@@ -4,10 +4,11 @@ Before making any design or code change:
 
 1. Read `/PROJECT_STATE.md`.
 2. Read `/ROADMAP.md`.
-3. Read `/DECISIONS.md` for the historical discovery record.
-4. Read `/DECISIONS_SUPERSESSIONS_2026-08-30.md`; it is authoritative where it conflicts with the baseline.
-5. Read `/docs/architecture/ARCHITECTURE_V0.2.md`.
-6. Check `/docs/research/` before assuming a Project Zomboid Build 42 hook/capability exists.
+3. Read `/DECISIONS.md` — current authoritative decisions.
+4. Use `/DECISIONS_BASELINE.md` only for historical discovery context.
+5. Read `/DECISIONS_SUPERSESSIONS_2026-08-30.md` for the review correction trail.
+6. Read `/docs/architecture/ARCHITECTURE_V0.2.md`.
+7. Check `/docs/research/` before assuming a Project Zomboid Build 42 hook/capability exists.
 
 ## Project rules
 
@@ -28,7 +29,7 @@ Before making any design or code change:
 ## Decision integrity
 
 - No implementation should silently contradict an existing decision.
-- **If a spike disproves a decision, strike/supersede it in the decision record, link the spike/issue/result, and record the replacement. Technical reality wins.**
+- **If a spike disproves a decision, supersede it in `DECISIONS.md`, link the spike/issue/result, and record the replacement. Technical reality wins.**
 - New technical decisions with lasting consequences go in `docs/decisions/`.
 - New Build 42 API assumptions must be verified and recorded in `docs/research/`.
 
