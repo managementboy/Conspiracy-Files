@@ -1,5 +1,12 @@
 # Tools
 
-Repository-side validation, generation, packaging, migration checks, schema validation, and other support tools belong here.
+Future repository tooling lives here.
 
-Tooling should remain separate from runtime mod code. Future examples may include content-pack validators, deterministic data generators, consistency checks, and documentation/build helpers.
+Planned responsibilities after the relevant schemas exist:
+- validate built-in content IDs/references;
+- validate canonical fixtures before packaging;
+- run content/schema checks in CI;
+- assist deterministic development-time content generation without putting runtime AI into the core game;
+- secret-scan provider profiles/API keys.
+
+Do not build a generic external content-pack validator before a second real content set exists. The first schema should be extracted from working built-in content, not invented in advance.
