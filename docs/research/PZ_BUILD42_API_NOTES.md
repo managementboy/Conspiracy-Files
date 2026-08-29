@@ -1,27 +1,45 @@
 # Project Zomboid Build 42 API Notes
 
-Status: Research backlog / verification log.
+This file distinguishes **reviewer hypotheses/current-context claims** from **observed project probe results**. Do not promote a claim to “verified” until a spike records the build/API/observed behaviour.
 
-## Current architecture assumptions to verify
+## Reviewer-reported baseline (2026-08-30)
+- Build 42.20 is on stable; review reports current stable 42.20.4.
+- Build 42 map is substantially larger than B41.
+- Further modding support is expected during the Build 42 support cycle.
+- Patch-exact mod-folder/version assumptions are unnatural; verify actual conventions in the first loadable-mod probe.
 
-- Normal Project Zomboid Lua/events/exposed Java APIs should be the default integration path.
-- Map/meta-grid data appears suitable for enumerating buildings, rooms, zones, and exact coordinates ahead of player arrival, but category reliability must be tested against real Build 42 data.
-- Building-entry confirmation should be achievable from player square/building state, but the preferred event/state transition must be proven.
-- Non-building landmarks such as transmission towers may require object/sprite/zone/radius-based registration rather than BuildingDef-style metadata.
-- Deferred story-item placement should occur when the relevant world area/container becomes available; exact-once semantics must be proven.
-- Global never-loaded chunk history is required for the agreed >90% retrofit rule and must be verified before that requirement can be implemented safely.
-- Persistent physical evidence identity across inventory/container/world transitions is a technical risk requiring proof.
-- Readable literature, item names/descriptions, maps, photos, keys, and other viable vanilla assets should use native behavior wherever possible; exact mutation APIs need version-specific verification.
-- Runtime AI/provider communication should remain Lua-first unless vanilla networking/data handling proves inadequate.
-- ZombieBuddy is conditional, not a default dependency. Introduce it only for missing API access, measured performance bottlenecks, or persistence/data-processing complexity.
+These statements came from the engineering review and are not yet independently re-verified in this repository.
 
-## Research recording rule
+## Required spikes
 
-For every finding record:
-- Build 42 version tested;
-- API/event/class used;
-- minimal reproduction/probe location under `/dev/`;
-- observed behavior;
-- limitations;
-- performance notes if relevant;
-- conclusion: vanilla Lua sufficient / Java helpful / ZombieBuddy required.
+### T1 — ModData persistence limits
+Test serialisable types, cycles, metatables, non-string keys, nesting and 1k/10k/100k record size/timing.
+
+### T2 — Full map/meta-grid enumeration cost
+Measure total cost on current B42 map and whether work must be spread across frames.
+
+### T3 — Location categorisation reliability
+Test police station, office, bookstore, hospital, transmission/non-building site across vanilla; map-mod support later. v0.1 uses curated locations regardless.
+
+### T4 — Exact-once deferred placement
+Find safest hook; test chunk reload, save/reload, burned/destroyed container, repeated load.
+
+### T5 — Persistent physical item identity
+Stamp project UUID/ID in item ModData if possible; test inventory/container/floor/vehicle/death/save-load transitions.
+
+### T6 — Never-loaded chunk detection
+Future retrofit only. Determine whether reliable per-candidate loaded-history state exists.
+
+### T7 — Item name/description/page text mutation
+Determine which asset types can show world-specific content and whether native reader behavior can be retained.
+
+### T8 — Building/room/non-building arrival detection
+Test multi-floor and basement cases plus a non-building landmark.
+
+### T9 — Network egress from Lua
+Confirm whether vanilla Lua can perform HTTP/network requests. The core design remains no-AI-primary regardless.
+
+### T10 — Cooperative Inspect context-menu integration
+Add/remove an `Inspect` entry without replacing vanilla or other-mod handlers.
+
+Use `SPIKE_TEMPLATE.md` for every result.
