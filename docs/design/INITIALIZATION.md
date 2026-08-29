@@ -1,5 +1,14 @@
-# Initialization and Validation
+# Initialization
 
-Status: Planned.
+**Status:** v0.1 deliberately avoids full map-wide initialization.
 
-This document will specify eligibility, content-pack load, map/location discovery, story resolution, candidate assignment, validation, retry, commit, deferred placement, retrofit rules, diagnostics, and failure behavior.
+For v0.1:
+- use two hand-curated/hardcoded story locations from the built-in fixture;
+- load the built-in authored thread;
+- validate IDs/references;
+- prepare one anchor + one fallback opportunity;
+- place content through the exact-once mechanism proven by T4;
+- do not scan/categorise the full map;
+- do not support retrofit, migration, external packs or multiplayer.
+
+Future map-wide Location Registry work is gated by T2/T3. Future non-building/arrival behavior is gated by T8. Retrofit remains post-v1 and would require T6.
