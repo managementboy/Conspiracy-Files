@@ -1,0 +1,26 @@
+# OS/editor
+.DS_Store
+Thumbs.db
+.idea/
+*.swp
+*.swo
+
+# Local secrets/config
+.env
+.env.*
+profiles.json
+secrets/
+*.pem
+*.key
+
+# Local PZ/runtime output
+Zomboid/
+logs/
+*.log
+
+# Build/test scratch
+build/
+dist/
+out/
+tmp/
+coverage/
