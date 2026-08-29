@@ -1,7 +1,9 @@
-# Project Zomboid Build 42 Mod Tree
+# Build 42 Mod Tree
 
-Future installable/source structure for the Build 42 Conspiracy-Files mod belongs under this directory.
+No implementation is committed yet. The first coding task after de-risk approval is a minimal loadable Build 42 probe mod, not the full feature set.
 
-Do not create implementation files here until the architecture proof stage verifies persistence, event hooks, location discovery, deferred placement, item identity, and native UI integration.
+The engineering review reports the Build 42 packaging convention as `Contents/mods/<id>/` with `common/media/...` for shared content and a `42/mod.info` version directory; it also reports that patch numbers are not represented in the version folder.
 
-The physical layout should follow current Build 42 mod conventions rather than assumptions from Build 41.
+**This is a reviewer-reported hypothesis, not yet a verified project fact. Verify it against the current stable Build 42 tooling/docs during the first loadable-mod spike before treating it as final.**
+
+Do not introduce ZombieBuddy/Java by default.
