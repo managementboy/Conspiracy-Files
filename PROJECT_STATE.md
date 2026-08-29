@@ -5,12 +5,13 @@ Target: Project Zomboid Build 42; reviewer-reported current stable line is 42.20
 
 ## Source of truth order
 
-1. `DECISIONS.md` — historical discovery record.
-2. `DECISIONS_SUPERSESSIONS_2026-08-30.md` — authoritative review corrections where they conflict with the baseline.
-3. `ROADMAP.md` — delivery scope and gates.
-4. `docs/architecture/ARCHITECTURE_V0.2.md` — current provisional architecture.
-5. `docs/research/` — observed Build 42 facts from spikes. **Observed technical reality overrides a speculative decision.**
-6. `docs/decisions/` — ADRs for durable engineering choices.
+1. `DECISIONS.md` — current authoritative decision index.
+2. `DECISIONS_BASELINE.md` — preserved full discovery history.
+3. `DECISIONS_SUPERSESSIONS_2026-08-30.md` — engineering-review correction trail.
+4. `ROADMAP.md` — delivery scope and gates.
+5. `docs/architecture/ARCHITECTURE_V0.2.md` — current provisional architecture.
+6. `docs/research/` — observed Build 42 facts from spikes. **Observed technical reality overrides a speculative decision.**
+7. `docs/decisions/` — ADRs for durable engineering choices.
 
 ## Core product
 
@@ -55,4 +56,4 @@ Before implementation architecture is signed off:
 
 ## Rule for disproven decisions
 
-Do not preserve a decision merely because it was previously marked settled. If a spike disproves it, supersede it explicitly in the decision record, link the spike/issue, and add the replacement ruling.
+Do not preserve a decision merely because it was previously marked settled. If a spike disproves it, supersede it explicitly in `DECISIONS.md`, link the spike/issue, and add the replacement ruling.
