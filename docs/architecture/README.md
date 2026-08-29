@@ -1,7 +1,6 @@
 # Architecture
 
-Authoritative and proposed system architecture documents live here.
+- `ARCHITECTURE_PROPOSAL.md` — historical first-draft architecture reviewed at commit `446f3b4`.
+- `ARCHITECTURE_V0.2.md` — **current** architecture after engineering-review corrections.
 
-Use this directory for subsystem boundaries, data-flow diagrams, lifecycle specifications, persistence architecture, integration boundaries, and architecture acceptance criteria.
-
-`ARCHITECTURE_PROPOSAL.md` is the current working proposal and remains subject to technical proof against Project Zomboid Build 42.
+Do not treat unverified Build 42 assumptions as signed-off architecture. Spike results in `docs/research/` override speculative design.
