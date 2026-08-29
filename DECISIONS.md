@@ -1,312 +1,104 @@
-# Conspiracy-Files — Decision Log
+# Conspiracy-Files — Current Decision Index
 
-This is the detailed discovery record. Question numbers refer to the discovery passes.
+This file contains the **current** project decisions. The complete original discovery record is preserved in [`DECISIONS_BASELINE.md`](DECISIONS_BASELINE.md). Engineering-review corrections are also preserved in [`DECISIONS_SUPERSESSIONS_2026-08-30.md`](DECISIONS_SUPERSESSIONS_2026-08-30.md).
 
----
+If a spike disproves a decision, technical reality wins: supersede the decision explicitly and link the spike result.
 
-# Phase 1 — Product / Client Discovery (26 questions)
+## Product decisions
 
-| Q | Decision |
-|---|---|
-| 1 | Core idea: Investigation/Mystery + Quest/Objectives + Roleplay/Narrative + Hidden-world/Conspiracy. |
-| 2 | Main gap: lack of mystery. |
-| 3 | Primary audience: solo player. |
-| 4 | Desired capabilities: all listed capabilities, with emphasis on searching clues, collecting evidence, following investigation chains, and maintaining an investigation record. |
-| 5 | Player journey: early-game hook, gradual escalation, open-ended investigation, multiple entry points. |
-| 6 | No conventional ending. Like base PZ, the story ends when the player dies, probably without finding the truth. |
-| 7 | Systemic integration with existing vanilla survival systems rather than replacing them. |
-| 8 | Integrate with all listed vanilla systems: loot, traits/professions, skills, radio/TV, maps, vehicles, electricity, zombies, buildings, crafting, timed actions, weather/time, mood/needs, readable media, world age. |
-| 9 | Minimal intrusion principle: integrate broadly but avoid rewriting core vanilla mechanics unless necessary. |
-| 10 | Information delivery: physical documents, maps/annotations, lightweight UI notifications, with the player journal/investigation log as the primary channel. |
-| 11 | Moderately guided + subtle. After a long inactivity period, clearer reminders are useful. |
-| 12 | Difficulty: low artificial friction; resource-, skill-, and knowledge-gated where appropriate; survival itself remains the primary difficulty. |
-| 13 | Access: skills, specific items, locations, world age; primarily soft requirements rather than hard gates. |
-| 14 | Profession-, skill-, and trait-specific observations/interpretations. |
-| 15 | Moderate replay variation, different entry points, multiple plausible interpretations, no definitive truth. |
-| 16 | Solo-first; multiplayer can be addressed later. |
-| 17 | Strongly defined default experience plus advanced configuration for narrative intensity, discovery assistance, randomization, etc.; later refined to configurable PZ-style options rather than a sacred default. |
-| 18 | High mod compatibility priority, especially custom maps, UI mods, trait/profession mods, explicit compatibility testing, and extension points. |
-| 19 | Target Project Zomboid Build 42 only. |
-| 20 | Assets: text content, custom investigation UI, localization readiness, reuse vanilla assets wherever possible. |
-| 21 | Tone: grounded conspiracy thriller + government/military + scientific themes + heavy dark comedy/bureaucratic absurdity. |
-| 22 | Strict canon compatibility, never confirm the Knox Event's true cause, historically grounded in the 1990s. |
-| 23 | No conventional first release; “never finished” PZ-style philosophy. Long-term target includes all listed capabilities. |
-| 24 | Nothing in the evolving target list is considered optional; prioritization is sequencing, not exclusion. |
-| 25 | All proposed boundaries are out of scope: replacing core PZ gameplay, linear quest game, definitive Knox explanation, heavy custom-map/assets dependence, multiplayer-first systems, combat/zombie AI overhaul, anachronism, confirmed supernatural truth, canon contradiction. |
-| 26 | Success is determined solely by the project owner; no external market/community success criterion. |
+| ID | Current decision | Rationale |
+|---|---|---|
+| P1-Q1 | Conspiracy-Files combines investigation/mystery, emergent objectives, roleplay/narrative and a hidden-world conspiracy layer. | Defines the product fantasy. |
+| P1-Q2 | The main gap addressed is lack of mystery in normal survival play. | Keeps the module focused. |
+| P1-Q3 | Solo is the only designed-for player mode today. | Multiplayer architecture is deferred. |
+| P1-Q5 | Entry should be early, escalation gradual, investigation open-ended, with multiple entry points. | Avoids a linear quest structure. |
+| P1-Q6 | There is no conventional final completion; the character usually dies without learning the full truth. | Matches Project Zomboid's core philosophy. |
+| P1-Q7 | Integrate systemically with vanilla survival rather than replace it. | The conspiracy is an overlay on survival. |
+| P1-Q9 | Minimal intrusion: do not rewrite core vanilla mechanics unless a proven requirement forces it. | Compatibility and maintainability. |
+| P1-Q15 / P4-R06 | Replay variation means different entry points, placements, timing and details into the same authored conspiracy, not different core truths. | Reconciles low randomness with replay value. |
+| P1-Q19 | Target Project Zomboid Build 42. Exact supported minor line must follow verified research. | Build 42 is the development target; patch-exact assumptions are retired. |
+| P1-Q20 / P4-R12 | UI/static strings are localisation-ready; dynamic/template-composed story prose is English-first in v1. | Full localisation conflicts with runtime composition. |
+| P1-Q21 | Tone: grounded government/military/scientific conspiracy with substantial dark bureaucratic humour. | Core voice. |
+| P1-Q22 | Remain canon-compatible, never confirm the Knox Event's true cause, and respect the 1990s setting. | Protects PZ lore and ambiguity. |
+| P1-Q23 / P4-R01 | The project may be creatively “never finished,” but development uses finishable milestones beginning with a concrete v0.1 vertical slice. | Prevents permanent pre-production. |
+| P1-Q26 | The project owner is the sole final arbiter of whether the experience is good. | No market-fit/community approval requirement. |
 
----
+## Player-experience decisions
 
-# Phase 2 — Module Capability & Player Requirements
+| ID | Current decision | Rationale |
+|---|---|---|
+| P2-Q4 | The player can manually mark acquired objects/facts as interesting. | Player curiosity is a core input. |
+| P2-Q6 / P4-R24 | Track physical evidence identity where technically possible; if identity is lost, keep the evidence record and mark the object unavailable. | Never erase investigation truth because an item cannot be followed. |
+| P2-Q7 | Evidence records may capture rich discovery context, bounded by proven persistence/performance limits. | Context is part of the clue. |
+| P2-Q16 | Critical paths use anchor + fallback opportunities; do not intentionally materialise duplicate backup clues as red herrings. | Reliability without clutter/false leads. |
+| P2-Q19 | System-derived relevance must be explainable. | Avoid opaque “the system says it matters.” |
+| P2-Q20 / P4-R05 | Journal + evidence list are primary through v1. Relationship graph is a v2 feature and must be prototyped separately. | Graph scope is disproportionate for v1. |
+| P2-Q26 | No deliberately meaningless authored false leads. | Player time should not be wasted by fake content. |
+| P2-Q27 | Discovering evidence does not directly make the world react to player knowledge. | The module observes/interprets more than it scripts reactions. |
+| P2-Q31 | Generated/narrated text respects known facts, character knowledge, canon and the 1990s boundary; speculation remains speculation. | Preserves trust. |
+| P2-Q36 | Journal chronology is discovery order. | Keeps the survivor's investigation history legible. |
+| P2-Q42 / P4-R07 | Timing/system rules remain hidden in normal play; full hidden-state diagnostics are development/debug only. | Diagnostics must not defeat the mystery. |
+| P2-Q51/Q52 | Save-affecting gameplay configuration is selected at world creation and stays fixed for that save. | Prevents mid-save story inconsistency. |
+| P2-Q54 / P4-R03 | **No-AI is the primary experience.** Runtime AI is optional enhancement only. | Core play cannot depend on API keys/network/cost. |
+| P2-Q58/Q59 | Optional AI narrative voice is in-character, funny, irreverent and fatalistic; humour remains present even in grim moments. | Defines the optional narration tone. |
+| P2-Q62/Q63 / P4-R13 | Onboarding is an in-fiction notebook/help page, not one-time quest-like popups. | Fits the fiction and reduces UI intrusion. |
+| P2-Q69 / P4-R11 | Provenance is stored internally and may be shown with an optional toggle; approved AI-assisted authored assets are normal in-fiction content. | Makes interpretation auditable without cluttering default presentation. |
+| P2-Q74-Q78 / P4-R14 | Old material may archive by in-game time and resurface when relevant; re-scoring is event-scoped using affected indexes, never all-pairs polling. | Keeps long investigations usable within the runtime budget. |
+| P2-Q81/Q82 | Progression is emergent; the module never announces case/mystery completion. | Avoids turning PZ into a quest game. |
+| P2-Q108/Q109 | Preserve conflicting evidence and do not automatically reconcile it. | Contradiction is part of the conspiracy. |
+| P2-Q113 / P4-R15 | Identity nodes remain separate even when confirmed as the same person; organisation labels may refine in place. | Alias encounter history is valuable; organisation naming is a different problem. |
+| P2-Q118 | Original evidence facts remain immutable when interpretation changes. | Core integrity invariant. |
+| P2-Q142 / P4-R29 | One normal-play global keybind opens the notebook. Help lives inside it; diagnostics use debug tooling. | Minimises mod key conflicts. |
+| P2-Q152-Q159 / P4-R08 | Working asset-text model is hybrid: vanilla inventory/container behaviour plus custom reader/Inspect for world-specific ModData where needed. Final ruling awaits T7. | Runtime text support is unproven. |
+| P2-Q161-Q163 | Randomness is low and never changes core conspiracy logic, canon-critical facts, major anchor relationships or tone. | Coherence over procedural novelty. |
+| P2-Q180/Q181 / P4-R07 | Normal play has no truth-dump diagnostics. Development/debug diagnostics may expose everything read-only. | Protects the central mystery. |
+| P2-Q190/Q191 / P4-R10 | Future compatibility separates PZ minor-line support, CF schema/API compatibility and authored content revision. Typo/text-only fixes must not require migrations. | Exact-match versioning is untenable. |
+| P2-Q198 / P4-R30 | If migrations return later, keep a minimal migration audit line. | Supportability. |
+| P2-Q205-Q207 / P4-R23 | The global >90% retrofit rule is retired. Retrofit is out of v1; any future model is per-candidate and reachability-based. | Global chunk percentage measures the wrong thing. |
 
-## Journal, evidence, AI, theories
+## Architecture decisions
 
-| Q | Decision |
-|---|---|
-| 1 | Journal role: active investigation tool + memory aid + narrative archive + character-aware notebook. AI storytelling is part of the module. |
-| 2 | AI: narrate discoveries, summarize investigation history, write in-character journal material, but never invent factual world state. AI also pre-generates approved asset text during development and may generate dynamic descriptions from verified in-game data. |
-| 3 | Any listed thing may be a clue: documents, printed media, maps, objects, environment, corpses/zombies, broadcasts, vehicles, character observations, timed events, relationships between ordinary facts, player-created observations. |
-| 4 | Clues enter mainly through manual capture plus delayed interpretation. Player can mark acquired objects/facts as interesting. |
-| 5 | Player-marked evidence supports bookmark, note, tags, manual links, automatic context, persistent identity, theory grouping, and AI commentary. |
-| 6 | Evidence identity/persistence: all desired tracking features if technically possible, including movement, loss/destruction, recovery, and preservation after object loss. |
-| 7 | Capture all listed context: time, location, source, nearby items/bodies, player condition, character identity, world state, metadata, player note, structured snapshot. |
-| 8 | Evidence connections: system-suggested + AI-suggested. |
-| 9 | Theories: evidence bundles + structured hypothesis + AI summary + competing theories + theory evolution; theory history is a later extension. |
-| 10 | Leads: evidence-backed, possible next action, possible location, possible object/item. |
-| 11 | Lead guidance: subtle, context-sensitive, stronger after long breaks, player-configurable hint level, never quest-marker language. |
-| 12 | All listed events may trigger journal updates. |
-| 13 | Runtime AI narration is on-demand only; AI also pre-generates contextual world assets ahead of time. |
-| 14 | Pre-generated documents: template variants, context pools, linked document chains, 1990s authenticity, dark bureaucratic humor. |
-| 15 | Document placement: contextual loot injection, character/corpse association, world-age dependence, linked chains, rare accidental discoveries, guaranteed anchors. |
-| 16 | Critical anchors: always spawn somewhere valid; redundant candidates exist but unused alternatives are removed/invalidated once one is found; fallback generation allowed before discovery; discovered knowledge persists; no thread depends on one fragile object. |
-| 17 | Ordinary suspicious items: preserve player suspicion; later metadata matching may create objective connections. |
-| 18 | Clue importance: system-derived relevance. |
-| 19 | Relevance must be explainable to the player. |
-| 20 | Primary browsing interface: relationship graph. |
-| 21 | Graph supports all node types, with contextual filtering. |
-| 22 | Graph supports all relationship types, with visible provenance for each relationship. |
-| 23 | Graph evolves continuously, keeps historical states, and uncertain links may disappear when contradicted. |
-| 24 | Graph history: automatic snapshots. |
-| 25 | Primary graph-node direct action: mark as interesting. |
-| 26 | No authored false leads; every authored clue ultimately matters. |
-| 27 | Discovering clues does not directly alter the game world. |
-| 28 | On death everything ends with the character; AI final investigation summary is desirable. |
-| 29 | Death summary includes all listed recap elements except any hidden “what they never knew” truth. |
-| 30 | AI may read, summarize, suggest from, challenge, but never overwrite player notes; notes remain subjective unless corroborated. |
-| 31 | Generated text: strict fact boundary, speculation framed as uncertainty, character-limited knowledge, no omniscience, contradictions allowed, canon protected, 1990s knowledge boundary. |
-| 32 | Every AI-generated asset requires manual approval before inclusion. |
-| 33 | Approved text assets are versioned content. |
-| 34 | Existing saves always use newest asset version. |
-| 35 | Revised clue/text asset replaces previous version immediately. |
-| 36 | Journal discovery ordering: chronological. |
-| 37 | Unresolved questions are simple freeform questions. |
-| 38 | Unresolved questions are created by manual text entry only. |
-| 39 | Clue discovery from gameplay: explicit interaction, inventory acquisition, world timing. |
-| 40 | Inventory-acquired clue: immediate recognition/logging. |
-| 41 | World timing may use a combination of date gates, phases, events, disappearance, replacement, and contextual change. |
-| 42 | Timing rules are completely hidden from the player. |
-| 43 | Missed time-sensitive clues are reintroduced later. |
-| 44 | Reintroduction uses the same clue in a new opportunity. |
-| 45 | Reintroduced clue has a delay before resurfacing. |
-| 46 | Clue rarity uses a mix of common/rare, contextual/dynamic, and authored placement approaches. |
-| 47 | Clue density is player-configurable. |
-| 48 | Density settings may control overall frequency, clue type, conspiracy depth, world phase, location type, rarity tier, and presets. |
-| 49 | No sacred default experience; later clarified that usable defaults still exist. |
-| 50 | All major configuration dimensions are exposed, with preconfigured defaults in the module’s PZ configuration page. |
-| 51 | Configuration cannot be changed for an existing save. |
-| 52 | Configuration is chosen at world creation. |
-| 53 | AI provider/API configuration is global, outside the save. |
-| 54 | If runtime AI is unavailable, use pre-generated summaries where possible and disable AI controls gracefully. |
-| 55 | No gameplay requirement for invoking runtime AI if configured. |
-| 56 | Runtime AI is accessible from both journal and relationship graph. |
-| 57 | Runtime AI can summarize current investigation, recent discoveries, selected theory, and generate death summary. |
-| 58 | AI summary voice: in-character survivor, funny, irreverent, fatalistic (“we know we are going to die”). |
-| 59 | Humor is always present, even for grim discoveries. |
-| 60 | Journal onboarding: light onboarding. |
-| 61 | Onboarding covers all listed major features. |
-| 62 | Onboarding delivery: one-time popups. |
-| 63 | Popups can be dismissed permanently after first view. |
-| 64 | Help is later accessible via a key binding. |
-| 65 | Help key opens a compact help overlay. |
-| 66 | Help overlay includes all major controls/concepts. |
-| 67 | Player notes: general freeform + evidence-attached + theory-attached. |
-| 68 | Evidence-attached notes stay with evidence; theory notes stay in theory view. |
-| 69 | Normal journal presentation does not visually distinguish facts/player interpretation/AI text. |
-| 70 | Full provenance is still tracked internally. |
-| 71 | No special visible/mechanical AI weighting by provenance; AI still cannot invent/contradict verified state. |
-| 72 | Duplicates are retained if their context differs. |
-| 73 | Duplicate context compares location, time, source/container, nearby environment, and character state. |
-| 74 | Large investigations: automatically archive old material. |
-| 75 | Archiving is time-based. |
-| 76 | Archived material automatically returns to active view if relevant again. |
-| 77 | Archive threshold is fixed by the module. |
-| 78 | Archive threshold uses in-game time. |
-| 79 | Core player requirements: curiosity, pattern recognition, patience, survival competence. |
-| 80 | Exhaustive investigation is moderately rewarded. |
-| 81 | Progression is purely emergent. |
-| 82 | The module never tells the player they completed a case/mystery/objective. |
-| 83 | Major discoveries are emphasized in the journal. |
-| 84 | Major discovery emphasis uses a dedicated marker. |
-| 85 | Major-discovery status may combine connectivity, theory impact, important entity/event revelation, question resolution, and authored importance. |
-| 86 | A clue may belong to multiple conspiracy threads. |
-| 87 | Visible thread names are created by the player. |
-| 88 | A player-created thread contains only a custom name; intentionally lightweight. |
-| 89 | Thread names affect graph by visual grouping only. |
-| 90 | Nodes are assigned to threads manually only. |
-| 91 | A node may belong to multiple threads. |
-| 92 | Thread grouping: boxes/regions around grouped nodes + floating thread label; collapse may be future enhancement. |
-| 93 | Multi-thread membership shown with badges/labels on the node. |
-| 94 | Thread membership removal is manual only. |
-| 95 | Deleting a thread removes grouping only, not underlying content. |
+| ID | Current decision | Rationale |
+|---|---|---|
+| P3-Q1 / ADR-0001 | Vanilla Lua first. | Use the platform's normal extension path unless evidence says otherwise. |
+| P3-Q2 | Java/ZombieBuddy requires missing API access, measured performance bottleneck, or persistence/data-processing complexity. | Keep the dependency boundary narrow. |
+| P3-Q3 | One authoritative core model; UI/diagnostics are projections. | Prevents competing truths. |
+| P3-Q4 | Persist minimal canonical state; rebuild caches/indexes. | Controls save size and state drift. |
+| P3-Q6 | Typed entity collections + a central relationship store. | Serves both domain logic and future graph views. |
+| P3-Q7 | Deterministic IDs for authored entities; generated IDs for player/runtime entities. | Stable references without predeclaring player content. |
+| P3-Q8 | Central relationship table is canonical; per-entity adjacency is a rebuildable index. | Avoids duplicated relationship truth. |
+| P3-Q9 | Domain events propagate meaningful model changes; views can rebuild on open as a safety net. | Event-driven without fragile UI coupling. |
+| P3-Q10 | PZ events are boundary inputs translated into internal CF domain events. | Keeps engine code outside the domain core. |
+| P4-R16 | Provisional runtime budget ≤2 ms/frame outside explicit initialization; use bounded queued work. | PZ Lua is main-thread constrained. |
+| P4-R17 | Provisional canonical save-state target ≤500 KB/save. | Gives T1 a measurable target. |
+| P4-R18 | Detect multiplayer and disable cleanly until MP support is designed. | Avoid half-running/corrupt state. |
+| P4-R19 | Every PZ adapter uses `pcall`; repeated subsystem failures auto-disable that subsystem with concise reporting. | Error containment. |
+| P4-R20 | Domain core has zero PZ runtime dependencies and runs in plain Lua 5.1 tests. | Testability. |
+| P4-R21 | No vanilla Lua replacement; one `ConspiracyFiles` namespace; cooperative context-menu/event hooks. | Mod compatibility. |
 
-## Locations, identities, graph behavior
+## Delivery/scope decisions
 
-| Q | Decision |
-|---|---|
-| 96 | Graph locations are exact building/location nodes. |
-| 97 | Location precision starts with nearby-landmark context and gets closer/more precise over time. |
-| 98 | Location becomes more precise through physical exploration. |
-| 99 | Imprecise location is represented as a landmark description. |
-| 100 | Location is confirmed when player enters the building. |
-| 101 | On confirmation, vague description is replaced by exact building. |
-| 102 | People/identities use progressive identity. |
-| 103 | Any listed evidence type may refine identity. |
-| 104 | Organizations initially appear as generic type only. |
-| 105 | Specific organization identity requires multiple independent clues agreeing. |
-| 106 | Events initially appear as generic event labels. |
-| 107 | Any listed evidence route may make an event more specific. |
-| 108 | Contradictory clues are both preserved; conflicts are part of the conspiracy. |
-| 109 | The module never automatically explains why clues conflict. |
-| 110 | Duplicate names stay separate until proven; people may have multiple identities. |
-| 111 | Alias suspicion is player-only. |
-| 112 | Alias suspicion is expressed with a manual “possibly same person” link. |
-| 113 | Identity nodes are never merged, even for confirmed aliases. |
-| 114 | Confirmed aliases use an explicit “Same person” link. |
-| 115 | Identity history preserves source history. |
-| 116 | Source history is shown in an expandable provenance panel. |
-| 117 | When meaning changes, replace old interpretation with the new one. |
-| 118 | Original underlying evidence remains unchanged. |
-| 119 | Updated interpretation gets an “updated” marker. |
-| 120 | Updated status clears after in-game time. |
-| 121 | Duration is context-dependent. |
-| 122 | Major/minor reinterpretation is determined by number of affected graph connections. |
-| 123 | Reinterpretation does not remove old graph links; old links remain but are outdated. |
-| 124 | Outdated links appear faded/dimmed. |
-| 125 | Major discoveries do not rearrange graph; user may rearrange manually. |
-| 126 | Manual graph arrangement persists for entire save. |
-| 127 | New nodes auto-place in nearest open space. |
-| 128 | Auto-placement favors proximity to related nodes. |
-| 129 | Relationship types use different line styles. |
-| 130 | Styles may combine pattern, thickness, direction, color, and icons. |
-| 131 | Link meaning appears on hover/select. |
-| 132 | In dense clusters, temporarily dim unrelated links. |
-| 133 | Dimming is triggered by hovering a node. |
-| 134 | Only unrelated links dim; unrelated nodes remain visible. |
-| 135 | Selecting a node locks graph focus. |
-| 136 | Outdated links remain visible but faded during focus. |
+| ID | Current decision | Rationale |
+|---|---|---|
+| P4-R01 | v0.1 = one hand-authored thread, 6 documents, 3 identities, 1 organisation, 2 curated locations, 1 anchor + 1 fallback, journal + evidence list, manual Mark Interesting. | Smallest end-to-end proof of the experience. |
+| P4-R02 / P4-R26 | Content precedes generic schema; project owner writes/approves canonical content, with AI only assisting drafts. | Avoid schema-first design. |
+| P4-R04 | Retrofit, migration and external content packs are not in v1. | De-risk core first. |
+| P4-R05/P4-R25 | Graph is v2; prototype separately with provisional 250 visible-node cap. | Biggest UI risk. |
+| P4-R22 | Death recap has a deterministic no-AI fallback; optional AI may enhance it later. | Death payoff cannot depend on network success. |
+| P4-R27 | Three concrete reward moments are defined in `docs/requirements/PLAYER_MOMENTS.md`. | Ensures the mod rewards the player without completion banners. |
+| P4-R28 | “Long inactivity” means a real-world gap between play sessions. | It is a return-player memory aid, not an in-world timer. |
 
-## Notebook, asset interaction, UI
+## Technical decisions intentionally pending spikes
 
-| Q | Decision |
-|---|---|
-| 137 | Evidence attachments: related documents in a normal PZ-style list view. |
-| 138 | Use same list behaviors/options as vanilla game wherever possible. |
-| 139 | Hybrid UI: vanilla conventions for ordinary lists/records; custom UI only for graph/theory-specific needs. |
-| 140 | Journal is presented like a survivor notebook. |
-| 141 | Notebook visual style: minimal decoration, clean and readable. |
-| 142 | Notebook opens via dedicated key binding. |
-| 143 | Whether notebook pauses game is player-configurable. |
-| 144 | Pause option is configured inside the notebook. |
-| 145 | Notebook remembers last open page + last selected evidence/theory/node. |
-| 146 | Notebook contains all major sections: journal, evidence, theories, graph, archive, help/reference. |
-| 147 | Sections may combine physical dividers/tabs, bookmarks, page-turn navigation, and vanilla controls styled as notebook UI. |
-| 148 | Archive feels like older notebook pages deeper in the same notebook. |
-| 149 | Newest page is appended at the end. |
-| 150 | Updated pages stay in original chronological position. |
-| 151 | Long entries continue across multiple pages automatically. |
-| 152 | Native-first asset interaction: use vanilla read/open behavior where it exists; notebook references the original evidence rather than copying full documents into notebook pages. |
-| 153 | Custom action for non-readable evidence is named `Inspect`. |
-| 154 | Inspect shows all: basic details, discovery context, player note, related graph connections, mark-as-interesting action. |
-| 155 | Inspect never reveals unknowable information, but may show legitimate module-injected text/content. |
-| 156 | Any technically viable vanilla asset type may carry injected conspiracy content. |
-| 157 | Injected content: AI-generated during development then approved + template-driven. |
-| 158 | Templates may vary all listed fields: names/aliases, dates/times, locations, organizations/codes, item IDs, bounded wording, humor/tone, cross-references. |
-| 159 | Template resolution happens during development and at world creation, with AI assistance. |
-| 160 | At world creation fix identity graph, document variants, names/dates/codes, placement candidates, cross-references, hidden thread structure. |
-| 161 | World-generation randomness is low. |
-| 162 | Limited randomness may vary placement, names/aliases, dates/codes, supporting documents, wording/tone, entry points. |
-| 163 | Never randomize core conspiracy logic, canon-critical facts, major anchor relationships, tone/thematic rules. |
+- **T1:** ModData persistence limits and final state-size ceiling.
+- **T2:** map/meta-grid enumeration cost and scheduler requirements.
+- **T3:** automatic location categorisation reliability.
+- **T4:** exact-once placement hook/idempotency sequence.
+- **T5:** persistent physical item identity.
+- **T6:** never-loaded chunk detection, only if retrofit returns.
+- **T7:** runtime item text/name/page behaviour.
+- **T8:** building/room/non-building arrival detection.
+- **T9:** Lua network egress; AI remains optional regardless.
+- **T10:** cooperative Inspect context-menu integration.
 
-## Initialization, geography, existing saves
-
-| Q | Decision |
-|---|---|
-| 164 | Validate all: clue reachability, references, location validity, identity consistency, timeline consistency, redundancy. |
-| 165 | If validation fails, regenerate automatically. |
-| 166 | Use a fixed small retry count; exact strategy must follow Build 42 world/chunk research. |
-| 167 | Hybrid initialization: conspiracy model up front, physical placement later as chunks/containers become available. |
-| 168 | Deferred placement uses a combination of first-valid, weighted, priority, distance-aware, and world-state-aware logic. |
-| 169 | Prevent clustering using combined spacing, per-building caps, area caps, thread-aware distribution, with narrative exceptions. |
-| 170 | Story location selection: hybrid category-driven + exact authored locations, player-region aware. Initialization may take longer to improve consistency. |
-| 171 | Initialization prioritizes complete location registry, story consistency, reachability, location diversity, map-mod awareness, fallback planning. |
-| 172 | Initialization UI: 1990s computer-program style, little detail by default, more-details button. |
-| 173 | If initialization takes long, keep running with status updates; do not skip validation. |
-| 174 | If retries fail, show an error and offer manual retry. |
-| 175 | Failure screen shows short reason + full diagnostics option. |
-| 176 | Full diagnostics use 1990s terminal style. |
-| 177 | Diagnostics include all listed stages/results/validation/retries/fallback/map compatibility details. |
-| 178 | Diagnostics remain available after successful initialization, read-only. |
-| 179 | Successful-run diagnostics accessible by dedicated key binding. |
-| 180 | Diagnostics available in normal play. |
-| 181 | Diagnostics may expose full hidden internal conspiracy state. |
-| 182 | Diagnostics remain read-only. |
-| 183 | External data-driven content packs supported. |
-| 184 | Packs may define all listed content/story data and AI pre-generation templates. |
-| 185 | Content packs are completely isolated from each other. |
-| 186 | Only one content pack active per save. |
-| 187 | Pack selected manually at world creation/start. |
-| 188 | Revised: pack switching is only possible at start; mid-journey switching is not allowed. |
-| 189 | If active pack becomes missing/invalid mid-save, block Conspiracy-Files from loading and show error. |
-| 190 | Content packs use strict core-version requirement. |
-| 191 | Exact version match only. |
-| 192 | Existing-save migration is player-selected. |
-| 193 | Migration preserves all investigation state. |
-| 194 | Migration failure aborts safely, leaving existing save untouched. |
-| 195 | Supported migration is presented with a simple prompt. |
-| 196 | Core and content pack migrate together. |
-| 197 | Migration availability is defined by explicit migration manifest. |
-| 198 | Migration history is not tracked after success. |
-| 199 | Conspiracy-Files may be added to an existing save. |
-| 200 | For retrofit, critical placement uses only unloaded/unvisited space; refined later to never-loaded chunks. |
-| 201 | Safe critical placement signal: chunk never loaded. |
-| 202 | Never inject any conspiracy content into already-loaded chunks during retrofit. |
-| 203 | If too little unexplored world remains, initialization fails. |
-| 204 | “Enough” unexplored world initially framed as minimum valid untouched locations. |
-| 205 | Refined threshold: retrofit requires more than 90% of map unopened/unloaded. |
-| 206 | Measure that threshold globally across all map chunks. |
-| 207 | >90% threshold is hard-coded. |
-
-## Return to main features
-
-| Q | Decision |
-|---|---|
-| 208 | Main loop: survive normally; investigate opportunistically. |
-| 209 | Any of the listed things may pull player deeper: strange item, specific document reference, recurring entity/symbol, unusual location, converging clues, old suspicion gaining support. |
-| 210 | If no meaningful discovery happened during normal play, journal does nothing. |
-| 211 | Clues may attract attention through any combination of unusual context, distinctive naming, injected description, readable content, or repeated pattern. |
-| 212 | Clue obviousness may vary; combination of obvious, subtle, and context-dependent. |
-| 213 | Ordinary-but-suspicious objects may combine vanilla appearance/name, subtle renamed variants, Inspect detail, and delayed significance. |
-| 214 | When an ordinary object becomes significant later, update journal only. |
-| 215 | Player learns this through an updated marker in the journal. |
-| 216 | Major discoveries may combine clearer interpretations, new possible locations/items, more specific identities/events, and increased relevance of old evidence. |
-| 217 | New leads are pursued through normal travel, map/landmark clues, item references, and recurring entities. |
-| 218 | Ignored leads remain untouched indefinitely until the player chooses to follow them. |
-
----
-
-# Phase 3 — Architecture Decisions
-
-| Q | Decision |
-|---|---|
-| 1 | Core implementation philosophy: vanilla Lua first. Use normal PZ Lua/events/exposed Java APIs wherever sufficient. |
-| 2 | ZombieBuddy/Java is justified for missing API access, demonstrated Lua performance bottlenecks, or persistence/data-processing complexity. External AI communication alone is not an automatic reason to use Java. |
-| 3 | Source of truth: one authoritative core conspiracy model with notebook, graph, archive, diagnostics, and UI as derived views. |
-| 4 | Persistence strategy: minimal canonical state plus rebuildable indexes/caches. |
-| 5 | Canonical persistent state includes world conspiracy model, discovery state, player-authored state, evidence lifecycle, graph layout, journal chronology, and version/configuration state. |
-| 6 | Internal model: typed entity collections plus a separate relationship store. |
-| 7 | IDs: deterministic for authored entities; generated for runtime/player-created entities. |
-| 8 | Relationships: central canonical relationship table plus rebuildable per-entity indexes. |
-| 9 | Model propagation: domain events for meaningful changes, with view rebuild/refresh on open as a safety net. |
-| 10 | Event boundary: vanilla PZ events at the edge, internal Conspiracy-Files domain events inside. |
-
----
-
-# Pending / unresolved
-
-The previous story-focused Question 219 was intentionally not answered. Architecture is now being handled as a system proposal rather than further one-question-at-a-time discovery.
-
-Current next focus:
-1. review/refine `docs/architecture/ARCHITECTURE_PROPOSAL.md`,
-2. verify Build 42 technical assumptions,
-3. prove persistence, location registry, building-entry detection, deferred placement, item identity, Inspect integration, notebook persistence, and graph persistence,
-4. decide the narrowest possible ZombieBuddy boundary only after those proofs.
+See GitHub issues #1–#10 and `docs/research/SPIKE_TEMPLATE.md`.
