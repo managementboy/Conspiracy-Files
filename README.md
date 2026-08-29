@@ -1,34 +1,39 @@
 # Conspiracy-Files
 
-A Project Zomboid Build 42 investigation and conspiracy module.
+A Project Zomboid Build 42 investigation/conspiracy module.
 
-Conspiracy-Files layers an open-ended mystery system over normal Project Zomboid survival. The player discovers documents, objects, locations, identities, events, and relationships while simply trying to stay alive. There is no conventional quest completion and no guaranteed truth before death.
-
-## Project status
-
-**Planning / architecture. No implementation code yet.**
-
-GitHub is the source of truth for cross-chat and future Codex work.
+**Current phase:** engineering de-risk and v0.1 definition. The project deliberately moved from a broad first-draft specification to a small vertical slice after lead-developer review.
 
 ## Start here
 
-1. [`PROJECT_STATE.md`](PROJECT_STATE.md) — concise bootstrap for a new chat or development session.
-2. [`DECISIONS.md`](DECISIONS.md) — detailed product, player-requirement, and capability decisions.
-3. [`docs/architecture/ARCHITECTURE_PROPOSAL.md`](docs/architecture/ARCHITECTURE_PROPOSAL.md) — current proposed system architecture.
+1. [`PROJECT_STATE.md`](PROJECT_STATE.md) — current state and immediate gates.
+2. [`ROADMAP.md`](ROADMAP.md) — v0.1/v1/v2 scope.
+3. [`DECISIONS.md`](DECISIONS.md) — historical discovery decisions.
+4. [`DECISIONS_SUPERSESSIONS_2026-08-30.md`](DECISIONS_SUPERSESSIONS_2026-08-30.md) — authoritative review corrections where they conflict with the baseline.
+5. [`docs/architecture/ARCHITECTURE_V0.2.md`](docs/architecture/ARCHITECTURE_V0.2.md) — current architecture.
+6. [`docs/research/`](docs/research/) — Build 42 probe results; observed technical facts override assumptions.
+7. [`docs/reviews/ENGINEERING_REVIEW_RESPONSE_2026-08-30.md`](docs/reviews/ENGINEERING_REVIEW_RESPONSE_2026-08-30.md) — review disposition and rulings.
 
-## Repository layout
+## Core direction
 
-- `docs/architecture/` — architecture and subsystem specifications.
-- `docs/requirements/` — product vision, capabilities, and player requirements.
-- `docs/design/` — detailed design specifications created before implementation.
-- `docs/research/` — verified Project Zomboid Build 42 API/modding research.
-- `docs/decisions/` — future ADR-style technical/design decisions.
-- `content-packs/` — future isolated conspiracy content packs and schemas.
-- `mod/42/` — future Project Zomboid Build 42 mod source/package tree.
-- `dev/` — development-only probes and tooling.
-- `tools/` — validation/build/support tools.
-- `test/` — tests and fixtures.
+- Solo-first; disable cleanly in multiplayer until MP is designed.
+- Vanilla Lua first; narrow Java/ZombieBuddy boundary only if proven necessary.
+- One canonical domain model; UI is a projection.
+- Immutable evidence facts, mutable interpretation.
+- No-AI is the primary experience; AI is optional enhancement and development-time authoring assistance.
+- Journal + evidence list are the primary v1 interface; graph is v2.
+- Content comes before generic pack schema: build one real thread first.
 
-## Architecture direction
+## Repository
 
-The current direction is a **Lua-first modular monolith** using vanilla Project Zomboid Lua/events/exposed Java APIs wherever possible. ZombieBuddy/Java remains optional and should only be introduced for missing API access, demonstrated performance bottlenecks, or persistence/data-processing complexity.
+- `docs/requirements/` — product/player requirements and target player moments.
+- `docs/architecture/` — architecture.
+- `docs/design/` — design specifications/budgets/policies.
+- `docs/research/` — spike templates and observed PZ API results.
+- `docs/decisions/` — ADRs.
+- `docs/reviews/` — engineering review trail.
+- `test/fixtures/` — hand-authored content fixtures before schemas.
+- `mod/` — future loadable mod.
+- `tools/` — future validators/build helpers.
+
+No production feature code should be built on an unverified Build 42 assumption when a listed spike can answer it first.
