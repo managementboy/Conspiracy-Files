@@ -8,11 +8,12 @@ A Project Zomboid Build 42 investigation/conspiracy module.
 
 1. [`PROJECT_STATE.md`](PROJECT_STATE.md) — current state and immediate gates.
 2. [`ROADMAP.md`](ROADMAP.md) — v0.1/v1/v2 scope.
-3. [`DECISIONS.md`](DECISIONS.md) — historical discovery decisions.
-4. [`DECISIONS_SUPERSESSIONS_2026-08-30.md`](DECISIONS_SUPERSESSIONS_2026-08-30.md) — authoritative review corrections where they conflict with the baseline.
-5. [`docs/architecture/ARCHITECTURE_V0.2.md`](docs/architecture/ARCHITECTURE_V0.2.md) — current architecture.
-6. [`docs/research/`](docs/research/) — Build 42 probe results; observed technical facts override assumptions.
-7. [`docs/reviews/ENGINEERING_REVIEW_RESPONSE_2026-08-30.md`](docs/reviews/ENGINEERING_REVIEW_RESPONSE_2026-08-30.md) — review disposition and rulings.
+3. [`DECISIONS.md`](DECISIONS.md) — **current authoritative decision index**.
+4. [`DECISIONS_BASELINE.md`](DECISIONS_BASELINE.md) — complete original 207-question discovery record.
+5. [`DECISIONS_SUPERSESSIONS_2026-08-30.md`](DECISIONS_SUPERSESSIONS_2026-08-30.md) — engineering-review correction trail.
+6. [`docs/architecture/ARCHITECTURE_V0.2.md`](docs/architecture/ARCHITECTURE_V0.2.md) — current architecture.
+7. [`docs/research/`](docs/research/) — Build 42 probe results; observed technical facts override assumptions.
+8. [`docs/reviews/ENGINEERING_REVIEW_RESPONSE_2026-08-30.md`](docs/reviews/ENGINEERING_REVIEW_RESPONSE_2026-08-30.md) — review disposition and rulings.
 
 ## Core direction
 
