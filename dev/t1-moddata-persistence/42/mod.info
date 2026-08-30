@@ -1,0 +1,6 @@
+name=Conspiracy-Files T1 Persistence Probe
+id=ConspiracyFiles_T1_Probe
+author=Conspiracy-Files project
+modversion=0.1
+description=Disposable Build 42 ModData persistence probe for GitHub Issue #1.
+versionMin=42.20.0
