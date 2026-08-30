@@ -1,120 +1,74 @@
 # Spike T1 — ModData persistence probe
 
-This folder is a disposable Project Zomboid Build 42 probe for GitHub Issue #1. It is intentionally separate from production mod code.
+This is disposable Project Zomboid Build 42 test code for GitHub Issue #1. It is not production Conspiracy-Files code.
 
-## Purpose
+## Install
 
-The probe answers T1 by performing real `ModData` save/reload cycles against a disposable single-player save. It does **not** infer persistence safety from successful Lua assignment.
-
-The probe writes only two namespaced Global ModData tables:
-
-- `ConspiracyFiles.T1.Control` — safe primitive control metadata;
-- `ConspiracyFiles.T1.Payload` — the scenario under test.
-
-Do not use a valued save. Several scenarios are intentionally capable of causing save errors, failed reloads, hangs, or corrupted probe state.
-
-## Build 42 local-mod layout
-
-Copy `dev/t1-moddata-persistence/` as a local mod folder so that the game sees this shape:
+Copy this directory as a local mod so Project Zomboid sees:
 
 ```text
 ConspiracyFiles_T1_Probe/
-├── common/
-│   └── media/lua/shared/ConspiracyFilesT1Probe.lua
-└── 42/
-    └── mod.info
+├── common/media/lua/shared/ConspiracyFilesT1Probe.lua
+└── 42/mod.info
 ```
 
-Enable **Conspiracy-Files T1 Persistence Probe** only for a new disposable single-player save.
+Enable **Conspiracy-Files T1 Persistence Probe** only in a disposable single-player save.
 
-Current official Project Zomboid material describes Build 42's versioned mod directories and the `common` directory. The first successful load of this probe is still the project-level verification that this exact local packaging works on the development PC.
+The probe writes two namespaced Global ModData tables:
 
-## Controls
+- `ConspiracyFiles.T1.Control`
+- `ConspiracyFiles.T1.Payload`
 
-The console prints structured records prefixed with `[CF-T1]`.
+## Manual controls
 
 - **F8** — select the next scenario.
-- **F9** — construct the selected scenario in `ModData` and arm reload validation.
-- **F10** — call `saveGame()` inside `pcall` and log elapsed wall-clock time around the call.
-- **F11** — remove both T1 ModData tags from memory. Save afterwards if you want the cleared state persisted.
+- **F9** — construct and arm it.
+- **F10** — call `saveGame()` inside `pcall` and log its synchronous interval.
 
-The Lua debugger can alternatively call `ConspiracyFiles.T1Probe.select(index)`, `.prepare()`, `.save()`, `.clear()`, or `.validate()`.
+F11 is intentionally not bound because the tested development setup uses it for fast teleport/debugging. Clear through `ConspiracyFiles.T1Probe.clear()` in the Lua debugger instead. The debugger can also call `.select(index)`, `.prepare()`, `.save()`, and `.validate()`.
 
-## Required run procedure
+The console emits structured `[CF-T1]` records. A successful assignment or returned save call is not success; only the same-save reload and deterministic `VERIFY` result classify a scenario.
 
-For every scenario:
+## Automated disposable-save mode
 
-1. Start or load the disposable test save with only this probe enabled where practical.
-2. Confirm `[CF-T1]|EVENT|kind=READY` and record `gameVersion=`. This is the exact installed Build 42 version for the spike.
-3. Use F8 until the desired `scenario=` is selected.
-4. Press F9. Record `constructMs=` from the `PREPARE` line.
-5. Press F10. Record the `SAVE_CALL_RETURN` result and `elapsedMs=`. If it errors, preserve the relevant console exception/stack trace.
-6. Exit to the main menu or desktop normally, then reload the **same** save.
-7. Record the `VERIFY` line emitted from `OnInitGlobalModData`.
-8. Record the resulting `global_mod_data.bin` size from the disposable save directory when measurable. Do not commit saves or raw logs containing private machine paths.
-9. Note any visible stall/freeze during construction, save, exit, or reload.
+The live T1 matrix used save folder names to avoid editing probe code between cases:
 
-`initWindowMs` is only an upper-bound initialization window from Lua script load to `OnInitGlobalModData`; it is **not** an isolated ModData deserialization time. `validationMs` measures only the probe's validation work after ModData has loaded. `OnPostSave` timing includes other world-save/exit work and should be treated as an upper bound.
+- `T1_clean` clears the two probe tags and saves.
+- `T1_<scenario>` selects, constructs and saves that scenario on its first load.
+- A reload with armed control metadata validates and exits without reconstructing.
 
-## Scenario matrix
+Set `latestSave.ini` to the desired T1 save. The probe continues only saves whose name begins `T1_`, and requests a normal quit-to-desktop after the save/validation pass.
 
-Run the following in order. Run `nil_seed` then `nil_removal` consecutively in the same disposable world. Use a fresh disposable save for every suspicious/unsafe scenario after the nil-removal pair; do not let one malformed payload contaminate interpretation of another.
+If a malformed payload removes the control tag itself, put a file named `ConspiracyFiles_T1_ExpectedReload.txt` in the PZ `Lua` cache directory. Its first line must be the exact save folder name, for example `T1_cycle`. This lets the reload validator report whole-tag loss without mistaking the reload for a first run. Remove the marker after that reload.
 
-| Scenario | What it tests |
-|---|---|
-| `baseline` | strings, integer/float numbers, booleans, nil-before-save, flat string-keyed table, numeric keys including 0/negative/fractional, mixed keys, nesting, array/list, empty table |
-| `nil_seed` | persist a key that will be removed on the next cycle |
-| `nil_removal` | set the previously persisted `nil_seed` key to nil, save, reload, and verify it is gone |
-| `function_value` | function as a persisted value |
-| `userdata_value` | exposed Java object (`getGameTime()`) as a persisted value |
-| `metatable` | metatable and `__index` behavior |
-| `cycle` | self-referential cyclic table |
-| `shared_reference` | two fields referencing the same Lua table |
-| `boolean_key` | boolean table key |
-| `table_key` | table-as-key |
-| `function_key` | function-as-key |
-| `userdata_key` | exposed Java object as key |
-| `depth_16` | nested table depth 16 |
-| `depth_32` | nested table depth 32 |
-| `depth_64` | nested table depth 64 |
-| `depth_128` | nested table depth 128 |
-| `depth_256` | nested table depth 256 |
-| `depth_512` | nested table depth 512 |
-| `scale_1000` | 1,000 representative Conspiracy-Files-style records |
-| `scale_10000` | 10,000 representative records |
-| `scale_100000` | 100,000 representative records |
+Project Zomboid's final loading screen polls raw physical mouse/controller state and suppresses Lua callbacks. The unattended run therefore used the launch-only native helper in `tools/ConspiracyFilesT1GateAgent.cpp`. It waits for the exact engine's `GameLoadingState.done == true`, then sets only `forceDone`, the flag the physical click path sets. It does not modify serializer code, ModData, saves or the installed game. Build it as a DLL against matching official OpenJDK JNI headers and launch the game with:
 
-If a depth causes a save/reload failure, stop increasing depth in that save. If a scale produces an unacceptable freeze or resource problem, preserve the measurement/error and do not force the next scale merely to obtain a larger number.
+```text
+JAVA_TOOL_OPTIONS=-agentpath:<absolute-path-to-dll>
+```
 
-## Representative scale record
+Every release logs `[CF-T1-AGENT]|GATE_RELEASED|reason=engine-done-true`.
 
-Each generated record contains:
+## Scenario order
 
-- stable ID;
-- entity type;
-- display name;
-- discovery timestamp;
-- `x/y/z` location;
-- five metadata fields;
-- three related entity IDs;
-- three flags/state values.
+Run `baseline`, then `nil_seed` and `nil_removal` consecutively in one disposable save. Use a fresh clone for every later suspicious scenario:
 
-The records deliberately contain only plain acyclic tables and string/number/boolean values. Reload validation checks record count plus a deterministic aggregate checksum derived from all architecture-style fields.
+1. `function_value`
+2. `userdata_value`
+3. `metatable`
+4. `cycle`
+5. `shared_reference`
+6. `boolean_key`
+7. `table_key`
+8. `function_key`
+9. `userdata_key`
+10. `depth_16`, `depth_32`, `depth_64`, `depth_128`, `depth_256`, `depth_512`
+11. `scale_1000`, `scale_10000`, `scale_100000`
 
-## Interpreting suspicious scenarios
+Record `PREPARE.constructMs`, `SAVE_CALL_RETURN.elapsedMs`, reload `VERIFY`, file size/hash, process responsiveness, console exceptions, and normal-exit `OnPostSave` timing.
 
-A `VERIFY ... status=PASS` means the probe's deterministic expectations passed. For suspicious scenarios the important evidence is the detailed representation fields, not the word PASS alone. For example:
+## Scale model
 
-- `shared_reference` reports `sameReference=true/false`;
-- `metatable` reports `metatableType`, `fallback`, and `metaMarker`;
-- `cycle` reports `selfSame`;
-- nonstandard-key cases report the key types found after reload;
-- function/userdata cases report the surviving value type/class.
+Every representative record contains a stable ID, entity type, display name, discovery timestamp, x/y/z location, five metadata fields, three related entity IDs, and three flags/state values. Reload verification walks all records and compares count plus a deterministic aggregate checksum.
 
-A save error, missing `VERIFY`, load failure, crash, or log exception is itself a T1 result. Preserve the relevant lines and exact build number.
-
-## Save-size measurement
-
-The engine currently names the Global ModData save file `global_mod_data.bin`. Record its size after a successful save/reload for `baseline`, 1k, 10k, and 100k. Prefer measuring the same disposable world before/after a payload replacement when possible, or record the baseline file size for each fresh world and report the delta.
-
-Do not interpret the engine's internal 524,288-byte buffer block size as a 512 KiB persistence limit; it is an implementation allocation constant, not evidence of a safe architectural ceiling.
+Do not interpret the engine's internal 524,288-byte block constant as a 512 KiB persistence limit. The T1 report derives project guardrails from measured live behavior.

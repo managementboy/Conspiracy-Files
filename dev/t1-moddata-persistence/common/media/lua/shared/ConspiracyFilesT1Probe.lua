@@ -12,6 +12,12 @@ local PAYLOAD_TAG = "ConspiracyFiles.T1.Payload"
 local HASH_MOD = 2147483647
 local moduleLoadedMs = getTimeInMillis and getTimeInMillis() or 0
 local lastOnSaveMs = nil
+local verifiedArmedOnLoad = false
+local autoContinuePending = true
+local autoContinueTicks = 0
+local autoQuitPending = false
+local autoQuitTicks = 0
+local EXPECTED_RELOAD_FILE = "ConspiracyFiles_T1_ExpectedReload.txt"
 
 local scenarios = {
     "baseline",
@@ -38,6 +44,37 @@ local scenarios = {
 }
 
 local selectedIndex = 1
+
+local function autoModeForCurrentSave()
+    local currentSave = getCurrentSaveName and getCurrentSaveName() or ""
+    local folder = tostring(currentSave):match("([^\\/]+)$") or ""
+    if folder == "T1_clean" then
+        return "clear"
+    end
+
+    local requested = folder:match("^T1_(.+)$")
+    if requested then
+        for i = 1, #scenarios do
+            if scenarios[i] == requested then
+                return requested, i
+            end
+        end
+    end
+    return nil
+end
+
+local function expectedReloadScenario()
+    local reader = getFileReader and getFileReader(EXPECTED_RELOAD_FILE, false) or nil
+    if not reader then
+        return nil
+    end
+    local expectedSave = reader:readLine()
+    reader:close()
+    if type(expectedSave) ~= "string" then
+        return nil
+    end
+    return expectedSave:match("^T1_(.+)$")
+end
 
 local function nowMs()
     if getTimeInMillis then
@@ -455,7 +492,12 @@ local function validateBaseline(root)
 
     check(type(root.empty) == "table")
     if type(root.empty) == "table" then
-        check(next(root.empty) == nil)
+        local isEmpty = true
+        for _ in pairs(root.empty) do
+            isEmpty = false
+            break
+        end
+        check(isEmpty)
     end
 
     return failures == 0, {
@@ -697,11 +739,26 @@ end
 local function validateArmedPayload()
     local ctl = ModData.get(CONTROL_TAG)
     if type(ctl) ~= "table" or ctl.armed ~= true or type(ctl.scenario) ~= "string" then
-        logEvent("VERIFY_SKIPPED", {
-            "reason=no-armed-control",
-            "gameVersion=" .. gameVersion(),
-        })
-        return
+        local autoMode = autoModeForCurrentSave()
+        local expectedScenario = expectedReloadScenario()
+        if autoMode and expectedScenario == autoMode then
+            ctl = {
+                scenario = autoMode,
+                constructMs = "<control-tag-missing>",
+                gameVersion = "<control-tag-missing>",
+            }
+            verifiedArmedOnLoad = true
+            logEvent("VERIFY_CONTROL_MISSING", {
+                "scenario=" .. autoMode,
+                "status=entire-control-tag-missing-after-save",
+            })
+        else
+            logEvent("VERIFY_SKIPPED", {
+                "reason=no-armed-control",
+                "gameVersion=" .. gameVersion(),
+            })
+            return
+        end
     end
 
     local name = ctl.scenario
@@ -801,11 +858,6 @@ local function onKeyPressed(key)
         end
     elseif key == getKeyCode("F10") then
         timedSave()
-    elseif key == getKeyCode("F11") then
-        local ok, err = pcall(clearProbeState)
-        if not ok then
-            logEvent("CLEAR", { "status=ERROR", "error=" .. safeString(err) })
-        end
     end
 end
 
@@ -823,6 +875,8 @@ local function onInitGlobalModData(isNewGame)
         "note=initWindowMs-is-not-isolated-ModData-load-time",
     })
 
+    local ctl = ModData.get(CONTROL_TAG)
+    verifiedArmedOnLoad = type(ctl) == "table" and ctl.armed == true and type(ctl.scenario) == "string"
     validateArmedPayload()
 end
 
@@ -844,9 +898,33 @@ local function onGameStart()
     logEvent("READY", {
         "gameVersion=" .. gameVersion(),
         "currentSave=" .. safeString(getCurrentSaveName and getCurrentSaveName() or nil),
-        "controls=F8-select,F9-prepare,F10-saveGame,F11-clear",
+        "controls=F8-select,F9-prepare,F10-saveGame,API-clear",
     })
     printSelection()
+
+    local autoMode, autoIndex = autoModeForCurrentSave()
+    if autoMode == "clear" then
+        logEvent("AUTO_START", { "mode=" .. autoMode })
+        clearProbeState()
+        timedSave()
+        logEvent("AUTO_DONE", { "mode=" .. autoMode })
+    elseif autoMode and not verifiedArmedOnLoad then
+        logEvent("AUTO_START", { "mode=" .. autoMode })
+        clearProbeState()
+        selectedIndex = autoIndex
+        printSelection()
+        prepareScenario(autoMode)
+        timedSave()
+        logEvent("AUTO_DONE", { "mode=" .. autoMode })
+    elseif autoMode then
+        logEvent("AUTO_SKIPPED", { "mode=" .. autoMode, "reason=verified-armed-payload-this-load" })
+    end
+
+    if autoMode then
+        autoQuitPending = true
+        autoQuitTicks = 0
+        logEvent("AUTO_QUIT_ARMED", { "mode=" .. autoMode })
+    end
 end
 
 local function onSave()
@@ -867,6 +945,56 @@ local function onPostSave()
         "elapsedSinceOnSaveMs=" .. elapsed,
         "note=includes-non-ModData-save-and-exit-work",
     })
+end
+
+local function onAutoContinueTick()
+    if not autoContinuePending then
+        return
+    end
+
+    autoContinueTicks = autoContinueTicks + 1
+    if autoContinueTicks < 30 then
+        return
+    end
+
+    local latest = getLatestSave and getLatestSave() or nil
+    local saveName = latest and latest[1] or nil
+    local gameMode = latest and latest[2] or nil
+    if type(saveName) ~= "string" or not saveName:match("^T1_") then
+        autoContinuePending = false
+        logEvent("AUTO_CONTINUE_SKIPPED", { "reason=latest-save-is-not-T1" })
+        return
+    end
+
+    if not MainScreen or not MainScreen.instance or not MainScreen.instance.setDefaultSandboxVars
+            or not MainScreen.continueLatestSave then
+        return
+    end
+
+    autoContinuePending = false
+    logEvent("AUTO_CONTINUE", { "save=" .. saveName, "gameMode=" .. safeString(gameMode) })
+    MainScreen.continueLatestSave(gameMode, saveName)
+end
+
+local function onAutoContinueMainMenu()
+    autoContinuePending = true
+    autoContinueTicks = 0
+    logEvent("AUTO_MENU_READY", { "status=waiting-for-main-screen-instance" })
+end
+
+local function onAutoQuitTick()
+    if not autoQuitPending then
+        return
+    end
+
+    autoQuitTicks = autoQuitTicks + 1
+    if autoQuitTicks < 120 then
+        return
+    end
+
+    autoQuitPending = false
+    logEvent("AUTO_QUIT", { "status=normal-quit-to-desktop-requested" })
+    getCore():quitToDesktop()
 end
 
 -- Small public surface for the Lua debugger if hotkeys are inconvenient.
@@ -892,6 +1020,10 @@ Events.OnGameStart.Add(onGameStart)
 Events.OnKeyPressed.Add(onKeyPressed)
 Events.OnSave.Add(onSave)
 Events.OnPostSave.Add(onPostSave)
+Events.OnTick.Add(onAutoContinueTick)
+Events.OnTick.Add(onAutoQuitTick)
+Events.OnRenderTick.Add(onAutoContinueTick)
+Events.OnMainMenuEnter.Add(onAutoContinueMainMenu)
 
 logEvent("SCRIPT_LOADED", {
     "gameVersion=" .. gameVersion(),
