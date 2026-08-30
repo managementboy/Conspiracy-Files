@@ -44,16 +44,25 @@ One built-in hand-authored thread:
 - hardcoded/curated locations;
 - no graph, theories, runtime AI, content packs, retrofit, migration, or MP.
 
+## v0.1 content/model status
+
+- `test/fixtures/THREAD-001-DEAD-AIR.md` is now a complete Dead Air authored-content candidate rather than a structural fixture: six full documents, three identities, one organisation, two story locations, anchor/fallback behavior, discovery paths, three reward moments, deterministic journal output and a Mark Interesting example.
+- The Dead Air text was development-time AI-assisted and still requires human approval before canonical shipping under `docs/design/AI_PROVENANCE.md`.
+- `docs/design/V0_1_DATA_MODEL.md` now derives the smallest v0.1 logical model from that story. Static authored prose/entities remain outside save state; v0.1 relationships are static ID references rather than standalone relationship records.
+- Exact vanilla map targets for the two curated locations are still unselected/unverified in this repository and must be chosen on the development PC.
+- No live Build 42 behavior was validated by this design work. T1/T3/T4/T5/T7/T8/T10 remain authoritative for their respective engine questions.
+
 ## Immediate work
 
 Before implementation architecture is signed off:
 
 1. run T1 and T9;
 2. run T2–T5;
-3. maintain the hand-authored fixture in `test/fixtures/THREAD-001-DEAD-AIR.md`;
-4. then update decisions from observed results;
-5. run T7/T8/T10 before expanding native asset/location/UI assumptions; T6 only matters if retrofit is revived.
+3. use the complete Dead Air fixture and `V0_1_DATA_MODEL.md` as the v0.1 implementation input without expanding into content packs/graph systems;
+4. choose and verify the two exact curated vanilla story locations on the development PC before location bindings are committed;
+5. then update decisions from observed spike results;
+6. run T7/T8/T10 before expanding native asset/location/UI assumptions; T6 only matters if retrofit is revived.
 
 ## Rule for disproven decisions
 
-Do not preserve a decision merely because it was previously marked settled. If a spike disproves it, supersede it explicitly in `DECISIONS.md`, link the spike/issue, and add the replacement ruling.
+Do not preserve a decision merely because it was previously marked settled. If a spike disproves it, supersede it explicitly in `DECISIONS.md`, link the spike result, and add the replacement ruling.
