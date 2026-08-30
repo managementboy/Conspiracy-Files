@@ -8,12 +8,26 @@ This file distinguishes **reviewer hypotheses/current-context claims** from **ob
 - Further modding support is expected during the Build 42 support cycle.
 - Patch-exact mod-folder/version assumptions are unnatural; verify actual conventions in the first loadable-mod probe.
 
-These statements came from the engineering review and are not yet independently re-verified in this repository.
+These statements came from the engineering review and are not yet independently re-verified in this repository as **live project-probe observations**.
+
+## T1 status — probe ready, live save/reload pending
+
+Full report: [`T1_MODDATA_PERSISTENCE.md`](T1_MODDATA_PERSISTENCE.md).
+
+Repository/web research on 2026-08-30 independently confirmed the following **external documentation context**:
+
+- Project Zomboid's official version endpoint reports Stable `42.20.4`.
+- Current official JavaDocs expose Lua-facing `ModData` operations including `getOrCreate`, `get` and `remove`; `ModData` fronts `GlobalModData`.
+- Current official JavaDocs name the Global ModData save file `global_mod_data.bin` and expose an internal `524288`-byte buffer block. That block size is not evidence of a 512 KiB persistence limit.
+- Current official LuaManager JavaDocs expose `saveGame()`, `getTimeInMillis()`, `getGameVersion()` and `getGameTime()` for probe instrumentation.
+- The Indie Stone's Build 42 modding announcement documents versioned mod directories plus `common/` shared content.
+
+**No T1 data shape, key type, reference behavior, nesting depth, scale result or save-size ceiling is yet marked verified.** The current agent runtime cannot access or launch the development PC's installed Project Zomboid client. The committed disposable probe covers baseline types, nil/removal, functions, Java objects, metatables, cycles, shared references, non-string/non-number keys, depth 16–512, and 1k/10k/100k representative records. Issue #1 remains open until the real Build 42 save/reload matrix is executed and the full report is updated from observed results.
 
 ## Required spikes
 
 ### T1 — ModData persistence limits
-Test serialisable types, cycles, metatables, non-string keys, nesting and 1k/10k/100k record size/timing.
+Probe committed under `dev/t1-moddata-persistence/`; live save/reload execution is still required. See [`T1_MODDATA_PERSISTENCE.md`](T1_MODDATA_PERSISTENCE.md).
 
 ### T2 — Full map/meta-grid enumeration cost
 Measure total cost on current B42 map and whether work must be spread across frames.
