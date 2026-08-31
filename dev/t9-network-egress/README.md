@@ -26,7 +26,7 @@ ConspiracyFiles_T9_Probe/
 
 Enable only `ConspiracyFiles_T9_Probe` in a disposable single-player save whose folder name begins `T9_`. Place a UTF-8 file named `ConspiracyFiles_T9_Sentinel.txt` containing exactly `CF-T9-SENTINEL` in the PZ `Lua` cache directory to exercise the constrained file bridge check.
 
-Run once normally and once with `-nosteam`. The latter selects the game's fixed HTTPS `servers.xml` implementation instead of Steam's server browser. After 120 ticks the probe executes once, waits long enough to record the post-call tick gap, and requests a normal quit to desktop.
+The committed T9 HTTP evidence used one controlled `-nosteam` run because that mode selects the engine's fixed HTTPS `servers.xml` implementation. A normal Steam-mode run is optional only for comparing the fixed-purpose helper's alternate Steam implementation; it is not evidence of arbitrary web egress. After 120 ticks the probe executes once, waits long enough to record the post-call tick gap, and requests a normal quit to desktop.
 
 For an unattended direct-executable run, compile `tools/ConspiracyFilesT9GateAgent.cpp` as a launch-only JNI agent and set `JAVA_TOOL_OPTIONS=-agentpath:<absolute-dll-path>`. The helper changes no Lua, save, networking or measurement state: it waits for the engine's own `GameLoadingState.done` flag and then releases the raw-input loading gate that an automated direct launch cannot satisfy. Its source is included so this test-harness intervention is auditable and reproducible; it is not part of the mod.
 

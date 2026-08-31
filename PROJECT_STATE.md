@@ -13,6 +13,23 @@ Target: Project Zomboid Build 42; T1 and T9 verified stable Build **42.20.4**, r
 6. `docs/research/` — observed Build 42 facts from spikes. **Observed technical reality overrides a speculative decision.**
 7. `docs/decisions/` — ADRs for durable engineering choices.
 
+## Spike-to-GitHub-issue map
+
+Spike numbers and GitHub issue numbers are not interchangeable. Use this authoritative mapping:
+
+| Spike | GitHub issue |
+|---|---:|
+| T1 | #1 |
+| T9 | #2 |
+| T2 | #3 |
+| T3 | #4 |
+| T4 | #5 |
+| T5 | #6 |
+| T6 | #7 |
+| T7 | #8 |
+| T8 | #9 |
+| T10 | #10 |
+
 ## Core product
 
 Conspiracy-Files is a solo-first Project Zomboid investigation overlay. The player survives normally and opportunistically discovers a grounded 1990s government/scientific conspiracy through ordinary PZ places and objects. There is no conventional case completion and no guaranteed final truth before death.
