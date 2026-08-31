@@ -34,7 +34,7 @@ Goal: prove the intended feeling once, with the smallest end-to-end build.
 ## Engineering gate A — before v0.1 implementation is trusted
 Run six critical probes:
 1. [x] T1 ModData persistence/size limits — complete on Build 42.20.4; decisions incorporated.
-2. [ ] T9 Lua network egress (close the runtime-AI transport question) — pending.
+2. [x] T9 Lua network egress — complete on Build 42.20.4; vanilla Lua has no general HTTP client, so future optional runtime-AI transport needs Java/ZombieBuddy or an external companion and remains outside v0.1.
 3. [ ] T2 map/meta-grid enumeration cost — pending.
 4. [ ] T3 location categorisation reliability — pending.
 5. [ ] T4 exact-once deferred placement — pending.

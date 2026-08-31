@@ -30,6 +30,20 @@ Verified live single-player Global ModData findings:
 
 The existing stable-ID and ID-based relationship architecture is retained and strengthened by these observations.
 
+## T9 — Vanilla Lua network egress: complete
+
+Full report: [`T9_NETWORK_EGRESS.md`](T9_NETWORK_EGRESS.md).
+
+Verified live single-player `-nosteam` findings on the same exact Build 42.20.4 installation:
+
+- `getHostByName` is exposed and synchronous: a controlled known host resolved in 13 ms; a `.invalid` name returned nil in 5 ms.
+- No general HTTP/HTTPS request surface was callable: `getUrlInputStream`, URL/connection/client classes, `Socket`, `Thread`, `Runnable`, `luajava` and internal `PublicServerUtil` were absent from Lua.
+- `openUrl` is an allowlisted browser-launch helper, not a response API.
+- `getPublicServersList` is the sole HTTP-like Lua call. In `-nosteam` it synchronously invokes an engine-fixed HTTPS XML endpoint; the live call occupied `OnTick` for 312 ms and returned nil with no status, body or error detail.
+- Arbitrary GET, plain HTTP, POST, TLS configuration/diagnostics, timeout configuration and async HTTP are unavailable to vanilla Lua.
+- The fixed path's installed code uses 10-second connect/read timeouts and reads the whole response using the platform-default decoder before XML parsing; Lua cannot configure those choices or access the raw response.
+- General optional runtime-AI transport therefore needs Java/ZombieBuddy or an external companion. This does not block v0.1 because no-AI remains primary.
+
 ## Documentation context
 
 - Official version metadata: <https://projectzomboid.com/version_announce/>
@@ -68,10 +82,6 @@ Determine which asset types can show world-specific content while retaining nati
 ### T8 — Building/room/non-building arrival detection
 
 Test multi-floor and basement cases plus a non-building landmark.
-
-### T9 — Network egress from Lua
-
-Confirm whether vanilla Lua can perform HTTP/network requests. The core design remains no-AI-primary regardless.
 
 ### T10 — Cooperative Inspect context-menu integration
 

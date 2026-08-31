@@ -24,7 +24,7 @@ Before making any design or code change:
 - Detect multiplayer and disable cleanly until MP support is explicitly designed.
 - Full hidden-state diagnostics are debug/development only.
 - Outside initialization, target ≤2 ms/frame and use bounded queued work rather than unbounded loops.
-- Provisional canonical-state target is ≤500 KB/save until T1 proves a different safe budget.
+- Completed T1 makes ≤500 KB/save the hard v0.1 canonical-state budget under P4-R17, with mandatory staged recursive validation before canonical ModData replacement under P4-R32.
 
 ## Decision integrity
 
