@@ -64,9 +64,9 @@ If a spike disproves a decision, technical reality wins: supersede the decision 
 | P3-Q2 | Java/ZombieBuddy requires missing API access, measured performance bottleneck, or persistence/data-processing complexity. | Keep the dependency boundary narrow. |
 | P3-Q3 | One authoritative core model; UI/diagnostics are projections. | Prevents competing truths. |
 | P3-Q4 | Persist minimal canonical state; rebuild caches/indexes. | Controls save size and state drift. |
-| P3-Q6 | Typed entity collections + a central relationship store. | Serves both domain logic and future graph views. |
+| P3-Q6 | Typed entity collections + a central relationship store. | Long-term direction for richer domain linkage; see P4-R31 for the v0.1 Dead Air exception. |
 | P3-Q7 | Deterministic IDs for authored entities; generated IDs for player/runtime entities. | Stable references without predeclaring player content. |
-| P3-Q8 | Central relationship table is canonical; per-entity adjacency is a rebuildable index. | Avoids duplicated relationship truth. |
+| P3-Q8 | Central relationship table is canonical; per-entity adjacency is a rebuildable index. | Long-term direction once relationship lifecycle is justified; see P4-R31 for v0.1. |
 | P3-Q9 | Domain events propagate meaningful model changes; views can rebuild on open as a safety net. | Event-driven without fragile UI coupling. |
 | P3-Q10 | PZ events are boundary inputs translated into internal CF domain events. | Keeps engine code outside the domain core. |
 | P4-R16 | Provisional runtime budget ≤2 ms/frame outside explicit initialization; use bounded queued work. | PZ Lua is main-thread constrained. |
@@ -75,6 +75,7 @@ If a spike disproves a decision, technical reality wins: supersede the decision 
 | P4-R19 | Every PZ adapter uses `pcall`; repeated subsystem failures auto-disable that subsystem with concise reporting. | Error containment. |
 | P4-R20 | Domain core has zero PZ runtime dependencies and runs in plain Lua 5.1 tests. | Testability. |
 | P4-R21 | No vanilla Lua replacement; one `ConspiracyFiles` namespace; cooperative context-menu/event hooks. | Mod compatibility. |
+| P4-R31 | **v0.1 Dead Air uses static stable-ID references on authored Assets instead of instantiating or persisting standalone Relationship records.** Re-evaluate a central relationship store only when a second real content set or the v2 graph creates an actual need. | The complete v0.1 story needs references, leads, contradictions and recontextualisation, but none of those relationships have runtime lifecycle in the slice. Content-first minimality wins over pre-building graph-era structure. |
 | P4-R32 | Before swapping canonical ModData, recursively validate a staged full replacement: allow only string/number keys and string/number/boolean/plain-table values (nil means absence); reject cycles; reject multiply referenced tables or normalize/copy them so meaning cannot depend on alias identity; reject metatables, functions, userdata, threads and exposed Java objects; enforce maximum depth 64; validate schema and estimated serialized size against P4-R17; swap only after the complete replacement passes, preserving the last known-good canonical root on rejection. | T1 found silent dropping of unsupported values and keys, loss of shared-reference identity, and catastrophic whole-tag loss from a cycle even when `saveGame()` returned; pre-save validation is therefore mandatory. |
 
 ## Delivery/scope decisions
