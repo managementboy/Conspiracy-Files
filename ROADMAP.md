@@ -33,12 +33,12 @@ Goal: prove the intended feeling once, with the smallest end-to-end build.
 
 ## Engineering gate A — before v0.1 implementation is trusted
 Run six critical probes:
-1. T1 ModData persistence/size limits.
-2. T9 Lua network egress (close the runtime-AI transport question).
-3. T2 map/meta-grid enumeration cost.
-4. T3 location categorisation reliability.
-5. T4 exact-once deferred placement.
-6. T5 persistent item identity.
+1. [x] T1 ModData persistence/size limits — complete on Build 42.20.4; decisions incorporated.
+2. [ ] T9 Lua network egress (close the runtime-AI transport question) — pending.
+3. [ ] T2 map/meta-grid enumeration cost — pending.
+4. [ ] T3 location categorisation reliability — pending.
+5. [ ] T4 exact-once deferred placement — pending.
+6. [ ] T5 persistent item identity — pending.
 
 A negative result is a valid result and must update the decision record.
 
