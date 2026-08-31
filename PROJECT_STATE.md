@@ -1,7 +1,7 @@
 # Conspiracy-Files — Project State
 
 Status: **Engineering de-risk / v0.1 definition**. No feature implementation has been accepted yet.
-Target: Project Zomboid Build 42; T1 verified stable Build **42.20.4**, revision **b0bbce05d5**, Steam build ID **24909800**. Other capability claims remain subject to their named spikes/research.
+Target: Project Zomboid Build 42; T1 and T9 verified stable Build **42.20.4**, revision **b0bbce05d5**, Steam build ID **24909800**. Other capability claims remain subject to their named spikes/research.
 
 ## Source of truth order
 
@@ -34,6 +34,7 @@ The first specification over-committed to unproven Build 42 capabilities. The en
 ## Completed de-risking
 
 - **T1 ModData persistence/size limits:** complete. The live single-player save/reload matrix on Build 42.20.4 revision b0bbce05d5 (Steam build ID 24909800) validated vanilla Lua Global ModData within the hard ≤500 KB/save canonical-state budget and established mandatory recursive pre-save validation. See `docs/research/T1_MODDATA_PERSISTENCE.md`.
+- **T9 vanilla Lua network egress:** complete. The live `-nosteam` probe on Build 42.20.4 found synchronous DNS and a fixed blocking server-list helper, but no arbitrary GET, POST, TLS/timeout controls or async HTTP response surface. Any future optional runtime-AI transport requires Java/ZombieBuddy or an external companion and remains outside v0.1. See `docs/research/T9_NETWORK_EGRESS.md`.
 
 ## v0.1 vertical slice
 
@@ -60,12 +61,11 @@ One built-in hand-authored thread:
 
 Before implementation architecture is signed off:
 
-1. run T9;
-2. run T2–T5;
-3. use the complete Dead Air fixture and `V0_1_DATA_MODEL.md` as the v0.1 implementation input without expanding into content packs/graph systems;
-4. choose and verify the two exact curated vanilla story locations on the development PC before location bindings are committed;
-5. update decisions from each observed spike result;
-6. run T7/T8/T10 before expanding native asset/location/UI assumptions; T6 only matters if retrofit is revived.
+1. run T2–T5;
+2. use the complete Dead Air fixture and `V0_1_DATA_MODEL.md` as the v0.1 implementation input without expanding into content packs/graph systems;
+3. choose and verify the two exact curated vanilla story locations on the development PC before location bindings are committed;
+4. update decisions from each observed spike result;
+5. run T7/T8/T10 before expanding native asset/location/UI assumptions; T6 only matters if retrofit is revived.
 
 ## Rule for disproven decisions
 

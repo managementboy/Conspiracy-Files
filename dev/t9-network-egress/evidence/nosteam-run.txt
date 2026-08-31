@@ -1,0 +1,54 @@
+Spike T9 controlled evidence transcript
+Captured: 2026-08-31 Europe/Berlin
+PZ: 42.20.4 b0bbce05d5; revision b0bbce05d5; Steam build 24909800
+Mode: direct executable, -nosteam, disposable T9_network save, T9 probe only
+Host: Windows 11 Pro 10.0.26200 build 26200; i9-13900H; 34,070,192,128 bytes RAM
+Probe SHA-256: 1B4CD444254987E40951B680A682E2FE73527EAF831AEF14DE6280F4FD7830A7
+Gate helper SHA-256: 2B4412410B4B22BA6D414A949EFDCA06CEB38128A0E4CC91FC6C3C1A0855E396
+
+External responsiveness sampler: 388 samples at approximately 100 ms over 49,688 ms;
+Windows Responding=false samples: 0. This is process-window evidence, not proof that
+individual game ticks were uninterrupted.
+
+Filtered safe transcript (raw console deliberately excluded):
+
+[CF-T9-AGENT]|STARTED|mode=loading-gate-only
+LOG  : Lua          f:0> [CF-T9]|EVENT|kind=SCRIPT_LOADED|gameVersion=42.20
+LOG  : Lua          f:0> [CF-T9]|EVENT|kind=AUTO_MENU_READY|status=waiting-for-main-screen-instance
+LOG  : Lua          f:0> [CF-T9]|EVENT|kind=AUTO_CONTINUE|save=T9_network|gameMode=Sandbox
+[CF-T9-AGENT]|GATE_RELEASED|reason=engine-done-true
+LOG  : Lua          f:0> [CF-T9]|EVENT|kind=READY|gameVersion=42.20|startAfterTicks=120
+LOG  : Lua          f:120> [CF-T9]|EVENT|kind=ENVIRONMENT|gameVersion=42.20|t9Save=true
+LOG  : Lua          f:120> [CF-T9]|EVENT|kind=ACTIVE_MODS|status=available|count=1|zombieBuddyActive=false
+LOG  : Lua          f:120> [CF-T9]|EVENT|kind=API_CANDIDATE|name=getUrlInputStream|luaType=nil
+LOG  : Lua          f:120> [CF-T9]|EVENT|kind=API_CANDIDATE|name=getURLInputStream|luaType=nil
+LOG  : Lua          f:120> [CF-T9]|EVENT|kind=API_CANDIDATE|name=getHostByName|luaType=function
+LOG  : Lua          f:120> [CF-T9]|EVENT|kind=API_CANDIDATE|name=openUrl|luaType=function
+LOG  : Lua          f:120> [CF-T9]|EVENT|kind=API_CANDIDATE|name=getPublicServersList|luaType=function
+LOG  : Lua          f:120> [CF-T9]|EVENT|kind=API_CANDIDATE|name=PublicServerUtil|luaType=nil
+LOG  : Lua          f:120> [CF-T9]|EVENT|kind=API_CANDIDATE|name=URL|luaType=nil
+LOG  : Lua          f:120> [CF-T9]|EVENT|kind=API_CANDIDATE|name=URLConnection|luaType=nil
+LOG  : Lua          f:120> [CF-T9]|EVENT|kind=API_CANDIDATE|name=HttpURLConnection|luaType=nil
+LOG  : Lua          f:120> [CF-T9]|EVENT|kind=API_CANDIDATE|name=HttpClient|luaType=nil
+LOG  : Lua          f:120> [CF-T9]|EVENT|kind=API_CANDIDATE|name=OkHttpClient|luaType=nil
+LOG  : Lua          f:120> [CF-T9]|EVENT|kind=API_CANDIDATE|name=Request|luaType=nil
+LOG  : Lua          f:120> [CF-T9]|EVENT|kind=API_CANDIDATE|name=Socket|luaType=nil
+LOG  : Lua          f:120> [CF-T9]|EVENT|kind=API_CANDIDATE|name=Thread|luaType=nil
+LOG  : Lua          f:120> [CF-T9]|EVENT|kind=API_CANDIDATE|name=Runnable|luaType=nil
+LOG  : Lua          f:120> [CF-T9]|EVENT|kind=API_CANDIDATE|name=luajava|luaType=nil
+LOG  : Lua          f:120> [CF-T9]|EVENT|kind=API_DISCOVERY_DONE|matchCount=31
+LOG  : Lua          f:120> [CF-T9]|EVENT|kind=DNS|case=known-host|status=RETURNED|resultKind=ipv4|elapsedMs=13
+LOG  : Lua          f:120> [CF-T9]|EVENT|kind=DNS|case=invalid-tld|status=RETURNED|resultKind=none|elapsedMs=5
+LOG  : Lua          f:120> [CF-T9]|EVENT|kind=OPEN_URL_REJECTED|status=RETURNED|resultType=nil|elapsedMs=0|note=non-allowlisted-url-no-browser-request-expected
+LOG  : Lua          f:120> [CF-T9]|EVENT|kind=FILE_SANDBOX|controlledCacheRead=true|parentTraversalCall=RETURNED|parentTraversalReader=nil
+LOG  : Lua          f:120> [CF-T9]|EVENT|kind=GENERAL_HTTP_SURFACE|callableCandidateFound=false|getCapability=unavailable|postCapability=unavailable
+LOG  : Lua          f:120> [CF-T9]|EVENT|kind=ASYNC_SURFACE|callableCandidateFound=false
+LOG  : Lua          f:120> [CF-T9]|EVENT|kind=SERVER_LIST_START|steamMode=false|callThread=OnTick-event-thread
+LOG  : Lua          f:120> [CF-T9]|EVENT|kind=SERVER_LIST_RETURN|steamMode=false|status=RETURNED|resultType=nil|entryCount=-1|elapsedMs=312|responseBodyVisible=false
+LOG  : Lua          f:121> [CF-T9]|EVENT|kind=POST_CALL_TICK|gapSinceReturnMs=14|blockingCallElapsedMs=312
+LOG  : Lua          f:240> [CF-T9]|EVENT|kind=AUTO_QUIT|status=normal-quit-to-desktop-requested
+
+Control observation made outside Lua (metadata only, response body discarded): at
+2026-08-31 15:55 Europe/Berlin, curl reached the same engine-hard-coded HTTPS URL,
+received HTTP 200 application/xml with Content-Length 38,380, TLS verification result
+0, and completed in 114 ms. This control does not turn curl behavior into a Lua claim.
