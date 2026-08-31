@@ -2,7 +2,7 @@
 
 This index separates observed project-spike results from external documentation context. Full results live in the linked spike reports.
 
-## Verified live environment (2026-08-30 through 2026-08-31)
+## Verified live environment (2026-08-30 through 2026-09-01)
 
 - Project Zomboid Stable `42.20.4 b0bbce05d5`
 - Revision `b0bbce05d5`
@@ -88,11 +88,13 @@ The documented `524288`-byte internal block constant is not a persistence limit 
 
 Complete on stable 42.20.4. `Events.LoadGridsquare` is a verified cooperative wake-up surface, but it fired 27,245 times before `OnGameStart`; enqueue relevant curated bindings and add an `OnGameStart` catch-up rather than mutating inline. A true teleport-driven stream-out/in made the exact target square unavailable and produced one new exact-target callback on return.
 
-`instanceItem` can create a detached item whose ModData is stamped before `ItemContainer:AddItem(existingItem)`. Exact-container stamp reconciliation survived seven interruption phases, three save/reloads and the real stream cycle without valid-path duplication. Physically removed targets persisted absent. T4 found and tested no Lua-visible atomic chunk/Global-ModData transaction, so a committed ledger with no stamp becomes `lost` and is not blindly respawned; duplicate stamps become `conflict`. See `T4_EXACT_ONCE_PLACEMENT.md` and `dev/t4-exact-once-placement/evidence/installed-api.txt`.
+`instanceItem` can create a detached item whose ModData is stamped before `ItemContainer:AddItem(existingItem)`. Exact-container stamp reconciliation survived seven interruption phases, three save/reloads and the real stream cycle without valid-path duplication. Physically removed targets persisted absent. T4 found and tested no Lua-visible atomic chunk/Global-ModData transaction, so confirmed loss is not blindly respawned and duplicate stamps become `conflict`. T5 later proved that zero in only the original container is not confirmed loss; it triggers wider identity reconciliation. See `T4_EXACT_ONCE_PLACEMENT.md`, `T5_PHYSICAL_ITEM_IDENTITY.md` and `dev/t4-exact-once-placement/evidence/installed-api.txt`.
 
 ### T5 — Persistent physical item identity
 
-Test project UUID/ID in item ModData across inventory, container, floor, vehicle, death and save/load transitions.
+Complete on stable 42.20.4. One detached-prestamped `Base.Note` retained its mod-owned ModData identity through inventory, an ordinary world container, the floor, a spawned vehicle truck bed and back to inventory, with a real reload at every stage. Permanent removal remained absent after reload. Real disposable-character death moved one stamped item into a nearby corpse with the same observed engine ID; post-save reload of the already-dead save stalled before `OnGameStart`, so corpse persistence across that final reload is not claimed.
+
+Both `copyModData` and `CopyModData` produced different engine items carrying the same identity and the two-item conflicts survived reload. Engine IDs stayed stable in the tested path but are diagnostic only. Placement outcome and physical availability must be separate: zero in the original placement container triggers wider identity reconciliation, not immediate loss. See `T5_PHYSICAL_ITEM_IDENTITY.md` and `dev/t5-physical-item-identity/evidence/installed-api.txt`.
 
 ### T6 — Never-loaded chunk detection
 

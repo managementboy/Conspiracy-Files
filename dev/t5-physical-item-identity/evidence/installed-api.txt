@@ -1,0 +1,56 @@
+Conspiracy-Files T5 installed API evidence
+Inspection date: 2026-09-01
+Installed Project Zomboid: 42.20.4 b0bbce05d5, revision b0bbce05d5,
+pzbullet=1.0.0.28, Steam build ID 24909800
+Installed projectzomboid.jar SHA-256:
+80E405A4BFC42F6072E75B3735F458A6514143DA011D3226007DED305A442F44
+
+Exact installed vanilla Lua inspected read-only:
+
+media/lua/shared/TimedActions/ISTransferAction.lua
+SHA-256 97744891C667D8DE0CD18C789AB0A6C0E4ADD0C7CC114D904C359703D0A66C43
+  transferItem removes the existing InventoryItem from the source and adds the same
+  instance to a normal destination. For floor destinations it adds that instance to
+  an ItemContainer of type floor and calls IsoGridSquare:AddWorldInventoryItem(item).
+  For floor sources it removes the IsoWorldInventoryObject, clears item:setWorldItem(nil),
+  then adds that InventoryItem to the destination. Vehicle container amounts are updated.
+
+media/lua/client/TimedActions/ISInventoryTransferAction.lua
+SHA-256 96EE554609F9AE029809643D50E4F31DBC5A7D21A558934BE0804FD909C345B4
+  normal single-player inventory/container/floor transfers delegate to
+  ISTransferAction:transferItem and use InventoryItem:getID for transaction lookup.
+
+media/lua/shared/TimedActions/ISDropWorldItemAction.lua
+SHA-256 1A1DB7308A9CEE66889ED197320D8CEB9A8373FCDF557D8E14D27B10EF644DB3
+  normal drop uses IsoGridSquare:AddWorldInventoryItem(existingItem) before removing
+  the same item from player inventory. Two special lit-item types are replacement cases.
+
+media/lua/client/TimedActions/ISGrabItemAction.lua
+SHA-256 09E0CF5DF8C9DF21381FEF6E3C3A88CB36D97264A7A1BDF9D460D37E2EFF8B0D
+  normal single-player floor pickup removes the world object, clears the InventoryItem's
+  world-item reference, and adds that InventoryItem to the destination container.
+
+media/lua/shared/TimedActions/ISClothingExtraAction.lua
+SHA-256 D5CB3C40A8F2C653F9F5D9F5E89F9222FB72723BB4D918EBD8119BC8C6AD0515
+  replacement clothing is a new item; when the old item has ModData, vanilla explicitly
+  calls newItem:copyModData(oldItem:getModData()). This is installed-code evidence that
+  transformation/replacement paths can copy an identity stamp to a different item.
+
+Official Build 42 Javadocs consulted:
+  https://projectzomboid.com/modding/zombie/inventory/InventoryItem.html
+    getID/setID, getModData, copyModData/CopyModData, createCloneItem, save/load,
+    getContainer/getWorldItem/setWorldItem.
+  https://projectzomboid.com/modding/zombie/inventory/ItemContainer.html
+    AddItem(existing InventoryItem), Remove/DoRemoveItem, getItems.
+  https://projectzomboid.com/modding/zombie/iso/objects/IsoWorldInventoryObject.html
+    getItem, save/load, removeFromWorld/removeFromSquare.
+  https://projectzomboid.com/modding/zombie/vehicles/BaseVehicle.html
+  https://projectzomboid.com/modding/zombie/vehicles/VehiclePart.html
+    vehicle part and item-container access.
+  https://projectzomboid.com/modding/zombie/iso/objects/IsoDeadBody.html
+    corpse container surface.
+
+Signature presence is not treated as a result. The live matrix proved which calls worked
+from the isolated ordinary Lua probe. In particular, InventoryItem:createCloneItem()
+returned no usable clone for the tested Base.Note even though the public method exists;
+both copyModData variants did create a second item carrying the same stamp.

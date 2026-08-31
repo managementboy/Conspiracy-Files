@@ -1,5 +1,7 @@
 # Spike T4 — exact-once deferred placement
 
+> **T5 follow-up correction (2026-09-01):** T4's explicit-remove cases still prove confirmed loss without respawn, but zero stamps in the original placement container after `placed` is not sufficient by itself to declare loss. T5 proved normal movement can place the same stamped item in inventory, floor, vehicle or corpse. Post-placement zero now triggers the bounded wider identity reconciliation defined in `T5_PHYSICAL_ITEM_IDENTITY.md`.
+
 - **Status:** Complete — live isolated fault/reload matrix executed on the development PC
 - **Project Zomboid build tested:** Stable `42.20.4 b0bbce05d5`; revision `b0bbce05d5`; `pzbullet=1.0.0.28`; Steam build ID `24909800`
 - **Platform:** Windows 11 Pro build 26200; direct 64-bit single-player client; `-nosteam`
@@ -88,7 +90,7 @@ For v0.1:
 - D1 and D2 keep independent placement records; D3–D6 remain ordinary supporting placements and are never suppressed by entry selection.
 - An unloaded D1 target is `pending`, not failed. Do not activate the fallback merely because a chunk/cell is absent.
 - A terminally invalid D1 target **before** D1 reaches `placed` may make D2 the guaranteed introduction opportunity, provided D2 itself has exactly one safe placement.
-- Once D1 reaches `placed`, never spawn another D1. If the physical object later disappears, transition to `lost` and rely on T5 for wider identity tracking rather than guessing.
+- Once D1 reaches `placed`, never spawn another D1. If it leaves the target container, use T5 wider identity tracking. Transition physical availability to unavailable/`lost` only after a destructive event or complete covered reconciliation proves absence; never guess or respawn.
 - `entryOpportunityUsed` should be set in the same validated root transition that accepts the winning introduction opportunity as `placed`; it must never switch from anchor to fallback or vice versa silently.
 
 One product decision remains: whether a durably placed but still-undiscovered D1 that later becomes `lost` should permit D2 to become the narrative entry opportunity. T4 establishes the safe technical choices but cannot decide the desired story semantics. **Morning to-do:** decide the Dead Air fallback rule for “anchor placed, not discovered, later lost” before implementing `entryOpportunityUsed`.
