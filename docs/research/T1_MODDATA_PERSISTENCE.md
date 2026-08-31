@@ -110,7 +110,7 @@ Before canonical state is committed to ModData:
 5. Reject metatables, functions, userdata, threads and exposed Java objects anywhere in canonical state.
 6. Enforce maximum depth 64.
 7. Enforce canonical serialized-size estimate `≤500 KB` and refuse/diagnose oversized commits.
-8. Keep canonical relationships as stable IDs in the central relationship table; rebuild adjacency and other caches.
+8. Represent canonical relationships with stable-ID references; storage may use static stable-ID arrays or a later standalone relationship store, but meaning must never depend on shared-table identity or engine-object references.
 9. Stage and validate a full replacement before swapping the last known-good canonical root.
 10. Emit a concise diagnostic on rejection; never silently drop unsupported state.
 
@@ -118,7 +118,7 @@ Before canonical state is committed to ModData:
 
 - P3-Q1 / ADR-0001 `Vanilla Lua first` is validated for persistence within the project budget.
 - P3-Q4 `Persist minimal canonical state; rebuild caches/indexes` is strengthened by the scale results.
-- P3-Q7/P3-Q8 stable IDs and ID-based central relationships are validated as the correct representation because shared table identity is lost and engine objects are dropped.
+- P3-Q7 stable-ID relationship references are strengthened because shared table identity is lost and engine objects are dropped. T1 does not prescribe whether v0.1 stores those references in static arrays or a later standalone relationship store.
 - P4-R17 `≤500 KB/save` changes from provisional to the recommended v0.1 hard canonical-state budget.
 - No Java or ZombieBuddy production dependency is introduced.
 - The domain model remains PZ-independent; nothing in T1 requires redesigning it around Lua or Java object references.

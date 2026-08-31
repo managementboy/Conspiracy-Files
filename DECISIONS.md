@@ -70,11 +70,12 @@ If a spike disproves a decision, technical reality wins: supersede the decision 
 | P3-Q9 | Domain events propagate meaningful model changes; views can rebuild on open as a safety net. | Event-driven without fragile UI coupling. |
 | P3-Q10 | PZ events are boundary inputs translated into internal CF domain events. | Keeps engine code outside the domain core. |
 | P4-R16 | Provisional runtime budget ≤2 ms/frame outside explicit initialization; use bounded queued work. | PZ Lua is main-thread constrained. |
-| P4-R17 | Provisional canonical save-state target ≤500 KB/save. | Gives T1 a measurable target. |
+| P4-R17 | **Hard v0.1 canonical-state budget: ≤500 KB/save.** | T1's live Build 42.20.4 results retained the target as an evidence-based production ceiling; technically serialisable larger states caused unacceptable synchronous stalls. |
 | P4-R18 | Detect multiplayer and disable cleanly until MP support is designed. | Avoid half-running/corrupt state. |
 | P4-R19 | Every PZ adapter uses `pcall`; repeated subsystem failures auto-disable that subsystem with concise reporting. | Error containment. |
 | P4-R20 | Domain core has zero PZ runtime dependencies and runs in plain Lua 5.1 tests. | Testability. |
 | P4-R21 | No vanilla Lua replacement; one `ConspiracyFiles` namespace; cooperative context-menu/event hooks. | Mod compatibility. |
+| P4-R31 | Before swapping canonical ModData, recursively validate a staged full replacement: allow only string/number keys and string/number/boolean/plain-table values (nil means absence); reject cycles; reject multiply referenced tables or normalize/copy them so meaning cannot depend on alias identity; reject metatables, functions, userdata, threads and exposed Java objects; enforce maximum depth 64; validate schema and estimated serialized size against P4-R17; swap only after the complete replacement passes, preserving the last known-good canonical root on rejection. | T1 found silent dropping of unsupported values and keys, loss of shared-reference identity, and catastrophic whole-tag loss from a cycle even when `saveGame()` returned; pre-save validation is therefore mandatory. |
 
 ## Delivery/scope decisions
 
@@ -90,7 +91,6 @@ If a spike disproves a decision, technical reality wins: supersede the decision 
 
 ## Technical decisions intentionally pending spikes
 
-- **T1:** ModData persistence limits and final state-size ceiling.
 - **T2:** map/meta-grid enumeration cost and scheduler requirements.
 - **T3:** automatic location categorisation reliability.
 - **T4:** exact-once placement hook/idempotency sequence.
