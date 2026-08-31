@@ -37,7 +37,7 @@ Run six critical probes:
 2. [x] T9 Lua network egress — complete on Build 42.20.4; vanilla Lua has no general HTTP client, so future optional runtime-AI transport needs Java/ZombieBuddy or an external companion and remains outside v0.1.
 3. [x] T2 map/meta-grid enumeration cost — complete on Build 42.20.4; 96,414 building/room records took 227–244 ms synchronously, while 100 records/frame stayed at or below 2 ms. Future discovery must stream/filter behind dual record/time bounds; v0.1 remains curated.
 4. [x] T3 location categorisation reliability — complete on Build 42.20.4; exact bookstore/clinic/hospital room labels produced useful candidates, but generic building categorisation and non-building transmission landmarks were not reliable enough to become story truth. v0.1/v1 remain curated; future automation is advisory and P4-R34-bounded.
-5. [ ] T4 exact-once deferred placement — pending.
+5. [x] T4 exact-once deferred placement — complete on Build 42.20.4; use queued `LoadGridsquare` wake-ups plus `OnGameStart` catch-up, detached pre-stamping, exact-container reconciliation, and loss-over-duplication handling for ambiguous persisted state.
 6. [ ] T5 persistent item identity — pending.
 
 A negative result is a valid result and must update the decision record.

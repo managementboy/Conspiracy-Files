@@ -104,14 +104,20 @@ Graph-only entities/features stay out until v2.
 
 v0.1 does not scan the whole map. The fixture provides two exact curated locations.
 
-Placement must be idempotent:
-1. decide intended placement ID;
-2. persist a placement/idempotency record at the safest point proven by T4;
-3. inject exactly once when the target becomes available;
-4. reconcile on save/load/repeated chunk load;
-5. activate fallback only if anchor cannot safely materialise.
+T4 fixes the placement protocol:
+
+1. select the deterministic Asset/placement token and curated binding; P4-R32-validate a full root with `pending`;
+2. use `LoadGridsquare` only to enqueue relevant bindings and `OnGameStart` to catch already-loaded targets;
+3. resolve the exact target and scan its container for the token before constructing anything;
+4. if zero, stage `placing`, create and stamp the item while detached, add that exact instance, verify one, then stage `placed`;
+5. if one, reconcile to `placed` without adding; if more than one, enter `conflict`; if `placed` later has zero, enter `lost` and never blindly respawn;
+6. keep merely unloaded targets pending; mark terminally destroyed/burned/invalid pre-placement targets `unavailable` and consider the authored fallback.
+
+Every canonical transition is a staged full-root replacement under P4-R32/P4-R17. T4 found and tested no Lua-visible atomic transaction across chunk/container files and Global ModData, so ambiguous partial persistence biases toward loss/fallback rather than duplication. Work is drained through a deduplicated bounded queue behind a `pcall` adapter boundary.
 
 Anchor and fallback are both valid authored content, but they are not deliberately spawned together as duplicate red herrings.
+
+The narrative rule for an anchor that was durably placed but remained undiscovered before later becoming `lost` is still a product choice and must be decided before `entryOpportunityUsed` is implemented.
 
 ## 7. Asset text model
 

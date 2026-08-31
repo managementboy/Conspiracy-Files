@@ -1,0 +1,6 @@
+name=Conspiracy-Files T4 Exact-Once Placement Probe
+id=ConspiracyFiles_T4_Probe
+author=Conspiracy-Files development
+modversion=0.0.1
+versionMin=42.0.0
+description=Disposable Build 42 exact-once deferred placement and reconciliation probe. Development use only.

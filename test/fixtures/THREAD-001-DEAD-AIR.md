@@ -608,7 +608,7 @@ Conceptually, finding either first:
 
 Anchor/fallback governs only the guaranteed introduction path. Both curated locations retain their complete authored supporting-document contents in every case: activating D2 as the fallback does not suppress D3 or D4, and it does not remove the relay site's normal authored content.
 
-Exact materialisation, fallback activation and idempotency sequencing remain T4 work. The authored content is valid regardless of which opportunity is used first.
+T4 now defines materialisation and idempotency sequencing in `docs/research/T4_EXACT_ONCE_PLACEMENT.md`. The authored content is valid regardless of which opportunity is used first. The project owner must still decide whether a placed-but-undiscovered D1 that later becomes `lost` may activate D2 as the narrative entry opportunity.
 
 # Plausible discovery paths
 
@@ -751,7 +751,7 @@ No choice above decides native reader vs ModData-backed text vs custom reader UI
 
 - **T1:** complete on Build 42.20.4; the implementation must obey P4-R32 and the hard ≤500 KB/save canonical-state budget. This paper fixture does not select the final conforming encoding.
 - **T3:** no automatic categorisation is required; exact curated vanilla targets still need selection/verification.
-- **T4:** no exact-once commit sequence is designed here.
+- **T4:** complete on Build 42.20.4; use queued relevant-binding wake-ups, detached item pre-stamping and exact-container reconciliation. This fixture still does not select final map bindings.
 - **T5:** the key/receiver cannot be assumed to retain stable physical identity.
 - **T7:** document text presentation mechanism remains open.
 - **T8:** location-arrival detection remains open.

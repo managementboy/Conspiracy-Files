@@ -1,0 +1,66 @@
+Conspiracy-Files T4 filtered live evidence
+Execution date: 2026-09-01
+Build: stable 42.20.4 b0bbce05d5; pzbullet 1.0.0.28; Steam build ID 24909800
+Mode: direct 64-bit single-player client, -nosteam, sole active mod
+Disposable save: T4_matrix (copied from the already-disposable T3 save)
+
+Environment and hook evidence
+  pass 0..3: gameVersion=42.20, activeModCount=1
+  LoadGridsquare callbacks before each OnGameStart: 27,245
+  streaming cycle: targetWasUnloaded=true, targetAvailableAfterReturn=true
+  streaming cycle: loadGridDelta=50,349, targetLoadGridDelta=1
+
+Bound probe-only containers
+  primary: 10719,10196,0 furniture_storage_01_15 / dresser
+  destroy-before: 10720,10196,0 furniture_tables_low_01_13 / sidetable
+  destroy-after: 10718,10196,0 furniture_shelving_01_43 / shelves
+  burned-classification path: 10722,10196,0 appliances_cooking_01_18 / woodstove
+
+Injected pre-state -> first reload result -> final reload result -> duplicate count
+  normal: placed/1 -> placed/1 -> placed/1 -> 1
+  before intent: pending/0 -> placed/1 -> placed/1 -> 1
+  after intent: placing/0 -> placed/1 -> placed/1 -> 1
+  after detached stamp, before add: placing/0 -> placed/1 -> placed/1 -> 1
+  after add, before verify: placing/1 -> placed/1 -> placed/1 -> 1
+  after verify, before ledger commit: placing/1 -> placed/1 -> placed/1 -> 1
+  after ledger commit, before save: placed/1 -> placed/1 -> placed/1 -> 1
+  committed item removed before save: placed/0 -> lost/0 -> lost/0 -> 0
+  target never available: pending/0 -> blocked/0 -> blocked/0 -> 0
+  container physically removed before placement: blocked/0 -> blocked/0 -> blocked/0 -> 0
+  container physically removed after placement: placed/0 -> lost/0 -> lost/0 -> 0
+  burned/unusable target classification: blocked/0 -> blocked/0 -> blocked/0 -> 0
+  two duplicates injected before reconciliation: placing/2 -> conflict/2 -> conflict/2 -> 2
+
+Matrix checkpoints
+  pre-reload-injected: PRESTATE_RECORDED, 0 harness failures
+  first-reload-reconciled: PASS, 0 failures
+  post-stream-reconciled: PASS, 0 failures
+  second-reload-stable: PASS, 0 failures
+  third-reload-final: PASS, 0 failures
+  COMPLETE: PASS
+
+saveGame synchronous returns
+  first placement/pre-state save: 365 ms
+  post-stream reconciliation save: 193 ms
+  second post-placement save: 325 ms
+  saves requested directly from OnGameStart (passes 0 and 2) logged an engine
+  FBORenderCell/SavefileThumbnail NullPointerException even though pcall returned true;
+  later reloads proved the tested ledger/items persisted. The post-stream save did not
+  log that exception. A successful saveGame return is not acceptance evidence.
+
+Audit SHA-256 (raw files remain in ignored tmp/t4-live)
+  iteration2-run1-stdout.txt 16F217C3D8324287314B5294CFC81F1A6A9A4DE869C33453C74F32974D94B673
+  iteration2-run2-stdout.txt E19299DBA79FD1EE67BB5C4D6C172517D91EAE1D3CAB16DA536E73C814CFF546
+  iteration2-run3-stdout.txt 8A319C29894E9D4D3974D435A285C1A96E1B250337E01984BE27AB8C395C8A9D
+  iteration2-run4-stdout.txt D038056CFE4EADBA59C3AC3191DCBA624FE1C2E4D5805E6A4F8DEBF253E7E5F7
+  final global_mod_data.bin 95D4CBD6296DCEA0D0DD8EF19F3E043284B15CAAD6F3FFA43E44CA63EDEE4B39
+
+Safety/restoration
+  final save archived under tmp/t4-live/restored-artifacts/T4_matrix-final-save
+  failed first iteration archived under tmp/t4-live/iteration1-failed-save
+  probe and loading-gate DLL archived out of active PZ paths
+  latestSave.ini restored SHA-256 DE54EEC0EFA7A7BF9810E9B22CA882D1C9DEF8CB3937283CF2B6DA5383084B29
+  mods/default.txt restored SHA-256 601B865924C8456DFD1820B0237450F1906E2D4253D4FAF7FF4BA6B4A86CE850
+  options.ini restored SHA-256 B726B45FB8150EB71CEC394EADE151A0502D658479A9E9F8F712573AB2935D06
+  debuglog.ini restored SHA-256 3DBD2F68125D6B1912BEC0843DD47D6165589CDC2EA90D8613690D750E06AA70
+  Project Zomboid closed; no probe/save/gate remained in an active path

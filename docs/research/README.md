@@ -11,7 +11,7 @@ Priority research topics:
 - map/meta-grid enumeration and location classification;
 - building/room arrival detection;
 - loaded vs never-loaded chunk history;
-- deferred exact-once item placement;
+- deferred exact-once item placement — T4 complete on Build 42.20.4; see `T4_EXACT_ONCE_PLACEMENT.md`;
 - persistent item identity;
 - native literature/readable item mutation;
 - custom Inspect integration;
