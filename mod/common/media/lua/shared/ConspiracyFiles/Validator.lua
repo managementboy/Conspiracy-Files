@@ -1,0 +1,276 @@
+local Content = require("ConspiracyFiles.Content")
+local Ids = require("ConspiracyFiles.Ids")
+
+local Validator = {}
+
+Validator.MAX_DEPTH = 64
+Validator.MAX_ENCODED_BYTES = 500 * 1024
+
+local ROOT_FIELDS = {
+    schemaVersion = true, threadId = true, contentRevision = true,
+    entryOpportunityUsed = true, assetMaterialisation = true,
+    confirmedLocationIds = true, evidence = true, journal = true
+}
+
+local EVIDENCE_FIELDS = {
+    evidenceId = true, kind = true, assetId = true, discoveryOrdinal = true,
+    contextText = true, foundLocationId = true, playerMarkedInteresting = true,
+    markIntentId = true, subjectLabel = true
+}
+
+local JOURNAL_FIELDS = {
+    entryId = true, ordinal = true, kind = true, subjectId = true, relatedId = true
+}
+
+local JOURNAL_KINDS = {
+    ["asset-discovered"] = true,
+    ["thread-introduced"] = true,
+    ["marked-interesting"] = true,
+    ["evidence-updated"] = true,
+    ["location-confirmed"] = true,
+    ["contradiction-surfaced"] = true
+}
+
+local function fail(path, message)
+    return false, path .. ": " .. message
+end
+
+local function isInteger(value)
+    return type(value) == "number" and value >= 1 and value == math.floor(value)
+end
+
+local function checkAllowedFields(value, allowed, path)
+    for key, _ in pairs(value) do
+        if type(key) ~= "string" or not allowed[key] then
+            return fail(path, "unexpected field " .. tostring(key))
+        end
+    end
+    return true
+end
+
+local function checkDenseArray(value, path)
+    local count = 0
+    for key, _ in pairs(value) do
+        if not isInteger(key) then
+            return fail(path, "must be a dense array")
+        end
+        count = count + 1
+    end
+    for index = 1, count do
+        if value[index] == nil then
+            return fail(path, "must be a dense array")
+        end
+    end
+    return true, count
+end
+
+local function validateSafeValue(value, path, depth, seen)
+    local valueType = type(value)
+    if valueType == "string" or valueType == "boolean" then
+        return true
+    end
+    if valueType == "number" then
+        if value ~= value or value == math.huge or value == -math.huge then
+            return fail(path, "number must be finite")
+        end
+        return true
+    end
+    if valueType ~= "table" then
+        return fail(path, "unsupported value type " .. valueType)
+    end
+    if depth > Validator.MAX_DEPTH then
+        return fail(path, "maximum table depth is " .. Validator.MAX_DEPTH)
+    end
+    if getmetatable(value) ~= nil then
+        return fail(path, "metatables are forbidden")
+    end
+    if seen[value] then
+        return fail(path, "cycles and shared-table aliases are forbidden")
+    end
+    seen[value] = true
+    for key, child in pairs(value) do
+        local keyType = type(key)
+        if keyType ~= "string" and keyType ~= "number" then
+            return fail(path, "unsupported key type " .. keyType)
+        end
+        if keyType == "number" and (key ~= key or key == math.huge or key == -math.huge) then
+            return fail(path, "numeric keys must be finite")
+        end
+        local ok, message = validateSafeValue(child, path .. "[" .. tostring(key) .. "]", depth + 1, seen)
+        if not ok then
+            return false, message
+        end
+    end
+    return true
+end
+
+local function validateSchema(root)
+    local ok, message = checkAllowedFields(root, ROOT_FIELDS, "root")
+    if not ok then return false, message end
+    if root.schemaVersion ~= 1 then return fail("root.schemaVersion", "must be 1") end
+    if root.threadId ~= Content.thread.threadId then return fail("root.threadId", "unknown Thread ID") end
+    if root.contentRevision ~= Content.thread.contentRevision then return fail("root.contentRevision", "unknown content revision") end
+    if root.entryOpportunityUsed ~= nil and root.entryOpportunityUsed ~= "anchor" and root.entryOpportunityUsed ~= "fallback" then
+        return fail("root.entryOpportunityUsed", "must be anchor, fallback or absent")
+    end
+    if type(root.assetMaterialisation) ~= "table" then return fail("root.assetMaterialisation", "must be a table") end
+    if type(root.confirmedLocationIds) ~= "table" then return fail("root.confirmedLocationIds", "must be a table") end
+    if type(root.evidence) ~= "table" then return fail("root.evidence", "must be a table") end
+    if type(root.journal) ~= "table" then return fail("root.journal", "must be a table") end
+
+    for assetId, status in pairs(root.assetMaterialisation) do
+        if not Content.assets[assetId] then return fail("root.assetMaterialisation", "unknown Asset ID " .. tostring(assetId)) end
+        if status ~= "materialised" then return fail("root.assetMaterialisation", "unknown monotonic status") end
+    end
+
+    local locationSeen = {}
+    local locationOk, locationCount = checkDenseArray(root.confirmedLocationIds, "root.confirmedLocationIds")
+    if not locationOk then return false, locationCount end
+    for index = 1, locationCount do
+        local locationId = root.confirmedLocationIds[index]
+        if type(locationId) ~= "string" or not Content.locations[locationId] then return fail("root.confirmedLocationIds", "unknown Location ID") end
+        if locationSeen[locationId] then return fail("root.confirmedLocationIds", "duplicate Location ID") end
+        locationSeen[locationId] = true
+    end
+
+    local evidenceOk, evidenceCount = checkDenseArray(root.evidence, "root.evidence")
+    if not evidenceOk then return false, evidenceCount end
+    local evidenceIds = {}
+    local markIntents = {}
+    local markedCount = 0
+    for index = 1, evidenceCount do
+        local evidence = root.evidence[index]
+        if type(evidence) ~= "table" then return fail("root.evidence", "record must be a table") end
+        ok, message = checkAllowedFields(evidence, EVIDENCE_FIELDS, "root.evidence[" .. index .. "]")
+        if not ok then return false, message end
+        if not Ids.isAuthored(evidence.evidenceId) then return fail("root.evidence", "invalid Evidence ID") end
+        if evidenceIds[evidence.evidenceId] then return fail("root.evidence", "duplicate Evidence ID") end
+        evidenceIds[evidence.evidenceId] = evidence
+        if evidence.discoveryOrdinal ~= index then return fail("root.evidence", "discovery ordinals must be contiguous") end
+        if type(evidence.contextText) ~= "string" or evidence.contextText == "" then return fail("root.evidence", "contextText must be non-empty") end
+        if evidence.foundLocationId ~= nil and not Content.locations[evidence.foundLocationId] then return fail("root.evidence", "unknown found Location ID") end
+        if type(evidence.playerMarkedInteresting) ~= "boolean" then return fail("root.evidence", "creation intent flag must be boolean") end
+        if evidence.kind == "authored-asset" then
+            local asset = Content.assets[evidence.assetId]
+            if not asset or asset.assetKind ~= "document" or not asset.autoRecordEvidence then return fail("root.evidence", "authored Evidence has unknown document Asset ID") end
+            if evidence.evidenceId ~= Ids.authoredEvidence(evidence.assetId) then return fail("root.evidence", "authored Evidence ID does not match Asset ID") end
+            if evidence.playerMarkedInteresting or evidence.markIntentId ~= nil or evidence.subjectLabel ~= nil then return fail("root.evidence", "authored Evidence has marked-object fields") end
+        elseif evidence.kind == "marked-object" then
+            markedCount = markedCount + 1
+            if evidence.evidenceId ~= Ids.markedEvidence(markedCount) then return fail("root.evidence", "marked Evidence IDs must be deterministic and contiguous") end
+            if evidence.assetId ~= nil and (not Content.assets[evidence.assetId] or Content.assets[evidence.assetId].assetKind ~= "ordinary-object") then return fail("root.evidence", "marked Evidence Asset ID must resolve to an ordinary object") end
+            if not evidence.playerMarkedInteresting then return fail("root.evidence", "marked Evidence must retain creation intent") end
+            if type(evidence.markIntentId) ~= "string" or evidence.markIntentId == "" then return fail("root.evidence", "markIntentId must be non-empty") end
+            if markIntents[evidence.markIntentId] then return fail("root.evidence", "duplicate mark intent") end
+            markIntents[evidence.markIntentId] = true
+            if evidence.assetId == nil and (type(evidence.subjectLabel) ~= "string" or evidence.subjectLabel == "") then return fail("root.evidence", "generic marked object requires subjectLabel") end
+        else
+            return fail("root.evidence", "unknown Evidence kind")
+        end
+    end
+
+    local journalOk, journalCount = checkDenseArray(root.journal, "root.journal")
+    if not journalOk then return false, journalCount end
+    local eventCounts = {}
+    local discoveredAssets = {}
+    local confirmedEvents = {}
+    local markedEvents = {}
+    for index = 1, journalCount do
+        local entry = root.journal[index]
+        if type(entry) ~= "table" then return fail("root.journal", "record must be a table") end
+        ok, message = checkAllowedFields(entry, JOURNAL_FIELDS, "root.journal[" .. index .. "]")
+        if not ok then return false, message end
+        if entry.entryId ~= Ids.journal(index) or entry.ordinal ~= index then return fail("root.journal", "IDs and ordinals must be contiguous") end
+        if not JOURNAL_KINDS[entry.kind] then return fail("root.journal", "unknown event kind") end
+        if type(entry.subjectId) ~= "string" or not Ids.isAuthored(entry.subjectId) then return fail("root.journal", "invalid subject ID") end
+        if entry.relatedId ~= nil and (type(entry.relatedId) ~= "string" or not Ids.isAuthored(entry.relatedId)) then return fail("root.journal", "invalid related ID") end
+        eventCounts[entry.kind] = (eventCounts[entry.kind] or 0) + 1
+        if entry.kind == "asset-discovered" then
+            local asset = Content.assets[entry.subjectId]
+            if not asset or asset.assetKind ~= "document" then return fail("root.journal", "asset-discovered subject must resolve to a document") end
+            if discoveredAssets[entry.subjectId] then return fail("root.journal", "duplicate asset-discovered event") end
+            discoveredAssets[entry.subjectId] = true
+        elseif entry.kind == "thread-introduced" then
+            if entry.subjectId ~= Content.thread.threadId or (entry.relatedId ~= Content.ids.d1 and entry.relatedId ~= Content.ids.d2) then
+                return fail("root.journal", "invalid thread introduction")
+            end
+            if not discoveredAssets[entry.relatedId] then return fail("root.journal", "thread introduction lacks its entry Evidence") end
+            if eventCounts[entry.kind] > 1 then return fail("root.journal", "duplicate thread introduction") end
+        elseif entry.kind == "marked-interesting" then
+            local evidence = evidenceIds[entry.subjectId]
+            if not evidence or evidence.kind ~= "marked-object" then return fail("root.journal", "marked-interesting subject must resolve to marked Evidence") end
+            if markedEvents[entry.subjectId] then return fail("root.journal", "duplicate marked-interesting event") end
+            markedEvents[entry.subjectId] = true
+        elseif entry.kind == "evidence-updated" then
+            local evidence = evidenceIds[entry.subjectId]
+            if not evidence or evidence.kind ~= "marked-object" or evidence.assetId ~= Content.ids.key
+                or entry.relatedId ~= Content.ids.d6 or not discoveredAssets[Content.ids.d6] then
+                return fail("root.journal", "invalid B-37 recontextualisation event")
+            end
+            if eventCounts[entry.kind] > 1 then return fail("root.journal", "duplicate B-37 recontextualisation") end
+        elseif entry.kind == "location-confirmed" then
+            if not Content.locations[entry.subjectId] or not locationSeen[entry.subjectId] then return fail("root.journal", "location event does not match confirmed state") end
+            if confirmedEvents[entry.subjectId] then return fail("root.journal", "duplicate location confirmation event") end
+            confirmedEvents[entry.subjectId] = true
+        elseif entry.kind == "contradiction-surfaced" then
+            if entry.subjectId ~= Content.ids.d6 or entry.relatedId ~= Content.ids.d5 then return fail("root.journal", "invalid contradiction event") end
+            if not discoveredAssets[Content.ids.d5] or not discoveredAssets[Content.ids.d6] then return fail("root.journal", "contradiction precedes its source documents") end
+            if eventCounts[entry.kind] > 1 then return fail("root.journal", "duplicate contradiction event") end
+        end
+    end
+    for _, evidence in ipairs(root.evidence) do
+        if evidence.kind == "authored-asset" and not discoveredAssets[evidence.assetId] then return fail("root.journal", "authored Evidence lacks discovery event") end
+        if evidence.kind == "marked-object" and not markedEvents[evidence.evidenceId] then return fail("root.journal", "marked Evidence lacks chronology event") end
+    end
+    for locationId, _ in pairs(locationSeen) do if not confirmedEvents[locationId] then return fail("root.journal", "confirmed Location lacks chronology event") end end
+    if eventCounts["thread-introduced"] then
+        local hasD1 = discoveredAssets[Content.ids.d1]
+        local hasD2 = discoveredAssets[Content.ids.d2]
+        if not hasD1 and not hasD2 then return fail("root.journal", "thread introduction lacks entry evidence") end
+    end
+    if eventCounts["contradiction-surfaced"] and (not discoveredAssets[Content.ids.d5] or not discoveredAssets[Content.ids.d6]) then
+        return fail("root.journal", "contradiction lacks known source documents")
+    end
+    return true
+end
+
+-- This is deliberately conservative, not a reproduction of PZ's serializer.
+-- Strings are charged at four bytes per source byte plus delimiters; numbers
+-- receive a fixed worst-case textual allowance; tables include key/value tags
+-- and separators. It is a deterministic preflight ceiling for P4-R17.
+local function estimateValue(value)
+    local valueType = type(value)
+    if valueType == "string" then return 2 + (4 * string.len(value)) end
+    if valueType == "number" then return 32 end
+    if valueType == "boolean" then return 5 end
+    local bytes = 2
+    for key, child in pairs(value) do
+        bytes = bytes + 3 + estimateValue(key) + estimateValue(child)
+    end
+    return bytes
+end
+
+function Validator.estimateEncodedBytes(root)
+    return estimateValue(root)
+end
+
+function Validator.validateStructure(value)
+    return validateSafeValue(value, "root", 1, {})
+end
+
+function Validator.validate(root)
+    if type(root) ~= "table" then return false, "root: must be a table" end
+    local contentOk, contentMessage = Content.validate()
+    if not contentOk then return false, "static content: " .. contentMessage end
+    local ok, message = Validator.validateStructure(root)
+    if not ok then return false, message end
+    ok, message = validateSchema(root)
+    if not ok then return false, message end
+    local estimated = Validator.estimateEncodedBytes(root)
+    if estimated > Validator.MAX_ENCODED_BYTES then
+        return false, "root: conservative encoded-size estimate " .. estimated .. " exceeds " .. Validator.MAX_ENCODED_BYTES .. " bytes"
+    end
+    return true, nil, estimated
+end
+
+return Validator
