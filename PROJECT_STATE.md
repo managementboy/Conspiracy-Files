@@ -1,6 +1,6 @@
 # Conspiracy-Files — Project State
 
-Status: **Engineering de-risk / v0.1 definition**. No feature implementation has been accepted yet.
+Status: **Engineering de-risk / v0.1 domain implementation**. The PZ-independent v0.1 Lua domain core is accepted; live Build 42 integration remains unvalidated.
 Target: Project Zomboid Build 42; T1 and T9 verified stable Build **42.20.4**, revision **b0bbce05d5**, Steam build ID **24909800**. Other capability claims remain subject to their named spikes/research.
 
 ## Source of truth order
@@ -53,6 +53,12 @@ The first specification over-committed to unproven Build 42 capabilities. The en
 - **T1 ModData persistence/size limits:** complete. The live single-player save/reload matrix on Build 42.20.4 revision b0bbce05d5 (Steam build ID 24909800) validated vanilla Lua Global ModData within the hard ≤500 KB/save canonical-state budget and established mandatory recursive pre-save validation. See `docs/research/T1_MODDATA_PERSISTENCE.md`.
 - **T9 vanilla Lua network egress:** complete. The live `-nosteam` probe on Build 42.20.4 found synchronous DNS and a fixed blocking server-list helper, but no arbitrary GET, POST, TLS/timeout controls or async HTTP response surface. Any future optional runtime-AI transport requires Java/ZombieBuddy or an external companion and remains outside v0.1. See `docs/research/T9_NETWORK_EGRESS.md`.
 
+## Accepted offline implementation
+
+- **v0.1 plain-Lua domain core:** merged in PR #15 at `c9d845e21a0a4298a83ce8b92204e66b6e59d073`. It implements the static Dead Air registries, private canonical ThreadState API, authored and Mark Interesting Evidence, append-only journal events, deterministic no-AI rendering, derived Organisation/Location labels, idempotent domain transitions, D5/D6 contradiction handling, B-37 recontextualisation, major-discovery evaluation, staged P4-R32 validation, the conservative P4-R17 size gate and static content resolution.
+- All 16 acceptance criteria classified `plain-Lua automated test` pass under PUC Lua 5.1.5. The suite reports 17 passing tests total because it also checks that the authoritative acceptance table and traceability matrix remain complete and one-to-one. See `docs/testing/V0_1_DOMAIN_CORE_TRACEABILITY.md`.
+- This acceptance is limited to the PZ-independent domain layer. It does not validate ModData adapter behavior, physical placement/commit sequencing, live item identity, reader/UI integration, location-arrival detection, map bindings or any other Build 42 engine behavior.
+
 ## v0.1 vertical slice
 
 One built-in hand-authored thread:
@@ -71,16 +77,16 @@ One built-in hand-authored thread:
 - `test/fixtures/THREAD-001-DEAD-AIR.md` is now a complete Dead Air authored-content candidate rather than a structural fixture: six full documents, three identities, one organisation, two story locations, anchor/fallback behavior, discovery paths, three reward moments, deterministic journal output and a Mark Interesting example.
 - The Dead Air text was development-time AI-assisted and still requires human approval before canonical shipping under `docs/design/AI_PROVENANCE.md`.
 - `docs/design/V0_1_DATA_MODEL.md` now derives the smallest v0.1 logical model from that story. Static authored prose/entities remain outside save state; v0.1 relationships are static ID references rather than standalone relationship records.
-- `docs/requirements/V0_1_ACCEPTANCE_CRITERIA.md` is complete as an implementation input: it separates observable product/domain acceptance from live engine validation, classifies every criterion by verification method, and keeps T4/T5/T7/T8/T10-dependent behavior blocked on those named spikes. It does not claim implementation acceptance or live Build 42 validation.
+- `docs/requirements/V0_1_ACCEPTANCE_CRITERIA.md` separates observable product/domain acceptance from live engine validation and classifies every criterion by verification method. Its 16 plain-Lua criteria are now covered by the accepted domain-core suite; T4/T5/T7/T8/T10-dependent behavior remains blocked on those named spikes, and no live Build 42 acceptance is claimed.
 - Exact vanilla map targets for the two curated locations are still unselected/unverified in this repository and must be chosen on the development PC.
-- No live Build 42 behavior was validated by the Dead Air design work itself. The separately completed T1 result is authoritative for persistence; T3/T4/T5/T7/T8/T10 remain authoritative for their respective open engine questions.
+- No live Build 42 behavior was validated by the accepted domain-core work. The separately completed T1 result is authoritative for persistence; Gate A T2–T5 remains open, and T7/T8/T10 remain authoritative for their respective engine questions.
 
 ## Immediate work
 
 Before implementation architecture is signed off:
 
 1. run T2–T5;
-2. use the complete Dead Air fixture and `V0_1_DATA_MODEL.md` as the v0.1 implementation input without expanding into content packs/graph systems;
+2. integrate the accepted domain core only through adapter mechanisms proven by the named spikes, without expanding into content packs/graph systems;
 3. choose and verify the two exact curated vanilla story locations on the development PC before location bindings are committed;
 4. update decisions from each observed spike result;
 5. run T7/T8/T10 before expanding native asset/location/UI assumptions; T6 only matters if retrofit is revived.
