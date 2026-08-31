@@ -1,7 +1,7 @@
 # Conspiracy-Files — Project State
 
 Status: **Engineering de-risk / v0.1 definition**. No feature implementation has been accepted yet.
-Target: Project Zomboid Build 42; reviewer-reported current stable line is 42.20.x, to be verified in spikes/research before implementation claims are final.
+Target: Project Zomboid Build 42; T1 verified stable Build **42.20.4**, revision **b0bbce05d5**, Steam build ID **24909800**. Other capability claims remain subject to their named spikes/research.
 
 ## Source of truth order
 
@@ -29,7 +29,11 @@ The first specification over-committed to unproven Build 42 capabilities. The en
 - v0.1 uses hand-curated/hardcoded story locations;
 - six critical spikes gate core implementation, with four additional probes required before broader v1 architecture sign-off;
 - the domain core must be PZ-free/testable under Lua 5.1;
-- provisional budgets are ≤2 ms/frame outside initialization and ≤500 KB canonical save state.
+- the runtime budget remains provisionally ≤2 ms/frame outside initialization; completed T1 makes ≤500 KB/save the hard v0.1 canonical-state budget.
+
+## Completed de-risking
+
+- **T1 ModData persistence/size limits:** complete. The live single-player save/reload matrix on Build 42.20.4 revision b0bbce05d5 (Steam build ID 24909800) validated vanilla Lua Global ModData within the hard ≤500 KB/save canonical-state budget and established mandatory recursive pre-save validation. See `docs/research/T1_MODDATA_PERSISTENCE.md`.
 
 ## v0.1 vertical slice
 
@@ -50,17 +54,17 @@ One built-in hand-authored thread:
 - The Dead Air text was development-time AI-assisted and still requires human approval before canonical shipping under `docs/design/AI_PROVENANCE.md`.
 - `docs/design/V0_1_DATA_MODEL.md` now derives the smallest v0.1 logical model from that story. Static authored prose/entities remain outside save state; v0.1 relationships are static ID references rather than standalone relationship records.
 - Exact vanilla map targets for the two curated locations are still unselected/unverified in this repository and must be chosen on the development PC.
-- No live Build 42 behavior was validated by this design work. T1/T3/T4/T5/T7/T8/T10 remain authoritative for their respective engine questions.
+- No live Build 42 behavior was validated by the Dead Air design work itself. The separately completed T1 result is authoritative for persistence; T3/T4/T5/T7/T8/T10 remain authoritative for their respective open engine questions.
 
 ## Immediate work
 
 Before implementation architecture is signed off:
 
-1. run T1 and T9;
+1. run T9;
 2. run T2–T5;
 3. use the complete Dead Air fixture and `V0_1_DATA_MODEL.md` as the v0.1 implementation input without expanding into content packs/graph systems;
 4. choose and verify the two exact curated vanilla story locations on the development PC before location bindings are committed;
-5. then update decisions from observed spike results;
+5. update decisions from each observed spike result;
 6. run T7/T8/T10 before expanding native asset/location/UI assumptions; T6 only matters if retrofit is revived.
 
 ## Rule for disproven decisions
