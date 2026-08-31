@@ -169,7 +169,7 @@ The key is an Asset because it is deliberately authored world content, but it is
 | `bodyText` | Full D1 text. Required for document Assets; absent for the key. |
 | `approxDate` | `1993-07-01/02` for D1. |
 | `physicalForm` | `three-part carbon service ticket`. |
-| `interactionHint` | `Read`, `Inspect`, `Examine`, or `Open`; engine mapping deferred to T7/T10. |
+| `interactionHint` | `Read`, `Inspect`, `Examine`, or `Open`; T7 fixes custom `Inspect` as the universal world-specific body reader, while T10 owns its cooperative menu mapping. |
 | `entryRole` | `anchor` for D1, `fallback` for D2, absent otherwise. |
 | `leadLocationIds` | D1 → police property; D2 → relay office. |
 | `contradictsAssetIds` | D5 ↔ D6; optionally D5 → D2 where the paperwork conflicts. |
@@ -672,7 +672,7 @@ The remaining product question is whether a placed-but-undiscovered anchor that 
 Complete on Build 42.20.4. Use one save-scoped mod-owned string token per intended physical instance, stamped while detached. The token survived inventory, ordinary container, floor, vehicle, reload at every stage and real player-death transfer to a corpse. Engine item IDs are diagnostics only. `copyModData` and `CopyModData` created persistent distinct items with the same token, so uniqueness is enforced by global observed counts: two or more is sticky `conflict`, never an automatic winner/deletion/restamp. Missing from one former location is `unknown` until a destructive event or complete covered reconciliation proves `unavailable`. Dead Air still works with the token absent as `untracked`.
 
 ### T7 — asset text/reader
-Owns whether `bodyText` is presented through native PZ reading, static item text, ModData-backed custom reading or a hybrid.
+Complete. `Asset.bodyText` remains authored/domain truth. The item projection persists a custom name plus validated plain ModData title/description/body; the custom T10 `Inspect` reader renders world-specific bodies. Locked Literature custom pages are optional generated projections for short plain-text artifacts only and are never read back as canonical content. `InventoryItem.description`, raw runtime `printMedia`, and generic/key/map native UIs are not body stores.
 
 ### T8 — arrival detection
 Owns how a PZ-facing adapter decides to add one of the two `confirmedLocationIds`.
@@ -684,13 +684,13 @@ Owns the cooperative context-menu mechanism for `Inspect` / `Mark Interesting`.
 
 | Dead Air Asset | Content preference | Data-model representation | Engine mechanism |
 |---|---|---|---|
-| D1 service ticket | Read / Inspect | `Asset.bodyText` | T7/T10 pending |
-| D2 property record | Examine / Read | `Asset.bodyText` | T7/T10 pending |
-| D3 invoice | Examine | `Asset.bodyText` | T7/T10 pending |
-| D4 notebook page | Read | `Asset.bodyText` | T7/T10 pending |
-| D5 memo | Read | `Asset.bodyText` | T7/T10 pending |
-| D6 shift note | Examine | `Asset.bodyText` | T7/T10 pending |
-| B-37 key | Examine / Mark Interesting | ordinary-object Asset; no document body | T5/T7/T10 pending |
+| D1 service ticket | Read / Inspect | `Asset.bodyText` | custom Inspect body; optional short locked Literature page projection; T10 hook pending |
+| D2 property record | Examine / Read | `Asset.bodyText` | custom Inspect body; T10 hook pending |
+| D3 invoice | Examine | `Asset.bodyText` | custom Inspect body; T10 hook pending |
+| D4 notebook page | Read | `Asset.bodyText` | custom Inspect body; optional short locked Literature page projection; T10 hook pending |
+| D5 memo | Read | `Asset.bodyText` | custom Inspect body; optional short locked Literature page projection; T10 hook pending |
+| D6 shift note | Examine | `Asset.bodyText` | custom Inspect body; T10 hook pending |
+| B-37 key | Examine / Mark Interesting | ordinary-object Asset; no document body | persistent custom name + ModData; T10 hook pending |
 
 The model deliberately stores the authored content independently of the eventual reader implementation.
 
@@ -724,4 +724,4 @@ The Dead Air fixture is development-time AI-assisted. Under `docs/design/AI_PROV
 ### Persistence awareness
 - No direct Lua/PZ/Java object reference required: yes.
 - Canonical logical state is tiny by estimate relative to the hard 500 KB/save budget: yes; the implementation must still measure its encoded state.
-- Completed T1/T4/T5 constraints are incorporated; T7/T8/T10 assumptions remain labeled unverified/deferred: yes.
+- Completed T1/T4/T5/T7 constraints are incorporated; T8/T10 assumptions remain labeled unverified/deferred: yes.

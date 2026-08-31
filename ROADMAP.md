@@ -43,7 +43,7 @@ Run six critical probes:
 A negative result is a valid result and must update the decision record.
 
 ## Engineering gate B — before broader v1 architecture sign-off
-- T7 asset text/name/page mutation.
+- [x] T7 asset text/name/page mutation — complete on Build 42.20.4; persistent custom names + ModData are the universal carrier, locked custom pages are a limited plain-text projection, and world-specific bodies use the custom Inspect reader.
 - T8 building/room/non-building arrival detection.
 - T10 cooperative `Inspect` context-menu integration.
 - T6 never-loaded chunk detection only if retrofit is revived.

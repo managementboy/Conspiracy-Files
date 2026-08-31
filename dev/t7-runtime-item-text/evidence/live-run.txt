@@ -1,0 +1,42 @@
+Conspiracy-Files T7 filtered live evidence
+Run date: 2026-09-01
+Environment: Windows 11 build 26200; Project Zomboid -nosteam single-player
+Build: 42.20.4 b0bbce05d5; revision=b0bbce05d5; pzbullet=1.0.0.28
+Steam build ID: 24909800
+projectzomboid.jar SHA-256: 80E405A4BFC42F6072E75B3735F458A6514143DA011D3226007DED305A442F44
+Final probe Lua SHA-256: 987D6C7C4056366CAA57715D4412D9C00D116135A35F17E4F3E178B7E3739CE7
+Gate helper SHA-256: 0779B27FDDC83D5DC72E17F16135E11AC8C19B11FAF8BCC25358E45388023547
+
+PERSISTENCE MATRIX
+
+Nine pre-save ITEM rows reported present=true, namePass=true, modDataPass=true and pagePass=true.
+TRANSLATION|language=EN|staticTitle=T7 Static Service Memorandum|staticBody=STATIC ENGLISH BODY\nRelay Site 31 / form 93-0714.\nLiteral percent: 100%. Unicode: cafe, naive.|rawTitleResult=T7 Dynamic Photo RS31-B37|rawBodyResult=<nil>|rawTitleExact=true|rawBodyExact=false
+FORMAT_FAILURE|raw runtime print-media body contained 100%.|result=java.util.UnknownFormatConversionException Conversion='.'
+SAVE|returned=true|error=<nil>|durationMs=300
+
+POST_LOAD_SUMMARY|createdCount=9|preSavePass=true|postLoadPass=true|descriptionPersistedCount=0|descriptionTotal=9
+
+All nine post-load rows retained their custom name/displayName, customName=true, and ModData title/description/body exactly.
+Notebook, Note, LetterHandwritten and Photo retained canBeWrite=true, lockedBy=ConspiracyFilesT7, pageCount=2 and both custom page strings.
+InventoryItem.description was nil after reload for all nine cases.
+Generic Paperclip and Key exposed no body reader. MuldraughMap retained its custom name and ModData while remaining a native map item.
+
+NATIVE UI OBSERVATIONS
+
+INVENTORY|all nine custom names visible after reload|normal categories preserved
+NATIVE_JOURNAL|case=notebook-pages|opened=true|title=T7 01 Notebook - Rourke Log|locked=true|pages=2|body-visible=true
+NATIVE_JOURNAL_FORMATTING|literal tokens visible=<LINE> <RGB:1,0,0>|plain text/newlines visible|formatting not interpreted
+NATIVE_PRINT_MEDIA|case=static-print|opened=true|translated title visible=T7 Static Service Memorandum|document canvas blank in tested payload|transcript toggle did not expose body
+NATIVE_MAP|installed vanilla context path opens ISMap for MapItem; the map surface does not consume Conspiracy-Files ModData body text
+
+SAFETY / RESTORATION
+
+The source save was an already disposable archived T5 save copy. No real character/save was used.
+The disposable save, installed probe and helper were moved to git-ignored tmp/t7-live/archive/; raw phase logs remain under tmp/t7-live/runs/.
+mods/default.txt restored SHA-256: 601B865924C8456DFD1820B0237450F1906E2D4253D4FAF7FF4BA6B4A86CE850
+latestSave.ini restored SHA-256: DE54EEC0EFA7A7BF9810E9B22CA882D1C9DEF8CB3937283CF2B6DA5383084B29
+options.ini restored SHA-256: B726B45FB8150EB71CEC394EADE151A0502D658479A9E9F8F712573AB2935D06
+debuglog.ini restored SHA-256: 3DBD2F68125D6B1912BEC0843DD47D6165589CDC2EA90D8613690D750E06AA70
+Active probe path present after restoration: false
+Active helper path present after restoration: false
+ProjectZomboid64 process count after restoration: 0
