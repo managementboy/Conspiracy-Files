@@ -2,7 +2,7 @@
 
 **Status:** v0.1 design for the single built-in Dead Air Narrative Thread.  
 **Source story:** `test/fixtures/THREAD-001-DEAD-AIR.md`, content revision `dead-air-r1`.  
-**Technical status:** logical/domain model only. T1 has not validated the final Project Zomboid ModData encoding, safe nesting, safe collection representation, save-size ceiling, or physical object references.
+**Technical status:** logical/domain model only. T1 validated vanilla Lua Global ModData on Build 42.20.4 within the hard ≤500 KB/save canonical-state budget and established the mandatory validation constraints in P4-R32; this document still does not define the final Lua encoding or physical object references.
 
 This document intentionally does **not** define a generic content-pack schema. It answers one question: what is the smallest practical model needed to implement Dead Air as currently authored?
 
@@ -314,6 +314,8 @@ Why this is smaller than a central table for Dead Air:
 
 If a second real content set or the v2 graph demonstrates that a central relationship store is materially simpler, introduce it then. Do not pre-pay that complexity in v0.1.
 
+**Cross-thread-reference tripwire:** when a second authored thread exists, reconsider these per-Asset arrays if it introduces references to identities or organisations owned by another thread, shares assets across threads, or requires queries/updates that traverse multiple threads. That review trigger does not design or commit to a graph or standalone relationship store now.
+
 ## 10. `Evidence` — retain and persist
 
 ### Purpose
@@ -610,9 +612,9 @@ A maximally explored Dead Air run is tiny.
 
 There is no need for thousands of records in v0.1.
 
-## 16. Serialized-size estimate — not a Project Zomboid measurement
+## 16. Serialized-size estimate — not a measurement of this model in Project Zomboid
 
-T1 is still incomplete, so no claim is made about `global_mod_data.bin` behavior.
+T1 measured representative payloads rather than this exact logical model. Its live Build 42.20.4 result established the hard ≤500 KB/save canonical-state budget and the required P4-R32 validation rules.
 
 For a rough scale check only, an illustrative JSON-shaped representation containing:
 - six document Evidence records;
@@ -626,38 +628,34 @@ is approximately:
 - **3.7 KB** in compact UTF-8 JSON;
 - **4.7 KB** when pretty-printed.
 
-JSON is not the PZ serializer. Using a deliberately pessimistic 4× representation overhead would still put this example around **15–20 KB**, far below the provisional **≤500 KB** canonical-state target.
+JSON is not the PZ serializer. Using a deliberately pessimistic 4× representation overhead would still put this example around **15–20 KB**, far below the hard **≤500 KB/save** canonical-state budget.
 
 This estimate does **not** validate:
-- Lua table serialisability;
-- numeric vs string key handling;
-- nested table limits;
+- the eventual Lua encoding of this logical model;
 - save/load timing;
 - actual `global_mod_data.bin` delta;
-- safe production ceiling.
+- the encoded size of the implementation.
 
-T1 remains the authority.
+T1 and P4-R32 remain authoritative for allowed key/value shapes, cycle/alias/metatable rejection, maximum depth 64, staged replacement validation and the hard budget.
 
-## 17. Persistence guardrails while T1 is open
+## 17. T1 persistence guardrails
 
-Until the live T1 matrix is complete, the logical model should be encoded conservatively by the eventual persistence adapter:
+The eventual persistence adapter must follow the completed T1 result and P4-R32:
 
 - stable string IDs rather than direct object/table references;
-- primitive leaf values only;
-- acyclic data;
-- no metatables, functions or Java/userdata values;
-- no canonical meaning that depends on shared-table identity;
-- shallow records rather than deeply nested object trees;
+- only string/number keys and string/number/boolean/plain-table values, with nil meaning absence;
+- reject cycles and multiply referenced tables, or normalize/copy aliases so meaning cannot depend on reference identity;
+- reject metatables, functions, userdata, threads and exposed Java objects;
+- enforce maximum depth 64 and estimated serialized size ≤500 KB/save;
+- stage and validate the full replacement before swapping the last known-good canonical root;
 - derived indexes rebuilt from static content and canonical IDs.
 
-The current T1 draft report describes these as interim risk controls, not proven Build 42 facts.
-
-If T1 rejects a proposed encoding shape, change the persistence adapter/encoding while preserving the logical model wherever possible.
+T1 validated these persistence constraints on stable Build 42.20.4, revision `b0bbce05d5`, Steam build ID `24909800`. It did not select the final application encoding for this model.
 
 ## 18. Spike boundaries
 
 ### T1 — persistence
-Owns final Lua/ModData encoding, supported value/key shapes, depth, scale and save-state budget. Nothing in this document is a live persistence result.
+Complete. Validated vanilla Lua Global ModData within the hard ≤500 KB/save budget and established P4-R32. The persistence adapter still owns the final conforming Lua/ModData encoding.
 
 ### T3 — location categorisation
 Does not gate the v0.1 story because locations are curated manually. It may affect later automatic discovery only.
@@ -720,5 +718,5 @@ The Dead Air fixture is development-time AI-assisted. Under `docs/design/AI_PROV
 
 ### Persistence awareness
 - No direct Lua/PZ/Java object reference required: yes.
-- Canonical logical state is tiny relative to the provisional 500 KB target: yes, by estimate only.
-- T1/T4/T5/T7/T8/T10 assumptions are labeled unverified/deferred: yes.
+- Canonical logical state is tiny by estimate relative to the hard 500 KB/save budget: yes; the implementation must still measure its encoded state.
+- Completed T1 constraints are incorporated; T4/T5/T7/T8/T10 assumptions remain labeled unverified/deferred: yes.

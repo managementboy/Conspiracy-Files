@@ -606,6 +606,8 @@ Conceptually, finding either first:
 3. exposes a non-quest Lead toward the other story location through ordinary text;
 4. does not announce an objective, spawn a marker, or reveal hidden truth.
 
+Anchor/fallback governs only the guaranteed introduction path. Both curated locations retain their complete authored supporting-document contents in every case: activating D2 as the fallback does not suppress D3 or D4, and it does not remove the relay site's normal authored content.
+
 Exact materialisation, fallback activation and idempotency sequencing remain T4 work. The authored content is valid regardless of which opportunity is used first.
 
 # Plausible discovery paths
@@ -747,7 +749,7 @@ No choice above decides native reader vs ModData-backed text vs custom reader UI
 
 # Technical assumptions deliberately not resolved here
 
-- **T1:** no persistence shape or size is claimed safe merely because this fixture can be represented on paper.
+- **T1:** complete on Build 42.20.4; the implementation must obey P4-R32 and the hard ≤500 KB/save canonical-state budget. This paper fixture does not select the final conforming encoding.
 - **T3:** no automatic categorisation is required; exact curated vanilla targets still need selection/verification.
 - **T4:** no exact-once commit sequence is designed here.
 - **T5:** the key/receiver cannot be assumed to retain stable physical identity.
