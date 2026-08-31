@@ -71,6 +71,7 @@ One built-in hand-authored thread:
 - `test/fixtures/THREAD-001-DEAD-AIR.md` is now a complete Dead Air authored-content candidate rather than a structural fixture: six full documents, three identities, one organisation, two story locations, anchor/fallback behavior, discovery paths, three reward moments, deterministic journal output and a Mark Interesting example.
 - The Dead Air text was development-time AI-assisted and still requires human approval before canonical shipping under `docs/design/AI_PROVENANCE.md`.
 - `docs/design/V0_1_DATA_MODEL.md` now derives the smallest v0.1 logical model from that story. Static authored prose/entities remain outside save state; v0.1 relationships are static ID references rather than standalone relationship records.
+- `docs/requirements/V0_1_ACCEPTANCE_CRITERIA.md` is complete as an implementation input: it separates observable product/domain acceptance from live engine validation, classifies every criterion by verification method, and keeps T4/T5/T7/T8/T10-dependent behavior blocked on those named spikes. It does not claim implementation acceptance or live Build 42 validation.
 - Exact vanilla map targets for the two curated locations are still unselected/unverified in this repository and must be chosen on the development PC.
 - No live Build 42 behavior was validated by the Dead Air design work itself. The separately completed T1 result is authoritative for persistence; T3/T4/T5/T7/T8/T10 remain authoritative for their respective open engine questions.
 
