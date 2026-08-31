@@ -4,6 +4,8 @@ Verified Project Zomboid Build 42 modding research belongs here.
 
 Record concrete API findings, tested hooks, limitations, performance measurements, and version-specific behavior. Distinguish verified behavior from assumptions.
 
+Completed reports include T1 persistence, T9 network egress, T2 map enumeration cost, and T3 location categorisation reliability. T3 establishes that automatic categorisation is advisory room/area-level candidate discovery only; curated catalogs remain authoritative.
+
 Priority research topics:
 - persistence/save APIs;
 - map/meta-grid enumeration and location classification;

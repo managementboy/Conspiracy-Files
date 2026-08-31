@@ -1,0 +1,6 @@
+name=Conspiracy-Files T3 Location Categorisation Probe
+id=ConspiracyFiles_T3_Probe
+author=Conspiracy-Files development
+modversion=0.0.1
+versionMin=42.0.0
+description=Disposable Build 42 location metadata categorisation probe. Development use only.

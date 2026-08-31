@@ -53,6 +53,7 @@ The first specification over-committed to unproven Build 42 capabilities. The en
 - **T1 ModData persistence/size limits:** complete. The live single-player save/reload matrix on Build 42.20.4 revision b0bbce05d5 (Steam build ID 24909800) validated vanilla Lua Global ModData within the hard ≤500 KB/save canonical-state budget and established mandatory recursive pre-save validation. See `docs/research/T1_MODDATA_PERSISTENCE.md`.
 - **T9 vanilla Lua network egress:** complete. The live `-nosteam` probe on Build 42.20.4 found synchronous DNS and a fixed blocking server-list helper, but no arbitrary GET, POST, TLS/timeout controls or async HTTP response surface. Any future optional runtime-AI transport requires Java/ZombieBuddy or an external companion and remains outside v0.1. See `docs/research/T9_NETWORK_EGRESS.md`.
 - **T2 map/meta-grid enumeration cost:** complete. The live isolated Build 42.20.4 probe counted 9,978 buildings and 86,436 rooms (96,414 records). Full synchronous scans occupied 227–244 ms; 100 records/frame stayed at or below 2 ms, while 500 and 1,000 exceeded P4-R16. A generic rich full-map index retained an observed 90–102 MiB of JVM heap, so future discovery must stream/filter into rebuildable non-canonical candidate indexes. v0.1 remains curated. See `docs/research/T2_MAP_ENUMERATION_COST.md`.
+- **T3 location categorisation reliability:** complete. A dual-bounded live Build 42.20.4 scan evaluated 55 curated vanilla building cases across police, bookstore, hospital/clinic, office and transmission categories. Conservative explainable rules produced 28 TP, 25 TN, 0 FP and 2 FN in that in-sample matrix, but building-wide labels remained context-sensitive and no semantic non-building transmission zone existed. Automatic categorisation is advisory only; v0.1/v1 remain curated. See `docs/research/T3_LOCATION_CATEGORISATION.md`.
 
 ## v0.1 vertical slice
 
@@ -74,13 +75,13 @@ One built-in hand-authored thread:
 - `docs/design/V0_1_DATA_MODEL.md` now derives the smallest v0.1 logical model from that story. Static authored prose/entities remain outside save state; v0.1 relationships are static ID references rather than standalone relationship records.
 - `docs/requirements/V0_1_ACCEPTANCE_CRITERIA.md` is complete as an implementation input: it separates observable product/domain acceptance from live engine validation, classifies every criterion by verification method, and keeps T4/T5/T7/T8/T10-dependent behavior blocked on those named spikes. It does not claim implementation acceptance or live Build 42 validation.
 - Exact vanilla map targets for the two curated locations are still unselected/unverified in this repository and must be chosen on the development PC.
-- No live Build 42 behavior was validated by the Dead Air design work itself. The separately completed T1 result is authoritative for persistence; T3/T4/T5/T7/T8/T10 remain authoritative for their respective open engine questions.
+- No live Build 42 behavior was validated by the Dead Air design work itself. The separately completed T1/T2/T3/T9 results are authoritative for persistence, enumeration, categorisation, and network transport; T4/T5/T7/T8/T10 remain authoritative for their respective open engine questions.
 
 ## Immediate work
 
 Before implementation architecture is signed off:
 
-1. run T3–T5;
+1. run T4–T5 (T3 is complete);
 2. use the complete Dead Air fixture and `V0_1_DATA_MODEL.md` as the v0.1 implementation input without expanding into content packs/graph systems;
 3. choose and verify the two exact curated vanilla story locations on the development PC before location bindings are committed;
 4. update decisions from each observed spike result;
