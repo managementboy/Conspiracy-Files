@@ -86,7 +86,9 @@ The documented `524288`-byte internal block constant is not a persistence limit 
 
 ### T4 — Exact-once deferred placement
 
-Find the safest hook; test chunk reload, save/reload, burned/destroyed container and repeated load.
+Complete on stable 42.20.4. `Events.LoadGridsquare` is a verified cooperative wake-up surface, but it fired 27,245 times before `OnGameStart`; enqueue relevant curated bindings and add an `OnGameStart` catch-up rather than mutating inline. A true teleport-driven stream-out/in made the exact target square unavailable and produced one new exact-target callback on return.
+
+`instanceItem` can create a detached item whose ModData is stamped before `ItemContainer:AddItem(existingItem)`. Exact-container stamp reconciliation survived seven interruption phases, three save/reloads and the real stream cycle without valid-path duplication. Physically removed targets persisted absent. T4 found and tested no Lua-visible atomic chunk/Global-ModData transaction, so a committed ledger with no stamp becomes `lost` and is not blindly respawned; duplicate stamps become `conflict`. See `T4_EXACT_ONCE_PLACEMENT.md` and `dev/t4-exact-once-placement/evidence/installed-api.txt`.
 
 ### T5 — Persistent physical item identity
 

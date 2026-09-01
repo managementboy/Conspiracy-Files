@@ -1,0 +1,52 @@
+Conspiracy-Files T4 installed API evidence
+Inspection date: 2026-09-01
+Installed projectzomboid.jar SHA-256: 80E405A4BFC42F6072E75B3735F458A6514143DA011D3226007DED305A442F44
+Installed vanilla Lua root: Project Zomboid media/lua (read-only inspection; no files changed)
+
+Relevant installed/public surfaces verified against the exact JAR, installed vanilla Lua,
+and the official Build 42 Javadocs:
+
+zombie.inventory.ItemContainer
+  public InventoryItem AddItem(InventoryItem item)
+  public ArrayList<InventoryItem> getItems()
+  public void Remove(InventoryItem item)
+  public boolean contains(InventoryItem item)
+  public void setDrawDirty(boolean value)
+  public IsoObject getParent()
+  public IsoGridSquare getSquare()
+
+zombie.inventory.InventoryItem
+  public KahluaTable getModData()
+  public ItemContainer getContainer()
+  public IsoGridSquare getSquare()
+
+zombie.iso.IsoObject
+  public int getContainerCount()
+  public ItemContainer getContainerByIndex(int index)
+  public IsoGridSquare getSquare()
+  public void removeFromWorld()
+  public void removeFromSquare()
+
+zombie.iso.IsoGridSquare
+  public PZArrayList<IsoObject> getObjects()
+  public int RemoveTileObject(IsoObject object)
+  public IsoChunk getChunk()
+
+Installed vanilla Lua precedent:
+  media/lua/client/DebugUIs/DebugScenarios.lua registers Events.LoadGridsquare.
+  instanceItem(type) is used widely to create a detached InventoryItem before insertion.
+  ItemContainer:AddItem(item) is used by vanilla Lua for an existing instance.
+  Moveables code triggers OnObjectAboutToBeRemoved before removal.
+
+Official Build 42 Javadocs consulted:
+  https://projectzomboid.com/modding/zombie/inventory/ItemContainer.html
+  https://projectzomboid.com/modding/zombie/inventory/InventoryItem.html
+  https://projectzomboid.com/modding/zombie/iso/IsoObject.html
+  https://projectzomboid.com/modding/zombie/iso/IsoGridSquare.html
+  https://projectzomboid.com/modding/zombie/Lua/LuaManager.GlobalObject.html
+  https://projectzomboid.com/modding/zombie/Lua/LuaEventManager.html
+
+Live capability, not signature presence, is decisive. The T4 run proved ordinary Lua could
+create and stamp a detached Base.Note, add that exact instance, enumerate it, remove it,
+remove two bound container objects, receive LoadGridsquare on a true stream-out/stream-in,
+and round-trip the ledger and items through four engine loads.

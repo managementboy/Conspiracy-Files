@@ -485,8 +485,8 @@ The braces above describe the **logical model**, not a T1-approved Lua serializa
 | `schemaVersion` | No within v0.1; migrations are out of scope. |
 | `threadId` | No. |
 | `contentRevision` | No for a given initialized save; typo/content handling follows existing revision policy. |
-| `entryOpportunityUsed` | `nil` → `anchor` or `fallback` once the T4-approved commit point is reached. Exact transition is T4-owned. |
-| `assetMaterialisation` | Yes, through T4-defined states. Exact state names/commit sequence remain provisional until T4. |
+| `entryOpportunityUsed` | `nil` → `anchor` or `fallback` in the same P4-R32-validated root transition that accepts the winning introduction opportunity as `placed`; it never switches silently. The “placed but undiscovered, later lost” fallback rule remains a product decision. |
+| `assetMaterialisation` | Yes. T4 states are `pending`, `placing`, `placed`, `unavailable`, `lost` and `conflict`; transitions follow the detached-prestamp/exact-container reconciliation sequence in `T4_EXACT_ONCE_PLACEMENT.md`. |
 | `confirmedLocationIds` | Append/add when T8-approved arrival logic confirms one of the two locations. |
 | `evidence` | Append/add only for immutable discovery facts; optional physical availability may change if T5 supports it. |
 | `journal` | Append-only. |
@@ -661,7 +661,9 @@ Complete. Validated vanilla Lua Global ModData within the hard ≤500 KB/save bu
 Does not gate the v0.1 story because locations are curated manually. It may affect later automatic discovery only.
 
 ### T4 — exact-once placement
-Owns when/how `entryOpportunityUsed` and `assetMaterialisation` become durable and how interrupted placement reconciles. This document intentionally does not invent the commit sequence.
+Complete on Build 42.20.4. `LoadGridsquare` queues relevant curated bindings and `OnGameStart` catches already-loaded targets. The adapter scans the exact container, stages `placing`, creates/stamps a detached item, adds that exact instance, verifies one stamp and stages `placed`. One pre-existing stamp repairs the ledger; zero after `placed` becomes `lost` without respawn; terminal target loss becomes `unavailable`; duplicates become `conflict`. Every transition stages and validates the full root under P4-R32/P4-R17.
+
+The remaining product question is whether a placed-but-undiscovered anchor that later becomes `lost` may activate the fallback. The model does not choose that story rule.
 
 ### T5 — physical item identity
 Owns whether `physicalItemToken` is usable. Dead Air must still work with it absent.
@@ -719,4 +721,4 @@ The Dead Air fixture is development-time AI-assisted. Under `docs/design/AI_PROV
 ### Persistence awareness
 - No direct Lua/PZ/Java object reference required: yes.
 - Canonical logical state is tiny by estimate relative to the hard 500 KB/save budget: yes; the implementation must still measure its encoded state.
-- Completed T1 constraints are incorporated; T4/T5/T7/T8/T10 assumptions remain labeled unverified/deferred: yes.
+- Completed T1/T4 constraints are incorporated; T5/T7/T8/T10 assumptions remain labeled unverified/deferred: yes.
