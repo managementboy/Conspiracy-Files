@@ -1,0 +1,9 @@
+Dead Air live location inspection baseline — 2026-09-01
+
+These values were read after confirming Project Zomboid was closed. They match
+the byte-for-byte restoration hashes recorded by the completed T10 manual run.
+
+latestSave.ini   DE54EEC0EFA7A7BF9810E9B22CA882D1C9DEF8CB3937283CF2B6DA5383084B29
+options.ini      B726B45FB8150EB71CEC394EADE151A0502D658479A9E9F8F712573AB2935D06
+debuglog.ini     3DBD2F68125D6B1912BEC0843DD47D6165589CDC2EA90D8613690D750E06AA70
+mods/default.txt 601B865924C8456DFD1820B0237450F1906E2D4253D4FAF7FF4BA6B4A86CE850
