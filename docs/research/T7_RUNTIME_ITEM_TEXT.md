@@ -37,7 +37,7 @@ An isolated nine-item matrix stamped a disposable copied character save. Every i
 
 - This was single-player `-nosteam` on one exact stable build and one English-language live run; German translation data was packaged but not independently launched.
 - The print-media test used a minimal runtime-defined layout rather than every shipped brochure/newspaper definition. It proves that this runtime-shaped route is unsafe, not that shipped static media is broken.
-- T10 still owns the cooperative custom `Inspect` context-menu hook. T7 proves the storage and native-reader constraints that hook must consume.
+- T10 later proved the cooperative custom `Inspect` action in player and Ground/loot inventory panes; direct-world-item right-click is unsupported. T7 supplies the storage and native-reader constraints that action consumes.
 - The probe used representative vanilla types, not final production definitions or the complete Dead Air prose lengths.
 
 ## Verdict

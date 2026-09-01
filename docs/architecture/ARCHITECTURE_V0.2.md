@@ -127,7 +127,7 @@ T7 fixes the boundary:
 - predefine generic/static PZ item types as necessary and retain vanilla inventory/container behaviour;
 - persist the resolved per-instance display name with `setName`/`setCustomName(true)`;
 - store validated plain resolved title/description/body fields in item ModData, while the authored/domain body remains authoritative;
-- render world-specific bodies through the cooperative custom `Inspect` surface owned by T10;
+- render world-specific bodies through T10's cooperative custom `Inspect` action in player and Ground/loot inventory panes;
 - optionally project deliberately short plain-text artifacts into locked `Literature.customPages`; treat the 15-line/1,200-character page UI and literal markup behavior as presentation constraints, never canonical storage;
 - do not use `InventoryItem.description`, raw runtime `printMedia` keys, or key/map/generic native UI as body carriers. Static pre-baked print media requires asset-specific proof.
 
@@ -191,7 +191,19 @@ Until an MP architecture exists:
 - never write unrelated ModData;
 - custom Inspect adds behaviour rather than replacing vanilla handlers.
 
-T10 remains open and may resume only through P4-R44's manual-GUI procedure: the project owner manually launches/enters the disposable save and performs requested right-clicks while the probe only logs menu callbacks/assertions. Do not use a helper/injected agent, restore quarantined components, add antivirus exclusions/bypasses or attempt alternate injection.
+T10 fixes the supported context-menu boundary. Use
+`OnFillInventoryObjectContextMenu` for both player inventory and Ground/loot
+inventory panes; add privately keyed actions after vanilla construction, remove
+only stored Conspiracy-Files callback identities, normalize/deduplicate the
+selection, revalidate at activation and wrap the boundary in `pcall`. Direct
+right-click on a dropped photo fired `OnFillWorldObjectContextMenu` with zero
+inventory subjects, so production does not advertise or depend on a direct-world
+Inspect action. The Ground inventory pane is the supported dropped-item path.
+
+P4-R44 remains the mandatory procedure for any T10 rerun: manual owner input and
+a pure-Lua logging probe only. The injected-helper route remains abandoned and
+prohibited; do not restore quarantined components, change security settings, add
+exclusions/bypasses or attempt alternate injection/synthetic input.
 
 ## 13. AI boundary
 
@@ -238,4 +250,4 @@ Backward-compatible typo/text revisions must not force save migration. Content p
 
 Before the broad architecture is considered signed off, record spike results for T1–T10 using `docs/research/SPIKE_TEMPLATE.md`.
 
-The first six critical probes are T1, T9, T2, T3, T4 and T5. T7 and T8 are complete; T10 still gates broader v1 behavior. T6 is only needed if retrofit returns.
+The first six critical probes are T1, T9, T2, T3, T4 and T5. T7, T8 and T10 are complete, so Engineering Gate B is complete with T10's inventory-pane-only limitation. T6 is only needed if retrofit returns.
