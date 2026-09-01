@@ -117,9 +117,9 @@ T4 fixes the placement protocol:
 
 Every canonical transition is a staged full-root replacement under P4-R32/P4-R17. T4 found and tested no Lua-visible atomic transaction across chunk/container files and Global ModData, so ambiguous partial persistence biases toward loss/fallback rather than duplication. Work is drained through a deduplicated bounded queue behind a `pcall` adapter boundary.
 
-Anchor and fallback are both valid authored content, but they are not deliberately spawned together as duplicate red herrings.
+Anchor and fallback are both valid authored content, but they are not deliberately spawned together as duplicate red herrings. P4-R40 permits D2 to activate once as the fallback introduction when durably placed but undiscovered D1 becomes conclusively `unavailable` only after T5/P4-R37 reconciliation. Mere unloading, original-container absence, `unknown`, `untracked` and `conflict` do not qualify, and D1 never respawns.
 
-The narrative rule for an anchor that was durably placed but remained undiscovered before later becoming `lost` is still a product choice and must be decided before `entryOpportunityUsed` is implemented.
+The two bindings target a regional separation of roughly 1,000–1,600 straight-line tiles, subject to live route/access verification. Inspect provisional candidates P2 `(13206,3073)` (medium local police station) and R2 `(13549,1572)` (compact communications/news facility with service garage) first; they are roughly 1,538 straight-line tiles apart. P2 must supply credible property/records containers or the large headquarters remains fallback. R2 must pass newsroom-character, access, boundary and container-plausibility checks. Neither candidate is a final binding.
 
 ## 7. Asset text model
 
@@ -190,6 +190,8 @@ Until an MP architecture exists:
 - never assume exclusive listener ownership;
 - never write unrelated ModData;
 - custom Inspect adds behaviour rather than replacing vanilla handlers.
+
+T10 remains open and may resume only through P4-R44's manual-GUI procedure: the project owner manually launches/enters the disposable save and performs requested right-clicks while the probe only logs menu callbacks/assertions. Do not use a helper/injected agent, restore quarantined components, add antivirus exclusions/bypasses or attempt alternate injection.
 
 ## 13. AI boundary
 

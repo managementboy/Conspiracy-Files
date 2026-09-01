@@ -79,13 +79,15 @@ The player may enter through either story location and may never see all six doc
 
 ## Story locations (2)
 
-Exact vanilla map targets are intentionally **not** claimed here. They must be chosen and verified on the development PC. v0.1 uses hand-curated targets; T3 does not need to succeed for that manual choice, while T4/T8 still govern placement and arrival mechanics.
+Exact vanilla map targets remain deliberately **unbound** until live inspection. The intended geography is a regional journey of roughly 1,000–1,600 straight-line tiles, subject to live route and access verification. v0.1 uses hand-curated targets; T3 candidate evidence prioritizes inspection but does not create story truth, while T4/T8 still govern placement and arrival mechanics.
 
 ### `dead-air:location:relay-office` — Relay Site 31 service office
 
 **Story purpose:** the technical side of the thread. It is where ordinary maintenance records reveal a channel activation that does not behave like ordinary maintenance.
 
 **Real PZ location type to map later:** a believable transmission/utility communications site or small service building associated with a mast/tower, fenced utility compound, radio infrastructure or equivalent hand-curated vanilla location. It needs plausible storage for service paperwork and tools, not a purpose-built conspiracy bunker.
+
+**Provisional inspection priority:** candidate R2 at `(13549,1572)`, the compact communications/news facility with a service garage recorded in T3's checked-in live candidate matrix. Inspect it first for convincing newsroom character, access, usable boundaries and plausible containers. R2 is not a final binding.
 
 **What the player knows before reaching it:** if led from the police side, only `Relay Site 31`, `south service road`, a fenced communications mast/utility structure, and CSS ticket `93-0714`. This should read as a landmark-style lead, not a quest marker.
 
@@ -101,7 +103,9 @@ Exact vanilla map targets are intentionally **not** claimed here. They must be c
 
 **Real PZ location type to map later:** a hand-curated vanilla police station with a believable desk, records room, property/evidence area or office container.
 
-**What the player knows before reaching it:** if led from D1, Rourke's portable receiver was taken by county police and entered as property record `4471`. No exact station coordinates are authored here.
+**Provisional inspection priority:** prefer a medium local station and inspect candidate P2 at `(13206,3073)` first. The large headquarters remains fallback only if P2 lacks credible property/records containers. P2 is not a final binding.
+
+**What the player knows before reaching it:** if led from D1, Rourke's portable receiver was taken by county police and entered as property record `4471`. Candidate coordinates are development provenance, not player-facing knowledge or a final station binding.
 
 **What confirms it:** physical arrival at the selected police station and discovery of matching property/shift paperwork, subject to T8.
 
@@ -608,7 +612,7 @@ Conceptually, finding either first:
 
 Anchor/fallback governs only the guaranteed introduction path. Both curated locations retain their complete authored supporting-document contents in every case: activating D2 as the fallback does not suppress D3 or D4, and it does not remove the relay site's normal authored content.
 
-T4 now defines materialisation and idempotency sequencing in `docs/research/T4_EXACT_ONCE_PLACEMENT.md`. The authored content is valid regardless of which opportunity is used first. The project owner must still decide whether a placed-but-undiscovered D1 that later becomes `lost` may activate D2 as the narrative entry opportunity.
+P4-R40 resolves the placed-but-undiscovered case. If D1 was durably placed, remained undiscovered and later becomes conclusively `unavailable` only after T5/P4-R37 reconciliation, D2 may activate once as the fallback introduction. Mere unloading, absence from D1's original container, `unknown`, `untracked` or `conflict` does not qualify. D1 never respawns. T4 continues to define materialisation and idempotency sequencing in `docs/research/T4_EXACT_ONCE_PLACEMENT.md`.
 
 # Plausible discovery paths
 
@@ -750,12 +754,12 @@ No choice above decides native reader vs ModData-backed text vs custom reader UI
 # Technical assumptions deliberately not resolved here
 
 - **T1:** complete on Build 42.20.4; the implementation must obey P4-R32 and the hard ≤500 KB/save canonical-state budget. This paper fixture does not select the final conforming encoding.
-- **T3:** no automatic categorisation is required; exact curated vanilla targets still need selection/verification.
+- **T3:** no automatic categorisation is required. Its checked-in live matrix supplies provisional candidates P2 `(13206,3073)` and R2 `(13549,1572)`, paired at roughly 1,538 straight-line tiles, but exact curated bindings still require live route/access, boundary and container/story-plausibility verification.
 - **T4:** complete on Build 42.20.4; use queued relevant-binding wake-ups, detached item pre-stamping and exact-container reconciliation. This fixture still does not select final map bindings.
-- **T5:** the key/receiver cannot be assumed to retain stable physical identity.
-- **T7:** document text presentation mechanism remains open.
-- **T8:** location-arrival detection remains open.
-- **T10:** cooperative Inspect/context-menu behavior remains open.
+- **T5:** use the accepted mod-owned per-instance token with separate availability/conflict state and P4-R37 reconciliation; engine IDs remain diagnostic, incomplete coverage cannot prove loss, and copied-token duplication is sticky `conflict`.
+- **T7:** use a persistent custom item name plus validated plain ModData title/description/body, with the custom T10 `Inspect` reader as the world-specific presentation boundary; optional locked Literature pages are limited projections only.
+- **T8:** use P4-R39's bounded/debounced sampling and exact binding predicates; delayed-reference ordering and reload-inside remain production-adapter acceptance cases rather than completed probe claims.
+- **T10:** cooperative Inspect/context-menu behavior remains open and may resume only as a P4-R44 manual-GUI session; the probe logs menu callbacks/assertions while the project owner manually enters the disposable save and performs the requested right-clicks.
 
 # Self-review
 
