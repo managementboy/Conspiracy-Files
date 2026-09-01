@@ -102,7 +102,7 @@ Future retrofit only. Determine whether reliable per-candidate loaded-history st
 
 ### T7 — Item name/description/page text mutation
 
-Determine which asset types can show world-specific content while retaining native reader behavior.
+Complete on stable 42.20.4. Custom names and item ModData round-tripped on all nine tested literature/photo/generic/key/map carriers; `InventoryItem.description` returned nil on all nine after reload. Runtime-enabled locked Literature custom pages persisted and opened in the native read-only journal, but the UI is a 15-line/1,200-character plain-text page and displayed markup literally. Raw runtime strings in `printMedia` are translation/formatter inputs, not opaque text; `%` content caused `UnknownFormatConversionException`, while the translated runtime-shaped media displayed a title but blank body canvas. Generic items/keys have no body reader and native map UI does not consume the ModData body. Use persistent custom name + validated ModData universally and the custom T10 Inspect reader for world-specific bodies; optional locked pages are short plain-text projections only. See `T7_RUNTIME_ITEM_TEXT.md` and `dev/t7-runtime-item-text/evidence/installed-api.txt`.
 
 ### T8 — Building/room/non-building arrival detection
 

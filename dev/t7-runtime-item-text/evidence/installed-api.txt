@@ -1,0 +1,39 @@
+Conspiracy-Files T7 installed Build 42 API evidence
+Build: 42.20.4 b0bbce05d5; Steam build ID 24909800
+projectzomboid.jar SHA-256: 80E405A4BFC42F6072E75B3735F458A6514143DA011D3226007DED305A442F44
+
+javap surface:
+
+zombie.inventory.InventoryItem
+  KahluaTable getModData()
+  void save(ByteBuffer, boolean)
+  void load(ByteBuffer, int)
+  String getName(); void setName(String)
+  String getDescription(); void setDescription(String)
+  boolean isCustomName(); void setCustomName(boolean)
+
+zombie.inventory.types.Literature extends InventoryItem
+  void save(ByteBuffer, boolean); void load(ByteBuffer, int)
+  boolean canBeWrite(); void setCanBeWrite(boolean)
+  HashMap<Integer,String> getCustomPages()
+  void addPage(Integer,String); String seePage(Integer)
+  String getLockedBy(); void setLockedBy(String)
+
+zombie.inventory.types.Key extends InventoryItem
+  save/load only; no readable-body API
+
+zombie.inventory.types.MapItem extends InventoryItem
+  String getMapID(); save/load; no document-body API
+
+Installed vanilla Lua observations:
+
+- ISInventoryPaneContextMenu routes writable Literature through onWriteSomething to ISUIWriteJournal.
+- ISUIWriteJournal is plain text, 15 lines and maxTextLength=lineNumber*80 (1200 characters per page in this path). A foreign lockedBy value makes title/body non-editable and page count follows customPages size.
+- Print-media context actions require Literature ModData.printMedia and use getText on info/title/text before PZAPI.UI.PrintMedia rendering.
+- ISInventoryPaneContextMenu routes MapItem to native ISMap; ordinary InventoryItem/Key have no body reader.
+
+Official API context:
+https://projectzomboid.com/modding/zombie/inventory/InventoryItem.html
+https://projectzomboid.com/modding/zombie/inventory/types/Literature.html
+https://projectzomboid.com/modding/zombie/inventory/types/Key.html
+https://projectzomboid.com/modding/zombie/inventory/types/MapItem.html

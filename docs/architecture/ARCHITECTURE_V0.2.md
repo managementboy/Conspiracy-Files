@@ -121,12 +121,13 @@ The narrative rule for an anchor that was durably placed but remained undiscover
 
 ## 7. Asset text model
 
-Working hypothesis pending T7:
-- predefine generic/static PZ item types as necessary;
-- retain vanilla inventory/container behaviour;
-- store world-specific resolved story text/metadata in item ModData when supported;
-- use a custom reader/Inspect surface for runtime-resolved text if native readers cannot display it safely;
-- use native reader behaviour for static pre-baked content where proven compatible.
+T7 fixes the boundary:
+- predefine generic/static PZ item types as necessary and retain vanilla inventory/container behaviour;
+- persist the resolved per-instance display name with `setName`/`setCustomName(true)`;
+- store validated plain resolved title/description/body fields in item ModData, while the authored/domain body remains authoritative;
+- render world-specific bodies through the cooperative custom `Inspect` surface owned by T10;
+- optionally project deliberately short plain-text artifacts into locked `Literature.customPages`; treat the 15-line/1,200-character page UI and literal markup behavior as presentation constraints, never canonical storage;
+- do not use `InventoryItem.description`, raw runtime `printMedia` keys, or key/map/generic native UI as body carriers. Static pre-baked print media requires asset-specific proof.
 
 Do not finalise content-pack schemas until T7 and a second real content set exist.
 
@@ -233,4 +234,4 @@ Backward-compatible typo/text revisions must not force save migration. Content p
 
 Before the broad architecture is considered signed off, record spike results for T1–T10 using `docs/research/SPIKE_TEMPLATE.md`.
 
-The first six critical probes are T1, T9, T2, T3, T4 and T5. T7/T8/T10 gate broader v1 behavior. T6 is only needed if retrofit returns.
+The first six critical probes are T1, T9, T2, T3, T4 and T5. T7 is complete; T8/T10 still gate broader v1 behavior. T6 is only needed if retrofit returns.
