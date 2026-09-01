@@ -1,7 +1,7 @@
 # Conspiracy-Files — Project State
 
-Status: **Engineering de-risk / v0.1 definition**. No feature implementation has been accepted yet.
-Target: Project Zomboid Build 42; T1/T2/T3/T4/T5/T7/T8/T9 verified stable Build **42.20.4**, revision **b0bbce05d5**, Steam build ID **24909800**. Other capability claims remain subject to their named spikes/research.
+Status: **Engineering de-risk / v0.1 domain implementation**. The PZ-independent v0.1 plain-Lua domain core was accepted and merged in PR #15; live Build 42 integration has not been accepted.
+Target: Project Zomboid Build 42; T1/T2/T3/T4/T5/T7/T8/T9 verified stable Build **42.20.4**, revision **b0bbce05d5**, Steam build ID **24909800**, with the limitations recorded in their reports. T10 remains open. Other capability claims remain subject to their named spikes/research.
 
 ## Source of truth order
 
@@ -59,6 +59,16 @@ The first specification over-committed to unproven Build 42 capabilities. The en
 - **T7 runtime item text and native readers:** complete. A nine-carrier Build 42.20.4 matrix proved custom item names and ModData bodies persist on literature, photos, generic items, keys and maps; `InventoryItem.description` did not persist. Locked Literature custom pages reopened in the vanilla read-only journal but are plain, limited projections. Runtime-shaped `printMedia` was unsafe, including a formatter failure on raw `%` content. The authoritative world-specific body therefore remains in ModData/domain content and uses the custom T10 `Inspect` reader. See `docs/research/T7_RUNTIME_ITEM_TEXT.md`.
 - **T8 curated location arrival detection:** complete with explicit reload/reference limitations. Scripted teleports produced zero `OnPlayerMove` callbacks. Bounded 15-tick state sampling with two stable samples correctly confirmed reached exact-room, whole-building, floor, basement, radius, rectangle and installed-zone predicates in 248–344 ms, with adjacent/wrong-floor/boundary negatives and sticky leave/re-entry behavior. Late scripted teleports became unreliable; delayed-reference ordering and reload-inside remain production-adapter tests rather than claimed results. See `docs/research/T8_LOCATION_ARRIVAL.md`.
 
+## Accepted offline implementation
+
+- **v0.1 plain-Lua domain core:** accepted and merged in PR #15 at `c9d845e21a0a4298a83ce8b92204e66b6e59d073`. It implements the static Dead Air registries, private canonical ThreadState API, authored and Mark Interesting Evidence, append-only journal events, deterministic no-AI rendering, derived Organisation/Location labels, idempotent domain transitions, D5/D6 contradiction handling, B-37 recontextualisation, major-discovery evaluation, staged P4-R32 validation, the conservative P4-R17 size gate and static content resolution.
+- All 16 acceptance criteria classified `plain-Lua automated test` pass under PUC Lua 5.1.5. The suite reports 17 passing tests total because it also checks that the authoritative acceptance table and traceability matrix remain complete and one-to-one. See `docs/testing/V0_1_DOMAIN_CORE_TRACEABILITY.md`.
+- This acceptance is limited to the PZ-independent domain layer. It does not accept ModData adapter behavior, physical placement/commit sequencing, live item identity, reader/UI integration, location-arrival integration, exact map bindings or any other Build 42 engine behavior.
+
+## Incomplete de-risking
+
+- **T10 cooperative Inspect integration:** open. It still owns the live cooperative `Inspect` and Mark Interesting context-menu mechanism and continues to block Engineering Gate B and `CF-V01-E08`. No T10 result is accepted on this branch.
+
 ## v0.1 vertical slice
 
 One built-in hand-authored thread:
@@ -77,15 +87,15 @@ One built-in hand-authored thread:
 - `test/fixtures/THREAD-001-DEAD-AIR.md` is now a complete Dead Air authored-content candidate rather than a structural fixture: six full documents, three identities, one organisation, two story locations, anchor/fallback behavior, discovery paths, three reward moments, deterministic journal output and a Mark Interesting example.
 - The Dead Air text was development-time AI-assisted and still requires human approval before canonical shipping under `docs/design/AI_PROVENANCE.md`.
 - `docs/design/V0_1_DATA_MODEL.md` now derives the smallest v0.1 logical model from that story. Static authored prose/entities remain outside save state; v0.1 relationships are static ID references rather than standalone relationship records.
-- `docs/requirements/V0_1_ACCEPTANCE_CRITERIA.md` is complete as an implementation input: it separates observable product/domain acceptance from live engine validation and incorporates T4/T5 placement, physical identity, T7 asset-text and T8 arrival mechanisms. T10-dependent behavior remains blocked on its named spike. It does not claim implementation acceptance for the production adapters or final map bindings.
+- `docs/requirements/V0_1_ACCEPTANCE_CRITERIA.md` separates observable product/domain acceptance from live engine validation. Its 16 plain-Lua criteria are covered by the accepted domain-core suite; T4/T5/T7/T8 establish mechanisms and production-adapter matrices, but live integration, T10-dependent behavior and final map bindings remain unaccepted.
 - Exact vanilla map targets for the two curated locations are still unselected/unverified in this repository and must be chosen on the development PC.
-- No live Build 42 behavior was validated by the Dead Air design work itself. The separately completed T1/T2/T3/T4/T5/T7/T8/T9 results are authoritative for persistence, enumeration, categorisation, placement, physical identity, asset text/readers, curated arrival and network transport; T10 remains authoritative for its open engine question.
+- No live Build 42 behavior was validated by the accepted domain-core work. The separately completed T1/T2/T3/T4/T5/T7/T8/T9 results are authoritative, with their recorded limitations, for persistence, enumeration, categorisation, placement, physical identity, asset text/readers, curated arrival and network transport; T10 remains open for its engine question.
 
 ## Immediate work
 
 Before implementation architecture is signed off:
 
-1. treat Engineering Gate A (T1/T9/T2/T3/T4/T5) as complete and use the complete Dead Air fixture plus `V0_1_DATA_MODEL.md` as the v0.1 implementation input without expanding into content packs/graph systems;
+1. treat Engineering Gate A (T1/T9/T2/T3/T4/T5) as complete and integrate the accepted domain core only through adapter mechanisms proven by the named spikes, without expanding into content packs/graph systems;
 2. choose and verify the two exact curated vanilla story locations on the development PC before location bindings are committed;
 3. implement physical identity as a mod-owned per-instance token with separate availability/conflict state; never infer loss from the original placement container alone;
 4. update decisions from each later observed spike result;
