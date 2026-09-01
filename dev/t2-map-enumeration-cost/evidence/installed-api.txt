@@ -1,0 +1,66 @@
+Conspiracy-Files T2 installed API evidence
+Inspection date: 2026-08-31
+Installed projectzomboid.jar SHA-256: 80E405A4BFC42F6072E75B3735F458A6514143DA011D3226007DED305A442F44
+Tool: JDK 25 javap -private / -c against the installed JAR
+
+Relevant installed public signatures:
+
+zombie.Lua.LuaManager$GlobalObject
+  public static zombie.iso.IsoWorld getWorld();
+  public static long getTimeInMillis();
+  public static java.lang.String getGameVersion();
+
+zombie.iso.IsoWorld
+  public zombie.iso.IsoMetaGrid getMetaGrid();
+  public java.lang.String getMap();
+
+zombie.iso.IsoMetaGrid
+  public java.util.ArrayList<zombie.iso.BuildingDef> getBuildings();
+  public int getMinX();
+  public int getMinY();
+  public int getMaxX();
+  public int getMaxY();
+  public int getWidth();
+  public int getHeight();
+  public boolean wasLoaded();
+
+zombie.iso.BuildingDef
+  public java.util.ArrayList<zombie.iso.RoomDef> getRooms();
+  public int getMinLevel();
+  public int getMaxLevel();
+  public int getX();
+  public int getY();
+  public int getX2();
+  public int getY2();
+  public long getID();
+  public java.lang.String getIDString();
+
+zombie.iso.RoomDef
+  public long getID();
+  public java.lang.String getIDString();
+  public java.lang.String getName();
+  public int getX();
+  public int getY();
+  public int getX2();
+  public int getY2();
+  public int getZ();
+  public int getArea();
+
+Installed Kahlua memory-counter semantics:
+
+`se.krka.kahlua.stdlib.BaseLib.collectgarbage(..., "count")` calls
+`Runtime.freeMemory()` and `Runtime.totalMemory()`, subtracts free from total,
+divides by 1024, and returns used JVM heap KiB. `collectgarbage("collect")`
+calls `System.gc()`. Therefore T2's heap deltas are observed retained JVM
+used-heap changes while the Lua index is held; they are not exact Lua-object
+sizes and are not total process working set.
+
+Official Build 42 Javadocs independently list the same path and record getters:
+https://projectzomboid.com/modding/zombie/Lua/LuaManager.GlobalObject.html
+https://projectzomboid.com/modding/zombie/iso/IsoWorld.html
+https://projectzomboid.com/modding/zombie/iso/IsoMetaGrid.html
+https://projectzomboid.com/modding/zombie/iso/BuildingDef.html
+https://projectzomboid.com/modding/zombie/iso/RoomDef.html
+
+The live probe is the evidence that this documented public Java path was
+actually callable from ordinary Build 42 Lua on the tested installation.

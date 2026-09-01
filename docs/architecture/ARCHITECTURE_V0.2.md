@@ -156,6 +156,8 @@ Expensive work uses a queue with bounded work per frame. Never:
 
 Archive relevance, when implemented, re-evaluates only records sharing affected entity/metadata indexes after a relevant domain event.
 
+T2 makes the map-discovery constraint concrete. The Build 42.20.4 vanilla map exposed 96,414 building/room records; full scans occupied 227–244 ms. Future map-wide discovery must stream behind both a conservative record cap below the tested 100-record/frame boundary and an elapsed-time deadline under 2 ms. It retains only filtered candidate facts required downstream. The generic full rich index is not the production shape: T2 observed a 90–102 MiB retained JVM used-heap delta while that index was held. Any candidate index remains a rebuildable session cache and is never persisted wholesale.
+
 ## 11. Multiplayer
 
 Until an MP architecture exists:
@@ -205,7 +207,7 @@ Backward-compatible typo/text revisions must not force save migration. Content p
 
 ## 17. Future features explicitly deferred
 
-- map-wide location registry and automatic categorisation — after T2/T3;
+- map-wide location discovery and automatic categorisation — after T3, using T2's filtered, rebuildable, dual-bounded scheduler constraints;
 - relationship graph — v2, separate prototype first;
 - content packs — after a second real content set;
 - retrofit — post-v1, per-candidate never-loaded/reachability model if revived;

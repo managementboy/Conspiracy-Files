@@ -78,6 +78,7 @@ If a spike disproves a decision, technical reality wins: supersede the decision 
 | P4-R31 | **v0.1 Dead Air uses static stable-ID references on authored Assets instead of instantiating or persisting standalone Relationship records.** Re-evaluate a central relationship store only when a second real content set or the v2 graph creates an actual need. | The complete v0.1 story needs references, leads, contradictions and recontextualisation, but none of those relationships have runtime lifecycle in the slice. Content-first minimality wins over pre-building graph-era structure. |
 | P4-R32 | Before swapping canonical ModData, recursively validate a staged full replacement: allow only string/number keys and string/number/boolean/plain-table values (nil means absence); reject cycles; reject multiply referenced tables or normalize/copy them so meaning cannot depend on alias identity; reject metatables, functions, userdata, threads and exposed Java objects; enforce maximum depth 64; validate schema and estimated serialized size against P4-R17; swap only after the complete replacement passes, preserving the last known-good canonical root on rejection. | T1 found silent dropping of unsupported values and keys, loss of shared-reference identity, and catastrophic whole-tag loss from a cycle even when `saveGame()` returned; pre-save validation is therefore mandatory. |
 | P4-R33 | **Any future general runtime-AI network transport must cross a Java/ZombieBuddy or external-companion boundary and remains outside v0.1.** Vanilla Lua may use DNS and fixed engine services, but it must not be treated as an arbitrary HTTP client. | T9 on Build 42.20.4 found no callable general GET, POST, TLS-control, timeout-control or asynchronous HTTP surface; the sole fixed HTTPS helper blocked `OnTick` for 312 ms and returned no usable response. See `docs/research/T9_NETWORK_EGRESS.md`. |
+| P4-R34 | **Future map-wide discovery is a rebuildable, non-persistent, filtered session process. Never synchronously scan the full map in normal play; queue work behind both a conservative record cap below the tested 100-record/frame boundary and an elapsed-time deadline under P4-R16, and retain only candidate facts needed downstream.** v0.1 continues to use curated locations. | T2 on Build 42.20.4 counted 96,414 building/room records; synchronous scans occupied 227–244 ms, 100 records/frame peaked at 2 ms, and a generic rich full-map Lua index retained an observed 90–102 MiB of JVM heap. Persisting or retaining the unfiltered registry is unjustified. See `docs/research/T2_MAP_ENUMERATION_COST.md`. |
 
 ## Delivery/scope decisions
 
@@ -93,7 +94,6 @@ If a spike disproves a decision, technical reality wins: supersede the decision 
 
 ## Technical decisions intentionally pending spikes
 
-- **T2:** map/meta-grid enumeration cost and scheduler requirements.
 - **T3:** automatic location categorisation reliability.
 - **T4:** exact-once placement hook/idempotency sequence.
 - **T5:** persistent physical item identity.

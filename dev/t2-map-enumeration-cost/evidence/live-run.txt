@@ -1,0 +1,43 @@
+Conspiracy-Files T2 filtered live evidence
+Execution date: 2026-08-31
+Process: exitCode=0 elapsedMs=68691 samples=498 Responding=false samples=0 peakWorkingSetBytes=5972160512
+Successful raw stdout SHA-256: 4C4AB8648E8BC8C5DD025EC671A91EA4578A6D653B71EB068AB94DB152665F9F
+Successful raw stderr SHA-256: 2656B2FAEE0D9BC458098F0A3E3E68AD9D81A9447A7C6991EABAD3CEA734BBAC
+Live-tested Lua source SHA-256: 8C79C770AB2C7BBA4C6C9FEEC4127457714CB066CE73477474819557F32F0D76
+Committed Lua source SHA-256: 0B1281764597CC1B980351ED41BEDA95B63FA832C4E16E7442B8C1205D76ABD2
+Post-run difference: one trailing blank line removed to satisfy git diff --check; executable Lua lines are unchanged.
+Tested projectzomboid.jar SHA-256: 80E405A4BFC42F6072E75B3735F458A6514143DA011D3226007DED305A442F44
+Gate helper DLL SHA-256: E5B0C7FC060A0AB5D28C8392E521FD9AE320760E48299C1A9DB147726BFA283D
+
+[CF-T2-AGENT]|STARTED|mode=loading-gate-only
+[CF-T2]|EVENT|kind=SCRIPT_LOADED|gameVersion=42.20
+[CF-T2]|EVENT|kind=AUTO_MENU_READY|status=waiting-for-main-screen-instance
+[CF-T2]|EVENT|kind=AUTO_CONTINUE|save=T2_map|gameMode=Sandbox
+[CF-T2-AGENT]|GATE_RELEASED|reason=engine-done-true
+[CF-T2]|EVENT|kind=ENVIRONMENT|gameVersion=42.20|save=T2_map|map=Brandenburg, KY;Echo Creek, KY;Ekron, KY;Fallas Lake, KY;Irvington, KY;March Ridge, KY;Riverside, KY;Rosewood, KY;Valley Station, KY;West Point, KY;Muldraugh, KY|activeModCount=1|probeActive=true|worldClass=IsoWorld|metaGridClass=IsoMetaGrid|buildingsClass=ArrayList|collectgarbageType=function
+[CF-T2]|EVENT|kind=META_GRID|minX=-250|minY=-250|maxX=250|maxY=250|width=501|height=501|wasLoaded=true
+[CF-T2]|EVENT|kind=BASELINE_TICKS|samples=120|meanTickStartGapMs=16.725|minTickStartGapMs=8|maxTickStartGapMs=260
+[CF-T2]|EVENT|kind=SYNC_SCAN|pass=1|buildings=9978|rooms=86436|records=96414|checksum=465114197|elapsedMs=244|countsMatch=true
+[CF-T2]|EVENT|kind=SYNC_NEXT_TICK|pass=1|gapSinceReturnMs=11|tickStartGapMs=255
+[CF-T2]|EVENT|kind=SYNC_SCAN|pass=2|buildings=9978|rooms=86436|records=96414|checksum=465114197|elapsedMs=231|countsMatch=true
+[CF-T2]|EVENT|kind=SYNC_NEXT_TICK|pass=2|gapSinceReturnMs=11|tickStartGapMs=242
+[CF-T2]|EVENT|kind=SYNC_SCAN|pass=3|buildings=9978|rooms=86436|records=96414|checksum=465114197|elapsedMs=232|countsMatch=true
+[CF-T2]|EVENT|kind=SYNC_NEXT_TICK|pass=3|gapSinceReturnMs=11|tickStartGapMs=243
+[CF-T2]|EVENT|kind=SYNC_SCAN|pass=4|buildings=9978|rooms=86436|records=96414|checksum=465114197|elapsedMs=227|countsMatch=true
+[CF-T2]|EVENT|kind=SYNC_NEXT_TICK|pass=4|gapSinceReturnMs=10|tickStartGapMs=237
+[CF-T2]|EVENT|kind=SYNC_SCAN|pass=5|buildings=9978|rooms=86436|records=96414|checksum=465114197|elapsedMs=228|countsMatch=true
+[CF-T2]|EVENT|kind=SYNC_NEXT_TICK|pass=5|gapSinceReturnMs=10|tickStartGapMs=238
+[CF-T2]|EVENT|kind=SYNC_INDEX|buildings=9978|rooms=86436|records=96414|roomNameKeys=588|roomNameBucketEntries=86436|elapsedMs=329|heapBeforeKB=1560576.000|heapAfterKB=1652736.000|heapDeltaKB=92160.000|heapDeltaBytes=94371840|preMeasureGcMs=471|postMeasureGcMs=484|retainsEngineObjects=false|persisted=false
+[CF-T2]|EVENT|kind=SYNC_SUMMARY|passes=5|peakScanCallbackMs=244|peakGapSinceReturnMs=11
+[CF-T2]|EVENT|kind=INDEX_RELEASED|gcMs=346
+[CF-T2]|EVENT|kind=BATCH_START|budgetRecordsPerFrame=100|heapBeforeKB=1538048.000|preMeasureGcMs=316
+[CF-T2]|EVENT|kind=BATCH_RESULT|budgetRecordsPerFrame=100|buildings=9978|rooms=86436|records=96414|roomNameKeys=588|roomNameBucketEntries=86436|frames=965|activeWallMs=8045|callbackTotalMs=536|callbackMeanMs=0.555|callbackPeakMs=2|callbacksOver2Ms=0|maxTickStartGapMs=12|heapBeforeKB=1538048.000|heapAfterKB=1636352.000|heapDeltaKB=98304.000|heapDeltaBytes=100663296|postMeasureGcMs=457|countsMatch=true|persisted=false
+[CF-T2]|EVENT|kind=INDEX_RELEASED|gcMs=318
+[CF-T2]|EVENT|kind=BATCH_START|budgetRecordsPerFrame=500|heapBeforeKB=1533952.000|preMeasureGcMs=329
+[CF-T2]|EVENT|kind=BATCH_RESULT|budgetRecordsPerFrame=500|buildings=9978|rooms=86436|records=96414|roomNameKeys=588|roomNameBucketEntries=86436|frames=193|activeWallMs=1621|callbackTotalMs=411|callbackMeanMs=2.130|callbackPeakMs=4|callbacksOver2Ms=54|maxTickStartGapMs=11|heapBeforeKB=1533952.000|heapAfterKB=1638400.000|heapDeltaKB=104448.000|heapDeltaBytes=106954752|postMeasureGcMs=450|countsMatch=true|persisted=false
+[CF-T2]|EVENT|kind=INDEX_RELEASED|gcMs=347
+[CF-T2]|EVENT|kind=BATCH_START|budgetRecordsPerFrame=1000|heapBeforeKB=1533952.000|preMeasureGcMs=316
+[CF-T2]|EVENT|kind=BATCH_RESULT|budgetRecordsPerFrame=1000|buildings=9978|rooms=86436|records=96414|roomNameKeys=588|roomNameBucketEntries=86436|frames=97|activeWallMs=982|callbackTotalMs=395|callbackMeanMs=4.072|callbackPeakMs=6|callbacksOver2Ms=93|maxTickStartGapMs=13|heapBeforeKB=1533952.000|heapAfterKB=1638400.000|heapDeltaKB=104448.000|heapDeltaBytes=106954752|postMeasureGcMs=447|countsMatch=true|persisted=false
+[CF-T2]|EVENT|kind=INDEX_RELEASED|gcMs=335
+[CF-T2]|EVENT|kind=COMPLETE|buildings=9978|rooms=86436|records=96414|syncPeakMs=244|syncPeakGapSinceReturnMs=11|batchCases=3|status=PASS
+[CF-T2]|EVENT|kind=AUTO_QUIT|status=normal-quit-to-desktop-requested|probeFailed=false

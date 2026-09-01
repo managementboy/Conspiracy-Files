@@ -35,7 +35,7 @@ Goal: prove the intended feeling once, with the smallest end-to-end build.
 Run six critical probes:
 1. [x] T1 ModData persistence/size limits — complete on Build 42.20.4; decisions incorporated.
 2. [x] T9 Lua network egress — complete on Build 42.20.4; vanilla Lua has no general HTTP client, so future optional runtime-AI transport needs Java/ZombieBuddy or an external companion and remains outside v0.1.
-3. [ ] T2 map/meta-grid enumeration cost — pending.
+3. [x] T2 map/meta-grid enumeration cost — complete on Build 42.20.4; 96,414 building/room records took 227–244 ms synchronously, while 100 records/frame stayed at or below 2 ms. Future discovery must stream/filter behind dual record/time bounds; v0.1 remains curated.
 4. [ ] T3 location categorisation reliability — pending.
 5. [ ] T4 exact-once deferred placement — pending.
 6. [ ] T5 persistent item identity — pending.

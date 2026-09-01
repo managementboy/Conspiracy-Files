@@ -1,0 +1,6 @@
+name=Conspiracy-Files T2 Map Enumeration Probe
+id=ConspiracyFiles_T2_Probe
+author=Conspiracy-Files development
+modversion=0.0.1
+versionMin=42.0.0
+description=Disposable Build 42 map/meta-grid enumeration and index-cost probe. Development use only.

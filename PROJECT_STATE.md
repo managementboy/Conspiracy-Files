@@ -52,6 +52,7 @@ The first specification over-committed to unproven Build 42 capabilities. The en
 
 - **T1 ModData persistence/size limits:** complete. The live single-player save/reload matrix on Build 42.20.4 revision b0bbce05d5 (Steam build ID 24909800) validated vanilla Lua Global ModData within the hard ≤500 KB/save canonical-state budget and established mandatory recursive pre-save validation. See `docs/research/T1_MODDATA_PERSISTENCE.md`.
 - **T9 vanilla Lua network egress:** complete. The live `-nosteam` probe on Build 42.20.4 found synchronous DNS and a fixed blocking server-list helper, but no arbitrary GET, POST, TLS/timeout controls or async HTTP response surface. Any future optional runtime-AI transport requires Java/ZombieBuddy or an external companion and remains outside v0.1. See `docs/research/T9_NETWORK_EGRESS.md`.
+- **T2 map/meta-grid enumeration cost:** complete. The live isolated Build 42.20.4 probe counted 9,978 buildings and 86,436 rooms (96,414 records). Full synchronous scans occupied 227–244 ms; 100 records/frame stayed at or below 2 ms, while 500 and 1,000 exceeded P4-R16. A generic rich full-map index retained an observed 90–102 MiB of JVM heap, so future discovery must stream/filter into rebuildable non-canonical candidate indexes. v0.1 remains curated. See `docs/research/T2_MAP_ENUMERATION_COST.md`.
 
 ## v0.1 vertical slice
 
@@ -79,7 +80,7 @@ One built-in hand-authored thread:
 
 Before implementation architecture is signed off:
 
-1. run T2–T5;
+1. run T3–T5;
 2. use the complete Dead Air fixture and `V0_1_DATA_MODEL.md` as the v0.1 implementation input without expanding into content packs/graph systems;
 3. choose and verify the two exact curated vanilla story locations on the development PC before location bindings are committed;
 4. update decisions from each observed spike result;

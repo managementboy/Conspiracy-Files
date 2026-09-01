@@ -2,7 +2,7 @@
 
 This index separates observed project-spike results from external documentation context. Full results live in the linked spike reports.
 
-## Verified live environment (2026-08-30)
+## Verified live environment (2026-08-30 through 2026-08-31)
 
 - Project Zomboid Stable `42.20.4 b0bbce05d5`
 - Revision `b0bbce05d5`
@@ -44,20 +44,31 @@ Verified live single-player `-nosteam` findings on the same exact Build 42.20.4 
 - The fixed path's installed code uses 10-second connect/read timeouts and reads the whole response using the platform-default decoder before XML parsing; Lua cannot configure those choices or access the raw response.
 - General optional runtime-AI transport therefore needs Java/ZombieBuddy or an external companion. This does not block v0.1 because no-AI remains primary.
 
+## T2 — Full map/meta-grid enumeration cost: complete
+
+Full report: [`T2_MAP_ENUMERATION_COST.md`](T2_MAP_ENUMERATION_COST.md).
+
+Verified live isolated single-player findings on the same exact Build 42.20.4 installation:
+
+- The documented `getWorld():getMetaGrid():getBuildings()` → `BuildingDef:getRooms()` path is callable from ordinary Lua.
+- The current vanilla map exposed 9,978 buildings and 86,436 rooms: 96,414 useful records.
+- Five synchronous scans occupied `OnTick` for 227–244 ms each and returned identical counts/checksum.
+- An equivalent useful index built at 100 records/frame took 965 frames/8,045 ms active wall time, averaged 0.555 ms and peaked at 2 ms with zero callbacks over 2 ms.
+- 500 records/frame averaged 2.130 ms and exceeded 2 ms on 54/193 callbacks; 1,000 averaged 4.072 ms and exceeded it on 93/97 callbacks.
+- The generic rich full-map index retained an observed 90–102 MiB JVM used-heap delta while held. Installed Kahlua bytecode confirms `collectgarbage("count")` is JVM used heap in KiB, not a Lua-only allocator counter.
+- Future discovery must be queued behind both record and elapsed-time bounds, stream/filter to candidate facts, and remain rebuildable/non-canonical. v0.1 still uses curated locations.
+
 ## Documentation context
 
 - Official version metadata: <https://projectzomboid.com/version_announce/>
 - Lua-facing `ModData`: <https://projectzomboid.com/modding/zombie/world/moddata/ModData.html>
 - Global ModData backing store: <https://projectzomboid.com/modding/zombie/world/moddata/GlobalModData.html>
 - Lua globals used for instrumentation: <https://projectzomboid.com/modding/zombie/Lua/LuaManager.GlobalObject.html>
+- Meta-grid and record getters used by T2: <https://projectzomboid.com/modding/zombie/iso/IsoMetaGrid.html>, <https://projectzomboid.com/modding/zombie/iso/BuildingDef.html>, <https://projectzomboid.com/modding/zombie/iso/RoomDef.html>
 
 The documented `524288`-byte internal block constant is not a persistence limit and was not used to derive the project budget.
 
 ## Remaining spikes
-
-### T2 — Full map/meta-grid enumeration cost
-
-Measure total cost on the current B42 map and whether work must be spread across frames.
 
 ### T3 — Location categorisation reliability
 
