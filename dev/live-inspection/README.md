@@ -1,0 +1,96 @@
+# Reusable Project Zomboid live-inspection harness
+
+`dev/live-inspection` is the repository-wide runner for disposable Build 42 map and runtime investigations. It separates reusable orchestration from declarative site facts, fails closed around saves, processes and renderers, and archives a sanitized evidence bundle after every owned run.
+
+It is development tooling, not production Conspiracy-Files code. It does not change vanilla game files, install Java/JNI helpers, inject into the process, alter security settings, or expose normal-play diagnostics. T10 reruns remain manual-GUI-only under P4-R44; this harness does not automate their UI actions.
+
+## Architecture
+
+The operator supplies a TOML profile. The Python runner validates the profile, renderer and machine state before mutation, owns a global file lock for the whole run, creates unique disposable save/mod paths, backs up protected controls with SHA-256 manifests, starts one owned launcher, advances through bounded log gates, and restores controls byte-for-byte during signal, error and normal cleanup. It never adopts, stops or cleans up a process it did not start.
+
+The temporary pure-Lua probe loads only the generated profile adapter. Its core contains no site coordinates. It validates the exact save and sole active mod, teleports only the disposable character, waits for an unpaused loaded player square, scans in batches constrained by both count and elapsed milliseconds, emits structured `[CF-INSPECT]` records, requests a normal quit, and never calls `saveGame()` or mutates map objects or containers.
+
+Profiles define paths, the protected control set and disposable-source marker, sites with role/bounds/entry/levels/room hints, ordered lifecycle gates, time budgets, and whether explicitly requested multi-site operation is allowed. The [Dead Air P2/R2 adapter](profiles/dead-air-p2-r2.toml) migrates provisional inputs only. It is not an authoritative binding or new live evidence.
+
+## Safety contract
+
+A live run is refused unless the following are all true:
+
+1. The profile parses and selects known sites.
+2. `DISPLAY` identifies the current graphical session and `glxinfo -B` returns a non-software renderer.
+3. The source is an immediate child of `Zomboid/Saves/Sandbox`, is not named like an inspection output, and contains the configured `.cf-live-inspection-source` marker.
+4. The exclusive `/tmp/conspiracy-files-live-inspection.lock` is acquired.
+5. `/proc` contains no Project Zomboid binary, launcher, main-screen JVM marker, or other inspection launcher.
+6. Generated `CF_INSPECT_*` save and `CF_LiveInspection_*` mod paths do not exist.
+
+The marker is deliberate operator authorization that a save is already disposable. Create it only in a save reserved as a clone source. Never add it to a real play save.
+
+The runner backs up existence, bytes, modes and hashes for `latestSave.ini`, `mods/default.txt`, `options.ini`, and `debuglog.ini` before changes. Cleanup archives the generated save/mod into the bundle, restores existing files atomically, removes control files that did not previously exist, verifies every restored hash, sanitizes console output, and emits a hash manifest. Cleanup errors produce `CLEANUP_FAILED` and are never hidden.
+
+The runner sends `SIGTERM` only to its owned launcher if abnormal cleanup requires it. It does not use `pkill`, adopt an old process, manipulate Xephyr, or force-kill an unverified PID.
+
+Every mutation phase is journaled in `run-state.json`. Signals perform immediate cleanup; after a process/session/power interruption, the next locked invocation first detects unfinished journals, archives only their exact generated paths, restores and hashes the recorded controls, marks the run `RECOVERED`, and only then continues preflight. Recovery is refused while any PZ process exists or if a journal path escapes the strict generated-save/mod roots.
+
+## Renderer choice and benchmark
+
+The normal desktop display is primary because it can use the laptop's real GPU through the signed-in session. Every copied historical Xephyr run reported `OpenGL renderer string: llvmpipe (LLVM 20.1.2, 256 bits)`, so the nested-display path is rejected rather than treated as hardware-isolated execution.
+
+No `LIBGL_ALWAYS_SOFTWARE=1` assignment exists on the normal path; the runner removes an inherited value. Before each live run, `glxinfo -B` is stored in `renderer-glxinfo.txt`. A fallback requires `--allow-software-renderer`; its manifest records `software=true`, and it is unsuitable for timing or graphics conclusions.
+
+The reusable timing benchmark is gate elapsed time plus the dual-bounded Lua scan (80 squares and 2 ms per tick). A real-GPU end-to-end benchmark compares menu-to-player-ready, chunk-stable and scan-complete timing from clean boots. It is deferred until no other PZ task is active; this implementation claims no new live result.
+
+Use the normal graphical session and move PZ to a dedicated workspace with ordinary desktop controls. The harness avoids synthetic input and does not rearrange the session. `showSurvivalGuide=false` and `focusloss=false` are temporary, exactly restored controls. Click-to-start and unexpected Survival Guide/modal dismissal are bounded manual gates; the Lua streaming clock resets while paused or while the player square is unavailable.
+
+## Operator workflow
+
+From the repository root:
+
+```bash
+dev/live-inspection/bin/cf-live-inspect preflight dev/live-inspection/profiles/dead-air-p2-r2.toml --site P2
+dev/live-inspection/bin/cf-live-inspect dry-run dev/live-inspection/profiles/dead-air-p2-r2.toml --site P2
+dev/live-inspection/bin/cf-live-inspect run dev/live-inspection/profiles/dead-air-p2-r2.toml --site P2
+```
+
+Use one site for a clean boot. Multi-site mode requires both profile permission and explicit flags:
+
+```bash
+dev/live-inspection/bin/cf-live-inspect run dev/live-inspection/profiles/dead-air-p2-r2.toml --site P2 --site R2
+```
+
+Prefer clean boots for map, access and lifecycle conclusions. Multi-site mode is only for questions unaffected by teleport/streaming history. `--non-interactive` fails at manual gates; it never bypasses click-to-start or a modal.
+
+Timeouts capture the active window (normally the dedicated PZ window) plus gate/attempt/recent-log JSON, avoiding a whole-desktop capture. Retries repeat observation only; they never relaunch or recreate state. A failed assertion cannot satisfy the configured `RUN_COMPLETE status=PASS` gate.
+
+## Evidence bundle
+
+Each unique bundle contains `manifest.json` with status/sites/renderer/cleanup/file hashes, renderer diagnostics, sanitized launcher/console output, filtered structured events, gate/timeout screenshots and sanitized diagnostics, the exact pre-run controls and manifest, and archived disposable save/mod.
+
+Home paths and common credential/header-shaped secrets are redacted from exportable text, and the recovery journal stores generated basenames rather than home paths. Raw console output stays outside Git. `control-before/` and `archive/` are explicitly marked private in the manifest because exact restoration and a disposable save cannot be content-sanitized; never check them in. Review `probe-events.txt` before checking evidence in; physical observations do not decide story suitability.
+
+## Extension rules
+
+Copy the example TOML and keep site facts and expected inputs in profiles. Keep reusable core free of story coordinates and outcomes. Match structured events where possible and native text only at unavoidable lifecycle boundaries.
+
+If an investigation needs more read-only facts, add a profile-controlled capability, retain count/time bounds, wrap engine calls with `pcall`, and add an offline contract test. Do not add object/container mutation, vanilla-file replacement, automatic T10 interaction, injected helpers, or security workarounds.
+
+## Offline verification
+
+Offline tests never launch PZ or touch its user root:
+
+```bash
+dev/live-inspection/test/run.sh
+```
+
+They cover profile validation, real-save marker enforcement, exact control round trips (including absent files), exclusive locking, renderer classification, gate/process diagnostics, sanitization, Lua/Python parsing, and static rejection of embedded P2/R2 coordinates, Xephyr, forced software mode, and the prohibited helper name in reusable core.
+
+## Deferred live validation
+
+After all other PZ work is complete:
+
+1. Let `preflight` prove no PZ/inspection process exists.
+2. Mark only an audited disposable source clone.
+3. Run P2 on the normal display and record renderer/gate timing.
+4. Verify click/modal gates, player-ready, pause-aware chunk stability, scan completion, screenshots, and normal exit.
+5. Verify `PASS`, restored hashes, absent active save/mod, and no remaining PZ process.
+6. Repeat from a fresh R2 clean boot; exercise multi-site only as an extra convenience test.
+7. Human-review any evidence before updating bindings or checked-in research.
