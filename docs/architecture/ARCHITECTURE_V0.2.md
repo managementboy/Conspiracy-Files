@@ -54,6 +54,8 @@ Own:
 
 Every adapter invokes domain work behind `pcall`.
 
+Curated location arrival follows T8: evaluate only referenced bindings on a bounded approximately 4 Hz state sampler, debounce with two consecutive samples for the same logical square, and persist a sticky confirmed ID before emitting one domain event. Use exact binding-specific room/building/floor/basement/radius/rectangle/zone predicates. `OnPlayerMove` may wake the adapter but is not authoritative because scripted teleports emitted no callbacks in the probe.
+
 ### Projection/UI layer
 v0.1:
 - notebook journal;
@@ -234,4 +236,4 @@ Backward-compatible typo/text revisions must not force save migration. Content p
 
 Before the broad architecture is considered signed off, record spike results for T1–T10 using `docs/research/SPIKE_TEMPLATE.md`.
 
-The first six critical probes are T1, T9, T2, T3, T4 and T5. T7 is complete; T8/T10 still gate broader v1 behavior. T6 is only needed if retrofit returns.
+The first six critical probes are T1, T9, T2, T3, T4 and T5. T7 and T8 are complete; T10 still gates broader v1 behavior. T6 is only needed if retrofit returns.

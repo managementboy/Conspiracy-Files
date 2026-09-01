@@ -1,0 +1,28 @@
+Conspiracy-Files T8 selected live evidence
+Build: Project Zomboid 42.20.4 b0bbce05d5, Steam build 24909800
+Mode: Windows 11, single-player -nosteam, one active probe mod
+
+Authoritative completed main prefix (phase0d, waypoints 1-17):
+- baseline/adjacent negatives: no confirmations
+- room-specific CONFIRM: source=bounded-poll-15-ticks samples=2 latencyFromFirstMatchMs=158 latencyFromWaypointMs=344
+- whole-building CONFIRM: source=bounded-poll-15-ticks samples=2 latencyFromFirstMatchMs=158 latencyFromWaypointMs=344
+- floor-specific CONFIRM: source=bounded-poll-15-ticks samples=2 latencyFromFirstMatchMs=129 latencyFromWaypointMs=337
+- building leave/re-entry: no new confirmations
+- outdoor-radius CONFIRM: source=bounded-poll-15-ticks samples=2 latencyFromFirstMatchMs=126 latencyFromWaypointMs=251
+- radius adjacent and boundary-graze negatives: no confirmations
+- outdoor-rectangle CONFIRM: source=bounded-poll-15-ticks samples=2 latencyFromFirstMatchMs=125 latencyFromWaypointMs=275
+- rectangle adjacent negative: no confirmation
+- installed-zone CONFIRM: source=bounded-poll-15-ticks samples=2 latencyFromFirstMatchMs=124 latencyFromWaypointMs=248
+- zone leave/re-entry: no new confirmations
+- moveCallbacks=0, falseConfirmations=0 through the clean prefix
+
+Authoritative completed basement phase 0:
+- wrong-floor z=0: no confirmation
+- basement-room z=-1 CONFIRM: source=bounded-poll-15-ticks samples=2 latencyFromFirstMatchMs=126 latencyFromWaypointMs=258
+- MATRIX_RESULT: failures=0 falseConfirmations=0 status=PASS
+- moveCallbacks=0
+
+Limitations preserved from the raw audit logs:
+- The main phase0d overall status was FAIL because scripted teleports stopped moving after waypoint 17. Delayed-reference and late basement steps were not reached correctly; this is a harness limitation, not an observed arrival failure.
+- The optional basement reload launch stopped at the startup input gate before entering the world. It establishes no reload/inside/re-entry result.
+- Raw stdout/stderr, disposable saves, installed probe snapshots, helper and prior failed attempts remain locally archived under tmp/t8-audit-live/ and are intentionally ignored by Git.

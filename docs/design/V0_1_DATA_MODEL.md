@@ -278,7 +278,7 @@ storyRequirement = "hand-curated vanilla police station with plausible property/
 
 An adapter-side binding to a real vanilla map target is required before implementation, but it is intentionally **not filled in here** because the development PC still has to select/verify the targets.
 
-That future binding may contain coordinates/building/room/radius information depending on T8 and manual map inspection. It is static implementation configuration, not player save state.
+That future binding may use T8-approved exact room/building/floor/basement/radius/rectangle/zone predicates, depending on manual map inspection. It is static implementation configuration, not player save state.
 
 ### Persisted location state
 
@@ -675,7 +675,7 @@ Complete on Build 42.20.4. Use one save-scoped mod-owned string token per intend
 Complete. `Asset.bodyText` remains authored/domain truth. The item projection persists a custom name plus validated plain ModData title/description/body; the custom T10 `Inspect` reader renders world-specific bodies. Locked Literature custom pages are optional generated projections for short plain-text artifacts only and are never read back as canonical content. `InventoryItem.description`, raw runtime `printMedia`, and generic/key/map native UIs are not body stores.
 
 ### T8 — arrival detection
-Owns how a PZ-facing adapter decides to add one of the two `confirmedLocationIds`.
+Complete on Build 42.20.4. The PZ-facing adapter samples only referenced curated bindings at approximately 4 Hz, requires two consecutive matches for the same logical square, and persists a sticky `confirmedLocationId` before appending one domain event. Predicates are exact and shape-specific for room, whole building, floor/basement, radius, rectangle or installed zone. `OnPlayerMove` may be a wake-up but cannot be the authority because scripted teleports produced zero callbacks. Reload-inside and delayed-reference ordering remain production-adapter acceptance cases.
 
 ### T10 — Inspect integration
 Owns the cooperative context-menu mechanism for `Inspect` / `Mark Interesting`.
@@ -724,4 +724,4 @@ The Dead Air fixture is development-time AI-assisted. Under `docs/design/AI_PROV
 ### Persistence awareness
 - No direct Lua/PZ/Java object reference required: yes.
 - Canonical logical state is tiny by estimate relative to the hard 500 KB/save budget: yes; the implementation must still measure its encoded state.
-- Completed T1/T4/T5/T7 constraints are incorporated; T8/T10 assumptions remain labeled unverified/deferred: yes.
+- Completed T1/T4/T5/T7/T8 constraints are incorporated; T10 assumptions remain labeled unverified/deferred: yes.
