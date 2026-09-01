@@ -12,6 +12,7 @@ This file is an authoritative overlay on the original `DECISIONS.md` baseline. I
 - P2-Q54: no-AI is primary; AI is optional enhancement.
 - P2-Q62/P2-Q63: popup onboarding removed; use an in-fiction notebook/help page.
 - P2-Q69: provenance remains internally stored and may be exposed by an optional toggle.
+- P2-Q100: the universal rule that location confirmation occurs when the player enters a building is superseded by P4-R39's exact binding-specific room/building/floor/basement/radius/rectangle/zone predicates. P2-Q97-Q99 and P2-Q101 remain compatible as progressive-precision rules. See [`T8_LOCATION_ARRIVAL.md`](docs/research/T8_LOCATION_ARRIVAL.md) and [T8 / GitHub Issue #9](https://github.com/managementboy/Conspiracy-Files/issues/9).
 - P2-Q144: pause/help preferences move to mod options; one normal-play notebook keybind.
 - P2-Q180/P2-Q181: full hidden-state diagnostics are development/debug only.
 - P2-Q190/P2-Q191: exact pack/core version matching retired; future compatibility separates content revision, CF schema/API, and PZ minor line.
