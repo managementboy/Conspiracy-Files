@@ -1,0 +1,39 @@
+Conspiracy-Files T3 installed vanilla map-data evidence
+Inspection date: 2026-08-31
+
+Installed map root:
+  media/maps/
+
+Top-level vanilla map directories:
+  Brandenburg, KY; Echo Creek, KY; Ekron, KY; Fallas Lake, KY; Irvington, KY;
+  March Ridge, KY; Muldraugh, KY; Riverside, KY; Rosewood, KY;
+  Valley Station, KY; West Point, KY; challengemaps
+
+Installed map-file counts below that root:
+  4,928 .png
+  4,118 .bin
+  4,112 .lotheader
+  4,112 .lotpack
+  23 .lua
+  18 .info
+  8 .xml
+  5 .zip
+
+The active Sandbox map list in the live run contained the 11 named Kentucky map entries above, excluding challengemaps.
+
+The human-readable installed zone source is media/maps/Muldraugh, KY/objects.lua:
+  bytes: 4,027,260
+  SHA-256: BB2AF79F1814265F9AD65BC9B55B0C723CC5A372D92CCC65AAE3FFC9ACF29572
+
+Exact source examples:
+  line 214: { name = "Offices", type = "ZombiesType", x = 12198, y = 1273, z = 0, width = 15, height = 20 }
+  line 960: { name = "Office", type = "ZombiesType", x = 13178, y = 1241, z = 0, width = 15, height = 8 }
+  line 976: { name = "Police", type = "ZombiesType", x = 12970, y = 1365, z = 0, width = 18, height = 39 }
+  line 1863: { name = "Police", type = "ZombiesType", x = 12479, y = 1581, z = 0, width = 9, height = 63 }
+
+Exact-name source counts in objects.lua:
+  Police / Office / Offices combined: 453
+
+No Bookstore, Hospital, Clinic, Medical, Radio, Transmission, Broadcast, Antenna, Tower or Communications semantic zone name was found in objects.lua. Live loading consolidated 8,867 zones and exposed 57 Police plus 394 office-name candidates (Office, Offices, and one leading-space variant). Two of the 453 exact-name source entries were not represented in that consolidated live count; T3 did not investigate the loader-level reason. All these semantic-looking records had type=ZombiesType. They are spawn-theming rectangles, not a general POI/category registry.
+
+Building and room definitions are compiled in installed .lotheader/.lotpack/.bin data rather than exposed as a human-readable category manifest. T3 therefore treats exact room names, bounds, levels and areas as raw installed map facts only after the live engine loaded them. The probe never edited these files.

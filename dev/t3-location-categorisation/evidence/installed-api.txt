@@ -1,0 +1,67 @@
+Conspiracy-Files T3 installed API evidence
+Inspection date: 2026-08-31
+Installed projectzomboid.jar SHA-256: 80E405A4BFC42F6072E75B3735F458A6514143DA011D3226007DED305A442F44
+Tool: JDK 25 javap -private against the installed JAR
+
+Relevant installed public signatures:
+
+zombie.iso.IsoMetaGrid
+  public java.util.ArrayList<zombie.iso.BuildingDef> getBuildings();
+  public java.util.List<zombie.iso.zones.Zone> getZones();
+  public zombie.iso.BuildingDef getBuildingAt(int, int);
+  public zombie.iso.BuildingDef getBuildingAt(int, int, int);
+  public zombie.iso.RoomDef getRoomAt(int, int, int);
+  public java.util.ArrayList<zombie.iso.zones.Zone> getZonesAt(int, int, int);
+  public java.util.ArrayList<zombie.iso.zones.Zone> getZonesIntersecting(int, int, int, int, int);
+
+zombie.iso.BuildingDef
+  public se.krka.kahlua.vm.KahluaTable getTable();
+  public java.util.ArrayList<zombie.iso.RoomDef> getRooms();
+  public int getArea();
+  public int getMinLevel();
+  public int getMaxLevel();
+  public int getX();
+  public int getY();
+  public int getX2();
+  public int getY2();
+  public long getID();
+  public java.lang.String getIDString();
+  public zombie.iso.zones.Zone getZone();
+  public boolean isShop();
+  public boolean isResidential();
+  public boolean isUserDefined();
+  public boolean isBasement();
+  public boolean isRural();
+
+zombie.iso.RoomDef
+  public java.lang.String getName();
+  public int getX();
+  public int getY();
+  public int getX2();
+  public int getY2();
+  public int getZ();
+  public int getArea();
+  public java.util.ArrayList<zombie.iso.RoomDef$RoomRect> getRects();
+  public zombie.iso.BuildingDef getBuilding();
+
+zombie.iso.zones.Zone
+  public java.lang.String getName();
+  public java.lang.String getType();
+  public java.lang.String getOriginalName();
+  public int getX();
+  public int getY();
+  public int getZ();
+  public int getWidth();
+  public int getHeight();
+  public boolean isPoint();
+  public boolean isPolygon();
+  public boolean isPolyline();
+  public boolean isRectangle();
+
+Official Build 42 Javadocs list the same public getter families:
+https://projectzomboid.com/modding/zombie/iso/IsoMetaGrid.html
+https://projectzomboid.com/modding/zombie/iso/BuildingDef.html
+https://projectzomboid.com/modding/zombie/iso/RoomDef.html
+https://projectzomboid.com/modding/zombie/iso/zones/Zone.html
+
+The final live probe proves the getters actually used by T3 are callable from ordinary Lua on the tested installation. Presence in javap or Javadocs alone is not treated as live capability.

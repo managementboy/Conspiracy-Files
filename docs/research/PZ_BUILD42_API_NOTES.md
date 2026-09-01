@@ -58,6 +58,20 @@ Verified live isolated single-player findings on the same exact Build 42.20.4 in
 - The generic rich full-map index retained an observed 90–102 MiB JVM used-heap delta while held. Installed Kahlua bytecode confirms `collectgarbage("count")` is JVM used heap in KiB, not a Lua-only allocator counter.
 - Future discovery must be queued behind both record and elapsed-time bounds, stream/filter to candidate facts, and remain rebuildable/non-canonical. v0.1 still uses curated locations.
 
+## T3 — Location categorisation reliability: complete
+
+Full report: [`T3_LOCATION_CATEGORISATION.md`](T3_LOCATION_CATEGORISATION.md).
+
+Verified live isolated single-player findings on the same exact Build 42.20.4 installation:
+
+- `IsoMetaGrid:getZones()`, building/room getters, zone getters and generic building traits were callable from ordinary Lua.
+- The vanilla map exposed 9,978 buildings, 86,436 rooms and 8,867 zones. The final 48-record/1 ms dual-bounded scan used 3,530 callbacks, peaked at 2 ms and had zero callbacks over 2 ms.
+- `BuildingDef:getTable()` was empty and `getZone()` nil for every emitted target/candidate. Generic building booleans did not encode a semantic category.
+- Exact room names were the useful surface: sampled bookstores and hospitals/clinics classified cleanly with specific room labels. Generic `office`, `medical`, `communications` and `broadcasting` required contextual rules.
+- The fixed 55-row matrix produced 28 TP, 25 TN, 0 FP and 2 FN. It missed one large police headquarters and one communications-tower building.
+- Police and Office/Offices zone names existed only as `ZombiesType` rectangles. No semantic bookstore, medical or transmission landmark zone was found.
+- Automatic categorisation is advisory, room/area-first candidate discovery only. v0.1 and v1 remain curated; non-building landmarks require curated/object-specific handling.
+
 ## Documentation context
 
 - Official version metadata: <https://projectzomboid.com/version_announce/>
@@ -69,10 +83,6 @@ Verified live isolated single-player findings on the same exact Build 42.20.4 in
 The documented `524288`-byte internal block constant is not a persistence limit and was not used to derive the project budget.
 
 ## Remaining spikes
-
-### T3 — Location categorisation reliability
-
-Test police station, office, bookstore, hospital, transmission/non-building site across vanilla; map-mod support later.
 
 ### T4 — Exact-once deferred placement
 
