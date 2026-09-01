@@ -110,7 +110,7 @@ T4 fixes the placement protocol:
 2. use `LoadGridsquare` only to enqueue relevant bindings and `OnGameStart` to catch already-loaded targets;
 3. resolve the exact target and scan its container for the token before constructing anything;
 4. if zero, stage `placing`, create and stamp the item while detached, add that exact instance, verify one, then stage `placed`;
-5. if one, reconcile to `placed` without adding; if more than one, enter `conflict`; if `placed` later has zero, enter `lost` and never blindly respawn;
+5. if one, reconcile to `placed` without adding; if more than one, enter `conflict`; if `placed` later has zero at the target, invoke T5's bounded wider physical-identity reconciliation and never blindly respawn;
 6. keep merely unloaded targets pending; mark terminally destroyed/burned/invalid pre-placement targets `unavailable` and consider the authored fallback.
 
 Every canonical transition is a staged full-root replacement under P4-R32/P4-R17. T4 found and tested no Lua-visible atomic transaction across chunk/container files and Global ModData, so ambiguous partial persistence biases toward loss/fallback rather than duplication. Work is drained through a deduplicated bounded queue behind a `pcall` adapter boundary.
@@ -132,11 +132,17 @@ Do not finalise content-pack schemas until T7 and a second real content set exis
 
 ## 8. Evidence identity
 
-Working hypothesis pending T5:
-- stamp our own stable ID in item ModData where possible;
-- never rely solely on engine item IDs;
-- if physical identity is lost, keep the evidence record and mark the physical object unavailable;
-- tracking can resume only if the same stamped identity is observed again.
+T5 fixes the v0.1 rule:
+
+- stamp one save-scoped mod-owned string token per intended physical instance in item ModData while the item is detached; T4's materialisation token may serve this role only when it is instance-unique;
+- never use an engine item ID as authority; it is diagnostic transition correlation only;
+- keep `assetMaterialisation=placed` separate from mutable physical availability/location;
+- one observed token is `available`; confirmed destruction or complete covered absence is `unavailable`; incomplete/unloaded coverage is `unknown`/`untracked`;
+- two or more distinct items with one token are sticky `conflict`; never silently select/delete/restamp a winner or clear the conflict because only one later remains;
+- all copy/transform code must explicitly omit or replace the identity token unless it deliberately preserves the same physical instance;
+- immutable Evidence survives every availability state, and tracking may resume after non-conflict loss only when the same token is observed exactly once.
+
+Normal movement can remove a placed item from its original container. That zero count starts bounded identity reconciliation and cannot by itself set `lost`.
 
 ## 9. Events and error containment
 

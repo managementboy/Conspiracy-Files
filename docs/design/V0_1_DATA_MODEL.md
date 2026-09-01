@@ -2,7 +2,7 @@
 
 **Status:** v0.1 design for the single built-in Dead Air Narrative Thread.  
 **Source story:** `test/fixtures/THREAD-001-DEAD-AIR.md`, content revision `dead-air-r1`.  
-**Technical status:** logical/domain model only. T1 validated vanilla Lua Global ModData on Build 42.20.4 within the hard ≤500 KB/save canonical-state budget and established the mandatory validation constraints in P4-R32; this document still does not define the final Lua encoding or physical object references.
+**Technical status:** logical/domain model only. T1 validated vanilla Lua Global ModData on Build 42.20.4 within the hard ≤500 KB/save canonical-state budget and established P4-R32. T5 validated a mod-owned per-instance ModData token for physical tracking and explicitly forbids direct PZ/Lua/Java object references; this document still does not define the final Lua encoding.
 
 This document intentionally does **not** define a generic content-pack schema. It answers one question: what is the smallest practical model needed to implement Dead Air as currently authored?
 
@@ -338,8 +338,10 @@ Records the player's encounter with an Asset/object in a specific discovery cont
 | Field | Why |
 |---|---|
 | `foundLocationId` | Store a stable story Location ID when the discovery occurs at one of the two known locations. |
-| `physicalItemToken` | **Only if T5 proves a safe stable token.** String ID only; never a direct PZ/Lua/Java object reference. |
-| `physicalAvailability` | Optional `available` / `unavailable` / `untracked` state if T5-supported tracking exists. This is mutable. |
+| `physicalItemToken` | Optional save-scoped, per-instance mod-owned string proven by T5; never a direct PZ/Lua/Java object reference or engine item ID. |
+| `physicalAvailability` | Optional mutable `untracked` / `unknown` / `available` / `unavailable` / `conflict`. `conflict` is sticky once duplicate-token items are observed. |
+| `lastKnownPhysicalLocation` | Optional bounded mutable descriptor of inventory/container/floor/vehicle/corpse context; never an engine object reference and never immutable discovery context. |
+| `identityConflictObserved` | Optional boolean; once true it is not automatically cleared because a later scan finds only one descendant. |
 
 ### Authored document example
 
@@ -363,7 +365,8 @@ discoveryOrdinal = 1
 foundLocationId = "dead-air:location:police-property"
 contextText = "Small key with red B-37 tag in the property drawer."
 playerMarkedInteresting = true
-physicalItemToken = absent unless T5 validates one
+physicalItemToken = "cf:<save-story-id>:dead-air:asset:key-b37:<materialisation-id>" when tracking is enabled; otherwise absent
+physicalAvailability = "available" or "untracked"
 ```
 
 ### Derived fields — do not persist
@@ -486,9 +489,9 @@ The braces above describe the **logical model**, not a T1-approved Lua serializa
 | `threadId` | No. |
 | `contentRevision` | No for a given initialized save; typo/content handling follows existing revision policy. |
 | `entryOpportunityUsed` | `nil` → `anchor` or `fallback` in the same P4-R32-validated root transition that accepts the winning introduction opportunity as `placed`; it never switches silently. The “placed but undiscovered, later lost” fallback rule remains a product decision. |
-| `assetMaterialisation` | Yes. T4 states are `pending`, `placing`, `placed`, `unavailable`, `lost` and `conflict`; transitions follow the detached-prestamp/exact-container reconciliation sequence in `T4_EXACT_ONCE_PLACEMENT.md`. |
+| `assetMaterialisation` | Yes. T4 pre-placement states/protocol remain `pending`, `placing`, `placed`, `unavailable`, `lost` and `conflict`. After `placed`, absence from the original container starts T5 identity reconciliation; placement outcome is not current location/availability. |
 | `confirmedLocationIds` | Append/add when T8-approved arrival logic confirms one of the two locations. |
-| `evidence` | Append/add only for immutable discovery facts; optional physical availability may change if T5 supports it. |
+| `evidence` | Append/add only for immutable discovery facts; T5 physical availability/location may change separately, while identity conflict is sticky. |
 | `journal` | Append-only. |
 
 ### What is deliberately absent
@@ -661,12 +664,12 @@ Complete. Validated vanilla Lua Global ModData within the hard ≤500 KB/save bu
 Does not gate the v0.1 story because locations are curated manually. It may affect later automatic discovery only.
 
 ### T4 — exact-once placement
-Complete on Build 42.20.4. `LoadGridsquare` queues relevant curated bindings and `OnGameStart` catches already-loaded targets. The adapter scans the exact container, stages `placing`, creates/stamps a detached item, adds that exact instance, verifies one stamp and stages `placed`. One pre-existing stamp repairs the ledger; zero after `placed` becomes `lost` without respawn; terminal target loss becomes `unavailable`; duplicates become `conflict`. Every transition stages and validates the full root under P4-R32/P4-R17.
+Complete on Build 42.20.4. `LoadGridsquare` queues relevant curated bindings and `OnGameStart` catches already-loaded targets. The adapter scans the exact container, stages `placing`, creates/stamps a detached item, adds that exact instance, verifies one stamp and stages `placed`. One pre-existing target stamp repairs the ledger; terminal pre-placement target loss becomes `unavailable`; duplicates become `conflict`. Every transition stages and validates the full root under P4-R32/P4-R17. T5 corrects the post-placement rule: zero in the original container triggers wider identity reconciliation, not immediate `lost`.
 
 The remaining product question is whether a placed-but-undiscovered anchor that later becomes `lost` may activate the fallback. The model does not choose that story rule.
 
 ### T5 — physical item identity
-Owns whether `physicalItemToken` is usable. Dead Air must still work with it absent.
+Complete on Build 42.20.4. Use one save-scoped mod-owned string token per intended physical instance, stamped while detached. The token survived inventory, ordinary container, floor, vehicle, reload at every stage and real player-death transfer to a corpse. Engine item IDs are diagnostics only. `copyModData` and `CopyModData` created persistent distinct items with the same token, so uniqueness is enforced by global observed counts: two or more is sticky `conflict`, never an automatic winner/deletion/restamp. Missing from one former location is `unknown` until a destructive event or complete covered reconciliation proves `unavailable`. Dead Air still works with the token absent as `untracked`.
 
 ### T7 — asset text/reader
 Owns whether `bodyText` is presented through native PZ reading, static item text, ModData-backed custom reading or a hybrid.
@@ -721,4 +724,4 @@ The Dead Air fixture is development-time AI-assisted. Under `docs/design/AI_PROV
 ### Persistence awareness
 - No direct Lua/PZ/Java object reference required: yes.
 - Canonical logical state is tiny by estimate relative to the hard 500 KB/save budget: yes; the implementation must still measure its encoded state.
-- Completed T1/T4 constraints are incorporated; T5/T7/T8/T10 assumptions remain labeled unverified/deferred: yes.
+- Completed T1/T4/T5 constraints are incorporated; T7/T8/T10 assumptions remain labeled unverified/deferred: yes.

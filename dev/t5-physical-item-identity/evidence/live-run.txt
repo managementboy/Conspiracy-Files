@@ -1,0 +1,60 @@
+Conspiracy-Files T5 filtered live evidence
+Run date: 2026-09-01
+Environment: Windows 11 10.0 build 26200; Project Zomboid -nosteam single-player
+Build: 42.20.4 b0bbce05d5; revision=b0bbce05d5; pzbullet=1.0.0.28
+Steam build ID: 24909800
+Probe Lua SHA-256: 12E3B1D5FF846666F5102148807782E695F3D2BD80787649661B4F064A78A907
+Gate helper SHA-256: 0779B27FDDC83D5DC72E17F16135E11AC8C19B11FAF8BCC25358E45388023547
+
+IDENTITY / TRANSITION MATRIX
+
+COPY_CASE|mechanism=fresh-instance|identity=cf-t5:fresh-source|sourceEngineId=712614182|copyEngineId=589363627|copyInherited=false|duplicateCount=1|policy=unique
+COPY_CASE|mechanism=createCloneItem|identity=cf-t5:create-clone|sourceEngineId=560304128|copyEngineId=<nil>|copyInherited=false|duplicateCount=1|policy=unique
+COPY_CASE|mechanism=copyModData|identity=cf-t5:copy-moddata|sourceEngineId=1382233360|copyEngineId=1046483214|copyInherited=true|duplicateCount=2|policy=conflict
+COPY_CASE|mechanism=CopyModData|identity=cf-t5:copy-moddata-upper|sourceEngineId=1514929163|copyEngineId=279411228|copyInherited=true|duplicateCount=2|policy=conflict
+LIMITATION|case=count-split|detail=no-normal-split-mechanism-for-Base.Note|closest-valid-evidence=createCloneItem-and-copyModData-cases
+
+MATRIX_ROW|stage=inventory-pre-save|action=stamp-detached-then-add|identity=cf-t5:physical:main|engineIds=1373654750|location=inventory|reloadProof=not-yet|duplicateCount=1|status=PASS
+MATRIX_ROW|stage=inventory-post-reload|action=reload|identity=cf-t5:physical:main|engineIds=1373654750|location=inventory|reloadProof=true|duplicateCount=1|status=PASS
+TRANSFER_RETURN|action=inventory-to-world-container|sameLuaObject=true|beforeEngineId=1373654750|afterEngineId=1373654750
+MATRIX_ROW|stage=world-container-pre-save|action=normal-transfer|identity=cf-t5:physical:main|engineIds=1373654750|location=world-container|reloadProof=not-yet|duplicateCount=1|status=PASS
+MATRIX_ROW|stage=world-container-post-reload|action=reload|identity=cf-t5:physical:main|engineIds=1373654750|location=world-container|reloadProof=true|duplicateCount=1|status=PASS
+TRANSFER_RETURN|action=world-container-to-floor|sameLuaObject=true|beforeEngineId=1373654750|afterEngineId=1373654750
+MATRIX_ROW|stage=floor-pre-save|action=normal-transfer|identity=cf-t5:physical:main|engineIds=1373654750|location=floor|reloadProof=not-yet|duplicateCount=1|status=PASS
+MATRIX_ROW|stage=floor-post-reload|action=reload|identity=cf-t5:physical:main|engineIds=1373654750|location=floor|reloadProof=true|duplicateCount=1|status=PASS
+TRANSFER_RETURN|action=floor-to-vehicle|sameLuaObject=true|beforeEngineId=1373654750|afterEngineId=1373654750
+MATRIX_ROW|stage=vehicle-pre-save|action=normal-transfer|identity=cf-t5:physical:main|engineIds=1373654750|location=vehicle|reloadProof=not-yet|duplicateCount=1|status=PASS
+MATRIX_ROW|stage=vehicle-post-reload|action=reload|identity=cf-t5:physical:main|engineIds=1373654750|location=vehicle|reloadProof=true|duplicateCount=1|status=PASS
+TRANSFER_RETURN|action=vehicle-to-inventory|sameLuaObject=true|beforeEngineId=1373654750|afterEngineId=1373654750
+MATRIX_ROW|stage=inventory-return-pre-save|action=normal-transfer|identity=cf-t5:physical:main|engineIds=1373654750|location=inventory|reloadProof=not-yet|duplicateCount=1|status=PASS
+MATRIX_ROW|stage=inventory-return-post-reload|action=reload|identity=cf-t5:physical:main|engineIds=1373654750|location=inventory|reloadProof=true|duplicateCount=1|status=PASS
+MATRIX_ROW|stage=destroyed-pre-save|action=permanent-remove|identity=cf-t5:physical:main|engineIds=|location=absent|reloadProof=not-yet|duplicateCount=0|status=PASS
+DESTRUCTION|identity=cf-t5:physical:main|engineId=1373654750|policy=lost-no-respawn
+MATRIX_ROW|stage=destroyed-post-reload|action=reload|identity=cf-t5:physical:main|engineIds=|location=absent|reloadProof=true|duplicateCount=0|status=PASS
+COPY_RELOAD_RESULT|identity=cf-t5:fresh-source|duplicateCount=1|policy=unique
+COPY_RELOAD_RESULT|identity=cf-t5:create-clone|duplicateCount=1|policy=unique
+COPY_RELOAD_RESULT|identity=cf-t5:copy-moddata|duplicateCount=2|policy=conflict
+COPY_RELOAD_RESULT|identity=cf-t5:copy-moddata-upper|duplicateCount=2|policy=conflict
+COMPLETE|mode=identity|status=PASS|initialEngineId=1373654750|vehicleLimitation=<nil>
+
+PLAYER DEATH / CORPSE TRANSFER
+
+MATRIX_ROW|stage=death-inventory-pre-save|action=stamp-detached-then-add|identity=cf-t5:death-transfer|engineIds=1017838024|location=inventory|reloadProof=not-yet|duplicateCount=1|status=PASS
+MATRIX_ROW|stage=death-inventory-post-reload|action=reload|identity=cf-t5:death-transfer|engineIds=1017838024|location=inventory|reloadProof=true|duplicateCount=1|status=PASS
+DEATH_TRIGGER|identity=cf-t5:death-transfer|engineId=1017838024|characterScope=disposable-copy-only
+ON_PLAYER_DEATH|x=10720|y=10195
+MATRIX_ROW|stage=corpse-pre-save|action=engine-player-death-transfer|identity=cf-t5:death-transfer|engineIds=1017838024|location=corpse|reloadProof=not-yet|duplicateCount=1|status=PASS
+SAVE_RETURNED|field=deathPass|nextPass=2|ok=true|elapsedMs=294
+LIMITATION|case=corpse-post-reload|detail=already-dead save stalled before OnGameStart and before engine-done gate; process terminated after bounded wait; no post-reload assertion claimed
+
+SAFETY / RESTORATION
+
+Three failed identity harness iterations and one exact-square-limited death iteration were archived, not deleted.
+The final identity save, final death save, installed probe copy, loaded helper and raw logs were archived under git-ignored tmp/t5-live/.
+latestSave.ini SHA-256 restored: DE54EEC0EFA7A7BF9810E9B22CA882D1C9DEF8CB3937283CF2B6DA5383084B29
+options.ini SHA-256 restored: B726B45FB8150EB71CEC394EADE151A0502D658479A9E9F8F712573AB2935D06
+debuglog.ini SHA-256 restored: 3DBD2F68125D6B1912BEC0843DD47D6165589CDC2EA90D8613690D750E06AA70
+mods/default.txt SHA-256 restored: 601B865924C8456DFD1820B0237450F1906E2D4253D4FAF7FF4BA6B4A86CE850
+Active probe path present after restoration: false
+Active helper path present after restoration: false
+ProjectZomboid64 process count after restoration: 0
