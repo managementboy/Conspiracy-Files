@@ -67,7 +67,7 @@ The first specification over-committed to unproven Build 42 capabilities. The en
 
 ## Incomplete de-risking
 
-- **T10 cooperative Inspect integration:** open. It still owns the live cooperative `Inspect` and Mark Interesting context-menu mechanism and continues to block Engineering Gate B and `CF-V01-E08`. No T10 result is accepted on this branch.
+- **T10 cooperative Inspect integration:** open. It still owns the live cooperative `Inspect` and Mark Interesting context-menu mechanism and continues to block Engineering Gate B and `CF-V01-E08`. No T10 result is accepted on this branch. Per P4-R44, it may resume only as a manual-GUI session: the project owner manually launches/enters the disposable save and performs the requested right-clicks while the probe only logs callbacks/assertions; no helper/injected agent, quarantine restoration, antivirus exclusion/bypass or alternate injection is permitted.
 
 ## v0.1 vertical slice
 
@@ -88,7 +88,7 @@ One built-in hand-authored thread:
 - The Dead Air text was development-time AI-assisted and still requires human approval before canonical shipping under `docs/design/AI_PROVENANCE.md`.
 - `docs/design/V0_1_DATA_MODEL.md` now derives the smallest v0.1 logical model from that story. Static authored prose/entities remain outside save state; v0.1 relationships are static ID references rather than standalone relationship records.
 - `docs/requirements/V0_1_ACCEPTANCE_CRITERIA.md` separates observable product/domain acceptance from live engine validation. Its 16 plain-Lua criteria are covered by the accepted domain-core suite; T4/T5/T7/T8 establish mechanisms and production-adapter matrices, but live integration, T10-dependent behavior and final map bindings remain unaccepted.
-- Exact vanilla map targets for the two curated locations are still unselected/unverified in this repository and must be chosen on the development PC.
+- Exact vanilla map targets remain unbound pending live inspection. The target geography is a roughly 1,000–1,600-tile straight-line regional journey (P4-R41). First inspection priority is provisional pair P2 `(13206,3073)`, a medium local police station, and R2 `(13549,1572)`, a compact communications/news facility with service garage, at roughly 1,538 straight-line tiles. P2 must have credible property/records containers or the large headquarters remains fallback; R2 must pass newsroom-character, access, boundary and container-plausibility checks. These priorities are not final bindings.
 - No live Build 42 behavior was validated by the accepted domain-core work. The separately completed T1/T2/T3/T4/T5/T7/T8/T9 results are authoritative, with their recorded limitations, for persistence, enumeration, categorisation, placement, physical identity, asset text/readers, curated arrival and network transport; T10 remains open for its engine question.
 
 ## Immediate work
@@ -96,12 +96,12 @@ One built-in hand-authored thread:
 Before implementation architecture is signed off:
 
 1. treat Engineering Gate A (T1/T9/T2/T3/T4/T5) as complete and integrate the accepted domain core only through adapter mechanisms proven by the named spikes, without expanding into content packs/graph systems;
-2. choose and verify the two exact curated vanilla story locations on the development PC before location bindings are committed;
+2. live-inspect provisional candidates P2 and R2 first, verify route/access plus story/container plausibility, and commit no exact location binding until both pass; use the large police headquarters only if P2 lacks credible property/records containers;
 3. implement physical identity as a mod-owned per-instance token with separate availability/conflict state; never infer loss from the original placement container alone;
 4. update decisions from each later observed spike result;
-5. implement T8's bounded/debounced sticky arrival adapter and use T7's explicit hybrid asset boundary; run T10 before expanding UI assumptions. T6 only matters if retrofit is revived.
+5. implement T8's bounded/debounced sticky arrival adapter and use T7's explicit hybrid asset boundary; resume T10 only through P4-R44's manual-GUI procedure before expanding UI assumptions. T6 only matters if retrofit is revived.
 
-Morning product to-do before implementing Dead Air entry selection: decide whether a durably placed but undiscovered D1 that later becomes `lost` may activate D2 as the narrative entry opportunity. T4 deliberately does not make that story decision.
+P4-R40 resolves the former entry-selection to-do: if durably placed but undiscovered D1 becomes conclusively `unavailable` only after T5/P4-R37 reconciliation, D2 may activate once as the fallback introduction. Unloading, original-container absence, `unknown`, `untracked` and `conflict` do not qualify, and D1 never respawns.
 
 ## Rule for disproven decisions
 

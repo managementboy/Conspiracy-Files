@@ -488,7 +488,7 @@ The braces above describe the **logical model**, not a T1-approved Lua serializa
 | `schemaVersion` | No within v0.1; migrations are out of scope. |
 | `threadId` | No. |
 | `contentRevision` | No for a given initialized save; typo/content handling follows existing revision policy. |
-| `entryOpportunityUsed` | `nil` → `anchor` or `fallback` in the same P4-R32-validated root transition that accepts the winning introduction opportunity as `placed`; it never switches silently. The “placed but undiscovered, later lost” fallback rule remains a product decision. |
+| `entryOpportunityUsed` | `nil` → `anchor` when D1 becomes the accepted introduction, or `fallback` when D2 activates as the one fallback introduction; the value never switches silently. D1 placement alone does not consume the introduction: under P4-R40, durably placed but undiscovered D1 may yield to D2 only after T5/P4-R37 conclusively sets D1 `unavailable`. Unloading, original-container absence, `unknown`, `untracked` and `conflict` do not qualify. D1 never respawns. |
 | `assetMaterialisation` | Yes. T4 pre-placement states/protocol remain `pending`, `placing`, `placed`, `unavailable`, `lost` and `conflict`. After `placed`, absence from the original container starts T5 identity reconciliation; placement outcome is not current location/availability. |
 | `confirmedLocationIds` | Append/add when T8-approved arrival logic confirms one of the two locations. |
 | `evidence` | Append/add only for immutable discovery facts; T5 physical availability/location may change separately, while identity conflict is sticky. |
@@ -661,12 +661,12 @@ T1 validated these persistence constraints on stable Build 42.20.4, revision `b0
 Complete. Validated vanilla Lua Global ModData within the hard ≤500 KB/save budget and established P4-R32. The persistence adapter still owns the final conforming Lua/ModData encoding.
 
 ### T3 — location categorisation
-Does not gate the v0.1 story because locations are curated manually. It may affect later automatic discovery only.
+Does not gate the v0.1 story because locations are curated manually. Its checked-in candidate evidence prioritizes live inspection of P2 `(13206,3073)` and R2 `(13549,1572)` under P4-R41–P4-R43, but neither candidate is a final binding.
 
 ### T4 — exact-once placement
 Complete on Build 42.20.4. `LoadGridsquare` queues relevant curated bindings and `OnGameStart` catches already-loaded targets. The adapter scans the exact container, stages `placing`, creates/stamps a detached item, adds that exact instance, verifies one stamp and stages `placed`. One pre-existing target stamp repairs the ledger; terminal pre-placement target loss becomes `unavailable`; duplicates become `conflict`. Every transition stages and validates the full root under P4-R32/P4-R17. T5 corrects the post-placement rule: zero in the original container triggers wider identity reconciliation, not immediate `lost`.
 
-The remaining product question is whether a placed-but-undiscovered anchor that later becomes `lost` may activate the fallback. The model does not choose that story rule.
+P4-R40 resolves the former product question: a durably placed but undiscovered D1 may activate D2 once as the fallback introduction only after T5/P4-R37 conclusively reconciles D1 to `unavailable`. Mere unloading, original-container absence, `unknown`, `untracked` and `conflict` do not qualify, and D1 never respawns.
 
 ### T5 — physical item identity
 Complete on Build 42.20.4. Use one save-scoped mod-owned string token per intended physical instance, stamped while detached. The token survived inventory, ordinary container, floor, vehicle, reload at every stage and real player-death transfer to a corpse. Engine item IDs are diagnostics only. `copyModData` and `CopyModData` created persistent distinct items with the same token, so uniqueness is enforced by global observed counts: two or more is sticky `conflict`, never an automatic winner/deletion/restamp. Missing from one former location is `unknown` until a destructive event or complete covered reconciliation proves `unavailable`. Dead Air still works with the token absent as `untracked`.
