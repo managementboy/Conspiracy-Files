@@ -100,6 +100,6 @@ If a spike disproves a decision, technical reality wins: supersede the decision 
 ## Technical decisions intentionally pending spikes
 
 - **T6:** never-loaded chunk detection, only if retrofit returns.
-- **T10:** cooperative Inspect context-menu integration.
+- **T10:** cooperative Inspect context-menu integration. Exact installed-source inspection and static Lua 5.1 tests support a candidate mechanism, but the live activation matrix was stopped for security review. No P4 ruling is accepted until a security-approved manual-GUI run observes the real menus and activations; see `docs/research/T10_COOPERATIVE_INSPECT.md`.
 
 See GitHub issues #1–#10 and `docs/research/SPIKE_TEMPLATE.md`.

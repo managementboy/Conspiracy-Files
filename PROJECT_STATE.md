@@ -1,7 +1,7 @@
 # Conspiracy-Files — Project State
 
 Status: **Engineering de-risk / v0.1 definition**. No feature implementation has been accepted yet.
-Target: Project Zomboid Build 42; T1/T2/T3/T4/T5/T7/T8/T9 verified stable Build **42.20.4**, revision **b0bbce05d5**, Steam build ID **24909800**. Other capability claims remain subject to their named spikes/research.
+Target: Project Zomboid Build 42; T1/T2/T3/T4/T5/T7/T8/T9 verified stable Build **42.20.4**, revision **b0bbce05d5**, Steam build ID **24909800**. T10 has exact installed-source and static candidate-adapter evidence only; its live activation matrix was stopped for security review and remains incomplete. Other capability claims remain subject to their named spikes/research.
 
 ## Source of truth order
 
@@ -59,6 +59,10 @@ The first specification over-committed to unproven Build 42 capabilities. The en
 - **T7 runtime item text and native readers:** complete. A nine-carrier Build 42.20.4 matrix proved custom item names and ModData bodies persist on literature, photos, generic items, keys and maps; `InventoryItem.description` did not persist. Locked Literature custom pages reopened in the vanilla read-only journal but are plain, limited projections. Runtime-shaped `printMedia` was unsafe, including a formatter failure on raw `%` content. The authoritative world-specific body therefore remains in ModData/domain content and uses the custom T10 `Inspect` reader. See `docs/research/T7_RUNTIME_ITEM_TEXT.md`.
 - **T8 curated location arrival detection:** complete with explicit reload/reference limitations. Scripted teleports produced zero `OnPlayerMove` callbacks. Bounded 15-tick state sampling with two stable samples correctly confirmed reached exact-room, whole-building, floor, basement, radius, rectangle and installed-zone predicates in 248–344 ms, with adjacent/wrong-floor/boundary negatives and sticky leave/re-entry behavior. Late scripted teleports became unreliable; delayed-reference ordering and reload-inside remain production-adapter tests rather than claimed results. See `docs/research/T8_LOCATION_ARRIVAL.md`.
 
+## Incomplete de-risking
+
+- **T10 cooperative Inspect integration:** incomplete. Exact installed Build 42.20.4 source inspection established the inventory/world event signatures, post-vanilla ordering, grouped-row dummy shape, `IsoWorldInventoryObject:getItem()` resolution, controller preflight rule and additive callback lifecycle. A 16-case PUC Lua 5.1 mock contract passed. The client booted and loaded the probe, but no live context-menu callback/action matrix ran before a security notification reported `runner.exe` quarantined as `Win64:MalwareX-gen [Cryp]` and the game reported `Fatal Error`. The run stopped without changing protection settings or quarantine. Gate B and `CF-V01-E08` remain blocked. See `docs/research/T10_COOPERATIVE_INSPECT.md`.
+
 ## v0.1 vertical slice
 
 One built-in hand-authored thread:
@@ -89,9 +93,11 @@ Before implementation architecture is signed off:
 2. choose and verify the two exact curated vanilla story locations on the development PC before location bindings are committed;
 3. implement physical identity as a mod-owned per-instance token with separate availability/conflict state; never infer loss from the original placement container alone;
 4. update decisions from each later observed spike result;
-5. implement T8's bounded/debounced sticky arrival adapter and use T7's explicit hybrid asset boundary; run T10 before expanding UI assumptions. T6 only matters if retrofit is revived.
+5. implement T8's bounded/debounced sticky arrival adapter and use T7's explicit hybrid asset boundary; complete T10 through a security-approved manual-GUI route before expanding UI assumptions. T6 only matters if retrofit is revived.
 
 Morning product to-do before implementing Dead Air entry selection: decide whether a durably placed but undiscovered D1 that later becomes `lost` may activate D2 as the narrative entry opportunity. T4 deliberately does not make that story decision.
+
+Morning safety to-do before resuming T10: review the antivirus quarantine with the user/security owner, identify `runner.exe` provenance if the protection product exposes it safely, and choose a manual-GUI test route that does not restore the flagged binary or bypass protection.
 
 ## Rule for disproven decisions
 

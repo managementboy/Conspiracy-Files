@@ -1,0 +1,46 @@
+T10 installed API inspection — Project Zomboid stable 42.20.4 b0bbce05d5
+Steam build ID: 24909800
+projectzomboid.jar SHA-256: 80E405A4BFC42F6072E75B3735F458A6514143DA011D3226007DED305A442F44
+
+Installed Lua hashes
+--------------------
+ISInventoryPaneContextMenu.lua  A28DC83B943D20C6FA59370195AA649AF249EA2EBD7D670ADDD6A9B76A357291
+ISInventoryPane.lua             557CFB0BF06C17FB741C9234062EB138DA9270E98B433F747415D984F875448C
+ISWorldObjectContextMenu.lua    5404E09A64817BFD753FF121C6454BCA8DE785166CA86F414DAB693758DC60A0
+ISContextMenu.lua               4E4616DEDBF135960DD2B7C63D67480AD19FF17352B1797CF9224631F9A669C8
+
+Inventory selection shape
+-------------------------
+ISInventoryPaneContextMenu.createMenu(player, isInPlayerInventory, items, x, y, origin)
+accepts raw InventoryItem values or grouped tables with an .items array.
+ISInventoryPane.getActualItems starts grouped iteration at index 2 because
+.items[1] is the dummy display duplicate, and it deduplicates by item identity.
+
+Inventory event order and signature
+-----------------------------------
+After vanilla menu construction, the installed file calls:
+  triggerEvent("OnFillInventoryObjectContextMenu", player, context, items)
+The adjacent vanilla comment explicitly describes adding items without mod
+conflicts. The event therefore receives the original selection shape, not the
+normalized result returned by ISInventoryPane.getActualItems.
+
+World event order and signature
+-------------------------------
+After vanilla world-menu construction, the installed file calls:
+  triggerEvent("OnFillWorldObjectContextMenu", player, context, worldobjects, test)
+Dropped inventory subjects are IsoWorldInventoryObject values and resolve via
+getItem(). During controller preflight, an additive callback must call
+ISWorldObjectContextMenu.setTest() only when it would add a command.
+
+Cooperative menu/event surfaces
+-------------------------------
+ISContextMenu exposes addOption, addOptionOnTop, getOptionFromName and
+removeOptionByName. Event collections support Add and Remove; installed vanilla
+code uses Remove in ordinary callback lifecycle management.
+
+Evidence boundary
+-----------------
+These are exact installed-source facts. The static Lua 5.1 harness exercises a
+candidate adapter against mocks. No live T10 context-menu callback or action
+activation was observed before the security stop; see SECURITY_STOP.md and
+docs/research/T10_COOPERATIVE_INSPECT.md.

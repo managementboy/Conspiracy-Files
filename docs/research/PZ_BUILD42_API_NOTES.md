@@ -110,6 +110,6 @@ Complete on stable 42.20.4 with explicit reload/reference limitations. Scripted 
 
 ### T10 — Cooperative Inspect context-menu integration
 
-Add/remove an `Inspect` entry without replacing vanilla or other-mod handlers.
+Incomplete on stable 42.20.4. Exact installed source shows that `OnFillInventoryObjectContextMenu(player, context, items)` and `OnFillWorldObjectContextMenu(player, context, worldobjects, test)` fire after vanilla construction. Inventory grouped rows carry a dummy duplicate at `.items[1]`, so real subjects start at index 2 and must be identity-deduplicated. Dropped inventory subjects resolve through `IsoWorldInventoryObject:getItem()`; world controller preflight calls `ISWorldObjectContextMenu.setTest()` only when the callback would add a valid command. Event collections support `Add` and `Remove`, enabling removal of only previously stored mod callback identities. A privately keyed additive candidate passed 16 Lua 5.1 mock checks, including foreign same-label preservation and fault containment. No real callback/action activation was observed before a security stop, so these facts do not yet prove the live adapter contract or complete Gate B. See `T10_COOPERATIVE_INSPECT.md` and `dev/t10-cooperative-inspect/evidence/installed-api.txt`.
 
 Use `SPIKE_TEMPLATE.md` for every result.

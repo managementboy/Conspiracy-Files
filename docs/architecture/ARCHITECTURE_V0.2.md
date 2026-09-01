@@ -191,6 +191,8 @@ Until an MP architecture exists:
 - never write unrelated ModData;
 - custom Inspect adds behaviour rather than replacing vanilla handlers.
 
+T10's exact installed-source inspection refines the still-provisional adapter shape: normalize inventory grouped rows from index 2 like `ISInventoryPane.getActualItems`, resolve dropped subjects through `IsoWorldInventoryObject:getItem()`, add privately keyed options from the post-vanilla inventory/world fill events, remove/re-add only stored Conspiracy-Files callback identities, call world `setTest()` only when a valid command would be added, and revalidate at activation before explicit idempotent domain intent. A Lua 5.1 mock contract passed, but no live activation was observed before the security stop. This is not yet an authoritative architecture decision and does not complete Gate B.
+
 ## 13. AI boundary
 
 ### Development-time AI
@@ -236,4 +238,4 @@ Backward-compatible typo/text revisions must not force save migration. Content p
 
 Before the broad architecture is considered signed off, record spike results for T1–T10 using `docs/research/SPIKE_TEMPLATE.md`.
 
-The first six critical probes are T1, T9, T2, T3, T4 and T5. T7 and T8 are complete; T10 still gates broader v1 behavior. T6 is only needed if retrofit returns.
+The first six critical probes are T1, T9, T2, T3, T4 and T5. T7 and T8 are complete. T10 has static candidate-mechanism evidence but still gates broader v1 behavior because its live activation matrix was stopped for security review. T6 is only needed if retrofit returns.
