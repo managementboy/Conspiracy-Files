@@ -83,7 +83,8 @@ test("CF-V01-P06 duplicate/reordered materialisation and discovery are idempoten
     local snapshot = reconstructed.snapshot()
     assertEqual(1, #snapshot.evidence)
     assertEqual(1, countKind(snapshot, "asset-discovered"))
-    assertEqual("materialised", snapshot.assetMaterialisation[ids.d3])
+    assertEqual("placed", snapshot.assetMaterialisation[ids.d3].state)
+    assertEqual("available", snapshot.assetMaterialisation[ids.d3].physicalAvailability)
     assertEqual(1, snapshot.evidence[1].discoveryOrdinal)
 end)
 

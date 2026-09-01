@@ -2,7 +2,7 @@
 
 A Project Zomboid Build 42 investigation/conspiracy module.
 
-**Current phase:** engineering de-risk and v0.1 definition. The project deliberately moved from a broad first-draft specification to a small vertical slice after lead-developer review.
+**Current phase:** v0.1 vertical-slice integration. The PZ-free Dead Air domain, production shell, exact location bindings, E02–E07 world adapters and presentation/input surface are implemented offline; end-to-end live Build 42 acceptance is still pending.
 
 ## Start here
 
@@ -34,7 +34,7 @@ A Project Zomboid Build 42 investigation/conspiracy module.
 - `docs/decisions/` — ADRs.
 - `docs/reviews/` — engineering review trail.
 - `test/fixtures/` — hand-authored content fixtures before schemas.
-- `mod/` — future loadable mod.
-- `tools/` — future validators/build helpers.
+- `mod/` — loadable Build 42 mod root; production adapters still require their named live acceptance matrices.
+- `tools/` — offline validators and deterministic release tooling.
 
 No production feature code should be built on an unverified Build 42 assumption when a listed spike can answer it first.

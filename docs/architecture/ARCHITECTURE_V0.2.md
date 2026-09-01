@@ -157,6 +157,15 @@ Rules:
 - repeated subsystem failures auto-disable that subsystem for the session after a bounded threshold;
 - surface one concise error instead of per-frame spam.
 
+P4-R47 fixes the base-v0.1 lifecycle boundary. `OnSave` and
+`OnPlayerDeath` re-stage and publish only the persistence adapter's private
+last-known-good full root. Reload revalidates/reconstructs that root from
+`OnInitGlobalModData` before `OnGameStart`. No lifecycle hook calls
+`saveGame()`, and neither callback delivery nor a returned save proves
+durability; only the next successful load does. Existing research verifies the
+event surfaces but not their complete production ordering, Alt-F4 delivery or
+already-dead reload path, which remain in the E10 live matrix.
+
 ## 10. Performance scheduler
 
 PZ Lua is treated as main-thread constrained.
@@ -217,11 +226,17 @@ Provider credentials live outside saves/repo. T9 determines whether transport re
 
 ## 14. Death recap
 
-Required path is deterministic and no-AI. It is generated from canonical state and must survive a failed/pending AI call.
+The recap is optional for base v0.1 and is not implemented by P4-R47. Canonical
+knowledge preservation at death/reload is required independently of any recap.
+
+If recap work is later included, its required path is deterministic and no-AI.
+It is generated only from the last valid canonical state and must survive a
+failed/pending AI call without revealing hidden truth.
 
 Runtime AI may optionally enhance the recap later, never reveal hidden truth.
 
-Alt-F4/death lifecycle mechanics require a dedicated PZ lifecycle probe before the final spec is locked.
+Alt-F4/death lifecycle mechanics require the dedicated E10 live matrix before
+acceptance; current callback ordering and durability limits remain explicit.
 
 ## 15. Diagnostics
 

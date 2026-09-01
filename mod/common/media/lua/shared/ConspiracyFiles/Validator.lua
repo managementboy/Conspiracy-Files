@@ -22,6 +22,25 @@ local JOURNAL_FIELDS = {
     entryId = true, ordinal = true, kind = true, subjectId = true, relatedId = true
 }
 
+local MATERIALISATION_FIELDS = {
+    state = true, physicalItemId = true, physicalIdentitySchema = true,
+    physicalAvailability = true, identityConflictObserved = true,
+    lastKnownPhysicalLocation = true
+}
+
+local PHYSICAL_LOCATION_FIELDS = {
+    kind = true, x = true, y = true, z = true, containerType = true,
+    vehicleId = true, vehiclePartId = true
+}
+
+local MATERIALISATION_STATES = {
+    pending = true, placing = true, placed = true, unavailable = true, conflict = true
+}
+
+local PHYSICAL_AVAILABILITY = {
+    untracked = true, unknown = true, available = true, unavailable = true, conflict = true
+}
+
 local JOURNAL_KINDS = {
     ["asset-discovered"] = true,
     ["thread-introduced"] = true,
@@ -118,9 +137,53 @@ local function validateSchema(root)
     if type(root.evidence) ~= "table" then return fail("root.evidence", "must be a table") end
     if type(root.journal) ~= "table" then return fail("root.journal", "must be a table") end
 
-    for assetId, status in pairs(root.assetMaterialisation) do
+    for assetId, record in pairs(root.assetMaterialisation) do
         if not Content.assets[assetId] then return fail("root.assetMaterialisation", "unknown Asset ID " .. tostring(assetId)) end
-        if status ~= "materialised" then return fail("root.assetMaterialisation", "unknown monotonic status") end
+        if Content.assets[assetId].assetKind ~= "document" then return fail("root.assetMaterialisation", "only document Assets materialise in v0.1") end
+        if type(record) ~= "table" then return fail("root.assetMaterialisation[" .. assetId .. "]", "must be a record") end
+        ok, message = checkAllowedFields(record, MATERIALISATION_FIELDS, "root.assetMaterialisation[" .. assetId .. "]")
+        if not ok then return false, message end
+        if not MATERIALISATION_STATES[record.state] then return fail("root.assetMaterialisation[" .. assetId .. "].state", "unknown placement state") end
+        if record.physicalItemId ~= nil and (type(record.physicalItemId) ~= "string" or record.physicalItemId == "") then
+            return fail("root.assetMaterialisation[" .. assetId .. "].physicalItemId", "must be a non-empty string or absent")
+        end
+        if record.physicalItemId ~= nil and record.physicalIdentitySchema ~= 1 then
+            return fail("root.assetMaterialisation[" .. assetId .. "].physicalIdentitySchema", "must be 1 when an identity token is present")
+        end
+        if record.physicalItemId == nil and record.physicalIdentitySchema ~= nil then
+            return fail("root.assetMaterialisation[" .. assetId .. "].physicalIdentitySchema", "requires an identity token")
+        end
+        if not PHYSICAL_AVAILABILITY[record.physicalAvailability] then
+            return fail("root.assetMaterialisation[" .. assetId .. "].physicalAvailability", "unknown physical availability")
+        end
+        if type(record.identityConflictObserved) ~= "boolean" then
+            return fail("root.assetMaterialisation[" .. assetId .. "].identityConflictObserved", "must be boolean")
+        end
+        if record.identityConflictObserved and (record.state ~= "conflict" or record.physicalAvailability ~= "conflict") then
+            return fail("root.assetMaterialisation[" .. assetId .. "]", "sticky identity conflict requires conflict state and availability")
+        end
+        if record.state == "conflict" and not record.identityConflictObserved then
+            return fail("root.assetMaterialisation[" .. assetId .. "]", "conflict state must retain the sticky identity flag")
+        end
+        if record.physicalAvailability == "conflict" and not record.identityConflictObserved then
+            return fail("root.assetMaterialisation[" .. assetId .. "]", "conflict availability must retain the sticky identity flag")
+        end
+        if record.physicalItemId == nil and record.physicalAvailability ~= "untracked" then
+            return fail("root.assetMaterialisation[" .. assetId .. "]", "missing identity token must remain untracked")
+        end
+        if record.state ~= "placed" and record.state ~= "conflict"
+            and record.physicalAvailability == "available" then
+            return fail("root.assetMaterialisation[" .. assetId .. "]", "only placed/conflict materialisation may be physically available")
+        end
+        if record.lastKnownPhysicalLocation ~= nil then
+            if type(record.lastKnownPhysicalLocation) ~= "table" then return fail("root.assetMaterialisation[" .. assetId .. "].lastKnownPhysicalLocation", "must be a table") end
+            ok, message = checkAllowedFields(record.lastKnownPhysicalLocation, PHYSICAL_LOCATION_FIELDS,
+                "root.assetMaterialisation[" .. assetId .. "].lastKnownPhysicalLocation")
+            if not ok then return false, message end
+            if type(record.lastKnownPhysicalLocation.kind) ~= "string" or record.lastKnownPhysicalLocation.kind == "" then
+                return fail("root.assetMaterialisation[" .. assetId .. "].lastKnownPhysicalLocation.kind", "must be non-empty")
+            end
+        end
     end
 
     local locationSeen = {}

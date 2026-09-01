@@ -1,10 +1,19 @@
 # v0.1 Build 42 Production Integration Shell — Handoff
 
+> Historical shell handoff. Later world-adapter and presentation/input work
+> extends this package; see `V0_1_WORLD_ADAPTER_HANDOFF.md` and
+> `V0_1_PRESENTATION_INPUT_HANDOFF.md`. Exclusions below describe the shell at
+> its original integration commit.
+
 **Implementation branch:** `codex/production-integration-shell`
 
 **Base commit:** `1be30c45da8f8b481d508c4f7f1acead2ff6c778`
 
 **Integrated on main:** `7ec2f97` (2026-09-01)
+
+**CF-V01-E10 extension:** branch
+`codex/cf-v01-e10-death-reload-lifecycle`, based on `0f90648`; live matrix
+pending.
 
 **Runtime target:** Project Zomboid Build 42.20.x; the relevant spike evidence
 was observed on 42.20.4. Production acceptance must rerun on the supported live
@@ -21,7 +30,8 @@ The shell contains only:
 
 - a fail-closed multiplayer decision made before event registration, canonical
   initialization, or world mutation;
-- additive `OnInitGlobalModData`, `OnGameStart`, and `OnTick` registration;
+- additive `OnInitGlobalModData`, `OnGameStart`, `OnSave`, `OnPlayerDeath`, and
+  `OnTick` registration;
 - a FIFO scheduler capped at 24 work units and 1 ms measured elapsed time per
   drain, with at most 256 queued keys and duplicate queued keys rejected;
 - `pcall` containment and a three-consecutive-failure budget per subsystem,
@@ -42,13 +52,14 @@ callback time.
 |---|---|---|---|
 | Package/bootstrap | `luac5.1` parses every Lua file; fake entrypoint creates one namespace and registers each hook once | Enable from the B42 mod UI, load a clean save, confirm the script loads once without loader/path errors | offline pass; live pending |
 | CF-V01-E09 persistence | Fake storage covers new root, existing-root reconstruction, round trip, unsafe/cyclic/oversized/regressive rejection, derived-projection equivalence, and failed-replace last-known-good preservation | Clean/repeated save-reload against Global ModData; invalid replacement; exact persisted fields/ordinals and actual file delta | **not passed; live pending** |
+| CF-V01-E10 death/reload | Fake storage covers save/death checkpoint repetition, private staged interruption, replacement failure, published-root corruption recovery, exact ordinal/projection reconstruction and pre-init no-ops | Run every row in `docs/testing/CF_V01_E10_LIVE_MATRIX.md`, including callback ordering, normal/abrupt exits and already-dead reload disposition | **implemented offline; live pending** |
 | CF-V01-E11 multiplayer disablement | MP=true and detector-fault decisions register zero hooks and perform zero storage calls | Host/client and dedicated-server smoke; inspect ModData/world/container state and confirm one concise disable line | **not passed; live pending** |
 | CF-V01-E12 performance | Scheduler tests cover key deduplication, queue cap, per-drain work cap, and elapsed-time deadline | Profile idle, queued, initialization-adjacent, and worst-case canonical work; confirm every normal-play callback is ≤2 ms | **not passed; live pending** |
-| CF-V01-E13 containment | Fake faults prove per-subsystem isolation, success reset, one-time reporting, three-consecutive-failure disablement, and no post-disable execution | Inject faults at all three production event boundaries and `ModData.add`; verify unrelated handlers continue and canonical state remains intact | **not passed; live pending** |
+| CF-V01-E13 containment | Fake faults prove per-subsystem isolation, success reset, one-time reporting, three-consecutive-failure disablement, and no post-disable execution | Inject faults at all five production event boundaries and `ModData.add`; verify unrelated handlers continue and canonical state remains intact | **not passed; live pending** |
 
-The completed T1/T2 spike reports justify the mechanisms but are not production
+The completed T1/T2/T5 reports justify the mechanisms but are not production
 adapter evidence. In particular, a successful Lua test or package load must not
-be reported as a pass for E09, E11, E12, or E13.
+be reported as a pass for E09, E10, E11, E12, or E13.
 
 ## Verification commands
 

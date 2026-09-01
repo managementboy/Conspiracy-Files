@@ -1,0 +1,20 @@
+name: Release validation
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deterministic-release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install the target Lua toolchain
+        run: sudo apt-get update && sudo apt-get install --yes lua5.1
+      - name: Validate and build twice
+        run: python3 tools/release_pipeline.py reproducibility-test

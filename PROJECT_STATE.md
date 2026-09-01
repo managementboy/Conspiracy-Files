@@ -1,6 +1,6 @@
 # Conspiracy-Files — Project State
 
-Status: **v0.1 vertical-slice integration**. The approved Dead Air content, PZ-independent domain core, exact P2/R2 bindings and offline production integration shell are implemented. End-to-end live Build 42 integration has not been accepted.
+Status: **v0.1 integrated offline candidate**. The approved Dead Air content, PZ-independent domain core, exact P2/R2 bindings, production shell, world-facing E02–E07 adapters, presentation/input slice, E10 lifecycle boundary and deterministic release pipeline are integrated. End-to-end live Build 42 integration has not been accepted.
 Target: Project Zomboid Build 42; T1/T2/T3/T4/T5/T7/T8/T9/T10 verified stable Build **42.20.4**, revision **b0bbce05d5**, Steam build ID **24909800**, with the limitations recorded in their reports. Other capability claims remain subject to their named spikes/research.
 
 ## Source of truth order
@@ -63,14 +63,27 @@ The first specification over-committed to unproven Build 42 capabilities. The en
 ## Accepted offline implementation
 
 - **v0.1 plain-Lua domain core:** accepted and merged in PR #15 at `c9d845e21a0a4298a83ce8b92204e66b6e59d073`. It implements the static Dead Air registries, private canonical ThreadState API, authored and Mark Interesting Evidence, append-only journal events, deterministic no-AI rendering, derived Organisation/Location labels, idempotent domain transitions, D5/D6 contradiction handling, B-37 recontextualisation, major-discovery evaluation, staged P4-R32 validation, the conservative P4-R17 size gate and static content resolution.
-- All 16 acceptance criteria classified `plain-Lua automated test` pass under PUC Lua 5.1.5. The combined repository suite reports 26 passing tests: 16 domain criteria, one traceability guard, one static CF-V01-E01 binding/evidence drift guard and eight fake-backed production-shell tests. See `docs/testing/V0_1_DOMAIN_CORE_TRACEABILITY.md` and `docs/testing/V0_1_PRODUCTION_SHELL_HANDOFF.md`.
+- All 16 acceptance criteria classified `plain-Lua automated test` pass under PUC Lua 5.1.5. The integrated repository suite reports 52 passing tests: 16 domain criteria, eleven shell/lifecycle cases, one static CF-V01-E01 binding guard, fourteen world-adapter cases including the cross-slice placement-to-Inspect contract, nine presentation/input cases and one traceability guard. See `docs/testing/V0_1_INTEGRATION_CANDIDATE_HANDOFF.md`.
 - This acceptance is limited to the PZ-independent domain layer. It does not accept ModData adapter behavior, physical placement/commit sequencing, live item identity, reader/UI integration, location-arrival integration or other production-adapter behavior. CF-V01-E01 separately accepts the exact static map bindings on Build 42.20.4.
-- **v0.1 production integration shell:** integrated on `main` at `7ec2f97`. It supplies the Build 42 package root and bootstrap, fail-closed multiplayer decision, additive lifecycle hooks, bounded scheduler, per-subsystem error budgets and staged Global ModData persistence adapter. Its eight offline tests pass, but CF-V01-E09/E11/E12/E13 remain live acceptance work; the shell does not yet implement placement, physical identity, reader/UI, arrival or notebook/evidence-list surfaces.
+- **v0.1 production integration shell:** integrated on `main` at `7ec2f97`. It supplies the Build 42 package root and bootstrap, fail-closed multiplayer decision, six additive lifecycle/world hooks, bounded scheduler, per-subsystem error budgets and staged Global ModData persistence adapter. Its offline tests pass, but CF-V01-E09/E10/E11/E12/E13 remain live acceptance work. The later slices below supply its world, presentation and lifecycle surfaces.
+- **v0.1 world-facing E02–E07 adapters:** implemented offline from base `0f90648`. They add accepted P2/R2 exact-container resolution with fail-closed signature checks, T4 detached prestamping and reconciliation, T5 mutable availability/sticky-conflict tracking, P4-R40 fallback gating, T7 custom-name plus validated ModData title/description/body projection, and T8 two-sample whole-building arrival through the production scheduler. Placement now also writes the presentation slice's nested validated contract, so every D1–D6 item is Inspect-compatible without weakening the flat physical-token boundary. Fourteen fake-backed matrices pass. No live Build 42 acceptance is claimed.
+- **v0.1 presentation/input slice:** implemented offline from base `0f90648`. It supplies the validated T7 item-presentation contract, T10 inventory-pane-only Inspect/Mark adapter, full custom reader, canonical journal/evidence/help projections and exactly one configurable notebook key binding. Nine fake-backed/static cases pass; CF-V01-E06/E08/E14 remain live acceptance work. See `docs/testing/V0_1_PRESENTATION_INPUT_HANDOFF.md`.
+- **CF-V01-E10 death/reload lifecycle boundary:** implemented from `0f90648`
+  with additive `OnSave`/`OnPlayerDeath` checkpoints that re-stage only the
+  persistence adapter's private last-known-good full root. Three focused cases
+  cover interrupted private staging, checkpoint replacement failure, corrupt
+  published-root recovery, repeated death/save callbacks, invalid same-process
+  reload fail-closed behavior and exact ordinal/projection reconstruction. No
+  recap is included.
+  This is offline evidence only; callback ordering, normal/abrupt exits,
+  mutation-in-`OnSave` serialization and already-dead reload remain in
+  `docs/testing/CF_V01_E10_LIVE_MATRIX.md`.
 
 ## Development tooling
 
 - `dev/live-inspection/` is the reusable, hardware-renderer-enforcing live investigation harness, committed at `5451964`. Its 12 offline tests pass. The normal-desktop GPU path still needs one end-to-end live validation before it replaces all spike-specific runners operationally.
 - `dev/location-binding/` preserves the audited one-off CF-V01-E01 probe and runner that produced the accepted P2/R2 evidence. It is development evidence, not part of the production payload.
+- `tools/release_pipeline.py` implements ADR-0003's offline deterministic gate. It validates the exact production tree and metadata, runs Lua 5.1 tests/syntax checks, rejects forbidden release content, creates GitHub and Workshop wrappers from one payload, and proves reproducibility by comparing two complete SHA-256 manifests. Cross-device smoke and promotion remain manual gates.
 
 ## v0.1 vertical slice
 
@@ -98,12 +111,13 @@ One built-in hand-authored thread:
 
 The next finishable milestone is the integrated, playable Dead Air vertical slice:
 
-1. connect the production shell to `ConspiracyFiles.LocationBindings` and implement E02–E08: T4 placement, T5 physical identity, T7 asset text, T8 arrival and T10 inventory-pane Inspect/Mark behavior;
-2. implement the notebook journal, evidence list, in-fiction help page and one notebook keybind, then pass the new CF-V01-E14 live UI criterion;
-3. assign and implement E10's death/reload lifecycle boundary;
+1. run the precise E02–E07 live production-adapter matrices in `docs/testing/V0_1_WORLD_ADAPTER_HANDOFF.md` on the supported Build 42 line;
+2. run the production custom-reader/context-menu/notebook live matrices for CF-V01-E06/E08/E14;
+3. run E10's explicit death/reload live matrix and resolve its already-dead
+   reload support disposition;
 4. run the live E09/E11/E12/E13 production-shell matrices plus the integrated E02–E08/E10/E14 matrices on the supported Build 42 line;
 5. validate the reusable live-inspection harness once on the hardware-rendered path, then use it for future live matrices;
-6. implement the deterministic release packager and cross-device prerelease smoke before any Workshop beta.
+6. run the deterministic release packager and complete the documented cross-device prerelease smoke before any Workshop beta.
 
 P4-R40 resolves the former entry-selection to-do: if durably placed but undiscovered D1 becomes conclusively `unavailable` only after T5/P4-R37 reconciliation, D2 may activate once as the fallback introduction. Unloading, original-container absence, `unknown`, `untracked` and `conflict` do not qualify, and D1 never respawns.
 

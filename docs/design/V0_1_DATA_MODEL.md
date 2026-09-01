@@ -467,12 +467,15 @@ contentRevision = "dead-air-r1"
 entryOpportunityUsed = "anchor"
 
 assetMaterialisation = {
-  "dead-air:asset:service-ticket-93-0714" = "materialised",
-  "dead-air:asset:property-record-4471" = "materialised",
-  "dead-air:asset:invoice-9327" = "materialised",
-  "dead-air:asset:rourke-notebook-0703" = "materialised",
-  "dead-air:asset:access-memo-7c" = "materialised",
-  "dead-air:asset:pike-shift-note-0705" = "materialised"
+  "dead-air:asset:service-ticket-93-0714" = {
+    state = "placed",
+    physicalItemId = "cf:<save-scope>:dead-air:asset:service-ticket-93-0714:1",
+    physicalIdentitySchema = 1,
+    physicalAvailability = "available",
+    identityConflictObserved = false,
+    lastKnownPhysicalLocation = { kind = "placement-container", ... }
+  },
+  ... one independent record for D2-D6 ...
 }
 
 confirmedLocationIds = {
@@ -494,7 +497,7 @@ The braces above describe the **logical model**, not a T1-approved Lua serializa
 | `threadId` | No. |
 | `contentRevision` | No for a given initialized save; typo/content handling follows existing revision policy. |
 | `entryOpportunityUsed` | `nil` → `anchor` when D1 becomes the accepted introduction, or `fallback` when D2 activates as the one fallback introduction; the value never switches silently. D1 placement alone does not consume the introduction: under P4-R40, durably placed but undiscovered D1 may yield to D2 only after T5/P4-R37 conclusively sets D1 `unavailable`. Unloading, original-container absence, `unknown`, `untracked` and `conflict` do not qualify. D1 never respawns. |
-| `assetMaterialisation` | Yes. T4 pre-placement states/protocol remain `pending`, `placing`, `placed`, `unavailable`, `lost` and `conflict`. After `placed`, absence from the original container starts T5 identity reconciliation; placement outcome is not current location/availability. |
+| `assetMaterialisation` | Yes. Each record retains T4 placement `state` (`pending`, `placing`, `placed`, pre-placement `unavailable`, or sticky `conflict`) separately from T5 `physicalAvailability` (`untracked`, `unknown`, `available`, `unavailable`, or sticky `conflict`). Confirmed post-placement loss is represented by `state=placed` plus `physicalAvailability=unavailable`; absence from the original container alone becomes `unknown`. |
 | `confirmedLocationIds` | Append/add when T8-approved arrival logic confirms one of the two locations. |
 | `evidence` | Append/add only for immutable discovery facts; T5 physical availability/location may change separately, while identity conflict is sticky. |
 | `journal` | Append-only. |

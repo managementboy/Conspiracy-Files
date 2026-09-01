@@ -24,6 +24,25 @@ local function discoverTransaction(assetId)
     end
 end
 
+local function dormantWorld()
+    return {
+        saveIdentity = function() return "fake-save" end,
+        squareCoordinates = function(square) return square.x, square.y, square.z end,
+        resolvePlacement = function() return { status = "unloaded" } end,
+        items = function() return {} end,
+        createItem = function() return { modData = {} } end,
+        addItem = function(_, item) return item end,
+        scanPhysical = function() return { matches = {}, coverage = "incomplete" } end,
+        playerSquare = function() return nil end,
+        squareKey = function(square) return tostring(square.x) .. ":" .. tostring(square.y) .. ":" .. tostring(square.z) end,
+        matchesArrival = function() return false end
+    }, {
+        modData = function(item) return item.modData end,
+        setName = function(item, name) item.name = name end,
+        setCustomName = function(item, value) item.customName = value end
+    }
+end
+
 test("integration scheduler deduplicates keys and obeys queue, work, and elapsed bounds", function()
     local now, ran = 0, {}
     local scheduler = CF.Scheduler.new({
@@ -141,10 +160,13 @@ end)
 test("integration singleplayer lifecycle is additive and defers canonical creation until ModData initialization", function()
     local callbacks, reports = {}, {}
     local storage = makeStorage()
+    local world, itemPort = dormantWorld()
     local runtime = CF.IntegrationRuntime.start({
         isMultiplayer = function() return false end,
         report = function(message) reports[#reports + 1] = message end,
         storage = storage,
+        world = world,
+        itemPort = itemPort,
         clock = function() return 0 end,
         addEvent = function(name, callback)
             assertEqual(nil, callbacks[name], "event registered twice")
@@ -152,9 +174,13 @@ test("integration singleplayer lifecycle is additive and defers canonical creati
         end
     })
     assertTrue(runtime.enabled)
-    assertEqual(3, #runtime.registeredEvents)
+    assertEqual(6, #runtime.registeredEvents)
     assertEqual(0, storage.replacementCount())
     assertEqual("registered", runtime.phase())
+    callbacks.OnSave()
+    callbacks.OnPlayerDeath()
+    assertEqual(0, storage.replacementCount())
+    assertEqual(0, runtime.lifecycle.status().checkpointCount)
     callbacks.OnInitGlobalModData(true)
     assertEqual(1, storage.replacementCount())
     assertEqual("canonical-ready", runtime.phase())
@@ -162,6 +188,157 @@ test("integration singleplayer lifecycle is additive and defers canonical creati
     assertEqual("running", runtime.phase())
     callbacks.OnTick()
     assertEqual(0, #reports)
+end)
+
+test("CF-V01-E10 save, death, and reload checkpoints preserve canonical order from last-known-good", function()
+    local callbacks = {}
+    local storage = makeStorage()
+    local world, itemPort = dormantWorld()
+    local runtime = CF.IntegrationRuntime.start({
+        isMultiplayer = function() return false end,
+        storage = storage,
+        world = world,
+        itemPort = itemPort,
+        clock = function() return 0 end,
+        addEvent = function(name, callback) callbacks[name] = callback end
+    })
+    callbacks.OnInitGlobalModData(true)
+    callbacks.OnGameStart()
+    assertTrue(runtime.persistence.transaction(discoverTransaction(ids.d1)))
+    assertTrue(runtime.persistence.transaction(discoverTransaction(ids.d3)))
+    assertTrue(runtime.persistence.transaction(discoverTransaction(ids.d5)))
+    assertTrue(runtime.persistence.transaction(discoverTransaction(ids.d2)))
+    assertTrue(runtime.persistence.transaction(discoverTransaction(ids.d6)))
+    assertTrue(runtime.persistence.transaction(discoverTransaction(ids.d4)))
+    assertTrue(runtime.persistence.transaction(function(candidate)
+        local ok, result, changed = candidate.markInteresting("e10-mark-1", {
+            subjectLabel = "Bent antenna",
+            contextText = "Found before the death boundary"
+        })
+        if not ok then error(result) end
+        return changed, result
+    end))
+    assertTrue(runtime.persistence.transaction(function(candidate)
+        local ok, result, changed = candidate.confirmLocation(ids.relay)
+        if not ok then error(result) end
+        return changed, result
+    end))
+    local expected = runtime.persistence.snapshot()
+    local expectedJournal = runtime.persistence.domain().renderJournal()
+
+    -- Model another writer corrupting the published table. The private
+    -- adapter copy remains authoritative at the lifecycle boundary.
+    storage.roots[runtime.persistence.tag()].evidence[1].discoveryOrdinal = 99
+    callbacks.OnSave()
+    assertDeepEqual(expected, storage.roots[runtime.persistence.tag()])
+    assertDeepEqual(expected, runtime.persistence.snapshot())
+
+    callbacks.OnPlayerDeath()
+    callbacks.OnPlayerDeath()
+    assertEqual("death-observed", runtime.phase())
+    assertEqual(3, runtime.lifecycle.status().checkpointCount)
+    assertEqual("death", runtime.lifecycle.status().lastCheckpointReason)
+
+    callbacks.OnInitGlobalModData(false)
+    callbacks.OnGameStart()
+    assertEqual("running", runtime.phase())
+    assertDeepEqual(expected, runtime.persistence.snapshot())
+    assertDeepEqual(expectedJournal, runtime.persistence.domain().renderJournal())
+    assertEqual(7, #expected.evidence)
+    for index, evidence in ipairs(expected.evidence) do
+        assertEqual(index, evidence.discoveryOrdinal)
+    end
+    for index, entry in ipairs(expected.journal) do
+        assertEqual(index, entry.ordinal)
+    end
+end)
+
+test("CF-V01-E10 interrupted staging and failed lifecycle replacement expose no partial root", function()
+    local callbacks, reports = {}, {}
+    local storage = makeStorage()
+    local replace = storage.replace
+    local failReplacement = false
+    storage.replace = function(tag, root)
+        if failReplacement then error("simulated lifecycle interruption") end
+        replace(tag, root)
+    end
+    local world, itemPort = dormantWorld()
+    local runtime = CF.IntegrationRuntime.start({
+        isMultiplayer = function() return false end,
+        storage = storage,
+        world = world,
+        itemPort = itemPort,
+        clock = function() return 0 end,
+        report = function(message) reports[#reports + 1] = message end,
+        addEvent = function(name, callback) callbacks[name] = callback end
+    })
+    callbacks.OnInitGlobalModData(true)
+    callbacks.OnGameStart()
+    assertTrue(runtime.persistence.transaction(discoverTransaction(ids.d1)))
+    local expected = runtime.persistence.snapshot()
+
+    local completed = pcall(function()
+        runtime.persistence.transaction(function(candidate)
+            assertTrue(candidate.discover(ids.d3, "private interrupted discovery", CF.Content.assets[ids.d3].placementLocationId))
+            error("interrupt after private mutation")
+        end)
+    end)
+    assertFalse(completed)
+    assertDeepEqual(expected, runtime.persistence.snapshot())
+    assertDeepEqual(expected, storage.roots[runtime.persistence.tag()])
+
+    failReplacement = true
+    callbacks.OnPlayerDeath()
+    assertEqual("running", runtime.phase())
+    assertEqual(0, runtime.lifecycle.status().checkpointCount)
+    assertDeepEqual(expected, runtime.persistence.snapshot())
+    assertDeepEqual(expected, storage.roots[runtime.persistence.tag()])
+    assertEqual(1, #reports)
+
+    failReplacement = false
+    callbacks.OnSave()
+    assertEqual(1, runtime.lifecycle.status().checkpointCount)
+    assertDeepEqual(expected, storage.roots[runtime.persistence.tag()])
+    local reloaded = CF.PersistenceAdapter.new({ storage = storage })
+    assertTrue(reloaded.load(false))
+    assertDeepEqual(expected, reloaded.snapshot())
+end)
+
+test("CF-V01-E10 invalid same-process reload cannot expose the prior session root", function()
+    local callbacks, reports = {}, {}
+    local storage = makeStorage()
+    local world, itemPort = dormantWorld()
+    local runtime = CF.IntegrationRuntime.start({
+        isMultiplayer = function() return false end,
+        storage = storage,
+        world = world,
+        itemPort = itemPort,
+        clock = function() return 0 end,
+        report = function(message) reports[#reports + 1] = message end,
+        addEvent = function(name, callback) callbacks[name] = callback end
+    })
+    callbacks.OnInitGlobalModData(true)
+    callbacks.OnGameStart()
+    assertTrue(runtime.persistence.transaction(discoverTransaction(ids.d1)))
+    local replacementCount = storage.replacementCount()
+
+    local invalid = { schemaVersion = 1 }
+    invalid.self = invalid
+    storage.roots[runtime.persistence.tag()] = invalid
+    callbacks.OnInitGlobalModData(false)
+    assertFalse(runtime.persistence.isLoaded())
+    assertEqual(nil, runtime.persistence.snapshot())
+    assertEqual("canonical-unavailable", runtime.phase())
+    assertEqual(replacementCount, storage.replacementCount())
+    assertEqual(invalid, storage.roots[runtime.persistence.tag()])
+
+    callbacks.OnGameStart()
+    assertEqual("canonical-unavailable", runtime.phase())
+    callbacks.OnSave()
+    callbacks.OnPlayerDeath()
+    assertEqual(replacementCount, storage.replacementCount())
+    assertEqual(invalid, storage.roots[runtime.persistence.tag()])
+    assertEqual(2, #reports)
 end)
 
 test("integration persistence stages complete roots and reconstructs domain projections across fake round trips", function()
@@ -258,7 +435,7 @@ test("integration Build 42 entrypoint creates one namespace and registers each c
         ModData = rawget(_G, "ModData"),
         Events = rawget(_G, "Events")
     }
-    local callbacks = { OnInitGlobalModData = {}, OnGameStart = {}, OnTick = {} }
+    local callbacks = { OnInitGlobalModData = {}, OnGameStart = {}, LoadGridsquare = {}, OnSave = {}, OnPlayerDeath = {}, OnTick = {} }
     local roots = {}
     _G.ConspiracyFiles = nil
     _G.isMultiplayer = function() return false end

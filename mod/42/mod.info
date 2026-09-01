@@ -2,5 +2,5 @@ name=Conspiracy-Files
 id=ConspiracyFiles
 author=Conspiracy-Files project
 modversion=0.1.0
-description=Build 42 production integration shell for the Dead Air v0.1 domain core.
+description=Dead Air v0.1 domain core, Build 42 world adapters, Inspect reader and survivor notebook.
 versionMin=42.20.0

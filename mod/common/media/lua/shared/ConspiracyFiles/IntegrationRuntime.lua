@@ -1,7 +1,9 @@
 local Bootstrap = require("ConspiracyFiles.Bootstrap")
 local ErrorBudget = require("ConspiracyFiles.ErrorBudget")
+local LifecycleAdapter = require("ConspiracyFiles.LifecycleAdapter")
 local PersistenceAdapter = require("ConspiracyFiles.PersistenceAdapter")
 local Scheduler = require("ConspiracyFiles.Scheduler")
+local WorldRuntime = require("ConspiracyFiles.WorldRuntime")
 
 local IntegrationRuntime = {}
 
@@ -20,6 +22,7 @@ function IntegrationRuntime.start(environment)
 
     local errors = ErrorBudget.new({ threshold = 3, report = environment.report })
     local persistence = PersistenceAdapter.new({ storage = environment.storage })
+    local lifecycle = LifecycleAdapter.new({ persistence = persistence })
     local scheduler = Scheduler.new({
         clock = environment.clock,
         maxWorkPerDrain = 24,
@@ -29,33 +32,67 @@ function IntegrationRuntime.start(environment)
             errors.call(subsystem, work)
         end
     })
+    local worldRuntime = WorldRuntime.new({
+        persistence = persistence,
+        scheduler = scheduler,
+        world = assert(environment.world, "world port is required"),
+        itemPort = assert(environment.itemPort, "item port is required")
+    })
     local phase = "registered"
     local callbacks = {}
     local registeredEvents = {}
 
     callbacks.OnInitGlobalModData = function(isNewGame)
-        errors.call("persistence", function()
+        phase = "loading-canonical"
+        local loaded = errors.call("persistence", function()
             local ok, message = persistence.load(isNewGame)
             if not ok then error(message) end
             phase = "canonical-ready"
         end)
+        if not loaded then phase = "canonical-unavailable" end
     end
 
     callbacks.OnGameStart = function()
         errors.call("lifecycle", function()
             if not persistence.isLoaded() then error("canonical state was not initialized") end
+            worldRuntime.start()
             phase = "running"
         end)
     end
 
+    callbacks.LoadGridsquare = function(square)
+        errors.call("placement-wakeup", function()
+            worldRuntime.onLoadGridSquare(square)
+        end)
+    end
+
+    local function checkpoint(reason)
+        errors.call("lifecycle-checkpoint", function()
+            local ok, message = lifecycle.checkpoint(reason)
+            if not ok then error(message) end
+            if reason == "death" and persistence.isLoaded() then phase = "death-observed" end
+        end)
+    end
+
+    callbacks.OnSave = function()
+        checkpoint("save")
+    end
+
+    callbacks.OnPlayerDeath = function()
+        checkpoint("death")
+    end
+
     callbacks.OnTick = function()
         errors.call("scheduler", function()
-            scheduler.drain()
+            if phase == "running" then
+                worldRuntime.onTick()
+                scheduler.drain()
+            end
         end)
     end
 
     local function registerAll()
-        for _, eventName in ipairs({ "OnInitGlobalModData", "OnGameStart", "OnTick" }) do
+        for _, eventName in ipairs({ "OnInitGlobalModData", "OnGameStart", "LoadGridsquare", "OnSave", "OnPlayerDeath", "OnTick" }) do
             environment.addEvent(eventName, callbacks[eventName])
             registeredEvents[#registeredEvents + 1] = eventName
         end
@@ -78,7 +115,9 @@ function IntegrationRuntime.start(environment)
         callbacks = callbacks,
         errorBudget = errors,
         persistence = persistence,
+        lifecycle = lifecycle,
         scheduler = scheduler,
+        worldRuntime = worldRuntime,
         registeredEvents = registeredEvents,
         phase = function() return phase end
     }

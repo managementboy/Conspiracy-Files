@@ -1,6 +1,6 @@
 # ADR-0003 — Reproducible release artifacts and staged distribution
 
-**Status:** Accepted
+**Status:** Accepted and implemented for local packaging/validation
 **Decision date:** 2026-09-01
 
 ## Context
@@ -40,4 +40,4 @@ Packaging excludes development probes, tests, raw research evidence, Git metadat
 - Other devices do not need a development checkout or the X380's local environment.
 - GitHub prereleases provide auditable internal builds before Workshop publication.
 - Workshop convenience cannot bypass repository validation or v0.1 acceptance.
-- A packaging/release-pipeline implementation remains required after the production shell verifies the exact Build 42 mod layout.
+- `tools/release_pipeline.py` implements the offline validation, shared-payload packaging and reproducibility gate. Promotion remains a separate manual decision after the required live acceptance work.

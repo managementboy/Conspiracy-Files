@@ -37,11 +37,13 @@ Goal: prove the intended feeling once, with the smallest end-to-end build.
 - [x] Plain-Lua domain core accepted.
 - [x] Exact P2/R2 bindings accepted on Build 42.20.4.
 - [x] Build 42 production package/bootstrap, scheduler, error budget and persistence shell implemented with offline tests.
-- [ ] D1–D6 placement, physical identity, reader/Inspect and arrival adapters integrated end to end.
-- [ ] Notebook journal, evidence list, in-fiction help and the one normal-play notebook keybind implemented.
-- [ ] Death/reload lifecycle boundary assigned, implemented and tested.
+- [x] D1–D6 placement, physical identity, durable item text storage and arrival adapters implemented with plain-Lua fakes.
+- [x] Notebook journal, evidence list, in-fiction help and the one normal-play notebook keybind implemented offline; live CF-V01-E14 acceptance remains pending.
+- [x] Reader/Inspect integration implemented with plain-Lua fakes; live E02–E08 production-adapter matrices remain pending.
+- [x] Death/reload lifecycle boundary assigned, implemented and fake-backed; live E10 acceptance remains pending.
 - [ ] Production shell and complete vertical slice pass their live Build 42 acceptance matrices.
-- [ ] Deterministic package pipeline and cross-device prerelease smoke pass.
+- [x] Deterministic local package and reproducibility pipeline implemented.
+- [ ] Cross-device prerelease smoke passes with the exact packaged artifact.
 
 ## Engineering gate A — before v0.1 implementation is trusted
 Run six critical probes:
@@ -98,7 +100,7 @@ The project may remain “never finished” as a creative philosophy, but every 
 Distribution follows P4-R46 / ADR-0003:
 
 1. live-verify the implemented production Build 42 layout and bootstrap;
-2. add a deterministic package/validation pipeline;
+2. generate artifacts through the implemented deterministic package/validation pipeline;
 3. publish versioned GitHub prerelease ZIPs for internal cross-device testing;
 4. use an unlisted/access-limited Workshop item only after another device installs and loads the same payload successfully;
 5. publish publicly only after every v0.1 acceptance criterion passes.

@@ -44,8 +44,27 @@ local function isMonotonicExtension(current, proposed)
     if current.entryOpportunityUsed ~= nil and proposed.entryOpportunityUsed ~= current.entryOpportunityUsed then
         return false, "root.entryOpportunityUsed: committed opportunity cannot regress or change"
     end
-    for assetId, status in pairs(current.assetMaterialisation) do
-        if proposed.assetMaterialisation[assetId] ~= status then return false, "root.assetMaterialisation: committed state cannot regress" end
+    local stateTransitions = {
+        pending = { pending = true, placing = true, placed = true, unavailable = true, conflict = true },
+        placing = { placing = true, placed = true, unavailable = true, conflict = true },
+        placed = { placed = true, conflict = true },
+        unavailable = { unavailable = true },
+        conflict = { conflict = true }
+    }
+    for assetId, record in pairs(current.assetMaterialisation) do
+        local nextRecord = proposed.assetMaterialisation[assetId]
+        if not nextRecord then return false, "root.assetMaterialisation: committed record cannot be removed" end
+        if not stateTransitions[record.state][nextRecord.state] then return false, "root.assetMaterialisation: placement state cannot regress" end
+        if record.physicalItemId ~= nextRecord.physicalItemId
+            or record.physicalIdentitySchema ~= nextRecord.physicalIdentitySchema then
+            return false, "root.assetMaterialisation: physical identity cannot change"
+        end
+        if record.identityConflictObserved and not nextRecord.identityConflictObserved then
+            return false, "root.assetMaterialisation: identity conflict is sticky"
+        end
+        if record.physicalAvailability == "conflict" and nextRecord.physicalAvailability ~= "conflict" then
+            return false, "root.assetMaterialisation: conflict availability is sticky"
+        end
     end
     if #proposed.confirmedLocationIds < #current.confirmedLocationIds then return false, "root.confirmedLocationIds: history cannot be truncated" end
     for index = 1, #current.confirmedLocationIds do
@@ -104,6 +123,19 @@ local function priorMarkedKey(root)
     return nil
 end
 
+local function fallbackEligible(root)
+    if root.entryOpportunityUsed ~= nil or findEvidenceByAsset(root, Content.ids.d1) then return false end
+    local anchor = root.assetMaterialisation[Content.ids.d1]
+    local fallback = root.assetMaterialisation[Content.ids.d2]
+    if not anchor or not fallback or fallback.state ~= "placed" then return false end
+    if anchor.state == "unavailable" then return true end
+    return anchor.state == "placed" and anchor.physicalAvailability == "unavailable"
+end
+
+local function maybeActivateFallback(root)
+    if fallbackEligible(root) then root.entryOpportunityUsed = "fallback" end
+end
+
 function ThreadState.new(initialRoot)
     local candidate = initialRoot or freshRoot()
     local ok, message = Validator.validate(candidate)
@@ -154,18 +186,126 @@ function ThreadState.new(initialRoot)
         if role ~= "anchor" and role ~= "fallback" then return false, "entry opportunity must be anchor or fallback" end
         return stage(function(proposed)
             if proposed.entryOpportunityUsed ~= nil then return false, proposed.entryOpportunityUsed end
+            if role == "anchor" and not findEvidenceByAsset(proposed, Content.ids.d1) then
+                return false, "anchor introduction has not been accepted"
+            end
+            if role == "fallback" and not fallbackEligible(proposed) then
+                return false, "fallback introduction is not eligible"
+            end
             proposed.entryOpportunityUsed = role
             return true, role
         end)
     end
 
-    function api.materialise(assetId)
-        if not Content.assets[assetId] then return false, "unknown Asset ID" end
+    function api.ensureMaterialisation(assetId, physicalItemId)
+        local asset = Content.assets[assetId]
+        if not asset or asset.assetKind ~= "document" then return false, "Asset is not a document" end
+        if physicalItemId ~= nil and (type(physicalItemId) ~= "string" or physicalItemId == "") then return false, "physicalItemId must be non-empty or absent" end
         return stage(function(proposed)
-            if proposed.assetMaterialisation[assetId] == "materialised" then return false, assetId end
-            proposed.assetMaterialisation[assetId] = "materialised"
+            local existing = proposed.assetMaterialisation[assetId]
+            if existing then
+                if existing.physicalItemId ~= physicalItemId then return false, "physical identity already fixed" end
+                return false, assetId
+            end
+            proposed.assetMaterialisation[assetId] = {
+                state = "pending",
+                physicalAvailability = physicalItemId and "unknown" or "untracked",
+                identityConflictObserved = false
+            }
+            if physicalItemId then
+                proposed.assetMaterialisation[assetId].physicalItemId = physicalItemId
+                proposed.assetMaterialisation[assetId].physicalIdentitySchema = 1
+            end
             return true, assetId
         end)
+    end
+
+    function api.beginPlacement(assetId)
+        if not Content.assets[assetId] then return false, "unknown Asset ID" end
+        return stage(function(proposed)
+            local record = proposed.assetMaterialisation[assetId]
+            if not record then return false, "materialisation is not prepared" end
+            if record.state == "placing" then return false, assetId end
+            if record.state ~= "pending" then return false, "materialisation cannot enter placing from " .. record.state end
+            record.state = "placing"
+            return true, assetId
+        end)
+    end
+
+    function api.completePlacement(assetId, physicalLocation)
+        if not Content.assets[assetId] then return false, "unknown Asset ID" end
+        return stage(function(proposed)
+            local record = proposed.assetMaterialisation[assetId]
+            if not record then return false, "materialisation is not prepared" end
+            if record.state == "unavailable" or record.state == "conflict" then return false, "terminal materialisation state " .. record.state end
+            local already = record.state == "placed" and record.physicalAvailability == (record.physicalItemId and "available" or "untracked")
+            local sameLocation = sameValue(record.lastKnownPhysicalLocation, physicalLocation)
+            record.state = "placed"
+            record.physicalAvailability = record.physicalItemId and "available" or "untracked"
+            if physicalLocation ~= nil then record.lastKnownPhysicalLocation = copy(physicalLocation) end
+            maybeActivateFallback(proposed)
+            if already and sameLocation then return false, assetId end
+            return true, assetId
+        end)
+    end
+
+    function api.markPlacementUnavailable(assetId)
+        if not Content.assets[assetId] then return false, "unknown Asset ID" end
+        return stage(function(proposed)
+            local record = proposed.assetMaterialisation[assetId]
+            if not record then return false, "materialisation is not prepared" end
+            if record.state == "unavailable" then return false, assetId end
+            if record.state ~= "pending" and record.state ~= "placing" then return false, "only pre-placement state can become unavailable" end
+            record.state = "unavailable"
+            record.physicalAvailability = record.physicalItemId and "unavailable" or "untracked"
+            maybeActivateFallback(proposed)
+            return true, assetId
+        end)
+    end
+
+    function api.reconcilePhysical(assetId, availability, physicalLocation)
+        local allowed = { untracked = true, unknown = true, available = true, unavailable = true, conflict = true }
+        if not allowed[availability] then return false, "unknown physical availability" end
+        return stage(function(proposed)
+            local record = proposed.assetMaterialisation[assetId]
+            if not record then return false, "materialisation is not prepared" end
+            if record.identityConflictObserved then return false, "conflict" end
+            if record.physicalItemId == nil then availability = "untracked" end
+            if availability == "conflict" then
+                record.state = "conflict"
+                record.physicalAvailability = "conflict"
+                record.identityConflictObserved = true
+                return true, assetId
+            end
+            if availability == "available" and record.state ~= "placed" then
+                return false, "available identity requires placed materialisation"
+            end
+            local changed = record.physicalAvailability ~= availability
+            record.physicalAvailability = availability
+            if physicalLocation ~= nil and not sameValue(record.lastKnownPhysicalLocation, physicalLocation) then
+                record.lastKnownPhysicalLocation = copy(physicalLocation)
+                changed = true
+            end
+            maybeActivateFallback(proposed)
+            return changed, assetId
+        end)
+    end
+
+    function api.fallbackEligible()
+        return fallbackEligible(root)
+    end
+
+    function api.isDiscovered(assetId)
+        return findEvidenceByAsset(root, assetId) ~= nil
+    end
+
+    function api.materialise(assetId)
+        if not Content.assets[assetId] then return false, "unknown Asset ID" end
+        local token = "cf:domain:" .. assetId .. ":1"
+        local ok, result, changed = api.ensureMaterialisation(assetId, token)
+        if not ok then return ok, result, changed end
+        if not changed and type(result) == "string" and result ~= assetId then return ok, result, changed end
+        return api.completePlacement(assetId, { kind = "domain" })
     end
 
     function api.discover(assetId, contextText, foundLocationId)
@@ -187,6 +327,9 @@ function ThreadState.new(initialRoot)
             if foundLocationId ~= nil then evidence.foundLocationId = foundLocationId end
             proposed.evidence[#proposed.evidence + 1] = evidence
             appendJournal(proposed, "asset-discovered", assetId)
+            if assetId == Content.ids.d1 and proposed.entryOpportunityUsed == nil then
+                proposed.entryOpportunityUsed = "anchor"
+            end
             if (assetId == Content.ids.d1 or assetId == Content.ids.d2) and not hasJournalKind(proposed, "thread-introduced") then
                 appendJournal(proposed, "thread-introduced", Content.thread.threadId, assetId)
             end

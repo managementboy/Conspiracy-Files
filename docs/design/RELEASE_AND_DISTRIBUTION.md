@@ -1,6 +1,6 @@
 # Release and Distribution
 
-**Status:** Approved policy; pipeline not yet implemented.
+**Status:** Approved policy; deterministic local pipeline implemented.
 **Authority:** ADR-0003 and P4-R46.
 
 ## Release channels
@@ -49,3 +49,47 @@ Every report should record:
 - reproduction steps and only sanitized Conspiracy-Files log evidence.
 
 Internal testing uses disposable saves until the release explicitly declares save compatibility.
+
+## Local deterministic pipeline
+
+Requirements are Git, Python 3, a PUC Lua 5.1-compatible interpreter and compiler (`lua5.1` and `luac5.1` by default). The validation and packaging work is entirely local and makes no network, GitHub or Workshop calls.
+
+Run the complete gate from a clean repository checkout:
+
+```text
+python3 tools/release_pipeline.py all --output dist
+```
+
+The command runs the project suite, compiles every packaged Lua file in syntax-check mode, verifies the exact `mod/` source structure and release metadata, scans production candidates for forbidden paths/files and credential patterns, builds twice and compares every output SHA-256, then writes:
+
+```text
+dist/
+├── Conspiracy-Files-0.1.0-github.zip
+├── Conspiracy-Files-0.1.0-workshop.zip
+├── Conspiracy-Files-0.1.0-workshop/
+│   └── Contents/mods/ConspiracyFiles/...
+└── SHA256SUMS
+```
+
+The GitHub ZIP has `ConspiracyFiles/` as its installable root. The Workshop directory and ZIP have `Contents/mods/ConspiracyFiles/` as their root. Both wrap byte-identical copies of one staged payload. That payload contains `release-metadata.json`, deterministic `RELEASE_NOTES.md`, and `SHA256SUMS` covering every other payload file.
+
+The metadata authority is `release/release.json`; the pipeline rejects a version, content revision, schema version or minimum PZ version that disagrees with the production Lua or `mod.info`. It also refuses a dirty working tree, making the recorded 40-character source commit exact.
+
+Useful narrower gates are:
+
+```text
+python3 tools/release_pipeline.py verify
+python3 tools/release_pipeline.py reproducibility-test
+python3 -m unittest discover -s test -p 'test_release_pipeline.py'
+```
+
+`CF_LUA` and `CF_LUAC` may name alternate offline Lua 5.1-compatible binaries. No command uploads or publishes anything.
+
+## Cross-device prerelease smoke test
+
+1. On the build device, run the complete gate and retain `dist/SHA256SUMS` with the two ZIPs.
+2. Verify the artifacts from inside the output directory (`cd dist && sha256sum -c SHA256SUMS`), then transfer the GitHub ZIP to a second device and verify its SHA-256 again before extraction. Do not copy the repository or an existing mod directory.
+3. Extract `ConspiracyFiles/` into that device's `Zomboid/mods/` directory. Confirm the installed payload's `SHA256SUMS` and `release-metadata.json` remain present.
+4. Start the exact verified PZ build recorded in the metadata, enable only Conspiracy-Files in a new disposable single-player save, and confirm the mod loads without an initialization error. Multiplayer must remain disabled.
+5. Record operating system, enabled mods, clean/copied-save status, exact artifact checksum, source commit, content/schema revisions and PZ build. Exercise the currently applicable v0.1 smoke matrix and retain only sanitized Conspiracy-Files log excerpts.
+6. Remove the disposable save and test installation after the report. A successful smoke permits consideration of an unlisted Workshop beta; it does not publish one and does not satisfy the remaining live acceptance matrix by itself.

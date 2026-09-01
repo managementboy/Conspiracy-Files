@@ -34,6 +34,10 @@ function PersistenceAdapter.new(options)
     end
 
     function api.load(isNewGame)
+        -- A Lua process may outlive one world/session. Never let a failed new
+        -- load fall back to the previous session's otherwise-valid domain.
+        domain = nil
+        lastKnownGood = nil
         local persisted = storage.get(tag)
         local candidate = persisted
         if candidate == nil then
@@ -70,6 +74,19 @@ function PersistenceAdapter.new(options)
         if not rebuilt then return false, message end
         storage.replace(tag, staged)
         domain = rebuilt
+        lastKnownGood = Copy.deep(staged)
+        return true, { estimatedBytes = estimated }
+    end
+
+    -- Lifecycle hooks never publish a live domain object or a caller-owned
+    -- snapshot. Re-stage the adapter's private last-known-good root so a save
+    -- or death boundary can only expose a complete P4-R32-valid replacement.
+    function api.checkpoint()
+        if not domain or not lastKnownGood then return false, "persistence adapter is not loaded" end
+        local staged, message, estimated = validateAndCopy(lastKnownGood)
+        if not staged then return false, message end
+
+        storage.replace(tag, staged)
         lastKnownGood = Copy.deep(staged)
         return true, { estimatedBytes = estimated }
     end
