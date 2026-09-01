@@ -11,4 +11,4 @@ For v0.1:
 - do not scan/categorise the full map;
 - do not support retrofit, migration, external packs or multiplayer.
 
-Future map-wide Location Registry work is gated by T2/T3. Future non-building/arrival behavior is gated by T8. Retrofit remains post-v1 and would require T6.
+Future map-wide Location Registry work is constrained by T2/T3. Curated building and non-building arrival uses T8's bounded/debounced exact predicates. Retrofit remains post-v1 and would require T6.

@@ -1,7 +1,7 @@
 # Conspiracy-Files — Project State
 
 Status: **Engineering de-risk / v0.1 definition**. No feature implementation has been accepted yet.
-Target: Project Zomboid Build 42; T1/T2/T3/T4/T5/T7/T9 verified stable Build **42.20.4**, revision **b0bbce05d5**, Steam build ID **24909800**. Other capability claims remain subject to their named spikes/research.
+Target: Project Zomboid Build 42; T1/T2/T3/T4/T5/T7/T8/T9 verified stable Build **42.20.4**, revision **b0bbce05d5**, Steam build ID **24909800**. Other capability claims remain subject to their named spikes/research.
 
 ## Source of truth order
 
@@ -57,6 +57,7 @@ The first specification over-committed to unproven Build 42 capabilities. The en
 - **T4 exact-once deferred placement:** complete. A live 13-scenario fault/reload matrix on Build 42.20.4 proved queued `LoadGridsquare` wake-ups plus `OnGameStart` catch-up, detached item pre-stamping, and exact-container reconciliation. Seven valid interruption paths remained at one item through a true target-square stream-out/in and three reloads. Terminal pre-placement target loss becomes `unavailable`; duplicates become `conflict`. T5 later corrected the post-placement rule: missing from the original container triggers wider physical-identity reconciliation, not immediate loss. See `docs/research/T4_EXACT_ONCE_PLACEMENT.md` and `docs/research/T5_PHYSICAL_ITEM_IDENTITY.md`.
 - **T5 persistent physical item identity:** complete. A fixed multi-load Build 42.20.4 matrix carried one detached-prestamped `Base.Note` through inventory, ordinary container, floor, vehicle and back to inventory with the same ModData token and observed engine ID, then proved permanent removal stayed absent. Real disposable-character death moved one stamped item to the corpse. `copyModData`/`CopyModData` produced distinct engine items with the same token, so duplicates are a sticky `conflict`; engine IDs remain diagnostics only. See `docs/research/T5_PHYSICAL_ITEM_IDENTITY.md`.
 - **T7 runtime item text and native readers:** complete. A nine-carrier Build 42.20.4 matrix proved custom item names and ModData bodies persist on literature, photos, generic items, keys and maps; `InventoryItem.description` did not persist. Locked Literature custom pages reopened in the vanilla read-only journal but are plain, limited projections. Runtime-shaped `printMedia` was unsafe, including a formatter failure on raw `%` content. The authoritative world-specific body therefore remains in ModData/domain content and uses the custom T10 `Inspect` reader. See `docs/research/T7_RUNTIME_ITEM_TEXT.md`.
+- **T8 curated location arrival detection:** complete with explicit reload/reference limitations. Scripted teleports produced zero `OnPlayerMove` callbacks. Bounded 15-tick state sampling with two stable samples correctly confirmed reached exact-room, whole-building, floor, basement, radius, rectangle and installed-zone predicates in 248–344 ms, with adjacent/wrong-floor/boundary negatives and sticky leave/re-entry behavior. Late scripted teleports became unreliable; delayed-reference ordering and reload-inside remain production-adapter tests rather than claimed results. See `docs/research/T8_LOCATION_ARRIVAL.md`.
 
 ## v0.1 vertical slice
 
@@ -76,9 +77,9 @@ One built-in hand-authored thread:
 - `test/fixtures/THREAD-001-DEAD-AIR.md` is now a complete Dead Air authored-content candidate rather than a structural fixture: six full documents, three identities, one organisation, two story locations, anchor/fallback behavior, discovery paths, three reward moments, deterministic journal output and a Mark Interesting example.
 - The Dead Air text was development-time AI-assisted and still requires human approval before canonical shipping under `docs/design/AI_PROVENANCE.md`.
 - `docs/design/V0_1_DATA_MODEL.md` now derives the smallest v0.1 logical model from that story. Static authored prose/entities remain outside save state; v0.1 relationships are static ID references rather than standalone relationship records.
-- `docs/requirements/V0_1_ACCEPTANCE_CRITERIA.md` is complete as an implementation input: it separates observable product/domain acceptance from live engine validation and incorporates T4/T5 placement, physical identity and T7 asset-text mechanisms. T8/T10-dependent behavior remains blocked on those named spikes. It does not claim implementation acceptance for the production adapter or final map bindings.
+- `docs/requirements/V0_1_ACCEPTANCE_CRITERIA.md` is complete as an implementation input: it separates observable product/domain acceptance from live engine validation and incorporates T4/T5 placement, physical identity, T7 asset-text and T8 arrival mechanisms. T10-dependent behavior remains blocked on its named spike. It does not claim implementation acceptance for the production adapters or final map bindings.
 - Exact vanilla map targets for the two curated locations are still unselected/unverified in this repository and must be chosen on the development PC.
-- No live Build 42 behavior was validated by the Dead Air design work itself. The separately completed T1/T2/T3/T4/T5/T7/T9 results are authoritative for persistence, enumeration, categorisation, placement, physical identity, asset text/readers and network transport; T8/T10 remain authoritative for their respective open engine questions.
+- No live Build 42 behavior was validated by the Dead Air design work itself. The separately completed T1/T2/T3/T4/T5/T7/T8/T9 results are authoritative for persistence, enumeration, categorisation, placement, physical identity, asset text/readers, curated arrival and network transport; T10 remains authoritative for its open engine question.
 
 ## Immediate work
 
@@ -88,7 +89,7 @@ Before implementation architecture is signed off:
 2. choose and verify the two exact curated vanilla story locations on the development PC before location bindings are committed;
 3. implement physical identity as a mod-owned per-instance token with separate availability/conflict state; never infer loss from the original placement container alone;
 4. update decisions from each later observed spike result;
-5. use T7's explicit hybrid asset boundary, and run T8/T10 before expanding location/UI assumptions; T6 only matters if retrofit is revived.
+5. implement T8's bounded/debounced sticky arrival adapter and use T7's explicit hybrid asset boundary; run T10 before expanding UI assumptions. T6 only matters if retrofit is revived.
 
 Morning product to-do before implementing Dead Air entry selection: decide whether a durably placed but undiscovered D1 that later becomes `lost` may activate D2 as the narrative entry opportunity. T4 deliberately does not make that story decision.
 

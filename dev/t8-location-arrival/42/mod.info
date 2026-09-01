@@ -1,0 +1,6 @@
+name=Conspiracy-Files T8 Location Arrival Probe
+id=ConspiracyFiles_T8_Probe
+author=Conspiracy-Files development
+modversion=0.0.1
+versionMin=42.0.0
+description=Disposable Build 42 building, room, floor, basement, radius, geometry, and zone arrival probe. Development use only.

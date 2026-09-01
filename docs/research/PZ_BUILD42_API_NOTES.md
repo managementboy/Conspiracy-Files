@@ -106,7 +106,7 @@ Complete on stable 42.20.4. Custom names and item ModData round-tripped on all n
 
 ### T8 — Building/room/non-building arrival detection
 
-Test multi-floor and basement cases plus a non-building landmark.
+Complete on stable 42.20.4 with explicit reload/reference limitations. Scripted `IsoPlayer:teleportTo` movement emitted zero `OnPlayerMove` callbacks. Sampling current-square state every 15 `OnTick` callbacks and requiring two stable samples confirmed reached exact-room, whole-building, floor, basement, radius, rectangle and installed-zone bindings in 248–344 ms. Adjacent, wrong-floor and boundary negatives did not confirm, and leave/re-entry did not duplicate sticky confirmations. Late scripted teleports became unreliable, so delayed-reference ordering and reload-inside remain production-adapter tests. See `T8_LOCATION_ARRIVAL.md`.
 
 ### T10 — Cooperative Inspect context-menu integration
 
