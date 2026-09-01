@@ -1,0 +1,10 @@
+VERSION = 1,
+
+mods
+{
+    mod = ConspiracyFiles_T10_Probe,
+}
+
+maps
+{
+}

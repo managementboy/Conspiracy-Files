@@ -82,7 +82,7 @@ Verified live isolated single-player findings on the same exact Build 42.20.4 in
 
 The documented `524288`-byte internal block constant is not a persistence limit and was not used to derive the project budget.
 
-## Remaining spikes
+## Spike results and remaining work
 
 ### T4 — Exact-once deferred placement
 
@@ -110,6 +110,17 @@ Complete on stable 42.20.4 with explicit reload/reference limitations. Scripted 
 
 ### T10 — Cooperative Inspect context-menu integration
 
-Add/remove an `Inspect` entry without replacing vanilla or other-mod handlers.
+Complete on stable 42.20.4 through the P4-R44 manual-GUI route. Repeated player
+inventory menus preserved vanilla actions and a second additive listener while
+adding exactly one privately keyed Inspect and Mark action. Inspect activated
+once; Mark emitted one intent/evidence marker and remained disabled after a real
+reload. Mixed, ambiguous, hidden, invalid and unowned selections behaved
+conservatively, and injected faults were contained without freezing/crashing.
+
+The Ground/loot inventory pane is the supported dropped-item surface. Direct
+right-click on the dropped photo fired `OnFillWorldObjectContextMenu` with zero
+inventory subjects, so production must not depend on a direct-world Inspect
+action. Controller activation was unavailable; installed-source/static
+preflight is the limit. See `T10_COOPERATIVE_INSPECT.md`.
 
 Use `SPIKE_TEMPLATE.md` for every result.

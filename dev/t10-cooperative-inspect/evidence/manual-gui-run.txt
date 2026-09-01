@@ -1,0 +1,85 @@
+T10 MANUAL GUI RUN — 2026-09-01
+
+Environment
+- Project Zomboid stable 42.20.4, revision b0bbce05d5, pzBullet 1.0.0.28.
+- Windows 11 build 26200; single-player disposable Sandbox save.
+- Save: T10_cooperative_inspect_manual.
+- Active mod count: 1; only ConspiracyFiles_T10_Probe.
+- Input: project owner using ordinary mouse/keyboard only.
+- Controller unavailable; controller activation not tested.
+- Security alert: none.
+
+Owner-performed manual actions and observations
+1. Launched PZ, continued the prepared save, entered the world, unpaused, and
+   observed all six inventory cases plus the dropped photo.
+2. Opened the revealed-note menu repeatedly. Each menu retained ordinary
+   vanilla actions and exactly one T10 Companion Action, Inspect, and Mark
+   Interesting. Clicked Inspect once; the game remained responsive.
+3. Actual same-type grouping was unavailable because custom-named Notes rendered
+   as separate rows. The owner instead multi-selected both valid Notes. The live
+   menu retained vanilla/companion actions, showed one disabled ambiguity hint,
+   and showed no Mark action.
+4. Multi-selected one valid Note plus the invalid Paperclip. The menu retained
+   vanilla/companion actions and showed exactly one Inspect and one Mark action.
+5. Right-clicked the hidden Note and invalid Paperclip separately. Both retained
+   vanilla/companion actions and exposed no Conspiracy-Files action.
+6. Right-clicked the B-37 key and activated Mark Interesting once. The next menu
+   showed Mark disabled. Saved/returned, reloaded the same save, and observed
+   Mark still disabled.
+7. Right-clicked the injected-fault Letter and activated Inspect twice (the
+   second click was an owner confirmation beyond the requested single click).
+   Both errors were contained; the game/inventory remained responsive. PZ showed
+   one ERROR indicator and the probe logged two BOUNDARY_ERROR records, one per
+   activation, with no DOMAIN_INSPECT for the fault item.
+8. Right-clicked the dropped Photo in the Ground inventory pane. The menu kept
+   vanilla/companion actions, enabled Inspect, and disabled Mark as unowned.
+9. Right-clicked the photo sprite directly in the world. The live world callback
+   received zero inventory subjects, preserved Grab / Extended 3D Placement /
+   Sit on ground / Walk to, and added no probe action.
+10. Closed Project Zomboid normally.
+
+Selected authoritative log facts
+- ENVIRONMENT: save=T10_cooperative_inspect_manual; activeModCount=1.
+- Repeated revealed-note menus: preExisting=8; postOptions=10; one private
+  Inspect and one private Mark were added on each fresh menu.
+- DOMAIN_INSPECT: asset=dead-air:asset:revealed-note; calls=1.
+- Mixed valid/invalid: invalidAlsoSelected=1; one Inspect and one Mark.
+- Two valid subjects: MENU_AMBIGUOUS valid=2 added=true.
+- DOMAIN_MARK: asset=dead-air:asset:key-b37; intentCalls=1;
+  evidenceCreated=true.
+- Reload: CASES_READY markedPersisted=true; subsequent key menu marked=true.
+- Fault: two BOUNDARY_ERROR records; faultLogs=1 then faultLogs=2; no fault-item
+  DOMAIN_INSPECT.
+- Ground pane: source=inventory; owned=false; Inspect enabled; Mark disabled;
+  seven pre-existing options preserved.
+- Direct world: source=world; subjects=0; invalid=0; four pre-existing vanilla
+  options preserved.
+
+Probe-only reload defect and correction
+- The reload produced a second intentionally-invalid Paperclip and a second
+  world Photo. This was fixture setup behavior, not an action/menu duplication:
+  the invalid case could not be rediscovered by its deliberately malformed
+  cfAssetId, and the world Photo was always recreated.
+- The committed probe separates cfT10CaseId from production-shaped validation
+  fields and reuses existing inventory/world cases. This correction is covered
+  by Lua 5.1 parse/static review but was not rerun live after cleanup.
+
+Restoration and archive
+- Archive: C:\Users\elkin.fricke\Zomboid\_pzstory_backups\T10_manual_gui_finalization_20260901
+- Archived: final disposable save (514 files), installed pure-Lua mod (3 files),
+  final console/log archive, and 14 owner screenshots.
+- Active disposable save path absent; active probe mod path absent; PZ process
+  count 0.
+- Restored SHA-256 hashes (all byte-for-byte matches):
+  latestSave.ini  DE54EEC0EFA7A7BF9810E9B22CA882D1C9DEF8CB3937283CF2B6DA5383084B29
+  options.ini     B726B45FB8150EB71CEC394EADE151A0502D658479A9E9F8F712573AB2935D06
+  debuglog.ini    3DBD2F68125D6B1912BEC0843DD47D6165589CDC2EA90D8613690D750E06AA70
+  mods/default.txt 601B865924C8456DFD1820B0237450F1906E2D4253D4FAF7FF4BA6B4A86CE850
+
+Security boundary
+- No helper/JNI/agent was compiled, run, copied, restored, or used.
+- No auto-continue harness was imported or run.
+- No quarantine/security setting was changed and no exclusion, bypass,
+  injection, synthetic input, or computer control was used.
+- The earlier runner.exe alert provenance remains unknown. The injected-helper
+  route is abandoned and prohibited.
