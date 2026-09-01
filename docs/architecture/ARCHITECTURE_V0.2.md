@@ -214,6 +214,12 @@ a pure-Lua logging probe only. The injected-helper route remains abandoned and
 prohibited; do not restore quarantined components, change security settings, add
 exclusions/bypasses or attempt alternate injection/synthetic input.
 
+P4-R48 creates no production/UI exception to that rule. It applies only to the
+external development harness and permits one ownership-checked XTEST action at
+the ordinary click-to-start gate for a non-T10 disposable run. Unattended T10/
+E08, context-menu, inventory, gameplay and acceptance interaction remain
+prohibited and are recorded as `NOT RUN`.
+
 ## 13. AI boundary
 
 ### Development-time AI

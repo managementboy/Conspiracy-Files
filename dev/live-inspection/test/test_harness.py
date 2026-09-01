@@ -141,6 +141,9 @@ class StaticPolicyTests(unittest.TestCase):
         self.assertNotIn("LIBGL_ALWAYS_SOFTWARE=1", text)
         self.assertNotIn("Xephyr", text)
         self.assertNotIn("runner.exe", text)
+        unattended = (ROOT / "lib/live_inspection/unattended.py").read_text()
+        self.assertNotIn("ButtonPress, 3", unattended)
+        self.assertNotIn("ButtonRelease, 3", unattended)
 
 
 if __name__ == "__main__":

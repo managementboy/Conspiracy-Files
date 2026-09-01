@@ -2,15 +2,15 @@
 
 `dev/live-inspection` is the repository-wide runner for disposable Build 42 map and runtime investigations. It separates reusable orchestration from declarative site facts, fails closed around saves, processes and renderers, and archives a sanitized evidence bundle after every owned run.
 
-It is development tooling, not production Conspiracy-Files code. It does not change vanilla game files, install Java/JNI helpers, inject into the process, alter security settings, or expose normal-play diagnostics. T10 reruns remain manual-GUI-only under P4-R44; this harness does not automate their UI actions.
+It is development tooling, not production Conspiracy-Files code. It does not change vanilla game files, install Java/JNI helpers, inject into the process, alter security settings, or expose normal-play diagnostics. T10 reruns remain manual-GUI-only under P4-R44. P4-R48 permits one narrowly verified ordinary startup-gate action for non-T10 runs; it does not permit T10, context-menu, inventory, gameplay or acceptance automation.
 
 ## Architecture
 
-The operator supplies a TOML profile. The Python runner validates the profile, renderer and machine state before mutation, owns a global file lock for the whole run, creates unique disposable save/mod paths, backs up protected controls with SHA-256 manifests, starts one owned launcher, advances through bounded log gates, and restores controls byte-for-byte during signal, error and normal cleanup. It never adopts, stops or cleans up a process it did not start.
+The operator supplies a TOML profile. The Python runner validates the profile, renderer and machine state before mutation, owns a global file lock for the whole run, creates unique disposable save/mod paths, backs up protected controls with SHA-256 manifests, starts one owned launcher, advances through bounded log gates, and restores controls byte-for-byte during signal, error and normal cleanup. It never adopts, stops or cleans up a process it did not start. A production profile may install one exact candidate payload beside the observer; a directory must be in a clean Git worktree and a ZIP must be checksum-pinned.
 
 The temporary pure-Lua probe loads only the generated profile adapter. Its core contains no site coordinates. It validates the exact save and sole active mod, teleports only the disposable character, waits for an unpaused loaded player square, scans in batches constrained by both count and elapsed milliseconds, emits structured `[CF-INSPECT]` records, requests a normal quit, and never calls `saveGame()` or mutates map objects or containers.
 
-Profiles define paths, the protected control set and disposable-source marker, sites with role/bounds/entry/levels/room hints, ordered lifecycle gates, time budgets, and whether explicitly requested multi-site operation is allowed. The [Dead Air P2/R2 adapter](profiles/dead-air-p2-r2.toml) migrates provisional inputs only. It is not an authoritative binding or new live evidence.
+Profiles define paths, the protected control set and disposable-source marker, acceptance criteria and interaction scope, payload identity, sites with role/bounds/entry/levels/room hints, ordered lifecycle gates, time budgets, and whether explicitly requested multi-site operation is allowed. The [Dead Air P2/R2 adapter](profiles/dead-air-p2-r2.toml) migrates provisional inputs only. The [production unattended example](profiles/dead-air-production-unattended.toml) uses environment-expanded machine paths and a repository-relative payload path; update its exact checksum whenever the candidate payload changes. Neither profile is new live evidence.
 
 ## Safety contract
 
@@ -22,6 +22,8 @@ A live run is refused unless the following are all true:
 4. The exclusive `/tmp/conspiracy-files-live-inspection.lock` is acquired.
 5. `/proc` contains no Project Zomboid binary, launcher, main-screen JVM marker, or other inspection launcher.
 6. Generated `CF_INSPECT_*` save and `CF_LiveInspection_*` mod paths do not exist.
+
+For `payload.mode="production"`, the runner additionally requires an exact lowercase SHA-256 and expected mod ID. It rejects dirty Git directory candidates, ZIP traversal/symlinks, multiple or missing Build 42 mod roots, identity drift and checksum drift. The active set is exactly the production mod plus the generated observer. Evidence records the candidate path, tree/package checksum, source commit when Git-backed, mod ID and temporary install identity.
 
 The marker is deliberate operator authorization that a save is already disposable. Create it only in a save reserved as a clone source. Never add it to a real play save.
 
@@ -39,7 +41,13 @@ No `LIBGL_ALWAYS_SOFTWARE=1` assignment exists on the normal path; the runner re
 
 The reusable timing benchmark is gate elapsed time plus the dual-bounded Lua scan (80 squares and 2 ms per tick). A real-GPU end-to-end benchmark compares menu-to-player-ready, chunk-stable and scan-complete timing from clean boots. It is deferred until no other PZ task is active; this implementation claims no new live result.
 
-Use the normal graphical session and move PZ to a dedicated workspace with ordinary desktop controls. The harness avoids synthetic input and does not rearrange the session. `showSurvivalGuide=false` and `focusloss=false` are temporary, exactly restored controls. Click-to-start and unexpected Survival Guide/modal dismissal are bounded manual gates; the Lua streaming clock resets while paused or while the player square is unavailable.
+Use the normal graphical session and move PZ to a dedicated workspace with ordinary desktop controls. The harness does not rearrange the session. `showSurvivalGuide=false` and `focusloss=false` are temporary, exactly restored controls. Manual profiles retain manual click/modal gates. An unattended profile may change only `click-to-start` to `action="startup-gate"`; its player-ready check is observation or screenshot only. The Lua streaming clock resets while paused or while the player square is unavailable.
+
+### Unattended startup boundary
+
+An unattended profile must declare `interaction_scope=["startup-gate"]`, a non-T10 criterion list, the exact click gate pattern `game loading took`, `max_actions=1`, and either `left-click` or the allowlisted `Return`/`space` key. At the matched gate the runner requires exactly one mapped title-matching window whose `_NET_WM_PID` is in the harness-owned launcher process group on the current `DISPLAY`. The signature may be at most 30 seconds old. It focuses that window, emits one press/release pair through the already-installed Python Xlib/XTEST support, and writes `unattended-startup-input.json`.
+
+Every unattended bundle writes `criteria-disposition.json` with T10 and CF-V01-E08 as `NOT RUN`. A profile that requests T10/E08, right-click, context menu, inventory/menu, gameplay or acceptance interaction is refused before save, mod or control mutation; the refused run still retains that disposition and a cleanup manifest. There is no retry input budget.
 
 ## Operator workflow
 
@@ -57,13 +65,24 @@ Use one site for a clean boot. Multi-site mode requires both profile permission 
 dev/live-inspection/bin/cf-live-inspect run dev/live-inspection/profiles/dead-air-p2-r2.toml --site P2 --site R2
 ```
 
-Prefer clean boots for map, access and lifecycle conclusions. Multi-site mode is only for questions unaffected by teleport/streaming history. `--non-interactive` fails at manual gates; it never bypasses click-to-start or a modal.
+Prefer clean boots for map, access and lifecycle conclusions. Multi-site mode is only for questions unaffected by teleport/streaming history. `--non-interactive` fails at manual gates. With a valid unattended profile it can cross only the ordinary startup gate; it never dismisses a modal or performs another interaction.
+
+For the checked-in production example, export machine-local values without editing the profile:
+
+```bash
+export PZ_SOURCE_SAVE=/absolute/path/to/Zomboid/Saves/Sandbox/disposable-source
+export PZ_USER_ROOT=/absolute/path/to/Zomboid
+export PZ_LAUNCHER=/absolute/path/to/projectzomboid.sh
+dev/live-inspection/bin/cf-live-inspect run dev/live-inspection/profiles/dead-air-production-unattended.toml --site P2 --non-interactive
+```
+
+Recompute a directory candidate checksum with `PYTHONPATH=dev/live-inspection/lib python3 -c 'from pathlib import Path; from live_inspection.payload import tree_checksum; print(tree_checksum(Path("mod")))'`. Commit the candidate first: a dirty worktree is intentionally refused.
 
 Timeouts capture the active window (normally the dedicated PZ window) plus gate/attempt/recent-log JSON, avoiding a whole-desktop capture. Retries repeat observation only; they never relaunch or recreate state. A failed assertion cannot satisfy the configured `RUN_COMPLETE status=PASS` gate.
 
 ## Evidence bundle
 
-Each unique bundle contains `manifest.json` with status/sites/renderer/cleanup/file hashes, renderer diagnostics, sanitized launcher/console output, filtered structured events, gate/timeout screenshots and sanitized diagnostics, the exact pre-run controls and manifest, and archived disposable save/mod.
+Each unique bundle contains `manifest.json` with status/sites/renderer/cleanup/file hashes, renderer diagnostics, sanitized launcher/console output, filtered structured events, gate/timeout screenshots and sanitized diagnostics, the exact pre-run controls and manifest, criteria disposition, any startup-input evidence, production-payload provenance, and archived disposable save/probe/payload.
 
 Home paths and common credential/header-shaped secrets are redacted from exportable text, and the recovery journal stores generated basenames rather than home paths. Raw console output stays outside Git. `control-before/` and `archive/` are explicitly marked private in the manifest because exact restoration and a disposable save cannot be content-sanitized; never check them in. Review `probe-events.txt` before checking evidence in; physical observations do not decide story suitability.
 
@@ -71,7 +90,7 @@ Home paths and common credential/header-shaped secrets are redacted from exporta
 
 Copy the example TOML and keep site facts and expected inputs in profiles. Keep reusable core free of story coordinates and outcomes. Match structured events where possible and native text only at unavoidable lifecycle boundaries.
 
-If an investigation needs more read-only facts, add a profile-controlled capability, retain count/time bounds, wrap engine calls with `pcall`, and add an offline contract test. Do not add object/container mutation, vanilla-file replacement, automatic T10 interaction, injected helpers, or security workarounds.
+If an investigation needs more read-only facts, add a profile-controlled capability, retain count/time bounds, wrap engine calls with `pcall`, and add an offline contract test. Criterion-specific profiles declare their criteria and payload without adding absolute source paths to reusable code. Do not add object/container mutation, vanilla-file replacement, automatic T10 interaction, right-click/context-menu/gameplay automation, injected helpers, or security workarounds.
 
 ## Offline verification
 
@@ -81,7 +100,7 @@ Offline tests never launch PZ or touch its user root:
 dev/live-inspection/test/run.sh
 ```
 
-They cover profile validation, real-save marker enforcement, exact control round trips (including absent files), exclusive locking, renderer classification, gate/process diagnostics, sanitization, Lua/Python parsing, and static rejection of embedded P2/R2 coordinates, Xephyr, forced software mode, and the prohibited helper name in reusable core.
+They cover profile validation, real-save marker enforcement, exact control round trips (including absent files), exclusive locking, renderer classification, gate/process diagnostics, PID/window ownership filtering, one-shot/stale-signature input bounds, T10/E08 and interaction-scope refusal, production payload validation/install/recovery cleanup, sanitization, Lua/Python parsing, and static rejection of embedded P2/R2 coordinates, Xephyr, forced software mode, right-click automation, and the prohibited helper name in reusable core.
 
 ## Deferred live validation
 

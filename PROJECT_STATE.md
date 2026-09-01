@@ -81,7 +81,7 @@ The first specification over-committed to unproven Build 42 capabilities. The en
 
 ## Development tooling
 
-- `dev/live-inspection/` is the reusable, hardware-renderer-enforcing live investigation harness, committed at `5451964`. Its 12 offline tests pass. The normal-desktop GPU path still needs one end-to-end live validation before it replaces all spike-specific runners operationally.
+- `dev/live-inspection/` is the reusable, hardware-renderer-enforcing live investigation harness. Its offline contract suite now includes P4-R48's one-shot, owned-window unattended startup boundary for non-T10 work and exact temporary production-payload staging/restoration. P4-R44 remains manual-only; unattended bundles record T10/E08 as `NOT RUN`. The normal-desktop GPU/XTEST path still needs one end-to-end live validation before it replaces spike-specific runners operationally. See `docs/testing/LIVE_INSPECTION_UNATTENDED_HANDOFF.md`.
 - `dev/location-binding/` preserves the audited one-off CF-V01-E01 probe and runner that produced the accepted P2/R2 evidence. It is development evidence, not part of the production payload.
 - `tools/release_pipeline.py` implements ADR-0003's offline deterministic gate. It validates the exact production tree and metadata, runs Lua 5.1 tests/syntax checks, rejects forbidden release content, creates GitHub and Workshop wrappers from one payload, and proves reproducibility by comparing two complete SHA-256 manifests. Cross-device smoke and promotion remain manual gates.
 

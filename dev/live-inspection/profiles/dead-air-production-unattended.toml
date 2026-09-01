@@ -1,0 +1,99 @@
+[run]
+profile_id = "dead-air-production-unattended"
+probe_id = "production-shell-observation"
+allow_multi_site = false
+
+[paths]
+# Set these per machine. The checked-in profile contains no user-specific path.
+source_save = "$PZ_SOURCE_SAVE"
+pz_user_root = "$PZ_USER_ROOT"
+launcher = "$PZ_LAUNCHER"
+evidence_root = "../../../tmp/live-inspection"
+
+[safety]
+source_marker = ".cf-live-inspection-source"
+controls = ["latestSave.ini", "mods/default.txt", "options.ini", "debuglog.ini"]
+
+[acceptance]
+criteria = ["CF-V01-E09", "CF-V01-E12", "CF-V01-E13"]
+interaction_scope = ["startup-gate"]
+
+[unattended_startup]
+enabled = true
+action = "left-click"
+max_actions = 1
+signature_max_age_seconds = 15
+window_title_pattern = "(?i)^project zomboid(?:\\s.*)?$"
+
+[payload]
+mode = "production"
+source = "../../../mod"
+expected_sha256 = "fed8a31f0d045ec5e1a1ab8ebd41f42dfc4a54413f82b20b03d003ac4791c30e"
+expected_mod_id = "ConspiracyFiles"
+
+[time_budgets]
+normal_exit_seconds = 45
+
+[[sites]]
+id = "P2"
+role = "police-property"
+bounds = [13206, 3073, 13238, 3101]
+entry_point = [13208.5, 3088.5, 0]
+levels = [0, 1]
+preferred_rooms = ["policeoffice", "policegunstorage", "policelocker"]
+
+[[gates]]
+name = "menu"
+pattern = "\\[CF-INSPECT\\].*kind=MENU_READY"
+timeout_seconds = 90
+retries = 1
+action = "screenshot"
+
+[[gates]]
+name = "world-loading"
+pattern = "\\[CF-INSPECT\\].*kind=WORLD_LOADING"
+timeout_seconds = 90
+retries = 1
+action = "wait"
+
+[[gates]]
+name = "click-to-start"
+pattern = "game loading took"
+timeout_seconds = 360
+retries = 0
+action = "startup-gate"
+
+[[gates]]
+name = "player-ready-modal-check"
+pattern = "\\[CF-INSPECT\\].*kind=PLAYER_READY"
+timeout_seconds = 180
+retries = 0
+action = "screenshot"
+
+[[gates]]
+name = "chunk-streaming"
+pattern = "\\[CF-INSPECT\\].*kind=CHUNK_STABLE"
+timeout_seconds = 180
+retries = 2
+action = "screenshot"
+
+[[gates]]
+name = "scan-completion"
+pattern = "\\[CF-INSPECT\\].*kind=SCAN_COMPLETE"
+timeout_seconds = 480
+retries = 1
+action = "screenshot"
+
+[[gates]]
+name = "run-completion"
+pattern = "\\[CF-INSPECT\\].*kind=RUN_COMPLETE.*status=PASS"
+timeout_seconds = 60
+retries = 0
+action = "wait"
+
+[[gates]]
+name = "normal-exit"
+pattern = "\\[CF-INSPECT\\].*kind=NORMAL_EXIT_REQUESTED.*status=PASS"
+timeout_seconds = 30
+retries = 0
+action = "wait"

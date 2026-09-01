@@ -14,11 +14,13 @@ import uuid
 from pathlib import Path
 
 from . import __version__
-from .config import load_profile
+from .config import load_profile, unattended_refusal_reason
 from .evidence import finalize_manifest, sanitize_line, write_sanitized
 from .model import Gate, HarnessError, Profile, Site
+from .payload import install_production_payload
 from .safety import ControlTransaction, ExclusiveRunLock, assert_save_safety, matching_pz_processes, parse_renderer, recover_interrupted_runs
 from .state import LogFollower, wait_for_gate
+from .unattended import StartupGateController, evidence_dict
 
 LOCK_PATH = Path("/tmp/conspiracy-files-live-inspection.lock")
 PREFIX = "[cf-live-inspection]"
@@ -58,6 +60,13 @@ def check_dependencies(profile: Profile, live: bool) -> list[str]:
     missing = [name for name in names if not (Path(name).is_file() if "/" in name else shutil.which(name))]
     if missing:
         raise HarnessError("missing dependency/dependencies: " + ", ".join(missing))
+    if profile.unattended_startup.enabled:
+        try:
+            import Xlib  # noqa: F401
+            from Xlib.ext import xtest  # noqa: F401
+        except ImportError as exc:
+            raise HarnessError("missing dependency: python-xlib with XTEST") from exc
+        names.append("python-xlib/XTEST")
     return names
 
 
@@ -76,8 +85,10 @@ def lua_string(value: str) -> str:
     return '"' + value.replace("\\", "\\\\").replace('"', '\\"').replace("\n", "\\n") + '"'
 
 
-def render_lua_profile(profile: Profile, sites: tuple[Site, ...], save_name: str, mod_id: str) -> str:
-    lines = ["return {", f"  runId = {lua_string(save_name)},", f"  saveName = {lua_string(save_name)},", f"  modId = {lua_string(mod_id)},", "  sites = {"]
+def render_lua_profile(profile: Profile, sites: tuple[Site, ...], save_name: str, mod_id: str, active_mod_ids: tuple[str, ...] | None = None) -> str:
+    active_mod_ids = active_mod_ids or (mod_id,)
+    expected = ", ".join(lua_string(value) for value in active_mod_ids)
+    lines = ["return {", f"  runId = {lua_string(save_name)},", f"  saveName = {lua_string(save_name)},", f"  modId = {lua_string(mod_id)},", f"  activeModIds = {{ {expected} }},", "  sites = {"]
     for site in sites:
         x1, y1, x2, y2 = site.bounds
         point = site.entry_point or ((x1 + x2) / 2, (y1 + y2) / 2, float(site.levels[0]))
@@ -95,8 +106,9 @@ def render_lua_profile(profile: Profile, sites: tuple[Site, ...], save_name: str
     return "\n".join(lines)
 
 
-def mod_list(mod_id: str) -> str:
-    return f"VERSION = 1,\n\nmods\n{{\n    mod = {mod_id},\n}}\n\nmaps\n{{\n}}\n"
+def mod_list(*mod_ids: str) -> str:
+    entries = "\n".join(f"    mod = {mod_id}," for mod_id in mod_ids)
+    return f"VERSION = 1,\n\nmods\n{{\n{entries}\n}}\n\nmaps\n{{\n}}\n"
 
 
 def replace_option(path: Path, key: str, value: str) -> None:
@@ -130,6 +142,8 @@ class LiveRun:
         self.bundle = profile.evidence_root / self.run_token
         self.destination_save = profile.pz_user_root / "Saves" / "Sandbox" / self.save_name
         self.installed_mod = profile.pz_user_root / "mods" / self.mod_id
+        self.installed_payload = profile.pz_user_root / "mods" / f"CF_Payload_{self.run_token.replace('-', '_')}"
+        self.installed_payload_staging = self.installed_payload.with_name(self.installed_payload.name + ".staging")
         self.controls: ControlTransaction | None = None
         self.process: subprocess.Popen | None = None
         self.launcher_stdout = None
@@ -138,12 +152,15 @@ class LiveRun:
         self.cleanup_done = False
         self.renderer: dict = {}
         self.bundle_created = False
+        self.startup_controller = StartupGateController(profile.unattended_startup)
 
     def write_state(self, status: str) -> None:
         self.bundle.mkdir(parents=True, exist_ok=True)
         (self.bundle / "run-state.json").write_text(json.dumps({
             "status": status, "run_token": self.run_token,
             "save_name": self.destination_save.name, "mod_name": self.installed_mod.name,
+            "payload_name": self.installed_payload.name if self.profile.payload.mode == "production" else None,
+            "payload_staging_name": self.installed_payload_staging.name if self.profile.payload.mode == "production" else None,
         }, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 
     def cleanup(self) -> None:
@@ -176,7 +193,7 @@ class LiveRun:
                 stream.close()
         archive = self.bundle / "archive"
         archive.mkdir(parents=True, exist_ok=True)
-        for source, name in ((self.destination_save, "save"), (self.installed_mod, "mod")):
+        for source, name in ((self.destination_save, "save"), (self.installed_mod, "probe-mod"), (self.installed_payload, "production-payload"), (self.installed_payload_staging, "production-payload-staging")):
             if source.exists():
                 try:
                     shutil.move(str(source), archive / name)
@@ -212,6 +229,15 @@ class LiveRun:
         self.bundle_created = True
         (self.bundle / "screenshots").mkdir()
         self.write_state("PREPARING")
+        if self.profile.unattended_startup.enabled:
+            (self.bundle / "criteria-disposition.json").write_text(json.dumps({
+                "T10": "NOT RUN", "CF-V01-E08": "NOT RUN",
+                "reason": "P4-R44 manual-only governance; unattended authority is startup-gate only",
+                "requested": list(self.profile.criteria),
+            }, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+            refusal = unattended_refusal_reason(self.profile)
+            if refusal:
+                raise HarnessError(refusal)
         self.renderer, glx = renderer_diagnostics(self.allow_software)
         (self.bundle / "renderer-glxinfo.txt").write_text(glx, encoding="utf-8")
         assert_save_safety(self.profile)
@@ -219,7 +245,7 @@ class LiveRun:
         if processes:
             details = "; ".join(f"pid={pid} {cmd}" for pid, cmd in processes)
             raise HarnessError("refusing to race an existing Project Zomboid/inspection process: " + details)
-        if self.destination_save.exists() or self.installed_mod.exists():
+        if self.destination_save.exists() or self.installed_mod.exists() or self.installed_payload.exists():
             raise HarnessError("generated disposable save/mod path unexpectedly exists")
         self.controls = ControlTransaction(self.profile.pz_user_root, self.profile.controls, self.bundle / "control-before")
         self.controls.backup_exact()
@@ -232,8 +258,14 @@ class LiveRun:
         text = mod_info.read_text(encoding="utf-8").replace("__MOD_ID__", self.mod_id)
         mod_info.write_text(text, encoding="utf-8")
         generated = self.installed_mod / "common" / "media" / "lua" / "client" / "CFInspectionProfile.lua"
-        generated.write_text(render_lua_profile(self.profile, self.sites, self.save_name, self.mod_id), encoding="utf-8")
-        active_mods = mod_list(self.mod_id)
+        active_ids = [self.mod_id]
+        payload_evidence = None
+        if self.profile.payload.mode == "production":
+            payload_evidence = install_production_payload(self.profile.payload, self.installed_payload)
+            active_ids.insert(0, payload_evidence.mod_id)
+            (self.bundle / "production-payload.json").write_text(json.dumps(payload_evidence.__dict__, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+        generated.write_text(render_lua_profile(self.profile, self.sites, self.save_name, self.mod_id, tuple(active_ids)), encoding="utf-8")
+        active_mods = mod_list(*active_ids)
         (self.destination_save / "mods.txt").write_text(active_mods, encoding="utf-8")
         (self.profile.pz_user_root / "mods" / "default.txt").write_text(active_mods, encoding="utf-8")
         (self.profile.pz_user_root / "latestSave.ini").write_text(f"{self.save_name}\nSandbox\n", encoding="utf-8")
@@ -273,6 +305,18 @@ class LiveRun:
                     if self.non_interactive or not sys.stdin.isatty():
                         raise HarnessError(f"gate {gate.name} requires bounded manual operator input")
                     input(f"{PREFIX} Complete the visible {gate.name} action, then press Enter: ")
+                elif gate.action == "startup-gate":
+                    if gate.name != "click-to-start" or not self.process:
+                        raise HarnessError("startup-gate action is valid only for the owned click-to-start gate")
+                    evidence = self.startup_controller.activate(
+                        launcher_pid=self.process.pid,
+                        signature=result.matched_line,
+                        signature_seen_at=time.monotonic(),
+                    )
+                    (self.bundle / "unattended-startup-input.json").write_text(
+                        json.dumps(evidence_dict(evidence), indent=2, sort_keys=True) + "\n", encoding="utf-8"
+                    )
+                    log("ordinary startup gate received one bounded harness-owned action")
         if not self.process:
             raise HarnessError("launcher ownership lost")
         try:
@@ -304,6 +348,10 @@ def main(argv: list[str] | None = None) -> int:
         profile = load_profile(args.profile)
         sites = select_sites(profile, args.site)
         check_dependencies(profile, live=args.command == "run")
+        if args.command != "run":
+            refusal = unattended_refusal_reason(profile)
+            if refusal:
+                raise HarnessError(refusal)
         with ExclusiveRunLock(LOCK_PATH):
             processes = matching_pz_processes()
             if processes:

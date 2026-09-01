@@ -32,12 +32,16 @@ local function saveName()
     return tostring(currentSave):match("([^\\/]+)$") or ""
 end
 
-local function onlyProbeActive()
+local function onlyExpectedModsActive()
     local ok, mods = pcall(getActivatedMods)
     if not ok or not mods then return false, -1 end
     local countOk, count = pcall(function() return mods:size() end)
-    local memberOk, member = pcall(function() return mods:contains(Profile.modId) end)
-    return countOk and memberOk and count == 1 and member == true, countOk and count or -1
+    if not countOk or count ~= #Profile.activeModIds then return false, countOk and count or -1 end
+    for i = 1, #Profile.activeModIds do
+        local memberOk, member = pcall(function() return mods:contains(Profile.activeModIds[i]) end)
+        if not memberOk or member ~= true then return false, count end
+    end
+    return true, count
 end
 
 local function spriteName(object)
@@ -177,9 +181,9 @@ local function runScanBatch()
 end
 
 local function initialize()
-    local valid, count = onlyProbeActive()
-    if not valid then error("probe must be the only active mod; count=" .. tostring(count)) end
-    event("PLAYER_READY", { "save=" .. saveName(), "activeModCount=" .. count, "gameVersion=" .. safe(getGameVersion and getGameVersion()) })
+    local valid, count = onlyExpectedModsActive()
+    if not valid then error("active mods do not exactly match the profile; count=" .. tostring(count)) end
+    event("PLAYER_READY", { "save=" .. saveName(), "activeModCount=" .. count, "activeMods=" .. safe(table.concat(Profile.activeModIds, ",")), "gameVersion=" .. safe(getGameVersion and getGameVersion()) })
     siteIndex, current, tick = 1, Profile.sites[1], 0
     logSiteDefinition(current); teleport(current); initialized = true
 end
