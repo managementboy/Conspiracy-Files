@@ -4,6 +4,8 @@
 
 **Base commit:** `1be30c45da8f8b481d508c4f7f1acead2ff6c778`
 
+**Integrated on main:** `7ec2f97` (2026-09-01)
+
 **Runtime target:** Project Zomboid Build 42.20.x; the relevant spike evidence
 was observed on 42.20.4. Production acceptance must rerun on the supported live
 build.

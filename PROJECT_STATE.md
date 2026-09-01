@@ -1,6 +1,6 @@
 # Conspiracy-Files — Project State
 
-Status: **Engineering de-risk / v0.1 domain implementation**. The PZ-independent v0.1 plain-Lua domain core was accepted and merged in PR #15; live Build 42 integration has not been accepted.
+Status: **v0.1 vertical-slice integration**. The approved Dead Air content, PZ-independent domain core, exact P2/R2 bindings and offline production integration shell are implemented. End-to-end live Build 42 integration has not been accepted.
 Target: Project Zomboid Build 42; T1/T2/T3/T4/T5/T7/T8/T9/T10 verified stable Build **42.20.4**, revision **b0bbce05d5**, Steam build ID **24909800**, with the limitations recorded in their reports. Other capability claims remain subject to their named spikes/research.
 
 ## Source of truth order
@@ -63,8 +63,14 @@ The first specification over-committed to unproven Build 42 capabilities. The en
 ## Accepted offline implementation
 
 - **v0.1 plain-Lua domain core:** accepted and merged in PR #15 at `c9d845e21a0a4298a83ce8b92204e66b6e59d073`. It implements the static Dead Air registries, private canonical ThreadState API, authored and Mark Interesting Evidence, append-only journal events, deterministic no-AI rendering, derived Organisation/Location labels, idempotent domain transitions, D5/D6 contradiction handling, B-37 recontextualisation, major-discovery evaluation, staged P4-R32 validation, the conservative P4-R17 size gate and static content resolution.
-- All 16 acceptance criteria classified `plain-Lua automated test` pass under PUC Lua 5.1.5. The suite reports 18 passing tests total: the 16 domain criteria, the traceability guard and a static CF-V01-E01 binding/evidence drift guard. See `docs/testing/V0_1_DOMAIN_CORE_TRACEABILITY.md`.
+- All 16 acceptance criteria classified `plain-Lua automated test` pass under PUC Lua 5.1.5. The combined repository suite reports 26 passing tests: 16 domain criteria, one traceability guard, one static CF-V01-E01 binding/evidence drift guard and eight fake-backed production-shell tests. See `docs/testing/V0_1_DOMAIN_CORE_TRACEABILITY.md` and `docs/testing/V0_1_PRODUCTION_SHELL_HANDOFF.md`.
 - This acceptance is limited to the PZ-independent domain layer. It does not accept ModData adapter behavior, physical placement/commit sequencing, live item identity, reader/UI integration, location-arrival integration or other production-adapter behavior. CF-V01-E01 separately accepts the exact static map bindings on Build 42.20.4.
+- **v0.1 production integration shell:** integrated on `main` at `7ec2f97`. It supplies the Build 42 package root and bootstrap, fail-closed multiplayer decision, additive lifecycle hooks, bounded scheduler, per-subsystem error budgets and staged Global ModData persistence adapter. Its eight offline tests pass, but CF-V01-E09/E11/E12/E13 remain live acceptance work; the shell does not yet implement placement, physical identity, reader/UI, arrival or notebook/evidence-list surfaces.
+
+## Development tooling
+
+- `dev/live-inspection/` is the reusable, hardware-renderer-enforcing live investigation harness, committed at `5451964`. Its 12 offline tests pass. The normal-desktop GPU path still needs one end-to-end live validation before it replaces all spike-specific runners operationally.
+- `dev/location-binding/` preserves the audited one-off CF-V01-E01 probe and runner that produced the accepted P2/R2 evidence. It is development evidence, not part of the production payload.
 
 ## v0.1 vertical slice
 
@@ -90,13 +96,14 @@ One built-in hand-authored thread:
 
 ## Immediate work
 
-Before implementation architecture is signed off:
+The next finishable milestone is the integrated, playable Dead Air vertical slice:
 
-1. treat Engineering Gate A (T1/T9/T2/T3/T4/T5) as complete and integrate the accepted domain core only through adapter mechanisms proven by the named spikes, without expanding into content packs/graph systems;
-2. consume the accepted P2/R2 bindings from `ConspiracyFiles.LocationBindings`; fail closed if exact building/container signatures no longer match, and do not substitute the rejected large-headquarters fallback silently;
-3. implement physical identity as a mod-owned per-instance token with separate availability/conflict state; never infer loss from the original placement container alone;
-4. update decisions from each later observed spike result;
-5. implement T8's bounded/debounced sticky arrival adapter and T7/T10's hybrid asset plus inventory-pane-only Inspect boundary. Direct-world-item right-click is not a supported dependency. T6 only matters if retrofit is revived.
+1. connect the production shell to `ConspiracyFiles.LocationBindings` and implement E02–E08: T4 placement, T5 physical identity, T7 asset text, T8 arrival and T10 inventory-pane Inspect/Mark behavior;
+2. implement the notebook journal, evidence list, in-fiction help page and one notebook keybind, then pass the new CF-V01-E14 live UI criterion;
+3. assign and implement E10's death/reload lifecycle boundary;
+4. run the live E09/E11/E12/E13 production-shell matrices plus the integrated E02–E08/E10/E14 matrices on the supported Build 42 line;
+5. validate the reusable live-inspection harness once on the hardware-rendered path, then use it for future live matrices;
+6. implement the deterministic release packager and cross-device prerelease smoke before any Workshop beta.
 
 P4-R40 resolves the former entry-selection to-do: if durably placed but undiscovered D1 becomes conclusively `unavailable` only after T5/P4-R37 reconciliation, D2 may activate once as the fallback introduction. Unloading, original-container absence, `unknown`, `untracked` and `conflict` do not qualify, and D1 never respawns.
 

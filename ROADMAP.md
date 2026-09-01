@@ -31,6 +31,18 @@ Goal: prove the intended feeling once, with the smallest end-to-end build.
 - generic mod-map categorisation;
 - broad procedural story generation.
 
+### Current delivery checkpoint
+
+- [x] Dead Air `dead-air-r1` content approved.
+- [x] Plain-Lua domain core accepted.
+- [x] Exact P2/R2 bindings accepted on Build 42.20.4.
+- [x] Build 42 production package/bootstrap, scheduler, error budget and persistence shell implemented with offline tests.
+- [ ] D1–D6 placement, physical identity, reader/Inspect and arrival adapters integrated end to end.
+- [ ] Notebook journal, evidence list, in-fiction help and the one normal-play notebook keybind implemented.
+- [ ] Death/reload lifecycle boundary assigned, implemented and tested.
+- [ ] Production shell and complete vertical slice pass their live Build 42 acceptance matrices.
+- [ ] Deterministic package pipeline and cross-device prerelease smoke pass.
+
 ## Engineering gate A — before v0.1 implementation is trusted
 Run six critical probes:
 1. [x] T1 ModData persistence/size limits — complete on Build 42.20.4; decisions incorporated.
@@ -85,7 +97,7 @@ The project may remain “never finished” as a creative philosophy, but every 
 
 Distribution follows P4-R46 / ADR-0003:
 
-1. verify the production Build 42 layout in the integration shell;
+1. live-verify the implemented production Build 42 layout and bootstrap;
 2. add a deterministic package/validation pipeline;
 3. publish versioned GitHub prerelease ZIPs for internal cross-device testing;
 4. use an unlisted/access-limited Workshop item only after another device installs and loads the same payload successfully;
