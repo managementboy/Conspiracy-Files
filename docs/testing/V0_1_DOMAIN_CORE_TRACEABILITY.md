@@ -17,8 +17,9 @@ The implementation is limited to the PZ-independent Dead Air domain core:
 - `Validator.lua` enforces the T1-safe scalar/table subset, no cycles/aliases/metatables, depth 64, the v0.1 schema, semantic journal-to-Evidence consistency and the 500 KB estimate ceiling.
 - `Renderer.lua` derives journal text and major classification from event kinds, stable IDs, immutable Evidence context and static definitions. Rendered prose is not persisted.
 - `Ids.lua` validates authored IDs and creates deterministic save-local Evidence/Journal IDs.
+- `LocationBindings.lua` contains only the static CF-V01-E01 result. Its separate regression test checks exact physical signatures against the accepted live evidence; it is not a PZ adapter or a substitute for the live matrix.
 
-There is deliberately no PZ event, ModData, item-token, map-binding, UI, network/AI, graph, content-pack, migration, retrofit or multiplayer implementation. The code records monotonic domain facts but does not choose T4's physical placement commit sequence.
+There is deliberately no PZ event, ModData, item-token, map-binding adapter, UI, network/AI, graph, content-pack, migration, retrofit or multiplayer implementation. Static map-binding data is now selected, but the code does not resolve live PZ objects or perform T4's physical placement commit sequence.
 
 ## Acceptance matrix
 
@@ -47,6 +48,10 @@ P4-R17 is enforced against a deterministic conservative estimate, not an asserte
 
 The estimate intentionally overstates many ordinary values. Only a live T1-style ModData test can measure the actual `global_mod_data.bin` delta; this domain gate exists to refuse obviously over-budget canonical state safely and consistently.
 
-## Open content gate
+## Content gate
 
-This implementation does not declare Dead Air canonical-shippable. The project-owner approval required by `docs/design/AI_PROVENANCE.md` and CF-V01-P03 remains open.
+The project owner approved Dead Air content revision `dead-air-r1` on 2026-09-01, satisfying CF-V01-P03. See `docs/reviews/DEAD_AIR_CONTENT_APPROVAL_2026-09-01.md`. This approval does not expand the accepted domain-core implementation into any live Project Zomboid integration behavior.
+
+## Location-binding drift guard
+
+The eighteenth suite test, `CF-V01-E01 selected live bindings remain exact and evidence-backed`, verifies `ConspiracyFiles.LocationBindings` against the selected structured records in `docs/research/CF_V01_E01_DEAD_AIR_LOCATION_BINDINGS.md`. The live P2/R2 matrix is the acceptance evidence; this plain-Lua test only prevents later configuration/documentation drift.

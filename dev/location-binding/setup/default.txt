@@ -1,0 +1,10 @@
+VERSION = 1,
+
+mods
+{
+    mod = ConspiracyFiles_LocationBinding_Probe,
+}
+
+maps
+{
+}

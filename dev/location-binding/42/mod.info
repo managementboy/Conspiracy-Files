@@ -1,0 +1,6 @@
+name=Conspiracy-Files Dead Air Location Binding Probe
+id=ConspiracyFiles_LocationBinding_Probe
+author=Conspiracy-Files development
+modversion=0.0.1
+versionMin=42.0.0
+description=Disposable read-only Build 42 inspection probe for the two Dead Air v0.1 curated location bindings.

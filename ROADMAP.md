@@ -46,6 +46,7 @@ A negative result is a valid result and must update the decision record.
 - [x] T7 asset text/name/page mutation — complete on Build 42.20.4; persistent custom names + ModData are the universal carrier, locked custom pages are a limited plain-text projection, and world-specific bodies use the custom Inspect reader.
 - [x] T8 building/room/non-building arrival detection — complete on Build 42.20.4; scripted teleports emitted no `OnPlayerMove`, while bounded 15-tick sampling with two stable samples correctly handled exact room/building/floor/basement/radius/rectangle/zone predicates, negatives and leave/re-entry. Use sticky idempotent confirmation; reload-inside and delayed-reference ordering remain production-adapter cases.
 - [x] T10 cooperative `Inspect` context-menu integration — complete on Build 42.20.4 through the manual-GUI route. Player and Ground/loot inventory panes preserve vanilla/foreign actions and provide privately keyed, activation-revalidated Inspect/Mark behavior. Direct world-object right-click did not receive dropped inventory subjects and is not supported.
+- [x] CF-V01-E01 Dead Air location bindings — complete on Build 42.20.4. P2 is the police property/records building and R2 is the relay communications/news building; all six document containers, exact whole-building arrival references, access objects and `1533.884`-tile separation are recorded in `docs/research/CF_V01_E01_DEAD_AIR_LOCATION_BINDINGS.md`.
 - T6 never-loaded chunk detection only if retrofit is revived.
 
 ## v1 — Core investigation experience
@@ -79,3 +80,13 @@ Provisional, only after v0.1 is fun and Gate A results are incorporated:
 
 ## Process rule
 The project may remain “never finished” as a creative philosophy, but every development milestone must have a finishable scope.
+
+## Distribution path
+
+Distribution follows P4-R46 / ADR-0003:
+
+1. verify the production Build 42 layout in the integration shell;
+2. add a deterministic package/validation pipeline;
+3. publish versioned GitHub prerelease ZIPs for internal cross-device testing;
+4. use an unlisted/access-limited Workshop item only after another device installs and loads the same payload successfully;
+5. publish publicly only after every v0.1 acceptance criterion passes.

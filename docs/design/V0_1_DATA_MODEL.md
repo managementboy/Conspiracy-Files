@@ -276,9 +276,14 @@ storyRequirement = "hand-curated vanilla police station with plausible property/
 
 ### Exact PZ binding
 
-An adapter-side binding to a real vanilla map target is required before implementation, but it is intentionally **not filled in here** because the development PC still has to select/verify the targets.
+CF-V01-E01 selected both adapter-side bindings on live Build 42.20.4. They are static implementation configuration in `ConspiracyFiles.LocationBindings`, not player save state:
 
-That future binding may use T8-approved exact room/building/floor/basement/radius/rectangle/zone predicates, depending on manual map inspection. It is static implementation configuration, not player save state.
+| Location | Arrival predicate | Document placements |
+|---|---|---|
+| `dead-air:location:relay-office` | whole R2 building resolved from `(13564,1596,0)` in `newsroom`; expected bounds `(13549,1572)`–`(13581,1604)`, z `0..3`, 26 rooms | D1/D3: communications shelves `(13555,1576,1)` / `(13556,1576,1)`; D4: communications desk `(13562,1579,1)` |
+| `dead-air:location:police-property` | whole P2 building resolved from `(13208,3088,0)` in `policeoffice`; expected bounds `(13206,3073)`–`(13238,3101)`, z `0..1`, 24 rooms | D2/D5/D6: police-office filing cabinets `(13207,3087,0)`, `(13208,3087,0)`, `(13209,3087,0)` |
+
+The adapter resolves the current `BuildingDef`/objects from those stable physical signatures and fails closed on mismatch; observed Java object IDs are diagnostic only. Arrival uses T8's whole-building predicate and stable-sample rules. Placement still uses T4's exact square/object/container reconciliation independently for each Asset. See `docs/research/CF_V01_E01_DEAD_AIR_LOCATION_BINDINGS.md`.
 
 ### Persisted location state
 
@@ -661,7 +666,7 @@ T1 validated these persistence constraints on stable Build 42.20.4, revision `b0
 Complete. Validated vanilla Lua Global ModData within the hard ≤500 KB/save budget and established P4-R32. The persistence adapter still owns the final conforming Lua/ModData encoding.
 
 ### T3 — location categorisation
-Does not gate the v0.1 story because locations are curated manually. Its checked-in candidate evidence prioritizes live inspection of P2 `(13206,3073)` and R2 `(13549,1572)` under P4-R41–P4-R43, but neither candidate is a final binding.
+Does not gate the v0.1 story because locations are curated manually. Its candidate matrix prioritized P2/R2; CF-V01-E01 subsequently accepted both as the exact bindings on Build 42.20.4 under P4-R41–P4-R43.
 
 ### T4 — exact-once placement
 Complete on Build 42.20.4. `LoadGridsquare` queues relevant curated bindings and `OnGameStart` catches already-loaded targets. The adapter scans the exact container, stages `placing`, creates/stamps a detached item, adds that exact instance, verifies one stamp and stages `placed`. One pre-existing target stamp repairs the ledger; terminal pre-placement target loss becomes `unavailable`; duplicates become `conflict`. Every transition stages and validates the full root under P4-R32/P4-R17. T5 corrects the post-placement rule: zero in the original container triggers wider identity reconciliation, not immediate `lost`.
@@ -696,9 +701,9 @@ The model deliberately stores the authored content independently of the eventual
 
 ## 20. Content provenance
 
-The Dead Air fixture is development-time AI-assisted. Under `docs/design/AI_PROVENANCE.md`:
+The Dead Air fixture is development-time AI-assisted and was approved by the project owner as canonical revision `dead-air-r1` on 2026-09-01. Under `docs/design/AI_PROVENANCE.md`:
 - the text may be drafted/edited with AI during development;
-- it requires human approval before canonical shipping;
+- substantive later revisions require renewed human approval before becoming canonical;
 - once approved, it is normal authored in-fiction content;
 - no runtime AI field, provider, prompt, response or credential belongs in this v0.1 model.
 

@@ -63,8 +63,8 @@ The first specification over-committed to unproven Build 42 capabilities. The en
 ## Accepted offline implementation
 
 - **v0.1 plain-Lua domain core:** accepted and merged in PR #15 at `c9d845e21a0a4298a83ce8b92204e66b6e59d073`. It implements the static Dead Air registries, private canonical ThreadState API, authored and Mark Interesting Evidence, append-only journal events, deterministic no-AI rendering, derived Organisation/Location labels, idempotent domain transitions, D5/D6 contradiction handling, B-37 recontextualisation, major-discovery evaluation, staged P4-R32 validation, the conservative P4-R17 size gate and static content resolution.
-- All 16 acceptance criteria classified `plain-Lua automated test` pass under PUC Lua 5.1.5. The suite reports 17 passing tests total because it also checks that the authoritative acceptance table and traceability matrix remain complete and one-to-one. See `docs/testing/V0_1_DOMAIN_CORE_TRACEABILITY.md`.
-- This acceptance is limited to the PZ-independent domain layer. It does not accept ModData adapter behavior, physical placement/commit sequencing, live item identity, reader/UI integration, location-arrival integration, exact map bindings or any other Build 42 engine behavior.
+- All 16 acceptance criteria classified `plain-Lua automated test` pass under PUC Lua 5.1.5. The suite reports 18 passing tests total: the 16 domain criteria, the traceability guard and a static CF-V01-E01 binding/evidence drift guard. See `docs/testing/V0_1_DOMAIN_CORE_TRACEABILITY.md`.
+- This acceptance is limited to the PZ-independent domain layer. It does not accept ModData adapter behavior, physical placement/commit sequencing, live item identity, reader/UI integration, location-arrival integration or other production-adapter behavior. CF-V01-E01 separately accepts the exact static map bindings on Build 42.20.4.
 
 ## v0.1 vertical slice
 
@@ -81,11 +81,11 @@ One built-in hand-authored thread:
 
 ## v0.1 content/model status
 
-- `test/fixtures/THREAD-001-DEAD-AIR.md` is now a complete Dead Air authored-content candidate rather than a structural fixture: six full documents, three identities, one organisation, two story locations, anchor/fallback behavior, discovery paths, three reward moments, deterministic journal output and a Mark Interesting example.
-- The Dead Air text was development-time AI-assisted and still requires human approval before canonical shipping under `docs/design/AI_PROVENANCE.md`.
+- `test/fixtures/THREAD-001-DEAD-AIR.md` is the approved canonical Dead Air content revision `dead-air-r1`: six full documents, three identities, one organisation, two story locations, anchor/fallback behavior, discovery paths, three reward moments, deterministic journal output and a Mark Interesting example.
+- The project owner approved Dead Air on 2026-09-01. Its development-time AI assistance remains disclosed under `docs/design/AI_PROVENANCE.md`; see `docs/reviews/DEAD_AIR_CONTENT_APPROVAL_2026-09-01.md`.
 - `docs/design/V0_1_DATA_MODEL.md` now derives the smallest v0.1 logical model from that story. Static authored prose/entities remain outside save state; v0.1 relationships are static ID references rather than standalone relationship records.
-- `docs/requirements/V0_1_ACCEPTANCE_CRITERIA.md` separates observable product/domain acceptance from live engine validation. Its 16 plain-Lua criteria are covered by the accepted domain-core suite; T4/T5/T7/T8/T10 establish mechanisms and production-adapter matrices, but production live integration and final map bindings remain unaccepted.
-- Exact vanilla map targets remain unbound pending live inspection. The target geography is a roughly 1,000–1,600-tile straight-line regional journey (P4-R41). First inspection priority is provisional pair P2 `(13206,3073)`, a medium local police station, and R2 `(13549,1572)`, a compact communications/news facility with service garage, at roughly 1,538 straight-line tiles. P2 must have credible property/records containers or the large headquarters remains fallback; R2 must pass newsroom-character, access, boundary and container-plausibility checks. These priorities are not final bindings.
+- `docs/requirements/V0_1_ACCEPTANCE_CRITERIA.md` separates observable product/domain acceptance from live engine validation. Its 16 plain-Lua criteria are covered by the accepted domain-core suite; CF-V01-E01 now passes, while T4/T5/T7/T8/T10 establish mechanisms whose production-adapter integration remains unaccepted.
+- Exact vanilla map targets are bound from the 2026-09-01 clean Build 42.20.4 matrix. Relay Site 31 uses R2's whole communications/news building at reference `(13564,1596,0)`, with D1/D3 on shelves `(13555,1576,1)` / `(13556,1576,1)` and D4 in desk `(13562,1579,1)`. Police property uses P2's whole station at reference `(13208,3088,0)`, with D2/D5/D6 in filing cabinets `(13207..13209,3087,0)`. The sites are `1533.884` straight-line tiles apart. See P4-R42/P4-R43 and `docs/research/CF_V01_E01_DEAD_AIR_LOCATION_BINDINGS.md`.
 - No live Build 42 behavior was validated by the accepted domain-core work. The separately completed T1/T2/T3/T4/T5/T7/T8/T9/T10 results are authoritative, with their recorded limitations, for persistence, enumeration, categorisation, placement, physical identity, asset text/readers, curated arrival, network transport and cooperative inventory-pane actions.
 
 ## Immediate work
@@ -93,7 +93,7 @@ One built-in hand-authored thread:
 Before implementation architecture is signed off:
 
 1. treat Engineering Gate A (T1/T9/T2/T3/T4/T5) as complete and integrate the accepted domain core only through adapter mechanisms proven by the named spikes, without expanding into content packs/graph systems;
-2. live-inspect provisional candidates P2 and R2 first, verify route/access plus story/container plausibility, and commit no exact location binding until both pass; use the large police headquarters only if P2 lacks credible property/records containers;
+2. consume the accepted P2/R2 bindings from `ConspiracyFiles.LocationBindings`; fail closed if exact building/container signatures no longer match, and do not substitute the rejected large-headquarters fallback silently;
 3. implement physical identity as a mod-owned per-instance token with separate availability/conflict state; never infer loss from the original placement container alone;
 4. update decisions from each later observed spike result;
 5. implement T8's bounded/debounced sticky arrival adapter and T7/T10's hybrid asset plus inventory-pane-only Inspect boundary. Direct-world-item right-click is not a supported dependency. T6 only matters if retrofit is revived.

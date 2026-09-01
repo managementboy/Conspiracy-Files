@@ -43,6 +43,7 @@ function assertDeepEqual(expected, actual, message)
 end
 
 dofile(root .. separator .. "test" .. separator .. "domain_core_spec.lua")
+dofile(root .. separator .. "test" .. separator .. "location_binding_spec.lua")
 
 test("traceability matrix covers every plain-Lua acceptance criterion exactly once", function()
     local expected = {

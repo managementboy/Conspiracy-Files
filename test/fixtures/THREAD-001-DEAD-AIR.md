@@ -1,6 +1,6 @@
 # THREAD-001 — Dead Air
 
-**Status:** Complete authored v0.1 content candidate. Development-time AI assisted this draft; human approval is required before it is treated as canonical shipped content under `docs/design/AI_PROVENANCE.md`.
+**Status:** Approved canonical v0.1 authored content. The project owner approved content revision `dead-air-r1` on 2026-09-01; development-time AI assistance remains disclosed under `docs/design/AI_PROVENANCE.md`. See `docs/reviews/DEAD_AIR_CONTENT_APPROVAL_2026-09-01.md`.
 **Content revision:** `dead-air-r1`
 **Purpose:** one hand-authored narrative thread that proves the v0.1 investigation loop before any generic content-pack schema exists.
 
@@ -79,19 +79,19 @@ The player may enter through either story location and may never see all six doc
 
 ## Story locations (2)
 
-Exact vanilla map targets remain deliberately **unbound** until live inspection. The intended geography is a regional journey of roughly 1,000–1,600 straight-line tiles, subject to live route and access verification. v0.1 uses hand-curated targets; T3 candidate evidence prioritizes inspection but does not create story truth, while T4/T8 still govern placement and arrival mechanics.
+The exact vanilla map targets are bound by CF-V01-E01's accepted Build 42.20.4 live matrix. They form a `1533.884`-tile straight-line regional journey. `ConspiracyFiles.LocationBindings` owns the static adapter coordinates/signatures; T4 and T8 still govern production placement and arrival mechanics.
 
 ### `dead-air:location:relay-office` — Relay Site 31 service office
 
 **Story purpose:** the technical side of the thread. It is where ordinary maintenance records reveal a channel activation that does not behave like ordinary maintenance.
 
-**Real PZ location type to map later:** a believable transmission/utility communications site or small service building associated with a mast/tower, fenced utility compound, radio infrastructure or equivalent hand-curated vanilla location. It needs plausible storage for service paperwork and tools, not a purpose-built conspiracy bunker.
+**Real PZ location:** R2, the vanilla communications/news facility. The whole-building arrival reference is `(13564,1596,0)` in `newsroom`; expected bounds are `(13549,1572)`–`(13581,1604)`, z `0..3`.
 
-**Provisional inspection priority:** candidate R2 at `(13549,1572)`, the compact communications/news facility with a service garage recorded in T3's checked-in live candidate matrix. Inspect it first for convincing newsroom character, access, usable boundaries and plausible containers. R2 is not a final binding.
+**Exact document placement:** D1 shelf `(13555,1576,1)`, D3 shelf `(13556,1576,1)`, and D4 desk `(13562,1579,1)`, all in named `communications` rooms. The facility also has a newsroom, service garage, exterior door `(13557,1572,0)` and internal stairs. The live scan covered all 26 rooms and passed.
 
 **What the player knows before reaching it:** if led from the police side, only `Relay Site 31`, `south service road`, a fenced communications mast/utility structure, and CSS ticket `93-0714`. This should read as a landmark-style lead, not a quest marker.
 
-**What confirms it:** physical arrival at the selected hand-curated location plus matching story dressing/asset context, subject to T8's eventual arrival-detection result.
+**What confirms it:** T8's bounded/debounced whole-building predicate resolves the building from the exact reference square and validates its expected bounds before confirming the Location.
 
 **Associated documents/items:** D1, D3, D4; optional ordinary B-37 key relevance.
 
@@ -101,13 +101,13 @@ Exact vanilla map targets remain deliberately **unbound** until live inspection.
 
 **Story purpose:** the administrative side of the thread. It turns a technical oddity into a question about who had authority to make it disappear into routine procedure.
 
-**Real PZ location type to map later:** a hand-curated vanilla police station with a believable desk, records room, property/evidence area or office container.
+**Real PZ location:** P2, the medium vanilla police station. The whole-building arrival reference is `(13208,3088,0)` in `policeoffice`; expected bounds are `(13206,3073)`–`(13238,3101)`, z `0..1`.
 
-**Provisional inspection priority:** prefer a medium local station and inspect candidate P2 at `(13206,3073)` first. The large headquarters remains fallback only if P2 lacks credible property/records containers. P2 is not a final binding.
+**Exact document placement:** D2, D5 and D6 use the adjacent filing cabinets `(13207,3087,0)`, `(13208,3087,0)` and `(13209,3087,0)` in the 12-square `policeoffice`. Its exterior door is `(13206,3087,0)`. The live scan covered all 24 rooms and found 83 containers, so the large headquarters fallback is rejected.
 
-**What the player knows before reaching it:** if led from D1, Rourke's portable receiver was taken by county police and entered as property record `4471`. Candidate coordinates are development provenance, not player-facing knowledge or a final station binding.
+**What the player knows before reaching it:** if led from D1, Rourke's portable receiver was taken by county police and entered as property record `4471`. Binding coordinates remain development provenance, not player-facing knowledge.
 
-**What confirms it:** physical arrival at the selected police station and discovery of matching property/shift paperwork, subject to T8.
+**What confirms it:** T8's bounded/debounced whole-building predicate resolves the building from the exact reference square and validates its expected bounds before confirming the Location.
 
 **Associated documents/items:** D2, D5, D6; optional red-tagged B-37 key.
 
@@ -754,8 +754,8 @@ No choice above decides native reader vs ModData-backed text vs custom reader UI
 # Technical assumptions deliberately not resolved here
 
 - **T1:** complete on Build 42.20.4; the implementation must obey P4-R32 and the hard ≤500 KB/save canonical-state budget. This paper fixture does not select the final conforming encoding.
-- **T3:** no automatic categorisation is required. Its checked-in live matrix supplies provisional candidates P2 `(13206,3073)` and R2 `(13549,1572)`, paired at roughly 1,538 straight-line tiles, but exact curated bindings still require live route/access, boundary and container/story-plausibility verification.
-- **T4:** complete on Build 42.20.4; use queued relevant-binding wake-ups, detached item pre-stamping and exact-container reconciliation. This fixture still does not select final map bindings.
+- **T3 / CF-V01-E01:** no automatic categorisation is required. T3 supplied candidates; CF-V01-E01's separate clean boots accepted P2/R2 at `1533.884` straight-line tiles and selected the six exact document containers recorded above.
+- **T4:** complete on Build 42.20.4; use queued relevant-binding wake-ups, detached item pre-stamping and exact-container reconciliation against `ConspiracyFiles.LocationBindings`.
 - **T5:** use the accepted mod-owned per-instance token with separate availability/conflict state and P4-R37 reconciliation; engine IDs remain diagnostic, incomplete coverage cannot prove loss, and copied-token duplication is sticky `conflict`.
 - **T7:** use a persistent custom item name plus validated plain ModData title/description/body, with the custom T10 `Inspect` reader as the world-specific presentation boundary; optional locked Literature pages are limited projections only.
 - **T8:** use P4-R39's bounded/debounced sampling and exact binding predicates; delayed-reference ordering and reload-inside remain production-adapter acceptance cases rather than completed probe claims.
