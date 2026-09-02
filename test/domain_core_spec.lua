@@ -377,6 +377,82 @@ test("CF-V01-P18 mandatory reverse chronology rejects missing and reordered deri
     end
 end)
 
+test("CF-V01-P18 reverse chronology binds derived events to their exact causal discovery", function()
+    local entry = newState()
+    discover(entry, ids.d1)
+    discover(entry, ids.d2)
+    local wrongEntry = entry.snapshot()
+    wrongEntry.journal[2], wrongEntry.journal[3] = wrongEntry.journal[3], wrongEntry.journal[2]
+    wrongEntry.journal[3].relatedId = ids.d2
+    wrongEntry.entryOpportunityUsed = "fallback"
+    renumberJournal(wrongEntry)
+    local delayedEntry = entry.snapshot()
+    delayedEntry.journal[2], delayedEntry.journal[3] = delayedEntry.journal[3], delayedEntry.journal[2]
+    renumberJournal(delayedEntry)
+    local evidenceOrderMismatch = entry.snapshot()
+    evidenceOrderMismatch.journal[1], evidenceOrderMismatch.journal[3]
+        = evidenceOrderMismatch.journal[3], evidenceOrderMismatch.journal[1]
+    evidenceOrderMismatch.journal[2].relatedId = ids.d2
+    evidenceOrderMismatch.entryOpportunityUsed = "fallback"
+    renumberJournal(evidenceOrderMismatch)
+
+    local contradiction = newState()
+    discover(contradiction, ids.d5)
+    discover(contradiction, ids.d6)
+    discover(contradiction, ids.d3)
+    local delayedContradiction = contradiction.snapshot()
+    delayedContradiction.journal[3], delayedContradiction.journal[4]
+        = delayedContradiction.journal[4], delayedContradiction.journal[3]
+    renumberJournal(delayedContradiction)
+
+    local b37 = newState()
+    assertChanged(b37.markInteresting("key-delayed-update", { assetId = ids.key, contextText = "B-37 before D6" }))
+    discover(b37, ids.d6)
+    discover(b37, ids.d3)
+    local delayedUpdate = b37.snapshot()
+    delayedUpdate.journal[3], delayedUpdate.journal[4] = delayedUpdate.journal[4], delayedUpdate.journal[3]
+    renumberJournal(delayedUpdate)
+
+    for _, hostile in ipairs({ wrongEntry, delayedEntry, evidenceOrderMismatch, delayedContradiction, delayedUpdate }) do
+        local ok, message = Validator.validate(hostile)
+        assertFalse(ok)
+        assertTrue(type(message) == "string" and message ~= "")
+    end
+end)
+
+test("CF-V01-P18 valid causal histories preserve both contradiction orders and combined B-37 ordering", function()
+    local d5ThenD6 = newState()
+    discover(d5ThenD6, ids.d5)
+    discover(d5ThenD6, ids.d6)
+    assertTrue(Validator.validate(d5ThenD6.snapshot()))
+
+    local d6ThenD5 = newState()
+    discover(d6ThenD5, ids.d6)
+    discover(d6ThenD5, ids.d5)
+    assertTrue(Validator.validate(d6ThenD5.snapshot()))
+
+    local combined = newState()
+    assertChanged(combined.markInteresting("key-combined", { assetId = ids.key, contextText = "B-37 before the pair" }))
+    discover(combined, ids.d5)
+    discover(combined, ids.d6)
+    local combinedRoot = combined.snapshot()
+    assertTrue(Validator.validate(combinedRoot))
+    assertEqual("asset-discovered", combinedRoot.journal[3].kind)
+    assertEqual(ids.d6, combinedRoot.journal[3].subjectId)
+    assertEqual("evidence-updated", combinedRoot.journal[4].kind)
+    assertEqual("contradiction-surfaced", combinedRoot.journal[5].kind)
+
+    local reverseCombined = newState()
+    assertChanged(reverseCombined.markInteresting("key-reverse-combined", { assetId = ids.key, contextText = "B-37 before D6" }))
+    discover(reverseCombined, ids.d6)
+    discover(reverseCombined, ids.d5)
+    local reverseRoot = reverseCombined.snapshot()
+    assertTrue(Validator.validate(reverseRoot))
+    assertEqual("evidence-updated", reverseRoot.journal[3].kind)
+    assertEqual("asset-discovered", reverseRoot.journal[4].kind)
+    assertEqual("contradiction-surfaced", reverseRoot.journal[5].kind)
+end)
+
 test("CF-V01-P19 calibrated estimator enforces the real 500 KB boundary", function()
     local maximal = newState()
     for _, assetId in ipairs(Content.thread.documentAssetIds) do

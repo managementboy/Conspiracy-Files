@@ -217,7 +217,7 @@ local function validateSchema(root)
     local discoveredAssets = {}
     local confirmedEvents = {}
     local markedEvents = {}
-    local introductionAssetId = nil
+    local evidenceEventCount = 0
     for index = 1, journalCount do
         local entry = root.journal[index]
         if type(entry) ~= "table" then return fail("root.journal", "record must be a table") end
@@ -232,6 +232,11 @@ local function validateSchema(root)
             local asset = Content.assets[entry.subjectId]
             if not asset or asset.assetKind ~= "document" then return fail("root.journal", "asset-discovered subject must resolve to a document") end
             if discoveredAssets[entry.subjectId] then return fail("root.journal", "duplicate asset-discovered event") end
+            evidenceEventCount = evidenceEventCount + 1
+            local evidence = evidenceIds[Ids.authoredEvidence(entry.subjectId)]
+            if not evidence or evidence.discoveryOrdinal ~= evidenceEventCount then
+                return fail("root.journal", "asset discovery does not match Evidence discovery order")
+            end
             discoveredAssets[entry.subjectId] = index
         elseif entry.kind == "thread-introduced" then
             if entry.subjectId ~= Content.thread.threadId or (entry.relatedId ~= Content.ids.d1 and entry.relatedId ~= Content.ids.d2) then
@@ -239,11 +244,14 @@ local function validateSchema(root)
             end
             if not discoveredAssets[entry.relatedId] then return fail("root.journal", "thread introduction lacks its entry Evidence") end
             if eventCounts[entry.kind] > 1 then return fail("root.journal", "duplicate thread introduction") end
-            introductionAssetId = entry.relatedId
         elseif entry.kind == "marked-interesting" then
             local evidence = evidenceIds[entry.subjectId]
             if not evidence or evidence.kind ~= "marked-object" then return fail("root.journal", "marked-interesting subject must resolve to marked Evidence") end
             if markedEvents[entry.subjectId] then return fail("root.journal", "duplicate marked-interesting event") end
+            evidenceEventCount = evidenceEventCount + 1
+            if evidence.discoveryOrdinal ~= evidenceEventCount then
+                return fail("root.journal", "marked Evidence does not match discovery order")
+            end
             markedEvents[entry.subjectId] = index
         elseif entry.kind == "evidence-updated" then
             local evidence = evidenceIds[entry.subjectId]
@@ -276,23 +284,60 @@ local function validateSchema(root)
         if eventCounts["thread-introduced"] ~= 1 then
             return fail("root.journal", "D1/D2 discovery requires exactly one thread introduction")
         end
-        local expectedRole = introductionAssetId == Content.ids.d1 and "anchor" or "fallback"
+        local firstEntryAssetId = Content.ids.d1
+        local firstEntryOrdinal = hasD1
+        if not firstEntryOrdinal or (hasD2 and hasD2 < firstEntryOrdinal) then
+            firstEntryAssetId = Content.ids.d2
+            firstEntryOrdinal = hasD2
+        end
+        local introduction = root.journal[firstEntryOrdinal + 1]
+        if not introduction or introduction.kind ~= "thread-introduced"
+            or introduction.subjectId ~= Content.thread.threadId
+            or introduction.relatedId ~= firstEntryAssetId then
+            return fail("root.journal", "thread introduction must immediately follow and reference the first D1/D2 discovery")
+        end
+        local expectedRole = firstEntryAssetId == Content.ids.d1 and "anchor" or "fallback"
         if root.entryOpportunityUsed ~= expectedRole then
             return fail("root.entryOpportunityUsed", "does not match committed thread introduction")
         end
     end
-    if discoveredAssets[Content.ids.d5] and discoveredAssets[Content.ids.d6]
-        and eventCounts["contradiction-surfaced"] ~= 1 then
-        return fail("root.journal", "D5/D6 discovery requires exactly one contradiction event")
-    end
     local d6Ordinal = discoveredAssets[Content.ids.d6]
+    local priorKeyMarkOrdinal = nil
+    local priorKeyEvidence = nil
     if d6Ordinal then
         for evidenceId, markedOrdinal in pairs(markedEvents) do
             local evidence = evidenceIds[evidenceId]
             if evidence and evidence.kind == "marked-object" and evidence.assetId == Content.ids.key
-                and markedOrdinal < d6Ordinal and eventCounts["evidence-updated"] ~= 1 then
+                and markedOrdinal < d6Ordinal then
+                priorKeyMarkOrdinal = markedOrdinal
+                priorKeyEvidence = evidence
+            end
+        end
+        if priorKeyMarkOrdinal then
+            if eventCounts["evidence-updated"] ~= 1 then
                 return fail("root.journal", "B-37 marked before D6 requires exactly one recontextualisation event")
             end
+            local update = root.journal[d6Ordinal + 1]
+            if not update or not priorKeyEvidence or update.kind ~= "evidence-updated"
+                or update.subjectId ~= priorKeyEvidence.evidenceId or update.relatedId ~= Content.ids.d6 then
+                return fail("root.journal", "B-37 recontextualisation must immediately follow the triggering D6 discovery")
+            end
+        end
+    end
+    local d5Ordinal = discoveredAssets[Content.ids.d5]
+    if d5Ordinal and d6Ordinal then
+        if eventCounts["contradiction-surfaced"] ~= 1 then
+            return fail("root.journal", "D5/D6 discovery requires exactly one contradiction event")
+        end
+        local completionOrdinal = math.max(d5Ordinal, d6Ordinal)
+        local contradictionOrdinal = completionOrdinal + 1
+        if completionOrdinal == d6Ordinal and priorKeyMarkOrdinal then
+            contradictionOrdinal = contradictionOrdinal + 1
+        end
+        local contradiction = root.journal[contradictionOrdinal]
+        if not contradiction or contradiction.kind ~= "contradiction-surfaced"
+            or contradiction.subjectId ~= Content.ids.d6 or contradiction.relatedId ~= Content.ids.d5 then
+            return fail("root.journal", "contradiction must immediately follow its completing discovery and same-trigger B-37 update")
         end
     end
     return true

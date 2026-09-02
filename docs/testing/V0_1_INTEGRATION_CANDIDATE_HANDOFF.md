@@ -54,8 +54,9 @@ python3 tools/release_pipeline.py all --output dist
 git diff --check
 ```
 
-The corrected integrated Lua suite reports 69 tests and zero failures. The release unit
-tests, clean-tree reproducibility gate, deterministic double build, archive
+The `lua5.1 test/run.lua` result at the exact candidate commit is the
+authoritative integrated suite count; historical branch totals are not a
+current acceptance signal. The release unit tests, clean-tree reproducibility gate, deterministic double build, archive
 payload comparison and generated checksum verification must pass at the final
 candidate commit before handoff.
 

@@ -167,6 +167,62 @@ test("presentation carrier accepts nested canonical data and rejects flat or dis
     assertEqual(nil, CF.ItemProjection.token(mirrored), "physical tracking must reject a disagreeing mirror")
 end)
 
+test("presentation physical identity carries the Asset/token pair for nested, mirrored, and partial carriers", function()
+    local token = "cf:save:pair:d1:1"
+    local nested = stamp(ids.d1, true, { physicalToken = token })
+    local identity, message = CF.ItemProjection.identity(nested)
+    assertTrue(identity ~= nil, message)
+    assertEqual(ids.d1, identity.assetId)
+    assertEqual(token, identity.physicalToken)
+
+    local fields = CF.ItemProjection.fields
+    local value = nested.modData.ConspiracyFiles
+    nested.modData[fields.schema] = value.schemaVersion
+    nested.modData[fields.physicalItemId] = value.physicalToken
+    nested.modData[fields.assetId] = value.assetId
+    nested.modData[fields.title] = value.resolvedTitle
+    nested.modData[fields.description] = value.resolvedDescription
+    nested.modData[fields.body] = value.resolvedBody
+    identity, message = CF.ItemProjection.identity(nested)
+    assertTrue(identity ~= nil and identity.hasLegacy, message)
+    assertEqual(ids.d1, identity.assetId)
+    assertEqual(token, identity.physicalToken)
+
+    local partial = fakeItem(true)
+    partial.modData.ConspiracyFiles = {
+        schemaVersion = CF.ItemPresentation.SCHEMA_VERSION,
+        assetId = ids.d1,
+        physicalToken = token
+    }
+    identity, message = CF.ItemProjection.identity(partial)
+    assertTrue(identity ~= nil, message)
+    assertEqual(ids.d1, identity.assetId)
+    assertEqual(token, identity.physicalToken)
+    local subject, reason = CF.ItemPresentation.validate(partial, function() return true end)
+    assertEqual(nil, subject)
+    assertEqual("hidden", reason)
+
+    local malformed = fakeItem(true)
+    malformed.modData.ConspiracyFiles = {
+        schemaVersion = CF.ItemPresentation.SCHEMA_VERSION,
+        assetId = ids.d1,
+        physicalToken = token,
+        unexpected = "rejected"
+    }
+    identity, message = CF.ItemProjection.identity(malformed)
+    assertEqual(nil, identity)
+    assertEqual("moddata-shape", message)
+    local classification, _, collisionReason = CF.ItemProjection.classifyIdentity(malformed, ids.d1, token)
+    assertEqual("collision", classification)
+    assertEqual("moddata-shape", collisionReason)
+
+    local wrongAsset = stamp(ids.d2, true, { physicalToken = token })
+    classification, identity, collisionReason = CF.ItemProjection.classifyIdentity(wrongAsset, ids.d1, token)
+    assertEqual("collision", classification)
+    assertEqual(ids.d2, identity.assetId)
+    assertEqual("asset-token-mismatch", collisionReason)
+end)
+
 test("presentation copied carriers retain content but expose the same physical token for conflict handling", function()
     local token = "cf:save:copy:key:1"
     local original = stamp(ids.key, true, { physicalToken = token })

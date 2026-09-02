@@ -56,9 +56,9 @@ global.
 ## Offline verification
 
 At this handoff's original world-adapter checkpoint, `lua5.1 test/run.lua`
-reported 39 tests and zero failures. The corrected integrated candidate now
-reports 69 tests and zero failures; see the integrated-candidate handoff for
-the combined verification gate. Thirteen fake-backed
+reported 39 tests and zero failures. That is a historical branch checkpoint;
+the exact candidate's `lua5.1 test/run.lua` output and integrated-candidate
+handoff are the current combined verification evidence. The fake-backed
 world tests cover:
 
 1. exact D1–D6 name/title/description/body projections;

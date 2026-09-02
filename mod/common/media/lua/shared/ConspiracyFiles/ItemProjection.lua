@@ -86,10 +86,21 @@ function ItemProjection.refresh(item, itemPort)
     return true, refreshDetail, changed
 end
 
-function ItemProjection.token(item, itemPort)
+function ItemProjection.identity(item, itemPort)
     local modData = modDataFor(item, itemPort)
     if not modData then return nil end
     local identity, message = ItemPresentation.identityFromModData(modData)
+    if not identity then return nil, message end
+    if not identity.physicalToken then return nil, "physical-token" end
+    return {
+        assetId = identity.assetId,
+        physicalToken = identity.physicalToken,
+        hasLegacy = identity.hasLegacy
+    }
+end
+
+function ItemProjection.token(item, itemPort)
+    local identity, message = ItemProjection.identity(item, itemPort)
     if not identity then return nil, message end
     return identity.physicalToken
 end
@@ -103,6 +114,24 @@ function ItemProjection.claimsToken(item, expectedToken, itemPort)
     local nested = modData[ItemPresentation.MOD_DATA_KEY]
     if type(nested) == "table" and nested.physicalToken == expectedToken then return true end
     return modData[ItemProjection.fields.physicalItemId] == expectedToken
+end
+
+-- A canonical physical observation is the pair, never either field alone.
+-- A one-sided match is a collision because accepting it would bind one
+-- authored Asset's carrier to another Asset's save-scoped token.
+function ItemProjection.classifyIdentity(item, expectedAssetId, expectedToken, itemPort)
+    local identity, reason = ItemProjection.identity(item, itemPort)
+    if identity then
+        local assetMatches = identity.assetId == expectedAssetId
+        local tokenMatches = identity.physicalToken == expectedToken
+        if assetMatches and tokenMatches then return "match", identity end
+        if assetMatches or tokenMatches then return "collision", identity, "asset-token-mismatch" end
+        return "other", identity
+    end
+    if ItemProjection.claimsToken(item, expectedToken, itemPort) then
+        return "collision", nil, reason or "rejected-token-claim"
+    end
+    return "other", nil, reason
 end
 
 return ItemProjection

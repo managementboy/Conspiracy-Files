@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import importlib.util
 from pathlib import Path
+import subprocess
 import tempfile
 import unittest
 import zipfile
@@ -15,6 +16,14 @@ SPEC = importlib.util.spec_from_file_location("cf_release_pipeline", ROOT / "too
 assert SPEC and SPEC.loader
 pipeline = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(pipeline)
+
+RANGE_SPEC = importlib.util.spec_from_file_location(
+    "cf_changed_range",
+    ROOT / "tools" / "check_changed_range.py",
+)
+assert RANGE_SPEC and RANGE_SPEC.loader
+changed_range = importlib.util.module_from_spec(RANGE_SPEC)
+RANGE_SPEC.loader.exec_module(changed_range)
 
 
 class ReleasePipelineSpec(unittest.TestCase):
@@ -83,6 +92,54 @@ class ReleasePipelineSpec(unittest.TestCase):
             'require("ConspiracyFiles/Adapters/PZ")',
             "candidate.lua",
         )
+
+    def test_workflow_ranges_cover_pr_push_new_branch_and_manual_dispatch(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="cf-workflow-range-") as temporary:
+            repository = Path(temporary)
+
+            def run_git(*arguments: str) -> subprocess.CompletedProcess[str]:
+                return subprocess.run(
+                    ["git", *arguments], cwd=repository, check=True, text=True,
+                    stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+                )
+
+            def commit(message: str) -> str:
+                run_git("add", ".")
+                run_git("commit", "-q", "-m", message)
+                return run_git("rev-parse", "HEAD").stdout.strip()
+
+            run_git("init", "-q")
+            run_git("config", "user.name", "Conspiracy-Files workflow test")
+            run_git("config", "user.email", "workflow-test@example.invalid")
+            (repository / "base.txt").write_text("clean\n", encoding="utf-8")
+            base = commit("base")
+            (repository / "bad.txt").write_text("trailing whitespace \n", encoding="utf-8")
+            bad = commit("bad earlier commit")
+            (repository / "later.txt").write_text("clean later commit\n", encoding="utf-8")
+            head = commit("clean final commit")
+
+            one_commit_push = changed_range.run_check(repository, "push", head, before=bad)
+            self.assertEqual(0, one_commit_push.returncode)
+            multi_commit_push = changed_range.run_check(repository, "push", head, before=base)
+            self.assertNotEqual(0, multi_commit_push.returncode)
+            self.assertIn("trailing whitespace", multi_commit_push.stdout)
+
+            pull_request = changed_range.run_check(
+                repository,
+                "pull_request",
+                head,
+                pull_request_base=base,
+            )
+            self.assertNotEqual(0, pull_request.returncode)
+            new_branch = changed_range.run_check(
+                repository,
+                "push",
+                bad,
+                before=changed_range.ZERO_SHA,
+            )
+            self.assertNotEqual(0, new_branch.returncode)
+            manual = changed_range.run_check(repository, "workflow_dispatch", head)
+            self.assertEqual(0, manual.returncode)
 
 
 if __name__ == "__main__":

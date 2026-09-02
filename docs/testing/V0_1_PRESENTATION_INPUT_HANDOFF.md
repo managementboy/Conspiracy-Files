@@ -70,6 +70,11 @@ presentation nor physical tracking silently chooses a side. This bridge keeps
 the nested table authoritative while preserving an otherwise valid item instance
 and physical token.
 
+Physical identity is the validated `(assetId, physicalToken)` pair. Placement
+and physical scans require both fields to match the requested canonical pair;
+a carrier for one known Asset that claims another Asset's token is a rejected
+collision and is never rewritten, replaced or used to advance the ledger.
+
 When reconciliation finds an owned item whose carrier schema/Asset/token and
 mirror equivalence are valid but whose non-empty `contentRevision` is older, it
 refreshes only the custom display name and presentation revision/text from the
@@ -113,8 +118,12 @@ find mod/common/media/lua -name '*.lua' -print0 | xargs -0 -n1 luac5.1 -p
 git diff --check
 ```
 
-The suite reports 35 passing tests. Nine presentation/input tests cover exact
-ModData validation, hidden/tampered rejection, known-only projections,
+At this handoff's original presentation-branch checkpoint, the suite reported
+35 passing tests. That figure is historical, not the current integrated suite
+total. Current evidence is the output of `lua5.1 test/run.lua` at the candidate
+commit and the combined gate in `V0_1_INTEGRATION_CANDIDATE_HANDOFF.md`.
+The presentation/input regressions cover exact ModData validation,
+Asset/token-pair identity, hidden/tampered rejection, known-only projections,
 foreign-action preservation, private deduplication, grouped/mixed/ambiguous
 selection, owned/Ground behavior, activation-time revalidation, idempotent
 Inspect/Mark transactions, callback fault containment, repeated notebook

@@ -17,13 +17,17 @@ jobs:
         with:
           fetch-depth: 0
       - name: Check changed-range whitespace
-        shell: bash
-        run: |
-          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
-            git diff --check "${{ github.event.pull_request.base.sha }}...HEAD"
-          else
-            git diff --check "HEAD^..HEAD"
-          fi
+        env:
+          CF_EVENT_NAME: ${{ github.event_name }}
+          CF_EVENT_BEFORE: ${{ github.event.before }}
+          CF_EVENT_SHA: ${{ github.sha }}
+          CF_PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: >-
+          python3 tools/check_changed_range.py
+          --event "$CF_EVENT_NAME"
+          --before "$CF_EVENT_BEFORE"
+          --sha "$CF_EVENT_SHA"
+          --pull-request-base "$CF_PR_BASE_SHA"
       - name: Install the target Lua toolchain
         run: sudo apt-get update && sudo apt-get install --yes lua5.1
       - name: Validate and build twice

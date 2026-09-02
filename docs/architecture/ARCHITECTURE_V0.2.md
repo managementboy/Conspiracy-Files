@@ -131,6 +131,7 @@ T7 fixes the boundary:
 - persist the resolved per-instance display name with `setName`/`setCustomName(true)`;
 - store schema, content revision, Asset ID, reveal state, physical token and resolved title/description/body in the canonical nested `item:getModData().ConspiracyFiles` table, while the authored/domain body remains authoritative;
 - reject flat-only carriers. The first schema-2 candidate's flat fields are a compatibility mirror only when all schema/Asset/token/presentation values exactly agree with the nested carrier; physical tracking never chooses between disagreement;
+- parse physical identity as the `(Asset ID, physical token)` pair and require both fields to match the requested canonical pair at placement and scan boundaries; a one-sided match is a rejected collision and never authorizes a rewrite, duplicate or ledger transition;
 - when an existing owned token has a structurally compatible older content revision, refresh only its display/presentation fields from current authoritative static content in place, preserving the item instance, Asset ID and physical token;
 - render world-specific bodies through T10's cooperative custom `Inspect` action in player and Ground/loot inventory panes;
 - optionally project deliberately short plain-text artifacts into locked `Literature.customPages`; treat the 15-line/1,200-character page UI and literal markup behavior as presentation constraints, never canonical storage;
@@ -145,7 +146,7 @@ T5 fixes the v0.1 rule:
 - stamp one save-scoped mod-owned string token per intended physical instance in item ModData while the item is detached; T4's materialisation token may serve this role only when it is instance-unique;
 - never use an engine item ID as authority; it is diagnostic transition correlation only;
 - keep `assetMaterialisation=placed` separate from mutable physical availability/location;
-- one observed token is `available`; confirmed destruction or complete covered absence is `unavailable`; incomplete/unloaded coverage is `unknown`/`untracked`;
+- one observed matching Asset/token pair is `available`; a carrier with only one matching field is rejected without a state transition; confirmed destruction or complete covered absence is `unavailable`; incomplete/unloaded coverage is `unknown`/`untracked`;
 - two or more distinct items with one token are sticky `conflict`; never silently select/delete/restamp a winner or clear the conflict because only one later remains;
 - all copy/transform code must explicitly omit or replace the identity token unless it deliberately preserves the same physical instance;
 - immutable Evidence survives every availability state, and tracking may resume after non-conflict loss only when the same token is observed exactly once.

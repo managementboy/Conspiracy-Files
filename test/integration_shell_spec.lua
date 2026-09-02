@@ -35,6 +35,21 @@ local function withoutJournalKind(root, kind)
     return root
 end
 
+local function renumberJournal(root)
+    for index, entry in ipairs(root.journal) do
+        entry.ordinal = index
+        entry.entryId = CF.Ids.journal(index)
+    end
+    return root
+end
+
+local function copyTable(value)
+    if type(value) ~= "table" then return value end
+    local result = {}
+    for key, child in pairs(value) do result[copyTable(key)] = copyTable(child) end
+    return result
+end
+
 test("integration scheduler deduplicates keys and obeys queue, work, and elapsed bounds", function()
     local now, ran = 0, {}
     local scheduler = CF.Scheduler.new({
@@ -349,6 +364,63 @@ test("integration incomplete mandatory histories are rejected without replacemen
         assertEqual(0, storage.replacementCount())
         assertEqual(invalid, storage.roots[CF.PersistenceAdapter.DEFAULT_TAG])
         assertFalse(adapter.isLoaded())
+    end
+end)
+
+test("integration causally impossible histories preserve invalid storage and the last-known-good root", function()
+    local entry = assert(CF.ThreadState.new())
+    assertTrue(entry.discover(ids.d1, "D1", ids.relay))
+    assertTrue(entry.discover(ids.d2, "D2", ids.police))
+    local wrongEntry = entry.snapshot()
+    wrongEntry.journal[2], wrongEntry.journal[3] = wrongEntry.journal[3], wrongEntry.journal[2]
+    wrongEntry.journal[3].relatedId = ids.d2
+    wrongEntry.entryOpportunityUsed = "fallback"
+    renumberJournal(wrongEntry)
+    local delayedEntry = entry.snapshot()
+    delayedEntry.journal[2], delayedEntry.journal[3] = delayedEntry.journal[3], delayedEntry.journal[2]
+    renumberJournal(delayedEntry)
+
+    local contradiction = assert(CF.ThreadState.new())
+    assertTrue(contradiction.discover(ids.d5, "D5", ids.police))
+    assertTrue(contradiction.discover(ids.d6, "D6", ids.police))
+    assertTrue(contradiction.discover(ids.d3, "D3", ids.relay))
+    local delayedContradiction = contradiction.snapshot()
+    delayedContradiction.journal[3], delayedContradiction.journal[4]
+        = delayedContradiction.journal[4], delayedContradiction.journal[3]
+    renumberJournal(delayedContradiction)
+
+    local b37 = assert(CF.ThreadState.new())
+    assertTrue(b37.markInteresting("key-delayed-update", { assetId = ids.key, contextText = "B-37" }))
+    assertTrue(b37.discover(ids.d6, "D6", ids.police))
+    assertTrue(b37.discover(ids.d3, "D3", ids.relay))
+    local delayedUpdate = b37.snapshot()
+    delayedUpdate.journal[3], delayedUpdate.journal[4] = delayedUpdate.journal[4], delayedUpdate.journal[3]
+    renumberJournal(delayedUpdate)
+
+    local good = assert(CF.ThreadState.new()).snapshot()
+    for _, invalid in ipairs({ wrongEntry, delayedEntry, delayedContradiction, delayedUpdate }) do
+        local invalidBefore = copyTable(invalid)
+        local storage = makeStorage(invalid)
+        local adapter = CF.PersistenceAdapter.new({ storage = storage })
+        local ok, message = adapter.load(false)
+        assertFalse(ok)
+        assertTrue(type(message) == "string" and message ~= "")
+        assertEqual(0, storage.replacementCount())
+        assertEqual(invalid, storage.roots[CF.PersistenceAdapter.DEFAULT_TAG])
+        assertDeepEqual(invalidBefore, storage.roots[CF.PersistenceAdapter.DEFAULT_TAG])
+        assertFalse(adapter.isLoaded())
+        assertEqual(nil, adapter.snapshot())
+
+        local goodStorage = makeStorage(good)
+        local loaded = CF.PersistenceAdapter.new({ storage = goodStorage })
+        assertTrue(loaded.load(false))
+        local lastKnownGood = loaded.snapshot()
+        local committed, commitMessage = loaded.commit(invalid)
+        assertFalse(committed)
+        assertTrue(type(commitMessage) == "string" and commitMessage ~= "")
+        assertEqual(0, goodStorage.replacementCount())
+        assertDeepEqual(lastKnownGood, loaded.snapshot())
+        assertDeepEqual(good, goodStorage.roots[CF.PersistenceAdapter.DEFAULT_TAG])
     end
 end)
 

@@ -19,6 +19,10 @@ function PhysicalIdentity.new(options)
         local placement = snapshot and snapshot.assetMaterialisation[assetId] or nil
         if not placement then return false, "materialisation is not prepared" end
         if placement == "conflict" then return true, "conflict" end
+        local collisions = observation.collisions or {}
+        if #collisions > 0 then
+            return false, "observed carrier does not match the requested Asset/token pair"
+        end
         local matches = observation.matches or {}
         local distinct, seen = {}, {}
         for _, match in ipairs(matches) do
