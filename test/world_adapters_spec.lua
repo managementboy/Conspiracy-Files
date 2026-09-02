@@ -14,7 +14,9 @@ end
 local itemPort = {
     modData = function(item) return item.modData end,
     setName = function(item, name) item.name = name end,
-    setCustomName = function(item, value) item.customName = value end
+    setCustomName = function(item, value) item.customName = value end,
+    displayName = function(item) return item.name end,
+    itemType = function(item) return item.itemType end
 }
 
 local function copyTable(value)
@@ -69,9 +71,9 @@ local function makeWorld()
         local assetId = context and context.assetId
         local identityGateway = context and context.identityGateway
         local matches, collisions, seen = {}, {}, {}
-        local function observe(item, location)
+        local function observe(item, location, authoredTarget)
             if seen[item] then return end
-            local verification = identityGateway.verify(item, assetId)
+            local verification = identityGateway.verify(item, assetId, { authoredTarget = authoredTarget == true })
             if verification.status == "verified" then
                 seen[item] = true
                 matches[#matches + 1] = { item = item, identity = verification.identity, location = location }
@@ -82,9 +84,10 @@ local function makeWorld()
                 }
             end
         end
-        for _, container in pairs(world.containers) do
+        for containerAssetId, container in pairs(world.containers) do
             for _, item in ipairs(container.items) do
-                observe(item, { kind = "placement-container", containerType = container.binding.containerType })
+                observe(item, { kind = "placement-container", containerType = container.binding.containerType },
+                    containerAssetId == assetId)
             end
         end
         for _, match in ipairs(world.externalMatches) do
@@ -125,6 +128,31 @@ end
 
 local function discover(persistence, assetId)
     local ok, result = persistence.transaction(function(state)
+        if assetId == ids.d2 and state.snapshot().entryOpportunityUsed == nil then
+            local snapshot = state.snapshot()
+            local accepted, detail
+            if snapshot.assetMaterialisation[ids.d1] == nil then
+                accepted, detail = state.ensureMaterialisation(ids.d1)
+                if not accepted then return false, detail end
+                snapshot = state.snapshot()
+            end
+            if snapshot.assetMaterialisation[ids.d2] == nil then
+                accepted, detail = state.ensureMaterialisation(ids.d2)
+                if not accepted then return false, detail end
+                snapshot = state.snapshot()
+            end
+            if snapshot.assetMaterialisation[ids.d1] == "placed" then
+                accepted, detail = state.reconcilePhysical(ids.d1, "unavailable")
+            else
+                accepted, detail = state.markPlacementUnavailable(ids.d1)
+            end
+            if not accepted then return false, detail end
+            snapshot = state.snapshot()
+            if snapshot.assetMaterialisation[ids.d2] ~= "placed" then
+                accepted, detail = state.completePlacement(ids.d2)
+                if not accepted then return false, detail end
+            end
+        end
         return state.discover(assetId, "fake discovery", CF.Content.assets[assetId].placementLocationId)
     end)
     assertTrue(ok, result)

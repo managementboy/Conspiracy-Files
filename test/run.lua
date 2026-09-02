@@ -49,6 +49,7 @@ dofile(root .. separator .. "test" .. separator .. "performance_spec.lua")
 dofile(root .. separator .. "test" .. separator .. "estimator_calibration_spec.lua")
 dofile(root .. separator .. "test" .. separator .. "world_adapters_spec.lua")
 dofile(root .. separator .. "test" .. separator .. "presentation_input_spec.lua")
+dofile(root .. separator .. "test" .. separator .. "integrity_model_spec.lua")
 
 test("traceability matrix gives every plain-Lua acceptance criterion one or more tests", function()
     local expected = {

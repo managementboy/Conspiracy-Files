@@ -470,7 +470,14 @@ test("presentation owns exactly one configurable notebook binding and refreshes 
     h.runtime.keyPressed(49)
     assertEqual(1, #h.notebooks)
     assertTrue(h.persistence.transaction(function(domain)
-        local ok, result, changed = domain.discover(ids.d2, "Inspected after opening the notebook.", ids.police)
+        local ok, result = domain.ensureMaterialisation(ids.d1)
+        if not ok then error(result) end
+        ok, result = domain.markPlacementUnavailable(ids.d1)
+        if not ok then error(result) end
+        ok, result = domain.materialise(ids.d2)
+        if not ok then error(result) end
+        local changed
+        ok, result, changed = domain.discover(ids.d2, "Inspected after opening the notebook.", ids.police)
         if not ok then error(result) end
         return changed, result
     end))

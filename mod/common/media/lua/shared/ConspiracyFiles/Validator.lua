@@ -71,6 +71,61 @@ local function checkDenseArray(value, path)
     return true, count
 end
 
+local function evidenceForAsset(root, assetId)
+    for _, evidence in ipairs(root.evidence or {}) do
+        if type(evidence) == "table" and evidence.assetId == assetId then return evidence end
+    end
+    return nil
+end
+
+local function introducedThrough(root, assetId)
+    for _, entry in ipairs(root.journal or {}) do
+        if type(entry) == "table" and entry.kind == "thread-introduced"
+            and entry.relatedId == assetId then return true end
+    end
+    return false
+end
+
+-- This is the exact present-state eligibility used by ThreadState when the
+-- fallback first becomes authoritative. Persistence additionally accepts the
+-- later reachable states described by fallbackHistoryPossible below because
+-- availability can recover and conflict can arise after that sticky choice.
+function Validator.fallbackEligible(root)
+    if root.entryOpportunityUsed ~= nil or evidenceForAsset(root, Content.ids.d1) then return false end
+    local anchor = root.assetMaterialisation and root.assetMaterialisation[Content.ids.d1] or nil
+    return (anchor == "unavailable"
+            or (anchor == "placed" and root.physicalAvailability
+                and root.physicalAvailability[Content.ids.d1] == "unavailable"))
+        and root.assetMaterialisation
+        and root.assetMaterialisation[Content.ids.d2] == "placed"
+end
+
+local function fallbackHistoryPossible(root)
+    local anchor = root.assetMaterialisation[Content.ids.d1]
+    local fallback = root.assetMaterialisation[Content.ids.d2]
+    if anchor ~= "unavailable" and anchor ~= "placed" and anchor ~= "conflict" then return false end
+    if fallback ~= "placed" and fallback ~= "conflict" then return false end
+    -- A post-placement fallback requires the D1 availability record that made
+    -- loss conclusive. It remains present when D1 later recovers or conflicts.
+    if (anchor == "placed" or anchor == "conflict")
+        and root.physicalAvailability[Content.ids.d1] == nil then return false end
+    -- D1 may be discovered after D2 introduced the thread, but it can never be
+    -- the first introduction in a fallback history.
+    if evidenceForAsset(root, Content.ids.d1) and not introducedThrough(root, Content.ids.d2) then return false end
+    return true
+end
+
+local function validateEntryOpportunity(root)
+    if root.entryOpportunityUsed == "fallback" and not fallbackHistoryPossible(root) then
+        return fail("root.entryOpportunityUsed",
+            "fallback has no reachable D1-loss/D2-materialisation history")
+    end
+    if root.entryOpportunityUsed == nil and Validator.fallbackEligible(root) then
+        return fail("root.entryOpportunityUsed", "eligible fallback must already be committed")
+    end
+    return true
+end
+
 local function validateSafeValue(value, path, depth, seen)
     local valueType = type(value)
     if valueType == "string" or valueType == "boolean" then
@@ -144,6 +199,9 @@ local function validateSchema(root)
         end
     end
 
+    ok, message = validateEntryOpportunity(root)
+    if not ok then return false, message end
+
     local locationSeen = {}
     local locationOk, locationCount = checkDenseArray(root.confirmedLocationIds, "root.confirmedLocationIds")
     if not locationOk then return false, locationCount end
@@ -181,13 +239,18 @@ local function validateSchema(root)
         elseif evidence.kind == "marked-object" then
             markedCount = markedCount + 1
             if evidence.evidenceId ~= Ids.markedEvidence(markedCount) then return fail("root.evidence", "marked Evidence IDs must be deterministic and contiguous") end
-            if evidence.assetId ~= nil and (not Content.assets[evidence.assetId] or Content.assets[evidence.assetId].assetKind ~= "ordinary-object") then return fail("root.evidence", "marked Evidence Asset ID must resolve to an ordinary object") end
+            local hasAsset = evidence.assetId ~= nil
+            local hasLabel = evidence.subjectLabel ~= nil
+            if hasAsset == hasLabel then
+                return fail("root.evidence", "marked Evidence requires exactly one of assetId or subjectLabel")
+            end
+            if hasAsset and (not Content.assets[evidence.assetId] or Content.assets[evidence.assetId].assetKind ~= "ordinary-object") then return fail("root.evidence", "marked Evidence Asset ID must resolve to an ordinary object") end
             if not evidence.playerMarkedInteresting then return fail("root.evidence", "marked Evidence must retain creation intent") end
             ok, message = checkBoundedString(evidence.markIntentId, Validator.MAX_MARK_INTENT_ID_BYTES, "root.evidence[" .. index .. "].markIntentId")
             if not ok then return false, message end
             if markIntents[evidence.markIntentId] then return fail("root.evidence", "duplicate mark intent") end
             markIntents[evidence.markIntentId] = true
-            if evidence.assetId ~= nil then
+            if hasAsset then
                 if markedAssets[evidence.assetId] then return fail("root.evidence", "ordinary Asset may be marked only once") end
                 markedAssets[evidence.assetId] = true
             else

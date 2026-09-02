@@ -80,12 +80,14 @@ gateway and require both fields to match the requested active canonical pair;
 a carrier for one known Asset that claims another Asset's token is a rejected
 collision and is never rewritten, replaced or used to advance the ledger.
 
-When reconciliation finds an owned item whose carrier schema/Asset/token and
-mirror equivalence are valid but whose non-empty `contentRevision` is older, it
+When reconciliation finds an item whose carrier schema/Asset/token and mirror
+equivalence are valid and whose `contentRevision` is exactly
+`dead-air-r0-compatible` or `dead-air-r0-compatible-text`, it
 refreshes only the custom display name and presentation revision/text from the
 current authoritative Asset. It does not replace, restamp or change physical
-identity. A carrier claiming the current revision must already match current
-static text exactly; tampering is rejected.
+identity. Missing, malformed, unknown and future revisions are rejected without
+display mutation. A carrier claiming the current revision must already match
+current static text exactly; tampering is rejected.
 
 The reader never trusts arbitrary current-revision ModData prose: validation
 requires exact agreement with the approved static Dead Air Asset. `InventoryItem.description`,
@@ -110,6 +112,9 @@ inspection.
   based, not label-based.
 - No `OnFillWorldObjectContextMenu` listener exists. Direct dropped-item sprite
   right-click remains unsupported per T10/P4-R45.
+- Menu callbacks bind the construction-time item, pair, action, mirror and
+  ownership state. Activation revalidation is read-only; complete coherent-pair
+  substitution, compatible-refresh abuse and any bound-state mutation are no-ops.
 - Expected stale activation rejection is a no-op. Unexpected adapter/UI faults
   pass through the existing per-subsystem `pcall`/three-failure error budget.
 

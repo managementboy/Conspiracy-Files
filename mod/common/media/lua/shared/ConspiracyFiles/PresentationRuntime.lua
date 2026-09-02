@@ -95,11 +95,33 @@ function PresentationRuntime.new(options)
         return identityGateway.resolvePresentation(item, port.isInventoryItem)
     end
 
-    local function activateInspect(_, playerNum, item)
+    local function authorize(subject, action, playerNum)
+        return {
+            item = subject.item,
+            assetId = subject.assetId,
+            physicalToken = subject.physicalToken,
+            carrierHasLegacy = subject.carrierHasLegacy == true,
+            action = action,
+            owned = port.isOwned(subject, playerNum) == true
+        }
+    end
+
+    local function revalidate(authorization, expectedAction, playerNum, item)
+        if type(authorization) ~= "table" or authorization.action ~= expectedAction
+            or authorization.item ~= item then return nil end
+        local identityGateway = identityProvider()
+        if not identityGateway or type(identityGateway.revalidatePresentation) ~= "function" then return nil end
+        local subject = identityGateway.revalidatePresentation(item, port.isInventoryItem, authorization)
+        if not subject then return nil end
+        if (port.isOwned(subject, playerNum) == true) ~= authorization.owned then return nil end
+        return subject
+    end
+
+    local function activateInspect(_, playerNum, item, authorization)
         safely("inspect-activation", function()
             local adapter = persistence()
             if not adapter then return end
-            local subject = resolve(item)
+            local subject = revalidate(authorization, INSPECT_ACTION, playerNum, item)
             if not subject then return end
             local owned = port.isOwned(subject, playerNum)
             if subject.assetKind == "document" then
@@ -117,11 +139,11 @@ function PresentationRuntime.new(options)
         end)
     end
 
-    local function activateMark(_, playerNum, item)
+    local function activateMark(_, playerNum, item, authorization)
         safely("mark-activation", function()
             local adapter = persistence()
             if not adapter then return end
-            local subject = resolve(item)
+            local subject = revalidate(authorization, MARK_ACTION, playerNum, item)
             if not subject or subject.assetKind ~= "ordinary-object" then return end
             if not port.isOwned(subject, playerNum) then return end
             if marked(adapter.domain(), subject.assetId) then return end
@@ -154,9 +176,15 @@ function PresentationRuntime.new(options)
                 return
             end
             local subject = valid[1]
-            addOption(context, INSPECT_ACTION, inspectLabel, activateInspect, playerNum, subject.item)
+            local inspectAuthorization = authorize(subject, INSPECT_ACTION, playerNum)
+            addOption(context, INSPECT_ACTION, inspectLabel, function(_, selectedPlayer, selectedItem)
+                return activateInspect(nil, selectedPlayer, selectedItem, inspectAuthorization)
+            end, playerNum, subject.item)
             if subject.assetKind == "ordinary-object" then
-                local option = addOption(context, MARK_ACTION, markLabel, activateMark, playerNum, subject.item)
+                local markAuthorization = authorize(subject, MARK_ACTION, playerNum)
+                local option = addOption(context, MARK_ACTION, markLabel, function(_, selectedPlayer, selectedItem)
+                    return activateMark(nil, selectedPlayer, selectedItem, markAuthorization)
+                end, playerNum, subject.item)
                 if not port.isOwned(subject, playerNum) then
                     disable(option, labels.takeBeforeMarking or "Take this item before marking it interesting.")
                 elseif marked(adapter.domain(), subject.assetId) then

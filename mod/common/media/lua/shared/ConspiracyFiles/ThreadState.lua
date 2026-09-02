@@ -121,10 +121,7 @@ local function priorMarkedKey(root)
 end
 
 local function fallbackEligible(root)
-    if root.entryOpportunityUsed ~= nil or findEvidenceByAsset(root, Content.ids.d1) then return false end
-    local anchor = root.assetMaterialisation[Content.ids.d1]
-    return (anchor == "unavailable" or (anchor == "placed" and root.physicalAvailability[Content.ids.d1] == "unavailable"))
-        and root.assetMaterialisation[Content.ids.d2] == "placed"
+    return Validator.fallbackEligible(root)
 end
 
 local function maybeActivateFallback(root)
@@ -269,6 +266,7 @@ function ThreadState.new(initialRoot)
         return stage(function(proposed)
             if proposed.physicalAvailability[assetId] == status then return false, assetId end
             proposed.physicalAvailability[assetId] = status
+            maybeActivateFallback(proposed)
             return true, assetId
         end)
     end
@@ -283,6 +281,10 @@ function ThreadState.new(initialRoot)
         if entryRole and not hasJournalKind(root, "thread-introduced")
             and root.entryOpportunityUsed ~= nil and root.entryOpportunityUsed ~= entryRole then
             return false, "discovery disagrees with committed entry opportunity"
+        end
+        if entryRole == "fallback" and not hasJournalKind(root, "thread-introduced")
+            and root.entryOpportunityUsed ~= "fallback" then
+            return false, "fallback discovery requires a previously eligible committed opportunity"
         end
         return stage(function(proposed)
             local existing = findEvidenceByAsset(proposed, assetId)
@@ -317,7 +319,10 @@ function ThreadState.new(initialRoot)
         if type(subject) ~= "table" then return false, "subject must be a table" end
         if type(subject.contextText) ~= "string" or subject.contextText == "" then return false, "contextText must be non-empty" end
         if string.len(subject.contextText) > Validator.MAX_CONTEXT_TEXT_BYTES then return false, "contextText exceeds byte limit" end
-        if subject.assetId ~= nil then
+        local hasAsset = subject.assetId ~= nil
+        local hasLabel = subject.subjectLabel ~= nil
+        if hasAsset == hasLabel then return false, "subject requires exactly one of assetId or subjectLabel" end
+        if hasAsset then
             local asset = Content.assets[subject.assetId]
             if not asset or asset.assetKind ~= "ordinary-object" then return false, "Asset is not a markable ordinary object" end
         elseif type(subject.subjectLabel) ~= "string" or subject.subjectLabel == "" then

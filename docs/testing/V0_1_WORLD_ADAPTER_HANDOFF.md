@@ -21,6 +21,10 @@ implementation has not been launched in Project Zomboid.
 - Placement resolves the exact P2/R2 room, object index, sprite, container index
   and container type. Unloaded squares remain pending. Any observable signature
   drift fails closed and creates nothing.
+- At that exact target, a no-carrier item becomes an authored collision only
+  when its canonical authored display name and available PZ full type match the
+  expected static Asset. It blocks creation without rewrite or ledger mutation;
+  ordinary unrelated loot remains harmless.
 - The T4 sequence is `pending` → durably staged `placing` → detached
   `Base.Note` creation → name/ModData prestamp → add exact instance → exact
   container rescan → durably staged `placed`. One gateway-verified active

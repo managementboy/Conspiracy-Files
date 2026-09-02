@@ -9,6 +9,14 @@ ItemPresentation.MAX_TITLE_LENGTH = 512
 ItemPresentation.MAX_DESCRIPTION_LENGTH = 4096
 ItemPresentation.MAX_BODY_LENGTH = 64 * 1024
 
+-- These are the only pre-r1 presentation carriers that schema 2 knows how to
+-- refresh safely. A non-empty string is not evidence of backward
+-- compatibility; unknown and future revisions must remain untouched.
+ItemPresentation.COMPATIBLE_OLDER_REVISIONS = {
+    ["dead-air-r0-compatible"] = true,
+    ["dead-air-r0-compatible-text"] = true
+}
+
 -- The nested table above is canonical. These fields were emitted by the first
 -- schema-2 candidate and remain a compatibility mirror only when every field is
 -- present and exactly agrees with the nested carrier.
@@ -173,8 +181,10 @@ function ItemPresentation.inspectModData(modData)
         if value.resolvedTitle ~= asset.displayName then return nil, "title" end
         if value.resolvedDescription ~= assetDescription(asset) then return nil, "description" end
         if value.resolvedBody ~= (asset.bodyText or asset.inspectText) then return nil, "body" end
-    else
+    elseif ItemPresentation.COMPATIBLE_OLDER_REVISIONS[value.contentRevision] then
         state = "stale-compatible"
+    else
+        return nil, "content-revision"
     end
     return {
         assetId = identity.assetId,
@@ -184,6 +194,10 @@ function ItemPresentation.inspectModData(modData)
         presentationState = state,
         value = value
     }
+end
+
+function ItemPresentation.isCompatibleOlderRevision(revision)
+    return ItemPresentation.COMPATIBLE_OLDER_REVISIONS[revision] == true
 end
 
 function ItemPresentation.refreshModData(modData)

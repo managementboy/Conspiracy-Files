@@ -25,6 +25,39 @@ local function setDisplay(item, itemPort, title)
     return true
 end
 
+local function displayNameFor(item, itemPort)
+    local ok, value
+    if itemPort and type(itemPort.displayName) == "function" then
+        ok, value = pcall(itemPort.displayName, item)
+    else
+        ok, value = pcall(function() return item:getDisplayName() end)
+    end
+    if ok and type(value) == "string" and value ~= "" then return value end
+    if type(item) == "table" and type(item.name) == "string" and item.name ~= "" then return item.name end
+    return nil
+end
+
+local function itemTypeFor(item, itemPort)
+    local ok, value
+    if itemPort and type(itemPort.itemType) == "function" then
+        ok, value = pcall(itemPort.itemType, item)
+    else
+        ok, value = pcall(function() return item:getFullType() end)
+    end
+    if ok and value ~= nil and tostring(value) ~= "" then return tostring(value) end
+    if type(item) == "table" and type(item.itemType) == "string" and item.itemType ~= "" then return item.itemType end
+    return nil
+end
+
+local function isAuthoredCandidate(item, asset, itemPort)
+    if not asset or displayNameFor(item, itemPort) ~= asset.displayName then return false end
+    local itemType = itemTypeFor(item, itemPort)
+    -- Production exposes getFullType. The nil case keeps deterministic plain-
+    -- Lua boundary fakes conservative when they can expose only the authored
+    -- display signal.
+    return itemType == nil or itemType == asset.pzItemType
+end
+
 local function claimMatches(claims, assetId, token)
     return claims.nestedAssetId == assetId or claims.legacyAssetId == assetId
         or claims.nestedPhysicalToken == token or claims.legacyPhysicalToken == token
@@ -43,7 +76,7 @@ function ItemIdentityGateway.new(options)
         return token
     end
 
-    function api.verify(item, expectedAssetId)
+    function api.verify(item, expectedAssetId, context)
         local modData, modDataMessage = modDataFor(item, itemPort)
         if not modData then return { status = "other", reason = modDataMessage, hasCarrier = false } end
         local inspected, inspectMessage = ItemPresentation.inspectModData(modData)
@@ -79,6 +112,15 @@ function ItemIdentityGateway.new(options)
                 hasCarrier = true
             }
         end
+        if context and context.authoredTarget == true and expectedAssetId
+            and isAuthoredCandidate(item, Content.assets[expectedAssetId], itemPort) then
+            return {
+                status = "rejected",
+                reason = "authored-candidate-missing-canonical-carrier",
+                hasCarrier = false,
+                authoredCandidate = true
+            }
+        end
         return { status = "other", reason = inspectMessage or tokenMessage, hasCarrier = false }
     end
 
@@ -106,6 +148,36 @@ function ItemIdentityGateway.new(options)
         if not subject then return nil, subjectMessage end
         local final = api.verify(item, subject.assetId)
         if final.status ~= "verified" then return nil, final.reason or final.status end
+        subject.carrierHasLegacy = final.identity.hasLegacy == true
+        return subject
+    end
+
+    -- Activation is deliberately read-only. Menu construction may refresh an
+    -- explicitly supported older presentation, but a callback never repairs a
+    -- changed carrier and never authorizes a different coherent pair.
+    function api.revalidatePresentation(item, isInventoryItem, authorization)
+        if type(authorization) ~= "table" or item ~= authorization.item then return nil, "stale-item" end
+        if type(authorization.assetId) ~= "string" or type(authorization.physicalToken) ~= "string" then
+            return nil, "stale-authorization"
+        end
+        local first = api.verify(item, authorization.assetId)
+        if first.status ~= "verified" then return nil, first.reason or first.status end
+        if first.identity.assetId ~= authorization.assetId
+            or first.identity.physicalToken ~= authorization.physicalToken then return nil, "stale-pair" end
+        if first.identity.presentationState ~= "current" then return nil, "stale-presentation" end
+        if (first.identity.hasLegacy == true) ~= (authorization.carrierHasLegacy == true) then
+            return nil, "stale-legacy-mirror"
+        end
+        local subject, subjectMessage = ItemPresentation.validate(item, isInventoryItem)
+        if not subject then return nil, subjectMessage end
+        local final = api.verify(item, authorization.assetId)
+        if final.status ~= "verified" or final.identity.assetId ~= authorization.assetId
+            or final.identity.physicalToken ~= authorization.physicalToken
+            or final.identity.presentationState ~= "current"
+            or (final.identity.hasLegacy == true) ~= (authorization.carrierHasLegacy == true) then
+            return nil, final.reason or "stale-authorization"
+        end
+        subject.carrierHasLegacy = final.identity.hasLegacy == true
         return subject
     end
 
@@ -121,7 +193,9 @@ function ItemIdentityGateway.new(options)
             local item = record and (record.item or record) or nil
             if item == nil or seen[item] then return end
             seen[item] = true
-            local result = api.verify(item, assetId)
+            local result = api.verify(item, assetId, {
+                authoredTarget = type(record) == "table" and record.authoredTarget == true
+            })
             local normalized = {
                 item = item,
                 identity = result.identity,

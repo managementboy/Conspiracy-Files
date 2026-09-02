@@ -341,6 +341,12 @@ Records the player's encounter with an Asset/object in a specific discovery cont
 | `contextText` | `Found in police property records.` | Yes | Yes |
 | `playerMarkedInteresting` | `false` for D2; `true` for B-37 key | Yes | Treat as immutable creation intent in v0.1 |
 
+For `kind = "marked-object"`, exactly one subject representation is present:
+either `assetId` resolving to a known `ordinary-object` Asset, or a non-empty
+bounded `subjectLabel` for a generic object. Both and neither are invalid; the
+same exclusivity applies at the Mark Interesting command boundary and during
+full-root reconstruction.
+
 ### Optional fields
 
 | Field | Why |
@@ -520,7 +526,7 @@ The braces above describe the **logical model**, not a T1-approved Lua serializa
 | `threadId` | No. |
 | `contentRevision` | Informational per initialized save. A compatible installed typo/text revision does not gate load. |
 | `pzMinorLine` | Informational target line recorded at initialization; runtime support is checked separately from save schema. |
-| `entryOpportunityUsed` | `nil` → `anchor` when D1 becomes the accepted introduction, or `fallback` when D2 activates as the one fallback introduction; the value never switches silently. D1 placement alone does not consume the introduction: under P4-R40, durably placed but undiscovered D1 may yield to D2 only after T5/P4-R37 conclusively sets D1 `unavailable`. Unloading, original-container absence, `unknown`, `untracked` and `conflict` do not qualify. D1 never respawns. |
+| `entryOpportunityUsed` | `nil` → `anchor` when D1 becomes the accepted introduction, or `fallback` when D2 activates as the one fallback introduction; the value never switches silently. D1 placement alone does not consume the introduction: under P4-R40, durably placed but undiscovered D1 may yield to D2 only after terminal pre-placement loss or after T5/P4-R37 conclusively sets placed D1 `unavailable`, with D2 placed. Unloading, original-container absence, `unknown`, `untracked` and `conflict` do not initially qualify. Full-root validation rejects a fallback without a reachable loss/materialisation history and rejects a currently eligible uncommitted fallback. After a valid sticky selection, later D1 recovery/conflict, D2 conflict and D1 discovery after D2's recorded introduction remain reachable and valid. D1 never respawns. |
 | `assetMaterialisation` | Yes under ADR-0005: `pending`, `placing`, `placed`, `unavailable`, `conflict`. `unavailable` and `conflict` are terminal; `placed` may move only to sticky `conflict`. `lost` is not a placement state. |
 | `physicalAvailability` | Yes under ADR-0005: `untracked`, `unknown`, `available`, `unavailable`, `conflict`. Non-conflict observations may refine; `conflict` is sticky. |
 | `confirmedLocationIds` | Append/add when T8-approved arrival logic confirms one of the two locations. |

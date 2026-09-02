@@ -12,8 +12,8 @@ is the active `(Asset ID, expected token)` pair verified through the production
 world-runtime gateway. Parsed ModData, a token alone, an Asset ID alone, a flat
 legacy claim or a caller-supplied scan classification is never authorization.
 
-Run presentation cases for D1–D6 and B-37. Run placement cases for D1–D6 at
-their accepted P2/R2 containers. At minimum, exercise cross-pairs in both
+Run presentation, placement and scan/reconciliation cases for D1–D6 and B-37
+at their accepted P2/R2 containers. At minimum, exercise cross-pairs in both
 directions for D1↔D2 and D3↔D4; then rotate the remaining Assets so every
 authored Asset appears once with another Asset's expected token.
 
@@ -22,18 +22,18 @@ authored Asset appears once with another Asset's expected token.
 | Case | Constructed carrier | Required result |
 |---|---|---|
 | P1 | Exact current nested carrier and active pair; absent legacy fields | Verified; normal placement/scan/presentation path may proceed. |
-| P2 | Structurally compatible older content revision with exact active pair | Verify identity first; refresh display/revision fields in place; verify again; preserve item instance, Asset ID and token. |
-| N1 | No `ConspiracyFiles` carrier / tokenless item | Reject. |
+| P2 | Exact active pair at `dead-air-r0-compatible` or `dead-air-r0-compatible-text` | Verify identity first; refresh display/revision fields in place; verify again; preserve item instance, Asset ID, token and exact legacy-mirror identity fields. |
+| N1 | At the exact authored target, the expected PZ item type plus canonical authored display name but no valid `ConspiracyFiles` carrier/pair | Reject. An ordinary item that lacks the authored presentation signal, or has a different item type, remains unrelated loot and does not block placement. |
 | N2 | Nested Asset ID with no physical token | Reject. |
 | N3 | Nested physical token with no Asset ID | Reject. |
 | N4 | Complete-looking legacy flat fields with no nested carrier | Reject. |
 | N5 | Unknown Asset ID with an active or fabricated token | Reject. |
 | N6 | Incompatible or malformed item schema | Reject. |
-| N7 | Missing, invalid or unsupported content revision | Reject unless it is the explicitly supported compatible-older P2 case. |
+| N7 | Missing, malformed, unknown or future content revision | Reject unless it is exactly one of P2's two supported older revisions. |
 | N8 | Current revision with tampered title, description, body or reveal state | Reject. |
 | N9 | Nested carrier plus partial or disagreeing legacy mirror | Reject; never choose or synchronize a side. |
 | N10 | Known Asset A with expected token for Asset B | Reject in both directions; never rewrite to either Asset. |
-| N11 | P1 at menu construction, then mutate Asset ID or token before callback activation | Activation rejects; no reader or domain intent. |
+| N11 | P1 at menu construction, then remove/partially mutate the carrier, substitute a complete coherent pair, downgrade to P2, mutate body/mirror/ownership, or pass another item to the callback | Activation's read-only revalidation rejects; no refresh, reader or domain intent. Run coherent D1→D2 and D2→D1 substitution explicitly. |
 | N12 | Caller-supplied physical observation labels an N2/N3/N10 carrier as a match | Gateway revalidation rejects; no availability transition. |
 | C1 | Two distinct items carrying the same verified active pair | Enter sticky `conflict`; retain both; do not create, delete, select, restamp or clear a winner. |
 
@@ -84,7 +84,10 @@ Confirm ordinary inventory/container behavior remains available.
 For D1–D6 and B-37 in player and Ground/loot panes, run P1/P2, every N-case,
 mixed selections, two-valid ambiguity, owned/unowned state, already-marked state,
 foreign same-label actions and repeated menu construction. Run N11 separately
-for Asset mutation and token mutation for both Inspect and Mark-capable items.
+for carrier removal, Asset-only/token-only mutation, both directions of
+coherent D1/D2 substitution, compatible-refresh abuse, presentation/mirror
+mutation, ownership transition and callback-item substitution. Exercise
+Inspect and both B-37 actions where applicable.
 
 Only a P1/P2 subject whose active pair verifies at construction and activation
 may open one reader or emit one idempotent domain intent. Rejected and mutated

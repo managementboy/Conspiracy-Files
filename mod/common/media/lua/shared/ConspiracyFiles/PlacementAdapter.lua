@@ -38,7 +38,7 @@ function PlacementAdapter.new(options)
     local function matchingItems(target, assetId)
         local matches = {}
         for _, item in ipairs(world.items(target)) do
-            local result = identityGateway.verify(item, assetId)
+            local result = identityGateway.verify(item, assetId, { authoredTarget = true })
             if result.status == "verified" then
                 matches[#matches + 1] = item
             elseif result.status == "collision" or result.status == "rejected" then

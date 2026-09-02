@@ -29,9 +29,15 @@ per-subsystem error budgets, the early multiplayer decision, deferred lifecycle
 initialization, Global ModData-shaped staging/round trips, last-known-good
 preservation, and the actual Build 42 entrypoint's one-namespace/additive-hook
 behavior. Integrity regressions also exercise exact per-kind journal replay,
-swapped/impossible histories, all seven authored active pairs, one-sided and
-cross-paired carrier rejection, supplied-observation revalidation,
-activation-time mutation and fail-closed CI range selection.
+swapped/impossible histories, public-operation root round trips followed by
+systematic mutations of every canonical root field and journal kind, fallback
+and marked-subject truth tables, all seven authored active pairs across the
+placement/scan/presentation matrix, explicit older-revision compatibility,
+authored-candidate versus ordinary-loot classification, supplied-observation
+revalidation, read-only activation-time substitution/mutation and fail-closed
+CI range selection. Mutations that remain valid are named in the model test;
+notably, root `contentRevision` remains informational under P4-R47, whereas an
+item carrier must be current or in P4-R38's explicit two-revision allowlist.
 
 The entrypoint smoke uses temporary fake PZ globals and restores them. It is not
 live engine evidence and does not pass CF-V01-E09/E11/E12/E13. See

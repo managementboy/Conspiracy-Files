@@ -27,6 +27,12 @@ local function assertChanged(ok, _, changed)
 end
 
 local function discover(state, assetId)
+    if assetId == ids.d2 and state.snapshot().entryOpportunityUsed == nil then
+        assertChanged(state.ensureMaterialisation(ids.d1))
+        assertChanged(state.markPlacementUnavailable(ids.d1))
+        assertChanged(state.materialise(ids.d2))
+        assertEqual("fallback", state.snapshot().entryOpportunityUsed)
+    end
     assertChanged(state.discover(assetId, "Found " .. assetId, Content.assets[assetId].placementLocationId))
 end
 

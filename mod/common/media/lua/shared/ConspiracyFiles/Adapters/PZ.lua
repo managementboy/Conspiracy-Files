@@ -57,9 +57,9 @@ local function resolvePlacement(binding)
     }
 end
 
-local function addItemObservation(result, collisions, seen, item, assetId, identityGateway, location)
+local function addItemObservation(result, collisions, seen, item, assetId, identityGateway, location, authoredTarget)
     if seen[item] then return end
-    local verification = identityGateway.verify(item, assetId)
+    local verification = identityGateway.verify(item, assetId, { authoredTarget = authoredTarget == true })
     if verification.status == "verified" then
         seen[item] = true
         result[#result + 1] = { item = item, identity = verification.identity, location = location }
@@ -71,9 +71,9 @@ local function addItemObservation(result, collisions, seen, item, assetId, ident
     end
 end
 
-local function addContainerMatches(result, collisions, seen, container, assetId, identityGateway, location)
+local function addContainerMatches(result, collisions, seen, container, assetId, identityGateway, location, authoredTarget)
     for _, item in ipairs(listItems(container)) do
-        addItemObservation(result, collisions, seen, item, assetId, identityGateway, location)
+        addItemObservation(result, collisions, seen, item, assetId, identityGateway, location, authoredTarget)
     end
 end
 
@@ -106,7 +106,8 @@ local function scanPhysical(context)
     if context and context.binding then
         local resolution = resolvePlacement(context.binding)
         if resolution.status == "available" then
-            addContainerMatches(matches, collisions, seen, resolution.target, assetId, identityGateway, resolution.location)
+            addContainerMatches(matches, collisions, seen, resolution.target, assetId, identityGateway,
+                resolution.location, true)
         end
     end
     local playerSquare = player and player:getSquare() or nil
@@ -205,7 +206,9 @@ function PZ.environment()
     local itemPort = {
         modData = function(item) return item:getModData() end,
         setName = function(item, name) item:setName(name) end,
-        setCustomName = function(item, value) item:setCustomName(value) end
+        setCustomName = function(item, value) item:setCustomName(value) end,
+        displayName = function(item) return item:getDisplayName() end,
+        itemType = function(item) return item:getFullType() end
     }
     local world = {
         saveIdentity = function()
