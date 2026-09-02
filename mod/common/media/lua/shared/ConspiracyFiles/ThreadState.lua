@@ -1,8 +1,8 @@
-local Content = require("ConspiracyFiles.Content")
-local Copy = require("ConspiracyFiles.Copy")
-local Ids = require("ConspiracyFiles.Ids")
-local Renderer = require("ConspiracyFiles.Renderer")
-local Validator = require("ConspiracyFiles.Validator")
+local Content = require("ConspiracyFiles/Content")
+local Copy = require("ConspiracyFiles/Copy")
+local Ids = require("ConspiracyFiles/Ids")
+local Renderer = require("ConspiracyFiles/Renderer")
+local Validator = require("ConspiracyFiles/Validator")
 
 local ThreadState = {}
 
@@ -127,6 +127,17 @@ local function priorMarkedKey(root)
     return nil
 end
 
+local function fallbackEligible(root)
+    if root.entryOpportunityUsed ~= nil or findEvidenceByAsset(root, Content.ids.d1) then return false end
+    local anchor = root.assetMaterialisation[Content.ids.d1]
+    return (anchor == "unavailable" or (anchor == "placed" and root.physicalAvailability[Content.ids.d1] == "unavailable"))
+        and root.assetMaterialisation[Content.ids.d2] == "placed"
+end
+
+local function maybeActivateFallback(root)
+    if fallbackEligible(root) then root.entryOpportunityUsed = "fallback" end
+end
+
 function ThreadState.new(initialRoot)
     local candidate = initialRoot or freshRoot()
     local ok, message = Validator.validate(candidate)
@@ -182,18 +193,70 @@ function ThreadState.new(initialRoot)
         if role ~= "anchor" and role ~= "fallback" then return false, "entry opportunity must be anchor or fallback" end
         return stage(function(proposed)
             if proposed.entryOpportunityUsed ~= nil then return false, proposed.entryOpportunityUsed end
+            if role == "fallback" and not fallbackEligible(proposed) then return false, "fallback introduction is not eligible" end
             proposed.entryOpportunityUsed = role
             return true, role
         end)
     end
 
-    function api.materialise(assetId)
-        if not Content.assets[assetId] then return false, "unknown Asset ID" end
+    function api.ensureMaterialisation(assetId)
+        local asset = Content.assets[assetId]
+        if not asset then return false, "unknown Asset ID" end
+        return stage(function(proposed)
+            if proposed.assetMaterialisation[assetId] ~= nil then return false, assetId end
+            proposed.assetMaterialisation[assetId] = "pending"
+            return true, assetId
+        end)
+    end
+
+    function api.beginPlacement(assetId)
+        return api.transitionMaterialisation(assetId, "placing")
+    end
+
+    function api.completePlacement(assetId)
         return stage(function(proposed)
             if proposed.assetMaterialisation[assetId] == "placed" then return false, assetId end
             proposed.assetMaterialisation[assetId] = "placed"
+            proposed.physicalAvailability[assetId] = "available"
+            maybeActivateFallback(proposed)
             return true, assetId
         end)
+    end
+
+    function api.markPlacementUnavailable(assetId)
+        return stage(function(proposed)
+            local state = proposed.assetMaterialisation[assetId]
+            if state ~= "pending" and state ~= "placing" then return false, "only pre-placement state can become unavailable" end
+            proposed.assetMaterialisation[assetId] = "unavailable"
+            maybeActivateFallback(proposed)
+            return true, assetId
+        end)
+    end
+
+    function api.reconcilePhysical(assetId, availability)
+        if not Validator.PHYSICAL_AVAILABILITY_STATES[availability] then return false, "unknown physical availability state" end
+        return stage(function(proposed)
+            local placement = proposed.assetMaterialisation[assetId]
+            if availability == "conflict" then proposed.assetMaterialisation[assetId] = "conflict" end
+            if placement ~= "placed" and placement ~= "conflict" and availability ~= "conflict" then
+                return false, "physical reconciliation requires placement"
+            end
+            if proposed.physicalAvailability[assetId] == availability then return false, assetId end
+            proposed.physicalAvailability[assetId] = availability
+            maybeActivateFallback(proposed)
+            return true, assetId
+        end)
+    end
+
+    function api.fallbackEligible() return fallbackEligible(root) end
+
+    function api.isDiscovered(assetId) return findEvidenceByAsset(root, assetId) ~= nil end
+
+    function api.materialise(assetId)
+        if not Content.assets[assetId] then return false, "unknown Asset ID" end
+        local ok, result = api.ensureMaterialisation(assetId)
+        if not ok then return false, result end
+        return api.completePlacement(assetId)
     end
 
     function api.transitionMaterialisation(assetId, status)
@@ -202,6 +265,7 @@ function ThreadState.new(initialRoot)
         return stage(function(proposed)
             if proposed.assetMaterialisation[assetId] == status then return false, assetId end
             proposed.assetMaterialisation[assetId] = status
+            maybeActivateFallback(proposed)
             return true, assetId
         end)
     end

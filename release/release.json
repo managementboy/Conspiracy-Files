@@ -1,0 +1,18 @@
+{
+  "content_revision": "dead-air-r1",
+  "known_limitations": [
+    "The live Build 42 production-adapter acceptance matrix is not complete.",
+    "Multiplayer is disabled until a multiplayer architecture is accepted.",
+    "This package is for local and cross-device prerelease validation only."
+  ],
+  "project_zomboid": {
+    "minimum_version": "42.20.0",
+    "supported_line": "42.20.x",
+    "verified_build": "42.20.4",
+    "verified_revision": "b0bbce05d5",
+    "verified_steam_build_id": "24909800"
+  },
+  "save_compatibility": "Use disposable clean saves for prerelease testing; save compatibility is not yet declared.",
+  "state_schema_version": 2,
+  "version": "0.1.0"
+}

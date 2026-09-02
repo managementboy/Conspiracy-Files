@@ -84,6 +84,22 @@ The documented `524288`-byte internal block constant is not a persistence limit 
 
 ## Spike results and remaining work
 
+### CF-V01-E10 — death/reload lifecycle boundary
+
+Implemented and fake-backed; live acceptance is pending. Existing T1 evidence
+verifies receipt of `OnInitGlobalModData`, `OnSave` and `OnPostSave` around its
+real persistence matrix, while T5 verifies receipt of `OnPlayerDeath` during a
+real disposable-character death. The production boundary selects
+`OnInitGlobalModData`/`OnGameStart` for reload and `OnSave`/`OnPlayerDeath` for
+last-known-good checkpoints. It does not use `OnPostSave` as proof and never
+calls `saveGame()`.
+
+This is a selection from existing evidence, not a new live result. Complete
+event ordering, mutation-in-`OnSave` serialization, Alt-F4 delivery and
+already-dead reload remain unproven and are enumerated in
+`CF_V01_E10_LIFECYCLE_BOUNDARY.md` and
+`../testing/CF_V01_E10_LIVE_MATRIX.md`.
+
 ### T4 — Exact-once deferred placement
 
 Complete on stable 42.20.4. `Events.LoadGridsquare` is a verified cooperative wake-up surface, but it fired 27,245 times before `OnGameStart`; enqueue relevant curated bindings and add an `OnGameStart` catch-up rather than mutating inline. A true teleport-driven stream-out/in made the exact target square unavailable and produced one new exact-target callback on return.

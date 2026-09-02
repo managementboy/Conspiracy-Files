@@ -1,4 +1,4 @@
-local Ids = require("ConspiracyFiles.Ids")
+local Ids = require("ConspiracyFiles/Ids")
 
 local Content = {}
 
@@ -81,6 +81,7 @@ Content.locations = {
 Content.assets = {
     [D1] = {
         assetId = D1, threadId = THREAD_ID, displayName = "CSS Field Service Ticket 93-0714",
+        descriptionText = "Grease-smudged three-part carbon service ticket; technician copy.", pzItemType = "Base.Note",
         assetKind = "document", placementLocationId = RELAY, entryRole = "anchor",
         references = { ROURKE, CSS, RELAY }, leadLocationIds = { POLICE }, autoRecordEvidence = true,
         journalText = "Found a CSS service ticket for Relay Site 31. Rourke logged a 37-second dead carrier and says police took his receiver.",
@@ -140,6 +141,7 @@ B-37 red key was on the same ring when they took the set.]]
     },
     [D2] = {
         assetId = D2, threadId = THREAD_ID, displayName = "Police Property Record 4471",
+        descriptionText = "Property/evidence intake card with stapled continuation strip.", pzItemType = "Base.Note",
         assetKind = "document", placementLocationId = POLICE, entryRole = "fallback",
         references = { PIKE, CSS, RELAY }, leadLocationIds = { RELAY }, autoRecordEvidence = true,
         journalText = "Police logged a modified receiver from Relay Site 31. No requesting agency is named; the set carries a CSS service number.",
@@ -192,6 +194,7 @@ Apparently "nobody" has excellent stationery.]]
     },
     [D3] = {
         assetId = D3, threadId = THREAD_ID, displayName = "CSS Invoice / Stock Transfer 9327",
+        descriptionText = "Dot-matrix invoice/stock transfer on tractor-feed paper.", pzItemType = "Base.Note",
         assetKind = "document", placementLocationId = RELAY,
         references = { CSS, VALE, RELAY }, autoRecordEvidence = true,
         journalText = "CSS billed ordinary relay work around a customer-supplied 7C-41 package. H. Vale approved it without a customer name.",
@@ -237,6 +240,7 @@ APPROVED: H. VALE]]
     },
     [D4] = {
         assetId = D4, threadId = THREAD_ID, displayName = "Torn Page from Rourke's Work Notebook",
+        descriptionText = "Torn lined pocket-notebook page, written in pencil and blue pen.", pzItemType = "Base.Note",
         assetKind = "document", placementLocationId = RELAY,
         references = { ROURKE, PIKE, VALE, CSS, RELAY }, autoRecordEvidence = true,
         journalText = "Rourke kept a private account. He says he was told to make 7C live, then told the test never happened.",
@@ -271,6 +275,7 @@ Carbon paper: the nation's last reliable backup system.]]
     },
     [D5] = {
         assetId = D5, threadId = THREAD_ID, displayName = "Temporary Access and Reporting Procedure — Relay 31",
+        descriptionText = "Typed one-page memo on CSS letterhead; photocopy with a faint top edge.", pzItemType = "Base.Note",
         assetKind = "document", placementLocationId = POLICE,
         references = { VALE, CSS, RELAY }, contradictsAssetIds = { D6, D2 }, autoRecordEvidence = true,
         journalText = "A memo signed H. Vale says police were warned about the relay work in advance and told not to report the tests by themselves.",
@@ -324,6 +329,7 @@ CUSTOMER COPY — [faint/illegible]]=]
     },
     [D6] = {
         assetId = D6, threadId = THREAD_ID, displayName = "Property Desk Shift Note",
+        descriptionText = "Handwritten note on the back of a property-room count sheet.", pzItemType = "Base.Note",
         assetKind = "document", placementLocationId = POLICE,
         references = { PIKE, ROURKE, VALE, CSS, RELAY }, contradictsAssetIds = { D5 },
         recontextualisesAssetIds = { KEY }, autoRecordEvidence = true,
@@ -361,7 +367,9 @@ If anyone asks, the radio arrested itself.
     [KEY] = {
         assetId = KEY, threadId = THREAD_ID, displayName = "Small key; red tag B-37",
         assetKind = "ordinary-object", placementLocationId = POLICE,
-        references = { RELAY }, autoRecordEvidence = false
+        references = { RELAY }, autoRecordEvidence = false,
+        inspectText = "A small cabinet key with a red plastic tag marked B-37.",
+        pzItemType = "Base.Key1"
     }
 }
 
@@ -413,8 +421,15 @@ function Content.validate()
         for _, locationId in ipairs(asset.leadLocationIds or {}) do if not Content.locations[locationId] then return false, "unresolved lead Location ID" end end
         for _, otherAssetId in ipairs(asset.contradictsAssetIds or {}) do if not Content.assets[otherAssetId] then return false, "unresolved contradiction Asset ID" end end
         for _, otherAssetId in ipairs(asset.recontextualisesAssetIds or {}) do if not Content.assets[otherAssetId] then return false, "unresolved recontextualisation Asset ID" end end
-        if asset.assetKind == "document" and (type(asset.bodyText) ~= "string" or type(asset.journalText) ~= "string" or not asset.autoRecordEvidence) then
+        if asset.assetKind == "document" and (type(asset.bodyText) ~= "string" or asset.bodyText == ""
+            or type(asset.journalText) ~= "string" or type(asset.displayName) ~= "string"
+            or type(asset.descriptionText) ~= "string" or asset.descriptionText == ""
+            or type(asset.pzItemType) ~= "string" or asset.pzItemType == "" or not asset.autoRecordEvidence) then
             return false, "document Asset is incomplete " .. assetId
+        end
+        if asset.assetKind == "ordinary-object" and (type(asset.inspectText) ~= "string" or asset.inspectText == ""
+            or type(asset.pzItemType) ~= "string" or asset.pzItemType == "") then
+            return false, "ordinary-object Asset is incomplete " .. assetId
         end
         if asset.assetKind == "document" then
             local evidenceOk = pcall(Ids.authoredEvidence, assetId)

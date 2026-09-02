@@ -10,3 +10,13 @@ Planned responsibilities after the relevant schemas exist:
 - secret-scan provider profiles/API keys.
 
 Do not build a generic external content-pack validator before a second real content set exists. The first schema should be extracted from working built-in content, not invented in advance.
+
+## Release pipeline
+
+`release_pipeline.py` is the offline ADR-0003 implementation. From a clean checkout, run:
+
+```text
+python3 tools/release_pipeline.py all --output dist
+```
+
+It validates and packages only the built-in production mod. It is deliberately not a generic content-pack validator and contains no upload, publication or Workshop API behavior. See `docs/design/RELEASE_AND_DISTRIBUTION.md` for the artifact contract and cross-device procedure.

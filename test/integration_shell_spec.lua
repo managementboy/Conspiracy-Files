@@ -138,6 +138,22 @@ test("integration bootstrap disables before hooks or canonical mutation in multi
     assertEqual(3, #reports)
 end)
 
+test("integration runtime accepts only the Build 42.20 major/minor line before mutation", function()
+    local hooks, mutations = 0, 0
+    local runtime = CF.IntegrationRuntime.start({
+        isMultiplayer = function() return false end,
+        runtimeVersion = function() return { major = 42, minor = 21, patch = 0 } end,
+        report = function() end,
+        storage = { get = function() mutations = mutations + 1 end, replace = function() mutations = mutations + 1 end },
+        clock = function() return 0 end,
+        addEvent = function() hooks = hooks + 1 end
+    })
+    assertFalse(runtime.enabled)
+    assertEqual("unsupported-pz-minor-line", runtime.reason)
+    assertEqual(0, hooks)
+    assertEqual(0, mutations)
+end)
+
 test("integration singleplayer lifecycle is additive and defers canonical creation until ModData initialization", function()
     local callbacks, reports = {}, {}
     local storage = makeStorage()
@@ -152,7 +168,7 @@ test("integration singleplayer lifecycle is additive and defers canonical creati
         end
     })
     assertTrue(runtime.enabled)
-    assertEqual(3, #runtime.registeredEvents)
+    assertEqual(6, #runtime.registeredEvents)
     assertEqual(0, storage.replacementCount())
     assertEqual("registered", runtime.phase())
     callbacks.OnInitGlobalModData(true)
@@ -190,6 +206,19 @@ test("integration persistence stages complete roots and reconstructs domain proj
     assertDeepEqual(expectedSnapshot, second.snapshot())
     assertDeepEqual(expectedJournal, second.domain().renderJournal())
     assertEqual(first.domain().organisationLabel(ids.css), second.domain().organisationLabel(ids.css))
+end)
+
+test("integration E10 checkpoints preserve the complete last-known-good root without lifecycle facts", function()
+    local storage = makeStorage()
+    local adapter = CF.PersistenceAdapter.new({ storage = storage })
+    assertTrue(adapter.load(true))
+    assertTrue(adapter.transaction(discoverTransaction(ids.d1)))
+    local before = adapter.snapshot()
+    assertTrue(adapter.checkpoint())
+    assertTrue(adapter.checkpoint())
+    assertDeepEqual(before, adapter.snapshot())
+    assertEqual(1, #adapter.snapshot().evidence)
+    assertEqual(2, #adapter.snapshot().journal)
 end)
 
 test("integration persistence rejects unsafe, oversized, regressive, and failed replacements without losing last-known-good", function()
@@ -310,14 +339,16 @@ test("integration Build 42 entrypoint creates one namespace and registers each c
         namespace = rawget(_G, "ConspiracyFiles"),
         isMultiplayer = rawget(_G, "isMultiplayer"),
         getTimeInMillis = rawget(_G, "getTimeInMillis"),
+        getCore = rawget(_G, "getCore"),
         ModData = rawget(_G, "ModData"),
         Events = rawget(_G, "Events")
     }
-    local callbacks = { OnInitGlobalModData = {}, OnGameStart = {}, OnTick = {} }
+    local callbacks = { OnInitGlobalModData = {}, OnGameStart = {}, LoadGridsquare = {}, OnSave = {}, OnPlayerDeath = {}, OnTick = {} }
     local roots = {}
     _G.ConspiracyFiles = nil
     _G.isMultiplayer = function() return false end
     _G.getTimeInMillis = function() return 0 end
+    _G.getCore = function() return { getVersion = function() return "42.20.4" end } end
     _G.ModData = {
         get = function(tag) return roots[tag] end,
         add = function(tag, root) roots[tag] = root end
@@ -339,6 +370,7 @@ test("integration Build 42 entrypoint creates one namespace and registers each c
     _G.ConspiracyFiles = old.namespace
     _G.isMultiplayer = old.isMultiplayer
     _G.getTimeInMillis = old.getTimeInMillis
+    _G.getCore = old.getCore
     _G.ModData = old.ModData
     _G.Events = old.Events
 end)

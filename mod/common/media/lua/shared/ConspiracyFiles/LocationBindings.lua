@@ -1,4 +1,4 @@
-local Content = require("ConspiracyFiles.Content")
+local Content = require("ConspiracyFiles/Content")
 
 local ids = Content.ids
 
@@ -40,6 +40,7 @@ local LocationBindings = {
             },
             placements = {
                 [ids.d2] = { x = 13207, y = 3087, z = 0, room = "policeoffice", objectIndex = 2, containerIndex = 0, containerType = "filingcabinet", sprite = "location_business_office_generic_01_32" },
+                [ids.key] = { x = 13207, y = 3087, z = 0, room = "policeoffice", objectIndex = 2, containerIndex = 0, containerType = "filingcabinet", sprite = "location_business_office_generic_01_32" },
                 [ids.d5] = { x = 13208, y = 3087, z = 0, room = "policeoffice", objectIndex = 2, containerIndex = 0, containerType = "filingcabinet", sprite = "location_business_office_generic_01_32" },
                 [ids.d6] = { x = 13209, y = 3087, z = 0, room = "policeoffice", objectIndex = 2, containerIndex = 0, containerType = "filingcabinet", sprite = "location_business_office_generic_01_32" }
             },

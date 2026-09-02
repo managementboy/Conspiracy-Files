@@ -1,0 +1,9 @@
+UI_EN = {
+    UI_CF_Inspect = "Inspect",
+    UI_CF_MarkInteresting = "Mark Interesting",
+    UI_CF_InspectAmbiguous = "Inspect Conspiracy-Files item",
+    UI_CF_SelectOne = "Select one Conspiracy-Files item at a time.",
+    UI_CF_TakeBeforeMarking = "Take this item before marking it interesting.",
+    UI_CF_AlreadyMarked = "Already marked interesting.",
+}
+

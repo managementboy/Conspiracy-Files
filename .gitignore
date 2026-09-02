@@ -24,6 +24,8 @@ dist/
 out/
 tmp/
 coverage/
+__pycache__/
+*.py[cod]
 
 # Generated release/Workshop artifacts
 *.zip

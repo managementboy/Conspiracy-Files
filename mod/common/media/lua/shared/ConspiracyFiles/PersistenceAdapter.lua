@@ -1,6 +1,6 @@
-local Copy = require("ConspiracyFiles.Copy")
-local ThreadState = require("ConspiracyFiles.ThreadState")
-local Validator = require("ConspiracyFiles.Validator")
+local Copy = require("ConspiracyFiles/Copy")
+local ThreadState = require("ConspiracyFiles/ThreadState")
+local Validator = require("ConspiracyFiles/Validator")
 
 local PersistenceAdapter = {}
 PersistenceAdapter.DEFAULT_TAG = "ConspiracyFiles.v0_1"
@@ -44,6 +44,8 @@ function PersistenceAdapter.new(options)
     end
 
     function api.load(isNewGame)
+        domain = nil
+        lastKnownGood = nil
         local persisted = storage.get(tag)
         local candidate = persisted
         if candidate == nil then
@@ -62,6 +64,15 @@ function PersistenceAdapter.new(options)
         domain = rebuilt
         lastKnownGood = Copy.deep(staged)
         return true, { isNewGame = isNewGame == true, created = persisted == nil, estimatedBytes = estimated }
+    end
+
+    function api.checkpoint()
+        if not domain or not lastKnownGood then return false, "persistence adapter is not loaded" end
+        local staged, message, estimated = validateAndCopy(lastKnownGood)
+        if not staged then return false, message end
+        storage.replace(tag, staged)
+        lastKnownGood = Copy.deep(staged)
+        return true, { estimatedBytes = estimated }
     end
 
     function api.commit(candidate)

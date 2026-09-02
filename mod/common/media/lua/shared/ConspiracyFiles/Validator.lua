@@ -1,5 +1,5 @@
-local Content = require("ConspiracyFiles.Content")
-local Ids = require("ConspiracyFiles.Ids")
+local Content = require("ConspiracyFiles/Content")
+local Ids = require("ConspiracyFiles/Ids")
 
 local Validator = {}
 
