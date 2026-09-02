@@ -2,7 +2,7 @@ require "ISUI/ISCollapsableWindow"
 require "ISUI/ISRichTextPanel"
 require "ISUI/ISTabPanel"
 
-local WindowGeometry = require("ConspiracyFiles.WindowGeometry")
+local WindowGeometry = require("ConspiracyFiles/WindowGeometry")
 
 local PZWindows = {}
 

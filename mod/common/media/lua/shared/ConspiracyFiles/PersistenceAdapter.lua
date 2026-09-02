@@ -1,6 +1,6 @@
-local Copy = require("ConspiracyFiles.Copy")
-local ThreadState = require("ConspiracyFiles.ThreadState")
-local Validator = require("ConspiracyFiles.Validator")
+local Copy = require("ConspiracyFiles/Copy")
+local ThreadState = require("ConspiracyFiles/ThreadState")
+local Validator = require("ConspiracyFiles/Validator")
 
 local PersistenceAdapter = {}
 PersistenceAdapter.DEFAULT_TAG = "ConspiracyFiles.v0_1"

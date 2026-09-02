@@ -1,4 +1,4 @@
-local Ids = require("ConspiracyFiles.Ids")
+local Ids = require("ConspiracyFiles/Ids")
 
 local Content = {}
 

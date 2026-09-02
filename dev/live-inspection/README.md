@@ -45,7 +45,7 @@ Use the normal graphical session and move PZ to a dedicated workspace with ordin
 
 ### Unattended startup boundary
 
-An unattended profile must declare `interaction_scope=["startup-gate"]`, a non-T10 criterion list, the exact click gate pattern `game loading took`, `max_actions=1`, and either `left-click` or the allowlisted `Return`/`space` key. At the matched gate the runner requires exactly one mapped title-matching window whose `_NET_WM_PID` is in the harness-owned launcher process group on the current `DISPLAY`. The signature may be at most 30 seconds old. It focuses that window, emits one press/release pair through the already-installed Python Xlib/XTEST support, and writes `unattended-startup-input.json`.
+An unattended profile must declare `interaction_scope=["startup-gate"]`, a non-T10 criterion list, the exact click gate pattern `game loading took`, `max_actions=1`, and either `left-click` or the allowlisted `Return`/`space` key. At the matched gate the runner requires exactly one mapped title-matching window whose `_NET_WM_PID` is in the harness-owned launcher process group on the current `DISPLAY`. The signature may be at most 30 seconds old. It requests that exact window through `_NET_ACTIVE_WINDOW`, verifies X11 focus, warps to the client-area midpoint, and verifies that the topmost root child at that point belongs to the owned window before emitting one press/release pair through the already-installed Python Xlib/XTEST support. Failure at any step consumes the one-shot controller without emitting input. `unattended-startup-input.json` records the client dimensions, local/root target coordinates, active window and topmost pointer window as well as the original ownership/signature facts.
 
 Every unattended bundle writes `criteria-disposition.json` with T10 and CF-V01-E08 as `NOT RUN`. A profile that requests T10/E08, right-click, context menu, inventory/menu, gameplay or acceptance interaction is refused before save, mod or control mutation; the refused run still retains that disposition and a cleanup manifest. There is no retry input budget.
 
@@ -76,7 +76,7 @@ export PZ_LAUNCHER=/absolute/path/to/projectzomboid.sh
 dev/live-inspection/bin/cf-live-inspect run dev/live-inspection/profiles/dead-air-production-unattended.toml --site P2 --non-interactive
 ```
 
-Recompute a directory candidate checksum with `PYTHONPATH=dev/live-inspection/lib python3 -c 'from pathlib import Path; from live_inspection.payload import tree_checksum; print(tree_checksum(Path("mod")))'`. Commit the candidate first: a dirty worktree is intentionally refused.
+Recompute a directory candidate checksum with `PYTHONPATH=dev/live-inspection/lib python3 -c 'from pathlib import Path; from live_inspection.payload import tree_checksum; print(tree_checksum(Path("mod")))'`. Commit the candidate first: a dirty worktree is intentionally refused. The checked-in production profile is a bootstrap/player-ready/site-scan smoke only; its empty criterion list deliberately does not claim E09/E12/E13, whose dedicated live matrices remain required.
 
 Timeouts capture the active window (normally the dedicated PZ window) plus gate/attempt/recent-log JSON, avoiding a whole-desktop capture. Retries repeat observation only; they never relaunch or recreate state. A failed assertion cannot satisfy the configured `RUN_COMPLETE status=PASS` gate.
 

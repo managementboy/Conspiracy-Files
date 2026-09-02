@@ -183,6 +183,14 @@ end
 local function initialize()
     local valid, count = onlyExpectedModsActive()
     if not valid then error("active mods do not exactly match the profile; count=" .. tostring(count)) end
+    if Profile.payloadMode == "production" then
+        local runtime = ConspiracyFiles and ConspiracyFiles.runtime
+        if type(runtime) ~= "table" or runtime.enabled ~= true then error("production runtime is unavailable") end
+        local registered = runtime.registeredEvents
+        if type(registered) ~= "table" or #registered ~= 6 then error("production runtime did not register all six event boundaries") end
+        local phase = runtime.phase and runtime.phase() or "<unavailable>"
+        event("PRODUCTION_READY", { "status=PASS", "phase=" .. safe(phase), "registeredEvents=" .. #registered })
+    end
     event("PLAYER_READY", { "save=" .. saveName(), "activeModCount=" .. count, "activeMods=" .. safe(table.concat(Profile.activeModIds, ",")), "gameVersion=" .. safe(getGameVersion and getGameVersion()) })
     siteIndex, current, tick = 1, Profile.sites[1], 0
     logSiteDefinition(current); teleport(current); initialized = true

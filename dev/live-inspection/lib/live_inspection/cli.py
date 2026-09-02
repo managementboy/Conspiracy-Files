@@ -88,7 +88,7 @@ def lua_string(value: str) -> str:
 def render_lua_profile(profile: Profile, sites: tuple[Site, ...], save_name: str, mod_id: str, active_mod_ids: tuple[str, ...] | None = None) -> str:
     active_mod_ids = active_mod_ids or (mod_id,)
     expected = ", ".join(lua_string(value) for value in active_mod_ids)
-    lines = ["return {", f"  runId = {lua_string(save_name)},", f"  saveName = {lua_string(save_name)},", f"  modId = {lua_string(mod_id)},", f"  activeModIds = {{ {expected} }},", "  sites = {"]
+    lines = ["return {", f"  runId = {lua_string(save_name)},", f"  saveName = {lua_string(save_name)},", f"  modId = {lua_string(mod_id)},", f"  payloadMode = {lua_string(profile.payload.mode)},", f"  activeModIds = {{ {expected} }},", "  sites = {"]
     for site in sites:
         x1, y1, x2, y2 = site.bounds
         point = site.entry_point or ((x1 + x2) / 2, (y1 + y2) / 2, float(site.levels[0]))

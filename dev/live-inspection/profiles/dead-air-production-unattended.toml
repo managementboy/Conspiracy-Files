@@ -15,7 +15,9 @@ source_marker = ".cf-live-inspection-source"
 controls = ["latestSave.ini", "mods/default.txt", "options.ini", "debuglog.ini"]
 
 [acceptance]
-criteria = ["CF-V01-E09", "CF-V01-E12", "CF-V01-E13"]
+# This profile is a production bootstrap/player-ready/site-scan smoke. The
+# dedicated live matrices remain required for E09/E12/E13 acceptance.
+criteria = []
 interaction_scope = ["startup-gate"]
 
 [unattended_startup]
@@ -28,7 +30,7 @@ window_title_pattern = "(?i)^project zomboid(?:\\s.*)?$"
 [payload]
 mode = "production"
 source = "../../../mod"
-expected_sha256 = "fed8a31f0d045ec5e1a1ab8ebd41f42dfc4a54413f82b20b03d003ac4791c30e"
+expected_sha256 = "b5d5158d00aca458220ac82e9f3176146a850bdf61d4735dc36e3aa7f623e41a"
 expected_mod_id = "ConspiracyFiles"
 
 [time_budgets]

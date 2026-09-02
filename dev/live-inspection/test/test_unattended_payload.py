@@ -19,7 +19,7 @@ from live_inspection.cli import LiveRun
 from live_inspection.model import HarnessError, Payload, UnattendedStartup
 from live_inspection.payload import install_production_payload, tree_checksum
 from live_inspection.safety import ControlTransaction, recover_interrupted_runs
-from live_inspection.unattended import StartupGateController
+from live_inspection.unattended import StartupGateController, X11Action
 
 
 GATE_NAMES = (
@@ -123,6 +123,7 @@ class UnattendedConfigTests(unittest.TestCase):
         profile = load_profile(ROOT / "profiles/dead-air-production-unattended.toml")
         self.assertEqual(profile.payload.expected_sha256, tree_checksum(profile.payload.source))
         self.assertEqual(profile.payload.expected_mod_id, "ConspiracyFiles")
+        self.assertEqual(profile.criteria, ())
         self.assertIsNone(unattended_refusal_reason(profile))
 
 
@@ -132,11 +133,20 @@ class StartupGateControllerTests(unittest.TestCase):
 
     def test_one_shot_bound_and_structured_evidence(self):
         controller = StartupGateController(self.policy())
-        with mock.patch.dict(os.environ, {"DISPLAY": ":0"}), mock.patch.object(controller, "_activate_x11", return_value=(222, 333, "Project Zomboid")):
+        action = X11Action(222, 333, "Project Zomboid", 1920, 1080, 960, 540, 960, 540, 333, 444)
+        with mock.patch.dict(os.environ, {"DISPLAY": ":0"}), mock.patch.object(controller, "_activate_x11", return_value=action):
             evidence = controller.activate(launcher_pid=111, signature="game loading took", signature_seen_at=time.monotonic())
             self.assertEqual((evidence.action, evidence.action_count, evidence.window_pid), ("left-click", 1, 222))
+            self.assertEqual((evidence.action_x, evidence.action_y, evidence.window_width, evidence.window_height), (960, 540, 1920, 1080))
             with self.assertRaisesRegex(HarnessError, "already been used"):
                 controller.activate(launcher_pid=111, signature="game loading took", signature_seen_at=time.monotonic())
+
+        class Window:
+            def __init__(self, window_id, parent=None): self.id, self.parent = window_id, parent
+            def query_tree(self): return type("Tree", (), {"parent": self.parent})()
+        root = Window(1); pz_frame = Window(44, root); pz = Window(333, pz_frame)
+        self.assertTrue(controller._belongs_to_window(pz, 44))
+        self.assertFalse(controller._belongs_to_window(pz, 55))
 
     def test_stale_signature_fails_before_x11(self):
         controller = StartupGateController(self.policy())

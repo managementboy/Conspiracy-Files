@@ -1,4 +1,4 @@
-local Content = require("ConspiracyFiles.Content")
+local Content = require("ConspiracyFiles/Content")
 
 local Renderer = {}
 

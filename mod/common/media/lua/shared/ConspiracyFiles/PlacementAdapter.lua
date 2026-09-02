@@ -1,8 +1,8 @@
-local Content = require("ConspiracyFiles.Content")
-local ItemProjection = require("ConspiracyFiles.ItemProjection")
-local LocationBindings = require("ConspiracyFiles.LocationBindings")
-local PhysicalIdentity = require("ConspiracyFiles.PhysicalIdentity")
-local PhysicalToken = require("ConspiracyFiles.PhysicalToken")
+local Content = require("ConspiracyFiles/Content")
+local ItemProjection = require("ConspiracyFiles/ItemProjection")
+local LocationBindings = require("ConspiracyFiles/LocationBindings")
+local PhysicalIdentity = require("ConspiracyFiles/PhysicalIdentity")
+local PhysicalToken = require("ConspiracyFiles/PhysicalToken")
 
 local PlacementAdapter = {}
 

@@ -1,6 +1,6 @@
-local ArrivalAdapter = require("ConspiracyFiles.ArrivalAdapter")
-local Content = require("ConspiracyFiles.Content")
-local PlacementAdapter = require("ConspiracyFiles.PlacementAdapter")
+local ArrivalAdapter = require("ConspiracyFiles/ArrivalAdapter")
+local Content = require("ConspiracyFiles/Content")
+local PlacementAdapter = require("ConspiracyFiles/PlacementAdapter")
 
 local WorldRuntime = {}
 

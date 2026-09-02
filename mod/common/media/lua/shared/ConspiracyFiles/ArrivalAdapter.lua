@@ -1,5 +1,5 @@
-local Content = require("ConspiracyFiles.Content")
-local LocationBindings = require("ConspiracyFiles.LocationBindings")
+local Content = require("ConspiracyFiles/Content")
+local LocationBindings = require("ConspiracyFiles/LocationBindings")
 
 local ArrivalAdapter = {}
 

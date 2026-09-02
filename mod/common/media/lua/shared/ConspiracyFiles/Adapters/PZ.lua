@@ -1,4 +1,4 @@
-local ItemProjection = require("ConspiracyFiles.ItemProjection")
+local ItemProjection = require("ConspiracyFiles/ItemProjection")
 
 local PZ = {}
 

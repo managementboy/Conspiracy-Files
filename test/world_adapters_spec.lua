@@ -467,7 +467,7 @@ test("offline PZ port resolves exact object/building signatures and fails closed
         return item
     end
     local ok, message = pcall(function()
-        local environment = require("ConspiracyFiles.Adapters.PZ").environment()
+        local environment = require("ConspiracyFiles/Adapters/PZ").environment()
         local resolved = environment.world.resolvePlacement(binding)
         assertEqual("available", resolved.status)
         local item = environment.world.createItem("Base.Note")

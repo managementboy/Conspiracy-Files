@@ -1,5 +1,5 @@
-local ItemPresentation = require("ConspiracyFiles.ItemPresentation")
-local Presentation = require("ConspiracyFiles.Presentation")
+local ItemPresentation = require("ConspiracyFiles/ItemPresentation")
+local Presentation = require("ConspiracyFiles/Presentation")
 
 local PresentationRuntime = {}
 

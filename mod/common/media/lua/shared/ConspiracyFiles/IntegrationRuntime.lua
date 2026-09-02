@@ -1,9 +1,9 @@
-local Bootstrap = require("ConspiracyFiles.Bootstrap")
-local ErrorBudget = require("ConspiracyFiles.ErrorBudget")
-local LifecycleAdapter = require("ConspiracyFiles.LifecycleAdapter")
-local PersistenceAdapter = require("ConspiracyFiles.PersistenceAdapter")
-local Scheduler = require("ConspiracyFiles.Scheduler")
-local WorldRuntime = require("ConspiracyFiles.WorldRuntime")
+local Bootstrap = require("ConspiracyFiles/Bootstrap")
+local ErrorBudget = require("ConspiracyFiles/ErrorBudget")
+local LifecycleAdapter = require("ConspiracyFiles/LifecycleAdapter")
+local PersistenceAdapter = require("ConspiracyFiles/PersistenceAdapter")
+local Scheduler = require("ConspiracyFiles/Scheduler")
+local WorldRuntime = require("ConspiracyFiles/WorldRuntime")
 
 local IntegrationRuntime = {}
 

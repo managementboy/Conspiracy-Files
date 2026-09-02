@@ -1,7 +1,7 @@
 require "ISUI/ISInventoryPaneContextMenu"
 
-local PresentationRuntime = require("ConspiracyFiles.PresentationRuntime")
-local PZWindows = require("ConspiracyFiles.PZWindows")
+local PresentationRuntime = require("ConspiracyFiles/PresentationRuntime")
+local PZWindows = require("ConspiracyFiles/PZWindows")
 
 local PZPresentation = {}
 
