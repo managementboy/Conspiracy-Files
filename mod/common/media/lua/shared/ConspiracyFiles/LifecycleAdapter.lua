@@ -37,4 +37,3 @@ function LifecycleAdapter.new(options)
 end
 
 return LifecycleAdapter
-

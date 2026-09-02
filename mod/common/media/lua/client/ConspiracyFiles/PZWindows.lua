@@ -6,6 +6,20 @@ local WindowGeometry = require("ConspiracyFiles/WindowGeometry")
 
 local PZWindows = {}
 
+local DEFAULT_LABELS = {
+    journalEmptyTitle = "No entries yet",
+    journalEmptyBody = "The pages are blank. Survival has been noisy enough without invented answers.",
+    chronologyHeading = "Chronology",
+    evidenceHeading = "Evidence",
+    evidenceEmptyBody = "Nothing recorded yet. Suspicion is not evidence until I choose to keep it.",
+    majorMarker = "[!] ",
+    markedMarker = "[marked] ",
+    journalTab = "Journal",
+    evidenceTab = "Evidence",
+    helpTab = "Help",
+    notebookSuffix = "survivor notebook"
+}
+
 local function escape(value)
     value = tostring(value or "")
     value = string.gsub(value, "<", "&lt;")
@@ -18,21 +32,25 @@ local function richText(title, description, body)
     return result .. " " .. escape(body or "")
 end
 
-local function journalText(rows)
-    if #rows == 0 then return "<H2> No entries yet <LINE> <TEXT> The pages are blank. Survival has been noisy enough without invented answers." end
-    local parts = { "<H2> Chronology <LINE> <TEXT>" }
+local function journalText(rows, labels)
+    if #rows == 0 then
+        return "<H2> " .. escape(labels.journalEmptyTitle) .. " <LINE> <TEXT> " .. escape(labels.journalEmptyBody)
+    end
+    local parts = { "<H2> " .. escape(labels.chronologyHeading) .. " <LINE> <TEXT>" }
     for _, row in ipairs(rows) do
-        local marker = row.major and "[!] " or ""
+        local marker = row.major and labels.majorMarker or ""
         parts[#parts + 1] = marker .. tostring(row.ordinal) .. ". " .. escape(row.text) .. " <BR>"
     end
     return table.concat(parts, " ")
 end
 
-local function evidenceText(rows)
-    if #rows == 0 then return "<H2> Evidence <LINE> <TEXT> Nothing recorded yet. Suspicion is not evidence until I choose to keep it." end
-    local parts = { "<H2> Evidence <LINE> <TEXT>" }
+local function evidenceText(rows, labels)
+    if #rows == 0 then
+        return "<H2> " .. escape(labels.evidenceHeading) .. " <LINE> <TEXT> " .. escape(labels.evidenceEmptyBody)
+    end
+    local parts = { "<H2> " .. escape(labels.evidenceHeading) .. " <LINE> <TEXT>" }
     for _, row in ipairs(rows) do
-        local marker = row.playerMarkedInteresting and "[marked] " or ""
+        local marker = row.playerMarkedInteresting and labels.markedMarker or ""
         parts[#parts + 1] = marker .. tostring(row.discoveryOrdinal) .. ". " .. escape(row.title)
             .. " <LINE> " .. escape(row.contextText) .. " <BR>"
     end
@@ -115,9 +133,9 @@ function NotebookWindow:createChildren()
     self.evidencePanel = ISRichTextPanel:new(0, 0, self.tabs:getWidth(), self.tabs:getHeight() - self.tabs.tabHeight)
     self.helpPanel = ISRichTextPanel:new(0, 0, self.tabs:getWidth(), self.tabs:getHeight() - self.tabs.tabHeight)
     for _, panel in ipairs({ self.journalPanel, self.evidencePanel, self.helpPanel }) do configureRichPanel(panel) end
-    self.tabs:addView("Journal", self.journalPanel)
-    self.tabs:addView("Evidence", self.evidencePanel)
-    self.tabs:addView("Help", self.helpPanel)
+    self.tabs:addView(self.labels.journalTab, self.journalPanel)
+    self.tabs:addView(self.labels.evidenceTab, self.evidencePanel)
+    self.tabs:addView(self.labels.helpTab, self.helpPanel)
     self:layoutContent()
 end
 
@@ -145,9 +163,9 @@ function NotebookWindow:prerender()
 end
 
 function NotebookWindow:setProjection(projection)
-    self:setTitle(projection.title .. " — survivor notebook")
-    self.journalPanel:setText(journalText(projection.journal))
-    self.evidencePanel:setText(evidenceText(projection.evidence))
+    self:setTitle(projection.title .. " — " .. self.labels.notebookSuffix)
+    self.journalPanel:setText(journalText(projection.journal, self.labels))
+    self.evidencePanel:setText(evidenceText(projection.evidence, self.labels))
     self.helpPanel:setText(helpText(projection.help))
     for _, panel in ipairs({ self.journalPanel, self.evidencePanel, self.helpPanel }) do
         panel:paginate()
@@ -155,12 +173,13 @@ function NotebookWindow:setProjection(projection)
     end
 end
 
-function NotebookWindow:new(geometry)
+function NotebookWindow:new(geometry, labels)
     local value = ISCollapsableWindow:new(geometry.x, geometry.y, geometry.width, geometry.height)
     setmetatable(value, self)
     self.__index = self
     value:setResizable(true)
     value.pin = true
+    value.labels = labels
     return value
 end
 
@@ -185,8 +204,14 @@ local function show(window, kind)
     window:bringToTop()
 end
 
-function PZWindows.new()
-    local api = { reader = nil, notebook = nil }
+function PZWindows.new(options)
+    options = options or {}
+    local labels = {}
+    for key, fallback in pairs(DEFAULT_LABELS) do
+        local supplied = options.labels and options.labels[key] or nil
+        labels[key] = type(supplied) == "string" and supplied ~= "" and supplied or fallback
+    end
+    local api = { reader = nil, notebook = nil, labels = labels }
 
     function api.openReader(projection)
         if not api.reader then
@@ -200,7 +225,7 @@ function PZWindows.new()
 
     function api.openNotebook(projection)
         if not api.notebook then
-            api.notebook = NotebookWindow:new(WindowGeometry.centered(getCore():getScreenWidth(), getCore():getScreenHeight(), "notebook"))
+            api.notebook = NotebookWindow:new(WindowGeometry.centered(getCore():getScreenWidth(), getCore():getScreenHeight(), "notebook"), labels)
             api.notebook:initialise()
             api.notebook:instantiate()
         end

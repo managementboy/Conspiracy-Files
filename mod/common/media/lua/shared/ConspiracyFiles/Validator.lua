@@ -232,7 +232,7 @@ local function validateSchema(root)
             local asset = Content.assets[entry.subjectId]
             if not asset or asset.assetKind ~= "document" then return fail("root.journal", "asset-discovered subject must resolve to a document") end
             if discoveredAssets[entry.subjectId] then return fail("root.journal", "duplicate asset-discovered event") end
-            discoveredAssets[entry.subjectId] = true
+            discoveredAssets[entry.subjectId] = index
         elseif entry.kind == "thread-introduced" then
             if entry.subjectId ~= Content.thread.threadId or (entry.relatedId ~= Content.ids.d1 and entry.relatedId ~= Content.ids.d2) then
                 return fail("root.journal", "invalid thread introduction")
@@ -244,12 +244,15 @@ local function validateSchema(root)
             local evidence = evidenceIds[entry.subjectId]
             if not evidence or evidence.kind ~= "marked-object" then return fail("root.journal", "marked-interesting subject must resolve to marked Evidence") end
             if markedEvents[entry.subjectId] then return fail("root.journal", "duplicate marked-interesting event") end
-            markedEvents[entry.subjectId] = true
+            markedEvents[entry.subjectId] = index
         elseif entry.kind == "evidence-updated" then
             local evidence = evidenceIds[entry.subjectId]
             if not evidence or evidence.kind ~= "marked-object" or evidence.assetId ~= Content.ids.key
                 or entry.relatedId ~= Content.ids.d6 or not discoveredAssets[Content.ids.d6] then
                 return fail("root.journal", "invalid B-37 recontextualisation event")
+            end
+            if not markedEvents[entry.subjectId] or markedEvents[entry.subjectId] >= discoveredAssets[Content.ids.d6] then
+                return fail("root.journal", "B-37 recontextualisation requires the key mark before D6 discovery")
             end
             if eventCounts[entry.kind] > 1 then return fail("root.journal", "duplicate B-37 recontextualisation") end
         elseif entry.kind == "location-confirmed" then
@@ -267,17 +270,30 @@ local function validateSchema(root)
         if evidence.kind == "marked-object" and not markedEvents[evidence.evidenceId] then return fail("root.journal", "marked Evidence lacks chronology event") end
     end
     for locationId, _ in pairs(locationSeen) do if not confirmedEvents[locationId] then return fail("root.journal", "confirmed Location lacks chronology event") end end
-    if eventCounts["thread-introduced"] then
-        local hasD1 = discoveredAssets[Content.ids.d1]
-        local hasD2 = discoveredAssets[Content.ids.d2]
-        if not hasD1 and not hasD2 then return fail("root.journal", "thread introduction lacks entry evidence") end
+    local hasD1 = discoveredAssets[Content.ids.d1]
+    local hasD2 = discoveredAssets[Content.ids.d2]
+    if hasD1 or hasD2 then
+        if eventCounts["thread-introduced"] ~= 1 then
+            return fail("root.journal", "D1/D2 discovery requires exactly one thread introduction")
+        end
         local expectedRole = introductionAssetId == Content.ids.d1 and "anchor" or "fallback"
         if root.entryOpportunityUsed ~= expectedRole then
             return fail("root.entryOpportunityUsed", "does not match committed thread introduction")
         end
     end
-    if eventCounts["contradiction-surfaced"] and (not discoveredAssets[Content.ids.d5] or not discoveredAssets[Content.ids.d6]) then
-        return fail("root.journal", "contradiction lacks known source documents")
+    if discoveredAssets[Content.ids.d5] and discoveredAssets[Content.ids.d6]
+        and eventCounts["contradiction-surfaced"] ~= 1 then
+        return fail("root.journal", "D5/D6 discovery requires exactly one contradiction event")
+    end
+    local d6Ordinal = discoveredAssets[Content.ids.d6]
+    if d6Ordinal then
+        for evidenceId, markedOrdinal in pairs(markedEvents) do
+            local evidence = evidenceIds[evidenceId]
+            if evidence and evidence.kind == "marked-object" and evidence.assetId == Content.ids.key
+                and markedOrdinal < d6Ordinal and eventCounts["evidence-updated"] ~= 1 then
+                return fail("root.journal", "B-37 marked before D6 requires exactly one recontextualisation event")
+            end
+        end
     end
     return true
 end

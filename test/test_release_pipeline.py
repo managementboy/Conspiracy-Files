@@ -70,7 +70,20 @@ class ReleasePipelineSpec(unittest.TestCase):
                 with self.assertRaises(pipeline.ReleaseError):
                     pipeline.scan_file_content(candidate, candidate.name)
 
+    def test_module_gate_rejects_dots_anywhere_in_conspiracy_files_ids(self) -> None:
+        rejected = (
+            'require("ConspiracyFiles.Bootstrap")',
+            'require("ConspiracyFiles/Adapters.PZ")',
+            "require 'ConspiracyFiles/Deep/Nested.Module'",
+        )
+        for source in rejected:
+            with self.subTest(source=source), self.assertRaises(pipeline.ReleaseError):
+                pipeline.validate_module_identifiers(source, "candidate.lua")
+        pipeline.validate_module_identifiers(
+            'require("ConspiracyFiles/Adapters/PZ")',
+            "candidate.lua",
+        )
+
 
 if __name__ == "__main__":
     unittest.main()
-

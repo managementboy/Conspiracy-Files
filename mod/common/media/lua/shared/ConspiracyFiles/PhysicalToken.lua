@@ -20,4 +20,3 @@ function PhysicalToken.forAsset(scope, assetId)
 end
 
 return PhysicalToken
-

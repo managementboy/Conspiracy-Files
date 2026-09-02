@@ -61,8 +61,7 @@ end
 
 local function addContainerMatches(result, seen, container, token, location)
     for _, item in ipairs(listItems(container)) do
-        local ok, modData = pcall(function() return item:getModData() end)
-        if ok and modData and modData[ItemProjection.fields.physicalItemId] == token and not seen[item] then
+        if ItemProjection.token(item) == token and not seen[item] then
             seen[item] = true
             result[#result + 1] = { item = item, location = location }
         end
@@ -120,8 +119,7 @@ local function scanPhysical(token, context)
                             local worldObject = worldObjects:get(index)
                             local ok, item = pcall(function() return worldObject:getItem() end)
                             if ok and item then
-                                local mdOk, modData = pcall(function() return item:getModData() end)
-                                if mdOk and modData and modData[ItemProjection.fields.physicalItemId] == token and not seen[item] then
+                                if ItemProjection.token(item) == token and not seen[item] then
                                     seen[item] = true
                                     matches[#matches + 1] = { item = item, location = { kind = "floor", x = x, y = y, z = pz } }
                                 end

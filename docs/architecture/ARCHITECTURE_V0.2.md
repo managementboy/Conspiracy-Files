@@ -129,7 +129,9 @@ CF-V01-E01 fixes the two exact whole-building bindings at `1533.884` straight-li
 T7 fixes the boundary:
 - predefine generic/static PZ item types as necessary and retain vanilla inventory/container behaviour;
 - persist the resolved per-instance display name with `setName`/`setCustomName(true)`;
-- store validated plain resolved title/description/body fields in item ModData, while the authored/domain body remains authoritative;
+- store schema, content revision, Asset ID, reveal state, physical token and resolved title/description/body in the canonical nested `item:getModData().ConspiracyFiles` table, while the authored/domain body remains authoritative;
+- reject flat-only carriers. The first schema-2 candidate's flat fields are a compatibility mirror only when all schema/Asset/token/presentation values exactly agree with the nested carrier; physical tracking never chooses between disagreement;
+- when an existing owned token has a structurally compatible older content revision, refresh only its display/presentation fields from current authoritative static content in place, preserving the item instance, Asset ID and physical token;
 - render world-specific bodies through T10's cooperative custom `Inspect` action in player and Ground/loot inventory panes;
 - optionally project deliberately short plain-text artifacts into locked `Literature.customPages`; treat the 15-line/1,200-character page UI and literal markup behavior as presentation constraints, never canonical storage;
 - do not use `InventoryItem.description`, raw runtime `printMedia` keys, or key/map/generic native UI as body carriers. Static pre-baked print media requires asset-specific proof.

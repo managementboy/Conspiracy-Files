@@ -37,11 +37,12 @@ Goal: prove the intended feeling once, with the smallest end-to-end build.
 - [x] Exact P2/R2 bindings accepted on Build 42.20.4.
 - [x] Build 42 production package/bootstrap, scheduler, error budget and persistence shell implemented with offline tests.
 - [ ] T11 production package passes its live loader/require/save-reload matrix (offline phase passed).
-- [ ] D1–D6 placement, physical identity, reader/Inspect and arrival adapters integrated end to end.
-- [ ] Notebook journal, evidence list, in-fiction help and the one normal-play notebook keybind implemented.
-- [ ] Supported death/reload checkpoint and state-integrity behavior implemented and tested by the v0.1 production-integration workstream (CF-V01-E10).
+- [x] D1–D6 placement, physical identity, reader/Inspect and arrival adapters implemented and tested offline; live acceptance pending.
+- [x] Notebook journal, evidence list, localized static chrome, in-fiction help and the one normal-play notebook keybind implemented and tested offline; live acceptance pending.
+- [x] Supported death/reload checkpoint and state-integrity behavior implemented and tested offline (CF-V01-E10); live acceptance pending.
 - [ ] Production shell and complete vertical slice pass their live Build 42 acceptance matrices.
-- [ ] Deterministic package pipeline and cross-device prerelease smoke pass.
+- [x] Deterministic package pipeline implemented and reproducibility-tested offline.
+- [ ] Cross-device prerelease smoke passes.
 
 ## Engineering gate A — before v0.1 implementation is trusted
 Run six critical probes:

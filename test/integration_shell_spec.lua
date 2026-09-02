@@ -24,6 +24,17 @@ local function discoverTransaction(assetId)
     end
 end
 
+local function withoutJournalKind(root, kind)
+    local retained = {}
+    for _, entry in ipairs(root.journal) do if entry.kind ~= kind then retained[#retained + 1] = entry end end
+    root.journal = retained
+    for index, entry in ipairs(root.journal) do
+        entry.ordinal = index
+        entry.entryId = CF.Ids.journal(index)
+    end
+    return root
+end
+
 test("integration scheduler deduplicates keys and obeys queue, work, and elapsed bounds", function()
     local now, ran = 0, {}
     local scheduler = CF.Scheduler.new({
@@ -176,8 +187,10 @@ test("integration singleplayer lifecycle is additive and defers canonical creati
     assertEqual("canonical-ready", runtime.phase())
     callbacks.OnGameStart()
     assertEqual("running", runtime.phase())
+    callbacks.OnGameStart()
     callbacks.OnTick()
-    assertEqual(0, #reports)
+    assertEqual(1, #reports)
+    assertEqual(CF.IntegrationRuntime.READY_DIAGNOSTIC, reports[1])
 end)
 
 test("integration persistence stages complete roots and reconstructs domain projections across fake round trips", function()
@@ -312,6 +325,33 @@ test("integration invalid persisted roots never get replaced by a fresh root", f
     assertFalse(adapter.isLoaded())
 end)
 
+test("integration incomplete mandatory histories are rejected without replacement or mutation", function()
+    local introduction = assert(CF.ThreadState.new())
+    assertTrue(introduction.discover(ids.d1, "D1", ids.relay))
+    local missingIntroduction = withoutJournalKind(introduction.snapshot(), "thread-introduced")
+
+    local contradiction = assert(CF.ThreadState.new())
+    assertTrue(contradiction.discover(ids.d5, "D5", ids.police))
+    assertTrue(contradiction.discover(ids.d6, "D6", ids.police))
+    local missingContradiction = withoutJournalKind(contradiction.snapshot(), "contradiction-surfaced")
+
+    local b37 = assert(CF.ThreadState.new())
+    assertTrue(b37.markInteresting("key-before-d6", { assetId = ids.key, contextText = "B-37" }))
+    assertTrue(b37.discover(ids.d6, "D6", ids.police))
+    local missingUpdate = withoutJournalKind(b37.snapshot(), "evidence-updated")
+
+    for _, invalid in ipairs({ missingIntroduction, missingContradiction, missingUpdate }) do
+        local storage = makeStorage(invalid)
+        local adapter = CF.PersistenceAdapter.new({ storage = storage })
+        local ok, message = adapter.load(false)
+        assertFalse(ok)
+        assertTrue(type(message) == "string" and message ~= "")
+        assertEqual(0, storage.replacementCount())
+        assertEqual(invalid, storage.roots[CF.PersistenceAdapter.DEFAULT_TAG])
+        assertFalse(adapter.isLoaded())
+    end
+end)
+
 test("integration incompatible persisted roots preserve data and disable runtime startup", function()
     local current = assert(CF.ThreadState.new()).snapshot()
     current.schemaVersion = CF.Validator.CURRENT_SCHEMA_VERSION - 1
@@ -332,6 +372,27 @@ test("integration incompatible persisted roots preserve data and disable runtime
     assertEqual(0, storage.replacementCount())
     assertEqual(current, storage.roots[CF.PersistenceAdapter.DEFAULT_TAG])
     assertEqual(1, #reports)
+    assertFalse(reports[1] == CF.IntegrationRuntime.READY_DIAGNOSTIC)
+end)
+
+test("integration failed initialization never emits the positive ready diagnostic", function()
+    local callbacks, reports = {}, {}
+    local runtime = CF.IntegrationRuntime.start({
+        isMultiplayer = function() return false end,
+        report = function(message) reports[#reports + 1] = message end,
+        storage = {
+            get = function() error("simulated initialization failure") end,
+            replace = function() error("must not replace") end
+        },
+        clock = function() return 0 end,
+        addEvent = function(name, callback) callbacks[name] = callback end
+    })
+    callbacks.OnInitGlobalModData(false)
+    callbacks.OnGameStart()
+    assertFalse(runtime.phase() == "running")
+    for _, message in ipairs(reports) do
+        assertFalse(message == CF.IntegrationRuntime.READY_DIAGNOSTIC)
+    end
 end)
 
 test("integration Build 42 entrypoint creates one namespace and registers each cooperative hook once", function()
@@ -341,7 +402,8 @@ test("integration Build 42 entrypoint creates one namespace and registers each c
         getTimeInMillis = rawget(_G, "getTimeInMillis"),
         getCore = rawget(_G, "getCore"),
         ModData = rawget(_G, "ModData"),
-        Events = rawget(_G, "Events")
+        Events = rawget(_G, "Events"),
+        require = rawget(_G, "require")
     }
     local callbacks = { OnInitGlobalModData = {}, OnGameStart = {}, LoadGridsquare = {}, OnSave = {}, OnPlayerDeath = {}, OnTick = {} }
     local roots = {}
@@ -358,7 +420,20 @@ test("integration Build 42 entrypoint creates one namespace and registers each c
         _G.Events[eventName] = { Add = function(callback) registered[#registered + 1] = callback end }
     end
 
-    dofile("mod/common/media/lua/shared/ConspiracyFilesBootstrap.lua")
+    local required = {}
+    _G.require = function(moduleId)
+        required[#required + 1] = moduleId
+        if string.sub(moduleId, 1, string.len("ConspiracyFiles")) == "ConspiracyFiles" then
+            assertEqual(nil, string.find(moduleId, ".", 1, true), "host require normalization must not conceal a dotted module ID")
+        end
+        return old.require(moduleId)
+    end
+    local loaded, loadMessage = pcall(dofile, "mod/common/media/lua/shared/ConspiracyFilesBootstrap.lua")
+    _G.require = old.require
+    assertTrue(loaded, loadMessage)
+    local exactPZ = false
+    for _, moduleId in ipairs(required) do if moduleId == "ConspiracyFiles/Adapters/PZ" then exactPZ = true end end
+    assertTrue(exactPZ, "bootstrap did not request the exact slash-form PZ adapter ID")
     assertTrue(type(_G.ConspiracyFiles) == "table")
     assertTrue(_G.ConspiracyFiles.runtime.enabled)
     for _, registered in pairs(callbacks) do assertEqual(1, #registered) end
@@ -373,4 +448,5 @@ test("integration Build 42 entrypoint creates one namespace and registers each c
     _G.getCore = old.getCore
     _G.ModData = old.ModData
     _G.Events = old.Events
+    _G.require = old.require
 end)

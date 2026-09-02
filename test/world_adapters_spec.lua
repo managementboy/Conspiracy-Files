@@ -17,6 +17,13 @@ local itemPort = {
     setCustomName = function(item, value) item.customName = value end
 }
 
+local function copyTable(value)
+    if type(value) ~= "table" then return value end
+    local result = {}
+    for key, child in pairs(value) do result[copyTable(key)] = copyTable(child) end
+    return result
+end
+
 local function makeWorld()
     local world = {
         containers = {}, status = {}, externalMatches = {}, coverage = "incomplete",
@@ -62,14 +69,14 @@ local function makeWorld()
         local matches, seen = {}, {}
         for assetId, container in pairs(world.containers) do
             for _, item in ipairs(container.items) do
-                if item.modData[CF.ItemProjection.fields.physicalItemId] == token and not seen[item] then
+                if CF.ItemProjection.token(item, itemPort) == token and not seen[item] then
                     seen[item] = true
                     matches[#matches + 1] = { item = item, location = { kind = "placement-container", containerType = container.binding.containerType } }
                 end
             end
         end
         for _, match in ipairs(world.externalMatches) do
-            if match.item.modData[CF.ItemProjection.fields.physicalItemId] == token and not seen[match.item] then
+            if CF.ItemProjection.token(match.item, itemPort) == token and not seen[match.item] then
                 seen[match.item] = true
                 matches[#matches + 1] = match
             end
@@ -99,7 +106,7 @@ end
 local function countToken(container, token)
     local count = 0
     for _, item in ipairs(container.items) do
-        if item.modData[CF.ItemProjection.fields.physicalItemId] == token then count = count + 1 end
+        if CF.ItemProjection.token(item, itemPort) == token then count = count + 1 end
     end
     return count
 end
@@ -121,12 +128,14 @@ test("offline E06 item projection stores exact durable name/title/description/bo
         assertEqual("Base.Note", payload.itemType)
         assertEqual(asset.displayName, item.name)
         assertTrue(item.customName)
-        assertEqual(1, item.modData[CF.ItemProjection.fields.schema])
-        assertEqual(token, item.modData[CF.ItemProjection.fields.physicalItemId])
-        assertEqual(assetId, item.modData[CF.ItemProjection.fields.assetId])
-        assertEqual(asset.displayName, item.modData[CF.ItemProjection.fields.title])
-        assertEqual(asset.descriptionText, item.modData[CF.ItemProjection.fields.description])
-        assertEqual(asset.bodyText, item.modData[CF.ItemProjection.fields.body])
+        local nested = item.modData[CF.ItemPresentation.MOD_DATA_KEY]
+        assertEqual(1, nested.schemaVersion)
+        assertEqual(token, nested.physicalToken)
+        assertEqual(assetId, nested.assetId)
+        assertEqual(asset.displayName, nested.resolvedTitle)
+        assertEqual(asset.descriptionText, nested.resolvedDescription)
+        assertEqual(asset.bodyText, nested.resolvedBody)
+        for _, legacyKey in pairs(CF.ItemProjection.fields) do assertEqual(nil, item.modData[legacyKey]) end
         assertEqual(nil, item.description)
         assertEqual(nil, item.printMedia)
     end
@@ -178,7 +187,7 @@ test("offline E02/E04 repeated availability places every document once with exac
     for _, assetId in ipairs(CF.Content.thread.documentAssetIds) do
         assertEqual("placed", persistence.snapshot().assetMaterialisation[assetId])
         assertEqual(1, countToken(world.containers[assetId], placement.tokenFor(assetId)))
-        assertEqual(assetId, world.containers[assetId].items[1].modData[CF.ItemProjection.fields.assetId])
+        assertEqual(assetId, world.containers[assetId].items[1].modData.ConspiracyFiles.assetId)
     end
     local beforeReload = persistence.snapshot()
     local reloadedPersistence = CF.PersistenceAdapter.new({ storage = storage })
@@ -188,6 +197,78 @@ test("offline E02/E04 repeated availability places every document once with exac
     for _, assetId in ipairs(CF.Content.thread.documentAssetIds) do assertEqual("placed", reloadedPlacement.reconcile(assetId)) end
     assertEqual(6, world.created)
     assertDeepEqual(beforeReload, reloadedPersistence.snapshot())
+end)
+
+test("offline E04 existing legacy item refreshes compatible text in place without identity replacement", function()
+    local world = makeWorld()
+    local placement, persistence = loadedPlacement(world)
+    local assetId = ids.d1
+    local asset = CF.Content.assets[assetId]
+    local token = placement.tokenFor(assetId)
+    local fields = CF.ItemProjection.fields
+    local old = {
+        instance = "existing-old-item",
+        name = "Old service ticket title",
+        customName = true,
+        modData = {
+            ConspiracyFiles = {
+                schemaVersion = CF.ItemPresentation.SCHEMA_VERSION,
+                contentRevision = "dead-air-r0-compatible-text",
+                assetId = assetId,
+                revealed = true,
+                resolvedTitle = "Old service ticket title",
+                resolvedDescription = "Old description",
+                resolvedBody = "Old compatible body",
+                physicalToken = token
+            }
+        }
+    }
+    old.modData[fields.schema] = CF.ItemPresentation.SCHEMA_VERSION
+    old.modData[fields.physicalItemId] = token
+    old.modData[fields.assetId] = assetId
+    old.modData[fields.title] = "Old service ticket title"
+    old.modData[fields.description] = "Old description"
+    old.modData[fields.body] = "Old compatible body"
+    world.containers[assetId].items = { old }
+
+    assertEqual("placed", placement.reconcile(assetId))
+    assertEqual(0, world.created)
+    assertEqual(old, world.containers[assetId].items[1])
+    assertEqual(token, CF.ItemProjection.token(old, itemPort))
+    assertEqual("placed", persistence.snapshot().assetMaterialisation[assetId])
+    assertEqual(CF.Content.thread.contentRevision, old.modData.ConspiracyFiles.contentRevision)
+    assertEqual(asset.displayName, old.name)
+    assertEqual(asset.displayName, old.modData.ConspiracyFiles.resolvedTitle)
+    assertEqual(asset.descriptionText, old.modData.ConspiracyFiles.resolvedDescription)
+    assertEqual(asset.bodyText, old.modData.ConspiracyFiles.resolvedBody)
+    assertEqual(token, old.modData[fields.physicalItemId])
+    assertEqual(asset.displayName, old.modData[fields.title])
+    assertEqual(asset.bodyText, old.modData[fields.body])
+end)
+
+test("offline E04 malformed carrier claiming the target token fails closed without duplication", function()
+    local world = makeWorld()
+    local placement, persistence = loadedPlacement(world)
+    local assetId = ids.d1
+    local token = placement.tokenFor(assetId)
+    local item = { modData = {} }
+    assertTrue(CF.ItemProjection.apply(item, assetId, token, itemPort))
+    local fields = CF.ItemProjection.fields
+    local nested = item.modData.ConspiracyFiles
+    item.modData[fields.schema] = nested.schemaVersion
+    item.modData[fields.physicalItemId] = "cf:tampered:different-token"
+    item.modData[fields.assetId] = nested.assetId
+    item.modData[fields.title] = nested.resolvedTitle
+    item.modData[fields.description] = nested.resolvedDescription
+    item.modData[fields.body] = nested.resolvedBody
+    world.containers[assetId].items = { item }
+
+    local ok, message = pcall(function() placement.reconcile(assetId) end)
+    assertFalse(ok)
+    assertTrue(string.find(tostring(message), "carrier claiming expected token was rejected", 1, true) ~= nil)
+    assertEqual(0, world.created)
+    assertEqual("pending", persistence.snapshot().assetMaterialisation[assetId])
+    assertEqual(1, #world.containers[assetId].items)
 end)
 
 test("offline E02 binding unload is pending and binding drift fails closed without world mutation", function()
@@ -251,7 +332,7 @@ test("offline E03 D1 discovery fixes anchor and conflict/unknown never select fa
     conflict.reconcile(ids.d2)
     local original = conflictWorld.containers[ids.d1].items[1]
     local duplicate = { modData = {} }
-    for key, value in pairs(original.modData) do duplicate.modData[key] = value end
+    duplicate.modData = copyTable(original.modData)
     conflictWorld.containers[ids.d1].items[#conflictWorld.containers[ids.d1].items + 1] = duplicate
     assertEqual("conflict", conflict.reconcile(ids.d1))
     assertEqual(nil, conflictPersistence.snapshot().entryOpportunityUsed)
@@ -384,7 +465,8 @@ test("offline world runtime reuses additive hooks and bounded scheduler for plac
     world.player = { x = 13570, y = 1580, z = 2, locationId = ids.relay }
     for _ = 1, 30 do callbacks.OnTick() end
     assertEqual(ids.relay, runtime.persistence.snapshot().confirmedLocationIds[1])
-    assertEqual(0, #reports)
+    assertEqual(1, #reports)
+    assertEqual(CF.IntegrationRuntime.READY_DIAGNOSTIC, reports[1])
     assertDeepEqual({ maxWorkPerDrain = 24, maxQueued = 256, maxMillis = 1 }, runtime.scheduler.limits())
 end)
 

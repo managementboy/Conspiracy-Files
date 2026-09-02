@@ -45,6 +45,9 @@ LOCAL_PATH_PATTERNS = (
     re.compile(rb"[A-Za-z]:\\Users\\[^\r\n]+"),
     re.compile(rb"(?i)(?:Zomboid[/\\\\](?:Saves|Logs)|latestSave\.ini)"),
 )
+CONSPIRACY_FILES_REQUIRE = re.compile(
+    r'''require\s*\(?\s*["'](ConspiracyFiles[^"']*)["']\s*\)?'''
+)
 
 
 class ReleaseError(RuntimeError):
@@ -123,6 +126,15 @@ def parse_mod_info(path: Path) -> dict[str, str]:
     return values
 
 
+def validate_module_identifiers(source: str, display_name: str) -> None:
+    for match in CONSPIRACY_FILES_REQUIRE.finditer(source):
+        module_id = match.group(1)
+        if "." in module_id:
+            raise ReleaseError(
+                f"dotted ConspiracyFiles require is forbidden in {display_name}: {module_id}"
+            )
+
+
 def all_mod_files() -> list[Path]:
     if not MOD_ROOT.is_dir():
         raise ReleaseError("mod/ is missing")
@@ -191,8 +203,7 @@ def production_files(config: dict) -> list[Path]:
     for relative in selected:
         if relative.suffix == ".lua":
             source = (MOD_ROOT / relative).read_text(encoding="utf-8")
-            if re.search(r'require\(["\']ConspiracyFiles\.', source):
-                raise ReleaseError(f"dotted ConspiracyFiles require is forbidden: {relative.as_posix()}")
+            validate_module_identifiers(source, relative.as_posix())
     return selected
 
 

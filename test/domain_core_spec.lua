@@ -30,6 +30,27 @@ local function discover(state, assetId)
     assertChanged(state.discover(assetId, "Found " .. assetId, Content.assets[assetId].placementLocationId))
 end
 
+local function removeJournalKind(root, kind)
+    local retained = {}
+    for _, entry in ipairs(root.journal) do
+        if entry.kind ~= kind then retained[#retained + 1] = entry end
+    end
+    root.journal = retained
+    for index, entry in ipairs(root.journal) do
+        entry.ordinal = index
+        entry.entryId = CF.Ids.journal(index)
+    end
+    return root
+end
+
+local function renumberJournal(root)
+    for index, entry in ipairs(root.journal) do
+        entry.ordinal = index
+        entry.entryId = CF.Ids.journal(index)
+    end
+    return root
+end
+
 local function containsText(value, needle, seen)
     if type(value) == "string" then return string.find(value, needle, 1, true) ~= nil end
     if type(value) ~= "table" then return false end
@@ -316,6 +337,44 @@ test("CF-V01-P18 staged recursive validation rejects unsafe states and preserves
     cursor.child = {}
     assertFalse(Validator.validateStructure(depth64))
     assertTrue(Validator.validateStructure({ [0] = "zero", [-1.5] = true, name = 3.25, nested = {} }))
+end)
+
+test("CF-V01-P18 mandatory reverse chronology rejects missing and reordered derived events", function()
+    local introduction = newState()
+    discover(introduction, ids.d1)
+    local missingIntroduction = removeJournalKind(introduction.snapshot(), "thread-introduced")
+
+    local contradiction = newState()
+    discover(contradiction, ids.d5)
+    discover(contradiction, ids.d6)
+    local missingContradiction = removeJournalKind(contradiction.snapshot(), "contradiction-surfaced")
+
+    local b37 = newState()
+    assertChanged(b37.markInteresting("key-before-d6", { assetId = ids.key, contextText = "B-37 before D6" }))
+    discover(b37, ids.d6)
+    local missingUpdate = removeJournalKind(b37.snapshot(), "evidence-updated")
+
+    local introductionBeforeDiscovery = introduction.snapshot()
+    introductionBeforeDiscovery.journal[1], introductionBeforeDiscovery.journal[2]
+        = introductionBeforeDiscovery.journal[2], introductionBeforeDiscovery.journal[1]
+    renumberJournal(introductionBeforeDiscovery)
+
+    local contradictionBeforeDiscovery = contradiction.snapshot()
+    table.insert(contradictionBeforeDiscovery.journal, 1, table.remove(contradictionBeforeDiscovery.journal, 3))
+    renumberJournal(contradictionBeforeDiscovery)
+
+    local updateBeforeD6 = b37.snapshot()
+    updateBeforeD6.journal[2], updateBeforeD6.journal[3] = updateBeforeD6.journal[3], updateBeforeD6.journal[2]
+    renumberJournal(updateBeforeD6)
+
+    for _, hostile in ipairs({
+        missingIntroduction, missingContradiction, missingUpdate,
+        introductionBeforeDiscovery, contradictionBeforeDiscovery, updateBeforeD6
+    }) do
+        local ok, message = Validator.validate(hostile)
+        assertFalse(ok)
+        assertTrue(type(message) == "string" and message ~= "")
+    end
 end)
 
 test("CF-V01-P19 calibrated estimator enforces the real 500 KB boundary", function()

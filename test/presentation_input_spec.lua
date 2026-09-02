@@ -18,6 +18,13 @@ local function stamp(assetId, owned, options)
     return item
 end
 
+local function copyTable(value)
+    if type(value) ~= "table" then return value end
+    local result = {}
+    for key, child in pairs(value) do result[copyTable(key)] = copyTable(child) end
+    return result
+end
+
 local function context(existing)
     local value = { options = existing or {} }
     return value
@@ -113,6 +120,65 @@ test("presentation item contract stamps names and validates only revealed canoni
     invalid, reason = CF.ItemPresentation.validate(item, function() return true end)
     assertEqual(nil, invalid)
     assertEqual("hidden", reason)
+end)
+
+test("presentation carrier accepts nested canonical data and rejects flat or disagreeing mirrors", function()
+    local token = "cf:save:carrier:d1:1"
+    local nested = stamp(ids.d1, true, { physicalToken = token })
+    assertTrue(CF.ItemPresentation.validate(nested, function() return true end) ~= nil)
+    assertEqual(token, CF.ItemProjection.token(nested))
+
+    local asset = CF.Content.assets[ids.d1]
+    local fields = CF.ItemProjection.fields
+    local flatOnly = fakeItem(true)
+    flatOnly.name = asset.displayName
+    flatOnly.modData[fields.schema] = CF.ItemPresentation.SCHEMA_VERSION
+    flatOnly.modData[fields.physicalItemId] = token
+    flatOnly.modData[fields.assetId] = ids.d1
+    flatOnly.modData[fields.title] = asset.displayName
+    flatOnly.modData[fields.description] = asset.descriptionText
+    flatOnly.modData[fields.body] = asset.bodyText
+    local subject, reason = CF.ItemPresentation.validate(flatOnly, function() return true end)
+    assertEqual(nil, subject)
+    assertEqual("missing-conspiracy-files-data", reason)
+    assertEqual(nil, CF.ItemProjection.token(flatOnly))
+
+    local mirrored = stamp(ids.d1, true, { physicalToken = token })
+    local value = mirrored.modData.ConspiracyFiles
+    mirrored.modData[fields.schema] = value.schemaVersion
+    mirrored.modData[fields.physicalItemId] = value.physicalToken
+    mirrored.modData[fields.assetId] = value.assetId
+    mirrored.modData[fields.title] = value.resolvedTitle
+    mirrored.modData[fields.description] = value.resolvedDescription
+    mirrored.modData[fields.body] = value.resolvedBody
+    assertTrue(CF.ItemPresentation.validate(mirrored, function() return true end) ~= nil)
+
+    mirrored.modData[fields.physicalItemId] = "cf:save:DIFFERENT"
+    subject, reason = CF.ItemPresentation.validate(mirrored, function() return true end)
+    assertEqual(nil, subject)
+    assertEqual("legacy-token-mismatch", reason)
+    assertEqual(nil, CF.ItemProjection.token(mirrored))
+    mirrored.modData[fields.physicalItemId] = token
+
+    mirrored.modData[fields.body] = "disagreeing presentation"
+    subject, reason = CF.ItemPresentation.validate(mirrored, function() return true end)
+    assertEqual(nil, subject)
+    assertEqual("legacy-body-mismatch", reason)
+    assertEqual(nil, CF.ItemProjection.token(mirrored), "physical tracking must reject a disagreeing mirror")
+end)
+
+test("presentation copied carriers retain content but expose the same physical token for conflict handling", function()
+    local token = "cf:save:copy:key:1"
+    local original = stamp(ids.key, true, { physicalToken = token })
+    local copied = fakeItem(true)
+    copied.modData = copyTable(original.modData)
+    copied.name = original.name
+    copied.customName = original.customName
+    assertTrue(CF.ItemPresentation.validate(original, function() return true end) ~= nil)
+    assertTrue(CF.ItemPresentation.validate(copied, function() return true end) ~= nil)
+    assertEqual(token, CF.ItemProjection.token(original))
+    assertEqual(token, CF.ItemProjection.token(copied))
+    assertFalse(original == copied)
 end)
 
 test("presentation notebook projects only known journal and Evidence in discovery order", function()
@@ -291,4 +357,44 @@ test("production client presentation files are Lua 5.1 syntax and declare no dir
     local source = file:read("*a")
     file:close()
     assertEqual(nil, string.find(source, "OnFillWorldObjectContextMenu", 1, true))
+end)
+
+test("production presentation consumes translated notebook chrome with safe fallbacks", function()
+    local oldRequire, oldGetText = _G.require, rawget(_G, "getText")
+    local capturedWindows, capturedRuntime
+    local windowStub = {
+        new = function(options)
+            capturedWindows = options
+            return { openReader = function() end, openNotebook = function() end }
+        end
+    }
+    local runtimeStub = {
+        new = function(options)
+            capturedRuntime = options
+            return { translated = true }
+        end
+    }
+    _G.require = function(moduleId)
+        if moduleId == "ISUI/ISInventoryPaneContextMenu" then return true end
+        if moduleId == "ConspiracyFiles/PresentationRuntime" then return runtimeStub end
+        if moduleId == "ConspiracyFiles/PZWindows" then return windowStub end
+        return oldRequire(moduleId)
+    end
+    _G.getText = function(key)
+        if key == "UI_CF_NotebookHelpTab" then return key end
+        return "translated:" .. key
+    end
+    local loaded, result = pcall(function()
+        local client = assert(loadfile("mod/common/media/lua/client/ConspiracyFiles/PZPresentation.lua"))()
+        return client.new({ namespace = {} })
+    end)
+    _G.require, _G.getText = oldRequire, oldGetText
+    assertTrue(loaded, result)
+    assertTrue(result.translated)
+    assertEqual("translated:UI_CF_NotebookJournalTab", capturedWindows.labels.journalTab)
+    assertEqual("translated:UI_CF_NotebookEmptyJournalBody", capturedWindows.labels.journalEmptyBody)
+    assertEqual("translated:UI_CF_NotebookMajorMarker", capturedWindows.labels.majorMarker)
+    assertEqual("Help", capturedWindows.labels.helpTab)
+    assertEqual("translated:UI_CF_NotebookTitleSuffix", capturedWindows.labels.notebookSuffix)
+    assertEqual("translated:UI_CF_Inspect", capturedRuntime.labels.inspect)
 end)

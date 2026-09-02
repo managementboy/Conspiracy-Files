@@ -3,14 +3,28 @@ local ItemPresentation = require("ConspiracyFiles/ItemPresentation")
 
 local ItemProjection = {}
 
-ItemProjection.fields = {
-    schema = "ConspiracyFilesPhysicalIdentitySchema",
-    physicalItemId = "ConspiracyFilesPhysicalItemId",
-    assetId = "ConspiracyFilesAssetId",
-    title = "ConspiracyFilesTitle",
-    description = "ConspiracyFilesDescription",
-    body = "ConspiracyFilesBody"
-}
+-- Retained only to recognize the rejected candidate's exact legacy mirror.
+ItemProjection.fields = ItemPresentation.LEGACY_FIELDS
+
+local function modDataFor(item, itemPort)
+    local ok, value
+    if itemPort and type(itemPort.modData) == "function" then
+        ok, value = pcall(itemPort.modData, item)
+    else
+        ok, value = pcall(function() return item:getModData() end)
+    end
+    if not ok or type(value) ~= "table" then return nil end
+    return value
+end
+
+local function setDisplay(item, itemPort, title)
+    local ok, message = pcall(function()
+        itemPort.setName(item, title)
+        itemPort.setCustomName(item, true)
+    end)
+    if not ok then return false, tostring(message) end
+    return true
+end
 
 function ItemProjection.payload(assetId, physicalItemId)
     local asset = Content.assets[assetId]
@@ -22,7 +36,7 @@ function ItemProjection.payload(assetId, physicalItemId)
     if type(body) ~= "string" or body == "" then return nil, "asset body is invalid" end
     if type(physicalItemId) ~= "string" or physicalItemId == "" then return nil, "physical item identity is invalid" end
     return {
-        schema = 1,
+        schema = ItemPresentation.SCHEMA_VERSION,
         physicalItemId = physicalItemId,
         assetId = assetId,
         title = asset.displayName,
@@ -40,32 +54,55 @@ function ItemProjection.apply(item, assetId, physicalItemId, itemPort)
         physicalToken = physicalItemId
     })
     if not presentation then return false, presentationMessage end
-    local modData = itemPort.modData(item)
-    if type(modData) ~= "table" then return false, "item ModData is unavailable" end
-    local fields = ItemProjection.fields
-    modData[fields.schema] = payload.schema
-    modData[fields.physicalItemId] = payload.physicalItemId
-    modData[fields.assetId] = payload.assetId
-    modData[fields.title] = payload.title
-    modData[fields.description] = payload.description
-    modData[fields.body] = payload.body
+    local modData = modDataFor(item, itemPort)
+    if not modData then return false, "item ModData is unavailable" end
+    local displayed, displayMessage = setDisplay(item, itemPort, payload.title)
+    if not displayed then return false, displayMessage end
+    for _, legacyKey in pairs(ItemProjection.fields) do modData[legacyKey] = nil end
     modData[ItemPresentation.MOD_DATA_KEY] = presentation
-    itemPort.setName(item, payload.title)
-    itemPort.setCustomName(item, true)
-    if modData[fields.schema] ~= 1 or modData[fields.physicalItemId] ~= physicalItemId
-        or modData[fields.assetId] ~= assetId or modData[fields.title] ~= payload.title
-        or modData[fields.description] ~= payload.description or modData[fields.body] ~= payload.body
-        or modData[ItemPresentation.MOD_DATA_KEY].physicalToken ~= physicalItemId
-        or modData[ItemPresentation.MOD_DATA_KEY].resolvedDescription ~= payload.description then
-        return false, "detached item projection did not validate"
+    local inspected, inspectMessage = ItemPresentation.inspectModData(modData)
+    if not inspected or inspected.assetId ~= assetId or inspected.physicalToken ~= physicalItemId
+        or inspected.presentationState ~= "current" then
+        return false, inspectMessage or "detached item projection did not validate"
     end
     return true, payload
 end
 
+function ItemProjection.refresh(item, itemPort)
+    local modData = modDataFor(item, itemPort)
+    if not modData then return false, "item ModData is unavailable" end
+    local inspected, message = ItemPresentation.inspectModData(modData)
+    if not inspected then return false, message end
+    if not inspected.physicalToken then return false, "physical-token" end
+    local current, currentMessage = ItemPresentation.definition(inspected.assetId, {
+        revealed = true,
+        physicalToken = inspected.physicalToken
+    })
+    if not current then return false, currentMessage end
+    local displayed, displayMessage = setDisplay(item, itemPort, current.resolvedTitle)
+    if not displayed then return false, displayMessage end
+    local refreshed, refreshDetail, changed = ItemPresentation.refreshModData(modData)
+    if not refreshed then return false, refreshDetail end
+    return true, refreshDetail, changed
+end
+
 function ItemProjection.token(item, itemPort)
-    local modData = itemPort.modData(item)
-    if type(modData) ~= "table" then return nil end
-    return modData[ItemProjection.fields.physicalItemId]
+    local modData = modDataFor(item, itemPort)
+    if not modData then return nil end
+    local identity, message = ItemPresentation.identityFromModData(modData)
+    if not identity then return nil, message end
+    return identity.physicalToken
+end
+
+-- Collision detection is deliberately broader than acceptance. Placement uses
+-- this only to stop before creating another item when malformed data claims the
+-- expected token; it never treats the malformed carrier as authoritative.
+function ItemProjection.claimsToken(item, expectedToken, itemPort)
+    local modData = modDataFor(item, itemPort)
+    if not modData then return false end
+    local nested = modData[ItemPresentation.MOD_DATA_KEY]
+    if type(nested) == "table" and nested.physicalToken == expectedToken then return true end
+    return modData[ItemProjection.fields.physicalItemId] == expectedToken
 end
 
 return ItemProjection

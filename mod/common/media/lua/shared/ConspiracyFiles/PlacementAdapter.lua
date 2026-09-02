@@ -30,7 +30,12 @@ function PlacementAdapter.new(options)
     local function matchingItems(target, token)
         local matches = {}
         for _, item in ipairs(world.items(target)) do
-            if ItemProjection.token(item, itemPort) == token then matches[#matches + 1] = item end
+            local candidateToken, reason = ItemProjection.token(item, itemPort)
+            if candidateToken == token then
+                matches[#matches + 1] = item
+            elseif ItemProjection.claimsToken(item, token, itemPort) then
+                error("item carrier claiming expected token was rejected: " .. tostring(reason))
+            end
         end
         return matches
     end
@@ -83,6 +88,8 @@ function PlacementAdapter.new(options)
             return "conflict"
         end
         if #matches == 1 then
+            local refreshed, refreshMessage = ItemProjection.refresh(matches[1], itemPort)
+            if not refreshed then error("existing item presentation rejected for " .. assetId .. ": " .. tostring(refreshMessage)) end
             transaction(persistence, function(state) return state.completePlacement(assetId, resolution.location) end)
             return "placed"
         end

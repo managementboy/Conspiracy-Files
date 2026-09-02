@@ -1,6 +1,6 @@
 # Release and Distribution
 
-**Status:** Approved policy; pipeline not yet implemented.
+**Status:** Approved policy; deterministic pipeline implemented and tested offline, promotion gates pending.
 **Authority:** ADR-0003 and P4-R46.
 
 ## Licence and disclosure
@@ -18,7 +18,7 @@ The repository's CC0-1.0 dedication is intentionally applied to all project-owne
 
 ## Artifact contract
 
-The deterministic packager must generate one production payload for both GitHub and Workshop distribution. Its final layout follows the production shell's verified Build 42 result rather than the historical packaging hypothesis in `mod/42/README.md`.
+The deterministic packager generates one production payload for both GitHub and Workshop wrappers. Its current layout follows the production shell's offline-validated Build 42 package shape; the real loader behavior remains subject to T11 live acceptance.
 
 The package contains only loadable production files and required metadata/assets. It excludes:
 
@@ -31,14 +31,14 @@ Each build identifies its Conspiracy-Files version, source commit, content revis
 
 ## Validation gate
 
-Before promotion, automation should:
+Before promotion, automation runs:
 
 1. run the plain-Lua suite;
 2. run Lua static/syntax checks;
 3. validate built-in IDs/references and package contents;
 4. reject secrets and forbidden development/local files;
 5. build the package twice and compare manifests/checksums where practical;
-6. smoke-install the artifact on a clean test device before Workshop beta.
+6. require a separate clean-device smoke before Workshop beta; this is not an offline pipeline claim.
 
 Development artifacts may be disposable. A retained prerelease or release must remain traceable to its exact source commit and checksum.
 

@@ -20,7 +20,20 @@ end
 function PZPresentation.new(options)
     options = options or {}
     local namespace = assert(options.namespace, "ConspiracyFiles namespace is required")
-    local windows = namespace._presentationWindows or PZWindows.new()
+    local windowLabels = {
+        journalEmptyTitle = translated("UI_CF_NotebookEmptyJournalTitle", "No entries yet"),
+        journalEmptyBody = translated("UI_CF_NotebookEmptyJournalBody", "The pages are blank. Survival has been noisy enough without invented answers."),
+        chronologyHeading = translated("UI_CF_NotebookChronology", "Chronology"),
+        evidenceHeading = translated("UI_CF_NotebookEvidence", "Evidence"),
+        evidenceEmptyBody = translated("UI_CF_NotebookEmptyEvidenceBody", "Nothing recorded yet. Suspicion is not evidence until I choose to keep it."),
+        majorMarker = translated("UI_CF_NotebookMajorMarker", "[!] "),
+        markedMarker = translated("UI_CF_NotebookMarkedMarker", "[marked] "),
+        journalTab = translated("UI_CF_NotebookJournalTab", "Journal"),
+        evidenceTab = translated("UI_CF_NotebookEvidenceTab", "Evidence"),
+        helpTab = translated("UI_CF_NotebookHelpTab", "Help"),
+        notebookSuffix = translated("UI_CF_NotebookTitleSuffix", "survivor notebook")
+    }
+    local windows = namespace._presentationWindows or PZWindows.new({ labels = windowLabels })
     namespace._presentationWindows = windows
     namespace._presentationCallbacks = namespace._presentationCallbacks or {}
 

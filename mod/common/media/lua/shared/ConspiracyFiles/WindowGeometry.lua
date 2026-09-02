@@ -26,4 +26,3 @@ function WindowGeometry.centered(screenWidth, screenHeight, kind)
 end
 
 return WindowGeometry
-

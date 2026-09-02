@@ -37,8 +37,10 @@ implementation has not been launched in Project Zomboid.
   placement or conclusively unavailable after placement. Unloading, original
   container absence, `unknown`, `untracked` and `conflict` cannot choose it.
   Discovering D1 fixes the entry opportunity to `anchor`; D1 never respawns.
-- Each D1–D6 item uses a persistent custom name and plain ModData schema/title/
-  description/body fields resolved from `dead-air-r1`. No body uses
+- Each D1–D6 item uses a persistent custom name and the canonical nested
+  `ModData.ConspiracyFiles` schema/Asset/token/title/description/body carrier
+  resolved from current static content. Compatible older presentation text is
+  refreshed in place without changing item identity. No body uses
   `InventoryItem.description`, runtime print media or native generic readers.
   The T10 custom Inspect reader remains deliberately outside this no-UI change.
 - Every 15 ticks, the runtime queues one arrival poll and one round-robin
@@ -53,7 +55,10 @@ global.
 
 ## Offline verification
 
-`lua5.1 test/run.lua` reports 39 tests and zero failures. Thirteen new fake-backed
+At this handoff's original world-adapter checkpoint, `lua5.1 test/run.lua`
+reported 39 tests and zero failures. The corrected integrated candidate now
+reports 69 tests and zero failures; see the integrated-candidate handoff for
+the combined verification gate. Thirteen fake-backed
 world tests cover:
 
 1. exact D1–D6 name/title/description/body projections;

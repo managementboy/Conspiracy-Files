@@ -20,8 +20,9 @@ slice:
 
 - a PZ-free item-presentation contract that stamps a custom display name and a
   namespaced, plain-table `ModData.ConspiracyFiles` payload;
-- exact validation of schema, content revision, known Asset ID, reveal state,
-  display name, title, description, full body and optional physical token;
+- exact validation of schema, known Asset ID, reveal state, display name, title,
+  description, full body and optional physical token, with compatible older
+  content revisions refreshed by placement before interaction;
 - one additive `OnFillInventoryObjectContextMenu` listener for both player and
   Ground/loot inventory panes, using module-private action ownership identities;
 - selection normalization matching T10's grouped-row rule, identity
@@ -45,8 +46,8 @@ canonical root.
 
 ## Item ModData contract
 
-Future placement code may call `ConspiracyFiles.ItemPresentation.stamp` only
-after it owns a detached item. The adapter writes one nested table:
+The canonical item carrier is the nested table below. Placement calls
+`ConspiracyFiles.ItemProjection.apply` only after it owns a detached item:
 
 ```text
 item:getModData().ConspiracyFiles = {
@@ -61,8 +62,23 @@ item:getModData().ConspiracyFiles = {
 }
 ```
 
-The reader never trusts arbitrary ModData prose: validation requires exact
-agreement with the approved static Dead Air Asset. `InventoryItem.description`,
+New items contain no flat identity/presentation duplicates. For items written by
+the first schema-2 candidate, the old flat schema, Asset, physical-token, title,
+description and body fields are accepted only as a complete exact mirror of the
+nested table. Flat-only, partial and disagreeing carriers fail closed; neither
+presentation nor physical tracking silently chooses a side. This bridge keeps
+the nested table authoritative while preserving an otherwise valid item instance
+and physical token.
+
+When reconciliation finds an owned item whose carrier schema/Asset/token and
+mirror equivalence are valid but whose non-empty `contentRevision` is older, it
+refreshes only the custom display name and presentation revision/text from the
+current authoritative Asset. It does not replace, restamp or change physical
+identity. A carrier claiming the current revision must already match current
+static text exactly; tampering is rejected.
+
+The reader never trusts arbitrary current-revision ModData prose: validation
+requires exact agreement with the approved static Dead Air Asset. `InventoryItem.description`,
 runtime `printMedia`, native key/map readers and custom Literature pages are not
 used as authoritative storage. A stamped placement location is deliberately
 not accepted as discovery context because the item may have moved before
@@ -70,8 +86,8 @@ inspection.
 
 ## Context-menu behavior
 
-- Hidden, malformed, stale-revision, unknown or body-tampered items add no
-  actions.
+- Hidden, malformed, unreconciled stale-revision, unknown or body-tampered items
+  add no actions.
 - Mixed valid/invalid selection acts only on the one valid item.
 - Multiple valid items add one disabled private Inspect hint and no Mark action.
 - Documents expose Inspect. Inspect revalidates, stages one idempotent authored

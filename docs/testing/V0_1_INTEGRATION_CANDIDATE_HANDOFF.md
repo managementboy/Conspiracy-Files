@@ -30,9 +30,12 @@ were combined rather than selecting one branch's version wholesale.
   acceptance.
 - Schema-2 keeps `assetMaterialisation` and `physicalAvailability` as separate
   maps. Save-scoped physical tokens are derived at adapter activation and are
-  never persisted as nested materialisation records. Item ModData remains a
-  validated presentation/identity carrier. A focused regression proves placed documents
-  validate for Inspect with exact title, authored description, body and token.
+  never persisted as nested materialisation records. The nested
+  `ModData.ConspiracyFiles` table is the canonical item presentation/identity
+  carrier; legacy flat fields are accepted only as a complete exact mirror and
+  are refreshed in lockstep for compatible content-text revisions. Focused
+  regressions cover flat-only, nested-only, disagreement, copying, tampering and
+  in-place old-item/current-text refresh while preserving the physical token.
 - E10 remains a checkpoint-only base-slice boundary: no death record,
   corpse scan or claim about callback ordering/already-dead reload was added.
 - The release pipeline packages this same production tree and performs no
@@ -51,7 +54,7 @@ python3 tools/release_pipeline.py all --output dist
 git diff --check
 ```
 
-The integrated Lua suite reports 61 tests and zero failures. The release unit
+The corrected integrated Lua suite reports 69 tests and zero failures. The release unit
 tests, clean-tree reproducibility gate, deterministic double build, archive
 payload comparison and generated checksum verification must pass at the final
 candidate commit before handoff.

@@ -7,6 +7,8 @@ local WorldRuntime = require("ConspiracyFiles/WorldRuntime")
 
 local IntegrationRuntime = {}
 
+IntegrationRuntime.READY_DIAGNOSTIC = "Conspiracy-Files: canonical runtime ready; phase=running"
+
 function IntegrationRuntime.start(environment)
     assert(type(environment) == "table", "integration environment is required")
     local decision = Bootstrap.decide(environment.isMultiplayer, environment.runtimeVersion)
@@ -37,6 +39,7 @@ function IntegrationRuntime.start(environment)
         worldRuntime = WorldRuntime.new({ persistence = persistence, scheduler = scheduler, world = environment.world, itemPort = environment.itemPort })
     end
     local phase = "registered"
+    local readyDiagnosticEmitted = false
     local callbacks = {}
     local registeredEvents = {}
 
@@ -57,6 +60,10 @@ function IntegrationRuntime.start(environment)
             if not persistence.isLoaded() then error("canonical state was not initialized") end
             if worldRuntime then worldRuntime.start() end
             phase = "running"
+            if environment.report and not readyDiagnosticEmitted then
+                readyDiagnosticEmitted = true
+                pcall(environment.report, IntegrationRuntime.READY_DIAGNOSTIC)
+            end
         end)
     end
 

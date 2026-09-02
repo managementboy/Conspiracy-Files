@@ -60,12 +60,12 @@ The first specification over-committed to unproven Build 42 capabilities. The en
 - **T8 curated location arrival detection:** complete with explicit reload/reference limitations. Scripted teleports produced zero `OnPlayerMove` callbacks. Bounded 15-tick state sampling with two stable samples correctly confirmed reached exact-room, whole-building, floor, basement, radius, rectangle and installed-zone predicates in 248–344 ms, with adjacent/wrong-floor/boundary negatives and sticky leave/re-entry behavior. Late scripted teleports became unreliable; delayed-reference ordering and reload-inside remain production-adapter tests rather than claimed results. See `docs/research/T8_LOCATION_ARRIVAL.md`.
 - **T10 cooperative Inspect integration:** complete through the P4-R44 manual-GUI route. Repeated inventory-pane menus preserved vanilla actions and another additive listener, privately keyed Inspect activated once, Mark Interesting emitted one intent and stayed disabled across reload, hidden/invalid/ambiguous/unowned states behaved conservatively, and injected faults were contained without a crash. Ground inventory is the supported dropped-item surface; direct world right-click received zero inventory subjects and is explicitly unsupported. Controller activation was unavailable. See `docs/research/T10_COOPERATIVE_INSPECT.md`.
 
-## Accepted offline implementation
+## Offline implementation status
 
 - **v0.1 plain-Lua domain core:** accepted and merged in PR #15 at `c9d845e21a0a4298a83ce8b92204e66b6e59d073`. It implements the static Dead Air registries, private canonical ThreadState API, authored and Mark Interesting Evidence, append-only journal events, deterministic no-AI rendering, derived Organisation/Location labels, idempotent domain transitions, D5/D6 contradiction handling, B-37 recontextualisation, major-discovery evaluation, staged P4-R32 validation, the conservative P4-R17 size gate and static content resolution.
-- All 16 acceptance criteria classified `plain-Lua automated test` pass under PUC Lua 5.1.5. The combined repository suite now reports 36 passing tests, including blocker regressions, T1 estimator calibration, fake-backed production-shell coverage, binding drift protection, and a complete-Dead-Air performance characterization. See `docs/testing/V0_1_DOMAIN_CORE_TRACEABILITY.md` and `docs/testing/V0_1_PRODUCTION_SHELL_HANDOFF.md`.
+- All 16 acceptance criteria classified `plain-Lua automated test` pass under PUC Lua 5.1.5. The combined repository suite also covers the fake-backed production shell, world/presentation/lifecycle adapters, binding drift, carrier integrity, localization consumption, release validation and a complete-Dead-Air performance characterization. See `docs/testing/V0_1_DOMAIN_CORE_TRACEABILITY.md` and the testing handoffs.
 - This acceptance is limited to the PZ-independent domain layer. It does not accept ModData adapter behavior, physical placement/commit sequencing, live item identity, reader/UI integration, location-arrival integration or other production-adapter behavior. CF-V01-E01 separately accepts the exact static map bindings on Build 42.20.4.
-- **v0.1 production integration shell:** integrated on `main` at `7ec2f97`. It supplies the Build 42 package root and bootstrap, fail-closed multiplayer decision, additive lifecycle hooks, bounded scheduler, per-subsystem error budgets and staged Global ModData persistence adapter. Its eight offline tests pass, but CF-V01-E09/E11/E12/E13 remain live acceptance work; the shell does not yet implement placement, physical identity, reader/UI, arrival or notebook/evidence-list surfaces.
+- **v0.1 production integration candidate:** the Build 42 package/bootstrap, fail-closed multiplayer gate, additive lifecycle hooks, bounded scheduler, error budgets, staged persistence, placement, physical identity, item reader/actions, arrival, notebook/evidence/help UI, supported death/reload checkpoints and deterministic packager are implemented and tested offline. CF-V01-E02–E14 still require their named live Build 42 acceptance matrices; the candidate is not independently accepted or released.
 
 ## Development tooling
 
@@ -96,14 +96,7 @@ One built-in hand-authored thread:
 
 ## Immediate work
 
-The next finishable milestone is the integrated, playable Dead Air vertical slice:
-
-1. connect the production shell to `ConspiracyFiles.LocationBindings` and implement E02–E08: T4 placement, T5 physical identity, T7 asset text, T8 arrival and T10 inventory-pane Inspect/Mark behavior;
-2. implement the notebook journal, evidence list, in-fiction help page and one notebook keybind, then pass the new CF-V01-E14 live UI criterion;
-3. assign and implement E10's supported death/reload checkpoint and state-integrity boundary;
-4. run the live E09/E11/E12/E13 production-shell matrices plus the integrated E02–E08/E10/E14 matrices on the supported Build 42 line;
-5. validate the reusable live-inspection harness once on the hardware-rendered path, then use it for future live matrices;
-6. implement the deterministic release packager and cross-device prerelease smoke before any Workshop beta.
+The next finishable milestone is independent offline QA of this corrected immutable candidate. Only after that gate passes should work resume on the live E02–E14 matrices for the supported Build 42 line, followed by the cross-device prerelease smoke. No release, distribution or owner acceptance is implied by the offline implementation.
 
 P4-R40 resolves the former entry-selection to-do: if durably placed but undiscovered D1 becomes conclusively `unavailable` only after T5/P4-R37 reconciliation, D2 may activate once as the fallback introduction. Unloading, original-container absence, `unknown`, `untracked` and `conflict` do not qualify, and D1 never respawns.
 

@@ -5,5 +5,15 @@ UI_EN = {
     UI_CF_SelectOne = "Select one Conspiracy-Files item at a time.",
     UI_CF_TakeBeforeMarking = "Take this item before marking it interesting.",
     UI_CF_AlreadyMarked = "Already marked interesting.",
+    UI_CF_NotebookEmptyJournalTitle = "No entries yet",
+    UI_CF_NotebookEmptyJournalBody = "The pages are blank. Survival has been noisy enough without invented answers.",
+    UI_CF_NotebookChronology = "Chronology",
+    UI_CF_NotebookEvidence = "Evidence",
+    UI_CF_NotebookEmptyEvidenceBody = "Nothing recorded yet. Suspicion is not evidence until I choose to keep it.",
+    UI_CF_NotebookMajorMarker = "[!] ",
+    UI_CF_NotebookMarkedMarker = "[marked] ",
+    UI_CF_NotebookJournalTab = "Journal",
+    UI_CF_NotebookEvidenceTab = "Evidence",
+    UI_CF_NotebookHelpTab = "Help",
+    UI_CF_NotebookTitleSuffix = "survivor notebook",
 }
-

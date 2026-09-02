@@ -26,13 +26,14 @@ function Presentation.reader(subject)
     local asset = Content.assets[subject.assetId]
     if not asset then return nil, "unknown reader Asset ID" end
     local description = asset.assetKind == "document" and asset.descriptionText or asset.inspectText
-    if subject.title ~= asset.displayName or subject.description ~= description or subject.body ~= asset.bodyText then
+    local body = asset.bodyText or description
+    if subject.title ~= asset.displayName or subject.description ~= description or subject.body ~= body then
         return nil, "reader subject does not match authoritative content"
     end
     return {
         title = asset.displayName,
         description = description,
-        body = asset.bodyText or description,
+        body = body,
         assetKind = asset.assetKind
     }
 end
