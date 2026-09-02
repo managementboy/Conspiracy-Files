@@ -160,6 +160,8 @@ Rules:
 - repeated subsystem failures auto-disable that subsystem for the session after a bounded threshold;
 - surface one concise error instead of per-frame spam.
 
+CF-V01-E10 limits supported death/reload handling to checkpoint and state integrity: preserve the last known-good canonical root, reject partial staged replacements, and append no lifecycle-only Evidence or JournalEntry.
+
 ## 10. Performance scheduler
 
 PZ Lua is treated as main-thread constrained.
@@ -220,19 +222,11 @@ Optional bonus only. May summarize canonical state. Never creates facts. Every A
 
 Provider credentials live outside saves/repo. T9 determines whether transport requires Java/companion process.
 
-## 14. Death recap
-
-Required path is deterministic and no-AI. It is generated from canonical state and must survive a failed/pending AI call.
-
-Runtime AI may optionally enhance the recap later, never reveal hidden truth.
-
-Alt-F4/death lifecycle mechanics require a dedicated PZ lifecycle probe before the final spec is locked.
-
-## 15. Diagnostics
+## 14. Diagnostics
 
 Full hidden-state diagnostics are development/debug only. They may be read-only and exhaustive, but normal play must not provide a truth-dump keybind.
 
-## 16. Versioning
+## 15. Versioning
 
 Separate:
 - PZ supported minor line;
@@ -243,11 +237,11 @@ Backward-compatible typo/text revisions must not force save migration. Content p
 
 ADR-0004 fixes their save representation: schema version gates load; content revision is informational; PZ minor line is recorded independently and checked at the runtime boundary. Incompatible roots are preserved untouched and disable the mod with one concise diagnostic.
 
-## 17. Journal and leads
+## 16. Journal and leads
 
 The journal is a point-in-time chronological record, not a live projection of later knowledge. Rendering may resolve static authored templates, but later location/name refinement does not rewrite earlier entry wording or major-event eligibility. Leads mean locations still worth investigating next; a confirmed location is removed from the derived lead list.
 
-## 18. Future features explicitly deferred
+## 17. Future features explicitly deferred
 
 - advisory map-wide location candidate discovery — post-v1 only, using T2's filtered/rebuildable dual-bounded scheduler and T3's room-first/provenance/override constraints; curated catalogs remain authoritative;
 - relationship graph — v2, separate prototype first;
@@ -257,7 +251,7 @@ The journal is a point-in-time chronological record, not a live projection of la
 - multiplayer — future architecture;
 - runtime AI — optional future enhancement.
 
-## 19. Architecture proof gates
+## 18. Architecture proof gates
 
 Before the broad architecture is considered signed off, record spike results for T1–T10 using `docs/research/SPIKE_TEMPLATE.md`.
 

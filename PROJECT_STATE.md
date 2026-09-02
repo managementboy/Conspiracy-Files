@@ -100,7 +100,7 @@ The next finishable milestone is the integrated, playable Dead Air vertical slic
 
 1. connect the production shell to `ConspiracyFiles.LocationBindings` and implement E02–E08: T4 placement, T5 physical identity, T7 asset text, T8 arrival and T10 inventory-pane Inspect/Mark behavior;
 2. implement the notebook journal, evidence list, in-fiction help page and one notebook keybind, then pass the new CF-V01-E14 live UI criterion;
-3. assign and implement E10's death/reload lifecycle boundary;
+3. assign and implement E10's supported death/reload checkpoint and state-integrity boundary;
 4. run the live E09/E11/E12/E13 production-shell matrices plus the integrated E02–E08/E10/E14 matrices on the supported Build 42 line;
 5. validate the reusable live-inspection harness once on the hardware-rendered path, then use it for future live matrices;
 6. implement the deterministic release packager and cross-device prerelease smoke before any Workshop beta.

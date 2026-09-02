@@ -14,7 +14,7 @@ Source review: `ENGINEERING_REVIEW_2026-08-30.md`.
 - Cut retrofit/migration/content packs from v1.
 - Demote graph to v2.
 - Debug-gate hidden diagnostics.
-- Add main-thread/save-size budgets, MP guard, error containment, compatibility rules, PZ-free domain core, glossary, decision IDs/rationales, death-summary fallback.
+- Add main-thread/save-size budgets, MP guard, error containment, compatibility rules, PZ-free domain core, glossary, decision IDs/rationales, and death/reload state preservation.
 - One normal-play keybind; in-fiction onboarding.
 - Create spike issues and ADRs.
 

@@ -14,4 +14,4 @@ Runtime AI implies network transport, player credentials/API key, latency, cost 
 - Any future general runtime-AI transport crosses an explicit Java/ZombieBuddy or external-companion boundary and remains outside v0.1.
 
 ## Consequences
-The notebook, story content, theories/interpretations and death recap must be useful without a provider. T9's negative general-egress result does not block v0.1; it makes a future optional transport dependency explicit. See `docs/research/T9_NETWORK_EGRESS.md`.
+The notebook, story content and supported interpretations must be useful without a provider. T9's negative general-egress result does not block v0.1; it makes a future optional transport dependency explicit. See `docs/research/T9_NETWORK_EGRESS.md`.

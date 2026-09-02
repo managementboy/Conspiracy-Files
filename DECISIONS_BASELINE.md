@@ -70,8 +70,7 @@ This is the detailed discovery record. Question numbers refer to the discovery p
 | 25 | Primary graph-node direct action: mark as interesting. |
 | 26 | No authored false leads; every authored clue ultimately matters. |
 | 27 | Discovering clues does not directly alter the game world. |
-| 28 | On death everything ends with the character; AI final investigation summary is desirable. |
-| 29 | Death summary includes all listed recap elements except any hidden “what they never knew” truth. |
+| 28 | On death everything ends with the character. |
 | 30 | AI may read, summarize, suggest from, challenge, but never overwrite player notes; notes remain subjective unless corroborated. |
 | 31 | Generated text: strict fact boundary, speculation framed as uncertainty, character-limited knowledge, no omniscience, contradictions allowed, canon protected, 1990s knowledge boundary. |
 | 32 | Every AI-generated asset requires manual approval before inclusion. |
@@ -99,8 +98,8 @@ This is the detailed discovery record. Question numbers refer to the discovery p
 | 54 | If runtime AI is unavailable, use pre-generated summaries where possible and disable AI controls gracefully. |
 | 55 | No gameplay requirement for invoking runtime AI if configured. |
 | 56 | Runtime AI is accessible from both journal and relationship graph. |
-| 57 | Runtime AI can summarize current investigation, recent discoveries, selected theory, and generate death summary. |
-| 58 | AI summary voice: in-character survivor, funny, irreverent, fatalistic (“we know we are going to die”). |
+| 57 | Runtime AI can summarize current investigation, recent discoveries, and selected theory. |
+| 58 | AI summary voice: in-character survivor, funny and irreverent. |
 | 59 | Humor is always present, even for grim discoveries. |
 | 60 | Journal onboarding: light onboarding. |
 | 61 | Onboarding covers all listed major features. |

@@ -22,6 +22,6 @@ A document gives only a landmark-style description. The player survives the trip
 
 Late in a run, two independently found documents connect the same people/organisation but contradict each other about what happened.
 
-**On screen:** both evidence records remain; the notebook surfaces the relationship/contradiction without resolving it. If the survivor later dies, the deterministic death recap calls back to the unresolved contradiction in the project's irreverent fatalistic voice.
+**On screen:** both evidence records remain; the notebook surfaces the relationship/contradiction without resolving it.
 
-**Why it feels good:** the player owns the interpretation, and death closes the character's investigation without revealing a canonical answer.
+**Why it feels good:** the player owns the interpretation without the system revealing a canonical answer.

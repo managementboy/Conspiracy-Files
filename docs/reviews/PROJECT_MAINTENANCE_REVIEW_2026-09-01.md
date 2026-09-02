@@ -13,7 +13,7 @@ There is no dated delivery baseline in the repository, so schedule performance c
 | Content/domain | Green | `dead-air-r1` is owner-approved; all 16 plain-Lua criteria pass. |
 | Static bindings | Green | P2/R2 and all six target containers are live-evidenced and protected by a drift test. |
 | Production shell | Amber | Package/bootstrap, persistence, scheduler, MP guard and error budgets exist and pass fake-backed tests; live E09/E11/E12/E13 remain open. |
-| Playable integration | Amber/red | Placement, item identity, reader/Inspect, arrival, notebook/evidence UI and death/reload integration are not implemented end to end. |
+| Playable integration | Amber/red | Placement, item identity, reader/Inspect, arrival, notebook/evidence UI and death/reload checkpoint integrity are not implemented end to end. |
 | Release readiness | Amber/red | Distribution policy exists, but deterministic packaging and another-device smoke testing do not. |
 | Schedule | Unrated | No milestone dates or target release date are recorded. |
 
@@ -49,7 +49,7 @@ The production shell moves E09 and E11–E13 from “awaiting implementation” 
 
 1. Integrate T4/T5/T7/T8/T10 mechanisms with the production shell and accepted P2/R2 bindings.
 2. Implement the notebook journal, evidence list, in-fiction help and single notebook keybind.
-3. Assign and implement the death/reload lifecycle boundary.
+3. Assign and implement the supported death/reload checkpoint and state-integrity boundary.
 4. Execute E02–E14 live matrices on the supported Build 42 line, preserving each criterion's limitations.
 5. Live-validate the reusable harness's hardware-rendered path.
 6. Build the deterministic package pipeline, publish an internal prerelease artifact and smoke-test it on another device.

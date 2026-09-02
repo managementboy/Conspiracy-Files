@@ -52,7 +52,7 @@ The first draft had strong organisation and several correct architectural instin
 - PZ-free domain core testable under plain Lua 5.1;
 - glossary and stable decision IDs;
 - rationales for load-bearing decisions;
-- robust death-summary fallback;
+- robust death/reload checkpoint and state preservation;
 - `.gitignore` and future CI plan;
 - GitHub issues for spikes;
 - ROADMAP with v0.1 and explicit deferrals;

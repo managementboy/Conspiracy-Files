@@ -104,7 +104,7 @@ If a spike disproves a decision, technical reality wins: supersede the decision 
 | P4-R02 / P4-R26 | Content precedes generic schema; project owner writes/approves canonical content, with AI only assisting drafts. | Avoid schema-first design. |
 | P4-R04 | Retrofit, migration and external content packs are not in v1. | De-risk core first. |
 | P4-R05/P4-R25 | Graph is v2; prototype separately with provisional 250 visible-node cap. | Biggest UI risk. |
-| P4-R22 | Death recap is required in v0.1, deterministic without AI, and persisted across the death/reload boundary; optional AI may enhance it later. CF-V01-E10 is owned by the v0.1 production-integration workstream. | Death payoff cannot depend on network success or remain an unowned conditional. |
+| P4-R22 | **Superseded 2026-09-02:** the project owner removed the death recap from project scope. No implementation, persistence, UI, test, acceptance, or release requirement remains. | CF-V01-E10 now covers only supported death/reload checkpoint and state-integrity behavior. |
 | P4-R51 | CC0-1.0 is intended to cover project-owned code, documentation and narrative content. Workshop/repository disclosure states that some narrative text was drafted with AI assistance and human-reviewed/approved; third-party PZ assets and trademarks are not relicensed. | Makes the intended licensing and disclosure scope explicit without per-item in-fiction labels. |
 | P4-R27 | Three concrete reward moments are defined in `docs/requirements/PLAYER_MOMENTS.md`. | Ensures the mod rewards the player without completion banners. |
 | P4-R28 | “Long inactivity” means a real-world gap between play sessions. | It is a return-player memory aid, not an in-world timer. |

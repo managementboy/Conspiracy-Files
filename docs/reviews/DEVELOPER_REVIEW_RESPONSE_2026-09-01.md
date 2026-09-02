@@ -32,7 +32,7 @@
 | C1 journal | Point-in-time chronological record. Later knowledge appends; it never rewrites old wording/eligibility. |
 | C2 leads | A lead is outstanding. Confirmed locations disappear from `leads()`. |
 | C3 compatibility axes | `schemaVersion`, `contentRevision`, and `pzMinorLine` are separate root fields under ADR-0004. |
-| C4 death recap | Required in v0.1. CF-V01-E10 is owned by the production-integration workstream and must persist across death/reload. |
+| C4 death/reload lifecycle | CF-V01-E10 covers supported checkpoint and state-integrity behavior across death/reload. |
 | C5 P2/R2 | Completed after the reviewed commit. The v0.1 integration workstream/project owner ran the disposable-save inspection; the checked-in structured transcript, exact bindings, reproduction commands, hashes, and limitations are in `CF_V01_E01_DEAD_AIR_LOCATION_BINDINGS.md`. |
 | C6 human approval | A dated repo artifact naming approver role, exact content revision/source, approval scope, and boundaries. `DEAD_AIR_CONTENT_APPROVAL_2026-09-01.md` is the first instance. |
 | C7 licence/disclosure | Project intent is CC0-1.0 for project-owned code, docs, and narrative. P4-R51 records this and approved Workshop disclosure wording; third-party PZ material is not relicensed. This is an intent record, not independent legal advice. |

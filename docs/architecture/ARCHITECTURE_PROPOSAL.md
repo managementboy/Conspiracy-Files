@@ -670,7 +670,6 @@ Functions:
 - current investigation summary;
 - recent discovery summary;
 - selected theory summary;
-- death summary.
 
 Inputs may include canonical evidence, current interpretations, player notes, theory state, journal history, and relevant character/game state.
 
@@ -679,8 +678,7 @@ Rules:
 - never reveal undiscovered hidden state unless diagnostics mode is explicitly being used outside narrative;
 - no omniscient truth;
 - maintain 1990s knowledge boundary;
-- always humorous/irreverent/fatalistic in-character voice;
-- death summary never reveals the true conspiracy.
+- maintain the approved in-character narrative voice.
 
 Runtime AI output is narrative, not evidence.
 
