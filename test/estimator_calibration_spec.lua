@@ -1,4 +1,4 @@
-local Validator = require("ConspiracyFiles.Validator")
+local Validator = require("ConspiracyFiles/Validator")
 
 test("T1 representative 1000-record estimate is calibrated to observed Global ModData bytes", function()
     local records = {}

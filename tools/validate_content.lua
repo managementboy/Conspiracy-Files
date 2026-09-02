@@ -7,8 +7,8 @@ package.path = root .. separator .. "mod" .. separator .. "common" .. separator
     .. "media" .. separator .. "lua" .. separator .. "shared" .. separator .. "?.lua;"
     .. package.path
 
-local Content = require("ConspiracyFiles.Content")
-local Ids = require("ConspiracyFiles.Ids")
+local Content = require("ConspiracyFiles/Content")
+local Ids = require("ConspiracyFiles/Ids")
 
 local ok, message = Content.validate()
 assert(ok, message)
