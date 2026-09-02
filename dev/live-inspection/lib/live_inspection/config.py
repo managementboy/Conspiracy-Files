@@ -124,24 +124,32 @@ def load_profile(path: Path) -> Profile:
         click_gate = next(gate for gate in gates if gate.name == "click-to-start")
         if click_gate.pattern != "game loading took":
             raise HarnessError("unattended click-to-start requires the exact ordinary gate signature 'game loading took'")
+        player_ready_gate = next(gate for gate in gates if gate.name == "player-ready-modal-check")
+        if player_ready_gate.pattern != r"\[CF-INSPECT\].*kind=PLAYER_READY":
+            raise HarnessError("unattended startup delivery requires the exact observer PLAYER_READY gate pattern")
     else:
         for manual_name in ("click-to-start", "player-ready-modal-check"):
             if actions[manual_name] != "manual":
                 raise HarnessError(f"gate {manual_name} must use action=manual unless unattended_startup.enabled=true")
     startup_action = str(unattended_raw.get("action", "left-click"))
-    startup_key = unattended_raw.get("key")
-    if startup_action not in {"left-click", "keypress"}:
-        raise HarnessError("unattended_startup.action must be left-click or keypress")
-    if startup_action == "keypress" and startup_key not in {"Return", "space"}:
-        raise HarnessError("unattended startup keypress is limited to Return or space")
-    if startup_action == "left-click" and startup_key is not None:
-        raise HarnessError("unattended startup left-click cannot also declare a key")
+    if startup_action != "left-click":
+        raise HarnessError(
+            "unattended_startup.action must be left-click; keypress startup is disabled after live evidence showed no transition"
+        )
+    if unattended_raw.get("key") is not None:
+        raise HarnessError("unattended startup left-click cannot declare a key")
     max_actions = _positive_int(unattended_raw.get("max_actions", 1), "unattended_startup.max_actions")
     if max_actions != 1:
         raise HarnessError("unattended_startup.max_actions must be exactly 1")
     signature_age = _positive_int(unattended_raw.get("signature_max_age_seconds", 15), "unattended_startup.signature_max_age_seconds")
     if signature_age > 30:
         raise HarnessError("unattended_startup.signature_max_age_seconds must be <= 30")
+    settle_seconds = _positive_int(
+        unattended_raw.get("post_signature_settle_seconds", 1),
+        "unattended_startup.post_signature_settle_seconds",
+    )
+    if settle_seconds >= signature_age:
+        raise HarnessError("unattended startup settle time must be shorter than the signature freshness budget")
     window_pattern = str(unattended_raw.get("window_title_pattern", r"(?i)project zomboid"))
     if window_pattern not in WINDOW_TITLE_PATTERNS:
         raise HarnessError("unattended startup window title must use an approved Project Zomboid pattern")
@@ -178,7 +186,9 @@ def load_profile(path: Path) -> Profile:
         sites=tuple(sites), gates=tuple(gates), time_budgets=dict(budgets),
         allow_multi_site=bool(run.get("allow_multi_site", False)),
         criteria=criteria, interaction_scope=interaction_scope,
-        unattended_startup=UnattendedStartup(unattended_enabled, startup_action, startup_key, max_actions, signature_age, window_pattern),
+        unattended_startup=UnattendedStartup(
+            unattended_enabled, startup_action, max_actions, signature_age, settle_seconds, window_pattern
+        ),
         payload=Payload(payload_mode, _path(payload_source, base) if payload_source else None, expected_sha, expected_mod_id),
         raw=raw,
     )

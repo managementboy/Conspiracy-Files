@@ -5,7 +5,6 @@ import os
 import subprocess
 import sys
 import tempfile
-import time
 import unittest
 import zipfile
 from pathlib import Path
@@ -19,7 +18,16 @@ from live_inspection.cli import LiveRun
 from live_inspection.model import HarnessError, Payload, UnattendedStartup
 from live_inspection.payload import install_production_payload, tree_checksum
 from live_inspection.safety import ControlTransaction, recover_interrupted_runs
-from live_inspection.unattended import StartupGateController, X11Action
+from live_inspection.state import GateResult
+from live_inspection.unattended import (
+    InputEvidence,
+    ProcessIdentity,
+    StartupGateController,
+    WindowSnapshot,
+    X11Action,
+    confirm_delivery,
+    fail_delivery,
+)
 
 
 GATE_NAMES = (
@@ -32,7 +40,12 @@ def profile_text(root: Path, *, criteria: str = 'criteria=["CF-V01-E02"]', scope
     gates = []
     for name in GATE_NAMES:
         action = "startup-gate" if name == "click-to-start" else "wait"
-        pattern = "game loading took" if name == "click-to-start" else "READY"
+        if name == "click-to-start":
+            pattern = "game loading took"
+        elif name == "player-ready-modal-check":
+            pattern = "\\\\[CF-INSPECT\\\\].*kind=PLAYER_READY"
+        else:
+            pattern = "READY"
         gates.append(f'''[[gates]]
 name="{name}"
 pattern="{pattern}"
@@ -56,6 +69,7 @@ enabled=true
 action="left-click"
 max_actions=1
 signature_max_age_seconds=10
+post_signature_settle_seconds=1
 [[sites]]
 id="S1"
 role="office"
@@ -112,6 +126,14 @@ class UnattendedConfigTests(unittest.TestCase):
                 self.load(base.replace("max_actions=1", "max_actions=2"))
             with self.assertRaisesRegex(HarnessError, "exact ordinary gate signature"):
                 self.load(base.replace('pattern="game loading took"', 'pattern=".*"'))
+            with self.assertRaisesRegex(HarnessError, "exact observer PLAYER_READY"):
+                self.load(base.replace('pattern="\\\\[CF-INSPECT\\\\].*kind=PLAYER_READY"', 'pattern="READY"'))
+
+    def test_keypress_strategy_is_explicitly_rejected_after_live_failure(self):
+        with tempfile.TemporaryDirectory() as temp:
+            base = profile_text(Path(temp))
+            with self.assertRaisesRegex(HarnessError, "keypress startup is disabled"):
+                self.load(base.replace('action="left-click"', 'action="keypress"\nkey="Return"'))
 
     def test_production_payload_requires_exact_identity_and_checksum(self):
         with tempfile.TemporaryDirectory() as temp:
@@ -129,17 +151,49 @@ class UnattendedConfigTests(unittest.TestCase):
 
 class StartupGateControllerTests(unittest.TestCase):
     def policy(self) -> UnattendedStartup:
-        return UnattendedStartup(True, "left-click", None, 1, 10, r"(?i)project zomboid")
+        return UnattendedStartup(True, "left-click", 1, 10, 1, r"(?i)project zomboid")
+
+    @staticmethod
+    def screenshot() -> dict[str, object]:
+        return {"status": "FRESH", "path": "screenshots/startup-gate-ready.png", "width": 960, "height": 1040}
+
+    @staticmethod
+    def input_evidence() -> InputEvidence:
+        return InputEvidence(
+            display=":0", launcher_pid=111, launcher_start_time_ticks=1000,
+            window_pid=222, window_start_time_ticks=2000, window_id=333,
+            window_title="Project Zomboid", action="left-click", action_count=1,
+            command_status="XTEST_EMITTED", delivery_status="PENDING_TRANSITION",
+            signature="game loading took", signature_age_seconds=1.1,
+            post_signature_settle_seconds=1, action_completed_monotonic=101.1,
+            window_x=480, window_y=32, window_width=960, window_height=1008,
+            action_x=480, action_y=960, root_x=960, root_y=992,
+            active_window_id=333, focus_window_id=333, pointer_window_id=44,
+            ready_screenshot=StartupGateControllerTests.screenshot(),
+        )
 
     def test_one_shot_bound_and_structured_evidence(self):
-        controller = StartupGateController(self.policy())
-        action = X11Action(222, 333, "Project Zomboid", 1920, 1080, 960, 540, 960, 540, 333, 444)
+        now = [100.0]
+        launcher = ProcessIdentity(111, 111, 1000)
+        window = WindowSnapshot(object(), ProcessIdentity(222, 111, 2000), 333, "Project Zomboid", 480, 32, 960, 1008)
+        action = X11Action(launcher, window, 480, 960, 960, 992, 333, 333, 444, self.screenshot())
+        controller = StartupGateController(
+            self.policy(), clock=lambda: now[0], sleep=lambda seconds: now.__setitem__(0, now[0] + seconds),
+            identity_reader=lambda _pid: launcher,
+        )
         with mock.patch.dict(os.environ, {"DISPLAY": ":0"}), mock.patch.object(controller, "_activate_x11", return_value=action):
-            evidence = controller.activate(launcher_pid=111, signature="game loading took", signature_seen_at=time.monotonic())
+            evidence = controller.activate(
+                launcher_pid=111, signature="game loading took", signature_seen_at=99.0,
+                readiness_capture=self.screenshot,
+            )
             self.assertEqual((evidence.action, evidence.action_count, evidence.window_pid), ("left-click", 1, 222))
-            self.assertEqual((evidence.action_x, evidence.action_y, evidence.window_width, evidence.window_height), (960, 540, 1920, 1080))
+            self.assertEqual((evidence.action_x, evidence.action_y, evidence.window_width, evidence.window_height), (480, 960, 960, 1008))
+            self.assertEqual((evidence.command_status, evidence.delivery_status), ("XTEST_EMITTED", "PENDING_TRANSITION"))
             with self.assertRaisesRegex(HarnessError, "already been used"):
-                controller.activate(launcher_pid=111, signature="game loading took", signature_seen_at=time.monotonic())
+                controller.activate(
+                    launcher_pid=111, signature="game loading took", signature_seen_at=100.0,
+                    readiness_capture=self.screenshot,
+                )
 
         class Window:
             def __init__(self, window_id, parent=None): self.id, self.parent = window_id, parent
@@ -149,32 +203,167 @@ class StartupGateControllerTests(unittest.TestCase):
         self.assertFalse(controller._belongs_to_window(pz, 55))
 
     def test_stale_signature_fails_before_x11(self):
-        controller = StartupGateController(self.policy())
-        with self.assertRaisesRegex(HarnessError, "stale"):
-            controller.activate(launcher_pid=111, signature="game loading took", signature_seen_at=time.monotonic() - 11)
+        launcher = ProcessIdentity(111, 111, 1000)
+        controller = StartupGateController(self.policy(), clock=lambda: 100.0, sleep=lambda _seconds: None, identity_reader=lambda _pid: launcher)
+        with mock.patch.dict(os.environ, {"DISPLAY": ":0"}), self.assertRaisesRegex(HarnessError, "stale"):
+            controller.activate(
+                launcher_pid=111, signature="game loading took", signature_seen_at=89.0,
+                readiness_capture=self.screenshot,
+            )
 
     def test_window_ownership_filters_non_group_pids(self):
         class Prop:
             def __init__(self, value): self.value = value
         class Attrs:
             map_state = 2
+        class Geometry:
+            width, height = 960, 1008
         class Window:
             def __init__(self, window_id, pid): self.id, self.pid = window_id, pid
             def get_attributes(self): return Attrs()
             def get_full_property(self, atom, _type):
                 return Prop([self.pid]) if atom == "pid" else Prop(b"Project Zomboid")
             def get_wm_name(self): return "Project Zomboid"
+            def get_geometry(self): return Geometry()
         class Root:
             def get_full_property(self, _atom, _type): return Prop([1, 2])
+            def translate_coords(self, _window, _x, _y): return type("Point", (), {"x": 480, "y": 32})()
         class Screen:
             root = Root()
         class Connection:
             def screen(self): return Screen()
             def intern_atom(self, name): return {"_NET_CLIENT_LIST": "clients", "_NET_WM_PID": "pid", "_NET_WM_NAME": "name", "UTF8_STRING": "utf8"}[name]
             def create_resource_object(self, _kind, window_id): return Window(window_id, 100 + window_id)
-        with mock.patch("live_inspection.unattended.os.getpgid", side_effect=lambda pid: 50 if pid == 101 else 99):
-            windows = StartupGateController._owned_windows(Connection(), 50)
-        self.assertEqual([(item[0].id, item[1]) for item in windows], [(1, 101)])
+        controller = StartupGateController(
+            self.policy(), identity_reader=lambda pid: ProcessIdentity(pid, 50 if pid == 101 else 99, pid * 10)
+        )
+        windows = controller._owned_windows(Connection(), ProcessIdentity(50, 50, 500))
+        self.assertEqual([(item.window_id, item.process.pid) for item in windows], [(1, 101)])
+
+    def test_faithful_x11_revalidation_fails_on_focus_race_and_wrong_window(self):
+        class Node:
+            def __init__(self, window_id, parent=None): self.id, self.parent = window_id, parent
+            def query_tree(self): return type("Tree", (), {"parent": self.parent})()
+        root_node = Node(1); window_node = Node(333, root_node)
+        launcher = ProcessIdentity(111, 111, 1000)
+        expected = WindowSnapshot(window_node, ProcessIdentity(222, 111, 2000), 333, "Project Zomboid", 480, 32, 960, 1008)
+
+        class Root:
+            active = 333
+            def get_full_property(self, _atom, _type): return type("Prop", (), {"value": [self.active]})()
+        root = Root()
+        class Connection:
+            focus = window_node
+            def get_input_focus(self): return type("Focus", (), {"focus": self.focus})()
+            def create_resource_object(self, _kind, window_id): return window_node if window_id == 333 else Node(window_id, root_node)
+        connection = Connection()
+        controller = StartupGateController(self.policy(), identity_reader=lambda _pid: launcher)
+
+        with mock.patch.object(controller, "_owned_windows", return_value=[expected]):
+            current, active, focus = controller._revalidate_pre_action(connection, launcher, expected, root, "active", 0)
+        self.assertEqual((current.window_id, active, focus), (333, 333, 333))
+
+        root.active = 999
+        with mock.patch.object(controller, "_owned_windows", return_value=[expected]), self.assertRaisesRegex(HarnessError, "focus race"):
+            controller._revalidate_pre_action(connection, launcher, expected, root, "active", 0)
+
+        root.active = 333
+        wrong = WindowSnapshot(window_node, expected.process, 444, expected.title, expected.x, expected.y, expected.width, expected.height)
+        with mock.patch.object(controller, "_owned_windows", return_value=[wrong]), self.assertRaisesRegex(HarnessError, "wrong window"):
+            controller._revalidate_pre_action(connection, launcher, expected, root, "active", 0)
+
+        drifted = WindowSnapshot(window_node, expected.process, 333, expected.title, expected.x, expected.y, 959, expected.height)
+        with mock.patch.object(controller, "_owned_windows", return_value=[drifted]), self.assertRaisesRegex(HarnessError, "geometry"):
+            controller._revalidate_pre_action(connection, launcher, expected, root, "active", 0)
+
+        reused_pid = WindowSnapshot(
+            window_node, ProcessIdentity(222, 111, 2001), 333, expected.title,
+            expected.x, expected.y, expected.width, expected.height,
+        )
+        with mock.patch.object(controller, "_owned_windows", return_value=[reused_pid]), self.assertRaisesRegex(HarnessError, "PID/start-time"):
+            controller._revalidate_pre_action(connection, launcher, expected, root, "active", 0)
+
+    def test_command_success_without_state_advance_is_not_delivery(self):
+        failed = fail_delivery(self.input_evidence(), reason="PLAYER_READY timeout")
+        self.assertEqual(failed.command_status, "XTEST_EMITTED")
+        self.assertEqual(failed.delivery_status, "NOT_CONFIRMED")
+        self.assertIn("timeout", failed.failure_reason or "")
+
+    def test_fresh_run_scoped_transition_confirms_delivery(self):
+        transition = "[CF-INSPECT]|EVENT|kind=PLAYER_READY|run=RUN-1"
+        confirmed = confirm_delivery(
+            self.input_evidence(), transition=transition, transition_seen_at=102.5, expected_run="RUN-1"
+        )
+        self.assertEqual(confirmed.delivery_status, "CONFIRMED")
+        self.assertAlmostEqual(confirmed.transition_latency_seconds or 0, 1.4)
+
+    def test_stale_or_wrong_run_transition_cannot_confirm_delivery(self):
+        transition = "[CF-INSPECT]|EVENT|kind=PLAYER_READY|run=RUN-1"
+        with self.assertRaisesRegex(HarnessError, "stale"):
+            confirm_delivery(self.input_evidence(), transition=transition, transition_seen_at=100.0, expected_run="RUN-1")
+        with self.assertRaisesRegex(HarnessError, "run-scoped"):
+            confirm_delivery(self.input_evidence(), transition=transition, transition_seen_at=102.0, expected_run="RUN-2")
+
+
+class StartupDeliveryIntegrationTests(unittest.TestCase):
+    class Process:
+        pid = 111
+        def poll(self): return None
+        def wait(self, timeout): return 0
+
+    def make_run(self, root: Path) -> LiveRun:
+        profile_path = root / "profile.toml"
+        profile_path.write_text(profile_text(root), encoding="utf-8")
+        profile = load_profile(profile_path)
+        run = LiveRun(profile, profile.sites, False, True)
+        run.bundle = root / "bundle"
+        run.bundle.mkdir()
+        (run.bundle / "screenshots").mkdir()
+        return run
+
+    @staticmethod
+    def emitted() -> InputEvidence:
+        return StartupGateControllerTests.input_evidence()
+
+    def test_execute_marks_successful_x11_command_unconfirmed_on_timeout(self):
+        with tempfile.TemporaryDirectory() as temp:
+            run = self.make_run(Path(temp))
+            run.startup_controller.activate = mock.Mock(return_value=self.emitted())
+
+            def gate_result(gate, *_args, **_kwargs):
+                if gate.name == "player-ready-modal-check":
+                    raise HarnessError("gate timed out")
+                return GateResult(gate.name, 1, 0.1, "game loading took", 100.0)
+
+            with mock.patch.object(run, "prepare"), mock.patch("live_inspection.cli.subprocess.Popen", return_value=self.Process()), mock.patch(
+                "live_inspection.cli.wait_for_gate", side_effect=gate_result
+            ), self.assertRaisesRegex(HarnessError, "delivery was not confirmed"):
+                run.execute()
+            if run.launcher_stdout: run.launcher_stdout.close()
+            if run.launcher_stderr: run.launcher_stderr.close()
+            evidence = json.loads((run.bundle / "unattended-startup-input.json").read_text(encoding="utf-8"))
+            self.assertEqual((evidence["command_status"], evidence["delivery_status"]), ("XTEST_EMITTED", "NOT_CONFIRMED"))
+
+    def test_execute_confirms_only_fresh_run_scoped_player_ready(self):
+        with tempfile.TemporaryDirectory() as temp:
+            run = self.make_run(Path(temp))
+            run.startup_controller.activate = mock.Mock(return_value=self.emitted())
+
+            def gate_result(gate, *_args, **_kwargs):
+                if gate.name == "player-ready-modal-check":
+                    line = f"[CF-INSPECT]|EVENT|kind=PLAYER_READY|run={run.save_name}"
+                    return GateResult(gate.name, 1, 0.1, line, 102.0)
+                return GateResult(gate.name, 1, 0.1, "game loading took", 100.0)
+
+            with mock.patch.object(run, "prepare"), mock.patch("live_inspection.cli.subprocess.Popen", return_value=self.Process()), mock.patch(
+                "live_inspection.cli.wait_for_gate", side_effect=gate_result
+            ):
+                run.execute()
+            if run.launcher_stdout: run.launcher_stdout.close()
+            if run.launcher_stderr: run.launcher_stderr.close()
+            evidence = json.loads((run.bundle / "unattended-startup-input.json").read_text(encoding="utf-8"))
+            self.assertEqual(evidence["delivery_status"], "CONFIRMED")
+            self.assertEqual(run.status, "PASS")
 
 
 class ProductionPayloadTests(unittest.TestCase):

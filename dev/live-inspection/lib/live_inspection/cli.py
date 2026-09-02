@@ -7,6 +7,7 @@ import os
 import re
 import shutil
 import signal
+import struct
 import subprocess
 import sys
 import time
@@ -18,9 +19,9 @@ from .config import load_profile, unattended_refusal_reason
 from .evidence import finalize_manifest, sanitize_line, write_sanitized
 from .model import Gate, HarnessError, Profile, Site
 from .payload import install_production_payload
-from .safety import ControlTransaction, ExclusiveRunLock, assert_save_safety, matching_pz_processes, parse_renderer, recover_interrupted_runs
+from .safety import ControlTransaction, ExclusiveRunLock, assert_save_safety, matching_pz_processes, parse_renderer, recover_interrupted_runs, sha256
 from .state import LogFollower, wait_for_gate
-from .unattended import StartupGateController, evidence_dict
+from .unattended import StartupGateController, confirm_delivery, evidence_dict, fail_delivery
 
 LOCK_PATH = Path("/tmp/conspiracy-files-live-inspection.lock")
 PREFIX = "[cf-live-inspection]"
@@ -57,6 +58,8 @@ def check_dependencies(profile: Profile, live: bool) -> list[str]:
     names = ["glxinfo", "lua5.1"]
     if live:
         names.append(str(profile.launcher))
+    if profile.unattended_startup.enabled:
+        names.append("gnome-screenshot")
     missing = [name for name in names if not (Path(name).is_file() if "/" in name else shutil.which(name))]
     if missing:
         raise HarnessError("missing dependency/dependencies: " + ", ".join(missing))
@@ -64,9 +67,10 @@ def check_dependencies(profile: Profile, live: bool) -> list[str]:
         try:
             import Xlib  # noqa: F401
             from Xlib.ext import xtest  # noqa: F401
+            from PIL import Image  # noqa: F401
         except ImportError as exc:
-            raise HarnessError("missing dependency: python-xlib with XTEST") from exc
-        names.append("python-xlib/XTEST")
+            raise HarnessError("missing dependency: python-xlib/XTEST and Pillow are required for unattended startup") from exc
+        names.extend(["python-xlib/XTEST", "Pillow"])
     return names
 
 
@@ -122,14 +126,93 @@ def replace_option(path: Path, key: str, value: str) -> None:
     os.replace(temporary, path)
 
 
-def capture_screen(destination: Path) -> None:
+def startup_gate_visual_evidence(
+    path: Path,
+    *,
+    screenshot_size: tuple[int, int],
+    client_size: tuple[int, int],
+) -> dict[str, object]:
+    from PIL import Image
+
+    width, height = screenshot_size
+    client_width, client_height = client_size
+    if width != client_width or not client_height <= height <= client_height + 64:
+        raise HarnessError("startup screenshot geometry does not match the owned client")
+    try:
+        with Image.open(path) as source:
+            image = source.convert("RGB")
+        decoration_height = height - client_height
+        box = (
+            int(client_width * 0.40),
+            decoration_height + int(client_height * 0.94),
+            int(client_width * 0.60),
+            decoration_height + int(client_height * 0.97),
+        )
+        bright_neutral_pixels = sum(
+            1 for pixel in image.crop(box).getdata()
+            if min(pixel) >= 175 and max(pixel) - min(pixel) <= 35
+        )
+    except (OSError, ValueError) as exc:
+        raise HarnessError(f"cannot inspect startup readiness screenshot: {exc}") from exc
+    minimum_pixels = max(80, int((box[2] - box[0]) * (box[3] - box[1]) * 0.01))
+    return {
+        "status": "VISIBLE" if bright_neutral_pixels >= minimum_pixels else "NOT_VISIBLE",
+        "region": list(box),
+        "bright_neutral_pixels": bright_neutral_pixels,
+        "minimum_pixels": minimum_pixels,
+    }
+
+
+def capture_screen(
+    destination: Path,
+    *,
+    required: bool = False,
+    startup_client_size: tuple[int, int] | None = None,
+) -> dict[str, object]:
+    def failure(message: str) -> dict[str, object]:
+        if required:
+            raise HarnessError(message)
+        log(message)
+        return {"status": "UNAVAILABLE", "reason": message, "path": destination.name}
+
+    if destination.exists():
+        return failure(f"refusing stale screenshot destination: {destination.name}")
     tool = shutil.which("gnome-screenshot")
     if not tool:
-        log(f"screenshot skipped (gnome-screenshot unavailable): {destination.name}")
-        return
+        return failure(f"screenshot skipped (gnome-screenshot unavailable): {destination.name}")
+    started_wall_ns = time.time_ns()
     result = run_command([tool, "-w", "-f", str(destination)], timeout=20)
     if result.returncode:
-        log(f"screenshot failed: {result.stderr.strip()}")
+        return failure(f"screenshot failed: {result.stderr.strip()}")
+    if not destination.is_file() or destination.stat().st_size == 0:
+        return failure(f"screenshot command returned success without fresh evidence: {destination.name}")
+    stat = destination.stat()
+    if stat.st_mtime_ns + 1_000_000_000 < started_wall_ns:
+        return failure(f"screenshot command returned stale evidence: {destination.name}")
+    header = destination.read_bytes()[:24]
+    if len(header) != 24 or header[:8] != b"\x89PNG\r\n\x1a\n" or header[12:16] != b"IHDR":
+        return failure(f"screenshot is not a valid PNG: {destination.name}")
+    width, height = struct.unpack(">II", header[16:24])
+    evidence: dict[str, object] = {
+        "status": "FRESH",
+        "path": f"screenshots/{destination.name}",
+        "sha256": sha256(destination),
+        "bytes": stat.st_size,
+        "mtime_ns": stat.st_mtime_ns,
+        "width": width,
+        "height": height,
+    }
+    if startup_client_size is not None:
+        try:
+            visual = startup_gate_visual_evidence(
+                destination, screenshot_size=(width, height), client_size=startup_client_size
+            )
+        except HarnessError as exc:
+            return failure(str(exc))
+        evidence["startup_gate_visual"] = visual
+        if visual["status"] != "VISIBLE":
+            return failure("post-signature screenshot does not show the bounded lower-center startup control")
+    return evidence
 
 
 class LiveRun:
@@ -153,6 +236,14 @@ class LiveRun:
         self.renderer: dict = {}
         self.bundle_created = False
         self.startup_controller = StartupGateController(profile.unattended_startup)
+        self.startup_evidence = None
+
+    def write_startup_evidence(self) -> None:
+        if self.startup_evidence is None:
+            return
+        (self.bundle / "unattended-startup-input.json").write_text(
+            json.dumps(evidence_dict(self.startup_evidence), indent=2, sort_keys=True) + "\n", encoding="utf-8"
+        )
 
     def write_state(self, status: str) -> None:
         self.bundle.mkdir(parents=True, exist_ok=True)
@@ -295,8 +386,37 @@ class LiveRun:
         for gate in self.profile.gates:
             repetitions = len(self.sites) if gate.name == "scan-completion" else 1
             for occurrence in range(1, repetitions + 1):
-                result = wait_for_gate(gate, follower, alive, timeout)
+                not_before = None
+                if gate.name == "player-ready-modal-check" and self.startup_evidence is not None:
+                    not_before = self.startup_evidence.action_completed_monotonic
+                try:
+                    result = wait_for_gate(gate, follower, alive, timeout, not_before=not_before)
+                except HarnessError as exc:
+                    if gate.name == "player-ready-modal-check" and self.startup_evidence is not None:
+                        self.startup_evidence = fail_delivery(
+                            self.startup_evidence,
+                            reason=f"expected fresh run-scoped PLAYER_READY transition did not occur: {exc}",
+                        )
+                        self.write_startup_evidence()
+                        raise HarnessError(
+                            "startup XTEST command completed but delivery was not confirmed by PLAYER_READY"
+                        ) from exc
+                    raise
                 suffix = f"-{occurrence}" if repetitions > 1 else ""
+                if gate.name == "player-ready-modal-check" and self.startup_evidence is not None:
+                    try:
+                        self.startup_evidence = confirm_delivery(
+                            self.startup_evidence,
+                            transition=result.matched_line,
+                            transition_seen_at=result.matched_at,
+                            expected_run=self.save_name,
+                        )
+                    except HarnessError as exc:
+                        self.startup_evidence = fail_delivery(self.startup_evidence, reason=str(exc))
+                        self.write_startup_evidence()
+                        raise
+                    self.write_startup_evidence()
+                    log("ordinary startup action delivery confirmed by fresh run-scoped PLAYER_READY")
                 log(f"gate {gate.name}{suffix} passed in {result.elapsed_seconds:.1f}s (attempt {result.attempt})")
                 if gate.action == "screenshot":
                     capture_screen(self.bundle / "screenshots" / f"gate-{gate.name}{suffix}.png")
@@ -311,12 +431,16 @@ class LiveRun:
                     evidence = self.startup_controller.activate(
                         launcher_pid=self.process.pid,
                         signature=result.matched_line,
-                        signature_seen_at=time.monotonic(),
+                        signature_seen_at=result.matched_at,
+                        readiness_capture=lambda width, height: capture_screen(
+                            self.bundle / "screenshots" / "startup-gate-ready.png",
+                            required=True,
+                            startup_client_size=(width, height),
+                        ),
                     )
-                    (self.bundle / "unattended-startup-input.json").write_text(
-                        json.dumps(evidence_dict(evidence), indent=2, sort_keys=True) + "\n", encoding="utf-8"
-                    )
-                    log("ordinary startup gate received one bounded harness-owned action")
+                    self.startup_evidence = evidence
+                    self.write_startup_evidence()
+                    log("ordinary startup XTEST action emitted; delivery awaits PLAYER_READY evidence")
         if not self.process:
             raise HarnessError("launcher ownership lost")
         try:

@@ -32,9 +32,9 @@ class Gate:
 class UnattendedStartup:
     enabled: bool = False
     action: str = "left-click"
-    key: str | None = None
     max_actions: int = 1
     signature_max_age_seconds: int = 15
+    post_signature_settle_seconds: int = 1
     window_title_pattern: str = r"(?i)project zomboid"
 
 

@@ -2,7 +2,7 @@
 
 `dev/live-inspection` is the repository-wide runner for disposable Build 42 map and runtime investigations. It separates reusable orchestration from declarative site facts, fails closed around saves, processes and renderers, and archives a sanitized evidence bundle after every owned run.
 
-It is development tooling, not production Conspiracy-Files code. It does not change vanilla game files, install Java/JNI helpers, inject into the process, alter security settings, or expose normal-play diagnostics. T10 reruns remain manual-GUI-only under P4-R44. P4-R48 permits one narrowly verified ordinary startup-gate action for non-T10 runs; it does not permit T10, context-menu, inventory, gameplay or acceptance automation.
+It is development tooling, not production Conspiracy-Files code. It does not change vanilla game files, install Java/JNI helpers, inject into the process, alter security settings, or expose normal-play diagnostics. T10 reruns remain manual-GUI-only under P4-R44. P4-R48 permits one narrowly verified ordinary startup-gate action for non-T10 runs; the current evidence-supported implementation is one left click and does not permit T10, context-menu, inventory, gameplay or acceptance automation.
 
 ## Architecture
 
@@ -45,7 +45,11 @@ Use the normal graphical session and move PZ to a dedicated workspace with ordin
 
 ### Unattended startup boundary
 
-An unattended profile must declare `interaction_scope=["startup-gate"]`, a non-T10 criterion list, the exact click gate pattern `game loading took`, `max_actions=1`, and either `left-click` or the allowlisted `Return`/`space` key. At the matched gate the runner requires exactly one mapped title-matching window whose `_NET_WM_PID` is in the harness-owned launcher process group on the current `DISPLAY`. The signature may be at most 30 seconds old. It requests that exact window through `_NET_ACTIVE_WINDOW`, verifies X11 focus, warps to the client-area midpoint, and verifies that the topmost root child at that point belongs to the owned window before emitting one press/release pair through the already-installed Python Xlib/XTEST support. Failure at any step consumes the one-shot controller without emitting input. `unattended-startup-input.json` records the client dimensions, local/root target coordinates, active window and topmost pointer window as well as the original ownership/signature facts.
+An unattended profile must declare `interaction_scope=["startup-gate"]`, a non-T10 criterion list, the exact click gate pattern `game loading took`, the exact observer pattern `\[CF-INSPECT\].*kind=PLAYER_READY`, `max_actions=1`, `action="left-click"`, and a positive post-signature settle time shorter than its at-most-30-second signature freshness budget. `Return`/`space` are rejected: the 2026-09-02 real-desktop replay showed a successful Return XTEST command without any PZ state transition.
+
+The loading signature is now only the start of a bounded readiness check, not proof that PZ accepts input. After the settle interval, the runner focuses the sole mapped title-matching window owned by the launcher process group, captures a fresh focused-window PNG matching that client's geometry, and requires the bright lower-center startup-control signature observed in both recorded Click to Start screens. For the preserved 960x1008 client this places the action at `(480,960)`, inside the rendered control; the generic coordinate is `(width/2, height*20/21)`. The 960x1040 decorated capture remains expected and is recorded separately from client geometry.
+
+After the screenshot and again after pointer warp immediately before XTEST, the runner revalidates launcher PID/start time, window PID/start time, sole-window identity, title, mapped state, client root origin/dimensions, active window, X11 focus, pointer root coordinates and topmost owned frame. Any drift consumes the one-shot controller without emitting input. `unattended-startup-input.json` first records `command_status="XTEST_EMITTED"` with `delivery_status="PENDING_TRANSITION"`; only a fresh, run-scoped `PLAYER_READY` observer line after the action changes delivery to `CONFIRMED`. Process exit or timeout changes it to `NOT_CONFIRMED`. XTEST completion alone is never delivery success.
 
 Every unattended bundle writes `criteria-disposition.json` with T10 and CF-V01-E08 as `NOT RUN`. A profile that requests T10/E08, right-click, context menu, inventory/menu, gameplay or acceptance interaction is refused before save, mod or control mutation; the refused run still retains that disposition and a cleanup manifest. There is no retry input budget.
 
@@ -100,7 +104,7 @@ Offline tests never launch PZ or touch its user root:
 dev/live-inspection/test/run.sh
 ```
 
-They cover profile validation, real-save marker enforcement, exact control round trips (including absent files), exclusive locking, renderer classification, gate/process diagnostics, PID/window ownership filtering, one-shot/stale-signature input bounds, T10/E08 and interaction-scope refusal, production payload validation/install/recovery cleanup, sanitization, Lua/Python parsing, and static rejection of embedded P2/R2 coordinates, Xephyr, forced software mode, right-click automation, and the prohibited helper name in reusable core.
+They cover profile validation, real-save marker enforcement, exact control round trips (including absent files), exclusive locking, renderer classification, gate/process diagnostics, PID/start-time/window ownership filtering, focus/window/geometry races, one-shot/stale-signature input bounds, stale log and screenshot rejection, visible startup-control recognition, transition-confirmed delivery, T10/E08 and interaction-scope refusal, production payload validation/install/recovery cleanup, sanitization, Lua/Python parsing, and static rejection of embedded P2/R2 coordinates, Xephyr, forced software mode, right-click automation, and the prohibited helper name in reusable core.
 
 ## Deferred live validation
 

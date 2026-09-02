@@ -3,75 +3,178 @@ from __future__ import annotations
 import os
 import re
 import time
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, replace
+from pathlib import Path
+from typing import Callable
 
 from .model import HarnessError, UnattendedStartup
+
+
+@dataclass(frozen=True)
+class ProcessIdentity:
+    pid: int
+    process_group_id: int
+    start_time_ticks: int
 
 
 @dataclass(frozen=True)
 class InputEvidence:
     display: str
     launcher_pid: int
+    launcher_start_time_ticks: int
     window_pid: int
+    window_start_time_ticks: int
     window_id: int
     window_title: str
     action: str
     action_count: int
+    command_status: str
+    delivery_status: str
     signature: str
     signature_age_seconds: float
+    post_signature_settle_seconds: int
+    action_completed_monotonic: float
+    window_x: int
+    window_y: int
     window_width: int
     window_height: int
-    action_x: int | None
-    action_y: int | None
-    root_x: int | None
-    root_y: int | None
+    action_x: int
+    action_y: int
+    root_x: int
+    root_y: int
     active_window_id: int
-    pointer_window_id: int | None
+    focus_window_id: int
+    pointer_window_id: int
+    ready_screenshot: dict[str, object]
+    transition: str | None = None
+    transition_latency_seconds: float | None = None
+    failure_reason: str | None = None
+
+
+@dataclass(frozen=True)
+class WindowSnapshot:
+    window: object
+    process: ProcessIdentity
+    window_id: int
+    title: str
+    x: int
+    y: int
+    width: int
+    height: int
 
 
 @dataclass(frozen=True)
 class X11Action:
-    window_pid: int
-    window_id: int
-    window_title: str
-    window_width: int
-    window_height: int
-    action_x: int | None
-    action_y: int | None
-    root_x: int | None
-    root_y: int | None
+    launcher: ProcessIdentity
+    window: WindowSnapshot
+    action_x: int
+    action_y: int
+    root_x: int
+    root_y: int
     active_window_id: int
-    pointer_window_id: int | None
+    focus_window_id: int
+    pointer_window_id: int
+    ready_screenshot: dict[str, object]
 
 
 class StartupGateController:
     """A fail-closed, one-use XTEST boundary for the ordinary startup gate."""
 
-    def __init__(self, policy: UnattendedStartup):
+    def __init__(
+        self,
+        policy: UnattendedStartup,
+        *,
+        clock: Callable[[], float] = time.monotonic,
+        sleep: Callable[[float], None] = time.sleep,
+        identity_reader: Callable[[int], ProcessIdentity] | None = None,
+    ):
         self.policy = policy
         self.used = False
+        self._clock = clock
+        self._sleep = sleep
+        self._identity_reader = identity_reader or self._read_process_identity
 
-    def activate(self, *, launcher_pid: int, signature: str, signature_seen_at: float) -> InputEvidence:
+    def activate(
+        self,
+        *,
+        launcher_pid: int,
+        signature: str,
+        signature_seen_at: float,
+        readiness_capture: Callable[[int, int], dict[str, object]],
+    ) -> InputEvidence:
         if self.used:
             raise HarnessError("unattended startup input has already been used")
         if not self.policy.enabled or self.policy.max_actions != 1:
             raise HarnessError("unattended startup input is not authorized")
-        age = time.monotonic() - signature_seen_at
-        if age < 0 or age > self.policy.signature_max_age_seconds:
-            raise HarnessError(f"startup gate signature is stale ({age:.3f}s)")
+        if self.policy.action != "left-click":
+            raise HarnessError("only the evidence-supported left-click startup action is authorized")
         display_name = os.environ.get("DISPLAY", "")
         if not display_name:
             raise HarnessError("DISPLAY is unset at unattended startup gate")
-        self.used = True
-        action = self._activate_x11(display_name, launcher_pid)
-        return InputEvidence(display_name, launcher_pid, action.window_pid, action.window_id, action.window_title,
-                             self.policy.action, 1, signature, age, action.window_width, action.window_height,
-                             action.action_x, action.action_y, action.root_x, action.root_y,
-                             action.active_window_id, action.pointer_window_id)
 
-    def _activate_x11(self, display_name: str, launcher_pid: int) -> X11Action:
+        launcher = self._identity_reader(launcher_pid)
+        if launcher.process_group_id != launcher_pid:
+            raise HarnessError("launcher is no longer the owned process-group leader")
+        self._assert_signature_fresh(signature_seen_at)
+        self.used = True
+        self._sleep(self.policy.post_signature_settle_seconds)
+        self._assert_signature_fresh(signature_seen_at)
+        if self._identity_reader(launcher_pid) != launcher:
+            raise HarnessError("launcher PID/start-time identity changed before startup action")
+
+        action = self._activate_x11(
+            display_name, launcher, readiness_capture,
+            lambda: self._assert_signature_fresh(signature_seen_at),
+        )
+        completed_at = self._clock()
+        age = completed_at - signature_seen_at
+        if age < 0 or age > self.policy.signature_max_age_seconds:
+            raise HarnessError(f"startup gate signature became stale before action completion ({age:.3f}s)")
+        window = action.window
+        return InputEvidence(
+            display=display_name,
+            launcher_pid=launcher.pid,
+            launcher_start_time_ticks=launcher.start_time_ticks,
+            window_pid=window.process.pid,
+            window_start_time_ticks=window.process.start_time_ticks,
+            window_id=window.window_id,
+            window_title=window.title,
+            action=self.policy.action,
+            action_count=1,
+            command_status="XTEST_EMITTED",
+            delivery_status="PENDING_TRANSITION",
+            signature=signature,
+            signature_age_seconds=age,
+            post_signature_settle_seconds=self.policy.post_signature_settle_seconds,
+            action_completed_monotonic=completed_at,
+            window_x=window.x,
+            window_y=window.y,
+            window_width=window.width,
+            window_height=window.height,
+            action_x=action.action_x,
+            action_y=action.action_y,
+            root_x=action.root_x,
+            root_y=action.root_y,
+            active_window_id=action.active_window_id,
+            focus_window_id=action.focus_window_id,
+            pointer_window_id=action.pointer_window_id,
+            ready_screenshot=action.ready_screenshot,
+        )
+
+    def _assert_signature_fresh(self, signature_seen_at: float) -> None:
+        age = self._clock() - signature_seen_at
+        if age < 0 or age > self.policy.signature_max_age_seconds:
+            raise HarnessError(f"startup gate signature is stale ({age:.3f}s)")
+
+    def _activate_x11(
+        self,
+        display_name: str,
+        launcher: ProcessIdentity,
+        readiness_capture: Callable[[int, int], dict[str, object]],
+        assert_fresh: Callable[[], None],
+    ) -> X11Action:
         try:
-            from Xlib import X, XK, display
+            from Xlib import X, display
             from Xlib.ext import xtest
             from Xlib.protocol import event
         except ImportError as exc:
@@ -80,71 +183,126 @@ class StartupGateController:
         try:
             if not connection.has_extension("XTEST"):
                 raise HarnessError(f"XTEST is unavailable on DISPLAY={display_name}; unattended startup remains disabled")
-            windows = self._owned_windows(connection, launcher_pid)
+            windows = self._owned_windows(connection, launcher)
             if len(windows) != 1:
                 raise HarnessError(f"expected exactly one harness-owned visible PZ window, found {len(windows)}")
-            window, window_pid, title = windows[0]
-            if not re.search(self.policy.window_title_pattern, title):
-                raise HarnessError(f"owned window title does not match bounded startup policy: {title!r}")
+            expected = windows[0]
+            if not re.search(self.policy.window_title_pattern, expected.title):
+                raise HarnessError(f"owned window title does not match bounded startup policy: {expected.title!r}")
+
             root = connection.screen().root
             active_atom = connection.intern_atom("_NET_ACTIVE_WINDOW")
             root.send_event(
                 event.ClientMessage(
-                    window=window,
+                    window=expected.window,
                     client_type=active_atom,
                     data=(32, [2, X.CurrentTime, 0, 0, 0]),
                 ),
                 event_mask=X.SubstructureRedirectMask | X.SubstructureNotifyMask,
             )
             connection.flush()
-            deadline = time.monotonic() + 2
-            active_window_id = 0
-            while time.monotonic() < deadline:
-                active = root.get_full_property(active_atom, X.AnyPropertyType)
-                if active and len(active.value) == 1:
-                    active_window_id = int(active.value[0])
-                    if active_window_id == window.id:
-                        break
-                time.sleep(0.05)
+            deadline = self._clock() + 2
+            while self._clock() < deadline:
+                if self._active_window_id(root, active_atom, X.AnyPropertyType) == expected.window_id:
+                    break
+                self._sleep(0.05)
             else:
                 raise HarnessError("owned PZ window did not become the active top-level window")
-            window.set_input_focus(X.RevertToParent, X.CurrentTime)
+            expected.window.set_input_focus(X.RevertToParent, X.CurrentTime)
             connection.sync()
-            focus = connection.get_input_focus().focus
-            if not self._belongs_to_window(window, self._resource_id(focus)):
-                raise HarnessError("owned PZ window did not receive X11 input focus")
-            geometry = window.get_geometry()
-            if geometry.width <= 0 or geometry.height <= 0:
-                raise HarnessError("owned PZ window has invalid geometry")
-            action_x = action_y = root_x = root_y = pointer_window_id = None
-            if self.policy.action == "left-click":
-                action_x, action_y = geometry.width // 2, geometry.height // 2
-                translated = root.translate_coords(window, action_x, action_y)
-                root_x, root_y = int(translated.x), int(translated.y)
-                window.warp_pointer(action_x, action_y)
-                connection.sync()
-                pointer = root.query_pointer()
-                pointer_window_id = self._resource_id(pointer.child)
-                if (int(pointer.root_x), int(pointer.root_y)) != (root_x, root_y):
-                    raise HarnessError("X11 pointer did not reach the owned PZ window target point")
-                if not self._belongs_to_window(window, pointer_window_id):
-                    raise HarnessError("owned PZ window is obscured at the startup click point")
-                xtest.fake_input(connection, X.ButtonPress, 1)
-                xtest.fake_input(connection, X.ButtonRelease, 1)
-            elif self.policy.action == "keypress":
-                keysym = XK.string_to_keysym(self.policy.key or "")
-                keycode = connection.keysym_to_keycode(keysym)
-                if not keysym or not keycode:
-                    raise HarnessError("authorized startup key could not be resolved")
-                xtest.fake_input(connection, X.KeyPress, keycode)
-                xtest.fake_input(connection, X.KeyRelease, keycode)
-            else:
-                raise HarnessError("unsupported unattended startup action")
+
+            ready_screenshot = readiness_capture(expected.width, expected.height)
+            self._validate_screenshot_geometry(ready_screenshot, expected)
+
+            current, active_window_id, focus_window_id = self._revalidate_pre_action(
+                connection, launcher, expected, root, active_atom, X.AnyPropertyType
+            )
+            action_x = current.width // 2
+            # Both failed 960x1008 captures place the real control around client y=960.
+            action_y = max(1, min(current.height - 2, (current.height * 20) // 21))
+            translated = root.translate_coords(current.window, action_x, action_y)
+            root_x, root_y = int(translated.x), int(translated.y)
+            current.window.warp_pointer(action_x, action_y)
             connection.sync()
-            return X11Action(window_pid, window.id, title, int(geometry.width), int(geometry.height),
-                             action_x, action_y, root_x, root_y, active_window_id, pointer_window_id)
+
+            # Warping and screenshot capture are race points. Revalidate the full
+            # identity/focus/geometry tuple once more immediately before XTEST.
+            current, active_window_id, focus_window_id = self._revalidate_pre_action(
+                connection, launcher, current, root, active_atom, X.AnyPropertyType
+            )
+            pointer = root.query_pointer()
+            pointer_window_id = self._resource_id(pointer.child)
+            if (int(pointer.root_x), int(pointer.root_y)) != (root_x, root_y):
+                raise HarnessError("X11 pointer did not reach the owned PZ startup-control point")
+            if not self._belongs_to_window(current.window, pointer_window_id):
+                raise HarnessError("owned PZ window is obscured at the startup-control point")
+
+            assert_fresh()
+            xtest.fake_input(connection, X.ButtonPress, 1)
+            xtest.fake_input(connection, X.ButtonRelease, 1)
+            connection.sync()
+            return X11Action(
+                launcher, current, action_x, action_y, root_x, root_y,
+                active_window_id, focus_window_id, pointer_window_id, ready_screenshot,
+            )
         finally:
             connection.close()
+
+    def _revalidate_pre_action(self, connection, launcher, expected, root, active_atom, any_property_type):
+        if self._identity_reader(launcher.pid) != launcher:
+            raise HarnessError("launcher PID/start-time identity changed at startup action")
+        windows = self._owned_windows(connection, launcher)
+        if len(windows) != 1:
+            raise HarnessError(f"owned PZ window set changed before startup action (found {len(windows)})")
+        current = windows[0]
+        self._assert_same_window(expected, current)
+        active_window_id = self._active_window_id(root, active_atom, any_property_type)
+        if active_window_id != expected.window_id:
+            raise HarnessError("focus race: owned PZ window is no longer the active top-level window")
+        focus_window_id = self._resource_id(connection.get_input_focus().focus)
+        if not self._focus_belongs_to_window(connection, expected.window_id, focus_window_id):
+            raise HarnessError("focus race: owned PZ window no longer has X11 input focus")
+        return current, active_window_id, focus_window_id
+
+    @staticmethod
+    def _assert_same_window(expected: WindowSnapshot, current: WindowSnapshot) -> None:
+        if current.window_id != expected.window_id:
+            raise HarnessError("wrong window replaced the owned PZ window before startup action")
+        if current.process != expected.process:
+            raise HarnessError("owned PZ window PID/start-time identity changed before startup action")
+        if current.title != expected.title:
+            raise HarnessError("owned PZ window title changed before startup action")
+        if (current.x, current.y, current.width, current.height) != (
+            expected.x, expected.y, expected.width, expected.height
+        ):
+            raise HarnessError("owned PZ client geometry changed before startup action")
+
+    @staticmethod
+    def _validate_screenshot_geometry(screenshot: dict[str, object], window: WindowSnapshot) -> None:
+        if screenshot.get("status") != "FRESH":
+            raise HarnessError("startup readiness screenshot is not fresh")
+        visual = screenshot.get("startup_gate_visual")
+        if not isinstance(visual, dict) or visual.get("status") != "VISIBLE":
+            raise HarnessError("startup readiness screenshot does not show the bounded startup control")
+        width, height = screenshot.get("width"), screenshot.get("height")
+        if width != window.width or not isinstance(height, int) or not window.height <= height <= window.height + 64:
+            raise HarnessError("startup readiness screenshot does not match the owned PZ client/decorated-frame geometry")
+
+    @staticmethod
+    def _active_window_id(root, active_atom, any_property_type) -> int:
+        active = root.get_full_property(active_atom, any_property_type)
+        if active and len(active.value) == 1:
+            return int(active.value[0])
+        return 0
+
+    @staticmethod
+    def _read_process_identity(pid: int) -> ProcessIdentity:
+        try:
+            text = (Path("/proc") / str(pid) / "stat").read_text(encoding="ascii")
+            fields = text[text.rfind(")") + 2:].split()
+            return ProcessIdentity(pid, int(fields[2]), int(fields[19]))
+        except (OSError, ValueError, IndexError) as exc:
+            raise HarnessError(f"cannot verify process identity for PID {pid}") from exc
 
     @staticmethod
     def _resource_id(resource) -> int | None:
@@ -153,6 +311,7 @@ class StartupGateController:
 
     @classmethod
     def _belongs_to_window(cls, window, candidate_id: int | None) -> bool:
+        """Return true when candidate is the client itself or an ancestor WM frame."""
         if candidate_id is None:
             return False
         current = window
@@ -165,8 +324,23 @@ class StartupGateController:
             current = parent
         return False
 
-    @staticmethod
-    def _owned_windows(connection, launcher_pid: int):
+    @classmethod
+    def _focus_belongs_to_window(cls, connection, window_id: int, focus_id: int | None) -> bool:
+        """Return true when focus is the exact PZ client or one of its descendants."""
+        if focus_id is None:
+            return False
+        current = connection.create_resource_object("window", focus_id)
+        for _ in range(64):
+            current_id = cls._resource_id(current)
+            if current_id == window_id:
+                return True
+            parent = current.query_tree().parent
+            if cls._resource_id(parent) in {None, current_id}:
+                return False
+            current = parent
+        return False
+
+    def _owned_windows(self, connection, launcher: ProcessIdentity) -> list[WindowSnapshot]:
         root = connection.screen().root
         client_atom = connection.intern_atom("_NET_CLIENT_LIST")
         pid_atom = connection.intern_atom("_NET_WM_PID")
@@ -186,14 +360,50 @@ class StartupGateController:
                 continue
             pid = int(pid_prop.value[0])
             try:
-                if os.getpgid(pid) != launcher_pid:
-                    continue
-            except (ProcessLookupError, PermissionError):
+                process = self._identity_reader(pid)
+            except HarnessError:
+                continue
+            if process.process_group_id != launcher.pid:
                 continue
             title_prop = window.get_full_property(name_atom, utf8_atom)
             title = bytes(title_prop.value).decode("utf-8", "replace") if title_prop else (window.get_wm_name() or "")
-            results.append((window, pid, str(title)))
+            geometry = window.get_geometry()
+            if geometry.width <= 0 or geometry.height <= 0:
+                continue
+            origin = root.translate_coords(window, 0, 0)
+            results.append(WindowSnapshot(
+                window, process, int(window.id), str(title), int(origin.x), int(origin.y),
+                int(geometry.width), int(geometry.height),
+            ))
         return results
+
+
+def confirm_delivery(
+    value: InputEvidence,
+    *,
+    transition: str,
+    transition_seen_at: float,
+    expected_run: str,
+) -> InputEvidence:
+    if value.delivery_status != "PENDING_TRANSITION":
+        raise HarnessError("startup delivery outcome has already been finalized")
+    if transition_seen_at <= value.action_completed_monotonic:
+        raise HarnessError("stale startup transition predates the XTEST action")
+    fields = transition.split("|")
+    if "kind=PLAYER_READY" not in fields or f"run={expected_run}" not in fields:
+        raise HarnessError("startup delivery transition is not the expected run-scoped PLAYER_READY event")
+    return replace(
+        value,
+        delivery_status="CONFIRMED",
+        transition=transition,
+        transition_latency_seconds=transition_seen_at - value.action_completed_monotonic,
+    )
+
+
+def fail_delivery(value: InputEvidence, *, reason: str) -> InputEvidence:
+    if value.delivery_status != "PENDING_TRANSITION":
+        return value
+    return replace(value, delivery_status="NOT_CONFIRMED", failure_reason=reason)
 
 
 def evidence_dict(value: InputEvidence) -> dict:

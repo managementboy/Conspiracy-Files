@@ -1,6 +1,6 @@
 # ADR-0004 — One-shot unattended startup gate
 
-**Status:** Accepted for offline implementation; live validation pending
+**Status:** Corrected offline after failed real-desktop delivery; independent live validation pending
 **Decision date:** 2026-09-01
 
 ## Context
@@ -9,15 +9,15 @@ The development laptop may be physically unattended while a non-T10 live matrix 
 
 ## Decision
 
-The reusable hardware-rendered live-inspection harness may emit one XTEST left click or one allowlisted `Return`/`space` keypress only at the ordinary startup gate. Before that action it must have:
+The reusable hardware-rendered live-inspection harness may emit one XTEST left click only at the ordinary startup gate. The earlier `Return`/`space` implementation is disabled because the 2026-09-02 real-desktop attempt returned command success without advancing PZ. Before the click it must have:
 
-- matched the exact `game loading took` signature within at most 30 seconds;
+- matched the exact `game loading took` signature within at most 30 seconds, then completed a bounded settle and fresh visible startup-control check;
 - retained the launcher PID it created;
 - found exactly one mapped Project Zomboid window on the current `DISPLAY`;
-- verified that window's `_NET_WM_PID` belongs to the launcher's process group; and
+- verified launcher and window PID/start-time identities, process-group ownership, client geometry, active-window/focus state and the unobscured pointer target immediately before XTEST; and
 - retained an unused action budget of exactly one.
 
-The action and ownership facts are written as structured evidence. Any ambiguity, stale signature, missing Xlib/XTEST capability or second request fails closed. No right-click, context menu, inventory/menu action, gameplay action or acceptance interaction is implemented.
+The command and ownership facts are written as structured evidence, but delivery remains pending until a fresh run-scoped observer `PLAYER_READY` line occurs after the click. Command success without that transition is explicitly `NOT_CONFIRMED`. Any ambiguity, stale log/screenshot, focus/window/geometry drift, missing Xlib/XTEST/Pillow capability or second request fails closed. No right-click, context menu, inventory/menu action, gameplay action or acceptance interaction is implemented.
 
 An unattended profile always records T10 and CF-V01-E08 as `NOT RUN`. If it requests either criterion or any prohibited interaction scope, the run is refused before save, mod or control mutation. P4-R44 is unchanged.
 

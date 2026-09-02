@@ -15,6 +15,13 @@ class GateResult:
     attempt: int
     elapsed_seconds: float
     matched_line: str
+    matched_at: float
+
+
+@dataclass(frozen=True)
+class ObservedLine:
+    text: str
+    observed_at: float
 
 
 class LogFollower:
@@ -22,10 +29,12 @@ class LogFollower:
         self.path = path
         self.offset = path.stat().st_size if start_at_end and path.exists() else 0
         self.carry = ""
+        self.pending: list[ObservedLine] = []
 
-    def read_lines(self) -> list[str]:
+    def read_records(self) -> list[ObservedLine]:
+        pending, self.pending = self.pending, []
         if not self.path.exists():
-            return []
+            return pending
         if self.path.stat().st_size < self.offset:
             self.offset = 0
             self.carry = ""
@@ -38,7 +47,14 @@ class LogFollower:
         self.carry = ""
         if parts and not parts[-1].endswith(("\n", "\r")):
             self.carry = parts.pop()
-        return [line.rstrip("\r\n") for line in parts]
+        observed_at = time.monotonic()
+        return pending + [ObservedLine(line.rstrip("\r\n"), observed_at) for line in parts]
+
+    def read_lines(self) -> list[str]:
+        return [record.text for record in self.read_records()]
+
+    def prepend_records(self, records: list[ObservedLine]) -> None:
+        self.pending = list(records) + self.pending
 
 
 def wait_for_gate(
@@ -47,6 +63,7 @@ def wait_for_gate(
     alive: Callable[[], bool],
     on_timeout: Callable[[Gate, int, list[str]], None],
     poll_seconds: float = 0.25,
+    not_before: float | None = None,
 ) -> GateResult:
     pattern = re.compile(gate.pattern)
     recent: list[str] = []
@@ -55,11 +72,19 @@ def wait_for_gate(
         while time.monotonic() - started < gate.timeout_seconds:
             if not alive():
                 raise HarnessError(f"process exited while waiting for gate {gate.name}")
-            for line in follower.read_lines():
-                recent.append(line)
+            records = follower.read_records()
+            for index, record in enumerate(records):
+                recent.append(record.text)
                 recent = recent[-80:]
-                if pattern.search(line):
-                    return GateResult(gate.name, attempt, time.monotonic() - started, line)
+                if pattern.search(record.text) and (not_before is None or record.observed_at > not_before):
+                    follower.prepend_records(records[index + 1:])
+                    return GateResult(
+                        gate.name,
+                        attempt,
+                        time.monotonic() - started,
+                        record.text,
+                        record.observed_at,
+                    )
             time.sleep(poll_seconds)
         on_timeout(gate, attempt, recent)
     raise HarnessError(

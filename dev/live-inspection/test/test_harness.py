@@ -1,8 +1,10 @@
 from __future__ import annotations
 
 import json
+import subprocess
 import sys
 import tempfile
+import time
 import unittest
 from pathlib import Path
 
@@ -10,10 +12,12 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "lib"))
 
 from live_inspection.config import load_profile
+from live_inspection.cli import capture_screen
 from live_inspection.evidence import sanitize_line
 from live_inspection.model import Gate, HarnessError
 from live_inspection.safety import ControlTransaction, ExclusiveRunLock, assert_save_safety, parse_renderer, recover_interrupted_runs, sha256
 from live_inspection.state import LogFollower, wait_for_gate
+from unittest import mock
 
 
 def profile_text(root: Path) -> str:
@@ -127,6 +131,86 @@ class StateTests(unittest.TestCase):
             path.write_text("NEW\n")
             self.assertEqual(follower.read_lines(), ["NEW"])
 
+    def test_gate_retains_later_lines_from_the_same_read(self):
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp) / "console.txt"
+            path.write_text("FIRST\nSECOND\n")
+            follower = LogFollower(path)
+            first = wait_for_gate(Gate("first", "FIRST", 1), follower, lambda: True, lambda *_: None, poll_seconds=0.001)
+            second = wait_for_gate(Gate("second", "SECOND", 1), follower, lambda: True, lambda *_: None, poll_seconds=0.001)
+            self.assertEqual((first.matched_line, second.matched_line), ("FIRST", "SECOND"))
+
+    def test_stale_buffered_log_cannot_satisfy_post_action_gate(self):
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp) / "console.txt"
+            path.write_text("PLAYER_READY stale\n")
+            follower = LogFollower(path)
+            stale = follower.read_records()
+            follower.prepend_records(stale)
+            action_completed = time.monotonic()
+            with path.open("a", encoding="utf-8") as stream:
+                stream.write("PLAYER_READY fresh\n")
+            result = wait_for_gate(
+                Gate("player-ready", "PLAYER_READY", 1), follower, lambda: True, lambda *_: None,
+                poll_seconds=0.001, not_before=action_completed,
+            )
+            self.assertEqual(result.matched_line, "PLAYER_READY fresh")
+
+    def test_required_screenshot_refuses_preexisting_stale_file(self):
+        with tempfile.TemporaryDirectory() as temp:
+            destination = Path(temp) / "ready.png"
+            destination.write_bytes(b"old")
+            with self.assertRaisesRegex(HarnessError, "stale screenshot"):
+                capture_screen(destination, required=True)
+
+    def test_required_screenshot_records_fresh_png_dimensions(self):
+        with tempfile.TemporaryDirectory() as temp:
+            destination = Path(temp) / "ready.png"
+
+            def command(*_args, **_kwargs):
+                destination.write_bytes(b"\x89PNG\r\n\x1a\n" + b"\x00\x00\x00\x0dIHDR" + (960).to_bytes(4, "big") + (1040).to_bytes(4, "big") + b"x")
+                return subprocess.CompletedProcess([], 0, "", "")
+
+            with mock.patch("live_inspection.cli.shutil.which", return_value="/usr/bin/gnome-screenshot"), mock.patch(
+                "live_inspection.cli.run_command", side_effect=command
+            ):
+                evidence = capture_screen(destination, required=True)
+            self.assertEqual((evidence["status"], evidence["width"], evidence["height"]), ("FRESH", 960, 1040))
+
+    def test_black_post_signature_frame_is_not_startup_ready(self):
+        from PIL import Image
+
+        with tempfile.TemporaryDirectory() as temp:
+            destination = Path(temp) / "ready.png"
+
+            def command(*_args, **_kwargs):
+                Image.new("RGB", (960, 1040), "black").save(destination)
+                return subprocess.CompletedProcess([], 0, "", "")
+
+            with mock.patch("live_inspection.cli.shutil.which", return_value="/usr/bin/gnome-screenshot"), mock.patch(
+                "live_inspection.cli.run_command", side_effect=command
+            ), self.assertRaisesRegex(HarnessError, "does not show"):
+                capture_screen(destination, required=True, startup_client_size=(960, 1008))
+
+    def test_visible_lower_center_control_is_startup_ready(self):
+        from PIL import Image, ImageDraw
+
+        with tempfile.TemporaryDirectory() as temp:
+            destination = Path(temp) / "ready.png"
+
+            def command(*_args, **_kwargs):
+                image = Image.new("RGB", (960, 1040), "black")
+                ImageDraw.Draw(image).rectangle((430, 985, 530, 997), fill="white")
+                image.save(destination)
+                return subprocess.CompletedProcess([], 0, "", "")
+
+            with mock.patch("live_inspection.cli.shutil.which", return_value="/usr/bin/gnome-screenshot"), mock.patch(
+                "live_inspection.cli.run_command", side_effect=command
+            ):
+                evidence = capture_screen(destination, required=True, startup_client_size=(960, 1008))
+            visual = evidence["startup_gate_visual"]
+            self.assertEqual(visual["status"], "VISIBLE")
+
     def test_sanitization(self):
         line = f"path={Path.home()}/Zomboid token=hunter2"
         sanitized = sanitize_line(line)
@@ -146,6 +230,8 @@ class StaticPolicyTests(unittest.TestCase):
         unattended = (ROOT / "lib/live_inspection/unattended.py").read_text()
         self.assertNotIn("ButtonPress, 3", unattended)
         self.assertNotIn("ButtonRelease, 3", unattended)
+        self.assertNotIn("KeyPress", unattended)
+        self.assertNotIn("KeyRelease", unattended)
 
 
 if __name__ == "__main__":

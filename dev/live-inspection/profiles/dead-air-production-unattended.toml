@@ -25,6 +25,7 @@ enabled = true
 action = "left-click"
 max_actions = 1
 signature_max_age_seconds = 15
+post_signature_settle_seconds = 1
 window_title_pattern = "(?i)^project zomboid(?:\\s.*)?$"
 
 [payload]
