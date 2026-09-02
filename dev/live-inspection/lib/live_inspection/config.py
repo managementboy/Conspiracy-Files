@@ -14,6 +14,7 @@ SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
 FORBIDDEN_UNATTENDED_CRITERIA = {"T10", "E08", "CF-V01-E08"}
 FORBIDDEN_INTERACTION_WORDS = ("inventory", "context", "menu", "right-click", "gameplay", "accept")
 WINDOW_TITLE_PATTERNS = {r"(?i)project zomboid", r"(?i)^project zomboid(?:\s.*)?$"}
+SUPPORTED_GAME_VERSIONS = {"42.20.4"}
 REQUIRED_GATE_ORDER = (
     "menu", "world-loading", "click-to-start", "player-ready-modal-check",
     "chunk-streaming", "scan-completion", "run-completion", "normal-exit",
@@ -157,6 +158,16 @@ def load_profile(path: Path) -> Profile:
         re.compile(window_pattern)
     except re.error as exc:
         raise HarnessError(f"unattended_startup.window_title_pattern is invalid: {exc}") from exc
+    supported_game_version = unattended_raw.get("supported_game_version", "")
+    if unattended_enabled and not isinstance(supported_game_version, str):
+        raise HarnessError("unattended_startup.supported_game_version must be a string")
+    if unattended_enabled and supported_game_version not in SUPPORTED_GAME_VERSIONS:
+        raise HarnessError(
+            "unattended startup requires an exact supported game version; "
+            f"expected one of {sorted(SUPPORTED_GAME_VERSIONS)}"
+        )
+    if not unattended_enabled and supported_game_version:
+        raise HarnessError("manual profiles must not declare an unattended supported game version")
     payload_mode = str(payload_raw.get("mode", "probe"))
     if payload_mode not in {"probe", "production"}:
         raise HarnessError("payload.mode must be probe or production")
@@ -187,7 +198,8 @@ def load_profile(path: Path) -> Profile:
         allow_multi_site=bool(run.get("allow_multi_site", False)),
         criteria=criteria, interaction_scope=interaction_scope,
         unattended_startup=UnattendedStartup(
-            unattended_enabled, startup_action, max_actions, signature_age, settle_seconds, window_pattern
+            unattended_enabled, startup_action, max_actions, signature_age, settle_seconds,
+            window_pattern, supported_game_version,
         ),
         payload=Payload(payload_mode, _path(payload_source, base) if payload_source else None, expected_sha, expected_mod_id),
         raw=raw,

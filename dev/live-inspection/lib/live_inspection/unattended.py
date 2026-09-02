@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import base64
+import hashlib
 import os
 import re
 import time
@@ -8,7 +10,10 @@ from pathlib import Path
 from typing import Callable
 
 from .model import HarnessError, UnattendedStartup
-from .state import GateResult, LogCursor
+from .state import GateResult, LogCursor, extract_gate_evidence
+
+
+SOURCE_CLOCK_FUTURE_TOLERANCE_MS = 1_000
 
 
 @dataclass(frozen=True)
@@ -28,6 +33,7 @@ class ReadinessIdentity:
     payload_id: str
     payload_checksum: str
     active_mod_ids: tuple[str, ...]
+    expected_game_version: str = "42.20.4"
 
 
 @dataclass(frozen=True)
@@ -69,6 +75,7 @@ class InputEvidence:
     rejected_transition: str | None = None
     rejected_transition_observation: dict[str, object] | None = None
     failure_reason: str | None = None
+    readiness_evidence_journal: tuple[dict[str, object], ...] = ()
 
 
 @dataclass(frozen=True)
@@ -416,13 +423,24 @@ class StartupGateController:
         return results
 
     def revalidate_delivery_identity(self, value: InputEvidence) -> dict[str, object]:
-        """Re-read the exact process/window tuple immediately before confirmation."""
+        """Re-read the complete session/window/pointer tuple before confirmation."""
         if not self.used:
             raise HarnessError("startup controller did not emit the owned one-shot action")
         if os.environ.get("DISPLAY", "") != value.display:
             raise HarnessError("DISPLAY/session identity changed before delivery confirmation")
         if (value.window_width, value.window_height) != (960, 1008):
             raise HarnessError("delivery confirmation requires the recorded 960x1008 client geometry")
+        expected_action = (
+            value.window_width // 2,
+            max(1, min(value.window_height - 2, (value.window_height * 20) // 21)),
+        )
+        if (value.action_x, value.action_y) != expected_action:
+            raise HarnessError("delivery confirmation action point is not the authorized lower-center target")
+        if (value.root_x, value.root_y) != (
+            value.window_x + value.action_x,
+            value.window_y + value.action_y,
+        ):
+            raise HarnessError("delivery confirmation action point is incoherent with the owned client geometry")
         launcher = ProcessIdentity(
             value.launcher_pid, value.launcher_pid, value.launcher_start_time_ticks
         )
@@ -461,6 +479,38 @@ class StartupGateController:
             focus_window_id = self._resource_id(connection.get_input_focus().focus)
             if not self._focus_belongs_to_window(connection, value.window_id, focus_window_id):
                 raise HarnessError("owned PZ client no longer has X11 focus at delivery confirmation")
+            pointer = root.query_pointer()
+            pointer_root_x, pointer_root_y = int(pointer.root_x), int(pointer.root_y)
+            pointer_window_id = self._resource_id(pointer.child)
+            if (pointer_root_x, pointer_root_y) != (value.root_x, value.root_y):
+                raise HarnessError("X11 pointer moved away from the authorized startup-control point")
+            if not self._belongs_to_window(current.window, pointer_window_id):
+                raise HarnessError(
+                    "another topmost window or overlay owns the pointer at delivery confirmation"
+                )
+
+            # Close the observation interval around the pointer query: none of
+            # the process, client, active-window, or focus identities may drift
+            # while the final topmost ownership fact is being collected.
+            if self._identity_reader(value.launcher_pid) != launcher:
+                raise HarnessError("launcher PID/start-time identity changed during delivery snapshot")
+            final_windows = self._owned_windows(connection, launcher)
+            if len(final_windows) != 1:
+                raise HarnessError(
+                    "owned PZ window set changed during delivery snapshot "
+                    f"(found {len(final_windows)})"
+                )
+            self._assert_same_window(current, final_windows[0])
+            final_active_window_id = self._active_window_id(
+                root, active_atom, X.AnyPropertyType
+            )
+            final_focus_window_id = self._resource_id(connection.get_input_focus().focus)
+            if final_active_window_id != active_window_id:
+                raise HarnessError("active PZ window changed during delivery snapshot")
+            if final_focus_window_id != focus_window_id or not self._focus_belongs_to_window(
+                connection, value.window_id, final_focus_window_id
+            ):
+                raise HarnessError("PZ input focus changed during delivery snapshot")
             return {
                 "status": "STABLE",
                 "checked_monotonic": self._clock(),
@@ -477,6 +527,13 @@ class StartupGateController:
                 "window_height": current.height,
                 "active_window_id": active_window_id,
                 "focus_window_id": focus_window_id,
+                "action_x": value.action_x,
+                "action_y": value.action_y,
+                "pointer_root_x": pointer_root_x,
+                "pointer_root_y": pointer_root_y,
+                "pointer_window_id": pointer_window_id,
+                "pointer_topmost_owned": True,
+                "display": value.display,
             }
         finally:
             connection.close()
@@ -518,13 +575,119 @@ def _parse_player_ready(value: str) -> dict[str, str]:
     return fields
 
 
+def _raw_record_details(transition: GateResult) -> dict[str, object]:
+    if transition.matched_raw_bytes is None:
+        raw = transition.matched_line.encode("utf-8")
+        capture = "SYNTHETIC_GATE_RESULT_WITHOUT_TERMINATOR"
+    else:
+        raw = transition.matched_raw_bytes
+        capture = "LOG_FOLLOWER_EXACT"
+    if raw.endswith(b"\r\n"):
+        terminator = b"\r\n"
+    elif raw.endswith(b"\n"):
+        terminator = b"\n"
+    else:
+        terminator = b""
+    decode_error = transition.matched_decode_error
+    if decode_error is None:
+        try:
+            raw[:-len(terminator) if terminator else None].decode("utf-8", "strict")
+            decode_error = False
+        except UnicodeDecodeError:
+            decode_error = True
+    return {
+        "raw_bytes": base64.b64encode(raw).decode("ascii"),
+        "raw_bytes_encoding": "base64",
+        "raw_bytes_capture": capture,
+        "raw_byte_length": len(raw),
+        "raw_sha256": hashlib.sha256(raw).hexdigest(),
+        "line_terminator": base64.b64encode(terminator).decode("ascii"),
+        "line_terminator_encoding": "base64",
+        "utf8_decode_status": "INVALID_UTF8_REPLACED" if decode_error else "VALID_UTF8",
+    }
+
+
+def _best_effort_player_ready(value: str) -> dict[str, str]:
+    marker = "[CF-INSPECT]|EVENT|"
+    position = value.find(marker)
+    if position < 0:
+        return {}
+    fields: dict[str, str] = {}
+    for part in value[position:].rstrip("\r\n").split("|")[2:]:
+        if "=" not in part:
+            continue
+        key, field_value = part.split("=", 1)
+        if key and key not in fields:
+            fields[key] = field_value
+    return fields
+
+
+def _transition_observation(
+    transition: GateResult,
+    *,
+    fields: dict[str, str] | None = None,
+) -> dict[str, object]:
+    result: dict[str, object] = {
+        "observed_monotonic": transition.matched_at,
+        "observed_wall_time_ns": transition.matched_wall_time_ns,
+        "record_start_offset": transition.matched_start_offset,
+        "record_end_offset": transition.matched_end_offset,
+        "file_mtime_ns": transition.matched_file_mtime_ns,
+        "log_device": transition.log_device,
+        "log_inode": transition.log_inode,
+        "decoded_text": transition.matched_line,
+    }
+    result.update(_raw_record_details(transition))
+    source_fields = fields if fields is not None else _best_effort_player_ready(
+        transition.matched_line
+    )
+    if source_fields.get("sequence", "").isdigit():
+        result["source_sequence"] = int(source_fields["sequence"])
+    if source_fields.get("emittedAtMs", "").isdigit():
+        result["source_emitted_at_ms"] = int(source_fields["emittedAtMs"])
+    if "gameVersion" in source_fields:
+        result["source_game_version"] = source_fields["gameVersion"]
+    return result
+
+
+def _journal_entry(
+    transition: GateResult,
+    *,
+    classification: str,
+    rejection_reason: str | None = None,
+    fields: dict[str, str] | None = None,
+    index: int,
+) -> dict[str, object]:
+    parsed_fields = fields
+    parse_error = None
+    if parsed_fields is None:
+        try:
+            parsed_fields = _parse_player_ready(transition.matched_line)
+        except HarnessError as exc:
+            parse_error = str(exc)
+    observation = _transition_observation(transition, fields=parsed_fields)
+    if observation["utf8_decode_status"] != "VALID_UTF8":
+        parse_result = "INVALID_UTF8_REJECTED"
+    else:
+        parse_result = "PARSED" if parse_error is None else "PARSE_REJECTED"
+    return {
+        "journal_index": index,
+        "classification": classification,
+        "parse_result": parse_result,
+        "parse_error": parse_error,
+        "rejection_reason": rejection_reason,
+        "parsed_fields": dict(parsed_fields) if parsed_fields is not None else None,
+        **observation,
+    }
+
+
 def confirm_delivery(
     value: InputEvidence,
     *,
     transition: GateResult,
     identity_revalidator: Callable[[InputEvidence], dict[str, object]],
 ) -> InputEvidence:
-    if value.delivery_status != "PENDING_TRANSITION":
+    if value.delivery_status not in {"PENDING_TRANSITION", "NOT_CONFIRMED"}:
         raise HarnessError("startup delivery outcome has already been finalized")
     cursor = value.pre_action_cursor
     identity = value.readiness_identity
@@ -555,11 +718,19 @@ def confirm_delivery(
         raise HarnessError("startup transition file timestamp predates the pre-action cursor")
     if transition.matched_wall_time_ns <= value.action_completed_wall_time_ns:
         raise HarnessError("startup transition was not observed after the XTEST action")
+    if transition.matched_file_mtime_ns > (
+        transition.matched_wall_time_ns + SOURCE_CLOCK_FUTURE_TOLERANCE_MS * 1_000_000
+    ):
+        raise HarnessError("startup transition file timestamp is incoherent with observation time")
+    if transition.matched_decode_error:
+        raise HarnessError("startup transition record contains invalid UTF-8")
     fields = _parse_player_ready(transition.matched_line)
     if cursor.observer_sequence_watermark is None:
         raise HarnessError("pre-action cursor lacks the observer sequence watermark")
     if int(fields["sequence"]) <= cursor.observer_sequence_watermark:
         raise HarnessError("startup transition is replayed or reordered against the pre-action sequence")
+    if fields["gameVersion"] in {"", "false", "<nil>", "<unavailable>"}:
+        raise HarnessError("startup transition lacks the observer game-version identity")
     expected = {
         "kind": "PLAYER_READY",
         "run": identity.run_id,
@@ -571,6 +742,7 @@ def confirm_delivery(
         "payloadMode": identity.payload_mode,
         "payloadId": identity.payload_id,
         "payloadChecksum": identity.payload_checksum,
+        "gameVersion": identity.expected_game_version,
     }
     mismatched = sorted(name for name, expected_value in expected.items() if fields[name] != expected_value)
     if mismatched:
@@ -578,56 +750,75 @@ def confirm_delivery(
     source_wall_time_ns = int(fields["emittedAtMs"]) * 1_000_000
     if source_wall_time_ns <= value.action_completed_wall_time_ns:
         raise HarnessError("startup transition was emitted before the XTEST action completed")
-    if fields["gameVersion"] in {"", "false", "<nil>", "<unavailable>"}:
-        raise HarnessError("startup transition lacks the observer game-version identity")
+    if source_wall_time_ns <= cursor.established_wall_time_ns:
+        raise HarnessError("startup transition source time predates the persisted pre-action cursor")
+    if source_wall_time_ns > (
+        transition.matched_wall_time_ns + SOURCE_CLOCK_FUTURE_TOLERANCE_MS * 1_000_000
+    ):
+        raise HarnessError(
+            "startup transition source time is implausibly in the future "
+            f"(tolerance={SOURCE_CLOCK_FUTURE_TOLERANCE_MS}ms)"
+        )
+    if source_wall_time_ns > (
+        transition.matched_file_mtime_ns + SOURCE_CLOCK_FUTURE_TOLERANCE_MS * 1_000_000
+    ):
+        raise HarnessError(
+            "startup transition source time is incoherent with the retained log file timestamp"
+        )
+    if not re.fullmatch(r"42\.\d+\.\d+", identity.expected_game_version):
+        raise HarnessError("startup readiness identity lacks an exact supported Build 42 version")
     confirmation_identity = identity_revalidator(value)
     if not isinstance(confirmation_identity, dict) or confirmation_identity.get("status") != "STABLE":
         raise HarnessError("delivery-time process/window identity was not stably revalidated")
+    observation = _transition_observation(transition, fields=fields)
+    accepted = _journal_entry(
+        transition,
+        classification="ACCEPTED",
+        fields=fields,
+        index=len(value.readiness_evidence_journal) + 1,
+    )
     return replace(
         value,
         delivery_status="CONFIRMED",
         transition=transition.matched_line,
         transition_latency_seconds=transition.matched_at - value.action_completed_monotonic,
-        transition_observation={
-            "observed_monotonic": transition.matched_at,
-            "observed_wall_time_ns": transition.matched_wall_time_ns,
-            "record_start_offset": transition.matched_start_offset,
-            "record_end_offset": transition.matched_end_offset,
-            "file_mtime_ns": transition.matched_file_mtime_ns,
-            "log_device": transition.log_device,
-            "log_inode": transition.log_inode,
-            "source_sequence": int(fields["sequence"]),
-            "source_emitted_at_ms": int(fields["emittedAtMs"]),
-        },
+        transition_observation=observation,
         confirmation_identity=confirmation_identity,
+        failure_reason=None,
+        readiness_evidence_journal=value.readiness_evidence_journal + (accepted,),
     )
 
 
 def fail_delivery(
     value: InputEvidence,
     *,
-    reason: str,
+    reason: str | BaseException,
     transition: GateResult | None = None,
 ) -> InputEvidence:
-    if value.delivery_status != "PENDING_TRANSITION":
+    if value.delivery_status == "CONFIRMED":
         return value
-    rejected_observation = None
-    if transition is not None:
-        rejected_observation = {
-            "observed_monotonic": transition.matched_at,
-            "observed_wall_time_ns": transition.matched_wall_time_ns,
-            "record_start_offset": transition.matched_start_offset,
-            "record_end_offset": transition.matched_end_offset,
-            "file_mtime_ns": transition.matched_file_mtime_ns,
-            "log_device": transition.log_device,
-            "log_inode": transition.log_inode,
-        }
+    clean_reason, carried = extract_gate_evidence(reason)
+    transitions = carried or ((transition,) if transition is not None else ())
+    journal = value.readiness_evidence_journal
+    for rejected in transitions:
+        journal = journal + (_journal_entry(
+            rejected,
+            classification="REJECTED",
+            rejection_reason=clean_reason,
+            index=len(journal) + 1,
+        ),)
+    last = transitions[-1] if transitions else None
+    rejected_observation = _transition_observation(last) if last is not None else None
     return replace(
         value,
         delivery_status="NOT_CONFIRMED",
-        rejected_transition=transition.matched_line if transition is not None else None,
-        rejected_transition_observation=rejected_observation,
-        failure_reason=reason,
+        rejected_transition=last.matched_line if last is not None else value.rejected_transition,
+        rejected_transition_observation=(
+            rejected_observation
+            if rejected_observation is not None else value.rejected_transition_observation
+        ),
+        failure_reason=clean_reason,
+        readiness_evidence_journal=journal,
     )
 
 

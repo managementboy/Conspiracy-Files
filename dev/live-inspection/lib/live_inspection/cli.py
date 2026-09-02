@@ -130,6 +130,7 @@ def render_lua_profile(profile: Profile, sites: tuple[Site, ...], identity: Read
         f"  payloadMode = {lua_string(identity.payload_mode)},",
         f"  payloadId = {lua_string(identity.payload_id)},",
         f"  payloadChecksum = {lua_string(identity.payload_checksum)},",
+        f"  expectedGameVersion = {lua_string(identity.expected_game_version)},",
         f"  activeModIds = {{ {expected} }},",
         "  sites = {",
     ]
@@ -321,6 +322,7 @@ class LiveRun:
             payload_id=profile.payload.expected_mod_id or self.mod_id,
             payload_checksum=profile.payload.expected_sha256 or tree_checksum(probe_root),
             active_mod_ids=tuple(str(value) for value in active_ids),
+            expected_game_version=profile.unattended_startup.supported_game_version,
         )
 
     @staticmethod
@@ -340,10 +342,53 @@ class LiveRun:
     def write_startup_evidence(self) -> None:
         if self.startup_evidence is None:
             return
+        self._append_startup_readiness_journal()
         self._write_json_atomic(
             self.bundle / "unattended-startup-input.json",
             evidence_dict(self.startup_evidence),
         )
+
+    def _append_startup_readiness_journal(self) -> None:
+        """Fsync new immutable entries before replacing the summary state."""
+        entries = list(self.startup_evidence.readiness_evidence_journal)
+        path = self.bundle / "startup-readiness-evidence.jsonl"
+        existing: list[dict[str, object]] = []
+        if path.exists():
+            raw_lines = path.read_bytes().splitlines(keepends=True)
+            if any(not line.endswith(b"\n") for line in raw_lines):
+                raise HarnessError("startup readiness journal has an incomplete trailing record")
+            try:
+                existing = [json.loads(line.decode("utf-8")) for line in raw_lines]
+            except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+                raise HarnessError("startup readiness journal is malformed") from exc
+        if len(entries) < len(existing):
+            if entries != existing[:len(entries)]:
+                raise HarnessError("startup readiness journal append-only prefix changed")
+            # Crash recovery: the append-only journal is authoritative when it
+            # is ahead of an older or independently reconstructed summary.
+            self.startup_evidence = replace(
+                self.startup_evidence,
+                readiness_evidence_journal=tuple(existing),
+            )
+            entries = existing
+        elif existing != entries[:len(existing)]:
+            raise HarnessError("startup readiness journal append-only prefix changed")
+        if len(existing) == len(entries):
+            return
+        with path.open("ab") as stream:
+            for entry in entries[len(existing):]:
+                stream.write(
+                    (json.dumps(entry, separators=(",", ":"), sort_keys=True) + "\n").encode(
+                        "utf-8"
+                    )
+                )
+            stream.flush()
+            os.fsync(stream.fileno())
+        directory_fd = os.open(path.parent, os.O_RDONLY | os.O_DIRECTORY)
+        try:
+            os.fsync(directory_fd)
+        finally:
+            os.close(directory_fd)
 
     def persist_pre_action_cursor(self, follower: LogFollower):
         cursor = follower.checkpoint()
@@ -551,9 +596,36 @@ class LiveRun:
                 if gate.name == "player-ready-modal-check" and self.startup_evidence is not None:
                     not_before = self.startup_evidence.action_completed_monotonic
                     cursor = self.startup_evidence.pre_action_cursor
+                match_validator = None
+                on_rejected_match = None
+                if gate.name == "player-ready-modal-check" and self.startup_evidence is not None:
+                    def match_validator(result):
+                        self.startup_evidence = confirm_delivery(
+                            self.startup_evidence,
+                            transition=result,
+                            identity_revalidator=(
+                                self.startup_controller.revalidate_delivery_identity
+                            ),
+                        )
+                        self.write_startup_evidence()
+
+                    def on_rejected_match(result, error):
+                        self.startup_evidence = fail_delivery(
+                            self.startup_evidence,
+                            reason=error,
+                            transition=result,
+                        )
+                        self.write_startup_evidence()
                 try:
                     result = wait_for_gate(
-                        gate, follower, alive, timeout, not_before=not_before, cursor=cursor
+                        gate,
+                        follower,
+                        alive,
+                        timeout,
+                        not_before=not_before,
+                        cursor=cursor,
+                        match_validator=match_validator,
+                        on_rejected_match=on_rejected_match,
                     )
                 except HarnessError as exc:
                     if gate.name == "player-ready-modal-check" and self.startup_evidence is not None:
@@ -568,19 +640,22 @@ class LiveRun:
                     raise
                 suffix = f"-{occurrence}" if repetitions > 1 else ""
                 if gate.name == "player-ready-modal-check" and self.startup_evidence is not None:
-                    try:
-                        self.startup_evidence = confirm_delivery(
-                            self.startup_evidence,
-                            transition=result,
-                            identity_revalidator=self.startup_controller.revalidate_delivery_identity,
-                        )
-                    except HarnessError as exc:
-                        self.startup_evidence = fail_delivery(
-                            self.startup_evidence, reason=str(exc), transition=result
-                        )
+                    if self.startup_evidence.delivery_status != "CONFIRMED":
+                        try:
+                            self.startup_evidence = confirm_delivery(
+                                self.startup_evidence,
+                                transition=result,
+                                identity_revalidator=(
+                                    self.startup_controller.revalidate_delivery_identity
+                                ),
+                            )
+                        except HarnessError as exc:
+                            self.startup_evidence = fail_delivery(
+                                self.startup_evidence, reason=exc, transition=result
+                            )
+                            self.write_startup_evidence()
+                            raise
                         self.write_startup_evidence()
-                        raise
-                    self.write_startup_evidence()
                     log("ordinary startup action delivery confirmed by fresh run-scoped PLAYER_READY")
                 log(f"gate {gate.name}{suffix} passed in {result.elapsed_seconds:.1f}s (attempt {result.attempt})")
                 if gate.action == "screenshot":

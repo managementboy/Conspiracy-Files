@@ -72,6 +72,7 @@ action="left-click"
 max_actions=1
 signature_max_age_seconds=10
 post_signature_settle_seconds=1
+supported_game_version="42.20.4"
 [[sites]]
 id="S1"
 role="office"
@@ -93,6 +94,33 @@ class UnattendedConfigTests(unittest.TestCase):
             profile = self.load(profile_text(Path(temp)))
             self.assertTrue(profile.unattended_startup.enabled)
             self.assertEqual(profile.interaction_scope, ("startup-gate",))
+            self.assertEqual(
+                profile.unattended_startup.supported_game_version, "42.20.4"
+            )
+
+    def test_missing_wrong_or_malformed_supported_game_version_is_rejected(self):
+        with tempfile.TemporaryDirectory() as temp:
+            base = profile_text(Path(temp))
+            cases = {
+                "missing": base.replace('supported_game_version="42.20.4"\n', ""),
+                "wrong-patch": base.replace(
+                    'supported_game_version="42.20.4"',
+                    'supported_game_version="42.20.5"',
+                ),
+                "broad-prefix": base.replace(
+                    'supported_game_version="42.20.4"',
+                    'supported_game_version="42.20.x"',
+                ),
+                "malformed": base.replace(
+                    'supported_game_version="42.20.4"',
+                    'supported_game_version="not-a-version"',
+                ),
+            }
+            for name, text in cases.items():
+                with self.subTest(name=name), self.assertRaisesRegex(
+                    HarnessError, "exact supported game version"
+                ):
+                    self.load(text)
 
     def test_refuses_t10_and_e08_unattended_acceptance(self):
         with tempfile.TemporaryDirectory() as temp:
@@ -388,6 +416,43 @@ class StartupDeliveryIntegrationTests(unittest.TestCase):
             self.assertEqual(selected.observer_sequence_watermark, 1)
             self.assertEqual(persisted["status"], "PRE_ACTION_CURSOR_ESTABLISHED")
             self.assertEqual(persisted["readiness_identity"]["session_id"], identity.session_id)
+
+    def test_readiness_journal_appends_fsyncs_and_survives_later_confirmation(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            run = object.__new__(LiveRun)
+            run.bundle = root
+            pending = StartupGateControllerTests.input_evidence()
+            wrong = StartupGateControllerTests.transition(run="OTHER")
+            with self.assertRaises(HarnessError) as raised:
+                confirm_delivery(
+                    pending,
+                    transition=wrong,
+                    identity_revalidator=lambda _value: {"status": "STABLE"},
+                )
+            run.startup_evidence = fail_delivery(
+                pending, reason=raised.exception, transition=wrong
+            )
+            with mock.patch("live_inspection.cli.os.fsync", wraps=os.fsync) as synced:
+                run.write_startup_evidence()
+                first_journal = (root / "startup-readiness-evidence.jsonl").read_bytes()
+                run.startup_evidence = confirm_delivery(
+                    run.startup_evidence,
+                    transition=StartupGateControllerTests.transition(sequence="5"),
+                    identity_revalidator=lambda _value: {"status": "STABLE"},
+                )
+                run.write_startup_evidence()
+            lines = (root / "startup-readiness-evidence.jsonl").read_bytes().splitlines()
+            saved = json.loads((root / "unattended-startup-input.json").read_text())
+            self.assertGreaterEqual(synced.call_count, 8)
+            self.assertEqual(len(lines), 2)
+            self.assertTrue((root / "startup-readiness-evidence.jsonl").read_bytes().startswith(first_journal))
+            self.assertEqual(
+                [json.loads(line)["classification"] for line in lines],
+                ["REJECTED", "ACCEPTED"],
+            )
+            self.assertEqual(saved["delivery_status"], "CONFIRMED")
+            self.assertEqual(len(saved["readiness_evidence_journal"]), 2)
 
     def test_execute_marks_successful_x11_command_unconfirmed_on_timeout(self):
         with tempfile.TemporaryDirectory() as temp:

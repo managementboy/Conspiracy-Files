@@ -195,6 +195,13 @@ end
 local function initialize()
     local valid, count = onlyExpectedModsActive()
     if not valid then error("active mods do not exactly match the profile; count=" .. tostring(count)) end
+    local gameVersion = getGameVersion and tostring(getGameVersion()) or "<unavailable>"
+    if Profile.expectedGameVersion ~= "" and gameVersion ~= Profile.expectedGameVersion then
+        error(
+            "game version does not match exact supported run contract; expected=" ..
+            safe(Profile.expectedGameVersion) .. " actual=" .. safe(gameVersion)
+        )
+    end
     if Profile.payloadMode == "production" then
         local runtime = ConspiracyFiles and ConspiracyFiles.runtime
         if type(runtime) ~= "table" or runtime.enabled ~= true then error("production runtime is unavailable") end
@@ -210,7 +217,7 @@ local function initialize()
         "payloadMode=" .. safe(Profile.payloadMode),
         "payloadId=" .. safe(Profile.payloadId),
         "payloadChecksum=" .. safe(Profile.payloadChecksum),
-        "gameVersion=" .. safe(getGameVersion and getGameVersion()),
+        "gameVersion=" .. safe(gameVersion),
     })
     siteIndex, current, tick = 1, Profile.sites[1], 0
     logSiteDefinition(current); teleport(current); initialized = true

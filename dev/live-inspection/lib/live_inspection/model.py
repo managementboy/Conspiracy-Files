@@ -36,6 +36,7 @@ class UnattendedStartup:
     signature_max_age_seconds: int = 15
     post_signature_settle_seconds: int = 1
     window_title_pattern: str = r"(?i)project zomboid"
+    supported_game_version: str = ""
 
 
 @dataclass(frozen=True)

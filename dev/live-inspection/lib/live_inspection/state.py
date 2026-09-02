@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+import base64
+import binascii
+import json
 import os
 import re
 import time
@@ -23,6 +26,8 @@ class GateResult:
     matched_file_mtime_ns: int | None = None
     log_device: int | None = None
     log_inode: int | None = None
+    matched_raw_bytes: bytes | None = None
+    matched_decode_error: bool | None = None
 
 
 @dataclass(frozen=True)
@@ -47,6 +52,102 @@ class ObservedLine:
     file_mtime_ns: int
     log_device: int
     log_inode: int
+    raw_bytes: bytes
+    decode_error: bool
+
+
+_GATE_EVIDENCE_MARKER = "\n[CF_GATE_EVIDENCE_BASE64="
+
+
+def _serialized_gate_result(value: GateResult) -> dict[str, object]:
+    return {
+        "name": value.name,
+        "attempt": value.attempt,
+        "elapsed_seconds": value.elapsed_seconds,
+        "matched_line": value.matched_line,
+        "matched_at": value.matched_at,
+        "matched_wall_time_ns": value.matched_wall_time_ns,
+        "matched_start_offset": value.matched_start_offset,
+        "matched_end_offset": value.matched_end_offset,
+        "matched_file_mtime_ns": value.matched_file_mtime_ns,
+        "log_device": value.log_device,
+        "log_inode": value.log_inode,
+        "matched_raw_bytes_base64": (
+            base64.b64encode(value.matched_raw_bytes).decode("ascii")
+            if value.matched_raw_bytes is not None else None
+        ),
+        "matched_decode_error": value.matched_decode_error,
+    }
+
+
+def _deserialized_gate_result(value: dict[str, object]) -> GateResult:
+    raw_base64 = value.get("matched_raw_bytes_base64")
+    raw = base64.b64decode(raw_base64, validate=True) if isinstance(raw_base64, str) else None
+    return GateResult(
+        name=str(value["name"]),
+        attempt=int(value["attempt"]),
+        elapsed_seconds=float(value["elapsed_seconds"]),
+        matched_line=str(value["matched_line"]),
+        matched_at=float(value["matched_at"]),
+        matched_wall_time_ns=(
+            int(value["matched_wall_time_ns"])
+            if value.get("matched_wall_time_ns") is not None else None
+        ),
+        matched_start_offset=(
+            int(value["matched_start_offset"])
+            if value.get("matched_start_offset") is not None else None
+        ),
+        matched_end_offset=(
+            int(value["matched_end_offset"])
+            if value.get("matched_end_offset") is not None else None
+        ),
+        matched_file_mtime_ns=(
+            int(value["matched_file_mtime_ns"])
+            if value.get("matched_file_mtime_ns") is not None else None
+        ),
+        log_device=int(value["log_device"]) if value.get("log_device") is not None else None,
+        log_inode=int(value["log_inode"]) if value.get("log_inode") is not None else None,
+        matched_raw_bytes=raw,
+        matched_decode_error=(
+            bool(value["matched_decode_error"])
+            if value.get("matched_decode_error") is not None else None
+        ),
+    )
+
+
+class GateEvidenceError(HarnessError):
+    """A gate rejection that carries every exact record which caused it."""
+
+    def __init__(self, message: str, records: tuple[GateResult, ...]):
+        self.message = message
+        self.records = records
+        payload = json.dumps(
+            [_serialized_gate_result(record) for record in records],
+            separators=(",", ":"),
+            sort_keys=True,
+        ).encode("utf-8")
+        encoded = base64.urlsafe_b64encode(payload).decode("ascii")
+        # Keep the exact evidence self-contained even for compatibility callers
+        # which preserve only str(exc) before passing it to fail_delivery().
+        super().__init__(message + _GATE_EVIDENCE_MARKER + encoded + "]")
+
+
+def extract_gate_evidence(error: str | BaseException) -> tuple[str, tuple[GateResult, ...]]:
+    if isinstance(error, GateEvidenceError):
+        return error.message, error.records
+    text = str(error)
+    message, marker, encoded = text.rpartition(_GATE_EVIDENCE_MARKER)
+    if not marker or not encoded.endswith("]"):
+        return text, ()
+    try:
+        payload = base64.urlsafe_b64decode(encoded[:-1].encode("ascii"))
+        values = json.loads(payload.decode("utf-8"))
+        if not isinstance(values, list):
+            raise ValueError("gate evidence payload is not a list")
+        records = tuple(_deserialized_gate_result(value) for value in values)
+    except (KeyError, TypeError, ValueError, binascii.Error, json.JSONDecodeError):
+        return text, ()
+    return message, records
 
 
 class LogFollower:
@@ -141,11 +242,18 @@ class LogFollower:
             newline = data.find(b"\n", position)
             if newline < 0:
                 break
-            raw = data[position:newline]
-            if raw.endswith(b"\r"):
-                raw = raw[:-1]
+            raw_bytes = data[position:newline + 1]
+            decoded_bytes = data[position:newline]
+            if decoded_bytes.endswith(b"\r"):
+                decoded_bytes = decoded_bytes[:-1]
+            try:
+                text = decoded_bytes.decode("utf-8", "strict")
+                decode_error = False
+            except UnicodeDecodeError:
+                text = decoded_bytes.decode("utf-8", "replace")
+                decode_error = True
             records.append(ObservedLine(
-                text=raw.decode("utf-8", "replace"),
+                text=text,
                 observed_at=observed_at,
                 observed_wall_time_ns=observed_wall_time_ns,
                 start_offset=read_start + position,
@@ -153,6 +261,8 @@ class LogFollower:
                 file_mtime_ns=stat.st_mtime_ns,
                 log_device=stat.st_dev,
                 log_inode=stat.st_ino,
+                raw_bytes=raw_bytes,
+                decode_error=decode_error,
             ))
             position = newline + 1
         if position < len(data):
@@ -177,6 +287,8 @@ def wait_for_gate(
     poll_seconds: float = 0.25,
     not_before: float | None = None,
     cursor: LogCursor | None = None,
+    match_validator: Callable[[GateResult], None] | None = None,
+    on_rejected_match: Callable[[GateResult, HarnessError], None] | None = None,
 ) -> GateResult:
     if not_before is not None and cursor is None:
         raise HarnessError("post-action log gates require an exact pre-action byte cursor")
@@ -194,9 +306,28 @@ def wait_for_gate(
                 and (not_before is None or record.observed_at > not_before)
                 and (cursor is None or record.start_offset >= cursor.offset)
             ]
+
+            def gate_result(record: ObservedLine) -> GateResult:
+                return GateResult(
+                    gate.name,
+                    attempt,
+                    time.monotonic() - started,
+                    record.text,
+                    record.observed_at,
+                    record.observed_wall_time_ns,
+                    record.start_offset,
+                    record.end_offset,
+                    record.file_mtime_ns,
+                    record.log_device,
+                    record.log_inode,
+                    record.raw_bytes,
+                    record.decode_error,
+                )
+
             if cursor is not None and len(matches) > 1:
-                raise HarnessError(
-                    f"gate {gate.name} observed duplicate or conflicting post-cursor records"
+                raise GateEvidenceError(
+                    f"gate {gate.name} observed duplicate or conflicting post-cursor records",
+                    tuple(gate_result(record) for record in matches),
                 )
             if cursor is not None and len(matches) == 1:
                 # Give a single buffered writer flush interval to expose an
@@ -205,28 +336,25 @@ def wait_for_gate(
                 trailing = follower.read_records(cursor=cursor)
                 trailing_matches = [record for record in trailing if pattern.search(record.text)]
                 if trailing_matches:
-                    raise HarnessError(
-                        f"gate {gate.name} observed duplicate or conflicting post-cursor records"
+                    raise GateEvidenceError(
+                        f"gate {gate.name} observed duplicate or conflicting post-cursor records",
+                        tuple(gate_result(record) for record in matches + trailing_matches),
                     )
                 records.extend(trailing)
             for index, record in enumerate(records):
                 recent.append(record.text)
                 recent = recent[-80:]
                 if record in matches:
+                    result = gate_result(record)
+                    if match_validator is not None:
+                        try:
+                            match_validator(result)
+                        except HarnessError as exc:
+                            if on_rejected_match is not None:
+                                on_rejected_match(result, exc)
+                            continue
                     follower.prepend_records(records[index + 1:])
-                    return GateResult(
-                        gate.name,
-                        attempt,
-                        time.monotonic() - started,
-                        record.text,
-                        record.observed_at,
-                        record.observed_wall_time_ns,
-                        record.start_offset,
-                        record.end_offset,
-                        record.file_mtime_ns,
-                        record.log_device,
-                        record.log_inode,
-                    )
+                    return result
             time.sleep(poll_seconds)
         on_timeout(gate, attempt, recent)
     raise HarnessError(

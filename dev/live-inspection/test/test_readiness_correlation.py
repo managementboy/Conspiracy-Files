@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import base64
+import json
 import os
 import sys
 import tempfile
@@ -73,14 +75,24 @@ def ready_line(**updates: str) -> str:
     )
 
 
-def observed(line: str | None = None, *, selected_cursor: LogCursor | None = None) -> GateResult:
+def observed(
+    line: str | None = None,
+    *,
+    selected_cursor: LogCursor | None = None,
+    seen_at: float = 12.1,
+    seen_wall_time_ns: int = 12_100_000_000,
+    file_mtime_ns: int = 12_000_000_000,
+    raw_bytes: bytes | None = None,
+    decode_error: bool | None = None,
+) -> GateResult:
     selected_cursor = selected_cursor or cursor()
     line = line or ready_line()
     return GateResult(
-        "player-ready-modal-check", 1, 0.1, line, 12.1,
-        12_100_000_000, selected_cursor.offset,
+        "player-ready-modal-check", 1, 0.1, line, seen_at,
+        seen_wall_time_ns, selected_cursor.offset,
         selected_cursor.offset + len(line.encode("utf-8")) + 1,
-        12_000_000_000, selected_cursor.log_device, selected_cursor.log_inode,
+        file_mtime_ns, selected_cursor.log_device, selected_cursor.log_inode,
+        raw_bytes, decode_error,
     )
 
 
@@ -141,12 +153,94 @@ class LogCursorBoundaryTests(unittest.TestCase):
             with path.open("a", encoding="utf-8") as stream:
                 stream.write(ready_line(sequence="4") + "\n")
                 stream.write(ready_line(sequence="5", payloadId="WrongMod") + "\n")
-            with self.assertRaisesRegex(HarnessError, "duplicate or conflicting"):
+            first = (ready_line(sequence="4") + "\n").encode("utf-8")
+            second = (ready_line(sequence="5", payloadId="WrongMod") + "\n").encode("utf-8")
+            with self.assertRaisesRegex(HarnessError, "duplicate or conflicting") as raised:
                 wait_for_gate(
                     Gate("player-ready", r"\[CF-INSPECT\].*kind=PLAYER_READY", 1),
                     follower, lambda: True, lambda *_: None, poll_seconds=0.001,
                     cursor=boundary,
                 )
+            failed = fail_delivery(
+                evidence(selected_cursor=replace(boundary, observer_sequence_watermark=3)),
+                reason=raised.exception,
+            )
+            self.assertEqual(failed.delivery_status, "NOT_CONFIRMED")
+            self.assertEqual(len(failed.readiness_evidence_journal), 2)
+            self.assertEqual(
+                [
+                    base64.b64decode(entry["raw_bytes"])
+                    for entry in failed.readiness_evidence_journal
+                ],
+                [first, second],
+            )
+            self.assertEqual(
+                [entry["classification"] for entry in failed.readiness_evidence_journal],
+                ["REJECTED", "REJECTED"],
+            )
+            self.assertLess(
+                failed.readiness_evidence_journal[0]["record_start_offset"],
+                failed.readiness_evidence_journal[1]["record_start_offset"],
+            )
+
+    def test_malformed_record_is_journaled_before_later_unique_valid_record(self):
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp) / "console.txt"
+            path.write_bytes(b"before\n")
+            follower = LogFollower(path)
+            boundary = follower.checkpoint()
+            selected_cursor = replace(
+                boundary,
+                established_monotonic=10.0,
+                established_wall_time_ns=10_000_000_000,
+                file_mtime_ns=9_000_000_000,
+                observer_sequence_watermark=3,
+            )
+            malformed = ready_line().replace("|run=RUN-1", "")
+            valid = ready_line(sequence="5")
+            with path.open("ab") as stream:
+                stream.write((malformed + "\n").encode("utf-8"))
+            current = [evidence(selected_cursor=selected_cursor)]
+
+            def validate(result):
+                current[0] = confirm_delivery(
+                    current[0],
+                    transition=result,
+                    identity_revalidator=lambda _value: {"status": "STABLE"},
+                )
+
+            def reject(result, error):
+                current[0] = fail_delivery(
+                    current[0], reason=error, transition=result
+                )
+                with path.open("ab") as stream:
+                    stream.write((valid + "\n").encode("utf-8"))
+
+            result = wait_for_gate(
+                Gate("player-ready", r"\[CF-INSPECT\].*kind=PLAYER_READY", 1),
+                follower,
+                lambda: True,
+                lambda *_: None,
+                poll_seconds=0.001,
+                not_before=11.0,
+                cursor=selected_cursor,
+                match_validator=validate,
+                on_rejected_match=reject,
+            )
+            self.assertEqual(result.matched_line, valid)
+            self.assertEqual(current[0].delivery_status, "CONFIRMED")
+            self.assertEqual(
+                [entry["classification"] for entry in current[0].readiness_evidence_journal],
+                ["REJECTED", "ACCEPTED"],
+            )
+            self.assertEqual(
+                current[0].readiness_evidence_journal[0]["parse_result"],
+                "PARSE_REJECTED",
+            )
+            self.assertEqual(
+                base64.b64decode(current[0].readiness_evidence_journal[0]["raw_bytes"]),
+                (malformed + "\n").encode("utf-8"),
+            )
 
 
 class ReadinessCorrelationTests(unittest.TestCase):
@@ -162,6 +256,138 @@ class ReadinessCorrelationTests(unittest.TestCase):
         self.assertEqual(result.transition_observation["record_start_offset"], 100)
         self.assertEqual(result.transition_observation["source_sequence"], 4)
         self.assertEqual(result.confirmation_identity["status"], "STABLE")
+        self.assertEqual(result.transition_observation["source_game_version"], "42.20.4")
+        self.assertEqual(result.readiness_evidence_journal[0]["classification"], "ACCEPTED")
+
+    def test_source_time_boundary_future_tolerance_and_observation_order(self):
+        with self.assertRaisesRegex(HarnessError, "emitted before"):
+            confirm_delivery(
+                evidence(), transition=observed(ready_line(emittedAtMs="11000")),
+                identity_revalidator=lambda _value: {"status": "STABLE"},
+            )
+        tolerated = confirm_delivery(
+            evidence(), transition=observed(ready_line(emittedAtMs="12900")),
+            identity_revalidator=lambda _value: {"status": "STABLE"},
+        )
+        self.assertEqual(tolerated.delivery_status, "CONFIRMED")
+        with self.assertRaisesRegex(HarnessError, "implausibly in the future"):
+            confirm_delivery(
+                evidence(), transition=observed(ready_line(emittedAtMs="13101")),
+                identity_revalidator=lambda _value: {"status": "STABLE"},
+            )
+        with self.assertRaisesRegex(HarnessError, "file timestamp is incoherent"):
+            confirm_delivery(
+                evidence(),
+                transition=observed(
+                    ready_line(),
+                    file_mtime_ns=13_200_000_000,
+                ),
+                identity_revalidator=lambda _value: {"status": "STABLE"},
+            )
+
+    def test_wrong_missing_and_malformed_game_versions_are_rejected(self):
+        cases = {
+            "wrong-supported-patch": ready_line(gameVersion="42.20.5"),
+            "arbitrary": ready_line(gameVersion="99.99.99-wrong"),
+            "malformed": ready_line(gameVersion="42.20.x"),
+            "unavailable": ready_line(gameVersion="<unavailable>"),
+            "missing": ready_line().replace("|gameVersion=42.20.4", ""),
+        }
+        for name, line in cases.items():
+            with self.subTest(name=name), self.assertRaises(HarnessError):
+                confirm_delivery(
+                    evidence(), transition=observed(line),
+                    identity_revalidator=lambda _value: {"status": "STABLE"},
+                )
+
+    def test_invalid_utf8_record_and_crlf_are_retained_byte_exactly(self):
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp) / "console.bin"
+            path.write_bytes(b"before\n")
+            follower = LogFollower(path)
+            boundary = follower.checkpoint()
+            raw = ready_line(payloadId="Wrong").encode("utf-8") + b"\xff\r\n"
+            with path.open("ab") as stream:
+                stream.write(raw)
+            record = follower.read_records(cursor=boundary)[0]
+            transition = GateResult(
+                "player-ready-modal-check", 1, 0.1, record.text,
+                record.observed_at, record.observed_wall_time_ns,
+                record.start_offset, record.end_offset, record.file_mtime_ns,
+                record.log_device, record.log_inode, record.raw_bytes,
+                record.decode_error,
+            )
+            selected_cursor = replace(
+                boundary,
+                established_monotonic=10.0,
+                established_wall_time_ns=10_000_000_000,
+                file_mtime_ns=9_000_000_000,
+                observer_sequence_watermark=3,
+            )
+            with self.assertRaisesRegex(HarnessError, "invalid UTF-8") as raised:
+                confirm_delivery(
+                    evidence(selected_cursor=selected_cursor),
+                    transition=transition,
+                    identity_revalidator=lambda _value: {"status": "STABLE"},
+                )
+            failed = fail_delivery(
+                evidence(selected_cursor=selected_cursor),
+                reason=raised.exception,
+                transition=transition,
+            )
+            entry = failed.readiness_evidence_journal[0]
+            self.assertEqual(base64.b64decode(entry["raw_bytes"]), raw)
+            self.assertEqual(base64.b64decode(entry["line_terminator"]), b"\r\n")
+            self.assertEqual(entry["utf8_decode_status"], "INVALID_UTF8_REPLACED")
+            self.assertEqual(entry["record_end_offset"] - entry["record_start_offset"], len(raw))
+            self.assertEqual(
+                base64.b64decode(failed.rejected_transition_observation["raw_bytes"]), raw
+            )
+
+    def test_later_unique_valid_record_preserves_prior_rejection_immutably(self):
+        rejected_transition = observed(
+            ready_line(run="OTHER"),
+            raw_bytes=(ready_line(run="OTHER") + "\n").encode("utf-8"),
+            decode_error=False,
+        )
+        initial = evidence()
+        with self.assertRaises(HarnessError) as raised:
+            confirm_delivery(
+                initial,
+                transition=rejected_transition,
+                identity_revalidator=lambda _value: {"status": "STABLE"},
+            )
+        rejected = fail_delivery(
+            initial, reason=raised.exception, transition=rejected_transition
+        )
+        immutable_first = json.dumps(
+            rejected.readiness_evidence_journal[0], sort_keys=True
+        )
+        valid_line = ready_line(sequence="5")
+        valid = replace(
+            observed(
+                valid_line,
+                raw_bytes=(valid_line + "\n").encode("utf-8"),
+                decode_error=False,
+            ),
+            matched_start_offset=500,
+            matched_end_offset=500 + len((valid_line + "\n").encode("utf-8")),
+        )
+        confirmed = confirm_delivery(
+            rejected,
+            transition=valid,
+            identity_revalidator=lambda _value: {"status": "STABLE"},
+        )
+        self.assertEqual(confirmed.delivery_status, "CONFIRMED")
+        self.assertEqual(len(confirmed.readiness_evidence_journal), 2)
+        self.assertEqual(
+            json.dumps(confirmed.readiness_evidence_journal[0], sort_keys=True),
+            immutable_first,
+        )
+        self.assertEqual(
+            [entry["classification"] for entry in confirmed.readiness_evidence_journal],
+            ["REJECTED", "ACCEPTED"],
+        )
 
     def test_wrong_missing_malformed_and_conflicting_fields_are_rejected(self):
         cases = {
@@ -239,9 +465,19 @@ class ReadinessCorrelationTests(unittest.TestCase):
 
         class Root:
             active = 333
+            pointer_x = 960
+            pointer_y = 992
+            pointer_child = window_node
 
             def get_full_property(self, _atom, _type):
                 return types.SimpleNamespace(value=[self.active])
+
+            def query_pointer(self):
+                return types.SimpleNamespace(
+                    child=self.pointer_child,
+                    root_x=self.pointer_x,
+                    root_y=self.pointer_y,
+                )
 
         class Connection:
             def __init__(self):
@@ -277,6 +513,25 @@ class ReadinessCorrelationTests(unittest.TestCase):
                 mock.patch.object(controller, "_owned_windows", return_value=[current]):
             stable = controller.revalidate_delivery_identity(evidence())
         self.assertEqual((stable["status"], stable["window_id"]), ("STABLE", 333))
+        self.assertEqual(
+            (stable["pointer_root_x"], stable["pointer_root_y"], stable["pointer_topmost_owned"]),
+            (960, 992, True),
+        )
+
+        connection.root.pointer_x = 961
+        with mock.patch.dict(sys.modules, {"Xlib": fake_xlib}), \
+                mock.patch.dict(os.environ, {"DISPLAY": ":0"}), \
+                mock.patch.object(controller, "_owned_windows", return_value=[current]), \
+                self.assertRaisesRegex(HarnessError, "pointer moved"):
+            controller.revalidate_delivery_identity(evidence())
+        connection.root.pointer_x = 960
+        connection.root.pointer_child = Node(999, root_node)
+        with mock.patch.dict(sys.modules, {"Xlib": fake_xlib}), \
+                mock.patch.dict(os.environ, {"DISPLAY": ":0"}), \
+                mock.patch.object(controller, "_owned_windows", return_value=[current]), \
+                self.assertRaisesRegex(HarnessError, "topmost window or overlay"):
+            controller.revalidate_delivery_identity(evidence())
+        connection.root.pointer_child = window_node
 
         drifted = replace(current, process=ProcessIdentity(222, 111, 2001))
         with mock.patch.dict(sys.modules, {"Xlib": fake_xlib}), \
