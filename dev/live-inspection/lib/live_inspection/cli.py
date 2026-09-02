@@ -600,14 +600,17 @@ class LiveRun:
                 on_rejected_match = None
                 if gate.name == "player-ready-modal-check" and self.startup_evidence is not None:
                     def match_validator(result):
-                        self.startup_evidence = confirm_delivery(
+                        # Validate without publishing CONFIRMED. wait_for_gate()
+                        # first drains and classifies every adjacent readiness
+                        # record, then the block below commits the sole valid
+                        # candidate after the one-shot policy is satisfied.
+                        confirm_delivery(
                             self.startup_evidence,
                             transition=result,
                             identity_revalidator=(
                                 self.startup_controller.revalidate_delivery_identity
                             ),
                         )
-                        self.write_startup_evidence()
 
                     def on_rejected_match(result, error):
                         self.startup_evidence = fail_delivery(

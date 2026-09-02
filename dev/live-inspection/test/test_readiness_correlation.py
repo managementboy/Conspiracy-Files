@@ -96,6 +96,102 @@ def observed(
     )
 
 
+def exercise_readiness_stream(
+    raw_records: tuple[bytes, ...],
+    chunks: tuple[bytes, ...],
+) -> dict[str, object]:
+    """Run the production validate-then-commit flow over scripted log chunks."""
+    with tempfile.TemporaryDirectory() as temp:
+        path = Path(temp) / "console.bin"
+        path.write_bytes(b"before\n")
+        delegate = LogFollower(path)
+        actual_cursor = delegate.checkpoint()
+        selected_cursor = replace(
+            actual_cursor,
+            established_monotonic=10.0,
+            established_wall_time_ns=10_000_000_000,
+            file_mtime_ns=9_000_000_000,
+            observer_sequence_watermark=3,
+        )
+
+        class FeedingFollower:
+            def __init__(self) -> None:
+                self.remaining = list(chunks)
+
+            @property
+            def carry(self) -> bytes:
+                return delegate.carry
+
+            def read_records(self, *, cursor=None):
+                if self.remaining:
+                    chunk = self.remaining.pop(0)
+                    if chunk:
+                        with path.open("ab") as stream:
+                            stream.write(chunk)
+                return delegate.read_records(cursor=cursor)
+
+            def prepend_records(self, records) -> None:
+                delegate.prepend_records(records)
+
+        follower = FeedingFollower()
+        current = [evidence(selected_cursor=selected_cursor)]
+        published_statuses: list[str] = []
+
+        def validate(result):
+            # Match LiveRun.execute(): validate against the current immutable
+            # evidence state without exposing CONFIRMED yet.
+            confirm_delivery(
+                current[0],
+                transition=result,
+                identity_revalidator=lambda _value: {"status": "STABLE"},
+            )
+
+        def reject(result, error):
+            current[0] = fail_delivery(current[0], reason=error, transition=result)
+            published_statuses.append(current[0].delivery_status)
+
+        chosen = None
+        try:
+            chosen = wait_for_gate(
+                Gate("player-ready", r"\[CF-INSPECT\].*kind=PLAYER_READY", 0.1),
+                follower,
+                lambda: True,
+                lambda *_: None,
+                poll_seconds=0.00001,
+                not_before=11.0,
+                cursor=selected_cursor,
+                match_validator=validate,
+                on_rejected_match=reject,
+            )
+        except HarnessError as exc:
+            current[0] = fail_delivery(
+                current[0], reason=f"wrapped production gate failure: {exc}"
+            )
+            published_statuses.append(current[0].delivery_status)
+        else:
+            current[0] = confirm_delivery(
+                current[0],
+                transition=chosen,
+                identity_revalidator=lambda _value: {"status": "STABLE"},
+            )
+            published_statuses.append(current[0].delivery_status)
+
+        journal = current[0].readiness_evidence_journal
+        return {
+            "delivery_status": current[0].delivery_status,
+            "classifications": tuple(row["classification"] for row in journal),
+            "rejection_reasons": tuple(row["rejection_reason"] for row in journal),
+            "raw_records": tuple(base64.b64decode(row["raw_bytes"]) for row in journal),
+            "offsets": tuple(
+                (row["record_start_offset"], row["record_end_offset"])
+                for row in journal
+            ),
+            "chosen": chosen.matched_line if chosen is not None else None,
+            "published_statuses": tuple(published_statuses),
+            "input_records": raw_records,
+        }
+
+
 class LogCursorBoundaryTests(unittest.TestCase):
     def test_independent_qa_unread_pre_action_transition_rejected(self):
         with tempfile.TemporaryDirectory() as temp:
@@ -241,6 +337,105 @@ class LogCursorBoundaryTests(unittest.TestCase):
                 base64.b64decode(current[0].readiness_evidence_journal[0]["raw_bytes"]),
                 (malformed + "\n").encode("utf-8"),
             )
+
+    def test_independent_qa_buffered_malformed_then_valid_confirms(self):
+        malformed = (ready_line().replace("|run=RUN-1", "") + "\n").encode("utf-8")
+        valid = (ready_line(sequence="5") + "\n").encode("utf-8")
+        result = exercise_readiness_stream((malformed, valid), (malformed + valid,))
+        self.assertEqual(result["delivery_status"], "CONFIRMED")
+        self.assertEqual(result["classifications"], ("REJECTED", "ACCEPTED"))
+        self.assertEqual(result["raw_records"], (malformed, valid))
+        self.assertEqual(result["published_statuses"], ("NOT_CONFIRMED", "CONFIRMED"))
+
+    def test_independent_qa_buffered_foreign_then_valid_confirms(self):
+        foreign = (ready_line(run="FOREIGN") + "\n").encode("utf-8")
+        valid = (ready_line(sequence="5") + "\n").encode("utf-8")
+        result = exercise_readiness_stream((foreign, valid), (foreign + valid,))
+        self.assertEqual(result["delivery_status"], "CONFIRMED")
+        self.assertEqual(result["classifications"], ("REJECTED", "ACCEPTED"))
+        self.assertEqual(result["raw_records"], (foreign, valid))
+        self.assertEqual(result["published_statuses"], ("NOT_CONFIRMED", "CONFIRMED"))
+
+    def test_record_order_policy_is_independent_of_poll_boundaries(self):
+        malformed = (ready_line().replace("|run=RUN-1", "") + "\n").encode("utf-8")
+        foreign = (ready_line(run="FOREIGN") + "\n").encode("utf-8")
+        valid4 = (ready_line(sequence="4") + "\n").encode("utf-8")
+        valid5 = (ready_line(sequence="5") + "\n").encode("utf-8")
+        cases = {
+            "rejected-valid": ((foreign, valid5), "CONFIRMED", ("REJECTED", "ACCEPTED")),
+            "valid-rejected": ((valid4, foreign), "NOT_CONFIRMED", ("REJECTED", "REJECTED")),
+            "rejected-rejected": ((malformed, foreign), "NOT_CONFIRMED", ("REJECTED", "REJECTED")),
+            "valid-valid": ((valid4, valid5), "NOT_CONFIRMED", ("REJECTED", "REJECTED")),
+            "duplicate-valid": ((valid4, valid4), "NOT_CONFIRMED", ("REJECTED", "REJECTED")),
+            "rejected-valid-valid": (
+                (foreign, valid4, valid5),
+                "NOT_CONFIRMED",
+                ("REJECTED", "REJECTED", "REJECTED"),
+            ),
+            "valid-rejected-rejected": (
+                (valid4, malformed, foreign),
+                "NOT_CONFIRMED",
+                ("REJECTED", "REJECTED", "REJECTED"),
+            ),
+        }
+        for name, (records, expected_status, expected_classes) in cases.items():
+            with self.subTest(case=name):
+                one_buffer = exercise_readiness_stream(records, (b"".join(records),))
+                one_per_poll = exercise_readiness_stream(records, records)
+                for outcome in (one_buffer, one_per_poll):
+                    self.assertEqual(outcome["delivery_status"], expected_status)
+                    self.assertEqual(outcome["classifications"], expected_classes)
+                    self.assertEqual(outcome["raw_records"], records)
+                    self.assertEqual(
+                        any(status == "CONFIRMED" for status in outcome["published_statuses"]),
+                        expected_status == "CONFIRMED",
+                    )
+                if name == "valid-rejected":
+                    self.assertIn(
+                        "correlation mismatch: run",
+                        one_buffer["rejection_reasons"][1],
+                    )
+                self.assertEqual(
+                    {
+                        key: one_buffer[key]
+                        for key in (
+                            "delivery_status", "classifications", "rejection_reasons",
+                            "raw_records", "offsets", "chosen",
+                        )
+                    },
+                    {
+                        key: one_per_poll[key]
+                        for key in (
+                            "delivery_status", "classifications", "rejection_reasons",
+                            "raw_records", "offsets", "chosen",
+                        )
+                    },
+                )
+
+    def test_every_byte_split_matches_one_buffer_and_one_record_per_poll(self):
+        malformed = (ready_line().replace("|run=RUN-1", "") + "\n").encode("utf-8")
+        valid = (ready_line(sequence="5") + "\n").encode("utf-8")
+        records = (malformed, valid)
+        stream = b"".join(records)
+        expected = exercise_readiness_stream(records, (stream,))
+        per_poll = exercise_readiness_stream(records, records)
+        compared_keys = (
+            "delivery_status", "classifications", "rejection_reasons",
+            "raw_records", "offsets", "chosen",
+        )
+        self.assertEqual(
+            {key: per_poll[key] for key in compared_keys},
+            {key: expected[key] for key in compared_keys},
+        )
+        for split in range(len(stream) + 1):
+            with self.subTest(split=split):
+                split_result = exercise_readiness_stream(
+                    records, (stream[:split], stream[split:])
+                )
+                self.assertEqual(
+                    {key: split_result[key] for key in compared_keys},
+                    {key: expected[key] for key in compared_keys},
+                )
 
 
 class ReadinessCorrelationTests(unittest.TestCase):

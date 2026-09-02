@@ -797,14 +797,15 @@ def fail_delivery(
 ) -> InputEvidence:
     if value.delivery_status == "CONFIRMED":
         return value
-    clean_reason, carried = extract_gate_evidence(reason)
+    clean_reason, carried, carried_reasons = extract_gate_evidence(reason)
     transitions = carried or ((transition,) if transition is not None else ())
+    transition_reasons = carried_reasons or (None,) * len(transitions)
     journal = value.readiness_evidence_journal
-    for rejected in transitions:
+    for rejected, record_reason in zip(transitions, transition_reasons):
         journal = journal + (_journal_entry(
             rejected,
             classification="REJECTED",
-            rejection_reason=clean_reason,
+            rejection_reason=record_reason or clean_reason,
             index=len(journal) + 1,
         ),)
     last = transitions[-1] if transitions else None

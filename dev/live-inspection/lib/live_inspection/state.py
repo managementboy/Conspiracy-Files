@@ -118,11 +118,25 @@ def _deserialized_gate_result(value: dict[str, object]) -> GateResult:
 class GateEvidenceError(HarnessError):
     """A gate rejection that carries every exact record which caused it."""
 
-    def __init__(self, message: str, records: tuple[GateResult, ...]):
+    def __init__(
+        self,
+        message: str,
+        records: tuple[GateResult, ...],
+        record_reasons: tuple[str | None, ...] | None = None,
+    ):
         self.message = message
         self.records = records
+        self.record_reasons = record_reasons or (None,) * len(records)
+        if len(self.record_reasons) != len(records):
+            raise ValueError("gate evidence reasons must align with records")
         payload = json.dumps(
-            [_serialized_gate_result(record) for record in records],
+            [
+                {
+                    **_serialized_gate_result(record),
+                    "record_rejection_reason": reason,
+                }
+                for record, reason in zip(records, self.record_reasons)
+            ],
             separators=(",", ":"),
             sort_keys=True,
         ).encode("utf-8")
@@ -132,22 +146,29 @@ class GateEvidenceError(HarnessError):
         super().__init__(message + _GATE_EVIDENCE_MARKER + encoded + "]")
 
 
-def extract_gate_evidence(error: str | BaseException) -> tuple[str, tuple[GateResult, ...]]:
+def extract_gate_evidence(
+    error: str | BaseException,
+) -> tuple[str, tuple[GateResult, ...], tuple[str | None, ...]]:
     if isinstance(error, GateEvidenceError):
-        return error.message, error.records
+        return error.message, error.records, error.record_reasons
     text = str(error)
     message, marker, encoded = text.rpartition(_GATE_EVIDENCE_MARKER)
     if not marker or not encoded.endswith("]"):
-        return text, ()
+        return text, (), ()
     try:
         payload = base64.urlsafe_b64decode(encoded[:-1].encode("ascii"))
         values = json.loads(payload.decode("utf-8"))
         if not isinstance(values, list):
             raise ValueError("gate evidence payload is not a list")
         records = tuple(_deserialized_gate_result(value) for value in values)
+        reasons = tuple(
+            value.get("record_rejection_reason")
+            if isinstance(value.get("record_rejection_reason"), str) else None
+            for value in values
+        )
     except (KeyError, TypeError, ValueError, binascii.Error, json.JSONDecodeError):
-        return text, ()
-    return message, records
+        return text, (), ()
+    return message, records, reasons
 
 
 class LogFollower:
@@ -296,66 +317,111 @@ def wait_for_gate(
     recent: list[str] = []
     for attempt in range(1, gate.retries + 2):
         started = time.monotonic()
+        accepted: GateResult | None = None
+        post_acceptance_matches: list[GateResult] = []
+        post_acceptance_reasons: list[str | None] = []
+        records_after_acceptance: list[ObservedLine] = []
+        trailing_poll_required = False
+
+        def gate_result(record: ObservedLine) -> GateResult:
+            return GateResult(
+                gate.name,
+                attempt,
+                time.monotonic() - started,
+                record.text,
+                record.observed_at,
+                record.observed_wall_time_ns,
+                record.start_offset,
+                record.end_offset,
+                record.file_mtime_ns,
+                record.log_device,
+                record.log_inode,
+                record.raw_bytes,
+                record.decode_error,
+            )
+
         while time.monotonic() - started < gate.timeout_seconds:
             if not alive():
-                raise HarnessError(f"process exited while waiting for gate {gate.name}")
-            records = follower.read_records(cursor=cursor)
-            matches = [
-                record for record in records
-                if pattern.search(record.text)
-                and (not_before is None or record.observed_at > not_before)
-                and (cursor is None or record.start_offset >= cursor.offset)
-            ]
-
-            def gate_result(record: ObservedLine) -> GateResult:
-                return GateResult(
-                    gate.name,
-                    attempt,
-                    time.monotonic() - started,
-                    record.text,
-                    record.observed_at,
-                    record.observed_wall_time_ns,
-                    record.start_offset,
-                    record.end_offset,
-                    record.file_mtime_ns,
-                    record.log_device,
-                    record.log_inode,
-                    record.raw_bytes,
-                    record.decode_error,
-                )
-
-            if cursor is not None and len(matches) > 1:
-                raise GateEvidenceError(
-                    f"gate {gate.name} observed duplicate or conflicting post-cursor records",
-                    tuple(gate_result(record) for record in matches),
-                )
-            if cursor is not None and len(matches) == 1:
-                # Give a single buffered writer flush interval to expose an
-                # adjacent duplicate/conflict before the candidate is returned.
-                time.sleep(poll_seconds)
-                trailing = follower.read_records(cursor=cursor)
-                trailing_matches = [record for record in trailing if pattern.search(record.text)]
-                if trailing_matches:
+                if accepted is not None:
                     raise GateEvidenceError(
-                        f"gate {gate.name} observed duplicate or conflicting post-cursor records",
-                        tuple(gate_result(record) for record in matches + trailing_matches),
+                        f"process exited while gate {gate.name} was settling its valid candidate",
+                        tuple(post_acceptance_matches),
+                        tuple(post_acceptance_reasons),
                     )
-                records.extend(trailing)
+                raise HarnessError(f"process exited while waiting for gate {gate.name}")
+            try:
+                records = follower.read_records(cursor=cursor)
+            except HarnessError as exc:
+                if accepted is not None:
+                    raise GateEvidenceError(
+                        f"gate {gate.name} could not finish settling its valid candidate: {exc}",
+                        tuple(post_acceptance_matches),
+                        tuple(post_acceptance_reasons),
+                    ) from exc
+                raise
             for index, record in enumerate(records):
                 recent.append(record.text)
                 recent = recent[-80:]
-                if record in matches:
-                    result = gate_result(record)
-                    if match_validator is not None:
-                        try:
-                            match_validator(result)
-                        except HarnessError as exc:
-                            if on_rejected_match is not None:
-                                on_rejected_match(result, exc)
-                            continue
+                if accepted is not None:
+                    records_after_acceptance.append(record)
+                if not pattern.search(record.text) \
+                        or (not_before is not None and record.observed_at <= not_before) \
+                        or (cursor is not None and record.start_offset < cursor.offset):
+                    continue
+                result = gate_result(record)
+                validation_error: HarnessError | None = None
+                if match_validator is not None:
+                    try:
+                        match_validator(result)
+                    except HarnessError as exc:
+                        validation_error = exc
+                if validation_error is not None:
+                    if accepted is None:
+                        if on_rejected_match is not None:
+                            on_rejected_match(result, validation_error)
+                    else:
+                        # A readiness-shaped record after the first valid one is
+                        # fail-closed noise. Defer its evidence with the valid
+                        # candidate so their byte order cannot be inverted.
+                        post_acceptance_matches.append(result)
+                        post_acceptance_reasons.append(str(validation_error))
+                    continue
+                if cursor is None:
                     follower.prepend_records(records[index + 1:])
                     return result
+                if accepted is None:
+                    accepted = result
+                    post_acceptance_matches.append(result)
+                    post_acceptance_reasons.append(None)
+                    trailing_poll_required = True
+                else:
+                    post_acceptance_matches.append(result)
+                    post_acceptance_reasons.append(None)
+
+            if accepted is not None:
+                # Do not expose a transient pass. Drain complete adjacent
+                # records through one quiet poll (and wait out a partial
+                # record) before committing the unique valid candidate.
+                if trailing_poll_required:
+                    trailing_poll_required = False
+                elif not records and not follower.carry:
+                    if len(post_acceptance_matches) > 1:
+                        raise GateEvidenceError(
+                            f"gate {gate.name} observed duplicate or conflicting post-cursor "
+                            "records after independently validating each readiness candidate",
+                            tuple(post_acceptance_matches),
+                            tuple(post_acceptance_reasons),
+                        )
+                    follower.prepend_records(records_after_acceptance)
+                    return accepted
             time.sleep(poll_seconds)
+        if accepted is not None:
+            raise GateEvidenceError(
+                f"gate {gate.name} did not reach a complete quiet record boundary "
+                "after its valid candidate",
+                tuple(post_acceptance_matches),
+                tuple(post_acceptance_reasons),
+            )
         on_timeout(gate, attempt, recent)
     raise HarnessError(
         f"gate {gate.name} timed out after {gate.retries + 1} attempt(s); "
