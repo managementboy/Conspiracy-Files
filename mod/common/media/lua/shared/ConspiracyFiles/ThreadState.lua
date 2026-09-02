@@ -1,6 +1,7 @@
 local Content = require("ConspiracyFiles/Content")
 local Copy = require("ConspiracyFiles/Copy")
 local Ids = require("ConspiracyFiles/Ids")
+local Journal = require("ConspiracyFiles/Journal")
 local Renderer = require("ConspiracyFiles/Renderer")
 local Validator = require("ConspiracyFiles/Validator")
 
@@ -104,19 +105,11 @@ local function hasJournalKind(root, kind)
     return false
 end
 
-local function appendJournal(root, kind, subjectId, relatedId)
-    local ordinal = #root.journal + 1
-    local entry = { entryId = Ids.journal(ordinal), ordinal = ordinal, kind = kind, subjectId = subjectId }
-    if relatedId ~= nil then entry.relatedId = relatedId end
-    root.journal[ordinal] = entry
-    return entry
-end
-
 local function maybeAppendContradiction(root)
     if findEvidenceByAsset(root, Content.ids.d5)
         and findEvidenceByAsset(root, Content.ids.d6)
         and not hasJournalKind(root, "contradiction-surfaced") then
-        appendJournal(root, "contradiction-surfaced", Content.ids.d6, Content.ids.d5)
+        Journal.appendContradictionSurfaced(root)
     end
 end
 
@@ -304,14 +297,14 @@ function ThreadState.new(initialRoot)
             }
             if foundLocationId ~= nil then evidence.foundLocationId = foundLocationId end
             proposed.evidence[#proposed.evidence + 1] = evidence
-            appendJournal(proposed, "asset-discovered", assetId)
+            Journal.appendAssetDiscovered(proposed, assetId)
             if (assetId == Content.ids.d1 or assetId == Content.ids.d2) and not hasJournalKind(proposed, "thread-introduced") then
                 proposed.entryOpportunityUsed = entryRole
-                appendJournal(proposed, "thread-introduced", Content.thread.threadId, assetId)
+                Journal.appendThreadIntroduced(proposed, assetId)
             end
             if assetId == Content.ids.d6 then
                 local keyEvidence = priorMarkedKey(proposed)
-                if keyEvidence then appendJournal(proposed, "evidence-updated", keyEvidence.evidenceId, assetId) end
+                if keyEvidence then Journal.appendEvidenceUpdated(proposed, keyEvidence.evidenceId, assetId) end
             end
             maybeAppendContradiction(proposed)
             return true, evidence.evidenceId
@@ -352,7 +345,7 @@ function ThreadState.new(initialRoot)
             if subject.assetId ~= nil then evidence.assetId = subject.assetId else evidence.subjectLabel = subject.subjectLabel end
             if subject.foundLocationId ~= nil then evidence.foundLocationId = subject.foundLocationId end
             proposed.evidence[#proposed.evidence + 1] = evidence
-            appendJournal(proposed, "marked-interesting", evidence.evidenceId)
+            Journal.appendMarkedInteresting(proposed, evidence.evidenceId)
             return true, evidence.evidenceId
         end)
     end
@@ -362,7 +355,7 @@ function ThreadState.new(initialRoot)
         return stage(function(proposed)
             if contains(proposed.confirmedLocationIds, locationId) then return false, locationId end
             proposed.confirmedLocationIds[#proposed.confirmedLocationIds + 1] = locationId
-            appendJournal(proposed, "location-confirmed", locationId)
+            Journal.appendLocationConfirmed(proposed, locationId)
             return true, locationId
         end)
     end

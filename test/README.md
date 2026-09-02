@@ -28,7 +28,10 @@ runner requires at least one and does not cap coverage. The shell cases cover sc
 per-subsystem error budgets, the early multiplayer decision, deferred lifecycle
 initialization, Global ModData-shaped staging/round trips, last-known-good
 preservation, and the actual Build 42 entrypoint's one-namespace/additive-hook
-behavior.
+behavior. Integrity regressions also exercise exact per-kind journal replay,
+swapped/impossible histories, all seven authored active pairs, one-sided and
+cross-paired carrier rejection, supplied-observation revalidation,
+activation-time mutation and fail-closed CI range selection.
 
 The entrypoint smoke uses temporary fake PZ globals and restores them. It is not
 live engine evidence and does not pass CF-V01-E09/E11/E12/E13. See

@@ -1,5 +1,9 @@
 # v0.1 Plain-Lua Domain Core — Traceability Report
 
+> This records the historical domain-core branch. The consolidated normal suite
+> additionally covers exact per-kind journal fields, causal history replay,
+> swapped confirmation/association negatives and last-known-good preservation.
+
 **Implementation branch:** `feature/plain-lua-domain-core`
 
 **Start point:** `ff1725cfc03627eeb2d3d12981f7b77e6ef3d2ca`
@@ -14,7 +18,7 @@ The implementation is limited to the PZ-independent Dead Air domain core:
 
 - `Content.lua` contains the accepted static ThreadDefinition, Asset, Identity, Organisation and Location registries. The six document bodies are byte-compared (after CRLF normalization) with `test/fixtures/THREAD-001-DEAD-AIR.md` during the suite.
 - `ThreadState.lua` owns canonical state in a closure. Callers receive deep-copy snapshots and derived projections only. Commands stage a complete copy and swap it only after validation.
-- `Validator.lua` enforces the T1-safe scalar/table subset, no cycles/aliases/metatables, depth 64, the v0.1 schema, semantic journal-to-Evidence consistency and the 500 KB estimate ceiling.
+- `Validator.lua` enforces the T1-safe scalar/table subset, no cycles/aliases/metatables, depth 64, the v0.1 schema and the 500 KB estimate ceiling; the current `Journal.lua` additionally owns exact per-kind construction and causal replay against Evidence and confirmation order.
 - `Renderer.lua` derives journal text and major classification from event kinds, stable IDs, immutable Evidence context and static definitions. Rendered prose is not persisted.
 - `Ids.lua` validates authored IDs and creates deterministic save-local Evidence/Journal IDs.
 - `LocationBindings.lua` contains only the static CF-V01-E01 result. Its separate regression test checks exact physical signatures against the accepted live evidence; it is not a PZ adapter or a substitute for the live matrix.
@@ -39,7 +43,7 @@ Each criterion has at least one named test. Additional regression tests may reus
 | CF-V01-P15 | `CF-V01-P15 optional B-37 key does not gate six-document or contradiction paths` | Full six-document path without key Evidence; required contradiction remains attainable. |
 | CF-V01-P16 | `CF-V01-P16 Organisation label derives generic-to-specific without persistence` | D2-only generic label; each of D1/D3/D5 as reveal; no persisted Organisation copy. |
 | CF-V01-P17 | `CF-V01-P17 Location labels derive independently from idempotent confirmations` | Zero, one and two confirmations; duplicate confirmation; only the confirmed label refines. |
-| CF-V01-P18 | `CF-V01-P18 staged recursive validation rejects unsafe states and preserves last-known-good` | Invalid key/value types, function, userdata, thread, metatable/Java stand-in, cycle, alias, schema/static-ID error, depth 64/65 and repeated staged-failure preservation. |
+| CF-V01-P18 | `CF-V01-P18 staged recursive validation rejects unsafe states and preserves last-known-good`; `CF-V01-P18 exact journal language rejects swapped confirmations and impossible per-kind fields` | Invalid structural values, schema/static-ID errors, depth 64/65, repeated staged-failure preservation, swapped discovery/confirmation associations, forbidden/required `relatedId` cases and impossible causal histories. |
 | CF-V01-P19 | `CF-V01-P19 calibrated estimator enforces the real 500 KB boundary` plus field-cap regression | Representative maximal slice; actual 500 KB estimator boundary; atomic capacity rejection; 4,096/256/128-byte persisted-field caps; static prose excluded. |
 | CF-V01-P24 | `CF-V01-P24 Evidence resolves full static content without copying document bodies` | Static-registry validation; exact fixture-body comparison; pre/post reconstruction resolution; canonical body exclusion; missing static ID covered by P18. |
 | CF-V01-P25 | `CF-V01-P25 complete suite loads with PZ globals absent` | Entire suite in PUC Lua 5.1.5 with `Events`, `ModData`, `getPlayer` and `getWorld` absent. |

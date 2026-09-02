@@ -138,6 +138,8 @@ class ReleasePipelineSpec(unittest.TestCase):
                 before=changed_range.ZERO_SHA,
             )
             self.assertNotEqual(0, new_branch.returncode)
+            with self.assertRaises(changed_range.RangeError):
+                changed_range.run_check(repository, "push", head, before="")
             manual = changed_range.run_check(repository, "workflow_dispatch", head)
             self.assertEqual(0, manual.returncode)
 

@@ -9,6 +9,8 @@ The reviewed `ARCHITECTURE_PROPOSAL.md` remains as the historical first draft. T
 - One authoritative domain model; notebook/evidence UI are projections.
 - **If rebuilding a cache can change story truth, it is not a cache.**
 - Evidence facts are immutable; interpretation is mutable.
+- Journal validity is the exact replay of legal per-kind events, not merely a table shape or set of counts.
+- Authored physical identity is the active `(Asset ID, expected physical token)` pair verified by one shared gateway at every consuming boundary.
 - Deterministic IDs for authored content; generated IDs for player/runtime records.
 - Lua-first modular monolith; Java/ZombieBuddy only when a spike proves need.
 - No-AI is the primary supported experience.
@@ -51,6 +53,11 @@ Own:
 - building/location arrival detection;
 - context-menu Inspect integration;
 - time/player-state snapshots.
+
+The world runtime owns the active item-identity gateway. Placement reconciliation,
+production physical scans, presentation resolution and activation-time revalidation
+all use that same instance and therefore the same save scope and token derivation.
+No adapter-supplied observation is trusted without gateway verification.
 
 Every adapter invokes domain work behind `pcall`.
 
@@ -111,7 +118,7 @@ T4 fixes the placement protocol:
 
 1. select the deterministic Asset/placement token and curated binding; P4-R32-validate a full root with `pending`;
 2. use `LoadGridsquare` only to enqueue relevant bindings and `OnGameStart` to catch already-loaded targets;
-3. resolve the exact target and scan its container for the token before constructing anything;
+3. resolve the exact target and scan its container through the active Asset/token gateway before constructing anything;
 4. if zero, stage `placing`, create and stamp the item while detached, add that exact instance, verify one, then stage `placed`;
 5. if one, reconcile to `placed` without adding; if more than one, enter `conflict`; if `placed` later has zero at the target, invoke T5's bounded wider physical-identity reconciliation and never blindly respawn;
 6. keep merely unloaded targets pending; mark terminally destroyed/burned/invalid pre-placement targets `unavailable` and consider the authored fallback.
@@ -132,7 +139,8 @@ T7 fixes the boundary:
 - store schema, content revision, Asset ID, reveal state, physical token and resolved title/description/body in the canonical nested `item:getModData().ConspiracyFiles` table, while the authored/domain body remains authoritative;
 - reject flat-only carriers. The first schema-2 candidate's flat fields are a compatibility mirror only when all schema/Asset/token/presentation values exactly agree with the nested carrier; physical tracking never chooses between disagreement;
 - parse physical identity as the `(Asset ID, physical token)` pair and require both fields to match the requested canonical pair at placement and scan boundaries; a one-sided match is a rejected collision and never authorizes a rewrite, duplicate or ledger transition;
-- when an existing owned token has a structurally compatible older content revision, refresh only its display/presentation fields from current authoritative static content in place, preserving the item instance, Asset ID and physical token;
+- route placement, all physical observations (including caller-supplied observations), presentation and action activation through the single world-runtime identity gateway; a parsed carrier is data, not authorization;
+- when an existing verified active pair has a structurally compatible older content revision, refresh only its display/presentation fields from current authoritative static content in place, preserving the item instance, Asset ID and physical token;
 - render world-specific bodies through T10's cooperative custom `Inspect` action in player and Ground/loot inventory panes;
 - optionally project deliberately short plain-text artifacts into locked `Literature.customPages`; treat the 15-line/1,200-character page UI and literal markup behavior as presentation constraints, never canonical storage;
 - do not use `InventoryItem.description`, raw runtime `printMedia` keys, or key/map/generic native UI as body carriers. Static pre-baked print media requires asset-specific proof.
@@ -143,13 +151,13 @@ Do not finalise content-pack schemas until T7 and a second real content set exis
 
 T5 fixes the v0.1 rule:
 
-- stamp one save-scoped mod-owned string token per intended physical instance in item ModData while the item is detached; T4's materialisation token may serve this role only when it is instance-unique;
+- stamp one save-scoped mod-owned string token together with its Asset ID per intended physical instance in item ModData while the item is detached; T4's materialisation token may serve this role only when it is instance-unique;
 - never use an engine item ID as authority; it is diagnostic transition correlation only;
 - keep `assetMaterialisation=placed` separate from mutable physical availability/location;
 - one observed matching Asset/token pair is `available`; a carrier with only one matching field is rejected without a state transition; confirmed destruction or complete covered absence is `unavailable`; incomplete/unloaded coverage is `unknown`/`untracked`;
-- two or more distinct items with one token are sticky `conflict`; never silently select/delete/restamp a winner or clear the conflict because only one later remains;
-- all copy/transform code must explicitly omit or replace the identity token unless it deliberately preserves the same physical instance;
-- immutable Evidence survives every availability state, and tracking may resume after non-conflict loss only when the same token is observed exactly once.
+- two or more distinct items with one verified active pair are sticky `conflict`; never silently select/delete/restamp a winner or clear the conflict because only one later remains;
+- all copy/transform code must explicitly omit or replace the identity pair unless it deliberately preserves the same physical instance;
+- immutable Evidence survives every availability state, and tracking may resume after non-conflict loss only when the same active pair is observed exactly once.
 
 Normal movement can remove a placed item from its original container. That zero count starts bounded identity reconciliation and cannot by itself set physical availability to `unavailable`.
 
@@ -205,7 +213,8 @@ T10 fixes the supported context-menu boundary. Use
 `OnFillInventoryObjectContextMenu` for both player inventory and Ground/loot
 inventory panes; add privately keyed actions after vanilla construction, remove
 only stored Conspiracy-Files callback identities, normalize/deduplicate the
-selection, revalidate at activation and wrap the boundary in `pcall`. Direct
+selection, require the active Asset/token pair at menu construction and revalidate
+that pair through the same gateway at activation, then wrap the boundary in `pcall`. Direct
 right-click on a dropped photo fired `OnFillWorldObjectContextMenu` with zero
 inventory subjects, so production does not advertise or depend on a direct-world
 Inspect action. The Ground inventory pane is the supported dropped-item path.
@@ -242,7 +251,9 @@ ADR-0004 fixes their save representation: schema version gates load; content rev
 
 ## 16. Journal and leads
 
-The journal is a point-in-time chronological record, not a live projection of later knowledge. Rendering may resolve static authored templates, but later location/name refinement does not rewrite earlier entry wording or major-event eligibility. Leads mean locations still worth investigating next; a confirmed location is removed from the derived lead list.
+The journal is a point-in-time chronological record, not a live projection of later knowledge. Each event kind has one exact constructor and exact required/forbidden fields. Full-root validation replays the journal from an empty derived history, applies source events and their immediate causal derived events in order, and requires the replayed Evidence discovery order, location-confirmation order, contradiction associations and B-37 recontextualisation associations to equal canonical state exactly. Swapped confirmations, reordered discoveries, missing or surplus relations, and impossible per-kind fields reject the complete staged root while preserving the last known-good root.
+
+Rendering may resolve static authored templates, but later location/name refinement does not rewrite earlier entry wording or major-event eligibility. Leads mean locations still worth investigating next; a confirmed location is removed from the derived lead list.
 
 ## 17. Future features explicitly deferred
 

@@ -714,7 +714,7 @@ These are discovery-state events, not quest stages. There is no final major mark
 - item description / label: `small key; red tag B-37`;
 - discovery context: where the survivor found it;
 - discovery order;
-- optional physical tracking token only if T5 proves a safe method.
+- authored live carriers use the active Asset ID plus expected save-scoped physical token under P4-R37; contextual story associations do not assert that physical identity.
 
 **Later relevance:** D1, D4 and especially D6 identify B-37 as the relay cabinet key that was on Rourke's receiver ring.
 

@@ -58,6 +58,10 @@ function WorldRuntime.new(options)
         return arrival
     end
 
+    function api.identityGateway()
+        return placement.identityGateway()
+    end
+
     return api
 end
 

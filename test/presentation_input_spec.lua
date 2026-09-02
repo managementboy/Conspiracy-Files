@@ -1,6 +1,10 @@
 local CF = require("ConspiracyFiles")
 local ids = CF.Content.ids
 
+local function activeToken(assetId)
+    return "cf:presentation-active:" .. assetId .. ":1"
+end
+
 local function fakeItem(owned)
     local item = { modData = {}, owned = owned == true, name = "Base item", customName = false }
     function item:getModData() return self.modData end
@@ -14,6 +18,7 @@ local function stamp(assetId, owned, options)
     local item = fakeItem(owned)
     options = options or {}
     if options.revealed == nil then options.revealed = true end
+    if options.physicalToken == nil then options.physicalToken = activeToken(assetId) end
     assertTrue(CF.ItemPresentation.stamp(item, assetId, options))
     return item
 end
@@ -61,9 +66,11 @@ local function harness()
     port.removeEvent = function(name, callback)
         if events[name] == callback then events[name] = nil; removed[#removed + 1] = name end
     end
+    local identityGateway = CF.ItemIdentityGateway.new({ tokenFor = activeToken })
     local runtime = CF.PresentationRuntime.new({
         port = port,
         persistenceProvider = function() return persistence end,
+        identityProvider = function() return identityGateway end,
         callBoundary = function(_, callback)
             local ok, result = pcall(callback)
             if not ok then boundaryErrors[#boundaryErrors + 1] = tostring(result) end
@@ -167,7 +174,7 @@ test("presentation carrier accepts nested canonical data and rejects flat or dis
     assertEqual(nil, CF.ItemProjection.token(mirrored), "physical tracking must reject a disagreeing mirror")
 end)
 
-test("presentation physical identity carries the Asset/token pair for nested, mirrored, and partial carriers", function()
+test("presentation physical identity accepts complete pairs and rejects partial or cross-Asset carriers", function()
     local token = "cf:save:pair:d1:1"
     local nested = stamp(ids.d1, true, { physicalToken = token })
     local identity, message = CF.ItemProjection.identity(nested)
@@ -195,9 +202,8 @@ test("presentation physical identity carries the Asset/token pair for nested, mi
         physicalToken = token
     }
     identity, message = CF.ItemProjection.identity(partial)
-    assertTrue(identity ~= nil, message)
-    assertEqual(ids.d1, identity.assetId)
-    assertEqual(token, identity.physicalToken)
+    assertEqual(nil, identity)
+    assertEqual("hidden", message)
     local subject, reason = CF.ItemPresentation.validate(partial, function() return true end)
     assertEqual(nil, subject)
     assertEqual("hidden", reason)
@@ -294,6 +300,94 @@ test("presentation inventory menu is additive, privately deduplicated, conservat
     assertEqual(0, #omitted.options)
 end)
 
+test("presentation gateway accepts every exact active pair and refreshes only compatible verified presentation", function()
+    local h = harness()
+    for _, assetId in ipairs({ ids.d1, ids.d2, ids.d3, ids.d4, ids.d5, ids.d6, ids.key }) do
+        local item = stamp(assetId, true)
+        local menu = context()
+        h.runtime.fillInventoryContextMenu(0, menu, { item })
+        local options = ownedOptions(h.runtime, menu)
+        assertEqual(assetId == ids.key and 2 or 1, #options)
+        assertEqual(0, #h.persistence.snapshot().evidence)
+    end
+
+    local stale = stamp(ids.d1, true)
+    local nested = stale.modData.ConspiracyFiles
+    nested.contentRevision = "dead-air-r0-compatible"
+    nested.resolvedTitle = "Historical title"
+    nested.resolvedDescription = "Historical description"
+    nested.resolvedBody = "Historical body"
+    stale.name = "Historical title"
+    local menu = context()
+    h.runtime.fillInventoryContextMenu(0, menu, { stale })
+    assertEqual(1, #ownedOptions(h.runtime, menu))
+    assertEqual(activeToken(ids.d1), nested.physicalToken)
+    assertEqual(CF.Content.thread.contentRevision, stale.modData.ConspiracyFiles.contentRevision)
+    assertEqual(CF.Content.assets[ids.d1].displayName, stale.name)
+    assertEqual(CF.Content.assets[ids.d1].bodyText, stale.modData.ConspiracyFiles.resolvedBody)
+    assertEqual(0, #h.persistence.snapshot().evidence)
+end)
+
+test("presentation gateway rejects cross-pairs and malformed carriers without action, refresh, reader, or ledger mutation", function()
+    local h = harness()
+    local rejected = {
+        stamp(ids.d2, true, { physicalToken = activeToken(ids.d1) }),
+        stamp(ids.d1, true, { physicalToken = activeToken(ids.d2) }),
+        stamp(ids.d4, true, { physicalToken = activeToken(ids.d3) }),
+        stamp(ids.d3, true, { physicalToken = activeToken(ids.d4) })
+    }
+    local assetOnly = stamp(ids.d1, true)
+    assetOnly.modData.ConspiracyFiles.physicalToken = nil
+    rejected[#rejected + 1] = assetOnly
+    local tokenOnly = stamp(ids.d2, true)
+    tokenOnly.modData.ConspiracyFiles.assetId = nil
+    rejected[#rejected + 1] = tokenOnly
+    local unknown = stamp(ids.d3, true)
+    unknown.modData.ConspiracyFiles.assetId = "dead-air:asset:unknown"
+    rejected[#rejected + 1] = unknown
+    local tampered = stamp(ids.d4, true)
+    tampered.modData.ConspiracyFiles.resolvedBody = "tampered"
+    rejected[#rejected + 1] = tampered
+
+    local beforeRoot = h.persistence.snapshot()
+    for _, item in ipairs(rejected) do
+        local beforeItem = copyTable(item)
+        local menu = context()
+        h.runtime.fillInventoryContextMenu(0, menu, { item })
+        assertEqual(0, #ownedOptions(h.runtime, menu))
+        assertDeepEqual(beforeItem, item)
+        assertDeepEqual(beforeRoot, h.persistence.snapshot())
+    end
+    assertEqual(0, #h.readers)
+    assertEqual(0, #h.boundaryErrors)
+end)
+
+test("presentation activation revalidates the active pair before discovery, Mark, or reader mutation", function()
+    local inspectHarness = harness()
+    local document = stamp(ids.d3, true)
+    local inspectMenu = context()
+    inspectHarness.runtime.fillInventoryContextMenu(0, inspectMenu, { document })
+    local inspect = ownedOptions(inspectHarness.runtime, inspectMenu)[1]
+    document.modData.ConspiracyFiles.physicalToken = activeToken(ids.d4)
+    local beforeInspect = inspectHarness.persistence.snapshot()
+    inspect.onSelect(inspect.target, inspect.param1, inspect.param2)
+    assertDeepEqual(beforeInspect, inspectHarness.persistence.snapshot())
+    assertEqual(0, #inspectHarness.readers)
+    assertEqual(0, #inspectHarness.boundaryErrors)
+
+    local markHarness = harness()
+    local key = stamp(ids.key, true)
+    local markMenu = context()
+    markHarness.runtime.fillInventoryContextMenu(0, markMenu, { key })
+    local mark = ownedOptions(markHarness.runtime, markMenu)[2]
+    key.modData.ConspiracyFiles.assetId = ids.d1
+    local beforeMark = markHarness.persistence.snapshot()
+    mark.onSelect(mark.target, mark.param1, mark.param2)
+    assertDeepEqual(beforeMark, markHarness.persistence.snapshot())
+    assertEqual(0, #markHarness.readers)
+    assertEqual(0, #markHarness.boundaryErrors)
+end)
+
 test("presentation Inspect revalidates at activation, records discovery once, and opens the full reader repeatedly", function()
     local h = harness()
     local document = stamp(ids.d4, true)
@@ -320,7 +414,7 @@ end)
 
 test("presentation Mark Interesting requires ownership and canonical state disables repeat intent", function()
     local h = harness()
-    local key = stamp(ids.key, false, { physicalToken = "cf:save:key:1" })
+    local key = stamp(ids.key, false)
     local ground = context()
     h.runtime.fillInventoryContextMenu(0, ground, { key })
     local groundOwned = ownedOptions(h.runtime, ground)

@@ -53,12 +53,14 @@ def range_arguments(
         range_spec = f"{pull_request_base}...{sha}"
         return [range_spec], range_spec
     if event == "push":
-        if before and before != ZERO_SHA:
-            require_commit(repository, before, "push before")
-            range_spec = f"{before}..{sha}"
-            return [range_spec], range_spec
-        tree = empty_tree(repository)
-        return [tree, sha], f"new-branch:{tree}..{sha}"
+        if not before:
+            raise RangeError("push before SHA is missing")
+        if before == ZERO_SHA:
+            tree = empty_tree(repository)
+            return [tree, sha], f"new-branch:{tree}..{sha}"
+        require_commit(repository, before, "push before")
+        range_spec = f"{before}..{sha}"
+        return [range_spec], range_spec
     if event == "workflow_dispatch":
         parent = git(repository, "rev-parse", "--verify", f"{sha}^{{commit}}^", check=False)
         if parent.returncode == 0:

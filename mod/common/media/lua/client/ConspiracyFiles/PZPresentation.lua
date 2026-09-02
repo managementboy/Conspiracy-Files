@@ -134,9 +134,17 @@ function PZPresentation.new(options)
         return pcall(callback)
     end
 
+    local function identityProvider()
+        local runtime = namespace.runtime
+        local worldRuntime = runtime and runtime.worldRuntime or nil
+        if not worldRuntime or type(worldRuntime.identityGateway) ~= "function" then return nil end
+        return worldRuntime.identityGateway()
+    end
+
     return PresentationRuntime.new({
         port = port,
         persistenceProvider = persistenceProvider,
+        identityProvider = identityProvider,
         callBoundary = callBoundary,
         labels = {
             inspect = translated("UI_CF_Inspect", "Inspect"),

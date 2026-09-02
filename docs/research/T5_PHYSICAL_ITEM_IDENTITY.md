@@ -1,5 +1,13 @@
 # Spike T5 — persistent physical item identity
 
+> **Historical mechanism evidence.** This probe proves ModData-token persistence,
+> normal movement behavior and copied-token hazards on the recorded Build 42
+> version. It did not test or prove the later production invariant that both the
+> active Asset ID and its expected save-scoped token must match at placement,
+> scan, presentation and activation boundaries. P4-R37 and
+> `docs/testing/SCHEMA2_PAIR_IDENTITY_LIVE_MATRIX.md` are authoritative for that
+> current pair rule.
+
 - **Status:** Proven for a mod-owned ModData identity across the tested normal transitions; uniqueness requires explicit conflict handling
 - **Project Zomboid build tested:** Stable `42.20.4 b0bbce05d5`; revision `b0bbce05d5`; `pzbullet=1.0.0.28`; Steam build ID `24909800`
 - **Platform:** Windows 11 `10.0.26200`; 64-bit client; single-player; `-nosteam`

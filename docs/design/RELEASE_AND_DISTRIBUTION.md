@@ -1,7 +1,7 @@
 # Release and Distribution
 
 **Status:** Approved policy; deterministic pipeline implemented and tested offline, promotion gates pending.
-**Authority:** ADR-0003 and P4-R46.
+**Authority:** ADR-0003, P4-R46 and PM-GOV-001.
 
 ## Licence and disclosure
 
@@ -38,9 +38,15 @@ Before promotion, automation runs:
 3. validate built-in IDs/references and package contents;
 4. reject secrets and forbidden development/local files;
 5. build the package twice and compare manifests/checksums where practical;
-6. require a separate clean-device smoke before Workshop beta; this is not an offline pipeline claim.
+6. fail closed unless the exact changed-range base exists, then audit the full range for unexpected paths, removed-feature residue, localization consumption, release/version metadata and stale documentation;
+7. run adversarial negative persistence/identity cases and inspect their raw artifacts in addition to summarized results;
+8. require independent offline QA on the exact candidate commit; any later production-code change invalidates that QA;
+9. require a separate clean-device smoke before Workshop beta; this is not an offline pipeline claim.
 
-Development artifacts may be disposable. A retained prerelease or release must remain traceable to its exact source commit and checksum.
+Development artifacts may be disposable. A retained prerelease or release must
+remain traceable from its owning decision/acceptance criterion through the exact
+source commit and offline/live evidence to its checksum. Offline evidence never
+substitutes for a required live matrix.
 
 ## Device test report
 

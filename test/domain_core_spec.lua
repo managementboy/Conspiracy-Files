@@ -420,6 +420,65 @@ test("CF-V01-P18 reverse chronology binds derived events to their exact causal d
     end
 end)
 
+test("CF-V01-P18 exact journal language rejects swapped confirmations and impossible per-kind fields", function()
+    local locations = newState()
+    assertChanged(locations.confirmLocation(ids.relay))
+    assertChanged(locations.confirmLocation(ids.police))
+    local swappedLocations = locations.snapshot()
+    swappedLocations.journal[1], swappedLocations.journal[2]
+        = swappedLocations.journal[2], swappedLocations.journal[1]
+    renumberJournal(swappedLocations)
+
+    local discovered = newState()
+    discover(discovered, ids.d3)
+    local discoveryRelated = discovered.snapshot()
+    discoveryRelated.journal[1].relatedId = ids.d4
+    local discoveryExtra = discovered.snapshot()
+    discoveryExtra.journal[1].plausible = ids.d4
+
+    local marked = newState()
+    assertChanged(marked.markInteresting("journal-fields", { assetId = ids.key, contextText = "B-37" }))
+    local markedRelated = marked.snapshot()
+    markedRelated.journal[1].relatedId = ids.d6
+
+    local locationRelated = locations.snapshot()
+    locationRelated.journal[1].relatedId = ids.d1
+
+    local introduced = newState()
+    discover(introduced, ids.d1)
+    local introductionMissingRelation = introduced.snapshot()
+    introductionMissingRelation.journal[2].relatedId = nil
+    local introductionSwapped = introduced.snapshot()
+    introductionSwapped.journal[2].subjectId, introductionSwapped.journal[2].relatedId
+        = introductionSwapped.journal[2].relatedId, introductionSwapped.journal[2].subjectId
+
+    local updated = newState()
+    assertChanged(updated.markInteresting("journal-update-fields", { assetId = ids.key, contextText = "B-37" }))
+    discover(updated, ids.d6)
+    local updateMissingRelation = updated.snapshot()
+    updateMissingRelation.journal[3].relatedId = nil
+    local updateSwapped = updated.snapshot()
+    updateSwapped.journal[3].subjectId, updateSwapped.journal[3].relatedId
+        = updateSwapped.journal[3].relatedId, updateSwapped.journal[3].subjectId
+
+    local contradiction = newState()
+    discover(contradiction, ids.d5)
+    discover(contradiction, ids.d6)
+    local contradictionSwapped = contradiction.snapshot()
+    contradictionSwapped.journal[3].subjectId, contradictionSwapped.journal[3].relatedId
+        = contradictionSwapped.journal[3].relatedId, contradictionSwapped.journal[3].subjectId
+
+    for _, hostile in ipairs({
+        swappedLocations, discoveryRelated, discoveryExtra, markedRelated, locationRelated,
+        introductionMissingRelation, introductionSwapped, updateMissingRelation, updateSwapped,
+        contradictionSwapped
+    }) do
+        local ok, message = Validator.validate(hostile)
+        assertFalse(ok)
+        assertTrue(type(message) == "string" and message ~= "")
+    end
+end)
+
 test("CF-V01-P18 valid causal histories preserve both contradiction orders and combined B-37 ordering", function()
     local d5ThenD6 = newState()
     discover(d5ThenD6, ids.d5)

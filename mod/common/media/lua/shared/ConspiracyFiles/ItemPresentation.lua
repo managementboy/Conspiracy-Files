@@ -74,6 +74,26 @@ local function legacyState(modData)
     return true
 end
 
+-- Quarantined compatibility inspection. No other module reads the legacy flat
+-- field names directly; callers receive claims only for collision detection,
+-- never as an authoritative carrier.
+function ItemPresentation.carrierClaims(modData)
+    if type(modData) ~= "table" then return { hasCarrier = false } end
+    local nested = modData[ItemPresentation.MOD_DATA_KEY]
+    local fields = ItemPresentation.LEGACY_FIELDS
+    local hasLegacy = false
+    for _, key in pairs(fields) do if modData[key] ~= nil then hasLegacy = true end end
+    return {
+        hasCarrier = nested ~= nil or hasLegacy,
+        hasNested = nested ~= nil,
+        hasLegacy = hasLegacy,
+        nestedAssetId = type(nested) == "table" and nested.assetId or nil,
+        nestedPhysicalToken = type(nested) == "table" and nested.physicalToken or nil,
+        legacyAssetId = hasLegacy and modData[fields.assetId] or nil,
+        legacyPhysicalToken = hasLegacy and modData[fields.physicalItemId] or nil
+    }
+end
+
 local function readIdentity(modData)
     if type(modData) ~= "table" then return nil, "missing-moddata" end
     local value = modData[ItemPresentation.MOD_DATA_KEY]

@@ -5,6 +5,9 @@ Use this directory for durable decisions made after implementation research begi
 Recommended naming:
 `ADR-0001-short-title.md`
 
+Project/governance policies may use `PM-GOV-###-short-title.md` when they govern
+evidence and promotion rather than one architecture mechanism.
+
 Each record should state:
 - status;
 - context;

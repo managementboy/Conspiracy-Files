@@ -1,4 +1,3 @@
-local ItemPresentation = require("ConspiracyFiles/ItemPresentation")
 local Presentation = require("ConspiracyFiles/Presentation")
 
 local PresentationRuntime = {}
@@ -13,6 +12,7 @@ function PresentationRuntime.new(options)
     options = options or {}
     local port = assert(options.port, "presentation port is required")
     local persistenceProvider = assert(options.persistenceProvider, "persistence provider is required")
+    local identityProvider = assert(options.identityProvider, "canonical identity gateway provider is required")
     local boundary = options.callBoundary or function(_, callback) return pcall(callback) end
     local labels = options.labels or {}
     local inspectLabel = labels.inspect or "Inspect"
@@ -90,7 +90,9 @@ function PresentationRuntime.new(options)
     end
 
     local function resolve(item)
-        return ItemPresentation.validate(item, port.isInventoryItem)
+        local identityGateway = identityProvider()
+        if not identityGateway or type(identityGateway.resolvePresentation) ~= "function" then return nil end
+        return identityGateway.resolvePresentation(item, port.isInventoryItem)
     end
 
     local function activateInspect(_, playerNum, item)
@@ -123,7 +125,7 @@ function PresentationRuntime.new(options)
             if not subject or subject.assetKind ~= "ordinary-object" then return end
             if not port.isOwned(subject, playerNum) then return end
             if marked(adapter.domain(), subject.assetId) then return end
-            local intentId = "item:" .. (subject.physicalToken or subject.assetId)
+            local intentId = "item:" .. subject.physicalToken
             local ok, detail = adapter.transaction(function(domain)
                 local accepted, result, changed = domain.markInteresting(intentId, {
                     assetId = subject.assetId,

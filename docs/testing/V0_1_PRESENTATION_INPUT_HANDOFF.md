@@ -4,6 +4,9 @@
 > release work. Production placement now emits this handoff's nested validated
 > ModData contract; this handoff's live limitations and matrices remain
 > authoritative.
+> The original branch identity is historical. The consolidated candidate uses
+> P4-R37's one shared active-pair gateway and the adversarial matrix in
+> `SCHEMA2_PAIR_IDENTITY_LIVE_MATRIX.md`.
 
 **Implementation branch:** `codex/cf-v01-input-presentation`
 
@@ -21,7 +24,8 @@ slice:
 - a PZ-free item-presentation contract that stamps a custom display name and a
   namespaced, plain-table `ModData.ConspiracyFiles` payload;
 - exact validation of schema, known Asset ID, reveal state, display name, title,
-  description, full body and optional physical token, with compatible older
+  description, full body and required expected physical token for authored live
+  carriers, with compatible older
   content revisions refreshed by placement before interaction;
 - one additive `OnFillInventoryObjectContextMenu` listener for both player and
   Ground/loot inventory panes, using module-private action ownership identities;
@@ -58,7 +62,7 @@ item:getModData().ConspiracyFiles = {
     resolvedTitle = <exact approved static title>,
     resolvedDescription = <exact approved presentation description>,
     resolvedBody = <exact approved static body, documents only>,
-    physicalToken = <optional save-scoped string>
+    physicalToken = <required expected save-scoped string for an authored live carrier>
 }
 ```
 
@@ -70,8 +74,9 @@ presentation nor physical tracking silently chooses a side. This bridge keeps
 the nested table authoritative while preserving an otherwise valid item instance
 and physical token.
 
-Physical identity is the validated `(assetId, physicalToken)` pair. Placement
-and physical scans require both fields to match the requested canonical pair;
+Physical identity is the validated `(assetId, physicalToken)` pair. Placement,
+physical scans, presentation and action activation use the same world-runtime
+gateway and require both fields to match the requested active canonical pair;
 a carrier for one known Asset that claims another Asset's token is a rejected
 collision and is never rewritten, replaced or used to advance the ledger.
 
@@ -138,17 +143,20 @@ world action hook. These are fake-backed/static results, not live engine facts.
    exact custom names plus exact nested ModData fields.
 2. Open every document through Inspect and compare every full title/body to
    `dead-air-r1`, including percent signs, punctuation and long wrapped lines.
-3. Confirm normal inventory/container behavior remains and no native
+3. Run P2 and all N-cases in `SCHEMA2_PAIR_IDENTITY_LIVE_MATRIX.md`; only the
+   verified compatible-older case may refresh and every rejected case opens no
+   reader and discovers nothing.
+4. Confirm normal inventory/container behavior remains and no native
    description, `printMedia`, key/map reader or custom page is required.
 
 ### CF-V01-E08 — cooperative actions
 
 1. In player and Ground/loot inventory panes, repeat menu construction with a
    foreign additive listener and a foreign same-label Inspect action.
-2. Exercise raw/grouped, one-valid, mixed valid/invalid, two-valid ambiguous,
-   hidden, invalid, stale-revision and tampered-body subjects.
-3. Change reveal/ownership state between menu construction and activation to
-   prove revalidation.
+2. Exercise all seven Assets and every active-pair positive/negative carrier in
+   `SCHEMA2_PAIR_IDENTITY_LIVE_MATRIX.md`, plus raw/grouped, mixed and ambiguous selections.
+3. Change Asset ID, token, reveal and ownership state independently between menu
+   construction and activation to prove gateway revalidation.
 4. Inspect a Ground item, take the B-37 key, Mark it once, save/reload and
    confirm Mark remains disabled from canonical Evidence.
 5. Exercise contained reader, transaction and menu faults while unrelated

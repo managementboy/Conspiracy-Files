@@ -1,4 +1,5 @@
 local Content = require("ConspiracyFiles/Content")
+local ItemIdentityGateway = require("ConspiracyFiles/ItemIdentityGateway")
 local ItemPresentation = require("ConspiracyFiles/ItemPresentation")
 
 local ItemProjection = {}
@@ -68,34 +69,16 @@ function ItemProjection.apply(item, assetId, physicalItemId, itemPort)
     return true, payload
 end
 
-function ItemProjection.refresh(item, itemPort)
-    local modData = modDataFor(item, itemPort)
-    if not modData then return false, "item ModData is unavailable" end
-    local inspected, message = ItemPresentation.inspectModData(modData)
-    if not inspected then return false, message end
-    if not inspected.physicalToken then return false, "physical-token" end
-    local current, currentMessage = ItemPresentation.definition(inspected.assetId, {
-        revealed = true,
-        physicalToken = inspected.physicalToken
-    })
-    if not current then return false, currentMessage end
-    local displayed, displayMessage = setDisplay(item, itemPort, current.resolvedTitle)
-    if not displayed then return false, displayMessage end
-    local refreshed, refreshDetail, changed = ItemPresentation.refreshModData(modData)
-    if not refreshed then return false, refreshDetail end
-    return true, refreshDetail, changed
-end
-
 function ItemProjection.identity(item, itemPort)
     local modData = modDataFor(item, itemPort)
     if not modData then return nil end
-    local identity, message = ItemPresentation.identityFromModData(modData)
-    if not identity then return nil, message end
-    if not identity.physicalToken then return nil, "physical-token" end
+    local inspected, message = ItemPresentation.inspectModData(modData)
+    if not inspected then return nil, message end
+    if not inspected.physicalToken then return nil, "physical-token" end
     return {
-        assetId = identity.assetId,
-        physicalToken = identity.physicalToken,
-        hasLegacy = identity.hasLegacy
+        assetId = inspected.assetId,
+        physicalToken = inspected.physicalToken,
+        hasLegacy = inspected.hasLegacy
     }
 end
 
@@ -105,33 +88,22 @@ function ItemProjection.token(item, itemPort)
     return identity.physicalToken
 end
 
--- Collision detection is deliberately broader than acceptance. Placement uses
--- this only to stop before creating another item when malformed data claims the
--- expected token; it never treats the malformed carrier as authoritative.
-function ItemProjection.claimsToken(item, expectedToken, itemPort)
-    local modData = modDataFor(item, itemPort)
-    if not modData then return false end
-    local nested = modData[ItemPresentation.MOD_DATA_KEY]
-    if type(nested) == "table" and nested.physicalToken == expectedToken then return true end
-    return modData[ItemProjection.fields.physicalItemId] == expectedToken
-end
-
--- A canonical physical observation is the pair, never either field alone.
--- A one-sided match is a collision because accepting it would bind one
--- authored Asset's carrier to another Asset's save-scoped token.
+-- Compatibility wrapper for QA/diagnostics. Production placement, physical
+-- scans and presentation share one long-lived ItemIdentityGateway instance.
 function ItemProjection.classifyIdentity(item, expectedAssetId, expectedToken, itemPort)
-    local identity, reason = ItemProjection.identity(item, itemPort)
-    if identity then
-        local assetMatches = identity.assetId == expectedAssetId
-        local tokenMatches = identity.physicalToken == expectedToken
-        if assetMatches and tokenMatches then return "match", identity end
-        if assetMatches or tokenMatches then return "collision", identity, "asset-token-mismatch" end
-        return "other", identity
+    local gateway = ItemIdentityGateway.new({
+        itemPort = itemPort,
+        tokenFor = function(assetId)
+            if assetId == expectedAssetId then return expectedToken end
+            return nil
+        end
+    })
+    local result = gateway.verify(item, expectedAssetId)
+    if result.status == "verified" then return "match", result.identity end
+    if result.status == "collision" or result.status == "rejected" then
+        return "collision", result.identity, result.reason
     end
-    if ItemProjection.claimsToken(item, expectedToken, itemPort) then
-        return "collision", nil, reason or "rejected-token-claim"
-    end
-    return "other", nil, reason
+    return "other", result.identity, result.reason
 end
 
 return ItemProjection

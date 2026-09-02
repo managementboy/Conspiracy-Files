@@ -19,7 +19,11 @@ unavailable -> terminal
 conflict -> terminal
 ```
 
-Direct reconciliation to `placed` is legal when an already-stamped single item is observed after stale/missing intent. `unavailable` is terminal pre-placement target loss. `conflict` is sticky. The obsolete values `materialised` and `lost` are not valid schema-2 placement states.
+Direct reconciliation to `placed` is legal when one item carrying the active
+P4-R37 Asset/token pair is gateway-verified after stale/missing intent.
+One-sided or cross-paired carriers do not reconcile placement. `unavailable` is
+terminal pre-placement target loss. `conflict` is sticky. The obsolete values
+`materialised` and `lost` are not valid schema-2 placement states.
 
 `physicalAvailability[assetId]` exists only after placement is `placed` or `conflict`:
 
@@ -27,7 +31,7 @@ Direct reconciliation to `placed` is legal when an already-stamped single item i
 untracked | unknown | available | unavailable | conflict
 ```
 
-All non-conflict availability values may move among one another as reconciliation coverage changes. In particular, `unavailable -> available` is legal only when the same uncompromised token is observed exactly once. `conflict` is sticky and cannot be cleared automatically.
+All non-conflict availability values may move among one another as reconciliation coverage changes. In particular, `unavailable -> available` is legal only when the same uncompromised active Asset/token pair is gateway-verified exactly once. `conflict` is sticky and cannot be cleared automatically.
 
 The monotonic invariant is restated: immutable Evidence and journal facts only append; entry selection never changes; placement follows the forward transition graph; physical availability may refine according to observation, while identity conflict never regresses.
 

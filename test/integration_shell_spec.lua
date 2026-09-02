@@ -397,8 +397,24 @@ test("integration causally impossible histories preserve invalid storage and the
     delayedUpdate.journal[3], delayedUpdate.journal[4] = delayedUpdate.journal[4], delayedUpdate.journal[3]
     renumberJournal(delayedUpdate)
 
+    local locations = assert(CF.ThreadState.new())
+    assertTrue(locations.confirmLocation(ids.relay))
+    assertTrue(locations.confirmLocation(ids.police))
+    local swappedLocations = locations.snapshot()
+    swappedLocations.journal[1], swappedLocations.journal[2]
+        = swappedLocations.journal[2], swappedLocations.journal[1]
+    renumberJournal(swappedLocations)
+
+    local discovery = assert(CF.ThreadState.new())
+    assertTrue(discovery.discover(ids.d3, "D3", ids.relay))
+    local impossibleRelation = discovery.snapshot()
+    impossibleRelation.journal[1].relatedId = ids.d4
+
     local good = assert(CF.ThreadState.new()).snapshot()
-    for _, invalid in ipairs({ wrongEntry, delayedEntry, delayedContradiction, delayedUpdate }) do
+    for _, invalid in ipairs({
+        wrongEntry, delayedEntry, delayedContradiction, delayedUpdate,
+        swappedLocations, impossibleRelation
+    }) do
         local invalidBefore = copyTable(invalid)
         local storage = makeStorage(invalid)
         local adapter = CF.PersistenceAdapter.new({ storage = storage })

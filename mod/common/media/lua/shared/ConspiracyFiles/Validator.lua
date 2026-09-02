@@ -1,5 +1,6 @@
 local Content = require("ConspiracyFiles/Content")
 local Ids = require("ConspiracyFiles/Ids")
+local Journal = require("ConspiracyFiles/Journal")
 
 local Validator = {}
 
@@ -29,19 +30,6 @@ local EVIDENCE_FIELDS = {
     evidenceId = true, kind = true, assetId = true, discoveryOrdinal = true,
     contextText = true, foundLocationId = true, playerMarkedInteresting = true,
     markIntentId = true, subjectLabel = true
-}
-
-local JOURNAL_FIELDS = {
-    entryId = true, ordinal = true, kind = true, subjectId = true, relatedId = true
-}
-
-local JOURNAL_KINDS = {
-    ["asset-discovered"] = true,
-    ["thread-introduced"] = true,
-    ["marked-interesting"] = true,
-    ["evidence-updated"] = true,
-    ["location-confirmed"] = true,
-    ["contradiction-surfaced"] = true
 }
 
 local function fail(path, message)
@@ -213,133 +201,8 @@ local function validateSchema(root)
 
     local journalOk, journalCount = checkDenseArray(root.journal, "root.journal")
     if not journalOk then return false, journalCount end
-    local eventCounts = {}
-    local discoveredAssets = {}
-    local confirmedEvents = {}
-    local markedEvents = {}
-    local evidenceEventCount = 0
-    for index = 1, journalCount do
-        local entry = root.journal[index]
-        if type(entry) ~= "table" then return fail("root.journal", "record must be a table") end
-        ok, message = checkAllowedFields(entry, JOURNAL_FIELDS, "root.journal[" .. index .. "]")
-        if not ok then return false, message end
-        if entry.entryId ~= Ids.journal(index) or entry.ordinal ~= index then return fail("root.journal", "IDs and ordinals must be contiguous") end
-        if not JOURNAL_KINDS[entry.kind] then return fail("root.journal", "unknown event kind") end
-        if type(entry.subjectId) ~= "string" or not Ids.isAuthored(entry.subjectId) then return fail("root.journal", "invalid subject ID") end
-        if entry.relatedId ~= nil and (type(entry.relatedId) ~= "string" or not Ids.isAuthored(entry.relatedId)) then return fail("root.journal", "invalid related ID") end
-        eventCounts[entry.kind] = (eventCounts[entry.kind] or 0) + 1
-        if entry.kind == "asset-discovered" then
-            local asset = Content.assets[entry.subjectId]
-            if not asset or asset.assetKind ~= "document" then return fail("root.journal", "asset-discovered subject must resolve to a document") end
-            if discoveredAssets[entry.subjectId] then return fail("root.journal", "duplicate asset-discovered event") end
-            evidenceEventCount = evidenceEventCount + 1
-            local evidence = evidenceIds[Ids.authoredEvidence(entry.subjectId)]
-            if not evidence or evidence.discoveryOrdinal ~= evidenceEventCount then
-                return fail("root.journal", "asset discovery does not match Evidence discovery order")
-            end
-            discoveredAssets[entry.subjectId] = index
-        elseif entry.kind == "thread-introduced" then
-            if entry.subjectId ~= Content.thread.threadId or (entry.relatedId ~= Content.ids.d1 and entry.relatedId ~= Content.ids.d2) then
-                return fail("root.journal", "invalid thread introduction")
-            end
-            if not discoveredAssets[entry.relatedId] then return fail("root.journal", "thread introduction lacks its entry Evidence") end
-            if eventCounts[entry.kind] > 1 then return fail("root.journal", "duplicate thread introduction") end
-        elseif entry.kind == "marked-interesting" then
-            local evidence = evidenceIds[entry.subjectId]
-            if not evidence or evidence.kind ~= "marked-object" then return fail("root.journal", "marked-interesting subject must resolve to marked Evidence") end
-            if markedEvents[entry.subjectId] then return fail("root.journal", "duplicate marked-interesting event") end
-            evidenceEventCount = evidenceEventCount + 1
-            if evidence.discoveryOrdinal ~= evidenceEventCount then
-                return fail("root.journal", "marked Evidence does not match discovery order")
-            end
-            markedEvents[entry.subjectId] = index
-        elseif entry.kind == "evidence-updated" then
-            local evidence = evidenceIds[entry.subjectId]
-            if not evidence or evidence.kind ~= "marked-object" or evidence.assetId ~= Content.ids.key
-                or entry.relatedId ~= Content.ids.d6 or not discoveredAssets[Content.ids.d6] then
-                return fail("root.journal", "invalid B-37 recontextualisation event")
-            end
-            if not markedEvents[entry.subjectId] or markedEvents[entry.subjectId] >= discoveredAssets[Content.ids.d6] then
-                return fail("root.journal", "B-37 recontextualisation requires the key mark before D6 discovery")
-            end
-            if eventCounts[entry.kind] > 1 then return fail("root.journal", "duplicate B-37 recontextualisation") end
-        elseif entry.kind == "location-confirmed" then
-            if not Content.locations[entry.subjectId] or not locationSeen[entry.subjectId] then return fail("root.journal", "location event does not match confirmed state") end
-            if confirmedEvents[entry.subjectId] then return fail("root.journal", "duplicate location confirmation event") end
-            confirmedEvents[entry.subjectId] = true
-        elseif entry.kind == "contradiction-surfaced" then
-            if entry.subjectId ~= Content.ids.d6 or entry.relatedId ~= Content.ids.d5 then return fail("root.journal", "invalid contradiction event") end
-            if not discoveredAssets[Content.ids.d5] or not discoveredAssets[Content.ids.d6] then return fail("root.journal", "contradiction precedes its source documents") end
-            if eventCounts[entry.kind] > 1 then return fail("root.journal", "duplicate contradiction event") end
-        end
-    end
-    for _, evidence in ipairs(root.evidence) do
-        if evidence.kind == "authored-asset" and not discoveredAssets[evidence.assetId] then return fail("root.journal", "authored Evidence lacks discovery event") end
-        if evidence.kind == "marked-object" and not markedEvents[evidence.evidenceId] then return fail("root.journal", "marked Evidence lacks chronology event") end
-    end
-    for locationId, _ in pairs(locationSeen) do if not confirmedEvents[locationId] then return fail("root.journal", "confirmed Location lacks chronology event") end end
-    local hasD1 = discoveredAssets[Content.ids.d1]
-    local hasD2 = discoveredAssets[Content.ids.d2]
-    if hasD1 or hasD2 then
-        if eventCounts["thread-introduced"] ~= 1 then
-            return fail("root.journal", "D1/D2 discovery requires exactly one thread introduction")
-        end
-        local firstEntryAssetId = Content.ids.d1
-        local firstEntryOrdinal = hasD1
-        if not firstEntryOrdinal or (hasD2 and hasD2 < firstEntryOrdinal) then
-            firstEntryAssetId = Content.ids.d2
-            firstEntryOrdinal = hasD2
-        end
-        local introduction = root.journal[firstEntryOrdinal + 1]
-        if not introduction or introduction.kind ~= "thread-introduced"
-            or introduction.subjectId ~= Content.thread.threadId
-            or introduction.relatedId ~= firstEntryAssetId then
-            return fail("root.journal", "thread introduction must immediately follow and reference the first D1/D2 discovery")
-        end
-        local expectedRole = firstEntryAssetId == Content.ids.d1 and "anchor" or "fallback"
-        if root.entryOpportunityUsed ~= expectedRole then
-            return fail("root.entryOpportunityUsed", "does not match committed thread introduction")
-        end
-    end
-    local d6Ordinal = discoveredAssets[Content.ids.d6]
-    local priorKeyMarkOrdinal = nil
-    local priorKeyEvidence = nil
-    if d6Ordinal then
-        for evidenceId, markedOrdinal in pairs(markedEvents) do
-            local evidence = evidenceIds[evidenceId]
-            if evidence and evidence.kind == "marked-object" and evidence.assetId == Content.ids.key
-                and markedOrdinal < d6Ordinal then
-                priorKeyMarkOrdinal = markedOrdinal
-                priorKeyEvidence = evidence
-            end
-        end
-        if priorKeyMarkOrdinal then
-            if eventCounts["evidence-updated"] ~= 1 then
-                return fail("root.journal", "B-37 marked before D6 requires exactly one recontextualisation event")
-            end
-            local update = root.journal[d6Ordinal + 1]
-            if not update or not priorKeyEvidence or update.kind ~= "evidence-updated"
-                or update.subjectId ~= priorKeyEvidence.evidenceId or update.relatedId ~= Content.ids.d6 then
-                return fail("root.journal", "B-37 recontextualisation must immediately follow the triggering D6 discovery")
-            end
-        end
-    end
-    local d5Ordinal = discoveredAssets[Content.ids.d5]
-    if d5Ordinal and d6Ordinal then
-        if eventCounts["contradiction-surfaced"] ~= 1 then
-            return fail("root.journal", "D5/D6 discovery requires exactly one contradiction event")
-        end
-        local completionOrdinal = math.max(d5Ordinal, d6Ordinal)
-        local contradictionOrdinal = completionOrdinal + 1
-        if completionOrdinal == d6Ordinal and priorKeyMarkOrdinal then
-            contradictionOrdinal = contradictionOrdinal + 1
-        end
-        local contradiction = root.journal[contradictionOrdinal]
-        if not contradiction or contradiction.kind ~= "contradiction-surfaced"
-            or contradiction.subjectId ~= Content.ids.d6 or contradiction.relatedId ~= Content.ids.d5 then
-            return fail("root.journal", "contradiction must immediately follow its completing discovery and same-trigger B-37 update")
-        end
-    end
+    ok, message = Journal.validateHistory(root)
+    if not ok then return false, message end
     return true
 end
 

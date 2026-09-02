@@ -1,4 +1,5 @@
 local Content = require("ConspiracyFiles/Content")
+local ItemIdentityGateway = require("ConspiracyFiles/ItemIdentityGateway")
 local ItemProjection = require("ConspiracyFiles/ItemProjection")
 local LocationBindings = require("ConspiracyFiles/LocationBindings")
 local PhysicalIdentity = require("ConspiracyFiles/PhysicalIdentity")
@@ -26,25 +27,31 @@ function PlacementAdapter.new(options)
     local identity = options.identity or PhysicalIdentity.new({ persistence = persistence })
     local scope = nil
     local api = {}
+    local identityGateway = ItemIdentityGateway.new({
+        itemPort = itemPort,
+        tokenFor = function(assetId)
+            if not scope then return nil end
+            return PhysicalToken.forAsset(scope, assetId)
+        end
+    })
 
-    local function matchingItems(target, assetId, token)
+    local function matchingItems(target, assetId)
         local matches = {}
         for _, item in ipairs(world.items(target)) do
-            local classification, carrier, reason = ItemProjection.classifyIdentity(item, assetId, token, itemPort)
-            if classification == "match" then
+            local result = identityGateway.verify(item, assetId)
+            if result.status == "verified" then
                 matches[#matches + 1] = item
-            elseif classification == "collision" and carrier then
-                error("item carrier Asset/token mismatch for " .. assetId .. ": carrier Asset "
-                    .. tostring(carrier.assetId) .. ", token " .. tostring(carrier.physicalToken))
-            elseif classification == "collision" then
-                error("item carrier claiming expected token was rejected: " .. tostring(reason))
+            elseif result.status == "collision" or result.status == "rejected" then
+                error("item carrier rejected by canonical Asset/token gateway for " .. assetId
+                    .. ": " .. tostring(result.reason or result.status))
             end
         end
         return matches
     end
 
     local function observeIdentity(assetId, observation)
-        local ok, result = identity.observe(assetId, observation)
+        local verifiedObservation = identityGateway.verifyObservation(assetId, observation)
+        local ok, result = identity.observe(assetId, verifiedObservation)
         if not ok then error("physical identity observation rejected for " .. assetId .. ": " .. tostring(result)) end
         return result
     end
@@ -91,20 +98,20 @@ function PlacementAdapter.new(options)
         end
         if resolution.status ~= "available" or resolution.target == nil then error("unknown placement resolution " .. resolution.status) end
 
-        local matches = matchingItems(resolution.target, assetId, token)
+        local matches = matchingItems(resolution.target, assetId)
         if #matches > 1 then
             observeIdentity(assetId, { matches = { { item = matches[1] }, { item = matches[2] } }, coverage = "incomplete" })
             return "conflict"
         end
         if #matches == 1 then
-            local refreshed, refreshMessage = ItemProjection.refresh(matches[1], itemPort)
+            local refreshed, refreshMessage = identityGateway.refresh(matches[1], assetId)
             if not refreshed then error("existing item presentation rejected for " .. assetId .. ": " .. tostring(refreshMessage)) end
             transaction(persistence, function(state) return state.completePlacement(assetId, resolution.location) end)
             return "placed"
         end
         if placementState == "placed" then
-            local observation = world.scanPhysical(token, {
-                assetId = assetId, binding = binding
+            local observation = world.scanPhysical({
+                assetId = assetId, binding = binding, identityGateway = identityGateway
             })
             observeIdentity(assetId, observation)
             return persistence.snapshot().physicalAvailability[assetId]
@@ -118,7 +125,7 @@ function PlacementAdapter.new(options)
         if not stamped then error(stampMessage) end
         local added = world.addItem(resolution.target, item)
         if added == nil then error("AddItem returned nil for " .. assetId) end
-        matches = matchingItems(resolution.target, assetId, token)
+        matches = matchingItems(resolution.target, assetId)
         if #matches == 0 then error("stamped item was absent after add for " .. assetId) end
         if #matches > 1 then
             observeIdentity(assetId, { matches = { { item = matches[1] }, { item = matches[2] } }, coverage = "incomplete" })
@@ -134,8 +141,8 @@ function PlacementAdapter.new(options)
         if not placementState then return "unprepared" end
         if placementState ~= "placed" and placementState ~= "conflict" then return placementState end
         if not scope then return "unprepared" end
-        local observation = suppliedObservation or world.scanPhysical(PhysicalToken.forAsset(scope, assetId), {
-            assetId = assetId, binding = bindingFor(assetId)
+        local observation = suppliedObservation or world.scanPhysical({
+            assetId = assetId, binding = bindingFor(assetId), identityGateway = identityGateway
         })
         observeIdentity(assetId, observation)
         return persistence.snapshot().physicalAvailability[assetId]
@@ -148,6 +155,11 @@ function PlacementAdapter.new(options)
     function api.tokenFor(assetId)
         if not scope then return nil end
         return PhysicalToken.forAsset(scope, assetId)
+    end
+
+
+    function api.identityGateway()
+        return identityGateway
     end
 
     return api

@@ -1,5 +1,3 @@
-local ItemProjection = require("ConspiracyFiles/ItemProjection")
-
 local PZ = {}
 
 local function report(message) print(message) end
@@ -59,47 +57,56 @@ local function resolvePlacement(binding)
     }
 end
 
-local function addItemObservation(result, collisions, seen, item, assetId, token, location)
+local function addItemObservation(result, collisions, seen, item, assetId, identityGateway, location)
     if seen[item] then return end
-    local classification, identity, reason = ItemProjection.classifyIdentity(item, assetId, token)
-    if classification == "match" then
+    local verification = identityGateway.verify(item, assetId)
+    if verification.status == "verified" then
         seen[item] = true
-        result[#result + 1] = { item = item, identity = identity, location = location }
-    elseif classification == "collision" then
+        result[#result + 1] = { item = item, identity = verification.identity, location = location }
+    elseif verification.status == "collision" or verification.status == "rejected" then
         seen[item] = true
-        collisions[#collisions + 1] = { item = item, identity = identity, reason = reason, location = location }
+        collisions[#collisions + 1] = {
+            item = item, identity = verification.identity, reason = verification.reason, location = location
+        }
     end
 end
 
-local function addContainerMatches(result, collisions, seen, container, assetId, token, location)
+local function addContainerMatches(result, collisions, seen, container, assetId, identityGateway, location)
     for _, item in ipairs(listItems(container)) do
-        addItemObservation(result, collisions, seen, item, assetId, token, location)
+        addItemObservation(result, collisions, seen, item, assetId, identityGateway, location)
     end
 end
 
-local function addVehicleMatches(result, collisions, seen, vehicle, assetId, token)
+local function addVehicleMatches(result, collisions, seen, vehicle, assetId, identityGateway)
     if not vehicle then return end
     for index = 0, vehicle:getPartCount() - 1 do
         local part = vehicle:getPartByIndex(index)
         local container = part and part:getItemContainer() or nil
         if container then
-            addContainerMatches(result, collisions, seen, container, assetId, token, {
+            addContainerMatches(result, collisions, seen, container, assetId, identityGateway, {
                 kind = "vehicle", vehicleId = tostring(vehicle:getId()), vehiclePartId = tostring(part:getId())
             })
         end
     end
 end
 
-local function scanPhysical(token, context)
+local function scanPhysical(context)
     local assetId = context and context.assetId or nil
     if type(assetId) ~= "string" or assetId == "" then error("physical scan requires an Asset ID") end
+    local identityGateway = context and context.identityGateway or nil
+    if not identityGateway or type(identityGateway.verify) ~= "function" then
+        error("physical scan requires the canonical identity gateway")
+    end
     local matches, collisions, seen = {}, {}, {}
     local player = getPlayer and getPlayer() or nil
-    if player then addContainerMatches(matches, collisions, seen, player:getInventory(), assetId, token, { kind = "player-inventory" }) end
+    if player then
+        addContainerMatches(matches, collisions, seen, player:getInventory(), assetId, identityGateway,
+            { kind = "player-inventory" })
+    end
     if context and context.binding then
         local resolution = resolvePlacement(context.binding)
         if resolution.status == "available" then
-            addContainerMatches(matches, collisions, seen, resolution.target, assetId, token, resolution.location)
+            addContainerMatches(matches, collisions, seen, resolution.target, assetId, identityGateway, resolution.location)
         end
     end
     local playerSquare = player and player:getSquare() or nil
@@ -118,7 +125,7 @@ local function scanPhysical(token, context)
                                 for containerIndex = 0, containerCount - 1 do
                                     local container = object:getContainerByIndex(containerIndex)
                                     if container then
-                                        addContainerMatches(matches, collisions, seen, container, assetId, token, {
+                                        addContainerMatches(matches, collisions, seen, container, assetId, identityGateway, {
                                             kind = "world-container", x = x, y = y, z = pz, containerType = tostring(container:getType())
                                         })
                                     end
@@ -132,7 +139,7 @@ local function scanPhysical(token, context)
                             local worldObject = worldObjects:get(index)
                             local ok, item = pcall(function() return worldObject:getItem() end)
                             if ok and item then
-                                addItemObservation(matches, collisions, seen, item, assetId, token,
+                                addItemObservation(matches, collisions, seen, item, assetId, identityGateway,
                                     { kind = "floor", x = x, y = y, z = pz })
                             end
                         end
@@ -143,7 +150,7 @@ local function scanPhysical(token, context)
                             local object = moving:get(index)
                             local ok, container = pcall(function() return object:getContainer() end)
                             if ok and container then
-                                addContainerMatches(matches, collisions, seen, container, assetId, token,
+                                addContainerMatches(matches, collisions, seen, container, assetId, identityGateway,
                                     { kind = "corpse", x = x, y = y, z = pz })
                             end
                         end
@@ -151,7 +158,7 @@ local function scanPhysical(token, context)
                 end
             end
         end
-        addVehicleMatches(matches, collisions, seen, player:getVehicle(), assetId, token)
+        addVehicleMatches(matches, collisions, seen, player:getVehicle(), assetId, identityGateway)
         local vehiclesOk, vehicles = pcall(function() return getCell():getVehicles() end)
         if vehiclesOk and vehicles then
             local limit = math.min(vehicles:size(), 16)
@@ -159,14 +166,14 @@ local function scanPhysical(token, context)
                 local vehicle = vehicles:get(index)
                 local dx, dy = vehicle:getX() - px, vehicle:getY() - py
                 if (dx * dx) + (dy * dy) <= 16 then
-                    addVehicleMatches(matches, collisions, seen, vehicle, assetId, token)
+                    addVehicleMatches(matches, collisions, seen, vehicle, assetId, identityGateway)
                 end
             end
         end
         local last = context and context.lastKnownPhysicalLocation or nil
         if last and last.kind == "vehicle" and last.vehicleId and type(getVehicleById) == "function" then
             local ok, vehicle = pcall(getVehicleById, tonumber(last.vehicleId))
-            if ok then addVehicleMatches(matches, collisions, seen, vehicle, assetId, token) end
+            if ok then addVehicleMatches(matches, collisions, seen, vehicle, assetId, identityGateway) end
         end
     end
     return { matches = matches, collisions = collisions, coverage = "incomplete" }

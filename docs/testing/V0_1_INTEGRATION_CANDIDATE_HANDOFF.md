@@ -1,5 +1,9 @@
 # v0.1 Dead Air Integrated Offline Candidate — Handoff
 
+> This records the historical schema-2 integration candidate. P4-R37,
+> PM-GOV-001 and `SCHEMA2_PAIR_IDENTITY_LIVE_MATRIX.md` are authoritative for
+> the later integrity consolidation and its required independent QA/live gates.
+
 ## Candidate identity
 
 - Integration base: `08a1dda0eb6d57639a8e403538d2c8d44928487e`.
@@ -32,10 +36,11 @@ were combined rather than selecting one branch's version wholesale.
   maps. Save-scoped physical tokens are derived at adapter activation and are
   never persisted as nested materialisation records. The nested
   `ModData.ConspiracyFiles` table is the canonical item presentation/identity
-  carrier; legacy flat fields are accepted only as a complete exact mirror and
-  are refreshed in lockstep for compatible content-text revisions. Focused
+  carrier; legacy flat fields are quarantined claims accepted only as a complete
+  exact mirror and never as a second authority. Compatible older presentation
+  fields refresh only after active-pair verification. Focused
   regressions cover flat-only, nested-only, disagreement, copying, tampering and
-  in-place old-item/current-text refresh while preserving the physical token.
+  in-place old-item/current-text refresh while preserving the complete identity pair.
 - E10 remains a checkpoint-only base-slice boundary: no death record,
   corpse scan or claim about callback ordering/already-dead reload was added.
 - The release pipeline packages this same production tree and performs no

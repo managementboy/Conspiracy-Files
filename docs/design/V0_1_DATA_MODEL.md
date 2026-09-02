@@ -2,7 +2,7 @@
 
 **Status:** v0.1 design for the single built-in Dead Air Narrative Thread.  
 **Source story:** `test/fixtures/THREAD-001-DEAD-AIR.md`, content revision `dead-air-r1`.  
-**Technical status:** logical/domain model only. T1 validated vanilla Lua Global ModData on Build 42.20.4 within the hard ≤500 KB/save canonical-state budget and established P4-R32. T5 validated a mod-owned per-instance ModData token for physical tracking and explicitly forbids direct PZ/Lua/Java object references; this document still does not define the final Lua encoding.
+**Technical status:** schema-2 logical model implemented offline. T1 validated vanilla Lua Global ModData on Build 42.20.4 within the hard ≤500 KB/save canonical-state budget and established P4-R32. T5 proved ModData token persistence and copy hazards; P4-R37 now requires the active Asset/token pair through one shared gateway and forbids direct PZ/Lua/Java object references in canonical state.
 
 This document intentionally does **not** define a generic content-pack schema. It answers one question: what is the smallest practical model needed to implement Dead Air as currently authored?
 
@@ -347,7 +347,7 @@ Records the player's encounter with an Asset/object in a specific discovery cont
 |---|---|
 | `foundLocationId` | Store a stable story Location ID when the discovery occurs at one of the two known locations. |
 | `physicalItemToken` | Optional save-scoped, per-instance mod-owned string proven by T5; never a direct PZ/Lua/Java object reference or engine item ID. |
-| `physicalAvailability` | Optional mutable `untracked` / `unknown` / `available` / `unavailable` / `conflict`. `conflict` is sticky once duplicate-token items are observed. |
+| `physicalAvailability` | Mutable `untracked` / `unknown` / `available` / `unavailable` / `conflict` after placement. `conflict` is sticky once distinct items with one verified active pair are observed. |
 | `lastKnownPhysicalLocation` | Optional bounded mutable descriptor of inventory/container/floor/vehicle/corpse context; never an engine object reference and never immutable discovery context. |
 | `identityConflictObserved` | Optional boolean; once true it is not automatically cleared because a later scan finds only one descendant. |
 
@@ -407,9 +407,22 @@ Evidence alone is not sufficient because a later update must appear at the point
 | `kind` | `asset-discovered` | Yes | Immutable |
 | `subjectId` | `dead-air:asset:access-memo-7c` | Yes | Immutable |
 
-### Optional field
+### Exact per-kind event language
 
-`relatedId` is used when one event connects two records:
+Every entry has exactly `entryId`, `ordinal`, `kind` and `subjectId`. The
+following table is exhaustive; `relatedId` is required only where shown and is
+forbidden for all other kinds.
+
+| Kind | `subjectId` | `relatedId` |
+|---|---|---|
+| `asset-discovered` | discovered document Asset | forbidden |
+| `thread-introduced` | Dead Air Thread | required introduction Asset (D1 or D2) |
+| `marked-interesting` | created Evidence | forbidden |
+| `evidence-updated` | prior marked Evidence | required D6 Asset |
+| `location-confirmed` | confirmed Location | forbidden |
+| `contradiction-surfaced` | D6 Asset | required D5 Asset |
+
+Example:
 
 ```text
 kind = "evidence-updated"
@@ -427,6 +440,12 @@ For other event kinds, a small fixed v0.1 renderer produces deterministic text f
 - the immutable Evidence context.
 
 The rendered prose itself is not persisted.
+
+Full-root validation replays source events from an empty history. It requires
+Evidence discoveries and confirmations in canonical order and accepts a derived
+thread introduction, B-37 update or contradiction only immediately after its
+exact causal event. Missing, surplus, reordered, swapped or impossible events
+reject the staged root while preserving the last known-good root.
 
 ### Major discovery marker
 
@@ -683,7 +702,7 @@ Complete on Build 42.20.4. `LoadGridsquare` queues relevant curated bindings and
 P4-R40 resolves the former product question: a durably placed but undiscovered D1 may activate D2 once as the fallback introduction only after T5/P4-R37 conclusively reconciles D1 to `unavailable`. Mere unloading, original-container absence, `unknown`, `untracked` and `conflict` do not qualify, and D1 never respawns.
 
 ### T5 — physical item identity
-Complete on Build 42.20.4. Use one save-scoped mod-owned string token per intended physical instance, stamped while detached. The token survived inventory, ordinary container, floor, vehicle, reload at every stage and real player-death transfer to a corpse. Engine item IDs are diagnostics only. `copyModData` and `CopyModData` created persistent distinct items with the same token, so uniqueness is enforced by global observed counts: two or more is sticky `conflict`, never an automatic winner/deletion/restamp. Missing from one former location is `unknown` until a destructive event or complete covered reconciliation proves `unavailable`. Dead Air still works with the token absent as `untracked`.
+Complete on Build 42.20.4 as mechanism evidence. The probe proved that one save-scoped ModData token survives inventory, ordinary container, floor, vehicle, reload and real player-death corpse transfer, and that ModData copying duplicates it. Engine item IDs are diagnostics only. Production authority is stricter under P4-R37: the same shared gateway must verify both the active Asset ID and its expected token. Two items with one verified pair are sticky `conflict`; tokenless, one-sided, cross-paired or conflicting carriers are rejected without a tracking transition. Missing from one former location remains `unknown` until a destructive event or complete covered reconciliation proves `unavailable`.
 
 ### T7 — asset text/reader
 Complete. `Asset.bodyText` remains authored/domain truth. The item projection persists a custom name plus validated plain ModData title/description/body; the custom T10 `Inspect` reader renders world-specific bodies. Locked Literature custom pages are optional generated projections for short plain-text artifacts only and are never read back as canonical content. `InventoryItem.description`, raw runtime `printMedia`, and generic/key/map native UIs are not body stores.
@@ -698,13 +717,13 @@ Owns the cooperative context-menu mechanism for `Inspect` / `Mark Interesting`.
 
 | Dead Air Asset | Content preference | Data-model representation | Engine mechanism |
 |---|---|---|---|
-| D1 service ticket | Read / Inspect | `Asset.bodyText` | custom Inspect body; optional short locked Literature page projection; T10 hook pending |
-| D2 property record | Examine / Read | `Asset.bodyText` | custom Inspect body; T10 hook pending |
-| D3 invoice | Examine | `Asset.bodyText` | custom Inspect body; T10 hook pending |
-| D4 notebook page | Read | `Asset.bodyText` | custom Inspect body; optional short locked Literature page projection; T10 hook pending |
-| D5 memo | Read | `Asset.bodyText` | custom Inspect body; optional short locked Literature page projection; T10 hook pending |
-| D6 shift note | Examine | `Asset.bodyText` | custom Inspect body; T10 hook pending |
-| B-37 key | Examine / Mark Interesting | ordinary-object Asset; no document body | persistent custom name + ModData; T10 hook pending |
+| D1 service ticket | Read / Inspect | `Asset.bodyText` | active-pair-gated custom Inspect body; optional short locked Literature page projection |
+| D2 property record | Examine / Read | `Asset.bodyText` | active-pair-gated custom Inspect body |
+| D3 invoice | Examine | `Asset.bodyText` | active-pair-gated custom Inspect body |
+| D4 notebook page | Read | `Asset.bodyText` | active-pair-gated custom Inspect body; optional short locked Literature page projection |
+| D5 memo | Read | `Asset.bodyText` | active-pair-gated custom Inspect body; optional short locked Literature page projection |
+| D6 shift note | Examine | `Asset.bodyText` | active-pair-gated custom Inspect body |
+| B-37 key | Examine / Mark Interesting | ordinary-object Asset; no document body | active-pair-gated custom name, Inspect and Mark action |
 
 The model deliberately stores the authored content independently of the eventual reader implementation.
 

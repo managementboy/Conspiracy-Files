@@ -65,18 +65,21 @@ local function makeWorld()
         end
         return item
     end
-    function world.scanPhysical(token, context)
+    function world.scanPhysical(context)
         local assetId = context and context.assetId
+        local identityGateway = context and context.identityGateway
         local matches, collisions, seen = {}, {}, {}
         local function observe(item, location)
             if seen[item] then return end
-            local classification, identity, reason = CF.ItemProjection.classifyIdentity(item, assetId, token, itemPort)
-            if classification == "match" then
+            local verification = identityGateway.verify(item, assetId)
+            if verification.status == "verified" then
                 seen[item] = true
-                matches[#matches + 1] = { item = item, identity = identity, location = location }
-            elseif classification == "collision" then
+                matches[#matches + 1] = { item = item, identity = verification.identity, location = location }
+            elseif verification.status == "collision" or verification.status == "rejected" then
                 seen[item] = true
-                collisions[#collisions + 1] = { item = item, identity = identity, reason = reason, location = location }
+                collisions[#collisions + 1] = {
+                    item = item, identity = verification.identity, reason = verification.reason, location = location
+                }
             end
         end
         for _, container in pairs(world.containers) do
@@ -274,10 +277,66 @@ test("offline E04 malformed carrier claiming the target token fails closed witho
 
     local ok, message = pcall(function() placement.reconcile(assetId) end)
     assertFalse(ok)
-    assertTrue(string.find(tostring(message), "carrier claiming expected token was rejected", 1, true) ~= nil)
+    assertTrue(string.find(tostring(message), "canonical Asset/token gateway", 1, true) ~= nil)
     assertEqual(0, world.created)
     assertEqual("pending", persistence.snapshot().assetMaterialisation[assetId])
     assertEqual(1, #world.containers[assetId].items)
+end)
+
+test("offline E02/E04 every Asset rejects one-sided, flat-only, unknown, incompatible, and conflicting carriers", function()
+    local cases = {
+        { assetId = ids.d1, shape = "asset-only" },
+        { assetId = ids.d2, shape = "token-only" },
+        { assetId = ids.d3, shape = "flat-only" },
+        { assetId = ids.d4, shape = "unknown-asset" },
+        { assetId = ids.d5, shape = "incompatible-schema" },
+        { assetId = ids.d6, shape = "invalid-revision" },
+        { assetId = ids.key, shape = "conflicting-mirror" }
+    }
+    for _, candidate in ipairs(cases) do
+        local world = makeWorld()
+        local placement, persistence = loadedPlacement(world)
+        local token = placement.tokenFor(candidate.assetId)
+        local item = { modData = {} }
+        assertTrue(CF.ItemProjection.apply(item, candidate.assetId, token, itemPort))
+        local nested = item.modData.ConspiracyFiles
+        local fields = CF.ItemProjection.fields
+        if candidate.shape == "asset-only" then
+            nested.physicalToken = nil
+        elseif candidate.shape == "token-only" then
+            nested.assetId = nil
+        elseif candidate.shape == "flat-only" then
+            item.modData[fields.schema] = nested.schemaVersion
+            item.modData[fields.physicalItemId] = nested.physicalToken
+            item.modData[fields.assetId] = nested.assetId
+            item.modData[fields.title] = nested.resolvedTitle
+            item.modData[fields.description] = nested.resolvedDescription
+            item.modData[fields.body] = nested.resolvedBody
+            item.modData.ConspiracyFiles = nil
+        elseif candidate.shape == "unknown-asset" then
+            nested.assetId = "dead-air:asset:unknown"
+        elseif candidate.shape == "incompatible-schema" then
+            nested.schemaVersion = CF.ItemPresentation.SCHEMA_VERSION + 1
+        elseif candidate.shape == "invalid-revision" then
+            nested.contentRevision = ""
+        elseif candidate.shape == "conflicting-mirror" then
+            item.modData[fields.schema] = nested.schemaVersion
+            item.modData[fields.physicalItemId] = "cf:conflicting-token"
+            item.modData[fields.assetId] = nested.assetId
+            item.modData[fields.title] = nested.resolvedTitle
+            item.modData[fields.description] = nested.resolvedDescription
+            item.modData[fields.body] = nested.resolvedBody
+        end
+        local before = copyTable(item)
+        world.containers[candidate.assetId].items = { item }
+        local ok, message = pcall(function() placement.reconcile(candidate.assetId) end)
+        assertFalse(ok, candidate.shape)
+        assertTrue(string.find(tostring(message), "canonical Asset/token gateway", 1, true) ~= nil)
+        assertEqual(0, world.created)
+        assertEqual(1, #world.containers[candidate.assetId].items)
+        assertEqual("pending", persistence.snapshot().assetMaterialisation[candidate.assetId])
+        assertDeepEqual(before, item)
+    end
 end)
 
 test("offline E02/E04 placement rejects current, stale-mirrored, and copied cross-Asset token carriers", function()
@@ -313,7 +372,7 @@ test("offline E02/E04 placement rejects current, stale-mirrored, and copied cros
         world.containers[candidate.expected].items = { item }
         local ok, message = pcall(function() placement.reconcile(candidate.expected) end)
         assertFalse(ok)
-        assertTrue(string.find(tostring(message), "Asset/token mismatch", 1, true) ~= nil)
+        assertTrue(string.find(tostring(message), "canonical Asset/token gateway", 1, true) ~= nil)
         assertEqual(0, world.created)
         assertEqual("pending", persistence.snapshot().assetMaterialisation[candidate.expected])
         assertEqual(1, #world.containers[candidate.expected].items)
@@ -416,7 +475,11 @@ test("offline E05 physical observations reject cross-Asset, partial, and malform
         { expected = ids.d1, carrier = ids.d2, shape = "current" },
         { expected = ids.d2, carrier = ids.d1, shape = "current" },
         { expected = ids.d4, carrier = ids.d3, shape = "partial" },
-        { expected = ids.d3, carrier = ids.d4, shape = "malformed" }
+        { expected = ids.d3, carrier = ids.d4, shape = "malformed" },
+        { expected = ids.d5, carrier = ids.d5, shape = "asset-only" },
+        { expected = ids.d6, carrier = ids.d6, shape = "token-only" },
+        { expected = ids.key, carrier = ids.key, shape = "flat-only" },
+        { expected = ids.d3, carrier = "dead-air:asset:unknown", shape = "unknown" }
     }
     for _, candidate in ipairs(cases) do
         local world = makeWorld()
@@ -425,9 +488,36 @@ test("offline E05 physical observations reject cross-Asset, partial, and malform
         local token = placement.tokenFor(candidate.expected)
         world.containers[candidate.expected].items = {}
         local item
-        if candidate.shape == "current" then
+        if candidate.shape == "current" or candidate.shape == "asset-only"
+            or candidate.shape == "token-only" or candidate.shape == "flat-only" then
             item = { modData = {} }
             assertTrue(CF.ItemProjection.apply(item, candidate.carrier, token, itemPort))
+            if candidate.shape == "asset-only" then
+                item.modData.ConspiracyFiles.physicalToken = nil
+            elseif candidate.shape == "token-only" then
+                item.modData.ConspiracyFiles.assetId = nil
+            elseif candidate.shape == "flat-only" then
+                local nested = item.modData.ConspiracyFiles
+                local fields = CF.ItemProjection.fields
+                item.modData[fields.schema] = nested.schemaVersion
+                item.modData[fields.physicalItemId] = nested.physicalToken
+                item.modData[fields.assetId] = nested.assetId
+                item.modData[fields.title] = nested.resolvedTitle
+                item.modData[fields.description] = nested.resolvedDescription
+                item.modData[fields.body] = nested.resolvedBody
+                item.modData.ConspiracyFiles = nil
+            end
+        elseif candidate.shape == "unknown" then
+            item = { modData = { ConspiracyFiles = {
+                schemaVersion = CF.ItemPresentation.SCHEMA_VERSION,
+                contentRevision = CF.Content.thread.contentRevision,
+                assetId = candidate.carrier,
+                revealed = true,
+                resolvedTitle = "Unknown",
+                resolvedDescription = "Unknown",
+                resolvedBody = "Unknown",
+                physicalToken = token
+            } } }
         else
             item = { modData = { ConspiracyFiles = {
                 schemaVersion = CF.ItemPresentation.SCHEMA_VERSION,
@@ -455,6 +545,34 @@ test("offline E05 physical observations reject cross-Asset, partial, and malform
     validWorld.externalMatches = { { item = valid, location = { kind = "player-inventory" } } }
     assertEqual("available", validPlacement.reconcileIdentity(ids.d1))
     assertEqual("available", validPersistence.snapshot().physicalAvailability[ids.d1])
+end)
+
+test("offline E05 supplied observations cannot bypass the canonical Asset/token gateway", function()
+    local world = makeWorld()
+    local placement, persistence = loadedPlacement(world)
+    assertEqual("placed", placement.reconcile(ids.d1))
+    local valid = world.containers[ids.d1].items[1]
+    world.containers[ids.d1].items = {}
+
+    local crossPair = { modData = {} }
+    assertTrue(CF.ItemProjection.apply(crossPair, ids.d2, placement.tokenFor(ids.d1), itemPort))
+    local lastKnownGood = persistence.snapshot()
+    local before = copyTable(crossPair)
+    local ok, message = pcall(function()
+        placement.reconcileIdentity(ids.d1, {
+            matches = { { item = crossPair, location = { kind = "player-inventory" } } },
+            coverage = "incomplete"
+        })
+    end)
+    assertFalse(ok)
+    assertTrue(string.find(tostring(message), "Asset/token pair", 1, true) ~= nil)
+    assertDeepEqual(lastKnownGood, persistence.snapshot())
+    assertDeepEqual(before, crossPair)
+
+    assertEqual("available", placement.reconcileIdentity(ids.d1, {
+        matches = { { item = valid, location = { kind = "player-inventory" } } },
+        coverage = "incomplete"
+    }))
 end)
 
 test("offline E05 schema-2 derives tokens and keeps adapter observations rebuildable", function()
@@ -649,7 +767,16 @@ test("offline PZ port resolves exact object/building signatures and fails closed
         assertTrue(CF.ItemProjection.apply(item, ids.d1, "cf:pz-port:d1", environment.itemPort))
         assertEqual(item, environment.world.addItem(resolved.target, item))
         assertEqual(1, #environment.world.items(resolved.target))
-        local observation = environment.world.scanPhysical("cf:pz-port:d1", { assetId = ids.d1, binding = binding })
+        local identityGateway = CF.ItemIdentityGateway.new({
+            itemPort = environment.itemPort,
+            tokenFor = function(assetId)
+                if assetId == ids.d1 then return "cf:pz-port:d1" end
+                return "cf:pz-port:" .. assetId
+            end
+        })
+        local observation = environment.world.scanPhysical({
+            assetId = ids.d1, binding = binding, identityGateway = identityGateway
+        })
         assertEqual(1, #observation.matches)
         assertEqual(0, #observation.collisions)
         assertEqual(ids.d1, observation.matches[1].identity.assetId)
@@ -657,7 +784,9 @@ test("offline PZ port resolves exact object/building signatures and fails closed
         local wrongAsset = environment.world.createItem("Base.Note")
         assertTrue(CF.ItemProjection.apply(wrongAsset, ids.d2, "cf:pz-port:d1", environment.itemPort))
         items[1] = wrongAsset
-        observation = environment.world.scanPhysical("cf:pz-port:d1", { assetId = ids.d1, binding = binding })
+        observation = environment.world.scanPhysical({
+            assetId = ids.d1, binding = binding, identityGateway = identityGateway
+        })
         assertEqual(0, #observation.matches)
         assertEqual(1, #observation.collisions)
         assertEqual(ids.d2, observation.collisions[1].identity.assetId)
@@ -669,12 +798,16 @@ test("offline PZ port resolves exact object/building signatures and fails closed
             physicalToken = "cf:pz-port:d1"
         }
         items[1] = partial
-        observation = environment.world.scanPhysical("cf:pz-port:d1", { assetId = ids.d1, binding = binding })
+        observation = environment.world.scanPhysical({
+            assetId = ids.d1, binding = binding, identityGateway = identityGateway
+        })
         assertEqual(0, #observation.matches)
         assertEqual(1, #observation.collisions)
 
         partial.md.ConspiracyFiles.unexpected = "malformed"
-        observation = environment.world.scanPhysical("cf:pz-port:d1", { assetId = ids.d1, binding = binding })
+        observation = environment.world.scanPhysical({
+            assetId = ids.d1, binding = binding, identityGateway = identityGateway
+        })
         assertEqual(0, #observation.matches)
         assertEqual(1, #observation.collisions)
         assertTrue(environment.world.matchesArrival(relayArrival, playerSquare))
