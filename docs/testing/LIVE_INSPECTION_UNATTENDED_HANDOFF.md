@@ -1,11 +1,11 @@
 # Unattended live-inspection harness handoff
 
-**Status:** Offline startup-delivery correction complete; fresh independent live validation not run
-**Correction branch:** `fix/live-inspection-x11-startup-delivery`
-**Correction base:** `ed2208311929c096921ca05509f645e6654522e2`
+**Status:** Readiness-correlation correction implemented offline; fresh independent QA and live validation not run
+**Correction branch:** `fix/live-inspection-readiness-correlation`
+**Correction base:** `e5f00afd6440aa586112fa1e688c1a5541058e69`
 **Original implementation branch/base:** `codex/unattended-live-inspection-harness` / `e206e46b78c5c21dd381f6722a74698c2e12c324`
 
-The correction checkout is `/home/yogax380/Documents/Codex/2026-09-02/conspiracy-files-fix-automated-harness-startup/work/conspiracy-files-live-inspection-startup-fix`. It was freshly created from the exact clean detached base with `git clone --no-local --no-hardlinks`, then had its origin removed. It has no alternates and shared zero Git-object and tracked-working-file device/inode pairs with either the harness source or the protected candidate. `/home/yogax380/Projects/Conspiracy-Files` was not used or modified.
+The readiness-correlation correction is based directly on the independently checked `e5f00afd` harness candidate. Engineering uses a fresh `git clone --no-local --no-hardlinks` with its origin removed, no alternates and zero shared Git-object/tracked-file inodes with the QA source. The protected shared checkout is outside this work boundary.
 
 ## Failed-run evidence audit
 
@@ -17,7 +17,9 @@ P4-R48 and ADR-0004 add a one-shot ordinary startup-gate capability for non-T10 
 
 The corrected runner accepts only one left click. After the exact `game loading took` signature it waits the configured bounded settle, requires a fresh owned-window screenshot containing the lower-center startup-control visual signature, and targets `(width/2,height*20/21)`—`(480,960)` for the preserved 960x1008 client. It records the expected 960x1040 decorated screenshot separately. Immediately before the action and after pointer warp it revalidates exact launcher/window PID start identities, process group, sole mapped window, title, root origin/client geometry, active window, focus and unobscured pointer ownership.
 
-XTEST completion is recorded as `PENDING_TRANSITION`, never successful delivery. Only a fresh run-scoped observer `PLAYER_READY` line after the click changes the evidence to `CONFIRMED`; timeout/process exit becomes `NOT_CONFIRMED`. Buffered pre-action log lines and stale/pre-existing screenshots cannot satisfy the boundary. The Return/space strategy is explicitly rejected pending new evidence rather than silently used as a fallback.
+XTEST completion is recorded as `PENDING_TRANSITION`, never successful delivery. Immediately before XTEST, after every readiness and identity check, the follower atomically records the console device/inode, exact EOF byte boundary, partial-record disposition, wall/monotonic timestamps and observer sequence watermark. Only complete records beginning at or after that cursor are parsed. The observer's own source timestamp and increasing sequence reject pre-action bytes that were flushed late, replayed or reordered.
+
+`PLAYER_READY` now has one strict structured contract: exact run ID, disposable save, observer ID, random session ID, source timestamp/sequence, payload mode/ID/checksum, exact validated active-mod list/count and game version. Missing, malformed, duplicated, foreign, stale or conflicting fields fail closed. After correlation and immediately before recording success, the runner revalidates the original launcher/window PID start identities, process group, XID/title/origin, exact 960x1008 geometry, active window, X11 focus and `DISPLAY`. Only a stable tuple changes the atomically written evidence to `CONFIRMED`; every rejection, timeout or process exit becomes `NOT_CONFIRMED` without an intermediate pass.
 
 P4-R44 is unchanged. Every unattended bundle records T10 and CF-V01-E08 as `NOT RUN`. A profile requesting T10/E08, context-menu, inventory/menu, right-click, gameplay or acceptance interaction is refused before save, mod or control mutation. No right-click or other gameplay input implementation exists.
 
@@ -43,13 +45,13 @@ For a production probe, also add `[payload]` with `mode="production"`, a relativ
 
 ## Offline evidence
 
-`dev/live-inspection/test/run.sh` covers legacy regressions plus profile policy, one-shot bounds, real log-observation freshness, buffered-line retention, stale screenshot/log rejection, visible gate recognition, PID/start-time ownership, focus/window/geometry races, command-success-without-transition failure, successful run-scoped transition confirmation, T10/E08 and interaction refusal with `NOT RUN` evidence, payload checksum/identity/cleanliness, safe ZIP extraction, install, failure cleanup, interrupted restoration, sanitization, Lua parsing and Python compilation.
+`dev/live-inspection/test/run.sh` preserves the prior 41 cases and adds the independent QA reproductions plus unread pre-click, partial-boundary, late-buffered source time, replay/reorder/duplicate/conflict, full field-correlation, delivery-time process/window drift and adversarial visual cases. The visual positives are lossless crops from both retained real frames; negatives cover generic rectangles at multiple positions/sizes, black/loading/stale-position and wrong-dimension frames. Existing transactional staging/recovery/control restoration, profile policy, one-shot bounds, T10/E08 refusal, payload validation, safe ZIP extraction, sanitization, Lua parsing and Python compilation remain covered.
 
 This correction did not launch Project Zomboid, touch a real save, change security software, install dependencies, use injected/JNI helpers, select Xephyr/software rendering or claim a live acceptance result.
 
 ## Separate live-validation scope
 
-This remains offline-only. The lower-center visual classifier is derived from the two recorded English gate frames and the action has not yet been proven on a fresh PZ process. It deliberately fails closed if the theme, localisation, scaling or window-manager decoration no longer fits those bounds. `PLAYER_READY` confirms that startup crossed the ordinary gate; it does not by itself accept any downstream module criterion.
+This remains offline-only. The visual classifier compares a thresholded lower-center mask to the two recorded English labels and is intentionally limited to the exact 960x1008 client/960x1040 decorated frame. It is not general OCR. A theme, localisation, font, scaling, decoration or layout change requires owner-attended confirmation and a separately reviewed signature; the gate must not be weakened to a generic shape or brightness rule. Even a fully correlated `PLAYER_READY` confirms only that this ordinary startup boundary advanced and does not accept any downstream module criterion.
 
 Independent QA must:
 

@@ -10,6 +10,7 @@ local active, completed, initialized = false, false, false
 local tick, exitTicks, siteIndex = 0, 0, 0
 local current, scan, failures = nil, nil, 0
 local autoContinue, menuTicks = false, 0
+local eventSequence = 0
 
 local function safe(value)
     if value == nil then return "<nil>" end
@@ -17,7 +18,18 @@ local function safe(value)
 end
 
 local function event(kind, fields)
-    local parts = { PREFIX, "EVENT", "kind=" .. safe(kind), "run=" .. safe(Profile.runId) }
+    eventSequence = eventSequence + 1
+    local emittedAtMs = getTimestampMs and getTimestampMs() or 0
+    local parts = {
+        PREFIX,
+        "EVENT",
+        "kind=" .. safe(kind),
+        "run=" .. safe(Profile.runId),
+        "observer=" .. safe(Profile.observerId),
+        "session=" .. safe(Profile.sessionId),
+        "sequence=" .. eventSequence,
+        "emittedAtMs=" .. safe(emittedAtMs),
+    }
     if fields then for i = 1, #fields do parts[#parts + 1] = fields[i] end end
     print(table.concat(parts, "|"))
 end
@@ -191,7 +203,15 @@ local function initialize()
         local phase = runtime.phase and runtime.phase() or "<unavailable>"
         event("PRODUCTION_READY", { "status=PASS", "phase=" .. safe(phase), "registeredEvents=" .. #registered })
     end
-    event("PLAYER_READY", { "save=" .. saveName(), "activeModCount=" .. count, "activeMods=" .. safe(table.concat(Profile.activeModIds, ",")), "gameVersion=" .. safe(getGameVersion and getGameVersion()) })
+    event("PLAYER_READY", {
+        "save=" .. saveName(),
+        "activeModCount=" .. count,
+        "activeMods=" .. safe(table.concat(Profile.activeModIds, ",")),
+        "payloadMode=" .. safe(Profile.payloadMode),
+        "payloadId=" .. safe(Profile.payloadId),
+        "payloadChecksum=" .. safe(Profile.payloadChecksum),
+        "gameVersion=" .. safe(getGameVersion and getGameVersion()),
+    })
     siteIndex, current, tick = 1, Profile.sites[1], 0
     logSiteDefinition(current); teleport(current); initialized = true
 end

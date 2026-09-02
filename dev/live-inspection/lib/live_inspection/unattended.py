@@ -8,6 +8,7 @@ from pathlib import Path
 from typing import Callable
 
 from .model import HarnessError, UnattendedStartup
+from .state import GateResult, LogCursor
 
 
 @dataclass(frozen=True)
@@ -15,6 +16,18 @@ class ProcessIdentity:
     pid: int
     process_group_id: int
     start_time_ticks: int
+
+
+@dataclass(frozen=True)
+class ReadinessIdentity:
+    run_id: str
+    save_name: str
+    observer_id: str
+    session_id: str
+    payload_mode: str
+    payload_id: str
+    payload_checksum: str
+    active_mod_ids: tuple[str, ...]
 
 
 @dataclass(frozen=True)
@@ -46,8 +59,15 @@ class InputEvidence:
     focus_window_id: int
     pointer_window_id: int
     ready_screenshot: dict[str, object]
+    action_completed_wall_time_ns: int | None = None
+    pre_action_cursor: LogCursor | None = None
+    readiness_identity: ReadinessIdentity | None = None
     transition: str | None = None
     transition_latency_seconds: float | None = None
+    transition_observation: dict[str, object] | None = None
+    confirmation_identity: dict[str, object] | None = None
+    rejected_transition: str | None = None
+    rejected_transition_observation: dict[str, object] | None = None
     failure_reason: str | None = None
 
 
@@ -75,6 +95,8 @@ class X11Action:
     focus_window_id: int
     pointer_window_id: int
     ready_screenshot: dict[str, object]
+    pre_action_cursor: LogCursor
+    action_completed_wall_time_ns: int
 
 
 class StartupGateController:
@@ -87,12 +109,14 @@ class StartupGateController:
         clock: Callable[[], float] = time.monotonic,
         sleep: Callable[[float], None] = time.sleep,
         identity_reader: Callable[[int], ProcessIdentity] | None = None,
+        wall_clock: Callable[[], int] = time.time_ns,
     ):
         self.policy = policy
         self.used = False
         self._clock = clock
         self._sleep = sleep
         self._identity_reader = identity_reader or self._read_process_identity
+        self._wall_clock = wall_clock
 
     def activate(
         self,
@@ -101,6 +125,8 @@ class StartupGateController:
         signature: str,
         signature_seen_at: float,
         readiness_capture: Callable[[int, int], dict[str, object]],
+        readiness_identity: ReadinessIdentity,
+        pre_action_checkpoint: Callable[[], LogCursor],
     ) -> InputEvidence:
         if self.used:
             raise HarnessError("unattended startup input has already been used")
@@ -125,6 +151,7 @@ class StartupGateController:
         action = self._activate_x11(
             display_name, launcher, readiness_capture,
             lambda: self._assert_signature_fresh(signature_seen_at),
+            pre_action_checkpoint,
         )
         completed_at = self._clock()
         age = completed_at - signature_seen_at
@@ -159,6 +186,9 @@ class StartupGateController:
             focus_window_id=action.focus_window_id,
             pointer_window_id=action.pointer_window_id,
             ready_screenshot=action.ready_screenshot,
+            action_completed_wall_time_ns=action.action_completed_wall_time_ns,
+            pre_action_cursor=action.pre_action_cursor,
+            readiness_identity=readiness_identity,
         )
 
     def _assert_signature_fresh(self, signature_seen_at: float) -> None:
@@ -172,6 +202,7 @@ class StartupGateController:
         launcher: ProcessIdentity,
         readiness_capture: Callable[[int, int], dict[str, object]],
         assert_fresh: Callable[[], None],
+        pre_action_checkpoint: Callable[[], LogCursor],
     ) -> X11Action:
         try:
             from Xlib import X, display
@@ -238,12 +269,19 @@ class StartupGateController:
                 raise HarnessError("owned PZ window is obscured at the startup-control point")
 
             assert_fresh()
+            pre_action_cursor = pre_action_checkpoint()
+            if not isinstance(pre_action_cursor, LogCursor):
+                raise HarnessError("pre-action log cursor was not established")
             xtest.fake_input(connection, X.ButtonPress, 1)
             xtest.fake_input(connection, X.ButtonRelease, 1)
             connection.sync()
+            action_completed_wall_time_ns = self._wall_clock()
+            if action_completed_wall_time_ns <= pre_action_cursor.established_wall_time_ns:
+                raise HarnessError("wall-clock evidence did not advance across the startup action")
             return X11Action(
                 launcher, current, action_x, action_y, root_x, root_y,
                 active_window_id, focus_window_id, pointer_window_id, ready_screenshot,
+                pre_action_cursor, action_completed_wall_time_ns,
             )
         finally:
             connection.close()
@@ -377,33 +415,220 @@ class StartupGateController:
             ))
         return results
 
+    def revalidate_delivery_identity(self, value: InputEvidence) -> dict[str, object]:
+        """Re-read the exact process/window tuple immediately before confirmation."""
+        if not self.used:
+            raise HarnessError("startup controller did not emit the owned one-shot action")
+        if os.environ.get("DISPLAY", "") != value.display:
+            raise HarnessError("DISPLAY/session identity changed before delivery confirmation")
+        if (value.window_width, value.window_height) != (960, 1008):
+            raise HarnessError("delivery confirmation requires the recorded 960x1008 client geometry")
+        launcher = ProcessIdentity(
+            value.launcher_pid, value.launcher_pid, value.launcher_start_time_ticks
+        )
+        if self._identity_reader(value.launcher_pid) != launcher:
+            raise HarnessError("launcher PID/start-time identity changed before delivery confirmation")
+        try:
+            from Xlib import X, display
+        except ImportError as exc:
+            raise HarnessError("python-xlib is unavailable for delivery identity revalidation") from exc
+        connection = display.Display(value.display)
+        try:
+            windows = self._owned_windows(connection, launcher)
+            if len(windows) != 1:
+                raise HarnessError(
+                    f"owned PZ window set changed before delivery confirmation (found {len(windows)})"
+                )
+            current = windows[0]
+            expected = WindowSnapshot(
+                current.window,
+                ProcessIdentity(
+                    value.window_pid, value.launcher_pid, value.window_start_time_ticks
+                ),
+                value.window_id,
+                value.window_title,
+                value.window_x,
+                value.window_y,
+                value.window_width,
+                value.window_height,
+            )
+            self._assert_same_window(expected, current)
+            root = connection.screen().root
+            active_atom = connection.intern_atom("_NET_ACTIVE_WINDOW")
+            active_window_id = self._active_window_id(root, active_atom, X.AnyPropertyType)
+            if active_window_id != value.window_id:
+                raise HarnessError("owned PZ window is no longer active at delivery confirmation")
+            focus_window_id = self._resource_id(connection.get_input_focus().focus)
+            if not self._focus_belongs_to_window(connection, value.window_id, focus_window_id):
+                raise HarnessError("owned PZ client no longer has X11 focus at delivery confirmation")
+            return {
+                "status": "STABLE",
+                "checked_monotonic": self._clock(),
+                "checked_wall_time_ns": self._wall_clock(),
+                "launcher_pid": launcher.pid,
+                "launcher_start_time_ticks": launcher.start_time_ticks,
+                "window_pid": current.process.pid,
+                "window_start_time_ticks": current.process.start_time_ticks,
+                "window_id": current.window_id,
+                "window_title": current.title,
+                "window_x": current.x,
+                "window_y": current.y,
+                "window_width": current.width,
+                "window_height": current.height,
+                "active_window_id": active_window_id,
+                "focus_window_id": focus_window_id,
+            }
+        finally:
+            connection.close()
+
+
+def _parse_player_ready(value: str) -> dict[str, str]:
+    marker = "[CF-INSPECT]|EVENT|"
+    position = value.find(marker)
+    if position < 0:
+        raise HarnessError("startup transition is not a canonical observer event")
+    parts = value[position:].rstrip("\r\n").split("|")
+    if parts[:2] != ["[CF-INSPECT]", "EVENT"]:
+        raise HarnessError("startup transition is not a canonical observer event")
+    fields: dict[str, str] = {}
+    for part in parts[2:]:
+        if "=" not in part:
+            raise HarnessError("startup transition contains a malformed field")
+        key, field_value = part.split("=", 1)
+        if not key or key in fields:
+            raise HarnessError("startup transition contains a duplicate or empty field")
+        fields[key] = field_value
+    required = {
+        "kind", "run", "observer", "session", "sequence", "emittedAtMs",
+        "save", "activeModCount", "activeMods", "payloadMode", "payloadId",
+        "payloadChecksum", "gameVersion",
+    }
+    if set(fields) != required:
+        missing = sorted(required - set(fields))
+        unexpected = sorted(set(fields) - required)
+        raise HarnessError(
+            "startup transition field contract mismatch: "
+            f"missing={missing or '<none>'} unexpected={unexpected or '<none>'}"
+        )
+    for name in ("sequence", "emittedAtMs", "activeModCount"):
+        if not fields[name].isdigit() or str(int(fields[name])) != fields[name]:
+            raise HarnessError(f"startup transition field {name} is not a canonical integer")
+    if int(fields["sequence"]) < 1 or int(fields["emittedAtMs"]) < 1:
+        raise HarnessError("startup transition sequence/timestamp is invalid")
+    return fields
+
 
 def confirm_delivery(
     value: InputEvidence,
     *,
-    transition: str,
-    transition_seen_at: float,
-    expected_run: str,
+    transition: GateResult,
+    identity_revalidator: Callable[[InputEvidence], dict[str, object]],
 ) -> InputEvidence:
     if value.delivery_status != "PENDING_TRANSITION":
         raise HarnessError("startup delivery outcome has already been finalized")
-    if transition_seen_at <= value.action_completed_monotonic:
+    cursor = value.pre_action_cursor
+    identity = value.readiness_identity
+    if cursor is None or identity is None or value.action_completed_wall_time_ns is None:
+        raise HarnessError("startup delivery evidence lacks its pre-action correlation contract")
+    if cursor.established_monotonic > value.action_completed_monotonic \
+            or cursor.established_wall_time_ns >= value.action_completed_wall_time_ns:
+        raise HarnessError("pre-action cursor timestamps do not precede the XTEST action completion")
+    if transition.matched_at <= value.action_completed_monotonic:
         raise HarnessError("stale startup transition predates the XTEST action")
-    fields = transition.split("|")
-    if "kind=PLAYER_READY" not in fields or f"run={expected_run}" not in fields:
-        raise HarnessError("startup delivery transition is not the expected run-scoped PLAYER_READY event")
+    observation_values = (
+        transition.matched_wall_time_ns,
+        transition.matched_start_offset,
+        transition.matched_end_offset,
+        transition.matched_file_mtime_ns,
+        transition.log_device,
+        transition.log_inode,
+    )
+    if any(item is None for item in observation_values):
+        raise HarnessError("startup transition lacks exact log observation evidence")
+    if (transition.log_device, transition.log_inode) != (cursor.log_device, cursor.log_inode):
+        raise HarnessError("startup transition came from a different log identity")
+    if transition.matched_start_offset < cursor.offset:
+        raise HarnessError("startup transition crosses or predates the pre-action byte cursor")
+    if transition.matched_end_offset <= transition.matched_start_offset:
+        raise HarnessError("startup transition has invalid byte offsets")
+    if transition.matched_file_mtime_ns < cursor.file_mtime_ns:
+        raise HarnessError("startup transition file timestamp predates the pre-action cursor")
+    if transition.matched_wall_time_ns <= value.action_completed_wall_time_ns:
+        raise HarnessError("startup transition was not observed after the XTEST action")
+    fields = _parse_player_ready(transition.matched_line)
+    if cursor.observer_sequence_watermark is None:
+        raise HarnessError("pre-action cursor lacks the observer sequence watermark")
+    if int(fields["sequence"]) <= cursor.observer_sequence_watermark:
+        raise HarnessError("startup transition is replayed or reordered against the pre-action sequence")
+    expected = {
+        "kind": "PLAYER_READY",
+        "run": identity.run_id,
+        "observer": identity.observer_id,
+        "session": identity.session_id,
+        "save": identity.save_name,
+        "activeModCount": str(len(identity.active_mod_ids)),
+        "activeMods": ",".join(identity.active_mod_ids),
+        "payloadMode": identity.payload_mode,
+        "payloadId": identity.payload_id,
+        "payloadChecksum": identity.payload_checksum,
+    }
+    mismatched = sorted(name for name, expected_value in expected.items() if fields[name] != expected_value)
+    if mismatched:
+        raise HarnessError("startup transition correlation mismatch: " + ", ".join(mismatched))
+    source_wall_time_ns = int(fields["emittedAtMs"]) * 1_000_000
+    if source_wall_time_ns <= value.action_completed_wall_time_ns:
+        raise HarnessError("startup transition was emitted before the XTEST action completed")
+    if fields["gameVersion"] in {"", "false", "<nil>", "<unavailable>"}:
+        raise HarnessError("startup transition lacks the observer game-version identity")
+    confirmation_identity = identity_revalidator(value)
+    if not isinstance(confirmation_identity, dict) or confirmation_identity.get("status") != "STABLE":
+        raise HarnessError("delivery-time process/window identity was not stably revalidated")
     return replace(
         value,
         delivery_status="CONFIRMED",
-        transition=transition,
-        transition_latency_seconds=transition_seen_at - value.action_completed_monotonic,
+        transition=transition.matched_line,
+        transition_latency_seconds=transition.matched_at - value.action_completed_monotonic,
+        transition_observation={
+            "observed_monotonic": transition.matched_at,
+            "observed_wall_time_ns": transition.matched_wall_time_ns,
+            "record_start_offset": transition.matched_start_offset,
+            "record_end_offset": transition.matched_end_offset,
+            "file_mtime_ns": transition.matched_file_mtime_ns,
+            "log_device": transition.log_device,
+            "log_inode": transition.log_inode,
+            "source_sequence": int(fields["sequence"]),
+            "source_emitted_at_ms": int(fields["emittedAtMs"]),
+        },
+        confirmation_identity=confirmation_identity,
     )
 
 
-def fail_delivery(value: InputEvidence, *, reason: str) -> InputEvidence:
+def fail_delivery(
+    value: InputEvidence,
+    *,
+    reason: str,
+    transition: GateResult | None = None,
+) -> InputEvidence:
     if value.delivery_status != "PENDING_TRANSITION":
         return value
-    return replace(value, delivery_status="NOT_CONFIRMED", failure_reason=reason)
+    rejected_observation = None
+    if transition is not None:
+        rejected_observation = {
+            "observed_monotonic": transition.matched_at,
+            "observed_wall_time_ns": transition.matched_wall_time_ns,
+            "record_start_offset": transition.matched_start_offset,
+            "record_end_offset": transition.matched_end_offset,
+            "file_mtime_ns": transition.matched_file_mtime_ns,
+            "log_device": transition.log_device,
+            "log_inode": transition.log_inode,
+        }
+    return replace(
+        value,
+        delivery_status="NOT_CONFIRMED",
+        rejected_transition=transition.matched_line if transition is not None else None,
+        rejected_transition_observation=rejected_observation,
+        failure_reason=reason,
+    )
 
 
 def evidence_dict(value: InputEvidence) -> dict:

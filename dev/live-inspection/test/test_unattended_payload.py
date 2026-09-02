@@ -7,6 +7,7 @@ import sys
 import tempfile
 import unittest
 import zipfile
+from dataclasses import replace
 from pathlib import Path
 from unittest import mock
 
@@ -18,10 +19,11 @@ from live_inspection.cli import LiveRun
 from live_inspection.model import HarnessError, Payload, UnattendedStartup
 from live_inspection.payload import install_production_payload, tree_checksum
 from live_inspection.safety import ControlTransaction, recover_interrupted_runs
-from live_inspection.state import GateResult
+from live_inspection.state import GateResult, LogCursor, LogFollower
 from live_inspection.unattended import (
     InputEvidence,
     ProcessIdentity,
+    ReadinessIdentity,
     StartupGateController,
     WindowSnapshot,
     X11Action,
@@ -158,6 +160,33 @@ class StartupGateControllerTests(unittest.TestCase):
         return {"status": "FRESH", "path": "screenshots/startup-gate-ready.png", "width": 960, "height": 1040}
 
     @staticmethod
+    def cursor() -> LogCursor:
+        return LogCursor(10, 100.0, 100_000_000_000, 99_000_000_000, 8, 9, False, 3)
+
+    @staticmethod
+    def identity(run: str = "RUN-1") -> ReadinessIdentity:
+        return ReadinessIdentity(
+            run, run, "OBSERVER-1", "SESSION-1", "production", "CandidateMod",
+            "a" * 64, ("CandidateMod", "OBSERVER-1"),
+        )
+
+    @classmethod
+    def transition(cls, *, seen_at: float = 102.5, **updates: str) -> GateResult:
+        fields = {
+            "kind": "PLAYER_READY", "run": "RUN-1", "observer": "OBSERVER-1",
+            "session": "SESSION-1", "sequence": "4", "emittedAtMs": "102000",
+            "save": "RUN-1", "activeModCount": "2",
+            "activeMods": "CandidateMod,OBSERVER-1", "payloadMode": "production",
+            "payloadId": "CandidateMod", "payloadChecksum": "a" * 64,
+            "gameVersion": "42.20.4",
+        }
+        fields.update(updates)
+        line = "[CF-INSPECT]|EVENT|" + "|".join(f"{key}={value}" for key, value in fields.items())
+        return GateResult("player-ready-modal-check", 1, 0.1, line, seen_at,
+                          102_500_000_000, 10, 10 + len(line.encode()) + 1,
+                          102_400_000_000, 8, 9)
+
+    @staticmethod
     def input_evidence() -> InputEvidence:
         return InputEvidence(
             display=":0", launcher_pid=111, launcher_start_time_ticks=1000,
@@ -170,13 +199,19 @@ class StartupGateControllerTests(unittest.TestCase):
             action_x=480, action_y=960, root_x=960, root_y=992,
             active_window_id=333, focus_window_id=333, pointer_window_id=44,
             ready_screenshot=StartupGateControllerTests.screenshot(),
+            action_completed_wall_time_ns=101_100_000_000,
+            pre_action_cursor=StartupGateControllerTests.cursor(),
+            readiness_identity=StartupGateControllerTests.identity(),
         )
 
     def test_one_shot_bound_and_structured_evidence(self):
         now = [100.0]
         launcher = ProcessIdentity(111, 111, 1000)
         window = WindowSnapshot(object(), ProcessIdentity(222, 111, 2000), 333, "Project Zomboid", 480, 32, 960, 1008)
-        action = X11Action(launcher, window, 480, 960, 960, 992, 333, 333, 444, self.screenshot())
+        action = X11Action(
+            launcher, window, 480, 960, 960, 992, 333, 333, 444,
+            self.screenshot(), self.cursor(), 101_100_000_000,
+        )
         controller = StartupGateController(
             self.policy(), clock=lambda: now[0], sleep=lambda seconds: now.__setitem__(0, now[0] + seconds),
             identity_reader=lambda _pid: launcher,
@@ -185,6 +220,7 @@ class StartupGateControllerTests(unittest.TestCase):
             evidence = controller.activate(
                 launcher_pid=111, signature="game loading took", signature_seen_at=99.0,
                 readiness_capture=self.screenshot,
+                readiness_identity=self.identity(), pre_action_checkpoint=self.cursor,
             )
             self.assertEqual((evidence.action, evidence.action_count, evidence.window_pid), ("left-click", 1, 222))
             self.assertEqual((evidence.action_x, evidence.action_y, evidence.window_width, evidence.window_height), (480, 960, 960, 1008))
@@ -193,6 +229,7 @@ class StartupGateControllerTests(unittest.TestCase):
                 controller.activate(
                     launcher_pid=111, signature="game loading took", signature_seen_at=100.0,
                     readiness_capture=self.screenshot,
+                    readiness_identity=self.identity(), pre_action_checkpoint=self.cursor,
                 )
 
         class Window:
@@ -209,6 +246,7 @@ class StartupGateControllerTests(unittest.TestCase):
             controller.activate(
                 launcher_pid=111, signature="game loading took", signature_seen_at=89.0,
                 readiness_capture=self.screenshot,
+                readiness_identity=self.identity(), pre_action_checkpoint=self.cursor,
             )
 
     def test_window_ownership_filters_non_group_pids(self):
@@ -290,19 +328,24 @@ class StartupGateControllerTests(unittest.TestCase):
         self.assertIn("timeout", failed.failure_reason or "")
 
     def test_fresh_run_scoped_transition_confirms_delivery(self):
-        transition = "[CF-INSPECT]|EVENT|kind=PLAYER_READY|run=RUN-1"
         confirmed = confirm_delivery(
-            self.input_evidence(), transition=transition, transition_seen_at=102.5, expected_run="RUN-1"
+            self.input_evidence(), transition=self.transition(),
+            identity_revalidator=lambda _value: {"status": "STABLE"},
         )
         self.assertEqual(confirmed.delivery_status, "CONFIRMED")
         self.assertAlmostEqual(confirmed.transition_latency_seconds or 0, 1.4)
 
     def test_stale_or_wrong_run_transition_cannot_confirm_delivery(self):
-        transition = "[CF-INSPECT]|EVENT|kind=PLAYER_READY|run=RUN-1"
         with self.assertRaisesRegex(HarnessError, "stale"):
-            confirm_delivery(self.input_evidence(), transition=transition, transition_seen_at=100.0, expected_run="RUN-1")
-        with self.assertRaisesRegex(HarnessError, "run-scoped"):
-            confirm_delivery(self.input_evidence(), transition=transition, transition_seen_at=102.0, expected_run="RUN-2")
+            confirm_delivery(
+                self.input_evidence(), transition=self.transition(seen_at=100.0),
+                identity_revalidator=lambda _value: {"status": "STABLE"},
+            )
+        with self.assertRaisesRegex(HarnessError, "correlation mismatch"):
+            confirm_delivery(
+                self.input_evidence(), transition=self.transition(run="RUN-2"),
+                identity_revalidator=lambda _value: {"status": "STABLE"},
+            )
 
 
 class StartupDeliveryIntegrationTests(unittest.TestCase):
@@ -322,13 +365,34 @@ class StartupDeliveryIntegrationTests(unittest.TestCase):
         return run
 
     @staticmethod
-    def emitted() -> InputEvidence:
-        return StartupGateControllerTests.input_evidence()
+    def emitted(run: LiveRun) -> InputEvidence:
+        return replace(
+            StartupGateControllerTests.input_evidence(),
+            readiness_identity=run.readiness_identity,
+        )
+
+    def test_pre_action_cursor_and_sequence_are_persisted_before_input(self):
+        with tempfile.TemporaryDirectory() as temp:
+            run = self.make_run(Path(temp))
+            identity = run.readiness_identity
+            console = Path(temp) / "console.txt"
+            line = (
+                f"LOG > [CF-INSPECT]|EVENT|kind=SCRIPT_LOADED|run={identity.run_id}|"
+                f"observer={identity.observer_id}|session={identity.session_id}|"
+                "sequence=1|emittedAtMs=1000|profileSites=1\n"
+            )
+            console.write_text(line, encoding="utf-8")
+            selected = run.persist_pre_action_cursor(LogFollower(console))
+            persisted = json.loads((run.bundle / "startup-readiness-cursor.json").read_text(encoding="utf-8"))
+            self.assertEqual(selected.offset, len(line.encode("utf-8")))
+            self.assertEqual(selected.observer_sequence_watermark, 1)
+            self.assertEqual(persisted["status"], "PRE_ACTION_CURSOR_ESTABLISHED")
+            self.assertEqual(persisted["readiness_identity"]["session_id"], identity.session_id)
 
     def test_execute_marks_successful_x11_command_unconfirmed_on_timeout(self):
         with tempfile.TemporaryDirectory() as temp:
             run = self.make_run(Path(temp))
-            run.startup_controller.activate = mock.Mock(return_value=self.emitted())
+            run.startup_controller.activate = mock.Mock(return_value=self.emitted(run))
 
             def gate_result(gate, *_args, **_kwargs):
                 if gate.name == "player-ready-modal-check":
@@ -347,12 +411,25 @@ class StartupDeliveryIntegrationTests(unittest.TestCase):
     def test_execute_confirms_only_fresh_run_scoped_player_ready(self):
         with tempfile.TemporaryDirectory() as temp:
             run = self.make_run(Path(temp))
-            run.startup_controller.activate = mock.Mock(return_value=self.emitted())
+            run.startup_controller.activate = mock.Mock(return_value=self.emitted(run))
+            run.startup_controller.revalidate_delivery_identity = mock.Mock(return_value={"status": "STABLE"})
 
             def gate_result(gate, *_args, **_kwargs):
                 if gate.name == "player-ready-modal-check":
-                    line = f"[CF-INSPECT]|EVENT|kind=PLAYER_READY|run={run.save_name}"
-                    return GateResult(gate.name, 1, 0.1, line, 102.0)
+                    identity = run.readiness_identity
+                    fields = {
+                        "kind": "PLAYER_READY", "run": identity.run_id,
+                        "observer": identity.observer_id, "session": identity.session_id,
+                        "sequence": "4", "emittedAtMs": "102000", "save": identity.save_name,
+                        "activeModCount": str(len(identity.active_mod_ids)),
+                        "activeMods": ",".join(identity.active_mod_ids),
+                        "payloadMode": identity.payload_mode, "payloadId": identity.payload_id,
+                        "payloadChecksum": identity.payload_checksum, "gameVersion": "42.20.4",
+                    }
+                    line = "[CF-INSPECT]|EVENT|" + "|".join(f"{key}={value}" for key, value in fields.items())
+                    return GateResult(gate.name, 1, 0.1, line, 102.0,
+                                      102_500_000_000, 10, 10 + len(line.encode()) + 1,
+                                      102_400_000_000, 8, 9)
                 return GateResult(gate.name, 1, 0.1, "game loading took", 100.0)
 
             with mock.patch.object(run, "prepare"), mock.patch("live_inspection.cli.subprocess.Popen", return_value=self.Process()), mock.patch(
@@ -364,6 +441,41 @@ class StartupDeliveryIntegrationTests(unittest.TestCase):
             evidence = json.loads((run.bundle / "unattended-startup-input.json").read_text(encoding="utf-8"))
             self.assertEqual(evidence["delivery_status"], "CONFIRMED")
             self.assertEqual(run.status, "PASS")
+
+    def test_rejected_correlation_is_atomically_recorded_without_pass(self):
+        with tempfile.TemporaryDirectory() as temp:
+            run = self.make_run(Path(temp))
+            run.startup_controller.activate = mock.Mock(return_value=self.emitted(run))
+            run.startup_controller.revalidate_delivery_identity = mock.Mock(return_value={"status": "STABLE"})
+
+            def gate_result(gate, *_args, **_kwargs):
+                if gate.name == "player-ready-modal-check":
+                    identity = run.readiness_identity
+                    line = (
+                        f"[CF-INSPECT]|EVENT|kind=PLAYER_READY|run={identity.run_id}|"
+                        f"observer={identity.observer_id}|session={identity.session_id}|sequence=4|"
+                        f"emittedAtMs=102000|save=WRONG-SAVE|activeModCount={len(identity.active_mod_ids)}|"
+                        f"activeMods={','.join(identity.active_mod_ids)}|payloadMode={identity.payload_mode}|"
+                        f"payloadId={identity.payload_id}|payloadChecksum={identity.payload_checksum}|"
+                        "gameVersion=42.20.4"
+                    )
+                    return GateResult(gate.name, 1, 0.1, line, 102.0,
+                                      102_500_000_000, 10, 10 + len(line.encode()) + 1,
+                                      102_400_000_000, 8, 9)
+                return GateResult(gate.name, 1, 0.1, "game loading took", 100.0)
+
+            with mock.patch.object(run, "prepare"), mock.patch(
+                "live_inspection.cli.subprocess.Popen", return_value=self.Process()
+            ), mock.patch("live_inspection.cli.wait_for_gate", side_effect=gate_result), \
+                    self.assertRaisesRegex(HarnessError, "correlation mismatch"):
+                run.execute()
+            if run.launcher_stdout: run.launcher_stdout.close()
+            if run.launcher_stderr: run.launcher_stderr.close()
+            saved = json.loads((run.bundle / "unattended-startup-input.json").read_text(encoding="utf-8"))
+            self.assertEqual(saved["delivery_status"], "NOT_CONFIRMED")
+            self.assertIsNone(saved["transition"])
+            self.assertIn("WRONG-SAVE", saved["rejected_transition"])
+            self.assertEqual(saved["rejected_transition_observation"]["record_start_offset"], 10)
 
 
 class ProductionPayloadTests(unittest.TestCase):
@@ -467,6 +579,13 @@ expected_mod_id="CandidateMod"
                 run.prepare()
                 self.assertTrue((run.installed_payload / "42/mod.info").is_file())
                 self.assertTrue((run.bundle / "production-payload.json").is_file())
+                generated = (
+                    run.installed_mod / "common/media/lua/client/CFInspectionProfile.lua"
+                ).read_text(encoding="utf-8")
+                self.assertIn(f'  observerId = "{run.mod_id}",', generated)
+                self.assertIn(f'  sessionId = "{run.readiness_identity.session_id}",', generated)
+                self.assertIn(f'  payloadId = "{run.readiness_identity.payload_id}",', generated)
+                self.assertIn(f'  payloadChecksum = "{checksum}",', generated)
                 run.cleanup()
             for name, content in before.items():
                 self.assertEqual((pz / name).read_bytes(), content)

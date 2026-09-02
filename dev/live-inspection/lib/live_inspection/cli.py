@@ -12,19 +12,49 @@ import subprocess
 import sys
 import time
 import uuid
+from dataclasses import asdict, replace
 from pathlib import Path
 
 from . import __version__
 from .config import load_profile, unattended_refusal_reason
 from .evidence import finalize_manifest, sanitize_line, write_sanitized
 from .model import Gate, HarnessError, Profile, Site
-from .payload import install_production_payload
+from .payload import install_production_payload, tree_checksum
 from .safety import ControlTransaction, ExclusiveRunLock, assert_save_safety, matching_pz_processes, parse_renderer, recover_interrupted_runs, sha256
 from .state import LogFollower, wait_for_gate
-from .unattended import StartupGateController, confirm_delivery, evidence_dict, fail_delivery
+from .unattended import ReadinessIdentity, StartupGateController, confirm_delivery, evidence_dict, fail_delivery
 
 LOCK_PATH = Path("/tmp/conspiracy-files-live-inspection.lock")
 PREFIX = "[cf-live-inspection]"
+STARTUP_CONTROL_REGION = (420, 982, 541, 1003)
+STARTUP_CONTROL_TEMPLATE_ROWS = (
+    (
+        "0000000000000000000000000000000", "0000000000000000000000000000000",
+        "0000000000000000000000000000000", "0000018400600000000000000000000",
+        "0003f18e006000000007e0000000000", "0007b180006000c0000ee3000003000",
+        "000e0180006000c0000c03000003000", "000c018c3e6181f1f00c07cfc37fc00",
+        "000c018c726301c3980e0704e3f7000", "000c018c606600c30c0783006383000",
+        "000c018ce07c00c70c03c303e383000", "000c018cc07e00c60c00e30fe303000",
+        "000c018ce07600c70c00631c6303000", "000e018c606300c31c0063186303000",
+        "0007f18c7e6380f3f81fe3dde303c00", "0003f18c3e61c0f1f00fc3cf2303c00",
+        "0000000000000000000000000000000", "0000000000000000000000000000000",
+        "0000000000000000000000000000000", "0000000000000000000000000000000",
+        "0000000000000000000000000000000",
+    ),
+    (
+        "0000000000000000000000000000000", "0000000000000000000000000000000",
+        "0000000000000000000000000000000", "0000008400200000000000000000000",
+        "0003f18c006000000007e0000000000", "00073180006000c0000e43000003000",
+        "000e0180006000c0000c03000003000", "000c018c3e6181f1f00c07c7c377c00",
+        "000c018c726301c3980e070063e7000", "000c018c606600c30c0783006383000",
+        "000c018c407c00c20c01c300e303000", "000c018cc07c00c60c00e30fe303000",
+        "000c018c407600c20c00630c6303000", "000e018c606300c30c0063186303000",
+        "0007f18c766380e3b81fc38ce303800", "0003f18c3e618071f00f81cf2301c00",
+        "0000000000000000000000000000000", "0000000000000000000000000000000",
+        "0000000000000000000000000000000", "0000000000000000000000000000000",
+        "0000000000000000000000000000000",
+    ),
+)
 
 
 def log(message: str) -> None:
@@ -89,10 +119,20 @@ def lua_string(value: str) -> str:
     return '"' + value.replace("\\", "\\\\").replace('"', '\\"').replace("\n", "\\n") + '"'
 
 
-def render_lua_profile(profile: Profile, sites: tuple[Site, ...], save_name: str, mod_id: str, active_mod_ids: tuple[str, ...] | None = None) -> str:
-    active_mod_ids = active_mod_ids or (mod_id,)
-    expected = ", ".join(lua_string(value) for value in active_mod_ids)
-    lines = ["return {", f"  runId = {lua_string(save_name)},", f"  saveName = {lua_string(save_name)},", f"  modId = {lua_string(mod_id)},", f"  payloadMode = {lua_string(profile.payload.mode)},", f"  activeModIds = {{ {expected} }},", "  sites = {"]
+def render_lua_profile(profile: Profile, sites: tuple[Site, ...], identity: ReadinessIdentity) -> str:
+    expected = ", ".join(lua_string(value) for value in identity.active_mod_ids)
+    lines = [
+        "return {",
+        f"  runId = {lua_string(identity.run_id)},",
+        f"  saveName = {lua_string(identity.save_name)},",
+        f"  observerId = {lua_string(identity.observer_id)},",
+        f"  sessionId = {lua_string(identity.session_id)},",
+        f"  payloadMode = {lua_string(identity.payload_mode)},",
+        f"  payloadId = {lua_string(identity.payload_id)},",
+        f"  payloadChecksum = {lua_string(identity.payload_checksum)},",
+        f"  activeModIds = {{ {expected} }},",
+        "  sites = {",
+    ]
     for site in sites:
         x1, y1, x2, y2 = site.bounds
         point = site.entry_point or ((x1 + x2) / 2, (y1 + y2) / 2, float(site.levels[0]))
@@ -136,30 +176,57 @@ def startup_gate_visual_evidence(
 
     width, height = screenshot_size
     client_width, client_height = client_size
-    if width != client_width or not client_height <= height <= client_height + 64:
-        raise HarnessError("startup screenshot geometry does not match the owned client")
+    if (client_width, client_height) != (960, 1008) or (width, height) != (960, 1040):
+        raise HarnessError(
+            "startup visual signature is supported only for the recorded 960x1008 client/960x1040 frame"
+        )
     try:
         with Image.open(path) as source:
             image = source.convert("RGB")
-        decoration_height = height - client_height
-        box = (
-            int(client_width * 0.40),
-            decoration_height + int(client_height * 0.94),
-            int(client_width * 0.60),
-            decoration_height + int(client_height * 0.97),
-        )
-        bright_neutral_pixels = sum(
-            1 for pixel in image.crop(box).getdata()
-            if min(pixel) >= 175 and max(pixel) - min(pixel) <= 35
-        )
+        if image.size != screenshot_size:
+            raise HarnessError("startup screenshot pixels do not match the recorded frame dimensions")
+        crop = image.crop(STARTUP_CONTROL_REGION)
     except (OSError, ValueError) as exc:
         raise HarnessError(f"cannot inspect startup readiness screenshot: {exc}") from exc
-    minimum_pixels = max(80, int((box[2] - box[0]) * (box[3] - box[1]) * 0.01))
+    region_width = STARTUP_CONTROL_REGION[2] - STARTUP_CONTROL_REGION[0]
+    candidate = {
+        (index % region_width, index // region_width)
+        for index, pixel in enumerate(crop.getdata())
+        if min(pixel) >= 140 and max(pixel) - min(pixel) <= 45
+    }
+
+    def template_points(rows: tuple[str, ...]) -> set[tuple[int, int]]:
+        points: set[tuple[int, int]] = set()
+        for y, row in enumerate(rows):
+            bits = int(row, 16)
+            for x in range(region_width):
+                if bits & (1 << (region_width - 1 - x)):
+                    points.add((x, y))
+        return points
+
+    best_score, best_template, best_shift = 0.0, None, None
+    for template_index, rows in enumerate(STARTUP_CONTROL_TEMPLATE_ROWS, 1):
+        template = template_points(rows)
+        for delta_y in range(-1, 2):
+            for delta_x in range(-1, 2):
+                shifted = {(x + delta_x, y + delta_y) for x, y in template}
+                denominator = len(candidate) + len(shifted)
+                score = (2 * len(candidate & shifted) / denominator) if denominator else 0.0
+                if score > best_score:
+                    best_score, best_template, best_shift = score, template_index, [delta_x, delta_y]
+    minimum_score = 0.78
+    count_ok = 250 <= len(candidate) <= 650
+    visible = count_ok and best_score >= minimum_score
     return {
-        "status": "VISIBLE" if bright_neutral_pixels >= minimum_pixels else "NOT_VISIBLE",
-        "region": list(box),
-        "bright_neutral_pixels": bright_neutral_pixels,
-        "minimum_pixels": minimum_pixels,
+        "status": "VISIBLE" if visible else "NOT_VISIBLE",
+        "classifier": "recorded-click-to-start-mask-v1",
+        "region": list(STARTUP_CONTROL_REGION),
+        "foreground_pixels": len(candidate),
+        "foreground_range": [250, 650],
+        "template_dice": round(best_score, 6),
+        "minimum_template_dice": minimum_score,
+        "matched_template": best_template,
+        "matched_shift": best_shift,
     }
 
 
@@ -237,13 +304,96 @@ class LiveRun:
         self.bundle_created = False
         self.startup_controller = StartupGateController(profile.unattended_startup)
         self.startup_evidence = None
+        probe_root = Path(__file__).resolve().parents[2] / "probe"
+        active_ids = (
+            (profile.payload.expected_mod_id, self.mod_id)
+            if profile.payload.mode == "production"
+            else (self.mod_id,)
+        )
+        if any(value is None for value in active_ids):
+            raise HarnessError("production payload identity is incomplete")
+        self.readiness_identity = ReadinessIdentity(
+            run_id=self.save_name,
+            save_name=self.save_name,
+            observer_id=self.mod_id,
+            session_id=uuid.uuid4().hex,
+            payload_mode=profile.payload.mode,
+            payload_id=profile.payload.expected_mod_id or self.mod_id,
+            payload_checksum=profile.payload.expected_sha256 or tree_checksum(probe_root),
+            active_mod_ids=tuple(str(value) for value in active_ids),
+        )
+
+    @staticmethod
+    def _write_json_atomic(path: Path, value: dict[str, object]) -> None:
+        staging = path.with_name(f".{path.name}.staging")
+        with staging.open("w", encoding="utf-8") as stream:
+            stream.write(json.dumps(value, indent=2, sort_keys=True) + "\n")
+            stream.flush()
+            os.fsync(stream.fileno())
+        os.replace(staging, path)
+        directory_fd = os.open(path.parent, os.O_RDONLY | os.O_DIRECTORY)
+        try:
+            os.fsync(directory_fd)
+        finally:
+            os.close(directory_fd)
 
     def write_startup_evidence(self) -> None:
         if self.startup_evidence is None:
             return
-        (self.bundle / "unattended-startup-input.json").write_text(
-            json.dumps(evidence_dict(self.startup_evidence), indent=2, sort_keys=True) + "\n", encoding="utf-8"
+        self._write_json_atomic(
+            self.bundle / "unattended-startup-input.json",
+            evidence_dict(self.startup_evidence),
         )
+
+    def persist_pre_action_cursor(self, follower: LogFollower):
+        cursor = follower.checkpoint()
+        sequences: list[int] = []
+        with follower.path.open("rb") as stream:
+            stat = os.fstat(stream.fileno())
+            if (stat.st_dev, stat.st_ino) != (cursor.log_device, cursor.log_inode) \
+                    or stat.st_size < cursor.offset:
+                raise HarnessError("console identity changed while persisting the pre-action cursor")
+            raw_prefix = stream.read(cursor.offset)
+            if len(raw_prefix) != cursor.offset:
+                raise HarnessError("console became incomplete while persisting the pre-action cursor")
+            prefix = raw_prefix.decode("utf-8", "replace")
+        marker = "[CF-INSPECT]|EVENT|"
+        for line in prefix.splitlines():
+            position = line.find(marker)
+            if position < 0:
+                continue
+            fields: dict[str, str] = {}
+            malformed = False
+            for part in line[position:].split("|")[2:]:
+                if "=" not in part:
+                    malformed = True
+                    break
+                key, value = part.split("=", 1)
+                if not key or key in fields:
+                    malformed = True
+                    break
+                fields[key] = value
+            if fields.get("run") != self.readiness_identity.run_id:
+                continue
+            if malformed or fields.get("observer") != self.readiness_identity.observer_id \
+                    or fields.get("session") != self.readiness_identity.session_id:
+                raise HarnessError("current-run observer identity is malformed before startup input")
+            sequence = fields.get("sequence", "")
+            if not sequence.isdigit() or str(int(sequence)) != sequence or int(sequence) < 1:
+                raise HarnessError("current-run observer sequence is malformed before startup input")
+            sequences.append(int(sequence))
+        if sequences != sorted(set(sequences)):
+            raise HarnessError("current-run observer records are reordered or duplicated before startup input")
+        cursor = replace(cursor, observer_sequence_watermark=max(sequences, default=0))
+        self._write_json_atomic(
+            self.bundle / "startup-readiness-cursor.json",
+            {
+                "status": "PRE_ACTION_CURSOR_ESTABLISHED",
+                "cursor": asdict(cursor),
+                "readiness_identity": asdict(self.readiness_identity),
+            },
+        )
+        return cursor
 
     def write_state(self, status: str) -> None:
         self.bundle.mkdir(parents=True, exist_ok=True)
@@ -355,7 +505,17 @@ class LiveRun:
             payload_evidence = install_production_payload(self.profile.payload, self.installed_payload)
             active_ids.insert(0, payload_evidence.mod_id)
             (self.bundle / "production-payload.json").write_text(json.dumps(payload_evidence.__dict__, indent=2, sort_keys=True) + "\n", encoding="utf-8")
-        generated.write_text(render_lua_profile(self.profile, self.sites, self.save_name, self.mod_id, tuple(active_ids)), encoding="utf-8")
+        if tuple(active_ids) != self.readiness_identity.active_mod_ids:
+            raise HarnessError("installed active-mod identity drifted from the readiness contract")
+        if payload_evidence is not None and (
+            payload_evidence.mod_id != self.readiness_identity.payload_id
+            or payload_evidence.checksum != self.readiness_identity.payload_checksum
+        ):
+            raise HarnessError("installed production payload drifted from the readiness contract")
+        generated.write_text(
+            render_lua_profile(self.profile, self.sites, self.readiness_identity),
+            encoding="utf-8",
+        )
         active_mods = mod_list(*active_ids)
         (self.destination_save / "mods.txt").write_text(active_mods, encoding="utf-8")
         (self.profile.pz_user_root / "mods" / "default.txt").write_text(active_mods, encoding="utf-8")
@@ -387,10 +547,14 @@ class LiveRun:
             repetitions = len(self.sites) if gate.name == "scan-completion" else 1
             for occurrence in range(1, repetitions + 1):
                 not_before = None
+                cursor = None
                 if gate.name == "player-ready-modal-check" and self.startup_evidence is not None:
                     not_before = self.startup_evidence.action_completed_monotonic
+                    cursor = self.startup_evidence.pre_action_cursor
                 try:
-                    result = wait_for_gate(gate, follower, alive, timeout, not_before=not_before)
+                    result = wait_for_gate(
+                        gate, follower, alive, timeout, not_before=not_before, cursor=cursor
+                    )
                 except HarnessError as exc:
                     if gate.name == "player-ready-modal-check" and self.startup_evidence is not None:
                         self.startup_evidence = fail_delivery(
@@ -407,12 +571,13 @@ class LiveRun:
                     try:
                         self.startup_evidence = confirm_delivery(
                             self.startup_evidence,
-                            transition=result.matched_line,
-                            transition_seen_at=result.matched_at,
-                            expected_run=self.save_name,
+                            transition=result,
+                            identity_revalidator=self.startup_controller.revalidate_delivery_identity,
                         )
                     except HarnessError as exc:
-                        self.startup_evidence = fail_delivery(self.startup_evidence, reason=str(exc))
+                        self.startup_evidence = fail_delivery(
+                            self.startup_evidence, reason=str(exc), transition=result
+                        )
                         self.write_startup_evidence()
                         raise
                     self.write_startup_evidence()
@@ -437,6 +602,8 @@ class LiveRun:
                             required=True,
                             startup_client_size=(width, height),
                         ),
+                        readiness_identity=self.readiness_identity,
+                        pre_action_checkpoint=lambda: self.persist_pre_action_cursor(follower),
                     )
                     self.startup_evidence = evidence
                     self.write_startup_evidence()
