@@ -490,6 +490,35 @@ test("presentation owns exactly one configurable notebook binding and refreshes 
     assertEqual(nil, h.events.OnKeyPressed)
 end)
 
+test("presentation registration callbacks stay inert across partial failure and activate once on retry", function()
+    local h = harness()
+    local failAt = "OnKeyPressed"
+    h.port.replaceEvent = function(name, callback)
+        h.events[name] = callback
+        if name == "OnFillInventoryObjectContextMenu" then callback(0, context(), { stamp(ids.d1, true) })
+        else callback(49) end
+        if name == failAt then error("injected presentation Add failure") end
+    end
+    h.port.removeEvent = function() error("injected presentation Remove failure") end
+
+    local started = pcall(h.runtime.start)
+    assertFalse(started)
+    local failedMenu = context()
+    h.events.OnFillInventoryObjectContextMenu(0, failedMenu, { stamp(ids.d1, true) })
+    h.events.OnKeyPressed(49)
+    assertEqual(0, #failedMenu.options)
+    assertEqual(0, #h.notebooks)
+    assertEqual(0, #h.persistence.snapshot().evidence)
+
+    failAt = nil
+    assertTrue(h.runtime.start())
+    local committedMenu = context()
+    h.events.OnFillInventoryObjectContextMenu(0, committedMenu, { stamp(ids.d1, true) })
+    assertEqual(1, #ownedOptions(h.runtime, committedMenu))
+    h.events.OnKeyPressed(49)
+    assertEqual(1, #h.notebooks)
+end)
+
 test("presentation geometry remains centered and usable at common resolutions", function()
     for _, resolution in ipairs({ {800, 600}, {960, 1008}, {1280, 720}, {1920, 1080}, {2560, 1440}, {3840, 2160} }) do
         for _, kind in ipairs({ "reader", "notebook" }) do

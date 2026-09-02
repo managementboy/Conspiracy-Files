@@ -41,7 +41,7 @@ Goal: prove the intended feeling once, with the smallest end-to-end build.
 - [x] Notebook journal, evidence list, localized static chrome, in-fiction help and the one normal-play notebook keybind implemented and tested offline; live acceptance pending.
 - [x] Supported death/reload checkpoint and state-integrity behavior implemented and tested offline (CF-V01-E10); live acceptance pending.
 - [x] Schema-2 exact journal replay, active Asset/token-pair gateway, legacy-carrier quarantine and fail-closed range gate implemented with offline adversarial regressions.
-- [ ] PM-GOV-001 independent offline QA passes on the exact consolidation commit; any later production-code change requires a new result.
+- [ ] PM-GOV-001 independent offline QA passes on the exact current candidate commit; any later production-code change requires a new result.
 - [ ] Production shell and complete vertical slice pass their live Build 42 acceptance matrices.
 - [x] Deterministic package pipeline implemented and reproducibility-tested offline.
 - [ ] Cross-device prerelease smoke passes.

@@ -23,7 +23,7 @@ authored Asset appears once with another Asset's expected token.
 |---|---|---|
 | P1 | Exact current nested carrier and active pair; absent legacy fields | Verified; normal placement/scan/presentation path may proceed. |
 | P2 | Exact active pair at `dead-air-r0-compatible` or `dead-air-r0-compatible-text` | Verify identity first; refresh display/revision fields in place; verify again; preserve item instance, Asset ID, token and exact legacy-mirror identity fields. |
-| N1 | At the exact authored target, the expected PZ item type plus canonical authored display name but no valid `ConspiracyFiles` carrier/pair | Reject. An ordinary item that lacks the authored presentation signal, or has a different item type, remains unrelated loot and does not block placement. |
+| N1 | At the exact authored target, the expected PZ item type plus canonical authored display name but no valid readable `ConspiracyFiles` carrier/pair, including getter failure, nil/non-table return, hostile access or malformed nested/legacy data | Reject. An ordinary same-type/different-name or canonical-name/different-type item remains unrelated loot and does not block placement. |
 | N2 | Nested Asset ID with no physical token | Reject. |
 | N3 | Nested physical token with no Asset ID | Reject. |
 | N4 | Complete-looking legacy flat fields with no nested carrier | Reject. |

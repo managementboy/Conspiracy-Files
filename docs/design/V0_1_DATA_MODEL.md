@@ -763,4 +763,4 @@ The Dead Air fixture is development-time AI-assisted and was approved by the pro
 ### Persistence awareness
 - No direct Lua/PZ/Java object reference required: yes.
 - Canonical logical state is tiny by estimate relative to the hard 500 KB/save budget: yes; the implementation must still measure its encoded state.
-- Completed T1/T4/T5/T7/T8 constraints are incorporated; T10 assumptions remain labeled unverified/deferred: yes.
+- Completed T1/T4/T5/T7/T8/T10 mechanism constraints are incorporated; production integration and T10 controller/live-candidate acceptance remain explicitly pending: yes.

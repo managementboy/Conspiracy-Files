@@ -292,7 +292,12 @@ local function tokenFor(assetId)
 end
 
 local itemPort = {
-    modData = function(item) return item.modData end,
+    modData = function(item)
+        if item.modDataMode == "throwing" then error("injected getModData failure") end
+        if item.modDataMode == "nil" then return nil end
+        if item.modDataMode == "non-table" then return "invalid ModData value" end
+        return item.modData
+    end,
     setName = function(item, value) item.name, item.nameWrites = value, item.nameWrites + 1 end,
     setCustomName = function(item, value) item.customName, item.customWrites = value, item.customWrites + 1 end,
     displayName = function(item) return item.name end,
@@ -335,6 +340,35 @@ end
 
 local function carrier(assetId, state, otherAssetId, tokenProvider)
     local tokens = tokenProvider or tokenFor
+    if state == "throwing" or state == "nil" or state == "non-table" then
+        local value = item(assetId, true)
+        value.name = CF.Content.assets[assetId].displayName
+        value.modDataMode = state
+        return value
+    end
+    if state == "hostile-table" then
+        local value = item(assetId, true)
+        value.name = CF.Content.assets[assetId].displayName
+        value.modData = setmetatable({}, {
+            __index = function() error("injected hostile ModData access") end
+        })
+        return value
+    end
+    if state == "malformed-nested-access" then
+        local value = item(assetId, true)
+        value.name = CF.Content.assets[assetId].displayName
+        value.modData.ConspiracyFiles = setmetatable({}, {
+            __index = function() error("injected hostile nested carrier access") end
+        })
+        return value
+    end
+    if state == "unreadable-legacy" then
+        local value = stamped(assetId, tokens(assetId))
+        value.modData = setmetatable(value.modData, {
+            __index = function() error("injected hostile legacy mirror access") end
+        })
+        return value
+    end
     if state == "absent" then return item(assetId, true) end
     if state == "authored-absent" then
         local value = item(assetId, true)
@@ -379,7 +413,8 @@ test("integrity revision compatibility and all-Asset gateway matrix are explicit
 
     local gateway = CF.ItemIdentityGateway.new({ itemPort = itemPort, tokenFor = tokenFor })
     local rejectedStates = {
-        "cross-pair", "asset-only", "token-only", "authored-absent", "partial", "malformed",
+        "cross-pair", "asset-only", "token-only", "authored-absent", "throwing", "nil", "non-table",
+        "hostile-table", "malformed-nested-access", "unreadable-legacy", "partial", "malformed",
         "conflicting-mirror", "unknown-asset", "wrong-save", "unknown-revision", "future-revision"
     }
     for index, assetId in ipairs(allAssets) do
@@ -422,7 +457,41 @@ test("integrity revision compatibility and all-Asset gateway matrix are explicit
             assertTrue(result.status == "collision" or result.status == "rejected", assetId .. "/" .. state)
             assertDeepEqual(before, hostile, assetId .. "/" .. state .. " gateway preservation")
         end
+
+        local wrongTarget = allAssets[(index % #allAssets) + 1]
+        local validElsewhere = carrier(assetId, "current", wrongTarget)
+        assertEqual("other", gateway.verify(validElsewhere, wrongTarget, { authoredTarget = true }).status,
+            assetId .. " valid pair at the wrong authored target")
+        for _, state in ipairs({ "throwing", "nil", "non-table", "hostile-table", "malformed-nested-access" }) do
+            local unreadableElsewhere = carrier(assetId, state, wrongTarget)
+            assertEqual("other", gateway.verify(unreadableElsewhere, wrongTarget, { authoredTarget = true }).status,
+                assetId .. "/" .. state .. " wrong-target non-claim")
+        end
     end
+end)
+
+test("integrity refresh fails before display writes when a verified carrier becomes unreadable", function()
+    local value = carrier(ids.d1, "current", ids.d2)
+    local reads = 0
+    local flakyPort = {
+        modData = function(subject)
+            reads = reads + 1
+            if reads > 1 then error("injected second getModData failure") end
+            return subject.modData
+        end,
+        setName = itemPort.setName,
+        setCustomName = itemPort.setCustomName,
+        displayName = itemPort.displayName,
+        itemType = itemPort.itemType
+    }
+    local gateway = CF.ItemIdentityGateway.new({ itemPort = flakyPort, tokenFor = tokenFor })
+    local refreshed, message, changed = gateway.refresh(value, ids.d1)
+    assertFalse(refreshed)
+    assertEqual("moddata-read-failed", message)
+    assertFalse(changed)
+    assertEqual(2, reads)
+    assertEqual(0, value.nameWrites)
+    assertEqual(0, value.customWrites)
 end)
 
 local function placementHarness(assetId, existing)
@@ -458,7 +527,8 @@ end
 
 test("integrity carrier matrix covers placement scan and reconciliation for D1-D6 and B-37", function()
     local rejectedStates = {
-        "cross-pair", "asset-only", "token-only", "authored-absent", "partial", "malformed",
+        "cross-pair", "asset-only", "token-only", "authored-absent", "throwing", "nil", "non-table",
+        "hostile-table", "malformed-nested-access", "unreadable-legacy", "partial", "malformed",
         "conflicting-mirror", "unknown-asset", "wrong-save", "unknown-revision", "future-revision"
     }
     for index, assetId in ipairs(allAssets) do
@@ -512,6 +582,12 @@ test("integrity carrier matrix covers placement scan and reconciliation for D1-D
             assertEqual(1, #target.items)
             assertDeepEqual(beforeItem, hostile)
             assertDeepEqual(beforeRoot, persistence.snapshot())
+            ok = pcall(placement.reconcile, assetId)
+            assertFalse(ok, "placement conflict must remain sticky for " .. assetId .. "/" .. state)
+            assertEqual(0, created())
+            assertEqual(1, #target.items)
+            assertDeepEqual(beforeItem, hostile)
+            assertDeepEqual(beforeRoot, persistence.snapshot())
 
             placement, persistence, target = placementHarness(assetId, nil)
             assertEqual("placed", placement.reconcile(assetId))
@@ -524,8 +600,34 @@ test("integrity carrier matrix covers placement scan and reconciliation for D1-D
             assertFalse(ok, "scan/reconciliation must reject " .. assetId .. "/" .. state)
             assertDeepEqual(beforeItem, scanItem)
             assertDeepEqual(beforeRoot, persistence.snapshot())
+            ok = pcall(placement.reconcileIdentity, assetId)
+            assertFalse(ok, "scan/reconciliation conflict must remain sticky for " .. assetId .. "/" .. state)
+            assertDeepEqual(beforeItem, scanItem)
+            assertDeepEqual(beforeRoot, persistence.snapshot())
         end
     end
+end)
+
+test("integrity unreadable authored-carrier faults use the bounded adapter error path without state leaks", function()
+    local placement, persistence, target, created = placementHarness(ids.d1, nil)
+    local hostile = carrier(ids.d1, "throwing", ids.d2, function(assetId) return placement.tokenFor(assetId) end)
+    target.items = { hostile }
+    local beforeRoot = persistence.snapshot()
+    local reports = {}
+    local budget = CF.ErrorBudget.new({
+        threshold = 3,
+        report = function(message) reports[#reports + 1] = message end
+    })
+    for _ = 1, 4 do
+        budget.call("placement", function() placement.reconcile(ids.d1) end)
+    end
+    assertTrue(budget.status("placement").disabled)
+    assertEqual(1, #reports)
+    assertTrue(string.find(reports[1], "placement failed", 1, true) ~= nil)
+    assertEqual(0, created())
+    assertEqual(1, #target.items)
+    assertEqual(hostile, target.items[1])
+    assertDeepEqual(beforeRoot, persistence.snapshot())
 end)
 
 local function presentationHarness()
@@ -574,7 +676,8 @@ end
 
 test("integrity presentation matrix and read-only stale callbacks cover Inspect and Mark", function()
     local rejectedStates = {
-        "cross-pair", "asset-only", "token-only", "absent", "authored-absent", "partial", "malformed",
+        "cross-pair", "asset-only", "token-only", "absent", "authored-absent", "throwing", "nil", "non-table",
+        "hostile-table", "malformed-nested-access", "unreadable-legacy", "partial", "malformed",
         "conflicting-mirror", "unknown-asset", "wrong-save", "unknown-revision", "future-revision"
     }
     for index, assetId in ipairs(allAssets) do

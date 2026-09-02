@@ -253,6 +253,11 @@ function PZ.environment()
             if not event or type(event.Add) ~= "function" then error("PZ event unavailable: " .. eventName) end
             event.Add(callback)
         end,
+        removeEvent = function(eventName, callback)
+            local event = Events[eventName]
+            if not event or type(event.Remove) ~= "function" then error("PZ event removal unavailable: " .. eventName) end
+            event.Remove(callback)
+        end,
         itemPort = itemPort,
         world = world,
         report = report

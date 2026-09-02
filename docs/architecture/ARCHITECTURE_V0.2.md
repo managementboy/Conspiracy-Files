@@ -140,7 +140,7 @@ T7 fixes the boundary:
 - reject flat-only carriers. The first schema-2 candidate's flat fields are a compatibility mirror only when all schema/Asset/token/presentation values exactly agree with the nested carrier; physical tracking never chooses between disagreement;
 - parse physical identity as the `(Asset ID, physical token)` pair and require both fields to match the requested canonical pair at placement and scan boundaries; a one-sided match is a rejected collision and never authorizes a rewrite, duplicate or ledger transition;
 - route placement, all physical observations (including caller-supplied observations), presentation and action activation through the single world-runtime identity gateway; a parsed carrier is data, not authorization;
-- at an exact authored target, treat an item as an authored candidate only when its canonical authored display name and, when available, its PZ full item type match that target's static Asset definition; a candidate missing a valid carrier/pair is a collision, while ordinary unrelated loot remains harmless;
+- at an exact authored target, treat an item as an authored candidate only when both its canonical authored display name and PZ full item type match that target's static Asset definition; a candidate whose carrier is missing, unreadable or invalid is a collision, while ordinary same-type/different-name and same-name/different-type loot remains harmless;
 - when an existing verified active pair has one of the two explicitly compatible older presentation revisions, `dead-air-r0-compatible` or `dead-air-r0-compatible-text`, refresh only its display/presentation fields from current authoritative static content in place, preserving the item instance, Asset ID and physical token; reject missing, malformed, unknown and future revisions without display or carrier mutation;
 - render world-specific bodies through T10's cooperative custom `Inspect` action in player and Ground/loot inventory panes;
 - optionally project deliberately short plain-text artifacts into locked `Literature.customPages`; treat the 15-line/1,200-character page UI and literal markup behavior as presentation constraints, never canonical storage;
@@ -167,6 +167,7 @@ Normal movement can remove a placed item from its original container. That zero 
 PZ events are boundary inputs translated to internal domain events.
 
 Rules:
+- install each callback set behind one registration-generation commit gate; callbacks remain inert until every required hook is attached, invalidate before reverse-order cleanup on failure, and keep any callback left by failed cleanup inert;
 - every adapter uses `pcall`;
 - multi-step canonical changes are staged/validated before commit;
 - repeated subsystem failures auto-disable that subsystem for the session after a bounded threshold;

@@ -191,7 +191,8 @@ test("integration singleplayer lifecycle is additive and defers canonical creati
         addEvent = function(name, callback)
             assertEqual(nil, callbacks[name], "event registered twice")
             callbacks[name] = callback
-        end
+        end,
+        removeEvent = function() end
     })
     assertTrue(runtime.enabled)
     assertEqual(6, #runtime.registeredEvents)
@@ -206,6 +207,113 @@ test("integration singleplayer lifecycle is additive and defers canonical creati
     callbacks.OnTick()
     assertEqual(1, #reports)
     assertEqual(CF.IntegrationRuntime.READY_DIAGNOSTIC, reports[1])
+end)
+
+test("integration event registration is generation-gated, reversibly cleaned up, and retry-safe at every hook", function()
+    local eventOrder = {
+        "OnInitGlobalModData", "OnGameStart", "LoadGridsquare",
+        "OnSave", "OnPlayerDeath", "OnTick"
+    }
+    local function invoke(name, callback)
+        if name == "OnInitGlobalModData" then callback(true)
+        elseif name == "LoadGridsquare" then callback({ x = 0, y = 0, z = 0 })
+        else callback() end
+    end
+    local function readyCount(reports)
+        local count = 0
+        for _, message in ipairs(reports) do
+            if message == CF.IntegrationRuntime.READY_DIAGNOSTIC then count = count + 1 end
+        end
+        return count
+    end
+
+    for _, cleanupFails in ipairs({ false, true }) do
+        for failIndex, failedEvent in ipairs(eventOrder) do
+            local storage = makeStorage()
+            local reports, retained, attempted, removeOrder = {}, {}, {}, {}
+            local failAt = failedEvent
+            local environment = {
+                isMultiplayer = function() return false end,
+                runtimeVersion = function() return { major = 42, minor = 20, patch = 4 } end,
+                report = function(message) reports[#reports + 1] = message end,
+                storage = storage,
+                clock = function() return 0 end
+            }
+            environment.addEvent = function(name, callback)
+                retained[name] = retained[name] or {}
+                retained[name][#retained[name] + 1] = callback
+                attempted[#attempted + 1] = { name = name, callback = callback }
+                -- An event collection is allowed to invoke a newly added
+                -- callback synchronously; an uncommitted generation is inert.
+                invoke(name, callback)
+                if name == failAt then error("injected Add failure at " .. name) end
+            end
+            environment.removeEvent = function(name, callback)
+                removeOrder[#removeOrder + 1] = name
+                if cleanupFails then error("injected Remove failure at " .. name) end
+                local callbacks = retained[name] or {}
+                for index = #callbacks, 1, -1 do
+                    if callbacks[index] == callback then table.remove(callbacks, index); return end
+                end
+            end
+
+            local failed = CF.IntegrationRuntime.start(environment)
+            assertFalse(failed.enabled, "failure position " .. failedEvent)
+            assertEqual("event-registration-failed", failed.reason)
+            assertEqual(0, storage.replacementCount(), "uncommitted callback mutated canonical state")
+            assertEqual(0, readyCount(reports), "uncommitted callback emitted the ready marker")
+            assertEqual(failIndex, #attempted, "registration must stop at the injected position")
+            for index = 1, failIndex do
+                assertEqual(eventOrder[failIndex - index + 1], removeOrder[index],
+                    "cleanup must run in reverse registration order")
+            end
+            for _, entry in ipairs(attempted) do invoke(entry.name, entry.callback) end
+            assertEqual(0, storage.replacementCount(), "failed generation callback remained active")
+            assertEqual(0, readyCount(reports), "failed generation emitted the ready marker")
+
+            failAt = nil
+            local retryStart = #attempted + 1
+            local retried = CF.IntegrationRuntime.start(environment)
+            assertTrue(retried.enabled, "retry after " .. failedEvent)
+            assertTrue(retried.registrationGeneration > failed.registrationGeneration)
+            for index = 1, retryStart - 1 do
+                invoke(attempted[index].name, attempted[index].callback)
+            end
+            assertEqual(0, storage.replacementCount(), "retired generation reactivated during retry")
+            assertEqual(0, readyCount(reports))
+
+            retried.callbacks.OnInitGlobalModData(true)
+            assertEqual(1, storage.replacementCount())
+            retried.callbacks.OnGameStart()
+            retried.callbacks.OnGameStart()
+            assertEqual("running", retried.phase())
+            assertEqual(1, readyCount(reports), "successful retry must emit exactly one ready marker")
+            for index = 1, retryStart - 1 do
+                invoke(attempted[index].name, attempted[index].callback)
+            end
+            assertEqual(1, storage.replacementCount(), "only the committed generation may mutate")
+            assertEqual(1, readyCount(reports), "only the committed generation may report readiness")
+        end
+    end
+end)
+
+test("integration runtime construction fails closed before hook registration", function()
+    local hooks, mutations, reports = 0, 0, {}
+    local runtime = CF.IntegrationRuntime.start({
+        isMultiplayer = function() return false end,
+        runtimeVersion = function() return { major = 42, minor = 20, patch = 4 } end,
+        report = function(message) reports[#reports + 1] = message end,
+        storage = {
+            get = function() mutations = mutations + 1 end
+        },
+        clock = function() return 0 end,
+        addEvent = function() hooks = hooks + 1 end
+    })
+    assertFalse(runtime.enabled)
+    assertEqual("runtime-construction-failed", runtime.reason)
+    assertEqual(0, hooks)
+    assertEqual(0, mutations)
+    for _, message in ipairs(reports) do assertFalse(message == CF.IntegrationRuntime.READY_DIAGNOSTIC) end
 end)
 
 test("integration persistence stages complete roots and reconstructs domain projections across fake round trips", function()
@@ -450,7 +558,8 @@ test("integration incompatible persisted roots preserve data and disable runtime
         report = function(message) reports[#reports + 1] = message end,
         storage = storage,
         clock = function() return 0 end,
-        addEvent = function(name, callback) callbacks[name] = callback end
+        addEvent = function(name, callback) callbacks[name] = callback end,
+        removeEvent = function() end
     })
     callbacks.OnInitGlobalModData(false)
     assertEqual("disabled-incompatible-state", runtime.phase())
@@ -473,7 +582,8 @@ test("integration failed initialization never emits the positive ready diagnosti
             replace = function() error("must not replace") end
         },
         clock = function() return 0 end,
-        addEvent = function(name, callback) callbacks[name] = callback end
+        addEvent = function(name, callback) callbacks[name] = callback end,
+        removeEvent = function() end
     })
     callbacks.OnInitGlobalModData(false)
     callbacks.OnGameStart()

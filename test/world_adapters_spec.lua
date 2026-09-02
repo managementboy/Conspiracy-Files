@@ -689,14 +689,15 @@ test("offline world runtime reuses additive hooks and bounded scheduler for plac
         world = world,
         itemPort = itemPort,
         clock = function() return 0 end,
-        addEvent = function(name, callback) callbacks[name] = callback end
+        addEvent = function(name, callback) callbacks[name] = callback end,
+        removeEvent = function() end
     })
     assertTrue(runtime.enabled)
     local d1Binding = CF.LocationBindings.locations[ids.relay].placements[ids.d1]
     callbacks.LoadGridsquare({ x = d1Binding.x, y = d1Binding.y, z = d1Binding.z })
-    assertEqual(1, runtime.scheduler.size())
+    assertEqual(0, runtime.scheduler.size())
     callbacks.OnTick()
-    assertEqual(1, runtime.scheduler.size(), "pre-start target wake-up must wait for canonical initialization")
+    assertEqual(0, runtime.scheduler.size(), "pre-start callbacks must be inert until the runtime is running")
     callbacks.OnInitGlobalModData(true)
     callbacks.OnGameStart()
     assertEqual(7, runtime.scheduler.size())
@@ -854,5 +855,157 @@ test("offline PZ port resolves exact object/building signatures and fails closed
     _G.getPlayer = old.getPlayer
     _G.getCurrentSaveName = old.getCurrentSaveName
     _G.instanceItem = old.instanceItem
+    assertTrue(ok, message)
+end)
+
+test("offline PZ concrete scan classifies every unreadable authored carrier without rewriting it", function()
+    local old = {
+        getCell = rawget(_G, "getCell"), getPlayer = rawget(_G, "getPlayer")
+    }
+    local function javaList(values)
+        return { size = function() return #values end, get = function(_, index) return values[index + 1] end }
+    end
+    local allAssets = {}
+    for _, assetId in ipairs(CF.Content.thread.documentAssetIds) do allAssets[#allAssets + 1] = assetId end
+    for _, assetId in ipairs(CF.Content.thread.optionalAssetIds) do allAssets[#allAssets + 1] = assetId end
+    local function bindingFor(assetId)
+        local asset = CF.Content.assets[assetId]
+        return CF.LocationBindings.locations[asset.placementLocationId].placements[assetId]
+    end
+    local currentBinding, currentItems
+    local container = {
+        getItems = function() return javaList(currentItems) end,
+        getType = function() return currentBinding.containerType end
+    }
+    local object = {
+        getSprite = function() return { getName = function() return currentBinding.sprite end } end,
+        getContainerCount = function() return currentBinding.containerIndex + 1 end,
+        getContainerByIndex = function(_, index) if index == currentBinding.containerIndex then return container end end
+    }
+    local filler = {
+        getSprite = function() return { getName = function() return "filler" end } end,
+        getContainerCount = function() return 0 end
+    }
+    local targetSquare = {
+        getRoom = function()
+            return { getRoomDef = function() return { getName = function() return currentBinding.room end } end }
+        end,
+        getObjects = function()
+            local values = {}
+            for index = 0, currentBinding.objectIndex - 1 do values[index + 1] = filler end
+            values[currentBinding.objectIndex + 1] = object
+            return javaList(values)
+        end
+    }
+    local cell = {
+        getGridSquare = function(_, x, y, z)
+            if x == currentBinding.x and y == currentBinding.y and z == currentBinding.z then return targetSquare end
+        end
+    }
+    _G.getCell = function() return cell end
+    _G.getPlayer = function() return nil end
+
+    local ok, message = pcall(function()
+        local environment = require("ConspiracyFiles/Adapters/PZ").environment()
+        local function tokenFor(assetId) return "cf:concrete-scan:" .. assetId end
+        local gateway = CF.ItemIdentityGateway.new({ itemPort = environment.itemPort, tokenFor = tokenFor })
+        local function authoredItem(assetId, state)
+            local asset = CF.Content.assets[assetId]
+            local value = {
+                md = {}, name = asset.displayName, itemType = asset.pzItemType,
+                mode = "table", nameWrites = 0, customWrites = 0
+            }
+            function value:getModData()
+                if self.mode == "throwing" then error("injected concrete getModData failure") end
+                if self.mode == "nil" then return nil end
+                if self.mode == "non-table" then return 37 end
+                return self.md
+            end
+            function value:getDisplayName() return self.name end
+            function value:getFullType() return self.itemType end
+            function value:setName(name) self.name, self.nameWrites = name, self.nameWrites + 1 end
+            function value:setCustomName(flag) self.customName, self.customWrites = flag, self.customWrites + 1 end
+
+            if state == "valid" or state == "malformed" or state == "asset-only"
+                or state == "token-only" or state == "conflicting" or state == "unreadable-legacy" then
+                assertTrue(CF.ItemProjection.apply(value, assetId, tokenFor(assetId), environment.itemPort))
+                value.nameWrites, value.customWrites = 0, 0
+            end
+            if state == "throwing" or state == "nil" or state == "non-table" then
+                value.mode = state
+            elseif state == "hostile" then
+                value.md = setmetatable({}, {
+                    __index = function() error("injected concrete hostile ModData access") end
+                })
+            elseif state == "partial" then
+                value.md.ConspiracyFiles = {
+                    schemaVersion = CF.ItemPresentation.SCHEMA_VERSION,
+                    assetId = assetId,
+                    physicalToken = tokenFor(assetId)
+                }
+            elseif state == "malformed" then
+                value.md.ConspiracyFiles.unexpected = true
+            elseif state == "asset-only" then
+                value.md.ConspiracyFiles.physicalToken = nil
+            elseif state == "token-only" then
+                value.md.ConspiracyFiles.assetId = nil
+            elseif state == "conflicting" then
+                value.md.ConspiracyFiles.physicalToken = "cf:concrete-scan:conflicting"
+            elseif state == "unreadable-legacy" then
+                value.md = setmetatable(value.md, {
+                    __index = function() error("injected concrete hostile legacy access") end
+                })
+            end
+            return value
+        end
+
+        local states = {
+            "valid", "throwing", "nil", "non-table", "hostile", "partial", "malformed",
+            "asset-only", "token-only", "conflicting", "unreadable-legacy"
+        }
+        for _, assetId in ipairs(allAssets) do
+            currentBinding = bindingFor(assetId)
+            for _, state in ipairs(states) do
+                local value = authoredItem(assetId, state)
+                local originalModData = value.md
+                currentItems = { value }
+                local observation = environment.world.scanPhysical({
+                    assetId = assetId,
+                    binding = currentBinding,
+                    identityGateway = gateway
+                })
+                if state == "valid" then
+                    assertEqual(1, #observation.matches, assetId .. "/" .. state)
+                    assertEqual(0, #observation.collisions, assetId .. "/" .. state)
+                else
+                    assertEqual(0, #observation.matches, assetId .. "/" .. state)
+                    assertEqual(1, #observation.collisions, assetId .. "/" .. state)
+                end
+                assertEqual(originalModData, value.md, assetId .. "/" .. state .. " ModData reference")
+                assertEqual(0, value.nameWrites, assetId .. "/" .. state .. " display rewrite")
+                assertEqual(0, value.customWrites, assetId .. "/" .. state .. " custom-name rewrite")
+            end
+
+            local ordinary = authoredItem(assetId, "nil")
+            ordinary.name = "Ordinary same-type loot"
+            currentItems = { ordinary }
+            local observation = environment.world.scanPhysical({
+                assetId = assetId, binding = currentBinding, identityGateway = gateway
+            })
+            assertEqual(0, #observation.matches)
+            assertEqual(0, #observation.collisions)
+
+            local wrongType = authoredItem(assetId, "nil")
+            wrongType.itemType = "Base.UnrelatedType"
+            currentItems = { wrongType }
+            observation = environment.world.scanPhysical({
+                assetId = assetId, binding = currentBinding, identityGateway = gateway
+            })
+            assertEqual(0, #observation.matches)
+            assertEqual(0, #observation.collisions)
+        end
+    end)
+    _G.getCell = old.getCell
+    _G.getPlayer = old.getPlayer
     assertTrue(ok, message)
 end)

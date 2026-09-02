@@ -33,6 +33,9 @@ swapped/impossible histories, public-operation root round trips followed by
 systematic mutations of every canonical root field and journal kind, fallback
 and marked-subject truth tables, all seven authored active pairs across the
 placement/scan/presentation matrix, explicit older-revision compatibility,
+every lifecycle-registration failure position with inert cleanup-failure
+callbacks and one-generation retry, readable/unreadable/throwing/nil/non-table/
+hostile/partial/malformed/one-sided/conflicting carriers for D1–D6 and B-37,
 authored-candidate versus ordinary-loot classification, supplied-observation
 revalidation, read-only activation-time substitution/mutation and fail-closed
 CI range selection. Mutations that remain valid are named in the model test;

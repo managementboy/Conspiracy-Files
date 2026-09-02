@@ -1,4 +1,5 @@
 local Presentation = require("ConspiracyFiles/Presentation")
+local RegistrationGate = require("ConspiracyFiles/RegistrationGate")
 
 local PresentationRuntime = {}
 
@@ -20,6 +21,7 @@ function PresentationRuntime.new(options)
     local ambiguousLabel = labels.ambiguous or "Inspect Conspiracy-Files item"
     local api = {}
     local started = false
+    local registration = nil
 
     local function persistence()
         local value = persistenceProvider()
@@ -211,25 +213,45 @@ function PresentationRuntime.new(options)
 
     function api.start()
         if started then return false end
+        local gate = RegistrationGate.new()
+        local candidate = {
+            gate = gate,
+            events = {
+                { name = "OnFillInventoryObjectContextMenu", callback = gate.wrap(api.fillInventoryContextMenu) },
+                { name = "OnKeyPressed", callback = gate.wrap(api.keyPressed) }
+            }
+        }
         local ok, message = pcall(function()
             port.ensureKeyBinding(PresentationRuntime.BINDING_NAME)
-            port.replaceEvent("OnFillInventoryObjectContextMenu", api.fillInventoryContextMenu)
-            port.replaceEvent("OnKeyPressed", api.keyPressed)
+            for _, entry in ipairs(candidate.events) do port.replaceEvent(entry.name, entry.callback) end
         end)
         if not ok then
-            pcall(port.removeEvent, "OnFillInventoryObjectContextMenu", api.fillInventoryContextMenu)
-            pcall(port.removeEvent, "OnKeyPressed", api.keyPressed)
+            gate.invalidate()
+            for index = #candidate.events, 1, -1 do
+                local entry = candidate.events[index]
+                pcall(port.removeEvent, entry.name, entry.callback)
+            end
             error(message)
         end
+        assert(gate.commit(), "presentation registration generation could not commit")
+        registration = candidate
         started = true
         return true
     end
 
     function api.stop()
         if not started then return false end
-        port.removeEvent("OnFillInventoryObjectContextMenu", api.fillInventoryContextMenu)
-        port.removeEvent("OnKeyPressed", api.keyPressed)
+        local active = registration
+        active.gate.invalidate()
+        local firstError = nil
+        for index = #active.events, 1, -1 do
+            local entry = active.events[index]
+            local ok, message = pcall(port.removeEvent, entry.name, entry.callback)
+            if not ok and not firstError then firstError = message end
+        end
+        registration = nil
         started = false
+        if firstError then error(firstError) end
         return true
     end
 

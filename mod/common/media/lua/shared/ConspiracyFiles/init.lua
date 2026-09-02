@@ -16,6 +16,7 @@ return {
     PlacementAdapter = require("ConspiracyFiles/PlacementAdapter"),
     Presentation = require("ConspiracyFiles/Presentation"),
     PresentationRuntime = require("ConspiracyFiles/PresentationRuntime"),
+    RegistrationGate = require("ConspiracyFiles/RegistrationGate"),
     Renderer = require("ConspiracyFiles/Renderer"),
     Scheduler = require("ConspiracyFiles/Scheduler"),
     Journal = require("ConspiracyFiles/Journal"),

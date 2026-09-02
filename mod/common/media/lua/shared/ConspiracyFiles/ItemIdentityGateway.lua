@@ -10,8 +10,28 @@ local function modDataFor(item, itemPort)
     else
         ok, value = pcall(function() return item:getModData() end)
     end
-    if not ok or type(value) ~= "table" then return nil, "missing-moddata" end
+    if not ok then return nil, "moddata-read-failed" end
+    if value == nil then return nil, "missing-moddata" end
+    if type(value) ~= "table" then return nil, "invalid-moddata" end
     return value
+end
+
+local function inspectModData(modData)
+    local ok, inspected, message = pcall(ItemPresentation.inspectModData, modData)
+    if not ok then return nil, "moddata-inspection-failed" end
+    return inspected, message
+end
+
+local function carrierClaims(modData)
+    local ok, claims = pcall(ItemPresentation.carrierClaims, modData)
+    if not ok or type(claims) ~= "table" then return nil, "moddata-claims-failed" end
+    return claims
+end
+
+local function validatePresentation(item, isInventoryItem)
+    local ok, subject, message = pcall(ItemPresentation.validate, item, isInventoryItem)
+    if not ok then return nil, "moddata-validation-failed" end
+    return subject, message
 end
 
 local function setDisplay(item, itemPort, title)
@@ -52,10 +72,7 @@ end
 local function isAuthoredCandidate(item, asset, itemPort)
     if not asset or displayNameFor(item, itemPort) ~= asset.displayName then return false end
     local itemType = itemTypeFor(item, itemPort)
-    -- Production exposes getFullType. The nil case keeps deterministic plain-
-    -- Lua boundary fakes conservative when they can expose only the authored
-    -- display signal.
-    return itemType == nil or itemType == asset.pzItemType
+    return itemType == asset.pzItemType
 end
 
 local function claimMatches(claims, assetId, token)
@@ -71,15 +88,28 @@ function ItemIdentityGateway.new(options)
 
     function api.expectedToken(assetId)
         if type(assetId) ~= "string" or not Content.assets[assetId] then return nil, "unknown-asset" end
-        local token = tokenFor(assetId)
+        local ok, token = pcall(tokenFor, assetId)
+        if not ok then return nil, "identity-provider-failed" end
         if type(token) ~= "string" or token == "" then return nil, "identity-not-initialized" end
         return token
     end
 
     function api.verify(item, expectedAssetId, context)
+        local authoredCandidate = context and context.authoredTarget == true and expectedAssetId
+            and isAuthoredCandidate(item, Content.assets[expectedAssetId], itemPort) or false
         local modData, modDataMessage = modDataFor(item, itemPort)
-        if not modData then return { status = "other", reason = modDataMessage, hasCarrier = false } end
-        local inspected, inspectMessage = ItemPresentation.inspectModData(modData)
+        if not modData then
+            if authoredCandidate then
+                return {
+                    status = "collision",
+                    reason = "authored-candidate-" .. tostring(modDataMessage),
+                    hasCarrier = false,
+                    authoredCandidate = true
+                }
+            end
+            return { status = "other", reason = modDataMessage, hasCarrier = false }
+        end
+        local inspected, inspectMessage = inspectModData(modData)
         local assetId = expectedAssetId or (inspected and inspected.assetId or nil)
         local expectedToken, tokenMessage = nil, nil
         if assetId then expectedToken, tokenMessage = api.expectedToken(assetId) end
@@ -99,23 +129,44 @@ function ItemIdentityGateway.new(options)
             if assetMatches or tokenMatches then
                 return { status = "collision", identity = identity, reason = "asset-token-mismatch", hasCarrier = true }
             end
+            if authoredCandidate then
+                return {
+                    status = "collision",
+                    identity = identity,
+                    reason = "authored-candidate-different-canonical-pair",
+                    hasCarrier = true,
+                    authoredCandidate = true
+                }
+            end
             return { status = "other", identity = identity, reason = "different-canonical-pair", hasCarrier = true }
         end
 
-        local claims = ItemPresentation.carrierClaims(modData)
+        local claims, claimsMessage = carrierClaims(modData)
+        if not claims then
+            if authoredCandidate then
+                return {
+                    status = "collision",
+                    reason = "authored-candidate-" .. tostring(claimsMessage),
+                    hasCarrier = false,
+                    authoredCandidate = true
+                }
+            end
+            return { status = "other", reason = claimsMessage or inspectMessage, hasCarrier = false }
+        end
         if claims.hasCarrier then
-            local status = expectedToken and claimMatches(claims, assetId, expectedToken) and "collision" or "rejected"
+            local collides = authoredCandidate or (expectedToken and claimMatches(claims, assetId, expectedToken))
+            local status = collides and "collision" or "rejected"
             return {
                 status = status,
                 reason = inspectMessage or tokenMessage or "rejected-carrier",
                 claims = claims,
-                hasCarrier = true
+                hasCarrier = true,
+                authoredCandidate = authoredCandidate
             }
         end
-        if context and context.authoredTarget == true and expectedAssetId
-            and isAuthoredCandidate(item, Content.assets[expectedAssetId], itemPort) then
+        if authoredCandidate then
             return {
-                status = "rejected",
+                status = "collision",
                 reason = "authored-candidate-missing-canonical-carrier",
                 hasCarrier = false,
                 authoredCandidate = true
@@ -127,12 +178,13 @@ function ItemIdentityGateway.new(options)
     function api.refresh(item, expectedAssetId)
         local result = api.verify(item, expectedAssetId)
         if result.status ~= "verified" then return false, result.reason, false, result end
-        local displayed, displayMessage = setDisplay(item, itemPort, result.inspected.asset.displayName)
-        if not displayed then return false, displayMessage, false, result end
         local modData, modDataMessage = modDataFor(item, itemPort)
         if not modData then return false, modDataMessage, false, result end
-        local refreshed, refreshDetail, changed = ItemPresentation.refreshModData(modData)
+        local refreshOk, refreshed, refreshDetail, changed = pcall(ItemPresentation.refreshModData, modData)
+        if not refreshOk then return false, "moddata-refresh-failed", false, result end
         if not refreshed then return false, refreshDetail, false, result end
+        local displayed, displayMessage = setDisplay(item, itemPort, result.inspected.asset.displayName)
+        if not displayed then return false, displayMessage, false, result end
         local verified = api.verify(item, expectedAssetId)
         if verified.status ~= "verified" then return false, verified.reason or "post-refresh-verification", false, verified end
         return true, refreshDetail, changed, verified
@@ -144,7 +196,7 @@ function ItemIdentityGateway.new(options)
         if first.status ~= "verified" then return nil, first.reason or first.status end
         local refreshed, refreshMessage = api.refresh(item, first.identity.assetId)
         if not refreshed then return nil, refreshMessage end
-        local subject, subjectMessage = ItemPresentation.validate(item, isInventoryItem)
+        local subject, subjectMessage = validatePresentation(item, isInventoryItem)
         if not subject then return nil, subjectMessage end
         local final = api.verify(item, subject.assetId)
         if final.status ~= "verified" then return nil, final.reason or final.status end
@@ -168,7 +220,7 @@ function ItemIdentityGateway.new(options)
         if (first.identity.hasLegacy == true) ~= (authorization.carrierHasLegacy == true) then
             return nil, "stale-legacy-mirror"
         end
-        local subject, subjectMessage = ItemPresentation.validate(item, isInventoryItem)
+        local subject, subjectMessage = validatePresentation(item, isInventoryItem)
         if not subject then return nil, subjectMessage end
         local final = api.verify(item, authorization.assetId)
         if final.status ~= "verified" or final.identity.assetId ~= authorization.assetId
