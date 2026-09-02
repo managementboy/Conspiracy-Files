@@ -12,7 +12,17 @@ function PersistenceAdapter.new(options)
     assert(type(storage.replace) == "function", "persistence storage.replace is required")
     local tag = options.tag or PersistenceAdapter.DEFAULT_TAG
     local domain, lastKnownGood = nil, nil
+    local growthBlocked = false
+    local rejectionReported = false
     local api = {}
+
+    local function reject(message)
+        if options.report and not rejectionReported then
+            options.report("Conspiracy-Files canonical state rejected; the previous save state was preserved. " .. tostring(message))
+            rejectionReported = true
+        end
+        return false, message
+    end
 
     local function validateAndCopy(candidate)
         local ok, message, estimated = Validator.validate(candidate)
@@ -43,10 +53,10 @@ function PersistenceAdapter.new(options)
         end
 
         local staged, message, estimated = validateAndCopy(candidate)
-        if not staged then return false, message end
+        if not staged then return reject(message) end
         local rebuilt
         rebuilt, message = reconstruct(staged)
-        if not rebuilt then return false, message end
+        if not rebuilt then return reject(message) end
 
         if persisted == nil then storage.replace(tag, staged) end
         domain = rebuilt
@@ -56,8 +66,15 @@ function PersistenceAdapter.new(options)
 
     function api.commit(candidate)
         if not domain or not lastKnownGood then return false, "persistence adapter is not loaded" end
+        if growthBlocked then return false, "capacity-exceeded: canonical mutations are disabled for this session" end
         local staged, message, estimated = validateAndCopy(candidate)
-        if not staged then return false, message end
+        if not staged then
+            if type(message) == "string" and string.find(message, "capacity-exceeded:", 1, true) == 1 then
+                growthBlocked = true
+                return reject(message)
+            end
+            return false, message
+        end
 
         local monotonic, monotonicMessage = ThreadState.new(lastKnownGood)
         if not monotonic then return false, monotonicMessage end
@@ -97,6 +114,10 @@ function PersistenceAdapter.new(options)
 
     function api.isLoaded()
         return domain ~= nil
+    end
+
+    function api.isGrowthBlocked()
+        return growthBlocked
     end
 
     function api.tag()

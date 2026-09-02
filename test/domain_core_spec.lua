@@ -83,7 +83,7 @@ test("CF-V01-P06 duplicate/reordered materialisation and discovery are idempoten
     local snapshot = reconstructed.snapshot()
     assertEqual(1, #snapshot.evidence)
     assertEqual(1, countKind(snapshot, "asset-discovered"))
-    assertEqual("materialised", snapshot.assetMaterialisation[ids.d3])
+    assertEqual("placed", snapshot.assetMaterialisation[ids.d3])
     assertEqual(1, snapshot.evidence[1].discoveryOrdinal)
 end)
 
@@ -232,6 +232,16 @@ test("CF-V01-P14 Mark Interesting creates one immutable chronology record per in
     assertEqual("dead-air:evidence:marked:0002", snapshot.evidence[2].evidenceId)
 end)
 
+test("CF-V01-P14 one physical authored object cannot be marked twice", function()
+    local state = newState()
+    assertChanged(state.markInteresting("key-first", { assetId = ids.key, contextText = "First mark" }))
+    local ok, evidenceId, changed = state.markInteresting("key-second", { assetId = ids.key, contextText = "Second mark" })
+    assertTrue(ok)
+    assertFalse(changed)
+    assertEqual("dead-air:evidence:marked:0001", evidenceId)
+    assertEqual(1, #state.snapshot().evidence)
+end)
+
 test("CF-V01-P15 optional B-37 key does not gate six-document or contradiction paths", function()
     local state = newState()
     for _, assetId in ipairs(Content.thread.documentAssetIds) do discover(state, assetId) end
@@ -308,7 +318,7 @@ test("CF-V01-P18 staged recursive validation rejects unsafe states and preserves
     assertTrue(Validator.validateStructure({ [0] = "zero", [-1.5] = true, name = 3.25, nested = {} }))
 end)
 
-test("CF-V01-P19 conservative estimator enforces the 500 KB boundary", function()
+test("CF-V01-P19 calibrated estimator enforces the real 500 KB boundary", function()
     local maximal = newState()
     for _, assetId in ipairs(Content.thread.documentAssetIds) do
         assertChanged(maximal.materialise(assetId))
@@ -322,28 +332,92 @@ test("CF-V01-P19 conservative estimator enforces the 500 KB boundary", function(
     assertTrue(Validator.estimateEncodedBytes(maximalSnapshot) < ThreadState.MAX_ENCODED_BYTES)
 
     local state = newState()
-    assertChanged(state.markInteresting("size-boundary", { subjectLabel = "payload", contextText = "x" }))
-    local base = state.snapshot()
-    local low, high = 1, 200000
-    while low + 1 < high do
-        local middle = math.floor((low + high) / 2)
-        local candidate = state.snapshot()
-        candidate.evidence[1].contextText = string.rep("x", middle)
-        local ok = Validator.validate(candidate)
-        if ok then low = middle else high = middle end
+    local lastGood = state.snapshot()
+    local rejected = nil
+    for index = 1, 200 do
+        local ok, message, changed = state.markInteresting(
+            "capacity-" .. index,
+            { subjectLabel = "payload-" .. index, contextText = string.rep("x", Validator.MAX_CONTEXT_TEXT_BYTES) }
+        )
+        if not ok then
+            rejected = message
+            break
+        end
+        assertTrue(changed)
+        lastGood = state.snapshot()
     end
-    local below = state.snapshot(); below.evidence[1].contextText = string.rep("x", low)
-    local above = state.snapshot(); above.evidence[1].contextText = string.rep("x", high)
-    local belowBytes = Validator.estimateEncodedBytes(below)
-    local aboveBytes = Validator.estimateEncodedBytes(above)
-    assertTrue(belowBytes <= ThreadState.MAX_ENCODED_BYTES)
-    assertTrue(aboveBytes > ThreadState.MAX_ENCODED_BYTES)
-    local boundaryState, message = ThreadState.new(below)
-    assertTrue(boundaryState ~= nil, message)
-    local accepted = boundaryState.snapshot()
-    assertFalse(boundaryState.replace(above))
-    assertDeepEqual(accepted, boundaryState.snapshot())
-    assertFalse(containsText(base, Content.assets[ids.d1].bodyText))
+    assertTrue(type(rejected) == "string")
+    assertTrue(string.find(rejected, "capacity-exceeded:", 1, true) == 1)
+    assertTrue(Validator.estimateEncodedBytes(lastGood) <= ThreadState.MAX_ENCODED_BYTES)
+    assertDeepEqual(lastGood, state.snapshot())
+    assertFalse(containsText(lastGood, Content.assets[ids.d1].bodyText))
+end)
+
+test("CF-V01-P19 persisted text fields have enforced byte caps", function()
+    local state = newState()
+    assertFalse(state.discover(ids.d3, string.rep("x", Validator.MAX_CONTEXT_TEXT_BYTES + 1), ids.relay))
+    assertFalse(state.markInteresting(string.rep("i", Validator.MAX_MARK_INTENT_ID_BYTES + 1), { subjectLabel = "x", contextText = "x" }))
+    assertFalse(state.markInteresting("bounded-label", { subjectLabel = string.rep("x", Validator.MAX_SUBJECT_LABEL_BYTES + 1), contextText = "x" }))
+    assertEqual(0, #state.snapshot().evidence)
+end)
+
+test("CF-V01-P18 compatible content revisions load while incompatible schemas fail closed", function()
+    local current = newState().snapshot()
+    current.contentRevision = "dead-air-r1-typo-fix"
+    local compatible, message = ThreadState.new(current)
+    assertTrue(compatible ~= nil, message)
+    local incompatible = current
+    incompatible.schemaVersion = Validator.CURRENT_SCHEMA_VERSION - 1
+    assertEqual(nil, ThreadState.new(incompatible))
+end)
+
+test("CF-V01-P06 entry selection matches the immutable introduction", function()
+    local automatic = newState()
+    discover(automatic, ids.d2)
+    assertEqual("fallback", automatic.snapshot().entryOpportunityUsed)
+
+    local selected = newState()
+    assertChanged(selected.useEntryOpportunity("anchor"))
+    local ok = selected.discover(ids.d2, "Wrong introduction", ids.police)
+    assertFalse(ok)
+    discover(selected, ids.d1)
+    assertEqual("anchor", selected.snapshot().entryOpportunityUsed)
+
+    local hostile = selected.snapshot()
+    hostile.entryOpportunityUsed = "fallback"
+    assertFalse(Validator.validate(hostile))
+end)
+
+test("CF-V01-P06 placement and physical availability follow legal transitions", function()
+    local state = newState()
+    assertChanged(state.transitionMaterialisation(ids.d1, "pending"))
+    assertChanged(state.transitionMaterialisation(ids.d1, "placing"))
+    assertChanged(state.transitionMaterialisation(ids.d1, "placed"))
+    assertChanged(state.transitionPhysicalAvailability(ids.d1, "unknown"))
+    assertChanged(state.transitionPhysicalAvailability(ids.d1, "available"))
+    assertChanged(state.transitionPhysicalAvailability(ids.d1, "unavailable"))
+    assertChanged(state.transitionPhysicalAvailability(ids.d1, "available"))
+    assertChanged(state.transitionPhysicalAvailability(ids.d1, "conflict"))
+    assertFalse(state.transitionPhysicalAvailability(ids.d1, "available"))
+    assertChanged(state.transitionMaterialisation(ids.d1, "conflict"))
+    assertFalse(state.transitionMaterialisation(ids.d1, "placed"))
+end)
+
+test("CF-V01-P04 confirmed locations are no longer outstanding leads", function()
+    local state = newState()
+    discover(state, ids.d1)
+    assertEqual(1, #state.leads())
+    assertChanged(state.confirmLocation(ids.police))
+    assertEqual(0, #state.leads())
+end)
+
+test("CF-V01-P09 journal text is a point-in-time chronology", function()
+    local state = newState()
+    discover(state, ids.d2)
+    local introduced = state.renderJournal()[2].text
+    assertChanged(state.confirmLocation(ids.relay))
+    assertEqual(introduced, state.renderJournal()[2].text)
+    assertTrue(string.find(introduced, Content.locations[ids.relay].preArrivalLabel, 1, true) ~= nil)
 end)
 
 test("CF-V01-P24 Evidence resolves full static content without copying document bodies", function()

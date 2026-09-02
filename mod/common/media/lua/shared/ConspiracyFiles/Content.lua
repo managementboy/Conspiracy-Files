@@ -37,6 +37,17 @@ Content.thread = {
     fallbackAssetId = D2
 }
 
+-- Static/localisable renderer strings and English-first story templates live
+-- beside authored content rather than in projection code. %s placeholders are
+-- positional and resolved deterministically by Renderer.
+Content.strings = {
+    threadIntroduced = "%s began with %s. Its paperwork points toward %s.",
+    markedInteresting = "Marked interesting: %s. %s",
+    evidenceUpdated = "The red B-37 key I marked earlier matches the relay paperwork. Pike says it came off Rourke's receiver ring and belongs with property record 4471.",
+    locationConfirmed = "Confirmed %s.",
+    contradictionSurfaced = "Pike's shift note says the advance CSS memo was not available when the receiver was taken, although the memo is dated earlier. Both records remain unresolved."
+}
+
 Content.identities = {
     [ROURKE] = { identityId = ROURKE, displayLabel = "M. Rourke", roleDescriptor = "CSS field technician" },
     [PIKE] = { identityId = PIKE, displayLabel = "Sgt. Dana Pike", roleDescriptor = "police property/evidence supervisor" },
@@ -404,6 +415,10 @@ function Content.validate()
         for _, otherAssetId in ipairs(asset.recontextualisesAssetIds or {}) do if not Content.assets[otherAssetId] then return false, "unresolved recontextualisation Asset ID" end end
         if asset.assetKind == "document" and (type(asset.bodyText) ~= "string" or type(asset.journalText) ~= "string" or not asset.autoRecordEvidence) then
             return false, "document Asset is incomplete " .. assetId
+        end
+        if asset.assetKind == "document" then
+            local evidenceOk = pcall(Ids.authoredEvidence, assetId)
+            if not evidenceOk then return false, "Asset uses reserved Evidence namespace " .. assetId end
         end
     end
     return true

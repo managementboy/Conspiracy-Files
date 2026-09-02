@@ -45,8 +45,10 @@ end
 dofile(root .. separator .. "test" .. separator .. "domain_core_spec.lua")
 dofile(root .. separator .. "test" .. separator .. "integration_shell_spec.lua")
 dofile(root .. separator .. "test" .. separator .. "location_binding_spec.lua")
+dofile(root .. separator .. "test" .. separator .. "performance_spec.lua")
+dofile(root .. separator .. "test" .. separator .. "estimator_calibration_spec.lua")
 
-test("traceability matrix covers every plain-Lua acceptance criterion exactly once", function()
+test("traceability matrix gives every plain-Lua acceptance criterion one or more tests", function()
     local expected = {
         "CF-V01-P04", "CF-V01-P06", "CF-V01-P07", "CF-V01-P08",
         "CF-V01-P09", "CF-V01-P10", "CF-V01-P11", "CF-V01-P12",
@@ -72,7 +74,7 @@ test("traceability matrix covers every plain-Lua acceptance criterion exactly on
         for _, candidate in ipairs(tests) do
             if string.sub(candidate.name, 1, string.len(criterion)) == criterion then namedTests = namedTests + 1 end
         end
-        assertEqual(1, namedTests, "criterion must map to one named automated test")
+        assertTrue(namedTests >= 1, "criterion must map to at least one named automated test")
     end
     for criterion, _ in pairs(classified) do assertTrue(expectedSet[criterion], "new plain-Lua criterion lacks an explicit traceability decision: " .. criterion) end
 end)

@@ -53,6 +53,7 @@ The largest content in Dead Air is its document prose. None of that needs to be 
 ### Save-specific canonical state — persisted
 - which entry opportunity was used, if one has been committed;
 - minimal per-Asset materialisation state required by T4;
+- current per-Asset physical availability required by T5;
 - Evidence records actually created by discovery/Mark Interesting;
 - confirmed story-location IDs;
 - chronological JournalEntry event records.
@@ -97,6 +98,8 @@ Player-created/manual Evidence uses a save-local generated suffix:
 ```text
 dead-air:evidence:marked:0001
 ```
+
+The `dead-air:evidence:marked:*` namespace is reserved; authored Asset slugs may not begin with `marked:`. `%04d` is a minimum display width and intentionally widens beyond ordinal 9,999.
 
 The exact runtime generator is an implementation detail. v0.1 only requires uniqueness inside one save/thread. Do not use a live Lua table, PZ object or Java object as identity.
 
@@ -450,8 +453,10 @@ v0.1 does not need a separate `WorldState` wrapper because:
 schemaVersion
 threadId
 contentRevision
+pzMinorLine
 entryOpportunityUsed
 assetMaterialisation
+physicalAvailability
 confirmedLocationIds
 evidence
 journal
@@ -460,19 +465,21 @@ journal
 Concrete example:
 
 ```text
-schemaVersion = 1
+schemaVersion = 2
 threadId = "dead-air:thread"
 contentRevision = "dead-air-r1"
+pzMinorLine = "42.20"
 
 entryOpportunityUsed = "anchor"
 
 assetMaterialisation = {
-  "dead-air:asset:service-ticket-93-0714" = "materialised",
-  "dead-air:asset:property-record-4471" = "materialised",
-  "dead-air:asset:invoice-9327" = "materialised",
-  "dead-air:asset:rourke-notebook-0703" = "materialised",
-  "dead-air:asset:access-memo-7c" = "materialised",
-  "dead-air:asset:pike-shift-note-0705" = "materialised"
+  "dead-air:asset:service-ticket-93-0714" = "placed",
+  "dead-air:asset:property-record-4471" = "placed"
+}
+
+physicalAvailability = {
+  "dead-air:asset:service-ticket-93-0714" = "available",
+  "dead-air:asset:property-record-4471" = "unknown"
 }
 
 confirmedLocationIds = {
@@ -492,11 +499,13 @@ The braces above describe the **logical model**, not a T1-approved Lua serializa
 |---|---|
 | `schemaVersion` | No within v0.1; migrations are out of scope. |
 | `threadId` | No. |
-| `contentRevision` | No for a given initialized save; typo/content handling follows existing revision policy. |
+| `contentRevision` | Informational per initialized save. A compatible installed typo/text revision does not gate load. |
+| `pzMinorLine` | Informational target line recorded at initialization; runtime support is checked separately from save schema. |
 | `entryOpportunityUsed` | `nil` → `anchor` when D1 becomes the accepted introduction, or `fallback` when D2 activates as the one fallback introduction; the value never switches silently. D1 placement alone does not consume the introduction: under P4-R40, durably placed but undiscovered D1 may yield to D2 only after T5/P4-R37 conclusively sets D1 `unavailable`. Unloading, original-container absence, `unknown`, `untracked` and `conflict` do not qualify. D1 never respawns. |
-| `assetMaterialisation` | Yes. T4 pre-placement states/protocol remain `pending`, `placing`, `placed`, `unavailable`, `lost` and `conflict`. After `placed`, absence from the original container starts T5 identity reconciliation; placement outcome is not current location/availability. |
+| `assetMaterialisation` | Yes under ADR-0005: `pending`, `placing`, `placed`, `unavailable`, `conflict`. `unavailable` and `conflict` are terminal; `placed` may move only to sticky `conflict`. `lost` is not a placement state. |
+| `physicalAvailability` | Yes under ADR-0005: `untracked`, `unknown`, `available`, `unavailable`, `conflict`. Non-conflict observations may refine; `conflict` is sticky. |
 | `confirmedLocationIds` | Append/add when T8-approved arrival logic confirms one of the two locations. |
-| `evidence` | Append/add only for immutable discovery facts; T5 physical availability/location may change separately, while identity conflict is sticky. |
+| `evidence` | Append/add only for immutable discovery facts. A physical authored Asset may be marked only once; intent IDs remain an additional idempotency key. |
 | `journal` | Append-only. |
 
 ### What is deliberately absent

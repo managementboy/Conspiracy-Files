@@ -1,16 +1,18 @@
 local Copy = {}
 
--- Callers must validate untrusted persisted state before copying it. The
--- copies table also makes this helper terminate defensively if a trusted
--- caller accidentally supplies an alias or cycle.
-function Copy.deep(value, copies)
+-- Callers must validate untrusted persisted state before copying it. Canonical
+-- tables deliberately have value semantics: repeated table identity is
+-- rejected instead of preserved, matching Validator.validateStructure.
+function Copy.deep(value, seen)
     if type(value) ~= "table" then return value end
-    copies = copies or {}
-    if copies[value] then return copies[value] end
+    seen = seen or {}
+    assert(not seen[value], "cycles and shared-table aliases are forbidden")
+    seen[value] = true
     local result = {}
-    copies[value] = result
     for key, child in pairs(value) do
-        result[Copy.deep(key, copies)] = Copy.deep(child, copies)
+        -- Valid canonical keys are primitive strings/numbers, so copying table
+        -- keys would be both unreachable and contrary to the storage contract.
+        result[key] = Copy.deep(child, seen)
     end
     return result
 end

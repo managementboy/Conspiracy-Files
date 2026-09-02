@@ -1,6 +1,6 @@
 # Conspiracy-Files — Architecture v0.2
 
-**Status:** Current architecture after engineering review. Provisional until Build 42 spikes resolve the load-bearing API questions.
+**Status:** Current v0.1 architecture. T1–T10 and CF-V01-E01 are resolved with their recorded limitations; integrated production acceptance remains open.
 
 The reviewed `ARCHITECTURE_PROPOSAL.md` remains as the historical first draft. This document is the implementation-facing correction.
 
@@ -33,7 +33,7 @@ Not in v0.1: graph, theories, runtime AI, content packs, retrofit, migration, MP
 
 ### Domain core (plain Lua 5.1)
 Owns:
-- canonical entities and relationships;
+- canonical Evidence/journal state and static authored ID references;
 - evidence facts and interpretation;
 - journal chronology;
 - player notes/Mark Interesting state;
@@ -97,8 +97,9 @@ Provisional target: **≤500 KB canonical state per save**. T1 owns the real lim
 - **Identity:** encountered person/name/cover record.
 - **Organisation:** organisation record whose label may refine.
 - **Location:** one of the two curated story locations.
-- **Relationship:** source ID, target ID, type, provenance, active/outdated state.
 - **JournalEntry:** chronological projection record.
+
+v0.1 has zero standalone Relationship records. Authored references live in static Asset definitions under P4-R31.
 
 Graph-only entities/features stay out until v2.
 
@@ -116,6 +117,8 @@ T4 fixes the placement protocol:
 6. keep merely unloaded targets pending; mark terminally destroyed/burned/invalid pre-placement targets `unavailable` and consider the authored fallback.
 
 Every canonical transition is a staged full-root replacement under P4-R32/P4-R17. T4 found and tested no Lua-visible atomic transaction across chunk/container files and Global ModData, so ambiguous partial persistence biases toward loss/fallback rather than duplication. Work is drained through a deduplicated bounded queue behind a `pcall` adapter boundary.
+
+ADR-0005 defines the exact legal placement and physical-availability transitions. The monotonic invariant applies to immutable truth/history and forward placement outcomes; it does not pretend that observed availability can never change. Identity `conflict` remains sticky.
 
 Anchor and fallback are both valid authored content, but they are not deliberately spawned together as duplicate red herrings. P4-R40 permits D2 to activate once as the fallback introduction when durably placed but undiscovered D1 becomes conclusively `unavailable` only after T5/P4-R37 reconciliation. Mere unloading, original-container absence, `unknown`, `untracked` and `conflict` do not qualify, and D1 never respawns.
 
@@ -145,7 +148,7 @@ T5 fixes the v0.1 rule:
 - all copy/transform code must explicitly omit or replace the identity token unless it deliberately preserves the same physical instance;
 - immutable Evidence survives every availability state, and tracking may resume after non-conflict loss only when the same token is observed exactly once.
 
-Normal movement can remove a placed item from its original container. That zero count starts bounded identity reconciliation and cannot by itself set `lost`.
+Normal movement can remove a placed item from its original container. That zero count starts bounded identity reconciliation and cannot by itself set physical availability to `unavailable`.
 
 ## 9. Events and error containment
 
@@ -162,6 +165,8 @@ Rules:
 PZ Lua is treated as main-thread constrained.
 
 Provisional normal-play budget: **≤2 ms/frame** for Conspiracy-Files outside explicit initialization/probe screens.
+
+Domain staging is O(canonical state): it copies and validates the complete root before commit. Journal rendering is O(journal + authored references). A plain-Lua complete-Dead-Air characterization test guards the current ceiling; live E12 remains authoritative for the actual PZ frame budget.
 
 Expensive work uses a queue with bounded work per frame. Never:
 - scan the full map each frame;
@@ -236,7 +241,13 @@ Separate:
 
 Backward-compatible typo/text revisions must not force save migration. Content packs and migrations are post-v1 and their detailed compatibility policy is intentionally deferred.
 
-## 17. Future features explicitly deferred
+ADR-0004 fixes their save representation: schema version gates load; content revision is informational; PZ minor line is recorded independently and checked at the runtime boundary. Incompatible roots are preserved untouched and disable the mod with one concise diagnostic.
+
+## 17. Journal and leads
+
+The journal is a point-in-time chronological record, not a live projection of later knowledge. Rendering may resolve static authored templates, but later location/name refinement does not rewrite earlier entry wording or major-event eligibility. Leads mean locations still worth investigating next; a confirmed location is removed from the derived lead list.
+
+## 18. Future features explicitly deferred
 
 - advisory map-wide location candidate discovery — post-v1 only, using T2's filtered/rebuildable dual-bounded scheduler and T3's room-first/provenance/override constraints; curated catalogs remain authoritative;
 - relationship graph — v2, separate prototype first;
@@ -246,7 +257,7 @@ Backward-compatible typo/text revisions must not force save migration. Content p
 - multiplayer — future architecture;
 - runtime AI — optional future enhancement.
 
-## 18. Architecture proof gates
+## 19. Architecture proof gates
 
 Before the broad architecture is considered signed off, record spike results for T1–T10 using `docs/research/SPIKE_TEMPLATE.md`.
 

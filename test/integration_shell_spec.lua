@@ -194,7 +194,8 @@ end)
 
 test("integration persistence rejects unsafe, oversized, regressive, and failed replacements without losing last-known-good", function()
     local storage = makeStorage()
-    local adapter = CF.PersistenceAdapter.new({ storage = storage })
+    local reports = {}
+    local adapter = CF.PersistenceAdapter.new({ storage = storage, report = function(message) reports[#reports + 1] = message end })
     assertTrue(adapter.load(true))
     assertTrue(adapter.transaction(discoverTransaction(ids.d1)))
     local good = adapter.snapshot()
@@ -208,6 +209,38 @@ test("integration persistence rejects unsafe, oversized, regressive, and failed 
     assertEqual(storedGood, storage.roots[adapter.tag()])
     assertEqual(replacementCount, storage.replacementCount())
     assertDeepEqual(good, adapter.snapshot())
+
+    local capacityStorage = makeStorage(good)
+    local capacityAdapter = CF.PersistenceAdapter.new({ storage = capacityStorage, report = function(message) reports[#reports + 1] = message end })
+    assertTrue(capacityAdapter.load(false))
+    local capacity = capacityAdapter.snapshot()
+    for index = 1, 130 do
+        local evidenceOrdinal = #capacity.evidence + 1
+        local evidenceId = CF.Ids.markedEvidence(index)
+        capacity.evidence[evidenceOrdinal] = {
+            evidenceId = evidenceId,
+            kind = "marked-object",
+            discoveryOrdinal = evidenceOrdinal,
+            contextText = string.rep("x", CF.Validator.MAX_CONTEXT_TEXT_BYTES),
+            playerMarkedInteresting = true,
+            markIntentId = "capacity-" .. index,
+            subjectLabel = "payload-" .. index
+        }
+        local journalOrdinal = #capacity.journal + 1
+        capacity.journal[journalOrdinal] = {
+            entryId = CF.Ids.journal(journalOrdinal),
+            ordinal = journalOrdinal,
+            kind = "marked-interesting",
+            subjectId = evidenceId
+        }
+    end
+    local capacityOk, capacityMessage = capacityAdapter.commit(capacity)
+    assertFalse(capacityOk)
+    assertTrue(string.find(capacityMessage, "capacity-exceeded:", 1, true) == 1)
+    assertTrue(capacityAdapter.isGrowthBlocked())
+    assertEqual(1, #reports)
+    assertDeepEqual(good, capacityStorage.roots[capacityAdapter.tag()])
+    assertDeepEqual(good, capacityAdapter.snapshot())
 
     local oversized = adapter.snapshot()
     oversized.evidence[1].contextText = string.rep("x", 200000)
@@ -248,6 +281,28 @@ test("integration invalid persisted roots never get replaced by a fresh root", f
     assertEqual(0, storage.replacementCount())
     assertEqual(invalid, storage.roots[CF.PersistenceAdapter.DEFAULT_TAG])
     assertFalse(adapter.isLoaded())
+end)
+
+test("integration incompatible persisted roots preserve data and disable runtime startup", function()
+    local current = assert(CF.ThreadState.new()).snapshot()
+    current.schemaVersion = CF.Validator.CURRENT_SCHEMA_VERSION - 1
+    local storage = makeStorage(current)
+    local callbacks, reports = {}, {}
+    local runtime = CF.IntegrationRuntime.start({
+        isMultiplayer = function() return false end,
+        report = function(message) reports[#reports + 1] = message end,
+        storage = storage,
+        clock = function() return 0 end,
+        addEvent = function(name, callback) callbacks[name] = callback end
+    })
+    callbacks.OnInitGlobalModData(false)
+    assertEqual("disabled-incompatible-state", runtime.phase())
+    callbacks.OnGameStart()
+    callbacks.OnTick()
+    assertEqual("disabled-incompatible-state", runtime.phase())
+    assertEqual(0, storage.replacementCount())
+    assertEqual(current, storage.roots[CF.PersistenceAdapter.DEFAULT_TAG])
+    assertEqual(1, #reports)
 end)
 
 test("integration Build 42 entrypoint creates one namespace and registers each cooperative hook once", function()

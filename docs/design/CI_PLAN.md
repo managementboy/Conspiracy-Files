@@ -1,12 +1,12 @@
 # CI Plan
 
-CI is intentionally not enabled while the repository contains no Lua implementation, but the architecture is designed so CI is cheap to add as soon as code exists.
+**Status:** Implemented by `.github/workflows/ci.yml`.
 
-## Required jobs once Lua exists
+## Required jobs
 
 1. **Lua static checks** — `luacheck` over the PZ-free domain core and project-owned Lua.
-2. **Unit tests** — `busted` (or an equivalent Lua 5.1-compatible test runner) against the domain core with no Project Zomboid runtime classes.
-3. **Content validation** — a tool under `tools/` validates built-in story fixtures/IDs/references against the project schema once that schema is extracted from real content.
+2. **Unit tests** — `lua5.1 test/run.lua` against the domain core and fake-backed integration shell with no Project Zomboid runtime classes.
+3. **Content validation** — `lua5.1 tools/validate_content.lua` validates the built-in registries, IDs, references and approved fixture bodies.
 4. **Secret scan** — reject committed API keys/provider profiles/local secrets.
 
 ## Architectural requirement

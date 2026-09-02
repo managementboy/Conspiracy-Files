@@ -17,7 +17,7 @@ Goal: prove the intended feeling once, with the smallest end-to-end build.
 - minimal persistence required by the slice;
 - exact-once placement for the fixture content;
 - location arrival detection for the two fixture locations;
-- deterministic non-AI death recap if the slice reaches death-summary work.
+- deterministic non-AI death recap persisted across the death/reload boundary.
 
 ### Explicitly out of v0.1
 - relationship graph;
@@ -37,9 +37,10 @@ Goal: prove the intended feeling once, with the smallest end-to-end build.
 - [x] Plain-Lua domain core accepted.
 - [x] Exact P2/R2 bindings accepted on Build 42.20.4.
 - [x] Build 42 production package/bootstrap, scheduler, error budget and persistence shell implemented with offline tests.
+- [ ] T11 production package passes its live loader/require/save-reload matrix (offline phase passed).
 - [ ] D1–D6 placement, physical identity, reader/Inspect and arrival adapters integrated end to end.
 - [ ] Notebook journal, evidence list, in-fiction help and the one normal-play notebook keybind implemented.
-- [ ] Death/reload lifecycle boundary assigned, implemented and tested.
+- [ ] Death/reload lifecycle boundary implemented and tested by the v0.1 production-integration workstream (CF-V01-E10).
 - [ ] Production shell and complete vertical slice pass their live Build 42 acceptance matrices.
 - [ ] Deterministic package pipeline and cross-device prerelease smoke pass.
 

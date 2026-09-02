@@ -19,7 +19,7 @@ function IntegrationRuntime.start(environment)
     end
 
     local errors = ErrorBudget.new({ threshold = 3, report = environment.report })
-    local persistence = PersistenceAdapter.new({ storage = environment.storage })
+    local persistence = PersistenceAdapter.new({ storage = environment.storage, report = environment.report })
     local scheduler = Scheduler.new({
         clock = environment.clock,
         maxWorkPerDrain = 24,
@@ -35,20 +35,25 @@ function IntegrationRuntime.start(environment)
 
     callbacks.OnInitGlobalModData = function(isNewGame)
         errors.call("persistence", function()
-            local ok, message = persistence.load(isNewGame)
-            if not ok then error(message) end
+            local ok = persistence.load(isNewGame)
+            if not ok then
+                phase = "disabled-incompatible-state"
+                return
+            end
             phase = "canonical-ready"
         end)
     end
 
     callbacks.OnGameStart = function()
         errors.call("lifecycle", function()
+            if phase == "disabled-incompatible-state" then return end
             if not persistence.isLoaded() then error("canonical state was not initialized") end
             phase = "running"
         end)
     end
 
     callbacks.OnTick = function()
+        if phase ~= "running" then return end
         errors.call("scheduler", function()
             scheduler.drain()
         end)

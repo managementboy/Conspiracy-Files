@@ -3,6 +3,10 @@
 **Status:** Approved policy; pipeline not yet implemented.
 **Authority:** ADR-0003 and P4-R46.
 
+## Licence and disclosure
+
+The repository's CC0-1.0 dedication is intentionally applied to all project-owned code, documentation and narrative content. It does not purport to relicense Project Zomboid, third-party assets, names or trademarks. Release and Workshop descriptions include the approved disclosure wording from `AI_PROVENANCE.md`.
+
 ## Release channels
 
 | Channel | Audience | Delivery | Gate |

@@ -24,3 +24,7 @@ dist/
 out/
 tmp/
 coverage/
+
+# Generated release/Workshop artifacts
+*.zip
+/Contents/

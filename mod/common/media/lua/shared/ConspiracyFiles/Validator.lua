@@ -5,10 +5,23 @@ local Validator = {}
 
 Validator.MAX_DEPTH = 64
 Validator.MAX_ENCODED_BYTES = 500 * 1024
+Validator.CURRENT_SCHEMA_VERSION = 2
+Validator.PZ_MINOR_LINE = "42.20"
+Validator.MAX_CONTEXT_TEXT_BYTES = 4096
+Validator.MAX_SUBJECT_LABEL_BYTES = 256
+Validator.MAX_MARK_INTENT_ID_BYTES = 128
+
+Validator.MATERIALISATION_STATES = {
+    pending = true, placing = true, placed = true, unavailable = true, conflict = true
+}
+
+Validator.PHYSICAL_AVAILABILITY_STATES = {
+    untracked = true, unknown = true, available = true, unavailable = true, conflict = true
+}
 
 local ROOT_FIELDS = {
-    schemaVersion = true, threadId = true, contentRevision = true,
-    entryOpportunityUsed = true, assetMaterialisation = true,
+    schemaVersion = true, threadId = true, contentRevision = true, pzMinorLine = true,
+    entryOpportunityUsed = true, assetMaterialisation = true, physicalAvailability = true,
     confirmedLocationIds = true, evidence = true, journal = true
 }
 
@@ -37,6 +50,12 @@ end
 
 local function isInteger(value)
     return type(value) == "number" and value >= 1 and value == math.floor(value)
+end
+
+local function checkBoundedString(value, maximum, path)
+    if type(value) ~= "string" or value == "" then return fail(path, "must be a non-empty string") end
+    if string.len(value) > maximum then return fail(path, "exceeds " .. maximum .. " bytes") end
+    return true
 end
 
 local function checkAllowedFields(value, allowed, path)
@@ -107,20 +126,34 @@ end
 local function validateSchema(root)
     local ok, message = checkAllowedFields(root, ROOT_FIELDS, "root")
     if not ok then return false, message end
-    if root.schemaVersion ~= 1 then return fail("root.schemaVersion", "must be 1") end
+    if root.schemaVersion ~= Validator.CURRENT_SCHEMA_VERSION then
+        return fail("root.schemaVersion", "unsupported schema; expected " .. Validator.CURRENT_SCHEMA_VERSION)
+    end
     if root.threadId ~= Content.thread.threadId then return fail("root.threadId", "unknown Thread ID") end
-    if root.contentRevision ~= Content.thread.contentRevision then return fail("root.contentRevision", "unknown content revision") end
+    ok, message = checkBoundedString(root.contentRevision, 128, "root.contentRevision")
+    if not ok then return false, message end
+    ok, message = checkBoundedString(root.pzMinorLine, 32, "root.pzMinorLine")
+    if not ok then return false, message end
     if root.entryOpportunityUsed ~= nil and root.entryOpportunityUsed ~= "anchor" and root.entryOpportunityUsed ~= "fallback" then
         return fail("root.entryOpportunityUsed", "must be anchor, fallback or absent")
     end
     if type(root.assetMaterialisation) ~= "table" then return fail("root.assetMaterialisation", "must be a table") end
+    if type(root.physicalAvailability) ~= "table" then return fail("root.physicalAvailability", "must be a table") end
     if type(root.confirmedLocationIds) ~= "table" then return fail("root.confirmedLocationIds", "must be a table") end
     if type(root.evidence) ~= "table" then return fail("root.evidence", "must be a table") end
     if type(root.journal) ~= "table" then return fail("root.journal", "must be a table") end
 
     for assetId, status in pairs(root.assetMaterialisation) do
         if not Content.assets[assetId] then return fail("root.assetMaterialisation", "unknown Asset ID " .. tostring(assetId)) end
-        if status ~= "materialised" then return fail("root.assetMaterialisation", "unknown monotonic status") end
+        if not Validator.MATERIALISATION_STATES[status] then return fail("root.assetMaterialisation", "unknown placement state") end
+    end
+    for assetId, status in pairs(root.physicalAvailability) do
+        if not Content.assets[assetId] then return fail("root.physicalAvailability", "unknown Asset ID " .. tostring(assetId)) end
+        if not Validator.PHYSICAL_AVAILABILITY_STATES[status] then return fail("root.physicalAvailability", "unknown physical availability state") end
+        local placement = root.assetMaterialisation[assetId]
+        if placement ~= "placed" and placement ~= "conflict" then
+            return fail("root.physicalAvailability", "requires placed or conflict placement state")
+        end
     end
 
     local locationSeen = {}
@@ -137,6 +170,7 @@ local function validateSchema(root)
     if not evidenceOk then return false, evidenceCount end
     local evidenceIds = {}
     local markIntents = {}
+    local markedAssets = {}
     local markedCount = 0
     for index = 1, evidenceCount do
         local evidence = root.evidence[index]
@@ -147,7 +181,8 @@ local function validateSchema(root)
         if evidenceIds[evidence.evidenceId] then return fail("root.evidence", "duplicate Evidence ID") end
         evidenceIds[evidence.evidenceId] = evidence
         if evidence.discoveryOrdinal ~= index then return fail("root.evidence", "discovery ordinals must be contiguous") end
-        if type(evidence.contextText) ~= "string" or evidence.contextText == "" then return fail("root.evidence", "contextText must be non-empty") end
+        ok, message = checkBoundedString(evidence.contextText, Validator.MAX_CONTEXT_TEXT_BYTES, "root.evidence[" .. index .. "].contextText")
+        if not ok then return false, message end
         if evidence.foundLocationId ~= nil and not Content.locations[evidence.foundLocationId] then return fail("root.evidence", "unknown found Location ID") end
         if type(evidence.playerMarkedInteresting) ~= "boolean" then return fail("root.evidence", "creation intent flag must be boolean") end
         if evidence.kind == "authored-asset" then
@@ -160,10 +195,17 @@ local function validateSchema(root)
             if evidence.evidenceId ~= Ids.markedEvidence(markedCount) then return fail("root.evidence", "marked Evidence IDs must be deterministic and contiguous") end
             if evidence.assetId ~= nil and (not Content.assets[evidence.assetId] or Content.assets[evidence.assetId].assetKind ~= "ordinary-object") then return fail("root.evidence", "marked Evidence Asset ID must resolve to an ordinary object") end
             if not evidence.playerMarkedInteresting then return fail("root.evidence", "marked Evidence must retain creation intent") end
-            if type(evidence.markIntentId) ~= "string" or evidence.markIntentId == "" then return fail("root.evidence", "markIntentId must be non-empty") end
+            ok, message = checkBoundedString(evidence.markIntentId, Validator.MAX_MARK_INTENT_ID_BYTES, "root.evidence[" .. index .. "].markIntentId")
+            if not ok then return false, message end
             if markIntents[evidence.markIntentId] then return fail("root.evidence", "duplicate mark intent") end
             markIntents[evidence.markIntentId] = true
-            if evidence.assetId == nil and (type(evidence.subjectLabel) ~= "string" or evidence.subjectLabel == "") then return fail("root.evidence", "generic marked object requires subjectLabel") end
+            if evidence.assetId ~= nil then
+                if markedAssets[evidence.assetId] then return fail("root.evidence", "ordinary Asset may be marked only once") end
+                markedAssets[evidence.assetId] = true
+            else
+                ok, message = checkBoundedString(evidence.subjectLabel, Validator.MAX_SUBJECT_LABEL_BYTES, "root.evidence[" .. index .. "].subjectLabel")
+                if not ok then return false, message end
+            end
         else
             return fail("root.evidence", "unknown Evidence kind")
         end
@@ -175,6 +217,7 @@ local function validateSchema(root)
     local discoveredAssets = {}
     local confirmedEvents = {}
     local markedEvents = {}
+    local introductionAssetId = nil
     for index = 1, journalCount do
         local entry = root.journal[index]
         if type(entry) ~= "table" then return fail("root.journal", "record must be a table") end
@@ -196,6 +239,7 @@ local function validateSchema(root)
             end
             if not discoveredAssets[entry.relatedId] then return fail("root.journal", "thread introduction lacks its entry Evidence") end
             if eventCounts[entry.kind] > 1 then return fail("root.journal", "duplicate thread introduction") end
+            introductionAssetId = entry.relatedId
         elseif entry.kind == "marked-interesting" then
             local evidence = evidenceIds[entry.subjectId]
             if not evidence or evidence.kind ~= "marked-object" then return fail("root.journal", "marked-interesting subject must resolve to marked Evidence") end
@@ -227,6 +271,10 @@ local function validateSchema(root)
         local hasD1 = discoveredAssets[Content.ids.d1]
         local hasD2 = discoveredAssets[Content.ids.d2]
         if not hasD1 and not hasD2 then return fail("root.journal", "thread introduction lacks entry evidence") end
+        local expectedRole = introductionAssetId == Content.ids.d1 and "anchor" or "fallback"
+        if root.entryOpportunityUsed ~= expectedRole then
+            return fail("root.entryOpportunityUsed", "does not match committed thread introduction")
+        end
     end
     if eventCounts["contradiction-surfaced"] and (not discoveredAssets[Content.ids.d5] or not discoveredAssets[Content.ids.d6]) then
         return fail("root.journal", "contradiction lacks known source documents")
@@ -234,18 +282,19 @@ local function validateSchema(root)
     return true
 end
 
--- This is deliberately conservative, not a reproduction of PZ's serializer.
--- Strings are charged at four bytes per source byte plus delimiters; numbers
--- receive a fixed worst-case textual allowance; tables include key/value tags
--- and separators. It is a deterministic preflight ceiling for P4-R17.
+-- Serializer-informed deterministic preflight estimate. string.len already
+-- measures encoded source bytes, so charging each byte four times would turn
+-- P4-R17's measured 500 KB ceiling into an undocumented ~125 KB ceiling.
+-- Type/tag/table allowances retain headroom; live package acceptance still
+-- compares representative roots with actual Global ModData file deltas.
 local function estimateValue(value)
     local valueType = type(value)
-    if valueType == "string" then return 2 + (4 * string.len(value)) end
-    if valueType == "number" then return 32 end
-    if valueType == "boolean" then return 5 end
+    if valueType == "string" then return 2 + string.len(value) end
+    if valueType == "number" then return 9 end
+    if valueType == "boolean" then return 2 end
     local bytes = 2
     for key, child in pairs(value) do
-        bytes = bytes + 3 + estimateValue(key) + estimateValue(child)
+        bytes = bytes + 2 + estimateValue(key) + estimateValue(child)
     end
     return bytes
 end
@@ -268,7 +317,7 @@ function Validator.validate(root)
     if not ok then return false, message end
     local estimated = Validator.estimateEncodedBytes(root)
     if estimated > Validator.MAX_ENCODED_BYTES then
-        return false, "root: conservative encoded-size estimate " .. estimated .. " exceeds " .. Validator.MAX_ENCODED_BYTES .. " bytes"
+        return false, "capacity-exceeded: encoded-size estimate " .. estimated .. " exceeds " .. Validator.MAX_ENCODED_BYTES .. " bytes"
     end
     return true, nil, estimated
 end

@@ -23,7 +23,8 @@ lua5.1 test/run.lua
 The runner has no third-party test dependency. It covers every criterion
 classified `plain-Lua automated test` in
 `docs/requirements/V0_1_ACCEPTANCE_CRITERIA.md`, then exercises the production
-shell through fakes. The shell cases cover scheduler bounds/deduplication,
+shell through fakes. A criterion may own multiple named regression tests; the
+runner requires at least one and does not cap coverage. The shell cases cover scheduler bounds/deduplication,
 per-subsystem error budgets, the early multiplayer decision, deferred lifecycle
 initialization, Global ModData-shaped staging/round trips, last-known-good
 preservation, and the actual Build 42 entrypoint's one-namespace/additive-hook

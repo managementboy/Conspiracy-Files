@@ -21,6 +21,8 @@ The implementation is limited to the PZ-independent Dead Air domain core:
 
 There is deliberately no PZ event, ModData, item-token, map-binding adapter, UI, network/AI, graph, content-pack, migration, retrofit or multiplayer implementation. Static map-binding data is now selected, but the code does not resolve live PZ objects or perform T4's physical placement commit sequence.
 
+Each criterion has at least one named test. Additional regression tests may reuse the same criterion prefix; traceability is one-to-many, not a restriction on coverage.
+
 ## Acceptance matrix
 
 | Criterion | Exact automated test | Principal cases covered |
@@ -38,15 +40,15 @@ There is deliberately no PZ event, ModData, item-token, map-binding adapter, UI,
 | CF-V01-P16 | `CF-V01-P16 Organisation label derives generic-to-specific without persistence` | D2-only generic label; each of D1/D3/D5 as reveal; no persisted Organisation copy. |
 | CF-V01-P17 | `CF-V01-P17 Location labels derive independently from idempotent confirmations` | Zero, one and two confirmations; duplicate confirmation; only the confirmed label refines. |
 | CF-V01-P18 | `CF-V01-P18 staged recursive validation rejects unsafe states and preserves last-known-good` | Invalid key/value types, function, userdata, thread, metatable/Java stand-in, cycle, alias, schema/static-ID error, depth 64/65 and repeated staged-failure preservation. |
-| CF-V01-P19 | `CF-V01-P19 conservative estimator enforces the 500 KB boundary` | Representative maximal 7-Evidence/two-location slice; immediately-below/above estimator payloads; oversized replacement preserves last-known-good; static prose excluded. |
+| CF-V01-P19 | `CF-V01-P19 calibrated estimator enforces the real 500 KB boundary` plus field-cap regression | Representative maximal slice; actual 500 KB estimator boundary; atomic capacity rejection; 4,096/256/128-byte persisted-field caps; static prose excluded. |
 | CF-V01-P24 | `CF-V01-P24 Evidence resolves full static content without copying document bodies` | Static-registry validation; exact fixture-body comparison; pre/post reconstruction resolution; canonical body exclusion; missing static ID covered by P18. |
 | CF-V01-P25 | `CF-V01-P25 complete suite loads with PZ globals absent` | Entire suite in PUC Lua 5.1.5 with `Events`, `ModData`, `getPlayer` and `getWorld` absent. |
 
 ## Encoded-size estimator
 
-P4-R17 is enforced against a deterministic conservative estimate, not an asserted reproduction of Project Zomboid's serializer. Strings are charged four bytes per source byte plus delimiters; numbers receive a fixed worst-case textual allowance; booleans, table delimiters, key/value tags and separators are charged explicitly. The estimate is order-independent because table-entry costs are summed. A staged root whose estimate exceeds `500 * 1024` bytes is rejected before the private root can be swapped.
+P4-R17 is enforced against a deterministic serializer-informed estimate, not an asserted reproduction of Project Zomboid's serializer. Encoded source string bytes are charged once plus type/table allowances. The estimate is order-independent because table-entry costs are summed. A staged root whose estimate exceeds `500 * 1024` bytes is rejected before the private root can be swapped.
 
-The estimate intentionally overstates many ordinary values. Only a live T1-style ModData test can measure the actual `global_mod_data.bin` delta; this domain gate exists to refuse obviously over-budget canonical state safely and consistently.
+The checked-in T1 calibration fixture estimates 444,196 bytes for the observed 442,499-byte 1,000-record file delta (0.38% headroom). Only a live T1-style ModData test can measure schema-2 `global_mod_data.bin` deltas; live package acceptance must retain that comparison. ADR-0004 defines the atomic rejection/reporting behavior.
 
 ## Content gate
 

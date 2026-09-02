@@ -1,26 +1,21 @@
 local Content = require("ConspiracyFiles.Content")
+local Copy = require("ConspiracyFiles.Copy")
 local Ids = require("ConspiracyFiles.Ids")
 local Renderer = require("ConspiracyFiles.Renderer")
 local Validator = require("ConspiracyFiles.Validator")
 
 local ThreadState = {}
 
-local function copy(value, copies)
-    if type(value) ~= "table" then return value end
-    copies = copies or {}
-    if copies[value] then return copies[value] end
-    local result = {}
-    copies[value] = result
-    for key, child in pairs(value) do result[copy(key, copies)] = copy(child, copies) end
-    return result
-end
+local copy = Copy.deep
 
 local function freshRoot()
     return {
-        schemaVersion = 1,
+        schemaVersion = Validator.CURRENT_SCHEMA_VERSION,
         threadId = Content.thread.threadId,
         contentRevision = Content.thread.contentRevision,
+        pzMinorLine = Validator.PZ_MINOR_LINE,
         assetMaterialisation = {},
+        physicalAvailability = {},
         confirmedLocationIds = {},
         evidence = {},
         journal = {}
@@ -41,11 +36,32 @@ local function sameValue(left, right)
 end
 
 local function isMonotonicExtension(current, proposed)
+    if proposed.schemaVersion ~= current.schemaVersion or proposed.threadId ~= current.threadId
+        or proposed.contentRevision ~= current.contentRevision or proposed.pzMinorLine ~= current.pzMinorLine then
+        return false, "root compatibility metadata cannot change during a domain mutation"
+    end
     if current.entryOpportunityUsed ~= nil and proposed.entryOpportunityUsed ~= current.entryOpportunityUsed then
         return false, "root.entryOpportunityUsed: committed opportunity cannot regress or change"
     end
+    local placementTransitions = {
+        pending = { placing = true, placed = true, unavailable = true, conflict = true },
+        placing = { placed = true, unavailable = true, conflict = true },
+        placed = { conflict = true },
+        unavailable = {},
+        conflict = {}
+    }
     for assetId, status in pairs(current.assetMaterialisation) do
-        if proposed.assetMaterialisation[assetId] ~= status then return false, "root.assetMaterialisation: committed state cannot regress" end
+        local nextStatus = proposed.assetMaterialisation[assetId]
+        if nextStatus ~= status and not (placementTransitions[status] and placementTransitions[status][nextStatus]) then
+            return false, "root.assetMaterialisation: illegal transition " .. status .. " -> " .. tostring(nextStatus)
+        end
+    end
+    for assetId, status in pairs(current.physicalAvailability) do
+        local nextStatus = proposed.physicalAvailability[assetId]
+        if nextStatus == nil then return false, "root.physicalAvailability: state cannot be removed" end
+        if status == "conflict" and nextStatus ~= "conflict" then
+            return false, "root.physicalAvailability: conflict is sticky"
+        end
     end
     if #proposed.confirmedLocationIds < #current.confirmedLocationIds then return false, "root.confirmedLocationIds: history cannot be truncated" end
     for index = 1, #current.confirmedLocationIds do
@@ -72,6 +88,13 @@ end
 local function findMarkIntent(root, markIntentId)
     for _, evidence in ipairs(root.evidence) do
         if evidence.markIntentId == markIntentId then return evidence end
+    end
+    return nil
+end
+
+local function findMarkedAsset(root, assetId)
+    for _, evidence in ipairs(root.evidence) do
+        if evidence.kind == "marked-object" and evidence.assetId == assetId then return evidence end
     end
     return nil
 end
@@ -121,6 +144,11 @@ function ThreadState.new(initialRoot)
             lastDiagnostic = diagnostic
             return false, diagnostic, false
         end
+        valid, diagnostic = isMonotonicExtension(root, proposed)
+        if not valid then
+            lastDiagnostic = diagnostic
+            return false, diagnostic, false
+        end
         root = proposed
         lastDiagnostic = nil
         return true, result, true
@@ -162,8 +190,28 @@ function ThreadState.new(initialRoot)
     function api.materialise(assetId)
         if not Content.assets[assetId] then return false, "unknown Asset ID" end
         return stage(function(proposed)
-            if proposed.assetMaterialisation[assetId] == "materialised" then return false, assetId end
-            proposed.assetMaterialisation[assetId] = "materialised"
+            if proposed.assetMaterialisation[assetId] == "placed" then return false, assetId end
+            proposed.assetMaterialisation[assetId] = "placed"
+            return true, assetId
+        end)
+    end
+
+    function api.transitionMaterialisation(assetId, status)
+        if not Content.assets[assetId] then return false, "unknown Asset ID" end
+        if not Validator.MATERIALISATION_STATES[status] then return false, "unknown placement state" end
+        return stage(function(proposed)
+            if proposed.assetMaterialisation[assetId] == status then return false, assetId end
+            proposed.assetMaterialisation[assetId] = status
+            return true, assetId
+        end)
+    end
+
+    function api.transitionPhysicalAvailability(assetId, status)
+        if not Content.assets[assetId] then return false, "unknown Asset ID" end
+        if not Validator.PHYSICAL_AVAILABILITY_STATES[status] then return false, "unknown physical availability state" end
+        return stage(function(proposed)
+            if proposed.physicalAvailability[assetId] == status then return false, assetId end
+            proposed.physicalAvailability[assetId] = status
             return true, assetId
         end)
     end
@@ -172,7 +220,13 @@ function ThreadState.new(initialRoot)
         local asset = Content.assets[assetId]
         if not asset or asset.assetKind ~= "document" or not asset.autoRecordEvidence then return false, "Asset is not an authored document" end
         if type(contextText) ~= "string" or contextText == "" then return false, "contextText must be non-empty" end
+        if string.len(contextText) > Validator.MAX_CONTEXT_TEXT_BYTES then return false, "contextText exceeds byte limit" end
         if foundLocationId ~= nil and not Content.locations[foundLocationId] then return false, "unknown found Location ID" end
+        local entryRole = assetId == Content.ids.d1 and "anchor" or (assetId == Content.ids.d2 and "fallback" or nil)
+        if entryRole and not hasJournalKind(root, "thread-introduced")
+            and root.entryOpportunityUsed ~= nil and root.entryOpportunityUsed ~= entryRole then
+            return false, "discovery disagrees with committed entry opportunity"
+        end
         return stage(function(proposed)
             local existing = findEvidenceByAsset(proposed, assetId)
             if existing then return false, existing.evidenceId end
@@ -188,6 +242,7 @@ function ThreadState.new(initialRoot)
             proposed.evidence[#proposed.evidence + 1] = evidence
             appendJournal(proposed, "asset-discovered", assetId)
             if (assetId == Content.ids.d1 or assetId == Content.ids.d2) and not hasJournalKind(proposed, "thread-introduced") then
+                proposed.entryOpportunityUsed = entryRole
                 appendJournal(proposed, "thread-introduced", Content.thread.threadId, assetId)
             end
             if assetId == Content.ids.d6 then
@@ -201,18 +256,25 @@ function ThreadState.new(initialRoot)
 
     function api.markInteresting(markIntentId, subject)
         if type(markIntentId) ~= "string" or markIntentId == "" then return false, "markIntentId must be non-empty" end
+        if string.len(markIntentId) > Validator.MAX_MARK_INTENT_ID_BYTES then return false, "markIntentId exceeds byte limit" end
         if type(subject) ~= "table" then return false, "subject must be a table" end
         if type(subject.contextText) ~= "string" or subject.contextText == "" then return false, "contextText must be non-empty" end
+        if string.len(subject.contextText) > Validator.MAX_CONTEXT_TEXT_BYTES then return false, "contextText exceeds byte limit" end
         if subject.assetId ~= nil then
             local asset = Content.assets[subject.assetId]
             if not asset or asset.assetKind ~= "ordinary-object" then return false, "Asset is not a markable ordinary object" end
         elseif type(subject.subjectLabel) ~= "string" or subject.subjectLabel == "" then
             return false, "generic marked object requires subjectLabel"
         end
+        if subject.subjectLabel ~= nil and string.len(subject.subjectLabel) > Validator.MAX_SUBJECT_LABEL_BYTES then return false, "subjectLabel exceeds byte limit" end
         if subject.foundLocationId ~= nil and not Content.locations[subject.foundLocationId] then return false, "unknown found Location ID" end
         return stage(function(proposed)
             local existing = findMarkIntent(proposed, markIntentId)
             if existing then return false, existing.evidenceId end
+            if subject.assetId ~= nil then
+                existing = findMarkedAsset(proposed, subject.assetId)
+                if existing then return false, existing.evidenceId end
+            end
             local markedOrdinal = 1
             for _, evidence in ipairs(proposed.evidence) do if evidence.kind == "marked-object" then markedOrdinal = markedOrdinal + 1 end end
             local evidence = {
@@ -288,7 +350,7 @@ function ThreadState.new(initialRoot)
         for _, evidence in ipairs(root.evidence) do
             local asset = evidence.assetId and Content.assets[evidence.assetId] or nil
             for _, locationId in ipairs(asset and asset.leadLocationIds or {}) do
-                if not seen[locationId] then
+                if not seen[locationId] and not contains(root.confirmedLocationIds, locationId) then
                     result[#result + 1] = { locationId = locationId, label = api.locationLabel(locationId), kind = "ordinary-text" }
                     seen[locationId] = true
                 end

@@ -1,7 +1,7 @@
 # Player Requirements
 
-Status: To be split from authoritative discovery decisions.
+**Status:** Superseded placeholder. Do not treat this file as a current requirements source.
 
 Until this document is populated, `/DECISIONS.md` is authoritative.
 
-This file will eventually consolidate player capabilities, expectations, interaction requirements, onboarding, notebook behavior, graph behavior, evidence handling, and AI-facing requirements into a development-ready requirements specification.
+Current observable player requirements are in `V0_1_ACCEPTANCE_CRITERIA.md` and `PLAYER_MOMENTS.md`; authoritative broader rulings remain in `/DECISIONS.md`.
