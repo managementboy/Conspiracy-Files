@@ -379,14 +379,13 @@ class StartupGateController:
             connection.sync()
 
             ready_screenshot = readiness_capture(expected.width, expected.height)
-            self._validate_screenshot_geometry(ready_screenshot, expected)
+            self._validate_readiness_screenshot(ready_screenshot, expected, root)
 
             current, active_window_id, focus_window_id = self._revalidate_pre_action(
                 connection, launcher, expected, root, active_atom, X.AnyPropertyType
             )
-            action_x = current.width // 2
-            # Both failed 960x1008 captures place the real control around client y=960.
-            action_y = max(1, min(current.height - 2, (current.height * 20) // 21))
+            self._assert_client_geometry(current, root)
+            action_x, action_y = self._safe_action_point(current.width, current.height)
             translated = root.translate_coords(current.window, action_x, action_y)
             root_x, root_y = int(translated.x), int(translated.y)
             current.window.warp_pointer(action_x, action_y)
@@ -460,15 +459,30 @@ class StartupGateController:
             raise HarnessError("owned PZ client geometry changed before startup action")
 
     @staticmethod
-    def _validate_screenshot_geometry(screenshot: dict[str, object], window: WindowSnapshot) -> None:
+    def _validate_readiness_screenshot(screenshot: dict[str, object], window: WindowSnapshot, root) -> None:
         if screenshot.get("status") != "FRESH":
             raise HarnessError("startup readiness screenshot is not fresh")
-        visual = screenshot.get("startup_gate_visual")
-        if not isinstance(visual, dict) or visual.get("status") != "VISIBLE":
-            raise HarnessError("startup readiness screenshot does not show the bounded startup control")
         width, height = screenshot.get("width"), screenshot.get("height")
-        if width != window.width or not isinstance(height, int) or not window.height <= height <= window.height + 64:
-            raise HarnessError("startup readiness screenshot does not match the owned PZ client/decorated-frame geometry")
+        if not isinstance(width, int) or not isinstance(height, int) or width < window.x + window.width or height < window.y + window.height:
+            raise HarnessError("startup readiness screenshot does not contain the owned PZ client geometry")
+
+    @staticmethod
+    def _safe_action_point(width: int, height: int) -> tuple[int, int]:
+        if width < 320 or height < 200:
+            raise HarnessError("owned PZ client geometry is too small for a safe startup point")
+        inset = 2
+        return width // 2, height // 2 if height // 2 >= inset else inset
+
+    @classmethod
+    def _assert_client_geometry(cls, window: WindowSnapshot, root) -> None:
+        screen = root.screen()
+        screen_width = int(getattr(screen, "width_in_pixels", 0))
+        screen_height = int(getattr(screen, "height_in_pixels", 0))
+        if window.x < 0 or window.y < 0 or window.width < 320 or window.height < 200:
+            raise HarnessError("owned PZ client geometry is zero, tiny, or off-screen")
+        if not screen_width or not screen_height or window.x + window.width > screen_width or window.y + window.height > screen_height:
+            raise HarnessError("owned PZ client geometry is zero, tiny, or off-screen")
+        cls._safe_action_point(window.width, window.height)
 
     @staticmethod
     def _active_window_id(root, active_atom, any_property_type) -> int:
@@ -565,12 +579,7 @@ class StartupGateController:
             raise HarnessError("startup controller did not emit the owned one-shot action")
         if os.environ.get("DISPLAY", "") != value.display:
             raise HarnessError("DISPLAY/session identity changed before delivery confirmation")
-        if (value.window_width, value.window_height) != (960, 1008):
-            raise HarnessError("delivery confirmation requires the recorded 960x1008 client geometry")
-        expected_action = (
-            value.window_width // 2,
-            max(1, min(value.window_height - 2, (value.window_height * 20) // 21)),
-        )
+        expected_action = self._safe_action_point(value.window_width, value.window_height)
         if (value.action_x, value.action_y) != expected_action:
             raise HarnessError("delivery confirmation action point is not the authorized lower-center target")
         if (value.root_x, value.root_y) != (

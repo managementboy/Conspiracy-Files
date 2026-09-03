@@ -78,7 +78,7 @@ def main() -> int:
             signature="game loading took", signature_age_seconds=1.0,
             post_signature_settle_seconds=1, action_completed_monotonic=11.0,
             window_x=480, window_y=32, window_width=960, window_height=1008,
-            action_x=480, action_y=960, root_x=960, root_y=992,
+        action_x=480, action_y=504, root_x=960, root_y=536,
             active_window_id=333, focus_window_id=333, pointer_window_id=444,
             ready_screenshot={"status": "FRESH", "width": 960, "height": 1040},
             action_completed_wall_time_ns=11_000_000_000,

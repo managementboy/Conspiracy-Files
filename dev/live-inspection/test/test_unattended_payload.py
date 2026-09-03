@@ -228,7 +228,7 @@ class StartupGateControllerTests(unittest.TestCase):
             signature="game loading took", signature_age_seconds=1.1,
             post_signature_settle_seconds=1, action_completed_monotonic=101.1,
             window_x=480, window_y=32, window_width=960, window_height=1008,
-            action_x=480, action_y=960, root_x=960, root_y=992,
+            action_x=480, action_y=504, root_x=960, root_y=536,
             active_window_id=333, focus_window_id=333, pointer_window_id=44,
             ready_screenshot=StartupGateControllerTests.screenshot(),
             action_completed_wall_time_ns=101_100_000_000,
@@ -241,7 +241,7 @@ class StartupGateControllerTests(unittest.TestCase):
         launcher = ProcessIdentity(111, 111, 1000)
         window = WindowSnapshot(object(), ProcessIdentity(222, 111, 2000), 333, "Project Zomboid", 480, 32, 960, 1008)
         action = X11Action(
-            launcher, window, 480, 960, 960, 992, 333, 333, 444,
+            launcher, window, 480, 504, 960, 536, 333, 333, 444,
             {**self.screenshot(), "captured_wall_time_ns": 101_050_000_000},
             {"status": "FRESH", "path": "screenshots/post-action-startup-gate.png", "width": 960, "height": 1040},
             101.0, 101_000_000_000, 101.08, 101_080_000_000, 0.08,
@@ -259,7 +259,7 @@ class StartupGateControllerTests(unittest.TestCase):
                 readiness_identity=self.identity(), pre_action_checkpoint=self.cursor,
             )
             self.assertEqual((evidence.action, evidence.action_count, evidence.window_pid), ("left-click", 1, 222))
-            self.assertEqual((evidence.action_x, evidence.action_y, evidence.window_width, evidence.window_height), (480, 960, 960, 1008))
+            self.assertEqual((evidence.action_x, evidence.action_y, evidence.window_width, evidence.window_height), (480, 504, 960, 1008))
             self.assertEqual((evidence.command_status, evidence.delivery_status), ("XTEST_EMITTED", "PENDING_TRANSITION"))
             self.assertEqual(evidence.signature_seen_monotonic, 99.0)
             self.assertEqual(evidence.signature_seen_wall_time_ns, 101_000_000_000)
@@ -464,6 +464,39 @@ class StartupGateControllerTests(unittest.TestCase):
         )
         windows = controller._owned_windows(Connection(), ProcessIdentity(50, 50, 500))
         self.assertEqual([(item.window_id, item.process.pid) for item in windows], [(1, 101)])
+
+    def test_safe_action_point_is_normalized_across_supported_client_sizes(self):
+        cases = (
+            ((960, 1008), (480, 504)),
+            ((1920, 1008), (960, 504)),
+            ((1280, 720), (640, 360)),
+            ((1920, 1080), (960, 540)),
+        )
+        for size, expected in cases:
+            with self.subTest(size=size):
+                self.assertEqual(StartupGateController._safe_action_point(*size), expected)
+
+    def test_unsafe_client_geometry_is_rejected_before_action(self):
+        class Root:
+            def __init__(self, width=1920, height=1080):
+                self._screen = type("Screen", (), {
+                    "width_in_pixels": width, "height_in_pixels": height,
+                })()
+
+            def screen(self):
+                return self._screen
+
+        process = ProcessIdentity(222, 111, 2000)
+        cases = (
+            ("tiny", WindowSnapshot(object(), process, 1, "Project Zomboid", 10, 10, 319, 200)),
+            ("zero", WindowSnapshot(object(), process, 1, "Project Zomboid", 10, 10, 0, 0)),
+            ("negative-origin", WindowSnapshot(object(), process, 1, "Project Zomboid", -1, 10, 960, 540)),
+            ("off-right", WindowSnapshot(object(), process, 1, "Project Zomboid", 1600, 10, 400, 540)),
+            ("off-bottom", WindowSnapshot(object(), process, 1, "Project Zomboid", 10, 700, 960, 500)),
+        )
+        for name, window in cases:
+            with self.subTest(geometry=name), self.assertRaisesRegex(HarnessError, "zero, tiny, or off-screen"):
+                StartupGateController._assert_client_geometry(window, Root())
 
     def test_faithful_x11_revalidation_fails_on_focus_race_and_wrong_window(self):
         class Node:

@@ -824,11 +824,9 @@ class LiveRun:
                         readiness_capture=lambda width, height: capture_screen(
                             self.bundle / "screenshots" / "startup-gate-ready.png",
                             required=True,
-                            startup_client_size=(width, height),
                         ),
                         post_action_capture=lambda width, height: capture_screen(
                             self.bundle / "screenshots" / "startup-gate-post-action.png",
-                            startup_client_size=(width, height),
                             require_startup_control_visible=False,
                         ),
                         readiness_identity=self.readiness_identity,
