@@ -1,7 +1,9 @@
 # Dead Air content review — 2026-09-03
 
-Scope: editorial and continuity review of content revision `dead-air-r1`.  
-Authority: recommendation only; this document does not close CF-V01-P03 or replace project-owner approval.  
+Scope: editorial and continuity review of content revision `dead-air-r1`.
+
+Authority: recommendation only; this document does not close CF-V01-P03 or replace project-owner approval.
+
 GitHub issue: [#26](https://github.com/managementboy/Conspiracy-Files/issues/26)
 
 ## Recommendation

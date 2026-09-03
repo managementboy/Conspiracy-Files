@@ -1,7 +1,8 @@
 # T12 installed Build 42 API-discovery notes
 
-Status: read-only source inspection; not live validation.  
-Inspected: 2026-09-03.  
+Status: read-only source inspection; not live validation.
+
+Inspected: 2026-09-03.
 Installed source root: standard local Project Zomboid `media/lua/client/ISUI` tree; machine-specific absolute paths are intentionally not recorded as project requirements.
 
 ## Candidate native surfaces

@@ -1,7 +1,9 @@
 # v0.1 Vertical Slice — Execution Plan
 
-Status: Active preparation  
-Milestone: [v0.1 Vertical Slice](https://github.com/managementboy/Conspiracy-Files/milestone/1)  
+Status: Active preparation
+
+Milestone: [v0.1 Vertical Slice](https://github.com/managementboy/Conspiracy-Files/milestone/1)
+
 Prepared: 2026-09-03
 
 ## Delivery rule
