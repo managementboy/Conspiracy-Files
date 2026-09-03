@@ -68,6 +68,7 @@ def main() -> int:
         expected = ReadinessIdentity(
             "RUN-1", "SAVE-1", "OBSERVER-1", "SESSION-1", "production",
             "CandidateMod", "a" * 64, ("CandidateMod", "OBSERVER-1"),
+            "42.20", "42.20.4",
         )
         pending = InputEvidence(
             display=":0", launcher_pid=111, launcher_start_time_ticks=1000,
@@ -89,7 +90,7 @@ def main() -> int:
                 "kind=PLAYER_READY|run=RUN-1|observer=OBSERVER-1|session=SESSION-1|"
                 "sequence=4|emittedAtMs=12000|save=" + save + "|activeModCount=2|"
                 "activeMods=CandidateMod,OBSERVER-1|payloadMode=production|"
-                "payloadId=CandidateMod|payloadChecksum=" + "a" * 64 + "|gameVersion=42.20.4"
+                "payloadId=CandidateMod|payloadChecksum=" + "a" * 64 + "|gameVersion=42.20"
             )
             line = "[CF-INSPECT]|EVENT|" + fields
             return GateResult(

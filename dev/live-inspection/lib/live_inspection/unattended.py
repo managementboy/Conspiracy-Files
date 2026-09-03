@@ -33,7 +33,8 @@ class ReadinessIdentity:
     payload_id: str
     payload_checksum: str
     active_mod_ids: tuple[str, ...]
-    expected_game_version: str = "42.20.4"
+    expected_game_version: str = ""
+    installed_game_version: str = ""
 
 
 @dataclass(frozen=True)
@@ -765,8 +766,10 @@ def confirm_delivery(
         raise HarnessError(
             "startup transition source time is incoherent with the retained log file timestamp"
         )
-    if not re.fullmatch(r"42\.\d+\.\d+", identity.expected_game_version):
-        raise HarnessError("startup readiness identity lacks an exact supported Build 42 version")
+    if not re.fullmatch(r"42\.\d+", identity.expected_game_version):
+        raise HarnessError("startup readiness identity lacks the runtime version precision")
+    if identity.installed_game_version and not re.fullmatch(r"42\.\d+\.\d+", identity.installed_game_version):
+        raise HarnessError("startup readiness identity lacks an exact supported installed Build 42 version")
     confirmation_identity = identity_revalidator(value)
     if not isinstance(confirmation_identity, dict) or confirmation_identity.get("status") != "STABLE":
         raise HarnessError("delivery-time process/window identity was not stably revalidated")

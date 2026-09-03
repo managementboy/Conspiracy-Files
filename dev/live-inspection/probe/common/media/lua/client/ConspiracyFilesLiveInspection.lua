@@ -195,6 +195,8 @@ end
 local function initialize()
     local valid, count = onlyExpectedModsActive()
     if not valid then error("active mods do not exactly match the profile; count=" .. tostring(count)) end
+    -- `getGameVersion()` reports the coarse runtime line on this Build 42
+    -- branch; the exact installed build is pinned separately by the profile.
     local gameVersion = getGameVersion and tostring(getGameVersion()) or "<unavailable>"
     if Profile.expectedGameVersion ~= "" and gameVersion ~= Profile.expectedGameVersion then
         error(

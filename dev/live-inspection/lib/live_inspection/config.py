@@ -21,6 +21,14 @@ REQUIRED_GATE_ORDER = (
 )
 
 
+def runtime_game_version_for(supported_game_version: str) -> str:
+    """Return the coarse runtime version reported by `getGameVersion()`."""
+    parts = supported_game_version.split(".")
+    if len(parts) < 2 or not all(part.isdigit() for part in parts[:2]):
+        raise HarnessError(f"unsupported installed game version format: {supported_game_version}")
+    return ".".join(parts[:2])
+
+
 def _path(value: str, base: Path) -> Path:
     expanded = Path(os.path.expandvars(os.path.expanduser(value)))
     return (base / expanded).resolve() if not expanded.is_absolute() else expanded.resolve()

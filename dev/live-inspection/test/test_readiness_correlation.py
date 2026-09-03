@@ -34,6 +34,7 @@ def identity() -> ReadinessIdentity:
     return ReadinessIdentity(
         "RUN-1", "SAVE-1", "OBSERVER-1", "SESSION-1", "production",
         "CandidateMod", "a" * 64, ("CandidateMod", "OBSERVER-1"),
+        "42.20", "42.20.4",
     )
 
 
@@ -67,7 +68,7 @@ def ready_line(**updates: str) -> str:
         "save": "SAVE-1", "activeModCount": "2",
         "activeMods": "CandidateMod,OBSERVER-1", "payloadMode": "production",
         "payloadId": "CandidateMod", "payloadChecksum": "a" * 64,
-        "gameVersion": "42.20.4",
+        "gameVersion": "42.20",
     }
     fields.update(updates)
     return "LOG  : Lua f:0> [CF-INSPECT]|EVENT|" + "|".join(
@@ -451,7 +452,7 @@ class ReadinessCorrelationTests(unittest.TestCase):
         self.assertEqual(result.transition_observation["record_start_offset"], 100)
         self.assertEqual(result.transition_observation["source_sequence"], 4)
         self.assertEqual(result.confirmation_identity["status"], "STABLE")
-        self.assertEqual(result.transition_observation["source_game_version"], "42.20.4")
+        self.assertEqual(result.transition_observation["source_game_version"], "42.20")
         self.assertEqual(result.readiness_evidence_journal[0]["classification"], "ACCEPTED")
 
     def test_source_time_boundary_future_tolerance_and_observation_order(self):
@@ -482,11 +483,11 @@ class ReadinessCorrelationTests(unittest.TestCase):
 
     def test_wrong_missing_and_malformed_game_versions_are_rejected(self):
         cases = {
-            "wrong-supported-patch": ready_line(gameVersion="42.20.5"),
+            "wrong-supported-patch": ready_line(gameVersion="42.21"),
             "arbitrary": ready_line(gameVersion="99.99.99-wrong"),
             "malformed": ready_line(gameVersion="42.20.x"),
             "unavailable": ready_line(gameVersion="<unavailable>"),
-            "missing": ready_line().replace("|gameVersion=42.20.4", ""),
+            "missing": ready_line().replace("|gameVersion=42.20", ""),
         }
         for name, line in cases.items():
             with self.subTest(name=name), self.assertRaises(HarnessError):

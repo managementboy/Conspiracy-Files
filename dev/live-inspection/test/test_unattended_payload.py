@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import os
+import signal
 import subprocess
 import sys
 import tempfile
@@ -97,6 +98,9 @@ class UnattendedConfigTests(unittest.TestCase):
             self.assertEqual(
                 profile.unattended_startup.supported_game_version, "42.20.4"
             )
+            run = LiveRun(profile, profile.sites, False, True)
+            self.assertEqual(run.readiness_identity.expected_game_version, "42.20")
+            self.assertEqual(run.readiness_identity.installed_game_version, "42.20.4")
 
     def test_missing_wrong_or_malformed_supported_game_version_is_rejected(self):
         with tempfile.TemporaryDirectory() as temp:
@@ -195,7 +199,7 @@ class StartupGateControllerTests(unittest.TestCase):
     def identity(run: str = "RUN-1") -> ReadinessIdentity:
         return ReadinessIdentity(
             run, run, "OBSERVER-1", "SESSION-1", "production", "CandidateMod",
-            "a" * 64, ("CandidateMod", "OBSERVER-1"),
+            "a" * 64, ("CandidateMod", "OBSERVER-1"), "42.20", "42.20.4",
         )
 
     @classmethod
@@ -206,7 +210,7 @@ class StartupGateControllerTests(unittest.TestCase):
             "save": "RUN-1", "activeModCount": "2",
             "activeMods": "CandidateMod,OBSERVER-1", "payloadMode": "production",
             "payloadId": "CandidateMod", "payloadChecksum": "a" * 64,
-            "gameVersion": "42.20.4",
+            "gameVersion": "42.20",
         }
         fields.update(updates)
         line = "[CF-INSPECT]|EVENT|" + "|".join(f"{key}={value}" for key, value in fields.items())
@@ -464,7 +468,9 @@ class StartupDeliveryIntegrationTests(unittest.TestCase):
                     raise HarnessError("gate timed out")
                 return GateResult(gate.name, 1, 0.1, "game loading took", 100.0)
 
-            with mock.patch.object(run, "prepare"), mock.patch("live_inspection.cli.subprocess.Popen", return_value=self.Process()), mock.patch(
+            with mock.patch.object(run, "prepare"), mock.patch.object(run, "cleanup"), mock.patch.object(
+                run, "_launcher_process_identity", return_value=ProcessIdentity(111, 111, 1000)
+            ), mock.patch("live_inspection.cli.subprocess.Popen", return_value=self.Process()), mock.patch(
                 "live_inspection.cli.wait_for_gate", side_effect=gate_result
             ), self.assertRaisesRegex(HarnessError, "delivery was not confirmed"):
                 run.execute()
@@ -489,7 +495,7 @@ class StartupDeliveryIntegrationTests(unittest.TestCase):
                         "activeModCount": str(len(identity.active_mod_ids)),
                         "activeMods": ",".join(identity.active_mod_ids),
                         "payloadMode": identity.payload_mode, "payloadId": identity.payload_id,
-                        "payloadChecksum": identity.payload_checksum, "gameVersion": "42.20.4",
+                        "payloadChecksum": identity.payload_checksum, "gameVersion": "42.20",
                     }
                     line = "[CF-INSPECT]|EVENT|" + "|".join(f"{key}={value}" for key, value in fields.items())
                     return GateResult(gate.name, 1, 0.1, line, 102.0,
@@ -497,7 +503,9 @@ class StartupDeliveryIntegrationTests(unittest.TestCase):
                                       102_400_000_000, 8, 9)
                 return GateResult(gate.name, 1, 0.1, "game loading took", 100.0)
 
-            with mock.patch.object(run, "prepare"), mock.patch("live_inspection.cli.subprocess.Popen", return_value=self.Process()), mock.patch(
+            with mock.patch.object(run, "prepare"), mock.patch.object(run, "cleanup"), mock.patch.object(
+                run, "_launcher_process_identity", return_value=ProcessIdentity(111, 111, 1000)
+            ), mock.patch("live_inspection.cli.subprocess.Popen", return_value=self.Process()), mock.patch(
                 "live_inspection.cli.wait_for_gate", side_effect=gate_result
             ):
                 run.execute()
@@ -522,14 +530,16 @@ class StartupDeliveryIntegrationTests(unittest.TestCase):
                         f"emittedAtMs=102000|save=WRONG-SAVE|activeModCount={len(identity.active_mod_ids)}|"
                         f"activeMods={','.join(identity.active_mod_ids)}|payloadMode={identity.payload_mode}|"
                         f"payloadId={identity.payload_id}|payloadChecksum={identity.payload_checksum}|"
-                        "gameVersion=42.20.4"
+                        "gameVersion=42.20"
                     )
                     return GateResult(gate.name, 1, 0.1, line, 102.0,
                                       102_500_000_000, 10, 10 + len(line.encode()) + 1,
                                       102_400_000_000, 8, 9)
                 return GateResult(gate.name, 1, 0.1, "game loading took", 100.0)
 
-            with mock.patch.object(run, "prepare"), mock.patch(
+            with mock.patch.object(run, "prepare"), mock.patch.object(run, "cleanup"), mock.patch.object(
+                run, "_launcher_process_identity", return_value=ProcessIdentity(111, 111, 1000)
+            ), mock.patch(
                 "live_inspection.cli.subprocess.Popen", return_value=self.Process()
             ), mock.patch("live_inspection.cli.wait_for_gate", side_effect=gate_result), \
                     self.assertRaisesRegex(HarnessError, "correlation mismatch"):
@@ -556,6 +566,20 @@ class ProductionPayloadTests(unittest.TestCase):
         subprocess.run(["git", "-C", str(root), "add", "candidate"], check=True)
         subprocess.run(["git", "-C", str(root), "commit", "-qm", "candidate"], check=True)
         return payload, tree_checksum(payload)
+
+    def make_live_run(self, root: Path) -> LiveRun:
+        pz = root / "pz"
+        (pz / "Saves/Sandbox/source").mkdir(parents=True)
+        (pz / "launcher").write_text("unused\n", encoding="utf-8")
+        (pz / "evidence").mkdir()
+        profile_path = root / "profile.toml"
+        profile_path.write_text(profile_text(pz), encoding="utf-8")
+        profile = load_profile(profile_path)
+        run = LiveRun(profile, profile.sites, False, True)
+        run.bundle = root / "bundle"
+        run.bundle.mkdir()
+        run.bundle_created = True
+        return run
 
     def test_validates_installs_and_records_clean_source_commit(self):
         with tempfile.TemporaryDirectory() as temp:
@@ -651,12 +675,61 @@ expected_mod_id="CandidateMod"
                 self.assertIn(f'  sessionId = "{run.readiness_identity.session_id}",', generated)
                 self.assertIn(f'  payloadId = "{run.readiness_identity.payload_id}",', generated)
                 self.assertIn(f'  payloadChecksum = "{checksum}",', generated)
+                self.assertIn('  expectedGameVersion = "42.20",', generated)
                 run.cleanup()
             for name, content in before.items():
                 self.assertEqual((pz / name).read_bytes(), content)
             self.assertFalse(run.installed_payload.exists()); self.assertFalse(run.destination_save.exists())
             self.assertTrue((run.bundle / "archive/production-payload").is_dir())
+            shutdown = json.loads((run.bundle / "launcher-shutdown.json").read_text(encoding="utf-8"))
+            self.assertEqual(shutdown["status"], "CLEAN")
+            self.assertFalse(shutdown["sigterm_sent"])
+            self.assertFalse(shutdown["sigkill_sent"])
 
+    def test_cleanup_records_graceful_launcher_termination_without_sigkill(self):
+        with tempfile.TemporaryDirectory() as temp:
+            run = self.make_live_run(Path(temp))
+            launcher_identity = ProcessIdentity(111, 111, 1000)
+            run.process = mock.Mock(pid=111, poll=mock.Mock(return_value=None))
+            with mock.patch.object(
+                run, "_launcher_process_identity", side_effect=[launcher_identity, None]
+            ), mock.patch("live_inspection.cli.os.killpg") as killpg, mock.patch(
+                "live_inspection.cli.time.monotonic", side_effect=[0.0, 0.0, 1.0]
+            ), mock.patch("live_inspection.cli.time.sleep"), mock.patch(
+                "live_inspection.cli.matching_pz_processes", return_value=[]
+            ):
+                run.cleanup()
+            self.assertEqual([call.args[1] for call in killpg.call_args_list], [signal.SIGTERM])
+            shutdown = json.loads((run.bundle / "launcher-shutdown.json").read_text(encoding="utf-8"))
+            self.assertEqual(shutdown["status"], "CLEAN")
+            self.assertTrue(shutdown["sigterm_sent"])
+            self.assertFalse(shutdown["sigkill_sent"])
+            self.assertEqual(shutdown["launcher_identity"]["pid"], 111)
+
+    def test_cleanup_escalates_only_after_verified_timeout(self):
+        with tempfile.TemporaryDirectory() as temp:
+            run = self.make_live_run(Path(temp))
+            launcher_identity = ProcessIdentity(111, 111, 1000)
+            run.process = mock.Mock(pid=111, poll=mock.Mock(return_value=None))
+            with mock.patch.object(
+                run, "_launcher_process_identity", return_value=launcher_identity
+            ), mock.patch("live_inspection.cli.os.killpg") as killpg, mock.patch(
+                "live_inspection.cli.time.monotonic", side_effect=[0.0, 0.0, 21.0]
+            ), mock.patch("live_inspection.cli.time.sleep"), mock.patch(
+                "live_inspection.cli.matching_pz_processes", return_value=[]
+            ):
+                run.cleanup()
+            self.assertEqual(
+                [call.args for call in killpg.call_args_list],
+                [(111, signal.SIGTERM), (111, signal.SIGKILL)],
+            )
+            shutdown = json.loads((run.bundle / "launcher-shutdown.json").read_text(encoding="utf-8"))
+            self.assertEqual(shutdown["status"], "CLEANUP_FAILED")
+            self.assertTrue(shutdown["sigterm_sent"])
+            self.assertTrue(shutdown["sigkill_sent"])
+            self.assertTrue(
+                any("SIGKILL after cleanup timeout" in error for error in shutdown["errors"])
+            )
 
 if __name__ == "__main__":
     unittest.main()

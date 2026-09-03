@@ -16,13 +16,13 @@ from dataclasses import asdict, replace
 from pathlib import Path
 
 from . import __version__
-from .config import load_profile, unattended_refusal_reason
+from .config import load_profile, runtime_game_version_for, unattended_refusal_reason
 from .evidence import finalize_manifest, sanitize_line, write_sanitized
 from .model import Gate, HarnessError, Profile, Site
 from .payload import install_production_payload, tree_checksum
 from .safety import ControlTransaction, ExclusiveRunLock, assert_save_safety, matching_pz_processes, parse_renderer, recover_interrupted_runs, sha256
 from .state import LogFollower, wait_for_gate
-from .unattended import ReadinessIdentity, StartupGateController, confirm_delivery, evidence_dict, fail_delivery
+from .unattended import ProcessIdentity, ReadinessIdentity, StartupGateController, confirm_delivery, evidence_dict, fail_delivery
 
 LOCK_PATH = Path("/tmp/conspiracy-files-live-inspection.lock")
 PREFIX = "[cf-live-inspection]"
@@ -299,6 +299,7 @@ class LiveRun:
         self.process: subprocess.Popen | None = None
         self.launcher_stdout = None
         self.launcher_stderr = None
+        self.launcher_identity: ProcessIdentity | None = None
         self.status = "INITIALIZING"
         self.cleanup_done = False
         self.renderer: dict = {}
@@ -322,8 +323,22 @@ class LiveRun:
             payload_id=profile.payload.expected_mod_id or self.mod_id,
             payload_checksum=profile.payload.expected_sha256 or tree_checksum(probe_root),
             active_mod_ids=tuple(str(value) for value in active_ids),
-            expected_game_version=profile.unattended_startup.supported_game_version,
+            expected_game_version=runtime_game_version_for(profile.unattended_startup.supported_game_version),
+            installed_game_version=profile.unattended_startup.supported_game_version,
         )
+
+    def _launcher_process_identity(self) -> ProcessIdentity | None:
+        if not self.process or self.process.poll() is not None:
+            return None
+        try:
+            identity = StartupGateController._read_process_identity(self.process.pid)
+        except HarnessError:
+            return None
+        if identity.process_group_id != self.process.pid:
+            return None
+        if self.launcher_identity is not None and identity != self.launcher_identity:
+            return None
+        return identity
 
     @staticmethod
     def _write_json_atomic(path: Path, value: dict[str, object]) -> None:
@@ -456,24 +471,44 @@ class LiveRun:
         if not self.bundle_created:
             return
         errors = []
+        termination: dict[str, object] = {
+            "status": "NOT_STARTED",
+            "launcher_identity": None,
+            "sigterm_sent": False,
+            "sigkill_sent": False,
+        }
         if self.process:
-            try:
-                os.killpg(self.process.pid, signal.SIGTERM)
-            except ProcessLookupError:
-                pass
-            deadline = time.monotonic() + 20
-            while time.monotonic() < deadline:
-                try:
-                    os.killpg(self.process.pid, 0)
-                except ProcessLookupError:
-                    break
-                time.sleep(0.25)
+            identity = self._launcher_process_identity()
+            if identity is None:
+                errors.append("launcher process could not be revalidated for cleanup; refusing to signal")
+                termination["status"] = "UNVERIFIED"
             else:
+                termination["status"] = "TERM_SENT"
+                termination["launcher_identity"] = asdict(identity)
                 try:
-                    os.killpg(self.process.pid, signal.SIGKILL)
-                    errors.append("verified owned process group required SIGKILL after cleanup timeout")
+                    os.killpg(identity.process_group_id, signal.SIGTERM)
+                    termination["sigterm_sent"] = True
                 except ProcessLookupError:
-                    pass
+                    termination["status"] = "ALREADY_EXITED"
+                deadline = time.monotonic() + 20
+                while time.monotonic() < deadline:
+                    if self._launcher_process_identity() is None:
+                        termination["status"] = "TERMINATED"
+                        break
+                    time.sleep(0.25)
+                else:
+                    refreshed = self._launcher_process_identity()
+                    if refreshed is not None:
+                        try:
+                            os.killpg(refreshed.process_group_id, signal.SIGKILL)
+                            termination["sigkill_sent"] = True
+                            termination["status"] = "ESCALATED"
+                            termination["launcher_identity"] = asdict(refreshed)
+                        except ProcessLookupError:
+                            termination["status"] = "ALREADY_EXITED"
+                        errors.append("verified owned process group required SIGKILL after cleanup timeout")
+                    else:
+                        termination["status"] = "TERMINATED"
         for stream in (self.launcher_stdout, self.launcher_stderr):
             if stream:
                 stream.close()
@@ -502,6 +537,10 @@ class LiveRun:
         remaining = matching_pz_processes()
         if remaining:
             errors.append("Project Zomboid/inspection process remains: " + ", ".join(str(pid) for pid, _ in remaining))
+        termination["remaining_processes"] = [pid for pid, _ in remaining]
+        termination["errors"] = errors[:]
+        termination["status"] = "CLEAN" if not errors else "CLEANUP_FAILED"
+        self._write_json_atomic(self.bundle / "launcher-shutdown.json", termination)
         metadata = {"status": self.status if not errors else "CLEANUP_FAILED", "run_token": self.run_token, "profile": self.profile.profile_id, "probe": self.profile.probe_id, "sites": [s.site_id for s in self.sites], "renderer": self.renderer, "cleanup_errors": errors, "private_directories": ["archive", "control-before"]}
         self.write_state("CLEAN" if not errors else "CLEANUP_FAILED")
         finalize_manifest(self.bundle, metadata)
@@ -579,6 +618,7 @@ class LiveRun:
         console = self.profile.pz_user_root / "console.txt"
         follower = LogFollower(console, start_at_end=True)
         self.process = subprocess.Popen([str(self.profile.launcher), "-debug", "-nosteam"], cwd=self.profile.launcher.parent, env=env, stdout=self.launcher_stdout, stderr=self.launcher_stderr, start_new_session=True)
+        self.launcher_identity = self._launcher_process_identity()
 
         def alive() -> bool:
             return self.process is not None and self.process.poll() is None
