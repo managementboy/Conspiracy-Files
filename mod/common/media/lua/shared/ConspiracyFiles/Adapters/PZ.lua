@@ -1,6 +1,15 @@
 local PZ = {}
 
 local function report(message) print(message) end
+local reportedDiagnostics = {}
+
+local function diagnostic(diagnostics, message)
+    diagnostics[#diagnostics + 1] = message
+    if not reportedDiagnostics[message] then
+        reportedDiagnostics[message] = true
+        report("Conspiracy-Files: " .. message)
+    end
+end
 
 local function runtimeVersion()
     local core = getCore and getCore() or nil
@@ -77,17 +86,78 @@ local function addContainerMatches(result, collisions, seen, container, assetId,
     end
 end
 
-local function addVehicleMatches(result, collisions, seen, vehicle, assetId, identityGateway)
+local function addVehicleMatches(result, collisions, seen, vehicle, assetId, identityGateway, diagnostics)
     if not vehicle then return end
-    for index = 0, vehicle:getPartCount() - 1 do
-        local part = vehicle:getPartByIndex(index)
-        local container = part and part:getItemContainer() or nil
+    local countOk, partCount = pcall(function() return vehicle:getPartCount() end)
+    if not countOk or type(partCount) ~= "number" or partCount < 0 then
+        diagnostic(diagnostics, "physical scan ignored a vehicle with an unreadable part collection")
+        return
+    end
+    for index = 0, partCount - 1 do
+        local partOk, part = pcall(function() return vehicle:getPartByIndex(index) end)
+        if not partOk then
+            diagnostic(diagnostics, "physical scan ignored an unreadable vehicle part")
+            part = nil
+        end
+        local containerOk, container = pcall(function()
+            return part and part:getItemContainer() or nil
+        end)
+        if not containerOk then
+            diagnostic(diagnostics, "physical scan ignored a vehicle part with an unreadable item container")
+            container = nil
+        end
         if container then
+            local idOk, vehicleId = pcall(function() return vehicle:getId() end)
+            local partIdOk, partId = pcall(function() return part:getId() end)
+            if not idOk or not partIdOk then
+                diagnostic(diagnostics, "physical scan ignored a vehicle part with unreadable identity")
+            else
             addContainerMatches(result, collisions, seen, container, assetId, identityGateway, {
-                kind = "vehicle", vehicleId = tostring(vehicle:getId()), vehiclePartId = tostring(part:getId())
+                kind = "vehicle", vehicleId = tostring(vehicleId), vehiclePartId = tostring(partId)
             })
+            end
         end
     end
+end
+
+local function collectVehicles(collection, diagnostics)
+    if not collection then return nil, "vehicle collection is unavailable" end
+
+    -- Build 42.17+ exposes IsoCell.getVehicles() as a Set.  Its iterator is
+    -- the stable common capability for both the Set and older list-shaped
+    -- collections; indexed get is retained only for older proxies without it.
+    local iteratorOk, iterator = pcall(function() return collection:iterator() end)
+    if iteratorOk and iterator then
+        local result = {}
+        while true do
+            local hasNextOk, hasNext = pcall(function() return iterator:hasNext() end)
+            if not hasNextOk then return nil, "vehicle collection iterator has no usable hasNext method" end
+            if not hasNext then return result end
+            local nextOk, vehicle = pcall(function() return iterator:next() end)
+            if not nextOk then return nil, "vehicle collection iterator has no usable next method" end
+            if vehicle == nil then
+                diagnostic(diagnostics, "physical scan ignored a nil vehicle entry")
+            else
+                result[#result + 1] = vehicle
+            end
+        end
+    end
+
+    local sizeOk, size = pcall(function() return collection:size() end)
+    if not sizeOk or type(size) ~= "number" or size < 0 then
+        return nil, "vehicle collection has neither a usable iterator nor size/get methods"
+    end
+    local result = {}
+    for index = 0, size - 1 do
+        local vehicleOk, vehicle = pcall(function() return collection:get(index) end)
+        if not vehicleOk then return nil, "vehicle collection has no usable indexed get method" end
+        if vehicle == nil then
+            diagnostic(diagnostics, "physical scan ignored a nil vehicle entry")
+        else
+            result[#result + 1] = vehicle
+        end
+    end
+    return result
 end
 
 local function scanPhysical(context)
@@ -97,7 +167,7 @@ local function scanPhysical(context)
     if not identityGateway or type(identityGateway.verify) ~= "function" then
         error("physical scan requires the canonical identity gateway")
     end
-    local matches, collisions, seen = {}, {}, {}
+    local matches, collisions, seen, diagnostics = {}, {}, {}, {}
     local player = getPlayer and getPlayer() or nil
     if player then
         addContainerMatches(matches, collisions, seen, player:getInventory(), assetId, identityGateway,
@@ -159,25 +229,36 @@ local function scanPhysical(context)
                 end
             end
         end
-        addVehicleMatches(matches, collisions, seen, player:getVehicle(), assetId, identityGateway)
+        addVehicleMatches(matches, collisions, seen, player:getVehicle(), assetId, identityGateway, diagnostics)
         local vehiclesOk, vehicles = pcall(function() return getCell():getVehicles() end)
         if vehiclesOk and vehicles then
-            local limit = math.min(vehicles:size(), 16)
-            for index = 0, limit - 1 do
-                local vehicle = vehicles:get(index)
-                local dx, dy = vehicle:getX() - px, vehicle:getY() - py
-                if (dx * dx) + (dy * dy) <= 16 then
-                    addVehicleMatches(matches, collisions, seen, vehicle, assetId, identityGateway)
+            local vehicleList, vehicleError = collectVehicles(vehicles, diagnostics)
+            if not vehicleList then
+                diagnostic(diagnostics, vehicleError)
+            else
+            local limit = math.min(#vehicleList, 16)
+            for index = 1, limit do
+                local vehicle = vehicleList[index]
+                local positionOk, dx, dy = pcall(function()
+                    return vehicle:getX() - px, vehicle:getY() - py
+                end)
+                if not positionOk then
+                    diagnostic(diagnostics, "physical scan ignored a vehicle with unreadable coordinates")
+                elseif (dx * dx) + (dy * dy) <= 16 then
+                    addVehicleMatches(matches, collisions, seen, vehicle, assetId, identityGateway, diagnostics)
                 end
             end
+            end
+        elseif not vehiclesOk or vehicles == nil then
+            diagnostic(diagnostics, "physical scan could not read the cell vehicle collection")
         end
         local last = context and context.lastKnownPhysicalLocation or nil
         if last and last.kind == "vehicle" and last.vehicleId and type(getVehicleById) == "function" then
             local ok, vehicle = pcall(getVehicleById, tonumber(last.vehicleId))
-            if ok then addVehicleMatches(matches, collisions, seen, vehicle, assetId, identityGateway) end
+            if ok then addVehicleMatches(matches, collisions, seen, vehicle, assetId, identityGateway, diagnostics) end
         end
     end
-    return { matches = matches, collisions = collisions, coverage = "incomplete" }
+    return { matches = matches, collisions = collisions, coverage = "incomplete", diagnostics = diagnostics }
 end
 
 local function buildingMatches(definition, arrival)

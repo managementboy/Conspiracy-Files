@@ -1009,3 +1009,78 @@ test("offline PZ concrete scan classifies every unreadable authored carrier with
     _G.getPlayer = old.getPlayer
     assertTrue(ok, message)
 end)
+
+test("offline PZ scan uses the Build 42 vehicle Set iterator and fails closed on partial vehicle APIs", function()
+    local old = { getCell = rawget(_G, "getCell"), getPlayer = rawget(_G, "getPlayer") }
+    local assetId = ids.d1
+    local binding = CF.LocationBindings.locations[CF.Content.assets[assetId].placementLocationId].placements[assetId]
+    local item = { md = {}, itemType = CF.Content.assets[assetId].pzItemType }
+    function item:getModData() return self.md end
+    function item:getFullType() return self.itemType end
+    function item:getDisplayName() return CF.Content.assets[assetId].displayName end
+    function item:setName(name) self.name = name end
+    function item:setCustomName(value) self.customName = value end
+    local environment = require("ConspiracyFiles/Adapters/PZ").environment()
+    assertTrue(CF.ItemProjection.apply(item, assetId, "cf:set-iterator:d1", environment.itemPort))
+
+    local container = {
+        getItems = function() return { size = function() return 1 end, get = function() return item end } end,
+        getType = function() return "TruckBed" end
+    }
+    local part = {
+        getItemContainer = function() return container end,
+        getId = function() return 7 end
+    }
+    local vehicle = {
+        getX = function() return 100 end, getY = function() return 100 end,
+        getPartCount = function() return 1 end,
+        getPartByIndex = function() return part end,
+        getId = function() return 42 end
+    }
+    local set = {
+        iterator = function()
+            local done = false
+            return {
+                hasNext = function() return not done end,
+                next = function() done = true; return vehicle end
+            }
+        end
+    }
+    local square = {
+        getX = function() return 100 end, getY = function() return 100 end, getZ = function() return 0 end,
+        getRoom = function() return nil end, getObjects = function() return nil end,
+        getWorldObjects = function() return nil end, getStaticMovingObjects = function() return nil end
+    }
+    local cell = {
+        getGridSquare = function() return square end,
+        getVehicles = function() return set end
+    }
+    local player = {
+        getInventory = function() return { getItems = function() return { size = function() return 0 end, get = function() end } end } end,
+        getSquare = function() return square end, getVehicle = function() return nil end
+    }
+    _G.getCell, _G.getPlayer = function() return cell end, function() return player end
+    local gateway = CF.ItemIdentityGateway.new({
+        itemPort = environment.itemPort,
+        tokenFor = function() return "cf:set-iterator:d1" end
+    })
+    local ok, observation = pcall(environment.world.scanPhysical, {
+        assetId = assetId, binding = binding, identityGateway = gateway
+    })
+    assertTrue(ok, observation)
+    assertEqual(1, #observation.matches)
+    assertEqual(0, #observation.collisions)
+
+    local partialCell = {
+        getGridSquare = function() return square end,
+        getVehicles = function() return { size = function() return 1 end } end
+    }
+    _G.getCell = function() return partialCell end
+    ok, observation = pcall(environment.world.scanPhysical, {
+        assetId = assetId, binding = binding, identityGateway = gateway
+    })
+    _G.getCell, _G.getPlayer = old.getCell, old.getPlayer
+    assertTrue(ok, observation)
+    assertEqual(0, #observation.matches)
+    assertTrue(#observation.diagnostics > 0)
+end)
