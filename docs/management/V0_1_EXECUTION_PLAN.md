@@ -39,6 +39,8 @@ T11 and T12 may run in parallel after a usable binding is available. T12 may beg
 - project-owner content approval and unresolved product preferences;
 - final save/reload, death, multiplayer, performance and fault-containment acceptance.
 
+Use `docs/management/OWNER_ATTENDANCE_CHECKLIST.md` to keep those sessions limited to decisions and manual observations that cannot be delegated safely.
+
 No unattended result may be worded as live validation. Prepared probes remain `Planned`; interrupted runs remain `In progress`; only archived observed evidence can support `Proven`, `Disproven` or `Inconclusive`.
 
 ## Owner decision packet
