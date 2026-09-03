@@ -1,0 +1,6 @@
+name=Conspiracy-Files T11 Adapter Integration Probe
+id=ConspiracyFiles_T11_Probe
+author=Conspiracy-Files development
+modversion=0.0.1
+versionMin=42.0.0
+description=Disposable one-item composition gate for v0.1 Project Zomboid adapters. Development use only.

@@ -1,6 +1,6 @@
 # Conspiracy-Files — Project State
 
-Status: **Engineering de-risk / v0.1 domain implementation**. The PZ-independent v0.1 plain-Lua domain core was accepted and merged in PR #15; live Build 42 integration has not been accepted.
+Status: **v0.1 location binding and integration preparation**. The PZ-independent v0.1 plain-Lua domain core was accepted and merged in PR #15; live Build 42 integration has not been accepted.
 Target: Project Zomboid Build 42; T1/T2/T3/T4/T5/T7/T8/T9/T10 verified stable Build **42.20.4**, revision **b0bbce05d5**, Steam build ID **24909800**, with the limitations recorded in their reports. Other capability claims remain subject to their named spikes/research.
 
 ## Source of truth order
@@ -29,6 +29,20 @@ Spike numbers and GitHub issue numbers are not interchangeable. Use this authori
 | T7 | #8 |
 | T8 | #9 |
 | T10 | #10 |
+
+## v0.1 delivery backlog
+
+| Work | GitHub issue | Attendance boundary |
+|---|---:|---|
+| Final P2/R2 location binding | #28 | Requires owner/manual live PZ session for route and arrival-negative evidence |
+| Dead Air human content approval | #26 | Requires project-owner approval or bounded revision request |
+| T11 adapter-composition gate | #29 | Preparation is unattended; final live GUI/save matrix requires attendance |
+| T12 ISUI runtime-feasibility gate | #25 | Preparation is unattended; final visual/input validation requires attendance |
+| Approved UI and remaining product decisions | #30 | Approved Help placement may be reconciled now; unresolved preference decisions require owner input |
+| Production Dead Air vertical slice | #31 | Starts only after the pre-assembly gates pass |
+| Full v0.1 live acceptance | #27 | Requires manual live PZ validation |
+
+The milestone is [v0.1 Vertical Slice](https://github.com/managementboy/Conspiracy-Files/milestone/1). T6 / Issue #7 remains open but is not on the v0.1 critical path unless retrofit returns.
 
 ## Core product
 
@@ -92,11 +106,14 @@ One built-in hand-authored thread:
 
 Before implementation architecture is signed off:
 
-1. treat Engineering Gate A (T1/T9/T2/T3/T4/T5) as complete and integrate the accepted domain core only through adapter mechanisms proven by the named spikes, without expanding into content packs/graph systems;
-2. live-inspect provisional candidates P2 and R2 first, verify route/access plus story/container plausibility, and commit no exact location binding until both pass; use the large police headquarters only if P2 lacks credible property/records containers;
-3. implement physical identity as a mod-owned per-instance token with separate availability/conflict state; never infer loss from the original placement container alone;
-4. update decisions from each later observed spike result;
-5. implement T8's bounded/debounced sticky arrival adapter and T7/T10's hybrid asset plus inventory-pane-only Inspect boundary. Direct-world-item right-click is not a supported dependency. T6 only matters if retrofit is revived.
+1. Resume Issue #28 from checkpoint commit `9103ea9` on `design/dead-air-location-binding-live`; complete only the bounded regional route review and candidate-specific arrival negatives before binding P2/R2.
+2. Close or return a bounded revision list for the `dead-air-r1` human content gate under Issue #26.
+3. Run T11 / Issue #29 on one real bound fixture before treating the production adapters as a single implementation step.
+4. Run T12 / Issue #25 before production notebook Lua begins; browser-prototype approval is not evidence of Build 42 ISUI feasibility.
+5. Complete Issue #30's remaining owner decisions and keep `DECISIONS.md`, requirements and UI direction synchronized.
+6. Only then assemble Issue #31 and execute Issue #27's full E01–E13 live acceptance matrix.
+
+All integration work must use the mechanisms proven by the named spikes, including P4-R32 staging, P4-R36 placement, P4-R37 identity, P4-R39 arrival sampling and P4-R45 inventory-pane-only actions. Direct-world-item right-click is not a supported dependency. T6 only matters if retrofit is revived.
 
 P4-R40 resolves the former entry-selection to-do: if durably placed but undiscovered D1 becomes conclusively `unavailable` only after T5/P4-R37 reconciliation, D2 may activate once as the fallback introduction. Unloading, original-container absence, `unknown`, `untracked` and `conflict` do not qualify, and D1 never respawns.
 

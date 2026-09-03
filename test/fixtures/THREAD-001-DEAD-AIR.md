@@ -91,7 +91,7 @@ Exact vanilla map targets remain deliberately **unbound** until live inspection.
 
 **What the player knows before reaching it:** if led from the police side, only `Relay Site 31`, `south service road`, a fenced communications mast/utility structure, and CSS ticket `93-0714`. This should read as a landmark-style lead, not a quest marker.
 
-**What confirms it:** physical arrival at the selected hand-curated location plus matching story dressing/asset context, subject to T8's eventual arrival-detection result.
+**What confirms it:** physical arrival at the selected hand-curated location plus matching story dressing/asset context, using T8/P4-R39's bounded, debounced, exact-predicate arrival mechanism.
 
 **Associated documents/items:** D1, D3, D4; optional ordinary B-37 key relevance.
 
@@ -115,7 +115,7 @@ Exact vanilla map targets remain deliberately **unbound** until live inspection.
 
 # Six documents
 
-The six document Assets below are the complete v0.1 authored document set. Each has a separate real-world purpose and voice. The implementation mechanism for showing the text remains T7/T10-dependent.
+The six document Assets below are the complete v0.1 authored document set. Each has a separate real-world purpose and voice. T7/T10 established persistent custom names plus validated ModData and the cooperative inventory-pane `Inspect` reader boundary; production integration remains outstanding.
 
 ---
 
@@ -741,13 +741,13 @@ This is a content preference, not a Build 42 API decision.
 
 | Asset | Preferred interaction | Engine status |
 |---|---|---|
-| D1 service ticket | Read / Inspect | T7/T10-dependent |
-| D2 property record | Examine / Read | T7/T10-dependent |
-| D3 invoice | Examine | T7/T10-dependent |
-| D4 notebook page | Read | T7/T10-dependent |
-| D5 memo | Read | T7/T10-dependent |
-| D6 shift note | Examine | T7/T10-dependent |
-| B-37 key | Examine / Mark Interesting | T5/T7/T10-dependent |
+| D1 service ticket | Read / Inspect | T7/T10 mechanism proven; production adapter pending |
+| D2 property record | Examine / Read | T7/T10 mechanism proven; production adapter pending |
+| D3 invoice | Examine | T7/T10 mechanism proven; production adapter pending |
+| D4 notebook page | Read | T7/T10 mechanism proven; production adapter pending |
+| D5 memo | Read | T7/T10 mechanism proven; production adapter pending |
+| D6 shift note | Examine | T7/T10 mechanism proven; production adapter pending |
+| B-37 key | Examine / Mark Interesting | T5/T7/T10 mechanisms proven; production adapter pending |
 
 No choice above decides native reader vs ModData-backed text vs custom reader UI.
 
@@ -759,7 +759,7 @@ No choice above decides native reader vs ModData-backed text vs custom reader UI
 - **T5:** use the accepted mod-owned per-instance token with separate availability/conflict state and P4-R37 reconciliation; engine IDs remain diagnostic, incomplete coverage cannot prove loss, and copied-token duplication is sticky `conflict`.
 - **T7:** use a persistent custom item name plus validated plain ModData title/description/body, with the custom T10 `Inspect` reader as the world-specific presentation boundary; optional locked Literature pages are limited projections only.
 - **T8:** use P4-R39's bounded/debounced sampling and exact binding predicates; delayed-reference ordering and reload-inside remain production-adapter acceptance cases rather than completed probe claims.
-- **T10:** cooperative Inspect/context-menu behavior remains open and may resume only as a P4-R44 manual-GUI session; the probe logs menu callbacks/assertions while the project owner manually enters the disposable save and performs the requested right-clicks.
+- **T10:** complete on Build 42.20.4 through the P4-R44 manual-GUI route. Use P4-R45's privately keyed, activation-revalidated player/Ground inventory-pane actions; direct-world-item right-click is not a supported dependency. Production reader/adapter integration remains outstanding.
 
 # Self-review
 
