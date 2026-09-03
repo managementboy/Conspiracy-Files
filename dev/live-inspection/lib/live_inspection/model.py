@@ -29,6 +29,25 @@ class Gate:
 
 
 @dataclass(frozen=True)
+class UnattendedStartup:
+    enabled: bool = False
+    action: str = "left-click"
+    max_actions: int = 1
+    signature_max_age_seconds: int = 15
+    post_signature_settle_seconds: int = 1
+    window_title_pattern: str = r"(?i)project zomboid"
+    supported_game_version: str = ""
+
+
+@dataclass(frozen=True)
+class Payload:
+    mode: str = "probe"
+    source: Path | None = None
+    expected_sha256: str | None = None
+    expected_mod_id: str | None = None
+
+
+@dataclass(frozen=True)
 class Profile:
     path: Path
     profile_id: str
@@ -43,4 +62,8 @@ class Profile:
     gates: tuple[Gate, ...]
     time_budgets: dict[str, int] = field(default_factory=dict)
     allow_multi_site: bool = False
+    criteria: tuple[str, ...] = ()
+    interaction_scope: tuple[str, ...] = ()
+    unattended_startup: UnattendedStartup = field(default_factory=UnattendedStartup)
+    payload: Payload = field(default_factory=Payload)
     raw: dict[str, Any] = field(default_factory=dict, repr=False)

@@ -154,17 +154,37 @@ def recover_interrupted_runs(pz_root: Path, evidence_root: Path) -> list[Path]:
         if state.get("status") in {"CLEAN", "RECOVERED"}:
             continue
         save_name, mod_name = state.get("save_name", ""), state.get("mod_name", "")
+        payload_name = state.get("payload_name")
+        payload_staging_name = state.get("payload_staging_name")
         save, mod = (save_root / save_name).resolve(), (mod_root / mod_name).resolve()
         if save.parent != save_root or not save_name.startswith("CF_INSPECT_") or "/" in save_name:
             raise HarnessError(f"refusing recovery with unsafe save path in {state_path}")
         if mod.parent != mod_root or not mod_name.startswith("CF_LiveInspection_") or "/" in mod_name:
             raise HarnessError(f"refusing recovery with unsafe mod path in {state_path}")
+        payload = None
+        if payload_name is not None:
+            if not isinstance(payload_name, str):
+                raise HarnessError(f"refusing recovery with invalid payload path in {state_path}")
+            payload = (mod_root / payload_name).resolve()
+            if payload.parent != mod_root or not payload_name.startswith("CF_Payload_") or "/" in payload_name:
+                raise HarnessError(f"refusing recovery with unsafe payload path in {state_path}")
+        payload_staging = None
+        if payload_staging_name is not None:
+            if not isinstance(payload_staging_name, str):
+                raise HarnessError(f"refusing recovery with invalid payload staging path in {state_path}")
+            payload_staging = (mod_root / payload_staging_name).resolve()
+            if payload_staging.parent != mod_root or not payload_staging_name.startswith("CF_Payload_") or not payload_staging_name.endswith(".staging") or "/" in payload_staging_name:
+                raise HarnessError(f"refusing recovery with unsafe payload staging path in {state_path}")
         bundle = state_path.parent
         archive = bundle / "archive-recovered"
         archive.mkdir(exist_ok=True)
         for source, name in ((save, "save"), (mod, "mod")):
             if source.exists():
                 shutil.move(str(source), archive / name)
+        if payload and payload.exists():
+            shutil.move(str(payload), archive / "production-payload")
+        if payload_staging and payload_staging.exists():
+            shutil.move(str(payload_staging), archive / "production-payload-staging")
         manifest_path = bundle / "control-before" / "manifest.json"
         if manifest_path.is_file():
             records = json.loads(manifest_path.read_text(encoding="utf-8"))

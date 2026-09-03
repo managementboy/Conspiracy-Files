@@ -41,4 +41,4 @@ replacement, repeated error spam or unrelated handler failure.
 
 Do not power-cut the operating system, modify a real save, claim cross-file
 atomicity, or infer behavior for callbacks that were not logged. A deterministic
-No player-facing lifecycle summary is in scope for this matrix.
+recap is outside this matrix because the base-v0.1 implementation omits it.

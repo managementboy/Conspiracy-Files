@@ -10,6 +10,7 @@ local active, completed, initialized = false, false, false
 local tick, exitTicks, siteIndex = 0, 0, 0
 local current, scan, failures = nil, nil, 0
 local autoContinue, menuTicks = false, 0
+local eventSequence = 0
 
 local function safe(value)
     if value == nil then return "<nil>" end
@@ -17,7 +18,18 @@ local function safe(value)
 end
 
 local function event(kind, fields)
-    local parts = { PREFIX, "EVENT", "kind=" .. safe(kind), "run=" .. safe(Profile.runId) }
+    eventSequence = eventSequence + 1
+    local emittedAtMs = getTimestampMs and getTimestampMs() or 0
+    local parts = {
+        PREFIX,
+        "EVENT",
+        "kind=" .. safe(kind),
+        "run=" .. safe(Profile.runId),
+        "observer=" .. safe(Profile.observerId),
+        "session=" .. safe(Profile.sessionId),
+        "sequence=" .. eventSequence,
+        "emittedAtMs=" .. safe(emittedAtMs),
+    }
     if fields then for i = 1, #fields do parts[#parts + 1] = fields[i] end end
     print(table.concat(parts, "|"))
 end
@@ -32,12 +44,16 @@ local function saveName()
     return tostring(currentSave):match("([^\\/]+)$") or ""
 end
 
-local function onlyProbeActive()
+local function onlyExpectedModsActive()
     local ok, mods = pcall(getActivatedMods)
     if not ok or not mods then return false, -1 end
     local countOk, count = pcall(function() return mods:size() end)
-    local memberOk, member = pcall(function() return mods:contains(Profile.modId) end)
-    return countOk and memberOk and count == 1 and member == true, countOk and count or -1
+    if not countOk or count ~= #Profile.activeModIds then return false, countOk and count or -1 end
+    for i = 1, #Profile.activeModIds do
+        local memberOk, member = pcall(function() return mods:contains(Profile.activeModIds[i]) end)
+        if not memberOk or member ~= true then return false, count end
+    end
+    return true, count
 end
 
 local function spriteName(object)
@@ -177,9 +193,34 @@ local function runScanBatch()
 end
 
 local function initialize()
-    local valid, count = onlyProbeActive()
-    if not valid then error("probe must be the only active mod; count=" .. tostring(count)) end
-    event("PLAYER_READY", { "save=" .. saveName(), "activeModCount=" .. count, "gameVersion=" .. safe(getGameVersion and getGameVersion()) })
+    local valid, count = onlyExpectedModsActive()
+    if not valid then error("active mods do not exactly match the profile; count=" .. tostring(count)) end
+    -- `getGameVersion()` reports the coarse runtime line on this Build 42
+    -- branch; the exact installed build is pinned separately by the profile.
+    local gameVersion = getGameVersion and tostring(getGameVersion()) or "<unavailable>"
+    if Profile.expectedGameVersion ~= "" and gameVersion ~= Profile.expectedGameVersion then
+        error(
+            "game version does not match exact supported run contract; expected=" ..
+            safe(Profile.expectedGameVersion) .. " actual=" .. safe(gameVersion)
+        )
+    end
+    if Profile.payloadMode == "production" then
+        local runtime = ConspiracyFiles and ConspiracyFiles.runtime
+        if type(runtime) ~= "table" or runtime.enabled ~= true then error("production runtime is unavailable") end
+        local registered = runtime.registeredEvents
+        if type(registered) ~= "table" or #registered ~= 6 then error("production runtime did not register all six event boundaries") end
+        local phase = runtime.phase and runtime.phase() or "<unavailable>"
+        event("PRODUCTION_READY", { "status=PASS", "phase=" .. safe(phase), "registeredEvents=" .. #registered })
+    end
+    event("PLAYER_READY", {
+        "save=" .. saveName(),
+        "activeModCount=" .. count,
+        "activeMods=" .. safe(table.concat(Profile.activeModIds, ",")),
+        "payloadMode=" .. safe(Profile.payloadMode),
+        "payloadId=" .. safe(Profile.payloadId),
+        "payloadChecksum=" .. safe(Profile.payloadChecksum),
+        "gameVersion=" .. safe(gameVersion),
+    })
     siteIndex, current, tick = 1, Profile.sites[1], 0
     logSiteDefinition(current); teleport(current); initialized = true
 end
