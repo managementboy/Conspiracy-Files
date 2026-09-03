@@ -264,17 +264,23 @@ class StartupGateControllerTests(unittest.TestCase):
         fake_protocol.event = types.SimpleNamespace(ClientMessage=lambda **_kwargs: object())
         launcher = ProcessIdentity(111, 111, 1000)
         window = WindowSnapshot(Window(), ProcessIdentity(222, 111, 2000), 333, "Project Zomboid", 480, 32, 960, 1008)
-        controller = StartupGateController(self.policy(), identity_reader=lambda _pid: launcher)
+        controller = StartupGateController(
+            self.policy(), clock=lambda: 100.0, identity_reader=lambda _pid: launcher
+        )
+        def complete(*_args, **kwargs):
+            kwargs["assert_fresh"]()
+            return "action"
+
         with mock.patch.dict(sys.modules, {"Xlib": fake_xlib, "Xlib.ext": fake_ext, "Xlib.protocol": fake_protocol}), \
                 mock.patch.object(controller, "_owned_windows", return_value=[window]), \
                 mock.patch.object(controller, "_revalidate_pre_action", return_value=(window, 333, 333)), \
                 mock.patch.object(controller, "_belongs_to_window", return_value=True), \
-                mock.patch.object(controller, "_complete_click_cycle", return_value="action"), \
+                mock.patch.object(controller, "_complete_click_cycle", side_effect=complete), \
                 mock.patch.dict(os.environ, {"DISPLAY": ":0"}):
             self.assertEqual(
                 controller._activate_x11(
-                    ":0", launcher, lambda *_size: self.screenshot(), None,
-                    lambda: None, self.cursor,
+                    ":0", launcher, lambda *_size: self.screenshot(), None, 99.0,
+                    self.cursor,
                 ),
                 "action",
             )

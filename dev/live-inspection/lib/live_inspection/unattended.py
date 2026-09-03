@@ -177,7 +177,7 @@ class StartupGateController:
 
         action = self._activate_x11(
             display_name, launcher, readiness_capture, post_action_capture,
-            lambda: self._assert_signature_fresh(signature_seen_at),
+            signature_seen_at,
             pre_action_checkpoint,
         )
         completed_at = self._clock()
@@ -337,7 +337,7 @@ class StartupGateController:
         launcher: ProcessIdentity,
         readiness_capture: Callable[[int, int], dict[str, object]],
         post_action_capture: Callable[[int, int], dict[str, object]] | None,
-        assert_fresh: Callable[[], None],
+        signature_seen_at: float,
         pre_action_checkpoint: Callable[[], LogCursor],
     ) -> X11Action:
         try:
@@ -403,7 +403,7 @@ class StartupGateController:
             if not self._belongs_to_window(current.window, pointer_window_id):
                 raise HarnessError("owned PZ window is obscured at the startup-control point")
 
-            assert_fresh()
+            self._assert_signature_fresh(signature_seen_at)
             return self._complete_click_cycle(
                 connection,
                 xtest,
