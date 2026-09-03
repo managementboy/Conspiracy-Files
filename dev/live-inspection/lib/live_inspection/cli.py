@@ -267,6 +267,7 @@ def capture_screen(
         "sha256": sha256(destination),
         "bytes": stat.st_size,
         "mtime_ns": stat.st_mtime_ns,
+        "captured_wall_time_ns": started_wall_ns,
         "width": width,
         "height": height,
     }
@@ -715,9 +716,14 @@ class LiveRun:
                         launcher_pid=self.process.pid,
                         signature=result.matched_line,
                         signature_seen_at=result.matched_at,
+                        signature_seen_wall_time_ns=result.matched_wall_time_ns,
                         readiness_capture=lambda width, height: capture_screen(
                             self.bundle / "screenshots" / "startup-gate-ready.png",
                             required=True,
+                            startup_client_size=(width, height),
+                        ),
+                        post_action_capture=lambda width, height: capture_screen(
+                            self.bundle / "screenshots" / "startup-gate-post-action.png",
                             startup_client_size=(width, height),
                         ),
                         readiness_identity=self.readiness_identity,

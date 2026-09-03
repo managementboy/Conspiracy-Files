@@ -66,9 +66,13 @@ class InputEvidence:
     focus_window_id: int
     pointer_window_id: int
     ready_screenshot: dict[str, object]
+    post_action_screenshot: dict[str, object] | None = None
     action_completed_wall_time_ns: int | None = None
     pre_action_cursor: LogCursor | None = None
     readiness_identity: ReadinessIdentity | None = None
+    signature_seen_monotonic: float | None = None
+    signature_seen_wall_time_ns: int | None = None
+    ready_screenshot_captured_wall_time_ns: int | None = None
     transition: str | None = None
     transition_latency_seconds: float | None = None
     transition_observation: dict[str, object] | None = None
@@ -103,6 +107,7 @@ class X11Action:
     focus_window_id: int
     pointer_window_id: int
     ready_screenshot: dict[str, object]
+    post_action_screenshot: dict[str, object] | None
     pre_action_cursor: LogCursor
     action_completed_wall_time_ns: int
 
@@ -132,7 +137,9 @@ class StartupGateController:
         launcher_pid: int,
         signature: str,
         signature_seen_at: float,
+        signature_seen_wall_time_ns: int | None = None,
         readiness_capture: Callable[[int, int], dict[str, object]],
+        post_action_capture: Callable[[int, int], dict[str, object]] | None = None,
         readiness_identity: ReadinessIdentity,
         pre_action_checkpoint: Callable[[], LogCursor],
     ) -> InputEvidence:
@@ -157,7 +164,7 @@ class StartupGateController:
             raise HarnessError("launcher PID/start-time identity changed before startup action")
 
         action = self._activate_x11(
-            display_name, launcher, readiness_capture,
+            display_name, launcher, readiness_capture, post_action_capture,
             lambda: self._assert_signature_fresh(signature_seen_at),
             pre_action_checkpoint,
         )
@@ -194,9 +201,15 @@ class StartupGateController:
             focus_window_id=action.focus_window_id,
             pointer_window_id=action.pointer_window_id,
             ready_screenshot=action.ready_screenshot,
+            post_action_screenshot=action.post_action_screenshot,
             action_completed_wall_time_ns=action.action_completed_wall_time_ns,
             pre_action_cursor=action.pre_action_cursor,
             readiness_identity=readiness_identity,
+            signature_seen_monotonic=signature_seen_at,
+            signature_seen_wall_time_ns=signature_seen_wall_time_ns,
+            ready_screenshot_captured_wall_time_ns=action.ready_screenshot.get(
+                "captured_wall_time_ns"
+            ) if isinstance(action.ready_screenshot, dict) else None,
         )
 
     def _assert_signature_fresh(self, signature_seen_at: float) -> None:
@@ -209,6 +222,7 @@ class StartupGateController:
         display_name: str,
         launcher: ProcessIdentity,
         readiness_capture: Callable[[int, int], dict[str, object]],
+        post_action_capture: Callable[[int, int], dict[str, object]] | None,
         assert_fresh: Callable[[], None],
         pre_action_checkpoint: Callable[[], LogCursor],
     ) -> X11Action:
@@ -283,13 +297,18 @@ class StartupGateController:
             xtest.fake_input(connection, X.ButtonPress, 1)
             xtest.fake_input(connection, X.ButtonRelease, 1)
             connection.sync()
+            post_action_screenshot = (
+                post_action_capture(expected.width, expected.height)
+                if post_action_capture is not None
+                else None
+            )
             action_completed_wall_time_ns = self._wall_clock()
             if action_completed_wall_time_ns <= pre_action_cursor.established_wall_time_ns:
                 raise HarnessError("wall-clock evidence did not advance across the startup action")
             return X11Action(
                 launcher, current, action_x, action_y, root_x, root_y,
                 active_window_id, focus_window_id, pointer_window_id, ready_screenshot,
-                pre_action_cursor, action_completed_wall_time_ns,
+                post_action_screenshot, pre_action_cursor, action_completed_wall_time_ns,
             )
         finally:
             connection.close()

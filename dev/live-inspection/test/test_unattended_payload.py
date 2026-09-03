@@ -242,7 +242,9 @@ class StartupGateControllerTests(unittest.TestCase):
         window = WindowSnapshot(object(), ProcessIdentity(222, 111, 2000), 333, "Project Zomboid", 480, 32, 960, 1008)
         action = X11Action(
             launcher, window, 480, 960, 960, 992, 333, 333, 444,
-            self.screenshot(), self.cursor(), 101_100_000_000,
+            {**self.screenshot(), "captured_wall_time_ns": 101_050_000_000},
+            {"status": "FRESH", "path": "screenshots/post-action-startup-gate.png", "width": 960, "height": 1040},
+            self.cursor(), 101_100_000_000,
         )
         controller = StartupGateController(
             self.policy(), clock=lambda: now[0], sleep=lambda seconds: now.__setitem__(0, now[0] + seconds),
@@ -251,12 +253,17 @@ class StartupGateControllerTests(unittest.TestCase):
         with mock.patch.dict(os.environ, {"DISPLAY": ":0"}), mock.patch.object(controller, "_activate_x11", return_value=action):
             evidence = controller.activate(
                 launcher_pid=111, signature="game loading took", signature_seen_at=99.0,
+                signature_seen_wall_time_ns=101_000_000_000,
                 readiness_capture=self.screenshot,
                 readiness_identity=self.identity(), pre_action_checkpoint=self.cursor,
             )
             self.assertEqual((evidence.action, evidence.action_count, evidence.window_pid), ("left-click", 1, 222))
             self.assertEqual((evidence.action_x, evidence.action_y, evidence.window_width, evidence.window_height), (480, 960, 960, 1008))
             self.assertEqual((evidence.command_status, evidence.delivery_status), ("XTEST_EMITTED", "PENDING_TRANSITION"))
+            self.assertEqual(evidence.signature_seen_monotonic, 99.0)
+            self.assertEqual(evidence.signature_seen_wall_time_ns, 101_000_000_000)
+            self.assertEqual(evidence.ready_screenshot_captured_wall_time_ns, 101_050_000_000)
+            self.assertEqual(evidence.post_action_screenshot and evidence.post_action_screenshot["path"], "screenshots/post-action-startup-gate.png")
             with self.assertRaisesRegex(HarnessError, "already been used"):
                 controller.activate(
                     launcher_pid=111, signature="game loading took", signature_seen_at=100.0,

@@ -186,6 +186,7 @@ class StateTests(unittest.TestCase):
             ):
                 evidence = capture_screen(destination, required=True)
             self.assertEqual((evidence["status"], evidence["width"], evidence["height"]), ("FRESH", 960, 1040))
+            self.assertIn("captured_wall_time_ns", evidence)
 
     def test_black_post_signature_frame_is_not_startup_ready(self):
         from PIL import Image
@@ -223,6 +224,7 @@ class StateTests(unittest.TestCase):
                 visual = evidence["startup_gate_visual"]
                 self.assertEqual(visual["status"], "VISIBLE")
                 self.assertGreaterEqual(visual["template_dice"], visual["minimum_template_dice"])
+                self.assertIn("captured_wall_time_ns", evidence)
 
     def test_sanitization(self):
         line = f"path={Path.home()}/Zomboid token=hunter2"
