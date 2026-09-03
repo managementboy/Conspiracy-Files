@@ -190,10 +190,17 @@ def startup_gate_visual_evidence(
     except (OSError, ValueError) as exc:
         raise HarnessError(f"cannot inspect startup readiness screenshot: {exc}") from exc
     region_width = STARTUP_CONTROL_REGION[2] - STARTUP_CONTROL_REGION[0]
+    # The genuine control fades, so classify neutral foreground relative to
+    # this region's peak rather than using a fixed bright-phase threshold.
+    pixels = list(crop.getdata())
+    peak_luminance = max((max(pixel) for pixel in pixels), default=0)
+    foreground_floor = peak_luminance * 0.55
     candidate = {
         (index % region_width, index // region_width)
-        for index, pixel in enumerate(crop.getdata())
-        if min(pixel) >= 140 and max(pixel) - min(pixel) <= 45
+        for index, pixel in enumerate(pixels)
+        if peak_luminance >= 32
+        and min(pixel) >= foreground_floor
+        and max(pixel) - min(pixel) <= 45
     }
 
     def template_points(rows: tuple[str, ...]) -> set[tuple[int, int]]:
@@ -224,6 +231,8 @@ def startup_gate_visual_evidence(
         "region": list(STARTUP_CONTROL_REGION),
         "foreground_pixels": len(candidate),
         "foreground_range": [250, 650],
+        "peak_luminance": peak_luminance,
+        "relative_foreground_floor": round(foreground_floor, 3),
         "template_dice": round(best_score, 6),
         "minimum_template_dice": minimum_score,
         "matched_template": best_template,
@@ -286,7 +295,7 @@ def capture_screen(
             return failure(str(exc))
         evidence["startup_gate_visual"] = visual
         if require_startup_control_visible and visual["status"] != "VISIBLE":
-            return failure("post-signature screenshot does not show the bounded lower-center startup control")
+            return failure("startup readiness screenshot does not show the bounded lower-center startup control")
     return evidence
 
 
