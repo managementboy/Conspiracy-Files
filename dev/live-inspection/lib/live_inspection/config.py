@@ -167,15 +167,13 @@ def load_profile(path: Path) -> Profile:
     except re.error as exc:
         raise HarnessError(f"unattended_startup.window_title_pattern is invalid: {exc}") from exc
     supported_game_version = unattended_raw.get("supported_game_version", "")
-    if unattended_enabled and not isinstance(supported_game_version, str):
+    if not isinstance(supported_game_version, str):
         raise HarnessError("unattended_startup.supported_game_version must be a string")
-    if unattended_enabled and supported_game_version not in SUPPORTED_GAME_VERSIONS:
+    if supported_game_version not in SUPPORTED_GAME_VERSIONS:
         raise HarnessError(
-            "unattended startup requires an exact supported game version; "
+            "every profile requires an exact supported game version; "
             f"expected one of {sorted(SUPPORTED_GAME_VERSIONS)}"
         )
-    if not unattended_enabled and supported_game_version:
-        raise HarnessError("manual profiles must not declare an unattended supported game version")
     payload_mode = str(payload_raw.get("mode", "probe"))
     if payload_mode not in {"probe", "production"}:
         raise HarnessError("payload.mode must be probe or production")

@@ -53,6 +53,8 @@ launcher="{root}/launcher"
 evidence_root="{root}/evidence"
 [safety]
 controls=["latestSave.ini", "mods/default.txt"]
+[unattended_startup]
+supported_game_version="42.20.4"
 [[sites]]
 id="S1"
 role="office"

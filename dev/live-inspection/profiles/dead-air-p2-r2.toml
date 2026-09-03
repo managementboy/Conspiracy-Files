@@ -16,6 +16,12 @@ evidence_root = "../../../tmp/live-inspection"
 source_marker = ".cf-live-inspection-source"
 controls = ["latestSave.ini", "mods/default.txt", "options.ini", "debuglog.ini"]
 
+[unattended_startup]
+# The runner builds one exact runtime-version identity for both manual and
+# unattended profiles. This pin is the installed-build contract; enabled stays
+# false so the startup gates below remain manual.
+supported_game_version = "42.20.4"
+
 [time_budgets]
 normal_exit_seconds = 45
 

@@ -183,6 +183,14 @@ class UnattendedConfigTests(unittest.TestCase):
         self.assertEqual(profile.criteria, ())
         self.assertIsNone(unattended_refusal_reason(profile))
 
+    def test_checked_in_manual_profile_has_the_shared_version_contract(self):
+        profile = load_profile(ROOT / "profiles/dead-air-p2-r2.toml")
+        self.assertFalse(profile.unattended_startup.enabled)
+        self.assertEqual(profile.unattended_startup.supported_game_version, "42.20.4")
+        run = LiveRun(profile, profile.sites[:1], False, True)
+        self.assertEqual(run.readiness_identity.expected_game_version, "42.20")
+        self.assertEqual(run.readiness_identity.installed_game_version, "42.20.4")
+
 
 class StartupGateControllerTests(unittest.TestCase):
     def policy(self) -> UnattendedStartup:
