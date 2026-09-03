@@ -1,8 +1,10 @@
 # T12 Build 42 ISUI runtime-feasibility probe
 
-Status: preparation scaffold; not live-proven.
+Status: API-grounded disposable implementation prepared; not live-proven.
 
 This disposable probe validates the minimum UI capabilities required by the approved v0.1 design. Synthetic known-state content is sufficient; no story state or production adapter is required.
+
+The candidate implementation is `common/media/lua/client/ConspiracyFilesT12Probe.lua`. It is guarded to a save whose folder begins `T12_` with this probe as the sole enabled mod, and exposes one privately keyed `T12: Open UI capability probe` inventory-context action.
 
 ## Local API-discovery baseline
 

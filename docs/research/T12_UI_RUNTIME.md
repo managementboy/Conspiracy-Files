@@ -5,7 +5,7 @@
 - **Platform:** Windows, manual GUI route
 - **Probe path/commit:** `dev/t12-ui-runtime/`
 - **GitHub issue:** [#25](https://github.com/managementboy/Conspiracy-Files/issues/25)
-- **API/event/classes used:** Candidate APIs must be confirmed against the installed build and listed in the final report
+- **API/event/classes used:** Candidate implementation uses `ISCollapsableWindow`, `ISPanel`, `ISButton`, `ISScrollingListBox`, `ISRichTextPanel`, resize-widget callbacks and `OnFillInventoryObjectContextMenu`; live behavior remains unverified
 
 ## Question
 
