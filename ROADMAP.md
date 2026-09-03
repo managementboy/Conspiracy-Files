@@ -48,6 +48,18 @@ A negative result is a valid result and must update the decision record.
 - [x] T10 cooperative `Inspect` context-menu integration — complete on Build 42.20.4 through the manual-GUI route. Player and Ground/loot inventory panes preserve vanilla/foreign actions and provide privately keyed, activation-revalidated Inspect/Mark behavior. Direct world-object right-click did not receive dropped inventory subjects and is not supported.
 - T6 never-loaded chunk detection only if retrofit is revived.
 
+## v0.1 pre-assembly gates
+
+The isolated mechanism spikes do not by themselves authorize complete slice assembly. Before production notebook work and the six-document integration begin:
+
+1. [ ] **Location binding / Issue #28:** finish the P2/R2 regional route review and candidate-specific arrival negatives, then commit exact bindings only if both candidates pass.
+2. [ ] **Human content gate / Issue #26:** the project owner approves or returns a bounded change list for `dead-air-r1` under `docs/design/AI_PROVENANCE.md`.
+3. [ ] **T11 adapter composition / Issue #29:** combine T1/T4/T5/T8/T10 mechanisms with the accepted domain core on one real bound fixture item and publish observed live evidence.
+4. [ ] **T12 UI runtime feasibility / Issue #25:** validate the approved notebook/Inspect interaction requirements against Build 42 ISUI and feed any limitations back into the design.
+5. [ ] **Decision reconciliation / Issue #30:** record the remaining owner choices on death-recap scope, police-location major treatment and normal-player conflict visibility.
+
+After these gates pass, Issue #31 owns production slice assembly and Issue #27 owns the complete live acceptance matrix.
+
 ## v1 — Core investigation experience
 Provisional, only after v0.1 is fun and Gate A results are incorporated:
 - built-in authored conspiracy content;
