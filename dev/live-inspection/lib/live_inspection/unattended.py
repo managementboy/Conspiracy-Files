@@ -212,6 +212,21 @@ class StartupGateController:
             ) if isinstance(action.ready_screenshot, dict) else None,
         )
 
+    @staticmethod
+    def _best_effort_post_action_capture(
+        capture: Callable[[int, int], dict[str, object]],
+        width: int,
+        height: int,
+    ) -> dict[str, object]:
+        try:
+            return capture(width, height)
+        except Exception as exc:
+            return {
+                "status": "UNAVAILABLE",
+                "reason": f"post-action screenshot unavailable: {exc}",
+                "path": "screenshots/post-action-startup-gate.png",
+            }
+
     def _assert_signature_fresh(self, signature_seen_at: float) -> None:
         age = self._clock() - signature_seen_at
         if age < 0 or age > self.policy.signature_max_age_seconds:
@@ -298,7 +313,7 @@ class StartupGateController:
             xtest.fake_input(connection, X.ButtonRelease, 1)
             connection.sync()
             post_action_screenshot = (
-                post_action_capture(expected.width, expected.height)
+                self._best_effort_post_action_capture(post_action_capture, expected.width, expected.height)
                 if post_action_capture is not None
                 else None
             )

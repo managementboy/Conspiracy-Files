@@ -278,6 +278,16 @@ class StartupGateControllerTests(unittest.TestCase):
         self.assertTrue(controller._belongs_to_window(pz, 44))
         self.assertFalse(controller._belongs_to_window(pz, 55))
 
+    def test_best_effort_post_action_capture_never_raises_on_capture_failure(self):
+        controller = StartupGateController(self.policy())
+        evidence = controller._best_effort_post_action_capture(
+            mock.Mock(side_effect=RuntimeError("capture boom")),
+            960,
+            1008,
+        )
+        self.assertEqual(evidence["status"], "UNAVAILABLE")
+        self.assertIn("capture boom", evidence["reason"])
+
     def test_stale_signature_fails_before_x11(self):
         launcher = ProcessIdentity(111, 111, 1000)
         controller = StartupGateController(self.policy(), clock=lambda: 100.0, sleep=lambda _seconds: None, identity_reader=lambda _pid: launcher)

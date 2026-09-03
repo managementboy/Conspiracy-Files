@@ -236,6 +236,7 @@ def capture_screen(
     *,
     required: bool = False,
     startup_client_size: tuple[int, int] | None = None,
+    require_startup_control_visible: bool = True,
 ) -> dict[str, object]:
     def failure(message: str) -> dict[str, object]:
         if required:
@@ -249,7 +250,12 @@ def capture_screen(
     if not tool:
         return failure(f"screenshot skipped (gnome-screenshot unavailable): {destination.name}")
     started_wall_ns = time.time_ns()
-    result = run_command([tool, "-w", "-f", str(destination)], timeout=20)
+    try:
+        result = run_command([tool, "-w", "-f", str(destination)], timeout=20)
+    except HarnessError as exc:
+        return failure(str(exc))
+    except Exception as exc:  # best-effort evidence capture must not become a new failure mode
+        return failure(f"screenshot capture raised unexpectedly: {exc}")
     if result.returncode:
         return failure(f"screenshot failed: {result.stderr.strip()}")
     if not destination.is_file() or destination.stat().st_size == 0:
@@ -279,7 +285,7 @@ def capture_screen(
         except HarnessError as exc:
             return failure(str(exc))
         evidence["startup_gate_visual"] = visual
-        if visual["status"] != "VISIBLE":
+        if require_startup_control_visible and visual["status"] != "VISIBLE":
             return failure("post-signature screenshot does not show the bounded lower-center startup control")
     return evidence
 
@@ -725,6 +731,7 @@ class LiveRun:
                         post_action_capture=lambda width, height: capture_screen(
                             self.bundle / "screenshots" / "startup-gate-post-action.png",
                             startup_client_size=(width, height),
+                            require_startup_control_visible=False,
                         ),
                         readiness_identity=self.readiness_identity,
                         pre_action_checkpoint=lambda: self.persist_pre_action_cursor(follower),

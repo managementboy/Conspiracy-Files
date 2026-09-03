@@ -188,6 +188,77 @@ class StateTests(unittest.TestCase):
             self.assertEqual((evidence["status"], evidence["width"], evidence["height"]), ("FRESH", 960, 1040))
             self.assertIn("captured_wall_time_ns", evidence)
 
+    def test_optional_post_action_screenshot_records_transition_without_failure(self):
+        from PIL import Image
+
+        with tempfile.TemporaryDirectory() as temp:
+            destination = Path(temp) / "post-action.png"
+
+            def command(*_args, **_kwargs):
+                Image.new("RGB", (960, 1040), "black").save(destination)
+                return subprocess.CompletedProcess([], 0, "", "")
+
+            with mock.patch("live_inspection.cli.shutil.which", return_value="/usr/bin/gnome-screenshot"), mock.patch(
+                "live_inspection.cli.run_command", side_effect=command
+            ):
+                evidence = capture_screen(
+                    destination,
+                    startup_client_size=(960, 1008),
+                    require_startup_control_visible=False,
+                )
+            self.assertEqual(evidence["status"], "FRESH")
+            self.assertEqual(evidence["startup_gate_visual"]["status"], "NOT_VISIBLE")
+
+    def test_optional_post_action_screenshot_preserves_visible_control_metadata(self):
+        from PIL import Image
+
+        with tempfile.TemporaryDirectory() as temp:
+            destination = Path(temp) / "post-action.png"
+
+            def command(*_args, **_kwargs):
+                image = Image.new("RGB", (960, 1040), "black")
+                crop = Image.open(BytesIO(base64.b64decode(RETAINED_CLICK_TO_START_CROPS[0]))).convert("RGB")
+                image.paste(crop, (420, 982))
+                image.save(destination)
+                return subprocess.CompletedProcess([], 0, "", "")
+
+            with mock.patch("live_inspection.cli.shutil.which", return_value="/usr/bin/gnome-screenshot"), mock.patch(
+                "live_inspection.cli.run_command", side_effect=command
+            ):
+                evidence = capture_screen(
+                    destination,
+                    startup_client_size=(960, 1008),
+                    require_startup_control_visible=False,
+                )
+            self.assertEqual(evidence["startup_gate_visual"]["status"], "VISIBLE")
+
+    def test_optional_post_action_screenshot_returns_unavailable_for_stale_destination(self):
+        with tempfile.TemporaryDirectory() as temp:
+            destination = Path(temp) / "post-action.png"
+            destination.write_bytes(b"old")
+            evidence = capture_screen(
+                destination,
+                required=False,
+                startup_client_size=(960, 1008),
+                require_startup_control_visible=False,
+            )
+            self.assertEqual(evidence["status"], "UNAVAILABLE")
+
+    def test_optional_post_action_screenshot_converts_capture_exception_to_unavailable(self):
+        with tempfile.TemporaryDirectory() as temp:
+            destination = Path(temp) / "post-action.png"
+
+            with mock.patch("live_inspection.cli.shutil.which", return_value="/usr/bin/gnome-screenshot"), mock.patch(
+                "live_inspection.cli.run_command", side_effect=RuntimeError("boom")
+            ):
+                evidence = capture_screen(
+                    destination,
+                    startup_client_size=(960, 1008),
+                    require_startup_control_visible=False,
+                )
+            self.assertEqual(evidence["status"], "UNAVAILABLE")
+            self.assertIn("boom", evidence["reason"])
+
     def test_black_post_signature_frame_is_not_startup_ready(self):
         from PIL import Image
 
