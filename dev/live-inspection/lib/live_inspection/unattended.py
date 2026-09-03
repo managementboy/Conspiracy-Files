@@ -463,8 +463,16 @@ class StartupGateController:
         if screenshot.get("status") != "FRESH":
             raise HarnessError("startup readiness screenshot is not fresh")
         width, height = screenshot.get("width"), screenshot.get("height")
-        if not isinstance(width, int) or not isinstance(height, int) or width < window.x + window.width or height < window.y + window.height:
-            raise HarnessError("startup readiness screenshot does not contain the owned PZ client geometry")
+        # Active-window captures use local image coordinates: the image starts
+        # at the client, so desktop-space window.x/window.y do not apply.
+        if (
+            not isinstance(width, int)
+            or not isinstance(height, int)
+            or width != window.width
+            or height < window.height
+            or height > window.height + 64
+        ):
+            raise HarnessError("startup readiness screenshot dimensions are inconsistent with the owned PZ client")
 
     @staticmethod
     def _safe_action_point(width: int, height: int) -> tuple[int, int]:

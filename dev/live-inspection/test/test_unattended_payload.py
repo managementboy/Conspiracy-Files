@@ -191,6 +191,23 @@ class StartupGateControllerTests(unittest.TestCase):
     def screenshot() -> dict[str, object]:
         return {"status": "FRESH", "path": "screenshots/startup-gate-ready.png", "width": 960, "height": 1040}
 
+    def test_active_window_readiness_capture_uses_local_coordinates(self):
+        window = WindowSnapshot(
+            object(), ProcessIdentity(222, 111, 2000), 333,
+            "Project Zomboid", 480, 32, 960, 1008,
+        )
+        root = mock.Mock()
+        StartupGateController._validate_readiness_screenshot(
+            {"status": "FRESH", "width": 960, "height": 1040}, window, root
+        )
+        for name, screenshot in (
+            ("truncated", {"status": "FRESH", "width": 960, "height": 1007}),
+            ("wrong-width", {"status": "FRESH", "width": 959, "height": 1040}),
+            ("inconsistent-height", {"status": "FRESH", "width": 960, "height": 1073}),
+        ):
+            with self.subTest(capture=name), self.assertRaisesRegex(HarnessError, "dimensions are inconsistent"):
+                StartupGateController._validate_readiness_screenshot(screenshot, window, root)
+
     @staticmethod
     def cursor() -> LogCursor:
         return LogCursor(10, 100.0, 100_000_000_000, 99_000_000_000, 8, 9, False, 3)
@@ -465,7 +482,7 @@ class StartupGateControllerTests(unittest.TestCase):
         windows = controller._owned_windows(Connection(), ProcessIdentity(50, 50, 500))
         self.assertEqual([(item.window_id, item.process.pid) for item in windows], [(1, 101)])
 
-    def test_safe_action_point_is_normalized_across_supported_client_sizes(self):
+    def test_safe_action_point_uses_1280x720_design_baseline_and_compatibility_sizes(self):
         cases = (
             ((960, 1008), (480, 504)),
             ((1920, 1008), (960, 504)),
