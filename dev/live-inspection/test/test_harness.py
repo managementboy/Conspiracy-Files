@@ -318,12 +318,9 @@ class StaticPolicyTests(unittest.TestCase):
         self.assertNotIn("ButtonRelease, 3", unattended)
         self.assertNotIn("KeyPress", unattended)
         self.assertNotIn("KeyRelease", unattended)
-        self.assertEqual(unattended.count("xtest.fake_input(connection, X.ButtonPress, 1)"), 1)
-        self.assertEqual(unattended.count("xtest.fake_input(connection, X.ButtonRelease, 1)"), 1)
-        self.assertLess(
-            unattended.index("pre_action_cursor = pre_action_checkpoint()"),
-            unattended.index("xtest.fake_input(connection, X.ButtonPress, 1)"),
-        )
+        self.assertEqual(unattended.count("button_press=X.ButtonPress"), 1)
+        self.assertEqual(unattended.count("button_release=X.ButtonRelease"), 1)
+        self.assertLess(unattended.index("button_press=X.ButtonPress"), unattended.index("button_release=X.ButtonRelease"))
 
 
 if __name__ == "__main__":

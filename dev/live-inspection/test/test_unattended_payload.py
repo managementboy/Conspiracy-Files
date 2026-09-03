@@ -8,7 +8,7 @@ import sys
 import tempfile
 import unittest
 import zipfile
-from dataclasses import replace
+from dataclasses import asdict, replace
 from pathlib import Path
 from unittest import mock
 
@@ -244,6 +244,7 @@ class StartupGateControllerTests(unittest.TestCase):
             launcher, window, 480, 960, 960, 992, 333, 333, 444,
             {**self.screenshot(), "captured_wall_time_ns": 101_050_000_000},
             {"status": "FRESH", "path": "screenshots/post-action-startup-gate.png", "width": 960, "height": 1040},
+            101.0, 101_000_000_000, 101.08, 101_080_000_000, 0.08,
             self.cursor(), 101_100_000_000,
         )
         controller = StartupGateController(
@@ -264,6 +265,9 @@ class StartupGateControllerTests(unittest.TestCase):
             self.assertEqual(evidence.signature_seen_wall_time_ns, 101_000_000_000)
             self.assertEqual(evidence.ready_screenshot_captured_wall_time_ns, 101_050_000_000)
             self.assertEqual(evidence.post_action_screenshot and evidence.post_action_screenshot["path"], "screenshots/post-action-startup-gate.png")
+            self.assertEqual(evidence.button_press_monotonic, 101.0)
+            self.assertEqual(evidence.button_release_monotonic, 101.08)
+            self.assertEqual(evidence.button_hold_seconds, 0.08)
             with self.assertRaisesRegex(HarnessError, "already been used"):
                 controller.activate(
                     launcher_pid=111, signature="game loading took", signature_seen_at=100.0,
@@ -287,6 +291,140 @@ class StartupGateControllerTests(unittest.TestCase):
         )
         self.assertEqual(evidence["status"], "UNAVAILABLE")
         self.assertIn("capture boom", evidence["reason"])
+
+    def test_owned_process_group_members_filters_foreign_group_members(self):
+        run = object.__new__(LiveRun)
+        run.process = None
+        run.launcher_identity = None
+        launcher = ProcessIdentity(111, 111, 1000)
+        foreign = ProcessIdentity(222, 999, 2000)
+        with mock.patch("live_inspection.cli.matching_pz_processes", return_value=[(111, "ProjectZomboid"), (222, "ProjectZomboid")]), mock.patch.object(
+            StartupGateController, "_read_process_identity", side_effect=[launcher, foreign]
+        ):
+            members = run._owned_process_group_members(launcher)
+        self.assertEqual([(member.pid, member.process_group_id) for member in members], [(111, 111)])
+
+    def test_signal_owned_process_members_refuses_pid_reuse(self):
+        run = object.__new__(LiveRun)
+        expected = ProcessIdentity(222, 111, 2000)
+        reused = ProcessIdentity(222, 111, 9999)
+        with mock.patch.object(
+            StartupGateController, "_read_process_identity", return_value=reused
+        ), mock.patch("live_inspection.cli.os.kill") as kill:
+            actions = run._signal_owned_process_members([expected], signal.SIGTERM)
+        self.assertEqual(actions[0]["status"], "IDENTITY_CHANGED")
+        self.assertEqual(actions[0]["current"], asdict(reused))
+        self.assertFalse(kill.called)
+
+    def test_click_cycle_records_single_press_release_and_dwell(self):
+        launcher = ProcessIdentity(111, 111, 1000)
+        window = WindowSnapshot(object(), ProcessIdentity(222, 111, 2000), 333, "Project Zomboid", 480, 32, 960, 1008)
+        controller = StartupGateController(
+            self.policy(),
+            clock=mock.Mock(side_effect=[100.0, 100.08]),
+            sleep=mock.Mock(),
+            identity_reader=lambda _pid: launcher,
+            wall_clock=mock.Mock(side_effect=[101_000_000_000, 101_080_000_000]),
+            click_hold_seconds=0.08,
+        )
+        connection = mock.Mock()
+        connection.sync = mock.Mock()
+        pointer = type("Pointer", (), {"root_x": 960, "root_y": 992, "child": 44})()
+        root = mock.Mock()
+        root.query_pointer.return_value = pointer
+        current = window
+        current_window = current.window
+        controller._revalidate_pre_action = mock.Mock(return_value=(current, 333, 333))
+        controller._belongs_to_window = mock.Mock(return_value=True)
+        controller._best_effort_post_action_capture = mock.Mock(
+            return_value={"status": "FRESH", "path": "screenshots/post-action-startup-gate.png", "width": 960, "height": 1008}
+        )
+        xtest = mock.Mock()
+        xtest.fake_input = mock.Mock()
+        action = controller._complete_click_cycle(
+            connection,
+            xtest,
+            current=current,
+            root=root,
+            active_atom="active",
+            launcher=launcher,
+            ready_screenshot=self.screenshot(),
+            post_action_capture=lambda width, height: {"status": "FRESH", "path": "screenshots/post-action-startup-gate.png", "width": width, "height": height},
+            assert_fresh=lambda: None,
+            pre_action_checkpoint=self.cursor,
+            action_x=480,
+            action_y=960,
+            root_x=960,
+            root_y=992,
+            active_window_id=333,
+            focus_window_id=333,
+            pointer_window_id=44,
+            button_press="ButtonPress",
+            button_release="ButtonRelease",
+            any_property_type="any",
+        )
+        self.assertEqual(
+            [call.args[2] for call in xtest.fake_input.call_args_list],
+            [1, 1],
+        )
+        self.assertEqual(
+            [call.args[1] for call in xtest.fake_input.call_args_list],
+            ["ButtonPress", "ButtonRelease"],
+        )
+        self.assertEqual(connection.sync.call_count, 2)
+        self.assertEqual(controller._sleep.call_args_list, [mock.call(0.08)])
+        self.assertAlmostEqual(action.button_hold_seconds or 0, 0.08, places=2)
+        self.assertEqual(action.button_press_monotonic, 100.0)
+        self.assertEqual(action.button_release_monotonic, 100.08)
+        self.assertEqual(action.post_action_screenshot["status"], "FRESH")
+
+    def test_click_cycle_releases_even_when_hold_revalidation_fails(self):
+        launcher = ProcessIdentity(111, 111, 1000)
+        window = WindowSnapshot(object(), ProcessIdentity(222, 111, 2000), 333, "Project Zomboid", 480, 32, 960, 1008)
+        controller = StartupGateController(
+            self.policy(),
+            clock=mock.Mock(side_effect=[100.0]),
+            sleep=mock.Mock(),
+            identity_reader=lambda _pid: launcher,
+            wall_clock=mock.Mock(side_effect=[1_000_000_000, 1_080_000_000]),
+            click_hold_seconds=0.08,
+        )
+        connection = mock.Mock()
+        connection.sync = mock.Mock()
+        root = mock.Mock()
+        root.query_pointer.return_value = type("Pointer", (), {"root_x": 960, "root_y": 992, "child": 44})()
+        controller._revalidate_pre_action = mock.Mock(side_effect=HarnessError("identity drift"))
+        controller._belongs_to_window = mock.Mock(return_value=True)
+        xtest = mock.Mock()
+        xtest.fake_input = mock.Mock()
+        with self.assertRaisesRegex(HarnessError, "identity drift"):
+            controller._complete_click_cycle(
+                connection,
+                xtest,
+                current=window,
+                root=root,
+                active_atom="active",
+                launcher=launcher,
+                ready_screenshot=self.screenshot(),
+                post_action_capture=None,
+                assert_fresh=lambda: None,
+                pre_action_checkpoint=self.cursor,
+                action_x=480,
+                action_y=960,
+                root_x=960,
+                root_y=992,
+                active_window_id=333,
+                focus_window_id=333,
+                pointer_window_id=44,
+                button_press="ButtonPress",
+                button_release="ButtonRelease",
+                any_property_type="any",
+            )
+        self.assertEqual(
+            [call.args[1] for call in xtest.fake_input.call_args_list],
+            ["ButtonPress", "ButtonRelease"],
+        )
+        self.assertEqual(connection.sync.call_count, 2)
 
     def test_stale_signature_fails_before_x11(self):
         launcher = ProcessIdentity(111, 111, 1000)
@@ -709,14 +847,18 @@ expected_mod_id="CandidateMod"
             launcher_identity = ProcessIdentity(111, 111, 1000)
             run.process = mock.Mock(pid=111, poll=mock.Mock(return_value=None))
             with mock.patch.object(
-                run, "_launcher_process_identity", side_effect=[launcher_identity, None]
-            ), mock.patch("live_inspection.cli.os.killpg") as killpg, mock.patch(
+                run, "_launcher_process_identity", return_value=launcher_identity
+            ), mock.patch.object(
+                run, "_owned_process_group_members", side_effect=[[launcher_identity], []]
+            ), mock.patch.object(
+                run, "_signal_owned_process_members", return_value=[{"status": "SENT", "target": asdict(launcher_identity), "signal": "SIGTERM"}]
+            ) as signal_members, mock.patch(
                 "live_inspection.cli.time.monotonic", side_effect=[0.0, 0.0, 1.0]
             ), mock.patch("live_inspection.cli.time.sleep"), mock.patch(
                 "live_inspection.cli.matching_pz_processes", return_value=[]
             ):
                 run.cleanup()
-            self.assertEqual([call.args[1] for call in killpg.call_args_list], [signal.SIGTERM])
+            self.assertEqual(signal_members.call_args_list[0].args[1], signal.SIGTERM)
             shutdown = json.loads((run.bundle / "launcher-shutdown.json").read_text(encoding="utf-8"))
             self.assertEqual(shutdown["status"], "CLEAN")
             self.assertTrue(shutdown["sigterm_sent"])
@@ -727,19 +869,28 @@ expected_mod_id="CandidateMod"
         with tempfile.TemporaryDirectory() as temp:
             run = self.make_live_run(Path(temp))
             launcher_identity = ProcessIdentity(111, 111, 1000)
+            child_identity = ProcessIdentity(222, 111, 2000)
             run.process = mock.Mock(pid=111, poll=mock.Mock(return_value=None))
             with mock.patch.object(
                 run, "_launcher_process_identity", return_value=launcher_identity
-            ), mock.patch("live_inspection.cli.os.killpg") as killpg, mock.patch(
-                "live_inspection.cli.time.monotonic", side_effect=[0.0, 0.0, 21.0]
+            ), mock.patch.object(
+                run, "_owned_process_group_members", side_effect=[[launcher_identity, child_identity], [child_identity]]
+            ), mock.patch.object(
+                run, "_signal_owned_process_members",
+                side_effect=[
+                    [
+                        {"status": "SENT", "target": asdict(launcher_identity), "signal": "SIGTERM"},
+                        {"status": "SENT", "target": asdict(child_identity), "signal": "SIGTERM"},
+                    ],
+                    [{"status": "SENT", "target": asdict(child_identity), "signal": "SIGKILL"}],
+                ],
+            ) as signal_members, mock.patch(
+                "live_inspection.cli.time.monotonic", side_effect=[0.0, 21.0]
             ), mock.patch("live_inspection.cli.time.sleep"), mock.patch(
                 "live_inspection.cli.matching_pz_processes", return_value=[]
             ):
                 run.cleanup()
-            self.assertEqual(
-                [call.args for call in killpg.call_args_list],
-                [(111, signal.SIGTERM), (111, signal.SIGKILL)],
-            )
+            self.assertEqual(signal_members.call_count, 2)
             shutdown = json.loads((run.bundle / "launcher-shutdown.json").read_text(encoding="utf-8"))
             self.assertEqual(shutdown["status"], "CLEANUP_FAILED")
             self.assertTrue(shutdown["sigterm_sent"])

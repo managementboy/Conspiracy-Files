@@ -347,6 +347,57 @@ class LiveRun:
             return None
         return identity
 
+    def _owned_process_group_members(self, launcher: ProcessIdentity) -> list[ProcessIdentity]:
+        members: list[ProcessIdentity] = []
+        seen: set[tuple[int, int]] = set()
+        for pid, _command in matching_pz_processes(own_pid=os.getpid()):
+            try:
+                identity = StartupGateController._read_process_identity(pid)
+            except HarnessError:
+                continue
+            if identity.process_group_id != launcher.process_group_id:
+                continue
+            key = (identity.pid, identity.start_time_ticks)
+            if key in seen:
+                continue
+            seen.add(key)
+            members.append(identity)
+        live_launcher = self._launcher_process_identity()
+        if live_launcher is not None and live_launcher.process_group_id == launcher.process_group_id:
+            key = (live_launcher.pid, live_launcher.start_time_ticks)
+            if key not in seen:
+                members.append(live_launcher)
+        members.sort(key=lambda identity: (identity.pid, identity.start_time_ticks))
+        return members
+
+    def _signal_owned_process_members(
+        self,
+        members: list[ProcessIdentity],
+        sig: signal.Signals,
+    ) -> list[dict[str, object]]:
+        actions: list[dict[str, object]] = []
+        for expected in members:
+            entry: dict[str, object] = {"target": asdict(expected), "signal": sig.name, "status": "SKIPPED"}
+            try:
+                current = StartupGateController._read_process_identity(expected.pid)
+            except HarnessError as exc:
+                entry["status"] = "UNVERIFIED"
+                entry["reason"] = str(exc)
+                actions.append(entry)
+                continue
+            if current != expected:
+                entry["status"] = "IDENTITY_CHANGED"
+                entry["current"] = asdict(current)
+                actions.append(entry)
+                continue
+            try:
+                os.kill(expected.pid, sig)
+                entry["status"] = "SENT"
+            except ProcessLookupError:
+                entry["status"] = "ALREADY_EXITED"
+            actions.append(entry)
+        return actions
+
     @staticmethod
     def _write_json_atomic(path: Path, value: dict[str, object]) -> None:
         staging = path.with_name(f".{path.name}.staging")
@@ -481,41 +532,76 @@ class LiveRun:
         termination: dict[str, object] = {
             "status": "NOT_STARTED",
             "launcher_identity": None,
+            "leader_live": None,
+            "owned_members_initial": [],
+            "owned_members_remaining": [],
             "sigterm_sent": False,
             "sigkill_sent": False,
+            "signal_actions": [],
         }
+        remaining: list[ProcessIdentity] = []
         if self.process:
-            identity = self._launcher_process_identity()
-            if identity is None:
+            leader_live = self._launcher_process_identity()
+            launcher_identity = leader_live or self.launcher_identity
+            if launcher_identity is None:
                 errors.append("launcher process could not be revalidated for cleanup; refusing to signal")
                 termination["status"] = "UNVERIFIED"
             else:
-                termination["status"] = "TERM_SENT"
-                termination["launcher_identity"] = asdict(identity)
-                try:
-                    os.killpg(identity.process_group_id, signal.SIGTERM)
-                    termination["sigterm_sent"] = True
-                except ProcessLookupError:
+                termination["launcher_identity"] = asdict(launcher_identity)
+                termination["leader_live"] = leader_live is not None
+                owned_members = self._owned_process_group_members(launcher_identity)
+                if leader_live is not None and all(member.pid != launcher_identity.pid for member in owned_members):
+                    owned_members = [launcher_identity, *owned_members]
+                termination["owned_members_initial"] = [asdict(member) for member in owned_members]
+                if not owned_members:
                     termination["status"] = "ALREADY_EXITED"
-                deadline = time.monotonic() + 20
-                while time.monotonic() < deadline:
-                    if self._launcher_process_identity() is None:
-                        termination["status"] = "TERMINATED"
-                        break
-                    time.sleep(0.25)
                 else:
-                    refreshed = self._launcher_process_identity()
-                    if refreshed is not None:
-                        try:
-                            os.killpg(refreshed.process_group_id, signal.SIGKILL)
-                            termination["sigkill_sent"] = True
-                            termination["status"] = "ESCALATED"
-                            termination["launcher_identity"] = asdict(refreshed)
-                        except ProcessLookupError:
-                            termination["status"] = "ALREADY_EXITED"
-                        errors.append("verified owned process group required SIGKILL after cleanup timeout")
+                    termination["status"] = "TERM_SENT"
+                    sigterm_actions = self._signal_owned_process_members(owned_members, signal.SIGTERM)
+                    termination["signal_actions"].append(
+                        {"phase": "sigterm", "members": sigterm_actions}
+                    )
+                    termination["sigterm_sent"] = any(action["status"] == "SENT" for action in sigterm_actions)
+                    for action in sigterm_actions:
+                        if action["status"] in {"IDENTITY_CHANGED", "UNVERIFIED"}:
+                            errors.append(
+                                "refusing to signal reused or unrelated owned member during cleanup: "
+                                + json.dumps(action, sort_keys=True)
+                            )
+                    initial_keys = {(member.pid, member.start_time_ticks) for member in owned_members}
+                    deadline = time.monotonic() + 20
+                    remaining = [
+                        member for member in self._owned_process_group_members(launcher_identity)
+                        if (member.pid, member.start_time_ticks) in initial_keys
+                    ]
+                    while time.monotonic() < deadline:
+                        if not remaining:
+                            termination["status"] = "TERMINATED"
+                            break
+                        time.sleep(0.25)
+                        remaining = [
+                            member for member in self._owned_process_group_members(launcher_identity)
+                            if (member.pid, member.start_time_ticks) in initial_keys
+                        ]
                     else:
-                        termination["status"] = "TERMINATED"
+                        if remaining:
+                            termination["owned_members_remaining"] = [asdict(member) for member in remaining]
+                            sigkill_actions = self._signal_owned_process_members(remaining, signal.SIGKILL)
+                            termination["signal_actions"].append(
+                                {"phase": "sigkill", "members": sigkill_actions}
+                            )
+                            termination["sigkill_sent"] = any(action["status"] == "SENT" for action in sigkill_actions)
+                            for action in sigkill_actions:
+                                if action["status"] in {"IDENTITY_CHANGED", "UNVERIFIED"}:
+                                    errors.append(
+                                        "refusing to escalate against reused or unrelated owned member: "
+                                        + json.dumps(action, sort_keys=True)
+                                    )
+                            termination["status"] = "ESCALATED" if termination["sigkill_sent"] else "ALREADY_EXITED"
+                        else:
+                            termination["status"] = "TERMINATED"
+                    if termination["status"] == "ESCALATED":
+                        errors.append("verified owned process members required SIGKILL after cleanup timeout")
         for stream in (self.launcher_stdout, self.launcher_stderr):
             if stream:
                 stream.close()
@@ -543,8 +629,11 @@ class LiveRun:
                 raw.unlink()
         remaining = matching_pz_processes()
         if remaining:
-            errors.append("Project Zomboid/inspection process remains: " + ", ".join(str(pid) for pid, _ in remaining))
-        termination["remaining_processes"] = [pid for pid, _ in remaining]
+            errors.append(
+                "recorded owned process members remain: "
+                + ", ".join(str(member.pid) for member in remaining)
+            )
+        termination["remaining_owned_members"] = [asdict(member) for member in remaining]
         termination["errors"] = errors[:]
         termination["status"] = "CLEAN" if not errors else "CLEANUP_FAILED"
         self._write_json_atomic(self.bundle / "launcher-shutdown.json", termination)

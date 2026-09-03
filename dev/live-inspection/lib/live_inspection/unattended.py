@@ -67,6 +67,11 @@ class InputEvidence:
     pointer_window_id: int
     ready_screenshot: dict[str, object]
     post_action_screenshot: dict[str, object] | None = None
+    button_press_monotonic: float | None = None
+    button_press_wall_time_ns: int | None = None
+    button_release_monotonic: float | None = None
+    button_release_wall_time_ns: int | None = None
+    button_hold_seconds: float | None = None
     action_completed_wall_time_ns: int | None = None
     pre_action_cursor: LogCursor | None = None
     readiness_identity: ReadinessIdentity | None = None
@@ -108,6 +113,11 @@ class X11Action:
     pointer_window_id: int
     ready_screenshot: dict[str, object]
     post_action_screenshot: dict[str, object] | None
+    button_press_monotonic: float | None
+    button_press_wall_time_ns: int | None
+    button_release_monotonic: float | None
+    button_release_wall_time_ns: int | None
+    button_hold_seconds: float | None
     pre_action_cursor: LogCursor
     action_completed_wall_time_ns: int
 
@@ -123,6 +133,7 @@ class StartupGateController:
         sleep: Callable[[float], None] = time.sleep,
         identity_reader: Callable[[int], ProcessIdentity] | None = None,
         wall_clock: Callable[[], int] = time.time_ns,
+        click_hold_seconds: float = 0.08,
     ):
         self.policy = policy
         self.used = False
@@ -130,6 +141,7 @@ class StartupGateController:
         self._sleep = sleep
         self._identity_reader = identity_reader or self._read_process_identity
         self._wall_clock = wall_clock
+        self._click_hold_seconds = click_hold_seconds
 
     def activate(
         self,
@@ -202,6 +214,11 @@ class StartupGateController:
             pointer_window_id=action.pointer_window_id,
             ready_screenshot=action.ready_screenshot,
             post_action_screenshot=action.post_action_screenshot,
+            button_press_monotonic=action.button_press_monotonic,
+            button_press_wall_time_ns=action.button_press_wall_time_ns,
+            button_release_monotonic=action.button_release_monotonic,
+            button_release_wall_time_ns=action.button_release_wall_time_ns,
+            button_hold_seconds=action.button_hold_seconds,
             action_completed_wall_time_ns=action.action_completed_wall_time_ns,
             pre_action_cursor=action.pre_action_cursor,
             readiness_identity=readiness_identity,
@@ -226,6 +243,88 @@ class StartupGateController:
                 "reason": f"post-action screenshot unavailable: {exc}",
                 "path": "screenshots/post-action-startup-gate.png",
             }
+
+    def _complete_click_cycle(
+        self,
+        connection,
+        xtest,
+        *,
+        current: WindowSnapshot,
+        root,
+        active_atom,
+        launcher: ProcessIdentity,
+        ready_screenshot: dict[str, object],
+        post_action_capture: Callable[[int, int], dict[str, object]] | None,
+        assert_fresh: Callable[[], None],
+        pre_action_checkpoint: Callable[[], LogCursor],
+        action_x: int,
+        action_y: int,
+        root_x: int,
+        root_y: int,
+        active_window_id: int,
+        focus_window_id: int,
+        pointer_window_id: int,
+        button_press,
+        button_release,
+        any_property_type,
+    ) -> X11Action:
+        press_emitted = False
+        release_emitted = False
+        button_press_monotonic = None
+        button_press_wall_time_ns = None
+        button_release_monotonic = None
+        button_release_wall_time_ns = None
+        try:
+            button_press_monotonic = self._clock()
+            button_press_wall_time_ns = self._wall_clock()
+            xtest.fake_input(connection, button_press, 1)
+            connection.sync()
+            press_emitted = True
+            self._sleep(self._click_hold_seconds)
+            assert_fresh()
+            verified_current, active_window_id, focus_window_id = self._revalidate_pre_action(
+                connection, launcher, current, root, active_atom, any_property_type
+            )
+            pointer = root.query_pointer()
+            if (int(pointer.root_x), int(pointer.root_y)) != (root_x, root_y):
+                raise HarnessError("X11 pointer drifted away from the owned PZ startup-control point while held")
+            if not self._belongs_to_window(verified_current.window, pointer_window_id):
+                raise HarnessError("owned PZ window lost topmost ownership while the startup click was held")
+            pre_action_cursor = pre_action_checkpoint()
+            if not isinstance(pre_action_cursor, LogCursor):
+                raise HarnessError("pre-action log cursor was not established")
+            xtest.fake_input(connection, button_release, 1)
+            connection.sync()
+            release_emitted = True
+            button_release_monotonic = self._clock()
+            button_release_wall_time_ns = self._wall_clock()
+            post_action_screenshot = (
+                self._best_effort_post_action_capture(post_action_capture, verified_current.width, verified_current.height)
+                if post_action_capture is not None
+                else None
+            )
+            action_completed_wall_time_ns = button_release_wall_time_ns
+            if action_completed_wall_time_ns <= pre_action_cursor.established_wall_time_ns:
+                raise HarnessError("wall-clock evidence did not advance across the startup action")
+            return X11Action(
+                launcher, verified_current, action_x, action_y, root_x, root_y,
+                active_window_id, focus_window_id, pointer_window_id, ready_screenshot,
+                post_action_screenshot, button_press_monotonic, button_press_wall_time_ns,
+                button_release_monotonic, button_release_wall_time_ns, button_release_monotonic - button_press_monotonic,
+                pre_action_cursor, action_completed_wall_time_ns,
+            )
+        except Exception as exc:
+            if press_emitted and not release_emitted:
+                try:
+                    xtest.fake_input(connection, button_release, 1)
+                    connection.sync()
+                    button_release_monotonic = self._clock()
+                    button_release_wall_time_ns = self._wall_clock()
+                except Exception as release_exc:
+                    raise HarnessError(
+                        f"{exc}; additionally failed to release held XTEST button: {release_exc}"
+                    ) from exc
+            raise
 
     def _assert_signature_fresh(self, signature_seen_at: float) -> None:
         age = self._clock() - signature_seen_at
@@ -306,24 +405,27 @@ class StartupGateController:
                 raise HarnessError("owned PZ window is obscured at the startup-control point")
 
             assert_fresh()
-            pre_action_cursor = pre_action_checkpoint()
-            if not isinstance(pre_action_cursor, LogCursor):
-                raise HarnessError("pre-action log cursor was not established")
-            xtest.fake_input(connection, X.ButtonPress, 1)
-            xtest.fake_input(connection, X.ButtonRelease, 1)
-            connection.sync()
-            post_action_screenshot = (
-                self._best_effort_post_action_capture(post_action_capture, expected.width, expected.height)
-                if post_action_capture is not None
-                else None
-            )
-            action_completed_wall_time_ns = self._wall_clock()
-            if action_completed_wall_time_ns <= pre_action_cursor.established_wall_time_ns:
-                raise HarnessError("wall-clock evidence did not advance across the startup action")
-            return X11Action(
-                launcher, current, action_x, action_y, root_x, root_y,
-                active_window_id, focus_window_id, pointer_window_id, ready_screenshot,
-                post_action_screenshot, pre_action_cursor, action_completed_wall_time_ns,
+            return self._complete_click_cycle(
+                connection,
+                xtest,
+                current=current,
+                root=root,
+                active_atom=active_atom,
+                launcher=launcher,
+                ready_screenshot=ready_screenshot,
+                post_action_capture=post_action_capture,
+                assert_fresh=lambda: self._assert_signature_fresh(signature_seen_at),
+                pre_action_checkpoint=pre_action_checkpoint,
+                action_x=action_x,
+                action_y=action_y,
+                root_x=root_x,
+                root_y=root_y,
+                active_window_id=active_window_id,
+                focus_window_id=focus_window_id,
+                pointer_window_id=pointer_window_id,
+                button_press=X.ButtonPress,
+                button_release=X.ButtonRelease,
+                any_property_type=X.AnyPropertyType,
             )
         finally:
             connection.close()
