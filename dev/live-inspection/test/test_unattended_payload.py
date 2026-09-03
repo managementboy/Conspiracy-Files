@@ -8,6 +8,7 @@ import sys
 import tempfile
 import unittest
 import zipfile
+import types
 from dataclasses import asdict, replace
 from pathlib import Path
 from unittest import mock
@@ -207,6 +208,76 @@ class StartupGateControllerTests(unittest.TestCase):
         ):
             with self.subTest(capture=name), self.assertRaisesRegex(HarnessError, "dimensions are inconsistent"):
                 StartupGateController._validate_readiness_screenshot(screenshot, window, root)
+
+    def test_startup_action_uses_display_screen_for_window_without_screen_method(self):
+        class Window:
+            id = 333
+
+            def set_input_focus(self, *_args):
+                pass
+
+            def warp_pointer(self, *_args):
+                pass
+
+        class Root:
+            def send_event(self, *_args, **_kwargs):
+                pass
+
+            def get_full_property(self, *_args):
+                return types.SimpleNamespace(value=[333])
+
+            def translate_coords(self, *_args):
+                return types.SimpleNamespace(x=480, y=536)
+
+            def query_pointer(self):
+                return types.SimpleNamespace(root_x=480, root_y=536, child=Window())
+
+        class Screen:
+            root = Root()
+            width_in_pixels = 1920
+            height_in_pixels = 1080
+
+        class Connection:
+            def has_extension(self, _name): return True
+            def screen(self): return Screen()
+            def intern_atom(self, _name): return "active"
+            def flush(self): pass
+            def sync(self): pass
+            def get_input_focus(self): return types.SimpleNamespace(focus=Window())
+            def close(self): pass
+
+        class X:
+            AnyPropertyType = 0
+            CurrentTime = 0
+            SubstructureRedirectMask = 1
+            SubstructureNotifyMask = 2
+            RevertToParent = 3
+            ButtonPress = 4
+            ButtonRelease = 5
+
+        fake_xlib = types.ModuleType("Xlib")
+        fake_xlib.X = X
+        fake_xlib.display = types.SimpleNamespace(Display=lambda _name: Connection())
+        fake_ext = types.ModuleType("Xlib.ext")
+        fake_ext.xtest = types.SimpleNamespace(fake_input=lambda *_args: None)
+        fake_protocol = types.ModuleType("Xlib.protocol")
+        fake_protocol.event = types.SimpleNamespace(ClientMessage=lambda **_kwargs: object())
+        launcher = ProcessIdentity(111, 111, 1000)
+        window = WindowSnapshot(Window(), ProcessIdentity(222, 111, 2000), 333, "Project Zomboid", 480, 32, 960, 1008)
+        controller = StartupGateController(self.policy(), identity_reader=lambda _pid: launcher)
+        with mock.patch.dict(sys.modules, {"Xlib": fake_xlib, "Xlib.ext": fake_ext, "Xlib.protocol": fake_protocol}), \
+                mock.patch.object(controller, "_owned_windows", return_value=[window]), \
+                mock.patch.object(controller, "_revalidate_pre_action", return_value=(window, 333, 333)), \
+                mock.patch.object(controller, "_belongs_to_window", return_value=True), \
+                mock.patch.object(controller, "_complete_click_cycle", return_value="action"), \
+                mock.patch.dict(os.environ, {"DISPLAY": ":0"}):
+            self.assertEqual(
+                controller._activate_x11(
+                    ":0", launcher, lambda *_size: self.screenshot(), None,
+                    lambda: None, self.cursor,
+                ),
+                "action",
+            )
 
     @staticmethod
     def cursor() -> LogCursor:
@@ -513,7 +584,7 @@ class StartupGateControllerTests(unittest.TestCase):
         )
         for name, window in cases:
             with self.subTest(geometry=name), self.assertRaisesRegex(HarnessError, "zero, tiny, or off-screen"):
-                StartupGateController._assert_client_geometry(window, Root())
+                StartupGateController._assert_client_geometry(window, Root().screen())
 
     def test_faithful_x11_revalidation_fails_on_focus_race_and_wrong_window(self):
         class Node:

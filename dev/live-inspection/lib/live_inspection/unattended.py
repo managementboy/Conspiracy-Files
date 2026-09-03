@@ -384,7 +384,7 @@ class StartupGateController:
             current, active_window_id, focus_window_id = self._revalidate_pre_action(
                 connection, launcher, expected, root, active_atom, X.AnyPropertyType
             )
-            self._assert_client_geometry(current, root)
+            self._assert_client_geometry(current, connection.screen())
             action_x, action_y = self._safe_action_point(current.width, current.height)
             translated = root.translate_coords(current.window, action_x, action_y)
             root_x, root_y = int(translated.x), int(translated.y)
@@ -482,8 +482,7 @@ class StartupGateController:
         return width // 2, height // 2 if height // 2 >= inset else inset
 
     @classmethod
-    def _assert_client_geometry(cls, window: WindowSnapshot, root) -> None:
-        screen = root.screen()
+    def _assert_client_geometry(cls, window: WindowSnapshot, screen) -> None:
         screen_width = int(getattr(screen, "width_in_pixels", 0))
         screen_height = int(getattr(screen, "height_in_pixels", 0))
         if window.x < 0 or window.y < 0 or window.width < 320 or window.height < 200:
