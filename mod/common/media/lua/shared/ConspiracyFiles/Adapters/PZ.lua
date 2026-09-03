@@ -1,4 +1,6 @@
 local PZ = {}
+local VEHICLE_SCAN_CAP = 16
+local VEHICLE_ENUMERATION_CEILING = 64
 
 local function report(message) print(message) end
 local reportedDiagnostics = {}
@@ -138,6 +140,9 @@ local function collectVehicles(collection, diagnostics)
             if vehicle == nil then
                 diagnostic(diagnostics, "physical scan ignored a nil vehicle entry")
             else
+                if #result >= VEHICLE_ENUMERATION_CEILING then
+                    return nil, "physical scan vehicle enumeration exceeded its safety ceiling"
+                end
                 result[#result + 1] = vehicle
             end
         end
@@ -146,6 +151,9 @@ local function collectVehicles(collection, diagnostics)
     local sizeOk, size = pcall(function() return collection:size() end)
     if not sizeOk or type(size) ~= "number" or size < 0 then
         return nil, "vehicle collection has neither a usable iterator nor size/get methods"
+    end
+    if size > VEHICLE_ENUMERATION_CEILING then
+        return nil, "physical scan vehicle collection exceeds its safety ceiling"
     end
     local result = {}
     for index = 0, size - 1 do
@@ -158,6 +166,43 @@ local function collectVehicles(collection, diagnostics)
         end
     end
     return result
+end
+
+local function selectVehicles(vehicles, px, py, diagnostics)
+    local candidates = {}
+    for _, vehicle in ipairs(vehicles) do
+        local positionOk, x, y = pcall(function() return vehicle:getX(), vehicle:getY() end)
+        if not positionOk or type(x) ~= "number" or type(y) ~= "number" then
+            diagnostic(diagnostics, "physical scan ignored a vehicle with unreadable coordinates")
+        else
+            local idOk, id = pcall(function() return vehicle:getId() end)
+            candidates[#candidates + 1] = {
+                vehicle = vehicle, x = x, y = y, distance = ((x - px) * (x - px)) + ((y - py) * (y - py)),
+                id = idOk and id ~= nil and tostring(id) or nil
+            }
+        end
+    end
+    table.sort(candidates, function(left, right)
+        if left.distance ~= right.distance then return left.distance < right.distance end
+        if left.x ~= right.x then return left.x < right.x end
+        if left.y ~= right.y then return left.y < right.y end
+        if left.id == nil or right.id == nil then return false end
+        return left.id < right.id
+    end)
+    if #candidates > VEHICLE_SCAN_CAP then
+        local boundary = candidates[VEHICLE_SCAN_CAP]
+        local nextCandidate = candidates[VEHICLE_SCAN_CAP + 1]
+        if boundary.distance == nextCandidate.distance and boundary.x == nextCandidate.x
+            and boundary.y == nextCandidate.y
+            and (boundary.id == nil or nextCandidate.id == nil or boundary.id == nextCandidate.id) then
+            return nil, "physical scan vehicle cap boundary has no stable identity ordering"
+        end
+    end
+    local selected = {}
+    for index = 1, math.min(#candidates, VEHICLE_SCAN_CAP) do
+        selected[index] = candidates[index].vehicle
+    end
+    return selected
 end
 
 local function scanPhysical(context)
@@ -236,18 +281,17 @@ local function scanPhysical(context)
             if not vehicleList then
                 diagnostic(diagnostics, vehicleError)
             else
-            local limit = math.min(#vehicleList, 16)
-            for index = 1, limit do
-                local vehicle = vehicleList[index]
-                local positionOk, dx, dy = pcall(function()
-                    return vehicle:getX() - px, vehicle:getY() - py
-                end)
-                if not positionOk then
-                    diagnostic(diagnostics, "physical scan ignored a vehicle with unreadable coordinates")
-                elseif (dx * dx) + (dy * dy) <= 16 then
-                    addVehicleMatches(matches, collisions, seen, vehicle, assetId, identityGateway, diagnostics)
+                local selectedVehicles, selectionError = selectVehicles(vehicleList, px, py, diagnostics)
+                if not selectedVehicles then
+                    diagnostic(diagnostics, selectionError)
+                else
+                    for _, vehicle in ipairs(selectedVehicles) do
+                        local dx, dy = vehicle:getX() - px, vehicle:getY() - py
+                        if (dx * dx) + (dy * dy) <= 16 then
+                            addVehicleMatches(matches, collisions, seen, vehicle, assetId, identityGateway, diagnostics)
+                        end
+                    end
                 end
-            end
             end
         elseif not vehiclesOk or vehicles == nil then
             diagnostic(diagnostics, "physical scan could not read the cell vehicle collection")

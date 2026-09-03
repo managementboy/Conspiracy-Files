@@ -1037,15 +1037,27 @@ test("offline PZ scan uses the Build 42 vehicle Set iterator and fails closed on
         getPartByIndex = function() return part end,
         getId = function() return 42 end
     }
+    local vehicles = {}
+    for index = 1, 16 do
+        vehicles[index] = {
+            getX = function() return 200 + index end, getY = function() return 200 end,
+            getPartCount = function() return 0 end, getId = function() return 100 + index end
+        }
+    end
+    vehicles[17] = vehicle
+    local setOrder = {}
+    for index = 1, 17 do setOrder[index] = index end
+    local activeSet
     local set = {
         iterator = function()
-            local done = false
+            local position = 0
             return {
-                hasNext = function() return not done end,
-                next = function() done = true; return vehicle end
+                hasNext = function() return position < #setOrder end,
+                next = function() position = position + 1; return activeSet[setOrder[position]] end
             }
         end
     }
+    activeSet = vehicles
     local square = {
         getX = function() return 100 end, getY = function() return 100 end, getZ = function() return 0 end,
         getRoom = function() return nil end, getObjects = function() return nil end,
@@ -1070,6 +1082,42 @@ test("offline PZ scan uses the Build 42 vehicle Set iterator and fails closed on
     assertTrue(ok, observation)
     assertEqual(1, #observation.matches)
     assertEqual(0, #observation.collisions)
+
+    local firstMatch = observation.matches[1].item
+    setOrder = { 17 }
+    for index = 1, 16 do setOrder[#setOrder + 1] = index end
+    ok, observation = pcall(environment.world.scanPhysical, {
+        assetId = assetId, binding = binding, identityGateway = gateway
+    })
+    assertTrue(ok, observation)
+    assertEqual(1, #observation.matches)
+    assertEqual(firstMatch, observation.matches[1].item)
+
+    local tied = {}
+    for index = 1, 17 do
+        tied[index] = {
+            getX = function() return 150 end, getY = function() return 150 end,
+            getPartCount = function() return index == 17 and 1 or 0 end
+        }
+    end
+    tied[17].getPartByIndex = function() return part end
+    activeSet, setOrder = tied, {}
+    for index = 1, 17 do setOrder[index] = index end
+    ok, observation = pcall(environment.world.scanPhysical, {
+        assetId = assetId, binding = binding, identityGateway = gateway
+    })
+    assertTrue(ok, observation)
+    assertEqual(0, #observation.matches)
+    assertTrue(#observation.diagnostics > 0)
+
+    activeSet, setOrder = vehicles, {}
+    for index = 1, 65 do setOrder[index] = ((index - 1) % 17) + 1 end
+    ok, observation = pcall(environment.world.scanPhysical, {
+        assetId = assetId, binding = binding, identityGateway = gateway
+    })
+    assertTrue(ok, observation)
+    assertEqual(0, #observation.matches)
+    assertTrue(#observation.diagnostics > 0)
 
     local partialCell = {
         getGridSquare = function() return square end,
