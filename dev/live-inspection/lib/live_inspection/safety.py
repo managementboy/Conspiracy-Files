@@ -7,7 +7,7 @@ import os
 import shutil
 import tempfile
 from dataclasses import dataclass
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 
 from .model import HarnessError, Profile
 
@@ -178,6 +178,23 @@ def recover_interrupted_runs(pz_root: Path, evidence_root: Path) -> list[Path]:
         bundle = state_path.parent
         archive = bundle / "archive-recovered"
         archive.mkdir(exist_ok=True)
+        owner_mailbox_relative = state.get("owner_mailbox_relative")
+        if owner_mailbox_relative is not None:
+            expected = ("CF_LiveInspectionMailboxes", state.get("run_token", ""), "owner-release")
+            relative = PurePosixPath(owner_mailbox_relative)
+            if relative.is_absolute() or relative.parts != expected or any("\\" in part or "\x00" in part for part in relative.parts):
+                raise HarnessError(f"refusing recovery with unsafe owner mailbox path in {state_path}")
+            mailbox_root = pz_root / expected[0]
+            run_dir = mailbox_root / expected[1]
+            if mailbox_root.is_symlink() or run_dir.is_symlink():
+                raise HarnessError(f"refusing recovery through owner mailbox symlink in {state_path}")
+            if run_dir.exists():
+                shutil.move(str(run_dir), str(archive / "owner-release-mailbox"))
+            if mailbox_root.is_dir():
+                try:
+                    mailbox_root.rmdir()
+                except OSError:
+                    pass
         for source, name in ((save, "save"), (mod, "mod")):
             if source.exists():
                 shutil.move(str(source), archive / name)

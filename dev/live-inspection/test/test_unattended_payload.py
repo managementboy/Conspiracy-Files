@@ -911,13 +911,13 @@ class ProductionPayloadTests(unittest.TestCase):
             }), encoding="utf-8")
             with mock.patch("live_inspection.cli.time.time", return_value=102.0):
                 run._write_owner_release("player-ready-modal-check")
-            release = run.bundle.joinpath("owner-release")
+            release = run._owner_mailbox_path()
             text = release.read_text(encoding="utf-8")
             self.assertTrue(text.startswith("CF_OWNER_RELEASE|version=1|status=RELEASED|"))
             self.assertIn("run_id=" + run.readiness_identity.run_id, text)
             self.assertIn("nonce=" + run.owner_phase_nonce, text)
             self.assertIn("released_at_ms=102000", text)
-            self.assertFalse(run.bundle.joinpath(".owner-release.staging").exists())
+            self.assertFalse(release.with_name(".owner-release.staging").exists())
 
     def test_actual_owner_prompt_refuses_no_tty_before_release(self):
         with tempfile.TemporaryDirectory() as temp:
@@ -944,10 +944,35 @@ class ProductionPayloadTests(unittest.TestCase):
             run.bundle.joinpath("owner-phase-ready.json").write_text(json.dumps({"status":"READY", "sequence":2, "emitted_at_ms":1000, "run_id":run.readiness_identity.run_id, "observer_id":run.readiness_identity.observer_id, "session_id":run.readiness_identity.session_id}), encoding="utf-8")
             with mock.patch("live_inspection.cli.os.replace", side_effect=OSError("injected")), self.assertRaises(OSError):
                 run._write_owner_release("player-ready-modal-check")
-            self.assertFalse(run.bundle.joinpath(".owner-release.staging").exists())
-            run.bundle.joinpath(".owner-release.staging").symlink_to(run.bundle / "victim")
+            staging = run._owner_mailbox_path(create_parent=True).with_name(".owner-release.staging")
+            self.assertFalse(staging.exists())
+            staging.symlink_to(run.bundle / "victim")
             with self.assertRaisesRegex(HarnessError, "path substitution"):
                 run._write_owner_release("player-ready-modal-check")
+
+    def test_owner_release_mailbox_is_relative_to_pz_user_root_and_archived(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp); run = self.make_live_run(root)
+            run.bundle.joinpath("owner-phase-ready.json").write_text(json.dumps({"status":"READY", "sequence":2, "emitted_at_ms":1000, "run_id":run.readiness_identity.run_id, "observer_id":run.readiness_identity.observer_id, "session_id":run.readiness_identity.session_id}), encoding="utf-8")
+            run._write_owner_release("player-ready-modal-check")
+            mailbox = run._owner_mailbox_path()
+            self.assertEqual(str(mailbox.relative_to(run.profile.pz_user_root)), run.owner_mailbox_relative)
+            run._archive_owner_mailbox(run.bundle / "archive")
+            self.assertTrue((run.bundle / "archive/owner-release-mailbox/owner-release").is_file())
+            self.assertFalse(mailbox.exists())
+            self.assertFalse((run.profile.pz_user_root / "CF_LiveInspectionMailboxes").exists())
+
+    def test_owner_release_mailbox_rejects_traversal_and_symlinked_parent(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp); run = self.make_live_run(root)
+            run.owner_mailbox_relative = "../victim"
+            with self.assertRaisesRegex(HarnessError, "unsafe relative"):
+                run._owner_mailbox_path()
+            mailbox_root = run.profile.pz_user_root / "CF_LiveInspectionMailboxes"
+            mailbox_root.symlink_to(root / "victim", target_is_directory=True)
+            run.owner_mailbox_relative = f"CF_LiveInspectionMailboxes/{run.run_token}/owner-release"
+            with self.assertRaisesRegex(HarnessError, "substitution"):
+                run._owner_mailbox_path(create_parent=True)
 
     def test_validates_installs_and_records_clean_source_commit(self):
         with tempfile.TemporaryDirectory() as temp:

@@ -1,6 +1,9 @@
 local mode = arg[1]
 local output, now, releaseContent, quitCount = {}, 1000, nil, 0
-local releasePath = "/tmp/cf-owner-phase-replay-release"
+-- Build 42 resolves getFileReader paths beneath the PZ user-file sandbox.
+-- Keep this executable fake on that same relative-path contract.
+local pzUserRoot = ".cf-owner-phase-pz-user"
+local releasePath = "CF_LiveInspectionMailboxes/RUN/owner-release"
 local realPrint = print
 print = function(value) output[#output + 1] = tostring(value) end
 local callbacks = { OnGameStart = {}, OnTick = {}, OnRenderTick = {}, OnMainMenuEnter = {} }
@@ -11,7 +14,7 @@ function getCurrentSaveName() return "SAVE" end; function getGameVersion() retur
 function getActivatedMods() return { size=function() return 1 end, contains=function(_, value) return value == "MOD" end } end
 function getCore() return { quitToDesktop=function() quitCount = quitCount + 1 end } end
 local readerCalls, readerErrors = 0, 0
-function getFileReader(path, create) readerCalls = readerCalls + 1; if create then readerErrors = readerErrors + 1; error("createFileExclusively must not be requested") end; if mode == "missing-error" then readerErrors = readerErrors + 1; error("java.io.IOException: No such file or directory") end; if mode == "read-error" then return { readLine=function() error("read failure") end, close=function() end } end; local file = io.open(path, "r"); if not file then return nil end; return { readLine=function() return file:read("*l") end, close=function() file:close() end } end
+function getFileReader(path, create) readerCalls = readerCalls + 1; if path:sub(1, 1) == "/" then readerErrors = readerErrors + 1; error("absolute path is outside the PZ user-file sandbox") end; if create then readerErrors = readerErrors + 1; error("createFileExclusively must not be requested") end; if mode == "missing-error" then readerErrors = readerErrors + 1; error("java.io.IOException: No such file or directory") end; if mode == "read-error" then return { readLine=function() error("read failure") end, close=function() end } end; local file = io.open(pzUserRoot .. "/" .. path, "r"); if not file then return nil end; return { readLine=function() return file:read("*l") end, close=function() file:close() end } end
 function getPlayer() return { getX=function() return 1 end, getY=function() return 1 end, getZ=function() return 0 end, teleportTo=function() end, setX=function() end, setY=function() end, setZ=function() end, setForceX=function() end, setForceY=function() end, setGodMod=function() end, setInvisible=function() end, setGhostMode=function() end } end
 function getCell() return { getGridSquare=function() return nil end } end
 function getWorld()
@@ -20,14 +23,15 @@ function getWorld()
 end
 function getGameTime() return { getTrueMultiplier=function() return 0 end } end; function instanceof() return false end
 local function publish(value, atomic)
-  local target = releasePath
+  os.execute("mkdir -p " .. pzUserRoot .. "/CF_LiveInspectionMailboxes/RUN")
+  local target = pzUserRoot .. "/" .. releasePath
   local path = atomic and target .. ".tmp" or target
   local file = assert(io.open(path, "w")); file:write(value); file:flush(); file:close()
   if atomic then assert(os.rename(path, target)) end
 end
 local validRelease = "CF_OWNER_RELEASE|version=1|status=RELEASED|gate=player-ready-modal-check|run_id=RUN|observer_id=OBS|session_id=SESSION|nonce=N1|ready_sequence=3|ready_at_ms=1001|released_at_ms=1002"
 local preReadyRelease = "CF_OWNER_RELEASE|version=1|status=RELEASED|gate=player-ready-modal-check|run_id=RUN|observer_id=OBS|session_id=SESSION|nonce=N1|ready_sequence=3|ready_at_ms=1001|released_at_ms=1001"
-os.remove(releasePath)
+os.execute("rm -rf " .. pzUserRoot)
 if mode == "pre-ready" then publish(preReadyRelease, true) end
 ConspiracyFiles = { T10Probe = { ownerPhaseReadiness=function() return true end, ownerPhaseSafety=function() return true end, ownerPhaseHandlerLease=function() return mode ~= "lease-stale" end } }
 dofile("probe/common/media/lua/client/ConspiracyFilesLiveInspection.lua")

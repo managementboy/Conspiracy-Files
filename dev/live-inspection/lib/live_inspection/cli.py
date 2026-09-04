@@ -13,7 +13,7 @@ import sys
 import time
 import uuid
 from dataclasses import asdict, replace
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 
 from . import __version__
 from .config import load_profile, runtime_game_version_for, unattended_refusal_reason
@@ -26,6 +26,7 @@ from .unattended import ProcessIdentity, ReadinessIdentity, StartupGateControlle
 
 LOCK_PATH = Path("/tmp/conspiracy-files-live-inspection.lock")
 PREFIX = "[cf-live-inspection]"
+OWNER_MAILBOX_ROOT = "CF_LiveInspectionMailboxes"
 STARTUP_CONTROL_REGION = (420, 982, 541, 1003)
 STARTUP_CONTROL_TEMPLATE_ROWS = (
     (
@@ -313,6 +314,7 @@ class LiveRun:
         self.installed_payload = profile.pz_user_root / "mods" / f"CF_Payload_{self.run_token.replace('-', '_')}"
         self.installed_payload_staging = self.installed_payload.with_name(self.installed_payload.name + ".staging")
         self.installed_fixture_probe = self.profile.pz_user_root / "mods" / "ConspiracyFiles_T10_Probe"
+        self.owner_mailbox_relative = f"{OWNER_MAILBOX_ROOT}/{self.run_token}/owner-release"
         self.controls: ControlTransaction | None = None
         self.process: subprocess.Popen | None = None
         self.launcher_stdout = None
@@ -557,6 +559,7 @@ class LiveRun:
             "save_name": self.destination_save.name, "mod_name": self.installed_mod.name,
             "payload_name": self.installed_payload.name if self.profile.payload.mode == "production" else None,
             "payload_staging_name": self.installed_payload_staging.name if self.profile.payload.mode == "production" else None,
+            "owner_mailbox_relative": self.owner_mailbox_relative,
         }, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 
     def cleanup(self) -> None:
@@ -650,6 +653,10 @@ class LiveRun:
                     shutil.move(str(source), archive / name)
                 except OSError as exc:
                     errors.append(f"could not archive {source}: {exc}")
+        try:
+            self._archive_owner_mailbox(archive)
+        except (OSError, HarnessError) as exc:
+            errors.append(f"could not archive owner release mailbox: {exc}")
         if self.controls:
             try:
                 self.controls.restore_exact()
@@ -736,7 +743,7 @@ class LiveRun:
         ):
             raise HarnessError("installed production payload drifted from the readiness contract")
         generated.write_text(
-            render_lua_profile(self.profile, self.sites, self.readiness_identity, self.bundle / "owner-release", self.owner_phase_nonce),
+            render_lua_profile(self.profile, self.sites, self.readiness_identity, Path(self.owner_mailbox_relative), self.owner_phase_nonce),
             encoding="utf-8",
         )
         active_mods = mod_list(*active_ids)
@@ -916,10 +923,10 @@ class LiveRun:
         # compare as a release before OWNER_PHASE_READY.
         released_at_ms = int(time.time() * 1000)
         line = "CF_OWNER_RELEASE|version=1|status=RELEASED|gate=" + gate_name + "|run_id=" + self.readiness_identity.run_id + "|observer_id=" + self.readiness_identity.observer_id + "|session_id=" + self.readiness_identity.session_id + "|nonce=" + self.owner_phase_nonce + "|ready_sequence=" + str(ready_sequence) + "|ready_at_ms=" + str(ready_at_ms) + "|released_at_ms=" + str(released_at_ms) + "\n"
-        path = self.bundle / "owner-release"
+        path = self._owner_mailbox_path(create_parent=True)
         staging = path.with_name(".owner-release.staging")
-        if not self.bundle.is_dir() or self.bundle.is_symlink() or path.is_symlink() or staging.is_symlink() or staging.exists():
-            raise HarnessError("owner release refused: evidence-root path substitution or stale staging file")
+        if path.is_symlink() or staging.is_symlink() or staging.exists():
+            raise HarnessError("owner release refused: mailbox path substitution or stale staging file")
         try:
             with staging.open("x", encoding="utf-8") as stream:
                 stream.write(line); stream.flush(); os.fsync(stream.fileno())
@@ -930,6 +937,50 @@ class LiveRun:
         finally:
             if staging.exists() or staging.is_symlink():
                 staging.unlink()
+
+    def _owner_mailbox_path(self, *, create_parent: bool = False) -> Path:
+        expected = (OWNER_MAILBOX_ROOT, self.run_token, "owner-release")
+        relative = PurePosixPath(self.owner_mailbox_relative)
+        if relative.is_absolute() or relative.parts != expected or any("\\" in part or "\x00" in part for part in relative.parts):
+            raise HarnessError("owner release refused: unsafe relative mailbox path")
+        root = self.profile.pz_user_root
+        mailbox_root = root / OWNER_MAILBOX_ROOT
+        run_dir = mailbox_root / self.run_token
+        for directory in (root, mailbox_root, run_dir):
+            if directory.is_symlink() or (directory.exists() and not directory.is_dir()):
+                raise HarnessError("owner release refused: mailbox path substitution")
+        if create_parent:
+            try:
+                mailbox_root.mkdir(exist_ok=True)
+            except OSError as exc:
+                raise HarnessError("owner release refused: mailbox path substitution") from exc
+            if mailbox_root.is_symlink() or not mailbox_root.is_dir():
+                raise HarnessError("owner release refused: mailbox path substitution")
+            try:
+                run_dir.mkdir(exist_ok=True)
+            except OSError as exc:
+                raise HarnessError("owner release refused: mailbox path substitution") from exc
+            if run_dir.is_symlink() or not run_dir.is_dir():
+                raise HarnessError("owner release refused: mailbox path substitution")
+        path = root / Path(*relative.parts)
+        if path.parent != run_dir or path.is_symlink():
+            raise HarnessError("owner release refused: mailbox path substitution")
+        return path
+
+    def _archive_owner_mailbox(self, archive: Path) -> None:
+        path = self._owner_mailbox_path()
+        run_dir = path.parent
+        if run_dir.exists():
+            target = archive / "owner-release-mailbox"
+            if target.exists() or target.is_symlink():
+                raise HarnessError("owner release mailbox archive already exists")
+            shutil.move(str(run_dir), str(target))
+        mailbox_root = self.profile.pz_user_root / OWNER_MAILBOX_ROOT
+        if mailbox_root.is_dir() and not mailbox_root.is_symlink():
+            try:
+                mailbox_root.rmdir()
+            except OSError:
+                pass
 
     def _write_owner_phase_ready(self, result) -> None:
         fields = {}

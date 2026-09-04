@@ -151,11 +151,15 @@ class SafetyTests(unittest.TestCase):
             control = root / "latestSave.ini"; control.write_text("before\n")
             bundle = root / "evidence/run-1"; transaction = ControlTransaction(root, ("latestSave.ini",), bundle / "control-before"); transaction.backup_exact()
             save = root / "Saves/Sandbox/CF_INSPECT_test"; save.mkdir(); mod = root / "mods/CF_LiveInspection_test"; mod.mkdir()
+            mailbox = root / "CF_LiveInspectionMailboxes/run-1"; mailbox.mkdir(parents=True)
+            (mailbox / "owner-release").write_text("release\n")
             control.write_text("after\n")
-            (bundle / "run-state.json").write_text(json.dumps({"status": "MUTATED", "save_name": save.name, "mod_name": mod.name}))
+            (bundle / "run-state.json").write_text(json.dumps({"status": "MUTATED", "run_token": "run-1", "save_name": save.name, "mod_name": mod.name, "owner_mailbox_relative": "CF_LiveInspectionMailboxes/run-1/owner-release"}))
             recovered = recover_interrupted_runs(root, root / "evidence")
             self.assertEqual(recovered, [bundle]); self.assertEqual(control.read_text(), "before\n")
             self.assertFalse(save.exists()); self.assertFalse(mod.exists())
+            self.assertEqual((bundle / "archive-recovered/owner-release-mailbox/owner-release").read_text(), "release\n")
+            self.assertFalse((root / "CF_LiveInspectionMailboxes").exists())
 
 
 class StateTests(unittest.TestCase):
