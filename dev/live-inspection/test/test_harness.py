@@ -14,7 +14,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "lib"))
 
 from live_inspection.config import load_profile
-from live_inspection.cli import capture_screen, startup_gate_visual_evidence
+from live_inspection.cli import capture_screen, startup_gate_visual_evidence, render_lua_profile
 from live_inspection.evidence import sanitize_line
 from live_inspection.model import Gate, HarnessError
 from live_inspection.safety import ControlTransaction, ExclusiveRunLock, assert_save_safety, parse_renderer, recover_interrupted_runs, sha256
@@ -78,6 +78,37 @@ class ConfigTests(unittest.TestCase):
             path.write_text(profile_text(root).replace("bounds=[1,2,3,4]", "bounds=[3,2,1,4]"))
             with self.assertRaisesRegex(HarnessError, "inverted"):
                 load_profile(path)
+
+    def test_owner_phase_profile_is_attended_and_finite(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp); path = root / "profile.toml"
+            path.write_text(profile_text(root) + "\n[owner_phase]\nenabled=true\ntimeout_seconds=7200\n")
+            profile = load_profile(path)
+            self.assertEqual(profile.owner_phase, {"enabled": True, "timeout_seconds": 7200})
+
+    def test_owner_phase_rejects_excessive_timeout(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp); path = root / "profile.toml"
+            path.write_text(profile_text(root) + "\n[owner_phase]\nenabled=true\ntimeout_seconds=86401\n")
+            with self.assertRaisesRegex(HarnessError, "<= 86400"):
+                load_profile(path)
+
+    def test_owner_release_protocol_is_rendered_with_nonce_and_identity_path(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp); path = root / "profile.toml"
+            path.write_text(profile_text(root) + "\n[owner_phase]\nenabled=true\ntimeout_seconds=7200\n")
+            profile = load_profile(path)
+            identity = type("Identity", (), {"active_mod_ids": ("CF_LiveInspection_test",), "run_id": "RUN", "save_name": "SAVE", "observer_id": "OBS", "session_id": "SESSION", "payload_mode": "probe", "payload_id": "OBS", "payload_checksum": "x", "expected_game_version": "42.20"})()
+            rendered = render_lua_profile(profile, profile.sites, identity, root / "owner-release", "NONCE")
+            self.assertIn("timeoutSeconds = 7200", rendered)
+            self.assertIn('nonce = "NONCE"', rendered)
+            self.assertIn("owner-release", rendered)
+
+    def test_checked_in_owner_attended_profile_is_manual_only(self):
+        profile = load_profile(ROOT / "profiles/cf-v01-e08-owner-attended.toml")
+        self.assertTrue(profile.owner_phase["enabled"])
+        self.assertEqual(profile.criteria, ("T10", "CF-V01-E08"))
+        self.assertFalse(profile.unattended_startup.enabled)
 
 
 class SafetyTests(unittest.TestCase):

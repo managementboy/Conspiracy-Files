@@ -10,6 +10,7 @@ local active, completed, initialized = false, false, false
 local tick, exitTicks, siteIndex = 0, 0, 0
 local current, scan, failures = nil, nil, 0
 local autoContinue, menuTicks = false, 0
+local ownerHold, ownerHoldTicks = false, 0
 local eventSequence = 0
 
 local function safe(value)
@@ -221,6 +222,12 @@ local function initialize()
         "payloadChecksum=" .. safe(Profile.payloadChecksum),
         "gameVersion=" .. safe(gameVersion),
     })
+    if Profile.ownerPhase and Profile.ownerPhase.enabled then
+        initialized = true
+        ownerHold = true
+        event("OWNER_PHASE_READY", { "status=HOLD", "timeoutSeconds=" .. safe(Profile.ownerPhase.timeoutSeconds), "nonce=" .. safe(Profile.ownerPhase.nonce) })
+        return
+    end
     siteIndex, current, tick = 1, Profile.sites[1], 0
     logSiteDefinition(current); teleport(current); initialized = true
 end
@@ -234,6 +241,34 @@ local function onTick()
     if active and not initialized then
         local ok, err = pcall(initialize)
         if not ok then fail("initialize", err); completed = true; initialized = true; event("RUN_COMPLETE", { "status=FAIL", "failures=" .. failures }) end
+    elseif active and ownerHold then
+        ownerHoldTicks = ownerHoldTicks + 1
+        local released = false
+        if Profile.ownerPhase.releasePath and Profile.ownerPhase.releasePath ~= "" and getFileReader then
+            local ok, reader = pcall(getFileReader, Profile.ownerPhase.releasePath, true)
+            if ok and reader then
+                local lineOk, line = pcall(function() return reader:readLine() end)
+                pcall(function() reader:close() end)
+                local text = lineOk and tostring(line) or ""
+                released = lineOk and line ~= nil
+                    and text:find('"status"%s*:%s*"RELEASED"') ~= nil
+                    and text:find('"run_id"%s*:%s*"' .. tostring(Profile.runId) .. '"') ~= nil
+                    and text:find('"observer_id"%s*:%s*"' .. tostring(Profile.observerId) .. '"') ~= nil
+                    and text:find('"session_id"%s*:%s*"' .. tostring(Profile.sessionId) .. '"') ~= nil
+                    and text:find('"nonce"%s*:%s*"' .. tostring(Profile.ownerPhase.nonce) .. '"') ~= nil
+            end
+        end
+        if released then
+            ownerHold = false
+            event("OWNER_PHASE_RELEASED", { "status=PASS", "nonce=" .. safe(Profile.ownerPhase.nonce) })
+            siteIndex, current, tick = 1, Profile.sites[1], 0
+            logSiteDefinition(current); teleport(current)
+        elseif ownerHoldTicks >= (Profile.ownerPhase.timeoutSeconds or 7200) * 60 then
+            ownerHold = false; active = false
+            fail("owner-phase-timeout", "explicit owner release was not acknowledged")
+            event("OWNER_PHASE_FAILED", { "status=FAIL", "reason=timeout" })
+            getCore():quitToDesktop()
+        end
     elseif active and completed then
         exitTicks = exitTicks + 1
         if exitTicks >= Profile.limits.exitDelayTicks then active = false; event("NORMAL_EXIT_REQUESTED", { "status=" .. (failures == 0 and "PASS" or "FAIL") }); getCore():quitToDesktop() end

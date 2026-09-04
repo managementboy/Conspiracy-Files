@@ -15,6 +15,7 @@ FORBIDDEN_UNATTENDED_CRITERIA = {"T10", "E08", "CF-V01-E08"}
 FORBIDDEN_INTERACTION_WORDS = ("inventory", "context", "menu", "right-click", "gameplay", "accept")
 WINDOW_TITLE_PATTERNS = {r"(?i)project zomboid", r"(?i)^project zomboid(?:\s.*)?$"}
 SUPPORTED_GAME_VERSIONS = {"42.20.4"}
+MAX_OWNER_PHASE_TIMEOUT_SECONDS = 86400
 REQUIRED_GATE_ORDER = (
     "menu", "world-loading", "click-to-start", "player-ready-modal-check",
     "chunk-streaming", "scan-completion", "run-completion", "normal-exit",
@@ -53,6 +54,15 @@ def load_profile(path: Path) -> Profile:
     acceptance = raw.get("acceptance", {})
     unattended_raw = raw.get("unattended_startup", {})
     payload_raw = raw.get("payload", {})
+    owner_phase_raw = raw.get("owner_phase", {})
+    if not isinstance(owner_phase_raw, dict):
+        raise HarnessError("owner_phase must be a TOML table")
+    owner_phase_enabled = owner_phase_raw.get("enabled", False)
+    if not isinstance(owner_phase_enabled, bool):
+        raise HarnessError("owner_phase.enabled must be boolean")
+    owner_phase_timeout = _positive_int(owner_phase_raw.get("timeout_seconds", 7200), "owner_phase.timeout_seconds")
+    if owner_phase_timeout > MAX_OWNER_PHASE_TIMEOUT_SECONDS:
+        raise HarnessError(f"owner_phase.timeout_seconds must be <= {MAX_OWNER_PHASE_TIMEOUT_SECONDS}")
     profile_id = run.get("profile_id", "")
     probe_id = run.get("probe_id", "")
     for label, value in (("profile_id", profile_id), ("probe_id", probe_id)):
@@ -125,6 +135,8 @@ def load_profile(path: Path) -> Profile:
     unattended_enabled = unattended_raw.get("enabled", False)
     if not isinstance(unattended_enabled, bool):
         raise HarnessError("unattended_startup.enabled must be boolean")
+    if owner_phase_enabled and unattended_enabled:
+        raise HarnessError("owner_phase is only valid for attended profiles")
     if unattended_enabled:
         if actions["click-to-start"] != "startup-gate":
             raise HarnessError("unattended startup requires click-to-start action=startup-gate")
@@ -208,6 +220,7 @@ def load_profile(path: Path) -> Profile:
             window_pattern, supported_game_version,
         ),
         payload=Payload(payload_mode, _path(payload_source, base) if payload_source else None, expected_sha, expected_mod_id),
+        owner_phase={"enabled": owner_phase_enabled, "timeout_seconds": owner_phase_timeout},
         raw=raw,
     )
 

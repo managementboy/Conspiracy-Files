@@ -119,7 +119,7 @@ def lua_string(value: str) -> str:
     return '"' + value.replace("\\", "\\\\").replace('"', '\\"').replace("\n", "\\n") + '"'
 
 
-def render_lua_profile(profile: Profile, sites: tuple[Site, ...], identity: ReadinessIdentity) -> str:
+def render_lua_profile(profile: Profile, sites: tuple[Site, ...], identity: ReadinessIdentity, owner_release_path: Path | None = None, owner_nonce: str = "") -> str:
     expected = ", ".join(lua_string(value) for value in identity.active_mod_ids)
     lines = [
         "return {",
@@ -131,6 +131,7 @@ def render_lua_profile(profile: Profile, sites: tuple[Site, ...], identity: Read
         f"  payloadId = {lua_string(identity.payload_id)},",
         f"  payloadChecksum = {lua_string(identity.payload_checksum)},",
         f"  expectedGameVersion = {lua_string(identity.expected_game_version)},",
+        f"  ownerPhase = {{ enabled = {'true' if profile.owner_phase.get('enabled', False) else 'false'}, timeoutSeconds = {int(profile.owner_phase.get('timeout_seconds', 7200))}, releasePath = {lua_string(str(owner_release_path or ''))}, nonce = {lua_string(owner_nonce)} }},",
         f"  activeModIds = {{ {expected} }},",
         "  sites = {",
     ]
@@ -322,6 +323,7 @@ class LiveRun:
         self.bundle_created = False
         self.startup_controller = StartupGateController(profile.unattended_startup)
         self.startup_evidence = None
+        self.owner_phase_nonce = uuid.uuid4().hex
         probe_root = Path(__file__).resolve().parents[2] / "probe"
         active_ids = (
             (profile.payload.expected_mod_id, self.mod_id)
@@ -702,7 +704,7 @@ class LiveRun:
         ):
             raise HarnessError("installed production payload drifted from the readiness contract")
         generated.write_text(
-            render_lua_profile(self.profile, self.sites, self.readiness_identity),
+            render_lua_profile(self.profile, self.sites, self.readiness_identity, self.bundle / "owner-release", self.owner_phase_nonce),
             encoding="utf-8",
         )
         active_mods = mod_list(*active_ids)
@@ -810,9 +812,7 @@ class LiveRun:
                     capture_screen(self.bundle / "screenshots" / f"gate-{gate.name}{suffix}.png")
                 elif gate.action == "manual":
                     capture_screen(self.bundle / "screenshots" / f"manual-{gate.name}{suffix}.png")
-                    if self.non_interactive or not sys.stdin.isatty():
-                        raise HarnessError(f"gate {gate.name} requires bounded manual operator input")
-                    input(f"{PREFIX} Complete the visible {gate.name} action, then press Enter: ")
+                    self._manual_prompt(gate.name, release_owner_phase=(gate.name == "player-ready-modal-check"))
                 elif gate.action == "startup-gate":
                     if gate.name != "click-to-start" or not self.process:
                         raise HarnessError("startup-gate action is valid only for the owned click-to-start gate")
@@ -844,6 +844,26 @@ class LiveRun:
         if code != 0:
             raise HarnessError(f"owned launcher exited with status {code}")
         self.status = "PASS"
+
+    def _manual_prompt(self, gate_name: str, *, release_owner_phase: bool = False) -> None:
+        if self.non_interactive or not sys.stdin.isatty():
+            raise HarnessError(f"gate {gate_name} requires bounded manual operator input")
+        import select
+        prompt = (f"{PREFIX} PLAYER_READY is held. Perform the owner-attended T10/E08 interactions, then press Enter to release the probe: " if release_owner_phase else f"{PREFIX} Complete the visible {gate_name} action, then press Enter: ")
+        sys.stdout.write(prompt); sys.stdout.flush()
+        deadline = time.monotonic() + self.profile.time_budgets.get("manual_prompt_seconds", 7200)
+        while time.monotonic() < deadline:
+            if not self._launcher_process_identity():
+                raise HarnessError(f"stale-process failure: owned Project Zomboid exited during manual gate {gate_name}")
+            ready, _, _ = select.select([sys.stdin], [], [], 1.0)
+            if ready:
+                sys.stdin.readline()
+                if not self._launcher_process_identity():
+                    raise HarnessError(f"stale-process failure: owned Project Zomboid exited during manual gate {gate_name}")
+                if release_owner_phase:
+                    self._write_json_atomic(self.bundle / "owner-release", {"status": "RELEASED", "gate": gate_name, "released_at_ns": time.time_ns(), "run_id": self.readiness_identity.run_id, "observer_id": self.readiness_identity.observer_id, "session_id": self.readiness_identity.session_id, "nonce": self.owner_phase_nonce})
+                return
+        raise HarnessError(f"manual gate {gate_name} timed out after {self.profile.time_budgets.get('manual_prompt_seconds', 7200)} seconds")
 
 
 def build_parser() -> argparse.ArgumentParser:

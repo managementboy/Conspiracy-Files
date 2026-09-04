@@ -66,4 +66,5 @@ class Profile:
     interaction_scope: tuple[str, ...] = ()
     unattended_startup: UnattendedStartup = field(default_factory=UnattendedStartup)
     payload: Payload = field(default_factory=Payload)
+    owner_phase: dict[str, object] = field(default_factory=dict)
     raw: dict[str, Any] = field(default_factory=dict, repr=False)

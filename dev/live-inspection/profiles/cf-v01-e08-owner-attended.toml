@@ -1,0 +1,83 @@
+[run]
+profile_id = "cf-v01-e08-owner-attended"
+probe_id = "owner-attended-inspect"
+
+[paths]
+source_save = "/home/yogax380/Zomboid/Saves/Sandbox/2026-09-01_13-58-50"
+pz_user_root = "/home/yogax380/Zomboid"
+launcher = "/home/yogax380/.steam/steam/steamapps/common/ProjectZomboid/projectzomboid.sh"
+evidence_root = "../../../tmp/live-inspection"
+
+[safety]
+source_marker = ".cf-live-inspection-source"
+controls = ["latestSave.ini", "mods/default.txt", "options.ini", "debuglog.ini"]
+
+[unattended_startup]
+supported_game_version = "42.20.4"
+
+[owner_phase]
+enabled = true
+timeout_seconds = 7200
+
+[acceptance]
+criteria = ["T10", "CF-V01-E08"]
+interaction_scope = ["owner-attended-context-menu-and-gameplay"]
+
+[time_budgets]
+normal_exit_seconds = 45
+manual_prompt_seconds = 7200
+
+[[sites]]
+id = "P2"
+role = "owner-attended-target"
+bounds = [13206, 3073, 13238, 3101]
+entry_point = [13208.5, 3088.5, 0]
+levels = [0, 1, 2, 3, 4, 5, 6, 7]
+
+[[gates]]
+name = "menu"
+pattern = "\\[CF-INSPECT\\].*kind=MENU_READY"
+timeout_seconds = 90
+action = "screenshot"
+
+[[gates]]
+name = "world-loading"
+pattern = "\\[CF-INSPECT\\].*kind=WORLD_LOADING"
+timeout_seconds = 90
+action = "wait"
+
+[[gates]]
+name = "click-to-start"
+pattern = "game loading took"
+timeout_seconds = 360
+action = "manual"
+
+[[gates]]
+name = "player-ready-modal-check"
+pattern = "\\[CF-INSPECT\\].*kind=PLAYER_READY"
+timeout_seconds = 180
+action = "manual"
+
+[[gates]]
+name = "chunk-streaming"
+pattern = "\\[CF-INSPECT\\].*kind=CHUNK_STABLE"
+timeout_seconds = 180
+action = "screenshot"
+
+[[gates]]
+name = "scan-completion"
+pattern = "\\[CF-INSPECT\\].*kind=SCAN_COMPLETE"
+timeout_seconds = 480
+action = "screenshot"
+
+[[gates]]
+name = "run-completion"
+pattern = "\\[CF-INSPECT\\].*kind=RUN_COMPLETE.*status=PASS"
+timeout_seconds = 60
+action = "wait"
+
+[[gates]]
+name = "normal-exit"
+pattern = "\\[CF-INSPECT\\].*kind=NORMAL_EXIT_REQUESTED.*status=PASS"
+timeout_seconds = 30
+action = "wait"

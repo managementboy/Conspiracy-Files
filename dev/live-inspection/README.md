@@ -125,3 +125,5 @@ After all other PZ work is complete:
 5. Verify `PASS`, restored hashes, absent active save/mod, and no remaining PZ process.
 6. Repeat from a fresh R2 clean boot; exercise multi-site only as an extra convenience test.
 7. Human-review any evidence before updating bindings or checked-in research.
+
+The dedicated `cf-v01-e08-owner-attended.toml` profile holds after fresh correlated `PLAYER_READY`. It emits `OWNER_PHASE_READY|status=HOLD`, performs no scan or exit, and accepts only a run/observer/session/nonce-bound release acknowledgement written by the attended PTY harness. The 7200-second hold is bounded by the validator’s 86400-second maximum; timeout, malformed release, signal, or process death fails closed and enters normal cleanup. Accepted release is recorded in the probe event stream. T10/E08 interaction remains owner-only.
