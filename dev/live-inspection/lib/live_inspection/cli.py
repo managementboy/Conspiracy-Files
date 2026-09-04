@@ -27,6 +27,7 @@ from .unattended import ProcessIdentity, ReadinessIdentity, StartupGateControlle
 LOCK_PATH = Path("/tmp/conspiracy-files-live-inspection.lock")
 PREFIX = "[cf-live-inspection]"
 OWNER_MAILBOX_ROOT = "CF_LiveInspectionMailboxes"
+OWNER_LUA_ROOT = "Lua"
 STARTUP_CONTROL_REGION = (420, 982, 541, 1003)
 STARTUP_CONTROL_TEMPLATE_ROWS = (
     (
@@ -944,12 +945,19 @@ class LiveRun:
         if relative.is_absolute() or relative.parts != expected or any("\\" in part or "\x00" in part for part in relative.parts):
             raise HarnessError("owner release refused: unsafe relative mailbox path")
         root = self.profile.pz_user_root
-        mailbox_root = root / OWNER_MAILBOX_ROOT
+        lua_root = root / OWNER_LUA_ROOT
+        mailbox_root = lua_root / OWNER_MAILBOX_ROOT
         run_dir = mailbox_root / self.run_token
-        for directory in (root, mailbox_root, run_dir):
+        for directory in (root, lua_root, mailbox_root, run_dir):
             if directory.is_symlink() or (directory.exists() and not directory.is_dir()):
                 raise HarnessError("owner release refused: mailbox path substitution")
         if create_parent:
+            try:
+                lua_root.mkdir(exist_ok=True)
+            except OSError as exc:
+                raise HarnessError("owner release refused: mailbox path substitution") from exc
+            if lua_root.is_symlink() or not lua_root.is_dir():
+                raise HarnessError("owner release refused: mailbox path substitution")
             try:
                 mailbox_root.mkdir(exist_ok=True)
             except OSError as exc:
@@ -962,9 +970,11 @@ class LiveRun:
                 raise HarnessError("owner release refused: mailbox path substitution") from exc
             if run_dir.is_symlink() or not run_dir.is_dir():
                 raise HarnessError("owner release refused: mailbox path substitution")
-        path = root / Path(*relative.parts)
+        path = lua_root / Path(*relative.parts)
         if path.parent != run_dir or path.is_symlink():
             raise HarnessError("owner release refused: mailbox path substitution")
+        if path.resolve(strict=False).parent != run_dir.resolve(strict=False):
+            raise HarnessError("owner release refused: mailbox path escape")
         return path
 
     def _archive_owner_mailbox(self, archive: Path) -> None:
@@ -975,7 +985,7 @@ class LiveRun:
             if target.exists() or target.is_symlink():
                 raise HarnessError("owner release mailbox archive already exists")
             shutil.move(str(run_dir), str(target))
-        mailbox_root = self.profile.pz_user_root / OWNER_MAILBOX_ROOT
+        mailbox_root = self.profile.pz_user_root / OWNER_LUA_ROOT / OWNER_MAILBOX_ROOT
         if mailbox_root.is_dir() and not mailbox_root.is_symlink():
             try:
                 mailbox_root.rmdir()

@@ -99,9 +99,11 @@ class ConfigTests(unittest.TestCase):
             path.write_text(profile_text(root) + "\n[owner_phase]\nenabled=true\ntimeout_seconds=7200\n")
             profile = load_profile(path)
             identity = type("Identity", (), {"active_mod_ids": ("CF_LiveInspection_test",), "run_id": "RUN", "save_name": "SAVE", "observer_id": "OBS", "session_id": "SESSION", "payload_mode": "probe", "payload_id": "OBS", "payload_checksum": "x", "expected_game_version": "42.20"})()
-            rendered = render_lua_profile(profile, profile.sites, identity, root / "owner-release", "NONCE")
+            rendered = render_lua_profile(profile, profile.sites, identity, Path("CF_LiveInspectionMailboxes/RUN/owner-release"), "NONCE")
             self.assertIn("timeoutSeconds = 7200", rendered)
             self.assertIn('nonce = "NONCE"', rendered)
+            self.assertIn('releasePath = "CF_LiveInspectionMailboxes/', rendered)
+            self.assertNotIn(str(root), rendered)
             self.assertIn("owner-release", rendered)
 
     def test_checked_in_owner_attended_profile_is_manual_only(self):
@@ -151,8 +153,9 @@ class SafetyTests(unittest.TestCase):
             control = root / "latestSave.ini"; control.write_text("before\n")
             bundle = root / "evidence/run-1"; transaction = ControlTransaction(root, ("latestSave.ini",), bundle / "control-before"); transaction.backup_exact()
             save = root / "Saves/Sandbox/CF_INSPECT_test"; save.mkdir(); mod = root / "mods/CF_LiveInspection_test"; mod.mkdir()
-            mailbox = root / "CF_LiveInspectionMailboxes/run-1"; mailbox.mkdir(parents=True)
+            mailbox = root / "Lua/CF_LiveInspectionMailboxes/run-1"; mailbox.mkdir(parents=True)
             (mailbox / "owner-release").write_text("release\n")
+            unrelated = root / "Lua/layout.ini"; unrelated.write_text("keep\n")
             control.write_text("after\n")
             (bundle / "run-state.json").write_text(json.dumps({"status": "MUTATED", "run_token": "run-1", "save_name": save.name, "mod_name": mod.name, "owner_mailbox_relative": "CF_LiveInspectionMailboxes/run-1/owner-release"}))
             recovered = recover_interrupted_runs(root, root / "evidence")
@@ -160,6 +163,7 @@ class SafetyTests(unittest.TestCase):
             self.assertFalse(save.exists()); self.assertFalse(mod.exists())
             self.assertEqual((bundle / "archive-recovered/owner-release-mailbox/owner-release").read_text(), "release\n")
             self.assertFalse((root / "CF_LiveInspectionMailboxes").exists())
+            self.assertEqual(unrelated.read_text(), "keep\n")
 
 
 class StateTests(unittest.TestCase):

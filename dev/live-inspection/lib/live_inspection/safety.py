@@ -184,7 +184,7 @@ def recover_interrupted_runs(pz_root: Path, evidence_root: Path) -> list[Path]:
             relative = PurePosixPath(owner_mailbox_relative)
             if relative.is_absolute() or relative.parts != expected or any("\\" in part or "\x00" in part for part in relative.parts):
                 raise HarnessError(f"refusing recovery with unsafe owner mailbox path in {state_path}")
-            mailbox_root = pz_root / expected[0]
+            mailbox_root = pz_root / "Lua" / expected[0]
             run_dir = mailbox_root / expected[1]
             if mailbox_root.is_symlink() or run_dir.is_symlink():
                 raise HarnessError(f"refusing recovery through owner mailbox symlink in {state_path}")

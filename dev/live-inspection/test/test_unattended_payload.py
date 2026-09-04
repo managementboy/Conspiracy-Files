@@ -956,11 +956,12 @@ class ProductionPayloadTests(unittest.TestCase):
             run.bundle.joinpath("owner-phase-ready.json").write_text(json.dumps({"status":"READY", "sequence":2, "emitted_at_ms":1000, "run_id":run.readiness_identity.run_id, "observer_id":run.readiness_identity.observer_id, "session_id":run.readiness_identity.session_id}), encoding="utf-8")
             run._write_owner_release("player-ready-modal-check")
             mailbox = run._owner_mailbox_path()
-            self.assertEqual(str(mailbox.relative_to(run.profile.pz_user_root)), run.owner_mailbox_relative)
+            self.assertEqual(str(mailbox.relative_to(run.profile.pz_user_root / "Lua")), run.owner_mailbox_relative)
+            self.assertFalse((run.profile.pz_user_root / run.owner_mailbox_relative).exists())
             run._archive_owner_mailbox(run.bundle / "archive")
             self.assertTrue((run.bundle / "archive/owner-release-mailbox/owner-release").is_file())
             self.assertFalse(mailbox.exists())
-            self.assertFalse((run.profile.pz_user_root / "CF_LiveInspectionMailboxes").exists())
+            self.assertFalse((run.profile.pz_user_root / "Lua/CF_LiveInspectionMailboxes").exists())
 
     def test_owner_release_mailbox_rejects_traversal_and_symlinked_parent(self):
         with tempfile.TemporaryDirectory() as temp:
@@ -968,7 +969,8 @@ class ProductionPayloadTests(unittest.TestCase):
             run.owner_mailbox_relative = "../victim"
             with self.assertRaisesRegex(HarnessError, "unsafe relative"):
                 run._owner_mailbox_path()
-            mailbox_root = run.profile.pz_user_root / "CF_LiveInspectionMailboxes"
+            mailbox_root = run.profile.pz_user_root / "Lua/CF_LiveInspectionMailboxes"
+            mailbox_root.parent.mkdir(parents=True)
             mailbox_root.symlink_to(root / "victim", target_is_directory=True)
             run.owner_mailbox_relative = f"CF_LiveInspectionMailboxes/{run.run_token}/owner-release"
             with self.assertRaisesRegex(HarnessError, "substitution"):
