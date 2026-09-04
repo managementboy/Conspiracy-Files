@@ -47,6 +47,8 @@ local inventory = {}
 local player = { getInventory = function() return inventory end }
 
 function getSpecificPlayer() return player end
+local nowMs = 1000
+function getTimestampMs() return nowMs end
 function getGameVersion() return "42.20.4" end
 function instanceof(value, className) return type(value) == "table" and value.__class == className end
 
@@ -217,6 +219,15 @@ local savedInventoryEvent, savedWorldEvent = Events.OnFillInventoryObjectContext
 Events.OnFillInventoryObjectContextMenu = nil
 check("registration fails closed while the engine event is unavailable", probe.registerHandlers() == false and probe.registrationStatus() == false)
 Events.OnFillInventoryObjectContextMenu = savedInventoryEvent
+
+probe.registerHandlers()
+test.inventoryHandler(0, context(), { revealed }); test.companionHandler(0, context(), { revealed }); test.worldHandler(0, context(), { world }, false)
+savedInventoryEvent.Remove(probe.staticTest.companionHandler)
+check("individual companion loss expires the lease", not probe.ownerPhaseHandlerLease())
+probe.registerHandlers()
+test.inventoryHandler(0, context(), { revealed }); test.companionHandler(0, context(), { revealed }); test.worldHandler(0, context(), { world }, false)
+savedWorldEvent.Remove(probe.staticTest.worldHandler)
+check("individual world loss expires the lease", not probe.ownerPhaseHandlerLease())
 check("registration retries after delayed event creation", probe.registerHandlers() == true and probe.registrationStatus() == true)
 
 local lostInventory = probe.staticTest.inventoryHandler
@@ -229,6 +240,27 @@ check("registration fails closed when Add verification errors", probe.registerHa
 savedWorldEvent.Add = originalAdd
 check("registration recovers after verification failure", probe.registerHandlers() == true and probe.registrationStatus() == true)
 
+test.setActive(true)
+test.inventoryHandler(0, context(), { revealed })
+test.companionHandler(0, context(), { revealed })
+test.worldHandler(0, context(), { world }, false)
+for _, callback in ipairs(Events.OnTick.callbacks) do callback() end
+check("all three actual handler surfaces establish a fresh lease", probe.ownerPhaseHandlerLease())
+nowMs = 1001
+savedInventoryEvent.Remove(probe.staticTest.inventoryHandler)
+check("individual inventory loss expires the lease", not probe.ownerPhaseHandlerLease())
+nowMs = 3000
+check("stale lease fails closed after T10 OnTick loss", not probe.ownerPhaseHandlerLease())
+nowMs = 1000
+probe.registerHandlers()
+test.inventoryHandler(0, context(), { revealed })
+test.companionHandler(0, context(), { revealed })
+test.worldHandler(0, context(), { world }, false)
+local rebuiltInventoryEvent = { callbacks = {}, Add = savedInventoryEvent.Add, Remove = savedInventoryEvent.Remove }
+Events.OnFillInventoryObjectContextMenu = rebuiltInventoryEvent
+check("event collection rebuild invalidates the old lease immediately", not probe.ownerPhaseHandlerLease())
+Events.OnFillInventoryObjectContextMenu = savedInventoryEvent
+
 dofile("dev/t10-cooperative-inspect/common/media/lua/client/ConspiracyFilesT10Probe.lua")
 local reloadedProbe = ConspiracyFiles.T10Probe
 check("duplicate script reload replaces only prior T10 identities",
@@ -238,4 +270,4 @@ if failures > 0 then
     error(tostring(failures) .. " static T10 probe checks failed")
 end
 
-print("PASS summary: 28 static T10 probe checks")
+print("PASS summary: 35 static T10 probe checks")

@@ -14,6 +14,7 @@ local ownerHold, ownerHoldTicks = false, 0
 local ownerReadySequence, ownerReadyAtMs = nil, nil
 local ownerPhaseReadySequence, ownerPhaseReadyAtMs = nil, nil
 local ownerReleasePollTicks, ownerReleaseReadErrorEmitted = 0, false
+local ownerLeaseWaitEmitted = false
 local ownerSetupWaiting = false
 local ownerSetupTicks = 0
 local eventSequence = 0
@@ -288,13 +289,15 @@ local function onTick()
         end
     elseif active and ownerHold then
         ownerHoldTicks = ownerHoldTicks + 1
-        local areaSafe = ConspiracyFiles and ConspiracyFiles.T10Probe and ConspiracyFiles.T10Probe.ownerPhaseSafety and ConspiracyFiles.T10Probe.ownerPhaseSafety()
+        local t10 = ConspiracyFiles and ConspiracyFiles.T10Probe
+        local areaSafe = t10 and t10.ownerPhaseSafety and t10.ownerPhaseSafety()
         if not areaSafe then
             ownerHold = false; active = false
             event("OWNER_SETUP_FAILED", { "status=FAIL", "reason=unsafe-area-or-safety-observation" })
             getCore():quitToDesktop()
             return
         end
+        local handlerLeaseFresh = t10 and t10.ownerPhaseHandlerLease and t10.ownerPhaseHandlerLease()
         ownerReleasePollTicks = ownerReleasePollTicks + 1
         local released = false
         if ownerReleasePollTicks % 15 == 1 and Profile.ownerPhase.releasePath and Profile.ownerPhase.releasePath ~= "" and getFileReader then
@@ -317,11 +320,16 @@ local function onTick()
                 end
             end
         end
-        if released then
+        if released and handlerLeaseFresh then
             ownerHold = false
             event("OWNER_PHASE_RELEASED", { "status=PASS", "nonce=" .. safe(Profile.ownerPhase.nonce), "readySequence=" .. safe(ownerPhaseReadySequence), "readyAtMs=" .. safe(ownerPhaseReadyAtMs) })
             siteIndex, current, tick = 1, Profile.sites[1], 0
             logSiteDefinition(current); teleport(current)
+        elseif released and not handlerLeaseFresh then
+            if not ownerLeaseWaitEmitted then
+                ownerLeaseWaitEmitted = true
+                event("OWNER_RELEASE_WAITING", { "status=HOLD", "reason=handler-lease-not-fresh" })
+            end
         elseif ownerHoldTicks >= (Profile.ownerPhase.timeoutSeconds or 7200) * 60 then
             ownerHold = false; active = false
             fail("owner-phase-timeout", "explicit owner release was not acknowledged")

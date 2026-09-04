@@ -20,7 +20,8 @@ local tickCount = 0
 local cases = {}
 local domain = { inspectCalls = 0, markCalls = 0, faultLogs = 0 }
 local ownerReadiness = false
-local registration = { verified = false, generation = 0, error = nil }
+local registration = { verified = false, generation = 0, error = nil, inventoryEvent = nil, worldEvent = nil, tickAt = nil }
+local lease = { inventoryAt = nil, companionAt = nil, worldAt = nil, generation = 0 }
 
 local function safe(value)
     if value == nil then return "<nil>" end
@@ -260,8 +261,18 @@ local function addSubjectActions(playerNum, context, subjects, source, test)
     return inspectAdded or markAdded
 end
 
+local function noteHandlerHeartbeat(field)
+    if not getTimestampMs then return end
+    local ok, now = pcall(getTimestampMs)
+    if ok and type(now) == "number" then
+        lease[field] = now
+        lease.generation = registration.generation
+    end
+end
+
 local function inventoryHandler(playerNum, context, items)
     if not active then return end
+    noteHandlerHeartbeat("inventoryAt")
     safely("inventory-menu", function()
         addSubjectActions(playerNum, context, normalizeInventorySubjects(items), "inventory", false)
     end)
@@ -269,6 +280,7 @@ end
 
 local function worldHandler(playerNum, context, worldobjects, test)
     if not active then return end
+    noteHandlerHeartbeat("worldAt")
     safely("world-menu", function()
         addSubjectActions(playerNum, context, normalizeWorldSubjects(worldobjects), "world", test == true)
     end)
@@ -276,6 +288,7 @@ end
 
 local function companionHandler(_, context, items)
     if not active or #normalizeInventorySubjects(items) == 0 then return end
+    noteHandlerHeartbeat("companionAt")
     if not optionByKey(context, COMPANION_KEY) then
         local option = context:addOption("T10 Companion Action", nil, function() logEvent("COMPANION_ACTIVATED") end)
         if option then option.cfT10ActionKey = COMPANION_KEY end
@@ -290,6 +303,15 @@ end
 
 local function eventCall(event, method, callback)
     return pcall(function() return event[method](callback) end)
+end
+
+local function knownMembership(event, callback)
+    -- The checked-in Lua fake exposes callbacks solely to test loss/rebuild.
+    -- Build 42 does not expose this field, so production falls back to the
+    -- invocation lease below instead of relying on unsupported introspection.
+    if type(event.callbacks) ~= "table" then return nil end
+    for _, current in ipairs(event.callbacks) do if current == callback then return true end end
+    return false
 end
 
 local function registerHandlers()
@@ -329,6 +351,8 @@ local function registerHandlers()
     registration.verified = true
     registration.error = nil
     registration.generation = registration.generation + 1
+    registration.inventoryEvent, registration.worldEvent = inventoryEvent, worldEvent
+    lease.inventoryAt, lease.companionAt, lease.worldAt, lease.generation = nil, nil, nil, registration.generation
     logEvent("REGISTER", {"mode=identity-remove-then-add", "generation="..tostring(registration.generation), "verified=engine-call"})
     return true
 end
@@ -389,7 +413,6 @@ local function ownerSetupContract(manifest, safe, handlersRegistered)
 end
 
 local function ownerPhaseSafety()
-    if registration.verified ~= true then return false end
     local player = getSpecificPlayer and getSpecificPlayer(0) or (getPlayer and getPlayer())
     local square = player and player.getCurrentSquare and player:getCurrentSquare()
     if not square or not square.getMovingObjects then return false end
@@ -397,6 +420,22 @@ local function ownerPhaseSafety()
     if not ok or not moving then return false end
     for i=0,moving:size()-1 do if classIs(moving:get(i), "IsoZombie") then return false end end
     return true
+end
+
+local function handlerLeaseFresh()
+    if registration.verified ~= true or lease.generation ~= registration.generation or not getTimestampMs then return false end
+    local inventoryEvent = eventSurface("OnFillInventoryObjectContextMenu")
+    local worldEvent = eventSurface("OnFillWorldObjectContextMenu")
+    if inventoryEvent ~= registration.inventoryEvent or worldEvent ~= registration.worldEvent then return false end
+    if knownMembership(inventoryEvent, T10.inventoryHandler) == false or knownMembership(inventoryEvent, T10.companionHandler) == false or knownMembership(worldEvent, T10.worldHandler) == false then return false end
+    local ok, now = pcall(getTimestampMs)
+    if not ok or type(now) ~= "number" then return false end
+    local maxAgeMs = 1500
+    return type(registration.tickAt) == "number" and now - registration.tickAt >= 0 and now - registration.tickAt <= maxAgeMs
+        and type(lease.inventoryAt) == "number" and type(lease.companionAt) == "number" and type(lease.worldAt) == "number"
+        and now - lease.inventoryAt >= 0 and now - lease.inventoryAt <= maxAgeMs
+        and now - lease.companionAt >= 0 and now - lease.companionAt <= maxAgeMs
+        and now - lease.worldAt >= 0 and now - lease.worldAt <= maxAgeMs
 end
 
 local function findWorldCase(id)
@@ -555,10 +594,14 @@ end
 local function onTick()
     if not active then return end
     tickCount = tickCount + 1
+    if getTimestampMs then
+        local ok, now = pcall(getTimestampMs)
+        if ok and type(now) == "number" then registration.tickAt = now end
+    end
     -- Event collections are engine-owned and may be rebuilt during reload.
     -- Reassert our exact identities periodically; this remains additive and
     -- preserves unrelated listeners.
-    if tickCount % 60 == 0 then registerHandlers() end
+    if tickCount % 60 == 0 and not handlerLeaseFresh() then registerHandlers() end
     if scheduled and tickCount >= 180 then
         local fn = scheduled
         scheduled = nil
@@ -574,6 +617,7 @@ T10.registerHandlers = registerHandlers
 T10.registrationStatus = function()
     return registration.verified == true and registration.generation > 0
 end
+T10.ownerPhaseHandlerLease = handlerLeaseFresh
 T10.staticTest = {
     setActive = function(value) active = value == true end,
     inventoryHandler = inventoryHandler,

@@ -70,7 +70,7 @@ class OwnerPhaseLifecycleTests(unittest.TestCase):
 
     def test_actual_lua_probe_replay_drives_hold_release_and_timeout(self):
         replay = ROOT / "test" / "owner_phase_probe_replay.lua"
-        for mode in ("hold", "release", "timeout", "malformed", "foreign", "stale", "duplicate", "pre-ready", "partial", "restart", "future", "missing-error", "read-error"):
+        for mode in ("hold", "release", "lease-stale", "timeout", "malformed", "foreign", "stale", "duplicate", "pre-ready", "partial", "restart", "future", "missing-error", "read-error"):
             result = subprocess.run(["lua5.1", str(replay), mode], cwd=ROOT, capture_output=True, text=True)
             self.assertEqual(result.returncode, 0, mode + ": " + result.stderr)
             self.assertIn("ASSERT", result.stdout)
