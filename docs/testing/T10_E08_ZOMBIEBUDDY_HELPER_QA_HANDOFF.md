@@ -14,6 +14,9 @@ performed or accepted
   `02947f3b32fa86f1971ac8b1f9fb15b7a13d2d9a7f1cffc0e814f8a7f3013357`.
 - Helper artifact: `dev/t10-zombiebuddy-helper/artifacts/zombiebuddy-helper-v1.py`,
   SHA-256 `2ae0dba1a79c1972d193efad119b05515a3364316b46fcb6ba3f5ede3f082963`.
+  Its required adjacent sources are `contract.py`
+  (`940e95a9d5c66aa1cbf0c1e5e0a3a732897e3e1010cea6541e244a86f6600030`) and
+  `helper.py` (`b56c8815efba1a303c35ba3a732ab8169ccae3d2468aa982486563607a21600d`).
 
 ## What QA must verify independently
 

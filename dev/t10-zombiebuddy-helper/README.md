@@ -49,11 +49,13 @@ live run remain required.
 
 ## Operator-only activation (not performed by engineering)
 
-After independent QA, the live operator may copy the exact
-`artifacts/zombiebuddy-helper-v1.py` source into the already-installed
-ZombieBuddy extension location, verify SHA-256
-`2ae0dba1a79c1972d193efad119b05515a3364316b46fcb6ba3f5ede3f082963`, and
-configure only the contract in
+After independent QA, the live operator may copy the exact three-file source
+bundle (`contract.py`, `helper.py`, and
+`artifacts/zombiebuddy-helper-v1.py`) into the already-installed ZombieBuddy
+extension location. Verify, respectively, SHA-256
+`940e95a9d5c66aa1cbf0c1e5e0a3a732897e3e1010cea6541e244a86f6600030`,
+`b56c8815efba1a303c35ba3a732ab8169ccae3d2468aa982486563607a21600d`, and
+`2ae0dba1a79c1972d193efad119b05515a3364316b46fcb6ba3f5ede3f082963`, then configure only the contract in
 `profiles/t10-e08-zombiebuddy-contract.toml`. Bind the launcher-owned Build
 42.20.4 process/window/display, a newly created
 `T10_cooperative_inspect_*` save, and exact probe/payload checksums before

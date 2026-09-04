@@ -24,7 +24,9 @@ contract; it does not install, download, activate or configure ZombieBuddy.
 The checked-in source artifact is pinned by profile SHA-256
 `2ae0dba1a79c1972d193efad119b05515a3364316b46fcb6ba3f5ede3f082963`; an
 operator may activate it only after independent QA and the separately reviewed
-live procedure.
+live procedure. The adjacent source modules are pinned too: `contract.py`
+`940e95a9d5c66aa1cbf0c1e5e0a3a732897e3e1010cea6541e244a86f6600030` and
+`helper.py` `b56c8815efba1a303c35ba3a732ab8169ccae3d2468aa982486563607a21600d`.
 
 Admission is fail-closed before every bounded action. The helper must prove its
 exact SHA-256/version plus one owned launcher process PID/start/executable
