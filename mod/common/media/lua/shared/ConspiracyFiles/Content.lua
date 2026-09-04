@@ -1,10 +1,11 @@
-local Ids = require("ConspiracyFiles.Ids")
+local Ids = require("ConspiracyFiles/Ids")
 
 local Content = {}
 
 local THREAD_ID = "dead-air:thread"
 local RELAY = "dead-air:location:relay-office"
 local POLICE = "dead-air:location:police-property"
+local MOTEL = "dead-air:location:rourke-motel"
 local ROURKE = "dead-air:identity:m-rourke"
 local PIKE = "dead-air:identity:dana-pike"
 local VALE = "dead-air:identity:h-vale"
@@ -19,7 +20,7 @@ local D6 = "dead-air:asset:pike-shift-note-0705"
 local KEY = "dead-air:asset:key-b37"
 
 Content.ids = {
-    thread = THREAD_ID, relay = RELAY, police = POLICE,
+    thread = THREAD_ID, relay = RELAY, police = POLICE, motel = MOTEL,
     d1 = D1, d2 = D2, d3 = D3, d4 = D4, d5 = D5, d6 = D6, key = KEY,
     rourke = ROURKE, pike = PIKE, vale = VALE, css = CSS
 }
@@ -32,7 +33,7 @@ Content.thread = {
     optionalAssetIds = { KEY },
     identityIds = { ROURKE, PIKE, VALE },
     organisationId = CSS,
-    locationIds = { RELAY, POLICE },
+    locationIds = { RELAY, POLICE, MOTEL },
     anchorAssetId = D1,
     fallbackAssetId = D2
 }
@@ -64,6 +65,12 @@ Content.locations = {
         preArrivalLabel = "police property desk",
         confirmedLabel = "police property / records area",
         storyRequirement = "hand-curated vanilla police station with plausible property/records context"
+    },
+    [MOTEL] = {
+        locationId = MOTEL,
+        preArrivalLabel = "Rourke's motel room",
+        confirmedLabel = "Rourke's motel room",
+        storyRequirement = "reachable motel room at the owner-confirmed coordinate"
     }
 }
 
@@ -226,7 +233,7 @@ APPROVED: H. VALE]]
     },
     [D4] = {
         assetId = D4, threadId = THREAD_ID, displayName = "Torn Page from Rourke's Work Notebook",
-        assetKind = "document", placementLocationId = RELAY,
+        assetKind = "document", placementLocationId = MOTEL,
         references = { ROURKE, PIKE, VALE, CSS, RELAY }, autoRecordEvidence = true,
         journalText = "Rourke kept a private account. He says he was told to make 7C live, then told the test never happened.",
         bodyText = [[7/3
@@ -374,11 +381,11 @@ end
 function Content.validate()
     if not Ids.isAuthored(Content.thread.threadId) then return false, "invalid Thread ID" end
     if #Content.thread.documentAssetIds ~= 6 or #Content.thread.optionalAssetIds ~= 1
-        or #Content.thread.identityIds ~= 3 or #Content.thread.locationIds ~= 2 then
+        or #Content.thread.identityIds ~= 3 or #Content.thread.locationIds ~= 3 then
         return false, "Dead Air inventory counts do not match the accepted model"
     end
     if registryCount(Content.assets) ~= 7 or registryCount(Content.identities) ~= 3
-        or registryCount(Content.organisations) ~= 1 or registryCount(Content.locations) ~= 2 then
+        or registryCount(Content.organisations) ~= 1 or registryCount(Content.locations) ~= 3 then
         return false, "Dead Air registry counts do not match the accepted model"
     end
     local ok, message = checkUniqueIds(Content.thread.documentAssetIds, Content.assets, "documentAssetIds")

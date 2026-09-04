@@ -377,3 +377,34 @@ test("CF-V01-P25 complete suite loads with PZ globals absent", function()
     assertEqual(nil, _G.getWorld)
     assertTrue(type(CF.ThreadState.new) == "function")
 end)
+
+test("notebook projection is discovery-ordered and knowledge-bounded", function()
+    local state = newState()
+    discover(state, ids.d6)
+    discover(state, ids.d3)
+    assertChanged(state.markInteresting("notebook-key", {
+        assetId = ids.key,
+        contextText = "A red-tagged key I did not understand",
+        foundLocationId = ids.police
+    }))
+    discover(state, ids.d5)
+
+    local rows = CF.NotebookProjection.evidence(state)
+    assertEqual(4, #rows)
+    assertEqual(Content.assets[ids.d6].displayName, rows[1].title)
+    assertEqual(Content.assets[ids.d3].displayName, rows[2].title)
+    assertEqual("Marked object", rows[3].typeLabel)
+    assertEqual("Marked interesting", rows[3].statusLabel)
+    assertTrue(string.find(rows[3].bodyText, "remains recorded", 1, true) ~= nil)
+    assertTrue(string.find(rows[3].detailText, "Pike's shift note", 1, true) ~= nil)
+    assertTrue(string.find(rows[4].detailText, "Unresolved contradiction", 1, true) ~= nil)
+    assertEqual("police property desk", rows[3].locationLabel)
+
+    local leadState = newState()
+    discover(leadState, ids.d1)
+    local before = CF.NotebookProjection.evidence(leadState)
+    assertEqual(1, #before[1].leads)
+    assertChanged(leadState.confirmLocation(ids.police))
+    local after = CF.NotebookProjection.evidence(leadState)
+    assertEqual(0, #after[1].leads)
+end)

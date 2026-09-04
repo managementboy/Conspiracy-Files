@@ -1,7 +1,7 @@
-local Content = require("ConspiracyFiles.Content")
-local Ids = require("ConspiracyFiles.Ids")
-local Renderer = require("ConspiracyFiles.Renderer")
-local Validator = require("ConspiracyFiles.Validator")
+local Content = require("ConspiracyFiles/Content")
+local Ids = require("ConspiracyFiles/Ids")
+local Renderer = require("ConspiracyFiles/Renderer")
+local Validator = require("ConspiracyFiles/Validator")
 
 local ThreadState = {}
 
