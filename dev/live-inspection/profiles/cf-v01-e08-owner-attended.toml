@@ -1,6 +1,6 @@
 [run]
-profile_id = "cf-v01-e08-owner-attended"
-probe_id = "owner-attended-inspect"
+profile_id = "cf-v01-e08-owner-attended-historical"
+probe_id = "owner-attended-inspect-historical"
 
 [paths]
 source_save = "/home/yogax380/Zomboid/Saves/Sandbox/2026-09-01_13-58-50"
@@ -20,6 +20,8 @@ enabled = true
 timeout_seconds = 7200
 
 [acceptance]
+# Historical manual profile retained as evidence. ADR-0006's helper contract is
+# separate and this reusable startup-only harness must continue to refuse it.
 criteria = ["T10", "CF-V01-E08"]
 interaction_scope = ["owner-attended-context-menu-and-gameplay"]
 

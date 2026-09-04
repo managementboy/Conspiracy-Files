@@ -76,4 +76,7 @@ presentation, production-shell and E10 handoffs.
 The next live-validation task should use this candidate repository at the exact
 integration commit supplied with the external handoff. Start with the combined
 E02–E08/E10/E14 matrices, rerun E09/E11/E12/E13 against the integrated runtime,
-and preserve the P4-R44 manual-only rule for T10-style GUI work.
+and preserve P4-R45's inventory-pane/handler constraints. ADR-0006 permits
+only its separately QAed, checksum-pinned Build 42.20.4 disposable-fixture
+helper contract for T10/E08; it is not a general live-run authority and does
+not make a helper result acceptance.

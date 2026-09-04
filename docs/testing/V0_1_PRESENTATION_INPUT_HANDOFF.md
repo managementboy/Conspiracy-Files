@@ -180,9 +180,13 @@ world action hook. These are fake-backed/static results, not live engine facts.
    titles/bodies, diagnostics, graph/theory controls and completion language.
 5. Save/reload and repeat the partial/complete projections.
 
-P4-R44 still governs any live T10-style rerun: owner-driven manual GUI input and
-pure-Lua logging only. Do not restore or replace the prohibited injected-helper
-route, and do not use synthetic input.
+The historical P4-R44 manual result still governs this handoff's evidence. ADR-0006
+now permits only a separately QAed, checksum-pinned ZombieBuddy helper for the
+exact Build 42.20.4 disposable T10/E08 fixture contract. It must preserve
+vanilla/foreign handlers, record sanitized raw evidence and fail closed on every
+identity/provenance/focus/cleanup defect; it has no direct-world, normal-gameplay
+or arbitrary-input authority. Do not restore or replace the prohibited
+injected-helper route.
 
 ## Deliberate exclusions
 

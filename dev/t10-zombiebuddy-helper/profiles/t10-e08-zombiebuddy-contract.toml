@@ -1,0 +1,10 @@
+# Contract declaration, not a runnable ZombieBuddy configuration.
+# A separately reviewed adapter must supply current owned identities and the
+# exact installed helper SHA-256 at runtime; no fallback/default is allowed.
+[contract]
+scenario = "t10-e08-disposable-fixture-v1"
+supported_game_version = "42.20.4"
+provider = "ZombieBuddy"
+max_actions = 96
+allowed_panes = ["player-inventory", "ground-inventory"]
+allowed_actions = ["open-inventory-context-menu", "activate-inspect", "activate-mark-interesting", "dismiss-inspect-reader", "reload-disposable-save"]

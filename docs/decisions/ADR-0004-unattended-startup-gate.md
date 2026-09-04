@@ -5,7 +5,7 @@
 
 ## Context
 
-The development laptop may be physically unattended while a non-T10 live matrix runs. Project Zomboid's ordinary click-to-start gate can halt an otherwise bounded disposable run. P4-R44 separately requires human-driven GUI interaction for T10 and every CF-V01-E08 context-menu acceptance rerun.
+The development laptop may be physically unattended while a non-T10 live matrix runs. Project Zomboid's ordinary click-to-start gate can halt an otherwise bounded disposable run. ADR-0006 separately defines the only possible T10/E08 helper path; it is not this harness and does not enlarge this ADR's authority.
 
 ## Decision
 
@@ -19,7 +19,7 @@ The reusable hardware-rendered live-inspection harness may emit one XTEST left c
 
 The command and ownership facts are written as structured evidence, but delivery remains pending until a fresh run-scoped observer `PLAYER_READY` line occurs after the click. Command success without that transition is explicitly `NOT_CONFIRMED`. Any ambiguity, stale log/screenshot, focus/window/geometry drift, missing Xlib/XTEST/Pillow capability or second request fails closed. No right-click, context menu, inventory/menu action, gameplay action or acceptance interaction is implemented.
 
-An unattended profile always records T10 and CF-V01-E08 as `NOT RUN`. If it requests either criterion or any prohibited interaction scope, the run is refused before save, mod or control mutation. P4-R44 is unchanged.
+An unattended profile always records T10 and CF-V01-E08 as `NOT RUN`. If it requests either criterion or any prohibited interaction scope, the run is refused before save, mod or control mutation. This reusable harness remains unchanged by ADR-0006.
 
 Production-observation profiles may additionally install either a checksum-pinned ZIP or a checksum-pinned directory from a clean Git worktree. The harness verifies one Build 42 mod root and the expected mod ID, records checksum and source commit when applicable, activates exactly that payload plus the read-only observer, and archives/removes both during normal, error, signal or journal recovery cleanup.
 

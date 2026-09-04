@@ -25,6 +25,7 @@ Before making any design or code change:
 - Full hidden-state diagnostics are debug/development only.
 - Outside initialization, target ≤2 ms/frame and use bounded queued work rather than unbounded loops.
 - Completed T1 makes ≤500 KB/save the hard v0.1 canonical-state budget under P4-R17, with mandatory staged recursive validation before canonical ModData replacement under P4-R32.
+- P4-R44/ADR-0006 permits a ZombieBuddy-based helper only through the separately auditable `dev/t10-zombiebuddy-helper/` Build 42.20.4 T10/E08 fixture contract. Do not install/configure it or broaden it: it is never production payload, normal-play automation, direct-world support, hidden-truth access, arbitrary input, injection, or authority to alter PZ, saves, controls, security or power.
 
 ## Decision integrity
 

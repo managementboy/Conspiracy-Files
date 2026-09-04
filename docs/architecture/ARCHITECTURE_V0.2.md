@@ -228,10 +228,14 @@ a changed carrier: removal, partial mutation, coherent pair substitution,
 compatible-older downgrade, presentation/mirror mutation and ownership change
 all make the callback a zero-effect no-op.
 
-P4-R44 remains the mandatory procedure for any T10 rerun: manual owner input and
-a pure-Lua logging probe only. The injected-helper route remains abandoned and
+ADR-0006 supersedes only P4-R44's former T10/E08 manual-only clause with one
+separate, checksum-pinned ZombieBuddy helper contract for the exact Build
+42.20.4 disposable fixture matrix. The adapter must revalidate owned
+process/window/display/save/payload identities before every bounded action and
+fail closed. It has no direct-world, hidden-truth, arbitrary-input or
+normal-gameplay authority. The injected-helper route remains abandoned and
 prohibited; do not restore quarantined components, change security settings, add
-exclusions/bypasses or attempt alternate injection/synthetic input.
+exclusions/bypasses or attempt alternate injection.
 
 ## 13. AI boundary
 

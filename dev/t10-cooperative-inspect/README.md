@@ -2,12 +2,14 @@
 
 Disposable Project Zomboid Build 42 code for GitHub Issue #10. This is an auditable spike, not production Conspiracy-Files code.
 
-This directory contains only the approved pure-Lua/manual-GUI probe, its static
-test, and evidence. The earlier injected-helper route was abandoned after a
-security alert whose `runner.exe` provenance remains unknown. That route and
+This directory contains the historical approved pure-Lua/manual-GUI probe, its
+static test, and evidence. The earlier injected-helper route was abandoned after
+a security alert whose `runner.exe` provenance remains unknown. That route and
 its helper/auto-continue artifacts are prohibited: do not restore, rebuild,
 copy, or run them; do not alter security controls or attempt alternate
-injection. See `evidence/SECURITY_STOP.md` for the factual incident record.
+injection. ADR-0006 permits only the separately bounded and currently unrun
+`../t10-zombiebuddy-helper/` contract, never this historical route. See
+`evidence/SECURITY_STOP.md` for the factual incident record.
 
 The probe activates only when it is the sole enabled mod and the current disposable Sandbox save begins `T10_cooperative_inspect`.
 
@@ -66,8 +68,11 @@ input in Project Zomboid:
    if a controller is already connected and the path is straightforward;
    otherwise record it as an explicit limitation.
 
-Do not use F-keys, console commands, macros, synthetic input, computer control,
-or any external helper. Stop immediately if any security alert appears.
+The historical manual matrix used no F-keys, console commands, macros,
+synthetic input, computer control or external helper. A future run may instead
+use only ADR-0006's separately reviewed, checksum-pinned contract; it must not
+reuse this section as broad automation authority. Stop immediately on any
+identity, provenance, focus, process, cleanup or security failure.
 
 ## Completed result
 

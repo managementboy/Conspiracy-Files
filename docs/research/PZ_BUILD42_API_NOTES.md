@@ -126,7 +126,7 @@ Complete on stable 42.20.4 with explicit reload/reference limitations. Scripted 
 
 ### T10 — Cooperative Inspect context-menu integration
 
-Complete on stable 42.20.4 through the P4-R44 manual-GUI route. Repeated player
+Complete on stable 42.20.4 through the historical P4-R44 manual-GUI route. Repeated player
 inventory menus preserved vanilla actions and a second additive listener while
 adding exactly one privately keyed Inspect and Mark action. Inspect activated
 once; Mark emitted one intent/evidence marker and remained disabled after a real
@@ -137,6 +137,9 @@ The Ground/loot inventory pane is the supported dropped-item surface. Direct
 right-click on the dropped photo fired `OnFillWorldObjectContextMenu` with zero
 inventory subjects, so production must not depend on a direct-world Inspect
 action. Controller activation was unavailable; installed-source/static
-preflight is the limit. See `T10_COOPERATIVE_INSPECT.md`.
+preflight is the limit. ADR-0006 adds only an unrun, checksum-pinned offline
+ZombieBuddy contract for the exact Build 42.20.4 disposable T10/E08 fixture; it
+does not alter these observed facts or create acceptance. See
+`T10_COOPERATIVE_INSPECT.md`.
 
 Use `SPIKE_TEMPLATE.md` for every result.

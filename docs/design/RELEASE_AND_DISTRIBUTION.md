@@ -43,7 +43,11 @@ Before promotion, automation runs:
 8. require independent offline QA on the exact candidate commit; any later production-code change invalidates that QA;
 9. require a separate clean-device smoke before Workshop beta; this is not an offline pipeline claim.
 
-Development artifacts may be disposable. A retained prerelease or release must
+Development artifacts may be disposable. Helper contracts, helper binaries and
+helper evidence remain development-only and are never package contents. Any
+retained helper-assisted test record must retain its helper/provider checksum,
+bounded-action and sanitized-evidence provenance under PM-GOV-001; it cannot
+promote a payload without its named live matrix. A retained prerelease or release must
 remain traceable from its owning decision/acceptance criterion through the exact
 source commit and offline/live evidence to its checksum. Offline evidence never
 substitutes for a required live matrix.

@@ -759,7 +759,7 @@ No choice above decides native reader vs ModData-backed text vs custom reader UI
 - **T5:** use the accepted mod-owned per-instance token with separate availability/conflict state and P4-R37 reconciliation; engine IDs remain diagnostic, incomplete coverage cannot prove loss, and copied-token duplication is sticky `conflict`.
 - **T7:** use a persistent custom item name plus validated plain ModData title/description/body, with the custom T10 `Inspect` reader as the world-specific presentation boundary; optional locked Literature pages are limited projections only.
 - **T8:** use P4-R39's bounded/debounced sampling and exact binding predicates; delayed-reference ordering and reload-inside remain production-adapter acceptance cases rather than completed probe claims.
-- **T10:** cooperative Inspect/context-menu behavior remains open and may resume only as a P4-R44 manual-GUI session; the probe logs menu callbacks/assertions while the project owner manually enters the disposable save and performs the requested right-clicks.
+- **T10:** cooperative Inspect/context-menu behavior remains open for production-adapter acceptance. The historical P4-R44 manual-GUI session remains valid evidence; ADR-0006 additionally permits only its separately QAed, checksum-pinned Build 42.20.4 disposable-fixture helper contract. Neither path supports direct-world interaction or general gameplay automation.
 
 # Self-review
 

@@ -41,6 +41,7 @@ Goal: prove the intended feeling once, with the smallest end-to-end build.
 - [x] Notebook journal, evidence list, localized static chrome, in-fiction help and the one normal-play notebook keybind implemented and tested offline; live acceptance pending.
 - [x] Supported death/reload checkpoint and state-integrity behavior implemented and tested offline (CF-V01-E10); live acceptance pending.
 - [x] Schema-2 exact journal replay, active Asset/token-pair gateway, legacy-carrier quarantine and fail-closed range gate implemented with offline adversarial regressions.
+- [x] ADR-0006's separately auditable Build 42.20.4 T10/E08 ZombieBuddy helper contract and offline refusal tests are implemented; no helper is installed/configured/run and no live acceptance is implied.
 - [ ] PM-GOV-001 independent offline QA passes on the exact current candidate commit; any later production-code change requires a new result.
 - [ ] Production shell and complete vertical slice pass their live Build 42 acceptance matrices.
 - [x] Deterministic package pipeline implemented and reproducibility-tested offline.
@@ -60,7 +61,7 @@ A negative result is a valid result and must update the decision record.
 ## Engineering gate B — before broader v1 architecture sign-off
 - [x] T7 asset text/name/page mutation — complete on Build 42.20.4; persistent custom names + ModData are the universal carrier, locked custom pages are a limited plain-text projection, and world-specific bodies use the custom Inspect reader.
 - [x] T8 building/room/non-building arrival detection — complete on Build 42.20.4; scripted teleports emitted no `OnPlayerMove`, while bounded 15-tick sampling with two stable samples correctly handled exact room/building/floor/basement/radius/rectangle/zone predicates, negatives and leave/re-entry. Use sticky idempotent confirmation; reload-inside and delayed-reference ordering remain production-adapter cases.
-- [x] T10 cooperative `Inspect` context-menu integration — complete on Build 42.20.4 through the manual-GUI route. Player and Ground/loot inventory panes preserve vanilla/foreign actions and provide privately keyed, activation-revalidated Inspect/Mark behavior. Direct world-object right-click did not receive dropped inventory subjects and is not supported.
+- [x] T10 cooperative `Inspect` context-menu integration — complete on Build 42.20.4 through the historical manual-GUI route. Player and Ground/loot inventory panes preserve vanilla/foreign actions and provide privately keyed, activation-revalidated Inspect/Mark behavior. Direct world-object right-click did not receive dropped inventory subjects and is not supported. ADR-0006 permits only a future, separately QAed checksum-pinned helper against the fixed disposable T10/E08 matrix.
 - [x] CF-V01-E01 Dead Air location bindings — complete on Build 42.20.4. P2 is the police property/records building and R2 is the relay communications/news building; all six document containers, exact whole-building arrival references, access objects and `1533.884`-tile separation are recorded in `docs/research/CF_V01_E01_DEAD_AIR_LOCATION_BINDINGS.md`.
 - T6 never-loaded chunk detection only if retrofit is revived.
 

@@ -21,7 +21,7 @@ XTEST completion is recorded as `PENDING_TRANSITION`, never successful delivery.
 
 `PLAYER_READY` now has one strict structured contract: exact run ID, disposable save, observer ID, random session ID, source timestamp/sequence, payload mode/ID/checksum, exact validated active-mod list/count and game version. Missing, malformed, duplicated, foreign, stale or conflicting fields fail closed. After correlation and immediately before recording success, the runner revalidates the original launcher/window PID start identities, process group, XID/title/origin, exact 960x1008 geometry, active window, X11 focus and `DISPLAY`. Only a stable tuple changes the atomically written evidence to `CONFIRMED`; every rejection, timeout or process exit becomes `NOT_CONFIRMED` without an intermediate pass.
 
-P4-R44 is unchanged. Every unattended bundle records T10 and CF-V01-E08 as `NOT RUN`. A profile requesting T10/E08, context-menu, inventory/menu, right-click, gameplay or acceptance interaction is refused before save, mod or control mutation. No right-click or other gameplay input implementation exists.
+This harness's T10/E08 refusal is unchanged. Every unattended bundle records T10 and CF-V01-E08 as `NOT RUN`. A profile requesting T10/E08, context-menu, inventory/menu, right-click, gameplay or acceptance interaction is refused before save, mod or control mutation. ADR-0006's separate helper contract does not run through this harness or grant it right-click/gameplay input authority.
 
 Production mode accepts an exact clean candidate:
 

@@ -17,7 +17,7 @@ An integrity-sensitive candidate is promotable only when all of the following ev
 
 ## Required record
 
-The handoff for a candidate records repository, branch, base, exact commit, commit range, commands, raw artifact paths/checksums where artifacts exist, failures and limitations. It distinguishes historical mechanism evidence from current production-invariant evidence and states whether any live runtime was launched.
+The handoff for a candidate records repository, branch, base, exact commit, commit range, commands, raw artifact paths/checksums where artifacts exist, failures and limitations. A helper-assisted candidate additionally records helper provider/version/SHA-256, bounded action ledger, bound process/window/display/save/payload identities, raw-event SHA-256 and sanitized raw event evidence. It distinguishes historical mechanism evidence from current production-invariant evidence and states whether any live runtime was launched.
 
 ## Promotion boundary
 

@@ -125,7 +125,7 @@ implementation and its own full integration acceptance remain future work.
   a recorded presentation limitation.
 - **P4-R38 / P2-Q152-Q159:** T7 authoritative ModData bodies now have a proven
   cooperative Inspect action surface.
-- **P4-R44:** manual-only security procedure completed without alert or bypass.
+- **P4-R44:** the historical manual-only security procedure completed without alert or bypass. ADR-0006 now permits only an unrun, checksum-pinned Build 42.20.4 disposable-fixture ZombieBuddy contract; it neither changes these observed results nor claims E08 acceptance.
 - **P4-R45:** inventory-pane-only context-menu boundary established by T10.
 - **CF-V01-E08:** complete for the supported surface.
 - **Engineering Gate B:** complete.
