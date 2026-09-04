@@ -911,7 +911,10 @@ class LiveRun:
             ready_at_ms = int(ready_data["emitted_at_ms"])
         except (OSError, ValueError, KeyError, TypeError, json.JSONDecodeError) as exc:
             raise HarnessError("owner release refused: OWNER_PHASE_READY evidence is malformed") from exc
-        released_at_ms = int(time.monotonic() * 1000)
+        # Build 42 getTimestampMs() is Unix-epoch milliseconds in the live
+        # evidence. Use the same clock domain; monotonic milliseconds would
+        # compare as a release before OWNER_PHASE_READY.
+        released_at_ms = int(time.time() * 1000)
         line = "CF_OWNER_RELEASE|version=1|status=RELEASED|gate=" + gate_name + "|run_id=" + self.readiness_identity.run_id + "|observer_id=" + self.readiness_identity.observer_id + "|session_id=" + self.readiness_identity.session_id + "|nonce=" + self.owner_phase_nonce + "|ready_sequence=" + str(ready_sequence) + "|ready_at_ms=" + str(ready_at_ms) + "|released_at_ms=" + str(released_at_ms) + "\n"
         path = self.bundle / "owner-release"
         staging = path.with_name(".owner-release.staging")

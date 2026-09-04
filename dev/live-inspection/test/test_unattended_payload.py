@@ -909,12 +909,14 @@ class ProductionPayloadTests(unittest.TestCase):
                 "observer_id": run.readiness_identity.observer_id,
                 "session_id": run.readiness_identity.session_id,
             }), encoding="utf-8")
-            run._write_owner_release("player-ready-modal-check")
+            with mock.patch("live_inspection.cli.time.time", return_value=102.0):
+                run._write_owner_release("player-ready-modal-check")
             release = run.bundle.joinpath("owner-release")
             text = release.read_text(encoding="utf-8")
             self.assertTrue(text.startswith("CF_OWNER_RELEASE|version=1|status=RELEASED|"))
             self.assertIn("run_id=" + run.readiness_identity.run_id, text)
             self.assertIn("nonce=" + run.owner_phase_nonce, text)
+            self.assertIn("released_at_ms=102000", text)
             self.assertFalse(run.bundle.joinpath(".owner-release.staging").exists())
 
     def test_actual_owner_prompt_refuses_no_tty_before_release(self):
