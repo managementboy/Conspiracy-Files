@@ -347,17 +347,42 @@ class LiveRun:
         )
 
     def _launcher_process_identity(self) -> ProcessIdentity | None:
-        if not self.process or self.process.poll() is not None:
+        if not self.process:
             return None
-        try:
-            identity = StartupGateController._read_process_identity(self.process.pid)
-        except HarnessError:
+        if self.process.poll() is None:
+            try:
+                identity = StartupGateController._read_process_identity(self.process.pid)
+            except HarnessError:
+                identity = None
+            if identity is not None and self.launcher_identity is not None:
+                if identity == self.launcher_identity:
+                    return identity
+                if identity.pid == self.launcher_identity.pid:
+                    return None
+                if identity.process_group_id != self.launcher_identity.process_group_id:
+                    return None
+            if identity is not None and identity.process_group_id == self.process.pid:
+                return identity
+        if self.launcher_identity is None:
             return None
-        if identity.process_group_id != self.process.pid:
-            return None
-        if self.launcher_identity is not None and identity != self.launcher_identity:
-            return None
-        return identity
+        # projectzomboid.sh is a wrapper. During a supported in-process
+        # launcher/child transition, retain ownership only for a live PZ
+        # member in the original process group with a fresh /proc identity.
+        for pid, _command in matching_pz_processes(own_pid=os.getpid()):
+            try:
+                candidate = StartupGateController._read_process_identity(pid)
+            except HarnessError:
+                continue
+            if candidate.pid != self.launcher_identity.pid and candidate.process_group_id == self.launcher_identity.process_group_id:
+                return candidate
+        return None
+
+    def _launcher_process_failure_reason(self) -> str:
+        if self.launcher_identity is None:
+            return "owned launcher identity was never established"
+        if self.process is not None and self.process.poll() is not None:
+            return "owned launcher and its process group exited"
+        return "owned launcher identity changed or process group became unverifiable"
 
     def _owned_process_group_members(self, launcher: ProcessIdentity) -> list[ProcessIdentity]:
         members: list[ProcessIdentity] = []
@@ -863,16 +888,16 @@ class LiveRun:
         deadline = time.monotonic() + self.profile.time_budgets.get("manual_prompt_seconds", 7200)
         while time.monotonic() < deadline:
             if not self._launcher_process_identity():
-                raise HarnessError(f"stale-process failure: owned Project Zomboid exited during manual gate {gate_name}")
+                raise HarnessError(f"stale-process failure: {self._launcher_process_failure_reason()} during manual gate {gate_name}")
             ready, _, _ = select.select([sys.stdin], [], [], 1.0)
             if ready:
                 sys.stdin.readline()
                 if not self._launcher_process_identity():
-                    raise HarnessError(f"stale-process failure: owned Project Zomboid exited during manual gate {gate_name}")
+                    raise HarnessError(f"stale-process failure: {self._launcher_process_failure_reason()} during manual gate {gate_name}")
                 if release_owner_phase:
                     self._write_owner_release(gate_name)
                     if not self._launcher_process_identity():
-                        raise HarnessError(f"stale-process failure: owned Project Zomboid exited immediately after release write for {gate_name}")
+                        raise HarnessError(f"stale-process failure: {self._launcher_process_failure_reason()} immediately after release write for {gate_name}")
                 return
         raise HarnessError(f"manual gate {gate_name} timed out after {self.profile.time_budgets.get('manual_prompt_seconds', 7200)} seconds")
 

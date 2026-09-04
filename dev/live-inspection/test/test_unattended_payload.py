@@ -693,6 +693,35 @@ class StartupDeliveryIntegrationTests(unittest.TestCase):
             readiness_identity=run.readiness_identity,
         )
 
+    def test_manual_lifecycle_accepts_verified_same_group_child_transition(self):
+        with tempfile.TemporaryDirectory() as temp:
+            run = self.make_run(Path(temp))
+            run.process = self.Process()
+            original = ProcessIdentity(111, 111, 1000)
+            child = ProcessIdentity(222, 111, 2000)
+            run.launcher_identity = original
+            with mock.patch.object(run.process, "poll", return_value=1), mock.patch(
+                "live_inspection.cli.matching_pz_processes", return_value=[(222, "ProjectZomboid64")]
+            ), mock.patch.object(StartupGateController, "_read_process_identity", return_value=child):
+                self.assertEqual(run._launcher_process_identity(), child)
+
+    def test_manual_lifecycle_rejects_exit_foreign_group_and_pid_reuse(self):
+        with tempfile.TemporaryDirectory() as temp:
+            run = self.make_run(Path(temp))
+            run.process = self.Process()
+            original = ProcessIdentity(111, 111, 1000)
+            run.launcher_identity = original
+            with mock.patch.object(run.process, "poll", return_value=1), mock.patch(
+                "live_inspection.cli.matching_pz_processes", return_value=[]
+            ):
+                self.assertIsNone(run._launcher_process_identity())
+                self.assertIn("exited", run._launcher_process_failure_reason())
+            with mock.patch.object(run.process, "poll", return_value=None), mock.patch.object(
+                StartupGateController, "_read_process_identity", return_value=ProcessIdentity(111, 111, 2000)
+            ):
+                self.assertIsNone(run._launcher_process_identity())
+                self.assertIn("changed", run._launcher_process_failure_reason())
+
     def test_pre_action_cursor_and_sequence_are_persisted_before_input(self):
         with tempfile.TemporaryDirectory() as temp:
             run = self.make_run(Path(temp))
