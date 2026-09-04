@@ -19,6 +19,7 @@ local scheduled = nil
 local tickCount = 0
 local cases = {}
 local domain = { inspectCalls = 0, markCalls = 0, faultLogs = 0 }
+local ownerReadiness = false
 
 local function safe(value)
     if value == nil then return "<nil>" end
@@ -38,7 +39,7 @@ local function saveFolder()
     return tostring(current):match("([^\\/]+)$") or ""
 end
 
-local function isProbeSave() return saveFolder():match("^T10_cooperative_inspect") ~= nil end
+local function isProbeSave() return saveFolder():match("^T10_cooperative_inspect") ~= nil or saveFolder():match("^CF_INSPECT_cf%-v01%-e08%-owner%-attended") ~= nil end
 
 local function activeModStatus()
     local ok, mods = pcall(getActivatedMods)
@@ -333,6 +334,31 @@ local function findInventoryCase(id)
     return nil
 end
 
+local function inventoryCaseCount(id)
+    local items = getPlayer():getInventory():getItems()
+    local count = 0
+    for i=0,items:size()-1 do if isFixtureCase(items:get(i), id) then count = count + 1 end end
+    return count
+end
+
+local function ownerSetupContract(manifest, safe, handlersRegistered)
+    if safe ~= true or handlersRegistered ~= true or type(manifest) ~= "table" then return false end
+    for _, id in ipairs({"revealed-note", "revealed-note-2", "key-b37", "hidden-note", "invalid", "fault"}) do
+        if manifest[id] ~= 1 then return false end
+    end
+    return manifest["unowned-photo"] == 1
+end
+
+local function ownerPhaseSafety()
+    local player = getSpecificPlayer and getSpecificPlayer(0) or (getPlayer and getPlayer())
+    local square = player and player.getCurrentSquare and player:getCurrentSquare()
+    if not square or not square.getMovingObjects then return false end
+    local ok, moving = pcall(function() return square:getMovingObjects() end)
+    if not ok or not moving then return false end
+    for i=0,moving:size()-1 do if classIs(moving:get(i), "IsoZombie") then return false end end
+    return true
+end
+
 local function findWorldCase(id)
     local square = getPlayer():getCurrentSquare()
     local objectsOk, objects = pcall(function() return square and square:getWorldObjects() end)
@@ -347,6 +373,21 @@ local function findWorldCase(id)
         end
     end
     return nil, nil
+end
+
+local function worldCaseCount(id)
+    local square = getPlayer():getCurrentSquare()
+    local ok, objects = pcall(function() return square and square:getWorldObjects() end)
+    if not ok or not objects then return 0 end
+    local count = 0
+    for i=0,objects:size()-1 do
+        local object = objects:get(i)
+        if classIs(object, "IsoWorldInventoryObject") then
+            local itemOk, item = pcall(function() return object:getItem() end)
+            if itemOk and isFixtureCase(item, id) then count = count + 1 end
+        end
+    end
+    return count
 end
 
 local function inventoryCase(itemType, id, revealed, valid, fault)
@@ -410,7 +451,22 @@ local function runCase(name, items, expectedInspect, expectedMark)
 end
 
 local function runMatrix()
+    local player = getSpecificPlayer and getSpecificPlayer(0) or (getPlayer and getPlayer())
+    local square = player and player.getCurrentSquare and player:getCurrentSquare()
+    if not square then logEvent("PROBE_ERROR", {"phase=owner-setup", "reason=player-square-unavailable"}); return end
+    local movingOk, moving = pcall(function() return square:getMovingObjects() end)
+    if not movingOk or not moving then logEvent("PROBE_ERROR", {"phase=owner-setup", "reason=safety-observation-unavailable"}); return end
+    for i=0,moving:size()-1 do if classIs(moving:get(i), "IsoZombie") then logEvent("PROBE_ERROR", {"phase=owner-setup", "reason=nearby-zombie"}); return end end
     createCases()
+    if not (cases.revealed and cases.revealed2 and cases.key and cases.hidden and cases.invalid and cases.fault and cases.unowned and cases.unownedWorld) then
+        logEvent("PROBE_ERROR", {"phase=owner-setup", "reason=fixture-manifest-incomplete"}); return
+    end
+    local manifest = {}
+    for _, id in ipairs({"revealed-note", "revealed-note-2", "key-b37", "hidden-note", "invalid", "fault"}) do manifest[id] = inventoryCaseCount(id) end
+    manifest["unowned-photo"] = worldCaseCount("unowned-photo")
+    if not ownerSetupContract(manifest, true, T10.inventoryHandler and T10.worldHandler and T10.companionHandler) then
+        logEvent("PROBE_ERROR", {"phase=owner-setup", "reason=handlers-not-registered"}); return
+    end
     registerHandlers()
     registerHandlers() -- explicit duplicate-registration/reload simulation
     local pass = true
@@ -440,13 +496,15 @@ local function runMatrix()
     })
     local inventory = getPlayerInventory(0)
     if inventory then inventory:setVisible(true); inventory:setPinned() end
-    logEvent("READY_FOR_MANUAL_UI", {"instruction=use-only-real-context-menu-clicks"})
+    ownerReadiness = pass
+    if ownerReadiness then logEvent("OWNER_FIXTURES_READY", {"status=PASS", "inventory=6", "ground=1", "safe=verified", "instruction=use-only-real-context-menu-clicks"}) end
+    logEvent("READY_FOR_MANUAL_UI", {"instruction=use-only-real-context-menu-clicks;cases=revealed-note,hidden-note,invalid-paperclip,key-b37,fault-letter,unowned-photo-ground"})
 end
 
 local function onGameStart()
     if not isProbeSave() then logEvent("SKIPPED", {"reason=current-save-is-not-T10"}); return end
     local modCount, probeActive = activeModStatus()
-    if modCount ~= 1 or not probeActive then
+    if (modCount ~= 1 and modCount ~= 2) or not probeActive then
         logEvent("PROBE_ERROR", {"reason=probe-must-be-only-active-mod", "count="..tostring(modCount)})
         return
     end
@@ -482,6 +540,9 @@ T10.staticTest = {
     domain = domain,
     isFixtureCase = isFixtureCase,
 }
+T10.ownerPhaseReadiness = function() return ownerReadiness end
+T10.ownerSetupContract = ownerSetupContract
+T10.ownerPhaseSafety = ownerPhaseSafety
 registerHandlers()
 Events.OnGameStart.Add(onGameStart)
 Events.OnTick.Add(onTick)

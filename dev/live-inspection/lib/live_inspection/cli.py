@@ -312,6 +312,7 @@ class LiveRun:
         self.installed_mod = profile.pz_user_root / "mods" / self.mod_id
         self.installed_payload = profile.pz_user_root / "mods" / f"CF_Payload_{self.run_token.replace('-', '_')}"
         self.installed_payload_staging = self.installed_payload.with_name(self.installed_payload.name + ".staging")
+        self.installed_fixture_probe = self.profile.pz_user_root / "mods" / "ConspiracyFiles_T10_Probe"
         self.controls: ControlTransaction | None = None
         self.process: subprocess.Popen | None = None
         self.launcher_stdout = None
@@ -326,9 +327,9 @@ class LiveRun:
         self.owner_phase_nonce = uuid.uuid4().hex
         probe_root = Path(__file__).resolve().parents[2] / "probe"
         active_ids = (
-            (profile.payload.expected_mod_id, self.mod_id)
+            ((profile.payload.expected_mod_id, "ConspiracyFiles_T10_Probe", self.mod_id) if profile.owner_phase.get("enabled", False) else (profile.payload.expected_mod_id, self.mod_id))
             if profile.payload.mode == "production"
-            else (self.mod_id,)
+            else (("ConspiracyFiles_T10_Probe", self.mod_id) if profile.owner_phase.get("enabled", False) else (self.mod_id,))
         )
         if any(value is None for value in active_ids):
             raise HarnessError("production payload identity is incomplete")
@@ -618,8 +619,8 @@ class LiveRun:
                 stream.close()
         archive = self.bundle / "archive"
         archive.mkdir(parents=True, exist_ok=True)
-        for source, name in ((self.destination_save, "save"), (self.installed_mod, "probe-mod"), (self.installed_payload, "production-payload"), (self.installed_payload_staging, "production-payload-staging")):
-            if source.exists():
+        for source, name in ((self.destination_save, "save"), (self.installed_mod, "probe-mod"), (getattr(self, "installed_fixture_probe", None), "t10-fixture-probe"), (self.installed_payload, "production-payload"), (self.installed_payload_staging, "production-payload-staging")):
+            if source is not None and source.exists():
                 try:
                     shutil.move(str(source), archive / name)
                 except OSError as exc:
@@ -679,6 +680,8 @@ class LiveRun:
             raise HarnessError("refusing to race an existing Project Zomboid/inspection process: " + details)
         if self.destination_save.exists() or self.installed_mod.exists() or self.installed_payload.exists():
             raise HarnessError("generated disposable save/mod path unexpectedly exists")
+        if self.profile.owner_phase.get("enabled", False) and self.installed_fixture_probe.exists():
+            raise HarnessError("generated T10 fixture probe path unexpectedly exists")
         self.controls = ControlTransaction(self.profile.pz_user_root, self.profile.controls, self.bundle / "control-before")
         self.controls.backup_exact()
         self.write_state("CONTROLS_BACKED_UP")
@@ -686,11 +689,15 @@ class LiveRun:
         (self.destination_save / ".cf-live-inspection-run.json").write_text(json.dumps({"run_token": self.run_token, "source": self.profile.source_save.name}) + "\n", encoding="utf-8")
         probe_root = Path(__file__).resolve().parents[2] / "probe"
         shutil.copytree(probe_root, self.installed_mod)
+        active_ids = [self.mod_id]
+        if self.profile.owner_phase.get("enabled", False):
+            fixture_root = Path(__file__).resolve().parents[3] / "t10-cooperative-inspect"
+            shutil.copytree(fixture_root, self.installed_fixture_probe, symlinks=False)
+            active_ids.insert(0, "ConspiracyFiles_T10_Probe")
         mod_info = self.installed_mod / "42" / "mod.info"
         text = mod_info.read_text(encoding="utf-8").replace("__MOD_ID__", self.mod_id)
         mod_info.write_text(text, encoding="utf-8")
         generated = self.installed_mod / "common" / "media" / "lua" / "client" / "CFInspectionProfile.lua"
-        active_ids = [self.mod_id]
         payload_evidence = None
         if self.profile.payload.mode == "production":
             payload_evidence = install_production_payload(self.profile.payload, self.installed_payload)

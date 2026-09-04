@@ -14,6 +14,8 @@ local ownerHold, ownerHoldTicks = false, 0
 local ownerReadySequence, ownerReadyAtMs = nil, nil
 local ownerPhaseReadySequence, ownerPhaseReadyAtMs = nil, nil
 local ownerReleasePollTicks, ownerReleaseReadErrorEmitted = 0, false
+local ownerSetupWaiting = false
+local ownerSetupTicks = 0
 local eventSequence = 0
 
 local function safe(value)
@@ -258,8 +260,7 @@ local function initialize()
     })
     if Profile.ownerPhase and Profile.ownerPhase.enabled then
         initialized = true
-        ownerHold = true
-        ownerPhaseReadySequence, ownerPhaseReadyAtMs = event("OWNER_PHASE_READY", { "status=HOLD", "timeoutSeconds=" .. safe(Profile.ownerPhase.timeoutSeconds), "nonce=" .. safe(Profile.ownerPhase.nonce) })
+        ownerSetupWaiting = true
         return
     end
     siteIndex, current, tick = 1, Profile.sites[1], 0
@@ -275,8 +276,25 @@ local function onTick()
     if active and not initialized then
         local ok, err = pcall(initialize)
         if not ok then fail("initialize", err); completed = true; initialized = true; event("RUN_COMPLETE", { "status=FAIL", "failures=" .. failures }) end
+    elseif active and ownerSetupWaiting then
+        ownerSetupTicks = ownerSetupTicks + 1
+        local ready = ConspiracyFiles and ConspiracyFiles.T10Probe and ConspiracyFiles.T10Probe.ownerPhaseReadiness and ConspiracyFiles.T10Probe.ownerPhaseReadiness()
+        if ready then
+            ownerSetupWaiting = false; ownerHold = true; ownerPhaseReadySequence, ownerPhaseReadyAtMs = event("OWNER_PHASE_READY", { "status=HOLD", "timeoutSeconds=" .. safe(Profile.ownerPhase.timeoutSeconds), "nonce=" .. safe(Profile.ownerPhase.nonce), "fixtures=verified", "safeArea=verified" })
+        elseif ownerSetupTicks >= (Profile.ownerPhase.timeoutSeconds or 7200) * 60 then
+            ownerSetupWaiting = false; active = false
+            event("OWNER_SETUP_FAILED", { "status=FAIL", "reason=fixture-or-safe-area-readiness-timeout" })
+            getCore():quitToDesktop()
+        end
     elseif active and ownerHold then
         ownerHoldTicks = ownerHoldTicks + 1
+        local areaSafe = ConspiracyFiles and ConspiracyFiles.T10Probe and ConspiracyFiles.T10Probe.ownerPhaseSafety and ConspiracyFiles.T10Probe.ownerPhaseSafety()
+        if not areaSafe then
+            ownerHold = false; active = false
+            event("OWNER_SETUP_FAILED", { "status=FAIL", "reason=unsafe-area-or-safety-observation" })
+            getCore():quitToDesktop()
+            return
+        end
         ownerReleasePollTicks = ownerReleasePollTicks + 1
         local released = false
         if ownerReleasePollTicks % 15 == 1 and Profile.ownerPhase.releasePath and Profile.ownerPhase.releasePath ~= "" and getFileReader then

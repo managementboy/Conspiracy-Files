@@ -193,6 +193,17 @@ ISWorldObjectContextMenu.Test = false
 test.worldHandler(0, context(), { worldObject(hidden) }, true)
 check("controller preflight stays silent for a hidden subject", ISWorldObjectContextMenu.Test == false)
 
+local fixtureManifest = {
+    ["revealed-note"] = 1, ["revealed-note-2"] = 1, ["key-b37"] = 1,
+    ["hidden-note"] = 1, ["invalid"] = 1, ["fault"] = 1, ["unowned-photo"] = 1,
+}
+check("owner setup accepts complete unique fixtures", probe.ownerSetupContract(fixtureManifest, true, true))
+fixtureManifest["fault"] = 2
+check("owner setup rejects duplicate fixtures", not probe.ownerSetupContract(fixtureManifest, true, true))
+fixtureManifest["fault"] = 1; fixtureManifest["unowned-photo"] = 0
+check("owner setup rejects missing Ground fixture", not probe.ownerSetupContract(fixtureManifest, true, true))
+check("owner setup rejects absent probe or unsafe state", not probe.ownerSetupContract(fixtureManifest, false, false))
+
 probe.registerHandlers()
 probe.registerHandlers()
 check("listener registration is idempotent and additive",
@@ -202,4 +213,4 @@ if failures > 0 then
     error(tostring(failures) .. " static T10 probe checks failed")
 end
 
-print("PASS summary: 17 static T10 probe checks")
+print("PASS summary: 21 static T10 probe checks")

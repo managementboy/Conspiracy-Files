@@ -25,10 +25,11 @@ local function publish(value, atomic)
   local file = assert(io.open(path, "w")); file:write(value); file:flush(); file:close()
   if atomic then assert(os.rename(path, target)) end
 end
-local validRelease = "CF_OWNER_RELEASE|version=1|status=RELEASED|gate=player-ready-modal-check|run_id=RUN|observer_id=OBS|session_id=SESSION|nonce=N1|ready_sequence=3|ready_at_ms=1000|released_at_ms=1001"
-local preReadyRelease = "CF_OWNER_RELEASE|version=1|status=RELEASED|gate=player-ready-modal-check|run_id=RUN|observer_id=OBS|session_id=SESSION|nonce=N1|ready_sequence=3|ready_at_ms=1000|released_at_ms=1000"
+local validRelease = "CF_OWNER_RELEASE|version=1|status=RELEASED|gate=player-ready-modal-check|run_id=RUN|observer_id=OBS|session_id=SESSION|nonce=N1|ready_sequence=3|ready_at_ms=1001|released_at_ms=1002"
+local preReadyRelease = "CF_OWNER_RELEASE|version=1|status=RELEASED|gate=player-ready-modal-check|run_id=RUN|observer_id=OBS|session_id=SESSION|nonce=N1|ready_sequence=3|ready_at_ms=1001|released_at_ms=1001"
 os.remove(releasePath)
 if mode == "pre-ready" then publish(preReadyRelease, true) end
+ConspiracyFiles = { T10Probe = { ownerPhaseReadiness=function() return true end, ownerPhaseSafety=function() return true end } }
 dofile("probe/common/media/lua/client/ConspiracyFilesLiveInspection.lua")
 for _, fn in ipairs(callbacks.OnGameStart) do fn() end; for _, fn in ipairs(callbacks.OnTick) do fn() end
 if mode == "hold" then for i=1,3 do for _, fn in ipairs(callbacks.OnTick) do fn() end end; assert(quitCount == 0); realPrint("ASSERT HOLD") else
@@ -38,8 +39,8 @@ if mode == "hold" then for i=1,3 do for _, fn in ipairs(callbacks.OnTick) do fn(
     elseif mode == "partial" then releaseContent="CF_OWNER_RELEASE|version=1|status" elseif mode == "foreign" then releaseContent="CF_OWNER_RELEASE|version=1|status=RELEASED|gate=player-ready-modal-check|run_id=OTHER|observer_id=OBS|session_id=SESSION|nonce=N1|ready_sequence=2|ready_at_ms=1000|released_at_ms=1000" elseif mode == "stale" or mode == "restart" then releaseContent="CF_OWNER_RELEASE|version=1|status=RELEASED|gate=player-ready-modal-check|run_id=RUN|observer_id=OBS|session_id=OTHER|nonce=N1|ready_sequence=2|ready_at_ms=1000|released_at_ms=1000" elseif mode == "duplicate" then releaseContent="CF_OWNER_RELEASE|version=1|status=RELEASED|gate=player-ready-modal-check|run_id=RUN|observer_id=OBS|session_id=SESSION|nonce=N1|ready_sequence=2|ready_at_ms=1000|released_at_ms=1000|x=1" elseif mode == "malformed" or mode == "pre-ready" then releaseContent="bad" end
     if mode ~= "pre-ready" and releaseContent then publish(releaseContent, mode ~= "partial") end
     now = 1001
-    local pollTicks = (mode == "missing-error" or mode == "read-error") and 45 or 1
-    for i=1,pollTicks do for _, fn in ipairs(callbacks.OnTick) do fn() end end
+    local pollTicks = (mode == "missing-error" or mode == "read-error") and 45 or 2
+    for i=1,pollTicks do if i == 2 then now = 1002 end; for _, fn in ipairs(callbacks.OnTick) do fn() end end
     if mode == "partial" then releaseContent=validRelease; publish(releaseContent, true); for i=1,15 do for _, fn in ipairs(callbacks.OnTick) do fn() end end end
     local text=table.concat(output,"\n"); if mode == "release" or mode == "partial" then assert(text:find("OWNER_PHASE_RELEASED")); realPrint("ASSERT RELEASED_ONCE") else assert(not text:find("OWNER_PHASE_RELEASED")); if mode == "missing-error" or mode == "read-error" then assert(select(2, text:gsub("OWNER_RELEASE_READ_ERROR", "")) == 1); assert(readerCalls < 10) end; realPrint("ASSERT SAFE") end
   end
