@@ -204,13 +204,38 @@ fixtureManifest["fault"] = 1; fixtureManifest["unowned-photo"] = 0
 check("owner setup rejects missing Ground fixture", not probe.ownerSetupContract(fixtureManifest, true, true))
 check("owner setup rejects absent probe or unsafe state", not probe.ownerSetupContract(fixtureManifest, false, false))
 
+local foreignInventory = function() end
+local foreignWorld = function() end
+Events.OnFillInventoryObjectContextMenu.Add(foreignInventory)
+Events.OnFillWorldObjectContextMenu.Add(foreignWorld)
 probe.registerHandlers()
 probe.registerHandlers()
 check("listener registration is idempotent and additive",
-    #Events.OnFillInventoryObjectContextMenu.callbacks == 2 and #Events.OnFillWorldObjectContextMenu.callbacks == 1)
+    #Events.OnFillInventoryObjectContextMenu.callbacks == 3 and #Events.OnFillWorldObjectContextMenu.callbacks == 2)
+
+local savedInventoryEvent, savedWorldEvent = Events.OnFillInventoryObjectContextMenu, Events.OnFillWorldObjectContextMenu
+Events.OnFillInventoryObjectContextMenu = nil
+check("registration fails closed while the engine event is unavailable", probe.registerHandlers() == false and probe.registrationStatus() == false)
+Events.OnFillInventoryObjectContextMenu = savedInventoryEvent
+check("registration retries after delayed event creation", probe.registerHandlers() == true and probe.registrationStatus() == true)
+
+local lostInventory = probe.staticTest.inventoryHandler
+savedInventoryEvent.Remove(lostInventory)
+check("registration repairs handler loss after initial setup", probe.registerHandlers() == true and #savedInventoryEvent.callbacks == 3)
+
+local originalAdd = savedWorldEvent.Add
+savedWorldEvent.Add = function() error("verification failure") end
+check("registration fails closed when Add verification errors", probe.registerHandlers() == false and probe.registrationStatus() == false)
+savedWorldEvent.Add = originalAdd
+check("registration recovers after verification failure", probe.registerHandlers() == true and probe.registrationStatus() == true)
+
+dofile("dev/t10-cooperative-inspect/common/media/lua/client/ConspiracyFilesT10Probe.lua")
+local reloadedProbe = ConspiracyFiles.T10Probe
+check("duplicate script reload replaces only prior T10 identities",
+    reloadedProbe.registrationStatus() and #savedInventoryEvent.callbacks == 3 and #savedWorldEvent.callbacks == 2)
 
 if failures > 0 then
     error(tostring(failures) .. " static T10 probe checks failed")
 end
 
-print("PASS summary: 21 static T10 probe checks")
+print("PASS summary: 28 static T10 probe checks")

@@ -20,6 +20,7 @@ local tickCount = 0
 local cases = {}
 local domain = { inspectCalls = 0, markCalls = 0, faultLogs = 0 }
 local ownerReadiness = false
+local registration = { verified = false, generation = 0, error = nil }
 
 local function safe(value)
     if value == nil then return "<nil>" end
@@ -281,17 +282,55 @@ local function companionHandler(_, context, items)
     end
 end
 
+local function eventSurface(name)
+    local ok, event = pcall(function() return Events and Events[name] end)
+    if not ok or not event or type(event.Add) ~= "function" or type(event.Remove) ~= "function" then return nil end
+    return event
+end
+
+local function eventCall(event, method, callback)
+    return pcall(function() return event[method](callback) end)
+end
+
 local function registerHandlers()
-    if T10.inventoryHandler then Events.OnFillInventoryObjectContextMenu.Remove(T10.inventoryHandler) end
-    if T10.worldHandler then Events.OnFillWorldObjectContextMenu.Remove(T10.worldHandler) end
-    if T10.companionHandler then Events.OnFillInventoryObjectContextMenu.Remove(T10.companionHandler) end
+    local inventoryEvent = eventSurface("OnFillInventoryObjectContextMenu")
+    local worldEvent = eventSurface("OnFillWorldObjectContextMenu")
+    if not inventoryEvent or not worldEvent then
+        registration.verified = false
+        registration.error = "event-surface-unavailable"
+        return false
+    end
+
+    -- Build 42 supports Add/Remove by callback identity, but does not provide
+    -- a portable listener enumeration API. Remove only our remembered
+    -- identities, then verify every required Add through the engine call.
+    local previous = { T10.companionHandler, T10.inventoryHandler, T10.worldHandler }
+    if previous[1] then local ok = eventCall(inventoryEvent, "Remove", previous[1]); if not ok then registration.verified=false; registration.error="remove-companion-failed"; return false end end
+    if previous[2] then local ok = eventCall(inventoryEvent, "Remove", previous[2]); if not ok then registration.verified=false; registration.error="remove-inventory-failed"; return false end end
+    if previous[3] then local ok = eventCall(worldEvent, "Remove", previous[3]); if not ok then registration.verified=false; registration.error="remove-world-failed"; return false end end
+
+    local added = {}
+    local ok, err = eventCall(inventoryEvent, "Add", companionHandler)
+    if ok then added[#added+1] = { inventoryEvent, companionHandler } end
+    if ok then ok, err = eventCall(inventoryEvent, "Add", inventoryHandler) end
+    if ok then added[#added+1] = { inventoryEvent, inventoryHandler } end
+    if ok then ok, err = eventCall(worldEvent, "Add", worldHandler) end
+    if ok then added[#added+1] = { worldEvent, worldHandler } end
+    if not ok then
+        for _, value in ipairs(added) do eventCall(value[1], "Remove", value[2]) end
+        registration.verified = false
+        registration.error = "add-failed"
+        return false
+    end
+
     T10.companionHandler = companionHandler
     T10.inventoryHandler = inventoryHandler
     T10.worldHandler = worldHandler
-    Events.OnFillInventoryObjectContextMenu.Add(T10.companionHandler)
-    Events.OnFillInventoryObjectContextMenu.Add(T10.inventoryHandler)
-    Events.OnFillWorldObjectContextMenu.Add(T10.worldHandler)
-    logEvent("REGISTER", {"mode=remove-previous-then-add", "global=ConspiracyFiles-only"})
+    registration.verified = true
+    registration.error = nil
+    registration.generation = registration.generation + 1
+    logEvent("REGISTER", {"mode=identity-remove-then-add", "generation="..tostring(registration.generation), "verified=engine-call"})
+    return true
 end
 
 local function stamp(item, id, revealed, valid, fault)
@@ -350,6 +389,7 @@ local function ownerSetupContract(manifest, safe, handlersRegistered)
 end
 
 local function ownerPhaseSafety()
+    if registration.verified ~= true then return false end
     local player = getSpecificPlayer and getSpecificPlayer(0) or (getPlayer and getPlayer())
     local square = player and player.getCurrentSquare and player:getCurrentSquare()
     if not square or not square.getMovingObjects then return false end
@@ -464,10 +504,9 @@ local function runMatrix()
     local manifest = {}
     for _, id in ipairs({"revealed-note", "revealed-note-2", "key-b37", "hidden-note", "invalid", "fault"}) do manifest[id] = inventoryCaseCount(id) end
     manifest["unowned-photo"] = worldCaseCount("unowned-photo")
-    if not ownerSetupContract(manifest, true, T10.inventoryHandler and T10.worldHandler and T10.companionHandler) then
+    if not ownerSetupContract(manifest, true, registerHandlers()) then
         logEvent("PROBE_ERROR", {"phase=owner-setup", "reason=handlers-not-registered"}); return
     end
-    registerHandlers()
     registerHandlers() -- explicit duplicate-registration/reload simulation
     local pass = true
     pass = runCase("raw-single-revealed", {cases.revealed}, 1, 1) and pass
@@ -516,6 +555,10 @@ end
 local function onTick()
     if not active then return end
     tickCount = tickCount + 1
+    -- Event collections are engine-owned and may be rebuilt during reload.
+    -- Reassert our exact identities periodically; this remains additive and
+    -- preserves unrelated listeners.
+    if tickCount % 60 == 0 then registerHandlers() end
     if scheduled and tickCount >= 180 then
         local fn = scheduled
         scheduled = nil
@@ -528,6 +571,9 @@ T10.normalizeInventorySubjects = normalizeInventorySubjects
 T10.normalizeWorldSubjects = normalizeWorldSubjects
 T10.validateSubject = validateSubject
 T10.registerHandlers = registerHandlers
+T10.registrationStatus = function()
+    return registration.verified == true and registration.generation > 0
+end
 T10.staticTest = {
     setActive = function(value) active = value == true end,
     inventoryHandler = inventoryHandler,
@@ -540,7 +586,7 @@ T10.staticTest = {
     domain = domain,
     isFixtureCase = isFixtureCase,
 }
-T10.ownerPhaseReadiness = function() return ownerReadiness end
+T10.ownerPhaseReadiness = function() return ownerReadiness == true and registration.verified == true end
 T10.ownerSetupContract = ownerSetupContract
 T10.ownerPhaseSafety = ownerPhaseSafety
 registerHandlers()
