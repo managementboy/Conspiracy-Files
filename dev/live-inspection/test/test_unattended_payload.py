@@ -894,6 +894,30 @@ class ProductionPayloadTests(unittest.TestCase):
             with self.assertRaisesRegex(HarnessError, "bounded manual operator input"):
                 run._manual_prompt("player-ready-modal-check", release_owner_phase=True)
 
+    def test_actual_owner_prompt_fails_closed_on_process_death_before_and_during_wait(self):
+        with tempfile.TemporaryDirectory() as temp:
+            run = self.make_live_run(Path(temp))
+            run.non_interactive = False
+            tty = types.SimpleNamespace(isatty=lambda: True, readline=lambda: "\n")
+            with mock.patch("live_inspection.cli.sys.stdin", tty), mock.patch.object(run, "_launcher_process_identity", return_value=None), self.assertRaisesRegex(HarnessError, "stale-process"):
+                run._manual_prompt("player-ready-modal-check", release_owner_phase=True)
+            with mock.patch("live_inspection.cli.sys.stdin", tty), mock.patch("select.select", return_value=([], [], [])), mock.patch.object(run, "_launcher_process_identity", side_effect=[object(), None]), self.assertRaisesRegex(HarnessError, "stale-process"):
+                run._manual_prompt("player-ready-modal-check", release_owner_phase=True)
+            with mock.patch("live_inspection.cli.sys.stdin", tty), mock.patch("select.select", return_value=([tty], [], [])), mock.patch.object(run, "_launcher_process_identity", side_effect=[object(), object(), None]), mock.patch.object(run, "_write_owner_release") as writer, self.assertRaisesRegex(HarnessError, "immediately after release write"):
+                run._manual_prompt("player-ready-modal-check", release_owner_phase=True)
+            writer.assert_called_once_with("player-ready-modal-check")
+
+    def test_actual_owner_release_writer_cleans_temp_on_error_and_rejects_symlink(self):
+        with tempfile.TemporaryDirectory() as temp:
+            run = self.make_live_run(Path(temp))
+            run.bundle.joinpath("owner-phase-ready.json").write_text(json.dumps({"status":"READY", "sequence":2, "emitted_at_ms":1000, "run_id":run.readiness_identity.run_id, "observer_id":run.readiness_identity.observer_id, "session_id":run.readiness_identity.session_id}), encoding="utf-8")
+            with mock.patch("live_inspection.cli.os.replace", side_effect=OSError("injected")), self.assertRaises(OSError):
+                run._write_owner_release("player-ready-modal-check")
+            self.assertFalse(run.bundle.joinpath(".owner-release.staging").exists())
+            run.bundle.joinpath(".owner-release.staging").symlink_to(run.bundle / "victim")
+            with self.assertRaisesRegex(HarnessError, "path substitution"):
+                run._write_owner_release("player-ready-modal-check")
+
     def test_validates_installs_and_records_clean_source_commit(self):
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp); source, checksum = self.make_clean_repo(root)

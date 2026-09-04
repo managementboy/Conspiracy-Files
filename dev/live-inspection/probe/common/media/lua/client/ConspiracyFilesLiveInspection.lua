@@ -12,6 +12,7 @@ local current, scan, failures = nil, nil, 0
 local autoContinue, menuTicks = false, 0
 local ownerHold, ownerHoldTicks = false, 0
 local ownerReadySequence, ownerReadyAtMs = nil, nil
+local ownerPhaseReadySequence, ownerPhaseReadyAtMs = nil, nil
 local eventSequence = 0
 
 local function safe(value)
@@ -67,9 +68,9 @@ local function ownerReleaseIsValid(line, nowMs)
     if fields.version ~= "1" or fields.status ~= "RELEASED" or fields.gate ~= "player-ready-modal-check" then return false end
     if fields.run_id ~= tostring(Profile.runId) or fields.observer_id ~= tostring(Profile.observerId) or fields.session_id ~= tostring(Profile.sessionId) or fields.nonce ~= tostring(Profile.ownerPhase.nonce) then return false end
     if not string.match(fields.ready_sequence, "^%d+$") or not string.match(fields.ready_at_ms, "^%d+$") or not string.match(fields.released_at_ms, "^%d+$") then return false end
-    if tonumber(fields.ready_sequence) ~= ownerReadySequence or tonumber(fields.ready_at_ms) ~= ownerReadyAtMs then return false end
+    if tonumber(fields.ready_sequence) ~= ownerPhaseReadySequence or tonumber(fields.ready_at_ms) ~= ownerPhaseReadyAtMs then return false end
     local releasedAt = tonumber(fields.released_at_ms)
-    return releasedAt >= ownerReadyAtMs and releasedAt <= nowMs + 1000 and releasedAt <= ownerReadyAtMs + (Profile.ownerPhase.timeoutSeconds or 7200) * 1000
+    return releasedAt > ownerPhaseReadyAtMs and releasedAt <= nowMs and releasedAt <= ownerPhaseReadyAtMs + (Profile.ownerPhase.timeoutSeconds or 7200) * 1000
 end
 
 local function saveName()
@@ -257,7 +258,7 @@ local function initialize()
     if Profile.ownerPhase and Profile.ownerPhase.enabled then
         initialized = true
         ownerHold = true
-        event("OWNER_PHASE_READY", { "status=HOLD", "timeoutSeconds=" .. safe(Profile.ownerPhase.timeoutSeconds), "nonce=" .. safe(Profile.ownerPhase.nonce) })
+        ownerPhaseReadySequence, ownerPhaseReadyAtMs = event("OWNER_PHASE_READY", { "status=HOLD", "timeoutSeconds=" .. safe(Profile.ownerPhase.timeoutSeconds), "nonce=" .. safe(Profile.ownerPhase.nonce) })
         return
     end
     siteIndex, current, tick = 1, Profile.sites[1], 0
@@ -286,7 +287,7 @@ local function onTick()
         end
         if released then
             ownerHold = false
-            event("OWNER_PHASE_RELEASED", { "status=PASS", "nonce=" .. safe(Profile.ownerPhase.nonce), "readySequence=" .. safe(ownerReadySequence), "readyAtMs=" .. safe(ownerReadyAtMs) })
+            event("OWNER_PHASE_RELEASED", { "status=PASS", "nonce=" .. safe(Profile.ownerPhase.nonce), "readySequence=" .. safe(ownerPhaseReadySequence), "readyAtMs=" .. safe(ownerPhaseReadyAtMs) })
             siteIndex, current, tick = 1, Profile.sites[1], 0
             logSiteDefinition(current); teleport(current)
         elseif ownerHoldTicks >= (Profile.ownerPhase.timeoutSeconds or 7200) * 60 then

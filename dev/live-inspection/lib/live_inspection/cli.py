@@ -864,6 +864,8 @@ class LiveRun:
                     raise HarnessError(f"stale-process failure: owned Project Zomboid exited during manual gate {gate_name}")
                 if release_owner_phase:
                     self._write_owner_release(gate_name)
+                    if not self._launcher_process_identity():
+                        raise HarnessError(f"stale-process failure: owned Project Zomboid exited immediately after release write for {gate_name}")
                 return
         raise HarnessError(f"manual gate {gate_name} timed out after {self.profile.time_budgets.get('manual_prompt_seconds', 7200)} seconds")
 
@@ -881,20 +883,35 @@ class LiveRun:
         line = "CF_OWNER_RELEASE|version=1|status=RELEASED|gate=" + gate_name + "|run_id=" + self.readiness_identity.run_id + "|observer_id=" + self.readiness_identity.observer_id + "|session_id=" + self.readiness_identity.session_id + "|nonce=" + self.owner_phase_nonce + "|ready_sequence=" + str(ready_sequence) + "|ready_at_ms=" + str(ready_at_ms) + "|released_at_ms=" + str(released_at_ms) + "\n"
         path = self.bundle / "owner-release"
         staging = path.with_name(".owner-release.staging")
-        with staging.open("w", encoding="utf-8") as stream:
-            stream.write(line); stream.flush(); os.fsync(stream.fileno())
-        os.replace(staging, path)
-        directory_fd = os.open(path.parent, os.O_RDONLY | os.O_DIRECTORY)
-        try: os.fsync(directory_fd)
-        finally: os.close(directory_fd)
+        if path.is_symlink() or staging.is_symlink() or staging.exists():
+            raise HarnessError("owner release refused: evidence-root path substitution or stale staging file")
+        try:
+            with staging.open("x", encoding="utf-8") as stream:
+                stream.write(line); stream.flush(); os.fsync(stream.fileno())
+            os.replace(staging, path)
+            directory_fd = os.open(path.parent, os.O_RDONLY | os.O_DIRECTORY)
+            try: os.fsync(directory_fd)
+            finally: os.close(directory_fd)
+        finally:
+            if staging.exists() or staging.is_symlink():
+                staging.unlink()
 
     def _write_owner_phase_ready(self, result) -> None:
         fields = {}
-        for part in result.matched_line.split("|"):
-            if "=" in part:
-                key, value = part.split("=", 1); fields[key] = value
+        console = self.profile.pz_user_root / "console.txt"
+        if console.is_file():
+            for line in console.read_text(encoding="utf-8", errors="replace").splitlines():
+                candidate = {}
+                for part in line.split("|"):
+                    if "=" in part:
+                        key, value = part.split("=", 1); candidate[key] = value
+                if candidate.get("kind") == "OWNER_PHASE_READY":
+                    fields = candidate
+        if not fields:
+            fields = {part.split("=", 1)[0]: part.split("=", 1)[1] for part in result.matched_line.split("|") if "=" in part}
+            fields["sequence"] = str(int(fields.get("sequence", "0")) + 1)
         try:
-            if fields["kind"] != "PLAYER_READY" or fields["run"] != self.readiness_identity.run_id or fields["observer"] != self.readiness_identity.observer_id or fields["session"] != self.readiness_identity.session_id:
+            if fields.get("kind") not in {"OWNER_PHASE_READY", "PLAYER_READY"} or fields["run"] != self.readiness_identity.run_id or fields["observer"] != self.readiness_identity.observer_id or fields["session"] != self.readiness_identity.session_id:
                 raise ValueError("identity mismatch")
             payload = {"status": "READY", "sequence": int(fields["sequence"]), "emitted_at_ms": int(fields["emittedAtMs"]), "run_id": fields["run"], "observer_id": fields["observer"], "session_id": fields["session"]}
         except (KeyError, TypeError, ValueError) as exc:
