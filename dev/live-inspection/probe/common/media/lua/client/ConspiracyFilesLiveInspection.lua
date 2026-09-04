@@ -11,6 +11,7 @@ local tick, exitTicks, siteIndex = 0, 0, 0
 local current, scan, failures = nil, nil, 0
 local autoContinue, menuTicks = false, 0
 local ownerHold, ownerHoldTicks = false, 0
+local ownerReadySequence, ownerReadyAtMs = nil, nil
 local eventSequence = 0
 
 local function safe(value)
@@ -33,11 +34,42 @@ local function event(kind, fields)
     }
     if fields then for i = 1, #fields do parts[#parts + 1] = fields[i] end end
     print(table.concat(parts, "|"))
+    return eventSequence, emittedAtMs
 end
 
 local function fail(code, detail)
     failures = failures + 1
     event("ASSERT_FAIL", { "code=" .. safe(code), "detail=" .. safe(detail) })
+end
+
+local function ownerReleaseIsValid(line, nowMs)
+    if type(line) ~= "string" then return false end
+    local fields, seen = {}, {}
+    local first = true
+    for part in string.gmatch(line, "[^|]+") do
+        if first then
+            if part ~= "CF_OWNER_RELEASE" then return false end
+            first = false
+        else
+        local key, value = part:match("^([^=]+)=(.*)$")
+        if not key or seen[key] then return false end
+        seen[key] = true; fields[key] = value
+        end
+    end
+    local required = { "version", "status", "gate", "run_id", "observer_id", "session_id", "nonce", "ready_sequence", "ready_at_ms", "released_at_ms" }
+    if not string.match(line, "^CF_OWNER_RELEASE|") then return false end
+    if not seen.version or not seen.status or not seen.gate or not seen.run_id or not seen.observer_id or not seen.session_id or not seen.nonce or not seen.ready_sequence or not seen.ready_at_ms or not seen.released_at_ms then return false end
+    for key in pairs(seen) do
+        local allowed = false
+        for i = 1, #required do if required[i] == key then allowed = true end end
+        if not allowed then return false end
+    end
+    if fields.version ~= "1" or fields.status ~= "RELEASED" or fields.gate ~= "player-ready-modal-check" then return false end
+    if fields.run_id ~= tostring(Profile.runId) or fields.observer_id ~= tostring(Profile.observerId) or fields.session_id ~= tostring(Profile.sessionId) or fields.nonce ~= tostring(Profile.ownerPhase.nonce) then return false end
+    if not string.match(fields.ready_sequence, "^%d+$") or not string.match(fields.ready_at_ms, "^%d+$") or not string.match(fields.released_at_ms, "^%d+$") then return false end
+    if tonumber(fields.ready_sequence) ~= ownerReadySequence or tonumber(fields.ready_at_ms) ~= ownerReadyAtMs then return false end
+    local releasedAt = tonumber(fields.released_at_ms)
+    return releasedAt >= ownerReadyAtMs and releasedAt <= nowMs + 1000 and releasedAt <= ownerReadyAtMs + (Profile.ownerPhase.timeoutSeconds or 7200) * 1000
 end
 
 local function saveName()
@@ -213,7 +245,7 @@ local function initialize()
         local phase = runtime.phase and runtime.phase() or "<unavailable>"
         event("PRODUCTION_READY", { "status=PASS", "phase=" .. safe(phase), "registeredEvents=" .. #registered })
     end
-    event("PLAYER_READY", {
+    ownerReadySequence, ownerReadyAtMs = event("PLAYER_READY", {
         "save=" .. saveName(),
         "activeModCount=" .. count,
         "activeMods=" .. safe(table.concat(Profile.activeModIds, ",")),
@@ -249,18 +281,12 @@ local function onTick()
             if ok and reader then
                 local lineOk, line = pcall(function() return reader:readLine() end)
                 pcall(function() reader:close() end)
-                local text = lineOk and tostring(line) or ""
-                released = lineOk and line ~= nil
-                    and text:find('"status"%s*:%s*"RELEASED"') ~= nil
-                    and text:find('"run_id"%s*:%s*"' .. tostring(Profile.runId) .. '"') ~= nil
-                    and text:find('"observer_id"%s*:%s*"' .. tostring(Profile.observerId) .. '"') ~= nil
-                    and text:find('"session_id"%s*:%s*"' .. tostring(Profile.sessionId) .. '"') ~= nil
-                    and text:find('"nonce"%s*:%s*"' .. tostring(Profile.ownerPhase.nonce) .. '"') ~= nil
+                released = lineOk and ownerReleaseIsValid(line, getTimestampMs and getTimestampMs() or 0)
             end
         end
         if released then
             ownerHold = false
-            event("OWNER_PHASE_RELEASED", { "status=PASS", "nonce=" .. safe(Profile.ownerPhase.nonce) })
+            event("OWNER_PHASE_RELEASED", { "status=PASS", "nonce=" .. safe(Profile.ownerPhase.nonce), "readySequence=" .. safe(ownerReadySequence), "readyAtMs=" .. safe(ownerReadyAtMs) })
             siteIndex, current, tick = 1, Profile.sites[1], 0
             logSiteDefinition(current); teleport(current)
         elseif ownerHoldTicks >= (Profile.ownerPhase.timeoutSeconds or 7200) * 60 then

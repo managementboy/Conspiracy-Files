@@ -808,6 +808,8 @@ class LiveRun:
                         self.write_startup_evidence()
                     log("ordinary startup action delivery confirmed by fresh run-scoped PLAYER_READY")
                 log(f"gate {gate.name}{suffix} passed in {result.elapsed_seconds:.1f}s (attempt {result.attempt})")
+                if gate.name == "player-ready-modal-check" and self.profile.owner_phase.get("enabled", False):
+                    self._write_owner_phase_ready(result)
                 if gate.action == "screenshot":
                     capture_screen(self.bundle / "screenshots" / f"gate-{gate.name}{suffix}.png")
                 elif gate.action == "manual":
@@ -861,9 +863,43 @@ class LiveRun:
                 if not self._launcher_process_identity():
                     raise HarnessError(f"stale-process failure: owned Project Zomboid exited during manual gate {gate_name}")
                 if release_owner_phase:
-                    self._write_json_atomic(self.bundle / "owner-release", {"status": "RELEASED", "gate": gate_name, "released_at_ns": time.time_ns(), "run_id": self.readiness_identity.run_id, "observer_id": self.readiness_identity.observer_id, "session_id": self.readiness_identity.session_id, "nonce": self.owner_phase_nonce})
+                    self._write_owner_release(gate_name)
                 return
         raise HarnessError(f"manual gate {gate_name} timed out after {self.profile.time_budgets.get('manual_prompt_seconds', 7200)} seconds")
+
+    def _write_owner_release(self, gate_name: str) -> None:
+        ready = self.bundle / "owner-phase-ready.json"
+        if not ready.is_file():
+            raise HarnessError("owner release refused: OWNER_PHASE_READY evidence is missing")
+        try:
+            ready_data = json.loads(ready.read_text(encoding="utf-8"))
+            ready_sequence = int(ready_data["sequence"])
+            ready_at_ms = int(ready_data["emitted_at_ms"])
+        except (OSError, ValueError, KeyError, TypeError, json.JSONDecodeError) as exc:
+            raise HarnessError("owner release refused: OWNER_PHASE_READY evidence is malformed") from exc
+        released_at_ms = int(time.monotonic() * 1000)
+        line = "CF_OWNER_RELEASE|version=1|status=RELEASED|gate=" + gate_name + "|run_id=" + self.readiness_identity.run_id + "|observer_id=" + self.readiness_identity.observer_id + "|session_id=" + self.readiness_identity.session_id + "|nonce=" + self.owner_phase_nonce + "|ready_sequence=" + str(ready_sequence) + "|ready_at_ms=" + str(ready_at_ms) + "|released_at_ms=" + str(released_at_ms) + "\n"
+        path = self.bundle / "owner-release"
+        staging = path.with_name(".owner-release.staging")
+        with staging.open("w", encoding="utf-8") as stream:
+            stream.write(line); stream.flush(); os.fsync(stream.fileno())
+        os.replace(staging, path)
+        directory_fd = os.open(path.parent, os.O_RDONLY | os.O_DIRECTORY)
+        try: os.fsync(directory_fd)
+        finally: os.close(directory_fd)
+
+    def _write_owner_phase_ready(self, result) -> None:
+        fields = {}
+        for part in result.matched_line.split("|"):
+            if "=" in part:
+                key, value = part.split("=", 1); fields[key] = value
+        try:
+            if fields["kind"] != "PLAYER_READY" or fields["run"] != self.readiness_identity.run_id or fields["observer"] != self.readiness_identity.observer_id or fields["session"] != self.readiness_identity.session_id:
+                raise ValueError("identity mismatch")
+            payload = {"status": "READY", "sequence": int(fields["sequence"]), "emitted_at_ms": int(fields["emittedAtMs"]), "run_id": fields["run"], "observer_id": fields["observer"], "session_id": fields["session"]}
+        except (KeyError, TypeError, ValueError) as exc:
+            raise HarnessError("owner phase release refused: malformed PLAYER_READY evidence") from exc
+        self._write_json_atomic(self.bundle / "owner-phase-ready.json", payload)
 
 
 def build_parser() -> argparse.ArgumentParser:

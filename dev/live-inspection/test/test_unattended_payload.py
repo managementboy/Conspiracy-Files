@@ -871,6 +871,29 @@ class ProductionPayloadTests(unittest.TestCase):
         run.bundle_created = True
         return run
 
+    def test_actual_owner_release_writer_is_scoped_and_atomic(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp); run = self.make_live_run(root)
+            run.bundle.joinpath("owner-phase-ready.json").write_text(json.dumps({
+                "status": "READY", "sequence": 2, "emitted_at_ms": 1000,
+                "run_id": run.readiness_identity.run_id,
+                "observer_id": run.readiness_identity.observer_id,
+                "session_id": run.readiness_identity.session_id,
+            }), encoding="utf-8")
+            run._write_owner_release("player-ready-modal-check")
+            release = run.bundle.joinpath("owner-release")
+            text = release.read_text(encoding="utf-8")
+            self.assertTrue(text.startswith("CF_OWNER_RELEASE|version=1|status=RELEASED|"))
+            self.assertIn("run_id=" + run.readiness_identity.run_id, text)
+            self.assertIn("nonce=" + run.owner_phase_nonce, text)
+            self.assertFalse(run.bundle.joinpath(".owner-release.staging").exists())
+
+    def test_actual_owner_prompt_refuses_no_tty_before_release(self):
+        with tempfile.TemporaryDirectory() as temp:
+            run = self.make_live_run(Path(temp))
+            with self.assertRaisesRegex(HarnessError, "bounded manual operator input"):
+                run._manual_prompt("player-ready-modal-check", release_owner_phase=True)
+
     def test_validates_installs_and_records_clean_source_commit(self):
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp); source, checksum = self.make_clean_repo(root)

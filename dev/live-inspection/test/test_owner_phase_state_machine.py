@@ -68,6 +68,13 @@ class OwnerPhaseLifecycleTests(unittest.TestCase):
         result = subprocess.run(["lua5.1", "-e", 'assert(loadfile("probe/common/media/lua/client/ConspiracyFilesLiveInspection.lua"))'], cwd=ROOT, capture_output=True, text=True)
         self.assertEqual(result.returncode, 0, result.stderr)
 
+    def test_actual_lua_probe_replay_drives_hold_release_and_timeout(self):
+        replay = ROOT / "test" / "owner_phase_probe_replay.lua"
+        for mode in ("hold", "release", "timeout", "malformed", "foreign", "stale", "duplicate", "pre-ready", "partial", "restart"):
+            result = subprocess.run(["lua5.1", str(replay), mode], cwd=ROOT, capture_output=True, text=True)
+            self.assertEqual(result.returncode, 0, mode + ": " + result.stderr)
+            self.assertIn("ASSERT", result.stdout)
+
 
 if __name__ == "__main__":
     unittest.main()
