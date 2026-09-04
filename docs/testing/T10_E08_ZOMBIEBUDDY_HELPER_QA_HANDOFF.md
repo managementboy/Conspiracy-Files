@@ -12,6 +12,8 @@ performed or accepted
   provenance documentation.
 - Production payload: unchanged; expected deterministic `mod/` tree checksum
   `02947f3b32fa86f1971ac8b1f9fb15b7a13d2d9a7f1cffc0e814f8a7f3013357`.
+- Helper artifact: `dev/t10-zombiebuddy-helper/artifacts/zombiebuddy-helper-v1.py`,
+  SHA-256 `2ae0dba1a79c1972d193efad119b05515a3364316b46fcb6ba3f5ede3f082963`.
 
 ## What QA must verify independently
 
@@ -54,3 +56,6 @@ future run must use only `t10-e08-disposable-fixture-v1`, player or Ground/loot
 inventory panes, and the 96-action vocabulary. It must preserve vanilla and
 foreign handlers, never assume direct-world right-click support, and must not
 claim T10 or CF-V01-E08 acceptance from helper command success alone.
+
+Engineering did not copy the artifact into the installed ZombieBuddy location,
+enable it, launch Project Zomboid, or execute the live matrix.

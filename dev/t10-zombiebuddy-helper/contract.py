@@ -28,6 +28,10 @@ ALLOWED_ACTIONS = frozenset({
     "dismiss-inspect-reader",
     "reload-disposable-save",
 })
+ALLOWED_FIXTURES = frozenset({
+    "t10-revealed-note", "t10-revealed-key", "t10-hidden-note",
+    "t10-invalid-paperclip", "t10-fault-letter", "t10-unowned-photo",
+})
 SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
 SAFE_EVIDENCE_RE = re.compile(r"(?i)(physical[_ -]?token|token|secret|password|body|hidden[_ -]?truth)\s*[:=]\s*[^|\n]+")
 
@@ -90,6 +94,16 @@ def _require_sha(value: str, field: str) -> None:
         raise ContractError(f"{field} must be a lowercase SHA-256")
 
 
+def _stable_identity(identity: RuntimeIdentity) -> tuple[object, ...]:
+    """Exclude per-sample freshness/proof booleans from drift comparison."""
+    return (
+        identity.run_id, identity.process_pid, identity.process_start_ticks,
+        identity.process_executable_sha256, identity.window_id, identity.window_title,
+        identity.display, identity.active, identity.focused, identity.sole_matching_window,
+        identity.disposable_save_id, identity.disposable_save_sha256, identity.payload_sha256,
+    )
+
+
 def validate_request(request: Request, *, previous_identity: RuntimeIdentity | None = None) -> None:
     """Validate one closed-world batch; every defect rejects the whole batch."""
     if request.scenario != SCENARIO:
@@ -123,7 +137,7 @@ def validate_request(request: Request, *, previous_identity: RuntimeIdentity | N
         (identity.payload_sha256, "payload"),
     ):
         _require_sha(value, field)
-    if previous_identity is not None and identity != previous_identity:
+    if previous_identity is not None and _stable_identity(identity) != _stable_identity(previous_identity):
         raise ContractError("process/window/display/save/payload identity drifted")
 
     if not request.actions or len(request.actions) > MAX_ACTIONS:
@@ -139,7 +153,7 @@ def validate_request(request: Request, *, previous_identity: RuntimeIdentity | N
             raise ContractError("direct-world and non-inventory panes are prohibited")
         if action.verb not in ALLOWED_ACTIONS:
             raise ContractError("arbitrary input or gameplay action is prohibited")
-        if not action.fixture_case.startswith("t10-"):
+        if action.fixture_case not in ALLOWED_FIXTURES:
             raise ContractError("actions may target only named disposable T10 fixtures")
         if action.pane == "ground-inventory" and action.verb == "activate-mark-interesting":
             raise ContractError("unowned Ground fixture cannot be marked")

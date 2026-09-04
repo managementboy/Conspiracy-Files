@@ -21,6 +21,10 @@ the existing disposable `ConspiracyFiles_T10_Probe` fixture on Build 42.20.4.
 It is an evidence-gathering aid, not a production dependency or a general UI
 agent. The repository currently supplies only its offline validator and profile
 contract; it does not install, download, activate or configure ZombieBuddy.
+The checked-in source artifact is pinned by profile SHA-256
+`2ae0dba1a79c1972d193efad119b05515a3364316b46fcb6ba3f5ede3f082963`; an
+operator may activate it only after independent QA and the separately reviewed
+live procedure.
 
 Admission is fail-closed before every bounded action. The helper must prove its
 exact SHA-256/version plus one owned launcher process PID/start/executable

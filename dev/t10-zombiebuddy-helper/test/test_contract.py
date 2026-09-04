@@ -12,6 +12,7 @@ from contract import (  # noqa: E402
     Action, ContractError, HelperProvenance, Request, RuntimeIdentity,
     evidence_record, sanitize_raw_evidence, validate_request,
 )
+from helper import ZombieBuddyT10E08Helper  # noqa: E402
 
 SHA = "a" * 64
 
@@ -76,6 +77,34 @@ class ContractTests(unittest.TestCase):
         self.assertEqual(len(record["raw_evidence_sha256"]), 64)
         self.assertEqual(record["sanitized_raw_evidence"], ["kind=MENU token=<redacted>", "body=<redacted>", "kind=PASS"])
         self.assertEqual(sanitize_raw_evidence(["secret: abc\n"]), ("secret=<redacted>",))
+
+    def test_helper_invokes_only_named_capabilities_and_rechecks_identity(self):
+        request = valid_request()
+        calls = []
+
+        class Capabilities:
+            def open_inventory_context_menu(self, pane, fixture): calls.append(("open", pane, fixture))
+            def activate_inspect(self, pane, fixture): calls.append(("inspect", pane, fixture))
+            def activate_mark_interesting(self, pane, fixture): calls.append(("mark", pane, fixture))
+            def dismiss_inspect_reader(self, pane, fixture): calls.append(("dismiss", pane, fixture))
+            def reload_disposable_save(self, pane, fixture): calls.append(("reload", pane, fixture))
+
+        helper = ZombieBuddyT10E08Helper(Capabilities())
+        self.assertEqual(helper.execute(request, lambda: request.identity), ("a1", "a2", "a3"))
+        self.assertEqual(calls, [("open", "player-inventory", "t10-revealed-note"), ("inspect", "player-inventory", "t10-revealed-note"), ("inspect", "ground-inventory", "t10-unowned-photo")])
+        with self.assertRaises(RuntimeError):
+            helper.execute(request, lambda: request.identity)
+
+    def test_helper_aborts_before_capability_on_identity_drift(self):
+        request = valid_request()
+        calls = []
+        class Capabilities:
+            def open_inventory_context_menu(self, pane, fixture): calls.append(1)
+        helper = ZombieBuddyT10E08Helper(Capabilities())
+        drifted = replace(request.identity, window_id="drift")
+        with self.assertRaises(ContractError):
+            helper.execute(request, lambda: drifted)
+        self.assertEqual(calls, [])
 
 
 if __name__ == "__main__":

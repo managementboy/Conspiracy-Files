@@ -47,6 +47,21 @@ only the existing cooperative T10/E08 matrix and never treats helper success as
 E08 acceptance. A fresh independent QA pass and separately owner-authorized
 live run remain required.
 
+## Operator-only activation (not performed by engineering)
+
+After independent QA, the live operator may copy the exact
+`artifacts/zombiebuddy-helper-v1.py` source into the already-installed
+ZombieBuddy extension location, verify SHA-256
+`2ae0dba1a79c1972d193efad119b05515a3364316b46fcb6ba3f5ede3f082963`, and
+configure only the contract in
+`profiles/t10-e08-zombiebuddy-contract.toml`. Bind the launcher-owned Build
+42.20.4 process/window/display, a newly created
+`T10_cooperative_inspect_*` save, and exact probe/payload checksums before
+starting. Run only the named fixture matrix; retain provenance/evidence and
+archive the disposable save/extension during cleanup. Do not use the existing
+`cf-live-inspect` unattended route, enable another capability, or retry a
+failed check. Engineering did not perform these steps.
+
 ## Offline verification
 
 ```bash

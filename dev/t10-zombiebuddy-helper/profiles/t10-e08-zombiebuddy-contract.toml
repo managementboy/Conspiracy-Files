@@ -5,6 +5,8 @@
 scenario = "t10-e08-disposable-fixture-v1"
 supported_game_version = "42.20.4"
 provider = "ZombieBuddy"
+artifact = "../artifacts/zombiebuddy-helper-v1.py"
+artifact_sha256 = "2ae0dba1a79c1972d193efad119b05515a3364316b46fcb6ba3f5ede3f082963"
 max_actions = 96
 allowed_panes = ["player-inventory", "ground-inventory"]
 allowed_actions = ["open-inventory-context-menu", "activate-inspect", "activate-mark-interesting", "dismiss-inspect-reader", "reload-disposable-save"]
