@@ -883,7 +883,7 @@ class LiveRun:
         line = "CF_OWNER_RELEASE|version=1|status=RELEASED|gate=" + gate_name + "|run_id=" + self.readiness_identity.run_id + "|observer_id=" + self.readiness_identity.observer_id + "|session_id=" + self.readiness_identity.session_id + "|nonce=" + self.owner_phase_nonce + "|ready_sequence=" + str(ready_sequence) + "|ready_at_ms=" + str(ready_at_ms) + "|released_at_ms=" + str(released_at_ms) + "\n"
         path = self.bundle / "owner-release"
         staging = path.with_name(".owner-release.staging")
-        if path.is_symlink() or staging.is_symlink() or staging.exists():
+        if not self.bundle.is_dir() or self.bundle.is_symlink() or path.is_symlink() or staging.is_symlink() or staging.exists():
             raise HarnessError("owner release refused: evidence-root path substitution or stale staging file")
         try:
             with staging.open("x", encoding="utf-8") as stream:

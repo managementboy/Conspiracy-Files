@@ -13,6 +13,7 @@ local autoContinue, menuTicks = false, 0
 local ownerHold, ownerHoldTicks = false, 0
 local ownerReadySequence, ownerReadyAtMs = nil, nil
 local ownerPhaseReadySequence, ownerPhaseReadyAtMs = nil, nil
+local ownerReleasePollTicks, ownerReleaseReadErrorEmitted = 0, false
 local eventSequence = 0
 
 local function safe(value)
@@ -276,13 +277,26 @@ local function onTick()
         if not ok then fail("initialize", err); completed = true; initialized = true; event("RUN_COMPLETE", { "status=FAIL", "failures=" .. failures }) end
     elseif active and ownerHold then
         ownerHoldTicks = ownerHoldTicks + 1
+        ownerReleasePollTicks = ownerReleasePollTicks + 1
         local released = false
-        if Profile.ownerPhase.releasePath and Profile.ownerPhase.releasePath ~= "" and getFileReader then
-            local ok, reader = pcall(getFileReader, Profile.ownerPhase.releasePath, true)
-            if ok and reader then
+        if ownerReleasePollTicks % 15 == 1 and Profile.ownerPhase.releasePath and Profile.ownerPhase.releasePath ~= "" and getFileReader then
+            local ok, reader = pcall(getFileReader, Profile.ownerPhase.releasePath, false)
+            if not ok then
+                if not ownerReleaseReadErrorEmitted then
+                    ownerReleaseReadErrorEmitted = true
+                    event("OWNER_RELEASE_READ_ERROR", { "status=FAIL", "detail=reader-open-failed" })
+                end
+            elseif reader then
                 local lineOk, line = pcall(function() return reader:readLine() end)
                 pcall(function() reader:close() end)
-                released = lineOk and ownerReleaseIsValid(line, getTimestampMs and getTimestampMs() or 0)
+                if not lineOk then
+                    if not ownerReleaseReadErrorEmitted then
+                        ownerReleaseReadErrorEmitted = true
+                        event("OWNER_RELEASE_READ_ERROR", { "status=FAIL", "detail=reader-read-failed" })
+                    end
+                else
+                    released = ownerReleaseIsValid(line, getTimestampMs and getTimestampMs() or 0)
+                end
             end
         end
         if released then
