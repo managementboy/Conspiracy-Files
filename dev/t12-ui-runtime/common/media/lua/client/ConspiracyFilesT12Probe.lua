@@ -2,7 +2,7 @@ local UI=require("ConspiracyFiles/Notebook")
 local State=require("ConspiracyFiles/ThreadState")
 local Content=require("ConspiracyFiles/Content")
 ConspiracyFiles=ConspiracyFiles or {}
-local Probe={VERSION="DEV-0.6-shared-document-panel"}
+local Probe={VERSION=UI.VERSION}
 function Probe.prepare()
     if not (isDebugEnabled and isDebugEnabled()) or (isClient and isClient()) or (isServer and isServer()) then return false end
     assert(not ConspiracyFiles.T11Mode,"T11 and T12 must not be enabled together")

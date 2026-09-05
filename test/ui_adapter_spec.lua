@@ -44,6 +44,15 @@ test("UI composition shares a clamped document pane, explicit ink and owner key 
         local probe=dofile(TEST_ROOT.."/dev/t12-ui-runtime/common/media/lua/client/ConspiracyFilesT12Probe.lua")
         assertTrue(probe.prepare()); assertEqual(86,#UI.probeState.snapshot().evidence)
         UI.open("evidence"); local window=assert(UI.notebook); assertTrue(window.inUI)
+        local drawn={}; window.list.drawText=function(_,text) drawn[#drawn+1]=text end
+        local row=window.list.items[1]
+        window.list.doDrawItem(window.list,0,row)
+        assertEqual(2,#drawn)
+        for _,text in ipairs(drawn) do assertTrue(getTextManager():MeasureStringX(UIFont.Small,text)<=window.list.width-32) end
+        assertTrue(drawn[2]:find("...",1,true)~=nil)
+        drawn={}; window.list.doDrawItem(window.list,window.list.height+10,row); assertEqual(0,#drawn)
+        window.list:setWidth(150); window.list.doDrawItem(window.list,0,row)
+        for _,text in ipairs(drawn) do assertTrue(getTextManager():MeasureStringX(UIFont.Small,text)<=118) end
         assertTrue(window.document.scroll~=nil); assertTrue(window.header~=window.document.body)
         window.document:setDocument(string.rep("Long document ",300).."<RGB:0,0,0>",false)
         assertTrue(window.document.body.text:find("<RGB:0.10,0.10,0.08>",1,true)==1)

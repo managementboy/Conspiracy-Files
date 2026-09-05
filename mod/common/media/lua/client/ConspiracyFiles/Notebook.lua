@@ -7,7 +7,7 @@ local Projection=require("ConspiracyFiles/NotebookProjection")
 ConspiracyFiles=ConspiracyFiles or {}
 ConspiracyFiles.NotebookUI=ConspiracyFiles.NotebookUI or {}
 local UI=ConspiracyFiles.NotebookUI
-UI.VERSION="DEV-0.6-shared-document-panel"
+UI.VERSION="DEV-0.6.1-row-bounds"
 local function safe(fn)
     local rt=ConspiracyFiles.Runtime
     if rt and not rt.disabled then return rt.boundary("ui",fn) end
@@ -76,12 +76,36 @@ function UI.openHelp()
     end)
 end
 local Window=ISCollapsableWindow:derive("CFNotebookWindow")
+local function fitRowText(text,width)
+    local measure=function(value) return getTextManager():MeasureStringX(UIFont.Small,value) end
+    if measure(text)<=width then return text end
+    if measure("...")>width then return "" end
+    local low,high,best=0,#text,"..."
+    while low<=high do
+        local middle=math.floor((low+high)/2); local finish=middle
+        -- Do not split a UTF-8 character at the shortening boundary.
+        while finish>0 do local nextByte=text:byte(finish+1); if not nextByte or nextByte<128 or nextByte>=192 then break end; finish=finish-1 end
+        local candidate=text:sub(1,finish).."..."
+        if measure(candidate)<=width then best=candidate; low=middle+1 else high=middle-1 end
+    end
+    return best
+end
 function Window:drawRow(y,item)
+    local offset=self:getYScroll(); local top=y+offset
+    if top+item.height<=0 or top>=self.height then return y+item.height end
     if self.selected==item.index then self:drawRect(0,y,self.width,item.height,0.8,0.28,0.32,0.25) end
-    local title="#"..item.item.ordinal.."  "..item.item.title
-    while #title>4 and getTextManager():MeasureStringX(UIFont.Small,title)>self.width-22 do title=title:sub(1,-5).."..." end
-    self:drawText(title,8,y+4,1,1,0.95,1,UIFont.Small)
-    self:drawText(item.item.summary,8,y+8+getTextManager():getFontHeight(UIFont.Small),0.90,0.90,0.85,1,UIFont.Small)
+    local fontHeight=getTextManager():getFontHeight(UIFont.Small)
+    local width=math.max(0,self.width-32) -- padding and native scrollbar
+    local signature=width..":"..fontHeight
+    if item.cfTextSignature~=signature then
+        item.cfTitle=fitRowText("#"..item.item.ordinal.."  "..item.item.title,width)
+        item.cfSummary=fitRowText(item.item.summary,width)
+        item.cfTextSignature=signature
+    end
+    -- Text may escape the native list stencil at large UI scales. Bound both
+    -- lines explicitly instead of relying on the stencil for overflowing text.
+    if top+4>=0 and top+4+fontHeight<=self.height then self:drawText(item.cfTitle,8,y+4,1,1,0.95,1,UIFont.Small) end
+    if top+8+fontHeight>=0 and top+8+2*fontHeight<=self.height then self:drawText(item.cfSummary,8,y+8+fontHeight,0.90,0.90,0.85,1,UIFont.Small) end
     return y+item.height
 end
 function Window:showRow(row)
