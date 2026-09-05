@@ -1,6 +1,6 @@
 # Conspiracy-Files — Project State
 
-Status: **v0.1 integration correction and evidence reconciliation**. The PZ-independent historical domain core was accepted and merged in PR #15; the current runtime/UI candidate and live Build 42 integration have not been accepted. See [PM takeover audit, 2026-09-05](docs/management/PM_TAKEOVER_AUDIT_2026-09-05.md) for reviewed provenance, blockers and current gates.
+Status: **product direction realigned; generated-investigation prototype specified, not implemented**. P4-R53 restores dynamic conspiracy generation and automatic location selection as the destination. Dead Air remains a mechanism/regression fixture. Historical domain and isolated-spike acceptance stands; current integrated/generated gameplay remains unaccepted.
 Target: Project Zomboid Build 42; T1/T2/T3/T4/T5/T7/T8/T9/T10 verified stable Build **42.20.4**, revision **b0bbce05d5**, Steam build ID **24909800**, with the limitations recorded in their reports. Other capability claims remain subject to their named spikes/research.
 
 ## Source of truth order
@@ -46,7 +46,9 @@ Spike numbers and GitHub issue numbers are not interchangeable. Use this authori
 | T8 | #9 |
 | T10 | #10 |
 
-## v0.1 delivery backlog
+## Historical v0.1 delivery backlog
+
+The table records the previous fixture work. P4-R53 and Immediate work below supersede its owner-location-approval sequence; see the execution plan for proposed backlog remapping.
 
 | Work | GitHub issue | Attendance boundary |
 |---|---:|---|
@@ -97,7 +99,7 @@ The first specification over-committed to unproven Build 42 capabilities. The en
 - Historical takeover baseline: 26 tests and 26 parsed Lua files. Current candidate: 42 offline tests pass, including two-location membership, transaction failures, runtime/menu mocks and shared UI composition. Neither result accepts an engine criterion. See correction evidence for current source hashes and syntax output.
 - This acceptance is limited to the PZ-independent domain layer. It does not accept ModData adapter behavior, physical placement/commit sequencing, live item identity, reader/UI integration, location-arrival integration, exact map bindings or any other Build 42 engine behavior.
 
-## v0.1 vertical slice
+## Historical v0.1 fixture scope
 
 One built-in hand-authored thread:
 - 6 documents;
@@ -121,17 +123,15 @@ One built-in hand-authored thread:
 
 ## Immediate work
 
-The owner-approved [guided development session](docs/management/GUIDED_SESSION.md) adds a debug-only panel on the same candidate. GUIDE-0.1 provides ordered UI/location/T11 checks, bounded read-only snapshots and manual verdict logging. It writes no save data. Guide verification: 42 offline tests, 37 parsed Lua files; no live visual pass. Evidence is in docs/management/evidence/2026-09-05-guide/.
+The owner approved the bounded [generated-investigation specification](docs/design/GENERATED_INVESTIGATION_PROTOTYPE.md). Planning is complete; no generator or live-mod changes are included in this increment.
 
-Reviewable candidate: [draft PR #33](https://github.com/managementboy/Conspiracy-Files/pull/33), source commit 8546a8c, stacked on preparation PR #32. All seven milestone issues remain open with reconciled descriptions. No main merge or current live acceptance occurred.
+1. Next implementation increment: G1 offline generation from 8–12 provenance-backed candidate records and two authored outlines; three documents across two automatically selected locations per case.
+2. After G1 evidence, generalize the minimum case-definition/adapter contracts for G2. Preserve validation and resolve the existing interrupted-placement recovery gap before live acceptance.
+3. Owner participation becomes generated-case playtesting, not choosing or approving each shelf/site. The former Muldraugh plausibility itinerary and guide steps 3–4 are suspended.
 
-The owner adopted the takeover recommendations. Corrected source and 42 passing offline tests are summarized in [CORRECTION_REPORT_2026-09-05.md](docs/management/CORRECTION_REPORT_2026-09-05.md). All authored bodies are preserved; selected journal details now add bounded survivor reflections while row summaries stay compact.
+The owner confirmed CPU strain was unrelated; it is not a project blocker. E12 performance verification still applies. T12 row-overflow fix DEV-0.6.1 is installed but awaits post-fix visual confirmation; no visual or integration pass is inferred.
 
-1. Manually verify the Muldraugh route and exact candidate boundaries/containers under Issue #28.
-2. Test shared DEV-0.6 T12 scrolling, contrast, focus and scaling; then run one-item T11 on an accepted target. The owner performs GUI actions.
-3. Revise from observed failures before promotion and the full E01–E13 matrix. Keep runtime integration in its own draft PR stacked on preparation PR #32; no main merge or live-gate closure is implied.
-
-Your three product choices are recorded in P4-R50–R52. No further choice is needed before these prepared tests.
+The historical draft PR and issue records remain evidence of prior scope. Realign their implementation checklists when dispatching G1/G2; no old location gate is closed or falsely marked passed by this documentation change.
 
 ## Rule for disproven decisions
 

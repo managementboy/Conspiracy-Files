@@ -1,30 +1,31 @@
-# v0.1 Vertical Slice — Execution Plan
+# Execution plan — generated investigation prototype
 
-Status: corrected candidate prepared; live integration unaccepted. Updated 2026-09-05.
+Updated 2026-09-05 under P4-R53. The former fixed-site itinerary is superseded as the active plan; historical acceptance results remain unchanged.
 
-Milestone: [v0.1 Vertical Slice](https://github.com/managementboy/Conspiracy-Files/milestone/1)
+## Approved increment
 
-The owner adopted the takeover recommendations and P4-R48–R52 records the selected Muldraugh two-site scope, ordinary police arrival, plain-language availability and deferred death recap. Content approval and Help/input direction stand. No further product-choice session is required.
+This increment updates the roadmap, decisions and [prototype specification](../design/GENERATED_INVESTIGATION_PROTOTYPE.md) only. No generator implementation, game deployment or renewed owner test session is part of it.
 
-## Critical path
+## Next sequence
 
-1. **#28 — exact Muldraugh binding:** verify normal road route, electronics/relay and police plausibility, exact containers and candidate-specific room/floor/boundary negatives. Provisional rectangles are not accepted story boundaries.
-2. **#25 — T12:** observe the shared DEV-0.6 notebook on the owner's screen. Start with the previously failing contrast/scrollbar checks; stop and correct a reproducible failure before repeating the whole matrix.
-3. **#29 — T11:** run the shared one-D1 wrapper on an accepted target. Owner performs all Inspect/Mark and real save/reload actions.
-4. **#31 — candidate promotion:** incorporate observed corrections, then scale to all seven physical items. No live acceptance follows from code presence.
-5. **#27 — E01–E13:** complete the full engine matrix, including real death/reload integrity, all multiplayer modes, coexistence and measured performance.
+1. **G1 offline generation:** bounded catalog, two outlines, coherent case facts, automatic location selection and measurable seed variation. Reuse map research; reject uncertain capabilities.
+2. **G2 live composition:** adapt fixed-registry assumptions only as needed, retain full-root validation and identity invariants, and verify actual containers automatically. Resolve recovery limitations before acceptance.
+3. **G3 playtest:** owner plays generated investigations and evaluates clarity, interest and survival fit. No prior approval of locations is required.
 
-T12 can precede location binding with synthetic display data. T11 may run provisionally for diagnosis but cannot pass its final-target obligation before #28.
+## Existing backlog mapping
 
-## Review work
+The following are planning mappings, not claims of changed GitHub status:
 
-- #26: existing owner content approval is corroborated; context, reveal rules, fixture copy and journal detail corrections are in the candidate. Review this patch without asking for approval again.
-- #30: all requested product choices are recorded; T12 decides runtime feasibility, including an explicit controller verdict.
-- Keep preparation PR #32 unchanged in code scope. Submit the preserved/corrected integration branch as a separate draft stacked on it; no force push, history rewrite or main merge.
-- Preserve historical evidence. Archive current test/syntax output and source hashes separately. Re-run only checks affected by new edits/failures.
+- #28's fixed Muldraugh approval itinerary is suspended; future work is automatic catalog/target validation, retaining technical arrival/container negatives.
+- #31's assembly checklist must target the generated case contract rather than a fixed six-document shipping story.
+- #29/T11 remains useful composition evidence, to be applied to generated output; #25/T12 remains UI feasibility.
+- #26 preserves the existing Dead Air approval. New authored building blocks need normal provenance/content review, not site-by-site approval.
+- #30 gains P4-R53 direction reconciliation. #27's reusable state/identity/MP/performance obligations remain; generated-case criteria are added before live sign-off.
 
-## Attendance rule
+## Evidence and attendance
 
-Use the [owner checklist](OWNER_ATTENDANCE_CHECKLIST.md). The owner launches and operates PZ. No injected helper, synthetic input, UI automation, antivirus change or security bypass for T10-derived actions. Ordinary debug console inspection/fault arming is allowed, but never substitutes for manual GUI evidence.
+The owner clarified CPU strain was unrelated. Remove that incident as a blocker without declaring a performance pass.
 
-No source inspection, Lua mock, browser design or isolated earlier spike accepts a composed engine criterion.
+Historical tests and source inspection do not accept generated output. Preserve Dead Air as a regression fixture. Owner manually performs required GUI/save/reload/death/usability actions under P4-R44; no synthetic input, injected helpers or security changes.
+
+Keep each implementation increment small, reuse evidence, and avoid another broad audit or speculative platform build.

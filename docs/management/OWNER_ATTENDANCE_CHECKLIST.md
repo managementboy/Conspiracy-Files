@@ -1,5 +1,7 @@
 # Owner attendance checklist
 
+**P4-R53 update, 2026-09-05:** the manual location-plausibility itinerary is suspended. Do not ask the owner to approve individual shelves or sites; guide steps 3–4 below are historical instructions, not the next task. The active plan is the generated-investigation prototype in docs/design/GENERATED_INVESTIGATION_PROTOTYPE.md. No new game session is required for the approved planning increment. The CPU-strain report was unrelated; technical performance criteria still stand.
+
 The product decisions are recorded in P4-R48–R52. This checklist contains manual observations still needed for the DEV-0.6 candidate. No game launch, mod deployment or live acceptance was performed by the correction work.
 
 ## Recorded choices

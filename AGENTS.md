@@ -46,4 +46,4 @@ Before making any design or code change:
 
 ## Current delivery scope
 
-The first implementation target is the `ROADMAP.md` v0.1 vertical slice. Do not pull graph, AI, content packs, retrofit, migration, or multiplayer into v0.1.
+Follow the active sequence in `ROADMAP.md` and P4-R53: the next bounded implementation target is G1 in `docs/design/GENERATED_INVESTIGATION_PROTOTYPE.md`. Dead Air is a retained fixed regression fixture, not the final product. Do not require owner approval of individual locations. Keep graph, runtime AI, external content packs, retrofit, migration and multiplayer outside this prototype.

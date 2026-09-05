@@ -1,5 +1,7 @@
 # Guided development session — GUIDE-0.1 / DEV-0.6
 
+**P4-R53 update, 2026-09-05:** the manual location-plausibility itinerary is suspended. Do not ask the owner to approve individual shelves or sites; guide steps 3–4 below are historical instructions, not the next task. The active plan is the generated-investigation prototype in docs/design/GENERATED_INVESTIGATION_PROTOTYPE.md. No new game session is required for the approved planning increment. The CPU-strain report was unrelated; technical performance criteria still stand.
+
 The guide reuses the candidate UI and adapters. It is debug-only and disabled in multiplayer. It does not change gameplay state, teleport, perform Inspect, save, change wrappers or mark gates accepted.
 
 ## Install and open

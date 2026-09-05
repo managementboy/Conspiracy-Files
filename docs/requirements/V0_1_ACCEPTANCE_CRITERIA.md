@@ -1,5 +1,7 @@
 # V0.1 Vertical Slice — Acceptance Criteria
 
+**Scope update P4-R53:** this matrix describes the historical Dead Air fixture and reusable engine obligations. Fixed P2/R2 or Muldraugh owner-plausibility approval is no longer an active product requirement. Generated-prototype acceptance is defined in [GENERATED_INVESTIGATION_PROTOTYPE.md](../design/GENERATED_INVESTIGATION_PROTOTYPE.md); old criteria remain evidence, not automatic acceptance of generation.
+
 **Status:** Complete implementation input; acceptance has not yet been demonstrated.
 
 **Scope:** the single built-in Dead Air vertical slice at content revision `dead-air-r1`.
