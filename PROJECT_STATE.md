@@ -1,6 +1,6 @@
 # Conspiracy-Files — Project State
 
-Status: **product direction realigned; generated-investigation prototype specified, not implemented**. P4-R53 restores dynamic conspiracy generation and automatic location selection as the destination. Dead Air remains a mechanism/regression fixture. Historical domain and isolated-spike acceptance stands; current integrated/generated gameplay remains unaccepted.
+Status: **product direction realigned; G1 generator implemented offline; real location catalog pending**. P4-R53 restores dynamic conspiracy generation and automatic location selection as the destination. Dead Air remains a mechanism/regression fixture. Historical domain and isolated-spike acceptance stands; current integrated/generated gameplay remains unaccepted.
 Target: Project Zomboid Build 42; T1/T2/T3/T4/T5/T7/T8/T9/T10 verified stable Build **42.20.4**, revision **b0bbce05d5**, Steam build ID **24909800**, with the limitations recorded in their reports. Other capability claims remain subject to their named spikes/research.
 
 ## Source of truth order
@@ -123,9 +123,9 @@ One built-in hand-authored thread:
 
 ## Immediate work
 
-The owner approved the bounded [generated-investigation specification](docs/design/GENERATED_INVESTIGATION_PROTOTYPE.md). Planning is complete; no generator or live-mod changes are included in this increment.
+The owner approved the bounded [generated-investigation specification](docs/design/GENERATED_INVESTIGATION_PROTOTYPE.md). G1 logic is now implemented outside the live mod in dev/generated-investigation/. 49 offline tests pass; a 100-seed synthetic sample spans 66 unordered site pairs and both outlines (50 each). This is not real-map or live-engine evidence.
 
-1. Next implementation increment: G1 offline generation from 8–12 provenance-backed candidate records and two authored outlines; three documents across two automatically selected locations per case.
+1. Receive the owner's 12 Muldraugh places, preserve nominations and enrich technical metadata under P4-R54. Unknown capabilities remain ineligible. Validate the real catalog before calling G1 complete.
 2. After G1 evidence, generalize the minimum case-definition/adapter contracts for G2. Preserve validation and resolve the existing interrupted-placement recovery gap before live acceptance.
 3. Owner participation becomes generated-case playtesting, not choosing or approving each shelf/site. The former Muldraugh plausibility itinerary and guide steps 3–4 are suspended.
 

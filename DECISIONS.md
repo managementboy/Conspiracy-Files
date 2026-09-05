@@ -139,3 +139,7 @@ The owner directed “I want to follow all your recommendations” after the tak
 - The next work increment is the specification in docs/design/GENERATED_INVESTIGATION_PROTOTYPE.md. Implementation follows separately in bounded steps; the existing hard-coded registries cannot be relabeled as a generator.
 
 **CPU clarification:** the owner reported that the observed CPU strain was unrelated to the mod. Remove that incident as a project blocker. This is an owner clarification, not a measured performance pass; the existing runtime budget and live performance criterion remain.
+
+## Initial location sources — 2026-09-05
+
+**P4-R54 — owner nominations plus technical enrichment:** the owner will supply 12 interesting places in Muldraugh. Use those as the prototype's real candidate set, with stable provenance, supplemented/enriched by existing map research as needed. This updates P4-R53's initial research-only catalog assumption, not its automatic-selection goal. Nominations do not establish observed storage or require owner inspection of containers. Synthetic test records remain separate and are ineligible by default. See docs/design/MULDRAUGH_LOCATION_INTAKE.md.

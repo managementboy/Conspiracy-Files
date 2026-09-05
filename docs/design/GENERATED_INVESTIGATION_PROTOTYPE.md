@@ -1,6 +1,6 @@
 # Generated investigation prototype — bounded specification
 
-Status: planning increment approved 2026-09-05; not implemented or live-accepted.
+Status: G1 offline generator implemented and tested with synthetic data; real Muldraugh catalog and live integration pending.
 Authority: DECISIONS P4-R53. Dead Air remains a regression fixture.
 
 ## What this must prove
@@ -11,7 +11,7 @@ Dynamic generation here means constrained assembly, not unconstrained runtime te
 
 ## Smallest content and catalog
 
-- 8–12 initial candidate location records from existing T2/T3 map research, restricted to metadata with explicit provenance. This is a development-scale subset of the eventual large database, not a claim of map-wide coverage.
+- The owner will provide 12 interesting Muldraugh places. Preserve their nominations, then use T2/T3 research and technical inspection to enrich explicit capabilities; a nomination alone does not prove usable storage. This is a development-scale subset of the eventual large database, not a claim of map-wide coverage.
 - Two authored case outlines sharing a small vocabulary of document forms. One connects an initial record to a corroborating record and an unresolved authorization gap; the other connects it to a conflicting account. Neither resolves the conspiracy.
 - Each case has three documents, two distinct locations, two identities and one organisation. Names, constrained dates/codes and selected outline vary by seed; all repeated facts come from one case fact table.
 - Slot requirements describe observable capabilities such as a searchable paper-storage container, supported floor and distinct building/area. Templates must not infer institutional authority from a generic room name. Start with flexible document premises that can use the catalog's demonstrated capabilities.
@@ -59,4 +59,4 @@ G1 finishes with an offline generator, small catalog/template fixtures and meani
 
 No large database population yet, generic content-pack schema, runtime AI, graph/theory UI, multiplayer, old-save retrofit, migrations or broad Workshop-map support. One built-in case per new save; ongoing campaign scheduling is deferred.
 
-Implement G1 as the next bounded work increment after this planning change. Reuse existing research and tests; do not restart the project audit. Expand only when the previous increment's evidence justifies it.
+G1's logic is now in dev/generated-investigation/; finish its real-catalog validation after the owner's list arrives. Reuse existing research and tests; do not restart the project audit. Expand only when the previous increment's evidence justifies it.

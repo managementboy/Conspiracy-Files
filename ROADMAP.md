@@ -1,5 +1,7 @@
 # Conspiracy-Files — Roadmap
 
+**G1 progress:** offline logic now generates three linked documents across two eligible sites, with revision-pinned restoration and knowledge-bounded projection. 49 tests pass; 100 synthetic seeds cover 66 unordered pairs and both outlines. The owner's 12 Muldraugh nominations will supply the real starting set under P4-R54. No synthetic coordinate is a real placement; live G2 is unchanged.
+
 ## Active destination and next increment
 
 P4-R53 restores the intended product: a large database of possible locations, automatic evidence placement and dynamically generated conspiracies. Players investigate; they do not approve locations in advance.

@@ -1,5 +1,7 @@
 # Execution plan — generated investigation prototype
 
+**Current increment:** G1 logic is implemented and tested offline in dev/generated-investigation/. The earlier planning-only description below is historical. Next, receive/enrich the owner's 12 Muldraugh nominations and validate the real catalog. No live deployment occurred; G2 remains separate.
+
 Updated 2026-09-05 under P4-R53. The former fixed-site itinerary is superseded as the active plan; historical acceptance results remain unchanged.
 
 ## Approved increment
