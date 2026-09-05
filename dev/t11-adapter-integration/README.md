@@ -19,7 +19,7 @@ This disposable probe will combine one final-bound Dead Air fixture with the acc
 | A | Start with no T11 canonical root or stamped item | Build/mod/save identity and zero-count baseline |
 | B | Load the exact target and allow queued placement | One detached-prestamped item, count one, canonical `placed` |
 | C | Repeat callbacks; stream target out/in | Count remains one; no duplicate domain transition |
-| D | Inspect once and save immediately | One Inspect intent, one Evidence, one JournalEntry, valid staged root |
+| D | Inspect once manually and save immediately | One Inspect intent and one Evidence; one asset-discovered entry plus one thread-introduced entry for fresh D1/D2; valid staged root |
 | E | Reload and inspect again | Same item token; no duplicate Evidence/JournalEntry |
 | F | Force arrival sample and reconciliation on one scheduled tick | One location confirmation at most; no partial state |
 | G | Move item from original container and reload | Item remains `available`; placement remains `placed` |

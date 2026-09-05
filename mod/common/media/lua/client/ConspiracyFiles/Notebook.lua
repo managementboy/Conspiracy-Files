@@ -2,6 +2,7 @@ require "ISUI/ISCollapsableWindow"
 require "ISUI/ISButton"
 require "ISUI/ISScrollingListBox"
 require "ISUI/ISRichTextPanel"
+require "ISUI/ISScrollBar"
 
 local Projection = require("ConspiracyFiles/NotebookProjection")
 
@@ -29,7 +30,8 @@ function CFReaderWindow:createChildren()
     self.body.marginTop, self.body.marginBottom = 12, 12
     self.body.backgroundColor = { r = 0.76, g = 0.73, b = 0.63, a = 1 }
     self.body.textR, self.body.textG, self.body.textB = 0.10, 0.10, 0.08
-    self.body:setText(self.documentTitle .. "\n\n" .. self.documentBody)
+    local context = self.documentContext and "\n\nWHAT THIS IS\n" .. self.documentContext or ""
+    self.body:setText(self.documentTitle .. context .. "\n\n" .. self.documentBody)
     self.body:paginate(); self:addChild(self.body)
     self.closeButton = ISButton:new(self.width - 104, self.height - 42, 90, 28, "Close", self, CFReaderWindow.close)
     self.closeButton:initialise(); self.closeButton:instantiate(); self:addChild(self.closeButton)
@@ -44,26 +46,24 @@ function CFReaderWindow:prerender()
     ISCollapsableWindow.prerender(self)
 end
 
-function CFReaderWindow:isKeyConsumed(key) return key == Keyboard.KEY_ESCAPE end
-function CFReaderWindow:onKeyRelease(key) if key == Keyboard.KEY_ESCAPE then self:close() end end
 function CFReaderWindow:close()
     self:removeFromUIManager()
     if UI.reader == self then UI.reader = nil end
 end
 
-function CFReaderWindow:new(x, y, width, height, title, body)
+function CFReaderWindow:new(x, y, width, height, title, context, body)
     local o = ISCollapsableWindow.new(self, x, y, width, height)
-    o:setTitle("Inspect: " .. title); o:setWantKeyEvents(true)
+    o:setTitle("Inspect: " .. title)
     o.minimumWidth, o.minimumHeight = 420, 320
-    o.documentTitle, o.documentBody = title, body
+    o.documentTitle, o.documentContext, o.documentBody = title, context, body
     return o
 end
 
-function UI.openReader(title, body)
+function UI.openReader(title, body, context)
     if UI.reader then UI.reader:close() end
     local screenW, screenH = getCore():getScreenWidth(), getCore():getScreenHeight()
     local width, height = math.min(700, screenW - 60), math.min(720, screenH - 60)
-    UI.reader = CFReaderWindow:new(math.floor((screenW - width) / 2), math.floor((screenH - height) / 2), width, height, title, body)
+    UI.reader = CFReaderWindow:new(math.floor((screenW - width) / 2), math.floor((screenH - height) / 2), width, height, title, context, body)
     UI.reader:initialise(); UI.reader:instantiate(); UI.reader:addToUIManager()
 end
 
@@ -132,7 +132,7 @@ function CFNotebookWindow:createChildren()
     self.list:setOnMouseDownFunction(self, CFNotebookWindow.onRowSelected)
     self.list.drawBorder = true; self:addChild(self.list)
     self.detail = ISRichTextPanel:new(324, top, self.width - 438, self.height - top - 18)
-    self.detail:initialise(); self.detail:instantiate(); self.detail.autosetheight = false; self.detail.clip = true
+    self.detail:initialise(); self.detail:instantiate(); self.detail:addScrollBars(false); self.detail.autosetheight = false; self.detail.clip = true
     self.detail.marginLeft, self.detail.marginRight = 16, 16
     self.detail.marginTop, self.detail.marginBottom = 14, 14
     self.detail.backgroundColor = { r = 0.76, g = 0.73, b = 0.63, a = 1 }
@@ -161,6 +161,7 @@ function CFNotebookWindow:applyLayout()
         self.detail:setWidth(contentWidth - listWidth - gap); self.detail:setHeight(contentHeight)
     end
     self.detail:paginate()
+    if self.detail.vscroll then self.detail.vscroll:updatePos() end
 end
 
 function CFNotebookWindow:prerender()
@@ -171,13 +172,6 @@ function CFNotebookWindow:prerender()
     ISCollapsableWindow.prerender(self)
 end
 
-function CFNotebookWindow:isKeyConsumed(key) return key == Keyboard.KEY_ESCAPE end
-function CFNotebookWindow:onKeyRelease(key)
-    if key ~= Keyboard.KEY_ESCAPE then return end
-    if UI.reader then UI.reader:close()
-    elseif self.compact and self.detailOnly then self:onBack()
-    else self:close() end
-end
 function CFNotebookWindow:close()
     if UI.reader then UI.reader:close() end
     self:removeFromUIManager(); if UI.notebook == self then UI.notebook = nil end
@@ -185,7 +179,7 @@ end
 
 function CFNotebookWindow:new(x, y, width, height)
     local o = ISCollapsableWindow.new(self, x, y, width, height)
-    o:setTitle("Survivor's Notebook - Dead Air"); o:setWantKeyEvents(true)
+    o:setTitle("Survivor's Notebook - Dead Air")
     o.minimumWidth, o.minimumHeight = 500, 400
     o.section, o.detailOnly = "journal", false
     return o
@@ -217,6 +211,28 @@ function UI.refresh(section, preferredId)
         UI.notebook:refresh(preferredId)
     end)
     if not ok then log("ERROR", "boundary=notebook-refresh error=" .. tostring(err)) end
+end
+
+local NOTEBOOK_BIND = "Conspiracy-Files: Toggle Survivor Notebook"
+if keyBinding then
+    local present = false
+    for _, binding in ipairs(keyBinding) do if binding.value == NOTEBOOK_BIND then present = true; break end end
+    if not present then table.insert(keyBinding, { value = NOTEBOOK_BIND, key = Keyboard.KEY_NONE }) end
+end
+
+function UI.toggle()
+    if UI.notebook then UI.notebook:close() else UI.open() end
+end
+
+if Events and Events.OnKeyPressed then
+    -- Build 42 may evaluate this file more than once.  Keep one handler;
+    -- some event implementations do not expose Remove during a reload.
+    if not UI.keyHandler then
+        UI.keyHandler = function(key)
+            if getCore():getKey(NOTEBOOK_BIND) == key then UI.toggle() end
+        end
+        Events.OnKeyPressed.Add(UI.keyHandler)
+    end
 end
 
 return UI

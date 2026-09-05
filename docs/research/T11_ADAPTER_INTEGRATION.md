@@ -7,6 +7,10 @@
 - **GitHub issue:** [#29](https://github.com/managementboy/Conspiracy-Files/issues/29)
 - **API/event/classes used:** To be recorded from the final probe implementation and installed-build audit
 
+## Takeover scope update — 2026-09-05
+
+Conditional runtime/UI code already exists but does not supersede this gate. The [PM audit](../management/PM_TAKEOVER_AUDIT_2026-09-05.md) identifies placement staging, identity, persistence, arrival, menu and error-containment gaps. Revise those before a live run. This directory currently contains preparation material and mod.info, not a runnable composition probe. Prepare an isolated wrapper for the corrected production-intended path and record its hashes/differences; a direct-domain debug harness is not manual Inspect evidence. Exact route/binding remains unresolved.
+
 ## Question
 
 Do the separately proven T1, T4, T5, T8 and T10 mechanisms compose safely with the accepted domain core when one real Dead Air item is placed, inspected, discovered, moved, reconciled, saved and reloaded at one final bound location?
@@ -19,7 +23,7 @@ The minimum matrix is:
 
 1. clean pending placement through detached token stamping, exact-container add, world verification and canonical `placed` commit;
 2. repeated target callbacks and true stream-out/in without duplicate materialisation;
-3. one Inspect activation creating exactly one Evidence and one JournalEntry, followed immediately by save/reload;
+3. one manual Inspect activation creating exactly one Evidence, one asset-discovered entry and, for a fresh D1/D2 introduction, one thread-introduced entry; save/reload immediately and require repeat Inspect to append neither entry;
 4. a T8 sample on the same tick as placement/identity reconciliation without partial or duplicated domain effects;
 5. move the item away from its original container and prove original-container absence does not imply loss;
 6. inject a copied-token duplicate and prove sticky `conflict` with no automatic winner or extra placement;
@@ -40,7 +44,7 @@ T11 is deliberately one-item composition evidence. It does not accept all six pl
 
 ## Verdict
 
-Pending live run. Full production adapter assembly remains blocked until this report has an evidence-backed verdict.
+Pending live run. Acceptance/promotion of the existing conditional production adapter candidate remains blocked until this report has an evidence-backed verdict. No current E01–E13 result is supplied by the historical scaffold summary.
 
 ## Decision links
 

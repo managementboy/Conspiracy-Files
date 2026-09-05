@@ -50,10 +50,10 @@ A negative result is a valid result and must update the decision record.
 
 ## v0.1 pre-assembly gates
 
-The isolated mechanism spikes do not by themselves authorize complete slice assembly. Before production notebook work and the six-document integration begin:
+The isolated mechanism spikes do not accept complete slice assembly. Conditional runtime/notebook code already exists locally; the following gates control its acceptance and promotion. The [2026-09-05 takeover audit](docs/management/PM_TAKEOVER_AUDIT_2026-09-05.md) records the three-location/Muldraugh candidate conflict with the two-location/P2/R2 scope; resolve it before final binding.
 
 1. [ ] **Location binding / Issue #28:** finish the P2/R2 regional route review and candidate-specific arrival negatives, then commit exact bindings only if both candidates pass.
-2. [ ] **Human content gate / Issue #26:** the project owner approves or returns a bounded change list for `dead-air-r1` under `docs/design/AI_PROVENANCE.md`.
+2. [ ] **Content reconciliation / Issue #26:** owner approval of `dead-air-r1` with added context is verified on 2026-09-05. Finish context delivery/disclosure and dependent-document corrections; do not ask for the same approval again or equate it with live acceptance.
 3. [ ] **T11 adapter composition / Issue #29:** combine T1/T4/T5/T8/T10 mechanisms with the accepted domain core on one real bound fixture item and publish observed live evidence.
 4. [ ] **T12 UI runtime feasibility / Issue #25:** validate the approved notebook/Inspect interaction requirements against Build 42 ISUI and feed any limitations back into the design.
 5. [ ] **Decision reconciliation / Issue #30:** record the remaining owner choices on death-recap scope, police-location major treatment and normal-player conflict visibility.

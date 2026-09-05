@@ -104,7 +104,13 @@ If a spike disproves a decision, technical reality wins: supersede the decision 
 | P4-R27 | Three concrete reward moments are defined in `docs/requirements/PLAYER_MOMENTS.md`. | Ensures the mod rewards the player without completion banners. |
 | P4-R28 | “Long inactivity” means a real-world gap between play sessions. | It is a return-player memory aid, not an in-world timer. |
 
-## Technical decisions intentionally pending spikes
+## Takeover reconciliation — 2026-09-05
+
+- **P4-R47 — notebook input:** the owner directed native X close controls and one configurable notebook open/close binding, with Escape reserved for the game's options flow. Do not assign a fixed function key. This supersedes the Escape-close expectation in earlier T12/browser material; controller mapping remains unverified. Direct owner instruction: 2026-09-05 11:18:36 UTC, archived in [owner provenance](docs/management/evidence/2026-09-05-takeover/owner-provenance.json).
+- **Content approval record:** `dead-air-r1` was owner-approved on 2026-09-05 with explanatory context, followed by a required D1/D4 timing correction. Approval is not pending; delivery/disclosure inconsistencies are tracked under Issue #26 and the [takeover audit](docs/management/PM_TAKEOVER_AUDIT_2026-09-05.md).
+- **Unresolved scope reconciliation:** the owner explicitly selected a Muldraugh test route and bounded per-save randomized placement on 2026-09-04. The current takeover still specifies two locations and P2/R2. Preserve both records; do not infer a final three-location shipping approval or silently supersede P4-R01/R40/R41–R43. Issue #28/#30 must settle route, motel membership and the relationship between order-independent evidence and fallback opportunity.
+
+## Remaining conditional spike
 
 - **T6:** never-loaded chunk detection, only if retrofit returns.
 

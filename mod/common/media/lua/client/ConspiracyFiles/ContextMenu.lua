@@ -29,7 +29,8 @@ local function inspect(_, playerNum, item)
         print("[CF-DEAD-AIR]|EVENT|kind=INSPECT|asset=" .. tostring(md.cfAssetId) .. "|title=" .. tostring(md.cfResolvedTitle or item:getName()))
         print("[CF-DEAD-AIR]|BODY|asset=" .. tostring(md.cfAssetId) .. "|text=" .. tostring(md.cfResolvedBody or "<missing>"):gsub("|", "/"):gsub("\n", "\\n"))
         NotebookUI.refresh("evidence", evidenceId)
-        NotebookUI.openReader(tostring(md.cfResolvedTitle or item:getName()), tostring(md.cfResolvedBody or "Text unavailable."))
+        local context = asset and asset.contextText or nil
+        NotebookUI.openReader(tostring(md.cfResolvedTitle or item:getName()), tostring(md.cfResolvedBody or "Text unavailable."), context)
     end)
     if not ok then print("[CF-DEAD-AIR]|EVENT|kind=ERROR|boundary=inspect|error=" .. tostring(err)) end
 end
@@ -83,7 +84,7 @@ local function onMenu(playerNum, context, items)
     local md = item:getModData()
     if not md or md.cfAssetId == nil then return end
     local ordinary = md.cfAssetKind == "ordinary-object"
-    local option = context:addOption(ordinary and "Mark Interesting" or "Inspect Dead Air", nil, ordinary and mark or inspect, playerNum, item)
+    local option = context:addOption(ordinary and "Mark Interesting" or "Inspect Document", nil, ordinary and mark or inspect, playerNum, item)
     if option then option.cfDeadAirAction = ordinary and MARK_ACTION or INSPECT_ACTION end
 end
 

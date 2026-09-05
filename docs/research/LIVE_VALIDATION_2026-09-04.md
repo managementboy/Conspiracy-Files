@@ -2,6 +2,8 @@
 
 Build: Project Zomboid 42.20.4 (`b0bbce05d5`), single-player debug mode.
 
+Takeover qualification, 2026-09-05: the account below describes the earlier owner-selected Muldraugh scaffold, not accepted P2/R2 bindings or the current randomized implementation. The current debug harness calls domain discovery directly; its completion marker cannot verify physical retrieval or P4-R44 manual menu interaction. No complete versioned T11/T12 or E01–E13 matrix is archived here. See [PM audit](../management/PM_TAKEOVER_AUDIT_2026-09-05.md) and its selected direct owner observations.
+
 ## Confirmed locations
 
 - Electronics store / relay: `(10615, 9603, 0)`; items placed on shelves near `(10614, 9604)`.

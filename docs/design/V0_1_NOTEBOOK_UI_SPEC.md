@@ -1,6 +1,6 @@
 # v0.1 usable notebook UI specification
 
-Status: implementation target for the first functional Build 42 UI; visual and input polish remain gated by the attended T12 run.
+Status: conditional implementation target; T12 runtime feasibility is in progress with unresolved scrollbar/contrast failures, and T11 composition is unaccepted. These gates cover functional correctness as well as visual/input usability. See [PM audit](../management/PM_TAKEOVER_AUDIT_2026-09-05.md).
 
 ## Goal
 
@@ -8,7 +8,8 @@ Provide one small, durable retrieval surface for everything the survivor has act
 
 ## First usable surface
 
-- `Open Survivor Notebook` is a cooperative inventory-pane context-menu action. It is a temporary clear open route until the approved configurable keybind is implemented and live-validated.
+- `Open Survivor Notebook` is a cooperative inventory-pane context-menu action. The production UI also exposes an unassigned-by-default, configurable `Conspiracy-Files: Toggle Survivor Notebook` binding; it opens or closes the notebook when the player chooses a keyboard/controller button, while native X buttons close individual windows. Escape remains reserved for the game options flow.
+- P4-R47 records the owner-approved X/configurable-toggle behavior. The implemented keyBinding path does not establish controller mapping/support; that requires an explicit T12 observation.
 - The notebook is one movable, resizable `ISCollapsableWindow` with `Journal` and `Evidence` buttons, a list, a detail panel, and Close.
 - At wide widths the list and detail appear together. At compact widths selection opens detail and `Back to list` returns to the list.
 - Journal and Evidence are always ordered oldest to newest, using canonical ordinals rather than authored asset order.
@@ -25,18 +26,26 @@ Every acquired record shows:
 5. state (`Inspected` for authored documents or `Marked interesting` for player-marked objects);
 6. immutable original context;
 7. complete authored body for known documents, or an explicit explanation that a marked object has no document text;
-8. unresolved leads derived from known evidence and still-unconfirmed locations;
-9. derived connections whose labels are disclosed by this evidence, plus contradiction/recontextualisation notes only when the related evidence is already known.
+8. a short authored `What this is` context line for known documents, expanding abbreviations and identifying the document's practical purpose; the same context appears at the top of the immediate Inspect reader;
+9. unresolved leads derived from known evidence and still-unconfirmed locations;
+10. derived connections whose labels are disclosed by this evidence, plus contradiction/recontextualisation notes only when the related evidence is already known.
 
-No evidence title, body, lead, connection, or relation is read from an undiscovered asset. Static authored content is resolved only through a canonical Evidence record.
+No evidence title, body, context line, lead, connection, or relation is read from an undiscovered asset. Static authored content is resolved only through a canonical Evidence record. Context lines explain terms such as CSS when the player first encounters them; they do not reveal hidden conclusions.
 
 ## Journal contract
 
 Each journal row shows its canonical ordinal, `Major`/`Journal`, and deterministic rendered wording. Detail repeats the full wording and event kind. The UI never adds objectives, solved state, progress, truth claims, or hidden diagnostics.
 
+Content follow-up: the current event wording is intentionally a compact
+development pass. Before the story-facing release, expand each selected Journal
+detail into atmospheric prose that gives the survivor sensory, human and
+practical context. Keep the row title and state label concise for scanning, and
+do not add facts or conclusions that are not supported by the evidence already
+known to the player.
+
 ## Inspect contract
 
-`Inspect Dead Air` performs an idempotent domain discovery and persistence commit before opening a reader. The reader shows the resolved title and complete authoritative body. If the notebook is already open it refreshes immediately and selects the resulting evidence record. Repeat inspection opens the same body without duplicating Evidence or Journal entries.
+`Inspect Document` performs an idempotent domain discovery and persistence commit before opening a reader. The reader shows the resolved title, contextual introduction and complete authoritative body. If the notebook is already open it refreshes immediately and selects the resulting evidence record. Repeat inspection opens the same body without duplicating Evidence or Journal entries. Internal thread identifiers remain diagnostic/logging details rather than player-facing labels.
 
 ## Refresh and failure behavior
 
@@ -48,8 +57,8 @@ Each journal row shows its canonical ordinal, `Major`/`Journal`, and determinist
 
 ## Explicit deferrals
 
-- configurable global keybind;
-- Help utility content and attention/read-state behavior;
+- live validation of the existing configurable global keybind;
+- attention/read-state behavior; the separate Help utility remains an approved requirement and is missing from the current production candidate;
 - keyboard/controller focus graph and controller opening;
 - geometry persistence and off-screen recovery;
 - final fonts, textures, icons, sounds, and visual polish;

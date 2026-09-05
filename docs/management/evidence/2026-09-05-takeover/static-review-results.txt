@@ -1,0 +1,4 @@
+OBSERVED: 3 story Location IDs; CF-V01-P01 requires 2
+OBSERVED: D2-only context reveals full organisation name while canonical label remains generic
+OBSERVED: Inspect reader receives nil context despite authored D1 context; asset is out of scope
+3 review findings reproduced using mocks; no live acceptance inferred

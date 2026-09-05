@@ -1,8 +1,10 @@
 # THREAD-001 — Dead Air
 
-**Status:** Complete authored v0.1 content candidate. Development-time AI assisted this draft; human approval is required before it is treated as canonical shipped content under `docs/design/AI_PROVENANCE.md`.
+**Status:** Development-time AI-assisted authored content; owner approval with explanatory context is verified for 2026-09-05 under `docs/design/AI_PROVENANCE.md`. See [approval record](../../docs/reviews/DEAD_AIR_CONTENT_REVIEW_2026-09-03.md). Issue #26 remains open for context delivery/disclosure and projection-copy reconciliation; this is not live integration acceptance.
 **Content revision:** `dead-air-r1`
 **Purpose:** one hand-authored narrative thread that proves the v0.1 investigation loop before any generic content-pack schema exists.
+
+**Takeover note, 2026-09-05:** all six bodies match current Content.lua, including the 23:58/7C-41 correction. Display names, summary examples and generic-to-specific organisation annotations below still require reconciliation with the added context. The two-location/P2/R2 design also conflicts with the owner-selected Muldraugh test and current motel candidate. Preserve authored bodies; resolve those differences through the [PM audit](../../docs/management/PM_TAKEOVER_AUDIT_2026-09-05.md) before shipping acceptance.
 
 ## Authorial boundary
 
@@ -155,10 +157,10 @@ Spare exciter cabinet B-37
 
 Work performed:
 23:52  Checked normal county channels. No fault found.
-00:11  Installed customer-supplied frequency-control package marked
+23:58  Installed customer-supplied frequency-control package marked
        "7C-41" in spare exciter per dispatch instruction.
 00:24  Key test, five seconds. No voice path requested.
-00:31  Dispatch instructed: LEAVE 7C ENABLED. DO NOT ENTER FREQ. ON COPY.
+00:31  Dispatch instructed: LEAVE 7C-41 ENABLED. DO NOT ENTER FREQ. ON COPY.
 00:47  Carrier observed on reserve channel. No voice, tone or station ID.
 00:53  Carrier repeated.
 00:59  Carrier repeated.
@@ -171,7 +173,7 @@ Work performed:
 03:41  County unit arrived at south gate with typed hold request.
        My portable monitor was taken for property intake.
        No equipment removed from relay cabinet.
-04:05  Dispatch: leave 7C package installed. Close ticket as routine setup.
+04:05  Dispatch: leave 7C-41 package installed. Close ticket as routine setup.
 
 Parts:
 1 customer-supplied frequency-control package .......... N/C
@@ -383,7 +385,7 @@ Vale may be CSS staff, the customer, a liaison or merely the name attached to an
 Keeping this one off the official pad because the official pad has developed
 a sudden allergy to events.
 
-Thursday night dispatch says "Vale wants 7C live before midnight."
+Thursday night dispatch says "Vale wants 7C-41 live before midnight."
 I ask WHICH Vale. Answer: "the one on the authorization."
 Excellent. Very helpful. I will repair radios by horoscope next.
 
@@ -688,7 +690,7 @@ Journal chronology is discovery order, not story chronology. Text below is imple
 | D1 | `Found a CSS service ticket for Relay Site 31. Rourke logged a 37-second dead carrier and says police took his receiver.` | Major **only if** this is the first Dead Air document discovered; it triggers the thread-introduced event. |
 | D2 | `Police logged a modified receiver from Relay Site 31. No requesting agency is named; the set carries a CSS service number.` | Major **only if** this is the first Dead Air document discovered; it triggers the same thread-introduced event. |
 | D3 | `CSS billed ordinary relay work around a customer-supplied 7C-41 package. H. Vale approved it without a customer name.` | No. |
-| D4 | `Rourke kept a private account. He says he was told to make 7C live, then told the test never happened.` | No. |
+| D4 | `Rourke kept a private account. He says he was told to make 7C-41 live, then told the test never happened.` | No. |
 | D5 | `A memo signed H. Vale says police were warned about the relay work in advance and told not to report the tests by themselves.` | No by itself. |
 | D6 | `Pike's shift note says the advance memo was not there when the receiver was taken, and callers could not agree what "H. Vale" meant.` | Major when this discovery completes the authored contradiction prerequisites. |
 

@@ -12,8 +12,9 @@ ConspiracyFiles.T12Probe = ConspiracyFiles.T12Probe or {}
 
 local T12 = ConspiracyFiles.T12Probe
 local PREFIX = "[CF-T12]"
+local PROBE_VERSION = "DEV-0.5-document-scrollbar"
 local OPTION_KEY = "ConspiracyFiles.T12.Open"
-local SAVE_PREFIX = "T12_"
+local TOGGLE_BIND = "Conspiracy-Files T12: Toggle Notebook"
 local MOD_ID = "ConspiracyFiles_T12_Probe"
 
 local JOURNAL = {
@@ -44,7 +45,7 @@ local function saveFolder()
 end
 
 local function guardedEnvironment()
-    if saveFolder():sub(1, #SAVE_PREFIX) ~= SAVE_PREFIX then return false, "save-prefix" end
+    if saveFolder() == "" then return false, "no-save" end
     local ok, mods = pcall(getActivatedMods)
     if not ok or mods == nil then return false, "activated-mods" end
     local countOk, count = pcall(function() return mods:size() end)
@@ -63,17 +64,9 @@ function T12HelpWindow:createChildren()
     self.text:instantiate()
     self.text.autosetheight = false
     self.text.clip = true
-    self.text:setText("ABOUT THESE NOTES\n\nThis is a disposable T12 utility window.\n\nINSPECT\nRead unusual documents through their inventory action.\n\nMARK INTERESTING\nRecord an acquired object because you think it matters.\n\nEscape should close the topmost probe window.")
+    self.text:setText("ABOUT THESE NOTES\n\nThis is a disposable T12 utility window.\n\nINSPECT\nRead unusual documents through their inventory action.\n\nMARK INTERESTING\nRecord an acquired object because you think it matters.\n\nUse the window X buttons to close. The Toggle Notebook key binding opens or closes the notebook.")
     self.text:paginate()
     self:addChild(self.text)
-end
-
-function T12HelpWindow:isKeyConsumed(key)
-    return key == Keyboard.KEY_ESCAPE
-end
-
-function T12HelpWindow:onKeyRelease(key)
-    if key == Keyboard.KEY_ESCAPE then self:close() end
 end
 
 function T12HelpWindow:close()
@@ -85,11 +78,100 @@ end
 function T12HelpWindow:new(x, y)
     local o = ISCollapsableWindow.new(self, x, y, 430, 360)
     o:setTitle("T12 Help utility")
-    o:setWantKeyEvents(true)
     return o
 end
 
 local T12NotebookWindow = ISCollapsableWindow:derive("T12NotebookWindow")
+
+-- ISRichTextPanel scrolls correctly in Build 42, but its inherited native
+-- scrollbar did not paint when embedded in this resizable window.  Keep the
+-- text panel as the scroll authority and expose its position through a
+-- separate sibling control.  This avoids relying on undocumented child
+-- painting behavior while retaining the engine's clamping and wheel support.
+local T12DocumentScrollBar = ISPanel:derive("T12DocumentScrollBar")
+
+function T12DocumentScrollBar:metrics()
+    local visible = math.max(1, self.target:getScrollAreaHeight())
+    local total = math.max(visible, self.target:getScrollHeight())
+    local maximum = math.max(0, total - visible)
+    local offset = math.max(0, math.min(maximum, -self.target:getYScroll()))
+    local trackTop = 18
+    local trackHeight = math.max(1, self.height - 36)
+    local thumbHeight = trackHeight
+    local thumbY = trackTop
+    if maximum > 0 then
+        thumbHeight = math.max(24, math.floor(trackHeight * visible / total))
+        thumbHeight = math.min(trackHeight, thumbHeight)
+        thumbY = trackTop + math.floor((trackHeight - thumbHeight) * offset / maximum)
+    end
+    return maximum, offset, trackTop, trackHeight, thumbY, thumbHeight
+end
+
+function T12DocumentScrollBar:prerender()
+    local maximum, _, trackTop, trackHeight, thumbY, thumbHeight = self:metrics()
+    self:drawRect(0, 0, self.width, self.height, 1, 0.02, 0.02, 0.02)
+    self:drawRectBorder(0, 0, self.width, self.height, 1, 0.55, 0.55, 0.55)
+    self:drawRect(4, trackTop, self.width - 8, trackHeight, 1, 0.12, 0.12, 0.12)
+    self:drawRect(4, 4, self.width - 8, 10, 1, 0.72, 0.72, 0.72)
+    self:drawRect(4, self.height - 14, self.width - 8, 10, 1, 0.72, 0.72, 0.72)
+    local tone = maximum > 0 and (self.dragging and 1 or 0.88) or 0.42
+    self:drawRect(3, thumbY, self.width - 6, thumbHeight, 1, tone, tone, tone)
+    self:drawRectBorder(3, thumbY, self.width - 6, thumbHeight, 1, 0.25, 0.25, 0.25)
+end
+
+function T12DocumentScrollBar:onMouseDown(_, y)
+    local maximum, offset, _, trackHeight, thumbY, thumbHeight = self:metrics()
+    if maximum <= 0 then return true end
+    if y >= thumbY and y <= thumbY + thumbHeight then
+        self.dragging = true
+        self.dragOffset = 0
+        self.dragStartOffset = offset
+        self.dragTravel = math.max(1, trackHeight - thumbHeight)
+        self:setCapture(true)
+    elseif y < thumbY then
+        self.target:setYScroll(self.target:getYScroll() + self.target:getScrollAreaHeight() * 0.9)
+    else
+        self.target:setYScroll(self.target:getYScroll() - self.target:getScrollAreaHeight() * 0.9)
+    end
+    return true
+end
+
+function T12DocumentScrollBar:onMouseMove(_, dy)
+    if not self.dragging then return end
+    local maximum = select(1, self:metrics())
+    self.dragOffset = self.dragOffset + dy
+    local offset = self.dragStartOffset + self.dragOffset * maximum / self.dragTravel
+    self.target:setYScroll(-offset)
+end
+
+function T12DocumentScrollBar:onMouseMoveOutside(dx, dy)
+    self:onMouseMove(dx, dy)
+end
+
+function T12DocumentScrollBar:onMouseUp()
+    if not self.dragging then return false end
+    self.dragging = false
+    self:setCapture(false)
+    return true
+end
+
+function T12DocumentScrollBar:onMouseUpOutside()
+    self.dragging = false
+    self:setCapture(false)
+end
+
+function T12DocumentScrollBar:onMouseWheel(del)
+    return self.target:onMouseWheel(del)
+end
+
+function T12DocumentScrollBar:new(target)
+    local o = ISPanel.new(self, 0, 0, 18, 100)
+    o.target = target
+    o.dragging = false
+    o.background = false
+    o.border = false
+    return o
+end
 
 function T12NotebookWindow:drawRow(y, item)
     if self.selected == item.index then
@@ -148,8 +230,11 @@ function T12NotebookWindow:onContrast(button)
     button:setTitle(self.highContrast and "Normal contrast" or "High contrast")
     if self.highContrast then
         self.backgroundColor = { r = 0.04, g = 0.04, b = 0.04, a = 0.98 }
-        self.detail.backgroundColor = { r = 0.96, g = 0.95, b = 0.91, a = 1 }
-        self.detail.textR, self.detail.textG, self.detail.textB = 0.05, 0.05, 0.04
+        -- ISRichTextPanel applies parsed line colours during render, so use a
+        -- dark surface here; the panel's reliable default light text remains
+        -- readable even when the content contains headings or colour tags.
+        self.detail.backgroundColor = { r = 0.02, g = 0.02, b = 0.02, a = 1 }
+        self.detail.textR, self.detail.textG, self.detail.textB = 1, 1, 1
     else
         self.backgroundColor = { r = 0.08, g = 0.10, b = 0.09, a = 0.96 }
         self.detail.backgroundColor = { r = 0.76, g = 0.73, b = 0.63, a = 1 }
@@ -195,6 +280,11 @@ function T12NotebookWindow:createChildren()
     self.detail.textR, self.detail.textG, self.detail.textB = 0.12, 0.12, 0.10
     self:addChild(self.detail)
 
+    self.detailScrollBar = T12DocumentScrollBar:new(self.detail)
+    self.detailScrollBar:initialise()
+    self.detailScrollBar:instantiate()
+    self:addChild(self.detailScrollBar)
+
     self.journalButton = ISButton:new(self.width - 92, self:titleBarHeight() + 22, 88, 42, "Journal", self, T12NotebookWindow.onSection)
     self.journalButton.internal = "journal"
     self.journalButton:initialise()
@@ -225,7 +315,7 @@ function T12NotebookWindow:applyPreferredLayout(width, height)
 end
 
 function T12NotebookWindow:applyLayout(reason)
-    local tabWidth, gap = 96, 12
+    local tabWidth, gap, scrollWidth = 96, 12, 18
     local top = self:titleBarHeight() + gap
     local bottom = self:resizeWidgetHeight() + gap
     local contentWidth = self.width - tabWidth - gap * 2
@@ -251,8 +341,11 @@ function T12NotebookWindow:applyLayout(reason)
         self.list:setHeight(contentHeight)
         self.detail:setX(gap)
         self.detail:setY(top + (self.detailOnly and 40 or 0))
-        self.detail:setWidth(contentWidth)
+        self.detail:setWidth(contentWidth - scrollWidth)
         self.detail:setHeight(contentHeight - (self.detailOnly and 40 or 0))
+        self.detailScrollBar:setX(self.detail:getX() + self.detail:getWidth())
+        self.detailScrollBar:setY(self.detail:getY())
+        self.detailScrollBar:setHeight(self.detail:getHeight())
     else
         self.backButton:setVisible(false)
         self.list:setVisible(true)
@@ -264,24 +357,23 @@ function T12NotebookWindow:applyLayout(reason)
         self.list:setHeight(contentHeight)
         self.detail:setX(gap + listWidth + gap)
         self.detail:setY(top)
-        self.detail:setWidth(contentWidth - listWidth - gap)
+        self.detail:setWidth(contentWidth - listWidth - gap - scrollWidth)
         self.detail:setHeight(contentHeight)
+        self.detailScrollBar:setX(self.detail:getX() + self.detail:getWidth())
+        self.detailScrollBar:setY(self.detail:getY())
+        self.detailScrollBar:setHeight(self.detail:getHeight())
     end
     self.detail:paginate()
-end
-
-function T12NotebookWindow:isKeyConsumed(key)
-    return key == Keyboard.KEY_ESCAPE
-end
-
-function T12NotebookWindow:onKeyRelease(key)
-    if key ~= Keyboard.KEY_ESCAPE then return end
-    if T12.helpWindow then
-        T12.helpWindow:close()
-    elseif self.compact and self.detailOnly then
-        self:onBack()
-    else
-        self:close()
+    -- Keep the control visible for short and long entries.  A full-height dim
+    -- thumb means "everything fits"; a shorter bright thumb means overflow.
+    -- This also makes the attended probe self-diagnosing instead of silently
+    -- hiding the control when engine metrics are unexpected.
+    self.detailScrollBar:setVisible(self.detail:getIsVisible())
+    local maximum, offset = self.detailScrollBar:metrics()
+    local scrollSignature = tostring(math.floor(offset)) .. "/" .. tostring(math.floor(maximum))
+    if scrollSignature ~= self.scrollSignature then
+        self.scrollSignature = scrollSignature
+        log("DOCUMENT_SCROLL", { "position=" .. scrollSignature, "visible=" .. tostring(math.floor(self.detail:getScrollAreaHeight())), "total=" .. tostring(math.floor(self.detail:getScrollHeight())) })
     end
 end
 
@@ -307,8 +399,7 @@ end
 
 function T12NotebookWindow:new(x, y, width, height)
     local o = ISCollapsableWindow.new(self, x, y, width, height)
-    o:setTitle("T12 Survivor's Notebook")
-    o:setWantKeyEvents(true)
+    o:setTitle("T12 Survivor's Notebook [" .. PROBE_VERSION .. "]")
     o.minimumWidth = 520
     o.minimumHeight = 420
     o.compact = false
@@ -337,7 +428,7 @@ local function openProbe()
     T12.notebook:initialise()
     T12.notebook:instantiate()
     T12.notebook:addToUIManager()
-    log("NOTEBOOK_OPEN", { "build=" .. safe(getGameVersion and getGameVersion() or "unknown"), "width=" .. tostring(width), "height=" .. tostring(height) })
+    log("NOTEBOOK_OPEN", { "probe=" .. PROBE_VERSION, "build=" .. safe(getGameVersion and getGameVersion() or "unknown"), "width=" .. tostring(width), "height=" .. tostring(height) })
 end
 
 local function onContextMenu(_, context)
@@ -350,14 +441,37 @@ local function onContextMenu(_, context)
     option.cfT12ActionKey = OPTION_KEY
 end
 
+local function toggleProbe()
+    if T12.notebook then T12.notebook:close() else openProbe() end
+end
+
 local function register()
-    if T12.contextHandler then Events.OnFillInventoryObjectContextMenu.Remove(T12.contextHandler) end
-    T12.contextHandler = onContextMenu
-    Events.OnFillInventoryObjectContextMenu.Add(T12.contextHandler)
+    -- Build 42 can load this file more than once.  Do not call Remove here:
+    -- some event implementations expose Add only, and a second dofile would
+    -- otherwise turn a harmless reload into "Object tried to call nil".
+    if not T12.contextHandler then
+        T12.contextHandler = onContextMenu
+        Events.OnFillInventoryObjectContextMenu.Add(T12.contextHandler)
+    end
 end
 
 T12.open = openProbe
+T12.toggle = toggleProbe
 T12.guardedEnvironment = guardedEnvironment
 T12.register = register
+
+if keyBinding then
+    local present = false
+    for _, binding in ipairs(keyBinding) do if binding.value == TOGGLE_BIND then present = true; break end end
+    if not present then table.insert(keyBinding, { value = TOGGLE_BIND, key = Keyboard.KEY_NONE }) end
+end
+if Events and Events.OnKeyPressed then
+    if not T12.keyHandler then
+        T12.keyHandler = function(key)
+            if getCore():getKey(TOGGLE_BIND) == key then toggleProbe() end
+        end
+        Events.OnKeyPressed.Add(T12.keyHandler)
+    end
+end
 
 register()

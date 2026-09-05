@@ -475,6 +475,8 @@ test("notebook projection is discovery-ordered and knowledge-bounded", function(
     assertEqual(4, #rows)
     assertEqual(Content.assets[ids.d6].displayName, rows[1].title)
     assertEqual(Content.assets[ids.d3].displayName, rows[2].title)
+    assertTrue(string.find(rows[2].detailText, "WHAT THIS IS", 1, true) ~= nil)
+    assertTrue(string.find(rows[2].detailText, "Cumberland Signal Services", 1, true) ~= nil)
     assertEqual("Marked object", rows[3].typeLabel)
     assertEqual("Marked interesting", rows[3].statusLabel)
     assertTrue(string.find(rows[3].bodyText, "remains recorded", 1, true) ~= nil)

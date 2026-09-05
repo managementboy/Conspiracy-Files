@@ -67,6 +67,7 @@ function NotebookProjection.evidence(state)
         local typeLabel = isDocument and "Document" or "Marked object"
         local statusLabel = isDocument and "Inspected" or "Marked interesting"
         local body = isDocument and resolved.bodyText or "No document text. This object remains recorded because you marked it interesting."
+        local whatThisIs = isDocument and (asset.contextText or "No additional context recorded.") or nil
         rows[#rows + 1] = {
             id = evidence.evidenceId,
             ordinal = evidence.discoveryOrdinal,
@@ -75,6 +76,7 @@ function NotebookProjection.evidence(state)
             statusLabel = statusLabel,
             locationLabel = location,
             contextText = evidence.contextText,
+            whatThisIs = whatThisIs,
             bodyText = body,
             leads = leads,
             connections = connections,
@@ -84,6 +86,7 @@ function NotebookProjection.evidence(state)
                 .. "\nSTATUS: " .. statusLabel
                 .. "\nFOUND: " .. location
                 .. "\nDISCOVERY: " .. tostring(evidence.discoveryOrdinal)
+                .. (whatThisIs and "\n\nWHAT THIS IS\n" .. whatThisIs or "")
                 .. "\n\nORIGINAL CONTEXT\n" .. evidence.contextText
                 .. "\n\nUNRESOLVED LEADS\n" .. joinLines(leads)
                 .. "\n\nKNOWN CONNECTIONS\n" .. joinLines(connections)

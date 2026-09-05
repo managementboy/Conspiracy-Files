@@ -86,10 +86,11 @@ Content.locations = {
 
 Content.assets = {
     [D1] = {
-        assetId = D1, threadId = THREAD_ID, displayName = "CSS Field Service Ticket 93-0714",
+        assetId = D1, threadId = THREAD_ID, displayName = "Cumberland Signal Services Field Service Ticket 93-0714",
         assetKind = "document", placementLocationId = RELAY, entryRole = "anchor",
         references = { ROURKE, CSS, RELAY }, leadLocationIds = { POLICE }, autoRecordEvidence = true,
-        journalText = "Found a CSS service ticket for Relay Site 31. Rourke logged a 37-second dead carrier and says police took his receiver.",
+        contextText = "A field-service ticket from Cumberland Signal Services (CSS), the private communications contractor that maintained the relay equipment.",
+        journalText = "Found a Cumberland Signal Services (CSS) service ticket for Relay Site 31. Rourke logged a 37-second dead carrier and says police took his receiver.",
         bodyText = [[CUMBERLAND SIGNAL SERVICES
 FIELD SERVICE TICKET
 
@@ -111,10 +112,10 @@ Spare exciter cabinet B-37
 
 Work performed:
 23:52  Checked normal county channels. No fault found.
-00:11  Installed customer-supplied frequency-control package marked
+23:58  Installed customer-supplied frequency-control package marked
        "7C-41" in spare exciter per dispatch instruction.
 00:24  Key test, five seconds. No voice path requested.
-00:31  Dispatch instructed: LEAVE 7C ENABLED. DO NOT ENTER FREQ. ON COPY.
+00:31  Dispatch instructed: LEAVE 7C-41 ENABLED. DO NOT ENTER FREQ. ON COPY.
 00:47  Carrier observed on reserve channel. No voice, tone or station ID.
 00:53  Carrier repeated.
 00:59  Carrier repeated.
@@ -127,7 +128,7 @@ Work performed:
 03:41  County unit arrived at south gate with typed hold request.
        My portable monitor was taken for property intake.
        No equipment removed from relay cabinet.
-04:05  Dispatch: leave 7C package installed. Close ticket as routine setup.
+04:05  Dispatch: leave 7C-41 package installed. Close ticket as routine setup.
 
 Parts:
 1 customer-supplied frequency-control package .......... N/C
@@ -148,7 +149,8 @@ B-37 red key was on the same ring when they took the set.]]
         assetId = D2, threadId = THREAD_ID, displayName = "Police Property Record 4471",
         assetKind = "document", placementLocationId = POLICE, entryRole = "fallback",
         references = { PIKE, CSS, RELAY }, leadLocationIds = { RELAY }, autoRecordEvidence = true,
-        journalText = "Police logged a modified receiver from Relay Site 31. No requesting agency is named; the set carries a CSS service number.",
+        contextText = "A police property record for a receiver taken from a communications technician. CSS is the Cumberland Signal Services contractor named on the equipment.",
+        journalText = "Police logged a modified receiver from Relay Site 31. No requesting agency is named; the set carries a Cumberland Signal Services (CSS) service number.",
         bodyText = [[PROPERTY / FOUND ARTICLE RECORD
 
 Record No.: 4471
@@ -197,10 +199,11 @@ a beautiful instruction sheet.
 Apparently "nobody" has excellent stationery.]]
     },
     [D3] = {
-        assetId = D3, threadId = THREAD_ID, displayName = "CSS Invoice / Stock Transfer 9327",
+        assetId = D3, threadId = THREAD_ID, displayName = "Cumberland Signal Services Invoice / Stock Transfer 9327",
         assetKind = "document", placementLocationId = RELAY,
         references = { CSS, VALE, RELAY }, autoRecordEvidence = true,
-        journalText = "CSS billed ordinary relay work around a customer-supplied 7C-41 package. H. Vale approved it without a customer name.",
+        contextText = "An invoice and stock-transfer sheet from Cumberland Signal Services (CSS). It records the equipment and authorization code used at Relay Site 31.",
+        journalText = "Cumberland Signal Services (CSS) billed ordinary relay work around a customer-supplied 7C-41 package. H. Vale approved it without a customer name.",
         bodyText = [[CUMBERLAND SIGNAL SERVICES
 SERVICE PARTS / STOCK TRANSFER
 
@@ -245,13 +248,14 @@ APPROVED: H. VALE]]
         assetId = D4, threadId = THREAD_ID, displayName = "Torn Page from Rourke's Work Notebook",
         assetKind = "document", placementLocationId = MOTEL,
         references = { ROURKE, PIKE, VALE, CSS, RELAY }, autoRecordEvidence = true,
-        journalText = "Rourke kept a private account. He says he was told to make 7C live, then told the test never happened.",
+        contextText = "A private notebook page written by M. Rourke, the CSS field technician who worked at Relay Site 31.",
+        journalText = "Rourke, a Cumberland Signal Services (CSS) technician, kept a private account. He says he was told to make 7C-41 live, then told the test never happened.",
         bodyText = [[7/3
 
 Keeping this one off the official pad because the official pad has developed
 a sudden allergy to events.
 
-Thursday night dispatch says "Vale wants 7C live before midnight."
+Thursday night dispatch says "Vale wants 7C-41 live before midnight."
 I ask WHICH Vale. Answer: "the one on the authorization."
 Excellent. Very helpful. I will repair radios by horoscope next.
 
@@ -279,7 +283,8 @@ Carbon paper: the nation's last reliable backup system.]]
         assetId = D5, threadId = THREAD_ID, displayName = "Temporary Access and Reporting Procedure — Relay 31",
         assetKind = "document", placementLocationId = POLICE,
         references = { VALE, CSS, RELAY }, contradictsAssetIds = { D6, D2 }, autoRecordEvidence = true,
-        journalText = "A memo signed H. Vale says police were warned about the relay work in advance and told not to report the tests by themselves.",
+        contextText = "An administrative memo on Cumberland Signal Services (CSS) letterhead, addressed to local patrol, property, and communications supervisors.",
+        journalText = "A Cumberland Signal Services (CSS) memo signed H. Vale says police were warned about the relay work in advance and told not to report the tests by themselves.",
         bodyText = [=[CUMBERLAND SIGNAL SERVICES
 ADMINISTRATIVE COORDINATION
 
@@ -333,7 +338,8 @@ CUSTOMER COPY — [faint/illegible]]=]
         assetKind = "document", placementLocationId = POLICE,
         references = { PIKE, ROURKE, VALE, CSS, RELAY }, contradictsAssetIds = { D5 },
         recontextualisesAssetIds = { KEY }, autoRecordEvidence = true,
-        journalText = "Pike's shift note says the advance memo was not there when the receiver was taken, and callers could not agree what \"H. Vale\" meant.",
+        contextText = "A handwritten note by Sgt. Dana Pike, the police property supervisor who logged the receiver under record 4471.",
+        journalText = "Pike's shift note says the Cumberland Signal Services (CSS) memo was not there when the receiver was taken, and callers could not agree what \"H. Vale\" meant.",
         bodyText = [[PROPERTY — DAY SHIFT
 
 Re: 4471
@@ -423,7 +429,8 @@ local function validateContent()
         for _, locationId in ipairs(asset.leadLocationIds or {}) do if not Content.locations[locationId] then return false, "unresolved lead Location ID" end end
         for _, otherAssetId in ipairs(asset.contradictsAssetIds or {}) do if not Content.assets[otherAssetId] then return false, "unresolved contradiction Asset ID" end end
         for _, otherAssetId in ipairs(asset.recontextualisesAssetIds or {}) do if not Content.assets[otherAssetId] then return false, "unresolved recontextualisation Asset ID" end end
-        if asset.assetKind == "document" and (type(asset.bodyText) ~= "string" or type(asset.journalText) ~= "string" or not asset.autoRecordEvidence) then
+        if asset.assetKind == "document" and (type(asset.bodyText) ~= "string" or type(asset.contextText) ~= "string"
+            or type(asset.journalText) ~= "string" or not asset.autoRecordEvidence) then
             return false, "document Asset is incomplete " .. assetId
         end
     end

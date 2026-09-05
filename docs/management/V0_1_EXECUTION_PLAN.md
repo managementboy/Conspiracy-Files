@@ -1,6 +1,6 @@
 # v0.1 Vertical Slice — Execution Plan
 
-Status: Active preparation
+Status: Active integration correction and evidence reconciliation; see [2026-09-05 takeover audit](PM_TAKEOVER_AUDIT_2026-09-05.md).
 
 Milestone: [v0.1 Vertical Slice](https://github.com/managementboy/Conspiracy-Files/milestone/1)
 
@@ -8,14 +8,14 @@ Prepared: 2026-09-03
 
 ## Delivery rule
 
-The accepted plain-Lua domain core and the isolated T1–T10 mechanisms are strong foundations, but they do not yet prove a composed playable system. Full production assembly begins only after the location, content, adapter-composition, UI-runtime and owner-decision gates below are closed with recorded evidence.
+The accepted plain-Lua domain core and isolated mechanisms do not prove a composed playable system. Conditional production-oriented code already exists locally. Correct and review it before promotion; location, content reconciliation, T11, T12 and owner-decision gates remain required. Code presence does not close a gate.
 
 ## Critical path
 
-1. **Issue #28 — bind P2/R2.** Resume the preserved location checkpoint, verify the regional route and candidate-specific arrival negatives, then update the fixture/design/acceptance bindings.
-2. **Issue #26 — approve Dead Air content.** The owner approves `dead-air-r1` or supplies a bounded change list. Technical contributors cannot self-close this gate.
+1. **Issue #28 — resolve route and bind exact targets.** Reconcile this takeover's two-location/P2/R2 scope with the earlier owner-selected Muldraugh test and motel candidate. Preserve the location checkpoint; perform candidate-specific route and arrival negatives only after the target scope is settled.
+2. **Issue #26 — reconcile approved Dead Air content.** Direct owner approval with context is verified for 2026-09-05. Fix the Inspect context delivery, organisation-disclosure inconsistency and stale fixture projection copy before closure; approval itself must not be requested again.
 3. **Issue #29 — T11 adapter composition.** Exercise one bound fixture item across placement, identity, Inspect/discovery, arrival and persistence before scaling to six documents.
-4. **Issue #25 — T12 UI runtime feasibility.** Prove the minimum notebook and Inspect interaction model in Build 42 ISUI before production UI implementation.
+4. **Issue #25 — T12 UI runtime feasibility.** In progress with unresolved scrollbar/contrast observations. Verify the corrected production-intended notebook and Inspect path, versioned independently from the synthetic probe, before acceptance.
 5. **Issue #30 — reconcile owner decisions.** Keep the already-approved Help-window decision authoritative and resolve the remaining preference choices.
 6. **Issue #31 — assemble the slice.** Implement only the accepted v0.1 scope.
 7. **Issue #27 — execute E01–E13.** Accept the slice only after every product, content and live-engine criterion passes.
@@ -47,11 +47,11 @@ No unattended result may be worded as live validation. Prepared probes remain `P
 
 The next attended decision session should answer only these bounded questions:
 
-1. Approve `dead-air-r1`, or identify exact documents/passages requiring revision.
+1. Resolve the location/scope conflict described above; recorded content approval stands.
 2. Should police-property confirmation be an ordinary journal entry or a `Major` discovery like relay confirmation?
 3. Should normal players ever see technical `untracked` or `conflict` wording, or only a human-readable availability consequence?
 4. Is the deterministic death recap in v0.1? If yes, approve a named lifecycle probe before implementation.
-5. Re-confirm the 2026-09-01 UI direction after the cooling-off review, including the separate Help utility window and right-edge tabs.
+5. Existing separate Help/right-edge direction and P4-R47 input decision stand; only a proposed deviation needs another owner decision.
 
 ## Definition of ready for production assembly
 

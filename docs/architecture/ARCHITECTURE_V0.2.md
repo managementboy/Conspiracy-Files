@@ -60,7 +60,7 @@ Curated location arrival follows T8: evaluate only referenced bindings on a boun
 v0.1:
 - notebook journal;
 - evidence list;
-- in-fiction help/onboarding page.
+- separate dark Help utility window opened from labeled notebook chrome under P4-R46; one configurable notebook toggle with native X close controls and Escape reserved for the game under P4-R47.
 
 v2 candidate:
 - relationship graph.
@@ -88,7 +88,7 @@ Persist only what cannot be reconstructed:
 
 Do **not** persist a full map registry in v0.1.
 
-Provisional target: **≤500 KB canonical state per save**. T1 owns the real limit.
+Hard v0.1 limit: **≤500 KB canonical state per save** under completed T1/P4-R17; the current validator conservatively enforces 500000 bytes. Full staged validation remains mandatory.
 
 ## 5. Entity model for v0.1
 
@@ -247,6 +247,8 @@ Backward-compatible typo/text revisions must not force save migration. Content p
 - runtime AI — optional future enhancement.
 
 ## 18. Architecture proof gates
+
+The [2026-09-05 takeover audit](../management/PM_TAKEOVER_AUDIT_2026-09-05.md) records incomplete conditional runtime/UI code. It does not supersede this architecture. T11 composition and T12 runtime UI verdicts remain required for promotion; T12 is in progress with unresolved failures. Route and two-location scope must be reconciled with the earlier Muldraugh test direction before binding.
 
 Before the broad architecture is considered signed off, record spike results for T1–T10 using `docs/research/SPIKE_TEMPLATE.md`.
 

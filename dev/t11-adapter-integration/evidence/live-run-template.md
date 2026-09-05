@@ -4,11 +4,14 @@
 - Date/operator:
 - Build/revision/Steam build ID:
 - Probe commit:
+- Candidate source/deployed hashes and differences from production-intended path:
 - Save name:
 - Enabled mods:
 - Baseline/setup hashes:
 
 ## Matrix results
+
+For first D1/D2 Inspect, count one Evidence, one asset-discovered and one thread-introduced entry separately; repeat Inspect adds none. Do not use the direct-domain debug harness as manual menu evidence.
 
 | Phase | Result | Observed counts/timing | Evidence reference |
 |---|---|---|---|
