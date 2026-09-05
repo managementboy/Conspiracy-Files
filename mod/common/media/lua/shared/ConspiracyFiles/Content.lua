@@ -5,7 +5,6 @@ local Content = {}
 local THREAD_ID = "dead-air:thread"
 local RELAY = "dead-air:location:relay-office"
 local POLICE = "dead-air:location:police-property"
-local MOTEL = "dead-air:location:rourke-motel"
 local ROURKE = "dead-air:identity:m-rourke"
 local PIKE = "dead-air:identity:dana-pike"
 local VALE = "dead-air:identity:h-vale"
@@ -20,7 +19,7 @@ local D6 = "dead-air:asset:pike-shift-note-0705"
 local KEY = "dead-air:asset:key-b37"
 
 Content.ids = {
-    thread = THREAD_ID, relay = RELAY, police = POLICE, motel = MOTEL,
+    thread = THREAD_ID, relay = RELAY, police = POLICE,
     d1 = D1, d2 = D2, d3 = D3, d4 = D4, d5 = D5, d6 = D6, key = KEY,
     rourke = ROURKE, pike = PIKE, vale = VALE, css = CSS
 }
@@ -33,7 +32,7 @@ Content.thread = {
     optionalAssetIds = { KEY },
     identityIds = { ROURKE, PIKE, VALE },
     organisationId = CSS,
-    locationIds = { RELAY, POLICE, MOTEL },
+    locationIds = { RELAY, POLICE },
     anchorAssetId = D1,
     fallbackAssetId = D2
 }
@@ -75,12 +74,6 @@ Content.locations = {
         preArrivalLabel = "police property desk",
         confirmedLabel = "police property / records area",
         storyRequirement = "hand-curated vanilla police station with plausible property/records context"
-    },
-    [MOTEL] = {
-        locationId = MOTEL,
-        preArrivalLabel = "Rourke's motel room",
-        confirmedLabel = "Rourke's motel room",
-        storyRequirement = "reachable motel room at the owner-confirmed coordinate"
     }
 }
 
@@ -149,8 +142,8 @@ B-37 red key was on the same ring when they took the set.]]
         assetId = D2, threadId = THREAD_ID, displayName = "Police Property Record 4471",
         assetKind = "document", placementLocationId = POLICE, entryRole = "fallback",
         references = { PIKE, CSS, RELAY }, leadLocationIds = { RELAY }, autoRecordEvidence = true,
-        contextText = "A police property record for a receiver taken from a communications technician. CSS is the Cumberland Signal Services contractor named on the equipment.",
-        journalText = "Police logged a modified receiver from Relay Site 31. No requesting agency is named; the set carries a Cumberland Signal Services (CSS) service number.",
+        contextText = "A police intake form for a seized radio receiver. The initials C.S.S. identify its communications maintenance contractor; this record does not spell out the company name.",
+        journalText = "Police logged a modified receiver from Relay Site 31. No requesting agency is named; the set carries a service number from the communications maintenance contractor, listed here as C.S.S.",
         bodyText = [[PROPERTY / FOUND ARTICLE RECORD
 
 Record No.: 4471
@@ -246,10 +239,10 @@ APPROVED: H. VALE]]
     },
     [D4] = {
         assetId = D4, threadId = THREAD_ID, displayName = "Torn Page from Rourke's Work Notebook",
-        assetKind = "document", placementLocationId = MOTEL,
+        assetKind = "document", placementLocationId = RELAY,
         references = { ROURKE, PIKE, VALE, CSS, RELAY }, autoRecordEvidence = true,
-        contextText = "A private notebook page written by M. Rourke, the CSS field technician who worked at Relay Site 31.",
-        journalText = "Rourke, a Cumberland Signal Services (CSS) technician, kept a private account. He says he was told to make 7C-41 live, then told the test never happened.",
+        contextText = "A private notebook page by M. Rourke, a field technician for the communications maintenance contractor identified as C.S.S. It describes the Relay Site 31 job outside the official paperwork.",
+        journalText = "Rourke, the communications maintenance technician, kept a private account. He says he was told to make 7C-41 live, then told the test never happened.",
         bodyText = [[7/3
 
 Keeping this one off the official pad because the official pad has developed
@@ -339,7 +332,7 @@ CUSTOMER COPY — [faint/illegible]]=]
         references = { PIKE, ROURKE, VALE, CSS, RELAY }, contradictsAssetIds = { D5 },
         recontextualisesAssetIds = { KEY }, autoRecordEvidence = true,
         contextText = "A handwritten note by Sgt. Dana Pike, the police property supervisor who logged the receiver under record 4471.",
-        journalText = "Pike's shift note says the Cumberland Signal Services (CSS) memo was not there when the receiver was taken, and callers could not agree what \"H. Vale\" meant.",
+        journalText = "Pike's shift note says the contractor's advance memo was not there when the receiver was taken, and callers could not agree what \"H. Vale\" meant.",
         bodyText = [[PROPERTY — DAY SHIFT
 
 Re: 4471
@@ -397,11 +390,11 @@ end
 local function validateContent()
     if not Ids.isAuthored(Content.thread.threadId) then return false, "invalid Thread ID" end
     if #Content.thread.documentAssetIds ~= 6 or #Content.thread.optionalAssetIds ~= 1
-        or #Content.thread.identityIds ~= 3 or #Content.thread.locationIds ~= 3 then
+        or #Content.thread.identityIds ~= 3 or #Content.thread.locationIds ~= 2 then
         return false, "Dead Air inventory counts do not match the accepted model"
     end
     if registryCount(Content.assets) ~= 7 or registryCount(Content.identities) ~= 3
-        or registryCount(Content.organisations) ~= 1 or registryCount(Content.locations) ~= 3 then
+        or registryCount(Content.organisations) ~= 1 or registryCount(Content.locations) ~= 2 then
         return false, "Dead Air registry counts do not match the accepted model"
     end
     local ok, message = checkUniqueIds(Content.thread.documentAssetIds, Content.assets, "documentAssetIds")

@@ -1,72 +1,54 @@
 # Owner attendance checklist
 
-This is the remaining owner/manual-PC work before accepting the conditional production candidate. The [2026-09-05 takeover audit](PM_TAKEOVER_AUDIT_2026-09-05.md) controls the next session: resolve the route/scope conflict first; correct static blockers and version the probe before another game retest. Preparation, code changes, logging and evidence transcription remain unattended work.
+The product decisions are recorded in P4-R48–R52. This checklist contains manual observations still needed for the DEV-0.6 candidate. No game launch, mod deployment or live acceptance was performed by the correction work.
 
-## Test-session operating rule
+## Recorded choices
 
-Use Project Zomboid **debug mode** for development validation whenever the
-probe supports it. Prefer Lua console commands in the current session for
-reloads, setup, teleportation and inspection. Avoid restarting the game or
-save unless the relevant code cannot be safely reloaded or the test explicitly
-requires a startup/load measurement.
+- [x] Two Muldraugh story sites; D4 belongs at electronics/relay; no motel.
+- [x] Police arrival is an ordinary journal entry.
+- [x] Availability messages use plain language.
+- [x] Death recap is deferred beyond v0.1; actual death/save integrity remains in E10.
+- [x] Preserve approved contextual introductions, 23:58/7C-41 consistency, separate Help, native X and configurable toggle; Escape belongs to the game.
 
-T10-derived actions remain manual under P4-R44: no synthetic input, injected helpers, UI automation or security changes. A console command must not stand in for required manual Inspect/Mark interaction.
+## Preparation and stop rule
 
-## Session 1 — bounded owner decisions
+Use debug mode and a disposable save. Verify build/revision, enabled mods and deployed source hashes from the correction evidence manifest. Retain existing saves/profile files. The schema-2 T11/world candidate needs a fresh disposable save because migration is out of scope; it refuses legacy data. T12 synthetic UI does not write the world/session root and can use an existing disposable UI save after a verified startup with the correct wrappers.
 
-- [x] Owner approved `dead-air-r1` with added context on 2026-09-05; direct source archived in the takeover audit.
-- [x] Owner required consistent D1/D4 timing; both bodies now use 23:58 installation and 7C-41.
-- [ ] Resolve P2/R2/two-location takeover scope versus the earlier Muldraugh test and motel/D4 placement before another location session.
-- County terminology is an optional editorial preference, not a blocker requiring another approval.
-- [ ] Choose ordinary or `Major` treatment for police-property location confirmation.
-- [ ] Choose whether normal players see technical `untracked`/`conflict` wording or only human-readable consequences.
-- [ ] Keep or remove the deterministic death recap from v0.1; if kept, authorize a named lifecycle probe.
-- [x] Preserve the recorded separate Help/right-edge direction and owner-requested X/configurable-toggle behavior; Escape belongs to the game. Runtime feasibility is still open.
+Enable ConspiracyFiles plus exactly one wrapper: T12 for synthetic UI, or T11 for one-item composition. Never enable both wrappers. The ordinary production candidate has no wrapper. No helper injection, synthetic GUI input, UI automation or security changes. Stop on a security alert, wrong save/mod set, unsupported build, unexplained duplicate or canonical validation error.
 
-Record only the decisions. Repository reconciliation can happen afterward without attendance.
+## Smallest next session: shared T12
 
-## Session 2 — finish P2/R2 location binding
+Open the ordinary debug console and manually enter ConspiracyFiles.T12Probe.open(). Verify the DEV-0.6 version marker. This prepares synthetic known-state data; it does not count as a real discovery.
 
-After the scope decision, use the selected route's preserved checkpoint. P2/R2 checkpoint: `design/dead-air-location-binding-live` at `9103ea9`; do not automatically restart that route in disregard of the recorded Muldraugh instructions.
+- [ ] Start at the previously failing 3200×2000 / font setting 3. Confirm readable ordinary and high-contrast text.
+- [ ] Verify the visible 22 px scrollbar, wheel, track paging, thumb drag and reaching both ends without title/actions moving.
+- [ ] Test wide and compact layouts, long titles, Back, separate Help, native X and repeated reopening.
+- [ ] Test keyboard Tab/arrows/Enter/Page Up/Page Down; confirm Escape still reaches the game.
+- [ ] Assign the notebook toggle through game settings and verify open/close.
+- [ ] Check agreed lower resolutions/font sizes, vanilla coexistence and geometry after resize/reopen.
+- [ ] Record controller unsupported/unavailable unless a cooperative route is actually observed. Do not infer support from keyboard behavior.
+- [ ] Archive visible verdict and console/version evidence. A repeated failure should produce one focused correction, not another unchanged full rerun.
 
-- [ ] Verify installed PZ build, profile and disposable-save setup independently.
-- [ ] Reveal only the bounded P2/R2 regional map corridor with the documented map surface.
-- [ ] Visually confirm that an ordinary road journey exists and record any route caveat.
-- [ ] At R2, test the exact arrival predicate plus adjacent, wrong-room and wrong-floor negatives.
-- [ ] At P2, test the exact arrival predicate plus adjacent, wrong-room and wrong-floor negatives.
-- [ ] Confirm or reject R2 and P2; inspect the headquarters fallback only if P2 fails.
-- [ ] Close PZ and allow the delegated restoration/evidence audit to finish.
+## Muldraugh binding
 
-Do not improvise production bindings during the session. The recorded results drive the patch afterward.
+- [ ] Verify an ordinary road route between electronics/relay around (10614,9604,0) and police around (10637,10410,0), including survival/access plausibility.
+- [ ] Record exact coordinates, object/container indices, sprite and type for three relay and four police candidates, or reject unsuitable candidates.
+- [ ] Test both candidate arrival areas: correct square, adjacent room/outside, boundary edge and wrong floor/basement.
+- [ ] Confirm that each rectangle really represents the intended room/area; narrow or replace it from observations. Bindings.accepted must stay false until this evidence is incorporated.
 
-## Session 3 — T12 UI-runtime observation
+The old P2/R2 checkpoint is preserved history, not the default route.
 
-Use a fresh disposable save with only `ConspiracyFiles_T12_Probe` enabled. PZ does not expose a reliable in-game save-name field, and the probe accepts any non-empty save when it is the sole enabled mod.
+## T11 after binding
 
-Before attendance: verify exact deployed version/hash, address known scrollbar/contrast failures, and state which checks remain. DEV-0.4 console callbacks and owner reports are archived; DEV-0.5-document-scrollbar has no archived passing result. Do not request repeated whole-matrix runs for an unchanged failure.
+Use [the T11 runbook](../../dev/t11-adapter-integration/README.md) and its evidence template.
 
-- [ ] Open an inventory context menu and choose `T12: Open UI capability probe`.
-- [ ] Move and resize the notebook repeatedly, including below and above the compact breakpoint.
-- [ ] Select Journal/Evidence, rows, Back, Help, contrast and Close.
-- [ ] Verify the long document scrolls without moving the title/actions.
-- [ ] Change through the agreed resolution and PZ font-size matrix.
-- [ ] Verify native X buttons close Help/notebook and the configurable Toggle Notebook binding opens/closes the notebook; Escape remains reserved for the game options flow.
-- [ ] Repeat with a controller if one is available; an unsupported result is valid.
-- [ ] State whether the UI feels acceptable, acceptable with listed corrections, or infeasible.
+- [ ] One real D1, detached stamp, count-one commit and repeated callbacks/streaming.
+- [ ] Owner manually Inspects, saves and reloads; repeat Inspect creates no new Evidence or JournalEntry.
+- [ ] Move through inventory/bag/floor/storage and observe token reconciliation; zero at source never proves loss.
+- [ ] Run explicit copied-token conflict and one-shot fault cases on disposable state.
+- [ ] Record same-tick arrival/reconciliation, timing, canonical size and actual save/reload accounting.
+- [ ] Review any missing fault controls/coverage as inconclusive, not passed.
 
-The probe logs mechanics; the owner supplies only visual/usability judgment and manual input.
+## Full acceptance
 
-## Session 4 — T11 composition run
-
-Run only after exact location binding and the final T11 probe implementation are ready.
-
-- [ ] Perform the requested inventory Inspect/Mark actions manually under P4-R44.
-- [ ] Perform instructed save, quit, reload, item move and stream-out/in transitions.
-- [ ] Confirm visible item counts and normal vanilla menu behavior when prompted.
-- [ ] Stop immediately on a security alert or non-disposable-state concern.
-
-The probe owns deterministic fault injection and counting. The owner must not manually manipulate internal ModData or use synthetic-input helpers.
-
-## Later final acceptance
-
-Death/reload, multiplayer disablement, performance and mod-coexistence sessions occur only after Issue #31 produces the complete slice. They are not prerequisites for beginning the focused T11/T12 gates.
+E01–E13 remain open. Real death/corpse/reload, all multiplayer disable modes, performance and an additive foreign mod require owner-observed evidence. A passing T12 or T11 alone cannot accept the slice.

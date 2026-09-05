@@ -1,5 +1,7 @@
 # v0.1 usable notebook UI specification
 
+**DEV-0.6 update:** Notebook and immediate Inspect now share DocumentPane, explicit RGB ink and a sibling scrollbar. Titles/actions are outside the scrolling body; Help is a separate dark utility. Keyboard navigation and remembered/clamped geometry are candidate implementations. Availability uses P4-R51 plain-language copy; police arrival stays ordinary and death recap is deferred. Controller support is unimplemented and must receive an explicit T12 verdict. None of these source changes is a visual pass.
+
 Status: conditional implementation target; T12 runtime feasibility is in progress with unresolved scrollbar/contrast failures, and T11 composition is unaccepted. These gates cover functional correctness as well as visual/input usability. See [PM audit](../management/PM_TAKEOVER_AUDIT_2026-09-05.md).
 
 ## Goal

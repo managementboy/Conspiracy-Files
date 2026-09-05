@@ -1,5 +1,7 @@
 # T12 installed Build 42 API-discovery notes
 
+**DEV-0.6 source correction:** installed ISRichTextPanel.paginate resets rgbCurrent to white; body text now starts with an explicit RGB command, with user/content angle brackets escaped using the renderer's &lt;/&gt; support. A 22 px sibling scrollbar reads the same body's scroll metrics. Source inspection establishes the rationale only; the owner must verify wheel, thumb, track, drag and contrast on the deployed version.
+
 Status: source inspection with subsequently reported attended observations; final runtime feasibility remains unresolved. The [T12 report](../../docs/research/T12_UI_RUNTIME.md) separates archived DEV-0.4 callbacks and owner-reported failures from the unverified DEV-0.5 candidate fix. Statements below about wheel/scrollbar behavior apply to that earlier composition, not a universal ISRichTextPanel limitation or a passing result for the replacement control.
 
 Inspected: 2026-09-03.

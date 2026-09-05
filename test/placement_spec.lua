@@ -15,7 +15,8 @@ test("placement pools are explicit, bounded and cover every physical asset", fun
     local pools = Placement.pools()
     assertEqual(3, #pools[Content.ids.relay])
     assertEqual(4, #pools[Content.ids.police])
-    assertEqual(2, #pools[Content.ids.motel])
+    assertEqual(2, #Content.thread.locationIds)
+    assertEqual(nil, Content.ids.motel)
     for _, pool in pairs(pools) do
         for _, candidate in ipairs(pool) do
             assertTrue(candidate.radius <= 2)
@@ -53,6 +54,8 @@ end)
 test("persisted placement plans restore without rerolling and without aliasing", function()
     local original = Placement.newPlan(9127)
     original.assignments[Content.ids.d1].status = "placed"
+    local candidate = Placement.resolveCandidate(original.assignments[Content.ids.d1])
+    original.assignments[Content.ids.d1].target = { x=candidate.x,y=candidate.y,z=0,objectIndex=0,containerIndex=0,containerType="shelves",sprite="test-shelf" }
     local restored, message = Placement.restore(original)
     assertTrue(restored ~= nil, message)
     assertDeepEqual(original, restored)

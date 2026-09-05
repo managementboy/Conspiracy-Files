@@ -1,5 +1,7 @@
 # Tests
 
+**DEV-0.6 correction:** run test/run.lua with PUC Lua 5.1.5. Current suite has 42 tests; runtime/menu/UI entries use explicit local mocks and do not control PZ. See the correction evidence directory for archived output. Native rendering, focus, save/reload and timing remain manual live gates.
+
 The domain core must be testable without launching Project Zomboid.
 
 ## Rule

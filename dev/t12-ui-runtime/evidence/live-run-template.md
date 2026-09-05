@@ -1,5 +1,7 @@
 # T12 live run
 
+**Current candidate:** DEV-0.6; enable ConspiracyFiles plus the matching wrapper only. Record candidate commit and deployed file hashes. No current live result is populated. Historical version observations must not be carried forward as passing results.
+
 - Status: Not run
 - Date/operator:
 - Build/revision/Steam build ID:

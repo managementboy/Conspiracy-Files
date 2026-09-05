@@ -98,13 +98,32 @@ end
 
 function NotebookProjection.journal(state)
     local rows = {}
+    local snapshot=state.snapshot()
+    local reflections={
+        [Content.ids.d1]="Thirty-seven seconds of nothing, on a schedule. Somebody still found a box to call it routine. I would like that person's confidence.",
+        [Content.ids.d2]="They kept the receiver and its paperwork. The requesting agency got to remain a blank space. A useful privilege, apparently.",
+        [Content.ids.d3]="The cable has a price. The important package is customer-supplied, and the customer has no name. The invoice balances better than the explanation.",
+        [Content.ids.d4]="Rourke wrote down the job he was told to do, then the instruction to pretend it never happened. Keeping both versions seems sensible.",
+        [Content.ids.d5]="The memo is very sure everyone had been told. Paper can afford to sound sure. It does not have to answer the telephone.",
+        [Content.ids.d6]="Pike wanted a real name and a callback number. That sounds like a modest request. The people calling made it sound ambitious."
+    }
+    local labels={['asset-discovered']="Document recorded",['thread-introduced']="A connection worth following",['marked-interesting']="Object marked",['evidence-updated']="New context",['location-confirmed']="Place recognised",['contradiction-surfaced']="Accounts disagree"}
+    local eventReflections={
+        ['thread-introduced']="A piece of paper points somewhere else. I can keep the place in mind without promising it a visit. Staying alive still gets first consideration.",
+        ['marked-interesting']="I have written down why it caught my attention. That is all I know for now; an interesting object does not owe me an explanation.",
+        ['evidence-updated']="The old note stays. What I have learned since belongs beside it, where I can see the difference.",
+        ['location-confirmed']="A name in the notes now has a place attached to it. Recognising the place does not tell me whether to trust the paperwork.",
+        ['contradiction-surfaced']="Both accounts are staying in the notebook. Picking the tidier one would make these pages shorter, which is not the same as making them right."
+    }
     for _, rendered in ipairs(state.renderJournal()) do
+        local entry=snapshot.journal[rendered.ordinal]
+        local reflection=entry.kind=="asset-discovered" and reflections[entry.subjectId] or eventReflections[entry.kind]
         rows[#rows + 1] = {
             id = rendered.entryId,
             ordinal = rendered.ordinal,
             title = rendered.text,
-            summary = (rendered.major and "Major" or "Journal") .. " - " .. rendered.kind,
-            detailText = rendered.text .. "\n\nEVENT: " .. rendered.kind .. (rendered.major and "\nSTATUS: Major" or "")
+            summary = (rendered.major and "Major — " or "") .. (labels[rendered.kind] or "Journal"),
+            detailText = rendered.text .. (reflection and "\n\n"..reflection or "")
         }
     end
     return rows

@@ -1,5 +1,7 @@
 # Conspiracy-Files — Architecture v0.2
 
+**2026-09-05 candidate update:** Session.lua stages and validates the complete schema-2 domain/placement aggregate before one wrapper.canonical swap. Scheduler.lua bounds resumable world reads by 48 steps and a 2 ms deadline; synchronous command validation and native calls still require E12 measurement. Two Muldraugh locations replace P2/R2 inspection priority under P4-R48. Shared candidate T11/T12 wrappers do not constitute live acceptance. See [correction report](../management/CORRECTION_REPORT_2026-09-05.md).
+
 **Status:** Current architecture after engineering review. Provisional until Build 42 spikes resolve the load-bearing API questions.
 
 The reviewed `ARCHITECTURE_PROPOSAL.md` remains as the historical first draft. This document is the implementation-facing correction.

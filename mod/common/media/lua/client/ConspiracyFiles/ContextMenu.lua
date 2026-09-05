@@ -1,91 +1,114 @@
-ConspiracyFiles = ConspiracyFiles or {}
-local Content = require("ConspiracyFiles/Content")
-local NotebookUI = require("ConspiracyFiles/Notebook")
-local INSPECT_ACTION = "ConspiracyFiles:Inspect"
-local MARK_ACTION = "ConspiracyFiles:MarkInteresting"
-local NOTEBOOK_ACTION = "ConspiracyFiles:OpenNotebook"
-
-local function runtime()
-    return ConspiracyFiles and ConspiracyFiles.Runtime or nil
+local Content=require("ConspiracyFiles/Content")
+local UI=require("ConspiracyFiles/Notebook")
+ConspiracyFiles=ConspiracyFiles or {}
+ConspiracyFiles.ContextMenu=ConspiracyFiles.ContextMenu or {}
+local Menu=ConspiracyFiles.ContextMenu
+local function runtime() return ConspiracyFiles.Runtime end
+local function isItem(value)
+    if not value or not instanceof then return false end
+    local ok,yes=pcall(instanceof,value,"InventoryItem"); return ok and yes
 end
-
-local function inspect(_, playerNum, item)
-    local ok, err = pcall(function()
-        local Runtime = runtime()
-        local md = item and item:getModData() or nil
-        if not Runtime or not md or md.cfAssetId == nil then return end
-        local discovered, evidenceId, changed = false, nil, false
-        if Runtime.state then
-            local asset = Content.assets[md.cfAssetId]
-            discovered, evidenceId, changed = Runtime.state.discover(
-                md.cfAssetId,
-                "Inspected " .. tostring(md.cfResolvedTitle or item:getName()),
-                md.cfFoundLocationId or (asset and asset.placementLocationId or nil)
-            )
-            if discovered and changed and Runtime.persist then Runtime.persist() end
+function Menu.normalize(items)
+    local out,seen,overflow={}, {},false
+    local function add(item)
+        if isItem(item) and not seen[item] then
+            if #out>=64 then overflow=true; return end
+            seen[item]=true; out[#out+1]=item
         end
-        print("[CF-DEAD-AIR]|EVENT|kind=DISCOVER|asset=" .. tostring(md.cfAssetId)
-            .. "|created=" .. tostring(changed) .. "|evidence=" .. tostring(evidenceId or "<nil>"))
-        print("[CF-DEAD-AIR]|EVENT|kind=INSPECT|asset=" .. tostring(md.cfAssetId) .. "|title=" .. tostring(md.cfResolvedTitle or item:getName()))
-        print("[CF-DEAD-AIR]|BODY|asset=" .. tostring(md.cfAssetId) .. "|text=" .. tostring(md.cfResolvedBody or "<missing>"):gsub("|", "/"):gsub("\n", "\\n"))
-        NotebookUI.refresh("evidence", evidenceId)
-        local context = asset and asset.contextText or nil
-        NotebookUI.openReader(tostring(md.cfResolvedTitle or item:getName()), tostring(md.cfResolvedBody or "Text unavailable."), context)
+    end
+    for index,value in ipairs(items or {}) do
+        if index>64 then overflow=true; break end
+        if isItem(value) then add(value)
+        elseif type(value)=="table" and type(value.items)=="table" then
+            for i=2,math.min(#value.items,65) do add(value.items[i]) end
+            if #value.items>65 then overflow=true end
+        end
+    end
+    return out,overflow
+end
+local function owned(item,playerNum)
+    local player=getSpecificPlayer(playerNum)
+    return player and item:getOutermostContainer()==player:getInventory()
+end
+function Menu.subject(item)
+    local rt=runtime()
+    if not rt or rt.disabled or not rt.state or not isItem(item) then return nil end
+    local md=item:getModData()
+    if type(md)~="table" or not md.cfAssetId then return nil end
+    local asset=Content.assets[md.cfAssetId]
+    local assignment=asset and rt.assignment(md.cfAssetId)
+    if not asset or md.cfSchema~=2 or md.cfAssetKind~=asset.assetKind or not assignment
+        or md.cfPhysicalToken~=assignment.physicalToken or assignment.status~="placed"
+        or assignment.availability=="conflict" or assignment.availability=="unavailable" then return nil end
+    return asset,assignment
+end
+local function activate(mark,playerNum,item,expectedToken,expectedContainer)
+    local rt=runtime(); if not rt then return end
+    rt.boundary(mark and "mark" or "inspect",function()
+        local asset,assignment=Menu.subject(item)
+        if not asset or assignment.physicalToken~=expectedToken then return end
+        if item:getOutermostContainer()~=expectedContainer then return end
+        if mark and (not owned(item,playerNum) or rt.isMarked(asset.assetId)) then return end
+        local ok,id,changed
+        if mark then ok,id,changed=rt.mark(asset.assetId,"Marked "..asset.displayName.." as worth remembering",assignment.locationId)
+        else ok,id,changed=rt.inspect(asset.assetId,"Inspected "..asset.displayName,assignment.locationId) end
+        if not ok then error(id) end
+        local known=rt.state.resolveEvidence(id); if not known then return end
+        UI.refresh("evidence",id)
+        if not mark then UI.openReader(known.displayName,known.bodyText,asset.contextText) end
+        print("[CF-DEAD-AIR]|MANUAL_ACTION|action="..(mark and "mark" or "inspect").."|asset="..asset.assetId.."|changed="..tostring(changed))
     end)
-    if not ok then print("[CF-DEAD-AIR]|EVENT|kind=ERROR|boundary=inspect|error=" .. tostring(err)) end
 end
-
-local function mark(_, playerNum, item)
-    local Runtime = runtime()
-    local md = item and item:getModData() or nil
-    if not Runtime or not md or not Runtime.state then return end
-    local created, evidenceId = Runtime.state.markInteresting("dead-air:mark:" .. tostring(md.cfAssetId), {
-        assetId = md.cfAssetId,
-        contextText = "Marked " .. tostring(md.cfResolvedTitle or item:getName()) .. " before its significance was clear",
-        foundLocationId = md.cfFoundLocationId
-    })
-    if created and Runtime.persist then Runtime.persist() end
-    NotebookUI.refresh("evidence", evidenceId)
-    print("[CF-DEAD-AIR]|EVENT|kind=MARK|asset=" .. tostring(md.cfAssetId) .. "|created=" .. tostring(created) .. "|evidence=" .. tostring(evidenceId or "<nil>"))
+local function add(context,key,label,callback,disabled)
+    for _,option in ipairs(context.options or {}) do if option.cfDeadAirAction==key then return option end end
+    local option=context:addOption(label,nil,callback)
+    if option then option.cfDeadAirAction=key; option.notAvailable=disabled==true end
+    return option
 end
-
-local function isInventoryItem(value)
-    if value == nil or not instanceof then return false end
-    local ok, result = pcall(instanceof, value, "InventoryItem")
-    return ok and result == true
-end
-
-local function firstItem(items)
-    for _, value in ipairs(items or {}) do
-        if isInventoryItem(value) then return value end
-        if type(value) == "table" and type(value.items) == "table" then
-            -- Build 42 grouped inventory rows contain a dummy at index 1.
-            for index = 2, #value.items do
-                if isInventoryItem(value.items[index]) then return value.items[index] end
-            end
-        end
+function Menu.fill(playerNum,context,items)
+    local rt=runtime(); if not rt or rt.disabled or not context then return end
+    add(context,"ConspiracyFiles:OpenNotebook","Open Survivor Notebook",function() UI.open() end)
+    local subjects,overflow=Menu.normalize(items)
+    local valid={}
+    for _,item in ipairs(subjects) do local asset,a=Menu.subject(item); if asset then valid[#valid+1]={item=item,asset=asset,assignment=a} end end
+    if overflow or #valid>1 then
+        for i=1,#valid do for j=i+1,#valid do
+            if valid[i].assignment.physicalToken==valid[j].assignment.physicalToken then rt.conflict(valid[i].asset.assetId) end
+        end end
+        add(context,"ConspiracyFiles:Inspect","Inspect Document (select one item)",nil,true); return
     end
-    return nil
-end
-
-local function onMenu(playerNum, context, items)
-    local Runtime = runtime()
-    if not Runtime or Runtime.disabled or not context then return end
-    local notebookPresent = false
-    for _, existing in ipairs(context.options or {}) do
-        if existing.cfDeadAirAction == NOTEBOOK_ACTION then notebookPresent = true; break end
+    if #valid==0 then
+        if #subjects~=1 then return end
+        local item=subjects[1]; local md=item:getModData()
+        if md.cfAssetId or not owned(item,playerNum) then return end
+        add(context,"ConspiracyFiles:MarkInteresting","Mark Interesting",function()
+            rt.boundary("mark",function()
+                if not owned(item,playerNum) then return end
+                local current=item:getModData(); if current.cfAssetId then return end
+                if current.cfMarkIntent and rt.hasMarkIntent(current.cfMarkIntent) then return end
+                local intent=current.cfMarkIntent or rt.newMarkIntent()
+                if type(intent)~="string" or #intent>200 then return end
+                current.cfMarkIntent=intent
+                local ok,id=rt.markGeneric(intent,tostring(item:getName())); if not ok then error(id) end
+                UI.refresh("evidence",id)
+            end)
+        end,md.cfMarkIntent and rt.hasMarkIntent(md.cfMarkIntent))
+        return
     end
-    if not notebookPresent then
-        local openOption = context:addOption("Open Survivor Notebook", nil, NotebookUI.open)
-        if openOption then openOption.cfDeadAirAction = NOTEBOOK_ACTION end
-    end
-    local item = firstItem(items)
-    if not item or not item.getModData then return end
-    local md = item:getModData()
-    if not md or md.cfAssetId == nil then return end
-    local ordinary = md.cfAssetKind == "ordinary-object"
-    local option = context:addOption(ordinary and "Mark Interesting" or "Inspect Document", nil, ordinary and mark or inspect, playerNum, item)
-    if option then option.cfDeadAirAction = ordinary and MARK_ACTION or INSPECT_ACTION end
+    local selected=valid[1]
+    local mark=selected.asset.assetKind=="ordinary-object"
+    local expectedContainer=selected.item:getOutermostContainer()
+    local disabled=mark and (not owned(selected.item,playerNum) or rt.isMarked(selected.asset.assetId))
+    add(context,mark and "ConspiracyFiles:MarkInteresting" or "ConspiracyFiles:Inspect",mark and "Mark Interesting" or "Inspect Document",
+        function() activate(mark,playerNum,selected.item,selected.assignment.physicalToken,expectedContainer) end,disabled)
 end
-
-Events.OnFillInventoryObjectContextMenu.Add(onMenu)
+-- One stable forwarding callback survives repeated module loads without removing
+-- vanilla/foreign listeners or retaining stale implementations.
+if not Menu.handler then
+    Menu.handler=function(...)
+        local args={...}; local rt=runtime()
+        if rt then rt.boundary("menu",function() Menu.fill(args[1],args[2],args[3]) end) end
+    end
+    Events.OnFillInventoryObjectContextMenu.Add(Menu.handler)
+end
+return Menu

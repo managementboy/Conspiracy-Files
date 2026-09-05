@@ -2,237 +2,243 @@ require "ISUI/ISCollapsableWindow"
 require "ISUI/ISButton"
 require "ISUI/ISScrollingListBox"
 require "ISUI/ISRichTextPanel"
-require "ISUI/ISScrollBar"
-
-local Projection = require("ConspiracyFiles/NotebookProjection")
-
-ConspiracyFiles = ConspiracyFiles or {}
-ConspiracyFiles.NotebookUI = ConspiracyFiles.NotebookUI or {}
-local UI = ConspiracyFiles.NotebookUI
-
-local function runtime()
-    return ConspiracyFiles and ConspiracyFiles.Runtime or nil
+local Document=require("ConspiracyFiles/DocumentPane")
+local Projection=require("ConspiracyFiles/NotebookProjection")
+ConspiracyFiles=ConspiracyFiles or {}
+ConspiracyFiles.NotebookUI=ConspiracyFiles.NotebookUI or {}
+local UI=ConspiracyFiles.NotebookUI
+UI.VERSION="DEV-0.6-shared-document-panel"
+local function safe(fn)
+    local rt=ConspiracyFiles.Runtime
+    if rt and not rt.disabled then return rt.boundary("ui",fn) end
+    local ok,why=pcall(fn); if not ok then print("[CF-UI]|ERROR|"..tostring(why)) end; return ok
 end
-
-local function log(kind, message)
-    print("[CF-DEAD-AIR]|EVENT|kind=" .. tostring(kind) .. "|message=" .. tostring(message or ""):gsub("|", "/"):gsub("\n", " "))
+local function state()
+    if UI.probeState then return UI.probeState end
+    local rt=ConspiracyFiles.Runtime; return rt and not rt.disabled and rt.state
 end
-
-local CFReaderWindow = ISCollapsableWindow:derive("CFReaderWindow")
-
-function CFReaderWindow:createChildren()
-    ISCollapsableWindow.createChildren(self)
-    self:setResizable(true)
-    self.body = ISRichTextPanel:new(14, self:titleBarHeight() + 14, self.width - 28, self.height - self:titleBarHeight() - 62)
-    self.body:initialise(); self.body:instantiate()
-    self.body.autosetheight = false; self.body.clip = true
-    self.body.marginLeft, self.body.marginRight = 14, 14
-    self.body.marginTop, self.body.marginBottom = 12, 12
-    self.body.backgroundColor = { r = 0.76, g = 0.73, b = 0.63, a = 1 }
-    self.body.textR, self.body.textG, self.body.textB = 0.10, 0.10, 0.08
-    local context = self.documentContext and "\n\nWHAT THIS IS\n" .. self.documentContext or ""
-    self.body:setText(self.documentTitle .. context .. "\n\n" .. self.documentBody)
-    self.body:paginate(); self:addChild(self.body)
-    self.closeButton = ISButton:new(self.width - 104, self.height - 42, 90, 28, "Close", self, CFReaderWindow.close)
-    self.closeButton:initialise(); self.closeButton:instantiate(); self:addChild(self.closeButton)
+local function rect(width,height,geometry)
+    local core=getCore(); local sw,sh=core:getScreenWidth(),core:getScreenHeight()
+    local g=geometry or {}
+    local function number(v,fallback) return type(v)=="number" and v==v and math.abs(v)<100000 and v or fallback end
+    local w=math.max(320,math.min(number(g.width,width),sw-20))
+    local h=math.max(260,math.min(number(g.height,height),sh-20))
+    local x=math.max(0,math.min(number(g.x,math.floor((sw-w)/2)),sw-w))
+    local y=math.max(0,math.min(number(g.y,math.floor((sh-h)/2)),sh-h))
+    return x,y,w,h
 end
-
-function CFReaderWindow:prerender()
-    if self.lastWidth ~= self.width or self.lastHeight ~= self.height then
-        self.body:setWidth(self.width - 28); self.body:setHeight(self.height - self:titleBarHeight() - 62)
-        self.closeButton:setX(self.width - 104); self.closeButton:setY(self.height - 42)
-        self.body:paginate(); self.lastWidth, self.lastHeight = self.width, self.height
-    end
-    ISCollapsableWindow.prerender(self)
-end
-
-function CFReaderWindow:close()
-    self:removeFromUIManager()
-    if UI.reader == self then UI.reader = nil end
-end
-
-function CFReaderWindow:new(x, y, width, height, title, context, body)
-    local o = ISCollapsableWindow.new(self, x, y, width, height)
-    o:setTitle("Inspect: " .. title)
-    o.minimumWidth, o.minimumHeight = 420, 320
-    o.documentTitle, o.documentContext, o.documentBody = title, context, body
-    return o
-end
-
-function UI.openReader(title, body, context)
-    if UI.reader then UI.reader:close() end
-    local screenW, screenH = getCore():getScreenWidth(), getCore():getScreenHeight()
-    local width, height = math.min(700, screenW - 60), math.min(720, screenH - 60)
-    UI.reader = CFReaderWindow:new(math.floor((screenW - width) / 2), math.floor((screenH - height) / 2), width, height, title, context, body)
-    UI.reader:initialise(); UI.reader:instantiate(); UI.reader:addToUIManager()
-end
-
-local CFNotebookWindow = ISCollapsableWindow:derive("CFNotebookWindow")
-
-function CFNotebookWindow:drawRow(y, item)
-    if self.selected == item.index then self:drawRect(0, y, self.width, item.height, 0.35, 0.48, 0.43, 0.34) end
-    self:drawText("#" .. tostring(item.item.ordinal) .. "  " .. item.item.title, 8, y + 5, 0.94, 0.94, 0.88, 1, UIFont.Small)
-    self:drawText(item.item.summary, 8, y + 23, 0.70, 0.74, 0.68, 1, UIFont.Small)
-    self:drawRectBorder(0, y, self.width, item.height, 0.45, 0.55, 0.55, 0.50)
-    return y + item.height
-end
-
-function CFNotebookWindow:showRow(row)
-    if not row then return end
-    self.currentId = row.id; self.detail:setText(row.detailText); self.detail:paginate()
-    if self.compact then self.detailOnly = true; self:applyLayout() end
-end
-
-function CFNotebookWindow:onRowSelected(row) self:showRow(row) end
-
-function CFNotebookWindow:rows()
-    local active = runtime()
-    if not active or not active.state then return {} end
-    return self.section == "evidence" and Projection.evidence(active.state) or Projection.journal(active.state)
-end
-
-function CFNotebookWindow:refresh(preferredId)
-    preferredId = preferredId or self.currentId
-    self.journalButton:setTitle(self.section == "journal" and "[Journal]" or "Journal")
-    self.evidenceButton:setTitle(self.section == "evidence" and "[Evidence]" or "Evidence")
-    local rows = self:rows(); self.list:clear(); local selected = nil
-    for index, row in ipairs(rows) do
-        self.list:addItem(row.title, row)
-        if row.id == preferredId then selected = index end
-    end
-    if #rows == 0 then
-        local empty = self.section == "evidence"
-            and "Nothing is recorded here yet.\n\nInspect an unusual document or mark an acquired object that seems worth remembering."
-            or "Nothing has made it into these notes yet.\n\nThe notebook records encounters; it does not assign objectives."
-        self.currentId = nil; self.detail:setText(empty); self.detail:paginate(); return
-    end
-    self.list.selected = selected or 1; self:showRow(rows[self.list.selected])
-end
-
-function CFNotebookWindow:onSection(button)
-    self.section = button.internal; self.detailOnly = false; self.currentId = nil
-    self:refresh(); self:applyLayout()
-end
-function CFNotebookWindow:onBack() self.detailOnly = false; self:applyLayout() end
-
-function CFNotebookWindow:createChildren()
+local Reader=ISCollapsableWindow:derive("CFReaderWindow")
+function Reader:createChildren()
     ISCollapsableWindow.createChildren(self); self:setResizable(true)
-    local top = self:titleBarHeight() + 12
-    self.journalButton = ISButton:new(self.width - 98, top, 94, 36, "Journal", self, CFNotebookWindow.onSection)
-    self.journalButton.internal = "journal"; self.journalButton:initialise(); self.journalButton:instantiate(); self:addChild(self.journalButton)
-    self.evidenceButton = ISButton:new(self.width - 98, top + 40, 94, 36, "Evidence", self, CFNotebookWindow.onSection)
-    self.evidenceButton.internal = "evidence"; self.evidenceButton:initialise(); self.evidenceButton:instantiate(); self:addChild(self.evidenceButton)
-    self.closeButton = ISButton:new(self.width - 98, self.height - 48, 94, 32, "Close", self, CFNotebookWindow.close)
-    self.closeButton:initialise(); self.closeButton:instantiate(); self:addChild(self.closeButton)
-    self.backButton = ISButton:new(12, top, 110, 30, "Back to list", self, CFNotebookWindow.onBack)
-    self.backButton:initialise(); self.backButton:instantiate(); self:addChild(self.backButton)
-    self.list = ISScrollingListBox:new(12, top, 300, self.height - top - 18)
-    self.list:initialise(); self.list:instantiate(); self.list.itemheight = 43
-    self.list.doDrawItem = CFNotebookWindow.drawRow
-    self.list:setOnMouseDownFunction(self, CFNotebookWindow.onRowSelected)
-    self.list.drawBorder = true; self:addChild(self.list)
-    self.detail = ISRichTextPanel:new(324, top, self.width - 438, self.height - top - 18)
-    self.detail:initialise(); self.detail:instantiate(); self.detail:addScrollBars(false); self.detail.autosetheight = false; self.detail.clip = true
-    self.detail.marginLeft, self.detail.marginRight = 16, 16
-    self.detail.marginTop, self.detail.marginBottom = 14, 14
-    self.detail.backgroundColor = { r = 0.76, g = 0.73, b = 0.63, a = 1 }
-    self.detail.textR, self.detail.textG, self.detail.textB = 0.10, 0.10, 0.08
-    self:addChild(self.detail); self:refresh(); self:applyLayout()
+    self.document=Document:new(12,self:titleBarHeight()+12,self.width-24,self.height-self:titleBarHeight()-66)
+    self.document:initialise(); self.document:instantiate(); self:addChild(self.document)
+    self.document:setDocument(self.text,self.dark)
+    self.closeButton=ISButton:new(self.width-108,self.height-42,94,30,"Close",self,Reader.close)
+    self.closeButton:initialise(); self:addChild(self.closeButton)
 end
-
-function CFNotebookWindow:applyLayout()
-    local gap, controlsWidth = 12, 102
-    local top, bottom = self:titleBarHeight() + gap, self:resizeWidgetHeight() + gap
-    local contentWidth, contentHeight = self.width - controlsWidth - gap * 2, self.height - top - bottom
-    self.compact = contentWidth < 620
-    self.journalButton:setX(self.width - 98); self.journalButton:setY(top)
-    self.evidenceButton:setX(self.width - 98); self.evidenceButton:setY(top + 40)
-    self.closeButton:setX(self.width - 98); self.closeButton:setY(self.height - bottom - 32)
-    if self.compact then
-        self.backButton:setVisible(self.detailOnly)
-        self.list:setVisible(not self.detailOnly); self.detail:setVisible(self.detailOnly)
-        self.list:setX(gap); self.list:setY(top); self.list:setWidth(contentWidth); self.list:setHeight(contentHeight)
-        self.detail:setX(gap); self.detail:setY(top + 38); self.detail:setWidth(contentWidth); self.detail:setHeight(contentHeight - 38)
-    else
-        self.backButton:setVisible(false); self.list:setVisible(true); self.detail:setVisible(true)
-        local listWidth = math.floor(contentWidth * 0.36)
-        self.list:setX(gap); self.list:setY(top); self.list:setWidth(listWidth); self.list:setHeight(contentHeight)
-        self.detail:setX(gap + listWidth + gap); self.detail:setY(top)
-        self.detail:setWidth(contentWidth - listWidth - gap); self.detail:setHeight(contentHeight)
-    end
-    self.detail:paginate()
-    if self.detail.vscroll then self.detail.vscroll:updatePos() end
-end
-
-function CFNotebookWindow:prerender()
-    if self.lastWidth ~= self.width or self.lastHeight ~= self.height then
-        self:setWidth(math.max(self.minimumWidth, self.width)); self:setHeight(math.max(self.minimumHeight, self.height))
-        self:applyLayout(); self.lastWidth, self.lastHeight = self.width, self.height
+function Reader:prerender()
+    if self.lastW~=self.width or self.lastH~=self.height then
+        self.document:setWidth(self.width-24); self.document:setHeight(self.height-self:titleBarHeight()-66)
+        self.closeButton:setX(self.width-108); self.closeButton:setY(self.height-42)
+        self.lastW,self.lastH=self.width,self.height
     end
     ISCollapsableWindow.prerender(self)
 end
-
-function CFNotebookWindow:close()
-    if UI.reader then UI.reader:close() end
-    self:removeFromUIManager(); if UI.notebook == self then UI.notebook = nil end
+function Reader:isKeyConsumed(key) return key==Keyboard.KEY_PRIOR or key==Keyboard.KEY_NEXT end
+function Reader:onKeyRelease(key)
+    safe(function() if key==Keyboard.KEY_PRIOR then self.document:page(-1) elseif key==Keyboard.KEY_NEXT then self.document:page(1) end end)
 end
-
-function CFNotebookWindow:new(x, y, width, height)
-    local o = ISCollapsableWindow.new(self, x, y, width, height)
-    o:setTitle("Survivor's Notebook - Dead Air")
-    o.minimumWidth, o.minimumHeight = 500, 400
-    o.section, o.detailOnly = "journal", false
-    return o
+function Reader:close()
+    self:removeFromUIManager()
+    if UI.reader==self then UI.reader=nil end
+    if UI.help==self then UI.help=nil end
+    if UI.notebook then UI.notebook:bringToTop() end
 end
-
-function UI.open(section, preferredId)
-    local ok, err = pcall(function()
-        local active = runtime()
-        if not active or not active.state or active.disabled then return end
-        if UI.notebook then
-            if section then UI.notebook.section = section end
-            UI.notebook:refresh(preferredId); UI.notebook:bringToTop(); return
-        end
-        local screenW, screenH = getCore():getScreenWidth(), getCore():getScreenHeight()
-        local width = math.min(math.max(760, math.floor(screenW * 0.70)), screenW - 40)
-        local height = math.min(math.max(520, math.floor(screenH * 0.65)), screenH - 40)
-        UI.notebook = CFNotebookWindow:new(math.floor((screenW - width) / 2), math.floor((screenH - height) / 2), width, height)
-        if section then UI.notebook.section = section end
-        UI.notebook:initialise(); UI.notebook:instantiate(); UI.notebook:addToUIManager()
-        if preferredId then UI.notebook:refresh(preferredId) end
+function Reader:new(title,text,dark)
+    local x,y,w,h=rect(720,720)
+    local o=ISCollapsableWindow.new(self,x,y,w,h)
+    o:setTitle(title); o:setWantKeyEvents(true); o.minimumWidth=420; o.minimumHeight=320
+    o.text,o.dark=text,dark; return o
+end
+function UI.openReader(title,body,context)
+    safe(function()
+        if UI.reader then UI.reader:close() end
+        local text=(context and "WHAT THIS IS\n"..context.."\n\n" or "")..tostring(body or "Text unavailable.")
+        UI.reader=Reader:new(title,text,UI.highContrast)
+        UI.reader:initialise(); UI.reader:instantiate(); UI.reader:addToUIManager()
     end)
-    if not ok then log("ERROR", "boundary=notebook-open error=" .. tostring(err)) end
 end
-
-function UI.refresh(section, preferredId)
-    if not UI.notebook then return end
-    local ok, err = pcall(function()
-        if section then UI.notebook.section = section end
-        UI.notebook:refresh(preferredId)
+function UI.openHelp()
+    safe(function()
+        if UI.help then UI.help:bringToTop(); return end
+        UI.help=Reader:new("About these notes", "SURVIVE FIRST\nThe notebook records what you encounter. It assigns no objectives and promises no final answer.\n\nINSPECT\nUse a document's action in your inventory or the Ground/loot inventory pane to read and record it.\n\nMARK INTERESTING\nTake an unusual object before marking it. Its original context stays in your notes even if you lose the object.\n\nNAVIGATION\nTab moves between Journal, Evidence, list, reading area, Help, contrast and Close. Arrow keys select list rows; Enter activates the focused control. Page Up/Down scroll the reading area.\n\nCLOSE\nUse the native X or Close button. Assign Conspiracy-Files: Toggle Survivor Notebook in the game's key bindings. Escape belongs to the game.\n\nController navigation has not been verified for this candidate.",true)
+        UI.help:initialise(); UI.help:instantiate(); UI.help:addToUIManager()
     end)
-    if not ok then log("ERROR", "boundary=notebook-refresh error=" .. tostring(err)) end
 end
-
-local NOTEBOOK_BIND = "Conspiracy-Files: Toggle Survivor Notebook"
-if keyBinding then
-    local present = false
-    for _, binding in ipairs(keyBinding) do if binding.value == NOTEBOOK_BIND then present = true; break end end
-    if not present then table.insert(keyBinding, { value = NOTEBOOK_BIND, key = Keyboard.KEY_NONE }) end
+local Window=ISCollapsableWindow:derive("CFNotebookWindow")
+function Window:drawRow(y,item)
+    if self.selected==item.index then self:drawRect(0,y,self.width,item.height,0.8,0.28,0.32,0.25) end
+    local title="#"..item.item.ordinal.."  "..item.item.title
+    while #title>4 and getTextManager():MeasureStringX(UIFont.Small,title)>self.width-22 do title=title:sub(1,-5).."..." end
+    self:drawText(title,8,y+4,1,1,0.95,1,UIFont.Small)
+    self:drawText(item.item.summary,8,y+8+getTextManager():getFontHeight(UIFont.Small),0.90,0.90,0.85,1,UIFont.Small)
+    return y+item.height
 end
-
-function UI.toggle()
-    if UI.notebook then UI.notebook:close() else UI.open() end
+function Window:showRow(row)
+    if not row then return end
+    self.currentId=row.id
+    self.header:setText("<RGB:1,1,0.95> "..row.title:gsub("<","&lt;"):gsub(">","&gt;")); self.header:paginate()
+    self.document:setDocument(row.detailText,UI.highContrast)
+    if self.compact then self.detailOnly=true end
+    self:layout()
 end
-
-if Events and Events.OnKeyPressed then
-    -- Build 42 may evaluate this file more than once.  Keep one handler;
-    -- some event implementations do not expose Remove during a reload.
-    if not UI.keyHandler then
-        UI.keyHandler = function(key)
-            if getCore():getKey(NOTEBOOK_BIND) == key then UI.toggle() end
+function Window:rows()
+    local current=state(); if not current then return {} end
+    local rows=self.section=="evidence" and Projection.evidence(current) or Projection.journal(current)
+    if self.section=="evidence" then
+        local labels={available="Last seen in accessible belongings or nearby storage.",unknown="Its current whereabouts are uncertain.",untracked="These notes do not track the physical object.",unavailable="The physical object is no longer available.",conflict="The physical object cannot be identified reliably."}
+        local rt=not UI.probeState and ConspiracyFiles.Runtime
+        for _,row in ipairs(rows) do
+            local e=current.resolveEvidence(row.id)
+            local a=rt and e.assetId and rt.assignment(e.assetId)
+            row.detailText=row.detailText.."\n\nPHYSICAL OBJECT\n"..(a and labels[a.availability] or labels.untracked)
         end
-        Events.OnKeyPressed.Add(UI.keyHandler)
     end
+    return rows
 end
-
+function Window:refresh(preferred)
+    self.journal:setTitle(self.section=="journal" and "[Journal]" or "Journal")
+    self.evidence:setTitle(self.section=="evidence" and "[Evidence]" or "Evidence")
+    local rows=self:rows(); self.list:clear(); local selected=1
+    for i,row in ipairs(rows) do self.list:addItem(row.title,row); if row.id==(preferred or self.currentId) then selected=i end end
+    if #rows==0 then
+        self.header:setText("<RGB:1,1,0.95> Nothing recorded yet"); self.header:paginate()
+        self.document:setDocument("Inspect an unusual document or mark an acquired object worth remembering. The notebook records encounters; it does not assign objectives.",UI.highContrast)
+        self:layout(); return
+    end
+    self.list.selected=selected; self:showRow(rows[selected])
+end
+function Window:onSection(button) self.section=button.internal; self.currentId=nil; self.detailOnly=false; self:refresh(); self:layout() end
+function Window:onBack() self.detailOnly=false; self.focusIndex=3; self:layout() end
+function Window:onContrast()
+    UI.highContrast=not UI.highContrast; self:refresh()
+    if UI.reader then UI.reader.document:setDocument(UI.reader.text,UI.highContrast) end
+end
+local function button(self,x,y,w,label,callback)
+    local b=ISButton:new(x,y,w,32,label,self,function(target,control) safe(function() callback(target,control) end) end)
+    b:initialise(); b:instantiate(); self:addChild(b); return b
+end
+function Window:createChildren()
+    ISCollapsableWindow.createChildren(self); self:setResizable(true)
+    self.journal=button(self,0,0,116,"Journal",Window.onSection); self.journal.internal="journal"
+    self.evidence=button(self,0,0,116,"Evidence",Window.onSection); self.evidence.internal="evidence"
+    self.help=button(self,0,0,116,"Help",function() UI.openHelp() end)
+    self.contrast=button(self,0,0,116,"Contrast",Window.onContrast)
+    self.closeButton=button(self,0,0,116,"Close",Window.close)
+    self.back=button(self,12,0,116,"Back to list",Window.onBack)
+    self.header=ISRichTextPanel:new(12,40,300,90); self.header:initialise(); self.header:instantiate()
+    self.header.autosetheight=false; self.header.clip=true; self.header.background=false; self:addChild(self.header)
+    self.document=Document:new(12,140,300,300); self.document:initialise(); self.document:instantiate(); self:addChild(self.document)
+    self.list=ISScrollingListBox:new(12,40,280,350); self.list:initialise(); self.list:instantiate()
+    self.list.itemheight=getTextManager():getFontHeight(UIFont.Small)*2+16; self.list.doDrawItem=Window.drawRow
+    self.list:setOnMouseDownFunction(self,function(target,row) safe(function() target:showRow(row) end) end); self:addChild(self.list)
+    self:layout(); self:refresh()
+end
+function Window:layout()
+    if not self.list then return end
+    local top=self:titleBarHeight()+12; local bottom=self:resizeWidgetHeight()+12
+    local usable=self.width-152; local height=self.height-top-bottom
+    local line=getTextManager():getFontHeight(UIFont.Small)
+    local headerHeight=math.max(72,line*3+12)
+    self.compact=usable<650
+    local listWidth=self.compact and usable or math.floor(usable*0.35)
+    local detailX=self.compact and 12 or 24+listWidth
+    local detailW=self.compact and usable or usable-listWidth-12
+    local showDetail=not self.compact or self.detailOnly
+    self.back:setVisible(self.compact and self.detailOnly); self.back:setY(top)
+    local extra=self.compact and 38 or 0
+    self.list:setX(12); self.list:setY(top); self.list:setWidth(listWidth); self.list:setHeight(height)
+    self.list:setVisible(not self.compact or not self.detailOnly)
+    self.header:setX(detailX); self.header:setY(top+extra); self.header:setWidth(detailW); self.header:setHeight(headerHeight); self.header:setVisible(showDetail); self.header:paginate()
+    self.document:setX(detailX); self.document:setY(top+extra+headerHeight); self.document:setWidth(detailW); self.document:setHeight(math.max(80,height-headerHeight-extra)); self.document:setVisible(showDetail)
+    local controls={self.journal,self.evidence,self.help,self.contrast,self.closeButton}
+    for i,b in ipairs(controls) do b:setX(self.width-128); b:setY(top+(i-1)*math.max(42,line+20)); b:setHeight(math.max(32,line+12)) end
+    self.list.itemheight=line*2+16
+end
+function Window:prerender()
+    local sw,sh=getCore():getScreenWidth(),getCore():getScreenHeight()
+    local signature=self.width..":"..self.height..":"..sw..":"..sh..":"..getTextManager():getFontHeight(UIFont.Small)
+    if signature~=self.signature then
+        local x,y,w,h=rect(self.width,self.height,{x=self.x,y=self.y,width=math.max(500,self.width),height=math.max(420,self.height)})
+        self:setX(x); self:setY(y); self:setWidth(w); self:setHeight(h); self:layout(); self.signature=signature
+    end
+    ISCollapsableWindow.prerender(self)
+    local controls={self.journal,self.evidence,self.list,self.document,self.help,self.contrast,self.closeButton}
+    local focused=controls[self.focusIndex or 3]
+    if focused and focused:getIsVisible() then self:drawRectBorder(focused.x-2,focused.y-2,focused.width+4,focused.height+4,1,0.95,0.85,0.35) end
+end
+function Window:isKeyConsumed(key)
+    return key==Keyboard.KEY_TAB or key==Keyboard.KEY_UP or key==Keyboard.KEY_DOWN or key==Keyboard.KEY_RETURN
+        or key==Keyboard.KEY_PRIOR or key==Keyboard.KEY_NEXT or key==Keyboard.KEY_BACK
+end
+function Window:onKeyRelease(key)
+    safe(function()
+        if key==Keyboard.KEY_TAB then
+            self.focusIndex=(self.focusIndex or 3)%7+1
+            if self.compact and not self.detailOnly and self.focusIndex==4 then self.focusIndex=5 end
+            if self.compact and self.detailOnly and self.focusIndex==3 then self.focusIndex=4 end
+        elseif key==Keyboard.KEY_BACK and self.compact and self.detailOnly then self:onBack()
+        elseif key==Keyboard.KEY_PRIOR then self.document:page(-1)
+        elseif key==Keyboard.KEY_NEXT then self.document:page(1)
+        elseif (key==Keyboard.KEY_UP or key==Keyboard.KEY_DOWN) and self.focusIndex==3 then
+            local index=math.max(1,math.min(#self.list.items,(self.list.selected or 1)+(key==Keyboard.KEY_UP and -1 or 1)))
+            self.list.selected=index
+            if self.list.items[index] then self:showRow(self.list.items[index].item) end
+        elseif key==Keyboard.KEY_RETURN then
+            local index=self.focusIndex or 3
+            if index==1 then self:onSection(self.journal) elseif index==2 then self:onSection(self.evidence)
+            elseif index==3 and self.list.items[self.list.selected] then self:showRow(self.list.items[self.list.selected].item)
+            elseif index==5 then UI.openHelp() elseif index==6 then self:onContrast() elseif index==7 then self:close() end
+        end
+    end)
+end
+function Window:close()
+    safe(function()
+        UI.geometry={x=self.x,y=self.y,width=self.width,height=self.height}
+        local player=getPlayer and getPlayer()
+        if player and not UI.probeState then player:getModData().ConspiracyFilesUI=UI.geometry end
+        if UI.reader then UI.reader:close() end; if UI.help then UI.help:close() end
+        self:removeFromUIManager(); if UI.notebook==self then UI.notebook=nil end
+    end)
+end
+function Window:new(section)
+    local player=getPlayer and getPlayer()
+    local geometry=UI.geometry or (player and player:getModData().ConspiracyFilesUI)
+    local x,y,w,h=rect(1000,680,type(geometry)=="table" and geometry or nil)
+    local o=ISCollapsableWindow.new(self,x,y,w,h)
+    o:setTitle("Survivor's Notebook"..((isDebugEnabled and isDebugEnabled()) and " ["..UI.VERSION.."]" or "")); o:setWantKeyEvents(true)
+    o.section=section or "journal"; o.focusIndex=3; o.minimumWidth=500; o.minimumHeight=420; return o
+end
+function UI.open(section,preferred)
+    safe(function()
+        if not state() then return end
+        if not UI.notebook then UI.notebook=Window:new(section); UI.notebook:initialise(); UI.notebook:instantiate(); UI.notebook:addToUIManager() end
+        if section then UI.notebook.section=section end
+        UI.notebook:refresh(preferred); UI.notebook:bringToTop()
+    end)
+end
+function UI.refresh(section,id)
+    if not UI.notebook then return end
+    safe(function() if section then UI.notebook.section=section end; UI.notebook:refresh(id) end)
+end
+function UI.toggle() if UI.notebook then UI.notebook:close() else UI.open() end end
+local BIND="Conspiracy-Files: Toggle Survivor Notebook"
+if keyBinding then
+    local exists=false; for _,entry in ipairs(keyBinding) do if entry.value==BIND then exists=true end end
+    if not exists then table.insert(keyBinding,{value=BIND,key=Keyboard.KEY_NONE}) end
+end
+if Events and Events.OnKeyPressed and not UI.keyHandler then
+    UI.keyHandler=function(key) safe(function() local assigned=getCore():getKey(BIND); if assigned and assigned>0 and key==assigned then UI.toggle() end end) end
+    Events.OnKeyPressed.Add(UI.keyHandler)
+end
 return UI

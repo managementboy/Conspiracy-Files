@@ -32,7 +32,7 @@ The minimum matrix is:
 
 The earlier owner-attended task reports wheel scrolling without a visible scrollbar, unreadable high contrast, and repeated unsuccessful corrections. [Archived owner statements](../management/evidence/2026-09-05-takeover/owner-provenance.json) include the final missing-scrollbar report at 2026-09-05 11:55:39 UTC.
 
-[Archived console excerpts](../management/evidence/2026-09-05-takeover/t12-console-excerpt.txt) identify `DEV-0.4-scrollbar`, notebook open and row-selection callbacks at 3200×2000 with font setting 3. These callbacks do not prove visual usability. The current source identifies `DEV-0.5-document-scrollbar`; no passing observation of that version is archived. The source's dedicated scrollbar is a candidate fix, not a proven replacement. See the [takeover audit](../management/PM_TAKEOVER_AUDIT_2026-09-05.md).
+[Archived console excerpts](../management/evidence/2026-09-05-takeover/t12-console-excerpt.txt) identify `DEV-0.4-scrollbar`, notebook open and row-selection callbacks at 3200×2000 with font setting 3. These callbacks do not prove visual usability. The historical DEV-0.5 candidate has no passing observation. Current DEV-0.6 uses the production Notebook/DocumentPane directly through a synthetic-data wrapper; it also has no archived live pass. See the [takeover audit](../management/PM_TAKEOVER_AUDIT_2026-09-05.md).
 
 ## Measurements
 
@@ -44,7 +44,7 @@ Browser prototype behavior is design evidence only. Static inspection of install
 
 ## Verdict
 
-Pending completion of a versioned live matrix. Conditional production notebook Lua already exists and differs from the synthetic probe (including scrollbar composition and missing Help/contrast/focus features). Its acceptance/promotion remains blocked until the actual intended path has an evidence-backed verdict and the UI specification incorporates limitations. Fix static blockers before requesting another attended retest.
+Pending completion of the versioned live matrix. DEV-0.6 uses the shared candidate Notebook/DocumentPane, including separate Help, explicit ink, sibling scrollbar and keyboard navigation. Synthetic fixture preparation performs no world/canonical writes. Browser, mock and source results do not accept rendering, controller, focus or usability. Final verification must include the production manual Inspect path under T11/full acceptance.
 
 ## Decision links
 

@@ -1,323 +1,222 @@
-local Core = require("ConspiracyFiles/init")
-
+local Content = require("ConspiracyFiles/Content")
+local Placement = require("ConspiracyFiles/Placement")
+local Session = require("ConspiracyFiles/Session")
+local Scheduler = require("ConspiracyFiles/Scheduler")
+local Bindings = require("ConspiracyFiles/Bindings")
+local World = require("ConspiracyFiles/WorldAccess")
 ConspiracyFiles = ConspiracyFiles or {}
 ConspiracyFiles.Runtime = ConspiracyFiles.Runtime or {}
 local Runtime = ConspiracyFiles.Runtime
 if Runtime.scriptLoaded then return Runtime end
-
-local STATE_TAG = "ConspiracyFiles.DeadAir"
-local PLACEMENT_TAG = "ConspiracyFiles.DeadAir.Placement"
-local PREFIX = "[CF-DEAD-AIR]"
-local SAMPLE_TICKS = 15
-local LOCATION_ORDER = { Core.Content.ids.relay, Core.Content.ids.police, Core.Content.ids.motel }
-local LOCATIONS = {
-    [Core.Content.ids.relay] = { id = Core.Content.ids.relay, label = "electronics-store-relay", x1 = 10580, y1 = 9583, x2 = 10620, y2 = 9622 },
-    [Core.Content.ids.police] = { id = Core.Content.ids.police, label = "muldraugh-police", x1 = 10625, y1 = 10395, x2 = 10650, y2 = 10425 },
-    [Core.Content.ids.motel] = { id = Core.Content.ids.motel, label = "rourke-motel", x1 = 10642, y1 = 9820, x2 = 10656, y2 = 9834 },
-}
-
-local function safe(value)
-    if value == nil then return "<nil>" end
-    return tostring(value):gsub("|", "/"):gsub("\n", " ")
+Runtime.VERSION = "DEV-0.6-transactional-candidate"
+Runtime.disabled = true
+local session, scheduler, sampler, ticks
+local bindingNotices={}
+local assets = {}; for _,id in ipairs(Content.thread.documentAssetIds) do assets[#assets+1]=id end
+for _,id in ipairs(Content.thread.optionalAssetIds) do assets[#assets+1]=id end
+local function log(kind,message)
+    print("[CF-DEAD-AIR]|"..kind.."|version="..Runtime.VERSION.."|"..tostring(message or ""):gsub("\n"," "):gsub("|","/"))
 end
-
-local function log(kind, fields)
-    local parts = { PREFIX, "EVENT", "kind=" .. safe(kind) }
-    for index = 1, #(fields or {}) do parts[#parts + 1] = fields[index] end
-    print(table.concat(parts, "|"))
+local function debugMode() return isDebugEnabled and isDebugEnabled() end
+local function empty(value) for _ in pairs(value) do return false end; return true end
+local function multiplayer() return (isClient and isClient()) or (isServer and isServer()) end
+local function checked(ok,why) if not ok then error(tostring(why)) end end
+local function boundary(subsystem,fn)
+    if Runtime.disabled or (scheduler and scheduler.isDisabled(subsystem)) then return false end
+    local ok,result,a,b=pcall(fn)
+    if not ok then
+        if scheduler then scheduler.failed(subsystem,result) else log("ERROR",subsystem..":"..tostring(result)) end
+        return false,result
+    end
+    return true,result,a,b
 end
-
-local function copy(value)
-    if type(value) ~= "table" then return value end
-    local result = {}
-    for key, child in pairs(value) do result[key] = copy(child) end
-    return result
+Runtime.boundary=boundary
+local function fault(point)
+    if not debugMode() or Runtime.faultPoint~=point then return end
+    Runtime.faultPoint=nil; log("FAULT",point); error("one-shot fault:"..point)
 end
-
-local function replaceModData(tag, staged)
-    local structureOk, structureError = Core.Validator.validateStructure(staged)
-    if not structureOk then error("unsafe ModData for " .. tag .. ":" .. safe(structureError)) end
-    if Core.Validator.estimateEncodedBytes(staged) > Core.Validator.MAX_ENCODED_BYTES then error("ModData size limit exceeded for " .. tag) end
-    local stored = ModData.getOrCreate(tag)
-    for key in pairs(stored) do stored[key] = nil end
-    for key, value in pairs(staged) do stored[key] = copy(value) end
-    return stored
-end
-
-local function saveState()
-    if Runtime.state then
-        local snapshot = Runtime.state.snapshot()
-        local total = Core.Validator.estimateEncodedBytes(snapshot)
-        if Runtime.placementPlan then total = total + Core.Validator.estimateEncodedBytes(Runtime.placementPlan) end
-        if total > Core.Validator.MAX_ENCODED_BYTES then error("combined canonical ModData size limit exceeded") end
-        Runtime.root = replaceModData(STATE_TAG, snapshot)
+local function placementJob(id)
+    local phase,scanResult,scanFinished,entry,count,countFinished,created
+    return function()
+        local a=session.assignment(id)
+        if a.status=="placed" or a.status=="conflict" or a.status=="unavailable" then return true end
+        if not a.target then
+            if not phase then
+                phase=World.candidateScan(Placement.resolveCandidate(a),function(targets,complete)
+                    scanResult=complete and targets or nil; scanFinished=true
+                end)
+            end
+            if not scanFinished then phase(); return false end
+            if not scanResult then return true end -- unloaded coverage is never terminal loss
+            local target=scanResult[Placement.resolveCandidate(a).containerOrdinal]
+            if not target then
+                -- A provisional candidate may be wrong. Do not classify that as
+                -- destruction or choose a different container opportunistically.
+                if not bindingNotices[a.candidateId] then bindingNotices[a.candidateId]=true; log("BINDING_REQUIRED",a.candidateId) end
+                return true
+            end
+            checked(session.bind(id,target)); phase=nil; return false
+        end
+        local container,reason=World.resolve(a.target)
+        if not container then
+            -- Destroyed/changed furniture is ambiguous after placement intent;
+            -- absence alone must not respawn or trigger fallback.
+            checked(session.observe(id,0,a.status=="pending" and reason=="target-changed" and Bindings.accepted)); return true
+        end
+        if not phase then
+            entry=container
+            phase=World.count(container,a.physicalToken,function(observed) count=observed; countFinished=true end)
+        end
+        if not countFinished then phase(); return false end
+        if container~=entry or count==nil then return true end
+        if count>1 then checked(session.observe(id,count,false)); return true end
+        if count==1 then
+            fault("before-placed-commit"); checked(session.placed(id,count)); log("PLACED",id..":reconciled"); return true
+        end
+        if a.status=="placing" and not created then
+            -- A persisted intent plus zero at the target is ambiguous across
+            -- chunk/GlobalModData persistence. Bias toward loss, never respawn.
+            checked(session.observe(id,0,false)); return true
+        end
+        if a.status=="pending" then
+            fault("before-intent"); checked(session.intent(id)); fault("after-intent")
+            created=true; return false
+        end
+        fault("before-add")
+        local asset=Content.assets[id]
+        local item=instanceItem(id==Content.ids.key and "Base.KeyRing" or "Base.Note")
+        assert(item,"item creation failed")
+        local md=item:getModData()
+        md.cfSchema=2; md.cfAssetId=id; md.cfAssetKind=asset.assetKind; md.cfPhysicalToken=a.physicalToken
+        md.cfResolvedTitle=asset.displayName; md.cfResolvedBody=asset.bodyText; md.cfFoundLocationId=a.locationId
+        item:setName(asset.displayName); item:setCustomName(true)
+        assert(container:AddItem(item),"container add returned nil")
+        fault("after-add")
+        -- Recount after add before committing placed. A retry only reconciles.
+        countFinished=false; count=nil; created=false
+        phase=World.count(container,a.physicalToken,function(observed) count=observed; countFinished=true end)
+        return false
     end
 end
-
-local function savePlacements()
-    local ok, message = Core.Placement.validate(Runtime.placementPlan)
-    if not ok then error("placement-plan:" .. safe(message)) end
-    local total = Core.Validator.estimateEncodedBytes(Runtime.placementPlan)
-    if Runtime.state then total = total + Core.Validator.estimateEncodedBytes(Runtime.state.snapshot()) end
-    if total > Core.Validator.MAX_ENCODED_BYTES then error("combined canonical ModData size limit exceeded") end
-    Runtime.placementRoot = replaceModData(PLACEMENT_TAG, Runtime.placementPlan)
-end
-
-Runtime.persist = saveState
-
-local function locationAt(player)
-    if not player or math.floor(player:getZ()) ~= 0 then return nil end
-    local x, y = player:getX(), player:getY()
-    for _, locationId in ipairs(LOCATION_ORDER) do
-        local location = LOCATIONS[locationId]
-        if x >= location.x1 and x <= location.x2 and y >= location.y1 and y <= location.y2 then return location end
+local function enqueuePlacements()
+    for _,id in ipairs(assets) do
+        local a=session.assignment(id)
+        if (not ConspiracyFiles.T11Mode or id==Content.ids.d1) and (a.status=="pending" or a.status=="placing") then scheduler.enqueue("place:"..id,"placement",placementJob(id)) end
     end
-    return nil
 end
-
-local function showLocationText(player, label)
-    local message = "DEAD AIR: CORRECT LOCATION — " .. label
-    local shown = false
-    if HaloTextHelper and HaloTextHelper.addGoodText then shown = pcall(HaloTextHelper.addGoodText, player, message) end
-    log("LOCATION_OVERLAY", { "shown=" .. tostring(shown), "text=" .. message })
-end
-
-local function permitsContainer(candidate, container)
-    local containerType = container and container.getType and tostring(container:getType()) or ""
-    for _, allowedType in ipairs(candidate.allowedContainerTypes or {}) do
-        if containerType == allowedType then return true end
+local function identityJob()
+    local results,complete,cursor=nil,false,1
+    local step=World.identityScan(getPlayer(),session.snapshot().placement.assignments,function(found) results=found; complete=true end)
+    return function()
+        if not complete then step(); return false end
+        local id=assets[cursor]; if not id then return true end
+        cursor=cursor+1
+        local a=session.assignment(id)
+        if a.status=="placed" or a.status=="conflict" then checked(session.observe(id,#results[id],false)) end
+        return false
     end
+end
+function Runtime.assignment(id) return session and session.assignment(id) end
+function Runtime.placementSummary() return session and session.snapshot().placement end
+function Runtime.requestAllPlacements() if not Runtime.disabled then enqueuePlacements() end end
+function Runtime.allPlacementsSettled()
+    if not session then return false end
+    for _,id in ipairs(assets) do if session.assignment(id).status~="placed" then return false end end; return true
+end
+function Runtime.isMarked(id)
+    if not Runtime.state then return false end
+    for _,e in ipairs(Runtime.state.snapshot().evidence) do if e.assetId==id and e.playerMarkedInteresting then return true end end
     return false
 end
-
-local function containerEntries(candidate)
-    local entries = {}
-    for radius = 0, candidate.radius do
-        for dx = -radius, radius do
-            for dy = -radius, radius do
-                if math.max(math.abs(dx), math.abs(dy)) == radius then
-                    local x, y = candidate.x + dx, candidate.y + dy
-                    local square = getCell():getGridSquare(x, y, candidate.z)
-                    local objects = square and square:getObjects() or nil
-                    if objects then
-                        for objectIndex = 0, objects:size() - 1 do
-                            local object = objects:get(objectIndex)
-                            if object and object.getContainerCount then
-                                for containerIndex = 0, object:getContainerCount() - 1 do
-                                    local container = object:getContainerByIndex(containerIndex)
-                                    if container and permitsContainer(candidate, container) then
-                                        entries[#entries + 1] = { container = container, x = x, y = y,
-                                            objectIndex = objectIndex, containerIndex = containerIndex }
-                                    end
-                                end
-                            end
-                        end
-                    end
-                end
-            end
-        end
-    end
-    return entries
+function Runtime.inspect(id,context,location)
+    if Runtime.disabled or not session then return false,"runtime unavailable" end
+    fault("inspect-domain")
+    return session.command("discover",id,context,location)
 end
-
-local function resolveContainer(assignment)
-    local candidate = Core.Placement.resolveCandidate(assignment)
-    if not candidate then return nil end
-    local entries = containerEntries(candidate)
-    return entries[candidate.containerOrdinal]
+function Runtime.mark(id,context,location)
+    if Runtime.disabled or not session then return false,"runtime unavailable" end
+    local a=session.assignment(id)
+    return session.command("markInteresting",a.physicalToken,{assetId=id,contextText=context,foundLocationId=location})
 end
-
-local function tokenCount(container, token)
-    local count = 0
-    local items = container and container.getItems and container:getItems() or nil
-    if not items then return count end
-    for index = 0, items:size() - 1 do
-        local item = items:get(index)
-        local md = item and item.getModData and item:getModData() or nil
-        if md and md.cfPhysicalToken == token then count = count + 1 end
-    end
-    return count
+function Runtime.markGeneric(intent,label)
+    if Runtime.disabled or not session then return false,"runtime unavailable" end
+    return session.command("markInteresting",intent,{subjectLabel=label:sub(1,240),contextText="Marked an acquired object as worth remembering: "..label:sub(1,240)})
 end
-
-local function createStampedItem(assignment)
-    local asset = Core.Content.assets[assignment.assetId]
-    local itemType = assignment.assetId == Core.Content.ids.key and "Base.KeyRing" or "Base.Note"
-    local item = instanceItem(itemType)
-    if not item then error(itemType .. " creation returned nil") end
-    local md = item:getModData()
-    md.cfAssetId = assignment.assetId
-    md.cfAssetKind = asset.assetKind
-    md.cfSchema = 1
-    md.cfPhysicalToken = assignment.physicalToken
-    md.cfResolvedTitle = asset.displayName
-    md.cfFoundLocationId = assignment.locationId
-    if asset.bodyText then md.cfResolvedBody = asset.bodyText end
-    item:setName(asset.displayName)
-    item:setCustomName(true)
-    return item
+function Runtime.hasMarkIntent(intent)
+    if not Runtime.state then return false end
+    for _,e in ipairs(Runtime.state.snapshot().evidence) do if e.markIntentId==intent then return true end end
+    return false
 end
-
-local function commitPlaced(assignment, entry, reconciled)
-    assignment.status = "placed"
-    local ok, _, changed = Runtime.state.materialise(assignment.assetId)
-    if not ok then error("domain materialisation failed for " .. assignment.assetId) end
-    savePlacements()
-    if changed then saveState() end
-    log("PHYSICAL_PLACED", { "asset=" .. assignment.assetId, "candidate=" .. assignment.candidateId,
-        "x=" .. tostring(entry.x), "y=" .. tostring(entry.y), "container=" .. safe(entry.container:getType()),
-        "reconciled=" .. tostring(reconciled) })
+function Runtime.newMarkIntent()
+    return "cf-mark:"..tostring(session.snapshot().placement.seed)..":"..tostring(#Runtime.state.snapshot().evidence+1)..":"..tostring(ZombRand(2147483646))
 end
-
-local function attemptAssignment(assignment)
-    if assignment.status ~= "pending" then return true end
-    local entry = resolveContainer(assignment)
-    if not entry then return false end
-    local matches = tokenCount(entry.container, assignment.physicalToken)
-    if matches > 1 then
-        assignment.status = "conflict"
-        savePlacements()
-        log("PHYSICAL_CONFLICT", { "asset=" .. assignment.assetId, "candidate=" .. assignment.candidateId, "matches=" .. tostring(matches) })
-        return true
-    end
-    if matches == 1 then commitPlaced(assignment, entry, true); return true end
-    local item = createStampedItem(assignment)
-    local added = entry.container:AddItem(item)
-    if not added then error("target-container-add-returned-nil for " .. assignment.assetId) end
-    if entry.container.setDrawDirty then entry.container:setDrawDirty(true) end
-    commitPlaced(assignment, entry, false)
-    return true
+function Runtime.confirmDestroyed(id)
+    -- Development fault-matrix control only; not an inference from search absence.
+    if not debugMode() or Runtime.disabled then return false end
+    return session.observe(id,0,true)
 end
-
-local function processLocation(locationId)
-    local complete = true
-    for _, assetId in ipairs(Core.Placement.assetsAt(locationId)) do
-        local assignment = Runtime.placementPlan.assignments[assetId]
-        if assignment.status == "pending" and not attemptAssignment(assignment) then complete = false end
-    end
-    Runtime.pendingLocations[locationId] = not complete
-end
-
-local function seedForNewSave(saveName)
-    if isDebugEnabled and isDebugEnabled() then return Core.Placement.DEBUG_SEED end
-    if ZombRand then
-        local ok, value = pcall(ZombRand, 2147483646)
-        if ok and type(value) == "number" then return value + 1 end
-    end
-    return Core.Placement.seedFromString(saveName)
-end
-
-local function initializePlacement(saveName)
-    local stored = ModData.getOrCreate(PLACEMENT_TAG)
-    if next(stored) ~= nil then
-        local restored, message = Core.Placement.restore(stored)
-        if not restored then error("stored placement plan invalid:" .. safe(message)) end
-        Runtime.placementPlan = restored
-    else
-        Runtime.placementPlan = Core.Placement.newPlan(seedForNewSave(saveName))
-        savePlacements()
-    end
-    -- LoadGridsquare and the player's current location enqueue only bounded,
-    -- relevant work. Keeping unloaded locations out prevents one unavailable
-    -- region from starving a location the player actually visits first.
-    Runtime.pendingLocations = {}
-end
-
-local function reconcileDomainMaterialisation()
-    local changed = false
-    for assetId, assignment in pairs(Runtime.placementPlan.assignments) do
-        if assignment.status == "placed" then
-            local ok, _, assetChanged = Runtime.state.materialise(assetId)
-            if not ok then error("domain materialisation recovery failed for " .. assetId) end
-            changed = changed or assetChanged
-        end
-    end
-    if changed then saveState() end
-end
-
-function Runtime.placementSummary()
-    if not Runtime.placementPlan then return nil end
-    return copy(Runtime.placementPlan)
-end
-
-function Runtime.allPlacementsSettled()
-    if not Runtime.placementPlan then return false end
-    for _, assignment in pairs(Runtime.placementPlan.assignments) do
-        if assignment.status ~= "placed" then return false end
-    end
-    return true
-end
-
-function Runtime.requestAllPlacements()
-    if not Runtime.pendingLocations then return end
-    for _, locationId in ipairs(LOCATION_ORDER) do Runtime.pendingLocations[locationId] = true end
-end
-
+function Runtime.conflict(id) return session.observe(id,2,false) end
+function Runtime.metrics() return scheduler and {peakMs=scheduler.peakMs,maxSteps=scheduler.maxSteps,budgetMs=scheduler.budgetMs} end
 local function initialize()
-    local save = getCurrentSaveName and getCurrentSaveName() or "<unknown>"
-    if isClient and isClient() then log("DISABLED", { "reason=multiplayer", "save=" .. safe(save) }); return false end
-    local stored = ModData.getOrCreate(STATE_TAG)
-    local state, err = Core.ThreadState.new(stored.schemaVersion and stored or nil)
-    if not state then error("state-init:" .. safe(err)) end
-    Runtime.state, Runtime.root, Runtime.ticks, Runtime.lastLocation = state, stored, 0, nil
-    initializePlacement(save)
-    reconcileDomainMaterialisation()
-    log("START", { "save=" .. safe(save), "gameVersion=" .. safe(getGameVersion()), "build=42.20.4",
-        "placementSeed=" .. tostring(Runtime.placementPlan.seed) })
-    log("READY", { "contentRevision=" .. safe(Core.Content.thread.contentRevision),
-        "stateEvidence=" .. tostring(#state.snapshot().evidence), "placements=7" })
-    return true
-end
-
-local function onGameStart()
-    local ok, err = pcall(initialize)
-    if not ok then log("ERROR", { "boundary=init", "error=" .. safe(err) }); Runtime.disabled = true end
-end
-
-local function onLoadGridSquare(square)
-    if Runtime.disabled or not Runtime.pendingLocations or not square then return end
-    local x, y, z = square:getX(), square:getY(), square:getZ()
-    if z ~= 0 then return end
-    for _, locationId in ipairs(LOCATION_ORDER) do
-        local location = LOCATIONS[locationId]
-        if x >= location.x1 and x <= location.x2 and y >= location.y1 and y <= location.y2 then
-            Runtime.pendingLocations[locationId] = true
-        end
+    Runtime.disabled=true; Runtime.state=nil; session=nil
+    if multiplayer() then log("DISABLED","multiplayer"); return end
+    if ConspiracyFiles.T12Mode then log("DISABLED","T12 synthetic UI only; world adapter inactive"); return end
+    if not Bindings.accepted and not debugMode() then log("DISABLED","candidate bindings require debug mode until accepted"); return end
+    assert(getTimestampMs,"bounded scheduler requires engine clock")
+    scheduler=Scheduler.new(getTimestampMs,function(system,why,disabled) log(disabled and "SUBSYSTEM_DISABLED" or "ERROR",system..":"..why) end)
+    sampler=Bindings.newSampler(); ticks=0
+    local tag=ConspiracyFiles.T11Mode and "ConspiracyFiles.T11.Session" or "ConspiracyFiles.DeadAir"
+    local wrapper=ModData.getOrCreate(tag)
+    for key in pairs(wrapper) do assert(key=="canonical","legacy/invalid state: use a fresh disposable save; no migration performed") end
+    if not ConspiracyFiles.T11Mode then
+        assert(empty(ModData.getOrCreate("ConspiracyFiles.DeadAir.Placement")),"legacy placement data: fresh disposable save required")
     end
+    local seed=debugMode() and Placement.DEBUG_SEED or (ZombRand(2147483646)+1)
+    local why
+    session,why=Session.new(wrapper.canonical,seed,function(staged)
+        fault("before-canonical-swap")
+        wrapper.canonical=staged -- T4-proven single staged-root assignment; no work after swap
+    end)
+    assert(session,why)
+    Runtime.state=session.view; Runtime.disabled=false
+    log("READY","tag="..tag..";build="..tostring(getGameVersion())..";bindings="..tostring(Bindings.accepted))
+    enqueuePlacements() -- includes already-loaded targets outside the player's location
 end
-
+local function onStart()
+    local ok,why=pcall(initialize)
+    if not ok then Runtime.disabled=true; log("INIT_REJECTED",why) end
+end
 local function onTick()
-    if Runtime.disabled or not Runtime.state then return end
-    Runtime.ticks = Runtime.ticks + 1
-    if Runtime.ticks % SAMPLE_TICKS ~= 0 then return end
-    local ok, err = pcall(function()
-        local player = getPlayer()
-        local location = locationAt(player)
-        if location then
-            if location.id ~= Runtime.lastLocation then
-                Runtime.lastLocation = location.id
-                showLocationText(player, location.label)
-                local success, _, changed = Runtime.state.confirmLocation(location.id)
-                if success and changed then
-                    saveState()
-                    log("LOCATION_CONFIRMED", { "location=" .. location.label, "x=" .. tostring(math.floor(player:getX())),
-                        "y=" .. tostring(math.floor(player:getY())) })
-                end
-            end
-            Runtime.pendingLocations[location.id] = true
-        else
-            Runtime.lastLocation = nil
+    boundary("scheduler",function()
+        ticks=ticks+1
+        if ticks%15==0 then
+            scheduler.enqueue("arrival","arrival",function()
+                local p=getPlayer(); if not p then return true end
+                fault("arrival-domain")
+                local id=sampler(Runtime.state.snapshot(),{x=math.floor(p:getX()),y=math.floor(p:getY()),z=math.floor(p:getZ())})
+                if id then checked(session.command("confirmLocation",id)); log("ARRIVAL",id) end
+                return true
+            end)
         end
-        for _, locationId in ipairs(LOCATION_ORDER) do
-            if Runtime.pendingLocations[locationId] then processLocation(locationId); break end
+        if ticks%120==0 then
+            enqueuePlacements(); scheduler.enqueue("identity","identity",identityJob())
+        end
+        scheduler.step()
+    end)
+end
+local function onSquare(square)
+    boundary("grid",function()
+        if not square then return end
+        local x,y,z=square:getX(),square:getY(),square:getZ()
+        for _,id in ipairs(assets) do
+            local a=session.assignment(id); local c=Placement.resolveCandidate(a)
+            if (not ConspiracyFiles.T11Mode or id==Content.ids.d1) and z==c.z and math.abs(x-c.x)<=c.radius and math.abs(y-c.y)<=c.radius then
+                scheduler.enqueue("place:"..id,"placement",placementJob(id))
+            end
         end
     end)
-    if not ok then log("ERROR", { "boundary=tick", "error=" .. safe(err) }); Runtime.disabled = true end
 end
-
-Events.OnGameStart.Add(onGameStart)
-Events.OnTick.Add(onTick)
-Events.LoadGridsquare.Add(onLoadGridSquare)
-Runtime.scriptLoaded = true
-log("SCRIPT_LOADED", { "module=runtime" })
-
+Runtime.start=onStart
+Events.OnGameStart.Add(onStart); Events.OnTick.Add(onTick); Events.LoadGridsquare.Add(onSquare)
+Runtime.scriptLoaded=true
 return Runtime

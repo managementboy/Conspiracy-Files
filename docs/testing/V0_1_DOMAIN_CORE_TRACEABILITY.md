@@ -1,5 +1,7 @@
 # v0.1 Plain-Lua Domain Core — Traceability Report
 
+**Correction suite, 2026-09-05:** 42 offline tests now include aggregate sink rejection, placement intent/recovery, partial identity absence and sticky conflict, two-sample referenced arrival, scheduler isolation, actual runtime/menu mocks, MP/T12 no-write startup, one-item T11 mode, generic mark idempotency, and shared UI composition. These extend the historical domain tests below; mocks do not supply E01–E13 evidence. Current logs/hashes: ../management/evidence/2026-09-05-correction/.
+
 **Implementation branch:** `feature/plain-lua-domain-core`
 
 **Start point:** `ff1725cfc03627eeb2d3d12981f7b77e6ef3d2ca`

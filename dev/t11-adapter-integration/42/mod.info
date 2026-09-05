@@ -1,5 +1,6 @@
 name=Conspiracy-Files T11 Adapter Integration Probe
 id=ConspiracyFiles_T11_Probe
+require=ConspiracyFiles
 author=Conspiracy-Files development
 modversion=0.0.1
 versionMin=42.0.0
