@@ -1,5 +1,7 @@
 # Spike T3 — location categorisation reliability
 
+**Policy update P4-R53:** the observations and limitations below remain authoritative. The later owner clarification supersedes the curated-only v1 product recommendation: use capability-based catalog records and automatic selection without per-site owner approval. Unknown labels still cannot become authoritative story facts. This is a product-policy correction, not new engine evidence.
+
 - **Status:** Complete — live isolated single-player probe executed on the development PC
 - **Project Zomboid build tested:** Stable `42.20.4 b0bbce05d5`; revision `b0bbce05d5`; `pzbullet=1.0.0.28`; Steam build ID `24909800`
 - **Platform:** Windows 11 Pro `10.0.26200` build 26200; Intel Core i9-13900H; 34,070,192,128 bytes RAM; direct 64-bit client; single-player; `-nosteam`

@@ -1,4 +1,4 @@
-local Ids = require("ConspiracyFiles.Ids")
+local Ids = require("ConspiracyFiles/Ids")
 
 local Content = {}
 
@@ -37,6 +37,16 @@ Content.thread = {
     fallbackAssetId = D2
 }
 
+-- Authored journal prose belongs with the rest of the content. Placeholders are
+-- resolved deterministically by Renderer and can later become localisation keys.
+Content.journalText = {
+    threadIntroduced = "Dead Air began with %s. Its paperwork points toward %s.",
+    markedInteresting = "Marked interesting: %s. %s",
+    evidenceUpdated = "The red B-37 key I marked earlier matches the relay paperwork. Pike says it came off Rourke's receiver ring and belongs with property record 4471.",
+    locationConfirmed = "Confirmed %s.",
+    contradictionSurfaced = "Pike's shift note says the advance CSS memo was not available when the receiver was taken, although the memo is dated earlier. Both records remain unresolved."
+}
+
 Content.identities = {
     [ROURKE] = { identityId = ROURKE, displayLabel = "M. Rourke", roleDescriptor = "CSS field technician" },
     [PIKE] = { identityId = PIKE, displayLabel = "Sgt. Dana Pike", roleDescriptor = "police property/evidence supervisor" },
@@ -69,10 +79,11 @@ Content.locations = {
 
 Content.assets = {
     [D1] = {
-        assetId = D1, threadId = THREAD_ID, displayName = "CSS Field Service Ticket 93-0714",
+        assetId = D1, threadId = THREAD_ID, displayName = "Cumberland Signal Services Field Service Ticket 93-0714",
         assetKind = "document", placementLocationId = RELAY, entryRole = "anchor",
         references = { ROURKE, CSS, RELAY }, leadLocationIds = { POLICE }, autoRecordEvidence = true,
-        journalText = "Found a CSS service ticket for Relay Site 31. Rourke logged a 37-second dead carrier and says police took his receiver.",
+        contextText = "A field-service ticket from Cumberland Signal Services (CSS), the private communications contractor that maintained the relay equipment.",
+        journalText = "Found a Cumberland Signal Services (CSS) service ticket for Relay Site 31. Rourke logged a 37-second dead carrier and says police took his receiver.",
         bodyText = [[CUMBERLAND SIGNAL SERVICES
 FIELD SERVICE TICKET
 
@@ -94,10 +105,10 @@ Spare exciter cabinet B-37
 
 Work performed:
 23:52  Checked normal county channels. No fault found.
-00:11  Installed customer-supplied frequency-control package marked
+23:58  Installed customer-supplied frequency-control package marked
        "7C-41" in spare exciter per dispatch instruction.
 00:24  Key test, five seconds. No voice path requested.
-00:31  Dispatch instructed: LEAVE 7C ENABLED. DO NOT ENTER FREQ. ON COPY.
+00:31  Dispatch instructed: LEAVE 7C-41 ENABLED. DO NOT ENTER FREQ. ON COPY.
 00:47  Carrier observed on reserve channel. No voice, tone or station ID.
 00:53  Carrier repeated.
 00:59  Carrier repeated.
@@ -110,7 +121,7 @@ Work performed:
 03:41  County unit arrived at south gate with typed hold request.
        My portable monitor was taken for property intake.
        No equipment removed from relay cabinet.
-04:05  Dispatch: leave 7C package installed. Close ticket as routine setup.
+04:05  Dispatch: leave 7C-41 package installed. Close ticket as routine setup.
 
 Parts:
 1 customer-supplied frequency-control package .......... N/C
@@ -131,7 +142,8 @@ B-37 red key was on the same ring when they took the set.]]
         assetId = D2, threadId = THREAD_ID, displayName = "Police Property Record 4471",
         assetKind = "document", placementLocationId = POLICE, entryRole = "fallback",
         references = { PIKE, CSS, RELAY }, leadLocationIds = { RELAY }, autoRecordEvidence = true,
-        journalText = "Police logged a modified receiver from Relay Site 31. No requesting agency is named; the set carries a CSS service number.",
+        contextText = "A police intake form for a seized radio receiver. The initials C.S.S. identify its communications maintenance contractor; this record does not spell out the company name.",
+        journalText = "Police logged a modified receiver from Relay Site 31. No requesting agency is named; the set carries a service number from the communications maintenance contractor, listed here as C.S.S.",
         bodyText = [[PROPERTY / FOUND ARTICLE RECORD
 
 Record No.: 4471
@@ -180,10 +192,11 @@ a beautiful instruction sheet.
 Apparently "nobody" has excellent stationery.]]
     },
     [D3] = {
-        assetId = D3, threadId = THREAD_ID, displayName = "CSS Invoice / Stock Transfer 9327",
+        assetId = D3, threadId = THREAD_ID, displayName = "Cumberland Signal Services Invoice / Stock Transfer 9327",
         assetKind = "document", placementLocationId = RELAY,
         references = { CSS, VALE, RELAY }, autoRecordEvidence = true,
-        journalText = "CSS billed ordinary relay work around a customer-supplied 7C-41 package. H. Vale approved it without a customer name.",
+        contextText = "An invoice and stock-transfer sheet from Cumberland Signal Services (CSS). It records the equipment and authorization code used at Relay Site 31.",
+        journalText = "Cumberland Signal Services (CSS) billed ordinary relay work around a customer-supplied 7C-41 package. H. Vale approved it without a customer name.",
         bodyText = [[CUMBERLAND SIGNAL SERVICES
 SERVICE PARTS / STOCK TRANSFER
 
@@ -228,13 +241,14 @@ APPROVED: H. VALE]]
         assetId = D4, threadId = THREAD_ID, displayName = "Torn Page from Rourke's Work Notebook",
         assetKind = "document", placementLocationId = RELAY,
         references = { ROURKE, PIKE, VALE, CSS, RELAY }, autoRecordEvidence = true,
-        journalText = "Rourke kept a private account. He says he was told to make 7C live, then told the test never happened.",
+        contextText = "A private notebook page by M. Rourke, a field technician for the communications maintenance contractor identified as C.S.S. It describes the Relay Site 31 job outside the official paperwork.",
+        journalText = "Rourke, the communications maintenance technician, kept a private account. He says he was told to make 7C-41 live, then told the test never happened.",
         bodyText = [[7/3
 
 Keeping this one off the official pad because the official pad has developed
 a sudden allergy to events.
 
-Thursday night dispatch says "Vale wants 7C live before midnight."
+Thursday night dispatch says "Vale wants 7C-41 live before midnight."
 I ask WHICH Vale. Answer: "the one on the authorization."
 Excellent. Very helpful. I will repair radios by horoscope next.
 
@@ -262,7 +276,8 @@ Carbon paper: the nation's last reliable backup system.]]
         assetId = D5, threadId = THREAD_ID, displayName = "Temporary Access and Reporting Procedure — Relay 31",
         assetKind = "document", placementLocationId = POLICE,
         references = { VALE, CSS, RELAY }, contradictsAssetIds = { D6, D2 }, autoRecordEvidence = true,
-        journalText = "A memo signed H. Vale says police were warned about the relay work in advance and told not to report the tests by themselves.",
+        contextText = "An administrative memo on Cumberland Signal Services (CSS) letterhead, addressed to local patrol, property, and communications supervisors.",
+        journalText = "A Cumberland Signal Services (CSS) memo signed H. Vale says police were warned about the relay work in advance and told not to report the tests by themselves.",
         bodyText = [=[CUMBERLAND SIGNAL SERVICES
 ADMINISTRATIVE COORDINATION
 
@@ -316,7 +331,8 @@ CUSTOMER COPY — [faint/illegible]]=]
         assetKind = "document", placementLocationId = POLICE,
         references = { PIKE, ROURKE, VALE, CSS, RELAY }, contradictsAssetIds = { D5 },
         recontextualisesAssetIds = { KEY }, autoRecordEvidence = true,
-        journalText = "Pike's shift note says the advance memo was not there when the receiver was taken, and callers could not agree what \"H. Vale\" meant.",
+        contextText = "A handwritten note by Sgt. Dana Pike, the police property supervisor who logged the receiver under record 4471.",
+        journalText = "Pike's shift note says the contractor's advance memo was not there when the receiver was taken, and callers could not agree what \"H. Vale\" meant.",
         bodyText = [[PROPERTY — DAY SHIFT
 
 Re: 4471
@@ -371,7 +387,7 @@ local function checkUniqueIds(list, registry, label)
     return true
 end
 
-function Content.validate()
+local function validateContent()
     if not Ids.isAuthored(Content.thread.threadId) then return false, "invalid Thread ID" end
     if #Content.thread.documentAssetIds ~= 6 or #Content.thread.optionalAssetIds ~= 1
         or #Content.thread.identityIds ~= 3 or #Content.thread.locationIds ~= 2 then
@@ -393,6 +409,10 @@ function Content.validate()
     if Content.thread.anchorAssetId ~= D1 or Content.thread.fallbackAssetId ~= D2 then return false, "anchor/fallback IDs changed" end
     for assetId, asset in pairs(Content.assets) do
         if asset.assetId ~= assetId or asset.threadId ~= THREAD_ID or not Ids.isAuthored(assetId) then return false, "invalid Asset registry key" end
+        local assetSlug = string.match(assetId, "^dead%-air:asset:(.+)$")
+        if assetSlug and string.sub(assetSlug, 1, 6) == "marked" then
+            return false, "Asset slug uses reserved marked prefix " .. assetId
+        end
         if not Content.locations[asset.placementLocationId] then return false, "unresolved Asset placement ID " .. assetId end
         for _, referenceId in ipairs(asset.references or {}) do
             if not Content.identities[referenceId] and not Content.organisations[referenceId] and not Content.locations[referenceId] then
@@ -402,11 +422,57 @@ function Content.validate()
         for _, locationId in ipairs(asset.leadLocationIds or {}) do if not Content.locations[locationId] then return false, "unresolved lead Location ID" end end
         for _, otherAssetId in ipairs(asset.contradictsAssetIds or {}) do if not Content.assets[otherAssetId] then return false, "unresolved contradiction Asset ID" end end
         for _, otherAssetId in ipairs(asset.recontextualisesAssetIds or {}) do if not Content.assets[otherAssetId] then return false, "unresolved recontextualisation Asset ID" end end
-        if asset.assetKind == "document" and (type(asset.bodyText) ~= "string" or type(asset.journalText) ~= "string" or not asset.autoRecordEvidence) then
+        if asset.assetKind == "document" and (type(asset.bodyText) ~= "string" or type(asset.contextText) ~= "string"
+            or type(asset.journalText) ~= "string" or not asset.autoRecordEvidence) then
             return false, "document Asset is incomplete " .. assetId
         end
     end
     return true
 end
 
-return Content
+local contentOk, contentMessage = validateContent()
+assert(contentOk, "invalid static Conspiracy-Files content: " .. tostring(contentMessage))
+function Content.validate()
+    return contentOk, contentMessage
+end
+
+local function copyArray(value)
+    local result = {}
+    for index = 1, #value do result[index] = value[index] end
+    return result
+end
+
+local function isDenseArray(value)
+    local count = 0
+    for key, _ in pairs(value) do
+        if type(key) ~= "number" or key < 1 or key ~= math.floor(key) then return false end
+        count = count + 1
+    end
+    for index = 1, count do if value[index] == nil then return false end end
+    return count > 0
+end
+
+-- Lua 5.1 has no __pairs/__ipairs metamethods. Object/registry tables are
+-- therefore true read-only proxies, while authored scalar arrays are returned
+-- as disposable copies so callers retain normal #/ipairs behaviour without
+-- gaining a reference to canonical content.
+local proxies = {}
+local function readOnly(value, path)
+    if type(value) ~= "table" then return value end
+    if isDenseArray(value) then return copyArray(value) end
+    if proxies[value] then return proxies[value] end
+    local proxy = {}
+    proxies[value] = proxy
+    setmetatable(proxy, {
+        __index = function(_, key)
+            return readOnly(value[key], path .. "." .. tostring(key))
+        end,
+        __newindex = function()
+            error(path .. " is read-only", 2)
+        end,
+        __metatable = "read-only"
+    })
+    return proxy
+end
+
+return readOnly(Content, "Content")

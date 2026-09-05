@@ -1,0 +1,27 @@
+PASS CF-V01-P04 D1/D2 introduction paths expose only ordinary-text leads
+PASS CF-V01-P06 duplicate/reordered materialisation and discovery are idempotent after reconstruction
+PASS CF-V01-P07 exported snapshots cannot mutate authored or marked Evidence truth
+PASS CF-V01-P07 renderer and content modules cannot mutate canonical truth
+PASS CF-V01-P08 JournalEntry chronology is append-only across mutation attempts
+PASS CF-V01-P09 deterministic no-AI renderer survives save-shaped round trips
+PASS CF-V01-P10 D5/D6 contradiction is knowledge-bounded and exactly once
+PASS CF-V01-P11 B-37 recontextualisation requires a prior marked key
+PASS CF-V01-P12 only the three eligible event classes are major and never solved
+PASS CF-V01-P14 Mark Interesting creates one immutable chronology record per intent
+PASS CF-V01-P15 optional B-37 key does not gate six-document or contradiction paths
+PASS CF-V01-P16 Organisation label derives generic-to-specific without persistence
+PASS CF-V01-P17 Location labels derive independently from idempotent confirmations
+PASS CF-V01-P18 staged recursive validation rejects unsafe states and preserves last-known-good
+PASS CF-V01-P18 validation rejects split-brain journal and ambiguous marked records
+PASS CF-V01-P19 conservative estimator enforces the 500 KB boundary
+PASS CF-V01-P19 estimator rejects cycles safely and maximal work stays within budget
+PASS CF-V01-P24 Evidence resolves full static content without copying document bodies
+PASS CF-V01-P25 complete suite loads with PZ globals absent
+PASS notebook projection is discovery-ordered and knowledge-bounded
+PASS runtime auto-execute plus require registers hooks exactly once
+PASS placement pools are explicit, bounded and cover every physical asset
+PASS placement selection is deterministic by seed and varies across new-save seeds
+PASS persisted placement plans restore without rerolling and without aliasing
+PASS physical eligibility is independent of evidence discovery order
+PASS traceability matrix covers every plain-Lua acceptance criterion at least once
+26 tests, 0 failures

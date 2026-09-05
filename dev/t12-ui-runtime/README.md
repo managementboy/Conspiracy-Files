@@ -1,43 +1,19 @@
-# T12 Build 42 ISUI runtime-feasibility probe
+# T12 shared UI probe — DEV-0.6
 
-Status: API-grounded disposable implementation prepared; not live-proven.
+Status: prepared replacement for the unresolved earlier UI; no archived live pass.
 
-This disposable probe validates the minimum UI capabilities required by the approved v0.1 design. Synthetic known-state content is sufficient; no story state or production adapter is required.
+Enable ConspiracyFiles plus ConspiracyFiles_T12_Probe in a disposable debug session. The dependency is explicit in mod.info. Do not enable T11 at the same time. The shared T12Mode bootstrap disables the world runtime before ModData access.
 
-The candidate implementation is `common/media/lua/client/ConspiracyFilesT12Probe.lua`. It is guarded to a save whose folder begins `T12_` with this probe as the sole enabled mod, and exposes one privately keyed `T12: Open UI capability probe` inventory-context action.
+The owner manually enters ConspiracyFiles.T12Probe.open() in the normal debug console. It builds 86 synthetic evidence rows in memory, then opens the production Notebook.lua using the production DocumentPane.lua. It does not create items, save canonical state, trigger real Inspect, or claim a visual verdict. No separate divergent scrollbar implementation remains.
 
-## Local API-discovery baseline
+## Required observations
 
-Read-only inspection of the installed Build 42 Lua sources confirms candidate native surfaces including `ISCollapsableWindow`, resize widgets and layout persistence hooks, `ISRichTextPanel`, scrolling list controls, buttons and joypad-focus conventions. These names justify a probe implementation but do not prove live behavior or the approved visual geometry.
+Start with the prior failure: 3200×2000, font setting 3. Verify ordinary ink, high contrast, a visible scrollbar, wheel, track paging and thumb drag at both ends. Titles and actions must stay fixed. Then check long titles, compact/wide layout, Help, native X, the configurable toggle, Escape remaining with the game, keyboard focus, lower resolutions, font changes and repeated resize/open/close.
 
-## Entry conditions
+Controller navigation is unimplemented; record unsupported/unavailable rather than implying keyboard bindings prove controller support. T12 geometry is retained in the running synthetic session only; actual player ModData geometry persistence belongs to the production/T11 or full acceptance run.
 
-- Installed build identity is captured independently.
-- The disposable save has only the T12 probe enabled.
-- No extracted PZ asset is copied into the repository or redistributed.
-- The test operator controls all keyboard, mouse and controller input manually.
+## Evidence
 
-## Capability matrix
+Record exact build/revision, mod list, save identity, source hashes, version marker, resolution/font setting, actions, visible outcome and console errors in evidence/live-run-template.md. The source manifest is in docs/management/evidence/2026-09-05-correction/. Keep DEV-0.4 failures and DEV-0.5 unverified history separate.
 
-| ID | Capability | Pass evidence |
-|---|---|---|
-| UI-01 | Movable/resizable notebook | Repeated move/resize with bounded minimum size and no broken children |
-| UI-02 | Wide master-detail layout | List and detail remain usable at the approved desktop footprint |
-| UI-03 | Compact layout | Resize triggers list-then-detail and explicit Back without clipped controls |
-| UI-04 | Right-edge sections | Journal/Evidence labels remain readable, selectable and visibly active |
-| UI-05 | Long-body scrolling | Body scrolls independently; title and local actions remain fixed |
-| UI-06 | Separate Help | Utility window is distinct; topmost Escape/close behavior is consistent |
-| UI-07 | Font/resolution relayout | Essential text survives tested PZ font settings and target resolutions |
-| UI-08 | Keyboard focus | Predictable route and visible focus across all required controls |
-| UI-09 | Controller route | Discoverable open/navigate/activate/return path, or explicit unsupported verdict |
-| UI-10 | Geometry persistence | Supported position/size fields restore without off-screen trapping |
-| UI-11 | Coexistence | Vanilla and one additive foreign UI/menu listener remain functional |
-| UI-12 | High contrast | Labels, boundaries and state geometry remain understandable without color/texture |
-
-## Stop conditions
-
-Stop on a security alert, unsupported build, non-disposable profile/save state, focus trap that prevents safe closure, unexplained vanilla UI suppression, or any need for a vanilla-file replacement/global monkey patch.
-
-## Completion
-
-Populate `docs/research/T12_UI_RUNTIME.md` and the evidence template with observed behavior at every tested resolution/font/input combination. Feed limitations back into the wireframe and visual specification before Issue #31 begins.
+A console READY line proves preparation only. No synthetic input, injected helper, UI automation or security changes. The owner performs GUI actions.
