@@ -1,0 +1,388 @@
+{
+  "date": "2026-09-05",
+  "candidateCommit": "8546a8cd0c9a48e2fef965e94df91d60a50583f9",
+  "draftPullRequest": 33,
+  "preparationPullRequest": 32,
+  "before": {
+    "25": {
+      "url": "https://github.com/managementboy/Conspiracy-Files/issues/25",
+      "title": "[Gate T12] Validate v0.1 ISUI notebook runtime feasibility",
+      "issue_number": 25,
+      "body": "Prove or disprove the approved UI assumptions in live Project Zomboid: custom movable/resizable multi-pane window, independent document scrolling, right-edge Journal/Evidence tabs, compact breakpoint, Escape/focus restoration, configured font scaling/relayout, controller route, remembered geometry, and coexistence with vanilla/foreign UI. Record unsupported behavior and feed corrections back into the UI specifications before production notebook Lua begins.",
+      "state": "open",
+      "user": {
+        "login": "managementboy",
+        "name": "managementboy",
+        "email": null,
+        "avatar_url": "https://avatars.githubusercontent.com/u/555763?v=4",
+        "id": 555763
+      },
+      "assignees": null,
+      "labels": null,
+      "milestone": 1,
+      "state_reason": null,
+      "comments": 0,
+      "created_at": "2026-09-03T19:29:54Z",
+      "updated_at": "2026-09-03T19:29:55Z",
+      "closed_at": null,
+      "display_url": "https://github.com/managementboy/Conspiracy-Files/issues/25",
+      "display_title": "[Gate T12] Validate v0.1 ISUI notebook runtime feasibility"
+    },
+    "26": {
+      "url": "https://github.com/managementboy/Conspiracy-Files/issues/26",
+      "title": "Close Dead Air human content-approval gate",
+      "issue_number": 26,
+      "body": "Resolve CF-V01-P03 for content revision dead-air-r1 under docs/design/AI_PROVENANCE.md. The project owner must explicitly approve the six AI-assisted authored documents or return a bounded change list. Record the dated result and update the fixture, acceptance criteria, traceability report, and project state consistently. This issue cannot be closed by technical review alone.",
+      "state": "open",
+      "user": {
+        "login": "managementboy",
+        "name": "managementboy",
+        "email": null,
+        "avatar_url": "https://avatars.githubusercontent.com/u/555763?v=4",
+        "id": 555763
+      },
+      "assignees": null,
+      "labels": null,
+      "milestone": 1,
+      "state_reason": null,
+      "comments": 0,
+      "created_at": "2026-09-03T19:29:55Z",
+      "updated_at": "2026-09-03T19:29:55Z",
+      "closed_at": null,
+      "display_url": "https://github.com/managementboy/Conspiracy-Files/issues/26",
+      "display_title": "Close Dead Air human content-approval gate"
+    },
+    "27": {
+      "url": "https://github.com/managementboy/Conspiracy-Files/issues/27",
+      "title": "Execute and sign off the v0.1 live acceptance matrix",
+      "issue_number": 27,
+      "body": "Run CF-V01-E01 through E13 against the supported Build 42 line after production assembly. Cover save/reload and staged rejection, death/reload, exact-once placement, fallback, physical moves/loss/conflict, all authored readers, arrival negatives, cooperative menus, multiplayer disablement, <=2 ms/frame behavior, and adapter fault containment. Archive reproducible evidence and accept the slice only when every product, content, and engine criterion passes.",
+      "state": "open",
+      "user": {
+        "login": "managementboy",
+        "name": "managementboy",
+        "email": null,
+        "avatar_url": "https://avatars.githubusercontent.com/u/555763?v=4",
+        "id": 555763
+      },
+      "assignees": null,
+      "labels": null,
+      "milestone": 1,
+      "state_reason": null,
+      "comments": 0,
+      "created_at": "2026-09-03T19:29:55Z",
+      "updated_at": "2026-09-03T19:29:55Z",
+      "closed_at": null,
+      "display_url": "https://github.com/managementboy/Conspiracy-Files/issues/27",
+      "display_title": "Execute and sign off the v0.1 live acceptance matrix"
+    },
+    "28": {
+      "url": "https://github.com/managementboy/Conspiracy-Files/issues/28",
+      "title": "Finalize Dead Air P2/R2 live location binding",
+      "issue_number": 28,
+      "body": "Complete CF-V01-E01 from the checkpoint on design/dead-air-location-binding-live. Verify the target Project Zomboid build/profile, reveal and review the bounded regional road corridor, run candidate-specific adjacent/wrong-room/wrong-floor T8 negatives, and bind P2/R2 only if all checks pass. Record exact failures and inspect the smallest fallback only when required. Requires project-owner/manual GUI attendance for the live pass.",
+      "state": "open",
+      "user": {
+        "login": "managementboy",
+        "name": "managementboy",
+        "email": null,
+        "avatar_url": "https://avatars.githubusercontent.com/u/555763?v=4",
+        "id": 555763
+      },
+      "assignees": null,
+      "labels": null,
+      "milestone": 1,
+      "state_reason": null,
+      "comments": 0,
+      "created_at": "2026-09-03T19:29:55Z",
+      "updated_at": "2026-09-03T19:29:55Z",
+      "closed_at": null,
+      "display_url": "https://github.com/managementboy/Conspiracy-Files/issues/28",
+      "display_title": "Finalize Dead Air P2/R2 live location binding"
+    },
+    "29": {
+      "url": "https://github.com/managementboy/Conspiracy-Files/issues/29",
+      "title": "[Gate T11] Compose v0.1 PZ adapters on one real fixture",
+      "issue_number": 29,
+      "body": "Before full slice assembly, exercise T4 placement, T5 physical identity, T8 arrival detection, T10 Inspect/Mark Interesting, T1-style canonical persistence, and the accepted domain core together on one bound Dead Air item. Include discovery during target streaming, Inspect followed by immediate save, same-tick arrival and placement/identity reconciliation, reload, duplicate-token conflict, and contained injected faults. Publish observed evidence and limitations; do not promote probe code directly to production.",
+      "state": "open",
+      "user": {
+        "login": "managementboy",
+        "name": "managementboy",
+        "email": null,
+        "avatar_url": "https://avatars.githubusercontent.com/u/555763?v=4",
+        "id": 555763
+      },
+      "assignees": null,
+      "labels": null,
+      "milestone": 1,
+      "state_reason": null,
+      "comments": 0,
+      "created_at": "2026-09-03T19:29:55Z",
+      "updated_at": "2026-09-03T19:29:55Z",
+      "closed_at": null,
+      "display_url": "https://github.com/managementboy/Conspiracy-Files/issues/29",
+      "display_title": "[Gate T11] Compose v0.1 PZ adapters on one real fixture"
+    },
+    "30": {
+      "url": "https://github.com/managementboy/Conspiracy-Files/issues/30",
+      "title": "Reconcile approved v0.1 UI and remaining product decisions",
+      "issue_number": 30,
+      "body": "Update the authoritative decision index to reflect the already-approved separate Help utility window and right-edge Journal/Evidence tabs. Obtain and record owner decisions for police-location major-discovery treatment, player visibility of untracked/conflict physical states, and death-recap inclusion/ownership. Reconcile ROADMAP, PLAYER_MOMENTS, acceptance criteria, and UI workspace status without claiming unresolved choices are approved.",
+      "state": "open",
+      "user": {
+        "login": "managementboy",
+        "name": "managementboy",
+        "email": null,
+        "avatar_url": "https://avatars.githubusercontent.com/u/555763?v=4",
+        "id": 555763
+      },
+      "assignees": null,
+      "labels": null,
+      "milestone": 1,
+      "state_reason": null,
+      "comments": 0,
+      "created_at": "2026-09-03T19:29:55Z",
+      "updated_at": "2026-09-03T19:29:55Z",
+      "closed_at": null,
+      "display_url": "https://github.com/managementboy/Conspiracy-Files/issues/30",
+      "display_title": "Reconcile approved v0.1 UI and remaining product decisions"
+    },
+    "31": {
+      "url": "https://github.com/managementboy/Conspiracy-Files/issues/31",
+      "title": "Assemble the production Dead Air v0.1 vertical slice",
+      "issue_number": 31,
+      "body": "After location binding, T11, T12, content approval, and decision reconciliation, implement the production PZ adapters and approved UI for six documents, optional B-37 Mark Interesting, two curated locations, anchor/fallback, journal/evidence projections, persistence, exact-once placement, identity reconciliation, arrival confirmation, Inspect, and clean multiplayer disablement. Keep graph, theories, runtime AI, content packs, retrofit, migrations, and multiplayer support out of scope.",
+      "state": "open",
+      "user": {
+        "login": "managementboy",
+        "name": "managementboy",
+        "email": null,
+        "avatar_url": "https://avatars.githubusercontent.com/u/555763?v=4",
+        "id": 555763
+      },
+      "assignees": null,
+      "labels": null,
+      "milestone": 1,
+      "state_reason": null,
+      "comments": 0,
+      "created_at": "2026-09-03T19:29:56Z",
+      "updated_at": "2026-09-03T19:29:56Z",
+      "closed_at": null,
+      "display_url": "https://github.com/managementboy/Conspiracy-Files/issues/31",
+      "display_title": "Assemble the production Dead Air v0.1 vertical slice"
+    }
+  },
+  "after": {
+    "25": {
+      "issue": {
+        "url": "https://github.com/managementboy/Conspiracy-Files/issues/25",
+        "title": "[Gate T12] Validate shared DEV-0.6 notebook runtime feasibility",
+        "issue_number": 25,
+        "body": "T12 is in progress, not accepted. Historical DEV-0.4 owner reports include missing scrollbar and unreadable contrast; no DEV-0.5 pass is archived. Draft #33 now supplies a DEV-0.6 wrapper using the production Notebook/DocumentPane with 86 synthetic evidence rows and no world/canonical writes.\n\nOwner-observed obligations: ordinary/high-contrast readability, visible scrollbar wheel/track/drag/endpoints, fixed title/actions, wide/compact layout, separate Help, native X, one configurable notebook toggle, Escape reserved for the game, keyboard focus, resolution/font changes, remembered geometry and vanilla/foreign coexistence. Controller support is unimplemented; record an explicit unsupported/unavailable verdict rather than infer support.\n\nUse ConspiracyFiles plus the T12 wrapper only, in a disposable debug session. Owner performs GUI actions under P4-R44. Offline composition mocks are preparation, not visual acceptance. Runbook: dev/t12-ui-runtime/README.md; report: docs/research/T12_UI_RUNTIME.md.",
+        "state": "open",
+        "user": {
+          "login": "managementboy",
+          "name": "managementboy",
+          "email": null,
+          "avatar_url": "https://avatars.githubusercontent.com/u/555763?v=4",
+          "id": 555763
+        },
+        "assignees": null,
+        "labels": null,
+        "milestone": 1,
+        "state_reason": null,
+        "comments": 0,
+        "created_at": "2026-09-03T19:29:54Z",
+        "updated_at": "2026-09-05T13:18:37Z",
+        "closed_at": null,
+        "display_url": "https://github.com/managementboy/Conspiracy-Files/issues/25",
+        "display_title": "[Gate T12] Validate shared DEV-0.6 notebook runtime feasibility"
+      },
+      "url": "https://github.com/managementboy/Conspiracy-Files/issues/25",
+      "title": "[Gate T12] Validate shared DEV-0.6 notebook runtime feasibility",
+      "display_url": "https://github.com/managementboy/Conspiracy-Files/issues/25",
+      "display_title": "[Gate T12] Validate shared DEV-0.6 notebook runtime feasibility"
+    },
+    "26": {
+      "issue": {
+        "url": "https://github.com/managementboy/Conspiracy-Files/issues/26",
+        "title": "Review recorded Dead Air approval and corrected content delivery",
+        "issue_number": 26,
+        "body": "Human approval is satisfied: direct owner text on 2026-09-05 approved dead-air-r1 with explanatory context (09:35:54 UTC) and required D1/D4 consistency (09:53:04 UTC). Do not ask for approval again. Provenance is archived in docs/management/evidence/2026-09-05-takeover/owner-provenance.json.\n\nDraft #33 preserves all six bodies and the 23:58/7C-41 correction. It fixes Inspect context scope/commit ordering, explains C.S.S.'s contractor role without premature company-name disclosure, aligns fixture names/context/journal summaries, and adds bounded selected journal reflections. Body preservation and fixture comparison pass offline.\n\nKeep this issue open for review of that durable corrective patch; content approval is not the remaining blocker. Actual UI delivery, location binding and full integration remain separate live gates. See docs/reviews/DEAD_AIR_CONTENT_REVIEW_2026-09-03.md.",
+        "state": "open",
+        "user": {
+          "login": "managementboy",
+          "name": "managementboy",
+          "email": null,
+          "avatar_url": "https://avatars.githubusercontent.com/u/555763?v=4",
+          "id": 555763
+        },
+        "assignees": null,
+        "labels": null,
+        "milestone": 1,
+        "state_reason": null,
+        "comments": 0,
+        "created_at": "2026-09-03T19:29:55Z",
+        "updated_at": "2026-09-05T13:18:40Z",
+        "closed_at": null,
+        "display_url": "https://github.com/managementboy/Conspiracy-Files/issues/26",
+        "display_title": "Review recorded Dead Air approval and corrected content delivery"
+      },
+      "url": "https://github.com/managementboy/Conspiracy-Files/issues/26",
+      "title": "Review recorded Dead Air approval and corrected content delivery",
+      "display_url": "https://github.com/managementboy/Conspiracy-Files/issues/26",
+      "display_title": "Review recorded Dead Air approval and corrected content delivery"
+    },
+    "27": {
+      "issue": {
+        "url": "https://github.com/managementboy/Conspiracy-Files/issues/27",
+        "title": "Execute and sign off the v0.1 live acceptance matrix",
+        "issue_number": 27,
+        "body": "E01–E13 remain unaccepted. After evidence-backed binding/T11/T12 and candidate promotion, run the complete matrix in docs/requirements/V0_1_ACCEPTANCE_CRITERIA.md: save/reload and staged rejection, actual death/corpse/reload, exact-once placement, entry opportunity, physical moves/loss/conflict, all authored readers, arrival negatives, cooperative menus, all multiplayer disable modes, <=2 ms/frame target and adapter fault containment.\n\nP4-R52 defers death recap beyond v0.1; it does not waive E10 state integrity. Draft #33 has 42 passing offline tests and 36 parsed Lua files but no live acceptance. Empty persisted-intent recovery remains conservative unknown, identity coverage is partial and controller behavior unimplemented. Archive reproducible owner-observed evidence; do not substitute mocks or historical isolated spikes.",
+        "state": "open",
+        "user": {
+          "login": "managementboy",
+          "name": "managementboy",
+          "email": null,
+          "avatar_url": "https://avatars.githubusercontent.com/u/555763?v=4",
+          "id": 555763
+        },
+        "assignees": null,
+        "labels": null,
+        "milestone": 1,
+        "state_reason": null,
+        "comments": 0,
+        "created_at": "2026-09-03T19:29:55Z",
+        "updated_at": "2026-09-05T13:18:46Z",
+        "closed_at": null,
+        "display_url": "https://github.com/managementboy/Conspiracy-Files/issues/27",
+        "display_title": "Execute and sign off the v0.1 live acceptance matrix"
+      },
+      "url": "https://github.com/managementboy/Conspiracy-Files/issues/27",
+      "title": "Execute and sign off the v0.1 live acceptance matrix",
+      "display_url": "https://github.com/managementboy/Conspiracy-Files/issues/27",
+      "display_title": "Execute and sign off the v0.1 live acceptance matrix"
+    },
+    "28": {
+      "issue": {
+        "url": "https://github.com/managementboy/Conspiracy-Files/issues/28",
+        "title": "Finalize Dead Air two-site Muldraugh live binding",
+        "issue_number": 28,
+        "body": "P4-R48 supersedes the old P2/R2 inspection priority and 1,000–1,600-tile target for this candidate. The owner-selected direction is Muldraugh electronics/relay around (10614,9604,0) and police around (10637,10410,0), about 806 tiles apart. Retain exactly two story locations; D4 belongs at relay, with no motel. Preserve the older design/dead-air-location-binding-live checkpoint as history.\n\nComplete E01 manually: independently verify build/profile/disposable save; ordinary road route and survival/access plausibility; exact coordinates, object/container indices, type and sprite for three relay and four police candidates; candidate-specific adjacent-room/outside, boundary and wrong-floor/basement negatives. Narrow or replace predicates from observed evidence. Draft #33 keeps Bindings.accepted=false and world adapters debug-only. Region selection is not final exact binding.",
+        "state": "open",
+        "user": {
+          "login": "managementboy",
+          "name": "managementboy",
+          "email": null,
+          "avatar_url": "https://avatars.githubusercontent.com/u/555763?v=4",
+          "id": 555763
+        },
+        "assignees": null,
+        "labels": null,
+        "milestone": 1,
+        "state_reason": null,
+        "comments": 0,
+        "created_at": "2026-09-03T19:29:55Z",
+        "updated_at": "2026-09-05T13:18:50Z",
+        "closed_at": null,
+        "display_url": "https://github.com/managementboy/Conspiracy-Files/issues/28",
+        "display_title": "Finalize Dead Air two-site Muldraugh live binding"
+      },
+      "url": "https://github.com/managementboy/Conspiracy-Files/issues/28",
+      "title": "Finalize Dead Air two-site Muldraugh live binding",
+      "display_url": "https://github.com/managementboy/Conspiracy-Files/issues/28",
+      "display_title": "Finalize Dead Air two-site Muldraugh live binding"
+    },
+    "29": {
+      "issue": {
+        "url": "https://github.com/managementboy/Conspiracy-Files/issues/29",
+        "title": "[Gate T11] Compose shared v0.1 adapters on one real fixture",
+        "issue_number": 29,
+        "body": "Draft #33 provides a runnable wrapper that requires ConspiracyFiles, sets T11Mode before startup, uses a separate canonical tag and allows D1 placement only. It exercises the actual candidate Runtime/Session/WorldAccess/ContextMenu/Notebook modules rather than a copied probe implementation. No live run is archived.\n\nAfter exact target binding, exercise detached stamping/count-one placement, streaming, manual Inspect plus immediate save/reload, one Evidence plus asset-discovered/thread-introduced events, idempotent repeated Inspect, same-tick arrival/reconciliation, physical moves, sticky duplicate-token conflict and contained boundary faults. DebugHarness exposes snapshots and explicit one-shot fault arming; it never simulates GUI actions.\n\nKnown gap: an empty persisted intent remains placing/unknown with no respawn; this does not yet satisfy every E02 count-one recovery path. Native disk/callback failures and incomplete identity coverage must be recorded as unexercised/inconclusive. Use dev/t11-adapter-integration/README.md and archive actual observations. Owner performs all GUI actions under P4-R44.",
+        "state": "open",
+        "user": {
+          "login": "managementboy",
+          "name": "managementboy",
+          "email": null,
+          "avatar_url": "https://avatars.githubusercontent.com/u/555763?v=4",
+          "id": 555763
+        },
+        "assignees": null,
+        "labels": null,
+        "milestone": 1,
+        "state_reason": null,
+        "comments": 0,
+        "created_at": "2026-09-03T19:29:55Z",
+        "updated_at": "2026-09-05T13:18:54Z",
+        "closed_at": null,
+        "display_url": "https://github.com/managementboy/Conspiracy-Files/issues/29",
+        "display_title": "[Gate T11] Compose shared v0.1 adapters on one real fixture"
+      },
+      "url": "https://github.com/managementboy/Conspiracy-Files/issues/29",
+      "title": "[Gate T11] Compose shared v0.1 adapters on one real fixture",
+      "display_url": "https://github.com/managementboy/Conspiracy-Files/issues/29",
+      "display_title": "[Gate T11] Compose shared v0.1 adapters on one real fixture"
+    },
+    "30": {
+      "issue": {
+        "url": "https://github.com/managementboy/Conspiracy-Files/issues/30",
+        "title": "Review recorded v0.1 product and UI decisions",
+        "issue_number": 30,
+        "body": "All requested owner choices are now recorded; no repeat decision request is needed. The owner directed 'I want to follow all your recommendations' and explicitly answered 'Use those three recommendations' for ordinary police arrival, plain-language physical availability and death recap deferred beyond v0.1.\n\nDECISIONS P4-R47–R52 preserves native X, one configurable toggle with Escape reserved for the game, separate Help and right-edge Journal/Evidence, and records the Muldraugh two-site/D4-relay scope plus entry-opportunity semantics. Draft #33 reconciles roadmap, player moments, acceptance criteria, content fixture and notebook specification. UI-Design-Workspace remains isolated; no assets copied or edits made there.\n\nKeep open for review of the recorded patch. Runtime feasibility remains #25/T12, including explicit controller limitations; product decisions do not imply live acceptance.",
+        "state": "open",
+        "user": {
+          "login": "managementboy",
+          "name": "managementboy",
+          "email": null,
+          "avatar_url": "https://avatars.githubusercontent.com/u/555763?v=4",
+          "id": 555763
+        },
+        "assignees": null,
+        "labels": null,
+        "milestone": 1,
+        "state_reason": null,
+        "comments": 0,
+        "created_at": "2026-09-03T19:29:55Z",
+        "updated_at": "2026-09-05T13:18:58Z",
+        "closed_at": null,
+        "display_url": "https://github.com/managementboy/Conspiracy-Files/issues/30",
+        "display_title": "Review recorded v0.1 product and UI decisions"
+      },
+      "url": "https://github.com/managementboy/Conspiracy-Files/issues/30",
+      "title": "Review recorded v0.1 product and UI decisions",
+      "display_url": "https://github.com/managementboy/Conspiracy-Files/issues/30",
+      "display_title": "Review recorded v0.1 product and UI decisions"
+    },
+    "31": {
+      "issue": {
+        "url": "https://github.com/managementboy/Conspiracy-Files/issues/31",
+        "title": "Review and promote the corrected Dead Air v0.1 candidate",
+        "issue_number": 31,
+        "body": "Conditional production code already exists; draft #33 preserves and revises it. Review the aggregate canonical commit, deterministic stored-target placement, conservative identity tracking, referenced two-sample arrival, cooperative Inspect/Mark actions and shared notebook. Offline evidence: 42 tests, 36 Lua syntax checks, six authored bodies preserved.\n\nScope: six documents, optional B-37 plus acquired-object Mark Interesting, two Muldraugh locations with D4 at relay, order-independent physical eligibility, one thread introduction, ordinary police arrival, plain-language availability and no death recap. No graph, theories, runtime AI, content packs, retrofit, migrations or multiplayer support.\n\nPromotion remains gated by #28 binding, #29 T11, #25 T12 and review of recorded #26/#30 outcomes; #27 owns E01–E13. In particular, do not hide the empty-intent recovery gap, partial identity coverage, unimplemented controller route or unmeasured native timing. Source and mock success are not playable-slice acceptance.",
+        "state": "open",
+        "user": {
+          "login": "managementboy",
+          "name": "managementboy",
+          "email": null,
+          "avatar_url": "https://avatars.githubusercontent.com/u/555763?v=4",
+          "id": 555763
+        },
+        "assignees": null,
+        "labels": null,
+        "milestone": 1,
+        "state_reason": null,
+        "comments": 0,
+        "created_at": "2026-09-03T19:29:56Z",
+        "updated_at": "2026-09-05T13:19:01Z",
+        "closed_at": null,
+        "display_url": "https://github.com/managementboy/Conspiracy-Files/issues/31",
+        "display_title": "Review and promote the corrected Dead Air v0.1 candidate"
+      },
+      "url": "https://github.com/managementboy/Conspiracy-Files/issues/31",
+      "title": "Review and promote the corrected Dead Air v0.1 candidate",
+      "display_url": "https://github.com/managementboy/Conspiracy-Files/issues/31",
+      "display_title": "Review and promote the corrected Dead Air v0.1 candidate"
+    }
+  }
+}

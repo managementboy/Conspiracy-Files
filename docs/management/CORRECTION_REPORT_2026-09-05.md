@@ -2,6 +2,8 @@
 
 Status: reviewable DEV-0.6 candidate; offline checks pass; live acceptance remains open.
 
+Published candidate: [draft PR #33](https://github.com/managementboy/Conspiracy-Files/pull/33), source commit 8546a8c, stacked on preparation PR #32. Issues #25–#31 were reconciled and remain open; #26/#30 now distinguish recorded owner approval from patch review. [Before/after issue snapshots](evidence/2026-09-05-correction/github-reconciliation.json) preserve the update trail.
+
 ## Authorization and preservation
 
 The owner accepted the takeover recommendations and explicitly selected ordinary police arrival, plain-language availability and no v0.1 death recap. P4-R48–R52 records scope and product decisions. Existing content approval is preserved.

@@ -121,6 +121,8 @@ One built-in hand-authored thread:
 
 ## Immediate work
 
+Reviewable candidate: [draft PR #33](https://github.com/managementboy/Conspiracy-Files/pull/33), source commit 8546a8c, stacked on preparation PR #32. All seven milestone issues remain open with reconciled descriptions. No main merge or current live acceptance occurred.
+
 The owner adopted the takeover recommendations. Corrected source and 42 passing offline tests are summarized in [CORRECTION_REPORT_2026-09-05.md](docs/management/CORRECTION_REPORT_2026-09-05.md). All authored bodies are preserved; selected journal details now add bounded survivor reflections while row summaries stay compact.
 
 1. Manually verify the Muldraugh route and exact candidate boundaries/containers under Issue #28.
