@@ -1,5 +1,16 @@
 # Conspiracy-Files — Agent / Codex Instructions
 
+## Token budget — owner instruction, 2026-09-05
+
+Conserve the shared weekly Codex allowance. Apply this to project management and implementation, not just response length.
+
+- Use small, bounded work increments and concise reports. Prioritize the next delivery blocker; defer optional polish and speculative work.
+- Reuse verified context and durable handoff notes. Read changed or relevant sections instead of repeatedly re-auditing unchanged material already reviewed in the same task.
+- Batch independent reads, keep tool output focused, and avoid repeated polling, duplicate documentation and unnecessary agent delegation.
+- Run verification appropriate to the change once; repeat only for new edits, failures or unresolved concerns. Never omit required correctness checks to save tokens.
+- Before substantial work, check account usage limits when available. Consider both weekly and short-window headroom; no project-specific share has been specified. If remaining allowance is tight, checkpoint completed work and surface the constraint before starting optional or large new work.
+- Do not purchase credits, redeem resets, schedule background work or change models without applicable authorization. Account limits are shared; do not promise that this project can prevent consumption by other tasks.
+
 Before making any design or code change:
 
 1. Read `/PROJECT_STATE.md`.
