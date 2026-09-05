@@ -8,9 +8,10 @@ import subprocess
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--lua-dir', type=Path, required=True)
+parser.add_argument('--evidence-dir', default='docs/management/evidence/2026-09-05-correction')
 args = parser.parse_args()
 root = Path(__file__).resolve().parent.parent
-out = root / 'docs/management/evidence/2026-09-05-correction'
+out = root / args.evidence_dir
 out.mkdir(parents=True, exist_ok=True)
 
 def run(command):

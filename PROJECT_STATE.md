@@ -121,6 +121,8 @@ One built-in hand-authored thread:
 
 ## Immediate work
 
+The owner-approved [guided development session](docs/management/GUIDED_SESSION.md) adds a debug-only panel on the same candidate. GUIDE-0.1 provides ordered UI/location/T11 checks, bounded read-only snapshots and manual verdict logging. It writes no save data. Guide verification: 42 offline tests, 37 parsed Lua files; no live visual pass. Evidence is in docs/management/evidence/2026-09-05-guide/.
+
 Reviewable candidate: [draft PR #33](https://github.com/managementboy/Conspiracy-Files/pull/33), source commit 8546a8c, stacked on preparation PR #32. All seven milestone issues remain open with reconciled descriptions. No main merge or current live acceptance occurred.
 
 The owner adopted the takeover recommendations. Corrected source and 42 passing offline tests are summarized in [CORRECTION_REPORT_2026-09-05.md](docs/management/CORRECTION_REPORT_2026-09-05.md). All authored bodies are preserved; selected journal details now add bounded survivor reflections while row summaries stay compact.

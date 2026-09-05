@@ -55,6 +55,15 @@ test("UI composition shares a clamped document pane, explicit ink and owner key 
         window:setWidth(650); window:layout(); assertTrue(window.compact)
         window:onBack(); assertTrue(window.list.visible); assertFalse(window.document.visible)
         window:close(); assertEqual(nil,UI.notebook); assertEqual(650,UI.geometry.width)
+        local guide=dofile(TEST_ROOT.."/mod/common/media/lua/client/ConspiracyFiles/SessionGuide.lua")
+        local before=UI.probeState.snapshot()
+        assertTrue(guide.open()); assertTrue(guide.window.inUI)
+        assertFalse(guide.record("Pass")) -- no wrapper: cannot claim T12 observation
+        ConspiracyFiles.T12Mode=true; assertTrue(guide.record("Fail")); assertEqual("Fail",guide.verdicts['ui-scroll'])
+        guide.index=5; assertFalse(guide.record("Pass")); assertTrue(guide.record("Not tested"))
+        assertTrue(guide.capture()); assertDeepEqual(before,UI.probeState.snapshot())
+        isDebugEnabled=function() return false end; assertFalse(guide.open()); assertFalse(guide.record("Pass"))
+        guide.window:close()
     end)
     for _,name in ipairs(names) do _G[name]=old[name] end
     for _,name in ipairs(modules) do package.loaded[name]=loaded[name] end
