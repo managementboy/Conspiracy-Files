@@ -4,7 +4,7 @@ local Ids = require("ConspiracyFiles/Ids")
 local Validator = {}
 
 Validator.MAX_DEPTH = 64
-Validator.MAX_ENCODED_BYTES = 500 * 1024
+Validator.MAX_ENCODED_BYTES = 500000
 
 local ROOT_FIELDS = {
     schemaVersion = true, threadId = true, contentRevision = true,
@@ -159,6 +159,7 @@ local function validateSchema(root)
             markedCount = markedCount + 1
             if evidence.evidenceId ~= Ids.markedEvidence(markedCount) then return fail("root.evidence", "marked Evidence IDs must be deterministic and contiguous") end
             if evidence.assetId ~= nil and (not Content.assets[evidence.assetId] or Content.assets[evidence.assetId].assetKind ~= "ordinary-object") then return fail("root.evidence", "marked Evidence Asset ID must resolve to an ordinary object") end
+            if evidence.assetId ~= nil and evidence.subjectLabel ~= nil then return fail("root.evidence", "marked Evidence must use either assetId or subjectLabel, not both") end
             if not evidence.playerMarkedInteresting then return fail("root.evidence", "marked Evidence must retain creation intent") end
             if type(evidence.markIntentId) ~= "string" or evidence.markIntentId == "" then return fail("root.evidence", "markIntentId must be non-empty") end
             if markIntents[evidence.markIntentId] then return fail("root.evidence", "duplicate mark intent") end
@@ -222,6 +223,12 @@ local function validateSchema(root)
         if evidence.kind == "authored-asset" and not discoveredAssets[evidence.assetId] then return fail("root.journal", "authored Evidence lacks discovery event") end
         if evidence.kind == "marked-object" and not markedEvents[evidence.evidenceId] then return fail("root.journal", "marked Evidence lacks chronology event") end
     end
+    for assetId, _ in pairs(discoveredAssets) do
+        local evidence = evidenceIds[Ids.authoredEvidence(assetId)]
+        if not evidence or evidence.kind ~= "authored-asset" or evidence.assetId ~= assetId then
+            return fail("root.evidence", "asset discovery event lacks authored Evidence")
+        end
+    end
     for locationId, _ in pairs(locationSeen) do if not confirmedEvents[locationId] then return fail("root.journal", "confirmed Location lacks chronology event") end end
     if eventCounts["thread-introduced"] then
         local hasD1 = discoveredAssets[Content.ids.d1]
@@ -251,6 +258,8 @@ local function estimateValue(value)
 end
 
 function Validator.estimateEncodedBytes(root)
+    local ok, message = Validator.validateStructure(root)
+    if not ok then return nil, message end
     return estimateValue(root)
 end
 
@@ -260,13 +269,11 @@ end
 
 function Validator.validate(root)
     if type(root) ~= "table" then return false, "root: must be a table" end
-    local contentOk, contentMessage = Content.validate()
-    if not contentOk then return false, "static content: " .. contentMessage end
     local ok, message = Validator.validateStructure(root)
     if not ok then return false, message end
     ok, message = validateSchema(root)
     if not ok then return false, message end
-    local estimated = Validator.estimateEncodedBytes(root)
+    local estimated = estimateValue(root)
     if estimated > Validator.MAX_ENCODED_BYTES then
         return false, "root: conservative encoded-size estimate " .. estimated .. " exceeds " .. Validator.MAX_ENCODED_BYTES .. " bytes"
     end

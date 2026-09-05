@@ -109,6 +109,33 @@ test("CF-V01-P07 exported snapshots cannot mutate authored or marked Evidence tr
     assertDeepEqual(truth, state.snapshot())
 end)
 
+test("CF-V01-P07 renderer and content modules cannot mutate canonical truth", function()
+    local state = newState()
+    discover(state, ids.d1)
+    local truth = state.snapshot()
+    local originalRenderJournal = CF.Renderer.renderJournal
+    local captured
+    CF.Renderer.renderJournal = function(snapshot)
+        captured = snapshot
+        snapshot.journal[1].kind = "contradiction-surfaced"
+        return originalRenderJournal(truth)
+    end
+    local ok, message = pcall(state.renderJournal)
+    CF.Renderer.renderJournal = originalRenderJournal
+    assertTrue(ok, message)
+    assertTrue(captured ~= nil)
+    assertDeepEqual(truth, state.snapshot())
+
+    local writeOk = pcall(function() Content.assets[ids.d1].journalText = "PWNED" end)
+    assertFalse(writeOk)
+    writeOk = pcall(function() Content.assets[ids.d1] = {} end)
+    assertFalse(writeOk)
+    local documentIds = Content.thread.documentAssetIds
+    documentIds[1] = ids.d6
+    assertEqual(ids.d1, Content.thread.documentAssetIds[1])
+    assertEqual(Content.assets[ids.d1].journalText, state.renderJournal()[1].text)
+end)
+
 test("CF-V01-P08 JournalEntry chronology is append-only across mutation attempts", function()
     local state = newState()
     discover(state, ids.d4)
@@ -147,7 +174,11 @@ test("CF-V01-P09 deterministic no-AI renderer survives save-shaped round trips",
     end
     assertEqual(6, #discoveryTexts)
     for index, assetId in ipairs(Content.thread.documentAssetIds) do assertEqual(Content.assets[assetId].journalText, discoveryTexts[index]) end
-    assertEqual(nil, _G.RuntimeAI)
+    for moduleName, _ in pairs(TEST_REQUIRED_MODULES) do
+        local lower = string.lower(moduleName)
+        assertFalse(string.find(lower, "socket", 1, true) ~= nil or string.find(lower, "http", 1, true) ~= nil,
+            "no-AI renderer loaded network module " .. moduleName)
+    end
 end)
 
 test("CF-V01-P10 D5/D6 contradiction is knowledge-bounded and exactly once", function()
@@ -308,6 +339,31 @@ test("CF-V01-P18 staged recursive validation rejects unsafe states and preserves
     assertTrue(Validator.validateStructure({ [0] = "zero", [-1.5] = true, name = 3.25, nested = {} }))
 end)
 
+test("CF-V01-P18 validation rejects split-brain journal and ambiguous marked records", function()
+    local state = newState()
+    discover(state, ids.d2)
+
+    local orphanDiscovery = state.snapshot()
+    local ordinal = #orphanDiscovery.journal + 1
+    orphanDiscovery.journal[ordinal] = {
+        entryId = CF.Ids.journal(ordinal), ordinal = ordinal,
+        kind = "asset-discovered", subjectId = ids.d3
+    }
+    local ok, diagnostic = Validator.validate(orphanDiscovery)
+    assertFalse(ok)
+    assertTrue(string.find(diagnostic, "lacks authored Evidence", 1, true) ~= nil)
+    assertEqual(nil, ThreadState.new(orphanDiscovery))
+
+    local marked = newState()
+    assertChanged(marked.markInteresting("exclusive-shape", { assetId = ids.key, contextText = "Drawer C" }))
+    local ambiguous = marked.snapshot()
+    ambiguous.evidence[1].subjectLabel = { 1, 2, 3 }
+    ok, diagnostic = Validator.validate(ambiguous)
+    assertFalse(ok)
+    assertTrue(string.find(diagnostic, "either assetId or subjectLabel", 1, true) ~= nil)
+    assertEqual(nil, ThreadState.new(ambiguous))
+end)
+
 test("CF-V01-P19 conservative estimator enforces the 500 KB boundary", function()
     local maximal = newState()
     for _, assetId in ipairs(Content.thread.documentAssetIds) do
@@ -346,10 +402,36 @@ test("CF-V01-P19 conservative estimator enforces the 500 KB boundary", function(
     assertFalse(containsText(base, Content.assets[ids.d1].bodyText))
 end)
 
+test("CF-V01-P19 estimator rejects cycles safely and maximal work stays within budget", function()
+    local cyclic = {}
+    cyclic.self = cyclic
+    local callOk, bytes, diagnostic = pcall(Validator.estimateEncodedBytes, cyclic)
+    assertTrue(callOk)
+    assertEqual(nil, bytes)
+    assertTrue(type(diagnostic) == "string" and string.find(diagnostic, "cycles", 1, true) ~= nil)
+
+    local maximal = newState()
+    for _, assetId in ipairs(Content.thread.documentAssetIds) do
+        assertChanged(maximal.materialise(assetId))
+        discover(maximal, assetId)
+    end
+    assertChanged(maximal.markInteresting("timing-key", { assetId = ids.key, contextText = "B-37 key" }))
+    for _, locationId in ipairs(Content.thread.locationIds) do assertChanged(maximal.confirmLocation(locationId)) end
+    local snapshot = maximal.snapshot()
+    local iterations = 1000
+    local started = os.clock()
+    for _ = 1, iterations do
+        assertTrue(Validator.validate(snapshot))
+        maximal.renderJournal()
+    end
+    local averageSeconds = (os.clock() - started) / iterations
+    assertTrue(averageSeconds <= 0.002, "maximal validate+render average exceeded 2 ms: " .. tostring(averageSeconds * 1000) .. " ms")
+end)
+
 test("CF-V01-P24 Evidence resolves full static content without copying document bodies", function()
     local contentOk, contentMessage = Content.validate()
     assertTrue(contentOk, contentMessage)
-    local fixtureFile = assert(io.open("test/fixtures/THREAD-001-DEAD-AIR.md", "rb"))
+    local fixtureFile = assert(io.open(TEST_ROOT .. TEST_SEPARATOR .. "test" .. TEST_SEPARATOR .. "fixtures" .. TEST_SEPARATOR .. "THREAD-001-DEAD-AIR.md", "rb"))
     local fixture = fixtureFile:read("*a")
     fixtureFile:close()
     fixture = string.gsub(fixture, "\r\n", "\n")
@@ -407,4 +489,32 @@ test("notebook projection is discovery-ordered and knowledge-bounded", function(
     assertChanged(leadState.confirmLocation(ids.police))
     local after = CF.NotebookProjection.evidence(leadState)
     assertEqual(0, #after[1].leads)
+end)
+
+test("runtime auto-execute plus require registers hooks exactly once", function()
+    local previousEvents = _G.Events
+    local previousNamespace = _G.ConspiracyFiles
+    local previousPrint = _G.print
+    local counts = { gameStart = 0, tick = 0, gridSquare = 0 }
+    _G.Events = {
+        OnGameStart = { Add = function() counts.gameStart = counts.gameStart + 1 end },
+        OnTick = { Add = function() counts.tick = counts.tick + 1 end },
+        LoadGridsquare = { Add = function() counts.gridSquare = counts.gridSquare + 1 end }
+    }
+    _G.ConspiracyFiles = nil
+    _G.print = function() end
+    local runtimePath = TEST_ROOT .. TEST_SEPARATOR .. "mod" .. TEST_SEPARATOR .. "common" .. TEST_SEPARATOR
+        .. "media" .. TEST_SEPARATOR .. "lua" .. TEST_SEPARATOR .. "shared" .. TEST_SEPARATOR
+        .. "ConspiracyFiles" .. TEST_SEPARATOR .. "Runtime.lua"
+    local ok, message = pcall(function()
+        dofile(runtimePath)
+        dofile(runtimePath)
+    end)
+    _G.Events = previousEvents
+    _G.ConspiracyFiles = previousNamespace
+    _G.print = previousPrint
+    assertTrue(ok, message)
+    assertEqual(1, counts.gameStart)
+    assertEqual(1, counts.tick)
+    assertEqual(1, counts.gridSquare)
 end)

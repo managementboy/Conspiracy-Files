@@ -14,10 +14,13 @@ A code change that can only be verified by launching the game should be isolated
 
 ## v0.1 domain-core command
 
-From the repository root, with PUC Lua 5.1 (or a Lua 5.1-compatible interpreter) on `PATH`:
+With PUC Lua 5.1 (or a Lua 5.1-compatible interpreter) on `PATH`:
 
 ```text
 lua5.1 test/run.lua
 ```
+
+The path may be relative or absolute; the runner resolves fixtures and project
+modules from its own filename rather than the process working directory.
 
 The runner has no third-party test dependency and intentionally runs with Project Zomboid globals absent. It covers every criterion classified `plain-Lua automated test` in `docs/requirements/V0_1_ACCEPTANCE_CRITERIA.md`. See `docs/testing/V0_1_DOMAIN_CORE_TRACEABILITY.md` for the exact mapping.

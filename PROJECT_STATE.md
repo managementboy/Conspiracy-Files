@@ -77,7 +77,7 @@ The first specification over-committed to unproven Build 42 capabilities. The en
 ## Accepted offline implementation
 
 - **v0.1 plain-Lua domain core:** accepted and merged in PR #15 at `c9d845e21a0a4298a83ce8b92204e66b6e59d073`. It implements the static Dead Air registries, private canonical ThreadState API, authored and Mark Interesting Evidence, append-only journal events, deterministic no-AI rendering, derived Organisation/Location labels, idempotent domain transitions, D5/D6 contradiction handling, B-37 recontextualisation, major-discovery evaluation, staged P4-R32 validation, the conservative P4-R17 size gate and static content resolution.
-- All 16 acceptance criteria classified `plain-Lua automated test` pass under PUC Lua 5.1.5. The suite reports 17 passing tests total because it also checks that the authoritative acceptance table and traceability matrix remain complete and one-to-one. See `docs/testing/V0_1_DOMAIN_CORE_TRACEABILITY.md`.
+- All 16 acceptance criteria classified `plain-Lua automated test` pass under PUC Lua 5.1.5. The current suite reports 26 passing tests, including focused review regressions and placement/runtime checks, and verifies that every classified criterion retains at least one named test. See `docs/testing/V0_1_DOMAIN_CORE_TRACEABILITY.md`.
 - This acceptance is limited to the PZ-independent domain layer. It does not accept ModData adapter behavior, physical placement/commit sequencing, live item identity, reader/UI integration, location-arrival integration, exact map bindings or any other Build 42 engine behavior.
 
 ## v0.1 vertical slice

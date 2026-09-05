@@ -3,6 +3,7 @@ local Core = require("ConspiracyFiles/init")
 ConspiracyFiles = ConspiracyFiles or {}
 ConspiracyFiles.Runtime = ConspiracyFiles.Runtime or {}
 local Runtime = ConspiracyFiles.Runtime
+if Runtime.scriptLoaded then return Runtime end
 
 local STATE_TAG = "ConspiracyFiles.DeadAir"
 local PLACEMENT_TAG = "ConspiracyFiles.DeadAir.Placement"
@@ -316,6 +317,7 @@ end
 Events.OnGameStart.Add(onGameStart)
 Events.OnTick.Add(onTick)
 Events.LoadGridsquare.Add(onLoadGridSquare)
+Runtime.scriptLoaded = true
 log("SCRIPT_LOADED", { "module=runtime" })
 
 return Runtime

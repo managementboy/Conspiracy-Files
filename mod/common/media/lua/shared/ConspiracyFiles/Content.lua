@@ -38,6 +38,16 @@ Content.thread = {
     fallbackAssetId = D2
 }
 
+-- Authored journal prose belongs with the rest of the content. Placeholders are
+-- resolved deterministically by Renderer and can later become localisation keys.
+Content.journalText = {
+    threadIntroduced = "Dead Air began with %s. Its paperwork points toward %s.",
+    markedInteresting = "Marked interesting: %s. %s",
+    evidenceUpdated = "The red B-37 key I marked earlier matches the relay paperwork. Pike says it came off Rourke's receiver ring and belongs with property record 4471.",
+    locationConfirmed = "Confirmed %s.",
+    contradictionSurfaced = "Pike's shift note says the advance CSS memo was not available when the receiver was taken, although the memo is dated earlier. Both records remain unresolved."
+}
+
 Content.identities = {
     [ROURKE] = { identityId = ROURKE, displayLabel = "M. Rourke", roleDescriptor = "CSS field technician" },
     [PIKE] = { identityId = PIKE, displayLabel = "Sgt. Dana Pike", roleDescriptor = "police property/evidence supervisor" },
@@ -378,7 +388,7 @@ local function checkUniqueIds(list, registry, label)
     return true
 end
 
-function Content.validate()
+local function validateContent()
     if not Ids.isAuthored(Content.thread.threadId) then return false, "invalid Thread ID" end
     if #Content.thread.documentAssetIds ~= 6 or #Content.thread.optionalAssetIds ~= 1
         or #Content.thread.identityIds ~= 3 or #Content.thread.locationIds ~= 3 then
@@ -400,6 +410,10 @@ function Content.validate()
     if Content.thread.anchorAssetId ~= D1 or Content.thread.fallbackAssetId ~= D2 then return false, "anchor/fallback IDs changed" end
     for assetId, asset in pairs(Content.assets) do
         if asset.assetId ~= assetId or asset.threadId ~= THREAD_ID or not Ids.isAuthored(assetId) then return false, "invalid Asset registry key" end
+        local assetSlug = string.match(assetId, "^dead%-air:asset:(.+)$")
+        if assetSlug and string.sub(assetSlug, 1, 6) == "marked" then
+            return false, "Asset slug uses reserved marked prefix " .. assetId
+        end
         if not Content.locations[asset.placementLocationId] then return false, "unresolved Asset placement ID " .. assetId end
         for _, referenceId in ipairs(asset.references or {}) do
             if not Content.identities[referenceId] and not Content.organisations[referenceId] and not Content.locations[referenceId] then
@@ -416,4 +430,49 @@ function Content.validate()
     return true
 end
 
-return Content
+local contentOk, contentMessage = validateContent()
+assert(contentOk, "invalid static Conspiracy-Files content: " .. tostring(contentMessage))
+function Content.validate()
+    return contentOk, contentMessage
+end
+
+local function copyArray(value)
+    local result = {}
+    for index = 1, #value do result[index] = value[index] end
+    return result
+end
+
+local function isDenseArray(value)
+    local count = 0
+    for key, _ in pairs(value) do
+        if type(key) ~= "number" or key < 1 or key ~= math.floor(key) then return false end
+        count = count + 1
+    end
+    for index = 1, count do if value[index] == nil then return false end end
+    return count > 0
+end
+
+-- Lua 5.1 has no __pairs/__ipairs metamethods. Object/registry tables are
+-- therefore true read-only proxies, while authored scalar arrays are returned
+-- as disposable copies so callers retain normal #/ipairs behaviour without
+-- gaining a reference to canonical content.
+local proxies = {}
+local function readOnly(value, path)
+    if type(value) ~= "table" then return value end
+    if isDenseArray(value) then return copyArray(value) end
+    if proxies[value] then return proxies[value] end
+    local proxy = {}
+    proxies[value] = proxy
+    setmetatable(proxy, {
+        __index = function(_, key)
+            return readOnly(value[key], path .. "." .. tostring(key))
+        end,
+        __newindex = function()
+            error(path .. " is read-only", 2)
+        end,
+        __metatable = "read-only"
+    })
+    return proxy
+end
+
+return readOnly(Content, "Content")
