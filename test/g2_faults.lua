@@ -21,6 +21,7 @@ local function newFixture()
     getPlayer=function() return player end; getDebug=function() return true end; isClient=function() return false end; isServer=function() return false end
     ZombRand=function() return 1 end
     local clock=0; getTimeInMillis=function() clock=clock+0.01; return clock end
+    local worldAgeHours=0; getGameTime=function() return {getWorldAgeHours=function() return worldAgeHours end} end
     getCell=function() return {getGridSquare=function(_,x,y,z)
         if (y~=0 and y~=1) or z~=0 or not loaded[x] or not containers[x+y/10] then return nil end
         local c=containers[x+y/10]
@@ -31,7 +32,18 @@ local function newFixture()
         local md={}; local item={getModData=function() return md end,setName=function() end,setCustomName=function() end}
         item.getOutermostContainer=function() return item.container end; return item
     end
-    local saved={}; ModData={getOrCreate=function() return saved end,get=function(tag) if tag=="ConspiracyFiles.Generated.G2" then return saved end end}
+    local saved={}
+    local otherStores={}
+    ModData={
+        getOrCreate=function(tag)
+            if tag=="ConspiracyFiles.Generated.G2" then return saved end
+            otherStores[tag]=otherStores[tag] or {}; return otherStores[tag]
+        end,
+        get=function(tag)
+            if tag=="ConspiracyFiles.Generated.G2" then return saved end
+            return otherStores[tag]
+        end
+    }
     local result={version="T3-nearby-2",buildings=2,map="mock",gameVersion="42.20",anchor={x=0,y=0},rows={}}
     for _,x in ipairs({0,20}) do
         result.rows[#result.rows+1]={kind="building",id=tostring(x),x=x,y=0,x2=x+2,y2=2,minLevel=0}

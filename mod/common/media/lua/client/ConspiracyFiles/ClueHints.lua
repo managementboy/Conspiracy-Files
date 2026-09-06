@@ -110,6 +110,15 @@ end
 local handler
 function H.stop() if handler then Events.OnTick.Remove(handler) end; pending=nil end
 function H.state() return {pending=pending~=nil,visits=visits,reported=reported,lastHint=lastHint} end
+-- Stale clue relocation moves a target's physical container; forget the old
+-- key so a stale halo/sound never fires for a document that is no longer
+-- there, and so `visits`/`reported` do not grow across relocations.
+function H.invalidate(target)
+    if type(target)~="table" then return end
+    local key=target.x..":"..target.y..":"..target.z..":"..target.objectIndex..":"..target.containerIndex
+    visits[key]=nil; reported[key]=nil
+    if pending and pending.key==key then pending=nil end
+end
 handler=function()
     local ok,why=pcall(step)
     if not ok then H.stop(); print("[CF-G2-HINT] disabled: "..tostring(why)) end

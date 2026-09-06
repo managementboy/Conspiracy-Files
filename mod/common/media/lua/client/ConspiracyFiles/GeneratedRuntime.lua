@@ -6,6 +6,8 @@ local Storage=require("ConspiracyFiles/Generated/Storage")
 local World=require("ConspiracyFiles/WorldAccess")
 local Scheduler=require("ConspiracyFiles/Scheduler")
 local Budget=require("ConspiracyFiles/SaveBudget")
+local StaleClue=require("ConspiracyFiles/StaleClue")
+local Visited=require("ConspiracyFiles/VisitedBuildingLog")
 require("ConspiracyFiles/DiscoveryLog")
 ConspiracyFiles=ConspiracyFiles or {}
 local R=ConspiracyFiles.GeneratedRuntime or {}
@@ -19,6 +21,11 @@ local function allowed()
         and not ConspiracyFiles.T11Mode and not ConspiracyFiles.T12Mode
 end
 local function checked(ok,why) if not ok then error(why or "generated session write rejected") end end
+local function worldHours()
+    local n=getGameTime():getWorldAgeHours()
+    assert(type(n)=="number" and n==n and n>=0 and n<math.huge,"invalid world clock")
+    return n
+end
 local function setup()
     if not allowed() then return false,"G2 requires debug single-player, without T11/T12" end
     ConspiracyFiles.GeneratedMode=true
@@ -48,7 +55,7 @@ local function placement(api,id)
         if not finished then scan(); return false end
         if current~=container or count==nil then return true end
         if count>1 then checked(api.status(id,"conflict")); return true end
-        if count==1 then checked(api.status(id,"placed")); log("Document placed or reconciled."); return true end
+        if count==1 then checked(api.status(id,"placed",worldHours())); log("Document placed or reconciled."); return true end
         if a.status=="placing" and not created then
             checked(api.status(id,"unknown")); log("Interrupted placement is uncertain; no automatic replacement."); return true
         end
@@ -92,13 +99,9 @@ local function openAll()
     end
     enqueue(); log("Generated case active. Take an evidence item, then right-click Inspect Investigation Evidence.")
 end
-local function worldHours()
-    local n=getGameTime():getWorldAgeHours()
-    assert(type(n)=="number" and n==n and n>=0 and n<math.huge,"invalid world clock")
-    return n
-end
 local function currentHouse()
-    local p=getPlayer();local square=p and p:getSquare();local building=square and square:getBuilding()
+    local p=getPlayer();local square=p and p.getSquare and p:getSquare()
+    local building=square and square.getBuilding and square:getBuilding()
     local def=building and building:getDef()
     return def and ("t3:"..tostring(def:getIDString())) or nil
 end
@@ -224,7 +227,7 @@ function R.inspect(item)
     local a=api and api.assignment(md.cfGeneratedId)
     if not a or md.cfPhysicalToken~=a.physicalToken or a.status=="conflict" then return false end
     -- A positively observed surviving item can reconcile an uncertain intent.
-    checked(api.status(md.cfGeneratedId,"placed")); checked(api.inspect(md.cfGeneratedId))
+    checked(api.status(md.cfGeneratedId,"placed",worldHours())); checked(api.inspect(md.cfGeneratedId))
     local log=ConspiracyFiles.DiscoveryLog
     if log and log.record then log.record("evidence",md.cfGeneratedId) end
     return true
@@ -241,6 +244,140 @@ function R.automaticStatus()
     return {count=#roots,preparing=preparing==true,scheduled=schedule~=nil,
         lastCreatedHours=schedule and schedule.createdHours[#schedule.createdHours],limit=Cases.MAX_CASES}
 end
+-- Bounded scan of a destination site's own bounding box for any container of
+-- an allowed type. Mirrors Storage.scan's tile-stepping discipline, but the
+-- box is small (one catalog location) and already known, so no rectangle
+-- list is needed. Never resumes across relocation attempts; a fresh scan
+-- starts once per chosen destination site.
+local function boundsScan(site,done)
+    local b=site.bounds
+    local kinds={}; for _,kind in ipairs(site.containerTypes) do kinds[kind]=true end
+    local x,y,objects,oi,ci=b.x1,b.y1,nil,0,0
+    return function()
+        if y>=b.y2 then done(nil); return true end
+        if objects==nil then
+            local square=getCell():getGridSquare(x,y,b.z)
+            objects=square and square:getObjects() or false
+            oi,ci=0,0
+        end
+        if not objects or oi>=objects:size() then
+            objects=nil; x=x+1
+            if x>=b.x2 then x=b.x1; y=y+1 end
+            return false
+        end
+        local o=objects:get(oi)
+        if not o or not o.getContainerCount or ci>=o:getContainerCount() then oi=oi+1; ci=0; return false end
+        local c=o:getContainerByIndex(ci)
+        local sprite=o:getSprite(); local name=sprite and sprite:getName()
+        if c and name and kinds[c:getType()] then
+            done({x=x,y=y,z=b.z,objectIndex=oi,containerIndex=ci,containerType=c:getType(),sprite=name}); return true
+        end
+        ci=ci+1
+        return false
+    end
+end
+-- Stale-clue relocation (docs/management/STALE_CLUE_RELOCATION.md). One job
+-- per session (like `identity`, not per document) keeps the job count
+-- bounded regardless of case/document count; it considers a single stale
+-- document per attempt, so several stale documents in one case are spread
+-- across successive periodic cycles rather than bursting all at once. Every
+-- guard is checked fresh on each attempt: staleness, the relocation cap, an
+-- unvisited destination with no other placed clue, the original item still
+-- present untouched, and the player not carrying it or standing near either
+-- location. Any refusal is logged and the document stays exactly where it
+-- is -- never a loud failure, never a guess.
+local function relocation(api)
+    local id,site,scan,target,oldContainer,tokenScan,tokenCount,tokenDone,carryScan,carryCount,carryDone,newItem,newDestination
+    return function()
+        local root=api.snapshot()
+        if not id then
+            local hours=worldHours()
+            local stale=StaleClue.staleIds(root,hours)
+            for _,candidate in ipairs(stale) do if StaleClue.canAttempt(root.assignments[candidate]) then id=candidate; break end end
+            if not id then return true end
+        end
+        local a=root.assignments[id]
+        if not a or a.status~="placed" then return true end
+        if not StaleClue.canAttempt(a) then return true end
+        local hours=worldHours()
+        if not StaleClue.isStale({status=a.status,placedHours=a.placedHours,id=id},root.known,hours) then return true end
+        oldContainer=oldContainer or World.resolve(a.target)
+        if not oldContainer then return true end -- nothing safe to verify against
+        local p=getPlayer()
+        local px,py,pz=math.floor(p:getX()),math.floor(p:getY()),math.floor(p:getZ())
+        if StaleClue.tooClose(px,py,pz,a.target) then return false end
+        if not site then
+            local candidates=StaleClue.destinations(root,Visited.set())
+            if #candidates==0 then
+                log("[CF-G2-RELOCATE] "..id..": no unvisited candidate; leaving in place")
+                return true
+            end
+            site=candidates[1]
+            scan=boundsScan(site,function(t) target=t end)
+        end
+        if not target then
+            if scan() then
+                if not target then
+                    log("[CF-G2-RELOCATE] "..id..": no loaded container at destination; leaving in place")
+                    return true
+                end
+            else return false end
+        end
+        if StaleClue.tooClose(px,py,pz,target) then return false end
+        if not tokenDone then
+            tokenScan=tokenScan or World.count(oldContainer,a.physicalToken,function(n) tokenCount=n; tokenDone=true end)
+            tokenScan(); if not tokenDone then return false end
+        end
+        if not carryDone then
+            carryScan=carryScan or World.count(p:getInventory(),a.physicalToken,function(n) carryCount=n; carryDone=true end)
+            carryScan(); if not carryDone then return false end
+        end
+        if not StaleClue.canRelocate(tokenCount,carryCount) then
+            log("[CF-G2-RELOCATE] "..id..": guard refused (original="..tostring(tokenCount)..", carried="..tostring(carryCount)..")")
+            return true
+        end
+        if not newItem then
+            local doc; for _,d in ipairs(root.case.documents) do if d.id==id then doc=d end end
+            local destination=World.resolve(target)
+            if not destination then log("[CF-G2-RELOCATE] "..id..": destination changed before placement; leaving in place"); return true end
+            local carrier=assert(require("ConspiracyFiles/Generated/EvidenceKinds").get(doc.kind))
+            newItem=assert(instanceItem(carrier.fullType),"could not create relocated evidence item")
+            local md=newItem:getModData()
+            md.cfGeneratedId=id; md.cfPhysicalToken=a.physicalToken
+            newItem:setName(doc.title); newItem:setCustomName(true)
+            newDestination=destination
+        end
+        -- T4/T5 policy is loss over duplication, and it is not merely a
+        -- preference here: two items sharing one cfPhysicalToken make the
+        -- periodic identity scan mark the document "conflict", which is
+        -- sticky, so the clue would be dead permanently and Inspect would
+        -- refuse it forever. Remove the one verified old item first; the new
+        -- copy is already built and detached, so the window is two engine
+        -- calls with no yield between them.
+        local items=oldContainer:getItems()
+        for i=0,items:size()-1 do
+            local it=items:get(i); local md=it and it:getModData()
+            if md and md.cfPhysicalToken==a.physicalToken then oldContainer:RemoveItem(it); break end
+        end
+        if not newDestination:AddItem(newItem) then
+            -- The old copy is already gone. Record the honest uncertainty
+            -- rather than leaving canonical state claiming a placed item.
+            checked(api.status(id,"unknown"))
+            log("[CF-G2-RELOCATE] "..id..": destination refused the item after removal; marked unknown")
+            return true
+        end
+        checked(api.relocate(id,target,hours))
+        local hints=ConspiracyFiles.ClueHints
+        if hints and hints.invalidate then hints.invalidate(a.target) end
+        log("[CF-G2-RELOCATE] relocated "..id.." to "..target.x..","..target.y..",floor "..target.z)
+        return true
+    end
+end
+local function trackVisited()
+    local house=currentHouse()
+    if house then Visited.record(house) end
+    return true
+end
 local function identity(api)
     local found,done
     local snapshot=api.snapshot()
@@ -249,7 +386,7 @@ local function identity(api)
         if not done then scan(); return false end
         for id,items in pairs(found) do
             if #items>1 then checked(api.status(id,"conflict"))
-            elseif #items==1 and api.assignment(id).status~="conflict" then checked(api.status(id,"placed")) end
+            elseif #items==1 and api.assignment(id).status~="conflict" then checked(api.status(id,"placed",worldHours())) end
         end
         return true
     end
@@ -259,6 +396,8 @@ Events.OnTick.Add(function()
     ticks=ticks+1
     if sessions and ticks%120==0 then
         enqueue(); for i,api in ipairs(sessions) do scheduler.enqueue("identity:"..i,"identity",identity(api)) end
+        for i,api in ipairs(sessions) do scheduler.enqueue("relocate:"..i,"relocation",relocation(api)) end
+        scheduler.enqueue("visited-building","tracking",trackVisited)
     end
     scheduler.step()
 end)
