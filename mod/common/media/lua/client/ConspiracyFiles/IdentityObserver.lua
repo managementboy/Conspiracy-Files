@@ -72,7 +72,15 @@ function I.afterRender(pane)
   if people and people.see and fullType and read(item,"isHidden")~=true and read(item,"getContainer")==container then
    pcall(people.see,item,container)
   end
-  if types[fullType] and read(item,"isHidden")~=true and read(item,"getContainer")==container then
+  -- A carrier stamped by GeneratedRuntime (cfGeneratedId set in ModData) is
+  -- generated-case evidence, not a plain identity document: it already gets
+  -- its own notebook row and ledger event, so it must not also become an
+  -- identity observation here. See EvidenceKinds.lua for the shared fullType
+  -- collision this guards against (Base.IDcard, Base.CreditCard,
+  -- Base.BusinessCard, Base.ParkingTicket).
+  local md=read(item,"getModData")
+  local generatedEvidence=type(md)=="table" and md.cfGeneratedId~=nil
+  if types[fullType] and not generatedEvidence and read(item,"isHidden")~=true and read(item,"getContainer")==container then
    local id=read(item,"getID")
    local name=clean(read(item,"getDisplayName"),180)
    if type(id)=="number" and id==id and math.abs(id)<9007199254740992 and id~=0 and name then
