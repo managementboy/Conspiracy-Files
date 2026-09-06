@@ -14,7 +14,11 @@ function N.fromResult(result)
             catalog.locations[#catalog.locations+1]={id=id,areaId=id,
                 name="Building at "..tostring(row.x)..", "..tostring(row.y),
                 mapId=result.map,buildLine=result.gameVersion,
-                bounds={x1=row.x,y1=row.y,x2=row.x2,y2=row.y2,z=row.minLevel},
+                -- Session.target forces every clue in a site onto bounds.z, so
+                -- taking the building minimum sent 100% of a basemented
+                -- building's clues underground - into rooms nothing verifies
+                -- are walkable. Ground level until connectivity is checked.
+                bounds={x1=row.x,y1=row.y,x2=row.x2,y2=row.y2,z=row.minLevel<0 and 0 or row.minLevel},
                 source={kind="map-research",reference="T3-nearby-2 runtime metadata; room labels advisory"},
                 paperStorage="unknown",containerTypes={},excluded=false}
         end
