@@ -11,4 +11,20 @@ env.ConspiracyFiles.KeyJournal={rows=function() return {{id='connection:1',ordin
 local connected=env.Window.rows({section='journal'})
 assert(#connected==3 and connected[3].id=='connection:1' and connected[3].ordinal==3)
 assert(#env.Window.rows({section='evidence'})==1)
-print('PASS Notebook actual journal integration: observed cards appended, evidence unchanged')
+-- With a shared ledger present the journal renders in true discovery order.
+package.path='mod/common/media/lua/shared/?.lua;'..package.path
+local Ledger=require('ConspiracyFiles/DiscoveryLedger')
+local ledger=Ledger.empty()
+for _,step in ipairs({{'evidence','cover',4},{'evidence','shift',5},{'identity','identity:1',5},{'evidence','review',9}}) do
+ ledger=assert(Ledger.record(ledger,step[1],step[2],step[3]))
+end
+env.ConspiracyFiles.DiscoveryLog={order=function(rows) return Ledger.order(ledger,rows) end}
+env.generatedRows=function() return {{id='cover'},{id='shift'},{id='review'}} end
+env.ConspiracyFiles.KeyJournal=nil
+local ordered=env.Window.rows({section='journal'})
+local ids={};for i,row in ipairs(ordered) do ids[i]=row.id;assert(row.ordinal==i) end
+assert(table.concat(ids,',')=='cover,shift,identity:1,review',table.concat(ids,','))
+local evidenceOnly=env.Window.rows({section='evidence'})
+assert(#evidenceOnly==3 and evidenceOnly[1].id=='cover' and evidenceOnly[3].id=='review')
+print('PASS Notebook actual journal integration: observed cards appended, evidence unchanged, ledger discovery order')
+

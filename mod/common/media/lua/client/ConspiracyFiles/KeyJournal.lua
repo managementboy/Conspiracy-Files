@@ -1,6 +1,7 @@
 -- Durable player observations only. Engine event adapters supply observed facts.
 local Connections = require("ConspiracyFiles/KeyConnection")
 local Budget = require("ConspiracyFiles/SaveBudget")
+local Log = require("ConspiracyFiles/DiscoveryLog")
 local J = {}
 ConspiracyFiles = ConspiracyFiles or {}
 ConspiracyFiles.KeyJournal = J
@@ -28,6 +29,11 @@ function J.observe(fact)
         if not allowed then return false, why end
         local store = ModData.getOrCreate(TAG)
         store.canonical = staged
+        -- Derived connections appear only after the fact that completes them,
+        -- so the ledger is appended from the recomputed set.
+        for _, connection in ipairs(Connections.connections(staged) or {}) do
+            Log.record("connection", "connection:" .. connection.id)
+        end
         local ui = ConspiracyFiles and ConspiracyFiles.NotebookUI
         if ui and ui.refresh then pcall(ui.refresh) end
         return true, "recorded"

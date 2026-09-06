@@ -384,7 +384,7 @@ end)()
 ConspiracyFiles=ConspiracyFiles or {}
 ConspiracyFiles.NotebookUI=ConspiracyFiles.NotebookUI or {}
 local UI=ConspiracyFiles.NotebookUI
-UI.VERSION="DEV-0.8.5-local-links"
+UI.VERSION="DEV-0.8.6-discovery-ledger"
 local function safe(fn)
     local rt=ConspiracyFiles.Runtime
     if rt and not rt.disabled then return rt.boundary("ui",fn) end
@@ -540,8 +540,10 @@ function Window:rows()
         if self.section=="journal" and connections then
             for _,row in ipairs(connections.rows()) do rows[#rows+1]=row end
         end
-        -- Number the combined view; each source has its own discovery sequence.
-        for index,row in ipairs(rows) do row.ordinal=index end
+        -- One shared ledger decides order and numbering for every source, so
+        -- the journal reflects real discovery order rather than source groups.
+        local log=ConspiracyFiles.DiscoveryLog
+        if log and log.order then rows=log.order(rows) else for index,row in ipairs(rows) do row.ordinal=index end end
         return rows
     end
     local current=state(); if not current then return {} end

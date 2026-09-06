@@ -1,6 +1,6 @@
 local V=require("ConspiracyFiles/Validator")
 local B={}
-local tags={generated="ConspiracyFiles.Generated.G2",addresses="ConspiracyFiles.AddressBook.Muldraugh",legacy="ConspiracyFiles.DeadAir",identities="ConspiracyFiles.IdentityObservations",keyConnections="ConspiracyFiles.KeyConnections",localPeople="ConspiracyFiles.LocalPeople"}
+local tags={generated="ConspiracyFiles.Generated.G2",addresses="ConspiracyFiles.AddressBook.Muldraugh",legacy="ConspiracyFiles.DeadAir",identities="ConspiracyFiles.IdentityObservations",keyConnections="ConspiracyFiles.KeyConnections",localPeople="ConspiracyFiles.LocalPeople",discoveries="ConspiracyFiles.DiscoveryLedger"}
 function B.check(kind,staged)
  local roots={}
  for name,tag in pairs(tags) do

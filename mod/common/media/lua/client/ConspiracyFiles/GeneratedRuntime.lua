@@ -6,6 +6,7 @@ local Storage=require("ConspiracyFiles/Generated/Storage")
 local World=require("ConspiracyFiles/WorldAccess")
 local Scheduler=require("ConspiracyFiles/Scheduler")
 local Budget=require("ConspiracyFiles/SaveBudget")
+require("ConspiracyFiles/DiscoveryLog")
 ConspiracyFiles=ConspiracyFiles or {}
 local R=ConspiracyFiles.GeneratedRuntime or {}
 ConspiracyFiles.GeneratedRuntime=R
@@ -224,6 +225,8 @@ function R.inspect(item)
     if not a or md.cfPhysicalToken~=a.physicalToken or a.status=="conflict" then return false end
     -- A positively observed surviving item can reconcile an uncertain intent.
     checked(api.status(md.cfGeneratedId,"placed")); checked(api.inspect(md.cfGeneratedId))
+    local log=ConspiracyFiles.DiscoveryLog
+    if log and log.record then log.record("evidence",md.cfGeneratedId) end
     return true
 end
 function R.subject(item)

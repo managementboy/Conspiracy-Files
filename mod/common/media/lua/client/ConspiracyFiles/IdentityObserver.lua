@@ -2,6 +2,7 @@
 require "ISUI/ISInventoryPane"
 local Model=require("ConspiracyFiles/IdentityObservations")
 local Budget=require("ConspiracyFiles/SaveBudget")
+local Log=require("ConspiracyFiles/DiscoveryLog")
 ConspiracyFiles=ConspiracyFiles or {}
 local I=ConspiracyFiles.IdentityObserver or {}
 ConspiracyFiles.IdentityObserver=I
@@ -99,6 +100,8 @@ function I.flush()
  local store=ModData.getOrCreate(TAG)
  store.canonical=staged
  seen[record.id]=true
+ -- Chronological order lives in one shared ledger, not per-source lists.
+ Log.record("identity","identity:"..record.id)
  local ui=ConspiracyFiles.NotebookUI
  if ui and ui.refresh then ui.refresh() end
 end
