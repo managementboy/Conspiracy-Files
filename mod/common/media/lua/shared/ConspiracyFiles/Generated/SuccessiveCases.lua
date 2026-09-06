@@ -3,7 +3,16 @@
 local V=require("ConspiracyFiles/Validator")
 local Session=require("ConspiracyFiles/Generated/Session")
 local Generator=require("ConspiracyFiles/Generated/Generator")
-local M={SCHEMA=1,MAX_CASES=3}
+-- MAX_CASES was a development-era number, not a budget one. Measured against
+-- the generator on 2026-09-06, one validated session root costs 22.5-44.8 kB
+-- (mean 29 kB) of the 500 kB canonical budget, so three cases used under a
+-- tenth of it while silently ending automatic case progression forever.
+-- Eight worst-case roots is ~358 kB, leaving room for the identity, key,
+-- people, marker, address, ledger and visited-building roots. The combined
+-- SaveBudget check still refuses a case that would not fit, so this is a
+-- ceiling, not a promise. Unlimited cases need retirement of completed ones;
+-- see docs/design/CASE_RETIREMENT.md.
+local M={SCHEMA=1,MAX_CASES=8}
 local function copy(v) if type(v)~="table" then return v end local o={} for k,x in pairs(v) do o[k]=copy(x) end return o end
 local function fields(t,allowed) if type(t)~="table" then return false end for k in pairs(t) do if not allowed[k] then return false end end return true end
 local function text(v) return type(v)=="string" and v~="" and #v<=160 end
