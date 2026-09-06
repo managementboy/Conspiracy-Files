@@ -33,7 +33,7 @@ test("UI composition shares a clamped document pane, explicit ink and owner key 
     function Base:addToUIManager() self.inUI=true end
     function Base:removeFromUIManager() self.inUI=false end
     for _,name in ipairs({"ISPanel","ISCollapsableWindow","ISButton","ISScrollingListBox","ISRichTextPanel"}) do _G[name]=Base:derive() end
-    ConspiracyFiles={}; Events={OnKeyPressed={Add=function() end}}
+    ConspiracyFiles={}; Events={OnKeyPressed={Add=function() end},OnPostUIDraw={Add=function() end},OnGameStart={Add=function() end}}
     Keyboard={KEY_TAB=1,KEY_UP=2,KEY_DOWN=3,KEY_RETURN=4,KEY_PRIOR=5,KEY_NEXT=6,KEY_BACK=7,KEY_ESCAPE=8,KEY_NONE=0}
     UIFont={Small=1}; keyBinding={}
     getCore=function() return {getScreenWidth=function() return 1280 end,getScreenHeight=function() return 800 end,getKey=function() return 0 end} end
@@ -63,7 +63,7 @@ test("UI composition shares a clamped document pane, explicit ink and owner key 
         UI.openHelp(); assertTrue(UI.help~=nil); assertTrue(UI.help.document.contrast); UI.help:close(); assertEqual(nil,UI.help)
         window:setWidth(650); window:layout(); assertTrue(window.compact)
         window:onBack(); assertTrue(window.list.visible); assertFalse(window.document.visible)
-        window:close(); assertEqual(nil,UI.notebook); assertEqual(650,UI.geometry.width)
+        window:close(); assertEqual(nil,UI.notebook); assertEqual(nil,UI.geometry) -- probes do not overwrite saved player preferences
         local guide=dofile(TEST_ROOT.."/mod/common/media/lua/client/ConspiracyFiles/SessionGuide.lua")
         local before=UI.probeState.snapshot()
         assertTrue(guide.open()); assertTrue(guide.window.inUI)
@@ -73,6 +73,22 @@ test("UI composition shares a clamped document pane, explicit ink and owner key 
         assertTrue(guide.capture()); assertDeepEqual(before,UI.probeState.snapshot())
         isDebugEnabled=function() return false end; assertFalse(guide.open()); assertFalse(guide.record("Pass"))
         guide.window:close()
+        UI.probeState=nil; ConspiracyFiles.T12Mode=nil
+        local known={{id="g1",title="Dispatch",body="First document",connections={}},
+            {id="g2",title="Receipt",body="Second document",connections={{target="g1",kind="corroborates"},{target="hidden",kind="corroborates"}}}}
+        ConspiracyFiles.GeneratedRuntime={metrics=function() return {} end,known=function() return known end}
+        ConspiracyFiles.ClueMarkers={note=function() return "Map marking waits for a pen or pencil." end}
+        UI.open("evidence","g2")
+        local gen=UI.notebook
+        assertEqual(2,#gen.list.items); assertEqual("g2",gen.currentId)
+        assertTrue(gen.document.plainText:find("Map marking waits for a pen or pencil.",1,true)~=nil)
+        assertTrue(gen.document.plainText:find("Supports: Dispatch",1,true)~=nil)
+        assertFalse(gen.document.plainText:find("hidden",1,true)~=nil)
+        gen:onSection(gen.journal); assertEqual("Inspected Dispatch",gen.list.items[1].item.title)
+        assertEqual("g1",gen.list.items[1].item.id)
+        UI.openHelp(); assertTrue(UI.help.text:find("Inspect Investigation Evidence",1,true)~=nil); UI.help:close()
+        gen:close()
+        assertEqual(2,#known); assertEqual("Second document",known[2].body)
     end)
     for _,name in ipairs(names) do _G[name]=old[name] end
     for _,name in ipairs(modules) do package.loaded[name]=loaded[name] end

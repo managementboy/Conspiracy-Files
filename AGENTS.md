@@ -4,12 +4,25 @@
 
 Conserve the shared weekly Codex allowance. Apply this to project management and implementation, not just response length.
 
+**Current reserve, owner updated 2026-09-06:** checkpoint and stop development at **5% weekly allowance remaining** (95% used). This supersedes the earlier 25%, 30% and 35% stop thresholds and 38% start gate in historical overnight plans and task handoffs. Check actual shared usage before new segments and during substantial work; choose bounded segments that leave room to checkpoint before the reserve. Do not interpret this as permission to consume resets or resume paused automations.
+
 - Use small, bounded work increments and concise reports. Prioritize the next delivery blocker; defer optional polish and speculative work.
 - Reuse verified context and durable handoff notes. Read changed or relevant sections instead of repeatedly re-auditing unchanged material already reviewed in the same task.
 - Batch independent reads, keep tool output focused, and avoid repeated polling, duplicate documentation and unnecessary agent delegation.
 - Run verification appropriate to the change once; repeat only for new edits, failures or unresolved concerns. Never omit required correctness checks to save tokens.
 - Before substantial work, check account usage limits when available. Consider both weekly and short-window headroom; no project-specific share has been specified. If remaining allowance is tight, checkpoint completed work and surface the constraint before starting optional or large new work.
 - Do not purchase credits, redeem resets, schedule background work or change models without applicable authorization. Account limits are shared; do not promise that this project can prevent consumption by other tasks.
+
+## Economical development strategy — owner approved, 2026-09-05
+
+- Keep this primary task responsible for project management, integration and final review.
+- Owner reaffirmed on 2026-09-06: subcontract bounded development to a separate visible Codex task/thread, following the earlier workflow. Prefer this over implementing an entire development segment in the PM conversation. Use one Terra Low development task at a time with a compact handoff; reuse a suitable existing development task where possible. Primary reviews results, integrates, deploys and guides live tests. This is the workflow for future concrete development segments, not a request to create an empty task now.
+- Delegate routine, independent implementation to one focused worker at a time. Default to GPT-5.6 Terra with low reasoning; use Luna only for clearly simple edits/extraction. Owner authorizes these worker model choices. Do not create multiple concurrent workers by default.
+- Give workers a compact handoff: concrete outcome, allowed files, invariants, test command and stopping point. Do not fork the full conversation. Separate tasks still share the account allowance; no guaranteed saving is claimed.
+- Workers implement and test their bounded scope; the primary agent reviews the diff and integrates. Avoid duplicate investigations, repeated full-suite runs and repeated progress polling.
+- Reserve higher-effort Astra work for difficult integration, architecture, persistence and recovery. Astra Low is an approved preference for routine primary work when the task's model setting can be changed explicitly; never claim a setting changed merely from a prompt. Current task settings remain app-controlled.
+- Scoped workers may rely on the primary's current handoff for settled project context and account-usage checks, reading only relevant project sections. They must inspect relevant implementation and instructions, and report contradictions. No full-history re-audit is required for each worker.
+- No live game interaction while the owner is away; mock/source checks do not count as native acceptance. Deployment remains with the primary agent under existing authorization.
 
 Before making any design or code change:
 
@@ -22,6 +35,8 @@ Before making any design or code change:
 7. Check `/docs/research/` before assuming a Project Zomboid Build 42 hook/capability exists.
 
 ## Project rules
+
+- **P4-R63, owner decision 2026-09-06:** before mod version 1.0, old-save backwards compatibility is not required. Breaking changes may require fresh saves; do not spend effort on legacy readers/migrations/fallbacks solely for older versions. Announce fresh-save requirements. Keep current-build save integrity and never silently reset/delete saves. This overrides older cross-version compatibility handoffs.
 
 - Target Project Zomboid Build 42; exact supported minor line must follow verified research.
 - Vanilla Lua first. Add ZombieBuddy/Java only for missing API access, measured performance, or persistence/data-processing complexity.

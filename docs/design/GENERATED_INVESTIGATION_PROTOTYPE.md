@@ -60,3 +60,18 @@ G1 finishes with an offline generator, small catalog/template fixtures and meani
 No large database population yet, generic content-pack schema, runtime AI, graph/theory UI, multiplayer, old-save retrofit, migrations or broad Workshop-map support. One built-in case per new save; ongoing campaign scheduling is deferred.
 
 G1's logic is now in dev/generated-investigation/; finish its real-catalog validation after the owner's list arrives. Reuse existing research and tests; do not restart the project audit. Expand only when the previous increment's evidence justifies it.
+
+## Investigation reach progression
+
+Owner-approved [P4-R55](../../DECISIONS.md#investigation-reach-progression--2026-09-05) sets the maximum radius for new cases by completed character survival days: **0–3: 250 tiles; 4–10: 500; 11–20: 1,000; 21+: 1,500**. Existing cases keep their locations. Prefer reduced category variety within the cap; defer if required eligible sites are unavailable. Do not widen the radius silently. These are playtest defaults; runtime progression and the anchor policy for later cases are not implemented by this documentation change.
+
+
+### P4-R55 implementation
+
+`ConspiracyFiles/Reach.lua` implements the pure survival-hours policy. `Generator.generateNew(catalog, seed, options, context)` requires `context.hoursSurvived` and `context.anchor={x,y}` and filters candidates before ordinary generation. It never widens for scarcity. `generate` remains the offline fixture entry point; future gameplay callers must use `generateNew`. Saved-case restore never reapplies radius filtering. The caller supplies the anchor, leaving the later-case anchor decision open.
+
+The manual T3 probe now defaults `start()` to the character's `getHoursSurvived()` tier around the current position. Explicit radius remains a labelled debug override. Installed vanilla `media/lua/shared/Logs/ISPerkLog.lua` uses this survival-hours getter. 51 suite tests plus focused probe tests pass; live automatic-radius verification and playable generated-case integration remain pending.
+
+## G2 implementation checkpoint
+
+The minimal generated resolver boundary is implemented as shared Generated/Generator plus a separate Generated/Session aggregate and GeneratedRuntime/GeneratedMenu adapters. Dead Air remains its own unchanged domain/placement fixture; only its runtime receives a generated-mode exclusion guard. This avoids weakening fixed-registry validation. G2 uses loaded room/container verification, three assigned notes and a known-only investigation journal. See [playable trial](../management/G2_PLAYABLE_TRIAL.md). Live gameplay acceptance, natural first-clue introduction and uncertain-intent recovery remain open.

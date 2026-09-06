@@ -1,8 +1,8 @@
-# Spike T3 — location categorisation reliability
+# Spike T3 â€” location categorisation reliability
 
 **Policy update P4-R53:** the observations and limitations below remain authoritative. The later owner clarification supersedes the curated-only v1 product recommendation: use capability-based catalog records and automatic selection without per-site owner approval. Unknown labels still cannot become authoritative story facts. This is a product-policy correction, not new engine evidence.
 
-- **Status:** Complete — live isolated single-player probe executed on the development PC
+- **Status:** Complete â€” live isolated single-player probe executed on the development PC
 - **Project Zomboid build tested:** Stable `42.20.4 b0bbce05d5`; revision `b0bbce05d5`; `pzbullet=1.0.0.28`; Steam build ID `24909800`
 - **Platform:** Windows 11 Pro `10.0.26200` build 26200; Intel Core i9-13900H; 34,070,192,128 bytes RAM; direct 64-bit client; single-player; `-nosteam`
 - **Probe path/branch:** `dev/t3-location-categorisation/` on `spike/t3-location-categorisation`; final live-tested Lua SHA-256 `DA180B0C3C86A388482F985BEDE2362C8CCEEF034E624D96A5F39A287CA588E0`
@@ -152,8 +152,34 @@ The correct product ruling is a curated v1 catalog with optional automatic candi
 
 ## Decision links
 
-- P4-R01 — v0.1 remains two curated locations.
-- P4-R06 — replay/placement variation may use validated candidates later; automatic labels do not alter core authored truth.
-- P4-R16 / P4-R34 — all discovery remains dual-bounded, filtered, rebuildable, and non-persistent.
-- P4-R35 — added: categorisation is advisory and room-first; v1 remains curated.
-- GitHub Issue #4 — `[Spike T3] Location categorisation reliability` remains externally open by instruction.
+- P4-R01 â€” v0.1 remains two curated locations.
+- P4-R06 â€” replay/placement variation may use validated candidates later; automatic labels do not alter core authored truth.
+- P4-R16 / P4-R34 â€” all discovery remains dual-bounded, filtered, rebuildable, and non-persistent.
+- P4-R35 â€” added: categorisation is advisory and room-first; v1 remains curated.
+- GitHub Issue #4 â€” `[Spike T3] Location categorisation reliability` remains externally open by instruction.
+
+## 2026-09-05 â€” structured nearby extraction trial
+
+Owner approved the T3-first approach after the PZReverseMapper detour. Prepared `dev/t3-location-categorisation/nearby/T3Nearby.lua` as a separate manual entry point; historical automated T3 code is not loaded. It exports up to 12 nearest buildings within a bounded radius, then every attached room and rectangle. Current-position anchor is labelled honestly; original spawn capture, category diversity, storage validation and generator integration remain future work. Owner nominations are optional, not a gate.
+
+Focused plain-Lua mock checks and Lua 5.1 syntax check pass. Live output and callback timing are **pending owner run**. See the nearby README for commands, safety caps, output schema and limitations. This does not reopen or replace the historical categorisation result.
+
+### Nearby trial result and diversity follow-up
+
+Version 1 completed in the owner session at (10637,10267,0): 9,978 buildings scanned; 12 buildings, 62 rooms, 87 rectangles extracted; 564 callbacks, 2 ms recorded peak, none above 2 ms. Evidence: `dev/t3-location-categorisation/nearby/evidence/2026-09-05-live.log`. This confirms structured extraction, not storage or gameplay acceptance.
+
+Owner approved automatic variety. Version 2 now streams room labels within the radius, retains bounded category pools, and selects up to 12 using deterministic seeded category rounds. Focused selection tests and the 50-test suite pass. The G1 catalog bridge preserves unknown storage and refuses premature generation. Wider-scan live timing and shortlist remain pending.
+
+### Nearby trial result and diversity follow-up
+
+Version 1 completed at (10637,10267,0): 9,978 buildings scanned; 12 buildings, 62 rooms, 87 rectangles extracted; 564 callbacks, 2 ms peak, none above 2 ms. Evidence: `dev/t3-location-categorisation/nearby/evidence/2026-09-05-live.log`. Structured extraction is verified; storage and gameplay are not.
+
+Owner approved automatic variety. Version 2 streams room labels within the radius, retains bounded category pools and selects up to 12 through deterministic seeded category rounds. Focused selection tests and the 50-test suite pass. The G1 catalog bridge preserves unknown storage and blocks premature generation. Wider-scan live timing and shortlist remain pending.
+
+## Named streets found in installed map data — 2026-09-05
+
+Installed `media/maps/Muldraugh, KY/streets.xml` contains 1,098 named street polylines. The installed WorldMapEditorMode_Streets.lua also exposes street-name editing, confirming these are map street records. This source does not provide house numbers, front-door road association or verified business signage.
+
+Generated/PlaceNames.lua derives 310 segments intersecting the Muldraugh trial rectangle x=10000..11500, y=9000..11000; the source SHA-256 is recorded in that file. Runtime lookup is restricted to that region and the verified 42.20/42.20.4 line with Muldraugh in the map list. It returns a nearby road within 60 tiles of building center, described as **near**, never a street address. Nearest-street choice does not prove an entrance fronts that street.
+
+For the current two buildings, both resolve near 3rd St. Coordinate labels are replaced in notebook presentation with dispatch/receiving building roles plus the road when available; a relative compass direction and approximate pace count is added only when the source text already references both places. Unknown/out-of-coverage names are not invented. Real authored place names are preserved. Canonical case facts and text stay unchanged. Fifty-three tests pass; normal-player navigation still needs owner evaluation.

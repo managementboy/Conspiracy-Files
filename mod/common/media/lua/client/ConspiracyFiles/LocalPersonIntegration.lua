@@ -1,0 +1,244 @@
+-- Observation-driven first slice: no corpse scans or hidden inventory reads.
+local Model=require("ConspiracyFiles/LocalPerson")
+local Runtime=require("ConspiracyFiles/LocalPersonRuntime")
+local Keys=require("ConspiracyFiles/HouseKeyAdapter")
+local Journal=require("ConspiracyFiles/KeyJournal")
+local Budget=require("ConspiracyFiles/SaveBudget")
+local Cases=require("ConspiracyFiles/Generated/SuccessiveCases")
+local P={}
+local TAG="ConspiracyFiles.LocalPeople"
+local queue,queued,ticks={},{},0
+local cardTypes={['Base.IDcard']=true,['Base.IDcard_Male']=true,['Base.IDcard_Female']=true,
+    ['Base.IDcard_Stolen']=true,['Base.CreditCard']=true,['Base.CreditCard_Stolen']=true,
+    ['Base.BusinessCard']=true,['Base.BusinessCard_Personal']=true,
+    ['Base.ParkingTicket']=true,['Base.SpeedingTicket']=true}
+local function read(object,method,...)
+    if not object then return nil end
+    local args={...}
+    local ok,value=pcall(function() return object[method] and object[method](object,unpack(args)) end)
+    if ok then return value end
+end
+local function supported()
+    local rt=ConspiracyFiles.GeneratedRuntime
+    return getDebug and getDebug() and not (isClient and isClient()) and not (isServer and isServer())
+        and not ConspiracyFiles.T11Mode and not ConspiracyFiles.T12Mode and rt and rt.metrics and rt.metrics()
+end
+local function state()
+    local wrapper=ModData.get(TAG)
+    if not wrapper then return Model.empty() end
+    assert(type(wrapper)=="table" and not getmetatable(wrapper),"invalid people store")
+    for key in pairs(wrapper) do assert(key=="canonical","unknown people field") end
+    assert(Model.validate(wrapper.canonical))
+    return wrapper.canonical
+end
+local function save(staged)
+    assert(staged and Model.validate(staged),"invalid people update")
+    assert(Budget.check("localPeople",{canonical=staged}))
+    ModData.getOrCreate(TAG).canonical=staged
+end
+local function cases()
+    local wrapper=Cases.current(ModData.get("ConspiracyFiles.Generated.G2") or {})
+    return wrapper and Cases.sessions(wrapper) or {}
+end
+local function buildingFor(root)
+    local doc=root.case.documents[1]
+    local target=root.assignments[doc.id].target
+    local square=read(getCell(),"getGridSquare",target.x,target.y,target.z)
+    local building=read(square,"getBuilding")
+    local def=read(building,"getDef")
+    local id=read(def,"getIDString")
+    if type(id)~="string" or doc.locationId~="t3:"..id then return nil end
+    return building,id,read(def,"getKeyId")
+end
+-- Ascend only container ownership, never inspect a bag's contents.
+local function origin(item,container)
+    local carried={item}
+    for _=1,8 do
+        local owner=read(container,"getParent")
+        if owner and instanceof(owner,"IsoDeadBody") then
+            local md=read(owner,"getModData")
+            local id=read(item,"getID")
+            if type(md)~="table" or type(id)~="number" or id==0 or id~=id or math.abs(id)>=9007199254740992 or id%1~=0 then return nil end
+            local token=md.cfObservedSource or ("corpse-item:"..tostring(id))
+            if type(token)~="string" or #token>160 then return nil end
+            return token,owner,carried
+        end
+        local bag=read(container,"getContainingItem")
+        if not bag then return nil end
+        local md=read(bag,"getModData")
+        if md and type(md.cfObservedSource)=="string" then return md.cfObservedSource,nil,carried end
+        carried[#carried+1]=bag
+        container=read(bag,"getContainer")
+    end
+end
+function P.see(item,container)
+    if not supported() or #queue>=16 or queued[item] or read(item,"getContainer")~=container then return end
+    local id=read(item,"getID")
+    if type(id)~="number" or id==0 or id~=id or math.abs(id)>=9007199254740992 or id%1~=0 then return end
+    local token,body,carried=origin(item,container)
+    if not token then return end
+    queue[#queue+1]={item=item,container=container,token=token,body=body,carried=carried,
+        label=read(item,"getDisplayName"),fullType=read(item,"getFullType"),id=read(item,"getID")}
+    queued[item]=true
+end
+local function remember(entry)
+    if entry.body then
+        local md=assert(read(entry.body,"getModData"))
+        assert(not md.cfObservedSource or md.cfObservedSource==entry.token,"source changed")
+        md.cfObservedSource=entry.token
+    end
+    for _,item in ipairs(entry.carried) do
+        local md=read(item,"getModData")
+        if md and not md.cfObservedSource then md.cfObservedSource=entry.token end
+    end
+end
+local function place(root,record,body,building)
+    local player=getPlayer()
+    local px,py,pz=read(player,"getX"),read(player,"getY"),read(player,"getZ")
+    local bx,by,bz=read(body,"getX"),read(body,"getY"),read(body,"getZ")
+    if not px or not py or not bx or not by or pz~=bz or (px-bx)^2+(py-by)^2>900 then return end
+    local container=read(body,"getContainer") or read(body,"getInventory")
+    if not container then return end
+    local items=read(container,"getItems")
+    local size=read(items,"size")
+    if type(size)~="number" or size>Runtime.MAX_ITEMS then return end
+    local count=0
+    for index=0,size-1 do
+        local md=read(read(items,"get",index),"getModData")
+        if md and md.cfLocalPersonToken==record.keyToken then count=count+1 end
+    end
+    if count>1 and record.status~="pending" and record.status~="conflict" then
+        save(assert(Runtime.reconcile(state(),record.caseId,count,false)))
+        return
+    end
+    if record.status=="placed" or record.status=="conflict" then return end
+    if record.status~="pending" then
+        local staged=Runtime.reconcile(state(),record.caseId,count,count==1)
+        if staged then save(staged) end
+        return
+    end
+    -- Commit intent before creating or adding an item. An interrupted intent
+    -- without a surviving key becomes unknown rather than spawning another.
+    save(assert(Runtime.intent(state(),record.caseId)))
+    record=state().records[record.caseId]
+    if count>0 then save(assert(Runtime.reconcile(state(),record.caseId,count,true)));return end
+    local key=assert(Runtime.createKey(building,record))
+    assert(container:AddItem(key),"key placement failed")
+    save(assert(Runtime.reconcile(state(),record.caseId,1,true)))
+end
+local function observe(entry)
+    remember(entry)
+    local current=state()
+    local md=read(entry.item,"getModData") or {}
+    -- A wallet may have been opened after leaving the body. Its observed
+    -- source survives that move; finish pending placement on seeing the body
+    -- again, without guessing which nearby corpse it belonged to.
+    if entry.body and not cardTypes[entry.fullType] and not md.cfLocalPersonCase then
+        for _,root in ipairs(cases()) do
+            local record=current.records[root.case.caseId]
+            if record and record.sourceToken==entry.token then
+                local building,buildingId,keyId=buildingFor(root)
+                if building and record.buildingId==buildingId and record.keyId==keyId then
+                    place(root,record,entry.body,building)
+                end
+            end
+        end
+    end
+    if md.cfLocalPersonCase then
+        local record=current.records[md.cfLocalPersonCase]
+        if record and record.status~="conflict" and record.sourceToken==entry.token and record.keyToken==md.cfLocalPersonToken then
+            assert(Journal.observe({kind="keySource",id=record.keyToken,sourceToken=entry.token,
+                keyToken=record.keyToken,keyId=record.keyId}))
+        end
+        return
+    end
+    if not cardTypes[entry.fullType] or type(entry.label)~="string" then return end
+    local name=entry.label:match(":%s*(.+)$")
+    if not name or #name>120 or name:find("[%c]") then return end
+    for _,root in ipairs(cases()) do
+        local id=root.case.caseId
+        local record=current.records[id]
+        local building,buildingId,keyId=buildingFor(root)
+        if not record and building and type(keyId)=="number" and keyId>=0 then
+            local staged=Runtime.bindVisible(current,{caseId=id,buildingId=buildingId,sourceToken=entry.token,
+                name=name,keyToken="person-key:"..id,keyId=keyId})
+            if staged then save(staged);current=state();record=current.records[id] end
+        end
+        if record and record.sourceToken==entry.token and record.observedName==name then
+            assert(Journal.observe({kind="nameDocument",id="identity:"..tostring(entry.id),sourceToken=entry.token,name=name}))
+            if entry.body and building and record.buildingId==buildingId and record.keyId==keyId then
+                place(root,record,entry.body,building)
+            end
+            return
+        end
+    end
+end
+function P.known()
+    local roots=cases()
+    local known={}
+    for _,row in ipairs(ConspiracyFiles.GeneratedRuntime.known()) do known[row.id]=true end
+    for _,root in ipairs(roots) do
+        local first=root.case.documents[1]
+        if known[first.id] then
+            assert(Journal.observe({kind="anonymousClue",id=first.id,buildingId=first.locationId:gsub("^t3:","")}))
+        end
+    end
+end
+function P.tick()
+    if not supported() then return end
+    ticks=ticks+1
+    if ticks%30~=0 then return end
+    local ok,why=pcall(function()
+        local entry=table.remove(queue,1)
+        if entry then queued[entry.item]=nil;observe(entry) end
+        P.known()
+    end)
+    if not ok then print("[CF-PERSON] Deferred: "..tostring(why)) end
+end
+local function heldKey(inventory,keyId)
+    local key=read(inventory,"haveThisKeyId",keyId)
+    local md=read(key,"getModData")
+    if md and md.cfLocalPersonCase then return key end
+    -- A vanilla spare key may precede our key. Search only owned containers,
+    -- bounded across the complete traversal, without exposing their contents.
+    local containers={inventory}
+    local index,visited,found=1,0,nil
+    while index<=#containers and index<=16 and visited<200 do
+        local list=read(containers[index],"getItems")
+        local size=read(list,"size") or 0
+        for i=0,math.min(size,200-visited)-1 do
+            visited=visited+1
+            local candidate=read(list,"get",i)
+            local data=read(candidate,"getModData")
+            if data and data.cfLocalPersonCase and read(candidate,"getKeyId")==keyId then
+                if found then return nil end
+                found=candidate
+            end
+            local bag=read(candidate,"getInventory")
+            if bag and #containers<16 then containers[#containers+1]=bag end
+        end
+        index=index+1
+    end
+    return found
+end
+function P.observeDoor(action)
+    if not supported() or action.character~=getPlayer() then return end
+    local door=action.item
+    local keyId=read(door,"getKeyId")
+    local inventory=read(action.character,"getInventory")
+    local key=heldKey(inventory,keyId)
+    local md=read(key,"getModData")
+    if not md then return end
+    local record=state().records[md.cfLocalPersonCase]
+    if not record or record.status=="conflict" or record.keyToken~=md.cfLocalPersonToken then return end
+    local square=read(door,"getSquare")
+    local doorId=table.concat({tostring(read(square,"getX")),tostring(read(square,"getY")),
+        tostring(read(square,"getZ")),tostring(read(door,"getObjectIndex"))},":")
+    local fact=Keys.observeInteractedMatch({interaction="door",interactionToken=doorId,
+        player=action.character,interactedDoor=door,heldKey=key,buildingId=record.buildingId,
+        doorId=doorId,keyToken=record.keyToken,factId="match:"..record.keyToken..":"..doorId})
+    if fact then assert(Journal.observe(fact));P.known() end
+end
+function P.reset() queue={};queued={};ticks=0 end
+Runtime.see=P.see
+return P

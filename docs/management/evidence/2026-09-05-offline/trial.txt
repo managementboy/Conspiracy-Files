@@ -1,0 +1,1 @@
+PASS manual trial entry: passive load, source hooks before case, running index reuse, multiplayer refusal

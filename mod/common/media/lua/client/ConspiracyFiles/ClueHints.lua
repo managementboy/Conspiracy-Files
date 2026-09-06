@@ -1,0 +1,78 @@
+-- Subtle discovery assistance: never grants knowledge or calls a zombie-attraction sound API.
+local World=require("ConspiracyFiles/WorldAccess")
+local Cases=require("ConspiracyFiles/Generated/SuccessiveCases")
+ConspiracyFiles=ConspiracyFiles or {}
+if ConspiracyFiles.ClueHints then ConspiracyFiles.ClueHints.stop() end
+local H={}
+ConspiracyFiles.ClueHints=H
+local phrases={"Is this a clue?","Something here seems worth a look.","Could this mean something?",
+    "Maybe I should check that.","That might be worth reading."}
+local visits,nextPoll,lastHint,phrase={},0,-60000,0
+local pending
+local function near(p,t,d)
+    return math.floor(p:getZ())==t.z and math.abs(math.floor(p:getX())-t.x)<=d and math.abs(math.floor(p:getY())-t.y)<=d
+end
+local function eligible(root,id)
+    local a=root and root.assignments and root.assignments[id]
+    if not a or a.status~="placed" then return nil end
+    for _,known in ipairs(root.known or {}) do if known==id then return nil end end
+    return a
+end
+local function enabled()
+    return getDebug and getDebug() and not (isClient and isClient()) and not (isServer and isServer())
+        and not ConspiracyFiles.T11Mode and not ConspiracyFiles.T12Mode
+end
+local function step()
+    if not enabled() then pending=nil; return end
+    local p=getPlayer(); if not p then pending=nil; return end
+    local wrapper=Cases.current(ModData.get("ConspiracyFiles.Generated.G2"))
+    local roots=wrapper and Cases.sessions(wrapper)
+    if not roots or #roots==0 then pending=nil; return end
+    local now=getTimeInMillis()
+    if pending then
+        local task=pending
+        local a=eligible(task.root,task.id)
+        if not a or not near(p,a.target,1) or World.resolve(a.target)~=task.container then pending=nil; return end
+        local started=now
+        for _=1,24 do
+            task.steps=task.steps+1
+            if task.steps>512 then pending=nil; return end -- unknown if too large; stay silent
+            if task.scan() then
+                pending=nil
+                if task.count==1 and now-lastHint>=60000 and not visits[task.key] then
+                    phrase=phrase%#phrases+1
+                    p:Say(phrases[phrase])
+                    visits[task.key]=a.target; lastHint=now
+                end
+                return
+            end
+            if getTimeInMillis()-started>=1 then return end
+        end
+        return
+    end
+    if now<nextPoll then return end
+    nextPoll=now+500
+    for key,t in pairs(visits) do if not near(p,t,3) then visits[key]=nil end end
+    if now-lastHint<60000 then return end
+    for _,root in ipairs(roots) do for _,doc in ipairs(root.case.documents) do
+        local a=eligible(root,doc.id)
+        if a and near(p,a.target,1) then
+            local t=a.target
+            local key=t.x..":"..t.y..":"..t.z..":"..t.objectIndex..":"..t.containerIndex
+            local c=not visits[key] and World.resolve(t)
+            if c then
+                local task={root=root,id=doc.id,key=key,container=c,steps=0}
+                task.scan=World.count(c,a.physicalToken,function(n) task.count=n end)
+                pending=task; return
+            end
+        end
+    end end
+end
+local handler
+function H.stop() if handler then Events.OnTick.Remove(handler) end; pending=nil end
+handler=function()
+    local ok,why=pcall(step)
+    if not ok then H.stop(); print("[CF-G2-HINT] disabled: "..tostring(why)) end
+end
+Events.OnTick.Add(handler)
+return H

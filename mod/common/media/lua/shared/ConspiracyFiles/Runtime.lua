@@ -160,6 +160,7 @@ function Runtime.metrics() return scheduler and {peakMs=scheduler.peakMs,maxStep
 local function initialize()
     Runtime.disabled=true; Runtime.state=nil; session=nil
     if multiplayer() then log("DISABLED","multiplayer"); return end
+    if ConspiracyFiles.GeneratedMode then log("DISABLED","generated development session active"); return end
     if ConspiracyFiles.T12Mode then log("DISABLED","T12 synthetic UI only; world adapter inactive"); return end
     if not Bindings.accepted and not debugMode() then log("DISABLED","candidate bindings require debug mode until accepted"); return end
     assert(getTimestampMs,"bounded scheduler requires engine clock")

@@ -257,3 +257,7 @@ The [2026-09-05 takeover audit](../management/PM_TAKEOVER_AUDIT_2026-09-05.md) r
 Before the broad architecture is considered signed off, record spike results for T1–T10 using `docs/research/SPIKE_TEMPLATE.md`.
 
 The first six critical probes are T1, T9, T2, T3, T4 and T5. T7, T8 and T10 are complete, so Engineering Gate B is complete with T10's inventory-pane-only limitation. T6 is only needed if retrofit returns.
+
+## Generated trial extension — 2026-09-05
+
+P4-R53 and P4-R58–R60 extend the historical fixed fixture with per-save fictional addresses and per-character finding/mark records. These are authoritative retained records, not rebuildable display caches. Active generated/address/marker writers use a common client SaveBudget adapter and the pure Validator.validateCombined check; each subsystem still validates its own schema before commit. Notebook map status and map overlays are projections. Manual Trial.start is development-only and initializes source capture before starting/resuming a case. See ../management/TOMORROW_PLAYTEST.md for remaining native gates; this does not establish production, multi-case or multiplayer support.

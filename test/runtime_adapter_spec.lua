@@ -1,6 +1,12 @@
 local Content=require("ConspiracyFiles/Content")
 local runtimePath=TEST_ROOT..TEST_SEPARATOR.."mod/common/media/lua/shared/ConspiracyFiles/Runtime.lua"
 local menuPath=TEST_ROOT..TEST_SEPARATOR.."mod/common/media/lua/client/ConspiracyFiles/ContextMenu.lua"
+local function investigationAction(menu)
+    for _, option in ipairs(menu.options) do
+        if option.cfDeadAirAction then return option end
+    end
+    error("missing investigation action")
+end
 local function environment(fn,server)
     local names={"ConspiracyFiles","Events","ModData","isClient","isServer","isDebugEnabled","getTimestampMs","getGameVersion","ZombRand","getCell","getPlayer","getSpecificPlayer","instanceItem","instanceof","print"}
     local previous={}; for _,name in ipairs(names) do previous[name]=_G[name] end
@@ -118,20 +124,20 @@ test("menu mock generic marks require ownership and retain a durable single inte
     environment(function(e)
         e.rt.start(); e.tick(500); dofile(menuPath)
         local item=instanceItem(); item:setName("Spare radio"); item.outer=e.inventory
-        local action=e.menu(item).options[2]
+        local action=investigationAction(e.menu(item))
         item.outer=nil; action.callback(); assertEqual(0,#e.rt.state.snapshot().evidence)
         item.outer=e.inventory; e.rt.faultPoint="before-canonical-swap"; action.callback()
         local intent=item:getModData().cfMarkIntent; assertTrue(intent~=nil); assertEqual(0,#e.rt.state.snapshot().evidence)
         action.callback(); action.callback(); assertEqual(1,#e.rt.state.snapshot().evidence)
-        assertEqual(intent,item:getModData().cfMarkIntent); assertTrue(e.menu(item).options[2].notAvailable)
-        e.rt.start(); assertTrue(e.menu(item).options[2].notAvailable)
+        assertEqual(intent,item:getModData().cfMarkIntent); assertTrue(investigationAction(e.menu(item)).notAvailable)
+        e.rt.start(); assertTrue(investigationAction(e.menu(item)).notAvailable)
     end)
 end)
 test("menu mock delivers approved context only after a successful committed discovery",function()
     environment(function(e)
         e.rt.start(); e.tick(500); dofile(menuPath)
         local item=e.find(Content.ids.d1)
-        local menu=e.menu(item); local action=menu.options[2]
+        local menu=e.menu(item); local action=investigationAction(menu)
         local source=item.outer; item.outer=nil; action.callback(); assertEqual(0,e.reader()); item.outer=source
         e.rt.faultPoint="before-canonical-swap"; action.callback()
         assertEqual(0,e.reader()); assertEqual(0,#e.rt.state.snapshot().evidence)
@@ -150,9 +156,9 @@ test("menu mock preserves foreign actions, deduplicates groups and rejects token
         local normalized=menuModule.normalize({{items={item,item,item}},item}); assertEqual(1,#normalized)
         local copy=instanceItem(); for k,v in pairs(item:getModData()) do copy:getModData()[k]=v end
         local menu=e.menu(item); table.insert(menu.options,1,{name="Foreign option"})
-        menuModule.fill(0,menu,{item}); assertEqual(3,#menu.options); assertEqual("Foreign option",menu.options[1].name)
+        menuModule.fill(0,menu,{item}); assertEqual(2,#menu.options); assertEqual("Foreign option",menu.options[1].name)
         local ambiguous={options={},addOption=menu.addOption}; menuModule.fill(0,ambiguous,{item,copy})
-        assertTrue(ambiguous.options[2].notAvailable)
+        assertTrue(investigationAction(ambiguous).notAvailable)
         assertEqual("conflict",e.rt.assignment(Content.ids.d1).availability)
     end)
 end)

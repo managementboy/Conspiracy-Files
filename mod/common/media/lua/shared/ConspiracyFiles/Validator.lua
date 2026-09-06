@@ -280,4 +280,20 @@ function Validator.validate(root)
     return true, nil, estimated
 end
 
+-- Validate each independently stored canonical root before accounting for the
+-- whole save. Reject unsafe peers instead of letting a different writer bypass
+-- the aggregate limit. No engine dependencies.
+function Validator.validateCombined(roots,limit)
+    local total=0
+    for name,root in pairs(roots) do
+        local ok,why=Validator.validateStructure(root)
+        if not ok then return false,tostring(name)..": "..tostring(why) end
+        total=total+Validator.estimateEncodedBytes(root)
+    end
+    if total>(limit or Validator.MAX_ENCODED_BYTES) then
+        return false,"combined canonical save budget exceeded ("..total.." bytes)"
+    end
+    return true,total
+end
+
 return Validator

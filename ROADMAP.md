@@ -1,19 +1,20 @@
 # Conspiracy-Files — Roadmap
 
-**G1 progress:** offline logic now generates three linked documents across two eligible sites, with revision-pinned restoration and knowledge-bounded projection. 49 tests pass; 100 synthetic seeds cover 66 unordered pairs and both outlines. The owner's 12 Muldraugh nominations will supply the real starting set under P4-R54. No synthetic coordinate is a real placement; live G2 is unchanged.
+**Current checkpoint (2026-09-06):** generated placement, notebook evidence persistence and core found-clue map-marker behavior have owner-observed live passes, including writing-tool queue/catch-up, removal, grouped labels and annotation save/reload. See [live evidence and remaining limits](docs/management/LIVE_SESSION_2026-09-06.md).
 
 ## Active destination and next increment
 
-P4-R53 restores the intended product: a large database of possible locations, automatic evidence placement and dynamically generated conspiracies. Players investigate; they do not approve locations in advance.
+P4-R63: pre-1.0 builds may require fresh saves. Old-save compatibility and migrations are not delivery gates; preserve current-build persistence and disclose breaking changes.
 
-1. **Planning increment (this change):** define a bounded generated prototype, explicit constraints and measurable acceptance.
-2. **G1 — offline generation:** use 8–12 provenance-backed catalog records, two small case outlines, three documents and two automatically chosen locations per case. Prove repeatability, meaningful seed variation and coherent references before engine work.
-3. **G2 — live composition:** generalize only the adapter contracts needed to consume a generated case; validate storage automatically, commit one case, then test actual placement/Inspect/save/reload. Preserve conservative identity recovery and surface its unresolved cases.
-4. **G3 — owner playtest:** play generated investigations and judge clarity, interest and survival fit. No plausibility tour or individual site-approval step.
-5. **Later expansion:** grow database coverage and template variety from measured gaps, without building a generic platform first.
+P4-R53 remains the destination: automatically selected locations and dynamically generated investigations. No per-site owner approval.
 
-See [Generated investigation prototype](docs/design/GENERATED_INVESTIGATION_PROTOTYPE.md). No generator implementation is included in this planning increment. The unrelated CPU incident is not a blocker; normal performance verification remains required.
+1. Core found-clue marker live check complete. Pending marks across save/reload and subsequent catch-up also passed. Red/blue colours and retention across tool changes also passed; green remains an optional live check; do not repeat passed checks without a relevant change.
+2. Paper-map/known-area label visibility and undiscovered-clue concealment passed owner testing. Map pan/zoom/reopen stability also passed owner testing. Broader road coverage and measured runtime cost remain separate checks.
+3. Retain conservative interrupted-placement behavior until recovery can be proven. Do not treat absent items as safe to respawn.
+4. Manual successive investigations now pass live: evidence from R-208 and R-781, global numbering, map annotations and save/reload coexist correctly. Automatic case progression remains the next integration milestone.
+5. P4-R64: include richer narrative descriptions and physically varied evidence in the next playable test: keys, diaries, notebooks and newspaper clippings, with further conspiracy-related evidence selected for coherent story roles. See [next playable milestone](docs/management/NEXT_PLAYABLE_MILESTONE.md).
 
+Offline hardening includes shared canonical budget accounting, safe marker failure handling, notebook map-status messages and a manual one-command trial entry. It does not replace native-engine acceptance.
 
 ## Historical v0.1 — Dead Air mechanism fixture
 
@@ -107,3 +108,24 @@ Expand only after the generated prototype passes its technical and playtest chec
 
 ## Process rule
 The project may remain “never finished” as a creative philosophy, but every development milestone must have a finishable scope.
+
+## G2 development integration — 2026-09-05
+
+One-case generated placement/Inspect/journal/save-resume path implemented; 52 suite tests plus end-to-end runtime mocks pass. Survival-radius selector verified live previously; actual generated gameplay is pending owner play. See [G2 playable trial](docs/management/G2_PLAYABLE_TRIAL.md) for commands, acceptance and unresolved conservative recovery. No production acceptance or multi-case scheduling is claimed.
+
+## Muldraugh addressing trial — 2026-09-05
+
+Implemented fixed per-save fictional address book, native-known-area map overlay and notebook address presentation. Unit/mocked adapter checks pass; native label visibility, cost, paper-map reveal and ordinary-player navigation await owner run. See [address trial](docs/research/MULDRAUGH_ADDRESS_TRIAL.md). Found-clue markers remain the next increment.
+
+Clue-marker follow-up: P4-R60 requires a qualifying inventory writing tool before adding clue annotations. Preserve discovery/source records without a tool, catch up unmarked known clues when one is acquired, and pause new writing when removed. Existing marks persist. Verify vanilla eligibility during implementation; include Help and save/reload/idempotency checks.
+
+## Clue markers — 2026-09-05
+
+Implemented development trial for discovered generated-clue map marks and writing-tool catch-up. Source capture happens on successful pickups; inspection gates evidence visibility. Tests pass; native new-evidence/tool-loss/save-reload run pending. See [trial](docs/management/CLUE_MARKER_TRIAL.md).
+
+## Next-phase task breakdown
+
+[Next-phase development tasks](docs/management/NEXT_PHASE_TASKS.md) defines NP-01–NP-10, dependencies and phase-exit criteria. Start with live acceptance plus offline interruption tests and performance instrumentation. Natural first-clue discovery, unloaded-location handling and successive cases follow proven recovery contracts. This is a proposed backlog; no pending feature or live gate is marked complete.
+## P4-R64 implementation checkpoint — 2026-09-06
+
+Mixed physical evidence and richer narrative candidate implemented, focused offline checks passed, installed for fresh-save native testing. Seven evidence items per case; four requested physical forms included. See docs/management/MIXED_EVIDENCE_DEVELOPMENT.md. Automatic successive timing remains unimplemented. Current allowance reserve is5% remaining per latest owner instruction.

@@ -143,3 +143,126 @@ The owner directed “I want to follow all your recommendations” after the tak
 ## Initial location sources — 2026-09-05
 
 **P4-R54 — owner nominations plus technical enrichment:** the owner will supply 12 interesting places in Muldraugh. Use those as the prototype's real candidate set, with stable provenance, supplemented/enriched by existing map research as needed. This updates P4-R53's initial research-only catalog assumption, not its automatic-selection goal. Nominations do not establish observed storage or require owner inspection of containers. Synthetic test records remain separate and are ineligible by default. See docs/design/MULDRAUGH_LOCATION_INTAKE.md.
+
+## Investigation reach progression — 2026-09-05
+
+**P4-R55 — new conspiracy range grows with character survival time.** Owner approved these initial playtest defaults to keep early investigations close while the player establishes survival:
+
+| Completed days survived by the character | Maximum radius for newly generated conspiracies |
+|---|---:|
+| 0–3 | 250 tiles |
+| 4–10 | 500 tiles |
+| 11–20 | 1,000 tiles |
+| 21+ | 1,500 tiles |
+
+- Use character survival duration, not real-world time or the world's calendar age. Tier boundaries are 4, 11 and 21 completed days survived.
+- Apply the radius when generating a new case. Existing conspiracies retain their committed locations and facts as time advances.
+- If the allowed area has few suitable buildings, accept less category variety. Never silently expand beyond the early-game limit. Required technical suitability and distinct-site constraints still apply; if no valid case can be formed, defer generation.
+- These values are approved starting defaults, subject to playtesting, not proven travel or difficulty measurements.
+- The current manual T3 probe's explicit radius argument remains a development control; this decision records intended gameplay behavior and does not claim runtime progression is implemented.
+- The radius anchor for later cases (original spawn, current position or another reference) remains an implementation/design choice to resolve separately; this decision approves the distance progression only.
+
+See [Generated investigation prototype](docs/design/GENERATED_INVESTIGATION_PROTOTYPE.md#investigation-reach-progression).
+
+**P4-R55 implementation follow-up:** pure reach policy, `Generator.generateNew` filtering and automatic survival-based T3 default implemented. Boundary/scarcity/restoration tests pass (51 suite tests plus focused probe checks). Live automatic-radius verification and full gameplay integration remain pending; see generator design.
+
+## Nearby clue assistance — 2026-09-05
+
+**P4-R56 — proximity text:** owner requested varied overhead text when one tile from a clue. Implemented five tentative phrases using native Say text, same-floor one-tile proximity including diagonals, only for undiscovered physically present generated documents. Implementation defaults: 60-second global cooldown, one hint per container visit, rearm after moving more than three tiles away. No discovery is granted and no clue facts are revealed. Missing, duplicate or conflicted items remain silent. Tests pass; live display awaits owner check.
+
+## Player-facing location references — 2026-09-05
+
+**P4-R57 — addresses and recognizable place names, not debug coordinates.** Owner identified that ordinary players cannot use coordinate-based document leads. Player-facing generated documents, journal entries and leads must identify destinations through verified place names or real available addresses. Raw coordinates remain internal placement data and development diagnostics only.
+
+- T3 currently supplies room labels and geometry; the current extraction does not establish street names, house numbers or business signage. Do not invent an address or promote a generic office label into a named institution.
+- Prefer a verified place name/address. Where those are unavailable, a grounded landmark/directional description may provide a fallback only if it distinguishes the destination sufficiently for normal play. Generic descriptions shared by several nearby buildings are not a solved lead.
+- Naming requires provenance and must remain consistent across all documents referencing the same location. Technical IDs and exact container coordinates stay separate from presentation.
+- Existing saved case facts/text remain immutable. Any presentation correction for the active prototype must preserve the referenced location and case identity; do not silently regenerate the case or rewrite canonical evidence.
+- The current coordinate-heavy G2 prose is an acknowledged prototype defect. A naming/resolution layer and owner navigation check are required before ordinary-player playability can be accepted. This decision records the requirement; no real-address database or naming implementation is claimed.
+
+## Town addressing baseline and player Help — 2026-09-05
+
+**P4-R58 — stable town baselines with player-visible addressing rules.** Owner approved using Main Street and/or First Street as town numbering baselines where suitable, and a fixed named alternative baseline where they are absent or unsuitable. The selected baseline must be documented for each town and explained in player Help. Do not infer that every town has those streets from the preliminary spawn-proximity check.
+
+- Implement the agreed fictional mod address system: fixed town baselines, increasing block ranges away from the baseline, hundred-number ranges for successive defined street blocks, odd/even numbers on opposite sides, stable building addresses independent of case seed and candidate selection. Detached sheds/garages share their main property's address where that relationship is established.
+- Adopt the previously researched Louisville parity as the mod convention: north side odd/south side even on east-west roads; east side odd/west side even on north-south roads. Curved roads and ambiguous frontage need explicit deterministic rules before assignment.
+- This supersedes P4-R57's prohibition on fictional house numbers only for the explicitly labelled, consistent mod addressing system. Do not claim these are real-world or original vanilla addresses. Street names continue to require map provenance.
+- Numbers must be visible to ordinary players at buildings or on their map; a number in a document alone is insufficient. Help must explain how to read them and identify the chosen baseline for supported towns.
+- Town baseline choices, full building/frontage indexing and visible address display remain to be implemented. The current Help describes this as planned, rather than pretending numbered buildings already exist. Existing case identities and discoveries remain unchanged.
+
+## Discovery markers and knowledge-limited house labels — 2026-09-05
+
+**P4-R59 — map annotations follow player knowledge.** Owner requests a map marker for each found clue at its finding location, plus house-number labels only for buildings already exposed by the game's map knowledge. Reading a town map should allow labels throughout the area that map actually reveals.
+
+- Capture the actual finding/source location; do not substitute the player's later reading position. Do not automatically mark all placement targets or disclose unfound evidence. Where original finding location is unavailable, do not invent it.
+- Clue markers and journal knowledge persist after dropping the physical item and across save/reload. Repeated inspection does not duplicate markers. Multiple clues at one location remain individually identifiable without unreadable stacked labels.
+- Assign house addresses independently of exploration and conspiracy selection; reveal their labels according to native map knowledge. House labels do not reveal clue presence.
+- Follow the area actually revealed by opening/reading a paper map, not merely possessing an item named Muldraugh Map. Do not reveal additional terrain or buildings to make numbering easier. Player annotations must be preserved.
+- Installed ISMap:initMapData calls MapUtils.revealKnownArea, which uses WorldMapVisited:setKnownInSquares for the map's bounds. Map symbol APIs are present. Exact known-area read/masking granularity and annotation persistence still require implementation and live verification; these capabilities are not accepted from source inspection alone.
+- This is an approved requirement, not a claim that house numbering or map annotations are already implemented. P4-R58 baseline/address assignment work remains prerequisite for house labels.
+
+## Writing tools gate clue-map annotations — 2026-09-05
+
+**P4-R60 — record knowledge immediately; annotate the map only with a writing tool.** Owner requires automatic clue markers to depend on a suitable pen/pencil in the player's inventory. Implementation may follow with the clue-marker increment; this is not implemented in the address trial.
+
+- Journal discovery and captured actual finding location persist independently of writing-tool possession. Existing map marks remain when the tool is removed.
+- Without a qualifying tool, queue known clues for map annotation; never lose or relocate their original finding positions.
+- On acquiring a qualifying tool, catch up all known, unmarked clues with valid recorded finding locations. Removing the tool pauses further writing; acquiring one again resumes the backlog.
+- Catch-up is idempotent across repeated inventory changes and save/reload. No duplicate markers and no disclosure of undiscovered clues. Missing historical finding locations are not guessed from the current player position.
+- Match the installed vanilla game's writing-tool eligibility/inventory handling after source verification; do not assume an exhaustive item list yet. Use bounded updates rather than continuous full inventory/world scans.
+- This requirement concerns clue annotations. Knowledge-limited house-address labels remain map information governed by P4-R59.
+- Explain the writing-tool requirement and deferred catch-up in player Help when implemented.
+
+## Economical task delegation — 2026-09-05
+
+**P4-R61 — owner-approved focused worker strategy.** Primary handles PM, integration and difficult bugs; routine independent work goes to one short-context worker at a time, normally Terra Low (Luna for simpler scopes). Higher Astra effort is reserved for demanding reviews; Astra Low is preferred for routine primary work when explicitly set through the app. Do not claim self-reconfiguration. Delegate compact scopes without full-history forks, share authoritative project files, test once at the proper level, and review before integration. All tasks consume the shared allowance; no guaranteed savings. See AGENTS.md for operating instructions. Owner authorized recording and immediately applying this strategy.
+
+
+## Successive investigations and story tone — 2026-09-05
+
+**P4-R62 — owner accepted all three offered recommendations.** Later investigations use the player's current position at creation as their reach anchor. Availability uses a minimum in-game time gap and a small concurrent-case cap, without requiring completion of a previous case. Authored conspiracies keep a grounded, ambiguous cover-up tone. Existing cases keep their committed anchors, reach, places and facts.
+
+The owner accepted the policy directions, not specific numerical gap/cap values or individual draft prose. Offline prototypes may take explicit tunable policy inputs; do not claim an unoffered number is owner-approved. Retention must not silently erase learned evidence. Native integration and individual new story drafts retain their existing review/playtest gates.
+
+## Pre-1.0 save compatibility — 2026-09-06
+
+**P4-R63 — no backwards compatibility obligation before version 1.0.** Owner explicitly removes old-save compatibility from the design requirements until the mod reaches 1.0. Breaking data/schema changes may require a fresh save. Do not build or retain fallback readers, upgrade adapters, migrations or compatibility tests solely to support saves created by older mod versions. Prefer one current authoritative schema and simpler current-build paths.
+
+This supersedes earlier requirements to preserve cross-version generated saves or retain a legacy canonical fallback in the successive-case design. Historical work and its test evidence remain history; existing code need not be ripped out merely to record this policy, but subsequent storage changes may remove the compatibility scaffolding. Cross-version preservation is no longer a delivery gate.
+
+Save/reload integrity within the current supported build, failed-write protection, immutable evidence within an ongoing supported save, validation, bounded save budgets and duplicate prevention still apply. State plainly when a build requires a fresh save. Do not silently reset, erase or reinterpret user saves. This decision is not authorization to delete saves, and does not itself define the eventual 1.0 compatibility contract.
+
+## Development allowance reserve update — 2026-09-06
+Owner lowers the reserve from 30% to 25% weekly allowance remaining. Checkpoint and stop development at 75% used. This overrides previous reserve thresholds in task handoffs; economical sequential development continues. No authorization to consume reset credits or resume paused automations.
+## Richer story and varied physical evidence — 2026-09-06
+
+**P4-R64 — owner requests the next playable expansion.** Evidence descriptions must be more substantive: explain what was found, add story and context, and offer what the survivor could infer. Keep observations separate from tentative interpretation; preserve grounded ambiguity and avoid spoilers from undiscovered evidence. This extends prose and content, not authoritative inference of an unproven conspiracy.
+
+The next playable test must include keys, diaries, notebooks and newspaper clippings, expanding beyond dispatch copies/files toward further conspiracy-related evidence. Use distinct appropriate physical item forms and story roles; maintain established inspection, discovery/source capture, notebook and map-marker behavior. Proposed additional forms are photos, receipts, annotated maps, letters, logs and recordings, subject to verified engine support and story usefulness. Working locks or audio playback are not automatically promised by adding keys or recordings. Implementation/testing plan: docs/management/NEXT_PLAYABLE_MILESTONE.md. These are requirements, not a claim of completed development.
+
+## Development allowance reserve update — 2026-09-06, latest
+Owner now sets the stop threshold to 5% weekly allowance remaining (95% used), superseding the previous 25% reserve and all earlier thresholds. Continue economical sequential development and checkpoint at this threshold. No reset credits or paused automation use is authorized.
+
+## Corpse identities and observed cards — 2026-09-06
+
+**P4-R65 — owner-approved identity/story direction.** For the first conspiracy, a story may assign a spawned character an occupation independently of clothing; an electrician need not wear work clothes. Assigned occupation is authored world data, not a claim that a probe discovered a reliable native occupation. Commit story facts consistently; do not overwrite established case facts when sampling characters again.
+
+Corpses are candidate locations for planting conspiracy evidence and can provide the opening discovery. Track/revalidate suitable loaded corpse candidates internally before any future placement; no automatic journal revelation from candidate enumeration. The current known probe candidate is at10792,10287,0 (descriptor name Shauna Strickland); this is an encounter location, not a home address or proof of card ownership. Corpse placement itself remains a separate implementation slice.
+
+Generate a journal observation when the player actually sees an ID or credit card on a corpse or inside an opened container, including a wallet. Seeing a closed wallet or merely approaching a corpse does not reveal the cards inside it. No pickup or right-click is required if the card is visibly listed. Record only information exposed by the observed item and its source; a card's name does not by itself establish the corpse's identity. Reopening, transferring and save/reload must not duplicate the same observation. Hidden descriptor names/occupations and unopened nested contents must not leak into journal knowledge. Current-build validation and shared save budget still apply.
+
+## Automatic start and named tickets — 2026-09-06
+
+**P4-R66 — owner requests automatic successive investigations now.** The first investigation's opening evidence must be placed inside the house the player currently occupies, not a random nearby building. If indoors/eligible storage is unavailable, wait rather than silently choosing another building. Later cases appear automatically near the player's current position under P4-R62 timing/reach/cap policy; no console commands required for the gameplay flow. Keep learned cases intact and persist timing with case creation. Numeric test pacing remains a configurable implementation choice, not a previously approved owner number.
+
+Owner notes parking and speeding tickets also carry names associated with zombies/corpses. Include visible named tickets as identity-document observations under P4-R65's same knowledge gate; capture displayed labels, not unseen descriptor facts. Installed item scripts verify Base.ParkingTicket and Base.SpeedingTicket; actual owner-name behavior remains subject to native item testing.
+
+Owner adds business cards as another possible name source. Installed literature.txt declares Base.BusinessCard, Base.BusinessCard_Personal and Base.BusinessCard_Nolans. Include these in visible-document observations; the card label is evidence of what was seen, not automatic proof of the corpse's name or profession.
+
+Owner requests native-like notebook window memory: remember placement/size and whether left open or closed. Implement per-save player UI preferences, including active Journal/Evidence tab. Capture layout while open, restore after runtime readiness, and do not carry another save's window state across loads.
+
+**P4-R67 — spread clues across containers.** Owner rejects discovering several investigation clues together in one container. Newly generated investigations assign each clue to a different physical container, retaining the required first-house opening. If there are insufficient suitable containers, defer creation instead of silently stacking clues. Already committed placements are not reshuffled or duplicated. Native acceptance remains required.
+
+**P4-R68 — variable evidence and local people.** Owner explicitly rejects seven fixed clues and fixed evidence types. Earlier object examples were suggestions, not a mandatory checklist. Audit installed game objects for mystery roles and actual usable mechanics; choose evidence count/types around each coherent mystery, required connections and available placements. No new numerical min/max approved yet. The three/four building split is an implementation limitation to remove with this change, not a design requirement.
+
+Nearby zombie/corpse names and occupations should participate in generated mysteries. Reuse available existing names; occupations may be authored consistently per P4-R65 where native profession is default/unknown. Keep chosen world facts stable and reveal them only through observed evidence. Clues may begin without a known person and acquire inferred connections later. Owner example: unnamed clue in101 Main St; later a key found on a named zombie actually opens that house, providing a connection from person to place and earlier clue. Record observed key provenance, verified key/lock relationship, and derived interpretation separately. Access supports association, not necessarily residence, ownership or authorship. Preserve original clue text and discovery context; add new journal interpretation rather than retrospectively inventing a name on the original object. Implement/test functioning native key relationship before claiming it works.

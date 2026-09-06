@@ -1,0 +1,7 @@
+[CF-G2] Generated case active. Take a document, then right-click Inspect Investigation Document.
+[CF-G2] DEV first clue container: 20, 0, floor 0. No discoveries granted.
+[CF-G2] Document placed or reconciled.
+[CF-G2] Document placed or reconciled.
+[CF-G2] Generated case active. Take a document, then right-click Inspect Investigation Document.
+[CF-G2] Generated case active. Take a document, then right-click Inspect Investigation Document.
+PASS G2 mock: loaded storage -> generated case -> 3 placed notes -> owned Inspect -> saved discovery -> resume without reroll/duplication -> duplicate conflict
