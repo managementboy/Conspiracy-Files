@@ -5,8 +5,8 @@ function D.run()
     if active then return false,"diagnostic running" end
     if not getDebug or not getDebug() or (isClient and isClient()) or (isServer and isServer()) then return false,"debug single player required" end
     local wrapper=ModData.get("ConspiracyFiles.Generated.G2")
-    local active=wrapper and require("ConspiracyFiles/Generated/SuccessiveCases").current(wrapper)
-    local root=active and active.canonical
+    local current=wrapper and require("ConspiracyFiles/Generated/SuccessiveCases").current(wrapper)
+    local root=current and current.canonical
     if not root or not root.case then return false,"no generated case" end
     local function log(s) print("[CF-G2-DIAG] "..s) end
     local player=getPlayer()

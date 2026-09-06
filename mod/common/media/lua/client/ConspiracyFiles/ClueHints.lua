@@ -8,6 +8,10 @@ ConspiracyFiles.ClueHints=H
 local phrases={"Is this a clue?","Something here seems worth a look.","Could this mean something?",
     "Maybe I should check that.","That might be worth reading."}
 local visits,nextPoll,lastHint,phrase={},0,-60000,0
+-- Hints are a silent speech bubble; without a log line a missed hint and an
+-- unfired hint look identical.  Report each outcome once per approach.
+local reported={}
+local function log(s) print("[CF-G2-HINT] "..tostring(s)) end
 local pending
 local function near(p,t,d)
     return math.floor(p:getZ())==t.z and math.abs(math.floor(p:getX())-t.x)<=d and math.abs(math.floor(p:getY())-t.y)<=d
@@ -32,17 +36,30 @@ local function step()
     if pending then
         local task=pending
         local a=eligible(task.root,task.id)
-        if not a or not near(p,a.target,1) or World.resolve(a.target)~=task.container then pending=nil; return end
+        if not a or not near(p,a.target,1) or World.resolve(a.target)~=task.container then
+            pending=nil
+            if not reported[task.key] then reported[task.key]={target=task.target}; log("abandoned "..task.key.." - moved away or container changed") end
+            return
+        end
         local started=now
         for _=1,24 do
             task.steps=task.steps+1
-            if task.steps>512 then pending=nil; return end -- unknown if too large; stay silent
+            if task.steps>512 then
+                pending=nil
+                if not reported[task.key] then reported[task.key]={target=task.target}; log("gave up at "..task.key.." - container too large to scan") end
+                return -- unknown if too large; stay silent
+            end
             if task.scan() then
                 pending=nil
                 if task.count==1 and now-lastHint>=60000 and not visits[task.key] then
                     phrase=phrase%#phrases+1
                     p:Say(phrases[phrase])
                     visits[task.key]=a.target; lastHint=now
+                    log("said \""..phrases[phrase].."\" at "..task.key)
+                elseif not reported[task.key] then
+                    reported[task.key]={target=task.target}
+                    log("suppressed at "..task.key.." matches="..tostring(task.count)..
+                        " sinceLastHintMs="..(now-lastHint).." alreadyVisited="..tostring(visits[task.key]~=nil))
                 end
                 return
             end
@@ -53,6 +70,7 @@ local function step()
     if now<nextPoll then return end
     nextPoll=now+500
     for key,t in pairs(visits) do if not near(p,t,3) then visits[key]=nil end end
+    for key,r in pairs(reported) do if not near(p,r.target,3) then reported[key]=nil end end
     if now-lastHint<60000 then return end
     for _,root in ipairs(roots) do for _,doc in ipairs(root.case.documents) do
         local a=eligible(root,doc.id)
@@ -61,7 +79,7 @@ local function step()
             local key=t.x..":"..t.y..":"..t.z..":"..t.objectIndex..":"..t.containerIndex
             local c=not visits[key] and World.resolve(t)
             if c then
-                local task={root=root,id=doc.id,key=key,container=c,steps=0}
+                local task={root=root,id=doc.id,key=key,target=t,container=c,steps=0}
                 task.scan=World.count(c,a.physicalToken,function(n) task.count=n end)
                 pending=task; return
             end
@@ -70,6 +88,7 @@ local function step()
 end
 local handler
 function H.stop() if handler then Events.OnTick.Remove(handler) end; pending=nil end
+function H.state() return {pending=pending~=nil,visits=visits,reported=reported,lastHint=lastHint} end
 handler=function()
     local ok,why=pcall(step)
     if not ok then H.stop(); print("[CF-G2-HINT] disabled: "..tostring(why)) end
