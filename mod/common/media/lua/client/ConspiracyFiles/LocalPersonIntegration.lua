@@ -195,6 +195,39 @@ function P.tick()
     end)
     if not ok then print("[CF-PERSON] Deferred: "..tostring(why)) end
 end
+-- Called after vanilla confirms an inventory transfer. It records only the
+-- source of a wallet itself; its contents remain unread until their rows are
+-- visibly displayed by the normal inventory observer.
+function P.observeTransfer(action, item, source, destination)
+    if not supported() or action.character~=getPlayer() or read(item,"getContainer")~=destination then return end
+    local wallet=read(item,"getInventory")
+    if not wallet then return end
+    local sourceBody=read(source,"getParent")
+    local destinationBody=read(destination,"getParent")
+    local md=read(item,"getModData")
+    if type(md)~="table" then return end
+    if sourceBody and instanceof(sourceBody,"IsoDeadBody") then
+        local id=read(item,"getID")
+        if type(id)~="number" or id==0 or id~=id or id%1~=0 or math.abs(id)>=9007199254740992 then return end
+        local token="corpse-wallet:"..tostring(id)
+        local bodyMD=read(sourceBody,"getModData")
+        if type(bodyMD)~="table" or (md.cfObservedSource and md.cfObservedSource~=token)
+            or (bodyMD.cfObservedSource and bodyMD.cfObservedSource~=token) then return end
+        md.cfObservedSource=token
+        bodyMD.cfObservedSource=token
+        return
+    end
+    if not (destinationBody and instanceof(destinationBody,"IsoDeadBody")) then return end
+    local token=md.cfObservedSource
+    if type(token)~="string" or #token==0 or #token>160 then return end
+    for _,root in ipairs(cases()) do
+        local record=state().records[root.case.caseId]
+        local building,buildingId,keyId=buildingFor(root)
+        if record and record.sourceToken==token and building and record.buildingId==buildingId and record.keyId==keyId then
+            place(root,record,destinationBody,building)
+        end
+    end
+end
 local function heldKey(inventory,keyId)
     local key=read(inventory,"haveThisKeyId",keyId)
     local md=read(key,"getModData")

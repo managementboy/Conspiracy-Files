@@ -25,12 +25,27 @@ function H.installDoor()
         end
     end
 end
+function H.installTransfer()
+    if H.transferInstalled then return end
+    local ok=pcall(require,"TimedActions/ISInventoryTransferAction")
+    if not ok or not ISInventoryTransferAction or type(ISInventoryTransferAction.perform)~="function" then return end
+    local original=ISInventoryTransferAction.perform
+    ISInventoryTransferAction.perform=function(action,...)
+        local item,source,destination=action.item,action.srcContainer,action.destContainer
+        local result=original(action,...)
+        pcall(Integration.observeTransfer,action,item,source,destination)
+        return result
+    end
+    H.transferInstalled=true
+end
 if Events and not H.installed then
     if Events.OnTick then Events.OnTick.Add(Integration.tick) end
     if Events.OnGameStart then Events.OnGameStart.Add(function()
         Integration.reset()
         H.installDoor()
+        H.installTransfer()
     end) end
+    H.installTransfer()
     H.installed=true
 end
 return H

@@ -101,4 +101,20 @@ reset();P.reset()
 local loose=item('Base.IDcard',55,'ID Card: Other')
 local floor={};loose.container=floor;P.see(loose,floor);tick()
 assert(db['ConspiracyFiles.LocalPeople']==nil and adds==0)
+-- The transfer hook establishes corpse provenance before the wallet can be
+-- opened. The ID is still observed only after the player opens that wallet.
+reset();P.reset()
+local transferred=item('Base.Wallet',77,'Wallet')
+local transferredInventory={getContainingItem=function() return transferred end}
+transferred.getInventory=function() return transferredInventory end
+transferred.container=playerInv
+P.observeTransfer({character=player},transferred,container,playerInv)
+assert(transferred:getModData().cfObservedSource=='corpse-wallet:77')
+local transferredID=item('Base.IDcard',78,'ID Card: Transfer Owner')
+transferredID.container=transferredInventory
+P.see(transferredID,transferredInventory);tick()
+assert(db['ConspiracyFiles.LocalPeople'].canonical.records.case.status=='pending' and adds==0)
+transferred.container=container
+P.observeTransfer({character=player},transferred,playerInv,container)
+assert(adds==1 and db['ConspiracyFiles.LocalPeople'].canonical.records.case.status=='placed')
 print('PASS local person integration: real reducers/journal, key placement, reverse discovery, replay, budget, interrupted intent, hidden wallet gate')
