@@ -51,10 +51,14 @@ function M.record(root,kind,reference,at)
     local ok,why=M.validate(root); if not ok then return nil,false,why end
     if not KINDS[kind] or not ref(reference) or not finite(at) or at<0 then return nil,false,"invalid discovery" end
     local staged=M.empty(); staged.nextSeq=root.nextSeq
+    local duplicate=false
     for i,e in ipairs(root.events) do
         staged.events[i]=copyEvent(e)
-        if e.ref==reference then return staged,false end
+        if e.ref==reference then duplicate=true end
     end
+    -- Copy the whole ledger before answering: an early duplicate must still
+    -- hand back a complete replacement, never a truncated one.
+    if duplicate then return staged,false end
     if #staged.events>=M.MAX then return staged,false,"ledger capacity exceeded" end
     staged.events[#staged.events+1]={seq=root.nextSeq,at=at,kind=kind,ref=reference}
     staged.nextSeq=root.nextSeq+1

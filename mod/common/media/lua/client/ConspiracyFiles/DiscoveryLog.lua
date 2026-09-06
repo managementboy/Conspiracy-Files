@@ -36,6 +36,8 @@ function D.record(kind,reference)
         if not Budget.check("discoveries",{canonical=staged}) then return false end
         local store=ModData.getOrCreate(TAG)
         store.canonical=staged
+        local event=staged.events[#staged.events]
+        print("[CF-LEDGER] #"..event.seq.." "..event.kind.." "..event.ref.." at hour "..string.format("%.2f",event.at))
         return true
     end)
     if not ok then print("[CF-LEDGER] Discovery not recorded: "..tostring(recorded)); return false end

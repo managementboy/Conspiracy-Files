@@ -16,6 +16,13 @@ assert(#e.events==0 and #a.events==1,"record never mutates its input")
 local same,again=L.record(b,"identity","identity:Base.IDcard:7",99)
 assert(same and not again and #same.events==2 and same.events[2].at==10)
 
+-- A duplicate anywhere in the ledger still returns the complete ledger.
+local long=L.empty()
+for i=1,5 do long=assert(L.record(long,"evidence","doc-"..i,i)) end
+local whole,repeated=L.record(long,"evidence","doc-1",50)
+assert(not repeated and #whole.events==5 and whole.nextSeq==6 and whole.events[5].ref=="doc-5")
+assert(L.validate(whole))
+
 -- Invalid input is refused.
 for _,bad in ipairs({{"guess","doc-2",1},{"evidence","",1},{"evidence","doc-2",-1},{"evidence","doc-2",0/0},{"evidence",{},1}}) do
     assert(not L.record(b,bad[1],bad[2],bad[3]))
