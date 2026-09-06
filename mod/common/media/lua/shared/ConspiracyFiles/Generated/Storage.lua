@@ -4,7 +4,8 @@ local V=require("ConspiracyFiles/Validator")
 local W=require("ConspiracyFiles/WorldAccess")
 local M={}
 local kinds={desk=true,counter=true,shelves=true,filingcabinet=true,locker=true}
-function M.scan(result,done)
+function M.scan(result,done,reachable)
+    reachable=reachable or function(x,y,z) return z==0 end
     local catalog,why=N.fromResult(result); if not catalog then return nil,why end
     local sites,rects={},{}
     for _,site in ipairs(catalog.locations) do sites[site.id]=site end
@@ -44,7 +45,11 @@ function M.scan(result,done)
         if not o or not o.getContainerCount or ci>=o:getContainerCount() then oi=oi+1; ci=0; return false end
         local c=o:getContainerByIndex(ci)
         local sprite=o:getSprite(); local name=sprite and sprite:getName()
-        if c and name and kinds[c:getType()] then
+        -- Non-ground candidates must be proven reachable (Connectivity, wired
+        -- through ReachabilityAdapter) before they can ever become a site's
+        -- target; an unproven basement tile is treated exactly like no
+        -- container being there at all, never placed on a guess.
+        if c and name and kinds[c:getType()] and (r.z==0 or reachable(x,y,r.z)) then
             local target={x=x,y=y,z=r.z,objectIndex=oi,containerIndex=ci,containerType=c:getType(),sprite=name}
             local key=x..":"..y..":"..r.z..":"..oi..":"..ci
             if W.resolve(target)==c and not seen[key] then

@@ -14,11 +14,14 @@ function N.fromResult(result)
             catalog.locations[#catalog.locations+1]={id=id,areaId=id,
                 name="Building at "..tostring(row.x)..", "..tostring(row.y),
                 mapId=result.map,buildLine=result.gameVersion,
-                -- Session.target forces every clue in a site onto bounds.z, so
-                -- taking the building minimum sent 100% of a basemented
-                -- building's clues underground - into rooms nothing verifies
-                -- are walkable. Ground level until connectivity is checked.
-                bounds={x1=row.x,y1=row.y,x2=row.x2,y2=row.y2,z=row.minLevel<0 and 0 or row.minLevel},
+                -- Session.target forces every clue in a site onto bounds.z, so a
+                -- raw building minimum alone would send every clue in a basemented
+                -- building underground on a guess. Generated/Storage.scan gates any
+                -- candidate below bounds.z==0 on a proven ConspiracyFiles/Connectivity
+                -- search (see docs/research/B42_RUNTIME_PASSABILITY.md); an unreachable
+                -- basement never becomes a site's target, so the raw minimum is safe
+                -- to report here.
+                bounds={x1=row.x,y1=row.y,x2=row.x2,y2=row.y2,z=row.minLevel},
                 source={kind="map-research",reference="T3-nearby-2 runtime metadata; room labels advisory"},
                 paperStorage="unknown",containerTypes={},excluded=false}
         end

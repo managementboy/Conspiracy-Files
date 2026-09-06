@@ -8,6 +8,7 @@ local Scheduler=require("ConspiracyFiles/Scheduler")
 local Budget=require("ConspiracyFiles/SaveBudget")
 local StaleClue=require("ConspiracyFiles/StaleClue")
 local Visited=require("ConspiracyFiles/VisitedBuildingLog")
+local Reachability=require("ConspiracyFiles/ReachabilityAdapter")
 require("ConspiracyFiles/DiscoveryLog")
 ConspiracyFiles=ConspiracyFiles or {}
 local R=ConspiracyFiles.GeneratedRuntime or {}
@@ -130,7 +131,25 @@ local function firstCase(catalog,seed,options,context,house,candidates)
     end
     return nil,"first house and partner lack containers for this generated evidence set"
 end
+-- A basement candidate only ever becomes usable once ConspiracyFiles/
+-- Connectivity, fed by ReachabilityAdapter, proves the exact square
+-- reachable from the player's current square (provably a place the player
+-- can stand). This runs as its own bounded "reachability" scheduler job,
+-- ahead of "storage", so Storage.scan's gate always sees a real answer
+-- (proven reachable) rather than a guess -- a site with no basement rows,
+-- or no live anchor square, skips straight to the scan exactly as before.
+local function withReachability(result,startStorage)
+    local sites=Reachability.basementSites(result)
+    local p=getPlayer()
+    local anchorSquare=#sites>0 and p and p.getSquare and p:getSquare()
+    if not anchorSquare then startStorage(function() return false end); return end
+    local cache={}
+    scheduler.enqueue("reachability","preparation",Reachability.reachabilityJob(sites,anchorSquare,cache,function()
+        startStorage(Reachability.predicate(cache))
+    end))
+end
 local function prepare(result,seed,later,house)
+  withReachability(result,function(reachable)
     local scan,why=Storage.scan(result,function(catalog,targets,candidates)
         local p=getPlayer()
         local used={}; for _,root in ipairs(Cases.sessions(wrapper) or {}) do for _,site in ipairs(root.case.locations) do used[site.id]=true end end
@@ -170,9 +189,10 @@ local function prepare(result,seed,later,house)
         openAll()
         local first=case.documents[1]; local t=targets[first.locationId]
         log("DEV first clue container: "..t.x..", "..t.y..", floor "..t.z..". No discoveries granted.")
-    end)
+    end,reachable)
     if not scan then preparing=false; log(why); return end
     scheduler.enqueue("storage","preparation",scan)
+  end)
 end
 function R.start(seed,options)
     require("ConspiracyFiles/GeneratedMenu")
