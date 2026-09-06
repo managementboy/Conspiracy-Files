@@ -12,11 +12,32 @@ local cardTypes={['Base.IDcard']=true,['Base.IDcard_Male']=true,['Base.IDcard_Fe
     ['Base.IDcard_Stolen']=true,['Base.CreditCard']=true,['Base.CreditCard_Stolen']=true,
     ['Base.BusinessCard']=true,['Base.BusinessCard_Personal']=true,
     ['Base.ParkingTicket']=true,['Base.SpeedingTicket']=true}
+-- The person/key chain had a single print, on its error path, so a silent
+-- failure and a chain that simply never triggered were indistinguishable.
+-- Journal.observe reports "recorded" only for a genuinely new fact, which
+-- keeps these lines off the 30-tick poll.
+local function log(message) print("[CF-PERSON] "..tostring(message)) end
+local function noteFact(fact,description)
+    local accepted,reason=Journal.observe(fact)
+    if accepted and reason=="recorded" then log(description) end
+    return accepted,reason
+end
 local function read(object,method,...)
     if not object then return nil end
     local args={...}
     local ok,value=pcall(function() return object[method] and object[method](object,unpack(args)) end)
     if ok then return value end
+end
+-- Observed occupation only. PZ exposes it through the body descriptor; see
+-- IdentityProbe, which verified getCharacterProfession on Build 42.20.4.
+local function occupationOf(body)
+    local descriptor=read(body,"getDescriptor")
+    local profession=read(descriptor,"getCharacterProfession")
+    local name=profession and read(profession,"getName")
+    if type(name)~="string" then return nil end
+    name=name:gsub("[%c]"," "):sub(1,60)
+    if not name:find("%S") then return nil end
+    return name
 end
 local function supported()
     local rt=ConspiracyFiles.GeneratedRuntime
@@ -124,6 +145,7 @@ local function place(root,record,body,building)
     if count>0 then save(assert(Runtime.reconcile(state(),record.caseId,count,true)));return end
     local key=assert(Runtime.createKey(building,record))
     assert(container:AddItem(key),"key placement failed")
+    log("key placed on body for case="..record.caseId.." keyId="..tostring(record.keyId))
     save(assert(Runtime.reconcile(state(),record.caseId,1,true)))
 end
 local function observe(entry)
@@ -147,8 +169,8 @@ local function observe(entry)
     if md.cfLocalPersonCase then
         local record=current.records[md.cfLocalPersonCase]
         if record and record.status~="conflict" and record.sourceToken==entry.token and record.keyToken==md.cfLocalPersonToken then
-            assert(Journal.observe({kind="keySource",id=record.keyToken,sourceToken=entry.token,
-                keyToken=record.keyToken,keyId=record.keyId}))
+            assert(noteFact({kind="keySource",id=record.keyToken,sourceToken=entry.token,
+                keyToken=record.keyToken,keyId=record.keyId},"keySource key="..record.keyToken))
         end
         return
     end
@@ -160,12 +182,16 @@ local function observe(entry)
         local record=current.records[id]
         local building,buildingId,keyId=buildingFor(root)
         if not record and building and type(keyId)=="number" and keyId>=0 then
+            local occupation=entry.body and occupationOf(entry.body) or nil
             local staged=Runtime.bindVisible(current,{caseId=id,buildingId=buildingId,sourceToken=entry.token,
-                name=name,keyToken="person-key:"..id,keyId=keyId})
-            if staged then save(staged);current=state();record=current.records[id] end
+                name=name,occupation=occupation,keyToken="person-key:"..id,keyId=keyId})
+            if staged then save(staged);current=state();record=current.records[id]
+                log("bound case="..id.." name="..name.." building="..buildingId.." keyId="..tostring(keyId)..
+                    " occupation="..(occupation or Runtime.UNRECORDED_OCCUPATION)) end
         end
         if record and record.sourceToken==entry.token and record.observedName==name then
-            assert(Journal.observe({kind="nameDocument",id="identity:"..tostring(entry.id),sourceToken=entry.token,name=name}))
+            assert(noteFact({kind="nameDocument",id="identity:"..tostring(entry.id),sourceToken=entry.token,name=name},
+                "nameDocument name="..name))
             if entry.body and building and record.buildingId==buildingId and record.keyId==keyId then
                 place(root,record,entry.body,building)
             end
@@ -180,7 +206,8 @@ function P.known()
     for _,root in ipairs(roots) do
         local first=root.case.documents[1]
         if known[first.id] then
-            assert(Journal.observe({kind="anonymousClue",id=first.id,buildingId=first.locationId:gsub("^t3:","")}))
+            assert(noteFact({kind="anonymousClue",id=first.id,buildingId=first.locationId:gsub("^t3:","")},
+                "anonymousClue clue="..first.id.." building="..first.locationId))
         end
     end
 end
@@ -270,7 +297,7 @@ function P.observeDoor(action)
     local fact=Keys.observeInteractedMatch({interaction="door",interactionToken=doorId,
         player=action.character,interactedDoor=door,heldKey=key,buildingId=record.buildingId,
         doorId=doorId,keyToken=record.keyToken,factId="match:"..record.keyToken..":"..doorId})
-    if fact then assert(Journal.observe(fact));P.known() end
+    if fact then assert(noteFact(fact,"keyDoorMatch door="..doorId.." building="..record.buildingId));P.known() end
 end
 function P.reset() queue={};queued={};ticks=0 end
 Runtime.see=P.see
