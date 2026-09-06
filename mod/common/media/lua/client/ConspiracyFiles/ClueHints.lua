@@ -29,9 +29,6 @@ end
 local function step()
     if not enabled() then pending=nil; return end
     local p=getPlayer(); if not p then pending=nil; return end
-    local wrapper=Cases.current(ModData.get("ConspiracyFiles.Generated.G2"))
-    local roots=wrapper and Cases.sessions(wrapper)
-    if not roots or #roots==0 then pending=nil; return end
     local now=getTimeInMillis()
     if pending then
         local task=pending
@@ -69,6 +66,11 @@ local function step()
     end
     if now<nextPoll then return end
     nextPoll=now+500
+    -- Cases.current fully revalidates the canonical case, so it must stay
+    -- behind the poll gate rather than running once per rendered frame.
+    local wrapper=Cases.current(ModData.get("ConspiracyFiles.Generated.G2"))
+    local roots=wrapper and Cases.sessions(wrapper)
+    if not roots or #roots==0 then return end
     for key,t in pairs(visits) do if not near(p,t,3) then visits[key]=nil end end
     for key,r in pairs(reported) do if not near(p,r.target,3) then reported[key]=nil end end
     if now-lastHint<60000 then return end
