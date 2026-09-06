@@ -7,6 +7,14 @@ local H={}
 ConspiracyFiles.ClueHints=H
 local phrases={"Is this a clue?","Something here seems worth a look.","Could this mean something?",
     "Maybe I should check that.","That might be worth reading."}
+-- Owner decision 2026-09-06: widen the trigger, tolerate a step or two
+-- during the scan, and announce on three channels.  FORGET must exceed
+-- HINT so leaving and returning is what re-arms a location.
+local HINT_RADIUS,SCAN_RADIUS,FORGET_RADIUS=2,3,4
+-- UI channel only.  playUISound never reaches the world sound manager, so
+-- it cannot attract zombies.  UIAchievement was rejected: it maps to the
+-- FMOD event Game/LevelUp and would read as a skill level-up.
+local HINT_SOUND="UIObjectMenuEnter"
 local visits,nextPoll,lastHint,phrase={},0,-60000,0
 -- Hints are a silent speech bubble; without a log line a missed hint and an
 -- unfired hint look identical.  Report each outcome once per approach.
@@ -26,6 +34,17 @@ local function enabled()
     return getDebug and getDebug() and not (isClient and isClient()) and not (isServer and isServer())
         and not ConspiracyFiles.T11Mode and not ConspiracyFiles.T12Mode
 end
+local function announce(p,text)
+    p:Say(text)
+    local halo=HaloTextHelper and HaloTextHelper.addText and pcall(HaloTextHelper.addText,p,text) or false
+    local audible=false
+    if getSoundManager then
+        local ok,manager=pcall(getSoundManager)
+        if ok and manager and manager.playUISound then audible=pcall(manager.playUISound,manager,HINT_SOUND) end
+    end
+    return halo,audible
+end
+
 local function step()
     if not enabled() then pending=nil; return end
     local p=getPlayer(); if not p then pending=nil; return end
@@ -33,7 +52,7 @@ local function step()
     if pending then
         local task=pending
         local a=eligible(task.root,task.id)
-        if not a or not near(p,a.target,1) or World.resolve(a.target)~=task.container then
+        if not a or not near(p,a.target,SCAN_RADIUS) or World.resolve(a.target)~=task.container then
             pending=nil
             if not reported[task.key] then reported[task.key]={target=task.target}; log("abandoned "..task.key.." - moved away or container changed") end
             return
@@ -50,9 +69,9 @@ local function step()
                 pending=nil
                 if task.count==1 and now-lastHint>=60000 and not visits[task.key] then
                     phrase=phrase%#phrases+1
-                    p:Say(phrases[phrase])
+                    local halo,audible=announce(p,phrases[phrase])
                     visits[task.key]=a.target; lastHint=now
-                    log("said \""..phrases[phrase].."\" at "..task.key)
+                    log("said \""..phrases[phrase].."\" at "..task.key.." halo="..tostring(halo).." sound="..tostring(audible))
                 elseif not reported[task.key] then
                     reported[task.key]={target=task.target}
                     log("suppressed at "..task.key.." matches="..tostring(task.count)..
@@ -71,12 +90,12 @@ local function step()
     local wrapper=Cases.current(ModData.get("ConspiracyFiles.Generated.G2"))
     local roots=wrapper and Cases.sessions(wrapper)
     if not roots or #roots==0 then return end
-    for key,t in pairs(visits) do if not near(p,t,3) then visits[key]=nil end end
-    for key,r in pairs(reported) do if not near(p,r.target,3) then reported[key]=nil end end
+    for key,t in pairs(visits) do if not near(p,t,FORGET_RADIUS) then visits[key]=nil end end
+    for key,r in pairs(reported) do if not near(p,r.target,FORGET_RADIUS) then reported[key]=nil end end
     if now-lastHint<60000 then return end
     for _,root in ipairs(roots) do for _,doc in ipairs(root.case.documents) do
         local a=eligible(root,doc.id)
-        if a and near(p,a.target,1) then
+        if a and near(p,a.target,HINT_RADIUS) then
             local t=a.target
             local key=t.x..":"..t.y..":"..t.z..":"..t.objectIndex..":"..t.containerIndex
             local c=not visits[key] and World.resolve(t)

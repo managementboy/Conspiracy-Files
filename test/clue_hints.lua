@@ -29,5 +29,21 @@ x=20; tick(); x=0; tick(); tick(); assert(#says==2 and says[1]~=says[2],'re-entr
 x=20; tick(); x=0; tick(); tick(); assert(#says==2,'global cooldown')
 x=20; clock=clock+61000; tick(); root.known={'d'}; x=0; tick(); tick(); assert(#says==2,'known clue silent')
 root.known={}; tick(); x=20; tick(); assert(#says==2,'moved away during count')
+-- Owner decision 2026-09-06: trigger at two tiles and announce on three
+-- channels.  Halo text and the UI sound must stay optional, so the module is
+-- exercised both without the globals (above) and with them (here).
+local halos,uiSounds={},{}
+HaloTextHelper={addText=function(_,t) halos[#halos+1]=t end}
+getSoundManager=function() return {playUISound=function(_,name) uiSounds[#uiSounds+1]=name end} end
+x=20; y=0; clock=clock+61000; tick()
+x=4; tick(); tick(); assert(#says==2,'three tiles is outside the trigger radius')
+x=3; y=1; tick(); tick()
+assert(#says==3,'two tiles triggers a hint')
+assert(#halos==1 and halos[1]==says[3],'halo text repeats the spoken phrase')
+assert(uiSounds[1]=='UIObjectMenuEnter','UI-channel sound only; never a world emitter')
+-- A step off the container keeps the scan alive instead of cancelling it.
+x=20; clock=clock+61000; tick(); x=3; tick(); x=2; tick(); tick()
+assert(#says==4 and #halos==2,'a step during the scan does not abandon the hint')
+
 H.stop(); assert(not callback)
 print('PASS proximity hints: floor, distance, actual token count, duplicates, cooldown, re-entry, phrase variation, discovery and stale-position guards')
