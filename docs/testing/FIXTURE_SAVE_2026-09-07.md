@@ -11,7 +11,8 @@ this file records what makes it worth keeping.
 - **Working copies:** `wallet key and corpse - Kopie`, `- Kopie (2)`, `(3)`,
   `(4)`, made from the master as testing proceeds. They are NOT
   interchangeable - the key and wallet are looted in some. Ask which is
-  current rather than assuming; on 2026-09-07 it was `Kopie (4)`.
+  current rather than assuming. Current on 2026-09-07: `Kopie (5)`, taken
+  fresh from the master for DEV-0.8.9-proxinv testing.
 - **Superseded:** `2026-09-07_11-51-30`, the original session save. Key taken
   and wallet opened during the afternoon; no longer a clean starting point.
 - **Mod build in play:** `DEV-0.8.6-discovery-ledger`, repo at `e1d2035`
