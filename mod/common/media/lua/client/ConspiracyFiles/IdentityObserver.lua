@@ -39,18 +39,35 @@ local function clean(value,limit)
  if not value:find("%S") then return nil end
  return value
 end
+-- Seven silent early returns made "the pane is open and nothing happens"
+-- undiagnosable. Report the gate that stopped a pane, throttled, and only
+-- for gates that are actually surprising -- the player's own inventory and
+-- invisible panes are the overwhelmingly common benign cases and stay quiet.
+local lastGateLog=0
+local function gate(reason)
+ local now=(getTimeInMillis and getTimeInMillis()) or 0
+ if now-lastGateLog>=2000 then lastGateLog=now; print("[CF-IDENTITY] pane skipped: "..tostring(reason)) end
+ return nil
+end
 function I.afterRender(pane)
- if not supported() or #queue>=16 or pane.mode~="details" or pane.dragStarted then return end
- if read(pane,"isReallyVisible")~=true or not pane.parent or pane.parent.isCollapsed then return end
+ if not supported() then return gate("observer unsupported (debug/MP/runtime gate)") end
+ if #queue>=16 then return gate("queue full") end
+ if pane.mode~="details" then return gate("pane mode is "..tostring(pane.mode)..", expected details") end
+ if pane.dragStarted then return end
+ if read(pane,"isReallyVisible")~=true then return end
+ if not pane.parent or pane.parent.isCollapsed then return end
  if read(pane.parent,"isReallyVisible")~=true then return end
  local player=getSpecificPlayer(pane.player)
  if not player or player~=getPlayer() then return end
  local container=pane.inventory
- if not container or container==read(player,"getInventory") then return end
+ if not container then return end
+ if container==read(player,"getInventory") then return end
  local owner=read(container,"getParent")
  local bag=read(container,"getContainingItem")
  local corpse=owner and instanceof(owner,"IsoDeadBody")
- if not corpse and not bag and (not owner or read(container,"getType")=="floor") then return end
+ if not corpse and not bag and (not owner or read(container,"getType")=="floor") then
+  return gate("container is neither corpse nor bag; type="..tostring(read(container,"getType")))
+ end
  local label=bag and clean(read(bag,"getDisplayName"),120) or (corpse and "corpse" or clean(read(container,"getType"),120))
  if not label then return end
  local h,header,scroll,height=pane.itemHgt,pane.headerHgt,read(pane,"getYScroll"),read(pane,"getHeight")
