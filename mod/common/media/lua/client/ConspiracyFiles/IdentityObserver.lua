@@ -66,7 +66,9 @@ local function describeContainer(c,player)
  end
  return nil
 end
+I.sawRender=false
 function I.afterRender(pane)
+ if not I.sawRender then I.sawRender=true; print("[CF-IDENTITY] afterRender reached for the first time") end
  if not supported() then return gate("observer unsupported (debug/MP/runtime gate)") end
  if #queue>=16 then return gate("queue full") end
  if pane.mode~="details" then return gate("pane mode is "..tostring(pane.mode)..", expected details") end
@@ -89,12 +91,16 @@ function I.afterRender(pane)
  -- At most sixteen fully visible rows per pane/frame; rotate across tall panes.
  local last=math.min(#rows,math.floor((height-header-scroll)/h))
  if last<first then return end
+ -- Count what the loop actually accepted. An accepted pane that records
+ -- nothing is otherwise indistinguishable from a pane never rendered.
+ local considered,accepted=0,0
  local start=pane.cfIdentityCursor or first
  if start<first or start>last then start=first end
  for n=0,math.min(15,last-first) do
   local index=first+(start-first+n)%(last-first+1)
   local row=rows[index]
   local item=instanceof(row,"InventoryItem") and row or (type(row)=="table" and row.items and row.items[1])
+  considered=considered+1
   local fullType=read(item,"getFullType")
   local people=ConspiracyFiles.LocalPersonRuntime
   local itemContainer=read(item,"getContainer")
@@ -118,10 +124,14 @@ function I.afterRender(pane)
     if not queued[key] and not seen[key] and #queue<16 then
      local record={id=key,fullType=fullType,label=name,source=source,container=label,
       x=read(player,"getX"),y=read(player,"getY"),z=read(player,"getZ"),observedAt=read(getGameTime(),"getWorldAgeHours")}
-     queue[#queue+1]=record;queued[key]=true
+     queue[#queue+1]=record;queued[key]=true;accepted=accepted+1
     end
    end
   end
+ end
+ if accepted==0 and considered>0 then
+  gate("pane accepted but recorded nothing: rows="..#rows.." first="..first.." last="..last..
+   " considered="..considered.." queue="..#queue.." containerType="..tostring(read(container,"getType")))
  end
  pane.cfIdentityCursor=first+(start-first+16)%(last-first+1)
 end
@@ -149,6 +159,8 @@ function I.tick()
  local ok,err=pcall(I.flush)
  if not ok then print("[CF-IDENTITY] Observation deferred: "..tostring(err)) end
 end
+print("[CF-IDENTITY] load: renderHookInstalled="..tostring(I.originalRender~=nil)..
+ " tickHandler="..tostring(I.tickHandler~=nil))
 if not I.originalRender then
  I.originalRender=ISInventoryPane.render
  ISInventoryPane.render=function(self,...)
