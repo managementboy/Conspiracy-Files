@@ -13,10 +13,15 @@ isServer=function() return false end
 getTimeInMillis=function() return clock end
 local haloNotes={}
 getPlayer=function() return {getX=function() return x end,getY=function() return y end,getZ=function() return z end,
- Say=function(_,s) says[#says+1]=s end,
+ -- Engine doubles must demand a receiver, exactly as Kahlua does. A permissive
+ -- table accepts obj.method(x) and hides the call-form bug that shipped three
+ -- defects on 2026-09-07 (77d46ef, d747a25, 5f12fa1).
+ Say=function(self,s) assert(self~=nil,"Say needs a receiver: player:Say(x)"); says[#says+1]=s end,
  -- setHaloNote is the only halo API that takes a duration; record it so the
  -- test proves a duration is passed, not merely that some text appeared.
- setHaloNote=function(_,text,r,g,b,duration) haloNotes[#haloNotes+1]={text=text,duration=duration} end} end
+ setHaloNote=function(self,text,r,g,b,duration)
+  assert(self~=nil,"setHaloNote needs a receiver: player:setHaloNote(...)")
+  haloNotes[#haloNotes+1]={text=text,duration=duration} end} end
 Events={OnTick={Add=function(f) assert(not callback); callback=f end,Remove=function(f) if callback==f then callback=nil end end}}
 local container={}
 package.preload["ConspiracyFiles/WorldAccess"]=function() return {

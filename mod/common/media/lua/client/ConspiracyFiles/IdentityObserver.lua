@@ -184,7 +184,24 @@ if Events and Events.OnTick and not I.tickHandler then
 end
 function I.reset() queue={};queued={};seen={};elapsed=0 end
 if Events and Events.OnGameStart and not I.startHandler then
- I.startHandler=function() I.reset() end
+ -- Seven modules are reached only by PZ executing their file, with nothing
+ -- requiring them. Two are load-bearing: AutomaticInvestigations makes cases
+ -- appear without console commands, and LocalPersonHooks installs the door
+ -- and transfer hooks the whole person/key strand depends on. PlayerVoice did
+ -- the same thing and silently never loaded (86ade2c), so this reports the
+ -- truth at game start instead of leaving it to be discovered mid-test.
+ local function reportModules()
+  local expected={"AutomaticInvestigations","LocalPersonHooks","LocalPersonRuntime",
+   "GeneratedRuntime","DiscoveryLog","PlayerVoice","PersonNameLog","ClueHints",
+   "ClueMarkers","IdentityObserver","NotebookUI","ObservedKeyLeads"}
+  local missing={}
+  for _,name in ipairs(expected) do
+   if ConspiracyFiles[name]==nil then missing[#missing+1]=name end
+  end
+  if #missing==0 then print("[CF-SELFCHECK] all "..#expected.." expected modules loaded")
+  else print("[CF-SELFCHECK] NOT LOADED: "..table.concat(missing,", ")) end
+ end
+ I.startHandler=function() I.reset(); pcall(reportModules) end
  Events.OnGameStart.Add(I.startHandler)
 end
 return I

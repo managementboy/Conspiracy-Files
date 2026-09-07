@@ -384,7 +384,7 @@ end)()
 ConspiracyFiles=ConspiracyFiles or {}
 ConspiracyFiles.NotebookUI=ConspiracyFiles.NotebookUI or {}
 local UI=ConspiracyFiles.NotebookUI
-UI.VERSION="DEV-0.8.11-named-docs"
+UI.VERSION="DEV-0.8.12-selfcheck"
 local function safe(fn)
     local rt=ConspiracyFiles.Runtime
     if rt and not rt.disabled then return rt.boundary("ui",fn) end
