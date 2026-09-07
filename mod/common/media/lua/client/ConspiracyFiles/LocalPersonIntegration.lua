@@ -8,6 +8,8 @@ local Cases=require("ConspiracyFiles/Generated/SuccessiveCases")
 local P={}
 local TAG="ConspiracyFiles.LocalPeople"
 local queue,queued,ticks={},{},0
+local attempts={}
+local MAX_ATTEMPTS=3
 local cardTypes={['Base.IDcard']=true,['Base.IDcard_Male']=true,['Base.IDcard_Female']=true,
     ['Base.IDcard_Stolen']=true,['Base.CreditCard']=true,['Base.CreditCard_Stolen']=true,
     ['Base.BusinessCard']=true,['Base.BusinessCard_Personal']=true,
@@ -226,12 +228,29 @@ function P.tick()
     if not supported() then return end
     ticks=ticks+1
     if ticks%30~=0 then return end
-    local ok,why=pcall(function()
-        local entry=table.remove(queue,1)
-        if entry then queued[entry.item]=nil;observe(entry) end
-        P.known()
-    end)
-    if not ok then print("[CF-PERSON] Deferred: "..tostring(why)) end
+    local entry=table.remove(queue,1)
+    if entry then
+        local ok,why=pcall(observe,entry)
+        if ok then
+            queued[entry.item]=nil; attempts[entry.item]=nil
+        else
+            -- Clearing the guard before observing let P.see re-queue a failing
+            -- entry on the very next render, so one permanent failure retried
+            -- forever. Give it a few tries, then leave the guard set so the
+            -- item is dropped once instead of spamming every render.
+            local n=(attempts[entry.item] or 0)+1
+            attempts[entry.item]=n
+            if n>=MAX_ATTEMPTS then
+                print("[CF-PERSON] Dropped after "..n.." attempts: "..tostring(why))
+            else
+                queued[entry.item]=nil
+                print("[CF-PERSON] Deferred ("..n.."/"..MAX_ATTEMPTS.."): "..tostring(why))
+            end
+        end
+    end
+    -- A failed observation must not stop derived clue facts being recorded.
+    local ok,why=pcall(P.known)
+    if not ok then print("[CF-PERSON] Deferred known: "..tostring(why)) end
 end
 -- Called after vanilla confirms an inventory transfer. It records only the
 -- source of a wallet itself; its contents remain unread until their rows are
@@ -310,6 +329,6 @@ function P.observeDoor(action)
         doorId=doorId,keyToken=record.keyToken,factId="match:"..record.keyToken..":"..doorId})
     if fact then assert(noteFact(fact,"keyDoorMatch door="..doorId.." building="..record.buildingId));P.known() end
 end
-function P.reset() queue={};queued={};ticks=0 end
+function P.reset() queue={};queued={};attempts={};ticks=0 end
 Runtime.see=P.see
 return P
