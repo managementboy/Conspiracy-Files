@@ -3,6 +3,47 @@
 Status: **generated G2 playable loop and core found-clue map markers have owner-observed live passes (2026-09-06)**. Dynamic generation and automatic location selection remain the destination (P4-R53); the installed development runtime is still one case per save. Offline expansion work is not yet live acceptance or a production release.
 Target: Project Zomboid Build 42; T1/T2/T3/T4/T5/T7/T8/T9/T10 verified stable Build **42.20.4**, revision **b0bbce05d5**, Steam build ID **24909800**, with the limitations recorded in their reports. Other capability claims remain subject to their named spikes/research.
 
+## MILESTONE — person/key/place connection proven live, 2026-09-07
+
+**DEV-0.8.9-proxinv.** The full four-fact chain closed in play for the first
+time, deriving a connection and rendering it in the notebook as entry #6:
+
+    [CF-PERSON] keyDoorMatch door=10714:9986:0:2 building=10977700185374755
+    [CF-LEDGER] #6 connection connection:...document-1;...identity:2063428190;
+                ...person-key:...;...match:... at hour 9.71
+    [CF-VOICE]  said "That's worth writing down." halo=true sound=true
+
+The connection id carries the whole inference: the clue found, the ID naming
+Norman Valle, the key found with his body, and the door that key opened. Four
+independently observed facts joined into one interpretation.
+
+Notebook #6 reads: "A key observed with a document naming Norman Valle matches
+the building where I found Dispatch copy / R-340. This suggests a connection
+between those belongings and that place. It does not establish who lived there
+or wrote the clue. The original clue remains unchanged." Cautious register held
+under the most tempting possible circumstances.
+
+This satisfies the owner's original requirement that a key found on a named
+corpse can connect that person to an otherwise unnamed clue location.
+
+**Every link fired:** bound, nameDocument, key placed, keySource,
+keyDoorMatch, derived connection, ledger entry, voice line.
+
+**Still unproven:** the observed vanilla-key path (`observedKeyDoor`) and its
+Set B named voice line, which needs the corpse's real residence key used on
+its own house. And wallet identity observation - see below, now the priority.
+
+**Priority correction from the owner:** most corpses carry their ID inside a
+wallet, not loose on the body. The fixture corpse is unusual in having both.
+Wallet observation is therefore the identity mechanic, not an edge case, and
+it is not currently confirmed working. A second corpse (ID: Alejandra Bunn)
+was on screen and recorded nothing. See docs/design/CORPSE_KEYS_AND_IDS.md.
+
+**Tooling caution:** reloadLuaFile on IdentityObserver leaves it half-attached
+- the reloaded chunk gets a fresh queue while the installed hooks may not be
+rebound. Diagnose observation problems from a clean restart, never after a
+reload of that module.
+
 ## Live session 2 — 2026-09-07 afternoon, DEV-0.8.8-voice
 
 **The person/key strand ran end to end for the first time.** Previously only
