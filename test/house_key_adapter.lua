@@ -1,5 +1,6 @@
 package.path="mod/common/media/lua/client/?.lua;"..package.path
 local calls=0;instanceof=function(o,t)return o.class==t end
+instanceItem=nil
 InventoryItemFactory={CreateItem=function(t)calls=calls+1;local id=-1;return {getFullType=function()return t end,getContainer=function()return nil end,getWorldItem=function()return nil end,setKeyId=function(_,v)id=v end,getKeyId=function()return id end}end}
 local A=require("ConspiracyFiles.HouseKeyAdapter");assert(calls==0,"load side effect")
 local factory = InventoryItemFactory.CreateItem
@@ -59,3 +60,20 @@ assert(A.observeInteractedMatch(inRing)==nil)
 local b={getDef=function()return {getKeyId=function()return 7 end}end};local k,w=A.createForBuilding(b);assert(w=="created-detached"and k:getKeyId()==7 and calls==1);assert(A.createForBuilding({getDef=function()error("boom")end})==nil)
 local held={getKeyId=function()return 7 end};local door={class="IsoDoor",getKeyId=function()return 7 end,checkKeyId=function()error("must not call")end,getSquare=function()return {getBuilding=function()return {getDef=function()return {getKeyId=function()return 7 end,getIDString=function()return "B"end}end}end}end};local p={getInventory=function()return {contains=function(_,x)return x==held end}end}
 local f,e=A.observeInteractedMatch({interaction="door",interactionToken="click",player=p,interactedDoor=door,heldKey=held,buildingId="B",doorId="D",keyToken="physical-1",factId="M"});assert(e=="matching-key-observed"and f.keyToken=="physical-1");assert(A.observeInteractedMatch({interaction="door",interactionToken="x",player=p,interactedDoor=door,heldKey=held,buildingId="wrong",doorId="D",keyToken="p",factId="M"})==nil);assert(A.observeInteractedMatch({interaction="door",interactionToken="",player=p,interactedDoor=door,heldKey=held,buildingId="B",doorId="D",keyToken="p",factId="M"})==nil);door.getKeyId=function()error("native")end;assert(A.observeInteractedMatch({interaction="door",interactionToken="x",player=p,interactedDoor=door,heldKey=held,buildingId="B",doorId="D",keyToken="p",factId="M"})==nil);print("house_key_adapter: ok")
+
+-- Live failure 2026-09-07: InventoryItemFactory was unavailable in game.
+-- instanceItem is the vanilla factory and must be preferred when present.
+local usedInstanceItem=0
+instanceItem=function(t)
+ usedInstanceItem=usedInstanceItem+1
+ local id=-1
+ return {getFullType=function() return t end,getContainer=function() return nil end,
+  getWorldItem=function() return nil end,setKeyId=function(_,v) id=v end,getKeyId=function() return id end}
+end
+local viaInstance=assert(A.createForBuilding({getDef=function() return {getKeyId=function() return 9 end} end}))
+assert(usedInstanceItem==1,"instanceItem is preferred over InventoryItemFactory")
+assert(viaInstance:getKeyId()==9,"the key still takes the building's id")
+instanceItem=nil
+InventoryItemFactory=nil
+assert(not A.createForBuilding({getDef=function() return {getKeyId=function() return 9 end} end}),
+ "no factory at all is refused, not crashed")
