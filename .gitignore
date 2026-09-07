@@ -24,3 +24,7 @@ dist/
 out/
 tmp/
 coverage/
+
+# Kahlua CLI runner: game-owned stdlib copied in locally, never committed
+stdlib.lua
+tools/kahlua/*.class
