@@ -3,6 +3,7 @@ require "ISUI/ISInventoryPane"
 local Model=require("ConspiracyFiles/IdentityObservations")
 local Budget=require("ConspiracyFiles/SaveBudget")
 local Log=require("ConspiracyFiles/DiscoveryLog")
+local Outfits=require("ConspiracyFiles/BodyOutfitLog")
 ConspiracyFiles=ConspiracyFiles or {}
 local I=ConspiracyFiles.IdentityObserver or {}
 ConspiracyFiles.IdentityObserver=I
@@ -30,7 +31,7 @@ local function root()
  return Model.empty()
 end
 function I.rows()
- local ok,result=pcall(function() local r=root();if Model.validate(r) then return Model.rows(r) end;return {} end)
+ local ok,result=pcall(function() local r=root();if Model.validate(r) then return Model.rows(r,Outfits.outfitFor) end;return {} end)
  return ok and result or {}
 end
 local function clean(value,limit)
@@ -58,12 +59,21 @@ end
 local function describeContainer(c,player)
  if not c or c==read(player,"getInventory") then return nil end
  local owner=read(c,"getParent")
- if owner and instanceof(owner,"IsoDeadBody") then return "corpse","corpse" end
+ if owner and instanceof(owner,"IsoDeadBody") then return "corpse","corpse",owner end
  local bag=read(c,"getContainingItem")
  if bag then
   local name=clean(read(bag,"getDisplayName"),120)
   if name then return name,"container" end
  end
+ return nil
+end
+-- The corpse's own provenance token, if LocalPersonIntegration has already
+-- stamped it (see LocalPersonIntegration.remember). Never fabricated here:
+-- an unstamped body just means the outfit line waits for a later render,
+-- same as any other eventually-consistent observation in this mod.
+local function corpseToken(owner)
+ local md=read(owner,"getModData")
+ if type(md)=="table" and type(md.cfObservedSource)=="string" then return md.cfObservedSource end
  return nil
 end
 I.sawRender=false
@@ -108,7 +118,7 @@ function I.afterRender(pane)
   local fullType=read(item,"getFullType")
   local people=ConspiracyFiles.LocalPersonRuntime
   local itemContainer=read(item,"getContainer")
-  local label,source=describeContainer(itemContainer,player)
+  local label,source,corpse=describeContainer(itemContainer,player)
   if people and people.see and fullType and read(item,"isHidden")~=true and itemContainer then
    pcall(people.see,item,itemContainer)
   end
@@ -133,7 +143,8 @@ function I.afterRender(pane)
     local key=fullType..":"..tostring(id)
     if not queued[key] and not seen[key] and #queue<16 then
      local record={id=key,fullType=fullType,label=name,source=source,container=label,
-      x=read(player,"getX"),y=read(player,"getY"),z=read(player,"getZ"),observedAt=read(getGameTime(),"getWorldAgeHours")}
+      x=read(player,"getX"),y=read(player,"getY"),z=read(player,"getZ"),observedAt=read(getGameTime(),"getWorldAgeHours"),
+      token=source=="corpse" and corpseToken(corpse) or nil}
      queue[#queue+1]=record;queued[key]=true;accepted=accepted+1
     end
    end

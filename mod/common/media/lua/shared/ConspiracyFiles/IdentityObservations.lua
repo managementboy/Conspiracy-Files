@@ -2,7 +2,7 @@ local V=require("ConspiracyFiles/Validator")
 local M={MAX=128}
 local types={['Base.IDcard']=true,['Base.IDcard_Stolen']=true,['Base.IDcard_Female']=true,
  ['Base.IDcard_Male']=true,['Base.CreditCard']=true,['Base.CreditCard_Stolen']=true,['Base.ParkingTicket']=true,['Base.SpeedingTicket']=true,['Base.BusinessCard']=true,['Base.BusinessCard_Personal']=true,['Base.BusinessCard_Nolans']=true,['Base.Passport']=true,['Base.PressID']=true,['Base.Badge']=true,['Base.Diary1']=true,['Base.Diary2']=true}
-local fields={id=true,fullType=true,label=true,source=true,container=true,x=true,y=true,z=true,observedAt=true}
+local fields={id=true,fullType=true,label=true,source=true,container=true,x=true,y=true,z=true,observedAt=true,token=true}
 local function finite(v) return type(v)=="number" and v==v and v~=math.huge and v~=-math.huge end
 local function text(v,n) return type(v)=="string" and #v<=n and v:find("%S") and not v:find("[%c]") end
 local function copyRecord(r) local o={};for k in pairs(fields) do o[k]=r[k] end;return o end
@@ -13,6 +13,7 @@ local function validRecord(r)
   and #r.id>#r.fullType+1 and text(r.label,180) and (r.source=="corpse" or r.source=="container")
   and text(r.container,120) and finite(r.x) and finite(r.y) and finite(r.z)
   and finite(r.observedAt) and r.observedAt>=0
+  and (r.token==nil or text(r.token,160))
 end
 function M.empty() return {schema=1,records={}} end
 function M.validate(root)
@@ -40,13 +41,27 @@ function M.add(root,r)
  ok,e=M.validate(candidate);if not ok then return nil,false,e end
  return candidate,true
 end
-function M.rows(root)
+-- outfitFor is an optional function(token) -> outfit name or nil, supplied
+-- by the client (ConspiracyFiles.BodyOutfitLog.outfitFor). This module stays
+-- a pure domain with zero PZ dependencies: it only ever calls what it was
+-- given, and only when this record actually carries a body's token. A
+-- missing outfitFor, a missing token, or an outfit lookup that returns
+-- nothing all mean the same thing here -- say nothing about clothing.
+function M.rows(root,outfitFor)
  if not M.validate(root) then return {} end
  local rows={}
  for i,r in ipairs(root.records) do
   local where=r.source=="corpse" and "among a corpse's belongings" or ("inside "..r.container)
+  local detail="I saw a document labelled \""..r.label.."\" "..where..".\n\nThe name on a document is a lead. It does not establish who owned the container or identify the body."
+  if r.token and outfitFor then
+   local ok,outfit=pcall(outfitFor,r.token)
+   if ok and text(outfit,120) then
+    detail=detail.."\n\nThe body itself wore a "..outfit..". A worn outfit and a labelled document are two separate observations from the same body; this record does not decide which one, if either, describes who the body is."
+   end
+  end
+  detail=detail.."\n\nObserved near "..math.floor(r.x)..", "..math.floor(r.y).." (floor "..r.z..")."
   rows[i]={id="identity:"..r.id,ordinal=i,title="Found "..r.label,summary="Identity document - "..r.source,
-   detailText="I saw a document labelled \""..r.label.."\" "..where..".\n\nThe name on a document is a lead. It does not establish who owned the container or identify the body.\n\nObserved near "..math.floor(r.x)..", "..math.floor(r.y).." (floor "..r.z..")."}
+   detailText=detail}
  end
  return rows
 end

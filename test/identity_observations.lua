@@ -36,3 +36,35 @@ for _,kind in ipairs({'Base.Necklace_DogTag','Base.KeyRing_SecurityPass'}) do
  assert(not M.add(e,rr),'deliberately not observed until the wording generalises: '..kind)
 end
 print('PASS identity observations: owner-named documents accepted, non-documents deliberately excluded')
+
+-- Phase 1 (docs/design/USING_GAME_ASSETS.md): a document found directly on a
+-- corpse can carry that body's provenance token, and the notebook row for it
+-- can mention the outfit BodyOutfitLog observed on the SAME token -- two
+-- independent leads, stated side by side, never resolved.
+local withToken=clone(r);withToken.token='corpse-item:7'
+local tokenRoot=assert(M.add(M.empty(),withToken))
+local outfits={['corpse-item:7']='PoliceStory'}
+local outfitFor=function(token) return outfits[token] end
+local rowsWithOutfit=assert(M.rows(tokenRoot,outfitFor))
+assert(rowsWithOutfit[1].detailText:find('PoliceStory',1,true),'the outfit observed on the same body must appear in its identity row')
+-- The pre-existing wording is untouched when there is nothing to add.
+assert(M.rows(tokenRoot)[1].detailText==M.rows(tokenRoot,nil)[1].detailText)
+assert(not M.rows(tokenRoot,nil)[1].detailText:find('PoliceStory',1,true))
+-- No token on the record: never fabricate a body connection that was not
+-- observed. No outfitFor supplied: the row renders exactly as before.
+local noToken=assert(M.rows(n,outfitFor))
+assert(not noToken[1].detailText:find('PoliceStory',1,true),'a record with no token must never gain an outfit line')
+-- An unknown or unreadable outfit (outfitFor returns nil, or throws) is
+-- silence, never a guess.
+assert(not M.rows(tokenRoot,function() return nil end)[1].detailText:find('wore',1,true))
+assert(not M.rows(tokenRoot,function() error('unreadable') end)[1].detailText:find('wore',1,true))
+-- The added sentence -- and only the added sentence, since the pre-existing
+-- identity wording above it already uses "owned" in its own caution clause
+-- -- asserts nothing about who the body was: it never uses "was",
+-- "worked as" or "owned" to settle the two observations against each other.
+local outfitSentence=assert(rowsWithOutfit[1].detailText:match('The body itself wore.-\n\n'),
+ 'expected an appended outfit sentence')
+for _,forbidden in ipairs({'was','worked as','owned'}) do
+ assert(not outfitSentence:find(forbidden,1,true),'outfit sentence must not assert: found "'..forbidden..'"')
+end
+print('PASS identity observations: outfit observed on the same body is surfaced, never asserted, degrades silently')

@@ -8,6 +8,7 @@ local Cases=require("ConspiracyFiles/Generated/SuccessiveCases")
 local Lead=require("ConspiracyFiles/ObservedKeyLead")
 local LeadAdapter=require("ConspiracyFiles/ObservedKeyAdapter")
 local Names=require("ConspiracyFiles/PersonNameLog")
+local Outfits=require("ConspiracyFiles/BodyOutfitLog")
 local P={}
 local TAG="ConspiracyFiles.LocalPeople"
 local LEAD_TAG="ConspiracyFiles.ObservedKeyLeads"
@@ -42,6 +43,19 @@ local function occupationOf(body)
     local name=profession and read(profession,"getName")
     if type(name)~="string" then return nil end
     name=name:gsub("[%c]"," "):sub(1,60)
+    if not name:find("%S") then return nil end
+    return name
+end
+-- Observed outfit only. IsoDeadBody:getOutfitName() is exactly what vanilla
+-- calls on this type -- see SpawnRateChecker.lua:260
+-- (container:getParent():getOutfitName()), which is the verified reference
+-- for this API. This never reads getPersistentOutfitID: that numeric ID is
+-- not a readable outfit name and is not what the notebook can say to the
+-- player.
+local function outfitOf(body)
+    local name=read(body,"getOutfitName")
+    if type(name)~="string" then return nil end
+    name=name:gsub("[%c]"," "):sub(1,120)
     if not name:find("%S") then return nil end
     return name
 end
@@ -181,6 +195,16 @@ local function remember(entry)
             entry.token=md.cfObservedSource
         end
         md.cfObservedSource=entry.token
+        -- The body's own token is now settled for this observation, so this
+        -- is the one place to record its outfit: exactly one call per
+        -- corpse-observing entry, keyed on the same token as everything
+        -- else about this body. Two adjacent corpses never share a token
+        -- (each token is derived from that specific body/item), so they
+        -- never share an outfit observation either. A missing or unreadable
+        -- outfit degrades silently -- outfitOf returns nil and nothing is
+        -- recorded.
+        local outfit=outfitOf(entry.body)
+        if outfit then Outfits.record(entry.token,outfit) end
     end
     for _,item in ipairs(entry.carried) do
         local md=read(item,"getModData")
