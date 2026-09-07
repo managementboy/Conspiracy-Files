@@ -3,6 +3,48 @@
 Status: **generated G2 playable loop and core found-clue map markers have owner-observed live passes (2026-09-06)**. Dynamic generation and automatic location selection remain the destination (P4-R53); the installed development runtime is still one case per save. Offline expansion work is not yet live acceptance or a production release.
 Target: Project Zomboid Build 42; T1/T2/T3/T4/T5/T7/T8/T9/T10 verified stable Build **42.20.4**, revision **b0bbce05d5**, Steam build ID **24909800**, with the limitations recorded in their reports. Other capability claims remain subject to their named spikes/research.
 
+## Live verification — 2026-09-07
+
+**Discovery-ledger ordering passed owner live testing.** One case, four
+documents plus one identity observation, DEV-0.8.6-discovery-ledger.
+
+Documents were discovered out of generation order (document-1, 3, 4, 2) and
+the notebook rendered them #1-#4 in that true order, then placed the ID card
+at #5 in its real chronological position. Under the previous code identity
+rows were appended after all evidence regardless of when they were found.
+Ledger log and notebook agreed exactly:
+
+    #1 evidence document-1 hour 3.30      notebook #1 Dispatch copy
+    #2 evidence document-3 hour 4.72      notebook #2 File review
+    #3 evidence document-4 hour 5.46      notebook #3 Press clipping
+    #4 evidence document-2 hour 5.58      notebook #4 Receiving copy
+    #5 identity IDcard_Male hour 6.74     notebook #5 Found ID Card
+
+Also observed live: clue hints fired at four separate containers with speech,
+halo text and UI sound, with varied phrasing and correct suppression once a
+container was emptied; map marker capture; `[CF-PERSON] anonymousClue`; and
+the cautious identity wording that refuses to assert who the body was.
+
+The identity was captured from a **loose ID card in the corpse container**,
+with no wallet transfer, confirming the prediction in
+docs/design/CORPSE_KEYS_AND_IDS.md that the wallet flow is a special case
+rather than the normal path.
+
+**Not verified by this run, do not treat as passed:**
+
+- Reachability gating and basement placement. Every target in this case was
+  z=0, and ground level short-circuits before the predicate is consulted.
+- The person/key chain beyond `anonymousClue`. `bound`, `nameDocument` and
+  `key placed` have still never fired.
+- Stale clue relocation, which needs 72 game hours.
+- Notebook window position/open-state across a real quit and reload.
+
+Two defects were found and fixed during the run: engine methods called
+without a receiver in ReachabilityRequest (77d46ef), and a corpse provenance
+race that threw when a body carried both a loose ID and a wallet (a5dc1bf).
+A retry-forever weakness remains in LocalPersonIntegration.tick: a failing
+queue entry is re-queued indefinitely rather than dropped once.
+
 ## Latest persistent handoff — 2026-09-06
 
 **Discovery ledger (DEV-0.8.6-discovery-ledger, installed 2026-09-06):** a single shared chronological ledger `ConspiracyFiles/DiscoveryLedger` (domain) plus `ConspiracyFiles/DiscoveryLog` (ModData, tag `ConspiracyFiles.DiscoveryLedger`) now records every discovery as it happens: generated evidence on inspect, identity documents on observation commit, and derived key/person/building connections after the fact that completes them. Each event carries a stable sequence number and the world-age hour, because several discoveries share one game-time interval. `Window:rows()` orders and numbers both notebook sections from that ledger, so journal numbering follows real discovery order instead of grouping by source. Under P4-R63 no migration was written: existing saves have no ledger, and unledgered rows fall back to their previous source order. Requires a fresh test save. No player save data was altered. Backup of the replaced install: `C:/Users/elkin.fricke/Zomboid/ConspiracyFiles-backups/20260906-210547-discovery-ledger`.
