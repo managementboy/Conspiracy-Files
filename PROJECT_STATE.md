@@ -3,6 +3,46 @@
 Status: **generated G2 playable loop and core found-clue map markers have owner-observed live passes (2026-09-06)**. Dynamic generation and automatic location selection remain the destination (P4-R53); the installed development runtime is still one case per save. Offline expansion work is not yet live acceptance or a production release.
 Target: Project Zomboid Build 42; T1/T2/T3/T4/T5/T7/T8/T9/T10 verified stable Build **42.20.4**, revision **b0bbce05d5**, Steam build ID **24909800**, with the limitations recorded in their reports. Other capability claims remain subject to their named spikes/research.
 
+## Live session 2 — 2026-09-07 afternoon, DEV-0.8.8-voice
+
+**The person/key strand ran end to end for the first time.** Previously only
+`anonymousClue` had ever fired.
+
+    [CF-PERSONNAME] recorded name for token corpse-item:521727268
+    [CF-PERSON] bound ... name=Norman Valle building=10977700185374755
+                keyId=77527912 occupation=unemployed
+    [CF-PERSON] nameDocument name=Norman Valle
+    [CF-LEDGER] #6 identity identity:Base.IDcard_Male:337615145 at hour 10.56
+    [CF-VOICE]  said "That's worth writing down." halo=true sound=true
+
+`occupation=unemployed` is read from the corpse descriptor. The same code that
+morning would have asserted "electrician" for every body.
+
+**Four defects found and fixed during the session:**
+
+- `InventoryItemFactory` is not exposed to mod Lua. Key creation had always
+  been wrong; nothing had ever reached it. Now uses `instanceItem`, the
+  vanilla factory (0d8bbde).
+- Nothing required `PlayerVoice`, so it could never load - the same class as
+  `GeneratedDiagnostic` that morning (86ade2c).
+- The provenance race fix was confirmed working: `adopted corpse provenance`
+  replaced the crash-and-loop, with the retry cap reporting `Deferred (1/3)`.
+- The role/carrier change invalidated every saved case, because `G.validate`
+  re-derives a case to detect tampering. It was reverted to keep the retained
+  fixture loadable (d97f6cc); re-land it with a generator revision bump.
+
+**Open defect:** identity observation requires a click, not merely a visible
+row. See docs/testing/OBSERVER_CLICK_DEFECT.md.
+
+**Still unproven:** the key-door link itself. The session closed before a door
+was opened with the residence key, so `observedKeyDoor`, the connection ledger
+entry and the Set B/C voice line have never fired. Reachability gating,
+basement placement and stale clue relocation also remain untested in play.
+
+**Recurring lesson:** five separate debugging rounds were lost to silent early
+returns. Instrumentation resolved each in minutes. Prefer a throttled log line
+over a silent return in any path the player can observe.
+
 ## Live verification — 2026-09-07
 
 **Discovery-ledger ordering passed owner live testing.** One case, four
