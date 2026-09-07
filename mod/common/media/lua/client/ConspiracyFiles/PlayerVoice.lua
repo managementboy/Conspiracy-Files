@@ -85,9 +85,15 @@ end
 local function log(message) print("[CF-VOICE] "..tostring(message)) end
 local function speak(player,text)
     if not player then log("no player; line not delivered") return false,false end
-    if player.Say then pcall(player.Say,player,text) end
+    -- Call engine methods with colon syntax, the way vanilla does.
+    -- pcall(obj.method, obj, ...) extracts the method first; Kahlua treats that
+    -- differently from a real method call, and pcall then hides any complaint, so
+    -- a true result can mean 'did not throw' rather than 'worked'.
+    if player.Say then pcall(function() player:Say(text) end) end
     local halo=false
-    if player.setHaloNote then halo=pcall(player.setHaloNote,player,text,255,255,255,HALO_DURATION) end
+    if player.setHaloNote then
+        halo=pcall(function() player:setHaloNote(text,255,255,255,HALO_DURATION) end)
+    end
     local audible=false
     if getSoundManager then
         local ok,manager=pcall(getSoundManager)

@@ -45,9 +45,13 @@ local function announce(p,text)
     -- duration. Fall back to HaloTextHelper so a missing method still shows
     -- something rather than silently dropping the visual channel.
     local halo=false
-    if p.setHaloNote then halo=pcall(p.setHaloNote,p,text,255,255,255,HINT_HALO_DURATION) end
+    -- Colon syntax, as vanilla uses it: an extracted method is not the same
+    -- call in Kahlua, and pcall hides the difference.
+    if p.setHaloNote then
+        halo=pcall(function() p:setHaloNote(text,255,255,255,HINT_HALO_DURATION) end)
+    end
     if not halo and HaloTextHelper and HaloTextHelper.addText then
-        halo=pcall(HaloTextHelper.addText,p,text)
+        halo=pcall(function() HaloTextHelper.addText(p,text) end)
     end
     local audible=false
     if getSoundManager then
