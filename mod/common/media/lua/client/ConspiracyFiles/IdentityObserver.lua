@@ -49,6 +49,23 @@ local function gate(reason)
  if now-lastGateLog>=2000 then lastGateLog=now; print("[CF-IDENTITY] pane skipped: "..tostring(reason)) end
  return nil
 end
+-- Build 42's default loot view is a merged proximity container (type
+-- "proxInv") that is neither a corpse nor a bag. Judging the whole pane by
+-- its container therefore switched the observer off in the view players
+-- actually use. Resolve each ROW's own container instead: that fixes the
+-- merged view and keeps provenance honest when two corpses appear in one
+-- list, since each item still reports the body it really came from.
+local function describeContainer(c,player)
+ if not c or c==read(player,"getInventory") then return nil end
+ local owner=read(c,"getParent")
+ if owner and instanceof(owner,"IsoDeadBody") then return "corpse","corpse" end
+ local bag=read(c,"getContainingItem")
+ if bag then
+  local name=clean(read(bag,"getDisplayName"),120)
+  if name then return name,"container" end
+ end
+ return nil
+end
 function I.afterRender(pane)
  if not supported() then return gate("observer unsupported (debug/MP/runtime gate)") end
  if #queue>=16 then return gate("queue full") end
@@ -62,14 +79,8 @@ function I.afterRender(pane)
  local container=pane.inventory
  if not container then return end
  if container==read(player,"getInventory") then return end
- local owner=read(container,"getParent")
- local bag=read(container,"getContainingItem")
- local corpse=owner and instanceof(owner,"IsoDeadBody")
- if not corpse and not bag and (not owner or read(container,"getType")=="floor") then
-  return gate("container is neither corpse nor bag; type="..tostring(read(container,"getType")))
- end
- local label=bag and clean(read(bag,"getDisplayName"),120) or (corpse and "corpse" or clean(read(container,"getType"),120))
- if not label then return end
+ -- Each row is judged on its own container below, so a mixed or merged pane
+ -- contributes exactly the rows that really sit in a corpse or a bag.
  local h,header,scroll,height=pane.itemHgt,pane.headerHgt,read(pane,"getYScroll"),read(pane,"getHeight")
  if type(h)~="number" or h<=0 or type(header)~="number" or type(scroll)~="number" or type(height)~="number" then return end
  local rows=pane.items
@@ -86,8 +97,10 @@ function I.afterRender(pane)
   local item=instanceof(row,"InventoryItem") and row or (type(row)=="table" and row.items and row.items[1])
   local fullType=read(item,"getFullType")
   local people=ConspiracyFiles.LocalPersonRuntime
-  if people and people.see and fullType and read(item,"isHidden")~=true and read(item,"getContainer")==container then
-   pcall(people.see,item,container)
+  local itemContainer=read(item,"getContainer")
+  local label,source=describeContainer(itemContainer,player)
+  if people and people.see and fullType and read(item,"isHidden")~=true and itemContainer then
+   pcall(people.see,item,itemContainer)
   end
   -- A carrier stamped by GeneratedRuntime (cfGeneratedId set in ModData) is
   -- generated-case evidence, not a plain identity document: it already gets
@@ -97,13 +110,13 @@ function I.afterRender(pane)
   -- Base.BusinessCard, Base.ParkingTicket).
   local md=read(item,"getModData")
   local generatedEvidence=type(md)=="table" and md.cfGeneratedId~=nil
-  if types[fullType] and not generatedEvidence and read(item,"isHidden")~=true and read(item,"getContainer")==container then
+  if types[fullType] and not generatedEvidence and read(item,"isHidden")~=true and label then
    local id=read(item,"getID")
    local name=clean(read(item,"getDisplayName"),180)
    if type(id)=="number" and id==id and math.abs(id)<9007199254740992 and id~=0 and name then
     local key=fullType..":"..tostring(id)
     if not queued[key] and not seen[key] and #queue<16 then
-     local record={id=key,fullType=fullType,label=name,source=corpse and "corpse" or "container",container=label,
+     local record={id=key,fullType=fullType,label=name,source=source,container=label,
       x=read(player,"getX"),y=read(player,"getY"),z=read(player,"getZ"),observedAt=read(getGameTime(),"getWorldAgeHours")}
      queue[#queue+1]=record;queued[key]=true
     end

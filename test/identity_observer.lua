@@ -72,4 +72,31 @@ visible.parent.isCollapsed=true; I.afterRender(visible); assert(forwarded==1)
 I.afterRender(pane(playerInv,{card(999,playerInv)})); assert(forwarded==1)
 local hidden=card(998,source); hidden.isHidden=function() return true end
 I.afterRender(pane(source,{hidden})); assert(forwarded==1)
+-- Build 42's default loot view is a merged proximity container: neither a
+-- corpse nor a bag. Judging the pane by its own container switched the
+-- observer off in the view players actually use, which is why nothing was
+-- ever recorded until the owner clicked into a specific container.
+local prox={getParent=function() return nil end,getContainingItem=function() return nil end,
+ getType=function() return 'proxInv' end}
+local function observedTitled(fragment)
+ for _,row in ipairs(I.rows()) do if tostring(row.title):find(fragment,1,true) then return true end end
+ return false
+end
+local inProx=card(4242,source,'ID Card: Prox Vale')
+run(pane(prox,{inProx}))
+assert(observedTitled('Prox Vale'),'a row whose OWN container is a corpse is observed even in a merged pane')
+
+-- A row that really does sit in the proximity container itself, with no
+-- corpse or bag behind it, is refused: provenance is never invented.
+run(pane(prox,{card(4243,prox,'ID Card: Loose Vale')}))
+assert(not observedTitled('Loose Vale'),'a row with no corpse or bag container is refused')
+
+-- The player's own inventory stays excluded even when merged into a pane.
+run(pane(prox,{card(4244,playerInv,'ID Card: Mine Vale')}))
+assert(not observedTitled('Mine Vale'),"the player's own inventory is never observed")
+
+-- A bag inside a merged pane is still a valid source.
+run(pane(prox,{card(4245,wallet,'ID Card: Bag Vale')}))
+assert(observedTitled('Bag Vale'),'a row inside a bag is observed from a merged pane too')
+
 print('PASS IdentityObserver: native wrapper, visibility, nested wallet gate, reload dedup, IDs, clipping, failed writes/budget, bounded queue, MP refusal')
