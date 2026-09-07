@@ -22,10 +22,14 @@ R.MARGIN = 6
 R.MAX_STAIRS = 256
 R.MAX_EDGES = 1024
 
+-- Engine objects are Java-backed: PZ's Kahlua rejects a method invoked
+-- without a receiver ("Expected a method call but got a function call"), so
+-- every call below must use colon syntax. Plain-table mocks accept both
+-- forms, which is exactly how a fully broken version passed its tests once.
 local function walkable(square)
     if not square then return false end
-    if square.isSolid() or square.isSolidTrans() then return false end
-    if not square.TreatAsSolidFloor() then return false end
+    if square:isSolid() or square:isSolidTrans() then return false end
+    if not square:TreatAsSolidFloor() then return false end
     return true
 end
 R.walkable = walkable
@@ -60,7 +64,7 @@ function R.stairLinks(getSquare, box, zLevels)
         for x = box.x1, box.x2 do
             for y = box.y1, box.y2 do
                 local square = getSquare(x, y, z)
-                if square and square.HasStairs and square.HasStairs() then
+                if square and square.HasStairs and square:HasStairs() then
                     for _, dz in ipairs({ 1, -1 }) do
                         local nz = z + dz
                         local linked = false
@@ -105,7 +109,7 @@ function R.wallEdges(getSquare, box, zLevels)
                         if R.inBox(box, nx, ny) then
                             local there = getSquare(nx, ny, z)
                             if walkable(there) then
-                                if here.isBlockedTo(there) or here.isWindowTo(there) then
+                                if here:isBlockedTo(there) or here:isWindowTo(there) then
                                     if #edges >= R.MAX_EDGES then return edges, true end
                                     edges[#edges + 1] = { x1 = x, y1 = y, z1 = z, x2 = nx, y2 = ny, z2 = z }
                                 end

@@ -20,16 +20,26 @@ local function fakeWorld()
         local s=squares[key(x,y,z)]
         if not s then return nil end
         local square={}
-        function square.isSolid() return s.solid end
-        function square.isSolidTrans() return false end
-        function square.TreatAsSolidFloor() return true end
-        function square.HasStairs() return s.stairs end
-        function square.isBlockedTo(other)
+        -- PZ squares are Java-backed and Kahlua REFUSES a method invoked
+        -- without a receiver: "Expected a method call but got a function
+        -- call". A permissive plain-table mock accepts both forms, which is
+        -- how a module whose every engine call was receiver-less passed this
+        -- suite and then threw on the first real square in game. These mocks
+        -- therefore demand the receiver, exactly like the engine.
+        local function receiver(self,name)
+            assert(self==square,name..": engine methods need a receiver; use square:"..name.."(), not square."..name.."()")
+        end
+        function square.isSolid(self) receiver(self,"isSolid") return s.solid end
+        function square.isSolidTrans(self) receiver(self,"isSolidTrans") return false end
+        function square.TreatAsSolidFloor(self) receiver(self,"TreatAsSolidFloor") return true end
+        function square.HasStairs(self) receiver(self,"HasStairs") return s.stairs end
+        function square.isBlockedTo(self,other)
+            receiver(self,"isBlockedTo")
             -- other is another such fake square; identify it by re-deriving
             -- its key isn't possible generically, so tests inject a probe.
             return other and other.__blockedFrom and other.__blockedFrom[square] or false
         end
-        function square.isWindowTo() return false end
+        function square.isWindowTo(self) receiver(self,"isWindowTo") return false end
         square.__x,square.__y,square.__z=x,y,z
         return square
     end
