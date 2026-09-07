@@ -7,6 +7,7 @@ local Budget=require("ConspiracyFiles/SaveBudget")
 local Cases=require("ConspiracyFiles/Generated/SuccessiveCases")
 local Lead=require("ConspiracyFiles/ObservedKeyLead")
 local LeadAdapter=require("ConspiracyFiles/ObservedKeyAdapter")
+local Names=require("ConspiracyFiles/PersonNameLog")
 local P={}
 local TAG="ConspiracyFiles.LocalPeople"
 local LEAD_TAG="ConspiracyFiles.ObservedKeyLeads"
@@ -261,6 +262,11 @@ local function observe(entry)
     if not cardTypes[entry.fullType] or type(entry.label)~="string" then return end
     local name=entry.label:match(":%s*(.+)$")
     if not name or #name>120 or name:find("[%c]") then return end
+    -- Associate this corpse/wallet provenance token with the observed name
+    -- independent of the case/binding system below: PlayerVoice's Set B
+    -- needs this for ANY key-door link, not only ones tied to a generated
+    -- case. Never invents a name -- this is exactly what was parsed above.
+    Names.record(entry.token,name)
     for _,root in ipairs(cases()) do
         local id=root.case.caseId
         local record=current.records[id]
@@ -437,6 +443,12 @@ local function observeDoorLead(inventory,door,keyId)
     saveLead(staged)
     log("observedKeyDoor building="..buildingId.." keyId="..tostring(keyId).." source="..token)
     recordLeadDiscovery(fact)
+    -- Set B/C voice line: the more significant event, so it fires here
+    -- unconditionally rather than through the Set A cooldown gate that
+    -- recordLeadDiscovery's ledger write may just have consumed. Never
+    -- suppressed by a Set A line fired moments earlier.
+    local voice=ConspiracyFiles.PlayerVoice
+    if voice and voice.onKeyDoorLink then pcall(voice.onKeyDoorLink,token) end
 end
 function P.observeDoor(action)
     if not supported() or action.character~=getPlayer() then return end
