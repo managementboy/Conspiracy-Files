@@ -1,6 +1,8 @@
 -- G1: offline generation and save-shaped restoration. Never loaded by the mod.
 local Catalog=require("ConspiracyFiles/Generated/Catalog")
 local V=require("ConspiracyFiles/Validator")
+local K=require("ConspiracyFiles/Generated/EvidenceKinds")
+local Roles=require("ConspiracyFiles/Generated/EvidenceRoles")
 -- Schema two deliberately refuses the earlier fixed-seven case shape.  Before
 -- 1.0 callers must use a fresh save rather than reinterpret an existing case.
 local G={REVISION="g2-variable-evidence-2",SCHEMA=2,MIN_EVIDENCE=3,MAX_EVIDENCE=7}
@@ -54,24 +56,54 @@ local function build(seed,revision,sites)
         "\n\nBelow the formal entry, "..facts.recipient.." has written: 'I am signing for what reached this desk, not for what someone says left theirs. Please retain this wording when making the office copy.' A second signature line is empty.\n\nWHAT IT MIGHT MEAN\nThe writer took care to limit responsibility. That caution could reflect an ordinary dispute between offices, or fear of being blamed for something more serious. Compare the exact claim here with other records rather than treating a signature as proof of the contents."
     documents[3].body="WHAT YOU FOUND\nAn internal review sheet with two staple holes and a torn corner. A pencil tick beside 'complete' has been crossed out rather than erased.\n\n"..documents[3].body..
         "\n\nThe reviewer adds: 'Do not replace the originals with a clean summary. If a supervisor requests a correction, retain the earlier version and record who requested it.' No supervisor's name follows. The bottom of the page has been left open for a reply.\n\nWHAT IT MIGHT MEAN\nSomeone wanted the disagreement preserved. This might be careful record keeping after a clerical error, or an attempt to leave a trail before the records were altered. The sheet raises a question about authority; it does not answer who exercised it."
-    document(4,"Tagged key / "..facts.code,a,
-        "WHAT YOU FOUND\nA small worn key on a wire loop, with a card tag tied through its bow. The tag carries "..facts.code.." and the initials "..facts.sender..". There is no address or lock number. The metal is polished around the grip but dull between the teeth.\n\nON THE TAG\n'Return separately. Do not leave with the driver.' On the reverse, in smaller writing: 'Ask before making another copy.' A crossed-out word is too smeared to read reliably.\n\nWHAT IT MIGHT MEAN\nThe matching reference links this key to the paperwork, but does not identify what it opens. It could belong to an ordinary cupboard, equipment box or unrelated office lock. Keeping it separate suggests someone controlled access; it is not proof that this key secured the shipment. You have no confirmed matching lock.",
-        {people[1].id,a.id},{{target=documents[1].id,kind="recontextualises"}},nil,"key")
-    document(5,"Private diary / "..facts.code,b,
-        "WHAT YOU FOUND\nA small diary with a soft cover and a broken elastic band. Most entries concern shopping, shifts and missed sleep. One page has been folded down beside a reference you recognise: "..facts.code..".\n\nJULY 5, 1993\n'"..facts.sender.." called again. Wanted to know whether I had signed. I asked why the signature mattered more than the answer. There was a long silence, then something about everyone being tired and the office needing to close the file. I told them my copy would say only what I could stand behind.'\n\n'Perhaps I made too much of it. People have been short with each other all week. Still, I kept the carbon instead of putting it with the rubbish.'\n\nWHAT IT MIGHT MEAN\nThis is a private account of pressure to sign, not an independent record of the call. It adds a human reason for the careful wording, while leaving room for exhaustion, misunderstanding or deliberate pressure. Nothing here establishes what was in the case.",
-        {people[1].id,people[2].id,b.id},{{target=documents[2].id,kind="recontextualises"}},nil,"diary")
-    document(6,"Shift notebook / "..facts.code,a,
-        "WHAT YOU FOUND\nA ruled pocket notebook with oil-darkened page edges. Routine meter readings share space with tea orders and a sketch of a loading bay. A short entry uses the same reference, "..facts.code..".\n\nJULY "..facts.dispatchDay..", 1993\n'Late collection. No normal stores entry. Office supplied the reference and said the description would follow. Asked twice. Leave space below.'\n\nThe next three ruled lines are empty. Beneath them: 'If anyone asks, send them to "..facts.organisation..". I can account for the time on this page, not for what was packed before my shift.' No name identifies the driver.\n\nWHAT IT MIGHT MEAN\nThe writer separated what they witnessed from what they were told. The blank lines could be a forgotten update or a deliberately avoided description. This supports asking how the transfer was recorded; it cannot establish the shipment's contents or destination by itself.",
-        {org.id,a.id},{{target=documents[1].id,kind="recontextualises"}},nil,"notebook")
-    document(7,"Press clipping / "..facts.code,b,
-        "WHAT YOU FOUND\nA newspaper folded around a narrow cut-out from its local news column. Someone has underlined the words 'routine maintenance' and pencilled "..facts.code.." in the margin. The article itself does not use that reference.\n\nLOCAL SERVICES NOTICE - JULY 2, 1993\nResidents were advised that service vehicles might visit local facilities outside ordinary hours while scheduled maintenance was completed. A spokesperson described the work as routine and asked that access routes be kept clear. The notice supplied no list of deliveries and no explanation of what equipment would be moved.\n\nWHAT IT MIGHT MEAN\nSomeone associated this public notice with the private reference, but the pencil annotation is their interpretation. Routine maintenance could explain an unusual collection time. It could also offer a convenient explanation for unrelated activity. The clipping cannot tell you which, and its unnamed annotator may have been guessing too.",
-        {b.id},{{target=documents[1].id,kind="recontextualises"}},nil,"clipping")
+    -- Optional roles pick their carrier through EvidenceRoles instead of a
+    -- literal kind string. `key`/`diary`/`notebook`/`clipping` each still
+    -- resolve to their one prose-capable carrier (a role's carrier list of
+    -- one is a genuine, if narrow, selection -- not a hardcoded string in
+    -- Generator itself); `affiliationLead`/`itineraryLead` genuinely choose
+    -- between two card/ticket carriers whose short capacity fits a named
+    -- identifier, which is what makes idcard/creditcard/businesscard/ticket
+    -- reachable at all. See docs/design/EVIDENCE_ROLE_SCHEMA.md.
+    local function carrierFor(roleId,body)
+        local kind=assert(Roles.choose(random,roleId))
+        assert(Roles.fits(roleId,kind,body))
+        return kind
+    end
+    local accessBody="WHAT YOU FOUND\nA small worn key on a wire loop, with a card tag tied through its bow. The tag carries "..facts.code.." and the initials "..facts.sender..". There is no address or lock number. The metal is polished around the grip but dull between the teeth.\n\nON THE TAG\n'Return separately. Do not leave with the driver.' On the reverse, in smaller writing: 'Ask before making another copy.' A crossed-out word is too smeared to read reliably.\n\nWHAT IT MIGHT MEAN\nThe matching reference links this key to the paperwork, but does not identify what it opens. It could belong to an ordinary cupboard, equipment box or unrelated office lock. Keeping it separate suggests someone controlled access; it is not proof that this key secured the shipment. You have no confirmed matching lock."
+    document(4,"Tagged key / "..facts.code,a,accessBody,
+        {people[1].id,a.id},{{target=documents[1].id,kind="recontextualises"}},nil,carrierFor("access",accessBody))
+    local diaryBody="WHAT YOU FOUND\nA small diary with a soft cover and a broken elastic band. Most entries concern shopping, shifts and missed sleep. One page has been folded down beside a reference you recognise: "..facts.code..".\n\nJULY 5, 1993\n'"..facts.sender.." called again. Wanted to know whether I had signed. I asked why the signature mattered more than the answer. There was a long silence, then something about everyone being tired and the office needing to close the file. I told them my copy would say only what I could stand behind.'\n\n'Perhaps I made too much of it. People have been short with each other all week. Still, I kept the carbon instead of putting it with the rubbish.'\n\nWHAT IT MIGHT MEAN\nThis is a private account of pressure to sign, not an independent record of the call. It adds a human reason for the careful wording, while leaving room for exhaustion, misunderstanding or deliberate pressure. Nothing here establishes what was in the case."
+    document(5,"Private diary / "..facts.code,b,diaryBody,
+        {people[1].id,people[2].id,b.id},{{target=documents[2].id,kind="recontextualises"}},nil,carrierFor("diaryContext",diaryBody))
+    local notebookBody="WHAT YOU FOUND\nA ruled pocket notebook with oil-darkened page edges. Routine meter readings share space with tea orders and a sketch of a loading bay. A short entry uses the same reference, "..facts.code..".\n\nJULY "..facts.dispatchDay..", 1993\n'Late collection. No normal stores entry. Office supplied the reference and said the description would follow. Asked twice. Leave space below.'\n\nThe next three ruled lines are empty. Beneath them: 'If anyone asks, send them to "..facts.organisation..". I can account for the time on this page, not for what was packed before my shift.' No name identifies the driver.\n\nWHAT IT MIGHT MEAN\nThe writer separated what they witnessed from what they were told. The blank lines could be a forgotten update or a deliberately avoided description. This supports asking how the transfer was recorded; it cannot establish the shipment's contents or destination by itself."
+    document(6,"Shift notebook / "..facts.code,a,notebookBody,
+        {org.id,a.id},{{target=documents[1].id,kind="recontextualises"}},nil,carrierFor("notebookContext",notebookBody))
+    local clippingBody="WHAT YOU FOUND\nA newspaper folded around a narrow cut-out from its local news column. Someone has underlined the words 'routine maintenance' and pencilled "..facts.code.." in the margin. The article itself does not use that reference.\n\nLOCAL SERVICES NOTICE - JULY 2, 1993\nResidents were advised that service vehicles might visit local facilities outside ordinary hours while scheduled maintenance was completed. A spokesperson described the work as routine and asked that access routes be kept clear. The notice supplied no list of deliveries and no explanation of what equipment would be moved.\n\nWHAT IT MIGHT MEAN\nSomeone associated this public notice with the private reference, but the pencil annotation is their interpretation. Routine maintenance could explain an unusual collection time. It could also offer a convenient explanation for unrelated activity. The clipping cannot tell you which, and its unnamed annotator may have been guessing too."
+    document(7,"Press clipping / "..facts.code,b,clippingBody,
+        {b.id},{{target=documents[1].id,kind="recontextualises"}},nil,carrierFor("clippingContext",clippingBody))
+    -- Two new short-text roles genuinely choose between the four card/ticket
+    -- carriers added 2026-09-06 (EvidenceKinds). Their bodies are a named
+    -- identifier and a line or two of context -- never the "WHAT YOU FOUND"
+    -- essay above -- because a card cannot hold that (T7).
+    local affiliationBody="Ref "..facts.code.."\n"..facts.sender.."\n"..facts.organisation
+    local affiliationKind=carrierFor("affiliationLead",affiliationBody)
+    document(8,K.get(affiliationKind).short.." / "..facts.code,a,affiliationBody,
+        {people[1].id,org.id,a.id},{{target=documents[1].id,kind="recontextualises"}},nil,affiliationKind)
+    local itineraryBody="Ref "..facts.code.."\n"..facts.recipient.." - "..b.name.."\nJuly "..facts.receiptDay..", 1993"
+    local itineraryKind=carrierFor("itineraryLead",itineraryBody)
+    document(9,K.get(itineraryKind).short.." / "..facts.code,b,itineraryBody,
+        {people[2].id,b.id},{{target=documents[2].id,kind="recontextualises"}},nil,itineraryKind)
     -- The first three roles are the coherent minimum: a route lead,
     -- an independently attributable response, and a review of that response.
     -- Optional roles are shuffled and bounded, so neither their count nor their
     -- carrier checklist is fixed, while every selected fact still resolves.
-    local optional={documents[4],documents[5],documents[6],documents[7]}
-    local optionalCount=random(#optional+1)-1
+    -- The pool now spans six roles/carriers (up from four) so the two new
+    -- short-text roles -- and therefore all four card/ticket carriers -- are
+    -- genuinely reachable, while MIN/MAX_EVIDENCE and their selection range
+    -- (0..4 optional slots on top of the 3 mandatory roles) stay unchanged.
+    local optional={documents[4],documents[5],documents[6],documents[7],documents[8],documents[9]}
+    local optionalCapacity=G.MAX_EVIDENCE-3
+    local optionalCount=random(optionalCapacity+1)-1
     for i=#optional,2,-1 do local j=random(i); optional[i],optional[j]=optional[j],optional[i] end
     while #documents>3 do documents[#documents]=nil end
     for i=1,optionalCount do
