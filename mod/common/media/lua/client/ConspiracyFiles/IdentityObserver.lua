@@ -131,7 +131,6 @@ function I.afterRender(pane)
    end
    if type(id)=="number" and id==id and math.abs(id)<9007199254740992 and id~=0 and name then
     local key=fullType..":"..tostring(id)
-    if queued[key] or seen[key] then missed=missed or (tostring(fullType)..":"..tostring(id).." already queued or seen") end
     if not queued[key] and not seen[key] and #queue<16 then
      local record={id=key,fullType=fullType,label=name,source=source,container=label,
       x=read(player,"getX"),y=read(player,"getY"),z=read(player,"getZ"),observedAt=read(getGameTime(),"getWorldAgeHours")}

@@ -39,10 +39,14 @@ Wallet observation is therefore the identity mechanic, not an edge case, and
 it is not currently confirmed working. A second corpse (ID: Alejandra Bunn)
 was on screen and recorded nothing. See docs/design/CORPSE_KEYS_AND_IDS.md.
 
-**Tooling caution:** reloadLuaFile on IdentityObserver leaves it half-attached
-- the reloaded chunk gets a fresh queue while the installed hooks may not be
-rebound. Diagnose observation problems from a clean restart, never after a
-reload of that module.
+**Tooling note, CORRECTED 2026-09-07:** an earlier version of this file claimed
+reloadLuaFile leaves IdentityObserver half-attached. That was wrong. The render
+hook and tick handler are registered once and are not rebound on reload, but
+both dispatch through the module table (`I.afterRender`, `I.tick`), so the
+reloaded functions are the ones that run. Reloading it is safe, and was proven
+so when diagnostics added after a reload fired immediately. The load line now
+reports `renderHookInstalled`/`tickHandler` so this is checkable rather than
+guessed at.
 
 ## Live session 2 — 2026-09-07 afternoon, DEV-0.8.8-voice
 
