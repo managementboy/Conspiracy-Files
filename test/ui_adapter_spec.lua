@@ -84,7 +84,12 @@ test("UI composition shares a clamped document pane, explicit ink and owner key 
         assertTrue(gen.document.plainText:find("Map marking waits for a pen or pencil.",1,true)~=nil)
         assertTrue(gen.document.plainText:find("Supports: Dispatch",1,true)~=nil)
         assertFalse(gen.document.plainText:find("hidden",1,true)~=nil)
-        gen:onSection(gen.journal); assertEqual("Inspected Dispatch",gen.list.items[1].item.title)
+        -- The journal no longer prefixes titles with "Inspected ": every row
+        -- carried it, so it distinguished nothing and cost ten characters of a
+        -- column that is 35% of the window. The summary still says so.
+        gen:onSection(gen.journal); assertEqual("Dispatch",gen.list.items[1].item.title)
+        assertTrue(gen.list.items[1].item.summary:find("Discovery",1,true)~=nil,
+            "the summary still identifies this as a discovery")
         assertEqual("g1",gen.list.items[1].item.id)
         UI.openHelp(); assertTrue(UI.help.text:find("Inspect Investigation Evidence",1,true)~=nil); UI.help:close()
         gen:close()

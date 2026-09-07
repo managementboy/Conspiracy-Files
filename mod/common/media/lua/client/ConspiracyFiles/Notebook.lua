@@ -524,8 +524,11 @@ local function generatedRows(section)
         for _,link in ipairs(r.connections or {}) do
             if titles[link.target] then detail=detail.."\n\n"..(meanings[link.kind] or "Connected to")..": "..titles[link.target] end
         end
-        rows[i]={id=r.id,ordinal=i,title=section=="journal" and "Inspected "..r.title or r.title,
-            summary=((require("ConspiracyFiles/Generated/EvidenceKinds").get(r.kind) or {}).label or "Evidence").." - Inspected - Discovery "..i,detailText=detail}
+        -- No "Inspected " prefix: every journal row carried it, so it told the
+        -- reader nothing and cost ten characters of a narrow column. The
+        -- summary line already says the row was inspected.
+        rows[i]={id=r.id,ordinal=i,title=r.title,
+            summary=((require("ConspiracyFiles/Generated/EvidenceKinds").get(r.kind) or {}).label or "Evidence").." - Discovery "..i,detailText=detail}
     end
     return rows
 end
@@ -564,8 +567,20 @@ function Window:rows()
     return rows
 end
 function Window:refresh(preferred)
-    self.journal:setTitle(self.section=="journal" and "[Journal]" or "Journal")
-    self.evidence:setTitle(self.section=="evidence" and "[Evidence]" or "Evidence")
+    -- Bracket characters were the only sign of which view was active and were
+    -- easy to miss. Highlight the active button instead, guarded so a build or
+    -- a test double without the vanilla colour setters still works.
+    self.journal:setTitle("Journal"); self.evidence:setTitle("Evidence")
+    for _,pair in ipairs({{self.journal,"journal"},{self.evidence,"evidence"}}) do
+        local control,name=pair[1],pair[2]
+        local on=self.section==name
+        if control.setBorderRGBA then
+            if on then control:setBorderRGBA(1,1,0.85,1) else control:setBorderRGBA(0.4,0.4,0.4,1) end
+        end
+        if control.setTextureRGBA then
+            if on then control:setTextureRGBA(0.35,0.35,0.3,1) else control:setTextureRGBA(0,0,0,0.6) end
+        end
+    end
     local rows=self:rows(); self.list:clear(); local selected=1
     for i,row in ipairs(rows) do self.list:addItem(row.title,row); if row.id==(preferred or self.currentId) then selected=i end end
     if #rows==0 then
