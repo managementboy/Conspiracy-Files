@@ -15,6 +15,11 @@ local HINT_RADIUS,SCAN_RADIUS,FORGET_RADIUS=2,3,4
 -- it cannot attract zombies.  UIAchievement was rejected: it maps to the
 -- FMOD event Game/LevelUp and would read as a skill level-up.
 local HINT_SOUND="UIObjectMenuEnter"
+-- Owner feedback 2026-09-07: the hint vanished too fast to read.
+-- HaloTextHelper.addText has no duration parameter; setHaloNote does, and
+-- vanilla uses it that way (ISMoveableSpriteProps.lua:3304 passes 300).
+-- Tune this one constant if it still reads too short or too long.
+local HINT_HALO_DURATION=900
 local visits,nextPoll,lastHint,phrase={},0,-60000,0
 -- Hints are a silent speech bubble; without a log line a missed hint and an
 -- unfired hint look identical.  Report each outcome once per approach.
@@ -36,7 +41,14 @@ local function enabled()
 end
 local function announce(p,text)
     p:Say(text)
-    local halo=HaloTextHelper and HaloTextHelper.addText and pcall(HaloTextHelper.addText,p,text) or false
+    -- Prefer setHaloNote: it is the only one of the two that accepts a
+    -- duration. Fall back to HaloTextHelper so a missing method still shows
+    -- something rather than silently dropping the visual channel.
+    local halo=false
+    if p.setHaloNote then halo=pcall(p.setHaloNote,p,text,255,255,255,HINT_HALO_DURATION) end
+    if not halo and HaloTextHelper and HaloTextHelper.addText then
+        halo=pcall(HaloTextHelper.addText,p,text)
+    end
     local audible=false
     if getSoundManager then
         local ok,manager=pcall(getSoundManager)

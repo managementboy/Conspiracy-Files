@@ -11,7 +11,12 @@ getDebug=function() return true end
 isClient=function() return false end
 isServer=function() return false end
 getTimeInMillis=function() return clock end
-getPlayer=function() return {getX=function() return x end,getY=function() return y end,getZ=function() return z end,Say=function(_,s) says[#says+1]=s end} end
+local haloNotes={}
+getPlayer=function() return {getX=function() return x end,getY=function() return y end,getZ=function() return z end,
+ Say=function(_,s) says[#says+1]=s end,
+ -- setHaloNote is the only halo API that takes a duration; record it so the
+ -- test proves a duration is passed, not merely that some text appeared.
+ setHaloNote=function(_,text,r,g,b,duration) haloNotes[#haloNotes+1]={text=text,duration=duration} end} end
 Events={OnTick={Add=function(f) assert(not callback); callback=f end,Remove=function(f) if callback==f then callback=nil end end}}
 local container={}
 package.preload["ConspiracyFiles/WorldAccess"]=function() return {
@@ -39,11 +44,16 @@ x=20; y=0; clock=clock+61000; tick()
 x=4; tick(); tick(); assert(#says==2,'three tiles is outside the trigger radius')
 x=3; y=1; tick(); tick()
 assert(#says==3,'two tiles triggers a hint')
-assert(#halos==1 and halos[1]==says[3],'halo text repeats the spoken phrase')
+-- Every spoken hint carries a halo note, from the first one onward.
+assert(#haloNotes==#says,'each spoken hint gets exactly one halo note')
+assert(haloNotes[#haloNotes].text==says[#says],'halo note repeats the spoken phrase')
+assert(type(haloNotes[#haloNotes].duration)=='number' and haloNotes[#haloNotes].duration>=300,
+ 'the halo note must carry an explicit, generous duration: a hint that vanishes before it is read is no hint')
+assert(#halos==0,'setHaloNote is preferred; HaloTextHelper is only the fallback')
 assert(uiSounds[1]=='UIObjectMenuEnter','UI-channel sound only; never a world emitter')
 -- A step off the container keeps the scan alive instead of cancelling it.
 x=20; clock=clock+61000; tick(); x=3; tick(); x=2; tick(); tick()
-assert(#says==4 and #halos==2,'a step during the scan does not abandon the hint')
+assert(#says==4 and #haloNotes==#says,'a step during the scan does not abandon the hint')
 
 H.stop(); assert(not callback)
 print('PASS proximity hints: floor, distance, actual token count, duplicates, cooldown, re-entry, phrase variation, discovery and stale-position guards')
