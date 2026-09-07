@@ -5,8 +5,11 @@ local Keys=require("ConspiracyFiles/HouseKeyAdapter")
 local Journal=require("ConspiracyFiles/KeyJournal")
 local Budget=require("ConspiracyFiles/SaveBudget")
 local Cases=require("ConspiracyFiles/Generated/SuccessiveCases")
+local Lead=require("ConspiracyFiles/ObservedKeyLead")
+local LeadAdapter=require("ConspiracyFiles/ObservedKeyAdapter")
 local P={}
 local TAG="ConspiracyFiles.LocalPeople"
+local LEAD_TAG="ConspiracyFiles.ObservedKeyLeads"
 local queue,queued,ticks={},{},0
 local attempts={}
 local MAX_ATTEMPTS=3
@@ -63,6 +66,46 @@ local function cases()
     local wrapper=Cases.current(ModData.get("ConspiracyFiles.Generated.G2") or {})
     return wrapper and Cases.sessions(wrapper) or {}
 end
+-- Observed-vanilla-key leads live in their own store: a body's real key is
+-- world content we only ever observe, never our own placed/reconciled fact.
+local function leadState()
+    local wrapper=ModData.get(LEAD_TAG)
+    if not wrapper then return Lead.empty() end
+    assert(type(wrapper)=="table" and not getmetatable(wrapper),"invalid observed-key lead store")
+    for key in pairs(wrapper) do assert(key=="canonical","unknown observed-key lead field") end
+    assert(Lead.validate(wrapper.canonical))
+    return wrapper.canonical
+end
+local function saveLead(staged)
+    assert(staged and Lead.validate(staged),"invalid observed-key lead update")
+    assert(Budget.check("observedKeyLeads",{canonical=staged}))
+    ModData.getOrCreate(LEAD_TAG).canonical=staged
+end
+-- True once a body's own vanilla key has already produced an observed lead.
+-- Constraint: the observed and fabricated key paths must never both run for
+-- the same corpse/case, so `place` below refuses to spawn a key here.
+local function hasLead(sourceToken)
+    if type(sourceToken)~="string" then return false end
+    for _,fact in pairs(leadState().leads) do
+        if fact.sourceToken==sourceToken then return true end
+    end
+    return false
+end
+-- Record a real vanilla key found on a body as a lead pointing at the
+-- building it opens -- never at who the body was or where they lived. An
+-- ambiguous or no-match lookup, or a budget refusal, is silence: this never
+-- guesses a building and never asserts a fact it cannot afford to keep.
+local function observeKeyLead(entry)
+    local matched=LeadAdapter.resolve(entry.item,cases())
+    if not matched then return end
+    local fact={id=entry.token,sourceToken=entry.token,keyId=matched.keyId,buildingId=matched.id}
+    local staged,changed=Lead.observe(leadState(),fact)
+    if not staged or not changed or not Budget.check("observedKeyLeads",{canonical=staged}) then return end
+    saveLead(staged)
+    log("observedKeyLead building="..matched.id.." keyId="..tostring(matched.keyId))
+    local ui=ConspiracyFiles.NotebookUI
+    if ui and ui.refresh then pcall(ui.refresh) end
+end
 local function buildingFor(root)
     local doc=root.case.documents[1]
     local target=root.assignments[doc.id].target
@@ -101,7 +144,8 @@ function P.see(item,container)
     local token,body,carried=origin(item,container)
     if not token then return end
     queue[#queue+1]={item=item,container=container,token=token,body=body,carried=carried,
-        label=read(item,"getDisplayName"),fullType=read(item,"getFullType"),id=read(item,"getID")}
+        label=read(item,"getDisplayName"),fullType=read(item,"getFullType"),id=read(item,"getID"),
+        keyId=read(item,"getKeyId")}
     queued[item]=true
 end
 local function remember(entry)
@@ -127,6 +171,10 @@ local function remember(entry)
     return true
 end
 local function place(root,record,body,building)
+    -- The observed and fabricated key paths are mutually exclusive per body:
+    -- once a real vanilla key on this corpse has already produced a lead,
+    -- never also spawn Base.Key1 for the same case.
+    if hasLead(record.sourceToken) then return end
     local player=getPlayer()
     local px,py,pz=read(player,"getX"),read(player,"getY"),read(player,"getZ")
     local bx,by,bz=read(body,"getX"),read(body,"getY"),read(body,"getZ")
@@ -165,6 +213,12 @@ local function observe(entry)
     if not remember(entry) then return end
     local current=state()
     local md=read(entry.item,"getModData") or {}
+    -- A real vanilla key on a body is world content, not ours: observe what
+    -- building it opens (a lead) instead of the person/name chain below,
+    -- which only ever concerns our own fabricated key.
+    if entry.body and not md.cfLocalPersonCase and type(entry.keyId)=="number" and entry.keyId>=0 then
+        observeKeyLead(entry)
+    end
     -- A wallet may have been opened after leaving the body. Its observed
     -- source survives that move; finish pending placement on seeing the body
     -- again, without guessing which nearby corpse it belonged to.
