@@ -3,6 +3,10 @@
 -- this ledger for ordering, so numbering matches what the player actually did.
 local Ledger=require("ConspiracyFiles/DiscoveryLedger")
 local Budget=require("ConspiracyFiles/SaveBudget")
+-- Load the voice, do not merely hope it is loaded. PZ does not execute every
+-- client file on its own - proven with GeneratedDiagnostic - so a module
+-- reached only through the shared table can silently never exist.
+require("ConspiracyFiles/PlayerVoice")
 ConspiracyFiles=ConspiracyFiles or {}
 local D=ConspiracyFiles.DiscoveryLog or {}
 ConspiracyFiles.DiscoveryLog=D
