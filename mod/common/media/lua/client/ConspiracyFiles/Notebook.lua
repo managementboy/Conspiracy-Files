@@ -540,6 +540,10 @@ function Window:rows()
         if self.section=="journal" and connections then
             for _,row in ipairs(connections.rows()) do rows[#rows+1]=row end
         end
+        local leads=ConspiracyFiles.ObservedKeyLeads
+        if self.section=="journal" and leads and leads.rows then
+            for _,row in ipairs(leads.rows()) do rows[#rows+1]=row end
+        end
         -- One shared ledger decides order and numbering for every source, so
         -- the journal reflects real discovery order rather than source groups.
         local log=ConspiracyFiles.DiscoveryLog

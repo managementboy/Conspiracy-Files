@@ -84,6 +84,21 @@ end
 -- True once a body's own vanilla key has already produced an observed lead.
 -- Constraint: the observed and fabricated key paths must never both run for
 -- the same corpse/case, so `place` below refuses to spawn a key here.
+-- The notebook reads sources off the shared table, so leads must be
+-- published there like IdentityObserver and KeyJournal are. A lead nobody
+-- can read is not a lead.
+ConspiracyFiles.ObservedKeyLeads=ConspiracyFiles.ObservedKeyLeads or {}
+ConspiracyFiles.ObservedKeyLeads.rows=function()
+    local ok,rows=pcall(function() return Lead.rows(leadState()) end)
+    return ok and rows or {}
+end
+-- Ledger ref must equal the notebook row id, or ordering cannot place it.
+local function recordLeadDiscovery(fact)
+    local logger=ConspiracyFiles.DiscoveryLog
+    if logger and logger.record then logger.record("connection","observedKeyLead:"..fact.id) end
+    local ui=ConspiracyFiles.NotebookUI
+    if ui and ui.refresh then pcall(ui.refresh) end
+end
 local function hasLead(sourceToken)
     if type(sourceToken)~="string" then return false end
     for _,fact in pairs(leadState().leads) do
@@ -96,6 +111,9 @@ end
 -- ambiguous or no-match lookup, or a budget refusal, is silence: this never
 -- guesses a building and never asserts a fact it cannot afford to keep.
 local function observeKeyLead(entry)
+    -- A door match is strictly better evidence than a catalogue guess, so
+    -- never add a catalogue lead for a body that already has one.
+    if hasLead(entry.token) then return end
     local matched=LeadAdapter.resolve(entry.item,cases())
     if not matched then return end
     local fact={id=entry.token,sourceToken=entry.token,keyId=matched.keyId,buildingId=matched.id}
@@ -103,8 +121,7 @@ local function observeKeyLead(entry)
     if not staged or not changed or not Budget.check("observedKeyLeads",{canonical=staged}) then return end
     saveLead(staged)
     log("observedKeyLead building="..matched.id.." keyId="..tostring(matched.keyId))
-    local ui=ConspiracyFiles.NotebookUI
-    if ui and ui.refresh then pcall(ui.refresh) end
+    recordLeadDiscovery(fact)
 end
 local function buildingFor(root)
     local doc=root.case.documents[1]
@@ -365,6 +382,62 @@ local function heldKey(inventory,keyId)
     end
     return found
 end
+-- A key looted from a body carries that body's provenance, stamped by
+-- remember(). Bounded traversal, same discipline as heldKey. Two candidate
+-- keys for one lock is ambiguous: refuse rather than pick one.
+local function observedCorpseKey(inventory,keyId)
+    local containers={inventory}
+    local index,visited,found=1,0,nil
+    while index<=#containers and index<=16 and visited<200 do
+        local list=read(containers[index],"getItems")
+        local size=read(list,"size") or 0
+        for i=0,math.min(size,200-visited)-1 do
+            visited=visited+1
+            local candidate=read(list,"get",i)
+            local md=read(candidate,"getModData")
+            if md and not md.cfLocalPersonCase and type(md.cfObservedSource)=="string"
+                and read(candidate,"getKeyId")==keyId then
+                if found then return nil end
+                found=candidate
+            end
+            local bag=read(candidate,"getInventory")
+            if bag and #containers<16 then containers[#containers+1]=bag end
+        end
+        index=index+1
+    end
+    return found
+end
+-- The engine has already decided this key opens this door, so the building
+-- comes from the door the player actually used. No catalogue, no keyId
+-- lookup, and no requirement that we authored the place.
+local function doorBuilding(door,keyId)
+    local square=read(door,"getSquare")
+    local building=square and read(square,"getBuilding")
+    if not building then
+        local opposite=read(door,"getOppositeSquare")
+        building=opposite and read(opposite,"getBuilding")
+    end
+    local def=building and read(building,"getDef")
+    if not def or read(def,"getKeyId")~=keyId then return nil end
+    local id=read(def,"getIDString")
+    if type(id)~="string" or id=="" or #id>160 or id:find("[%c]") then return nil end
+    return id
+end
+local function observeDoorLead(inventory,door,keyId)
+    if type(keyId)~="number" or keyId~=math.floor(keyId) or keyId<0 then return end
+    local key=observedCorpseKey(inventory,keyId)
+    local md=key and read(key,"getModData")
+    local token=md and md.cfObservedSource
+    if type(token)~="string" or token=="" or #token>160 then return end
+    local buildingId=doorBuilding(door,keyId)
+    if not buildingId then return end
+    local fact={id="door:"..token,sourceToken=token,keyId=keyId,buildingId=buildingId}
+    local staged,changed=Lead.observe(leadState(),fact)
+    if not staged or not changed or not Budget.check("observedKeyLeads",{canonical=staged}) then return end
+    saveLead(staged)
+    log("observedKeyDoor building="..buildingId.." keyId="..tostring(keyId).." source="..token)
+    recordLeadDiscovery(fact)
+end
 function P.observeDoor(action)
     if not supported() or action.character~=getPlayer() then return end
     local door=action.item
@@ -372,7 +445,13 @@ function P.observeDoor(action)
     local inventory=read(action.character,"getInventory")
     local key=heldKey(inventory,keyId)
     local md=read(key,"getModData")
-    if not md then return end
+    if not md then
+        -- No key of ours fits. A real key taken from a body does the same
+        -- job better: it names a building we never chose.
+        local ok,why=pcall(observeDoorLead,inventory,door,keyId)
+        if not ok then log("door lead deferred: "..tostring(why)) end
+        return
+    end
     local record=state().records[md.cfLocalPersonCase]
     if not record or record.status=="conflict" or record.keyToken~=md.cfLocalPersonToken then return end
     local square=read(door,"getSquare")
