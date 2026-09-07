@@ -177,6 +177,10 @@ print('PASS real notebook projection, legacy upgrade, global ordinals and frozen
 -- Inspect every remaining physical kind in both cases, beyond the old aggregate cap.
 local remaining={}
 for _,c in pairs(containers) do for _,v in ipairs(c.items) do remaining[#remaining+1]=v end end
+-- Capture the live case before discovering everything: completing a case now
+-- retires it, dropping the case envelope this tamper check needs. Retirement
+-- is orthogonal to tamper rejection, so the check keeps testing a live case.
+local tamperSource=saved.campaign.successive.cases[1].case
 for _,v in ipairs(remaining) do
  local finding=assert(capture(v));local c=v.container
  for n,other in ipairs(c.items) do if other==v then table.remove(c.items,n);break end end
@@ -187,7 +191,7 @@ assert(#all==firstEvidence+secondEvidence,'all selected evidence items remain le
 local kinds={};for _,v in ipairs(all) do kinds[v.kind]=true end
 assert(kinds.dispatch,'every case retains its core dispatch lead')
 local G=require('ConspiracyFiles/Generated/Generator')
-local altered=assert(G.restore(saved.campaign.successive.cases[1].case))
+local altered=assert(G.restore(tamperSource))
 altered.documents[1].kind='Base.Axe';assert(not G.validate(altered),'physical kind tampering rejected before placement')
 events.start();assert(#R.known()==firstEvidence+secondEvidence,'all selected discoveries survive runtime reload')
 for n,v in ipairs(R.known()) do assert(v.id==all[n].id and v.body==all[n].body,'discovery order and rich text immutable on reload') end

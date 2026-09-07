@@ -2,6 +2,7 @@
 local G=require("ConspiracyFiles/Generated/Generator")
 local Session=require("ConspiracyFiles/Generated/Session")
 local Cases=require("ConspiracyFiles/Generated/SuccessiveCases")
+local Retired=require("ConspiracyFiles/Generated/RetiredCase")
 local Storage=require("ConspiracyFiles/Generated/Storage")
 local World=require("ConspiracyFiles/WorldAccess")
 local Scheduler=require("ConspiracyFiles/Scheduler")
@@ -15,6 +16,9 @@ local R=ConspiracyFiles.GeneratedRuntime or {}
 ConspiracyFiles.GeneratedRuntime=R
 if R.loaded then return R end
 local sessions,scheduler,wrapper,ticks,preparing
+-- Rows of retired cases. They have no Session to project from, but the player
+-- learned them and the notebook must still render them.
+local retiredRows={}
 local TAG="ConspiracyFiles.Generated.G2"
 local function log(message) print("[CF-G2] "..tostring(message)) end
 local function allowed()
@@ -94,9 +98,16 @@ end
 local function openAll()
     -- Replacing the session set invalidates queued closures over old APIs.
     scheduler=Scheduler.new(getTimeInMillis,function(system,why) if system=="preparation" then preparing=false end;log(system..": "..why) end);scheduler.maxSteps=24;scheduler.budgetMs=1
-    sessions={}
+    sessions={}; retiredRows={}
     for index,root in ipairs(Cases.sessions(wrapper)) do
-        sessions[index]=assert(Session.open(root,function(staged) swap(assert(Cases.replace(wrapper,index,staged))) end))
+        -- A retired root is not a Session and must never be opened as one.
+        -- The closure keeps the true wrapper index, which no longer matches
+        -- the position in `sessions` once any root has retired.
+        if Retired.isRetired(root) then
+            for _,row in ipairs(root.rows) do retiredRows[#retiredRows+1]=row end
+        else
+            sessions[#sessions+1]=assert(Session.open(root,function(staged) swap(assert(Cases.replace(wrapper,index,staged))) end))
+        end
     end
     enqueue(); log("Generated case active. Take an evidence item, then right-click Inspect Investigation Evidence.")
 end
@@ -222,7 +233,9 @@ function R.start(seed,options)
 end
 function R.known()
     if not wrapper or not sessions then return {} end
-    local byId={}; for _,api in ipairs(sessions) do for _,row in ipairs(api.project()) do byId[row.id]=row end end
+    local byId={}
+    for _,row in ipairs(retiredRows) do byId[row.id]=row end
+    for _,api in ipairs(sessions) do for _,row in ipairs(api.project()) do byId[row.id]=row end end
     local rows={}; for _,id in ipairs(Cases.discoveries(wrapper)) do if byId[id] then rows[#rows+1]=byId[id] end end; return rows
 end
 function R.nextCase(seed)
@@ -248,8 +261,22 @@ function R.inspect(item)
     if not a or md.cfPhysicalToken~=a.physicalToken or a.status=="conflict" then return false end
     -- A positively observed surviving item can reconcile an uncertain intent.
     checked(api.status(md.cfGeneratedId,"placed",worldHours())); checked(api.inspect(md.cfGeneratedId))
-    local log=ConspiracyFiles.DiscoveryLog
-    if log and log.record then log.record("evidence",md.cfGeneratedId) end
+    local ledger=ConspiracyFiles.DiscoveryLog
+    if ledger and ledger.record then ledger.record("evidence",md.cfGeneratedId) end
+    -- Record the discovery first, then retire: a case whose last document has
+    -- just been found no longer needs its placement bookkeeping, and shedding
+    -- it is what keeps later cases inside the shared save budget.
+    local done=api.snapshot()
+    if #done.known>=#done.case.documents then
+        for index,root in ipairs(Cases.sessions(wrapper)) do
+            if not Retired.isRetired(root) and root.case and root.case.caseId==done.case.caseId then
+                local staged,why=Cases.retire(wrapper,index)
+                if staged then swap(staged); openAll(); log("Case complete; placement details retired.")
+                else log("Case complete but not retired: "..tostring(why)) end
+                break
+            end
+        end
+    end
     return true
 end
 function R.subject(item)
