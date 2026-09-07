@@ -16,7 +16,7 @@ local attempts={}
 local MAX_ATTEMPTS=3
 local cardTypes={['Base.IDcard']=true,['Base.IDcard_Male']=true,['Base.IDcard_Female']=true,
     ['Base.IDcard_Stolen']=true,['Base.CreditCard']=true,['Base.CreditCard_Stolen']=true,
-    ['Base.BusinessCard']=true,['Base.BusinessCard_Personal']=true,
+    ['Base.BusinessCard']=true,['Base.BusinessCard_Personal']=true,['Base.Passport']=true,['Base.PressID']=true,['Base.Badge']=true,['Base.Diary1']=true,['Base.Diary2']=true,
     ['Base.ParkingTicket']=true,['Base.SpeedingTicket']=true}
 -- The person/key chain had a single print, on its error path, so a silent
 -- failure and a chain that simply never triggered were indistinguishable.

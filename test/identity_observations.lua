@@ -21,3 +21,18 @@ for _,kind in ipairs({'Base.IDcard_Stolen','Base.IDcard_Female','Base.IDcard_Mal
 end
 local blank=clone(r);blank.fullType='Base.IDcard_Blank';blank.id=blank.fullType..':1';assert(not M.add(e,blank))
 print("PASS IdentityObservations: strict bounds/fields, unsafe data, immutable snapshots, dedup, variants, factual rows")
+
+-- Build 42 marks name-bearing items with Tags = base:applyownername. Sixteen
+-- items carry it; the original whitelist guessed eleven and missed the strongest
+-- documents of all. See docs/research/OWNER_NAMED_ITEMS.md.
+for _,kind in ipairs({'Base.Passport','Base.PressID','Base.Badge','Base.Diary1','Base.Diary2'}) do
+ local rr=clone(r);rr.fullType=kind;rr.id=kind..':500'
+ assert(M.add(e,rr),'owner-named item must be observable: '..kind)
+end
+-- Not yet adopted: dog tags and the security-pass key ring are owner-named but
+-- are not documents, and the row wording would have to change first.
+for _,kind in ipairs({'Base.Necklace_DogTag','Base.KeyRing_SecurityPass'}) do
+ local rr=clone(r);rr.fullType=kind;rr.id=kind..':501'
+ assert(not M.add(e,rr),'deliberately not observed until the wording generalises: '..kind)
+end
+print('PASS identity observations: owner-named documents accepted, non-documents deliberately excluded')

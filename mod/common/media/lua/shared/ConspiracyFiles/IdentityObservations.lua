@@ -1,7 +1,7 @@
 local V=require("ConspiracyFiles/Validator")
 local M={MAX=128}
 local types={['Base.IDcard']=true,['Base.IDcard_Stolen']=true,['Base.IDcard_Female']=true,
- ['Base.IDcard_Male']=true,['Base.CreditCard']=true,['Base.CreditCard_Stolen']=true,['Base.ParkingTicket']=true,['Base.SpeedingTicket']=true,['Base.BusinessCard']=true,['Base.BusinessCard_Personal']=true,['Base.BusinessCard_Nolans']=true}
+ ['Base.IDcard_Male']=true,['Base.CreditCard']=true,['Base.CreditCard_Stolen']=true,['Base.ParkingTicket']=true,['Base.SpeedingTicket']=true,['Base.BusinessCard']=true,['Base.BusinessCard_Personal']=true,['Base.BusinessCard_Nolans']=true,['Base.Passport']=true,['Base.PressID']=true,['Base.Badge']=true,['Base.Diary1']=true,['Base.Diary2']=true}
 local fields={id=true,fullType=true,label=true,source=true,container=true,x=true,y=true,z=true,observedAt=true}
 local function finite(v) return type(v)=="number" and v==v and v~=math.huge and v~=-math.huge end
 local function text(v,n) return type(v)=="string" and #v<=n and v:find("%S") and not v:find("[%c]") end
