@@ -11,13 +11,21 @@ getGameTime=function() return {getWorldAgeHours=function() return 1 end} end
 getDebug=function() return true end;isClient=function() return false end;isServer=function() return false end
 instanceof=function(o,k) return type(o)=='table' and o.kind==k end
 ConspiracyFiles={GeneratedRuntime={metrics=function() return {} end},NotebookUI={refresh=function() end}}
+-- Engine doubles demand a receiver, as Kahlua does. A permissive table lets a
+-- receiver-less call pass here and fail in game; see AGENTS.md.
+local strict=dofile('test/support/strict.lua')
 local corpse={kind='IsoDeadBody'}
-local bag={kind='InventoryItem',getDisplayName=function() return 'Wallet' end,getFullType=function() return 'Base.Wallet' end}
-local source={getParent=function() return corpse end,getType=function() return 'inventorymale' end}
-local wallet={getContainingItem=function() return bag end,getType=function() return 'wallet' end}
+local bag=strict.object('bag',{getDisplayName=function() return 'Wallet' end,
+ getFullType=function() return 'Base.Wallet' end}); bag.kind='InventoryItem'
+local source=strict.object('corpseContainer',{getParent=function() return corpse end,
+ getType=function() return 'inventorymale' end})
+local wallet=strict.object('walletContainer',{getContainingItem=function() return bag end,
+ getType=function() return 'wallet' end})
 local function card(id,container,name)
- return {kind='InventoryItem',getID=function() return id end,getFullType=function() return 'Base.IDcard' end,
- getDisplayName=function() return name or 'ID Card: Ada Vale' end,getContainer=function() return container end,isHidden=function() return false end}
+ local c=strict.object('item',{getID=function() return id end,getFullType=function() return 'Base.IDcard' end,
+  getDisplayName=function() return name or 'ID Card: Ada Vale' end,getContainer=function() return container end,
+  isHidden=function() return false end,getModData=function() return {} end})
+ c.kind='InventoryItem'; return c
 end
 local function pane(container,rows)
  return {mode='details',player=0,inventory=container,items=rows,itemHgt=20,headerHgt=20,
