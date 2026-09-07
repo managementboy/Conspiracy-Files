@@ -4,15 +4,16 @@
 it, and do not ask the owner to overwrite it. The owner keeps their own copy;
 this file records what makes it worth keeping.
 
-- **Working copy the owner tests from (2026-09-07):**
-  `C:\Users\elkin.fricke\Zomboid\Saves\Sandbox\wallet key and corpse - Kopie (4)`
-  The owner keeps several numbered copies of this world under
-  `Saves\Sandbox\wallet key and corpse*`. **Ask which copy is current before
-  assuming** - they are not interchangeable, because the key and wallet have
-  been taken in some and not in others. The clean state for the key-door test
-  is key and wallet still ON the corpse.
-- **Original:** `C:\Users\elkin.fricke\Zomboid\Saves\Sandbox\2026-09-07_11-51-30`
-  (key taken and wallet opened during the afternoon session; no longer clean)
+- **Clean master:** `C:\Users\elkin.fricke\Zomboid\Saves\Sandbox\wallet key and corpse`
+  Key and wallet still ON the corpse, nothing looted. This is the fixture.
+  **The owner always plays on a copy and keeps this one untouched.** Never
+  test directly in it, and never ask the owner to.
+- **Working copies:** `wallet key and corpse - Kopie`, `- Kopie (2)`, `(3)`,
+  `(4)`, made from the master as testing proceeds. They are NOT
+  interchangeable - the key and wallet are looted in some. Ask which is
+  current rather than assuming; on 2026-09-07 it was `Kopie (4)`.
+- **Superseded:** `2026-09-07_11-51-30`, the original session save. Key taken
+  and wallet opened during the afternoon; no longer a clean starting point.
 - **Mod build in play:** `DEV-0.8.6-discovery-ledger`, repo at `e1d2035`
 - **Game:** Build 42.20.4, revision `b0bbce05d5`
 - **Case id:** `1177813649`, four documents, record `R-340`
