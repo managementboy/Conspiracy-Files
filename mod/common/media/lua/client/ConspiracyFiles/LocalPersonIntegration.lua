@@ -104,14 +104,25 @@ function P.see(item,container)
 end
 local function remember(entry)
     if entry.body then
-        local md=assert(read(entry.body,"getModData"))
-        assert(not md.cfObservedSource or md.cfObservedSource==entry.token,"source changed")
+        local md=read(entry.body,"getModData")
+        if type(md)~="table" then return false end
+        -- A body's provenance token legitimately changes between queueing and
+        -- flushing: moving its wallet stamps the corpse, while an item queued
+        -- moments earlier still carries the token computed back then. Both
+        -- items came off the same body, so adopt the token the body already
+        -- carries instead of treating an ordinary sequence of player actions
+        -- as a contradiction and throwing.
+        if md.cfObservedSource and md.cfObservedSource~=entry.token then
+            log("adopted corpse provenance "..tostring(md.cfObservedSource).." for a queued observation")
+            entry.token=md.cfObservedSource
+        end
         md.cfObservedSource=entry.token
     end
     for _,item in ipairs(entry.carried) do
         local md=read(item,"getModData")
         if md and not md.cfObservedSource then md.cfObservedSource=entry.token end
     end
+    return true
 end
 local function place(root,record,body,building)
     local player=getPlayer()
@@ -149,7 +160,7 @@ local function place(root,record,body,building)
     save(assert(Runtime.reconcile(state(),record.caseId,1,true)))
 end
 local function observe(entry)
-    remember(entry)
+    if not remember(entry) then return end
     local current=state()
     local md=read(entry.item,"getModData") or {}
     -- A wallet may have been opened after leaving the body. Its observed
