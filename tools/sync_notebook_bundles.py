@@ -1,9 +1,25 @@
+import io
 from pathlib import Path
 root = Path(__file__).resolve().parents[1]
 lua = root / "mod/common/media/lua"
 p = lua / "client/ConspiracyFiles/Notebook.lua"
-s = p.read_text(encoding="utf-8")
-def read(name): return (lua / name).read_text(encoding="utf-8")
+# Read and write with newline="" so line endings survive. Path.read_text /
+# write_text translate newlines, which silently rewrote the whole of
+# Notebook.lua from LF to CRLF on Windows and produced a full-file diff even
+# when no bundle content had changed.
+def slurp(path): 
+    with io.open(path, "r", encoding="utf-8", newline="") as handle: return handle.read()
+def spit(path, text):
+    with io.open(path, "w", encoding="utf-8", newline="") as handle: handle.write(text)
+s = slurp(p)
+# Bundled sources are LF while Notebook.lua is CRLF. Embedding raw LF text into
+# a CRLF host produced a mixed file, which is why this script rewrote every line
+# even when no bundle content had changed. Normalise to the host file's endings.
+HOST_NL = chr(13) + chr(10) if (chr(13) + chr(10)) in s else chr(10)
+def read(name):
+    text = slurp(lua / name).replace(chr(13) + chr(10), chr(10))
+    return text.replace(chr(10), HOST_NL)
+
 def replace(label, body):
     global s
     a = s.index("-- BEGIN " + label + " hot-load bundle.")
@@ -24,4 +40,4 @@ if "-- BEGIN " + label + " hot-load bundle." not in s:
     s=s[:at]+"-- BEGIN " + label + " hot-load bundle.\n-- END " + label + " hot-load bundle.\n"+s[at:]
 toolbar=read("client/ConspiracyFiles/NotebookToolbar.lua").replace('local UI=require("ConspiracyFiles/Notebook")','local UI=ConspiracyFiles.NotebookUI')
 replace(label, "function UI.enableNotebookToolbar()\nlocal toolbar=(function()\n" + toolbar + "\nend)()\nreturn toolbar.ensure()\nend\nUI.enableNotebookToolbar()\n")
-p.write_text(s, encoding="utf-8")
+spit(p, s)

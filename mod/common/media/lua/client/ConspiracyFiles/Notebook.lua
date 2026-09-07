@@ -2,6 +2,7 @@ require "ISUI/ISCollapsableWindow"
 require "ISUI/ISButton"
 require "ISUI/ISScrollingListBox"
 require "ISUI/ISRichTextPanel"
+require "ISUI/ISTextEntryBox"
 local Document=require("ConspiracyFiles/DocumentPane")
 local Projection=require("ConspiracyFiles/NotebookProjection")
 -- BEGIN generated PlaceNames hot-load copy (same source as Generated/PlaceNames.lua).
@@ -453,8 +454,8 @@ end
 function UI.openHelp()
     safe(function()
         if UI.help then UI.help:bringToTop(); return end
-        UI.help=Reader:new("About these notes", "SURVIVE FIRST\nThe notebook records what you encounter. It assigns no objectives and promises no final answer.\n\nINSPECT\nUse a document's action in your inventory or the Ground/loot inventory pane to read and record it.\n\nMARK INTERESTING\nTake an unusual object before marking it. Its original context stays in your notes even if you lose the object.\n\nNAVIGATION\nTab moves between Journal, Evidence, list, reading area, Help, contrast and Close. Arrow keys select list rows; Enter activates the focused control. Page Up/Down scroll the reading area.\n\nCLOSE\nUse the native X or Close button. Assign Conspiracy-Files: Toggle Survivor Notebook in the game's key bindings. Escape belongs to the game.\n\nController navigation has not been verified for this candidate.",true)
-        if generated() then UI.help.text="SURVIVE FIRST\nThese notes record evidence you have inspected. They do not assign objectives.\n\nINSPECT\nTake a generated evidence item into your inventory, then choose Inspect Investigation Evidence.\n\nJOURNAL AND EVIDENCE\nJournal records discovery order. Evidence lets you select and review each item. Connections appear only between evidence items you have inspected.\n\nNAVIGATION\nUse the list and Journal/Evidence buttons. Tab and arrow keys navigate; Page Up/Down scroll. Contrast changes the reading colors. Use X or Close to dismiss." end
+        UI.help=Reader:new("About these notes", "SURVIVE FIRST\nThe notebook records what you encounter. It assigns no objectives and promises no final answer.\n\nINSPECT\nUse a document's action in your inventory or the Ground/loot inventory pane to read and record it.\n\nMARK INTERESTING\nTake an unusual object before marking it. Its original context stays in your notes even if you lose the object.\n\nNAVIGATION\nTab moves between Journal, Evidence, Filter, list, reading area, Help, contrast and Close. Arrow keys select list rows; Enter activates the focused control. Page Up/Down scroll the reading area.\n\nFILTER\nType in the filter box to narrow the list by title or summary text. It only changes what is shown; entry numbers and the record itself never change. Clear it to see everything again.\n\nNEW ENTRIES\nA * before an entry's number marks something recorded since you last closed the notebook.\n\nCLOSE\nUse the native X or Close button. Assign Conspiracy-Files: Toggle Survivor Notebook in the game's key bindings. Escape belongs to the game.\n\nController navigation has not been verified for this candidate.",true)
+        if generated() then UI.help.text="SURVIVE FIRST\nThese notes record evidence you have inspected. They do not assign objectives.\n\nINSPECT\nTake a generated evidence item into your inventory, then choose Inspect Investigation Evidence.\n\nJOURNAL AND EVIDENCE\nJournal records discovery order. Evidence lets you select and review each item. Connections appear only between evidence items you have inspected.\n\nFILTER\nThe filter box narrows the list to titles or summaries containing the text you type. It is a view only: the ledger, the order and each entry's true discovery number never change. Clear it to see everything again.\n\nNEW ENTRIES\nA * before an entry's number marks something recorded since you last closed the notebook.\n\nCASE MARKER\nWhen several investigations are running, an entry's summary names the case it belongs to. Identity and connection notes are not tied to one investigation and carry no case marker.\n\nNAVIGATION\nUse the list, the filter box and Journal/Evidence buttons. Tab and arrow keys navigate; Page Up/Down scroll. Contrast changes the reading colors. Use X or Close to dismiss." end
         UI.help.text=UI.help.text.."\n\nCLUE MAP MARKS\nNew clue pickups remember where you found them. After inspection, a pen or pencil in your inventory (including bags) adds their finding locations to the world map. Without a writing tool, markings wait and catch up when you acquire one. Existing marks remain if you drop the tool or document. Old discoveries without a recorded finding location cannot be mapped. Markers show notebook evidence numbers and titles.\n\nFINDING ADDRESSES\nThe planned address system uses Main Street or First Street as a town's starting line where suitable. Other towns use a fixed, named alternative. Numbers increase away from that starting line, with a new hundred-number range for each defined street block.\n\nOn east-west roads, odd numbers are on the north side and even numbers on the south. On north-south roads, odd numbers are on the east side and even numbers on the west.\n\nThese will be game addresses created by Conspiracy-Files, not real-world postal addresses. This build currently provides street names and relative directions; house numbers and town-by-town starting lines are not available yet."
         if ConspiracyFiles.AddressMap and ConspiracyFiles.AddressMap.ready() then
             local before=UI.help.text:find("\n\nFINDING ADDRESSES",1,true)
@@ -479,6 +480,17 @@ local function fitRowText(text,width)
     end
     return best
 end
+-- Row list columns are only 35% of the window, so a fitted title/summary is
+-- routinely shortened. The tooltip carries the untruncated pair; verified
+-- against the installed game's ISScrollingListBox.lua (updateTooltip reads
+-- self.items[row].tooltip and renders it, called every render pass), so
+-- setting item.tooltip here needs no extra plumbing in this file.
+local function rowTooltip(row)
+    local title=row.title or ""
+    local summary=row.summary or ""
+    if summary=="" then return title end
+    return title.."\n\n"..summary
+end
 function Window:drawRow(y,item)
     local offset=self:getYScroll(); local top=y+offset
     if top+item.height<=0 or top>=self.height then return y+item.height end
@@ -487,13 +499,19 @@ function Window:drawRow(y,item)
     local width=math.max(0,self.width-32) -- padding and native scrollbar
     local signature=width..":"..fontHeight
     if item.cfTextSignature~=signature then
-        item.cfTitle=fitRowText("#"..item.item.ordinal.."  "..item.item.title,width)
+        -- The leading "*" only marks unread rows for the reader; it is never
+        -- part of the stored title, so it cannot affect order or numbering.
+        local marker=item.item.cfNew and "* " or ""
+        item.cfTitle=fitRowText(marker.."#"..item.item.ordinal.."  "..item.item.title,width)
         item.cfSummary=fitRowText(item.item.summary,width)
         item.cfTextSignature=signature
     end
     -- Text may escape the native list stencil at large UI scales. Bound both
     -- lines explicitly instead of relying on the stencil for overflowing text.
-    if top+4>=0 and top+4+fontHeight<=self.height then self:drawText(item.cfTitle,8,y+4,1,1,0.95,1,UIFont.Small) end
+    if top+4>=0 and top+4+fontHeight<=self.height then
+        if item.item.cfNew then self:drawText(item.cfTitle,8,y+4,1,0.95,0.55,1,UIFont.Small)
+        else self:drawText(item.cfTitle,8,y+4,1,1,0.95,1,UIFont.Small) end
+    end
     if top+8+fontHeight>=0 and top+8+2*fontHeight<=self.height then self:drawText(item.cfSummary,8,y+8+fontHeight,0.90,0.90,0.85,1,UIFont.Small) end
     return y+item.height
 end
@@ -527,8 +545,15 @@ local function generatedRows(section)
         -- No "Inspected " prefix: every journal row carried it, so it told the
         -- reader nothing and cost ten characters of a narrow column. The
         -- summary line already says the row was inspected.
+        -- Several cases interleave chronologically by design; the case's own
+        -- short dispatch code (already shown in document titles, e.g.
+        -- "Dispatch copy / R-482") orients the reader without grouping or
+        -- reordering anything. Identity and connection rows never reach this
+        -- function, so no case marker is invented for them.
+        local caseMarker=case and type(case.facts)=="table" and type(case.facts.code)=="string" and case.facts.code
         rows[i]={id=r.id,ordinal=i,title=r.title,
-            summary=((require("ConspiracyFiles/Generated/EvidenceKinds").get(r.kind) or {}).label or "Evidence").." - Discovery "..i,detailText=detail}
+            summary=((require("ConspiracyFiles/Generated/EvidenceKinds").get(r.kind) or {}).label or "Evidence").." - Discovery "..i
+                ..(caseMarker and " - Case "..caseMarker or ""),detailText=detail}
     end
     return rows
 end
@@ -551,6 +576,22 @@ function Window:rows()
         -- the journal reflects real discovery order rather than source groups.
         local log=ConspiracyFiles.DiscoveryLog
         if log and log.order then rows=log.order(rows) else for index,row in ipairs(rows) do row.ordinal=index end end
+        -- Mark rows discovered after the last time the notebook was closed.
+        -- `UI` is only available when this file runs whole (never when a test
+        -- extracts just this function), so the guard below degrades to "no
+        -- marks" rather than indexing a missing table.
+        local seen=UI and UI.lastSeenSequence and UI.lastSeenSequence()
+        if seen and log and log.events then
+            local ok,events=pcall(log.events)
+            if ok and type(events)=="table" then
+                local seqOf={}
+                for _,e in ipairs(events) do if type(e.ref)=="string" and type(e.seq)=="number" then seqOf[e.ref]=e.seq end end
+                for _,row in ipairs(rows) do
+                    local at=seqOf[row.id]
+                    if at and at>seen then row.cfNew=true end
+                end
+            end
+        end
         return rows
     end
     local current=state(); if not current then return {} end
@@ -581,17 +622,47 @@ function Window:refresh(preferred)
             if on then control:setTextureRGBA(0.35,0.35,0.3,1) else control:setTextureRGBA(0,0,0,0.6) end
         end
     end
-    local rows=self:rows(); self.list:clear(); local selected=1
-    for i,row in ipairs(rows) do self.list:addItem(row.title,row); if row.id==(preferred or self.currentId) then selected=i end end
+    local rows=self:rows()
     if #rows==0 then
+        self.list:clear()
         self.header:setText("<RGB:1,1,0.95> Nothing recorded yet"); self.header:paginate()
         self.document:setDocument("Inspect an unusual document or mark an acquired object worth remembering. The notebook records encounters; it does not assign objectives.",UI.highContrast)
         self:layout(); return
     end
-    self.list.selected=selected; self:showRow(rows[selected])
+    -- Filter is a lens over the view only: ordinals were already assigned
+    -- above by the ledger (or by discovery order for classic saves), so a
+    -- filtered row keeps its true "#N" no matter how the list is narrowed.
+    local query=self:filterQuery()
+    local visible=rows
+    if query~="" then
+        visible={}
+        for _,row in ipairs(rows) do
+            local title=(row.title or ""):lower(); local summary=(row.summary or ""):lower()
+            if title:find(query,1,true) or summary:find(query,1,true) then visible[#visible+1]=row end
+        end
+    end
+    self.list:clear(); local selected=1
+    for i,row in ipairs(visible) do
+        self.list:addItem(row.title,row,rowTooltip(row))
+        if row.id==(preferred or self.currentId) then selected=i end
+    end
+    if #visible==0 then
+        self.list.selected=nil
+        self.header:setText("<RGB:1,1,0.95> No entries match the filter"); self.header:paginate()
+        self.document:setDocument("Nothing recorded so far matches \""..(query or "").."\". Clear the filter to see every entry again; nothing has been hidden or removed.",UI.highContrast)
+        self:layout(); return
+    end
+    self.list.selected=selected; self:showRow(visible[selected])
+end
+-- Read-only: never writes back to the filter box, so its own cursor/typing
+-- state is untouched by every refresh triggered while the player is typing.
+function Window:filterQuery()
+    local ok,text=pcall(function() return self.filter and self.filter.getText and self.filter:getText() end)
+    if not ok or type(text)~="string" then return "" end
+    return text:lower()
 end
 function Window:onSection(button) self.section=button.internal; self.currentId=nil; self.detailOnly=false; self:refresh(); self:layout() end
-function Window:onBack() self.detailOnly=false; self.focusIndex=3; self:layout() end
+function Window:onBack() self.detailOnly=false; self.focusKey="list"; self:layout() end
 function Window:onContrast()
     UI.highContrast=not UI.highContrast; self:refresh()
     if UI.reader then UI.reader.document:setDocument(UI.reader.text,UI.highContrast) end
@@ -614,12 +685,24 @@ function Window:createChildren()
     self.list=ISScrollingListBox:new(12,40,280,350); self.list:initialise(); self.list:instantiate()
     self.list.itemheight=getTextManager():getFontHeight(UIFont.Small)*2+16; self.list.doDrawItem=Window.drawRow
     self.list:setOnMouseDownFunction(self,function(target,row) safe(function() target:showRow(row) end) end); self:addChild(self.list)
+    -- Plain case-insensitive substring filter over title/summary. It only
+    -- narrows what Window:refresh puts into the list; it never touches the
+    -- ledger, the row data, or ordinal numbering (see Window:refresh).
+    self.filter=ISTextEntryBox:new("",12,40,280,28)
+    self.filter.placeholderText="Filter title or summary"
+    self.filter:initialise(); self.filter:instantiate()
+    self.filter.target=self
+    self.filter.onTextChangeFunction=function(target) safe(function() target:refresh() end) end
+    self:addChild(self.filter)
     self:layout(); self:refresh()
 end
 function Window:layout()
     if not self.list then return end
     local top=self:titleBarHeight()+12; local bottom=self:resizeWidgetHeight()+12
     local usable=self.width-152; local height=self.height-top-bottom
+    -- Reserved for the header/document detail column, which sits beside the
+    -- list and is not shortened by the filter box above the list.
+    local fullHeight=height
     local line=getTextManager():getFontHeight(UIFont.Small)
     local headerHeight=math.max(72,line*3+12)
     self.compact=usable<650
@@ -627,9 +710,15 @@ function Window:layout()
     local detailX=self.compact and 12 or 24+listWidth
     local detailW=self.compact and usable or usable-listWidth-12
     local showDetail=not self.compact or self.detailOnly==true
+    local showList=not self.compact or not self.detailOnly
     self.back:setVisible(self.compact and self.detailOnly==true); self.back:setY(top)
     local extra=self.compact and 38 or 0
-    self.list:setX(12); self.list:setY(top); self.list:setWidth(listWidth); self.list:setHeight(height)
+    local filterHeight=math.max(26,line+10)
+    local filterGap=6
+    self.filter:setX(12); self.filter:setY(top); self.filter:setWidth(listWidth); self.filter:setHeight(filterHeight)
+    self.filter:setVisible(showList)
+    height=height-filterHeight-filterGap
+    self.list:setX(12); self.list:setY(top+filterHeight+filterGap); self.list:setWidth(listWidth); self.list:setHeight(height)
     -- ISScrollingListBox:setHeight does NOT resize its own scroll bar; vanilla
     -- always does it by hand (ISComboBox.lua:57, ISInventoryPane.lua:1786,
     -- ISServerSandboxOptionsUI.lua:295). Without this the bar keeps the height
@@ -639,12 +728,27 @@ function Window:layout()
         if bar.setHeight then bar:setHeight(height) end
         if bar.setX and bar.width then bar:setX(listWidth-bar.width) end
     end
-    self.list:setVisible(not self.compact or not self.detailOnly)
+    self.list:setVisible(showList)
     self.header:setX(detailX); self.header:setY(top+extra); self.header:setWidth(detailW); self.header:setHeight(headerHeight); self.header:setVisible(showDetail); self.header:paginate()
-    self.document:setX(detailX); self.document:setY(top+extra+headerHeight); self.document:setWidth(detailW); self.document:setHeight(math.max(80,height-headerHeight-extra)); self.document:setVisible(showDetail)
+    self.document:setX(detailX); self.document:setY(top+extra+headerHeight); self.document:setWidth(detailW); self.document:setHeight(math.max(80,fullHeight-headerHeight-extra)); self.document:setVisible(showDetail)
     local controls={self.journal,self.evidence,self.help,self.contrast,self.closeButton}
     for i,b in ipairs(controls) do b:setX(self.width-128); b:setY(top+(i-1)*math.max(42,line+20)); b:setHeight(math.max(32,line+12)) end
     self.list.itemheight=line*2+16
+    -- Tab only ever lands on a control that is actually shown; a hidden
+    -- filter/list/document is simply absent from the cycle instead of needing
+    -- hand-written skip rules (see Window:onKeyRelease).
+    local order={"journal","evidence"}
+    if showList then order[#order+1]="filter"; order[#order+1]="list" end
+    if showDetail then order[#order+1]="document" end
+    order[#order+1]="help"; order[#order+1]="contrast"; order[#order+1]="close"
+    self.focusOrder=order
+    local hasFocus=false
+    for _,key in ipairs(order) do if key==self.focusKey then hasFocus=true end end
+    if not hasFocus then self.focusKey=order[1] end
+end
+function Window:focusWidgets()
+    return {journal=self.journal,evidence=self.evidence,filter=self.filter,list=self.list,
+        document=self.document,help=self.help,contrast=self.contrast,close=self.closeButton}
 end
 function Window:prerender()
     local sw,sh=getCore():getScreenWidth(),getCore():getScreenHeight()
@@ -655,8 +759,7 @@ function Window:prerender()
     end
     ISCollapsableWindow.prerender(self)
     UI.rememberWindow(self,true)
-    local controls={self.journal,self.evidence,self.list,self.document,self.help,self.contrast,self.closeButton}
-    local focused=controls[self.focusIndex or 3]
+    local focused=self.focusKey and self:focusWidgets()[self.focusKey]
     if focused and focused:getIsVisible() then self:drawRectBorder(focused.x-2,focused.y-2,focused.width+4,focused.height+4,1,0.95,0.85,0.35) end
 end
 function Window:isKeyConsumed(key)
@@ -666,21 +769,22 @@ end
 function Window:onKeyRelease(key)
     safe(function()
         if key==Keyboard.KEY_TAB then
-            self.focusIndex=(self.focusIndex or 3)%7+1
-            if self.compact and not self.detailOnly and self.focusIndex==4 then self.focusIndex=5 end
-            if self.compact and self.detailOnly and self.focusIndex==3 then self.focusIndex=4 end
+            local order=self.focusOrder or {"list"}
+            local current=1
+            for i,name in ipairs(order) do if name==self.focusKey then current=i end end
+            self.focusKey=order[(current%#order)+1]
         elseif key==Keyboard.KEY_BACK and self.compact and self.detailOnly then self:onBack()
         elseif key==Keyboard.KEY_PRIOR then self.document:page(-1)
         elseif key==Keyboard.KEY_NEXT then self.document:page(1)
-        elseif (key==Keyboard.KEY_UP or key==Keyboard.KEY_DOWN) and self.focusIndex==3 then
+        elseif (key==Keyboard.KEY_UP or key==Keyboard.KEY_DOWN) and self.focusKey=="list" then
             local index=math.max(1,math.min(#self.list.items,(self.list.selected or 1)+(key==Keyboard.KEY_UP and -1 or 1)))
             self.list.selected=index
             if self.list.items[index] then self:showRow(self.list.items[index].item) end
         elseif key==Keyboard.KEY_RETURN then
-            local index=self.focusIndex or 3
-            if index==1 then self:onSection(self.journal) elseif index==2 then self:onSection(self.evidence)
-            elseif index==3 and self.list.items[self.list.selected] then self:showRow(self.list.items[self.list.selected].item)
-            elseif index==5 then UI.openHelp() elseif index==6 then self:onContrast() elseif index==7 then self:close() end
+            local focus=self.focusKey
+            if focus=="journal" then self:onSection(self.journal) elseif focus=="evidence" then self:onSection(self.evidence)
+            elseif focus=="list" and self.list.items[self.list.selected] then self:showRow(self.list.items[self.list.selected].item)
+            elseif focus=="help" then UI.openHelp() elseif focus=="contrast" then self:onContrast() elseif focus=="close" then self:close() end
         end
     end)
 end
@@ -709,13 +813,47 @@ function UI.restoreWindow()
     UI.open(saved.section=="evidence" and "evidence" or "journal")
     if UI.notebook then UI.restorePending=false end
 end
+-- Highest discovery sequence number the ledger has produced so far, across
+-- every source (evidence/identity/connection). Used only to decide what to
+-- remember as "seen" when the notebook closes; never touches the ledger.
+local function highestDiscoverySeq()
+    local log=ConspiracyFiles.DiscoveryLog
+    local ok,events=pcall(function() return log and log.events and log.events() end)
+    if not ok or type(events)~="table" then return nil end
+    local max=nil
+    for _,e in ipairs(events) do
+        if type(e.seq)=="number" and (not max or e.seq>max) then max=e.seq end
+    end
+    return max
+end
 function Window:close()
     safe(function()
+        -- Recorded on close, not on open: an entry discovered during this
+        -- session must still show its "new" mark for the whole session, and
+        -- only stop being marked the next time the notebook is opened.
+        local seq=highestDiscoverySeq()
+        if seq then UI.rememberSeenSequence(seq) end
         UI.rememberWindow(self,false)
         UI.restorePending=false
         if UI.reader then UI.reader:close() end; if UI.help then UI.help:close() end
         self:removeFromUIManager(); if UI.notebook==self then UI.notebook=nil end
     end)
+end
+-- The highest ledger sequence the player has already seen. Player ModData
+-- already carries notebook window state (UI.rememberWindow above); this adds
+-- one more small, bounded number alongside it under its own key.
+function UI.lastSeenSequence()
+    if UI.probeState then return nil end
+    local player=getPlayer and getPlayer(); if not player then return nil end
+    local seen=player:getModData().ConspiracyFilesSeenSeq
+    return type(seen)=="number" and seen or nil
+end
+function UI.rememberSeenSequence(seq)
+    if UI.probeState or type(seq)~="number" then return end
+    local player=getPlayer and getPlayer(); if not player then return end
+    local md=player:getModData()
+    if type(md.ConspiracyFilesSeenSeq)=="number" and md.ConspiracyFilesSeenSeq>=seq then return end
+    md.ConspiracyFilesSeenSeq=seq
 end
 function Window:new(section)
     local player=getPlayer and getPlayer()
@@ -723,7 +861,7 @@ function Window:new(section)
     local x,y,w,h=rect(1000,680,type(geometry)=="table" and geometry or nil)
     local o=ISCollapsableWindow.new(self,x,y,w,h)
     o:setTitle("Survivor's Notebook"..((isDebugEnabled and isDebugEnabled()) and " ["..UI.VERSION.."]" or "")); o:setWantKeyEvents(true)
-    o.section=section or "journal"; o.focusIndex=3; o.minimumWidth=500; o.minimumHeight=420; return o
+    o.section=section or "journal"; o.focusKey="list"; o.minimumWidth=500; o.minimumHeight=420; return o
 end
 function UI.open(section,preferred)
     safe(function()

@@ -1,8 +1,8 @@
 -- Composition mocks only: no engine, rendering, native focus, or GUI input.
 test("UI composition shares a clamped document pane, explicit ink and owner key policy",function()
-    local names={"ISPanel","ISCollapsableWindow","ISButton","ISScrollingListBox","ISRichTextPanel","ConspiracyFiles","Events","Keyboard","UIFont","keyBinding","getCore","getTextManager","getPlayer","isDebugEnabled","isClient","isServer"}
+    local names={"ISPanel","ISCollapsableWindow","ISButton","ISScrollingListBox","ISRichTextPanel","ISTextEntryBox","ConspiracyFiles","Events","Keyboard","UIFont","keyBinding","getCore","getTextManager","getPlayer","isDebugEnabled","isClient","isServer"}
     local old={}; for _,name in ipairs(names) do old[name]=_G[name] end
-    local modules={"ISUI/ISPanel","ISUI/ISCollapsableWindow","ISUI/ISButton","ISUI/ISScrollingListBox","ISUI/ISRichTextPanel","ConspiracyFiles/Notebook","ConspiracyFiles/DocumentPane"}
+    local modules={"ISUI/ISPanel","ISUI/ISCollapsableWindow","ISUI/ISButton","ISUI/ISScrollingListBox","ISUI/ISRichTextPanel","ISUI/ISTextEntryBox","ConspiracyFiles/Notebook","ConspiracyFiles/DocumentPane"}
     local loaded={}; for _,name in ipairs(modules) do loaded[name]=package.loaded[name]; package.loaded[name]=true end
     package.loaded["ConspiracyFiles/Notebook"]=nil; package.loaded["ConspiracyFiles/DocumentPane"]=nil
     local path=package.path
@@ -28,11 +28,12 @@ test("UI composition shares a clamped document pane, explicit ink and owner key 
     function Base:titleBarHeight() return 24 end
     function Base:resizeWidgetHeight() return 8 end
     function Base:clear() self.items={} end
-    function Base:addItem(t,item) self.items[#self.items+1]={text=t,item=item,index=#self.items+1,height=self.itemheight} end
+    function Base:addItem(t,item,tooltip) self.items[#self.items+1]={text=t,item=item,index=#self.items+1,height=self.itemheight,tooltip=tooltip} end
+    function Base:getText() return self.text or "" end
     for _,name in ipairs({"setResizable","setWantKeyEvents","setOnMouseDownFunction","bringToTop","drawRect","drawRectBorder","prerender","setCapture","drawText"}) do Base[name]=function() end end
     function Base:addToUIManager() self.inUI=true end
     function Base:removeFromUIManager() self.inUI=false end
-    for _,name in ipairs({"ISPanel","ISCollapsableWindow","ISButton","ISScrollingListBox","ISRichTextPanel"}) do _G[name]=Base:derive() end
+    for _,name in ipairs({"ISPanel","ISCollapsableWindow","ISButton","ISScrollingListBox","ISRichTextPanel","ISTextEntryBox"}) do _G[name]=Base:derive() end
     ConspiracyFiles={}; Events={OnKeyPressed={Add=function() end},OnPostUIDraw={Add=function() end},OnGameStart={Add=function() end}}
     Keyboard={KEY_TAB=1,KEY_UP=2,KEY_DOWN=3,KEY_RETURN=4,KEY_PRIOR=5,KEY_NEXT=6,KEY_BACK=7,KEY_ESCAPE=8,KEY_NONE=0}
     UIFont={Small=1}; keyBinding={}
@@ -50,6 +51,14 @@ test("UI composition shares a clamped document pane, explicit ink and owner key 
         assertEqual(2,#drawn)
         for _,text in ipairs(drawn) do assertTrue(getTextManager():MeasureStringX(UIFont.Small,text)<=window.list.width-32) end
         assertTrue(drawn[2]:find("...",1,true)~=nil)
+        -- Item 2: ISScrollingListBox honours item.tooltip natively (confirmed
+        -- by reading the installed game's ISScrollingListBox.lua: addItem's
+        -- third argument sets it, and updateTooltip renders it every render
+        -- pass), so the row's tooltip should carry the untruncated pair even
+        -- though the on-screen text above was shortened to fit the column.
+        local untruncated=row.item.title..(row.item.summary~="" and "\n\n"..row.item.summary or "")
+        assertEqual(untruncated,row.tooltip)
+        assertTrue(row.tooltip:find(row.item.title,1,true)==1,"tooltip carries the untruncated title")
         drawn={}; window.list.doDrawItem(window.list,window.list.height+10,row); assertEqual(0,#drawn)
         window.list:setWidth(150); window.list.doDrawItem(window.list,0,row)
         for _,text in ipairs(drawn) do assertTrue(getTextManager():MeasureStringX(UIFont.Small,text)<=118) end
@@ -92,8 +101,45 @@ test("UI composition shares a clamped document pane, explicit ink and owner key 
             "the summary still identifies this as a discovery")
         assertEqual("g1",gen.list.items[1].item.id)
         UI.openHelp(); assertTrue(UI.help.text:find("Inspect Investigation Evidence",1,true)~=nil); UI.help:close()
+        -- Item 6: the filter narrows the view only. Discovery numbers must
+        -- stay the ones the ledger actually assigned, not be renumbered to
+        -- reflect position in the filtered list.
+        gen.filter:setText("receipt"); gen:refresh()
+        assertEqual(1,#gen.list.items); assertEqual("g2",gen.list.items[1].item.id)
+        assertEqual(2,gen.list.items[1].item.ordinal,"a filtered view must keep the true discovery number")
+        gen.filter:setText("zzz-nothing-matches-this"); gen:refresh()
+        assertEqual(0,#gen.list.items)
+        assertTrue(gen.document.plainText:find("Clear the filter",1,true)~=nil,"a filter that hides everything must say so, not silently show an empty list")
+        gen.filter:setText(""); gen:refresh()
+        assertEqual(2,#gen.list.items,"clearing the filter restores everything")
         gen:close()
         assertEqual(2,#known); assertEqual("Second document",known[2].body)
+        -- Item 4: entries discovered since the notebook was last closed are
+        -- marked, and the stored high-water mark only advances on close, not
+        -- on open (an isolated case/ledger so this cannot disturb `known`).
+        local known2={{id="k1",title="Alpha",body="A",connections={}},{id="k2",title="Beta",body="B",connections={}}}
+        ConspiracyFiles.GeneratedRuntime={metrics=function() return {} end,known=function() return known2 end}
+        local seenData={}
+        local realGetPlayer=getPlayer
+        getPlayer=function() return {getModData=function() return seenData end} end
+        ConspiracyFiles.DiscoveryLog={events=function() return {{seq=1,ref="k1",kind="evidence"},{seq=2,ref="k2",kind="evidence"}} end}
+        UI.open("journal")
+        local w1=assert(UI.notebook)
+        for _,it in ipairs(w1.list.items) do assertFalse(it.item.cfNew==true,"nothing is marked new before any seen-sequence is stored") end
+        w1:close()
+        assertEqual(2,seenData.ConspiracyFilesSeenSeq,"closing records the highest sequence seen so far")
+        known2[3]={id="k3",title="Gamma",body="C",connections={}}
+        ConspiracyFiles.DiscoveryLog.events=function() return {{seq=1,ref="k1",kind="evidence"},{seq=2,ref="k2",kind="evidence"},{seq=3,ref="k3",kind="evidence"}} end
+        UI.open("journal")
+        local w2=assert(UI.notebook)
+        local flagged={}
+        for _,it in ipairs(w2.list.items) do flagged[it.item.id]=it.item.cfNew==true end
+        assertTrue(flagged.k3,"the newly discovered row is marked since the last close")
+        assertFalse(flagged.k1 or false,"already-seen rows stay unmarked")
+        assertFalse(flagged.k2 or false,"already-seen rows stay unmarked")
+        w2:close()
+        assertEqual(3,seenData.ConspiracyFilesSeenSeq,"closing again advances the stored high-water mark")
+        getPlayer=realGetPlayer
     end)
     for _,name in ipairs(names) do _G[name]=old[name] end
     for _,name in ipairs(modules) do package.loaded[name]=loaded[name] end
