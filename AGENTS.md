@@ -52,6 +52,36 @@ Before making any design or code change:
 - Outside initialization, target ≤2 ms/frame and use bounded queued work rather than unbounded loops.
 - Completed T1 makes ≤500 KB/save the hard v0.1 canonical-state budget under P4-R17, with mandatory staged recursive validation before canonical ModData replacement under P4-R32.
 
+## Engine call form — hard rule, learned live 2026-09-07
+
+**Call PZ engine (Java-backed) methods with colon syntax. Never extract the
+method first.**
+
+    GOOD   square:HasStairs()            player:setHaloNote(t,255,255,255,900)
+    GOOD   pcall(function() manager:playUISound(name) end)
+    BAD    square.HasStairs()             -- throws
+    BAD    pcall(player.setHaloNote, player, ...)   -- may silently do nothing
+
+Kahlua does not treat an extracted method as a real method call. This failed
+twice in one day, in two different ways:
+
+- `ReachabilityRequest` called every engine method without a receiver. It threw
+  on the first real square in game and killed case preparation (77d46ef).
+- `PlayerVoice` and `ClueHints` used `pcall(obj.method, obj, ...)` for
+  `setHaloNote` and `playUISound`. Those did **nothing at all** while `pcall`
+  returned true, so the code logged success and the player saw and heard
+  nothing (d747a25 and follow-up).
+
+The silent variant is the dangerous one: tests pass, logs claim success, and
+the feature is simply absent in play. Wrapping in `pcall` hides it further.
+
+This applies only to engine objects. `pcall(ourTable.ourFunction, ...)` on our
+own plain Lua is fine and is used widely.
+
+Plain-table test doubles accept both call forms, so they cannot catch this.
+Where it matters, make the double demand a receiver - see the mock in
+`test/reachability_gate.lua`.
+
 ## Decision integrity
 
 - No implementation should silently contradict an existing decision.

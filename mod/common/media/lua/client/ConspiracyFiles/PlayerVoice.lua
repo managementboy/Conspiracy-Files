@@ -97,7 +97,7 @@ local function speak(player,text)
     local audible=false
     if getSoundManager then
         local ok,manager=pcall(getSoundManager)
-        if ok and manager and manager.playUISound then audible=pcall(manager.playUISound,manager,VOICE_SOUND) end
+        if ok and manager and manager.playUISound then audible=pcall(function() manager:playUISound(VOICE_SOUND) end) end
     end
     log("said \""..tostring(text).."\" halo="..tostring(halo).." sound="..tostring(audible))
     return halo,audible

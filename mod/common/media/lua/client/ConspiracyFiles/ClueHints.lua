@@ -56,7 +56,7 @@ local function announce(p,text)
     local audible=false
     if getSoundManager then
         local ok,manager=pcall(getSoundManager)
-        if ok and manager and manager.playUISound then audible=pcall(manager.playUISound,manager,HINT_SOUND) end
+        if ok and manager and manager.playUISound then audible=pcall(function() manager:playUISound(HINT_SOUND) end) end
     end
     return halo,audible
 end
