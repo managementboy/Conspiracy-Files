@@ -50,6 +50,26 @@ that body. Never invent a name.
 3. "Someone I found dead had a key to this place."
 4. "That key fits. Whoever carried it belonged here, maybe."
 
+## Set D — an uninspected evidence item entered the inventory
+
+Owner request 2026-09-07, UI proposal 8: reading evidence requires a
+right-click "Inspect Investigation Evidence" action a new player has no
+reason to guess. Proximity clue hints say something nearby is worth finding;
+nothing says what to do once it is in hand. Fired once, the first time a
+generated-case evidence item the player has not yet inspected settles into
+their inventory. Never fired for ordinary loot, and never again once the item
+is inspected or has already spoken once. Points at the *idea* of reading it
+properly, never at the keybind or the context-menu action by name.
+
+1. "I should take a proper look at this."
+2. "Worth reading this properly when I get a moment."
+3. "This deserves more than a glance. I'll read it properly, later."
+4. "I shouldn't just carry this around unread."
+5. "Better sit down and go through this properly."
+6. "That's worth a proper read, not just a pocket."
+7. "I'll want to go through this properly when I get the chance."
+8. "This isn't something to skim. Read it properly, later."
+
 ## Delivery rules
 
 - Speech bubble plus a halo note with an explicit duration, exactly as
@@ -61,3 +81,8 @@ that body. Never invent a name.
 - A cooldown so a burst of discoveries does not produce a burst of chatter.
 - Set B/C is the more significant event and must not be suppressed by a Set A
   line fired moments earlier.
+- Set D shares Set A's cooldown, not a cooldown of its own: both are ambient
+  survivor musing, so a burst of looting or discovery in one trip produces at
+  most one line of either kind, not one of each. Set D also fires at most
+  once per physical item, tracked on the item itself so it survives a
+  drop/re-pickup or a save/reload.

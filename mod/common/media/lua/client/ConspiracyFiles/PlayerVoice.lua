@@ -14,6 +14,11 @@
 ConspiracyFiles=ConspiracyFiles or {}
 local V=ConspiracyFiles.PlayerVoice or {}
 ConspiracyFiles.PlayerVoice=V
+-- Load the pickup hint explicitly. It installs its own action wrappers at file
+-- scope and nothing else references it, which is exactly how PlayerVoice itself
+-- silently never loaded (86ade2c). PlayerVoice is required by DiscoveryLog, so
+-- anchoring the hint here gives it a load path that is actually proven.
+pcall(require,"ConspiracyFiles/EvidencePickupHint")
 
 -- Register: the journal stays hedged, the character may speculate. No line
 -- states as fact that the named person lived somewhere or owned anything.
@@ -52,6 +57,21 @@ local SET_C={
     "That key fits. Whoever carried it belonged here, maybe.",
 }
 
+-- Set D: an uninspected generated-case evidence item just settled into the
+-- inventory. Points at the fact that it needs a proper look, never at the
+-- keybind or context-menu action itself -- a survivor thinking aloud does not
+-- narrate a tutorial.
+local SET_D={
+    "I should take a proper look at this.",
+    "Worth reading this properly when I get a moment.",
+    "This deserves more than a glance. I'll read it properly, later.",
+    "I shouldn't just carry this around unread.",
+    "Better sit down and go through this properly.",
+    "That's worth a proper read, not just a pocket.",
+    "I'll want to go through this properly when I get the chance.",
+    "This isn't something to skim. Read it properly, later.",
+}
+
 -- setHaloNote is the only halo API that takes a duration; ClueHints already
 -- established 900 as a readable value for a short line of speech.
 local HALO_DURATION=900
@@ -63,7 +83,7 @@ local VOICE_SOUND="UIObjectMenuEnter"
 -- significant event and must never be suppressed by it.
 local COOLDOWN_MS=45000
 
-local indexA,indexB,indexC=0,0,0
+local indexA,indexB,indexC,indexD=0,0,0,0
 local lastSetAAt=-1/0
 
 local function now()
@@ -139,7 +159,35 @@ function V.onKeyDoorLink(sourceToken)
     end
 end
 
+-- Set D: an uninspected generated-case evidence item just entered the
+-- player's inventory. UI_POLISH_PROPOSALS.md #8 -- the right-click "Inspect
+-- Investigation Evidence" action has no other discovery path, so the
+-- survivor names the gap in their own voice. The caller (a pickup/transfer
+-- hook) is responsible for confirming the item is live generated evidence
+-- and not yet inspected; this function only owns delivery, rotation, the
+-- once-per-item guard and the shared cooldown.
+--
+-- Once-per-item is a flag written directly onto the item's own mod data, the
+-- same way GeneratedRuntime and ClueMarkers already tag items -- it survives
+-- the item being dropped and picked back up, and a save/reload, without any
+-- new persistent state of our own. Gated by the same cooldown as Set A: both
+-- are ambient survivor musing, not the significant Set B/C revelation, so a
+-- burst of loot in one trip should not produce a burst of either kind.
+function V.onEvidenceFound(item)
+    if not item then return end
+    local p=player(); if not p then return end
+    local ok,md=pcall(function() return item:getModData() end)
+    if not ok or type(md)~="table" then log("evidence hint not delivered: item has no mod data") return end
+    if md.cfVoiceHinted then log("evidence hint suppressed: already delivered for this item") return end
+    local t=now()
+    if t-lastSetAAt<COOLDOWN_MS then log("evidence hint suppressed by cooldown ("..(t-lastSetAAt).."ms)") return end
+    lastSetAAt=t
+    md.cfVoiceHinted=true
+    indexD=indexD%#SET_D+1
+    speak(p,SET_D[indexD])
+end
+
 -- Test/debug hook: reset rotation and cooldown state.
-function V.reset() indexA,indexB,indexC,lastSetAAt=0,0,0,-1/0 end
+function V.reset() indexA,indexB,indexC,indexD,lastSetAAt=0,0,0,0,-1/0 end
 
 return V

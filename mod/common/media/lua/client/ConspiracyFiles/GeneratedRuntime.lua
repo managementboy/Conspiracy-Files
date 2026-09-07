@@ -284,6 +284,15 @@ function R.subject(item)
     local md=item:getModData(); local root=md and Cases.find(wrapper,md.cfGeneratedId); local a=root and root.assignments[md.cfGeneratedId]
     return a and md.cfPhysicalToken==a.physicalToken and a.status~="conflict"
 end
+-- True once the item's document id has been inspected (recorded in the
+-- ledger via R.inspect). Distinct from R.subject: a subject item can be
+-- live evidence the player has already read.
+function R.isInspected(item)
+    if not wrapper or not sessions or not item then return false end
+    local md=item:getModData(); if not md or not md.cfGeneratedId then return false end
+    for _,id in ipairs(Cases.discoveries(wrapper)) do if id==md.cfGeneratedId then return true end end
+    return false
+end
 function R.metrics() return scheduler and {peakMs=scheduler.peakMs} end
 function R.automaticStatus()
     local roots=wrapper and Cases.sessions(wrapper) or {}
