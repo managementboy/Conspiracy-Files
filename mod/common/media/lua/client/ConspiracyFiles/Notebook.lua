@@ -384,7 +384,7 @@ end)()
 ConspiracyFiles=ConspiracyFiles or {}
 ConspiracyFiles.NotebookUI=ConspiracyFiles.NotebookUI or {}
 local UI=ConspiracyFiles.NotebookUI
-UI.VERSION="DEV-0.8.8-voice"
+UI.VERSION="DEV-0.8.9-proxinv"
 local function safe(fn)
     local rt=ConspiracyFiles.Runtime
     if rt and not rt.disabled then return rt.boundary("ui",fn) end
@@ -615,6 +615,15 @@ function Window:layout()
     self.back:setVisible(self.compact and self.detailOnly==true); self.back:setY(top)
     local extra=self.compact and 38 or 0
     self.list:setX(12); self.list:setY(top); self.list:setWidth(listWidth); self.list:setHeight(height)
+    -- ISScrollingListBox:setHeight does NOT resize its own scroll bar; vanilla
+    -- always does it by hand (ISComboBox.lua:57, ISInventoryPane.lua:1786,
+    -- ISServerSandboxOptionsUI.lua:295). Without this the bar keeps the height
+    -- and position it had when the window was created.
+    local bar=self.list.vscroll
+    if bar then
+        if bar.setHeight then bar:setHeight(height) end
+        if bar.setX and bar.width then bar:setX(listWidth-bar.width) end
+    end
     self.list:setVisible(not self.compact or not self.detailOnly)
     self.header:setX(detailX); self.header:setY(top+extra); self.header:setWidth(detailW); self.header:setHeight(headerHeight); self.header:setVisible(showDetail); self.header:paginate()
     self.document:setX(detailX); self.document:setY(top+extra+headerHeight); self.document:setWidth(detailW); self.document:setHeight(math.max(80,height-headerHeight-extra)); self.document:setVisible(showDetail)
