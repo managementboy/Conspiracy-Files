@@ -93,13 +93,17 @@ function I.afterRender(pane)
  if last<first then return end
  -- Count what the loop actually accepted. An accepted pane that records
  -- nothing is otherwise indistinguishable from a pane never rendered.
- local considered,accepted=0,0
+ -- Report only a WATCHED item that went unrecorded, naming the check that
+ -- rejected it. Logging every pane that records nothing cried wolf: ten rows
+ -- of clothing recording nothing is normal, not a defect.
+ local considered,accepted,missed=0,0,nil
  local start=pane.cfIdentityCursor or first
  if start<first or start>last then start=first end
  for n=0,math.min(15,last-first) do
   local index=first+(start-first+n)%(last-first+1)
   local row=rows[index]
   local item=instanceof(row,"InventoryItem") and row or (type(row)=="table" and row.items and row.items[1])
+  if not item then missed=missed or ("row "..index.." resolved to no item; rowType="..type(row)) end
   considered=considered+1
   local fullType=read(item,"getFullType")
   local people=ConspiracyFiles.LocalPersonRuntime
@@ -116,11 +120,18 @@ function I.afterRender(pane)
   -- Base.BusinessCard, Base.ParkingTicket).
   local md=read(item,"getModData")
   local generatedEvidence=type(md)=="table" and md.cfGeneratedId~=nil
+  if types[fullType] and not generatedEvidence and not label then
+   missed=missed or (tostring(fullType).." has no corpse/bag container; itemContainer="..tostring(itemContainer))
+  end
   if types[fullType] and not generatedEvidence and read(item,"isHidden")~=true and label then
    local id=read(item,"getID")
    local name=clean(read(item,"getDisplayName"),180)
+   if not (type(id)=="number" and id~=0 and name) then
+    missed=missed or (tostring(fullType).." rejected: id="..tostring(id).." name="..tostring(name))
+   end
    if type(id)=="number" and id==id and math.abs(id)<9007199254740992 and id~=0 and name then
     local key=fullType..":"..tostring(id)
+    if queued[key] or seen[key] then missed=missed or (tostring(fullType)..":"..tostring(id).." already queued or seen") end
     if not queued[key] and not seen[key] and #queue<16 then
      local record={id=key,fullType=fullType,label=name,source=source,container=label,
       x=read(player,"getX"),y=read(player,"getY"),z=read(player,"getZ"),observedAt=read(getGameTime(),"getWorldAgeHours")}
@@ -129,9 +140,9 @@ function I.afterRender(pane)
    end
   end
  end
- if accepted==0 and considered>0 then
-  gate("pane accepted but recorded nothing: rows="..#rows.." first="..first.." last="..last..
-   " considered="..considered.." queue="..#queue.." containerType="..tostring(read(container,"getType")))
+ if accepted==0 and missed then
+  gate("watched item not recorded: "..missed.." (rows="..#rows..", considered="..considered..
+   ", containerType="..tostring(read(container,"getType"))..")")
  end
  pane.cfIdentityCursor=first+(start-first+16)%(last-first+1)
 end
