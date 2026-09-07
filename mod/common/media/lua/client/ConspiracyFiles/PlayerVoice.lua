@@ -80,8 +80,11 @@ local function withName(template,name)
     return template:sub(1,i-1)..name..template:sub(j+1)
 end
 
+-- A line the player misses and a line that never fired look identical unless
+-- delivery is logged. That cost an hour on clue hints; do not repeat it.
+local function log(message) print("[CF-VOICE] "..tostring(message)) end
 local function speak(player,text)
-    if not player then return false,false end
+    if not player then log("no player; line not delivered") return false,false end
     if player.Say then pcall(player.Say,player,text) end
     local halo=false
     if player.setHaloNote then halo=pcall(player.setHaloNote,player,text,255,255,255,HALO_DURATION) end
@@ -90,6 +93,7 @@ local function speak(player,text)
         local ok,manager=pcall(getSoundManager)
         if ok and manager and manager.playUISound then audible=pcall(manager.playUISound,manager,VOICE_SOUND) end
     end
+    log("said \""..tostring(text).."\" halo="..tostring(halo).." sound="..tostring(audible))
     return halo,audible
 end
 
@@ -105,7 +109,7 @@ end
 function V.onDiscovery(kind,reference)
     local p=player(); if not p then return end
     local t=now()
-    if t-lastSetAAt<COOLDOWN_MS then return end
+    if t-lastSetAAt<COOLDOWN_MS then log("journal line suppressed by cooldown ("..(t-lastSetAAt).."ms)") return end
     lastSetAAt=t
     indexA=indexA%#SET_A+1
     speak(p,SET_A[indexA])
