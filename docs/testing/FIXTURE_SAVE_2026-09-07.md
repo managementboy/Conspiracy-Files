@@ -4,7 +4,15 @@
 it, and do not ask the owner to overwrite it. The owner keeps their own copy;
 this file records what makes it worth keeping.
 
-- **Save:** `C:\Users\elkin.fricke\Zomboid\Saves\Sandbox\2026-09-07_11-51-30`
+- **Working copy the owner tests from (2026-09-07):**
+  `C:\Users\elkin.fricke\Zomboid\Saves\Sandbox\wallet key and corpse - Kopie (4)`
+  The owner keeps several numbered copies of this world under
+  `Saves\Sandbox\wallet key and corpse*`. **Ask which copy is current before
+  assuming** - they are not interchangeable, because the key and wallet have
+  been taken in some and not in others. The clean state for the key-door test
+  is key and wallet still ON the corpse.
+- **Original:** `C:\Users\elkin.fricke\Zomboid\Saves\Sandbox\2026-09-07_11-51-30`
+  (key taken and wallet opened during the afternoon session; no longer clean)
 - **Mod build in play:** `DEV-0.8.6-discovery-ledger`, repo at `e1d2035`
 - **Game:** Build 42.20.4, revision `b0bbce05d5`
 - **Case id:** `1177813649`, four documents, record `R-340`
