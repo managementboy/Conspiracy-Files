@@ -47,4 +47,13 @@ function L.outfitFor(token)
     return ok and outfit or nil
 end
 
+-- What the notebook may print. outfitFor returns the game's raw id, because
+-- that is the observation and the store keeps facts; this is the same value
+-- turned into words, and nil where the id identifies nobody. Keeping them
+-- apart means a stored observation is never rewritten for presentation.
+function L.readableOutfitFor(token)
+    local ok,outfit=pcall(Outfits.readable,L.outfitFor(token))
+    return ok and outfit or nil
+end
+
 return L

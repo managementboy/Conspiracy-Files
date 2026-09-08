@@ -66,6 +66,32 @@ function M.observe(root,token,outfit)
     return staged,true
 end
 
+-- getOutfitName returns the outfit's internal id: "ConstructionWorker",
+-- "Bathrobe", "Generic03". The raw id is stored, because it is the game's own
+-- fact, but it is not what the notebook can say to a player.
+--
+-- Two rules, both conservative. An outfit that identifies nobody is not a
+-- lead: "Generic03" says only that the game dressed a zombie, so it is
+-- suppressed and the sentence is omitted entirely rather than padded with
+-- noise. Anything else becomes ordinary words - "ConstructionWorker" reads
+-- "construction worker" - because a lead the player cannot read is no better
+-- than one they never got.
+local UNINFORMATIVE={["generic"]=true,["default"]=true,["naked"]=true,["nude"]=true,["bullet"]=true}
+function M.readable(name)
+    if type(name)~="string" then return nil end
+    local trimmed=name:gsub("^%s+",""):gsub("%s+$","")
+    if trimmed=="" then return nil end
+    -- Debug and test wardrobes are not observations about anybody.
+    if trimmed:lower():find("test") then return nil end
+    local stem=trimmed:gsub("%d+$",""):lower()
+    if UNINFORMATIVE[stem] then return nil end
+    -- CamelCase and underscores into words, without disturbing an id that is
+    -- already one plain word.
+    local spaced=trimmed:gsub("_"," "):gsub("(%l)(%u)","%1 %2"):gsub("(%u)(%u%l)","%1 %2")
+    spaced=spaced:gsub("%s+"," "):gsub("^%s+",""):gsub("%s+$","")
+    if spaced=="" then return nil end
+    return spaced:lower()
+end
 function M.outfitFor(root,token)
     local ok=M.validate(root); if not ok then return nil end
     if type(token)~="string" then return nil end

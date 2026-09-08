@@ -34,7 +34,7 @@ local function root()
  return Model.empty()
 end
 function I.rows()
- local ok,result=pcall(function() local r=root();if Model.validate(r) then return Model.rows(r,Outfits.outfitFor) end;return {} end)
+ local ok,result=pcall(function() local r=root();if Model.validate(r) then return Model.rows(r,Outfits.readableOutfitFor) end;return {} end)
  return ok and result or {}
 end
 local function clean(value,limit)
