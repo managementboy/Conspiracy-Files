@@ -42,6 +42,10 @@ CHECKS=(
   "zombie.iso.IsoGridSquare:getBuilding:the building a door or body sits in"
   "zombie.iso.IsoGridSquare:getRoom:room labels for placement constraints"
   "zombie.iso.RoomDef:getName:the room label T3 extracts"
+  # O1: whether vanilla already dressed this room. Present on the installed
+  # class; NOT yet proven callable from vanilla Lua - that needs a live probe,
+  # and presence in the jar is not capability (T9).
+  "zombie.iso.RoomDef:getProceduralSpawnedContainer:O1, which containers vanilla already filled"
   "zombie.characters.IsoPlayer:getInventory:distinguishing the player's own pane"
   "zombie.characters.IsoGameCharacter:getDescriptor:the survivor forename in the notebook title"
   "zombie.characters.SurvivorDesc:getForename:the survivor forename in the notebook title"
