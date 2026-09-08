@@ -36,7 +36,24 @@ function M.add(root,r)
  if not validRecord(r) then return nil,false,"invalid observation" end
  local candidate=M.empty();local duplicate=false
  for i,old in ipairs(root.records) do candidate.records[i]=copyRecord(old);if old.id==r.id then duplicate=true end end
- if duplicate then return candidate,false end
+ -- A record observed before its body was stamped has no token, and the outfit
+ -- lead can never attach without one. Take the token when it finally exists
+ -- rather than treating the second sighting as a duplicate with nothing to add.
+ -- Nothing else about a stored record is ever rewritten: an observation is a
+ -- record of what was seen, not a mutable row.
+ if duplicate then
+  if r.token~=nil then
+   for i,old in ipairs(candidate.records) do
+    if old.id==r.id and old.token==nil then
+     candidate.records[i].token=r.token
+     local okBackfill,eBackfill=M.validate(candidate)
+     if not okBackfill then return nil,false,eBackfill end
+     return candidate,true
+    end
+   end
+  end
+  return candidate,false
+ end
  candidate.records[#candidate.records+1]=copyRecord(r)
  ok,e=M.validate(candidate);if not ok then return nil,false,e end
  return candidate,true

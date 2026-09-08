@@ -11,6 +11,9 @@ local TAG="ConspiracyFiles.IdentityObservations"
 local types={['Base.IDcard']=true,['Base.IDcard_Stolen']=true,['Base.IDcard_Female']=true,
  ['Base.IDcard_Male']=true,['Base.CreditCard']=true,['Base.CreditCard_Stolen']=true,['Base.ParkingTicket']=true,['Base.SpeedingTicket']=true,['Base.BusinessCard']=true,['Base.BusinessCard_Personal']=true,['Base.BusinessCard_Nolans']=true,['Base.Passport']=true,['Base.PressID']=true,['Base.Badge']=true,['Base.Diary1']=true,['Base.Diary2']=true}
 local queue,queued,seen={},{},{}
+-- Ids stored without a body token. They are the only records worth looking at
+-- twice: everything else is retired after one sighting.
+local tokenless={}
 local elapsed=0
 local function read(o,key)
  if not o then return nil end
@@ -56,6 +59,13 @@ end
 -- actually use. Resolve each ROW's own container instead: that fixes the
 -- merged view and keeps provenance honest when two corpses appear in one
 -- list, since each item still reports the body it really came from.
+-- Third return is the CARRIER: the object that may hold a provenance token.
+-- For a bag that is the bag itself, not the corpse, because a wallet moved off
+-- a body carries the body's stamp (LocalPersonIntegration stamps it on the
+-- move). Returning only the corpse here lost that: an ID inside a wallet was
+-- classified "container" and its outfit lead was discarded even though the mod
+-- knew which body the wallet came from. Observed 2026-09-08 with Jarvis
+-- Harding; see docs/management/PLAYTEST_2026-09-08.md.
 local function describeContainer(c,player)
  if not c or c==read(player,"getInventory") then return nil end
  local owner=read(c,"getParent")
@@ -63,17 +73,33 @@ local function describeContainer(c,player)
  local bag=read(c,"getContainingItem")
  if bag then
   local name=clean(read(bag,"getDisplayName"),120)
-  if name then return name,"container" end
+  if name then return name,"container",bag end
  end
  return nil
 end
--- The corpse's own provenance token, if LocalPersonIntegration has already
--- stamped it (see LocalPersonIntegration.remember). Never fabricated here:
--- an unstamped body just means the outfit line waits for a later render,
--- same as any other eventually-consistent observation in this mod.
-local function corpseToken(owner)
- local md=read(owner,"getModData")
+-- The provenance token a carrier already holds, if LocalPersonIntegration has
+-- stamped it (see LocalPersonIntegration.remember). Never fabricated here: an
+-- unstamped carrier yields nil, and the record is re-observed later once the
+-- stamp exists. A carrier is a corpse or a bag taken off one; both are stamped
+-- the same way, so both are read the same way.
+local function provenanceToken(carrier)
+ local md=read(carrier,"getModData")
  if type(md)=="table" and type(md.cfObservedSource)=="string" then return md.cfObservedSource end
+ return nil
+end
+-- Ten checks below return silently. That is right in normal play - the
+-- player's own pane, a dragging pane, a collapsed parent and a hidden pane are
+-- all ordinary - and logging them all "cried wolf" once already. But when a
+-- pane the player is plainly looking at records nothing, the reason is then
+-- unobtainable: on 2026-09-08 an open wallet was skipped with no line at all,
+-- and AUDIT_2026-09-07 wrongly believed a diagnostic already named it.
+--
+-- So it is opt-in. From the debug console:
+--   ConspiracyFiles.IdentityObserver.verbose=true
+-- Costs nothing while off, and names the failing check in one session.
+I.verbose=false
+local function bail(reason)
+ if I.verbose then gate("bailed: "..tostring(reason)) end
  return nil
 end
 I.sawRender=false
@@ -82,25 +108,25 @@ function I.afterRender(pane)
  if not supported() then return gate("observer unsupported (debug/MP/runtime gate)") end
  if #queue>=16 then return gate("queue full") end
  if pane.mode~="details" then return gate("pane mode is "..tostring(pane.mode)..", expected details") end
- if pane.dragStarted then return end
- if read(pane,"isReallyVisible")~=true then return end
- if not pane.parent or pane.parent.isCollapsed then return end
- if read(pane.parent,"isReallyVisible")~=true then return end
+ if pane.dragStarted then return bail("pane.dragStarted") end
+ if read(pane,"isReallyVisible")~=true then return bail("pane not really visible") end
+ if not pane.parent or pane.parent.isCollapsed then return bail("no parent, or parent collapsed") end
+ if read(pane.parent,"isReallyVisible")~=true then return bail("parent not really visible") end
  local player=getSpecificPlayer(pane.player)
- if not player or player~=getPlayer() then return end
+ if not player or player~=getPlayer() then return bail("pane belongs to another player") end
  local container=pane.inventory
- if not container then return end
- if container==read(player,"getInventory") then return end
+ if not container then return bail("pane has no inventory") end
+ if container==read(player,"getInventory") then return bail("pane is the player own inventory") end
  -- Each row is judged on its own container below, so a mixed or merged pane
  -- contributes exactly the rows that really sit in a corpse or a bag.
  local h,header,scroll,height=pane.itemHgt,pane.headerHgt,read(pane,"getYScroll"),read(pane,"getHeight")
- if type(h)~="number" or h<=0 or type(header)~="number" or type(scroll)~="number" or type(height)~="number" then return end
+ if type(h)~="number" or h<=0 or type(header)~="number" or type(scroll)~="number" or type(height)~="number" then return bail("geometry unreadable: h="..tostring(h)..", header="..tostring(header)..", scroll="..tostring(scroll)..", height="..tostring(height)) end
  local rows=pane.items
- if type(rows)~="table" then return end
+ if type(rows)~="table" then return bail("pane.items is "..type(rows)) end
  local first=math.max(1,math.ceil(-scroll/h)+1)
  -- At most sixteen fully visible rows per pane/frame; rotate across tall panes.
  local last=math.min(#rows,math.floor((height-header-scroll)/h))
- if last<first then return end
+ if last<first then return bail("no fully visible rows: first="..tostring(first)..", last="..tostring(last)) end
  -- Count what the loop actually accepted. An accepted pane that records
  -- nothing is otherwise indistinguishable from a pane never rendered.
  -- Report only a WATCHED item that went unrecorded, naming the check that
@@ -118,7 +144,7 @@ function I.afterRender(pane)
   local fullType=read(item,"getFullType")
   local people=ConspiracyFiles.LocalPersonRuntime
   local itemContainer=read(item,"getContainer")
-  local label,source,corpse=describeContainer(itemContainer,player)
+  local label,source,carrier=describeContainer(itemContainer,player)
   if people and people.see and fullType and read(item,"isHidden")~=true and itemContainer then
    pcall(people.see,item,itemContainer)
   end
@@ -141,10 +167,15 @@ function I.afterRender(pane)
    end
    if type(id)=="number" and id==id and math.abs(id)<9007199254740992 and id~=0 and name then
     local key=fullType..":"..tostring(id)
-    if not queued[key] and not seen[key] and #queue<16 then
+    local token=carrier and provenanceToken(carrier) or nil
+    -- Re-observe only a record that is still missing its token AND now has one
+    -- to take. Retrying unconditionally would re-queue every unstamped bag on
+    -- every render for nothing.
+    local unfinished=tokenless[key] and token~=nil
+    if not queued[key] and (not seen[key] or unfinished) and #queue<16 then
      local record={id=key,fullType=fullType,label=name,source=source,container=label,
       x=read(player,"getX"),y=read(player,"getY"),z=read(player,"getZ"),observedAt=read(getGameTime(),"getWorldAgeHours"),
-      token=source=="corpse" and corpseToken(corpse) or nil}
+      token=token}
      queue[#queue+1]=record;queued[key]=true;accepted=accepted+1
     end
    end
@@ -163,12 +194,17 @@ function I.flush()
  queued[record.id]=nil
  local staged,changed=Model.add(root(),record)
  if not staged then return end
- if not changed then seen[record.id]=true;return end
+ if not changed then
+  seen[record.id]=true
+  if record.token==nil then tokenless[record.id]=true end
+  return
+ end
  if not Budget.check("identities",{canonical=staged}) then return end
  -- Sole replacement only after full domain and aggregate validation.
  local store=ModData.getOrCreate(TAG)
  store.canonical=staged
  seen[record.id]=true
+ if record.token==nil then tokenless[record.id]=true else tokenless[record.id]=nil end
  -- Chronological order lives in one shared ledger, not per-source lists.
  Log.record("identity","identity:"..record.id)
  local ui=ConspiracyFiles.NotebookUI
@@ -193,7 +229,7 @@ if Events and Events.OnTick and not I.tickHandler then
  I.tickHandler=function() I.tick() end
  Events.OnTick.Add(I.tickHandler)
 end
-function I.reset() queue={};queued={};seen={};elapsed=0 end
+function I.reset() queue={};queued={};seen={};tokenless={};elapsed=0 end
 if Events and Events.OnGameStart and not I.startHandler then
  -- Seven modules are reached only by PZ executing their file, with nothing
  -- requiring them. Two are load-bearing: AutomaticInvestigations makes cases
