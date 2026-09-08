@@ -14,9 +14,9 @@ set -euo pipefail
 export MSYS2_ARG_CONV_EXCL="*"
 
 REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
-PZ_DEFAULT="/c/Program Files (x86)/Steam/steamapps/common/ProjectZomboid"
-PZ="${PZ_HOME:-$PZ_DEFAULT}"
-JDK="${JAVA_HOME:-/c/Program Files/Zulu/zulu-25}"
+. "$REPO/tools/env.sh"
+PZ="$PZ_HOME"
+JDK="$JAVA_HOME"
 
 [ -f "$PZ/projectzomboid.jar" ] || { echo "projectzomboid.jar not found under $PZ (set PZ_HOME)" >&2; exit 2; }
 [ -x "$JDK/bin/java" ] || { echo "java not found under $JDK (set JAVA_HOME)" >&2; exit 2; }

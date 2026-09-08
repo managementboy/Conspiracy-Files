@@ -7,7 +7,8 @@
 # way that looked like a runtime bug. This catches that class of mistake.
 set -uo pipefail
 REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-INSTALL="${CF_INSTALL:-/c/Users/elkin.fricke/Zomboid/mods/ConspiracyFiles}"
+. "$REPO/tools/env.sh"
+INSTALL="$CF_INSTALL"
 status=0
 
 echo "== every require() resolves inside the shipped tree =="
