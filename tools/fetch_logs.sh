@@ -4,6 +4,7 @@
 #   tools/fetch_logs.sh              console.txt, plus a summary of the CF lines
 #   tools/fetch_logs.sh --all        also the timestamped Logs/ folder
 #   tools/fetch_logs.sh --list       show what is on the play machine, fetch nothing
+#   tools/fetch_logs.sh --incoming   summarise a log the play machine pushed here
 #
 # Development and play are on different machines, so the log has to come here
 # before it can be read. scp rather than rsync: the play machine is Windows and
@@ -37,11 +38,13 @@ DEST="$REPO/dev/playtest-logs"
 want_all=0
 list_only=0
 summarise_only=""
+incoming=0
 while [ $# -gt 0 ]; do
     case "$1" in
         --all)  want_all=1; shift ;;
         --list) list_only=1; shift ;;
         --summarise) summarise_only="${2:-}"; shift 2 ;;
+        --incoming)  incoming=1; shift ;;
         *) echo "unknown argument: $1" >&2; exit 2 ;;
     esac
 done
@@ -79,6 +82,24 @@ summarise() {
 if [ -n "$summarise_only" ]; then
     [ -f "$summarise_only" ] || { echo "no such log: $summarise_only" >&2; exit 2; }
     summarise "$summarise_only"
+    exit 0
+fi
+
+# --incoming: the play machine pushed the log here instead of us pulling it.
+# A company-managed Windows box may be unable to install the OpenSSH *server*
+# from Windows Update, while the *client* ships enabled by default - so pushing
+# works where pulling cannot. Summarise the newest thing that arrived.
+if [ "$incoming" -eq 1 ]; then
+    newest="$(ls -1t "$DEST/incoming"/*.txt 2>/dev/null | head -1 || true)"
+    [ -n "$newest" ] || {
+        echo "nothing in $DEST/incoming." >&2
+        echo "On the play machine, push one with:" >&2
+        echo "  scp \$env:USERPROFILE\\Zomboid\\console.txt USER@HOST:$DEST/incoming/console.txt" >&2
+        exit 1; }
+    echo "$newest"
+    echo "  arrived $(date -r "$newest" '+%Y-%m-%d %H:%M:%S'), $(wc -l < "$newest" | tr -d ' ') lines"
+    echo
+    summarise "$newest"
     exit 0
 fi
 
