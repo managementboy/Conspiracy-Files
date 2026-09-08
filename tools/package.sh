@@ -59,3 +59,15 @@ if [ "${1:-}" = "--install" ]; then
     cp -r "$staging/ConspiracyFiles" "$CF_INSTALL"
     echo "installed to $CF_INSTALL"
 fi
+
+# --stage <dir>: leave the verified tree at <dir> instead of installing it, so
+# the Workshop publisher gets the same require-checked payload the zip and the
+# local install get. The check above is the whole point; do not stage around it.
+if [ "${1:-}" = "--stage" ]; then
+    dest="${2:-}"
+    [ -n "$dest" ] || { echo "--stage needs a destination directory" >&2; exit 1; }
+    rm -rf "$dest"
+    mkdir -p "$(dirname "$dest")"
+    cp -r "$staging/ConspiracyFiles" "$dest"
+    echo "staged to $dest"
+fi
