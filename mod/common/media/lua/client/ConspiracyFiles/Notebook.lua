@@ -855,12 +855,30 @@ function UI.rememberSeenSequence(seq)
     if type(md.ConspiracyFilesSeenSeq)=="number" and md.ConspiracyFilesSeenSeq>=seq then return end
     md.ConspiracyFilesSeenSeq=seq
 end
+-- The survivor's own forename, or nil. This is the game's fact, not ours: the
+-- notebook belongs to whoever is holding it, and PZ already named them. Every
+-- getter is guarded because a descriptor can be absent mid-load, and a missing
+-- name must fall back rather than break the window.
+local function survivorForename(player)
+    if not player then return nil end
+    local ok,name=pcall(function()
+        local d=player:getDescriptor()
+        if not d then return nil end
+        return d:getForename()
+    end)
+    if not ok or type(name)~="string" then return nil end
+    name=name:gsub("[\r\n]"," "):gsub("^%s+",""):gsub("%s+$","")
+    if name=="" then return nil end
+    return name:sub(1,24)
+end
 function Window:new(section)
     local player=getPlayer and getPlayer()
     local geometry=UI.geometry or (player and player:getModData().ConspiracyFilesUI)
     local x,y,w,h=rect(1000,680,type(geometry)=="table" and geometry or nil)
     local o=ISCollapsableWindow.new(self,x,y,w,h)
-    o:setTitle("Survivor's Notebook"..((isDebugEnabled and isDebugEnabled()) and " ["..UI.VERSION.."]" or "")); o:setWantKeyEvents(true)
+    local forename=survivorForename(player)
+    local owner=forename and (forename.."'s Notebook") or "Survivor's Notebook"
+    o:setTitle(owner..((isDebugEnabled and isDebugEnabled()) and " ["..UI.VERSION.."]" or "")); o:setWantKeyEvents(true)
     o.section=section or "journal"; o.focusKey="list"; o.minimumWidth=500; o.minimumHeight=420; return o
 end
 function UI.open(section,preferred)
