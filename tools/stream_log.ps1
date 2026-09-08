@@ -68,6 +68,25 @@ if ($age -gt 5) {
     Write-Host ""
 }
 
+# Get-Content | ssh hands ssh a pipe as stdin, so it cannot prompt for a
+# password: it waits forever for input that can never arrive, and the stream
+# looks like it started while nothing is sent. Prove key auth works first,
+# with a plain ssh that is allowed to fail fast.
+Write-Host "checking key-based access to $DevHost ..."
+ssh -o BatchMode=yes -o ConnectTimeout=8 $DevHost "exit" 2>$null
+if ($LASTEXITCODE -ne 0) {
+    Write-Host ""
+    Write-Host "Cannot reach $DevHost without a password." -ForegroundColor Red
+    Write-Host "Streaming pipes the log into ssh, so ssh has no way to ask you for one."
+    Write-Host "Set up a key once:"
+    Write-Host ""
+    Write-Host "  ssh-keygen -t ed25519"
+    Write-Host "  type `$env:USERPROFILE\.ssh\id_ed25519.pub | ssh $DevHost `"mkdir -p ~/.ssh && chmod 700 ~/.ssh && cat >> ~/.ssh/authorized_keys && chmod 600 ~/.ssh/authorized_keys`""
+    Write-Host ""
+    Write-Host "Then run this again. (push_log.ps1 still works with a password.)"
+    exit 1
+}
+
 $stamp  = Get-Date -Format "yyyy-MM-dd_HH-mm-ss"
 $remote = "$DevPath/live-$stamp.txt"
 
