@@ -30,7 +30,7 @@ work".
 
 Within a few seconds of starting, `console.txt` should contain:
 
-    [CF-SELFCHECK] all 12 expected modules loaded
+    [CF-SELFCHECK] all 13 expected modules loaded
     [CF-G2] Generated case active.
 
 If the self-check names anything as `NOT LOADED`, stop and report that line: it
