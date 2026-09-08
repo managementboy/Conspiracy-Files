@@ -1,0 +1,17 @@
+# The working tree is deliberately byte-stable across machines.
+#
+# This repository contains a mix of CRLF and LF files, some of them mixed within
+# a single file, and the deployed mod is compared byte-for-byte against the repo
+# by tools/verify_install.sh. If git normalised endings on checkout, moving to
+# another OS would rewrite thousands of lines, bury real changes in noise, and
+# make that comparison meaningless.
+#
+# So: never convert anything. What is committed is what lands on disk.
+* -text
+
+# Binary assets, stated explicitly so no tool guesses.
+*.png binary
+*.jar binary
+*.bin binary
+*.pzby binary
+*.class binary
