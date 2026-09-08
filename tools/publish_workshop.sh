@@ -82,9 +82,15 @@ published_id="0"
 
 description="$(cat "$ITEM_DIR/description.txt" 2>/dev/null || echo "Conspiracy-Files: Dead Air")"
 
-# steamcmd wants a VDF. Quotes inside the description would end the string, so
-# escape them rather than produce a file that fails to parse at upload time.
-vdf_escape() { printf '%s' "$1" | sed 's/\\/\\\\/g; s/"/\\"/g'; }
+# steamcmd wants a VDF, and a VDF string is single-line: a literal newline ends
+# it and Steam then fails with "got } in key". The description is several
+# paragraphs, so newlines must become the two-character escape \n, not be
+# passed through. Quotes and backslashes need escaping for the same reason.
+vdf_escape() {
+    printf '%s' "$1" \
+        | sed 's/\\/\\\\/g; s/"/\\"/g' \
+        | awk 'BEGIN { ORS = "" } NR > 1 { print "\\n" } { print }'
+}
 
 {
     echo '"workshopitem"'
@@ -99,6 +105,17 @@ vdf_escape() { printf '%s' "$1" | sed 's/\\/\\\\/g; s/"/\\"/g'; }
     echo "    \"changenote\"      \"$(vdf_escape "$changenote")\""
     echo '}'
 } > "$VDF"
+
+# A value that still contains a raw newline splits its line and Steam rejects
+# the whole file with an unhelpful "got } in key". Catch it here: every key is
+# exactly one line, so the total is the three structural lines plus the keys.
+expected_lines=$(( 3 + 7 ))
+[ -f "$PREVIEW" ] && expected_lines=$(( expected_lines + 1 ))
+actual_lines="$(wc -l < "$VDF" | tr -d ' ')"
+[ "$actual_lines" -eq "$expected_lines" ] || {
+    echo "generated VDF is malformed: expected $expected_lines lines, got $actual_lines." >&2
+    echo "A value contains an unescaped newline. See $VDF" >&2
+    exit 1; }
 
 lua_files="$(find "$CONTENT" -name '*.lua' | wc -l | tr -d ' ')"
 vis_name=$(case "$visibility" in 0) echo public;; 1) echo friends-only;; 2) echo private;; 3) echo unlisted;; esac)
