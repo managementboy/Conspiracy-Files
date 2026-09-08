@@ -67,8 +67,39 @@ publish creates a second, unrelated Workshop item.
 3. `tools/publish_workshop.sh --changenote "<what changed>"`.
 4. On the play machine, Steam pushes the update to the subscription. Enable the
    mod, start a **fresh save**, play.
-5. Send back `console.txt` - `[CF-SELFCHECK]` first, then `[CF-LEDGER]`,
-   `[CF-VOICE]`, `[CF-PERSON]`.
+5. Pull the log back with `tools/fetch_logs.sh` - see below.
+
+## Getting the log off the play machine
+
+The log is written where the game runs, so it has to be fetched. One-time setup
+on the Windows play machine, in an admin PowerShell:
+
+    Add-WindowsCapability -Online -Name OpenSSH.Server~~~~0.0.1.0
+    Start-Service sshd
+    Set-Service -Name sshd -StartupType Automatic
+
+Then here, once:
+
+    export CF_PLAY_HOST=elkin.fricke@<play-machine-ip>
+    ssh-copy-id "$CF_PLAY_HOST"
+
+An **admin** user's key goes in `C:\ProgramData\ssh\administrators_authorized_keys`,
+not the user's `.ssh\authorized_keys`. A key in the wrong file is the usual
+reason Windows still asks for a password, and this script refuses to prompt.
+
+    tools/fetch_logs.sh                     # console.txt, plus a summary
+    tools/fetch_logs.sh --all               # also the timestamped Logs/ folder
+    tools/fetch_logs.sh --list              # what is there, fetch nothing
+    tools/fetch_logs.sh --summarise <file>  # summarise a log you already have
+
+Logs land in `dev/playtest-logs/<timestamp>/`, gitignored, with `latest`
+pointing at the most recent. The summary leads with `[CF-SELFCHECK]` because it
+explains everything after it: a missing line means the mod never reached game
+start, usually a disabled mod or a launch without `-debug`.
+
+PZ rewrites `console.txt` each launch but keeps timestamped copies in `Logs/`,
+so a previous session survives - use `--all` when the interesting run was not
+the last one.
 
 `tools/package.sh --install` still exists for testing on this machine without
 going through Steam. Prefer it for a quick local check; use the Workshop route

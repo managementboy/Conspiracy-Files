@@ -31,3 +31,4 @@ tools/kahlua/*.class
 
 # Build output from tools/package.sh
 dist/
+dev/playtest-logs/
