@@ -82,14 +82,21 @@ published_id="0"
 
 description="$(cat "$ITEM_DIR/description.txt" 2>/dev/null || echo "Conspiracy-Files: Dead Air")"
 
-# steamcmd wants a VDF, and a VDF string is single-line: a literal newline ends
-# it and Steam then fails with "got } in key". The description is several
-# paragraphs, so newlines must become the two-character escape \n, not be
-# passed through. Quotes and backslashes need escaping for the same reason.
+# steamcmd wants a VDF, and Valve's KeyValues parser reads these files with
+# escape sequences OFF. A backslash is therefore an ordinary character and \"
+# does NOT escape a quote: it is a backslash followed by a quote that ends the
+# string early. Steam then swallows the rest of the file and reports "got } in
+# key" against the closing brace, naming nothing useful.
+#
+# So a value cannot contain a double quote or a backslash at all. Replace them
+# rather than escape them. A VDF string is also single-line, and \n is likewise
+# not an escape, so paragraph breaks cannot survive here - the description is
+# flattened to one line and its real formatting is set on the Workshop page.
 vdf_escape() {
     printf '%s' "$1" \
-        | sed 's/\\/\\\\/g; s/"/\\"/g' \
-        | awk 'BEGIN { ORS = "" } NR > 1 { print "\\n" } { print }'
+        | tr '\\' '/' \
+        | sed "s/\"/'/g" \
+        | awk 'BEGIN { ORS = "" } NR > 1 { print " " } { print }'
 }
 
 {
@@ -106,15 +113,24 @@ vdf_escape() {
     echo '}'
 } > "$VDF"
 
-# A value that still contains a raw newline splits its line and Steam rejects
-# the whole file with an unhelpful "got } in key". Catch it here: every key is
-# exactly one line, so the total is the three structural lines plus the keys.
+# Steam's parse failure names the closing brace rather than the bad value, so
+# check the file here instead. Every key line is exactly "key" "value" - four
+# quote characters - and a stray quote or newline in a value breaks that count.
+# This is the check that would have caught both upload failures on 2026-09-08.
 expected_lines=$(( 3 + 7 ))
 [ -f "$PREVIEW" ] && expected_lines=$(( expected_lines + 1 ))
 actual_lines="$(wc -l < "$VDF" | tr -d ' ')"
 [ "$actual_lines" -eq "$expected_lines" ] || {
     echo "generated VDF is malformed: expected $expected_lines lines, got $actual_lines." >&2
-    echo "A value contains an unescaped newline. See $VDF" >&2
+    echo "A value contains a newline. See $VDF" >&2
+    exit 1; }
+
+bad_line="$(awk 'NR > 2 && /^ / { n = gsub(/"/, "\""); if (n != 4) { print NR": "$0; exit } }' "$VDF")"
+[ -z "$bad_line" ] || {
+    echo "generated VDF has a key line without exactly 4 quotes:" >&2
+    echo "  $bad_line" >&2
+    echo "A value contains a double quote. Steam reads these files with escape" >&2
+    echo "sequences off, so it cannot be escaped - remove it. See $VDF" >&2
     exit 1; }
 
 lua_files="$(find "$CONTENT" -name '*.lua' | wc -l | tr -d ' ')"
