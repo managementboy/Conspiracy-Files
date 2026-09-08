@@ -102,16 +102,75 @@ The heaviest session, and the one most worth doing carefully.
 target loss becomes `unavailable`; duplicates become `conflict`. Neither is a
 bug; a silently duplicated document is.
 
-### S5 — Persistence and death (E09, E10, ~30 min)
+### S5 — Persistence and death (E09, E10, ~45 min)
 
-Accumulate several discoveries, then die. Reload. Then die again with a
-discovery in progress.
+Two criteria, one session, because they share a setup: E09 is about canonical
+state surviving a round trip through Global ModData, and E10 is about death and
+reload not disturbing it.
 
-**Pass:** discoveries survive in the same order, nothing is duplicated or
-erased, no partially staged state is visible. Death recap is out of v0.1
-(P4-R52) - its absence is correct.
+**Setup.** A save with at least **three discoveries** already recorded and, if
+possible, one document still in the world uncollected - a partially explored
+case exercises more than a finished one. Diagnostics on. Note the notebook's
+entry order before starting; it is the thing being protected.
 
-**Never** delete or reset the save to "clean up" between attempts. Make new ones.
+**The measurement.** E09 requires the encoded size, not a guess. Before and
+after each phase below, run:
+
+    local V=require("ConspiracyFiles/Validator")
+    local total=0
+    for _,tag in ipairs({"ConspiracyFiles.Generated.G2","ConspiracyFiles.AddressBook.Muldraugh",
+        "ConspiracyFiles.DeadAir","ConspiracyFiles.IdentityObservations",
+        "ConspiracyFiles.BodyOutfitObservations"}) do
+      local r=ModData.get(tag)
+      if r then local n=V.estimateEncodedBytes(r); total=total+n
+        print("[BUDGET] "..tag.." = "..n) end
+    end
+    print("[BUDGET] TOTAL = "..total.." of "..V.MAX_ENCODED_BYTES)
+
+It prints to `console.txt`, so the numbers arrive in the stream and the delta
+across phases is the "encoded delta" E09 asks for.
+
+**Phase 1 - clean round trip (E09).** Save and quit properly. Reload. Compare
+the notebook against the order noted at the start.
+*Pass:* every entry present, same order, same text, same ordinals. Derived
+views - evidence list, connections - rebuild identically. `[BUDGET] TOTAL`
+unchanged or trivially different.
+
+**Phase 2 - repeated reload (E09).** Reload three more times without playing.
+*Pass:* nothing accumulates. `[BUDGET] TOTAL` must not creep upward with each
+reload; a slow climb across reloads is a leak and is the most likely defect
+this phase will find.
+
+**Phase 3 - death after discoveries (E10).** Get killed deliberately, with all
+discoveries recorded. Continue as a new character in the same save.
+*Pass:* canonical discoveries are intact and in order. The new survivor's
+notebook is titled with the **new** forename. Death recap is out of v0.1
+(P4-R52), so its absence is correct, not a gap.
+
+**Phase 4 - death mid-discovery (E10).** Start again, find a document, and die
+**before** inspecting it - ideally while the pickup voice line is still
+playing.
+*Pass:* either the discovery is fully recorded or fully absent. A half-written
+entry, a ledger number with no entry, or an entry with no ledger number is the
+failure this phase exists to catch.
+
+**Phase 5 - corpse transfer (E10).** T5 showed a real death moves stamped items
+to the corpse. Recover a case document from your **own** previous corpse.
+*Pass:* the item is still recognised as the same evidence, not a duplicate. If
+it registers as a second copy, that is a `conflict` - correct behaviour, and
+worth reporting rather than treating as a pass.
+
+**Phase 6 - abrupt interruption (E09).** Alt-F4 during play, then reload.
+*Pass:* the last known-good root survives. Losing the last few seconds is
+acceptable; a corrupted or partially staged root is not.
+
+**Overall pass:** no duplication, no reordering, no erasure, no partially
+staged state visible at any point, and `[BUDGET] TOTAL` stays well under
+500,000 bytes throughout.
+
+**Never** delete or reset the save to "clean up" between phases. Make new ones.
+Phase 3 onward deliberately makes a mess of one save - that is the point, and
+it is why the save being messed up must be one you are willing to lose.
 
 ### S6 — Arrival (E07, ~20 min)
 
