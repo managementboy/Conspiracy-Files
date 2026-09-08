@@ -95,27 +95,34 @@ Write-Host "        -> ${DevHost}:$remote"
 Write-Host "Ctrl+C to stop." -ForegroundColor Green
 Write-Host ""
 
-$first = $true
+# Copy the whole file every few seconds rather than piping a follower into ssh.
+#
+# The obvious approach - Get-Content -Wait | ssh "cat >> file" - does not work.
+# PowerShell buffers output into a native command, and because -Wait means the
+# pipeline never ends, that buffer is never flushed: ssh is handed nothing, the
+# remote file is never even created, and the script cheerfully reports that it
+# is streaming. Observed on 2026-09-08, twice.
+#
+# scp of the whole log is wasteful and completely reliable. The log is under a
+# megabyte and this is a LAN, so a full copy every few seconds costs nothing
+# that matters and has no partial-state failure mode.
+$interval = 3
+$lastSize = -1
 while ($true) {
     try {
-        # First attempt sends the file so far and then follows, so the session
-        # start is included. A reconnect sends only new lines, or the whole log
-        # would be duplicated into the stream every time the link blips.
-        if ($first) {
-            Get-Content $console -Wait -Encoding UTF8 |
-                ssh $DevHost "cat >> '$remote'"
-        } else {
-            Get-Content $console -Wait -Tail 0 -Encoding UTF8 |
-                ssh $DevHost "cat >> '$remote'"
+        $size = (Get-Item $console).Length
+        if ($size -ne $lastSize) {
+            scp -q $console "${DevHost}:$remote"
+            if ($LASTEXITCODE -eq 0) {
+                $kb = [int]($size / 1KB)
+                Write-Host ("{0}  sent {1} KB" -f (Get-Date -Format "HH:mm:ss"), $kb)
+                $lastSize = $size
+            } else {
+                Write-Host "scp failed; retrying" -ForegroundColor Yellow
+            }
         }
     } catch {
-        Write-Host "stream interrupted: $($_.Exception.Message)" -ForegroundColor Yellow
+        Write-Host "read failed: $($_.Exception.Message)" -ForegroundColor Yellow
     }
-
-    # Reaching here means ssh exited: the link dropped, or the game closed and
-    # the file handle went away. Retry rather than dying, so a brief network
-    # blip does not end the session's logging.
-    $first = $false
-    Write-Host "reconnecting in 3s ..." -ForegroundColor Yellow
-    Start-Sleep -Seconds 3
+    Start-Sleep -Seconds $interval
 }
