@@ -15,7 +15,7 @@
 #
 # CREDENTIALS ARE NOT HANDLED HERE. Log in once, yourself, interactively:
 #
-#     steamcmd +login <your-steam-username>
+#     steamcmd +login managementboy
 #
 # steamcmd caches that session, so this script can then run non-interactively
 # with only the username. It never asks for, stores or passes a password, and
@@ -26,6 +26,10 @@ REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 . "$REPO/tools/env.sh"
 
 APPID=108600
+# The account that owns this Workshop item. A username is not a secret; the
+# password is, and nothing here ever touches one. Override with STEAM_USER=...
+STEAM_USER_DEFAULT=managementboy
+: "${STEAM_USER:=$STEAM_USER_DEFAULT}"
 ITEM_DIR="$REPO/tools/workshop"
 ID_FILE="$ITEM_DIR/published_file_id"
 PREVIEW="$ITEM_DIR/preview.png"
@@ -103,6 +107,7 @@ echo "workshop payload"
 echo "  version     $version"
 echo "  lua files   $lua_files"
 echo "  visibility  $vis_name ($visibility)"
+echo "  account     $STEAM_USER"
 echo "  item        $([ "$published_id" = "0" ] && echo 'NEW - will be created' || echo "$published_id")"
 echo "  changenote  $changenote"
 [ -f "$PREVIEW" ] || echo "  preview     none (Workshop page will have no image)"
@@ -116,13 +121,11 @@ fi
 
 command -v steamcmd >/dev/null 2>&1 || {
     echo "steamcmd not found. Install it, then log in once interactively:" >&2
-    echo "  sudo apt install steamcmd && steamcmd +login <your-steam-username>" >&2
+    echo "  sudo apt install steamcmd && steamcmd +login $STEAM_USER" >&2
     exit 2; }
 
-[ -n "${STEAM_USER:-}" ] || {
-    echo "set STEAM_USER to your Steam account name (username only, never a password)." >&2
-    echo "  STEAM_USER=yourname tools/publish_workshop.sh" >&2
-    exit 2; }
+[ "$STEAM_USER" = "$STEAM_USER_DEFAULT" ] \
+    || echo "publishing as $STEAM_USER, not the usual $STEAM_USER_DEFAULT"
 
 echo
 echo "uploading as $STEAM_USER ..."

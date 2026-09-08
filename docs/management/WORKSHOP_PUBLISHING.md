@@ -30,7 +30,7 @@ which is the one thing this workflow depends on.
 ## One-time setup
 
     sudo apt install steamcmd
-    steamcmd +login <your-steam-username>
+    steamcmd +login managementboy
 
 **Do that login yourself, interactively.** It will ask for your password and
 Steam Guard code. steamcmd caches the session afterwards, so the publisher runs
@@ -43,9 +43,12 @@ it the page has no picture, which is untidy but not blocking.
 
 ## Publishing
 
-    tools/publish_workshop.sh --dry-run                     # build, show, upload nothing
-    STEAM_USER=yourname tools/publish_workshop.sh
-    STEAM_USER=yourname tools/publish_workshop.sh --changenote "room-aware placement"
+    tools/publish_workshop.sh --dry-run                  # build, show, upload nothing
+    tools/publish_workshop.sh
+    tools/publish_workshop.sh --changenote "room-aware placement"
+
+The account defaults to `managementboy`; `STEAM_USER=someone-else` overrides it
+and the script says so when it is not the usual account.
 
 The payload is built through `tools/package.sh --stage`, so the Workshop item is
 the same require-checked tree as the zip and the local install. That check is
@@ -61,7 +64,7 @@ publish creates a second, unrelated Workshop item.
 1. Develop here. `lua5.1 test/run.lua`, then `tools/kahlua/run.sh --parse-all`.
 2. Bump `UI.VERSION` in `Notebook.lua`. It names the archive and the title bar,
    and it is the only in-game signal of what is running.
-3. `STEAM_USER=... tools/publish_workshop.sh --changenote "<what changed>"`.
+3. `tools/publish_workshop.sh --changenote "<what changed>"`.
 4. On the play machine, Steam pushes the update to the subscription. Enable the
    mod, start a **fresh save**, play.
 5. Send back `console.txt` - `[CF-SELFCHECK]` first, then `[CF-LEDGER]`,
