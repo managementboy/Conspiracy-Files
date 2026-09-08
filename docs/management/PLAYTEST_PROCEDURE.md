@@ -38,6 +38,31 @@ machines.
 
 ## Getting the log back
 
+Two ways. Streaming is better when Claude is at the keyboard while you play;
+pushing is better for an unattended session.
+
+### Live, while you play
+
+Copy `tools/stream_log.ps1` to the play machine once. **Start the game first**,
+then run it in its own window and leave it there:
+
+    .\stream_log.ps1
+
+Every line arrives within about a second, so a question can be answered
+mid-session. Ctrl+C stops it; a dropped link reconnects by itself and resumes
+without resending what already arrived.
+
+Order matters. PZ truncates `console.txt` when it launches, and a follower
+attached across that truncation keeps reading the old handle and reports
+nothing at all. Starting the game first also means the whole file belongs to
+this session, including `[CF-SELFCHECK]` in the first seconds.
+
+Claude watches it with `tools/fetch_logs.sh --live`, which reports whether the
+file is still growing before anything else: a stream that died looks exactly
+like a quiet game until you measure it.
+
+### After the session
+
 Copy `tools/push_log.ps1` to the play machine once. After a session:
 
     .\push_log.ps1

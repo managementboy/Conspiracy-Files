@@ -5,6 +5,7 @@
 #   tools/fetch_logs.sh --all        also the timestamped Logs/ folder
 #   tools/fetch_logs.sh --list       show what is on the play machine, fetch nothing
 #   tools/fetch_logs.sh --incoming   summarise a log the play machine pushed here
+#   tools/fetch_logs.sh --live       watch a session streaming in right now
 #
 # Development and play are on different machines, so the log has to come here
 # before it can be read. scp rather than rsync: the play machine is Windows and
@@ -39,12 +40,14 @@ want_all=0
 list_only=0
 summarise_only=""
 incoming=0
+live=0
 while [ $# -gt 0 ]; do
     case "$1" in
         --all)  want_all=1; shift ;;
         --list) list_only=1; shift ;;
         --summarise) summarise_only="${2:-}"; shift 2 ;;
         --incoming)  incoming=1; shift ;;
+        --live)      live=1; shift ;;
         *) echo "unknown argument: $1" >&2; exit 2 ;;
     esac
 done
@@ -100,6 +103,30 @@ summarise() {
 if [ -n "$summarise_only" ]; then
     [ -f "$summarise_only" ] || { echo "no such log: $summarise_only" >&2; exit 2; }
     summarise "$summarise_only"
+    exit 0
+fi
+
+# --live: a session is streaming in right now. Show whether it is actually
+# still arriving, then the newest Conspiracy-Files lines. Growth matters: a
+# stream that died looks identical to a quiet game until you measure it.
+if [ "$live" -eq 1 ]; then
+    newest="$(ls -1t "$DEST/incoming"/*.txt 2>/dev/null | head -1 || true)"
+    [ -n "$newest" ] || { echo "nothing streaming into $DEST/incoming." >&2; exit 1; }
+    before="$(wc -c < "$newest")"
+    sleep 3
+    after="$(wc -c < "$newest")"
+    echo "$newest"
+    if [ "$after" -gt "$before" ]; then
+        echo "  LIVE - grew $(( after - before )) bytes in 3s, $(wc -l < "$newest" | tr -d ' ') lines total"
+    else
+        echo "  not growing. $(wc -l < "$newest" | tr -d ' ') lines, last written $(date -r "$newest" '+%H:%M:%S')."
+        echo "  The game may be paused or closed, or the stream stopped."
+    fi
+    echo
+    summarise "$newest"
+    echo
+    echo "last Conspiracy-Files lines:"
+    grep -F '[CF-' "$newest" | tail -12 | cut -c1-170 | sed 's/^/  /'
     exit 0
 fi
 
