@@ -172,14 +172,53 @@ staged state visible at any point, and `[BUDGET] TOTAL` stays well under
 Phase 3 onward deliberately makes a mess of one save - that is the point, and
 it is why the save being messed up must be one you are willing to lose.
 
-### S6 — Arrival (E07, ~20 min)
+### S6 — Arrival (E07, ~30 min) — BLOCKED, needs a prerequisite
 
-Approach each site on foot, from different directions, including a wrong floor
-and an adjacent building.
+**This session cannot run today, and finding that out is itself a result.**
 
-**Pass:** the matching Location confirms once and only once; adjacent and
-wrong-floor approaches confirm nothing. T8 showed scripted teleports emit no
-`OnPlayerMove`, so **walk** - do not teleport, or the result is meaningless.
+Arrival confirmation lives only in the authored Dead Air runtime:
+`Runtime.lua` samples the player every 15 ticks and emits
+`[CF-DEAD-AIR]|ARRIVAL|<id>`. The generated path has **no location
+confirmation at all** - it has site scanning (`[CF-T3-NEARBY]`) and stale-clue
+relocation (`[CF-G2-RELOCATE]`), but nothing that confirms a Location.
+
+And the authored runtime never starts in a normal debug session.
+`AutomaticInvestigations.lua:12` sets `ConspiracyFiles.GeneratedMode=true` at
+**file load** whenever debug single-player is active, and `Runtime.lua:163`
+then logs `DISABLED: generated development session active`. The only existing
+escape hatches are `T11Mode`/`T12Mode`, which are read at load time, so setting
+them from the debug console is too late.
+
+**This is the exception to accepting against the generated path.** Every other
+criterion tests a mechanism both paths share. E07 does not: the mechanism only
+exists on one of them, and that one is switched off.
+
+**Prerequisite, one of:**
+
+1. **A load-time mode toggle** so the authored thread can be selected
+   deliberately - a sandbox option, or a marker the mod reads before
+   `AutomaticInvestigations` decides. Smallest change; makes E07 testable as
+   written, and is useful beyond this session.
+2. **Give the generated path arrival**, so a generated Location confirms on
+   approach the way an authored one does. Larger, and genuinely a v1 feature
+   rather than a test fixture - "arrival at a site you have not yet visited"
+   is a real part of the experience the generated path currently lacks.
+3. **Defer E07** until the generated path gets arrival on its own schedule, and
+   accept v0.1 without it.
+
+Option 2 is the honest one if arrival is meant to be part of the experience;
+option 1 is the cheap one if E07 is only wanted as a tick. That is a product
+decision, not a testing decision.
+
+**Once unblocked**, the session itself is short. Approach each site on foot from
+several directions, plus a wrong floor and an adjacent building.
+
+*Pass:* exactly one confirmation is persisted before one domain event for the
+matching location. Adjacent travel, wrong floor, repeated samples, leaving and
+re-entering, and reloading while inside append nothing further.
+
+**Walk, do not teleport.** T8 found scripted teleports emit no `OnPlayerMove`
+at all, so a teleported arrival proves nothing whatever the log says.
 
 ### S7 — Fault containment (E13, ~30 min)
 
