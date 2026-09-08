@@ -19,6 +19,30 @@ param(
 
 $ErrorActionPreference = "Stop"
 
+# $env:USERPROFILE is whichever account this shell runs as. Running from an
+# elevated shell on another account (la_fricke rather than elkin.fricke) points
+# it at a profile that has never played. So: use it when it actually holds a
+# console.txt, otherwise pick whichever profile on this machine has the newest
+# one, and say which was chosen rather than failing quietly.
+function Resolve-ZomboidFolder {
+    param([string]$Preferred)
+
+    if (Test-Path (Join-Path $Preferred "console.txt")) { return $Preferred }
+
+    $candidates = Get-ChildItem "C:\Users" -Directory -ErrorAction SilentlyContinue |
+        ForEach-Object { Join-Path $_.FullName "Zomboid" } |
+        Where-Object { Test-Path (Join-Path $_ "console.txt") } |
+        Sort-Object { (Get-Item (Join-Path $_ "console.txt")).LastWriteTime } -Descending
+
+    if ($candidates) {
+        Write-Host "No console.txt under $Preferred; using $($candidates[0])" -ForegroundColor Yellow
+        return $candidates[0]
+    }
+    return $Preferred
+}
+
+$Zomboid = Resolve-ZomboidFolder $Zomboid
+
 $console = Join-Path $Zomboid "console.txt"
 if (-not (Test-Path $console)) {
     Write-Host "No console.txt at $console" -ForegroundColor Red
