@@ -22,6 +22,17 @@ archive="$out/ConspiracyFiles-$version.zip"
 # the shared media tree. Nothing from dev/, test/, docs/ or tools/.
 mkdir -p "$staging/ConspiracyFiles"
 cp -r "$REPO/mod/42" "$staging/ConspiracyFiles/42"
+
+# Stamp the build into mod.info so the in-game mod list names the build it is
+# actually about to load. A static "0.1.0-dev" there cost three restarts on
+# 2026-09-08 chasing whether Steam had delivered an update: the only way to
+# tell was to load a save and read the notebook title bar. The version stays
+# single-sourced in Version.lua; this is a copy made at package time, which is
+# why the repo's mod.info keeps a placeholder.
+info="$staging/ConspiracyFiles/42/mod.info"
+sed -i "s/^modversion=.*/modversion=$version/" "$info"
+grep -q "^modversion=$version$" "$info" || {
+    echo "failed to stamp modversion into mod.info" >&2; exit 1; }
 cp -r "$REPO/mod/common" "$staging/ConspiracyFiles/common"
 
 # A package that cannot generate a case is worse than no package. Every
