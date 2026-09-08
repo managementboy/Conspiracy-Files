@@ -74,9 +74,27 @@ summarise() {
         [ "$n" = "0" ] || printf '%-16s %s\n' "$tag" "$n"
     done
 
-    local errors
-    errors="$(grep -icE 'error|exception|stack traceback' "$log" || true)"
-    [ "$errors" = "0" ] || { echo; echo "$errors lines mention an error or traceback."; }
+    # A bare grep for "error" is useless here: FMOD alone prints dozens of
+    # "result: No errors." lines, which is how a clean 2026-09-08 log first
+    # looked like it had 50 problems. Match real markers, drop the negations,
+    # and separate ours from the engine's own routine complaints.
+    local engine ours
+    engine="$(grep -E '^(ERROR|WARN)|Exception|stack traceback' "$log" \
+        | grep -vciE 'no errors' || true)"
+    ours="$(grep -E '^(ERROR|WARN)|Exception|stack traceback' "$log" \
+        | grep -viE 'no errors' | grep -ciE 'conspiracy|\[CF-' || true)"
+
+    echo
+    if [ "$ours" != "0" ]; then
+        echo "$ours error lines mention Conspiracy-Files. These are ours:"
+        grep -E '^(ERROR|WARN)|Exception|stack traceback' "$log" \
+            | grep -viE 'no errors' | grep -iE 'conspiracy|\[CF-' | head -5 | cut -c1-160 | sed 's/^/  /'
+    elif [ "$engine" != "0" ]; then
+        echo "$engine engine error/warning lines, none mentioning Conspiracy-Files."
+        echo "Vanilla PZ logs these routinely; check them only if something looks wrong."
+    else
+        echo "no error or warning lines."
+    fi
 }
 
 if [ -n "$summarise_only" ]; then

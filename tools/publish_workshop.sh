@@ -59,8 +59,8 @@ case "$visibility" in
     *) echo "--visibility must be 0 public, 1 friends, 2 private or 3 unlisted" >&2; exit 2 ;;
 esac
 
-version="$(grep -o 'UI.VERSION="[^"]*"' "$REPO/mod/common/media/lua/client/ConspiracyFiles/Notebook.lua" | head -1 | sed 's/.*="//;s/"//')"
-[ -n "$version" ] || { echo "could not read UI.VERSION from Notebook.lua" >&2; exit 1; }
+version="$(grep -o 'ConspiracyFiles.VERSION = "[^"]*"' "$REPO/mod/common/media/lua/shared/ConspiracyFiles/Version.lua" | head -1 | sed 's/.*= "//;s/"//')"
+[ -n "$version" ] || { echo "could not read ConspiracyFiles.VERSION from Version.lua" >&2; exit 1; }
 [ -n "$changenote" ] || changenote="$version"
 
 # Build through package.sh so the Workshop payload is the same require-checked

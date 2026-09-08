@@ -8,7 +8,7 @@ ConspiracyFiles = ConspiracyFiles or {}
 ConspiracyFiles.Runtime = ConspiracyFiles.Runtime or {}
 local Runtime = ConspiracyFiles.Runtime
 if Runtime.scriptLoaded then return Runtime end
-Runtime.VERSION = "DEV-0.6-transactional-candidate"
+Runtime.VERSION = require("ConspiracyFiles/Version")
 Runtime.disabled = true
 local session, scheduler, sampler, ticks
 local bindingNotices={}

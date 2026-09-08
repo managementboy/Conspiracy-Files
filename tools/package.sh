@@ -11,8 +11,8 @@ set -euo pipefail
 REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 . "$REPO/tools/env.sh"
 
-version="$(grep -o 'UI.VERSION="[^"]*"' "$REPO/mod/common/media/lua/client/ConspiracyFiles/Notebook.lua" | head -1 | sed 's/.*="//;s/"//')"
-[ -n "$version" ] || { echo "could not read UI.VERSION from Notebook.lua" >&2; exit 1; }
+version="$(grep -o 'ConspiracyFiles.VERSION = "[^"]*"' "$REPO/mod/common/media/lua/shared/ConspiracyFiles/Version.lua" | head -1 | sed 's/.*= "//;s/"//')"
+[ -n "$version" ] || { echo "could not read ConspiracyFiles.VERSION from Version.lua" >&2; exit 1; }
 
 staging="$(mktemp -d)"; trap 'rm -rf "$staging"' EXIT
 out="$REPO/dist"; mkdir -p "$out"
