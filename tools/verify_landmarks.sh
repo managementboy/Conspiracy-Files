@@ -30,7 +30,12 @@ src="${1:-}"
 [ -n "$src" ] || { echo "usage: $0 <file with a landmark table> | -" >&2; exit 2; }
 [ "$src" = "-" ] && src=/dev/stdin
 
-# Cell size is 300 tiles. A cell is present when its .lotheader is.
+# Read the cell size from the map itself - map.info says "Cell size is
+# 256x256". Never hardcode it; the first version of this script assumed 300 and
+# produced nine confident false alarms.
+CELL="$(grep -oE 'Cell size is [0-9]+' "$CELLS/map.info" 2>/dev/null | grep -oE '[0-9]+' | head -1)"
+[ -n "$CELL" ] || { echo "could not read cell size from $CELLS/map.info" >&2; exit 2; }
+echo "cell size ${CELL}, read from map.info"
 total=0; good=0
 missing=""
 while IFS= read -r line; do
@@ -41,7 +46,7 @@ while IFS= read -r line; do
     label="$(printf '%s' "$line" | grep -oE '\*\*[^*]+\*\*' | head -1 | tr -d '*' || true)"
     [ -n "$label" ] || label="$(printf '%s' "$line" | cut -c1-40)"
     total=$((total + 1))
-    cx=$((x / 300)); cy=$((y / 300))
+    cx=$((x / CELL)); cy=$((y / CELL))
     if [ -f "$CELLS/${cx}_${cy}.lotheader" ]; then
         good=$((good + 1))
     else
