@@ -31,6 +31,14 @@ function Resolve-ZomboidFolder {
 
     if (Test-Path (Join-Path $Preferred "console.txt")) { return $Preferred }
 
+    # Dropped into the Zomboid folder itself, which is the tidiest place for it:
+    # the log is right there, it is always the correct profile, and it does not
+    # vanish when Downloads is cleared out.
+    if ($PSScriptRoot -and (Test-Path (Join-Path $PSScriptRoot "console.txt"))) {
+        Write-Host "using this script's own folder: $PSScriptRoot" -ForegroundColor Yellow
+        return $PSScriptRoot
+    }
+
     $candidates = Get-ChildItem "C:\Users" -Directory -ErrorAction SilentlyContinue |
         ForEach-Object { Join-Path $_.FullName "Zomboid" } |
         Where-Object { Test-Path (Join-Path $_ "console.txt") } |

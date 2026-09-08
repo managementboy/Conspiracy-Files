@@ -41,12 +41,24 @@ machines.
 Two ways. Streaming is better when Claude is at the keyboard while you play;
 pushing is better for an unattended session.
 
+### Where the scripts live
+
+Put both in the play machine's Zomboid folder, next to `console.txt`. That
+folder always exists, always belongs to the account that actually plays, and
+does not get cleared out the way Downloads does. Both scripts notice when they
+are sitting next to the log and use that folder, so no argument is needed.
+
+From the play machine, to fetch or refresh them:
+
+    scp elkin@192.168.50.226:/home/elkin/Conspiracy-Files/tools/*_log.ps1 $env:USERPROFILE\Zomboid\
+
+Re-run that whenever the scripts change here.
+
 ### Live, while you play
 
-Copy `tools/stream_log.ps1` to the play machine once. **Start the game first**,
-then run it in its own window and leave it there:
+**Start the game first**, then in its own window:
 
-    .\stream_log.ps1
+    cd $env:USERPROFILE\Zomboid; .\stream_log.ps1
 
 Every line arrives within about a second, so a question can be answered
 mid-session. Ctrl+C stops it; a dropped link reconnects by itself and resumes
