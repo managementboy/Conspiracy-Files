@@ -73,14 +73,18 @@ end
 -- ordering only: S.target's allow-list and the distinct/repeated-container
 -- checks below are untouched, so a stored target is unaffected by whether a
 -- room fit.
-function S.createDistributed(case,candidates,rooms)
+function S.createDistributed(case,candidates,rooms,occupied)
     local valid,why=G.validate(case);if not valid then return nil,why end
     local sites,used,counts,taken,targets={},{},{},{},{}
     for _,site in ipairs(case.locations) do sites[site.id]=site end
     for _,doc in ipairs(case.documents) do
         local list=type(candidates)=="table" and candidates[doc.locationId]
         local target
-        if rooms==nil then
+        -- The original counts-indexed path runs only when NEITHER hint is
+        -- supplied, so behaviour is byte-identical to before either existed.
+        -- Testing occupancy alone caught this: gating on `rooms` made the
+        -- preference inert whenever room names were absent.
+        if rooms==nil and occupied==nil then
             counts[doc.locationId]=(counts[doc.locationId] or 0)+1
             target=type(list)=="table" and list[counts[doc.locationId]]
         else
@@ -95,10 +99,33 @@ function S.createDistributed(case,candidates,rooms)
             -- Storage.scan happening to emit only in-bounds candidates.
             local site=sites[doc.locationId]
             local function usable(i) return not siteTaken[i] and S.target(list[i],site) end
+            -- `occupied` is OPTIONAL and is a preference, never a filter. A
+            -- document left alone in an empty drawer is the thing that reads
+            -- as placed by software; among somebody's belongings it reads as
+            -- part of the house. So a container that already holds something
+            -- is preferred, and a site with nothing but empty containers still
+            -- gets its document rather than deferring.
+            --
+            -- Order of preference: fits the room AND lived-in, then fits the
+            -- room, then lived-in, then first usable - which is exactly what
+            -- the loops below did before this existed, so omitting `occupied`
+            -- and `rooms` leaves the original behaviour untouched.
+            local occupiedForSite=type(occupied)=="table" and occupied[doc.locationId]
+            local function livedIn(i)
+                return type(occupiedForSite)=="table" and occupiedForSite[i]==true
+            end
             if type(list)=="table" and type(roomsForSite)=="table" then
                 for i in ipairs(list) do
-                    if usable(i) and RoomAffinity.fits(doc.kind,roomsForSite[i]) then index=i;break end
+                    if usable(i) and RoomAffinity.fits(doc.kind,roomsForSite[i]) and livedIn(i) then index=i;break end
                 end
+                if not index then
+                    for i in ipairs(list) do
+                        if usable(i) and RoomAffinity.fits(doc.kind,roomsForSite[i]) then index=i;break end
+                    end
+                end
+            end
+            if not index and type(list)=="table" and type(occupiedForSite)=="table" then
+                for i=1,#list do if usable(i) and livedIn(i) then index=i;break end end
             end
             if not index and type(list)=="table" then
                 for i=1,#list do if usable(i) then index=i;break end end

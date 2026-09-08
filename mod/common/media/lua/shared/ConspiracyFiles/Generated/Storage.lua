@@ -32,6 +32,7 @@ function M.scan(result,done,reachable)
     end
     local index,dx,dy,oi,ci=1,0,0,0,0
     local objects,targets,candidates,rooms,seen,steps=nil,{},{},{},{},0
+    local occupied={}
     local function nextTile(r)
         objects=nil; oi,ci=0,0; dy=dy+1
         if dy>=r.h then dy=0; dx=dx+1 end
@@ -41,7 +42,7 @@ function M.scan(result,done,reachable)
         steps=steps+1
         if steps>100000 then error("storage scan safety cap; no case committed") end
         local r=rects[index]
-        if not r then done(catalog,targets,candidates,rooms); return true end
+        if not r then done(catalog,targets,candidates,rooms,occupied); return true end
         local id="t3:"..r.building
         local site=sites[id]
         if not site or (targets[id] and r.z~=targets[id].z) or (candidates[id] and #candidates[id]>=8) then index=index+1; dx,dy,oi,ci=0,0,0,0; objects=nil; return false end
@@ -72,6 +73,17 @@ function M.scan(result,done,reachable)
                 if type(roomName)=="string" then
                     rooms[id]=rooms[id] or {}; rooms[id][#candidates[id]]=roomName
                 end
+                -- Does anything already live in here? A clue among somebody's
+                -- belongings reads as part of the house; alone in an empty
+                -- drawer it reads as placed by software. A preference for
+                -- Session.createDistributed, never a filter. Whatever filled
+                -- the container - vanilla's procedural pass, hand-placed loot,
+                -- a previous survivor - counts the same, so this needs no
+                -- engine API beyond the items already readable here.
+                local items=c.getItems and c:getItems()
+                local count=items and items.size and items:size() or 0
+                occupied[id]=occupied[id] or {}
+                occupied[id][#candidates[id]]=count>0
                 if not targets[id] then targets[id]=target;site.bounds.z=r.z end
                 site.paperStorage="observed";local types={};for _,v in ipairs(site.containerTypes) do types[v]=true end;types[c:getType()]=true;site.containerTypes={};for k in pairs(types) do if #site.containerTypes<5 then site.containerTypes[#site.containerTypes+1]=k end end;table.sort(site.containerTypes)
                 site.source.reference="G2 loaded container inside T3 room footprint"

@@ -161,7 +161,7 @@ local function withReachability(result,startStorage)
 end
 local function prepare(result,seed,later,house)
   withReachability(result,function(reachable)
-    local scan,why=Storage.scan(result,function(catalog,targets,candidates,rooms)
+    local scan,why=Storage.scan(result,function(catalog,targets,candidates,rooms,occupied)
         local p=getPlayer()
         local used={}; for _,root in ipairs(Cases.sessions(wrapper) or {}) do for _,site in ipairs(root.case.locations) do used[site.id]=true end end
         local filtered={revision=catalog.revision,locations={}}
@@ -188,7 +188,7 @@ local function prepare(result,seed,later,house)
         for _,site in ipairs(case.locations) do
             if not World.resolve(targets[site.id]) then log("Storage changed before commit; retry start."); return end
         end
-        local root=assert(Session.createDistributed(case,candidates,rooms))
+        local root=assert(Session.createDistributed(case,candidates,rooms,occupied))
         for _,assignment in pairs(root.assignments) do
             if not World.resolve(assignment.target) then log("Distributed storage changed before commit; retry later.");return end
         end
