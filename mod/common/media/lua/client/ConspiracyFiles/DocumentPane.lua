@@ -57,7 +57,17 @@ end
 function DocumentPane:setDocument(text,contrast)
     self.plainText=tostring(text or "")
     self.contrast=contrast
-    self.body.backgroundColor=contrast and {r=0.02,g=0.02,b=0.02,a=1} or {r=0.84,g=0.81,b=0.71,a=1}
+    -- A monospace face reads as something typed or written up rather than as
+    -- interface text, which is most of the difference between a case file and
+    -- a dialog box. ISRichTextPanel has no font tag, but it honours
+    -- defaultFont, so this costs one assignment and no change to how any
+    -- entry is composed. UIFont.Code is the game's own face (media/fonts/
+    -- codeSmall|Medium|Large); nothing is shipped for it.
+    self.body.defaultFont=UIFont.Code
+    self.body.font=UIFont.Code
+    -- Slightly warmer and less yellow than before: closer to typing paper than
+    -- to manila, so the ink reads darker against it.
+    self.body.backgroundColor=contrast and {r=0.02,g=0.02,b=0.02,a=1} or {r=0.87,g=0.84,b=0.76,a=1}
     -- paginate() resets rgbCurrent to white; textR/G/B does not control parsed
     -- line colours. An explicit initial RGB tag fixes the installed renderer.
     local ink=contrast and "<RGB:1,1,1> " or "<RGB:0.10,0.10,0.08> "
