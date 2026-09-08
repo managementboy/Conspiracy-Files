@@ -20,7 +20,27 @@ JDK="$JAVA_HOME"
 
 [ -f "$PZ/projectzomboid.jar" ] || { echo "projectzomboid.jar not found under $PZ (set PZ_HOME)" >&2; exit 2; }
 [ -x "$JDK/bin/java" ] || { echo "java not found under $JDK (set JAVA_HOME)" >&2; exit 2; }
+[ -x "$JDK/bin/javac" ] || { echo "$JDK is a JRE, not a JDK: no compiler. Set JAVA_HOME to a JDK 25+." >&2; exit 2; }
 [ $# -ge 1 ] || { echo "usage: $0 <script.lua> [more.lua ...]" >&2; exit 2; }
+
+# The jar is class-file major 69. An older JDK fails with a wall of "cannot find
+# symbol" instead of saying so; name it here rather than let that happen.
+jdk_major="$("$JDK/bin/javac" -version 2>&1 | sed -n 's/^javac \([0-9]*\).*/\1/p')"
+if [ -n "$jdk_major" ] && [ "$jdk_major" -lt 25 ]; then
+    echo "JAVA_HOME is JDK $jdk_major; the game jar needs JDK 25 or newer. Set JAVA_HOME." >&2
+    exit 2
+fi
+
+# Java is a Windows process under MSYS/Cygwin and needs Windows-shaped paths and
+# a ';' classpath separator; everywhere else the path is already correct and the
+# separator is ':'.
+if command -v cygpath >/dev/null 2>&1; then
+    cf_jpath() { cygpath -w "$1"; }
+    CPSEP=';'
+else
+    cf_jpath() { printf '%s\n' "$1"; }
+    CPSEP=':'
+fi
 
 if [ ! -f "$REPO/stdlib.lua" ]; then
     cp "$PZ/stdlib.lua" "$REPO/stdlib.lua"
@@ -28,11 +48,11 @@ fi
 
 if [ ! -f "$REPO/tools/kahlua/RunLua.class" ] \
    || [ "$REPO/tools/kahlua/RunLua.java" -nt "$REPO/tools/kahlua/RunLua.class" ]; then
-    "$JDK/bin/javac" -cp "$(cygpath -w "$PZ/projectzomboid.jar")" \
+    "$JDK/bin/javac" -cp "$(cf_jpath "$PZ/projectzomboid.jar")" \
         -d "$REPO/tools/kahlua" "$REPO/tools/kahlua/RunLua.java"
 fi
 
-CP="$(cygpath -w "$PZ/projectzomboid.jar");$(cygpath -w "$REPO/tools/kahlua")"
+CP="$(cf_jpath "$PZ/projectzomboid.jar")$CPSEP$(cf_jpath "$REPO/tools/kahlua")"
 
 # --parse-all: compile every shipped mod file with the engine's own compiler.
 # PUC Lua accepting a file says nothing about whether Kahlua will parse it.
@@ -43,9 +63,9 @@ fi
 failures=0
 for script in "$@"; do
     printf '%-46s ' "$(basename "$script")"
-    # Java is a Windows process: hand it a Windows path, and keep it relative to
-    # the repo so scripts can use their usual relative package.path and dofile.
-    if (cd "$REPO" && "$JDK/bin/java" -cp "$CP" RunLua "$(cygpath -w "$(cd "$(dirname "$script")" && pwd)/$(basename "$script")")") > /tmp/kahlua.out 2>&1; then
+    # Hand Java a path shaped for its own OS, and keep the run relative to the
+    # repo so scripts can use their usual relative package.path and dofile.
+    if (cd "$REPO" && "$JDK/bin/java" -cp "$CP" RunLua "$(cf_jpath "$(cd "$(dirname "$script")" && pwd)/$(basename "$script")")") > /tmp/kahlua.out 2>&1; then
         echo "ok"
     else
         failures=$((failures + 1))

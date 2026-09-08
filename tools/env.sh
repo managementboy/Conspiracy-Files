@@ -31,10 +31,21 @@ cf_first_exe() { for candidate in "$@"; do [ -x "$candidate" ] && { printf '%s\n
 
 : "${CF_INSTALL:=${ZOMBOID_HOME:+$ZOMBOID_HOME/mods/ConspiracyFiles}}"
 
+# The Linux Steam layout nests the jar and stdlib.lua one level below the app
+# directory; the Windows layout puts them at its root. Consumers want the
+# directory that actually holds the jar, so descend when that is the case.
+if [ -n "${PZ_HOME:-}" ] \
+   && [ ! -f "$PZ_HOME/projectzomboid.jar" ] \
+   && [ -f "$PZ_HOME/projectzomboid/projectzomboid.jar" ]; then
+    PZ_HOME="$PZ_HOME/projectzomboid"
+fi
+
 # A JDK, not a JRE: the Kahlua runner has to compile a small Java file, and the
 # game's bundled runtime ships no compiler.
+# /opt/jdk-25 is where install-jdk25-for-pz.sh puts it.
 : "${JAVA_HOME:=$(cf_first_dir \
     "/c/Program Files/Zulu/zulu-25" \
+    "/opt/jdk-25" \
     "/usr/lib/jvm/zulu-25" \
     "/usr/lib/jvm/java-25-openjdk-amd64" \
     "/usr/lib/jvm/temurin-25-jdk-amd64" \
