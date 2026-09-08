@@ -1,5 +1,6 @@
 local G=require("ConspiracyFiles/Generated/Generator")
 local V=require("ConspiracyFiles/Validator")
+local RoomAffinity=require("ConspiracyFiles/Generated/RoomAffinity")
 local S={}
 -- Stale clue relocation (docs/management/STALE_CLUE_RELOCATION.md): a placed,
 -- undiscovered document gets one new home after going unfound this long.
@@ -61,14 +62,50 @@ function S.create(case,targets,documentTargets)
     local ok,why=S.validate(root); if not ok then return nil,why end
     return root
 end
-function S.createDistributed(case,candidates)
+-- `rooms` is OPTIONAL (Phase 2, docs/design/USING_GAME_ASSETS.md): when it is
+-- omitted this runs the exact original counts-indexed loop below, so
+-- behaviour is byte-identical to before Phase 2 existed. When `rooms` is
+-- supplied (rooms[siteId][candidateIndex] -> room name, from
+-- Generated/Storage.scan), each document instead prefers the first unused
+-- candidate at its site whose room fits its `kind` (Generated/RoomAffinity),
+-- and falls back to the first unused candidate -- in the same order the
+-- omitted-rooms loop would have picked -- whenever nothing fits. This is
+-- ordering only: S.target's allow-list and the distinct/repeated-container
+-- checks below are untouched, so a stored target is unaffected by whether a
+-- room fit.
+function S.createDistributed(case,candidates,rooms)
     local valid,why=G.validate(case);if not valid then return nil,why end
-    local sites,used,counts,targets={},{},{},{}
+    local sites,used,counts,taken,targets={},{},{},{},{}
     for _,site in ipairs(case.locations) do sites[site.id]=site end
     for _,doc in ipairs(case.documents) do
         local list=type(candidates)=="table" and candidates[doc.locationId]
-        counts[doc.locationId]=(counts[doc.locationId] or 0)+1
-        local target=type(list)=="table" and list[counts[doc.locationId]]
+        local target
+        if rooms==nil then
+            counts[doc.locationId]=(counts[doc.locationId] or 0)+1
+            target=type(list)=="table" and list[counts[doc.locationId]]
+        else
+            taken[doc.locationId]=taken[doc.locationId] or {}
+            local siteTaken=taken[doc.locationId]
+            local roomsForSite=type(rooms)=="table" and rooms[doc.locationId]
+            local index
+            -- Only ever choose a candidate that would validate anyway. The
+            -- sequential path reaches candidates 1..n in order, so an invalid
+            -- entry later in the list could never be selected; preferring by
+            -- room can reach further in, so it must check rather than rely on
+            -- Storage.scan happening to emit only in-bounds candidates.
+            local site=sites[doc.locationId]
+            local function usable(i) return not siteTaken[i] and S.target(list[i],site) end
+            if type(list)=="table" and type(roomsForSite)=="table" then
+                for i in ipairs(list) do
+                    if usable(i) and RoomAffinity.fits(doc.kind,roomsForSite[i]) then index=i;break end
+                end
+            end
+            if not index and type(list)=="table" then
+                for i=1,#list do if usable(i) then index=i;break end end
+            end
+            if index then siteTaken[index]=true end
+            target=index and list[index]
+        end
         if not S.target(target,sites[doc.locationId]) then return nil,"not enough distinct suitable containers" end
         local key=table.concat({target.x,target.y,target.z,target.objectIndex,target.containerIndex},":")
         if used[key] then return nil,"repeated physical container" end
