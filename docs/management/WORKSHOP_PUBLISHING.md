@@ -72,11 +72,20 @@ publish creates a second, unrelated Workshop item.
 ## Getting the log off the play machine
 
 The log is written where the game runs, so it has to be fetched. One-time setup
-on the Windows play machine, in an admin PowerShell:
+on the Windows play machine, in a PowerShell **started with Run as
+Administrator** - Win+X, "Windows PowerShell (Administrator)". Without
+elevation the first command fails with "Der angeforderte Vorgang erfordert
+erhoehte Rechte" and the two after it then fail because sshd does not exist
+yet. An elevated shell opens in C:\Windows\system32, not your home folder,
+which is the quickest way to tell.
 
     Add-WindowsCapability -Online -Name OpenSSH.Server~~~~0.0.1.0
     Start-Service sshd
     Set-Service -Name sshd -StartupType Automatic
+    Get-Service sshd            # must report Running
+
+If DISM is blocked, the GUI does the same job: Settings, System, Optional
+features, Add a feature, OpenSSH Server.
 
 Then here, once:
 
