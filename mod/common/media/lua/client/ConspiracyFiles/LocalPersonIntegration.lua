@@ -133,7 +133,10 @@ local function observeKeyLead(entry)
     if not matched then return end
     local fact={id=entry.token,sourceToken=entry.token,keyId=matched.keyId,buildingId=matched.id}
     local staged,changed=Lead.observe(leadState(),fact)
-    if not staged or not changed or not Budget.check("observedKeyLeads",{canonical=staged}) then return end
+    if not staged then return doorBail("the lead did not validate") end
+    if not changed then return doorBail("this key/door lead was already recorded") end
+    if not Budget.check("observedKeyLeads",{canonical=staged}) then
+        return doorBail("recording this lead would exceed the save budget") end
     saveLead(staged)
     log("observedKeyLead building="..matched.id.." keyId="..tostring(matched.keyId))
     recordLeadDiscovery(fact)
@@ -453,17 +456,43 @@ local function doorBuilding(door,keyId)
     if type(id)~="string" or id=="" or #id>160 or id:find("[%c]") then return nil end
     return id
 end
+-- Six ways this can decline, all of them silent until now. observedKeyDoor has
+-- never been seen working in play, and a door that produces nothing is
+-- indistinguishable from a door nobody tried. Opt in from the debug console:
+--   ConspiracyFiles.LocalPersonIntegration.verboseDoors=true
+-- Off by default: every ordinary door in Muldraugh reaches this function.
+P.verboseDoors=false
+local lastDoorLog={}
+local function doorBail(reason)
+    if not P.verboseDoors then return nil end
+    local now=(getTimeInMillis and getTimeInMillis()) or 0
+    local key=tostring(reason):gsub("%d+","N")
+    if now-(lastDoorLog[key] or -math.huge)>=2000 then
+        lastDoorLog[key]=now
+        log("door lead skipped: "..tostring(reason))
+    end
+    return nil
+end
 local function observeDoorLead(inventory,door,keyId)
-    if type(keyId)~="number" or keyId~=math.floor(keyId) or keyId<0 then return end
+    if type(keyId)~="number" or keyId~=math.floor(keyId) or keyId<0 then
+        return doorBail("door has no usable keyId ("..tostring(keyId)..")") end
     local key=observedCorpseKey(inventory,keyId)
+    if not key then
+        return doorBail("no carried key with keyId "..tostring(keyId)..
+            " that came off a body; a case key is deliberately excluded here") end
     local md=key and read(key,"getModData")
     local token=md and md.cfObservedSource
-    if type(token)~="string" or token=="" or #token>160 then return end
+    if type(token)~="string" or token=="" or #token>160 then
+        return doorBail("the key carries no provenance stamp, so it cannot be tied to a body") end
     local buildingId=doorBuilding(door,keyId)
-    if not buildingId then return end
+    if not buildingId then
+        return doorBail("this door's building does not declare keyId "..tostring(keyId)) end
     local fact={id="door:"..token,sourceToken=token,keyId=keyId,buildingId=buildingId}
     local staged,changed=Lead.observe(leadState(),fact)
-    if not staged or not changed or not Budget.check("observedKeyLeads",{canonical=staged}) then return end
+    if not staged then return doorBail("the lead did not validate") end
+    if not changed then return doorBail("this key/door lead was already recorded") end
+    if not Budget.check("observedKeyLeads",{canonical=staged}) then
+        return doorBail("recording this lead would exceed the save budget") end
     saveLead(staged)
     log("observedKeyDoor building="..buildingId.." keyId="..tostring(keyId).." source="..token)
     recordLeadDiscovery(fact)
