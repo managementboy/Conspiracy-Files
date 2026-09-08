@@ -167,7 +167,15 @@ echo "uploading as $STEAM_USER ..."
 out="$(steamcmd +login "$STEAM_USER" +workshop_build_item "$VDF" +quit 2>&1)" || true
 printf '%s\n' "$out" | tail -20
 
-if printf '%s' "$out" | grep -qi 'Success.*workshop'; then
+# steamcmd prints a bare "Success." and immediately concatenates the next line
+# onto it, so match that and the explicit ERROR! rather than any richer phrase.
+# Getting this wrong is expensive: a successful upload whose ID is not recorded
+# makes the NEXT publish create a second, unrelated Workshop item.
+if printf '%s' "$out" | grep -q 'ERROR!'; then
+    printf '%s\n' "$out" | grep 'ERROR!' >&2
+    echo "upload failed. Nothing was recorded." >&2
+    exit 1
+elif printf '%s' "$out" | grep -q 'Success\.'; then
     new_id="$(printf '%s' "$out" | grep -oE 'PublishFileID [0-9]+' | grep -oE '[0-9]+' | head -1)"
     if [ -n "$new_id" ] && [ "$new_id" != "$published_id" ]; then
         mkdir -p "$ITEM_DIR"
@@ -175,6 +183,14 @@ if printf '%s' "$out" | grep -qi 'Success.*workshop'; then
         echo
         echo "new Workshop item $new_id - recorded in $ID_FILE."
         echo "COMMIT THAT FILE, or the next publish creates a second item."
+    fi
+    if [ "$published_id" = "0" ] && [ -z "$new_id" ]; then
+        echo
+        echo "UPLOAD SUCCEEDED BUT NO ITEM ID WAS FOUND IN THE OUTPUT." >&2
+        echo "Find it at https://steamcommunity.com/id/me/myworkshopfiles/ and put" >&2
+        echo "it in $ID_FILE before publishing again, or the next publish will" >&2
+        echo "create a second item." >&2
+        exit 1
     fi
     echo
     echo "published. Subscribe on the play machine:"
