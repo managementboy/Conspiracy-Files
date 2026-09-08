@@ -47,10 +47,19 @@ end
 -- undiagnosable. Report the gate that stopped a pane, throttled, and only
 -- for gates that are actually surprising -- the player's own inventory and
 -- invisible panes are the overwhelmingly common benign cases and stay quiet.
-local lastGateLog=0
+local lastGateLog={}
+-- Throttle PER REASON, not globally. One shared timer meant the commonest
+-- reason ate every slot: on 2026-09-08 the player's own inventory pane bailed
+-- 51 times and hid the corpse pane's reason completely, which is the one
+-- anybody actually wanted. A reason nobody has seen for two seconds is worth
+-- a line even while another repeats constantly.
 local function gate(reason)
  local now=(getTimeInMillis and getTimeInMillis()) or 0
- if now-lastGateLog>=2000 then lastGateLog=now; print("[CF-IDENTITY] pane skipped: "..tostring(reason)) end
+ local key=tostring(reason):gsub("%d+","N")
+ if now-(lastGateLog[key] or -math.huge)>=2000 then
+  lastGateLog[key]=now
+  print("[CF-IDENTITY] pane skipped: "..tostring(reason))
+ end
  return nil
 end
 -- Build 42's default loot view is a merged proximity container (type
