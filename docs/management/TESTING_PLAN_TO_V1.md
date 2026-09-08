@@ -5,7 +5,9 @@ Written 2026-09-08, after the first two-machine playtest. The goal is to close
 in an order where every session's result is worth having even if the next one
 never happens.
 
-`CF-V01-E01` (static map bindings) is accepted. The other twelve are not.
+`CF-V01-E01` (static map bindings) is accepted. Of the remaining twelve, **E11
+(the multiplayer gate) was dropped on 2026-09-08** at the owner's direction -
+see S8 for what that accepts. Eleven remain in scope, across seven sessions.
 
 ## A scoping question that comes first
 
@@ -128,15 +130,34 @@ boundary.
 **Pass:** no crash, no corrupted canonical state, and no per-frame log spam.
 The mod degrades and says so once.
 
-### S8 — Multiplayer gate (E11, ~20 min, separate setup)
+### S8 — Multiplayer gate (E11) — DROPPED 2026-09-08
 
-Start a host/client game and a dedicated server with the mod enabled.
+Dropped at the owner's direction. Multiplayer is already out of v1 by roadmap,
+the mod is solo-first, and `tools/workshop/description.txt` states
+"Single-player only".
 
-**Pass:** the mod detects multiplayer and disables **before** canonical
-initialisation or any world mutation. It should do nothing at all, loudly
-enough to see in the log.
+**What is being accepted by dropping it.** E11 is not a multiplayer feature; it
+is the fail-closed gate that makes the mod switch itself off in multiplayer
+before canonical initialisation or any world mutation. The gate is implemented
+and covered by offline tests. What is now unverified is its behaviour in a real
+host/client or dedicated-server session.
 
-This one is fail-closed by design, so a boring result is the right result.
+The residual risk is small but not zero: the mod is published, and somebody will
+eventually load it on a server. If the gate misbehaves there, the failure lands
+on a player rather than on us, and we will hear about it as a bug report rather
+than as a log line.
+
+**Cheap mitigations, if the risk ever feels worth reducing:**
+
+- keep "Single-player only" prominent in the Workshop description (it is);
+- one 10-minute host/client smoke test before any *public* release, as distinct
+  from the unlisted dev item;
+- treat a multiplayer bug report as a stop-and-fix rather than a wontfix, since
+  a mod that damages a server save is a different class of problem from one
+  that does nothing.
+
+Recorded rather than deleted so the next person knows this was a decision, not
+an oversight.
 
 ## After the ladder
 
