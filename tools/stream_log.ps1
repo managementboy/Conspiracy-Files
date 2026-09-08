@@ -2,15 +2,13 @@
 #
 #   .\stream_log.ps1
 #
-# Leave it running in its own window while you play. Every line the game writes
-# arrives on the development machine within about a second, so a question can be
+# Leave it running in its own window while you play. Whatever the game writes
+# arrives on the development machine within a few seconds, so a question can be
 # answered mid-session instead of after quitting. Ctrl+C stops it.
 #
-# START THE GAME FIRST, THEN THIS. Project Zomboid truncates console.txt when it
-# launches, and a follower attached across that truncation keeps reading the old
-# handle and reports nothing. Launching first also means the whole file belongs
-# to this session, including the [CF-SELFCHECK] line at game start - which is
-# the single most important line and is written in the first seconds.
+# Each send is a complete copy of the log, so it can be started at any point -
+# before or after the game, before or after loading a save - and nothing is
+# missed, including the [CF-SELFCHECK] line written at game start.
 #
 # Uses only the OpenSSH client, which Windows ships enabled. No elevation, and
 # no OpenSSH server on this machine.
