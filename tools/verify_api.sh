@@ -42,6 +42,18 @@ CHECKS=(
   "zombie.iso.IsoGridSquare:getBuilding:the building a door or body sits in"
   "zombie.iso.IsoGridSquare:getRoom:room labels for placement constraints"
   "zombie.iso.RoomDef:getName:the room label T3 extracts"
+  # Vehicles as places (2026-09-09). A car is a container that moves, which is
+  # why these are checked rather than assumed: everything the mod places today
+  # is addressed by a grid square that cannot walk away.
+  "zombie.iso.IsoCell:getVehicles:finding the vehicles near a site at all"
+  "zombie.vehicles.BaseVehicle:getParts:reaching a vehicle's trunk, seats and glovebox"
+  "zombie.vehicles.BaseVehicle:getId:the only stable handle on a vehicle that has moved"
+  "zombie.vehicles.BaseVehicle:getSquare:where the vehicle is NOW, which is not where it was"
+  "zombie.vehicles.BaseVehicle:isTrunkLocked:a locked boot is a lead, not an obstacle"
+  "zombie.vehicles.VehiclePart:getItemContainer:the container a clue would actually go in"
+  "zombie.vehicles.VehiclePart:getId:which part it is - TruckBed, GloveBox, SeatFrontLeft"
+  "zombie.vehicles.VehiclePart:getContainerCapacity:whether a 20-weight body fits in this boot"
+  "zombie.inventory.ItemContainer:getVehiclePart:telling a car boot from a kitchen cupboard"
   # O1: whether vanilla already dressed this room. Present on the installed
   # class; NOT yet proven callable from vanilla Lua - that needs a live probe,
   # and presence in the jar is not capability (T9).
