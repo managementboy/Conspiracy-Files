@@ -86,7 +86,7 @@ function M.rows(root,outfitFor)
   if r.token and outfitFor then
    local ok,outfit=pcall(outfitFor,r.token)
    if ok and text(outfit,120) then
-    detail=detail.."\n\nThe body itself wore a "..outfit..". A worn outfit and a labelled document are two separate observations from the same body; this record does not decide which one, if either, describes who the body is."
+    detail=detail.."\n\nThe body itself wore: "..outfit..". A worn outfit and a labelled document are two separate observations from the same body; this record does not decide which one, if either, describes who the body is."
    end
   end
   detail=detail.."\n\nObserved near "..math.floor(r.x)..", "..math.floor(r.y).." (floor "..r.z..")."

@@ -53,3 +53,22 @@ assert(M.readable(42) == nil, 'a non-string yields nothing')
 
 print('PASS outfit readable: generic and test wardrobes suppressed, real outfits '
     .. 'become plain words, no id ever reaches player-facing text')
+
+-- The sentence must not carry an article. getOutfitName returns bare labels -
+-- "Police" was observed in play on 2026-09-09 - and "wore a police" is broken
+-- English. Generic03 hid this: suppression meant the sentence never once
+-- rendered with a real value until a uniformed body turned up.
+local Identity = require("ConspiracyFiles/IdentityObservations")
+local root = assert(Identity.add(Identity.empty(), {
+    id = "Base.IDcard:1", fullType = "Base.IDcard", label = "ID Card: A Name",
+    source = "corpse", container = "corpse", x = 1, y = 2, z = 0,
+    observedAt = 3, token = "corpse-item:1",
+}))
+for _, raw in ipairs({ 'Police', 'Bathrobe', 'ConstructionWorker', 'SecurityGuard' }) do
+    local text = Identity.rows(root, function() return M.readable(raw) end)[1].detailText
+    assert(text:find('The body itself wore: ', 1, true),
+        raw .. ': the outfit sentence must not use an article')
+    assert(not text:find('wore a ', 1, true),
+        raw .. ': "wore a ' .. tostring(M.readable(raw)) .. '" is not English for every label')
+end
+print('PASS outfit sentence: no article, so a bare label like "police" still reads')

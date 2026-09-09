@@ -62,7 +62,7 @@ assert(not beforeRows[1].detailText:find('The body itself wore', 1, true),
     'no outfit line while the record has no token')
 
 local afterRows = M.rows(second, outfitFor)
-assert(afterRows[1].detailText:find('The body itself wore a security guard uniform', 1, true),
+assert(afterRows[1].detailText:find('The body itself wore: security guard uniform', 1, true),
     'the outfit line must appear once the token is backfilled')
 assert(afterRows[1].detailText:find('two separate observations', 1, true),
     'and it must still refuse to reconcile the two leads')
