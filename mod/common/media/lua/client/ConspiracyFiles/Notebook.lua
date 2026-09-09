@@ -616,10 +616,15 @@ function Window:refresh(preferred)
         local control,name=pair[1],pair[2]
         local on=self.section==name
         if control.setBorderRGBA then
-            if on then control:setBorderRGBA(1,1,0.85,1) else control:setBorderRGBA(0.4,0.4,0.4,1) end
+            if on then control:setBorderRGBA(1,0.92,0.6,1) else control:setBorderRGBA(0.3,0.3,0.3,1) end
         end
         if control.setTextureRGBA then
-            if on then control:setTextureRGBA(0.35,0.35,0.3,1) else control:setTextureRGBA(0,0,0,0.6) end
+            -- The active tab must be obvious at a glance. The previous values
+            -- were applied correctly and were still indistinguishable on
+            -- screen: the owner could not tell which tab he was on from his
+            -- own screenshot, and neither could anyone else. A highlight
+            -- nobody notices is the same as no highlight.
+            if on then control:setTextureRGBA(0.55,0.50,0.34,1) else control:setTextureRGBA(0,0,0,0.75) end
         end
     end
     local rows=self:rows()
