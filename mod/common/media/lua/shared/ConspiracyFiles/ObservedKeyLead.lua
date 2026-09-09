@@ -110,7 +110,33 @@ end
 
 -- Cautious, player-facing rows. Wording mirrors KeyJournal.rows and
 -- IdentityObservations.rows: a lead, never proof of residence or ownership.
-function M.rows(root)
+-- labelFor is an OPTIONAL function(buildingId) -> a human address, or nil,
+-- supplied by the client (ConspiracyFiles.AddressMap.labelForBuilding). This
+-- module stays a pure domain with zero PZ dependencies: it only calls what it
+-- was handed, exactly as IdentityObservations.rows takes outfitFor.
+--
+-- Resolved at RENDER time, not once at observation. The address book fills in
+-- as the player explores, so a door opened early may have no label yet and
+-- gain one later; reopening the notebook then shows it.
+-- A building id is not something a survivor would write down. Name the place
+-- if the address book knows it, and say nothing identifying if it does not:
+-- "the building at 11259175162085419" reached a player on 2026-09-09 and is
+-- worse than no identifier at all.
+local function describe(f, labelFor)
+    local place
+    if labelFor then
+        local ok, label = pcall(labelFor, f.buildingId)
+        if ok and type(label) == "string" and label ~= "" and #label <= 120
+           and not label:find("[%c]") then place = label end
+    end
+    local opening = place
+        and ("A key I found among a body's belongings opens " .. place .. ".")
+        or "A key I found among a body's belongings opens a building I have been to."
+    return opening ..
+        " This suggests a possible connection between that body and the building;" ..
+        " it does not establish who the body was, that they lived there, or that they owned it."
+end
+function M.rows(root, labelFor)
     if not M.validate(root) then return {} end
     local ids = {}
     for id in pairs(root.leads) do ids[#ids + 1] = id end
@@ -123,9 +149,7 @@ function M.rows(root)
             ordinal = #rows + 1,
             title = "A key found with a body matches a building",
             summary = "Interpretation - observed key",
-            detailText = "A key I found among a body's belongings matches the building at " .. f.buildingId ..
-                ". This suggests a possible connection between that body and the building; " ..
-                "it does not establish who the body was, that they lived there, or that they owned it.",
+            detailText = describe(f, labelFor),
         }
     end
     return rows

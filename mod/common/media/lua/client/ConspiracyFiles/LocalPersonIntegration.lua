@@ -110,7 +110,15 @@ end
 -- can read is not a lead.
 ConspiracyFiles.ObservedKeyLeads=ConspiracyFiles.ObservedKeyLeads or {}
 ConspiracyFiles.ObservedKeyLeads.rows=function()
-    local ok,rows=pcall(function() return Lead.rows(leadState()) end)
+    -- Hand the renderer the address book so a connection can name a place
+    -- rather than a building id. Resolved here, at render time, because the
+    -- book fills in as the player explores: a door opened before its street
+    -- was indexed gains its address on a later look.
+    local ok,rows=pcall(function()
+        local Address=ConspiracyFiles.AddressMap
+        local labelFor=Address and Address.labelForBuilding
+        return Lead.rows(leadState(),labelFor)
+    end)
     return ok and rows or {}
 end
 -- Ledger ref must equal the notebook row id, or ordering cannot place it.

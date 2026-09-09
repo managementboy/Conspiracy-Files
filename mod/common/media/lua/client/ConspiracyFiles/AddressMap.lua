@@ -37,6 +37,17 @@ local function use(root)
     end
 end
 function M.ready() return book~=nil end
+-- The address for a building id, or nil. Keyed exactly as the book is built:
+-- every id here comes from BuildingDef:getIDString(), the same call T3Nearby
+-- and the audit at line 121 use, so an observedKeyDoor building id resolves
+-- directly. Returns nil for a building the book never gave an address to -
+-- a shed off a dirt road is not "useful" and never gets one.
+function M.labelForBuilding(id)
+    if not book or type(id)~="string" or id=="" then return nil end
+    local r=byId["t3:"..id]
+    if not r or type(r.label)~="string" or r.label=="" then return nil end
+    return r.label
+end
 function M.stop() if handler then Events.OnTick.Remove(handler) end; job=nil;stopAudit() end
 function M.describe(body,case)
     if not book then return nil end
