@@ -11,7 +11,12 @@ package.path = "mod/common/media/lua/shared/?.lua;" .. package.path
 local M = require("ConspiracyFiles/BodyOutfitObservations")
 
 -- Suppressed: says nothing about who the body was.
-for _, name in ipairs({ 'Generic01', 'Generic03', 'Generic10', 'generic', 'Default', 'Naked', 'bullet' }) do
+-- The real uninformative set, read from media/clothing/clothing.xml:
+-- Generic01..Generic05, Generic_Skirt, Naked, NakedVeil. Generic_Skirt reached
+-- a player on 2026-09-09 as "generic skirt", because the old rule stripped
+-- trailing digits and compared the whole stem.
+for _, name in ipairs({ 'Generic01', 'Generic03', 'Generic05', 'Generic_Skirt',
+                        'Naked', 'NakedVeil', 'generic', 'Default', 'bullet' }) do
     assert(M.readable(name) == nil, name .. ' identifies nobody and must be suppressed')
 end
 
@@ -19,6 +24,10 @@ end
 for _, name in ipairs({ 'ArmorTest_Metal', 'ArmorTest_Bone', '1RJTest', 'AlwaysRadioTest' }) do
     assert(M.readable(name) == nil, name .. ' is a test outfit, not a lead')
 end
+
+-- Cook_Generic identifies a cook. Suppressing anything merely CONTAINING
+-- "generic" would lose it, which is why the rule judges the leading word.
+assert(M.readable('Cook_Generic') ~= nil, 'Cook_Generic identifies a cook and must survive')
 
 -- Readable: real outfits become ordinary words.
 local expected = {

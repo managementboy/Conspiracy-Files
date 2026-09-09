@@ -14,5 +14,5 @@
 -- This module deliberately requires nothing, so anything can read it without
 -- dragging in a dependency chain.
 ConspiracyFiles = ConspiracyFiles or {}
-ConspiracyFiles.VERSION = "DEV-0.8.22-outfit-wording"
+ConspiracyFiles.VERSION = "DEV-0.8.23-generic-skirt"
 return ConspiracyFiles.VERSION

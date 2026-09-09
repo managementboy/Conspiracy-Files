@@ -83,8 +83,13 @@ function M.readable(name)
     if trimmed=="" then return nil end
     -- Debug and test wardrobes are not observations about anybody.
     if trimmed:lower():find("test") then return nil end
-    local stem=trimmed:gsub("%d+$",""):lower()
-    if UNINFORMATIVE[stem] then return nil end
+    -- Judge the LEADING WORD, not the whole string and not a substring. The
+    -- game ships Generic01..Generic05, Generic_Skirt, Naked and NakedVeil, all
+    -- of which identify nobody - and Cook_Generic, which identifies a cook.
+    -- Stripping trailing digits caught Generic03 and missed Generic_Skirt,
+    -- which reached a player on 2026-09-09 as "generic skirt".
+    local head=trimmed:match("^%u%l+") or trimmed:match("^%a+") or trimmed
+    if UNINFORMATIVE[head:lower()] then return nil end
     -- CamelCase and underscores into words, without disturbing an id that is
     -- already one plain word.
     local spaced=trimmed:gsub("_"," "):gsub("(%l)(%u)","%1 %2"):gsub("(%u)(%u%l)","%1 %2")
