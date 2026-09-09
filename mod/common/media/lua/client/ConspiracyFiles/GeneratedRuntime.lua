@@ -263,6 +263,15 @@ function R.inspect(item)
     checked(api.status(md.cfGeneratedId,"placed",worldHours())); checked(api.inspect(md.cfGeneratedId))
     local ledger=ConspiracyFiles.DiscoveryLog
     if ledger and ledger.record then ledger.record("evidence",md.cfGeneratedId) end
+    -- Hovering a document you have already read should say so, without having
+    -- to open the notebook to find out which of the four you are holding. The
+    -- item already carries its real title as its name, so this only needs to
+    -- confirm the notebook has it.
+    --
+    -- Set on INSPECTION and never before. A tooltip on an undiscovered
+    -- document would let a player find every clue by hovering, which would
+    -- replace the investigation with a sweep of the furniture.
+    pcall(function() item:setTooltip("Tooltip_ConspiracyFiles_Recorded") end)
     -- Record the discovery first, then retire: a case whose last document has
     -- just been found no longer needs its placement bookkeeping, and shedding
     -- it is what keeps later cases inside the shared save budget.
