@@ -68,7 +68,7 @@ first real evidence for two criteria.
 E12 and E08 need more than one session's evidence, but this starts both at zero
 cost.
 
-### S2 — Physical identity (E05, ~30 min)
+### S2 — Physical identity (E05) — PASSED 2026-09-09
 
 Carry one discovered document through every state a player can put it in:
 inventory, a container, the floor, a vehicle, back to inventory. Save and
