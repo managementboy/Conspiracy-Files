@@ -518,11 +518,7 @@ end
 function Window:showRow(row)
     if not row then return end
     self.currentId=row.id
-    -- Amber heading against muted body text. In the reference the title is the
-    -- only warm thing on the page, which is what gives an entry a shape at a
-    -- glance instead of a wall of even-weight text.
-    self.header.defaultFont=UIFont.Code
-    self.header:setText("<RGB:0.91,0.64,0.30> "..row.title:gsub("<","&lt;"):gsub(">","&gt;")); self.header:paginate()
+    self.header:setText("<RGB:1,1,0.95> "..row.title:gsub("<","&lt;"):gsub(">","&gt;")); self.header:paginate()
     self.document:setDocument(row.detailText,UI.highContrast)
     if self.compact then self.detailOnly=true end
     self:layout()
@@ -629,7 +625,7 @@ function Window:refresh(preferred)
     local rows=self:rows()
     if #rows==0 then
         self.list:clear()
-        self.header:setText("<RGB:0.91,0.64,0.30> Nothing recorded yet"); self.header:paginate()
+        self.header:setText("<RGB:1,1,0.95> Nothing recorded yet"); self.header:paginate()
         self.document:setDocument("Inspect an unusual document or mark an acquired object worth remembering. The notebook records encounters; it does not assign objectives.",UI.highContrast)
         self:layout(); return
     end
@@ -652,7 +648,7 @@ function Window:refresh(preferred)
     end
     if #visible==0 then
         self.list.selected=nil
-        self.header:setText("<RGB:0.91,0.64,0.30> No entries match the filter"); self.header:paginate()
+        self.header:setText("<RGB:1,1,0.95> No entries match the filter"); self.header:paginate()
         self.document:setDocument("Nothing recorded so far matches \""..(query or "").."\". Clear the filter to see every entry again; nothing has been hidden or removed.",UI.highContrast)
         self:layout(); return
     end

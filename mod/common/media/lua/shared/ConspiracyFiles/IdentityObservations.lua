@@ -69,7 +69,20 @@ function M.rows(root,outfitFor)
  local rows={}
  for i,r in ipairs(root.records) do
   local where=r.source=="corpse" and "among a corpse's belongings" or ("inside "..r.container)
-  local detail="I saw a document labelled \""..r.label.."\" "..where..".\n\nThe name on a document is a lead. It does not establish who owned the container or identify the body."
+  local detail="I saw a document labelled \""..r.label.."\" "..where.."."
+  -- A container carrying a body's provenance token was taken off that body,
+  -- and the player is entitled to know it. Saying only "inside Wallet" threw
+  -- away a fact the mod had already established - the same failure as losing
+  -- the outfit lead, one layer up. Observed 2026-09-09 with Ursula Schultz:
+  -- the wallet was stamped, the case was bound to that corpse, and the entry
+  -- still read as though the wallet had been found on a shelf.
+  --
+  -- It still refuses to say whose body, because a wallet on a corpse is a
+  -- wallet on a corpse.
+  if r.source~="corpse" and r.token then
+   detail=detail.." That container was taken off a corpse."
+  end
+  detail=detail.."\n\nThe name on a document is a lead. It does not establish who owned the container or identify the body."
   if r.token and outfitFor then
    local ok,outfit=pcall(outfitFor,r.token)
    if ok and text(outfit,120) then
