@@ -77,6 +77,13 @@ local function words(id)
             previousLower=false
         else
             if (upper or digit) and previousLower then out=out.." " end
+            -- A run of capitals followed by a lower-case letter is an acronym
+            -- meeting a word: IDcard is an ID card, not an idcard.
+            if upper then
+                local nextCh=string.sub(id,i+1,i+1)
+                local previousCh=string.sub(id,i-1,i-1)
+                if previousCh>="A" and previousCh<="Z" and nextCh>="a" and nextCh<="z" then out=out.." " end
+            end
             out=out..string.lower(ch)
             previousLower=not upper and not digit
         end
@@ -97,6 +104,14 @@ end
 local NUMERALS={"one","two","three","four","five","six","seven","eight","nine","ten",
                 "eleven","twelve","thirteen","fourteen","fifteen","sixteen"}
 local function numeral(n) return NUMERALS[n] or tostring(n) end
+-- "A idcard" is the kind of thing a player notices and we do not. The rule is
+-- the sound of the first letter, which is right far more often than it is
+-- wrong for the words a catalogue id produces.
+local function article(label)
+    local first=string.lower(string.sub(label,1,1))
+    if first=="a" or first=="e" or first=="i" or first=="o" or first=="u" then return "an" end
+    return "a"
+end
 local function build(seed,revision,sites)
     local random=rng(seed)
     -- The premise is drawn first, so it is the seed's most significant choice:
@@ -238,20 +253,22 @@ local function build(seed,revision,sites)
         local kind=assert(Roles.choose(random,roleId))
         local label=words(kind)
         local body=fill(sentence,map)
-        body=subst(body,"LABEL",label)
+        body=subst(subst(body,"ARTICLE",article(label)),"LABEL",label)
+        body=string.upper(string.sub(body,1,1))..string.sub(body,2)
         assert(Roles.fits(roleId,kind,body))
         local wear=assert(ObjectRoles.describe(assert(Roles.ruleOf(roleId)))).wear
-        document(n,"A "..label,site,body,references,{link},nil,kind)
+        document(n,string.upper(string.sub(article(label),1,1))..string.sub(article(label),2)
+            .." "..label,site,body,references,{link},nil,kind)
         documents[n].wear=wear
     end
     objectDocument(13,"physicalTrace",a,
-        "A {LABEL}, badly worn, stored with the paperwork about {SUBJECT}. Nothing is written on it. Why it was kept with records is not recorded.",
+        "{ARTICLE} {LABEL}, badly worn, stored with the paperwork about {SUBJECT}. Nothing is written on it. Why it was kept with records is not recorded.",
         {a.id},{target=documents[1].id,kind="recontextualises"})
     objectDocument(14,"bearsName",b,
-        "A {LABEL} carrying a name, filed with the papers about {SUBJECT}. Nothing here says the name is the owner's, or that the owner left it.",
+        "{ARTICLE} {LABEL} carrying a name, filed with the papers about {SUBJECT}. Nothing here says the name is the owner's, or that the owner left it.",
         {b.id},{target=documents[2].id,kind="recontextualises"})
     objectDocument(15,"outOfPlace",a,
-        "A {LABEL}, worn, kept with the file on {SUBJECT}. It is not the kind of thing anyone files with records.",
+        "{ARTICLE} {LABEL}, worn, kept with the file on {SUBJECT}. It is not the kind of thing anyone files with records.",
         {a.id},{target=documents[1].id,kind="recontextualises"})
     -- Quantity as evidence. Owner, 2026-09-09: "one of something is no misery
     -- but a house full of bleach is a mystery", and then the two shapes that
