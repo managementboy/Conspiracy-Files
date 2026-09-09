@@ -31,8 +31,29 @@ local roles={
     -- Places someone somewhere / dates an event as a short transactional
     -- identifier. Reachable carriers: creditcard, ticket.
     itineraryLead={capacity="short",carriers={"creditcard","ticket"}},
+    -- Phase 3 (docs/design/USING_GAME_ASSETS.md). Roles are the variety
+    -- multiplier: MAX_EVIDENCE caps a case at seven documents whatever the
+    -- pool size, so a wider pool costs nothing in save budget and changes what
+    -- a case can be about.
+    --
+    -- These three exist to DISAGREE. Until now every optional document
+    -- connected to the route lead with "recontextualises" - it added context
+    -- and nothing more - so only the mandatory receiving copy could ever
+    -- contradict anything. A case whose every optional document merely agrees
+    -- is not an investigation.
+    --
+    -- A payment recorded against the shipment. Its date is the interesting
+    -- part, not its amount.
+    paymentRecord={capacity="prose",carriers={"receipt","notepad"}},
+    -- Someone was demonstrably somewhere on a day that does not fit.
+    timingDispute={capacity="short",carriers={"ticket","creditcard"}},
+    -- A routine log that happens to place a person somewhere. Supports rather
+    -- than disputes: a case where everything disagrees is as flat as one where
+    -- nothing does.
+    presenceNote={capacity="prose",carriers={"notebook","notepad"}},
 }
-local ORDER={"access","diaryContext","notebookContext","clippingContext","affiliationLead","itineraryLead"}
+local ORDER={"access","diaryContext","notebookContext","clippingContext","affiliationLead","itineraryLead",
+             "paymentRecord","timingDispute","presenceNote"}
 
 for _,roleId in ipairs(ORDER) do
     local role=roles[roleId]

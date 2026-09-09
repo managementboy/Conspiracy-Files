@@ -93,6 +93,33 @@ local function build(seed,revision,sites)
     local itineraryKind=carrierFor("itineraryLead",itineraryBody)
     document(9,K.get(itineraryKind).short.." / "..facts.code,b,itineraryBody,
         {people[2].id,b.id},{{target=documents[2].id,kind="recontextualises"}},nil,itineraryKind)
+    -- Phase 3 roles. These are the first optional documents that can
+    -- DISAGREE with what came before: every earlier one connected with
+    -- "recontextualises", so only the mandatory receiving copy could ever
+    -- contradict anything.
+    --
+    -- A payment dated before the dispatch it pays for. That is a fact about
+    -- paperwork order, not proof of anything, and the wording keeps it that
+    -- way.
+    local paymentBody="WHAT YOU FOUND\nA carbon payment slip with a smudged duplicate line, kept in a wallet fold rather than filed.\n\n"
+        ..facts.organisation.."\nPayment against record "..facts.code.."\nRaised July "..(facts.dispatchDay-1)
+        ..", 1993 - one day before the dispatch it settles.\nAuthorised by: "..facts.sender.."\nCounter-signature: none."
+    local paymentKind=carrierFor("paymentRecord",paymentBody)
+    document(10,K.get(paymentKind).short.." / "..facts.code,a,paymentBody,
+        {people[1].id,org.id,a.id},{{target=documents[1].id,kind="disputes-delivery"}},nil,paymentKind)
+    -- A stub placing the recipient elsewhere on the day of receipt.
+    local timingBody="Ref "..facts.code.."\n"..facts.recipient.."\nJuly "..facts.receiptDay..", 1993 - "..a.name
+    local timingKind=carrierFor("timingDispute",timingBody)
+    document(11,K.get(timingKind).short.." / "..facts.code,a,timingBody,
+        {people[2].id,a.id},{{target=documents[2].id,kind="disputes-delivery"}},nil,timingKind)
+    -- And one that agrees. A case where everything disagrees is as flat as one
+    -- where nothing does.
+    local presenceBody="WHAT YOU FOUND\nA duty log with a soft cover, the current week held open by a bent paperclip.\n\n"
+        .."July "..facts.receiptDay..", 1993 - "..b.name.."\n"..facts.recipient.." signed in at the gate and again at the store."
+        .."\nNo vehicle number recorded.\nEntry for record "..facts.code.." initialled twice."
+    local presenceKind=carrierFor("presenceNote",presenceBody)
+    document(12,K.get(presenceKind).short.." / "..facts.code,b,presenceBody,
+        {people[2].id,b.id},{{target=documents[2].id,kind="corroborates"}},nil,presenceKind)
     -- The first three roles are the coherent minimum: a route lead,
     -- an independently attributable response, and a review of that response.
     -- Optional roles are shuffled and bounded, so neither their count nor their
@@ -101,7 +128,8 @@ local function build(seed,revision,sites)
     -- short-text roles -- and therefore all four card/ticket carriers -- are
     -- genuinely reachable, while MIN/MAX_EVIDENCE and their selection range
     -- (0..4 optional slots on top of the 3 mandatory roles) stay unchanged.
-    local optional={documents[4],documents[5],documents[6],documents[7],documents[8],documents[9]}
+    local optional={documents[4],documents[5],documents[6],documents[7],documents[8],documents[9],
+                    documents[10],documents[11],documents[12]}
     local optionalCapacity=G.MAX_EVIDENCE-3
     local optionalCount=random(optionalCapacity+1)-1
     for i=#optional,2,-1 do local j=random(i); optional[i],optional[j]=optional[j],optional[i] end
