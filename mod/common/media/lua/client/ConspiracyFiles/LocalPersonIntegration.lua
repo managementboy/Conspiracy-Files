@@ -85,7 +85,19 @@ local function save(staged)
 end
 local function cases()
     local wrapper=Cases.current(ModData.get("ConspiracyFiles.Generated.G2") or {})
-    return wrapper and Cases.sessions(wrapper) or {}
+    local all=wrapper and Cases.sessions(wrapper) or {}
+    -- A retired case keeps only the evidence rows the notebook renders: its
+    -- documents, identities and case envelope are deliberately discarded once
+    -- everything has been found. Five call sites below read root.case, and on
+    -- 2026-09-09 finding the last document of a case retired it and then threw
+    -- once per tick, forever. Skip retired roots here rather than guard each
+    -- use: there is nothing in one for this module to act on.
+    local live={}
+    for _,root in ipairs(all) do
+        if type(root)=="table" and type(root.case)=="table"
+           and type(root.case.documents)=="table" then live[#live+1]=root end
+    end
+    return live
 end
 -- Observed-vanilla-key leads live in their own store: a body's real key is
 -- world content we only ever observe, never our own placed/reconciled fact.
