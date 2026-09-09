@@ -293,6 +293,30 @@ function R.isInspected(item)
     for _,id in ipairs(Cases.discoveries(wrapper)) do if id==md.cfGeneratedId then return true end end
     return false
 end
+-- Development only: where this case put its documents, discovered or not.
+-- Testing a case repeatedly means finding a document first, and hunting for
+-- one has been the slow part of three sessions. This spoils the investigation
+-- on purpose, so it is gated on debug like everything else here and is never
+-- part of play.
+function R.devLocations()
+    if not allowed() or not sessions then return "no active case" end
+    local out={}
+    for _,api in ipairs(sessions) do
+        local ok,snap=pcall(api.snapshot)
+        if ok and snap and snap.assignments then
+            for id,a in pairs(snap.assignments) do
+                local t=a.target
+                if t then
+                    out[#out+1]=string.format("%s  %s,%s floor %s  [%s]",
+                        tostring(id),tostring(t.x),tostring(t.y),tostring(t.z),tostring(a.status))
+                end
+            end
+        end
+    end
+    table.sort(out)
+    if #out==0 then return "no documents placed" end
+    return table.concat(out,"\n")
+end
 function R.metrics() return scheduler and {peakMs=scheduler.peakMs} end
 function R.automaticStatus()
     local roots=wrapper and Cases.sessions(wrapper) or {}
