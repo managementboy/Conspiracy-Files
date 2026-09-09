@@ -68,17 +68,14 @@ So a vehicle target has to be addressed by **vehicle identity plus part id**,
 and verified by scanning the cell's vehicles rather than by resolving a square.
 That is a new target kind, a schema change, and a generator revision bump.
 
-Two things about it can only be answered inside the running game:
+Two things about it could only be answered inside the running game, and the
+owner answered both on 2026-09-09: **a vehicle's identity and the contents of
+its boot both survive a save and reload.**
 
-1. **Does `BaseVehicle:getId()` survive a save and reload?** If it does not,
-   vehicle placement needs a different handle - a ModData stamp on the vehicle
-   itself, which is more work but not much more.
-2. **Does an item placed in a trunk survive a reload?** Vehicle containers are
-   saved with the vehicle rather than with the cell, and nothing in T1 or T7
-   covered them.
-
-Neither can be settled by reading the jar, and guessing at them is how a
-weekend gets lost.
+We depend on neither. `VehiclePart:getModData()` exists, so the mod leaves its
+own mark on the part it placed into and finds that mark again by looking at the
+cell's vehicles. Nothing asks the engine which vehicle this is, or where it was
+parked - which is exactly the property a clue in a car needs.
 
 ## The three shapes, once that is settled
 
@@ -100,21 +97,29 @@ where things go when they are being moved rather than kept. `TruckBed` and
 `GloveBox` are different rooms in the sense `RoomAffinity` already means, and
 should be treated as such.
 
-## What I need from the owner
-
-A ten-minute test, from the debug console, before any of this is built:
-
-    ConspiracyFiles.GeneratedDiagnostic.vehicleProbe()
-
-It will report every nearby vehicle's id, its parts and their capacities, place
-a marked item in the nearest trunk, and print what to check after a save and
-reload. That probe does not exist yet and is the first thing to write.
-
 ## Order of work
 
-1. The probe, and the owner's answers to the two unknowns.
-2. A vehicle target kind, addressed by vehicle id and part id.
-3. Permission for existing carriers to be placed in a glovebox.
-4. Vehicle-aware room affinity (`TruckBed`, `GloveBox`, `SeatFrontLeft`).
-5. Piles in a boot.
+1. ~~The two unknowns~~ - answered by the owner; no probe needed.
+2. **The access layer** - done (`WorldAccess`, `test/vehicle_access.lua`):
+   ordered parts with their capacities, vehicles near a point measured from
+   where they are *now*, a mark left on a part, and a boot that still resolves
+   after being driven across town.
+3. A vehicle target kind in `Session.target`, and candidates that include cars
+   parked near a site rather than only furniture inside its rooms. This is the
+   real structural work: sites are room rectangles, and a car is in the
+   driveway.
+4. Vehicle-aware room affinity - `GloveBox` and `TruckBed` are rooms in the
+   sense that module already means.
+5. Piles in a boot. The pile rules need nothing new; a car is a container with
+   a different reason to be suspicious.
 6. The body, last, and carefully.
+
+## The body, and what may be said about it
+
+One item, weight 20, and the only evidence this mod would ever place that is a
+person. It must be rare. It must never be described beyond what is visible.
+And it must never be called a victim - the mod does not know that, and the
+whole discipline of this project is that a lead is never proof.
+
+"A body, in the boot of a car, with the file nearby" is the whole of what may
+be written. Everything a player concludes from that is theirs.

@@ -15,6 +15,100 @@ function World.resolve(target)
     if not container or container:getType()~=target.containerType then return nil,"target-changed" end
     return container
 end
+-- VEHICLES AS PLACES (docs/design/VEHICLES_AS_PLACES.md).
+--
+-- Everything above addresses a container by the grid square it stands on,
+-- which is safe because a kitchen cupboard cannot walk away. A car can, so a
+-- vehicle container is addressed by a mark we leave on the PART -
+-- VehiclePart:getModData() - and found again by looking at the cell's
+-- vehicles rather than at a square. The owner has confirmed in play that both
+-- a vehicle's identity and the contents of its boot survive a save and
+-- reload; the part mark makes us independent of the id regardless.
+--
+-- Parts worth using, and why they are not all of them. A glovebox is the best
+-- container in the game for a document - small, private, and nothing arrives
+-- there by accident. A boot is where things go when they are being moved
+-- rather than kept. The rest of a car is seats and engine parts, which hold
+-- nothing or hold it implausibly.
+World.VEHICLE_PARTS={"GloveBox","TruckBed","TrunkDoor","SeatFrontLeft","SeatFrontRight"}
+
+-- Every usable container in one vehicle, as {part=id,container=container}.
+-- Ordered by VEHICLE_PARTS, never by engine iteration order, so selection is
+-- reproducible.
+function World.vehicleParts(vehicle)
+    local out={}
+    if not vehicle or not vehicle.getParts then return out end
+    local parts=vehicle:getParts()
+    if not parts or not parts.getPartById then return out end
+    for _,id in ipairs(World.VEHICLE_PARTS) do
+        local part=parts:getPartById(id)
+        local container=part and part.getItemContainer and part:getItemContainer()
+        if container then
+            out[#out+1]={part=id,container=container,
+                capacity=part.getContainerCapacity and part:getContainerCapacity() or nil}
+        end
+    end
+    return out
+end
+
+-- Vehicles whose current square lies within `radius` tiles of (x,y,z), with
+-- their usable containers. Bounded: a cell can hold a great many vehicles and
+-- this runs on a budgeted scheduler step like everything else here.
+function World.vehiclesNear(x,y,z,radius,limit)
+    local cell=getCell()
+    local found={}
+    if not cell or not cell.getVehicles then return found end
+    local vehicles=cell:getVehicles()
+    if not vehicles then return found end
+    limit=limit or 8
+    for vehicle in pairs(vehicles) do
+        if #found>=limit then break end
+        local square=vehicle.getSquare and vehicle:getSquare()
+        if square then
+            local vx,vy,vz=square:getX(),square:getY(),square:getZ()
+            if vz==z and math.abs(vx-x)<=radius and math.abs(vy-y)<=radius then
+                local parts=World.vehicleParts(vehicle)
+                if #parts>0 then
+                    found[#found+1]={vehicle=vehicle,x=vx,y=vy,z=vz,parts=parts}
+                end
+            end
+        end
+    end
+    return found
+end
+
+-- Find the container we marked. `mark` is the value stamped into the part's
+-- ModData at placement; it is our own handle, so nothing here depends on how
+-- the engine numbers vehicles or where the car has since been driven.
+function World.resolveVehicle(target,radius)
+    if type(target)~="table" or type(target.vehiclePart)~="string" or type(target.vehicleMark)~="string" then
+        return nil,"not a vehicle target"
+    end
+    -- Widened deliberately: the car may have been moved, and the point of the
+    -- mark is that finding it again does not depend on where it was parked.
+    local near=World.vehiclesNear(target.x,target.y,target.z,radius or 60,16)
+    for _,entry in ipairs(near) do
+        for _,part in ipairs(entry.parts) do
+            if part.part==target.vehiclePart then
+                local vehiclePart=part.container.getVehiclePart and part.container:getVehiclePart()
+                local md=vehiclePart and vehiclePart.getModData and vehiclePart:getModData()
+                if md and md.cfVehicleMark==target.vehicleMark then return part.container end
+            end
+        end
+    end
+    return nil,"vehicle-not-found"
+end
+
+-- Leave our mark on the part a clue was placed into.
+function World.markVehiclePart(container,mark)
+    if not container or type(mark)~="string" then return false end
+    local part=container.getVehiclePart and container:getVehiclePart()
+    local md=part and part.getModData and part:getModData()
+    if not md then return false end
+    md.cfVehicleMark=mark
+    return true
+end
+
 function World.candidateScan(candidate,done)
     local dx,dy=-candidate.radius,-candidate.radius
     local objects,objectIndex,containerIndex=nil,0,0
