@@ -178,6 +178,55 @@ can do.
 That belongs with the other two standing refusals - no custom photograph, no
 playable tape. We do not describe what the player cannot see.
 
+## Different kinds of vehicle
+
+Owner, 2026-09-09:
+
+> There are also different types of cars. Again misplaced objects are a
+> mystery. What are 50 mannequin doing in a truck... again just an example. Be
+> creative.
+
+The game answers most of this itself. Nearly half of its 47 vehicle scripts
+carry a `zombieType` naming the kind of person found dead at that wheel:
+`AmbulanceDriver`, `Police`, `Postal`, `Fireman`, `PrisonGuard`, `Farmer`,
+`Ranger`. That is the game stating what a vehicle was *for*, which makes "this
+cargo has nothing to do with this vehicle" a derived fact rather than a mapping
+somebody invented.
+
+`tools/extract_vehicle_types.py` parses all of it into
+`Generated/VehicleCatalogue.lua`: 47 vehicles, 20 of which name their driver,
+with the container parts each declares and whether it is a trailer - cargo with
+no driver at all.
+
+`Generated/VehicleAffinity.lua` is the judgement layer on top, and it is
+deliberately thin: eight trades where the answer is obvious, and silence
+everywhere else.
+
+### Why silence is the load-bearing part
+
+Fifty mannequins in a **mail van** is a question. The same fifty in an
+**unmarked saloon** is furniture in a car.
+
+So `avoids` is not the negation of `fits`. A vehicle with no declared driver
+has no business being called the wrong place for anything, and a vehicle whose
+driver is `Generic01` is the game saying *this one has no identity* - exactly
+what `Generic03` means on a corpse, and refused here for the same reason. Only
+13 of the 47 vehicles carry an opinion. That is correct, not a shortfall.
+
+### What this makes possible
+
+- **A trade's own supplies, in far too great a quantity.** A stack of dressings
+  in an ambulance is expected. Eleven boxes of them is not.
+- **Cargo with nothing to do with the vehicle.** The mannequins. A livestock
+  trailer full of office chairs. A prison van full of gardening tools.
+- **The wrong vehicle for the paperwork.** A case file about a maintenance
+  contract, found in the glovebox of a police car.
+
+Moveables (`Mov_MannequinMale`, weight 0.5, category `Furniture`) are barred
+from drawers by `ObjectRules` - "a moveable is placed in the world, not stacked
+inside a drawer" - and a truck bed is precisely the exception. That denial will
+need to become bed-specific when placement reaches vehicles.
+
 ## The body, and what may be said about it
 
 One item, weight 20, and the only evidence this mod would ever place that is a
