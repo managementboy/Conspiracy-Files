@@ -25,6 +25,9 @@ can be made to mean something:
   blood      it is a weapon, so setBloodLevel applies and it can be found bloodied
   keyed      it is a key, and a key can be tested against a real door
   firearm    it takes ammunition; marked so a rule can refuse it as loot
+  countable  duplicates are identical, so the only variable is how many there
+             are - one bottle of bleach is nothing, a cupboard of it is a
+             question
 
 WHAT THIS DOES NOT DO. It does not know whether an item is interesting, whether
 a story could live in it, or whether the player will ever notice it. It also
@@ -111,6 +114,12 @@ def properties(fields, source):
     # for reading the notebook.
     if fields.get("AmmoType") or fields.get("MagazineType"):
         out.append("firearm")
+    # Countable: no condition track, so two of them are indistinguishable and
+    # the only thing that can vary is how many there are. One bottle of bleach
+    # is a bottle of bleach; forty is a question. Weight is required because a
+    # countable thing has to be a thing the player can pick up and pile.
+    if "condition" not in out and "keyed" not in out and fields.get("Weight"):
+        out.append("countable")
     return out
 
 
@@ -139,7 +148,12 @@ def main():
             category = fields.get("DisplayCategory", "-")
             if args.category and category != args.category:
                 continue
-            rows.append((name, source, category, ",".join(props), fields.get("__module", "Base")))
+            try:
+                weight = float(fields.get("Weight", "0") or 0)
+            except ValueError:
+                weight = 0.0
+            rows.append((name, source, category, ",".join(props),
+                         fields.get("__module", "Base"), weight))
 
     rows.sort(key=lambda r: (r[0],))
     if args.limit:
@@ -152,11 +166,11 @@ def main():
 
     print("| Item | Script | Category | Usable properties |")
     print("|---|---|---|---|")
-    for name, source, category, props, _module in rows:
+    for name, source, category, props, _module, _weight in rows:
         print(f"| {name} | {source} | {category} | {props} |")
 
     counts = {}
-    for _, _, _, props, _module in rows:
+    for _, _, _, props, _module, _weight in rows:
         for p in props.split(","):
             counts[p] = counts.get(p, 0) + 1
     print(f"\n{len(rows)} candidates: " + ", ".join(f"{k}={v}" for k, v in sorted(counts.items())))
@@ -180,12 +194,14 @@ LUA_HEADER = """-- DERIVED FILE - do not edit by hand.
 --   blood      it is a weapon, so setBloodLevel applies (persistence UNVERIFIED)
 --   keyed      it is a key, testable against a real door
 --   firearm    it takes ammunition; marked so a rule can refuse it as loot
+--   countable  duplicates are identical, so quantity is the only variable -
+--              one bottle of bleach is nothing, a cupboard of it is a question
 --
 -- This file is data only. ObjectRules.lua decides which of these an
 -- investigation may use, and never picks an item by name.
 local M={}
 M.REVISION="%s"
--- {id, fullType, category, script, properties}
+-- {id, fullType, category, script, weight, properties}
 M.items={
 """
 
@@ -196,10 +212,10 @@ def write_lua(path, rows):
         "\n".join("|".join(r[:4]) for r in rows).encode("utf-8")).hexdigest()[:12]
     with open(path, "w", encoding="utf-8") as out:
         out.write(LUA_HEADER % ("objects-" + digest))
-        for name, source, category, props, module in rows:
+        for name, source, category, props, module, weight in rows:
             plist = ",".join('"%s"' % p for p in props.split(","))
-            out.write(' {id="%s",fullType="%s.%s",category="%s",script="%s",properties={%s}},\n'
-                      % (name, module, name, category, source, plist))
+            out.write(' {id="%s",fullType="%s.%s",category="%s",script="%s",weight=%.3f,properties={%s}},\n'
+                      % (name, module, name, category, source, weight, plist))
         out.write("""}
 local byId={}
 for _,item in ipairs(M.items) do byId[item.id]=item end
@@ -208,7 +224,7 @@ function M.get(id)
     local item=type(id)=="string" and byId[id]
     if not item then return nil,"unknown catalogue object" end
     return {id=item.id,fullType=item.fullType,category=item.category,
-            script=item.script,properties=item.properties}
+            script=item.script,weight=item.weight,properties=item.properties}
 end
 function M.has(item,property)
     for _,p in ipairs(item.properties) do if p==property then return true end end

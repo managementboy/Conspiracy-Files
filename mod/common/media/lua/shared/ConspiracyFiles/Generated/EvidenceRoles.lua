@@ -65,10 +65,12 @@ local roles={
     physicalTrace={capacity="object",rule="physicalTrace"},
     bearsName={capacity="object",rule="bearsName"},
     outOfPlace={capacity="object",rule="outOfPlace"},
+    -- The count is the evidence, not the object. See ObjectRules.accumulation.
+    accumulation={capacity="object",rule="accumulation"},
 }
 local ORDER={"access","diaryContext","notebookContext","clippingContext","affiliationLead","itineraryLead",
              "paymentRecord","timingDispute","presenceNote",
-             "physicalTrace","bearsName","outOfPlace"}
+             "physicalTrace","bearsName","outOfPlace","accumulation"}
 
 for _,roleId in ipairs(ORDER) do
     local role=roles[roleId]

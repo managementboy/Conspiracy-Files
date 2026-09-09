@@ -77,6 +77,12 @@ local function words(id)
     end
     return collapsed..string.sub(out,at)
 end
+-- A survivor writes "fourteen", not "14". The range is the one
+-- ObjectRules.accumulation can produce; anything outside it is a mistake
+-- upstream and should look like one rather than being silently rendered.
+local NUMERALS={"one","two","three","four","five","six","seven","eight","nine","ten",
+                "eleven","twelve","thirteen","fourteen","fifteen","sixteen"}
+local function numeral(n) return NUMERALS[n] or tostring(n) end
 local function build(seed,revision,sites)
     local random=rng(seed)
     -- The premise is drawn first, so it is the seed's most significant choice:
@@ -233,6 +239,26 @@ local function build(seed,revision,sites)
     objectDocument(15,"outOfPlace",a,
         "A {LABEL}, worn, kept with the file on {SUBJECT}. It is not the kind of thing anyone files with records.",
         {a.id},{target=documents[1].id,kind="recontextualises"})
+    -- Quantity as evidence. Owner, 2026-09-09: "one of something is no misery
+    -- but a house full of bleach is a mystery."
+    --
+    -- Nothing is written on any of them and they are all identical, which is
+    -- the point: the only fact is the count, and the count is the one thing
+    -- the mod states plainly and then declines to explain.
+    local accumulationKind=assert(Roles.choose(random,"accumulation"))
+    local accumulationCount=assert(ObjectRoles.quantity(random,"accumulation"))
+    local accumulationLabel=words(accumulationKind)
+    local accumulationBody=subst(subst(fill(
+        "{COUNT} of the same thing - {LABEL} - stacked with the file on {SUBJECT}. One would be ordinary. Nothing records who needed {COUNT}.",
+        map),"LABEL",accumulationLabel),"COUNT",numeral(accumulationCount))
+    accumulationBody=string.upper(string.sub(accumulationBody,1,1))..string.sub(accumulationBody,2)
+    assert(Roles.fits("accumulation",accumulationKind,accumulationBody))
+    document(16,accumulationLabel..", one of "..numeral(accumulationCount),b,accumulationBody,
+        {b.id},{{target=documents[2].id,kind="recontextualises"}},nil,accumulationKind)
+    documents[16].wear=assert(ObjectRoles.describe("accumulation")).wear
+    -- The count is a fact about the world, so it has to reach placement: the
+    -- runtime creates exactly this many and treats any more as a conflict.
+    documents[16].quantity=accumulationCount
     -- The first three roles are the coherent minimum: a route lead,
     -- an independently attributable response, and a review of that response.
     -- Optional roles are shuffled and bounded, so neither their count nor their
@@ -243,7 +269,7 @@ local function build(seed,revision,sites)
     -- (0..4 optional slots on top of the 3 mandatory roles) stay unchanged.
     local optional={documents[4],documents[5],documents[6],documents[7],documents[8],documents[9],
                     documents[10],documents[11],documents[12],
-                    documents[13],documents[14],documents[15]}
+                    documents[13],documents[14],documents[15],documents[16]}
     local optionalCapacity=G.MAX_EVIDENCE-3
     local optionalCount=random(optionalCapacity+1)-1
     for i=#optional,2,-1 do local j=random(i); optional[i],optional[j]=optional[j],optional[i] end

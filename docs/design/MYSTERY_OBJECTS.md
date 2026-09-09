@@ -34,10 +34,23 @@ something a different way, and there are only four honest ways available:
 | `condition` | it has a condition track, so it can be found nearly broken, and that is a fact about its history | condition is a core saved field |
 | `blood` | `HandWeapon.setBloodLevel(float)` exists on the installed jar, so a weapon can be found bloodied | **not verified to persist - test before relying on it** |
 | `keyed` | a key can be tested against a real door, which the mod has already proven in play | yes (`observedKeyDoor`) |
+| `countable` | duplicates are identical, so the only variable left is how many there are | yes - the runtime places and counts the whole pile |
 
-And one that costs nothing and needs no API at all: **where the thing is**. A
-security pass in a kitchen drawer is evidence. The same pass in a security
-office is furniture.
+And two that cost nothing and need no API at all.
+
+**Where the thing is.** A security pass in a kitchen drawer is evidence. The
+same pass in a security office is furniture.
+
+**How many of it there are.** Owner, 2026-09-09: *"one of something is no
+misery but a house full of bleach is a mystery."* Nothing about a bottle of
+bleach carries this; the object is entirely ordinary and stays ordinary. The
+count is the whole of the evidence, which makes it the cheapest signal
+available and the only one that needs no property at all - just an item whose
+duplicates are indistinguishable.
+
+The rule that uses it draws only from **low-value** categories, and that is the
+load-bearing part. A cupboard of bandages is not a mystery, it is a windfall,
+and evidence must never be better loot than the loot.
 
 ## The fifty
 

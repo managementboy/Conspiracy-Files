@@ -55,12 +55,28 @@ local rules={
     -- The wrongness is the whole clue: a household or trade object in a room
     -- with no reason for it. Deliberately excludes weapons, whose presence
     -- reads as violence rather than as misplacement.
+    -- Quantity as evidence. Owner, 2026-09-09: "one of something is no
+    -- misery but a house full of bleach is a mystery."
+    --
+    -- Nothing about the object carries this - a bottle of bleach is a bottle
+    -- of bleach - so the rule selects for the opposite of the other three: an
+    -- item with no condition track, whose duplicates are identical, where the
+    -- only variable left is how many there are.
+    --
+    -- The allowed categories are deliberately the LOW-VALUE ones. A cupboard
+    -- of bandages or ammunition is not a mystery, it is a windfall, and
+    -- evidence must never be better loot than the loot. Weight is capped
+    -- because the pile has to fit in one container the player can open.
+    accumulation={requires={"countable"},wear="intact",maxWeight=1.5,
+        quantity={6,16},
+        anyCategory={"Household","Cooking","WaterContainer","Camping","Gardening","Junk"},
+        text="ordinary in itself, in a quantity that is not"},
     outOfPlace={requires={"condition"},wear="worn",
         anyCategory={"Tool","Household","Cooking","Gardening","Electronics",
                      "Communications","Container","Security","Junk","Memento"},
         text="belongs somewhere other than where it was found"},
 }
-local ORDER={"physicalTrace","bearsName","testableAccess","outOfPlace"}
+local ORDER={"physicalTrace","bearsName","testableAccess","outOfPlace","accumulation"}
 
 -- Individual refusals, where a category is the wrong instrument.
 local DENY_ITEM={
@@ -94,6 +110,9 @@ for _,ruleId in ipairs(ORDER) do
             for _,property in ipairs(rule.requires) do
                 if not Catalogue.has(item,property) then fits=false end
             end
+            if fits and rule.maxWeight then
+                fits=type(item.weight)=="number" and item.weight>0 and item.weight<=rule.maxWeight
+            end
             if fits and rule.anyCategory then
                 local matched=false
                 for _,category in ipairs(rule.anyCategory) do
@@ -117,7 +136,8 @@ end
 function M.describe(ruleId)
     local rule=rules[ruleId]
     if not rule then return nil,"unknown object rule" end
-    return {id=ruleId,wear=rule.wear,text=rule.text,candidates=#eligible[ruleId]}
+    return {id=ruleId,wear=rule.wear,text=rule.text,candidates=#eligible[ruleId],
+            quantity=rule.quantity}
 end
 
 -- Every item a rule can produce, in catalogue order. Callers that want one
@@ -138,6 +158,17 @@ function M.choose(random,ruleId)
     if not list then return nil,"unknown object rule" end
     if type(random)~="function" then return nil,"random generator required" end
     return Catalogue.get(list[random(#list)])
+end
+
+-- How many of the thing there are. One for every rule but accumulation, where
+-- the count IS the evidence. Deterministic, one draw, same contract as choose.
+function M.quantity(random,ruleId)
+    local rule=rules[ruleId]
+    if not rule then return nil,"unknown object rule" end
+    if type(random)~="function" then return nil,"random generator required" end
+    if not rule.quantity then return 1 end
+    local low,high=rule.quantity[1],rule.quantity[2]
+    return low+random(high-low+1)-1
 end
 
 -- Why a category is refused, for anyone who wonders where an item went.

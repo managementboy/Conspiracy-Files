@@ -78,6 +78,15 @@ local function applyWear(item,doc)
     elseif doc.wear=="worn" then level=math.max(1,math.floor(max*0.5)) end
     pcall(function() item:setCondition(level) end)
 end
+-- How many copies belong to one document. One for everything the survivor
+-- reads, and for most objects; more only where the COUNT is the evidence -
+-- a cupboard of bleach rather than a bottle of it (ObjectRules.accumulation).
+local function expectedCount(api,id)
+    for _,d in ipairs(api.snapshot().case.documents) do
+        if d.id==id then return d.quantity or 1 end
+    end
+    return 1
+end
 local function placement(api,id)
     local scan,count,finished,container,created
     return function()
@@ -85,14 +94,15 @@ local function placement(api,id)
         if a.status=="placed" or a.status=="conflict" or a.status=="unknown" then return true end
         local current=World.resolve(a.target)
         if not current then return true end
+        local expected=expectedCount(api,id)
         if not scan then
             container=current
             scan=World.count(current,a.physicalToken,function(n) count=n; finished=true end)
         end
         if not finished then scan(); return false end
         if current~=container or count==nil then return true end
-        if count>1 then checked(api.status(id,"conflict")); return true end
-        if count==1 then checked(api.status(id,"placed",worldHours())); log("Document placed or reconciled."); return true end
+        if count>expected then checked(api.status(id,"conflict")); return true end
+        if count==expected then checked(api.status(id,"placed",worldHours())); log("Document placed or reconciled."); return true end
         if a.status=="placing" and not created then
             checked(api.status(id,"unknown")); log("Interrupted placement is uncertain; no automatic replacement."); return true
         end
@@ -100,13 +110,18 @@ local function placement(api,id)
         local doc
         for _,d in ipairs(api.snapshot().case.documents) do if d.id==id then doc=d end end
         local carrier=assert(require("ConspiracyFiles/Generated/EvidenceKinds").get(doc.kind))
-        local item=assert(instanceItem(carrier.fullType),"could not create evidence item")
-        local md=item:getModData()
-        md.cfGeneratedId=id; md.cfPhysicalToken=a.physicalToken
-        item:setName(doc.title); item:setCustomName(true)
-        applyWear(item,doc)
-        writePages(item,doc)
-        assert(current:AddItem(item),"could not add note")
+        -- One copy for everything readable; `quantity` copies where the count
+        -- is the point. Each carries the same token, so the scan above counts
+        -- the pile rather than calling the second bottle a conflict.
+        for _=1,expected do
+            local item=assert(instanceItem(carrier.fullType),"could not create evidence item")
+            local md=item:getModData()
+            md.cfGeneratedId=id; md.cfPhysicalToken=a.physicalToken
+            item:setName(doc.title); item:setCustomName(true)
+            applyWear(item,doc)
+            writePages(item,doc)
+            assert(current:AddItem(item),"could not add note")
+        end
         created=false; finished=false
         scan=World.count(current,a.physicalToken,function(n) count=n; finished=true end)
         return false
@@ -433,7 +448,16 @@ local function relocation(api)
         if not id then
             local hours=worldHours()
             local stale=StaleClue.staleIds(root,hours)
-            for _,candidate in ipairs(stale) do if StaleClue.canAttempt(root.assignments[candidate]) then id=candidate; break end end
+            for _,candidate in ipairs(stale) do
+                -- A pile does not relocate. Relocation is built on there being
+                -- exactly one item carrying the token (T4/T5: loss over
+                -- duplication), and moving a hoard would mean moving every
+                -- copy without a yield. A quantity is a fact about a place
+                -- anyway; carrying it somewhere else would be a different
+                -- claim, not the same clue in a new drawer.
+                if StaleClue.canAttempt(root.assignments[candidate])
+                    and expectedCount(api,candidate)==1 then id=candidate; break end
+            end
             if not id then return true end
         end
         local a=root.assignments[id]
