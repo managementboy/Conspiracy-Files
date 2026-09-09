@@ -109,6 +109,26 @@ assert(not W.markVehiclePart(nil, "x"), "marking nothing must fail rather than p
 assert(not W.markVehiclePart({ getType = function() return "counter" end }, "x"),
     "a kitchen counter has no vehicle part to mark")
 
+-- Bodies in seats (owner, 2026-09-09: "bodies can fit in car seats too").
+-- The game's own numbers are pointed: a car seat declares MaxCapacity 20 and a
+-- body weighs exactly 20, so a seat holds one body and nothing else. Capacity
+-- is read from the part, never assumed, so a glovebox can never take one.
+local hearse = fakeVehicle(100, 100, { GloveBox = 5, SeatFrontRight = 20, TruckBed = 100 })
+local roomy = W.partsWithRoom(hearse, W.BODY_WEIGHT)
+assert(#roomy == 2, "a seat and a boot take a body; a glovebox does not")
+assert(roomy[1].part == "TruckBed" or roomy[2].part == "TruckBed")
+local seatFound = false
+for _, entry in ipairs(roomy) do if entry.part == "SeatFrontRight" then seatFound = true end end
+assert(seatFound, "a front seat must be able to hold a body")
+for _, entry in ipairs(roomy) do
+    assert(entry.part ~= "GloveBox", "a glovebox declares 5 and must never be offered for a body")
+end
+assert(#W.partsWithRoom(fakeVehicle(1, 1, { GloveBox = 5 }), W.BODY_WEIGHT) == 0,
+    "a car with only a glovebox offers nowhere for a body")
+-- And a glovebox is still the right place for a document.
+assert(#W.partsWithRoom(fakeVehicle(1, 1, { GloveBox = 5 }), 0.2) == 1,
+    "a glovebox must still take a piece of paper")
+
 -- The scan is bounded: a cell can hold a great many vehicles.
 local many = {}
 for i = 1, 40 do many[fakeVehicle(100, 100, { TruckBed = 40 })] = true end

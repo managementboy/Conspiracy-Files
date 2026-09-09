@@ -128,6 +128,45 @@ should be treated as such.
    a different reason to be suspicious.
 6. The body, last, and carefully.
 
+## Bodies in seats
+
+Owner, 2026-09-09:
+
+> Don't forget something no one has done in PZ... bodies can fit in car seats
+> too. Murder to keep someone quiet? Example only.
+
+Seats have containers - `template_seat.txt` declares one for every seat
+position - and the game's own numbers are unusually pointed. A car seat
+declares `MaxCapacity = 20` (`items/normal.txt`, `NormalCarSeat1`) and
+`Base.CorpseMale` weighs exactly `20`.
+
+**A car seat holds one body and nothing else at all.**
+
+That is a better sentence than anything we would have written, and it comes
+from the game rather than from us. `World.partsWithRoom(vehicle, BODY_WEIGHT)`
+reads the capacity off the installed part, so a glovebox (5) is never offered,
+a seat (20) takes exactly one, and a truck bed (100) takes a body and the rest
+of the case with it.
+
+The three placements read differently, and that difference is the whole value:
+
+- **A boot.** Something was being moved, and somebody chose not to be seen
+  doing it.
+- **A front seat.** Somebody was being carried, not moved - and was sitting
+  where a passenger sits.
+- **A rear seat.** Neither, quite. That is the one a player will argue about.
+
+### The limitation, stated plainly
+
+A body in a seat container is **not visible through the windscreen**. The
+player finds it by opening that seat's container, the way they find anything
+else in a car. `BaseVehicle:setPassenger` takes an `IsoGameCharacter`, and a
+corpse is not one, so a body posed behind the wheel is not something this mod
+can do.
+
+That belongs with the other two standing refusals - no custom photograph, no
+playable tape. We do not describe what the player cannot see.
+
 ## The body, and what may be said about it
 
 One item, weight 20, and the only evidence this mod would ever place that is a
@@ -136,4 +175,6 @@ And it must never be called a victim - the mod does not know that, and the
 whole discipline of this project is that a lead is never proof.
 
 "A body, in the boot of a car, with the file nearby" is the whole of what may
-be written. Everything a player concludes from that is theirs.
+be written. Everything a player concludes from that is theirs - and the owner's
+own example, *murder to keep someone quiet*, is exactly the conclusion the mod
+must leave them to reach on their own.

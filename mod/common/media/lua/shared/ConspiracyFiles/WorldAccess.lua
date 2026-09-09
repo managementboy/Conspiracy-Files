@@ -30,7 +30,17 @@ end
 -- there by accident. A boot is where things go when they are being moved
 -- rather than kept. The rest of a car is seats and engine parts, which hold
 -- nothing or hold it implausibly.
-World.VEHICLE_PARTS={"GloveBox","TruckBed","TrunkDoor","SeatFrontLeft","SeatFrontRight"}
+-- Seats are here for a reason the owner named on 2026-09-09: "bodies can fit
+-- in car seats too. murder to keep someone quiet?" They can, and the game's own
+-- numbers are unusually pointed about it - a car seat declares MaxCapacity 20
+-- (items/normal.txt, NormalCarSeat1) and Base.CorpseMale weighs exactly 20. A
+-- seat holds one body and nothing else at all.
+World.VEHICLE_PARTS={"GloveBox","TruckBed","TrunkDoor",
+                     "SeatFrontLeft","SeatFrontRight","SeatRearLeft","SeatRearRight"}
+-- What a body weighs, from items/normal.txt. Named because two rules and a
+-- container check all depend on it, and a silent change would be worse than a
+-- loud one.
+World.BODY_WEIGHT=20
 
 -- Every usable container in one vehicle, as {part=id,container=container}.
 -- Ordered by VEHICLE_PARTS, never by engine iteration order, so selection is
@@ -47,6 +57,19 @@ function World.vehicleParts(vehicle)
             out[#out+1]={part=id,container=container,
                 capacity=part.getContainerCapacity and part:getContainerCapacity() or nil}
         end
+    end
+    return out
+end
+
+-- The parts of one vehicle with room for `weight`. Capacity is read from the
+-- installed part rather than assumed: a glovebox declares 5 and will never take
+-- a body, a car seat declares 20 and takes exactly one, a truck bed declares
+-- 100 and takes a body and the rest of the case with it.
+function World.partsWithRoom(vehicle,weight)
+    local out={}
+    for _,entry in ipairs(World.vehicleParts(vehicle)) do
+        local capacity=entry.capacity
+        if type(capacity)=="number" and capacity>=(weight or 0) then out[#out+1]=entry end
     end
     return out
 end
