@@ -59,10 +59,24 @@ Every target the mod has ever written is a grid square:
 bounds-checked against the site it belongs to (`Generated/Session.lua`,
 `S.target`). That works because a kitchen cupboard cannot walk away.
 
-**A car can.** Address a clue by the square a car is parked on and the first
-player to drive it has broken the case - placement will look for a container
-that is no longer there, and the document will end in `unknown` or `conflict`
-with the player given no way to understand why.
+**A car can** - but only the player can move one. Owner, 2026-09-09: *"the
+issue of a car moving is a non issue. only the player can move a car. so the
+evidence travels with him."*
+
+That corrects the framing above. A clue in a boot is not at risk of wandering
+off: nothing in Knox drives. If the car moves at all, the person who moved it
+is the person the clue is for, and the evidence went with them.
+
+It makes a boot the one container in the game that **follows the player**. A
+survivor can take a car for the fuel and be carrying a case file for a week
+without knowing it - which is a better way to find a clue than opening a drawer,
+and costs nothing to build.
+
+What still has to be right is finding the container again after the car has
+moved, because placement verifies what it placed. Addressing by parking space
+would fail there, so a vehicle clue is addressed by a mark on the part instead.
+The risk was never the clue being lost; it was the mod losing track of a clue
+the player still has.
 
 So a vehicle target has to be addressed by **vehicle identity plus part id**,
 and verified by scanning the cell's vehicles rather than by resolving a square.

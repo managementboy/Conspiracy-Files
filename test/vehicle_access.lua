@@ -82,12 +82,16 @@ assert(W.markVehiclePart(boot, "cf-veh:case-1:doc-4"), "marking a real vehicle p
 local target = { x = 100, y = 100, z = 0, vehiclePart = "TruckBed", vehicleMark = "cf-veh:case-1:doc-4" }
 assert(W.resolveVehicle(target) == boot, "the marked boot must resolve where it stands")
 
+-- Only the player can move a car (owner, 2026-09-09), so a moved car means the
+-- clue is travelling with the person it is for. What must not break is the mod
+-- losing track of a clue the player still has.
 car.at = { x = 140, y = 96, z = 0 }
 assert(W.resolveVehicle(target) == boot,
-    "a driven car must still resolve; addressing a clue by a parking space is how a case dies unexplained")
+    "a driven car must still resolve; the evidence went with the driver and the mod must know it")
 
--- Driven out of range entirely: not found, and explicitly so. Absence is never
--- destruction here, exactly as the whereabouts scan already treats it.
+-- Driven right out of range: not found, and explicitly so. Absence is never
+-- destruction here, exactly as the whereabouts scan already treats it - and
+-- here it is not even loss, since somebody drove it there.
 car.at = { x = 900, y = 900, z = 0 }
 local gone, why = W.resolveVehicle(target)
 assert(gone == nil and why == "vehicle-not-found", "a car far away must be reported missing, not guessed at")
