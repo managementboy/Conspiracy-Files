@@ -82,6 +82,24 @@ assert(W.markVehiclePart(boot, "cf-veh:case-1:doc-4"), "marking a real vehicle p
 local target = { x = 100, y = 100, z = 0, vehiclePart = "TruckBed", vehicleMark = "cf-veh:case-1:doc-4" }
 assert(W.resolveVehicle(target) == boot, "the marked boot must resolve where it stands")
 
+-- Before placement nothing is marked yet, so an unclaimed part of the right
+-- kind on a car still standing where the candidate was found must resolve.
+-- Without this the first placement could never happen at all.
+local fresh = fakeVehicle(200, 200, { TruckBed = 40 })
+cell.getVehicles = function() return { [car] = true, [van] = true, [absent] = true, [fresh] = true } end
+local unplaced = { x = 200, y = 200, z = 0, vehiclePart = "TruckBed" }
+assert(W.resolveVehicle(unplaced, "cf-g2:doc-9") == fresh.parts.TruckBed.container,
+    "an unmarked part where the candidate was found must resolve, or nothing is ever placed")
+-- But only where it was found. A car that drove off before we placed must not
+-- be silently replaced by whichever car is there now.
+fresh.at = { x = 700, y = 700, z = 0 }
+assert(W.resolveVehicle(unplaced, "cf-g2:doc-9") == nil,
+    "placement must wait rather than put the evidence in a car nobody chose")
+fresh.at = { x = 200, y = 200, z = 0 }
+-- And a part already claimed by another document is not free to take.
+W.markVehiclePart(fresh.parts.TruckBed.container, "cf-g2:doc-2")
+assert(W.resolveVehicle(unplaced, "cf-g2:doc-9") == nil, "a claimed part belongs to the document that claimed it")
+
 -- Only the player can move a car (owner, 2026-09-09), so a moved car means the
 -- clue is travelling with the person it is for. What must not break is the mod
 -- losing track of a clue the player still has.
@@ -96,9 +114,11 @@ car.at = { x = 900, y = 900, z = 0 }
 local gone, why = W.resolveVehicle(target)
 assert(gone == nil and why == "vehicle-not-found", "a car far away must be reported missing, not guessed at")
 
--- The van's boot is a different container with no mark, and must never be
--- mistaken for ours.
+-- A mark belongs to ONE part, not to the whole car. The glovebox of the same
+-- car, once another document has claimed it, must never answer to our mark.
 car.at = { x = 100, y = 100, z = 0 }
+local glove = W.vehicleParts(car)[1].container
+W.markVehiclePart(glove, "cf-g2:someone-else")
 local wrongPart = { x = 100, y = 100, z = 0, vehiclePart = "GloveBox", vehicleMark = "cf-veh:case-1:doc-4" }
 assert(W.resolveVehicle(wrongPart) == nil, "the mark belongs to one part, not to the whole car")
 

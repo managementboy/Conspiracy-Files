@@ -118,15 +118,32 @@ should be treated as such.
    ordered parts with their capacities, vehicles near a point measured from
    where they are *now*, a mark left on a part, and a boot that still resolves
    after being driven across town.
-3. A vehicle target kind in `Session.target`, and candidates that include cars
-   parked near a site rather than only furniture inside its rooms. This is the
-   real structural work: sites are room rectangles, and a car is in the
-   driveway.
-4. Vehicle-aware room affinity - `GloveBox` and `TruckBed` are rooms in the
-   sense that module already means.
-5. Piles in a boot. The pile rules need nothing new; a car is a container with
-   a different reason to be suspicious.
-6. The body, last, and carefully.
+3. **The vehicle target kind** - done. `Session.target` accepts a target that
+   names a part instead of an object index, and allows it outside the site's
+   own footprint by `S.VEHICLE_RADIUS` (12 tiles: a driveway, a verge, a kerb -
+   not the next street). Square targets are untouched, which is the assertion
+   that matters most, since every clue the mod has ever placed goes through
+   that one function. `Catalog` accepts `vehicle` as a container type.
+4. **Candidates that include cars** - done. `Storage.scan` adds vehicles as a
+   final pass, after the rooms, so a car never displaces a container inside the
+   building: a room is still the first place to look.
+5. **Vehicle-aware room affinity** - done. `GloveBox`, `TruckBed` and the seats
+   are rooms in the sense that module already means. Every readable carrier is
+   welcome in a glovebox; personal ones are at home in a seat; bulk goes in a
+   bed or a boot and never in a glovebox.
+6. **Cargo with no reason to be there** - done, as `ObjectRules.vehicleBulk`.
+   It is the only rule permitted to reach `Furniture`, which is how fifty
+   mannequins become possible without moveables being stacked in kitchen
+   cupboards everywhere else.
+7. The body, last, and carefully. Not built.
+
+## What a vehicle clue does NOT assert
+
+`vehicleBulk`'s wording says "loaded together as cargo", never "in a vehicle".
+Room preference is exactly that - a preference - and `createDistributed` falls
+back to any usable container, so a sentence asserting a car would be false the
+first time a case had no car near it. Where the thing actually is, the notebook
+already reports.
 
 ## Bodies in seats
 

@@ -30,6 +30,47 @@ function M.scan(result,done,reachable)
             rects[#rects+1]=row
         end
     end
+    -- Vehicles near a site, added once the room scan is done. A site is a room
+    -- rectangle inside a building and a car is in the driveway, so this is the
+    -- one place the mod looks outside a site's own footprint - by
+    -- Session.VEHICLE_RADIUS, which is a driveway and not the next street.
+    local function addVehicles(catalogue,cands,roomsOut,occupiedOut)
+        local S=require("ConspiracyFiles/Generated/Session")
+        local RoomAffinity=require("ConspiracyFiles/Generated/RoomAffinity")
+        for _,site in ipairs(catalogue.locations) do
+            local b=site.bounds
+            local cx=math.floor((b.x1+b.x2)/2)
+            local cy=math.floor((b.y1+b.y2)/2)
+            local reach=math.max(b.x2-b.x1,b.y2-b.y1)+S.VEHICLE_RADIUS
+            local near=W.vehiclesNear(cx,cy,b.z,reach,6)
+            for _,entry in ipairs(near) do
+                -- Only inside the widened footprint the target validator will
+                -- accept, or the candidate could never be chosen.
+                if entry.x>=b.x1-S.VEHICLE_RADIUS and entry.x<b.x2+S.VEHICLE_RADIUS
+                    and entry.y>=b.y1-S.VEHICLE_RADIUS and entry.y<b.y2+S.VEHICLE_RADIUS then
+                    local script=entry.vehicle.getScriptName and entry.vehicle:getScriptName() or "vehicle"
+                    for _,part in ipairs(entry.parts) do
+                        local list=cands[site.id]
+                        if list and #list<12 and RoomAffinity.knownRoom(part.part) then
+                            list[#list+1]={x=entry.x,y=entry.y,z=entry.z,objectIndex=0,containerIndex=0,
+                                containerType=S.VEHICLE_CONTAINER,sprite=tostring(script),vehiclePart=part.part}
+                            roomsOut[site.id]=roomsOut[site.id] or {}
+                            roomsOut[site.id][#list]=part.part
+                            local items=part.container.getItems and part.container:getItems()
+                            occupiedOut[site.id]=occupiedOut[site.id] or {}
+                            occupiedOut[site.id][#list]=(items and items.size and items:size() or 0)>0
+                            local types={}
+                            for _,v in ipairs(site.containerTypes) do types[v]=true end
+                            if not types[S.VEHICLE_CONTAINER] and #site.containerTypes<5 then
+                                site.containerTypes[#site.containerTypes+1]=S.VEHICLE_CONTAINER
+                                table.sort(site.containerTypes)
+                            end
+                        end
+                    end
+                end
+            end
+        end
+    end
     local index,dx,dy,oi,ci=1,0,0,0,0
     local objects,targets,candidates,rooms,seen,steps=nil,{},{},{},{},0
     local occupied={}
@@ -42,7 +83,13 @@ function M.scan(result,done,reachable)
         steps=steps+1
         if steps>100000 then error("storage scan safety cap; no case committed") end
         local r=rects[index]
-        if not r then done(catalog,targets,candidates,rooms,occupied); return true end
+        if not r then
+            -- Vehicles are added last, so a car never displaces a container
+            -- inside the building: a room is still the first place to look.
+            local ok=pcall(addVehicles,catalog,candidates,rooms,occupied)
+            if not ok then rooms=rooms; end
+            done(catalog,targets,candidates,rooms,occupied); return true
+        end
         local id="t3:"..r.building
         local site=sites[id]
         if not site or (targets[id] and r.z~=targets[id].z) or (candidates[id] and #candidates[id]>=8) then index=index+1; dx,dy,oi,ci=0,0,0,0; objects=nil; return false end

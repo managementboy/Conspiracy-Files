@@ -23,6 +23,11 @@ local rooms={
     hall=true,kitchen=true,bedroom=true,kidsbedroom=true,livingroom=true,
     bathroom=true,closet=true,office=true,toolstore=true,garagestorage=true,
     derelict=true,
+    -- Vehicle parts are rooms in exactly the sense this module already means:
+    -- a place with an opinion about what belongs in it. Storage.scan reports
+    -- them as a candidate's "room name" so nothing below had to change shape.
+    GloveBox=true,TruckBed=true,TrunkDoor=true,
+    SeatFrontLeft=true,SeatFrontRight=true,SeatRearLeft=true,SeatRearRight=true,
 }
 
 -- Starting affinity table from the design doc, kept small and legible:
@@ -45,6 +50,14 @@ local affinity={
     businesscard={bedroom=true,livingroom=true,office=true},
     ticket={bedroom=true,livingroom=true,office=true},
 }
+-- Paperwork in a car. A glovebox is the best container in the game for a
+-- document - small, private, nothing arrives there by accident - so every
+-- readable carrier is welcome in one, and the personal ones are at home in a
+-- seat as well.
+for kind in pairs(affinity) do affinity[kind].GloveBox=true end
+for _,kind in ipairs({"diary","letter","idcard","creditcard","businesscard","ticket"}) do
+    affinity[kind].SeatFrontRight=true; affinity[kind].SeatFrontLeft=true
+end
 
 -- Object evidence (2026-09-09) cannot be listed here: it comes from a
 -- catalogue of several thousand items derived from the game's own scripts, so
@@ -67,7 +80,7 @@ local categoryRooms={
     ProtectiveGear={closet=true,garagestorage=true},
     Gardening={garagestorage=true,toolstore=true},
     Tool={toolstore=true,garagestorage=true},
-    Material={toolstore=true,garagestorage=true},
+
     Camping={closet=true,garagestorage=true},
     Container={closet=true,garagestorage=true},
     Electronics={livingroom=true,office=true},
@@ -76,7 +89,17 @@ local categoryRooms={
     Accessory={bedroom=true,closet=true},
     Clothing={bedroom=true,closet=true},
     Literature={livingroom=true,bedroom=true,office=true},
+    -- Bulk belongs in a bed or a boot, never in a glovebox.
+    Material={toolstore=true,garagestorage=true,TruckBed=true},
+    Furniture={TruckBed=true},
 }
+-- Every object category that is plausible cargo may ride in a truck bed. A
+-- boot is where things go when they are being MOVED rather than kept, which is
+-- a different reason to be suspicious from a cupboard.
+for _,category in ipairs({"Household","Cooking","WaterContainer","Gardening","Tool",
+                          "Camping","Container","Electronics","Junk"}) do
+    if categoryRooms[category] then categoryRooms[category].TruckBed=true end
+end
 for category,set in pairs(categoryRooms) do
     for room in pairs(set) do
         assert(rooms[room],"RoomAffinity: unknown room name "..tostring(room).." for category "..category)
@@ -100,6 +123,12 @@ for kind,set in pairs(affinity) do
     for room in pairs(set) do
         assert(rooms[room],"RoomAffinity: unknown room name "..tostring(room))
     end
+end
+
+-- Whether a label is one this module recognises at all. Storage.scan uses it
+-- so an unknown vehicle part can never become a candidate's room name.
+function M.knownRoom(name)
+    return type(name)=="string" and rooms[name]==true
 end
 
 -- True only when `room` is a known-good room label for `kind`. Any other

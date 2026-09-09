@@ -71,10 +71,12 @@ local roles={
     misplacedBulk={capacity="object",rule="misplacedBulk"},
     -- Used medical supplies and protective gear, in bulk. See ObjectRules.
     medicalHoard={capacity="object",rule="medicalHoard"},
+    -- Cargo in a vehicle with no reason to carry it. See ObjectRules.
+    vehicleBulk={capacity="object",rule="vehicleBulk"},
 }
 local ORDER={"access","diaryContext","notebookContext","clippingContext","affiliationLead","itineraryLead",
              "paymentRecord","timingDispute","presenceNote",
-             "physicalTrace","bearsName","outOfPlace","accumulation","misplacedBulk","medicalHoard"}
+             "physicalTrace","bearsName","outOfPlace","accumulation","misplacedBulk","medicalHoard","vehicleBulk"}
 
 for _,roleId in ipairs(ORDER) do
     local role=roles[roleId]

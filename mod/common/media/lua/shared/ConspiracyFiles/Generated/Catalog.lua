@@ -33,7 +33,13 @@ function Catalog.validate(c)
         local valid,n=array(r.containerTypes,8); if not valid then return false,"invalid container constraints" end
         local types={}
         for _,kind in ipairs(r.containerTypes) do
-            if not ({desk=true,counter=true,shelves=true,filingcabinet=true,locker=true})[kind] or types[kind] then return false,"unsupported/duplicate container type" end
+            -- "vehicle" (2026-09-09) is the one container type that is not a
+            -- piece of furniture standing on a square. A car parked in the
+            -- driveway belongs to the house it is outside, and
+            -- Generated/Session.lua's S.target is where that widening is
+            -- bounded - to VEHICLE_RADIUS, and to vehicle targets only.
+            if not ({desk=true,counter=true,shelves=true,filingcabinet=true,locker=true,vehicle=true})[kind]
+                or types[kind] then return false,"unsupported/duplicate container type" end
             types[kind]=true
         end
         if r.paperStorage=="observed" and n==0 then return false,"observed storage lacks constraints" end

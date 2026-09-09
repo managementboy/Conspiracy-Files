@@ -92,7 +92,9 @@ local function placement(api,id)
     return function()
         local a=api.assignment(id)
         if a.status=="placed" or a.status=="conflict" or a.status=="unknown" then return true end
-        local current=World.resolve(a.target)
+        -- The physical token doubles as the mark on a vehicle part, so a clue
+        -- in a car is found again wherever the player has since driven it.
+        local current=World.resolve(a.target,a.physicalToken)
         if not current then return true end
         local expected=expectedCount(api,id)
         if not scan then
@@ -122,6 +124,8 @@ local function placement(api,id)
             writePages(item,doc)
             assert(current:AddItem(item),"could not add note")
         end
+        -- Claim the part, once the items are actually in it.
+        World.markVehiclePart(current,a.physicalToken)
         created=false; finished=false
         scan=World.count(current,a.physicalToken,function(n) count=n; finished=true end,expected)
         return false

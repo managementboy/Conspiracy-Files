@@ -310,6 +310,14 @@ local function build(seed,revision,sites)
     pile(18,"medicalHoard",b,
         "{COUNT} of the same thing - {LABEL} - all of it already used, bagged together in a room that is not for it, with the file on {SUBJECT}. One household does not get through this much.",
         {target=documents[2].id,kind="recontextualises"})
+    pile(19,"vehicleBulk",a,
+        -- Deliberately does NOT say "in a vehicle". Room preference is exactly
+        -- that - a preference - and Session.createDistributed falls back to any
+        -- usable container, so a sentence asserting a car would be false the
+        -- first time a case had no car near it. Where the thing actually is,
+        -- the notebook already reports.
+        "{COUNT} of the same thing - {LABEL} - loaded together as cargo, with the file on {SUBJECT} among it. Nothing records where any of it was going.",
+        {target=documents[1].id,kind="recontextualises"})
     -- The first three roles are the coherent minimum: a route lead,
     -- an independently attributable response, and a review of that response.
     -- Optional roles are shuffled and bounded, so neither their count nor their
@@ -320,7 +328,7 @@ local function build(seed,revision,sites)
     -- (0..4 optional slots on top of the 3 mandatory roles) stay unchanged.
     local optional={documents[4],documents[5],documents[6],documents[7],documents[8],documents[9],
                     documents[10],documents[11],documents[12],
-                    documents[13],documents[14],documents[15],documents[16],documents[17],documents[18]}
+                    documents[13],documents[14],documents[15],documents[16],documents[17],documents[18],documents[19]}
     local optionalCapacity=G.MAX_EVIDENCE-3
     local optionalCount=random(optionalCapacity+1)-1
     for i=#optional,2,-1 do local j=random(i); optional[i],optional[j]=optional[j],optional[i] end

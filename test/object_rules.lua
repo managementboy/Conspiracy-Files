@@ -33,7 +33,7 @@ assert(Catalogue.count() > 500,
 -- medical items, and the rule refuses unused ones because a cupboard of
 -- antibiotics is a windfall. Thirty is what actually exists.
 local FLOOR = { physicalTrace = 50, bearsName = 13, testableAccess = 4, outOfPlace = 25,
-                accumulation = 100, misplacedBulk = 100, medicalHoard = 20 }
+                accumulation = 100, misplacedBulk = 100, medicalHoard = 20, vehicleBulk = 100 }
 for _, id in ipairs(Rules.list()) do
     local rule = assert(Rules.describe(id))
     assert(rule.candidates >= FLOOR[id],
@@ -76,7 +76,7 @@ end
 -- are the owner's own example, and the calorie cap is what keeps a hundred of
 -- them from being a week of food.
 local WINDFALL = { Ammo = true, FirstAid = true, Bandage = true, SkillBook = true, Bag = true }
-for _, ruleId in ipairs({ "accumulation", "misplacedBulk", "medicalHoard" }) do
+for _, ruleId in ipairs({ "accumulation", "misplacedBulk", "medicalHoard", "vehicleBulk" }) do
     for _, id in ipairs(Rules.candidates(ruleId)) do
         local item = assert(Catalogue.get(id))
         if ruleId == "medicalHoard" then
@@ -93,7 +93,10 @@ for _, ruleId in ipairs({ "accumulation", "misplacedBulk", "medicalHoard" }) do
         else
             assert(not WINDFALL[item.category], id .. " would make a pile of it a windfall, not a mystery")
         end
-        assert(item.weight > 0 and item.weight <= 2.0, id .. " is too heavy to pile in one container")
+        -- vehicleBulk is allowed heavier things than a drawer rule: a truck
+        -- bed declares 100 and industrial sinks are cargo, not clutter.
+        local ceiling = ruleId == "vehicleBulk" and 3.0 or 2.0
+        assert(item.weight > 0 and item.weight <= ceiling, id .. " is too heavy to pile in one container")
         -- The budget is what replaced banning whole categories. A pile must
         -- never be worth enough to be the reason a player opens the drawer.
         local most = Rules.quantity(function(n) return n end, ruleId, item)
@@ -120,7 +123,7 @@ assert(spread >= 5, "the count barely varies (" .. spread .. " values); quantity
 -- Everything that is not a pile places exactly one. A second copy of a
 -- readable document would be two of the same page, which is a bug, not a clue.
 for _, id in ipairs(Rules.list()) do
-    if id ~= "accumulation" and id ~= "misplacedBulk" and id ~= "medicalHoard" then
+    if id ~= "accumulation" and id ~= "misplacedBulk" and id ~= "medicalHoard" and id ~= "vehicleBulk" then
         assert(Rules.quantity(rng(1), id) == 1, id .. " must place exactly one")
     end
 end
@@ -140,10 +143,19 @@ for seed = 1, 400 do
                 -- Nothing is written on an object. A body longer than a
                 -- notebook sentence would be the mod explaining the object.
                 assert(#doc.body <= Kinds.OBJECT_MAX_CHARS, doc.kind .. " carries too much text for an object")
-                -- Nor may the mod claim blood: setBloodLevel exists on the jar
-                -- but nothing has proven it survives a save.
-                assert(not string.find(string.lower(doc.body), "blood", 1, true),
-                    doc.kind .. " claims blood, which is not verified to persist")
+                -- Nor may the mod CLAIM blood: setBloodLevel exists on the jar
+                -- but nothing has proven it survives a save, so no wording may
+                -- describe an object as bloodied.
+                --
+                -- The check is on our phrasings, not on the substring "blood":
+                -- the game ships Mov_MobileBloodbag, and a blood bag is a thing
+                -- that exists rather than a claim about the state we left an
+                -- object in.
+                for _, claim in ipairs({ "bloodied", "blood-soaked", "soaked in blood",
+                                         "stained with blood", "covered in blood" }) do
+                    assert(not string.find(string.lower(doc.body), claim, 1, true),
+                        doc.kind .. " claims blood (" .. claim .. "), which is not verified to persist")
+                end
                 withWear = withWear + 1
                 if doc.quantity then
                     assert(doc.quantity >= 5 and doc.quantity <= 16, "a placed pile is outside the rule's range")

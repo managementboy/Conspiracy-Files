@@ -97,6 +97,20 @@ local rules={
         quantity={6,16},budgeted=true,room="natural",
         denyCategory=WINDFALL,
         text="ordinary in itself, in a quantity that is not"},
+    -- Owner, 2026-09-09: "what are 50 mannequin doing in a truck."
+    --
+    -- Moveables are barred from drawers above - nobody stacks a mannequin in a
+    -- cupboard - and a truck bed is precisely the exception. This rule exists
+    -- so that ban holds where it is true and stops where it is not: it draws
+    -- bulk cargo, prefers a bed or a boot through RoomAffinity, and is the
+    -- only rule permitted to reach Furniture at all.
+    vehicleBulk={requires={"countable"},wear="intact",maxWeight=3.0,
+        quantity={6,16},budgeted=true,room="wrong",
+        allowDenied={Furniture=true,Material=true},
+        denyCategory=WINDFALL,
+        anyCategory={"Furniture","Material","Container","Gardening","Junk",
+                     "Camping","Household","Electronics"},
+        text="cargo, in a vehicle with no reason to be carrying it"},
     -- Owner, 2026-09-09, mid-build: "let's not forget that any place with
     -- loads of medical equipment and PPA is suspicious."
     --
@@ -133,7 +147,7 @@ local rules={
                      "Communications","Container","Security","Junk","Memento"},
         text="belongs somewhere other than where it was found"},
 }
-local ORDER={"physicalTrace","bearsName","testableAccess","outOfPlace","accumulation","misplacedBulk","medicalHoard"}
+local ORDER={"physicalTrace","bearsName","testableAccess","outOfPlace","accumulation","misplacedBulk","medicalHoard","vehicleBulk"}
 
 
 -- Individual refusals, where a category is the wrong instrument.

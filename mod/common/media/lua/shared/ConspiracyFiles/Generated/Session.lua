@@ -15,7 +15,32 @@ local function fields(t,allowed)
     return true
 end
 local function integer(n) return type(n)=="number" and n==math.floor(n) and math.abs(n)<1000000 end
+-- How far outside a site's own footprint a vehicle may be and still count as
+-- belonging to it. Sites are room rectangles INSIDE buildings and cars are in
+-- driveways, which is the one real mismatch in treating a vehicle as a place.
+-- Twelve tiles is a driveway, a verge or a kerb; it is not the next street.
+S.VEHICLE_RADIUS=12
+S.VEHICLE_CONTAINER="vehicle"
+-- A vehicle target names a part and carries the mark the runtime stamps on it.
+-- It is addressed by that mark rather than by a parking space, because only
+-- the player can move a car and the clue travels with them when they do.
+local function vehicleTarget(t) return type(t)=="table" and type(t.vehiclePart)=="string" end
 function S.target(t,site)
+    if vehicleTarget(t) then
+        if not fields(t,{x=true,y=true,z=true,objectIndex=true,containerIndex=true,containerType=true,
+                         sprite=true,vehiclePart=true,vehicleMark=true}) then return false end
+        for _,k in ipairs({"x","y","z","objectIndex","containerIndex"}) do if not integer(t[k]) then return false end end
+        if t.objectIndex~=0 or t.containerIndex~=0 then return false end
+        if type(t.sprite)~="string" or #t.sprite>300 then return false end
+        if #t.vehiclePart==0 or #t.vehiclePart>60 then return false end
+        if t.vehicleMark~=nil and (type(t.vehicleMark)~="string" or #t.vehicleMark>300) then return false end
+        if t.containerType~=S.VEHICLE_CONTAINER then return false end
+        local b=site.bounds
+        local r=S.VEHICLE_RADIUS
+        if t.x<b.x1-r or t.x>=b.x2+r or t.y<b.y1-r or t.y>=b.y2+r or t.z~=b.z then return false end
+        for _,kind in ipairs(site.containerTypes) do if kind==S.VEHICLE_CONTAINER then return true end end
+        return false
+    end
     if not fields(t,{x=true,y=true,z=true,objectIndex=true,containerIndex=true,containerType=true,sprite=true}) then return false end
     for _,k in ipairs({"x","y","z","objectIndex","containerIndex"}) do if not integer(t[k]) then return false end end
     if t.objectIndex<0 or t.containerIndex<0 or type(t.sprite)~="string" or #t.sprite>300 then return false end
@@ -134,7 +159,11 @@ function S.createDistributed(case,candidates,rooms,occupied)
             target=index and list[index]
         end
         if not S.target(target,sites[doc.locationId]) then return nil,"not enough distinct suitable containers" end
-        local key=table.concat({target.x,target.y,target.z,target.objectIndex,target.containerIndex},":")
+        -- Two documents may share a car but never a part, so the part joins
+        -- the uniqueness key: without it, a glovebox and a boot at the same
+        -- parking square would look like one container.
+        local key=table.concat({target.x,target.y,target.z,target.objectIndex,target.containerIndex,
+                                target.vehiclePart or "-"},":")
         if used[key] then return nil,"repeated physical container" end
         used[key]=true;targets[doc.id]=target
     end

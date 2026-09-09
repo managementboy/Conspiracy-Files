@@ -4,7 +4,11 @@ local function spriteName(object)
     local sprite=object and object:getSprite()
     return sprite and sprite:getName() or nil
 end
-function World.resolve(target)
+function World.resolve(target,mark)
+    -- A vehicle target is not addressed by a square. See resolveVehicle.
+    if type(target)=="table" and type(target.vehiclePart)=="string" then
+        return World.resolveVehicle(target,mark)
+    end
     local square=getCell():getGridSquare(target.x,target.y,target.z)
     if not square then return nil,"unloaded" end
     local objects=square:getObjects()
@@ -114,20 +118,46 @@ end
 -- Find the container we marked. `mark` is the value stamped into the part's
 -- ModData at placement; it is our own handle, so nothing here depends on how
 -- the engine numbers vehicles or where the car has since been driven.
-function World.resolveVehicle(target,radius)
-    if type(target)~="table" or type(target.vehiclePart)~="string" or type(target.vehicleMark)~="string" then
+-- `mark` is the caller's own handle - the assignment's physical token. Two
+-- passes, in this order:
+--
+--   1. The marked part, wherever the car now is. This is the case after
+--      placement, and the reason a driven car does not lose its clue.
+--   2. An UNMARKED part of the right kind on a vehicle still standing where
+--      the candidate was found. This is the case before placement, when
+--      nothing has been stamped yet.
+--
+-- If the car was driven off between the candidate being recorded and the clue
+-- being placed, neither pass matches and placement simply waits. Better than
+-- placing into whichever car happens to be there now, which would put the
+-- evidence somewhere nobody chose.
+function World.resolveVehicle(target,mark,radius)
+    if type(target)~="table" or type(target.vehiclePart)~="string" then
         return nil,"not a vehicle target"
     end
-    -- Widened deliberately: the car may have been moved, and the point of the
-    -- mark is that finding it again does not depend on where it was parked.
-    local near=World.vehiclesNear(target.x,target.y,target.z,radius or 60,16)
-    for _,entry in ipairs(near) do
+    mark=mark or target.vehicleMark
+    local function partsOf(entry)
+        local out={}
         for _,part in ipairs(entry.parts) do
-            if part.part==target.vehiclePart then
+            if part.part==target.vehiclePart then out[#out+1]=part end
+        end
+        return out
+    end
+    if type(mark)=="string" then
+        local near=World.vehiclesNear(target.x,target.y,target.z,radius or 60,16)
+        for _,entry in ipairs(near) do
+            for _,part in ipairs(partsOf(entry)) do
                 local vehiclePart=part.container.getVehiclePart and part.container:getVehiclePart()
                 local md=vehiclePart and vehiclePart.getModData and vehiclePart:getModData()
-                if md and md.cfVehicleMark==target.vehicleMark then return part.container end
+                if md and md.cfVehicleMark==mark then return part.container end
             end
+        end
+    end
+    for _,entry in ipairs(World.vehiclesNear(target.x,target.y,target.z,0,8)) do
+        for _,part in ipairs(partsOf(entry)) do
+            local vehiclePart=part.container.getVehiclePart and part.container:getVehiclePart()
+            local md=vehiclePart and vehiclePart.getModData and vehiclePart:getModData()
+            if md and md.cfVehicleMark==nil then return part.container end
         end
     end
     return nil,"vehicle-not-found"
