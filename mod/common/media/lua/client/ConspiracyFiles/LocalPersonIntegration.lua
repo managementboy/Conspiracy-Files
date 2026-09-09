@@ -10,6 +10,12 @@ local LeadAdapter=require("ConspiracyFiles/ObservedKeyAdapter")
 local Names=require("ConspiracyFiles/PersonNameLog")
 local Outfits=require("ConspiracyFiles/BodyOutfitLog")
 local P={}
+-- Reachable from the debug console. The verboseDoors switch documented below
+-- is useless if there is nothing to set it on: this module was require-only,
+-- so ConspiracyFiles.LocalPersonIntegration.verboseDoors=true crashed on a nil
+-- index. A diagnostic nobody can turn on is not a diagnostic.
+ConspiracyFiles=ConspiracyFiles or {}
+ConspiracyFiles.LocalPersonIntegration=P
 local TAG="ConspiracyFiles.LocalPeople"
 local LEAD_TAG="ConspiracyFiles.ObservedKeyLeads"
 local queue,queued,ticks={},{},0
