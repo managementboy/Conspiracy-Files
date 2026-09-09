@@ -14,5 +14,5 @@
 -- This module deliberately requires nothing, so anything can read it without
 -- dragging in a dependency chain.
 ConspiracyFiles = ConspiracyFiles or {}
-ConspiracyFiles.VERSION = "DEV-0.8.19-case-file-look"
+ConspiracyFiles.VERSION = "DEV-0.8.20-drag-gate"
 return ConspiracyFiles.VERSION

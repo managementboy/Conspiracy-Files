@@ -117,7 +117,17 @@ function I.afterRender(pane)
  if not supported() then return gate("observer unsupported (debug/MP/runtime gate)") end
  if #queue>=16 then return gate("queue full") end
  if pane.mode~="details" then return gate("pane mode is "..tostring(pane.mode)..", expected details") end
- if pane.dragStarted then return bail("pane.dragStarted") end
+ -- dragStarted does NOT mean "a drag is happening". ISInventoryPane sets it
+ -- when a drag exceeds four pixels and clears it in exactly one place,
+ -- onMouseDown; it is never initialised. So after any drag it stays true until
+ -- the player next clicks that pane, and testing it alone made the observer
+ -- abandon a pane permanently. That is the wallet defect: on 2026-09-08 an
+ -- open wallet recorded nothing until a row was selected, because selecting is
+ -- a mouse-down and a mouse-down is what cleared the flag.
+ --
+ -- dragging is the live state - set on mouse-down, cleared on mouse-up - so a
+ -- real drag is both together.
+ if pane.dragging and pane.dragStarted then return bail("a drag is in progress") end
  if read(pane,"isReallyVisible")~=true then return bail("pane not really visible") end
  if not pane.parent or pane.parent.isCollapsed then return bail("no parent, or parent collapsed") end
  if read(pane.parent,"isReallyVisible")~=true then return bail("parent not really visible") end
