@@ -6,8 +6,12 @@ generator's premise pool: `mod/common/media/lua/shared/ConspiracyFiles/Generated
 Content status stays *drafted, pending approval* per ADR-0002 - the owner
 selected the premises, not yet every sentence of the prose they generate.
 
-Each premise supplies a reference prefix, three organisations, and three anchor
-documents (claim, response, review) in the shape the generator already used.
+Each premise supplies three organisations and three anchor documents (claim,
+response, review) in the shape the generator already used. It does **not**
+supply the case reference: the links between documents already carry the
+connection and the notebook sorts on them, so a reference that encoded the
+premise would only announce which story the player had drawn before they had
+read a word of it.
 The premise is the seed's **first** draw, so it is the most significant thing a
 seed decides: what the case is about, before who is in it or how it resolves.
 Every premise reads two ways - the records agree, or they do not - and each of

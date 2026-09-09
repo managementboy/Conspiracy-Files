@@ -23,15 +23,19 @@ local seen={};for _,t in ipairs(candidates['t3:home']) do assert(t.z==0 and not 
 assert(catalog.locations[1].paperStorage=='observed' and #catalog.locations[1].containerTypes==2)
 -- Domain commits independent target snapshots and refuses a cupboard pile.
 local G=require('ConspiracyFiles/Generated/Generator');local S=require('ConspiracyFiles/Generated/Session')
--- Seed pinned to a case that places at least two documents at the first site,
--- because the duplicate-target and shortage checks below have nothing to bite
--- on otherwise. Seed 17 did that until premises changed which documents a seed
--- draws (2026-09-09); seed 1 does it now. This test is about target
--- allocation, not about which seed produces the shape.
-local case=assert(G.generate(dofile('test/fixtures/synthetic_locations.lua'),1,{mapId='SYNTHETIC-MAP',buildLine='TEST-ONLY',allowSynthetic=true}))
-local atFirst=0
-for _,d in ipairs(case.documents) do if d.locationId==case.locations[1].id then atFirst=atFirst+1 end end
-assert(atFirst>=2,'fixture assumption changed: the first site must hold two or more documents')
+-- The duplicate-target and shortage checks below need a case that places at
+-- least two documents at the first site; with one, there is nothing to
+-- collide. Search for that shape rather than pinning a seed: a pinned seed
+-- made this test re-pin on every generator change (seed 17 held until roles
+-- widened the pool, then premises shifted every draw again).
+local case
+for seed=1,200 do
+ local candidate=G.generate(dofile('test/fixtures/synthetic_locations.lua'),seed,{mapId='SYNTHETIC-MAP',buildLine='TEST-ONLY',allowSynthetic=true})
+ if candidate then local atFirst=0
+  for _,d in ipairs(candidate.documents) do if d.locationId==candidate.locations[1].id then atFirst=atFirst+1 end end
+  if atFirst>=2 then case=candidate; break end end
+end
+assert(case,'no seed in 1..200 placed two documents at the first site')
 local choices={};for _,site in ipairs(case.locations) do
  choices[site.id]={};for i=1,7 do choices[site.id][i]={x=site.bounds.x1,y=site.bounds.y1,z=site.bounds.z,objectIndex=i-1,containerIndex=0,containerType=site.containerTypes[1],sprite='s'} end
 end

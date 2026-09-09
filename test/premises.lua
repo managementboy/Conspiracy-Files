@@ -21,14 +21,35 @@ local opts = { mapId = "SYNTHETIC-MAP", buildLine = "TEST-ONLY", allowSynthetic 
 
 assert(Premises.count() == 20, "expected twenty premises, got " .. Premises.count())
 
--- Codes are how a player recognises two documents as belonging to one case.
--- Two premises sharing a prefix would make two cases look like one.
-local codes = {}
-for _, id in ipairs(Premises.list()) do
-    local premise = assert(Premises.get(id))
-    assert(not codes[premise.code], "premise code " .. premise.code .. " is used twice")
-    codes[premise.code] = id
+-- The case reference must not give the premise away. The links between
+-- documents already carry the connection and the notebook sorts on them, so a
+-- reference that encoded the story would only tell the player which case they
+-- had drawn before they had read a word of it.
+local perPremise, perPrefix = {}, {}
+for seed = 1, 600 do
+    local case = G.generate(catalog, seed, opts)
+    if case then
+        local prefix = string.match(case.documents[1].body, "Record: ([A-Z]+)%-") or
+                       string.match(case.documents[1].title, "/ ([A-Z]+)%-")
+        assert(prefix, "a case must carry a reference: " .. case.documents[1].title)
+        perPremise[case.premiseId] = perPremise[case.premiseId] or {}
+        perPremise[case.premiseId][prefix] = true
+        perPrefix[prefix] = perPrefix[prefix] or {}
+        perPrefix[prefix][case.premiseId] = true
+    end
 end
+for id, prefixes in pairs(perPremise) do
+    local n = 0
+    for _ in pairs(prefixes) do n = n + 1 end
+    assert(n > 1, "premise " .. id .. " always uses the same reference prefix; the reference gives the story away")
+end
+local shared = 0
+for _, ids in pairs(perPrefix) do
+    local n = 0
+    for _ in pairs(ids) do n = n + 1 end
+    if n > 1 then shared = shared + 1 end
+end
+assert(shared > 0, "no reference prefix is ever shared between premises; the reference still identifies the story")
 
 local seen, outlines, kinds = {}, {}, {}
 local cases = 0

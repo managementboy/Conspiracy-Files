@@ -73,15 +73,27 @@ local S=require("ConspiracyFiles/Generated/Session")
 -- with 2 required distinct containers at each of synthetic-site-06/-04.
 -- The seed moved from 17 to 395 when Phase 3 added three roles to the optional
 -- pool (2026-09-09): a wider pool changes both which documents a given seed
--- draws and how many. Twenty premises (2026-09-09) changed it again, since the
--- premise is now the seed's first draw and shifts every draw after it. Seed 16
--- reproduces the original shape exactly - four documents, these four carriers,
--- two sites - so every assertion below is unchanged. This test is about
--- room-aware placement, not about which seed happens to produce it.
-local case=assert(G.generate(dofile("test/fixtures/synthetic_locations.lua"),16,{mapId="SYNTHETIC-MAP",buildLine="TEST-ONLY",allowSynthetic=true}))
-local byKind={}
-for _,d in ipairs(case.documents) do byKind[d.kind]=d end
-assert(byKind.dispatch and byKind.receipt and byKind.notepad and byKind.idcard, "fixture assumption changed; update this test")
+-- draws and how many, and twenty premises (2026-09-09) shifted every draw
+-- again. Pinning a seed made this test re-pin on every generator change, so it
+-- now SEARCHES for the shape it needs - four documents, these four carriers,
+-- the pairs on one site each - instead of asserting that one seed still
+-- produces it. This test is about room-aware placement, not about which seed
+-- happens to produce the arrangement.
+local case,byKind
+for seed=1,4000 do
+    local candidate=G.generate(dofile("test/fixtures/synthetic_locations.lua"),seed,
+        {mapId="SYNTHETIC-MAP",buildLine="TEST-ONLY",allowSynthetic=true})
+    if candidate and #candidate.documents==4 then
+        local k={}
+        for _,d in ipairs(candidate.documents) do k[d.kind]=d end
+        if k.dispatch and k.receipt and k.notepad and k.idcard
+            and k.dispatch.locationId==k.idcard.locationId
+            and k.receipt.locationId==k.notepad.locationId then
+            case,byKind=candidate,k; break
+        end
+    end
+end
+assert(case,"no seed in 1..4000 produced the four-document arrangement this test needs")
 local dispatchSite,idcardSite=byKind.dispatch.locationId,byKind.idcard.locationId
 local receiptSite,notepadSite=byKind.receipt.locationId,byKind.notepad.locationId
 assert(dispatchSite==idcardSite and receiptSite==notepadSite, "fixture assumption changed; update this test")

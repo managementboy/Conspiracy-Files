@@ -39,6 +39,12 @@ local function fill(text,map)
     for _,key in ipairs(FIELDS) do text=subst(text,key,map[key]) end
     return text
 end
+-- A case reference exists so that three pieces of paper look like one file,
+-- which is how paperwork works. It is drawn independently of the premise: the
+-- links between documents already carry the connection and the notebook sorts
+-- on them, so a reference that encoded the premise would only announce which
+-- story the player had drawn before they had read a word of it.
+local REFERENCE={"R","RC","GT","PS","WB","HK","MC","BF","LD","TN","AV","QS"}
 local function build(seed,revision,sites)
     local random=rng(seed)
     -- The premise is drawn first, so it is the seed's most significant choice:
@@ -54,7 +60,7 @@ local function build(seed,revision,sites)
     -- is resolved before it becomes {ORG} for everything else.
     local organisation=subst(subst(premise.orgs[random(#premise.orgs)],"A",a.name),"B",b.name)
     local facts={sender=names[first],recipient=names[second],organisation=organisation,
-        code=premise.code.."-"..(100+random(899)),dispatchDay=1+random(3),receiptDay=5,reviewDay=6,
+        code=REFERENCE[random(#REFERENCE)].."-"..(100+random(899)),dispatchDay=1+random(3),receiptDay=5,reviewDay=6,
         premise=premise.id,subject=premise.subject,unknown=premise.unknown}
     local map={CODE=facts.code,ORG=organisation,P1=facts.sender,P2=facts.recipient,
         A=a.name,B=b.name,D1=tostring(facts.dispatchDay),D2=tostring(facts.receiptDay),

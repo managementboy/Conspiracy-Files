@@ -24,7 +24,7 @@
 -- docs/design/PREMISES.md for the prose originals and the owner's selection.
 local M={}
 
--- Each entry: id, title, code (reference prefix), subject, unknown, orgs (3),
+-- Each entry: id, title, subject, unknown, orgs (3),
 -- and three anchor documents - claim, response, review - each with a carrier
 -- `kind`, a `title`, a physical `found` description, the document's own `text`,
 -- and a `meaning` that must never assert a conclusion. The response and review
@@ -35,7 +35,7 @@ local M={}
 -- reusing that wording where they agree would put a suspicion on the page that
 -- the paperwork does not support.
 local P={
-{id="transfer-nobody-arranged",title="A transfer nobody arranged",code="TR",
+{id="transfer-nobody-arranged",title="A transfer nobody arranged",
  subject="the transfer",unknown="who asked for it",
  orgs={"County Personnel Office","Regional Staffing Service","District Works Department"},
  claim={kind="dispatch",title="Transfer notice / {CODE}",
@@ -55,7 +55,7 @@ local P={
   dispute="The two copies do not agree and the file has nevertheless been marked closed. Retain both; do not correct one from the other.",
   meaning="Somebody wanted the disagreement preserved, or somebody wanted it tidied. The sheet raises a question about authority without answering who exercised it."}},
 
-{id="signed-by-someone-absent",title="Signed for by someone who was not there",code="SG",
+{id="signed-by-someone-absent",title="Signed for by someone who was not there",
  subject="the signature",unknown="whose hand it was",
  orgs={"Knox County Supply Office","Regional Distribution Depot","County Equipment Service"},
  claim={kind="dispatch",title="Delivery docket / {CODE}",
@@ -75,7 +75,7 @@ local P={
   dispute="No answer received. The query has been marked closed by someone who did not sign the closure.",
   meaning="A closed query is not a settled one. Who closed it, and on what basis, is the part the sheet does not record."}},
 
-{id="two-start-dates",title="The employee with two start dates",code="ST",
+{id="two-start-dates",title="The employee with two start dates",
  subject="the start date",unknown="where the missing months were spent",
  orgs={"McCoy Logging Corp","Knox County Public Works","Fossoil Regional Office"},
  claim={kind="letter",title="Employment record / {CODE}",
@@ -96,7 +96,7 @@ local P={
   meaningAgree="An explanation nobody signed is worth exactly as much as the person who wrote it, and there is no way to tell from here who that was.",
   meaning="A file that cannot be produced is the most ordinary thing in an office and the most useful thing to a person with something to keep out of it."}},
 
-{id="resignation-after-payslip",title="The last week of a job",code="RS",
+{id="resignation-after-payslip",title="The last week of a job",
  subject="the resignation",unknown="who wrote it",
  orgs={"Knox County Schools","Regional Health Service","{A} Site Office"},
  claim={kind="letter",title="Letter of resignation / {CODE}",
@@ -116,7 +116,7 @@ local P={
   dispute="Entry does not reconcile and has been left underlined rather than corrected.",
   meaning="Somebody noticed and stopped short of writing down what they suspected. The underlining is the whole of their comment."}},
 
-{id="address-that-only-receives",title="The address that receives but never sends",code="AD",
+{id="address-that-only-receives",title="The address that receives but never sends",
  subject="the deliveries",unknown="who was there to take them",
  orgs={"Regional Supply Office","County Equipment Service","Valu-Line Distribution"},
  claim={kind="dispatch",title="Delivery schedule / {CODE}",
@@ -137,7 +137,7 @@ local P={
   meaningAgree="An address kept on a schedule with no contact name behind it is normal in a large organisation, and is also how a place stays supplied without being visited.",
   meaning="Somebody took the address off a list and somebody put it back within hours. Neither of them wrote down why."}},
 
-{id="identical-inventories",title="Two buildings, one inventory",code="IN",
+{id="identical-inventories",title="Two buildings, one inventory",
  subject="the inventory",unknown="which building it describes",
  orgs={"MassGenFac Stores","Regional Distribution Depot","County Equipment Service"},
  claim={kind="dispatch",title="Stock list / {CODE}",
@@ -158,7 +158,7 @@ local P={
   meaningAgree="Initials that appear on no establishment list certified this. That is a gap in a record of who works there, before it is anything else.",
   meaning="An audit that stops mid-sentence has a reason, and the reason is not on the page."}},
 
-{id="room-not-on-the-plan",title="The room that is not on the plan",code="RM",
+{id="room-not-on-the-plan",title="The room that is not on the plan",
  subject="the callout",unknown="which room was worked on",
  orgs={"County Building Maintenance","District Works Department","{B} Facilities Office"},
  claim={kind="dispatch",title="Maintenance callout / {CODE}",
@@ -178,7 +178,7 @@ local P={
   dispute="Does not reconcile. The ledger shows the crew elsewhere that afternoon.",
   meaning="Two records of the same hours. Crews are moved without the ledger being told, and hours are also written down for work that was not done."}},
 
-{id="lease-outlived-tenant",title="The lease that outlived the tenant",code="LS",
+{id="lease-outlived-tenant",title="The lease that outlived the tenant",
  subject="the tenancy",unknown="who holds the keys now",
  orgs={"Knox County Property Trust","Regional Estates Office","Valu-Line Distribution"},
  claim={kind="letter",title="Rent statement / {CODE}",
@@ -199,7 +199,7 @@ local P={
   meaningAgree="An inspection recorded with an illegible name is an inspection nobody can be asked about. Offices produce that by accident constantly.",
   meaning="Access not obtained can mean nobody had the time or nobody was let in. The sheet was designed to record the visit, not the reason it failed."}},
 
-{id="load-that-got-lighter",title="The load that got lighter",code="LD",
+{id="load-that-got-lighter",title="The load that got lighter",
  subject="the load",unknown="what came off it",
  orgs={"McCoy Logging Corp","Regional Haulage Service","Fossoil Transport"},
  claim={kind="dispatch",title="Weighbridge ticket / {CODE}",
@@ -220,7 +220,7 @@ local P={
   meaningAgree="A difference inside the certificate is a difference nobody has to explain. That may be the end of it, or the reason it ends there.",
   meaning="A missing certificate makes the numbers unprovable in either direction, which is convenient for whoever would rather they stayed that way - and is also just what a filing system does."}},
 
-{id="fuel-for-a-dead-truck",title="Fuel for a vehicle that was off the road",code="FL",
+{id="fuel-for-a-dead-truck",title="Fuel for a vehicle that was off the road",
  subject="the fuel account",unknown="which vehicle was being filled",
  orgs={"Fossoil Regional Office","Gas 2 Go Commercial Accounts","County Motor Pool"},
  claim={kind="dispatch",title="Fuel account statement / {CODE}",
@@ -240,7 +240,7 @@ local P={
   dispute="No explanation offered. The card was not stopped.",
   meaning="Nobody stopped the card. That is either indifference or someone protecting the arrangement, and a query note cannot tell you which."}},
 
-{id="returned-cleaner",title="The equipment that came back cleaner",code="HR",
+{id="returned-cleaner",title="The equipment that came back cleaner",
  subject="the hire",unknown="where it had been",
  orgs={"County Equipment Service","Regional Plant Hire","{A} Site Office"},
  claim={kind="dispatch",title="Hire note / {CODE}",
@@ -261,7 +261,7 @@ local P={
   meaningAgree="Serial numbers that were never compared cannot contradict anything. An item can leave the system as one thing and come back as another simply because nobody looked.",
   meaning="An item accepted back under the wrong serial has left the system as one thing and returned as another. Clerks do this in a hurry every week."}},
 
-{id="two-crates-one-number",title="Two crates, one number",code="CR",
+{id="two-crates-one-number",title="Two crates, one number",
  subject="the crate reference",unknown="which crate is which",
  orgs={"MassGenFac Stores","Regional Distribution Depot","County Equipment Service"},
  claim={kind="dispatch",title="Goods receipt / {CODE}",
@@ -282,7 +282,7 @@ local P={
   meaningAgree="A book withdrawn from use takes its stubs with it. The fault is recorded and the means of checking it is gone.",
   meaning="Only one crate can be found. That is a fact about a search, not about a crate, and searches end for all sorts of reasons."}},
 
-{id="paid-before-ordered",title="Paid before it was ordered",code="PY",
+{id="paid-before-ordered",title="Paid before it was ordered",
  subject="the payment",unknown="who authorised it",
  orgs={"County Accounts Office","County Finance Department","Regional Supply Office"},
  claim={kind="dispatch",title="Requisition / {CODE}",
@@ -302,7 +302,7 @@ local P={
   dispute="Not reconciled. The signature does not resemble the specimen held on file.",
   meaning="A specimen signature settles a question of hands, not of intent. Somebody may have signed for a colleague at a desk, as happens hourly."}},
 
-{id="overtime-nobody-worked",title="The overtime nobody worked",code="OT",
+{id="overtime-nobody-worked",title="The overtime nobody worked",
  subject="the night shift",unknown="who was on the site",
  orgs={"County Public Works","McCoy Logging Corp","{B} Site Office"},
  claim={kind="dispatch",title="Timesheet / {CODE}",
@@ -322,7 +322,7 @@ local P={
   dispute="Query unanswered. Paid anyway, on the authority of the same signature that approved the hours.",
   meaning="The person who approved the hours also settled the question about them. That is poor practice everywhere and it is not, by itself, evidence of anything else."}},
 
-{id="closure-announced-twice",title="A closure announced twice",code="CL",
+{id="closure-announced-twice",title="A closure announced twice",
  subject="the closure",unknown="whether the place was still working",
  orgs={"Knox County Administration","Regional Health Service","MassGenFac"},
  claim={kind="letter",title="Public notice / {CODE}",
@@ -343,7 +343,7 @@ local P={
   meaningAgree="Copies returned and destroyed as routine is exactly what routine looks like, and exactly what it would look like if it were not.",
   meaning="Recovering circulated copies is ordinary practice for confidential paper. The urgency in the wording is the only unusual thing here, and urgency is not proof."}},
 
-{id="appointment-out-of-order",title="The medical appointment that came first",code="MD",
+{id="appointment-out-of-order",title="The medical appointment that came first",
  subject="the follow-up",unknown="when the patient was first seen",
  orgs={"Knox County Health Office","Regional Health Service","{B} Medical Centre"},
  claim={kind="dispatch",title="Follow-up note / {CODE}",
@@ -364,7 +364,7 @@ local P={
   meaningAgree="The sequence works once a card in another drawer is counted. Whether that card describes this patient is a question the check did not ask.",
   meaning="Nobody asked, or nobody wrote the answer down. A gap in a card index is a gap in an index."}},
 
-{id="file-signed-out",title="The file that was signed out and never returned",code="FC",
+{id="file-signed-out",title="The file that was signed out and never returned",
  subject="the missing file",unknown="who took it",
  orgs={"Knox County Courthouse","Rosewood Correctional","County Records Office"},
  claim={kind="dispatch",title="Records log / {CODE}",
@@ -385,7 +385,7 @@ local P={
   meaningAgree="The file came back and the initials were never identified. A returned file closes a query without answering it.",
   meaning="Somebody worked out whose initials they were and thought better of writing it down. What they concluded is not on the sheet."}},
 
-{id="missing-ledger-page",title="The page that is missing",code="LG",
+{id="missing-ledger-page",title="The page that is missing",
  subject="the ledger",unknown="what the removed page said",
  orgs={"{A} Site Office","County Public Works","Rosewood Correctional"},
  claim={kind="dispatch",title="Duty ledger / {CODE}",
@@ -406,7 +406,7 @@ local P={
   meaningAgree="Entries rewritten from a duplicate are only as good as the duplicate. Nobody recorded who did the rewriting, or when.",
   meaning="A book that nobody tried to reconstruct was either unimportant or better left incomplete. The note does not say which and the person who wrote it did not sign."}},
 
-{id="photograph-without-a-name",title="The photograph with no caption",code="PH",
+{id="photograph-without-a-name",title="The photograph with no caption",
  subject="the photograph",unknown="who the unnamed person is",
  orgs={"{A} Site Office","McCoy Logging Corp","Knox County Schools"},
  claim={kind="letter",title="Staff photograph / {CODE}",
@@ -426,7 +426,7 @@ local P={
   dispute="Unanswered. The note has been filed rather than pursued.",
   meaning="An unnamed face and an unnamed agency are two absences, not one fact. Neither becomes a person until something else names them."}},
 
-{id="withdrawn-extension",title="The number that was withdrawn",code="EX",
+{id="withdrawn-extension",title="The number that was withdrawn",
  subject="the extension",unknown="what department used it",
  orgs={"Knox County Administration","MassGenFac","Regional Health Service"},
  claim={kind="dispatch",title="Internal directory / {CODE}",
@@ -457,14 +457,11 @@ for i,premise in ipairs(P) do ORDER[i]=premise.id end
 -- Load-time checks. A premise with a missing field or an impossible carrier
 -- would otherwise fail at case generation, in play, on one seed in twenty.
 local ANCHORS={"claim","response","review"}
-local seenId,seenCode={},{}
+local seenId={}
 for _,premise in ipairs(P) do
     assert(type(premise.id)=="string" and #premise.id>0,"premise needs an id")
     assert(not seenId[premise.id],"duplicate premise id "..premise.id)
     seenId[premise.id]=true
-    assert(type(premise.code)=="string" and #premise.code>=2,"premise "..premise.id.." needs a reference prefix")
-    assert(not seenCode[premise.code],"duplicate premise code "..premise.code)
-    seenCode[premise.code]=true
     for _,field in ipairs({"title","subject","unknown"}) do
         assert(type(premise[field])=="string" and #premise[field]>0,"premise "..premise.id.." needs "..field)
     end
