@@ -73,11 +73,12 @@ local S=require("ConspiracyFiles/Generated/Session")
 -- with 2 required distinct containers at each of synthetic-site-06/-04.
 -- The seed moved from 17 to 395 when Phase 3 added three roles to the optional
 -- pool (2026-09-09): a wider pool changes both which documents a given seed
--- draws and how many. 395 reproduces the original shape exactly - four
--- documents, these four carriers, two sites - so every assertion below is
--- unchanged. This test is about room-aware placement, not about which seed
--- happens to produce it.
-local case=assert(G.generate(dofile("test/fixtures/synthetic_locations.lua"),395,{mapId="SYNTHETIC-MAP",buildLine="TEST-ONLY",allowSynthetic=true}))
+-- draws and how many. Twenty premises (2026-09-09) changed it again, since the
+-- premise is now the seed's first draw and shifts every draw after it. Seed 16
+-- reproduces the original shape exactly - four documents, these four carriers,
+-- two sites - so every assertion below is unchanged. This test is about
+-- room-aware placement, not about which seed happens to produce it.
+local case=assert(G.generate(dofile("test/fixtures/synthetic_locations.lua"),16,{mapId="SYNTHETIC-MAP",buildLine="TEST-ONLY",allowSynthetic=true}))
 local byKind={}
 for _,d in ipairs(case.documents) do byKind[d.kind]=d end
 assert(byKind.dispatch and byKind.receipt and byKind.notepad and byKind.idcard, "fixture assumption changed; update this test")

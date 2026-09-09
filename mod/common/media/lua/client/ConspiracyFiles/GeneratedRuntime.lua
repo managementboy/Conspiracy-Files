@@ -117,7 +117,7 @@ end
 local function openAll()
     -- Replacing the session set invalidates queued closures over old APIs.
     scheduler=Scheduler.new(getTimeInMillis,function(system,why) if system=="preparation" then preparing=false end;log(system..": "..why) end);scheduler.maxSteps=24;scheduler.budgetMs=1
-    sessions={}; retiredRows={}
+    sessions={}; retiredRows={}; local stale=0
     for index,root in ipairs(Cases.sessions(wrapper)) do
         -- A retired root is not a Session and must never be opened as one.
         -- The closure keeps the true wrapper index, which no longer matches
@@ -125,10 +125,27 @@ local function openAll()
         if Retired.isRetired(root) then
             for _,row in ipairs(root.rows) do retiredRows[#retiredRows+1]=row end
         else
-            sessions[#sessions+1]=assert(Session.open(root,function(staged) swap(assert(Cases.replace(wrapper,index,staged))) end))
+            -- A root written by an earlier generator revision no longer
+            -- validates, and asserting on it would throw once per tick
+            -- forever - the same shape of failure as the retired-case loop
+            -- fixed on 2026-09-09. A case from an older build is a case we
+            -- stop tracking, not a crash. Its evidence stays in the player's
+            -- world and its notebook rows stay readable; only placement and
+            -- discovery stop.
+            local api,why=Session.open(root,function(staged) swap(assert(Cases.replace(wrapper,index,staged))) end)
+            if api then
+                sessions[#sessions+1]=api
+            else
+                stale=stale+1
+                log("a saved case predates this build and is no longer tracked: "..tostring(why))
+            end
         end
     end
-    enqueue(); log("Generated case active. Take an evidence item, then right-click Inspect Investigation Evidence.")
+    enqueue()
+    if stale>0 then
+        log(stale.." saved case(s) predate this build. New cases will generate normally; the old ones stay in the notebook.")
+    end
+    log("Generated case active. Take an evidence item, then right-click Inspect Investigation Evidence.")
 end
 local function currentHouse()
     local p=getPlayer();local square=p and p.getSquare and p:getSquare()

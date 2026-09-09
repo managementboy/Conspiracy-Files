@@ -1,7 +1,17 @@
 # Twenty premises
 
-Drafted 2026-09-09 for the owner to choose among, cut or rewrite. Nothing here
-is approved content: ADR-0002 says AI may draft, a human approves.
+Drafted 2026-09-09. **The owner kept all twenty**, and they are now the
+generator's premise pool: `mod/common/media/lua/shared/ConspiracyFiles/Generated/Premises.lua`.
+
+Content status stays *drafted, pending approval* per ADR-0002 - the owner
+selected the premises, not yet every sentence of the prose they generate.
+
+Each premise supplies a reference prefix, three organisations, and three anchor
+documents (claim, response, review) in the shape the generator already used.
+The premise is the seed's **first** draw, so it is the most significant thing a
+seed decides: what the case is about, before who is in it or how it resolves.
+Every premise reads two ways - the records agree, or they do not - and each of
+the twenty is reachable and readable both ways, which the test suite checks.
 
 ## What makes one of these work
 
@@ -144,15 +154,16 @@ department that appears in neither.
 
 ---
 
-## Notes on choosing
+## Notes on the set
 
-The strongest of these are the ones a player can **check** - where a second
+The strongest are the ones a player can **check** - where a second
 document could confirm or contradict, and the game world contains the place
 involved. 2, 5, 9, 10, 13 and 14 all have that quality.
 
 The weakest are those that resolve into a single fact with nothing to compare
-it against: 11 and 19 are atmosphere more than investigation, and may work
-better as an optional role inside another case than as a case of their own.
+it against: 11 and 19 are atmosphere more than investigation. They are in the
+pool because the owner kept the set whole; if play shows they land flat, they
+are two entries to remove from one table, not a rewrite.
 
 None of them mentions the outbreak, the military, or anything scientific. That
 is deliberate. A player who finds three pieces of ordinary 1993 paperwork that

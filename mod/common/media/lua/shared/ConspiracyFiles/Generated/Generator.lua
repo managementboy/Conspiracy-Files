@@ -3,9 +3,10 @@ local Catalog=require("ConspiracyFiles/Generated/Catalog")
 local V=require("ConspiracyFiles/Validator")
 local K=require("ConspiracyFiles/Generated/EvidenceKinds")
 local Roles=require("ConspiracyFiles/Generated/EvidenceRoles")
+local Premises=require("ConspiracyFiles/Generated/Premises")
 -- Schema two deliberately refuses the earlier fixed-seven case shape.  Before
 -- 1.0 callers must use a fresh save rather than reinterpret an existing case.
-local G={REVISION="g2-role-carrier-1",SCHEMA=2,MIN_EVIDENCE=3,MAX_EVIDENCE=7}
+local G={REVISION="g3-premises-1",SCHEMA=2,MIN_EVIDENCE=3,MAX_EVIDENCE=7}
 local function copy(v) if type(v)~="table" then return v end; local out={}; for k,c in pairs(v) do out[k]=copy(c) end; return out end
 local function same(a,b)
     if type(a)~=type(b) then return false end
@@ -17,14 +18,47 @@ local function seedOK(n) return type(n)=="number" and n==math.floor(n) and n>=1 
 local function rng(seed)
     return function(n) seed=(seed*48271)%2147483647; return seed%n+1 end
 end
+-- Placeholder substitution. Plain find/concatenation rather than string.gsub
+-- with a pattern: a premise's own words are data, and a '%' or a '-' in an
+-- organisation name must never be read as a pattern. Kahlua's string library
+-- is incomplete, and this stays inside the part of it the engine implements.
+local function subst(text,key,value)
+    local token="{"..key.."}"
+    local out,at=nil,1
+    while true do
+        local s,e=string.find(text,token,at,true)
+        if not s then break end
+        out=(out or "")..string.sub(text,at,s-1)..value
+        at=e+1
+    end
+    if not out then return text end
+    return out..string.sub(text,at)
+end
+local FIELDS={"CODE","ORG","P1","P2","A","B","D1","D2","D3","SUBJECT","UNKNOWN"}
+local function fill(text,map)
+    for _,key in ipairs(FIELDS) do text=subst(text,key,map[key]) end
+    return text
+end
 local function build(seed,revision,sites)
-    local random=rng(seed); local outline=random(2)==1 and "corroboration" or "conflicting-account"
+    local random=rng(seed)
+    -- The premise is drawn first, so it is the seed's most significant choice:
+    -- what the case is ABOUT, before who is in it or how it resolves. See
+    -- ConspiracyFiles/Generated/Premises.lua and docs/design/PREMISES.md.
+    local premise=Premises.choose(random)
+    local outline=random(2)==1 and "corroboration" or "conflicting-account"
     local names={"M. Ellis","D. Mercer","R. Hale","J. Voss"}
     local first=random(#names); local second=(first+random(#names-1)-1)%#names+1
     local prefix="generated:"..seed..":"
-    local facts={sender=names[first],recipient=names[second],organisation=({"County Equipment Service","Regional Supply Office","District Maintenance Service"})[random(3)],
-        code="R-"..(100+random(899)),dispatchDay=1+random(3),receiptDay=5,reviewDay=6}
     local a,b=sites[1],sites[2]
+    -- An organisation may name one of the two sites ("{A} Site Office"), so it
+    -- is resolved before it becomes {ORG} for everything else.
+    local organisation=subst(subst(premise.orgs[random(#premise.orgs)],"A",a.name),"B",b.name)
+    local facts={sender=names[first],recipient=names[second],organisation=organisation,
+        code=premise.code.."-"..(100+random(899)),dispatchDay=1+random(3),receiptDay=5,reviewDay=6,
+        premise=premise.id,subject=premise.subject,unknown=premise.unknown}
+    local map={CODE=facts.code,ORG=organisation,P1=facts.sender,P2=facts.recipient,
+        A=a.name,B=b.name,D1=tostring(facts.dispatchDay),D2=tostring(facts.receiptDay),
+        D3=tostring(facts.reviewDay),SUBJECT=premise.subject,UNKNOWN=premise.unknown}
     local people={{id=prefix.."person-1",name=facts.sender},{id=prefix.."person-2",name=facts.recipient}}
     local org={id=prefix.."organisation",name=facts.organisation}
     local documents={}
@@ -32,30 +66,40 @@ local function build(seed,revision,sites)
         documents[n]={id=prefix.."document-"..n,kind=kind or "dispatch",title=title,locationId=location.id,body=body,
             references=refs,links=links or {},leads=leads or {}}
     end
-    local routeKind=outline=="corroboration" and "letter" or "dispatch"
-    local routeTitle=routeKind=="letter" and "Cover letter / "..facts.code or "Dispatch copy / "..facts.code
-    document(1,routeTitle,a,
-        facts.organisation.."\nJuly "..facts.dispatchDay..", 1993\nFrom: unsigned office copy\nRecord: "..facts.code..
-        "\nRoute copy: "..a.name.." to "..b.name..".\nSealed equipment case; contents not entered. "..facts.recipient..
-        " keeps the receiving copy at "..b.name..". Authorization to follow under separate cover.",
-        {people[1].id,people[2].id,org.id,a.id,b.id},{},{b.id},routeKind)
-    local receipt=outline=="corroboration" and "One sealed case received. Seal unbroken; contents not checked."
-        or "No case received. Only the dispatch copy arrived. Please stop counting paper as equipment."
-    document(2,"Receiving copy / "..facts.code,b,
-        "July "..facts.receiptDay..", 1993\n"..facts.recipient.." / "..b.name.."\nRecord: "..facts.code.."\n"..receipt..
-        "\nFiled against "..facts.sender.."'s dispatch copy from "..a.name..".",
-        {people[1].id,people[2].id,a.id,b.id},{{target=documents[1].id,kind=outline=="corroboration" and "corroborates" or "disputes-delivery"}},nil,"receipt")
-    local review=outline=="corroboration" and "The receiving copy confirms a sealed case. The authorization cover is still missing. A signature confirms receipt, not permission."
-        or "The receiving copy denies delivery. Someone has nevertheless marked the dispatch file complete. Keep both copies; do not correct one from the other."
-    document(3,"File review / "..facts.code,b,
-        facts.organisation.."\nJuly "..facts.reviewDay..", 1993\nRecord: "..facts.code.."\n"..review.."\nNo explanation is attached.",
-        {org.id,b.id},{{target=documents[2].id,kind="recontextualises"}},nil,"notepad")
-    documents[1].body="WHAT YOU FOUND\nA creased carbon copy, its lower edge stained by a wet cup. The sender pressed hard enough to leave grooves through the paper. A neat office stamp sits over a hurried handwritten correction.\n\n"..documents[1].body..
-        "\n\nIn the margin: 'Driver asked whether the contents were on the manifest. Told him to use the reference number. Keep our copy until the separate authority arrives.' The signature box has been filled; the space for the authorising officer is blank.\n\nWHAT IT MIGHT MEAN\nSomeone recorded a transfer without recording what was inside. That could conceal an unauthorised shipment, or simply be paperwork completed before its attachments arrived. The receiving address is a concrete place to compare accounts; the missing authorisation alone proves neither explanation."
-    documents[2].body="WHAT YOU FOUND\nA thin receipt folded into quarters. The same reference appears in blue ink at the top and in a darker hand beside the signature. There is no inventory attached.\n\n"..documents[2].body..
-        "\n\nBelow the formal entry, "..facts.recipient.." has written: 'I am signing for what reached this desk, not for what someone says left theirs. Please retain this wording when making the office copy.' A second signature line is empty.\n\nWHAT IT MIGHT MEAN\nThe writer took care to limit responsibility. That caution could reflect an ordinary dispute between offices, or fear of being blamed for something more serious. Compare the exact claim here with other records rather than treating a signature as proof of the contents."
-    documents[3].body="WHAT YOU FOUND\nAn internal review sheet with two staple holes and a torn corner. A pencil tick beside 'complete' has been crossed out rather than erased.\n\n"..documents[3].body..
-        "\n\nThe reviewer adds: 'Do not replace the originals with a clean summary. If a supervisor requests a correction, retain the earlier version and record who requested it.' No supervisor's name follows. The bottom of the page has been left open for a reply.\n\nWHAT IT MIGHT MEAN\nSomeone wanted the disagreement preserved. This might be careful record keeping after a clerical error, or an attempt to leave a trail before the records were altered. The sheet raises a question about authority; it does not answer who exercised it."
+    -- Every anchor is assembled in the same three parts, because
+    -- Generated/DocumentPages.lua reads them: the physical description is
+    -- dropped from the readable pages, the document's own words become the
+    -- pages, and everything from WHAT IT MIGHT MEAN stays in the notebook. A
+    -- premise that reordered these would put an interpretation on a page the
+    -- survivor is supposed to have found already written.
+    local agreeing=outline=="corroboration"
+    local branch=agreeing and "agree" or "dispute"
+    local function anchor(doc,useBranch)
+        local text=doc.text
+        local meaning=doc.meaning
+        if useBranch then
+            text=text.."\n"..doc[branch]
+            -- Several reviews are written for the version where the records
+            -- conflict. Reusing that wording where they agree would put a
+            -- suspicion on the page the paperwork does not support.
+            if agreeing and doc.meaningAgree then meaning=doc.meaningAgree end
+        end
+        return fill("WHAT YOU FOUND\n"..doc.found.."\n\n"..text.."\n\nWHAT IT MIGHT MEAN\n"..meaning,map)
+    end
+    -- 1. The claim: a record that asserts something, found at the first site,
+    --    and the only document that leads anywhere - to the second site.
+    document(1,fill(premise.claim.title,map),a,anchor(premise.claim,false),
+        {people[1].id,people[2].id,org.id,a.id,b.id},{},{b.id},premise.claim.kind)
+    -- 2. The response: a second record that either agrees with the claim or
+    --    contradicts it. This is the case's outline, made physical.
+    document(2,fill(premise.response.title,map),b,anchor(premise.response,true),
+        {people[1].id,people[2].id,a.id,b.id},
+        {{target=documents[1].id,kind=agreeing and "corroborates" or "disputes-delivery"}},nil,premise.response.kind)
+    -- 3. The review: somebody inside the organisation looking at the pair and
+    --    writing down what they are going to do about it, which is usually
+    --    less than the reader would like.
+    document(3,fill(premise.review.title,map),b,anchor(premise.review,true),
+        {org.id,b.id},{{target=documents[2].id,kind="recontextualises"}},nil,premise.review.kind)
     -- Optional roles pick their carrier through EvidenceRoles instead of a
     -- literal kind string. `key`/`diary`/`notebook`/`clipping` each still
     -- resolve to their one prose-capable carrier (a role's carrier list of
@@ -64,59 +108,61 @@ local function build(seed,revision,sites)
     -- between two card/ticket carriers whose short capacity fits a named
     -- identifier, which is what makes idcard/creditcard/businesscard/ticket
     -- reachable at all. See docs/design/EVIDENCE_ROLE_SCHEMA.md.
+    --
+    -- Their prose stays premise-independent by talking about {SUBJECT} - the
+    -- premise's own noun for the matter - and {UNKNOWN}, the thing the
+    -- paperwork cannot settle. A diary kept by someone under pressure reads
+    -- the same whether the pressure was about a sealed case or a night shift;
+    -- writing twenty diaries would have bought nothing but twenty chances to
+    -- contradict the premise they sit inside.
     local function carrierFor(roleId,body)
         local kind=assert(Roles.choose(random,roleId))
         assert(Roles.fits(roleId,kind,body))
         return kind
     end
-    local accessBody="WHAT YOU FOUND\nA small worn key on a wire loop, with a card tag tied through its bow. The tag carries "..facts.code.." and the initials "..facts.sender..". There is no address or lock number. The metal is polished around the grip but dull between the teeth.\n\nON THE TAG\n'Return separately. Do not leave with the driver.' On the reverse, in smaller writing: 'Ask before making another copy.' A crossed-out word is too smeared to read reliably.\n\nWHAT IT MIGHT MEAN\nThe matching reference links this key to the paperwork, but does not identify what it opens. It could belong to an ordinary cupboard, equipment box or unrelated office lock. Keeping it separate suggests someone controlled access; it is not proof that this key secured the shipment. You have no confirmed matching lock."
-    document(4,"Tagged key / "..facts.code,a,accessBody,
+    local accessBody=fill("WHAT YOU FOUND\nA small worn key on a wire loop, with a card tag tied through its bow. The tag carries {CODE} and the initials {P1}. There is no address or lock number. The metal is polished around the grip but dull between the teeth.\n\nON THE TAG\n'Return separately. Do not leave with the driver.' On the reverse, in smaller writing: 'Ask before making another copy.' A crossed-out word is too smeared to read reliably.\n\nWHAT IT MIGHT MEAN\nThe matching reference links this key to the paperwork about {SUBJECT}, but does not identify what it opens. It could belong to an ordinary cupboard, equipment box or unrelated office lock. Keeping it separate suggests someone controlled access; it is not proof that this key secured anything in the file. You have no confirmed matching lock.",map)
+    document(4,fill("Tagged key / {CODE}",map),a,accessBody,
         {people[1].id,a.id},{{target=documents[1].id,kind="recontextualises"}},nil,carrierFor("access",accessBody))
-    local diaryBody="WHAT YOU FOUND\nA small diary with a soft cover and a broken elastic band. Most entries concern shopping, shifts and missed sleep. One page has been folded down beside a reference you recognise: "..facts.code..".\n\nJULY 5, 1993\n'"..facts.sender.." called again. Wanted to know whether I had signed. I asked why the signature mattered more than the answer. There was a long silence, then something about everyone being tired and the office needing to close the file. I told them my copy would say only what I could stand behind.'\n\n'Perhaps I made too much of it. People have been short with each other all week. Still, I kept the carbon instead of putting it with the rubbish.'\n\nWHAT IT MIGHT MEAN\nThis is a private account of pressure to sign, not an independent record of the call. It adds a human reason for the careful wording, while leaving room for exhaustion, misunderstanding or deliberate pressure. Nothing here establishes what was in the case."
-    document(5,"Private diary / "..facts.code,b,diaryBody,
+    local diaryBody=fill("WHAT YOU FOUND\nA small diary with a soft cover and a broken elastic band. Most entries concern shopping, shifts and missed sleep. One page has been folded down beside a reference you recognise: {CODE}.\n\nJULY {D2}, 1993\n'{P1} called again. Wanted to know whether I had signed. I asked why the signature mattered more than the answer. There was a long silence, then something about everyone being tired and the office needing to close the file. I told them my copy would say only what I could stand behind.'\n\n'Perhaps I made too much of it. People have been short with each other all week. Still, I kept the carbon instead of putting it with the rubbish.'\n\nWHAT IT MIGHT MEAN\nThis is a private account of pressure to sign, not an independent record of the call. It adds a human reason for the careful wording, while leaving room for exhaustion, misunderstanding or deliberate pressure. Nothing here establishes {UNKNOWN}.",map)
+    document(5,fill("Private diary / {CODE}",map),b,diaryBody,
         {people[1].id,people[2].id,b.id},{{target=documents[2].id,kind="recontextualises"}},nil,carrierFor("diaryContext",diaryBody))
-    local notebookBody="WHAT YOU FOUND\nA ruled pocket notebook with oil-darkened page edges. Routine meter readings share space with tea orders and a sketch of a loading bay. A short entry uses the same reference, "..facts.code..".\n\nJULY "..facts.dispatchDay..", 1993\n'Late collection. No normal stores entry. Office supplied the reference and said the description would follow. Asked twice. Leave space below.'\n\nThe next three ruled lines are empty. Beneath them: 'If anyone asks, send them to "..facts.organisation..". I can account for the time on this page, not for what was packed before my shift.' No name identifies the driver.\n\nWHAT IT MIGHT MEAN\nThe writer separated what they witnessed from what they were told. The blank lines could be a forgotten update or a deliberately avoided description. This supports asking how the transfer was recorded; it cannot establish the shipment's contents or destination by itself."
-    document(6,"Shift notebook / "..facts.code,a,notebookBody,
+    local notebookBody=fill("WHAT YOU FOUND\nA ruled pocket notebook with oil-darkened page edges. Routine meter readings share space with tea orders and a sketch of a loading bay. A short entry uses the same reference, {CODE}.\n\nJULY {D1}, 1993\n'Asked about {SUBJECT}. No normal stores entry. Office supplied the reference and said the description would follow. Asked twice. Leave space below.'\n\nThe next three ruled lines are empty. Beneath them: 'If anyone asks, send them to {ORG}. I can account for the time on this page, not for anything that was settled before my shift.' No name identifies the writer.\n\nWHAT IT MIGHT MEAN\nThe writer separated what they witnessed from what they were told. The blank lines could be a forgotten update or a deliberately avoided description. This supports asking how the matter was recorded; it cannot establish {UNKNOWN}.",map)
+    document(6,fill("Shift notebook / {CODE}",map),a,notebookBody,
         {org.id,a.id},{{target=documents[1].id,kind="recontextualises"}},nil,carrierFor("notebookContext",notebookBody))
-    local clippingBody="WHAT YOU FOUND\nA newspaper folded around a narrow cut-out from its local news column. Someone has underlined the words 'routine maintenance' and pencilled "..facts.code.." in the margin. The article itself does not use that reference.\n\nLOCAL SERVICES NOTICE - JULY 2, 1993\nResidents were advised that service vehicles might visit local facilities outside ordinary hours while scheduled maintenance was completed. A spokesperson described the work as routine and asked that access routes be kept clear. The notice supplied no list of deliveries and no explanation of what equipment would be moved.\n\nWHAT IT MIGHT MEAN\nSomeone associated this public notice with the private reference, but the pencil annotation is their interpretation. Routine maintenance could explain an unusual collection time. It could also offer a convenient explanation for unrelated activity. The clipping cannot tell you which, and its unnamed annotator may have been guessing too."
-    document(7,"Press clipping / "..facts.code,b,clippingBody,
+    local clippingBody=fill("WHAT YOU FOUND\nA newspaper folded around a narrow cut-out from its local news column. Someone has underlined the words 'routine maintenance' and pencilled {CODE} in the margin. The article itself does not use that reference.\n\nLOCAL SERVICES NOTICE - JULY 2, 1993\nResidents were advised that service vehicles might visit local facilities outside ordinary hours while scheduled maintenance was completed. A spokesperson described the work as routine and asked that access routes be kept clear. The notice supplied no list of deliveries and no explanation of what equipment would be moved.\n\nWHAT IT MIGHT MEAN\nSomeone associated this public notice with the private reference, but the pencil annotation is their interpretation. Routine maintenance could explain unusual hours around {SUBJECT}. It could also offer a convenient explanation for unrelated activity. The clipping cannot tell you which, and its unnamed annotator may have been guessing too.",map)
+    document(7,fill("Press clipping / {CODE}",map),b,clippingBody,
         {b.id},{{target=documents[1].id,kind="recontextualises"}},nil,carrierFor("clippingContext",clippingBody))
-    -- Two new short-text roles genuinely choose between the four card/ticket
+    -- Two short-text roles genuinely choose between the four card/ticket
     -- carriers added 2026-09-06 (EvidenceKinds). Their bodies are a named
     -- identifier and a line or two of context -- never the "WHAT YOU FOUND"
     -- essay above -- because a card cannot hold that (T7).
-    local affiliationBody="Ref "..facts.code.."\n"..facts.sender.."\n"..facts.organisation
+    local affiliationBody=fill("Ref {CODE}\n{P1}\n{ORG}",map)
     local affiliationKind=carrierFor("affiliationLead",affiliationBody)
     document(8,K.get(affiliationKind).short.." / "..facts.code,a,affiliationBody,
         {people[1].id,org.id,a.id},{{target=documents[1].id,kind="recontextualises"}},nil,affiliationKind)
-    local itineraryBody="Ref "..facts.code.."\n"..facts.recipient.." - "..b.name.."\nJuly "..facts.receiptDay..", 1993"
+    local itineraryBody=fill("Ref {CODE}\n{P2} - {B}\nJuly {D2}, 1993",map)
     local itineraryKind=carrierFor("itineraryLead",itineraryBody)
     document(9,K.get(itineraryKind).short.." / "..facts.code,b,itineraryBody,
         {people[2].id,b.id},{{target=documents[2].id,kind="recontextualises"}},nil,itineraryKind)
-    -- Phase 3 roles. These are the first optional documents that can
-    -- DISAGREE with what came before: every earlier one connected with
-    -- "recontextualises", so only the mandatory receiving copy could ever
-    -- contradict anything.
+    -- Phase 3 roles. These are the optional documents that can DISAGREE with
+    -- what came before: every other one connects with "recontextualises", so
+    -- without them only the mandatory response could ever contradict anything.
     --
-    -- A payment dated before the dispatch it pays for. That is a fact about
+    -- A payment dated before the record it settles. That is a fact about
     -- paperwork order, not proof of anything, and the wording keeps it that
     -- way.
-    local paymentBody="WHAT YOU FOUND\nA carbon payment slip with a smudged duplicate line, kept in a wallet fold rather than filed.\n\n"
-        ..facts.organisation.."\nPayment against record "..facts.code.."\nRaised July "..(facts.dispatchDay-1)
-        ..", 1993 - one day before the dispatch it settles.\nAuthorised by: "..facts.sender.."\nCounter-signature: none."
+    local paymentBody=fill("WHAT YOU FOUND\nA carbon payment slip with a smudged duplicate line, kept in a wallet fold rather than filed.\n\n{ORG}\nPayment against record {CODE}\nRaised July "..(facts.dispatchDay-1)..", 1993 - one day before the entry it settles.\nAuthorised by: {P1}\nCounter-signature: none.",map)
     local paymentKind=carrierFor("paymentRecord",paymentBody)
     document(10,K.get(paymentKind).short.." / "..facts.code,a,paymentBody,
         {people[1].id,org.id,a.id},{{target=documents[1].id,kind="disputes-delivery"}},nil,paymentKind)
-    -- A stub placing the recipient elsewhere on the day of receipt.
-    local timingBody="Ref "..facts.code.."\n"..facts.recipient.."\nJuly "..facts.receiptDay..", 1993 - "..a.name
+    -- A stub placing the second person elsewhere on the day of the response.
+    local timingBody=fill("Ref {CODE}\n{P2}\nJuly {D2}, 1993 - {A}",map)
     local timingKind=carrierFor("timingDispute",timingBody)
     document(11,K.get(timingKind).short.." / "..facts.code,a,timingBody,
         {people[2].id,a.id},{{target=documents[2].id,kind="disputes-delivery"}},nil,timingKind)
     -- And one that agrees. A case where everything disagrees is as flat as one
     -- where nothing does.
-    local presenceBody="WHAT YOU FOUND\nA duty log with a soft cover, the current week held open by a bent paperclip.\n\n"
-        .."July "..facts.receiptDay..", 1993 - "..b.name.."\n"..facts.recipient.." signed in at the gate and again at the store."
-        .."\nNo vehicle number recorded.\nEntry for record "..facts.code.." initialled twice."
+    local presenceBody=fill("WHAT YOU FOUND\nA duty log with a soft cover, the current week held open by a bent paperclip.\n\nJuly {D2}, 1993 - {B}\n{P2} signed in at the gate and again at the store.\nNo vehicle number recorded.\nEntry for record {CODE} initialled twice.",map)
     local presenceKind=carrierFor("presenceNote",presenceBody)
     document(12,K.get(presenceKind).short.." / "..facts.code,b,presenceBody,
         {people[2].id,b.id},{{target=documents[2].id,kind="corroborates"}},nil,presenceKind)
@@ -140,7 +186,7 @@ local function build(seed,revision,sites)
         documents[#documents+1]=d
     end
     return {schemaVersion=G.SCHEMA,generatorRevision=G.REVISION,catalogRevision=revision,seed=seed,
-        caseId=prefix.."case",outline=outline,contentStatus="development-draft-unapproved",
+        caseId=prefix.."case",outline=outline,premiseId=premise.id,contentStatus="development-draft-unapproved",
         locations=copy(sites),facts=facts,identities=people,organisation=org,documents=documents}
 end
 -- Number of actual containers a generated case needs at each selected site.
