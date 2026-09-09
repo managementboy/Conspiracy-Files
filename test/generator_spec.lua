@@ -1,6 +1,7 @@
 package.path=TEST_ROOT.."/dev/?.lua;"..package.path
 local G=require("generated-investigation/Generator")
 local Catalog=require("generated-investigation/Catalog")
+local Kinds=require("generated-investigation/EvidenceKinds")
 local function catalog() return dofile(TEST_ROOT.."/test/fixtures/synthetic_locations.lua") end
 local options={mapId="SYNTHETIC-MAP",buildLine="TEST-ONLY",allowSynthetic=true}
 local function generated(seed,c) return assert(G.generate(c or catalog(),seed or 17,options)) end
@@ -27,7 +28,22 @@ test("generated 100-seed sample varies sites outlines text, carriers and bounded
         local required=assert(G.requiredContainers(c)); local total=0
         for _,n in pairs(required) do total=total+n end
         assertEqual(#c.documents,total,"required distinct containers follows selected evidence")
-        for _,doc in ipairs(c.documents) do assertTrue(doc.body:find(c.facts.code,1,true)~=nil) end
+        -- Every READABLE document carries the case reference, which is how a
+        -- player ties three pieces of paper into one file. Object evidence
+        -- (2026-09-09) carries none, and cannot: nothing is written on a
+        -- hammer. It belongs to the case by having been kept with the papers
+        -- and by the connection the notebook records - never by a reference we
+        -- would have had to pretend was engraved on it.
+        for _,doc in ipairs(c.documents) do
+            local carrier=assert(Kinds.get(doc.kind))
+            if carrier.capacity=="object" then
+                assertTrue(doc.body:find(c.facts.code,1,true)==nil,
+                    "an object must not carry a written case reference")
+                assertTrue(doc.wear~=nil,"object evidence must say what state it was found in")
+            else
+                assertTrue(doc.body:find(c.facts.code,1,true)~=nil)
+            end
+        end
     end
     local n=0; for _ in pairs(locationPairs) do n=n+1 end
     assertTrue(n>=2); assertTrue(outlines.corroboration); assertTrue(outlines['conflicting-account'])

@@ -1,5 +1,15 @@
 # Fifty objects that could carry a mystery
 
+> **This list is an illustration, not the pool.** Owner, 2026-09-09: *"50 just
+> as 200 was an example not a requirement. selection rules over the derived
+> catalogue."* The mod does not draw from these fifty. It draws from
+> `Generated/ObjectCatalogue.lua` - 844 items derived from the game's own
+> scripts - through the rules in `Generated/ObjectRules.lua`. Those rules reach
+> 216 objects that can be found damaged, all 16 the engine names, 6 keys and 65
+> household or trade objects that could be somewhere they do not belong. What
+> follows is a worked example of what those rules should produce, and a record
+> of which objects are traps.
+
 Owner, 2026-09-09:
 
 > Why can't we place objects? Like a bloody knife. A broken gun?

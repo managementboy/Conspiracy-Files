@@ -4,6 +4,7 @@ local V=require("ConspiracyFiles/Validator")
 local K=require("ConspiracyFiles/Generated/EvidenceKinds")
 local Roles=require("ConspiracyFiles/Generated/EvidenceRoles")
 local Premises=require("ConspiracyFiles/Generated/Premises")
+local ObjectRoles=require("ConspiracyFiles/Generated/ObjectRules")
 -- Schema two deliberately refuses the earlier fixed-seven case shape.  Before
 -- 1.0 callers must use a fresh save rather than reinterpret an existing case.
 local G={REVISION="g3-premises-1",SCHEMA=2,MIN_EVIDENCE=3,MAX_EVIDENCE=7}
@@ -45,6 +46,37 @@ end
 -- on them, so a reference that encoded the premise would only announce which
 -- story the player had drawn before they had read a word of it.
 local REFERENCE={"R","RC","GT","PS","WB","HK","MC","BF","LD","TN","AV","QS"}
+-- A catalogue id is a script name: KitchenKnife, Necklace_DogTag. The survivor
+-- writes in words, so the id is broken back into them. This is deliberately
+-- dumb - it cannot know that "Necklace_DogTag" is a set of dog tags - which is
+-- why nothing built on it may claim to know what the object IS beyond its
+-- name.
+local function words(id)
+    local out=""
+    local previousLower=false
+    for i=1,#id do
+        local ch=string.sub(id,i,i)
+        local upper=(ch>="A" and ch<="Z")
+        local digit=(ch>="0" and ch<="9")
+        if ch=="_" then
+            out=out.." "
+            previousLower=false
+        else
+            if (upper or digit) and previousLower then out=out.." " end
+            out=out..string.lower(ch)
+            previousLower=not upper and not digit
+        end
+    end
+    -- Collapse any double spacing an underscore beside a capital produced.
+    local collapsed,at="",1
+    while true do
+        local s2,e2=string.find(out,"  ",at,true)
+        if not s2 then break end
+        collapsed=collapsed..string.sub(out,at,s2-1).." "
+        at=e2+1
+    end
+    return collapsed..string.sub(out,at)
+end
 local function build(seed,revision,sites)
     local random=rng(seed)
     -- The premise is drawn first, so it is the seed's most significant choice:
@@ -172,6 +204,35 @@ local function build(seed,revision,sites)
     local presenceKind=carrierFor("presenceNote",presenceBody)
     document(12,K.get(presenceKind).short.." / "..facts.code,b,presenceBody,
         {people[2].id,b.id},{{target=documents[2].id,kind="corroborates"}},nil,presenceKind)
+    -- Object evidence (2026-09-09). These carry no readable text at all: a
+    -- worn hammer stored with a case file says what it says by being there.
+    -- Their carrier is not a name written here but whatever ObjectRules
+    -- answers from the catalogue derived from the game's own item scripts, so
+    -- these three roles reach several hundred objects between them rather than
+    -- the handful a person would have listed.
+    --
+    -- The notebook sentence records that the thing was found with the papers
+    -- and stops. It must not say what the object means, because the object is
+    -- the one piece of evidence the player can interpret entirely without us.
+    local function objectDocument(n,roleId,site,sentence,references,link)
+        local kind=assert(Roles.choose(random,roleId))
+        local label=words(kind)
+        local body=fill(sentence,map)
+        body=subst(body,"LABEL",label)
+        assert(Roles.fits(roleId,kind,body))
+        local wear=assert(ObjectRoles.describe(assert(Roles.ruleOf(roleId)))).wear
+        document(n,"A "..label,site,body,references,{link},nil,kind)
+        documents[n].wear=wear
+    end
+    objectDocument(13,"physicalTrace",a,
+        "A {LABEL}, badly worn, stored with the paperwork about {SUBJECT}. Nothing is written on it. Why it was kept with records is not recorded.",
+        {a.id},{target=documents[1].id,kind="recontextualises"})
+    objectDocument(14,"bearsName",b,
+        "A {LABEL} carrying a name, filed with the papers about {SUBJECT}. Nothing here says the name is the owner's, or that the owner left it.",
+        {b.id},{target=documents[2].id,kind="recontextualises"})
+    objectDocument(15,"outOfPlace",a,
+        "A {LABEL}, worn, kept with the file on {SUBJECT}. It is not the kind of thing anyone files with records.",
+        {a.id},{target=documents[1].id,kind="recontextualises"})
     -- The first three roles are the coherent minimum: a route lead,
     -- an independently attributable response, and a review of that response.
     -- Optional roles are shuffled and bounded, so neither their count nor their
@@ -181,7 +242,8 @@ local function build(seed,revision,sites)
     -- genuinely reachable, while MIN/MAX_EVIDENCE and their selection range
     -- (0..4 optional slots on top of the 3 mandatory roles) stay unchanged.
     local optional={documents[4],documents[5],documents[6],documents[7],documents[8],documents[9],
-                    documents[10],documents[11],documents[12]}
+                    documents[10],documents[11],documents[12],
+                    documents[13],documents[14],documents[15]}
     local optionalCapacity=G.MAX_EVIDENCE-3
     local optionalCount=random(optionalCapacity+1)-1
     for i=#optional,2,-1 do local j=random(i); optional[i],optional[j]=optional[j],optional[i] end

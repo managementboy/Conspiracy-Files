@@ -64,6 +64,20 @@ local function writePages(item,doc)
         for index,text in ipairs(pages) do item:addPage(index,text) end
     end)
 end
+-- Object evidence is found in the state its story implies. Condition is a core
+-- saved field, so this survives a reload; blood is deliberately NOT applied,
+-- because setBloodLevel exists on the installed jar but nothing has proven it
+-- persists, and no wording anywhere claims an object is bloodied.
+local function applyWear(item,doc)
+    if not item or not doc or not doc.wear then return end
+    if not item.getConditionMax or not item.setCondition then return end
+    local ok,max=pcall(function() return item:getConditionMax() end)
+    if not ok or type(max)~="number" or max<=0 then return end
+    local level=max
+    if doc.wear=="poor" then level=math.max(1,math.floor(max*0.15))
+    elseif doc.wear=="worn" then level=math.max(1,math.floor(max*0.5)) end
+    pcall(function() item:setCondition(level) end)
+end
 local function placement(api,id)
     local scan,count,finished,container,created
     return function()
@@ -90,6 +104,7 @@ local function placement(api,id)
         local md=item:getModData()
         md.cfGeneratedId=id; md.cfPhysicalToken=a.physicalToken
         item:setName(doc.title); item:setCustomName(true)
+        applyWear(item,doc)
         writePages(item,doc)
         assert(current:AddItem(item),"could not add note")
         created=false; finished=false
@@ -470,6 +485,7 @@ local function relocation(api)
             local md=newItem:getModData()
             md.cfGeneratedId=id; md.cfPhysicalToken=a.physicalToken
             newItem:setName(doc.title); newItem:setCustomName(true)
+            applyWear(newItem,doc)
             writePages(newItem,doc)
             newDestination=destination
         end

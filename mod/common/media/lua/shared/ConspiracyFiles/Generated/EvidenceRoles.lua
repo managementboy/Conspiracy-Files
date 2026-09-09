@@ -15,6 +15,7 @@
 -- against EvidenceKinds.capacity so a mismatched entry fails fast at require
 -- time instead of silently emitting a role's prose onto a card.
 local K=require("ConspiracyFiles/Generated/EvidenceKinds")
+local ObjectRules=require("ConspiracyFiles/Generated/ObjectRules")
 local M={}
 
 -- id -> {capacity="prose"|"short", carriers={kind,...}}
@@ -51,16 +52,36 @@ local roles={
     -- than disputes: a case where everything disagrees is as flat as one where
     -- nothing does.
     presenceNote={capacity="prose",carriers={"notebook","notepad"}},
+    -- Object roles (2026-09-09). Every role above names its carriers
+    -- explicitly, which is right when there are one or two of them and
+    -- impossible when there are two hundred. These name a RULE instead, and
+    -- ObjectRules answers it from the catalogue derived from the game's own
+    -- item scripts - so an object role reaches whatever the game ships rather
+    -- than whatever a person remembered to type.
+    --
+    -- They carry no readable text. A bloodied hammer in a bedside drawer says
+    -- what it says by being there; the notebook records that it was found,
+    -- and nothing interprets it.
+    physicalTrace={capacity="object",rule="physicalTrace"},
+    bearsName={capacity="object",rule="bearsName"},
+    outOfPlace={capacity="object",rule="outOfPlace"},
 }
 local ORDER={"access","diaryContext","notebookContext","clippingContext","affiliationLead","itineraryLead",
-             "paymentRecord","timingDispute","presenceNote"}
+             "paymentRecord","timingDispute","presenceNote",
+             "physicalTrace","bearsName","outOfPlace"}
 
 for _,roleId in ipairs(ORDER) do
     local role=roles[roleId]
-    assert(type(role.carriers)=="table" and #role.carriers>0,"evidence role "..roleId.." needs at least one carrier")
-    for _,kind in ipairs(role.carriers) do
-        local v=assert(K.get(kind),"evidence role "..roleId.." references unknown carrier "..tostring(kind))
-        assert(v.capacity==role.capacity,"evidence role "..roleId.." capacity mismatch for carrier "..kind)
+    if role.rule then
+        assert(role.capacity=="object","only object roles may select by rule: "..roleId)
+        assert(ObjectRules.describe(role.rule),"evidence role "..roleId.." names an unknown object rule")
+        assert(role.carriers==nil,"an object role selects by rule, never from a carrier list: "..roleId)
+    else
+        assert(type(role.carriers)=="table" and #role.carriers>0,"evidence role "..roleId.." needs at least one carrier")
+        for _,kind in ipairs(role.carriers) do
+            local v=assert(K.get(kind),"evidence role "..roleId.." references unknown carrier "..tostring(kind))
+            assert(v.capacity==role.capacity,"evidence role "..roleId.." capacity mismatch for carrier "..kind)
+        end
     end
 end
 
@@ -76,9 +97,15 @@ function M.capacityOf(roleId)
     return role and role.capacity
 end
 
+-- The object rule a role selects by, or nil for a role with a carrier list.
+function M.ruleOf(roleId)
+    local role=roles[roleId]
+    return role and role.rule
+end
+
 function M.carriersOf(roleId)
     local role=roles[roleId]
-    if not role then return nil end
+    if not role or role.rule then return nil end
     local out={}
     for i,kind in ipairs(role.carriers) do out[i]=kind end
     return out
@@ -92,6 +119,11 @@ function M.choose(random,roleId)
     local role=roles[roleId]
     if not role then return nil,"unknown evidence role" end
     if type(random)~="function" then return nil,"random generator required" end
+    if role.rule then
+        local item=ObjectRules.choose(random,role.rule)
+        if not item then return nil,"object rule produced nothing" end
+        return item.id
+    end
     local carriers=role.carriers
     return carriers[random(#carriers)]
 end
@@ -104,7 +136,11 @@ function M.fits(roleId,kind,body)
     local role=roles[roleId]
     if not role then return false,"unknown evidence role" end
     local allowed=false
-    for _,candidate in ipairs(role.carriers) do if candidate==kind then allowed=true end end
+    if role.rule then
+        for _,candidate in ipairs(ObjectRules.candidates(role.rule)) do if candidate==kind then allowed=true end end
+    else
+        for _,candidate in ipairs(role.carriers) do if candidate==kind then allowed=true end end
+    end
     if not allowed then return false,"carrier "..tostring(kind).." does not suit role "..roleId end
     if not K.fits(kind,body) then return false,"text exceeds carrier "..tostring(kind).."'s capacity" end
     return true

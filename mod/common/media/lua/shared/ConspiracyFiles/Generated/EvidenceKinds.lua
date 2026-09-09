@@ -41,9 +41,24 @@ local kinds={
  ticket={fullType="Base.ParkingTicket",label="Parking ticket",short="Ticket",capacity="short"},
 }
 local function copy(v) return {kind=v.kind,fullType=v.fullType,label=v.label,short=v.short,capacity=v.capacity} end
+-- A third capacity, added 2026-09-09: "object". Every carrier above is
+-- something the survivor READS. An object is not - a bloodied hammer says what
+-- it says by being a bloodied hammer in a bedroom drawer - so it holds a name
+-- and nothing else, and its meaning lives in the notebook rather than on the
+-- item. Object kinds are not listed here: they come from
+-- Generated/ObjectCatalogue.lua, which is derived from the game's own item
+-- scripts, because a hand-written list of objects is the bottleneck this was
+-- built to remove. See ObjectRules.lua.
+local Objects=require("ConspiracyFiles/Generated/ObjectCatalogue")
+M.OBJECT_MAX_CHARS=240
 function M.get(kind)
- local v=type(kind)=="string" and kinds[kind];if not v then return nil,"unknown generated evidence kind" end
- return copy({kind=kind,fullType=v.fullType,label=v.label,short=v.short,capacity=v.capacity})
+ local v=type(kind)=="string" and kinds[kind]
+ if v then return copy({kind=kind,fullType=v.fullType,label=v.label,short=v.short,capacity=v.capacity}) end
+ local object=type(kind)=="string" and Objects.get(kind)
+ if object then
+  return {kind=kind,fullType=object.fullType,label=object.id,short=object.id,capacity="object"}
+ end
+ return nil,"unknown generated evidence kind"
 end
 function M.validate(kind)
  local v,why=M.get(kind);if not v then return false,why end;return true,v
@@ -56,6 +71,12 @@ end
 function M.fits(kind,body)
  local v=M.get(kind); if not v or type(body)~="string" then return false end
  if v.capacity=="short" then return #body<=M.SHORT_MAX_CHARS end
+ -- An object carries no readable text at all: nothing is written on a hammer.
+ -- Its body is the notebook's own sentence about having found it, so the cap
+ -- is about what belongs in a notebook row, not what fits on the item - a
+ -- page of prose about an object would be the mod explaining the object,
+ -- which is the one thing it must not do.
+ if v.capacity=="object" then return #body<=M.OBJECT_MAX_CHARS end
  return true
 end
 return M

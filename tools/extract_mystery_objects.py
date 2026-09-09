@@ -24,6 +24,7 @@ can be made to mean something:
              broken, and that is a fact about its history
   blood      it is a weapon, so setBloodLevel applies and it can be found bloodied
   keyed      it is a key, and a key can be tested against a real door
+  firearm    it takes ammunition; marked so a rule can refuse it as loot
 
 WHAT THIS DOES NOT DO. It does not know whether an item is interesting, whether
 a story could live in it, or whether the player will ever notice it. It also
@@ -57,6 +58,7 @@ def items_dir():
 
 
 ITEM = re.compile(r"^\s*item\s+(\S+)\s*$")
+MODULE = re.compile(r"^\s*module\s+(\S+)")
 
 
 def parse(path):
@@ -67,9 +69,14 @@ def parse(path):
     top of the file - the first version of this counted from the file and
     matched nothing at all.
     """
+    module = "Base"
     name, fields, depth, started = None, {}, 0, False
     for line in open(path, encoding="utf-8", errors="ignore"):
         if name is None:
+            m = MODULE.match(line)
+            if m:
+                module = m.group(1)
+            m = ITEM.match(line)
             m = ITEM.match(line)
             if m:
                 name, fields, depth, started = m.group(1), {}, 0, False
@@ -79,6 +86,7 @@ def parse(path):
             started = True
         depth -= line.count("}")
         if started and depth <= 0:
+            fields["__module"] = module
             yield name, fields
             name = None
             continue
@@ -98,6 +106,11 @@ def properties(fields, source):
         out.append("blood")
     if source == "key.txt" or fields.get("ItemType", "").endswith("key"):
         out.append("keyed")
+    # A firearm is marked so selection rules can refuse it. Evidence must never
+    # be better loot than the loot; a working gun in a drawer pays the player
+    # for reading the notebook.
+    if fields.get("AmmoType") or fields.get("MagazineType"):
+        out.append("firearm")
     return out
 
 
@@ -107,6 +120,8 @@ def main():
     ap.add_argument("--property", help="only items with this property")
     ap.add_argument("--category", help="only this DisplayCategory")
     ap.add_argument("--limit", type=int, default=0)
+    ap.add_argument("--lua", metavar="PATH",
+                    help="write the catalogue as a Lua module instead of a table")
     args = ap.parse_args()
 
     d = items_dir()
@@ -124,24 +139,83 @@ def main():
             category = fields.get("DisplayCategory", "-")
             if args.category and category != args.category:
                 continue
-            rows.append((name, source, category, ",".join(props)))
+            rows.append((name, source, category, ",".join(props), fields.get("__module", "Base")))
 
-    rows.sort(key=lambda r: (r[1], r[2], r[0]))
+    rows.sort(key=lambda r: (r[0],))
     if args.limit:
         rows = rows[:args.limit]
 
+    if args.lua:
+        write_lua(args.lua, rows)
+        print(f"wrote {len(rows)} items to {args.lua}")
+        return
+
     print("| Item | Script | Category | Usable properties |")
     print("|---|---|---|---|")
-    for name, source, category, props in rows:
+    for name, source, category, props, _module in rows:
         print(f"| {name} | {source} | {category} | {props} |")
 
     counts = {}
-    for _, _, _, props in rows:
+    for _, _, _, props, _module in rows:
         for p in props.split(","):
             counts[p] = counts.get(p, 0) + 1
     print(f"\n{len(rows)} candidates: " + ", ".join(f"{k}={v}" for k, v in sorted(counts.items())))
     print("name and ModData persistence proven (T7). condition is a core saved field. "
           "blood on a weapon is NOT verified to persist - test before relying on it.")
+
+
+LUA_HEADER = """-- DERIVED FILE - do not edit by hand.
+--
+--     python3 tools/extract_mystery_objects.py --lua \\
+--         mod/common/media/lua/shared/ConspiracyFiles/Generated/ObjectCatalogue.lua
+--
+-- Every row was parsed out of the installed game's own item scripts
+-- (media/scripts/generated/items/*.txt), so each item name and each property
+-- claimed for it is true by construction. A catalogue written from memory
+-- looks exactly as authoritative and cannot be checked by reading it.
+--
+-- Properties, and what each is good for:
+--   name       the engine stamps an owner's name on it (Tags = base:applyownername)
+--   condition  it has a condition track, so it can be found nearly broken
+--   blood      it is a weapon, so setBloodLevel applies (persistence UNVERIFIED)
+--   keyed      it is a key, testable against a real door
+--   firearm    it takes ammunition; marked so a rule can refuse it as loot
+--
+-- This file is data only. ObjectRules.lua decides which of these an
+-- investigation may use, and never picks an item by name.
+local M={}
+M.REVISION="%s"
+-- {id, fullType, category, script, properties}
+M.items={
+"""
+
+
+def write_lua(path, rows):
+    import hashlib
+    digest = hashlib.sha256(
+        "\n".join("|".join(r[:4]) for r in rows).encode("utf-8")).hexdigest()[:12]
+    with open(path, "w", encoding="utf-8") as out:
+        out.write(LUA_HEADER % ("objects-" + digest))
+        for name, source, category, props, module in rows:
+            plist = ",".join('"%s"' % p for p in props.split(","))
+            out.write(' {id="%s",fullType="%s.%s",category="%s",script="%s",properties={%s}},\n'
+                      % (name, module, name, category, source, plist))
+        out.write("""}
+local byId={}
+for _,item in ipairs(M.items) do byId[item.id]=item end
+function M.count() return #M.items end
+function M.get(id)
+    local item=type(id)=="string" and byId[id]
+    if not item then return nil,"unknown catalogue object" end
+    return {id=item.id,fullType=item.fullType,category=item.category,
+            script=item.script,properties=item.properties}
+end
+function M.has(item,property)
+    for _,p in ipairs(item.properties) do if p==property then return true end end
+    return false
+end
+return M
+""")
 
 
 if __name__ == "__main__":
