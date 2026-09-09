@@ -31,10 +31,20 @@ end
 -- rather than kept. The rest of a car is seats and engine parts, which hold
 -- nothing or hold it implausibly.
 -- Seats are here for a reason the owner named on 2026-09-09: "bodies can fit
--- in car seats too. murder to keep someone quiet?" They can, and the game's own
--- numbers are unusually pointed about it - a car seat declares MaxCapacity 20
--- (items/normal.txt, NormalCarSeat1) and Base.CorpseMale weighs exactly 20. A
--- seat holds one body and nothing else at all.
+-- in car seats too. murder to keep someone quiet?" They can. A car seat
+-- declares MaxCapacity 20 (items/normal.txt, NormalCarSeat1) and
+-- Base.CorpseMale weighs exactly 20.
+--
+-- CAPACITY IS NOT A WEIGHT CEILING, and I said it was. The owner: "weird I can
+-- fit a generator on a seat" - and a generator weighs 40. Vanilla's transfer
+-- action asks hasRoomFor before moving anything, so the check is real; what it
+-- evidently means is "this container is not already full", which lets one
+-- oversized item in and then refuses everything after it.
+--
+-- So the engine would happily put a body in a glovebox. Refusing that is OUR
+-- rule, not the engine's, and partsWithRoom below is a plausibility filter -
+-- labelled as one so nobody later mistakes it for a constraint the game
+-- enforces.
 World.VEHICLE_PARTS={"GloveBox","TruckBed","TrunkDoor",
                      "SeatFrontLeft","SeatFrontRight","SeatRearLeft","SeatRearRight"}
 -- What a body weighs, from items/normal.txt. Named because two rules and a
@@ -61,10 +71,11 @@ function World.vehicleParts(vehicle)
     return out
 end
 
--- The parts of one vehicle with room for `weight`. Capacity is read from the
--- installed part rather than assumed: a glovebox declares 5 and will never take
--- a body, a car seat declares 20 and takes exactly one, a truck bed declares
--- 100 and takes a body and the rest of the case with it.
+-- The parts of one vehicle we are willing to put `weight` into. Capacity is
+-- read from the installed part rather than assumed - a glovebox declares 5, a
+-- car seat 20, a truck bed 100 - but see the note above: this is the mod's own
+-- judgement about what is plausible, not a limit the engine would enforce. A
+-- body in a glovebox would be accepted by the game and laughed at by a player.
 function World.partsWithRoom(vehicle,weight)
     local out={}
     for _,entry in ipairs(World.vehicleParts(vehicle)) do

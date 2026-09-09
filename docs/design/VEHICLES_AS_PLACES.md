@@ -136,17 +136,28 @@ Owner, 2026-09-09:
 > too. Murder to keep someone quiet? Example only.
 
 Seats have containers - `template_seat.txt` declares one for every seat
-position - and the game's own numbers are unusually pointed. A car seat
-declares `MaxCapacity = 20` (`items/normal.txt`, `NormalCarSeat1`) and
-`Base.CorpseMale` weighs exactly `20`.
+position. A car seat declares `MaxCapacity = 20` (`items/normal.txt`,
+`NormalCarSeat1`) and `Base.CorpseMale` weighs exactly `20`.
 
-**A car seat holds one body and nothing else at all.**
+**Correction, 2026-09-09.** I wrote that as though capacity were a weight
+ceiling the engine enforces. The owner: *"weird I can fit a generator on a
+seat"* - and a generator weighs 40.
 
-That is a better sentence than anything we would have written, and it comes
-from the game rather than from us. `World.partsWithRoom(vehicle, BODY_WEIGHT)`
-reads the capacity off the installed part, so a glovebox (5) is never offered,
-a seat (20) takes exactly one, and a truck bed (100) takes a body and the rest
-of the case with it.
+Vanilla's `ISInventoryTransferAction` does call `hasRoomFor` before moving
+anything, so the check is real. What it evidently means is *"this container is
+not already full"*: one oversized item goes in, and nothing goes in after it.
+That fits the observation exactly, and it also means the engine would happily
+accept a body in a glovebox.
+
+So the useful facts split in two:
+
+- **Engine fact.** A container that is not full accepts one more item whatever
+  it weighs. Put a body in a seat and the seat is then full - nothing else
+  joins it - but that is a consequence, not a rule about bodies.
+- **Our rule.** `World.partsWithRoom(vehicle, BODY_WEIGHT)` refuses a glovebox
+  for a body because a body in a glovebox is absurd, not because the game says
+  no. It is a plausibility filter and is labelled as one in the code, so nobody
+  later mistakes it for a constraint that would hold without us.
 
 The three placements read differently, and that difference is the whole value:
 

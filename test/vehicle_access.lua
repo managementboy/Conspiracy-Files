@@ -110,9 +110,15 @@ assert(not W.markVehiclePart({ getType = function() return "counter" end }, "x")
     "a kitchen counter has no vehicle part to mark")
 
 -- Bodies in seats (owner, 2026-09-09: "bodies can fit in car seats too").
--- The game's own numbers are pointed: a car seat declares MaxCapacity 20 and a
--- body weighs exactly 20, so a seat holds one body and nothing else. Capacity
--- is read from the part, never assumed, so a glovebox can never take one.
+--
+-- A car seat declares MaxCapacity 20 and a body weighs exactly 20. What that
+-- does NOT mean is that the engine refuses anything heavier: the owner pointed
+-- out he can fit a 40-weight generator on a seat, so capacity evidently gates
+-- on "is this container already full" rather than on the incoming weight.
+--
+-- Which makes the filter below OUR judgement, not the engine's. The game would
+-- put a body in a glovebox; a player would laugh at it. This test pins the
+-- judgement, and the comment records that it is one.
 local hearse = fakeVehicle(100, 100, { GloveBox = 5, SeatFrontRight = 20, TruckBed = 100 })
 local roomy = W.partsWithRoom(hearse, W.BODY_WEIGHT)
 assert(#roomy == 2, "a seat and a boot take a body; a glovebox does not")
