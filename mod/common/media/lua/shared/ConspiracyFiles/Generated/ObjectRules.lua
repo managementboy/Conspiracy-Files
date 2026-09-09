@@ -28,11 +28,33 @@ local DENY={
     -- Craftable and salvage families are enormous, near-identical, and read as
     -- inventory rather than as anything having happened.
     WeaponCrafted="hundreds of near-identical crafted variants read as inventory",
-    Material="raw materials say nothing about a person or an event",
-    MaterialWeapon="as Material",
+    MaterialWeapon="a crafted-material weapon reads as inventory, not as an event",
     VehicleMaintenance="a spare part is only a story with a vehicle attached, which we do not yet model",
     ProtectiveGear="armour is equipment; it says what someone wore, which the outfit lead already covers",
+    Furniture="a moveable is placed in the world, not stacked inside a drawer",
 }
+
+-- Categories whose value a budget cannot measure, so a pile of them would be a
+-- windfall however small we made it. Weight and calories bound the rest.
+local WINDFALL={
+    Ammo="a pile of ammunition is a windfall, not a question",
+    FirstAid="the same, and worse: medicine is the scarcest thing a survivor owns",
+    Bandage="as FirstAid",
+    SkillBook="a pile of books is levels, not evidence",
+    Bag="containers are capacity, which is the one thing hoarding actually gives",
+}
+
+-- What a pile may be worth. A hundred eggs is a mystery in prose and a week of
+-- food in practice, so the count is cut to fit the budget rather than the
+-- category being banned outright. Both numbers are deliberately modest: the
+-- pile has to fit in one container the player can open, and must never be the
+-- reason they open it.
+local WEIGHT_BUDGET=6.0
+local CALORIE_BUDGET=1200.0
+-- Below this a count stops being remarkable, so an item the budget would cut
+-- this far is not eligible at all rather than being placed in a quantity
+-- nobody would look at twice.
+local MEANINGFUL_PILE=5
 
 -- id -> rule. `requires` are properties every candidate must carry;
 -- `anyCategory`, when present, restricts to those DisplayCategories.
@@ -67,25 +89,112 @@ local rules={
     -- of bandages or ammunition is not a mystery, it is a windfall, and
     -- evidence must never be better loot than the loot. Weight is capped
     -- because the pile has to fit in one container the player can open.
+    -- The RIGHT place, the wrong amount. Owner's example: a hundred eggs in
+    -- the fridge. The object belongs exactly where it was found; only the
+    -- count is impossible. Room preference follows the item's own category
+    -- (RoomAffinity), so the eggs really are in the kitchen.
     accumulation={requires={"countable"},wear="intact",maxWeight=1.5,
-        quantity={6,16},
-        anyCategory={"Household","Cooking","WaterContainer","Camping","Gardening","Junk"},
+        quantity={6,16},budgeted=true,room="natural",
+        denyCategory=WINDFALL,
         text="ordinary in itself, in a quantity that is not"},
+    -- Owner, 2026-09-09, mid-build: "let's not forget that any place with
+    -- loads of medical equipment and PPA is suspicious."
+    --
+    -- Correct, and it contradicted the rule above, which banned medicine and
+    -- protective gear outright on the grounds that a cupboard of bandages is a
+    -- windfall rather than a mystery. Both things are true, and the game
+    -- itself resolves them: it ships the SPENT versions - BandageDirty,
+    -- Bandage_Chest_Blood - and gives protective gear a condition track, so a
+    -- hoard can be exactly the sight the owner means and worth nothing at all
+    -- to a survivor. What is stockpiled here has already been used.
+    medicalHoard={requires={},wear="poor",maxWeight=2.0,
+        quantity={5,14},budgeted=true,room="wrong",spent=true,
+        allowDenied={ProtectiveGear=true},
+        -- Build 42's ProtectiveGear category holds crafted armour as well as
+        -- protective equipment. A pile of bone greaves is a different story
+        -- from a pile of respirators, and not the one the owner meant.
+        denyWords={"Bone","Chainmail","Cuirass","Greave","Gorget","Codpiece",
+                   "Magazine","Scrap","Plates","Spiked"},
+        anyCategory={"FirstAid","Bandage","ProtectiveGear"},
+        text="used, and there is far too much of it to be one person's"},
+    -- The WRONG place, whatever the amount. Owner's example: fifty bricks in
+    -- the bedroom. Here the object is unremarkable in its own setting -
+    -- bricks on a building site are bricks - and the room is the whole
+    -- anomaly, so the rule asks RoomAffinity for a room the item has no
+    -- business being in.
+    misplacedBulk={requires={"countable"},wear="intact",maxWeight=1.5,
+        quantity={4,12},budgeted=true,room="wrong",
+        denyCategory=WINDFALL,
+        anyCategory={"Material","Gardening","Camping","Junk","Electronics",
+                     "Cooking","WaterContainer","Household"},
+        text="unremarkable where it belongs, and this is not where it belongs"},
     outOfPlace={requires={"condition"},wear="worn",
         anyCategory={"Tool","Household","Cooking","Gardening","Electronics",
                      "Communications","Container","Security","Junk","Memento"},
         text="belongs somewhere other than where it was found"},
 }
-local ORDER={"physicalTrace","bearsName","testableAccess","outOfPlace","accumulation"}
+local ORDER={"physicalTrace","bearsName","testableAccess","outOfPlace","accumulation","misplacedBulk","medicalHoard"}
+
 
 -- Individual refusals, where a category is the wrong instrument.
 local DENY_ITEM={
     BareHands="not an object; the engine's stand-in for no weapon at all",
 }
 
+-- A catalogue id becomes the words the survivor writes, so it has to read like
+-- something a person would say. "Mushroom_Generic4" and
+-- "Bag_ProtectiveCaseSmall_Survivalist" are real items and unusable prose; the
+-- same judgement the outfit lead makes about "Generic03" applies here.
+--
+-- A TRAILING digit is fine and is dropped when the id becomes words: Diary1 is
+-- a diary, and refusing it would throw away one of the few objects the engine
+-- stamps with a person's name. A digit anywhere else marks an internal variant.
+-- "Generic" is refused outright for the same reason the outfit lead refuses
+-- Generic03: it is the game telling us this one has no identity.
+local function legible(id)
+    local last=#id
+    while last>0 do
+        local ch=string.sub(id,last,last)
+        if ch>="0" and ch<="9" then last=last-1 else break end
+    end
+    for i=1,last do
+        local ch=string.sub(id,i,i)
+        if ch>="0" and ch<="9" then return false end
+    end
+    if string.find(id,"Generic",1,true) then return false end
+    id=string.sub(id,1,last)
+    local words,inWord=0,false
+    for i=1,#id do
+        local ch=string.sub(id,i,i)
+        local boundary=(ch=="_") or (ch>="A" and ch<="Z")
+        if boundary then inWord=false end
+        if not inWord and ch~="_" then words=words+1; inWord=true end
+    end
+    return words<=3
+end
+
+-- Already used, and therefore no use to anybody. The game marks its own spent
+-- variants; a piece of protective gear counts because the rule places it at
+-- the end of its condition track.
+local function spent(item)
+    if string.find(item.id,"Dirty",1,true) then return true end
+    if string.find(item.id,"_Blood",1,true) then return true end
+    if string.find(item.id,"Used",1,true) then return true end
+    for _,p in ipairs(item.properties) do if p=="condition" then return true end end
+    return false
+end
+
 local function allowed(item,rule)
-    if DENY[item.category] then return false end
+    if DENY[item.category] and not (rule.allowDenied and rule.allowDenied[item.category]) then return false end
+    if rule.spent and not spent(item) then return false end
+    if rule.denyWords then
+        for _,word in ipairs(rule.denyWords) do
+            if string.find(item.id,word,1,true) then return false end
+        end
+    end
     if DENY_ITEM[item.id] then return false end
+    if rule.denyCategory and rule.denyCategory[item.category] then return false end
+    if not legible(item.id) then return false end
     -- A working firearm is loot however poor its condition. The bloodied
     -- kitchen knife is the point of this rule; the free shotgun is not.
     if rule.refuse then
@@ -109,6 +218,18 @@ for _,ruleId in ipairs(ORDER) do
             local fits=true
             for _,property in ipairs(rule.requires) do
                 if not Catalogue.has(item,property) then fits=false end
+            end
+            -- A budgeted rule must refuse an item whose budget would cut the
+            -- pile below the point where a count is remarkable at all. Two
+            -- loaves of bread dough is not a mystery, and clamping to two
+            -- would have produced exactly that sentence.
+            if fits and rule.budgeted then
+                local affordable=math.floor(WEIGHT_BUDGET/math.max(item.weight or 0,0.001))
+                if type(item.calories)=="number" and item.calories>0 then
+                    local byCalories=math.floor(CALORIE_BUDGET/item.calories)
+                    if byCalories<affordable then affordable=byCalories end
+                end
+                fits=affordable>=MEANINGFUL_PILE
             end
             if fits and rule.maxWeight then
                 fits=type(item.weight)=="number" and item.weight>0 and item.weight<=rule.maxWeight
@@ -160,16 +281,46 @@ function M.choose(random,ruleId)
     return Catalogue.get(list[random(#list)])
 end
 
--- How many of the thing there are. One for every rule but accumulation, where
--- the count IS the evidence. Deterministic, one draw, same contract as choose.
-function M.quantity(random,ruleId)
+-- How many of the thing there are. One for everything except the two rules
+-- where the count IS the evidence. Deterministic, one draw, same contract as
+-- choose - and then cut to the budget, which is not a draw and so cannot
+-- disturb the sequence.
+--
+-- `item` is optional and only matters for a budgeted rule: without it the
+-- unbudgeted count is returned, which is what a caller wants when it is asking
+-- what the rule COULD produce rather than what this object may.
+function M.quantity(random,ruleId,item)
     local rule=rules[ruleId]
     if not rule then return nil,"unknown object rule" end
     if type(random)~="function" then return nil,"random generator required" end
     if not rule.quantity then return 1 end
     local low,high=rule.quantity[1],rule.quantity[2]
-    return low+random(high-low+1)-1
+    local count=low+random(high-low+1)-1
+    if rule.budgeted and type(item)=="table" then
+        if type(item.weight)=="number" and item.weight>0 then
+            local affordable=math.floor(WEIGHT_BUDGET/item.weight)
+            if affordable<count then count=affordable end
+        end
+        if type(item.calories)=="number" and item.calories>0 then
+            local affordable=math.floor(CALORIE_BUDGET/item.calories)
+            if affordable<count then count=affordable end
+        end
+        -- Two of a thing is still more than one of it. Below that the count
+        -- stops being evidence, so the rule should not have chosen this item.
+        if count<MEANINGFUL_PILE then count=MEANINGFUL_PILE end
+    end
+    return count
 end
+
+-- Which room this rule wants: "natural" for the room the item belongs in,
+-- "wrong" for one it does not, nil where the room is not part of the point.
+function M.roomIntent(ruleId)
+    local rule=rules[ruleId]
+    return rule and rule.room
+end
+
+M.WEIGHT_BUDGET=WEIGHT_BUDGET
+M.CALORIE_BUDGET=CALORIE_BUDGET
 
 -- Why a category is refused, for anyone who wonders where an item went.
 function M.denialReason(category) return DENY[category] end

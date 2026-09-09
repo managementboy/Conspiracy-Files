@@ -5,6 +5,7 @@ local K=require("ConspiracyFiles/Generated/EvidenceKinds")
 local Roles=require("ConspiracyFiles/Generated/EvidenceRoles")
 local Premises=require("ConspiracyFiles/Generated/Premises")
 local ObjectRoles=require("ConspiracyFiles/Generated/ObjectRules")
+local Catalogue=require("ConspiracyFiles/Generated/ObjectCatalogue")
 -- Schema two deliberately refuses the earlier fixed-seven case shape.  Before
 -- 1.0 callers must use a fresh save rather than reinterpret an existing case.
 local G={REVISION="g3-premises-1",SCHEMA=2,MIN_EVIDENCE=3,MAX_EVIDENCE=7}
@@ -51,7 +52,20 @@ local REFERENCE={"R","RC","GT","PS","WB","HK","MC","BF","LD","TN","AV","QS"}
 -- dumb - it cannot know that "Necklace_DogTag" is a set of dog tags - which is
 -- why nothing built on it may claim to know what the object IS beyond its
 -- name.
+-- Engine slot prefixes. "Hat_SurgicalMask" is a surgical mask; the "Hat" is
+-- the game telling itself which body slot to use, and a survivor writing
+-- "hat surgical mask" would be transcribing our plumbing.
+local SLOT_PREFIXES={"Hat_","Necklace_","Vest_","Shirt_","Trousers_","Jacket_",
+                     "Mov_","Bag_","Shoes_","Gloves_"}
 local function words(id)
+    for _,prefix in ipairs(SLOT_PREFIXES) do
+        if string.sub(id,1,#prefix)==prefix then id=string.sub(id,#prefix+1) end
+    end
+    -- A trailing variant digit is not a word. Diary1 is a diary.
+    while #id>0 do
+        local ch=string.sub(id,#id,#id)
+        if ch>="0" and ch<="9" then id=string.sub(id,1,#id-1) else break end
+    end
     local out=""
     local previousLower=false
     for i=1,#id do
@@ -240,25 +254,45 @@ local function build(seed,revision,sites)
         "A {LABEL}, worn, kept with the file on {SUBJECT}. It is not the kind of thing anyone files with records.",
         {a.id},{target=documents[1].id,kind="recontextualises"})
     -- Quantity as evidence. Owner, 2026-09-09: "one of something is no misery
-    -- but a house full of bleach is a mystery."
+    -- but a house full of bleach is a mystery", and then the two shapes that
+    -- makes: "100 eggs in the fridge? 50 bricks in the bedroom".
+    --
+    -- They are different anomalies. The eggs are in exactly the right place
+    -- and there are far too many; the bricks would be unremarkable on a
+    -- building site and are in a bedroom. So one document asks placement for
+    -- the room the item belongs in, and the other for a room it does not.
     --
     -- Nothing is written on any of them and they are all identical, which is
     -- the point: the only fact is the count, and the count is the one thing
     -- the mod states plainly and then declines to explain.
-    local accumulationKind=assert(Roles.choose(random,"accumulation"))
-    local accumulationCount=assert(ObjectRoles.quantity(random,"accumulation"))
-    local accumulationLabel=words(accumulationKind)
-    local accumulationBody=subst(subst(fill(
-        "{COUNT} of the same thing - {LABEL} - stacked with the file on {SUBJECT}. One would be ordinary. Nothing records who needed {COUNT}.",
-        map),"LABEL",accumulationLabel),"COUNT",numeral(accumulationCount))
-    accumulationBody=string.upper(string.sub(accumulationBody,1,1))..string.sub(accumulationBody,2)
-    assert(Roles.fits("accumulation",accumulationKind,accumulationBody))
-    document(16,accumulationLabel..", one of "..numeral(accumulationCount),b,accumulationBody,
-        {b.id},{{target=documents[2].id,kind="recontextualises"}},nil,accumulationKind)
-    documents[16].wear=assert(ObjectRoles.describe("accumulation")).wear
-    -- The count is a fact about the world, so it has to reach placement: the
-    -- runtime creates exactly this many and treats any more as a conflict.
-    documents[16].quantity=accumulationCount
+    local function pile(n,roleId,site,sentence,link)
+        local kind=assert(Roles.choose(random,roleId))
+        -- The count depends on what the thing weighs and is worth, so the
+        -- catalogue row is needed, not just the id.
+        local item=assert(Catalogue.get(kind))
+        local count=assert(ObjectRoles.quantity(random,roleId,item))
+        local label=words(kind)
+        local body=subst(subst(fill(sentence,map),"LABEL",label),"COUNT",numeral(count))
+        body=string.upper(string.sub(body,1,1))..string.sub(body,2)
+        assert(Roles.fits(roleId,kind,body))
+        document(n,label..", one of "..numeral(count),site,body,{site.id},{link},nil,kind)
+        documents[n].wear=assert(ObjectRoles.describe(roleId)).wear
+        -- The count is a fact about the world, so it has to reach placement:
+        -- the runtime creates exactly this many and treats any more as a
+        -- conflict. The room intent has to reach it too, or the bricks end up
+        -- in the garage where nobody would look twice at them.
+        documents[n].quantity=count
+        documents[n].roomIntent=assert(ObjectRoles.roomIntent(roleId))
+    end
+    pile(16,"accumulation",b,
+        "{COUNT} of the same thing - {LABEL} - kept where such a thing is kept, with the file on {SUBJECT} beside it. One would be ordinary. This many is not.",
+        {target=documents[2].id,kind="recontextualises"})
+    pile(17,"misplacedBulk",a,
+        "{COUNT} of the same thing - {LABEL} - in a room with no use for any of it, stored with the file on {SUBJECT}. Somewhere else this would not be worth writing down.",
+        {target=documents[1].id,kind="recontextualises"})
+    pile(18,"medicalHoard",b,
+        "{COUNT} of the same thing - {LABEL} - all of it already used, bagged together in a room that is not for it, with the file on {SUBJECT}. One household does not get through this much.",
+        {target=documents[2].id,kind="recontextualises"})
     -- The first three roles are the coherent minimum: a route lead,
     -- an independently attributable response, and a review of that response.
     -- Optional roles are shuffled and bounded, so neither their count nor their
@@ -269,7 +303,7 @@ local function build(seed,revision,sites)
     -- (0..4 optional slots on top of the 3 mandatory roles) stay unchanged.
     local optional={documents[4],documents[5],documents[6],documents[7],documents[8],documents[9],
                     documents[10],documents[11],documents[12],
-                    documents[13],documents[14],documents[15],documents[16]}
+                    documents[13],documents[14],documents[15],documents[16],documents[17],documents[18]}
     local optionalCapacity=G.MAX_EVIDENCE-3
     local optionalCount=random(optionalCapacity+1)-1
     for i=#optional,2,-1 do local j=random(i); optional[i],optional[j]=optional[j],optional[i] end

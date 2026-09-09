@@ -152,8 +152,12 @@ def main():
                 weight = float(fields.get("Weight", "0") or 0)
             except ValueError:
                 weight = 0.0
+            try:
+                calories = float(fields.get("Calories", "0") or 0)
+            except ValueError:
+                calories = 0.0
             rows.append((name, source, category, ",".join(props),
-                         fields.get("__module", "Base"), weight))
+                         fields.get("__module", "Base"), weight, calories))
 
     rows.sort(key=lambda r: (r[0],))
     if args.limit:
@@ -166,11 +170,11 @@ def main():
 
     print("| Item | Script | Category | Usable properties |")
     print("|---|---|---|---|")
-    for name, source, category, props, _module, _weight in rows:
+    for name, source, category, props, _module, _weight, _calories in rows:
         print(f"| {name} | {source} | {category} | {props} |")
 
     counts = {}
-    for _, _, _, props, _module, _weight in rows:
+    for _, _, _, props, _module, _weight, _calories in rows:
         for p in props.split(","):
             counts[p] = counts.get(p, 0) + 1
     print(f"\n{len(rows)} candidates: " + ", ".join(f"{k}={v}" for k, v in sorted(counts.items())))
@@ -201,7 +205,12 @@ LUA_HEADER = """-- DERIVED FILE - do not edit by hand.
 -- investigation may use, and never picks an item by name.
 local M={}
 M.REVISION="%s"
--- {id, fullType, category, script, weight, properties}
+-- {id, fullType, category, script, weight, calories, properties}
+--
+-- `calories` is carried so a rule can bound what a pile is WORTH rather than
+-- banning whole categories from being piled. A hundred eggs is a mystery in
+-- prose and a week of food in practice; the budget is what keeps evidence from
+-- being better loot than the loot.
 M.items={
 """
 
@@ -212,10 +221,10 @@ def write_lua(path, rows):
         "\n".join("|".join(r[:4]) for r in rows).encode("utf-8")).hexdigest()[:12]
     with open(path, "w", encoding="utf-8") as out:
         out.write(LUA_HEADER % ("objects-" + digest))
-        for name, source, category, props, module, weight in rows:
+        for name, source, category, props, module, weight, calories in rows:
             plist = ",".join('"%s"' % p for p in props.split(","))
-            out.write(' {id="%s",fullType="%s.%s",category="%s",script="%s",weight=%.3f,properties={%s}},\n'
-                      % (name, module, name, category, source, weight, plist))
+            out.write(' {id="%s",fullType="%s.%s",category="%s",script="%s",weight=%.3f,calories=%.1f,properties={%s}},\n'
+                      % (name, module, name, category, source, weight, calories, plist))
         out.write("""}
 local byId={}
 for _,item in ipairs(M.items) do byId[item.id]=item end
@@ -224,7 +233,8 @@ function M.get(id)
     local item=type(id)=="string" and byId[id]
     if not item then return nil,"unknown catalogue object" end
     return {id=item.id,fullType=item.fullType,category=item.category,
-            script=item.script,weight=item.weight,properties=item.properties}
+            script=item.script,weight=item.weight,calories=item.calories,
+            properties=item.properties}
 end
 function M.has(item,property)
     for _,p in ipairs(item.properties) do if p==property then return true end end

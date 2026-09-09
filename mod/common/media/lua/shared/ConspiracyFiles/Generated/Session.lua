@@ -116,11 +116,11 @@ function S.createDistributed(case,candidates,rooms,occupied)
             end
             if type(list)=="table" and type(roomsForSite)=="table" then
                 for i in ipairs(list) do
-                    if usable(i) and RoomAffinity.fits(doc.kind,roomsForSite[i]) and livedIn(i) then index=i;break end
+                    if usable(i) and RoomAffinity.prefers(doc,roomsForSite[i]) and livedIn(i) then index=i;break end
                 end
                 if not index then
                     for i in ipairs(list) do
-                        if usable(i) and RoomAffinity.fits(doc.kind,roomsForSite[i]) then index=i;break end
+                        if usable(i) and RoomAffinity.prefers(doc,roomsForSite[i]) then index=i;break end
                     end
                 end
             end

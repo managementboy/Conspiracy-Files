@@ -48,9 +48,29 @@ count is the whole of the evidence, which makes it the cheapest signal
 available and the only one that needs no property at all - just an item whose
 duplicates are indistinguishable.
 
-The rule that uses it draws only from **low-value** categories, and that is the
-load-bearing part. A cupboard of bandages is not a mystery, it is a windfall,
-and evidence must never be better loot than the loot.
+Two rules use it, because the owner's own examples are two different anomalies:
+
+- **The right room, an impossible count.** A hundred eggs in the fridge. The
+  object belongs exactly where it was found; only the number is wrong.
+- **The wrong room, any count.** Fifty bricks in the bedroom. Bricks on a
+  building site are bricks; the room is the whole of the anomaly.
+
+Room preference for objects is derived from the item's own `DisplayCategory`,
+so the eggs really are in a kitchen and the bricks really are not in a garage.
+
+**What a pile may be worth is bounded, not banned.** A hundred eggs is a
+mystery in prose and a week of food in practice, so the count is cut to fit a
+weight and calorie budget rather than the whole category being refused.
+Categories whose worth a budget cannot measure - ammunition, unused medicine,
+skill books, bags - stay out, because a cupboard of those is a windfall however
+small we make it.
+
+**Except used medical supplies and protective equipment.** Owner, 2026-09-09:
+*"any place with loads of medical equipment and PPA is suspicious."* True, and
+it contradicted the rule above. The game itself resolves it: it ships the spent
+versions - `BandageDirty`, `Bandage_Chest_Blood` - and gives protective gear a
+condition track, so the hoard can be exactly that sight and worth nothing at
+all to a survivor. What is stockpiled is what has already been used.
 
 ## The fifty
 

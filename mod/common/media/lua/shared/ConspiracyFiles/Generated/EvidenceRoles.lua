@@ -67,10 +67,14 @@ local roles={
     outOfPlace={capacity="object",rule="outOfPlace"},
     -- The count is the evidence, not the object. See ObjectRules.accumulation.
     accumulation={capacity="object",rule="accumulation"},
+    -- The same count, in a room with no use for it. See ObjectRules.
+    misplacedBulk={capacity="object",rule="misplacedBulk"},
+    -- Used medical supplies and protective gear, in bulk. See ObjectRules.
+    medicalHoard={capacity="object",rule="medicalHoard"},
 }
 local ORDER={"access","diaryContext","notebookContext","clippingContext","affiliationLead","itineraryLead",
              "paymentRecord","timingDispute","presenceNote",
-             "physicalTrace","bearsName","outOfPlace","accumulation"}
+             "physicalTrace","bearsName","outOfPlace","accumulation","misplacedBulk","medicalHoard"}
 
 for _,roleId in ipairs(ORDER) do
     local role=roles[roleId]

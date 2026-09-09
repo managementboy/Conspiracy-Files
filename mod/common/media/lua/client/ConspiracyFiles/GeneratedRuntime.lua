@@ -97,7 +97,7 @@ local function placement(api,id)
         local expected=expectedCount(api,id)
         if not scan then
             container=current
-            scan=World.count(current,a.physicalToken,function(n) count=n; finished=true end)
+            scan=World.count(current,a.physicalToken,function(n) count=n; finished=true end,expected)
         end
         if not finished then scan(); return false end
         if current~=container or count==nil then return true end
@@ -123,7 +123,7 @@ local function placement(api,id)
             assert(current:AddItem(item),"could not add note")
         end
         created=false; finished=false
-        scan=World.count(current,a.physicalToken,function(n) count=n; finished=true end)
+        scan=World.count(current,a.physicalToken,function(n) count=n; finished=true end,expected)
         return false
     end
 end
@@ -624,12 +624,18 @@ end
 local function identity(api)
     local found,done
     local snapshot=api.snapshot()
-    local scan=World.identityScan(getPlayer(),snapshot.assignments,function(r) found=r; done=true end)
+    -- How many copies each document is supposed to have. A pile is one
+    -- document and many identical items; finding the second one is not a
+    -- conflict, it is the pile.
+    local expected={}
+    for _,d in ipairs(snapshot.case.documents) do expected[d.id]=d.quantity or 1 end
+    local scan=World.identityScan(getPlayer(),snapshot.assignments,function(r) found=r; done=true end,expected)
     return function()
         if not done then scan(); return false end
         for id,items in pairs(found) do
-            if #items>1 then checked(api.status(id,"conflict"))
-            elseif #items==1 and api.assignment(id).status~="conflict" then checked(api.status(id,"placed",worldHours())) end
+            local want=expected[id] or 1
+            if #items>want then checked(api.status(id,"conflict"))
+            elseif #items>=1 and api.assignment(id).status~="conflict" then checked(api.status(id,"placed",worldHours())) end
             -- identityScan reports every document, with an empty list where it
             -- found nothing. That empty case was previously ignored, so a
             -- document could never stop being "placed" however far it went.

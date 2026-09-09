@@ -46,13 +46,24 @@ function World.candidateScan(candidate,done)
         return false
     end
 end
-function World.count(container,token,done)
+-- `limit` is how many copies the caller believes belong here; the scan stops
+-- as soon as it has seen one more than that, which is all anyone needs to know
+-- to say "too many". It defaults to 1 because for most of this mod's life the
+-- only question was "is there more than one?".
+--
+-- That default used to be the only behaviour, and it was wrong the moment a
+-- document could legitimately be a pile of six (ObjectRules.accumulation): the
+-- scan reported 2, placement saw fewer than it expected, created the pile
+-- again, and the document ended in the sticky "conflict" state - dead
+-- permanently. Caught by test/g2_smoke.lua's exact item count.
+function World.count(container,token,done,limit)
     local items=container:getItems()
     local originalSize=items:size()
+    local ceiling=(type(limit)=="number" and limit>=1) and limit or 1
     local index,count,seen=0,0,{}
     return function()
         if items:size()~=originalSize then done(nil,"inventory-changed"); return true end
-        if count>=2 then done(2); return true end
+        if count>ceiling then done(ceiling+1); return true end
         if index>=originalSize then done(count); return true end
         local item=items:get(index); index=index+1
         local md=item and item:getModData()
@@ -63,9 +74,20 @@ end
 -- Searches player inventory (including bags), nearby floor/corpse/container
 -- contents and the currently occupied vehicle. Coverage is explicitly partial:
 -- zero observations NEVER proves destruction or triggers fallback.
-function World.identityScan(player,assignments,done)
-    local tokens,found,seenItems={},{},{}
-    for id,a in pairs(assignments) do tokens[a.physicalToken]=id; found[id]={} end
+-- `expected` maps a document id to how many copies belong to it, defaulting to
+-- one. It exists because a document can legitimately be a pile of six ordinary
+-- things (ObjectRules.accumulation), and this scan used to stop at two per
+-- document and let the caller call anything past one a conflict - which is
+-- sticky, so a pile would have been declared broken the moment the player
+-- pocketed one bottle out of it.
+function World.identityScan(player,assignments,done,expected)
+    local tokens,found,seenItems,ceiling={},{},{},{}
+    for id,a in pairs(assignments) do
+        tokens[a.physicalToken]=id; found[id]={}
+        local want=(type(expected)=="table" and expected[id]) or 1
+        -- One more than expected is enough to know there are too many.
+        ceiling[id]=want+1
+    end
     local tasks,seenContainers={},{}
     local function enqueue(container)
         if container and not seenContainers[container] and #tasks<256 then
@@ -75,9 +97,9 @@ function World.identityScan(player,assignments,done)
     local function observe(item)
         if not item then return end
         local md=item:getModData(); local id=md and tokens[md.cfPhysicalToken]
-        if id and not seenItems[item] and #found[id]<2 then
+        if id and not seenItems[item] and #found[id]<ceiling[id] then
             seenItems[item]=true
-            if #found[id]<2 then found[id][#found[id]+1]=item end
+            found[id][#found[id]+1]=item
         end
         if instanceof(item,"InventoryContainer") then enqueue(item:getInventory()) end
     end

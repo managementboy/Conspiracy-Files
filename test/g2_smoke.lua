@@ -72,8 +72,13 @@ for i=1,80 do events.tick() end
 assert(saved.campaign and saved.campaign.canonical)
 local count=0; local item
 for _,c in pairs(containers) do count=count+#c.items; item=item or c.items[1] end
-local firstEvidence=#saved.campaign.canonical.case.documents
-assert(count==firstEvidence, 'one physical item per selected evidence role')
+-- One physical item per document, EXCEPT where the count is the evidence: a
+-- pile of the same ordinary thing is one document and many items (2026-09-09,
+-- ObjectRules.accumulation / misplacedBulk). Summing the documents' own
+-- quantities keeps this an exactness check rather than weakening it to ">=".
+local firstEvidence=0
+for _,d in ipairs(saved.campaign.canonical.case.documents) do firstEvidence=firstEvidence+(d.quantity or 1) end
+assert(count==firstEvidence, 'one physical item per evidence role, or one pile of the stated size')
 local seenTypes={}
 for _,c in pairs(containers) do for _,v in ipairs(c.items) do seenTypes[v.fullType]=true end end
 assert(seenTypes['Base.Note'], 'minimum anonymous lead carrier missing')
@@ -102,7 +107,8 @@ for i=1,160 do events.tick() end
 assert(saved.canonical==legacyRoot,'legacy fallback is retained unchanged')
 assert(saved.campaign.successive and #saved.campaign.successive.cases==1, 'second case is staged beside legacy canonical')
 count=#inventory.items; for _,c in pairs(containers) do count=count+#c.items end
-local secondEvidence=#saved.campaign.successive.cases[1].case.documents
+local secondEvidence=0
+for _,d in ipairs(saved.campaign.successive.cases[1].case.documents) do secondEvidence=secondEvidence+(d.quantity or 1) end
 assert(count==firstEvidence+secondEvidence, 'second case adds its selected evidence roles')
 assert(R.known()[1].body==body, 'old discovery remains first globally')
 local newItem
@@ -175,8 +181,20 @@ Markers.update();assert(playerData['ConspiracyFiles.ClueMarkers'].records[newIte
 assert(saved.canonical==legacyRoot,'later discoveries never rewrite fallback')
 print('PASS real notebook projection, legacy upgrade, global ordinals and frozen ink after reload')
 -- Inspect every remaining physical kind in both cases, beyond the old aggregate cap.
-local remaining={}
-for _,c in pairs(containers) do for _,v in ipairs(c.items) do remaining[#remaining+1]=v end end
+-- One item per DOCUMENT, not per item: a pile is six bottles of the same
+-- ordinary thing and one discovery (2026-09-09). Picking one out of the pile
+-- is enough to have found it, which is also the right gameplay answer - nobody
+-- should have to pocket all six.
+-- Anything already discovered stays discovered, and a pile leaves siblings on
+-- the shelf after one of them has been taken. Seeding from what is already
+-- known keeps this loop to documents nobody has found yet.
+local remaining,seenDocuments={},{}
+for _,row in ipairs(R.known()) do seenDocuments[row.id]=true end
+seenDocuments[newItem:getModData().cfGeneratedId]=true
+for _,c in pairs(containers) do for _,v in ipairs(c.items) do
+ local docId=v:getModData().cfGeneratedId
+ if not seenDocuments[docId] then seenDocuments[docId]=true; remaining[#remaining+1]=v end
+end end
 -- Capture the live case before discovering everything: completing a case now
 -- retires it, dropping the case envelope this tamper check needs. Retirement
 -- is orthogonal to tamper rejection, so the check keeps testing a live case.
@@ -187,12 +205,15 @@ for _,v in ipairs(remaining) do
  inventory:AddItem(v);Markers.after(finding,v);assert(R.inspect(v))
 end
 local all=R.known()
-assert(#all==firstEvidence+secondEvidence,'all selected evidence items remain learnable')
+-- Documents, not items: a pile is many items and one thing learned.
+local firstDocs=#saved.canonical.case.documents
+local secondDocs=#tamperSource.documents
+assert(#all==firstDocs+secondDocs,'all selected evidence items remain learnable')
 local kinds={};for _,v in ipairs(all) do kinds[v.kind]=true end
 assert(kinds.dispatch,'every case retains its core dispatch lead')
 local G=require('ConspiracyFiles/Generated/Generator')
 local altered=assert(G.restore(tamperSource))
 altered.documents[1].kind='Base.Axe';assert(not G.validate(altered),'physical kind tampering rejected before placement')
-events.start();assert(#R.known()==firstEvidence+secondEvidence,'all selected discoveries survive runtime reload')
+events.start();assert(#R.known()==firstDocs+secondDocs,'all selected discoveries survive runtime reload')
 for n,v in ipairs(R.known()) do assert(v.id==all[n].id and v.body==all[n].body,'discovery order and rich text immutable on reload') end
 print('PASS variable mixed evidence discoveries, registry projection, tamper rejection and reload')
