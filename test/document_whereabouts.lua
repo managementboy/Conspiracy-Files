@@ -16,8 +16,10 @@ local g = assert(io.open('mod/common/media/lua/client/ConspiracyFiles/Notebook.l
 local notebook = g:read('*a'); g:close()
 
 -- The empty case must be handled, or nothing below it can work.
-assert(runtime:find('if #items>=1 then s.seen=true; s.misses=0 else s.misses=s.misses+1 end', 1, true),
+assert(runtime:find('s.misses=s.misses+1', 1, true),
     'the scan must count misses when a document is not found')
+assert(runtime:find('s.seen=true; s.misses=0', 1, true),
+    'finding a document must reset its miss count')
 
 -- Uncertainty must take several misses. One doorway is not evidence of loss.
 local threshold = runtime:match('MISSES_BEFORE_UNCERTAIN=(%d+)')

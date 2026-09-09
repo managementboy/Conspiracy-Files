@@ -445,6 +445,54 @@ end
 -- "not anywhere we can currently see", never "destroyed" - which is why the
 -- wording is about uncertainty rather than loss.
 local sightings={}
+-- Every engine call guarded: a document can be in a container whose parent has
+-- gone, on a square that has streamed out, or held by an object that does not
+-- answer the call at all. None of that should cost the player their notebook.
+local function rd(o,k,...)
+    if not o or not o[k] then return nil end
+    local ok,v=pcall(function(...) return o[k](o,...) end,...)
+    if ok then return v end
+end
+-- Where a document actually is, in words a survivor would use. "Close by" was
+-- vague where we were not: the scan holds the item itself, so it can say
+-- whether it is carried, in something, or on the floor - and the address book
+-- can usually name the building. Vagueness is for what we cannot know.
+local function placeOf(item)
+    local player=getPlayer()
+    local container=rd(item,"getContainer")
+    local carried=player and container and container==rd(player,"getInventory")
+    local bag=container and rd(container,"getContainingItem")
+    if not carried and bag and player and rd(bag,"getOutermostContainer")==rd(player,"getInventory") then
+        local name=rd(bag,"getName")
+        return name and ("Carried, in your "..tostring(name)..".") or "Carried."
+    end
+    if carried then return "Carried." end
+    -- Somewhere in the world. Name the building if the address book knows it.
+    local square=rd(item,"getSquare")
+    if not square then
+        local world=rd(item,"getWorldItem"); square=world and rd(world,"getSquare")
+    end
+    if not square and container then
+        local parent=rd(container,"getParent"); square=parent and rd(parent,"getSquare")
+    end
+    local address
+    local building=square and rd(square,"getBuilding")
+    local def=building and rd(building,"getDef")
+    local id=def and rd(def,"getIDString")
+    if id then
+        local map=ConspiracyFiles.AddressMap
+        address=map and map.labelForBuilding and select(2,pcall(map.labelForBuilding,tostring(id)))
+        if type(address)~="string" or address=="" then address=nil end
+    end
+    local kind=container and rd(container,"getType")
+    local vehicle=container and rd(container,"getVehiclePart")
+    if vehicle then return address and ("In a vehicle at "..address..".") or "In a vehicle." end
+    if kind and kind~="floor" then
+        return address and ("In a "..tostring(kind).." at "..address..".")
+            or ("In a "..tostring(kind)..".")
+    end
+    return address and ("On the floor at "..address..".") or "On the ground."
+end
 -- Five consecutive misses, at one scan per 120 ticks. Long enough that walking
 -- through a doorway does not make the notebook doubt itself.
 local MISSES_BEFORE_UNCERTAIN=5
@@ -456,8 +504,8 @@ function R.whereabouts(id)
             if a.status=="conflict" then return "conflict" end
             local s=sightings[id]
             if not s then return "unchecked" end
-            if s.misses>=MISSES_BEFORE_UNCERTAIN then return "uncertain" end
-            if s.seen then return "accounted" end
+            if s.misses>=MISSES_BEFORE_UNCERTAIN then return "uncertain",s.where end
+            if s.seen then return "accounted",s.where end
             return "unchecked"
         end
     end
@@ -476,7 +524,11 @@ local function identity(api)
             -- found nothing. That empty case was previously ignored, so a
             -- document could never stop being "placed" however far it went.
             local s=sightings[id] or {seen=false,misses=0}
-            if #items>=1 then s.seen=true; s.misses=0 else s.misses=s.misses+1 end
+            if #items>=1 then
+                s.seen=true; s.misses=0
+                local ok,where=pcall(placeOf,items[1])
+                s.where=ok and where or nil
+            else s.misses=s.misses+1 end
             sightings[id]=s
         end
         return true

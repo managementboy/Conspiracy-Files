@@ -587,11 +587,10 @@ function Window:rows()
         if self.section=="evidence" then
             local runtime=generated()
             local words={
-                -- "belongings or nearby storage" was inherited from the
-                -- authored path and is not what the scan checks: it also sees
-                -- the ground and the player's vehicle. Observed on 2026-09-09
-                -- with a document lying on the floor.
-                accounted="Last accounted for close by - carried, stored, in a vehicle or on the ground.",
+                -- Where it actually is, when the scan could tell. The
+                -- fallback stays deliberately plain for the rare case where
+                -- the item was seen but its surroundings could not be read.
+                accounted="Last accounted for close by.",
                 uncertain="Not seen recently. Its whereabouts are uncertain.",
                 conflict="More than one copy has been seen. Which is the original is uncertain.",
                 unchecked="Not checked since you loaded this save.",
@@ -600,10 +599,20 @@ function Window:rows()
                 -- generated() is not guaranteed to be a table; a test double
                 -- returns a boolean, and indexing that crashes the notebook.
                 local lookup=type(runtime)=="table" and runtime.whereabouts
-                local ok,where=false,nil
-                if lookup then ok,where=pcall(lookup,row.id) end
-                if not ok then where=nil end
-                if words[where] then row.detailText=row.detailText.."\n\nPHYSICAL OBJECT\n"..words[where] end
+                local ok,where,place=false,nil,nil
+                if lookup then ok,where,place=pcall(lookup,row.id) end
+                if not ok then where,place=nil,nil end
+                if words[where] then
+                    local line=words[where]
+                    -- Say where it is when we saw it, rather than describing
+                    -- everywhere it might be. Vagueness is for what we cannot
+                    -- know, not for what the scan just looked at.
+                    if where=="accounted" and type(place)=="string" and place~="" then line=place end
+                    if where=="uncertain" and type(place)=="string" and place~="" then
+                        line=line.." Last seen: "..place
+                    end
+                    row.detailText=row.detailText.."\n\nPHYSICAL OBJECT\n"..line
+                end
             end
         end
         local seen=UI and UI.lastSeenSequence and UI.lastSeenSequence()
