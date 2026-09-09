@@ -434,6 +434,35 @@ local function trackVisited()
     if house then Visited.record(house) end
     return true
 end
+-- What the periodic scan has been able to see, per document. Kept in memory
+-- rather than in the save on purpose: a saved flag cannot tell "we looked and
+-- it is not there" apart from "we have not looked since you loaded", and
+-- claiming the first when we mean the second is exactly the kind of unearned
+-- certainty this notebook exists to avoid. After a reload we say so.
+--
+-- The scan covers the player, two tiles around them, their vehicle, and the
+-- container the document was originally placed in. Absence therefore means
+-- "not anywhere we can currently see", never "destroyed" - which is why the
+-- wording is about uncertainty rather than loss.
+local sightings={}
+-- Five consecutive misses, at one scan per 120 ticks. Long enough that walking
+-- through a doorway does not make the notebook doubt itself.
+local MISSES_BEFORE_UNCERTAIN=5
+function R.whereabouts(id)
+    if type(id)~="string" or not sessions then return nil end
+    for _,api in ipairs(sessions) do
+        local ok,a=pcall(api.assignment,id)
+        if ok and a then
+            if a.status=="conflict" then return "conflict" end
+            local s=sightings[id]
+            if not s then return "unchecked" end
+            if s.misses>=MISSES_BEFORE_UNCERTAIN then return "uncertain" end
+            if s.seen then return "accounted" end
+            return "unchecked"
+        end
+    end
+    return nil
+end
 local function identity(api)
     local found,done
     local snapshot=api.snapshot()
@@ -443,6 +472,12 @@ local function identity(api)
         for id,items in pairs(found) do
             if #items>1 then checked(api.status(id,"conflict"))
             elseif #items==1 and api.assignment(id).status~="conflict" then checked(api.status(id,"placed",worldHours())) end
+            -- identityScan reports every document, with an empty list where it
+            -- found nothing. That empty case was previously ignored, so a
+            -- document could never stop being "placed" however far it went.
+            local s=sightings[id] or {seen=false,misses=0}
+            if #items>=1 then s.seen=true; s.misses=0 else s.misses=s.misses+1 end
+            sightings[id]=s
         end
         return true
     end
@@ -459,6 +494,9 @@ Events.OnTick.Add(function()
 end)
 Events.OnGameStart.Add(function()
     sessions,scheduler,preparing,wrapper=nil,nil,false,nil
+    -- Forget what we could see last time. A new session has not looked yet,
+    -- and should say so rather than inherit yesterday's confidence.
+    sightings={}
     if not allowed() then return end
     local saved=ModData.getOrCreate(TAG)
     if saved.canonical or saved.campaign then

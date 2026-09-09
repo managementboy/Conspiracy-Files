@@ -2,7 +2,11 @@
 local f=assert(io.open('mod/common/media/lua/client/ConspiracyFiles/Notebook.lua','r'));local src=f:read('*a');f:close()
 local a=assert(src:find('function Window:rows()',1,true));local b=assert(src:find('function Window:refresh(',a,true))
 local env={Window={},generated=function() return true end,generatedRows=function() return {{id='existing'}} end,
- ConspiracyFiles={IdentityObserver={rows=function() return {{id='identity:1',title='Observed card'}} end}},ipairs=ipairs}
+ ConspiracyFiles={IdentityObserver={rows=function() return {{id='identity:1',title='Observed card'}} end}},ipairs=ipairs,
+ -- Window:rows already uses type() and pcall() for the discovery-log path; the
+ -- sandbox simply never reached those lines, so it passed while being an
+ -- unfaithful stand-in. Providing them lets the whole function run.
+ type=type,pcall=pcall}
 local chunk=assert(loadstring(src:sub(a,b-1)));setfenv(chunk,env);chunk()
 local j=env.Window.rows({section='journal'});assert(#j==2 and j[2].id=='identity:1')
 assert(j[1].ordinal==1 and j[2].ordinal==2)

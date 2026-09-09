@@ -580,6 +580,28 @@ function Window:rows()
         -- `UI` is only available when this file runs whole (never when a test
         -- extracts just this function), so the guard below degrades to "no
         -- marks" rather than indexing a missing table.
+        -- Where the document physically is, for generated cases. The older
+        -- authored path adds this further down; generated rows return before
+        -- reaching it, so a player carrying a document round got no
+        -- acknowledgement the mod knew where it was.
+        if self.section=="evidence" then
+            local runtime=generated()
+            local words={
+                accounted="Last accounted for among your belongings or nearby storage.",
+                uncertain="Not seen recently. Its whereabouts are uncertain.",
+                conflict="More than one copy has been seen. Which is the original is uncertain.",
+                unchecked="Not checked since you loaded this save.",
+            }
+            for _,row in ipairs(rows) do
+                -- generated() is not guaranteed to be a table; a test double
+                -- returns a boolean, and indexing that crashes the notebook.
+                local lookup=type(runtime)=="table" and runtime.whereabouts
+                local ok,where=false,nil
+                if lookup then ok,where=pcall(lookup,row.id) end
+                if not ok then where=nil end
+                if words[where] then row.detailText=row.detailText.."\n\nPHYSICAL OBJECT\n"..words[where] end
+            end
+        end
         local seen=UI and UI.lastSeenSequence and UI.lastSeenSequence()
         if seen and log and log.events then
             local ok,events=pcall(log.events)
