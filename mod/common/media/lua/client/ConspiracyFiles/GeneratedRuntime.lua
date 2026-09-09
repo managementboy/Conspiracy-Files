@@ -46,6 +46,24 @@ local function setup()
     scheduler.maxSteps=24; scheduler.budgetMs=1
     ticks=0; return true
 end
+-- Put the document's own words on the object. A diary you can pick up, open
+-- and find blank contradicts the record the notebook keeps of it, and the
+-- object is the thing the player actually holds.
+--
+-- Literature.addPage was proven to persist across save and reload by T7 on
+-- this build; printMedia was the path that failed there, and is not used.
+-- Everything is guarded because not every carrier is Literature: a key or a
+-- credit card takes its name and nothing else.
+local Pages=require("ConspiracyFiles/Generated/DocumentPages")
+local function writePages(item,doc)
+    if not item or not doc or not item.addPage then return end
+    local ok,pages=pcall(Pages.pages,doc.body)
+    if not ok or type(pages)~="table" or #pages==0 then return end
+    pcall(function()
+        if item.setNumberOfPages then item:setNumberOfPages(math.max(#pages,1)) end
+        for index,text in ipairs(pages) do item:addPage(index,text) end
+    end)
+end
 local function placement(api,id)
     local scan,count,finished,container,created
     return function()
@@ -72,6 +90,7 @@ local function placement(api,id)
         local md=item:getModData()
         md.cfGeneratedId=id; md.cfPhysicalToken=a.physicalToken
         item:setName(doc.title); item:setCustomName(true)
+        writePages(item,doc)
         assert(current:AddItem(item),"could not add note")
         created=false; finished=false
         scan=World.count(current,a.physicalToken,function(n) count=n; finished=true end)
@@ -434,6 +453,7 @@ local function relocation(api)
             local md=newItem:getModData()
             md.cfGeneratedId=id; md.cfPhysicalToken=a.physicalToken
             newItem:setName(doc.title); newItem:setCustomName(true)
+            writePages(newItem,doc)
             newDestination=destination
         end
         -- T4/T5 policy is loss over duplication, and it is not merely a
