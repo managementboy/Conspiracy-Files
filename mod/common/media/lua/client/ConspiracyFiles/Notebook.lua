@@ -587,7 +587,11 @@ function Window:rows()
         if self.section=="evidence" then
             local runtime=generated()
             local words={
-                accounted="Last accounted for among your belongings or nearby storage.",
+                -- "belongings or nearby storage" was inherited from the
+                -- authored path and is not what the scan checks: it also sees
+                -- the ground and the player's vehicle. Observed on 2026-09-09
+                -- with a document lying on the floor.
+                accounted="Last accounted for close by - carried, stored, in a vehicle or on the ground.",
                 uncertain="Not seen recently. Its whereabouts are uncertain.",
                 conflict="More than one copy has been seen. Which is the original is uncertain.",
                 unchecked="Not checked since you loaded this save.",
