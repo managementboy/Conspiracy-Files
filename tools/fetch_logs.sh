@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # Pull the play machine's Project Zomboid logs onto the development machine.
 #
-#   tools/fetch_logs.sh              console.txt, plus a summary of the CF lines
+#   tools/fetch_logs.sh              our lines plus every WARN/ERROR (the fast path)
+#   tools/fetch_logs.sh --full       the whole console.txt, engine chatter included
 #   tools/fetch_logs.sh --all        also the timestamped Logs/ folder
 #   tools/fetch_logs.sh --list       show what is on the play machine, fetch nothing
 #   tools/fetch_logs.sh --incoming   summarise a log the play machine pushed here
@@ -37,6 +38,9 @@ REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 DEST="$REPO/dev/playtest-logs"
 
 want_all=0
+# Default to the filtered fetch: on a long session the engine's own chatter is
+# most of the file and none of it is ours. --full when you want all of it.
+want_full=0
 list_only=0
 summarise_only=""
 incoming=0
@@ -44,6 +48,7 @@ live=0
 while [ $# -gt 0 ]; do
     case "$1" in
         --all)  want_all=1; shift ;;
+        --full) want_full=1; shift ;;
         --list) list_only=1; shift ;;
         --summarise) summarise_only="${2:-}"; shift 2 ;;
         --incoming)  incoming=1; shift ;;
@@ -175,11 +180,32 @@ out="$DEST/$stamp"
 mkdir -p "$out"
 
 echo "fetching from $CF_PLAY_HOST ..."
-scp $ssh_opts -q "$CF_PLAY_HOST:$CF_PLAY_ZOMBOID/console.txt" "$out/console.txt" || {
-    echo "could not copy console.txt from $CF_PLAY_ZOMBOID." >&2
-    echo "If the Zomboid folder is elsewhere, set CF_PLAY_ZOMBOID." >&2
-    rmdir "$out" 2>/dev/null || true
-    exit 1; }
+if [ "$want_full" -eq 1 ]; then
+    scp $ssh_opts -q "$CF_PLAY_HOST:$CF_PLAY_ZOMBOID/console.txt" "$out/console.txt" || {
+        echo "could not copy console.txt from $CF_PLAY_ZOMBOID." >&2
+        echo "If the Zomboid folder is elsewhere, set CF_PLAY_ZOMBOID." >&2
+        rmdir "$out" 2>/dev/null || true
+        exit 1; }
+else
+    # Filter on the PLAY machine, so a long session copies kilobytes instead of
+    # megabytes. Measured on a short launch: 400 of 487 lines were the engine
+    # repeating "BLANK OVERLAY TEXTURE" once per floor sprite - 82% of the file,
+    # none of it ours.
+    #
+    # WARN and ERROR come too, deliberately. The engine's own failures are how
+    # a mod crash gets explained, and dropping them to save bytes would be
+    # saving the wrong thing. `findstr` ships with Windows; multiple /C: are OR.
+    ssh $ssh_opts "$CF_PLAY_HOST" \
+        "findstr /C:\"[CF]\" /C:\"ERROR\" /C:\"WARN\" \"${CF_PLAY_ZOMBOID//\//\\}\\console.txt\"" \
+        > "$out/console.txt" 2>/dev/null || true
+    if [ ! -s "$out/console.txt" ]; then
+        echo "no matching lines fetched; falling back to the whole file." >&2
+        scp $ssh_opts -q "$CF_PLAY_HOST:$CF_PLAY_ZOMBOID/console.txt" "$out/console.txt" || {
+            echo "could not copy console.txt from $CF_PLAY_ZOMBOID." >&2
+            rmdir "$out" 2>/dev/null || true
+            exit 1; }
+    fi
+fi
 
 if [ "$want_all" -eq 1 ]; then
     scp $ssh_opts -qr "$CF_PLAY_HOST:$CF_PLAY_ZOMBOID/Logs" "$out/Logs" 2>/dev/null \
@@ -189,7 +215,12 @@ fi
 ln -sfn "$stamp" "$DEST/latest"
 
 lines="$(wc -l < "$out/console.txt" | tr -d ' ')"
-echo "  $out/console.txt  ($lines lines)"
+if [ "$want_full" -eq 1 ]; then
+    echo "  $out/console.txt  ($lines lines, whole file)"
+else
+    echo "  $out/console.txt  ($lines lines: ours, plus every WARN and ERROR)"
+    echo "  (tools/fetch_logs.sh --full for the engine chatter as well)"
+fi
 echo "  $DEST/latest -> $stamp"
 echo
 

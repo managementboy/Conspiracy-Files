@@ -38,6 +38,31 @@ paste:
 `grep ev=placed` returns five lines where a person would otherwise read five
 hundred. That is the whole design goal, and every rule below defends it.
 
+## Noise: filtered at the source, not muted in the game
+
+The engine can be told to shut up - `DebugLog.setLogEnabled(DebugType.General,
+false)` is callable from Lua - and we deliberately do not.
+
+`console.txt` belongs to the game and to the player. A mod that quietly turns
+off the engine's own logging is how the cause of a crash goes missing three
+weeks later, with no reason for anyone to suspect us. `General` also carries
+real engine errors, so muting it to lose the texture spam would take genuine
+failures with it.
+
+Instead `fetch_logs.sh` filters on the PLAY machine, so a long session copies
+kilobytes rather than megabytes:
+
+    tools/fetch_logs.sh          ours, plus every WARN and ERROR
+    tools/fetch_logs.sh --full   the whole file, engine chatter included
+
+Measured on a real console: **487 lines to 48, a 90% reduction, with all 9
+errors and all 39 warnings kept.** 82% of what it dropped was the engine
+repeating "BLANK OVERLAY TEXTURE" once per floor sprite.
+
+WARN and ERROR travel deliberately. The engine's own failures are how a mod
+crash gets explained, and dropping them to save bytes would be saving the wrong
+thing.
+
 ## The rules
 
 - **One prefix.** `[CF]` on every line, so one grep finds the whole mod. A
