@@ -109,7 +109,20 @@ local function placement(api,id)
             checked(api.status(id,"placed",worldHours()))
             -- Six identical "Document placed" lines answered nothing when the
             -- owner asked where the clues were. The fields exist; use them.
-            CFLog.write("i","placed",{doc=id,place=a.target and (a.target.x..","..a.target.y),
+            local address
+            do
+                local map=ConspiracyFiles.AddressMap
+                local site=a.locationId
+                if not site then
+                    for _,d in ipairs(api.snapshot().case.documents) do if d.id==id then site=d.locationId end end
+                end
+                if type(site)=="string" and map and map.labelForBuilding then
+                    local trimmed=string.sub(site,1,3)=="t3:" and string.sub(site,4) or site
+                    local okAddr,label=pcall(map.labelForBuilding,trimmed)
+                    if okAddr and type(label)=="string" and label~="" then address=label end
+                end
+            end
+            CFLog.write("i","placed",{doc=id,place=address or (a.target and (a.target.x..","..a.target.y)),
                 room=a.target and a.target.vehiclePart or nil,n=expected})
             return true
         end
@@ -417,14 +430,35 @@ end
 function R.devLocations()
     if not allowed() or not sessions then return "no active case" end
     local out={}
+    -- Coordinates alone made this diagnostic almost useless in play: the owner
+    -- had searched seven houses and could not tell which of them held the rest.
+    -- The address book already knows what a building is called, so say it.
+    local map=ConspiracyFiles.AddressMap
+    local function addressOf(siteId)
+        if type(siteId)~="string" or not map or not map.labelForBuilding then return nil end
+        -- Site ids are "t3:<buildingId>"; labelForBuilding adds that prefix
+        -- itself, so it is stripped here rather than doubled.
+        local buildingId=siteId
+        if string.sub(buildingId,1,3)=="t3:" then buildingId=string.sub(buildingId,4) end
+        local ok,label=pcall(map.labelForBuilding,buildingId)
+        if ok and type(label)=="string" and label~="" then return label end
+        return nil
+    end
     for _,api in ipairs(sessions) do
         local ok,snap=pcall(api.snapshot)
         if ok and snap and snap.assignments then
+            -- Where each document BELONGS, which is what carries the address.
+            -- An assignment only gains a locationId once it has relocated.
+            local siteOf={}
+            if snap.case and snap.case.documents then
+                for _,doc in ipairs(snap.case.documents) do siteOf[doc.id]=doc.locationId end
+            end
             for id,a in pairs(snap.assignments) do
                 local t=a.target
                 if t then
-                    out[#out+1]=string.format("%s  %s,%s floor %s  [%s]",
-                        tostring(id),tostring(t.x),tostring(t.y),tostring(t.z),tostring(a.status))
+                    local where=addressOf(a.locationId or siteOf[id]) or "address unknown"
+                    out[#out+1]=string.format("%s  %s  %s,%s floor %s  [%s]",
+                        tostring(id),where,tostring(t.x),tostring(t.y),tostring(t.z),tostring(a.status))
                 end
             end
         end

@@ -61,4 +61,11 @@ assert(runtime:find('CFLog.write("i","placed",{doc=', 1, true),
     'the placement line must carry the document id and its place')
 assert(not runtime:find('log("Document placed or reconciled.")', 1, true),
     'the fieldless placement line must be gone')
+-- "Where" means an address, not a coordinate pair. The owner had searched
+-- seven houses and could not tell which of them held the rest; the address book
+-- already knew what each building was called.
+assert(runtime:find('labelForBuilding', 1, true),
+    'the location dump must name the building, not only its coordinates')
+assert(runtime:find('address unknown', 1, true),
+    'an unnamed building must say so rather than printing nothing')
 print('PASS console switches: diagnostics log their answers, and placement says which and where')
