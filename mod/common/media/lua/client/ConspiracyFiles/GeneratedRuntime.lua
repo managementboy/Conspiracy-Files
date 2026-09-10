@@ -105,7 +105,14 @@ local function placement(api,id)
         if not finished then scan(); return false end
         if current~=container or count==nil then return true end
         if count>expected then checked(api.status(id,"conflict")); return true end
-        if count==expected then checked(api.status(id,"placed",worldHours())); log("Document placed or reconciled."); return true end
+        if count==expected then
+            checked(api.status(id,"placed",worldHours()))
+            -- Six identical "Document placed" lines answered nothing when the
+            -- owner asked where the clues were. The fields exist; use them.
+            CFLog.write("i","placed",{doc=id,place=a.target and (a.target.x..","..a.target.y),
+                room=a.target and a.target.vehiclePart or nil,n=expected})
+            return true
+        end
         if a.status=="placing" and not created then
             checked(api.status(id,"unknown")); log("Interrupted placement is uncertain; no automatic replacement."); return true
         end
@@ -423,7 +430,15 @@ function R.devLocations()
         end
     end
     table.sort(out)
-    if #out==0 then return "no documents placed" end
+    -- LOG the result, do not just return it. A debug-console call shows nothing
+    -- when a function only returns a string, so this read as "does nothing"
+    -- during the 2026-09-10 playtest - a diagnostic that cannot be used from
+    -- the console it was written for.
+    if #out==0 then
+        log("no documents placed")
+        return "no documents placed"
+    end
+    for _,line in ipairs(out) do log(line) end
     return table.concat(out,"\n")
 end
 function R.metrics() return scheduler and {peakMs=scheduler.peakMs} end

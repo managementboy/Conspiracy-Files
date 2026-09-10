@@ -45,3 +45,20 @@ end
 
 print('PASS console switches: every documented debug switch is reachable from '
     .. 'the console, not just defined on a local table')
+
+-- A diagnostic that only RETURNS a string shows nothing in the debug console,
+-- which is the console it exists for. devLocations read as "does nothing"
+-- during the 2026-09-10 playtest for exactly that reason.
+local f = assert(io.open('mod/common/media/lua/client/ConspiracyFiles/GeneratedRuntime.lua', 'r'))
+local runtime = f:read('*a'); f:close()
+local body = runtime:match('function R%.devLocations%(%).-\nend')
+assert(body, 'devLocations must exist')
+assert(body:find('log(', 1, true), 'a console diagnostic must log its result, not only return it')
+
+-- And placement must say WHICH document and WHERE. Six identical "Document
+-- placed" lines answered nothing when the owner asked where the clues were.
+assert(runtime:find('CFLog.write("i","placed",{doc=', 1, true),
+    'the placement line must carry the document id and its place')
+assert(not runtime:find('log("Document placed or reconciled.")', 1, true),
+    'the fieldless placement line must be gone')
+print('PASS console switches: diagnostics log their answers, and placement says which and where')
