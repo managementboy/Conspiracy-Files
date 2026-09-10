@@ -84,13 +84,4 @@ function M.withTrade()
     return out
 end
 
--- The trades this module has an opinion about, ordered. Kept small on purpose;
--- adding one is a content decision, not a bug fix.
-function M.trades()
-    local out={}
-    for kind in pairs(trade) do out[#out+1]=kind end
-    table.sort(out)
-    return out
-end
-
 return M

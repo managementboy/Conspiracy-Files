@@ -599,8 +599,22 @@ local function placeOf(item)
         if type(address)~="string" or address=="" then address=nil end
     end
     local kind=container and rd(container,"getType")
-    local vehicle=container and rd(container,"getVehiclePart")
-    if vehicle then return address and ("In a vehicle at "..address..".") or "In a vehicle." end
+    local part=container and rd(container,"getVehiclePart")
+    if part then
+        -- Name the vehicle. "In a vehicle" cannot tell a mail van from an
+        -- unmarked one, and that difference is the whole of what a vehicle
+        -- adds over a cupboard.
+        local vehicle=rd(part,"getVehicle")
+        local script=vehicle and rd(vehicle,"getScriptName")
+        -- Plain string.sub, not gsub with a pattern: Kahlua's string library
+        -- is incomplete and this stays inside the part the engine implements.
+        local name=type(script)=="string" and script or nil
+        if name and string.sub(name,1,5)=="Base." then name=string.sub(name,6) end
+        local where=name and ("In a "..name) or "In a vehicle"
+        local slot=rd(part,"getId")
+        if type(slot)=="string" and slot~="" then where=where.." ("..slot..")" end
+        return address and (where.." at "..address..".") or (where..".")
+    end
     if kind and kind~="floor" then
         return address and ("In a "..tostring(kind).." at "..address..".")
             or ("In a "..tostring(kind)..".")

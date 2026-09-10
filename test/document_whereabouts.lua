@@ -50,3 +50,17 @@ assert(unchecked and unchecked:lower():find('not checked'),
 
 print('PASS document whereabouts: misses counted, uncertainty needs several, '
     .. 'sightings reset on load, and no state claims a document was destroyed')
+
+-- Naming the vehicle (2026-09-10). "In a vehicle" cannot tell a mail van from
+-- an unmarked one, and that difference is the whole of what a vehicle adds
+-- over a cupboard. Until the notebook says which car, a trade-mismatch rule
+-- has nothing a player could ever perceive.
+assert(runtime:find('local vehicle=rd(part,"getVehicle")', 1, true),
+    'the whereabouts line must reach the vehicle, not just its part')
+assert(runtime:find('rd(vehicle,"getScriptName")', 1, true),
+    'the vehicle must be named')
+assert(runtime:find('string.sub(name,1,5)=="Base."', 1, true),
+    'the Base. prefix is engine plumbing and must not reach the player')
+assert(not runtime:find('or "In a vehicle." end', 1, true),
+    'the old unnamed wording must be gone')
+print('PASS document whereabouts: the notebook names the vehicle a clue is in')

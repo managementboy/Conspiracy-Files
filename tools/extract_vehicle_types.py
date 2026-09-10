@@ -131,7 +131,7 @@ LUA_HEADER = """-- DERIVED FILE - do not edit by hand.
 -- a mapping somebody invented.
 local M={}
 M.REVISION="%s"
--- {id, script, drivers, parts, trailer}
+-- {id, drivers, parts}
 M.vehicles={
 """
 
@@ -145,9 +145,8 @@ def write_lua(path, rows):
         for row in rows:
             drivers = ",".join('"%s"' % d for d in row["drivers"])
             parts = ",".join('"%s"' % p for p in row["parts"])
-            out.write(' {id="%s",script="%s",trailer=%s,drivers={%s},parts={%s}},\n'
-                      % (row["id"], row["script"], "true" if row["trailer"] else "false",
-                         drivers, parts))
+            out.write(' {id="%s",drivers={%s},parts={%s}},\n'
+                      % (row["id"], drivers, parts))
         out.write("""}
 local byId={}
 for _,v in ipairs(M.vehicles) do byId[v.id]=v end
@@ -155,18 +154,7 @@ function M.count() return #M.vehicles end
 function M.get(id)
     local v=type(id)=="string" and byId[id]
     if not v then return nil,"unknown vehicle" end
-    return {id=v.id,script=v.script,trailer=v.trailer,drivers=v.drivers,parts=v.parts}
-end
--- The kinds of person the game names across every vehicle, ordered.
-function M.driverKinds()
-    local seen,out={},{}
-    for _,v in ipairs(M.vehicles) do
-        for _,d in ipairs(v.drivers) do
-            if not seen[d] then seen[d]=true; out[#out+1]=d end
-        end
-    end
-    table.sort(out)
-    return out
+    return {id=v.id,drivers=v.drivers,parts=v.parts}
 end
 return M
 """)

@@ -45,7 +45,8 @@ end
 for _, id in ipairs(Rules.candidates("physicalTrace")) do
     local item = assert(Catalogue.get(id))
     assert(not Catalogue.has(item, "firearm"), id .. " is a firearm and must not be placed as evidence")
-    assert(not Rules.denialReason(item.category), id .. " comes from a denied category")
+    assert(item.category ~= "Explosives" and item.category ~= "Furniture",
+        id .. " comes from a denied category")
 end
 
 -- Determinism, the same requirement every other selection in the generator

@@ -205,7 +205,7 @@ LUA_HEADER = """-- DERIVED FILE - do not edit by hand.
 -- investigation may use, and never picks an item by name.
 local M={}
 M.REVISION="%s"
--- {id, fullType, category, script, weight, calories, properties}
+-- {id, fullType, category, weight, calories, properties}
 --
 -- `calories` is carried so a rule can bound what a pile is WORTH rather than
 -- banning whole categories from being piled. A hundred eggs is a mystery in
@@ -223,8 +223,8 @@ def write_lua(path, rows):
         out.write(LUA_HEADER % ("objects-" + digest))
         for name, source, category, props, module, weight, calories in rows:
             plist = ",".join('"%s"' % p for p in props.split(","))
-            out.write(' {id="%s",fullType="%s.%s",category="%s",script="%s",weight=%.3f,calories=%.1f,properties={%s}},\n'
-                      % (name, module, name, category, source, weight, calories, plist))
+            out.write(' {id="%s",fullType="%s.%s",category="%s",weight=%.3f,calories=%.1f,properties={%s}},\n'
+                      % (name, module, name, category, weight, calories, plist))
         out.write("""}
 local byId={}
 for _,item in ipairs(M.items) do byId[item.id]=item end
@@ -233,8 +233,7 @@ function M.get(id)
     local item=type(id)=="string" and byId[id]
     if not item then return nil,"unknown catalogue object" end
     return {id=item.id,fullType=item.fullType,category=item.category,
-            script=item.script,weight=item.weight,calories=item.calories,
-            properties=item.properties}
+            weight=item.weight,calories=item.calories,properties=item.properties}
 end
 function M.has(item,property)
     for _,p in ipairs(item.properties) do if p==property then return true end end

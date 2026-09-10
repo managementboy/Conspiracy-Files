@@ -336,7 +336,4 @@ end
 M.WEIGHT_BUDGET=WEIGHT_BUDGET
 M.CALORIE_BUDGET=CALORIE_BUDGET
 
--- Why a category is refused, for anyone who wonders where an item went.
-function M.denialReason(category) return DENY[category] end
-
 return M
