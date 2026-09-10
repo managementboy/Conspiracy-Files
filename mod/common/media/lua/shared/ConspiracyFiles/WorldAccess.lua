@@ -99,9 +99,17 @@ function World.vehiclesNear(x,y,z,radius,limit)
     local vehicles=cell:getVehicles()
     if not vehicles then return found end
     limit=limit or 8
-    for vehicle in pairs(vehicles) do
+    -- size()/get(i-1), the way vanilla does it (ISVehicleBloodUI.lua:80).
+    -- getVehicles() returns a Java Set, not a Lua table, and `pairs` on one
+    -- throws inside Kahlua's TableLib - which is exactly how this crashed the
+    -- 2026-09-10 playtest. The unit test's fake cell was a Lua table, so it
+    -- was more convenient than the real thing and proved nothing.
+    if not vehicles.size or not vehicles.get then return found end
+    local total=vehicles:size()
+    for i=1,total do
         if #found>=limit then break end
-        local square=vehicle.getSquare and vehicle:getSquare()
+        local vehicle=vehicles:get(i-1)
+        local square=vehicle and vehicle.getSquare and vehicle:getSquare()
         if square then
             local vx,vy,vz=square:getX(),square:getY(),square:getZ()
             if vz==z and math.abs(vx-x)<=radius and math.abs(vy-y)<=radius then

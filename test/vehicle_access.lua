@@ -52,7 +52,15 @@ end
 local car = fakeVehicle(100, 100, { GloveBox = 5, TruckBed = 40 })
 local van = fakeVehicle(102, 101, { TruckBed = 70 })
 local absent = fakeVehicle(500, 500, { GloveBox = 5 })
-local cell = { getVehicles = function() return { [car] = true, [van] = true, [absent] = true } end }
+-- The engine returns a Java Set from getVehicles(), reached with size() and
+-- get(i-1) - never a Lua table, and never with `pairs`. This fake mirrors that
+-- exactly, because the first version of it was a Lua table: more convenient
+-- than the real thing, passing happily while the game crashed on `pairs`.
+local function javaSet(list)
+    return { size = function() return #list end,
+             get = function(_, i) return list[i + 1] end }
+end
+local cell = { getVehicles = function() return javaSet({ car, van, absent }) end }
 getCell = function() return cell end
 
 local W = require("ConspiracyFiles/WorldAccess")
@@ -86,7 +94,7 @@ assert(W.resolveVehicle(target) == boot, "the marked boot must resolve where it 
 -- kind on a car still standing where the candidate was found must resolve.
 -- Without this the first placement could never happen at all.
 local fresh = fakeVehicle(200, 200, { TruckBed = 40 })
-cell.getVehicles = function() return { [car] = true, [van] = true, [absent] = true, [fresh] = true } end
+cell.getVehicles = function() return javaSet({ car, van, absent, fresh }) end
 local unplaced = { x = 200, y = 200, z = 0, vehiclePart = "TruckBed" }
 assert(W.resolveVehicle(unplaced, "cf-g2:doc-9") == fresh.parts.TruckBed.container,
     "an unmarked part where the candidate was found must resolve, or nothing is ever placed")
@@ -157,9 +165,14 @@ assert(#W.partsWithRoom(fakeVehicle(1, 1, { GloveBox = 5 }), 0.2) == 1,
 
 -- The scan is bounded: a cell can hold a great many vehicles.
 local many = {}
-for i = 1, 40 do many[fakeVehicle(100, 100, { TruckBed = 40 })] = true end
-cell.getVehicles = function() return many end
+for i = 1, 40 do many[#many + 1] = fakeVehicle(100, 100, { TruckBed = 40 }) end
+cell.getVehicles = function() return javaSet(many) end
 assert(#W.vehiclesNear(100, 100, 0, 5, 8) <= 8, "the vehicle scan must stay bounded")
+
+-- A collection that is not the engine's shape must be refused, not iterated.
+cell.getVehicles = function() return { [car] = true } end
+assert(#W.vehiclesNear(100, 100, 0, 5) == 0,
+    "a Lua table is not what the engine returns; iterating one would hide the real shape again")
 
 print("PASS vehicle access: ordered parts with capacities, distance from where a car is now, "
     .. "and a marked boot that survives being driven across town")
