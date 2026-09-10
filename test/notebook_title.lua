@@ -87,3 +87,18 @@ receiverEnforced = not ok
 assert(receiverEnforced, 'the double must reject a receiverless call, or this test proves nothing')
 
 print('PASS notebook title: survivor forename, fallbacks for absent/empty/throwing descriptors, bounded, debug build suffix')
+
+-- PlaceNames was copy-pasted into Notebook.lua - 377 lines, kept in step by a
+-- script - while the file already required five modules. Nothing in the
+-- history ever gave a reason. It is a plain require now, and this is the
+-- check that it stays one: a second copy would drift silently, and the drift
+-- would show as a notebook rendering street names the rest of the mod does not
+-- recognise.
+local f = assert(io.open('mod/common/media/lua/client/ConspiracyFiles/Notebook.lua', 'r'))
+local notebook = f:read('*a'); f:close()
+assert(notebook:find('local PlaceNames=require("ConspiracyFiles/Generated/PlaceNames")', 1, true),
+    'the notebook must require PlaceNames, not carry a copy of it')
+assert(not notebook:find('hot-load copy', 1, true), 'the copied block must be gone')
+assert(not notebook:find('Derived named street segments', 1, true),
+    'no fragment of the copy may remain')
+print('PASS notebook: PlaceNames is required, not copied')
