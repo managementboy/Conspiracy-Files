@@ -23,6 +23,10 @@ assert(named >= 15, "only " .. named .. " vehicles name their driver; the deriva
 -- The game's own statements, spot-checked. These are facts from
 -- media/scripts/generated/vehicles, not opinions.
 assert(Vehicles.get("VanAmbulance").drivers[1] == "AmbulanceDriver")
+-- Parts are not recorded here on purpose: WorldAccess asks the live vehicle,
+-- because a car in the world can be missing a seat or a trunk door and a table
+-- written from the scripts would disagree with the car in front of the player.
+assert(Vehicles.get("VanAmbulance").parts == nil, "the catalogue must not claim to know a car's parts")
 assert(Vehicles.get("VanMail").drivers[1] == "Postal")
 assert(Vehicles.get("VanSeats_Prison").drivers[1] == "PrisonGuard")
 assert(Vehicles.get("Trailer_Livestock").drivers[1] == "Farmer", "a livestock trailer is a farmer's")

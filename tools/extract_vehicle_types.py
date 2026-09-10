@@ -131,7 +131,12 @@ LUA_HEADER = """-- DERIVED FILE - do not edit by hand.
 -- a mapping somebody invented.
 local M={}
 M.REVISION="%s"
--- {id, drivers, parts}
+-- {id, drivers}
+--
+-- Container parts are deliberately NOT recorded. WorldAccess asks the live
+-- vehicle which parts it has, because a car in the world can have a seat or a
+-- trunk door missing, and a table written from the scripts would confidently
+-- disagree with the car standing in front of the player.
 M.vehicles={
 """
 
@@ -144,9 +149,7 @@ def write_lua(path, rows):
         out.write(LUA_HEADER % ("vehicles-" + digest))
         for row in rows:
             drivers = ",".join('"%s"' % d for d in row["drivers"])
-            parts = ",".join('"%s"' % p for p in row["parts"])
-            out.write(' {id="%s",drivers={%s},parts={%s}},\n'
-                      % (row["id"], drivers, parts))
+            out.write(' {id="%s",drivers={%s}},\n' % (row["id"], drivers))
         out.write("""}
 local byId={}
 for _,v in ipairs(M.vehicles) do byId[v.id]=v end
@@ -154,7 +157,7 @@ function M.count() return #M.vehicles end
 function M.get(id)
     local v=type(id)=="string" and byId[id]
     if not v then return nil,"unknown vehicle" end
-    return {id=v.id,drivers=v.drivers,parts=v.parts}
+    return {id=v.id,drivers=v.drivers}
 end
 return M
 """)
