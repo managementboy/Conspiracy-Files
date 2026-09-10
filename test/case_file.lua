@@ -106,10 +106,16 @@ local menu = source('mod/common/media/lua/client/ConspiracyFiles/GeneratedMenu.l
 assert(caseFile:find('selectButtonForContainer', 1, true), 'the papers must open in the inventory panel')
 assert(caseFile:find('pcall(function()', 1, true), 'and must not throw if the panel is not there yet')
 
--- (b) The item's own icon on the context options.
-assert(menu:find('item:getTexture()', 1, true), 'menu options should carry the item icon')
-assert(menu:find('option.iconTexture=icon', 1, true))
-assert(menu:find('here.iconTexture=icon', 1, true), 'both options, not just one')
+-- (b) An icon for the ACTION, not for the thing. The item's own icon says what
+-- it is, which the row above the menu already showed.
+assert(not menu:find('item:getTexture()', 1, true),
+    "the option must not wear the item's own icon; that says what it is, not what it does")
+assert(menu:find('media/ui/Search_Icon_On.png', 1, true), 'inspect wants a magnifying glass')
+assert(menu:find('option.iconTexture=lookIcon', 1, true))
+assert(menu:find('here.iconTexture=noteIcon', 1, true), 'a different action gets a different icon')
+-- Item icons are packed in Build 42, so candidates are tried in turn and a
+-- missing texture must never cost the player the option.
+assert(menu:find('pcall(getTexture,path)', 1, true), 'a missing texture must not throw')
 
 -- (c) Not "Case File": the survivor is not an investigator.
 -- Checked on what titleFor RETURNS, not on the file: the comment above it

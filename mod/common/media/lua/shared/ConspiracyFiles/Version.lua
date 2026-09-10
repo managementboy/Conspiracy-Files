@@ -14,5 +14,5 @@
 -- This module deliberately requires nothing, so anything can read it without
 -- dragging in a dependency chain.
 ConspiracyFiles = ConspiracyFiles or {}
-ConspiracyFiles.VERSION = "DEV-0.20.0-caseperson"
+ConspiracyFiles.VERSION = "DEV-0.20.1-actionicons"
 return ConspiracyFiles.VERSION
