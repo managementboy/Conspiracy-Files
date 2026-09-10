@@ -149,6 +149,11 @@ local function placement(api,id)
             -- Its own category, so evidence sorts together instead of hiding
             -- among Junk (owner, 2026-09-10). A display string only; nothing
             -- in the game keys off it.
+            --
+            -- The name is a TRANSLATION KEY: the inventory renders
+            -- IGUI_ItemCat_<category>, and without the entry the player sees
+            -- the raw key. Ours ships in Translate/EN/IG_UI.json - seen in
+            -- play as "IGUI_ItemCat_Evidence" down a whole column.
             pcall(function() item:setDisplayCategory("Evidence") end)
             applyWear(item,doc)
             writePages(item,doc)

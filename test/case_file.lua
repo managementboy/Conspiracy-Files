@@ -129,3 +129,14 @@ assert(titleFor:find("'s Papers", 1, true), 'they kept some papers')
 assert(runtime:find('item:setDisplayCategory("Evidence")', 1, true),
     'placed evidence must carry its own category so it can be sorted')
 print('PASS case file: opens on start, carries icons, is not a "case file", and sorts as Evidence')
+
+-- The display category is a TRANSLATION KEY. The inventory renders
+-- IGUI_ItemCat_<category>, so without the entry a player sees the raw key -
+-- which is exactly what happened in play: a column reading
+-- "IGUI_ItemCat_Evidence" beside every clue.
+local translations = source('mod/common/media/lua/shared/Translate/EN/IG_UI.json')
+local category = runtime:match('setDisplayCategory%("([^"]+)"%)')
+assert(category, 'the evidence category must be findable')
+assert(translations:find('"IGUI_ItemCat_' .. category .. '"', 1, true),
+    'the category ' .. category .. ' has no translation; the player would see the raw key')
+print('PASS case file: the evidence category ships the translation the inventory looks up')
