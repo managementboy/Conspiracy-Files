@@ -68,3 +68,45 @@ for _,forbidden in ipairs({'was','worked as','owned'}) do
  assert(not outfitSentence:find(forbidden,1,true),'outfit sentence must not assert: found "'..forbidden..'"')
 end
 print('PASS identity observations: outfit observed on the same body is surfaced, never asserted, degrades silently')
+
+-- Named items found in FURNITURE (owner, 2026-09-10: "let named items found in
+-- furniture become identity leads, not just ones off bodies").
+--
+-- Until now identity was read only off a corpse or a bag taken from one. That
+-- rule had a good reason - a name on a body is evidence that person was THERE
+-- - and a drawer is weaker. It is not nothing, though, and the wording has to
+-- carry the difference rather than flattening three strengths into one claim.
+local furniture = {
+    schema = 1,
+    records = { {
+        id = "Base.Diary1:77", fullType = "Base.Diary1", label = "Diary: Kirk Key",
+        source = "furniture", container = "dresser",
+        x = 10, y = 20, z = 0, observedAt = 5,
+    } },
+}
+assert(M.validate(furniture), "a furniture-sourced observation must be accepted")
+local rows = M.rows(furniture)
+assert(#rows == 1, "it must reach the notebook")
+local body = rows[1].detailText
+assert(type(body) == "string", "a row must carry its own text")
+assert(body:find("put away in a dresser", 1, true), body)
+-- The claim must stay at the strength the source supports.
+assert(body:find("Somebody kept this here", 1, true), "a drawer says only that it was kept there")
+-- The disclaimer has to name what it is NOT, because a name in a house reads
+-- as ownership unless the text refuses it out loud.
+assert(body:find("not that they lived here", 1, true), body)
+assert(body:find("not that they are the person on the document", 1, true), body)
+-- And a corpse still reads as a corpse: the stronger source must not have been
+-- levelled down to match the weaker one.
+local corpse = {
+    schema = 1,
+    records = { {
+        id = "Base.IDcard:1", fullType = "Base.IDcard", label = "ID Card",
+        source = "corpse", container = "corpse",
+        x = 1, y = 1, z = 0, observedAt = 1,
+    } },
+}
+local corpseRows = M.rows(corpse)
+assert(corpseRows[1].detailText:find("among a corpse's belongings", 1, true), corpseRows[1].detailText)
+assert(corpseRows[1].detailText:find("among a corpse's belongings", 1, true), corpseRows[1].detailText)
+print('PASS identity observations: a name in a dresser is a lead, and a weaker one than a name on a body')

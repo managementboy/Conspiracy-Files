@@ -108,3 +108,17 @@ run(pane(prox,{card(4245,wallet,'ID Card: Bag Vale')}))
 assert(observedTitled('Bag Vale'),'a row inside a bag is observed from a merged pane too')
 
 print('PASS IdentityObserver: native wrapper, visibility, nested wallet gate, reload dedup, IDs, clipping, failed writes/budget, bounded queue, MP refusal')
+
+-- Furniture is a source, the proximity pane is not (owner, 2026-09-10: "let
+-- named items found in furniture become identity leads, not just ones off
+-- bodies"). The list is closed for exactly this reason: an item loose in the
+-- merged pane, or on the floor, has no provenance and must still be refused.
+local observer = assert(io.open('mod/common/media/lua/client/ConspiracyFiles/IdentityObserver.lua', 'r'))
+local text = observer:read('*a'); observer:close()
+assert(text:find('local FURNITURE=', 1, true), 'the accepted container types must be a named, closed list')
+assert(text:find('dresser=true', 1, true), "a dresser is somebody's furniture")
+assert(not text:find('proxInv=true', 1, true), 'the merged pane aggregate is not furniture')
+assert(not text:find('floor=true', 1, true), 'the floor is not furniture')
+assert(text:find('"furniture",nil', 1, true),
+    'furniture yields no carrier: there is no body behind a drawer to take a provenance token from')
+print('PASS IdentityObserver: a drawer is a source, the floor and the merged pane are not')

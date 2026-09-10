@@ -76,6 +76,13 @@ end
 -- classified "container" and its outfit lead was discarded even though the mod
 -- knew which body the wallet came from. Observed 2026-09-08 with Jarvis
 -- Harding; see docs/management/PLAYTEST_2026-09-08.md.
+-- Container types that are somebody's furniture: a person chose to put a
+-- document in one. Deliberately excludes "floor" and the merged pane's own
+-- "proxInv" aggregate, where an item is merely lying about.
+local FURNITURE={desk=true,counter=true,shelves=true,filingcabinet=true,locker=true,
+ dresser=true,wardrobe=true,sidetable=true,crate=true,freezer=true,fridge=true,
+ clothingrack=true,bin=true,medicine=true,toolbox=true,militarycrate=true,
+ metal_shelves=true,officedrawers=true,filecabinet=true}
 local function describeContainer(c,player)
  if not c or c==read(player,"getInventory") then return nil end
  local owner=read(c,"getParent")
@@ -85,6 +92,25 @@ local function describeContainer(c,player)
   local name=clean(read(bag,"getDisplayName"),120)
   if name then return name,"container",bag end
  end
+ -- Furniture. Owner, 2026-09-10: "let named items found in furniture become
+ -- identity leads, not just ones off bodies."
+ --
+ -- A named diary in a stranger's dresser was skipped until now, because
+ -- identity was only ever read off a corpse or a bag taken from one. That rule
+ -- exists for a good reason - a name on a body is evidence that person was
+ -- THERE - and a drawer is weaker. It is not nothing, though: somebody named
+ -- on a diary kept it in this house.
+ --
+ -- So a furniture container yields a place rather than a person: the source is
+ -- "furniture", never "corpse", and IdentityObservations keeps the claim at the
+ -- strength the source supports.
+ --
+ -- A CLOSED list, and that is the point. The merged proximity pane is itself a
+ -- container (type "proxInv"), and so is the floor; an item loose in either has
+ -- no provenance at all and must still be refused, exactly as before. Only a
+ -- real piece of furniture - something a person put a document INTO - counts.
+ local kind=read(c,"getType")
+ if type(kind)=="string" and FURNITURE[kind] then return kind,"furniture",nil end
  return nil
 end
 -- The provenance token a carrier already holds, if LocalPersonIntegration has

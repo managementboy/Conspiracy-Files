@@ -10,7 +10,7 @@ local function validRecord(r)
  if type(r)~="table" or getmetatable(r) then return false end
  for k in pairs(r) do if not fields[k] then return false end end
  return types[r.fullType] and text(r.id,240) and r.id:sub(1,#r.fullType+1)==r.fullType..":"
-  and #r.id>#r.fullType+1 and text(r.label,180) and (r.source=="corpse" or r.source=="container")
+  and #r.id>#r.fullType+1 and text(r.label,180) and (r.source=="corpse" or r.source=="container" or r.source=="furniture")
   and text(r.container,120) and finite(r.x) and finite(r.y) and finite(r.z)
   and finite(r.observedAt) and r.observedAt>=0
   and (r.token==nil or text(r.token,160))
@@ -68,7 +68,14 @@ function M.rows(root,outfitFor)
  if not M.validate(root) then return {} end
  local rows={}
  for i,r in ipairs(root.records) do
-  local where=r.source=="corpse" and "among a corpse's belongings" or ("inside "..r.container)
+  -- Three strengths of the same observation, and the wording carries the
+  -- difference. A name on a body is evidence that person was there; a name in
+  -- a bag taken off a body is nearly as strong; a name in somebody's dresser
+  -- says only that the document was kept in that house.
+  local where
+  if r.source=="corpse" then where="among a corpse's belongings"
+  elseif r.source=="furniture" then where="put away in a "..r.container
+  else where="inside "..r.container end
   local detail="I saw a document labelled \""..r.label.."\" "..where.."."
   -- A container carrying a body's provenance token was taken off that body,
   -- and the player is entitled to know it. Saying only "inside Wallet" threw
@@ -82,7 +89,11 @@ function M.rows(root,outfitFor)
   if r.source~="corpse" and r.token then
    detail=detail.." That container was taken off a corpse."
   end
-  detail=detail.."\n\nThe name on a document is a lead. It does not establish who owned the container or identify the body."
+  if r.source=="furniture" then
+   detail=detail.."\n\nSomebody kept this here. That is all it shows: not that they lived here, not that they are nearby, and not that they are the person on the document."
+  else
+   detail=detail.."\n\nThe name on a document is a lead. It does not establish who owned the container or identify the body."
+  end
   if r.token and outfitFor then
    local ok,outfit=pcall(outfitFor,r.token)
    if ok and text(outfit,120) then
