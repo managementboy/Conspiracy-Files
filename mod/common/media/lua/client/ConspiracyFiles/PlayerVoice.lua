@@ -104,8 +104,15 @@ end
 -- delivery is logged. That cost an hour on clue hints; do not repeat it.
 local CFLog=require("ConspiracyFiles/Log")
 local function log(message) CFLog.message("voice","voice",message) end
-local function speak(player,text)
+-- Two visual channels, two different strings. Owner, 2026-09-10: "some
+-- messages on top of the player repeated once in colour once in white" - which
+-- they did, because Say and setHaloNote were both handed the same sentence.
+-- The bubble is the survivor thinking; the halo is the fact, in as few words
+-- as will fit above a head.
+local function speak(player,text,label)
     if not player then log("no player; line not delivered") return false,false end
+    assert(type(label)=="string" and label~="" and label~=text,
+        "the halo must say something other than the spoken line, or it echoes it")
     -- Call engine methods with colon syntax, the way vanilla does.
     -- pcall(obj.method, obj, ...) extracts the method first; Kahlua treats that
     -- differently from a real method call, and pcall then hides any complaint, so
@@ -113,14 +120,14 @@ local function speak(player,text)
     if player.Say then pcall(function() player:Say(text) end) end
     local halo=false
     if player.setHaloNote then
-        halo=pcall(function() player:setHaloNote(text,255,255,255,HALO_DURATION) end)
+        halo=pcall(function() player:setHaloNote(label,255,255,255,HALO_DURATION) end)
     end
     local audible=false
     if getSoundManager then
         local ok,manager=pcall(getSoundManager)
         if ok and manager and manager.playUISound then audible=pcall(function() manager:playUISound(VOICE_SOUND) end) end
     end
-    log("said \""..tostring(text).."\" halo="..tostring(halo).." sound="..tostring(audible))
+    log("said \""..tostring(text).."\" halo="..tostring(halo).."("..tostring(label)..") sound="..tostring(audible))
     return halo,audible
 end
 
@@ -139,7 +146,7 @@ function V.onDiscovery(kind,reference)
     if t-lastSetAAt<COOLDOWN_MS then log("journal line suppressed by cooldown ("..(t-lastSetAAt).."ms)") return end
     lastSetAAt=t
     indexA=indexA%#SET_A+1
-    speak(p,SET_A[indexA])
+    speak(p,SET_A[indexA],"Noted")
 end
 
 -- Set B/C: a real key looted from a body opened a door. Never gated by the
@@ -153,10 +160,10 @@ function V.onKeyDoorLink(sourceToken)
     if names and names.nameFor then ok,name=pcall(names.nameFor,sourceToken) end
     if ok and type(name)=="string" and name~="" then
         indexB=indexB%#SET_B+1
-        speak(p,withName(SET_B[indexB],name))
+        speak(p,withName(SET_B[indexB],name),"Key matches this door")
     else
         indexC=indexC%#SET_C+1
-        speak(p,SET_C[indexC])
+        speak(p,SET_C[indexC],"Key matches this door")
     end
 end
 
@@ -185,7 +192,7 @@ function V.onEvidenceFound(item)
     lastSetAAt=t
     md.cfVoiceHinted=true
     indexD=indexD%#SET_D+1
-    speak(p,SET_D[indexD])
+    speak(p,SET_D[indexD],"Unread")
 end
 
 -- Test/debug hook: reset rotation and cooldown state.

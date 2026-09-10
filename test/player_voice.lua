@@ -163,7 +163,14 @@ assert(#says==3,"Set B/C is never gated by the Set A cooldown")
 Voice.reset(); says={}; haloNotes={}; uiSounds={}; otherSounds={}
 clock=clock+60000
 Voice.onDiscovery("evidence","halo-check")
-assert(#haloNotes==1 and haloNotes[1].text==says[1],"the halo note must repeat the spoken line")
+-- Two channels, two strings (owner, 2026-09-10: "some messages on top of the
+-- player repeated once in colour once in white"). The bubble carries the
+-- survivor's line; the halo carries the fact in as few words as fit above a
+-- head. This assertion used to demand the opposite - it pinned the echo - so
+-- it is inverted deliberately, not relaxed.
+assert(#haloNotes==1,"one halo note per line")
+assert(haloNotes[1].text~=says[1],"the halo must not repeat the spoken line")
+assert(#haloNotes[1].text<=30,"a halo is read at a glance: "..haloNotes[1].text)
 assert(type(haloNotes[1].duration)=="number" and haloNotes[1].duration>=300,
     "the halo note must carry an explicit, generous duration")
 assert(#uiSounds==1,"exactly one UI-channel sound per spoken line")
@@ -186,3 +193,22 @@ local ok=pcall(Voice.onDiscovery,"evidence","bare")
 assert(ok and #says==1,"a player without setHaloNote/sound manager must still speak, not throw")
 
 print("PASS player voice: every Set A/B/C line reachable, no immediate repeats, name never fabricated, cooldown gates Set A only, link line escapes it, halo duration and UI-only sound")
+
+-- The defect this guards: Say and setHaloNote were both handed the same
+-- sentence, so every line appeared twice above the player - once in the
+-- bubble's colour, once in the halo's white. Reported in play, and it survived
+-- because two tests asserted the echo rather than questioning it.
+--
+-- A source check as well as a behavioural one, because the behavioural test
+-- only covers the paths it exercises and this defect was in every path.
+local f = assert(io.open('mod/common/media/lua/client/ConspiracyFiles/PlayerVoice.lua', 'r'))
+local voice = f:read('*a'); f:close()
+assert(not voice:find('setHaloNote(text', 1, true),
+    'the halo must never be handed the spoken text')
+assert(voice:find('label~=text', 1, true),
+    'the split must be enforced at the call, not left to whoever adds the next line')
+local g = assert(io.open('mod/common/media/lua/client/ConspiracyFiles/ClueHints.lua', 'r'))
+local hints = g:read('*a'); g:close()
+assert(not hints:find('setHaloNote(text', 1, true), 'the hint halo must not repeat the spoken phrase')
+assert(not hints:find('addText(p,text)', 1, true), 'nor on the fallback path')
+print('PASS player voice: the bubble and the halo never say the same thing')

@@ -174,7 +174,14 @@ Voice.reset(); says={}; haloNotes={}; uiSounds={}
 clock=clock+60000
 local halo=makeItem(true,false)
 ISTransferAction.transferItem(nil,player,halo,{},{})
-assert(#haloNotes==1 and haloNotes[1].text==says[1],"the halo note must repeat the spoken line")
+-- Two channels, two strings (owner, 2026-09-10: "some messages on top of the
+-- player repeated once in colour once in white"). The bubble carries the
+-- survivor's line; the halo carries the fact in as few words as fit above a
+-- head. This assertion used to demand the opposite - it pinned the echo - so
+-- it is inverted deliberately, not relaxed.
+assert(#haloNotes==1,"one halo note per line")
+assert(haloNotes[1].text~=says[1],"the halo must not repeat the spoken line")
+assert(haloNotes[1].text=="Unread","unread evidence in hand is stated, not wondered about")
 assert(type(haloNotes[1].duration)=="number" and haloNotes[1].duration>=300,
     "the halo note must carry an explicit, generous duration")
 assert(#uiSounds==1,"exactly one UI-channel sound per spoken line")

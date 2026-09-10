@@ -51,7 +51,13 @@ x=3; y=1; tick(); tick()
 assert(#says==3,'two tiles triggers a hint')
 -- Every spoken hint carries a halo note, from the first one onward.
 assert(#haloNotes==#says,'each spoken hint gets exactly one halo note')
-assert(haloNotes[#haloNotes].text==says[#says],'halo note repeats the spoken phrase')
+-- Two channels, two strings (owner, 2026-09-10: "some messages on top of the
+-- player repeated once in colour once in white"). The bubble carries the
+-- survivor's line; the halo carries the fact in as few words as fit above a
+-- head. This assertion used to demand the opposite - it pinned the echo - so
+-- it is inverted deliberately, not relaxed.
+assert(haloNotes[#haloNotes].text~=says[#says],'the halo must not repeat the spoken phrase')
+assert(haloNotes[#haloNotes].text=='Something nearby','the halo states the fact, briefly')
 assert(type(haloNotes[#haloNotes].duration)=='number' and haloNotes[#haloNotes].duration>=300,
  'the halo note must carry an explicit, generous duration: a hint that vanishes before it is read is no hint')
 assert(#halos==0,'setHaloNote is preferred; HaloTextHelper is only the fallback')

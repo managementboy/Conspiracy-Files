@@ -78,6 +78,20 @@ properly, never at the keybind or the context-menu action by name.
 - Never a world sound and never an emitter: UI channel only, so the survivor's
   thinking never attracts zombies.
 - Rotate phrasings; never repeat the previous line twice running.
+- **The bubble and the halo never say the same thing.** Reported in play,
+  2026-09-10: "some messages on top of the player repeated once in colour once
+  in white". They did - `Say` and `setHaloNote` were both handed the same
+  sentence, so every line appeared twice above the survivor's head.
+
+  The bubble is the survivor thinking, in their own words. The halo is the
+  fact, in as few words as fit above a head: `Noted`, `Unread`,
+  `Key matches this door`, `Something nearby`.
+
+  `speak` refuses a halo label equal to the spoken line, so the split cannot
+  quietly lapse when somebody adds the next voice line. It survived this long
+  because two tests asserted the echo instead of questioning it; those
+  assertions are now inverted rather than deleted, so the reversal is on the
+  record.
 - A cooldown so a burst of discoveries does not produce a burst of chatter.
 - Set B/C is the more significant event and must not be suppressed by a Set A
   line fired moments earlier.
