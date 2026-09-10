@@ -176,8 +176,16 @@ local function generatedRows(section)
         -- reordering anything. Identity and connection rows never reach this
         -- function, so no case marker is invented for them.
         local caseMarker=case and type(case.facts)=="table" and type(case.facts.code)=="string" and case.facts.code
+        -- EvidenceKinds.label is a human phrase for the twelve paper carriers
+        -- ("Dispatch document"), but an object carrier's label is its raw
+        -- catalogue id - "ClayPot" reached the notebook on 2026-09-10. An
+        -- object already says what it is in its own title, so the summary says
+        -- what kind of thing it is rather than repeating the id.
+        local carrier=require("ConspiracyFiles/Generated/EvidenceKinds").get(r.kind) or {}
+        local what=carrier.label or "Evidence"
+        if carrier.capacity=="object" then what="Object found" end
         rows[i]={id=r.id,ordinal=i,title=r.title,
-            summary=((require("ConspiracyFiles/Generated/EvidenceKinds").get(r.kind) or {}).label or "Evidence").." - Discovery "..i
+            summary=what.." - Discovery "..i
                 ..(caseMarker and " - Case "..caseMarker or ""),detailText=detail}
     end
     return rows

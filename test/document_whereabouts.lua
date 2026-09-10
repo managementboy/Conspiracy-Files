@@ -71,3 +71,12 @@ assert(runtime:find('text~=key', 1, true),
 assert(not runtime:find('or "In a vehicle." end', 1, true),
     'the old unnamed wording must be gone')
 print('PASS document whereabouts: the notebook names the vehicle a clue is in')
+
+-- "Carried, in your Omer's Case File." Seen in play 2026-09-10, once the
+-- survivor had a container named after themselves. A bag that already carries
+-- a possessive does not take a second one.
+assert(runtime:find('string.find(name,"\'s ",1,true)', 1, true),
+    'a container whose name already possesses must not be given "your" as well')
+assert(runtime:find('"Carried, in "..name', 1, true), 'it reads "Carried, in Omer\'s Case File."')
+assert(runtime:find('"Carried, in your "..name', 1, true), 'and an ordinary bag still reads "your"')
+print('PASS document whereabouts: no double possessive on a named container')

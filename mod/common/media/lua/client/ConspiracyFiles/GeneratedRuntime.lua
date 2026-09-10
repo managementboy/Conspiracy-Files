@@ -696,7 +696,13 @@ local function placeOf(item)
     local bag=container and rd(container,"getContainingItem")
     if not carried and bag and player and rd(bag,"getOutermostContainer")==rd(player,"getInventory") then
         local name=rd(bag,"getName")
-        return name and ("Carried, in your "..tostring(name)..".") or "Carried."
+        -- "Carried, in your Omer's Case File" - seen in play 2026-09-10. A
+        -- container the survivor has already named for themselves does not
+        -- take a second possessive.
+        if not name then return "Carried." end
+        name=tostring(name)
+        if string.find(name,"'s ",1,true) then return "Carried, in "..name.."." end
+        return "Carried, in your "..name.."."
     end
     if carried then return "Carried." end
     -- Somewhere in the world. Name the building if the address book knows it.
