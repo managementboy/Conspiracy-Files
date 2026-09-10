@@ -78,6 +78,32 @@ properly, never at the keybind or the context-menu action by name.
 - Never a world sound and never an emitter: UI channel only, so the survivor's
   thinking never attracts zombies.
 - Rotate phrasings; never repeat the previous line twice running.
+- **Speak only when the player learns something they could not have known a
+  second earlier.** Owner, 2026-09-10: "I would also like us to use it much
+  more to interact with the player." The rule is what lets that be true without
+  the mod nattering: it rules out ambient observation entirely - walking past a
+  marker, opening the notebook, reading a page - and rules in every moment
+  below. A line the survivor has not earned makes the next one cheaper.
+
+  | Moment | Bubble | Halo |
+  |---|---|---|
+  | A found record meets one already held | "This doesn't match what the other one said." | `Two records disagree` |
+  | ...and agrees with it | "That fits with the other one." | `Records agree` |
+  | The last document of a case | "That's all of it, I think." | `Nothing left to find here` |
+  | Arrival at a building the file named | "This is the address from the file." | `Named in the file` |
+  | Far too many of one thing | "Why would anyone need this many?" | `Far too many` |
+  | A body where a body should not be | "There's a person in here." | `A body` |
+
+  Each is gated on its own once-per-thing flag rather than the shared cooldown,
+  because none can legitimately repeat: a connection is new once, a case
+  retires once, an address is arrived at once.
+
+  Two of them carry a rule of their own. The **connection** line never says
+  which record is true - "they do not match" is a fact about two pieces of
+  paper, "someone is lying" is a conclusion. The **arrival** line fires only
+  from a document the player has already read, and only once they are inside:
+  a step earlier, or from an unread lead, it stops being recognition and
+  becomes a quest marker.
 - **The bubble and the halo never say the same thing.** Reported in play,
   2026-09-10: "some messages on top of the player repeated once in colour once
   in white". They did - `Say` and `setHaloNote` were both handed the same

@@ -61,6 +61,51 @@ local SET_C={
 -- inventory. Points at the fact that it needs a proper look, never at the
 -- keybind or context-menu action itself -- a survivor thinking aloud does not
 -- narrate a tutorial.
+-- Set E: a document the player just found disagrees with, or backs up, one
+-- they already had. This is the centre of an investigation and the mod used to
+-- pass it in silence.
+--
+-- The survivor NEVER says which record is true. "They do not match" is a fact
+-- about two pieces of paper; "someone is lying" is a conclusion, and the whole
+-- discipline of this project is that a lead is never proof.
+local SET_E_DISPUTE={
+    "This doesn't match what the other one said.",
+    "Hold on - the other copy says something else entirely.",
+    "One of these is wrong. I can't tell which.",
+    "These two don't agree, and both of them are signed.",
+}
+local SET_E_AGREE={
+    "That fits with the other one.",
+    "Same story as the first copy. That's something.",
+    "Two records, and they agree for once.",
+}
+-- Set F: every document of a case has been found. Not "solved" - the mod does
+-- not know that and never will. Only that there is nothing further to find.
+local SET_F={
+    "That's all of it, I think.",
+    "I don't think there's any more of this one.",
+    "That's the last of the paperwork.",
+}
+-- Set G: the player has walked into a building an earlier document named.
+-- Fires on ARRIVAL and never before: said a moment early it is a quest marker,
+-- said on the doorstep it is recognition.
+local SET_G={
+    "This is the address from the file.",
+    "So this is the place the paperwork meant.",
+    "I've read this address somewhere. Here it is.",
+}
+-- Set H: far too many of one ordinary thing in one place.
+local SET_H={
+    "Why would anyone need this many?",
+    "That is a lot of the same thing.",
+    "Nobody keeps this many by accident.",
+}
+-- Set I: a body somewhere a body has no business being.
+local SET_I={
+    "God. Someone put a body in here.",
+    "There's a person in here. Someone put them here.",
+    "That's a body. In here.",
+}
 local SET_D={
     "I should take a proper look at this.",
     "Worth reading this properly when I get a moment.",
@@ -83,6 +128,7 @@ local VOICE_SOUND="UIObjectMenuEnter"
 -- significant event and must never be suppressed by it.
 local COOLDOWN_MS=45000
 
+local indexE,indexF,indexG,indexH,indexI=0,0,0,0,0
 local indexA,indexB,indexC,indexD=0,0,0,0
 local lastSetAAt=-1/0
 
@@ -195,7 +241,75 @@ function V.onEvidenceFound(item)
     speak(p,SET_D[indexD],"Unread")
 end
 
+-- Everything below fires only when the player learns something they could not
+-- have known a second earlier. That is the rule that keeps a mod with nine
+-- voice triggers from becoming a mod that natters, and it rules out ambient
+-- observation entirely: walking past a marker, opening the notebook and
+-- reading a page all stay silent.
+--
+-- Each is gated on its own once-per-thing flag rather than on the shared
+-- cooldown, because none of them can repeat: a case retires once, a connection
+-- is new once, an address is arrived at once per case.
+local said={}
+local function once(key)
+    if said[key] then return false end
+    said[key]=true
+    return true
+end
+
+-- Set E: a newly found document connects to one already held.
+-- `kind` is the connection's own kind, as recorded on the document.
+function V.onConnection(kind,documentId)
+    local p=player(); if not p then return end
+    if not once("link:"..tostring(documentId)) then return end
+    if kind=="disputes-delivery" then
+        indexE=indexE%#SET_E_DISPUTE+1
+        speak(p,SET_E_DISPUTE[indexE],"Two records disagree")
+    else
+        indexE=indexE%#SET_E_AGREE+1
+        speak(p,SET_E_AGREE[indexE],"Records agree")
+    end
+end
+
+-- Set F: the last document of a case has been found.
+function V.onCaseComplete(caseId)
+    local p=player(); if not p then return end
+    if not once("done:"..tostring(caseId)) then return end
+    indexF=indexF%#SET_F+1
+    speak(p,SET_F[indexF],"Nothing left to find here")
+end
+
+-- Set G: arrival at a building an earlier document named. The caller owns
+-- "has the player actually arrived"; this owns only delivery and once-ness.
+function V.onNamedPlace(buildingId)
+    local p=player(); if not p then return end
+    if not once("place:"..tostring(buildingId)) then return end
+    indexG=indexG%#SET_G+1
+    speak(p,SET_G[indexG],"Named in the file")
+end
+
+-- Set H: a pile. `where` is whatever identifies the container, so one cupboard
+-- speaks once however many times it is opened.
+function V.onPile(where)
+    local p=player(); if not p then return end
+    if not once("pile:"..tostring(where)) then return end
+    indexH=indexH%#SET_H+1
+    speak(p,SET_H[indexH],"Far too many")
+end
+
+-- Set I: a body somewhere a body should not be.
+function V.onBody(where)
+    local p=player(); if not p then return end
+    if not once("body:"..tostring(where)) then return end
+    indexI=indexI%#SET_I+1
+    speak(p,SET_I[indexI],"A body")
+end
+
 -- Test/debug hook: reset rotation and cooldown state.
-function V.reset() indexA,indexB,indexC,indexD,lastSetAAt=0,0,0,0,-1/0 end
+function V.reset()
+    indexA,indexB,indexC,indexD,lastSetAAt=0,0,0,0,-1/0
+    indexE,indexF,indexG,indexH,indexI=0,0,0,0,0
+    said={}
+end
 
 return V

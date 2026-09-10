@@ -334,6 +334,30 @@ function R.inspect(item)
     checked(api.status(md.cfGeneratedId,"placed",worldHours())); checked(api.inspect(md.cfGeneratedId))
     local ledger=ConspiracyFiles.DiscoveryLog
     if ledger and ledger.record then ledger.record("evidence",md.cfGeneratedId) end
+    -- The moment two records meet. A document only connects to one already
+    -- held, so this fires exactly when the player learns something they could
+    -- not have known a second earlier - which is the rule every voice trigger
+    -- has to pass. The survivor never says which record is true.
+    local voice=ConspiracyFiles.PlayerVoice
+    if voice and voice.onConnection then
+        local snapshot=api.snapshot()
+        local held={}
+        for _,id in ipairs(snapshot.known or {}) do held[id]=true end
+        for _,doc in ipairs(snapshot.case.documents) do
+            if doc.id==md.cfGeneratedId then
+                for _,link in ipairs(doc.links or {}) do
+                    if held[link.target] then
+                        pcall(voice.onConnection,link.kind,doc.id)
+                        break
+                    end
+                end
+                -- A pile is one document and many identical things; the count
+                -- is the whole of the evidence, so it is worth a beat.
+                if doc.quantity and voice.onPile then pcall(voice.onPile,doc.id) end
+                break
+            end
+        end
+    end
     -- Hovering a document you have already read should say so, without having
     -- to open the notebook to find out which of the four you are holding. The
     -- item already carries its real title as its name, so this only needs to
@@ -351,7 +375,12 @@ function R.inspect(item)
         for index,root in ipairs(Cases.sessions(wrapper)) do
             if not Retired.isRetired(root) and root.case and root.case.caseId==done.case.caseId then
                 local staged,why=Cases.retire(wrapper,index)
-                if staged then swap(staged); openAll(); log("Case complete; placement details retired.")
+                if staged then
+                    swap(staged); openAll(); log("Case complete; placement details retired.")
+                    -- Not "solved" - the mod does not know that and never will.
+                    -- Only that there is nothing further to find.
+                    local v=ConspiracyFiles.PlayerVoice
+                    if v and v.onCaseComplete then pcall(v.onCaseComplete,done.case.caseId) end
                 else log("Case complete but not retired: "..tostring(why)) end
                 break
             end
@@ -546,7 +575,26 @@ local function relocation(api)
 end
 local function trackVisited()
     local house=currentHouse()
-    if house then Visited.record(house) end
+    if not house then return true end
+    Visited.record(house)
+    -- Recognition, not direction. This fires only once the player is INSIDE a
+    -- building an already-discovered document named - a step earlier it would
+    -- be a quest marker, which is the one thing this mod does not do. A lead
+    -- the player has not read yet says nothing at all.
+    local voice=ConspiracyFiles.PlayerVoice
+    if not voice or not voice.onNamedPlace or not sessions then return true end
+    for _,api in ipairs(sessions) do
+        local snapshot=api.snapshot()
+        local known={}
+        for _,id in ipairs(snapshot.known or {}) do known[id]=true end
+        for _,doc in ipairs(snapshot.case.documents) do
+            if known[doc.id] then
+                for _,lead in ipairs(doc.leads or {}) do
+                    if lead==house then pcall(voice.onNamedPlace,house); return true end
+                end
+            end
+        end
+    end
     return true
 end
 -- What the periodic scan has been able to see, per document. Kept in memory
