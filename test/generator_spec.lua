@@ -37,8 +37,13 @@ test("generated 100-seed sample varies sites outlines text, carriers and bounded
         for _,doc in ipairs(c.documents) do
             local carrier=assert(Kinds.get(doc.kind))
             if carrier.capacity=="object" then
-                assertTrue(doc.body:find(c.facts.code,1,true)==nil,
-                    "an object must not carry a written case reference")
+                -- Nothing is written ON a hammer, and the item's NAME is just
+                -- what the thing is. What the notebook sentence may say is what
+                -- the object sat beside - and from 2026-09-10 it names that
+                -- file by its reference, because "the file on the extension"
+                -- is opaque when you are looking at ten clay pots.
+                assertTrue(doc.title:find(c.facts.code,1,true)==nil,
+                    "an object's own name must not carry a written case reference")
                 assertTrue(doc.wear~=nil,"object evidence must say what state it was found in")
             else
                 assertTrue(doc.body:find(c.facts.code,1,true)~=nil)

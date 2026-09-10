@@ -35,7 +35,23 @@ local function root()
  return Model.empty()
 end
 function I.rows()
- local ok,result=pcall(function() local r=root();if Model.validate(r) then return Model.rows(r,Outfits.readableOutfitFor) end;return {} end)
+ -- Where an observation happened, as an address rather than a grid reference.
+ -- The lookup is here because the address book is a client module and
+ -- IdentityObservations has no engine contact; a building the book cannot name
+ -- falls back to coordinates rather than losing the row.
+ local function placeFor(x,y,z)
+  local cell=getCell and getCell()
+  local square=cell and cell.getGridSquare and cell:getGridSquare(x,y,z)
+  local building=square and square.getBuilding and square:getBuilding()
+  local def=building and building.getDef and building:getDef()
+  local id=def and def.getIDString and def:getIDString()
+  local map=ConspiracyFiles.AddressMap
+  if not id or not map or not map.labelForBuilding then return nil end
+  local ok,label=pcall(map.labelForBuilding,tostring(id))
+  if ok and type(label)=="string" and label~="" then return label end
+  return nil
+ end
+ local ok,result=pcall(function() local r=root();if Model.validate(r) then return Model.rows(r,Outfits.readableOutfitFor,placeFor) end;return {} end)
  return ok and result or {}
 end
 local function clean(value,limit)

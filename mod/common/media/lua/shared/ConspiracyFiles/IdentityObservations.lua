@@ -64,7 +64,11 @@ end
 -- given, and only when this record actually carries a body's token. A
 -- missing outfitFor, a missing token, or an outfit lookup that returns
 -- nothing all mean the same thing here -- say nothing about clothing.
-function M.rows(root,outfitFor)
+-- `placeFor(x,y,z)` names where an observation happened. Optional and guarded
+-- exactly like outfitFor: the address book lives client-side, this module has
+-- no engine contact, and a missing name must degrade to coordinates rather
+-- than stop a row rendering.
+function M.rows(root,outfitFor,placeFor)
  if not M.validate(root) then return {} end
  local rows={}
  for i,r in ipairs(root.records) do
@@ -100,7 +104,17 @@ function M.rows(root,outfitFor)
     detail=detail.."\n\nThe body itself wore: "..outfit..". A worn outfit and a labelled document are two separate observations from the same body; this record does not decide which one, if either, describes who the body is."
    end
   end
-  detail=detail.."\n\nObserved near "..math.floor(r.x)..", "..math.floor(r.y).." (floor "..r.z..")."
+  -- An address, when the address book knows one. Owner, 2026-09-10: "under
+  -- Journal we are still using coordinates." A survivor writes down a street,
+  -- not a grid reference; the numbers stay as the fallback because an
+  -- unnamed building is better reported than skipped.
+  local place
+  if placeFor then
+   local ok,label=pcall(placeFor,r.x,r.y,r.z)
+   if ok and text(label,120) then place=label end
+  end
+  if place then detail=detail.."\n\nObserved at "..place.."."
+  else detail=detail.."\n\nObserved near "..math.floor(r.x)..", "..math.floor(r.y).." (floor "..r.z..")." end
   rows[i]={id="identity:"..r.id,ordinal=i,title="Found "..r.label,summary="Identity document - "..r.source,
    detailText=detail}
  end

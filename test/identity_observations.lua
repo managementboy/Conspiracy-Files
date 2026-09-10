@@ -110,3 +110,16 @@ local corpseRows = M.rows(corpse)
 assert(corpseRows[1].detailText:find("among a corpse's belongings", 1, true), corpseRows[1].detailText)
 assert(corpseRows[1].detailText:find("among a corpse's belongings", 1, true), corpseRows[1].detailText)
 print('PASS identity observations: a name in a dresser is a lead, and a weaker one than a name on a body')
+
+-- Where an observation happened, as an address (owner, 2026-09-10: "under
+-- Journal we are still using coordinates"). A survivor writes down a street,
+-- not a grid reference.
+local located = M.rows(furniture, nil, function() return "114 S Main St" end)
+assert(located[1].detailText:find("Observed at 114 S Main St.", 1, true), located[1].detailText)
+-- The address book is client-side and can fail; coordinates remain the
+-- fallback, because an unnamed building is better reported than skipped.
+local unnamed = M.rows(furniture, nil, function() return nil end)
+assert(unnamed[1].detailText:find("Observed near 10, 20 (floor 0).", 1, true), unnamed[1].detailText)
+local broken = M.rows(furniture, nil, function() error("no address book") end)
+assert(broken[1].detailText:find("Observed near", 1, true), "a failing lookup must not lose the row")
+print('PASS identity observations: an address where the book knows one, coordinates where it does not')

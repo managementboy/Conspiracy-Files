@@ -10,7 +10,7 @@ local Catalogue=require("ConspiracyFiles/Generated/ObjectCatalogue")
 -- 1.0 callers must use a fresh save rather than reinterpret an existing case.
 -- MIN_EVIDENCE is two, not three: a claim and a record contradicting it is a
 -- whole case. See the review note in build().
-local G={REVISION="g4-shape-1",SCHEMA=2,MIN_EVIDENCE=2,MAX_EVIDENCE=7}
+local G={REVISION="g5-pilepaper-1",SCHEMA=2,MIN_EVIDENCE=2,MAX_EVIDENCE=7}
 local function copy(v) if type(v)~="table" then return v end; local out={}; for k,c in pairs(v) do out[k]=copy(c) end; return out end
 local function same(a,b)
     if type(a)~=type(b) then return false end
@@ -123,6 +123,16 @@ end
 local NUMERALS={"one","two","three","four","five","six","seven","eight","nine","ten",
                 "eleven","twelve","thirteen","fourteen","fifteen","sixteen"}
 local function numeral(n) return NUMERALS[n] or tostring(n) end
+-- Naive plural, and deliberately so: these labels come from catalogue ids, so
+-- "clay pot" and "credit card" are the shape of nearly all of them. A word
+-- already ending in s, x, ch or sh is left alone rather than guessed at, which
+-- is wrong less often than "boxs" is.
+local function plural(label)
+    local tail=string.sub(label,-1)
+    local two=string.sub(label,-2)
+    if tail=="s" or tail=="x" or two=="ch" or two=="sh" then return label end
+    return label.."s"
+end
 -- "A idcard" is the kind of thing a player notices and we do not. The rule is
 -- the sound of the first letter, which is right far more often than it is
 -- wrong for the words a catalogue id produces.
@@ -220,7 +230,15 @@ local function build(seed,revision,sites)
     --
     -- Their prose stays premise-independent by talking about {SUBJECT} - the
     -- premise's own noun for the matter - and {UNKNOWN}, the thing the
-    -- paperwork cannot settle. A diary kept by someone under pressure reads
+    -- paperwork cannot settle.
+    --
+    -- Where an object sits BESIDE a file, it names the file by its reference
+    -- rather than by the subject. Owner, 2026-09-10, reading "with the file on
+    -- the extension among it" while looking at ten clay pots: "what is this
+    -- file on the extension that is mentioned here?" The subject nouns are
+    -- written for the premise's own documents and go opaque when quoted next to
+    -- something unrelated; a record number is a thing the player can go and
+    -- match. A diary kept by someone under pressure reads
     -- the same whether the pressure was about a sealed case or a night shift;
     -- writing twenty diaries would have bought nothing but twenty chances to
     -- contradict the premise they sit inside.
@@ -298,13 +316,13 @@ local function build(seed,revision,sites)
         documents[n].wear=wear
     end
     objectDocument(13,"physicalTrace",a,
-        "{ARTICLE} {LABEL}, badly worn, stored with the paperwork about {SUBJECT}. Nothing is written on it. Why it was kept with records is not recorded.",
+        "{ARTICLE} {LABEL}, badly worn, stored with the file marked {CODE}. Nothing is written on it. Why it was kept with records is not recorded.",
         {a.id},{target=documents[1].id,kind="recontextualises"})
     objectDocument(14,"bearsName",b,
-        "{ARTICLE} {LABEL} carrying a name, filed with the papers about {SUBJECT}. Nothing here says the name is the owner's, or that the owner left it.",
+        "{ARTICLE} {LABEL} carrying a name, filed with the papers marked {CODE}. Nothing here says the name is the owner's, or that the owner left it.",
         {b.id},{target=documents[2].id,kind="recontextualises"})
     objectDocument(15,"outOfPlace",a,
-        "{ARTICLE} {LABEL}, worn, kept with the file on {SUBJECT}. It is not the kind of thing anyone files with records.",
+        "{ARTICLE} {LABEL}, worn, kept with the file marked {CODE}. It is not the kind of thing anyone files with records.",
         {a.id},{target=documents[1].id,kind="recontextualises"})
     -- Quantity as evidence. Owner, 2026-09-09: "one of something is no misery
     -- but a house full of bleach is a mystery", and then the two shapes that
@@ -340,15 +358,25 @@ local function build(seed,revision,sites)
         -- in the garage where nobody would look twice at them.
         documents[n].quantity=count
         documents[n].roomIntent=assert(ObjectRoles.roomIntent(roleId))
+        documents[n].label=label
+        -- How many the PAPERWORK says there are. Fewer than are actually
+        -- there, and the player does the arithmetic: the file says eight, the
+        -- cupboard holds ten. Neither document states the disagreement - that
+        -- is the player's to notice, which is the whole discipline here.
+        --
+        -- Drawn in a fixed place whether or not this document is selected, so
+        -- the sequence a case rebuilds from cannot shift.
+        local short=random(3)
+        documents[n].onPaper=math.max(1,count-short)
     end
     pile(16,"accumulation",b,
-        "{COUNT} of the same thing - {LABEL} - kept where such a thing is kept, with the file on {SUBJECT} beside it. One would be ordinary. This many is not.",
+        "{COUNT} of the same thing - {LABEL} - kept where such a thing is kept, with the file marked {CODE} beside it. One would be ordinary. This many is not.",
         {target=documents[2].id,kind="recontextualises"})
     pile(17,"misplacedBulk",a,
-        "{COUNT} of the same thing - {LABEL} - in a room with no use for any of it, stored with the file on {SUBJECT}. Somewhere else this would not be worth writing down.",
+        "{COUNT} of the same thing - {LABEL} - in a room with no use for any of it, stored with the file marked {CODE}. Somewhere else this would not be worth writing down.",
         {target=documents[1].id,kind="recontextualises"})
     pile(18,"medicalHoard",b,
-        "{COUNT} of the same thing - {LABEL} - all of it already used, bagged together in a room that is not for it, with the file on {SUBJECT}. One household does not get through this much.",
+        "{COUNT} of the same thing - {LABEL} - all of it already used, bagged together in a room that is not for it, with the file marked {CODE}. One household does not get through this much.",
         {target=documents[2].id,kind="recontextualises"})
     pile(19,"vehicleBulk",a,
         -- Deliberately does NOT say "in a vehicle". Room preference is exactly
@@ -356,7 +384,7 @@ local function build(seed,revision,sites)
         -- usable container, so a sentence asserting a car would be false the
         -- first time a case had no car near it. Where the thing actually is,
         -- the notebook already reports.
-        "{COUNT} of the same thing - {LABEL} - loaded together as cargo, with the file on {SUBJECT} among it. Nothing records where any of it was going.",
+        "{COUNT} of the same thing - {LABEL} - loaded together as cargo, with the file marked {CODE} among it. Nothing records where any of it was going.",
         {target=documents[1].id,kind="recontextualises"})
     -- The first three roles are the coherent minimum: a route lead,
     -- an independently attributable response, and a review of that response.
@@ -377,6 +405,36 @@ local function build(seed,revision,sites)
         local d=optional[i]
         d.id=prefix.."document-"..(#documents+1)
         documents[#documents+1]=d
+    end
+    -- Now that the case knows what is actually in it, the paperwork can refer
+    -- to it. Owner, 2026-09-10, on finding ten clay pots beside a file that
+    -- never mentioned them: "if we have 10 clay pots, do we reference them in
+    -- any of our files we find?" We did not, and a pile nobody wrote down is
+    -- atmosphere rather than evidence.
+    --
+    -- The claim gains a stores line giving the count ON PAPER. It is lower than
+    -- the count in the cupboard, and nothing anywhere says so: the player
+    -- counts the pots and notices, or does not.
+    -- EVERY pile, not just the first: a case can hold two, and an unmentioned
+    -- one is back to being atmosphere. Found while previewing the change.
+    local stores={}
+    for _,d in ipairs(documents) do
+        if d.quantity and d.label and d.onPaper then
+            stores[#stores+1]=numeral(d.onPaper).." "..plural(d.label)
+                .." received. Signed for; no order number given."
+            -- The pile answers the claim, and disagrees with it.
+            d.links={{target=documents[1].id,kind="disputes-delivery"}}
+        end
+    end
+    if #stores>0 then
+        local line="\n\nATTACHED\nStores notes against this record:\n"..table.concat(stores,"\n")
+        local at=string.find(documents[1].body,"\n\nWHAT IT MIGHT MEAN",1,true)
+        if at then
+            documents[1].body=string.sub(documents[1].body,1,at-1)..line
+                ..string.sub(documents[1].body,at)
+        else
+            documents[1].body=documents[1].body..line
+        end
     end
     return {schemaVersion=G.SCHEMA,generatorRevision=G.REVISION,catalogRevision=revision,seed=seed,
         caseId=prefix.."case",outline=outline,premiseId=premise.id,contentStatus="development-draft-unapproved",
