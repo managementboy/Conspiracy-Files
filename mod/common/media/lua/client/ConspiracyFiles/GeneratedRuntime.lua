@@ -146,6 +146,10 @@ local function placement(api,id)
             local name=doc.title
             if expected>1 and doc.label then name=doc.label.." ("..copy.." of "..expected..")" end
             item:setName(name); item:setCustomName(true)
+            -- Its own category, so evidence sorts together instead of hiding
+            -- among Junk (owner, 2026-09-10). A display string only; nothing
+            -- in the game keys off it.
+            pcall(function() item:setDisplayCategory("Evidence") end)
             applyWear(item,doc)
             writePages(item,doc)
             assert(current:AddItem(item),"could not add note")

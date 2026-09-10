@@ -44,10 +44,12 @@ local function forename(player)
     return name:sub(1,24)
 end
 
+-- "Case File" made the survivor sound like an investigator. Owner, 2026-09-10:
+-- "he/she is a survivor. other name?" They are someone who kept some papers.
 function F.titleFor(player)
     local name=player and forename(player)
-    if name then return name.."'s Case File" end
-    return "Case File"
+    if name then return name.."'s Papers" end
+    return "Papers"
 end
 
 -- Already carrying one? Searched by our own mark rather than by type, so a
@@ -85,7 +87,18 @@ function F.give(player)
         -- and nothing here pretends otherwise.
         item:setFavorite(true)
     end)
-    log("case file issued: "..tostring(F.titleFor(player)))
+    log("papers issued: "..tostring(F.titleFor(player)))
+    -- Open it in the inventory panel, so the survivor starts with their papers
+    -- in front of them rather than having to find the icon. Guarded all the way
+    -- down: the panel may not exist yet on the first tick, and a failure here
+    -- must not cost the player the item.
+    pcall(function()
+        local page=getPlayerInventory and getPlayerInventory(0)
+        local inventory=item.getInventory and item:getInventory()
+        if page and inventory and page.selectButtonForContainer then
+            page:selectButtonForContainer(inventory)
+        end
+    end)
     return item
 end
 

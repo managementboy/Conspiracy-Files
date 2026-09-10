@@ -17,13 +17,15 @@ function M.fill(playerNum,context,items)
     local item=subjects[1]
     if not R.subject(item) then return end
     local expected=item:getOutermostContainer()
+    -- The item's own icon on the option, so the menu reads at a glance.
+    local icon=item.getTexture and item:getTexture() or nil
     local option=context:addOption("Inspect Investigation Evidence",nil,function()
         if item:getOutermostContainer()~=expected then return end
         local ok,inspected=pcall(R.inspect,item)
         if ok and inspected then M.open(item:getModData().cfGeneratedId) end
     end)
     local carried=expected==getSpecificPlayer(playerNum):getInventory()
-    if option then option.notAvailable=not carried end
+    if option then option.notAvailable=not carried; option.iconTexture=icon end
     -- Note it where it lies. A pile of eleven credit cards is evidence the
     -- player should be able to record without emptying a drawer into their
     -- pockets; so, later, is a body in a boot. The notebook opens either way,
@@ -34,7 +36,7 @@ function M.fill(playerNum,context,items)
             local ok,noted=pcall(R.inspect,item,true)
             if ok and noted then M.open(item:getModData().cfGeneratedId) end
         end)
-        if here then here.notAvailable=false end
+        if here then here.notAvailable=false; here.iconTexture=icon end
     end
 end
 if not M.handler then
