@@ -21,6 +21,51 @@ Claude publishes without asking each time. Claude does **not** change
 visibility, title or description without asking: those reach past the two
 machines.
 
+## Getting the log off the play machine
+
+The two scripts live in this repo, so a reset or a new Windows profile leaves
+the play machine without them. That has cost twenty minutes twice. **Fetch them
+first, with the only tool that is always there** - the OpenSSH *client*, which
+Windows ships enabled and WSUS does not block (the *server* is the part that is
+blocked, which is why everything below pushes rather than pulls):
+
+    scp elkin@192.168.50.226:/home/elkin/Conspiracy-Files/tools/*_log.ps1 .
+
+Then, in PowerShell on the play machine, pick one:
+
+    .\stream_log.ps1     during play - a full copy every few seconds, Ctrl+C to stop
+    .\push_log.ps1       after quitting - one copy, once
+
+Streaming is the better default: a question can be answered mid-session instead
+of after. Each send is a complete copy, so it may be started at any point and
+nothing is missed.
+
+On the development machine:
+
+    tools/fetch_logs.sh --live       watch a session arriving now
+    tools/fetch_logs.sh --incoming   read what was pushed
+
+Both land in `dev/playtest-logs/incoming/`.
+
+### Two checks worth doing before playing on
+
+**Is the log this session's?** `stream_log.ps1` says how long ago `console.txt`
+was written. "1272 minutes ago" means the game is not running and you are about
+to stream yesterday.
+
+**Did Steam actually deliver the build?** The log lines say which. New format is
+`[CF] v=1 t=08:14 lvl=i ev=placed ...`; anything starting `[CF-G2]` or
+`[CF-IDENTITY]` is a build from before 2026-09-10 and Steam has not pushed the
+update yet. Playing on would test the wrong mod.
+
+### If PowerShell refuses a script
+
+`export` is bash and does not exist there; `.\script.ps1` only works from the
+directory holding the script. Neither is worth debugging mid-session - the
+one-liner below needs no file at all:
+
+    scp $env:USERPROFILE\Zomboid\console.txt elkin@192.168.50.226:/home/elkin/Conspiracy-Files/dev/playtest-logs/incoming/console.txt
+
 ## Before every session, three things
 
 1. **`-debug` must be on the launch line.** Steam, right-click Project Zomboid,
