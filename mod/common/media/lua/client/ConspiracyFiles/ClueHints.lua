@@ -87,7 +87,17 @@ local function step()
             end
             if task.scan() then
                 pending=nil
-                if task.count==1 and now-lastHint>=60000 and not visits[task.key] then
+                -- Present, and no more than belongs here. A pile of eleven
+                -- credit cards is one document (ObjectRules.accumulation), so
+                -- requiring exactly one silenced the hint at precisely the clue
+                -- most worth hinting at. More than expected is still a
+                -- duplicate, and still silent.
+                --
+                -- Third caller of World.count to assume one item per document.
+                -- The other two were fixed earlier the same day; this one was
+                -- missed because no test here builds a pile.
+                if task.count and task.count>=1 and task.count<=(task.expected or 1)
+                    and now-lastHint>=60000 and not visits[task.key] then
                     phrase=phrase%#phrases+1
                     local halo,audible=announce(p,phrases[phrase])
                     visits[task.key]=a.target; lastHint=now
@@ -120,8 +130,12 @@ local function step()
             local key=t.x..":"..t.y..":"..t.z..":"..t.objectIndex..":"..t.containerIndex
             local c=not visits[key] and World.resolve(t)
             if c then
-                local task={root=root,id=doc.id,key=key,target=t,container=c,steps=0}
-                task.scan=World.count(c,a.physicalToken,function(n) task.count=n end)
+                -- How many copies belong here. A pile is one document and many
+                -- identical items, so "more than one" is only suspicious when
+                -- it is more than the document expects.
+                local expected=doc.quantity or 1
+                local task={root=root,id=doc.id,key=key,target=t,container=c,steps=0,expected=expected}
+                task.scan=World.count(c,a.physicalToken,function(n) task.count=n end,expected)
                 pending=task; return
             end
         end

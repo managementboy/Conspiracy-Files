@@ -22,7 +22,20 @@ function M.fill(playerNum,context,items)
         local ok,inspected=pcall(R.inspect,item)
         if ok and inspected then M.open(item:getModData().cfGeneratedId) end
     end)
-    if option then option.notAvailable=expected~=getSpecificPlayer(playerNum):getInventory() end
+    local carried=expected==getSpecificPlayer(playerNum):getInventory()
+    if option then option.notAvailable=not carried end
+    -- Note it where it lies. A pile of eleven credit cards is evidence the
+    -- player should be able to record without emptying a drawer into their
+    -- pockets; so, later, is a body in a boot. The notebook opens either way,
+    -- because the point of noting a thing is to read what was noted.
+    if not carried then
+        local here=context:addOption("Note in the Investigation",nil,function()
+            if item:getOutermostContainer()~=expected then return end
+            local ok,noted=pcall(R.inspect,item,true)
+            if ok and noted then M.open(item:getModData().cfGeneratedId) end
+        end)
+        if here then here.notAvailable=false end
+    end
 end
 if not M.handler then
     M.handler=function(...) return M.fill(...) end

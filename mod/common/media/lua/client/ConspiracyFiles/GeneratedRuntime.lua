@@ -136,11 +136,16 @@ local function placement(api,id)
         -- One copy for everything readable; `quantity` copies where the count
         -- is the point. Each carries the same token, so the scan above counts
         -- the pile rather than calling the second bottle a conflict.
-        for _=1,expected do
+        for copy=1,expected do
             local item=assert(instanceItem(carrier.fullType),"could not create evidence item")
             local md=item:getModData()
             md.cfGeneratedId=id; md.cfPhysicalToken=a.physicalToken
-            item:setName(doc.title); item:setCustomName(true)
+            -- Each copy of a pile counts itself. Eleven items all reading "one
+            -- of eleven" told the player nothing about which one they were
+            -- holding (owner, 2026-09-10).
+            local name=doc.title
+            if expected>1 and doc.label then name=doc.label.." ("..copy.." of "..expected..")" end
+            item:setName(name); item:setCustomName(true)
             applyWear(item,doc)
             writePages(item,doc)
             assert(current:AddItem(item),"could not add note")
@@ -344,8 +349,23 @@ function R.nextCase(seed)
     preparing=true; local waited=0; scheduler.enqueue("next-metadata","preparation",function() waited=waited+1;if probe.error then preparing=false;error(probe.error) end;if probe.result then prepare(probe.result,seed,true);return true end;if waited>240000 then preparing=false;error("metadata extraction did not complete") end;return false end)
     return true
 end
-function R.inspect(item)
-    if not allowed() or not sessions or not item or item:getOutermostContainer()~=getPlayer():getInventory() then return false end
+-- `inPlace` records a document without taking it. Owner, 2026-09-10: "we
+-- should be able to right click and add it to our Notebook without adding them
+-- to our inventory" - which is plainly right for a pile of eleven credit cards
+-- or, later, a body in a boot.
+--
+-- Possession was required so that discovery stayed deliberate: a player must
+-- not be able to sweep a street by hovering over furniture. A right-click on a
+-- named menu option is just as deliberate, so the guarantee survives.
+function R.inspect(item,inPlace)
+    if not allowed() or not sessions or not item then return false end
+    if not inPlace and item:getOutermostContainer()~=getPlayer():getInventory() then return false end
+    if inPlace then
+        -- It must be somewhere real, and not already in hand: noting an item
+        -- you are carrying is the ordinary path and should stay that way.
+        local container=item:getContainer()
+        if not container or container==getPlayer():getInventory() then return false end
+    end
     local md=item:getModData(); local root=md and Cases.find(wrapper,md.cfGeneratedId); local api
     if root then for _,candidate in ipairs(sessions) do if candidate.snapshot().case.caseId==root.case.caseId then api=candidate end end end
     local a=api and api.assignment(md.cfGeneratedId)

@@ -32,6 +32,9 @@ local function tick() clock=clock+500; callback() end
 local H=dofile('mod/common/media/lua/client/ConspiracyFiles/ClueHints.lua')
 z=1; tick(); tick(); assert(#says==0,'wrong floor')
 z=0; count=0; tick(); tick(); assert(#says==0,'absent clue')
+-- More copies than the document expects is still a duplicate, and still
+-- silent. What changed (2026-09-10) is that "more than one" alone is no longer
+-- the test: a pile is one document and many identical items.
 count=2; tick(); tick(); assert(#says==0,'duplicate clue')
 count=1; tick(); tick(); assert(#says==1,'one-tile diagonal clue')
 for i=1,130 do tick() end; assert(#says==1,'no stationary chatter')
@@ -68,3 +71,20 @@ assert(#says==4 and #haloNotes==#says,'a step during the scan does not abandon t
 
 H.stop(); assert(not callback)
 print('PASS proximity hints: floor, distance, actual token count, duplicates, cooldown, re-entry, phrase variation, discovery and stale-position guards')
+
+-- A pile must still be hinted at. The hint required EXACTLY one item carrying
+-- the token, so a container holding eleven credit cards - the clue most worth
+-- hinting at - went silent, logged as "suppressed matches=2".
+--
+-- Third caller of World.count to assume one item per document. The other two
+-- were fixed earlier the same day and this one was missed, which is why the
+-- check is on the source: the behavioural tests here do not build a pile.
+local f = assert(io.open('mod/common/media/lua/client/ConspiracyFiles/ClueHints.lua', 'r'))
+local hints = f:read('*a'); f:close()
+assert(not hints:find('task.count==1', 1, true),
+    'the hint must not require exactly one item; a pile is one document and many items')
+assert(hints:find('task.count>=1', 1, true), 'one or more matching items means the clue is there')
+assert(hints:find('task.count<=(task.expected or 1)', 1, true),
+    'more copies than the document expects is still a duplicate and still silent')
+assert(hints:find('doc.quantity or 1', 1, true), 'the hint must know how many copies belong here')
+print('PASS clue hints: a pile of eleven is still worth mentioning')

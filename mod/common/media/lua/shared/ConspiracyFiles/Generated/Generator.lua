@@ -59,7 +59,22 @@ local REFERENCE={"R","RC","GT","PS","WB","HK","MC","BF","LD","TN","AV","QS"}
 -- "hat surgical mask" would be transcribing our plumbing.
 local SLOT_PREFIXES={"Hat_","Necklace_","Vest_","Shirt_","Trousers_","Jacket_",
                      "Mov_","Bag_","Shoes_","Gloves_"}
+-- Trailing qualifiers. "CreditCard_Stolen" is a stolen credit card, not a
+-- "credit card stolen" - seen in play 2026-09-10, eleven of them in one drawer.
+-- A closed list, because only some trailing words are adjectives: Bag_DuffelBag
+-- is a duffel bag and must not become "duffelbag bag".
+local QUALIFIERS={Stolen=true,Old=true,Used=true,Dirty=true,Broken=true,
+    Empty=true,Full=true,Burnt=true,Rusty=true,Worn=true,Fresh=true,Wet=true}
 local function words(id)
+    -- Both spellings: CreditCard_Stolen and BandageDirty. The second is why
+    -- the underscore cannot be required - the test caught "bandage dirty"
+    -- immediately after the first version fixed "credit card stolen".
+    local qualifier
+    local head,tail=string.match(id,"^(.-)_?([A-Z][a-z]+)$")
+    if head and head~="" and QUALIFIERS[tail] then
+        qualifier=string.lower(tail)
+        id=head
+    end
     for _,prefix in ipairs(SLOT_PREFIXES) do
         if string.sub(id,1,#prefix)==prefix then id=string.sub(id,#prefix+1) end
     end
@@ -98,7 +113,9 @@ local function words(id)
         collapsed=collapsed..string.sub(out,at,s2-1).." "
         at=e2+1
     end
-    return collapsed..string.sub(out,at)
+    local text=collapsed..string.sub(out,at)
+    if qualifier then text=qualifier.." "..text end
+    return text
 end
 -- A survivor writes "fourteen", not "14". The range is the one
 -- ObjectRules.accumulation can produce; anything outside it is a mistake
@@ -311,7 +328,11 @@ local function build(seed,revision,sites)
         local body=subst(subst(fill(sentence,map),"LABEL",label),"COUNT",numeral(count))
         body=string.upper(string.sub(body,1,1))..string.sub(body,2)
         assert(Roles.fits(roleId,kind,body))
-        document(n,label..", one of "..numeral(count),site,body,{site.id},{link},nil,kind)
+        -- The notebook row names the pile; each physical copy is numbered by
+        -- the runtime (owner, 2026-09-10: "1 of x should be counted on each
+        -- item"), which needs the bare label rather than the row's wording.
+        document(n,label..", "..numeral(count).." of them",site,body,{site.id},{link},nil,kind)
+        documents[n].label=label
         documents[n].wear=assert(ObjectRoles.describe(roleId)).wear
         -- The count is a fact about the world, so it has to reach placement:
         -- the runtime creates exactly this many and treats any more as a

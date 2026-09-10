@@ -17,7 +17,10 @@ end
 local runtime = read('mod/common/media/lua/client/ConspiracyFiles/GeneratedRuntime.lua')
 
 -- Written exactly once, and inside the inspect path.
-local inspect = runtime:match('function R%.inspect%(item%)(.-)\nfunction ')
+-- inspect gained an `inPlace` argument on 2026-09-10 (noting a document
+-- without taking it), so the signature is matched loosely enough to survive
+-- another one.
+local inspect = runtime:match('function R%.inspect%(item[^)]*%)(.-)\nfunction ')
 assert(inspect, 'R.inspect must exist')
 assert(inspect:find('setTooltip', 1, true),
     'the tooltip must be written when a document is inspected')
@@ -53,3 +56,22 @@ end
 
 print('PASS inspected tooltip: written only on inspection, key ships with the '
     .. 'mod, wording reports a note rather than announcing importance')
+
+-- Noting a document without taking it (owner, 2026-09-10: "we should be able
+-- to right click and add it to our Notebook without adding them to our
+-- inventory"). A pile of eleven credit cards should not have to be pocketed.
+--
+-- Possession was required so discovery stayed deliberate - a player must not
+-- sweep a street by hovering over furniture. A right-click on a named option is
+-- just as deliberate, so the guarantee survives and the guard moves rather than
+-- disappearing.
+assert(inspect:find('if not inPlace and item:getOutermostContainer()', 1, true),
+    'possession must still be required on the ordinary path')
+assert(inspect:find('container==getPlayer():getInventory() then return false', 1, true),
+    'noting in place must refuse an item already in hand: that is the ordinary path')
+local menu = read('mod/common/media/lua/client/ConspiracyFiles/GeneratedMenu.lua')
+assert(menu:find('"Note in the Investigation"', 1, true), 'the option must exist')
+assert(menu:find('R.inspect,item,true', 1, true), 'it must record in place')
+assert(menu:find('if not carried then', 1, true),
+    'it must appear only when the item is NOT already carried, or it duplicates Inspect')
+print('PASS inspected tooltip: a document can be noted where it lies, and possession still gates the ordinary path')

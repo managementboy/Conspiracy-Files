@@ -189,7 +189,9 @@ local runtime = f:read("*a"); f:close()
 assert(not runtime:find("if count>1 then", 1, true),
     "placement still calls a second copy a conflict; every pile would die on placement")
 assert(runtime:find("if count>expected then", 1, true), "placement must compare against the expected count")
-assert(runtime:find("for _=1,expected do", 1, true), "placement must create the whole pile")
+assert(runtime:find("for copy=1,expected do", 1, true), "placement must create the whole pile")
+assert(runtime:find('copy.." of "..expected', 1, true),
+    "each copy of a pile must count itself; eleven items all reading 'one of eleven' says nothing")
 assert(runtime:find("expectedCount(api,candidate)==1", 1, true),
     "relocation must skip piles; it is built on there being exactly one item with the token")
 print("PASS object rules: placement creates and counts whole piles, and never relocates one")
@@ -214,3 +216,28 @@ local text = session:read("*a"); session:close()
 assert(text:find("RoomAffinity.prefers(doc,", 1, true),
     "placement must ask what the DOCUMENT wants from a room, not only what its kind fits")
 print("PASS object rules: right room with an impossible count, and a wrong room whatever the count")
+
+-- Labels are player-facing, and a mechanical CamelCase split gets adjectives
+-- backwards. Seen in play 2026-09-10: eleven of "credit card stolen, one of
+-- eleven" in one drawer. A trailing qualifier belongs in front.
+local seen = {}
+for seed = 1, 300 do
+    local case = G.generate(dofile("test/fixtures/synthetic_locations.lua"), seed,
+        { mapId = "SYNTHETIC-MAP", buildLine = "TEST-ONLY", allowSynthetic = true })
+    if case then
+        for _, doc in ipairs(case.documents) do
+            local carrier = assert(Kinds.get(doc.kind))
+            if carrier.capacity == "object" then seen[doc.title] = true end
+        end
+    end
+end
+for title in pairs(seen) do
+    for _, backwards in ipairs({ " stolen", " broken", " dirty", " empty", " used", " old" }) do
+        -- A qualifier may end a title only when the title IS the qualifier's
+        -- noun (never), so finding one at the end means the split reversed it.
+        local head = title:gsub(",.*$", "")
+        assert(not head:find(backwards .. "$"),
+            "label reads backwards: '" .. head .. "' - a qualifier belongs in front")
+    end
+end
+print('PASS object rules: no label puts its adjective after the noun')
