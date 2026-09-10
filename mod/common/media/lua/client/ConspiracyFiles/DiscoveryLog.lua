@@ -1,6 +1,7 @@
 -- ModData-backed writer/reader for the shared chronological discovery ledger.
 -- Every discovery source appends here as it happens; the notebook reads only
 -- this ledger for ordering, so numbering matches what the player actually did.
+local CFLog=require("ConspiracyFiles/Log")
 local Ledger=require("ConspiracyFiles/DiscoveryLedger")
 local Budget=require("ConspiracyFiles/SaveBudget")
 -- Load the voice, do not merely hope it is loaded. PZ does not execute every
@@ -41,7 +42,7 @@ function D.record(kind,reference)
         local store=ModData.getOrCreate(TAG)
         store.canonical=staged
         local event=staged.events[#staged.events]
-        print("[CF-LEDGER] #"..event.seq.." "..event.kind.." "..event.ref.." at hour "..string.format("%.2f",event.at))
+        CFLog.message("ledger","note","#"..event.seq.." "..event.kind.." "..event.ref.." at hour "..string.format("%.2f",event.at))
         -- Set A voice line: fire on every genuinely new discovery, whatever
         -- its kind. Guarded so a missing/unloaded PlayerVoice degrades to
         -- silence rather than blocking the ledger write above.
@@ -49,7 +50,7 @@ function D.record(kind,reference)
         if voice and voice.onDiscovery then pcall(voice.onDiscovery,kind,reference) end
         return true
     end)
-    if not ok then print("[CF-LEDGER] Discovery not recorded: "..tostring(recorded)); return false end
+    if not ok then CFLog.message("ledger","note","Discovery not recorded: "..tostring(recorded)); return false end
     return recorded
 end
 

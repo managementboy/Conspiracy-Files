@@ -13,7 +13,7 @@ UI.VERSION=require("ConspiracyFiles/Version")
 local function safe(fn)
     local rt=ConspiracyFiles.Runtime
     if rt and not rt.disabled then return rt.boundary("ui",fn) end
-    local ok,why=pcall(fn); if not ok then print("[CF-UI]|ERROR|"..tostring(why)) end; return ok
+    local ok,why=pcall(fn); if not ok then CFLog.message("notebook","note","|ERROR|"..tostring(why)) end; return ok
 end
 local function generated()
     local rt=ConspiracyFiles.GeneratedRuntime
@@ -768,7 +768,8 @@ if ConspiracyFiles.AddressMap and ConspiracyFiles.AddressMap.stop then Conspirac
 local M={}; ConspiracyFiles.AddressMap=M
 local TAG="ConspiracyFiles.AddressBook.Muldraugh"
 local job,handler,book,byId,buckets,peak=nil,nil,nil,{}, {},0
-local function log(s) print("[CF-ADDRESS] "..s) end
+local CFLog=require("ConspiracyFiles/Log")
+local function log(s) CFLog.message("notebook","note",s) end
 local status="Not started"
 local view,viewReasons,auditHandler
 local function stopAudit() if auditHandler then Events.OnTick.Remove(auditHandler);auditHandler=nil end end
@@ -998,7 +999,8 @@ local pens={"Pen","Pencil","RedPen","BluePen","GreenPen"}
 -- Vanilla ISWorldMapSymbols palette, in its deterministic tool priority order.
 local inks={Pen={0.129,0.129,0.129},Pencil={0.2,0.2,0.2},RedPen={0.65,0.054,0.054},BluePen={0.156,0.188,0.49},GreenPen={0.06,0.39,0.17}}
 local questionTexture
-local function log(s) print("[CF-MARKERS] "..s) end
+local CFLog=require("ConspiracyFiles/Log")
+local function log(s) CFLog.message("notebook","note",s) end
 local function allowed()
  return getDebug and getDebug() and not (isClient and isClient()) and not (isServer and isServer())
   and not ConspiracyFiles.T11Mode and not ConspiracyFiles.T12Mode
@@ -1303,7 +1305,7 @@ function T.start()
  for i,name in ipairs({"TEMP TEST A - marker colour","TEMP TEST B - marker colour"}) do
   -- Vanilla OnBreak.lua: string overload returns InventoryItem, not IsoWorldInventoryObject.
   local item=square:AddWorldInventoryItem("Base.Note",0.5,0.5,0.0)
- if not item then print("[CF-MARKER-TEST] Spawn stopped before all notes were created.");return false end
+ if not item then CFLog.message("notebook","note","Spawn stopped before all notes were created.");return false end
   item:setName(name);item:setCustomName(true);item:getModData()[KEY]=true
   items[i]=item;records[item]={x=square:getX(),y=square:getY(),z=square:getZ(),map=currentMap(),known=false,written=false}
  end
@@ -1323,7 +1325,7 @@ function T.start()
   local now=getTimeInMillis();if now-last<1000 then return end;last=now
   local m=ConspiracyFiles.MarkerColourTest;if m then pcall(m.update) end end
  Events.OnTick.Add(tick)
- print("[CF-MARKER-TEST] Spawned two temporary notes at the current square. Pick up one, then inspect it from inventory.")
+ CFLog.message("notebook","note","Spawned two temporary notes at the current square. Pick up one, then inspect it from inventory.")
  return true
 end
 function T.stop() if tick then Events.OnTick.Remove(tick);tick=nil end end
@@ -1380,7 +1382,7 @@ end
 function Toolbar.refresh()
     if Toolbar.failed then return end
     local ok,why=pcall(Toolbar.ensure)
-    if not ok then Toolbar.failed=true;closeButton();print("[CF-NOTEBOOK] Toolbar stopped: "..tostring(why)) end
+    if not ok then Toolbar.failed=true;closeButton();CFLog.message("notebook","note","Toolbar stopped: "..tostring(why)) end
 end
 
 function Toolbar.ensure()

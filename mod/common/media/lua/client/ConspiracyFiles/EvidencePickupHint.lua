@@ -23,7 +23,8 @@
 ConspiracyFiles=ConspiracyFiles or {}
 local E=ConspiracyFiles.EvidencePickupHint or {}
 ConspiracyFiles.EvidencePickupHint=E
-local function log(message) print("[CF-VOICE] "..tostring(message)) end
+local CFLog=require("ConspiracyFiles/Log")
+local function log(message) CFLog.message("hint","hint",message) end
 local function safe(fn,...)
     local ok,result=pcall(fn,...)
     if not ok then log("Skipped: "..tostring(result)) end

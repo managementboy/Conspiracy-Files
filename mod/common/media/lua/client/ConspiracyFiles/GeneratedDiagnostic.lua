@@ -12,7 +12,8 @@ function D.run()
     local current=wrapper and require("ConspiracyFiles/Generated/SuccessiveCases").current(wrapper)
     local root=current and current.canonical
     if not root or not root.case then return false,"no generated case" end
-    local function log(s) print("[CF-G2-DIAG] "..s) end
+    local CFLog=require("ConspiracyFiles/Log")
+local function log(s) CFLog.message("diag","probe",s) end
     local player=getPlayer()
     if player then log("player="..player:getX()..","..player:getY()..","..player:getZ()) end
     local tasks={}
@@ -78,7 +79,8 @@ function D.access(radius)
     local roots=current and Cases.sessions(current)
     if not roots or #roots==0 then return false,"no generated case" end
     radius=(type(radius)=="number" and radius>=1 and radius<=24) and math.floor(radius) or 12
-    local function log(s) print("[CF-G2-ACCESS] "..s) end
+    local CFLog=require("ConspiracyFiles/Log")
+local function log(s) CFLog.message("diag","probe",s) end
     local targets,levels,box={},{},nil
     for _,root in ipairs(roots) do
         for _,doc in ipairs(root.case.documents) do
@@ -147,4 +149,20 @@ function D.access(radius)
     return true
 end
 
+-- Log level, from the debug console. Debug is off by default because a log
+-- left at debug is how this became unreadable the first time:
+--
+--     ConspiracyFiles.logLevel("d")   everything, for one session
+--     ConspiracyFiles.logLevel("i")   the default
+--     ConspiracyFiles.logLevel()      report the current level
+ConspiracyFiles=ConspiracyFiles or {}
+function ConspiracyFiles.logLevel(level)
+    local Log=require("ConspiracyFiles/Log")
+    if level==nil then return Log.level end
+    Log.level=level
+    Log.info("note",{mod="diag",msg="log level now "..tostring(Log.level)})
+    return Log.level
+end
+
 return D
+

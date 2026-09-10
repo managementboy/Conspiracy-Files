@@ -1,3 +1,4 @@
+local CFLog=require("ConspiracyFiles/Log")
 require "ISUI/ISCollapsableWindow"
 require "ISUI/ISButton"
 local Document=require("ConspiracyFiles/DocumentPane")
@@ -25,7 +26,7 @@ function Guide.mode()
     return ConspiracyFiles.T12Mode and "T12" or ConspiracyFiles.T11Mode and "T11" or "candidate (no wrapper)"
 end
 local function clean(value) return tostring(value or ""):gsub("[\r\n|]"," "):sub(1,700) end
-local function log(kind,value) print("[CF-GUIDE]|"..kind.."|version="..Guide.VERSION.."|mode="..Guide.mode().."|"..clean(value)) end
+local function log(kind,value) CFLog.message("guide","note","|"..kind.."|version="..Guide.VERSION.."|mode="..Guide.mode().."|"..clean(value)) end
 local function safe(fn)
     if not Guide.allowed() or Guide.failures>=3 then return false end
     local ok,why=pcall(fn)

@@ -3,6 +3,7 @@
 -- the same body (docs/design/USING_GAME_ASSETS.md, Phase 1). Same house
 -- style as PersonNameLog: validated, bounded, copy-on-write, gated by
 -- SaveBudget, no metatables.
+local CFLog=require("ConspiracyFiles/Log")
 local Outfits=require("ConspiracyFiles/BodyOutfitObservations")
 local Budget=require("ConspiracyFiles/SaveBudget")
 ConspiracyFiles=ConspiracyFiles or {}
@@ -35,10 +36,10 @@ function L.record(token,outfit)
         if not Budget.check("bodyOutfits",{canonical=staged}) then return false end
         local store=ModData.getOrCreate(TAG)
         store.canonical=staged
-        print("[CF-OUTFIT] recorded outfit for token "..tostring(token))
+        CFLog.message("outfit","outfit","recorded outfit for token "..tostring(token))
         return true
     end)
-    if not ok then print("[CF-OUTFIT] Not recorded: "..tostring(recorded)); return false end
+    if not ok then CFLog.message("outfit","outfit","Not recorded: "..tostring(recorded)); return false end
     return recorded
 end
 

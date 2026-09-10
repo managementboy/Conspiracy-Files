@@ -6,7 +6,8 @@ if ConspiracyFiles.AddressMap and ConspiracyFiles.AddressMap.stop then Conspirac
 local M={}; ConspiracyFiles.AddressMap=M
 local TAG="ConspiracyFiles.AddressBook.Muldraugh"
 local job,handler,book,byId,buckets,peak=nil,nil,nil,{}, {},0
-local function log(s) print("[CF-ADDRESS] "..s) end
+local CFLog=require("ConspiracyFiles/Log")
+local function log(s) CFLog.message("address","address",s) end
 local status="Not started"
 local view,viewReasons,auditHandler
 local function stopAudit() if auditHandler then Events.OnTick.Remove(auditHandler);auditHandler=nil end end

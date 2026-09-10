@@ -1,6 +1,7 @@
 -- Additive sidebar shortcut.  It deliberately does not patch ISEquippedItem:
 -- Build 42 exposes no sidebar-button event, so this follows the existing
 -- Project Cook pattern of a separately managed sibling beside the anchor.
+local CFLog=require("ConspiracyFiles/Log")
 require "ISUI/ISButton"
 local UI=require("ConspiracyFiles/Notebook")
 ConspiracyFiles=ConspiracyFiles or {}
@@ -41,7 +42,7 @@ end
 function Toolbar.refresh()
     if Toolbar.failed then return end
     local ok,why=pcall(Toolbar.ensure)
-    if not ok then Toolbar.failed=true;closeButton();print("[CF-NOTEBOOK] Toolbar stopped: "..tostring(why)) end
+    if not ok then Toolbar.failed=true;closeButton();CFLog.message("notebook","note","Toolbar stopped: "..tostring(why)) end
 end
 
 function Toolbar.ensure()

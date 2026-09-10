@@ -12,7 +12,8 @@ local function read(o,k,...)
 end
 local function finite(v) return type(v)=='number' and v==v and v~=math.huge and v~=-math.huge end
 local function text(v) if v==nil or v=='' then return 'unavailable' end;return tostring(v):gsub('[\r\n]',' '):sub(1,180) end
-local function log(s) print('[CF-ID] '..s) end
+local CFLog=require("ConspiracyFiles/Log")
+local function log(s) CFLog.message("identity","probe",s) end
 function P.stop()
  if handler then Events.OnTick.Remove(handler) end
  handler=nil;job=nil

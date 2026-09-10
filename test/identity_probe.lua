@@ -21,6 +21,9 @@ getCell=function() return {getZombieList=function() return list(zombies) end,get
  ops=ops+1
  if x==2 and y==0 then return {getStaticMovingObjects=function() return list(static) end} end
 end} end
+-- The probe logs through ConspiracyFiles/Log (2026-09-10), which lives in
+-- shared, so dofile needs shared on the path.
+package.path='mod/common/media/lua/shared/?.lua;'..package.path
 local P=dofile('mod/common/media/lua/client/ConspiracyFiles/IdentityProbe.lua')
 assert(not tick and #output==0,'loading probe does not scan')
 local function drain()

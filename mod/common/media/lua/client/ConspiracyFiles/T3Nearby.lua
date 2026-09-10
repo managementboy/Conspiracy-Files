@@ -12,7 +12,7 @@ local function emit(row)
     for k in pairs(row) do keys[#keys+1] = k end
     table.sort(keys)
     for _,k in ipairs(keys) do parts[#parts+1] = k .. "=" .. string.format("%q", tostring(row[k])) end
-    print("[CF-T3-NEARBY] " .. table.concat(parts, " "))
+    CFLog.message("nearby","scan","" .. table.concat(parts, " "))
 end
 function T.cancel()
     if tick and Events then Events.OnTick.Remove(tick) end
@@ -164,7 +164,8 @@ function D.run()
     local wrapper=ModData.get("ConspiracyFiles.Generated.G2")
     local root=wrapper and wrapper.canonical
     if not root or not root.case then return false,"no generated case" end
-    local function log(s) print("[CF-G2-DIAG] "..s) end
+    local CFLog=require("ConspiracyFiles/Log")
+local function log(s) CFLog.message("nearby","scan",s) end
     local player=getPlayer()
     if player then log("player="..player:getX()..","..player:getY()..","..player:getZ()) end
     local tasks={}
@@ -295,7 +296,7 @@ local handler
 function H.stop() if handler then Events.OnTick.Remove(handler) end; pending=nil end
 handler=function()
     local ok,why=pcall(step)
-    if not ok then H.stop(); print("[CF-G2-HINT] disabled: "..tostring(why)) end
+    if not ok then H.stop(); CFLog.message("nearby","scan","disabled: "..tostring(why)) end
 end
 Events.OnTick.Add(handler)
 return H

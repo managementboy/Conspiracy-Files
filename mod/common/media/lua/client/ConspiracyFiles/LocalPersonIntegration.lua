@@ -29,7 +29,8 @@ local cardTypes={['Base.IDcard']=true,['Base.IDcard_Male']=true,['Base.IDcard_Fe
 -- failure and a chain that simply never triggered were indistinguishable.
 -- Journal.observe reports "recorded" only for a genuinely new fact, which
 -- keeps these lines off the 30-tick poll.
-local function log(message) print("[CF-PERSON] "..tostring(message)) end
+local CFLog=require("ConspiracyFiles/Log")
+local function log(message) CFLog.message("person","person",message) end
 local function noteFact(fact,description)
     local accepted,reason=Journal.observe(fact)
     if accepted and reason=="recorded" then log(description) end
@@ -371,16 +372,16 @@ function P.tick()
             local n=(attempts[entry.item] or 0)+1
             attempts[entry.item]=n
             if n>=MAX_ATTEMPTS then
-                print("[CF-PERSON] Dropped after "..n.." attempts: "..tostring(why))
+                CFLog.message("person","person","Dropped after "..n.." attempts: "..tostring(why))
             else
                 queued[entry.item]=nil
-                print("[CF-PERSON] Deferred ("..n.."/"..MAX_ATTEMPTS.."): "..tostring(why))
+                CFLog.message("person","person","Deferred ("..n.."/"..MAX_ATTEMPTS.."): "..tostring(why))
             end
         end
     end
     -- A failed observation must not stop derived clue facts being recorded.
     local ok,why=pcall(P.known)
-    if not ok then print("[CF-PERSON] Deferred known: "..tostring(why)) end
+    if not ok then CFLog.message("person","person","Deferred known: "..tostring(why)) end
 end
 -- Called after vanilla confirms an inventory transfer. It records only the
 -- source of a wallet itself; its contents remain unread until their rows are

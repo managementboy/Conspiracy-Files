@@ -24,7 +24,8 @@ local visits,nextPoll,lastHint,phrase={},0,-60000,0
 -- Hints are a silent speech bubble; without a log line a missed hint and an
 -- unfired hint look identical.  Report each outcome once per approach.
 local reported={}
-local function log(s) print("[CF-G2-HINT] "..tostring(s)) end
+local CFLog=require("ConspiracyFiles/Log")
+local function log(s) CFLog.message("hint","hint",s) end
 local pending
 local function near(p,t,d)
     return math.floor(p:getZ())==t.z and math.abs(math.floor(p:getX())-t.x)<=d and math.abs(math.floor(p:getY())-t.y)<=d
@@ -137,7 +138,7 @@ function H.invalidate(target)
 end
 handler=function()
     local ok,why=pcall(step)
-    if not ok then H.stop(); print("[CF-G2-HINT] disabled: "..tostring(why)) end
+    if not ok then H.stop(); CFLog.message("hint","hint","disabled: "..tostring(why)) end
 end
 Events.OnTick.Add(handler)
 return H

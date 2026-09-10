@@ -1,4 +1,5 @@
 -- Observe only rows already displayed by the selected native inventory pane.
+local CFLog=require("ConspiracyFiles/Log")
 require "ISUI/ISInventoryPane"
 local Model=require("ConspiracyFiles/IdentityObservations")
 local Budget=require("ConspiracyFiles/SaveBudget")
@@ -58,7 +59,7 @@ local function gate(reason)
  local key=tostring(reason):gsub("%d+","N")
  if now-(lastGateLog[key] or -math.huge)>=2000 then
   lastGateLog[key]=now
-  print("[CF-IDENTITY] pane skipped: "..tostring(reason))
+  CFLog.message("identity","person","pane skipped: "..tostring(reason))
  end
  return nil
 end
@@ -113,7 +114,7 @@ local function bail(reason)
 end
 I.sawRender=false
 function I.afterRender(pane)
- if not I.sawRender then I.sawRender=true; print("[CF-IDENTITY] afterRender reached for the first time") end
+ if not I.sawRender then I.sawRender=true; CFLog.message("identity","person","afterRender reached for the first time") end
  if not supported() then return gate("observer unsupported (debug/MP/runtime gate)") end
  if #queue>=16 then return gate("queue full") end
  if pane.mode~="details" then return gate("pane mode is "..tostring(pane.mode)..", expected details") end
@@ -233,9 +234,9 @@ function I.tick()
  elapsed=elapsed+1
  if elapsed%10~=0 then return end
  local ok,err=pcall(I.flush)
- if not ok then print("[CF-IDENTITY] Observation deferred: "..tostring(err)) end
+ if not ok then CFLog.message("identity","person","Observation deferred: "..tostring(err)) end
 end
-print("[CF-IDENTITY] load: renderHookInstalled="..tostring(I.originalRender~=nil)..
+CFLog.message("identity","person","load: renderHookInstalled="..tostring(I.originalRender~=nil)..
  " tickHandler="..tostring(I.tickHandler~=nil))
 if not I.originalRender then
  I.originalRender=ISInventoryPane.render
@@ -264,8 +265,8 @@ if Events and Events.OnGameStart and not I.startHandler then
   for _,name in ipairs(expected) do
    if ConspiracyFiles[name]==nil then missing[#missing+1]=name end
   end
-  if #missing==0 then print("[CF-SELFCHECK] all "..#expected.." expected modules loaded")
-  else print("[CF-SELFCHECK] NOT LOADED: "..table.concat(missing,", ")) end
+  if #missing==0 then CFLog.message("identity","person","all "..#expected.." expected modules loaded")
+  else CFLog.message("identity","person","NOT LOADED: "..table.concat(missing,", ")) end
  end
  I.startHandler=function() I.reset(); pcall(reportModules) end
  Events.OnGameStart.Add(I.startHandler)

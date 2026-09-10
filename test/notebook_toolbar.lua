@@ -1,5 +1,7 @@
 -- Mock-only sidebar composition check. Native placement/hover remains manual.
-package.path="mod/common/media/lua/client/?.lua;"..package.path
+-- shared/ is on the path too: client modules log through ConspiracyFiles/Log
+-- (2026-09-10), which lives in shared.
+package.path="mod/common/media/lua/client/?.lua;mod/common/media/lua/shared/?.lua;"..package.path
 local added,removed=0,0
 local events={}
 Events={OnTick={Add=function(handler) events.tick=handler end,Remove=function() removed=removed+1 end},

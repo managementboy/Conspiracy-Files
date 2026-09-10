@@ -102,7 +102,8 @@ end
 
 -- A line the player misses and a line that never fired look identical unless
 -- delivery is logged. That cost an hour on clue hints; do not repeat it.
-local function log(message) print("[CF-VOICE] "..tostring(message)) end
+local CFLog=require("ConspiracyFiles/Log")
+local function log(message) CFLog.message("voice","voice",message) end
 local function speak(player,text)
     if not player then log("no player; line not delivered") return false,false end
     -- Call engine methods with colon syntax, the way vanilla does.

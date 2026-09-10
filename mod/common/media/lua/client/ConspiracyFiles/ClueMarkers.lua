@@ -11,7 +11,8 @@ local pens={"Pen","Pencil","RedPen","BluePen","GreenPen"}
 -- Vanilla ISWorldMapSymbols palette, in its deterministic tool priority order.
 local inks={Pen={0.129,0.129,0.129},Pencil={0.2,0.2,0.2},RedPen={0.65,0.054,0.054},BluePen={0.156,0.188,0.49},GreenPen={0.06,0.39,0.17}}
 local questionTexture
-local function log(s) print("[CF-MARKERS] "..s) end
+local CFLog=require("ConspiracyFiles/Log")
+local function log(s) CFLog.message("marker","marker",s) end
 local function allowed()
  return getDebug and getDebug() and not (isClient and isClient()) and not (isServer and isServer())
   and not ConspiracyFiles.T11Mode and not ConspiracyFiles.T12Mode

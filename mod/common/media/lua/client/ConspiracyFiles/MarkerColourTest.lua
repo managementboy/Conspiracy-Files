@@ -1,4 +1,5 @@
 -- Debug fixture only.  It never participates in generated evidence or marker saves.
+local CFLog=require("ConspiracyFiles/Log")
 ConspiracyFiles=ConspiracyFiles or {}
 local T=ConspiracyFiles.MarkerColourTest or {};ConspiracyFiles.MarkerColourTest=T
 if T.loaded then return T end
@@ -70,7 +71,7 @@ function T.start()
  for i,name in ipairs({"TEMP TEST A - marker colour","TEMP TEST B - marker colour"}) do
   -- Vanilla OnBreak.lua: string overload returns InventoryItem, not IsoWorldInventoryObject.
   local item=square:AddWorldInventoryItem("Base.Note",0.5,0.5,0.0)
- if not item then print("[CF-MARKER-TEST] Spawn stopped before all notes were created.");return false end
+ if not item then CFLog.message("marker","probe","Spawn stopped before all notes were created.");return false end
   item:setName(name);item:setCustomName(true);item:getModData()[KEY]=true
   items[i]=item;records[item]={x=square:getX(),y=square:getY(),z=square:getZ(),map=currentMap(),known=false,written=false}
  end
@@ -90,7 +91,7 @@ function T.start()
   local now=getTimeInMillis();if now-last<1000 then return end;last=now
   local m=ConspiracyFiles.MarkerColourTest;if m then pcall(m.update) end end
  Events.OnTick.Add(tick)
- print("[CF-MARKER-TEST] Spawned two temporary notes at the current square. Pick up one, then inspect it from inventory.")
+ CFLog.message("marker","probe","Spawned two temporary notes at the current square. Pick up one, then inspect it from inventory.")
  return true
 end
 function T.stop() if tick then Events.OnTick.Remove(tick);tick=nil end end

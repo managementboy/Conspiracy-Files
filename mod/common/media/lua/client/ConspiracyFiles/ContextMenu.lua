@@ -1,3 +1,4 @@
+local CFLog=require("ConspiracyFiles/Log")
 local Content=require("ConspiracyFiles/Content")
 local UI=require("ConspiracyFiles/Notebook")
 ConspiracyFiles=ConspiracyFiles or {}
@@ -56,7 +57,7 @@ local function activate(mark,playerNum,item,expectedToken,expectedContainer)
         local known=rt.state.resolveEvidence(id); if not known then return end
         UI.refresh("evidence",id)
         if not mark then UI.openReader(known.displayName,known.bodyText,asset.contextText) end
-        print("[CF-DEAD-AIR]|MANUAL_ACTION|action="..(mark and "mark" or "inspect").."|asset="..asset.assetId.."|changed="..tostring(changed))
+        CFLog.message("notebook","note","|MANUAL_ACTION|action="..(mark and "mark" or "inspect").."|asset="..asset.assetId.."|changed="..tostring(changed))
     end)
 end
 local function add(context,key,label,callback,disabled)

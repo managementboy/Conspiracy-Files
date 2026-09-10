@@ -1,4 +1,5 @@
 -- Current development build: automatic single-player trial activation.
+local CFLog=require("ConspiracyFiles/Log")
 ConspiracyFiles=ConspiracyFiles or {}
 local A=ConspiracyFiles.AutomaticInvestigations or {}
 ConspiracyFiles.AutomaticInvestigations=A
@@ -34,7 +35,7 @@ function A.onTick()
  ticks=ticks+1
  if ticks~=30 and ticks%A.config.retryTicks~=0 then return end
  local ok,err=pcall(A.poll)
- if not ok and tostring(err)~=A.lastError then A.lastError=tostring(err);print("[CF-AUTO] Deferred: "..A.lastError) end
+ if not ok and tostring(err)~=A.lastError then A.lastError=tostring(err);CFLog.message("auto","case","Deferred: "..A.lastError) end
 end
 if Events and not A.tickHandler then
  A.tickHandler=function() A.onTick() end;Events.OnTick.Add(A.tickHandler)

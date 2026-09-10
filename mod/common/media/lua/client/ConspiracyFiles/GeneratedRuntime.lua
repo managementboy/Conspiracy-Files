@@ -20,7 +20,8 @@ local sessions,scheduler,wrapper,ticks,preparing
 -- learned them and the notebook must still render them.
 local retiredRows={}
 local TAG="ConspiracyFiles.Generated.G2"
-local function log(message) print("[CF-G2] "..tostring(message)) end
+local CFLog=require("ConspiracyFiles/Log")
+local function log(message) CFLog.message("case","note",message) end
 local function allowed()
     return getDebug and getDebug() and not (isClient and isClient()) and not (isServer and isServer())
         and not ConspiracyFiles.T11Mode and not ConspiracyFiles.T12Mode

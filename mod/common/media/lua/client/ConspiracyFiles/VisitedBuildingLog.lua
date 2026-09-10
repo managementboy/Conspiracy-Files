@@ -2,6 +2,7 @@
 -- GeneratedRuntime records the player's current building as it plays; stale
 -- clue relocation reads this set to avoid moving a document into a building
 -- the player has already searched.
+local CFLog=require("ConspiracyFiles/Log")
 local V=require("ConspiracyFiles/VisitedBuildings")
 local Budget=require("ConspiracyFiles/SaveBudget")
 ConspiracyFiles=ConspiracyFiles or {}
@@ -28,10 +29,10 @@ function L.record(id)
         if not Budget.check("visitedBuildings",{canonical=staged}) then return false end
         local store=ModData.getOrCreate(TAG)
         store.canonical=staged
-        print("[CF-G2-RELOCATE] visited "..tostring(id))
+        CFLog.message("visited","note","visited "..tostring(id))
         return true
     end)
-    if not ok then print("[CF-G2-RELOCATE] visited-building not recorded: "..tostring(recorded)); return false end
+    if not ok then CFLog.message("visited","note","visited-building not recorded: "..tostring(recorded)); return false end
     return recorded
 end
 

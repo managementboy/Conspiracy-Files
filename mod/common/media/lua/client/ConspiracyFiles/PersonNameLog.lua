@@ -2,6 +2,7 @@
 -- needs to speak a name in Set B (see docs/design/PLAYER_VOICE.md). Same
 -- house style as DiscoveryLog: validated, bounded, copy-on-write, gated by
 -- SaveBudget, no metatables.
+local CFLog=require("ConspiracyFiles/Log")
 local Names=require("ConspiracyFiles/PersonNameObservations")
 local Budget=require("ConspiracyFiles/SaveBudget")
 ConspiracyFiles=ConspiracyFiles or {}
@@ -33,10 +34,10 @@ function L.record(token,name)
         if not Budget.check("personNames",{canonical=staged}) then return false end
         local store=ModData.getOrCreate(TAG)
         store.canonical=staged
-        print("[CF-PERSONNAME] recorded name for token "..tostring(token))
+        CFLog.message("person","person","recorded name for token "..tostring(token))
         return true
     end)
-    if not ok then print("[CF-PERSONNAME] Not recorded: "..tostring(recorded)); return false end
+    if not ok then CFLog.message("person","person","Not recorded: "..tostring(recorded)); return false end
     return recorded
 end
 
