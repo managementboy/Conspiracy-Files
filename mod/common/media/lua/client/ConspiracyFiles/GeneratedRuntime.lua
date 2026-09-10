@@ -610,6 +610,17 @@ local function placeOf(item)
         -- is incomplete and this stays inside the part the engine implements.
         local name=type(script)=="string" and script or nil
         if name and string.sub(name,1,5)=="Base." then name=string.sub(name,6) end
+        -- The game already names its own vehicles: IGUI_VehicleNameVanAmbulance
+        -- is "Ambulance", CarLightsPolice is "Police Chevalier Nyala". Ask it
+        -- rather than shipping a table of our own, which would be one more
+        -- thing to keep in step with the game and would only ever be English.
+        -- getText returns the key back when there is no translation, so an
+        -- unmatched id falls through to the script name.
+        if name and getText then
+            local key="IGUI_VehicleName"..name
+            local ok,text=pcall(getText,key)
+            if ok and type(text)=="string" and text~="" and text~=key then name=text end
+        end
         local where=name and ("In a "..name) or "In a vehicle"
         local slot=rd(part,"getId")
         if type(slot)=="string" and slot~="" then where=where.." ("..slot..")" end

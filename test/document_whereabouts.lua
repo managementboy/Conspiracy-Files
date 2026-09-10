@@ -61,6 +61,13 @@ assert(runtime:find('rd(vehicle,"getScriptName")', 1, true),
     'the vehicle must be named')
 assert(runtime:find('string.sub(name,1,5)=="Base."', 1, true),
     'the Base. prefix is engine plumbing and must not reach the player')
+-- "VanAmbulance" is a script id, not a name anyone would write. The game
+-- already ships the real ones - IGUI_VehicleNameVanAmbulance is "Ambulance" -
+-- so we ask it instead of shipping a table that would only ever be English.
+assert(runtime:find('"IGUI_VehicleName"..name', 1, true),
+    'the vehicle name must come from the game\'s own translation, not a table of ours')
+assert(runtime:find('text~=key', 1, true),
+    'getText returns the key when there is no translation; an unmatched id must fall through')
 assert(not runtime:find('or "In a vehicle." end', 1, true),
     'the old unnamed wording must be gone')
 print('PASS document whereabouts: the notebook names the vehicle a clue is in')
