@@ -102,8 +102,20 @@ assert(waitPlaced(function() return saved.campaign.canonical end,400),'bounded w
 local legacyRoot=saved.campaign.canonical
 saved={canonical=legacyRoot};assert(R.start(99))
 assert(R.known()[1].body==body,'legacy save opens before upgrade')
-assert(R.nextCase(2), 'explicit debug next-case request starts')
-for i=1,160 do events.tick() end
+-- Seed searched, not pinned. The harness offers a fixed handful of containers
+-- per site, and how many a case needs varies with its shape (2026-09-10: the
+-- review is no longer always present, which changes the split across sites).
+-- A pinned seed made this test fail on a content change that was working
+-- exactly as intended.
+local started=false
+for seed=2,40 do
+    if R.nextCase(seed) then
+        for i=1,160 do events.tick() end
+        if saved.campaign and saved.campaign.successive
+            and #saved.campaign.successive.cases==1 then started=true; break end
+    end
+end
+assert(started,'no seed in 2..40 could stage a second case in this harness')
 assert(saved.canonical==legacyRoot,'legacy fallback is retained unchanged')
 assert(saved.campaign.successive and #saved.campaign.successive.cases==1, 'second case is staged beside legacy canonical')
 count=#inventory.items; for _,c in pairs(containers) do count=count+#c.items end

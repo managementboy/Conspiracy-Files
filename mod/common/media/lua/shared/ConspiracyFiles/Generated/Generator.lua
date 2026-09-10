@@ -8,7 +8,9 @@ local ObjectRoles=require("ConspiracyFiles/Generated/ObjectRules")
 local Catalogue=require("ConspiracyFiles/Generated/ObjectCatalogue")
 -- Schema two deliberately refuses the earlier fixed-seven case shape.  Before
 -- 1.0 callers must use a fresh save rather than reinterpret an existing case.
-local G={REVISION="g3-premises-1",SCHEMA=2,MIN_EVIDENCE=3,MAX_EVIDENCE=7}
+-- MIN_EVIDENCE is two, not three: a claim and a record contradicting it is a
+-- whole case. See the review note in build().
+local G={REVISION="g4-shape-1",SCHEMA=2,MIN_EVIDENCE=2,MAX_EVIDENCE=7}
 local function copy(v) if type(v)~="table" then return v end; local out={}; for k,c in pairs(v) do out[k]=copy(c) end; return out end
 local function same(a,b)
     if type(a)~=type(b) then return false end
@@ -171,8 +173,25 @@ local function build(seed,revision,sites)
     -- 3. The review: somebody inside the organisation looking at the pair and
     --    writing down what they are going to do about it, which is usually
     --    less than the reader would like.
-    document(3,fill(premise.review.title,map),b,anchor(premise.review,true),
-        {org.id,b.id},{{target=documents[2].id,kind="recontextualises"}},nil,premise.review.kind)
+    --
+    -- Not always present. Owner, 2026-09-10, on whether cases are still built
+    -- to a set shape: for thirteen of the twenty premises the claim and the
+    -- response already hold the whole disagreement, and the review is worth
+    -- having without being load-bearing. Those cases may end on the
+    -- contradiction itself, which is a different kind of case to read - it
+    -- stops where the paperwork stops, with nobody having reacted at all.
+    --
+    -- The draw happens here, in a fixed place in the sequence, whether or not
+    -- it can be used: a case must rebuild identically from its seed, and a
+    -- conditional draw would shift every choice after it.
+    local reviewRoll=random(2)
+    local mandatory=3
+    if premise.reviewOptional and reviewRoll==1 then
+        mandatory=2
+    else
+        document(3,fill(premise.review.title,map),b,anchor(premise.review,true),
+            {org.id,b.id},{{target=documents[2].id,kind="recontextualises"}},nil,premise.review.kind)
+    end
     -- Optional roles pick their carrier through EvidenceRoles instead of a
     -- literal kind string. `key`/`diary`/`notebook`/`clipping` each still
     -- resolve to their one prose-capable carrier (a role's carrier list of
@@ -329,10 +348,10 @@ local function build(seed,revision,sites)
     local optional={documents[4],documents[5],documents[6],documents[7],documents[8],documents[9],
                     documents[10],documents[11],documents[12],
                     documents[13],documents[14],documents[15],documents[16],documents[17],documents[18],documents[19]}
-    local optionalCapacity=G.MAX_EVIDENCE-3
+    local optionalCapacity=G.MAX_EVIDENCE-mandatory
     local optionalCount=random(optionalCapacity+1)-1
     for i=#optional,2,-1 do local j=random(i); optional[i],optional[j]=optional[j],optional[i] end
-    while #documents>3 do documents[#documents]=nil end
+    while #documents>mandatory do documents[#documents]=nil end
     for i=1,optionalCount do
         local d=optional[i]
         d.id=prefix.."document-"..(#documents+1)

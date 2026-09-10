@@ -7,7 +7,7 @@ Content status stays *drafted, pending approval* per ADR-0002 - the owner
 selected the premises, not yet every sentence of the prose they generate.
 
 Each premise supplies three organisations and three anchor documents (claim,
-response, review) in the shape the generator already used. It does **not**
+response, review - the last of which it may mark optional) in the shape the generator already used. It does **not**
 supply the case reference: the links between documents already carry the
 connection and the notebook sorts on them, so a reference that encoded the
 premise would only announce which story the player had drawn before they had
@@ -16,6 +16,25 @@ The premise is the seed's **first** draw, so it is the most significant thing a
 seed decides: what the case is about, before who is in it or how it resolves.
 Every premise reads two ways - the records agree, or they do not - and each of
 the twenty is reachable and readable both ways, which the test suite checks.
+
+## The shape is not fixed
+
+Owner, 2026-09-10: *"are we still building the mysteries with a set amount of
+clues?"*
+
+The count always varied - three to seven documents, evenly. The **skeleton**
+did not: every case was a claim, a response, and a review of the pair.
+
+Thirteen of the twenty premises now mark their review optional, because their
+claim and response already hold the whole disagreement. Those cases may end on
+the contradiction itself, which reads differently - it stops where the
+paperwork stops, with nobody having reacted at all. Measured across 600 cases:
+191 ended on the contradiction, 409 kept a review, and the smallest case is now
+two documents.
+
+The other seven keep their review always, because the point of those cases *is*
+what the office did next - the unsigned explanation, the recovered copies, the
+initials written out in full and then crossed through.
 
 ## What makes one of these work
 

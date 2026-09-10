@@ -24,12 +24,21 @@
 -- docs/design/PREMISES.md for the prose originals and the owner's selection.
 local M={}
 
--- Each entry: id, title, subject, unknown, orgs (3),
+-- Each entry: id, title, subject, unknown, orgs (3), an optional
+-- `reviewOptional`,
 -- and three anchor documents - claim, response, review - each with a carrier
 -- `kind`, a `title`, a physical `found` description, the document's own `text`,
 -- and a `meaning` that must never assert a conclusion. The response and review
 -- additionally carry `agree` and `dispute` lines; the case outline picks one,
--- which is what makes the same premise readable two ways. A review may also
+-- which is what makes the same premise readable two ways.
+--
+-- `reviewOptional` marks a premise whose claim and response already hold the
+-- whole disagreement. For those the review - somebody inside the organisation
+-- looking at the pair and doing less about it than the reader would like - is
+-- worth having but is not load-bearing, so the case may end on the
+-- contradiction itself. Thirteen of the twenty are marked; the other seven
+-- need their review, because the point of those cases IS what the office did
+-- next. A review may also
 -- carry `meaningAgree`, used in place of `meaning` when the case corroborates:
 -- several reviews are written for the version where the records conflict, and
 -- reusing that wording where they agree would put a suspicion on the page that
@@ -55,7 +64,7 @@ local P={
   dispute="The two copies do not agree and the file has nevertheless been marked closed. Retain both; do not correct one from the other.",
   meaning="Somebody wanted the disagreement preserved, or somebody wanted it tidied. The sheet raises a question about authority without answering who exercised it."}},
 
-{id="signed-by-someone-absent",title="Signed for by someone who was not there",
+{id="signed-by-someone-absent",reviewOptional=true,title="Signed for by someone who was not there",
  subject="the signature",unknown="whose hand it was",
  orgs={"Knox County Supply Office","Regional Distribution Depot","County Equipment Service"},
  claim={kind="dispatch",title="Delivery docket / {CODE}",
@@ -75,7 +84,7 @@ local P={
   dispute="No answer received. The query has been marked closed by someone who did not sign the closure.",
   meaning="A closed query is not a settled one. Who closed it, and on what basis, is the part the sheet does not record."}},
 
-{id="two-start-dates",title="The employee with two start dates",
+{id="two-start-dates",reviewOptional=true,title="The employee with two start dates",
  subject="the start date",unknown="where the missing months were spent",
  orgs={"McCoy Logging Corp","Knox County Public Works","Fossoil Regional Office"},
  claim={kind="letter",title="Employment record / {CODE}",
@@ -116,7 +125,7 @@ local P={
   dispute="Entry does not reconcile and has been left underlined rather than corrected.",
   meaning="Somebody noticed and stopped short of writing down what they suspected. The underlining is the whole of their comment."}},
 
-{id="address-that-only-receives",title="The address that receives but never sends",
+{id="address-that-only-receives",reviewOptional=true,title="The address that receives but never sends",
  subject="the deliveries",unknown="who was there to take them",
  orgs={"Regional Supply Office","County Equipment Service","Valu-Line Distribution"},
  claim={kind="dispatch",title="Delivery schedule / {CODE}",
@@ -137,7 +146,7 @@ local P={
   meaningAgree="An address kept on a schedule with no contact name behind it is normal in a large organisation, and is also how a place stays supplied without being visited.",
   meaning="Somebody took the address off a list and somebody put it back within hours. Neither of them wrote down why."}},
 
-{id="identical-inventories",title="Two buildings, one inventory",
+{id="identical-inventories",reviewOptional=true,title="Two buildings, one inventory",
  subject="the inventory",unknown="which building it describes",
  orgs={"MassGenFac Stores","Regional Distribution Depot","County Equipment Service"},
  claim={kind="dispatch",title="Stock list / {CODE}",
@@ -199,7 +208,7 @@ local P={
   meaningAgree="An inspection recorded with an illegible name is an inspection nobody can be asked about. Offices produce that by accident constantly.",
   meaning="Access not obtained can mean nobody had the time or nobody was let in. The sheet was designed to record the visit, not the reason it failed."}},
 
-{id="load-that-got-lighter",title="The load that got lighter",
+{id="load-that-got-lighter",reviewOptional=true,title="The load that got lighter",
  subject="the load",unknown="what came off it",
  orgs={"McCoy Logging Corp","Regional Haulage Service","Fossoil Transport"},
  claim={kind="dispatch",title="Weighbridge ticket / {CODE}",
@@ -220,7 +229,7 @@ local P={
   meaningAgree="A difference inside the certificate is a difference nobody has to explain. That may be the end of it, or the reason it ends there.",
   meaning="A missing certificate makes the numbers unprovable in either direction, which is convenient for whoever would rather they stayed that way - and is also just what a filing system does."}},
 
-{id="fuel-for-a-dead-truck",title="Fuel for a vehicle that was off the road",
+{id="fuel-for-a-dead-truck",reviewOptional=true,title="Fuel for a vehicle that was off the road",
  subject="the fuel account",unknown="which vehicle was being filled",
  orgs={"Fossoil Regional Office","Gas 2 Go Commercial Accounts","County Motor Pool"},
  claim={kind="dispatch",title="Fuel account statement / {CODE}",
@@ -261,7 +270,7 @@ local P={
   meaningAgree="Serial numbers that were never compared cannot contradict anything. An item can leave the system as one thing and come back as another simply because nobody looked.",
   meaning="An item accepted back under the wrong serial has left the system as one thing and returned as another. Clerks do this in a hurry every week."}},
 
-{id="two-crates-one-number",title="Two crates, one number",
+{id="two-crates-one-number",reviewOptional=true,title="Two crates, one number",
  subject="the crate reference",unknown="which crate is which",
  orgs={"MassGenFac Stores","Regional Distribution Depot","County Equipment Service"},
  claim={kind="dispatch",title="Goods receipt / {CODE}",
@@ -282,7 +291,7 @@ local P={
   meaningAgree="A book withdrawn from use takes its stubs with it. The fault is recorded and the means of checking it is gone.",
   meaning="Only one crate can be found. That is a fact about a search, not about a crate, and searches end for all sorts of reasons."}},
 
-{id="paid-before-ordered",title="Paid before it was ordered",
+{id="paid-before-ordered",reviewOptional=true,title="Paid before it was ordered",
  subject="the payment",unknown="who authorised it",
  orgs={"County Accounts Office","County Finance Department","Regional Supply Office"},
  claim={kind="dispatch",title="Requisition / {CODE}",
@@ -302,7 +311,7 @@ local P={
   dispute="Not reconciled. The signature does not resemble the specimen held on file.",
   meaning="A specimen signature settles a question of hands, not of intent. Somebody may have signed for a colleague at a desk, as happens hourly."}},
 
-{id="overtime-nobody-worked",title="The overtime nobody worked",
+{id="overtime-nobody-worked",reviewOptional=true,title="The overtime nobody worked",
  subject="the night shift",unknown="who was on the site",
  orgs={"County Public Works","McCoy Logging Corp","{B} Site Office"},
  claim={kind="dispatch",title="Timesheet / {CODE}",
@@ -343,7 +352,7 @@ local P={
   meaningAgree="Copies returned and destroyed as routine is exactly what routine looks like, and exactly what it would look like if it were not.",
   meaning="Recovering circulated copies is ordinary practice for confidential paper. The urgency in the wording is the only unusual thing here, and urgency is not proof."}},
 
-{id="appointment-out-of-order",title="The medical appointment that came first",
+{id="appointment-out-of-order",reviewOptional=true,title="The medical appointment that came first",
  subject="the follow-up",unknown="when the patient was first seen",
  orgs={"Knox County Health Office","Regional Health Service","{B} Medical Centre"},
  claim={kind="dispatch",title="Follow-up note / {CODE}",
@@ -385,7 +394,7 @@ local P={
   meaningAgree="The file came back and the initials were never identified. A returned file closes a query without answering it.",
   meaning="Somebody worked out whose initials they were and thought better of writing it down. What they concluded is not on the sheet."}},
 
-{id="missing-ledger-page",title="The page that is missing",
+{id="missing-ledger-page",reviewOptional=true,title="The page that is missing",
  subject="the ledger",unknown="what the removed page said",
  orgs={"{A} Site Office","County Public Works","Rosewood Correctional"},
  claim={kind="dispatch",title="Duty ledger / {CODE}",
@@ -406,7 +415,7 @@ local P={
   meaningAgree="Entries rewritten from a duplicate are only as good as the duplicate. Nobody recorded who did the rewriting, or when.",
   meaning="A book that nobody tried to reconstruct was either unimportant or better left incomplete. The note does not say which and the person who wrote it did not sign."}},
 
-{id="photograph-without-a-name",title="The photograph with no caption",
+{id="photograph-without-a-name",reviewOptional=true,title="The photograph with no caption",
  subject="the photograph",unknown="who the unnamed person is",
  orgs={"{A} Site Office","McCoy Logging Corp","Knox County Schools"},
  claim={kind="letter",title="Staff photograph / {CODE}",
@@ -426,7 +435,7 @@ local P={
   dispute="Unanswered. The note has been filed rather than pursued.",
   meaning="An unnamed face and an unnamed agency are two absences, not one fact. Neither becomes a person until something else names them."}},
 
-{id="withdrawn-extension",title="The number that was withdrawn",
+{id="withdrawn-extension",reviewOptional=true,title="The number that was withdrawn",
  subject="the extension",unknown="what department used it",
  orgs={"Knox County Administration","MassGenFac","Regional Health Service"},
  claim={kind="dispatch",title="Internal directory / {CODE}",
