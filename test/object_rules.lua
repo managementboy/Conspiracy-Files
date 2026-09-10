@@ -241,3 +241,32 @@ for title in pairs(seen) do
     end
 end
 print('PASS object rules: no label puts its adjective after the noun')
+
+-- Owner, 2026-09-10: "x of the same thing is a very repetitive way of writing
+-- it and sounds like a robot." It was one sentence per rule, so every pile in
+-- every case read identically.
+local bodies, titles = {}, {}
+for seed = 1, 400 do
+    local case = G.generate(dofile("test/fixtures/synthetic_locations.lua"), seed,
+        { mapId = "SYNTHETIC-MAP", buildLine = "TEST-ONLY", allowSynthetic = true })
+    if case then
+        for _, doc in ipairs(case.documents) do
+            if doc.quantity then
+                bodies[doc.body:sub(1, 40)] = true
+                titles[doc.title] = true
+                assert(not doc.body:find("of the same thing", 1, true),
+                    "the robot phrasing is back: " .. doc.body)
+                -- "six lunchboxes", not "lunchbox, six of them".
+                assert(not doc.title:find(", ", 1, true), "a pile title reads as a count and a plural: " .. doc.title)
+                -- Junk names must not reach the player.
+                assert(not doc.title:find("aaa"), "a joke item name reached the notebook: " .. doc.title)
+                assert(not doc.title:find(" rights") and not doc.title:find(" lefts"),
+                    "which side of a pair a thing is does not matter: " .. doc.title)
+            end
+        end
+    end
+end
+local shapes = 0
+for _ in pairs(bodies) do shapes = shapes + 1 end
+assert(shapes >= 12, "only " .. shapes .. " distinct pile openings; four rules should give sixteen")
+print(string.format('PASS object rules: %d distinct pile phrasings, none of them counting for the player', shapes))

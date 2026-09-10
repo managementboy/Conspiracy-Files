@@ -11,8 +11,15 @@ local function container()
  c.AddItem=function(_,item) c.items[#c.items+1]=item;item.container=c;return item end
  return c
 end
+-- Eight containers per house, in a 4x2 block. Four was exactly MAX_EVIDENCE
+-- minus the three mandatory roles, which held only while no case could want
+-- more than four documents in one building. It is not a safe fit: how a case
+-- splits across its two sites varies with its shape, and on 2026-09-10 a case
+-- wanted five at one site and the run deferred forever. The harness must never
+-- be the constraint under test.
 local places={0,20,40,60,80,100}
-for _,x in ipairs(places) do for _,offset in ipairs({0,0.1,1,1.1}) do containers[x+offset]=container() end end
+local offsets={0,0.1,1,1.1,2,2.1,3,3.1}
+for _,x in ipairs(places) do for _,offset in ipairs(offsets) do containers[x+offset]=container() end end
 local inventory=container();local house=nil;local hours=10;local position=0
 local player=record{getZ=0,getY=0,getHoursSurvived=0,getInventory=inventory,getVehicle=nil}
 player.getX=function() return position end;player.getModData=function() return {} end
@@ -36,8 +43,11 @@ local db={};local fail=false
 ModData={get=function(tag) return db[tag] end,getOrCreate=function(tag) if fail then error('failed save') end;db[tag]=db[tag] or {};return db[tag] end}
 local result={version='T3-nearby-2',buildings=#places,map='mock',gameVersion='42.20',anchor={x=0,y=0},rows={}}
 for _,x in ipairs(places) do
- result.rows[#result.rows+1]={kind='building',id=tostring(x),x=x,y=0,x2=x+2,y2=2,minLevel=0}
- result.rows[#result.rows+1]={kind='rect',building=tostring(x),x=x,y=0,z=0,w=2,h=2}
+ -- Four wide, two deep, matching the eight container keys above (x+dx for
+ -- dx in 0..3, y in {0,1}). The building bounds must cover them too: a
+ -- candidate outside its site's bounds is refused by Session.target.
+ result.rows[#result.rows+1]={kind='building',id=tostring(x),x=x,y=0,x2=x+4,y2=2,minLevel=0}
+ result.rows[#result.rows+1]={kind='rect',building=tostring(x),x=x,y=0,z=0,w=4,h=2}
 end
 local requestedHouse;local probes=0
 package.preload['ConspiracyFiles/T3Nearby']=function() return {result=result,start=function(_,_,required) requestedHouse=required;probes=probes+1;return true end} end
@@ -54,7 +64,21 @@ house='0';tick(1100)
 local first=assert(active());assert(C.validate(first) and requestedHouse=='0')
 assert(first.canonical.case.documents[1].locationId=='t3:0','opening clue in current house')
 assert(first.schedule.createdHours[1]==10 and #R.known()==0)
-local inHouse=0;for _,offset in ipairs({0,0.1,1,1.1}) do assert(#containers[offset].items<=1);inHouse=inHouse+#containers[offset].items end
+-- One DOCUMENT per container, not one item: a pile is one document and many
+-- identical items (2026-09-10), so a drawer holding six lunchboxes is still
+-- one piece of evidence. Counting items here would have called that a
+-- violation of the separate-containers rule it is not.
+local inHouse=0
+for _,offset in ipairs(offsets) do
+ local documents={}
+ for _,item in ipairs(containers[offset].items) do
+  local id=item.getModData and item:getModData().cfGeneratedId
+  if id then documents[id]=true end
+ end
+ local n=0;for _ in pairs(documents) do n=n+1 end
+ assert(n<=1,'a container must hold at most one document, however many copies of it')
+ inHouse=inHouse+n
+end
 local required=assert(require('ConspiracyFiles/Generated/Generator').requiredContainers(first.canonical.case))['t3:0']
 assert(inHouse==required,'selected opening evidence occupies its required separate containers')
 local firstId=first.canonical.case.caseId

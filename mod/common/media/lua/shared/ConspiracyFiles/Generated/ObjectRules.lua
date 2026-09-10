@@ -176,6 +176,12 @@ local function legible(id)
         if ch>="0" and ch<="9" then return false end
     end
     if string.find(id,"Generic",1,true) then return false end
+    -- Three of the same letter in a row is a joke item name, not a thing a
+    -- survivor writes down: "seven painting aaaaahs" reached the notebook.
+    for i=1,#id-2 do
+        local c=string.sub(id,i,i)
+        if c==string.sub(id,i+1,i+1) and c==string.sub(id,i+2,i+2) then return false end
+    end
     id=string.sub(id,1,last)
     local words,inWord=0,false
     for i=1,#id do

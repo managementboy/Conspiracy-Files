@@ -119,7 +119,50 @@ assert(located[1].detailText:find("Observed at 114 S Main St.", 1, true), locate
 -- The address book is client-side and can fail; coordinates remain the
 -- fallback, because an unnamed building is better reported than skipped.
 local unnamed = M.rows(furniture, nil, function() return nil end)
-assert(unnamed[1].detailText:find("Observed near 10, 20 (floor 0).", 1, true), unnamed[1].detailText)
+assert(unnamed[1].detailText:find("a building the address book does not name", 1, true),
+    unnamed[1].detailText)
 local broken = M.rows(furniture, nil, function() error("no address book") end)
-assert(broken[1].detailText:find("Observed near", 1, true), "a failing lookup must not lose the row")
+assert(broken[1].detailText:find("does not name", 1, true), "a failing lookup must not lose the row")
 print('PASS identity observations: an address where the book knows one, coordinates where it does not')
+
+-- Two names in one wallet (owner, 2026-09-10: "one wallet two names? one is a
+-- business card, clearly of someone that Millicent met"), and: "don't we still
+-- know from which corpse I just took it?" We did. Every document off one body
+-- shares a provenance token, and the mod was throwing that away.
+local wallet = {
+    schema = 1,
+    records = {
+        { id = "Base.IDcard:1", fullType = "Base.IDcard", label = "ID Card: Millicent Autry",
+          source = "container", container = "Wallet", token = "corpse-item:9",
+          x = 1, y = 2, z = 0, observedAt = 1 },
+        { id = "Base.BusinessCard:2", fullType = "Base.BusinessCard",
+          label = "Business Card: Misti Blum (Plumber)",
+          source = "container", container = "Wallet", token = "corpse-item:9",
+          x = 1, y = 2, z = 0, observedAt = 2 },
+    },
+}
+local walletRows = M.rows(wallet)
+local idRow = walletRows[1].detailText
+local cardRow = walletRows[2].detailText
+assert(idRow:find("The same one carried:", 1, true), idRow)
+assert(idRow:find("Misti Blum", 1, true), "the ID row must name what shared its wallet")
+assert(cardRow:find("Millicent Autry", 1, true), "and the card row must name the other")
+
+-- The kinds differ, and that difference is the whole of what may be said: an ID
+-- names its bearer, a business card names somebody else whose card was kept.
+assert(idRow:find("another person's card, kept", 1, true), idRow)
+assert(cardRow:find("names somebody else", 1, true), cardRow)
+assert(cardRow:find("not that they met", 1, true), "carrying a card is not meeting someone")
+
+-- And it still refuses to say whose body it is.
+for _, row in ipairs(walletRows) do
+    assert(not row.detailText:lower():find("the body is", 1, true), row.detailText)
+end
+
+-- A document with no companions says nothing extra.
+local alone = { schema = 1, records = { {
+    id = "Base.IDcard:3", fullType = "Base.IDcard", label = "ID Card: Solo",
+    source = "container", container = "Wallet", token = "corpse-item:7",
+    x = 1, y = 1, z = 0, observedAt = 1 } } }
+assert(not M.rows(alone)[1].detailText:find("The same one carried", 1, true))
+print('PASS identity observations: two names in one wallet are reported as two names in one wallet')

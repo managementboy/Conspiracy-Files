@@ -68,9 +68,31 @@ end
 -- exactly like outfitFor: the address book lives client-side, this module has
 -- no engine contact, and a missing name must degrade to coordinates rather
 -- than stop a row rendering.
+-- Which documents shared a container, by provenance token. Two names in one
+-- wallet is a fact about the wallet, and the mod was throwing it away.
+local function companions(root)
+ local byToken={}
+ for _,r in ipairs(root.records) do
+  if r.token then
+   byToken[r.token]=byToken[r.token] or {}
+   local list=byToken[r.token]
+   list[#list+1]=r
+  end
+ end
+ return byToken
+end
+-- An ID names the person it was issued to; a business card names somebody
+-- else, whose card the carrier kept. That difference is the whole of what can
+-- be said about two names in one wallet, and it is a fact about the documents
+-- rather than a guess about the people.
+local BEARER={["Base.IDcard"]=true,["Base.IDcard_Male"]=true,["Base.IDcard_Female"]=true,
+ ["Base.Passport"]=true,["Base.Badge"]=true,["Base.PressID"]=true,
+ ["Base.Necklace_DogTag"]=true,["Base.Necklace_DogTag_Male"]=true,
+ ["Base.Necklace_DogTag_Female"]=true}
 function M.rows(root,outfitFor,placeFor)
  if not M.validate(root) then return {} end
  local rows={}
+ local shared=companions(root)
  for i,r in ipairs(root.records) do
   -- Three strengths of the same observation, and the wording carries the
   -- difference. A name on a body is evidence that person was there; a name in
@@ -92,6 +114,24 @@ function M.rows(root,outfitFor,placeFor)
   -- wallet on a corpse.
   if r.source~="corpse" and r.token then
    detail=detail.." That container was taken off a corpse."
+   -- And we know WHICH corpse: the same token binds every document that came
+   -- off it. Owner, 2026-09-10: "don't we still know from which corpse I just
+   -- took it?" We did, and said nothing.
+   local others={}
+   for _,other in ipairs(shared[r.token] or {}) do
+    if other.id~=r.id then others[#others+1]=other end
+   end
+   if #others>0 then
+    local names={}
+    for _,other in ipairs(others) do
+     names[#names+1]=other.label..(BEARER[other.fullType] and "" or " (another person's card, kept)")
+    end
+    table.sort(names)
+    detail=detail.." The same one carried: "..table.concat(names,"; ").."."
+    if not BEARER[r.fullType] then
+     detail=detail.." A card like this one names somebody else - it says it was carried, not that they met."
+    end
+   end
   end
   if r.source=="furniture" then
    detail=detail.."\n\nSomebody kept this here. That is all it shows: not that they lived here, not that they are nearby, and not that they are the person on the document."
@@ -113,8 +153,14 @@ function M.rows(root,outfitFor,placeFor)
    local ok,label=pcall(placeFor,r.x,r.y,r.z)
    if ok and text(label,120) then place=label end
   end
+  -- A grid reference helps nobody. Owner, 2026-09-10, twice: "and again
+  -- coordinates not addresses". The address book covers part of the map, so
+  -- some buildings genuinely have no name - and saying so is more use than six
+  -- digits the player cannot act on. The numbers stay in parentheses for a
+  -- developer reading a log, not as the sentence.
   if place then detail=detail.."\n\nObserved at "..place.."."
-  else detail=detail.."\n\nObserved near "..math.floor(r.x)..", "..math.floor(r.y).." (floor "..r.z..")." end
+  else detail=detail.."\n\nObserved in a building the address book does not name ("
+   ..math.floor(r.x)..", "..math.floor(r.y)..")." end
   rows[i]={id="identity:"..r.id,ordinal=i,title="Found "..r.label,summary="Identity document - "..r.source,
    detailText=detail}
  end

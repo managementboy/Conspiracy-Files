@@ -65,11 +65,20 @@ local SLOT_PREFIXES={"Hat_","Necklace_","Vest_","Shirt_","Trousers_","Jacket_",
 -- is a duffel bag and must not become "duffelbag bag".
 local QUALIFIERS={Stolen=true,Old=true,Used=true,Dirty=true,Broken=true,
     Empty=true,Full=true,Burnt=true,Rusty=true,Worn=true,Fresh=true,Wet=true}
+-- Which side of a pair a thing is does not matter to an investigation, and
+-- "ten elbow pad rights" is not English. Dropped from the display name only.
+local SIDES={Left=true,Right=true,L=true,R=true}
 local function words(id)
     -- Both spellings: CreditCard_Stolen and BandageDirty. The second is why
     -- the underscore cannot be required - the test caught "bandage dirty"
     -- immediately after the first version fixed "credit card stolen".
     local qualifier
+    -- Sides first: "ElbowPad_Right" is an elbow pad, and "Kneepad_Left_Sport"
+    -- is a sport kneepad.
+    for _=1,2 do
+        local body,side=string.match(id,"^(.-)_?([A-Z][a-z]*)$")
+        if body and body~="" and SIDES[side] then id=body else break end
+    end
     local head,tail=string.match(id,"^(.-)_?([A-Z][a-z]+)$")
     if head and head~="" and QUALIFIERS[tail] then
         qualifier=string.lower(tail)
@@ -341,20 +350,27 @@ local function build(seed,revision,sites)
     -- Nothing is written on any of them and they are all identical, which is
     -- the point: the only fact is the count, and the count is the one thing
     -- the mod states plainly and then declines to explain.
-    local function pile(n,roleId,site,sentence,link)
+    local function pile(n,roleId,site,sentences,link)
         local kind=assert(Roles.choose(random,roleId))
         -- The count depends on what the thing weighs and is worth, so the
         -- catalogue row is needed, not just the id.
         local item=assert(Catalogue.get(kind))
         local count=assert(ObjectRoles.quantity(random,roleId,item))
         local label=words(kind)
-        local body=subst(subst(fill(sentence,map),"LABEL",label),"COUNT",numeral(count))
+        -- One of several phrasings, by seed. The draw happens whether or not
+        -- this document is selected, so the sequence a case rebuilds from
+        -- cannot shift.
+        local sentence=sentences[random(#sentences)]
+        local body=fill(sentence,map)
+        body=subst(subst(body,"LABELS",plural(label)),"LABEL",label)
+        body=subst(body,"COUNT",numeral(count))
         body=string.upper(string.sub(body,1,1))..string.sub(body,2)
         assert(Roles.fits(roleId,kind,body))
         -- The notebook row names the pile; each physical copy is numbered by
         -- the runtime (owner, 2026-09-10: "1 of x should be counted on each
         -- item"), which needs the bare label rather than the row's wording.
-        document(n,label..", "..numeral(count).." of them",site,body,{site.id},{link},nil,kind)
+        -- "six lunchboxes", not "lunchbox, six of them".
+        document(n,numeral(count).." "..plural(label),site,body,{site.id},{link},nil,kind)
         documents[n].label=label
         documents[n].wear=assert(ObjectRoles.describe(roleId)).wear
         -- The count is a fact about the world, so it has to reach placement:
@@ -374,23 +390,34 @@ local function build(seed,revision,sites)
         local short=random(3)
         documents[n].onPaper=math.max(1,count-short)
     end
-    pile(16,"accumulation",b,
-        "{COUNT} of the same thing - {LABEL} - kept where such a thing is kept, with the file marked {CODE} beside it. One would be ordinary. This many is not.",
-        {target=documents[2].id,kind="recontextualises"})
-    pile(17,"misplacedBulk",a,
-        "{COUNT} of the same thing - {LABEL} - in a room with no use for any of it, stored with the file marked {CODE}. Somewhere else this would not be worth writing down.",
-        {target=documents[1].id,kind="recontextualises"})
-    pile(18,"medicalHoard",b,
-        "{COUNT} of the same thing - {LABEL} - all of it already used, bagged together in a room that is not for it, with the file marked {CODE}. One household does not get through this much.",
-        {target=documents[2].id,kind="recontextualises"})
-    pile(19,"vehicleBulk",a,
-        -- Deliberately does NOT say "in a vehicle". Room preference is exactly
-        -- that - a preference - and Session.createDistributed falls back to any
-        -- usable container, so a sentence asserting a car would be false the
-        -- first time a case had no car near it. Where the thing actually is,
-        -- the notebook already reports.
-        "{COUNT} of the same thing - {LABEL} - loaded together as cargo, with the file marked {CODE} among it. Nothing records where any of it was going.",
-        {target=documents[1].id,kind="recontextualises"})
+    -- Owner, 2026-09-10: "x of the same thing is a very repetitive way of
+    -- writing it and sounds like a robot." It was one sentence per rule, so
+    -- every pile in every case read identically. Four ways to say each, chosen
+    -- by the case seed, and none of them counting for the player.
+    pile(16,"accumulation",b,{
+        "{COUNT} {LABELS}, kept where such a thing is kept. One would be ordinary. This many is not.",
+        "Somebody put {COUNT} {LABELS} in here, tidily, in the place they belong. Nobody needs {COUNT}.",
+        "{COUNT} {LABELS}, in the right cupboard and the wrong number.",
+        "A shelf of {LABELS} - {COUNT} of them, where one or two would be unremarkable. The file marked {CODE} sits beside them.",
+    })
+    pile(17,"misplacedBulk",a,{
+        "{COUNT} {LABELS}, in a room with no use for any of them. Somewhere else this would not be worth writing down.",
+        "{COUNT} {LABELS}, stacked in a room that has nothing to do with them.",
+        "Somebody carried {COUNT} {LABELS} into this room and left them. There is nothing here they belong to.",
+        "{COUNT} {LABELS} where there is no reason for even one. The file marked {CODE} is among them.",
+    })
+    pile(18,"medicalHoard",b,{
+        "{COUNT} {LABELS}, every one already used, bagged together in a room that is not for them. One household does not get through this much.",
+        "Somebody kept {COUNT} used {LABELS}. Not clean ones. Used.",
+        "{COUNT} {LABELS}, spent and stacked, nowhere near a bathroom. The file marked {CODE} is with them.",
+        "A bag of {LABELS} - {COUNT}, every one of them already used. Nobody keeps this.",
+    })
+    pile(19,"vehicleBulk",a,{
+        "{COUNT} {LABELS}, loaded together as cargo. Nothing records where they were going.",
+        "{COUNT} {LABELS}, roped together like freight, with the file marked {CODE} among it.",
+        "Somebody loaded {COUNT} {LABELS} for a journey. There is no manifest and no destination written anywhere.",
+        "{COUNT} {LABELS}, packed as though they were going somewhere.",
+    })
     -- The first three roles are the coherent minimum: a route lead,
     -- an independently attributable response, and a review of that response.
     -- Optional roles are shuffled and bounded, so neither their count nor their
