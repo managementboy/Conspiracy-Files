@@ -10,7 +10,7 @@ local Catalogue=require("ConspiracyFiles/Generated/ObjectCatalogue")
 -- 1.0 callers must use a fresh save rather than reinterpret an existing case.
 -- MIN_EVIDENCE is two, not three: a claim and a record contradicting it is a
 -- whole case. See the review note in build().
-local G={REVISION="g5-pilepaper-1",SCHEMA=2,MIN_EVIDENCE=2,MAX_EVIDENCE=7}
+local G={REVISION="g6-fullnames-1",SCHEMA=2,MIN_EVIDENCE=2,MAX_EVIDENCE=7}
 local function copy(v) if type(v)~="table" then return v end; local out={}; for k,c in pairs(v) do out[k]=copy(c) end; return out end
 local function same(a,b)
     if type(a)~=type(b) then return false end
@@ -148,7 +148,12 @@ local function build(seed,revision,sites)
     -- ConspiracyFiles/Generated/Premises.lua and docs/design/PREMISES.md.
     local premise=Premises.choose(random)
     local outline=random(2)==1 and "corroboration" or "conflicting-account"
-    local names={"M. Ellis","D. Mercer","R. Hale","J. Voss"}
+    -- Full names, not initials. Owner, 2026-09-10: a nearby body is going to
+    -- be given this name and an ID to match, and "M. Ellis" on a corpse is not
+    -- something a player can connect to a letter signed "M. Ellis" - it is the
+    -- same abbreviation twice. A full name is a person.
+    local names={"Marion Ellis","Delia Mercer","Roy Hale","Joanne Voss",
+                 "Curtis Vance","Adele Prosser","Warren Nagy","Ines Kubiak"}
     local first=random(#names); local second=(first+random(#names-1)-1)%#names+1
     local prefix="generated:"..seed..":"
     local a,b=sites[1],sites[2]

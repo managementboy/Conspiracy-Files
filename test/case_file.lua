@@ -112,7 +112,12 @@ assert(menu:find('option.iconTexture=icon', 1, true))
 assert(menu:find('here.iconTexture=icon', 1, true), 'both options, not just one')
 
 -- (c) Not "Case File": the survivor is not an investigator.
-assert(not caseFile:find('Case File', 1, true), 'the name must not make them an investigator')
+-- Checked on what titleFor RETURNS, not on the file: the comment above it
+-- quotes the old name to explain why it went.
+local titleFor = caseFile:match('function F%.titleFor%(player%).-\nend')
+assert(titleFor, 'titleFor must be findable')
+assert(not titleFor:find('Case File', 1, true), 'the name must not make them an investigator')
+assert(titleFor:find("'s Papers", 1, true), 'they kept some papers')
 
 -- (d) Evidence sorts as Evidence, not as Junk.
 assert(runtime:find('item:setDisplayCategory("Evidence")', 1, true),

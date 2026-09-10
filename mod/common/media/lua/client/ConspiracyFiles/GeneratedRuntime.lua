@@ -300,6 +300,18 @@ local function prepare(result,seed,later,house)
         openAll()
         local first=case.documents[1]; local t=targets[first.locationId]
         log("DEV first clue container: "..t.x..", "..t.y..", floor "..t.z..". No discoveries granted.")
+        -- Give the case's person a body. The case keeps its own name and a
+        -- nearby zombie is given THAT name and an ID to match, because a name
+        -- read off the world could never be rebuilt from the seed. See
+        -- ConspiracyFiles/CasePerson.lua.
+        pcall(function()
+            local People=require("ConspiracyFiles/CasePerson")
+            local person=case.identities and case.identities[1]
+            if person and person.name then
+                local bound,why=People.bind(person.name,case.caseId,t.x,t.y,t.z)
+                if not bound then log("case person not bound: "..tostring(why)) end
+            end
+        end)
     end,reachable)
     if not scan then preparing=false; log(why); return end
     scheduler.enqueue("storage","preparation",scan)

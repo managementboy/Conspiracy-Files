@@ -303,7 +303,7 @@ if Events and Events.OnGameStart and not I.startHandler then
   local expected={"AutomaticInvestigations","LocalPersonHooks","LocalPersonRuntime",
    "GeneratedRuntime","DiscoveryLog","PlayerVoice","PersonNameLog","ClueHints",
    "ClueMarkers","IdentityObserver","NotebookUI","ObservedKeyLeads","EvidencePickupHint",
-   "CaseFile"}
+   "CaseFile","CasePerson"}
   local missing={}
   for _,name in ipairs(expected) do
    if ConspiracyFiles[name]==nil then missing[#missing+1]=name end
