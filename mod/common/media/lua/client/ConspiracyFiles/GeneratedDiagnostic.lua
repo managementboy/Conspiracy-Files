@@ -1,4 +1,5 @@
 -- Read-only owner-triggered diagnostic. No item, save or placement mutations.
+local CFLog=require("ConspiracyFiles/Log")
 local D={}
 local active,accessTask
 -- Published on the shared table, not just returned: reloadLuaFile re-runs
@@ -12,8 +13,7 @@ function D.run()
     local current=wrapper and require("ConspiracyFiles/Generated/SuccessiveCases").current(wrapper)
     local root=current and current.canonical
     if not root or not root.case then return false,"no generated case" end
-    local CFLog=require("ConspiracyFiles/Log")
-local function log(s) CFLog.message("diag","probe",s) end
+    local function log(s) CFLog.message("diag","probe",s) end
     local player=getPlayer()
     if player then log("player="..player:getX()..","..player:getY()..","..player:getZ()) end
     local tasks={}
@@ -79,8 +79,7 @@ function D.access(radius)
     local roots=current and Cases.sessions(current)
     if not roots or #roots==0 then return false,"no generated case" end
     radius=(type(radius)=="number" and radius>=1 and radius<=24) and math.floor(radius) or 12
-    local CFLog=require("ConspiracyFiles/Log")
-local function log(s) CFLog.message("diag","probe",s) end
+    local function log(s) CFLog.message("diag","probe",s) end
     local targets,levels,box={},{},nil
     for _,root in ipairs(roots) do
         for _,doc in ipairs(root.case.documents) do

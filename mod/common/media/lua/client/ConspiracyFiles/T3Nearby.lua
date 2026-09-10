@@ -1,4 +1,5 @@
 -- Manual, read-only T3 extension. No game/save mutation or automatic startup.
+local CFLog=require("ConspiracyFiles/Log")
 ConspiracyFiles = ConspiracyFiles or {}
 if ConspiracyFiles.T3Nearby then ConspiracyFiles.T3Nearby.cancel() end
 local Selection = require("ConspiracyFiles/T3Selection")
@@ -164,8 +165,7 @@ function D.run()
     local wrapper=ModData.get("ConspiracyFiles.Generated.G2")
     local root=wrapper and wrapper.canonical
     if not root or not root.case then return false,"no generated case" end
-    local CFLog=require("ConspiracyFiles/Log")
-local function log(s) CFLog.message("nearby","scan",s) end
+    local function log(s) CFLog.message("nearby","scan",s) end
     local player=getPlayer()
     if player then log("player="..player:getX()..","..player:getY()..","..player:getZ()) end
     local tasks={}

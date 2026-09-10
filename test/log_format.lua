@@ -70,3 +70,32 @@ assert(strays == 0, strays .. " client module(s) still print their own prefix in
 
 print("PASS log format: one prefix, one vocabulary, fixed field order, debug off, "
     .. "and no module printing its own prefix")
+
+-- A local declared AFTER its first use is a global, and a global that does not
+-- exist is nil. Kahlua then fails at the call: "attempted index: message of
+-- non-table: null" - which is exactly what stopped the first case of the
+-- 2026-09-10 playtest from ever starting, thirty ticks in.
+--
+-- Nothing caught it. The file compiled, every test passed, and the failure
+-- needed the game to reach that code path. So the check is mechanical: in
+-- every client module, the logger must be declared before it is used.
+local dir = "mod/common/media/lua/client/ConspiracyFiles/"
+local listing = io.popen("ls " .. dir .. "*.lua")
+for path in listing:lines() do
+    local f = assert(io.open(path, "r"))
+    local declaredAt, usedAt, n = nil, nil, 0
+    for line in f:lines() do
+        n = n + 1
+        if not declaredAt and line:find('^local CFLog=require') then declaredAt = n end
+        if not usedAt and line:find("CFLog%.") and not line:find('^local CFLog=require') then usedAt = n end
+    end
+    f:close()
+    if usedAt then
+        assert(declaredAt, path .. " uses CFLog without requiring it")
+        assert(declaredAt < usedAt,
+            path .. " declares CFLog at line " .. declaredAt .. " but uses it at " .. usedAt
+            .. "; a local declared after its use is a nil global")
+    end
+end
+listing:close()
+print("PASS log format: every client module declares its logger before using it")
