@@ -180,6 +180,14 @@ if Events and not F.tickHandler then
     Events.OnTick.Add(F.tickHandler)
     F.startHandler=function() tried=false end
     Events.OnGameStart.Add(F.startHandler)
+    -- A survivor who respawns after a death is a new character, and OnGameStart
+    -- does not fire for them: the new survivor got no papers at all (Linux death
+    -- check, 2026-09-11). OnCreatePlayer does. give() skips anyone who already
+    -- holds a file, so the first survivor is never given two.
+    if Events.OnCreatePlayer then
+        F.createHandler=function() tried=false end
+        Events.OnCreatePlayer.Add(F.createHandler)
+    end
 end
 
 return F

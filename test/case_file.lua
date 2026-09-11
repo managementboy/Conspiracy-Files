@@ -37,7 +37,7 @@ local player = {
     getDescriptor = function() return { getForename = function() return "Una" end } end,
 }
 getPlayer = function() return player end
-Events = { OnTick = { Add = function() end }, OnGameStart = { Add = function() end } }
+Events = { OnTick = { Add = function() end }, OnGameStart = { Add = function() end }, OnCreatePlayer = { Add = function() end } }
 ConspiracyFiles = ConspiracyFiles or {}
 local F = dofile('mod/common/media/lua/client/ConspiracyFiles/CaseFile.lua')
 
@@ -212,4 +212,14 @@ local busy = { getInventory = function() return inv4 end,
     getSecondaryHandItem = function() return held end,
     setSecondaryHandItem = function(_, item) held = item end }
 assert(F4.give(busy) and held == torch, 'an occupied off hand is never emptied for the papers')
-print('PASS case file: the papers open as soon as the panel offers them, held in a free off hand')
+-- A survivor who respawns after death is a new character: OnGameStart does not
+-- fire for them, OnCreatePlayer does, and they get papers of their own.
+assert(F4.createHandler, 'papers are issued to a respawned survivor too')
+local inv5 = { items = {} }; inv5.AddItem = later.AddItem; inv5.getItems = later.getItems
+local reborn = { getInventory = function() return inv5 end,
+    getDescriptor = function() return { getForename = function() return "Booker" end } end,
+    getSecondaryHandItem = function() return nil end, setSecondaryHandItem = function() end }
+getPlayer = function() return reborn end
+F4.createHandler(0, reborn); F4.onTick()
+assert(F4.held(reborn), 'the new survivor gets their own papers')
+print('PASS case file: the papers open as soon as the panel offers them, held in a free off hand; a respawned survivor gets papers')

@@ -35,10 +35,8 @@ done
 
 # Progress worth keeping: two documents found and inspected.
 for i in 1 2; do
-    f="$(ev "return CFLoop.find($i)")"; h="$(cut -f3 <<<"$f")"
-    if [[ "$h" == vehicle* ]]; then ev 'return CFLoop.enterVehicle()' >/dev/null; wait_true 30 'CFLoop.inVehicle()' >/dev/null
-    else ev "return CFLoop.goTo($i)" >/dev/null; fi
-    for _ in 1 2 3 4 5 6; do [ "$(ev 'return CFLoop.openContainer()' | cut -f1)" = true ] && break; sleep 1; done
+    r="$(inspect_doc "$i")" || fail "could not inspect document $i before the first save: $r"
+done
     ev 'return CFLoop.take()' >/dev/null; wait_true 20 'CFLoop.carried()' >/dev/null
     [ "$(ev 'return CFLoop.inspect()' | cut -f1)" = true ] || fail "could not inspect document $i before the first save"
     [[ "$h" == vehicle* ]] && { ev 'return CFLoop.exitVehicle()' >/dev/null; sleep 3; }

@@ -64,6 +64,14 @@ local function scanSquare(sq, id)
     end
 end
 
+-- Teleport onto document n's coordinates so its squares load before searching:
+-- a site 100 tiles away is not loaded, and a search there finds nothing.
+function L.approach(n)
+    local d = L.list[n]
+    getPlayer():teleportTo(d.x + 0.5, d.y + 0.5, d.z)
+    return true
+end
+
 -- The physical item for document n, searched on its square and neighbours.
 function L.find(n)
     local d = L.list[n]
@@ -102,6 +110,14 @@ end
 
 -- A clue in a car: stand by it and get in through the vehicle menu's own
 -- action, which walks to the door and enters, as a player's click does.
+-- Is the driver's door locked? A clue in a locked car needs a key or a broken
+-- window, which placement does not consider (catalogue VC-06).
+function L.vehicleLocked()
+    local door = L.vehicle and L.vehicle:getPartById("DoorFrontLeft")
+    local d = door and door:getDoor()
+    return d ~= nil and d:isLocked()
+end
+
 function L.enterVehicle()
     local v = L.vehicle
     if not v then return false, "no vehicle" end

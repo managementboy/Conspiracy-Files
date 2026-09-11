@@ -45,3 +45,22 @@ mod_errors() {
 source_line() {
     echo "source: $(git -C "$REPO" rev-parse --short HEAD)$(git -C "$REPO" diff --quiet HEAD -- mod 2>/dev/null || echo ' + uncommitted mod changes')"
 }
+
+# Find document N of the placed case, take it and inspect it the player's way
+# (checks/core_loop.lua must be loaded). Prints the document's name; fails
+# with a reason. Cars go through the vehicle menu.
+inspect_doc() {
+    local i="$1" f h
+    ev "return CFLoop.approach($i)" >/dev/null; sleep 2
+    f="$(ev "return CFLoop.find($i)")"
+    [ "$(cut -f1 <<<"$f")" = true ] || { echo "document $i not found: $(cut -f2 <<<"$f")"; return 1; }
+    h="$(cut -f3 <<<"$f")"
+    if [[ "$h" == vehicle* ]]; then ev 'return CFLoop.enterVehicle()' >/dev/null; wait_true 30 'CFLoop.inVehicle()' >/dev/null
+    else ev "return CFLoop.goTo($i)" >/dev/null; fi
+    for _ in 1 2 3 4 5 6; do [ "$(ev 'return CFLoop.openContainer()' | cut -f1)" = true ] && break; sleep 1; done
+    ev 'return CFLoop.take()' >/dev/null
+    wait_true 20 'CFLoop.carried()' || { echo "document $i never reached the inventory"; return 1; }
+    [ "$(ev 'return CFLoop.inspect()' | cut -f1)" = true ] || { echo "document $i could not be inspected"; return 1; }
+    [[ "$h" == vehicle* ]] && { ev 'return CFLoop.exitVehicle()' >/dev/null; sleep 3; }
+    cut -f2 <<<"$f"
+}

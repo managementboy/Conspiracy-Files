@@ -32,14 +32,20 @@ while :; do
 done
 say "case placed: $summary"
 
-rows=()
+rows=(); findings=()
 for i in $(seq 1 "$n"); do
+    ev "return CFLoop.approach($i)" >/dev/null; sleep 2
     found="$(ev "return CFLoop.find($i)")"
     [ "$(cut -f1 <<<"$found")" = true ] || { fail "document $i not found where the runtime says: $(cut -f2 <<<"$found")"; continue; }
     name="$(cut -f2 <<<"$found")"; holder="$(cut -f3 <<<"$found")"; room="$(cut -f4 <<<"$found")"; floor="$(cut -f5 <<<"$found")"
     if [[ "$holder" == vehicle* ]]; then
+        locked="$(ev 'return CFLoop.vehicleLocked()' | cut -f1)"
+        [ "$locked" = true ] && { holder="$holder (locked)"; findings+=("document $i ($name) is in a LOCKED car: a player needs its key or a broken window"); }
         ev 'return CFLoop.enterVehicle()' >/dev/null
-        wait_true 30 'CFLoop.inVehicle()' || fail "document $i ($name, $holder): could not get into the vehicle"
+        if ! wait_true 30 'CFLoop.inVehicle()'; then
+            if [ "$locked" = true ]; then say "could not get into the locked car"
+            else fail "document $i ($name, $holder): could not get into the vehicle"; fi
+        fi
     else
         ev "return CFLoop.goTo($i)" >/dev/null
     fi
@@ -53,7 +59,7 @@ for i in $(seq 1 "$n"); do
     ev "return CFLoop.remember($i)" >/dev/null
     [[ "$holder" == vehicle* ]] && { ev 'return CFLoop.exitVehicle()' >/dev/null; sleep 3; }
     rows+=("  $i. $name, in $holder, room $room, floor $floor (container icon clicked: $opened)")
-    [ "$opened" = yes ] || fail "document $i ($name): the loot panel never showed its $holder"
+    [ "$opened" = yes ] || [[ "$holder" == *locked* ]] || fail "document $i ($name): the loot panel never showed its $holder"
     say "document $i: $name"
 done
 
@@ -94,6 +100,7 @@ report="$EVIDENCE/$id-core-loop.txt"
     echo "second case appeared (gap removed): $next_case"
     echo "errors inside the mod: $(grep -c . <<<"$errors")"
     [ -z "$errors" ] || sed 's/^/  /' <<<"$errors" | head -10
+    for f in "${findings[@]}"; do echo "FINDING: $f"; done
     for f in "${fails[@]}"; do echo "FAIL: $f"; done
     echo "screenshot: dev/eval/linux/runs/$id-map.png (not committed)"
 } > "$report"

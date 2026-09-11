@@ -16,5 +16,6 @@ for i in $(seq 1 "$n"); do
     reports+=("$out")
 done
 echo "soak: $pass pass, $fail fail, $broke could not run"
+printf '%s\n' "${reports[@]}" | grep -E "^(FINDING|FAIL):" | sort | uniq -c | sort -rn | head -20
 printf '%s\n' "${reports[@]}" | grep -oE ", in [^,]+, room [^,]+, floor -?[0-9]+" | sed 's/^, in //' | sort | uniq -c | sort -rn | head -30
 [ "$fail" -eq 0 ] && [ "$broke" -eq 0 ]
