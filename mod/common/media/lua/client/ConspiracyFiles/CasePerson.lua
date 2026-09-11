@@ -111,4 +111,69 @@ function P.bind(name,caseId,x,y,z)
     return zombie
 end
 
+-- Where is the case person now? A debug-console answer, logged so it reaches the
+-- development machine through the stream. Owner, 2026-09-11, having killed a
+-- zombie he took for Ines Kubiak: "ahhh wrong one then". The bound zombie moves,
+-- and nothing else says where it went.
+--
+--     ConspiracyFiles.CasePerson.where()
+function P.where()
+    local cell=getCell and getCell()
+    local list=cell and read(cell,"getZombieList")
+    if not list or not list.size then log("where: no zombie list"); return "no zombie list" end
+    local lines={}
+    for i=0,list:size()-1 do
+        local zombie=list:get(i)
+        local md=zombie and read(zombie,"getModData")
+        if type(md)=="table" and md[P.MARK] then
+            local square=read(zombie,"getSquare")
+            local descriptor=read(zombie,"getDescriptor")
+            local name=descriptor and ((read(descriptor,"getForename") or "").." "..(read(descriptor,"getSurname") or "")) or "?"
+            local x,y=square and read(square,"getX"),square and read(square,"getY")
+            local place
+            local map=ConspiracyFiles.AddressMap
+            if map and map.nearest and x and y then
+                local ok,label=pcall(map.nearest,x,y)
+                if ok and label then place="near "..label end
+            end
+            lines[#lines+1]=name.."  "..(place or "no address nearby").."  ("..tostring(x)..","..tostring(y)..")"
+        end
+    end
+    if #lines==0 then
+        log("where: no bound case person in the loaded area - dead, or too far away to be loaded")
+        return "none loaded"
+    end
+    for _,line in ipairs(lines) do log("where: "..line) end
+    return table.concat(lines,"\n")
+end
+
+-- When a named zombie dies, record exactly what the game left in its pockets.
+--
+-- Not yet known, and it decides the design: does Project Zomboid generate a
+-- corpse's loot at death? If it does, a zombie given Ines Kubiak's name and ID
+-- will die carrying its ORIGINAL identity as well - one body, two names, and
+-- the game's own documents contradicting the case. Rather than build a fix for
+-- a guess, this logs the answer the first time it happens.
+function P.onZombieDead(zombie)
+    local md=zombie and read(zombie,"getModData")
+    if type(md)~="table" or not md[P.MARK] then return end
+    local names={}
+    local inventory=read(zombie,"getInventory")
+    local items=inventory and read(inventory,"getItems")
+    if items and items.size then
+        for i=0,items:size()-1 do
+            local item=items:get(i)
+            local label=item and read(item,"getDisplayName")
+            if label then names[#names+1]=tostring(label) end
+        end
+    end
+    log("bound case person died ("..tostring(md[P.MARK]).."); carrying: "
+        ..(#names>0 and table.concat(names,"; ") or "nothing"))
+end
+
+if Events and Events.OnZombieDead and not P.deathHandler then
+    P.deathHandler=function(zombie) pcall(P.onZombieDead,zombie) end
+    Events.OnZombieDead.Add(P.deathHandler)
+end
+
 return P

@@ -18,19 +18,32 @@ local function zombie(x, y, z)
         getSquare = function() return { getX = function() return x end,
             getY = function() return y end, getZ = function() return z end } end,
         getModData = function() return md end,
+        -- A descriptor with getters as well as setters, and an inventory that
+        -- remembers what was put in it. The first version of this fake had
+        -- neither, so where() printed a blank name and a death logged
+        -- "carrying: nothing" - a fake that proved only itself.
         getDescriptor = function()
             return { setForename = function(_, n) desc.forename = n end,
-                     setSurname = function(_, n) desc.surname = n end }
+                     setSurname = function(_, n) desc.surname = n end,
+                     getForename = function() return desc.forename end,
+                     getSurname = function() return desc.surname end }
         end,
         getInventory = function()
-            return { AddItem = function(_, fullType)
-                local item = { fullType = fullType, md = {},
-                    getModData = function(self) return self.md end,
-                    setName = function(self, n) self.name = n end,
-                    setCustomName = function(self, v) self.custom = v end }
-                z2.items[#z2.items + 1] = item
-                return item
-            end }
+            return {
+                AddItem = function(_, fullType)
+                    local item = { fullType = fullType, md = {},
+                        getModData = function(self) return self.md end,
+                        setName = function(self, n) self.name = n end,
+                        getDisplayName = function(self) return self.name or self.fullType end,
+                        setCustomName = function(self, v) self.custom = v end }
+                    z2.items[#z2.items + 1] = item
+                    return item
+                end,
+                getItems = function()
+                    return { size = function() return #z2.items end,
+                             get = function(_, i) return z2.items[i + 1] end }
+                end,
+            }
         end,
     }
     return z2
@@ -113,3 +126,27 @@ for name in nameList:gmatch('"([^"]+)"') do
     assert(name:find(' '), 'every case name needs a surname: ' .. name)
 end
 print('PASS case person: wired into case creation, reported at start, and the names are full ones')
+
+-- Finding her again, and learning what the game puts in her pockets when she
+-- dies. Owner, 2026-09-11, having killed the wrong zombie: "ahhh wrong one
+-- then". Both halves log, so the answer reaches the development machine.
+local bodies = { zombie(120, 130, 0) }
+list = bodies
+local target = assert(P.bind("Ines Kubiak", "case-9", 120, 130, 0))
+local where = P.where()
+assert(where:find("Ines Kubiak", 1, true), where)
+local seen = {}
+local oldWrite = print
+print = function(s) seen[#seen + 1] = s end
+P.onZombieDead(target)
+print = oldWrite
+local line = table.concat(seen, "\n")
+assert(line:find("bound case person died", 1, true), line)
+assert(line:find("ID Card: Ines Kubiak", 1, true), "the death log must list what she carried: " .. line)
+-- An unbound zombie's death says nothing.
+seen = {}
+print = function(s) seen[#seen + 1] = s end
+P.onZombieDead(zombie(1, 1, 0))
+print = oldWrite
+assert(#seen == 0, "an unbound zombie's death must not be logged")
+print('PASS case person: where() finds her, and her death records what she carried')
