@@ -1,11 +1,16 @@
 #!/usr/bin/env bash
-# All plain-Lua unit tests, the way they are meant to run: PUC Lua 5.1.
+# Engine compile check of every mod file, then all plain-Lua unit tests the
+# way they are meant to run: PUC Lua 5.1.
 # test/run.lua runs the *_spec files; every other test/*.lua runs on its own.
 # (tools/kahlua/run.sh is for checking engine compatibility of single files,
 # not for this suite: most tests use io/loadfile, which the runner lacks.)
 #   tools/autotest/unit.sh        exit 0 when everything passes
 cd "$(dirname "${BASH_SOURCE[0]}")/../.." || exit 2
 fail=0; n=0
+# First: does the game's own compiler (Kahlua) accept every shipped file?
+# PUC Lua accepting a file says nothing about that (see 255d992).
+parse="$(tools/kahlua/run.sh --parse-all 2>&1 | tail -1)"; echo "$parse"
+grep -q ", 0 failed" <<<"$parse" || fail=$((fail + 1))
 if ! out="$(timeout 300 lua5.1 test/run.lua 2>&1)"; then echo "$out" | tail -20; fail=$((fail + 1)); fi
 echo "specs: $(tail -1 <<<"$out")"
 for t in test/*.lua; do
