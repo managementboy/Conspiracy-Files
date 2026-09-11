@@ -95,29 +95,43 @@ end
 function World.vehiclesNear(x,y,z,radius,limit)
     local cell=getCell()
     local found={}
-    if not cell or not cell.getVehicles then return found end
-    local vehicles=cell:getVehicles()
-    if not vehicles then return found end
+    if not cell then return found end
     limit=limit or 8
-    -- size()/get(i-1), the way vanilla does it (ISVehicleBloodUI.lua:80).
-    -- getVehicles() returns a Java Set, not a Lua table, and `pairs` on one
-    -- throws inside Kahlua's TableLib - which is exactly how this crashed the
-    -- 2026-09-10 playtest. The unit test's fake cell was a Lua table, so it
-    -- was more convenient than the real thing and proved nothing.
-    if not vehicles.size or not vehicles.get then return found end
-    local total=vehicles:size()
-    for i=1,total do
-        if #found>=limit then break end
-        local vehicle=vehicles:get(i-1)
-        local square=vehicle and vehicle.getSquare and vehicle:getSquare()
-        if square then
-            local vx,vy,vz=square:getX(),square:getY(),square:getZ()
-            if vz==z and math.abs(vx-x)<=radius and math.abs(vy-y)<=radius then
-                local parts=World.vehicleParts(vehicle)
-                if #parts>0 then
-                    found[#found+1]={vehicle=vehicle,x=vx,y=vy,z=vz,parts=parts}
-                end
-            end
+    local seen={}
+    local function consider(vehicle)
+        if #found>=limit or not vehicle or seen[vehicle] then return end
+        seen[vehicle]=true
+        local square=vehicle.getSquare and vehicle:getSquare()
+        if not square then return end
+        local vx,vy,vz=square:getX(),square:getY(),square:getZ()
+        if vz==z and math.abs(vx-x)<=radius and math.abs(vy-y)<=radius then
+            local parts=World.vehicleParts(vehicle)
+            if #parts>0 then found[#found+1]={vehicle=vehicle,x=vx,y=vy,z=vz,parts=parts} end
+        end
+    end
+    -- getVehicles() is a java.util.Set (verified against the jar). A Set has
+    -- no get(i), so the size()/get(i-1) loop copied from ISVehicleBloodUI
+    -- found nothing: owner, 2026-09-11, standing in front of a van, "said no
+    -- vehicles in twelve tiles". toArray() is how vanilla walks a Set
+    -- (Vehicles.lua:1039, ipairs over getTags():toArray()). `pairs` on the Set
+    -- itself throws - that was the 2026-09-10 crash.
+    local vehicles=cell.getVehicles and cell:getVehicles()
+    local list=vehicles and vehicles.toArray and vehicles:toArray()
+    if type(list)=="table" then
+        World.lastVehicleScan="set"
+        for _,vehicle in ipairs(list) do consider(vehicle) end
+        return found
+    end
+    -- Fallback: ask each nearby square which vehicle stands on it, which is
+    -- how the loot window finds a car's boot (ISInventoryPage.lua:1759).
+    -- ponytail: square scan, capped at 20 tiles; the Set path covers wider.
+    World.lastVehicleScan="squares"
+    local r=math.min(radius,20)
+    for dy=-r,r do
+        for dx=-r,r do
+            local square=cell:getGridSquare(x+dx,y+dy,z)
+            local vehicle=square and square.getVehicleContainer and square:getVehicleContainer()
+            if vehicle then consider(vehicle) end
         end
     end
     return found

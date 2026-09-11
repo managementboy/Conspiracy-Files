@@ -32,14 +32,14 @@ function V.here()
     if not player then log("probe: no player"); return "no player" end
     local x,y,z=math.floor(read(player,"getX") or 0),math.floor(read(player,"getY") or 0),math.floor(read(player,"getZ") or 0)
     local near=World.vehiclesNear(x,y,z,12,8)
-    if #near==0 then log("probe: no vehicle within 12 tiles of "..x..","..y); return "no vehicle nearby" end
+    if #near==0 then log("probe: no vehicle within 12 tiles of "..x..","..y.." scan="..tostring(World.lastVehicleScan)); return "no vehicle nearby" end
     table.sort(near,function(a,b)
         return math.max(math.abs(a.x-x),math.abs(a.y-y))<math.max(math.abs(b.x-x),math.abs(b.y-y)) end)
     local entry=near[1]
     local script=read(entry.vehicle,"getScriptName") or "?"
     local parts={}
     for _,p in ipairs(entry.parts) do parts[#parts+1]=p.part.."("..tostring(p.capacity)..")" end
-    log("probe: nearest vehicle "..tostring(script).." at "..entry.x..","..entry.y.."; containers: "..table.concat(parts,", "))
+    log("probe: scan="..tostring(World.lastVehicleScan).." nearest vehicle "..tostring(script).." at "..entry.x..","..entry.y.."; containers: "..table.concat(parts,", "))
     local chosen
     for _,p in ipairs(entry.parts) do chosen=p; break end
     if not chosen then log("probe: that vehicle offers no container"); return "no container" end

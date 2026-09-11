@@ -52,13 +52,13 @@ end
 local car = fakeVehicle(100, 100, { GloveBox = 5, TruckBed = 40 })
 local van = fakeVehicle(102, 101, { TruckBed = 70 })
 local absent = fakeVehicle(500, 500, { GloveBox = 5 })
--- The engine returns a Java Set from getVehicles(), reached with size() and
--- get(i-1) - never a Lua table, and never with `pairs`. This fake mirrors that
--- exactly, because the first version of it was a Lua table: more convenient
--- than the real thing, passing happily while the game crashed on `pairs`.
+-- The engine returns a java.util.Set from getVehicles(): it has size() and
+-- toArray(), and NO get(i). Both earlier fakes were kinder than the game - a
+-- Lua table (the game crashed on `pairs`), then a Set with get(i) (the game
+-- found no vehicles at all). This one offers only what the jar declares.
 local function javaSet(list)
     return { size = function() return #list end,
-             get = function(_, i) return list[i + 1] end }
+             toArray = function() local copy = {} for i, v in ipairs(list) do copy[i] = v end return copy end }
 end
 local cell = { getVehicles = function() return javaSet({ car, van, absent }) end }
 getCell = function() return cell end
@@ -169,10 +169,16 @@ for i = 1, 40 do many[#many + 1] = fakeVehicle(100, 100, { TruckBed = 40 }) end
 cell.getVehicles = function() return javaSet(many) end
 assert(#W.vehiclesNear(100, 100, 0, 5, 8) <= 8, "the vehicle scan must stay bounded")
 
--- A collection that is not the engine's shape must be refused, not iterated.
+-- A collection that is not the engine's shape must be refused, not iterated
+-- with `pairs`; the square fallback still finds a vehicle standing nearby.
 cell.getVehicles = function() return { [car] = true } end
-assert(#W.vehiclesNear(100, 100, 0, 5) == 0,
-    "a Lua table is not what the engine returns; iterating one would hide the real shape again")
+cell.getGridSquare = function(_, x, y, z)
+    return { getVehicleContainer = function() return (x == 100 and y == 100) and car or nil end }
+end
+local viaSquares = W.vehiclesNear(100, 100, 0, 5)
+assert(#viaSquares == 1 and viaSquares[1].vehicle == car and W.lastVehicleScan == "squares",
+    "without toArray the scan must fall back to asking the squares")
+cell.getGridSquare = nil
 
 print("PASS vehicle access: ordered parts with capacities, distance from where a car is now, "
     .. "and a marked boot that survives being driven across town")
