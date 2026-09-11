@@ -79,13 +79,24 @@ local function known(c,id)
  for _,v in ipairs(c.known) do if v==id then return true end end
  return false
 end
+-- Where a source container stands. A car's part container (glove box, seat,
+-- trunk) has no grid square of its own - getSourceGrid() is nil - so a clue
+-- taken from a car recorded no finding location and never got a map mark
+-- (Linux probe, 2026-09-11: GloveBox getSourceGrid=nil). Its vehicle does.
+local function sourceSquare(source)
+ if not source then return nil end
+ local grid=source:getSourceGrid();if grid then return grid end
+ local parent=source:getParent()
+ if parent and instanceof and instanceof(parent,"BaseVehicle") then return parent:getSquare() end
+ return nil
+end
 -- Called before vanilla removes the item. Never use a placement target or reading position.
 function M.before(character,item,source,destination,square)
  if not allowed() or character~=getPlayer() or not destination or not destination:isInCharacterInventory(character) then return end
  if not session() then return end
  if source and source:isInCharacterInventory(character) then return end
  if item and instanceof and instanceof(item,"InventoryContainer") then
-  local w=item:getWorldItem();local origin=square or (w and w:getSquare()) or (source and source:getSourceGrid())
+  local w=item:getWorldItem();local origin=square or (w and w:getSquare()) or sourceSquare(source)
   if not origin then return end
   local pending={children={}};local queue={item:getInventory()};local cursor,seen,count=1,{},0
   while queue[cursor] do
@@ -107,7 +118,7 @@ function M.before(character,item,source,destination,square)
  local md=item and item:getModData();local c=md and session(md.cfGeneratedId);local a=c and c.assignments[md.cfGeneratedId]
  if not a or a.status=="conflict" or md.cfPhysicalToken~=a.physicalToken then return end
  local r=read();if r.records[md.cfGeneratedId] or known(c,md.cfGeneratedId) then return end
- if not square then local w=item:getWorldItem();square=w and w:getSquare() or source and source:getSourceGrid() end
+ if not square then local w=item:getWorldItem();square=w and w:getSquare() or sourceSquare(source) end
  if not square then return end
  return {id=md.cfGeneratedId,token=a.physicalToken,x=square:getX(),y=square:getY(),z=square:getZ(),map=tostring(getWorld():getMap())}
 end

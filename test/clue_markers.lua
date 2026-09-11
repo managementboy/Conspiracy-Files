@@ -102,4 +102,15 @@ player.getModData=function() return data end
 local e=note('e');root.assignments.e={physicalToken='t:e',status='placed'}
 local candidate=M.before(player,e,source,dest);e.outer=inv;root.assignments.e.status='conflict';M.after(candidate,e)
 assert(not data['ConspiracyFiles.ClueMarkers'].records.e)
-print('PASS marker status, corrupt-state isolation, failed save preserves root/native transfer, mid-transfer conflict')
+-- A clue in a car: a part container has no grid square of its own
+-- (getSourceGrid is nil in 42.20.4), so the vehicle's square is where it was found.
+instanceof=function(o,class) return type(o)=='table' and o.class==class end
+local vsquare={getX=function() return 300 end,getY=function() return 400 end,getZ=function() return 0 end}
+local van={class='BaseVehicle',getSquare=function(self) assert(self,'colon call');return vsquare end}
+local glovebox={isInCharacterInventory=function() return false end,getSourceGrid=function() return nil end,
+ getParent=function(self) assert(self,'colon call');return van end}
+root.assignments.v={physicalToken='t:v',status='placed'}
+local v=note('v');assert(ISTransferAction:transferItem(player,v,glovebox,dest)==v)
+local rv=data['ConspiracyFiles.ClueMarkers'].records.v
+assert(rv and rv.x==300 and rv.y==400,'a clue taken from a car is recorded where the car stands')
+print('PASS marker status, corrupt-state isolation, failed save preserves root/native transfer, mid-transfer conflict, clues from cars')
