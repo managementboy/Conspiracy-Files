@@ -97,6 +97,25 @@ Expand only after the generated prototype passes its technical and playtest chec
 - multiplayer;
 - runtime AI as required functionality.
 
+## Owner requests, not yet scheduled
+
+- **Tell the player the mod is starting** (2026-09-11: "I would love a progress
+  bar or something to tell the player that our mod is starting"). On a new game
+  the mod builds an address book, scans the nearby buildings and prepares a
+  case - a minute or so in which nothing visible happens. Preferred shape is in
+  the survivor's own voice rather than a UI bar, since UI work is deferred and
+  the mod already speaks through halo text: "Taking in the street names...",
+  then "Something about this place...", then silence once the first case
+  exists. Each phase already logs; the halo only needs to follow it.
+- **Late-binding names** - see `docs/design/LATE_BINDING_NAMES.md`, three open
+  questions for the owner at the end.
+- **Premise-tied objects** - each premise declares the object that belongs to
+  its story and the paperwork mentions it (the ledger's craft knife, the fuel
+  account's can, the callout's ventilation part). Agreed 2026-09-11.
+- **Address book for all of Knox** - it is frozen per save from ~60 street
+  segments of a Muldraugh trial region; `streets.xml` has 1,099. Regenerating
+  helps new saves only, and the 400 KB cap needs checking first.
+
 ## v2 candidates
 - relationship graph (after standalone UI prototype);
 - optional runtime AI summaries;
