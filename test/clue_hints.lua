@@ -87,4 +87,13 @@ assert(hints:find('task.count>=1', 1, true), 'one or more matching items means t
 assert(hints:find('task.count<=(task.expected or 1)', 1, true),
     'more copies than the document expects is still a duplicate and still silent')
 assert(hints:find('doc.quantity or 1', 1, true), 'the hint must know how many copies belong here')
+
+-- Around a car, not just at its middle square. 2026-09-11: a diary on a van's
+-- front seat was found with no hint; the driver's door is out of two tiles.
+local function at(x,y) return {getX=function() return x end,getY=function() return y end,getZ=function() return 0 end} end
+local house={x=100,y=100,z=0,objectIndex=1,containerIndex=0}
+local van={x=100,y=100,z=0,objectIndex=0,containerIndex=0,vehiclePart='SeatFrontLeft'}
+assert(H.near(at(102,100),house,2) and not H.near(at(103,100),house,2),'a house clue keeps its two-tile reach')
+assert(H.near(at(103,102),van,2),'the driver door of a van is near a clue on its seat')
+assert(not H.near(at(106,100),van,2),'the next car along is not')
 print('PASS clue hints: a pile of eleven is still worth mentioning')

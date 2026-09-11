@@ -27,9 +27,16 @@ local reported={}
 local CFLog=require("ConspiracyFiles/Log")
 local function log(s) CFLog.message("hint","hint",s) end
 local pending
+-- A car's target is the one square the vehicle stands on, its middle, and a
+-- van is five tiles long: standing at the driver's door is already out of a
+-- two-tile reach. 2026-09-11: a diary on a van's front seat was found with no
+-- hint at all. So a vehicle target is reached from anywhere around the car.
+local VEHICLE_REACH=3
 local function near(p,t,d)
+    if type(t.vehiclePart)=="string" then d=d+VEHICLE_REACH end
     return math.floor(p:getZ())==t.z and math.abs(math.floor(p:getX())-t.x)<=d and math.abs(math.floor(p:getY())-t.y)<=d
 end
+H.near=near
 local function eligible(root,id)
     local a=root and root.assignments and root.assignments[id]
     if not a or a.status~="placed" then return nil end
