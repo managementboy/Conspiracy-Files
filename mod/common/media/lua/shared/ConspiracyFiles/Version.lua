@@ -14,5 +14,5 @@
 -- This module deliberately requires nothing, so anything can read it without
 -- dragging in a dependency chain.
 ConspiracyFiles = ConspiracyFiles or {}
-ConspiracyFiles.VERSION = "DEV-0.22.3-mapstack"
+ConspiracyFiles.VERSION = "DEV-0.23.0-keys"
 return ConspiracyFiles.VERSION

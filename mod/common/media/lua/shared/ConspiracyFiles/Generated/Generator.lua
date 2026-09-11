@@ -10,7 +10,7 @@ local Catalogue=require("ConspiracyFiles/Generated/ObjectCatalogue")
 -- 1.0 callers must use a fresh save rather than reinterpret an existing case.
 -- MIN_EVIDENCE is two, not three: a claim and a record contradicting it is a
 -- whole case. See the review note in build().
-local G={REVISION="g8-cast-1",SCHEMA=2,MIN_EVIDENCE=2,MAX_EVIDENCE=7}
+local G={REVISION="g9-namedcards-1",SCHEMA=2,MIN_EVIDENCE=2,MAX_EVIDENCE=7}
 local function copy(v) if type(v)~="table" then return v end; local out={}; for k,c in pairs(v) do out[k]=copy(c) end; return out end
 local function same(a,b)
     if type(a)~=type(b) then return false end
@@ -319,11 +319,15 @@ local function build(seed,revision,sites,cast)
     -- essay above -- because a card cannot hold that (T7).
     local affiliationBody=fill("Ref {CODE}\n{P1}\n{ORG}",map)
     local affiliationKind=carrierFor("affiliationLead",affiliationBody)
-    document(8,K.get(affiliationKind).short.." / "..facts.code,a,affiliationBody,
+    -- A card is named the way the game names its own: "Credit Card: Genevieve
+    -- Ricks", not "Credit Card / PS-289". Owner, 2026-09-11, holding one of
+    -- ours: "we did not add a name to it. would have been cool". A reference
+    -- number is a filing label; a name on a card is a person.
+    document(8,K.get(affiliationKind).short..": "..facts.sender,a,affiliationBody,
         {people[1].id,org.id,a.id},{{target=documents[1].id,kind="recontextualises"}},nil,affiliationKind)
     local itineraryBody=fill("Ref {CODE}\n{P2} - {B}\nJuly {D2}, 1993",map)
     local itineraryKind=carrierFor("itineraryLead",itineraryBody)
-    document(9,K.get(itineraryKind).short.." / "..facts.code,b,itineraryBody,
+    document(9,K.get(itineraryKind).short..": "..facts.recipient,b,itineraryBody,
         {people[2].id,b.id},{{target=documents[2].id,kind="recontextualises"}},nil,itineraryKind)
     -- Phase 3 roles. These are the optional documents that can DISAGREE with
     -- what came before: every other one connects with "recontextualises", so
@@ -339,7 +343,7 @@ local function build(seed,revision,sites,cast)
     -- A stub placing the second person elsewhere on the day of the response.
     local timingBody=fill("Ref {CODE}\n{P2}\nJuly {D2}, 1993 - {A}",map)
     local timingKind=carrierFor("timingDispute",timingBody)
-    document(11,K.get(timingKind).short.." / "..facts.code,a,timingBody,
+    document(11,K.get(timingKind).short..": "..facts.recipient,a,timingBody,
         {people[2].id,a.id},{{target=documents[2].id,kind="disputes-delivery"}},nil,timingKind)
     -- And one that agrees. A case where everything disagrees is as flat as one
     -- where nothing does.

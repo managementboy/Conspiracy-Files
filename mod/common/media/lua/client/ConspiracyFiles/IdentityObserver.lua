@@ -223,6 +223,15 @@ function I.afterRender(pane)
   if people and people.see and fullType and read(item,"isHidden")~=true and itemContainer then
    pcall(people.see,item,itemContainer)
   end
+  -- Keys on a body or in a bag off one go to the journal before any door is
+  -- tried (owner, 2026-09-11). Only where there is a carrier: a key lying in a
+  -- kitchen drawer says nothing about a person, and the journal would fill with
+  -- every house key in Knox.
+  local keys=ConspiracyFiles.KeyObserver
+  if keys and keys.see and label and (source=="corpse" or source=="container") then
+   local token=carrier and provenanceToken(carrier)
+   pcall(keys.see,item,label,token)
+  end
   -- A carrier stamped by GeneratedRuntime (cfGeneratedId set in ModData) is
   -- generated-case evidence, not a plain identity document: it already gets
   -- its own notebook row and ledger event, so it must not also become an
@@ -316,7 +325,7 @@ if Events and Events.OnGameStart and not I.startHandler then
   local expected={"AutomaticInvestigations","LocalPersonHooks","LocalPersonRuntime",
    "GeneratedRuntime","DiscoveryLog","PlayerVoice","PersonNameLog","ClueHints",
    "ClueMarkers","IdentityObserver","NotebookUI","ObservedKeyLeads","EvidencePickupHint",
-   "CaseFile","CasePerson"}
+   "CaseFile","CasePerson","KeyObserver"}
   local missing={}
   for _,name in ipairs(expected) do
    if ConspiracyFiles[name]==nil then missing[#missing+1]=name end

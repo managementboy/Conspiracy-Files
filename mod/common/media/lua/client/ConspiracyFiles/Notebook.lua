@@ -205,6 +205,11 @@ function Window:rows()
         if self.section=="journal" and leads and leads.rows then
             for _,row in ipairs(leads.rows()) do rows[#rows+1]=row end
         end
+        -- Keys found on bodies, before any door has been tried.
+        local keys=ConspiracyFiles.KeyObserver
+        if self.section=="journal" and keys and keys.rows then
+            for _,row in ipairs(keys.rows()) do rows[#rows+1]=row end
+        end
         -- One shared ledger decides order and numbering for every source, so
         -- the journal reflects real discovery order rather than source groups.
         local log=ConspiracyFiles.DiscoveryLog
