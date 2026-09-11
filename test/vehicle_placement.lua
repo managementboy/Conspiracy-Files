@@ -79,6 +79,47 @@ end
 local root = assert(S.createDistributed(case, choices, rooms))
 assert(S.validate(root), "a case using a car must validate like any other")
 
+-- One car parked between two of the case's buildings is a candidate at both.
+-- It may hold a clue for one of them, never for both: the 2026-09-11 playtest
+-- crashed with "repeated physical container" the first time vehicles were
+-- really found. The shared boot is the only lived-in candidate anywhere, so
+-- every site prefers it and the later sites must fall back to their own.
+-- The fixture's buildings are 100 tiles apart, so this test packs them onto
+-- one street, 12 tiles apart, where one parked van is in reach of its neighbours.
+local street = dofile("test/fixtures/synthetic_locations.lua")
+for i, location in ipairs(street.locations) do
+    location.bounds = { x1 = i * 12, y1 = 0, x2 = i * 12 + 8, y2 = 8, z = 0 }
+end
+local packed = assert(G.generate(street, 5,
+    { mapId = "SYNTHETIC-MAP", buildLine = "TEST-ONLY", allowSynthetic = true }))
+local xs = {}
+for _, location in ipairs(packed.locations) do xs[#xs + 1] = location.bounds.x1 end
+table.sort(xs)
+local van = { x = math.floor((xs[1] + xs[#xs] + 8) / 2), y = 4, z = 0, objectIndex = 0,
+              containerIndex = 0, containerType = "vehicle", sprite = "Base.Van", vehiclePart = "TruckBed" }
+local both, lived, reachable = {}, {}, 0
+for _, location in ipairs(packed.locations) do
+    location.containerTypes[#location.containerTypes + 1] = "vehicle"
+    table.sort(location.containerTypes)
+    local list = { {} }
+    for k, v in pairs(van) do list[1][k] = v end
+    local here = { true }
+    for i = 1, 6 do
+        list[#list + 1] = { x = location.bounds.x1, y = 0, z = 0, objectIndex = i - 1, containerIndex = 0,
+                            containerType = location.containerTypes[1], sprite = "s" }
+        here[#list] = false
+    end
+    both[location.id], lived[location.id] = list, here
+    if S.target(list[1], location) then reachable = reachable + 1 end
+end
+assert(reachable >= 2, "the test must really put one van within reach of two sites (got " .. reachable .. ")")
+local sharedRoot, why = S.createDistributed(packed, both, nil, lived)
+assert(sharedRoot, "a van shared by two sites must not refuse the case: " .. tostring(why))
+assert(S.validate(sharedRoot))
+local inVan = 0
+for _, a in pairs(sharedRoot.assignments) do if a.target.vehiclePart then inVan = inVan + 1 end end
+assert(inVan == 1, "exactly one site's clue goes in the shared van, got " .. inVan)
+
 -- Two parts of the same car at the same parking square are two containers, not
 -- one. Without the part in the uniqueness key they would collide and the case
 -- would be refused as a repeated container.

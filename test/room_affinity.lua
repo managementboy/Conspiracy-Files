@@ -152,8 +152,21 @@ collide[dispatchSite][1]=collide[dispatchSite][2] -- candidate 1 and 2 are now t
 local collideRooms={[dispatchSite]={[1]="bathroom",[2]="office",[3]="bathroom"}}
 -- dispatch prefers idx2 (office); idcard's only remaining fit (idx3) is
 -- removed above so it falls back to idx1, which is now a duplicate of idx2.
-assert(not S.createDistributed(case,collide,collideRooms),
-    "a repeated physical container must still be rejected when rooms are supplied")
+-- Since 2026-09-11 the selector steps past a container another document
+-- already holds instead of refusing the whole case (a car shared by two sites
+-- crashed the playtest). The guarantee is unchanged: never two in one.
+local spread=assert(S.createDistributed(case,collide,collideRooms),
+    "a duplicate candidate must be skipped, not refuse the case")
+local held={}
+for _,a in pairs(spread.assignments) do
+    local t=a.target
+    local key=table.concat({t.x,t.y,t.z,t.objectIndex,t.containerIndex,t.vehiclePart or "-"},":")
+    assert(not held[key],"two documents must never share one physical container")
+    held[key]=true
+end
+-- The plain sequential path has no selector to step past it, so it still refuses.
+assert(not S.createDistributed(case,collide),
+    "a repeated physical container must still be rejected on the sequential path")
 print("PASS room affinity: distinct-container / repeated-container guarantees still hold")
 
 -- 3d. A case where NO room fits anything for any document must still

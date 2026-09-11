@@ -98,6 +98,10 @@ end
 -- ordering only: S.target's allow-list and the distinct/repeated-container
 -- checks below are untouched, so a stored target is unaffected by whether a
 -- room fit.
+local function physicalKey(target)
+    return table.concat({target.x,target.y,target.z,target.objectIndex,target.containerIndex,
+                         target.vehiclePart or "-"},":")
+end
 function S.createDistributed(case,candidates,rooms,occupied)
     local valid,why=G.validate(case);if not valid then return nil,why end
     local sites,used,counts,taken,targets={},{},{},{},{}
@@ -123,7 +127,13 @@ function S.createDistributed(case,candidates,rooms,occupied)
             -- room can reach further in, so it must check rather than rely on
             -- Storage.scan happening to emit only in-bounds candidates.
             local site=sites[doc.locationId]
-            local function usable(i) return not siteTaken[i] and S.target(list[i],site) end
+            -- Not already given to another site either. A car parked between
+            -- the case's two buildings is a candidate at both (2026-09-11
+            -- playtest: "repeated physical container" the first time vehicles
+            -- were actually found).
+            local function usable(i)
+                return not siteTaken[i] and S.target(list[i],site) and not used[physicalKey(list[i])]
+            end
             -- `occupied` is OPTIONAL and is a preference, never a filter. A
             -- document left alone in an empty drawer is the thing that reads
             -- as placed by software; among somebody's belongings it reads as
@@ -162,8 +172,7 @@ function S.createDistributed(case,candidates,rooms,occupied)
         -- Two documents may share a car but never a part, so the part joins
         -- the uniqueness key: without it, a glovebox and a boot at the same
         -- parking square would look like one container.
-        local key=table.concat({target.x,target.y,target.z,target.objectIndex,target.containerIndex,
-                                target.vehiclePart or "-"},":")
+        local key=physicalKey(target)
         if used[key] then return nil,"repeated physical container" end
         used[key]=true;targets[doc.id]=target
     end
