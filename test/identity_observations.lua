@@ -119,10 +119,14 @@ assert(located[1].detailText:find("Observed at 114 S Main St.", 1, true), locate
 -- The address book is client-side and can fail; coordinates remain the
 -- fallback, because an unnamed building is better reported than skipped.
 local unnamed = M.rows(furniture, nil, function() return nil end)
-assert(unnamed[1].detailText:find("a building the address book does not name", 1, true),
-    unnamed[1].detailText)
+assert(unnamed[1].detailText:find("somewhere with no address nearby", 1, true), unnamed[1].detailText)
+-- No coordinates anywhere in the sentence. The owner asked three times.
+assert(not unnamed[1].detailText:find("%d%d%d"), "coordinates reached the journal: " .. unnamed[1].detailText)
 local broken = M.rows(furniture, nil, function() error("no address book") end)
-assert(broken[1].detailText:find("does not name", 1, true), "a failing lookup must not lose the row")
+assert(broken[1].detailText:find("no address nearby", 1, true), "a failing lookup must not lose the row")
+-- Outdoors reads as outdoors: "Observed outdoors, near 109 Walker Road."
+local outside = M.rows(furniture, nil, function() return "outdoors, near 109 Walker Road" end)
+assert(outside[1].detailText:find("Observed outdoors, near 109 Walker Road.", 1, true), outside[1].detailText)
 print('PASS identity observations: an address where the book knows one, coordinates where it does not')
 
 -- Two names in one wallet (owner, 2026-09-10: "one wallet two names? one is a

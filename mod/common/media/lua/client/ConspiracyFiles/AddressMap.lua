@@ -38,6 +38,32 @@ local function use(root)
     end
 end
 function M.ready() return book~=nil end
+-- The named building nearest to a point, and how far away it is. For things
+-- found OUTDOORS: a wallet on the street beside 109 Walker Road was reported as
+-- "in a building the address book does not name" (2026-09-11), which was false
+-- twice over - it was not in a building, and the building next to it had a
+-- name. Searches the point's own 64-tile bucket and its neighbours, which the
+-- book already builds, so this costs a handful of comparisons.
+function M.nearest(x,y,within)
+    if not book or type(x)~="number" or type(y)~="number" then return nil end
+    within=within or 30
+    local bx,by=math.floor(x/64),math.floor(y/64)
+    local best,bestDistance=nil,nil
+    for dx=-1,1 do for dy=-1,1 do
+        for _,r in ipairs(buckets[(bx+dx)..":"..(by+dy)] or {}) do
+            if type(r.label)=="string" and r.label~="" then
+                -- Distance to the footprint's edge, not its centre: standing on
+                -- a porch is zero tiles from the house, not ten.
+                local ex=x<r.x and r.x-x or (x>=r.x2 and x-r.x2+1 or 0)
+                local ey=y<r.y and r.y-y or (y>=r.y2 and y-r.y2+1 or 0)
+                local d=math.max(ex,ey)
+                if d<=within and (not bestDistance or d<bestDistance) then best,bestDistance=r,d end
+            end
+        end
+    end end
+    if not best then return nil end
+    return best.label,bestDistance
+end
 -- The address for a building id, or nil. Keyed exactly as the book is built:
 -- every id here comes from BuildingDef:getIDString(), the same call T3Nearby
 -- and the audit at line 121 use, so an observedKeyDoor building id resolves

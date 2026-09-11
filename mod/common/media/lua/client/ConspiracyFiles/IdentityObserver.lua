@@ -40,15 +40,28 @@ function I.rows()
  -- IdentityObservations has no engine contact; a building the book cannot name
  -- falls back to coordinates rather than losing the row.
  local function placeFor(x,y,z)
+  local map=ConspiracyFiles.AddressMap
+  if not map then return nil end
   local cell=getCell and getCell()
   local square=cell and cell.getGridSquare and cell:getGridSquare(x,y,z)
   local building=square and square.getBuilding and square:getBuilding()
   local def=building and building.getDef and building:getDef()
   local id=def and def.getIDString and def:getIDString()
-  local map=ConspiracyFiles.AddressMap
-  if not id or not map or not map.labelForBuilding then return nil end
-  local ok,label=pcall(map.labelForBuilding,tostring(id))
-  if ok and type(label)=="string" and label~="" then return label end
+  -- Inside a building: its own address.
+  if id and map.labelForBuilding then
+   local ok,label=pcall(map.labelForBuilding,tostring(id))
+   if ok and type(label)=="string" and label~="" then return label end
+  end
+  -- Outdoors, or in a building the book cannot name: the nearest one it can.
+  -- "Outside 109 Walker Road" is what a survivor writes; six digits is not.
+  if map.nearest then
+   local ok,label,distance=pcall(map.nearest,x,y)
+   if ok and type(label)=="string" then
+    if not id and distance==0 then return "right outside "..label end
+    if not id then return "outdoors, near "..label end
+    return "a building near "..label
+   end
+  end
   return nil
  end
  local ok,result=pcall(function() local r=root();if Model.validate(r) then return Model.rows(r,Outfits.readableOutfitFor,placeFor) end;return {} end)

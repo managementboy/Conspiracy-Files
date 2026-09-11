@@ -158,9 +158,19 @@ function M.rows(root,outfitFor,placeFor)
   -- some buildings genuinely have no name - and saying so is more use than six
   -- digits the player cannot act on. The numbers stay in parentheses for a
   -- developer reading a log, not as the sentence.
-  if place then detail=detail.."\n\nObserved at "..place.."."
-  else detail=detail.."\n\nObserved in a building the address book does not name ("
-   ..math.floor(r.x)..", "..math.floor(r.y)..")." end
+  -- No coordinates in the sentence at all. Owner, three times: "still writing
+  -- coordinates". The first fallback bracketed them; the owner still read them
+  -- as coordinates, which they were. When nothing nearby has a name, saying so
+  -- plainly is the honest answer - and "a building the address book does not
+  -- name" was not even true for a wallet lying on the street.
+  if place then
+   -- A phrase ("outdoors, near ...") reads without "at"; an address does.
+   -- Tested on a lower-case LETTER, because "114 S Main St" starts with a
+   -- digit, and a digit equals its own lower case.
+   local lead=string.sub(place,1,1)
+   if lead>="a" and lead<="z" then detail=detail.."\n\nObserved "..place.."."
+   else detail=detail.."\n\nObserved at "..place.."." end
+  else detail=detail.."\n\nObserved somewhere with no address nearby." end
   rows[i]={id="identity:"..r.id,ordinal=i,title="Found "..r.label,summary="Identity document - "..r.source,
    detailText=detail}
  end
