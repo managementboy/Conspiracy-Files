@@ -61,8 +61,10 @@ publish creates a second, unrelated Workshop item.
 
 ## The two-machine loop
 
-1. Develop here. `lua5.1 test/run.lua`, then `tools/kahlua/run.sh --parse-all`.
-2. Bump `UI.VERSION` in `Notebook.lua`. It names the archive and the title bar,
+1. Develop here. `tools/autotest/unit.sh`, then `tools/autotest/boot_check.sh` (P4-R76: only builds
+   that pass it are published).
+2. Bump `ConspiracyFiles.VERSION` in `mod/common/media/lua/shared/ConspiracyFiles/Version.lua`
+   (the single source since it moved out of Notebook.lua). It names the archive and the title bar,
    and it is the only in-game signal of what is running.
 3. `tools/publish_workshop.sh --changenote "<what changed>"`.
 4. On the play machine, Steam pushes the update to the subscription. Enable the
