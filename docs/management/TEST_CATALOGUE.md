@@ -19,12 +19,12 @@ persistence · P3 edges, polish, performance headroom.
 ## Infrastructure the tests need
 
 - **INF-01** [P1] Reload: restart the game into the *same* save (`start --continue`), so save/reload tests run unattended. ◻
-- **INF-02** [P1] Core-loop driver: find each placed document, walk/teleport to it, open its container through the loot panel, take it, choose "Inspect Investigation Evidence" from the real right-click menu. ◻
+- **INF-02** [P1] Core-loop driver: find each placed document, walk/teleport to it, open its container through the loot panel, take it, choose "Inspect Investigation Evidence" from the real right-click menu. ✅ `checks/core_loop.sh` (cars via the vehicle menu)
 - **INF-03** [P2] Walking instead of teleporting (T8: teleports emit no OnPlayerMove), for arrival tests. ◻
 - **INF-04** [P2] Time control: advance world hours or shorten policy gaps for 24 h scheduling and 72 h relocation. ◻
 - **INF-05** [P2] Player death on demand (god mode off, then kill), for E10. ◻
 - **INF-06** [P2] Frame-cost sampling from `GeneratedRuntime.metrics()` / `Runtime.metrics()` during scripted play. ◻
-- **INF-07** [P3] Writing tool in inventory (map markers need one). ◻
+- **INF-07** [P3] Writing tool in inventory (map markers need one). ✅ `CFLoop.givePen`
 - ✅ Boot check, wallet check, eval channel, unit runner with engine compile (2026-09-11).
 
 ## A. Case generation
@@ -77,6 +77,7 @@ persistence · P3 edges, polish, performance headroom.
 - **VC-02** [A][P1] One car is never a candidate for two case sites (the "repeated physical container" crash). ↺ ef51729
 - **VC-03** [A][P1] The proximity hint reaches around a car, not only its middle square. ↺ 7983376
 - **VC-04** [O][P3] Vehicle identity and boot contents survive save/reload. ✅ owner-observed 09-09
+- **VC-05** [A][P1] A clue found in a car's glove box gets a map mark. ◻ seen "historical finding location unavailable" 09-11, but the taker was outside the car; re-test seated
 
 ## D. Identity, wallets, outfits, keys
 
@@ -119,12 +120,14 @@ persistence · P3 edges, polish, performance headroom.
 - **NB-13** [O][P2] Every document type readable in full, no mid-sentence truncation (E06). ◻
 - **NB-15/16** [O][P3] Toolbar icon beside Search; generic "Open Journal" menu entry gone. ✅ live 09-06
 - **NB-17/18** [O][P3] Selected tab visible; the reverted amber restyle stays reverted. ✅/regression watch
-- **NB-19–22** [—] Title prefix, tooltips, new-since-last-open, filter box. ⛔ design only — UI_POLISH_PROPOSALS
+- **NB-19–22** [O][P3] Title prefix, tooltips, new-since-last-open, filter box. The filter box and unread marks exist (486d5fc; seen 09-11) — the design doc is out of date; live behaviour ◻
 - **NB-23** [U][P2] The journal never reorders, groups, renumbers or hides entries by default. ◻ regression watch
 - **NB-24–27** [O][P3] T12 layout/scroll/contrast items; T12 verdict pending. ❌/◻ (older T12 candidate)
 - **NB-28** [A][P1] Evidence category label is translated, not raw `IGUI_ItemCat_Evidence`. ↺ 767627a
-- **NB-29** [A][P1] The survivor's papers open automatically at start. ↺ 370c1d6
-- **NB-30** [A][P1] Completing a case does not make LocalPersonIntegration throw every tick. ↺ 3fe1813 ("worst failure so far")
+- **NB-29** [A][P1] The survivor's papers open automatically at start. ↺ 370c1d6; ❌ Linux 09-11 log: "papers not opened: the panel never offered them a button"
+- **NB-30** [A][P1] Completing a case does not make LocalPersonIntegration throw every tick. ↺ 3fe1813 ("worst failure so far"); ✅ Linux 09-11 core loop, 0 errors
+- **NB-31** [A][P1] Completing a case must not stop the next case, map marks or hints. ❌ found 09-11 → fixed 3553fc9, ✅ core loop (second case appears, retired marks drawn)
+- **NB-32** [S][P2] A document's list subtitle matches what it is (a staff photograph was subtitled "Handwritten cover letter", 09-11). ◻ investigate
 
 ## F. Map markers and writing tools
 
@@ -148,7 +151,7 @@ persistence · P3 edges, polish, performance headroom.
 
 ## H. Performance
 
-- **PF-01** [A][P2] Building/room scan ≤2 ms peak, zero frames over budget. ✅ live 09-08
+- **PF-01** [A][P2] Building/room scan ≤2 ms peak, zero frames over budget. ✅ live 09-08; ❌ Linux laptop 09-11: nearby scan 11 callbacks over 2 ms, peak 3 ms (slower machine? compare on Windows)
 - **PF-02** [A][P2] Synchronous canonical/UI/native call cost (E12). ◻ never measured — INF-06
 - **PF-03** [A][P2] Identity render hook cost against the 2 ms budget. ◻
 - **PF-04** [S][P3] Diagnostics are unconditional in release builds. ❌
@@ -234,3 +237,4 @@ no injected helpers.
 ## Log
 
 - 2026-09-11 — Catalogue written. Linux: boot ✅ ×3, wallet ✅ ×2 (a0e0dcf shows the same-name fix live). Unit suite all green (53 specs, 96 standalone, 85/85 engine compile).
+- 2026-09-11 — Core loop check built and passing. It found that completing a case stopped the next case, map marks and hints (NB-31, fixed 3553fc9). DevEval now runs while paused. DEV-0.24.6-retired passed the boot check and was published to the unlisted Workshop item.
