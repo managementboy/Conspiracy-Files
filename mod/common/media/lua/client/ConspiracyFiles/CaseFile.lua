@@ -88,17 +88,13 @@ function F.give(player)
         item:setFavorite(true)
     end)
     log("papers issued: "..tostring(F.titleFor(player)))
-    -- Open it in the inventory panel, so the survivor starts with their papers
-    -- in front of them rather than having to find the icon. Guarded all the way
-    -- down: the panel may not exist yet on the first tick, and a failure here
-    -- must not cost the player the item.
-    pcall(function()
-        local page=getPlayerInventory and getPlayerInventory(0)
-        local inventory=item.getInventory and item:getInventory()
-        if page and inventory and page.selectButtonForContainer then
-            page:selectButtonForContainer(inventory)
-        end
-    end)
+    -- Open it in the inventory panel. Not immediately: the item is added this
+    -- very tick, and the panel only builds a button for a new container on a
+    -- later update, so a selection now finds nothing and silently does nothing
+    -- - which is exactly what happened in play on 2026-09-11. It is retried on
+    -- later ticks until the button exists, and given up on after a few seconds.
+    F.pendingOpen=item.getInventory and item:getInventory() or nil
+    F.openTries=0
     return item
 end
 
@@ -106,13 +102,41 @@ end
 -- file; an existing save gets one too, once, the first time it loads under a
 -- build that has this - which is why the mark is on the item rather than in a
 -- flag of ours.
+-- How long to keep trying to open the papers: about five seconds of ticks.
+F.OPEN_ATTEMPTS=300
+
+-- True once the panel has a button for this container and it is selected.
+local function tryOpen(inventory)
+    local ok,done=pcall(function()
+        local page=getPlayerInventory and getPlayerInventory(0)
+        if not page or not page.backpacks or not page.selectButtonForContainer then return false end
+        for _,button in ipairs(page.backpacks) do
+            if button.inventory==inventory then
+                page:selectButtonForContainer(inventory)
+                return true
+            end
+        end
+        return false
+    end)
+    return ok and done
+end
+
 local tried=false
 function F.onTick()
+    if F.pendingOpen then
+        F.openTries=(F.openTries or 0)+1
+        if tryOpen(F.pendingOpen) then
+            F.pendingOpen=nil
+        elseif F.openTries>=F.OPEN_ATTEMPTS then
+            log("papers not opened: the inventory panel never offered a button for them")
+            F.pendingOpen=nil
+        end
+    end
     if tried then return end
     if not getPlayer or not getPlayer() then return end
     tried=true
     local item,why=F.give()
-    if not item then log("case file not issued: "..tostring(why)) end
+    if not item then log("papers not issued: "..tostring(why)) end
 end
 
 if Events and not F.tickHandler then

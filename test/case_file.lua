@@ -105,6 +105,13 @@ local menu = source('mod/common/media/lua/client/ConspiracyFiles/GeneratedMenu.l
 -- failure must not cost them the item.
 assert(caseFile:find('selectButtonForContainer', 1, true), 'the papers must open in the inventory panel')
 assert(caseFile:find('pcall(function()', 1, true), 'and must not throw if the panel is not there yet')
+-- Not on the tick the item is added: the panel builds a container's button on
+-- a later update, so an immediate selection finds nothing and silently does
+-- nothing. That is what happened in play on 2026-09-11. It must retry until the
+-- button exists, and give up rather than retry forever.
+assert(caseFile:find('F.pendingOpen=', 1, true), 'opening must be deferred until the panel has a button')
+assert(caseFile:find('button.inventory==inventory', 1, true), 'and must wait for that specific button')
+assert(caseFile:find('F.OPEN_ATTEMPTS', 1, true), 'and must give up eventually')
 
 -- (b) An icon for the ACTION, not for the thing. The item's own icon says what
 -- it is, which the row above the menu already showed.
@@ -140,3 +147,36 @@ assert(category, 'the evidence category must be findable')
 assert(translations:find('"IGUI_ItemCat_' .. category .. '"', 1, true),
     'the category ' .. category .. ' has no translation; the player would see the raw key')
 print('PASS case file: the evidence category ships the translation the inventory looks up')
+
+-- Behaviourally: the button appears a few ticks late, and the papers open then.
+local selected, buttons = nil, {}
+getPlayerInventory = function()
+    return { backpacks = buttons, selectButtonForContainer = function(_, inv) selected = inv end }
+end
+-- A fresh inventory of its own: the one above already holds Una's papers.
+local later = { items = {} }
+later.AddItem = function(self, fullType)
+    local item = makeItem(fullType)
+    item.getInventory = function() return { id = "papers-inventory" } end
+    self.items[#self.items + 1] = item
+    return item
+end
+later.getItems = function(self)
+    local list = self.items
+    return { size = function() return #list end, get = function(_, i) return list[i + 1] end }
+end
+local fresh = { getInventory = function() return later end,
+    getDescriptor = function() return { getForename = function() return "Van" end } end }
+getPlayer = function() return fresh end
+local F2 = dofile('mod/common/media/lua/client/ConspiracyFiles/CaseFile.lua')
+F2.onTick()
+local papers = F2.held(fresh)
+assert(papers, 'the papers must be issued on the first tick')
+assert(selected == nil, 'there is no button yet, so nothing can be selected yet')
+F2.onTick(); F2.onTick()
+assert(selected == nil, 'still no button')
+buttons[1] = { inventory = F2.pendingOpen }
+F2.onTick()
+assert(selected ~= nil, 'the papers must open the tick their button appears')
+assert(F2.pendingOpen == nil, 'and stop trying once they have')
+print('PASS case file: the papers open as soon as the panel offers them, not before')
