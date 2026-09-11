@@ -73,7 +73,10 @@ function L.find(n)
         if it then
             L.item, L.holder = it, holder
             local where = L.part and ("vehicle " .. tostring(L.part:getId())) or tostring(it:getContainer() and it:getContainer():getType())
-            return true, it:getDisplayName(), where
+            -- Room and floor, so repeated runs can tally where clues land.
+            local sq = getCell():getGridSquare(d.x + dx, d.y + dy, d.z)
+            local room = sq and sq:getRoom() and sq:getRoom():getName() or (L.part and "vehicle" or "outdoors")
+            return true, it:getDisplayName(), where, room, d.z
         end
     end end
     L.item = nil

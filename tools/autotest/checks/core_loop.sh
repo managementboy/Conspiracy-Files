@@ -36,7 +36,7 @@ rows=()
 for i in $(seq 1 "$n"); do
     found="$(ev "return CFLoop.find($i)")"
     [ "$(cut -f1 <<<"$found")" = true ] || { fail "document $i not found where the runtime says: $(cut -f2 <<<"$found")"; continue; }
-    name="$(cut -f2 <<<"$found")"; holder="$(cut -f3 <<<"$found")"
+    name="$(cut -f2 <<<"$found")"; holder="$(cut -f3 <<<"$found")"; room="$(cut -f4 <<<"$found")"; floor="$(cut -f5 <<<"$found")"
     if [[ "$holder" == vehicle* ]]; then
         ev 'return CFLoop.enterVehicle()' >/dev/null
         wait_true 30 'CFLoop.inVehicle()' || fail "document $i ($name, $holder): could not get into the vehicle"
@@ -52,7 +52,7 @@ for i in $(seq 1 "$n"); do
     wait_true 10 'CFLoop.inspected()' || fail "document $i ($name) not marked inspected"
     ev "return CFLoop.remember($i)" >/dev/null
     [[ "$holder" == vehicle* ]] && { ev 'return CFLoop.exitVehicle()' >/dev/null; sleep 3; }
-    rows+=("  $i. $name, in $holder (container icon clicked: $opened)")
+    rows+=("  $i. $name, in $holder, room $room, floor $floor (container icon clicked: $opened)")
     [ "$opened" = yes ] || fail "document $i ($name): the loot panel never showed its $holder"
     say "document $i: $name"
 done
