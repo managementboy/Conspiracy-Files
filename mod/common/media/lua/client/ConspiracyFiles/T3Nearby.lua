@@ -251,7 +251,8 @@ local function step()
     local p=getPlayer(); if not p then pending=nil; return end
     local wrapper=ModData.get("ConspiracyFiles.Generated.G2")
     local root=wrapper and wrapper.canonical
-    if not root then pending=nil; return end
+    -- A retired first case has no case envelope and nothing left to hint at.
+    if not root or not root.case then pending=nil; return end
     local now=getTimeInMillis()
     if pending then
         local task=pending

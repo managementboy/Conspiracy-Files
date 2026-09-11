@@ -809,7 +809,8 @@ if ConspiracyFiles.AddressMap and ConspiracyFiles.AddressMap.stop then Conspirac
 local M={}; ConspiracyFiles.AddressMap=M
 local TAG="ConspiracyFiles.AddressBook.Muldraugh"
 local job,handler,book,byId,buckets,peak=nil,nil,nil,{}, {},0
-local function log(s) CFLog.message("notebook","note",s) end
+local CFLog=require("ConspiracyFiles/Log")
+local function log(s) CFLog.message("address","address",s) end
 local status="Not started"
 local view,viewReasons,auditHandler
 local function stopAudit() if auditHandler then Events.OnTick.Remove(auditHandler);auditHandler=nil end end
@@ -840,6 +841,43 @@ local function use(root)
     end
 end
 function M.ready() return book~=nil end
+-- The named building nearest to a point, and how far away it is. For things
+-- found OUTDOORS: a wallet on the street beside 109 Walker Road was reported as
+-- "in a building the address book does not name" (2026-09-11), which was false
+-- twice over - it was not in a building, and the building next to it had a
+-- name. Searches the point's own 64-tile bucket and its neighbours, which the
+-- book already builds, so this costs a handful of comparisons.
+function M.nearest(x,y,within)
+    if not book or type(x)~="number" or type(y)~="number" then return nil end
+    within=within or 30
+    local bx,by=math.floor(x/64),math.floor(y/64)
+    local best,bestDistance=nil,nil
+    for dx=-1,1 do for dy=-1,1 do
+        for _,r in ipairs(buckets[(bx+dx)..":"..(by+dy)] or {}) do
+            if type(r.label)=="string" and r.label~="" then
+                -- Distance to the footprint's edge, not its centre: standing on
+                -- a porch is zero tiles from the house, not ten.
+                local ex=x<r.x and r.x-x or (x>=r.x2 and x-r.x2+1 or 0)
+                local ey=y<r.y and r.y-y or (y>=r.y2 and y-r.y2+1 or 0)
+                local d=math.max(ex,ey)
+                if d<=within and (not bestDistance or d<bestDistance) then best,bestDistance=r,d end
+            end
+        end
+    end end
+    if not best then return nil end
+    return best.label,bestDistance
+end
+-- The address for a building id, or nil. Keyed exactly as the book is built:
+-- every id here comes from BuildingDef:getIDString(), the same call T3Nearby
+-- and the audit at line 121 use, so an observedKeyDoor building id resolves
+-- directly. Returns nil for a building the book never gave an address to -
+-- a shed off a dirt road is not "useful" and never gets one.
+function M.labelForBuilding(id)
+    if not book or type(id)~="string" or id=="" then return nil end
+    local r=byId["t3:"..id]
+    if not r or type(r.label)~="string" or r.label=="" then return nil end
+    return r.label
+end
 function M.stop() if handler then Events.OnTick.Remove(handler) end; job=nil;stopAudit() end
 function M.describe(body,case)
     if not book then return nil end
@@ -1039,7 +1077,8 @@ local pens={"Pen","Pencil","RedPen","BluePen","GreenPen"}
 -- Vanilla ISWorldMapSymbols palette, in its deterministic tool priority order.
 local inks={Pen={0.129,0.129,0.129},Pencil={0.2,0.2,0.2},RedPen={0.65,0.054,0.054},BluePen={0.156,0.188,0.49},GreenPen={0.06,0.39,0.17}}
 local questionTexture
-local function log(s) CFLog.message("notebook","note",s) end
+local CFLog=require("ConspiracyFiles/Log")
+local function log(s) CFLog.message("marker","marker",s) end
 local function allowed()
  return getDebug and getDebug() and not (isClient and isClient()) and not (isServer and isServer())
   and not ConspiracyFiles.T11Mode and not ConspiracyFiles.T12Mode
@@ -1049,6 +1088,19 @@ local function session(id)
  local w=wrapper();return w and (id and Cases.find(w,id) or w.canonical)
 end
 local function discoveries() local w=wrapper();return w and Cases.discoveries(w) or {} end
+-- A completed case is retired to {caseId,rows,known}: no assignments and no
+-- case envelope. Completing a case threw here and stopped the marker worker
+-- (Linux core-loop run, 2026-09-11), the same class as 3fe1813. So every read
+-- below goes through these two, which work for live and retired cases alike.
+local function conflicted(c,id)
+ local a=c and c.assignments and c.assignments[id]
+ return a~=nil and a.status=="conflict"
+end
+local function titleOf(root,id)
+ local docs=root and ((root.case and root.case.documents) or root.rows) or {}
+ for _,d in ipairs(docs) do if d.id==id then return d.title end end
+ return nil
+end
 local function valid(r)
  local ok=V.validateStructure(r)
  if not ok or type(r)~="table" or r.schema~=1 or type(r.records)~="table" or V.estimateEncodedBytes(r)>24000 then return false end
@@ -1143,8 +1195,10 @@ function M.update()
  if not session() then return end
  local r=read();local next
  for _,id in ipairs(discoveries()) do local c=session(id)
-  local v=r.records[id];local a=c.assignments[id]
-  if v and not v.written and a and a.status~="conflict" and v.map==tostring(getWorld():getMap()) then
+  local v=r.records[id]
+  -- A recorded finding is written once a tool is held, whether its case is
+  -- still live or already retired; only a conflicted document is refused.
+  if v and not v.written and c and not conflicted(c,id) and v.map==tostring(getWorld():getMap()) then
    local ink=M.writingTool(getPlayer());if not ink then return end
    next=next or copy(r);next.records[id].written=true;next.records[id].ink=ink
   end
@@ -1160,7 +1214,7 @@ function M.note(id)
  local r=read();local v=r and r.records[id]
  if not v then return "Finding location was not recorded; no map mark is available." end
  if v.written then return "Finding location marked on your world map." end
- if c.assignments[id] and c.assignments[id].status=="conflict" then return "Map marking is unavailable for this document." end
+ if conflicted(c,id) then return "Map marking is unavailable for this document." end
  return "Finding location remembered. Map marking waits for a pen or pencil."
 end
 function M.status()
@@ -1179,8 +1233,7 @@ function M.drawRecords(ui,c,r)
   if v and v.written and v.map==tostring(getWorld():getMap()) then
    local key=v.x..":"..v.y..":"..v.z
    if not groups[key] then groups[key]={point=v,labels={}};order[#order+1]=key end
-   local title=id
-   for _,d in ipairs(c.case.documents) do if d.id==id then title=d.title end end
+   local title=titleOf(c,id) or id
    local g=groups[key];g.labels[#g.labels+1]={number=i,title=title,floor=v.z,ink=v.ink}
   end
  end
@@ -1191,26 +1244,47 @@ function M.drawRecords(ui,c,r)
   return ui.mapAPI:getStyleAPI():getLayerByName(symbols:getDefaultTextLayerID()):getFont()
  end)
  if ok and nativeFont then font=nativeFont end
+ -- Group by where markers land ON SCREEN, not by tile. Grouping only exact
+ -- tiles meant two documents a tile apart in one house were laid out as if
+ -- alone, and their labels printed over each other (2026-09-11, house 104:
+ -- "two markings unreadable due to overwriting"). Markers whose question marks
+ -- would sit within a label's height of each other now share one stacked label
+ -- list; each keeps its own question mark at its own spot. Zoom in far enough
+ -- and they separate again, which is the right behaviour for free.
+ local clusters={}
  for _,key in ipairs(order) do
   local g=groups[key];local v=g.point
   local x,y=ui.mapAPI:worldToUIX(v.x+0.5,v.y+0.5),ui.mapAPI:worldToUIY(v.x+0.5,v.y+0.5)
   if x>16 and y>60 and x<ui.width-24 and y<ui.height-80 then
+   local home
+   for _,cluster in ipairs(clusters) do
+    if math.abs(cluster.x-x)<=Layout.CLUSTER_X and math.abs(cluster.y-y)<=Layout.CLUSTER_Y then home=cluster;break end
+   end
+   if not home then home={x=x,y=y,points={},labels={}};clusters[#clusters+1]=home end
+   home.points[#home.points+1]={x=x,y=y,ink=v.ink}
+   for _,label in ipairs(g.labels) do home.labels[#home.labels+1]=label end
+  end
+ end
+ local size=math.min(28,getTextManager():getFontHeight(font)+2)
+ local h=getTextManager():getFontHeight(font)+2
+ local measure=function(text) return getTextManager():MeasureStringX(font,text) end
+ if questionTexture==nil and getTexture then questionTexture=getTexture("media/ui/LootableMaps/map_question.png") end
+ for _,cluster in ipairs(clusters) do
+  for _,point in ipairs(cluster.points) do
    -- Older records did not retain ink; display those in neutral graphite.
-   local color=inks[v.ink] or inks.Pencil
-   local size=math.min(28,getTextManager():getFontHeight(font)+2)
-   if questionTexture==nil and getTexture then questionTexture=getTexture("media/ui/LootableMaps/map_question.png") end
+   local color=inks[point.ink] or inks.Pencil
    if questionTexture and ui.drawTextureScaled then
-    ui:drawTextureScaled(questionTexture,x-size/2,y-size/2,size,size,1,color[1],color[2],color[3])
+    ui:drawTextureScaled(questionTexture,point.x-size/2,point.y-size/2,size,size,1,color[1],color[2],color[3])
    else
-    ui:drawText("?",x-4,y-8,color[1],color[2],color[3],1,font)
+    ui:drawText("?",point.x-4,point.y-8,color[1],color[2],color[3],1,font)
    end
-   local h=getTextManager():getFontHeight(font)+2
-   local measure=function(text) return getTextManager():MeasureStringX(font,text) end
-   local labels=Layout.layout(g.labels,x+size/2,y,{left=16,top=60,right=ui.width-24,bottom=ui.height-80},h,measure)
-   for i,label in ipairs(labels) do
-    local ink=inks[g.labels[i].ink] or inks.Pencil
-    ui:drawText(label.text,label.x,label.y,ink[1],ink[2],ink[3],1,font)
-   end
+  end
+  -- Labels in discovery order, whatever tile each came from.
+  table.sort(cluster.labels,function(a,b) return a.number<b.number end)
+  local labels=Layout.layout(cluster.labels,cluster.x+size/2,cluster.y,{left=16,top=60,right=ui.width-24,bottom=ui.height-80},h,measure)
+  for i,label in ipairs(labels) do
+   local ink=inks[cluster.labels[i].ink] or inks.Pencil
+   ui:drawText(label.text,label.x,label.y,ink[1],ink[2],ink[3],1,font)
   end
  end
 end
@@ -1218,7 +1292,10 @@ function M.draw(ui)
  if not allowed() or not getPlayer() then return end
  if not session() then return end
  local c={known=discoveries(),case={documents={}}}
- for _,id in ipairs(c.known) do local root=session(id);if root then for _,d in ipairs(root.case.documents) do if d.id==id then c.case.documents[#c.case.documents+1]=d end end end end
+ for _,id in ipairs(c.known) do
+  local title=titleOf(session(id),id)
+  if title then c.case.documents[#c.case.documents+1]={id=id,title=title} end
+ end
  M.drawRecords(ui,c,read())
 end
 local function safe(fn,...)
@@ -1273,6 +1350,7 @@ end
 function UI.enableMarkerColourTest()
 local test=(function()
 -- Debug fixture only.  It never participates in generated evidence or marker saves.
+local CFLog=require("ConspiracyFiles/Log")
 ConspiracyFiles=ConspiracyFiles or {}
 local T=ConspiracyFiles.MarkerColourTest or {};ConspiracyFiles.MarkerColourTest=T
 if T.loaded then return T end
@@ -1344,7 +1422,7 @@ function T.start()
  for i,name in ipairs({"TEMP TEST A - marker colour","TEMP TEST B - marker colour"}) do
   -- Vanilla OnBreak.lua: string overload returns InventoryItem, not IsoWorldInventoryObject.
   local item=square:AddWorldInventoryItem("Base.Note",0.5,0.5,0.0)
- if not item then CFLog.message("notebook","note","Spawn stopped before all notes were created.");return false end
+ if not item then CFLog.message("marker","probe","Spawn stopped before all notes were created.");return false end
   item:setName(name);item:setCustomName(true);item:getModData()[KEY]=true
   items[i]=item;records[item]={x=square:getX(),y=square:getY(),z=square:getZ(),map=currentMap(),known=false,written=false}
  end
@@ -1364,7 +1442,7 @@ function T.start()
   local now=getTimeInMillis();if now-last<1000 then return end;last=now
   local m=ConspiracyFiles.MarkerColourTest;if m then pcall(m.update) end end
  Events.OnTick.Add(tick)
- CFLog.message("notebook","note","Spawned two temporary notes at the current square. Pick up one, then inspect it from inventory.")
+ CFLog.message("marker","probe","Spawned two temporary notes at the current square. Pick up one, then inspect it from inventory.")
  return true
 end
 function T.stop() if tick then Events.OnTick.Remove(tick);tick=nil end end
@@ -1381,6 +1459,7 @@ local toolbar=(function()
 -- Additive sidebar shortcut.  It deliberately does not patch ISEquippedItem:
 -- Build 42 exposes no sidebar-button event, so this follows the existing
 -- Project Cook pattern of a separately managed sibling beside the anchor.
+local CFLog=require("ConspiracyFiles/Log")
 require "ISUI/ISButton"
 local UI=ConspiracyFiles.NotebookUI
 ConspiracyFiles=ConspiracyFiles or {}

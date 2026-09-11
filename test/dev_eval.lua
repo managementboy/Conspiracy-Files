@@ -128,3 +128,12 @@ send("20260911T120000-1",function() error("must not rerun") end);tick()
 assert(runs["20260911T120000-1"]==1 and #handlers.OnTick==1,"reload keeps seen ids and one handler")
 
 realPrint("dev_eval: all checks passed")
+
+-- With the engine's OnTickEvenPaused available, the poll runs there instead,
+-- so commands still run while the world map has the game paused.
+ConspiracyFiles=nil;handlers={}
+Events={OnGameStart=event("OnGameStart"),OnTick=event("OnTick"),OnTickEvenPaused=event("OnTickEvenPaused")}
+dofile(path)
+for _,f in ipairs(handlers.OnGameStart) do f() end
+assert(handlers.OnTickEvenPaused and #handlers.OnTickEvenPaused==1 and handlers.OnTick==nil,"polls even while paused")
+realPrint("dev_eval: polls on OnTickEvenPaused where the engine has it")

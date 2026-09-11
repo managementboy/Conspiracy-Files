@@ -17,7 +17,7 @@ function D.run()
     local player=getPlayer()
     if player then log("player="..player:getX()..","..player:getY()..","..player:getZ()) end
     local tasks={}
-    for _,doc in ipairs(root.case.documents) do
+    for _,doc in ipairs(root.case and root.case.documents or {}) do
         local a=root.assignments[doc.id]; local t=a.target
         log("document="..doc.title.." status="..a.status.." target="..t.x..","..t.y..","..t.z..
             " object="..t.objectIndex.." container="..t.containerIndex.." type="..t.containerType.." sprite="..t.sprite)
@@ -82,7 +82,7 @@ function D.access(radius)
     local function log(s) CFLog.message("diag","probe",s) end
     local targets,levels,box={},{},nil
     for _,root in ipairs(roots) do
-        for _,doc in ipairs(root.case.documents) do
+        for _,doc in ipairs(root.case and root.case.documents or {}) do
             local t=root.assignments[doc.id].target
             targets[#targets+1]={title=doc.title,t=t}
             levels[t.z]=true

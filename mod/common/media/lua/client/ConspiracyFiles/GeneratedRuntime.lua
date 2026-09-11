@@ -278,7 +278,16 @@ local function prepare(result,seed,later,house)
   withReachability(result,function(reachable)
     local scan,why=Storage.scan(result,function(catalog,targets,candidates,rooms,occupied)
         local p=getPlayer()
-        local used={}; for _,root in ipairs(Cases.sessions(wrapper) or {}) do for _,site in ipairs(root.case.locations) do used[site.id]=true end end
+        -- Sites earlier cases used are not reused. A retired case keeps no case
+        -- envelope, only its rows, and each row still names its site. Reading
+        -- root.case.locations for a retired case threw here, so once a player's
+        -- only case was complete no further case could ever be prepared
+        -- (Linux core-loop check, 2026-09-11; same class as 3fe1813).
+        local used={}
+        for _,root in ipairs(Cases.sessions(wrapper) or {}) do
+            if root.case then for _,site in ipairs(root.case.locations) do used[site.id]=true end
+            else for _,row in ipairs(root.rows or {}) do if row.locationId then used[row.locationId]=true end end end
+        end
         local filtered={revision=catalog.revision,locations={}}
         for _,site in ipairs(catalog.locations) do
             local available=candidates and candidates[site.id] or {}

@@ -22,6 +22,19 @@ local function session(id)
  local w=wrapper();return w and (id and Cases.find(w,id) or w.canonical)
 end
 local function discoveries() local w=wrapper();return w and Cases.discoveries(w) or {} end
+-- A completed case is retired to {caseId,rows,known}: no assignments and no
+-- case envelope. Completing a case threw here and stopped the marker worker
+-- (Linux core-loop run, 2026-09-11), the same class as 3fe1813. So every read
+-- below goes through these two, which work for live and retired cases alike.
+local function conflicted(c,id)
+ local a=c and c.assignments and c.assignments[id]
+ return a~=nil and a.status=="conflict"
+end
+local function titleOf(root,id)
+ local docs=root and ((root.case and root.case.documents) or root.rows) or {}
+ for _,d in ipairs(docs) do if d.id==id then return d.title end end
+ return nil
+end
 local function valid(r)
  local ok=V.validateStructure(r)
  if not ok or type(r)~="table" or r.schema~=1 or type(r.records)~="table" or V.estimateEncodedBytes(r)>24000 then return false end
@@ -116,8 +129,10 @@ function M.update()
  if not session() then return end
  local r=read();local next
  for _,id in ipairs(discoveries()) do local c=session(id)
-  local v=r.records[id];local a=c.assignments[id]
-  if v and not v.written and a and a.status~="conflict" and v.map==tostring(getWorld():getMap()) then
+  local v=r.records[id]
+  -- A recorded finding is written once a tool is held, whether its case is
+  -- still live or already retired; only a conflicted document is refused.
+  if v and not v.written and c and not conflicted(c,id) and v.map==tostring(getWorld():getMap()) then
    local ink=M.writingTool(getPlayer());if not ink then return end
    next=next or copy(r);next.records[id].written=true;next.records[id].ink=ink
   end
@@ -133,7 +148,7 @@ function M.note(id)
  local r=read();local v=r and r.records[id]
  if not v then return "Finding location was not recorded; no map mark is available." end
  if v.written then return "Finding location marked on your world map." end
- if c.assignments[id] and c.assignments[id].status=="conflict" then return "Map marking is unavailable for this document." end
+ if conflicted(c,id) then return "Map marking is unavailable for this document." end
  return "Finding location remembered. Map marking waits for a pen or pencil."
 end
 function M.status()
@@ -152,8 +167,7 @@ function M.drawRecords(ui,c,r)
   if v and v.written and v.map==tostring(getWorld():getMap()) then
    local key=v.x..":"..v.y..":"..v.z
    if not groups[key] then groups[key]={point=v,labels={}};order[#order+1]=key end
-   local title=id
-   for _,d in ipairs(c.case.documents) do if d.id==id then title=d.title end end
+   local title=titleOf(c,id) or id
    local g=groups[key];g.labels[#g.labels+1]={number=i,title=title,floor=v.z,ink=v.ink}
   end
  end
@@ -212,7 +226,10 @@ function M.draw(ui)
  if not allowed() or not getPlayer() then return end
  if not session() then return end
  local c={known=discoveries(),case={documents={}}}
- for _,id in ipairs(c.known) do local root=session(id);if root then for _,d in ipairs(root.case.documents) do if d.id==id then c.case.documents[#c.case.documents+1]=d end end end end
+ for _,id in ipairs(c.known) do
+  local title=titleOf(session(id),id)
+  if title then c.case.documents[#c.case.documents+1]={id=id,title=title} end
+ end
  M.drawRecords(ui,c,read())
 end
 local function safe(fn,...)

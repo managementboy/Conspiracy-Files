@@ -109,9 +109,13 @@ function E.start()
     if ok and id then E.seen[id]=true end
     E.nextPoll=nil
     E.active=true
-    if Events and Events.OnTick and not E.tickHandler then
+    -- OnTickEvenPaused where the engine has it: OnTick stops while the game is
+    -- paused, and the world map pauses it, so a command sent while the map was
+    -- open (or to close it) never ran (Linux core-loop check, 2026-09-11).
+    local event=Events and (Events.OnTickEvenPaused or Events.OnTick)
+    if event and not E.tickHandler then
         E.tickHandler=function() E.tick() end
-        Events.OnTick.Add(E.tickHandler)
+        event.Add(E.tickHandler)
     end
     print("[CF-EVAL] ready; inbox "..E.INBOX..(ok and id and (" (ignoring stale id="..id..")") or ""))
 end

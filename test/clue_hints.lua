@@ -96,4 +96,12 @@ local van={x=100,y=100,z=0,objectIndex=0,containerIndex=0,vehiclePart='SeatFront
 assert(H.near(at(102,100),house,2) and not H.near(at(103,100),house,2),'a house clue keeps its two-tile reach')
 assert(H.near(at(103,102),van,2),'the driver door of a van is near a clue on its seat')
 assert(not H.near(at(106,100),van,2),'the next car along is not')
-print('PASS clue hints: a pile of eleven is still worth mentioning')
+-- A retired first case sits beside a live one: {caseId,rows,known}, no case
+-- envelope. Hints read root.case.documents for every case and threw on each
+-- poll once a case completed (Linux core-loop check, 2026-09-11).
+local retired={schema=1,caseId="R-1",rows={{id="old",title="Old"}},known={"old"}}
+ModData={get=function() return {canonical=retired,successive={cases={root}}} end}
+H=dofile('mod/common/media/lua/client/ConspiracyFiles/ClueHints.lua')
+local ok,err=pcall(function() for i=1,4 do tick() end end)
+assert(ok,'a retired case must not break hints for the live one: '..tostring(err))
+print('PASS clue hints: a pile of eleven is still worth mentioning; a retired case is skipped')

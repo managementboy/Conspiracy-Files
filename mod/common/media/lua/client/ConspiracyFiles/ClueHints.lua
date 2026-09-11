@@ -130,7 +130,9 @@ local function step()
     for key,t in pairs(visits) do if not near(p,t,FORGET_RADIUS) then visits[key]=nil end end
     for key,r in pairs(reported) do if not near(p,r.target,FORGET_RADIUS) then reported[key]=nil end end
     if now-lastHint<60000 then return end
-    for _,root in ipairs(roots) do for _,doc in ipairs(root.case.documents) do
+    -- A retired case has nothing left to find and no case envelope; reading
+    -- root.case.documents for one threw on every poll once a case completed.
+    for _,root in ipairs(roots) do for _,doc in ipairs(root.case and root.case.documents or {}) do
         local a=eligible(root,doc.id)
         if a and near(p,a.target,HINT_RADIUS) then
             local t=a.target
