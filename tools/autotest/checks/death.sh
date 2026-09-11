@@ -27,10 +27,6 @@ done
 for i in 1 2; do
     r="$(inspect_doc "$i")" || fail "could not inspect document $i: $r"
 done
-    ev 'return CFLoop.take()' >/dev/null; wait_true 20 'CFLoop.carried()' >/dev/null
-    [ "$(ev 'return CFLoop.inspect()' | cut -f1)" = true ] || fail "could not inspect document $i"
-    [[ "$h" == vehicle* ]] && { ev 'return CFLoop.exitVehicle()' >/dev/null; sleep 3; }
-done
 sleep 3
 before="$(ev 'return CFReload.notebook()')"; first="$(ev 'return CFDeath.forename()')"
 carried="$(ev 'return CFDeath.carried()')"

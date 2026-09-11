@@ -37,10 +37,6 @@ done
 for i in 1 2; do
     r="$(inspect_doc "$i")" || fail "could not inspect document $i before the first save: $r"
 done
-    ev 'return CFLoop.take()' >/dev/null; wait_true 20 'CFLoop.carried()' >/dev/null
-    [ "$(ev 'return CFLoop.inspect()' | cut -f1)" = true ] || fail "could not inspect document $i before the first save"
-    [[ "$h" == vehicle* ]] && { ev 'return CFLoop.exitVehicle()' >/dev/null; sleep 3; }
-done
 sleep 3
 before="$(snapshot)"
 say "before: $(head -1 <<<"$before" | cut -c1-120)"
