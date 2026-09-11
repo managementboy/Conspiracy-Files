@@ -106,4 +106,79 @@ if Events and Events.OnGameStart and not E.startHooked then
 end
 E.install()
 
+
+-- A REPEATING reminder while unread evidence is carried.
+--
+-- Owner, 2026-09-11, carrying a fancy pen for an hour without realising it was
+-- evidence: "can you please add a reminder on top of player that we have not
+-- done that?" The pickup line fired once, as designed, and was missed - and
+-- once is all it ever says for an item.
+--
+-- So while anything carried is live evidence the notebook has not recorded,
+-- the halo repeats every few minutes. Halo ONLY: no speech and no sound. The
+-- speech line is the survivor noticing a thing once; this is a quiet mark
+-- above their head, and a mod whose survivor repeats himself every three
+-- minutes is a mod people uninstall.
+E.REMIND_EVERY_MS=180000
+E.SCAN_EVERY_MS=5000
+local lastScan,lastRemind=0,0
+
+-- Distinct unread documents carried, counting a pile once: six lunchboxes are
+-- one piece of evidence. Searches the inventory and one level into containers
+-- in it, which covers a bag and the survivor's own papers.
+function E.unreadCarried(player)
+    local runtime=ConspiracyFiles.GeneratedRuntime
+    if not player or not runtime or not runtime.subject or not runtime.isInspected then return 0 end
+    local seen,count={},0
+    local function consider(item)
+        local ok,md=pcall(function() return item:getModData() end)
+        local id=ok and type(md)=="table" and md.cfGeneratedId
+        if not id or seen[id] then return end
+        local okS,subject=pcall(runtime.subject,item)
+        local okI,read=pcall(runtime.isInspected,item)
+        if okS and subject and okI and not read then seen[id]=true; count=count+1 end
+    end
+    local function walk(container,depth)
+        local items=container and container.getItems and container:getItems()
+        if not items then return end
+        for i=0,items:size()-1 do
+            local item=items:get(i)
+            if item then
+                consider(item)
+                if depth<1 and item.getInventory then
+                    local ok,inner=pcall(function() return item:getInventory() end)
+                    if ok and inner then walk(inner,depth+1) end
+                end
+            end
+        end
+    end
+    local ok,inventory=pcall(function() return player:getInventory() end)
+    if ok and inventory then walk(inventory,0) end
+    return count
+end
+
+function E.reminderText(count)
+    if count<=0 then return nil end
+    if count==1 then return "Unread evidence" end
+    return count.." unread pieces of evidence"
+end
+
+function E.remindTick()
+    local now=getTimeInMillis and getTimeInMillis() or 0
+    if now-lastScan<E.SCAN_EVERY_MS then return end
+    lastScan=now
+    if now-lastRemind<E.REMIND_EVERY_MS then return end
+    local player=getPlayer and getPlayer()
+    local text=E.reminderText(E.unreadCarried(player))
+    if not text then return end
+    lastRemind=now
+    pcall(function() player:setHaloNote(text,230,210,140,600) end)
+    log("reminded: "..text)
+end
+
+if Events and not E.remindHandler then
+    E.remindHandler=function() E.remindTick() end
+    Events.OnTick.Add(E.remindHandler)
+end
+
 return E
