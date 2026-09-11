@@ -10,7 +10,7 @@ local Catalogue=require("ConspiracyFiles/Generated/ObjectCatalogue")
 -- 1.0 callers must use a fresh save rather than reinterpret an existing case.
 -- MIN_EVIDENCE is two, not three: a claim and a record contradicting it is a
 -- whole case. See the review note in build().
-local G={REVISION="g6-fullnames-1",SCHEMA=2,MIN_EVIDENCE=2,MAX_EVIDENCE=7}
+local G={REVISION="g7-markedobjects-1",SCHEMA=2,MIN_EVIDENCE=2,MAX_EVIDENCE=7}
 local function copy(v) if type(v)~="table" then return v end; local out={}; for k,c in pairs(v) do out[k]=copy(c) end; return out end
 local function same(a,b)
     if type(a)~=type(b) then return false end
@@ -64,7 +64,11 @@ local SLOT_PREFIXES={"Hat_","Necklace_","Vest_","Shirt_","Trousers_","Jacket_",
 -- A closed list, because only some trailing words are adjectives: Bag_DuffelBag
 -- is a duffel bag and must not become "duffelbag bag".
 local QUALIFIERS={Stolen=true,Old=true,Used=true,Dirty=true,Broken=true,
-    Empty=true,Full=true,Burnt=true,Rusty=true,Worn=true,Fresh=true,Wet=true}
+    Empty=true,Full=true,Burnt=true,Rusty=true,Worn=true,Fresh=true,Wet=true,
+    Fancy=true,Forged=true,Crude=true,Cheap=true,Small=true,Large=true,
+    -- Materials read backwards the same way: Fork_Bone is a bone fork and
+    -- BaseballBat_Crafted a crafted baseball bat.
+    Crafted=true,Bone=true,Stone=true,Wood=true,Wooden=true,Metal=true,Leather=true}
 -- Which side of a pair a thing is does not matter to an investigation, and
 -- "ten elbow pad rights" is not English. Dropped from the display name only.
 local SIDES={Left=true,Right=true,L=true,R=true}
@@ -72,17 +76,21 @@ local function words(id)
     -- Both spellings: CreditCard_Stolen and BandageDirty. The second is why
     -- the underscore cannot be required - the test caught "bandage dirty"
     -- immediately after the first version fixed "credit card stolen".
+    -- Sides and qualifiers, in whatever order they come. "ElbowPad_Right" is
+    -- an elbow pad; "Kneepad_Right_Leather" is a leather kneepad, and peeling
+    -- only the last word left "right" behind (caught by test, 2026-09-11).
     local qualifier
-    -- Sides first: "ElbowPad_Right" is an elbow pad, and "Kneepad_Left_Sport"
-    -- is a sport kneepad.
-    for _=1,2 do
-        local body,side=string.match(id,"^(.-)_?([A-Z][a-z]*)$")
-        if body and body~="" and SIDES[side] then id=body else break end
-    end
-    local head,tail=string.match(id,"^(.-)_?([A-Z][a-z]+)$")
-    if head and head~="" and QUALIFIERS[tail] then
-        qualifier=string.lower(tail)
-        id=head
+    for _=1,4 do
+        local body,tail=string.match(id,"^(.-)_?([A-Z][a-z]*)$")
+        if not body or body=="" then break end
+        if SIDES[tail] then
+            id=body
+        elseif QUALIFIERS[tail] and not qualifier then
+            qualifier=string.lower(tail)
+            id=body
+        else
+            break
+        end
     end
     for _,prefix in ipairs(SLOT_PREFIXES) do
         if string.sub(id,1,#prefix)==prefix then id=string.sub(id,#prefix+1) end
@@ -317,27 +325,58 @@ local function build(seed,revision,sites)
     -- The notebook sentence records that the thing was found with the papers
     -- and stops. It must not say what the object means, because the object is
     -- the one piece of evidence the player can interpret entirely without us.
-    local function objectDocument(n,roleId,site,sentence,references,link)
+    -- How a person's name ends up on a thing, by what kind of thing it is. A
+    -- name tape is sewn into a coat, not a hammer.
+    local function markOn(category)
+        if category=="Clothing" or category=="Accessory" or category=="ProtectiveGear" then
+            return "A name tape is sewn inside: {P1}."
+        elseif category=="Tool" or category=="ToolWeapon" or category=="GardeningWeapon"
+            or category=="Gardening" or category=="Weapon" or category=="SportsWeapon" then
+            return "A name is scratched into the handle: {P1}."
+        elseif category=="Household" or category=="Cooking" or category=="CookingWeapon"
+            or category=="Container" or category=="Junk" then
+            return "A strip of tape on it has a name written in pen: {P1}."
+        end
+        return "It is marked with a name: {P1}."
+    end
+    -- A single object belongs to SOMEBODY. Owner, 2026-09-11, on a worn fancy
+    -- pen that meant nothing: "why is this evidence relevant? the text gives no
+    -- interesting mystery", and then "if we linked it to a person, then it
+    -- would be perfect. a pen could be marked with the name."
+    --
+    -- It was right: a random object next to paperwork is the least surprising
+    -- thing in the world, and the text had to insist it mattered. Marked with
+    -- the case person's name - the same person CasePerson gives a body and an
+    -- ID card near the first clue - it is a thread the player can pull.
+    --
+    -- The mark is the one thing asserted: a name is on the object. The text
+    -- says nothing about whether it was theirs, or whether they left it here.
+    local function objectDocument(n,roleId,site,sentence,references,link,marked)
         local kind=assert(Roles.choose(random,roleId))
         local label=words(kind)
+        local item=Catalogue.get(kind)
+        if marked then sentence=sentence.." "..markOn(item and item.category) end
         local body=fill(sentence,map)
         body=subst(subst(body,"ARTICLE",article(label)),"LABEL",label)
         body=string.upper(string.sub(body,1,1))..string.sub(body,2)
         assert(Roles.fits(roleId,kind,body))
         local wear=assert(ObjectRoles.describe(assert(Roles.ruleOf(roleId)))).wear
-        document(n,string.upper(string.sub(article(label),1,1))..string.sub(article(label),2)
-            .." "..label,site,body,references,{link},nil,kind)
+        -- The item's own name: "Fancy pen, marked Ines Kubiak". No leading
+        -- article - "A pen fancy" read oddly in an inventory list.
+        local title=string.upper(string.sub(label,1,1))..string.sub(label,2)
+        if marked then title=title..", marked "..facts.sender end
+        document(n,title,site,body,references,{link},nil,kind)
         documents[n].wear=wear
     end
     objectDocument(13,"physicalTrace",a,
-        "{ARTICLE} {LABEL}, badly worn, stored with the file marked {CODE}. Nothing is written on it. Why it was kept with records is not recorded.",
-        {a.id},{target=documents[1].id,kind="recontextualises"})
+        "{ARTICLE} {LABEL}, badly worn, stored with the file marked {CODE}.",
+        {people[1].id,a.id},{target=documents[1].id,kind="recontextualises"},true)
     objectDocument(14,"bearsName",b,
         "{ARTICLE} {LABEL} carrying a name, filed with the papers marked {CODE}. Nothing here says the name is the owner's, or that the owner left it.",
         {b.id},{target=documents[2].id,kind="recontextualises"})
     objectDocument(15,"outOfPlace",a,
-        "{ARTICLE} {LABEL}, worn, kept with the file marked {CODE}. It is not the kind of thing anyone files with records.",
-        {a.id},{target=documents[1].id,kind="recontextualises"})
+        "{ARTICLE} {LABEL}, worn, kept with the file marked {CODE} - not the kind of thing anyone files with records.",
+        {people[1].id,a.id},{target=documents[1].id,kind="recontextualises"},true)
     -- Quantity as evidence. Owner, 2026-09-09: "one of something is no misery
     -- but a house full of bleach is a mystery", and then the two shapes that
     -- makes: "100 eggs in the fridge? 50 bricks in the bedroom".

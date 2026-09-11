@@ -142,7 +142,9 @@ local rules={
         anyCategory={"Material","Gardening","Camping","Junk","Electronics",
                      "Cooking","WaterContainer","Household"},
         text="unremarkable where it belongs, and this is not where it belongs"},
-    outOfPlace={requires={"condition"},wear="worn",
+    -- Refuses bags of dead animals: "dead roaches" is a pest-control
+    -- container, not an object a person marks with their name.
+    outOfPlace={requires={"condition"},wear="worn",denyWords={"Dead","Bag_"},
         anyCategory={"Tool","Household","Cooking","Gardening","Electronics",
                      "Communications","Container","Security","Junk","Memento"},
         text="belongs somewhere other than where it was found"},
