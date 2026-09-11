@@ -177,8 +177,9 @@ cautious: none of these may ever be presented as proof of what happened.
 3. **Placement carries the meaning.** The same object is furniture in one room
    and evidence in another, so room affinity does the work here that prose does
    for documents.
-4. **Never rewrite what a player's world already contains.** These are placed,
-   like every other piece of evidence - vanilla loot is left alone.
+4. ~~Never rewrite what a player's world already contains.~~ **Withdrawn by the
+   owner, 2026-09-11.** The mod may change things the world already holds -
+   name a zombie, fill a diary, add a card to a pocket. See DECISIONS.md.
 5. **`blood` is unverified.** `setBloodLevel` exists on the installed jar. That
    it survives a save is an assumption until somebody proves it. Until then, a
    bloodied object must be the kind of thing that still reads as evidence

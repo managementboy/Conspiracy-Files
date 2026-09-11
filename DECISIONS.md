@@ -266,3 +266,32 @@ Owner requests native-like notebook window memory: remember placement/size and w
 **P4-R68 — variable evidence and local people.** Owner explicitly rejects seven fixed clues and fixed evidence types. Earlier object examples were suggestions, not a mandatory checklist. Audit installed game objects for mystery roles and actual usable mechanics; choose evidence count/types around each coherent mystery, required connections and available placements. No new numerical min/max approved yet. The three/four building split is an implementation limitation to remove with this change, not a design requirement.
 
 Nearby zombie/corpse names and occupations should participate in generated mysteries. Reuse available existing names; occupations may be authored consistently per P4-R65 where native profession is default/unknown. Keep chosen world facts stable and reveal them only through observed evidence. Clues may begin without a known person and acquire inferred connections later. Owner example: unnamed clue in101 Main St; later a key found on a named zombie actually opens that house, providing a connection from person to place and earlier clue. Record observed key provenance, verified key/lock relationship, and derived interpretation separately. Access supports association, not necessarily residence, ownership or authorship. Preserve original clue text and discovery context; add new journal interpretation rather than retrospectively inventing a name on the original object. Implement/test functioning native key relationship before claiming it works.
+
+## The mod may change what the world already contains — 2026-09-11
+
+**Decision (owner):** "we have broken that rule a lot since we started
+developing this mod. So remove that constraint from our project."
+
+**Withdrawn:** "never rewrite what a player's world already contains" - the rule
+that the mod only ever placed its own evidence and left vanilla loot alone.
+
+**Why it no longer held.** It had already been broken, deliberately, several
+times: a nearby zombie is given the case person's name and an ID card
+(CasePerson), placed evidence sets its own display category, and the survivor's
+papers are a vanilla photo album renamed. Each was the right call for the
+investigation, and a rule that is routinely broken for good reasons is not a
+rule; it is a trap for whoever reads it next.
+
+**What this allows.** Filling an empty vanilla diary with a looted person's
+story; naming and equipping zombies; changing vanilla items where that serves a
+case.
+
+**What still holds, and is a different rule.** Never delete, reset or rewrite a
+player's SAVE, and never do it for them. That concerns their save file and is
+unaffected by this decision.
+
+**The cost, stated so it is chosen rather than forgotten.** Once the mod edits
+vanilla items, a player can no longer assume that anything they find is simply
+the game's. For an investigation mod that ambiguity is arguably a feature. It
+does mean the notebook's own restraint matters more, not less: an edited item
+may still only ever say what it says, never what it proves.

@@ -45,8 +45,7 @@ or keep a dead case occupying one of the four active slots forever.
 3. **Leave the documents exactly where they are.** Do not delete, do not
    relocate on abandonment. If the player passes that building in three weeks,
    the clue is still in the drawer, and finding it then is a better moment than
-   any the mod could have engineered. This also respects the rule that we never
-   rewrite what a player's world already contains.
+   any the mod could have engineered.
 4. **Keep what was learned.** Everything already in the notebook stays, in
    order. Going cold on a trail does not unlearn it.
 5. **Stay reversible.** A cold trail that the player stumbles back into should
