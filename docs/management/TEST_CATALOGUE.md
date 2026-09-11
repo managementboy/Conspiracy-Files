@@ -18,11 +18,11 @@ persistence · P3 edges, polish, performance headroom.
 
 ## Infrastructure the tests need
 
-- **INF-01** [P1] Reload: restart the game into the *same* save (`start --continue`), so save/reload tests run unattended. ◻
+- **INF-01** [P1] Reload: restart the game into the *same* save (`start --continue`), so save/reload tests run unattended. ✅ `pz.sh start --continue`, `stop --save`
 - **INF-02** [P1] Core-loop driver: find each placed document, walk/teleport to it, open its container through the loot panel, take it, choose "Inspect Investigation Evidence" from the real right-click menu. ✅ `checks/core_loop.sh` (cars via the vehicle menu)
 - **INF-03** [P2] Walking instead of teleporting (T8: teleports emit no OnPlayerMove), for arrival tests. ◻
 - **INF-04** [P2] Time control: advance world hours or shorten policy gaps for 24 h scheduling and 72 h relocation. ◻
-- **INF-05** [P2] Player death on demand (god mode off, then kill), for E10. ◻
+- **INF-05** [P2] Player death on demand, respawn through the post-death panel. ✅ `checks/death.sh`
 - **INF-06** [P2] Frame-cost sampling from `GeneratedRuntime.metrics()` / `Runtime.metrics()` during scripted play. ◻
 - **INF-07** [P3] Writing tool in inventory (map markers need one). ✅ `CFLoop.givePen`
 - ✅ Boot check, wallet check, eval channel, unit runner with engine compile (2026-09-11).
@@ -30,7 +30,7 @@ persistence · P3 edges, polish, performance headroom.
 ## A. Case generation
 
 - **CG-01** [A][P1] A case commits in the starting house under the 500 KB budget. ✅ live 09-05/06; ✅ Linux 09-11 (case active after indoor start) — G2_PLAYABLE_TRIAL
-- **CG-02** [A][P1] Reload never rerolls an existing case (same documents, same places). ✅ live — needs INF-01 for a Linux run
+- **CG-02** [A][P1] Reload never rerolls an existing case (same documents, same places). ✅ live; ✅ Linux 09-11 (`checks/reload.sh`, 3 reloads)
 - **CG-03** [U][P3] 100-seed sample: ≥2 location pairs, both outline kinds. ✅ offline — evidence/2026-09-05-g1
 - **CG-04** [U][P3] Same seed gives the same case whatever the catalogue order. ◻ partial offline
 - **CG-05** [S][P2] Generated mode switches off the authored Dead Air runtime, which blocks E07. ❌ — TESTING_PLAN_TO_V1 S6
@@ -38,7 +38,7 @@ persistence · P3 edges, polish, performance headroom.
 - **CG-07** [A][P1] Two or more cases coexist with continuous global numbering. ✅ live 09-06
 - **CG-08** [S][P3] Local links: 3–7 clues, three core relationships, first office copy unsigned. ◻ — LOCAL_LINKS_ACCEPTANCE
 - **CG-09** [A][P1] Retirement at MAX_CASES=8 keeps the save under budget and never retires a case with undiscovered documents. ◻ never run natively — CASE_RETIREMENT
-- **CG-10** [A][P2] A save from an older generator revision is refused with a plain error, not a crash. ✅ live
+- **CG-10** [A][P2] A save from an older generator revision is refused with a plain error, not a crash. ✅ live; ✅ Linux 09-11 (g10 save under g11: "Saved case refused", no crash; P4-R77)
 - **CG-11** [S][P2] Empty persisted-intent recovery gap. ❌ — GENERATED_INVESTIGATION_PROTOTYPE
 - **CG-12** [U][P2] Reach tiers 250/500/1000/1500 by survival hours; never widen for scarcity; restore never re-filters. ◻ partial offline (P4-R55)
 - **CG-13** [O][P3] No solved-state, objective or completion markers appear. ◻
@@ -53,7 +53,7 @@ persistence · P3 edges, polish, performance headroom.
 - **AS-01** [A][P1] First case opens in the starting house, no console. ✅ Linux 09-11
 - **AS-02** [A][P1] A later case appears after 24 in-game hours. ◻ — needs INF-04
 - **AS-03** [A][P2] The cap on retained cases holds; no completion needed for the next one. ◻ partial
-- **AS-04** [A][P2] Save/reload does not reset the 24 h clock; a failed commit does not advance it. ◻ mock only
+- **AS-04** [A][P2] Save/reload does not reset the 24 h clock; a failed commit does not advance it. ✅ first half, Linux 09-11 (schedule unchanged over 3 reloads)
 - **AS-05** [S][P3] Leaving the building during preparation aborts/retries rather than committing the wrong site. ◻
 - **AS-06** [S][P2] Resolve the doc conflict: is automatic scheduling live? (LIVE_SESSION_2026-09-06 vs AUTOMATIC_INVESTIGATIONS) ◻
 
@@ -77,7 +77,8 @@ persistence · P3 edges, polish, performance headroom.
 - **VC-02** [A][P1] One car is never a candidate for two case sites (the "repeated physical container" crash). ↺ ef51729
 - **VC-03** [A][P1] The proximity hint reaches around a car, not only its middle square. ↺ 7983376
 - **VC-04** [O][P3] Vehicle identity and boot contents survive save/reload. ✅ owner-observed 09-09
-- **VC-05** [A][P1] A clue found in a car's glove box gets a map mark. ◻ seen "historical finding location unavailable" 09-11, but the taker was outside the car; re-test seated
+- **VC-05** [A][P1] A clue found in a car's glove box gets a map mark. ❌ car containers have no grid square → fixed ee58ce3 (vehicle's square); unit-tested, live ◻ until a soak run meets a car clue
+- **VC-06** [A][P2] A clue in a LOCKED car: placement does not consider locks; the player needs the key or a broken window. ◻ reported as a FINDING by the core loop when met
 
 ## D. Identity, wallets, outfits, keys
 
@@ -95,7 +96,7 @@ persistence · P3 edges, polish, performance headroom.
 - **ID-14** [A][P2] Duplicate document deliberately reproduced for E05. ◻
 - **ID-15** [A][P2] Document in a vehicle for E05. ◻
 - **ID-16** [S][P3] ObservedKeyAdapter only matches the current case's own locations (dead code?). ❌ — AUDIT_2026-09-07
-- **ID-17/18/19** [A][P2] Every owner-named item type is observed: dog tags, passport, press ID, badge, diaries; `applyownername` tag form. ❌ coverage gap / ◻ — OWNER_NAMED_ITEMS
+- **ID-17/18/19** [A][P3] Every owner-named item type is observed. ❌ gap: dog tags (3 types) and KeyRing_SecurityPass are tagged `applyownername` but not watched; both rare in vanilla (dog tags only in keepsake cigar boxes, the pass only on Judge Matt Hass). Passport/press ID/badge display ◻
 - **ID-20** [O][P3] Identity "#1" visually collides with case entries "#1–3". ❌
 - **ID-21** [S][P3] Zombie descriptors expose names; professions all "unemployed". ✅ live 09-06
 - **ID-23** [—] Late-binding names. ⛔ not built (ROADMAP owner requests)
@@ -105,6 +106,7 @@ persistence · P3 edges, polish, performance headroom.
 - **ID-27** [A][P2] A key inside a keyring can be inspected. ◻
 - **ID-28/29** [S][P3] Detached house key for a building with a keyId; door interaction without altering the lock. ◻ — HOUSE_KEY_CONNECTION
 - **ID-30** [U][P1] A same-name ticket/credit card is not "another person's card". ✅ 36ebc2d, live 09-11 ("same name as the ID")
+- **ID-31** [U][P1] Object names from item ids: "C dplayer" → "CD player", "i dcard" → "ID card". ❌ found 09-11 → fixed 7a8c5f1, test/object_names.lua
 - **CN-01** [A][P1] Named zombie / case person: a zombie carries the case person's name and ID (09eb46f, CasePerson). ◻ live regression
 
 ## E. Notebook and UI
@@ -124,10 +126,10 @@ persistence · P3 edges, polish, performance headroom.
 - **NB-23** [U][P2] The journal never reorders, groups, renumbers or hides entries by default. ◻ regression watch
 - **NB-24–27** [O][P3] T12 layout/scroll/contrast items; T12 verdict pending. ❌/◻ (older T12 candidate)
 - **NB-28** [A][P1] Evidence category label is translated, not raw `IGUI_ItemCat_Evidence`. ↺ 767627a
-- **NB-29** [A][P1] The survivor's papers open automatically at start. ↺ 370c1d6; ❌ Linux 09-11 log: "papers not opened: the panel never offered them a button"
+- **NB-29** [A][P1] The survivor's papers open automatically at start. ❌ never worked (unequipped items get no panel button) → fixed ca9421e (held in a free off hand); ✅ boot check verifies every run
 - **NB-30** [A][P1] Completing a case does not make LocalPersonIntegration throw every tick. ↺ 3fe1813 ("worst failure so far"); ✅ Linux 09-11 core loop, 0 errors
 - **NB-31** [A][P1] Completing a case must not stop the next case, map marks or hints. ❌ found 09-11 → fixed 3553fc9, ✅ core loop (second case appears, retired marks drawn)
-- **NB-32** [S][P2] A document's list subtitle matches what it is (a staff photograph was subtitled "Handwritten cover letter", 09-11). ◻ investigate
+- **NB-32** [S][P2] A document's list subtitle matches what it is. ❌ a staff photograph was a letter → fixed 7a8c5f1 (real Base.Photo, generator g11). Open for the owner: record/statement/notice still subtitled "Handwritten cover letter"
 
 ## F. Map markers and writing tools
 
@@ -160,12 +162,12 @@ persistence · P3 edges, polish, performance headroom.
 ## I. Persistence, reload, death
 
 - **PS-01–06** [S][P3] T1 ModData rules: plain tables survive; cycles lose everything silently; functions/metatables dropped. ✅ live 42.20.4 (rules; guard in SaveBudget)
-- **PS-07** [A][P1] Clean round-trip keeps notebook order, text and ordinals; encoded size unchanged (E09). ◻ — INF-01
-- **PS-08** [A][P1] Three reloads do not grow the budget total (E09). ◻ — INF-01
+- **PS-07** [A][P1] Clean round-trip keeps notebook order, text and ordinals; encoded size unchanged (E09). ✅ Linux 09-11
+- **PS-08** [A][P1] Three reloads do not grow the budget total (E09). ✅ Linux 09-11 (flat at 168,768 bytes)
 - **PS-09** [A][P2] Abrupt kill: the last good root survives, nothing corrupted (E09). ◻ — kill -9 via pz.sh
-- **PS-10** [A][P2] Death after discoveries: intact, ordered; new notebook with the new forename; no recap (E10). ◻ — INF-05
+- **PS-10** [A][P2] Death after discoveries: intact, ordered; new notebook with the new forename; no recap (E10). ✅ Linux 09-11; found and fixed: the respawned survivor got no papers (4d23f76)
 - **PS-11** [A][P2] Death mid-discovery: fully recorded or fully absent (E10). ◻
-- **PS-12** [A][P2] A document recovered from the player's own corpse is the same evidence, not a duplicate (E10). ◻
+- **PS-12** [A][P2] A document recovered from the player's own corpse is the same evidence, not a duplicate (E10). ✅ Linux 09-11
 - **PS-14/15** [S][P3] Stamp survives all moves with reload; OnPlayerDeath carries it to the corpse. ✅ live 42.20.4
 - **PS-16** [S][P3] Corpse persistence when reloading an already-dead character. ◻
 
@@ -238,3 +240,4 @@ no injected helpers.
 
 - 2026-09-11 — Catalogue written. Linux: boot ✅ ×3, wallet ✅ ×2 (a0e0dcf shows the same-name fix live). Unit suite all green (53 specs, 96 standalone, 85/85 engine compile).
 - 2026-09-11 — Core loop check built and passing. It found that completing a case stopped the next case, map marks and hints (NB-31, fixed 3553fc9). DevEval now runs while paused. DEV-0.24.6-retired passed the boot check and was published to the unlisted Workshop item.
+- 2026-09-11 evening — Reload and death checks built and passing (PS-07/08/10/12, CG-02/10). Found and fixed: papers never opened (NB-29), respawned survivor without papers, car clues without a map mark (VC-05), wrong object names and the photograph-as-letter (generator g11, needs a new game). DEV-0.25.0-names published.
