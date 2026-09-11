@@ -46,3 +46,23 @@ assert(B.check('keyConnections',{canonical={schema=1}}))
 db['ConspiracyFiles.KeyConnections']={canonical=cycle}
 assert(not B.check('markers',{}),'unsafe key observation peers reject other writes')
 print('PASS key connections shared budget accounting')
+
+-- Unchanged stores are not walked again on every write (20-50 ms per write on
+-- the Linux test laptop, 2026-09-11); a replaced canonical is measured afresh.
+do
+    local V = require('ConspiracyFiles/Validator')
+    local walks, real = 0, V.estimateEncodedBytes
+    V.estimateEncodedBytes = function(root) walks = walks + 1; return real(root) end
+    db['ConspiracyFiles.KeyConnections'] = { canonical = { schema = 1 } }
+    local B2 = dofile('mod/common/media/lua/client/ConspiracyFiles/SaveBudget.lua')
+    assert(B2.check('markers', { schema = 1, records = {} }))
+    local first = walks
+    assert(B2.check('markers', { schema = 1, records = {} }))
+    assert(walks - first <= 1, 'only the staged root is measured again, walked ' .. (walks - first))
+    db['ConspiracyFiles.KeyConnections'].canonical = { schema = 1, extra = true }
+    local before = walks
+    B2.check('markers', { schema = 1, records = {} })
+    assert(walks - before >= 2, 'a store whose canonical was replaced is measured afresh')
+    V.estimateEncodedBytes = real
+    print('PASS save budget: unchanged stores are not re-walked on every write')
+end

@@ -33,6 +33,7 @@ end
 reset()
 package.loaded['ConspiracyFiles/Generated/SuccessiveCases']={
     current=function(store) return store.campaign end,
+    currentCached=function(store) return store.campaign end,
     sessions=function(wrapper) return {wrapper.canonical} end}
 ModData={get=function(tag) return db[tag] end,getOrCreate=function(tag) db[tag]=db[tag] or {};return db[tag] end}
 getPlayer=function() return player end

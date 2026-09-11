@@ -124,7 +124,7 @@ local function step()
     nextPoll=now+500
     -- Cases.current fully revalidates the canonical case, so it must stay
     -- behind the poll gate rather than running once per rendered frame.
-    local wrapper=Cases.current(ModData.get("ConspiracyFiles.Generated.G2"))
+    local wrapper=Cases.currentCached(ModData.get("ConspiracyFiles.Generated.G2"),getTimeInMillis and getTimeInMillis())
     local roots=wrapper and Cases.sessions(wrapper)
     if not roots or #roots==0 then return end
     for key,t in pairs(visits) do if not near(p,t,FORGET_RADIUS) then visits[key]=nil end end

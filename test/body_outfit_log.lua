@@ -32,6 +32,7 @@ getCell=function() return {getGridSquare=function() return nil end} end
 InventoryItemFactory={CreateItem=function() error("no case binding needed for this test") end}
 package.loaded['ConspiracyFiles/Generated/SuccessiveCases']={
     current=function() return nil end,
+    currentCached=function() return nil end,
     sessions=function() return {} end}
 ConspiracyFiles={GeneratedRuntime={metrics=function() return {} end,known=function() return {} end}}
 

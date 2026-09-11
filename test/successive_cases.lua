@@ -32,3 +32,20 @@ assert(not A.validate(staged),'global order cannot grant unknown evidence')
 table.remove(staged.successive.discoveries)
 assert(A.validate(staged))
 print('PASS campaign envelope and fabricated discovery rejection')
+
+-- currentCached revalidates only when the stored tables change or the cache is
+-- ten minutes old (the map markers called current() several times a frame).
+do
+    local calls, real = 0, A.current
+    A.current = function(store) calls = calls + 1; return real(store) end
+    local store = { campaign = { canonical = {} } }
+    A.currentCached(store, 1000); A.currentCached(store, 1500); A.currentCached(store, 2000)
+    assert(calls == 1, "same tables within a minute: validated once, got " .. calls)
+    store.campaign = { canonical = {} }
+    A.currentCached(store, 2500)
+    assert(calls == 2, "a write replaces the table, so it validates again")
+    A.currentCached(store, 2500 + A.CACHE_MS + 1)
+    assert(calls == 3, "and again once the cache is ten minutes old")
+    A.current = real
+    print("PASS successive cases: current() is cached until the store changes")
+end

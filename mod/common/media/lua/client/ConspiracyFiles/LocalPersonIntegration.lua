@@ -85,7 +85,7 @@ local function save(staged)
     ModData.getOrCreate(TAG).canonical=staged
 end
 local function cases()
-    local wrapper=Cases.current(ModData.get("ConspiracyFiles.Generated.G2") or {})
+    local wrapper=Cases.currentCached(ModData.get("ConspiracyFiles.Generated.G2") or {},getTimeInMillis and getTimeInMillis())
     local all=wrapper and Cases.sessions(wrapper) or {}
     -- A retired case keeps only the evidence rows the notebook renders: its
     -- documents, identities and case envelope are deliberately discarded once

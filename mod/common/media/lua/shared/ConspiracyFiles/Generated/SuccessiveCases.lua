@@ -71,6 +71,32 @@ function M.current(store)
  if store.canonical~=nil then local w={canonical=store.canonical};local ok,why=M.validate(w);if not ok then return nil,why end;return w end
  return nil,"no generated case"
 end
+-- Validation re-derives every case from its seed: about 20 ms on the Linux
+-- test laptop. The map markers called M.current several times per rendered
+-- frame and once a second in play - a 20 ms stall each time (Linux perf check,
+-- 2026-09-11). Hot paths use this instead: it revalidates only when the stored
+-- tables change (every write replaces them) or when the last validation is
+-- older than ten minutes, as a backstop (only swap() writes the store). `now` is the caller's clock in ms, so
+-- this module stays engine-free.
+local memo={}
+M.CACHE_MS=600000
+function M.currentCached(store,now)
+ if type(store)~="table" then return nil,"generated store missing" end
+ if memo.store==store and memo.campaign==store.campaign and memo.canonical==store.canonical
+  and type(now)=="number" and memo.at and now-memo.at<M.CACHE_MS and now>=memo.at then
+  return memo.wrapper,memo.why
+ end
+ local wrapper,why=M.current(store)
+ memo={store=store,campaign=store.campaign,canonical=store.canonical,at=now,wrapper=wrapper,why=why}
+ return wrapper,why
+end
+-- A writer that has just validated what it stores says so, and the next
+-- cached read does not validate the same tables again (22 ms after each write).
+function M.remember(store,now)
+ if type(store)~="table" then return end
+ memo={store=store,campaign=store.campaign,canonical=store.canonical,at=now,
+  wrapper=store.campaign or (store.canonical and {canonical=store.canonical}),why=nil}
+end
 function M.validate(wrapper)
  local safe=V.validateStructure(wrapper); if not safe or not fields(wrapper,{canonical=true,successive=true,schedule=true}) then return false,"unsupported generated wrapper" end
  if wrapper.canonical==nil then return false,"legacy canonical required" end

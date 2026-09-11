@@ -192,6 +192,8 @@ local function swap(next)
     next=copyValue(next)
     checked(Cases.validate(next)); checked(Budget.check("generatedCampaign",next))
     local store=ModData.getOrCreate(TAG); store.campaign=next; wrapper=next
+    -- Validated just above: the cached readers need not validate it again.
+    pcall(Cases.remember,store,getTimeInMillis and getTimeInMillis())
 end
 local function openAll()
     -- Replacing the session set invalidates queued closures over old APIs.

@@ -1083,7 +1083,9 @@ local function allowed()
  return getDebug and getDebug() and not (isClient and isClient()) and not (isServer and isServer())
   and not ConspiracyFiles.T11Mode and not ConspiracyFiles.T12Mode
 end
-local function wrapper() local w=ModData.get("ConspiracyFiles.Generated.G2");return w and Cases.current(w) end
+-- Cached: validating the store every call cost ~20 ms, several times a frame
+-- while the map was open (see SuccessiveCases.currentCached).
+local function wrapper() local w=ModData.get("ConspiracyFiles.Generated.G2");return w and Cases.currentCached(w,getTimeInMillis and getTimeInMillis()) end
 local function session(id)
  local w=wrapper();return w and (id and Cases.find(w,id) or w.canonical)
 end

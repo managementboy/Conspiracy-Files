@@ -94,7 +94,7 @@ end
 local function caseFor(building)
     local ok,phrase=pcall(function()
         local Cases=require("ConspiracyFiles/Generated/SuccessiveCases")
-        local wrapper=Cases.current(ModData.get("ConspiracyFiles.Generated.G2"))
+        local wrapper=Cases.currentCached(ModData.get("ConspiracyFiles.Generated.G2"),getTimeInMillis and getTimeInMillis())
         for _,r in ipairs(wrapper and Cases.sessions(wrapper) or {}) do
             local case=r.case
             if case and case.locations then

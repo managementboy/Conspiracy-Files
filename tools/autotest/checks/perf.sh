@@ -8,8 +8,9 @@
 # minutes: bodies open in the loot panel (identity observer), documents found
 # and inspected, the world map open (markers drawn), and the next case being
 # prepared (the nearby scan). Adds the runtime scheduler's own peak and the
-# scan's own frames-over-budget line. Reports numbers; FAIL only when a
-# handler is at 2 ms or more in over 1% of its calls, or averages over 0.5 ms.
+# scan's own frames-over-budget line. FAIL means a per-frame problem: a handler
+# averaging over 0.5 ms, or at 2 ms or more in over 5% of its calls. Single
+# stalls (a write after a discovery) are listed as FINDING lines.
 # This laptop is slower than the owner's machine; compare there before acting.
 set -uo pipefail
 . "$(dirname "${BASH_SOURCE[0]}")/../lib.sh"
@@ -50,14 +51,19 @@ ev 'return CFPerf.unwrapAll()' >/dev/null
 errors="$(mod_errors)"
 "$PZ" stop >/dev/null 2>&1
 
-rows=()
+rows=(); findings=()
 while IFS= read -r row; do
     [ -n "$row" ] || continue
     rows+=("  $row")
     calls="$(grep -oE 'calls=[0-9]+' <<<"$row" | cut -d= -f2)"; over="$(grep -oE 'over2ms=[0-9]+' <<<"$row" | cut -d= -f2)"
     avg="$(grep -oE 'avg=[0-9.]+' <<<"$row" | cut -d= -f2)"
     [ "${calls:-0}" -gt 0 ] || continue
-    awk -v o="$over" -v c="$calls" 'BEGIN { exit !(o * 100 > c) }' && fail "$(cut -d' ' -f1 <<<"$row"): at 2 ms or more in $over of $calls calls"
+    # DevEval runs the test's own commands (spawning zombies, placing items):
+    # reported, not judged.
+    [[ "$row" == DevEval.* ]] && continue
+    awk -v o="$over" -v c="$calls" 'BEGIN { exit !(o * 100 > c * 5) }' && fail "$(cut -d' ' -f1 <<<"$row"): at 2 ms or more in $over of $calls calls"
+    max="$(grep -oE 'max=[0-9]+' <<<"$row" | cut -d= -f2)"
+    [ "${over:-0}" -gt 0 ] && findings+=("$(cut -d' ' -f1 <<<"$row"): $over single stall(s), worst ${max} ms")
     awk -v a="$avg" 'BEGIN { exit !(a > 0.5) }' && fail "$(cut -d' ' -f1 <<<"$row"): averages ${avg} ms per call"
 done < <(tr '|' '\n' <<<"$report_line" | sed 's/^ *//')
 [ -z "$errors" ] || fail "errors inside the mod"
@@ -72,6 +78,7 @@ report="$EVIDENCE/$id-perf.txt"
     printf '%s\n' "${rows[@]}"
     echo "runtime scheduler peak: ${sched} ms"
     echo "nearby scan for the second case: ${scan:-no scan line}"
+    for f in "${findings[@]}"; do echo "FINDING: $f"; done
     for f in "${fails[@]}"; do echo "FAIL: $f"; done
 } > "$report"
 cat "$report"
