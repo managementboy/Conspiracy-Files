@@ -158,7 +158,29 @@ assert(idRow:find("another person's card, kept", 1, true), idRow)
 assert(cardRow:find("names somebody else", 1, true), cardRow)
 assert(cardRow:find("not that they met", 1, true), "carrying a card is not meeting someone")
 
+-- But a ticket with the SAME name as the ID beside it is the bearer's own, not
+-- "another person's card" (Linux wallet check, 2026-09-11: Linnie Weis's own
+-- speeding ticket was described as somebody else's).
+local own = {
+    schema = 1,
+    records = {
+        { id = "Base.IDcard_Female:1", fullType = "Base.IDcard_Female", label = "ID Card: Linnie Weis",
+          source = "container", container = "Wallet", token = "corpse-wallet:5",
+          x = 1, y = 2, z = 0, observedAt = 1 },
+        { id = "Base.SpeedingTicket:2", fullType = "Base.SpeedingTicket", label = "Speeding Ticket: Linnie Weis",
+          source = "container", container = "Wallet", token = "corpse-wallet:5",
+          x = 1, y = 2, z = 0, observedAt = 2 },
+    },
+}
+local ownRows = M.rows(own)
+assert(not ownRows[1].detailText:find("another person", 1, true), ownRows[1].detailText)
+assert(ownRows[1].detailText:find("Speeding Ticket: Linnie Weis (same name as the ID)", 1, true), ownRows[1].detailText)
+assert(not ownRows[2].detailText:find("names somebody else", 1, true), ownRows[2].detailText)
+assert(ownRows[2].detailText:find("same name as the ID it was found with", 1, true), ownRows[2].detailText)
+assert(ownRows[2].detailText:find("not either of them to the body", 1, true), "still no claim about the body")
+
 -- And it still refuses to say whose body it is.
+for _, row in ipairs(ownRows) do walletRows[#walletRows + 1] = row end
 for _, row in ipairs(walletRows) do
     assert(not row.detailText:lower():find("the body is", 1, true), row.detailText)
 end

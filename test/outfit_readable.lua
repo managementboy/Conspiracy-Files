@@ -29,6 +29,12 @@ end
 -- "generic" would lose it, which is why the rule judges the leading word.
 assert(M.readable('Cook_Generic') ~= nil, 'Cook_Generic identifies a cook and must survive')
 
+-- An id that describes the person, not the clothes. "Young" reached the
+-- notebook as "The body itself wore: young." (Linux wallet check, 2026-09-11).
+-- Exact match only: YoungCowpoke is still an outfit.
+assert(M.readable('Young') == nil, 'Young describes the person, not what they wore')
+assert(M.readable('YoungCowpoke') == 'young cowpoke', tostring(M.readable('YoungCowpoke')))
+
 -- Readable: real outfits become ordinary words.
 local expected = {
     ConstructionWorker = 'construction worker',

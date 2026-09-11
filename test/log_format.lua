@@ -63,7 +63,9 @@ Log.level = "i"
 
 -- And no client module may go back to printing its own prefix. That is the
 -- regression that produced twenty-two vocabularies, one cheap change at a time.
-local handle = io.popen("grep -rln 'print(\"\\[CF' mod/common/media/lua/client/ConspiracyFiles/ 2>/dev/null | wc -l")
+-- One exception, by name: DevEval's [CF-EVAL <id>] lines are a wire format that
+-- tools/cf_eval.sh parses, not log lines, so they must not change shape.
+local handle = io.popen("grep -rln 'print(\"\\[CF' mod/common/media/lua/client/ConspiracyFiles/ 2>/dev/null | grep -v '/DevEval.lua$' | wc -l")
 local strays = tonumber(handle:read("*a")) or 0
 handle:close()
 assert(strays == 0, strays .. " client module(s) still print their own prefix instead of using Log")

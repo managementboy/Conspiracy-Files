@@ -77,6 +77,7 @@ end
 -- "construction worker" - because a lead the player cannot read is no better
 -- than one they never got.
 local UNINFORMATIVE={["generic"]=true,["default"]=true,["naked"]=true,["nude"]=true,["bullet"]=true}
+local NOT_CLOTHING={["young"]=true}
 function M.readable(name)
     if type(name)~="string" then return nil end
     local trimmed=name:gsub("^%s+",""):gsub("%s+$","")
@@ -90,6 +91,10 @@ function M.readable(name)
     -- which reached a player on 2026-09-09 as "generic skirt".
     local head=trimmed:match("^%u%l+") or trimmed:match("^%a+") or trimmed
     if UNINFORMATIVE[head:lower()] then return nil end
+    -- Whole ids that describe the person, not the clothes. "Young" reached the
+    -- notebook as "The body itself wore: young." (Linux wallet check,
+    -- 2026-09-11). Exact match only: "YoungCowpoke" still describes an outfit.
+    if NOT_CLOTHING[trimmed:lower()] then return nil end
     -- CamelCase and underscores into words, without disturbing an id that is
     -- already one plain word.
     local spaced=trimmed:gsub("_"," "):gsub("(%l)(%u)","%1 %2"):gsub("(%u)(%u%l)","%1 %2")

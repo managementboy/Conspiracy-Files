@@ -122,14 +122,37 @@ function M.rows(root,outfitFor,placeFor)
     if other.id~=r.id then others[#others+1]=other end
    end
    if #others>0 then
+    -- Compare the names, not just the kinds. A ticket or credit card usually
+    -- names the person it was issued to, so beside an ID with the SAME name it
+    -- is not "another person's card". Linnie Weis's own speeding ticket, in her
+    -- own wallet next to her own ID, was called exactly that (Linux wallet
+    -- check, 2026-09-11). A different name keeps the business-card reading.
+    local bearerNames={}
+    local function nameOf(label) return type(label)=="string" and label:match(": (.+)$") or nil end
+    if BEARER[r.fullType] and nameOf(r.label) then bearerNames[nameOf(r.label)]=true end
+    for _,other in ipairs(others) do
+     if BEARER[other.fullType] and nameOf(other.label) then bearerNames[nameOf(other.label)]=true end
+    end
+    local function sameAsBearer(record)
+     local name=nameOf(record.label)
+     return name~=nil and bearerNames[name]==true
+    end
     local names={}
     for _,other in ipairs(others) do
-     names[#names+1]=other.label..(BEARER[other.fullType] and "" or " (another person's card, kept)")
+     local note=""
+     if not BEARER[other.fullType] then
+      note=sameAsBearer(other) and " (same name as the ID)" or " (another person's card, kept)"
+     end
+     names[#names+1]=other.label..note
     end
     table.sort(names)
     detail=detail.." The same one carried: "..table.concat(names,"; ").."."
     if not BEARER[r.fullType] then
-     detail=detail.." A card like this one names somebody else - it says it was carried, not that they met."
+     if sameAsBearer(r) then
+      detail=detail.." It carries the same name as the ID it was found with. That ties the two documents together, not either of them to the body."
+     else
+      detail=detail.." A card like this one names somebody else - it says it was carried, not that they met."
+     end
     end
    end
   end
