@@ -41,9 +41,9 @@ local function fakeVehicle(x, y, partIds)
                      getY = function() return vehicle.at.y end,
                      getZ = function() return vehicle.at.z end }
         end,
-        getParts = function()
-            return { getPartById = function(_, id) return parts[id] end }
-        end,
+        -- The vehicle itself answers getPartById. getParts() is deliberately
+        -- absent: the VehicleParts it returns in game cannot be indexed from Lua.
+        getPartById = function(_, id) return parts[id] end,
         parts = parts,
     }
     return vehicle

@@ -61,11 +61,13 @@ World.BODY_WEIGHT=20
 -- reproducible.
 function World.vehicleParts(vehicle)
     local out={}
-    if not vehicle or not vehicle.getParts then return out end
-    local parts=vehicle:getParts()
-    if not parts or not parts.getPartById then return out end
+    -- Ask the VEHICLE for each part. getParts() returns VehicleParts, a class
+    -- Lua cannot index at all ("attempted index: getPartById of non-table",
+    -- 2026-09-11 playtest); BaseVehicle answers getPartById itself, which is
+    -- how vanilla does it (Trailer3Scenario_Arrival.lua:87).
+    if not vehicle or not vehicle.getPartById then return out end
     for _,id in ipairs(World.VEHICLE_PARTS) do
-        local part=parts:getPartById(id)
+        local part=vehicle:getPartById(id)
         local container=part and part.getItemContainer and part:getItemContainer()
         if container then
             out[#out+1]={part=id,container=container,

@@ -46,7 +46,7 @@ CHECKS=(
   # why these are checked rather than assumed: everything the mod places today
   # is addressed by a grid square that cannot walk away.
   "zombie.iso.IsoCell:getVehicles:finding the vehicles near a site at all"
-  "zombie.vehicles.BaseVehicle:getParts:reaching a vehicle's trunk, seats and glovebox"
+  "zombie.vehicles.VehiclePartOwner:getPartById:reaching a vehicle's trunk, seats and glovebox (declared on the interface BaseVehicle implements)"
   "zombie.vehicles.BaseVehicle:getId:the only stable handle on a vehicle that has moved"
   "zombie.vehicles.BaseVehicle:getSquare:where the vehicle is NOW, which is not where it was"
   "zombie.vehicles.BaseVehicle:isTrunkLocked:a locked boot is a lead, not an obstacle"
