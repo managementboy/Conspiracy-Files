@@ -87,6 +87,15 @@ function F.give(player)
         -- and nothing here pretends otherwise.
         item:setFavorite(true)
     end)
+    -- Hold them. The inventory panel gives a carried container a button only
+    -- while it is equipped (vanilla ISInventoryPage:refreshBackpacks: equipped,
+    -- or a key ring), so papers loose in the main inventory could never be
+    -- opened automatically: 370c1d6 waited for a button that never comes (Linux
+    -- run, 2026-09-11: "2 buttons: Inventory, Key Ring"). Only into a FREE off
+    -- hand - never take something out of the player's hand for this.
+    pcall(function()
+        if player:getSecondaryHandItem()==nil then player:setSecondaryHandItem(item) end
+    end)
     log("papers issued: "..tostring(F.titleFor(player)))
     -- Open it in the inventory panel. Not immediately: the item is added this
     -- very tick, and the panel only builds a button for a new container on a

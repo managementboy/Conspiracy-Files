@@ -192,4 +192,24 @@ getPlayer = function() return fresh2 end
 local F3 = dofile('mod/common/media/lua/client/ConspiracyFiles/CaseFile.lua')
 for _ = 1, F3.OPEN_ATTEMPTS + 50 do F3.onTick() end
 assert(F3.pendingOpen ~= nil, 'ticks spent waiting for the panel must not count toward giving up')
-print('PASS case file: the papers open as soon as the panel offers them, not before')
+-- Held, not loose: the panel only gives a carried container a button while it
+-- is equipped, so the papers go into a free off hand - and never displace
+-- whatever the player already holds there.
+local held
+local inv3 = { items = {} }; inv3.AddItem = later.AddItem; inv3.getItems = later.getItems
+local handsFree = { getInventory = function() return inv3 end,
+    getDescriptor = function() return { getForename = function() return "Ada" end } end,
+    getSecondaryHandItem = function(self) assert(self, 'colon call'); return held end,
+    setSecondaryHandItem = function(self, item) assert(self, 'colon call'); held = item end }
+local F4 = dofile('mod/common/media/lua/client/ConspiracyFiles/CaseFile.lua')
+local issued = F4.give(handsFree)
+assert(issued and held == issued, 'papers go into a free off hand, so the panel offers them a button')
+local torch = { name = 'torch' }
+held = torch
+local inv4 = { items = {} }; inv4.AddItem = later.AddItem; inv4.getItems = later.getItems
+local busy = { getInventory = function() return inv4 end,
+    getDescriptor = function() return { getForename = function() return "Bo" end } end,
+    getSecondaryHandItem = function() return held end,
+    setSecondaryHandItem = function(_, item) held = item end }
+assert(F4.give(busy) and held == torch, 'an occupied off hand is never emptied for the papers')
+print('PASS case file: the papers open as soon as the panel offers them, held in a free off hand')
