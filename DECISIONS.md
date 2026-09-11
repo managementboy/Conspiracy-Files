@@ -323,3 +323,23 @@ without asking first. Pushing, merging and publishing keep their existing rules.
 decisions in our project." Decisions go into this file (and a pointer into
 `AGENTS.md` where agents must see them), so every agent and session reads the
 same record, not one assistant's private memory.
+
+## Weekend autonomy — 2026-09-11
+
+**P4-R73 — keep working until the task list is done.** Owner: "always continue
+with tasks until you finish them", "dont wait for my confirmation on continuing
+testing", "you have the whole weekend to work through all possible scenarios".
+Claude works through the test catalogue (`docs/management/TEST_CATALOGUE.md`)
+without asking between steps, minds token usage, and splits work into
+subagents/threads where that is cheaper or faster.
+
+**P4-R74 — defects found by tests are fixed.** Owner chose: fix, re-test with
+the same test, commit. Questions of game design or tone are not decided by
+Claude; they are written up for the owner.
+
+**P4-R75 — push the branch.** Claude pushes `integration/v0.1-corrected-candidate`
+after each verified batch. No merges to `main`.
+
+**P4-R76 — publish passing builds.** A build that passes the Linux boot check
+may be published to the unlisted Workshop item (version bumped each time), so
+the Windows play machine has the latest build.

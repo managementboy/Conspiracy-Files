@@ -38,7 +38,7 @@ Before making any design or code change:
 
 - **P4-R63, owner decision 2026-09-06:** before mod version 1.0, old-save backwards compatibility is not required. Breaking changes may require fresh saves; do not spend effort on legacy readers/migrations/fallbacks solely for older versions. Announce fresh-save requirements. Keep current-build save integrity and never silently reset/delete saves. This overrides older cross-version compatibility handoffs.
 
-- **Owner decisions 2026-09-11 (P4-R69 to P4-R72 in DECISIONS.md):** commit finished, verified work without asking (pushing, merging and publishing unchanged); record every owner decision in DECISIONS.md; the Linux PC is dedicated to this mod.
+- **Owner decisions 2026-09-11 (P4-R69 to P4-R76 in DECISIONS.md):** commit finished, verified work without asking; record every owner decision in DECISIONS.md; the Linux PC is dedicated to this mod. Weekend autonomy: work through docs/management/TEST_CATALOGUE.md without waiting for confirmation, fix defects and re-test (design/tone questions go to the owner), push integration/v0.1-corrected-candidate after verified batches (never merge to main), publish builds that pass the Linux boot check to the unlisted Workshop item.
 
 - **Owner decision 2026-09-11, Linux auto-testing (P4-R69):** Claude may run the real game unattended on the Linux development machine with `tools/autotest/pz.sh`, and those runs count as evidence. This narrows the "no live game interaction while the owner is away" rule above to the Windows play machine. Attended Windows sessions keep their role for feel, Workshop delivery and owner acceptance. See `docs/management/LINUX_AUTOTEST.md`.
 
