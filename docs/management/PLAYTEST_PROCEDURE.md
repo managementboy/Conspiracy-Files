@@ -118,6 +118,34 @@ Claude watches it with `tools/fetch_logs.sh --live`, which reports whether the
 file is still growing before anything else: a stream that died looks exactly
 like a quiet game until you measure it.
 
+### Live Lua from the development machine (eval)
+
+For a debug single-player session where Claude needs to ask the running game
+something, start the stream with `-Eval` instead:
+
+    cd $env:USERPROFILE\Zomboid; .\stream_log.ps1 -Eval
+
+It prints `EVAL IS ON` once. Each loop it also fetches
+`dev/eval/inbox/cf_inbox.lua` from the development machine into
+`Zomboid\Lua\cf_inbox.lua`. The game's `DevEval` module checks that file about
+once a second and runs each new command once. On the development machine:
+
+    tools/cf_eval.sh 'return getPlayer():getX()'
+    tools/cf_eval.sh -f snippet.lua
+
+The result or error comes back through the streamed log, normally within about
+ten seconds. If nothing finishes in 30 seconds the script prints the log lines
+after the command started, which is where a compile error's stack trace shows up.
+
+- **Never start `stream_log.ps1` with `-Eval` in an attended acceptance
+  session.** Acceptance runs with no injected helpers (takeover audit, P4-R44).
+  Leaving the switch off gives the old behaviour exactly.
+- It only works with `-debug`, in single-player. Without `-debug` the module
+  registers nothing and reads no file.
+- A command left in the inbox from an earlier session is ignored at game start.
+  Each command runs at most once.
+- It runs through `reloadLuaFile` because B42 mod Lua has no `loadstring`.
+
 ### After the session
 
 Copy `tools/push_log.ps1` to the play machine once. After a session:

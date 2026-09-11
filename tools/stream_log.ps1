@@ -12,11 +12,20 @@
 #
 # Uses only the OpenSSH client, which Windows ships enabled. No elevation, and
 # no OpenSSH server on this machine.
+#
+#   .\stream_log.ps1 -Eval
+#
+# Also fetches the development machine's live Lua command (tools/cf_eval.sh)
+# into Zomboid\Lua\cf_inbox.lua on every loop, where the game's debug-only
+# DevEval module runs it. Off by default. Never use -Eval in an attended
+# acceptance session: those must run with no injected helpers.
 
 param(
     [string]$DevHost = "elkin@192.168.50.226",
     [string]$DevPath = "/home/elkin/Conspiracy-Files/dev/playtest-logs/incoming",
-    [string]$Zomboid = "$env:USERPROFILE\Zomboid"
+    [string]$Zomboid = "$env:USERPROFILE\Zomboid",
+    [switch]$Eval,
+    [string]$EvalInbox = "/home/elkin/Conspiracy-Files/dev/eval/inbox/cf_inbox.lua"
 )
 
 # $env:USERPROFILE is whichever account this shell runs as. Running from an
@@ -93,6 +102,20 @@ Write-Host "        -> ${DevHost}:$remote"
 Write-Host "Ctrl+C to stop." -ForegroundColor Green
 Write-Host ""
 
+if ($Eval) {
+    $evalDir   = Join-Path $Zomboid "Lua"
+    $evalLocal = Join-Path $evalDir "cf_inbox.lua"
+    # Fetched beside the target and moved into place, so the game never reads
+    # a half-copied file.
+    $evalPart  = Join-Path $evalDir "cf_inbox.lua.part"
+    $evalWarned = $false
+    New-Item -ItemType Directory -Force -Path $evalDir | Out-Null
+    Write-Host "EVAL IS ON: fetching ${DevHost}:$EvalInbox" -ForegroundColor Magenta
+    Write-Host "        -> $evalLocal" -ForegroundColor Magenta
+    Write-Host "Do not use -Eval in an attended acceptance session." -ForegroundColor Magenta
+    Write-Host ""
+}
+
 # Copy the whole file every few seconds rather than piping a follower into ssh.
 #
 # The obvious approach - Get-Content -Wait | ssh "cat >> file" - does not work.
@@ -121,6 +144,29 @@ while ($true) {
         }
     } catch {
         Write-Host "read failed: $($_.Exception.Message)" -ForegroundColor Yellow
+    }
+    # Eval never interrupts the log stream: a failure warns once per streak
+    # (no command sent yet is the normal case) and the loop carries on.
+    if ($Eval) {
+        try {
+            scp -q "${DevHost}:$EvalInbox" $evalPart 2>$null
+            if ($LASTEXITCODE -eq 0) {
+                if (-not (Test-Path $evalLocal) -or
+                    (Get-FileHash $evalPart).Hash -ne (Get-FileHash $evalLocal).Hash) {
+                    Move-Item -Force $evalPart $evalLocal
+                    Write-Host ("{0}  eval command fetched" -f (Get-Date -Format "HH:mm:ss"))
+                }
+                $evalWarned = $false
+            } elseif (-not $evalWarned) {
+                Write-Host "eval: no command fetched (none sent yet?); log stream continues" -ForegroundColor Yellow
+                $evalWarned = $true
+            }
+        } catch {
+            if (-not $evalWarned) {
+                Write-Host "eval: $($_.Exception.Message); log stream continues" -ForegroundColor Yellow
+                $evalWarned = $true
+            }
+        }
     }
     Start-Sleep -Seconds $interval
 }
