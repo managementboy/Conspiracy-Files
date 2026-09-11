@@ -1,0 +1,13 @@
+Linux core loop check 20260911T161031: PASS
+source: 6a2ef7e
+first case: 4 documents, all found and inspected through the right-click menu:
+  1. Delivery docket / WB-304, in vehicle GloveBox, room vehicle, floor 0 (container icon clicked: yes)
+  2. Attendance note / WB-304, in shelves, room livingroom, floor 0 (container icon clicked: yes)
+  3. Query sheet / WB-304, in shelves, room livingroom, floor 0 (container icon clicked: yes)
+  4. kneepad right military (1 of 6), in counter, room kitchen, floor 0 (container icon clicked: yes)
+notebook entries: 4; case completion reported: yes
+map marks without a pen (written/pending/missing): 0/4/0
+map marks after a pen, case already retired: 4/0/0
+second case appeared (gap removed): yes
+errors inside the mod: 0
+screenshot: dev/eval/linux/runs/20260911T161031-map.png (not committed)
