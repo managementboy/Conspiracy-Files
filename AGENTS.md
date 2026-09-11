@@ -38,6 +38,10 @@ Before making any design or code change:
 
 - **P4-R63, owner decision 2026-09-06:** before mod version 1.0, old-save backwards compatibility is not required. Breaking changes may require fresh saves; do not spend effort on legacy readers/migrations/fallbacks solely for older versions. Announce fresh-save requirements. Keep current-build save integrity and never silently reset/delete saves. This overrides older cross-version compatibility handoffs.
 
+- **Owner decisions 2026-09-11 (P4-R69 to P4-R72 in DECISIONS.md):** commit finished, verified work without asking (pushing, merging and publishing unchanged); record every owner decision in DECISIONS.md; the Linux PC is dedicated to this mod.
+
+- **Owner decision 2026-09-11, Linux auto-testing (P4-R69):** Claude may run the real game unattended on the Linux development machine with `tools/autotest/pz.sh`, and those runs count as evidence. This narrows the "no live game interaction while the owner is away" rule above to the Windows play machine. Attended Windows sessions keep their role for feel, Workshop delivery and owner acceptance. See `docs/management/LINUX_AUTOTEST.md`.
+
 - Target Project Zomboid Build 42; exact supported minor line must follow verified research.
 - Vanilla Lua first. Add ZombieBuddy/Java only for missing API access, measured performance, or persistence/data-processing complexity.
 - The domain core must have zero PZ runtime dependencies and be testable in plain Lua 5.1. All engine contact belongs behind integration adapters.

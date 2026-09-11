@@ -295,3 +295,31 @@ vanilla items, a player can no longer assume that anything they find is simply
 the game's. For an investigation mod that ambiguity is arguably a feature. It
 does mean the notebook's own restraint matters more, not less: an edited item
 may still only ever say what it says, never what it proves.
+
+## Linux auto-testing, commits and where decisions live — 2026-09-11
+
+**P4-R69 — Claude tests in the real game on the Linux development machine.**
+Owner: "auto-testing by you (claude) can be done on the machine", and asked
+whether those runs count as evidence: "absolutely". Claude may launch and drive
+the game unattended there with `tools/autotest/` (see
+`docs/management/LINUX_AUTOTEST.md`), and the reports in
+`docs/management/evidence/linux-autotest/` are evidence. This narrows "no live
+game interaction while the owner is away" to the Windows play machine. Attended
+Windows sessions keep their role: how the game feels, Workshop delivery, and
+owner acceptance.
+
+**P4-R70 — the Linux PC is dedicated to this mod.** Owner: "this PC is only for
+development of this mod. I could not care less if you use the display." Claude
+may use its screen, pointer and focus during test runs, and tune its game
+settings for testing (speed and screenshot readability over frame rate; owner:
+"fps should not be as important to you as for a real player"). The original
+settings are kept in `~/Zomboid/options.ini.before-autotest`.
+
+**P4-R71 — commit without asking.** Owner: "always auto commit when you think it
+is appropriate." Claude commits finished, verified work on the current branch
+without asking first. Pushing, merging and publishing keep their existing rules.
+
+**P4-R72 — owner decisions are stored in the project.** Owner: "store my
+decisions in our project." Decisions go into this file (and a pointer into
+`AGENTS.md` where agents must see them), so every agent and session reads the
+same record, not one assistant's private memory.
