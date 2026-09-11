@@ -44,6 +44,7 @@ local affinity={
     notebook={office=true,toolstore=true,garagestorage=true},
     diary={bedroom=true,livingroom=true},
     letter={bedroom=true,livingroom=true},
+    photograph={bedroom=true,livingroom=true,office=true},
     key={office=true,garagestorage=true,closet=true},
     idcard={bedroom=true,livingroom=true,office=true},
     creditcard={bedroom=true,livingroom=true,office=true},
@@ -55,7 +56,7 @@ local affinity={
 -- readable carrier is welcome in one, and the personal ones are at home in a
 -- seat as well.
 for kind in pairs(affinity) do affinity[kind].GloveBox=true end
-for _,kind in ipairs({"diary","letter","idcard","creditcard","businesscard","ticket"}) do
+for _,kind in ipairs({"diary","letter","photograph","idcard","creditcard","businesscard","ticket"}) do
     affinity[kind].SeatFrontRight=true; affinity[kind].SeatFrontLeft=true
 end
 

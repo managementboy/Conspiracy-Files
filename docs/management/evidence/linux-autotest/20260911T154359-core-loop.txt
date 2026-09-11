@@ -1,0 +1,14 @@
+Linux core loop check 20260911T154359: PASS
+source: ca9421e + uncommitted mod changes
+first case: 5 documents, all found and inspected through the right-click menu:
+  1. Internal directory / QS-804, in shelves (container icon clicked: yes)
+  2. Revised directory / QS-804, in shelves (container icon clicked: yes)
+  3. glass panel (1 of 12), in counter (container icon clicked: yes)
+  4. Tagged key / QS-804, in counter (container icon clicked: yes)
+  5. Shift notebook / QS-804, in counter (container icon clicked: yes)
+notebook entries: 5; case completion reported: yes
+map marks without a pen (written/pending/missing): 0/5/0
+map marks after a pen, case already retired: 5/0/0
+second case appeared (gap removed): yes
+errors inside the mod: 0
+screenshot: dev/eval/linux/runs/20260911T154359-map.png (not committed)

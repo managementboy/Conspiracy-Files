@@ -418,7 +418,7 @@ local P={
 {id="photograph-without-a-name",reviewOptional=true,title="The photograph with no caption",
  subject="the photograph",unknown="who the unnamed person is",
  orgs={"{A} Site Office","McCoy Logging Corp","Knox County Schools"},
- claim={kind="letter",title="Staff photograph / {CODE}",
+ claim={kind="photograph",title="Staff photograph / {CODE}",
   found="A workplace photograph, curling at two corners. On the reverse, names are written in a careful column with a pencil that has been sharpened partway down the list.",
   text="Record: {CODE}\nTaken at {A}, spring 1993.\nNames as written on the reverse.\nThe last line of the column is left blank, and the blank has been ruled off.",
   meaning="A photograph with one name short. Nobody knew the temporary staff member's surname is the likeliest answer, and it is an answer that leaves a person unaccounted for."},

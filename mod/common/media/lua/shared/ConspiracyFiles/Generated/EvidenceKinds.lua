@@ -25,6 +25,12 @@ local kinds={
  dispatch={fullType="Base.Note",label="Dispatch document",short="Dispatch",capacity="prose"},
  receipt={fullType="Base.Receipt",label="Receiving receipt",short="Receipt",capacity="prose"},
  letter={fullType="Base.LetterHandwritten",label="Handwritten cover letter",short="Letter",capacity="prose"},
+ -- A real photograph (vanilla Base.Photo, literature, ReadType photo). The staff
+ -- photograph premise borrowed `letter`, so a photograph was listed as a
+ -- "Handwritten cover letter" and lay in the world as a letter (2026-09-11).
+ -- Linux probe the same day: Base.Photo keeps a custom name, pages and ModData
+ -- across a save/reload, so it carries prose like the proven carriers.
+ photograph={fullType="Base.Photo",label="Photograph",short="Photo",capacity="prose"},
  notepad={fullType="Base.Notepad",label="Review notepad",short="Review",capacity="prose"},
  key={fullType="Base.Key1",label="Brass key",short="Key",capacity="prose"},
  diary={fullType="Base.Diary1",label="Personal diary",short="Diary",capacity="prose"},

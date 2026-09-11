@@ -10,7 +10,7 @@ local Catalogue=require("ConspiracyFiles/Generated/ObjectCatalogue")
 -- 1.0 callers must use a fresh save rather than reinterpret an existing case.
 -- MIN_EVIDENCE is two, not three: a claim and a record contradicting it is a
 -- whole case. See the review note in build().
-local G={REVISION="g10-onestory-1",SCHEMA=2,MIN_EVIDENCE=2,MAX_EVIDENCE=7}
+local G={REVISION="g11-honest-names-1",SCHEMA=2,MIN_EVIDENCE=2,MAX_EVIDENCE=7}
 local function copy(v) if type(v)~="table" then return v end; local out={}; for k,c in pairs(v) do out[k]=copy(c) end; return out end
 local function same(a,b)
     if type(a)~=type(b) then return false end
@@ -71,7 +71,12 @@ local QUALIFIERS={Stolen=true,Old=true,Used=true,Dirty=true,Broken=true,
     Crafted=true,Bone=true,Stone=true,Wood=true,Wooden=true,Metal=true,Leather=true}
 -- Which side of a pair a thing is does not matter to an investigation, and
 -- "ten elbow pad rights" is not English. Dropped from the display name only.
-local SIDES={Left=true,Right=true,L=true,R=true}
+local SIDES={Left=true,Right=true,L=true,R=true,Male=true,Female=true}
+-- Acronyms that open an item id, kept in capitals. Letter case alone cannot
+-- tell "TV|Dinner" from "CD|player": the old rule made "CDplayer" "c dplayer"
+-- and "IDcard" "i dcard" (Linux run, 2026-09-11: "C dplayer, marked Curtis
+-- Vance"). Longest first. Weapon model codes are deliberately not here.
+local ACRONYMS={"SCBA","BBQ","RPG","VHS","CD","ID","TV","BS"}
 local function words(id)
     -- Both spellings: CreditCard_Stolen and BandageDirty. The second is why
     -- the underscore cannot be required - the test caught "bandage dirty"
@@ -99,6 +104,10 @@ local function words(id)
     while #id>0 do
         local ch=string.sub(id,#id,#id)
         if ch>="0" and ch<="9" then id=string.sub(id,1,#id-1) else break end
+    end
+    local acronym
+    for _,a in ipairs(ACRONYMS) do
+        if string.sub(id,1,#a)==a then acronym=a; id=string.sub(id,#a+1); break end
     end
     local out=""
     local previousLower=false
@@ -131,9 +140,13 @@ local function words(id)
         at=e2+1
     end
     local text=collapsed..string.sub(out,at)
+    text=string.match(text,"^%s*(.-)%s*$")
+    if acronym then text=text=="" and acronym or acronym.." "..text end
     if qualifier then text=qualifier.." "..text end
     return text
 end
+-- Exposed for tests: the words an item id becomes in player-facing text.
+G.words=words
 -- A survivor writes "fourteen", not "14". The range is the one
 -- ObjectRules.accumulation can produce; anything outside it is a mistake
 -- upstream and should look like one rather than being silently rendered.
