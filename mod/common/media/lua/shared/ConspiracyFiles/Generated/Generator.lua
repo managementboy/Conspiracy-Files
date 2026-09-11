@@ -10,7 +10,7 @@ local Catalogue=require("ConspiracyFiles/Generated/ObjectCatalogue")
 -- 1.0 callers must use a fresh save rather than reinterpret an existing case.
 -- MIN_EVIDENCE is two, not three: a claim and a record contradicting it is a
 -- whole case. See the review note in build().
-local G={REVISION="g7-markedobjects-1",SCHEMA=2,MIN_EVIDENCE=2,MAX_EVIDENCE=7}
+local G={REVISION="g8-cast-1",SCHEMA=2,MIN_EVIDENCE=2,MAX_EVIDENCE=7}
 local function copy(v) if type(v)~="table" then return v end; local out={}; for k,c in pairs(v) do out[k]=copy(c) end; return out end
 local function same(a,b)
     if type(a)~=type(b) then return false end
@@ -158,7 +158,7 @@ local function article(label)
     if first=="a" or first=="e" or first=="i" or first=="o" or first=="u" then return "an" end
     return "a"
 end
-local function build(seed,revision,sites)
+local function build(seed,revision,sites,cast)
     local random=rng(seed)
     -- The premise is drawn first, so it is the seed's most significant choice:
     -- what the case is ABOUT, before who is in it or how it resolves. See
@@ -169,8 +169,36 @@ local function build(seed,revision,sites)
     -- be given this name and an ID to match, and "M. Ellis" on a corpse is not
     -- something a player can connect to a letter signed "M. Ellis" - it is the
     -- same abbreviation twice. A full name is a person.
-    local names={"Marion Ellis","Delia Mercer","Roy Hale","Joanne Voss",
-                 "Curtis Vance","Adele Prosser","Warren Nagy","Ines Kubiak"}
+    local invented={"Marion Ellis","Delia Mercer","Roy Hale","Joanne Voss",
+                    "Curtis Vance","Adele Prosser","Warren Nagy","Ines Kubiak"}
+    -- People the player has ALREADY MET, if there are any. Owner, 2026-09-11:
+    -- "do we track the names of corpses so we can fill out other evidence with
+    -- it?" We did, and every case still drew from eight invented names.
+    --
+    -- `cast` is the names read off identity documents on bodies the player has
+    -- looted, handed in at case creation and SAVED IN THE CASE - exactly as the
+    -- two buildings are. That is what keeps a case rebuildable from its seed:
+    -- the world-derived facts are inputs recorded alongside it, never read
+    -- again from the world at load time.
+    --
+    -- With two or more met names the case uses only those; with one, it is
+    -- mixed into the invented list; with none, nothing changes. The draws
+    -- happen in the same two places whatever the pool, so the sequence after
+    -- them cannot shift.
+    local met={}
+    if type(cast)=="table" then for _,n in ipairs(cast) do met[#met+1]=n end end
+    local names
+    if #met>=2 then
+        names=met
+    else
+        names={}
+        for _,n in ipairs(met) do names[#names+1]=n end
+        for _,n in ipairs(invented) do
+            local dup=false
+            for _,m in ipairs(met) do if m==n then dup=true end end
+            if not dup then names[#names+1]=n end
+        end
+    end
     local first=random(#names); local second=(first+random(#names-1)-1)%#names+1
     local prefix="generated:"..seed..":"
     local a,b=sites[1],sites[2]
@@ -183,7 +211,11 @@ local function build(seed,revision,sites)
     local map={CODE=facts.code,ORG=organisation,P1=facts.sender,P2=facts.recipient,
         A=a.name,B=b.name,D1=tostring(facts.dispatchDay),D2=tostring(facts.receiptDay),
         D3=tostring(facts.reviewDay),SUBJECT=premise.subject,UNKNOWN=premise.unknown}
-    local people={{id=prefix.."person-1",name=facts.sender},{id=prefix.."person-2",name=facts.recipient}}
+    local function wasMet(name) for _,m in ipairs(met) do if m==name then return true end end return false end
+    -- `met` marks a person whose body the player has already searched, so
+    -- CasePerson does not name a SECOND zombie after someone already dead.
+    local people={{id=prefix.."person-1",name=facts.sender,met=wasMet(facts.sender) or nil},
+                  {id=prefix.."person-2",name=facts.recipient,met=wasMet(facts.recipient) or nil}}
     local org={id=prefix.."organisation",name=facts.organisation}
     local documents={}
     local function document(n,title,location,body,refs,links,leads,kind)
@@ -509,7 +541,26 @@ local function build(seed,revision,sites)
     end
     return {schemaVersion=G.SCHEMA,generatorRevision=G.REVISION,catalogRevision=revision,seed=seed,
         caseId=prefix.."case",outline=outline,premiseId=premise.id,contentStatus="development-draft-unapproved",
-        locations=copy(sites),facts=facts,identities=people,organisation=org,documents=documents}
+        locations=copy(sites),cast=#met>0 and copy(met) or nil,facts=facts,identities=people,
+        organisation=org,documents=documents}
+end
+-- What the player has met, reduced to what a case may safely carry: plain
+-- two-word-or-more names, printable, bounded, deduplicated and ORDERED, since
+-- the order changes which name a seed draws.
+local CAST_MAX=8
+function G.castFrom(names)
+    if type(names)~="table" then return nil end
+    local out,seen={},{}
+    for _,n in ipairs(names) do
+        if type(n)=="string" and #n>=3 and #n<=60 and not n:find("[%c]")
+            and n:find("%S+%s+%S+") and not seen[n] then
+            seen[n]=true; out[#out+1]=n
+        end
+    end
+    table.sort(out)
+    while #out>CAST_MAX do table.remove(out) end
+    if #out==0 then return nil end
+    return out
 end
 -- Number of actual containers a generated case needs at each selected site.
 -- Session.createDistributed remains the final authority on target uniqueness.
@@ -523,7 +574,7 @@ function G.generate(catalog,seed,options)
     if not seedOK(seed) then return nil,"seed must be an integer from 1 through 2147483646" end
     options=options or {}
     if type(options)~="table" then return nil,"invalid generator options" end
-    for key in pairs(options) do if key~="mapId" and key~="buildLine" and key~="allowSynthetic" then return nil,"unknown generator option" end end
+    for key in pairs(options) do if key~="mapId" and key~="buildLine" and key~="allowSynthetic" and key~="names" then return nil,"unknown generator option" end end
     if type(options.mapId)~="string" or type(options.buildLine)~="string" then return nil,"map and build are required" end
     local eligible,why=Catalog.eligible(catalog,options.mapId,options.buildLine,options.allowSynthetic)
     if not eligible then return nil,why end
@@ -535,7 +586,7 @@ function G.generate(catalog,seed,options)
     local random=rng((seed+4099)%2147483646+1)
     local selected=pairs[random(#pairs)]
     if random(2)==1 then selected={selected[2],selected[1]} end
-    local result=build(seed,catalog.revision,selected)
+    local result=build(seed,catalog.revision,selected,G.castFrom(options.names))
     local valid,err=G.validate(result); if not valid then return nil,err end
     return copy(result)
 end
@@ -544,7 +595,7 @@ function G.generateSelected(catalog,seed,options,orderedSiteIds)
     local safe=V.validateStructure({options=options,orderedSiteIds=orderedSiteIds})
     if not safe or type(options)~="table" or type(orderedSiteIds)~="table" then return nil,"invalid selected-generation input" end
     for key in pairs(options) do
-        if key~="mapId" and key~="buildLine" and key~="allowSynthetic" then return nil,"unknown generator option" end
+        if key~="mapId" and key~="buildLine" and key~="allowSynthetic" and key~="names" then return nil,"unknown generator option" end
     end
     for key in pairs(orderedSiteIds) do if key~=1 and key~=2 then return nil,"exactly two ordered site IDs required" end end
     for i=1,2 do if type(orderedSiteIds[i])~="string" or #orderedSiteIds[i]==0 or #orderedSiteIds[i]>300 then return nil,"invalid ordered site ID" end end
@@ -555,7 +606,7 @@ function G.generateSelected(catalog,seed,options,orderedSiteIds)
     local byId={}; for _,site in ipairs(eligible) do byId[site.id]=site end
     local a,b=byId[orderedSiteIds[1]],byId[orderedSiteIds[2]]
     if not a or not b or not Catalog.distinct(a,b) then return nil,"selected sites are not eligible and distinct" end
-    local result=build(seed,catalog.revision,{a,b}); local valid,err=G.validate(result); if not valid then return nil,err end
+    local result=build(seed,catalog.revision,{a,b},G.castFrom(options.names)); local valid,err=G.validate(result); if not valid then return nil,err end
     return copy(result)
 end
 -- Gameplay-facing creation entry point. Legacy generate remains an offline fixture API.
@@ -587,7 +638,14 @@ function G.validate(case)
     -- Revision-pinned reconstruction verifies every fact, text and reference.
     -- It uses saved sites, never today's external catalog. Future revisions
     -- must retain a reader or refuse; they may not silently rewrite evidence.
-    if not same(case,build(case.seed,case.catalogRevision,case.locations)) then return false,"case facts, text or structure do not match recorded revision" end
+    -- The cast is validated as strictly as any other field: it must already be
+    -- in the form castFrom produces, or a hand-edited save could smuggle a name
+    -- in that the generator itself would never have accepted.
+    if case.cast~=nil then
+        local canonical=G.castFrom(case.cast)
+        if not canonical or not same(canonical,case.cast) then return false,"invalid case cast" end
+    end
+    if not same(case,build(case.seed,case.catalogRevision,case.locations,case.cast)) then return false,"case facts, text or structure do not match recorded revision" end
     return true
 end
 function G.restore(saved)

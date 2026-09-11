@@ -41,6 +41,12 @@ function L.record(token,name)
     return recorded
 end
 
+-- Names read off bodies the player has looted, for building the next case.
+function L.names()
+    local ok,list=pcall(function() return Names.names(L.root()) end)
+    if ok and type(list)=="table" then return list end
+    return {}
+end
 function L.nameFor(token)
     local ok,name=pcall(Names.nameFor,L.root(),token)
     return ok and name or nil

@@ -119,7 +119,7 @@ local generator = source('mod/common/media/lua/shared/ConspiracyFiles/Generated/
 -- Matched against the name list itself, not the file: the comment above it
 -- quotes the old initials to explain why they went, and a grep for the whole
 -- file finds the explanation rather than the code.
-local nameList = generator:match('local names=(%b{})')
+local nameList = generator:match('local invented=(%b{})')
 assert(nameList, 'the case name list must be findable')
 assert(not nameList:find('M%. '), 'initials are not a person: ' .. nameList)
 for name in nameList:gmatch('"([^"]+)"') do

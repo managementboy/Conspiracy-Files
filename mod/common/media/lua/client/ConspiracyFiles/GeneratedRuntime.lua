@@ -288,6 +288,17 @@ local function prepare(result,seed,later,house)
         preparing=false
         if house and currentHouse()~=house then log("First case deferred: player changed building.");return end
         local options={mapId=result.map,buildLine=result.gameVersion}
+        -- The people this case is about come from bodies the player has already
+        -- searched, when there are any. Read once, here, at creation, and saved
+        -- in the case - never re-read at load, which would break validation.
+        -- Named nameLog, not log: a local called `log` shadowed this file's own
+        -- log function, and the next line in scope that tried to log crashed
+        -- case creation outright (caught by automatic_investigations).
+        local nameLog=ConspiracyFiles.PersonNameLog
+        if nameLog and nameLog.names then
+            local ok,met=pcall(nameLog.names)
+            if ok and type(met)=="table" and #met>0 then options.names=met end
+        end
         local context={hoursSurvived=p:getHoursSurvived(),anchor=anchor}
         local case,err
         if house then case,err=firstCase(filtered,seed,options,context,house,candidates)
@@ -322,7 +333,12 @@ local function prepare(result,seed,later,house)
         pcall(function()
             local People=require("ConspiracyFiles/CasePerson")
             local person=case.identities and case.identities[1]
-            if person and person.name then
+            -- A person the player has already met is a body they have already
+            -- searched. Naming a second zombie after them would put the same
+            -- person in two graves.
+            if person and person.met then
+                log("case person "..tostring(person.name).." is someone already met; no new body")
+            elseif person and person.name then
                 local bound,why=People.bind(person.name,case.caseId,t.x,t.y,t.z)
                 if not bound then log("case person not bound: "..tostring(why)) end
             end

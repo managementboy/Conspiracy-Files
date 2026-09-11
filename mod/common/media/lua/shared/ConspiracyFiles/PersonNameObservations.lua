@@ -67,4 +67,15 @@ function M.nameFor(root,token)
     return f and f.name or nil
 end
 
+-- Every name recorded so far, ordered by token so the list is the same on every
+-- machine. Used to build a new case around people the player has already met.
+function M.names(root)
+    local ok=M.validate(root); if not ok then return {} end
+    local tokens={}
+    for token in pairs(root.names) do tokens[#tokens+1]=token end
+    table.sort(tokens)
+    local out={}
+    for _,token in ipairs(tokens) do out[#out+1]=root.names[token].name end
+    return out
+end
 return M
