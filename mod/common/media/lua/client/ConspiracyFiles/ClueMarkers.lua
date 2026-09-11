@@ -164,26 +164,47 @@ function M.drawRecords(ui,c,r)
   return ui.mapAPI:getStyleAPI():getLayerByName(symbols:getDefaultTextLayerID()):getFont()
  end)
  if ok and nativeFont then font=nativeFont end
+ -- Group by where markers land ON SCREEN, not by tile. Grouping only exact
+ -- tiles meant two documents a tile apart in one house were laid out as if
+ -- alone, and their labels printed over each other (2026-09-11, house 104:
+ -- "two markings unreadable due to overwriting"). Markers whose question marks
+ -- would sit within a label's height of each other now share one stacked label
+ -- list; each keeps its own question mark at its own spot. Zoom in far enough
+ -- and they separate again, which is the right behaviour for free.
+ local clusters={}
  for _,key in ipairs(order) do
   local g=groups[key];local v=g.point
   local x,y=ui.mapAPI:worldToUIX(v.x+0.5,v.y+0.5),ui.mapAPI:worldToUIY(v.x+0.5,v.y+0.5)
   if x>16 and y>60 and x<ui.width-24 and y<ui.height-80 then
+   local home
+   for _,cluster in ipairs(clusters) do
+    if math.abs(cluster.x-x)<=Layout.CLUSTER_X and math.abs(cluster.y-y)<=Layout.CLUSTER_Y then home=cluster;break end
+   end
+   if not home then home={x=x,y=y,points={},labels={}};clusters[#clusters+1]=home end
+   home.points[#home.points+1]={x=x,y=y,ink=v.ink}
+   for _,label in ipairs(g.labels) do home.labels[#home.labels+1]=label end
+  end
+ end
+ local size=math.min(28,getTextManager():getFontHeight(font)+2)
+ local h=getTextManager():getFontHeight(font)+2
+ local measure=function(text) return getTextManager():MeasureStringX(font,text) end
+ if questionTexture==nil and getTexture then questionTexture=getTexture("media/ui/LootableMaps/map_question.png") end
+ for _,cluster in ipairs(clusters) do
+  for _,point in ipairs(cluster.points) do
    -- Older records did not retain ink; display those in neutral graphite.
-   local color=inks[v.ink] or inks.Pencil
-   local size=math.min(28,getTextManager():getFontHeight(font)+2)
-   if questionTexture==nil and getTexture then questionTexture=getTexture("media/ui/LootableMaps/map_question.png") end
+   local color=inks[point.ink] or inks.Pencil
    if questionTexture and ui.drawTextureScaled then
-    ui:drawTextureScaled(questionTexture,x-size/2,y-size/2,size,size,1,color[1],color[2],color[3])
+    ui:drawTextureScaled(questionTexture,point.x-size/2,point.y-size/2,size,size,1,color[1],color[2],color[3])
    else
-    ui:drawText("?",x-4,y-8,color[1],color[2],color[3],1,font)
+    ui:drawText("?",point.x-4,point.y-8,color[1],color[2],color[3],1,font)
    end
-   local h=getTextManager():getFontHeight(font)+2
-   local measure=function(text) return getTextManager():MeasureStringX(font,text) end
-   local labels=Layout.layout(g.labels,x+size/2,y,{left=16,top=60,right=ui.width-24,bottom=ui.height-80},h,measure)
-   for i,label in ipairs(labels) do
-    local ink=inks[g.labels[i].ink] or inks.Pencil
-    ui:drawText(label.text,label.x,label.y,ink[1],ink[2],ink[3],1,font)
-   end
+  end
+  -- Labels in discovery order, whatever tile each came from.
+  table.sort(cluster.labels,function(a,b) return a.number<b.number end)
+  local labels=Layout.layout(cluster.labels,cluster.x+size/2,cluster.y,{left=16,top=60,right=ui.width-24,bottom=ui.height-80},h,measure)
+  for i,label in ipairs(labels) do
+   local ink=inks[cluster.labels[i].ink] or inks.Pencil
+   ui:drawText(label.text,label.x,label.y,ink[1],ink[2],ink[3],1,font)
   end
  end
 end

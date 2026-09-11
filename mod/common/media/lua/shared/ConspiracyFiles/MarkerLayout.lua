@@ -24,6 +24,12 @@ local function trimToWidth(text,width,measure)
 end
 
 -- labels are ordered {number=...,title=...,floor=...}; returns visible draw entries.
+-- How close two markers may land on screen before their labels share one
+-- stacked list, in pixels. Vertical is roughly a label's height; horizontal is
+-- wider, because a label runs to the right of its marker and a neighbour to the
+-- right is what it would print over.
+M.CLUSTER_X=140
+M.CLUSTER_Y=24
 function M.layout(labels,pointX,pointY,bounds,lineHeight,measure)
  local availableRows=math.max(0,math.floor((bounds.bottom-bounds.top)/lineHeight))
  local count=math.min(#labels,availableRows)

@@ -102,35 +102,62 @@ end
 -- file; an existing save gets one too, once, the first time it loads under a
 -- build that has this - which is why the mark is on the item rather than in a
 -- flag of ours.
--- How long to keep trying to open the papers: about five seconds of ticks.
-F.OPEN_ATTEMPTS=300
+-- How long to keep trying once the panel exists: about thirty seconds.
+--
+-- The first version gave up after five seconds counted from the FIRST TICK. On
+-- a new game the inventory panel can appear well after that, so the whole
+-- budget was spent waiting for a panel rather than for a button, and the papers
+-- never opened (2026-09-11, twice). Attempts now count only once the panel is
+-- there to be asked.
+F.OPEN_ATTEMPTS=1800
 
--- True once the panel has a button for this container and it is selected.
+-- "opened", "no-panel" or "no-button". Reported rather than guessed at: two
+-- fixes for this were built on readings of vanilla that turned out to be
+-- incomplete.
 local function tryOpen(inventory)
-    local ok,done=pcall(function()
+    local ok,state=pcall(function()
         local page=getPlayerInventory and getPlayerInventory(0)
-        if not page or not page.backpacks or not page.selectButtonForContainer then return false end
+        if not page or not page.backpacks or not page.selectButtonForContainer then return "no-panel" end
         for _,button in ipairs(page.backpacks) do
             if button.inventory==inventory then
                 page:selectButtonForContainer(inventory)
-                return true
+                return "opened"
             end
         end
-        return false
+        return "no-button"
     end)
-    return ok and done
+    return ok and state or "no-panel"
+end
+
+-- What the panel offered, for the log line when this gives up.
+local function describePanel()
+    local ok,text=pcall(function()
+        local page=getPlayerInventory and getPlayerInventory(0)
+        if not page or not page.backpacks then return "no inventory panel" end
+        local names={}
+        for _,button in ipairs(page.backpacks) do
+            names[#names+1]=tostring(button.name or button.title or "?")
+        end
+        return #page.backpacks.." buttons: "..table.concat(names,", ")
+    end)
+    return ok and text or "unreadable panel"
 end
 
 local tried=false
 function F.onTick()
     if F.pendingOpen then
-        F.openTries=(F.openTries or 0)+1
-        if tryOpen(F.pendingOpen) then
+        local state=tryOpen(F.pendingOpen)
+        if state=="opened" then
+            log("papers opened in the inventory panel after "..tostring(F.openTries or 0).." ticks")
             F.pendingOpen=nil
-        elseif F.openTries>=F.OPEN_ATTEMPTS then
-            log("papers not opened: the inventory panel never offered a button for them")
-            F.pendingOpen=nil
+        elseif state=="no-button" then
+            F.openTries=(F.openTries or 0)+1
+            if F.openTries>=F.OPEN_ATTEMPTS then
+                log("papers not opened: the panel never offered them a button - "..describePanel())
+                F.pendingOpen=nil
+            end
         end
+        -- "no-panel" costs nothing: the panel is not there to be asked yet.
     end
     if tried then return end
     if not getPlayer or not getPlayer() then return end

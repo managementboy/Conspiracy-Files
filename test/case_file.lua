@@ -179,4 +179,17 @@ buttons[1] = { inventory = F2.pendingOpen }
 F2.onTick()
 assert(selected ~= nil, 'the papers must open the tick their button appears')
 assert(F2.pendingOpen == nil, 'and stop trying once they have')
+
+-- Waiting for the panel itself must not use up the budget: on a new game the
+-- inventory panel can appear long after the first tick.
+getPlayerInventory = function() return nil end
+local later2 = { items = {} }
+later2.AddItem = later.AddItem
+later2.getItems = later.getItems
+local fresh2 = { getInventory = function() return later2 end,
+    getDescriptor = function() return { getForename = function() return "Jo" end } end }
+getPlayer = function() return fresh2 end
+local F3 = dofile('mod/common/media/lua/client/ConspiracyFiles/CaseFile.lua')
+for _ = 1, F3.OPEN_ATTEMPTS + 50 do F3.onTick() end
+assert(F3.pendingOpen ~= nil, 'ticks spent waiting for the panel must not count toward giving up')
 print('PASS case file: the papers open as soon as the panel offers them, not before')
