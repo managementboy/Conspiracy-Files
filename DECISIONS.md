@@ -343,3 +343,12 @@ after each verified batch. No merges to `main`.
 **P4-R76 — publish passing builds.** A build that passes the Linux boot check
 may be published to the unlisted Workshop item (version bumped each time), so
 the Windows play machine has the latest build.
+
+## Old cases after a rules change — 2026-09-11
+
+**P4-R77 — no compatibility for cases made under older rules.** Every change
+to how cases are built bumps the generator revision, and a save's case made
+under an earlier revision is set aside on load (not deleted). Claude proposed
+keeping old cases playable; owner: "no, all new". A playtest after a rules
+change starts a fresh game. Do not build revision compatibility, and do not
+offer it again; say plainly when an update needs a new game.
