@@ -6,7 +6,8 @@
 #   tools/autotest/pz.sh shot out.png        screenshot of the game window
 #   tools/autotest/pz.sh log [N]             last N mod log lines of this run
 #   tools/autotest/pz.sh status
-#   tools/autotest/pz.sh stop                quit the game (force after 60s)
+#   tools/autotest/pz.sh start --continue [WORLD]  reload the last run's save (or WORLD)
+#   tools/autotest/pz.sh stop [--save]       quit the game (force after 60s); --save saves first
 #
 # Owner decision 2026-09-11: Claude may auto-test on this machine, and these
 # runs count as evidence. Attended Windows sessions keep their own acceptance
@@ -84,13 +85,18 @@ click_window() {
 }
 
 cmd_start() {
-    local at="" hidden="" console="" mortal="" p
+    local at="" hidden="" console="" mortal="" cont="" p
     while [ $# -gt 0 ]; do
         case "$1" in
             --at) at="${2:?--at X,Y,Z}"; shift 2 ;;
             --hidden) hidden=1; shift ;;
             --console) console=1; shift ;;
             --mortal) mortal=1; shift ;;
+            --continue)
+                if [ $# -ge 2 ] && [[ "$2" != --* ]]; then cont="$2"; shift
+                else cont="$(cat "$LOCAL/world" 2>/dev/null)"; fi
+                [ -n "$cont" ] || { say "no world to continue: none recorded yet"; exit 2; }
+                shift ;;
             *) say "unknown option $1"; exit 2 ;;
         esac
     done
@@ -110,6 +116,7 @@ cmd_start() {
         echo "session=$id"
         echo "expires=$(( $(date +%s) + 600 ))"
         [ -z "$mortal" ] || echo "mortal=1"
+        [ -z "$cont" ] || { echo "mode=continue"; echo "world=$cont"; }
         if [ -n "$at" ]; then IFS=, read -r x y z <<<"$at"; echo "x=$x"; echo "y=$y"; echo "z=${z:-0}"; fi
     } > "$SESSION_FILE"
     say "launching session $id"
@@ -128,6 +135,8 @@ cmd_start() {
             click)
                 if grep -qF "[CF-EVAL] ready" <<<"$out"; then
                     rm -f "$SESSION_FILE"
+                    # Remember the world, so `start --continue` can reload it.
+                    CF_EVAL_TIMEOUT=15 "$REPO/tools/cf_eval.sh" 'return getWorld():getWorld()' 2>/dev/null | sed -n 's/^ok //p' > "$LOCAL/world"
                     [ -n "$console" ] || CF_EVAL_TIMEOUT=15 "$REPO/tools/cf_eval.sh" 'return CFAutoTest.hideConsole()' >/dev/null 2>&1 || say "could not hide the Lua console"
                     grep -E '\[CF-SELFCHECK\]|version=|\[CF\] v=' <<<"$out" | sed 's/^.*> //' | head -3 >&2 || true
                     say "ready; use: tools/autotest/pz.sh eval 'return getPlayer():getX()'"
@@ -146,6 +155,12 @@ cmd_stop() {
     local p; p="$(pid)"
     rm -f "$SESSION_FILE"
     [ -n "$p" ] || { say "not running"; return 0; }
+    # --save: write the save explicitly and wait for it before quitting, so a
+    # reload test never depends on what quitting happens to do.
+    if [ "${1:-}" = "--save" ]; then
+        CF_EVAL_TIMEOUT=30 "$REPO/tools/cf_eval.sh" 'saveGame(); return true' >/dev/null 2>&1 || say "save command did not answer"
+        sleep 5
+    fi
     CF_EVAL_TIMEOUT=10 "$REPO/tools/cf_eval.sh" 'getCore():quitToDesktop()' >/dev/null 2>&1 || true
     for _ in $(seq 60); do [ -n "$(pid)" ] || { say "stopped"; return 0; }; sleep 1; done
     say "did not quit within 60s; terminating"
@@ -164,7 +179,7 @@ cmd_shot() {
 case "${1:-}" in
     start) shift; cmd_start "$@" ;;
     eval) shift; exec "$REPO/tools/cf_eval.sh" "$@" ;;
-    stop) cmd_stop ;;
+    stop) shift; cmd_stop "$@" ;;
     shot) shift; cmd_shot "$@" ;;
     log) since_launch | grep -E '\[CF' | sed 's/^.*> //' | tail -n "${2:-30}" ;;
     status) p="$(pid)"; if [ -n "$p" ]; then echo "game: running pid $p"; else echo "game: not running"; fi; echo "session: $(cat "$LOCAL/session" 2>/dev/null || echo none)" ;;

@@ -78,6 +78,17 @@ function A.frontEndTick()
     end
     A.noBreakOnError()
     print("[CF-AUTOTEST] launching session=" .. tostring(cfg.session))
+    -- mode=continue: reload an existing save by name, through the main menu's
+    -- own Continue path (reload tests: catalogue INF-01).
+    if cfg.mode == "continue" and cfg.world then
+        print("[CF-AUTOTEST] continuing world=" .. cfg.world)
+        MainScreen.continueLatestSave("Sandbox", cfg.world)
+        return
+    end
+    -- The debug-scenario launcher does not copy the active mods into the new
+    -- world's mods.txt, so a reload of that save ran with NO mods (seen
+    -- 2026-09-11). A normal New Game does this copy itself.
+    ActiveMods.getById("currentGame"):copyFrom(ActiveMods.getById("default"))
     DebugScenarios.instance:launchScenario(A.scenario(cfg))
 end
 
