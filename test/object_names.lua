@@ -26,3 +26,14 @@ for _,id in ipairs(Premises.list()) do local p=Premises.get(id)
 end
 assert(found,"the staff photograph premise exists")
 print("PASS object names: acronyms stay whole, variants drop, a photograph is a photograph")
+assert(G.words("PressID")=="press ID", G.words("PressID"))
+assert(G.words("LighterBBQ")=="lighter BBQ", G.words("LighterBBQ"))
+-- Developer and placeholder items are never evidence.
+local Rules=require("ConspiracyFiles/Generated/ObjectRules")
+for _,rule in ipairs(Rules.list()) do
+    for _,id in ipairs(Rules.candidates(rule)) do
+        assert(not (id:find("Debug") or id:find("DEBUG") or id:sub(1,4)=="Test" or id:find("Unusable") or id:find("_DEV_")),
+            "rule "..rule.." can choose the developer/placeholder item "..id)
+    end
+end
+print("PASS object names: trailing acronyms, and no debug/test/placeholder item is ever evidence")

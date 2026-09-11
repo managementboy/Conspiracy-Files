@@ -10,7 +10,7 @@ local Catalogue=require("ConspiracyFiles/Generated/ObjectCatalogue")
 -- 1.0 callers must use a fresh save rather than reinterpret an existing case.
 -- MIN_EVIDENCE is two, not three: a claim and a record contradicting it is a
 -- whole case. See the review note in build().
-local G={REVISION="g11-honest-names-1",SCHEMA=2,MIN_EVIDENCE=2,MAX_EVIDENCE=7}
+local G={REVISION="g12-real-objects-1",SCHEMA=2,MIN_EVIDENCE=2,MAX_EVIDENCE=7}
 local function copy(v) if type(v)~="table" then return v end; local out={}; for k,c in pairs(v) do out[k]=copy(c) end; return out end
 local function same(a,b)
     if type(a)~=type(b) then return false end
@@ -142,6 +142,10 @@ local function words(id)
     local text=collapsed..string.sub(out,at)
     text=string.match(text,"^%s*(.-)%s*$")
     if acronym then text=text=="" and acronym or acronym.." "..text end
+    -- An acronym later in the id, whole word: "PressID" is a press ID, not a
+    -- "press id"; "LighterBBQ" a lighter for a BBQ.
+    local known={};for _,a in ipairs(ACRONYMS) do known[string.lower(a)]=a end
+    text=string.gsub(text,"%a+",function(word) return known[word] or word end)
     if qualifier then text=qualifier.." "..text end
     return text
 end

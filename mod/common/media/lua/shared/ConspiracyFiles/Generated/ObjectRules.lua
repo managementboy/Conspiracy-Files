@@ -231,12 +231,20 @@ end
 -- deterministic across Lua implementations - the same requirement
 -- EvidenceRoles.choose and Premises.choose carry, and for the same reason: a
 -- case must rebuild identically after a reload or it fails validation.
+-- Items that exist only for the game's developers or as placeholders are never
+-- evidence: "Debug fluid, marked ..." could be generated (Linux name audit,
+-- 2026-09-11: BucketWaterDebug, DebugFluid, TestDebugWater, UnusableMetal).
+local function real(item)
+    local id=item.id or ""
+    return not (id:find("Debug",1,true) or id:find("DEBUG",1,true) or id:find("_DEV_",1,true)
+        or id:sub(1,4)=="Test" or id:find("Unusable",1,true))
+end
 local eligible={}
 for _,ruleId in ipairs(ORDER) do
     local rule=rules[ruleId]
     local list={}
     for _,item in ipairs(Catalogue.items) do
-        if allowed(item,rule) then
+        if allowed(item,rule) and real(item) then
             local fits=true
             for _,property in ipairs(rule.requires) do
                 if not Catalogue.has(item,property) then fits=false end
