@@ -10,7 +10,7 @@ local Catalogue=require("ConspiracyFiles/Generated/ObjectCatalogue")
 -- 1.0 callers must use a fresh save rather than reinterpret an existing case.
 -- MIN_EVIDENCE is two, not three: a claim and a record contradicting it is a
 -- whole case. See the review note in build().
-local G={REVISION="g9-namedcards-1",SCHEMA=2,MIN_EVIDENCE=2,MAX_EVIDENCE=7}
+local G={REVISION="g10-onestory-1",SCHEMA=2,MIN_EVIDENCE=2,MAX_EVIDENCE=7}
 local function copy(v) if type(v)~="table" then return v end; local out={}; for k,c in pairs(v) do out[k]=copy(c) end; return out end
 local function same(a,b)
     if type(a)~=type(b) then return false end
@@ -313,11 +313,19 @@ local function build(seed,revision,sites,cast)
     local clippingBody=fill("WHAT YOU FOUND\nA newspaper folded around a narrow cut-out from its local news column. Someone has underlined the words 'routine maintenance' and pencilled {CODE} in the margin. The article itself does not use that reference.\n\nLOCAL SERVICES NOTICE - JULY 2, 1993\nResidents were advised that service vehicles might visit local facilities outside ordinary hours while scheduled maintenance was completed. A spokesperson described the work as routine and asked that access routes be kept clear. The notice supplied no list of deliveries and no explanation of what equipment would be moved.\n\nWHAT IT MIGHT MEAN\nSomeone associated this public notice with the private reference, but the pencil annotation is their interpretation. Routine maintenance could explain unusual hours around {SUBJECT}. It could also offer a convenient explanation for unrelated activity. The clipping cannot tell you which, and its unnamed annotator may have been guessing too.",map)
     document(7,fill("Press clipping / {CODE}",map),b,clippingBody,
         {b.id},{{target=documents[1].id,kind="recontextualises"}},nil,carrierFor("clippingContext",clippingBody))
+    -- The extra documents name the case's own matter as well as its number.
+    -- Owner, 2026-09-11, holding four documents of one case: "I cant figure out
+    -- why they are all part of one case". They were written to fit any of the
+    -- twenty stories, so the only thread was the reference number - which he
+    -- had asked to be less prominent. Naming {SUBJECT} ("the inventory", "the
+    -- night shift") makes each point at the same THING, not just the same
+    -- filing code.
+    --
     -- Two short-text roles genuinely choose between the four card/ticket
     -- carriers added 2026-09-06 (EvidenceKinds). Their bodies are a named
     -- identifier and a line or two of context -- never the "WHAT YOU FOUND"
     -- essay above -- because a card cannot hold that (T7).
-    local affiliationBody=fill("Ref {CODE}\n{P1}\n{ORG}",map)
+    local affiliationBody=fill("Ref {CODE} - {SUBJECT}\n{P1}\n{ORG}",map)
     local affiliationKind=carrierFor("affiliationLead",affiliationBody)
     -- A card is named the way the game names its own: "Credit Card: Genevieve
     -- Ricks", not "Credit Card / PS-289". Owner, 2026-09-11, holding one of
@@ -325,7 +333,7 @@ local function build(seed,revision,sites,cast)
     -- number is a filing label; a name on a card is a person.
     document(8,K.get(affiliationKind).short..": "..facts.sender,a,affiliationBody,
         {people[1].id,org.id,a.id},{{target=documents[1].id,kind="recontextualises"}},nil,affiliationKind)
-    local itineraryBody=fill("Ref {CODE}\n{P2} - {B}\nJuly {D2}, 1993",map)
+    local itineraryBody=fill("Ref {CODE} - {SUBJECT}\n{P2} - {B}\nJuly {D2}, 1993",map)
     local itineraryKind=carrierFor("itineraryLead",itineraryBody)
     document(9,K.get(itineraryKind).short..": "..facts.recipient,b,itineraryBody,
         {people[2].id,b.id},{{target=documents[2].id,kind="recontextualises"}},nil,itineraryKind)
@@ -336,20 +344,23 @@ local function build(seed,revision,sites,cast)
     -- A payment dated before the record it settles. That is a fact about
     -- paperwork order, not proof of anything, and the wording keeps it that
     -- way.
-    local paymentBody=fill("WHAT YOU FOUND\nA carbon payment slip with a smudged duplicate line, kept in a wallet fold rather than filed.\n\n{ORG}\nPayment against record {CODE}\nRaised July "..(facts.dispatchDay-1)..", 1993 - one day before the entry it settles.\nAuthorised by: {P1}\nCounter-signature: none.",map)
+    local paymentBody=fill("WHAT YOU FOUND\nA carbon payment slip with a smudged duplicate line, kept in a wallet fold rather than filed.\n\n{ORG}\nPayment against {SUBJECT}, record {CODE}\nRaised July "..(facts.dispatchDay-1)..", 1993 - one day before the entry it settles.\nAuthorised by: {P1}\nCounter-signature: none.",map)
     local paymentKind=carrierFor("paymentRecord",paymentBody)
-    document(10,K.get(paymentKind).short.." / "..facts.code,a,paymentBody,
+    -- Titled by what it IS, not by the paper it is written on: a payment slip
+    -- on a notepad used to be called "Review", and the owner found himself
+    -- holding two reviews of which only one reviewed anything.
+    document(10,"Payment slip / "..facts.code,a,paymentBody,
         {people[1].id,org.id,a.id},{{target=documents[1].id,kind="disputes-delivery"}},nil,paymentKind)
     -- A stub placing the second person elsewhere on the day of the response.
-    local timingBody=fill("Ref {CODE}\n{P2}\nJuly {D2}, 1993 - {A}",map)
+    local timingBody=fill("Ref {CODE} - {SUBJECT}\n{P2}\nJuly {D2}, 1993 - {A}",map)
     local timingKind=carrierFor("timingDispute",timingBody)
     document(11,K.get(timingKind).short..": "..facts.recipient,a,timingBody,
         {people[2].id,a.id},{{target=documents[2].id,kind="disputes-delivery"}},nil,timingKind)
     -- And one that agrees. A case where everything disagrees is as flat as one
     -- where nothing does.
-    local presenceBody=fill("WHAT YOU FOUND\nA duty log with a soft cover, the current week held open by a bent paperclip.\n\nJuly {D2}, 1993 - {B}\n{P2} signed in at the gate and again at the store.\nNo vehicle number recorded.\nEntry for record {CODE} initialled twice.",map)
+    local presenceBody=fill("WHAT YOU FOUND\nA duty log with a soft cover, the current week held open by a bent paperclip.\n\nJuly {D2}, 1993 - {B}\n{P2} signed in at the gate and again at the store.\nNo vehicle number recorded.\nEntry against {SUBJECT}, record {CODE}, initialled twice.",map)
     local presenceKind=carrierFor("presenceNote",presenceBody)
-    document(12,K.get(presenceKind).short.." / "..facts.code,b,presenceBody,
+    document(12,"Duty log / "..facts.code,b,presenceBody,
         {people[2].id,b.id},{{target=documents[2].id,kind="corroborates"}},nil,presenceKind)
     -- Object evidence (2026-09-09). These carry no readable text at all: a
     -- worn hammer stored with a case file says what it says by being there.
@@ -667,8 +678,18 @@ function G.project(case,discovered)
     local rows={}
     for i,id in ipairs(discovered) do
         local doc=byId[id]; local links={}
-        for _,link in ipairs(doc.links) do if known[link.target] then links[#links+1]=copy(link) end end
-        rows[i]={id=id,kind=doc.kind,title=doc.title,body=doc.body,locationId=doc.locationId,leads=copy(doc.leads),connections=links}
+        -- Links to documents NOT yet found are reported as `unseen`, by the
+        -- kind of document only - never its text. The notebook turns them into
+        -- the survivor wondering aloud: "Probably refers to another stock
+        -- list?" (owner, 2026-09-11: "that creates tension"). A question can be
+        -- wrong, which is exactly what keeps it from being a quest marker.
+        local unseen={}
+        for _,link in ipairs(doc.links) do
+            if known[link.target] then links[#links+1]=copy(link)
+            elseif byId[link.target] then unseen[#unseen+1]={kind=link.kind,title=byId[link.target].title} end
+        end
+        rows[i]={id=id,kind=doc.kind,title=doc.title,body=doc.body,locationId=doc.locationId,leads=copy(doc.leads),
+            connections=links,unseen=#unseen>0 and unseen or nil}
     end
     return rows
 end

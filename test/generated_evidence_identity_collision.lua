@@ -50,7 +50,7 @@ local corpse={kind='IsoDeadBody'}
 local container={getParent=function() return corpse end,getType=function() return 'inventorymale' end}
 local function item(id,fullType,modData)
  return {kind='InventoryItem',getID=function() return id end,getFullType=function() return fullType end,
-  getDisplayName=function() return "Found document" end,getContainer=function() return container end,
+  getDisplayName=function() return "ID Card: Found Person" end,getContainer=function() return container end,
   isHidden=function() return false end,getModData=function() return modData or {} end}
 end
 local function pane(rows)

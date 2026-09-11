@@ -91,7 +91,9 @@ test("UI composition shares a clamped document pane, explicit ink and owner key 
         local gen=UI.notebook
         assertEqual(2,#gen.list.items); assertEqual("g2",gen.currentId)
         assertTrue(gen.document.plainText:find("Map marking waits for a pen or pencil.",1,true)~=nil)
-        assertTrue(gen.document.plainText:find("Supports: Dispatch",1,true)~=nil)
+        -- "Supports" became "Agrees with" when the connection verbs stopped assuming
+-- every case was about a delivery (2026-09-11).
+        assertTrue(gen.document.plainText:find("Agrees with: Dispatch",1,true)~=nil)
         assertFalse(gen.document.plainText:find("hidden",1,true)~=nil)
         -- The journal no longer prefixes titles with "Inspected ": every row
         -- carried it, so it distinguished nothing and cost ten characters of a

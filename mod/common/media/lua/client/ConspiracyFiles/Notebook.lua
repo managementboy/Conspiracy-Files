@@ -154,7 +154,22 @@ local function generatedRows(section)
     local Cases=wrapper and require("ConspiracyFiles/Generated/SuccessiveCases")
     wrapper=Cases and Cases.current(wrapper)
     for _,r in ipairs(known) do titles[r.id]=r.title end
-    local meanings={corroborates="Supports",['disputes-delivery']="Disputes delivery in",recontextualises="Adds context to"}
+    -- "Disputes delivery in" was left over from when every case was about a
+    -- delivery. Plain verbs that fit any of the twenty stories.
+    local meanings={corroborates="Agrees with",['disputes-delivery']="Does not match",recontextualises="Adds context to"}
+    -- The kind of document a link points at, from its title alone: "Second
+    -- stock list / PS-289" is a stock list, "Credit Card: Joanne Voss" a credit
+    -- card. Never its text - the player has not found it.
+    local function nounOf(title)
+        local noun=tostring(title or "")
+        noun=noun:gsub("%s*/.*$",""):gsub(":.*$","")
+        noun=string.lower(noun):gsub("^second ",""):gsub("^another ","")
+        return noun
+    end
+    local function articleFor(noun)
+        local first=string.sub(noun,1,1)
+        return (first=="a" or first=="e" or first=="i" or first=="o" or first=="u") and "an" or "a"
+    end
     for i,r in ipairs(known) do
         local root=Cases and Cases.find(wrapper,r.id);local case=root and root.case
         local addresses=case and ConspiracyFiles.AddressMap and ConspiracyFiles.AddressMap.describe(r.body,case)
@@ -166,6 +181,18 @@ local function generatedRows(section)
         end
         for _,link in ipairs(r.connections or {}) do
             if titles[link.target] then detail=detail.."\n\n"..(meanings[link.kind] or "Connected to")..": "..titles[link.target] end
+        end
+        -- The survivor wondering about a document not found yet. Owner,
+        -- 2026-09-11: not "refers to a second list you have not found" but
+        -- "probably refers to another list?" - "that creates tension". A
+        -- question can be wrong, which is what keeps it from being a waypoint.
+        for _,link in ipairs(r.unseen or {}) do
+            local noun=nounOf(link.title)
+            if noun~="" then
+                local own=string.lower(tostring(r.title or ""))
+                local lead=string.find(own,noun,1,true) and "another" or articleFor(noun)
+                detail=detail.."\n\nProbably refers to "..lead.." "..noun.."?"
+            end
         end
         -- No "Inspected " prefix: every journal row carried it, so it told the
         -- reader nothing and cost ten characters of a narrow column. The

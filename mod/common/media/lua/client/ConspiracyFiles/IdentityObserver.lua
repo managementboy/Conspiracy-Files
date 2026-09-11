@@ -246,6 +246,11 @@ function I.afterRender(pane)
   if types[fullType] and not generatedEvidence and read(item,"isHidden")~=true and label then
    local id=read(item,"getID")
    local name=clean(read(item,"getDisplayName"),180)
+   -- A document with no name on it is not an identity document. The game
+   -- names its own "Diary: Kirk Key", "ID Card: Paris Stover"; a plain "Diary"
+   -- was recorded as an identity lead with nobody in it (2026-09-11: "we found
+   -- a diary. But it is empty and not relevant for our evidence?").
+   if name and not string.find(name,": ",1,true) then name=nil end
    if not (type(id)=="number" and id~=0 and name) then
     missed=missed or (tostring(fullType).." rejected: id="..tostring(id).." name="..tostring(name))
    end
