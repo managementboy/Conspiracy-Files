@@ -122,8 +122,18 @@ local function placement(api,id)
                     if okAddr and type(label)=="string" and label~="" then address=label end
                 end
             end
-            CFLog.write("i","placed",{doc=id,place=address or (a.target and (a.target.x..","..a.target.y)),
-                room=a.target and a.target.vehiclePart or nil,n=expected})
+            -- The address for a human reader AND the exact spot for a debugger.
+            -- Asking for addresses "instead of coordinates" was about the
+            -- journal, which the player reads; stripping the coordinates from
+            -- the log left nobody able to say which drawer a missing document
+            -- was in (2026-09-11, document 4 at 109 Walker Road).
+            local t=a.target
+            local placedDoc
+            for _,d in ipairs(api.snapshot().case.documents) do if d.id==id then placedDoc=d end end
+            CFLog.write("i","placed",{doc=id,place=address,
+                at=t and (t.x..","..t.y..","..t.z..":"..tostring(t.objectIndex)..":"..tostring(t.containerIndex)),
+                kind=placedDoc and placedDoc.kind or nil,
+                room=t and t.vehiclePart or nil,n=expected})
             return true
         end
         if a.status=="placing" and not created then
