@@ -23,7 +23,7 @@ persistence · P3 edges, polish, performance headroom.
 - **INF-03** [P2] Walking instead of teleporting (T8: teleports emit no OnPlayerMove), for arrival tests. ◻
 - **INF-04** [P2] Time control: advance world hours or shorten policy gaps for 24 h scheduling and 72 h relocation. ◻
 - **INF-05** [P2] Player death on demand, respawn through the post-death panel. ✅ `checks/death.sh`
-- **INF-06** [P2] Frame-cost sampling from `GeneratedRuntime.metrics()` / `Runtime.metrics()` during scripted play. ◻
+- **INF-06** [P2] Frame-cost sampling during scripted play. ✅ `checks/perf.sh` (handlers timed, scheduler peak, scan line)
 - **INF-07** [P3] Writing tool in inventory (map markers need one). ✅ `CFLoop.givePen`
 - ✅ Boot check, wallet check, eval channel, unit runner with engine compile (2026-09-11).
 
@@ -154,8 +154,8 @@ persistence · P3 edges, polish, performance headroom.
 ## H. Performance
 
 - **PF-01** [A][P2] Building/room scan ≤2 ms peak, zero frames over budget. ✅ live 09-08; ❌ Linux laptop 09-11: nearby scan 11 callbacks over 2 ms, peak 3 ms (slower machine? compare on Windows)
-- **PF-02** [A][P2] Synchronous canonical/UI/native call cost (E12). ◻ never measured — INF-06
-- **PF-03** [A][P2] Identity render hook cost against the 2 ms budget. ◻
+- **PF-02** [A][P2] Synchronous canonical/UI/native call cost (E12). ❌ found 09-11: map marks ~20 ms per map frame and per second, case preparation 64 ms, every write 20-50 ms → fixed c73874b (validation cached); now marks 0.25 ms/frame, scheduler 1 ms. Left: ~12 ms single stalls per write (laptop)
+- **PF-03** [A][P2] Identity render hook cost against the 2 ms budget. ✅ Linux 09-11: 0.08 ms average over 16,000 panel renders
 - **PF-04** [S][P3] Diagnostics are unconditional in release builds. ❌
 - **PF-09/10** [A][P3] Real adapter timing; combined save-budget preflight. ◻
 
@@ -174,7 +174,7 @@ persistence · P3 edges, polish, performance headroom.
 ## J. Multiplayer and fault containment
 
 - **MP-01/02** [—] Multiplayer fail-closed in real sessions. ⛔ dropped 09-08 (E11); Workshop says single-player only
-- **FC-01** [A][P2] Injected faults at each adapter boundary: no crash, corruption or log spam (E13). ◻
+- **FC-01** [A][P2] Injected faults at each adapter boundary: no crash, corruption or log spam (E13). ✅ Linux 09-11 (`checks/faults.sh`, 9 points)
 - **FC-02** [S][P2] The context menu with several/duplicate selections (E08). ❌ first item only — PM_TAKEOVER_AUDIT
 - **FC-04** [A][P1] A failing operation does not retry itself every tick (84404dc, 20 errors a second). ↺
 - **FC-05** [A][P1] An ordinary sequence of player actions never trips an `assert` (a5dc1bf). ↺
@@ -216,8 +216,8 @@ persistence · P3 edges, polish, performance headroom.
 - **E09** Persistence round-trip — open → PS-07/08/09.
 - **E10** Death/reload integrity — open → PS-10/11/12.
 - **E11** Multiplayer — dropped 09-08.
-- **E12** Synchronous cost — partial → PF-02/03.
-- **E13** Fault containment — open → FC-01.
+- **E12** Synchronous cost — measured on Linux 09-11; fixed the 20-64 ms stalls; single write stalls remain (owner question) → PF-02/03.
+- **E13** Fault containment — ✅ Linux 09-11 → FC-01.
 
 ## Rules for running tests
 
@@ -241,3 +241,4 @@ no injected helpers.
 - 2026-09-11 — Catalogue written. Linux: boot ✅ ×3, wallet ✅ ×2 (a0e0dcf shows the same-name fix live). Unit suite all green (53 specs, 96 standalone, 85/85 engine compile).
 - 2026-09-11 — Core loop check built and passing. It found that completing a case stopped the next case, map marks and hints (NB-31, fixed 3553fc9). DevEval now runs while paused. DEV-0.24.6-retired passed the boot check and was published to the unlisted Workshop item.
 - 2026-09-11 evening — Reload and death checks built and passing (PS-07/08/10/12, CG-02/10). Found and fixed: papers never opened (NB-29), respawned survivor without papers, car clues without a map mark (VC-05), wrong object names and the photograph-as-letter (generator g11, needs a new game). DEV-0.25.0-names published.
+- 2026-09-11 late — Fault containment PASS (E13). Performance measured (E12): three stalls of 20-64 ms fixed by caching validation; text lint over 2,000 cases clean; developer items excluded from evidence (g12).
