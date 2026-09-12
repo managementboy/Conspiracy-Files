@@ -34,6 +34,13 @@ local function root()
  if store.canonical~=nil then return store.canonical end
  return Model.empty()
 end
+-- One address lookup per PLACE, remembered - including a refusal. These rows
+-- are rebuilt every time a reading surface refreshes, and each row resolves an
+-- address, so a failing address book was being asked again and again: 72 caught
+-- errors in fifteen seconds (fault check, 2026-09-12). A place does not move.
+local placeCache={}
+function I.forgetPlaces() placeCache={} end
+
 function I.rows()
  -- Where an observation happened, as an address rather than a grid reference.
  -- The lookup is here because the address book is a client module and
@@ -42,6 +49,9 @@ function I.rows()
  local function placeFor(x,y,z)
   local map=ConspiracyFiles.AddressMap
   if not map then return nil end
+  local key=tostring(x)..","..tostring(y)..","..tostring(z)
+  local remembered=placeCache[key]
+  if remembered~=nil then return remembered or nil end
   local cell=getCell and getCell()
   local square=cell and cell.getGridSquare and cell:getGridSquare(x,y,z)
   local building=square and square.getBuilding and square:getBuilding()
@@ -50,18 +60,22 @@ function I.rows()
   -- Inside a building: its own address.
   if id and map.labelForBuilding then
    local ok,label=pcall(map.labelForBuilding,tostring(id))
-   if ok and type(label)=="string" and label~="" then return label end
+   if ok and type(label)=="string" and label~="" then placeCache[key]=label; return label end
   end
   -- Outdoors, or in a building the book cannot name: the nearest one it can.
   -- "Outside 109 Walker Road" is what a survivor writes; six digits is not.
   if map.nearest then
    local ok,label,distance=pcall(map.nearest,x,y)
    if ok and type(label)=="string" then
-    if not id and distance==0 then return "right outside "..label end
-    if not id then return "outdoors, near "..label end
-    return "a building near "..label
+    local said
+    if not id and distance==0 then said="right outside "..label
+    elseif not id then said="outdoors, near "..label
+    else said="a building near "..label end
+    placeCache[key]=said
+    return said
    end
   end
+  placeCache[key]=false
   return nil
  end
  local ok,result=pcall(function() local r=root();if Model.validate(r) then return Model.rows(r,Outfits.readableOutfitFor,placeFor) end;return {} end)

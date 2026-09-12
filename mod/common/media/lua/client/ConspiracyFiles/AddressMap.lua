@@ -30,6 +30,10 @@ local function valid(root)
 end
 local function use(root)
     book=root; byId,buckets={},{}
+ -- Anything asked before the book existed was answered with a refusal and
+ -- remembered as one; let those readers ask again now.
+ local observer=ConspiracyFiles.IdentityObserver
+ if observer and observer.forgetPlaces then pcall(observer.forgetPlaces) end
     for _,r in ipairs(root.records) do
         byId["t3:"..r.id]=r
         local cx,cy=(r.x+r.x2-1)/2,(r.y+r.y2-1)/2
