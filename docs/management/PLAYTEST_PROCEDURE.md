@@ -1,7 +1,8 @@
 # Playtest procedure
 
-Current as of 2026-09-08, when development moved to Linux Mint and play stayed
-on the Windows machine. This supersedes the session plans in
+Current as of 2026-09-12. Development and unattended testing run on the Linux
+machine; the Windows machine is where the owner plays and where Workshop
+delivery is proven. This supersedes the session plans in
 `TOMORROW_PLAYTEST.md` and `OWNER_ATTENDANCE_CHECKLIST.md`, which describe
 DEV-0.6-era sessions on a single machine.
 
@@ -10,6 +11,7 @@ DEV-0.6-era sessions on a single machine.
 | Who | Step |
 |---|---|
 | Claude | Build the change. Run `lua5.1 test/run.lua` and `tools/kahlua/run.sh --parse-all`. Both must pass. |
+| Claude | `tools/autotest/boot_check.sh` on the Linux machine: a real game start, every mod file loaded, no mod error, player alive. |
 | Claude | Bump `ConspiracyFiles.VERSION` in `Version.lua` to name what changed. |
 | Claude | `tools/publish_workshop.sh --changenote "<what changed>"` |
 | Steam | Pushes the update to the play machine's subscription. |
@@ -77,7 +79,7 @@ one-liner below needs no file at all:
    correct under P4-R63. Never delete an existing save to make room; make a new
    one alongside it.
 3. **Check the title bar.** It should read
-   `<YourName>'s Notebook [DEV-0.8.13-notebook-name]` or later. If it shows an
+   `<YourName>'s Notebook [DEV-0.25.1-realobjects]` or later. If it shows an
    older build, Steam has not finished updating the subscription and everything
    you are about to test is the previous build.
 
@@ -105,14 +107,13 @@ Re-run that whenever the scripts change here.
 
     cd $env:USERPROFILE\Zomboid; .\stream_log.ps1
 
-Every line arrives within about a second, so a question can be answered
-mid-session. Ctrl+C stops it; a dropped link reconnects by itself and resumes
-without resending what already arrived.
+A complete copy of the log goes over every three seconds, so a question can be
+answered mid-session. Ctrl+C stops it. A dropped link costs nothing: every send
+is the whole file rather than a continuation, so the next one catches up.
 
-Order matters. PZ truncates `console.txt` when it launches, and a follower
-attached across that truncation keeps reading the old handle and reports
-nothing at all. Starting the game first also means the whole file belongs to
-this session, including `[CF-SELFCHECK]` in the first seconds.
+Order matters. PZ truncates `console.txt` when it launches, and the script
+refuses to start without one. Starting the game first also means the whole file
+belongs to this session, including the module line in the first seconds.
 
 Claude watches it with `tools/fetch_logs.sh --live`, which reports whether the
 file is still growing before anything else: a stream that died looks exactly
@@ -164,20 +165,25 @@ because reporting a session that never ran wastes a round trip.
 
 ## What to look at first
 
-`[CF-SELFCHECK]` explains everything after it, so read it before anything else.
+Every mod line is one format: `[CF] v=1 t=08:14 lvl=i ev=placed ...`, then
+`key=value` fields. `lvl` is `e`, `w`, `i` or `d`; `ev` says what happened.
 
-- `all 13 expected modules loaded` - good, continue.
-- `NOT LOADED: <names>` - stop. Three modules have shipped complete, tested and
-  called by nothing. Any behaviour that looks broken below this line is
-  probably just absent.
+Read the module line first - it explains everything after it:
+
+- `ev=person mod=identity msg=all 17 expected modules loaded` - good, continue.
+- `msg=NOT LOADED: <names>` - stop. Those modules shipped but never ran, and
+  any behaviour that looks broken below this line is probably just absent.
 - **no line at all** - the mod never reached game start. Almost always a
   disabled mod or a launch without `-debug`.
 
-Then the tags: `[CF-G2]` case generation and placement, `[CF-LEDGER]` each
-discovery in order with its game time, `[CF-VOICE]` what the survivor said and
-whether it displayed, `[CF-G2-HINT]` proximity hints including suppressed ones,
-`[CF-PERSON]` the corpse/key/building chain, `[CF-IDENTITY]` why an inventory
-pane was or was not observed.
+Then grep `ev=`: `case`, `placed`, `relocated`, `found`, `inspected`, `retired`
+for cases and evidence; `voice`, `hint`, `marker`, `note` for what the player
+was told, including whether a line actually displayed; `person`, `outfit`,
+`key`, `door`, `address`, `vehicle` for the corpse/key/building chain; `error`
+and `skip` for what went wrong or was declined.
+
+Live Lua prints outside that format on purpose, so it stays greppable at any
+log level: `[CF-EVAL] ready` at game start, then `[CF-EVAL <id>]` per command.
 
 Engine error lines are normal. Vanilla PZ logs fluid-container names, translator
 format strings and skeleton bone lookups on every launch; `fetch_logs.sh`
@@ -185,29 +191,38 @@ separates those from anything mentioning Conspiracy-Files.
 
 ## Currently unverified in play
 
-Nothing below has ever been seen working in a game. Test in roughly this order -
-the first is the headline feature and the cheapest to reach.
+Linux auto-testing now covers boot, the core loop, save/reload, death, fault
+containment, pacing and the wallet ID mechanic, with evidence under
+`docs/management/evidence/linux-autotest/`. What is left here needs human eyes,
+a real Workshop delivery, or both. Test in roughly this order - the first is the
+headline feature and the cheapest to reach.
 
 1. **Corpse outfits as observed leads.** A body in a security guard's uniform
    carrying an accountant's ID. The notebook must record two leads that
-   disagree and refuse to conclude which is true. Confirmed by `[CF-IDENTITY]`.
+   disagree and refuse to conclude which is true. Reading an ID from a corpse
+   wallet has autotest evidence (`checks/wallet_id.sh`); the two leads
+   disagreeing has never been seen.
 2. **Room-aware placement.** Paperwork in offices, not in a garage. `[CF-G2]`.
 3. **Evidence-pickup voice line.** Speech on picking up a document. `[CF-VOICE]`
    records whether it actually displayed, which is not the same as being said.
 4. **The eight notebook UI improvements.**
 5. **Case retirement.**
 6. **Role/carrier evidence selection.**
-7. **The survivor's forename in the notebook title.** New in
-   DEV-0.8.13-notebook-name; a character with an unusual or missing name should
-   fall back to `Survivor's Notebook` rather than break the window.
+7. **The survivor's forename in the notebook title.** A character with an
+   unusual or missing name should fall back to `Survivor's Notebook` rather
+   than break the window.
 
 Also open and worth watching for: the wallet click defect, narrowed to nested
 container panes.
 
 ## Rules that do not change during a playtest
 
-- **The owner plays. Claude never drives the game.** Claude reads `console.txt`
-  and offers one-line console commands; it does not automate play.
+- **On the Windows play machine the owner plays; Claude never drives it.**
+  Claude reads `console.txt` and offers one-line commands or a live eval, and
+  it does not automate play there. On the Linux machine Claude may run the game
+  unattended and those runs count as evidence (owner decision 2026-09-11, see
+  `LINUX_AUTOTEST.md`). The two do not mix: acceptance is an attended Windows
+  session with no injected helpers.
 - **Never delete, reset or rewrite a save.** A fresh save may be required; say
   so, never do it for them.
 - **A lead is never proof.** Two disagreeing leads are the feature. A notebook
