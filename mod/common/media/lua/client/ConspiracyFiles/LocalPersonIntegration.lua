@@ -380,8 +380,19 @@ function P.tick()
         end
     end
     -- A failed observation must not stop derived clue facts being recorded.
+    --
+    -- Only when something has actually been discovered, though. This ran twice
+    -- a second for the life of the save, and P.known rebuilds every notebook
+    -- row - which resolves a street address per row. Idle, with nothing open,
+    -- that was two row rebuilds and a fistful of address lookups every second
+    -- (measured in game, 2026-09-12, chasing the fault check's "a retry every
+    -- frame?"). Derived clue facts change only when a discovery lands.
+    local log=ConspiracyFiles.DiscoveryLog
+    local seq=log and log.highestSeq and select(2,pcall(log.highestSeq)) or nil
+    if seq~=nil and seq==P.lastKnownSeq then return end
     local ok,why=pcall(P.known)
-    if not ok then CFLog.message("person","person","Deferred known: "..tostring(why)) end
+    if ok then P.lastKnownSeq=seq
+    else CFLog.message("person","person","Deferred known: "..tostring(why)) end
 end
 -- Called after vanilla confirms an inventory transfer. It records only the
 -- source of a wallet itself; its contents remain unread until their rows are
