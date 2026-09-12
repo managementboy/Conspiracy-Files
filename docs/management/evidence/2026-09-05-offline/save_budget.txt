@@ -1,0 +1,1 @@
+PASS aggregate save budget: exact boundary, unsafe peers, all writer directions, replacement accounting, no mutations

@@ -1,5 +1,7 @@
 # v0.1 Plain-Lua Domain Core — Traceability Report
 
+**Correction suite, 2026-09-05:** 42 offline tests now include aggregate sink rejection, placement intent/recovery, partial identity absence and sticky conflict, two-sample referenced arrival, scheduler isolation, actual runtime/menu mocks, MP/T12 no-write startup, one-item T11 mode, generic mark idempotency, and shared UI composition. These extend the historical domain tests below; mocks do not supply E01–E13 evidence. Current logs/hashes: ../management/evidence/2026-09-05-correction/.
+
 **Implementation branch:** `feature/plain-lua-domain-core`
 
 **Start point:** `ff1725cfc03627eeb2d3d12981f7b77e6ef3d2ca`
@@ -7,6 +9,12 @@
 **Runtime contract:** plain Lua 5.1; no Project Zomboid or Java globals
 
 **Single test command:** `lua5.1 test/run.lua`
+
+## Current checkout audit — 2026-09-05
+
+The scope description below documents the historical accepted domain-core increment. The current `pm/v0.1-unattended-prep` checkout additionally contains conditional planner/runtime/UI work and review regressions. Takeover rerun: **26 tests, zero failures** under PUC Lua 5.1.5, retaining coverage of all 16 plain-Lua criteria. [Archived output](../management/evidence/2026-09-05-takeover/lua51-suite.txt).
+
+The current validator limit is **500000 bytes**, superseding the historical `500 * 1024` description below. The offline average timing assertion is not E12's live frame-peak acceptance. Runtime registration is tested with mocks. Static P01/P02/P05 and engine E01–E13 are not accepted by this suite: the current content registers three Locations, while the authoritative scope requires two. The body comparison does not compare all fixture titles, journal examples or explanatory context. See [PM audit](../management/PM_TAKEOVER_AUDIT_2026-09-05.md).
 
 ## Scope and architecture
 
@@ -47,6 +55,6 @@ P4-R17 is enforced against a deterministic conservative estimate, not an asserte
 
 The estimate intentionally overstates many ordinary values. Only a live T1-style ModData test can measure the actual `global_mod_data.bin` delta; this domain gate exists to refuse obviously over-budget canonical state safely and consistently.
 
-## Open content gate
+## Content approval and reconciliation
 
-This implementation does not declare Dead Air canonical-shippable. The project-owner approval required by `docs/design/AI_PROVENANCE.md` and CF-V01-P03 remains open.
+Owner approval required by `docs/design/AI_PROVENANCE.md` and CF-V01-P03 is verified for 2026-09-05 in the [content review](../reviews/DEAD_AIR_CONTENT_REVIEW_2026-09-03.md). Issue #26 remains open for delivery/disclosure/document corrections. Neither approval nor this suite declares the integrated slice accepted.

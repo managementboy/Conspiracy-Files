@@ -1,0 +1,7 @@
+{
+  "dev/generated-investigation/Catalog.lua": "754363dabf433ec5c34b42a08495efe7887ddaeec2bd5e61e65e6bf43182e6c6",
+  "dev/generated-investigation/Generator.lua": "7ef8ffc62b5a8f0d4a83e28caa98a67913b0f9ea93486a241e632bbc89e63792",
+  "test/fixtures/synthetic_locations.lua": "b9f9a0dd3a2755833de7d9174f881659854f24b40095d430f091dfd3a67ab6f1",
+  "test/generator_spec.lua": "e9d03cc39effdcf11af5a185c510cb6896be73f791eaa4e253c7223491961576",
+  "tools/generate_sample.lua": "6d4e793ebce488b2db9892f7feae5a8eb79a8fef6b1dd79ecdc84772569c0549"
+}

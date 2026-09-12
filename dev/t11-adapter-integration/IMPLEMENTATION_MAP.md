@@ -1,5 +1,7 @@
 # T11 implementation map
 
+**DEV-0.6 implementation update:** the wrapper now delegates directly to mod/common/media/lua: Session.lua owns aggregate commit; Placement.lua owns validated plan/target identity; WorldAccess.lua supplies resumable reads; Scheduler.lua runs capped deadline batches; Runtime.lua binds these to engine events; ContextMenu.lua and Notebook.lua deliver manual actions/UI. T11Mode limits eligible placement to D1 and selects a separate tag. The older map below is design/provenance; live obligations still apply.
+
 This map identifies the proven source mechanisms to adapt into one disposable composition probe. It is not permission to copy isolated probe state machines into production.
 
 | Concern | Proven source | Composition boundary |

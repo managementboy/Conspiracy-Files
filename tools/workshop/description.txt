@@ -1,0 +1,7 @@
+Conspiracy-Files generates investigations in Project Zomboid Build 42.
+
+It places physical documents in real containers in real buildings, records what you find in a survivor's notebook, and links people, keys and places into cautious interpretations. It never sets an objective, never announces a solution, and never asserts a fact it only has a lead for. An ID on a corpse, a key in a pocket, an outfit: all are leads. Two leads that disagree are the point.
+
+[b]This is a development build. A FRESH SAVE IS REQUIRED.[/b] An existing save will be refused as an unsupported generated case revision. That is correct behaviour, not a bug.
+
+Single-player only. Vanilla Lua; no Java, no network access, no runtime AI.

@@ -1,0 +1,14 @@
+Linux core loop check 20260911T150110: PASS
+source: 13b8ba4 + uncommitted mod changes
+first case: 5 documents, all found and inspected through the right-click menu:
+  1. Letter of resignation / QS-260, in shelves (container icon clicked: yes)
+  2. Final payslip / QS-260, in counter (container icon clicked: yes)
+  3. Leavers list / QS-260, in counter (container icon clicked: yes)
+  4. Payment slip / QS-260, in counter (container icon clicked: yes)
+  5. surgical mask (1 of 9), in counter (container icon clicked: yes)
+notebook entries: 5; case completion reported: yes
+map marks without a pen (written/pending/missing): 0/5/0
+map marks after a pen, case already retired: 5/0/0
+second case appeared (gap removed): yes
+errors inside the mod: 0
+screenshot: dev/eval/linux/runs/20260911T150110-map.png (not committed)

@@ -1,0 +1,4 @@
+git diff --check: PASS (line-ending conversion warnings are informational).
+warning: in the working copy of 'dev/t12-ui-runtime/common/media/lua/client/ConspiracyFilesT12Probe.lua', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'mod/common/media/lua/client/ConspiracyFiles/Notebook.lua', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'test/ui_adapter_spec.lua', LF will be replaced by CRLF the next time Git touches it

@@ -1,5 +1,9 @@
 # Conspiracy-Files — Architecture v0.2
 
+**P4-R53 direction update:** the next generated prototype needs a minimal case-definition/resolver boundary in place of fixed Dead Air registry assumptions. This is planned in docs/design/GENERATED_INVESTIGATION_PROTOTYPE.md, not implemented here. Preserve full-root validation, immutable discoveries and identity recovery. Automatic capability-based selection replaces per-site owner approval; T3's metadata uncertainty remains a technical constraint.
+
+**2026-09-05 candidate update:** Session.lua stages and validates the complete schema-2 domain/placement aggregate before one wrapper.canonical swap. Scheduler.lua bounds resumable world reads by 48 steps and a 2 ms deadline; synchronous command validation and native calls still require E12 measurement. Two Muldraugh locations replace P2/R2 inspection priority under P4-R48. Shared candidate T11/T12 wrappers do not constitute live acceptance. See [correction report](../management/CORRECTION_REPORT_2026-09-05.md).
+
 **Status:** Current architecture after engineering review. Provisional until Build 42 spikes resolve the load-bearing API questions.
 
 The reviewed `ARCHITECTURE_PROPOSAL.md` remains as the historical first draft. This document is the implementation-facing correction.
@@ -60,7 +64,7 @@ Curated location arrival follows T8: evaluate only referenced bindings on a boun
 v0.1:
 - notebook journal;
 - evidence list;
-- in-fiction help/onboarding page.
+- separate dark Help utility window opened from labeled notebook chrome under P4-R46; one configurable notebook toggle with native X close controls and Escape reserved for the game under P4-R47.
 
 v2 candidate:
 - relationship graph.
@@ -88,7 +92,7 @@ Persist only what cannot be reconstructed:
 
 Do **not** persist a full map registry in v0.1.
 
-Provisional target: **≤500 KB canonical state per save**. T1 owns the real limit.
+Hard v0.1 limit: **≤500 KB canonical state per save** under completed T1/P4-R17; the current validator conservatively enforces 500000 bytes. Full staged validation remains mandatory.
 
 ## 5. Entity model for v0.1
 
@@ -248,6 +252,12 @@ Backward-compatible typo/text revisions must not force save migration. Content p
 
 ## 18. Architecture proof gates
 
+The [2026-09-05 takeover audit](../management/PM_TAKEOVER_AUDIT_2026-09-05.md) records incomplete conditional runtime/UI code. It does not supersede this architecture. T11 composition and T12 runtime UI verdicts remain required for promotion; T12 is in progress with unresolved failures. Route and two-location scope must be reconciled with the earlier Muldraugh test direction before binding.
+
 Before the broad architecture is considered signed off, record spike results for T1–T10 using `docs/research/SPIKE_TEMPLATE.md`.
 
 The first six critical probes are T1, T9, T2, T3, T4 and T5. T7, T8 and T10 are complete, so Engineering Gate B is complete with T10's inventory-pane-only limitation. T6 is only needed if retrofit returns.
+
+## Generated trial extension — 2026-09-05
+
+P4-R53 and P4-R58–R60 extend the historical fixed fixture with per-save fictional addresses and per-character finding/mark records. These are authoritative retained records, not rebuildable display caches. Active generated/address/marker writers use a common client SaveBudget adapter and the pure Validator.validateCombined check; each subsystem still validates its own schema before commit. Notebook map status and map overlays are projections. Manual Trial.start is development-only and initializes source capture before starting/resuming a case. See ../management/TOMORROW_PLAYTEST.md for remaining native gates; this does not establish production, multi-case or multiplayer support.

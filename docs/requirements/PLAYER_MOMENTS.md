@@ -1,5 +1,7 @@
 # Target Player Moments
 
+**v0.1 decision update, 2026-09-05:** P4-R48 keeps two Muldraugh story locations, with D4 at relay. Police arrival remains an ordinary journal entry (P4-R50); physical availability is expressed in plain language (P4-R51). Death recap is deferred beyond v0.1 (P4-R52); any recap moment below is future direction, while real death/reload integrity remains required under E10. Existing Help/X/configurable-toggle decisions stand.
+
 The project deliberately avoids XP bars, solved-case banners and a final truth. It still needs concrete rewarding moments. These are the three v0.1/v1 targets.
 
 ## Moment 1 — “That ordinary thing was not ordinary”

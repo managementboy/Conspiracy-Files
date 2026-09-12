@@ -1,17 +1,14 @@
-local Content = require("ConspiracyFiles.Content")
-local Ids = require("ConspiracyFiles.Ids")
-local Renderer = require("ConspiracyFiles.Renderer")
-local Validator = require("ConspiracyFiles.Validator")
+local Content = require("ConspiracyFiles/Content")
+local Ids = require("ConspiracyFiles/Ids")
+local Renderer = require("ConspiracyFiles/Renderer")
+local Validator = require("ConspiracyFiles/Validator")
 
 local ThreadState = {}
 
-local function copy(value, copies)
+local function copy(value)
     if type(value) ~= "table" then return value end
-    copies = copies or {}
-    if copies[value] then return copies[value] end
     local result = {}
-    copies[value] = result
-    for key, child in pairs(value) do result[copy(key, copies)] = copy(child, copies) end
+    for key, child in pairs(value) do result[key] = copy(child) end
     return result
 end
 
@@ -108,10 +105,19 @@ function ThreadState.new(initialRoot)
     local candidate = initialRoot or freshRoot()
     local ok, message = Validator.validate(candidate)
     if not ok then return nil, message end
+    -- A loaded save has no trusted earlier root to compare against. Its
+    -- monotonicity is therefore established structurally: immutable histories
+    -- must be valid extensions of the empty schema root, after which replace()
+    -- enforces extension relative to the live canonical root.
+    ok, message = isMonotonicExtension(freshRoot(), candidate)
+    if not ok then return nil, message end
     local root = copy(candidate)
     local lastDiagnostic = nil
     local api = {}
 
+    -- Transition contract: (ok, result, changed). On an idempotent success,
+    -- result is the value already committed and changed is false. Callers that
+    -- need to distinguish ownership of a transition must inspect changed.
     local function stage(mutator)
         local proposed = copy(root)
         local changed, result = mutator(proposed)
@@ -242,7 +248,7 @@ function ThreadState.new(initialRoot)
     end
 
     function api.renderJournal()
-        return Renderer.renderJournal(root)
+        return Renderer.renderJournal(copy(root))
     end
 
     function api.resolveEvidence(evidenceId)

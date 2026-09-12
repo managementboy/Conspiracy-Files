@@ -1,0 +1,6 @@
+name=CF AutoTest (Linux dev machine only)
+id=CFAutoTest
+author=Conspiracy-Files development
+modversion=0.1.0
+versionMin=42.0.0
+description=Starts a fresh debug game unattended for tools/autotest/pz.sh. Never publish.

@@ -1,0 +1,8 @@
+Linux death check 20260911T160320: PASS
+source: ee58ce3 + uncommitted mod changes
+first survivor: Jeannine, carrying 2 case documents at death
+notebook before death: 2 1=2031849767:document-1:Transfer notice / BF-287 | 2=2031849767:document-2:Receiving roster / BF-287
+new survivor: Tracy; papers: papers issued: Tracy's Papers
+notebook for the new survivor: 2 1=2031849767:document-1:Transfer notice / BF-287 | 2=2031849767:document-2:Receiving roster / BF-287
+document taken back off the body: Transfer notice / BF-287
+errors inside the mod: 0

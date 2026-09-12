@@ -1,0 +1,184 @@
+-- Vehicles as places, first slice: finding a car's containers and finding one
+-- again after it has been driven away.
+--
+-- Owner, 2026-09-09: "next is placement of hints in cars. placing bodies in
+-- car boots. placing unreasonable amount of things in a car." And then, on the
+-- two things the jar could not answer: "I can confirm they do" - a vehicle's
+-- identity and the contents of its boot both survive a save and reload.
+--
+-- Everything the mod places today is addressed by a grid square, which is safe
+-- because a kitchen cupboard cannot walk away. This is the layer that stops
+-- that assumption reaching cars: a clue in a vehicle is found again by a mark
+-- left on the PART, so it does not matter where the car has since been parked.
+package.path = "mod/common/media/lua/shared/?.lua;" .. package.path
+
+-- A fake cell with two vehicles, one of which will drive off mid-test.
+local function fakePart(id, capacity)
+    local md = {}
+    local part
+    part = {
+        getId = function() return id end,
+        getContainerCapacity = function() return capacity end,
+        getModData = function() return md end,
+        getItemContainer = function() return part.container end,
+    }
+    part.container = {
+        getType = function() return "vehicle" end,
+        getVehiclePart = function() return part end,
+        items = {},
+    }
+    return part
+end
+
+local function fakeVehicle(x, y, partIds)
+    local parts = {}
+    for id, capacity in pairs(partIds) do parts[id] = fakePart(id, capacity) end
+    local vehicle
+    vehicle = {
+        at = { x = x, y = y, z = 0 },
+        getSquare = function()
+            return { getX = function() return vehicle.at.x end,
+                     getY = function() return vehicle.at.y end,
+                     getZ = function() return vehicle.at.z end }
+        end,
+        -- The vehicle itself answers getPartById. getParts() is deliberately
+        -- absent: the VehicleParts it returns in game cannot be indexed from Lua.
+        getPartById = function(_, id) return parts[id] end,
+        parts = parts,
+    }
+    return vehicle
+end
+
+local car = fakeVehicle(100, 100, { GloveBox = 5, TruckBed = 40 })
+local van = fakeVehicle(102, 101, { TruckBed = 70 })
+local absent = fakeVehicle(500, 500, { GloveBox = 5 })
+-- The engine returns a java.util.Set from getVehicles(): it has size() and
+-- toArray(), and NO get(i). Both earlier fakes were kinder than the game - a
+-- Lua table (the game crashed on `pairs`), then a Set with get(i) (the game
+-- found no vehicles at all). This one offers only what the jar declares.
+local function javaSet(list)
+    return { size = function() return #list end,
+             toArray = function() local copy = {} for i, v in ipairs(list) do copy[i] = v end return copy end }
+end
+local cell = { getVehicles = function() return javaSet({ car, van, absent }) end }
+getCell = function() return cell end
+
+local W = require("ConspiracyFiles/WorldAccess")
+
+-- Only the parts a clue could plausibly live in, in a fixed order. Engine
+-- iteration order must never decide which container a case uses, for the same
+-- reason every other selection in this mod is ordered: a case has to rebuild
+-- identically after a reload.
+local parts = W.vehicleParts(car)
+assert(#parts == 2, "expected two usable containers, got " .. #parts)
+assert(parts[1].part == "GloveBox", "GloveBox must come first, got " .. parts[1].part)
+assert(parts[2].part == "TruckBed")
+assert(parts[1].capacity == 5 and parts[2].capacity == 40,
+    "capacity must be reported; a 20-weight body fits a boot and not a glovebox")
+
+-- Distance is measured from where the car is NOW.
+local near = W.vehiclesNear(100, 100, 0, 5)
+assert(#near == 2, "expected the two nearby vehicles, got " .. #near)
+local far = W.vehiclesNear(100, 100, 0, 1)
+assert(#far == 1, "only the car itself is within one tile")
+assert(#W.vehiclesNear(100, 100, 1, 50) == 0, "a vehicle on another floor is not nearby")
+
+-- Mark a part, then drive the car to the other side of town. The mark is the
+-- whole point: nothing here asks the engine which vehicle this is.
+local boot = parts[2].container
+assert(W.markVehiclePart(boot, "cf-veh:case-1:doc-4"), "marking a real vehicle part must succeed")
+local target = { x = 100, y = 100, z = 0, vehiclePart = "TruckBed", vehicleMark = "cf-veh:case-1:doc-4" }
+assert(W.resolveVehicle(target) == boot, "the marked boot must resolve where it stands")
+
+-- Before placement nothing is marked yet, so an unclaimed part of the right
+-- kind on a car still standing where the candidate was found must resolve.
+-- Without this the first placement could never happen at all.
+local fresh = fakeVehicle(200, 200, { TruckBed = 40 })
+cell.getVehicles = function() return javaSet({ car, van, absent, fresh }) end
+local unplaced = { x = 200, y = 200, z = 0, vehiclePart = "TruckBed" }
+assert(W.resolveVehicle(unplaced, "cf-g2:doc-9") == fresh.parts.TruckBed.container,
+    "an unmarked part where the candidate was found must resolve, or nothing is ever placed")
+-- But only where it was found. A car that drove off before we placed must not
+-- be silently replaced by whichever car is there now.
+fresh.at = { x = 700, y = 700, z = 0 }
+assert(W.resolveVehicle(unplaced, "cf-g2:doc-9") == nil,
+    "placement must wait rather than put the evidence in a car nobody chose")
+fresh.at = { x = 200, y = 200, z = 0 }
+-- And a part already claimed by another document is not free to take.
+W.markVehiclePart(fresh.parts.TruckBed.container, "cf-g2:doc-2")
+assert(W.resolveVehicle(unplaced, "cf-g2:doc-9") == nil, "a claimed part belongs to the document that claimed it")
+
+-- Only the player can move a car (owner, 2026-09-09), so a moved car means the
+-- clue is travelling with the person it is for. What must not break is the mod
+-- losing track of a clue the player still has.
+car.at = { x = 140, y = 96, z = 0 }
+assert(W.resolveVehicle(target) == boot,
+    "a driven car must still resolve; the evidence went with the driver and the mod must know it")
+
+-- Driven right out of range: not found, and explicitly so. Absence is never
+-- destruction here, exactly as the whereabouts scan already treats it - and
+-- here it is not even loss, since somebody drove it there.
+car.at = { x = 900, y = 900, z = 0 }
+local gone, why = W.resolveVehicle(target)
+assert(gone == nil and why == "vehicle-not-found", "a car far away must be reported missing, not guessed at")
+
+-- A mark belongs to ONE part, not to the whole car. The glovebox of the same
+-- car, once another document has claimed it, must never answer to our mark.
+car.at = { x = 100, y = 100, z = 0 }
+local glove = W.vehicleParts(car)[1].container
+W.markVehiclePart(glove, "cf-g2:someone-else")
+local wrongPart = { x = 100, y = 100, z = 0, vehiclePart = "GloveBox", vehicleMark = "cf-veh:case-1:doc-4" }
+assert(W.resolveVehicle(wrongPart) == nil, "the mark belongs to one part, not to the whole car")
+
+-- Malformed targets are refused rather than guessed at.
+assert(W.resolveVehicle({ x = 1, y = 1, z = 0 }) == nil, "a square target is not a vehicle target")
+assert(W.resolveVehicle(nil) == nil)
+assert(not W.markVehiclePart(nil, "x"), "marking nothing must fail rather than pretend")
+assert(not W.markVehiclePart({ getType = function() return "counter" end }, "x"),
+    "a kitchen counter has no vehicle part to mark")
+
+-- Bodies in seats (owner, 2026-09-09: "bodies can fit in car seats too").
+--
+-- A car seat declares MaxCapacity 20 and a body weighs exactly 20. What that
+-- does NOT mean is that the engine refuses anything heavier: the owner pointed
+-- out he can fit a 40-weight generator on a seat, so capacity evidently gates
+-- on "is this container already full" rather than on the incoming weight.
+--
+-- Which makes the filter below OUR judgement, not the engine's. The game would
+-- put a body in a glovebox; a player would laugh at it. This test pins the
+-- judgement, and the comment records that it is one.
+local hearse = fakeVehicle(100, 100, { GloveBox = 5, SeatFrontRight = 20, TruckBed = 100 })
+local roomy = W.partsWithRoom(hearse, W.BODY_WEIGHT)
+assert(#roomy == 2, "a seat and a boot take a body; a glovebox does not")
+assert(roomy[1].part == "TruckBed" or roomy[2].part == "TruckBed")
+local seatFound = false
+for _, entry in ipairs(roomy) do if entry.part == "SeatFrontRight" then seatFound = true end end
+assert(seatFound, "a front seat must be able to hold a body")
+for _, entry in ipairs(roomy) do
+    assert(entry.part ~= "GloveBox", "a glovebox declares 5 and must never be offered for a body")
+end
+assert(#W.partsWithRoom(fakeVehicle(1, 1, { GloveBox = 5 }), W.BODY_WEIGHT) == 0,
+    "a car with only a glovebox offers nowhere for a body")
+-- And a glovebox is still the right place for a document.
+assert(#W.partsWithRoom(fakeVehicle(1, 1, { GloveBox = 5 }), 0.2) == 1,
+    "a glovebox must still take a piece of paper")
+
+-- The scan is bounded: a cell can hold a great many vehicles.
+local many = {}
+for i = 1, 40 do many[#many + 1] = fakeVehicle(100, 100, { TruckBed = 40 }) end
+cell.getVehicles = function() return javaSet(many) end
+assert(#W.vehiclesNear(100, 100, 0, 5, 8) <= 8, "the vehicle scan must stay bounded")
+
+-- A collection that is not the engine's shape must be refused, not iterated
+-- with `pairs`; the square fallback still finds a vehicle standing nearby.
+cell.getVehicles = function() return { [car] = true } end
+cell.getGridSquare = function(_, x, y, z)
+    return { getVehicleContainer = function() return (x == 100 and y == 100) and car or nil end }
+end
+local viaSquares = W.vehiclesNear(100, 100, 0, 5)
+assert(#viaSquares == 1 and viaSquares[1].vehicle == car and W.lastVehicleScan == "squares",
+    "without toArray the scan must fall back to asking the squares")
+cell.getGridSquare = nil
+
+print("PASS vehicle access: ordered parts with capacities, distance from where a car is now, "
+    .. "and a marked boot that survives being driven across town")

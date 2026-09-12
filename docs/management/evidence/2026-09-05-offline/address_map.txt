@@ -1,0 +1,15 @@
+[CF-ADDRESS] Building full Muldraugh trial address index; no terrain revealed.
+[CF-ADDRESS] Matching roads for 2 buildings
+[CF-ADDRESS] Ready: 2 fixed addresses; 0 unresolved; peak callback 0 ms. Zoom in on the world map.
+[CF-ADDRESS] Restored 2 fixed addresses. Zoom in on the world map.
+[CF-ADDRESS] Filling address gaps; preserving all 2 existing addresses.
+[CF-ADDRESS] Building full Muldraugh trial address index; no terrain revealed.
+[CF-ADDRESS] Matching roads for 2 buildings
+[CF-ADDRESS] Ready: 2 fixed addresses; 0 unresolved; peak callback 0 ms. Zoom in on the world map.
+[CF-ADDRESS] Restored 2 fixed addresses. Zoom in on the world map.
+PASS address index: parity/order, full-map scan, persisted labels, known/forgotten map mask, cooperative rendering, coordinate-free text
+[CF-ADDRESS] Audit begin: last map viewport; original numbers and map knowledge remain unchanged.
+[CF-ADDRESS] Audit 10940,9710..10946,9718 id=b reason=hidden by native map knowledge address=102 Test St rooms=bedroom
+[CF-ADDRESS] Audit 10920,9680..10926,9688 id=a reason=hidden by native map knowledge address=101 Test St rooms=bedroom
+[CF-ADDRESS] Audit complete: 0 drawn buildings, 2 other footprints (first 60 detailed).
+PASS setback fixtures, curve direction invariance, distance cap

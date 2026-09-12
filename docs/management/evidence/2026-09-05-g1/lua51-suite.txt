@@ -1,0 +1,68 @@
+PASS CF-V01-P04 D1/D2 introduction paths expose only ordinary-text leads
+PASS CF-V01-P06 duplicate/reordered materialisation and discovery are idempotent after reconstruction
+PASS CF-V01-P07 exported snapshots cannot mutate authored or marked Evidence truth
+PASS CF-V01-P07 renderer and content modules cannot mutate canonical truth
+PASS CF-V01-P08 JournalEntry chronology is append-only across mutation attempts
+PASS CF-V01-P09 deterministic no-AI renderer survives save-shaped round trips
+PASS CF-V01-P10 D5/D6 contradiction is knowledge-bounded and exactly once
+PASS CF-V01-P11 B-37 recontextualisation requires a prior marked key
+PASS CF-V01-P12 only the three eligible event classes are major and never solved
+PASS CF-V01-P14 Mark Interesting creates one immutable chronology record per intent
+PASS CF-V01-P15 optional B-37 key does not gate six-document or contradiction paths
+PASS CF-V01-P16 Organisation label derives generic-to-specific without persistence
+PASS CF-V01-P17 Location labels derive independently from idempotent confirmations
+PASS CF-V01-P18 staged recursive validation rejects unsafe states and preserves last-known-good
+PASS CF-V01-P18 validation rejects split-brain journal and ambiguous marked records
+PASS CF-V01-P19 conservative estimator enforces the 500 KB boundary
+PASS CF-V01-P19 estimator rejects cycles safely and maximal work stays within budget
+PASS CF-V01-P24 Evidence resolves full static content without copying document bodies
+PASS CF-V01-P25 complete suite loads with PZ globals absent
+PASS notebook projection is discovery-ordered and knowledge-bounded
+PASS runtime auto-execute plus require registers hooks exactly once
+PASS placement pools are explicit, bounded and cover every physical asset
+PASS placement selection is deterministic by seed and varies across new-save seeds
+PASS persisted placement plans restore without rerolling and without aliasing
+PASS physical eligibility is independent of evidence discovery order
+PASS session rejects a sink failure without advancing domain or placement
+PASS session placement intent and count-one commit round-trip as one root
+PASS partial absence never activates fallback; explicit destruction does; conflicts stay sticky
+PASS malformed legacy and oversized session roots are rejected without writes
+PASS arrival requires referenced exact binding and two identical square samples
+PASS scheduler bounds records and deadline while failed subsystem leaves other jobs running
+PASS two-location contract retains all six documents and police-only context defers company name
+PASS runtime mock composes seven exact placements and reloads without duplicate items
+PASS runtime mock reconciles after-add interruption and never retries an empty persisted intent
+PASS runtime mock server disablement performs no ModData access
+PASS runtime mock client and T12 disable before writes; T11 shares adapters with one item
+PASS runtime mock malformed roots preserve storage and disable initialization
+PASS menu mock generic marks require ownership and retain a durable single intent
+PASS menu mock delivers approved context only after a successful committed discovery
+PASS menu mock preserves foreign actions, deduplicates groups and rejects token ambiguity
+[CF-T12]|READY|version=DEV-0.6.1-row-bounds|synthetic=true|worldWrites=false|ui=DEV-0.6.1-row-bounds
+[CF-GUIDE]|OPEN|version=GUIDE-0.1 / candidate DEV-0.6|mode=candidate (no wrapper)|Results remain in memory and console; no save data written
+[CF-GUIDE]|REFUSED|version=GUIDE-0.1 / candidate DEV-0.6|mode=candidate (no wrapper)|wrong mode for ui-scroll
+[CF-GUIDE]|OWNER_VERDICT|version=GUIDE-0.1 / candidate DEV-0.6|mode=T12|ui-scroll=Fail; observation only, not gate acceptance
+[CF-GUIDE]|SNAPSHOT|version=GUIDE-0.1 / candidate DEV-0.6|mode=T12|Mode: T12
+[CF-GUIDE]|SNAPSHOT|version=GUIDE-0.1 / candidate DEV-0.6|mode=T12|Guide: GUIDE-0.1 / candidate DEV-0.6
+[CF-GUIDE]|SNAPSHOT|version=GUIDE-0.1 / candidate DEV-0.6|mode=T12|Bindings accepted: false
+[CF-GUIDE]|SNAPSHOT|version=GUIDE-0.1 / candidate DEV-0.6|mode=T12|Runtime: nil / disabled: true
+[CF-GUIDE]|REFUSED|version=GUIDE-0.1 / candidate DEV-0.6|mode=T12|wrong mode for placement
+[CF-GUIDE]|OWNER_VERDICT|version=GUIDE-0.1 / candidate DEV-0.6|mode=T12|placement=Not tested; observation only, not gate acceptance
+[CF-GUIDE]|SNAPSHOT|version=GUIDE-0.1 / candidate DEV-0.6|mode=T12|Mode: T12
+[CF-GUIDE]|SNAPSHOT|version=GUIDE-0.1 / candidate DEV-0.6|mode=T12|Guide: GUIDE-0.1 / candidate DEV-0.6
+[CF-GUIDE]|SNAPSHOT|version=GUIDE-0.1 / candidate DEV-0.6|mode=T12|Bindings accepted: false
+[CF-GUIDE]|SNAPSHOT|version=GUIDE-0.1 / candidate DEV-0.6|mode=T12|Runtime: nil / disabled: true
+[CF-GUIDE]|SNAPSHOT|version=GUIDE-0.1 / candidate DEV-0.6|mode=T12|Mode: T12
+[CF-GUIDE]|SNAPSHOT|version=GUIDE-0.1 / candidate DEV-0.6|mode=T12|Guide: GUIDE-0.1 / candidate DEV-0.6
+[CF-GUIDE]|SNAPSHOT|version=GUIDE-0.1 / candidate DEV-0.6|mode=T12|Bindings accepted: false
+[CF-GUIDE]|SNAPSHOT|version=GUIDE-0.1 / candidate DEV-0.6|mode=T12|Runtime: nil / disabled: true
+PASS UI composition shares a clamped document pane, explicit ink and owner key policy
+PASS generated case repeats across catalog order and does not alias input
+PASS generated 100-seed sample varies sites outlines text and connection meaning
+PASS generated eligibility rejects unknown excluded incompatible and synthetic defaults
+PASS generated locations cannot use aliases or overlapping floors as distinct sites
+PASS generated malformed catalogs and seeds fail without producing a partial case
+PASS generated restoration rejects altered facts text references and unsupported revisions
+PASS generated projections preserve discovery order and hide undiscovered connections
+PASS traceability matrix covers every plain-Lua acceptance criterion at least once
+49 tests, 0 failures

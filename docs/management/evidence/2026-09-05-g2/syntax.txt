@@ -1,0 +1,1 @@
+32 Lua files parsed successfully

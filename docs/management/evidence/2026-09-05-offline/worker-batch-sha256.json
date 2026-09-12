@@ -1,0 +1,18 @@
+[
+  {
+    "file": "shared/ConspiracyFiles/Generated/Session.lua",
+    "sha256": "24541B747CE0B2395588F502C32086C3815BE506187E298E66950304FED01C55"
+  },
+  {
+    "file": "shared/ConspiracyFiles/MarkerLayout.lua",
+    "sha256": "76C263B79CD7895978B77DF9AB0B3FDD25AA29C0DCC76C14D537C585E96BBC59"
+  },
+  {
+    "file": "client/ConspiracyFiles/ClueMarkers.lua",
+    "sha256": "E209FACA487755150995CFFDCC912026BB367B347ECC3383B070209DCF2E7606"
+  },
+  {
+    "file": "client/ConspiracyFiles/Notebook.lua",
+    "sha256": "8E7C15F70D983494194B4E589AE6848AC81F833B33CBA0D8A5DD75C64D044E13"
+  }
+]

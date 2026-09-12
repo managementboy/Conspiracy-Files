@@ -1,6 +1,9 @@
 # V0.1 Data Model — Story-Derived Minimal Model
 
 **Status:** v0.1 design for the single built-in Dead Air Narrative Thread.  
+
+**Takeover clarification, 2026-09-05:** owner approval of `dead-air-r1` with added context is verified in the [content review](../reviews/DEAD_AIR_CONTENT_REVIEW_2026-09-03.md). The logical two-location scope below remains the acceptance contract while the current three-location candidate/test-route conflict is reconciled. Context disclosure, title/summary examples and physical-state integration remain corrective work; see [PM audit](../management/PM_TAKEOVER_AUDIT_2026-09-05.md). Historical references below to required human approval are a policy, not a claim that the owner has not approved this revision.
+
 **Source story:** `test/fixtures/THREAD-001-DEAD-AIR.md`, content revision `dead-air-r1`.  
 **Technical status:** logical/domain model only. T1 validated vanilla Lua Global ModData on Build 42.20.4 within the hard ≤500 KB/save canonical-state budget and established P4-R32. T5 validated a mod-owned per-instance ModData token for physical tracking and explicitly forbids direct PZ/Lua/Java object references; this document still does not define the final Lua encoding.
 

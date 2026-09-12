@@ -1,0 +1,5 @@
+LOG  : Lua          f:566> [CF-T12]|EVENT|kind=ROW_SELECTED|section=journal|title=Found CSS service ticket|compact=false
+LOG  : Lua          f:566> [CF-T12]|EVENT|kind=NOTEBOOK_OPEN|probe=DEV-0.4-scrollbar|build=42.20|width=2240|height=1300
+LOG  : Lua          f:568> [CF-T12]|EVENT|kind=ENVIRONMENT|signature=3200x2000:font=3
+LOG  : Lua          f:745> [CF-T12]|EVENT|kind=ROW_SELECTED|section=journal|title=Found CSS service ticket|compact=false
+LOG  : Lua          f:940> [CF-T12]|EVENT|kind=ROW_SELECTED|section=evidence|title=CSS Field Service Ticket 93-0714|compact=false
