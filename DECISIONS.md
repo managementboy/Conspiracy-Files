@@ -352,3 +352,16 @@ under an earlier revision is set aside on load (not deleted). Claude proposed
 keeping old cases playable; owner: "no, all new". A playtest after a rules
 change starts a fresh game. Do not build revision compatibility, and do not
 offer it again; say plainly when an update needs a new game.
+
+## Evidence for a settled fact — 2026-09-12
+
+**P4-R78 — a settled fact cites a command or an archived log, never a
+recollection.** Anything written down as established about the engine, a build
+or a live result must carry a citation that another session can check: a
+command that can be re-run (`tools/autotest/...`, `tools/kahlua/run.sh`,
+`lua5.1 test/...`), or a file under `docs/management/evidence/` or
+`dev/playtest-logs/`. Attribution to a person is not a citation. If only a
+recollection exists, write it as a claim to test and say what would settle it;
+do not build on it. Owner endorsed the rule as stated after a task handoff
+asserted an in-game confirmation the owner did not recall giving — the claim
+happened to be true, which is exactly why it went unchallenged.

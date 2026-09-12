@@ -89,6 +89,8 @@ Where it matters, make the double demand a receiver - see the mock in
 ## Decision integrity
 
 - No implementation should silently contradict an existing decision.
+- **P4-R78:** a settled fact cites a re-runnable command or an archived log.
+  Attribution to a person is not a citation; a recollection is a claim to test.
 - **If a spike disproves a decision, supersede it in `DECISIONS.md`, link the spike/issue/result, and record the replacement. Technical reality wins.**
 - New technical decisions with lasting consequences go in `docs/decisions/`.
 - New Build 42 API assumptions must be verified and recorded in `docs/research/`.
