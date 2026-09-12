@@ -36,8 +36,11 @@ local function safe(fn,...) local ok,v=pcall(fn,...) if ok then return v end end
 -- Native-pixel geometry. Everything below is in the device's own pixels and is
 -- multiplied by a whole number on the way to the screen, so a pixel is always
 -- a square: 2x or 3x, chosen by the ZOOM the player last set.
-S.LINES=6
-S.COLS=34
+-- Portrait, like the shell the owner drew: the glass is nearly square and the
+-- keypad sits under it. A first pass was 34 columns by 6 lines, which made a
+-- letterbox - correct in code, wrong on screen (2026-09-12).
+S.LINES=10
+S.COLS=22
 local PAD=6                       -- glass margin
 local CASE=10                     -- plastic around the glass
 S.HOLD_MS=450                     -- how long a held POWER becomes the lamp
@@ -76,7 +79,7 @@ function S.metrics(scale)
     local inner=S.COLS*8               -- 8 native px is the widest common glyph
     local glass={w=inner+PAD*2,h=(S.LINES+2)*Font.line+PAD*2+6}
     local w=glass.w+CASE*2
-    local h=glass.h+CASE*2+22          -- 22 native px of keypad and lip
+    local h=glass.h+CASE+12+26         -- lid above the glass, keypad and lip below
     return {scale=scale,glass=glass,w=w*scale,h=h*scale}
 end
 
@@ -119,17 +122,26 @@ function Screen:text(value,x,y,colour)
     return cursor-x
 end
 
+-- Four round buttons with a rocker between them, spaced across the foot of the
+-- case: the arrangement on the shell the owner drew.
 function Screen:buttons()
     local s=self.scale
     local m=S.metrics(s)
-    local row=m.h-16*s
+    local width=m.w/s
+    local row=m.h/s-17
     local out={}
-    local xs={CASE+6,CASE+22,CASE+64,CASE+80}
     local names={"MODE","PREV","NEXT","INDEX"}
-    for i=1,4 do out[#out+1]={id=names[i],x=xs[i]*s,y=row,w=11*s,h=11*s,round=true} end
-    out[#out+1]={id="UP",x=(CASE+42)*s,y=row,w=16*s,h=5*s}
-    out[#out+1]={id="DOWN",x=(CASE+42)*s,y=row+6*s,w=16*s,h=5*s}
-    out[#out+1]={id="POWER",x=(CASE+2)*s,y=2*s,w=10*s,h=5*s}
+    local gap=(width-2*CASE-24)/3           -- 24 native px reserved for the rocker
+    local x=CASE
+    for i=1,4 do
+        if i==3 then x=x+24+4 end            -- the rocker sits in the middle
+        out[#out+1]={id=names[i],x=x*s,y=row*s,w=12*s,h=12*s}
+        x=x+gap
+    end
+    local rx=(width-24)/2
+    out[#out+1]={id="UP",x=rx*s,y=row*s,w=24*s,h=5*s}
+    out[#out+1]={id="DOWN",x=rx*s,y=(row+7)*s,w=24*s,h=5*s}
+    out[#out+1]={id="POWER",x=(CASE+1)*s,y=3*s,w=12*s,h=5*s}
     return out
 end
 
@@ -141,9 +153,10 @@ function Screen:prerender()
     self:drawRectBorder(0,0,self.width,self.height,1,SHELL_EDGE[1],SHELL_EDGE[2],SHELL_EDGE[3])
     -- Power light, beside the power button.
     local led=self.on and LED_ON or LED_OFF
-    self:drawRect((CASE+14)*s,2*s,4*s,4*s,1,led[1],led[2],led[3])
+    self:drawRect((CASE+16)*s,3*s,5*s,5*s,1,led[1],led[2],led[3])
+    self:drawRectBorder((CASE+16)*s,3*s,5*s,5*s,1,SHELL_EDGE[1],SHELL_EDGE[2],SHELL_EDGE[3])
     -- Glass.
-    local gx,gy=CASE*s,(CASE+2)*s
+    local gx,gy=CASE*s,12*s
     local glass=self.lamp and GLASS_LIT or GLASS
     self:drawRect(gx,gy,m.glass.w*s,m.glass.h*s,1,glass[1],glass[2],glass[3])
     self:drawRectBorder(gx,gy,m.glass.w*s,m.glass.h*s,1,SHELL_EDGE[1],SHELL_EDGE[2],SHELL_EDGE[3])

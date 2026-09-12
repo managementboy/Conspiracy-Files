@@ -50,3 +50,40 @@ function CFOrg.papersHeld()
     local F = ConspiracyFiles.CaseFile
     return F ~= nil and F.held(getPlayer()) ~= nil
 end
+
+-- The device's own screen: does it open, does it draw, do the buttons answer?
+function CFOrg.openScreen()
+    local w = ConspiracyFiles.OrganiserScreen.open()
+    return w ~= nil, tostring(w and w.width), tostring(w and w.height)
+end
+
+function CFOrg.pressButton(id)
+    local w = ConspiracyFiles.OrganiserScreen.window
+    if not w then return false, "no screen" end
+    w:press(id)
+    return true, tostring(w.section), tostring(w.entry), tostring(w.card), tostring(w.index), tostring(w.on)
+end
+
+function CFOrg.screenState()
+    local w = ConspiracyFiles.OrganiserScreen.window
+    if not w then return false, "no screen" end
+    return true, tostring(w.section), tostring(w.entry), tostring(w.card), tostring(w.index), tostring(w.on), tostring(w.lamp)
+end
+
+function CFOrg.clickButton(id)
+    local w = ConspiracyFiles.OrganiserScreen.window
+    if not w then return false, "no screen" end
+    for _, b in ipairs(w:buttons()) do
+        if b.id == id then
+            w:onMouseDown(b.x + 1, b.y + 1)
+            w:onMouseUp(b.x + 1, b.y + 1)
+            return true, id
+        end
+    end
+    return false, "no such button: " .. tostring(id)
+end
+
+function CFOrg.closeScreen()
+    ConspiracyFiles.OrganiserScreen.close()
+    return true
+end

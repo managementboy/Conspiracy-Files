@@ -113,9 +113,11 @@ function O.read(player)
         log("organiser not read: "..tostring(why))
         return false,why
     end
-    local ui=ConspiracyFiles.NotebookUI or ConspiracyFiles.Notebook
-    if not ui or not ui.open then return false,"no reading surface loaded" end
-    safe(ui.open,"evidence")
+    -- The device's own screen, not the old window: what opens is the object in
+    -- the survivor's hand (P4-R79, one carried reading surface).
+    local screen=ConspiracyFiles.OrganiserScreen
+    if not screen or not screen.open then return false,"no reading surface loaded" end
+    safe(screen.open)
     log("organiser read")
     return true
 end
