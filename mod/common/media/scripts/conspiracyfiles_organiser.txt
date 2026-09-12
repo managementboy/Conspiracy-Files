@@ -17,9 +17,11 @@ module ConspiracyFiles
      * - today. The mod is called Dead Air, and a device that genuinely is a
      * radio underneath can one day be tuned.
      *
-     * Icon and model are a stand-in: WalkieTalkieBudget is the closest vanilla
-     * shape until the mod has art of its own. A wrong icon is a cosmetic bug;
-     * a missing texture is an item nobody can see in their inventory.
+     * The inventory icon is the mod's own: media/ui/Item_PocketOrganiser.png,
+     * drawn to the silhouette the owner sent on 2026-09-12 - a portrait case,
+     * a big screen taking most of the front, four round buttons with a rocker
+     * between them. The world MODEL is still a stand-in (a toy walkie-talkie),
+     * because a dropped organiser is seen from ten tiles up and rarely.
      */
     item Organiser
     {
@@ -27,7 +29,7 @@ module ConspiracyFiles
         DisplayCategory = Electronics,
         ItemType = base:radio,
         Weight = 0.3,
-        Icon = WalkieTalkieBudget,
+        Icon = PocketOrganiser,
         StaticModel = WalkieTalkieToy,
         WorldStaticModel = WalkieTalkieToy,
         BaseVolumeRange = 0,
