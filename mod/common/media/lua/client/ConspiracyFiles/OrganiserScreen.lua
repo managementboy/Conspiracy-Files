@@ -178,6 +178,19 @@ function Screen:list()
     return self.cachedList
 end
 
+-- One string, wrapped to a pixel width.
+local function wrapTo(text,width)
+    local out={}
+    local line=""
+    for word in tostring(text or ""):gmatch("%S+") do
+        local candidate=line=="" and word or (line.." "..word)
+        if Font.width(candidate,1)<=width then line=candidate
+        else if line~="" then out[#out+1]=line end; line=word end
+    end
+    if line~="" then out[#out+1]=line end
+    return out
+end
+
 local function pages(detail,width)
     local lines={}
     for paragraph in (tostring(detail or "").."\n"):gmatch("([^\n]*)\n") do
@@ -220,15 +233,35 @@ function Screen:draw(gx,gy)
     local program=self:program()
     local rows=self:list()
     if self.record then
-        local lines=pages(self.record.detail,c.w-4-8)
+        -- A record, laid out as a Palm application laid one out: the title,
+        -- the few facts as labelled fields, a rule, then what the survivor
+        -- wrote. Fields never scroll away; the writing does.
         K.titleBar(c,program.title,self.record.index and (self.record.index.." of "..#rows) or nil)
+        local y=line+2
+        local title=self.record.title or ""
+        for _,text in ipairs(wrapTo(title,c.w-4)) do
+            K.text(c,text,2,y,K.INK); y=y+line
+        end
+        for _,field in ipairs(self.record.fields or {}) do
+            K.text(c,field.label,2,y,K.DIM)
+            local value=wrapTo(field.value,c.w-38)
+            for i,text in ipairs(value) do
+                if i>2 then break end            -- a field is a fact, not an essay
+                K.text(c,text,36,y,K.INK); y=y+line
+            end
+            if #value==0 then y=y+line end
+        end
+        K.fill(c,0,y,c.w,1,K.DIM); y=y+2
+        local room=math.floor((c.h-line-2-y+line)/line)-2
+        if room<2 then room=2 end
+        local body=pages(self.record.detail,c.w-4-8)
         local top=(self.card-1)*room+1
         for i=0,room-1 do
-            local text=lines[top+i]
+            local text=body[top+i]
             if not text then break end
-            K.text(c,text,2,line+2+i*line,K.INK)
+            K.text(c,text,2,y+i*line,K.INK)
         end
-        K.arrows(c,line+2,room*line,top>1,top+room-1<#lines)
+        K.arrows(c,y,room*line,top>1,top+room-1<#body)
         local foot=K.foot(c,"")
         local x=K.command(c,"BACK",2,foot,"BACK")
         if self.record.todo then K.command(c,"TICK",x,foot,"TICK")

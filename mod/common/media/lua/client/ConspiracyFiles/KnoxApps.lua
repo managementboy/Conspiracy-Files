@@ -51,16 +51,49 @@ function A.dateOf(atHours)
 end
 
 -- FILES ----------------------------------------------------------------------
+-- A record is shown the way a Palm application showed one: the title, then the
+-- few facts as labelled fields, then a rule, then what the survivor actually
+-- wrote. The window's own filing furniture stays in the window.
+--
+-- The fields come out of the projection's own ALLCAPS blocks (FOUND, MAP,
+-- PHYSICAL OBJECT ...), so nothing is invented here and any wording the
+-- notebook improves arrives on the device with it.
+local FIELD={FOUND="FOUND",["MAP"]="MAP",["PHYSICAL OBJECT"]="OBJECT",
+             ["ATTACHED"]="NOTES",["ORIGINAL CONTEXT"]="CONTEXT"}
+
+local function split(detail)
+    local body,fields={},{}
+    for block in (tostring(detail or "").."\n\n"):gmatch("(.-)\n\n") do
+        local heading,rest=block:match("^(%u[%u%s]+)\n(.*)$")
+        if heading and FIELD[heading] then
+            fields[#fields+1]={label=FIELD[heading],value=rest:gsub("\n"," ")}
+        elseif heading then
+            body[#body+1]=rest
+        elseif block:find("%S") then
+            body[#body+1]=block
+        end
+    end
+    return table.concat(body,"\n\n"),fields
+end
+
 A.files={
     id="FILES",title="FILES",icon="files",
     list=function()
         local ui=ConspiracyFiles.NotebookUI
         local rows=(ui and ui.generatedRows and safe(ui.generatedRows,"evidence")) or {}
+        local log=ConspiracyFiles.DiscoveryLog
+        local when={}
+        for _,event in ipairs((log and log.events and safe(log.events)) or {}) do
+            local date=A.dateOf(event.at)
+            if date then when[event.ref]=string.format("%s, %02d:00",date.label,date.hour) end
+        end
         local out={}
         for _,row in ipairs(rows) do
             if not row.cfHeading then
+                local body,fields=split(row.detailText)
+                if when[row.id] then table.insert(fields,1,{label="WHEN",value=when[row.id]}) end
                 out[#out+1]={label=(row.ordinal and (row.ordinal..". ") or "")..(row.title or ""),
-                             title=row.title,detail=row.detailText,id=row.id}
+                             title=row.title,detail=body,fields=fields,id=row.id}
             end
         end
         return out
@@ -172,6 +205,33 @@ A.todo={
     end,
 }
 
-A.programs={A.files,A.names,A.dates,A.todo}
+-- HELP -----------------------------------------------------------------------
+-- Written for this device, not inherited from the window: the old help was
+-- about tabs, a filter box and a contrast toggle, none of which exist here.
+A.help={
+    id="HELP",title="HELP",icon="help",
+    list=function()
+        return {
+            {label="Survive first",title="Survive first",
+             detail="This machine records what you find. It sets no objectives and promises no answer.\n\nReading it takes your main hand. Something can reach you while you read."},
+            {label="The keys",title="The keys",
+             detail="VIEW  the program list.\nPREV  the record before.\nNEXT  the record after.\nLIST  open a record, or back out.\nROCKER  page through a record.\n\nThe power key at the top switches the screen off. Hold it for the lamp."},
+            {label="The stylus",title="The stylus",
+             detail="Tap a program to open it. Tap a record to read it. Tap the arrows in the right margin to page. Tap the name in the title bar to come back here."},
+            {label="Files",title="Files",
+             detail="Everything you have inspected, numbered in the order you found it. A number never changes."},
+            {label="Names",title="Names",
+             detail="Every name you have seen on a document, and where you saw it.\n\nA name on a paper is a lead. It does not say who anybody is."},
+            {label="Dates",title="Dates",
+             detail="What you found, by the day you found it. Built from your own movements; nothing is added."},
+            {label="To do",title="To do",
+             detail="Open a file and press REMIND to set yourself a reminder. Tap a reminder to tick it off."},
+            {label="Battery",title="Battery",
+             detail="The cell in the corner is real. A flat machine will not read, and your papers still will."},
+        }
+    end,
+}
+
+A.programs={A.files,A.names,A.dates,A.todo,A.help}
 
 return A

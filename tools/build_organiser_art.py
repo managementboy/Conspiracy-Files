@@ -148,7 +148,7 @@ if __name__ == "__main__":
 # (Palm OS UI Guidelines; the classic 160x160 launcher used three columns).
 # These are drawn on a 22 x 22 native grid, 1-bit, scaled by whole numbers.
 ICON = 22
-ICONS = ("files", "names", "dates", "todo")
+ICONS = ("files", "names", "dates", "todo", "help")
 
 def draw_icon(name, scale):
     s = scale * SS
@@ -179,6 +179,12 @@ def draw_icon(name, scale):
             for col in range(3):
                 x, y = (5 + col*5)*s, (12 + row*4)*s
                 d.rectangle([x, y, x+2*s, y+2*s], fill=ink)
+    elif name == "help":
+        # A question mark in a rounded box, as the system's own info icon was.
+        d.rounded_rectangle([2*s,2*s,20*s,20*s], radius=4*s, outline=ink, width=w)
+        d.arc([7*s,6*s,15*s,13*s], 150, 360, fill=ink, width=w)
+        d.line([(11*s,12*s),(11*s,15*s)], fill=ink, width=w)
+        d.rectangle([10*s,16*s,12*s,18*s], fill=ink)
     elif name == "todo":
         # A list with two ticks.
         d.rectangle([3*s,2*s,19*s,20*s], outline=ink, width=w)
