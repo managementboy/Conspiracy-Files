@@ -395,3 +395,44 @@ back to it having learned something since the last visit; two finds in one
 sweep earn nothing. Consequence accepted deliberately: the place view is flat
 for the first hour of a save, so it must say so in the survivor's voice rather
 than render as an empty panel.
+
+## Knox.OS, the four open calls — 2026-09-13
+
+The four decisions left for the owner at the foot of
+`docs/management/HANDOFF_2026-09-13.md`, asked and answered in one sitting.
+Two changed nothing; two changed the build.
+
+**P4-R82 — the type stays at 23 rows.** The device screen is 225 x 297 and the
+type is sized for the original 160-wide canvas, so it renders at roughly 71% of
+the proportion the design intends and reads small. Three ways out were put to
+the owner — redraw the glass to 320 wide so doubled type lands pixel-perfect,
+double the type inside the current art (23 rows falls to 10), or scale by ~1.4
+to fit exactly and accept a soft pixel font. Owner chose **none of them: keep
+23 rows**. Information density beats legibility here. Consequence to hold onto:
+this is a known, accepted readability cost, not an oversight — do not "fix" it
+in a later pass, and if the case art is ever redrawn for another reason, the
+320-wide option becomes free and should be raised again.
+
+**P4-R83 — a new survivor is still issued an organiser.** Considered too
+generous now that finding one is the continuity mechanic, and it was put to the
+owner alongside stopping the issue outright, or issuing it switched off and
+flat. Owner chose to **keep issuing at spawn, unchanged**. A survivor who can
+never read the mod in their first hour is the worse failure. `O.give` is already
+idempotent per player, so this stays exactly as built.
+
+**P4-R84 — the lamp stays, and now costs battery.** Held POWER lights the glass
+as a real Palm's backlight did. Owner kept it but rejected it being a free
+toggle: it now drains the cell **on top of** the engine's own drain for the
+device being on. A full charge, lamp alone, lasts `O.LAMP_HOURS` = 10 in-game
+hours, and the lamp switches itself off when the cell goes flat. Charged
+against in-game time rather than ticks, and the drain function returns
+immediately when the lamp is not lit, so this does not reintroduce the
+per-tick cost stripped out on 2026-09-12.
+
+**P4-R85 — the clock is removed.** This reverses the 2026-09-12 ruling recorded
+in `OrganiserScreen.lua`, which argued a digital organiser plausibly has a
+clock. Owner ruled the vanilla rule wins: knowing the time costs you a watch,
+and a reading device must not quietly buy that slot back. The launcher header
+now carries only the battery and the category. `K.status` keeps its `time`
+parameter and skips it when nil, so the header can carry a clock again if this
+is ever reversed.

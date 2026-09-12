@@ -200,8 +200,46 @@ end
 
 -- One tick watcher: open Knox.OS the moment the organiser is really in the
 -- main hand, and give up quietly if the player cancelled the equip.
+-- The lamp is not free. It is the backlight of a 1993 machine, and the owner
+-- ruled (2026-09-13) that reading in the dark should cost something rather
+-- than be a toggle with no downside. A full cell, lamp alone, lasts
+-- O.LAMP_HOURS in-game hours; that is ON TOP of the drain the engine already
+-- applies for the device being switched on.
+--
+-- Charged against in-game time, not ticks, so it does not depend on frame
+-- rate, and only while the lamp is actually lit - the whole function returns
+-- immediately otherwise, because per-tick work in normal play is exactly what
+-- was stripped out of this file on 2026-09-12.
+O.LAMP_HOURS=10
+function O.lampTick()
+    local screen=ConspiracyFiles.OrganiserScreen
+    local window=screen and screen.window
+    if not window or not window.on or not window.lamp then
+        O.lampAt=nil
+        return
+    end
+    local clock=getGameTime and getGameTime()
+    local now=clock and safe(function() return clock:getWorldAgeHours() end)
+    if not now then return end
+    local since=O.lampAt
+    O.lampAt=now
+    -- First lit tick, or the clock went backwards on a load: start the meter.
+    if not since or now<=since then return end
+    local item=O.held()
+    local power=item and O.power(item)
+    if power==nil or power<=0 then return end
+    local drained=power-((now-since)/O.LAMP_HOURS)
+    if drained<0 then drained=0 end
+    safe(function() item:getDeviceData():setPower(drained) end)
+    if drained<=0 then
+        window.lamp=false
+        log("organiser lamp off: flat battery")
+    end
+end
+
 function O.tick()
     O.handTick()
+    safe(O.lampTick)
     local pending=O.pendingOpen
     if not pending then return end
     pending.tries=pending.tries+1

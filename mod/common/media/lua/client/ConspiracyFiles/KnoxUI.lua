@@ -154,13 +154,15 @@ end
 
 function K.rows(c) return math.floor((c.h-2)/Font.line)-3 end
 
--- The launcher's own header: the time at the left, the battery at the right,
--- and the category between them - the anatomy of the classic Applications
--- screen (Palm OS UI Guidelines; the launcher put the clock top-left and the
--- category picker top-right).
+-- The launcher's own header: the battery at the right and the category beside
+-- it - the anatomy of the classic Applications screen (Palm OS UI Guidelines;
+-- the launcher put the clock top-left and the category picker top-right).
+-- `time` is nil on this machine: the owner ruled the clock out, because the
+-- game charges a watch slot for knowing the hour and this must not undercut
+-- that. The parameter stays so the header can carry one again if that changes.
 function K.status(c,time,category,charge)
     local line=Font.line
-    K.text(c,time,2,0,K.INK)
+    if time then K.text(c,time,2,0,K.INK) end
     -- Battery: a little cell, filled to its charge.
     local bw,bh=14,6
     local bx=c.w-bw-4

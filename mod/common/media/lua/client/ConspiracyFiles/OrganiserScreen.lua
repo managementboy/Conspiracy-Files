@@ -247,21 +247,18 @@ function Screen:draw(gx,gy)
         return
     end
     if self.launcher then
-        -- The Applications launcher: clock, battery, category, icon grid.
-        -- The machine has a clock of its own, which is the point of a digital
-        -- organiser: the game only tells you the time if you carry a watch, and
-        -- this IS one. It reads only while the screen is on and it has power,
-        -- so a flat cell costs you the time as well (owner, 2026-09-12).
-        local clock=getGameTime and getGameTime()
-        local hour=clock and safe(function() return clock:getHour() end) or 0
-        local minute=clock and safe(function() return clock:getMinutes() end) or 0
+        -- The Applications launcher: battery, category, icon grid.
+        -- No clock. The machine could plausibly have one, but the game's rule
+        -- is that knowing the time costs you a watch, and a reading device
+        -- should not quietly buy you back a slot the vanilla game charges for
+        -- (owner, 2026-09-13, reversing the 09-12 ruling).
         local charge
         local organiser=ConspiracyFiles.Organiser
         if organiser and organiser.held then
             local item=safe(organiser.held)
             charge=item and organiser.power and safe(organiser.power,item)
         end
-        local y=K.status(c,string.format("%d:%02d",hour,minute),"All",charge)
+        local y=K.status(c,nil,"All",charge)
         -- No record counts on the icons. Palm's launcher never showed any, and
         -- working them out means asking every program to read its whole store -
         -- which the fault check caught as an address lookup retrying forever,
