@@ -25,6 +25,7 @@
 -- rocker and the entries, M, I, L, and Escape to close.
 local CFLog=require("ConspiracyFiles/Log")
 local Font=require("ConspiracyFiles/Generated/OrganiserFont")
+local Case=require("ConspiracyFiles/Generated/OrganiserCase")
 require("ISUI/ISPanel")
 ConspiracyFiles=ConspiracyFiles or {}
 local S=ConspiracyFiles.OrganiserScreen or {}
@@ -33,16 +34,17 @@ ConspiracyFiles.OrganiserScreen=S
 local function log(message) CFLog.message("casefile","note",message) end
 local function safe(fn,...) local ok,v=pcall(fn,...) if ok then return v end end
 
--- Native-pixel geometry. Everything below is in the device's own pixels and is
--- multiplied by a whole number on the way to the screen, so a pixel is always
--- a square: 2x or 3x, chosen by the ZOOM the player last set.
+-- The case is a PICTURE, not a stack of rectangles: the game's Lua draws only
+-- rectangles, so a shell drawn in code came out as grey plates (owner,
+-- 2026-09-12: "that looks nothing like your or my mockup ... All sqare"). The
+-- art and these hit boxes are generated together by tools/build_organiser_art.py,
+-- in native pixels, multiplied by a whole-number scale so a pixel stays square.
 -- Portrait, like the shell the owner drew: the glass is nearly square and the
 -- keypad sits under it. A first pass was 34 columns by 6 lines, which made a
 -- letterbox - correct in code, wrong on screen (2026-09-12).
 S.LINES=10
 S.COLS=22
-local PAD=6                       -- glass margin
-local CASE=10                     -- plastic around the glass
+local PADX,PADY=4,3               -- text margin inside the glass
 S.HOLD_MS=450                     -- how long a held POWER becomes the lamp
 S.PRESS_MS=110                    -- how long a button shows as pressed
 
@@ -76,11 +78,17 @@ local Screen=ISPanel:derive("CFOrganiserScreen")
 S.Screen=Screen
 
 function S.metrics(scale)
-    local inner=S.COLS*8               -- 8 native px is the widest common glyph
-    local glass={w=inner+PAD*2,h=(S.LINES+2)*Font.line+PAD*2+6}
-    local w=glass.w+CASE*2
-    local h=glass.h+CASE+12+26         -- lid above the glass, keypad and lip below
-    return {scale=scale,glass=glass,w=w*scale,h=h*scale}
+    return {scale=scale,glass=Case.glass,w=Case.w*scale,h=Case.h*scale}
+end
+
+local art={}
+local function texture(name,scale)
+    local key=name..scale
+    local hit=art[key]
+    if hit~=nil then return hit or nil end
+    local t=getTexture and safe(getTexture,"media/ui/CFOrg/"..name.."_"..scale.."x.png")
+    art[key]=t or false
+    return t
 end
 
 function Screen:new(owner)
@@ -126,49 +134,47 @@ end
 -- case: the arrangement on the shell the owner drew.
 function Screen:buttons()
     local s=self.scale
-    local m=S.metrics(s)
-    local width=m.w/s
-    local row=m.h/s-17
-    local b=12                              -- button
     local out={}
-    -- Two buttons, the rocker, two buttons - measured in from each edge so the
-    -- pair on the right never walks off the case.
-    local left={CASE,CASE+b+6}
-    local right={width-CASE-b-b-6,width-CASE-b}
-    local names={"MODE","PREV","NEXT","INDEX"}
-    local xs={left[1],left[2],right[1],right[2]}
-    for i=1,4 do out[#out+1]={id=names[i],x=xs[i]*s,y=row*s,w=b*s,h=b*s} end
-    local rx=(width-24)/2
-    out[#out+1]={id="UP",x=rx*s,y=row*s,w=24*s,h=5*s}
-    out[#out+1]={id="DOWN",x=rx*s,y=(row+7)*s,w=24*s,h=5*s}
-    out[#out+1]={id="POWER",x=(CASE+1)*s,y=3*s,w=12*s,h=5*s}
+    for _,b in ipairs(Case.buttons) do
+        out[#out+1]={id=b.id,x=b.x*s,y=b.y*s,w=b.w*s,h=b.h*s,round=b.round,nx=b.x,ny=b.y}
+    end
     return out
 end
 
 function Screen:prerender()
     local s=self.scale
-    local m=S.metrics(s)
-    -- Case.
-    self:drawRect(0,0,self.width,self.height,1,SHELL[1],SHELL[2],SHELL[3])
-    self:drawRectBorder(0,0,self.width,self.height,1,SHELL_EDGE[1],SHELL_EDGE[2],SHELL_EDGE[3])
-    -- Power light, beside the power button.
-    local led=self.on and LED_ON or LED_OFF
-    self:drawRect((CASE+16)*s,3*s,5*s,5*s,1,led[1],led[2],led[3])
-    self:drawRectBorder((CASE+16)*s,3*s,5*s,5*s,1,SHELL_EDGE[1],SHELL_EDGE[2],SHELL_EDGE[3])
-    -- Glass.
-    local gx,gy=CASE*s,12*s
-    local glass=self.lamp and GLASS_LIT or GLASS
-    self:drawRect(gx,gy,m.glass.w*s,m.glass.h*s,1,glass[1],glass[2],glass[3])
-    self:drawRectBorder(gx,gy,m.glass.w*s,m.glass.h*s,1,SHELL_EDGE[1],SHELL_EDGE[2],SHELL_EDGE[3])
-    if self.on then self:draw(gx+PAD*s,gy+PAD*s,m.glass.w*s-PAD*2*s) end
-    -- Keypad.
+    local case=texture("case",s)
+    if case then
+        self:drawTextureScaled(case,0,0,Case.w*s,Case.h*s,1,1,1,1)
+    else
+        -- No art: a flat shell is ugly but readable, and a missing texture must
+        -- never cost the player their notes.
+        self:drawRect(0,0,self.width,self.height,1,SHELL[1],SHELL[2],SHELL[3])
+        self:drawRect(Case.glass.x*s,Case.glass.y*s,Case.glass.w*s,Case.glass.h*s,1,GLASS[1],GLASS[2],GLASS[3])
+    end
+    -- The lamp warms the glass.
+    if self.on and self.lamp then
+        self:drawRect(Case.glass.x*s,Case.glass.y*s,Case.glass.w*s,Case.glass.h*s,0.55,GLASS_LIT[1],GLASS_LIT[2],GLASS_LIT[3])
+    end
+    -- The light beside the power key, lit only while the screen is on.
+    if self.on then
+        local led=texture("led",s)
+        if led then self:drawTextureScaled(led,Case.led.x*s,Case.led.y*s,Case.led.d*s,Case.led.d*s,1,1,1,1)
+        else self:drawRect(Case.led.x*s,Case.led.y*s,Case.led.d*s,Case.led.d*s,1,LED_ON[1],LED_ON[2],LED_ON[3]) end
+    end
+    -- A key that was just hit sinks and darkens for a moment.
     local now=getTimeInMillis and getTimeInMillis() or 0
     for _,b in ipairs(self:buttons()) do
-        local held=self.pressed[b.id] and now-self.pressed[b.id]<S.PRESS_MS
-        local y=held and b.y+math.max(1,s/2) or b.y
-        local c=held and SHELL_EDGE or SHELL_DEEP
-        self:drawRect(b.x,y,b.w,b.h,1,c[1],c[2],c[3])
-        self:drawRectBorder(b.x,y,b.w,b.h,1,SHELL_EDGE[1],SHELL_EDGE[2],SHELL_EDGE[3])
+        if self.pressed[b.id] and now-self.pressed[b.id]<S.PRESS_MS then
+            local name=b.round and "press" or (b.id=="POWER" and "power" or "rocker")
+            local t=texture(name,s)
+            local sink=math.max(1,s/2)
+            if t then self:drawTextureScaled(t,b.x,b.y+sink,b.w,b.h,0.9,1,1,1)
+            else self:drawRect(b.x,b.y+sink,b.w,b.h,1,SHELL_EDGE[1],SHELL_EDGE[2],SHELL_EDGE[3]) end
+        end
+    end
+    if self.on then
+        self:draw((Case.glass.x+PADX)*s,(Case.glass.y+PADY)*s,(Case.glass.w-PADX*2)*s)
     end
 end
 
@@ -183,7 +189,7 @@ function Screen:draw(x,y,width)
     self:text(top,x,y,INK_DIM)
     local rw=measure(right,s)
     self:text(right,x+width-rw,y,INK_DIM)
-    local body=y+line+2*s
+    local body=y+line+math.floor(s/2)
     if self.index then
         for i,row in ipairs(rows) do
             if i>S.LINES then break end
@@ -199,8 +205,8 @@ function Screen:draw(x,y,width)
     else
         self:text("NOTHING RECORDED YET",x,body,INK_DIM)
     end
-    local legend=self.index and "MODE  < >  INDEX BACK" or "^ v TEXT   < > ENTRY   INDEX"
-    self:text(legend,x,y+(S.LINES+1)*line+4*s,INK_DIM)
+    local legend=self.index and "MODE  < >  INDEX BACK" or "^v TEXT  <> ENTRY  INDEX"
+    self:text(legend,x,y+(S.LINES+1)*line+math.floor(s/2),INK_DIM)
 end
 
 -- Rows come from the notebook's own projection: one store, one set of rows,
