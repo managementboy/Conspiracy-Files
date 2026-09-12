@@ -184,8 +184,14 @@ function O.handTick()
         ours=full==O.TYPE
     end
     if ours and not screen.window then
-        safe(screen.open)
-        log("organiser in hand: Knox.OS opened")
+        if O.booting and screen.boot then
+            O.booting=false
+            safe(screen.boot)
+            log("organiser in hand: Knox.OS booting")
+        else
+            safe(screen.open)
+            log("organiser in hand: Knox.OS opened")
+        end
     elseif not ours and screen.window and not screen.window.booting then
         safe(screen.close)
         log("organiser put away: Knox.OS closed")
@@ -285,16 +291,30 @@ if Events and Events.OnTick and not O.tickHooked then
     Events.OnTick.Add(function() safe(O.tick) end)
 end
 
--- The machine boots with the game, so the player sees the mod start rather than
--- wondering whether it is there (owner has asked for this since 2026-09-11).
+-- The machine boots with the game, and the survivor is HOLDING it while it
+-- does. Owner, 2026-09-12: "Boot screen is no exception. You equip our PDA as
+-- the first action." So the first thing a survivor does is take the machine
+-- out and watch it start - which is also the rule everywhere else: the hand is
+-- the switch, and nothing appears on screen that is not in a hand.
 if Events and Events.OnGameStart and not O.bootHooked then
     O.bootHooked=true
     Events.OnGameStart.Add(function()
         safe(function()
             local apps=ConspiracyFiles.KnoxApps
             if apps and apps.rememberMe then apps.rememberMe() end
-            local screen=ConspiracyFiles.OrganiserScreen
-            if screen and screen.boot then screen.boot() end
+            local player=getPlayer and getPlayer()
+            local item=O.held(player)
+            if not player or not item then return end
+            -- Into the hand through the game's own action, like any other
+            -- equip; handTick opens Knox.OS when it lands, and O.booting makes
+            -- that first screen the boot screen.
+            O.booting=true
+            local queued=safe(function()
+                require("TimedActions/ISEquipWeaponAction")
+                ISTimedActionQueue.add(ISEquipWeaponAction:new(player,item,50,true,false))
+                return true
+            end)
+            if not queued then safe(function() player:setPrimaryHandItem(item) end) end
         end)
     end)
 end
