@@ -99,7 +99,7 @@ end
 
 function CFOrg.programs()
     local names = {}
-    for _, app in ipairs(ConspiracyFiles.KnoxApps.programs) do
+    for _, app in ipairs(ConspiracyFiles.KnoxApps.visible()) do
         names[#names + 1] = app.title .. "=" .. #(app.list and app.list() or {})
     end
     return true, table.concat(names, " ")

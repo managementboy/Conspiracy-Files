@@ -322,9 +322,20 @@ A.notes={
     end,
 }
 
-A.programs={A.files,A.names,A.dates,A.todo,A.notes,A.help}
+A.programs={A.files,A.names,A.dates,A.todo,A.notes,A.help,A.sites}
 
--- The hidden one is appended only with the debug switch on.
-if getDebug and getDebug() then A.programs[#A.programs+1]=A.sites end
+-- What a player may see. SITES hands out the answers, so it exists only while
+-- the game is in debug, and the question is asked EVERY time the launcher is
+-- drawn - asking once when this file loaded would decide it before the game
+-- knew (owner, 2026-09-12: "the cheating app shall only open when in debug
+-- mode :-)").
+function A.visible()
+    local debug=getDebug and getDebug() and not (isClient and isClient()) and not (isServer and isServer())
+    local out={}
+    for _,program in ipairs(A.programs) do
+        if not program.hidden or debug then out[#out+1]=program end
+    end
+    return out
+end
 
 return A

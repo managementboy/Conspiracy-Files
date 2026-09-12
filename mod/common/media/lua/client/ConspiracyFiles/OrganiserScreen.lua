@@ -180,7 +180,13 @@ end
 
 -- Knox.OS. The shell owns the title bar, the scrolling and the arrows; a
 -- program only says what its rows are (ConspiracyFiles/KnoxApps).
-function Screen:program() return Apps.programs[self.app or 1] or Apps.programs[1] end
+-- Always through Apps.visible(): the hidden program must not be reachable by
+-- an index left over from a debug session.
+function Screen:programs() return Apps.visible() end
+function Screen:program()
+    local programs=self:programs()
+    return programs[self.app or 1] or programs[1]
+end
 
 function Screen:list()
     if self.cachedList then return self.cachedList end
@@ -248,7 +254,7 @@ function Screen:draw(gx,gy)
             charge=item and organiser.power and safe(organiser.power,item)
         end
         local y=K.status(c,string.format("%d:%02d",hour,minute),"All",charge)
-        K.grid(c,Apps.programs,y+2,self.app or 1,function(name) return texture("icons/"..self.scale.."x/"..name,nil) end)
+        K.grid(c,self:programs(),y+2,self.app or 1,function(name) return texture("icons/"..self.scale.."x/"..name,nil) end)
         K.foot(c,"tap a program")
         return
     end
@@ -337,7 +343,7 @@ function Screen:press(id)
         elseif self.record then self.record=nil
         else self.entry=math.max(1,self.entry-1) end
     elseif id=="NEXT" then
-        if self.launcher then self.app=math.min(#Apps.programs,(self.app or 1)+1)
+        if self.launcher then self.app=math.min(#self:programs(),(self.app or 1)+1)
         else self.entry=math.min(math.max(1,#rows),self.entry+1); self.record=nil end
     elseif id=="UP" then
         self.card=math.max(1,self.card-1)
