@@ -244,6 +244,10 @@ function Screen:draw(gx,gy)
     end
     if self.launcher then
         -- The Applications launcher: clock, battery, category, icon grid.
+        -- The machine has a clock of its own, which is the point of a digital
+        -- organiser: the game only tells you the time if you carry a watch, and
+        -- this IS one. It reads only while the screen is on and it has power,
+        -- so a flat cell costs you the time as well (owner, 2026-09-12).
         local clock=getGameTime and getGameTime()
         local hour=clock and safe(function() return clock:getHour() end) or 0
         local minute=clock and safe(function() return clock:getMinutes() end) or 0
@@ -331,23 +335,28 @@ function Screen:press(id)
     end
     if not self.on then return end
     local rows=self:list()
-    if id=="MODE" then
-        self.launcher=not self.launcher; self.record=nil
-    elseif id=="INDEX" then
-        if self.launcher then
-            self.launcher=false; self.cachedList=nil; self.entry,self.card=1,1
-        elseif self.record then self.record=nil
-        else self:openRow(self.entry) end
-    elseif id=="PREV" then
-        if self.launcher then self.app=math.max(1,(self.app or 1)-1)
-        elseif self.record then self.record=nil
-        else self.entry=math.max(1,self.entry-1) end
-    elseif id=="NEXT" then
-        if self.launcher then self.app=math.min(#self:programs(),(self.app or 1)+1)
-        else self.entry=math.min(math.max(1,#rows),self.entry+1); self.record=nil end
+    -- The four keys open the four programs, the way a Palm's Date, Address,
+    -- To Do and Memo keys did. The launcher is a tap on the title bar.
+    local DIRECT={MODE="FILES",PREV="NAMES",NEXT="DATES",INDEX="TODO"}
+    local wanted=DIRECT[id]
+    if wanted then
+        local programs=self:programs()
+        for i,program in ipairs(programs) do
+            if program.id==wanted then
+                if self.app==i and not self.record and not self.launcher then
+                    -- Pressed again while already there: step through its records,
+                    -- which is what the key did on the real machine.
+                    self.entry=math.min(math.max(1,#rows),self.entry+1)
+                else
+                    self.app=i; self.record=nil; self.launcher=false
+                    self.entry,self.card,self.cachedList=1,1,nil
+                end
+                break
+            end
+        end
     elseif id=="UP" then
-        self.card=math.max(1,self.card-1)
-        if not self.record then self.entry=math.max(1,self.entry-1) end
+        if self.record then self.card=math.max(1,self.card-1)
+        else self.entry=math.max(1,self.entry-1) end
     elseif id=="DOWN" then
         if self.record then self.card=self.card+1
         else self.entry=math.min(math.max(1,#rows),self.entry+1) end

@@ -118,3 +118,10 @@ function CFOrg.tapWidget(id, payload)
     end
     return false, "no widget " .. tostring(id)
 end
+
+-- Which card of a record is on screen, for the scrolling check.
+function CFOrg.card()
+    local w = ConspiracyFiles.OrganiserScreen.window
+    if not w then return "no screen" end
+    return tostring(w.card), tostring(w.record ~= nil)
+end

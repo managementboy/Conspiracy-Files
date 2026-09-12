@@ -2,14 +2,14 @@
 --
 -- Where every part of the case sits, in native pixels: the art and the
 -- hit boxes come from one source so they cannot drift apart.
-local M={w=182,h=236,scales={2,3}}
+local M={w=182,h=242,scales={2,3}}
 M.glass={x=11,y=26,w=160,h=160}
 M.button=14
 M.buttons={
- {id="MODE",x=14,y=198,w=14,h=14,round=true},
- {id="PREV",x=36,y=198,w=14,h=14,round=true},
- {id="NEXT",x=132,y=198,w=14,h=14,round=true},
- {id="INDEX",x=154,y=198,w=14,h=14,round=true},
+ {id="MODE",x=9,y=198,w=14,h=14,round=true},
+ {id="PREV",x=47,y=198,w=14,h=14,round=true},
+ {id="NEXT",x=121,y=198,w=14,h=14,round=true},
+ {id="INDEX",x=159,y=198,w=14,h=14,round=true},
  {id="UP",x=74,y=198,w=34,h=9},
  {id="DOWN",x=74,y=209,w=34,h=9},
  {id="POWER",x=13,y=9,w=20,h=9},

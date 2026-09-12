@@ -106,6 +106,14 @@ ev 'return CFOrg.tapWidget("APP",1)' >/dev/null; sleep 1
 ev 'return CFOrg.tapWidget("ROW",1)' >/dev/null; sleep 1
 [ "$(ev 'return CFOrg.knox()' | cut -f5)" = true ] || fail "a tap on a record did not open it"
 shot record
+# Scrolling, which nothing has ever proved: page down with the rocker, then
+# with the arrow in the right margin, and see the card number move.
+before_card="$(ev 'return CFOrg.card and CFOrg.card() or "?"')"
+ev 'return CFOrg.pressButton("DOWN")' >/dev/null; sleep 1
+after_key="$(ev 'return CFOrg.card and CFOrg.card() or "?"')"
+ev 'return CFOrg.tapWidget("DOWN")' >/dev/null; sleep 1
+after_tap="$(ev 'return CFOrg.card and CFOrg.card() or "?"')"
+say "cards: $before_card -> $after_key (rocker) -> $after_tap (arrow)"
 ev 'return CFOrg.tapWidget("REMIND")' >/dev/null; sleep 1
 ev 'return CFOrg.pressButton("MODE")' >/dev/null; sleep 1
 ev 'return CFOrg.tapWidget("APP",4)' >/dev/null; sleep 1

@@ -33,16 +33,23 @@ SS = 4                      # supersample, so curves are smooth at every scale
 # The real thing had a 160 x 160 screen, so that is the glass, and everything
 # else is measured around it (owner, 2026-09-12). The whole case is then scaled
 # up by a whole number, never stretched.
-W, H = 182, 236             # the case, in native pixels
+W, H = 182, 242             # the case, in native pixels (room for real labels)
 GLASS = (11, 26, 160, 160)  # x, y, w, h - the original's own screen
 BTN0 = 14                   # round button diameter
 BTN = BTN0
 # Mirrored about the centre line: the right-hand pair sat 28 px from the edge
 # while the left pair sat 14 (owner, 2026-09-12: "buttons are not alligned").
-BTNS = {"MODE": (14, 198), "PREV": (36, 198), "NEXT": (W - 36 - BTN0, 198), "INDEX": (W - 14 - BTN0, 198)}
+# Spread so the labels do not run into each other: a real label needs the room
+# a two-pixel one did not.
+BTNS = {"MODE": (9, 198), "PREV": (47, 198), "NEXT": (W - 47 - BTN0, 198), "INDEX": (W - 9 - BTN0, 198)}
 # Palm's own buttons carried a label under the key; the guidelines call for the
 # frequent commands to be one press, named, not hidden in a menu.
-LABELS = {"MODE": "VIEW", "PREV": "PREV", "NEXT": "NEXT", "INDEX": "LIST"}
+# A Palm's four keys opened its four applications - Date, Address, To Do, Memo
+# - and so do these. The launcher is a tap on the title bar, as Home was a tap
+# on the silkscreen. Owner, 2026-09-12: "what do we need the buttons in the
+# middle for now that we have a touch screen?" - the rocker is what you use
+# when you cannot aim: walking, or with something coming.
+LABELS = {"MODE": "FILES", "PREV": "NAMES", "NEXT": "DATES", "INDEX": "TO DO"}
 ROCKER = ((W - 34) // 2, 198, 34, 9)   # x, y, w, h of the upper half; lower half sits 11 below
 ROCKER_GAP = 11
 POWER = (13, 9, 20, 9)
@@ -83,11 +90,13 @@ def draw_case(scale):
         bx, by = bx * s, by * s
         d.ellipse([bx, by, bx + BTN * s, by + BTN * s], fill=DEEP, outline=EDGE, width=max(1, s // 2))
     # Labels, in the device's own face, under each key.
-    face = ImageFont.truetype(os.path.join(REPO, "mod/common/media/fonts/palm-os.otf"), 16 * s // 2)
+    # Full size, not half: the labels were legible only to someone who knew
+    # what they said (owner, 2026-09-12).
+    face = ImageFont.truetype(os.path.join(REPO, "mod/common/media/fonts/palm-os.otf"), 16 * s)
     for name, (bx, by) in BTNS.items():
         label = LABELS[name]
         tw = face.getlength(label)
-        d.text((bx * s + (BTN * s - tw) / 2, (by + BTN) * s), label, font=face, fill=EDGE)
+        d.text((bx * s + (BTN * s - tw) / 2, (by + BTN - 1) * s), label, font=face, fill=(24, 24, 26, 255))
     # The rocker, two pills.
     rx, ry, rw, rh = [v * s for v in ROCKER]
     for offset in (0, ROCKER_GAP * s):
