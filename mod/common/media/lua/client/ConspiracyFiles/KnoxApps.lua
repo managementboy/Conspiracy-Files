@@ -238,7 +238,9 @@ A.help={
 -- address book has been built, whether a case is being prepared, and how many
 -- of its documents have reached the world.
 function A.bootLines()
-    local out={"KNOX.OS 1.0","(c) 1993 Knox Systems",""}
+    -- Hardware by Lectromax, the game's own manufacturer; the software is
+    -- ours. A boot screen is where a machine says who made it.
+    local out={"LECTROMAX DATALINE 160","KNOX.OS 1.0","(c) 1993 Knox Systems",""}
     local address=ConspiracyFiles.AddressMap
     local ready=address and address.ready and safe(address.ready)
     out[#out+1]=ready and "Address book .... ready" or "Address book .... reading"

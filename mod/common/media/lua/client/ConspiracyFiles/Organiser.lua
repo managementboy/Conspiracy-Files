@@ -8,6 +8,9 @@
 -- is what buys the battery, the on/off state and the save round-trip from the
 -- game rather than from us.
 --
+-- It is a Lectromax Dataline 160: Lectromax Manufacturing makes the appliances
+-- in this world, so the hardware is theirs and only Knox.OS is ours.
+--
 -- WHAT THIS IS NOT, and must never become: the record. Owner decision P4-R80 -
 -- the ledger stays the record and the device is a reader. Lose it, burn it,
 -- leave it in a car, and you lose a convenience, never a case. Reading also

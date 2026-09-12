@@ -9,6 +9,12 @@ module ConspiracyFiles
      * a pocket electronic organiser - a Casio SF-series digital diary, sold in
      * every mall in Kentucky that summer.
      *
+     * It is a LECTROMAX, because that is who makes appliances in this world
+     * (Lectromax Manufacturing, all over the game's own job ads and product
+     * names - "Lectromax Franklin Valuline"). The hardware belongs to Knox
+     * County; only the software on it is ours. Owner, 2026-09-12: "our PDA
+     * should be part of that lore."
+     *
      * It is declared as a RADIO on purpose. Basing it on base:radio buys the
      * whole battery model from the game for nothing: the power level, the
      * on/off state, the vanilla "insert battery" menu, and persistence across
@@ -25,7 +31,7 @@ module ConspiracyFiles
      */
     item Organiser
     {
-        DisplayName = Pocket Organiser,
+        DisplayName = Lectromax Dataline 160,
         DisplayCategory = Electronics,
         ItemType = base:radio,
         Weight = 0.3,

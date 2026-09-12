@@ -155,3 +155,17 @@ receiver, and it makes the following possible without re-founding anything:
   number station, a dead man's message repeating on a loop.
 
 Hiding a panel is reversible. Removing the radio is not.
+
+## The hardware is a Lectromax
+
+Owner, 2026-09-12: "Lectromax is the name of most appliances in the game. our
+PDA should be part of that lore."
+
+Lectromax Manufacturing is the game's own appliance maker — its job ads are all
+over Knox County and its products are named in the same shape ("Lectromax
+Franklin Valuline"). So the machine is a **Lectromax Dataline 160**, the 160
+being its screen, and it sits on a shelf beside the game's own microwaves and
+radios rather than arriving from nowhere.
+
+Only the software is ours: **Knox.OS**, by Knox Systems. The boot screen says
+both, because that is where a machine tells you who made it.
