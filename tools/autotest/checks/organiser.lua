@@ -145,8 +145,6 @@ function CFOrg.showHitBoxes(on)
             for _, b in ipairs(self:buttons()) do
                 self:drawRectBorder(b.x, b.y, b.w, b.h, 1, 0.2, 1, 0.4)
             end
-            self:drawRectBorder(Case.led.x * s, Case.led.y * s,
-                Case.led.d * s, Case.led.d * s, 1, 1, 1, 0.2)
         end
     end
     return true

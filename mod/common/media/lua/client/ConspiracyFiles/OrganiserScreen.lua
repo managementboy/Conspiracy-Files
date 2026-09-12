@@ -57,8 +57,6 @@ local GLASS={0.66,0.70,0.59}
 local GLASS_LIT={0.76,0.70,0.46}
 local INK={0.15,0.17,0.13}
 local INK_DIM={0.38,0.42,0.33}
-local LED_ON={0.85,0.35,0.30}
-local LED_OFF={0.30,0.20,0.19}
 
 -- The screen draws its own letters. Handing the game a font in its own format
 -- was tried first and killed it on startup: the manifest override is picked up,
@@ -162,11 +160,8 @@ function Screen:prerender()
     if self.on and self.lamp then
         self:drawRect(Case.glass.x*s,Case.glass.y*s,Case.glass.w*s,Case.glass.h*s,0.55,GLASS_LIT[1],GLASS_LIT[2],GLASS_LIT[3])
     end
-    if self.on then
-        local led=texture("led",s)
-        if led then self:drawTextureScaled(led,Case.led.x*s,Case.led.y*s,Case.led.d*s,Case.led.d*s,1,1,1,1)
-        else self:drawRect(Case.led.x*s,Case.led.y*s,Case.led.d*s,Case.led.d*s,1,LED_ON[1],LED_ON[2],LED_ON[3]) end
-    end
+    -- No power light: the screen says whether it is on, which is how you can
+    -- tell with any real machine (owner, 2026-09-12).
     local now=getTimeInMillis and getTimeInMillis() or 0
     for _,b in ipairs(self:buttons()) do
         if self.pressed[b.id] and now-self.pressed[b.id]<S.PRESS_MS then

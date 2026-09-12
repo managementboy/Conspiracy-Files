@@ -12,5 +12,4 @@ M.buttons={
  {id="INDEX",x=213,y=372,w=54,h=32,round=true},
  {id="POWER",x=296,y=300,w=9,h=26},
 }
-M.led={x=284,y=20,d=7}
 return M
