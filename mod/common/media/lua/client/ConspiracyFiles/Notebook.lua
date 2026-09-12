@@ -7,6 +7,7 @@ require "ISUI/ISTextEntryBox"
 local Document=require("ConspiracyFiles/DocumentPane")
 local Projection=require("ConspiracyFiles/NotebookProjection")
 local PlaceNames=require("ConspiracyFiles/Generated/PlaceNames")
+local PlaceIndex=require("ConspiracyFiles/PlaceIndex")
 ConspiracyFiles=ConspiracyFiles or {}
 ConspiracyFiles.NotebookUI=ConspiracyFiles.NotebookUI or {}
 local UI=ConspiracyFiles.NotebookUI
@@ -81,7 +82,7 @@ function UI.openHelp()
         if UI.help then UI.help:bringToTop(); return end
         UI.help=Reader:new("About these notes", "SURVIVE FIRST\nThe notebook records what you encounter. It assigns no objectives and promises no final answer.\n\nINSPECT\nUse a document's action in your inventory or the Ground/loot inventory pane to read and record it.\n\nMARK INTERESTING\nTake an unusual object before marking it. Its original context stays in your notes even if you lose the object.\n\nNAVIGATION\nTab moves between Journal, Evidence, Filter, list, reading area, Help, contrast and Close. Arrow keys select list rows; Enter activates the focused control. Page Up/Down scroll the reading area.\n\nFILTER\nType in the filter box to narrow the list by title or summary text. It only changes what is shown; entry numbers and the record itself never change. Clear it to see everything again.\n\nNEW ENTRIES\nA * before an entry's number marks something recorded since you last closed the notebook.\n\nCLOSE\nUse the native X or Close button. Assign Conspiracy-Files: Toggle Survivor Notebook in the game's key bindings. Escape belongs to the game.\n\nController navigation has not been verified for this candidate.",true)
         if generated() then UI.help.text="SURVIVE FIRST\nThese notes record evidence you have inspected. They do not assign objectives.\n\nINSPECT\nTake a generated evidence item into your inventory, then choose Inspect Investigation Evidence.\n\nJOURNAL AND EVIDENCE\nJournal records discovery order. Evidence lets you select and review each item. Connections appear only between evidence items you have inspected.\n\nFILTER\nThe filter box narrows the list to titles or summaries containing the text you type. It is a view only: the ledger, the order and each entry's true discovery number never change. Clear it to see everything again.\n\nNEW ENTRIES\nA * before an entry's number marks something recorded since you last closed the notebook.\n\nCASE MARKER\nWhen several investigations are running, an entry's summary names the case it belongs to. Identity and connection notes are not tied to one investigation and carry no case marker.\n\nNAVIGATION\nUse the list, the filter box and Journal/Evidence buttons. Tab and arrow keys navigate; Page Up/Down scroll. Contrast changes the reading colors. Use X or Close to dismiss." end
-        UI.help.text=UI.help.text.."\n\nCLUE MAP MARKS\nNew clue pickups remember where you found them. After inspection, a pen or pencil in your inventory (including bags) adds their finding locations to the world map. Without a writing tool, markings wait and catch up when you acquire one. Existing marks remain if you drop the tool or document. Old discoveries without a recorded finding location cannot be mapped. Markers show notebook evidence numbers and titles.\n\nFINDING ADDRESSES\nThe planned address system uses Main Street or First Street as a town's starting line where suitable. Other towns use a fixed, named alternative. Numbers increase away from that starting line, with a new hundred-number range for each defined street block.\n\nOn east-west roads, odd numbers are on the north side and even numbers on the south. On north-south roads, odd numbers are on the east side and even numbers on the west.\n\nThese will be game addresses created by Conspiracy-Files, not real-world postal addresses. This build currently provides street names and relative directions; house numbers and town-by-town starting lines are not available yet."
+        UI.help.text=UI.help.text.."\n\nPLACES\nThe Places button shows exactly the same entries as the Journal, in the same order, with nothing added or hidden. What it adds is a heading over a place you have come back to. A place earns one only when you return having learned something since you were last there, so walking in and out of a doorway earns nothing and one thorough search earns nothing. Until something is worth going back to, the list is simply flat. A heading over entries from more than one investigation says so.\n\nCLUE MAP MARKS\nNew clue pickups remember where you found them. After inspection, a pen or pencil in your inventory (including bags) adds their finding locations to the world map. Without a writing tool, markings wait and catch up when you acquire one. Existing marks remain if you drop the tool or document. Old discoveries without a recorded finding location cannot be mapped. Markers show notebook evidence numbers and titles.\n\nFINDING ADDRESSES\nThe planned address system uses Main Street or First Street as a town's starting line where suitable. Other towns use a fixed, named alternative. Numbers increase away from that starting line, with a new hundred-number range for each defined street block.\n\nOn east-west roads, odd numbers are on the north side and even numbers on the south. On north-south roads, odd numbers are on the east side and even numbers on the west.\n\nThese will be game addresses created by Conspiracy-Files, not real-world postal addresses. This build currently provides street names and relative directions; house numbers and town-by-town starting lines are not available yet."
         if ConspiracyFiles.AddressMap and ConspiracyFiles.AddressMap.ready() then
             local before=UI.help.text:find("\n\nFINDING ADDRESSES",1,true)
             if before then UI.help.text=UI.help.text:sub(1,before-1) end
@@ -90,6 +91,9 @@ function UI.openHelp()
         UI.help:initialise(); UI.help:instantiate(); UI.help:addToUIManager()
     end)
 end
+-- The three indexes over one store. Named once so window-state restore
+-- cannot silently forget a view by only knowing about two of them.
+local SECTIONS={journal=true,evidence=true,places=true}
 local Window=ISCollapsableWindow:derive("CFNotebookWindow")
 local function fitRowText(text,width)
     local measure=function(value) return getTextManager():MeasureStringX(UIFont.Small,value) end
@@ -119,8 +123,20 @@ end
 function Window:drawRow(y,item)
     local offset=self:getYScroll(); local top=y+offset
     if top+item.height<=0 or top>=self.height then return y+item.height end
-    if self.selected==item.index then self:drawRect(0,y,self.width,item.height,0.8,0.28,0.32,0.25) end
     local fontHeight=getTextManager():getFontHeight(UIFont.Small)
+    -- A heading is not an entry: it cannot be selected, it carries no number,
+    -- and it must not look like something with a detail pane behind it.
+    if item.item.cfHeading then
+        local width=math.max(0,self.width-32)
+        if top+4>=0 and top+4+fontHeight<=self.height then
+            self:drawText(fitRowText(item.item.title,width),8,y+4,0.85,0.80,0.62,1,UIFont.Small)
+        end
+        if item.item.note and top+8+fontHeight>=0 and top+8+2*fontHeight<=self.height then
+            self:drawText(fitRowText(item.item.note,width),8,y+8+fontHeight,0.80,0.72,0.50,1,UIFont.Small)
+        end
+        return y+item.height
+    end
+    if self.selected==item.index then self:drawRect(0,y,self.width,item.height,0.8,0.28,0.32,0.25) end
     local width=math.max(0,self.width-32) -- padding and native scrollbar
     local signature=width..":"..fontHeight
     if item.cfTextSignature~=signature then
@@ -141,7 +157,9 @@ function Window:drawRow(y,item)
     return y+item.height
 end
 function Window:showRow(row)
-    if not row then return end
+    -- Headings and the place view's empty line are list items, not entries:
+    -- they have no detail to show and no id to remember.
+    if not row or row.cfHeading then return end
     self.currentId=row.id
     self.header:setText("<RGB:1,1,0.95> "..row.title:gsub("<","&lt;"):gsub(">","&gt;")); self.header:paginate()
     self.document:setDocument(row.detailText,UI.highContrast)
@@ -211,7 +229,12 @@ local function generatedRows(section)
         local carrier=require("ConspiracyFiles/Generated/EvidenceKinds").get(r.kind) or {}
         local what=carrier.label or "Evidence"
         if carrier.capacity=="object" then what="Object found" end
-        rows[i]={id=r.id,ordinal=i,title=r.title,
+        -- The subtitle is composed later, in PlaceIndex.decorate, because
+        -- only there is it known whether the survivor remembers where this
+        -- was found - and the place takes the slot the carrier name held.
+        -- What is set here is the fallback, used verbatim when there is no
+        -- place, so an unplaced row reads exactly as it always did.
+        rows[i]={id=r.id,ordinal=i,title=r.title,cfCarrier=what,cfCase=caseMarker or nil,
             summary=what.." - Discovery "..i
                 ..(caseMarker and " - Case "..caseMarker or ""),detailText=detail}
     end
@@ -221,26 +244,35 @@ function Window:rows()
     if generated() then
         local rows=generatedRows(self.section)
         local observer=ConspiracyFiles.IdentityObserver
-        if self.section=="journal" and observer then
+        if self.section~="evidence" and observer then
             for _,row in ipairs(observer.rows()) do rows[#rows+1]=row end
         end
         local connections=ConspiracyFiles.KeyJournal
-        if self.section=="journal" and connections then
+        if self.section~="evidence" and connections then
             for _,row in ipairs(connections.rows()) do rows[#rows+1]=row end
         end
         local leads=ConspiracyFiles.ObservedKeyLeads
-        if self.section=="journal" and leads and leads.rows then
+        if self.section~="evidence" and leads and leads.rows then
             for _,row in ipairs(leads.rows()) do rows[#rows+1]=row end
         end
         -- Keys found on bodies, before any door has been tried.
         local keys=ConspiracyFiles.KeyObserver
-        if self.section=="journal" and keys and keys.rows then
+        if self.section~="evidence" and keys and keys.rows then
             for _,row in ipairs(keys.rows()) do rows[#rows+1]=row end
         end
         -- One shared ledger decides order and numbering for every source, so
         -- the journal reflects real discovery order rather than source groups.
         local log=ConspiracyFiles.DiscoveryLog
         if log and log.order then rows=log.order(rows) else for index,row in ipairs(rows) do row.ordinal=index end end
+        -- WP1. Where each entry was found, stamped once at discovery and read
+        -- back here. Ordinals are already assigned above, so the subtitle can
+        -- carry the true discovery number rather than a source-order index.
+        local placeOf={}
+        if log and log.places then
+            local ok,found=pcall(log.places)
+            if ok and type(found)=="table" then placeOf=found end
+        end
+        PlaceIndex.decorate(rows,placeOf)
         -- Mark rows discovered after the last time the notebook was closed.
         -- `UI` is only available when this file runs whole (never when a test
         -- extracts just this function), so the guard below degrades to "no
@@ -311,8 +343,8 @@ function Window:refresh(preferred)
     -- Bracket characters were the only sign of which view was active and were
     -- easy to miss. Highlight the active button instead, guarded so a build or
     -- a test double without the vanilla colour setters still works.
-    self.journal:setTitle("Journal"); self.evidence:setTitle("Evidence")
-    for _,pair in ipairs({{self.journal,"journal"},{self.evidence,"evidence"}}) do
+    self.journal:setTitle("Journal"); self.evidence:setTitle("Evidence"); self.places:setTitle("Places")
+    for _,pair in ipairs({{self.journal,"journal"},{self.evidence,"evidence"},{self.places,"places"}}) do
         local control,name=pair[1],pair[2]
         local on=self.section==name
         if control.setBorderRGBA then
@@ -346,10 +378,44 @@ function Window:refresh(preferred)
             if title:find(query,1,true) or summary:find(query,1,true) then visible[#visible+1]=row end
         end
     end
-    self.list:clear(); local selected=1
-    for i,row in ipairs(visible) do
-        self.list:addItem(row.title,row,rowTooltip(row))
-        if row.id==(preferred or self.currentId) then selected=i end
+    self.list:clear(); local selected=nil
+    -- The place view is the same rows in the same discovery order, with a
+    -- heading laid over the runs that earned one. Deliberately not sorted:
+    -- bucketing by address would turn the notebook into a checklist to sweep,
+    -- which is the thing this index exists to avoid.
+    local entries
+    if self.section=="places" then
+        local visits=ConspiracyFiles.PlaceVisitLog
+        local counts={}
+        if visits and visits.counts then
+            local ok,found=pcall(visits.counts)
+            if ok and type(found)=="table" then counts=found end
+        end
+        local earned=PlaceIndex.headings(counts)
+        entries=PlaceIndex.index(visible,earned)
+        local any=false
+        for _,entry in ipairs(entries) do if entry.heading then any=true end end
+        -- Flat is the correct and expected state for the first hour of a
+        -- save. Say why, in the survivor's voice, so it does not read as a
+        -- panel that failed to load.
+        if not any then table.insert(entries,1,{heading=PlaceIndex.EMPTY}) end
+    else
+        entries={}
+        for _,row in ipairs(visible) do entries[#entries+1]={row=row} end
+    end
+    for _,entry in ipairs(entries) do
+        if entry.heading then
+            local item={cfHeading=true,title=entry.heading,
+                note=entry.crossesCases and "This place touches more than one case." or nil}
+            self.list:addItem(item.title,item,item.note or item.title)
+        else
+            local row=entry.row
+            self.list:addItem(row.title,row,rowTooltip(row))
+            -- Selection is by list position, which headings shift. First
+            -- real entry by default; the remembered one when it is still here.
+            if selected==nil then selected=#self.list.items end
+            if row.id==(preferred or self.currentId) then selected=#self.list.items end
+        end
     end
     if #visible==0 then
         self.list.selected=nil
@@ -357,7 +423,9 @@ function Window:refresh(preferred)
         self.document:setDocument("Nothing recorded so far matches \""..(query or "").."\". Clear the filter to see every entry again; nothing has been hidden or removed.",UI.highContrast)
         self:layout(); return
     end
-    self.list.selected=selected; self:showRow(visible[selected])
+    self.list.selected=selected
+    local chosen=selected and self.list.items[selected]
+    self:showRow(chosen and chosen.item)
 end
 -- Read-only: never writes back to the filter box, so its own cursor/typing
 -- state is untouched by every refresh triggered while the player is typing.
@@ -380,6 +448,9 @@ function Window:createChildren()
     ISCollapsableWindow.createChildren(self); self:setResizable(true)
     self.journal=button(self,0,0,116,"Journal",Window.onSection); self.journal.internal="journal"
     self.evidence=button(self,0,0,116,"Evidence",Window.onSection); self.evidence.internal="evidence"
+    -- The same rows as the journal, read a second way. Not a second list:
+    -- one store, two indexes over it.
+    self.places=button(self,0,0,116,"Places",Window.onSection); self.places.internal="places"
     self.help=button(self,0,0,116,"Help",function() UI.openHelp() end)
     self.contrast=button(self,0,0,116,"Contrast",Window.onContrast)
     self.closeButton=button(self,0,0,116,"Close",Window.close)
@@ -436,13 +507,13 @@ function Window:layout()
     self.list:setVisible(showList)
     self.header:setX(detailX); self.header:setY(top+extra); self.header:setWidth(detailW); self.header:setHeight(headerHeight); self.header:setVisible(showDetail); self.header:paginate()
     self.document:setX(detailX); self.document:setY(top+extra+headerHeight); self.document:setWidth(detailW); self.document:setHeight(math.max(80,fullHeight-headerHeight-extra)); self.document:setVisible(showDetail)
-    local controls={self.journal,self.evidence,self.help,self.contrast,self.closeButton}
+    local controls={self.journal,self.evidence,self.places,self.help,self.contrast,self.closeButton}
     for i,b in ipairs(controls) do b:setX(self.width-128); b:setY(top+(i-1)*math.max(42,line+20)); b:setHeight(math.max(32,line+12)) end
     self.list.itemheight=line*2+16
     -- Tab only ever lands on a control that is actually shown; a hidden
     -- filter/list/document is simply absent from the cycle instead of needing
     -- hand-written skip rules (see Window:onKeyRelease).
-    local order={"journal","evidence"}
+    local order={"journal","evidence","places"}
     if showList then order[#order+1]="filter"; order[#order+1]="list" end
     if showDetail then order[#order+1]="document" end
     order[#order+1]="help"; order[#order+1]="contrast"; order[#order+1]="close"
@@ -452,7 +523,7 @@ function Window:layout()
     if not hasFocus then self.focusKey=order[1] end
 end
 function Window:focusWidgets()
-    return {journal=self.journal,evidence=self.evidence,filter=self.filter,list=self.list,
+    return {journal=self.journal,evidence=self.evidence,places=self.places,filter=self.filter,list=self.list,
         document=self.document,help=self.help,contrast=self.contrast,close=self.closeButton}
 end
 function Window:prerender()
@@ -482,12 +553,19 @@ function Window:onKeyRelease(key)
         elseif key==Keyboard.KEY_PRIOR then self.document:page(-1)
         elseif key==Keyboard.KEY_NEXT then self.document:page(1)
         elseif (key==Keyboard.KEY_UP or key==Keyboard.KEY_DOWN) and self.focusKey=="list" then
-            local index=math.max(1,math.min(#self.list.items,(self.list.selected or 1)+(key==Keyboard.KEY_UP and -1 or 1)))
-            self.list.selected=index
-            if self.list.items[index] then self:showRow(self.list.items[index].item) end
+            local step=key==Keyboard.KEY_UP and -1 or 1
+            local index=(self.list.selected or 1)+step
+            -- Step over headings rather than landing on them: arrowing down a
+            -- list must never stop on something with nothing behind it.
+            while self.list.items[index] and self.list.items[index].item.cfHeading do index=index+step end
+            if self.list.items[index] then
+                self.list.selected=index
+                self:showRow(self.list.items[index].item)
+            end
         elseif key==Keyboard.KEY_RETURN then
             local focus=self.focusKey
             if focus=="journal" then self:onSection(self.journal) elseif focus=="evidence" then self:onSection(self.evidence)
+            elseif focus=="places" then self:onSection(self.places)
             elseif focus=="list" and self.list.items[self.list.selected] then self:showRow(self.list.items[self.list.selected].item)
             elseif focus=="help" then UI.openHelp() elseif focus=="contrast" then self:onContrast() elseif focus=="close" then self:close() end
         end
@@ -497,7 +575,7 @@ function UI.rememberWindow(window,isOpen)
     if UI.probeState then return end
     local player=getPlayer and getPlayer();if not player then return end
     local saved={x=window.x,y=window.y,width=window.width,height=window.height,
-        isOpen=isOpen==true,section=window.section=="evidence" and "evidence" or "journal"}
+        isOpen=isOpen==true,section=SECTIONS[window.section] and window.section or "journal"}
     UI.geometry=saved
     local md=player:getModData();local old=md.ConspiracyFilesUI
     if type(old)=="table" and old.x==saved.x and old.y==saved.y and old.width==saved.width
@@ -515,7 +593,7 @@ function UI.restoreWindow()
     local saved=player:getModData().ConspiracyFilesUI
     if type(saved)~="table" or saved.isOpen~=true then UI.restorePending=false;return end
     if not state() then return end
-    UI.open(saved.section=="evidence" and "evidence" or "journal")
+    UI.open(SECTIONS[saved.section] and saved.section or "journal")
     if UI.notebook then UI.restorePending=false end
 end
 -- Highest discovery sequence number the ledger has produced so far, across
@@ -593,6 +671,13 @@ function UI.open(section,preferred)
         if section then UI.notebook.section=section end
         UI.notebook:refresh(preferred); UI.notebook:bringToTop()
         UI.rememberWindow(UI.notebook,true);UI.restorePending=false
+        -- WP6. Opening your notes somewhere means you were thinking about
+        -- that place, which is a better signal than standing in it - and it
+        -- is the one stamp a debug teleport cannot fake, since teleporting
+        -- fires no movement event. Whether it counts as a RETURN is decided
+        -- by PlaceVisits, not here.
+        local log=ConspiracyFiles.DiscoveryLog
+        if log and log.visit then pcall(log.visit) end
     end)
 end
 function UI.refresh(section,id)
