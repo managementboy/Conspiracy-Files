@@ -35,3 +35,6 @@ dev/playtest-logs/
 
 # Live Lua eval channel (tools/cf_eval.sh): local commands, never committed
 dev/eval/
+
+# graphify knowledge graph (derived, LINUX dev machine only)
+graphify-out/
