@@ -96,11 +96,12 @@ function O.give(player)
     return item
 end
 
--- Read the investigation on it. The notebook UI is the screen for now: one
--- surface, the survivor's, opened from a thing they are holding rather than
--- from nowhere. What the screen SHOWS is a separate question (the pocket
--- projection in docs/design/READING_SURFACES.md), deliberately not answered
--- here - this is the object, not the layout.
+-- Reading takes the MAIN hand. Owner, 2026-09-12, on giving the device a
+-- stylus: "it requires the device to be held in the main hand (making it also
+-- dangerous to read, and therefore part of the PZ philosophy)". So opening
+-- Knox.OS equips the organiser through the game's own action - the survivor
+-- puts down whatever they were holding - and a player who is jumped while
+-- reading pays for it exactly as they would for reading a book.
 function O.read(player)
     player=player or (getPlayer and getPlayer())
     local item=O.held(player)
@@ -113,13 +114,44 @@ function O.read(player)
         log("organiser not read: "..tostring(why))
         return false,why
     end
-    -- The device's own screen, not the old window: what opens is the object in
-    -- the survivor's hand (P4-R79, one carried reading surface).
     local screen=ConspiracyFiles.OrganiserScreen
     if not screen or not screen.open then return false,"no reading surface loaded" end
-    safe(screen.open)
-    log("organiser read")
+    -- Already in the hand: open at once.
+    local primary=safe(function() return player:getPrimaryHandItem() end)
+    if primary==item then safe(screen.open); log("organiser read"); return true end
+    -- Otherwise take it in hand first, the way the game equips anything, and
+    -- open when the survivor actually has it. Never force the item into the
+    -- slot: an equip that the player interrupts must leave them holding what
+    -- they chose, not a computer.
+    local queued=safe(function()
+        local ISEquipWeaponAction=require("TimedActions/ISEquipWeaponAction")
+        ISTimedActionQueue.add(ISEquipWeaponAction:new(player,item,50,true,false))
+        return true
+    end)
+    if not queued then
+        safe(function() player:setPrimaryHandItem(item) end)
+    end
+    O.pendingOpen={player=player,item=item,tries=0}
+    log("organiser: taking it in hand")
     return true
+end
+
+-- One tick watcher: open Knox.OS the moment the organiser is really in the
+-- main hand, and give up quietly if the player cancelled the equip.
+function O.tick()
+    local pending=O.pendingOpen
+    if not pending then return end
+    pending.tries=pending.tries+1
+    local player=pending.player
+    local primary=player and safe(function() return player:getPrimaryHandItem() end)
+    if primary==pending.item then
+        O.pendingOpen=nil
+        local screen=ConspiracyFiles.OrganiserScreen
+        if screen and screen.open then safe(screen.open); log("organiser read") end
+    elseif pending.tries>600 then
+        O.pendingOpen=nil
+        log("organiser: never reached the hand")
+    end
 end
 
 -- The menu on the item itself. Only on our own organiser, and only in the
@@ -150,6 +182,11 @@ function O.install()
         O.menuHooked=true
         Events.OnFillInventoryObjectContextMenu.Add(function(...) safe(O.fill,...) end)
     end
+end
+
+if Events and Events.OnTick and not O.tickHooked then
+    O.tickHooked=true
+    Events.OnTick.Add(function() safe(O.tick) end)
 end
 
 if Events and not O.startHooked then

@@ -5,12 +5,12 @@
 -- decide what they be maped with and give real click feedback. the Screen is
 -- touchscreen? 1993 did not have that."
 --
--- So: the glass is inert. Nothing on the screen is clickable, nothing hovers,
--- nothing highlights. Every action is a button on the case, and every button
--- answers - it sinks a pixel, it darkens while held, it clicks, and the power
--- light responds. (For the record: 1993 did have stylus screens, the Newton
--- and the Zoomer both shipped that year. Buttons are still the right call for
--- a game played one-handed with a horde outside.)
+-- The glass WAS inert, and is not any more: the owner reversed that ruling the
+-- same afternoon, giving the device a stylus (docs/design/KNOX_OS.md). So a
+-- tap picks a record, a tap works the scroll arrows, and the keys still do
+-- everything they did - the rocker beats a stylus when something is coming.
+-- The device is held in the main hand to be read, which is what makes reading
+-- it a decision rather than a menu.
 --
 -- THE MAP, and why:
 --   POWER (top)        screen on and off. The light beside it is lit while on.
@@ -329,11 +329,51 @@ function Screen:press(id)
     log("organiser key "..id)
 end
 
+-- Where a tap landed on the glass, in native pixels from its top left, or nil.
+function Screen:onGlass(x,y)
+    local s=self.scale
+    local gx,gy=Case.glass.x*s,Case.glass.y*s
+    if x<gx or y<gy or x>gx+Case.glass.w*s or y>gy+Case.glass.h*s then return nil end
+    return (x-gx)/s,(y-gy)/s
+end
+
+-- The stylus. Rows in the list, the scroll arrows in the right margin, and the
+-- title bar's view name, which is Palm's category selector.
+function Screen:tap(nx,ny)
+    local rows=self:rows()
+    local line=Font.line
+    if ny<=line then
+        if nx>Case.glass.w*0.6 then return end
+        self:press("MODE"); return
+    end
+    local room=S.lines()
+    local first=math.floor((ny-line-1)/line)+1
+    if first<1 or first>room then return end
+    if nx>=Case.glass.w-PADX-8 then
+        -- Right margin: the arrows.
+        self:press(first<=room/2 and "UP" or "DOWN"); return
+    end
+    if self.index then
+        local top=math.max(1,math.min(self.entry-math.floor(room/2),#rows-room+1))
+        if top<1 then top=1 end
+        local wanted=top+first-1
+        if rows[wanted] then
+            self.entry=wanted; self.card=1; self.index=false
+            safe(function() getSoundManager():playUISound("UIActivateButton") end)
+            log("organiser tap: record "..wanted)
+        end
+    else
+        self:press(first<=room/2 and "UP" or "DOWN")
+    end
+end
+
 function Screen:onMouseDown(x,y)
     self.downAt=getTimeInMillis and getTimeInMillis() or 0
     for _,b in ipairs(self:buttons()) do
         if x>=b.x and x<=b.x+b.w and y>=b.y and y<=b.y+b.h then self.down=b.id; return true end
     end
+    local nx,ny=self:onGlass(x,y)
+    if nx and self.on then self.down="GLASS"; self.glassAt={nx,ny}; return true end
     self.down=nil
     return ISPanel.onMouseDown(self,x,y)
 end
@@ -341,6 +381,12 @@ end
 function Screen:onMouseUp(x,y)
     local id=self.down
     self.down=nil
+    if id=="GLASS" then
+        local nx,ny=self:onGlass(x,y)
+        if nx and self.glassAt then self:tap(nx,ny) end
+        self.glassAt=nil
+        return true
+    end
     if not id then return ISPanel.onMouseUp(self,x,y) end
     local held=(getTimeInMillis and getTimeInMillis() or 0)-(self.downAt or 0)
     -- A held POWER is the lamp, the way a real one worked.
