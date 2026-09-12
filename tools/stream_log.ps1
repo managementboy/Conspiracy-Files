@@ -21,7 +21,7 @@
 # acceptance session: those must run with no injected helpers.
 
 param(
-    [string]$DevHost = "elkin@192.168.50.226",
+    [string]$DevHost = "elkin@192.168.51.226",
     [string]$DevPath = "/home/elkin/Conspiracy-Files/dev/playtest-logs/incoming",
     [string]$Zomboid = "$env:USERPROFILE\Zomboid",
     [switch]$Eval,

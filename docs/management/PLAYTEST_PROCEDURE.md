@@ -29,7 +29,7 @@ first, with the only tool that is always there** - the OpenSSH *client*, which
 Windows ships enabled and WSUS does not block (the *server* is the part that is
 blocked, which is why everything below pushes rather than pulls):
 
-    scp elkin@192.168.50.226:/home/elkin/Conspiracy-Files/tools/*_log.ps1 .
+    scp elkin@192.168.51.226:/home/elkin/Conspiracy-Files/tools/*_log.ps1 .
 
 Then, in PowerShell on the play machine, pick one:
 
@@ -64,7 +64,7 @@ update yet. Playing on would test the wrong mod.
 directory holding the script. Neither is worth debugging mid-session - the
 one-liner below needs no file at all:
 
-    scp $env:USERPROFILE\Zomboid\console.txt elkin@192.168.50.226:/home/elkin/Conspiracy-Files/dev/playtest-logs/incoming/console.txt
+    scp $env:USERPROFILE\Zomboid\console.txt elkin@192.168.51.226:/home/elkin/Conspiracy-Files/dev/playtest-logs/incoming/console.txt
 
 ## Before every session, three things
 
@@ -95,7 +95,7 @@ are sitting next to the log and use that folder, so no argument is needed.
 
 From the play machine, to fetch or refresh them:
 
-    scp elkin@192.168.50.226:/home/elkin/Conspiracy-Files/tools/*_log.ps1 $env:USERPROFILE\Zomboid\
+    scp elkin@192.168.51.226:/home/elkin/Conspiracy-Files/tools/*_log.ps1 $env:USERPROFILE\Zomboid\
 
 Re-run that whenever the scripts change here.
 
