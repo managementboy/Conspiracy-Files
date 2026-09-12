@@ -24,6 +24,7 @@
 -- Keys mirror them for a player whose hand is on WASD: arrow keys for the
 -- rocker and the entries, M, I, L, and Escape to close.
 local CFLog=require("ConspiracyFiles/Log")
+local Font=require("ConspiracyFiles/Generated/OrganiserFont")
 require("ISUI/ISPanel")
 ConspiracyFiles=ConspiracyFiles or {}
 local S=ConspiracyFiles.OrganiserScreen or {}
@@ -52,20 +53,28 @@ local INK_DIM={0.42,0.48,0.35}
 local LED_ON={0.85,0.35,0.30}
 local LED_OFF={0.30,0.20,0.19}
 
--- The face is a real game font now: media/fonts/EN/* ships it in the game's own
--- format and takes over the Cred2 slot, which vanilla spends only on the
--- credits screen. So the screen measures and draws like any other UI, and the
--- letters are still the Palm OS ones.
-S.FONT=UIFont and UIFont.Cred2 or nil
-local function measure(text) return getTextManager():MeasureStringX(S.FONT,text) end
-local function lineHeight() return getTextManager():getFontHeight(S.FONT) end
+-- The screen draws its own letters. Handing the game a font in its own format
+-- was tried first and killed it on startup: the manifest override is picked up,
+-- then the engine looks for the .fnt through its own file access, which cannot
+-- see a mod's files ("FileNotFoundException: media/palmos.fnt", 2026-09-12).
+-- So: one small texture per glyph, kept once it is found or missed.
+local glyphs={}
+local function glyph(code,scale)
+    local key=scale.."/"..code
+    local hit=glyphs[key]
+    if hit~=nil then return hit or nil end
+    local texture=getTexture and safe(getTexture,"media/ui/CFOrg/"..scale.."x/"..code..".png")
+    glyphs[key]=texture or false
+    return texture
+end
+local function measure(text,scale) return Font.width(text,scale) end
 
 local Screen=ISPanel:derive("CFOrganiserScreen")
 S.Screen=Screen
 
 function S.metrics(scale)
     local inner=S.COLS*8               -- 8 native px is the widest common glyph
-    local glass={w=inner+PAD*2,h=(S.LINES+2)*11+PAD*2+6}
+    local glass={w=inner+PAD*2,h=(S.LINES+2)*Font.line+PAD*2+6}
     local w=glass.w+CASE*2
     local h=glass.h+CASE*2+22          -- 22 native px of keypad and lip
     return {scale=scale,glass=glass,w=w*scale,h=h*scale}
@@ -94,8 +103,20 @@ function Screen:initialise() ISPanel.initialise(self); self:setWantKeyEvents(tru
 
 -- Text, letter by letter, from the device's own alphabet.
 function Screen:text(value,x,y,colour)
-    self:drawText(value,x,y,colour[1],colour[2],colour[3],1,S.FONT)
-    return measure(value)
+    local scale=self.scale
+    local cursor=x
+    for i=1,#value do
+        local code=string.byte(value,i)
+        if code>=Font.first and code<=Font.last then
+            local width=Font.w[code-Font.first+1]*scale
+            local texture=glyph(code,scale)
+            if texture then
+                self:drawTextureScaled(texture,cursor,y,width,Font.line*scale,1,colour[1],colour[2],colour[3])
+            end
+            cursor=cursor+width
+        end
+    end
+    return cursor-x
 end
 
 function Screen:buttons()
@@ -141,13 +162,13 @@ end
 -- What the glass says. Never clickable, never hovering: it is a display.
 function Screen:draw(x,y,width)
     local s=self.scale
-    local line=lineHeight()
+    local line=Font.line*s
     local rows=self:rows()
     local entry=rows[self.entry]
     local top=({evidence="EV",journal="JN",places="PL"})[self.section] or "EV"
     local right=self.index and (#rows.." ENTRIES") or ("#"..self.entry.." CARD "..self.card.."/"..math.max(1,entry and #entry.cards or 1))
     self:text(top,x,y,INK_DIM)
-    local rw=measure(right)
+    local rw=measure(right,s)
     self:text(right,x+width-rw,y,INK_DIM)
     local body=y+line+2*s
     if self.index then
