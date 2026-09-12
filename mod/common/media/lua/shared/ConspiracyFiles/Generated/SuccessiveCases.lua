@@ -127,6 +127,31 @@ function M.validate(wrapper)
  for id in pairs(seen) do if not known[id] then return false,"global discovery is not known by its case" end end
  return true
 end
+-- Everything a reshuffle would have to clean up, captured BEFORE the store is
+-- replaced: once the wrapper is swapped this list cannot be recovered from
+-- anywhere, and the papers are already lying in drawers around Muldraugh.
+--
+-- Owner, 2026-09-12: every change to case rules costs a fresh game, several
+-- times a day. A reshuffle builds new cases in the save the player is already
+-- standing in; the world still holds the old documents, the map still holds
+-- their marks, and both are keyed by the ids returned here.
+--
+-- Retired roots are included: their documents were placed in the world too.
+-- A retired root keeps no assignments, so it contributes ids and no tokens.
+function M.abandon(wrapper)
+ local roots=M.sessions(wrapper); if not roots then return nil,"generated wrapper missing" end
+ local out={documentIds={},physicalTokens={},caseIds={}}
+ for _,root in ipairs(roots) do
+  local caseId=rootCaseId(root)
+  if caseId then out.caseIds[#out.caseIds+1]=caseId end
+  for _,id in ipairs(rootDocumentIds(root) or {}) do
+   out.documentIds[#out.documentIds+1]=id
+   local token=rootToken(root,id)
+   if token then out.physicalTokens[#out.physicalTokens+1]=token end
+  end
+ end
+ return out
+end
 function M.sessions(wrapper)
  if type(wrapper)~="table" then return nil,"generated wrapper missing" end
  local out={}; if wrapper.canonical then out[#out+1]=wrapper.canonical end

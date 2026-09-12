@@ -220,3 +220,45 @@ function L.noGap()
     ConspiracyFiles.AutomaticInvestigations.config.minGapHours = 0
     return true
 end
+
+-- Reshuffle support (checks/reshuffle.sh). ids() is the fingerprint of the
+-- case currently in the save; orphanEvidence() counts papers left in the world
+-- that still claim to belong to a case nothing knows about any more.
+function L.ids()
+    local out = {}
+    for _, d in ipairs(L.docs()) do out[#out + 1] = d.id end
+    table.sort(out)
+    return table.concat(out, ",")
+end
+
+function L.orphanEvidence()
+    local orphans, checked = 0, 0
+    local cell = getCell()
+    local p = getPlayer()
+    local px, py, pz = math.floor(p:getX()), math.floor(p:getY()), math.floor(p:getZ())
+    local function consider(item)
+        local ok, md = pcall(function() return item:getModData() end)
+        if not ok or type(md) ~= "table" or not md.cfGeneratedId then return end
+        checked = checked + 1
+        -- Still marked, but no live case owns it: that is the orphan a
+        -- reshuffle must not leave behind.
+        if not R.subject(item) then orphans = orphans + 1 end
+    end
+    for x = px - 20, px + 20 do
+        for y = py - 20, py + 20 do
+            local square = cell:getGridSquare(x, y, pz)
+            local objects = square and square:getObjects()
+            for i = 0, (objects and objects:size() or 0) - 1 do
+                local o = objects:get(i)
+                for c = 0, (o.getContainerCount and o:getContainerCount() or 0) - 1 do
+                    local container = o:getContainerByIndex(c)
+                    local items = container and container:getItems()
+                    for n = 0, (items and items:size() or 0) - 1 do pcall(consider, items:get(n)) end
+                end
+            end
+        end
+    end
+    local carried = p:getInventory():getItems()
+    for i = 0, carried:size() - 1 do pcall(consider, carried:get(i)) end
+    return orphans, checked
+end

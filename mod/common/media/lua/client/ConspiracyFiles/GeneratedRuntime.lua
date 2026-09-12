@@ -385,6 +385,82 @@ function R.start(seed,options)
     end)
     return true
 end
+-- Start the investigation over in the save the player is already in.
+--
+-- Owner, 2026-09-12: every change to the case rules costs a fresh game, and
+-- that happened four times in one day. The world, the character, the base and
+-- the map knowledge are all still good; only the cases are stale. So this
+-- abandons every case and builds new ones under the current rules, right here.
+--
+-- Nothing is preserved (P4-R77): the old paperwork is stripped back to
+-- ordinary loot rather than deleted, because a player may be carrying it and
+-- an item vanishing from a hand is worse than a page nobody records.
+--
+--     ConspiracyFiles.GeneratedRuntime.reshuffle("dry")   say what would go
+--     ConspiracyFiles.GeneratedRuntime.reshuffle()        do it
+--
+-- Developer command: the same debug/single-player gate as nextCase.
+function R.reshuffle(mode,seed)
+    local dry=mode=="dry"
+    if preparing then return false,"preparation already running" end
+    if not allowed() then return false,"debug single-player required" end
+    if not wrapper or not (wrapper.canonical or wrapper.campaign) then return false,"no generated case to reshuffle" end
+    local manifest,why=Cases.abandon(wrapper)
+    if not manifest then return false,tostring(why) end
+    -- The discovery ledger is append-only and finite. Reshuffling does not
+    -- consume it, but the cases that follow do, and a ledger that fills up
+    -- refuses every future discovery for the rest of the save. Say so while
+    -- there is still room rather than after.
+    local Ledger=require("ConspiracyFiles/DiscoveryLedger")
+    local log2=ConspiracyFiles.DiscoveryLog
+    local used=log2 and log2.events and #log2.events() or 0
+    local room=Ledger.MAX-used
+    log("Reshuffle: "..#manifest.caseIds.." case(s), "..#manifest.documentIds..
+        " document(s), "..room.." discovery slot(s) left of "..Ledger.MAX..(dry and " [dry run]" or ""))
+    if dry then return true,manifest end
+    if room<G.MAX_EVIDENCE*2 then
+        return false,"only "..room.." discovery slots left; a reshuffle now would run the ledger out"
+    end
+    -- Strip the mod's marks off what is already in the world, so a page in a
+    -- drawer becomes ordinary literature instead of evidence nothing knows
+    -- about. Bounded: only the containers the cases themselves recorded, plus
+    -- whatever the player is carrying.
+    local stripped=0
+    local function unmark(item)
+        local md=item and item.getModData and item:getModData()
+        if type(md)=="table" and md.cfGeneratedId then
+            md.cfGeneratedId=nil; md.cfPhysicalToken=nil; stripped=stripped+1
+        end
+    end
+    for _,root in ipairs(Cases.sessions(wrapper) or {}) do
+        for _,assignment in pairs(root.assignments or {}) do
+            local ok,container=pcall(World.resolve,assignment.target)
+            local items=ok and container and container.getItems and container:getItems()
+            if items and items.size then
+                for i=0,items:size()-1 do pcall(unmark,items:get(i)) end
+            end
+        end
+    end
+    local player=getPlayer and getPlayer()
+    local inventory=player and player:getInventory()
+    local carried=inventory and inventory.getItems and inventory:getItems()
+    if carried and carried.size then for i=0,carried:size()-1 do pcall(unmark,carried:get(i)) end end
+    local markers=ConspiracyFiles.ClueMarkers
+    local forgotten=0
+    if markers and markers.forget then
+        local ok,n=pcall(markers.forget,manifest.documentIds); forgotten=(ok and type(n)=="number") and n or 0
+    end
+    -- Now the store itself. Clearing both fields is what lets R.start take the
+    -- first-house path again, exactly as it does in a brand-new save.
+    local store=ModData.getOrCreate(TAG)
+    store.canonical=nil; store.campaign=nil
+    wrapper=nil; sessions={}; retiredRows={}
+    pcall(Cases.remember,store,getTimeInMillis and getTimeInMillis())
+    log("Reshuffle: "..stripped.." item(s) returned to ordinary loot, "..forgotten.." map mark(s) forgotten. Building a new case here.")
+    local started,failed=R.start(seed,{firstHouse=true})
+    if not started then return false,"cases cleared, but no new case yet: "..tostring(failed) end
+    return true,manifest
+end
 function R.known()
     if not wrapper or not sessions then return {} end
     local byId={}

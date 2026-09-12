@@ -49,3 +49,23 @@ do
     A.current = real
     print("PASS successive cases: current() is cached until the store changes")
 end
+
+-- A reshuffle replaces every case in the save the player is standing in, so
+-- the ids and tokens of what is already lying in the world must be captured
+-- BEFORE the swap: afterwards nothing knows those papers exist. Retired cases
+-- count too - their documents were placed in the world like any other.
+local manifest = assert(A.abandon(staged))
+local documents = 0
+for _, r in ipairs(A.sessions(staged)) do documents = documents + #r.case.documents end
+assert(#manifest.documentIds == documents,
+    'every document of every case is listed, got ' .. #manifest.documentIds .. ' of ' .. documents)
+assert(#manifest.physicalTokens == documents, 'every live document contributes its physical token')
+assert(#manifest.caseIds == 2, 'both cases are named')
+local seen = {}
+for _, id in ipairs(manifest.documentIds) do
+    assert(not seen[id], 'a document is listed once'); seen[id] = true
+    assert(A.find(staged, id), 'a listed document really belongs to this store')
+end
+assert(not A.abandon(nil), 'no store, no manifest')
+assert(#A.abandon({canonical = first}).documentIds == #first.case.documents, 'a single-case store lists its own')
+print('PASS SuccessiveCases: a reshuffle can name every paper it is about to abandon')

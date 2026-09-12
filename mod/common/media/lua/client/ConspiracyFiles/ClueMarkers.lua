@@ -156,6 +156,22 @@ function M.update()
   if ui and ui.refresh then pcall(ui.refresh) end
  end
 end
+-- Forget the marks of documents that no longer belong to any case. Only a
+-- reshuffle (GeneratedRuntime.reshuffle) has a reason to call this: its cases
+-- are gone, and their records would otherwise sit in the store forever, eating
+-- the 64-record ceiling whose read() throws rather than degrades.
+function M.forget(ids)
+ if type(ids)~="table" then return 0 end
+ local r=read(); if not r then return 0 end
+ local next,gone=nil,0
+ for _,id in ipairs(ids) do
+  if type(id)=="string" and r.records[id] then
+   next=next or copy(r); next.records[id]=nil; gone=gone+1
+  end
+ end
+ if next then commit(next); log("Forgot "..gone.." map mark(s) of abandoned cases.") end
+ return gone
+end
 function M.note(id)
  local c=session(id);if not c or not known(c,id) then return nil end
  local r=read();local v=r and r.records[id]
