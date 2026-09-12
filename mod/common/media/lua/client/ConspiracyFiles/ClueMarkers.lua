@@ -117,7 +117,11 @@ function M.before(character,item,source,destination,square)
   end
   return pending
  end
- local md=item and item:getModData();local c=md and session(md.cfGeneratedId);local a=c and c.assignments[md.cfGeneratedId]
+ -- A RETIRED case keeps its rows and no assignments, so `c.assignments` is
+ -- nil for anything belonging to one. Picking a document off your own corpse
+ -- after the case retired threw here (death check, 2026-09-12).
+ local md=item and item:getModData();local c=md and session(md.cfGeneratedId)
+ local a=c and c.assignments and c.assignments[md.cfGeneratedId]
  if not a or a.status=="conflict" or md.cfPhysicalToken~=a.physicalToken then return end
  local r=read();if r.records[md.cfGeneratedId] or known(c,md.cfGeneratedId) then return end
  if not square then local w=item:getWorldItem();square=w and w:getSquare() or sourceSquare(source) end
@@ -131,7 +135,7 @@ function M.after(candidate,item)
  end
  if not candidate or not item or item:getOutermostContainer()~=getPlayer():getInventory() then return end
  local md=item:getModData();if md.cfGeneratedId~=candidate.id or md.cfPhysicalToken~=candidate.token then return end
- local c=session(candidate.id);local a=c and c.assignments[candidate.id]
+ local c=session(candidate.id);local a=c and c.assignments and c.assignments[candidate.id]
  if not a or a.physicalToken~=candidate.token or a.status=="conflict" then return end
  local r=read();if r.records[candidate.id] then return end
  local next=copy(r);next.records[candidate.id]={x=candidate.x,y=candidate.y,z=candidate.z,map=candidate.map,written=false}
