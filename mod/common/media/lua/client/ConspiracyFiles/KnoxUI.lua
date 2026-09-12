@@ -184,7 +184,7 @@ end
 -- The grid of applications: three columns, icon over name, as the classic
 -- launcher drew them. `icons` is a name -> texture lookup owned by the caller.
 K.ICON=22
-function K.grid(c,programs,ny,selected,icon)
+function K.grid(c,programs,ny,selected,icon,counts)
     local cols=3
     local cell=math.floor(c.w/cols)
     local rowHeight=K.ICON+Font.line+3

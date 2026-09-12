@@ -71,5 +71,6 @@ out="$REPO/docs/management/evidence/linux-autotest/$(date +%Y%m%dT%H%M%S)-reshuf
     for f in "${fails[@]:-}"; do [ -n "$f" ] && echo "FAIL: $f"; done
 } > "$out"
 say "written: $out"
+echo "Linux reshuffle check $id: $verdict"
 cat "$out"
 [ "$verdict" = PASS ] && exit 0 || exit 1

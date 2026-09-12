@@ -146,5 +146,6 @@ out="$REPO/docs/management/evidence/linux-autotest/$(date +%Y%m%dT%H%M%S)-knox.t
     for f in "${fails[@]:-}"; do [ -n "$f" ] && echo "FAIL: $f"; done
 } > "$out"
 say "written: $out"
+echo "Linux Knox.OS check $id: $verdict"
 cat "$out"
 [ "$verdict" = PASS ] && exit 0 || exit 1
