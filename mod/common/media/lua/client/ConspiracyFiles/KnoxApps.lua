@@ -19,6 +19,13 @@ ConspiracyFiles.KnoxApps=A
 
 local function safe(fn,...) local ok,v=pcall(fn,...) if ok then return v end end
 
+-- The two stores that live in the machine rather than in the world, named
+-- here because the boot self-test measures them and it runs before either
+-- program is defined. Organiser.lua clears exactly these when a cell goes
+-- flat; if a third is ever added, it belongs in that list too.
+local TAG="ConspiracyFiles.KnoxToDo"
+local NOTES="ConspiracyFiles.KnoxNotes"
+
 -- The in-game date an event happened, from the world hours stamped on it.
 -- getGameTime() knows today; the ledger knows how many world hours ago a thing
 -- was found; the difference is the date. Nothing is stored for this.
@@ -212,7 +219,6 @@ A.dates={
 -- The one program the survivor writes rather than reads, and it takes no
 -- typing: a to-do is made by tapping a record's "REMIND" command, so the text
 -- is always something the player has already found. Ticked off by tapping.
-local TAG="ConspiracyFiles.KnoxToDo"
 local function store()
     local root=ModData and ModData.getOrCreate(TAG)
     if root and type(root.items)~="table" then root.items={} end
@@ -336,6 +342,23 @@ function A.bootLines()
     local log=ConspiracyFiles.DiscoveryLog
     local events=(log and log.events and safe(log.events)) or {}
     out[#out+1]="Records ......... "..#events
+    -- The self-test a machine of this age ran on every boot. The figure is
+    -- real: 128K of RAM less what the stores actually hold, so it falls as the
+    -- case grows, which is the only reason to print it at all.
+    local notes=safe(function() return #((ModData.get(NOTES) or {}).items or {}) end) or 0
+    local todos=safe(function() return #((ModData.get(TAG) or {}).items or {}) end) or 0
+    local used=#events*96+notes*208+todos*128
+    local free=math.max(0,128*1024-used)
+    out[#out+1]=string.format("Memory .......... %dK free",math.floor(free/1024))
+    -- A flat cell empties battery-backed RAM. The player is told, because
+    -- finding your own to-dos silently gone is a bug's behaviour, not a
+    -- machine's.
+    local organiser=ConspiracyFiles.Organiser
+    local item=organiser and organiser.held and safe(organiser.held)
+    if item and organiser.memoryLost and safe(organiser.memoryLost,item) then
+        out[#out+1]="** MEMORY LOST **"
+        out[#out+1]="notes and to-dos cleared"
+    end
     out[#out+1]=""
     if ready and status and not status.preparing and (status.count or 0)>0 then
         out[#out+1]="Ready."
@@ -374,7 +397,6 @@ A.sites={
 --
 -- A note goes into the log, which is already streamed to the development
 -- machine, so it arrives where the rest of the evidence about a session is.
-local NOTES="ConspiracyFiles.KnoxNotes"
 function A.addNote(text)
     if type(text)~="string" or not text:find("%S") then return false end
     text=text:gsub("[\r\n]"," "):sub(1,200)

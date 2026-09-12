@@ -86,6 +86,71 @@ function O.power(item)
     return safe(function() return data:getPower() end)
 end
 
+-- The hardware, as a 1993 pocket machine actually behaved -----------------
+--
+-- Everything here is a property of the DEVICE, not of the case. P4-R80 is the
+-- line that must not be crossed: losing or flattening the machine costs
+-- convenience, never the investigation. The ledger lives in the world, so a
+-- dead organiser is an inconvenience and a found one reads the case again.
+
+O.LOW_POWER=0.20   -- below this the machine says so, as a Palm's warning did
+O.LAMP_MIN=0.10    -- a backlight will not run a dying cell
+
+-- The stores that live in the machine's RAM rather than in the world. A real
+-- Palm lost exactly this much when its cells went flat: your memos and your
+-- to-dos, not anything written down elsewhere. The discovery ledger is NOT
+-- here and must never be, because that is the case.
+local VOLATILE={"ConspiracyFiles.KnoxNotes","ConspiracyFiles.KnoxToDo"}
+local LOST="cfMemoryLost"
+
+function O.low(item)
+    local power=O.power(item)
+    return power~=nil and power>0 and power<O.LOW_POWER
+end
+
+-- Battery-backed RAM, and the battery is flat. Wipe what the machine was
+-- holding and remember that it happened, so the next boot can say so rather
+-- than the player quietly finding their to-dos gone.
+function O.loseMemory(item)
+    if not item then return false end
+    local md=safe(function() return item:getModData() end)
+    if not md or md[LOST] then return false end
+    for _,tag in ipairs(VOLATILE) do
+        safe(function()
+            local root=ModData and ModData.getOrCreate(tag)
+            if root then root.items={} end
+        end)
+    end
+    md[LOST]=true
+    log("organiser memory lost: flat battery cleared notes and to-dos")
+    return true
+end
+
+function O.memoryLost(item)
+    local md=item and safe(function() return item:getModData() end)
+    return (md and md[LOST]) and true or false
+end
+
+-- Cleared once the machine has power again AND the player has seen the notice
+-- on the boot screen, so the message is not lost in the same instant it
+-- appears.
+function O.clearMemoryNotice(item)
+    local md=item and safe(function() return item:getModData() end)
+    if md and md[LOST] and (O.power(item) or 0)>0 then md[LOST]=nil; return true end
+    return false
+end
+
+-- Checked where it is cheap and where it matters: when the machine is picked
+-- up and read, and when the lamp finishes a cell off. NOT every tick - a
+-- per-tick battery poll is the class of cost that was stripped out of this
+-- file on 2026-09-12.
+function O.checkPower(item)
+    item=item or O.held()
+    local power=O.power(item)
+    if power~=nil and power<=0 then O.loseMemory(item) end
+    return power
+end
+
 function O.readable(item)
     if not item then return false,"no organiser" end
     local power=O.power(item)
@@ -234,6 +299,14 @@ function O.lampTick()
     if drained<=0 then
         window.lamp=false
         log("organiser lamp off: flat battery")
+        -- The cell the lamp just finished off is the cell that was holding
+        -- the machine's RAM. This is the one path that flattens a battery
+        -- while we are watching, so it is the one path that must notice.
+        O.checkPower(item)
+    elseif drained<O.LAMP_MIN then
+        -- A backlight is the first thing to go on a dying cell.
+        window.lamp=false
+        log("organiser lamp off: too little charge to run it")
     end
 end
 

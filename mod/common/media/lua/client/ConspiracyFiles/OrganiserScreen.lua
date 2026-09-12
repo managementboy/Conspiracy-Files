@@ -47,6 +47,10 @@ local function safe(fn,...) local ok,v=pcall(fn,...) if ok then return v end end
 -- widget kit, not chosen here.
 S.HOLD_MS=450                     -- how long a held POWER becomes the lamp
 S.PRESS_MS=110                    -- how long a button shows as pressed
+-- Auto-off. Every Palm did this, and for the reason this machine needs it:
+-- the cells are the scarce thing. Real seconds, not game hours, because it is
+-- the player who has stopped touching it. POWER wakes it again.
+S.AUTO_OFF_MS=120000
 
 -- Palm III colours: a graphite case, a near-black surround, and the grey-green
 -- LCD. Only the glass is green.
@@ -132,6 +136,7 @@ function Screen:new(owner)
     o.index=false
     o.on=true
     o.lamp=false
+    o.touched=getTimeInMillis and getTimeInMillis() or 0
     o.pressed={}
     o.moveWithMouse=true
     return o
@@ -148,7 +153,47 @@ function Screen:buttons()
     return out
 end
 
+-- What the command line says. Normally the caller's own hint, but a machine
+-- with a dying cell says that instead, on every screen, the way a Palm put its
+-- battery warning in front of whatever you were doing. A refused lamp shows
+-- briefly for the same reason: the player pressed something and must be told
+-- why nothing happened.
+function Screen:footText(hint)
+    local now=getTimeInMillis and getTimeInMillis() or 0
+    if self.lampRefused and now-self.lampRefused<2500 then
+        return "LAMP NEEDS MORE CHARGE"
+    end
+    local organiser=ConspiracyFiles.Organiser
+    local item=organiser and organiser.held and safe(organiser.held)
+    if item and organiser.low and safe(organiser.low,item) then return "BATTERY LOW" end
+    return hint
+end
+
+-- The boot screen has been read and dismissed. Anything it was there to
+-- report - a lost memory, so far - can stop being reported now.
+function Screen:bootSeen()
+    local organiser=ConspiracyFiles.Organiser
+    if not organiser or not organiser.clearMemoryNotice then return end
+    local item=safe(organiser.held)
+    if item then safe(organiser.clearMemoryNotice,item) end
+end
+
+-- Anything the player does to the machine counts as touching it.
+function Screen:touch() self.touched=getTimeInMillis and getTimeInMillis() or 0 end
+
+-- Idle long enough and it switches itself off, as the real machine did. The
+-- lamp goes with it, because that is the whole point of auto-off.
+function Screen:idleCheck()
+    if not self.on then return end
+    local now=getTimeInMillis and getTimeInMillis() or 0
+    if now-(self.touched or now)<S.AUTO_OFF_MS then return end
+    self.on=false
+    self.lamp=false
+    log("organiser auto-off: idle")
+end
+
 function Screen:prerender()
+    self:idleCheck()
     local s=self.scale
     local case=texture("case",s)
     if case then
@@ -242,7 +287,7 @@ function Screen:draw(gx,gy)
         for _,text in ipairs(self.bootText) do
             K.text(c,text,2,y,K.INK); y=y+line
         end
-        local foot=K.foot(c,"")
+        local foot=K.foot(c,self:footText(""))
         K.command(c,"START",2,foot,"START")
         return
     end
@@ -266,7 +311,7 @@ function Screen:draw(gx,gy)
         -- 2026-09-12). An icon and its name cost nothing.
         K.grid(c,self:programs(),y+2,self.app or 1,
             function(name) return texture("icons/"..self.scale.."x/"..name,nil) end)
-        K.foot(c,"tap a program")
+        K.foot(c,self:footText("tap a program"))
         return
     end
     local program=self:program()
@@ -301,7 +346,7 @@ function Screen:draw(gx,gy)
             K.text(c,text,2,y+i*line,K.INK)
         end
         K.arrows(c,y,room*line,top>1,top+room-1<#body)
-        local foot=K.foot(c,"")
+        local foot=K.foot(c,self:footText(""))
         local x=K.command(c,"BACK",2,foot,"BACK")
         if self.record.todo then K.command(c,"TICK",x,foot,"TICK")
         else K.command(c,"REMIND",x,foot,"REMIND") end
@@ -317,7 +362,7 @@ function Screen:draw(gx,gy)
         K.row(c,row.label,line+2+i*line,(top+i)==self.entry,"ROW",top+i)
     end
     K.arrows(c,line+2,room*line,top>1,top+room-1<#rows)
-    K.foot(c,"VIEW: programs   LIST: open")
+    K.foot(c,self:footText("VIEW: programs   LIST: open"))
 end
 
 function Screen:openRow(index)
@@ -333,6 +378,7 @@ function Screen:openRow(index)
 end
 
 function Screen:press(id)
+    self:touch()
     self.pressed[id]=getTimeInMillis and getTimeInMillis() or 0
     safe(function() getSoundManager():playUISound("UIActivateButton") end)
     if id=="POWER" then
@@ -345,7 +391,7 @@ function Screen:press(id)
     -- still insists you press the one button it is showing is a machine that
     -- annoys people (knox check, 2026-09-12: every tap landed on nothing
     -- because the boot screen was still up).
-    if self.booting then self.booting=false; return end
+    if self.booting then self.booting=false; self:bootSeen(); return end
     local rows=self:list()
     -- The four keys open the four programs, the way a Palm's Date, Address,
     -- To Do and Memo keys did. The launcher is a tap on the title bar.
@@ -378,8 +424,10 @@ end
 
 -- The stylus: whatever widget is under the tap.
 function Screen:tap(x,y)
+    self:touch()
     if self.booting then
         self.booting=false
+        self:bootSeen()
         safe(function() getSoundManager():playUISound("UIActivateButton") end)
         return
     end
@@ -409,6 +457,7 @@ function Screen:tap(x,y)
         self.record=nil; self.cachedList=nil
     elseif id=="START" then
         self.booting=false
+        self:bootSeen()
     elseif id=="UP" then self:press("UP")
     elseif id=="DOWN" then self:press("DOWN") end
     log("knox tap: "..tostring(id))
@@ -435,6 +484,18 @@ function Screen:onMouseUp(x,y)
     if not id then return ISPanel.onMouseUp(self,x,y) end
     local held=(getTimeInMillis and getTimeInMillis() or 0)-(self.downAt or 0)
     if id=="POWER" and held>=S.HOLD_MS then
+        self:touch()
+        local organiser=ConspiracyFiles.Organiser
+        local item=organiser and safe(organiser.held)
+        local power=item and organiser.power and safe(organiser.power,item)
+        -- A backlight is the first thing a dying cell refuses to run. Asking
+        -- for it is not a failure the player caused, so it says so quietly
+        -- rather than doing nothing at all.
+        if not self.lamp and power~=nil and power<(organiser.LAMP_MIN or 0) then
+            self.lampRefused=getTimeInMillis and getTimeInMillis() or 0
+            log("organiser lamp refused: charge "..tostring(power))
+            return true
+        end
         self.lamp=not self.lamp
         self.pressed[id]=getTimeInMillis and getTimeInMillis() or 0
         safe(function() getSoundManager():playUISound("UIActivateButton") end)
@@ -492,6 +553,10 @@ end
 -- a second reading surface, which is exactly what P4-R79 forbids.
 function S.open()
     if S.window then S.window:bringToTop(); return S.window end
+    -- Picking the machine up is when a flat cell is discovered, and it is a
+    -- cheap moment to look: once per open, not once per tick.
+    local organiser=ConspiracyFiles.Organiser
+    if organiser and organiser.checkPower then safe(organiser.checkPower) end
     local w=Screen:new()
     w:initialise(); w:instantiate(); w:addToUIManager()
     S.window=w

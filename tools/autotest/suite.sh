@@ -3,7 +3,7 @@
 #   tools/autotest/suite.sh [--hidden]
 set -uo pipefail
 . "$(dirname "${BASH_SOURCE[0]}")/lib.sh"
-checks=(boot_check.sh checks/wallet_id.sh checks/core_loop.sh checks/reload.sh checks/death.sh checks/faults.sh checks/perf.sh checks/knox.sh checks/reshuffle.sh)
+checks=(boot_check.sh checks/wallet_id.sh checks/core_loop.sh checks/reload.sh checks/death.sh checks/faults.sh checks/perf.sh checks/knox.sh checks/hardware.sh checks/reshuffle.sh)
 pass=0; total=0
 for c in "${checks[@]}"; do
     # Each check claims the machine itself now (claim_game), so the suite does

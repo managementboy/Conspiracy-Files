@@ -169,7 +169,16 @@ end
 -- Published so the organiser's screen reads the SAME rows this window does:
 -- one store, one projection, two surfaces (docs/design/READING_SURFACES.md).
 local function generatedRows(section)
-    local known=generated().known(); local titles,rows={},{}
+    -- No case generated yet is a normal state, not a fault: a new world spends
+    -- its first half-minute indexing addresses, and the organiser's own boot
+    -- screen tells the player to carry on using it while that finishes. Before
+    -- this guard, doing exactly that threw "attempted index: known of
+    -- non-table" on every list refresh - swallowed by the callers' pcall, so
+    -- the screen merely looked empty, but filling the log with exceptions in
+    -- the one place a real problem would have to be spotted.
+    local rt=generated()
+    if not rt then return {} end
+    local known=rt.known(); local titles,rows={},{}
     local wrapper=ModData and ModData.get and ModData.get("ConspiracyFiles.Generated.G2")
     local Cases=wrapper and require("ConspiracyFiles/Generated/SuccessiveCases")
     wrapper=Cases and Cases.current(wrapper)
