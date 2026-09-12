@@ -1,0 +1,7 @@
+FAIL reshuffle - 2026-09-12T15:06:04+02:00
+commit: af90ac2
+before: 2	1:placed@102 E Maple St; 2:placed@127 S Main St
+after:  
+FAIL: no new case was placed after the reshuffle
+FAIL: the reshuffle produced the same documents
+FAIL: errors inside the mod: General      f:11486> Lua((MOD:Conspiracy-Files: Dead Air)).preparation> Exception thrown  |  metadata extraction did not complete at BaseLib.error(BaseLib.java:307).
