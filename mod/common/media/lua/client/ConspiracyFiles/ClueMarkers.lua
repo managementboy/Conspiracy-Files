@@ -51,21 +51,11 @@ local function valid(r)
  end
  return true
 end
--- read() runs on every tick through M.update, and valid() walks and measures
--- the whole record store: 1.7 ms average and 20 ms at worst on the Linux test
--- laptop (writecost check, 2026-09-12), over a 2 ms per-frame budget. Every
--- writer here is copy-on-write - commit() always stores a NEW table built by
--- copy() - so the same table validated once is the same data, and the check is
--- skipped by identity. The table being written is always validated in full.
-local validated=nil
 local function read()
  local p=getPlayer();if not p then return end
  local r=p:getModData()[TAG]
  if r==nil then return {schema=1,records={}} end
- if r~=validated then
-  if not valid(r) then error("saved marker records refused") end
-  validated=r
- end
+ if not valid(r) then error("saved marker records refused") end
  return r
 end
 local function copy(r)
@@ -78,7 +68,6 @@ local function commit(r)
  local within,why=require("ConspiracyFiles/SaveBudget").check("markers",r)
  if not within then error(why) end
  getPlayer():getModData()[TAG]=r
- validated=r
 end
 function M.writingTool(player)
  local inv=player and player:getInventory();if not inv then return false end

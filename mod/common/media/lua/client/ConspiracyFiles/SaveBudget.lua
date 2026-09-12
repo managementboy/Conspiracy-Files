@@ -13,12 +13,7 @@ local function measure(name,root)
  local a=type(root)=="table" and root.canonical or nil
  local b=type(root)=="table" and root.campaign or nil
  local c=cache[name]
- -- A root with neither child is a flat store of its own (the marker records
- -- live under the player, not under a canonical/campaign wrapper). It was the
- -- one root this cache never covered, so every write of every kind re-walked
- -- it; its writer is copy-on-write like the rest, so the table's identity is
- -- enough. (writecost check, 2026-09-12.)
- if c and c.root==root and c.a==a and c.b==b then return c.ok,c.why,c.bytes end
+ if c and c.root==root and c.a==a and c.b==b and (a~=nil or b~=nil) then return c.ok,c.why,c.bytes end
  local ok,why=V.validateStructure(root)
  local bytes=ok and V.estimateEncodedBytes(root) or 0
  cache[name]={root=root,a=a,b=b,ok=ok,why=why,bytes=bytes}
