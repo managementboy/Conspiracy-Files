@@ -90,8 +90,10 @@ names="$(ev 'return CFOrg.knox()')"
 [ "$(cut -f2 <<<"$names")" = NAMES ] || fail "a tap on the NAMES icon did not open it: $names"
 # Only a promise we actually set up: if no corpse carried a wallet, the address
 # book having nothing in it is the truth, not a fault.
+# Whatever else happens, the survivor is in their own address book.
+[ "$(cut -f3 <<<"$names")" -gt 0 ] 2>/dev/null || fail "the address book does not even hold the survivor"
 if [ "$wallet" = yes ]; then
-    [ "$(cut -f3 <<<"$names")" -gt 0 ] 2>/dev/null || fail "the address book is empty after looting an ID"
+    [ "$(cut -f3 <<<"$names")" -gt 1 ] 2>/dev/null || fail "a looted ID did not reach the address book"
 else
     say "no ID was looted this run; the address book's contents are not asserted"
 fi

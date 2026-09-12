@@ -262,6 +262,8 @@ if Events and Events.OnGameStart and not O.bootHooked then
     O.bootHooked=true
     Events.OnGameStart.Add(function()
         safe(function()
+            local apps=ConspiracyFiles.KnoxApps
+            if apps and apps.rememberMe then apps.rememberMe() end
             local screen=ConspiracyFiles.OrganiserScreen
             if screen and screen.boot then screen.boot() end
         end)

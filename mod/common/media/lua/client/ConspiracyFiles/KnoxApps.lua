@@ -104,6 +104,47 @@ A.files={
 -- The address book. Every name the player has actually seen on a document, in
 -- the order they were seen, with where it was found underneath. A name is a
 -- lead: the book says where a name was written, never who anybody is.
+-- The survivor's own card. Owner, 2026-09-12: "the adress book should at least
+-- have ourselfs in it." It is also the only entry in the book that is not a
+-- lead: everything else is a name seen on a document, this one is a fact.
+local ME="ConspiracyFiles.KnoxMe"
+function A.rememberMe()
+    local player=getPlayer and getPlayer()
+    if not player then return end
+    local root=ModData and ModData.getOrCreate(ME)
+    if not root then return end
+    if not root.woke then
+        local address=ConspiracyFiles.AddressMap
+        local place=address and address.nearest and safe(address.nearest,
+            math.floor(player:getX()),math.floor(player:getY()),40)
+        root.woke=type(place)=="string" and place or nil
+        root.day=safe(function()
+            local clock=getGameTime()
+            return clock:getDay()+1 .. " " .. (MONTHS[clock:getMonth()+1] or "?") .. " " .. clock:getYear()
+        end)
+    end
+    return root
+end
+
+function A.me()
+    local player=getPlayer and getPlayer()
+    if not player then return nil end
+    local descriptor=safe(function() return player:getDescriptor() end)
+    local forename=descriptor and safe(function() return descriptor:getForename() end)
+    local surname=descriptor and safe(function() return descriptor:getSurname() end)
+    local name=((forename or "").." "..(surname or "")):gsub("^%s+",""):gsub("%s+$","")
+    if name=="" then return nil end
+    local root=A.rememberMe() or {}
+    local lines={"This is me."}
+    local job=descriptor and safe(function() return descriptor:getProfession() end)
+    if type(job)=="string" and job~="" and job~="unemployed" then
+        lines[#lines+1]="Work: "..job:gsub("^%l",string.upper)
+    end
+    if root.woke then lines[#lines+1]="Woke up at "..root.woke.."." end
+    if root.day then lines[#lines+1]="First day: "..root.day.."." end
+    return {label=name,title=name,detail=table.concat(lines,"\n"),id="me",me=true}
+end
+
 A.names={
     id="NAMES",title="NAMES",icon="names",
     list=function()
@@ -114,6 +155,8 @@ A.names={
         local observer=ConspiracyFiles.IdentityObserver
         local rows=(observer and observer.rows and safe(observer.rows)) or {}
         local out={}
+        local me=A.me()
+        if me then out[1]=me end
         for _,row in ipairs(rows) do
             -- The notebook says "Found Ines Kubiak's ID card" because it is a
             -- list of findings. An address book is a list of PEOPLE, so the
