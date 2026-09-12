@@ -365,3 +365,33 @@ recollection exists, write it as a claim to test and say what would settle it;
 do not build on it. Owner endorsed the rule as stated after a task handoff
 asserted an in-game confirmation the owner did not recall giving — the claim
 happened to be true, which is exactly why it went unchallenged.
+
+## Reading surfaces — 2026-09-12
+
+Answers to the three open calls at the foot of
+`docs/design/READING_SURFACES.md`, asked and answered in one sitting.
+
+**P4-R79 — the device replaces the window.** Owner chose "device replaces the
+window" over the handoff's own assumption that the window becomes a desk. There
+is one reading surface and the survivor carries it. The desk/board surface in
+that document's Step 3 is therefore **not** to be built, and the staging drops
+to: projection surface argument, Papers as the surface, then the device as a
+real item. Consequence to hold onto: a single surface can never lay the case out
+larger than what the survivor is holding, so anything the old window could only
+show at 1000x680 must survive the move or be dropped on purpose, not by
+accident.
+
+**P4-R80 — losing the device costs convenience, never the case.** The ledger
+stays the record; the device is a reader. Combined with P4-R79 this creates an
+obligation, because with one surface a lost device is a mod the player cannot
+read: **there must always be a way back to reading.** Whatever form that takes
+(a replaceable common item, a craftable, a spawn guarantee) is unsettled and is
+flagged for the owner before the device becomes a real item. Not built on the
+assumption that it resolves itself.
+
+**P4-R81 — a heading is earned by a return, not by a count.** WP6 wins over
+WP2 where they disagree. A place earns a heading only when the player comes
+back to it having learned something since the last visit; two finds in one
+sweep earn nothing. Consequence accepted deliberately: the place view is flat
+for the first hour of a save, so it must say so in the survivor's voice rather
+than render as an empty panel.
