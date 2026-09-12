@@ -229,6 +229,102 @@ A.help={
     end,
 }
 
-A.programs={A.files,A.names,A.dates,A.todo,A.help}
+-- BOOT ------------------------------------------------------------------------
+-- What the machine says while the mod is still waking up. Owner, 2026-09-12:
+-- "The PDA will show a boot screen telling the player to wait. for now we could
+-- even show real information of what we are doing."
+--
+-- So every line here is a real state, never a fake progress bar: whether the
+-- address book has been built, whether a case is being prepared, and how many
+-- of its documents have reached the world.
+function A.bootLines()
+    local out={"KNOX.OS 1.0","(c) 1993 Knox Systems",""}
+    local address=ConspiracyFiles.AddressMap
+    local ready=address and address.ready and safe(address.ready)
+    out[#out+1]=ready and "Address book .... ready" or "Address book .... reading"
+    local runtime=ConspiracyFiles.GeneratedRuntime
+    local status=runtime and runtime.automaticStatus and safe(runtime.automaticStatus)
+    if not status then
+        out[#out+1]="Case ............ waiting"
+    elseif status.preparing then
+        out[#out+1]="Case ............ preparing"
+    elseif (status.count or 0)>0 then
+        out[#out+1]="Case ............ "..status.count.." open"
+    else
+        out[#out+1]="Case ............ none yet"
+    end
+    local rows=runtime and runtime.known and safe(runtime.known)
+    out[#out+1]="Records ......... "..#(rows or {})
+    out[#out+1]=""
+    if ready and status and not status.preparing and (status.count or 0)>0 then
+        out[#out+1]="Ready."
+    else
+        out[#out+1]="Working. You can play;"
+        out[#out+1]="this finishes by itself."
+    end
+    return out
+end
+
+-- SITES -----------------------------------------------------------------------
+-- The hidden program: where the case's papers actually are. Owner's idea, and
+-- it only exists in debug - a player must never be handed the answers.
+A.sites={
+    id="SITES",title="SITES",icon="help",hidden=true,
+    list=function()
+        local runtime=ConspiracyFiles.GeneratedRuntime
+        local text=runtime and runtime.devLocations and safe(runtime.devLocations)
+        local out={}
+        for line in (tostring(text or "").."\n"):gmatch("([^\n]*)\n") do
+            if line:find("%S") then
+                local id,place,rest=line:match("^(%S+)%s+(.-)%s+(%-?%d+,%-?%d+ floor.*)$")
+                out[#out+1]={label=place or line,title=place or line,
+                             detail=(id or "").."\n"..(rest or line),id="site-"..#out}
+            end
+        end
+        if #out==0 then out[1]={label="No case placed.",title="No case placed.",detail="",id="site-none"} end
+        return out
+    end,
+}
+
+-- NOTES -----------------------------------------------------------------------
+-- Feedback, typed in the game. Owner, 2026-09-12: "if you want we can also give
+-- you feed back directly from there on things we notice. That way I dont have
+-- to leave the game to type for you."
+--
+-- A note goes into the log, which is already streamed to the development
+-- machine, so it arrives where the rest of the evidence about a session is.
+local NOTES="ConspiracyFiles.KnoxNotes"
+function A.addNote(text)
+    if type(text)~="string" or not text:find("%S") then return false end
+    text=text:gsub("[\r\n]"," "):sub(1,200)
+    local root=ModData and ModData.getOrCreate(NOTES)
+    if root then
+        if type(root.items)~="table" then root.items={} end
+        root.items[#root.items+1]={text=text,at=safe(function() return getGameTime():getWorldAgeHours() end)}
+    end
+    local CFLog=require("ConspiracyFiles/Log")
+    CFLog.write("i","note",{mod="owner",msg=text})
+    return true
+end
+
+A.notes={
+    id="NOTES",title="NOTES",icon="todo",
+    list=function()
+        local root=ModData and ModData.get(NOTES)
+        local out={}
+        for i,item in ipairs((root and root.items) or {}) do
+            out[#out+1]={label=item.text,title="Note "..i,detail=item.text,id="note-"..i}
+        end
+        out[#out+1]={label="+ write a note",title="Write a note",
+                     detail="Type what you noticed. It reaches the development machine with the log.",
+                     id="note-new",write=true}
+        return out
+    end,
+}
+
+A.programs={A.files,A.names,A.dates,A.todo,A.notes,A.help}
+
+-- The hidden one is appended only with the debug switch on.
+if getDebug and getDebug() then A.programs[#A.programs+1]=A.sites end
 
 return A

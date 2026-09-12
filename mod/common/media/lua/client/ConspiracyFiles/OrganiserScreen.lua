@@ -107,10 +107,21 @@ function S.fit()
     return want
 end
 
+-- Off to the side, never over the survivor. Owner, 2026-09-12: "mabye not
+-- centered as it would make surviving a zombie at your home" - a machine that
+-- opens itself in the middle of the screen at spawn is a machine that gets you
+-- killed. It sits against the right edge, where the game keeps its own panels.
+function S.place(m)
+    local w=getCore():getScreenWidth()
+    local h=getCore():getScreenHeight()
+    return w-m.w-24,math.max(24,(h-m.h)/2)
+end
+
 function Screen:new(owner)
     local scale=S.scale or S.fit()
     local m=S.metrics(scale)
-    local o=ISPanel.new(self,(getCore():getScreenWidth()-m.w)/2,(getCore():getScreenHeight()-m.h)/2,m.w,m.h)
+    local x,y=S.place(m)
+    local o=ISPanel.new(self,x,y,m.w,m.h)
     o.backgroundColor={r=0,g=0,b=0,a=0}
     o.borderColor={r=0,g=0,b=0,a=0}
     o.owner=owner
@@ -214,6 +225,17 @@ function Screen:draw(gx,gy)
     self.context=c
     local line=Font.line
     local room=K.rows(c)
+    if self.booting then
+        -- The machine waking up, with the mod's real state on it: no invented
+        -- progress bar, just what is actually done and what is not.
+        local y=2
+        for _,text in ipairs(Apps.bootLines()) do
+            K.text(c,text,2,y,K.INK); y=y+line
+        end
+        local foot=K.foot(c,"")
+        K.command(c,"START",2,foot,"START")
+        return
+    end
     if self.launcher then
         -- The Applications launcher: clock, battery, category, icon grid.
         local clock=getGameTime and getGameTime()
@@ -339,7 +361,10 @@ function Screen:tap(x,y)
     elseif id=="SELECT" then self.launcher=true; self.record=nil
     elseif id=="ROW" then
         if self.launcher then self.app=widget.payload; self.launcher=false; self.cachedList=nil; self.entry=1
-        else self:openRow(widget.payload) end
+        else
+            local row=self:list()[widget.payload]
+            if row and row.write then self:writeNote() else self:openRow(widget.payload) end
+        end
     elseif id=="BACK" then self.record=nil; self.card=1
     elseif id=="TICK" then
         if self.record and self.record.index then
@@ -350,6 +375,8 @@ function Screen:tap(x,y)
     elseif id=="REMIND" then
         if self.record then Apps.addToDo(self.record.title) end
         self.record=nil; self.cachedList=nil
+    elseif id=="START" then
+        self.booting=false
     elseif id=="UP" then self:press("UP")
     elseif id=="DOWN" then self:press("DOWN") end
     log("knox tap: "..tostring(id))
@@ -399,6 +426,31 @@ function Screen:onKeyRelease(key)
     if id then self:press(id) end
 end
 
+-- Typing. The Palm had a writing area under its screen and so does this: the
+-- game's own text box is placed there, because drawing a keyboard on a 160 x
+-- 160 canvas would be a worse answer than borrowing one that works.
+function Screen:writeNote()
+    if self.writer then return end
+    require("ISUI/ISTextEntryBox")
+    local s=self.scale
+    local x=Case.glass.x*s
+    local y=(Case.glass.y+Case.glass.h)*s-Font.line*s*2
+    local box=ISTextEntryBox:new("",x,y,Case.glass.w*s,Font.line*s*2)
+    box:initialise(); box:instantiate()
+    box:setMaxTextLength(200)
+    box.onCommandEntered=function()
+        local text=box:getText()
+        self:removeChild(box); self.writer=nil
+        if text and text:find("%S") then
+            Apps.addNote(text); self.cachedList=nil
+            log("owner note: "..text)
+        end
+    end
+    self:addChild(box)
+    box:focus()
+    self.writer=box
+end
+
 function Screen:close()
     self:removeFromUIManager()
     S.window=nil
@@ -416,6 +468,15 @@ function S.open()
 end
 
 function S.close() if S.window then S.window:close() end end
+
+-- Wake the machine up when the game starts: off to the side, booting, showing
+-- what the mod is actually doing. It does NOT take the survivor's hand for
+-- this - a boot screen is the device in your bag, not in your fist.
+function S.boot()
+    local w=S.open()
+    if w then w.booting=true end
+    return w
+end
 function S.zoom(scale)
     if scale==2 or scale==3 or scale==4 then S.scale=scale
     else S.scale=((S.scale or S.fit())%4)+1; if S.scale<2 then S.scale=2 end end

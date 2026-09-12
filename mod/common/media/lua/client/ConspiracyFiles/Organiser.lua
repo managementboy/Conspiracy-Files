@@ -225,6 +225,18 @@ if Events and Events.OnTick and not O.tickHooked then
     Events.OnTick.Add(function() safe(O.tick) end)
 end
 
+-- The machine boots with the game, so the player sees the mod start rather than
+-- wondering whether it is there (owner has asked for this since 2026-09-11).
+if Events and Events.OnGameStart and not O.bootHooked then
+    O.bootHooked=true
+    Events.OnGameStart.Add(function()
+        safe(function()
+            local screen=ConspiracyFiles.OrganiserScreen
+            if screen and screen.boot then screen.boot() end
+        end)
+    end)
+end
+
 if Events and not O.startHooked then
     O.startHooked=true
     local function issue() safe(O.give) end
