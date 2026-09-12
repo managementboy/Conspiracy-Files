@@ -166,6 +166,8 @@ function Window:showRow(row)
     if self.compact then self.detailOnly=true end
     self:layout()
 end
+-- Published so the organiser's screen reads the SAME rows this window does:
+-- one store, one projection, two surfaces (docs/design/READING_SURFACES.md).
 local function generatedRows(section)
     local known=generated().known(); local titles,rows={},{}
     local wrapper=ModData and ModData.get and ModData.get("ConspiracyFiles.Generated.G2")
@@ -240,6 +242,7 @@ local function generatedRows(section)
     end
     return rows
 end
+UI.generatedRows=function(section) return generatedRows(section) end
 function Window:rows()
     if generated() then
         local rows=generatedRows(self.section)

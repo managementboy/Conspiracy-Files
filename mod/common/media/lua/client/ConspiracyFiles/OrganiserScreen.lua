@@ -193,7 +193,8 @@ function Screen:draw(x,y,width)
     elseif entry then
         local card=entry.cards[self.card] or {}
         for i,text in ipairs(card) do
-            self:text(text,x,body+(i-1)*line,i==1 and INK or (i==2 and INK_DIM or INK))
+            local head=self.card==1 and entry.head or 0
+            self:text(text,x,body+(i-1)*line,i<=head and INK or INK)
         end
     else
         self:text("NOTHING RECORDED YET",x,body,INK_DIM)
@@ -202,23 +203,44 @@ function Screen:draw(x,y,width)
     self:text(legend,x,y+(S.LINES+1)*line+4*s,INK_DIM)
 end
 
--- Rows come from the notebook's own projection: one store, two surfaces.
+-- Rows come from the notebook's own projection: one store, one set of rows,
+-- two surfaces. The screen only decides how many fit on the glass.
+local function wrap(text,cols,out)
+    for paragraph in (tostring(text).."\n"):gmatch("([^\n]*)\n") do
+        if paragraph=="" then
+            if #out>0 and out[#out]~="" then out[#out+1]="" end
+        else
+            local line=""
+            for word in paragraph:gmatch("%S+") do
+                if line=="" then line=word
+                elseif #line+1+#word<=cols then line=line.." "..word
+                else out[#out+1]=line; line=word end
+            end
+            if line~="" then out[#out+1]=line end
+        end
+    end
+    return out
+end
+
 function Screen:rows()
     if self.cachedRows then return self.cachedRows end
     local out={}
-    local runtime=ConspiracyFiles.GeneratedRuntime
-    local known=runtime and runtime.known and safe(runtime.known) or {}
-    for _,row in ipairs(known) do
-        local cards,current={},{}
-        local title=tostring(row.title or "")
-        current[#current+1]=title
-        if row.summary then current[#current+1]=tostring(row.summary) end
-        for word in tostring(row.detailText or ""):gmatch("[^\n]+") do
-            if #current>=S.LINES then cards[#cards+1]=current; current={} end
-            current[#current+1]=word
+    local ui=ConspiracyFiles.NotebookUI
+    local rows=(ui and ui.generatedRows and safe(ui.generatedRows,self.section=="journal" and "journal" or "evidence")) or {}
+    for _,row in ipairs(rows) do
+        if not row.cfHeading then
+            local lines={}
+            wrap(row.title or "",S.COLS,lines)
+            local head=#lines
+            if row.summary then wrap(row.summary,S.COLS,lines) end
+            wrap(row.detailText or "",S.COLS,lines)
+            local cards,card={},{}
+            for i,line in ipairs(lines) do
+                card[#card+1]=line
+                if #card>=S.LINES or i==#lines then cards[#cards+1]=card; card={} end
+            end
+            out[#out+1]={title=tostring(row.title or ""),head=head,cards=cards}
         end
-        if #current>0 then cards[#cards+1]=current end
-        out[#out+1]={title=title,cards=cards}
     end
     self.cachedRows=out
     return out
@@ -236,6 +258,7 @@ function Screen:press(id)
     elseif id=="MODE" then
         self.section=({evidence="journal",journal="places",places="evidence"})[self.section]
         self.entry,self.card,self.index=1,1,false
+        self.cachedRows=nil
     elseif id=="INDEX" then
         self.index=not self.index
     elseif id=="PREV" then
