@@ -21,7 +21,24 @@ local sessions,scheduler,wrapper,ticks,preparing
 local retiredRows={}
 -- Building id -> address, or false for "the book has no name for it". Cleared
 -- when the address book finishes building, so early misses are not permanent.
+--
+-- Every address lookup in this file goes through addressFor. Two of the three
+-- places that asked the book directly run on the scheduler, so a case being
+-- placed resolved the same two addresses about twice a second for as long as
+-- the save was open (traced in game, 2026-09-12).
 local addressCache={}
+local function addressFor(id)
+    if type(id)~="string" or id=="" then return nil end
+    local trimmed=string.sub(id,1,3)=="t3:" and string.sub(id,4) or id
+    local remembered=addressCache[trimmed]
+    if remembered~=nil then return remembered or nil end
+    local map=ConspiracyFiles.AddressMap
+    if not map or not map.labelForBuilding then return nil end
+    local ok,label=pcall(map.labelForBuilding,trimmed)
+    if ok and type(label)=="string" and label~="" then addressCache[trimmed]=label; return label end
+    addressCache[trimmed]=false
+    return nil
+end
 local TAG="ConspiracyFiles.Generated.G2"
 local CFLog=require("ConspiracyFiles/Log")
 local function log(message) CFLog.message("case","note",message) end
@@ -119,11 +136,7 @@ local function placement(api,id)
                 if not site then
                     for _,d in ipairs(api.snapshot().case.documents) do if d.id==id then site=d.locationId end end
                 end
-                if type(site)=="string" and map and map.labelForBuilding then
-                    local trimmed=string.sub(site,1,3)=="t3:" and string.sub(site,4) or site
-                    local okAddr,label=pcall(map.labelForBuilding,trimmed)
-                    if okAddr and type(label)=="string" and label~="" then address=label end
-                end
+                address=addressFor(site)
             end
             -- The address for a human reader AND the exact spot for a debugger.
             -- Asking for addresses "instead of coordinates" was about the
@@ -880,8 +893,7 @@ local function placeOf(item)
     local id=def and rd(def,"getIDString")
     if id then
         local map=ConspiracyFiles.AddressMap
-        address=map and map.labelForBuilding and select(2,pcall(map.labelForBuilding,tostring(id)))
-        if type(address)~="string" or address=="" then address=nil end
+        address=addressFor(tostring(id))
     end
     local kind=container and rd(container,"getType")
     local part=container and rd(container,"getVehiclePart")
