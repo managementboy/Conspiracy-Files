@@ -129,15 +129,15 @@ function Screen:buttons()
     local m=S.metrics(s)
     local width=m.w/s
     local row=m.h/s-17
+    local b=12                              -- button
     local out={}
+    -- Two buttons, the rocker, two buttons - measured in from each edge so the
+    -- pair on the right never walks off the case.
+    local left={CASE,CASE+b+6}
+    local right={width-CASE-b-b-6,width-CASE-b}
     local names={"MODE","PREV","NEXT","INDEX"}
-    local gap=(width-2*CASE-24)/3           -- 24 native px reserved for the rocker
-    local x=CASE
-    for i=1,4 do
-        if i==3 then x=x+24+4 end            -- the rocker sits in the middle
-        out[#out+1]={id=names[i],x=x*s,y=row*s,w=12*s,h=12*s}
-        x=x+gap
-    end
+    local xs={left[1],left[2],right[1],right[2]}
+    for i=1,4 do out[#out+1]={id=names[i],x=xs[i]*s,y=row*s,w=b*s,h=b*s} end
     local rx=(width-24)/2
     out[#out+1]={id="UP",x=rx*s,y=row*s,w=24*s,h=5*s}
     out[#out+1]={id="DOWN",x=rx*s,y=(row+7)*s,w=24*s,h=5*s}
