@@ -17,7 +17,7 @@ say() { echo "pacing: $*" >&2; }
 abort() { say "$*"; "$PZ" stop; exit 2; }
 fails=(); fail() { fails+=("$*"); say "FAIL: $*"; }
 
-not_running || { say "game already running; tools/autotest/pz.sh stop first"; exit 2; }
+claim_game || exit 2
 "$PZ" start "${start_args[@]}" || abort "the game did not reach a playable world"
 id="$(session)"
 for f in core_loop reload pacing; do ev -f "$REPO/tools/autotest/checks/$f.lua" >/dev/null || abort "could not load $f.lua"; done

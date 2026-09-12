@@ -23,7 +23,7 @@ snapshot() { # prints four lines: notebook, placement, schedule, bytes
     ev 'return CFReload.schedule()'; ev 'return CFReload.bytes()'
 }
 
-not_running || { say "game already running; tools/autotest/pz.sh stop first"; exit 2; }
+claim_game || exit 2
 "$PZ" start "${start_args[@]}" || abort "the game did not reach a playable world"
 first="$(session)"; world="$(cat "$REPO/dev/eval/linux/world")"
 load_lua || abort "could not load the check's Lua"

@@ -18,7 +18,7 @@ start_args=()
 say() { echo "wallet-id: $*" >&2; }
 abort() { say "$*"; "$PZ" stop; exit 2; }
 
-not_running || { say "game already running; tools/autotest/pz.sh stop first"; exit 2; }
+claim_game || exit 2
 "$PZ" start "${start_args[@]}" || abort "the game did not reach a playable world"
 id="$(session)"
 ev -f "$REPO/tools/autotest/checks/wallet_id.lua" >/dev/null || abort "could not load the check's Lua"

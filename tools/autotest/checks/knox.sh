@@ -17,7 +17,7 @@ abort() { say "$*"; "$PZ" stop; exit 2; }
 fails=(); fail() { fails+=("$*"); say "FAIL: $*"; }
 shot() { "$PZ" shot "$RUNS/$(session)-knox-$1.png" >/dev/null 2>&1; }
 
-not_running || { say "game already running; tools/autotest/pz.sh stop first"; exit 2; }
+claim_game || exit 2
 "$PZ" start "${start_args[@]}" || abort "the game did not reach a playable world"
 # A fresh world spends its first half-minute indexing addresses, and a driver
 # sent into that gets no slot before the eval channel gives up. Wait for the

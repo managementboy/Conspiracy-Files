@@ -30,7 +30,7 @@ abort() { say "$*"; "$PZ" stop; exit 2; }
 points=(DiscoveryLog.record DiscoveryLedger.record DiscoveryLedger.validate
         SaveBudget.check ClueMarkers.after ClueMarkers.update PlayerVoice.onDiscovery)
 
-not_running || { say "game already running; tools/autotest/pz.sh stop first"; exit 2; }
+claim_game || exit 2
 "$PZ" start "${start_args[@]}" || abort "the game did not reach a playable world"
 id="$(session)"
 for f in core_loop perf; do

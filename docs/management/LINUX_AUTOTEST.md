@@ -108,3 +108,17 @@ menu and tooltip fonts Medium so screenshots are readable. Loading went from
 - This PC is dedicated to the mod (owner, 2026-09-11), so using its screen is
   fine. `--hidden` works too, about 5 seconds slower to load.
 - Mod Lua has no `loadstring` in this game version, so code always arrives as a file.
+
+## One run at a time
+
+Every check claims the machine before it starts (`claim_game` in
+`tools/autotest/lib.sh`) and waits its turn, up to twenty minutes. The lock is
+released when the script exits, however it exits.
+
+This is enforced rather than remembered because it cost four false failures on
+2026-09-12: a check that starts while another is still playing either refuses
+outright, or — worse — talks to a game the other run then stops, and reports
+that the mod is broken when nothing is.
+
+A game still running when the lock is granted is a leftover from a run that
+died without stopping it, so the claim clears it rather than refusing to work.

@@ -16,7 +16,7 @@ say() { echo "core-loop: $*" >&2; }
 abort() { say "$*"; "$PZ" stop; exit 2; }
 fails=(); fail() { fails+=("$*"); say "FAIL: $*"; }
 
-not_running || { say "game already running; tools/autotest/pz.sh stop first"; exit 2; }
+claim_game || exit 2
 "$PZ" start "${start_args[@]}" || abort "the game did not reach a playable world"
 id="$(session)"
 ev -f "$REPO/tools/autotest/checks/core_loop.lua" >/dev/null || abort "could not load the check's Lua"

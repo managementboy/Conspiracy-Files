@@ -7,6 +7,38 @@ EVIDENCE="$REPO/docs/management/evidence/linux-autotest"
 mkdir -p "$RUNS" "$EVIDENCE"
 
 session() { cat "$REPO/dev/eval/linux/session"; }
+# ONE RUN AT A TIME, enforced rather than remembered.
+#
+# There is one game machine and two Claude sessions, and a check that starts
+# while another is still playing either refuses ("game already running") or,
+# worse, talks to a game the other run then stops - which cost four false
+# failures on 2026-09-12 before anyone noticed the pattern. So every check
+# claims the machine first and waits its turn; the lock is released when the
+# script exits, however it exits, because the shell closes the descriptor.
+#
+# claim_game [SECONDS]  wait up to SECONDS (default 20 minutes) for the machine.
+CF_LOCK="${PZ_ZOMBOID:-$HOME/Zomboid}/.cf-autotest.lock"
+claim_game() {
+    local wait_for="${1:-1200}"
+    exec 9>"$CF_LOCK" || { echo "cannot write the lock at $CF_LOCK" >&2; return 1; }
+    if ! flock -w "$wait_for" 9; then
+        echo "another run has held the game for over ${wait_for}s; not starting" >&2
+        return 1
+    fi
+    # The lock is ours. A game still running now is a leftover from a run that
+    # died without stopping it, so clear it rather than refusing to work.
+    if ! not_running; then
+        echo "a leftover game is still running; stopping it" >&2
+        "$PZ" stop >/dev/null 2>&1
+        local deadline=$(( $(date +%s) + 90 ))
+        until not_running; do
+            [ "$(date +%s)" -lt "$deadline" ] || { echo "could not stop the leftover game" >&2; return 1; }
+            sleep 3
+        done
+    fi
+    return 0
+}
+
 not_running() { grep -q "not running" <<<"$("$PZ" status)"; }
 
 # Log of the current run only.

@@ -22,7 +22,7 @@ points=(IdentityObserver.afterRender IdentityObserver.tick ClueMarkers.update Cl
         AutomaticInvestigations.onTick CaseFile.onTick EvidencePickupHint.remindTick
         LocalPersonIntegration.tick DevEval.tick)
 
-not_running || { say "game already running; tools/autotest/pz.sh stop first"; exit 2; }
+claim_game || exit 2
 "$PZ" start "${start_args[@]}" || abort "the game did not reach a playable world"
 id="$(session)"
 for f in core_loop wallet_id perf; do ev -f "$REPO/tools/autotest/checks/$f.lua" >/dev/null || abort "could not load $f.lua"; done

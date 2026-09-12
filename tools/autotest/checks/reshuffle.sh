@@ -28,7 +28,7 @@ placed() { # wait until every document of the current case is placed; echoes the
     done
 }
 
-not_running || { say "game already running; tools/autotest/pz.sh stop first"; exit 2; }
+claim_game || exit 2
 "$PZ" start "${start_args[@]}" || abort "the game did not reach a playable world"
 ev -f "$REPO/tools/autotest/checks/core_loop.lua" >/dev/null || abort "could not load the loop driver"
 wait_true 90 'ConspiracyFiles.GeneratedRuntime.metrics()~=nil' || abort "no case started"
