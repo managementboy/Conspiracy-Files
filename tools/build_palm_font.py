@@ -21,8 +21,7 @@ numbers with nearest-neighbour - never re-rendered larger, which would soften
 it. Two sizes, because the zoom key steps between them.
 
 Outputs (generated, committed):
-    mod/common/media/ui/CFOrg/2x/<code>.png   95 glyphs, 22px line
-    mod/common/media/ui/CFOrg/3x/<code>.png   95 glyphs, 33px line
+    mod/common/media/ui/CFOrg/<scale>x/<code>.png   95 glyphs each, scales 2-4
     mod/common/media/lua/shared/ConspiracyFiles/Generated/OrganiserFont.lua
 """
 from PIL import Image, ImageDraw, ImageFont
@@ -35,7 +34,7 @@ UI = os.path.join(REPO, "mod/common/media/ui")
 LUA = os.path.join(REPO, "mod/common/media/lua/shared/ConspiracyFiles/Generated/OrganiserFont.lua")
 SIZE = 16              # the point size where this face lands exactly on its grid
 FIRST, LAST = 32, 126
-SCALES = (2, 3)
+SCALES = (2, 3, 4)
 
 def main():
     font = ImageFont.truetype(SRC, SIZE)
@@ -71,7 +70,7 @@ def main():
         f.write("-- in NATIVE pixels, multiplied by the screen's scale; each glyph is a\n")
         f.write("-- texture at media/ui/CFOrg/<scale>x/<code>.png.\n")
         f.write('-- Face: "Palm OS" by Damien Guard, CC BY-SA 3.0 - see CREDITS.md.\n')
-        f.write("local M={first=%d,last=%d,line=%d,ascent=%d,scales={2,3}}\n" % (FIRST, LAST, line, ascent))
+        f.write("local M={first=%d,last=%d,line=%d,ascent=%d,scales={2,3,4}}\n" % (FIRST, LAST, line, ascent))
         f.write("M.w={%s}\n" % ",".join(str(w) for w in widths))
         f.write("""function M.width(text,scale)
  if type(text)~="string" then return 0 end

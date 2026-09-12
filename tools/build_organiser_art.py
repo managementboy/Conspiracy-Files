@@ -20,20 +20,23 @@ Outputs (generated, committed):
     mod/common/media/ui/CFOrg/led_<scale>x.png      the light, lit
     .../lua/shared/ConspiracyFiles/Generated/OrganiserCase.lua
 """
-from PIL import Image, ImageDraw
+from PIL import Image, ImageDraw, ImageFont
 import os
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.dirname(HERE)
 OUT = os.path.join(REPO, "mod/common/media/ui/CFOrg")
 LUA = os.path.join(REPO, "mod/common/media/lua/shared/ConspiracyFiles/Generated/OrganiserCase.lua")
-SCALES = (2, 3)
+SCALES = (2, 3, 4)
 SS = 4                      # supersample, so curves are smooth at every scale
 
-W, H = 140, 210             # the case, in native pixels
+W, H = 140, 214             # the case, in native pixels
 GLASS = (10, 24, 120, 146)  # x, y, w, h - nearly square, as a Palm's was
 BTN = 14                    # round button diameter
 BTNS = {"MODE": (12, 178), "PREV": (30, 178), "NEXT": (96, 178), "INDEX": (114, 178)}
+# Palm's own buttons carried a label under the key; the guidelines call for the
+# frequent commands to be one press, named, not hidden in a menu.
+LABELS = {"MODE": "VIEW", "PREV": "PREV", "NEXT": "NEXT", "INDEX": "LIST"}
 ROCKER = (56, 178, 28, 9)   # x, y, w, h of the upper half; lower half sits 11 below
 ROCKER_GAP = 11
 POWER = (12, 8, 18, 8)
@@ -68,6 +71,12 @@ def draw_case(scale):
     for _, (bx, by) in BTNS.items():
         bx, by = bx * s, by * s
         d.ellipse([bx, by, bx + BTN * s, by + BTN * s], fill=DEEP, outline=EDGE, width=max(1, s // 2))
+    # Labels, in the device's own face, under each key.
+    face = ImageFont.truetype(os.path.join(REPO, "mod/common/media/fonts/palm-os.otf"), 16 * s // 2)
+    for name, (bx, by) in BTNS.items():
+        label = LABELS[name]
+        tw = face.getlength(label)
+        d.text((bx * s + (BTN * s - tw) / 2, (by + BTN + 1) * s), label, font=face, fill=EDGE)
     # The rocker, two pills.
     rx, ry, rw, rh = [v * s for v in ROCKER]
     for offset in (0, ROCKER_GAP * s):

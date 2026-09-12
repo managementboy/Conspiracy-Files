@@ -5,7 +5,7 @@
 -- in NATIVE pixels, multiplied by the screen's scale; each glyph is a
 -- texture at media/ui/CFOrg/<scale>x/<code>.png.
 -- Face: "Palm OS" by Damien Guard, CC BY-SA 3.0 - see CREDITS.md.
-local M={first=32,last=126,line=11,ascent=9,scales={2,3}}
+local M={first=32,last=126,line=11,ascent=9,scales={2,3,4}}
 M.w={2,2,4,8,6,8,7,2,4,4,6,6,3,4,2,5,5,3,5,5,5,5,5,5,5,5,2,3,6,6,6,5,8,5,5,5,6,4,4,6,6,2,4,6,5,8,6,7,5,7,5,5,6,6,6,8,6,6,6,3,5,3,6,5,3,5,5,4,5,5,5,5,5,2,3,5,2,8,5,5,5,5,4,4,4,5,6,6,6,6,4,4,2,4,7}
 function M.width(text,scale)
  if type(text)~="string" then return 0 end

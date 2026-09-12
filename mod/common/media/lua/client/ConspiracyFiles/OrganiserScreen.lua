@@ -91,8 +91,19 @@ local function texture(name,scale)
     return t
 end
 
+-- Palm's own guidance is to use the whole screen: "go to the edge". The device
+-- therefore takes about four fifths of the window's height, at a whole-number
+-- scale so the pixels stay square. ZOOM steps it down for anyone who wants the
+-- game visible behind it.
+function S.fit()
+    local h=getCore and getCore():getScreenHeight() or 720
+    local want=math.floor(h*0.82/Case.h)
+    if want<2 then want=2 elseif want>4 then want=4 end
+    return want
+end
+
 function Screen:new(owner)
-    local scale=S.scale or 2
+    local scale=S.scale or S.fit()
     local m=S.metrics(scale)
     local o=ISPanel.new(self,(getCore():getScreenWidth()-m.w)/2,(getCore():getScreenHeight()-m.h)/2,m.w,m.h)
     o.backgroundColor={r=0,g=0,b=0,a=0}
@@ -178,35 +189,53 @@ function Screen:prerender()
     end
 end
 
--- What the glass says. Never clickable, never hovering: it is a display.
+-- What the glass says, in the shape Palm OS used: a dark title bar naming the
+-- view with the record count on the right, the body filling the width to the
+-- edge, scroll arrows in the right margin, and the commands along the foot.
+-- (Palm OS User Interface Guidelines; users.fuw.edu.pl/~michalj/palmos.)
 function Screen:draw(x,y,width)
     local s=self.scale
     local line=Font.line*s
     local rows=self:rows()
     local entry=rows[self.entry]
-    local top=({evidence="EV",journal="JN",places="PL"})[self.section] or "EV"
-    local right=self.index and (#rows.." ENTRIES") or ("#"..self.entry.." CARD "..self.card.."/"..math.max(1,entry and #entry.cards or 1))
-    self:text(top,x,y,INK_DIM)
-    local rw=measure(right,s)
-    self:text(right,x+width-rw,y,INK_DIM)
+    local view=({evidence="EVIDENCE",journal="JOURNAL",places="PLACES"})[self.section] or "EVIDENCE"
+    -- Title bar: dark, full width, light letters.
+    self:drawRect(x-PADX*s,y,width+PADX*2*s,line,1,INK[1],INK[2],INK[3])
+    self:text(view,x,y,GLASS)
+    local count=#rows>0 and (self.entry.." of "..#rows) or "empty"
+    self:text(count,x+width-measure(count,s),y,GLASS)
     local body=y+line+math.floor(s/2)
+    local room=S.LINES
     if self.index then
-        for i,row in ipairs(rows) do
-            if i>S.LINES then break end
-            local mark=i==self.entry and ">" or " "
-            self:text(mark..i.." "..(row.title or ""),x,body+(i-1)*line,i==self.entry and INK or INK_DIM)
+        local first=math.max(1,math.min(self.entry-math.floor(room/2),#rows-room+1))
+        if first<1 then first=1 end
+        for i=0,room-1 do
+            local row=rows[first+i]
+            if not row then break end
+            local selected=(first+i)==self.entry
+            local label=(first+i)..". "..row.title
+            if selected then self:drawRect(x-PADX*s,body+i*line,width+PADX*2*s,line,1,INK[1],INK[2],INK[3]) end
+            self:text(label,x,body+i*line,selected and GLASS or INK)
         end
+        if first>1 then self:text("^",x+width-measure("^",s),body,INK_DIM) end
+        if first+room-1<#rows then self:text("v",x+width-measure("v",s),body+(room-1)*line,INK_DIM) end
     elseif entry then
         local card=entry.cards[self.card] or {}
         for i,text in ipairs(card) do
-            local head=self.card==1 and entry.head or 0
-            self:text(text,x,body+(i-1)*line,i<=head and INK or INK)
+            if i>room then break end
+            self:text(text,x,body+(i-1)*line,i<=(self.card==1 and entry.head or 0) and INK or INK)
         end
+        -- Scroll arrows in the right margin, exactly where Palm put them.
+        if self.card>1 then self:text("^",x+width-measure("^",s),body,INK_DIM) end
+        if self.card<#entry.cards then self:text("v",x+width-measure("v",s),body+(room-1)*line,INK_DIM) end
     else
-        self:text("NOTHING RECORDED YET",x,body,INK_DIM)
+        self:text("Nothing recorded yet.",x,body,INK_DIM)
     end
-    local legend=self.index and "MODE  < >  INDEX BACK" or "^v TEXT  <> ENTRY  INDEX"
-    self:text(legend,x,y+(S.LINES+1)*line+math.floor(s/2),INK_DIM)
+    -- Command line at the foot: the four keys, named as they are on the case.
+    local foot=y+(room+1)*line+math.floor(s/2)
+    self:drawRect(x-PADX*s,foot,width+PADX*2*s,1*s,1,INK_DIM[1],INK_DIM[2],INK_DIM[3])
+    local legend=self.index and "LIST: open   PREV/NEXT: move" or "LIST: all   ^v: page"
+    self:text(legend,x,foot+2*s,INK_DIM)
 end
 
 -- Rows come from the notebook's own projection: one store, one set of rows,
@@ -235,11 +264,19 @@ function Screen:rows()
     local rows=(ui and ui.generatedRows and safe(ui.generatedRows,self.section=="journal" and "journal" or "evidence")) or {}
     for _,row in ipairs(rows) do
         if not row.cfHeading then
+            -- The window's own furniture stays in the window: its filing line
+            -- ("Dispatch document - Discovery 1 - Case LD-340") and its block
+            -- headings are bookkeeping, and a pocket screen has no room for
+            -- bookkeeping. Title, then what the survivor actually wrote.
             local lines={}
             wrap(row.title or "",S.COLS,lines)
             local head=#lines
-            if row.summary then wrap(row.summary,S.COLS,lines) end
-            wrap(row.detailText or "",S.COLS,lines)
+            for paragraph in (tostring(row.detailText or "").."\n\n"):gmatch("(.-)\n\n") do
+                local heading=paragraph:match("^(%u[%u%s]+)\n")
+                local text=heading and paragraph:sub(#heading+2) or paragraph
+                if text and text:find("%S") then wrap(text,S.COLS,lines); lines[#lines+1]="" end
+            end
+            while lines[#lines]=="" do lines[#lines]=nil end
             local cards,card={},{}
             for i,line in ipairs(lines) do
                 card[#card+1]=line
@@ -337,7 +374,8 @@ end
 
 function S.close() if S.window then S.window:close() end end
 function S.zoom(scale)
-    S.scale=(scale==3 or scale==2) and scale or (S.scale==2 and 3 or 2)
+    if scale==2 or scale==3 or scale==4 then S.scale=scale
+    else S.scale=((S.scale or S.fit())%4)+1; if S.scale<2 then S.scale=2 end end
     if S.window then S.close(); S.open() end
     return S.scale
 end
