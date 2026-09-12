@@ -238,9 +238,9 @@ function Screen:draw(x,y,width)
         self:text("Nothing recorded yet.",x,body,INK_DIM)
     end
     -- Command line at the foot: the four keys, named as they are on the case.
-    local foot=y+(room+1)*line+math.floor(s/2)
+    local foot=body+room*line+math.floor(s/2)
     self:drawRect(x-PADX*s,foot,width+PADX*2*s,1*s,1,INK_DIM[1],INK_DIM[2],INK_DIM[3])
-    local legend=self.index and "LIST: open   PREV/NEXT: move" or "LIST: all   ^v: page"
+    local legend=self.index and "LIST: read  PREV/NEXT: move" or "LIST: all  ^v: page  VIEW"
     self:text(legend,x,foot+2*s,INK_DIM)
 end
 

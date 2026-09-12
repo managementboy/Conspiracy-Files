@@ -35,12 +35,15 @@ SS = 4                      # supersample, so curves are smooth at every scale
 # up by a whole number, never stretched.
 W, H = 182, 236             # the case, in native pixels
 GLASS = (11, 26, 160, 160)  # x, y, w, h - the original's own screen
-BTN = 14                    # round button diameter
-BTNS = {"MODE": (14, 200), "PREV": (36, 200), "NEXT": (118, 200), "INDEX": (140, 200)}
+BTN0 = 14                   # round button diameter
+BTN = BTN0
+# Mirrored about the centre line: the right-hand pair sat 28 px from the edge
+# while the left pair sat 14 (owner, 2026-09-12: "buttons are not alligned").
+BTNS = {"MODE": (14, 198), "PREV": (36, 198), "NEXT": (W - 36 - BTN0, 198), "INDEX": (W - 14 - BTN0, 198)}
 # Palm's own buttons carried a label under the key; the guidelines call for the
 # frequent commands to be one press, named, not hidden in a menu.
 LABELS = {"MODE": "VIEW", "PREV": "PREV", "NEXT": "NEXT", "INDEX": "LIST"}
-ROCKER = (74, 200, 34, 9)   # x, y, w, h of the upper half; lower half sits 11 below
+ROCKER = ((W - 34) // 2, 198, 34, 9)   # x, y, w, h of the upper half; lower half sits 11 below
 ROCKER_GAP = 11
 POWER = (13, 9, 20, 9)
 LED = (39, 10, 7)            # x, y, diameter
@@ -71,8 +74,10 @@ def draw_case(scale):
     # Power key and the light beside it.
     px, py, pw, ph = [v * s for v in POWER]
     d.rounded_rectangle([px, py, px + pw, py + ph], radius=3 * s, fill=DEEP, outline=EDGE, width=max(1, s // 2))
+    # The light sits in a dark well, or it reads as a dot floating on the plastic.
     lx, ly, ld = [v * s for v in LED]
-    d.ellipse([lx, ly, lx + ld, ly + ld], fill=WELL, outline=EDGE, width=max(1, s // 2))
+    d.ellipse([lx - s, ly - s, lx + ld + s, ly + ld + s], fill=(20, 20, 22, 255))
+    d.ellipse([lx, ly, lx + ld, ly + ld], fill=WELL)
     # Four round buttons.
     for _, (bx, by) in BTNS.items():
         bx, by = bx * s, by * s
@@ -82,7 +87,7 @@ def draw_case(scale):
     for name, (bx, by) in BTNS.items():
         label = LABELS[name]
         tw = face.getlength(label)
-        d.text((bx * s + (BTN * s - tw) / 2, (by + BTN + 1) * s), label, font=face, fill=EDGE)
+        d.text((bx * s + (BTN * s - tw) / 2, (by + BTN) * s), label, font=face, fill=EDGE)
     # The rocker, two pills.
     rx, ry, rw, rh = [v * s for v in ROCKER]
     for offset in (0, ROCKER_GAP * s):
