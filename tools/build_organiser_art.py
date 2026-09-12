@@ -33,31 +33,25 @@ SS = 4                      # supersample, so curves are smooth at every scale
 # The real thing had a 160 x 160 screen, so that is the glass, and everything
 # else is measured around it (owner, 2026-09-12). The whole case is then scaled
 # up by a whole number, never stretched.
-W, H = 182, 242             # the case, in native pixels (room for real labels)
-GLASS = (11, 26, 160, 160)  # x, y, w, h - the original's own screen
-BTN0 = 14                   # round button diameter
+# Proportions taken from the owner's own drawing (2026-09-12): a plain grey
+# shell with a thick, even bezel, a tall screen opening, four soft-cornered keys
+# in a row along the foot, and a small tab on the right edge. No rocker and no
+# separate power key on the face - the tab is the power, held for the lamp.
+#
+# The glass is 160 wide, as the original's was, and taller than square because
+# the drawing is: more lines of the survivor's writing, which is no loss.
+W, H = 199, 281             # the case, in native pixels
+GLASS = (20, 19, 159, 207)  # x, y, w, h - the screen opening in the drawing
+BTN0 = 33                   # a key is a wide, soft-cornered rectangle now
 BTN = BTN0
-# Mirrored about the centre line: the right-hand pair sat 28 px from the edge
-# while the left pair sat 14 (owner, 2026-09-12: "buttons are not alligned").
-# Spread so the labels do not run into each other: a real label needs the room
-# a two-pixel one did not.
-BTNS = {"MODE": (9, 198), "PREV": (47, 198), "NEXT": (W - 47 - BTN0, 198), "INDEX": (W - 9 - BTN0, 198)}
-# Palm's own buttons carried a label under the key; the guidelines call for the
-# frequent commands to be one press, named, not hidden in a menu.
-# A Palm's four keys opened its four applications - Date, Address, To Do, Memo
-# - and so do these. The launcher is a tap on the title bar, as Home was a tap
-# on the silkscreen. Owner, 2026-09-12: "what do we need the buttons in the
-# middle for now that we have a touch screen?" - the rocker is what you use
-# when you cannot aim: walking, or with something coming.
+BTN_H = 20
+BTNS = {"MODE": (24, 246), "PREV": (62, 246), "NEXT": (100, 246), "INDEX": (138, 246)}
 LABELS = {"MODE": "FILES", "PREV": "NAMES", "NEXT": "DATES", "INDEX": "TO DO"}
-ROCKER = ((W - 34) // 2, 198, 34, 9)   # x, y, w, h of the upper half; lower half sits 11 below
-ROCKER_GAP = 11
-POWER = (13, 9, 20, 9)
-LED = (39, 10, 7)            # x, y, diameter
+POWER = (193, 196, 6, 22)   # the tab on the right edge
+LED = (188, 8, 5)
+ROCKER = None               # the drawing has none; the keys and the glass suffice
+ROCKER_GAP = 0
 
-# The Palm III was graphite, not green: a dark neutral grey case with slightly
-# lighter grey keys, a near-black screen surround, and only the LCD itself in
-# that pale grey-green (owner, 2026-09-12).
 SHELL = (78, 79, 82, 255)
 SHELL_HI = (92, 93, 96, 255)
 EDGE = (26, 26, 28, 255)
@@ -70,38 +64,33 @@ def draw_case(scale):
     s = scale * SS
     img = Image.new("RGBA", (W * s, H * s), (0, 0, 0, 0))
     d = ImageDraw.Draw(img)
-    r = 9 * s
-    d.rounded_rectangle([0, 0, W * s - 1, H * s - 1], radius=r, fill=SHELL, outline=EDGE, width=max(1, s // 2))
-    # A lighter band down the top third: cheap plastic caught the light.
-    d.rounded_rectangle([2 * s, 2 * s, (W - 2) * s, 20 * s], radius=4 * s, fill=SHELL_HI)
-    # Screen well, then the glass inside it.
+    # The shell: one flat grey slab with generous rounded corners.
+    d.rounded_rectangle([0, 0, W * s - 1, H * s - 1], radius=12 * s, fill=SHELL,
+                        outline=EDGE, width=max(1, s // 2))
+    # A soft inner edge, the way moulded plastic catches light along a bezel.
+    d.rounded_rectangle([3 * s, 3 * s, (W - 3) * s, (H - 3) * s], radius=10 * s,
+                        outline=SHELL_HI, width=max(1, s // 2))
+    # The screen opening: a deep well, then the glass.
     gx, gy, gw, gh = [v * s for v in GLASS]
-    d.rounded_rectangle([gx - 2 * s, gy - 2 * s, gx + gw + 2 * s, gy + gh + 2 * s], radius=2 * s, fill=WELL)
+    d.rounded_rectangle([gx - 3 * s, gy - 3 * s, gx + gw + 3 * s, gy + gh + 3 * s],
+                        radius=3 * s, fill=WELL)
     d.rectangle([gx, gy, gx + gw, gy + gh], fill=GLASS_FILL)
-    # Power key and the light beside it.
-    px, py, pw, ph = [v * s for v in POWER]
-    d.rounded_rectangle([px, py, px + pw, py + ph], radius=3 * s, fill=DEEP, outline=EDGE, width=max(1, s // 2))
-    # The light sits in a dark well, or it reads as a dot floating on the plastic.
-    lx, ly, ld = [v * s for v in LED]
-    d.ellipse([lx - s, ly - s, lx + ld + s, ly + ld + s], fill=(20, 20, 22, 255))
-    d.ellipse([lx, ly, lx + ld, ly + ld], fill=WELL)
-    # Four round buttons.
-    for _, (bx, by) in BTNS.items():
-        bx, by = bx * s, by * s
-        d.ellipse([bx, by, bx + BTN * s, by + BTN * s], fill=DEEP, outline=EDGE, width=max(1, s // 2))
-    # Labels, in the device's own face, under each key.
-    # Full size, not half: the labels were legible only to someone who knew
-    # what they said (owner, 2026-09-12).
+    # Four soft-cornered keys along the foot.
     face = ImageFont.truetype(os.path.join(REPO, "mod/common/media/fonts/palm-os.otf"), 16 * s)
     for name, (bx, by) in BTNS.items():
+        x, y = bx * s, by * s
+        d.rounded_rectangle([x, y, x + BTN * s, y + BTN_H * s], radius=5 * s,
+                            fill=DEEP, outline=EDGE, width=max(1, s // 2))
         label = LABELS[name]
         tw = face.getlength(label)
-        d.text((bx * s + (BTN * s - tw) / 2, (by + BTN - 1) * s), label, font=face, fill=(24, 24, 26, 255))
-    # The rocker, two pills.
-    rx, ry, rw, rh = [v * s for v in ROCKER]
-    for offset in (0, ROCKER_GAP * s):
-        d.rounded_rectangle([rx, ry + offset, rx + rw, ry + offset + rh], radius=3 * s,
-                            fill=DEEP, outline=EDGE, width=max(1, s // 2))
+        d.text((x + (BTN * s - tw) / 2, y + (BTN_H * s - 11 * s) / 2), label,
+               font=face, fill=(232, 232, 230, 255))
+    # The tab on the right edge: power, and the lamp when held.
+    px, py, pw, ph = [v * s for v in POWER]
+    d.rounded_rectangle([px, py, px + pw, py + ph], radius=2 * s, fill=DEEP,
+                        outline=EDGE, width=max(1, s // 2))
+    lx, ly, ld = [v * s for v in LED]
+    d.ellipse([lx, ly, lx + ld, ly + ld], fill=WELL)
     return img.resize((W * scale, H * scale), Image.LANCZOS)
 
 def pressed_round(scale):
@@ -127,8 +116,8 @@ def main():
     os.makedirs(OUT, exist_ok=True)
     for scale in SCALES:
         draw_case(scale).save(os.path.join(OUT, "case_%dx.png" % scale))
-        pressed_round(scale).save(os.path.join(OUT, "press_%dx.png" % scale))
-        pressed_rect(scale, ROCKER[2], ROCKER[3]).save(os.path.join(OUT, "rocker_%dx.png" % scale))
+        pressed_rect(scale, BTN, BTN_H, 5).save(os.path.join(OUT, "press_%dx.png" % scale))
+        pressed_rect(scale, BTN, BTN_H, 5).save(os.path.join(OUT, "rocker_%dx.png" % scale))
         pressed_rect(scale, POWER[2], POWER[3]).save(os.path.join(OUT, "power_%dx.png" % scale))
         led(scale).save(os.path.join(OUT, "led_%dx.png" % scale))
     with open(LUA, "w") as f:
@@ -140,9 +129,7 @@ def main():
         f.write("M.button=%d\n" % BTN)
         f.write("M.buttons={\n")
         for name, (x, y) in BTNS.items():
-            f.write(" {id=\"%s\",x=%d,y=%d,w=%d,h=%d,round=true},\n" % (name, x, y, BTN, BTN))
-        f.write(" {id=\"UP\",x=%d,y=%d,w=%d,h=%d},\n" % ROCKER)
-        f.write(" {id=\"DOWN\",x=%d,y=%d,w=%d,h=%d},\n" % (ROCKER[0], ROCKER[1] + ROCKER_GAP, ROCKER[2], ROCKER[3]))
+            f.write(" {id=\"%s\",x=%d,y=%d,w=%d,h=%d,round=true},\n" % (name, x, y, BTN, BTN_H))
         f.write(" {id=\"POWER\",x=%d,y=%d,w=%d,h=%d},\n" % POWER)
         f.write("}\n")
         f.write("M.led={x=%d,y=%d,d=%d}\n" % LED)

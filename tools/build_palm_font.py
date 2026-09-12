@@ -34,7 +34,7 @@ UI = os.path.join(REPO, "mod/common/media/ui")
 LUA = os.path.join(REPO, "mod/common/media/lua/shared/ConspiracyFiles/Generated/OrganiserFont.lua")
 SIZE = 16              # the point size where this face lands exactly on its grid
 FIRST, LAST = 32, 126
-SCALES = (2, 3, 4)
+SCALES = (1, 2, 3)
 
 def main():
     font = ImageFont.truetype(SRC, SIZE)
@@ -70,7 +70,7 @@ def main():
         f.write("-- in NATIVE pixels, multiplied by the screen's scale; each glyph is a\n")
         f.write("-- texture at media/ui/CFOrg/<scale>x/<code>.png.\n")
         f.write('-- Face: "Palm OS" by Damien Guard, CC BY-SA 3.0 - see CREDITS.md.\n')
-        f.write("local M={first=%d,last=%d,line=%d,ascent=%d,scales={2,3,4}}\n" % (FIRST, LAST, line, ascent))
+        f.write("local M={first=%d,last=%d,line=%d,ascent=%d,scales={1,2,3}}\n" % (FIRST, LAST, line, ascent))
         f.write("M.w={%s}\n" % ",".join(str(w) for w in widths))
         f.write("""function M.width(text,scale)
  if type(text)~="string" then return 0 end

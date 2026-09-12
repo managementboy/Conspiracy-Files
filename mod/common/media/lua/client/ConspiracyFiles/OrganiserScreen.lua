@@ -102,8 +102,10 @@ end
 -- game visible behind it.
 function S.fit()
     local h=getCore and getCore():getScreenHeight() or 720
-    local want=math.floor(h*0.82/Case.h)
-    if want<2 then want=2 elseif want>4 then want=4 end
+    -- The owner's case is 305 x 444 in its own pixels, so 1x is a real size
+    -- on a small screen and 3x fills a big one.
+    local want=math.floor(h*0.86/Case.h)
+    if want<1 then want=1 elseif want>3 then want=3 end
     return want
 end
 
@@ -516,8 +518,8 @@ function S.boot()
     return w
 end
 function S.zoom(scale)
-    if scale==2 or scale==3 or scale==4 then S.scale=scale
-    else S.scale=((S.scale or S.fit())%4)+1; if S.scale<2 then S.scale=2 end end
+    if scale==1 or scale==2 or scale==3 then S.scale=scale
+    else S.scale=((S.scale or S.fit())%3)+1 end
     if S.window then S.close(); S.open() end
     return S.scale
 end
