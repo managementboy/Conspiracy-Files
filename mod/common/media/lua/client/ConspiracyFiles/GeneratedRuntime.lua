@@ -400,7 +400,7 @@ end
 --     ConspiracyFiles.GeneratedRuntime.reshuffle()        do it
 --
 -- Developer command: the same debug/single-player gate as nextCase.
-function R.reshuffle(mode,seed)
+function R.reshuffle(mode)
     local dry=mode=="dry"
     if preparing then return false,"preparation already running" end
     if not allowed() then return false,"debug single-player required" end
@@ -456,9 +456,15 @@ function R.reshuffle(mode,seed)
     store.canonical=nil; store.campaign=nil
     wrapper=nil; sessions={}; retiredRows={}
     pcall(Cases.remember,store,getTimeInMillis and getTimeInMillis())
-    log("Reshuffle: "..stripped.." item(s) returned to ordinary loot, "..forgotten.." map mark(s) forgotten. Building a new case here.")
-    local started,failed=R.start(seed,{firstHouse=true})
-    if not started then return false,"cases cleared, but no new case yet: "..tostring(failed) end
+    -- Starting the new case here would race the automatic starter: both call
+    -- the nearby scan, and T3Nearby.cancel() means the second start kills the
+    -- first one's job, so neither waiter ever sees a result (reshuffle check,
+    -- 2026-09-12). AutomaticInvestigations.poll already starts a case whenever
+    -- there are none, in the building the player is standing in - which is
+    -- exactly what a reshuffle wants, and it is the same path a fresh save
+    -- takes. So: clear, and let it do its job.
+    log("Reshuffle: "..stripped.." item(s) returned to ordinary loot, "..forgotten..
+        " map mark(s) forgotten. A new case starts from where you stand, within a few seconds.")
     return true,manifest
 end
 function R.known()
