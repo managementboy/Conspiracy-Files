@@ -258,20 +258,13 @@ function Screen:draw(gx,gy)
             charge=item and organiser.power and safe(organiser.power,item)
         end
         local y=K.status(c,string.format("%d:%02d",hour,minute),"All",charge)
-        -- The record counts are worked out ONCE a second, not once a frame.
-        -- Counting every program every frame meant re-reading every store sixty
-        -- times a second, which the fault check caught as an address lookup
-        -- retrying forever (suite, 2026-09-12).
-        local now=getTimeInMillis and getTimeInMillis() or 0
-        if not self.counts or now-(self.countedAt or 0)>1000 then
-            self.counts={}
-            for i,app in ipairs(self:programs()) do
-                self.counts[i]=#((app.list and safe(app.list)) or {})
-            end
-            self.countedAt=now
-        end
+        -- No record counts on the icons. Palm's launcher never showed any, and
+        -- working them out means asking every program to read its whole store -
+        -- which the fault check caught as an address lookup retrying forever,
+        -- first every frame and then, after a cache, every second (suite,
+        -- 2026-09-12). An icon and its name cost nothing.
         K.grid(c,self:programs(),y+2,self.app or 1,
-            function(name) return texture("icons/"..self.scale.."x/"..name,nil) end,self.counts)
+            function(name) return texture("icons/"..self.scale.."x/"..name,nil) end)
         K.foot(c,"tap a program")
         return
     end
