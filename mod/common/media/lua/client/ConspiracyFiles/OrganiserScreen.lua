@@ -42,9 +42,13 @@ local function safe(fn,...) local ok,v=pcall(fn,...) if ok then return v end end
 -- Portrait, like the shell the owner drew: the glass is nearly square and the
 -- keypad sits under it. A first pass was 34 columns by 6 lines, which made a
 -- letterbox - correct in code, wrong on screen (2026-09-12).
-S.LINES=10
-S.COLS=22
-local PADX,PADY=4,3               -- text margin inside the glass
+-- The glass is the original's own 160 x 160, so how much fits is measured, not
+-- chosen: the title bar takes a line, the command line takes one with a rule
+-- above it, and the rest is the document. Wrapping is by pixel width, because
+-- this face is proportional - an "i" is two pixels and an "m" is eight.
+local PADX,PADY=3,2               -- Palm's own rule: one or two pixels, no more
+function S.lines() return math.floor((Case.glass.h-PADY*2)/Font.line)-3 end
+function S.textWidth() return Case.glass.w-PADX*2-7 end   -- 7 px kept for the scroll arrows
 S.HOLD_MS=450                     -- how long a held POWER becomes the lamp
 S.PRESS_MS=110                    -- how long a button shows as pressed
 
@@ -205,7 +209,7 @@ function Screen:draw(x,y,width)
     local count=#rows>0 and (self.entry.." of "..#rows) or "empty"
     self:text(count,x+width-measure(count,s),y,GLASS)
     local body=y+line+math.floor(s/2)
-    local room=S.LINES
+    local room=S.lines()
     if self.index then
         local first=math.max(1,math.min(self.entry-math.floor(room/2),#rows-room+1))
         if first<1 then first=1 end
@@ -240,16 +244,22 @@ end
 
 -- Rows come from the notebook's own projection: one store, one set of rows,
 -- two surfaces. The screen only decides how many fit on the glass.
-local function wrap(text,cols,out)
+-- Wrap to the glass in PIXELS. Counting characters is wrong for a proportional
+-- face: "Illinois" and "McCoy Logging" are the same length and not the same
+-- width.
+local function wrap(text,width,out)
     for paragraph in (tostring(text).."\n"):gmatch("([^\n]*)\n") do
         if paragraph=="" then
             if #out>0 and out[#out]~="" then out[#out+1]="" end
         else
             local line=""
             for word in paragraph:gmatch("%S+") do
-                if line=="" then line=word
-                elseif #line+1+#word<=cols then line=line.." "..word
-                else out[#out+1]=line; line=word end
+                local candidate=line=="" and word or (line.." "..word)
+                if Font.width(candidate,1)<=width then line=candidate
+                else
+                    if line~="" then out[#out+1]=line end
+                    line=word
+                end
             end
             if line~="" then out[#out+1]=line end
         end
@@ -269,18 +279,18 @@ function Screen:rows()
             -- headings are bookkeeping, and a pocket screen has no room for
             -- bookkeeping. Title, then what the survivor actually wrote.
             local lines={}
-            wrap(row.title or "",S.COLS,lines)
+            wrap(row.title or "",S.textWidth(),lines)
             local head=#lines
             for paragraph in (tostring(row.detailText or "").."\n\n"):gmatch("(.-)\n\n") do
                 local heading=paragraph:match("^(%u[%u%s]+)\n")
                 local text=heading and paragraph:sub(#heading+2) or paragraph
-                if text and text:find("%S") then wrap(text,S.COLS,lines); lines[#lines+1]="" end
+                if text and text:find("%S") then wrap(text,S.textWidth(),lines); lines[#lines+1]="" end
             end
             while lines[#lines]=="" do lines[#lines]=nil end
             local cards,card={},{}
             for i,line in ipairs(lines) do
                 card[#card+1]=line
-                if #card>=S.LINES or i==#lines then cards[#cards+1]=card; card={} end
+                if #card>=S.lines() or i==#lines then cards[#cards+1]=card; card={} end
             end
             out[#out+1]={title=tostring(row.title or ""),head=head,cards=cards}
         end

@@ -30,17 +30,20 @@ LUA = os.path.join(REPO, "mod/common/media/lua/shared/ConspiracyFiles/Generated/
 SCALES = (2, 3, 4)
 SS = 4                      # supersample, so curves are smooth at every scale
 
-W, H = 140, 214             # the case, in native pixels
-GLASS = (10, 24, 120, 146)  # x, y, w, h - nearly square, as a Palm's was
+# The real thing had a 160 x 160 screen, so that is the glass, and everything
+# else is measured around it (owner, 2026-09-12). The whole case is then scaled
+# up by a whole number, never stretched.
+W, H = 182, 236             # the case, in native pixels
+GLASS = (11, 26, 160, 160)  # x, y, w, h - the original's own screen
 BTN = 14                    # round button diameter
-BTNS = {"MODE": (12, 178), "PREV": (30, 178), "NEXT": (96, 178), "INDEX": (114, 178)}
+BTNS = {"MODE": (14, 200), "PREV": (36, 200), "NEXT": (118, 200), "INDEX": (140, 200)}
 # Palm's own buttons carried a label under the key; the guidelines call for the
 # frequent commands to be one press, named, not hidden in a menu.
 LABELS = {"MODE": "VIEW", "PREV": "PREV", "NEXT": "NEXT", "INDEX": "LIST"}
-ROCKER = (56, 178, 28, 9)   # x, y, w, h of the upper half; lower half sits 11 below
+ROCKER = (74, 200, 34, 9)   # x, y, w, h of the upper half; lower half sits 11 below
 ROCKER_GAP = 11
-POWER = (12, 8, 18, 8)
-LED = (36, 9, 6)            # x, y, diameter
+POWER = (13, 9, 20, 9)
+LED = (39, 10, 7)            # x, y, diameter
 
 SHELL = (110, 118, 100, 255)
 SHELL_HI = (128, 136, 116, 255)

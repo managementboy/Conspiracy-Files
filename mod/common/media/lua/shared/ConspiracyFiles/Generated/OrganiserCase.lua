@@ -2,17 +2,17 @@
 --
 -- Where every part of the case sits, in native pixels: the art and the
 -- hit boxes come from one source so they cannot drift apart.
-local M={w=140,h=214,scales={2,3}}
-M.glass={x=10,y=24,w=120,h=146}
+local M={w=182,h=236,scales={2,3}}
+M.glass={x=11,y=26,w=160,h=160}
 M.button=14
 M.buttons={
- {id="MODE",x=12,y=178,w=14,h=14,round=true},
- {id="PREV",x=30,y=178,w=14,h=14,round=true},
- {id="NEXT",x=96,y=178,w=14,h=14,round=true},
- {id="INDEX",x=114,y=178,w=14,h=14,round=true},
- {id="UP",x=56,y=178,w=28,h=9},
- {id="DOWN",x=56,y=189,w=28,h=9},
- {id="POWER",x=12,y=8,w=18,h=8},
+ {id="MODE",x=14,y=200,w=14,h=14,round=true},
+ {id="PREV",x=36,y=200,w=14,h=14,round=true},
+ {id="NEXT",x=118,y=200,w=14,h=14,round=true},
+ {id="INDEX",x=140,y=200,w=14,h=14,round=true},
+ {id="UP",x=74,y=200,w=34,h=9},
+ {id="DOWN",x=74,y=211,w=34,h=9},
+ {id="POWER",x=13,y=9,w=20,h=9},
 }
-M.led={x=36,y=9,d=6}
+M.led={x=39,y=10,d=7}
 return M
