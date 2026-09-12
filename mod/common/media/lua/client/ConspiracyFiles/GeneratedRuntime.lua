@@ -19,6 +19,9 @@ local sessions,scheduler,wrapper,ticks,preparing
 -- Rows of retired cases. They have no Session to project from, but the player
 -- learned them and the notebook must still render them.
 local retiredRows={}
+-- Building id -> address, or false for "the book has no name for it". Cleared
+-- when the address book finishes building, so early misses are not permanent.
+local addressCache={}
 local TAG="ConspiracyFiles.Generated.G2"
 local CFLog=require("ConspiracyFiles/Log")
 local function log(message) CFLog.message("case","note",message) end
@@ -467,7 +470,18 @@ function R.reshuffle(mode)
         " map mark(s) forgotten. A new case starts from where you stand, within a few seconds.")
     return true,manifest
 end
+-- The address book builds in the background; anything it could not name before
+-- it finished deserves a second chance, once.
+local addressBookWasReady=false
+local function refreshAddressCache()
+    local map=ConspiracyFiles.AddressMap
+    local ready=map and map.ready and map.ready()==true
+    if ready and not addressBookWasReady then addressCache={} end
+    addressBookWasReady=ready
+end
+
 function R.known()
+    refreshAddressCache()
     if not wrapper or not sessions then return {} end
     local byId={}
     for _,row in ipairs(retiredRows) do byId[row.id]=row end
@@ -594,14 +608,21 @@ function R.devLocations()
     -- had searched seven houses and could not tell which of them held the rest.
     -- The address book already knows what a building is called, so say it.
     local map=ConspiracyFiles.AddressMap
+    -- Ask the address book ONCE per building, and remember a refusal as well as
+    -- an answer. Rows are rebuilt whenever the reading surface refreshes, and
+    -- an address book that is failing was being asked again every time - 52
+    -- caught errors in fifteen seconds (fault check, 2026-09-12).
     local function addressOf(siteId)
         if type(siteId)~="string" or not map or not map.labelForBuilding then return nil end
+        local remembered=addressCache[siteId]
+        if remembered~=nil then return remembered or nil end
         -- Site ids are "t3:<buildingId>"; labelForBuilding adds that prefix
         -- itself, so it is stripped here rather than doubled.
         local buildingId=siteId
         if string.sub(buildingId,1,3)=="t3:" then buildingId=string.sub(buildingId,4) end
         local ok,label=pcall(map.labelForBuilding,buildingId)
-        if ok and type(label)=="string" and label~="" then return label end
+        if ok and type(label)=="string" and label~="" then addressCache[siteId]=label; return label end
+        addressCache[siteId]=false
         return nil
     end
     for _,api in ipairs(sessions) do

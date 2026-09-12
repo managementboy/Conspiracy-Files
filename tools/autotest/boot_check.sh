@@ -19,7 +19,7 @@ while [ $# -gt 0 ]; do
     esac
 done
 
-grep -q "not running" <<<"$("$PZ" status)" || { echo "game already running; tools/autotest/pz.sh stop first" >&2; exit 2; }
+claim_game || exit 2
 "$PZ" start "${start_args[@]}" || { echo "boot check: the game did not reach a playable world" >&2; "$PZ" stop; exit 2; }
 session="$(cat "$REPO/dev/eval/linux/session")"
 runs="$REPO/dev/eval/linux/runs"; mkdir -p "$runs"
