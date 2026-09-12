@@ -677,10 +677,11 @@ end
 --
 -- The row projection (UI.generatedRows) is untouched and is what Knox.OS reads,
 -- so both surfaces say the same words about the same records.
+-- The hand is the switch (Organiser.handTick): this only asks the survivor to
+-- take the machine out, and Knox.OS opens when it reaches their hand.
 function UI.openSurface(section,preferred)
     local organiser=ConspiracyFiles.Organiser
-    local screen=ConspiracyFiles.OrganiserScreen
-    if organiser and screen and organiser.held and screen.open then
+    if organiser and organiser.held then
         local ok,item=pcall(organiser.held)
         if ok and item then
             local read=pcall(organiser.read)

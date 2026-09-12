@@ -166,9 +166,36 @@ function O.read(player)
     return true
 end
 
+-- The machine is either in your hand and readable, or away and not.
+--
+-- Owner, 2026-09-12: "equipping it in your main hand opens it, and unequipping
+-- closes it. Inspecting an object does not open it." So the hand IS the switch:
+-- no menu item to read, no window that appears over a document you just picked
+-- up. Take it out to read; put it away to stop.
+function O.handTick()
+    local player=getPlayer and getPlayer()
+    if not player then return end
+    local screen=ConspiracyFiles.OrganiserScreen
+    if not screen then return end
+    local primary=safe(function() return player:getPrimaryHandItem() end)
+    local ours=false
+    if primary then
+        local full=safe(function() return primary:getFullType() end)
+        ours=full==O.TYPE
+    end
+    if ours and not screen.window then
+        safe(screen.open)
+        log("organiser in hand: Knox.OS opened")
+    elseif not ours and screen.window and not screen.window.booting then
+        safe(screen.close)
+        log("organiser put away: Knox.OS closed")
+    end
+end
+
 -- One tick watcher: open Knox.OS the moment the organiser is really in the
 -- main hand, and give up quietly if the player cancelled the equip.
 function O.tick()
+    O.handTick()
     local pending=O.pendingOpen
     if not pending then return end
     pending.tries=pending.tries+1
@@ -209,6 +236,8 @@ function O.fill(playerNum,context,items)
         if name and context.removeOptionByName then context:removeOptionByName(name) end
     end)
     local option=context:addOption("Read the Investigation",nil,function() O.read(player) end)
+    -- Kept because it is the discoverable way in; all it does is put the
+    -- machine in your hand, which is what actually opens it.
     if option then
         local ok,readable=true,O.readable(subject)
         option.notAvailable=not (ok and readable)

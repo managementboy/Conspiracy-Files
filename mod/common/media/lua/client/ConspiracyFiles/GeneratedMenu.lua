@@ -37,10 +37,13 @@ function M.fill(playerNum,context,items)
         "media/ui/Properties/InventoryProperty_Research.png")
     local noteIcon=icon("Item_Notebook","media/ui/Properties/InventoryProperty_Research.png",
         "media/ui/Search_Icon_On.png")
+    -- Inspecting records the thing; it does NOT open the machine. Owner,
+    -- 2026-09-12: "Inspecting an object does not open it." Reading happens when
+    -- the survivor takes the organiser in hand, and not as a side effect of
+    -- picking a paper up.
     local option=context:addOption("Inspect Investigation Evidence",nil,function()
         if item:getOutermostContainer()~=expected then return end
-        local ok,inspected=pcall(R.inspect,item)
-        if ok and inspected then M.open(item:getModData().cfGeneratedId) end
+        pcall(R.inspect,item)
     end)
     local carried=expected==getSpecificPlayer(playerNum):getInventory()
     if option then option.notAvailable=not carried; option.iconTexture=lookIcon end
@@ -51,8 +54,7 @@ function M.fill(playerNum,context,items)
     if not carried then
         local here=context:addOption("Note in the Investigation",nil,function()
             if item:getOutermostContainer()~=expected then return end
-            local ok,noted=pcall(R.inspect,item,true)
-            if ok and noted then M.open(item:getModData().cfGeneratedId) end
+            pcall(R.inspect,item,true)
         end)
         if here then here.notAvailable=false; here.iconTexture=noteIcon end
     end
