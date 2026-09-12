@@ -45,13 +45,16 @@ ROCKER_GAP = 11
 POWER = (13, 9, 20, 9)
 LED = (39, 10, 7)            # x, y, diameter
 
-SHELL = (110, 118, 100, 255)
-SHELL_HI = (128, 136, 116, 255)
-EDGE = (38, 42, 34, 255)
-DEEP = (74, 82, 64, 255)
-WELL = (60, 67, 52, 255)
-GLASS_FILL = (185, 196, 160, 255)
-LED_ON = (216, 92, 76, 255)
+# The Palm III was graphite, not green: a dark neutral grey case with slightly
+# lighter grey keys, a near-black screen surround, and only the LCD itself in
+# that pale grey-green (owner, 2026-09-12).
+SHELL = (78, 79, 82, 255)
+SHELL_HI = (92, 93, 96, 255)
+EDGE = (26, 26, 28, 255)
+DEEP = (56, 57, 60, 255)
+WELL = (40, 40, 43, 255)
+GLASS_FILL = (168, 178, 150, 255)
+LED_ON = (214, 88, 72, 255)
 
 def draw_case(scale):
     s = scale * SS

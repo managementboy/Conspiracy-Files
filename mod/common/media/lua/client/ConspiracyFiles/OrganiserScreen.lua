@@ -52,13 +52,15 @@ function S.textWidth() return Case.glass.w-PADX*2-7 end   -- 7 px kept for the s
 S.HOLD_MS=450                     -- how long a held POWER becomes the lamp
 S.PRESS_MS=110                    -- how long a button shows as pressed
 
-local SHELL={0.42,0.45,0.38}
-local SHELL_EDGE={0.10,0.11,0.09}
-local SHELL_DEEP={0.28,0.31,0.25}
-local GLASS={0.72,0.77,0.63}
-local GLASS_LIT={0.78,0.71,0.45}
-local INK={0.17,0.20,0.14}
-local INK_DIM={0.42,0.48,0.35}
+-- Palm III colours: a graphite case, a near-black surround, and the grey-green
+-- LCD. Only the glass is green.
+local SHELL={0.31,0.31,0.32}
+local SHELL_EDGE={0.10,0.10,0.11}
+local SHELL_DEEP={0.22,0.22,0.24}
+local GLASS={0.66,0.70,0.59}
+local GLASS_LIT={0.76,0.70,0.46}
+local INK={0.15,0.17,0.13}
+local INK_DIM={0.38,0.42,0.33}
 local LED_ON={0.85,0.35,0.30}
 local LED_OFF={0.30,0.20,0.19}
 
