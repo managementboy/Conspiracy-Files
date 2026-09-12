@@ -12,20 +12,21 @@
 -- The device is held in the main hand to be read, which is what makes reading
 -- it a decision rather than a menu.
 --
--- THE MAP, and why:
---   POWER (top)        screen on and off. The light beside it is lit while on.
---   POWER, held        the lamp. This is how a real Palm lit its screen, and
---                      it keeps the sixth function off the face of the device.
---   ROCKER up/down     move through the text of what you are reading.
---   MODE   (button 1)  evidence, journal, places, round again.
---   PREV   (button 2)  the entry before this one.
---   NEXT   (button 3)  the entry after this one.
---   INDEX  (button 4)  out to the whole case, and back in again.
--- Keys mirror them for a player whose hand is on WASD: arrow keys for the
--- rocker and the entries, M, I, L, and Escape to close.
+-- THE MAP, which is now Knox.OS's:
+--   POWER (top)        screen on and off; the light is lit while it is on.
+--   POWER, held        the lamp, as a real Palm's backlight was.
+--   ROCKER up/down     page through what is open.
+--   VIEW   (button 1)  the program list, and back.
+--   PREV   (button 2)  the record before; in the program list, the program before.
+--   NEXT   (button 3)  the record after.
+--   LIST   (button 4)  open the selected record, or back out of one.
+-- Keys mirror them for a player whose hand is on WASD: arrows, M, I, L, and
+-- Escape to close. The stylus does all of it by tapping.
 local CFLog=require("ConspiracyFiles/Log")
 local Font=require("ConspiracyFiles/Generated/OrganiserFont")
 local Case=require("ConspiracyFiles/Generated/OrganiserCase")
+local K=require("ConspiracyFiles/KnoxUI")
+local Apps=require("ConspiracyFiles/KnoxApps")
 require("ISUI/ISPanel")
 ConspiracyFiles=ConspiracyFiles or {}
 local S=ConspiracyFiles.OrganiserScreen or {}
@@ -42,13 +43,8 @@ local function safe(fn,...) local ok,v=pcall(fn,...) if ok then return v end end
 -- Portrait, like the shell the owner drew: the glass is nearly square and the
 -- keypad sits under it. A first pass was 34 columns by 6 lines, which made a
 -- letterbox - correct in code, wrong on screen (2026-09-12).
--- The glass is the original's own 160 x 160, so how much fits is measured, not
--- chosen: the title bar takes a line, the command line takes one with a rule
--- above it, and the rest is the document. Wrapping is by pixel width, because
--- this face is proportional - an "i" is two pixels and an "m" is eight.
-local PADX,PADY=3,2               -- Palm's own rule: one or two pixels, no more
-function S.lines() return math.floor((Case.glass.h-PADY*2)/Font.line)-3 end
-function S.textWidth() return Case.glass.w-PADX*2-7 end   -- 7 px kept for the scroll arrows
+-- The glass is the original's own 160 x 160. How much fits is measured by the
+-- widget kit, not chosen here.
 S.HOLD_MS=450                     -- how long a held POWER becomes the lamp
 S.PRESS_MS=110                    -- how long a button shows as pressed
 
@@ -129,31 +125,11 @@ end
 
 function Screen:initialise() ISPanel.initialise(self); self:setWantKeyEvents(true) end
 
--- Text, letter by letter, from the device's own alphabet.
-function Screen:text(value,x,y,colour)
-    local scale=self.scale
-    local cursor=x
-    for i=1,#value do
-        local code=string.byte(value,i)
-        if code>=Font.first and code<=Font.last then
-            local width=Font.w[code-Font.first+1]*scale
-            local texture=glyph(code,scale)
-            if texture then
-                self:drawTextureScaled(texture,cursor,y,width,Font.line*scale,1,colour[1],colour[2],colour[3])
-            end
-            cursor=cursor+width
-        end
-    end
-    return cursor-x
-end
-
--- Four round buttons with a rocker between them, spaced across the foot of the
--- case: the arrangement on the shell the owner drew.
 function Screen:buttons()
     local s=self.scale
     local out={}
     for _,b in ipairs(Case.buttons) do
-        out[#out+1]={id=b.id,x=b.x*s,y=b.y*s,w=b.w*s,h=b.h*s,round=b.round,nx=b.x,ny=b.y}
+        out[#out+1]={id=b.id,x=b.x*s,y=b.y*s,w=b.w*s,h=b.h*s,round=b.round}
     end
     return out
 end
@@ -164,22 +140,17 @@ function Screen:prerender()
     if case then
         self:drawTextureScaled(case,0,0,Case.w*s,Case.h*s,1,1,1,1)
     else
-        -- No art: a flat shell is ugly but readable, and a missing texture must
-        -- never cost the player their notes.
         self:drawRect(0,0,self.width,self.height,1,SHELL[1],SHELL[2],SHELL[3])
         self:drawRect(Case.glass.x*s,Case.glass.y*s,Case.glass.w*s,Case.glass.h*s,1,GLASS[1],GLASS[2],GLASS[3])
     end
-    -- The lamp warms the glass.
     if self.on and self.lamp then
         self:drawRect(Case.glass.x*s,Case.glass.y*s,Case.glass.w*s,Case.glass.h*s,0.55,GLASS_LIT[1],GLASS_LIT[2],GLASS_LIT[3])
     end
-    -- The light beside the power key, lit only while the screen is on.
     if self.on then
         local led=texture("led",s)
         if led then self:drawTextureScaled(led,Case.led.x*s,Case.led.y*s,Case.led.d*s,Case.led.d*s,1,1,1,1)
         else self:drawRect(Case.led.x*s,Case.led.y*s,Case.led.d*s,Case.led.d*s,1,LED_ON[1],LED_ON[2],LED_ON[3]) end
     end
-    -- A key that was just hit sinks and darkens for a moment.
     local now=getTimeInMillis and getTimeInMillis() or 0
     for _,b in ipairs(self:buttons()) do
         if self.pressed[b.id] and now-self.pressed[b.id]<S.PRESS_MS then
@@ -190,181 +161,155 @@ function Screen:prerender()
             else self:drawRect(b.x,b.y+sink,b.w,b.h,1,SHELL_EDGE[1],SHELL_EDGE[2],SHELL_EDGE[3]) end
         end
     end
-    if self.on then
-        self:draw((Case.glass.x+PADX)*s,(Case.glass.y+PADY)*s,(Case.glass.w-PADX*2)*s)
-    end
+    if self.on then self:draw(Case.glass.x*s,Case.glass.y*s) end
 end
 
--- What the glass says, in the shape Palm OS used: a dark title bar naming the
--- view with the record count on the right, the body filling the width to the
--- edge, scroll arrows in the right margin, and the commands along the foot.
--- (Palm OS User Interface Guidelines; users.fuw.edu.pl/~michalj/palmos.)
-function Screen:draw(x,y,width)
-    local s=self.scale
-    local line=Font.line*s
-    local rows=self:rows()
-    local entry=rows[self.entry]
-    local view=({evidence="EVIDENCE",journal="JOURNAL",places="PLACES"})[self.section] or "EVIDENCE"
-    -- Title bar: dark, full width, light letters.
-    self:drawRect(x-PADX*s,y,width+PADX*2*s,line,1,INK[1],INK[2],INK[3])
-    self:text(view,x,y,GLASS)
-    local count=#rows>0 and (self.entry.." of "..#rows) or "empty"
-    self:text(count,x+width-measure(count,s),y,GLASS)
-    local body=y+line+math.floor(s/2)
-    local room=S.lines()
-    if self.index then
-        local first=math.max(1,math.min(self.entry-math.floor(room/2),#rows-room+1))
-        if first<1 then first=1 end
-        for i=0,room-1 do
-            local row=rows[first+i]
-            if not row then break end
-            local selected=(first+i)==self.entry
-            local label=(first+i)..". "..row.title
-            if selected then self:drawRect(x-PADX*s,body+i*line,width+PADX*2*s,line,1,INK[1],INK[2],INK[3]) end
-            self:text(label,x,body+i*line,selected and GLASS or INK)
-        end
-        if first>1 then self:text("^",x+width-measure("^",s),body,INK_DIM) end
-        if first+room-1<#rows then self:text("v",x+width-measure("v",s),body+(room-1)*line,INK_DIM) end
-    elseif entry then
-        local card=entry.cards[self.card] or {}
-        for i,text in ipairs(card) do
-            if i>room then break end
-            self:text(text,x,body+(i-1)*line,i<=(self.card==1 and entry.head or 0) and INK or INK)
-        end
-        -- Scroll arrows in the right margin, exactly where Palm put them.
-        if self.card>1 then self:text("^",x+width-measure("^",s),body,INK_DIM) end
-        if self.card<#entry.cards then self:text("v",x+width-measure("v",s),body+(room-1)*line,INK_DIM) end
-    else
-        self:text("Nothing recorded yet.",x,body,INK_DIM)
-    end
-    -- Command line at the foot: the four keys, named as they are on the case.
-    local foot=body+room*line+math.floor(s/2)
-    self:drawRect(x-PADX*s,foot,width+PADX*2*s,1*s,1,INK_DIM[1],INK_DIM[2],INK_DIM[3])
-    local legend=self.index and "LIST: read  PREV/NEXT: move" or "LIST: all  ^v: page  VIEW"
-    self:text(legend,x,foot+2*s,INK_DIM)
+-- Knox.OS. The shell owns the title bar, the scrolling and the arrows; a
+-- program only says what its rows are (ConspiracyFiles/KnoxApps).
+function Screen:program() return Apps.programs[self.app or 1] or Apps.programs[1] end
+
+function Screen:list()
+    if self.cachedList then return self.cachedList end
+    local program=self:program()
+    self.cachedList=(program.list and safe(program.list)) or {}
+    return self.cachedList
 end
 
--- Rows come from the notebook's own projection: one store, one set of rows,
--- two surfaces. The screen only decides how many fit on the glass.
--- Wrap to the glass in PIXELS. Counting characters is wrong for a proportional
--- face: "Illinois" and "McCoy Logging" are the same length and not the same
--- width.
-local function wrap(text,width,out)
-    for paragraph in (tostring(text).."\n"):gmatch("([^\n]*)\n") do
+local function pages(detail,width)
+    local lines={}
+    for paragraph in (tostring(detail or "").."\n"):gmatch("([^\n]*)\n") do
         if paragraph=="" then
-            if #out>0 and out[#out]~="" then out[#out+1]="" end
+            if #lines>0 and lines[#lines]~="" then lines[#lines+1]="" end
         else
             local line=""
             for word in paragraph:gmatch("%S+") do
                 local candidate=line=="" and word or (line.." "..word)
                 if Font.width(candidate,1)<=width then line=candidate
-                else
-                    if line~="" then out[#out+1]=line end
-                    line=word
-                end
+                else if line~="" then lines[#lines+1]=line end; line=word end
             end
-            if line~="" then out[#out+1]=line end
+            if line~="" then lines[#lines+1]=line end
         end
     end
-    return out
+    return lines
 end
 
-function Screen:rows()
-    if self.cachedRows then return self.cachedRows end
-    local out={}
-    local ui=ConspiracyFiles.NotebookUI
-    local rows=(ui and ui.generatedRows and safe(ui.generatedRows,self.section=="journal" and "journal" or "evidence")) or {}
-    for _,row in ipairs(rows) do
-        if not row.cfHeading then
-            -- The window's own furniture stays in the window: its filing line
-            -- ("Dispatch document - Discovery 1 - Case LD-340") and its block
-            -- headings are bookkeeping, and a pocket screen has no room for
-            -- bookkeeping. Title, then what the survivor actually wrote.
-            local lines={}
-            wrap(row.title or "",S.textWidth(),lines)
-            local head=#lines
-            for paragraph in (tostring(row.detailText or "").."\n\n"):gmatch("(.-)\n\n") do
-                local heading=paragraph:match("^(%u[%u%s]+)\n")
-                local text=heading and paragraph:sub(#heading+2) or paragraph
-                if text and text:find("%S") then wrap(text,S.textWidth(),lines); lines[#lines+1]="" end
-            end
-            while lines[#lines]=="" do lines[#lines]=nil end
-            local cards,card={},{}
-            for i,line in ipairs(lines) do
-                card[#card+1]=line
-                if #card>=S.lines() or i==#lines then cards[#cards+1]=card; card={} end
-            end
-            out[#out+1]={title=tostring(row.title or ""),head=head,cards=cards}
+function Screen:draw(gx,gy)
+    local c=K.begin(self,self.scale,gx,gy,Case.glass.w,Case.glass.h)
+    self.context=c
+    local line=Font.line
+    local room=K.rows(c)
+    if self.launcher then
+        K.titleBar(c,"KNOX.OS",#Apps.programs.." programs")
+        for i,app in ipairs(Apps.programs) do
+            local count=#((app.list and safe(app.list)) or {})
+            K.row(c,app.title.."   "..count,line+2+(i-1)*line,i==(self.app or 1),"APP",i)
         end
+        K.foot(c,"tap a program")
+        return
     end
-    self.cachedRows=out
-    return out
+    local program=self:program()
+    local rows=self:list()
+    if self.record then
+        local lines=pages(self.record.detail,c.w-4-8)
+        K.titleBar(c,program.title,self.record.index and (self.record.index.." of "..#rows) or nil)
+        local top=(self.card-1)*room+1
+        for i=0,room-1 do
+            local text=lines[top+i]
+            if not text then break end
+            K.text(c,text,2,line+2+i*line,K.INK)
+        end
+        K.arrows(c,line+2,room*line,top>1,top+room-1<#lines)
+        local foot=K.foot(c,"")
+        local x=K.command(c,"BACK",2,foot,"BACK")
+        if self.record.todo then K.command(c,"TICK",x,foot,"TICK")
+        else K.command(c,"REMIND",x,foot,"REMIND") end
+        return
+    end
+    K.titleBar(c,program.title,#rows>0 and (self.entry.." of "..#rows) or "empty")
+    local top=math.max(1,math.min(self.entry-math.floor(room/2),#rows-room+1))
+    if top<1 then top=1 end
+    if #rows==0 then K.text(c,"Nothing recorded yet.",2,line+2,K.DIM) end
+    for i=0,room-1 do
+        local row=rows[top+i]
+        if not row then break end
+        K.row(c,row.label,line+2+i*line,(top+i)==self.entry,"ROW",top+i)
+    end
+    K.arrows(c,line+2,room*line,top>1,top+room-1<#rows)
+    K.foot(c,"VIEW: programs   LIST: open")
+end
+
+function Screen:openRow(index)
+    local rows=self:list()
+    local row=rows[index]
+    if not row then return end
+    self.entry=index
+    if row.todo and row.index then
+        Apps.tickToDo(row.index); self.cachedList=nil
+    else
+        self.record=row; self.record.index=index; self.card=1
+    end
 end
 
 function Screen:press(id)
     self.pressed[id]=getTimeInMillis and getTimeInMillis() or 0
     safe(function() getSoundManager():playUISound("UIActivateButton") end)
-    local rows=self:rows()
     if id=="POWER" then
         self.on=not self.on
         if not self.on then self.lamp=false end
-    elseif not self.on then
         return
-    elseif id=="MODE" then
-        self.section=({evidence="journal",journal="places",places="evidence"})[self.section]
-        self.entry,self.card,self.index=1,1,false
-        self.cachedRows=nil
+    end
+    if not self.on then return end
+    local rows=self:list()
+    if id=="MODE" then
+        self.launcher=not self.launcher; self.record=nil
     elseif id=="INDEX" then
-        self.index=not self.index
+        if self.launcher then
+            self.launcher=false; self.cachedList=nil; self.entry,self.card=1,1
+        elseif self.record then self.record=nil
+        else self:openRow(self.entry) end
     elseif id=="PREV" then
-        self.entry=math.max(1,self.entry-1); self.card=1
+        if self.launcher then self.app=math.max(1,(self.app or 1)-1)
+        elseif self.record then self.record=nil
+        else self.entry=math.max(1,self.entry-1) end
     elseif id=="NEXT" then
-        self.entry=math.min(math.max(1,#rows),self.entry+1); self.card=1
+        if self.launcher then self.app=math.min(#Apps.programs,(self.app or 1)+1)
+        else self.entry=math.min(math.max(1,#rows),self.entry+1); self.record=nil end
     elseif id=="UP" then
         self.card=math.max(1,self.card-1)
+        if not self.record then self.entry=math.max(1,self.entry-1) end
     elseif id=="DOWN" then
-        local entry=rows[self.entry]
-        self.card=math.min(entry and #entry.cards or 1,self.card+1)
+        if self.record then self.card=self.card+1
+        else self.entry=math.min(math.max(1,#rows),self.entry+1) end
     end
-    log("organiser key "..id)
+    log("knox key "..id)
 end
 
--- Where a tap landed on the glass, in native pixels from its top left, or nil.
-function Screen:onGlass(x,y)
-    local s=self.scale
-    local gx,gy=Case.glass.x*s,Case.glass.y*s
-    if x<gx or y<gy or x>gx+Case.glass.w*s or y>gy+Case.glass.h*s then return nil end
-    return (x-gx)/s,(y-gy)/s
-end
-
--- The stylus. Rows in the list, the scroll arrows in the right margin, and the
--- title bar's view name, which is Palm's category selector.
-function Screen:tap(nx,ny)
-    local rows=self:rows()
-    local line=Font.line
-    if ny<=line then
-        if nx>Case.glass.w*0.6 then return end
-        self:press("MODE"); return
-    end
-    local room=S.lines()
-    local first=math.floor((ny-line-1)/line)+1
-    if first<1 or first>room then return end
-    if nx>=Case.glass.w-PADX-8 then
-        -- Right margin: the arrows.
-        self:press(first<=room/2 and "UP" or "DOWN"); return
-    end
-    if self.index then
-        local top=math.max(1,math.min(self.entry-math.floor(room/2),#rows-room+1))
-        if top<1 then top=1 end
-        local wanted=top+first-1
-        if rows[wanted] then
-            self.entry=wanted; self.card=1; self.index=false
-            safe(function() getSoundManager():playUISound("UIActivateButton") end)
-            log("organiser tap: record "..wanted)
+-- The stylus: whatever widget is under the tap.
+function Screen:tap(x,y)
+    local widget=self.context and K.at(self.context,x,y)
+    if not widget then return end
+    safe(function() getSoundManager():playUISound("UIActivateButton") end)
+    local id=widget.id
+    if id=="APP" then
+        self.app=widget.payload; self.launcher=false; self.record=nil
+        self.entry,self.card,self.cachedList=1,1,nil
+    elseif id=="SELECT" then self.launcher=true; self.record=nil
+    elseif id=="ROW" then
+        if self.launcher then self.app=widget.payload; self.launcher=false; self.cachedList=nil; self.entry=1
+        else self:openRow(widget.payload) end
+    elseif id=="BACK" then self.record=nil; self.card=1
+    elseif id=="TICK" then
+        if self.record and self.record.index then
+            local rows=self:list(); local row=rows[self.record.index]
+            if row and row.index then Apps.tickToDo(row.index) end
         end
-    else
-        self:press(first<=room/2 and "UP" or "DOWN")
-    end
+        self.record=nil; self.cachedList=nil
+    elseif id=="REMIND" then
+        if self.record then Apps.addToDo(self.record.title) end
+        self.record=nil; self.cachedList=nil
+    elseif id=="UP" then self:press("UP")
+    elseif id=="DOWN" then self:press("DOWN") end
+    log("knox tap: "..tostring(id))
 end
 
 function Screen:onMouseDown(x,y)
@@ -372,8 +317,11 @@ function Screen:onMouseDown(x,y)
     for _,b in ipairs(self:buttons()) do
         if x>=b.x and x<=b.x+b.w and y>=b.y and y<=b.y+b.h then self.down=b.id; return true end
     end
-    local nx,ny=self:onGlass(x,y)
-    if nx and self.on then self.down="GLASS"; self.glassAt={nx,ny}; return true end
+    local s=self.scale
+    local gx,gy=Case.glass.x*s,Case.glass.y*s
+    if self.on and x>=gx and y>=gy and x<=gx+Case.glass.w*s and y<=gy+Case.glass.h*s then
+        self.down="GLASS"; return true
+    end
     self.down=nil
     return ISPanel.onMouseDown(self,x,y)
 end
@@ -381,15 +329,9 @@ end
 function Screen:onMouseUp(x,y)
     local id=self.down
     self.down=nil
-    if id=="GLASS" then
-        local nx,ny=self:onGlass(x,y)
-        if nx and self.glassAt then self:tap(nx,ny) end
-        self.glassAt=nil
-        return true
-    end
+    if id=="GLASS" then self:tap(x,y); return true end
     if not id then return ISPanel.onMouseUp(self,x,y) end
     local held=(getTimeInMillis and getTimeInMillis() or 0)-(self.downAt or 0)
-    -- A held POWER is the lamp, the way a real one worked.
     if id=="POWER" and held>=S.HOLD_MS then
         self.lamp=not self.lamp
         self.pressed[id]=getTimeInMillis and getTimeInMillis() or 0
@@ -409,7 +351,7 @@ end
 function Screen:onKeyRelease(key)
     if key==Keyboard.KEY_ESCAPE then self:close(); return end
     if key==Keyboard.KEY_P then self:press("POWER"); return end
-    if key==Keyboard.KEY_L then self.lamp=not self.lamp; log("organiser lamp "..tostring(self.lamp)); return end
+    if key==Keyboard.KEY_L then self.lamp=not self.lamp; return end
     local id=KEYS[key]
     if id then self:press(id) end
 end

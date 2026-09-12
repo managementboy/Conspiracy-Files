@@ -87,3 +87,34 @@ function CFOrg.closeScreen()
     ConspiracyFiles.OrganiserScreen.close()
     return true
 end
+
+-- Knox.OS: the launcher, the programs and the stylus.
+function CFOrg.knox()
+    local w = ConspiracyFiles.OrganiserScreen.window
+    if not w then return false, "no screen" end
+    local program = w:program()
+    return true, tostring(program and program.title), tostring(#w:list()),
+        tostring(w.launcher), tostring(w.record ~= nil), tostring(w.app or 1)
+end
+
+function CFOrg.programs()
+    local names = {}
+    for _, app in ipairs(ConspiracyFiles.KnoxApps.programs) do
+        names[#names + 1] = app.title .. "=" .. #(app.list and app.list() or {})
+    end
+    return true, table.concat(names, " ")
+end
+
+-- Tap the glass where a widget is: find it through the context the shell built.
+function CFOrg.tapWidget(id, payload)
+    local w = ConspiracyFiles.OrganiserScreen.window
+    if not w or not w.context then return false, "no screen" end
+    for _, h in ipairs(w.context.hits) do
+        if h.id == id and (payload == nil or h.payload == payload) then
+            w:onMouseDown(h.x + 2, h.y + 2)
+            w:onMouseUp(h.x + 2, h.y + 2)
+            return true, id
+        end
+    end
+    return false, "no widget " .. tostring(id)
+end
