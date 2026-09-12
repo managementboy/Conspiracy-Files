@@ -15,7 +15,9 @@
 #   DiscoveryLedger.validate the closed-world check over the ledger
 #   SaveBudget.check         the size estimate before the save write
 #   ClueMarkers.after        the map mark written at the pickup
-#   ClueMarkers.update       the marker worker's own per-tick share
+#   ClueMarkers.update       the marker worker: it copies and commits the whole
+#                            record store, and is the 13 ms suspect
+#   PlayerVoice.onDiscovery  the survivor's line, halo and UI sound
 #
 # Reports, never fails on a threshold: this is a measurement, and the machine
 # it runs on is slower than the owner's. Exit 0 measured, 2 could not run.
@@ -26,7 +28,7 @@ say() { echo "writecost: $*" >&2; }
 abort() { say "$*"; "$PZ" stop; exit 2; }
 
 points=(DiscoveryLog.record DiscoveryLedger.record DiscoveryLedger.validate
-        SaveBudget.check ClueMarkers.after ClueMarkers.update)
+        SaveBudget.check ClueMarkers.after ClueMarkers.update PlayerVoice.onDiscovery)
 
 not_running || { say "game already running; tools/autotest/pz.sh stop first"; exit 2; }
 "$PZ" start "${start_args[@]}" || abort "the game did not reach a playable world"
@@ -76,13 +78,14 @@ done
 
 sleep 5
 report="$(ev 'return CFPerf.report()' | tr '|' '\n')"
+build="$(ev 'return ConspiracyFiles.VERSION' | cut -f1)"
 errors="$(mod_errors)"
 "$PZ" stop
 
 out="$REPO/docs/management/evidence/linux-autotest/$(date +%Y%m%dT%H%M%S)-writecost.txt"
 {
     echo "write cost, by part - $(date -Is)"
-    echo "build: $(grep -o 'DEV-[^\"]*' "$REPO/mod/common/media/lua/shared/ConspiracyFiles/Version.lua" | head -1)"
+    echo "build: $build"
     echo "commit: $(git -C "$REPO" rev-parse --short HEAD)"
     echo "session: $id   documents: $n"
     echo
