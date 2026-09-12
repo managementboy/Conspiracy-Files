@@ -76,38 +76,6 @@ end
 -- noise. Anything else becomes ordinary words - "ConstructionWorker" reads
 -- "construction worker" - because a lead the player cannot read is no better
 -- than one they never got.
--- Some outfit ids are a STYLE or an ACTIVITY, not clothing. Owner, weekend
--- note 2026-09-12: "They read as 'wore: goth'." A survivor looking at a body
--- writes what they can see, so each of these carries one written line and the
--- raw id is never printed.
-local GLOSS={
-    biker="leather and heavy boots",
-    classy="clothes somebody would call smart",
-    goth="a lot of black, chains, heavy boots",
-    punk="torn clothes, studs, dyed hair",
-    redneck="a work shirt and a cap",
-    rocker="denim and a band shirt",
-    grunge="flannel over a worn shirt",
-    tourist="holiday clothes, nothing for around here",
-    hunter="hunting clothes, orange and camouflage",
-    golfer="clothes for a golf course",
-    party="clothes for a night out",
-    clubgoer="clothes for a night out",
-    gaudy="bright clothes that do not go together",
-    bedroom="what somebody sleeps in",
-    jewelry="more jewellery than clothes",
-}
--- Ids that are a PERSON, not an outfit. The game dresses named characters this
--- way, and "the body itself wore: frank hemingway" is both nonsense and the
--- one thing this mod must never do -- state who a body is. Suppressed, and
--- suppressed by exact id, so "YoungCowpoke" still describes clothes.
-local PERSON={
-    bob=true,dean=true,duke=true,joan=true,john=true,kate=true,nolan=true,
-    ["frank hemingway"]=true,["jackie jaye"]=true,["judge matt hass"]=true,
-    ["kirsty kormick"]=true,["mayor west point"]=true,["rev peter watts"]=true,
-    ["sir twiggy"]=true,groucho=true,["groucho tshirt"]=true,spiffo=true,
-    santa=true,["santa green"]=true,zed=true,["mannequin 1"]=true,["mannequin 2"]=true,
-}
 local UNINFORMATIVE={["generic"]=true,["default"]=true,["naked"]=true,["nude"]=true,["bullet"]=true}
 local NOT_CLOTHING={["young"]=true}
 function M.readable(name)
@@ -132,14 +100,7 @@ function M.readable(name)
     local spaced=trimmed:gsub("_"," "):gsub("(%l)(%u)","%1 %2"):gsub("(%u)(%u%l)","%1 %2")
     spaced=spaced:gsub("%s+"," "):gsub("^%s+",""):gsub("%s+$","")
     if spaced=="" then return nil end
-    spaced=spaced:lower()
-    -- A named character is a person, not an observation about clothes.
-    if PERSON[spaced] then return nil end
-    -- A style or an activity is written out; everything else is already the
-    -- clothes ("construction worker", "nurse") and stands as it is. Nothing is
-    -- invented for an id this table has never seen: a future game update can
-    -- add outfits, and the worst it can do is read plainly.
-    return GLOSS[spaced] or spaced
+    return spaced:lower()
 end
 function M.outfitFor(root,token)
     local ok=M.validate(root); if not ok then return nil end

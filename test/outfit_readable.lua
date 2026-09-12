@@ -51,24 +51,6 @@ for raw, want in pairs(expected) do
     assert(got == want, raw .. ' -> ' .. tostring(got) .. ', wanted ' .. want)
 end
 
--- A style or an activity is not clothing, and the raw id read as a label:
--- "The body itself wore: goth." (owner, weekend note 2026-09-12). Each style
--- carries a written line instead; an id no table has seen still reads plainly,
--- so a future game update can add outfits without inventing words.
-assert(M.readable('Goth') == 'a lot of black, chains, heavy boots', 'a style is written out')
-assert(M.readable('Redneck') == 'a work shirt and a cap')
-assert(M.readable('Tourist') == 'holiday clothes, nothing for around here')
-assert(M.readable('Nurse') == 'nurse', 'an occupation is already the clothes')
-assert(M.readable('MoonlightGardener') == 'moonlight gardener',
-    'an id nobody has glossed still reads as words, never as an invention')
-
--- An outfit id that is a PERSON says who a body is, which this mod may never
--- do. The game dresses named characters this way.
-for _, named in ipairs({'Bob', 'Frank_Hemingway', 'Judge_Matt_Hass', 'Kirsty_Kormick', 'Spiffo'}) do
-    assert(M.readable(named) == nil, named .. ' names a person and must be suppressed')
-end
-assert(M.readable('YoungCowpoke') == 'young cowpoke', 'a costume that merely sounds like a name stays')
-
 -- Nothing readable ever contains a capital or an underscore: those are the
 -- marks of an id that escaped into prose, which is what this exists to stop.
 for raw in pairs(expected) do
