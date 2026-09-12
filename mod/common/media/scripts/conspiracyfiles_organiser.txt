@@ -1,0 +1,48 @@
+module ConspiracyFiles
+{
+    /*
+     * The survivor's pocket organiser: the thing they read the investigation on.
+     *
+     * Owner, 2026-09-12: "why not drop the notebook completely and replace it
+     * with a PalmPilot kind of device that our survivor has on him?" The
+     * PalmPilot is 1996 and this is July 1993, so the period-correct object is
+     * a pocket electronic organiser - a Casio SF-series digital diary, sold in
+     * every mall in Kentucky that summer.
+     *
+     * It is declared as a RADIO on purpose. Basing it on base:radio buys the
+     * whole battery model from the game for nothing: the power level, the
+     * on/off state, the vanilla "insert battery" menu, and persistence across
+     * save and reload, all engine-side. TwoWay is false and the channel range
+     * is a single dead frequency, so it transmits nothing and receives nothing
+     * - today. The mod is called Dead Air, and a device that genuinely is a
+     * radio underneath can one day be tuned.
+     *
+     * Icon and model are a stand-in: WalkieTalkieBudget is the closest vanilla
+     * shape until the mod has art of its own. A wrong icon is a cosmetic bug;
+     * a missing texture is an item nobody can see in their inventory.
+     */
+    item Organiser
+    {
+        DisplayName = Pocket Organiser,
+        DisplayCategory = Electronics,
+        ItemType = base:radio,
+        Weight = 0.3,
+        Icon = WalkieTalkieBudget,
+        StaticModel = WalkieTalkieToy,
+        WorldStaticModel = WalkieTalkieToy,
+        BaseVolumeRange = 0,
+        DisappearOnUse = false,
+        IsHighTier = false,
+        IsPortable = true,
+        IsTelevision = false,
+        MicRange = 0,
+        MinChannel = 88000,
+        MaxChannel = 88000,
+        TransmitRange = 0,
+        TwoWay = false,
+        UseWhileEquipped = true,
+        UsesBattery = true,
+        UseDelta = 0.0005,
+        Tags = usesbattery,
+    }
+}
