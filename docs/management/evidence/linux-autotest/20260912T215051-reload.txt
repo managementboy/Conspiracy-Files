@@ -1,0 +1,8 @@
+Linux reload check 20260912T215051: PASS
+source: 5eacd89
+world: 47505895595061836726; three save/quit/continue round trips after two documents were inspected
+notebook before: 2 1=1721876425:document-1:Rent statement / RC-190 | 2=1721876425:document-2:Key return note / RC-190
+placements before: 3 1721876425:document-1@10840,10148,0:placed 1721876425:document-2@10880,10153,0:placed 1721876425:document-3@10880,10156,0:placed
+schedule before (count, last created hour, scheduled): 1 2.072294235229492 true
+save-budget total per round (bytes): 156059 156059 156059 156059
+errors inside the mod: 0

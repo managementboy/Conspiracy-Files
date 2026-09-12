@@ -1,0 +1,13 @@
+Linux fault containment check 20260912T213633: PASS
+source: 5eacd89
+each function made to throw for 15 s of play, then restored:
+  DiscoveryLog.record: inspected document 1 (Records log / PS-589); 5 mod log lines and 1 caught errors in 15 s; most repeated line x1; game answering: true; case valid: true
+  SaveBudget.check: document 2: document 2 not found: not on or next to its square; 10 mod log lines and 8 caught errors in 15 s; most repeated line x2; game answering: true; case valid: true
+  GeneratedRuntime.inspect: document 3: document 3 not found: not on or next to its square; 1 mod log lines and 0 caught errors in 15 s; most repeated line x1; game answering: true; case valid: true
+  ClueMarkers.update: inspected document 4 (ID card (1 of 11)); 11 mod log lines and 1 caught errors in 15 s; most repeated line x1; game answering: true; case valid: true
+  ClueMarkers.draw: opened the world map; 1 mod log lines and 1 caught errors in 15 s; most repeated line x1; game answering: true; case valid: true
+  WorldAccess.resolve: stood by unfound document 5; 1 mod log lines and 9 caught errors in 15 s; most repeated line x1; game answering: true; case valid: true
+  WorldAccess.count: stood by unfound document 5; 0 mod log lines and 0 caught errors in 15 s; most repeated line x1; game answering: true; case valid: true
+  AddressMap.labelForBuilding: opened the notebook; 0 mod log lines and 2 caught errors in 15 s; most repeated line x1; game answering: true; case valid: true
+  IdentityObservations.add: opened 4 fresh bodies; 11 mod log lines and 0 caught errors in 15 s; most repeated line x4; game answering: true; case valid: true
+recovery afterwards: document 5 inspected (Payment slip / PS-589)

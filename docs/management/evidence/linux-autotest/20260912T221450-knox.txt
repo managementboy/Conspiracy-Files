@@ -1,0 +1,7 @@
+PASS knox.os - 2026-09-12T22:14:50+02:00
+commit: 5eacd89
+session: 20260912T221052
+opened:   true	FILES	1	nil	false	1
+names:    true	NAMES	1	false	false	2
+dates:    true	DATES	1	false	false	4
+to do:    true	TO DO	1	false	false	5

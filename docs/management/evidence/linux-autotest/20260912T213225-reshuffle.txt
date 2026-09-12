@@ -1,0 +1,4 @@
+PASS reshuffle - 2026-09-12T21:32:25+02:00
+commit: 2b10c06
+before: 6	1:placed@102 E Maple St; 2:placed@107 E Maple St; 3:placed@107 E Maple St; 4:placed@102 E Maple St; 5:placed@107 E Maple St; 6:placed@107 E Maple St
+after:  4	1:placed@102 E Maple St; 2:placed@104 E Maple St; 3:placed@102 E Maple St; 4:placed@102 E Maple St

@@ -1,0 +1,13 @@
+Linux core loop check 20260912T210219: PASS
+source: 2b10c06
+first case: 4 documents, all found and inspected through the right-click menu:
+  1. Records log / HK-563, in shelves, room hall, floor 0 (container icon clicked: yes)
+  2. Registry list / HK-563, in shelves, room kitchen, floor 0 (container icon clicked: yes)
+  3. Registry review / HK-563, in counter, room kitchen, floor 0 (container icon clicked: yes)
+  4. metal thigh (1 of 6), in counter, room kitchen, floor 0 (container icon clicked: yes)
+notebook entries: 4; case completion reported: yes
+map marks without a pen (written/pending/missing): 0/4/0
+map marks after a pen, case already retired: 4/0/0
+second case appeared (gap removed): yes
+errors inside the mod: 0
+screenshot: dev/eval/linux/runs/20260912T210219-map.png (not committed)

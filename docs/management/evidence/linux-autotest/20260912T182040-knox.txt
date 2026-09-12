@@ -1,0 +1,11 @@
+FAIL knox.os - 2026-09-12T18:20:40+02:00
+commit: 774a1ef
+session: 20260912T181706
+opened:   true	FILES	1	nil	false	1
+names:    true	NAMES	2	false	false	2
+dates:    true	DATES	1	false	false	3
+to do:    true	TO DO	1	false	false	4
+FAIL: errors inside the mod: General      f:0 at CellLoader.DoTileObjectCreation     > CellLoader> missing tile vegetation_groundcover_01_18
+General      f:7679> Lua((MOD:Conspiracy-Files: Dead Air)).safe> Exception thrown  |   at KahluaUtil.fail(KahluaUtil.java:100).
+General      f:7736> Lua((MOD:Conspiracy-Files: Dead Air)).safe> Exception thrown  |   at KahluaUtil.fail(KahluaUtil.java:100).
+General      f:9296> Lua((MOD:Conspiracy-Files: Dead Air)).safe> Exception thrown  |   at KahluaUtil.fail(KahluaUtil.java:100).

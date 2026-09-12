@@ -1,0 +1,12 @@
+Linux wallet ID check 20260912T182732: PASS
+source: b83adbf
+wallet ID: 'ID Card: Anthony Darling'; wallet stamp after carrying it off: corpse-wallet:1016324665
+notebook summary: Identity document - container
+notebook text:
+  I saw a document labelled "ID Card: Anthony Darling" inside Wallet. That container was taken off a corpse.
+  The name on a document is a lead. It does not establish who owned the container or identify the body.
+  The body itself wore: whatever they left the house in. A worn outfit and a labelled document are two separate observations from the same body; this record does not decide which one, if either, describes who the body is.
+  Observed at 102 E Maple St.
+loose ID on a body: PASS: 'ID Card: Trista Rand' recorded as Identity document - corpse
+errors inside the mod: 0
+screenshot: dev/eval/linux/runs/20260912T182732-wallet.png (not committed)

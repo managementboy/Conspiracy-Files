@@ -1,0 +1,8 @@
+Linux reload check 20260912T195151: PASS
+source: 249a6f2
+world: 41177338395016215044; three save/quit/continue round trips after two documents were inspected
+notebook before: 2 1=2049730065:document-1:Delivery schedule / PS-124 | 2=2049730065:document-2:Utility record / PS-124
+placements before: 0 
+schedule before (count, last created hour, scheduled): 1 2.066404342651367 true
+save-budget total per round (bytes): 141629 141629 141629 141629
+errors inside the mod: 0
