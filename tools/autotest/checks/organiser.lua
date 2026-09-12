@@ -149,3 +149,23 @@ function CFOrg.showHitBoxes(on)
     end
     return true
 end
+
+-- Open a program by NAME. Its position moves whenever a program is added, and
+-- a check that taps position 3 starts testing whatever landed there (PLACES
+-- displaced DATES on 2026-09-12).
+function CFOrg.openProgram(title)
+    local w = ConspiracyFiles.OrganiserScreen.window
+    if not w then return false, "no screen" end
+    for i, program in ipairs(w:programs()) do
+        if program.title == title then
+            for _, h in ipairs(w.context and w.context.hits or {}) do
+                if h.id == "APP" and h.payload == i then
+                    w:onMouseDown(h.x + 2, h.y + 2); w:onMouseUp(h.x + 2, h.y + 2)
+                    return true, title
+                end
+            end
+            return false, "no icon for " .. title
+        end
+    end
+    return false, "no program called " .. tostring(title)
+end

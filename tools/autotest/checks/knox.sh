@@ -85,7 +85,7 @@ ev 'return CFOrg.tapWidget("SELECT")' >/dev/null; sleep 1
 shot launcher
 say "programs: $(ev 'return CFOrg.programs()' | cut -f2)"
 
-ev 'return CFOrg.tapWidget("APP",2)' >/dev/null; sleep 1
+ev 'return CFOrg.openProgram("NAMES")' >/dev/null; sleep 1
 names="$(ev 'return CFOrg.knox()')"
 [ "$(cut -f2 <<<"$names")" = NAMES ] || fail "a tap on the NAMES icon did not open it: $names"
 # Only a promise we actually set up: if no corpse carried a wallet, the address
@@ -100,7 +100,7 @@ fi
 shot names
 
 ev 'return CFOrg.tapWidget("SELECT")' >/dev/null; sleep 1
-ev 'return CFOrg.tapWidget("APP",3)' >/dev/null; sleep 1
+ev 'return CFOrg.openProgram("DATES")' >/dev/null; sleep 1
 dates="$(ev 'return CFOrg.knox()')"
 [ "$(cut -f2 <<<"$dates")" = DATES ] || fail "a tap on the DATES icon did not open it: $dates"
 [ "$(cut -f3 <<<"$dates")" -gt 0 ] 2>/dev/null || fail "the date book has no days in it"

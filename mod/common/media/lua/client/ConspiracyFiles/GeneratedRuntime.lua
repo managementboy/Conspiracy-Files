@@ -47,6 +47,30 @@ local function allowed()
         and not ConspiracyFiles.T11Mode and not ConspiracyFiles.T12Mode
 end
 local function checked(ok,why) if not ok then error(why or "generated session write rejected") end end
+
+-- When the save itself refuses a write, STOP writing for a while.
+--
+-- Placement commits after every document, and each commit checks the save
+-- budget. With that check failing, the mod kept trying: the scheduler gives up
+-- after three failures, but the scheduler is rebuilt whenever the case store is
+-- reopened, which resets the count - about ten attempts a second, for as long
+-- as the fault lasted (traced in game, 2026-09-12). A refusal is a state of the
+-- save, not of one task, so it is remembered here, above all of them.
+local saveRefusedUntil=nil
+local SAVE_BACKOFF_MS=60000
+local function noteSaveRefused(why)
+    local now=getTimeInMillis and getTimeInMillis() or 0
+    if not saveRefusedUntil or now>saveRefusedUntil then
+        log("The save refused a write ("..tostring(why).."); pausing placement for a minute.")
+    end
+    saveRefusedUntil=now+SAVE_BACKOFF_MS
+end
+local function saveRefused()
+    if not saveRefusedUntil then return false end
+    local now=getTimeInMillis and getTimeInMillis() or 0
+    if now>=saveRefusedUntil then saveRefusedUntil=nil; return false end
+    return true
+end
 local function worldHours()
     local n=getGameTime():getWorldAgeHours()
     assert(type(n)=="number" and n==n and n>=0 and n<math.huge,"invalid world clock")
@@ -195,7 +219,9 @@ end
 local function enqueue()
     if not sessions then return end
     for index,api in ipairs(sessions) do for _,d in ipairs(api.snapshot().case.documents) do
-        scheduler.enqueue("place:"..d.id,"placement",placement(api,d.id))
+        -- Nothing is placed while the save is refusing writes; the documents
+        -- are enqueued again when the case store is next opened.
+        if not saveRefused() then scheduler.enqueue("place:"..d.id,"placement",placement(api,d.id)) end
     end
     end
 end
@@ -206,7 +232,9 @@ end
 local function swap(next)
     -- Keep fallback and active payload independent; validator forbids shared aliases.
     next=copyValue(next)
-    checked(Cases.validate(next)); checked(Budget.check("generatedCampaign",next))
+    checked(Cases.validate(next))
+    local within,why=Budget.check("generatedCampaign",next)
+    if not within then noteSaveRefused(why); checked(false,why) end
     local store=ModData.getOrCreate(TAG); store.campaign=next; wrapper=next
     -- Validated just above: the cached readers need not validate it again.
     pcall(Cases.remember,store,getTimeInMillis and getTimeInMillis())
