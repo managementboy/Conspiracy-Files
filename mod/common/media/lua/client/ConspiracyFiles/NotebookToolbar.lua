@@ -36,7 +36,7 @@ function Toolbar.open()
         return
     end
     if UI.reader then UI.reader:close() end
-    UI.open("evidence")
+    UI.openSurface("evidence")
 end
 
 function Toolbar.refresh()

@@ -40,12 +40,22 @@ ev 'return CFLoop.take()' >/dev/null
 wait_true 20 'CFLoop.carried()' || say "the document never reached the inventory"
 ev 'return CFLoop.inspect()' >/dev/null; sleep 2
 
-# A body with an ID in its wallet, so NAMES has a real person in it.
-ev 'return CFWallet.spawnBodies(4)' >/dev/null; sleep 3
-ev 'return CFWallet.openBodies()' >/dev/null; sleep 6
-ev 'return CFWallet.takeWallet()' >/dev/null; sleep 3
-ev 'return CFWallet.holdWallet()' >/dev/null; sleep 2
-ev 'return CFWallet.openWallet()' >/dev/null; sleep 4
+# A body with an ID in its wallet, so NAMES has a real person in it. The game
+# decides what a corpse carries, so keep rolling bodies until one has a wallet
+# rather than assuming the first four do.
+wallet=no
+for _ in 1 2 3; do
+    ev 'return CFWallet.spawnBodies(4)' >/dev/null; sleep 3
+    ev 'return CFWallet.openBodies()' >/dev/null; sleep 5
+    ev 'return CFWallet.takeWallet()' >/dev/null; sleep 3
+    if wait_true 10 'CFWallet.walletCarried()'; then wallet=yes; break; fi
+done
+if [ "$wallet" = yes ]; then
+    ev 'return CFWallet.holdWallet()' >/dev/null; sleep 2
+    ev 'return CFWallet.openWallet()' >/dev/null; sleep 4
+else
+    say "no corpse carried a wallet; NAMES is checked against whatever else was seen"
+fi
 
 ev 'return CFOrg.openScreen()' >/dev/null
 wait_true 30 'ConspiracyFiles.OrganiserScreen.window~=nil' || abort "the device never opened"

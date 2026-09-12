@@ -6,7 +6,7 @@ local M=ConspiracyFiles.GeneratedMenu or {}
 ConspiracyFiles.GeneratedMenu=M
 function M.open(id)
     if UI.reader then UI.reader:close() end
-    UI.open("evidence",type(id)=="string" and id or nil)
+    UI.openSurface("evidence",type(id)=="string" and id or nil)
 end
 function M.fill(playerNum,context,items)
     if not getDebug or not getDebug() or not context or playerNum~=0 then return end

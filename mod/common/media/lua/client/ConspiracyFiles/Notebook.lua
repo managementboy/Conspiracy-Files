@@ -667,6 +667,30 @@ function Window:new(section)
     o:setTitle(owner..((isDebugEnabled and isDebugEnabled()) and " ["..UI.VERSION.."]" or "")); o:setWantKeyEvents(true)
     o.section=section or "journal"; o.focusKey="list"; o.minimumWidth=500; o.minimumHeight=420; return o
 end
+-- ONE READING SURFACE (P4-R79). Everything that used to open this window now
+-- opens Knox.OS on the organiser the survivor is carrying: the toolbar button,
+-- the right-click Inspect, the session guide. The window itself stays, and
+-- opens only when there is no device to read on - a player who lost theirs, or
+-- burned it, still gets their case back (P4-R80). That is the whole of the
+-- "remove the old notebook" change: the window stopped being the first answer,
+-- and became the last one.
+--
+-- The row projection (UI.generatedRows) is untouched and is what Knox.OS reads,
+-- so both surfaces say the same words about the same records.
+function UI.openSurface(section,preferred)
+    local organiser=ConspiracyFiles.Organiser
+    local screen=ConspiracyFiles.OrganiserScreen
+    if organiser and screen and organiser.held and screen.open then
+        local ok,item=pcall(organiser.held)
+        if ok and item then
+            local read=pcall(organiser.read)
+            if read then return true end
+        end
+    end
+    UI.open(section,preferred)
+    return false
+end
+
 function UI.open(section,preferred)
     safe(function()
         if not state() then return end
