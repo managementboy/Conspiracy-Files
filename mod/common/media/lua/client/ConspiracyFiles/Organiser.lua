@@ -216,7 +216,35 @@ function O.fill(playerNum,context,items)
     end
 end
 
+-- The radio panel is refused at the door, not just left off the menu.
+--
+-- The game offers "Device Options" for any radio held in a hand - and this one
+-- is always in a hand, because reading it equips it - so removing the menu
+-- entry was never enough: anything else that opens the panel would still get
+-- there (owner, 2026-09-12: "the radio menu is still open"). So the opener
+-- itself is wrapped: asked to show a frequency dial for a Lectromax Dataline,
+-- it opens Knox.OS instead, which is what the player wanted anyway.
+function O.blockRadioPanel()
+    if O.panelBlocked then return true end
+    local ok=pcall(require,"ISUI/ISRadioAndTvMenu")
+    if not ok or not ISRadioAndTvMenu or type(ISRadioAndTvMenu.openRadioPanel)~="function" then return false end
+    O.panelBlocked=true
+    local original=ISRadioAndTvMenu.openRadioPanel
+    ISRadioAndTvMenu.openRadioPanel=function(player,item,...)
+        local md=item and item.getModData and safe(function() return item:getModData() end)
+        local full=item and safe(function() return item:getFullType() end)
+        if full==O.TYPE or (type(md)=="table" and md[MARK]) then
+            log("radio panel refused; opening Knox.OS")
+            O.read(player)
+            return
+        end
+        return original(player,item,...)
+    end
+    return true
+end
+
 function O.install()
+    O.blockRadioPanel()
     if Events and Events.OnFillInventoryObjectContextMenu and not O.menuHooked then
         O.menuHooked=true
         Events.OnFillInventoryObjectContextMenu.Add(function(...) safe(O.fill,...) end)
