@@ -56,10 +56,23 @@ link() { # link <target> <name>: create or confirm, never overwrite a real folde
     else ln -s "$1" "$2"; fi
 }
 
+# A mod folder is COPIED, not linked. Lua loads happily through a symlink, but
+# item scripts do not: the game rebuilt the path of every file under a linked
+# mod as mods/<absolute path again> and gave up with FileNotFoundException, so
+# media/scripts/*.txt silently never loaded and the organiser did not exist
+# (organiser check, 2026-09-12). Copying costs a second per run and removes the
+# whole class. --delete so a file removed in the repo disappears from the game.
+sync_mod() { # sync_mod <source> <name>
+    local dest="$ZOMBOID/mods/$2"
+    if [ -L "$dest" ]; then rm -f "$dest"; fi
+    mkdir -p "$dest"
+    rsync -a --delete "$1/" "$dest/"
+}
+
 setup() {
     mkdir -p "$LOCAL/inbox" "$LOCAL/log" "$ZOMBOID/Lua" "$ZOMBOID/mods"
-    link "$REPO/mod" "$ZOMBOID/mods/ConspiracyFiles"
-    link "$REPO/tools/autotest/CFAutoTest" "$ZOMBOID/mods/CFAutoTest"
+    sync_mod "$REPO/mod" ConspiracyFiles
+    sync_mod "$REPO/tools/autotest/CFAutoTest" CFAutoTest
     link "$LOCAL/inbox/cf_inbox.lua" "$ZOMBOID/Lua/cf_inbox.lua"
     link "$CONSOLE" "$LOCAL/log/live-local.txt"
     # New worlds take their mod list from default.txt.
