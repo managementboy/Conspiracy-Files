@@ -107,3 +107,29 @@ observations the player has already earned.
 - **The old window.** Once Knox.OS has the programs, the desk window is a
   second reading surface with different words, and P4-R79 says there is one.
   It should become a developer tool or go.
+
+## The machine is the reader; the world keeps the record
+
+Owner, 2026-09-12, and this is the decision that makes death bearable:
+
+> our survivor can keep saving his evidence into the evidence photobook we have
+> on us and can be reread into the PDA when we find it again (or another one?)
+> ... it makes continuity after death and new character very easy: we find the
+> pda and we know about all misteries.
+
+Three things follow, and all three are now built:
+
+1. **Any organiser reads the case.** Not just the one issued at spawn. The
+   marked one is preferred when both are carried, but a machine out of a desk
+   drawer is as good a reader as your own.
+2. **Organisers exist in the world.** Rare, in office desks, electronics shops,
+   police and medical offices, so finding one is a real event
+   (`media/lua/server/ConspiracyFiles_Organisers.lua`).
+3. **The record was never in the character.** It lives in the save's world
+   data, which is why a new survivor who picks up a machine knows every case
+   the last one worked. Your own is usually on your own corpse, exactly where
+   you left it.
+
+The papers keep the physical documents and the organiser reads them; losing
+either costs convenience, never the case. The organiser is marked favourite so
+a new player does not throw it away in their first panic.

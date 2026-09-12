@@ -33,10 +33,33 @@ local function safe(fn,...)
     return nil
 end
 
--- The organiser this player is carrying, found by our mark rather than by
--- type: an organiser looted off a body is somebody else's and is not silently
--- adopted as the survivor's own.
+-- ANY organiser the player is carrying reads the case. Owner, 2026-09-12: a
+-- survivor who dies and starts again finds a machine - their own, on their own
+-- corpse, or one from a desk - and knows the investigation again, because the
+-- record was never kept in the character. Ours is marked only so it is issued
+-- once and kept favourite; a found one is just as good a reader.
 function O.held(player)
+    player=player or (getPlayer and getPlayer())
+    local inventory=player and safe(function() return player:getInventory() end)
+    local items=inventory and inventory.getItems and inventory:getItems()
+    if not items then return nil end
+    local found
+    for i=0,items:size()-1 do
+        local item=items:get(i)
+        local ok,full=pcall(function() return item:getFullType() end)
+        if ok and full==O.TYPE then
+            local md=item.getModData and item:getModData()
+            if md and md[MARK] then return item end   -- ours, if we have it
+            found=found or item                       -- otherwise whatever we found
+        end
+    end
+    return found
+end
+
+-- Ours specifically: the one that was issued, for deciding whether to issue
+-- another. A found machine must not stop a new survivor being given one, and
+-- must not be renamed or claimed either.
+function O.issued(player)
     player=player or (getPlayer and getPlayer())
     local inventory=player and safe(function() return player:getInventory() end)
     local items=inventory and inventory.getItems and inventory:getItems()
@@ -74,7 +97,7 @@ end
 function O.give(player)
     player=player or (getPlayer and getPlayer())
     if not player then return nil,"no player" end
-    local existing=O.held(player)
+    local existing=O.issued(player)
     if existing then return existing end
     local item=safe(function() return player:getInventory():AddItem(O.TYPE) end)
     if not item then return nil,"could not create "..O.TYPE end
