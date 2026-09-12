@@ -133,3 +133,25 @@ Three things follow, and all three are now built:
 The papers keep the physical documents and the organiser reads them; losing
 either costs convenience, never the case. The organiser is marked favourite so
 a new player does not throw it away in their first panic.
+
+## The radio bones stay, on purpose
+
+The organiser is declared as a radio so the game handles its battery, its
+on/off state and its saving. The vanilla radio panel is hidden for it, because
+a frequency dial on a pocket organiser is silly — but the item type stays.
+
+Owner, 2026-09-12: "it opens the door to having the pda sync with PCs or being
+connected to things making many options possible in later versions of our mod."
+
+So this is a standing instruction as much as a note: **do not change the item
+away from a radio to tidy it up.** Underneath that plain grey case there is a
+receiver, and it makes the following possible without re-founding anything:
+
+- A frequency that carries Dead Air itself, which is the mod's own name.
+- A machine that syncs with something else — a desktop in an office, another
+  organiser found on a body, a base station — because two radios can already
+  hear each other in this game.
+- Anything the broadcast system does later: a scheduled transmission, a
+  number station, a dead man's message repeating on a loop.
+
+Hiding a panel is reversible. Removing the radio is not.
