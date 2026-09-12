@@ -687,7 +687,17 @@ function UI.openSurface(section,preferred)
             if read then return true end
         end
     end
-    UI.open(section,preferred)
+    -- No machine, no reading. Owner, 2026-09-12: "Did we not decide to get rid
+    -- of the old notebook?" - we did. The window is not a fallback any more; a
+    -- survivor without an organiser has to find one, which is the whole point
+    -- of organisers existing in the world. The window stays in the code as a
+    -- developer tool (UI.open, debug only) until every one of its views has a
+    -- home in Knox.OS, and then it goes.
+    local voice=ConspiracyFiles.PlayerVoice
+    local player=getPlayer and getPlayer()
+    if voice and voice.speak and player then
+        pcall(voice.speak,player,"I need something to read this on.","No machine")
+    end
     return false
 end
 

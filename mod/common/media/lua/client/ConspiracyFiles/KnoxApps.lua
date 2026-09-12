@@ -279,6 +279,30 @@ A.help={
     end,
 }
 
+-- PLACES ----------------------------------------------------------------------
+-- The place index, which until now lived only in the old window: the same
+-- records, grouped under the places the survivor kept going back to. A heading
+-- is earned by a return, never printed for every address (P4-R81).
+A.places={
+    id="PLACES",title="PLACES",icon="dates",
+    list=function()
+        local ui=ConspiracyFiles.NotebookUI
+        local rows=(ui and ui.generatedRows and safe(ui.generatedRows,"places")) or {}
+        local out={}
+        for _,row in ipairs(rows) do
+            if row.cfHeading then
+                out[#out+1]={label="- "..tostring(row.title or ""),title=tostring(row.title or ""),
+                             detail=tostring(row.detailText or "A place you came back to."),
+                             id="place-"..#out,heading=true}
+            else
+                out[#out+1]={label="  "..(row.title or ""),title=row.title,
+                             detail=row.detailText,id=row.id}
+            end
+        end
+        return out
+    end,
+}
+
 -- BOOT ------------------------------------------------------------------------
 -- What the machine says while the mod is still waking up. Owner, 2026-09-12:
 -- "The PDA will show a boot screen telling the player to wait. for now we could
@@ -379,7 +403,7 @@ A.notes={
     end,
 }
 
-A.programs={A.files,A.names,A.dates,A.todo,A.notes,A.help,A.sites}
+A.programs={A.files,A.names,A.places,A.dates,A.todo,A.notes,A.help,A.sites}
 
 -- What a player may see. SITES hands out the answers, so it exists only while
 -- the game is in debug, and the question is asked EVERY time the launcher is
