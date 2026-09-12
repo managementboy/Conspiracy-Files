@@ -67,11 +67,17 @@ function W.findFixtures()
 end
 
 function W.showLooseBody()
+    if not (W.loose and W.loose.button) then return false, "no loose body found" end
     getPlayerLoot(0):selectContainer(W.loose.button)
     return W.loose.name
 end
 
+-- Every step below now REPORTS "no wallet" instead of throwing. The game
+-- decides what a corpse carries, so a run where nobody had one is a normal
+-- outcome, and a driver that errors on it fills the log with red that looks
+-- like a fault in the mod (knox check, 2026-09-12).
 function W.takeWallet()
+    if not (W.wallet and W.wallet.item and W.wallet.button) then return false, "no wallet found" end
     local p = getPlayer()
     getPlayerLoot(0):selectContainer(W.wallet.button)
     ISTimedActionQueue.add(ISInventoryTransferAction:new(p, W.wallet.item, W.wallet.button.inventory, p:getInventory()))
@@ -79,17 +85,20 @@ function W.takeWallet()
 end
 
 function W.walletCarried()
-    local w = W.wallet.item
+    local w = W.wallet and W.wallet.item
+    if not w then return false, "no wallet found" end
     return w:getContainer() == getPlayer():getInventory(), tostring(w:getModData().cfObservedSource)
 end
 
 -- A carried container only gets an icon while it is held.
 function W.holdWallet()
+    if not (W.wallet and W.wallet.item) then return false, "no wallet found" end
     ISTimedActionQueue.add(ISEquipWeaponAction:new(getPlayer(), W.wallet.item, 50, false))
     return true
 end
 
 function W.openWallet()
+    if not (W.wallet and W.wallet.item) then return false, "no wallet found" end
     local inv = getPlayerInventory(0)
     inv:refreshBackpacks()
     local target = W.wallet.item:getInventory()
