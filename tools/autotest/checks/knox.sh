@@ -35,7 +35,12 @@ done
 wait_true 90 'ConspiracyFiles.GeneratedRuntime.metrics()~=nil' || abort "no case started"
 
 # A case, found the way a player finds it: one document is enough for FILES.
-deadline=$(( $(date +%s) + 200 ))
+# How long to allow for the case to place its documents. A fresh world indexes
+# addresses first, and on a loaded machine that stretches: observed 43s to
+# reach a playable world when the box was idle and 150s+ with a game and a
+# desktop already on it, with placement stretching by the same factor. 200s
+# was tight enough to abort this check on nothing but load (2026-09-13).
+deadline=$(( $(date +%s) + ${CF_PLACE_TIMEOUT:-450} ))
 while :; do
     s="$(ev 'return CFLoop.summary()')"; n="$(cut -f1 <<<"$s")"
     [ "${n:-0}" -gt 0 ] && ! grep -qE ":(pending|placing)" <<<"$s" && break
@@ -71,6 +76,10 @@ ev 'return CFOrg.openScreen()' >/dev/null
 wait_true 30 'ConspiracyFiles.OrganiserScreen.window~=nil' || abort "the device never opened"
 sleep 1
 # The machine boots with the game; step past that before driving it.
+# Waking first, before every group below: the device switches itself off after
+# three idle minutes and this harness is far slower than a player, so a check
+# that did not wake would be testing auto-off by accident (2026-09-13).
+ev 'return CFOrg.wake()' >/dev/null
 ev 'return CFOrg.tapWidget("START")' >/dev/null; sleep 1
 state="$(ev 'return CFOrg.knox()')"
 say "opened: $state"
@@ -80,11 +89,13 @@ shot files
 
 # The launcher is a tap on the title bar now (Palm's Home), not a key: the four
 # keys go straight to their four programs.
+ev 'return CFOrg.wake()' >/dev/null
 ev 'return CFOrg.tapWidget("SELECT")' >/dev/null; sleep 1
 [ "$(ev 'return CFOrg.knox()' | cut -f4)" = true ] || fail "a tap on the title bar did not open the launcher"
 shot launcher
 say "programs: $(ev 'return CFOrg.programs()' | cut -f2)"
 
+ev 'return CFOrg.wake()' >/dev/null
 ev 'return CFOrg.openProgram("NAMES")' >/dev/null; sleep 1
 names="$(ev 'return CFOrg.knox()')"
 [ "$(cut -f2 <<<"$names")" = NAMES ] || fail "a tap on the NAMES icon did not open it: $names"
@@ -99,6 +110,7 @@ else
 fi
 shot names
 
+ev 'return CFOrg.wake()' >/dev/null
 ev 'return CFOrg.tapWidget("SELECT")' >/dev/null; sleep 1
 ev 'return CFOrg.openProgram("DATES")' >/dev/null; sleep 1
 dates="$(ev 'return CFOrg.knox()')"
@@ -107,9 +119,11 @@ dates="$(ev 'return CFOrg.knox()')"
 shot dates
 
 # The keys go straight to a program: FILES is the first key.
+ev 'return CFOrg.wake()' >/dev/null
 ev 'return CFOrg.pressButton("MODE")' >/dev/null; sleep 1
 files_key="$(ev 'return CFOrg.knox()')"
 [ "$(cut -f2 <<<"$files_key")" = FILES ] || fail "the FILES key did not open FILES: $files_key"
+ev 'return CFOrg.wake()' >/dev/null
 ev 'return CFOrg.tapWidget("ROW",1)' >/dev/null; sleep 1
 [ "$(ev 'return CFOrg.knox()' | cut -f5)" = true ] || fail "a tap on a record did not open it"
 shot record
@@ -121,6 +135,7 @@ after_key="$(ev 'return CFOrg.card and CFOrg.card() or "?"')"
 ev 'return CFOrg.tapWidget("DOWN")' >/dev/null; sleep 1
 after_tap="$(ev 'return CFOrg.card and CFOrg.card() or "?"')"
 say "cards: $before_card -> $after_key (rocker) -> $after_tap (arrow)"
+ev 'return CFOrg.wake()' >/dev/null
 ev 'return CFOrg.tapWidget("REMIND")' >/dev/null; sleep 1
 ev 'return CFOrg.pressButton("INDEX")' >/dev/null; sleep 1
 todo="$(ev 'return CFOrg.knox()')"

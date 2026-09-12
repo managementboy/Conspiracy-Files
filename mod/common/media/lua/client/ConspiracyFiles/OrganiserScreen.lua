@@ -50,7 +50,11 @@ S.PRESS_MS=110                    -- how long a button shows as pressed
 -- Auto-off. Every Palm did this, and for the reason this machine needs it:
 -- the cells are the scarce thing. Real seconds, not game hours, because it is
 -- the player who has stopped touching it. POWER wakes it again.
-S.AUTO_OFF_MS=120000
+-- Three minutes: the longest a Palm would let you set, chosen because reading
+-- one long record is a perfectly normal thing to spend two minutes doing and
+-- having the machine die in your hand for it is not realism, it is a bug with
+-- an excuse.
+S.AUTO_OFF_MS=180000
 
 -- Palm III colours: a graphite case, a near-black surround, and the grey-green
 -- LCD. Only the glass is green.
@@ -386,7 +390,16 @@ function Screen:press(id)
         if not self.on then self.lamp=false end
         return
     end
-    if not self.on then return end
+    -- Asleep: any hardware key wakes it, exactly as the four application keys
+    -- woke a Palm, and the press is spent on waking. Before this, a machine
+    -- that had switched itself off ate every key and every tap in silence,
+    -- which is the worst thing an input can do (knox check, 2026-09-13: the
+    -- whole device went unresponsive mid-run and nothing said why).
+    if not self.on then
+        self.on=true
+        log("organiser wake: "..id)
+        return
+    end
     -- Any key leaves the boot screen. A machine that has finished booting and
     -- still insists you press the one button it is showing is a machine that
     -- annoys people (knox check, 2026-09-12: every tap landed on nothing

@@ -169,3 +169,17 @@ function CFOrg.openProgram(title)
     end
     return false, "no program called " .. tostring(title)
 end
+
+-- The machine may have switched itself off between two steps of a check: the
+-- harness takes minutes over what a player does in seconds, and auto-off is
+-- real (S.AUTO_OFF_MS). A player presses a key and carries on, so the driver
+-- does the same rather than pretending the feature is not there.
+function CFOrg.wake()
+    local S = ConspiracyFiles.OrganiserScreen
+    local w = S and S.window
+    if not w then return false, "no screen" end
+    local was = w.on
+    w.on = true
+    w:touch()
+    return true, tostring(was)
+end

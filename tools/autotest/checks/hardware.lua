@@ -109,3 +109,27 @@ function CFHW.lampFor(hours)
     O.lampTick()
     return true, tostring(d:getPower()), tostring(w.lamp)
 end
+
+-- Waking. A machine that has switched itself off must come back on the first
+-- hardware key, and that press must be spent on waking rather than also
+-- navigating - which is what a Palm did, and what stops a blind key press
+-- landing somewhere the player cannot see.
+function CFHW.sleep()
+    local w = S.window; if not w then return false, "no screen" end
+    w.on = true
+    w.touched = getTimeInMillis() - (S.AUTO_OFF_MS + 1000)
+    w:idleCheck()
+    return true, tostring(w.on)
+end
+
+function CFHW.pressKey(id)
+    local w = S.window; if not w then return false, "no screen" end
+    local before = tostring(w.app or 1)
+    w:press(id)
+    return true, tostring(w.on), before, tostring(w.app or 1)
+end
+
+function CFHW.app()
+    local w = S.window; if not w then return false end
+    return true, tostring(w.app or 1), tostring(w.on)
+end

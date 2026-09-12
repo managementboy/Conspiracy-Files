@@ -36,6 +36,23 @@ gone="$(ev 'return CFHW.idle(180000)')"
 say "auto-off: 60s idle on=$(f 2 <<<"$near"), 180s idle on=$(f 2 <<<"$gone")"
 ev 'return CFHW.touch()' >/dev/null
 
+# --- waking -----------------------------------------------------------------
+# A machine that switched itself off must come back on the first hardware key.
+# Before this it ate every key and every tap in silence, which is how the knox
+# check found the whole device unresponsive mid-run (2026-09-13).
+ev 'return CFHW.setPower(1)' >/dev/null
+[ "$(ev 'return CFHW.sleep()' | f 2)" = false ] || fail "could not put the machine to sleep for the wake test"
+woke="$(ev 'return CFHW.pressKey("NEXT")')"
+[ "$(f 2 <<<"$woke")" = true ] || fail "a hardware key did not wake a sleeping machine: $woke"
+# The waking press must not also navigate: it woke the screen, nothing more.
+[ "$(f 3 <<<"$woke")" = "$(f 4 <<<"$woke")" ] || \
+    fail "the waking press also changed program ($(f 3 <<<"$woke") -> $(f 4 <<<"$woke"))"
+# Awake, the same key does navigate.
+moved="$(ev 'return CFHW.pressKey("NEXT")')"
+[ "$(f 3 <<<"$moved")" != "$(f 4 <<<"$moved")" ] || \
+    say "the second press did not change program (it may already have been there)"
+say "wake: asleep -> key -> on=$(f 2 <<<"$woke"), press consumed"
+
 # --- the lamp ---------------------------------------------------------------
 # A healthy cell runs it; a dying one refuses and says so.
 ev 'return CFHW.setPower(1)' >/dev/null
