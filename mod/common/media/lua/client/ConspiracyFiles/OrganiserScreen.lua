@@ -84,11 +84,14 @@ function S.metrics(scale)
 end
 
 local art={}
+-- With a scale, a piece of case art (case_3x.png); without one, a path that
+-- already carries its own scale (icons/3x/files.png).
 local function texture(name,scale)
-    local key=name..scale
+    local key=name..tostring(scale)
     local hit=art[key]
     if hit~=nil then return hit or nil end
-    local t=getTexture and safe(getTexture,"media/ui/CFOrg/"..name.."_"..scale.."x.png")
+    local path=scale and ("media/ui/CFOrg/"..name.."_"..scale.."x.png") or ("media/ui/CFOrg/"..name..".png")
+    local t=getTexture and safe(getTexture,path)
     art[key]=t or false
     return t
 end
@@ -199,11 +202,18 @@ function Screen:draw(gx,gy)
     local line=Font.line
     local room=K.rows(c)
     if self.launcher then
-        K.titleBar(c,"KNOX.OS",#Apps.programs.." programs")
-        for i,app in ipairs(Apps.programs) do
-            local count=#((app.list and safe(app.list)) or {})
-            K.row(c,app.title.."   "..count,line+2+(i-1)*line,i==(self.app or 1),"APP",i)
+        -- The Applications launcher: clock, battery, category, icon grid.
+        local clock=getGameTime and getGameTime()
+        local hour=clock and safe(function() return clock:getHour() end) or 0
+        local minute=clock and safe(function() return clock:getMinutes() end) or 0
+        local charge
+        local organiser=ConspiracyFiles.Organiser
+        if organiser and organiser.held then
+            local item=safe(organiser.held)
+            charge=item and organiser.power and safe(organiser.power,item)
         end
+        local y=K.status(c,string.format("%d:%02d",hour,minute),"All",charge)
+        K.grid(c,Apps.programs,y+2,self.app or 1,function(name) return texture("icons/"..self.scale.."x/"..name,nil) end)
         K.foot(c,"tap a program")
         return
     end

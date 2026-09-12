@@ -154,4 +154,63 @@ end
 
 function K.rows(c) return math.floor((c.h-2)/Font.line)-3 end
 
+-- The launcher's own header: the time at the left, the battery at the right,
+-- and the category between them - the anatomy of the classic Applications
+-- screen (Palm OS UI Guidelines; the launcher put the clock top-left and the
+-- category picker top-right).
+function K.status(c,time,category,charge)
+    local line=Font.line
+    K.text(c,time,2,0,K.INK)
+    -- Battery: a little cell, filled to its charge.
+    local bw,bh=14,6
+    local bx=c.w-bw-4
+    K.frame(c,bx,2,bw,bh,K.INK)
+    K.fill(c,c.w-3,4,2,2,K.INK)
+    if type(charge)=="number" and charge>0 then
+        local fill=math.max(1,math.floor((bw-2)*math.min(charge,1)))
+        K.fill(c,bx+1,3,fill,bh-2,K.INK)
+    end
+    if category then
+        local w=K.width(category)+6
+        local x=bx-w-6
+        K.text(c,category,x,0,K.INK)
+        K.text(c," v",x+K.width(category),0,K.INK)
+        hit(c,"CATEGORY",x-2,0,w+6,line)
+    end
+    K.fill(c,0,line,c.w,1,K.INK)
+    return line+2
+end
+
+-- The grid of applications: three columns, icon over name, as the classic
+-- launcher drew them. `icons` is a name -> texture lookup owned by the caller.
+K.ICON=22
+function K.grid(c,programs,ny,selected,icon)
+    local cols=3
+    local cell=math.floor(c.w/cols)
+    local rowHeight=K.ICON+Font.line+3
+    for i,program in ipairs(programs) do
+        local col=(i-1)%cols
+        local row=math.floor((i-1)/cols)
+        local x=col*cell+math.floor((cell-K.ICON)/2)
+        local y=ny+row*rowHeight
+        local texture=icon and icon(program.icon or string.lower(program.id or ""))
+        if texture then
+            c.panel:drawTextureScaled(texture,c.x+x*c.scale,c.y+y*c.scale,
+                K.ICON*c.scale,K.ICON*c.scale,1,1,1,1)
+        else
+            K.frame(c,x,y,K.ICON,K.ICON,K.INK)
+        end
+        local label=program.title
+        local lw=K.width(label)
+        local lx=col*cell+math.floor((cell-lw)/2)
+        if i==selected then
+            K.fill(c,lx-2,y+K.ICON+1,lw+4,Font.line,K.INK)
+            K.text(c,label,lx,y+K.ICON+1,K.GLASS)
+        else
+            K.text(c,label,lx,y+K.ICON+1,K.INK)
+        end
+        hit(c,"APP",col*cell,y,cell,rowHeight,i)
+    end
+end
+
 return K

@@ -52,7 +52,7 @@ end
 
 -- FILES ----------------------------------------------------------------------
 A.files={
-    id="FILES",title="FILES",
+    id="FILES",title="FILES",icon="files",
     list=function()
         local ui=ConspiracyFiles.NotebookUI
         local rows=(ui and ui.generatedRows and safe(ui.generatedRows,"evidence")) or {}
@@ -72,23 +72,24 @@ A.files={
 -- the order they were seen, with where it was found underneath. A name is a
 -- lead: the book says where a name was written, never who anybody is.
 A.names={
-    id="NAMES",title="NAMES",
+    id="NAMES",title="NAMES",icon="names",
     list=function()
-        local log=ConspiracyFiles.IdentityObserver or ConspiracyFiles.LocalPersonRuntime
         local rows=safe(function()
             local Identity=require("ConspiracyFiles/IdentityObservations")
             local store=ModData and ModData.get("ConspiracyFiles.IdentityObservations")
             local root=store and store.canonical
             if not root then return nil end
-            return Identity.rows(root)
+            local outfits=ConspiracyFiles.BodyOutfitLog
+            return Identity.rows(root,outfits and outfits.outfitFor or nil,
+                ConspiracyFiles.AddressMap and ConspiracyFiles.AddressMap.nearest or nil)
         end) or {}
         local out={}
         for _,row in ipairs(rows) do
-            local name=row.name or row.title
-            if name then
-                out[#out+1]={label=tostring(name),title=tostring(name),
-                             detail=tostring(row.detail or row.summary or ""),id=row.id}
-            end
+            -- The notebook says "Found Ines Kubiak's ID card" because it is a
+            -- list of findings. An address book is a list of PEOPLE, so the
+            -- name leads and the document is the detail.
+            local label=tostring(row.title or ""):gsub("^Found ","")
+            out[#out+1]={label=label,title=label,detail=tostring(row.detailText or ""),id=row.id}
         end
         return out
     end,
@@ -98,7 +99,7 @@ A.names={
 -- The date book. Every discovery carries the world hour it was made at, so
 -- this is a timeline the player wrote with their own feet.
 A.dates={
-    id="DATES",title="DATES",
+    id="DATES",title="DATES",icon="dates",
     list=function()
         local log=ConspiracyFiles.DiscoveryLog
         local events=(log and log.events and safe(log.events)) or {}
@@ -155,7 +156,7 @@ function A.tickToDo(index)
 end
 
 A.todo={
-    id="TODO",title="TO DO",
+    id="TODO",title="TO DO",icon="todo",
     list=function()
         local root=store()
         local out={}

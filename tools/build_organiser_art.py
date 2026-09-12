@@ -142,3 +142,60 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+# --- Application icons -------------------------------------------------------
+# The Palm launcher is a grid of small monochrome icons with the name beneath
+# (Palm OS UI Guidelines; the classic 160x160 launcher used three columns).
+# These are drawn on a 22 x 22 native grid, 1-bit, scaled by whole numbers.
+ICON = 22
+ICONS = ("files", "names", "dates", "todo")
+
+def draw_icon(name, scale):
+    s = scale * SS
+    img = Image.new("RGBA", (ICON * s, ICON * s), (0, 0, 0, 0))
+    d = ImageDraw.Draw(img)
+    ink = (26, 26, 28, 255)
+    w = max(1, s)
+    if name == "files":
+        # A sheet with a folded corner and ruled lines.
+        d.polygon([(3*s,1*s),(14*s,1*s),(19*s,6*s),(19*s,21*s),(3*s,21*s)], outline=ink, width=w)
+        d.line([(14*s,1*s),(14*s,6*s),(19*s,6*s)], fill=ink, width=w)
+        for i in range(4):
+            d.line([(6*s,(9+3*i)*s),(16*s,(9+3*i)*s)], fill=ink, width=w)
+    elif name == "names":
+        # A card with a head and shoulders, and two ruled lines beside it.
+        d.rectangle([2*s,3*s,20*s,19*s], outline=ink, width=w)
+        d.ellipse([5*s,6*s,10*s,11*s], outline=ink, width=w)
+        d.arc([4*s,11*s,11*s,18*s], 200, 340, fill=ink, width=w)
+        d.line([(13*s,8*s),(18*s,8*s)], fill=ink, width=w)
+        d.line([(13*s,12*s),(18*s,12*s)], fill=ink, width=w)
+    elif name == "dates":
+        # A month block with its two binder rings.
+        d.rectangle([2*s,4*s,20*s,20*s], outline=ink, width=w)
+        d.line([(2*s,9*s),(20*s,9*s)], fill=ink, width=w)
+        d.line([(7*s,1*s),(7*s,5*s)], fill=ink, width=w)
+        d.line([(15*s,1*s),(15*s,5*s)], fill=ink, width=w)
+        for row in range(2):
+            for col in range(3):
+                x, y = (5 + col*5)*s, (12 + row*4)*s
+                d.rectangle([x, y, x+2*s, y+2*s], fill=ink)
+    elif name == "todo":
+        # A list with two ticks.
+        d.rectangle([3*s,2*s,19*s,20*s], outline=ink, width=w)
+        for i in range(3):
+            y = (6 + 5*i)*s
+            d.rectangle([6*s,y,9*s,y+3*s], outline=ink, width=w)
+            d.line([(11*s,y+1*s),(16*s,y+1*s)], fill=ink, width=w)
+            if i < 2:
+                d.line([(6*s,y+1*s),(7*s,y+3*s),(9*s,y)], fill=ink, width=w)
+    return img.resize((ICON * scale, ICON * scale), Image.LANCZOS)
+
+def build_icons():
+    for scale in SCALES:
+        folder = os.path.join(OUT, "icons", "%dx" % scale)
+        os.makedirs(folder, exist_ok=True)
+        for name in ICONS:
+            draw_icon(name, scale).save(os.path.join(folder, "%s.png" % name))
+    print("icons: %d at %s, %d px native" % (len(ICONS), SCALES, ICON))
+
+build_icons()
