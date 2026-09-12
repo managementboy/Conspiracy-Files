@@ -1,6 +1,6 @@
 local V=require("ConspiracyFiles/Validator")
 local B={}
-local tags={generated="ConspiracyFiles.Generated.G2",addresses="ConspiracyFiles.AddressBook.Muldraugh",legacy="ConspiracyFiles.DeadAir",identities="ConspiracyFiles.IdentityObservations",keyConnections="ConspiracyFiles.KeyConnections",localPeople="ConspiracyFiles.LocalPeople",discoveries="ConspiracyFiles.DiscoveryLedger",visitedBuildings="ConspiracyFiles.VisitedBuildings",observedKeyLeads="ConspiracyFiles.ObservedKeyLeads",personNames="ConspiracyFiles.PersonNameObservations",bodyOutfits="ConspiracyFiles.BodyOutfitObservations"}
+local tags={generated="ConspiracyFiles.Generated.G2",addresses="ConspiracyFiles.AddressBook.Muldraugh",legacy="ConspiracyFiles.DeadAir",identities="ConspiracyFiles.IdentityObservations",keyConnections="ConspiracyFiles.KeyConnections",localPeople="ConspiracyFiles.LocalPeople",discoveries="ConspiracyFiles.DiscoveryLedger",visitedBuildings="ConspiracyFiles.VisitedBuildings",observedKeyLeads="ConspiracyFiles.ObservedKeyLeads",personNames="ConspiracyFiles.PersonNameObservations",bodyOutfits="ConspiracyFiles.BodyOutfitObservations",placeVisits="ConspiracyFiles.PlaceVisits"}
 -- Measuring every saved root on every write cost 20-50 ms on the Linux test
 -- laptop (perf check, 2026-09-11): the whole ~170 KB was walked to record one
 -- map mark or one ID. A store keeps its identity while each write replaces its

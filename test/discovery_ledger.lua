@@ -62,4 +62,49 @@ for i=1,L.MAX do full=assert(L.record(full,"evidence","doc-"..i,i)) end
 local capped,added,why=L.record(full,"evidence","doc-overflow",1)
 assert(not added and why=="ledger capacity exceeded" and #capped.events==L.MAX)
 
+-- Where a thing was found, stamped once at discovery (WP1).
+--
+-- The validator is closed-world, so the schema had to go to 2 in the same
+-- commit that added the field; a save written under schema 1 is refused
+-- outright rather than half-read (P4-R77 - a rules change means a fresh
+-- game, and there is no migration to build).
+assert(L.SCHEMA==2,"adding a field without bumping the schema breaks every save silently")
+local old=L.empty(); old.schema=1
+assert(not L.validate(old),"a schema-1 ledger must be refused, not quietly accepted")
+
+local placedLedger=L.empty()
+placedLedger=assert(L.record(placedLedger,"evidence","p-indoors",1,"109 Walker Road","building-7"))
+placedLedger=assert(L.record(placedLedger,"evidence","p-outdoors",2,"42 McCoy Lane"))
+placedLedger=assert(L.record(placedLedger,"evidence","p-nowhere",3))
+local places,ids=L.places(placedLedger),L.placeIds(placedLedger)
+assert(places["p-indoors"]=="109 Walker Road" and places["p-outdoors"]=="42 McCoy Lane")
+-- A missing place is nil and stays nil. Never "", never "Unknown": an empty
+-- string would herd every placeless entry under one fake heading.
+assert(places["p-nowhere"]==nil)
+-- The building id travels beside the label so the grain of "the same place"
+-- can change later without rewriting a stored event. It is absent whenever
+-- the label came from the nearest-building fallback, because then the player
+-- was not inside that building.
+assert(ids["p-indoors"]=="building-7" and ids["p-outdoors"]==nil and ids["p-nowhere"]==nil)
+
+-- A place we cannot use costs the discovery nothing: the entry is still
+-- recorded, placeless. Losing an entry over a bad label would be far worse
+-- than not knowing where it was found.
+for _,bad in ipairs({"","   ","\n",{},7,true}) do
+    local staged=assert(L.record(L.empty(),"evidence","ref",1,bad))
+    assert(#staged.events==1 and staged.events[1].place==nil,"a bad place must not cost the entry")
+end
+-- An id with no label names nothing a player could read.
+local orphan=assert(L.record(L.empty(),"evidence","ref",1,nil,"building-7"))
+assert(orphan.events[1].placeId==nil)
+local handMade=L.empty()
+handMade.events[1]={seq=1,at=1,kind="evidence",ref="ref",placeId="building-7"}
+handMade.nextSeq=2
+assert(not L.validate(handMade),"a stored id without a label must be refused")
+
+-- The place survives every later copy: a car driven across town must not
+-- rewrite where its contents were found.
+local later=assert(L.record(placedLedger,"evidence","p-latest",4,"Somewhere Else"))
+assert(L.places(later)["p-indoors"]=="109 Walker Road")
+
 print("discovery ledger: ok")
