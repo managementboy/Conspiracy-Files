@@ -136,9 +136,16 @@ function A.me()
     if name=="" then return nil end
     local root=A.rememberMe() or {}
     local lines={"This is me."}
-    local job=descriptor and safe(function() return descriptor:getProfession() end)
-    if type(job)=="string" and job~="" and job~="unemployed" then
-        lines[#lines+1]="Work: "..job:gsub("^%l",string.upper)
+    -- getProfession() does not exist on a survivor in B42; the trade comes from
+    -- getCharacterProfession():getName(). Verified
+    -- against the installed jar rather than guessed (the guess threw three
+    -- swallowed errors a run, 2026-09-12).
+    local job=descriptor and safe(function()
+        local profession=descriptor:getCharacterProfession()
+        return profession and profession:getName() or nil
+    end)
+    if type(job)=="string" and job~="" then
+        lines[#lines+1]="Work: "..(getText and getText("IGUI_Occupation_"..job) or job)
     end
     if root.woke then lines[#lines+1]="Woke up at "..root.woke.."." end
     if root.day then lines[#lines+1]="First day: "..root.day.."." end
