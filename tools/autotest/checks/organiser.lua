@@ -125,3 +125,29 @@ function CFOrg.card()
     if not w then return "no screen" end
     return tostring(w.card), tostring(w.record ~= nil)
 end
+
+-- Outline every hit box over the case, so the owner can see whether the taps
+-- land on the art. Debug aid only; nothing draws these in a real game.
+function CFOrg.showHitBoxes(on)
+    local S = ConspiracyFiles.OrganiserScreen
+    local w = S.window
+    if not w then return false, "no screen" end
+    w.showHits = on ~= false
+    if w.showHits and not w.hitPainter then
+        local Case = require("ConspiracyFiles/Generated/OrganiserCase")
+        local original = w.prerender
+        w.hitPainter = true
+        w.prerender = function(self)
+            original(self)
+            local s = self.scale
+            self:drawRectBorder(Case.glass.x * s, Case.glass.y * s,
+                Case.glass.w * s, Case.glass.h * s, 1, 1, 0.2, 0.8)
+            for _, b in ipairs(self:buttons()) do
+                self:drawRectBorder(b.x, b.y, b.w, b.h, 1, 0.2, 1, 0.4)
+            end
+            self:drawRectBorder(Case.led.x * s, Case.led.y * s,
+                Case.led.d * s, Case.led.d * s, 1, 1, 1, 0.2)
+        end
+    end
+    return true
+end

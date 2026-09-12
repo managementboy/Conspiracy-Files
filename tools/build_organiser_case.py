@@ -54,11 +54,33 @@ def screen_hole(img):
             nx, ny = x + dx, y + dy
             if 0 <= nx < w and 0 <= ny < h and clear(nx, ny) and not seen[ny][nx]:
                 seen[ny][nx] = True; q.append((nx, ny))
-    holes = [(x, y) for y in range(h) for x in range(w) if clear(x, y) and not seen[y][x]]
-    if not holes:
+    # Rows of the hole, then the longest run of FULL-WIDTH rows. A drawing has
+    # specks - a few stray transparent pixels near the keys - and taking the
+    # bounding box of everything stretched the glass down over the bezel
+    # (owner, 2026-09-12: "the glas goes to far down").
+    rows = {}
+    for y in range(h):
+        xs = [x for x in range(w) if clear(x, y) and not seen[y][x]]
+        if xs:
+            rows[y] = (min(xs), max(xs), len(xs))
+    if not rows:
         raise SystemExit("no screen opening found in the drawing")
-    xs = [p[0] for p in holes]; ys = [p[1] for p in holes]
-    return min(xs), min(ys), max(xs) - min(xs) + 1, max(ys) - min(ys) + 1
+    widest = max(r[2] for r in rows.values())
+    best = run = None
+    for y in sorted(rows):
+        if rows[y][2] >= widest * 0.98:
+            run = run or [y, y]
+            run[1] = y
+        elif run:
+            if not best or run[1] - run[0] > best[1] - best[0]:
+                best = run
+            run = None
+    if run and (not best or run[1] - run[0] > best[1] - best[0]):
+        best = run
+    top, bottom = best
+    x0 = min(rows[y][0] for y in range(top, bottom + 1))
+    x1 = max(rows[y][1] for y in range(top, bottom + 1))
+    return x0, top, x1 - x0 + 1, bottom - top + 1
 
 def main():
     art = Image.open(SRC).convert("RGBA")

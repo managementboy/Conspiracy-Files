@@ -4,7 +4,7 @@
 -- The owner's own drawing of the machine (2026-09-12). The screen opening
 -- is found in the picture; the keys are measured from it.
 local M={w=305,h=444,scales={1,2,3}}
-M.glass={x=40,y=41,w=225,h=333}
+M.glass={x=40,y=41,w=225,h=297}
 M.buttons={
  {id="MODE",x=38,y=372,w=52,h=32,round=true},
  {id="PREV",x=97,y=372,w=51,h=32,round=true},
