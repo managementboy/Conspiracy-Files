@@ -192,6 +192,15 @@ function O.fill(playerNum,context,items)
     if not subject then return end
     local player=getSpecificPlayer and getSpecificPlayer(playerNum)
     if not player or subject:getOutermostContainer()~=player:getInventory() then return end
+    -- The item is declared as a radio so the game handles its battery, which
+    -- also makes the game offer its radio panel - a frequency dial and a volume
+    -- slider on a pocket organiser (owner, 2026-09-12: "it is also showing the
+    -- interface to a radio when opening it... not pretty"). Take that option
+    -- away for this item, and leave the battery one, which is real.
+    safe(function()
+        local name=getText("IGUI_DeviceOptions")
+        if name and context.removeOptionByName then context:removeOptionByName(name) end
+    end)
     local option=context:addOption("Read the Investigation",nil,function() O.read(player) end)
     if option then
         local ok,readable=true,O.readable(subject)
