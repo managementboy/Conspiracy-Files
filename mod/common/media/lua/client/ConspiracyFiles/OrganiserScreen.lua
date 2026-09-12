@@ -334,6 +334,11 @@ function Screen:press(id)
         return
     end
     if not self.on then return end
+    -- Any key leaves the boot screen. A machine that has finished booting and
+    -- still insists you press the one button it is showing is a machine that
+    -- annoys people (knox check, 2026-09-12: every tap landed on nothing
+    -- because the boot screen was still up).
+    if self.booting then self.booting=false; return end
     local rows=self:list()
     -- The four keys open the four programs, the way a Palm's Date, Address,
     -- To Do and Memo keys did. The launcher is a tap on the title bar.
@@ -366,6 +371,11 @@ end
 
 -- The stylus: whatever widget is under the tap.
 function Screen:tap(x,y)
+    if self.booting then
+        self.booting=false
+        safe(function() getSoundManager():playUISound("UIActivateButton") end)
+        return
+    end
     local widget=self.context and K.at(self.context,x,y)
     if not widget then return end
     safe(function() getSoundManager():playUISound("UIActivateButton") end)

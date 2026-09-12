@@ -70,6 +70,8 @@ fi
 ev 'return CFOrg.openScreen()' >/dev/null
 wait_true 30 'ConspiracyFiles.OrganiserScreen.window~=nil' || abort "the device never opened"
 sleep 1
+# The machine boots with the game; step past that before driving it.
+ev 'return CFOrg.tapWidget("START")' >/dev/null; sleep 1
 state="$(ev 'return CFOrg.knox()')"
 say "opened: $state"
 [ "$(cut -f2 <<<"$state")" = FILES ] || fail "Knox.OS did not open into FILES: $state"
