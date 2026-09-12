@@ -76,8 +76,10 @@ say "opened: $state"
 [ "$(cut -f3 <<<"$state")" -gt 0 ] 2>/dev/null || fail "FILES is empty"
 shot files
 
-ev 'return CFOrg.pressButton("MODE")' >/dev/null; sleep 1
-[ "$(ev 'return CFOrg.knox()' | cut -f4)" = true ] || fail "VIEW did not open the launcher"
+# The launcher is a tap on the title bar now (Palm's Home), not a key: the four
+# keys go straight to their four programs.
+ev 'return CFOrg.tapWidget("SELECT")' >/dev/null; sleep 1
+[ "$(ev 'return CFOrg.knox()' | cut -f4)" = true ] || fail "a tap on the title bar did not open the launcher"
 shot launcher
 say "programs: $(ev 'return CFOrg.programs()' | cut -f2)"
 
@@ -93,16 +95,17 @@ else
 fi
 shot names
 
-ev 'return CFOrg.pressButton("MODE")' >/dev/null; sleep 1
+ev 'return CFOrg.tapWidget("SELECT")' >/dev/null; sleep 1
 ev 'return CFOrg.tapWidget("APP",3)' >/dev/null; sleep 1
 dates="$(ev 'return CFOrg.knox()')"
 [ "$(cut -f2 <<<"$dates")" = DATES ] || fail "a tap on the DATES icon did not open it: $dates"
 [ "$(cut -f3 <<<"$dates")" -gt 0 ] 2>/dev/null || fail "the date book has no days in it"
 shot dates
 
-# Back to FILES, open a record, set a reminder, and see it in TO DO.
+# The keys go straight to a program: FILES is the first key.
 ev 'return CFOrg.pressButton("MODE")' >/dev/null; sleep 1
-ev 'return CFOrg.tapWidget("APP",1)' >/dev/null; sleep 1
+files_key="$(ev 'return CFOrg.knox()')"
+[ "$(cut -f2 <<<"$files_key")" = FILES ] || fail "the FILES key did not open FILES: $files_key"
 ev 'return CFOrg.tapWidget("ROW",1)' >/dev/null; sleep 1
 [ "$(ev 'return CFOrg.knox()' | cut -f5)" = true ] || fail "a tap on a record did not open it"
 shot record
@@ -115,8 +118,7 @@ ev 'return CFOrg.tapWidget("DOWN")' >/dev/null; sleep 1
 after_tap="$(ev 'return CFOrg.card and CFOrg.card() or "?"')"
 say "cards: $before_card -> $after_key (rocker) -> $after_tap (arrow)"
 ev 'return CFOrg.tapWidget("REMIND")' >/dev/null; sleep 1
-ev 'return CFOrg.pressButton("MODE")' >/dev/null; sleep 1
-ev 'return CFOrg.tapWidget("APP",4)' >/dev/null; sleep 1
+ev 'return CFOrg.pressButton("INDEX")' >/dev/null; sleep 1
 todo="$(ev 'return CFOrg.knox()')"
 [ "$(cut -f2 <<<"$todo")" = "TO DO" ] || fail "TO DO did not open: $todo"
 shot todo
