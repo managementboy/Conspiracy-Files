@@ -136,6 +136,78 @@ raw save write, the map mark, the ledger index, the full-case re-validation.
 Done when: the split is measured and logged once per discovery, and the chosen
 fix is proven with the same measurement.
 
+### WP6 — A heading has to be walked into (the owner's provocation)
+
+Added 2026-09-12 after the owner asked how to develop it: *the player's own
+movement is the index; never print a heading the player did not create by
+going back.* This refines WP2 rather than replacing it — WP2 groups, WP6
+decides which groups deserve a name.
+
+**Three moves, all small.**
+
+1. **The stamp is intent, not position.** Record the place when the player
+   OPENS their notes there (`UI.open` in `Notebook.lua`), and when a discovery
+   is recorded there (`DiscoveryLog.record`, which WP1 already touches).
+   Opening your notes somewhere means you were thinking about that place. It
+   also sidesteps the debug teleport hole, which fires no movement event.
+2. **A return only counts if something changed.** Store, per place, the highest
+   discovery number at the time of the visit (`highestDiscoverySeq()` already
+   exists in `Notebook.lua`). Same number on the next visit means the player
+   learned nothing in between: the visit is swallowed, silently. A higher
+   number means a real return, and the count goes to 2, 3, 4. Pacing a doorway
+   earns nothing; coming back after you learned something earns everything.
+3. **The count writes the heading.** "again", then "third time now", with the
+   address appended only from the third visit, when the player has shown they
+   care which house it is.
+
+**Where the data lives — and where it must not.** Visits do NOT go in the
+discovery ledger. It is closed-world (`KINDS` admits evidence, identity and
+connection only), capped at 512 events, refuses duplicate references, and
+raises rather than degrades when validation fails. Visits are orders of
+magnitude more frequent than discoveries; putting them there would burn a
+case's entire history in one afternoon. Keep a small bounded table in player
+save data beside the existing seen-sequence bookkeeping: `{place = {seq, n}}`,
+around two dozen keys, evict the lowest.
+
+**Worth one ledger event, though:** the moment a place reaches two, record it
+as a `connection`. References are unique, so it can fire only once per place.
+That gives the return a discovery number, a place in the true chronology and a
+spoken line — the player *finds* that they keep coming back, rather than being
+told.
+
+**The empty case is the feature.** In the first hour, nothing has earned a
+heading and the place view is flat. It must not look broken: one line in the
+survivor's voice saying nothing has been worth going back to yet.
+
+Done when: a walked loop through one house twice with no discovery in between
+logs "swallowed"; a search followed by a return logs "minted, n=2"; and the
+place view stays flat until then. All three provable unattended with
+`tools/autotest/pz.sh`.
+
+**Build it as observation first.** Before any UI: `DiscoveryLog.visit()`, wired
+only to notes-opening, logging the place, the stored number, the current
+number and the verdict. Read the log from a real session. If real play does not
+produce returns, the whole idea dies cheaply.
+
+#### Two further ideas, not scheduled
+
+- **The route, not the place.** Three frames independently proposed making a
+  walked path the unit — "the way down Cortman", with places as stops. It is
+  harder to fake than a revisit and closer to how people describe habits. The
+  cheap probe: in the existing `trackVisited` task, keep the last building id
+  and log a line whenever it changes. Then read a real session and see whether
+  repeated ordered pairs exist at all. Risk: a player who drives produces pairs
+  with nothing in between, and naming a route is the closest this mod has ever
+  come to a narrator.
+- **Absence as information.** A place stopped being visited could earn
+  "haven't been back to the warehouse since". Tempting, and dangerous: a faded
+  row is indistinguishable from a lost one, and the notebook's own help text
+  promises entry numbers never change. Rule if it is ever built: absence may
+  change decoration only — never a row's existence, its number, or whether a
+  search finds it — and it must be written as a line the mod ADDS, never as
+  something it takes away. A two-week siege must not grey out a player's leads,
+  so any threshold counts other places visited, not hours on the clock.
+
 ## The device — where the owner wants to go
 
 Do not start here. WP1 and WP2 are the same idea in cheaper form, and they
