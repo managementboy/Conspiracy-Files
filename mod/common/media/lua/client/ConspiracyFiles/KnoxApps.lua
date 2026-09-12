@@ -107,15 +107,12 @@ A.files={
 A.names={
     id="NAMES",title="NAMES",icon="names",
     list=function()
-        local rows=safe(function()
-            local Identity=require("ConspiracyFiles/IdentityObservations")
-            local store=ModData and ModData.get("ConspiracyFiles.IdentityObservations")
-            local root=store and store.canonical
-            if not root then return nil end
-            local outfits=ConspiracyFiles.BodyOutfitLog
-            return Identity.rows(root,outfits and outfits.outfitFor or nil,
-                ConspiracyFiles.AddressMap and ConspiracyFiles.AddressMap.nearest or nil)
-        end) or {}
+        -- Ask the observer for its own rows rather than re-reading its store:
+        -- it already joins the outfit and the address in, and a second reader
+        -- guessing at the store's shape is how the address book came up empty
+        -- with an ID in the player's pocket (knox check, 2026-09-12).
+        local observer=ConspiracyFiles.IdentityObserver
+        local rows=(observer and observer.rows and safe(observer.rows)) or {}
         local out={}
         for _,row in ipairs(rows) do
             -- The notebook says "Found Ines Kubiak's ID card" because it is a

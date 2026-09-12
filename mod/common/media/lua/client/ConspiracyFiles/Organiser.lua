@@ -146,8 +146,12 @@ function O.read(player)
     -- open when the survivor actually has it. Never force the item into the
     -- slot: an equip that the player interrupts must leave them holding what
     -- they chose, not a computer.
+    -- require() on a timed action returns the module's own value, which for
+    -- these files is not the class - the class arrives as a GLOBAL. Indexing
+    -- the return value threw "attempted index: new of non-table" every time
+    -- the device was opened (knox check, 2026-09-12).
     local queued=safe(function()
-        local ISEquipWeaponAction=require("TimedActions/ISEquipWeaponAction")
+        require("TimedActions/ISEquipWeaponAction")
         ISTimedActionQueue.add(ISEquipWeaponAction:new(player,item,50,true,false))
         return true
     end)
