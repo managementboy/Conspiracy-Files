@@ -305,8 +305,13 @@ function A.bootLines()
     else
         out[#out+1]="Case ............ none yet"
     end
-    local rows=runtime and runtime.known and safe(runtime.known)
-    out[#out+1]="Records ......... "..#(rows or {})
+    -- Count from the ledger, not from runtime.known(): that one resolves an
+    -- address for every record, and the boot screen asks once a second, which
+    -- the fault check caught as an address lookup retrying forever (suite,
+    -- 2026-09-12). A count needs no addresses.
+    local log=ConspiracyFiles.DiscoveryLog
+    local events=(log and log.events and safe(log.events)) or {}
+    out[#out+1]="Records ......... "..#events
     out[#out+1]=""
     if ready and status and not status.preparing and (status.count or 0)>0 then
         out[#out+1]="Ready."

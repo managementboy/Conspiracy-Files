@@ -233,9 +233,16 @@ function Screen:draw(gx,gy)
     local room=K.rows(c)
     if self.booting then
         -- The machine waking up, with the mod's real state on it: no invented
-        -- progress bar, just what is actually done and what is not.
+        -- progress bar, just what is actually done and what is not. Read once a
+        -- second; a boot screen that re-reads the mod sixty times a second is
+        -- worse than the thing it is reporting on.
+        local now=getTimeInMillis and getTimeInMillis() or 0
+        if not self.bootText or now-(self.bootAt or 0)>1000 then
+            self.bootText=Apps.bootLines()
+            self.bootAt=now
+        end
         local y=2
-        for _,text in ipairs(Apps.bootLines()) do
+        for _,text in ipairs(self.bootText) do
             K.text(c,text,2,y,K.INK); y=y+line
         end
         local foot=K.foot(c,"")
