@@ -19,8 +19,18 @@ shot() { "$PZ" shot "$RUNS/$(session)-knox-$1.png" >/dev/null 2>&1; }
 
 not_running || { say "game already running; tools/autotest/pz.sh stop first"; exit 2; }
 "$PZ" start "${start_args[@]}" || abort "the game did not reach a playable world"
+# A fresh world spends its first half-minute indexing addresses, and a driver
+# sent into that gets no slot before the eval channel gives up. Wait for the
+# mod to answer, then allow a long load and retry it (knox check, 2026-09-12).
+export CF_EVAL_TIMEOUT=90
+wait_true 120 'ConspiracyFiles~=nil and ConspiracyFiles.GeneratedRuntime~=nil' || abort "the mod never answered"
 for f in core_loop organiser wallet_id; do
-    ev -f "$REPO/tools/autotest/checks/$f.lua" >/dev/null || abort "could not load $f.lua"
+    loaded=no
+    for _ in 1 2 3; do
+        ev -f "$REPO/tools/autotest/checks/$f.lua" >/dev/null && { loaded=yes; break; }
+        sleep 5
+    done
+    [ "$loaded" = yes ] || abort "could not load $f.lua"
 done
 wait_true 90 'ConspiracyFiles.GeneratedRuntime.metrics()~=nil' || abort "no case started"
 
