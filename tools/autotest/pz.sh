@@ -36,9 +36,16 @@ say() { echo "pz: $*" >&2; }
 
 # Virtual screen for --hidden: software OpenGL (llvmpipe), nothing on the
 # owner's monitor. Left running between runs; it costs almost nothing idle.
+#
+# 9>&- matters. claim_game holds the game lock as file descriptor 9, and Xvfb
+# outlives the run that started it, so without this it INHERITS that descriptor
+# and keeps the lock for as long as it lives. The next claim_game then blocks
+# until its 1200s timeout and the check dies having printed nothing - which is
+# exactly what happened on 2026-09-13, and would have deadlocked every check
+# in suite.sh after the first.
 ensure_hidden_display() {
     if ! xdpyinfo -display "$HIDDEN_DISPLAY" >/dev/null 2>&1; then
-        setsid nohup Xvfb "$HIDDEN_DISPLAY" -screen 0 1280x720x24 -nolisten tcp >/dev/null 2>&1 &
+        setsid nohup Xvfb "$HIDDEN_DISPLAY" -screen 0 1280x720x24 -nolisten tcp >/dev/null 2>&1 9>&- &
         for _ in $(seq 20); do xdpyinfo -display "$HIDDEN_DISPLAY" >/dev/null 2>&1 && break; sleep 0.5; done
     fi
     xdpyinfo -display "$HIDDEN_DISPLAY" >/dev/null 2>&1 || { say "could not start Xvfb on $HIDDEN_DISPLAY"; exit 1; }
