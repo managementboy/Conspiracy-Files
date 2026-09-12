@@ -53,7 +53,12 @@ end
 -- turned into words, and nil where the id identifies nobody. Keeping them
 -- apart means a stored observation is never rewritten for presentation.
 function L.readableOutfitFor(token)
-    local ok,outfit=pcall(Outfits.readable,L.outfitFor(token))
+    -- WP3. A written line, from a closed table, or nothing. The raw id is
+    -- still what gets stored - it is the game's own fact - but an id the mod
+    -- has no words for stays unsaid rather than being turned into words
+    -- automatically. A future game update must not be able to put a new word
+    -- in the survivor's mouth.
+    local ok,outfit=pcall(Outfits.describe,L.outfitFor(token))
     return ok and outfit or nil
 end
 

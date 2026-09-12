@@ -87,3 +87,64 @@ for _, raw in ipairs({ 'Police', 'Bathrobe', 'ConstructionWorker', 'SecurityGuar
         raw .. ': "wore a ' .. tostring(M.readable(raw)) .. '" is not English for every label')
 end
 print('PASS outfit sentence: no article, so a bare label like "police" still reads')
+
+-- ------------------------------------------------------------- WP3 ------
+-- "The body itself wore: goth" prints a game id in a lower-case hat. Nobody
+-- looking at a corpse thinks the word "goth"; they think what they can see.
+-- M.describe is a CLOSED table of written lines, and everything else is
+-- silence.
+for _, style in ipairs({ 'Goth', 'Classy', 'Punk', 'Redneck', 'Biker', 'Hunter' }) do
+    local line = M.describe(style)
+    assert(type(line) == 'string' and #line > 0, style .. ' must have a written line')
+    -- A description, not a relabelled id: it must not simply be the id again.
+    assert(line:lower() ~= style:lower(), style .. ' is not a description of itself')
+    assert(not line:find('%u'), style .. ' left a capital in player-facing text')
+    assert(not line:find('_'), style .. ' left an underscore in player-facing text')
+end
+assert(M.describe('Goth') == 'a lot of black, chains, boots', tostring(M.describe('Goth')))
+
+-- FAIL CLOSED. This is the whole rule. A future game update ships a new
+-- outfit id; the survivor must say nothing rather than something nobody
+-- wrote. Three ids have already leaked into prose this way - Generic03,
+-- Generic_Skirt and Young - which is why this is a table and not a transform.
+for _, invented in ipairs({ 'Nonsense', 'Outfit_From_A_Future_Patch', 'Goth2',
+                            'goth', 'GOTH', ' Nonsense ', 'Generic03', 'Young',
+                            'ArmorTest_Metal', '', '   ' }) do
+    assert(M.describe(invented) == nil,
+        'an id with no written line must produce silence, got ' .. tostring(M.describe(invented)))
+end
+assert(M.describe(nil) == nil and M.describe(42) == nil and M.describe({}) == nil)
+-- Surrounding whitespace is trimmed, so a padded real id still resolves.
+assert(M.describe('  Goth  ') == M.describe('Goth'))
+
+-- The table is real writing, not a stub with six entries in it: the uniforms
+-- and trades a body in Muldraugh actually wears are covered too, or the
+-- closed rule would be a large regression dressed as a safety measure.
+assert(M.describedCount() >= 60, 'only ' .. M.describedCount() .. ' outfits described')
+for _, common in ipairs({ 'Police', 'ConstructionWorker', 'Doctor', 'Nurse',
+                          'Fireman', 'Bathrobe', 'Farmer', 'Mechanic', 'Chef', 'Inmate' }) do
+    assert(M.describe(common), common .. ' is common enough that silence would be a regression')
+end
+
+-- Every written line has to survive the sentence it is dropped into:
+-- "The body itself wore: " .. line .. "." Nothing may already end in a stop,
+-- start with a capital, or contain the kind of punctuation that would break
+-- the clause in two.
+local seen = {}
+for _, id in ipairs(M.describedIds()) do
+    local line = M.describe(id)
+    assert(type(line) == 'string' and #line > 2, id .. ': a description must be words')
+    assert(not line:find('%.$'), id .. ': the sentence supplies the full stop')
+    assert(not line:find('^%u'), id .. ': the line continues a sentence, it does not start one')
+    assert(not seen[line], 'two outfits share a description: ' .. line)
+    seen[line] = true
+end
+
+local described = Identity.rows(root, function() return M.describe('Goth') end)[1].detailText
+assert(described:find('The body itself wore: a lot of black, chains, boots.', 1, true), described)
+local silent = Identity.rows(root, function() return M.describe('Outfit_From_A_Future_Patch') end)[1].detailText
+assert(not silent:find('The body itself wore', 1, true),
+    'an undescribed outfit must omit the whole sentence, not render it empty')
+
+print('PASS outfit described: the six styles read as sentences, uniforms and '
+    .. 'trades are covered, and an invented id produces silence')
