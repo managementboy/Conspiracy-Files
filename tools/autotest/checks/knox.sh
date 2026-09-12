@@ -84,7 +84,13 @@ say "programs: $(ev 'return CFOrg.programs()' | cut -f2)"
 ev 'return CFOrg.tapWidget("APP",2)' >/dev/null; sleep 1
 names="$(ev 'return CFOrg.knox()')"
 [ "$(cut -f2 <<<"$names")" = NAMES ] || fail "a tap on the NAMES icon did not open it: $names"
-[ "$(cut -f3 <<<"$names")" -gt 0 ] 2>/dev/null || fail "the address book is empty after looting an ID"
+# Only a promise we actually set up: if no corpse carried a wallet, the address
+# book having nothing in it is the truth, not a fault.
+if [ "$wallet" = yes ]; then
+    [ "$(cut -f3 <<<"$names")" -gt 0 ] 2>/dev/null || fail "the address book is empty after looting an ID"
+else
+    say "no ID was looted this run; the address book's contents are not asserted"
+fi
 shot names
 
 ev 'return CFOrg.pressButton("MODE")' >/dev/null; sleep 1
