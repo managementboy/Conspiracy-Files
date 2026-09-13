@@ -117,6 +117,53 @@ tools/autotest/pz.sh eval 'return CFPDA.ticks(600)'      # per-tick handlers
 content and the non-drawing checks, so an optimisation lands on the term that
 actually costs something.
 
+## Traps in the harness, and the helpers that exist because of them
+
+These all cost a run before they were understood. Use the helpers.
+
+**`grep -c` returns a zero AND fails.** `grep -c PATTERN file` prints `0` and
+exits 1 when it matches nothing, so the common idiom
+
+```bash
+n="$(grep -c 'lvl=e' "$CONSOLE" 2>/dev/null || echo 0)"   # WRONG: "0\n0"
+```
+
+produces *two* zeros, and the next `$(( ))` dies on it — taking the check down
+after its last assertion has already passed, with no message. Use
+`mod_error_count` from `lib.sh`. `test/harness_lock.lua` fails if the bad idiom
+reappears.
+
+**`console.txt` is truncated when the game starts.** An error count taken
+before a save-and-reload cannot be compared with one taken after. Ask only
+about the session that is running.
+
+**Anything launched in the background inherits the machine lock.** `claim_game`
+holds it as file descriptor 9, so a launch without `9>&-` keeps the lock for as
+long as it lives — and a game that outlives its check then blocks every later
+check at `flock` for twenty minutes, silently. This happened twice, to `Xvfb`
+and then to the game launch. `claim_game` now names the holder when it gives
+up; if a check ever hangs, run:
+
+```bash
+fuser -v ~/Zomboid/.cf-autotest.lock
+```
+
+**Empty strings are not numbers.** `[ "$n" -lt 2000 ]` and `$(( ))` both blow
+up on an empty or non-numeric value. `is_number` from `lib.sh`.
+
+**`collectgarbage("count")` is not a Lua heap here.** Between eval calls it
+drifts by up to 6 MB with nothing happening; within one call it is stable. But
+it cannot force a full JVM collection and every UI panel is a Java object, so
+growth cannot distinguish "still referenced" from "not yet swept".
+`pdalife.sh` reports it with a control and asserts nothing on it. The leak
+assertions are the reachability ones: the UI manager's element count, the
+window being nil after close, and the handler counts.
+
+**Some event tables are not introspectable.** `CFLIFE.handlers` tries the known
+field names and says "unreadable" rather than reporting a confident zero. When
+it says that, the handler-duplication assertion is vacuous — read the note, do
+not read a pass.
+
 ## Adding a test
 
 - Logic, text, a reducer, a projection → `test/`, offline, assert outcomes.
