@@ -41,7 +41,9 @@ world="$(cat "$REPO/dev/eval/linux/world")"
 export CF_EVAL_TIMEOUT=120
 wait_true 120 'ConspiracyFiles~=nil and ConspiracyFiles.OrganiserScreen~=nil' || abort "the mod never loaded"
 load_probe || abort "could not load the probe"
-before_errors="$(grep -c 'lvl=e' "$CONSOLE" 2>/dev/null || echo 0)"
+# Not compared across the restart below: the game truncates console.txt when
+# it starts, so the only honest question is whether the mod logged any errors
+# in the session that is running now.
 
 # --- obtaining it ----------------------------------------------------------
 iss="$(ev 'return CFGAME.issued()')"
@@ -120,10 +122,9 @@ cor="$(ev 'return CFGAME.survivesCorruption()')"
     || fail "corrupted stores broke the device: $(f 2 <<<"$cor")"
 
 # --- and the log -----------------------------------------------------------
-after_errors="$(grep -c 'lvl=e' "$CONSOLE" 2>/dev/null || echo 0)"
-new_errors=$((after_errors - before_errors))
-say "log: $new_errors new mod error lines"
-[ "$new_errors" -le 0 ] || fail "$new_errors new error lines logged by the mod during play"
+new_errors="$(mod_error_count)"
+say "log: $new_errors mod error lines in this session"
+[ "$new_errors" -eq 0 ] || fail "the mod logged $new_errors error lines during play"
 
 "$PZ" shot "$RUNS/$(session)-pdagame.png" >/dev/null 2>&1
 "$PZ" stop

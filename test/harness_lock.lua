@@ -47,5 +47,31 @@ local lib = read("tools/autotest/lib.sh")
 assert(lib:find("fuser", 1, true),
     "claim_game must name the lock holder when it times out")
 
-print("PASS harness lock: all " .. launches ..
-      " background launches close the machine lock descriptor, and a timeout names the holder")
+-- And nobody may count with the idiom that returns two numbers.
+--
+-- `grep -c PATTERN file || echo 0` prints "0" AND exits 1 when it matches
+-- nothing, so the fallback fires as well and the result is "0\n0". Feed that
+-- to $(( )) and the arithmetic dies, taking the whole check down after its
+-- last assertion has already passed - which is exactly what happened to
+-- checks/pdagame.sh on 2026-09-13. lib.sh has mod_error_count for this.
+local bad = {}
+local scripts = io.popen("ls tools/autotest/*.sh tools/autotest/checks/*.sh tools/fieldnote-test/*.sh 2>/dev/null")
+for path in scripts:lines() do
+    local src = read(path)
+    for line in src:gmatch("[^\n]+") do
+        -- Not comments: lib.sh's own explanation quotes the bad idiom to
+        -- describe it, which is the point of the explanation.
+        if not line:match("^%s*#") and line:find("grep %-c") and line:find("||%s*echo%s+0") then
+            bad[#bad + 1] = path .. ": " .. (line:gsub("^%s+", ""):sub(1, 60))
+        end
+    end
+end
+scripts:close()
+assert(#bad == 0,
+    "grep -c prints 0 and exits 1 on no match, so these produce \"0\\n0\" and will "
+    .. "kill the next arithmetic; use lib.sh's mod_error_count:\n  "
+    .. table.concat(bad, "\n  "))
+
+print("PASS harness correctness: all " .. launches ..
+      " background launches close the machine lock descriptor, a timeout names the holder, " ..
+      "and nothing counts with grep -c || echo 0")

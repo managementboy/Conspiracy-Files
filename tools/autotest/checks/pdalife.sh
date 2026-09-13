@@ -34,7 +34,7 @@ wait_true 120 'ConspiracyFiles~=nil and ConspiracyFiles.OrganiserScreen~=nil' ||
 ev -f "$HERE/pdalife.lua" >/dev/null || abort "could not load the probe"
 
 # Errors logged by the mod before any of this, so only NEW ones count.
-before_errors="$(grep -c 'lvl=e' "$CONSOLE" 2>/dev/null || echo 0)"
+before_errors="$(mod_error_count)"
 
 handlers0="$(ev 'return CFLIFE.handlerCounts()')"
 say "handlers at rest: $(f 2 <<<"$handlers0")  ($(f 3 <<<"$handlers0"))"
@@ -102,10 +102,11 @@ say "handlers after: $(f 2 <<<"$handlers1")"
 say "stores after:   $(f 2 <<<"$stores1")"
 [ "$(f 2 <<<"$handlers0")" = "$(f 2 <<<"$handlers1")" ] || fail "handler counts differ end to end: [$(f 2 <<<"$handlers0")] -> [$(f 2 <<<"$handlers1")]"
 
-after_errors="$(grep -c 'lvl=e' "$CONSOLE" 2>/dev/null || echo 0)"
+after_errors="$(mod_error_count)"
 new_errors=$((after_errors - before_errors))
 [ "$new_errors" -le 0 ] || fail "$new_errors new error lines logged by the mod during this run"
-mod_errors="$(grep -c 'ERROR.*ConspiracyFiles\|Exception.*ConspiracyFiles' "$CONSOLE" 2>/dev/null || echo 0)"
+mod_errors="$( { grep -c 'ERROR.*ConspiracyFiles\|Exception.*ConspiracyFiles' "$CONSOLE" 2>/dev/null || true; } | head -1 )"
+mod_errors="${mod_errors:-0}"
 say "log: $new_errors new mod error lines, $mod_errors engine exceptions naming the mod"
 
 "$PZ" shot "$RUNS/$(session)-pdalife.png" >/dev/null 2>&1

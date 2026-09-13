@@ -1,0 +1,13 @@
+FAIL pdalife - 2026-09-13T21:10:26+02:00
+commit: a2a6066
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+session: 20260913T210838
+cycles:   200 open/close - errors=0, ui 27->27, closed=true
+handlers: [] -> []
+memory:   heap 1470464KB->1482752KB (+12288KB, +61.44KB per cycle)
+churn:    40 rounds, 360 screens, 0 errors
+sizes:    9/9 device-and-font combinations drew
+abuse:    survived every state
+stores:   ConspiracyFilesOrganiserPrefs=0 ConspiracyFiles.KnoxNotes=0 ConspiracyFiles.KnoxToDo=0 ConspiracyFiles.DeadAir=0  ->  ConspiracyFilesOrganiserPrefs=2 ConspiracyFiles.KnoxNotes=0 ConspiracyFiles.KnoxToDo=0 ConspiracyFiles.DeadAir=0
+log:      0 new mod error lines
+FAIL: the heap grew +61.44KB per open/close cycle, which is a leak

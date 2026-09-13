@@ -102,6 +102,29 @@ renderer_line() {
     esac
 }
 
+# How many error lines the MOD has logged to the current console, as a bare
+# integer. Every caller of this got it wrong the same way:
+#
+#   n="$(grep -c 'lvl=e' "$CONSOLE" 2>/dev/null || echo 0)"
+#
+# grep -c prints "0" AND exits 1 when it matches nothing, so the || fallback
+# fires as well and n becomes "0\n0" - which then kills the next $(( )) with an
+# arithmetic syntax error and takes the whole check down after its last
+# assertion had already passed (2026-09-13).
+#
+# It also only makes sense on ONE console: the game truncates console.txt when
+# it starts, so a count taken before a save-and-reload cannot be compared with
+# one taken after.
+mod_error_count() {
+    local file="${1:-$CONSOLE}"
+    local n
+    n="$( { grep -c 'lvl=e' "$file" 2>/dev/null || true; } | head -1 )"
+    case "$n" in
+        ''|*[!0-9]*) echo 0 ;;
+        *) echo "$n" ;;
+    esac
+}
+
 source_line() {
     echo "source: $(git -C "$REPO" rev-parse --short HEAD)$(git -C "$REPO" diff --quiet HEAD -- mod 2>/dev/null || echo ' + uncommitted mod changes')"
     renderer_line
