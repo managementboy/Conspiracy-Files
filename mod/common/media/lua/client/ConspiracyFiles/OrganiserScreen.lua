@@ -609,7 +609,7 @@ function Screen:draw(gx,gy)
             else
                 K.text(c,"Tap a marked day.",2,after+2,K.DIM)
             end
-            K.foot(c,self:footText("MENU: programs"))
+            K.foot(c,self:footText("HOME: programs"))
             return
         end
     end
@@ -627,7 +627,7 @@ function Screen:draw(gx,gy)
     -- The hint named keys this machine has never had: VIEW and LIST were the
     -- mapping before the buttons were MENU/UP/DOWN/BACK, and it was still on
     -- screen a version later (owner screenshot, 2026-09-13).
-    K.foot(c,self:footText("MENU: programs   tap: open"))
+    K.foot(c,self:footText("HOME: programs   tap: open"))
 end
 
 function Screen:openRow(index)

@@ -16,14 +16,14 @@ place, I'd bet" is in character. "This was their house" is not.
 Delivered whenever a new discovery reaches the ledger, whatever its kind.
 
 1. "That's worth writing down."
-2. "Interesting. Into the notebook it goes."
+2. "Interesting. That's going in the machine."
 3. "I should note this before I forget."
 4. "Hm. That's going in my notes."
 5. "Better write this one down."
 6. "That means something. Noting it."
 7. "I'll want to remember this."
 8. "Worth keeping a record of that."
-9. "Let me get this down on paper."
+9. "Let me key this in while I've got it."
 10. "That's a detail I shouldn't lose."
 
 ## Set B — a person-key-door link was discovered

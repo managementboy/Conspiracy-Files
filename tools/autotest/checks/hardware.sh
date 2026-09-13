@@ -97,8 +97,16 @@ help="$(ev 'return CFHW.helpText()' | f 2)"
 grep -qiE 'press - and =|press - to make' <<<"$help" || fail "HELP does not explain how to resize the machine"
 grep -qi 'drag' <<<"$help" || fail "HELP does not mention dragging the corner"
 grep -qi 'text size' <<<"$help" || fail "HELP does not explain the text size"
-grep -qi 'MENU' <<<"$help" || fail "HELP does not name the buttons"
-grep -qiE 'VIEW  the program|ROCKER' <<<"$help" && fail "HELP still describes the old keys"
+# Named for what is ON THE PLASTIC. These assertions used to require "MENU"
+# and FORBID "ROCKER", both of which were true before P4-R87 changed the keys
+# and neither of which is true now: the silkscreen reads HOME and BACK and
+# there is a rocker between them.
+grep -qi 'HOME' <<<"$help" || fail "HELP does not name the HOME key"
+grep -qi 'BACK' <<<"$help" || fail "HELP does not name the BACK key"
+grep -qi 'rocker' <<<"$help" || fail "HELP does not mention the rocker"
+grep -qi 'blank' <<<"$help" || fail "HELP does not say the two middle keys do nothing"
+grep -qiE '\bMENU\b' <<<"$help" && fail "HELP still names a MENU key, which the device does not have"
+grep -qiE 'VIEW  the program' <<<"$help" && fail "HELP still describes the old keys"
 say "help: documents size and the current buttons"
 
 # --- the lamp ---------------------------------------------------------------

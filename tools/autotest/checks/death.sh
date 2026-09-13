@@ -97,6 +97,7 @@ report="$EVIDENCE/$id-death.txt"
     echo "notebook before death: $(tr '\t' ' ' <<<"$before")"
     echo "new survivor: $second; papers: ${title:-no papers issued line}"
     echo "notebook for the new survivor: $(tr '\t' ' ' <<<"$after")"
+    echo "the new survivor's organiser: carried=$(cut -f1 <<<"$organiser") marked=$(cut -f2 <<<"$organiser"); reads for them=$(cut -f1 <<<"$device")"
     echo "document taken back off the body: $(cut -f2 <<<"$body")"
     echo "errors inside the mod: $(grep -c . <<<"$errors")"
     [ -z "$errors" ] || sed 's/^/  /' <<<"$errors" | head -10

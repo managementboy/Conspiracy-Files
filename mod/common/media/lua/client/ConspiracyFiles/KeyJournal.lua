@@ -60,7 +60,7 @@ function J.rows()
                 detailText="A key observed with a document naming "..connection.name..
                     " matches the building where I found "..(titles[connection.clueId] or "the earlier clue")..
                     ". This suggests a connection between those belongings and that place. "..
-                    "It does not establish who lived there or wrote the clue. The original clue remains unchanged.",
+                    "It does not establish who lived there or wrote the clue.",
             }
         end
         return result

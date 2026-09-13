@@ -421,7 +421,7 @@ A.help={
             {label="Survive first",title="Survive first",
              detail="This machine records what you find. It sets no objectives and promises no answer.\n\nReading it takes your main hand. Something can reach you while you read."},
             {label="The keys",title="The keys",
-             detail="MENU  the program list. Wakes the machine.\nUP    the line or page above.\nDOWN  the line or page below.\nBACK  out of a record, then out to the programs.\n\nThere is no power switch. Hold MENU for the lamp. Left alone it switches itself off."},
+             detail="HOME opens the programs, and wakes the machine.\nBACK steps out of a record, then out to the programs.\nThe rocker goes up and down: a line in a list, a page in a record.\n\nThe two keys between HOME and BACK are blank. They do nothing yet.\n\nThere is no power switch. Hold HOME for the lamp. Left alone it switches itself off."},
             {label="Size",title="Size",
              detail="Two sizes, and they are different things. SETUP holds both.\n\nText size is how much fits on the screen: Small, Medium or Large.\n\nMachine size is how big the case is drawn. Drag its bottom-right corner, or point at it and press - and = . Three sizes; it starts at whichever suits your screen.\n\nThose are the only keys it takes, and only while you are pointing at it: it never takes the map or the inventory off you.\n\nEvery size is a whole multiple, so a pixel stays square."},
             {label="The stylus",title="The stylus",
@@ -595,7 +595,7 @@ A.notes={
             out[#out+1]={label=item.text,title="Note "..i,detail=item.text,id="note-"..i}
         end
         out[#out+1]={label="+ write a note",title="Write a note",
-                     detail="Type what you noticed, then tap SEND. It reaches the development machine with the log.\n\nCANCEL throws it away, and so does leaving the program.",
+                     detail="Type what you noticed, then tap SEND. It goes out with the log, to the people building this.\n\nCANCEL throws it away, and so does leaving the program.",
                      id="note-new",write=true}
         return out
     end,

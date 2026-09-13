@@ -24,14 +24,14 @@ pcall(require,"ConspiracyFiles/EvidencePickupHint")
 -- states as fact that the named person lived somewhere or owned anything.
 local SET_A={
     "That's worth writing down.",
-    "Interesting. Into the notebook it goes.",
+    "Interesting. That's going in the machine.",
     "I should note this before I forget.",
     "Hm. That's going in my notes.",
     "Better write this one down.",
     "That means something. Noting it.",
     "I'll want to remember this.",
     "Worth keeping a record of that.",
-    "Let me get this down on paper.",
+    "Let me key this in while I've got it.",
     "That's a detail I shouldn't lose.",
 }
 
