@@ -9,10 +9,17 @@
 -- organiser being found OR issued at all. Every offline test passed. Only a
 -- real game said so, six minutes later.
 --
--- This catches it in a second, offline. It is deliberately conservative: it
--- only looks at `local function NAME(...)` declarations, only counts calls
--- written as NAME(, ignores comments and strings, and accepts a forward
--- declaration, because those are the shapes this codebase actually uses.
+-- It covers local FUNCTIONS and local TABLES, because the first version only
+-- did functions and I fell straight through the gap: moving doorBail above its
+-- caller left `local lastDoorLog={}` three hundred lines below it, so doorBail
+-- indexed a nil global, threw, was caught, and retried EVERY FRAME. The faults
+-- check counted 90 caught errors in 15 seconds. A table read before its
+-- declaration fails exactly like a function called before its declaration.
+--
+-- Deliberately conservative: only `local function NAME(` and `local NAME={`
+-- declarations, only uses written as NAME( or NAME[, comments and string
+-- bodies stripped, forward declarations accepted, and a name preceded by . or
+-- : ignored.
 local function read(path)
     local f = assert(io.open(path, "r"), "cannot read " .. path)
     local s = f:read("*a"); f:close(); return s
@@ -46,6 +53,10 @@ for _, dir in ipairs(dirs) do
             local line = code(raw)
             local name = line:match("^%s*local%s+function%s+([%w_]+)%s*%(")
             if name and not declaredAt[name] then declaredAt[name] = n end
+            -- `local NAME={...}` - a table read before this line is a nil
+            -- global just as surely as a function called before it.
+            local tbl = line:match("^%s*local%s+([%w_]+)%s*=%s*{")
+            if tbl and not declaredAt[tbl] then declaredAt[tbl] = n end
             -- `local NAME` on its own, or `local NAME, OTHER` - a forward
             -- declaration means the local exists from that point.
             for fwd in line:gmatch("^%s*local%s+([%w_,%s]+)$") do
@@ -63,8 +74,11 @@ for _, dir in ipairs(dirs) do
                     -- Not preceded by . or : - Journal.observe(fact) is a
                     -- method call on a table, not a reference to a local of
                     -- the same name, and a word frontier alone matches it.
-                    if (" " .. line):find("[^%w_.:]" .. name .. "%s*%(")
-                       and not line:match("^%s*local%s+function%s+" .. name) then
+                    local used = (" " .. line):find("[^%w_.:]" .. name .. "%s*%(")
+                              or (" " .. line):find("[^%w_.:]" .. name .. "%s*%[")
+                    if used
+                       and not line:match("^%s*local%s+function%s+" .. name)
+                       and not line:match("^%s*local%s+" .. name .. "%s*=") then
                         firstUse = n; break
                     end
                 end
@@ -85,5 +99,5 @@ assert(#problems == 0,
     "these resolve as nil globals until their declaration runs:\n  "
     .. table.concat(problems, "\n  "))
 
-print("PASS local before use: " .. declarations .. " local functions across "
-      .. checked .. " modules, none called above its own declaration")
+print("PASS local before use: " .. declarations .. " local functions and tables across "
+      .. checked .. " modules, none used above its own declaration")

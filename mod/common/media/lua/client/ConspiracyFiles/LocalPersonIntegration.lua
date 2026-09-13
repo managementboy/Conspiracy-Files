@@ -157,6 +157,11 @@ end
 -- GLOBAL - so the lead-validation error path threw "tried to call nil"
 -- instead of bailing with a reason. Found by test/local_before_use.lua
 -- on 2026-09-13; nothing had ever exercised that path.
+-- Lives with doorBail, not three hundred lines below it. This table was left
+-- behind when doorBail moved up here, so doorBail indexed a nil GLOBAL,
+-- threw, was caught, and retried EVERY FRAME - the faults check counted 90
+-- caught errors in 15 seconds. Same bug class as the move was fixing.
+local lastDoorLog={}
 local function doorBail(reason)
     if not P.verboseDoors then return nil end
     local now=(getTimeInMillis and getTimeInMillis()) or 0
@@ -516,7 +521,6 @@ end
 --   ConspiracyFiles.LocalPersonIntegration.verboseDoors=true
 -- Off by default: every ordinary door in Muldraugh reaches this function.
 P.verboseDoors=false
-local lastDoorLog={}
 local function observeDoorLead(inventory,door,keyId)
     if type(keyId)~="number" or keyId~=math.floor(keyId) or keyId<0 then
         return doorBail("door has no usable keyId ("..tostring(keyId)..")") end
