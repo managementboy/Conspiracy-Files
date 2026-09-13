@@ -200,9 +200,13 @@ end
 function M.drawRecords(ui,c,r)
  if not ui or not r or not ui.mapAPI or ui.mapAPI:getZoomF()<14 then return end
  local groups,order={},{}
+ -- Hoisted: this was asked of the engine once PER RECORD PER FRAME to compare
+ -- against a field that cannot change inside a frame. Runs while the world map
+ -- is open and zoomed in, which is exactly when the map is already busy.
+ local currentMap=tostring(getWorld():getMap())
  for i,id in ipairs(c.known) do
   local v=r.records[id]
-  if v and v.written and v.map==tostring(getWorld():getMap()) then
+  if v and v.written and v.map==currentMap then
    local key=v.x..":"..v.y..":"..v.z
    if not groups[key] then groups[key]={point=v,labels={}};order[#order+1]=key end
    local title=titleOf(c,id) or id
@@ -210,12 +214,19 @@ function M.drawRecords(ui,c,r)
   end
  end
  -- Match vanilla ISWorldMapSymbols:onAddNote: use the default text layer font.
- local font=UIFont.Handwritten or UIFont.Small
- local ok,nativeFont=pcall(function()
-  local symbols=ui.mapAPI:getSymbolsAPIv2()
-  return ui.mapAPI:getStyleAPI():getLayerByName(symbols:getDefaultTextLayerID()):getFont()
- end)
- if ok and nativeFont then font=nativeFont end
+ -- The map's own text font, resolved once. It cannot change while the map is
+ -- open, and this was building a closure and walking three engine APIs to
+ -- re-derive it on every frame.
+ local font=M.noteFont
+ if font==nil then
+  font=UIFont.Handwritten or UIFont.Small
+  local ok,nativeFont=pcall(function()
+   local symbols=ui.mapAPI:getSymbolsAPIv2()
+   return ui.mapAPI:getStyleAPI():getLayerByName(symbols:getDefaultTextLayerID()):getFont()
+  end)
+  if ok and nativeFont then font=nativeFont end
+  M.noteFont=font
+ end
  -- Group by where markers land ON SCREEN, not by tile. Grouping only exact
  -- tiles meant two documents a tile apart in one house were laid out as if
  -- alone, and their labels printed over each other (2026-09-11, house 104:
