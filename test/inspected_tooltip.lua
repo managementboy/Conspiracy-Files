@@ -72,6 +72,10 @@ assert(inspect:find('container==getPlayer():getInventory() then return false', 1
 local menu = read('mod/common/media/lua/client/ConspiracyFiles/GeneratedMenu.lua')
 assert(menu:find('"Note in the Investigation"', 1, true), 'the option must exist')
 assert(menu:find('R.inspect,item,true', 1, true), 'it must record in place')
-assert(menu:find('if not carried then', 1, true),
+-- The prefix, not the whole line: the guard gained "and not reading" when
+-- reading a drawer stopped needing the item in your pockets (d4ac15d), and
+-- pinning the exact wording made this fail on a change that was correct.
+-- What matters here is that being carried still suppresses the option.
+assert(menu:find('if not carried', 1, true),
     'it must appear only when the item is NOT already carried, or it duplicates Inspect')
 print('PASS inspected tooltip: a document can be noted where it lies, and possession still gates the ordinary path')
