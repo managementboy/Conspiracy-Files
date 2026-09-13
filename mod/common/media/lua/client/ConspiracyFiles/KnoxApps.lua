@@ -225,37 +225,120 @@ A.names={
 -- DATES ----------------------------------------------------------------------
 -- The date book. Every discovery carries the world hour it was made at, so
 -- this is a timeline the player wrote with their own feet.
+-- DATES ------------------------------------------------------------------------
+-- A calendar, not a list sorted by date (owner, 2026-09-13). The Date Book's
+-- month view marked a day by WHEN as well as whether: marks sat high, middle
+-- or low in the cell for morning, afternoon or night, so the shape of the
+-- month told you something at a glance. Every discovery carries an hour, so
+-- that costs nothing here.
+local Calendar=require("ConspiracyFiles/Calendar")
+local monthLength,firstWeekday=Calendar.monthLength,Calendar.firstWeekday
+
+-- Everything found, bucketed by date. Built once per read and shared by the
+-- grid and the day list, so the two cannot disagree.
+function A.diary()
+    local log=ConspiracyFiles.DiscoveryLog
+    local events=(log and log.events and safe(log.events)) or {}
+    local ui=ConspiracyFiles.NotebookUI
+    local rows=(ui and ui.generatedRows and safe(ui.generatedRows,"evidence")) or {}
+    local titles={}
+    for _,row in ipairs(rows) do if row.id then titles[row.id]=row.title end end
+    local byKey,newest={},nil
+    for _,event in ipairs(events) do
+        local when=A.dateOf(event.at)
+        if when then
+            local bucket=byKey[when.key]
+            if not bucket then
+                bucket={day=when.day,month=when.month,year=when.year,label=when.label,items={}}
+                byKey[when.key]=bucket
+            end
+            bucket.items[#bucket.items+1]={hour=when.hour,
+                text=string.format("%02d:00  %s",when.hour,tostring(titles[event.ref] or event.kind))}
+            if not newest or when.key>newest then newest=when.key end
+        end
+    end
+    for _,bucket in pairs(byKey) do
+        table.sort(bucket.items,function(a,b) return a.hour<b.hour end)
+    end
+    return byKey,newest
+end
+
+-- The month the calendar is showing. Defaults to today, and the picker steps
+-- it, because the picker is the widget this machine already has.
+function A.dateCursor(offset)
+    local clock=getGameTime and getGameTime()
+    local month=(clock and safe(function() return clock:getMonth() end) or 0)+1
+    local year=clock and safe(function() return clock:getYear() end) or 1993
+    local day=(clock and safe(function() return clock:getDay() end) or 0)+1
+    month=month+(offset or 0)
+    while month>12 do month=month-12; year=year+1 end
+    while month<1 do month=month+12; year=year-1 end
+    return month,year,day
+end
+
 A.dates={
-    id="DATES",title="DATES",icon="dates",
-    list=function()
-        local log=ConspiracyFiles.DiscoveryLog
-        local events=(log and log.events and safe(log.events)) or {}
-        local ui=ConspiracyFiles.NotebookUI
-        local rows=(ui and ui.generatedRows and safe(ui.generatedRows,"evidence")) or {}
-        local titles={}
-        for _,row in ipairs(rows) do if row.id then titles[row.id]=row.title end end
-        local byDay,order={},{}
-        for _,event in ipairs(events) do
-            local when=A.dateOf(event.at)
-            if when then
-                if not byDay[when.key] then byDay[when.key]={label=when.label,items={}}; order[#order+1]=when.key end
-                local what=titles[event.ref] or event.kind
-                local items=byDay[when.key].items
-                items[#items+1]=string.format("%02d:00  %s",when.hour,tostring(what))
+    id="DATES",title="DATES",icon="dates",calendar=true,
+    -- The picker steps the month rather than filtering, which is what a date
+    -- book's category control did.
+    filters=function()
+        local names={}
+        for back=0,5 do
+            local m,y=A.dateCursor(-back)
+            names[#names+1]=(MONTHS[m] or "?").." "..tostring(y):sub(3)
+        end
+        return names
+    end,
+    -- The grid needs the whole month, not a list of rows.
+    month=function(index)
+        local m,y,today=A.dateCursor(-((index or 1)-1))
+        local byKey=A.diary()
+        local days={}
+        for _,bucket in pairs(byKey) do
+            if bucket.month==m and bucket.year==y then
+                local mark=days[bucket.day] or {}
+                for _,item in ipairs(bucket.items) do
+                    if item.hour<12 then mark.morning=true
+                    elseif item.hour<18 then mark.afternoon=true
+                    else mark.night=true end
+                end
+                days[bucket.day]=mark
             end
         end
+        local m0,y0=A.dateCursor(0)
+        return {month=m,year=y,length=monthLength(m,y),first=firstWeekday(m,y),
+                days=days,today=(m==m0 and y==y0) and today or nil,
+                label=(MONTHS[m] or "?").." "..y}
+    end,
+    -- One day, opened from the grid.
+    day=function(index,dayNumber)
+        local m,y=A.dateCursor(-((index or 1)-1))
+        local byKey=A.diary()
+        local bucket=byKey[y*10000+m*100+dayNumber]
+        local label=dayNumber.." "..(MONTHS[m] or "?").." "..y
+        if not bucket or #bucket.items==0 then
+            return {label=label,title=label,detail="Nothing found on this day.",id="day-empty"}
+        end
+        local lines={}
+        for _,item in ipairs(bucket.items) do lines[#lines+1]=item.text end
+        return {label=label,title=label,detail=table.concat(lines,"\n"),id="day-"..dayNumber}
+    end,
+    -- Still a list underneath, for anything that asks for one.
+    list=function()
+        local byKey=A.diary()
+        local order={}
+        for key in pairs(byKey) do order[#order+1]=key end
         table.sort(order)
         local out={}
         for _,key in ipairs(order) do
-            local day=byDay[key]
-            out[#out+1]={label=day.label.."  ("..#day.items..")",title=day.label,
-                         detail=table.concat(day.items,"\n"),id="day-"..key}
+            local bucket=byKey[key]
+            local lines={}
+            for _,item in ipairs(bucket.items) do lines[#lines+1]=item.text end
+            out[#out+1]={label=bucket.label.."  ("..#bucket.items..")",title=bucket.label,
+                         detail=table.concat(lines,"\n"),id="day-"..key}
         end
         return out
     end,
-}
-
--- TO DO ----------------------------------------------------------------------
+}---------------------------------------------------------------
 -- The one program the survivor writes rather than reads, and it takes no
 -- typing: a to-do is made by tapping a record's "REMIND" command, so the text
 -- is always something the player has already found. Ticked off by tapping.

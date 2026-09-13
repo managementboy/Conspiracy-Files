@@ -50,6 +50,7 @@ function assertDeepEqual(expected, actual, message)
     if not deepEqual(expected, actual) then error(message or "tables differ", 2) end
 end
 
+dofile(root .. separator .. "test" .. separator .. "calendar_spec.lua")
 dofile(root .. separator .. "test" .. separator .. "domain_core_spec.lua")
 dofile(root .. separator .. "test" .. separator .. "placement_spec.lua")
 dofile(root .. separator .. "test" .. separator .. "integration_spec.lua")

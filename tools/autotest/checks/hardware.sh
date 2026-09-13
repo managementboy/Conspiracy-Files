@@ -237,6 +237,24 @@ say "own card: Named=$named Unnamed=$unnamed"
 [ "${named:-0}" -ge 1 ] || fail "the survivor is not in Named: $named"
 [ "${unnamed:-0}" = 0 ] || fail "the survivor leaked into Unnamed: $unnamed"
 
+# --- the date book is a calendar ---------------------------------------------
+# Owner, 2026-09-13: "this should look like a calendar app, not a list of files
+# sorted by date."
+d="$(ev 'return CFHW.openDates()')"
+[ "$(f 1 <<<"$d")" = true ] || fail "DATES did not open as a calendar: $d"
+[ "$(f 2 <<<"$d")" = DATES ] || fail "wrong program: $d"
+say "month: $(f 3 <<<"$d") length=$(f 4 <<<"$d") firstWeekday=$(f 5 <<<"$d") today=$(f 6 <<<"$d")"
+len="$(f 4 <<<"$d")"; fw="$(f 5 <<<"$d")"
+[ "${len:-0}" -ge 28 ] && [ "${len:-0}" -le 31 ] || fail "impossible month length: $len"
+[ "${fw:-0}" -ge 1 ] && [ "${fw:-0}" -le 7 ] || fail "impossible first weekday: $fw"
+months="$(ev 'return CFHW.everyMonth()')"
+[ "$(f 1 <<<"$months")" = true ] || fail "a month failed to draw: $months"
+say "months drawn: $(f 2 <<<"$months")"
+# A day with nothing on it must say so, not break.
+empty="$(ev 'return CFHW.tapDay(28)')"
+[ "$(f 1 <<<"$empty")" = true ] || fail "tapping a day failed: $empty"
+say "day 28: $(f 2 <<<"$empty") -> $(f 3 <<<"$empty")"
+
 # --- no plumbing on screen ---------------------------------------------------
 me="$(ev 'return CFHW.meCard()')"
 [ "$(f 1 <<<"$me")" = true ] || fail "the survivor has no card in NAMES: $me"

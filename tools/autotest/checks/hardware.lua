@@ -271,3 +271,50 @@ function CFHW.pumpScreen()
     w:powerCheck()
     return true, tostring(w.on)
 end
+
+-- The date book, drawn as a month.
+function CFHW.openDates()
+    local w = S.window; if not w then return false, "no screen" end
+    w.on = true; w.launcher = false; w.record = nil; w.day = nil
+    for i, p in ipairs(w:programs()) do if p.id == "DATES" then w.app = i end end
+    w.entry, w.card, w.cachedList = 1, 1, nil
+    local ok, why = pcall(function() w:render() end)
+    if not ok then return false, "render: " .. tostring(why) end
+    local program = w:program()
+    local _, _, at = w:category(program)
+    local month = program.month and program.month(at or 1)
+    if not month then return false, "no month" end
+    return true, tostring(program.id), tostring(month.label),
+        tostring(month.length), tostring(month.first), tostring(month.today)
+end
+
+-- Every month the picker can reach must draw without throwing.
+function CFHW.everyMonth()
+    local w = S.window; if not w then return false end
+    local program = w:program()
+    local seen = {}
+    for i = 1, 6 do
+        w.categories = w.categories or {}
+        w.categories[program.id] = i
+        w.cachedList = nil
+        local ok, why = pcall(function() w:render() end)
+        if not ok then return false, "month " .. i .. " render: " .. tostring(why) end
+        local m = program.month(i)
+        seen[#seen + 1] = m and m.label or "?"
+    end
+    w.categories[program.id] = 1
+    return true, table.concat(seen, ",")
+end
+
+-- Tapping a day must open it, and an empty day must say so rather than break.
+function CFHW.tapDay(n)
+    local w = S.window; if not w then return false end
+    local program = w:program()
+    local _, _, at = w:category(program)
+    local row = program.day and program.day(at or 1, tonumber(n))
+    if not row then return false, "no row" end
+    w.record = row; w.day = tonumber(n)
+    local ok, why = pcall(function() w:render() end)
+    if not ok then return false, "render: " .. tostring(why) end
+    return true, tostring(row.title), tostring(row.detail):gsub("\n", " | ")
+end

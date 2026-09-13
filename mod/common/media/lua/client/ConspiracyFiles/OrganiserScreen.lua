@@ -463,6 +463,25 @@ function Screen:draw(gx,gy)
         self:drawNote(c)
         return
     end
+    -- A calendar program draws a month, not a list of rows (owner,
+    -- 2026-09-13: "this should look like a calendar app").
+    if program.calendar and program.month then
+        local _,names,at=self:category(program)
+        local month=safe(program.month,at or 1)
+        if month then
+            local y=K.titleBar(c,program.title,month.label,names and names[at or 1])
+            local after=K.month(c,y+1,month.length,month.first,month.days,month.today,self.day)
+            local count=0
+            for _ in pairs(month.days or {}) do count=count+1 end
+            if count==0 then
+                K.text(c,"Nothing found this month.",2,after+2,K.DIM)
+            else
+                K.text(c,"Tap a marked day.",2,after+2,K.DIM)
+            end
+            K.foot(c,self:footText("MENU: programs"))
+            return
+        end
+    end
     K.titleBar(c,program.title,#rows>0 and (self.entry.." of "..#rows) or "empty",
         self:category(program))
     local top=math.max(1,math.min(self.entry-math.floor(room/2),#rows-room+1))
@@ -564,6 +583,14 @@ function Screen:tap(x,y)
     if id=="APP" then
         self.app=widget.payload; self.launcher=false; self.record=nil
         self.entry,self.card,self.cachedList=1,1,nil
+    elseif id=="DAY" then
+        local program=self:program()
+        if program and program.day then
+            local _,_,at=self:category(program)
+            self.day=widget.payload
+            self.record=safe(program.day,at or 1,widget.payload)
+            self.card=1
+        end
     elseif id=="CATEGORY" then self:cycleCategory()
     elseif id=="SELECT" then self.launcher=true; self.record=nil
     elseif id=="ROW" then
@@ -574,7 +601,7 @@ function Screen:tap(x,y)
         end
     elseif id=="NOTE_DONE" then self:finishNote(true)
     elseif id=="NOTE_CANCEL" then self:finishNote(false)
-    elseif id=="BACK" then self.record=nil; self.card=1
+    elseif id=="BACK" then self.record=nil; self.card=1; self.day=nil
     elseif id=="TICK" then
         if self.record and self.record.index then
             local rows=self:list(); local row=rows[self.record.index]

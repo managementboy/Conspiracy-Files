@@ -197,6 +197,50 @@ end
 -- The grid of applications: three columns, icon over name, as the classic
 -- launcher drew them. `icons` is a name -> texture lookup owned by the caller.
 K.ICON=22
+-- The month, as the Date Book drew one: a grid of the days, and a mark on the
+-- days that have something. Palm did not merely dot a busy day - the marks sat
+-- at the top, middle or bottom of the cell for morning, afternoon or night, so
+-- the shape of the month told you WHEN at a glance. That is free here, because
+-- every discovery already carries an hour.
+--
+-- `days` is a map: day number -> {morning=bool,afternoon=bool,night=bool}.
+-- `first` is the weekday the 1st falls on, 1 = Sunday, as the Date Book began
+-- its weeks.
+function K.month(c,ny,length,first,days,today,selected)
+    local line=Font.line
+    local cw=math.floor(c.w/7)
+    local left=math.floor((c.w-cw*7)/2)
+    local HEAD={"S","M","T","W","T","F","S"}
+    for i=1,7 do
+        local x=left+(i-1)*cw
+        K.text(c,HEAD[i],x+math.floor((cw-K.width(HEAD[i]))/2),ny,K.DIM)
+    end
+    local top=ny+line
+    local ch=line+6
+    local rows=math.ceil((length+first-1)/7)
+    for d=1,length do
+        local cell=d+first-2
+        local col,row=cell%7,math.floor(cell/7)
+        local x,y=left+col*cw,top+row*ch
+        if d==selected then K.fill(c,x,y,cw-1,ch-1,K.INK) end
+        local ink=(d==selected) and K.GLASS or K.INK
+        local label=tostring(d)
+        K.text(c,label,x+2,y,ink)
+        if d==today and d~=selected then K.frame(c,x,y,cw-1,ch-1,K.INK) end
+        -- The marks: a square each, high for morning, middle for afternoon,
+        -- low for night. Right-hand side, so the day number stays readable.
+        local mark=days and days[d]
+        if mark then
+            local mx=x+cw-4
+            if mark.morning then K.fill(c,mx,y+1,2,2,ink) end
+            if mark.afternoon then K.fill(c,mx,y+math.floor(ch/2)-1,2,2,ink) end
+            if mark.night then K.fill(c,mx,y+ch-4,2,2,ink) end
+        end
+        hit(c,"DAY",x,y,cw-1,ch-1,d)
+    end
+    return top+rows*ch
+end
+
 function K.grid(c,programs,ny,selected,icon,counts)
     local cols=3
     local cell=math.floor(c.w/cols)
