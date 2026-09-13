@@ -1,9 +1,15 @@
--- Eval-channel probe for the Fieldnote test mod. Loaded with
+-- Eval-channel probe for the Fieldnote device. Loaded with
 -- `pz.sh eval -f tools/fieldnote-test/probe.lua`, then queried by name.
 -- Every check here is about the HARDWARE drawing and input contract the
--- design package specifies; none wires a game action.
+-- design package specifies; the Knox.OS side is checked by hardware.sh.
+--
+-- The device used to be a standalone mod so it could be looked at before it
+-- replaced anything. It was, and approved, so it now lives in the mod proper
+-- and this probe drives it there.
 CFFN = CFFN or {}
+require "Fieldnote/Panel"
 local G = require("Fieldnote/Geometry")
+local Font = require("ConspiracyFiles/Generated/OrganiserFont")
 
 local function panel()
     local S = Fieldnote and Fieldnote.Panel
@@ -15,7 +21,7 @@ function CFFN.state()
     local S, w = panel()
     if not S then return false, "Fieldnote.Panel missing" end
     if not w then return false, "no window" end
-    return true, tostring(Fieldnote.VERSION), tostring(S.scale),
+    return true, tostring(ConspiracyFiles and ConspiracyFiles.VERSION), tostring(S.scale),
         tostring(w.width) .. "x" .. tostring(w.height), tostring(G.device.w) .. "x" .. tostring(G.device.h)
 end
 
@@ -93,12 +99,12 @@ function CFFN.pressColour(controlId)
     end
     if not comp then return false, "no pressable primitive for " .. tostring(controlId) end
     local function hex(c) return string.format("%02X%02X%02X", math.floor(c[1] * 255 + 0.5), math.floor(c[2] * 255 + 0.5), math.floor(c[3] * 255 + 0.5)) end
-    w.pressed = nil
-    local normal = hex(w:colourFor(comp, prim))
-    w.pressed = controlId
-    local held = hex(w:colourFor(comp, prim))
-    w.pressed = nil
-    local released = hex(w:colourFor(comp, prim))
+    -- The colour rule is on the MODULE, not the panel: the PDA draws the case
+    -- into its own window through S.render, so a panel method would have been
+    -- reachable from only one of the two callers.
+    local normal = hex(S.colourFor(comp, prim, nil))
+    local held = hex(S.colourFor(comp, prim, controlId))
+    local released = hex(S.colourFor(comp, prim, nil))
     return true, prim.id, normal, held, released
 end
 
@@ -180,14 +186,14 @@ function CFFN.labels()
             end
         end
         if label then
-            local font = (label.font == "UI Medium") and UIFont.Medium or UIFont.Small
-            -- Measure the INK, not the glyph box. The renderer places the box
-            -- at baseline - (YOffset + YReal); the ink begins YOffset rows below
-            -- that, at baseline - YReal. For UI Small on "NOTE" that is 4 blank
-            -- rows (measured in-game, 2026-09-13: YOffset=4, YReal=8), and a
-            -- box-top comparison reported a 0-1px overlap that was empty space.
-            local ink = tm:MeasureStringYReal(font, label.text)
-            local top = label.baseline - ink        -- ink top, component-local, scale 1
+            -- The legends are in the device's own face now (P4-R90), so this
+            -- is arithmetic and not a measurement: the cell top sits at
+            -- baseline - ascent, and every capital in this face inks rows
+            -- 2..8 of its 11px cell. Nothing here depends on the machine, so
+            -- a pass here is a pass everywhere - which is the entire point of
+            -- having moved off the game's UI font.
+            local INK_TOP_IN_CELL = 2
+            local top = label.baseline - Font.ascent + INK_TOP_IN_CELL
             local gap = top - iconBottom
             out[#out + 1] = string.format("%s:%s top=%d icon=%d gap=%d", c.id, label.text, top, iconBottom, gap)
             if gap < 1 then bad[#bad + 1] = c.id .. ":" .. label.text .. " overlaps icon by " .. tostring(1 - gap) end

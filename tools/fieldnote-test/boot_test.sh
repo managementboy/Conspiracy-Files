@@ -4,9 +4,9 @@
 #   tools/fieldnote-test/boot_test.sh [--hidden]
 #
 # Runs on the LINUX dev machine through the same harness as every other check
-# (tools/autotest/pz.sh): claims the game, copies FieldnoteTest into
-# ~/Zomboid/mods beside the two mods already there, enables it for new worlds,
-# starts a fresh world, and drives the panel through the eval channel.
+# (tools/autotest/pz.sh): claims the game, starts a fresh world and drives the
+# panel through the eval channel. The device is part of the mod now, so there
+# is nothing separate to install - pz.sh already copies it.
 #
 # PASS needs: the mod loaded and opened; it draws with and without wear; every
 # manifest hitbox resolves at both ends of its half-open box and not one pixel
@@ -24,21 +24,14 @@ abort() { say "$*"; "$PZ" stop; exit 2; }
 fails=(); fail() { fails+=("$*"); say "FAIL: $*"; }
 f() { cut -f"$1"; }
 
-# The harness copies the two real mods on every start (pz.sh setup). Put ours
-# beside them the same way - copied, not linked, for the reason pz.sh gives.
-ZOMBOID="${PZ_ZOMBOID:-$HOME/Zomboid}"
-mkdir -p "$ZOMBOID/mods"
-rsync -a --delete "$HERE/FieldnoteTest/" "$ZOMBOID/mods/FieldnoteTest/"
-d="$ZOMBOID/mods/default.txt"
-if [ -f "$d" ] && ! grep -qE "mod = FieldnoteTest," "$d"; then
-    sed -i "/^mods$/,/^}/ s/^{$/{\n    mod = FieldnoteTest,/" "$d"
-fi
-
 claim_game || exit 2
 "$PZ" start "${start_args[@]}" || abort "the game did not reach a playable world"
 export CF_EVAL_TIMEOUT=90
-wait_true 120 'Fieldnote~=nil and Fieldnote.Panel~=nil' || abort "the Fieldnote mod never loaded"
 ev -f "$HERE/probe.lua" >/dev/null || abort "could not load the probe"
+wait_true 120 'Fieldnote~=nil and Fieldnote.Panel~=nil' || abort "the Fieldnote panel never loaded"
+# Nothing opens the hardware on its own any more: the device is the PDA's case
+# and the PDA decides when it is on screen. The probe opens it to be looked at.
+ev 'Fieldnote.Panel.open()' >/dev/null || abort "the device would not open"
 wait_true 30 'Fieldnote.Panel.window~=nil' || abort "the device never opened"
 
 state="$(ev 'return CFFN.state()')"

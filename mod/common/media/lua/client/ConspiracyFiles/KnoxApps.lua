@@ -381,6 +381,36 @@ A.todo={
     end,
 }
 
+-- SETUP ----------------------------------------------------------------------
+-- Palm had a Prefs application, and so does this. TWO sizes live here because
+-- they are two different things and neither substitutes for the other
+-- (P4-R89): how big the machine is drawn, and how big its type is. Only the
+-- second changes how much text fits.
+--
+-- Reached through the global rather than a require: OrganiserScreen requires
+-- this file, so requiring it back would be a loop. list() runs at draw time,
+-- by which point the screen is long since loaded.
+A.setup={
+    id="SETUP",title="SETUP",icon="setup",
+    list=function()
+        local O=ConspiracyFiles and ConspiracyFiles.OrganiserScreen
+        if not O then
+            return {{label="Unavailable.",title="Unavailable.",
+                     detail="The screen is not loaded.",id="setup-none"}}
+        end
+        local sizes=O.FONT_SIZES or {}
+        local f=sizes[O.fontSize or O.FONT_DEFAULT] or sizes[O.FONT_DEFAULT] or {label="?"}
+        return {
+            {label="Text ...... "..tostring(f.label),title="Text size",
+             detail="How big the type is on the screen, and so how much of it fits at once.\n\nSmall, Medium or Large. Medium is the size this face was drawn for; Small fits more and wants a larger machine to read comfortably.\n\nTap this line to step it.",
+             id="setup-text",setup="text"},
+            {label="Machine ... "..tostring(O.scale or 1).."x",title="Machine size",
+             detail="How big the whole machine is drawn. It changes nothing about how much text fits - that is the text size above.\n\nDrag the bottom-right corner of the case, or tap this line to step it. Every size is a whole multiple, so a pixel stays square.",
+             id="setup-machine",setup="machine"},
+        }
+    end,
+}
+
 -- HELP -----------------------------------------------------------------------
 -- Written for this device, not inherited from the window: the old help was
 -- about tabs, a filter box and a contrast toggle, none of which exist here.
@@ -393,7 +423,7 @@ A.help={
             {label="The keys",title="The keys",
              detail="MENU  the program list. Wakes the machine.\nUP    the line or page above.\nDOWN  the line or page below.\nBACK  out of a record, then out to the programs.\n\nThere is no power switch. Hold MENU for the lamp. Left alone it switches itself off."},
             {label="Size",title="Size",
-             detail="Point at the machine and press - to make it smaller, = to make it larger. Four sizes; it starts at whichever suits your screen.\n\nThose are the only keys it takes, and only while you are pointing at it: it never takes the map or the inventory off you.\n\nEvery size is a whole multiple, so a pixel stays square."},
+             detail="Two sizes, and they are different things. SETUP holds both.\n\nText size is how much fits on the screen: Small, Medium or Large.\n\nMachine size is how big the case is drawn. Drag its bottom-right corner, or point at it and press - and = . Three sizes; it starts at whichever suits your screen.\n\nThose are the only keys it takes, and only while you are pointing at it: it never takes the map or the inventory off you.\n\nEvery size is a whole multiple, so a pixel stays square."},
             {label="The stylus",title="The stylus",
              detail="Tap a program to open it. Tap a record to read it. Tap the arrows in the right margin to page. Tap the name in the title bar to come back here."},
             {label="Files",title="Files",
@@ -571,7 +601,7 @@ A.notes={
     end,
 }
 
-A.programs={A.files,A.names,A.places,A.dates,A.todo,A.notes,A.help,A.sites}
+A.programs={A.files,A.names,A.places,A.dates,A.todo,A.notes,A.setup,A.help,A.sites}
 
 -- What a player may see. SITES hands out the answers, so it exists only while
 -- the game is in debug, and the question is asked EVERY time the launcher is

@@ -87,6 +87,51 @@ function CFHW.holdPower()
     return true, tostring(w.lamp), tostring(w.lampRefused ~= nil)
 end
 
+-- THE TWO SIZE CONTROLS (P4-R89), and the invariant that makes them two
+-- controls rather than one: changing the MACHINE size changes the window and
+-- not how much text fits; changing the TEXT size changes how much text fits
+-- and not the window. If either one moved both numbers they would not be
+-- independent, which is the whole of the owner's ruling.
+function CFHW.sizes()
+    local w = S.window; if not w then return false, "no screen" end
+    local function state()
+        local l = w:lcd()
+        return {device=w.scale, font=w.fontSize, ww=w:getWidth(), wh=w:getHeight(),
+                t=l.t, cols=l.w, rows=l.h}
+    end
+    local function show(x)
+        return string.format("device=%dx font=%d window=%dx%d glyphs=%dx cols=%d rows=%d",
+            x.device, x.font, x.ww, x.wh, x.t, x.cols, x.rows)
+    end
+    S.fontSize = S.FONT_DEFAULT; w.fontSize = S.FONT_DEFAULT
+    S.zoom(1)
+    local a = state()
+    S.zoom(2)
+    local b = state()                       -- machine bigger
+    S.stepFont(1)
+    local c = state()                       -- text bigger, machine unchanged
+    local bad = {}
+    if not (b.ww > a.ww and b.wh > a.wh) then bad[#bad+1] = "machine size did not resize the window" end
+    if b.cols ~= a.cols or b.rows ~= a.rows then bad[#bad+1] = "machine size changed how much text fits" end
+    if c.ww ~= b.ww or c.wh ~= b.wh then bad[#bad+1] = "text size resized the window" end
+    if c.cols == b.cols then bad[#bad+1] = "text size did not change how much text fits" end
+    -- Every glyph set the two controls can land on must actually exist.
+    local Font = require("ConspiracyFiles/Generated/OrganiserFont")
+    local missing = {}
+    for d = 1, S.MAX do
+        for f = 1, #S.FONT_SIZES do
+            local t = S.typeScale(d, f)
+            local ok = false
+            for _, have in ipairs(Font.scales or {}) do if have == t then ok = true end end
+            if not ok then missing[#missing+1] = tostring(t) .. "x" end
+        end
+    end
+    if #missing > 0 then bad[#bad+1] = "no glyph set for " .. table.concat(missing, ",") end
+    S.zoom(1); S.fontSize = S.FONT_DEFAULT; w.fontSize = S.FONT_DEFAULT
+    if #bad > 0 then return false, table.concat(bad, "; "), show(a) .. " | " .. show(b) .. " | " .. show(c) end
+    return true, show(a) .. " | " .. show(b) .. " | " .. show(c)
+end
+
 function CFHW.foot()
     local w = S.window; if not w then return false, "no screen" end
     return true, tostring(w:footText("HINT"))
@@ -162,11 +207,14 @@ function CFHW.step(by)
 end
 
 -- What fit() picks for a given screen height, without needing that screen.
+-- It ASKS fit() now. It used to recompute the formula here, so when the
+-- rounding changed - flooring 1.53 to 1x had been opening the device at its
+-- smallest size on a 4K screen - this check went on confirming the old
+-- behaviour and would never have caught the bug it exists to catch.
 function CFHW.fitFor(height)
-    local Case = require("ConspiracyFiles/Generated/OrganiserCase")
-    local want = math.floor(tonumber(height) * S.FILL / Case.h)
-    if want < 1 then want = 1 elseif want > 3 then want = 3 end
-    return true, tostring(want), tostring(Case.h * want), tostring(height)
+    local FG = require("Fieldnote/Geometry")
+    local want = S.fit(height)
+    return true, tostring(want), tostring(FG.device.h * want), tostring(height)
 end
 
 -- HELP must actually tell the player how to do it.

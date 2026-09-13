@@ -134,14 +134,14 @@ function CFOrg.showHitBoxes(on)
     if not w then return false, "no screen" end
     w.showHits = on ~= false
     if w.showHits and not w.hitPainter then
-        local Case = require("ConspiracyFiles/Generated/OrganiserCase")
+        local FG = require("Fieldnote/Geometry")
         local original = w.prerender
         w.hitPainter = true
         w.prerender = function(self)
             original(self)
             local s = self.scale
-            self:drawRectBorder(Case.glass.x * s, Case.glass.y * s,
-                Case.glass.w * s, Case.glass.h * s, 1, 1, 0.2, 0.8)
+            self:drawRectBorder(FG.lcd.x * s, FG.lcd.y * s,
+                FG.lcd.w * s, FG.lcd.h * s, 1, 1, 0.2, 0.8)
             for _, b in ipairs(self:buttons()) do
                 self:drawRectBorder(b.x, b.y, b.w, b.h, 1, 0.2, 1, 0.4)
             end

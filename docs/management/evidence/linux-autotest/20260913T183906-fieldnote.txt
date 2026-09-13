@@ -1,0 +1,6 @@
+PASS fieldnote - 2026-09-13T18:39:06+02:00
+commit: e8da662
+session: 20260913T183713
+loaded:  true	DEV-0.31.0-knoxos	1	400x620	400x620
+lcd:     true	480,100 320x422	0	
+labels:  true	C14:HOME top=22 icon=17 gap=5 | C17:BACK top=22 icon=17 gap=5

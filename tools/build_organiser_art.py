@@ -164,7 +164,12 @@ if __name__ == "__main__":
 # the same picture with bigger squares, exactly like the Palm typeface beside
 # it.
 ICON = 22
-ICONS = ("files", "names", "places", "dates", "todo", "notes", "help", "sites")
+ICONS = ("files", "names", "places", "dates", "todo", "notes", "help", "sites", "setup")
+# The icons live ON the LCD, so they are drawn at the CONTENT scale, not the
+# device scale - the same set the typeface beside them needs (P4-R89). Keep
+# this equal to build_palm_font.py's SCALES or the launcher loses its icons at
+# whichever combination of device size and font size is missing.
+ICON_SCALES = (1, 2, 3, 4, 6, 9)
 
 def draw_icon(name, scale):
     """One icon, drawn at native size in whole pixels, then enlarged."""
@@ -254,17 +259,25 @@ def draw_icon(name, scale):
         vline(5, 2, 18)                       # the pole
         hline(2, 19, 19)                      # the ground
         hline(3, 8, 18)                       # its base
+    elif name == "setup":
+        # Three slider tracks with a handle on each: what a settings icon was
+        # before anyone drew a cogwheel, and it says "sizes" rather than
+        # "machinery". Palm had a Prefs application; this is it.
+        for i, at in enumerate((6, 13, 8)):
+            y = 4 + i * 6
+            hline(3, 18, y + 2)              # the track
+            box(at, y, at + 2, y + 4, fill=True)   # the handle
     # NEAREST: repeat the pixels, never blend them.
     if scale != 1:
         img = img.resize((ICON * scale, ICON * scale), Image.NEAREST)
     return img
 
 def build_icons():
-    for scale in (1, 2, 3, 4):
+    for scale in ICON_SCALES:
         folder = os.path.join(OUT, "icons", "%dx" % scale)
         os.makedirs(folder, exist_ok=True)
         for name in ICONS:
             draw_icon(name, scale).save(os.path.join(folder, "%s.png" % name))
-    print("icons: %d at %s, %d px native" % (len(ICONS), SCALES, ICON))
+    print("icons: %d at %s, %d px native" % (len(ICONS), ICON_SCALES, ICON))
 
 build_icons()

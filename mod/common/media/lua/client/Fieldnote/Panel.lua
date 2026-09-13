@@ -9,21 +9,26 @@
 -- existing press handler.
 --
 -- Verified against the installed Build 42.20 Lua/jar, not from memory:
---   ISUIElement:drawRect(x, y, w, h, a, r, g, b)      alpha FIRST
---   ISUIElement:drawText(str, x, y, r, g, b, a, font) alpha LAST
---   zombie.ui.TextManager: MeasureStringX(UIFont, String), getFontHeight(UIFont)
---   UIFont.Small / UIFont.Medium exist.
+--   ISUIElement:drawRect(x, y, w, h, a, r, g, b)               alpha FIRST
+--   ISUIElement:drawTextureScaled(t, x, y, w, h, a, r, g, b)   alpha FIRST
 -- The palette is {r,g,b,a} and is reordered per call below; that difference is
 -- the whole reason the manifest refuses to fix an argument order.
 --
--- THE ONE THING THAT NEEDED EYES: drawText anchors by the TOP of the glyph
--- box, and the design gives BASELINES. PZ exposes no ascent directly, but
--- AngelCodeFont.getHeight(str, real, offset) exposes the two halves of it:
--- MeasureStringYOffset = rows above the ink, MeasureStringYReal = ink rows.
--- Their sum is the ink bottom - the baseline of a caps label. Verified from
--- the bytecode, after getFontHeight and MeasureStringY both overshot.
+-- THE WORDS ON THE PLASTIC ARE IN THE DEVICE'S OWN TYPEFACE (P4-R90), not the
+-- game's UI font. The design package asked for UI Small, and that was the one
+-- thing on this device whose size came from the player's own settings rather
+-- than from us: on a 3200x1894 machine the labels drew on top of their icons
+-- and on the development machine the same code cleared them by 3-4px, because
+-- the only machine-dependent input in the whole device was those font metrics.
+-- The mod already ships a pixel face at every scale the screen needs, so the
+-- legends use it. That makes the placement arithmetic instead of a
+-- measurement: the cell is `line` tall with the baseline at `ascent`, so a
+-- label sits at (baseline - ascent) and every machine draws it identically.
+-- This is also what retires the whole MeasureStringYOffset/YReal baseline
+-- problem that cost a day - there is nothing left to measure.
 require "ISUI/ISPanel"
 local G=require("Fieldnote/Geometry")
+local Font=require("ConspiracyFiles/Generated/OrganiserFont")
 
 Fieldnote=Fieldnote or {}
 local S=Fieldnote.Panel or {}
@@ -34,11 +39,22 @@ S.Panel=Panel
 
 S.scale=1
 S.showWear=G.showWear
-S.onAction=function(id) end   -- replaced by whoever wires the buttons
-
-local FONTS={["UI Small"]=UIFont.Small,["UI Medium"]=UIFont.Medium}
+S.onAction=function(action,id) end   -- replaced by whoever drives this panel
 
 local function colour(name) return G.palette[name] or G.palette.edge end
+
+-- One glyph picture of the device's own face. The legends are on the plastic,
+-- so they take the DEVICE scale - unlike the screen's text, which takes the
+-- content scale the player chose.
+local glyphs={}
+local function glyph(code,scale)
+    local key=scale.."/"..code
+    local hit=glyphs[key]
+    if hit~=nil then return hit or nil end
+    local ok,texture=pcall(getTexture,"media/ui/CFOrg/"..scale.."x/"..code..".png")
+    glyphs[key]=(ok and texture) or false
+    return ok and texture or nil
+end
 
 function S.metrics(scale)
     scale=scale or S.scale
@@ -62,8 +78,7 @@ function Panel:initialise() ISPanel.initialise(self) end
 
 -- The colour a primitive draws in right now: its own, or its pressed colour
 -- while its control is held, or the rocker's per-half override.
-function Panel:colourFor(component,primitive)
-    local held=self.pressed
+function S.colourFor(component,primitive,held)
     if held then
         if component.overrides then
             -- Rocker: the half being pressed carries its own override table.
@@ -78,46 +93,54 @@ function Panel:colourFor(component,primitive)
     return colour(primitive.color)
 end
 
-function Panel:drawPrimitive(component,p)
-    local s=self.scale
+local function drawPrimitive(target,s,held,component,p)
     local ox,oy=component.x,component.y
-    local c=self:colourFor(component,p)
+    local c=S.colourFor(component,p,held)
     if p.kind=="rect" then
         -- drawRect(x, y, w, h, ALPHA, r, g, b)
-        self:drawRect((ox+p.x)*s,(oy+p.y)*s,p.w*s,p.h*s,c[4],c[1],c[2],c[3])
+        target:drawRect((ox+p.x)*s,(oy+p.y)*s,p.w*s,p.h*s,c[4],c[1],c[2],c[3])
     elseif p.kind=="text" then
-        local font=FONTS[p.font] or UIFont.Small
-        local tm=getTextManager()
-        local width=tm:MeasureStringX(font,p.text)
-        -- The ascent: the distance from drawText's y to the BOTTOM of this
-        -- string's ink, which for a descender-free caps label is its baseline.
-        -- Read out of AngelCodeFont.getHeight(str, real, offset) itself
-        -- (javap, 2026-09-13): it tracks the highest ink row (min yoffset) and
-        -- the lowest (max height+yoffset); `offset` returns the former and
-        -- `real` their difference. Ink bottom is therefore offset + real.
-        -- getFontHeight is the line height and MeasureStringY the full box -
-        -- both overshot and put every label on top of its icon.
-        local height=tm:MeasureStringYOffset(font,p.text)+tm:MeasureStringYReal(font,p.text)
+        local width=Font.width(p.text,s)
         local x=(ox+p.x)*s
         if p.align=="center" then x=x-width/2
         elseif p.align=="right" then x=x-width end
         -- Nearest integer pixel, as the design resolves alignment.
         x=math.floor(x+0.5)
-        -- Top-anchored text placed so its glyphs sit on the given baseline.
-        local y=(oy+p.baseline)*s-height
-        -- drawText(str, x, y, r, g, b, ALPHA, font)
-        self:drawText(p.text,x,y,c[1],c[2],c[3],c[4],font)
+        -- The cell top that puts this face's baseline where the design asks.
+        -- Measured, not assumed: every capital in this face inks rows 2..8 of
+        -- an 11px cell, so the baseline is row 9 - which is `ascent`.
+        local y=(oy+p.baseline-Font.ascent)*s
+        for i=1,#p.text do
+            local code=string.byte(p.text,i)
+            if code>=Font.first and code<=Font.last then
+                local w=Font.w[code-Font.first+1]
+                local texture=glyph(code,s)
+                if texture then
+                    -- drawTextureScaled(t, x, y, w, h, ALPHA, r, g, b)
+                    target:drawTextureScaled(texture,x,y,w*s,Font.line*s,c[4],c[1],c[2],c[3])
+                end
+                x=x+w*s
+            end
+        end
+    end
+end
+
+-- Draw the whole device into any panel. This is deliberately NOT a method:
+-- the PDA draws the case into its own window, and it must not have to own a
+-- second panel to do it. `held` is the control id currently pressed, or nil.
+function S.render(target,scale,held,showWear)
+    if showWear==nil then showWear=S.showWear end
+    for _,component in ipairs(G.components) do
+        if not (component.optional and not showWear) then
+            for _,p in ipairs(component.primitives) do
+                drawPrimitive(target,scale,held,component,p)
+            end
+        end
     end
 end
 
 function Panel:prerender()
-    for _,component in ipairs(G.components) do
-        if not (component.optional and not S.showWear) then
-            for _,p in ipairs(component.primitives) do
-                self:drawPrimitive(component,p)
-            end
-        end
-    end
+    S.render(self,self.scale,self.pressed,S.showWear)
 end
 
 -- Half-open hit test, device-local, exactly as the manifest states it:

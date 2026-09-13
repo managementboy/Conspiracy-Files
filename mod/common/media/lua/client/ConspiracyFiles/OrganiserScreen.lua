@@ -28,7 +28,18 @@
 -- Escape to close. The stylus does all of it by tapping.
 local CFLog=require("ConspiracyFiles/Log")
 local Font=require("ConspiracyFiles/Generated/OrganiserFont")
-local Case=require("ConspiracyFiles/Generated/OrganiserCase")
+local FG=require("Fieldnote/Geometry")
+require("Fieldnote/Panel")
+-- The case is the Fieldnote device, drawn from its design manifest with
+-- native rectangles - no picture, no art pipeline (P4-R87..R89). A Case-shaped
+-- view of it so the rest of this file keeps speaking in the same terms the
+-- bitmap shell taught it: device units, multiplied by a whole-number scale.
+local Case={w=FG.device.w,h=FG.device.h,
+            glass={x=FG.lcd.x,y=FG.lcd.y,w=FG.lcd.w,h=FG.lcd.h},
+            buttons={}}
+for _,ctl in ipairs(FG.controls) do
+    Case.buttons[#Case.buttons+1]={id=ctl.id,x=ctl.x,y=ctl.y,w=ctl.w,h=ctl.h,action=ctl.action}
+end
 local K=require("ConspiracyFiles/KnoxUI")
 local Apps=require("ConspiracyFiles/KnoxApps")
 require("ISUI/ISPanel")
@@ -39,16 +50,22 @@ ConspiracyFiles.OrganiserScreen=S
 local function log(message) CFLog.message("casefile","note",message) end
 local function safe(fn,...) local ok,v=pcall(fn,...) if ok then return v end end
 
--- The case is a PICTURE, not a stack of rectangles: the game's Lua draws only
--- rectangles, so a shell drawn in code came out as grey plates (owner,
--- 2026-09-12: "that looks nothing like your or my mockup ... All sqare"). The
--- art and these hit boxes are generated together by tools/build_organiser_art.py,
--- in native pixels, multiplied by a whole-number scale so a pixel stays square.
--- Portrait, like the shell the owner drew: the glass is nearly square and the
--- keypad sits under it. A first pass was 34 columns by 6 lines, which made a
--- letterbox - correct in code, wrong on screen (2026-09-12).
--- The glass is the original's own 160 x 160. How much fits is measured by the
--- widget kit, not chosen here.
+-- The case WAS a picture, because a shell drawn in code came out as grey
+-- plates (owner, 2026-09-12: "that looks nothing like your or my mockup ...
+-- All sqare"). The Fieldnote design solved that properly - stepped bevels,
+-- highlights above and left, shadows below and right - so the shell is
+-- rectangles again and the SVG-to-four-PNG-exports pipeline is gone.
+-- Geometry comes from the design manifest and is generated, never
+-- transcribed: tools/fieldnote-test/build_fieldnote.py is the only way the
+-- device changes.
+--
+-- TWO SIZE CONTROLS, INDEPENDENT (P4-R89). `scale` is how big the DEVICE is
+-- drawn; `fontSize` is how big the player wants the TEXT, as a real Palm's
+-- font selector did. The glyph set used is the product of the two, so the
+-- amount of text on screen depends only on fontSize and the device scale only
+-- changes how big the whole thing is. Both step in whole numbers: a
+-- fractional scale would soften the pixel face and misalign the housing,
+-- which is the exact problem this rebuild exists to escape.
 S.HOLD_MS=450                     -- how long a held MENU becomes the lamp
 S.PRESS_MS=110                    -- how long a button shows as pressed
 -- Auto-off. Every Palm did this, and for the reason this machine needs it:
@@ -68,14 +85,21 @@ S.AUTO_OFF_MS=180000
 -- drawn over it in the LCD typeface. That first attempt was rejected on sight
 -- and rightly (owner, 2026-09-13: "extremely ugly. remove."). The mapping
 -- stays here; the words go in the artwork the owner is drawing.
-S.ACTION={MODE="MENU",PREV="UP",NEXT="DOWN",INDEX="BACK",UP="UP",DOWN="DOWN"}
+-- The one input map. Fieldnote control ids on the left, Knox.OS verbs on the
+-- right (P4-R87): HOME and BACK on the outer keys, the rocker taking up and
+-- down, and the two inner keys deliberately absent - they depress, they log,
+-- and they do nothing until play shows what they are for. A key with no entry
+-- here still wakes the machine, because every hardware key did on a Palm.
+--
+-- MODE/PREV/NEXT/INDEX stay as aliases: they are what the keyboard mirror and
+-- the checks press, and they cost one table entry each.
+S.ACTION={C09="MENU",C12="BACK",rocker_up="UP",rocker_down="DOWN",
+          MODE="MENU",PREV="UP",NEXT="DOWN",INDEX="BACK",UP="UP",DOWN="DOWN"}
 
 -- Palm III colours: a graphite case, a near-black surround, and the grey-green
 -- LCD. Only the glass is green.
-local SHELL={0.31,0.31,0.32}
-local SHELL_EDGE={0.10,0.10,0.11}
-local SHELL_DEEP={0.22,0.22,0.24}
-local GLASS={0.66,0.70,0.59}
+-- The shell's own colours are the manifest's now; only the lamp is still
+-- painted from here, because it is light on the glass rather than hardware.
 local GLASS_LIT={0.76,0.70,0.46}
 local INK={0.15,0.17,0.13}
 local INK_DIM={0.38,0.42,0.33}
@@ -103,16 +127,54 @@ function S.metrics(scale)
     return {scale=scale,glass=Case.glass,w=Case.w*scale,h=Case.h*scale}
 end
 
+-- The player's font size, as a multiplier on the machine's own pixels. Three,
+-- like a Palm's. Medium is the size this face was actually cut for; small is
+-- the dense setting and large is for reading at arm's length.
+S.FONT_SIZES={{id="small",label="Small",mult=1},
+              {id="medium",label="Medium",mult=2},
+              {id="large",label="Large",mult=3}}
+S.FONT_DEFAULT=2
+S.fontSize=S.fontSize or S.FONT_DEFAULT
+
+-- Both size choices are the player's PREFERENCE, so they live in the machine
+-- and survive a reload. The device scale never used to persist and reset to
+-- whatever fit the screen on every load, which is tolerable for a thing you
+-- set once and forget and not for one you can drag.
+local PREFS="ConspiracyFilesOrganiserPrefs"
+local function prefsStore()
+    return ModData and safe(ModData.getOrCreate,PREFS)
+end
+function S.loadPrefs()
+    local root=prefsStore(); if not root then return end
+    if type(root.scale)=="number" and root.scale>=1 and root.scale<=S.MAX then
+        S.scale=math.floor(root.scale)
+    end
+    if type(root.fontSize)=="number" and S.FONT_SIZES[root.fontSize] then
+        S.fontSize=math.floor(root.fontSize)
+    end
+end
+function S.savePrefs()
+    local root=prefsStore(); if not root then return end
+    root.scale=S.scale; root.fontSize=S.fontSize
+end
+
+-- The glyph set a given device scale and font size land on. Every product of
+-- 1..3 and 1..3 is generated (tools/build_palm_font.py SCALES), so this is
+-- always a whole number with pictures behind it.
+function S.typeScale(scale,fontSize)
+    local f=S.FONT_SIZES[fontSize or S.FONT_DEFAULT] or S.FONT_SIZES[S.FONT_DEFAULT]
+    return scale*f.mult
+end
+
 local art={}
--- With a scale, a piece of case art (case_3x.png); without one, a path that
--- already carries its own scale (icons/3x/files.png).
-local function texture(name,scale)
-    local key=name..tostring(scale)
-    local hit=art[key]
+-- A program icon, at a path that already carries its own scale
+-- (icons/3x/files.png). The case used to come through here too, as
+-- case_3x.png; the shell is rectangles now and has no pictures.
+local function texture(name)
+    local hit=art[name]
     if hit~=nil then return hit or nil end
-    local path=scale and ("media/ui/CFOrg/"..name.."_"..scale.."x.png") or ("media/ui/CFOrg/"..name..".png")
-    local t=getTexture and safe(getTexture,path)
-    art[key]=t or false
+    local t=getTexture and safe(getTexture,"media/ui/CFOrg/"..name..".png")
+    art[name]=t or false
     return t
 end
 
@@ -126,14 +188,28 @@ end
 -- size of the game's own radio panel beside it (owner screenshot, 2026-09-13).
 -- Half the height is a device you hold, not a window you live in.
 S.FILL=0.5
--- The owner's SVG is exported at four sizes, so there are four (2026-09-13).
-S.MAX=4
-function S.fit()
-    local h=getCore and getCore():getScreenHeight() or 720
-    -- The case is 305 x 444 in its own pixels, and the scale is a whole number
-    -- so a drawn pixel stays square.
+-- Three, because the type is drawn at scale x fontSize and 3 x 3 = 9 is the
+-- largest glyph set generated. A fourth device size would need 12x pictures
+-- and would not fit a 4K screen anyway.
+S.MAX=3
+-- `height` is for the checks, which must be able to ask what this picks for a
+-- screen they are not running on. It defaulted to the real screen and the
+-- check reimplemented the formula instead, which is how it came to still be
+-- asserting the old rounding after the rounding changed.
+function S.fit(height)
+    local h=tonumber(height) or (getCore and getCore():getScreenHeight()) or 720
+    -- The largest whole size that is at most FILL of the screen height. This
+    -- looked like a bug worth fixing - 1894 x 0.5 / 620 is 1.53 and flooring
+    -- it opens the device at 620px on a 4K screen, a third of the height - but
+    -- rounding to nearest gives 1240px, 65% of that screen, and the owner
+    -- rejected 1332px (70%) as far too big for a thing meant to fit in a
+    -- pocket. There is no whole size that lands near half on that screen: it
+    -- is 33% or 65%. So the rule stands as the owner set it, and the DEFAULT
+    -- is his open question - he now has a control that persists.
     local want=math.floor(h*S.FILL/Case.h)
     if want<1 then want=1 elseif want>S.MAX then want=S.MAX end
+    -- Never taller than the window it opens in, whatever the rounding wanted.
+    while want>1 and Case.h*want>h*0.95 do want=want-1 end
     return want
 end
 
@@ -156,6 +232,7 @@ function Screen:new(owner)
     o.borderColor={r=0,g=0,b=0,a=0}
     o.owner=owner
     o.scale=scale
+    o.fontSize=S.fontSize or S.FONT_DEFAULT
     o.section="evidence"
     o.entry=1
     o.card=1
@@ -174,6 +251,37 @@ function Screen:new(owner)
 end
 
 function Screen:initialise() ISPanel.initialise(self); self:setWantKeyEvents(true) end
+
+-- Where the LCD is on the window, and how many of the machine's own pixels
+-- fit on it at the player's font size. Everything Knox.OS draws is in those
+-- pixels; everything the case draws is in device pixels. This is the one
+-- place the two meet.
+function Screen:lcd()
+    local s=self.scale
+    local t=S.typeScale(s,self.fontSize)
+    return {x=Case.glass.x*s,y=Case.glass.y*s,
+            w=math.floor(Case.glass.w*s/t),h=math.floor(Case.glass.h*s/t),t=t}
+end
+
+-- The size grip: the bottom-right corner of the case. Nothing is DRAWN there
+-- - the design has no grip component and inventing hardware it does not have
+-- is how the old case ended up with a power tab off the edge of the picture -
+-- so SETUP and HELP both say the corner drags, and SETUP steps it on a tap for
+-- anyone who never tries.
+function Screen:grip()
+    local s=self.scale
+    local g=14*s
+    return {x=Case.w*s-g,y=Case.h*s-g,w=g,h=g}
+end
+
+-- The control being held right now, for the case's pressed colours.
+function Screen:heldControl()
+    local now=getTimeInMillis and getTimeInMillis() or 0
+    for id,at in pairs(self.pressed) do
+        if now-at<S.PRESS_MS then return id end
+    end
+    return nil
+end
 
 function Screen:buttons()
     local s=self.scale
@@ -275,28 +383,17 @@ function Screen:prerender()
     self:idleCheck()
     self:powerCheck()
     local s=self.scale
-    local case=texture("case",s)
-    if case then
-        self:drawTextureScaled(case,0,0,Case.w*s,Case.h*s,1,1,1,1)
-    else
-        self:drawRect(0,0,self.width,self.height,1,SHELL[1],SHELL[2],SHELL[3])
-        self:drawRect(Case.glass.x*s,Case.glass.y*s,Case.glass.w*s,Case.glass.h*s,1,GLASS[1],GLASS[2],GLASS[3])
-    end
+    -- The whole shell, including its keys and their pressed faces, drawn from
+    -- the design manifest. The LCD comes out of this as a filled rectangle,
+    -- and Knox.OS draws over it below.
+    Fieldnote.Panel.render(self,s,self:heldControl())
     if self.on and self.lamp then
         self:drawRect(Case.glass.x*s,Case.glass.y*s,Case.glass.w*s,Case.glass.h*s,0.55,GLASS_LIT[1],GLASS_LIT[2],GLASS_LIT[3])
     end
     -- No power light: the screen says whether it is on, which is how you can
-    -- tell with any real machine (owner, 2026-09-12).
-    local now=getTimeInMillis and getTimeInMillis() or 0
-    for _,b in ipairs(self:buttons()) do
-        if self.pressed[b.id] and now-self.pressed[b.id]<S.PRESS_MS then
-            local name="press"
-            local t=texture(name,s)
-            local sink=math.max(1,s/2)
-            if t then self:drawTextureScaled(t,b.x,b.y+sink,b.w,b.h,0.9,1,1,1)
-            else self:drawRect(b.x,b.y+sink,b.w,b.h,1,SHELL_EDGE[1],SHELL_EDGE[2],SHELL_EDGE[3]) end
-        end
-    end
+    -- tell with any real machine (owner, 2026-09-12). A held key darkens its
+    -- own face through the manifest's pressed colours, so there is no longer a
+    -- separate pressed-button picture drawn on top of the shell.
     if self.on then self:draw(Case.glass.x*s,Case.glass.y*s) end
 end
 
@@ -370,7 +467,8 @@ local function pages(detail,width)
 end
 
 function Screen:draw(gx,gy)
-    local c=K.begin(self,self.scale,gx,gy,Case.glass.w,Case.glass.h)
+    local l=self:lcd()
+    local c=K.begin(self,l.t,gx,gy,l.w,l.h)
     self.context=c
     local line=Font.line
     local room=K.rows(c)
@@ -405,7 +503,7 @@ function Screen:draw(gx,gy)
         -- first every frame and then, after a cache, every second (suite,
         -- 2026-09-12). An icon and its name cost nothing.
         K.grid(c,self:programs(),y+2,self.app or 1,
-            function(name) return texture("icons/"..self.scale.."x/"..name,nil) end)
+            function(name) return texture("icons/"..self:lcd().t.."x/"..name) end)
         K.foot(c,self:footText("tap a program"))
         return
     end
@@ -506,6 +604,10 @@ function Screen:openRow(index)
     self.entry=index
     if row.todo and row.index then
         Apps.tickToDo(row.index); self.cachedList=nil
+    elseif row.setup=="text" then
+        S.stepFont(1)
+    elseif row.setup=="machine" then
+        S.step(S.scale>=S.MAX and -(S.MAX-1) or 1)
     else
         self.record=row; self.record.index=index; self.card=1
     end
@@ -620,28 +722,61 @@ end
 
 function Screen:onMouseDown(x,y)
     self.downAt=getTimeInMillis and getTimeInMillis() or 0
+    local g=self:grip()
+    if x>=g.x and y>=g.y and x<g.x+g.w and y<g.y+g.h then
+        self.resizing={scale=self.scale,dy=0}
+        self.down="GRIP"
+        return true
+    end
     for _,b in ipairs(self:buttons()) do
-        if x>=b.x and x<=b.x+b.w and y>=b.y and y<=b.y+b.h then self.down=b.id; return true end
+        -- Half-open, exactly as the manifest states it: a pixel on the far
+        -- edge belongs to whatever is next, not to this key.
+        if x>=b.x and x<b.x+b.w and y>=b.y and y<b.y+b.h then self.down=b.id; return true end
     end
     local s=self.scale
     local gx,gy=Case.glass.x*s,Case.glass.y*s
-    if self.on and x>=gx and y>=gy and x<=gx+Case.glass.w*s and y<=gy+Case.glass.h*s then
+    if self.on and x>=gx and y>=gy and x<Case.glass.x*s+Case.glass.w*s and y<Case.glass.y*s+Case.glass.h*s then
         self.down="GLASS"; return true
     end
     self.down=nil
     return ISPanel.onMouseDown(self,x,y)
 end
 
+-- Dragging the corner. The corner follows the pointer and the size SNAPS to a
+-- whole multiple, because a fractional scale softens the pixel face and
+-- misaligns the housing - the exact problem the rebuild exists to escape
+-- (P4-R89). So it reads as a window you pull, and it clicks between sizes.
+function Screen:onMouseMove(dx,dy)
+    local r=self.resizing
+    if r then
+        r.dy=r.dy+(dy or 0)
+        local want=math.floor((Case.h*r.scale+r.dy)/Case.h+0.5)
+        if want<1 then want=1 elseif want>S.MAX then want=S.MAX end
+        if want~=self.scale then S.zoom(want) end
+        return true
+    end
+    return ISPanel.onMouseMove(self,dx,dy)
+end
+
+function Screen:onMouseUpOutside(x,y)
+    self.resizing=nil; self.down=nil
+    return ISPanel.onMouseUpOutside(self,x,y)
+end
+
 function Screen:onMouseUp(x,y)
     local id=self.down
     self.down=nil
+    if id=="GRIP" then self.resizing=nil; S.savePrefs(); return true end
     if id=="GLASS" then self:tap(x,y); return true end
     if not id then return ISPanel.onMouseUp(self,x,y) end
     local held=(getTimeInMillis and getTimeInMillis() or 0)-(self.downAt or 0)
     -- The lamp moved from the power tab to a held MENU when the owner's case
     -- lost the tab (2026-09-13). Same gesture, the only button that can still
     -- carry it without stealing a press the player needs.
-    if id=="MODE" and held>=S.HOLD_MS and self.on then
+    -- Held MENU, by what the key DOES and not by which key it is: MENU moved
+    -- from MODE to C09 when the housing changed, and an id test here would
+    -- have silently taken the lamp away with it.
+    if S.ACTION[id]=="MENU" and held>=S.HOLD_MS and self.on then
         self:touch()
         local organiser=ConspiracyFiles.Organiser
         local item=organiser and safe(organiser.held)
@@ -708,15 +843,15 @@ end
 function Screen:writeNote()
     if self.writer then return end
     require("ISUI/ISTextEntryBox")
-    local s=self.scale
+    local l=self:lcd()
     -- Where the field is drawn, in the machine's own pixels.
-    local fx,fy=2,Case.glass.h-Font.line*4
+    local fx,fy=2,l.h-Font.line*4
     -- Parked off the case, not merely made transparent. setFrameAlpha(0) and
     -- transparent text still left the box painting a dark slab over the glass,
     -- so the field's own text was drawn dark-on-dark and could not be read
     -- (owner, 2026-09-13: "unreadable"). Keystrokes follow FOCUS, not
     -- position, so a box nobody can see still types.
-    local box=ISTextEntryBox:new("",-10000,-10000,(Case.glass.w-4)*s,Font.line*s)
+    local box=ISTextEntryBox:new("",-10000,-10000,(l.w-4)*l.t,Font.line*l.t)
     box:initialise(); box:instantiate()
     box:setMaxTextLength(200)
     safe(function()
@@ -782,6 +917,9 @@ end
 -- a second reading surface, which is exactly what P4-R79 forbids.
 function S.open()
     if S.window then S.window:bringToTop(); return S.window end
+    -- The player's own sizes, read once per session before the first window is
+    -- built - after that S.scale and S.fontSize are the truth.
+    if not S.prefsLoaded then S.prefsLoaded=true; safe(S.loadPrefs) end
     -- Picking the machine up is when a flat cell is discovered, and it is a
     -- cheap moment to look: once per open, not once per tick.
     local organiser=ConspiracyFiles.Organiser
@@ -810,8 +948,36 @@ end
 function S.zoom(scale)
     if type(scale)=="number" and scale>=1 and scale<=S.MAX then S.scale=math.floor(scale)
     else S.scale=((S.scale or S.fit())%S.MAX)+1 end
-    if S.window then S.close(); S.open() end
+    -- Resized in place, not closed and reopened. A rebuild dropped the player
+    -- back on the launcher, which made "tap here to step the machine size"
+    -- throw away the screen you were reading to change its size.
+    local w=S.window
+    if w then
+        -- A half-written note is positioned in the old size's pixels, and any
+        -- navigation abandons one anyway.
+        if w.writer then w:finishNote(false) end
+        local m=S.metrics(S.scale)
+        w.scale=S.scale
+        safe(function() w:setWidth(m.w); w:setHeight(m.h) end)
+        local x,y=S.place(m)
+        safe(function() w:setX(x); w:setY(y) end)
+        w.cachedList=nil
+    end
+    S.savePrefs()
     return S.scale
+end
+
+-- The text size steps round, because there are three of them and a selector
+-- with three choices should cycle. The case does not change size, so the
+-- window is left alone and only what it draws changes.
+function S.stepFont(by)
+    local n=#S.FONT_SIZES
+    S.fontSize=(((S.fontSize or S.FONT_DEFAULT)-1+(by or 1))%n)+1
+    local w=S.window
+    if w then w.fontSize=S.fontSize; w.cachedList=nil end
+    S.savePrefs()
+    log("text size: "..S.FONT_SIZES[S.fontSize].id)
+    return S.fontSize
 end
 
 -- One step smaller or larger, stopping at the ends rather than wrapping round

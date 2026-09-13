@@ -80,9 +80,23 @@ top="$(ev 'return CFHW.step(5)')"; high="$(ev 'return CFHW.size()' | f 2)"
 maxs="$(f 3 <<<"$top")"
 [ "$high" = "$maxs" ] || fail "stepping up repeatedly did not stop at S.MAX ($maxs): $high"
 say "zoom clamps: down->$low up->$high"
+# The two controls must be INDEPENDENT (P4-R89): the machine size changes the
+# window and not how much text fits; the text size changes how much text fits
+# and not the window. Either one moving both numbers means they are one
+# control wearing two hats.
+sizes="$(ev 'return CFHW.sizes()')"
+if [ "$(f 1 <<<"$sizes")" = true ]; then
+    say "two size controls: $(f 2 <<<"$sizes")"
+else
+    fail "size controls are not independent: $(f 2 <<<"$sizes") [$(f 3 <<<"$sizes")]"
+fi
 # And HELP has to say how, which was the actual complaint.
 help="$(ev 'return CFHW.helpText()' | f 2)"
-grep -qi 'press - to make' <<<"$help" || fail "HELP does not explain how to resize"
+# Two size controls now (P4-R89), and HELP has to distinguish them: the old
+# assertion matched one phrase about one control.
+grep -qiE 'press - and =|press - to make' <<<"$help" || fail "HELP does not explain how to resize the machine"
+grep -qi 'drag' <<<"$help" || fail "HELP does not mention dragging the corner"
+grep -qi 'text size' <<<"$help" || fail "HELP does not explain the text size"
 grep -qi 'MENU' <<<"$help" || fail "HELP does not name the buttons"
 grep -qiE 'VIEW  the program|ROCKER' <<<"$help" && fail "HELP still describes the old keys"
 say "help: documents size and the current buttons"

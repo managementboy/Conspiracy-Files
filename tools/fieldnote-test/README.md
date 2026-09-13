@@ -1,9 +1,15 @@
-# Fieldnote PDA — standalone test mod
+# Fieldnote PDA — the device, and the tools that generate it
 
-A separate, self-contained Project Zomboid Build 42.20 mod that draws the
-rectangle-built PDA from `design/manifest.json` using **only native
-`drawRect` calls and built-in UI text**. No textures, no SVG, no PNG at
-runtime. It does **not** touch the Conspiracy-Files mod or the current PDA.
+The rectangle-built PDA from `design/manifest.json`, drawn with **only native
+`drawRect` calls and the mod's own pixel typeface**. No textures for the
+hardware, no SVG, no PNG at runtime, and nothing measured from the player's
+machine.
+
+**This was a standalone test mod so it could be looked at before it replaced
+anything.** It was, and the owner approved its drawing in his own play
+(2026-09-13), so the device now lives in the mod proper — `Fieldnote/Panel.lua`
+and the generated `Fieldnote/Geometry.lua` — and it is the PDA's case. What is
+left in this folder is the design package, the generator and the boot check.
 
 The LCD is drawn as a blank filled rectangle and nothing hardware ever
 enters it. No branding, no handwriting pad. Wear scuffs are on by default,
@@ -13,13 +19,11 @@ as the manifest's `default_visibility` says, and can be toggled.
 tools/fieldnote-test/
   design/                      the package's manifest.json + DESIGN.md + reference PNG
   build_fieldnote.py           manifest.json  ->  Geometry.lua  (the ONLY way geometry changes)
-  FieldnoteTest/               the mod itself (copy this folder)
-    42/mod.info
-    common/media/lua/shared/Fieldnote/Geometry.lua    GENERATED - do not edit
-    common/media/lua/client/Fieldnote/Panel.lua       the renderer + input
-    common/media/lua/client/Fieldnote/Fieldnote.lua   entry point, opens on game start
   probe.lua                    eval-channel checks used by boot_test.sh
-  boot_test.sh                 boots a real game and proves the contract
+  boot_test.sh                 boots a real game and proves the hardware contract
+
+mod/common/media/lua/shared/Fieldnote/Geometry.lua    GENERATED - do not edit
+mod/common/media/lua/client/Fieldnote/Panel.lua       the renderer + input
 ```
 
 ## What was verified against the installed game, not from memory
@@ -28,25 +32,25 @@ tools/fieldnote-test/
 |---|---|---|
 | `ISUIElement:drawRect` | `(x, y, w, h, a, r, g, b)` | **alpha first** |
 | `ISUIElement:drawText` | `(str, x, y, r, g, b, a, font)` | **alpha last** |
-| `zombie.ui.TextManager` | `MeasureStringX(UIFont, String)` | centring |
-| `zombie.ui.TextManager` | `MeasureStringYOffset` + `MeasureStringYReal` | **the baseline** — see below |
-| `UIFont` | `Small`, `Medium` exist | "UI Small" → `UIFont.Small` |
+| `ISUIElement:drawTextureScaled` | `(t, x, y, w, h, a, r, g, b)` | **alpha first** |
 
 The palette is kept as `{r,g,b,a}` and reordered per call in `Panel.lua`.
 That difference between the two draw calls is exactly why the design refused
 to fix an argument order.
 
-**The one thing the package said needed eyes — resolved from the bytecode.**
-`drawText` anchors by the *top* of the glyph box; the design gives
-*baselines*, and PZ exposes no ascent directly. The first live render used
-`getFontHeight` and every label landed ~10px high, on its icon; `MeasureStringY`
-overshot too (it is the full box). Disassembling
-`AngelCodeFont.getHeight(str, real, offset)` shows it tracks the highest ink
-row and the lowest: `MeasureStringYOffset` returns the rows *above* the ink and
-`MeasureStringYReal` the ink height, so their sum is the ink bottom — the
-baseline of a descender-free caps label. Labels are placed at
-`baseline − (YOffset + YReal)`, and `boot_test.sh` now **asserts** every
-label's top sits below its icon rather than leaving it to a screenshot.
+**The label baseline problem, and why it no longer exists.** The design gives
+*baselines*; `drawText` anchors by the *top* of the glyph box and PZ exposes no
+ascent. That was solved by disassembling `AngelCodeFont.getHeight(str, real,
+offset)` — `MeasureStringYOffset` is the rows above the ink and
+`MeasureStringYReal` the ink height, so their sum is the ink bottom. It worked,
+and it was still machine-dependent: the same code cleared the icons here and
+collided with them on the owner's 4K machine, because the game's font metrics
+were the only input to this device that came from the player's settings.
+
+So the legends moved to the mod's own pixel face (P4-R90). The cell is 11px
+with its baseline at `ascent` and every capital inks rows 2..8, so a legend
+sits at `baseline − ascent` and draws identically on every machine — 5px clear
+of its icon, everywhere. `boot_test.sh` still asserts it.
 
 ## Install
 

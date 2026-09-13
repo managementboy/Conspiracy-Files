@@ -1,0 +1,19 @@
+FAIL fieldnote - 2026-09-13T18:36:05+02:00
+commit: e8da662
+session: 20260913T183405
+loaded:  true	DEV-0.31.0-knoxos	1	400x620	400x620
+lcd:     true	480,100 320x422	0	
+labels:  true	C14:HOME top=22 icon=17 gap=5 | C17:BACK top=22 icon=17 gap=5
+FAIL: press colour C09: 
+FAIL: press colour C10: 
+FAIL: press colour C11: 
+FAIL: press colour C12: 
+FAIL: press colour rocker_up: 
+FAIL: press colour rocker_down: 
+FAIL: errors inside the mod: General      f:0 at CellLoader.DoTileObjectCreation     > CellLoader> missing tile vegetation_groundcover_01_18
+General      f:62> Lua(Vanilla).pressColour> Exception thrown  |  Object tried to call nil in pressColour at KahluaUtil.fail(KahluaUtil.java:100).
+General      f:67> Lua(Vanilla).pressColour> Exception thrown  |  Object tried to call nil in pressColour at KahluaUtil.fail(KahluaUtil.java:100).
+General      f:73> Lua(Vanilla).pressColour> Exception thrown  |  Object tried to call nil in pressColour at KahluaUtil.fail(KahluaUtil.java:100).
+General      f:79> Lua(Vanilla).pressColour> Exception thrown  |  Object tried to call nil in pressColour at KahluaUtil.fail(KahluaUtil.java:100).
+General      f:85> Lua(Vanilla).pressColour> Exception thrown  |  Object tried to call nil in pressColour at KahluaUtil.fail(KahluaUtil.java:100).
+General      f:91> Lua(Vanilla).pressColour> Exception thrown  |  Object tried to call nil in pressColour at KahluaUtil.fail(KahluaUtil.java:100).

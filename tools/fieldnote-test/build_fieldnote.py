@@ -8,7 +8,7 @@ text anchor, hitbox and pressed-state override comes from it. Nothing here is
 transcribed by hand, so the Lua cannot drift from the design without this
 script being re-run - and re-running it is the whole update path.
 
-Output: FieldnoteTest/common/media/lua/shared/Fieldnote/Geometry.lua
+Output: mod/common/media/lua/shared/Fieldnote/Geometry.lua
 
 Coordinate contract preserved exactly as the package states it: integer,
 top-left origin, half-open rectangles as x, y, w, h; components draw in
@@ -22,8 +22,9 @@ import os
 import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
+REPO = os.path.dirname(os.path.dirname(HERE))
 DEFAULT_MANIFEST = os.path.join(HERE, "design", "manifest.json")
-OUT = os.path.join(HERE, "FieldnoteTest", "common", "media", "lua", "shared", "Fieldnote", "Geometry.lua")
+OUT = os.path.join(REPO, "mod", "common", "media", "lua", "shared", "Fieldnote", "Geometry.lua")
 
 
 def lua_str(s):

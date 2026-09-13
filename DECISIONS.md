@@ -538,3 +538,33 @@ preference has to be stored per player and given somewhere to be changed; and
 the auto-fit that opens the device has to stop rounding 1.52 down to 1x. The
 font itself is already done — `build_palm_font.py` now emits all six scales the
 grid needs.
+
+## The words on the plastic — 2026-09-13
+
+**P4-R90 — the silkscreen legends use the device's own typeface, not the
+game's.** The design package specified built-in UI Small for the key legends,
+and that made them the only thing on the entire device whose size came from the
+player's machine rather than from us. The symptom was the unresolved label bug:
+on the owner's 3200x1894 machine the labels drew on top of their icons, while
+the same code on the development machine measured them 3-4px clear. A UI
+font-size setting was the leading hypothesis and was never proven; a metrics
+script was staged to read the owner's real font metrics out of his own session.
+
+Put the choice to the owner and he took it: the legends are drawn in the pixel
+face the mod already ships, at every scale the device can be drawn at.
+
+This does not work around the bug, it removes the category. There is nothing
+left to measure: the face has a fixed 11px cell with its baseline at `ascent`,
+every capital inks rows 2..8, so a legend's position is arithmetic and every
+machine draws it identically — 5px clear of its icon, everywhere. It also
+retires the `MeasureStringYOffset` + `MeasureStringYReal` baseline rule that
+cost most of a day to derive from `AngelCodeFont.getHeight`'s bytecode, and the
+staged metrics script with it. **The owner's numbers are no longer needed and
+that eval slot is free.**
+
+Consequence to hold onto: real silkscreen lettering was printed sans, not a
+screen face, so this is a small deliberate loss of fidelity bought with total
+machine independence. It is also a divergence from the design package's text
+contract, recorded in `DESIGN.md` alongside the key changes. And it means the
+legends scale with the DEVICE, not with the player's font size — they are on
+the plastic, not on the screen.

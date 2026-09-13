@@ -10,6 +10,13 @@
 > no action — until play shows what they are for; their symbol layers C15 and
 > C16 are removed. Re-read the geometry from `manifest.json`, never from the
 > tables below.
+>
+> The **key legends are drawn in the mod's own pixel typeface**, not the
+> built-in UI Small this package specifies (P4-R90). That was the only part
+> of the device whose size came from the player's machine, and it put the
+> labels on top of their icons on a 4K display. The package's text contract
+> — baseline anchors, integer coordinates, centre alignment resolved by
+> measured width — is honoured exactly; only the face is ours.
 
 ## A. Design description
 
