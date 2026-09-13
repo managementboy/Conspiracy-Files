@@ -113,6 +113,21 @@ end
 -- saved field, so this survives a reload; blood is deliberately NOT applied,
 -- because setBloodLevel exists on the installed jar but nothing has proven it
 -- persists, and no wording anywhere claims an object is bloodied.
+-- Everything a created evidence document needs to look like one. Both places
+-- that build an item call this: first placement, and relocation.
+--
+-- The category is a display string only; nothing in the game keys off it. It
+-- is also a TRANSLATION KEY - the inventory renders IGUI_ItemCat_<category>,
+-- and without the entry the player sees the raw key, so ours ships in
+-- Translate/EN/IG_UI.json (seen in play as "IGUI_ItemCat_Evidence" down a
+-- whole column). And it is a RUNTIME property: it is not saved with the item,
+-- which is why loading a game re-stamps it as well.
+local function stampEvidence(item,title)
+    if not item then return end
+    item:setName(title); item:setCustomName(true)
+    pcall(function() item:setDisplayCategory("Evidence") end)
+end
+
 local function applyWear(item,doc)
     if not item or not doc or not doc.wear then return end
     if not item.getConditionMax or not item.setCondition then return end
@@ -195,16 +210,7 @@ local function placement(api,id)
             -- holding (owner, 2026-09-10).
             local name=doc.title
             if expected>1 and doc.label then name=doc.label.." ("..copy.." of "..expected..")" end
-            item:setName(name); item:setCustomName(true)
-            -- Its own category, so evidence sorts together instead of hiding
-            -- among Junk (owner, 2026-09-10). A display string only; nothing
-            -- in the game keys off it.
-            --
-            -- The name is a TRANSLATION KEY: the inventory renders
-            -- IGUI_ItemCat_<category>, and without the entry the player sees
-            -- the raw key. Ours ships in Translate/EN/IG_UI.json - seen in
-            -- play as "IGUI_ItemCat_Evidence" down a whole column.
-            pcall(function() item:setDisplayCategory("Evidence") end)
+            stampEvidence(item,name)
             applyWear(item,doc)
             writePages(item,doc)
             assert(current:AddItem(item),"could not add note")
@@ -813,7 +819,13 @@ local function relocation(api)
             newItem=assert(instanceItem(carrier.fullType),"could not create relocated evidence item")
             local md=newItem:getModData()
             md.cfGeneratedId=id; md.cfPhysicalToken=a.physicalToken
-            newItem:setName(doc.title); newItem:setCustomName(true)
+            -- Relocation RECREATES the item, and used to set the name here
+            -- and nothing else - so a relocated document reverted to its
+            -- script's own category and appeared as "Literature" in the middle
+            -- of a session (owner, 2026-09-13, at 101 4th St). Same stamp as
+            -- first placement now, from one function, so a third creation path
+            -- cannot drift the same way.
+            stampEvidence(newItem,doc.title)
             applyWear(newItem,doc)
             writePages(newItem,doc)
             newDestination=destination
