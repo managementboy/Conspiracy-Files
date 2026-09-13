@@ -60,6 +60,15 @@ if [ "${1:-}" = "--parse-all" ]; then
     cd "$REPO"
     exec "$JDK/bin/java" -cp "$CP" RunLua --parse $(find mod/common -name '*.lua' | sort)
 fi
+# --parse <file...>: the same engine compile, for files outside mod/common -
+# a test mod under tools/, say. The plain single-file mode below EXECUTES a
+# file, so a client file that requires ISPanel fails there with "Object tried
+# to call nil" whether or not it is valid; this is the parse-only check.
+if [ "${1:-}" = "--parse" ]; then
+    shift
+    cd "$REPO"
+    exec "$JDK/bin/java" -cp "$CP" RunLua --parse "$@"
+fi
 failures=0
 for script in "$@"; do
     printf '%-46s ' "$(basename "$script")"
