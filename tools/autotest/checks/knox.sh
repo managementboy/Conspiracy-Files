@@ -150,6 +150,20 @@ say "cards: $before_card -> $after_key (rocker) -> $after_tap (arrow)"
 ev 'return CFOrg.wake()' >/dev/null
 ev 'return CFOrg.tapWidget("REMIND")' >/dev/null; sleep 1
 ev 'return CFOrg.wake()' >/dev/null
+# Back to the launcher FIRST. openProgram taps an icon in the launcher's hit
+# list, so it can only work while the launcher is on screen - every other call
+# site in this file taps the title bar before it, and this one did not.
+#
+# It used to be pressButton("INDEX"), when INDEX was LIST and opened the
+# selected record. 822cfd0 made INDEX into BACK after the owner's play session
+# and rewrote this step as openProgram, without adding the launcher tap the
+# other sites have. REMIND clears you back to the FILES LIST, not the
+# launcher, so the call has been unable to succeed since. It went unnoticed
+# because software rendering was failing this check wholesale at the time: on
+# 2026-09-12 every assertion in it failed, and a real narrow bug sat behind
+# the broad flake until the renderer was fixed (2026-09-13).
+todo_open="$(ev 'return CFOrg.tapWidget("SELECT")')"; sleep 1
+[ "$(ev 'return CFOrg.knox()' | cut -f4)" = true ] || fail "could not get back to the launcher for TO DO: $todo_open"
 ev 'return CFOrg.openProgram("TO DO")' >/dev/null; sleep 1
 todo="$(ev 'return CFOrg.knox()')"
 [ "$(cut -f2 <<<"$todo")" = "TO DO" ] || fail "TO DO did not open: $todo"

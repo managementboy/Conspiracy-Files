@@ -1,0 +1,9 @@
+Linux reload check 20260913T191558: PASS
+source: 00d42ea
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+world: 90031669634578637484; three save/quit/continue round trips after two documents were inspected
+notebook before: 2 1=397693428:document-1:Follow-up note / PS-932 | 2=397693428:document-2:Attendance card / PS-932
+placements before: 7 397693428:document-1@10840,10148,0:placed 397693428:document-2@10873,10126,0:placed 397693428:document-3@10836,10146,0:placed 397693428:document-4@10836,10147,0:placed 397693428:document-5@10836,10148,0:placed 397693428:document-6@10836,10148,0:placed 397693428:document-7@10871,10114,0:placed
+schedule before (count, last created hour, scheduled): 1 2.0712356567382812 true
+save-budget total per round (bytes): 168127 168127 168127 168127
+errors inside the mod: 0
