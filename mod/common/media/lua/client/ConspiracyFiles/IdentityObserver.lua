@@ -215,7 +215,16 @@ function I.afterRender(pane)
  local first=math.max(1,math.ceil(-scroll/h)+1)
  -- At most sixteen fully visible rows per pane/frame; rotate across tall panes.
  local last=math.min(#rows,math.floor((height-header-scroll)/h))
- if last<first then return bail("no fully visible rows: first="..tostring(first)..", last="..tostring(last)) end
+ if last<first then
+  -- Say WHICH of the two it is. "first=1, last=0" was true both when the pane
+  -- held no rows and when it reported itself shorter than one row, and the
+  -- owner's container hit this with a credit card plainly on screen
+  -- (2026-09-13). A diagnostic that cannot separate two causes is half a
+  -- diagnostic.
+  return bail("no fully visible rows: first="..tostring(first)..", last="..tostring(last)
+   ..", rows="..tostring(#rows)..", itemHgt="..tostring(h)..", headerHgt="..tostring(header)
+   ..", scroll="..tostring(scroll)..", height="..tostring(height))
+ end
  -- Count what the loop actually accepted. An accepted pane that records
  -- nothing is otherwise indistinguishable from a pane never rendered.
  -- Report only a WATCHED item that went unrecorded, naming the check that

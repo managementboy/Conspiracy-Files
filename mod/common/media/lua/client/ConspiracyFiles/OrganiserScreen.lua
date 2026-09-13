@@ -406,6 +406,11 @@ function Screen:draw(gx,gy)
         else K.command(c,"REMIND",x,foot,"REMIND") end
         return
     end
+    if self.writer then
+        K.titleBar(c,program.title,nil)
+        self:drawNote(c)
+        return
+    end
     K.titleBar(c,program.title,#rows>0 and (self.entry.." of "..#rows) or "empty")
     local top=math.max(1,math.min(self.entry-math.floor(room/2),#rows-room+1))
     if top<1 then top=1 end
@@ -416,7 +421,10 @@ function Screen:draw(gx,gy)
         K.row(c,row.label,line+2+i*line,(top+i)==self.entry,"ROW",top+i)
     end
     K.arrows(c,line+2,room*line,top>1,top+room-1<#rows)
-    K.foot(c,self:footText("VIEW: programs   LIST: open"))
+    -- The hint named keys this machine has never had: VIEW and LIST were the
+    -- mapping before the buttons were MENU/UP/DOWN/BACK, and it was still on
+    -- screen a version later (owner screenshot, 2026-09-13).
+    K.foot(c,self:footText("MENU: programs   tap: open"))
 end
 
 function Screen:openRow(index)
@@ -465,6 +473,9 @@ function Screen:press(id)
     -- Back to retreat. That keeps the design's own promise - "page with the
     -- keys, aim with the stylus" - which the program-jump mapping never did.
     local action=S.ACTION[id]
+    -- Any navigation abandons a half-written note. It used to be a child of
+    -- the whole screen, so it stayed on top of whatever you moved to.
+    if action and self.writer then self:finishNote(false) end
     if action=="MENU" then
         self.launcher=true; self.record=nil; self.card=1
     elseif action=="BACK" then
@@ -494,6 +505,9 @@ function Screen:tap(x,y)
     if not widget then return end
     safe(function() getSoundManager():playUISound("UIActivateButton") end)
     local id=widget.id
+    if self.writer and id~="NOTE_DONE" and id~="NOTE_CANCEL" then
+        self:finishNote(false)
+    end
     if id=="APP" then
         self.app=widget.payload; self.launcher=false; self.record=nil
         self.entry,self.card,self.cachedList=1,1,nil
@@ -504,6 +518,8 @@ function Screen:tap(x,y)
             local row=self:list()[widget.payload]
             if row and row.write then self:writeNote() else self:openRow(widget.payload) end
         end
+    elseif id=="NOTE_DONE" then self:finishNote(true)
+    elseif id=="NOTE_CANCEL" then self:finishNote(false)
     elseif id=="BACK" then self.record=nil; self.card=1
     elseif id=="TICK" then
         if self.record and self.record.index then
@@ -567,54 +583,112 @@ function Screen:onMouseUp(x,y)
     return true
 end
 
-local KEYS={[Keyboard.KEY_UP]="UP",[Keyboard.KEY_DOWN]="DOWN",[Keyboard.KEY_LEFT]="PREV",
-            [Keyboard.KEY_RIGHT]="NEXT",[Keyboard.KEY_M]="MODE",[Keyboard.KEY_I]="INDEX"}
-function Screen:isKeyConsumed(key)
-    return KEYS[key]~=nil or key==Keyboard.KEY_ESCAPE or key==Keyboard.KEY_L
-        or key==Keyboard.KEY_P or key==Keyboard.KEY_MINUS or key==Keyboard.KEY_EQUALS
-end
-function Screen:onKeyRelease(key)
-    if key==Keyboard.KEY_ESCAPE then self:close(); return end
-    -- The keyboard keeps an off switch even though the case has no tab: it is
-    -- a shortcut, not a moulding, so it tells no lie about the object.
-    if key==Keyboard.KEY_P then
-        self.on=not self.on
-        if not self.on then self.lamp=false end
-        return
-    end
-    if key==Keyboard.KEY_L then self.lamp=not self.lamp; return end
-    if key==Keyboard.KEY_MINUS then S.step(-1); return end
-    if key==Keyboard.KEY_EQUALS then S.step(1); return end
-    local id=KEYS[key]
-    if id then self:press(id) end
+-- THE DEVICE TAKES NO GAME KEYS.
+--
+-- It used to swallow the arrows, M, I, Escape, L, P, - and = for as long as it
+-- was open - which is to say it stole the map, the inventory and the pause
+-- menu from a player holding it (owner, 2026-09-13: "while PDA open, we cant
+-- open the map as M key is bound to a button. remove all button mappings to
+-- key strokes"). A reading device that disables the map is not a trade
+-- anybody would make.
+--
+-- The machine is driven the way the design always said it was: the stylus, and
+-- the four keys on its own case. Nothing on the keyboard.
+--
+-- The two exceptions are the size controls, and they are consumed ONLY while
+-- the pointer is actually over the device - so - and = resize the thing you
+-- are pointing at, and mean whatever the game wants them to mean the rest of
+-- the time.
+function Screen:sizeKey(key)
+    if key~=Keyboard.KEY_MINUS and key~=Keyboard.KEY_EQUALS then return false end
+    return safe(function() return self:isMouseOver() end)==true
 end
 
--- Typing. The Palm had a writing area under its screen and so does this: the
--- game's own text box is placed there, because drawing a keyboard on a 160 x
--- 160 canvas would be a worse answer than borrowing one that works.
+function Screen:isKeyConsumed(key)
+    return self:sizeKey(key)==true
+end
+
+function Screen:onKeyRelease(key)
+    if not self:sizeKey(key) then return end
+    if key==Keyboard.KEY_MINUS then S.step(-1) else S.step(1) end
+end
+
+-- Writing a note ---------------------------------------------------------------
+--
+-- The game's own text box is used for the TYPING, because it is the only thing
+-- that reliably receives keystrokes - but it is made invisible
+-- (setFrameAlpha(0), setTextRGBA alpha 0) and the field is drawn by this
+-- screen instead, in the machine's own typeface, inside the glass.
+--
+-- It used to be added as a plain child, so the owner got a white sans-serif
+-- box in the game's font sitting on top of the case, which then STAYED on top
+-- when he moved to another program, with no visible way to send what he had
+-- written (owner, 2026-09-13, three faults in one screenshot).
 function Screen:writeNote()
     if self.writer then return end
     require("ISUI/ISTextEntryBox")
     local s=self.scale
-    local x=Case.glass.x*s
-    local y=(Case.glass.y+Case.glass.h)*s-Font.line*s*2
-    local box=ISTextEntryBox:new("",x,y,Case.glass.w*s,Font.line*s*2)
+    -- Where the field is drawn, in the machine's own pixels.
+    local fx,fy=2,Case.glass.h-Font.line*4
+    local box=ISTextEntryBox:new("",
+        (Case.glass.x+fx)*s,(Case.glass.y+fy)*s,(Case.glass.w-4)*s,Font.line*s)
     box:initialise(); box:instantiate()
     box:setMaxTextLength(200)
-    box.onCommandEntered=function()
-        local text=box:getText()
-        self:removeChild(box); self.writer=nil
-        if text and text:find("%S") then
-            Apps.addNote(text); self.cachedList=nil
-            log("owner note: "..text)
-        end
-    end
+    -- Invisible, but focused and listening. The look is this screen's job.
+    safe(function()
+        box.javaObject:setFrameAlpha(0)
+        box.javaObject:setTextRGBA(0,0,0,0)
+    end)
+    box.onCommandEntered=function() self:finishNote(true) end
     self:addChild(box)
     box:focus()
     self.writer=box
+    self.writerAt={x=fx,y=fy}
+end
+
+-- Done, or abandoned. Either way the field goes: it must never outlive the
+-- program it was opened in.
+function Screen:finishNote(commit)
+    local box=self.writer
+    if not box then return end
+    self.writer=nil
+    self.writerAt=nil
+    local text=safe(function() return box:getText() end)
+    safe(function() box:unfocus() end)
+    safe(function() self:removeChild(box) end)
+    if commit and type(text)=="string" and text:find("%S") then
+        Apps.addNote(text)
+        self.cachedList=nil
+        log("owner note: "..text)
+    end
+end
+
+-- Drawn as a Palm drew one: a framed field with a caret, and two command
+-- buttons underneath saying what will happen.
+function Screen:drawNote(c)
+    local at=self.writerAt
+    if not at or not self.writer then return end
+    local text=safe(function() return self.writer:getText() end) or ""
+    K.text(c,"Write a note:",at.x,at.y-Font.line,K.DIM)
+    K.frame(c,at.x-1,at.y-1,c.w-at.x*2+2,Font.line+2,K.INK)
+    -- The tail of the line, so a long note keeps its caret in view.
+    local shown=text
+    while K.width(shown)>c.w-at.x*2-6 and #shown>0 do shown=shown:sub(2) end
+    K.text(c,shown,at.x+1,at.y,K.INK)
+    -- A caret that blinks, because a field with no caret does not look like
+    -- one you can type into.
+    local now=getTimeInMillis and getTimeInMillis() or 0
+    if math.floor(now/500)%2==0 then
+        K.fill(c,at.x+1+K.width(shown),at.y,1,Font.line-1,K.INK)
+    end
+    local foot=K.foot(c,self:footText(""))
+    local x=K.command(c,"SEND",2,foot,"NOTE_DONE")
+    K.command(c,"CANCEL",x,foot,"NOTE_CANCEL")
 end
 
 function Screen:close()
+    -- A half-written note dies with the screen rather than outliving it.
+    self:finishNote(false)
     self:removeFromUIManager()
     S.window=nil
 end

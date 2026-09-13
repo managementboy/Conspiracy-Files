@@ -177,3 +177,50 @@ function CFHW.helpText()
     end
     return true, table.concat(out, " || ")
 end
+
+-- The survivor's own card in NAMES. It printed a translation key at the player
+-- ("Work: IGUI_Occupation_fitnessinstructor") because the key was invented and
+-- getText hands back what it cannot find (owner screenshot, 2026-09-13).
+function CFHW.meCard()
+    for _, row in ipairs(A.names.list()) do
+        if row.me then return true, tostring(row.detail):gsub("\n", " | ") end
+    end
+    return false, "no card for the survivor"
+end
+
+-- Crash durability. The ledger lives in ModData, which only reaches the disk
+-- when the GAME saves, so a hard crash loses every discovery since the last
+-- autosave - the owner lost his on 2026-09-13. A write-ahead journal is
+-- supposed to bring them back. This proves it by destroying the ModData copy,
+-- which is exactly what a crash does to the unsaved part of it.
+local DL = ConspiracyFiles.DiscoveryLog
+local LEDGER_TAG = "ConspiracyFiles.DiscoveryLedger"
+
+function CFHW.recordDiscovery(ref)
+    local ok = DL.record("evidence", tostring(ref))
+    return ok == true, tostring(#DL.events())
+end
+
+function CFHW.ledgerCount() return true, tostring(#DL.events()) end
+
+function CFHW.journalCount()
+    return true, tostring(#DL.journalRead())
+end
+
+-- What a crash does: the in-memory ledger was never written to the save.
+function CFHW.wipeLedger()
+    local store = ModData.getOrCreate(LEDGER_TAG)
+    store.canonical = nil
+    return true, tostring(#DL.events())
+end
+
+function CFHW.replay()
+    local n = DL.journalReplay()
+    return true, tostring(n), tostring(#DL.events())
+end
+
+function CFHW.refs()
+    local out = {}
+    for _, e in ipairs(DL.events()) do out[#out + 1] = tostring(e.ref) end
+    return true, table.concat(out, ",")
+end

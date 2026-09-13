@@ -165,6 +165,48 @@ say "boot after restore: $boot"
 boot2="$(ev 'return CFHW.boot()' | f 2)"
 grep -q "Restoring from backup" <<<"$boot2" && fail "the restore notice came back after it was read: $boot2"
 
+# --- the research survives a crash -------------------------------------------
+# Owner, 2026-09-13: "game crashed. all lost in the files" ... "make sure we
+# dont loose the game reseach we are working on".
+for r in journal-a journal-b journal-c; do ev "return CFHW.recordDiscovery('$r')" >/dev/null; done
+before="$(ev 'return CFHW.ledgerCount()' | f 2)"
+jn="$(ev 'return CFHW.journalCount()' | f 2)"
+say "recorded: ledger=$before journal=$jn"
+[ "${before:-0}" -ge 3 ] || fail "could not record three discoveries: $before"
+[ "${jn:-0}" -ge 3 ] || fail "the journal did not receive them: $jn"
+refs_before="$(ev 'return CFHW.refs()' | f 2)"
+
+# Destroy the saved copy, which is what an unclean shutdown does to it.
+ev 'return CFHW.wipeLedger()' >/dev/null
+lost="$(ev 'return CFHW.ledgerCount()' | f 2)"
+[ "$lost" = 0 ] || fail "the wipe did not simulate a crash: $lost"
+say "after the crash: ledger=$lost"
+
+back="$(ev 'return CFHW.replay()')"
+restored="$(f 2 <<<"$back")"; now="$(f 3 <<<"$back")"
+say "after replay:    restored=$restored ledger=$now"
+[ "${now:-0}" -ge "${before:-1}" ] || fail "the journal did not bring the research back: $before -> $now"
+refs_after="$(ev 'return CFHW.refs()' | f 2)"
+[ "$refs_after" = "$refs_before" ] || fail "the restored ledger differs: '$refs_before' -> '$refs_after'"
+
+# Replaying twice must not duplicate anything.
+ev 'return CFHW.replay()' >/dev/null
+again="$(ev 'return CFHW.ledgerCount()' | f 2)"
+[ "$again" = "$now" ] || fail "a second replay duplicated entries: $now -> $again"
+say "replay is idempotent: $now -> $again"
+
+# --- no plumbing on screen ---------------------------------------------------
+me="$(ev 'return CFHW.meCard()')"
+[ "$(f 1 <<<"$me")" = true ] || fail "the survivor has no card in NAMES: $me"
+card="$(f 2 <<<"$me")"
+say "own card: $card"
+# A translation key is upper-case words joined by underscores. None may reach
+# the screen: getText returns the key itself when it cannot find it, so a wrong
+# key looks exactly like this and nothing errors.
+grep -qE '[A-Z]{2,}_[A-Za-z_]+' <<<"$card" && \
+    fail "a raw translation key reached the survivor's card: $card"
+grep -q 'This is me' <<<"$card" || fail "the survivor's card lost its own text: $card"
+
 errors="$(mod_errors)"
 [ -z "$errors" ] || fail "errors inside the mod: $errors"
 id="$(session)"

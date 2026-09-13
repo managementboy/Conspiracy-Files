@@ -77,6 +77,9 @@ function D.record(kind,reference)
         local store=ModData.getOrCreate(TAG)
         store.canonical=staged
         local event=staged.events[#staged.events]
+        -- Straight to disk, before anything else can go wrong. ModData will
+        -- not reach the disk until the game next saves.
+        pcall(D.journalAppend,event)
         CFLog.message("ledger","note","#"..event.seq.." "..event.kind.." "..event.ref.." at hour "..string.format("%.2f",event.at)
             ..(event.place and (" at "..event.place) or " (no named place)"))
         -- Set A voice line: fire on every genuinely new discovery, whatever
@@ -123,5 +126,98 @@ function D.events() return Ledger.events(D.root()) end
 function D.places() return Ledger.places(D.root()) end
 function D.placeIds() return Ledger.placeIds(D.root()) end
 function D.order(rows) local ok,out=pcall(Ledger.order,D.root(),rows); return ok and out or rows end
+
+-- The write-ahead journal ----------------------------------------------------
+--
+-- The ledger above lives in ModData, and ModData only reaches the disk when
+-- the GAME saves. A hard crash therefore loses every discovery made since the
+-- last autosave - which is exactly what happened to the owner on 2026-09-13:
+-- "game crashed. all lost in the files".
+--
+-- So every discovery is also appended to a plain file the moment it is
+-- recorded, and anything the save turns out to be missing is replayed on the
+-- next load. The journal is the belt; ModData is still the braces.
+--
+-- Replay is safe to run at any time because Ledger.record refuses a reference
+-- it already holds and reports changed=false, so an entry that did survive the
+-- save is a no-op rather than a duplicate.
+local JOURNAL="ConspiracyFiles_discoveries.txt"
+local SEP="\29"     -- a field separator no place name or reference contains
+
+local function saveId()
+    local world=getWorld and getWorld()
+    local name=world and world.getWorld and world:getWorld()
+    return (type(name)=="string" and name~="" ) and name or "?"
+end
+
+local function encode(value)
+    if value==nil then return "" end
+    return (tostring(value):gsub("[\r\n\29]"," "))
+end
+
+-- One line per discovery, appended. Never rewrites the file: an append cannot
+-- corrupt what is already on disk, which is the whole point of it.
+function D.journalAppend(event)
+    if not event then return false end
+    local ok=pcall(function()
+        local w=getFileWriter(JOURNAL,true,true)
+        if not w then return end
+        -- writeln, not write: it owns the line ending, and the play machine
+        -- is Windows while this is read back on Linux.
+        w:writeln(table.concat({saveId(),encode(event.kind),encode(event.ref),
+            encode(string.format("%.6f",event.at or 0)),encode(event.place),
+            encode(event.placeId)},SEP))
+        w:close()
+    end)
+    return ok
+end
+
+function D.journalRead()
+    local out={}
+    pcall(function()
+        local r=getFileReader(JOURNAL,false)
+        if not r then return end
+        local mine=saveId()
+        while true do
+            local line=r:readLine()
+            if line==nil then break end
+            local f={}
+            for part in (line..SEP):gmatch("([^"..SEP.."]*)"..SEP) do f[#f+1]=part end
+            if #f>=4 and f[1]==mine then
+                out[#out+1]={kind=f[2],ref=f[3],at=tonumber(f[4]),
+                             place=(f[5]~="" and f[5]) or nil,
+                             placeId=(f[6]~="" and f[6]) or nil}
+            end
+        end
+        r:close()
+    end)
+    return out
+end
+
+-- Put back anything the save did not keep. Returns how many were restored.
+function D.journalReplay()
+    local entries=D.journalRead()
+    if #entries==0 then return 0 end
+    local restored=0
+    for _,e in ipairs(entries) do
+        local ok,done=pcall(function()
+            local staged,changed=Ledger.record(root(),e.kind,e.ref,e.at,e.place,e.placeId)
+            if not staged or not changed then return false end
+            if not Budget.check("discoveries",{canonical=staged}) then return false end
+            ModData.getOrCreate(TAG).canonical=staged
+            return true
+        end)
+        if ok and done then restored=restored+1 end
+    end
+    if restored>0 then
+        CFLog.message("ledger","note","restored "..restored.." discoveries from the journal after an unclean shutdown")
+    end
+    return restored
+end
+
+if Events and Events.OnGameStart and not D.journalHooked then
+    D.journalHooked=true
+    Events.OnGameStart.Add(function() pcall(D.journalReplay) end)
+end
 
 return D

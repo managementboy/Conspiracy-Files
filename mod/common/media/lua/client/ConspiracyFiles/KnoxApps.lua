@@ -147,12 +147,30 @@ function A.me()
     -- getCharacterProfession():getName(). Verified
     -- against the installed jar rather than guessed (the guess threw three
     -- swallowed errors a run, 2026-09-12).
+    -- The trade, as the game's own character screen resolves it:
+    -- CharacterProfessionDefinition.getCharacterProfessionDefinition(prof)
+    -- then getUIName() (ISCharacterScreen.loadProfession, installed game).
+    --
+    -- It used to build "IGUI_Occupation_"..getName() and hand that to
+    -- getText. No such key exists in the game, and getText hands back the key
+    -- it could not find, so the survivor's own card read
+    -- "Work: IGUI_Occupation_fitnessinstructor" (owner screenshot,
+    -- 2026-09-13). getName() is the lowercase id, never a translation key.
     local job=descriptor and safe(function()
         local profession=descriptor:getCharacterProfession()
-        return profession and profession:getName() or nil
+        if not profession then return nil end
+        local def=CharacterProfessionDefinition
+            and CharacterProfessionDefinition.getCharacterProfessionDefinition(profession)
+        local shown=def and def:getUIName()
+        -- Never show a raw key. If the lookup fails, say nothing about the
+        -- trade rather than printing plumbing at the player.
+        if type(shown)=="string" and shown~="" and not shown:find("^%u+_") then
+            return shown
+        end
+        return nil
     end)
     if type(job)=="string" and job~="" then
-        lines[#lines+1]="Work: "..(getText and getText("IGUI_Occupation_"..job) or job)
+        lines[#lines+1]="Work: "..job
     end
     if root.woke then lines[#lines+1]="Woke up at "..root.woke.."." end
     if root.day then lines[#lines+1]="First day: "..root.day.."." end
@@ -270,7 +288,7 @@ A.help={
             {label="The keys",title="The keys",
              detail="MENU  the program list. Wakes the machine.\nUP    the line or page above.\nDOWN  the line or page below.\nBACK  out of a record, then out to the programs.\n\nThere is no power switch. Hold MENU for the lamp. Left alone it switches itself off."},
             {label="Size",title="Size",
-             detail="Press - to make the machine smaller and = to make it larger. Three sizes; it starts at whichever suits your screen.\n\nEvery size is a whole multiple, so a pixel stays square."},
+             detail="Point at the machine and press - to make it smaller, = to make it larger. Four sizes; it starts at whichever suits your screen.\n\nThose are the only keys it takes, and only while you are pointing at it: it never takes the map or the inventory off you.\n\nEvery size is a whole multiple, so a pixel stays square."},
             {label="The stylus",title="The stylus",
              detail="Tap a program to open it. Tap a record to read it. Tap the arrows in the right margin to page. Tap the name in the title bar to come back here."},
             {label="Files",title="Files",
@@ -279,6 +297,8 @@ A.help={
              detail="Every name you have seen on a document, and where you saw it.\n\nA name on a paper is a lead. It does not say who anybody is."},
             {label="Dates",title="Dates",
              detail="What you found, by the day you found it. Built from your own movements; nothing is added."},
+            {label="Notes",title="Notes",
+             detail="Open NOTES and tap '+ write a note'. Type, then tap SEND; Enter does the same.\n\nA note goes into this machine and into the log, which reaches the people building this. It is how you tell them something without leaving the game."},
             {label="To do",title="To do",
              detail="Open a file and press REMIND to set yourself a reminder. Tap a reminder to tick it off."},
             {label="Battery",title="Battery",
@@ -426,7 +446,7 @@ A.notes={
             out[#out+1]={label=item.text,title="Note "..i,detail=item.text,id="note-"..i}
         end
         out[#out+1]={label="+ write a note",title="Write a note",
-                     detail="Type what you noticed. It reaches the development machine with the log.",
+                     detail="Type what you noticed, then tap SEND. It reaches the development machine with the log.\n\nCANCEL throws it away, and so does leaving the program.",
                      id="note-new",write=true}
         return out
     end,
