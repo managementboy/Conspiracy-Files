@@ -12,6 +12,14 @@ local TAG="ConspiracyFiles.IdentityObservations"
 local types={['Base.IDcard']=true,['Base.IDcard_Stolen']=true,['Base.IDcard_Female']=true,
  ['Base.IDcard_Male']=true,['Base.CreditCard']=true,['Base.CreditCard_Stolen']=true,['Base.ParkingTicket']=true,['Base.SpeedingTicket']=true,['Base.BusinessCard']=true,['Base.BusinessCard_Personal']=true,['Base.BusinessCard_Nolans']=true,['Base.Passport']=true,['Base.PressID']=true,['Base.Badge']=true,['Base.Diary1']=true,['Base.Diary2']=true}
 local queue,queued,seen={},{},{}
+-- How many times one identity may fail to record before it is dropped and
+-- said so. The same cap, for the same reason, as LocalPersonIntegration's:
+-- clearing the guard before the write lets a PERMANENTLY failing record be
+-- re-queued on the very next render, so one failure retries forever. That was
+-- fixed next door on 2026-09-12 and never applied here; the fault check
+-- counted 90 caught errors in 15 seconds against a budget of 30 (2026-09-13).
+local MAX_ATTEMPTS=3
+local attempts={}
 -- Ids stored without a body token. They are the only records worth looking at
 -- twice: everything else is retired after one sighting.
 local tokenless={}
@@ -303,9 +311,23 @@ function I.flush()
  if not supported() then queue={};queued={};return end
  local record=table.remove(queue,1)
  if not record then return end
+ -- The guard stays SET until this record either lands or is given up on. A
+ -- few tries, then dropped once rather than spammed every render.
+ local ok,staged,changed=pcall(Model.add,root(),record)
+ if not ok or not staged then
+  local n=(attempts[record.id] or 0)+1
+  attempts[record.id]=n
+  if n>=MAX_ATTEMPTS then
+   -- Guard left set: this record is not coming back.
+   CFLog.message("person","person","Identity dropped after "..n.." attempts: "
+    ..tostring(record.label or record.id)..(ok and "" or (" ("..tostring(staged)..")")))
+  else
+   queued[record.id]=nil
+  end
+  return
+ end
  queued[record.id]=nil
- local staged,changed=Model.add(root(),record)
- if not staged then return end
+ attempts[record.id]=nil
  if not changed then
   seen[record.id]=true
   if record.token==nil then tokenless[record.id]=true end
