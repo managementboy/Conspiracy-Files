@@ -30,6 +30,22 @@ O.TYPE="ConspiracyFiles.Organiser"
 local MARK="cfOrganiser"
 
 local function log(message) CFLog.message("casefile","note",message) end
+
+-- SINGLE PLAYER ONLY, like everything else in this mod. Runtime.initialize
+-- sets Runtime.disabled and returns on isClient()/isServer(), and every other
+-- client feature guards the same way - but the organiser did not, and it was
+-- the mod's only unguarded feature. In multiplayer it would have been issued
+-- on OnCreatePlayer, force-equipped on OnGameStart and opened Knox.OS with no
+-- runtime behind it: an empty device that writes notes and to-dos into
+-- client-side ModData nothing reconciles. The mod sends no commands and
+-- transmits no table anywhere, so there is nothing to synchronise and nothing
+-- to be gained by pretending; it stays out of the way instead.
+--
+-- A device that refuses to appear is the honest failure here. An empty one
+-- that takes the survivor's hand and shows a case that does not exist is not.
+local function multiplayer() return (isClient and isClient()) or (isServer and isServer()) end
+O.multiplayer=multiplayer
+
 local function safe(fn,...)
     local ok,value=pcall(fn,...)
     if ok then return value end
@@ -216,6 +232,7 @@ end
 -- organiser; an existing save gets one the first time it loads under a build
 -- that has this.
 function O.give(player)
+    if multiplayer() then return nil,"multiplayer" end
     player=player or (getPlayer and getPlayer())
     if not player then return nil,"no player" end
     local existing=O.issued(player)
@@ -364,6 +381,7 @@ function O.lampTick()
 end
 
 function O.tick()
+    if multiplayer() then return end
     O.handTick()
     safe(O.lampTick)
     local pending=O.pendingOpen
@@ -458,6 +476,7 @@ function O.blockRadioPanel()
 end
 
 function O.install()
+    if multiplayer() then return end
     O.blockRadioPanel()
     if Events and Events.OnFillInventoryObjectContextMenu and not O.menuHooked then
         O.menuHooked=true
@@ -478,6 +497,7 @@ end
 if Events and Events.OnGameStart and not O.bootHooked then
     O.bootHooked=true
     Events.OnGameStart.Add(function()
+        if multiplayer() then log("organiser: multiplayer, not issued"); return end
         safe(function()
             local apps=ConspiracyFiles.KnoxApps
             if apps and apps.rememberMe then apps.rememberMe() end

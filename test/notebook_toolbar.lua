@@ -1,7 +1,9 @@
 -- Mock-only sidebar composition check. Native placement/hover remains manual.
 -- shared/ is on the path too: client modules log through ConspiracyFiles/Log
 -- (2026-09-10), which lives in shared.
-package.path="mod/common/media/lua/client/?.lua;mod/common/media/lua/shared/?.lua;"..package.path
+package.path="mod/common/media/lua/client/?.lua;mod/common/media/lua/shared/?.lua;test/?.lua;"..package.path
+local contract=require("fixtures/contract")
+local REAL_NOTEBOOK="mod/common/media/lua/client/ConspiracyFiles/Notebook.lua"
 local added,removed=0,0
 local events={}
 Events={OnTick={Add=function(handler) events.tick=handler end,Remove=function() removed=removed+1 end},
@@ -21,8 +23,19 @@ ISButton=Base:derive()
 package.preload["ISUI/ISButton"]=function() return ISButton end
 local opened=0
 local notebook={visible=false,getIsVisible=function(self) return self.visible end,close=function(self) self.visible=false end}
+-- Pinned to the real module's interface at both ends. This stub used to
+-- provide open(section) while the code under test called openSurface, so the
+-- test passed green on a mock that could not satisfy a single real call. See
+-- test/fixtures/contract.lua.
 package.preload["ConspiracyFiles/Notebook"]=function()
-    return {notebook=notebook,open=function(section) opened=opened+1; assert(section=="evidence"); notebook.visible=true end}
+    return contract.pin({
+        notebook=notebook,
+        openSurface=function(section,preferred)
+            opened=opened+1
+            assert(section=="evidence","the toolbar must open the evidence surface")
+            notebook.visible=true
+        end,
+    },REAL_NOTEBOOK,contract.callsOn("mod/common/media/lua/client/ConspiracyFiles/NotebookToolbar.lua","UI"))
 end
 ConspiracyFiles={GeneratedRuntime={metrics=function() return {} end}}
 getDebug=function() return true end; isClient=function() return false end; isServer=function() return false end

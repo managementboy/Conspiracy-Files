@@ -1,4 +1,10 @@
-package.path="mod/common/media/lua/shared/?.lua;mod/common/media/lua/client/?.lua;"..package.path
+package.path="mod/common/media/lua/shared/?.lua;mod/common/media/lua/client/?.lua;test/?.lua;"..package.path
+-- A REAL generated session, validated by the shipped validator. This test used
+-- to carry a literal root AND stub out SuccessiveCases so that nothing checked
+-- it - which meant the one mock in here was hiding the very integration it
+-- existed to prove. See test/fixtures/generated_session.lua.
+local Fixture=require("fixtures/generated_session")
+local session=Fixture.store()
 local db,items,adds,known={},{},0,false
 local bodyMD={}
 local body,container,playerInv,player,building,square
@@ -23,18 +29,21 @@ playerInv={contains=function(self,value) return value.container==self end,
     haveThisKeyId=function(self,id) return self.key and self.key.keyId==id and self.key end}
 player={getInventory=function() return playerInv end,getModData=function() return {} end,
     getX=function() return 1 end,getY=function() return 1 end,getZ=function() return 0 end}
-building={getDef=function() return {getIDString=function() return "house" end,getKeyId=function() return 7 end} end}
+-- The building is the one the generated case actually placed its first
+-- document in, not an invented name: P.known derives its buildingId from the
+-- document's locationId, and the two have to be the same building or no
+-- connection can ever chain.
+building={getDef=function() return {getIDString=function() return session.buildingId end,getKeyId=function() return 7 end} end}
 square={getBuilding=function() return building end,getX=function() return 0 end,getY=function() return 0 end,getZ=function() return 0 end}
-local root={case={caseId="case",documents={{id="clue",locationId="t3:house"}}},assignments={clue={target={x=0,y=0,z=0}}}}
 local function reset()
-    db={['ConspiracyFiles.Generated.G2']={campaign={canonical=root}}}
+    db={['ConspiracyFiles.Generated.G2']=Fixture.store().store}
     items={};adds=0;known=false;bodyMD={};playerInv.key=nil
 end
 reset()
-package.loaded['ConspiracyFiles/Generated/SuccessiveCases']={
-    current=function(store) return store.campaign end,
-    currentCached=function(store) return store.campaign end,
-    sessions=function(wrapper) return {wrapper.canonical} end}
+-- No SuccessiveCases stub. It used to be replaced with three one-line
+-- functions that skipped validation entirely, so the hand-made session in here
+-- was never checked and the real refusal ("legacy canonical refused") could
+-- never surface. The shipped module reads the fixture now.
 ModData={get=function(tag) return db[tag] end,getOrCreate=function(tag) db[tag]=db[tag] or {};return db[tag] end}
 getPlayer=function() return player end
 getCell=function() return {getGridSquare=function() return square end} end
@@ -42,28 +51,44 @@ getDebug=function() return true end;isClient=function() return false end;isServe
 instanceof=function(object,class) return type(object)=="table" and object.class==class end
 InventoryItemFactory={CreateItem=function(kind) return item(kind,99,"House key") end}
 ConspiracyFiles={GeneratedRuntime={metrics=function() return {} end,known=function()
-    return known and {{id="clue",title="Unsigned office copy"}} or {}
+    return known and {{id=session.docId,title="Unsigned office copy"}} or {}
 end}}
 local P=require('ConspiracyFiles/LocalPersonIntegration')
 local J=require('ConspiracyFiles/KeyJournal')
 local B=require('ConspiracyFiles/SaveBudget')
+-- A DISCOVERY LANDING is what re-derives clue facts, and the production code
+-- keys that on DiscoveryLog.highestSeq() advancing: P.tick refuses to rebuild
+-- derived facts otherwise, because doing it unconditionally cost two notebook
+-- row rebuilds and a fistful of street-address lookups every second of every
+-- save (measured in game, 2026-09-12).
+--
+-- So a test that "makes a clue known" by flipping a boolean on the runtime
+-- stub is not simulating a discovery at all - it changes what known() returns
+-- while the signal the code watches stays still, and the derivation is
+-- correctly skipped. That is why this test could record three of the four
+-- facts a connection needs and never the fourth.
+--
+-- discover() moves both together, the way the game does.
+local seq=0
+ConspiracyFiles.DiscoveryLog={highestSeq=function() return seq end}
 local function tick() for _=1,30 do P.tick() end end
+local function discover() known=true; seq=seq+1; tick() end
 local function card()
     local value=item('Base.IDcard',1,'ID Card: Dana Vale');value.container=container;return value
 end
 local id=card();items={id}
 assert(adds==0 and #J.rows()==0)
 P.see(id,container);tick()
-assert(adds==1 and db['ConspiracyFiles.LocalPeople'].canonical.records.case.status=='placed')
+assert(adds==1 and db['ConspiracyFiles.LocalPeople'].canonical.records[session.caseId].status=='placed')
 local key=items[2]
-assert(key.keyId==7 and key:getModData().cfLocalPersonToken=='person-key:case')
+assert(key.keyId==7 and key:getModData().cfLocalPersonToken=='person-key:'..session.caseId)
 P.see(key,container);tick()
 key.container=playerInv;playerInv.key=key;items={id}
 local door={class='IsoDoor',getSquare=function() return square end,getObjectIndex=function() return 0 end,
     getKeyId=function() return 7 end,checkKeyId=function() error('no lock initialization') end}
 P.observeDoor({character=player,item=door})
 assert(#J.rows()==0,'unknown clue stays unknown')
-known=true;tick()
+discover()
 assert(#J.rows()==1 and J.rows()[1].detailText:find('Dana Vale',1,true))
 local rowId=J.rows()[1].id
 P.reset();P.see(id,container);tick();P.observeDoor({character=player,item=door})
@@ -75,11 +100,11 @@ P.see(id,container);tick();assert(adds==0 and db['ConspiracyFiles.LocalPeople']=
 B.check=check
 -- A persisted interrupted intent with no surviving key stays unknown.
 P.see(id,container);tick();assert(adds==1)
-local record=db['ConspiracyFiles.LocalPeople'].canonical.records.case
+local record=db['ConspiracyFiles.LocalPeople'].canonical.records[session.caseId]
 record.status='placing';items={id};adds=0
 P.reset();P.see(id,container);tick()
-assert(adds==0 and record~=db['ConspiracyFiles.LocalPeople'].canonical.records.case)
-assert(db['ConspiracyFiles.LocalPeople'].canonical.records.case.status=='unknown')
+assert(adds==0 and record~=db['ConspiracyFiles.LocalPeople'].canonical.records[session.caseId])
+assert(db['ConspiracyFiles.LocalPeople'].canonical.records[session.caseId].status=='unknown')
 P.see(id,container);tick();assert(adds==0)
 -- A visible closed wallet does not expose its identity documents.
 reset();P.reset()
@@ -93,11 +118,11 @@ wallet.container={}
 local walletInventory={getContainingItem=function() return wallet end}
 local walletCard=item('Base.IDcard',45,'ID Card: Wallet Owner');walletCard.container=walletInventory
 P.see(walletCard,walletInventory);tick()
-assert(db['ConspiracyFiles.LocalPeople'].canonical.records.case.status=='pending' and adds==0)
+assert(db['ConspiracyFiles.LocalPeople'].canonical.records[session.caseId].status=='pending' and adds==0)
 P.reset()
 local shirt=item('Base.Shirt',46,'Shirt');shirt.container=container;items={shirt}
 P.see(shirt,container);tick()
-assert(adds==1 and db['ConspiracyFiles.LocalPeople'].canonical.records.case.status=='placed')
+assert(adds==1 and db['ConspiracyFiles.LocalPeople'].canonical.records[session.caseId].status=='placed')
 reset();P.reset()
 local loose=item('Base.IDcard',55,'ID Card: Other')
 local floor={};loose.container=floor;P.see(loose,floor);tick()
@@ -114,8 +139,8 @@ assert(transferred:getModData().cfObservedSource=='corpse-wallet:77')
 local transferredID=item('Base.IDcard',78,'ID Card: Transfer Owner')
 transferredID.container=transferredInventory
 P.see(transferredID,transferredInventory);tick()
-assert(db['ConspiracyFiles.LocalPeople'].canonical.records.case.status=='pending' and adds==0)
+assert(db['ConspiracyFiles.LocalPeople'].canonical.records[session.caseId].status=='pending' and adds==0)
 transferred.container=container
 P.observeTransfer({character=player},transferred,playerInv,container)
-assert(adds==1 and db['ConspiracyFiles.LocalPeople'].canonical.records.case.status=='placed')
+assert(adds==1 and db['ConspiracyFiles.LocalPeople'].canonical.records[session.caseId].status=='placed')
 print('PASS local person integration: real reducers/journal, key placement, reverse discovery, replay, budget, interrupted intent, hidden wallet gate')

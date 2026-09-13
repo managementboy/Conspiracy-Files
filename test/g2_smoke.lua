@@ -181,11 +181,17 @@ assert(R.nextCase(3)); for i=1,160 do events.tick() end
 assert(#saved.campaign.successive.cases==1, 'insufficient distinct storage defers without replacing prior cases')
 print('PASS G2 mock: loaded storage -> generated case -> 3 placed notes -> owned Inspect -> saved discovery -> resume without reroll/duplication -> duplicate conflict')
 
-local file=assert(io.open('mod/common/media/lua/client/ConspiracyFiles/Notebook.lua','r'));local source=file:read('*a');file:close()
-local start=assert(source:find('local function generatedRows(section)',1,true));local finish=assert(source:find('function Window:rows()',start,true))
-local chunk=assert(loadstring(source:sub(start,finish-1)..' return generatedRows'))
-local env=setmetatable({generated=function() return R end,PlaceNames={render=function(text,case) return case.caseId..'|'..text end}},{__index=_G});setfenv(chunk,env)
-local notebookRows=chunk()('evidence')
+-- The real projection, required like any other module. This used to SLICE the
+-- function out of Notebook.lua between two literal string markers and
+-- loadstring the fragment: it broke as soon as the line after it changed,
+-- because the slice swallowed that line and it touches UI. The projection is
+-- ConspiracyFiles/EvidenceRows now, so this exercises the shipped code path
+-- the PDA and the notebook both use, instead of a copy of its text.
+package.preload['ConspiracyFiles/Generated/PlaceNames']=function()
+    return {render=function(text,case) return case.caseId..'|'..text end}
+end
+local EvidenceRows=require('ConspiracyFiles/EvidenceRows')
+local notebookRows=EvidenceRows.build('evidence',function() return R end)
 assert(notebookRows[2].id==newItem:getModData().cfGeneratedId and notebookRows[2].ordinal==2)
 assert(notebookRows[2].detailText:find(saved.campaign.successive.cases[1].case.caseId,1,true)==1,'notebook resolves new owning case')
 assert(notebookRows[3].detailText:find(saved.campaign.canonical.case.caseId,1,true)==1,'late old clue resolves original owning case')

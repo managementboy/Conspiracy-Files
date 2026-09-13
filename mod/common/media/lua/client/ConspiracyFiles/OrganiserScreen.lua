@@ -915,7 +915,13 @@ end
 
 -- Open it, or bring it back. One window: a second organiser on screen would be
 -- a second reading surface, which is exactly what P4-R79 forbids.
+-- Single player only, like the rest of the mod (see Organiser.lua). Guarded
+-- here as well as at the item, so no future caller can open a device that has
+-- no runtime behind it just by reaching for the screen directly.
+function S.multiplayer() return (isClient and isClient()) or (isServer and isServer()) end
+
 function S.open()
+    if S.multiplayer() then return nil,"multiplayer" end
     if S.window then S.window:bringToTop(); return S.window end
     -- The player's own sizes, read once per session before the first window is
     -- built - after that S.scale and S.fontSize are the truth.

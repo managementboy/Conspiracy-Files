@@ -88,8 +88,13 @@ for path in listing:lines() do
     local declaredAt, usedAt, n = nil, nil, 0
     for line in f:lines() do
         n = n + 1
-        if not declaredAt and line:find('^local CFLog=require') then declaredAt = n end
-        if not usedAt and line:find("CFLog%.") and not line:find('^local CFLog=require') then usedAt = n end
+        -- The declaration may be indented: a require inside the one function
+        -- that logs is perfectly valid scope, and anchoring this to the start
+        -- of a line reported KnoxApps.lua as broken when it declares CFLog on
+        -- line 584 and uses it on 585. What matters is only that a
+        -- declaration comes FIRST, which is the bug this check exists for.
+        if not declaredAt and line:find('local CFLog%s*=%s*require') then declaredAt = n end
+        if not usedAt and line:find("CFLog%.") and not line:find('local CFLog%s*=%s*require') then usedAt = n end
     end
     f:close()
     if usedAt then

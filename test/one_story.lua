@@ -65,15 +65,15 @@ assert(rows[1].unseen[1].title and not rows[1].unseen[1].body,
     "only the unfound document's title may travel, never its text")
 assert(#rows[1].connections == 0, "and it must not count as a connection until found")
 
+-- The survivor wondering about an unfound document - in the owner's words, and
+-- as a question, because a question can be wrong - is asserted on the OUTPUT
+-- in test/evidence_rows.lua against the real projection. It was checked here
+-- by searching Notebook.lua for the literal source line, which asserted
+-- nothing about what a reader sees and broke when the projection moved.
 local notebook = assert(io.open("mod/common/media/lua/client/ConspiracyFiles/Notebook.lua")):read("*a")
-assert(notebook:find('Probably refers to "', 1, true), "the survivor wonders, in the owner's words")
-assert(notebook:find('.."?"', 1, true), "as a question - a question can be wrong")
--- Checked on the table itself: the comment above it quotes the old label to
--- explain why it went.
-local meanings = notebook:match("local meanings=(%b{})")
--- The label values, not the keys: `disputes-delivery` is the link kind's
--- internal id and stays; what the player reads must not say "delivery".
-assert(meanings and not meanings:find('="[^"]*[Dd]elivery', 1),
-    "the connection verbs must not assume every case is about a delivery")
+-- The connection verbs not assuming every case is about a delivery is
+-- asserted on the RENDERED phrase in test/evidence_rows.lua, for every link
+-- kind. It was checked here by pattern-matching the lookup table out of
+-- Notebook.lua, which said nothing about what a reader sees.
 print("PASS one story: documents are titled by what they are, name the same matter, "
     .. "and the survivor wonders about the ones not found yet")

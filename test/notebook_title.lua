@@ -103,10 +103,8 @@ assert(not notebook:find('Derived named street segments', 1, true),
     'no fragment of the copy may remain')
 print('PASS notebook: PlaceNames is required, not copied')
 
--- An object carrier's "label" is its raw catalogue id, so "ClayPot - Discovery
--- 1" reached the notebook on 2026-09-10. The twelve paper carriers have real
--- phrases ("Dispatch document"); objects do not, and their own title already
--- says what they are.
-assert(notebook:find('if carrier.capacity=="object" then what="Object found" end', 1, true),
-    'an object row must not print its raw catalogue id as a summary')
-print('PASS notebook: an object row says what it is, not what the catalogue calls it')
+-- An object row saying what it is rather than what the catalogue calls it is
+-- now asserted on the OUTPUT, in test/evidence_rows.lua, against the real
+-- projection. It was checked here by searching this file for the line that
+-- implemented it, which asserted nothing about what a reader sees and broke
+-- when the projection moved to ConspiracyFiles/EvidenceRows.
