@@ -21,9 +21,14 @@ local function debugMode() return isDebugEnabled and isDebugEnabled() end
 local function empty(value) for _ in pairs(value) do return false end; return true end
 local function multiplayer() return (isClient and isClient()) or (isServer and isServer()) end
 local function checked(ok,why) if not ok then error(tostring(why)) end end
-local function boundary(subsystem,fn)
+-- `arg` lets a caller pass a module-level function instead of building a
+-- closure at the call site. LoadGridsquare fires for every square the game
+-- streams in, which is constantly while the player is moving, and the old
+-- shape allocated a fresh closure for each one BEFORE this function could
+-- decide it was disabled and do nothing with it.
+local function boundary(subsystem,fn,arg)
     if Runtime.disabled or (scheduler and scheduler.isDisabled(subsystem)) then return false end
-    local ok,result,a,b=pcall(fn)
+    local ok,result,a,b=pcall(fn,arg)
     if not ok then
         if scheduler then scheduler.failed(subsystem,result) else log("ERROR",subsystem..":"..tostring(result)) end
         return false,result
@@ -187,9 +192,10 @@ local function onStart()
     local ok,why=pcall(initialize)
     if not ok then Runtime.disabled=true; log("INIT_REJECTED",why) end
 end
-local function onTick()
-    boundary("scheduler",function()
-        ticks=ticks+1
+-- Hoisted out of onTick so the per-tick path does not allocate a closure to
+-- describe itself. Everything it touches is a module local already.
+local function tickBody()
+    ticks=ticks+1
         if ticks%15==0 then
             scheduler.enqueue("arrival","arrival",function()
                 local p=getPlayer(); if not p then return true end
@@ -202,20 +208,28 @@ local function onTick()
         if ticks%120==0 then
             enqueuePlacements(); scheduler.enqueue("identity","identity",identityJob())
         end
-        scheduler.step()
-    end)
+    scheduler.step()
+end
+local function onTick()
+    boundary("scheduler",tickBody)
+end
+-- Runs for EVERY grid square the game streams in - hundreds a second while the
+-- player walks - so it allocates nothing and gets out early.
+local function squareBody(square)
+    if not square then return end
+    local x,y,z=square:getX(),square:getY(),square:getZ()
+    for _,id in ipairs(assets) do
+        local a=session.assignment(id); local c=Placement.resolveCandidate(a)
+        if (not ConspiracyFiles.T11Mode or id==Content.ids.d1) and z==c.z and math.abs(x-c.x)<=c.radius and math.abs(y-c.y)<=c.radius then
+            scheduler.enqueue("place:"..id,"placement",placementJob(id))
+        end
+    end
 end
 local function onSquare(square)
-    boundary("grid",function()
-        if not square then return end
-        local x,y,z=square:getX(),square:getY(),square:getZ()
-        for _,id in ipairs(assets) do
-            local a=session.assignment(id); local c=Placement.resolveCandidate(a)
-            if (not ConspiracyFiles.T11Mode or id==Content.ids.d1) and z==c.z and math.abs(x-c.x)<=c.radius and math.abs(y-c.y)<=c.radius then
-                scheduler.enqueue("place:"..id,"placement",placementJob(id))
-            end
-        end
-    end)
+    -- Before boundary, not inside it: a disabled runtime is the common case in
+    -- a generated development session, and it was still paying per square.
+    if Runtime.disabled then return end
+    boundary("grid",squareBody,square)
 end
 Runtime.start=onStart
 Events.OnGameStart.Add(onStart); Events.OnTick.Add(onTick); Events.LoadGridsquare.Add(onSquare)

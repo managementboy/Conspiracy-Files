@@ -69,11 +69,33 @@ function CFGAME.tour()
                     .. tostring(opened and opened.title)
             else
                 visited[#visited + 1] = program.title
-                -- And a row, if it has any, then back out with BACK.
+                -- And a row, if it has any. Tapping a row does not always
+                -- open a record, and it is not supposed to: a to-do TICKS
+                -- (that is how they are completed) and a SETUP line steps a
+                -- size. So the assertion is that the tap did SOMETHING
+                -- observable, which is the behaviour a player relies on -
+                -- asserting "a record opened" wrongly failed the TO DO
+                -- program as soon as there was a real to-do in it.
                 local rows = w:list()
                 if rows and #rows > 0 then
+                    local row = rows[1]
+                    local wasDone = row.todo and tostring(row.label):find("%[x%]") ~= nil
+                    local sizeBefore = tostring(S.scale) .. "/" .. tostring(S.fontSize)
                     w:openRow(1); w:prerender()
-                    if not w.record and not rows[1].cfHeading and not rows[1].setup then
+                    if row.todo then
+                        local after = w:list()[1]
+                        local nowDone = after and tostring(after.label):find("%[x%]") ~= nil
+                        if nowDone == wasDone then
+                            problems[#problems + 1] = program.title .. ": tapping a to-do did not tick it"
+                        end
+                        w:openRow(1)              -- put it back as it was
+                    elseif row.setup then
+                        if sizeBefore == tostring(S.scale) .. "/" .. tostring(S.fontSize) then
+                            problems[#problems + 1] = program.title .. ": tapping a size line changed nothing"
+                        end
+                    elseif row.cfHeading then
+                        if w.record then problems[#problems + 1] = program.title .. ": a heading opened a record" end
+                    elseif not w.record then
                         problems[#problems + 1] = program.title .. ": a row would not open"
                     end
                     w:press("INDEX"); w:prerender()
@@ -137,8 +159,8 @@ function CFGAME.write(text)
 end
 
 function CFGAME.countState()
-    local notes = ModData.get("ConspiracyFiles.Organiser.Notes")
-    local todos = ModData.get("ConspiracyFiles.Organiser.ToDo")
+    local notes = ModData.get("ConspiracyFiles.KnoxNotes")
+    local todos = ModData.get("ConspiracyFiles.KnoxToDo")
     local n = (type(notes) == "table" and type(notes.items) == "table") and #notes.items or -1
     local t = (type(todos) == "table" and type(todos.items) == "table") and #todos.items or -1
     return "notes=" .. n .. " todos=" .. t
@@ -160,8 +182,8 @@ end
 -- What the device does when its own stores are rubbish. A save edited by hand,
 -- a mod conflict, a half-written file: the device must still open.
 function CFGAME.corrupt()
-    local notes = ModData.getOrCreate("ConspiracyFiles.Organiser.Notes")
-    local todos = ModData.getOrCreate("ConspiracyFiles.Organiser.ToDo")
+    local notes = ModData.getOrCreate("ConspiracyFiles.KnoxNotes")
+    local todos = ModData.getOrCreate("ConspiracyFiles.KnoxToDo")
     local prefs = ModData.getOrCreate("ConspiracyFilesOrganiserPrefs")
     notes.items = "not a table"
     todos.items = { "a bare string", 42, {}, { text = nil, done = "yes" } }

@@ -125,8 +125,8 @@ end
 -- The stores the device writes, so growth can be seen rather than guessed.
 function CFLIFE.stores()
     local out = {}
-    for _, tag in ipairs({"ConspiracyFilesOrganiserPrefs", "ConspiracyFiles.Organiser.Notes",
-                          "ConspiracyFiles.Organiser.ToDo", "ConspiracyFiles.DeadAir"}) do
+    for _, tag in ipairs({"ConspiracyFilesOrganiserPrefs", "ConspiracyFiles.KnoxNotes",
+                          "ConspiracyFiles.KnoxToDo", "ConspiracyFiles.DeadAir"}) do
         local t = ModData and ModData.get and ModData.get(tag)
         local n = 0
         if type(t) == "table" then

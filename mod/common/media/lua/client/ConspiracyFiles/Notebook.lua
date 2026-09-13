@@ -1187,7 +1187,12 @@ local function commit(r)
  if not valid(r) then error("marker data invalid or budget exceeded") end
  local within,why=require("ConspiracyFiles/SaveBudget").check("markers",r)
  if not within then error(why) end
- getPlayer():getModData()[TAG]=r
+ -- read() nil-checks the player and this did not, so a commit landing while
+ -- there is no player - a death, a world transition - indexed nil and threw
+ -- from inside a save path. Named, so the reason reaches the log rather than
+ -- arriving as "attempt to index a nil value".
+ local p=getPlayer();if not p then error("no player to save marker records to") end
+ p:getModData()[TAG]=r
 end
 function M.writingTool(player)
  local inv=player and player:getInventory();if not inv then return false end
