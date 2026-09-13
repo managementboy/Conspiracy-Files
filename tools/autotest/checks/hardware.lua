@@ -127,11 +127,19 @@ function CFHW.sleep()
     return true, tostring(w.on)
 end
 
+-- MODE is MENU now, so its effect is observable as the launcher opening -
+-- which is what lets us prove the waking press was SPENT on waking.
 function CFHW.pressKey(id)
     local w = S.window; if not w then return false, "no screen" end
-    local before = tostring(w.app or 1)
+    local before = tostring(w.launcher == true)
     w:press(id)
-    return true, tostring(w.on), before, tostring(w.app or 1)
+    return true, tostring(w.on), before, tostring(w.launcher == true)
+end
+
+function CFHW.leaveLauncher()
+    local w = S.window; if not w then return false end
+    w.launcher = false; w.record = nil
+    return true, tostring(w.launcher == true)
 end
 
 function CFHW.app()

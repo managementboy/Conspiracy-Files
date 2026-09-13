@@ -56,6 +56,11 @@ S.PRESS_MS=110                    -- how long a button shows as pressed
 -- an excuse.
 S.AUTO_OFF_MS=180000
 
+-- What each physical button does, and what is printed under it. One table, so
+-- a button can never be relabelled without its behaviour changing with it.
+S.ACTION={MODE="MENU",PREV="UP",NEXT="DOWN",INDEX="BACK",UP="UP",DOWN="DOWN"}
+S.LABEL={MODE="MENU",PREV="UP",NEXT="DOWN",INDEX="BACK"}
+
 -- Palm III colours: a graphite case, a near-black surround, and the grey-green
 -- LCD. Only the glass is green.
 local SHELL={0.31,0.31,0.32}
@@ -64,6 +69,9 @@ local SHELL_DEEP={0.22,0.22,0.24}
 local GLASS={0.66,0.70,0.59}
 local GLASS_LIT={0.76,0.70,0.46}
 local INK={0.15,0.17,0.13}
+-- Printed on the case, not drawn on the glass, so it is legible with the
+-- machine switched off - exactly like the silkscreen on the real thing.
+local CASE_INK={0.80,0.80,0.82}
 local INK_DIM={0.38,0.42,0.33}
 
 -- The screen draws its own letters. Handing the game a font in its own format
@@ -138,6 +146,11 @@ function Screen:new(owner)
     o.entry=1
     o.card=1
     o.index=false
+    -- The machine comes up on its Applications screen, as a Palm did. It used
+    -- to open straight into FILES, which meant the icon grid - the only thing
+    -- that says what the programs ARE - was somewhere you had to already know
+    -- how to reach (owner, 2026-09-13).
+    o.launcher=true
     o.on=true
     o.lamp=false
     o.touched=getTimeInMillis and getTimeInMillis() or 0
@@ -162,15 +175,44 @@ end
 -- battery warning in front of whatever you were doing. A refused lamp shows
 -- briefly for the same reason: the player pressed something and must be told
 -- why nothing happened.
+-- The charge, read at most once a second. It was read TWICE per frame - the
+-- footer's low warning and the launcher's battery both walked the whole
+-- inventory looking for the device, every frame, on every screen. That is the
+-- exact cost the five retry loops were stripped out for on 2026-09-12, put
+-- back by the battery warning on 2026-09-13. A cell does not move in a frame.
+function Screen:charge()
+    local now=getTimeInMillis and getTimeInMillis() or 0
+    if self.chargeAt and now-self.chargeAt<1000 then return self.chargeValue end
+    local organiser=ConspiracyFiles.Organiser
+    local item=organiser and organiser.held and safe(organiser.held)
+    self.chargeValue=item and organiser.power and safe(organiser.power,item)
+    self.chargeAt=now
+    return self.chargeValue
+end
+
 function Screen:footText(hint)
     local now=getTimeInMillis and getTimeInMillis() or 0
     if self.lampRefused and now-self.lampRefused<2500 then
         return "LAMP NEEDS MORE CHARGE"
     end
     local organiser=ConspiracyFiles.Organiser
-    local item=organiser and organiser.held and safe(organiser.held)
-    if item and organiser.low and safe(organiser.low,item) then return "BATTERY LOW" end
+    local charge=self:charge()
+    if charge~=nil and charge>0 and charge<(organiser and organiser.LOW_POWER or 0) then
+        return "BATTERY LOW"
+    end
     return hint
+end
+
+-- Leaving the boot screen, by any of the three ways out of it: START, a tap,
+-- or any key. All three land on the Applications screen, because "it finished
+-- booting, now what?" should be answered by the icons rather than by dropping
+-- the player into one program with no way of knowing the others exist.
+function Screen:finishBoot()
+    self.booting=false
+    self.launcher=true
+    self.record=nil
+    self.entry,self.card,self.cachedList=1,1,nil
+    self:bootSeen()
 end
 
 -- The boot screen has been read and dismissed. Anything it was there to
@@ -221,7 +263,24 @@ function Screen:prerender()
             else self:drawRect(b.x,b.y+sink,b.w,b.h,1,SHELL_EDGE[1],SHELL_EDGE[2],SHELL_EDGE[3]) end
         end
     end
+    self:labels()
     if self.on then self:draw(Case.glass.x*s,Case.glass.y*s) end
+end
+
+-- The silkscreen. A Palm told you what its keys were by having the words
+-- printed on the plastic; this one left the player guessing (owner,
+-- 2026-09-13: "I do have to guess what button does what?"). Drawn rather than
+-- painted into the case art so it scales with the zoom and cannot fall out of
+-- step with S.ACTION.
+function Screen:labels()
+    local c=K.begin(self,self.scale,0,0,Case.w,Case.h)
+    for _,b in ipairs(Case.buttons) do
+        local text=S.LABEL[b.id]
+        if text then
+            local w=K.width(text)
+            K.text(c,text,b.x+math.floor((b.w-w)/2),b.y+b.h+3,CASE_INK)
+        end
+    end
 end
 
 -- Knox.OS. The shell owns the title bar, the scrolling and the arrows; a
@@ -301,13 +360,7 @@ function Screen:draw(gx,gy)
         -- is that knowing the time costs you a watch, and a reading device
         -- should not quietly buy you back a slot the vanilla game charges for
         -- (owner, 2026-09-13, reversing the 09-12 ruling).
-        local charge
-        local organiser=ConspiracyFiles.Organiser
-        if organiser and organiser.held then
-            local item=safe(organiser.held)
-            charge=item and organiser.power and safe(organiser.power,item)
-        end
-        local y=K.status(c,nil,"All",charge)
+        local y=K.status(c,nil,"All",self:charge())
         -- No record counts on the icons. Palm's launcher never showed any, and
         -- working them out means asking every program to read its whole store -
         -- which the fault check caught as an address lookup retrying forever,
@@ -410,31 +463,28 @@ function Screen:press(id)
     -- still insists you press the one button it is showing is a machine that
     -- annoys people (knox check, 2026-09-12: every tap landed on nothing
     -- because the boot screen was still up).
-    if self.booting then self.booting=false; self:bootSeen(); return end
+    if self.booting then self:finishBoot(); return end
     local rows=self:list()
-    -- The four keys open the four programs, the way a Palm's Date, Address,
-    -- To Do and Memo keys did. The launcher is a tap on the title bar.
-    local DIRECT={MODE="FILES",PREV="NAMES",NEXT="DATES",INDEX="TODO"}
-    local wanted=DIRECT[id]
-    if wanted then
-        local programs=self:programs()
-        for i,program in ipairs(programs) do
-            if program.id==wanted then
-                if self.app==i and not self.record and not self.launcher then
-                    -- Pressed again while already there: step through its records,
-                    -- which is what the key did on the real machine.
-                    self.entry=math.min(math.max(1,#rows),self.entry+1)
-                else
-                    self.app=i; self.record=nil; self.launcher=false
-                    self.entry,self.card,self.cachedList=1,1,nil
-                end
-                break
-            end
-        end
-    elseif id=="UP" then
+    -- Four buttons, four verbs, nothing overloaded. They used to jump straight
+    -- to FILES, NAMES, DATES and TO DO, which is what a Palm's four keys did -
+    -- but a Palm PRINTED them on the case and this one did not, so the owner
+    -- was left guessing what each button was for (owner, 2026-09-13). Labelled
+    -- on the case below, and reduced to the set that makes the whole device
+    -- usable without the stylus: Menu to go anywhere, Up and Down to read,
+    -- Back to retreat. That keeps the design's own promise - "page with the
+    -- keys, aim with the stylus" - which the program-jump mapping never did.
+    local action=S.ACTION[id]
+    if action=="MENU" then
+        self.launcher=true; self.record=nil; self.card=1
+    elseif action=="BACK" then
+        -- One step, and only one: out of a record to its list, out of a list
+        -- to the programs. The launcher is the top, so Back stops there.
+        if self.record then self.record=nil; self.card=1
+        elseif not self.launcher then self.launcher=true end
+    elseif action=="UP" then
         if self.record then self.card=math.max(1,self.card-1)
         else self.entry=math.max(1,self.entry-1) end
-    elseif id=="DOWN" then
+    elseif action=="DOWN" then
         if self.record then self.card=self.card+1
         else self.entry=math.min(math.max(1,#rows),self.entry+1) end
     end
@@ -445,8 +495,7 @@ end
 function Screen:tap(x,y)
     self:touch()
     if self.booting then
-        self.booting=false
-        self:bootSeen()
+        self:finishBoot()
         safe(function() getSoundManager():playUISound("UIActivateButton") end)
         return
     end
@@ -475,8 +524,7 @@ function Screen:tap(x,y)
         if self.record then Apps.addToDo(self.record.title) end
         self.record=nil; self.cachedList=nil
     elseif id=="START" then
-        self.booting=false
-        self:bootSeen()
+        self:finishBoot()
     elseif id=="UP" then self:press("UP")
     elseif id=="DOWN" then self:press("DOWN") end
     log("knox tap: "..tostring(id))

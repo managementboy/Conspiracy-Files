@@ -83,12 +83,18 @@ ev 'return CFOrg.wake()' >/dev/null
 ev 'return CFOrg.tapWidget("START")' >/dev/null; sleep 1
 state="$(ev 'return CFOrg.knox()')"
 say "opened: $state"
-[ "$(cut -f2 <<<"$state")" = FILES ] || fail "Knox.OS did not open into FILES: $state"
+# The machine comes up on its Applications screen now, not inside a program
+# (owner, 2026-09-13): the icons are the only thing that says what the
+# programs are, so landing anywhere else hides them from a new player.
+[ "$(cut -f4 <<<"$state")" = true ] || fail "Knox.OS did not open onto the launcher: $state"
+shot launcher-first
+ev 'return CFOrg.openProgram("FILES")' >/dev/null; sleep 1
+state="$(ev 'return CFOrg.knox()')"
+[ "$(cut -f2 <<<"$state")" = FILES ] || fail "tapping the FILES icon did not open it: $state"
 [ "$(cut -f3 <<<"$state")" -gt 0 ] 2>/dev/null || fail "FILES is empty"
 shot files
 
-# The launcher is a tap on the title bar now (Palm's Home), not a key: the four
-# keys go straight to their four programs.
+# Back to the launcher: a tap on the title bar (Palm's Home), or the MENU key.
 ev 'return CFOrg.wake()' >/dev/null
 ev 'return CFOrg.tapWidget("SELECT")' >/dev/null; sleep 1
 [ "$(ev 'return CFOrg.knox()' | cut -f4)" = true ] || fail "a tap on the title bar did not open the launcher"
@@ -118,11 +124,17 @@ dates="$(ev 'return CFOrg.knox()')"
 [ "$(cut -f3 <<<"$dates")" -gt 0 ] 2>/dev/null || fail "the date book has no days in it"
 shot dates
 
-# The keys go straight to a program: FILES is the first key.
+# The four buttons are MENU / UP / DOWN / BACK now, printed on the case
+# (owner, 2026-09-13). MENU goes to the Applications screen from anywhere.
 ev 'return CFOrg.wake()' >/dev/null
+ev 'return CFOrg.openProgram("FILES")' >/dev/null; sleep 1
 ev 'return CFOrg.pressButton("MODE")' >/dev/null; sleep 1
-files_key="$(ev 'return CFOrg.knox()')"
-[ "$(cut -f2 <<<"$files_key")" = FILES ] || fail "the FILES key did not open FILES: $files_key"
+menu_key="$(ev 'return CFOrg.knox()')"
+[ "$(cut -f4 <<<"$menu_key")" = true ] || fail "the MENU button did not open the launcher: $menu_key"
+# BACK stops at the launcher rather than falling off the top.
+ev 'return CFOrg.pressButton("INDEX")' >/dev/null; sleep 1
+[ "$(ev 'return CFOrg.knox()' | cut -f4)" = true ] || fail "BACK went somewhere past the launcher"
+ev 'return CFOrg.openProgram("FILES")' >/dev/null; sleep 1
 ev 'return CFOrg.wake()' >/dev/null
 ev 'return CFOrg.tapWidget("ROW",1)' >/dev/null; sleep 1
 [ "$(ev 'return CFOrg.knox()' | cut -f5)" = true ] || fail "a tap on a record did not open it"
@@ -130,14 +142,15 @@ shot record
 # Scrolling, which nothing has ever proved: page down with the rocker, then
 # with the arrow in the right margin, and see the card number move.
 before_card="$(ev 'return CFOrg.card and CFOrg.card() or "?"')"
-ev 'return CFOrg.pressButton("DOWN")' >/dev/null; sleep 1
+ev 'return CFOrg.pressButton("NEXT")' >/dev/null; sleep 1
 after_key="$(ev 'return CFOrg.card and CFOrg.card() or "?"')"
 ev 'return CFOrg.tapWidget("DOWN")' >/dev/null; sleep 1
 after_tap="$(ev 'return CFOrg.card and CFOrg.card() or "?"')"
 say "cards: $before_card -> $after_key (rocker) -> $after_tap (arrow)"
 ev 'return CFOrg.wake()' >/dev/null
 ev 'return CFOrg.tapWidget("REMIND")' >/dev/null; sleep 1
-ev 'return CFOrg.pressButton("INDEX")' >/dev/null; sleep 1
+ev 'return CFOrg.wake()' >/dev/null
+ev 'return CFOrg.openProgram("TO DO")' >/dev/null; sleep 1
 todo="$(ev 'return CFOrg.knox()')"
 [ "$(cut -f2 <<<"$todo")" = "TO DO" ] || fail "TO DO did not open: $todo"
 shot todo

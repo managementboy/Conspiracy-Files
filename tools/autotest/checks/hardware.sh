@@ -44,16 +44,16 @@ ev 'return CFHW.touch()' >/dev/null
 # check found the whole device unresponsive mid-run (2026-09-13).
 ev 'return CFHW.setPower(1)' >/dev/null
 [ "$(ev 'return CFHW.sleep()' | f 2)" = false ] || fail "could not put the machine to sleep for the wake test"
-woke="$(ev 'return CFHW.pressKey("NEXT")')"
+ev 'return CFHW.leaveLauncher()' >/dev/null
+woke="$(ev 'return CFHW.pressKey("MODE")')"
 [ "$(f 2 <<<"$woke")" = true ] || fail "a hardware key did not wake a sleeping machine: $woke"
 # The waking press must not also navigate: it woke the screen, nothing more.
 [ "$(f 3 <<<"$woke")" = "$(f 4 <<<"$woke")" ] || \
-    fail "the waking press also changed program ($(f 3 <<<"$woke") -> $(f 4 <<<"$woke"))"
-# Awake, the same key does navigate.
-moved="$(ev 'return CFHW.pressKey("NEXT")')"
-[ "$(f 3 <<<"$moved")" != "$(f 4 <<<"$moved")" ] || \
-    say "the second press did not change program (it may already have been there)"
-say "wake: asleep -> key -> on=$(f 2 <<<"$woke"), press consumed"
+    fail "the waking press also acted (launcher $(f 3 <<<"$woke") -> $(f 4 <<<"$woke"))"
+# Awake, the same button does act: MODE is MENU, so the launcher opens.
+moved="$(ev 'return CFHW.pressKey("MODE")')"
+[ "$(f 4 <<<"$moved")" = true ] || fail "MENU did not open the launcher when awake: $moved"
+say "wake: asleep -> key -> on=$(f 2 <<<"$woke"), press consumed; MENU works when awake"
 
 # --- the lamp ---------------------------------------------------------------
 # A healthy cell runs it; a dying one refuses and says so.
