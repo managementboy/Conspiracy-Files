@@ -47,6 +47,15 @@ say "loose ID: $loose_result"
 
 ev 'return CFWallet.takeWallet()' >/dev/null
 wait_true 30 'CFWallet.walletCarried()' || abort "the wallet transfer never finished"
+# WAIT for the provenance stamp instead of reading it the instant the transfer
+# lands. The stamp is written by LocalPersonIntegration's queued observation,
+# which runs on a 30-tick cycle, so reading it immediately is a race - and it
+# lost on 2026-09-13: the suite reported "recorded, but without its corpse
+# provenance" with stamp nil, and the identical check passed on a re-run.
+# Nothing is weakened by waiting: if the stamp never arrives, the corpse
+# provenance assertion below still fails, and now for the real reason.
+wait_true 30 'tostring(select(2,CFWallet.walletCarried()))~="nil"' \
+    || say "note: no corpse provenance stamp appeared within 30s"
 stamp="$(ev 'return CFWallet.walletCarried()' | cut -f2)"
 ev 'return CFWallet.holdWallet()' >/dev/null
 wait_true 20 'CFWallet.openWallet()' || abort "no icon for the held wallet"
