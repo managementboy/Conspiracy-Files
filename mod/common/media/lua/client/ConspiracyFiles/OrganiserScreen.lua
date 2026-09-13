@@ -77,14 +77,14 @@ S.PRESS_MS=110                    -- how long a button shows as pressed
 -- an excuse.
 S.AUTO_OFF_MS=180000
 
--- What each physical button does, and what is printed under it. One table, so
--- a button can never be relabelled without its behaviour changing with it.
--- The labels belong in the case ART (art/organiser-case.svg, exported to
--- art/organiser-case-1x..4x.png, then tools/build_organiser_case.py),
--- silkscreened like the real machine's, not
--- drawn over it in the LCD typeface. That first attempt was rejected on sight
--- and rightly (owner, 2026-09-13: "extremely ugly. remove."). The mapping
--- stays here; the words go in the artwork the owner is drawing.
+-- What each physical button does. The words printed under them are
+-- silkscreened into the housing by the design manifest, not drawn over the
+-- case in the LCD typeface - that first attempt was rejected on sight and
+-- rightly (owner, 2026-09-13: "extremely ugly. remove."). So the mapping is
+-- here and the words are in the manifest, and the two have to be changed
+-- together: a key that prints one thing and does another is worse than a key
+-- that prints nothing, which is why the two unassigned keys print nothing.
+--
 -- The one input map. Fieldnote control ids on the left, Knox.OS verbs on the
 -- right (P4-R87): HOME and BACK on the outer keys, the rocker taking up and
 -- down, and the two inner keys deliberately absent - they depress, they log,

@@ -96,19 +96,19 @@ Fieldnote.wear(false)   -- pristine housing;  Fieldnote.wear(true) restores scuf
 Every button press prints `[FIELDNOTE] press: <id> -> <action>` to the
 console. Nothing is wired to a game action — deliberately, per the design.
 
-## Replace the current PDA (NOT done — for approval)
+## It replaced the current PDA — done, 2026-09-13
 
-The panel's public surface was shaped to mirror `ConspiracyFiles.OrganiserScreen`
-so the swap is small. Three changes, in order:
+The three steps this section used to describe are done and gated, so it is
+kept only as the record of what changed.
 
-1. **Geometry.** Point `OrganiserScreen` at `Fieldnote.Panel.metrics().lcd`
-   instead of `Generated/OrganiserCase.lua`'s `glass`. The LCD is
-   `320 × 422` at `(40, 50)` — the same 320-wide canvas the type was cut
-   for, so Knox.OS's own drawing needs **no** change beyond its origin. The
-   case hit boxes (`Case.buttons`) become `Geometry.controls`.
+1. **Geometry.** `OrganiserScreen` draws into `Fieldnote`'s `320 x 422` LCD at
+   `(40, 50)`. The old `Generated/OrganiserCase.lua` and its `glass` are gone,
+   and so is the whole SVG-to-four-PNG-exports chain: `build_organiser_case.py`,
+   `art/organiser-case.svg`, its four exports and the eight case, press, rocker
+   and power textures. `build_organiser_art.py` keeps its icon builder, which
+   is pixel art drawn in code and always was.
 
-2. **Input.** `Fieldnote.Panel.onAction(action, id)` is the single dispatch
-   point. Map it onto the existing `Screen:press(id)`:
+2. **Input.** The six controls, per P4-R87:
 
    | Fieldnote control | label | action | Knox.OS |
    |---|---|---|---|
@@ -118,18 +118,16 @@ so the swap is small. Three changes, in order:
    | C12 (far right) | BACK | back | BACK |
    | rocker_up / rocker_down | — | scroll_up / scroll_down | UP / DOWN |
 
-   Settled by the owner on 2026-09-13 (P4-R87). The rocker taking up and down
-   is what frees the two inner keys; MENU and BACK have to live on keys
-   because there is no power tab and MENU is also how the device wakes. The
-   inner two keep their moulded faces and depress, but print nothing and do
-   nothing until play shows what they are for — a key that prints a word and
-   does something else is worse than a key that prints nothing. They still
-   dispatch `unassigned`, so a press shows up in the log while the owner is
-   working out what he reaches for.
+   The rocker taking up and down is what frees the two inner keys; MENU and
+   BACK have to live on keys because there is no power tab and MENU is also how
+   the device wakes. The inner two keep their moulded faces and depress, but
+   print nothing and do nothing until play shows what they are for. They still
+   dispatch `unassigned`, so a press shows up in the log.
 
-3. **Art.** `build_organiser_case.py`, the four `art/organiser-case-*.png`
-   exports and `media/ui/CFOrg/case_*.png` become unused and can be
-   removed. The lamp overlay, if kept, is one `drawRect` over the LCD.
+3. **Sizes.** Two independent controls (P4-R89): how big the machine is drawn,
+   and how big its type is. The glyph set is the product of the two, so how
+   much text fits depends only on the text size. SETUP holds both, and the
+   case's bottom-right corner drags, snapping to whole sizes.
 
-Do **not** do any of this until the test build is approved in-game. The
-whole point of this folder is that it can be looked at first.
+The lamp is one `drawRect` over the LCD, as it always was; the design has no
+lamp control and no power tab, so a held MENU still lights it (P4-R84).
