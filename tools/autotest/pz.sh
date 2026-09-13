@@ -82,8 +82,16 @@ setup() {
     sync_mod "$REPO/tools/autotest/CFAutoTest" CFAutoTest
     link "$LOCAL/inbox/cf_inbox.lua" "$ZOMBOID/Lua/cf_inbox.lua"
     link "$CONSOLE" "$LOCAL/log/live-local.txt"
+    # The Fieldnote hardware used to be a separate mod so the owner could look
+    # at it before it replaced anything. It is part of ConspiracyFiles now, but
+    # boot_test.sh had installed and enabled it here, and a leftover copy draws
+    # a SECOND, blank device beside the real one - which every check happily
+    # passed while the screenshot showed two PDAs (2026-09-13). A mod this
+    # harness installed is a mod this harness has to be able to uninstall.
+    rm -rf "$ZOMBOID/mods/FieldnoteTest"
     # New worlds take their mod list from default.txt.
     local d="$ZOMBOID/mods/default.txt"
+    sed -i '/^ *mod = FieldnoteTest,$/d' "$d"
     for m in ConspiracyFiles CFAutoTest; do
         grep -qE "mod = $m," "$d" || sed -i "/^mods$/,/^}/ s/^{$/{\n    mod = $m,/" "$d"
     done
