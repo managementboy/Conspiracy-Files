@@ -195,6 +195,48 @@ again="$(ev 'return CFHW.ledgerCount()' | f 2)"
 [ "$again" = "$now" ] || fail "a second replay duplicated entries: $now -> $again"
 say "replay is idempotent: $now -> $again"
 
+# --- pulling the cell out ----------------------------------------------------
+ev 'return CFHW.fitCell()' >/dev/null
+ev 'return CFHW.touch()' >/dev/null
+[ "$(ev 'return CFHW.pumpScreen()' | f 2)" = true ] || fail "the screen was not on with a good cell"
+[ "$(ev 'return CFHW.removeCell()' | f 2)" = false ] || fail "hasCell still true with no battery fitted"
+off="$(ev 'return CFHW.pumpScreen()' | f 2)"
+[ "$off" = false ] || fail "the screen stayed lit with the cell removed: on=$off"
+say "cell removed: screen on=$off"
+ev 'return CFHW.fitCell()' >/dev/null
+ev 'return CFHW.touch()' >/dev/null
+
+# --- the address book's categories -------------------------------------------
+# Palm put them top-right of the title bar, tapped to cycle (owner chose
+# All / Named / Unnamed / Linked, 2026-09-13).
+ev 'return CFHW.openNames()' >/dev/null
+seen=""
+for i in 1 2 3 4 5; do
+    c="$(ev 'return CFHW.category()')"
+    seen="$seen $(f 2 <<<"$c")($(f 3 <<<"$c"))"
+    ev 'return CFHW.cycleCategory()' >/dev/null
+done
+say "categories:$seen"
+grep -q 'All' <<<"$seen" || fail "no All category: $seen"
+grep -q 'Named' <<<"$seen" || fail "no Named category: $seen"
+grep -q 'Unnamed' <<<"$seen" || fail "no Unnamed category: $seen"
+grep -q 'Linked' <<<"$seen" || fail "no Linked category: $seen"
+# Five steps through four categories must return to the first.
+first="$(awk '{print $1}' <<<"$seen")"; fifth="$(awk '{print $5}' <<<"$seen")"
+[ "$first" = "$fifth" ] || fail "the picker did not cycle back round: $first vs $fifth"
+# The survivor's own card is a name they know: under Named, never under Unnamed.
+ev 'return CFHW.openNames()' >/dev/null
+named=""; unnamed=""
+for i in 1 2 3 4; do
+    c="$(ev 'return CFHW.category()')"
+    [ "$(f 2 <<<"$c")" = Named ] && named="$(f 3 <<<"$c")"
+    [ "$(f 2 <<<"$c")" = Unnamed ] && unnamed="$(f 3 <<<"$c")"
+    ev 'return CFHW.cycleCategory()' >/dev/null
+done
+say "own card: Named=$named Unnamed=$unnamed"
+[ "${named:-0}" -ge 1 ] || fail "the survivor is not in Named: $named"
+[ "${unnamed:-0}" = 0 ] || fail "the survivor leaked into Unnamed: $unnamed"
+
 # --- no plumbing on screen ---------------------------------------------------
 me="$(ev 'return CFHW.meCard()')"
 [ "$(f 1 <<<"$me")" = true ] || fail "the survivor has no card in NAMES: $me"

@@ -177,9 +177,26 @@ function A.me()
     return {label=name,title=name,detail=table.concat(lines,"\n"),id="me",me=true}
 end
 
+-- The address book's categories, in the top-right of the title bar, tapped to
+-- cycle - which is where and how a Palm put them.
+--
+-- "Linked" is what the PLAYER has connected: two documents off the same body
+-- or the same bag, both of which they found. It is deliberately not "the case
+-- involves this person", which would hand over the answer the mod exists to
+-- withhold (owner chose this reading, 2026-09-13).
+A.NAME_FILTERS={"All","Named","Unnamed","Linked"}
+
+local function passesFilter(row,filter)
+    if filter=="Named" then return row.person~=nil end
+    if filter=="Unnamed" then return row.person==nil end
+    if filter=="Linked" then return row.linked==true end
+    return true
+end
+
 A.names={
     id="NAMES",title="NAMES",icon="names",
-    list=function()
+    filters=function() return A.NAME_FILTERS end,
+    list=function(filter)
         -- Ask the observer for its own rows rather than re-reading its store:
         -- it already joins the outfit and the address in, and a second reader
         -- guessing at the store's shape is how the address book came up empty
@@ -187,14 +204,19 @@ A.names={
         local observer=ConspiracyFiles.IdentityObserver
         local rows=(observer and observer.rows and safe(observer.rows)) or {}
         local out={}
+        filter=filter or "All"
+        -- The survivor's own card is a name they certainly know, so it belongs
+        -- under Named and never under Unnamed.
         local me=A.me()
-        if me then out[1]=me end
+        if me and (filter=="All" or filter=="Named") then out[1]=me end
         for _,row in ipairs(rows) do
+          if passesFilter(row,filter) then
             -- The notebook says "Found Ines Kubiak's ID card" because it is a
             -- list of findings. An address book is a list of PEOPLE, so the
             -- name leads and the document is the detail.
             local label=tostring(row.title or ""):gsub("^Found ","")
             out[#out+1]={label=label,title=label,detail=tostring(row.detailText or ""),id=row.id}
+          end
         end
         return out
     end,
@@ -404,12 +426,26 @@ A.sites={
     list=function()
         local runtime=ConspiracyFiles.GeneratedRuntime
         local text=runtime and runtime.devLocations and safe(runtime.devLocations)
+        -- Which of them the player has actually found. The ledger's reference
+        -- IS the document id devLocations prints, so the two match directly.
+        -- Owner, 2026-09-13: "sites should mark those found." Four papers at
+        -- one address are otherwise four identical rows.
+        local found={}
+        local log=ConspiracyFiles.DiscoveryLog
+        for _,e in ipairs((log and log.events and safe(log.events)) or {}) do
+            if e.ref then found[tostring(e.ref)]=true end
+        end
+        -- No tick in the typeface: it is ASCII 32..126 and nothing else, so
+        -- the mark is a character the machine can actually draw.
         local out={}
         for line in (tostring(text or "").."\n"):gmatch("([^\n]*)\n") do
             if line:find("%S") then
                 local id,place,rest=line:match("^(%S+)%s+(.-)%s+(%-?%d+,%-?%d+ floor.*)$")
-                out[#out+1]={label=place or line,title=place or line,
-                             detail=(id or "").."\n"..(rest or line),id="site-"..#out}
+                local got=id~=nil and found[id]==true
+                local label=(got and "* " or "  ")..(place or line)
+                out[#out+1]={label=label,title=place or line,
+                             detail=(got and "FOUND\n" or "not found yet\n")
+                                 ..(id or "").."\n"..(rest or line),id="site-"..#out}
             end
         end
         if #out==0 then out[1]={label="No case placed.",title="No case placed.",detail="",id="site-none"} end

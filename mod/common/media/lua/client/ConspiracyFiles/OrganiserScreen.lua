@@ -252,8 +252,28 @@ function Screen:idleCheck()
     log("organiser auto-off: idle")
 end
 
+-- A machine with no cell in it is off. Checked on the cached once-a-second
+-- read, not per frame: pulling the battery out used to leave the screen lit
+-- because power was only ever looked at when the device was picked up or woken
+-- (owner, 2026-09-13: "removing the battery does not shutt off our pda").
+function Screen:powerCheck()
+    if not self.on then return end
+    local organiser=ConspiracyFiles.Organiser
+    if not organiser or not organiser.hasCell then return end
+    -- charge() is the throttle: it refreshes at most once a second and caches
+    -- the item it found, so this costs nothing between reads.
+    self:charge()
+    local item=safe(organiser.held)
+    if item and safe(organiser.hasCell,item)==false then
+        self.on=false
+        self.lamp=false
+        log("organiser off: no cell")
+    end
+end
+
 function Screen:prerender()
     self:idleCheck()
+    self:powerCheck()
     local s=self.scale
     local case=texture("case",s)
     if case then
@@ -290,10 +310,31 @@ function Screen:program()
     return programs[self.app or 1] or programs[1]
 end
 
+-- The category a program is filtered by, per program, remembered while the
+-- machine is on. Palm kept the category you left an application in.
+function Screen:category(program)
+    program=program or self:program()
+    if not program or not program.filters then return nil end
+    local names=safe(program.filters) or {}
+    if #names==0 then return nil end
+    self.categories=self.categories or {}
+    local at=self.categories[program.id] or 1
+    if at<1 or at>#names then at=1 end
+    return names[at],names,at
+end
+
+function Screen:cycleCategory()
+    local program=self:program()
+    local current,names,at=self:category(program)
+    if not current then return end
+    self.categories[program.id]=(at%#names)+1
+    self.entry,self.card,self.cachedList=1,1,nil
+end
+
 function Screen:list()
     if self.cachedList then return self.cachedList end
     local program=self:program()
-    self.cachedList=(program.list and safe(program.list)) or {}
+    self.cachedList=(program.list and safe(program.list,self:category(program))) or {}
     return self.cachedList
 end
 
@@ -382,9 +423,20 @@ function Screen:draw(gx,gy)
         end
         for _,field in ipairs(self.record.fields or {}) do
             K.text(c,field.label,2,y,K.DIM)
+            -- A field was capped at two lines and simply stopped, so a longer
+            -- one ended mid-sentence with nothing to show it had (owner,
+            -- 2026-09-13: "maybe some text got cut off?"). Four lines now, and
+            -- when it still does not fit, it SAYS so with an ellipsis rather
+            -- than pretending that was the whole fact.
+            local LINES=4
             local value=wrapTo(field.value,c.w-38)
             for i,text in ipairs(value) do
-                if i>2 then break end            -- a field is a fact, not an essay
+                if i>LINES then break end
+                if i==LINES and #value>LINES then
+                    -- Trim a little to make room for the mark.
+                    while K.width(text.."...")>c.w-38 and #text>0 do text=text:sub(1,-2) end
+                    text=text.."..."
+                end
                 K.text(c,text,36,y,K.INK); y=y+line
             end
             if #value==0 then y=y+line end
@@ -411,7 +463,8 @@ function Screen:draw(gx,gy)
         self:drawNote(c)
         return
     end
-    K.titleBar(c,program.title,#rows>0 and (self.entry.." of "..#rows) or "empty")
+    K.titleBar(c,program.title,#rows>0 and (self.entry.." of "..#rows) or "empty",
+        self:category(program))
     local top=math.max(1,math.min(self.entry-math.floor(room/2),#rows-room+1))
     if top<1 then top=1 end
     if #rows==0 then K.text(c,"Nothing recorded yet.",2,line+2,K.DIM) end
@@ -511,6 +564,7 @@ function Screen:tap(x,y)
     if id=="APP" then
         self.app=widget.payload; self.launcher=false; self.record=nil
         self.entry,self.card,self.cachedList=1,1,nil
+    elseif id=="CATEGORY" then self:cycleCategory()
     elseif id=="SELECT" then self.launcher=true; self.record=nil
     elseif id=="ROW" then
         if self.launcher then self.app=widget.payload; self.launcher=false; self.cachedList=nil; self.entry=1
@@ -630,11 +684,14 @@ function Screen:writeNote()
     local s=self.scale
     -- Where the field is drawn, in the machine's own pixels.
     local fx,fy=2,Case.glass.h-Font.line*4
-    local box=ISTextEntryBox:new("",
-        (Case.glass.x+fx)*s,(Case.glass.y+fy)*s,(Case.glass.w-4)*s,Font.line*s)
+    -- Parked off the case, not merely made transparent. setFrameAlpha(0) and
+    -- transparent text still left the box painting a dark slab over the glass,
+    -- so the field's own text was drawn dark-on-dark and could not be read
+    -- (owner, 2026-09-13: "unreadable"). Keystrokes follow FOCUS, not
+    -- position, so a box nobody can see still types.
+    local box=ISTextEntryBox:new("",-10000,-10000,(Case.glass.w-4)*s,Font.line*s)
     box:initialise(); box:instantiate()
     box:setMaxTextLength(200)
-    -- Invisible, but focused and listening. The look is this screen's job.
     safe(function()
         box.javaObject:setFrameAlpha(0)
         box.javaObject:setTextRGBA(0,0,0,0)
@@ -670,6 +727,7 @@ function Screen:drawNote(c)
     if not at or not self.writer then return end
     local text=safe(function() return self.writer:getText() end) or ""
     K.text(c,"Write a note:",at.x,at.y-Font.line,K.DIM)
+    K.fill(c,at.x-1,at.y-1,c.w-at.x*2+2,Font.line+2,K.GLASS)
     K.frame(c,at.x-1,at.y-1,c.w-at.x*2+2,Font.line+2,K.INK)
     -- The tail of the line, so a long note keeps its caret in view.
     local shown=text

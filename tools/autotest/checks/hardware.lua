@@ -224,3 +224,50 @@ function CFHW.refs()
     for _, e in ipairs(DL.events()) do out[#out + 1] = tostring(e.ref) end
     return true, table.concat(out, ",")
 end
+
+-- The address book's category picker.
+function CFHW.openNames()
+    local w = S.window; if not w then return false, "no screen" end
+    w.on = true; w.launcher = false; w.record = nil
+    for i, p in ipairs(w:programs()) do
+        if p.id == "NAMES" then w.app = i end
+    end
+    w.entry, w.card, w.cachedList = 1, 1, nil
+    return true, tostring(w:program().id)
+end
+
+function CFHW.category()
+    local w = S.window; if not w then return false end
+    local name = w:category()
+    return true, tostring(name), tostring(#w:list())
+end
+
+function CFHW.cycleCategory()
+    local w = S.window; if not w then return false end
+    w:cycleCategory()
+    return true, tostring(w:category()), tostring(#w:list())
+end
+
+-- Pulling the cell out. The screen stayed lit because power was only ever
+-- looked at when the device was picked up or woken (owner, 2026-09-13).
+function CFHW.removeCell()
+    local i = held(); if not i then return false, "not carried" end
+    local d = i:getDeviceData(); if not d then return false, "no device data" end
+    d:setHasBattery(false)
+    d:setPower(0)
+    return true, tostring(O.hasCell(i))
+end
+
+function CFHW.fitCell()
+    local i = held(); local d = i and i:getDeviceData()
+    if not d then return false end
+    d:setHasBattery(true); d:setPower(1)
+    return true, tostring(O.hasCell(i))
+end
+
+function CFHW.pumpScreen()
+    local w = S.window; if not w then return false, "no screen" end
+    w.chargeAt = nil                -- force the cached read to refresh
+    w:powerCheck()
+    return true, tostring(w.on)
+end

@@ -191,6 +191,19 @@ function O.checkPower(item)
     return power
 end
 
+-- Is there a cell in it at all? getPower() alone does not answer that: a
+-- device with the battery pulled out can still report a power figure, so the
+-- machine stayed lit in the owner's hand with no battery in it (2026-09-13).
+function O.hasCell(item)
+    if not item then return false end
+    local data=safe(function() return item:getDeviceData() end)
+    if not data then return true end          -- no battery model: always on
+    local fitted=safe(function() return data:getHasBattery() end)
+    if fitted==false then return false end
+    local power=O.power(item)
+    return power==nil or power>0
+end
+
 function O.readable(item)
     if not item then return false,"no organiser" end
     local power=O.power(item)

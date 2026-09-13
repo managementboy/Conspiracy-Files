@@ -1014,7 +1014,35 @@ Events.OnTick.Add(function()
     end
     scheduler.step()
 end)
+-- setDisplayCategory is a RUNTIME property: the custom name is saved with the
+-- item and the category is not, so reloading a save dropped every document
+-- back into Junk (owner, 2026-09-13). Re-stamped on load, for anything still
+-- carrying our marker. Walks bags too, because the Papers are a container and
+-- that is where the evidence actually lives.
+local function restampEvidence(container,depth)
+    if not container or (depth or 0)>3 then return 0 end
+    local items=container.getItems and container:getItems()
+    if not items then return 0 end
+    local n=0
+    for i=0,items:size()-1 do
+        local item=items:get(i)
+        local md=item and item.getModData and item:getModData()
+        if type(md)=="table" and md.cfGeneratedId then
+            pcall(function() item:setDisplayCategory("Evidence") end)
+            n=n+1
+        end
+        local inner=item and item.getInventory and item:getInventory()
+        if inner then n=n+restampEvidence(inner,(depth or 0)+1) end
+    end
+    return n
+end
+
 Events.OnGameStart.Add(function()
+    pcall(function()
+        local player=getPlayer and getPlayer()
+        local n=player and restampEvidence(player:getInventory(),0) or 0
+        if n>0 then log("re-stamped "..n.." documents as Evidence after loading") end
+    end)
     sessions,scheduler,preparing,wrapper=nil,nil,false,nil
     -- Forget what we could see last time. A new session has not looked yet,
     -- and should say so rather than inherit yesterday's confidence.

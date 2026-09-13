@@ -194,8 +194,26 @@ function M.rows(root,outfitFor,placeFor)
    if lead>="a" and lead<="z" then detail=detail.."\n\nObserved "..place.."."
    else detail=detail.."\n\nObserved at "..place.."." end
   else detail=detail.."\n\nObserved somewhere with no address nearby." end
+  -- Fields the address book filters on. Rendered strings are no use for
+  -- that, and a reader guessing at the store's shape is how NAMES came up
+  -- empty once already.
+  --
+  -- person: the name the document itself carries, or nil. "Credit Card:
+  --   Joanne Voss" names somebody; a parking ticket may not.
+  -- linked: this document shares a body or a bag with another one the player
+  --   has also found. That is a connection the PLAYER made by finding both,
+  --   which is the only kind this mod is allowed to point at. It deliberately
+  --   does NOT mean "the case involves them" - that would hand over the
+  --   answer, and a name on a document is a lead, not an identity.
+  local person=type(r.label)=="string" and r.label:match(": (.+)$") or nil
+  local linked=false
+  if r.token then
+   for _,other in ipairs(shared[r.token] or {}) do
+    if other.id~=r.id then linked=true; break end
+   end
+  end
   rows[i]={id="identity:"..r.id,ordinal=i,title="Found "..r.label,summary="Identity document - "..r.source,
-   detailText=detail}
+   detailText=detail,person=person,linked=linked,source=r.source}
  end
  return rows
 end

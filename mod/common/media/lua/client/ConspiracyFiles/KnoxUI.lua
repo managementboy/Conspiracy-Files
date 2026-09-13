@@ -82,14 +82,25 @@ end
 
 -- The title bar: dark band, view name on the left as a selector (it can be
 -- changed, and Palm marked that with a trigger), count on the right.
-function K.titleBar(c,title,right)
+-- `right` is the count. `category`, when a program has one, is the Palm
+-- category picker: top-right of the title bar, its own arrow, tapped to cycle.
+-- The count moves left of it so the two never overlap.
+function K.titleBar(c,title,right,category)
     local line=Font.line
     K.fill(c,0,0,c.w,line,K.INK)
     K.text(c,title,2,0,K.GLASS)
     local w=K.width(title)
     K.text(c," v",2+w,0,K.GLASS)                   -- the selector's arrow
     hit(c,"SELECT",0,0,w+10,line)
-    if right then K.text(c,right,c.w-2-K.width(right),0,K.GLASS) end
+    local edge=c.w-2
+    if category then
+        local text=category.." v"
+        local cw=K.width(text)
+        K.text(c,text,edge-cw,0,K.GLASS)
+        hit(c,"CATEGORY",edge-cw-2,0,cw+4,line)
+        edge=edge-cw-6
+    end
+    if right then K.text(c,right,edge-K.width(right),0,K.GLASS) end
     c.cursor=line+1
     return c.cursor
 end
