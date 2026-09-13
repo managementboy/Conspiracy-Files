@@ -268,7 +268,9 @@ A.help={
             {label="Survive first",title="Survive first",
              detail="This machine records what you find. It sets no objectives and promises no answer.\n\nReading it takes your main hand. Something can reach you while you read."},
             {label="The keys",title="The keys",
-             detail="VIEW  the program list.\nPREV  the record before.\nNEXT  the record after.\nLIST  open a record, or back out.\nROCKER  page through a record.\n\nThe power key at the top switches the screen off. Hold it for the lamp."},
+             detail="MENU  the program list.\nUP    the line or page above.\nDOWN  the line or page below.\nBACK  out of a record, then out to the programs.\n\nThe power tab on the side switches the screen off. Hold it for the lamp."},
+            {label="Size",title="Size",
+             detail="Press - to make the machine smaller and = to make it larger. Three sizes; it starts at whichever suits your screen.\n\nEvery size is a whole multiple, so a pixel stays square."},
             {label="The stylus",title="The stylus",
              detail="Tap a program to open it. Tap a record to read it. Tap the arrows in the right margin to page. Tap the name in the title bar to come back here."},
             {label="Files",title="Files",
@@ -280,7 +282,9 @@ A.help={
             {label="To do",title="To do",
              detail="Open a file and press REMIND to set yourself a reminder. Tap a reminder to tick it off."},
             {label="Battery",title="Battery",
-             detail="The cell in the corner is real. A flat machine will not read, and your papers still will."},
+             detail="The cell in the corner is real. A flat machine will not read, and your papers still will.\n\nBelow a fifth it says BATTERY LOW. The lamp needs more than a tenth to run at all.\n\nLeft alone for three minutes it switches itself off to save the cell. Any key wakes it."},
+            {label="Memory",title="Memory",
+             detail="A dead cell takes your notes and to-dos offline; it does not destroy them. Fit a fresh cell and the machine restores them on the next boot.\n\nWhat you have found is not kept in here. It is in the record, so any organiser reads it."},
         }
     end,
 }

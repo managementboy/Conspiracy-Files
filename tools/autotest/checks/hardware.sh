@@ -55,6 +55,35 @@ moved="$(ev 'return CFHW.pressKey("MODE")')"
 [ "$(f 4 <<<"$moved")" = true ] || fail "MENU did not open the launcher when awake: $moved"
 say "wake: asleep -> key -> on=$(f 2 <<<"$woke"), press consumed; MENU works when awake"
 
+# --- size -------------------------------------------------------------------
+# The default filled 86% of the screen height on the owner's 4K display, which
+# drew a 915x1332 "pocket" organiser (screenshot, 2026-09-13). And nothing
+# called S.zoom, so it could not be resized at all.
+for h in 1080 1440 1894 2160; do
+    fit="$(ev "return CFHW.fitFor($h)")"
+    scale="$(f 2 <<<"$fit")"; px="$(f 3 <<<"$fit")"
+    say "screen ${h}px -> scale $scale, device ${px}px tall"
+    awk -v p="$px" -v h="$h" 'BEGIN{exit !(p <= h*0.62)}' || \
+        fail "on a ${h}px screen the device is ${px}px tall - more than 62% of the screen"
+done
+before="$(ev 'return CFHW.size()' | f 2)"
+ev 'return CFHW.step(1)' >/dev/null; up="$(ev 'return CFHW.size()' | f 2)"
+ev 'return CFHW.step(-1)' >/dev/null; back="$(ev 'return CFHW.size()' | f 2)"
+[ "$back" = "$before" ] || fail "one step up then down did not return to $before (got $back)"
+say "zoom: $before -> $up -> $back"
+# Stepping past the end must stop, not wrap to the opposite extreme.
+ev 'return CFHW.step(-5)' >/dev/null; low="$(ev 'return CFHW.size()' | f 2)"
+[ "$low" = 1 ] || fail "stepping down repeatedly did not stop at 1: $low"
+ev 'return CFHW.step(5)' >/dev/null; high="$(ev 'return CFHW.size()' | f 2)"
+[ "$high" = 3 ] || fail "stepping up repeatedly did not stop at 3: $high"
+say "zoom clamps: down->$low up->$high"
+# And HELP has to say how, which was the actual complaint.
+help="$(ev 'return CFHW.helpText()' | f 2)"
+grep -qi 'press - to make' <<<"$help" || fail "HELP does not explain how to resize"
+grep -qi 'MENU' <<<"$help" || fail "HELP does not name the buttons"
+grep -qiE 'VIEW  the program|ROCKER' <<<"$help" && fail "HELP still describes the old keys"
+say "help: documents size and the current buttons"
+
 # --- the lamp ---------------------------------------------------------------
 # A healthy cell runs it; a dying one refuses and says so.
 ev 'return CFHW.setPower(1)' >/dev/null

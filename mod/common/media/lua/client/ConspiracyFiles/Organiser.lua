@@ -407,24 +407,39 @@ end
 -- The game offers "Device Options" for any radio held in a hand - and this one
 -- is always in a hand, because reading it equips it - so removing the menu
 -- entry was never enough: anything else that opens the panel would still get
--- there (owner, 2026-09-12: "the radio menu is still open"). So the opener
--- itself is wrapped: asked to show a frequency dial for a Lectromax Dataline,
--- it opens Knox.OS instead, which is what the player wanted anyway.
+-- there (owner, 2026-09-12: "the radio menu is still open").
+--
+-- The first attempt wrapped ISRadioAndTvMenu.openRadioPanel, and the owner
+-- still saw a frequency dial on his organiser (2026-09-13). That function was
+-- a branch, not the trunk: its whole body is one call to
+-- ISRadioWindow.activate, and EIGHT other places in the installed game call
+-- activate directly. The one that bites here is ISButtonPrompt:openDeviceOptions,
+-- the on-screen prompt for a held device - and this device is always held.
+--
+-- So the wrap goes on activate, which every route passes through. Verified
+-- against the installed game's own Lua, not from memory
+-- (media/lua/client/RadioCom/ISRadioWindow.lua:9).
+function O.isOurs(item)
+    if not item then return false end
+    local full=safe(function() return item:getFullType() end)
+    if full==O.TYPE then return true end
+    local md=item.getModData and safe(function() return item:getModData() end)
+    return type(md)=="table" and md[MARK]==true
+end
+
 function O.blockRadioPanel()
     if O.panelBlocked then return true end
-    local ok=pcall(require,"ISUI/ISRadioAndTvMenu")
-    if not ok or not ISRadioAndTvMenu or type(ISRadioAndTvMenu.openRadioPanel)~="function" then return false end
+    local ok=pcall(require,"RadioCom/ISRadioWindow")
+    if not ok or not ISRadioWindow or type(ISRadioWindow.activate)~="function" then return false end
     O.panelBlocked=true
-    local original=ISRadioAndTvMenu.openRadioPanel
-    ISRadioAndTvMenu.openRadioPanel=function(player,item,...)
-        local md=item and item.getModData and safe(function() return item:getModData() end)
-        local full=item and safe(function() return item:getFullType() end)
-        if full==O.TYPE or (type(md)=="table" and md[MARK]) then
+    local original=ISRadioWindow.activate
+    ISRadioWindow.activate=function(player,device,...)
+        if O.isOurs(device) then
             log("radio panel refused; opening Knox.OS")
             O.read(player)
             return
         end
-        return original(player,item,...)
+        return original(player,device,...)
     end
     return true
 end

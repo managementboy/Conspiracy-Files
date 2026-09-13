@@ -58,8 +58,12 @@ S.AUTO_OFF_MS=180000
 
 -- What each physical button does, and what is printed under it. One table, so
 -- a button can never be relabelled without its behaviour changing with it.
+-- The labels belong in the case ART (art/organiser-case.svg -> .png ->
+-- tools/build_organiser_case.py), silkscreened like the real machine's, not
+-- drawn over it in the LCD typeface. That first attempt was rejected on sight
+-- and rightly (owner, 2026-09-13: "extremely ugly. remove."). The mapping
+-- stays here; the words go in the artwork the owner is drawing.
 S.ACTION={MODE="MENU",PREV="UP",NEXT="DOWN",INDEX="BACK",UP="UP",DOWN="DOWN"}
-S.LABEL={MODE="MENU",PREV="UP",NEXT="DOWN",INDEX="BACK"}
 
 -- Palm III colours: a graphite case, a near-black surround, and the grey-green
 -- LCD. Only the glass is green.
@@ -69,9 +73,6 @@ local SHELL_DEEP={0.22,0.22,0.24}
 local GLASS={0.66,0.70,0.59}
 local GLASS_LIT={0.76,0.70,0.46}
 local INK={0.15,0.17,0.13}
--- Printed on the case, not drawn on the glass, so it is legible with the
--- machine switched off - exactly like the silkscreen on the real thing.
-local CASE_INK={0.80,0.80,0.82}
 local INK_DIM={0.38,0.42,0.33}
 
 -- The screen draws its own letters. Handing the game a font in its own format
@@ -114,11 +115,17 @@ end
 -- therefore takes about four fifths of the window's height, at a whole-number
 -- scale so the pixels stay square. ZOOM steps it down for anyone who wants the
 -- game visible behind it.
+-- How much of the screen the machine should take up. It was 0.86, which on a
+-- 4K display picks 3x and draws a 915 x 1332 organiser - most of the screen
+-- height for a thing that is meant to fit in a pocket, and several times the
+-- size of the game's own radio panel beside it (owner screenshot, 2026-09-13).
+-- Half the height is a device you hold, not a window you live in.
+S.FILL=0.5
 function S.fit()
     local h=getCore and getCore():getScreenHeight() or 720
-    -- The owner's case is 305 x 444 in its own pixels, so 1x is a real size
-    -- on a small screen and 3x fills a big one.
-    local want=math.floor(h*0.86/Case.h)
+    -- The case is 305 x 444 in its own pixels, and the scale is a whole number
+    -- so a drawn pixel stays square.
+    local want=math.floor(h*S.FILL/Case.h)
     if want<1 then want=1 elseif want>3 then want=3 end
     return want
 end
@@ -263,24 +270,98 @@ function Screen:prerender()
             else self:drawRect(b.x,b.y+sink,b.w,b.h,1,SHELL_EDGE[1],SHELL_EDGE[2],SHELL_EDGE[3]) end
         end
     end
-    self:labels()
     if self.on then self:draw(Case.glass.x*s,Case.glass.y*s) end
 end
 
--- The silkscreen. A Palm told you what its keys were by having the words
--- printed on the plastic; this one left the player guessing (owner,
--- 2026-09-13: "I do have to guess what button does what?"). Drawn rather than
--- painted into the case art so it scales with the zoom and cannot fall out of
--- step with S.ACTION.
-function Screen:labels()
-    local c=K.begin(self,self.scale,0,0,Case.w,Case.h)
-    for _,b in ipairs(Case.buttons) do
-        local text=S.LABEL[b.id]
-        if text then
-            local w=K.width(text)
-            K.text(c,text,b.x+math.floor((b.w-w)/2),b.y+b.h+3,CASE_INK)
+-- The charge, read at most once a second. It was read TWICE per frame - the
+-- footer's low warning and the launcher's battery both walked the whole
+-- inventory looking for the device, every frame, on every screen. That is the
+-- exact cost the five retry loops were stripped out for on 2026-09-12, put
+-- back by the battery warning on 2026-09-13. A cell does not move in a frame.
+function Screen:charge()
+    local now=getTimeInMillis and getTimeInMillis() or 0
+    if self.chargeAt and now-self.chargeAt<1000 then return self.chargeValue end
+    local organiser=ConspiracyFiles.Organiser
+    local item=organiser and organiser.held and safe(organiser.held)
+    self.chargeValue=item and organiser.power and safe(organiser.power,item)
+    self.chargeAt=now
+    return self.chargeValue
+end
+
+function Screen:footText(hint)
+    local now=getTimeInMillis and getTimeInMillis() or 0
+    if self.lampRefused and now-self.lampRefused<2500 then
+        return "LAMP NEEDS MORE CHARGE"
+    end
+    local organiser=ConspiracyFiles.Organiser
+    local charge=self:charge()
+    if charge~=nil and charge>0 and charge<(organiser and organiser.LOW_POWER or 0) then
+        return "BATTERY LOW"
+    end
+    return hint
+end
+
+-- Leaving the boot screen, by any of the three ways out of it: START, a tap,
+-- or any key. All three land on the Applications screen, because "it finished
+-- booting, now what?" should be answered by the icons rather than by dropping
+-- the player into one program with no way of knowing the others exist.
+function Screen:finishBoot()
+    self.booting=false
+    self.launcher=true
+    self.record=nil
+    self.entry,self.card,self.cachedList=1,1,nil
+    self:bootSeen()
+end
+
+-- The boot screen has been read and dismissed. Anything it was there to
+-- report - a lost memory, so far - can stop being reported now.
+function Screen:bootSeen()
+    local organiser=ConspiracyFiles.Organiser
+    if not organiser or not organiser.clearMemoryNotice then return end
+    local item=safe(organiser.held)
+    if item then safe(organiser.clearMemoryNotice,item) end
+end
+
+-- Anything the player does to the machine counts as touching it.
+function Screen:touch() self.touched=getTimeInMillis and getTimeInMillis() or 0 end
+
+-- Idle long enough and it switches itself off, as the real machine did. The
+-- lamp goes with it, because that is the whole point of auto-off.
+function Screen:idleCheck()
+    if not self.on then return end
+    local now=getTimeInMillis and getTimeInMillis() or 0
+    if now-(self.touched or now)<S.AUTO_OFF_MS then return end
+    self.on=false
+    self.lamp=false
+    log("organiser auto-off: idle")
+end
+
+function Screen:prerender()
+    self:idleCheck()
+    local s=self.scale
+    local case=texture("case",s)
+    if case then
+        self:drawTextureScaled(case,0,0,Case.w*s,Case.h*s,1,1,1,1)
+    else
+        self:drawRect(0,0,self.width,self.height,1,SHELL[1],SHELL[2],SHELL[3])
+        self:drawRect(Case.glass.x*s,Case.glass.y*s,Case.glass.w*s,Case.glass.h*s,1,GLASS[1],GLASS[2],GLASS[3])
+    end
+    if self.on and self.lamp then
+        self:drawRect(Case.glass.x*s,Case.glass.y*s,Case.glass.w*s,Case.glass.h*s,0.55,GLASS_LIT[1],GLASS_LIT[2],GLASS_LIT[3])
+    end
+    -- No power light: the screen says whether it is on, which is how you can
+    -- tell with any real machine (owner, 2026-09-12).
+    local now=getTimeInMillis and getTimeInMillis() or 0
+    for _,b in ipairs(self:buttons()) do
+        if self.pressed[b.id] and now-self.pressed[b.id]<S.PRESS_MS then
+            local name=b.round and "press" or (b.id=="POWER" and "power" or "rocker")
+            local t=texture(name,s)
+            local sink=math.max(1,s/2)
+            if t then self:drawTextureScaled(t,b.x,b.y+sink,b.w,b.h,0.9,1,1,1)
+            else self:drawRect(b.x,b.y+sink,b.w,b.h,1,SHELL_EDGE[1],SHELL_EDGE[2],SHELL_EDGE[3]) end
         end
     end
+    if self.on then self:draw(Case.glass.x*s,Case.glass.y*s) end
 end
 
 -- Knox.OS. The shell owns the title bar, the scrolling and the arrows; a
@@ -576,12 +657,15 @@ end
 local KEYS={[Keyboard.KEY_UP]="UP",[Keyboard.KEY_DOWN]="DOWN",[Keyboard.KEY_LEFT]="PREV",
             [Keyboard.KEY_RIGHT]="NEXT",[Keyboard.KEY_M]="MODE",[Keyboard.KEY_I]="INDEX"}
 function Screen:isKeyConsumed(key)
-    return KEYS[key]~=nil or key==Keyboard.KEY_ESCAPE or key==Keyboard.KEY_L or key==Keyboard.KEY_P
+    return KEYS[key]~=nil or key==Keyboard.KEY_ESCAPE or key==Keyboard.KEY_L
+        or key==Keyboard.KEY_P or key==Keyboard.KEY_MINUS or key==Keyboard.KEY_EQUALS
 end
 function Screen:onKeyRelease(key)
     if key==Keyboard.KEY_ESCAPE then self:close(); return end
     if key==Keyboard.KEY_P then self:press("POWER"); return end
     if key==Keyboard.KEY_L then self.lamp=not self.lamp; return end
+    if key==Keyboard.KEY_MINUS then S.step(-1); return end
+    if key==Keyboard.KEY_EQUALS then S.step(1); return end
     local id=KEYS[key]
     if id then self:press(id) end
 end
@@ -641,11 +725,25 @@ function S.boot()
     if w then w.booting=true end
     return w
 end
+-- Resizing. S.zoom existed but NOTHING called it - no key, no menu, nothing -
+-- so the machine could not be resized at all and HELP had nothing to say about
+-- it (owner, 2026-09-13: "help gives us no information on how to resize").
+-- Now it is on - and = , and HELP says so.
 function S.zoom(scale)
     if scale==1 or scale==2 or scale==3 then S.scale=scale
     else S.scale=((S.scale or S.fit())%3)+1 end
     if S.window then S.close(); S.open() end
     return S.scale
+end
+
+-- One step smaller or larger, stopping at the ends rather than wrapping round
+-- to the opposite extreme, which is what a size control should do.
+function S.step(by)
+    local now=S.scale or S.fit()
+    local want=now+by
+    if want<1 then want=1 elseif want>3 then want=3 end
+    if want==now then return now end
+    return S.zoom(want)
 end
 
 return S

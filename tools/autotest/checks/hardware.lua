@@ -146,3 +146,32 @@ function CFHW.app()
     local w = S.window; if not w then return false end
     return true, tostring(w.app or 1), tostring(w.on)
 end
+
+-- Size. S.zoom existed with nothing calling it, so it was never exercised.
+function CFHW.size()
+    local w = S.window
+    return true, tostring(S.scale or S.fit()), tostring(S.fit()),
+        tostring(w and w.width or "?"), tostring(w and w.height or "?")
+end
+
+function CFHW.step(by)
+    S.step(tonumber(by))
+    return true, tostring(S.scale)
+end
+
+-- What fit() picks for a given screen height, without needing that screen.
+function CFHW.fitFor(height)
+    local Case = require("ConspiracyFiles/Generated/OrganiserCase")
+    local want = math.floor(tonumber(height) * S.FILL / Case.h)
+    if want < 1 then want = 1 elseif want > 3 then want = 3 end
+    return true, tostring(want), tostring(Case.h * want), tostring(height)
+end
+
+-- HELP must actually tell the player how to do it.
+function CFHW.helpText()
+    local out = {}
+    for _, row in ipairs(A.help.list()) do
+        out[#out + 1] = tostring(row.title) .. ": " .. tostring(row.detail):gsub("\n", " ")
+    end
+    return true, table.concat(out, " || ")
+end
