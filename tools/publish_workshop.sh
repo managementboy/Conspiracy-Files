@@ -69,6 +69,13 @@ version="$(grep -o 'ConspiracyFiles.VERSION = "[^"]*"' "$REPO/mod/common/media/l
 rm -rf "$BUILD"
 mkdir -p "$CONTENT/mods"
 "$REPO/tools/package.sh" --stage "$CONTENT/mods/ConspiracyFiles" >/dev/null
+# The Fieldnote PDA test mod rides the SAME item as a second mod folder: Steam
+# ships whatever is under contentfolder, and the game lists each mods/<id> as
+# its own enableable mod. So the owner subscribes once and ticks "Fieldnote
+# PDA (test)" in the Mods menu - no second item, no new id, no visibility
+# change (owner, 2026-09-13: "push it to steam"). It is a test of the
+# hardware drawing only; it is NOT the PDA and touches nothing in mod/.
+rsync -a --delete "$REPO/tools/fieldnote-test/FieldnoteTest/" "$CONTENT/mods/FieldnoteTest/"
 
 # Steam strips nothing and adds nothing: whatever is in contentfolder becomes
 # the item root, and the game expects to find mods/<id>/ there. This mirrors the
