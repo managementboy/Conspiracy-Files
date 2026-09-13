@@ -1,0 +1,239 @@
+-- The PDA as a player actually uses it, inside a running game.
+--
+-- The distinction that matters: this drives the device through the SAME
+-- entry points the player's hands reach, not through the screen's private
+-- API. Opening it means putting the organiser in the primary hand, because
+-- that is the switch (O.handTick); closing it means taking it out. A test
+-- that calls OrganiserScreen.open() is testing our own function, not the
+-- feature.
+CFGAME = CFGAME or {}
+local S = ConspiracyFiles.OrganiserScreen
+local O = ConspiracyFiles.Organiser
+
+local function player() return getPlayer and getPlayer() end
+
+-- ---------------------------------------------------------------- obtaining
+-- A survivor is issued an organiser at spawn. Find it the way the mod does.
+function CFGAME.issued()
+    local p = player(); if not p then return false, "no player" end
+    local item = O.held and O.held(p)
+    if not item then return false, "no organiser in inventory" end
+    local md = item:getModData()
+    local favourite = select(2, pcall(function() return item:isFavorite() end))
+    return true, tostring(item:getFullType()), tostring(md.cfOrganiser == true),
+        tostring(favourite), tostring(O.readable and select(1, O.readable(item)))
+end
+
+-- ------------------------------------------------------ the hand is the switch
+-- Put it in the main hand and let the mod's own tick notice, exactly as
+-- equipping it in play does.
+function CFGAME.takeOut()
+    local p = player(); if not p then return false, "no player" end
+    local item = O.held(p); if not item then return false, "no organiser" end
+    pcall(function() p:setPrimaryHandItem(item) end)
+    for _ = 1, 5 do pcall(O.tick) end
+    return true, tostring(S.window ~= nil), tostring(S.window and S.window.on)
+end
+
+function CFGAME.putAway()
+    local p = player(); if not p then return false, "no player" end
+    pcall(function() p:setPrimaryHandItem(nil) end)
+    for _ = 1, 5 do pcall(O.tick) end
+    return true, tostring(S.window == nil)
+end
+
+-- ------------------------------------------------------------------- screens
+-- Every program on the launcher, opened by TAPPING ITS ICON, then a record
+-- opened, then backed out - and what the screen says it is at each step.
+function CFGAME.tour()
+    local w = S.window; if not w then return false, "no screen" end
+    w.on = true; w.booting = false
+    w:press("MODE")
+    local visited, problems = {}, {}
+    local programs = w:programs()
+    for i, program in ipairs(programs) do
+        w:press("MODE")                 -- HOME, through the real key
+        w:prerender()                   -- so the launcher's hit boxes exist
+        local hit
+        for _, h in ipairs((w.context or {}).hits or {}) do
+            if h.id == "APP" and h.payload == i then hit = h end
+        end
+        if not hit then
+            problems[#problems + 1] = program.title .. ": no icon to tap"
+        else
+            w:onMouseDown(hit.x + 2, hit.y + 2); w:onMouseUp(hit.x + 2, hit.y + 2)
+            w:prerender()
+            local opened = w:program()
+            if not opened or opened.title ~= program.title then
+                problems[#problems + 1] = program.title .. ": tap opened "
+                    .. tostring(opened and opened.title)
+            else
+                visited[#visited + 1] = program.title
+                -- And a row, if it has any, then back out with BACK.
+                local rows = w:list()
+                if rows and #rows > 0 then
+                    w:openRow(1); w:prerender()
+                    if not w.record and not rows[1].cfHeading and not rows[1].setup then
+                        problems[#problems + 1] = program.title .. ": a row would not open"
+                    end
+                    w:press("INDEX"); w:prerender()
+                    if w.record then problems[#problems + 1] = program.title .. ": BACK left the record open" end
+                end
+            end
+        end
+    end
+    if #problems > 0 then return false, table.concat(problems, " | "), table.concat(visited, ",") end
+    return true, tostring(#visited), table.concat(visited, ",")
+end
+
+-- The rocker and the four keys, each proved by an observable effect.
+function CFGAME.controls()
+    local w = S.window; if not w then return false, "no screen" end
+    w.on = true; w.booting = false
+    local problems = {}
+    -- HOME from inside a record reaches the launcher.
+    w.launcher = false; w.app = 1; w.cachedList = nil
+    local rows = w:list()
+    if rows and #rows > 0 then w:openRow(1) end
+    w:press("C09")
+    if not w.launcher then problems[#problems + 1] = "HOME (C09) did not reach the launcher" end
+    -- The rocker moves the selection on a list.
+    w.launcher = false; w.app = 1; w.cachedList = nil; w.entry = 1
+    w:prerender()
+    local before = w.entry
+    w:press("rocker_down"); w:prerender()
+    local afterDown = w.entry
+    w:press("rocker_up"); w:prerender()
+    local afterUp = w.entry
+    if #(w:list() or {}) > 1 and afterDown == before then
+        problems[#problems + 1] = "the rocker did not move the selection down"
+    end
+    if afterUp ~= before then problems[#problems + 1] = "the rocker did not come back up" end
+    -- The two unassigned keys must do NOTHING except wake it.
+    w.launcher = true; w.record = nil
+    local snapshot = tostring(w.launcher) .. tostring(w.app) .. tostring(w.entry)
+    w:press("C10"); w:press("C11")
+    if tostring(w.launcher) .. tostring(w.app) .. tostring(w.entry) ~= snapshot then
+        problems[#problems + 1] = "an unassigned key changed the screen"
+    end
+    -- BACK stops at the launcher rather than falling off the top.
+    w:press("C12")
+    if not w.launcher then problems[#problems + 1] = "BACK went past the launcher" end
+    if #problems > 0 then return false, table.concat(problems, " | ") end
+    return true, "HOME, BACK, the rocker both ways, and two keys that do nothing"
+end
+
+-- ------------------------------------------------------------- writing state
+-- A note and a to-do, written the way the player writes them, so there is
+-- something of the survivor's own to survive a save.
+function CFGAME.write(text)
+    local w = S.window; if not w then return false, "no screen" end
+    w.on = true; w.booting = false
+    local Apps = ConspiracyFiles.KnoxApps
+    local ok1 = pcall(Apps.addNote, tostring(text or "night note"))
+    local ok2 = pcall(Apps.addToDo, "night to-do " .. tostring(text or ""))
+    w.cachedList = nil
+    return true, tostring(ok1), tostring(ok2), CFGAME.countState()
+end
+
+function CFGAME.countState()
+    local notes = ModData.get("ConspiracyFiles.Organiser.Notes")
+    local todos = ModData.get("ConspiracyFiles.Organiser.ToDo")
+    local n = (type(notes) == "table" and type(notes.items) == "table") and #notes.items or -1
+    local t = (type(todos) == "table" and type(todos.items) == "table") and #todos.items or -1
+    return "notes=" .. n .. " todos=" .. t
+end
+
+-- The two size settings, and whether they came back.
+function CFGAME.setSizes(scale, font)
+    S.fontSize = tonumber(font) or S.FONT_DEFAULT
+    S.zoom(tonumber(scale) or 1)
+    S.savePrefs()
+    return true, tostring(S.scale), tostring(S.fontSize)
+end
+
+function CFGAME.sizes()
+    return true, tostring(S.scale), tostring(S.fontSize)
+end
+
+-- --------------------------------------------------------- hostile world state
+-- What the device does when its own stores are rubbish. A save edited by hand,
+-- a mod conflict, a half-written file: the device must still open.
+function CFGAME.corrupt()
+    local notes = ModData.getOrCreate("ConspiracyFiles.Organiser.Notes")
+    local todos = ModData.getOrCreate("ConspiracyFiles.Organiser.ToDo")
+    local prefs = ModData.getOrCreate("ConspiracyFilesOrganiserPrefs")
+    notes.items = "not a table"
+    todos.items = { "a bare string", 42, {}, { text = nil, done = "yes" } }
+    prefs.scale = "enormous"
+    prefs.fontSize = -17
+    return true, "stores corrupted"
+end
+
+-- Open it, draw every screen, and report anything that threw. This is the
+-- assertion that corrupted state degrades rather than crashing.
+function CFGAME.survivesCorruption()
+    local problems = {}
+    S.prefsLoaded = nil                  -- force the bad prefs to be read
+    local ok, why = pcall(S.open)
+    if not ok then return false, "would not open: " .. tostring(why) end
+    local w = S.window
+    if not w then return false, "no window after open" end
+    if type(w.scale) ~= "number" or w.scale < 1 or w.scale > S.MAX then
+        problems[#problems + 1] = "bad prefs produced scale " .. tostring(w.scale)
+    end
+    if type(w.fontSize) ~= "number" or not S.FONT_SIZES[w.fontSize] then
+        problems[#problems + 1] = "bad prefs produced fontSize " .. tostring(w.fontSize)
+    end
+    w.on = true; w.booting = false
+    for i = 1, #w:programs() do
+        w.launcher = false; w.app = i; w.cachedList = nil; w.record = nil
+        local drew, err = pcall(function()
+            local rows = w:list()
+            w:prerender()
+            if rows and #rows > 0 then w:openRow(1); w:prerender() end
+        end)
+        if not drew then problems[#problems + 1] = "program " .. i .. ": " .. tostring(err) end
+    end
+    if #problems > 0 then return false, table.concat(problems, " | ") end
+    return true, "opened and drew every program on corrupted stores"
+end
+
+-- ------------------------------------------------------ inventory interactions
+-- Taking the organiser out of the inventory entirely while the screen is up.
+function CFGAME.removeItem()
+    local p = player(); if not p then return false, "no player" end
+    local item = O.held(p); if not item then return false, "no organiser" end
+    pcall(function() p:setPrimaryHandItem(item) end)
+    for _ = 1, 5 do pcall(O.tick) end
+    local wasOpen = S.window ~= nil
+    pcall(function() p:getInventory():Remove(item) end)
+    pcall(function() p:setPrimaryHandItem(nil) end)
+    for _ = 1, 10 do pcall(O.tick) end
+    return true, tostring(wasOpen), tostring(S.window == nil),
+        tostring(O.held(p) == nil)
+end
+
+-- And a new one is issued again, so losing it costs convenience and never the
+-- case (P4-R80).
+function CFGAME.reissue()
+    local p = player(); if not p then return false, "no player" end
+    local item, why = O.give(p)
+    if not item then return false, "not reissued: " .. tostring(why) end
+    return true, tostring(O.held(p) ~= nil)
+end
+
+-- Where the window sits for a given screen size, so a resolution change
+-- cannot leave it off-screen.
+function CFGAME.placement(w0, h0)
+    local fit = S.fit(tonumber(h0))
+    local m = S.metrics(fit)
+    -- S.place reads the live screen, so compute the same way against the
+    -- hypothetical one.
+    local screenW = tonumber(w0)
+    local x = screenW - m.w
+    return true, tostring(fit), tostring(m.w) .. "x" .. tostring(m.h),
+        tostring(x >= 0), tostring(m.h <= tonumber(h0))
+end
+
+return CFGAME

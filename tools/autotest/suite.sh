@@ -3,7 +3,15 @@
 #   tools/autotest/suite.sh [--hidden]
 set -uo pipefail
 . "$(dirname "${BASH_SOURCE[0]}")/lib.sh"
-checks=(boot_check.sh checks/wallet_id.sh checks/core_loop.sh checks/reload.sh checks/death.sh checks/faults.sh checks/perf.sh checks/knox.sh checks/hardware.sh checks/reshuffle.sh)
+# The device's own checks run with the rest of them now. pdagame, pdalife and
+# pdaperf were written on 2026-09-13 and living outside the suite would have
+# meant nobody ran them; the Fieldnote hardware contract was in the same
+# position, reachable only by knowing the path to it.
+checks=(boot_check.sh checks/wallet_id.sh checks/core_loop.sh checks/reload.sh
+        checks/death.sh checks/faults.sh checks/perf.sh checks/knox.sh
+        checks/hardware.sh checks/reshuffle.sh
+        ../fieldnote-test/boot_test.sh
+        checks/pdagame.sh checks/pdalife.sh checks/pdaperf.sh)
 pass=0; total=0
 for c in "${checks[@]}"; do
     # Each check claims the machine itself now (claim_game), so the suite does

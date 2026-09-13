@@ -79,7 +79,31 @@ function D.record(kind,reference)
         local event=staged.events[#staged.events]
         -- Straight to disk, before anything else can go wrong. ModData will
         -- not reach the disk until the game next saves.
-        pcall(D.journalAppend,event)
+        --
+        -- AND IT HAS TO SAY SO IF IT FAILS. This is the whole of the crash
+        -- protection: the journal is why a crash no longer costs the player
+        -- their research. The result used to be discarded, so a disk that
+        -- refused the write left every discovery living in ModData only,
+        -- unprotected until the next save, with nothing anywhere saying the
+        -- safety net was gone. Two crashes in play on 2026-09-13 ended on
+        -- device input with no Lua trace; if the journal had been failing
+        -- those runs, nothing would have told us.
+        --
+        -- It does not abort the discovery: the entry IS recorded, and losing
+        -- it because the journal is unhappy would be strictly worse. It warns,
+        -- once per session for the same reason, because a warning repeated on
+        -- every discovery buries the log that a real problem has to be spotted in.
+        local journalled,why=pcall(D.journalAppend,event)
+        if not journalled then
+            if not D.journalWarned then
+                D.journalWarned=true
+                CFLog.message("ledger","note",
+                    "Discoveries are NOT being written to the journal: "..tostring(why)
+                    .."; they survive only from the game's next save onward. Further"
+                    .." journal failures this session will not be repeated here.","w")
+            end
+            D.journalFailures=(D.journalFailures or 0)+1
+        end
         CFLog.message("ledger","note","#"..event.seq.." "..event.kind.." "..event.ref.." at hour "..string.format("%.2f",event.at)
             ..(event.place and (" at "..event.place) or " (no named place)"))
         -- Set A voice line: fire on every genuinely new discovery, whatever

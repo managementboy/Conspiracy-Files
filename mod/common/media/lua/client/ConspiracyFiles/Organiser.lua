@@ -57,15 +57,20 @@ end
 -- corpse, or one from a desk - and knows the investigation again, because the
 -- record was never kept in the character. Ours is marked only so it is issued
 -- once and kept favourite; a found one is just as good a reader.
+-- Walks the survivor's inventory, so it is not free and must not be called
+-- per frame. It used to allocate a fresh closure for EVERY ITEM on the way
+-- past - a pcall wrapping a closure, per item, per call - and the screen's
+-- powerCheck called it sixty times a second. `safe` and `pcall` both take the
+-- receiver as an argument, so none of that allocation was ever needed.
 function O.held(player)
     player=player or (getPlayer and getPlayer())
-    local inventory=player and safe(function() return player:getInventory() end)
+    local inventory=player and safe(player.getInventory,player)
     local items=inventory and inventory.getItems and inventory:getItems()
     if not items then return nil end
     local found
     for i=0,items:size()-1 do
         local item=items:get(i)
-        local ok,full=pcall(function() return item:getFullType() end)
+        local ok,full=pcall(item.getFullType,item)
         if ok and full==O.TYPE then
             local md=item.getModData and item:getModData()
             if md and md[MARK] then return item end   -- ours, if we have it
@@ -307,17 +312,36 @@ end
 -- closes it. Inspecting an object does not open it." So the hand IS the switch:
 -- no menu item to read, no window that appears over a document you just picked
 -- up. Take it out to read; put it away to stop.
+-- MEASURED, 2026-09-13, in a real game on real hardware: this handler cost
+-- 0.0750 ms per call against 0.0017 for the mod's other two per-tick handlers.
+-- Forty-four times the price, sixty times a second, for the whole life of
+-- every save, whether or not the device is anywhere near the player's hand.
+--
+-- Two causes, both of them the same mistake. `safe(function() ... end)`
+-- allocates a fresh closure on every call, and `safe` already takes varargs -
+-- so `safe(player.getPrimaryHandItem, player)` does the identical job with no
+-- allocation at all. And the full type of an item that has not changed since
+-- the last tick cannot have changed either, so asking the engine for it sixty
+-- times a second answers the same question over and over.
+--
+-- Behaviour is deliberately identical: the window comparison below still runs
+-- every tick, because the screen can be closed by something other than the
+-- hand and this handler is what notices.
 function O.handTick()
     local player=getPlayer and getPlayer()
     if not player then return end
     local screen=ConspiracyFiles.OrganiserScreen
     if not screen then return end
-    local primary=safe(function() return player:getPrimaryHandItem() end)
-    local ours=false
-    if primary then
-        local full=safe(function() return primary:getFullType() end)
-        ours=full==O.TYPE
+    local primary=safe(player.getPrimaryHandItem,player)
+    local ours
+    if primary==nil then
+        ours=false
+    elseif primary==O.lastPrimary then
+        ours=O.lastOurs                      -- same item, same answer
+    else
+        ours=safe(primary.getFullType,primary)==O.TYPE
     end
+    O.lastPrimary,O.lastOurs=primary,ours
     if ours and not screen.window then
         if O.booting and screen.boot then
             O.booting=false
@@ -354,7 +378,8 @@ function O.lampTick()
         return
     end
     local clock=getGameTime and getGameTime()
-    local now=clock and safe(function() return clock:getWorldAgeHours() end)
+    -- No closure: safe takes varargs, and this is on the per-tick path.
+    local now=clock and safe(clock.getWorldAgeHours,clock)
     if not now then return end
     local since=O.lampAt
     O.lampAt=now
@@ -388,7 +413,7 @@ function O.tick()
     if not pending then return end
     pending.tries=pending.tries+1
     local player=pending.player
-    local primary=player and safe(function() return player:getPrimaryHandItem() end)
+    local primary=player and safe(player.getPrimaryHandItem,player)
     if primary==pending.item then
         O.pendingOpen=nil
         local screen=ConspiracyFiles.OrganiserScreen

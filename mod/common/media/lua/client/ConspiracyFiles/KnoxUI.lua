@@ -27,25 +27,57 @@ function K.begin(panel,scale,x,y,w,h)
     return {panel=panel,scale=scale,x=x,y=y,w=w,h=h,hits={},cursor=0}
 end
 
+-- One glyph picture, cached per scale and then per character code.
+--
+-- It used to build a string key - scale.."/"..code - for every character of
+-- every line of every frame. A full screen of text is ~640 glyphs, so that was
+-- ~640 string allocations and ~640 hash lookups per frame, thrown away
+-- immediately, purely to find something already in memory. Two integer-keyed
+-- array lookups do the same job and allocate nothing.
+--
+-- `false` still marks a glyph the game does not have, so a missing texture is
+-- looked up once rather than on every frame forever.
+K.cache=K.cache or {}
 local function glyph(code,scale)
-    K.cache=K.cache or {}
-    local key=scale.."/"..code
-    local hit=K.cache[key]
+    local byScale=K.cache[scale]
+    if not byScale then byScale={}; K.cache[scale]=byScale end
+    local hit=byScale[code]
     if hit~=nil then return hit or nil end
     local ok,texture=pcall(getTexture,"media/ui/CFOrg/"..scale.."x/"..code..".png")
-    K.cache[key]=(ok and texture) or false
+    byScale[code]=(ok and texture) or false
     return ok and texture or nil
 end
 
--- Text in native coordinates. Returns the width drawn, in native pixels.
+-- Text in native coordinates, CLIPPED TO THE GLASS. Returns the width drawn,
+-- in native pixels.
+--
+-- The clip is not a nicety. Nothing clips a mod's drawing to its own panel, so
+-- this loop used to draw every character it was given, walking the cursor
+-- straight off the right-hand edge of the LCD and painting the remainder over
+-- the device's moulded housing. Two things wrong with that at once: the player
+-- can write a two-hundred-character note (the field's own limit), so it is
+-- reachable rather than theoretical; and every glyph past the edge still cost
+-- a Lua-to-Java call for something nobody could see.
+--
+-- MEASURED, 2026-09-13, on a NOTES list of forty-one notes: 1224 texture
+-- calls per frame and 5.98 ms of a 16.6 ms frame spent on screen content,
+-- because sixteen visible rows were each drawing seventy-two characters into a
+-- thirty-eight character line. The rows were already culled vertically; it was
+-- only ever the horizontal edge that leaked.
 function K.text(c,value,nx,ny,colour)
     local s=c.scale
     local cursor=c.x+nx*s
+    local edge=c.x+c.w*s
     value=tostring(value or "")
     for i=1,#value do
         local code=string.byte(value,i)
         if code>=Font.first and code<=Font.last then
             local width=Font.w[code-Font.first+1]
+            if cursor+width*s>edge then
+                -- Past the glass. Nothing after this can be visible either,
+                -- because the cursor only moves right.
+                return (cursor-c.x)/s-nx
+            end
             local texture=glyph(code,s)
             if texture then
                 c.panel:drawTextureScaled(texture,cursor,c.y+ny*s,width*s,Font.line*s,1,colour[1],colour[2],colour[3])
@@ -54,6 +86,26 @@ function K.text(c,value,nx,ny,colour)
         end
     end
     return (cursor-c.x)/s-nx
+end
+
+-- As much of `value` as fits in `width` native pixels, with an ellipsis when
+-- something had to go. A hard clip alone stops the bleed but cuts a word
+-- mid-letter and says nothing about it; a row that has been shortened should
+-- look shortened, which is what the record view already did for its own lines.
+function K.fit(value,width)
+    value=tostring(value or "")
+    if Font.width(value,1)<=width then return value end
+    local dots=Font.width("...",1)
+    local room=width-dots
+    if room<=0 then return "" end
+    local total,cut=0,0
+    for i=1,#value do
+        local code=string.byte(value,i)
+        local w=(code>=Font.first and code<=Font.last) and Font.w[code-Font.first+1] or 0
+        if total+w>room then break end
+        total=total+w; cut=i
+    end
+    return value:sub(1,cut).."..."
 end
 
 function K.width(value) return Font.width(value,1) end
@@ -109,7 +161,9 @@ end
 function K.row(c,label,ny,selected,id,payload)
     local line=Font.line
     if selected then K.fill(c,0,ny,c.w,line,K.INK) end
-    K.text(c,label,2,ny,selected and K.GLASS or K.INK)
+    -- Shortened with an ellipsis rather than sheared off at the glass: the
+    -- row starts at x=2 and the scroll arrows own the last nine pixels.
+    K.text(c,K.fit(label,c.w-11),2,ny,selected and K.GLASS or K.INK)
     hit(c,id or "ROW",0,ny,c.w-9,line,payload)
     return ny+line
 end

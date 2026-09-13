@@ -245,7 +245,7 @@ function Screen:new(owner)
     o.on=true
     o.lamp=false
     o.touched=getTimeInMillis and getTimeInMillis() or 0
-    o.pressed={}
+    o.pressedId,o.pressedAt=nil,nil
     o.moveWithMouse=true
     return o
 end
@@ -274,12 +274,21 @@ function Screen:grip()
     return {x=Case.w*s-g,y=Case.h*s-g,w=g,h=g}
 end
 
--- The control being held right now, for the case's pressed colours.
+-- The control being held right now, for the case's pressed colours. ONE
+-- control: a hand presses one key at a time and the case shows one key down.
+--
+-- This was a table keyed by control id that nothing ever removed from, walked
+-- with pairs() on every frame. Two faults in one. It iterated every id pressed
+-- for the whole life of the window rather than the one that matters; and
+-- pairs() has no defined order, so two presses inside the 110 ms window could
+-- light whichever key the hash happened to yield first instead of the one the
+-- player just pressed.
 function Screen:heldControl()
+    local id=self.pressedId
+    if not id then return nil end
     local now=getTimeInMillis and getTimeInMillis() or 0
-    for id,at in pairs(self.pressed) do
-        if now-at<S.PRESS_MS then return id end
-    end
+    if now-(self.pressedAt or 0)<S.PRESS_MS then return id end
+    self.pressedId,self.pressedAt=nil,nil
     return nil
 end
 
@@ -297,13 +306,27 @@ end
 -- inventory looking for the device, every frame, on every screen. That is the
 -- exact cost the five retry loops were stripped out for on 2026-09-12, put
 -- back by the battery warning on 2026-09-13. A cell does not move in a frame.
+-- The charge, read at most once a second, and the ITEM it was read from kept
+-- with it. The item was thrown away before, so powerCheck below went and found
+-- it again on every single frame - and finding it means walking the survivor's
+-- whole inventory (Organiser.held).
+--
+-- `chargeFresh` says whether this call actually refreshed, so callers that
+-- only care once a second can ask. It is a field rather than a second return
+-- value because K.status(c,nil,"All",self:charge()) takes charge() in tail
+-- position, where an extra return would slide into the next argument.
 function Screen:charge()
     local now=getTimeInMillis and getTimeInMillis() or 0
-    if self.chargeAt and now-self.chargeAt<1000 then return self.chargeValue end
+    if self.chargeAt and now-self.chargeAt<1000 then
+        self.chargeFresh=false
+        return self.chargeValue
+    end
     local organiser=ConspiracyFiles.Organiser
     local item=organiser and organiser.held and safe(organiser.held)
+    self.chargeItem=item
     self.chargeValue=item and organiser.power and safe(organiser.power,item)
     self.chargeAt=now
+    self.chargeFresh=true
     return self.chargeValue
 end
 
@@ -364,14 +387,24 @@ end
 -- read, not per frame: pulling the battery out used to leave the screen lit
 -- because power was only ever looked at when the device was picked up or woken
 -- (owner, 2026-09-13: "removing the battery does not shutt off our pda").
+-- MEASURED, 2026-09-13: the three non-drawing checks in prerender cost
+-- 0.4-0.6 ms of every frame, and nearly all of it was here. charge() is
+-- throttled to once a second, but the two lines under it were not: held()
+-- walked the survivor's entire inventory and hasCell asked the engine for the
+-- battery, sixty times a second, to re-answer a question whose answer changes
+-- when the player moves an item.
+--
+-- It now asks exactly as often as the charge does. A cell pulled out of the
+-- device is noticed within a second instead of within a frame, which is the
+-- same promise the battery readout has always made, and hardware.sh asserts
+-- the behaviour either way.
 function Screen:powerCheck()
     if not self.on then return end
     local organiser=ConspiracyFiles.Organiser
     if not organiser or not organiser.hasCell then return end
-    -- charge() is the throttle: it refreshes at most once a second and caches
-    -- the item it found, so this costs nothing between reads.
     self:charge()
-    local item=safe(organiser.held)
+    if not self.chargeFresh then return end
+    local item=self.chargeItem
     if item and safe(organiser.hasCell,item)==false then
         self.on=false
         self.lamp=false
@@ -615,7 +648,7 @@ end
 
 function Screen:press(id)
     self:touch()
-    self.pressed[id]=getTimeInMillis and getTimeInMillis() or 0
+    self.pressedId,self.pressedAt=id,(getTimeInMillis and getTimeInMillis() or 0)
     safe(function() getSoundManager():playUISound("UIActivateButton") end)
     -- Asleep: any hardware key wakes it, exactly as the four application keys
     -- woke a Palm, and the press is spent on waking. Before this, a machine
@@ -790,7 +823,7 @@ function Screen:onMouseUp(x,y)
             return true
         end
         self.lamp=not self.lamp
-        self.pressed[id]=getTimeInMillis and getTimeInMillis() or 0
+        self.pressedId,self.pressedAt=id,(getTimeInMillis and getTimeInMillis() or 0)
         safe(function() getSoundManager():playUISound("UIActivateButton") end)
         log("organiser lamp "..tostring(self.lamp))
         return true
