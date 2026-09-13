@@ -158,7 +158,19 @@ cmd_start() {
     say "launching session $id"
     # setsid -f: the launcher must not keep this script's stdout open, or
     # anything reading our output (a pipe, a test runner) never sees EOF.
-    (cd "$GAME" && exec setsid -f ./projectzomboid.sh -debug -nosteam </dev/null >/dev/null 2>&1)
+    # 9>&- for the same reason Xvfb needs it above, and this one is worse.
+    # claim_game holds the machine lock as file descriptor 9; the game
+    # inherited it, so the GAME held the lock for as long as it lived. A game
+    # that outlives its check - one that ignores the quit and has to be
+    # terminated, which happens - then blocks every later check at
+    # `flock -w 1200 9` until the timeout, and a suite of them falls over one
+    # after another having printed nothing.
+    #
+    # Found 2026-09-13 by fuser on the lock file: the holders were the launcher,
+    # the game, this script's own bash, and a flock that had been waiting
+    # thirteen minutes. The Xvfb case was fixed months earlier and the comment
+    # above it describes this exact failure; the game launch was simply missed.
+    (cd "$GAME" && exec setsid -f ./projectzomboid.sh -debug -nosteam </dev/null >/dev/null 2>&1 9>&-)
 
     local deadline=$(( $(date +%s) + 300 )) stage=launch last_click=0 seen=""
     while [ "$(date +%s)" -lt "$deadline" ]; do

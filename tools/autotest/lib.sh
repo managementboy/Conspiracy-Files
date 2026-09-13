@@ -22,7 +22,19 @@ claim_game() {
     local wait_for="${1:-1200}"
     exec 9>"$CF_LOCK" || { echo "cannot write the lock at $CF_LOCK" >&2; return 1; }
     if ! flock -w "$wait_for" 9; then
+        # Say WHO is holding it. This used to time out after twenty minutes
+        # having printed nothing but "another run has held the game", which is
+        # indistinguishable from a legitimately busy machine - and on
+        # 2026-09-13 the holder was the GAME ITSELF, which had inherited this
+        # very descriptor at launch and kept the lock after outliving its
+        # check. Every later check queued behind a process nobody suspected.
+        # pz.sh closes fd 9 on launch now; this names the holder if anything
+        # else ever manages the same trick.
         echo "another run has held the game for over ${wait_for}s; not starting" >&2
+        if command -v fuser >/dev/null 2>&1; then
+            echo "the lock at $CF_LOCK is held by:" >&2
+            fuser -v "$CF_LOCK" >&2 2>&1 || true
+        fi
         return 1
     fi
     # The lock is ours. A game still running now is a leftover from a run that
