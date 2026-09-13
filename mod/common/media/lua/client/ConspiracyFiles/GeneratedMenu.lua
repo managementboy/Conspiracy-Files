@@ -41,17 +41,36 @@ function M.fill(playerNum,context,items)
     -- 2026-09-12: "Inspecting an object does not open it." Reading happens when
     -- the survivor takes the organiser in hand, and not as a side effect of
     -- picking a paper up.
+    local carried=expected==getSpecificPlayer(playerNum):getInventory()
+    -- With the organiser in hand you can record a document where it lies.
+    --
+    -- Inspect used to be greyed out unless the paper was in your pockets, so
+    -- reading a drawer meant emptying it into them first - "very very
+    -- bothersome and makes the game unplayable" (owner, 2026-09-13). The two
+    -- paths were never different work: R.inspect(item,true) records exactly
+    -- the same thing, and the only distinction was where the item was allowed
+    -- to be.
+    --
+    -- The organiser being OPEN is the condition, because it is the machine
+    -- doing the recording and the mod's rule is that it must be in your hand
+    -- to do anything. Without it, the old behaviour stands.
+    local screen=ConspiracyFiles.OrganiserScreen
+    local reading=(screen and screen.window and screen.window.on)==true
     local option=context:addOption("Inspect Investigation Evidence",nil,function()
         if item:getOutermostContainer()~=expected then return end
-        pcall(R.inspect,item)
+        pcall(R.inspect,item,not carried)
     end)
-    local carried=expected==getSpecificPlayer(playerNum):getInventory()
-    if option then option.notAvailable=not carried; option.iconTexture=lookIcon end
+    if option then
+        option.notAvailable=not (carried or reading)
+        option.iconTexture=lookIcon
+
+    end
     -- Note it where it lies. A pile of eleven credit cards is evidence the
     -- player should be able to record without emptying a drawer into their
     -- pockets; so, later, is a body in a boot. The notebook opens either way,
     -- because the point of noting a thing is to read what was noted.
-    if not carried then
+    -- The separate wording is only worth showing when Inspect cannot do it.
+    if not carried and not reading then
         local here=context:addOption("Note in the Investigation",nil,function()
             if item:getOutermostContainer()~=expected then return end
             pcall(R.inspect,item,true)

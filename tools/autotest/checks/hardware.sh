@@ -255,6 +255,33 @@ empty="$(ev 'return CFHW.tapDay(28)')"
 [ "$(f 1 <<<"$empty")" = true ] || fail "tapping a day failed: $empty"
 say "day 28: $(f 2 <<<"$empty") -> $(f 3 <<<"$empty")"
 
+# --- evidence files itself away ----------------------------------------------
+# Owner, 2026-09-13: emptying a drawer into your pockets to read it "makes the
+# game unplayable". Documents go into the Papers - but only while the organiser
+# is closed, because things moving under you while you read is not help.
+ev 'return CFHW.plantDoc()' >/dev/null
+before="$(ev 'return CFHW.pocketCount()')"
+say "planted: loose=$(f 2 <<<"$before") filed=$(f 3 <<<"$before") papers=$(f 4 <<<"$before")"
+[ "$(f 4 <<<"$before")" = true ] || abort "no papers carried; cannot test filing"
+[ "$(f 2 <<<"$before")" -ge 1 ] || fail "the planted document is not in the pocket"
+# Organiser OPEN: nothing may move.
+ev 'return CFHW.setScreen(true)' >/dev/null
+[ "$(ev 'return CFHW.file()' | f 2)" = 0 ] || fail "documents were filed while the organiser was open"
+held="$(ev 'return CFHW.pocketCount()')"
+[ "$(f 2 <<<"$held")" = "$(f 2 <<<"$before")" ] || fail "the pocket changed while reading"
+say "while reading: nothing moved"
+# Organiser CLOSED: it files.
+ev 'return CFHW.setScreen(false)' >/dev/null
+moved="$(ev 'return CFHW.file()' | f 2)"
+after="$(ev 'return CFHW.pocketCount()')"
+say "after filing: moved=$moved loose=$(f 2 <<<"$after") filed=$(f 3 <<<"$after")"
+# NOT asserted on `moved`: the game's own tick files on its own schedule and
+# will often have done the work before this call, reporting 0 with the job
+# already done. The counts are the truth (2026-09-13).
+[ "$(f 3 <<<"$after")" -ge 1 ] || fail "nothing was filed with the organiser closed"
+[ "$(f 2 <<<"$after")" -lt "$(f 2 <<<"$before")" ] || fail "the pocket did not empty: $(f 2 <<<"$before") -> $(f 2 <<<"$after")"
+ev 'return CFHW.setScreen(true)' >/dev/null
+
 # --- no plumbing on screen ---------------------------------------------------
 me="$(ev 'return CFHW.meCard()')"
 [ "$(f 1 <<<"$me")" = true ] || fail "the survivor has no card in NAMES: $me"

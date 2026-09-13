@@ -318,3 +318,47 @@ function CFHW.tapDay(n)
     if not ok then return false, "render: " .. tostring(why) end
     return true, tostring(row.title), tostring(row.detail):gsub("\n", " | ")
 end
+
+-- Filing evidence into the Papers, and inspecting where it lies.
+local CaseFile = require("ConspiracyFiles/CaseFile")
+
+function CFHW.pocketCount()
+    local inv = getPlayer():getInventory()
+    local items = inv:getItems()
+    local loose, filed = 0, 0
+    local papers = CaseFile.held(getPlayer())
+    for i = 0, items:size() - 1 do
+        local it = items:get(i)
+        local md = it and it.getModData and it:getModData()
+        if type(md) == "table" and md.cfGeneratedId then loose = loose + 1 end
+    end
+    local into = papers and papers:getInventory()
+    if into then
+        local pi = into:getItems()
+        for i = 0, pi:size() - 1 do
+            local md = pi:get(i):getModData()
+            if type(md) == "table" and md.cfGeneratedId then filed = filed + 1 end
+        end
+    end
+    return true, tostring(loose), tostring(filed), tostring(papers ~= nil)
+end
+
+-- A document in the pocket, made the way the runtime makes one.
+function CFHW.plantDoc()
+    local item = getPlayer():getInventory():AddItem("Base.Newspaper")
+    if not item then return false, "could not create" end
+    item:getModData().cfGeneratedId = "test:filing:" .. tostring(getTimeInMillis())
+    return true, tostring(item:getFullType())
+end
+
+function CFHW.file()
+    CaseFile.filedAt = nil            -- skip the throttle
+    local n = CaseFile.fileEvidence()
+    return true, tostring(n)
+end
+
+function CFHW.setScreen(on)
+    local w = S.window; if not w then return false end
+    w.on = (tostring(on) == "true")
+    return true, tostring(w.on)
+end

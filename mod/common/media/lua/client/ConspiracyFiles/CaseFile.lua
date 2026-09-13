@@ -153,7 +153,64 @@ local function describePanel()
 end
 
 local tried=false
+-- Filing evidence away by itself -----------------------------------------------
+--
+-- Documents you pick up go into the Papers, so the survivor's pockets do not
+-- fill with paper (owner, 2026-09-13). Only while the organiser is CLOSED: with
+-- it in hand you are reading, and things moving under you while you read is the
+-- kind of help nobody asked for.
+--
+-- Once every few seconds, not every tick. A per-tick inventory walk is the cost
+-- five retry loops were stripped out for on 2026-09-12, and a document does not
+-- appear in your pocket sixty times a second.
+F.FILE_EVERY_MS=3000
+function F.fileEvidence()
+    local now=getTimeInMillis and getTimeInMillis() or 0
+    if F.filedAt and now-F.filedAt<F.FILE_EVERY_MS then return 0 end
+    F.filedAt=now
+    local screen=ConspiracyFiles.OrganiserScreen
+    if screen and screen.window and screen.window.on then return 0 end
+    local player=getPlayer and getPlayer()
+    if not player then return 0 end
+    local papers=F.held(player)
+    local into=papers and papers.getInventory and papers:getInventory()
+    if not into then return 0 end
+    local ok,inventory=pcall(function() return player:getInventory() end)
+    if not ok or not inventory then return 0 end
+    local items=inventory.getItems and inventory:getItems()
+    if not items then return 0 end
+    -- Collect first, move second: moving while walking the list it came from
+    -- skips items.
+    local moving={}
+    for i=0,items:size()-1 do
+        local item=items:get(i)
+        local md=item and item.getModData and item:getModData()
+        if type(md)=="table" and md.cfGeneratedId and item~=papers then
+            moving[#moving+1]=item
+        end
+    end
+    local moved=0
+    for _,item in ipairs(moving) do
+        -- Room, and only room the papers actually have: silently vanishing a
+        -- document because a container was full would be far worse than
+        -- leaving it in a pocket.
+        local fits=pcall(function()
+            return into:hasRoomFor(player,item)
+        end)
+        if fits~=false then
+            local done=pcall(function()
+                inventory:Remove(item)
+                into:AddItem(item)
+            end)
+            if done then moved=moved+1 end
+        end
+    end
+    if moved>0 then log("filed "..moved.." document(s) into the papers") end
+    return moved
+end
+
 function F.onTick()
+    pcall(F.fileEvidence)
     if F.pendingOpen then
         local state=tryOpen(F.pendingOpen)
         if state=="opened" then
