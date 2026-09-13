@@ -43,21 +43,75 @@ local function log(message) CFLog.message("casefile","note",message) end
 --
 -- A device that refuses to appear is the honest failure here. An empty one
 -- that takes the survivor's hand and shows a case that does not exist is not.
--- Answered once. Whether this is a client or a server cannot change inside a
--- session, and O.tick asks on every one of sixty ticks a second.
-local isMultiplayer=nil
-local function multiplayer()
-    if isMultiplayer==nil then
-        isMultiplayer=((isClient and isClient()) or (isServer and isServer())) and true or false
-    end
-    return isMultiplayer
-end
+-- Asked every time, deliberately. Caching it looks free - the answer cannot
+-- change inside a session - but the FIRST call happens when this file loads,
+-- before there is a world, and a wrong answer cached then disables the device
+-- for the whole session with no way back. The saving was two engine calls per
+-- tick against a handler that measures 0.0033 ms; not worth a cliff.
+local function multiplayer() return (isClient and isClient()) or (isServer and isServer()) end
 O.multiplayer=multiplayer
 
 local function safe(fn,...)
     local ok,value=pcall(fn,...)
     if ok then return value end
     return nil
+end
+
+-- Every organiser the survivor is carrying, INCLUDING the ones inside bags.
+--
+-- getItems() returns only what is directly in the main inventory: a worn
+-- backpack is one item in that list and its contents are in the bag's own
+-- container, not in this one. So an organiser stashed in a bag was invisible
+-- to O.issued, which meant O.give - called on every OnGameStart - concluded
+-- the survivor had never been issued one and added ANOTHER. Every reload with
+-- the device in a bag produced one more organiser.
+--
+-- Reachable in ordinary play: it is a pocket device and players put things in
+-- bags. setFavorite only warns before DISCARDING it with a bag, which is a
+-- different act.
+--
+-- WALKED BY HAND, deliberately. The first version of this used the engine's
+-- getAllTypeRecurse and found nothing at all: that call matches an item's
+-- short type, not its fullType, so "ConspiracyFiles.Organiser" matched
+-- nothing and came back as a valid EMPTY list - which a nil-check cannot
+-- catch. The organiser stopped being issued entirely, and only running the
+-- real game said so (checks/pdagame.sh, 2026-09-13). Comparing getFullType
+-- ourselves is the same test the flat scan always used, so the only thing
+-- that changed is that bags are now looked inside.
+local function collectOrganisers(container,out,depth)
+    if not container or depth>4 then return out end
+    local items=container.getItems and container:getItems()
+    if not items then return out end
+    for i=0,items:size()-1 do
+        local item=items:get(i)
+        if item then
+            local ok,full=pcall(item.getFullType,item)
+            if ok and full==O.TYPE then out[#out+1]=item end
+            -- Anything with an inventory of its own is a bag; look inside.
+            -- Depth-capped rather than cycle-tracked: four is deeper than the
+            -- game lets a survivor nest containers.
+            --
+            -- The whole descent is inside a pcall because a plain
+            -- InventoryItem has no getInventory at all, and merely REACHING
+            -- for a method a Java object does not have can throw through this
+            -- bridge rather than yielding nil. An unguarded `item.getInventory
+            -- and ...` therefore threw on the first ordinary item in the
+            -- survivor's pockets, took the whole walk with it, and stopped the
+            -- organiser being found or issued at all.
+            local ok2,inner=pcall(function()
+                return item.getInventory and item:getInventory() or nil
+            end)
+            if ok2 and inner and inner~=container then
+                collectOrganisers(inner,out,depth+1)
+            end
+        end
+    end
+    return out
+end
+local function carriedOrganisers(player)
+    local inventory=player and safe(player.getInventory,player)
+    if not inventory then return {} end
+    return collectOrganisers(inventory,{},0)
 end
 
 -- ANY organiser the player is carrying reads the case. Owner, 2026-09-12: a
@@ -84,43 +138,6 @@ end
 -- Ours specifically: the one that was issued, for deciding whether to issue
 -- another. A found machine must not stop a new survivor being given one, and
 -- must not be renamed or claimed either.
--- Every organiser the survivor is carrying, INCLUDING the ones inside bags.
---
--- getItems() returns only what is directly in the main inventory: a worn
--- backpack is one item in that list and its contents are in the bag's own
--- container, not in this one. So an organiser stashed in a bag was invisible
--- to O.issued, which meant O.give - called on every OnGameStart - concluded
--- the survivor had never been issued one and added ANOTHER. Every reload with
--- the device in a bag produced one more organiser.
---
--- Reachable in ordinary play: it is a pocket device and players put things in
--- bags. setFavorite only warns before DISCARDING it with a bag, which is a
--- different act.
---
--- getAllTypeRecurse is the engine's own recursive search. Falls back to the
--- flat scan if it is ever absent, which is no worse than what was here.
-local function carriedOrganisers(player)
-    local inventory=player and safe(player.getInventory,player)
-    if not inventory then return {} end
-    local out={}
-    local all=inventory.getAllTypeRecurse and safe(inventory.getAllTypeRecurse,inventory,O.TYPE)
-    if all and all.size then
-        for i=0,all:size()-1 do
-            local item=all:get(i)
-            if item then out[#out+1]=item end
-        end
-        return out
-    end
-    local items=inventory.getItems and inventory:getItems()
-    if not items then return out end
-    for i=0,items:size()-1 do
-        local item=items:get(i)
-        local ok,full=pcall(item.getFullType,item)
-        if ok and full==O.TYPE then out[#out+1]=item end
-    end
-    return out
-end
-
 function O.issued(player)
     player=player or (getPlayer and getPlayer())
     for _,item in ipairs(carriedOrganisers(player)) do

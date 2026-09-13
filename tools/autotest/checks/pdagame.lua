@@ -263,11 +263,26 @@ function CFGAME.stashAndReissue()
             return false, "could not obtain a container to stash it in"
         end
     end
-    local before = 0
-    for _, _ in ipairs({}) do end
-    -- Count organisers before, the recursive way.
-    local all = inv.getAllTypeRecurse and inv:getAllTypeRecurse(O.TYPE)
-    before = (all and all.size) and all:size() or -1
+    -- Counted by walking, not by getAllTypeRecurse: that call matches an
+    -- item's SHORT type, so the full type finds nothing and comes back as a
+    -- valid empty list. Believing it is what broke the organiser entirely.
+    local function countCarried(container, depth)
+        if not container or depth > 4 then return 0 end
+        local list = container.getItems and container:getItems()
+        if not list then return 0 end
+        local n = 0
+        for i = 0, list:size() - 1 do
+            local it = list:get(i)
+            if it then
+                local ok, full = pcall(function() return it:getFullType() end)
+                if ok and full == O.TYPE then n = n + 1 end
+                local inner = it.getInventory and select(2, pcall(function() return it:getInventory() end))
+                if inner and inner ~= container then n = n + countCarried(inner, depth + 1) end
+            end
+        end
+        return n
+    end
+    local before = countCarried(inv, 0)
     -- Move it into the bag.
     pcall(function() p:setPrimaryHandItem(nil) end)
     local moved = pcall(function()
@@ -279,8 +294,7 @@ function CFGAME.stashAndReissue()
     local stillFound = O.issued(p) ~= nil
     -- And issuing again must NOT add a second one.
     O.give(p)
-    all = inv.getAllTypeRecurse and inv:getAllTypeRecurse(O.TYPE)
-    local after = (all and all.size) and all:size() or -1
+    local after = countCarried(inv, 0)
     return true, tostring(stillFound), tostring(before), tostring(after),
         tostring(bag:getFullType())
 end

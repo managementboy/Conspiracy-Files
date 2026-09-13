@@ -152,6 +152,22 @@ end
 -- building it opens -- never at who the body was or where they lived. An
 -- ambiguous or no-match lookup, or a budget refusal, is silence: this never
 -- guesses a building and never asserts a fact it cannot afford to keep.
+-- Declared here rather than beside observeDoorLead below, because
+-- observeKeyLead calls it and a local declared after its use is a nil
+-- GLOBAL - so the lead-validation error path threw "tried to call nil"
+-- instead of bailing with a reason. Found by test/local_before_use.lua
+-- on 2026-09-13; nothing had ever exercised that path.
+local function doorBail(reason)
+    if not P.verboseDoors then return nil end
+    local now=(getTimeInMillis and getTimeInMillis()) or 0
+    local key=tostring(reason):gsub("%d+","N")
+    if now-(lastDoorLog[key] or -math.huge)>=2000 then
+        lastDoorLog[key]=now
+        log("door lead skipped: "..tostring(reason))
+    end
+    return nil
+end
+
 local function observeKeyLead(entry)
     -- A door match is strictly better evidence than a catalogue guess, so
     -- never add a catalogue lead for a body that already has one.
@@ -501,16 +517,6 @@ end
 -- Off by default: every ordinary door in Muldraugh reaches this function.
 P.verboseDoors=false
 local lastDoorLog={}
-local function doorBail(reason)
-    if not P.verboseDoors then return nil end
-    local now=(getTimeInMillis and getTimeInMillis()) or 0
-    local key=tostring(reason):gsub("%d+","N")
-    if now-(lastDoorLog[key] or -math.huge)>=2000 then
-        lastDoorLog[key]=now
-        log("door lead skipped: "..tostring(reason))
-    end
-    return nil
-end
 local function observeDoorLead(inventory,door,keyId)
     if type(keyId)~="number" or keyId~=math.floor(keyId) or keyId<0 then
         return doorBail("door has no usable keyId ("..tostring(keyId)..")") end
