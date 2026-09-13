@@ -74,8 +74,11 @@ say "zoom: $before -> $up -> $back"
 # Stepping past the end must stop, not wrap to the opposite extreme.
 ev 'return CFHW.step(-5)' >/dev/null; low="$(ev 'return CFHW.size()' | f 2)"
 [ "$low" = 1 ] || fail "stepping down repeatedly did not stop at 1: $low"
-ev 'return CFHW.step(5)' >/dev/null; high="$(ev 'return CFHW.size()' | f 2)"
-[ "$high" = 3 ] || fail "stepping up repeatedly did not stop at 3: $high"
+top="$(ev 'return CFHW.step(5)')"; high="$(ev 'return CFHW.size()' | f 2)"
+# Against S.MAX, not a number typed here: the owner's SVG now exports four
+# sizes and this assertion said three (2026-09-13).
+maxs="$(f 3 <<<"$top")"
+[ "$high" = "$maxs" ] || fail "stepping up repeatedly did not stop at S.MAX ($maxs): $high"
 say "zoom clamps: down->$low up->$high"
 # And HELP has to say how, which was the actual complaint.
 help="$(ev 'return CFHW.helpText()' | f 2)"

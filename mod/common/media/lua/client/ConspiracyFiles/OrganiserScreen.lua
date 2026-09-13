@@ -13,11 +13,15 @@
 -- it a decision rather than a menu.
 --
 -- THE MAP, which is now Knox.OS's:
---   POWER (top)        screen on and off; the light is lit while it is on.
---   POWER, held        the lamp, as a real Palm's backlight was.
---   ROCKER up/down     page through what is open.
---   VIEW   (button 1)  the program list, and back.
---   PREV   (button 2)  the record before; in the program list, the program before.
+--   MENU  (button 1)  the programs; and it wakes a sleeping machine.
+--   MENU, held         the lamp, as a real Palm's backlight was.
+--   UP    (button 2)  the line above, or the page above inside a record.
+--   DOWN  (button 3)  the line below, or the page below.
+--   BACK  (button 4)  out of a record, then out to the programs.
+--
+-- There is no power tab. The owner's case does not draw one (2026-09-13), so
+-- there is not one: MENU wakes the machine and three idle minutes switch it
+-- off. A control the case does not have is a lie about the object.
 --   NEXT   (button 3)  the record after.
 --   LIST   (button 4)  open the selected record, or back out of one.
 -- Keys mirror them for a player whose hand is on WASD: arrows, M, I, L, and
@@ -45,11 +49,11 @@ local function safe(fn,...) local ok,v=pcall(fn,...) if ok then return v end end
 -- letterbox - correct in code, wrong on screen (2026-09-12).
 -- The glass is the original's own 160 x 160. How much fits is measured by the
 -- widget kit, not chosen here.
-S.HOLD_MS=450                     -- how long a held POWER becomes the lamp
+S.HOLD_MS=450                     -- how long a held MENU becomes the lamp
 S.PRESS_MS=110                    -- how long a button shows as pressed
 -- Auto-off. Every Palm did this, and for the reason this machine needs it:
 -- the cells are the scarce thing. Real seconds, not game hours, because it is
--- the player who has stopped touching it. POWER wakes it again.
+-- the player who has stopped touching it. Any key wakes it again.
 -- Three minutes: the longest a Palm would let you set, chosen because reading
 -- one long record is a perfectly normal thing to spend two minutes doing and
 -- having the machine die in your hand for it is not realism, it is a bug with
@@ -58,8 +62,9 @@ S.AUTO_OFF_MS=180000
 
 -- What each physical button does, and what is printed under it. One table, so
 -- a button can never be relabelled without its behaviour changing with it.
--- The labels belong in the case ART (art/organiser-case.svg -> .png ->
--- tools/build_organiser_case.py), silkscreened like the real machine's, not
+-- The labels belong in the case ART (art/organiser-case.svg, exported to
+-- art/organiser-case-1x..4x.png, then tools/build_organiser_case.py),
+-- silkscreened like the real machine's, not
 -- drawn over it in the LCD typeface. That first attempt was rejected on sight
 -- and rightly (owner, 2026-09-13: "extremely ugly. remove."). The mapping
 -- stays here; the words go in the artwork the owner is drawing.
@@ -121,12 +126,14 @@ end
 -- size of the game's own radio panel beside it (owner screenshot, 2026-09-13).
 -- Half the height is a device you hold, not a window you live in.
 S.FILL=0.5
+-- The owner's SVG is exported at four sizes, so there are four (2026-09-13).
+S.MAX=4
 function S.fit()
     local h=getCore and getCore():getScreenHeight() or 720
     -- The case is 305 x 444 in its own pixels, and the scale is a whole number
     -- so a drawn pixel stays square.
     local want=math.floor(h*S.FILL/Case.h)
-    if want<1 then want=1 elseif want>3 then want=3 end
+    if want<1 then want=1 elseif want>S.MAX then want=S.MAX end
     return want
 end
 
@@ -177,26 +184,26 @@ function Screen:buttons()
     return out
 end
 
+-- The charge, read at most once a second. It was read TWICE per frame - the
+-- footer's low warning and the launcher's battery both walked the whole
+-- inventory looking for the device, every frame, on every screen. That is the
+-- exact cost the five retry loops were stripped out for on 2026-09-12, put
+-- back by the battery warning on 2026-09-13. A cell does not move in a frame.
+function Screen:charge()
+    local now=getTimeInMillis and getTimeInMillis() or 0
+    if self.chargeAt and now-self.chargeAt<1000 then return self.chargeValue end
+    local organiser=ConspiracyFiles.Organiser
+    local item=organiser and organiser.held and safe(organiser.held)
+    self.chargeValue=item and organiser.power and safe(organiser.power,item)
+    self.chargeAt=now
+    return self.chargeValue
+end
+
 -- What the command line says. Normally the caller's own hint, but a machine
 -- with a dying cell says that instead, on every screen, the way a Palm put its
 -- battery warning in front of whatever you were doing. A refused lamp shows
 -- briefly for the same reason: the player pressed something and must be told
 -- why nothing happened.
--- The charge, read at most once a second. It was read TWICE per frame - the
--- footer's low warning and the launcher's battery both walked the whole
--- inventory looking for the device, every frame, on every screen. That is the
--- exact cost the five retry loops were stripped out for on 2026-09-12, put
--- back by the battery warning on 2026-09-13. A cell does not move in a frame.
-function Screen:charge()
-    local now=getTimeInMillis and getTimeInMillis() or 0
-    if self.chargeAt and now-self.chargeAt<1000 then return self.chargeValue end
-    local organiser=ConspiracyFiles.Organiser
-    local item=organiser and organiser.held and safe(organiser.held)
-    self.chargeValue=item and organiser.power and safe(organiser.power,item)
-    self.chargeAt=now
-    return self.chargeValue
-end
-
 function Screen:footText(hint)
     local now=getTimeInMillis and getTimeInMillis() or 0
     if self.lampRefused and now-self.lampRefused<2500 then
@@ -263,98 +270,7 @@ function Screen:prerender()
     local now=getTimeInMillis and getTimeInMillis() or 0
     for _,b in ipairs(self:buttons()) do
         if self.pressed[b.id] and now-self.pressed[b.id]<S.PRESS_MS then
-            local name=b.round and "press" or (b.id=="POWER" and "power" or "rocker")
-            local t=texture(name,s)
-            local sink=math.max(1,s/2)
-            if t then self:drawTextureScaled(t,b.x,b.y+sink,b.w,b.h,0.9,1,1,1)
-            else self:drawRect(b.x,b.y+sink,b.w,b.h,1,SHELL_EDGE[1],SHELL_EDGE[2],SHELL_EDGE[3]) end
-        end
-    end
-    if self.on then self:draw(Case.glass.x*s,Case.glass.y*s) end
-end
-
--- The charge, read at most once a second. It was read TWICE per frame - the
--- footer's low warning and the launcher's battery both walked the whole
--- inventory looking for the device, every frame, on every screen. That is the
--- exact cost the five retry loops were stripped out for on 2026-09-12, put
--- back by the battery warning on 2026-09-13. A cell does not move in a frame.
-function Screen:charge()
-    local now=getTimeInMillis and getTimeInMillis() or 0
-    if self.chargeAt and now-self.chargeAt<1000 then return self.chargeValue end
-    local organiser=ConspiracyFiles.Organiser
-    local item=organiser and organiser.held and safe(organiser.held)
-    self.chargeValue=item and organiser.power and safe(organiser.power,item)
-    self.chargeAt=now
-    return self.chargeValue
-end
-
-function Screen:footText(hint)
-    local now=getTimeInMillis and getTimeInMillis() or 0
-    if self.lampRefused and now-self.lampRefused<2500 then
-        return "LAMP NEEDS MORE CHARGE"
-    end
-    local organiser=ConspiracyFiles.Organiser
-    local charge=self:charge()
-    if charge~=nil and charge>0 and charge<(organiser and organiser.LOW_POWER or 0) then
-        return "BATTERY LOW"
-    end
-    return hint
-end
-
--- Leaving the boot screen, by any of the three ways out of it: START, a tap,
--- or any key. All three land on the Applications screen, because "it finished
--- booting, now what?" should be answered by the icons rather than by dropping
--- the player into one program with no way of knowing the others exist.
-function Screen:finishBoot()
-    self.booting=false
-    self.launcher=true
-    self.record=nil
-    self.entry,self.card,self.cachedList=1,1,nil
-    self:bootSeen()
-end
-
--- The boot screen has been read and dismissed. Anything it was there to
--- report - a lost memory, so far - can stop being reported now.
-function Screen:bootSeen()
-    local organiser=ConspiracyFiles.Organiser
-    if not organiser or not organiser.clearMemoryNotice then return end
-    local item=safe(organiser.held)
-    if item then safe(organiser.clearMemoryNotice,item) end
-end
-
--- Anything the player does to the machine counts as touching it.
-function Screen:touch() self.touched=getTimeInMillis and getTimeInMillis() or 0 end
-
--- Idle long enough and it switches itself off, as the real machine did. The
--- lamp goes with it, because that is the whole point of auto-off.
-function Screen:idleCheck()
-    if not self.on then return end
-    local now=getTimeInMillis and getTimeInMillis() or 0
-    if now-(self.touched or now)<S.AUTO_OFF_MS then return end
-    self.on=false
-    self.lamp=false
-    log("organiser auto-off: idle")
-end
-
-function Screen:prerender()
-    self:idleCheck()
-    local s=self.scale
-    local case=texture("case",s)
-    if case then
-        self:drawTextureScaled(case,0,0,Case.w*s,Case.h*s,1,1,1,1)
-    else
-        self:drawRect(0,0,self.width,self.height,1,SHELL[1],SHELL[2],SHELL[3])
-        self:drawRect(Case.glass.x*s,Case.glass.y*s,Case.glass.w*s,Case.glass.h*s,1,GLASS[1],GLASS[2],GLASS[3])
-    end
-    if self.on and self.lamp then
-        self:drawRect(Case.glass.x*s,Case.glass.y*s,Case.glass.w*s,Case.glass.h*s,0.55,GLASS_LIT[1],GLASS_LIT[2],GLASS_LIT[3])
-    end
-    -- No power light: the screen says whether it is on, which is how you can
-    -- tell with any real machine (owner, 2026-09-12).
-    local now=getTimeInMillis and getTimeInMillis() or 0
-    for _,b in ipairs(self:buttons()) do
-        if self.pressed[b.id] and now-self.pressed[b.id]<S.PRESS_MS then
-            local name=b.round and "press" or (b.id=="POWER" and "power" or "rocker")
+            local name="press"
             local t=texture(name,s)
             local sink=math.max(1,s/2)
             if t then self:drawTextureScaled(t,b.x,b.y+sink,b.w,b.h,0.9,1,1,1)
@@ -519,17 +435,6 @@ function Screen:press(id)
     self:touch()
     self.pressed[id]=getTimeInMillis and getTimeInMillis() or 0
     safe(function() getSoundManager():playUISound("UIActivateButton") end)
-    if id=="POWER" then
-        self.on=not self.on
-        if not self.on then self.lamp=false
-        else
-            -- Switching it on is the other moment a fresh cell is noticed, and
-            -- the moment the player is looking at the screen to see it said.
-            local organiser=ConspiracyFiles.Organiser
-            if organiser and organiser.checkPower then safe(organiser.checkPower) end
-        end
-        return
-    end
     -- Asleep: any hardware key wakes it, exactly as the four application keys
     -- woke a Palm, and the press is spent on waking. Before this, a machine
     -- that had switched itself off ate every key and every tap in silence,
@@ -537,6 +442,11 @@ function Screen:press(id)
     -- whole device went unresponsive mid-run and nothing said why).
     if not self.on then
         self.on=true
+        -- Waking is the moment a fresh cell is noticed, and the moment the
+        -- player is looking at the screen to be told about it. It is also the
+        -- only way back on now that the case has no power tab.
+        local organiser=ConspiracyFiles.Organiser
+        if organiser and organiser.checkPower then safe(organiser.checkPower) end
         log("organiser wake: "..id)
         return
     end
@@ -631,7 +541,10 @@ function Screen:onMouseUp(x,y)
     if id=="GLASS" then self:tap(x,y); return true end
     if not id then return ISPanel.onMouseUp(self,x,y) end
     local held=(getTimeInMillis and getTimeInMillis() or 0)-(self.downAt or 0)
-    if id=="POWER" and held>=S.HOLD_MS then
+    -- The lamp moved from the power tab to a held MENU when the owner's case
+    -- lost the tab (2026-09-13). Same gesture, the only button that can still
+    -- carry it without stealing a press the player needs.
+    if id=="MODE" and held>=S.HOLD_MS and self.on then
         self:touch()
         local organiser=ConspiracyFiles.Organiser
         local item=organiser and safe(organiser.held)
@@ -662,7 +575,13 @@ function Screen:isKeyConsumed(key)
 end
 function Screen:onKeyRelease(key)
     if key==Keyboard.KEY_ESCAPE then self:close(); return end
-    if key==Keyboard.KEY_P then self:press("POWER"); return end
+    -- The keyboard keeps an off switch even though the case has no tab: it is
+    -- a shortcut, not a moulding, so it tells no lie about the object.
+    if key==Keyboard.KEY_P then
+        self.on=not self.on
+        if not self.on then self.lamp=false end
+        return
+    end
     if key==Keyboard.KEY_L then self.lamp=not self.lamp; return end
     if key==Keyboard.KEY_MINUS then S.step(-1); return end
     if key==Keyboard.KEY_EQUALS then S.step(1); return end
@@ -730,8 +649,8 @@ end
 -- it (owner, 2026-09-13: "help gives us no information on how to resize").
 -- Now it is on - and = , and HELP says so.
 function S.zoom(scale)
-    if scale==1 or scale==2 or scale==3 then S.scale=scale
-    else S.scale=((S.scale or S.fit())%3)+1 end
+    if type(scale)=="number" and scale>=1 and scale<=S.MAX then S.scale=math.floor(scale)
+    else S.scale=((S.scale or S.fit())%S.MAX)+1 end
     if S.window then S.close(); S.open() end
     return S.scale
 end
@@ -741,7 +660,7 @@ end
 function S.step(by)
     local now=S.scale or S.fit()
     local want=now+by
-    if want<1 then want=1 elseif want>3 then want=3 end
+    if want<1 then want=1 elseif want>S.MAX then want=S.MAX end
     if want==now then return now end
     return S.zoom(want)
 end

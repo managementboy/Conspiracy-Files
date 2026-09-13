@@ -268,7 +268,7 @@ A.help={
             {label="Survive first",title="Survive first",
              detail="This machine records what you find. It sets no objectives and promises no answer.\n\nReading it takes your main hand. Something can reach you while you read."},
             {label="The keys",title="The keys",
-             detail="MENU  the program list.\nUP    the line or page above.\nDOWN  the line or page below.\nBACK  out of a record, then out to the programs.\n\nThe power tab on the side switches the screen off. Hold it for the lamp."},
+             detail="MENU  the program list. Wakes the machine.\nUP    the line or page above.\nDOWN  the line or page below.\nBACK  out of a record, then out to the programs.\n\nThere is no power switch. Hold MENU for the lamp. Left alone it switches itself off."},
             {label="Size",title="Size",
              detail="Press - to make the machine smaller and = to make it larger. Three sizes; it starts at whichever suits your screen.\n\nEvery size is a whole multiple, so a pixel stays square."},
             {label="The stylus",title="The stylus",
@@ -282,7 +282,7 @@ A.help={
             {label="To do",title="To do",
              detail="Open a file and press REMIND to set yourself a reminder. Tap a reminder to tick it off."},
             {label="Battery",title="Battery",
-             detail="The cell in the corner is real. A flat machine will not read, and your papers still will.\n\nBelow a fifth it says BATTERY LOW. The lamp needs more than a tenth to run at all.\n\nLeft alone for three minutes it switches itself off to save the cell. Any key wakes it."},
+             detail="The cell in the corner is real. A flat machine will not read, and your papers still will.\n\nBelow a fifth it says BATTERY LOW. The lamp needs more than a tenth to run at all.\n\nLeft alone for three minutes it switches itself off to save the cell. Any button wakes it."},
             {label="Memory",title="Memory",
              detail="A dead cell takes your notes and to-dos offline; it does not destroy them. Fit a fresh cell and the machine restores them on the next boot.\n\nWhat you have found is not kept in here. It is in the record, so any organiser reads it."},
         }
@@ -294,7 +294,7 @@ A.help={
 -- records, grouped under the places the survivor kept going back to. A heading
 -- is earned by a return, never printed for every address (P4-R81).
 A.places={
-    id="PLACES",title="PLACES",icon="dates",
+    id="PLACES",title="PLACES",icon="places",
     list=function()
         local ui=ConspiracyFiles.NotebookUI
         local rows=(ui and ui.generatedRows and safe(ui.generatedRows,"places")) or {}
@@ -380,7 +380,7 @@ end
 -- The hidden program: where the case's papers actually are. Owner's idea, and
 -- it only exists in debug - a player must never be handed the answers.
 A.sites={
-    id="SITES",title="SITES",icon="help",hidden=true,
+    id="SITES",title="SITES",icon="sites",hidden=true,
     list=function()
         local runtime=ConspiracyFiles.GeneratedRuntime
         local text=runtime and runtime.devLocations and safe(runtime.devLocations)
@@ -418,7 +418,7 @@ function A.addNote(text)
 end
 
 A.notes={
-    id="NOTES",title="NOTES",icon="todo",
+    id="NOTES",title="NOTES",icon="notes",
     list=function()
         local root=ModData and ModData.get(NOTES)
         local out={}

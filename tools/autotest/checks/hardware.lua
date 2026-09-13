@@ -76,10 +76,12 @@ function CFHW.touch()
     return true
 end
 
--- The lamp, asked for the way the player asks: a held POWER release.
+-- The lamp, asked for the way the player asks: a held MENU release. The case
+-- has no power tab any more (owner, 2026-09-13), so MENU carries it.
 function CFHW.holdPower()
     local w = S.window; if not w then return false, "no screen" end
-    w.down = "POWER"
+    w.on = true
+    w.down = "MODE"
     w.downAt = getTimeInMillis() - (S.HOLD_MS + 50)
     w:onMouseUp(0, 0)
     return true, tostring(w.lamp), tostring(w.lampRefused ~= nil)
@@ -156,7 +158,7 @@ end
 
 function CFHW.step(by)
     S.step(tonumber(by))
-    return true, tostring(S.scale)
+    return true, tostring(S.scale), tostring(S.MAX)
 end
 
 -- What fit() picks for a given screen height, without needing that screen.

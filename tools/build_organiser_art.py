@@ -1,7 +1,13 @@
 #!/usr/bin/env python3
-"""Draw the organiser's case, and tell the Lua where every part of it sits.
+"""Draw the organiser's application icons.
 
     tools/build_organiser_art.py
+
+The CASE is no longer drawn here: it is the owner's own artwork, exported from
+art/organiser-case.svg and turned into the mod's art and geometry by
+tools/build_organiser_case.py (2026-09-13). What survives in this file is the
+icon set, which IS drawn in code because it has to be pixel art on a 1-bit
+screen. The case-drawing code below is dead and kept only for its measurements.
 
 The game's Lua can only fill rectangles - no rounded corners, no circles - so a
 case drawn in code comes out as a stack of grey plates (owner, 2026-09-12:
@@ -142,58 +148,119 @@ if __name__ == "__main__":
 # --- Application icons -------------------------------------------------------
 # The Palm launcher is a grid of small monochrome icons with the name beneath
 # (Palm OS UI Guidelines; the classic 160x160 launcher used three columns).
-# These are drawn on a 22 x 22 native grid, 1-bit, scaled by whole numbers.
+#
+# ONE RULE, and the owner had to say it out loud before it was followed
+# (2026-09-13: "our lcd is pixelated, round curves are a no go"): this is a
+# 1-bit LCD, so an icon is made of whole square pixels and nothing else.
+#
+# That forbids three things this file used to do:
+#   * ellipse() and arc() - a curve on a pixel grid is a lie about the screen
+#   * rounded_rectangle() - same
+#   * drawing big and resizing down with LANCZOS, which is ANTI-ALIASING and
+#     was quietly turning every edge into soft grey
+#
+# So: draw at native 22x22 with rectangles and straight lines, then enlarge
+# with NEAREST, which repeats pixels instead of blending them. Every size is
+# the same picture with bigger squares, exactly like the Palm typeface beside
+# it.
 ICON = 22
-ICONS = ("files", "names", "dates", "todo", "help")
+ICONS = ("files", "names", "places", "dates", "todo", "notes", "help", "sites")
 
 def draw_icon(name, scale):
-    s = scale * SS
-    img = Image.new("RGBA", (ICON * s, ICON * s), (0, 0, 0, 0))
+    """One icon, drawn at native size in whole pixels, then enlarged."""
+    img = Image.new("RGBA", (ICON, ICON), (0, 0, 0, 0))
     d = ImageDraw.Draw(img)
     ink = (26, 26, 28, 255)
-    w = max(1, s)
+    def box(x0, y0, x1, y1, fill=False):
+        d.rectangle([x0, y0, x1, y1], outline=None if fill else ink,
+                    fill=ink if fill else None, width=1)
+    def hline(x0, x1, y): d.rectangle([x0, y, x1, y], fill=ink)
+    def vline(x, y0, y1): d.rectangle([x, y0, x, y1], fill=ink)
+
     if name == "files":
-        # A sheet with a folded corner and ruled lines.
-        d.polygon([(3*s,1*s),(14*s,1*s),(19*s,6*s),(19*s,21*s),(3*s,21*s)], outline=ink, width=w)
-        d.line([(14*s,1*s),(14*s,6*s),(19*s,6*s)], fill=ink, width=w)
+        # A sheet with a stepped corner - the fold, in squares.
+        box(3, 1, 18, 20)
         for i in range(4):
-            d.line([(6*s,(9+3*i)*s),(16*s,(9+3*i)*s)], fill=ink, width=w)
+            vline(18 - i, 1, 1 + i)          # the corner cut, as a staircase
+            hline(18 - i, 18, 1 + i)
+        for i in range(5):
+            hline(6, 15, 7 + 2 * i)
     elif name == "names":
-        # A card with a head and shoulders, and two ruled lines beside it.
-        d.rectangle([2*s,3*s,20*s,19*s], outline=ink, width=w)
-        d.ellipse([5*s,6*s,10*s,11*s], outline=ink, width=w)
-        d.arc([4*s,11*s,11*s,18*s], 200, 340, fill=ink, width=w)
-        d.line([(13*s,8*s),(18*s,8*s)], fill=ink, width=w)
-        d.line([(13*s,12*s),(18*s,12*s)], fill=ink, width=w)
+        # A card: a blocky head and shoulders, and two ruled lines.
+        box(2, 3, 19, 19)
+        box(6, 6, 9, 9, fill=True)           # head: a square, not a circle
+        box(5, 11, 10, 16, fill=True)        # shoulders: a slab
+        hline(13, 17, 8)
+        hline(13, 17, 12)
+    elif name == "places":
+        # A pin over a baseline: a square head and a stepped point.
+        box(7, 2, 14, 9)
+        box(10, 5, 11, 6, fill=True)
+        for i in range(3):                    # the point, tapering in steps
+            hline(8 + i, 13 - i, 10 + i)
+        box(10, 13, 11, 13, fill=True)
+        hline(3, 18, 19)
     elif name == "dates":
-        # A month block with its two binder rings.
-        d.rectangle([2*s,4*s,20*s,20*s], outline=ink, width=w)
-        d.line([(2*s,9*s),(20*s,9*s)], fill=ink, width=w)
-        d.line([(7*s,1*s),(7*s,5*s)], fill=ink, width=w)
-        d.line([(15*s,1*s),(15*s,5*s)], fill=ink, width=w)
+        # A month block with two binder tabs and a grid of days.
+        box(2, 4, 19, 20)
+        hline(2, 19, 8)
+        vline(7, 1, 4)
+        vline(14, 1, 4)
         for row in range(2):
             for col in range(3):
-                x, y = (5 + col*5)*s, (12 + row*4)*s
-                d.rectangle([x, y, x+2*s, y+2*s], fill=ink)
-    elif name == "help":
-        # A question mark in a rounded box, as the system's own info icon was.
-        d.rounded_rectangle([2*s,2*s,20*s,20*s], radius=4*s, outline=ink, width=w)
-        d.arc([7*s,6*s,15*s,13*s], 150, 360, fill=ink, width=w)
-        d.line([(11*s,12*s),(11*s,15*s)], fill=ink, width=w)
-        d.rectangle([10*s,16*s,12*s,18*s], fill=ink)
+                x, y = 5 + col * 5, 11 + row * 4
+                box(x, y, x + 2, y + 2, fill=True)
     elif name == "todo":
-        # A list with two ticks.
-        d.rectangle([3*s,2*s,19*s,20*s], outline=ink, width=w)
+        # A list with ticks, drawn as two straight strokes.
+        box(3, 2, 18, 20)
         for i in range(3):
-            y = (6 + 5*i)*s
-            d.rectangle([6*s,y,9*s,y+3*s], outline=ink, width=w)
-            d.line([(11*s,y+1*s),(16*s,y+1*s)], fill=ink, width=w)
+            y = 5 + 5 * i
+            box(6, y, 9, y + 3)
+            hline(11, 16, y + 1)
             if i < 2:
-                d.line([(6*s,y+1*s),(7*s,y+3*s),(9*s,y)], fill=ink, width=w)
-    return img.resize((ICON * scale, ICON * scale), Image.LANCZOS)
+                for k in range(2): d.point((6 + k, y + 1 + k), fill=ink)
+                for k in range(3): d.point((8 - k, y + 2 - k), fill=ink)
+    elif name == "notes":
+        # A memo pad: ruled, with a torn-off bottom edge. The first try laid a
+        # pencil across a page and the owner could not read it (2026-09-13) -
+        # at 22 pixels a pencil is four dots and a guess. A ragged tear is a
+        # silhouette, and a silhouette survives being small.
+        vline(3, 2, 16)
+        vline(18, 2, 16)
+        hline(3, 18, 2)
+        for i in range(4):
+            hline(6, 15, 5 + 3 * i)
+        tooth = (0, 1, 2, 1)                  # the tear, in whole pixels
+        for i, x in enumerate(range(3, 19)):
+            vline(x, 16, 17 + tooth[i % 4])
+    elif name == "help":
+        # A question mark in a SQUARE box. The old one used a rounded box and
+        # an arc, which is exactly what the owner objected to.
+        box(2, 2, 19, 19)
+        hline(8, 13, 6)
+        vline(13, 6, 9)
+        hline(10, 13, 9)
+        vline(10, 9, 12)
+        box(10, 14, 11, 15, fill=True)
+    elif name == "sites":
+        # A flag planted in the ground: this is the debug program that says
+        # where the papers actually are, and a marked spot is a flag. It was a
+        # map with a cross through it, which read as neither (owner,
+        # 2026-09-13). Distinct from PLACES, which is a pin.
+        box(6, 3, 15, 9, fill=True)           # the flag, solid so it reads
+        for i in range(3):                    # a swallowtail, in steps
+            vline(15 - i, 3 + i, 3 + i)
+            vline(15 - i, 9 - i, 9 - i)
+        vline(5, 2, 18)                       # the pole
+        hline(2, 19, 19)                      # the ground
+        hline(3, 8, 18)                       # its base
+    # NEAREST: repeat the pixels, never blend them.
+    if scale != 1:
+        img = img.resize((ICON * scale, ICON * scale), Image.NEAREST)
+    return img
 
 def build_icons():
-    for scale in SCALES:
+    for scale in (1, 2, 3, 4):
         folder = os.path.join(OUT, "icons", "%dx" % scale)
         os.makedirs(folder, exist_ok=True)
         for name in ICONS:
