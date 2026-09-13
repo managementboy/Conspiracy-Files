@@ -43,7 +43,15 @@ local function log(message) CFLog.message("casefile","note",message) end
 --
 -- A device that refuses to appear is the honest failure here. An empty one
 -- that takes the survivor's hand and shows a case that does not exist is not.
-local function multiplayer() return (isClient and isClient()) or (isServer and isServer()) end
+-- Answered once. Whether this is a client or a server cannot change inside a
+-- session, and O.tick asks on every one of sixty ticks a second.
+local isMultiplayer=nil
+local function multiplayer()
+    if isMultiplayer==nil then
+        isMultiplayer=((isClient and isClient()) or (isServer and isServer())) and true or false
+    end
+    return isMultiplayer
+end
 O.multiplayer=multiplayer
 
 local function safe(fn,...)
