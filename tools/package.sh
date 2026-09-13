@@ -38,12 +38,28 @@ cp -r "$REPO/mod/common" "$staging/ConspiracyFiles/common"
 # A package that cannot generate a case is worse than no package. Every
 # require() in the shipped tree must resolve inside the shipped tree - this is
 # the check that would have caught T3Nearby existing only on one machine.
+# Two things this scanner has to get right, both learned the hard way:
+#
+#   * COMMENTS ARE NOT CODE. A comment in init.lua explaining that
+#     requiring the package by name resolves to that file contained the call
+#     it was describing, and this check dutifully tried to resolve it and
+#     refused to package the mod (2026-09-13). Comment lines are stripped
+#     first now.
+#   * A PACKAGE RESOLVES TO ITS init.lua. Lua's own convention: requiring
+#     "ConspiracyFiles" finds ConspiracyFiles/init.lua, which is exactly how
+#     the two domain specs load the whole domain. The check only looked for
+#     <module>.lua, so the package form could never have resolved.
 missing=0
 while read -r module; do
+    [ -n "$module" ] || continue
     [ -f "$staging/ConspiracyFiles/common/media/lua/shared/$module.lua" ] && continue
     [ -f "$staging/ConspiracyFiles/common/media/lua/client/$module.lua" ] && continue
+    [ -f "$staging/ConspiracyFiles/common/media/lua/shared/$module/init.lua" ] && continue
+    [ -f "$staging/ConspiracyFiles/common/media/lua/client/$module/init.lua" ] && continue
     echo "MISSING from package: $module" >&2; missing=$((missing + 1))
-done < <(grep -rhoE 'require\("(ConspiracyFiles[^"]*)"\)' "$staging/ConspiracyFiles" --include=*.lua \
+done < <(find "$staging/ConspiracyFiles" -name '*.lua' -print0 \
+         | xargs -0 -r sed -E 's/--.*$//' \
+         | grep -oE 'require\("(ConspiracyFiles[^"]*)"\)' \
          | sed -E 's/require\("//; s/"\)//' | sort -u)
 [ "$missing" -eq 0 ] || { echo "refusing to package: $missing unresolved require(s)" >&2; exit 1; }
 [ -f "$staging/ConspiracyFiles/42/mod.info" ] || { echo "refusing to package: no mod.info" >&2; exit 1; }
