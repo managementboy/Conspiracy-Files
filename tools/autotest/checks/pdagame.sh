@@ -114,6 +114,16 @@ say "removed while open: screen closed=$(f 3 <<<"$rm_")"
 re="$(ev 'return CFGAME.reissue()')"
 [ "$(f 1 <<<"$re")" = true ] || fail "a replacement organiser was not issued: $(f 2 <<<"$re")"
 
+# --- item transfer: stash it in a bag -------------------------------------
+st="$(ev 'return CFGAME.stashAndReissue()')"
+if [ "$(f 1 <<<"$st")" = true ]; then
+    say "stashed in $(f 5 <<<"$st"): still found=$(f 2 <<<"$st"), organisers $(f 3 <<<"$st")->$(f 4 <<<"$st")"
+    [ "$(f 2 <<<"$st")" = true ] || fail "an organiser inside a bag is not found, so another will be issued on every reload"
+    [ "$(f 3 <<<"$st")" = "$(f 4 <<<"$st")" ] || fail "issuing again while the organiser was in a bag added a duplicate: $(f 3 <<<"$st") -> $(f 4 <<<"$st")"
+else
+    say "note: could not test stashing ($(f 2 <<<"$st"))"
+fi
+
 # --- corrupted stores ------------------------------------------------------
 ev 'return CFGAME.corrupt()' >/dev/null
 ev 'ConspiracyFiles.OrganiserScreen.close()' >/dev/null
@@ -143,6 +153,7 @@ outf="$EVIDENCE/$(date +%Y%m%dT%H%M%S)-pdagame.txt"
     echo "controls:  $(f 2 <<<"$ctl")"
     echo "restart:   $state_before -> $state_after; sizes $(f 2 <<<"$sz_before")/$(f 3 <<<"$sz_before") -> $(f 2 <<<"$sz_after")/$(f 3 <<<"$sz_after")"
     echo "inventory: removed while open -> closed=$(f 3 <<<"$rm_"); reissued=$(f 2 <<<"$re")"
+    echo "transfer:  stashed in a bag -> still found=$(f 2 <<<"$st"), organisers $(f 3 <<<"$st")->$(f 4 <<<"$st")"
     echo "corrupted: $(f 2 <<<"$cor")"
     echo "log:       $new_errors new mod error lines"
     for x in "${fails[@]}"; do echo "FAIL: $x"; done

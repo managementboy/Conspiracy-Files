@@ -236,6 +236,55 @@ function CFGAME.removeItem()
         tostring(O.held(p) == nil)
 end
 
+-- ITEM TRANSFER: the organiser stashed in a bag.
+--
+-- getItems() returns only what is directly in the main inventory - a worn
+-- backpack is one item in that list and its contents live in the bag's own
+-- container - so an organiser inside a bag was invisible to O.issued. O.give
+-- runs on every OnGameStart, concluded the survivor had never been issued one,
+-- and added ANOTHER. Every reload with the device in a bag produced one more.
+--
+-- Reachable in ordinary play: it is a pocket device and players stash things.
+function CFGAME.stashAndReissue()
+    local p = player(); if not p then return false, "no player" end
+    local inv = p:getInventory()
+    local item = O.held(p); if not item then return false, "no organiser" end
+    -- A container to put it in. Any bag the survivor has; else make one.
+    local bag
+    local items = inv:getItems()
+    for i = 0, items:size() - 1 do
+        local candidate = items:get(i)
+        local container = candidate and candidate.getInventory and candidate:getInventory()
+        if container and candidate ~= item then bag = candidate; break end
+    end
+    if not bag then
+        bag = inv:AddItem("Base.Bag_Satchel")
+        if not bag or not bag.getInventory or not bag:getInventory() then
+            return false, "could not obtain a container to stash it in"
+        end
+    end
+    local before = 0
+    for _, _ in ipairs({}) do end
+    -- Count organisers before, the recursive way.
+    local all = inv.getAllTypeRecurse and inv:getAllTypeRecurse(O.TYPE)
+    before = (all and all.size) and all:size() or -1
+    -- Move it into the bag.
+    pcall(function() p:setPrimaryHandItem(nil) end)
+    local moved = pcall(function()
+        inv:Remove(item)
+        bag:getInventory():AddItem(item)
+    end)
+    if not moved then return false, "could not move the organiser into the bag" end
+    -- Still found, though it is inside a container.
+    local stillFound = O.issued(p) ~= nil
+    -- And issuing again must NOT add a second one.
+    O.give(p)
+    all = inv.getAllTypeRecurse and inv:getAllTypeRecurse(O.TYPE)
+    local after = (all and all.size) and all:size() or -1
+    return true, tostring(stillFound), tostring(before), tostring(after),
+        tostring(bag:getFullType())
+end
+
 -- And a new one is issued again, so losing it costs convenience and never the
 -- case (P4-R80).
 function CFGAME.reissue()

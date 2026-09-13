@@ -72,18 +72,11 @@ end
 -- receiver as an argument, so none of that allocation was ever needed.
 function O.held(player)
     player=player or (getPlayer and getPlayer())
-    local inventory=player and safe(player.getInventory,player)
-    local items=inventory and inventory.getItems and inventory:getItems()
-    if not items then return nil end
     local found
-    for i=0,items:size()-1 do
-        local item=items:get(i)
-        local ok,full=pcall(item.getFullType,item)
-        if ok and full==O.TYPE then
-            local md=item.getModData and item:getModData()
-            if md and md[MARK] then return item end   -- ours, if we have it
-            found=found or item                       -- otherwise whatever we found
-        end
+    for _,item in ipairs(carriedOrganisers(player)) do
+        local md=item.getModData and item:getModData()
+        if md and md[MARK] then return item end   -- ours, if we have it
+        found=found or item                       -- otherwise whatever we found
     end
     return found
 end
@@ -91,14 +84,47 @@ end
 -- Ours specifically: the one that was issued, for deciding whether to issue
 -- another. A found machine must not stop a new survivor being given one, and
 -- must not be renamed or claimed either.
-function O.issued(player)
-    player=player or (getPlayer and getPlayer())
-    local inventory=player and safe(function() return player:getInventory() end)
-    local items=inventory and inventory.getItems and inventory:getItems()
-    if not items then return nil end
+-- Every organiser the survivor is carrying, INCLUDING the ones inside bags.
+--
+-- getItems() returns only what is directly in the main inventory: a worn
+-- backpack is one item in that list and its contents are in the bag's own
+-- container, not in this one. So an organiser stashed in a bag was invisible
+-- to O.issued, which meant O.give - called on every OnGameStart - concluded
+-- the survivor had never been issued one and added ANOTHER. Every reload with
+-- the device in a bag produced one more organiser.
+--
+-- Reachable in ordinary play: it is a pocket device and players put things in
+-- bags. setFavorite only warns before DISCARDING it with a bag, which is a
+-- different act.
+--
+-- getAllTypeRecurse is the engine's own recursive search. Falls back to the
+-- flat scan if it is ever absent, which is no worse than what was here.
+local function carriedOrganisers(player)
+    local inventory=player and safe(player.getInventory,player)
+    if not inventory then return {} end
+    local out={}
+    local all=inventory.getAllTypeRecurse and safe(inventory.getAllTypeRecurse,inventory,O.TYPE)
+    if all and all.size then
+        for i=0,all:size()-1 do
+            local item=all:get(i)
+            if item then out[#out+1]=item end
+        end
+        return out
+    end
+    local items=inventory.getItems and inventory:getItems()
+    if not items then return out end
     for i=0,items:size()-1 do
         local item=items:get(i)
-        local md=item and item.getModData and item:getModData()
+        local ok,full=pcall(item.getFullType,item)
+        if ok and full==O.TYPE then out[#out+1]=item end
+    end
+    return out
+end
+
+function O.issued(player)
+    player=player or (getPlayer and getPlayer())
+    for _,item in ipairs(carriedOrganisers(player)) do
+        local md=item.getModData and item:getModData()
         if md and md[MARK] then return item end
     end
     return nil
