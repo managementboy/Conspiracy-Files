@@ -45,6 +45,13 @@ say "stores at rest: $(f 2 <<<"$stores0")"
 cyc="$(ev "return CFLIFE.cycle($CYCLES)")"
 if [ "$(f 1 <<<"$cyc")" = true ]; then
     say "cycled $(f 2 <<<"$cyc") times: errors=$(f 3 <<<"$cyc"), $(f 4 <<<"$cyc"), $(f 5 <<<"$cyc"), closed=$(f 6 <<<"$cyc")"
+    say "memory: $(f 7 <<<"$cyc")"
+    # Per-cycle heap growth, after two full collections. A window that is
+    # closed but still referenced cannot be collected, so this is where a
+    # genuine leak appears. 2KB per open/close is generous; a real leak of a
+    # panel and its children is far larger than that.
+    per="$(f 7 <<<"$cyc" | grep -oE '[-+][0-9.]+KB per cycle' | grep -oE '[-+][0-9.]+' || echo 0)"
+    awk -v p="$per" 'BEGIN{exit !(p<2.0)}' || fail "the heap grew ${per}KB per open/close cycle, which is a leak"
     [ "$(f 3 <<<"$cyc")" = 0 ] || fail "open/close raised $(f 3 <<<"$cyc") errors over $CYCLES cycles"
     [ "$(f 6 <<<"$cyc")" = true ] || fail "the device is still open after its last close"
     # UI manager growth: the same window closed and reopened must not leave
@@ -114,6 +121,7 @@ out="$EVIDENCE/$(date +%Y%m%dT%H%M%S)-pdalife.txt"
     echo "session: $id"
     echo "cycles:   $CYCLES open/close - errors=$(f 3 <<<"$cyc"), $(f 4 <<<"$cyc"), closed=$(f 6 <<<"$cyc")"
     echo "handlers: [$(f 2 <<<"$handlers0")] -> [$(f 2 <<<"$handlers1")]"
+    echo "memory:   $(f 7 <<<"$cyc")"
     echo "churn:    $CHURN rounds, $(f 3 <<<"$ch") screens, $(f 4 <<<"$ch") errors"
     echo "sizes:    $(f 2 <<<"$sz")/9 device-and-font combinations drew"
     echo "abuse:    $(f 2 <<<"$ab")"

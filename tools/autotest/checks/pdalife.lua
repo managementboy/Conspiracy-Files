@@ -42,10 +42,20 @@ function CFLIFE.uiCount()
     return ok and n or nil
 end
 
+-- The Lua heap, in kilobytes, after a full collection. Two collections because
+-- the first can leave finalisable objects behind. This is the honest answer to
+-- "does it leak": anything the device still holds a reference to cannot be
+-- collected and shows up here as a number that climbs.
+function CFLIFE.heapKB()
+    collectgarbage("collect"); collectgarbage("collect")
+    return collectgarbage("count")
+end
+
 -- Open and close the device n times through the SAME entry points the player's
 -- hand uses, and report what accumulated.
 function CFLIFE.cycle(n)
     n = tonumber(n) or 100
+    local heapBefore = CFLIFE.heapKB()
     local before = { ui = CFLIFE.uiCount() }
     local _, handlersBefore = CFLIFE.handlerCounts()
     local errors = 0
@@ -61,10 +71,13 @@ function CFLIFE.cycle(n)
     end
     local _, handlersAfter = CFLIFE.handlerCounts()
     local after = { ui = CFLIFE.uiCount() }
+    local heapAfter = CFLIFE.heapKB()
     return true, tostring(n), tostring(errors),
         "ui " .. tostring(before.ui) .. "->" .. tostring(after.ui),
         "handlers before[" .. handlersBefore .. "] after[" .. handlersAfter .. "]",
-        tostring(S.window == nil)
+        tostring(S.window == nil),
+        string.format("heap %.0fKB->%.0fKB (%+.0fKB, %+.2fKB per cycle)",
+            heapBefore, heapAfter, heapAfter - heapBefore, (heapAfter - heapBefore) / n)
 end
 
 -- Rapid screen changes: every program, opened and backed out of, repeatedly.
