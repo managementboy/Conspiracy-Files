@@ -887,7 +887,7 @@
     },
     {
       "id": "C09",
-      "name": "Notes button",
+      "name": "Home button",
       "order": 7,
       "parent": "device",
       "bounds": [
@@ -1014,7 +1014,7 @@
     },
     {
       "id": "C10",
-      "name": "Tasks button",
+      "name": "Unassigned button (left inner)",
       "order": 8,
       "parent": "device",
       "bounds": [
@@ -1023,7 +1023,7 @@
         62,
         36
       ],
-      "purpose": "Independent stepped physical application key with a rectangular hitbox.",
+      "purpose": "Moulded key face left deliberately blank: the control exists and depresses, but nothing is printed on it and nothing is assigned, until play shows what it is for.",
       "role": "hardware",
       "optional": false,
       "primitives": [
@@ -1141,7 +1141,7 @@
     },
     {
       "id": "C11",
-      "name": "Contacts button",
+      "name": "Unassigned button (right inner)",
       "order": 9,
       "parent": "device",
       "bounds": [
@@ -1150,7 +1150,7 @@
         62,
         36
       ],
-      "purpose": "Independent stepped physical application key with a rectangular hitbox.",
+      "purpose": "Moulded key face left deliberately blank: the control exists and depresses, but nothing is printed on it and nothing is assigned, until play shows what it is for.",
       "role": "hardware",
       "optional": false,
       "primitives": [
@@ -1268,7 +1268,7 @@
     },
     {
       "id": "C12",
-      "name": "Search button",
+      "name": "Back button",
       "order": 10,
       "parent": "device",
       "bounds": [
@@ -1554,7 +1554,7 @@
     },
     {
       "id": "C14",
-      "name": "Notes symbol and label",
+      "name": "Home symbol and label",
       "order": 12,
       "parent": "device",
       "bounds": [
@@ -1563,7 +1563,7 @@
         62,
         36
       ],
-      "purpose": "Small rectangle-built icon and ordinary UI label.",
+      "purpose": "Rectangle-built house and its silkscreen label.",
       "role": "hardware",
       "optional": false,
       "primitives": [
@@ -1571,9 +1571,9 @@
           "id": "C14.01",
           "type": "rect",
           "rect": [
-            25,
+            29,
+            4,
             5,
-            12,
             1
           ],
           "color": "legend",
@@ -1584,9 +1584,9 @@
           "id": "C14.02",
           "type": "rect",
           "rect": [
-            25,
-            16,
-            12,
+            28,
+            5,
+            7,
             1
           ],
           "color": "legend",
@@ -1597,10 +1597,10 @@
           "id": "C14.03",
           "type": "rect",
           "rect": [
-            25,
+            27,
             6,
-            1,
-            10
+            9,
+            1
           ],
           "color": "legend",
           "alpha": 1,
@@ -1610,10 +1610,10 @@
           "id": "C14.04",
           "type": "rect",
           "rect": [
-            36,
-            6,
-            1,
-            10
+            26,
+            7,
+            11,
+            1
           ],
           "color": "legend",
           "alpha": 1,
@@ -1623,9 +1623,9 @@
           "id": "C14.05",
           "type": "rect",
           "rect": [
-            28,
+            25,
             8,
-            6,
+            13,
             1
           ],
           "color": "legend",
@@ -1636,10 +1636,10 @@
           "id": "C14.06",
           "type": "rect",
           "rect": [
-            28,
-            11,
-            6,
-            1
+            27,
+            9,
+            9,
+            8
           ],
           "color": "legend",
           "alpha": 1,
@@ -1647,23 +1647,10 @@
         },
         {
           "id": "C14.07",
-          "type": "rect",
-          "rect": [
-            28,
-            14,
-            6,
-            1
-          ],
-          "color": "legend",
-          "alpha": 1,
-          "border_thickness": 0
-        },
-        {
-          "id": "C14.08",
           "type": "text",
           "x": 31,
           "baseline_y": 29,
-          "text": "NOTE",
+          "text": "HOME",
           "size_px": 9,
           "font_category": "UI Small",
           "weight": "normal",
@@ -1676,306 +1663,8 @@
       "control_id": "C09"
     },
     {
-      "id": "C15",
-      "name": "Tasks symbol and label",
-      "order": 13,
-      "parent": "device",
-      "bounds": [
-        104,
-        559,
-        62,
-        36
-      ],
-      "purpose": "Small rectangle-built icon and ordinary UI label.",
-      "role": "hardware",
-      "optional": false,
-      "primitives": [
-        {
-          "id": "C15.01",
-          "type": "rect",
-          "rect": [
-            22,
-            5,
-            3,
-            1
-          ],
-          "color": "legend",
-          "alpha": 1,
-          "border_thickness": 0
-        },
-        {
-          "id": "C15.02",
-          "type": "rect",
-          "rect": [
-            22,
-            7,
-            3,
-            1
-          ],
-          "color": "legend",
-          "alpha": 1,
-          "border_thickness": 0
-        },
-        {
-          "id": "C15.03",
-          "type": "rect",
-          "rect": [
-            22,
-            6,
-            1,
-            1
-          ],
-          "color": "legend",
-          "alpha": 1,
-          "border_thickness": 0
-        },
-        {
-          "id": "C15.04",
-          "type": "rect",
-          "rect": [
-            24,
-            6,
-            1,
-            1
-          ],
-          "color": "legend",
-          "alpha": 1,
-          "border_thickness": 0
-        },
-        {
-          "id": "C15.05",
-          "type": "rect",
-          "rect": [
-            28,
-            6,
-            12,
-            1
-          ],
-          "color": "legend",
-          "alpha": 1,
-          "border_thickness": 0
-        },
-        {
-          "id": "C15.06",
-          "type": "rect",
-          "rect": [
-            22,
-            10,
-            3,
-            1
-          ],
-          "color": "legend",
-          "alpha": 1,
-          "border_thickness": 0
-        },
-        {
-          "id": "C15.07",
-          "type": "rect",
-          "rect": [
-            22,
-            12,
-            3,
-            1
-          ],
-          "color": "legend",
-          "alpha": 1,
-          "border_thickness": 0
-        },
-        {
-          "id": "C15.08",
-          "type": "rect",
-          "rect": [
-            22,
-            11,
-            1,
-            1
-          ],
-          "color": "legend",
-          "alpha": 1,
-          "border_thickness": 0
-        },
-        {
-          "id": "C15.09",
-          "type": "rect",
-          "rect": [
-            24,
-            11,
-            1,
-            1
-          ],
-          "color": "legend",
-          "alpha": 1,
-          "border_thickness": 0
-        },
-        {
-          "id": "C15.10",
-          "type": "rect",
-          "rect": [
-            28,
-            11,
-            12,
-            1
-          ],
-          "color": "legend",
-          "alpha": 1,
-          "border_thickness": 0
-        },
-        {
-          "id": "C15.11",
-          "type": "rect",
-          "rect": [
-            22,
-            15,
-            3,
-            1
-          ],
-          "color": "legend",
-          "alpha": 1,
-          "border_thickness": 0
-        },
-        {
-          "id": "C15.12",
-          "type": "rect",
-          "rect": [
-            22,
-            17,
-            3,
-            1
-          ],
-          "color": "legend",
-          "alpha": 1,
-          "border_thickness": 0
-        },
-        {
-          "id": "C15.13",
-          "type": "rect",
-          "rect": [
-            22,
-            16,
-            1,
-            1
-          ],
-          "color": "legend",
-          "alpha": 1,
-          "border_thickness": 0
-        },
-        {
-          "id": "C15.14",
-          "type": "rect",
-          "rect": [
-            24,
-            16,
-            1,
-            1
-          ],
-          "color": "legend",
-          "alpha": 1,
-          "border_thickness": 0
-        },
-        {
-          "id": "C15.15",
-          "type": "rect",
-          "rect": [
-            28,
-            16,
-            12,
-            1
-          ],
-          "color": "legend",
-          "alpha": 1,
-          "border_thickness": 0
-        },
-        {
-          "id": "C15.16",
-          "type": "text",
-          "x": 31,
-          "baseline_y": 29,
-          "text": "TASK",
-          "size_px": 9,
-          "font_category": "UI Small",
-          "weight": "normal",
-          "align": "center",
-          "color": "legend",
-          "alpha": 1,
-          "border_thickness": 0
-        }
-      ],
-      "control_id": "C10"
-    },
-    {
-      "id": "C16",
-      "name": "Contacts symbol and label",
-      "order": 14,
-      "parent": "device",
-      "bounds": [
-        234,
-        559,
-        62,
-        36
-      ],
-      "purpose": "Small rectangle-built icon and ordinary UI label.",
-      "role": "hardware",
-      "optional": false,
-      "primitives": [
-        {
-          "id": "C16.01",
-          "type": "rect",
-          "rect": [
-            28,
-            5,
-            6,
-            5
-          ],
-          "color": "legend",
-          "alpha": 1,
-          "border_thickness": 0
-        },
-        {
-          "id": "C16.02",
-          "type": "rect",
-          "rect": [
-            25,
-            12,
-            12,
-            5
-          ],
-          "color": "legend",
-          "alpha": 1,
-          "border_thickness": 0
-        },
-        {
-          "id": "C16.03",
-          "type": "rect",
-          "rect": [
-            27,
-            10,
-            8,
-            2
-          ],
-          "color": "legend",
-          "alpha": 1,
-          "border_thickness": 0
-        },
-        {
-          "id": "C16.04",
-          "type": "text",
-          "x": 31,
-          "baseline_y": 29,
-          "text": "ADDR",
-          "size_px": 9,
-          "font_category": "UI Small",
-          "weight": "normal",
-          "align": "center",
-          "color": "legend",
-          "alpha": 1,
-          "border_thickness": 0
-        }
-      ],
-      "control_id": "C11"
-    },
-    {
       "id": "C17",
-      "name": "Search symbol and label",
+      "name": "Back symbol and label",
       "order": 15,
       "parent": "device",
       "bounds": [
@@ -1984,7 +1673,7 @@
         62,
         36
       ],
-      "purpose": "Small rectangle-built icon and ordinary UI label.",
+      "purpose": "Rectangle-built left arrow and its silkscreen label.",
       "role": "hardware",
       "optional": false,
       "primitives": [
@@ -1992,10 +1681,10 @@
           "id": "C17.01",
           "type": "rect",
           "rect": [
-            23,
-            4,
+            24,
             11,
-            2
+            1,
+            1
           ],
           "color": "legend",
           "alpha": 1,
@@ -2005,10 +1694,10 @@
           "id": "C17.02",
           "type": "rect",
           "rect": [
-            23,
-            12,
-            11,
-            2
+            25,
+            10,
+            1,
+            3
           ],
           "color": "legend",
           "alpha": 1,
@@ -2018,10 +1707,10 @@
           "id": "C17.03",
           "type": "rect",
           "rect": [
-            23,
-            6,
-            2,
-            6
+            26,
+            9,
+            1,
+            5
           ],
           "color": "legend",
           "alpha": 1,
@@ -2031,10 +1720,10 @@
           "id": "C17.04",
           "type": "rect",
           "rect": [
-            32,
-            6,
-            2,
-            6
+            27,
+            8,
+            1,
+            7
           ],
           "color": "legend",
           "alpha": 1,
@@ -2044,10 +1733,10 @@
           "id": "C17.05",
           "type": "rect",
           "rect": [
-            33,
-            12,
-            3,
-            3
+            28,
+            7,
+            1,
+            9
           ],
           "color": "legend",
           "alpha": 1,
@@ -2057,10 +1746,10 @@
           "id": "C17.06",
           "type": "rect",
           "rect": [
-            35,
-            15,
-            3,
-            3
+            29,
+            6,
+            1,
+            11
           ],
           "color": "legend",
           "alpha": 1,
@@ -2068,10 +1757,23 @@
         },
         {
           "id": "C17.07",
+          "type": "rect",
+          "rect": [
+            30,
+            9,
+            9,
+            5
+          ],
+          "color": "legend",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C17.08",
           "type": "text",
           "x": 31,
           "baseline_y": 29,
-          "text": "FIND",
+          "text": "BACK",
           "size_px": 9,
           "font_category": "UI Small",
           "weight": "normal",
@@ -2283,7 +1985,7 @@
         62,
         36
       ],
-      "action": "notes"
+      "action": "home"
     },
     {
       "id": "C10",
@@ -2293,7 +1995,7 @@
         62,
         36
       ],
-      "action": "tasks"
+      "action": "unassigned"
     },
     {
       "id": "C11",
@@ -2303,7 +2005,7 @@
         62,
         36
       ],
-      "action": "contacts"
+      "action": "unassigned"
     },
     {
       "id": "C12",
@@ -2313,7 +2015,7 @@
         62,
         36
       ],
-      "action": "search"
+      "action": "back"
     },
     {
       "id": "rocker_up",

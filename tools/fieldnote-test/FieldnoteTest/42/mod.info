@@ -1,6 +1,6 @@
 name=Fieldnote PDA (test)
 id=FieldnoteTest
 author=Conspiracy-Files development
-modversion=0.1.0-test
+modversion=0.2.0-test
 versionMin=42.0.0
 description=Standalone test of the rectangle-built Fieldnote PDA design. Draws the device from the design manifest with native rectangles and UI text. Does not touch the Conspiracy-Files mod. Not for publishing.

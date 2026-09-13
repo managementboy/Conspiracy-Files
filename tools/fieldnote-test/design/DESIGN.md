@@ -1,5 +1,16 @@
 # HANDHELD PDA — rectangle-built PDA design package
 
+> **Divergence from this package, on the owner's ruling (2026-09-13).** The
+> manifest is authoritative and has moved on; the component tables below still
+> describe the package as delivered. The four application keys were drawn here
+> as NOTE / TASK / ADDR / FIND. The device now has a **HOME** key (C09, house
+> icon, C14) on the far left and a **BACK** key (C12, left arrow, C17) on the
+> far right, with the rocker taking up and down. The two inner keys (C10, C11)
+> keep their moulded faces and are deliberately **blank** — no icon, no label,
+> no action — until play shows what they are for; their symbol layers C15 and
+> C16 are removed. Re-read the geometry from `manifest.json`, never from the
+> tables below.
+
 ## A. Design description
 
 A straight-on, orthographic 400 × 620 charcoal organizer. The exact 320 × 422 green-gray LCD begins at (40, 50), occupying 80% of the device width and approximately 68% of its height. An eight-pixel recessed surround encloses it without entering its usable pixels. The remaining 148 pixels below the LCD provide the broad PalmPilot-inspired chin: a plain charcoal face above a recessed bank of four application keys surrounding an up/down rocker. The top casing is unbranded and carries only a small power indicator.

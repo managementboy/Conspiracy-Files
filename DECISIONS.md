@@ -461,3 +461,35 @@ of a battery the player never saw coming. See `docs/design/KNOX_OS.md`.
 This extends P4-R80 rather than replacing it. That decision said losing the
 device costs convenience, never the case. This says flattening the device does
 not even cost the convenience permanently.
+
+## The Fieldnote keys, and the wear — 2026-09-13
+
+**P4-R87 — two keys do the work, two stay blank on purpose.** The Fieldnote
+housing puts two big keys left of the rocker and two right of it. The design
+package named all four (NOTE / TASK / ADDR / FIND) and the handoff asked which
+two should become program keys now that the rocker takes up and down. Owner
+ruled: the **far left key is HOME** and the **far right key is BACK** — the two
+ends of the bank, the two verbs the device cannot work without — and the **two
+inner keys stay blank** until play shows what they are for. Both end keys get
+new icons: a house for HOME (a Palm's own Home silkscreen was a house) and a
+left arrow for BACK.
+
+The point of the rebuild, in the owner's words, was to make the buttons
+flexible for development, and that is what the blank pair buys. They keep their
+moulded faces and still depress, but they print nothing and do nothing. They do
+dispatch `unassigned`, so a press lands in the play log while the owner works
+out what he keeps reaching for.
+
+Consequence to hold onto: this reverses nothing, but it does retire the design
+package's own four words. The symbol layers C15 and C16 are gone from the
+manifest and `DESIGN.md` carries a divergence note, because the manifest is
+authoritative and the package's tables now describe a device that does not
+exist. The reason a blank key beats a labelled one here is the same reason the
+program-jump mapping was dropped earlier the same day: a key that prints a word
+and does something else is worse than a key that prints nothing.
+
+**P4-R88 — the wear scuffs stay.** Six sparse one-pixel scuffs on the exposed
+housing, on by default per the manifest. Owner kept them, and flagged that
+**blood is wanted on the device later** — not now. Recorded so that arrives as
+a deliberate addition to a housing that already admits wear, rather than as a
+surprise on a pristine case.

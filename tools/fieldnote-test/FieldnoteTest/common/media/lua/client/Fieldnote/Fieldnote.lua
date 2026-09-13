@@ -9,7 +9,7 @@
 require "Fieldnote/Panel"
 local S=Fieldnote.Panel
 
-Fieldnote.VERSION="0.1.0-test"
+Fieldnote.VERSION="0.2.0-test"
 
 local function log(msg)
     print("[FIELDNOTE] "..tostring(msg))

@@ -106,17 +106,22 @@ so the swap is small. Three changes, in order:
 2. **Input.** `Fieldnote.Panel.onAction(action, id)` is the single dispatch
    point. Map it onto the existing `Screen:press(id)`:
 
-   | Fieldnote control | action | Knox.OS today |
-   |---|---|---|
-   | C09 | notes | MENU (`MODE`) |
-   | C10 | tasks | UP (`PREV`) |
-   | C11 | contacts | DOWN (`NEXT`) |
-   | C12 | search | BACK (`INDEX`) |
-   | rocker_up / rocker_down | scroll | UP / DOWN |
+   | Fieldnote control | label | action | Knox.OS |
+   |---|---|---|---|
+   | C09 (far left) | HOME | home | MENU — the launcher |
+   | C10 (left inner) | *blank* | unassigned | nothing, deliberately |
+   | C11 (right inner) | *blank* | unassigned | nothing, deliberately |
+   | C12 (far right) | BACK | back | BACK |
+   | rocker_up / rocker_down | — | scroll_up / scroll_down | UP / DOWN |
 
-   The rocker is a genuine gain: today UP/DOWN share the four keys.
-   The design's action names (notes/tasks/contacts/search) are its own
-   suggestion; the mapping above is the current one and is the owner's call.
+   Settled by the owner on 2026-09-13 (P4-R87). The rocker taking up and down
+   is what frees the two inner keys; MENU and BACK have to live on keys
+   because there is no power tab and MENU is also how the device wakes. The
+   inner two keep their moulded faces and depress, but print nothing and do
+   nothing until play shows what they are for — a key that prints a word and
+   does something else is worse than a key that prints nothing. They still
+   dispatch `unassigned`, so a press shows up in the log while the owner is
+   working out what he reaches for.
 
 3. **Art.** `build_organiser_case.py`, the four `art/organiser-case-*.png`
    exports and `media/ui/CFOrg/case_*.png` become unused and can be
