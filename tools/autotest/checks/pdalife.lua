@@ -42,13 +42,38 @@ function CFLIFE.uiCount()
     return ok and n or nil
 end
 
--- The Lua heap, in kilobytes, after a full collection. Two collections because
--- the first can leave finalisable objects behind. This is the honest answer to
--- "does it leak": anything the device still holds a reference to cannot be
--- collected and shows up here as a number that climbs.
+-- The heap figure, in kilobytes, after two collections.
+--
+-- WHAT THIS NUMBER IS AND IS NOT, measured on this engine 2026-09-13 rather
+-- than assumed:
+--
+--   * Between separate eval calls it drifts on its own by up to 6 MB with
+--     nothing happening at all (five idle reads: 1480704, 1474560, 1476608,
+--     1478656, 1476608). So a before/after pair spanning two calls says
+--     nothing.
+--   * WITHIN one call it is stable: two hundred no-op iterations moved it by
+--     exactly 0 KB. So a before/after pair inside one call is meaningful.
+--   * But collectgarbage here almost certainly cannot force a full JVM
+--     collection, and every UI panel is a Java object. Growth therefore
+--     cannot distinguish "still referenced" from "garbage not yet collected".
+--
+-- Which is why nothing FAILS on this number. The leak assertions are the
+-- direct reachability ones: the UI manager's element count, the window being
+-- nil after close, and the event handler counts. Those say what is still
+-- reachable; this says what has not been swept yet.
 function CFLIFE.heapKB()
     collectgarbage("collect"); collectgarbage("collect")
     return collectgarbage("count")
+end
+
+-- The same loop shape doing no device work, so the growth above has a control
+-- taken in the same call under the same conditions.
+function CFLIFE.heapControl(n)
+    n = tonumber(n) or 200
+    local before = CFLIFE.heapKB()
+    for _ = 1, n do local t = {}; t[1] = _; t = nil end
+    local after = CFLIFE.heapKB()
+    return true, string.format("%+.2fKB per idle iteration", (after - before) / n)
 end
 
 -- Open and close the device n times through the SAME entry points the player's
