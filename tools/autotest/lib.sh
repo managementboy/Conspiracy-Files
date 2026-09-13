@@ -125,6 +125,12 @@ mod_error_count() {
     esac
 }
 
+# Is this a bare non-negative integer? `[ "$n" -lt 2000 ]` and $(( )) both
+# blow up on an empty or non-numeric value, and a check that dies inside its
+# own assertion prints nothing useful - see mod_error_count above for the
+# version of this that cost a whole run.
+is_number() { case "${1:-}" in ''|*[!0-9]*) return 1 ;; *) return 0 ;; esac; }
+
 source_line() {
     echo "source: $(git -C "$REPO" rev-parse --short HEAD)$(git -C "$REPO" diff --quiet HEAD -- mod 2>/dev/null || echo ' + uncommitted mod changes')"
     renderer_line

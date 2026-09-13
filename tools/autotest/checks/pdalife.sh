@@ -59,10 +59,10 @@ if [ "$(f 1 <<<"$cyc")" = true ]; then
     # elements behind.
     growth="$(f 4 <<<"$cyc")"
     from="${growth#ui }"; to="${from#*->}"; from="${from%%->*}"
-    if [ "$from" != nil ] && [ "$to" != nil ]; then
+    if is_number "$from" && is_number "$to"; then
         [ "$to" -le "$((from + 2))" ] || fail "UI manager grew from $from to $to over $CYCLES cycles (elements leaking)"
     else
-        say "note: UI manager size not readable on this build; leak check skipped"
+        say "note: UI manager size not readable on this build ($from -> $to); leak check skipped"
     fi
     # Event handlers must be identical before and after: nothing re-registers.
     hb="$(f 5 <<<"$cyc" | sed 's/.*before\[\(.*\)\] after\[.*/\1/')"

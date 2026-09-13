@@ -56,7 +56,11 @@ done
 # would put it.
 for what in "${!CALLS[@]}"; do
     n="${CALLS[$what]}"
-    [ "$n" -lt 2000 ] || fail "$what issues $n draw calls per frame, over the 2000 budget"
+    if is_number "$n"; then
+        [ "$n" -lt 2000 ] || fail "$what issues $n draw calls per frame, over the 2000 budget"
+    else
+        fail "$what reported a non-numeric draw-call count: '$n'"
+    fi
 done
 
 # Attribute the frame time before anyone optimises the wrong term.
@@ -84,7 +88,9 @@ if [ "$(f 1 <<<"$shown")" = true ]; then
     echo "notes-list $(f 4 <<<"$t")" >> "$RUNS/$(session)-pdaperf-times.txt"
     echo "notes-list calls $(f 3 <<<"$one")" >> "$RUNS/$(session)-pdaperf-times.txt"
     echo "notes-list split $(f 2 <<<"$sp")" >> "$RUNS/$(session)-pdaperf-times.txt"
-    n="$(f 3 <<<"$one")"; [ "$n" -lt 2000 ] || fail "a full notes list issues $n draw calls per frame"
+    n="$(f 3 <<<"$one")"
+    is_number "$n" && { [ "$n" -lt 2000 ] || fail "a full notes list issues $n draw calls per frame"; } \
+        || fail "the notes list reported a non-numeric draw-call count: '$n'"
     # And a record opened from it, which is the text-heaviest screen there is.
     rec="$(ev 'return CFPDA.show("record")')"
     if [ "$(f 1 <<<"$rec")" = true ]; then
@@ -93,7 +99,9 @@ if [ "$(f 1 <<<"$shown")" = true ]; then
         say "record: $(f 3 <<<"$one") draw calls/frame, $(f 4 <<<"$t") ms/frame  [$(f 4 <<<"$one")]"
         echo "record $(f 4 <<<"$t")" >> "$RUNS/$(session)-pdaperf-times.txt"
         echo "record calls $(f 3 <<<"$one")" >> "$RUNS/$(session)-pdaperf-times.txt"
-        n="$(f 3 <<<"$one")"; [ "$n" -lt 2000 ] || fail "a record issues $n draw calls per frame"
+        n="$(f 3 <<<"$one")"
+        is_number "$n" && { [ "$n" -lt 2000 ] || fail "a record issues $n draw calls per frame"; } \
+            || fail "the record reported a non-numeric draw-call count: '$n'"
     else
         say "record still not openable: $(f 2 <<<"$rec")"
     fi
