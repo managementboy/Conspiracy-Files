@@ -96,58 +96,98 @@ end
 O.LOW_POWER=0.20   -- below this the machine says so, as a Palm's warning did
 O.LAMP_MIN=0.10    -- a backlight will not run a dying cell
 
--- The stores that live in the machine's RAM rather than in the world. A real
--- Palm lost exactly this much when its cells went flat: your memos and your
--- to-dos, not anything written down elsewhere. The discovery ledger is NOT
--- here and must never be, because that is the case.
+-- The stores that live in the machine's RAM rather than in the world: the
+-- survivor's own notes and to-dos. The discovery ledger is NOT here and must
+-- never be, because that is the case.
 local VOLATILE={"ConspiracyFiles.KnoxNotes","ConspiracyFiles.KnoxToDo"}
-local LOST="cfMemoryLost"
+local ASLEEP="cfMemoryAsleep"     -- the cell died; the stores are set aside
+local RESTORED="cfMemoryRestored" -- and came back, for the boot screen to say
 
 function O.low(item)
     local power=O.power(item)
     return power~=nil and power>0 and power<O.LOW_POWER
 end
 
--- Battery-backed RAM, and the battery is flat. Wipe what the machine was
--- holding and remember that it happened, so the next boot can say so rather
--- than the player quietly finding their to-dos gone.
-function O.loseMemory(item)
+-- A dead cell costs ACCESS, never the data (owner, 2026-09-13). The stores are
+-- moved aside rather than cleared, so a flat machine shows you nothing and a
+-- fresh cell gives you everything back. The realism is in the interruption,
+-- not in punishing the player for a battery.
+--
+-- The destructive version - a real Palm losing battery-backed RAM for good -
+-- is the future hard mode, and it needs the PC sync to exist first so there is
+-- something to have failed to back up to. See docs/design/KNOX_OS.md.
+function O.suspendMemory(item)
     if not item then return false end
     local md=safe(function() return item:getModData() end)
-    if not md or md[LOST] then return false end
+    if not md or md[ASLEEP] then return false end
+    local moved=0
     for _,tag in ipairs(VOLATILE) do
         safe(function()
             local root=ModData and ModData.getOrCreate(tag)
-            if root then root.items={} end
+            if not root then return end
+            if type(root.items)=="table" and #root.items>0 then
+                root.backup=root.items
+                moved=moved+#root.items
+            end
+            root.items={}
         end)
     end
-    md[LOST]=true
-    log("organiser memory lost: flat battery cleared notes and to-dos")
+    md[ASLEEP]=true
+    log("organiser memory offline: flat cell set aside "..moved.." entries")
     return true
 end
 
-function O.memoryLost(item)
-    local md=item and safe(function() return item:getModData() end)
-    return (md and md[LOST]) and true or false
+-- A fresh cell. Everything comes back.
+function O.restoreMemory(item)
+    if not item then return false end
+    local md=safe(function() return item:getModData() end)
+    if not md or not md[ASLEEP] then return false end
+    if (O.power(item) or 0)<=0 then return false end
+    local back=0
+    for _,tag in ipairs(VOLATILE) do
+        safe(function()
+            local root=ModData and ModData.getOrCreate(tag)
+            if not root then return end
+            if type(root.backup)=="table" then
+                root.items=root.backup
+                back=back+#root.backup
+                root.backup=nil
+            end
+        end)
+    end
+    md[ASLEEP]=nil
+    md[RESTORED]=true
+    log("organiser memory restored: "..back.." entries back from backup")
+    return true
 end
 
--- Cleared once the machine has power again AND the player has seen the notice
--- on the boot screen, so the message is not lost in the same instant it
--- appears.
+function O.memoryAsleep(item)
+    local md=item and safe(function() return item:getModData() end)
+    return (md and md[ASLEEP]) and true or false
+end
+
+function O.memoryRestored(item)
+    local md=item and safe(function() return item:getModData() end)
+    return (md and md[RESTORED]) and true or false
+end
+
+-- Cleared once the player has seen the boot screen carrying the notice, so the
+-- message is not lost in the same instant it appears.
 function O.clearMemoryNotice(item)
     local md=item and safe(function() return item:getModData() end)
-    if md and md[LOST] and (O.power(item) or 0)>0 then md[LOST]=nil; return true end
+    if md and md[RESTORED] then md[RESTORED]=nil; return true end
     return false
 end
 
 -- Checked where it is cheap and where it matters: when the machine is picked
--- up and read, and when the lamp finishes a cell off. NOT every tick - a
--- per-tick battery poll is the class of cost that was stripped out of this
--- file on 2026-09-12.
+-- up, when it is switched on, and when the lamp finishes a cell off. NOT every
+-- tick - a per-tick battery poll is the class of cost that was stripped out of
+-- this file on 2026-09-12.
 function O.checkPower(item)
     item=item or O.held()
     local power=O.power(item)
-    if power~=nil and power<=0 then O.loseMemory(item) end
+    if power==nil then return power end
+    if power<=0 then O.suspendMemory(item) else O.restoreMemory(item) end
     return power
 end
 

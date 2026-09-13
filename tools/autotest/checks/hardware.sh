@@ -6,9 +6,11 @@
 # PASS needs: the machine switches itself off when left alone and wakes on a
 # touch; a low cell says so on every screen; the lamp refuses to run below its
 # minimum charge; the lamp drains the cell at the stated rate; a flat cell
-# clears the machine's own notes and to-dos, says MEMORY LOST on the next boot
-# and stops saying it once read; and through all of it the discovery ledger -
-# the case - is untouched (P4-R80). Exit 0 pass, 1 fail, 2 could not run.
+# takes the machine's notes and to-dos OFFLINE rather than destroying them,
+# says MEMORY OFFLINE while it has no cell, brings everything back on a fresh
+# one saying "Restoring from backup", and stops saying it once read; and
+# through all of it the discovery ledger - the case - is untouched (P4-R80).
+# Owner, 2026-09-13: a dead battery costs access, never data. Exit 0 pass.
 set -uo pipefail
 . "$(dirname "${BASH_SOURCE[0]}")/../lib.sh"
 start_args=(); [ "${1:-}" = "--hidden" ] && start_args+=(--hidden)
@@ -94,24 +96,42 @@ say "before the cell dies: notes=$notes to-dos=$todos ledger=$ledger"
 [ "${todos:-0}" -gt 0 ] || abort "could not seed a to-do"
 
 ev 'return CFHW.setPower(0)' >/dev/null
-[ "$(ev 'return CFHW.loseMemory()' | f 1)" = true ] || fail "a flat cell did not clear the machine's memory"
+[ "$(ev 'return CFHW.suspend()' | f 1)" = true ] || fail "a flat cell did not take the machine's memory offline"
 after="$(ev 'return CFHW.counts()')"
 after_notes="$(f 1 <<<"$after")"; after_todos="$(f 2 <<<"$after")"; after_ledger="$(f 3 <<<"$after")"
-say "after the cell dies:  notes=$after_notes to-dos=$after_todos ledger=$after_ledger"
-[ "$after_notes" = 0 ] || fail "notes survived a flat cell: $after_notes"
-[ "$after_todos" = 0 ] || fail "to-dos survived a flat cell: $after_todos"
+say "while the cell is dead: notes=$after_notes to-dos=$after_todos ledger=$after_ledger"
+# Offline means unreadable, which is the whole cost.
+[ "$after_notes" = 0 ] || fail "notes were still readable on a dead cell: $after_notes"
+[ "$after_todos" = 0 ] || fail "to-dos were still readable on a dead cell: $after_todos"
 # The line that must never be crossed.
 [ "$after_ledger" = "$ledger" ] || fail "THE CASE WAS DAMAGED: ledger $ledger -> $after_ledger (P4-R80)"
 
-# The next boot says so, and stops saying so once read.
-boot="$(ev 'return CFHW.boot()' | f 2)"
-grep -q "MEMORY LOST" <<<"$boot" || fail "the boot screen did not report the loss: $boot"
-grep -qE "Memory \.+ [0-9]+K free" <<<"$boot" || fail "no memory self-test on the boot screen: $boot"
-say "boot after loss: $boot"
+# The boot screen while it has no cell.
+boot_off="$(ev 'return CFHW.boot()' | f 2)"
+grep -q "MEMORY OFFLINE" <<<"$boot_off" || fail "a dead machine did not say its memory was offline: $boot_off"
+grep -qE "Memory \.+ [0-9]+K free" <<<"$boot_off" || fail "no memory self-test on the boot screen: $boot_off"
+
+# --- a fresh cell restores everything ---------------------------------------
+# Owner, 2026-09-13: we never lose data, only temporary access. Losing it for
+# good is the future hard mode and needs the PC sync to exist first.
 ev 'return CFHW.setPower(1)' >/dev/null
-[ "$(ev 'return CFHW.dismissBoot()' | f 2)" = false ] || fail "the loss notice never cleared once read"
+restored="$(ev 'return CFHW.restore()')"
+[ "$(f 1 <<<"$restored")" = true ] || fail "a fresh cell did not restore the memory: $restored"
+[ "$(f 2 <<<"$restored")" = false ] || fail "the machine still thinks its memory is offline: $restored"
+back="$(ev 'return CFHW.counts()')"
+back_notes="$(f 1 <<<"$back")"; back_todos="$(f 2 <<<"$back")"; back_ledger="$(f 3 <<<"$back")"
+say "after a fresh cell:    notes=$back_notes to-dos=$back_todos ledger=$back_ledger"
+[ "$back_notes" = "$notes" ] || fail "notes did not come back: $notes -> $back_notes"
+[ "$back_todos" = "$todos" ] || fail "to-dos did not come back: $todos -> $back_todos"
+[ "$back_ledger" = "$ledger" ] || fail "the case changed across the swap: $ledger -> $back_ledger"
+
+# And the boot screen says so, once.
+boot="$(ev 'return CFHW.boot()' | f 2)"
+grep -q "Restoring from backup" <<<"$boot" || fail "the boot screen did not report the restore: $boot"
+say "boot after restore: $boot"
+[ "$(ev 'return CFHW.dismissBoot()' | f 2)" = false ] || fail "the restore notice never cleared once read"
 boot2="$(ev 'return CFHW.boot()' | f 2)"
-grep -q "MEMORY LOST" <<<"$boot2" && fail "the loss notice came back after it was read: $boot2"
+grep -q "Restoring from backup" <<<"$boot2" && fail "the restore notice came back after it was read: $boot2"
 
 errors="$(mod_errors)"
 [ -z "$errors" ] || fail "errors inside the mod: $errors"
@@ -126,9 +146,11 @@ out="$REPO/docs/management/evidence/linux-autotest/$(date +%Y%m%dT%H%M%S)-hardwa
     echo "session: $id"
     echo "auto-off:     60s on=$(f 2 <<<"$near")  180s on=$(f 2 <<<"$gone")"
     echo "lamp drain:   2 in-game hours: 1.0 -> $rate"
-    echo "volatile:     notes $notes->$after_notes  to-dos $todos->$after_todos"
-    echo "ledger:       $ledger -> $after_ledger (must not change)"
-    echo "boot notice:  $boot"
+    echo "dead cell:    notes $notes->$after_notes  to-dos $todos->$after_todos (offline)"
+    echo "fresh cell:   notes $after_notes->$back_notes  to-dos $after_todos->$back_todos (restored)"
+    echo "ledger:       $ledger -> $after_ledger -> $back_ledger (must never change)"
+    echo "boot offline: $boot_off"
+    echo "boot restore: $boot"
     for f in "${fails[@]:-}"; do [ -n "$f" ] && echo "FAIL: $f"; done
 } > "$out"
 say "written: $out"

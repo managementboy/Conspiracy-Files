@@ -350,14 +350,17 @@ function A.bootLines()
     local used=#events*96+notes*208+todos*128
     local free=math.max(0,128*1024-used)
     out[#out+1]=string.format("Memory .......... %dK free",math.floor(free/1024))
-    -- A flat cell empties battery-backed RAM. The player is told, because
-    -- finding your own to-dos silently gone is a bug's behaviour, not a
-    -- machine's.
+    -- A dead cell takes the machine's RAM offline; a fresh one brings it back.
+    -- The player is told either way, because notes that quietly vanish and
+    -- notes that quietly return are both a machine behaving like a bug.
     local organiser=ConspiracyFiles.Organiser
     local item=organiser and organiser.held and safe(organiser.held)
-    if item and organiser.memoryLost and safe(organiser.memoryLost,item) then
-        out[#out+1]="** MEMORY LOST **"
-        out[#out+1]="notes and to-dos cleared"
+    if item and organiser.memoryRestored and safe(organiser.memoryRestored,item) then
+        out[#out+1]="Restoring from backup ..."
+        out[#out+1]="Notes and to-dos restored."
+    elseif item and organiser.memoryAsleep and safe(organiser.memoryAsleep,item) then
+        out[#out+1]="** MEMORY OFFLINE **"
+        out[#out+1]="fit a cell to restore"
     end
     out[#out+1]=""
     if ready and status and not status.preparing and (status.count or 0)>0 then

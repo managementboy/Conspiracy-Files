@@ -436,3 +436,28 @@ and a reading device must not quietly buy that slot back. The launcher header
 now carries only the battery and the category. `K.status` keeps its `time`
 parameter and skips it when nil, so the header can carry a clock again if this
 is ever reversed.
+
+## A dead battery costs access, never data — 2026-09-13
+
+**P4-R86 — the organiser never loses the survivor's writing.** The first cut
+of volatile memory did what the hardware really did: a flat cell cleared the
+machine's notes and to-dos for good, because a Palm's RAM was battery-backed
+and a dead cell was a dead cell. The owner reversed it on sight. A dead battery
+now takes the stores **offline** — a flat machine shows you nothing — and a
+fresh cell brings every entry back, with the boot screen saying "Restoring from
+backup ...".
+
+The reasoning is that the realism worth having is the interruption, not the
+punishment. Losing an evening's notes to a battery is the kind of authenticity
+that makes people stop playing, and it buys nothing the temporary blackout does
+not already buy.
+
+Consequence, and the reason this is written down rather than just fixed: the
+destructive version is **not cancelled, it is deferred**. It becomes a hard
+mode once the mod has a PC to sync the organiser to, because only then is
+losing your data the consequence of a choice — you did not sync — rather than
+of a battery the player never saw coming. See `docs/design/KNOX_OS.md`.
+
+This extends P4-R80 rather than replacing it. That decision said losing the
+device costs convenience, never the case. This says flattening the device does
+not even cost the convenience permanently.

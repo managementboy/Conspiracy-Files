@@ -169,3 +169,25 @@ radios rather than arriving from nowhere.
 
 Only the software is ours: **Knox.OS**, by Knox Systems. The boot screen says
 both, because that is where a machine tells you who made it.
+
+## Not yet: the PC sync, and the hard mode that needs it
+
+A 1993 organiser was half a machine. The other half sat on a desk, and the
+cradle between them is what made losing the pocket half survivable: you synced,
+and your memos were on both. That is a real thing this mod does not have yet,
+and two features are waiting behind it.
+
+**The sync itself.** A desktop machine somewhere in Knox County - an office, a
+newsroom, a police station - that the organiser can be docked to. Docking
+copies the record both ways. It gives the survivor a reason to go back to a
+building they have already looted, and it gives the case a second home that is
+not in their pocket.
+
+**Hard mode: a flat cell really does lose your data.** This is exactly what
+P4-R86 turned off, and the reason it was turned off is that a battery dying is
+not a choice the player made. Once there is a cradle, it becomes one: you did
+not sync, and that is on you. The code is already shaped for it -
+`Organiser.suspendMemory` moves the stores aside instead of clearing them, so
+hard mode is that function clearing them and nothing else changing.
+
+Until the sync exists, a dead battery costs access and nothing more.

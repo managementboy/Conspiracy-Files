@@ -28,3 +28,19 @@ Follow P4-R61: one short-context Terra Low worker at a time for independent rout
 ## Phase exit
 
 A new survivor can encounter an investigation naturally, navigate using player-visible places/addresses, inspect and retain evidence, and mark actual finding locations only with a writing tool. Later investigations can grow in reach without changing old facts. Persistence/recovery and native performance have observed evidence. Multiplayer, runtime AI, graphs, migrations and external content packs remain outside this phase unless separately approved.
+
+## The organiser's PC sync, and the hard mode behind it (added 2026-09-13)
+
+A desk machine the organiser can be docked to, copying the record both ways.
+Worth building for its own sake - it gives the survivor a reason to return to a
+building they have already emptied, and the case a second home outside their
+pocket.
+
+It also unblocks the one feature deliberately turned off in P4-R86: a flat cell
+really losing the survivor's notes and to-dos. That is authentic hardware
+behaviour and it was rejected because a battery dying is not a choice the
+player made. With a cradle it becomes one - you did not sync. `suspendMemory`
+already sets the stores aside rather than clearing them, so hard mode is that
+one function clearing them instead.
+
+Design notes in `docs/design/KNOX_OS.md`.

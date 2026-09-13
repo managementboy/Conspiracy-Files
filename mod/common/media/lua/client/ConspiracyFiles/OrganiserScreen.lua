@@ -387,7 +387,13 @@ function Screen:press(id)
     safe(function() getSoundManager():playUISound("UIActivateButton") end)
     if id=="POWER" then
         self.on=not self.on
-        if not self.on then self.lamp=false end
+        if not self.on then self.lamp=false
+        else
+            -- Switching it on is the other moment a fresh cell is noticed, and
+            -- the moment the player is looking at the screen to see it said.
+            local organiser=ConspiracyFiles.Organiser
+            if organiser and organiser.checkPower then safe(organiser.checkPower) end
+        end
         return
     end
     -- Asleep: any hardware key wakes it, exactly as the four application keys

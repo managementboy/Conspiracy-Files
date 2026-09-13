@@ -34,12 +34,17 @@ function CFHW.counts()
     return #((notes or {}).items or {}), #((todos or {}).items or {}), #events
 end
 
-function CFHW.loseMemory()
+function CFHW.suspend()
     O.checkPower(held())
-    return O.memoryLost(held()) == true
+    return O.memoryAsleep(held()) == true
 end
 
-function CFHW.memoryLost() return O.memoryLost(held()) == true end
+function CFHW.restore()
+    O.checkPower(held())
+    return O.memoryRestored(held()) == true, tostring(O.memoryAsleep(held()))
+end
+
+function CFHW.memoryAsleep() return O.memoryAsleep(held()) == true end
 
 -- The screen. open() is the moment a flat cell is noticed.
 function CFHW.open()
@@ -96,7 +101,7 @@ function CFHW.dismissBoot()
     local w = S.window; if not w then return false end
     w.booting = false
     w:bootSeen()
-    return true, tostring(O.memoryLost(held()))
+    return true, tostring(O.memoryRestored(held()))
 end
 
 -- The lamp drain, over a stated number of in-game hours.
