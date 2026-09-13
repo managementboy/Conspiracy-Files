@@ -493,3 +493,48 @@ housing, on by default per the manifest. Owner kept them, and flagged that
 **blood is wanted on the device later** — not now. Recorded so that arrives as
 a deliberate addition to a housing that already admits wear, rather than as a
 surprise on a pristine case.
+
+## Size is two controls, not one — 2026-09-13
+
+**P4-R89 — the device resizes and the type resizes, independently.** This
+**supersedes P4-R82**, which kept 23 rows because the choice was framed as
+rows-versus-legibility at one fixed size. The premise was wrong. The handoff
+then re-raised it as 52-versus-36 characters, which was the same mistake in
+new clothes; the owner rejected the framing outright.
+
+A real PalmPilot had a **font size selector with three sizes**, and a physical
+device has a physical size. So the device gets both: the PDA can be **pulled
+bigger and smaller like a window**, and the player picks their **own font
+size** inside it. Asked whether dragging should magnify the text or fit more
+of it, the owner's answer was **both** — they are two separate controls and
+neither substitutes for the other.
+
+What makes this work is that the two are genuinely independent: the glyph set
+drawn is the product of the two, so how much text fits depends **only** on the
+font setting, and the device size only changes how big the whole thing is.
+
+| font size | characters/line | rows | glyph set at device 1x / 2x / 3x |
+|---|---|---|---|
+| small | 78 | 35 | 1x / 2x / 3x |
+| medium | 38 | 16 | 2x / 4x / 6x |
+| large | 25 | 9 | 3x / 6x / 9x |
+
+Medium is the size the face was actually cut for. Small is the dense setting
+and is only comfortable once the device is drawn large; that is the player's
+business, not ours.
+
+**Both controls step in whole numbers, and that is not negotiable.** Every
+rectangle and every glyph on this device is pixel-exact at integer scales. A
+freely-dragged 1.4x would soften the pixel face and misalign the housing
+geometry — which is precisely the blurry-upscale problem the Fieldnote rebuild
+was built to escape. A drag handle therefore **snaps** to 1x / 2x / 3x. On a
+3200x1894 screen those are the three that fit; 4x would need a 2480-pixel-tall
+screen.
+
+Consequence, and the reason this is written down rather than just built: it
+enlarges WP1. Knox.OS's drawing context currently uses one number for both the
+device scale and the glyph set, so those have to come apart; a font-size
+preference has to be stored per player and given somewhere to be changed; and
+the auto-fit that opens the device has to stop rounding 1.52 down to 1x. The
+font itself is already done — `build_palm_font.py` now emits all six scales the
+grid needs.

@@ -18,10 +18,18 @@ a 2 ms frame budget.
 The face is "Palm OS" by Damien Guard (CC BY-SA 3.0, see CREDITS.md). It is a
 pixel font, so it is rendered once at its native size and enlarged by whole
 numbers with nearest-neighbour - never re-rendered larger, which would soften
-it. Two sizes, because the zoom key steps between them.
+it.
+
+WHY THESE SCALES. The device has two independent size controls (P4-R89): how
+big the PDA is drawn, and the player's own font size, exactly as a Palm's font
+selector worked. The glyph set actually used is the product of the two, so
+three font sizes across three device sizes needs 1x2x3 x 1x2x3 = scales
+1, 2, 3, 4, 6 and 9. Nothing is ever drawn at a non-integer scale: that would
+soften a pixel face and misalign the rectangle geometry, which is the whole
+thing this pipeline exists to avoid.
 
 Outputs (generated, committed):
-    mod/common/media/ui/CFOrg/<scale>x/<code>.png   95 glyphs each, scales 2-4
+    mod/common/media/ui/CFOrg/<scale>x/<code>.png   95 glyphs each
     mod/common/media/lua/shared/ConspiracyFiles/Generated/OrganiserFont.lua
 """
 from PIL import Image, ImageDraw, ImageFont
@@ -34,7 +42,7 @@ UI = os.path.join(REPO, "mod/common/media/ui")
 LUA = os.path.join(REPO, "mod/common/media/lua/shared/ConspiracyFiles/Generated/OrganiserFont.lua")
 SIZE = 16              # the point size where this face lands exactly on its grid
 FIRST, LAST = 32, 126
-SCALES = (1, 2, 3)
+SCALES = (1, 2, 3, 4, 6, 9)
 
 def main():
     font = ImageFont.truetype(SRC, SIZE)
@@ -70,7 +78,7 @@ def main():
         f.write("-- in NATIVE pixels, multiplied by the screen's scale; each glyph is a\n")
         f.write("-- texture at media/ui/CFOrg/<scale>x/<code>.png.\n")
         f.write('-- Face: "Palm OS" by Damien Guard, CC BY-SA 3.0 - see CREDITS.md.\n')
-        f.write("local M={first=%d,last=%d,line=%d,ascent=%d,scales={1,2,3}}\n" % (FIRST, LAST, line, ascent))
+        f.write("local M={first=%d,last=%d,line=%d,ascent=%d,scales={%s}}\n" % (FIRST, LAST, line, ascent, ",".join(str(x) for x in SCALES)))
         f.write("M.w={%s}\n" % ",".join(str(w) for w in widths))
         f.write("""function M.width(text,scale)
  if type(text)~="string" then return 0 end
