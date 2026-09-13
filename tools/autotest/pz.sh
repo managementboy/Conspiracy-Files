@@ -28,6 +28,14 @@ SESSION_FILE="$ZOMBOID/Lua/cf_autotest_session.txt"
 CONSOLE="$ZOMBOID/console.txt"
 export CF_EVAL_DIR="$LOCAL" CF_EVAL_LOG_DIR="$LOCAL/log"
 HIDDEN_DISPLAY=":99"
+# The real screen, captured BEFORE the stashed display can overwrite it.
+# Without this the stash was a one-way door: a --hidden run leaves :99 in the
+# file, the next run without --hidden reads it here, and the non-hidden branch
+# below then finds DISPLAY already set and keeps it. So a run that never asked
+# to be hidden got the virtual screen - and with it software OpenGL - silently
+# and permanently (2026-09-13). That is why knox.sh had been amber and every
+# perf number was measured on llvmpipe while an Iris Xe sat idle.
+REAL_DISPLAY="${DISPLAY:-:0}"
 # A run started with --hidden records its display, so later shot/stop/click
 # commands reach the same (invisible) screen.
 [ -f "$LOCAL/display" ] && export DISPLAY="$(cat "$LOCAL/display")"
@@ -136,7 +144,7 @@ cmd_start() {
         echo "$DISPLAY" > "$LOCAL/display"
     else
         rm -f "$LOCAL/display"
-        export DISPLAY="${DISPLAY:-:0}"
+        export DISPLAY="$REAL_DISPLAY"
     fi
     local id; id="$(date +%Y%m%dT%H%M%S)"
     echo "$id" > "$LOCAL/session"

@@ -70,7 +70,7 @@ evidence="$REPO/docs/management/evidence/linux-autotest"; mkdir -p "$evidence"
 report="$evidence/$session-boot.txt"
 {
     echo "Linux boot check $session: $verdict"
-    echo "source: $(git -C "$REPO" rev-parse --short HEAD)$(git -C "$REPO" diff --quiet HEAD -- mod || echo ' + uncommitted mod changes')"
+    source_line
     echo "mod version / game version / player alive: $(sed 's/^ok //' <<<"$facts")"
     echo "${load:-load time not found}; soaked ${soak}s"
     echo "mod files loaded: ${loaded:-?} of $total${missing:+; missing: $missing}"

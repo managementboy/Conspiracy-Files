@@ -91,6 +91,7 @@ out="$REPO/docs/management/evidence/linux-autotest/$(date +%Y%m%dT%H%M%S)-fieldn
 {
     echo "$verdict fieldnote - $(date -Is)"
     echo "commit: $(git -C "$REPO" rev-parse --short HEAD)"
+    renderer_line
     echo "session: $id"
     echo "loaded:  $state"
     echo "lcd:     $l"

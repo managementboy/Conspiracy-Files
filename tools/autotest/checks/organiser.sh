@@ -57,6 +57,7 @@ out="$REPO/docs/management/evidence/linux-autotest/$(date +%Y%m%dT%H%M%S)-organi
 {
     echo "$verdict organiser - $(date -Is)"
     echo "commit: $(git -C "$REPO" rev-parse --short HEAD)"
+    renderer_line
     echo "issued: $state"
     echo "after reload: $again"
     for f in "${fails[@]:-}"; do [ -n "$f" ] && echo "FAIL: $f"; done

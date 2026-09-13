@@ -166,6 +166,7 @@ out="$REPO/docs/management/evidence/linux-autotest/$(date +%Y%m%dT%H%M%S)-knox.t
 {
     echo "$verdict knox.os - $(date -Is)"
     echo "commit: $(git -C "$REPO" rev-parse --short HEAD)"
+    renderer_line
     echo "session: $id"
     echo "opened:   $state"
     echo "names:    $names"

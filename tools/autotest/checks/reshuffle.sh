@@ -66,6 +66,7 @@ out="$REPO/docs/management/evidence/linux-autotest/$(date +%Y%m%dT%H%M%S)-reshuf
 {
     echo "$verdict reshuffle - $(date -Is)"
     echo "commit: $(git -C "$REPO" rev-parse --short HEAD)"
+    renderer_line
     echo "before: $first"
     echo "after:  $second"
     for f in "${fails[@]:-}"; do [ -n "$f" ] && echo "FAIL: $f"; done

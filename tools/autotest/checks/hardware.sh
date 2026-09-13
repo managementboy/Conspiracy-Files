@@ -318,6 +318,7 @@ out="$REPO/docs/management/evidence/linux-autotest/$(date +%Y%m%dT%H%M%S)-hardwa
 {
     echo "$verdict hardware - $(date -Is)"
     echo "commit: $(git -C "$REPO" rev-parse --short HEAD)"
+    renderer_line
     echo "session: $id"
     echo "auto-off:     60s on=$(f 2 <<<"$near")  180s on=$(f 2 <<<"$gone")"
     echo "lamp drain:   2 in-game hours: 1.0 -> $rate"

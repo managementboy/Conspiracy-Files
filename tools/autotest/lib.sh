@@ -74,8 +74,25 @@ mod_errors() {
         END { flush() }' | sed 's/^ERROR: *//'
 }
 
+# WHAT DREW IT. Every check ran on llvmpipe for a day without any result
+    # saying so, and three known problems - knox.sh flaking, meaningless perf
+    # numbers, an address index taking minutes - were all that one fact
+    # (owner, 2026-09-13: "are you running the game in software or hardware
+    # acceleration"). A result you cannot read the renderer off is a result you
+    # cannot interpret, so it goes in the evidence beside the commit.
+renderer_line() {
+    local card
+    card="$(grep -ohm1 'GraphicsCard: .*' "${CONSOLE:-$HOME/Zomboid/console.txt}" 2>/dev/null | sed 's/GraphicsCard: //')"
+    case "$card" in
+        *llvmpipe*|*softpipe*|*swrast*) echo "renderer: ${card% } (SOFTWARE) on display ${DISPLAY:-?}" ;;
+        "")                             echo "renderer: unknown on display ${DISPLAY:-?}" ;;
+        *)                              echo "renderer: ${card% } on display ${DISPLAY:-?}" ;;
+    esac
+}
+
 source_line() {
     echo "source: $(git -C "$REPO" rev-parse --short HEAD)$(git -C "$REPO" diff --quiet HEAD -- mod 2>/dev/null || echo ' + uncommitted mod changes')"
+    renderer_line
 }
 
 # Find document N of the placed case, take it and inspect it the player's way

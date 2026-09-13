@@ -87,6 +87,7 @@ out="$REPO/docs/management/evidence/linux-autotest/$(date +%Y%m%dT%H%M%S)-writec
     echo "write cost, by part - $(date -Is)"
     echo "build: $build"
     echo "commit: $(git -C "$REPO" rev-parse --short HEAD)"
+    renderer_line
     echo "session: $id   documents: $n"
     echo
     echo "$report"
