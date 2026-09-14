@@ -66,7 +66,7 @@ for i=1,40 do
     local before=#says
     Voice.onDiscovery("evidence","doc-"..i)
     assert(#says==before+1,"Set A must speak once cooldown has cleared")
-    local line=says[#says]
+    local line=haloNotes[#haloNotes].text
     seenA[line]=true
     assert(line~=previous,"must never repeat the previous line twice running")
     previous=line
@@ -97,7 +97,7 @@ local SET_B_COUNT=8
 local seenB,previousB={},nil
 for i=1,24 do
     Voice.onKeyDoorLink("corpse-item:1")
-    local line=says[#says]
+    local line=haloNotes[#haloNotes].text
     assert(line:find("Dana Vale",1,true),"Set B must speak the observed name verbatim: "..line)
     assert(not line:find("<name>",1,true),"the <name> placeholder must always be substituted")
     assert(line~=previousB,"Set B must never repeat the previous line twice running")
@@ -117,7 +117,7 @@ local SET_C_COUNT=4
 local seenC,previousC={},nil
 for i=1,16 do
     Voice.onKeyDoorLink("corpse-item:unknown-"..i)
-    local line=says[#says]
+    local line=haloNotes[#haloNotes].text
     for _,forbidden in ipairs({"Dana Vale","<name>"}) do
         assert(not line:find(forbidden,1,true),"Set C must never fabricate or leak a name: "..line)
     end
@@ -137,7 +137,7 @@ Voice.onKeyDoorLink("corpse-item:1")
 assert(#says==1,"a misbehaving name lookup must not prevent the link line from speaking")
 ConspiracyFiles.PersonNameLog={nameFor=function() return "" end}
 Voice.onKeyDoorLink("corpse-item:1")
-assert(not says[#says]:find("<name>",1,true) and not says[#says]:find("'s key",1,true),"an empty name must fall back to Set C, not speak a blank name")
+assert(not haloNotes[#haloNotes].text:find("<name>",1,true) and not haloNotes[#haloNotes].text:find("'s key",1,true),"an empty name must fall back to Set C, not speak a blank name")
 ConspiracyFiles.PersonNameLog=nil
 Voice.onKeyDoorLink("corpse-item:1")
 assert(#says==3,"a missing PersonNameLog module must degrade to Set C, not throw")
@@ -153,7 +153,7 @@ Voice.onDiscovery("connection","observedKeyLead:door:corpse-item:1") -- Set A fi
 assert(#says==1)
 Voice.onKeyDoorLink("corpse-item:1") -- fired moments later, must still speak
 assert(#says==2,"the link line must not be suppressed by a Set A line fired moments earlier")
-assert(says[2]:find("Dana Vale",1,true))
+assert(haloNotes[#haloNotes].text:find("Dana Vale",1,true))
 -- And repeating the link back-to-back (still within the Set A cooldown)
 -- keeps speaking too -- Set B/C carries no cooldown of its own.
 Voice.onKeyDoorLink("corpse-item:1")
@@ -172,8 +172,10 @@ Voice.onDiscovery("evidence","halo-check")
 -- head. This assertion used to demand the opposite - it pinned the echo - so
 -- it is inverted deliberately, not relaxed.
 assert(#haloNotes==1,"one halo note per line")
-assert(haloNotes[1].text~=says[1],"the halo must not repeat the spoken line")
-assert(#haloNotes[1].text<=30,"a halo is read at a glance: "..haloNotes[1].text)
+assert(haloNotes[1].text~=says[1],"the halo must not repeat the bubble")
+-- Swapped round (owner, Windows, 2026-09-14): the survivor's words in white,
+-- the tag in the coloured bubble, and the tag is what is read at a glance.
+assert(#says[1]<=30,"the bubble's tag is read at a glance: "..says[1])
 assert(type(haloNotes[1].duration)=="number" and haloNotes[1].duration>=300,
     "the halo note must carry an explicit, generous duration")
 assert(#uiSounds==1,"exactly one UI-channel sound per spoken line")
@@ -194,6 +196,7 @@ getSoundManager=nil
 clock=clock+60000
 local ok=pcall(Voice.onDiscovery,"evidence","bare")
 assert(ok and #says==1,"a player without setHaloNote/sound manager must still speak, not throw")
+assert(says[1]~="Noted","with no halo, the survivor's words go in the bubble rather than the tag")
 
 print("PASS player voice: every Set A/B/C line reachable, no immediate repeats, name never fabricated, cooldown gates Set A only, link line escapes it, halo duration and UI-only sound")
 
@@ -206,12 +209,15 @@ print("PASS player voice: every Set A/B/C line reachable, no immediate repeats, 
 -- only covers the paths it exercises and this defect was in every path.
 local f = assert(io.open('mod/common/media/lua/client/ConspiracyFiles/PlayerVoice.lua', 'r'))
 local voice = f:read('*a'); f:close()
-assert(not voice:find('setHaloNote(text', 1, true),
-    'the halo must never be handed the spoken text')
+-- Swapped round on 2026-09-14: the words go in the halo and the tag in the bubble.
+assert(voice:find('setHaloNote(text', 1, true),
+    "the survivor's words go in the white halo")
+assert(voice:find('Say(halo and label or text)', 1, true),
+    'the bubble carries the tag, or the words when there is no halo')
 assert(voice:find('label~=text', 1, true),
     'the split must be enforced at the call, not left to whoever adds the next line')
 local g = assert(io.open('mod/common/media/lua/client/ConspiracyFiles/ClueHints.lua', 'r'))
 local hints = g:read('*a'); g:close()
-assert(not hints:find('setHaloNote(text', 1, true), 'the hint halo must not repeat the spoken phrase')
-assert(not hints:find('addText(p,text)', 1, true), 'nor on the fallback path')
+assert(hints:find('setHaloNote(text', 1, true), 'the hint phrase goes in the white halo too')
+assert(hints:find('Say(halo and HINT_HALO or text)', 1, true), 'and its bubble carries the fact, or the phrase without a halo')
 print('PASS player voice: the bubble and the halo never say the same thing')

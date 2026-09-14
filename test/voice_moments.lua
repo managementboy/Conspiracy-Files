@@ -30,12 +30,12 @@ local function fresh() says, halos = {}, {}; Voice.reset() end
 fresh()
 Voice.onConnection("disputes-delivery", "doc-2")
 assert(#says == 1 and #halos == 1, "a connection must be spoken")
-assert(halos[1] == "Two records disagree", halos[1])
+assert(says[1] == "Two records disagree", says[1])
 assert(says[1] ~= halos[1], "the bubble and the halo never say the same thing")
 
 -- It must never say which record is true. That is a conclusion, and a lead is
 -- never proof.
-for _, line in ipairs({ says[1] }) do
+for _, line in ipairs({ halos[1] }) do
     local l = line:lower()
     for _, banned in ipairs({ "lying", "lied", "faked", "proves", "cover" }) do
         assert(not l:find(banned, 1, true), "the survivor must not conclude: " .. line)
@@ -44,7 +44,7 @@ end
 
 -- Agreement is a different line, because it is a different fact.
 fresh(); Voice.onConnection("corroborates", "doc-3")
-assert(halos[1] == "Records agree", halos[1])
+assert(says[1] == "Records agree", says[1])
 
 -- Once per thing. A connection is new once; a case retires once; an address is
 -- arrived at once. None of these can repeat, so none of them may repeat.
@@ -57,13 +57,14 @@ Voice.onPile("doc-4"); Voice.onPile("doc-4")
 Voice.onBody("boot"); Voice.onBody("boot")
 assert(#says == 5, "each moment speaks exactly once, got " .. #says)
 
--- The halo is read at a glance; the bubble is the survivor thinking.
-for _, h in ipairs(halos) do assert(#h <= 30, "halo too long to read at a glance: " .. h) end
+-- The bubble's tag is read at a glance; the white halo is the survivor
+-- thinking (swapped round, owner, 2026-09-14).
+for _, h in ipairs(says) do assert(#h <= 30, "the bubble's tag is too long to read at a glance: " .. h) end
 
 -- A completed case is never called solved. The mod does not know that.
 fresh(); Voice.onCaseComplete("case-2")
-assert(halos[1] == "Nothing left to find here", halos[1])
-assert(not says[1]:lower():find("solved", 1, true), "a case is never solved, only exhausted")
+assert(says[1] == "Nothing left to find here", says[1])
+assert(not halos[1]:lower():find("solved", 1, true), "a case is never solved, only exhausted")
 
 -- The callers, checked at the source: a behavioural test only covers the paths
 -- it exercises, and these fire deep inside the runtime.

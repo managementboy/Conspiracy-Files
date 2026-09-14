@@ -260,7 +260,7 @@ function A.diary()
                 bucket={day=when.day,month=when.month,year=when.year,label=when.label,items={}}
                 byKey[when.key]=bucket
             end
-            bucket.items[#bucket.items+1]={hour=when.hour,ref=event.ref,
+            bucket.items[#bucket.items+1]={hour=when.hour,ref=event.ref,title=tostring(titles[event.ref] or event.kind),
                 text=string.format("%02d:00  %s",when.hour,tostring(titles[event.ref] or event.kind))}
             if not newest or when.key>newest then newest=when.key end
         end
@@ -323,8 +323,25 @@ A.dates={
         local byKey=A.diary()
         local bucket=byKey[y*10000+m*100+dayNumber]
         local label=dayNumber.." "..(MONTHS[m] or "?").." "..y
+        -- Drawn as the Date Book's day view (owner, 2026-09-14): the date and
+        -- the week it falls in, then a line for each hour. A day of another
+        -- month is left blank in the week, as the month grid leaves it.
+        local length=monthLength(m,y)
+        local weekday=(firstWeekday(m,y)+dayNumber-2)%7+1
+        local week={}
+        for i=1,7 do
+            local d=dayNumber+i-weekday
+            if d>=1 and d<=length then
+                local other=byKey[y*10000+m*100+d]
+                week[i]={day=d,marked=other~=nil and #other.items>0}
+            end
+        end
+        local view={dayView=true,dayNumber=dayNumber,week=week,label=label,title=label,
+            short=dayNumber.." "..(MONTHS[m] or "?").." "..tostring(y):sub(3),
+            shorter=dayNumber.." "..(MONTHS[m] or "?")}
         if not bucket or #bucket.items==0 then
-            return {label=label,title=label,detail="Nothing found on this day.",id="day-empty"}
+            view.detail,view.id,view.entries="Nothing found on this day.","day-empty",{}
+            return view
         end
         -- Each line is also an entry the screen can open: a date book's entry
         -- opened the record it named (owner, Windows, 2026-09-14: "an entry in
@@ -332,9 +349,10 @@ A.dates={
         local lines,entries={},{}
         for _,item in ipairs(bucket.items) do
             lines[#lines+1]=item.text
-            entries[#entries+1]={text=item.text,ref=item.ref}
+            entries[#entries+1]={text=item.text,ref=item.ref,hour=item.hour,title=item.title}
         end
-        return {label=label,title=label,detail=table.concat(lines,"\n"),entries=entries,id="day-"..dayNumber}
+        view.detail,view.entries,view.id=table.concat(lines,"\n"),entries,"day-"..dayNumber
+        return view
     end,
     -- Still a list underneath, for anything that asks for one.
     list=function()

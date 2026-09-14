@@ -199,13 +199,35 @@ function K.check(c,ticked,nx,ny,id,payload)
 end
 
 -- Scroll arrows in the right margin, only when there is more to see.
-function K.arrows(c,ny,height,up,down)
-    local x=c.w-7
-    if up then K.text(c,"^",x,ny,K.DIM); hit(c,"UP",x-1,ny,8,Font.line) end
-    if down then
-        local y=ny+height-Font.line
-        K.text(c,"v",x,y,K.DIM); hit(c,"DOWN",x-1,y,8,Font.line)
+-- A Palm scroll bar down the right edge of whatever scrolls (owner, Windows,
+-- 2026-09-14: "scrollbars not visible?" - a lone "v" in the corner was all that
+-- said a record went on). Arrows at both ends, dim when there is nothing more
+-- that way; a track; and a thumb as long as the share of the text on screen,
+-- sitting where the screen is. Drawn only when there is more than fits.
+-- Tapping above the thumb steps up and below it steps down, as the rocker does.
+-- `top` is the first line shown, `room` how many fit, `total` how many exist.
+function K.scrollbar(c,ny,height,top,room,total)
+    if type(total)~="number" or total<=room then return end
+    local w=5
+    local x=c.w-w-1
+    local upInk=top>1 and K.INK or K.DIM
+    local downInk=top+room-1<total and K.INK or K.DIM
+    K.fill(c,x+2,ny,1,1,upInk); K.fill(c,x+1,ny+1,3,1,upInk); K.fill(c,x,ny+2,5,1,upInk)
+    local by=ny+height-3
+    K.fill(c,x,by,5,1,downInk); K.fill(c,x+1,by+1,3,1,downInk); K.fill(c,x+2,by+2,1,1,downInk)
+    local trackY,trackH=ny+4,height-8
+    if trackH<3 then
+        local half=math.floor(height/2)
+        hit(c,"UP",x-2,ny,w+3,half); hit(c,"DOWN",x-2,ny+half,w+3,height-half)
+        return
     end
+    K.fill(c,x+2,trackY,1,trackH,K.DIM)
+    local thumbH=math.max(3,math.floor(trackH*room/total))
+    local share=math.min(1,math.max(0,(top-1)/math.max(1,total-room)))
+    local thumbY=trackY+math.floor((trackH-thumbH)*share)
+    K.fill(c,x+1,thumbY,3,thumbH,K.INK)
+    hit(c,"UP",x-2,ny,w+3,thumbY-ny)
+    hit(c,"DOWN",x-2,thumbY+thumbH,w+3,ny+height-thumbY-thumbH)
 end
 
 -- The command line along the foot, with a rule above it.
@@ -246,6 +268,57 @@ function K.status(c,time,category,charge)
     end
     K.fill(c,0,line,c.w,1,K.INK)
     return line+2
+end
+
+-- The Date Book's day view header (owner, 2026-09-14, with a photo of the
+-- real one): the date on the left and the week it falls in across the right,
+-- the open day inverted and a tick under any other day with something on it.
+-- `week` is seven cells, Sunday first, each nil (a day of another month) or
+-- {day=n,marked=bool}. The date shortens rather than running under the week.
+function K.dayHeader(c,label,shorter,week,selected)
+    local line=Font.line
+    K.fill(c,0,0,c.w,line,K.INK)
+    local HEAD={"S","M","T","W","T","F","S"}
+    local cw=K.width("W")+3
+    local left=c.w-1-cw*7
+    if K.width(label)>left-4 then label=shorter or label end
+    K.text(c,K.fit(label,left-4),2,0,K.GLASS)
+    for i=1,7 do
+        local cell=week and week[i]
+        if cell then
+            local x=left+(i-1)*cw
+            local tx=x+math.floor((cw-K.width(HEAD[i]))/2)
+            if cell.day==selected then
+                K.fill(c,x,1,cw-1,line-1,K.GLASS)
+                K.text(c,HEAD[i],tx,0,K.INK)
+            else
+                K.text(c,HEAD[i],tx,0,K.GLASS)
+                if cell.marked then K.fill(c,x+math.floor(cw/2)-1,line-2,2,1,K.GLASS) end
+            end
+            hit(c,"WEEKDAY",x,0,cw,line,cell.day)
+        end
+    end
+    c.cursor=line+1
+    return c.cursor
+end
+
+-- One line of the day view: the hour at the left, a rule, and what was found
+-- in that hour on the rule. A second find in the same hour passes hour=nil and
+-- is drawn without repeating the time, as the Date Book did. A solid rule, not
+-- the Date Book's dots: every dot would be a draw call of its own.
+function K.hourLine(c,ny,hour,text,id,payload)
+    local line=Font.line
+    local lx=K.width("00:00")+4
+    if hour then
+        local label=string.format("%d:00",hour)
+        K.text(c,label,lx-4-K.width(label),ny,K.DIM)
+    end
+    K.fill(c,lx,ny+line-1,c.w-lx-8,1,K.DIM)
+    if text and text~="" then
+        K.text(c,K.fit(text,c.w-lx-10),lx,ny,K.INK)
+        if id then hit(c,id,0,ny,c.w-8,line,payload) end
+    end
+    return ny+line
 end
 
 -- The grid of applications: three columns, icon over name, as the classic

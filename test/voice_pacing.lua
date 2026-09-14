@@ -29,10 +29,10 @@ assert(#says==1,"only one line may show at a time, got "..#says)
 assert(#halos==1,"and only its halo")
 tick(1000); assert(#says==1,"the second line must wait while the first is still being read")
 tick(5000); assert(#says==2,"the second line follows once the first has had its time")
-assert(halos[2]=="Two records disagree",tostring(halos[2]))
+assert(says[2]=="Two records disagree",tostring(says[2]))
 tick(500); assert(#says==2,"and it holds the space in turn")
 tick(6000); assert(#says==3,"the third line follows")
-assert(halos[3]=="Far too many",tostring(halos[3]))
+assert(says[3]=="Far too many",tostring(says[3]))
 tick(60000); assert(#says==3,"nothing more is said once nothing is waiting")
 
 -- Bounded: a flood is one line showing and four waiting, not minutes of chatter.

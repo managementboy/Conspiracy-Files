@@ -79,6 +79,9 @@ function F.store(seed)
         -- with the t3: prefix stripped (see P.known).
         buildingId=tostring(doc.locationId):gsub("^t3:",""),
         documents=root.case.documents,
+        -- The case's own person: only a card with this name may bind the case
+        -- to a body (owner, Windows, 2026-09-14).
+        personName=root.case.identities and root.case.identities[1] and root.case.identities[1].name,
     }
 end
 

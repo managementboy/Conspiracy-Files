@@ -365,9 +365,23 @@ function CFGAME.liveRecords()
         back = w.record == day
     end
     A.files.list = files
+    -- The week across the top (P4-R100): it holds the open day, and tapping
+    -- another day in it opens that day.
+    local weekOk = false
+    for _, cell in pairs(day.week or {}) do if cell.day == today then weekOk = true end end
+    local otherDay, tried = false, false
+    w.record = day; w.card = 1; w:prerender()
+    for _, h in ipairs((w.context or {}).hits or {}) do
+        if h.id == "WEEKDAY" and h.payload ~= today and not tried then
+            tried = true
+            w:onMouseDown(h.x + 2, h.y + 2); w:onMouseUp(h.x + 2, h.y + 2)
+            if w.record and w.record.dayView and w.record.dayNumber == h.payload then otherDay = h.payload end
+        end
+    end
     w.record = nil; w.day = nil; w.cachedList = nil
     return tostring(recorded), tostring(cachedBefore), tostring(refreshed), shown,
-        tostring(hourOk), tostring(hit ~= nil), tostring(opened), tostring(back)
+        tostring(hourOk), tostring(hit ~= nil), tostring(opened), tostring(back),
+        tostring(weekOk), tostring(otherDay)
 end
 
 return CFGAME

@@ -153,18 +153,21 @@ local function log(message) CFLog.message("voice","voice",message) end
 -- Two visual channels, two different strings. Owner, 2026-09-10: "some
 -- messages on top of the player repeated once in colour once in white" - which
 -- they did, because Say and setHaloNote were both handed the same sentence.
--- The bubble is the survivor thinking; the halo is the fact, in as few words
--- as will fit above a head.
+-- Swapped round (owner, Windows, 2026-09-14: "switch arround the speach text.
+-- colored and white. it makes more sence"): the white halo carries the
+-- survivor's words and holds the longer display; the coloured bubble carries
+-- the fact, in as few words as will fit.
 local function deliver(player,text,label)
     -- Call engine methods with colon syntax, the way vanilla does.
     -- pcall(obj.method, obj, ...) extracts the method first; Kahlua treats that
     -- differently from a real method call, and pcall then hides any complaint, so
     -- a true result can mean 'did not throw' rather than 'worked'.
-    if player.Say then pcall(function() player:Say(text) end) end
     local halo=false
     if player.setHaloNote then
-        halo=pcall(function() player:setHaloNote(label,255,255,255,HALO_DURATION) end)
+        halo=pcall(function() player:setHaloNote(text,255,255,255,HALO_DURATION) end)
     end
+    -- A player object with no halo still gets the words, in the bubble.
+    if player.Say then pcall(function() player:Say(halo and label or text) end) end
     local audible=false
     if getSoundManager then
         local ok,manager=pcall(getSoundManager)

@@ -27,6 +27,10 @@ P.CARD="Base.IDcard"
 -- Stamped on the zombie, so one body is bound once and a reload does not bind
 -- a second. Stamped on the card too, so the binding can be recognised later.
 P.MARK="cfCasePerson"
+-- Her name, on the zombie beside the mark. The card cannot carry it through
+-- death - the game empties a zombie's pockets as it dies - but the body copies
+-- the zombie's ModData, so the name arrives with the body (P4-R101).
+P.NAME="cfCasePersonName"
 -- Far enough to be worth walking to, close enough to be findable at all.
 P.RADIUS=40
 P.MAX_SCAN=60
@@ -44,6 +48,15 @@ local function halves(name)
     local first,last=string.match(name,"^(%S+)%s+(.+)$")
     if first then return first,last end
     return name,""
+end
+
+-- The case's card: her name, and the mark that says whose it is.
+local function stamp(card,name,caseId)
+    pcall(function()
+        card:setName("ID Card: "..name)
+        card:setCustomName(true)
+        card:getModData()[P.MARK]=caseId
+    end)
 end
 
 -- A zombie within reach of (x,y,z) that we have not already bound. Bounded: a
@@ -94,17 +107,11 @@ function P.bind(name,caseId,x,y,z)
         local inventory=zombie:getInventory()
         if inventory then card=inventory:AddItem(P.CARD) end
     end)
-    if card then
-        pcall(function()
-            card:setName("ID Card: "..name)
-            card:setCustomName(true)
-            local md=card:getModData()
-            md[P.MARK]=caseId
-        end)
-    end
+    if card then stamp(card,name,caseId) end
     pcall(function()
         local md=zombie:getModData()
         md[P.MARK]=caseId
+        md[P.NAME]=name
     end)
     log("bound "..name.." to a body near "..tostring(x)..","..tostring(y)
         ..(card and " with an ID card" or " but could not give it a card"))
@@ -149,11 +156,11 @@ end
 
 -- When a named zombie dies, record exactly what the game left in its pockets.
 --
--- Not yet known, and it decides the design: does Project Zomboid generate a
--- corpse's loot at death? If it does, a zombie given Ines Kubiak's name and ID
--- will die carrying its ORIGINAL identity as well - one body, two names, and
--- the game's own documents contradicting the case. Rather than build a fix for
--- a guess, this logs the answer the first time it happens.
+-- The answer came in play (Windows, 2026-09-14): the game empties a zombie's
+-- pockets as it dies, before this event fires, and rolls the body's loot from
+-- its name the first time the body is opened - so "Roy Hale" landed on two of
+-- the game's own ID cards. P.onDeadBodySpawn below is the fix. This log stays:
+-- it is how the next surprise will be seen.
 function P.onZombieDead(zombie)
     local md=zombie and read(zombie,"getModData")
     if type(md)~="table" or not md[P.MARK] then return end
@@ -174,6 +181,45 @@ end
 if Events and Events.OnZombieDead and not P.deathHandler then
     P.deathHandler=function(zombie) pcall(P.onZombieDead,zombie) end
     Events.OnZombieDead.Add(P.deathHandler)
+end
+
+-- When her body appears, it carries exactly one card: hers (P4-R101).
+--
+-- The body is built from the zombie AFTER its pockets were emptied, copies the
+-- zombie's ModData (so the mark and the name arrive), and only then fires
+-- OnDeadBodySpawn, with its searched flag already set - all read from the
+-- game's IsoDeadBody constructor. Loot is rolled the first time an unsearched
+-- body is opened, so marking it searched here stops the game putting her name
+-- on its own cards. She keeps what she wore; she gains nothing the game rolls.
+function P.onDeadBodySpawn(body)
+    local md=body and read(body,"getModData")
+    local caseId=type(md)=="table" and md[P.MARK]
+    if not caseId then return end
+    local container=read(body,"getContainer")
+    if not container then log("case person's body has no container; left as the game made it"); return end
+    pcall(function() container:setExplored(true) end)
+    local has=false
+    local items=read(container,"getItems")
+    if items and items.size then
+        for i=0,items:size()-1 do
+            local item=items:get(i)
+            local imd=item and read(item,"getModData")
+            if type(imd)=="table" and imd[P.MARK]==caseId then has=true end
+        end
+    end
+    local name=md[P.NAME]
+    local card
+    if not has and type(name)=="string" and name~="" then
+        card=read(container,"AddItem",P.CARD)
+        if card then stamp(card,name,caseId) end
+    end
+    log("case person's body ("..tostring(caseId).."): marked searched; card "
+        ..(has and "already there" or (card and "added" or "could not be added")))
+end
+
+if Events and Events.OnDeadBodySpawn and not P.bodyHandler then
+    P.bodyHandler=function(body) pcall(P.onDeadBodySpawn,body) end
+    Events.OnDeadBodySpawn.Add(P.bodyHandler)
 end
 
 return P

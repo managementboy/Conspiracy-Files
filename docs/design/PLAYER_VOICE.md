@@ -85,7 +85,7 @@ properly, never at the keybind or the context-menu action by name.
   marker, opening the notebook, reading a page - and rules in every moment
   below. A line the survivor has not earned makes the next one cheaper.
 
-  | Moment | Bubble | Halo |
+  | Moment | Halo (white) | Bubble (colour) |
   |---|---|---|
   | A found record meets one already held | "This doesn't match what the other one said." | `Two records disagree` |
   | ...and agrees with it | "That fits with the other one." | `Records agree` |
@@ -109,9 +109,13 @@ properly, never at the keybind or the context-menu action by name.
   in white". They did - `Say` and `setHaloNote` were both handed the same
   sentence, so every line appeared twice above the survivor's head.
 
-  The bubble is the survivor thinking, in their own words. The halo is the
-  fact, in as few words as fit above a head: `Noted`, `Unread`,
-  `Key matches this door`, `Something nearby`.
+  The white halo is the survivor thinking, in their own words, and holds the
+  longer display. The coloured bubble is the fact, in as few words as fit
+  above a head: `Noted`, `Unread`, `Key matches this door`, `Something nearby`.
+  Swapped round on 2026-09-14 (owner: "switch arround the speach text. colored
+  and white. it makes more sence"); a player object with no halo gets the words
+  in the bubble instead. Lines that fire together are shown one after another,
+  each held long enough to read.
 
   `speak` refuses a halo label equal to the spoken line, so the split cannot
   quietly lapse when somebody adds the next voice line. It survived this long

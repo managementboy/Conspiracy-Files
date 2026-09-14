@@ -92,6 +92,14 @@ drag="$(ev 'return CFHW.dragOutside()')"
 [ "$(f 2 <<<"$drag")" = 2 ] || fail "dragging the corner outward did not make the machine bigger: $drag"
 [ "$(f 3 <<<"$drag")" = true ] || fail "releasing the corner outside the machine left it resizing: $drag"
 [ "$(f 4 <<<"$drag")" = 2 ] || fail "the size dragged to was not remembered: $drag"
+
+# The launcher's clock shows only while a watch or clock is carried (P4-R85,
+# P4-R100): knowing the time costs a watch, and the organiser does not buy it back.
+clk="$(ev 'return CFHW.clock()')"
+say "clock: without a watch='$(f 2 <<<"$clk")' with a watch='$(f 3 <<<"$clk")'"
+[ "$(f 4 <<<"$clk")" = true ] || fail "the clock check could not give the survivor a watch: $clk"
+[ "$(f 2 <<<"$clk")" = nil ] || fail "the launcher showed the time with no watch or clock carried: $clk"
+grep -qE '^[0-9]{1,2}:[0-9]{2}' <<<"$(f 3 <<<"$clk")" || fail "the launcher showed no time with a watch carried: $clk"
 say "zoom clamps: down->$low up->$high"
 # The two controls must be INDEPENDENT (P4-R89): the machine size changes the
 # window and not how much text fits; the text size changes how much text fits

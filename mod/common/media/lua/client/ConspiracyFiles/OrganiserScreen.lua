@@ -400,6 +400,38 @@ end
 -- device is noticed within a second instead of within a frame, which is the
 -- same promise the battery readout has always made, and hardware.sh asserts
 -- the behaviour either way.
+-- The launcher's clock, as the Palm's home screen had one (owner, 2026-09-14,
+-- with a photo of it) - but only while the survivor has something that tells
+-- the time. P4-R85 stands: knowing the time costs a watch, and the organiser
+-- does not buy that back. The rule is the vanilla clock's own: any alarm clock
+-- or watch in the inventory, worn or not. Read once a second, because finding
+-- one walks the inventory, and in the player's own 12- or 24-hour format.
+function Screen:clockText()
+    local now=getTimeInMillis and getTimeInMillis() or 0
+    if self.clockAt and now-self.clockAt<1000 then return self.clockValue end
+    self.clockAt=now
+    self.clockValue=nil
+    local player=getPlayer and getPlayer()
+    local items=player and safe(function() return player:getInventory():getItems() end)
+    local timed=false
+    if items then
+        for i=0,items:size()-1 do
+            local item=items:get(i)
+            if instanceof(item,"AlarmClockClothing") or instanceof(item,"AlarmClock") then timed=true; break end
+        end
+    end
+    if not timed then return nil end
+    local tod=safe(function() return getGameTime():getTimeOfDay() end)
+    if type(tod)~="number" then return nil end
+    local h,m=math.floor(tod),math.floor((tod%1)*60)
+    if safe(function() return getCore():getOptionClock24Hour() end) then
+        self.clockValue=string.format("%d:%02d",h,m)
+    else
+        self.clockValue=string.format("%d:%02d %s",(h+11)%12+1,m,h<12 and "am" or "pm")
+    end
+    return self.clockValue
+end
+
 function Screen:powerCheck()
     if not self.on then return end
     local organiser=ConspiracyFiles.Organiser
@@ -526,12 +558,10 @@ function Screen:draw(gx,gy)
         return
     end
     if self.launcher then
-        -- The Applications launcher: battery, category, icon grid.
-        -- No clock. The machine could plausibly have one, but the game's rule
-        -- is that knowing the time costs you a watch, and a reading device
-        -- should not quietly buy you back a slot the vanilla game charges for
-        -- (owner, 2026-09-13, reversing the 09-12 ruling).
-        local y=K.status(c,nil,"All",self:charge())
+        -- The Applications launcher: clock, battery, category, icon grid. The
+        -- clock shows only while the survivor carries a watch or an alarm
+        -- clock (P4-R85, P4-R100) - see Screen:clockText.
+        local y=K.status(c,self:clockText(),"All",self:charge())
         -- No record counts on the icons. Palm's launcher never showed any, and
         -- working them out means asking every program to read its whole store -
         -- which the fault check caught as an address lookup retrying forever,
@@ -544,6 +574,10 @@ function Screen:draw(gx,gy)
     end
     local program=self:program()
     local rows=self:list()
+    if self.record and self.record.dayView then
+        self:drawDay(c)
+        return
+    end
     if self.record then
         -- A record, laid out as a Palm application laid one out: the title,
         -- the few facts as labelled fields, a rule, then what the survivor
@@ -587,7 +621,7 @@ function Screen:draw(gx,gy)
                 if not entry then break end
                 K.row(c,entry.text,y+i*line,false,"ENTRY",top+i)
             end
-            K.arrows(c,y,room*line,top>1,top+room-1<#entries)
+            K.scrollbar(c,y,room*line,top,room,#entries)
         else
             local body=pages(self.record.detail,c.w-4-8)
             local top=(self.card-1)*room+1
@@ -596,7 +630,7 @@ function Screen:draw(gx,gy)
                 if not text then break end
                 K.text(c,text,2,y+i*line,K.INK)
             end
-            K.arrows(c,y,room*line,top>1,top+room-1<#body)
+            K.scrollbar(c,y,room*line,top,room,#body)
         end
         local foot=K.foot(c,self:footText(""))
         local x=K.command(c,"BACK",2,foot,"BACK")
@@ -638,11 +672,52 @@ function Screen:draw(gx,gy)
         if not row then break end
         K.row(c,row.label,line+2+i*line,(top+i)==self.entry,"ROW",top+i)
     end
-    K.arrows(c,line+2,room*line,top>1,top+room-1<#rows)
+    K.scrollbar(c,line+2,room*line,top,room,#rows)
     -- The hint named keys this machine has never had: VIEW and LIST were the
     -- mapping before the buttons were MENU/UP/DOWN/BACK, and it was still on
     -- screen a version later (owner screenshot, 2026-09-13).
     K.foot(c,self:footText("HOME: programs   tap: open"))
+end
+
+-- One day in DATES, as the Date Book drew it (owner, 2026-09-14, with a photo
+-- of the real one): the date and its week across the top, a line for every
+-- hour of the working day, and each find on the line of the hour it was made.
+-- Eight to six, as the Date Book opened, widened to take in anything earlier
+-- or later. A line opens its record; a day in the week opens that day.
+function Screen:drawDay(c)
+    local line=Font.line
+    local day=self.record
+    local y=K.dayHeader(c,day.short or day.title or "",day.shorter,day.week,day.dayNumber)
+    local entries=day.entries or {}
+    local first,last=8,18
+    for _,e in ipairs(entries) do
+        if type(e.hour)=="number" then
+            if e.hour<first then first=e.hour end
+            if e.hour>last then last=e.hour end
+        end
+    end
+    local lines={}
+    for hour=first,last do
+        local shown=false
+        for index,e in ipairs(entries) do
+            if e.hour==hour then
+                lines[#lines+1]={hour=(not shown) and hour or nil,text=e.title or e.text,index=index}
+                shown=true
+            end
+        end
+        if not shown then lines[#lines+1]={hour=hour} end
+    end
+    local foot=c.h-line-1
+    local room=math.max(2,math.floor((foot-2-y)/line))
+    local top=(self.card-1)*room+1
+    for i=0,room-1 do
+        local l=lines[top+i]
+        if not l then break end
+        K.hourLine(c,y+i*line,l.hour,l.text,l.index and "ENTRY" or nil,l.index)
+    end
+    K.scrollbar(c,y,room*line,top,room,#lines)
+    local footY=K.foot(c,self:footText(""))
+    K.command(c,"BACK",2,footY,"BACK")
 end
 
 function Screen:openRow(index)
@@ -739,7 +814,7 @@ function Screen:tap(x,y)
     if id=="APP" then
         self.app=widget.payload; self.launcher=false; self.record=nil
         self.entry,self.card,self.cachedList=1,1,nil
-    elseif id=="DAY" then
+    elseif id=="DAY" or id=="WEEKDAY" then
         local program=self:program()
         if program and program.day then
             local _,_,at=self:category(program)
@@ -932,10 +1007,11 @@ function Screen:writeNote()
     local box=ISTextEntryBox:new("",-10000,-10000,(l.w-4)*l.t,Font.line*l.t)
     box:initialise(); box:instantiate()
     box:setMaxTextLength(200)
-    safe(function()
-        box.javaObject:setFrameAlpha(0)
-        box.javaObject:setTextRGBA(0,0,0,0)
-    end)
+    -- No setFrameAlpha: the box builds its frame the first time it is drawn,
+    -- so asking for it here threw a NullPointerException into the log on every
+    -- note (owner's Windows log, 2026-09-14) - and a box parked this far off
+    -- the case never shows a frame anyway.
+    safe(function() box.javaObject:setTextRGBA(0,0,0,0) end)
     box.onCommandEntered=function() self:finishNote(true) end
     self:addChild(box)
     box:focus()

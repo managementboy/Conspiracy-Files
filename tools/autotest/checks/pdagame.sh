@@ -81,6 +81,8 @@ say "live records: recorded=$(f 1 <<<"$live") refreshed=$(f 3 <<<"$live") entry=
 [ "$(f 6 <<<"$live")" = true ] || fail "the day view drew no tappable entry for the discovery: $live"
 [ "$(f 7 <<<"$live")" = true ] || fail "tapping a DATES entry did not open its record: $live"
 [ "$(f 8 <<<"$live")" = true ] || fail "BACK from a record opened in DATES did not return to the day: $live"
+[ "$(f 9 <<<"$live")" = true ] || fail "the day view's week did not hold the open day: $live"
+case "$(f 10 <<<"$live")" in ''|nil|false) fail "tapping another day in the week did not open that day: $live";; esac
 
 # --- placement across screen sizes ----------------------------------------
 for res in "1920 1080" "3200 1894" "2560 1440" "1280 720"; do

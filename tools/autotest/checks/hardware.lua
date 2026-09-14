@@ -243,6 +243,31 @@ function CFHW.dragOutside()
     return tostring(before), tostring(grown), tostring(released), tostring(saved)
 end
 
+-- The launcher's clock (P4-R100): shown only while the survivor carries
+-- something that tells the time, the vanilla clock's own rule. Every watch and
+-- clock is taken away first, then one watch is given, then all is put back.
+function CFHW.clock()
+    local w = S.window; if not w then return false, "no window" end
+    local inv = getPlayer():getInventory()
+    local held = {}
+    local items = inv:getItems()
+    for i = items:size() - 1, 0, -1 do
+        local item = items:get(i)
+        if instanceof(item, "AlarmClockClothing") or instanceof(item, "AlarmClock") then
+            held[#held + 1] = item:getFullType(); inv:Remove(item)
+        end
+    end
+    w.clockAt = nil
+    local without = w:clockText()
+    local watch = inv:AddItem("Base.WristWatch_Left_DigitalBlack")
+    w.clockAt = nil
+    local with = w:clockText()
+    if watch then inv:Remove(watch) end
+    for _, fullType in ipairs(held) do inv:AddItem(fullType) end
+    w.clockAt = nil
+    return true, tostring(without), tostring(with), tostring(watch ~= nil)
+end
+
 -- What fit() picks for a given screen height, without needing that screen.
 -- It ASKS fit() now. It used to recompute the formula here, so when the
 -- rounding changed - flooring 1.53 to 1x had been opening the device at its

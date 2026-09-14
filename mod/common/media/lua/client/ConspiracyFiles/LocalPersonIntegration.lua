@@ -346,7 +346,12 @@ local function observe(entry)
         local id=root.case.caseId
         local record=current.records[id]
         local building,buildingId,keyId=buildingFor(root)
-        if not record and building and type(keyId)=="number" and keyId>=0 then
+        -- Only the case's own person binds the case (P4-R101). The first named
+        -- card on ANY body used to take it: in play a stranger, Abbie Tidwell,
+        -- became the case's person beside Roy Hale and was given the house key.
+        local person=root.case.identities and root.case.identities[1]
+        local theirs=not person or person.name==name
+        if not record and theirs and building and type(keyId)=="number" and keyId>=0 then
             local occupation=entry.body and occupationOf(entry.body) or nil
             local staged=Runtime.bindVisible(current,{caseId=id,buildingId=buildingId,sourceToken=entry.token,
                 name=name,occupation=occupation,keyToken="person-key:"..id,keyId=keyId})

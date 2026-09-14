@@ -38,7 +38,7 @@ z=0; count=0; tick(); tick(); assert(#says==0,'absent clue')
 count=2; tick(); tick(); assert(#says==0,'duplicate clue')
 count=1; tick(); tick(); assert(#says==1,'one-tile diagonal clue')
 for i=1,130 do tick() end; assert(#says==1,'no stationary chatter')
-x=20; tick(); x=0; tick(); tick(); assert(#says==2 and says[1]~=says[2],'re-entry varies phrase')
+x=20; tick(); x=0; tick(); tick(); assert(#says==2 and haloNotes[1].text~=haloNotes[2].text,'re-entry varies phrase')
 x=20; tick(); x=0; tick(); tick(); assert(#says==2,'global cooldown')
 x=20; clock=clock+61000; tick(); root.known={'d'}; x=0; tick(); tick(); assert(#says==2,'known clue silent')
 root.known={}; tick(); x=20; tick(); assert(#says==2,'moved away during count')
@@ -60,7 +60,7 @@ assert(#haloNotes==#says,'each spoken hint gets exactly one halo note')
 -- head. This assertion used to demand the opposite - it pinned the echo - so
 -- it is inverted deliberately, not relaxed.
 assert(haloNotes[#haloNotes].text~=says[#says],'the halo must not repeat the spoken phrase')
-assert(haloNotes[#haloNotes].text=='Something nearby','the halo states the fact, briefly')
+assert(says[#says]=='Something nearby','the bubble states the fact, briefly (swapped round, owner, 2026-09-14)')
 assert(type(haloNotes[#haloNotes].duration)=='number' and haloNotes[#haloNotes].duration>=300,
  'the halo note must carry an explicit, generous duration: a hint that vanishes before it is read is no hint')
 assert(#halos==0,'setHaloNote is preferred; HaloTextHelper is only the fallback')

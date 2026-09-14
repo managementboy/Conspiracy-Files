@@ -158,7 +158,7 @@ for i=1,40 do
     local item=makeItem(true,false)
     ISTransferAction.transferItem(nil,player,item,{},{})
     assert(#says==1,"exactly one line once the cooldown has cleared")
-    local line=says[1]
+    local line=haloNotes[#haloNotes].text
     seenD[line]=true
     assert(line~=previous,"must never repeat the previous line twice running")
     previous=line
@@ -183,7 +183,7 @@ ISTransferAction.transferItem(nil,player,halo,{},{})
 -- it is inverted deliberately, not relaxed.
 assert(#haloNotes==1,"one halo note per line")
 assert(haloNotes[1].text~=says[1],"the halo must not repeat the spoken line")
-assert(haloNotes[1].text=="Unread","unread evidence in hand is stated, not wondered about")
+assert(says[1]=="Unread","unread evidence in hand is stated in the bubble, not wondered about")
 assert(type(haloNotes[1].duration)=="number" and haloNotes[1].duration>=300,
     "the halo note must carry an explicit, generous duration")
 assert(#uiSounds==1,"exactly one UI-channel sound per spoken line")

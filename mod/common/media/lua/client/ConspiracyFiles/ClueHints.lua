@@ -47,11 +47,10 @@ local function enabled()
     return getDebug and getDebug() and not (isClient and isClient()) and not (isServer and isServer())
         and not ConspiracyFiles.T11Mode and not ConspiracyFiles.T12Mode
 end
--- The bubble wonders; the halo states. Handing both the same sentence is what
+-- The halo wonders; the bubble states (swapped round, 2026-09-14). Handing both the same sentence is what
 -- made a hint appear twice above the player, once in colour and once in white.
 local HINT_HALO="Something nearby"
 local function announce(p,text)
-    p:Say(text)
     -- Prefer setHaloNote: it is the only one of the two that accepts a
     -- duration. Fall back to HaloTextHelper so a missing method still shows
     -- something rather than silently dropping the visual channel.
@@ -59,11 +58,14 @@ local function announce(p,text)
     -- Colon syntax, as vanilla uses it: an extracted method is not the same
     -- call in Kahlua, and pcall hides the difference.
     if p.setHaloNote then
-        halo=pcall(function() p:setHaloNote(HINT_HALO,255,255,255,HINT_HALO_DURATION) end)
+        halo=pcall(function() p:setHaloNote(text,255,255,255,HINT_HALO_DURATION) end)
     end
     if not halo and HaloTextHelper and HaloTextHelper.addText then
-        halo=pcall(function() HaloTextHelper.addText(p,HINT_HALO) end)
+        halo=pcall(function() HaloTextHelper.addText(p,text) end)
     end
+    -- The phrase in white, the fact in the coloured bubble (owner, Windows,
+    -- 2026-09-14); with no halo at all the phrase still shows, in the bubble.
+    p:Say(halo and HINT_HALO or text)
     local audible=false
     if getSoundManager then
         local ok,manager=pcall(getSoundManager)

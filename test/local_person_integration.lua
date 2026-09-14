@@ -74,7 +74,19 @@ ConspiracyFiles.DiscoveryLog={highestSeq=function() return seq end}
 local function tick() for _=1,30 do P.tick() end end
 local function discover() known=true; seq=seq+1; tick() end
 local function card()
-    local value=item('Base.IDcard',1,'ID Card: Dana Vale');value.container=container;return value
+    local value=item('Base.IDcard',1,'ID Card: '..session.personName);value.container=container;return value
+end
+-- Only the case's own person binds the case (owner, Windows, 2026-09-14). The
+-- first named card on ANY body used to take it, so a stranger's corpse became
+-- the case's person beside the one the case itself had named, and was given
+-- the house key.
+assert(type(session.personName)=="string","the fixture case must name its person")
+do
+    local stranger=item('Base.IDcard',2,'ID Card: Somebody Else');stranger.container=container
+    items={stranger}
+    P.see(stranger,container);tick()
+    assert(adds==0 and db['ConspiracyFiles.LocalPeople']==nil,"a stranger's card must not bind the case to their body")
+    reset();P.reset()
 end
 local id=card();items={id}
 assert(adds==0 and #J.rows()==0)
@@ -89,7 +101,7 @@ local door={class='IsoDoor',getSquare=function() return square end,getObjectInde
 P.observeDoor({character=player,item=door})
 assert(#J.rows()==0,'unknown clue stays unknown')
 discover()
-assert(#J.rows()==1 and J.rows()[1].detailText:find('Dana Vale',1,true))
+assert(#J.rows()==1 and J.rows()[1].detailText:find(session.personName,1,true))
 local rowId=J.rows()[1].id
 P.reset();P.see(id,container);tick();P.observeDoor({character=player,item=door})
 assert(adds==1 and #J.rows()==1 and J.rows()[1].id==rowId,'replay cannot respawn or duplicate')
@@ -106,7 +118,9 @@ P.reset();P.see(id,container);tick()
 assert(adds==0 and record~=db['ConspiracyFiles.LocalPeople'].canonical.records[session.caseId])
 assert(db['ConspiracyFiles.LocalPeople'].canonical.records[session.caseId].status=='unknown')
 P.see(id,container);tick();assert(adds==0)
--- A visible closed wallet does not expose its identity documents.
+-- A visible closed wallet does not expose its identity documents. Every card
+-- below carries the case's own person's name (P4-R101), so what each step
+-- proves is the wallet or body gate, not the name rule.
 reset();P.reset()
 local wallet=item('Base.Wallet',44,'Wallet');wallet.container=container
 wallet.getInventory=function() error('must not inspect hidden wallet contents') end
@@ -116,7 +130,7 @@ assert(db['ConspiracyFiles.LocalPeople']==nil and adds==0)
 -- bind the name, but placement waits for the original corpse to be observed.
 wallet.container={}
 local walletInventory={getContainingItem=function() return wallet end}
-local walletCard=item('Base.IDcard',45,'ID Card: Wallet Owner');walletCard.container=walletInventory
+local walletCard=item('Base.IDcard',45,'ID Card: '..session.personName);walletCard.container=walletInventory
 P.see(walletCard,walletInventory);tick()
 assert(db['ConspiracyFiles.LocalPeople'].canonical.records[session.caseId].status=='pending' and adds==0)
 P.reset()
@@ -124,7 +138,7 @@ local shirt=item('Base.Shirt',46,'Shirt');shirt.container=container;items={shirt
 P.see(shirt,container);tick()
 assert(adds==1 and db['ConspiracyFiles.LocalPeople'].canonical.records[session.caseId].status=='placed')
 reset();P.reset()
-local loose=item('Base.IDcard',55,'ID Card: Other')
+local loose=item('Base.IDcard',55,'ID Card: '..session.personName)
 local floor={};loose.container=floor;P.see(loose,floor);tick()
 assert(db['ConspiracyFiles.LocalPeople']==nil and adds==0)
 -- The transfer hook establishes corpse provenance before the wallet can be
@@ -136,7 +150,7 @@ transferred.getInventory=function() return transferredInventory end
 transferred.container=playerInv
 P.observeTransfer({character=player},transferred,container,playerInv)
 assert(transferred:getModData().cfObservedSource=='corpse-wallet:77')
-local transferredID=item('Base.IDcard',78,'ID Card: Transfer Owner')
+local transferredID=item('Base.IDcard',78,'ID Card: '..session.personName)
 transferredID.container=transferredInventory
 P.see(transferredID,transferredInventory);tick()
 assert(db['ConspiracyFiles.LocalPeople'].canonical.records[session.caseId].status=='pending' and adds==0)

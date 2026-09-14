@@ -634,3 +634,38 @@ Small and Medium** (four text sizes), and that the **machine size controls how
 much fits** while the text keeps the size the player picked — which is what
 makes a 0.5x machine possible with every text size. This **amends P4-R89**:
 both controls stay, but machine size no longer magnifies the text.
+
+**P4-R100 — DATES opens a day as the Date Book did, and the launcher has a
+clock for a survivor with a watch.** The owner sent photos of the real Palm
+home screen and Date Book day view and approved both. A day now shows the date
+and its week across the top (tap a day to open it) and a line per hour, eight to
+six widened to take in earlier or later finds, each find on its hour's line and
+opening its record. The clock returns to the launcher, which reopens P4-R85 only
+as far as P4-R85 allows: **it shows only while the survivor carries a watch or
+an alarm clock**, the vanilla clock's own rule, so the organiser still never
+buys back what the game charges a watch for. Say so if the clock should show
+without one.
+
+**P4-R101 — a case has one person, and her body carries one card.** Found in
+play: the first case named its person Roy Hale and gave a nearby zombie that
+name and an ID card, but a second system bound the case to the first named
+card seen on any corpse (Abbie Tidwell) and gave that body the house key; and
+the game, which empties a zombie's pockets as it dies and rolls a body's loot
+from its name when first opened, put "Roy Hale" on two of its own ID cards.
+Owner approved the fix. **Only a card carrying the case's own person's name
+binds the case to a body.** When that person's body appears it is **marked
+searched** and holds **exactly one card with her name** — the clothes she wore
+and nothing the game rolls. Still open: the name is given to whichever zombie
+is nearest, so a body can wear clothes that do not match it.
+
+**P4-R102 — the survivor's words in white, the tag in the coloured bubble.**
+Owner in play: "switch arround the speach text. colored and white. it makes more
+sence." The white halo now carries the survivor's line and holds the longer
+display; the coloured speech bubble carries the short fact (`Noted`,
+`Two records disagree`, `Something nearby`). Clue hints follow the same split. A
+player object with no halo gets the words in the bubble, so a line is never
+lost. Lines that fire together are shown one after another.
+
+Found alongside it, not decided: a named case zombie does not survive a save and
+reload. CN-01 (`case_person.sh`) fails at that step on the code before P4-R101
+and after it alike, so it is older than that fix and still open.
