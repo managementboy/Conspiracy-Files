@@ -172,6 +172,36 @@ not read a pass.
   it.
 - Every bug gets a regression test in whichever tier can actually catch it.
   If only a running game can catch it, that is where it goes.
+- **A new check is not done until it has been seen to fail.** Add an entry to
+  `MUTATIONS` in `tools/autotest/prove.py` - the line of mod code that makes it
+  right, the bug put back, and the FAIL text the check must print - and run
+  `tools/autotest/prove.py --only <name>`. See below.
+- Drive the real thing, not a stand-in. A stage that hands the screen a fake row
+  or a fake record proves the function it called, not the feature; the SETUP and
+  DATES stages were first written that way and rewritten (2026-09-14).
+
+## Proving a check can fail
+
+A passing check says the code is right today. It does not say the check would
+notice if the code were wrong. On 2026-09-14 the owner asked for the weaker
+checks to be brought up to "good", and this is the bar:
+
+    tools/autotest/prove.py --list            what is covered
+    tools/autotest/prove.py                   all of it (several minutes each)
+    tools/autotest/prove.py --only clock-needs-watch
+
+For each entry it puts ONE deliberate bug back into the spare worktree
+(`~/cf-wp345`), runs the check named for it there, requires a FAIL carrying the
+expected text, and restores the file. A result is **CAUGHT**, **MISSED** (the
+check passed with the bug in: the check is decoration), or **FAILED, BUT NOT
+FOR THIS** (it failed on something else, so it proved nothing about this bug).
+It refuses a worktree with uncommitted changes, so a mutation can never be
+committed, and writes `<stamp>-prove.txt` beside the other evidence.
+
+A trap that made one check vacuous: a Lua stage that returns `nil` prints the
+word `nil`, and `[ -n "$x" ]` treats that as a result. CN-01 passed "card on the
+body in the notebook" that way with nothing recorded. Return an explicit
+`true`/`false` and compare against it.
 
 ## Reading the evidence
 
