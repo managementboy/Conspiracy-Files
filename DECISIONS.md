@@ -658,6 +658,24 @@ searched** and holds **exactly one card with her name** — the clothes she wore
 and nothing the game rolls. Still open: the name is given to whichever zombie
 is nearest, so a body can wear clothes that do not match it.
 
+**P4-R103 — the case person survives a reload.** The game never saves an
+ordinary zombie: on load it builds a new one from a position and an outfit id,
+with no name, no mark and empty pockets, so the named zombie vanished at every
+save (CN-01). A dead body is saved whole. So each case now keeps **one small
+record in the world save** (`ConspiracyFiles.CasePeople`): her name, where she
+was last seen (refreshed every few seconds while she is loaded, only once she
+has moved), the outfit id and sex of the zombie carrying her, and whether she
+is dead. After a load, a sweep of the loaded zombies finds none carrying her and
+**dresses the zombie nearest her last position as her again** — name, mark and
+exactly one card — preferring the same outfit id, then the same sex. A case
+never binds a second person, and once she is **dead no zombie is dressed as her
+again**; her body carries her. **Name and body now match:** every invented name
+has a sex, and she is given the nearest zombie of that sex, the nearest of any
+only when none is in reach (logged). A name met on a corpse takes any body.
+Accepted limit: the outfit is preferred, not guaranteed, so after a load she
+can look different — the game may not recreate a zombie in her clothes near
+that spot.
+
 **P4-R102 — the survivor's words in white, the tag in the coloured bubble.**
 Owner in play: "switch arround the speach text. colored and white. it makes more
 sence." The white halo now carries the survivor's line and holds the longer
