@@ -126,12 +126,25 @@ def main():
             print("mutation %s -> %s ..." % (name, check), flush=True)
             result = run("timeout 1500 tools/autotest/checks/%s.sh" % check, wt, timeout=1600)
             out = result.stdout + result.stderr
+            # Every run's whole output is kept: the first proof had one result
+            # it could not explain ("FAILED, BUT NOT FOR THIS ... no FAIL line")
+            # and nothing left to read (20260914, body-searched).
+            runs = os.path.join(REPO, "dev/eval/linux/runs")
+            os.makedirs(runs, exist_ok=True)
+            open(os.path.join(runs, "%s-prove-%s.txt" % (stamp, name)), "w").write(out)
             failed = result.returncode != 0
             matched = expect in out
-            verdict = "CAUGHT" if failed and matched else ("FAILED, BUT NOT FOR THIS" if failed else "MISSED")
+            # Exit 2 is "could not run" in every check: a world that never
+            # started proves nothing about the bug, so it is not a catch.
+            if result.returncode == 2:
+                verdict = "COULD NOT RUN"
+            else:
+                verdict = "CAUGHT" if failed and matched else ("FAILED, BUT NOT FOR THIS" if failed else "MISSED")
             if verdict == "CAUGHT":
                 caught += 1
-            why = [l.strip() for l in out.splitlines() if "FAIL:" in l][:3]
+            why = [l.strip() for l in out.splitlines() if "FAIL:" in l or "abort" in l.lower()][:3]
+            if not why:
+                why = [l.strip() for l in out.splitlines() if l.strip()][-2:]
             lines.append("%s %s (%s): %s" % (verdict, name, check, " | ".join(why) or "no FAIL line"))
             print(lines[-1], flush=True)
         finally:
