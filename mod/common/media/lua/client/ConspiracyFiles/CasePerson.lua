@@ -275,7 +275,7 @@ function P.bind(name,caseId,x,y,z)
     local ok,why=save(store,changes)
     log("bound "..name.." to a body near "..tostring(x)..","..tostring(y)
         ..(card and " with an ID card" or " but could not give it a card")
-        ..(matched and "" or "; no zombie of her sex within reach, so the nearest")
+        ..(matched and "" or "; no zombie of the name's sex within reach, so the nearest")
         ..(ok and "" or "; NOT recorded, she will not survive a reload: "..tostring(why)))
     return zombie
 end
@@ -301,7 +301,7 @@ local function finish(store,live,changes)
                 sweep.wrote[caseId]=nil
                 changed=true
                 log("re-bound "..r.name.." ("..caseId..") after a load near "..zx..","..zy
-                    ..(best.rank==2 and "; same outfit" or (best.rank==1 and "; outfit differs" or "; no zombie of her sex nearby, so the nearest")))
+                    ..(best.rank==2 and "; same outfit" or (best.rank==1 and "; outfit differs" or "; no zombie of the name's sex nearby, so the nearest")))
             end
         end
     end

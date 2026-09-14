@@ -110,4 +110,67 @@ function B.lead(name)
     return false, "no notebook row for ID Card: " .. tostring(name)
 end
 
+-- The comparison body. The check above shows her body is marked searched with
+-- one card; it could not show that marking it is what keeps the game's own
+-- cards off it. This proves the mechanism on an ordinary body: it starts
+-- unsearched, and showing it in the loot panel is what rolls its loot (the
+-- game marks it searched as it does). Her body is spared exactly that roll.
+function B.spawnPlain()
+    local p = getPlayer()
+    pcall(function() p:setGodMod(true); p:setInvisible(true) end)
+    local list = addZombiesInOutfit(math.floor(p:getX()) + 2, math.floor(p:getY()), math.floor(p:getZ()), 1, nil, 50)
+    local z = list and list:size() > 0 and list:get(0)
+    if not z then return false, "no zombie spawned" end
+    pcall(function() z:setUseless(true) end)
+    B.plain = z
+    B.px, B.py, B.pz = math.floor(z:getX()), math.floor(z:getY()), math.floor(z:getZ())
+    z:Kill(nil)
+    return true
+end
+
+function B.plainBody()
+    local cell = getCell()
+    for dx = -3, 3 do
+        for dy = -3, 3 do
+            local square = cell:getGridSquare(B.px + dx, B.py + dy, B.pz)
+            for _, o in ipairs(square and bodiesOn(square) or {}) do
+                if not o:getModData()[P.MARK] then
+                    local c = o:getContainer()
+                    local before = c:isExplored()
+                    getPlayer():teleportTo(o:getX() + 1, o:getY(), o:getZ())
+                    local loot = getPlayerLoot(0)
+                    loot:refreshBackpacks()
+                    for _, b in ipairs(loot.backpacks) do
+                        if b.inventory == c then loot:selectContainer(b) end
+                    end
+                    B.plainContainer = c
+                    return true, tostring(before)
+                end
+            end
+        end
+    end
+    return false, "no ordinary body near " .. tostring(B.px) .. "," .. tostring(B.py)
+end
+
+function B.plainSearched()
+    return B.plainContainer ~= nil and B.plainContainer:isExplored() == true
+end
+
+-- Name and body: a woman's name goes to a woman and a man's to a man, judged by
+-- the game's own isFemale. One of each is spawned beside the player, so a match
+-- always exists and the picker has no excuse to fall back.
+function B.sexPick()
+    local p = getPlayer()
+    local x, y, z = math.floor(p:getX()), math.floor(p:getY()), math.floor(p:getZ())
+    local f = addZombiesInOutfit(x + 3, y + 1, z, 1, nil, 100)
+    local m = addZombiesInOutfit(x + 3, y - 1, z, 1, nil, 0)
+    for _, list in ipairs({ f, m }) do
+        if list and list:size() > 0 then pcall(function() list:get(0):setUseless(true) end) end
+    end
+    local woman, womanMatched = P.candidate(x, y, z, "f")
+    local man, manMatched = P.candidate(x, y, z, "m")
+    return true, tostring(woman ~= nil and woman:isFemale()), tostring(womanMatched),
+        tostring(man ~= nil and not man:isFemale()), tostring(manMatched)
+end
+
 return CFBody

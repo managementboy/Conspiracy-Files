@@ -228,7 +228,7 @@ assert(man.md.cfCasePerson == nil and #man.items == 0)
 list = { zombie(301, 300, 0, false, 5) }
 local text, joanne = logged(function() return P.bind("Joanne Voss", "case-fallback", 300, 300, 0) end)
 assert(joanne == list[1], "with no woman in reach the nearest body still takes the name")
-assert(text:find("no zombie of her sex", 1, true), "and the log says the sex could not be matched: " .. text)
+assert(text:find("no zombie of the name's sex", 1, true), "and the log says the sex could not be matched: " .. text)
 -- Every invented name has a sex; the table covers exactly the generator's list.
 local listed = 0
 for name in nameList:gmatch('"([^"]+)"') do

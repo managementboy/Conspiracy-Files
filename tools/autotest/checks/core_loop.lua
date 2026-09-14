@@ -215,6 +215,63 @@ end
 
 function L.inspected() return R.isInspected(L.item) == true end
 
+-- DATES with a real paper (owner, Windows, 2026-09-14: "an entry in the
+-- calendar should open the file if we click on it"). pdagame proves the tap
+-- with a stand-in record; this one uses a document the loop actually found and
+-- read, so it proves a real paper opens from the date book, and BACK returns.
+function L.datesTap()
+    local S = ConspiracyFiles.OrganiserScreen
+    local w = S.window or S.open()
+    if not w then return false, "the organiser would not open" end
+    local rows = R.known()
+    local doc = rows[#rows]
+    if not doc then return false, "nothing found yet" end
+    w.on = true; w.booting = false; w.launcher = false; w.record = nil; w.popup = nil
+    for i, p in ipairs(w:programs()) do if p.id == "DATES" then w.app = i end end
+    w.cachedList = nil
+    local program = w:program()
+    local _, _, at = w:category(program)
+    local today = getGameTime():getDay() + 1
+    local day = program.day(at or 1, today)
+    local target
+    for i, e in ipairs(day.entries or {}) do if e.ref == doc.id then target = i end end
+    if not target then return false, "today's page has no entry for " .. tostring(doc.title) end
+    w.record = day; w.day = today; w.card = 1
+    -- A busy day runs to a second page; page to the entry with the rocker.
+    local hit
+    for _ = 1, 6 do
+        w:prerender()
+        for _, h in ipairs((w.context or {}).hits or {}) do
+            if h.id == "ENTRY" and h.payload == target then hit = h end
+        end
+        if hit then break end
+        w:press("DOWN")
+    end
+    if not hit then return false, "the day view drew no entry for " .. tostring(doc.title) end
+    w:onMouseDown(hit.x + 2, hit.y + 2); w:onMouseUp(hit.x + 2, hit.y + 2)
+    local opened = w.record ~= nil and w.record.id == doc.id and w.record.title == doc.title
+    w:press("INDEX")
+    local back = w.record == day
+    pcall(S.close)
+    return true, tostring(opened), tostring(back), tostring(doc.title)
+end
+
+-- A finished case's papers can still be found (P4-R104, owner: "I lost my files
+-- somewhere?"): once the case has retired, every document it held says where
+-- it was last seen. Until now only unit tests had seen it.
+function L.lastSeen()
+    local have, total, sample = 0, 0, ""
+    for _, row in ipairs(R.known()) do
+        total = total + 1
+        local state, words = R.whereabouts(row.id)
+        if state == "lastseen" and type(words) == "string" and words ~= "" then
+            have = have + 1
+            if sample == "" then sample = words end
+        end
+    end
+    return tostring(have), tostring(total), sample
+end
+
 -- The relay memo's date note, in the real game (P4-R96): once the memo is
 -- found, every record dated inside 30 June - 8 July 1993 carries it. Until
 -- now only a unit test had seen it.

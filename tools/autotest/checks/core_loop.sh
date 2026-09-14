@@ -84,6 +84,24 @@ if [ "$(cut -f1 <<<"$notes")" = true ]; then
 fi
 completed=no; run_log | grep -q "Case complete" && completed=yes
 [ "$completed" = yes ] || fail "the case never reported completion"
+# A finished case's papers still say where they were last seen (P4-R104).
+seen="0"
+for _ in $(seq 1 20); do
+    seen="$(ev 'return CFLoop.lastSeen()')"
+    [ "$(cut -f1 <<<"$seen")" = "$(cut -f2 <<<"$seen")" ] && break
+    sleep 2
+done
+say "last seen: $(cut -f1 <<<"$seen") of $(cut -f2 <<<"$seen") documents, e.g. '$(cut -f3 <<<"$seen")'"
+findings+=("last seen after completion: $(cut -f1 <<<"$seen") of $(cut -f2 <<<"$seen") documents, e.g. '$(cut -f3 <<<"$seen")'")
+if [ "$completed" = yes ] && [ "$(cut -f1 <<<"$seen")" != "$(cut -f2 <<<"$seen")" ]; then
+    fail "after the case completed, only $(cut -f1 <<<"$seen") of $(cut -f2 <<<"$seen") documents say where they were last seen"
+fi
+# DATES opens a real paper the loop found (owner, 2026-09-14).
+dt="$(ev 'return CFLoop.datesTap()')"
+say "dates tap: $(tr '\t' ' ' <<<"$dt")"
+[ "$(cut -f1 <<<"$dt")" = true ] || fail "DATES could not show today's page for a real paper: $(cut -f2 <<<"$dt")"
+[ "$(cut -f2 <<<"$dt")" = true ] || fail "tapping a real paper's DATES entry did not open its record: $dt"
+[ "$(cut -f3 <<<"$dt")" = true ] || fail "BACK from a paper opened in DATES did not return to the day: $dt"
 before_pen="$(ev 'return CFLoop.markers()')"
 [ "$(cut -f2 <<<"$before_pen")" = "$n" ] || fail "without a pen, expected $n pending marks: $before_pen"
 

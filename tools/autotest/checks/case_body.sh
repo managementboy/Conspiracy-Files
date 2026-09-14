@@ -51,6 +51,24 @@ done
 say "lead: $(tr '\t' ' ' <<<"$lead")"
 [ "$(f 1 <<<"$lead")" = true ] || fail "her ID card on the body did not become a notebook lead: $lead"
 
+# The comparison: an ordinary body is unsearched until shown, and showing it
+# rolls its loot. That is the roll her body is marked searched against.
+plain="$(ev 'return CFBody.spawnPlain()')"
+[ "$(f 1 <<<"$plain")" = true ] || fail "could not make an ordinary body to compare: $plain"
+sleep 6
+pb="$(ev 'return CFBody.plainBody()')"
+plain_rolled=no; wait_true 10 'CFBody.plainSearched()' && plain_rolled=yes
+say "comparison body: found=$(f 1 <<<"$pb") searched before it was shown=$(f 2 <<<"$pb") searched once shown=$plain_rolled"
+[ "$(f 1 <<<"$pb")" = true ] || fail "no ordinary body to compare: $pb"
+[ "$(f 2 <<<"$pb")" = false ] || fail "an ordinary body was already searched before anyone opened it, so the comparison proves nothing: $pb"
+[ "$plain_rolled" = yes ] || fail "showing an ordinary body did not roll its loot, so marking hers searched is not what protects it"
+
+# Name and body (P4-R103): the game's own isFemale decides.
+sx="$(ev 'return CFBody.sexPick()')"
+say "sex matching: woman's name -> female=$(f 2 <<<"$sx") matched=$(f 3 <<<"$sx"); man's name -> male=$(f 4 <<<"$sx") matched=$(f 5 <<<"$sx")"
+[ "$(f 2 <<<"$sx")" = true ] && [ "$(f 3 <<<"$sx")" = true ] || fail "the case person picker chose a zombie that is not female for a woman's name: $sx"
+[ "$(f 4 <<<"$sx")" = true ] && [ "$(f 5 <<<"$sx")" = true ] || fail "the case person picker chose a zombie that is not male for a man's name: $sx"
+
 line="$(run_log | grep -oE "case person's body \([^)]*\): [^\"]*" | tail -1)"
 say "log: ${line:-nothing logged}"
 [ -n "$line" ] || fail "the body handler logged nothing"
@@ -68,6 +86,8 @@ report="$EVIDENCE/$id-case-body.txt"
     echo "body: $(tr '\t' ' ' <<<"$body")"
     echo "log: ${line:-none}"
     echo "notebook lead: $(tr '\t' ' ' <<<"$lead")"
+    echo "comparison body: $(tr '\t' ' ' <<<"$pb"), searched once shown: $plain_rolled"
+    echo "sex matching: $(tr '\t' ' ' <<<"$sx")"
     for x in "${fails[@]}"; do echo "FAIL: $x"; done
 } > "$report"
 cat "$report"

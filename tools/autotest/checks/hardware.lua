@@ -210,12 +210,36 @@ end
 -- crashed on the owner's first try (Windows, 2026-09-14). Every size check
 -- above had already set a size, which is why none of them saw it. The row is
 -- handed to openRow directly so the check does not depend on SETUP's layout.
+-- Open the real SETUP program and tap its real line for `kind` ("text" or
+-- "machine") through the stylus, as the player does. The first version of
+-- these stages handed openRow a fake row instead, which proved openRow and not
+-- SETUP - a layout change that lost the line would still have passed.
+local function tapSetupLine(w, kind)
+    w.on = true; w.booting = false; w.launcher = false; w.record = nil; w.popup = nil
+    for i, p in ipairs(w:programs()) do if p.id == "SETUP" then w.app = i end end
+    w.cachedList = nil
+    local rows = w:list()
+    local index
+    for i, row in ipairs(rows) do if row.setup == kind then index = i end end
+    if not index then return false, "SETUP has no " .. kind .. " line" end
+    w.entry = index
+    local drew, why = pcall(function() w:prerender() end)
+    if not drew then return false, "SETUP did not draw: " .. tostring(why) end
+    local hit
+    for _, h in ipairs((w.context or {}).hits or {}) do
+        if h.id == "ROW" and h.payload == index then hit = h end
+    end
+    if not hit then return false, "SETUP drew no tappable " .. kind .. " line" end
+    local tapped, err = pcall(function()
+        w:onMouseDown(hit.x + 2, hit.y + 2); w:onMouseUp(hit.x + 2, hit.y + 2)
+    end)
+    return tapped, tostring(err)
+end
+
 function CFHW.freshMachineTap()
     local w = S.window; if not w then return false, "no window" end
     S.zoom(1); S.scale = nil
-    w.list = function() return {{id = "setup-machine", setup = "machine"}} end
-    local ok, err = pcall(w.openRow, w, 1)
-    w.list = nil
+    local ok, err = tapSetupLine(w, "machine")
     -- SETUP > Machine opens a list now (owner, 2026-09-14), with the size the
     -- machine is actually drawn at marked.
     local popup = w.popup
@@ -227,10 +251,8 @@ end
 -- SETUP > Text: a Palm popup list; tapping a line chooses it and closes it.
 function CFHW.textList()
     local w = S.window; if not w then return false, "no window" end
-    w.on = true; w.booting = false; w.launcher = false; w.record = nil
-    w.list = function() return {{id = "setup-text", setup = "text"}} end
-    w:openRow(1)
-    w.list = nil
+    local opened, why = tapSetupLine(w, "text")
+    if not opened then return false, why end
     w:prerender()
     local hit
     for _, h in ipairs((w.context or {}).hits or {}) do
