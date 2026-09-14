@@ -46,6 +46,8 @@ Events={OnGameStart={Add=function() end}}
 
 ConspiracyFiles={}
 local Voice=dofile("mod/common/media/lua/client/ConspiracyFiles/PlayerVoice.lua")
+-- Pacing is test/voice_pacing.lua's job; this file pins when Set D fires.
+Voice.HOLD_MS=0
 ConspiracyFiles.PlayerVoice=Voice
 
 -- Fake GeneratedRuntime: a per-item registry standing in for real

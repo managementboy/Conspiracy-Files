@@ -35,7 +35,15 @@ function A.dateOf(atHours)
     if not clock or type(atHours)~="number" then return nil end
     local now=safe(function() return clock:getWorldAgeHours() end)
     if type(now)~="number" then return nil end
-    local daysAgo=math.floor((now-atHours)/24)
+    -- The ledger stores world-age hours - hours since the world began - which
+    -- is not the time of day: every find on the first morning read 02:00, and
+    -- a find late one evening could land on the next day (owner, Windows,
+    -- 2026-09-14). Count back from the clock's own time of day instead.
+    local tod=safe(function() return clock:getTimeOfDay() end)
+    if type(tod)~="number" then tod=now%24 end
+    local found=tod-(now-atHours)
+    local daysAgo=0
+    while found<0 do found=found+24; daysAgo=daysAgo+1 end
     local day=safe(function() return clock:getDay() end) or 0
     local month=safe(function() return clock:getMonth() end) or 0
     local year=safe(function() return clock:getYear() end) or 1993
@@ -54,7 +62,7 @@ function A.dateOf(atHours)
     return {day=day,month=month,year=year,
             label=day.." "..(MONTHS[month] or "?").." "..year,
             key=year*10000+month*100+day,
-            hour=math.floor(atHours%24)}
+            hour=math.floor(found)}
 end
 
 -- FILES ----------------------------------------------------------------------
@@ -252,7 +260,7 @@ function A.diary()
                 bucket={day=when.day,month=when.month,year=when.year,label=when.label,items={}}
                 byKey[when.key]=bucket
             end
-            bucket.items[#bucket.items+1]={hour=when.hour,
+            bucket.items[#bucket.items+1]={hour=when.hour,ref=event.ref,
                 text=string.format("%02d:00  %s",when.hour,tostring(titles[event.ref] or event.kind))}
             if not newest or when.key>newest then newest=when.key end
         end
@@ -318,9 +326,15 @@ A.dates={
         if not bucket or #bucket.items==0 then
             return {label=label,title=label,detail="Nothing found on this day.",id="day-empty"}
         end
-        local lines={}
-        for _,item in ipairs(bucket.items) do lines[#lines+1]=item.text end
-        return {label=label,title=label,detail=table.concat(lines,"\n"),id="day-"..dayNumber}
+        -- Each line is also an entry the screen can open: a date book's entry
+        -- opened the record it named (owner, Windows, 2026-09-14: "an entry in
+        -- the calendar should open the file if we click on it").
+        local lines,entries={},{}
+        for _,item in ipairs(bucket.items) do
+            lines[#lines+1]=item.text
+            entries[#entries+1]={text=item.text,ref=item.ref}
+        end
+        return {label=label,title=label,detail=table.concat(lines,"\n"),entries=entries,id="day-"..dayNumber}
     end,
     -- Still a list underneath, for anything that asks for one.
     list=function()

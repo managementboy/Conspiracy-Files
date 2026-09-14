@@ -111,6 +111,13 @@ function D.record(kind,reference)
         -- silence rather than blocking the ledger write above.
         local voice=ConspiracyFiles.PlayerVoice
         if voice and voice.onDiscovery then pcall(voice.onDiscovery,kind,reference) end
+        -- Whatever the organiser is showing is now out of date. Its list was
+        -- cached until the player left the program, so a picked-up ID or a
+        -- read document only appeared after going out and back in (owner,
+        -- Windows, 2026-09-14). Every discovery passes through here, and each
+        -- store is written before this runs, so the next draw sees it.
+        local screen=ConspiracyFiles.OrganiserScreen
+        if screen and screen.window then screen.window.cachedList=nil end
         -- Finding something here counts as being here, judged against the
         -- number this very discovery just produced.
         if event.place then pcall(D.visit,event.place) end

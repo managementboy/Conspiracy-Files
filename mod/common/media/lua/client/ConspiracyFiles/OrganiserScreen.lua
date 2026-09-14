@@ -577,14 +577,27 @@ function Screen:draw(gx,gy)
         K.fill(c,0,y,c.w,1,K.DIM); y=y+2
         local room=math.floor((c.h-line-2-y+line)/line)-2
         if room<2 then room=2 end
-        local body=pages(self.record.detail,c.w-4-8)
-        local top=(self.card-1)*room+1
-        for i=0,room-1 do
-            local text=body[top+i]
-            if not text then break end
-            K.text(c,text,2,y+i*line,K.INK)
+        if self.record.entries then
+            -- A day in DATES lists what was found on it, and each line opens
+            -- the record it names (owner, Windows, 2026-09-14).
+            local entries=self.record.entries
+            local top=(self.card-1)*room+1
+            for i=0,room-1 do
+                local entry=entries[top+i]
+                if not entry then break end
+                K.row(c,entry.text,y+i*line,false,"ENTRY",top+i)
+            end
+            K.arrows(c,y,room*line,top>1,top+room-1<#entries)
+        else
+            local body=pages(self.record.detail,c.w-4-8)
+            local top=(self.card-1)*room+1
+            for i=0,room-1 do
+                local text=body[top+i]
+                if not text then break end
+                K.text(c,text,2,y+i*line,K.INK)
+            end
+            K.arrows(c,y,room*line,top>1,top+room-1<#body)
         end
-        K.arrows(c,y,room*line,top>1,top+room-1<#body)
         local foot=K.foot(c,self:footText(""))
         local x=K.command(c,"BACK",2,foot,"BACK")
         if self.record.todo then K.command(c,"TICK",x,foot,"TICK")
@@ -695,7 +708,8 @@ function Screen:press(id)
     elseif action=="BACK" then
         -- One step, and only one: out of a record to its list, out of a list
         -- to the programs. The launcher is the top, so Back stops there.
-        if self.record then self.record=nil; self.card=1
+        if self.record and self.record.backTo then self.record=self.record.backTo; self.card=1
+        elseif self.record then self.record=nil; self.card=1
         elseif not self.launcher then self.launcher=true end
     elseif action=="UP" then
         if self.record then self.card=math.max(1,self.card-1)
@@ -733,6 +747,18 @@ function Screen:tap(x,y)
             self.record=safe(program.day,at or 1,widget.payload)
             self.card=1
         end
+    elseif id=="ENTRY" then
+        -- Open the FILES record the day's line names; BACK returns to the day.
+        local day=self.record
+        local entry=day and day.entries and day.entries[widget.payload]
+        if entry and entry.ref then
+            for _,row in ipairs(safe(Apps.files.list) or {}) do
+                if row.id==entry.ref then
+                    row.backTo=day; self.record=row; self.card=1
+                    break
+                end
+            end
+        end
     elseif id=="CATEGORY" then self:cycleCategory()
     elseif id=="SELECT" then self.launcher=true; self.record=nil
     elseif id=="ROW" then
@@ -743,7 +769,9 @@ function Screen:tap(x,y)
         end
     elseif id=="NOTE_DONE" then self:finishNote(true)
     elseif id=="NOTE_CANCEL" then self:finishNote(false)
-    elseif id=="BACK" then self.record=nil; self.card=1; self.day=nil
+    elseif id=="BACK" then
+        if self.record and self.record.backTo then self.record=self.record.backTo; self.card=1
+        else self.record=nil; self.card=1; self.day=nil end
     elseif id=="TICK" then
         if self.record and self.record.index then
             local rows=self:list(); local row=rows[self.record.index]

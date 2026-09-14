@@ -51,6 +51,9 @@ getSoundManager=function() return manager end
 -- attracting zombies.
 ConspiracyFiles={}
 local Voice=dofile("mod/common/media/lua/client/ConspiracyFiles/PlayerVoice.lua")
+-- Lines are paced one after another in play; test/voice_pacing.lua pins that.
+-- This file pins wording, rotation and gating, so it hears every line at once.
+Voice.HOLD_MS=0
 
 -- ---------------------------------------------------------------------
 -- Set A: every line reachable, never repeated back to back.

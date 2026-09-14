@@ -155,10 +155,7 @@ local function log(message) CFLog.message("voice","voice",message) end
 -- they did, because Say and setHaloNote were both handed the same sentence.
 -- The bubble is the survivor thinking; the halo is the fact, in as few words
 -- as will fit above a head.
-local function speak(player,text,label)
-    if not player then log("no player; line not delivered") return false,false end
-    assert(type(label)=="string" and label~="" and label~=text,
-        "the halo must say something other than the spoken line, or it echoes it")
+local function deliver(player,text,label)
     -- Call engine methods with colon syntax, the way vanilla does.
     -- pcall(obj.method, obj, ...) extracts the method first; Kahlua treats that
     -- differently from a real method call, and pcall then hides any complaint, so
@@ -177,11 +174,54 @@ local function speak(player,text,label)
     return halo,audible
 end
 
+-- Lines that fire together are SHOWN one after another. Inspecting a single
+-- document can announce the discovery, a disagreement and a pile in the same
+-- instant, and each Say replaced the bubble before it, so two of the three
+-- vanished before they could be read (owner, Windows, 2026-09-14: "disappears
+-- super fast. I cant read that fast"). Each line now holds the space long
+-- enough to read it, and the next one waits. Bounded, so a burst never becomes
+-- minutes of chatter.
+-- V.HOLD_MS overrides the hold; the content tests set 0 to deliver at once.
+local QUEUE_MAX=4
+local queue={}
+local lastSpokenAt,lastHold=-1/0,0
+local function holdFor(text) return math.max(3000,1500+60*#tostring(text)) end
+local function speak(player,text,label)
+    if not player then log("no player; line not delivered") return false,false end
+    assert(type(label)=="string" and label~="" and label~=text,
+        "the halo must say something other than the spoken line, or it echoes it")
+    local t=now()
+    if #queue==0 and t-lastSpokenAt>=(V.HOLD_MS or lastHold) then
+        lastSpokenAt,lastHold=t,holdFor(text)
+        return deliver(player,text,label)
+    end
+    if #queue>=QUEUE_MAX then
+        log("line dropped, "..QUEUE_MAX.." already waiting: \""..tostring(text).."\"")
+        return false,false
+    end
+    queue[#queue+1]={text=text,label=label}
+    log("queued \""..tostring(text).."\" behind "..(#queue-1).." waiting line(s)")
+    return false,false
+end
+
 local function player()
     if not getPlayer then return nil end
     local ok,p=pcall(getPlayer)
     return ok and p or nil
 end
+
+-- Every tick: the next waiting line, once the one showing has had its time.
+-- A line waiting while there is no player stays queued rather than lost.
+function V.drain()
+    if #queue==0 then return end
+    local t=now()
+    if t-lastSpokenAt<(V.HOLD_MS or lastHold) then return end
+    local p=player(); if not p then return end
+    local nextLine=table.remove(queue,1)
+    lastSpokenAt,lastHold=t,holdFor(nextLine.text)
+    deliver(p,nextLine.text,nextLine.label)
+end
+if Events and Events.OnTick and Events.OnTick.Add then Events.OnTick.Add(V.drain) end
 
 -- Set A: fire whenever a new discovery reaches the shared ledger, whatever
 -- its kind. Callers (DiscoveryLog.record) must only invoke this on a
@@ -310,6 +350,7 @@ function V.reset()
     indexA,indexB,indexC,indexD,lastSetAAt=0,0,0,0,-1/0
     indexE,indexF,indexG,indexH,indexI=0,0,0,0,0
     said={}
+    queue={}; lastSpokenAt,lastHold=-1/0,0
 end
 
 return V

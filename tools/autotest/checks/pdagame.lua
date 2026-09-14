@@ -321,4 +321,53 @@ function CFGAME.placement(w0, h0)
         tostring(x >= 0), tostring(m.h <= tonumber(h0))
 end
 
+-- ------------------------------------------------------------ live records
+-- Owner, Windows, 2026-09-14, three reports in one sitting: a new find only
+-- appeared after leaving the program and coming back; every DATES entry read
+-- 02:00; and a DATES entry could not be opened. A discovery is recorded the way
+-- the mod records one, with a program open, and the screen is read back. The
+-- FILES list is stood in for so the tap has a record to open.
+function CFGAME.liveRecords()
+    local w = S.window; if not w then return false, "no screen" end
+    local D = ConspiracyFiles.DiscoveryLog
+    local A = ConspiracyFiles.KnoxApps
+    w.on = true; w.booting = false; w.launcher = false; w.record = nil; w.day = nil
+    for i, p in ipairs(w:programs()) do if p.id == "DATES" then w.app = i end end
+    w.entry, w.card, w.cachedList = 1, 1, nil
+    w:prerender(); w:list()
+    local cachedBefore = w.cachedList ~= nil
+    local ref = "cfgame:live-" .. tostring(getTimeInMillis())
+    local recorded = D.record("evidence", ref)
+    local refreshed = cachedBefore and w.cachedList == nil
+    local clock = getGameTime()
+    local hourNow = math.floor(clock:getTimeOfDay())
+    local program = w:program()
+    local _, _, at = w:category(program)
+    local today = clock:getDay() + 1
+    local day = program.day(at or 1, today)
+    local entry
+    for _, e in ipairs(day.entries or {}) do if e.ref == ref then entry = e end end
+    local shown = entry and entry.text or "none"
+    local hourOk = entry ~= nil and shown:sub(1, 5) == string.format("%02d:00", hourNow)
+    local files = A.files.list
+    A.files.list = function() return {{id = ref, title = "Live record", detail = "check", fields = {}}} end
+    w.record = day; w.day = today; w.card = 1
+    w:prerender()
+    local hit
+    for _, h in ipairs((w.context or {}).hits or {}) do
+        if h.id == "ENTRY" and day.entries[h.payload] == entry then hit = h end
+    end
+    local opened, back = false, false
+    if hit then
+        w:onMouseDown(hit.x + 2, hit.y + 2); w:onMouseUp(hit.x + 2, hit.y + 2)
+        opened = w.record ~= nil and w.record.id == ref
+        w:press("INDEX"); w:prerender()
+        back = w.record == day
+    end
+    A.files.list = files
+    w.record = nil; w.day = nil; w.cachedList = nil
+    return tostring(recorded), tostring(cachedBefore), tostring(refreshed), shown,
+        tostring(hourOk), tostring(hit ~= nil), tostring(opened), tostring(back)
+end
+
 return CFGAME

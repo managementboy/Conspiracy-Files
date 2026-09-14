@@ -20,6 +20,8 @@ getPlayer = function() return p end
 getTimeInMillis = function() return 0 end
 ConspiracyFiles = ConspiracyFiles or {}
 local Voice = dofile('mod/common/media/lua/client/ConspiracyFiles/PlayerVoice.lua')
+-- Pacing is test/voice_pacing.lua's job; this file pins which moments speak.
+Voice.HOLD_MS = 0
 
 local function fresh() says, halos = {}, {}; Voice.reset() end
 

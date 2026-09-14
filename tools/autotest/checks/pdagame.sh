@@ -71,6 +71,17 @@ tour="$(ev 'return CFGAME.tour()')"
 ctl="$(ev 'return CFGAME.controls()')"
 [ "$(f 1 <<<"$ctl")" = true ] && say "controls: $(f 2 <<<"$ctl")" || fail "controls: $(f 2 <<<"$ctl")"
 
+# Live in the program: a new find shows without leaving it, DATES gives the
+# clock's hour, and an entry opens its record (owner, Windows, 2026-09-14).
+live="$(ev 'return CFGAME.liveRecords()')"
+say "live records: recorded=$(f 1 <<<"$live") refreshed=$(f 3 <<<"$live") entry='$(f 4 <<<"$live")' tapped=$(f 6 <<<"$live") opened=$(f 7 <<<"$live") back=$(f 8 <<<"$live")"
+[ "$(f 1 <<<"$live")" = true ] || fail "the check could not record a discovery: $live"
+[ "$(f 3 <<<"$live")" = true ] || fail "a new discovery did not refresh the open program's list: $live"
+[ "$(f 5 <<<"$live")" = true ] || fail "DATES did not show the clock's hour for a discovery made now: $live"
+[ "$(f 6 <<<"$live")" = true ] || fail "the day view drew no tappable entry for the discovery: $live"
+[ "$(f 7 <<<"$live")" = true ] || fail "tapping a DATES entry did not open its record: $live"
+[ "$(f 8 <<<"$live")" = true ] || fail "BACK from a record opened in DATES did not return to the day: $live"
+
 # --- placement across screen sizes ----------------------------------------
 for res in "1920 1080" "3200 1894" "2560 1440" "1280 720"; do
     set -- $res

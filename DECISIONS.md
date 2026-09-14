@@ -619,3 +619,18 @@ reviews it in play. Removed from ADR-0002, `AI_PROVENANCE.md`,
 elsewhere are history and stay as written. The `contentStatus` labels inside
 saved cases are left alone: they are part of each case's byte-for-byte
 rebuild, so changing them would set aside every case in play for a label.
+
+## Live Windows test — 2026-09-14
+
+**P4-R98 — no free window resize.** Dragging the corner zooms the organiser in
+whole steps. The owner had pictured pulling the window freely, into a wide
+shape; seeing it, the owner called that a bad idea. Dropped.
+
+**P4-R99 — machine size decides how much fits; text has four sizes.** Owner
+feedback in play: 1x is already big on a 4K screen, a 0.5x size is needed for
+smaller screens, and the jump from Small to Medium text is too big. Offered a
+picture of the options, the owner chose to **keep Small and add a size between
+Small and Medium** (four text sizes), and that the **machine size controls how
+much fits** while the text keeps the size the player picked — which is what
+makes a 0.5x machine possible with every text size. This **amends P4-R89**:
+both controls stay, but machine size no longer magnifies the text.
