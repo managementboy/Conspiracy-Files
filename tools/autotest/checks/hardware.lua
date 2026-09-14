@@ -206,6 +206,43 @@ function CFHW.step(by)
     return true, tostring(S.scale), tostring(S.MAX)
 end
 
+-- A new game has never saved a size, so S.scale is nil (P4-R94 opens at the
+-- default without writing one). Tapping SETUP > Machine compared that nil and
+-- crashed on the owner's first try (Windows, 2026-09-14). Every size check
+-- above had already set a size, which is why none of them saw it. The row is
+-- handed to openRow directly so the check does not depend on SETUP's layout.
+function CFHW.freshMachineTap()
+    local w = S.window; if not w then return false, "no window" end
+    S.zoom(1); S.scale = nil
+    w.list = function() return {{id = "setup-machine", setup = "machine"}} end
+    local ok, err = pcall(w.openRow, w, 1)
+    w.list = nil
+    local after = S.scale
+    S.zoom(1)
+    return ok, tostring(err), tostring(after)
+end
+
+-- Growing the machine drags its corner AWAY from it, so the pointer is outside
+-- the window from the first pixel and the game sends the moves to
+-- onMouseMoveOutside. Only moves inside were handled, so the drag could shrink
+-- the machine and never grow it (owner, Windows, 2026-09-14).
+function CFHW.dragOutside()
+    local w = S.window; if not w then return false, "no window" end
+    local FG = require("Fieldnote/Geometry")
+    S.zoom(1)
+    local g = w:grip()
+    w:onMouseDown(g.x + 1, g.y + 1)
+    local before = w.scale
+    w:onMouseMoveOutside(0, FG.device.h * 1.2)
+    local grown = w.scale
+    w:onMouseUpOutside(w.width + 50, w.height + 50)
+    local released = w.resizing == nil and w.down == nil
+    local prefs = ModData.get("ConspiracyFilesOrganiserPrefs")
+    local saved = prefs and prefs.scale
+    S.zoom(1)
+    return tostring(before), tostring(grown), tostring(released), tostring(saved)
+end
+
 -- What fit() picks for a given screen height, without needing that screen.
 -- It ASKS fit() now. It used to recompute the formula here, so when the
 -- rounding changed - flooring 1.53 to 1x had been opening the device at its

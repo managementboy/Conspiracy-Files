@@ -642,7 +642,12 @@ function Screen:openRow(index)
     elseif row.setup=="text" then
         S.stepFont(1)
     elseif row.setup=="machine" then
-        S.step(S.scale>=S.MAX and -(S.MAX-1) or 1)
+        -- S.scale is nil until the player has chosen a size (P4-R94 opens at
+        -- the default without writing one), so read the size actually drawn.
+        -- Comparing nil crashed the first tap in every new game (owner,
+        -- Windows, 2026-09-14).
+        local now=self.scale or S.scale or S.fit()
+        S.step(now>=S.MAX and -(S.MAX-1) or 1)
     else
         self.record=row; self.record.index=index; self.card=1
     end
@@ -793,7 +798,17 @@ function Screen:onMouseMove(dx,dy)
     return ISPanel.onMouseMove(self,dx,dy)
 end
 
+-- Growing the machine means dragging the corner AWAY from it, so the pointer
+-- leaves the window on the first pixel and the game reports every later move
+-- to onMouseMoveOutside instead. Without this the drag only ever shrank it
+-- (owner, Windows, 2026-09-14: "trying to upp the PDA bigger does not work").
+function Screen:onMouseMoveOutside(dx,dy)
+    if self.resizing then return self:onMouseMove(dx,dy) end
+    return ISPanel.onMouseMoveOutside(self,dx,dy)
+end
+
 function Screen:onMouseUpOutside(x,y)
+    if self.down=="GRIP" then S.savePrefs() end
     self.resizing=nil; self.down=nil
     return ISPanel.onMouseUpOutside(self,x,y)
 end

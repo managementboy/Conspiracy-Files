@@ -79,6 +79,19 @@ top="$(ev 'return CFHW.step(5)')"; high="$(ev 'return CFHW.size()' | f 2)"
 # sizes and this assertion said three (2026-09-13).
 maxs="$(f 3 <<<"$top")"
 [ "$high" = "$maxs" ] || fail "stepping up repeatedly did not stop at S.MAX ($maxs): $high"
+
+# A new game has no saved size (P4-R94); tapping SETUP > Machine then crashed
+# on the owner's first try (Windows, 2026-09-14).
+fresh="$(ev 'return CFHW.freshMachineTap()')"
+[ "$(f 1 <<<"$fresh")" = true ] || fail "SETUP > Machine crashed in a game with no saved size: $fresh"
+[ "$(f 3 <<<"$fresh")" = 2 ] || fail "SETUP > Machine did not step 1x to 2x in a game with no saved size: $fresh"
+
+# Growing drags the corner away from the machine, so the pointer is outside it.
+drag="$(ev 'return CFHW.dragOutside()')"
+[ "$(f 1 <<<"$drag")" = 1 ] || fail "the drag check did not start at 1x: $drag"
+[ "$(f 2 <<<"$drag")" = 2 ] || fail "dragging the corner outward did not make the machine bigger: $drag"
+[ "$(f 3 <<<"$drag")" = true ] || fail "releasing the corner outside the machine left it resizing: $drag"
+[ "$(f 4 <<<"$drag")" = 2 ] || fail "the size dragged to was not remembered: $drag"
 say "zoom clamps: down->$low up->$high"
 # The two controls must be INDEPENDENT (P4-R89): the machine size changes the
 # window and not how much text fits; the text size changes how much text fits
