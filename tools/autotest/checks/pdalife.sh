@@ -86,7 +86,7 @@ fi
 sz="$(ev 'return CFLIFE.sizes()')"
 [ "$(f 1 <<<"$sz")" = true ] && say "sizes: $(f 2 <<<"$sz") of 9 device/font combinations drew" \
     || fail "sizes: $(f 2 <<<"$sz")"
-[ "$(f 2 <<<"$sz")" = 9 ] || fail "not every size combination drew: $(f 2 <<<"$sz")/9"
+[ "$(f 2 <<<"$sz")" = "$(f 3 <<<"$sz")" ] || fail "not every size combination drew: $(f 2 <<<"$sz")/$(f 3 <<<"$sz")"
 
 # --- deliberate abuse -------------------------------------------------------
 ab="$(ev 'return CFLIFE.abuse()')"
@@ -126,7 +126,7 @@ out="$EVIDENCE/$(date +%Y%m%dT%H%M%S)-pdalife.txt"
     echo "memory:   $(f 7 <<<"$cyc") [reported, not asserted: see pdalife.lua]"
     echo "control:  $(f 2 <<<"$ctl") with no device work, same call"
     echo "churn:    $CHURN rounds, $(f 3 <<<"$ch") screens, $(f 4 <<<"$ch") errors"
-    echo "sizes:    $(f 2 <<<"$sz")/9 device-and-font combinations drew"
+    echo "sizes:    $(f 2 <<<"$sz")/$(f 3 <<<"$sz") machine-and-text combinations drew"
     echo "abuse:    $(f 2 <<<"$ab")"
     echo "stores:   $(f 2 <<<"$stores0")  ->  $(f 2 <<<"$stores1")"
     echo "log:      $new_errors new mod error lines"

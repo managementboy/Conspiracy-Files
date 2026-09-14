@@ -90,9 +90,12 @@ function CFGAME.tour()
                         end
                         w:openRow(1)              -- put it back as it was
                     elseif row.setup then
-                        if sizeBefore == tostring(S.scale) .. "/" .. tostring(S.fontSize) then
-                            problems[#problems + 1] = program.title .. ": tapping a size line changed nothing"
+                        -- A size line opens its list now (P4-R99); that is what
+                        -- the tap must visibly do.
+                        if not w.popup then
+                            problems[#problems + 1] = program.title .. ": tapping a size line opened no list"
                         end
+                        w.popup = nil
                     elseif row.cfHeading then
                         if w.record then problems[#problems + 1] = program.title .. ": a heading opened a record" end
                     elseif not w.record then

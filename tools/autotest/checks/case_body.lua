@@ -83,4 +83,31 @@ function B.body()
     return false, "no marked body near " .. tostring(B.x) .. "," .. tostring(B.y)
 end
 
+-- Show her body in the loot panel, as a player opening it does. The identity
+-- observer records a card only from rows the inventory pane actually draws,
+-- so the container must be selected and drawn before the notebook can know it.
+function B.openBody()
+    local loot = getPlayerLoot(0)
+    loot:refreshBackpacks()
+    for _, b in ipairs(loot.backpacks) do
+        local parent = b.inventory and b.inventory:getParent()
+        if parent and instanceof(parent, "IsoDeadBody") and parent:getModData()[P.MARK] then
+            loot:selectContainer(b)
+            return true
+        end
+    end
+    return false, "her body is not in the loot panel"
+end
+
+-- Whether the notebook holds a lead for the card, as a plain true or false.
+-- CN-01 asked a helper that returns nil when there is no row, and counted the
+-- printed word "nil" as a row - so its "card on the body in the notebook"
+-- passed with nothing recorded (20260914T201413).
+function B.lead(name)
+    for _, r in ipairs(ConspiracyFiles.IdentityObserver.rows()) do
+        if r.title == "Found ID Card: " .. tostring(name) then return true, tostring(r.summary) end
+    end
+    return false, "no notebook row for ID Card: " .. tostring(name)
+end
+
 return CFBody

@@ -38,6 +38,19 @@ say "body: found=$(f 1 <<<"$body") searched=$(f 2 <<<"$body") idcards=$(f 3 <<<"
 [ "$(f 4 <<<"$body")" = 1 ] || fail "the card on the body is not the case's own: $body"
 [ "$(f 5 <<<"$body")" = "ID Card: $name" ] || fail "the card on the body reads '$(f 5 <<<"$body")', not 'ID Card: $name'"
 
+# Her card becomes a lead once the body is opened, as a player opens it. Asked
+# as a plain true/false: CN-01 took the printed word "nil" for a row.
+opened="$(ev 'return CFBody.openBody()')"
+[ "$(f 1 <<<"$opened")" = true ] || fail "could not open her body in the loot panel: $opened"
+lead="false"
+for _ in 1 2 3 4 5 6 7 8 9 10; do
+    lead="$(ev "return CFBody.lead([[$name]])")"
+    [ "$(f 1 <<<"$lead")" = true ] && break
+    sleep 1
+done
+say "lead: $(tr '\t' ' ' <<<"$lead")"
+[ "$(f 1 <<<"$lead")" = true ] || fail "her ID card on the body did not become a notebook lead: $lead"
+
 line="$(run_log | grep -oE "case person's body \([^)]*\): [^\"]*" | tail -1)"
 say "log: ${line:-nothing logged}"
 [ -n "$line" ] || fail "the body handler logged nothing"
@@ -54,6 +67,7 @@ report="$EVIDENCE/$id-case-body.txt"
     echo "bound zombie: $(tr '\t' ' ' <<<"$found")"
     echo "body: $(tr '\t' ' ' <<<"$body")"
     echo "log: ${line:-none}"
+    echo "notebook lead: $(tr '\t' ' ' <<<"$lead")"
     for x in "${fails[@]}"; do echo "FAIL: $x"; done
 } > "$report"
 cat "$report"

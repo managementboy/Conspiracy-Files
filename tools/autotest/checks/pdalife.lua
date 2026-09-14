@@ -157,7 +157,9 @@ function CFLIFE.sizes()
     S.fontSize = S.FONT_DEFAULT
     S.zoom(1)
     if #missing > 0 then return false, table.concat(missing, "; ") end
-    return true, tostring(drawn)
+    -- Counted from the tables, not typed: P4-R99 made it 5 machine sizes x 4
+    -- text sizes, and a hard-coded 9 failed a run that drew all 20.
+    return true, tostring(drawn), tostring(#S.SCALES * #S.FONT_SIZES)
 end
 
 -- The stores the device writes, so growth can be seen rather than guessed.
