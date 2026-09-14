@@ -97,7 +97,7 @@ If a spike disproves a decision, technical reality wins: supersede the decision 
 | ID | Current decision | Rationale |
 |---|---|---|
 | P4-R01 — historical fixture scope; see P4-R53 | v0.1 = one hand-authored thread, 6 documents, 3 identities, 1 organisation, 2 curated locations, 1 anchor + 1 fallback, journal + evidence list, manual Mark Interesting. | Smallest end-to-end proof of the experience. |
-| P4-R02 / P4-R26 | Content precedes generic schema; project owner writes/approves canonical content, with AI only assisting drafts. | Avoid schema-first design. |
+| P4-R02 / P4-R26 | Content precedes generic schema; project owner writes/approves canonical content, with AI only assisting drafts. **Approval part removed by P4-R97 (2026-09-14):** AI-written text ships without a separate approval step. | Avoid schema-first design. |
 | P4-R04 | Retrofit, migration and external content packs are not in v1. | De-risk core first. |
 | P4-R05/P4-R25 | Graph is v2; prototype separately with provisional 250 visible-node cap. | Biggest UI risk. |
 | P4-R22 | Death recap has a deterministic no-AI fallback; optional AI may enhance it later. | Death payoff cannot depend on network success. |
@@ -606,5 +606,16 @@ gets a short note saying so, as a maybe; the memo is never noted against
 itself and nothing is said before it is found. Its words are read from
 `Content.lua`, not copied. Later cases are unchanged, so games already under
 way keep their cases but never see the memo — **the memo needs a new game.**
-The paper's description, its two readings and the note are new prose and
-await the owner's approval (ADR-0002).
+The paper's description, its two readings and the note are new prose, reviewed
+by the owner in play (P4-R97).
+
+**P4-R97 — the approval rule for AI-written text is removed.** ADR-0002 said
+development-time AI may draft but a human must approve canonical assets
+before they ship. Owner, 2026-09-14: "that is a very old rule. remove it."
+AI-written text now ships with the build like any other change, and the owner
+reviews it in play. Removed from ADR-0002, `AI_PROVENANCE.md`,
+`AI_BOUNDARIES.md`, the glossary and the premise notes; the rest of ADR-0002
+(no-AI play is primary, runtime AI optional) stands. Dated approval records
+elsewhere are history and stay as written. The `contentStatus` labels inside
+saved cases are left alone: they are part of each case's byte-for-byte
+rebuild, so changing them would set aside every case in play for a label.

@@ -61,8 +61,8 @@ Real in-process HTTP exposed to Lua.
 Run the model at development time and ship the output as ordinary authored
 content. No runtime key, no network, no companion, no new failure mode. This
 removes the *authoring volume* cap, which is most of the stated problem, and it
-is already permitted by P4-R02/P4-R26 (AI assists drafts; the owner approves
-canonical content).
+is already permitted by P4-R02/P4-R26 (AI assists drafts). Since P4-R97
+(2026-09-14) such content ships without a separate approval step.
 
 ## Decision
 

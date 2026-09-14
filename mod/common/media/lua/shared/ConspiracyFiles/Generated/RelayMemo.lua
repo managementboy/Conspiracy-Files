@@ -13,8 +13,8 @@
 -- so editing that memo in Content.lua sets aside every first case in play.
 -- Below 1.0 that is the standing rule anyway (P4-R77) - a new game.
 --
--- WHAT YOU FOUND, WHAT IT MIGHT MEAN and NOTE are new prose, and canonical
--- text needs the owner's approval before it ships (ADR-0002).
+-- WHAT YOU FOUND, WHAT IT MIGHT MEAN and NOTE are new prose, reviewed by the
+-- owner in play (P4-R97).
 local Content=require("ConspiracyFiles/Content")
 
 local M={}

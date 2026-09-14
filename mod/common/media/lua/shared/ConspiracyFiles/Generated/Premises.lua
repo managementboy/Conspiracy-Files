@@ -20,7 +20,7 @@
 -- names, {D1}/{D2}/{D3} the three July 1993 days, {SUBJECT} the premise's own
 -- noun for the matter, {UNKNOWN} the thing the paperwork cannot settle.
 --
--- Content status: drafted by AI, pending human approval per ADR-0002. See
+-- Drafted by AI; ships without a separate approval step (P4-R97). See
 -- docs/design/PREMISES.md for the prose originals and the owner's selection.
 local M={}
 

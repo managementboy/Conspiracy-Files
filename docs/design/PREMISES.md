@@ -3,8 +3,8 @@
 Drafted 2026-09-09. **The owner kept all twenty**, and they are now the
 generator's premise pool: `mod/common/media/lua/shared/ConspiracyFiles/Generated/Premises.lua`.
 
-Content status stays *drafted, pending approval* per ADR-0002 - the owner
-selected the premises, not yet every sentence of the prose they generate.
+The prose they generate ships without a separate approval step (P4-R97,
+2026-09-14); the owner reviews it in play.
 
 Each premise supplies three organisations and three anchor documents (claim,
 response, review - the last of which it may mark optional) in the shape the generator already used. It does **not**
