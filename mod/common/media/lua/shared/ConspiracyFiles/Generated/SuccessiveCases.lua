@@ -196,16 +196,47 @@ end
 -- validate-then-swap discipline as every other canonical mutation, so there
 -- is never an observable half-retired wrapper. Idempotent: retiring an
 -- already-retired root is a recognised no-op, not an error and not a second
--- shrink.
-function M.retire(wrapper,index)
+-- shrink. `lastSeen` (document id -> words) is where the runtime last saw
+-- each paper; it is kept on the retired rows (P4-R104).
+function M.retire(wrapper,index,lastSeen)
  local ok,why=M.validate(wrapper); if not ok then return nil,why end
  local roots=M.sessions(wrapper); local root=roots[index]; if not root then return nil,"unknown generated case" end
  if Retired.isRetired(root) then return wrapper,false end
- local retired,rwhy=Retired.retire(root); if not retired then return nil,rwhy end
+ local retired,rwhy=Retired.retire(root,lastSeen); if not retired then return nil,rwhy end
  local out={canonical=index==1 and retired or wrapper.canonical}; if wrapper.schedule then out.schedule=copy(wrapper.schedule) end; local cases={}
  for i=2,#roots do cases[i-1]=copy(i==index and retired or roots[i]) end
  if #cases>0 or wrapper.successive then out.successive={schema=M.SCHEMA,cases=cases,discoveries=M.discoveries(wrapper)} end
  ok,why=M.validate(out); if not ok then return nil,why end
  return out,true
+end
+-- Where a finished case's papers were last seen, updated copy-on-write.
+-- Owner, 2026-09-14: "I lost my files somewhere?" - a completed case had
+-- dropped every placement detail. `updates` maps document id -> words; only
+-- retired rows are touched (a live document has its own scan), unchanged or
+-- unusable text is ignored, and nothing is returned changed unless a row
+-- really changed. Same validate-then-swap discipline as retire.
+function M.noteLastSeen(wrapper,updates)
+ if type(updates)~="table" then return wrapper,false end
+ local ok,why=M.validate(wrapper); if not ok then return nil,why end
+ local roots=M.sessions(wrapper); local changed=false; local out={}
+ for index,root in ipairs(roots) do
+  local next=root
+  if Retired.isRetired(root) then
+   for r,row in ipairs(root.rows) do
+    local words=Retired.cleanLastSeen(updates[row.id])
+    if words and words~=row.lastSeen then
+     if next==root then next=copy(root) end
+     next.rows[r].lastSeen=words; changed=true
+    end
+   end
+  end
+  out[index]=next
+ end
+ if not changed then return wrapper,false end
+ local w={canonical=out[1]}; if wrapper.schedule then w.schedule=copy(wrapper.schedule) end; local cases={}
+ for i=2,#out do cases[i-1]=copy(out[i]) end
+ if #cases>0 or wrapper.successive then w.successive={schema=M.SCHEMA,cases=cases,discoveries=M.discoveries(wrapper)} end
+ ok,why=M.validate(w); if not ok then return nil,why end
+ return w,true
 end
 return M

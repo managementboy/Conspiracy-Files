@@ -19,6 +19,9 @@ local sessions,scheduler,wrapper,ticks,preparing
 -- Rows of retired cases. They have no Session to project from, but the player
 -- learned them and the notebook must still render them.
 local retiredRows={}
+-- Declared with the identity scan further down. Retirement (R.inspect) reads
+-- both to keep where each paper was last seen, and sits above that code.
+local sightings,placeOf
 -- Building id -> address, or false for "the book has no name for it". Cleared
 -- when the address book finishes building, so early misses are not permanent.
 --
@@ -245,17 +248,24 @@ local function swap(next)
     -- Validated just above: the cached readers need not validate it again.
     pcall(Cases.remember,store,getTimeInMillis and getTimeInMillis())
 end
+-- Retired rows, re-read from the stored wrapper. A last-seen write changes
+-- only these, so it refreshes them without reopening every live session.
+local function refreshRetired()
+    retiredRows={}
+    for _,root in ipairs(Cases.sessions(wrapper) or {}) do
+        if Retired.isRetired(root) then for _,row in ipairs(root.rows) do retiredRows[#retiredRows+1]=row end end
+    end
+end
 local function openAll()
     -- Replacing the session set invalidates queued closures over old APIs.
     scheduler=Scheduler.new(getTimeInMillis,function(system,why) if system=="preparation" then preparing=false end;log(system..": "..why) end);scheduler.maxSteps=24;scheduler.budgetMs=1
-    sessions={}; retiredRows={}; local stale=0
+    sessions={}; refreshRetired(); local stale=0
     for index,root in ipairs(Cases.sessions(wrapper)) do
-        -- A retired root is not a Session and must never be opened as one.
+        -- A retired root is not a Session and must never be opened as one
+        -- (its rows were collected by refreshRetired above).
         -- The closure keeps the true wrapper index, which no longer matches
         -- the position in `sessions` once any root has retired.
-        if Retired.isRetired(root) then
-            for _,row in ipairs(root.rows) do retiredRows[#retiredRows+1]=row end
-        else
+        if not Retired.isRetired(root) then
             -- A root written by an earlier generator revision no longer
             -- validates, and asserting on it would throw once per tick
             -- forever - the same shape of failure as the retired-case loop
@@ -618,7 +628,16 @@ function R.inspect(item,inPlace)
     if #done.known>=#done.case.documents then
         for index,root in ipairs(Cases.sessions(wrapper)) do
             if not Retired.isRetired(root) and root.case and root.case.caseId==done.case.caseId then
-                local staged,why=Cases.retire(wrapper,index)
+                -- Keep where each paper was last seen. Owner, 2026-09-14: "I
+                -- lost my files somewhere?" - retiring dropped every placement
+                -- detail, and the notebook could no longer say (P4-R104). The
+                -- document in hand is where it is right now, not where the
+                -- last scan happened to see it.
+                local seen={}
+                for sid,s in pairs(sightings) do if s.where then seen[sid]=s.where end end
+                local okHere,here=pcall(placeOf,item)
+                if okHere and here then seen[md.cfGeneratedId]=here end
+                local staged,why=Cases.retire(wrapper,index,seen)
                 if staged then
                     swap(staged); openAll(); log("Case complete; placement details retired.")
                     -- Not "solved" - the mod does not know that and never will.
@@ -893,7 +912,7 @@ end
 -- container the document was originally placed in. Absence therefore means
 -- "not anywhere we can currently see", never "destroyed" - which is why the
 -- wording is about uncertainty rather than loss.
-local sightings={}
+sightings={}
 -- Every engine call guarded: a document can be in a container whose parent has
 -- gone, on a square that has streamed out, or held by an object that does not
 -- answer the call at all. None of that should cost the player their notebook.
@@ -906,7 +925,7 @@ end
 -- vague where we were not: the scan holds the item itself, so it can say
 -- whether it is carried, in something, or on the floor - and the address book
 -- can usually name the building. Vagueness is for what we cannot know.
-local function placeOf(item)
+placeOf=function(item)
     local player=getPlayer()
     local container=rd(item,"getContainer")
     local carried=player and container and container==rd(player,"getInventory")
@@ -988,6 +1007,14 @@ function R.whereabouts(id)
             return "unchecked"
         end
     end
+    -- A finished case keeps no scan of its own, only where its paper was last
+    -- seen (P4-R104). No record means we say nothing, never that it is gone.
+    for _,row in ipairs(retiredRows) do
+        if row.id==id then
+            if type(row.lastSeen)=="string" then return "lastseen",row.lastSeen end
+            return nil
+        end
+    end
     return nil
 end
 local function identity(api)
@@ -1019,6 +1046,78 @@ local function identity(api)
         return true
     end
 end
+-- Where a finished case's papers are now (P4-R104). Owner, 2026-09-14: "I lost
+-- my files somewhere?" The case had completed, retirement had dropped its
+-- placement details, and nothing could say where the papers had gone.
+--
+-- A retired case has no identity scan, so this is a smaller one: the player's
+-- inventory with bags inside it (depth 3, as restampEvidence walks it) and the
+-- containers the loot panel is showing, one item per scheduler step, at most
+-- every ten seconds of real time. What it finds is written to the save only
+-- when the words changed, and never more than once a minute per document: a
+-- player walking round with the Papers must not cost a 20 ms validation every
+-- time a bag changes hands.
+local LAST_SEEN_EVERY_MS=10000
+local LAST_SEEN_WRITE_MS=60000
+local LAST_SEEN_CONTAINERS=64
+local LAST_SEEN_ITEMS=2048
+local lastSeenAt=nil
+local lastSeenWritten={}
+local function lastSeenJob()
+    local rows={}
+    for _,row in ipairs(retiredRows) do rows[row.id]=row end
+    local tasks,listed={},{}
+    local function add(container,depth)
+        if container and depth<=3 and not listed[container] and #tasks<LAST_SEEN_CONTAINERS then
+            listed[container]=true; tasks[#tasks+1]={container=container,depth=depth}
+        end
+    end
+    local player=getPlayer and getPlayer()
+    add(player and rd(player,"getInventory"),0)
+    -- The loot panel's containers are what the player is looking into; its
+    -- buttons already hold them, so reaching them costs nothing.
+    pcall(function()
+        local page=getPlayerLoot and getPlayerLoot(0)
+        for _,button in ipairs(page and page.backpacks or {}) do add(button.inventory,0) end
+    end)
+    local found,cursor,index,examined={},1,0,0
+    return function()
+        local task=tasks[cursor]
+        if task and examined<LAST_SEEN_ITEMS then
+            local items=rd(task.container,"getItems")
+            local size=items and rd(items,"size") or 0
+            if type(size)~="number" or index>=size then cursor=cursor+1; index=0; return false end
+            local item=rd(items,"get",index); index=index+1; examined=examined+1
+            local md=item and rd(item,"getModData")
+            local id=type(md)=="table" and md.cfGeneratedId
+            if id and rows[id] and not found[id] then
+                local ok,where=pcall(placeOf,item)
+                if ok and type(where)=="string" then found[id]=where end
+            end
+            local inner=item and rd(item,"getInventory")
+            if inner then add(inner,task.depth+1) end
+            return false
+        end
+        if saveRefused() or not wrapper then return true end
+        local now=getTimeInMillis and getTimeInMillis() or 0
+        local updates,any={},false
+        for id,where in pairs(found) do
+            local words=Retired.cleanLastSeen(where)
+            local at=lastSeenWritten[id]
+            if words and words~=rows[id].lastSeen and (not at or now-at>=LAST_SEEN_WRITE_MS or now<at) then
+                updates[id]=words; any=true
+            end
+        end
+        if not any then return true end
+        local staged,changed=Cases.noteLastSeen(wrapper,updates)
+        if not staged then log("Last-seen note refused: "..tostring(changed)); return true end
+        if changed then
+            swap(staged); refreshRetired()
+            for id in pairs(updates) do lastSeenWritten[id]=now end
+        end
+        return true
+    end
+end
 Events.OnTick.Add(function()
     if not scheduler or not allowed() then return end
     ticks=ticks+1
@@ -1026,6 +1125,12 @@ Events.OnTick.Add(function()
         enqueue(); for i,api in ipairs(sessions) do scheduler.enqueue("identity:"..i,"identity",identity(api)) end
         for i,api in ipairs(sessions) do scheduler.enqueue("relocate:"..i,"relocation",relocation(api)) end
         scheduler.enqueue("visited-building","tracking",trackVisited)
+        if #retiredRows>0 then
+            local now=getTimeInMillis and getTimeInMillis() or 0
+            if not lastSeenAt or now-lastSeenAt>=LAST_SEEN_EVERY_MS or now<lastSeenAt then
+                if scheduler.enqueue("last-seen","lastseen",lastSeenJob()) then lastSeenAt=now end
+            end
+        end
     end
     scheduler.step()
 end)
@@ -1062,6 +1167,7 @@ Events.OnGameStart.Add(function()
     -- Forget what we could see last time. A new session has not looked yet,
     -- and should say so rather than inherit yesterday's confidence.
     sightings={}
+    lastSeenAt=nil
     if not allowed() then return end
     local saved=ModData.getOrCreate(TAG)
     if saved.canonical or saved.campaign then
