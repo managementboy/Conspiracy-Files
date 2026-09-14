@@ -701,3 +701,15 @@ Normal text leaves a readable page. Say so if it should open at half.
 **P4-R105 — the organiser reads in either hand.** Owner: "the left hand should
 leave the PDA open." Held in the off hand it stays open beside a one-handed
 weapon; a two-handed weapon fills both hands and puts it away. HELP says so.
+
+**P4-R104 — a finished case's papers can still be found.** Owner in play: "I
+lost my files somewhere?" A case completed, retirement dropped its placement
+details, and nothing could say where its papers were any more. A finished
+case's documents now keep **where they were last seen** in the save (one short
+line per document, in the words the notebook already used). While a case is
+finished, the mod still looks for its papers in the survivor's inventory and
+bags and in the containers the loot panel is showing, every ten seconds, and
+updates that line at most once a minute per document. The notebook shows it as
+"Last seen: …" and PDA FILES shows a WHERE line for every document, live or
+finished. Neither ever says a document is lost. The Papers album is now found
+inside bags too, so filing keeps working with it in a backpack.

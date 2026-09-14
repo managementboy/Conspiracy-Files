@@ -54,15 +54,31 @@ end
 
 -- Already carrying one? Searched by our own mark rather than by type, so a
 -- photo album the player looted stays an ordinary photo album.
+--
+-- Inside bags too, three deep (as GeneratedRuntime's restampEvidence walks).
+-- Found in play, 2026-09-14 (P4-R104): Papers put in a backpack were not found,
+-- so filing stopped and the papers seemed gone. Level by level, so the album
+-- at hand is preferred over one at the bottom of a bag. Only ever the player's
+-- own inventory tree: an album on a shelf is not "held".
+F.HELD_DEPTH=3
 function F.held(player)
     local ok,inventory=pcall(function() return player:getInventory() end)
     if not ok or not inventory then return nil end
-    local items=inventory.getItems and inventory:getItems()
-    if not items then return nil end
-    for i=0,items:size()-1 do
-        local item=items:get(i)
-        local md=item and item.getModData and item:getModData()
-        if md and md[MARK] then return item end
+    local level={inventory}
+    for _=0,F.HELD_DEPTH do
+        local deeper={}
+        for _,container in ipairs(level) do
+            local items=container.getItems and container:getItems()
+            for i=0,(items and items:size() or 0)-1 do
+                local item=items:get(i)
+                local md=item and item.getModData and item:getModData()
+                if md and md[MARK] then return item end
+                local inner=item and item.getInventory and item:getInventory()
+                if inner and #deeper<64 then deeper[#deeper+1]=inner end
+            end
+        end
+        if #deeper==0 then return nil end
+        level=deeper
     end
     return nil
 end
@@ -177,6 +193,12 @@ function F.fileEvidence()
     if not into then return 0 end
     local ok,inventory=pcall(function() return player:getInventory() end)
     if not ok or not inventory then return 0 end
+    -- Never file INTO an album outside the player's inventory tree: a document
+    -- moved onto a shelf would leave the survivor's hands without them asking.
+    if papers.getOutermostContainer then
+        local okOuter,outer=pcall(function() return papers:getOutermostContainer() end)
+        if not okOuter or outer~=inventory then return 0 end
+    end
     local items=inventory.getItems and inventory:getItems()
     if not items then return 0 end
     -- Collect first, move second: moving while walking the list it came from

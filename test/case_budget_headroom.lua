@@ -36,7 +36,12 @@ for seed=1,60 do
             local liveBytes=V.estimateEncodedBytes(root)
             measured=measured+1
             if liveBytes>largestLive then largestLive=liveBytes end
-            local retired=assert(Retired.retire(root))
+            -- Every retired row carries where its paper was last seen, at the
+            -- longest text allowed (P4-R104): the worst case, not the usual one.
+            local lastSeen={}
+            for _,doc in ipairs(case.documents) do lastSeen[doc.id]=string.rep("x",Retired.LAST_SEEN_MAX) end
+            local retired=assert(Retired.retire(root,lastSeen))
+            for _,row in ipairs(retired.rows) do assert(#row.lastSeen==Retired.LAST_SEEN_MAX,"worst case must be measured at max lastSeen") end
             local retiredBytes=V.estimateEncodedBytes(retired)
             if retiredBytes>largestRetired then largestRetired=retiredBytes end
         end

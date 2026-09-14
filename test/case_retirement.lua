@@ -146,3 +146,47 @@ assert(total+RESERVED_FOR_OTHER_ROOTS<=V.MAX_ENCODED_BYTES,
     string.format("a full %d-case campaign must fit the shared budget: %d root bytes + %d reserved",Cases.MAX_CASES,total,RESERVED_FOR_OTHER_ROOTS))
 print(string.format("PASS %d-case campaign (%d retired, %d active) fits budget: %d root bytes + %d reserved = %d of %d",
     Cases.MAX_CASES,retiredTotal,Cases.MAX_ACTIVE,total,RESERVED_FOR_OTHER_ROOTS,total+RESERVED_FOR_OTHER_ROOTS,V.MAX_ENCODED_BYTES))
+
+-- 7. Where a finished case's papers were last seen (P4-R104). Owner in play,
+--    2026-09-14: "I lost my files somewhere?" - retirement had dropped every
+--    placement detail. Retired rows keep an optional lastSeen line.
+local lsRoot=discoverAll(makeRoot(401))
+local firstId,secondId=lsRoot.known[1],lsRoot.known[2]
+local lsWrapper=assert(Cases.retire({canonical=lsRoot},1,{[firstId]="Carried, in Una's Papers.",[secondId]="bad\nline"}))
+local lsRows=Cases.sessions(lsWrapper)[1].rows
+local byId={}; for _,row in ipairs(lsRows) do byId[row.id]=row end
+assert(byId[firstId].lastSeen=="Carried, in Una's Papers.","retirement keeps where a paper was last seen")
+assert(byId[secondId].lastSeen=="bad line","control characters become spaces rather than refusing retirement")
+assert(Cases.validate(lsWrapper))
+-- Round trip: the stored root validates again on load.
+assert(Retired.validate(Cases.sessions(lsWrapper)[1]))
+-- An old schema-2 root saved before lastSeen existed must still load.
+local old=Cases.sessions(retiredWrapper)[1]
+for _,row in ipairs(old.rows) do assert(row.lastSeen==nil,"fixture retired without sightings") end
+assert(old.schema==2 and Retired.validate(old),"a retired root without lastSeen is still valid")
+-- Bad stored values are refused by the validator, never silently kept.
+local function withLastSeen(v) local r=Cases.sessions(lsWrapper)[1]; local c={} for k,x in pairs(r) do c[k]=x end
+    c.rows={}; for i,row in ipairs(r.rows) do local o={} for k,x in pairs(row) do o[k]=x end c.rows[i]=o end
+    c.rows[1].lastSeen=v; return c end
+assert(not Retired.validate(withLastSeen("")),"empty lastSeen refused")
+assert(not Retired.validate(withLastSeen(string.rep("a",Retired.LAST_SEEN_MAX+1))),"over-long lastSeen refused")
+assert(Retired.validate(withLastSeen(string.rep("a",Retired.LAST_SEEN_MAX))),"max-length lastSeen accepted")
+assert(not Retired.validate(withLastSeen("tab\there")),"control characters refused")
+assert(not Retired.validate(withLastSeen(7)),"non-string refused")
+assert(Retired.cleanLastSeen(string.rep("b",400))==string.rep("b",Retired.LAST_SEEN_MAX),"long text is cut, not refused")
+assert(Retired.cleanLastSeen(" \n ")==nil and Retired.cleanLastSeen(nil)==nil)
+-- Updating it later is copy-on-write and reports whether anything changed.
+local before=Cases.sessions(lsWrapper)[1].rows
+local moved,changedLs=assert(Cases.noteLastSeen(lsWrapper,{[firstId]="In a counter at 102 Pattern St."}))
+assert(changedLs==true and moved~=lsWrapper)
+local movedRows={}; for _,row in ipairs(Cases.sessions(moved)[1].rows) do movedRows[row.id]=row end
+assert(movedRows[firstId].lastSeen=="In a counter at 102 Pattern St.","the new place is stored")
+assert(byId[firstId].lastSeen=="Carried, in Una's Papers." and Cases.sessions(lsWrapper)[1].rows==before,"the old wrapper is untouched")
+local same,changedSame=Cases.noteLastSeen(moved,{[firstId]="In a counter at 102 Pattern St.",["not-a-document"]="Carried."})
+assert(same==moved and changedSame==false,"unchanged text and unknown ids write nothing")
+-- A live case is not touched: it has its own scan.
+local live={canonical=makeRoot(402)}
+local liveId=live.canonical.case.documents[1].id
+local liveSame,liveChanged=Cases.noteLastSeen(live,{[liveId]="Carried."})
+assert(liveSame==live and liveChanged==false,"live documents are not given a stored last-seen")
+print("PASS retired papers keep where they were last seen: stored, cleaned, validated, old roots still load, updates copy-on-write")

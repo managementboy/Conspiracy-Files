@@ -223,3 +223,40 @@ getPlayer = function() return reborn end
 F4.createHandler(0, reborn); F4.onTick()
 assert(F4.held(reborn), 'the new survivor gets their own papers')
 print('PASS case file: the papers open as soon as the panel offers them, held in a free off hand; a respawned survivor gets papers')
+
+-- The Papers inside a backpack (P4-R104). Found in play, 2026-09-14: once the
+-- album went into a bag it was not found, filing stopped and the papers seemed
+-- lost. Found three deep; never deeper; and never filed into when it is not in
+-- the player's own inventory tree.
+local function box(items)
+    return { items = items,
+        getItems = function(self) local l = self.items; return { size = function() return #l end, get = function(_, i) return l[i + 1] end } end,
+        Remove = function(self, it) for i, v in ipairs(self.items) do if v == it then table.remove(self.items, i); return end end end,
+        AddItem = function(self, it) self.items[#self.items + 1] = it; return it end,
+        hasRoomFor = function() return true end }
+end
+local function bag(inner) local b = makeItem("Base.Bag_Schoolbag"); b.getInventory = function() return inner end; return b end
+local albumInv = box({})
+local album = makeItem("Base.PhotoAlbum"); album.md.cfCaseFile = true
+album.getInventory = function() return albumInv end
+local doc = makeItem("Base.Note"); doc.md.cfGeneratedId = "doc-1"
+local top = box({ doc, bag(box({ album })) })
+album.getOutermostContainer = function() return top end
+local carrier = { getInventory = function() return top end,
+    getDescriptor = function() return { getForename = function() return "Una" end } end }
+getPlayer = function() return carrier end
+local clock5 = 0; getTimeInMillis = function() clock5 = clock5 + 5000; return clock5 end
+local F5 = dofile('mod/common/media/lua/client/ConspiracyFiles/CaseFile.lua')
+assert(F5.held(carrier) == album, 'the Papers are found inside a backpack')
+assert(F5.give(carrier) == album, 'and a second album is not issued because of the bag')
+assert(F5.fileEvidence() == 1 and albumInv.items[1] == doc and #top.items == 1, 'filing still works with the Papers in a bag')
+-- Four bags deep is past the walk.
+local deepAlbum = makeItem("Base.PhotoAlbum"); deepAlbum.md.cfCaseFile = true
+local deep = box({ bag(box({ bag(box({ bag(box({ bag(box({ deepAlbum })) })) })) })) })
+assert(F5.held({ getInventory = function() return deep end }) == nil, 'the walk stops at three bags deep')
+-- An album that reports it is not in the player's tree is never filed into.
+local stray = makeItem("Base.Note"); stray.md.cfGeneratedId = "doc-2"
+top.items[#top.items + 1] = stray
+album.getOutermostContainer = function() return { shelf = true } end
+assert(F5.fileEvidence() == 0 and top.items[#top.items] == stray, 'nothing is filed into an album outside the inventory tree')
+print('PASS case file: the Papers are found inside bags, three deep, and are only filed into while carried')

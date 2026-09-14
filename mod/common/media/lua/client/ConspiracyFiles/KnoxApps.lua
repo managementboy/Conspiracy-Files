@@ -102,11 +102,28 @@ A.files={
             local date=A.dateOf(event.at)
             if date then when[event.ref]=string.format("%s, %02d:00",date.label,date.hour) end
         end
+        -- Where the paper is. FILES never said, even for a live case, and once a
+        -- case finished nothing did (owner, 2026-09-14: "I lost my files
+        -- somewhere?", P4-R104). Knowledge only: what the scan saw, or where a
+        -- finished case's paper was last seen - never that it is lost.
+        local runtime=ConspiracyFiles.GeneratedRuntime
+        local function whereOf(id)
+            if not runtime or not runtime.whereabouts then return nil end
+            local ok,state,place=pcall(runtime.whereabouts,id)
+            if not ok then return nil end
+            local known=type(place)=="string" and place~="" and place or nil
+            if state=="accounted" then return known or "Last accounted for close by." end
+            if state=="uncertain" then return "Not seen recently."..(known and (" Last seen: "..known) or "") end
+            if state=="lastseen" and known then return "Last seen: "..known end
+            return nil
+        end
         local out={}
         for _,row in ipairs(rows) do
             if not row.cfHeading then
                 local body,fields=split(row.detailText)
                 if when[row.id] then table.insert(fields,1,{label="WHEN",value=when[row.id]}) end
+                local where=whereOf(row.id)
+                if where then fields[#fields+1]={label="WHERE",value=where} end
                 out[#out+1]={label=(row.ordinal and (row.ordinal..". ") or "")..(row.title or ""),
                              title=row.title,detail=body,fields=fields,id=row.id}
             end

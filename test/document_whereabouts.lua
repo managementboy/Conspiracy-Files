@@ -80,3 +80,39 @@ assert(runtime:find('string.find(name,"\'s ",1,true)', 1, true),
 assert(runtime:find('"Carried, in "..name', 1, true), 'it reads "Carried, in Omer\'s Case File."')
 assert(runtime:find('"Carried, in your "..name', 1, true), 'and an ordinary bag still reads "your"')
 print('PASS document whereabouts: no double possessive on a named container')
+
+-- A finished case's papers (P4-R104). Owner in play, 2026-09-14: "I lost my
+-- files somewhere?" Retirement dropped every placement detail, so nothing
+-- could say where the papers were. The notebook and FILES now say where they
+-- were last seen - and still never that they are lost.
+assert(runtime:find('return "lastseen",row.lastSeen', 1, true), 'a retired document reports where it was last seen')
+local lastseen = notebook:match('lastseen="([^"]+)"')
+assert(lastseen and lastseen:find('Last seen', 1, true), 'the notebook has wording for a finished case')
+assert(not lastseen:lower():find('lost') and not lastseen:lower():find('destroy'), 'the last-seen wording claims nothing')
+assert(runtime:find('LAST_SEEN_WRITE_MS=60000', 1, true), 'a last-seen write happens at most once a minute per document')
+assert(runtime:find('LAST_SEEN_EVERY_MS=10000', 1, true), 'the last-seen scan is throttled to every ten seconds')
+
+-- PDA FILES, through fakes: a WHERE field for live and finished documents.
+package.path = "mod/common/media/lua/client/?.lua;mod/common/media/lua/shared/?.lua;" .. package.path
+package.preload["ConspiracyFiles/KnoxUI"] = function() return {} end
+ConspiracyFiles = ConspiracyFiles or {}
+ConspiracyFiles.NotebookUI = { generatedRows = function()
+    return { { id = "a", title = "A", detailText = "body" }, { id = "b", title = "B", detailText = "body" },
+             { id = "c", title = "C", detailText = "body" }, { id = "d", title = "D", detailText = "body" },
+             { id = "e", title = "E", detailText = "body" } }
+end }
+local states = { a = { "accounted", "Carried." }, b = { "uncertain", "In a desk." }, c = { "lastseen", "Carried, in Una's Papers." },
+                 d = { "unchecked" }, e = { "lastseen" } }
+ConspiracyFiles.GeneratedRuntime = { whereabouts = function(id) local s = states[id]; return s[1], s[2] end }
+local okApps, A = pcall(dofile, 'mod/common/media/lua/client/ConspiracyFiles/KnoxApps.lua')
+assert(okApps, 'KnoxApps loads under fakes: ' .. tostring(A))
+local listed = {}
+for _, row in ipairs(A.files.list()) do
+    for _, field in ipairs(row.fields) do if field.label == "WHERE" then listed[row.id] = field.value end end
+end
+assert(listed.a == "Carried.", tostring(listed.a))
+assert(listed.b == "Not seen recently. Last seen: In a desk.", tostring(listed.b))
+assert(listed.c == "Last seen: Carried, in Una's Papers.", tostring(listed.c))
+assert(listed.d == nil and listed.e == nil, 'no WHERE line where nothing is known')
+for _, v in pairs(listed) do assert(not v:lower():find('lost') and not v:lower():find('destroy'), v) end
+print('PASS document whereabouts: a finished case says where its papers were last seen, in the notebook and in FILES')

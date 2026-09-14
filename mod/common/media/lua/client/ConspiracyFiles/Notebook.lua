@@ -225,6 +225,10 @@ function Window:rows()
                 uncertain="Not seen recently. Its whereabouts are uncertain.",
                 conflict="More than one copy has been seen. Which is the original is uncertain.",
                 unchecked="Not checked since you loaded this save.",
+                -- A finished case: where its paper was last seen, kept in the
+                -- save (P4-R104; owner, 2026-09-14: "I lost my files
+                -- somewhere?"). Only shown with a place; never a claim of loss.
+                lastseen="Last seen: ",
             }
             for _,row in ipairs(rows) do
                 -- generated() is not guaranteed to be a table; a test double
@@ -233,8 +237,10 @@ function Window:rows()
                 local ok,where,place=false,nil,nil
                 if lookup then ok,where,place=pcall(lookup,row.id) end
                 if not ok then where,place=nil,nil end
+                if where=="lastseen" and (type(place)~="string" or place=="") then where=nil end
                 if words[where] then
                     local line=words[where]
+                    if where=="lastseen" then line=line..place end
                     -- Say where it is when we saw it, rather than describing
                     -- everywhere it might be. Vagueness is for what we cannot
                     -- know, not for what the scan just looked at.

@@ -235,3 +235,49 @@ altered.documents[1].kind='Base.Axe';assert(not G.validate(altered),'physical ki
 events.start();assert(#R.known()==firstDocs+secondDocs,'all selected discoveries survive runtime reload')
 for n,v in ipairs(R.known()) do assert(v.id==all[n].id and v.body==all[n].body,'discovery order and rich text immutable on reload') end
 print('PASS variable mixed evidence discoveries, registry projection, tamper rejection and reload')
+
+-- A finished case's papers are still found (P4-R104). Owner in play, 2026-09-14:
+-- "I lost my files somewhere?" Both cases above completed and retired. The
+-- runtime now keeps where each paper was last seen, updates it from a throttled
+-- scan of the inventory, bags and loot panel, and never writes it more than
+-- once a minute per document.
+local Retired=require('ConspiracyFiles/Generated/RetiredCase')
+local Cases=require('ConspiracyFiles/Generated/SuccessiveCases')
+local function retiredRow(id)
+ for _,root in ipairs(Cases.sessions(saved.campaign)) do
+  if Retired.isRetired(root) then for _,row in ipairs(root.rows) do if row.id==id then return row end end end
+ end
+end
+local carried=inventory.items[1]; local docId=carried:getModData().cfGeneratedId
+assert(retiredRow(docId),'fixture: the case holding this paper has retired')
+for _,v in ipairs(inventory.items) do v.getContainer=function() return v.container end end
+local function run(ms) clock=clock+ms; for _=1,240 do events.tick() end end
+run(0)
+assert(retiredRow(docId).lastSeen=='Carried.','the scan records a carried paper: '..tostring(retiredRow(docId).lastSeen))
+local state,place=R.whereabouts(docId)
+assert(state=='lastseen' and place=='Carried.','whereabouts reports where a finished paper was last seen')
+-- Into a bag: found inside it, in the words the notebook uses.
+local satchelInv=container(); local satchel=instanceItem('Base.Bag_Satchel')
+satchel.getInventory=function() return satchelInv end; satchel.getName=function() return 'Satchel' end
+satchel.getOutermostContainer=function() return inventory end
+satchelInv.getContainingItem=function() return satchel end
+local bagged=inventory.items[2]; local baggedId=bagged:getModData().cfGeneratedId
+table.remove(inventory.items,2); satchelInv:AddItem(bagged); inventory:AddItem(satchel)
+bagged.getContainer=function() return bagged.container end
+-- Onto a desk shown in the loot panel, within the minute: not written yet.
+local desk=container()
+for i,v in ipairs(inventory.items) do if v==carried then table.remove(inventory.items,i); break end end
+desk:AddItem(carried)
+getPlayerLoot=function() return {backpacks={{inventory=desk}}} end
+run(11000)
+-- Both were written a moment ago by the first scan, so neither moves yet.
+assert(retiredRow(baggedId).lastSeen=='Carried.','no second write for one document within a minute')
+assert(retiredRow(docId).lastSeen=='Carried.','no second write for one document within a minute')
+run(61000)
+assert(retiredRow(baggedId).lastSeen=='Carried, in your Satchel.','a paper in a bag is found: '..tostring(retiredRow(baggedId).lastSeen))
+assert(retiredRow(docId).lastSeen=='In a desk.','after a minute the loot-panel sighting is written: '..tostring(retiredRow(docId).lastSeen))
+assert(select(2,R.whereabouts(docId))=='In a desk.')
+-- It survives a reload: the line is in the save, not in memory.
+events.start(); assert(select(2,R.whereabouts(docId))=='In a desk.','last seen survives a reload')
+getPlayerLoot=nil
+print('PASS finished case: papers keep where they were last seen, from bags and the loot panel, throttled per document, across reload')
