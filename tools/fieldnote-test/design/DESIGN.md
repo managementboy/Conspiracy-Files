@@ -17,6 +17,10 @@
 > labels on top of their icons on a 4K display. The package's text contract
 > — baseline anchors, integer coordinates, centre alignment resolved by
 > measured width — is honoured exactly; only the face is ours.
+>
+> A **resize grip** (C20, six embossed dimples) sits in the bottom-right corner,
+> right of the key recess and below BACK (P4-R95). Dragging that corner resizes
+> the whole device.
 
 ## A. Design description
 

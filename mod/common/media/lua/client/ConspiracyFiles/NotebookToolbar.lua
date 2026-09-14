@@ -64,7 +64,7 @@ function Toolbar.ensure()
         button:setDisplayBackground(false)
         button:ignoreWidthChange(); button:ignoreHeightChange()
         button:setImage(getTexture(NOTEBOOK_TEXTURE))
-        button:setTooltip("Open Survivor Notebook")
+        button:setTooltip("Open Case Records")
         button:addToUIManager()
         button.cfNotebookToolbarVersion=TOOLBAR_VERSION
         Toolbar.button=button; Toolbar.sidebar=sidebar

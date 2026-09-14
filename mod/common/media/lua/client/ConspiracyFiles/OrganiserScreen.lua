@@ -40,6 +40,9 @@ local Case={w=FG.device.w,h=FG.device.h,
 for _,ctl in ipairs(FG.controls) do
     Case.buttons[#Case.buttons+1]={id=ctl.id,x=ctl.x,y=ctl.y,w=ctl.w,h=ctl.h,action=ctl.action}
 end
+for _,component in ipairs(FG.components) do
+    if component.id=="C20" then Case.grip={x=component.x,y=component.y} end
+end
 local K=require("ConspiracyFiles/KnoxUI")
 local Apps=require("ConspiracyFiles/KnoxApps")
 require("ISUI/ISPanel")
@@ -196,21 +199,17 @@ S.MAX=3
 -- screen they are not running on. It defaulted to the real screen and the
 -- check reimplemented the formula instead, which is how it came to still be
 -- asserting the old rounding after the rounding changed.
+-- The size the organiser opens at when the player has never chosen one: the
+-- smallest, on every screen (P4-R94). It used to aim for half the screen
+-- height, which on the owner's display landed on the smallest size anyway and
+-- on other displays did not. The player's own choice, once made, is kept by
+-- savePrefs/loadPrefs and wins over this.
+--
+-- `height` is still accepted so the check can ask what this returns for a
+-- screen it is not running on; the answer is simply the same everywhere now.
+S.DEFAULT_SCALE=1
 function S.fit(height)
-    local h=tonumber(height) or (getCore and getCore():getScreenHeight()) or 720
-    -- The largest whole size that is at most FILL of the screen height. This
-    -- looked like a bug worth fixing - 1894 x 0.5 / 620 is 1.53 and flooring
-    -- it opens the device at 620px on a 4K screen, a third of the height - but
-    -- rounding to nearest gives 1240px, 65% of that screen, and the owner
-    -- rejected 1332px (70%) as far too big for a thing meant to fit in a
-    -- pocket. There is no whole size that lands near half on that screen: it
-    -- is 33% or 65%. So the rule stands as the owner set it, and the DEFAULT
-    -- is his open question - he now has a control that persists.
-    local want=math.floor(h*S.FILL/Case.h)
-    if want<1 then want=1 elseif want>S.MAX then want=S.MAX end
-    -- Never taller than the window it opens in, whatever the rounding wanted.
-    while want>1 and Case.h*want>h*0.95 do want=want-1 end
-    return want
+    return S.DEFAULT_SCALE
 end
 
 -- Off to the side, never over the survivor. Owner, 2026-09-12: "mabye not
@@ -270,8 +269,11 @@ end
 -- anyone who never tries.
 function Screen:grip()
     local s=self.scale
-    local g=14*s
-    return {x=Case.w*s-g,y=Case.h*s-g,w=g,h=g}
+    -- From the drawn grip (manifest component C20) out to the device's own
+    -- corner, so the whole corner handles a drag and the part that SHOWS it is
+    -- part of what you can grab.
+    local g=Case.grip or {x=Case.w-14,y=Case.h-14}
+    return {x=g.x*s,y=g.y*s,w=(Case.w-g.x)*s,h=(Case.h-g.y)*s}
 end
 
 -- The control being held right now, for the case's pressed colours. ONE

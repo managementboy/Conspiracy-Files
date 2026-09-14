@@ -568,3 +568,29 @@ machine independence. It is also a divergence from the design package's text
 contract, recorded in `DESIGN.md` alongside the key changes. And it means the
 legends scale with the DEVICE, not with the player's font size — they are on
 the plastic, not on the screen.
+
+## Five calls on the device and the story — 2026-09-14
+
+**P4-R91 — the shared week is real.** Every generated case is dated inside the
+same days of early July 1993, and the same few names recur across cases. That
+was an artefact of a single-case design reused for a ten-case campaign, and it
+made attentive players see one operation behind all of it with no payoff. Put
+to the owner as "keep them separate" or "make it real"; owner: **make it
+real.** The coincidence becomes the connecting thread. How visible that thread
+is to the player is still to be settled with the owner before content is
+written. The owner also restated the standing rule: while the mod is below 1.0,
+every rules change means a new game (P4-R77).
+
+**P4-R92 — the editorial pass is approved.** The corrected key help, the
+footers, the two voice lines and the tooltip wording may ship.
+
+**P4-R93 — "Open Survivor Notebook" is renamed.** The device replaced the
+notebook (P4-R79), so the fallback window's button no longer calls itself one.
+
+**P4-R94 — the organiser always opens small, then remembers.** The first open
+is the smallest size on every screen. Once the player changes the size, that
+size is kept.
+
+**P4-R95 — the drag corner gets a visible grip.** Resizing by dragging the
+bottom-right corner existed but nothing showed it. A grip is drawn there, as
+part of the design manifest like every other piece of the housing.

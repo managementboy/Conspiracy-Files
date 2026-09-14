@@ -1881,9 +1881,182 @@
       ]
     },
     {
+      "id": "C20",
+      "name": "Resize grip",
+      "order": 17,
+      "parent": "device",
+      "bounds": [
+        378,
+        590,
+        12,
+        12
+      ],
+      "purpose": "Embossed corner grip: drag here to change the size of the whole device.",
+      "role": "hardware",
+      "optional": false,
+      "primitives": [
+        {
+          "id": "C20.01",
+          "type": "rect",
+          "rect": [
+            9,
+            9,
+            2,
+            2
+          ],
+          "color": "shadow",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C20.02",
+          "type": "rect",
+          "rect": [
+            11,
+            11,
+            1,
+            1
+          ],
+          "color": "highlight",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C20.03",
+          "type": "rect",
+          "rect": [
+            5,
+            9,
+            2,
+            2
+          ],
+          "color": "shadow",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C20.04",
+          "type": "rect",
+          "rect": [
+            7,
+            11,
+            1,
+            1
+          ],
+          "color": "highlight",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C20.05",
+          "type": "rect",
+          "rect": [
+            1,
+            9,
+            2,
+            2
+          ],
+          "color": "shadow",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C20.06",
+          "type": "rect",
+          "rect": [
+            3,
+            11,
+            1,
+            1
+          ],
+          "color": "highlight",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C20.07",
+          "type": "rect",
+          "rect": [
+            9,
+            5,
+            2,
+            2
+          ],
+          "color": "shadow",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C20.08",
+          "type": "rect",
+          "rect": [
+            11,
+            7,
+            1,
+            1
+          ],
+          "color": "highlight",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C20.09",
+          "type": "rect",
+          "rect": [
+            5,
+            5,
+            2,
+            2
+          ],
+          "color": "shadow",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C20.10",
+          "type": "rect",
+          "rect": [
+            7,
+            7,
+            1,
+            1
+          ],
+          "color": "highlight",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C20.11",
+          "type": "rect",
+          "rect": [
+            9,
+            1,
+            2,
+            2
+          ],
+          "color": "shadow",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C20.12",
+          "type": "rect",
+          "rect": [
+            11,
+            3,
+            1,
+            1
+          ],
+          "color": "highlight",
+          "alpha": 1,
+          "border_thickness": 0
+        }
+      ]
+    },
+    {
       "id": "C19",
       "name": "Optional wear overlay",
-      "order": 17,
+      "order": 18,
       "parent": "device",
       "bounds": [
         0,
