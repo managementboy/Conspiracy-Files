@@ -701,6 +701,13 @@ for the new sizes: 1x rather than the new half size, because at 0.5x only Small
 or Normal text leaves a readable page. The size is written to the save's own
 ModData the moment it changes, so a crash does not lose it either.
 
+**P4-R106 — how a car's containers are reached.** Owner, 2026-09-14: "The globe
+box only opens when sitting in the front of the car", and a truck bed or trunk
+is reached from outside, "only if they are open". Placement may still put a
+clue in either; the checks now reach them exactly that way (vehicle_reach:
+truck bed refused while its door is shut, allowed once open, from outside;
+glove box from a front seat).
+
 **P4-R105 — the organiser reads in either hand.** Owner: "the left hand should
 leave the PDA open." Held in the off hand it stays open beside a one-handed
 weapon; a two-handed weapon fills both hands and puts it away. HELP says so.

@@ -36,6 +36,14 @@ for part in TruckBed GloveBox; do
     placed="$(ev "return CFVan.place('$part')")"
     [ "$(f 1 <<<"$placed")" = true ] || { fail "$part: $(f 2 <<<"$placed")"; continue; }
     sleep 2
+    shut=""
+    if [ "$part" = TruckBed ]; then
+        # Only if it is open (owner, 2026-09-14): beside it with the door shut, refused.
+        shut="$(ev 'return CFVan.accessWhileShut()')"; sleep 1
+        shut="$(ev 'return CFVan.accessWhileShut()')"
+        [ "$(f 1 <<<"$shut")" = true ] || fail "could not stand at the TruckBed: $shut"
+        [ "$(f 2 <<<"$shut")" = false ] || fail "the TruckBed opened from outside with its trunk door still shut"
+    fi
     reach="$(ev 'return CFLoop.reachPart()')"
     outside=no
     [ "$(f 1 <<<"$reach")" = true ] && wait_true 20 'CFLoop.partAccess()' && outside=yes
@@ -49,7 +57,7 @@ for part in TruckBed GloveBox; do
     taken=no; wait_true 20 'CFLoop.carried()' && taken=yes
     ev 'return CFLoop.exitVehicle()' >/dev/null; sleep 2
     say "$part: from outside=$outside from a seat=$seated icon=$opened taken=$taken ($(f 3 <<<"$reach"))"
-    rows+=("$part: reached from outside=$outside, from a seat=$seated, loot-panel icon=$opened, taken=$taken ($(f 3 <<<"$reach"))")
+    rows+=("$part: allowed while shut=$(f 2 <<<"$shut"), reached from outside=$outside, from a seat=$seated, loot-panel icon=$opened, taken=$taken ($(f 3 <<<"$reach"))")
     # A truck bed from outside; a glove box only from a front seat (owner, 2026-09-14).
     if [ "$part" = TruckBed ]; then
         [ "$outside" = yes ] || fail "the TruckBed could not be reached from outside the van"
