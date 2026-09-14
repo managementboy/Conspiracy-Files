@@ -121,6 +121,11 @@ def main():
     for check in sorted({m[1] for m in chosen}):
         print("baseline %s ..." % check, flush=True)
         clean = run("timeout 1500 tools/autotest/checks/%s.sh" % check, wt, timeout=1600)
+        # Kept like every mutation run: a baseline that could not start (exit 2,
+        # 20260914 body-searched) left nothing to say why.
+        runs = os.path.join(REPO, "dev/eval/linux/runs")
+        os.makedirs(runs, exist_ok=True)
+        open(os.path.join(runs, "%s-prove-baseline-%s.txt" % (stamp, check)), "w").write(clean.stdout + clean.stderr)
         baseline[check] = clean.returncode == 0
         lines.append("baseline %s: %s" % (check, "PASS" if baseline[check] else "FAIL (exit %d)" % clean.returncode))
         print(lines[-1], flush=True)

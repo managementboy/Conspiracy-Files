@@ -49,8 +49,15 @@ say "body: found=$(f 1 <<<"$body") searched=$(f 2 <<<"$body") idcards=$(f 3 <<<"
 
 # Her card becomes a lead once the body is opened, as a player opens it. Asked
 # as a plain true/false: CN-01 took the printed word "nil" for a row.
-opened="$(ev 'return CFBody.openBody()')"
-if [ "$(cut -f1 <<<"$opened")" != true ]; then sleep 2; opened="$(ev 'return CFBody.openBody()')"; fi
+# The loot panel lists a body only once it has caught up with the move, so ask
+# again rather than once: a single retry passed one run and failed the next
+# two (20260914T203013, 20260914T220704: "her body is not in the loot panel").
+opened="false"
+for _ in 1 2 3 4 5 6; do
+    opened="$(ev 'return CFBody.openBody()')"
+    [ "$(cut -f1 <<<"$opened")" = true ] && break
+    sleep 2
+done
 [ "$(f 1 <<<"$opened")" = true ] || fail "could not open her body in the loot panel: $opened"
 lead="false"
 for _ in 1 2 3 4 5 6 7 8 9 10; do
