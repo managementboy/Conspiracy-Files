@@ -384,4 +384,24 @@ function CFGAME.liveRecords()
         tostring(weekOk), tostring(otherDay)
 end
 
+-- ------------------------------------------------------------------ off hand
+-- Either hand opens it (owner, Windows, 2026-09-14: "the left hand should leave
+-- the PDA open"), and a two-handed weapon - which the game puts in BOTH hands -
+-- puts it away.
+function CFGAME.offHand()
+    local p = player(); if not p then return false, "no player" end
+    local item = O.held(p); if not item then return false, "no organiser" end
+    pcall(function() p:setPrimaryHandItem(nil); p:setSecondaryHandItem(item) end)
+    for _ = 1, 5 do pcall(O.tick) end
+    local openInLeft = S.window ~= nil
+    local axe = p:getInventory():AddItem("Base.Axe")
+    pcall(function() p:setPrimaryHandItem(axe); p:setSecondaryHandItem(axe) end)
+    for _ = 1, 5 do pcall(O.tick) end
+    local closed = S.window == nil
+    pcall(function() p:setPrimaryHandItem(nil); p:setSecondaryHandItem(nil) end)
+    if axe then pcall(function() p:getInventory():Remove(axe) end) end
+    for _ = 1, 5 do pcall(O.tick) end
+    return true, tostring(openInLeft), tostring(closed), tostring(axe ~= nil)
+end
+
 return CFGAME

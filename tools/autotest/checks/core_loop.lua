@@ -135,6 +135,45 @@ function L.exitVehicle()
     return true
 end
 
+-- A part reached from OUTSIDE - a truck bed, a trunk, a glove box through the
+-- passenger door - is reached as a player reaches it: stand in the part's own
+-- area and open the door that guards it. Getting in first was wrong for these.
+-- The game never shows a truck bed to someone sitting inside the vehicle
+-- (Vehicles.lua ContainerAccess.TruckBed), which failed 20260914T173417; and
+-- a failed entry left the harness at the driver's door, out of reach of a
+-- glove box (20260911T155401).
+local GUARD = { TruckBed = { "TrunkDoor", "DoorRear" }, TrunkDoor = { "TrunkDoor" },
+                GloveBox = { "DoorFrontRight" } }
+function L.reachPart()
+    local v, part = L.vehicle, L.part
+    if not v or not part then return false, "no vehicle part" end
+    local area = part:getArea()
+    local c = area and v:getAreaCenter(area)
+    if not c then return false, "the part has no area" end
+    getPlayer():teleportTo(c:getX(), c:getY(), v:getZ())
+    local opened = "none"
+    for _, doorId in ipairs(GUARD[part:getId()] or {}) do
+        local door = v:getPartById(doorId)
+        local d = door and door:getDoor()
+        if d and not d:isOpen() then
+            -- A harness shortcut, reported as a finding by the caller: placement
+            -- ignores locks (catalogue VC-06), so a locked door hides a clue.
+            if d:isLocked() then d:setLocked(false); L.unlocked = doorId end
+            ISVehicleMenu.onOpenDoor(getPlayer(), door)
+            opened = doorId
+            break
+        end
+    end
+    return true, tostring(part:getId()), opened
+end
+
+-- Whether the game itself would let the player at this part's container now.
+function L.partAccess()
+    local v, part = L.vehicle, L.part
+    if not v or not part then return false end
+    return v:canAccessContainer(part:getIndex(), getPlayer()) == true
+end
+
 -- Click the container's icon in the loot panel, as a player would. Right after
 -- a long move the panel has no icon yet, so the caller polls this.
 function L.openContainer()
@@ -175,6 +214,24 @@ function L.inspect()
 end
 
 function L.inspected() return R.isInspected(L.item) == true end
+
+-- The relay memo's date note, in the real game (P4-R96): once the memo is
+-- found, every record dated inside 30 June - 8 July 1993 carries it. Until
+-- now only a unit test had seen it.
+function L.dateNotes()
+    local Memo = require("ConspiracyFiles/Generated/RelayMemo")
+    local ui = ConspiracyFiles.NotebookUI
+    local rows = (ui and ui.generatedRows and ui.generatedRows("evidence")) or {}
+    local memo, dated, noted = false, 0, 0
+    for _, r in ipairs(R.known()) do
+        if r.kind == Memo.KIND then memo = true
+        elseif Memo.inWeek(r.body) then dated = dated + 1 end
+    end
+    for _, row in ipairs(rows) do
+        if tostring(row.detailText):find("DATE NOTE", 1, true) then noted = noted + 1 end
+    end
+    return tostring(memo), tostring(dated), tostring(noted)
+end
 
 -- What the notebook knows: count and the newest titles.
 function L.known()

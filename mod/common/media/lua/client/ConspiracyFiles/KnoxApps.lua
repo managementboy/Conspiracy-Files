@@ -451,7 +451,7 @@ A.help={
     list=function()
         return {
             {label="Survive first",title="Survive first",
-             detail="This machine records what you find. It sets no objectives and promises no answer.\n\nReading it takes your main hand. Something can reach you while you read."},
+             detail="This machine records what you find. It sets no objectives and promises no answer.\n\nReading it takes a hand, either one. A two-handed weapon puts it away. Something can reach you while you read."},
             {label="The keys",title="The keys",
              detail="HOME opens the programs, and wakes the machine.\nBACK steps out of a record, then out to the programs.\nThe rocker goes up and down: a line in a list, a page in a record.\n\nThe two keys between HOME and BACK are blank. They do nothing yet.\n\nThere is no power switch. Hold HOME for the lamp. Left alone it switches itself off."},
             {label="Size",title="Size",

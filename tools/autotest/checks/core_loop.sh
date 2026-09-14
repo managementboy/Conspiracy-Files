@@ -38,14 +38,22 @@ for i in $(seq 1 "$n"); do
     found="$(ev "return CFLoop.find($i)")"
     [ "$(cut -f1 <<<"$found")" = true ] || { fail "document $i not found where the runtime says: $(cut -f2 <<<"$found")"; continue; }
     name="$(cut -f2 <<<"$found")"; holder="$(cut -f3 <<<"$found")"; room="$(cut -f4 <<<"$found")"; floor="$(cut -f5 <<<"$found")"
+    access=true
     if [[ "$holder" == vehicle* ]]; then
         locked="$(ev 'return CFLoop.vehicleLocked()' | cut -f1)"
         [ "$locked" = true ] && { holder="$holder (locked)"; findings+=("document $i ($name) is in a LOCKED car: a player needs its key or a broken window"); }
-        ev 'return CFLoop.enterVehicle()' >/dev/null
-        if ! wait_true 30 'CFLoop.inVehicle()'; then
-            if [ "$locked" = true ]; then say "could not get into the locked car"
-            else fail "document $i ($name, $holder): could not get into the vehicle"; fi
+        # From outside first, as a player reaches a truck bed or a glove box; get
+        # in only when the part is still out of reach (a seat, or a blocked door).
+        ev 'return CFLoop.reachPart()' >/dev/null
+        if ! wait_true 20 'CFLoop.partAccess()'; then
+            ev 'return CFLoop.enterVehicle()' >/dev/null
+            if ! wait_true 30 'CFLoop.inVehicle()'; then
+                if [ "$locked" = true ]; then say "could not get into the locked car"
+                else fail "document $i ($name, $holder): could not get into the vehicle"; fi
+            fi
         fi
+        access="$(ev 'return CFLoop.partAccess()' | cut -f1)"
+        [ "$access" = true ] || findings+=("document $i ($name): the game would not open its $holder from where the harness stood")
     else
         ev "return CFLoop.goTo($i)" >/dev/null
     fi
@@ -59,13 +67,21 @@ for i in $(seq 1 "$n"); do
     ev "return CFLoop.remember($i)" >/dev/null
     [[ "$holder" == vehicle* ]] && { ev 'return CFLoop.exitVehicle()' >/dev/null; sleep 3; }
     rows+=("  $i. $name, in $holder, room $room, floor $floor (container icon clicked: $opened)")
-    [ "$opened" = yes ] || [[ "$holder" == *locked* ]] || fail "document $i ($name): the loot panel never showed its $holder"
+    # A missing icon is a failure only when the game itself allowed the part.
+    [ "$opened" = yes ] || [ "$access" != true ] || fail "document $i ($name): the game allowed its $holder but the loot panel never showed it"
     say "document $i: $name"
 done
 
 sleep 5
 known="$(ev 'return CFLoop.known()' | cut -f1)"
 [ "$known" = "$n" ] || fail "notebook knows $known of $n documents"
+# The relay memo's date note (P4-R96), in the real game at last.
+notes="$(ev 'return CFLoop.dateNotes()')"
+say "date notes: memo found=$(cut -f1 <<<"$notes") records dated in its week=$(cut -f2 <<<"$notes") carrying the note=$(cut -f3 <<<"$notes")"
+findings+=("relay memo date notes: memo found=$(cut -f1 <<<"$notes"), dated in its week=$(cut -f2 <<<"$notes"), carrying the note=$(cut -f3 <<<"$notes")")
+if [ "$(cut -f1 <<<"$notes")" = true ]; then
+    [ "$(cut -f3 <<<"$notes")" = "$(cut -f2 <<<"$notes")" ] || fail "the relay memo was found, but $(cut -f3 <<<"$notes") of $(cut -f2 <<<"$notes") records dated in its week carry the date note"
+fi
 completed=no; run_log | grep -q "Case complete" && completed=yes
 [ "$completed" = yes ] || fail "the case never reported completion"
 before_pen="$(ev 'return CFLoop.markers()')"

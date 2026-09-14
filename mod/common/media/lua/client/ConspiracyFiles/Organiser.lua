@@ -335,7 +335,8 @@ function O.read(player)
     if not screen or not screen.open then return false,"no reading surface loaded" end
     -- Already in the hand: open at once.
     local primary=safe(function() return player:getPrimaryHandItem() end)
-    if primary==item then safe(screen.open); log("organiser read"); return true end
+    local secondary=safe(function() return player:getSecondaryHandItem() end)
+    if primary==item or secondary==item then safe(screen.open); log("organiser read"); return true end
     -- Otherwise take it in hand first, the way the game equips anything, and
     -- open when the survivor actually has it. Never force the item into the
     -- slot: an equip that the player interrupts must leave them holding what
@@ -383,16 +384,20 @@ function O.handTick()
     if not player then return end
     local screen=ConspiracyFiles.OrganiserScreen
     if not screen then return end
+    -- Either hand (owner, Windows, 2026-09-14: "the left hand should leave the
+    -- PDA open"). Held in the off hand it stays open beside a one-handed weapon;
+    -- the cost moves to that hand - no torch, and a two-handed weapon fills
+    -- both hands, so the organiser cannot be in either and it closes.
     local primary=safe(player.getPrimaryHandItem,player)
+    local secondary=safe(player.getSecondaryHandItem,player)
     local ours
-    if primary==nil then
-        ours=false
-    elseif primary==O.lastPrimary then
-        ours=O.lastOurs                      -- same item, same answer
+    if primary==O.lastPrimary and secondary==O.lastSecondary then
+        ours=O.lastOurs                      -- same items, same answer
     else
-        ours=safe(primary.getFullType,primary)==O.TYPE
+        ours=(primary~=nil and safe(primary.getFullType,primary)==O.TYPE)
+            or (secondary~=nil and safe(secondary.getFullType,secondary)==O.TYPE)
     end
-    O.lastPrimary,O.lastOurs=primary,ours
+    O.lastPrimary,O.lastSecondary,O.lastOurs=primary,secondary,ours
     if ours and not screen.window then
         if O.booting and screen.boot then
             O.booting=false

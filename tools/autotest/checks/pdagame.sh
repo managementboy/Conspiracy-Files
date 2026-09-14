@@ -62,6 +62,15 @@ ev 'return CFGAME.takeOut()' >/dev/null
 reopen="$(ev 'return CFGAME.takeOut()')"
 [ "$(f 2 <<<"$reopen")" = true ] || fail "the device would not reopen after being put away"
 
+# Either hand (owner, Windows, 2026-09-14); a two-handed weapon puts it away.
+ev 'return CFGAME.putAway()' >/dev/null
+off="$(ev 'return CFGAME.offHand()')"
+say "left hand: open=$(f 2 <<<"$off") a two-handed weapon closed it=$(f 3 <<<"$off")"
+[ "$(f 4 <<<"$off")" = true ] || fail "the check could not give the survivor a two-handed weapon: $off"
+[ "$(f 2 <<<"$off")" = true ] || fail "the organiser in the left hand did not open Knox.OS: $off"
+[ "$(f 3 <<<"$off")" = true ] || fail "a two-handed weapon did not put the organiser away: $off"
+ev 'return CFGAME.takeOut()' >/dev/null
+
 # --- every screen, by tapping its icon -------------------------------------
 tour="$(ev 'return CFGAME.tour()')"
 [ "$(f 1 <<<"$tour")" = true ] && say "toured $(f 2 <<<"$tour") programs: $(f 3 <<<"$tour")" \

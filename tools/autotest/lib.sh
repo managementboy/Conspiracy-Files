@@ -145,7 +145,9 @@ inspect_doc() {
     f="$(ev "return CFLoop.find($i)")"
     [ "$(cut -f1 <<<"$f")" = true ] || { echo "document $i not found: $(cut -f2 <<<"$f")"; return 1; }
     h="$(cut -f3 <<<"$f")"
-    if [[ "$h" == vehicle* ]]; then ev 'return CFLoop.enterVehicle()' >/dev/null; wait_true 30 'CFLoop.inVehicle()' >/dev/null
+    # Outside first, as core_loop.sh does: a truck bed is never shown to someone inside the vehicle.
+    if [[ "$h" == vehicle* ]]; then ev 'return CFLoop.reachPart()' >/dev/null
+        wait_true 20 'CFLoop.partAccess()' >/dev/null || { ev 'return CFLoop.enterVehicle()' >/dev/null; wait_true 30 'CFLoop.inVehicle()' >/dev/null; }
     else ev "return CFLoop.goTo($i)" >/dev/null; fi
     for _ in 1 2 3 4 5 6; do [ "$(ev 'return CFLoop.openContainer()' | cut -f1)" = true ] && break; sleep 1; done
     ev 'return CFLoop.take()' >/dev/null
