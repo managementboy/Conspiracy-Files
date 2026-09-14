@@ -509,7 +509,10 @@ function P.onDeadBodySpawn(body)
         card=read(container,"AddItem",P.CARD)
         if card then stamp(card,name,caseId) end
     end
-    log("case person's body ("..tostring(caseId).."): marked searched; card "
+    -- The flag's actual value, read back, so play logs and checks can see it
+    -- held. A reading taken later proves nothing: the game marks any body
+    -- searched itself once the loot panel shows it (case_body, 2026-09-14).
+    log("case person's body ("..tostring(caseId).."): searched="..tostring(read(container,"isExplored")==true).."; card "
         ..(has and "already there" or (card and "added" or "could not be added")))
 end
 

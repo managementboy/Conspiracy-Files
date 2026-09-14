@@ -8,30 +8,6 @@ CFBody = CFBody or {}
 local B = CFBody
 local P = ConspiracyFiles.CasePerson
 
--- The searched flag read AT THE MOMENT a body appears. Read later, it proves
--- nothing: the game marks a body searched by itself the moment the loot panel
--- shows it, so a check reading the flag after walking up to the body saw
--- "searched" whether or not the mod had set it (prove.py, body-searched,
--- 20260914T214459). This listener is added after the mod's own, so it runs
--- after the mod's handler and before any panel can have touched the body.
-B.spawned = B.spawned or {}
-if not B.watching then
-    B.watching = true
-    -- Counted and its errors kept: the first version recorded nothing at all
-    -- for either body (20260914T215207), and a pcall that swallows its own
-    -- error cannot say whether it never fired or fired and failed.
-    B.fired, B.lastError = 0, "none"
-    Events.OnDeadBodySpawn.Add(function(body)
-        B.fired = B.fired + 1
-        local ok, err = pcall(function()
-            local md = body:getModData()
-            local tag = md[P.MARK] and "case" or (md.cfPlainProbe and "plain") or nil
-            if tag then B.spawned[tag] = tostring(body:getContainer():isExplored()) end
-        end)
-        if not ok then B.lastError = tostring(err) end
-    end)
-end
-
 function B.caseName()
     local w = ModData.get("ConspiracyFiles.Generated.G2")
     local c = w and (w.campaign and w.campaign.canonical or w.canonical)
@@ -214,8 +190,5 @@ function B.sexPick()
         tostring(man ~= nil and not man:isFemale()), tostring(manMatched)
 end
 
-function B.spawnSearched(tag)
-    return tostring(B.spawned[tag]), tostring(B.fired), tostring(B.lastError)
-end
 
 return CFBody
