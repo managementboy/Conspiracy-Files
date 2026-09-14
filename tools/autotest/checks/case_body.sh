@@ -30,8 +30,9 @@ say "case person: $name; the bound zombie carries '$(f 2 <<<"$found")' at $(f 3 
 
 ev 'return CFBody.kill()' >/dev/null
 sleep 6
-at_spawn="$(ev "return CFBody.spawnSearched('case')" | f 1)"
-say "her body, searched at the moment it appeared: $at_spawn"
+spawn_read="$(ev "return CFBody.spawnSearched('case')")"
+at_spawn="$(f 1 <<<"$spawn_read")"
+say "her body, searched at the moment it appeared: $at_spawn (body-spawn events seen: $(f 2 <<<"$spawn_read"), last error: $(f 3 <<<"$spawn_read"))"
 [ "$at_spawn" = true ] || fail "the body is not marked searched when it appears (at spawn: $at_spawn), so the game will roll its own cards in her name"
 body="$(ev 'return CFBody.body()')"
 say "body: found=$(f 1 <<<"$body") searched=$(f 2 <<<"$body") idcards=$(f 3 <<<"$body") ours=$(f 4 <<<"$body") [$(f 5 <<<"$body")] items=$(f 6 <<<"$body")"

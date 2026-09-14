@@ -113,7 +113,23 @@ def main():
     stamp = datetime.datetime.now().strftime("%Y%m%dT%H%M%S")
     lines = ["Linux mutation proof %s" % stamp, "worktree: %s at %s" % (wt, head), ""]
     caught = 0
+    # Each check first runs UNMUTATED. A check that already fails proves
+    # nothing about a bug put back into it: the first run counted body-searched
+    # as caught when the clean check printed the very same failure
+    # (20260914T215207). Only a mutation whose check passed clean can be caught.
+    baseline = {}
+    for check in sorted({m[1] for m in chosen}):
+        print("baseline %s ..." % check, flush=True)
+        clean = run("timeout 1500 tools/autotest/checks/%s.sh" % check, wt, timeout=1600)
+        baseline[check] = clean.returncode == 0
+        lines.append("baseline %s: %s" % (check, "PASS" if baseline[check] else "FAIL (exit %d)" % clean.returncode))
+        print(lines[-1], flush=True)
+    lines.append("")
     for name, check, path, good, bad, expect in chosen:
+        if not baseline.get(check):
+            lines.append("BASELINE FAILED %s (%s): the clean check fails, so this mutation proves nothing" % (name, check))
+            print(lines[-1], flush=True)
+            continue
         full = os.path.join(wt, path)
         text = open(full, newline="").read()
         count = text.count(good)

@@ -17,12 +17,18 @@ local P = ConspiracyFiles.CasePerson
 B.spawned = B.spawned or {}
 if not B.watching then
     B.watching = true
+    -- Counted and its errors kept: the first version recorded nothing at all
+    -- for either body (20260914T215207), and a pcall that swallows its own
+    -- error cannot say whether it never fired or fired and failed.
+    B.fired, B.lastError = 0, "none"
     Events.OnDeadBodySpawn.Add(function(body)
-        pcall(function()
+        B.fired = B.fired + 1
+        local ok, err = pcall(function()
             local md = body:getModData()
             local tag = md[P.MARK] and "case" or (md.cfPlainProbe and "plain") or nil
             if tag then B.spawned[tag] = tostring(body:getContainer():isExplored()) end
         end)
+        if not ok then B.lastError = tostring(err) end
     end)
 end
 
@@ -208,6 +214,8 @@ function B.sexPick()
         tostring(man ~= nil and not man:isFemale()), tostring(manMatched)
 end
 
-function B.spawnSearched(tag) return tostring(B.spawned[tag]) end
+function B.spawnSearched(tag)
+    return tostring(B.spawned[tag]), tostring(B.fired), tostring(B.lastError)
+end
 
 return CFBody
