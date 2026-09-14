@@ -18,6 +18,7 @@
 -- counts as an active generated runtime (its probe state can stand in for
 -- one), and that decision stays where it is made.
 local PlaceNames=require("ConspiracyFiles/Generated/PlaceNames")
+local RelayMemo=require("ConspiracyFiles/Generated/RelayMemo")
 
 local Rows={}
 
@@ -35,7 +36,13 @@ function Rows.build(section,runtime)
     local wrapper=ModData and ModData.get and ModData.get("ConspiracyFiles.Generated.G2")
     local Cases=wrapper and require("ConspiracyFiles/Generated/SuccessiveCases")
     wrapper=Cases and Cases.current(wrapper)
-    for _,r in ipairs(known) do titles[r.id]=r.title end
+    -- The week is only pointed out once the relay memo that defines it has
+    -- been found (P4-R96); before that the dates are just dates.
+    local memoFound=false
+    for _,r in ipairs(known) do
+        titles[r.id]=r.title
+        if r.kind==RelayMemo.KIND then memoFound=true end
+    end
     -- "Disputes delivery in" was left over from when every case was about a
     -- delivery. Plain verbs that fit any of the twenty stories.
     local meanings={corroborates="Agrees with",['disputes-delivery']="Does not match",recontextualises="Adds context to"}
@@ -75,6 +82,11 @@ function Rows.build(section,runtime)
                 local lead=string.find(own,noun,1,true) and "another" or articleFor(noun)
                 detail=detail.."\n\nProbably refers to "..lead.." "..noun.."?"
             end
+        end
+        -- A maybe, never a finding: the mod does not know the week means
+        -- anything. The memo is not noted against itself.
+        if memoFound and r.kind~=RelayMemo.KIND and RelayMemo.inWeek(r.body) then
+            detail=detail.."\n\n"..RelayMemo.NOTE
         end
         -- No "Inspected " prefix: every journal row carried it, so it told the
         -- reader nothing and cost ten characters of a narrow column. The

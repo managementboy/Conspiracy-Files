@@ -50,6 +50,7 @@ local affinity={
     creditcard={bedroom=true,livingroom=true,office=true},
     businesscard={bedroom=true,livingroom=true,office=true},
     ticket={bedroom=true,livingroom=true,office=true},
+    memo={office=true,toolstore=true,garagestorage=true},
 }
 -- Paperwork in a car. A glovebox is the best container in the game for a
 -- document - small, private, nothing arrives there by accident - so every

@@ -1,6 +1,7 @@
 -- G1: offline generation and save-shaped restoration. Never loaded by the mod.
 local Catalog=require("ConspiracyFiles/Generated/Catalog")
 local V=require("ConspiracyFiles/Validator")
+local Memo=require("ConspiracyFiles/Generated/RelayMemo")
 local K=require("ConspiracyFiles/Generated/EvidenceKinds")
 local Roles=require("ConspiracyFiles/Generated/EvidenceRoles")
 local Premises=require("ConspiracyFiles/Generated/Premises")
@@ -175,7 +176,7 @@ local function article(label)
     if first=="a" or first=="e" or first=="i" or first=="o" or first=="u" then return "an" end
     return "a"
 end
-local function build(seed,revision,sites,cast)
+local function build(seed,revision,sites,cast,relayMemo)
     local random=rng(seed)
     -- The premise is drawn first, so it is the seed's most significant choice:
     -- what the case is ABOUT, before who is in it or how it resolves. See
@@ -571,10 +572,17 @@ local function build(seed,revision,sites,cast)
             documents[1].body=documents[1].body..line
         end
     end
+    -- The first case of a game carries the relay memo (P4-R96): one more
+    -- paper, last, at the second site, after every draw above so no story
+    -- document changes. It takes no role and links to nothing.
+    if relayMemo then
+        documents[#documents+1]={id=prefix.."document-"..(#documents+1),kind=Memo.KIND,title=Memo.TITLE,
+            locationId=b.id,body=Memo.body(),references={b.id},links={},leads={}}
+    end
     return {schemaVersion=G.SCHEMA,generatorRevision=G.REVISION,catalogRevision=revision,seed=seed,
         caseId=prefix.."case",outline=outline,premiseId=premise.id,contentStatus="development-draft-unapproved",
         locations=copy(sites),cast=#met>0 and copy(met) or nil,facts=facts,identities=people,
-        organisation=org,documents=documents}
+        organisation=org,documents=documents,relayMemo=relayMemo and true or nil}
 end
 -- What the player has met, reduced to what a case may safely carry: plain
 -- two-word-or-more names, printable, bounded, deduplicated and ORDERED, since
@@ -606,8 +614,9 @@ function G.generate(catalog,seed,options)
     if not seedOK(seed) then return nil,"seed must be an integer from 1 through 2147483646" end
     options=options or {}
     if type(options)~="table" then return nil,"invalid generator options" end
-    for key in pairs(options) do if key~="mapId" and key~="buildLine" and key~="allowSynthetic" and key~="names" then return nil,"unknown generator option" end end
+    for key in pairs(options) do if key~="mapId" and key~="buildLine" and key~="allowSynthetic" and key~="names" and key~="relayMemo" then return nil,"unknown generator option" end end
     if type(options.mapId)~="string" or type(options.buildLine)~="string" then return nil,"map and build are required" end
+    if options.relayMemo~=nil and type(options.relayMemo)~="boolean" then return nil,"invalid relay memo option" end
     local eligible,why=Catalog.eligible(catalog,options.mapId,options.buildLine,options.allowSynthetic)
     if not eligible then return nil,why end
     local pairs={}
@@ -618,7 +627,7 @@ function G.generate(catalog,seed,options)
     local random=rng((seed+4099)%2147483646+1)
     local selected=pairs[random(#pairs)]
     if random(2)==1 then selected={selected[2],selected[1]} end
-    local result=build(seed,catalog.revision,selected,G.castFrom(options.names))
+    local result=build(seed,catalog.revision,selected,G.castFrom(options.names),options.relayMemo==true)
     local valid,err=G.validate(result); if not valid then return nil,err end
     return copy(result)
 end
@@ -627,18 +636,19 @@ function G.generateSelected(catalog,seed,options,orderedSiteIds)
     local safe=V.validateStructure({options=options,orderedSiteIds=orderedSiteIds})
     if not safe or type(options)~="table" or type(orderedSiteIds)~="table" then return nil,"invalid selected-generation input" end
     for key in pairs(options) do
-        if key~="mapId" and key~="buildLine" and key~="allowSynthetic" and key~="names" then return nil,"unknown generator option" end
+        if key~="mapId" and key~="buildLine" and key~="allowSynthetic" and key~="names" and key~="relayMemo" then return nil,"unknown generator option" end
     end
     for key in pairs(orderedSiteIds) do if key~=1 and key~=2 then return nil,"exactly two ordered site IDs required" end end
     for i=1,2 do if type(orderedSiteIds[i])~="string" or #orderedSiteIds[i]==0 or #orderedSiteIds[i]>300 then return nil,"invalid ordered site ID" end end
     if orderedSiteIds[1]==orderedSiteIds[2] then return nil,"two distinct site IDs required" end
     if not seedOK(seed) or type(options.mapId)~="string" or type(options.buildLine)~="string"
-        or (options.allowSynthetic~=nil and type(options.allowSynthetic)~="boolean") then return nil,"invalid selected-generation input" end
+        or (options.allowSynthetic~=nil and type(options.allowSynthetic)~="boolean")
+        or (options.relayMemo~=nil and type(options.relayMemo)~="boolean") then return nil,"invalid selected-generation input" end
     local eligible,why=Catalog.eligible(catalog,options.mapId,options.buildLine,options.allowSynthetic); if not eligible then return nil,why end
     local byId={}; for _,site in ipairs(eligible) do byId[site.id]=site end
     local a,b=byId[orderedSiteIds[1]],byId[orderedSiteIds[2]]
     if not a or not b or not Catalog.distinct(a,b) then return nil,"selected sites are not eligible and distinct" end
-    local result=build(seed,catalog.revision,{a,b},G.castFrom(options.names)); local valid,err=G.validate(result); if not valid then return nil,err end
+    local result=build(seed,catalog.revision,{a,b},G.castFrom(options.names),options.relayMemo==true); local valid,err=G.validate(result); if not valid then return nil,err end
     return copy(result)
 end
 -- Gameplay-facing creation entry point. Legacy generate remains an offline fixture API.
@@ -663,7 +673,11 @@ function G.validate(case)
     local valid,err=Catalog.validate({revision=case.catalogRevision,locations=case.locations})
     if not valid then return false,err end
     if #case.locations~=2 then return false,"expected two locations" end
-    if #case.documents<G.MIN_EVIDENCE or #case.documents>G.MAX_EVIDENCE then return false,"invalid evidence role count" end
+    if case.relayMemo~=nil and case.relayMemo~=true then return false,"invalid relay memo flag" end
+    -- The relay memo takes no story role, so it is not counted against the
+    -- role bounds; the rebuild below still proves it is exactly the one paper.
+    local roleCount=#case.documents-(case.relayMemo and 1 or 0)
+    if roleCount<G.MIN_EVIDENCE or roleCount>G.MAX_EVIDENCE then return false,"invalid evidence role count" end
     local a,b=case.locations[1],case.locations[2]
     if not Catalog.distinct(a,b) or a.mapId~=b.mapId or a.buildLine~=b.buildLine then return false,"incompatible saved locations" end
     for _,site in ipairs(case.locations) do if site.excluded or site.paperStorage~="observed" then return false,"ineligible saved location" end end
@@ -677,7 +691,7 @@ function G.validate(case)
         local canonical=G.castFrom(case.cast)
         if not canonical or not same(canonical,case.cast) then return false,"invalid case cast" end
     end
-    if not same(case,build(case.seed,case.catalogRevision,case.locations,case.cast)) then return false,"case facts, text or structure do not match recorded revision" end
+    if not same(case,build(case.seed,case.catalogRevision,case.locations,case.cast,case.relayMemo)) then return false,"case facts, text or structure do not match recorded revision" end
     return true
 end
 function G.restore(saved)

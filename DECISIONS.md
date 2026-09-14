@@ -594,3 +594,17 @@ size is kept.
 **P4-R95 — the drag corner gets a visible grip.** Resizing by dragging the
 bottom-right corner existed but nothing showed it. A grip is drawn there, as
 part of the design manifest like every other piece of the housing.
+
+**P4-R96 — the thread is the relay memo, and the records point it out.**
+Settles the visibility question P4-R91 left open. The owner chose that the
+records point the week out, then — told the relay memo could not be found
+while generated cases run — chose to put the memo in. The approved Dead Air
+memo (Relay 31, "EFFECTIVE 30 JUNE THROUGH 08 JULY") is placed as one extra
+paper in the **first** case of a game, at that case's second site, taking no
+story role. Once it has been found, any record dated inside those nine days
+gets a short note saying so, as a maybe; the memo is never noted against
+itself and nothing is said before it is found. Its words are read from
+`Content.lua`, not copied. Later cases are unchanged, so games already under
+way keep their cases but never see the memo — **the memo needs a new game.**
+The paper's description, its two readings and the note are new prose and
+await the owner's approval (ADR-0002).

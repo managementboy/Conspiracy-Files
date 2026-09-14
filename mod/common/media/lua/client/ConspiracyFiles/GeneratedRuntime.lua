@@ -349,6 +349,9 @@ local function prepare(result,seed,later,house)
         preparing=false
         if house and currentHouse()~=house then log("First case deferred: player changed building.");return end
         local options={mapId=result.map,buildLine=result.gameVersion}
+        -- The first case of a game carries the relay memo (P4-R96); later
+        -- cases never do, so a game holds exactly one.
+        if not later then options.relayMemo=true end
         -- The people this case is about come from bodies the player has already
         -- searched, when there are any. Read once, here, at creation, and saved
         -- in the case - never re-read at load, which would break validation.
