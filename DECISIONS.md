@@ -694,9 +694,12 @@ sizes 0.5x, 1x, 1.5x, 2x and 3x; a bigger machine shows more of the text and
 the type keeps the size chosen. SETUP's Text and Machine lines open Palm popup
 lists, as in the owner's photo: tap a line to choose, tap outside to leave it,
 the rocker steps through it. A saved text size is kept by name; saves from
-before keep Small, Medium and Large. **The machine still first opens at 1x, not
-at the new half size** (P4-R94 said "the smallest"): at 0.5x only Small or
-Normal text leaves a readable page. Say so if it should open at half.
+before keep Small, Medium and Large. **A save first opens the machine at 1x,
+and from then on at the size it was last left at** - owner, 2026-09-14: "We
+load at 1x and remember the last close size in the save." This settles P4-R94
+for the new sizes: 1x rather than the new half size, because at 0.5x only Small
+or Normal text leaves a readable page. The size is written to the save's own
+ModData the moment it changes, so a crash does not lose it either.
 
 **P4-R105 — the organiser reads in either hand.** Owner: "the left hand should
 leave the PDA open." Held in the off hand it stays open beside a one-handed
