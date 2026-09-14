@@ -126,6 +126,15 @@ function L.enterVehicle()
     local c = v:getAreaCenter(v:getPassengerArea(0))
     if c then getPlayer():teleportTo(c:getX(), c:getY(), v:getZ())
     else getPlayer():teleportTo(v:getX() + 2.5, v:getY() + 0.5, v:getZ()) end
+    -- A locked car, as a player with its key would find it. Without this the
+    -- harness took a paper out of a locked glove box it could never have
+    -- reached, the mod saw no ordinary pickup, and that paper's map mark went
+    -- missing (20260914T203902). The lock itself is reported as a finding.
+    for p = 0, v:getPartCount() - 1 do
+        local part = v:getPartByIndex(p)
+        local d = part and part:getDoor()
+        if d and d:isLocked() then d:setLocked(false); L.unlocked = true end
+    end
     ISVehicleMenu.onEnter(getPlayer(), v, 0)
     return true
 end
@@ -135,18 +144,18 @@ function L.exitVehicle()
     return true
 end
 
--- A part reached from OUTSIDE - a truck bed, a trunk, a glove box through the
--- passenger door - is reached as a player reaches it: stand in the part's own
--- area and open the door that guards it. Getting in first was wrong for these.
+-- A part reached from OUTSIDE - a truck bed or a trunk - is reached as a player
+-- reaches it: stand in the part's own area and open the door that guards it.
 -- The game never shows a truck bed to someone sitting inside the vehicle
--- (Vehicles.lua ContainerAccess.TruckBed), which failed 20260914T173417; and
--- a failed entry left the harness at the driver's door, out of reach of a
--- glove box (20260911T155401).
-local GUARD = { TruckBed = { "TrunkDoor", "DoorRear" }, TrunkDoor = { "TrunkDoor" },
-                GloveBox = { "DoorFrontRight" } }
+-- (Vehicles.lua ContainerAccess.TruckBed), which failed 20260914T173417.
+-- A glove box is the opposite: it opens only from a front seat (owner,
+-- 2026-09-14: "The globe box only opens when sitting in the front of the car"),
+-- so for it this returns false and the caller gets in.
+local GUARD = { TruckBed = { "TrunkDoor", "DoorRear" }, TrunkDoor = { "TrunkDoor" } }
 function L.reachPart()
     local v, part = L.vehicle, L.part
     if not v or not part then return false, "no vehicle part" end
+    if not GUARD[part:getId()] then return false, tostring(part:getId()), "reached from a seat" end
     local area = part:getArea()
     local c = area and v:getAreaCenter(area)
     if not c then return false, "the part has no area" end

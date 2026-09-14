@@ -37,18 +37,25 @@ for part in TruckBed GloveBox; do
     [ "$(f 1 <<<"$placed")" = true ] || { fail "$part: $(f 2 <<<"$placed")"; continue; }
     sleep 2
     reach="$(ev 'return CFLoop.reachPart()')"
-    outside=no; wait_true 20 'CFLoop.partAccess()' && outside=yes
+    outside=no
+    [ "$(f 1 <<<"$reach")" = true ] && wait_true 20 'CFLoop.partAccess()' && outside=yes
+    seated=no
     if [ "$outside" = no ]; then
-        ev 'return CFLoop.enterVehicle()' >/dev/null; wait_true 30 'CFVan.inVehicle()' >/dev/null
+        ev 'return CFLoop.enterVehicle()' >/dev/null; wait_true 30 'CFVan.inVehicle()' && seated=yes
     fi
     opened=no
     for _ in 1 2 3 4 5 6 7 8; do [ "$(ev 'return CFLoop.openContainer()' | f 1)" = true ] && { opened=yes; break; }; sleep 1; done
     ev 'return CFLoop.take()' >/dev/null
     taken=no; wait_true 20 'CFLoop.carried()' && taken=yes
     ev 'return CFLoop.exitVehicle()' >/dev/null; sleep 2
-    say "$part: from outside=$outside icon=$opened taken=$taken (door opened: $(f 3 <<<"$reach"))"
-    rows+=("$part: reached from outside=$outside, loot-panel icon=$opened, taken=$taken, door opened: $(f 3 <<<"$reach")")
-    [ "$outside" = yes ] || fail "the $part could not be reached from outside the van"
+    say "$part: from outside=$outside from a seat=$seated icon=$opened taken=$taken ($(f 3 <<<"$reach"))"
+    rows+=("$part: reached from outside=$outside, from a seat=$seated, loot-panel icon=$opened, taken=$taken ($(f 3 <<<"$reach"))")
+    # A truck bed from outside; a glove box only from a front seat (owner, 2026-09-14).
+    if [ "$part" = TruckBed ]; then
+        [ "$outside" = yes ] || fail "the TruckBed could not be reached from outside the van"
+    else
+        [ "$seated" = yes ] || fail "the GloveBox could not be reached from the front seat"
+    fi
     [ "$opened" = yes ] || fail "the loot panel never showed the $part"
     [ "$taken" = yes ] || fail "the paper in the $part never reached the inventory"
 done

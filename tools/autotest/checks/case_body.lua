@@ -87,6 +87,20 @@ end
 -- observer records a card only from rows the inventory pane actually draws,
 -- so the container must be selected and drawn before the notebook can know it.
 function B.openBody()
+    -- Stand beside her body first: the loot panel lists only what is within a
+    -- tile, and the kill left the player where the zombie was, not where the
+    -- body came to rest (20260914T203013: "her body is not in the loot panel").
+    local cell = getCell()
+    for dx = -3, 3 do
+        for dy = -3, 3 do
+            local square = cell:getGridSquare(B.x + dx, B.y + dy, B.z)
+            for _, o in ipairs(square and bodiesOn(square) or {}) do
+                if o:getModData()[P.MARK] then
+                    getPlayer():teleportTo(o:getX() + 0.5, o:getY() + 0.5, o:getZ())
+                end
+            end
+        end
+    end
     local loot = getPlayerLoot(0)
     loot:refreshBackpacks()
     for _, b in ipairs(loot.backpacks) do

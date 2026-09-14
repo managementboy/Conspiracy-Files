@@ -44,8 +44,8 @@ for i in $(seq 1 "$n"); do
         [ "$locked" = true ] && { holder="$holder (locked)"; findings+=("document $i ($name) is in a LOCKED car: a player needs its key or a broken window"); }
         # From outside first, as a player reaches a truck bed or a glove box; get
         # in only when the part is still out of reach (a seat, or a blocked door).
-        ev 'return CFLoop.reachPart()' >/dev/null
-        if ! wait_true 20 'CFLoop.partAccess()'; then
+        reached="$(ev 'return CFLoop.reachPart()' | cut -f1)"
+        if [ "$reached" != true ] || ! wait_true 20 'CFLoop.partAccess()'; then
             ev 'return CFLoop.enterVehicle()' >/dev/null
             if ! wait_true 30 'CFLoop.inVehicle()'; then
                 if [ "$locked" = true ]; then say "could not get into the locked car"

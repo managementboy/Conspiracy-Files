@@ -41,6 +41,7 @@ say "body: found=$(f 1 <<<"$body") searched=$(f 2 <<<"$body") idcards=$(f 3 <<<"
 # Her card becomes a lead once the body is opened, as a player opens it. Asked
 # as a plain true/false: CN-01 took the printed word "nil" for a row.
 opened="$(ev 'return CFBody.openBody()')"
+if [ "$(cut -f1 <<<"$opened")" != true ]; then sleep 2; opened="$(ev 'return CFBody.openBody()')"; fi
 [ "$(f 1 <<<"$opened")" = true ] || fail "could not open her body in the loot panel: $opened"
 lead="false"
 for _ in 1 2 3 4 5 6 7 8 9 10; do
