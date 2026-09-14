@@ -8,6 +8,24 @@ CFBody = CFBody or {}
 local B = CFBody
 local P = ConspiracyFiles.CasePerson
 
+-- The searched flag read AT THE MOMENT a body appears. Read later, it proves
+-- nothing: the game marks a body searched by itself the moment the loot panel
+-- shows it, so a check reading the flag after walking up to the body saw
+-- "searched" whether or not the mod had set it (prove.py, body-searched,
+-- 20260914T214459). This listener is added after the mod's own, so it runs
+-- after the mod's handler and before any panel can have touched the body.
+B.spawned = B.spawned or {}
+if not B.watching then
+    B.watching = true
+    Events.OnDeadBodySpawn.Add(function(body)
+        pcall(function()
+            local md = body:getModData()
+            local tag = md[P.MARK] and "case" or (md.cfPlainProbe and "plain") or nil
+            if tag then B.spawned[tag] = tostring(body:getContainer():isExplored()) end
+        end)
+    end)
+end
+
 function B.caseName()
     local w = ModData.get("ConspiracyFiles.Generated.G2")
     local c = w and (w.campaign and w.campaign.canonical or w.canonical)
@@ -136,6 +154,9 @@ function B.spawnPlain()
     local z = list and list:size() > 0 and list:get(0)
     if not z then return false, "no zombie spawned" end
     pcall(function() z:setUseless(true) end)
+    -- Stamped, so the listener and the search find THIS body - not one the
+    -- check already showed in the loot panel (20260914T214459 picked one).
+    z:getModData().cfPlainProbe = true
     B.plain = z
     B.px, B.py, B.pz = math.floor(z:getX()), math.floor(z:getY()), math.floor(z:getZ())
     z:Kill(nil)
@@ -148,7 +169,7 @@ function B.plainBody()
         for dy = -3, 3 do
             local square = cell:getGridSquare(B.px + dx, B.py + dy, B.pz)
             for _, o in ipairs(square and bodiesOn(square) or {}) do
-                if not o:getModData()[P.MARK] then
+                if o:getModData().cfPlainProbe then
                     local c = o:getContainer()
                     local before = c:isExplored()
                     getPlayer():teleportTo(o:getX() + 1, o:getY(), o:getZ())
@@ -186,5 +207,7 @@ function B.sexPick()
     return true, tostring(woman ~= nil and woman:isFemale()), tostring(womanMatched),
         tostring(man ~= nil and not man:isFemale()), tostring(manMatched)
 end
+
+function B.spawnSearched(tag) return tostring(B.spawned[tag]) end
 
 return CFBody

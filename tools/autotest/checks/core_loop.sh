@@ -45,7 +45,10 @@ for i in $(seq 1 "$n"); do
         # From outside first, as a player reaches a truck bed or a glove box; get
         # in only when the part is still out of reach (a seat, or a blocked door).
         reached="$(ev 'return CFLoop.reachPart()' | cut -f1)"
-        if [ "$reached" != true ] || ! wait_true 20 'CFLoop.partAccess()'; then
+        if [ "$reached" = true ] && ! wait_true 12 'CFLoop.partAccess()'; then
+            ev 'return CFLoop.forceOpen()' >/dev/null; wait_true 8 'CFLoop.partAccess()' >/dev/null
+        fi
+        if [ "$reached" != true ] || [ "$(ev 'return CFLoop.partAccess()' | cut -f1)" != true ]; then
             ev 'return CFLoop.enterVehicle()' >/dev/null
             if ! wait_true 30 'CFLoop.inVehicle()'; then
                 if [ "$locked" = true ]; then say "could not get into the locked car"
@@ -92,7 +95,8 @@ for _ in $(seq 1 20); do
     sleep 2
 done
 say "last seen: $(cut -f1 <<<"$seen") of $(cut -f2 <<<"$seen") documents, e.g. '$(cut -f3 <<<"$seen")'"
-findings+=("last seen after completion: $(cut -f1 <<<"$seen") of $(cut -f2 <<<"$seen") documents, e.g. '$(cut -f3 <<<"$seen")'")
+findings+=("last seen after completion: $(cut -f1 <<<"$seen") of $(cut -f2 <<<"$seen") documents, e.g. '$(cut -f3 <<<"$seen")'; retired cases in the save=$(cut -f4 <<<"$seen"), rows with a stored last seen=$(cut -f5 <<<"$seen")")
+findings+=("last-seen log: $(run_log | grep -oE '(Last-seen[^\"]*|lastseen: [^\"]*)' | tail -2 | tr '\n' ' ')")
 if [ "$completed" = yes ] && [ "$(cut -f1 <<<"$seen")" != "$(cut -f2 <<<"$seen")" ]; then
     fail "after the case completed, only $(cut -f1 <<<"$seen") of $(cut -f2 <<<"$seen") documents say where they were last seen"
 fi

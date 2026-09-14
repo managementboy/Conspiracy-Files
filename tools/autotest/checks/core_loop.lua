@@ -176,6 +176,22 @@ function L.reachPart()
     return true, tostring(part:getId()), opened
 end
 
+-- The guarding door, opened outright if the door action has not managed it.
+-- What the checks are about is the rule - a truck bed only once its door is
+-- open (owner, 2026-09-14) - not the door animation; the queued action did not
+-- finish within 20 s in 20260914T213522 and the check fell back into the seat,
+-- where a truck bed is never shown.
+function L.forceOpen()
+    local v, part = L.vehicle, L.part
+    if not v or not part then return false end
+    for _, doorId in ipairs(GUARD[part:getId()] or {}) do
+        local door = v:getPartById(doorId)
+        local d = door and door:getDoor()
+        if d and not d:isOpen() then d:setLocked(false); d:setOpen(true); return true, doorId end
+    end
+    return false, "no shut guard door"
+end
+
 -- Whether the game itself would let the player at this part's container now.
 function L.partAccess()
     local v, part = L.vehicle, L.part
@@ -278,7 +294,19 @@ function L.lastSeen()
             if sample == "" then sample = words end
         end
     end
-    return tostring(have), tostring(total), sample
+    -- What the save holds, so a shortfall says where it broke: 7 of 7 on one
+    -- run and 0 of 8 on the next (20260914T214013), with nothing to tell why.
+    local Cases = require("ConspiracyFiles/Generated/SuccessiveCases")
+    local store = ModData.get("ConspiracyFiles.Generated.G2")
+    local wrapper = store and Cases.current(store)
+    local retired, stored = 0, 0
+    for _, root in ipairs((wrapper and Cases.sessions(wrapper)) or {}) do
+        if type(root.rows) == "table" then
+            retired = retired + 1
+            for _, r in ipairs(root.rows) do if r.lastSeen then stored = stored + 1 end end
+        end
+    end
+    return tostring(have), tostring(total), sample, tostring(retired), tostring(stored)
 end
 
 -- The relay memo's date note, in the real game (P4-R96): once the memo is

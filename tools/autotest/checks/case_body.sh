@@ -30,10 +30,14 @@ say "case person: $name; the bound zombie carries '$(f 2 <<<"$found")' at $(f 3 
 
 ev 'return CFBody.kill()' >/dev/null
 sleep 6
+at_spawn="$(ev "return CFBody.spawnSearched('case')" | f 1)"
+say "her body, searched at the moment it appeared: $at_spawn"
+[ "$at_spawn" = true ] || fail "the body is not marked searched when it appears (at spawn: $at_spawn), so the game will roll its own cards in her name"
 body="$(ev 'return CFBody.body()')"
 say "body: found=$(f 1 <<<"$body") searched=$(f 2 <<<"$body") idcards=$(f 3 <<<"$body") ours=$(f 4 <<<"$body") [$(f 5 <<<"$body")] items=$(f 6 <<<"$body")"
 [ "$(f 1 <<<"$body")" = true ] || fail "no marked body where the case person died: $body"
-[ "$(f 2 <<<"$body")" = true ] || fail "the body is not marked searched, so the game will roll its own cards in her name: $body"
+# Read again after walking up to it: by now the game may have marked it itself,
+# so this is a report, and the at-spawn reading above is the assertion.
 [ "$(f 3 <<<"$body")" = 1 ] || fail "the body holds $(f 3 <<<"$body") ID cards, not exactly one: $body"
 [ "$(f 4 <<<"$body")" = 1 ] || fail "the card on the body is not the case's own: $body"
 [ "$(f 5 <<<"$body")" = "ID Card: $name" ] || fail "the card on the body reads '$(f 5 <<<"$body")', not 'ID Card: $name'"
@@ -57,11 +61,12 @@ say "lead: $(tr '\t' ' ' <<<"$lead")"
 plain="$(ev 'return CFBody.spawnPlain()')"
 [ "$(f 1 <<<"$plain")" = true ] || fail "could not make an ordinary body to compare: $plain"
 sleep 6
+plain_spawn="$(ev "return CFBody.spawnSearched('plain')" | f 1)"
 pb="$(ev 'return CFBody.plainBody()')"
 plain_rolled=no; wait_true 10 'CFBody.plainSearched()' && plain_rolled=yes
 say "comparison body: found=$(f 1 <<<"$pb") searched before it was shown=$(f 2 <<<"$pb") searched once shown=$plain_rolled"
 [ "$(f 1 <<<"$pb")" = true ] || fail "no ordinary body to compare: $pb"
-[ "$(f 2 <<<"$pb")" = false ] || fail "an ordinary body was already searched before anyone opened it, so the comparison proves nothing: $pb"
+[ "$plain_spawn" = false ] || fail "an ordinary body was already searched when it appeared (at spawn: $plain_spawn), so the comparison proves nothing"
 [ "$plain_rolled" = yes ] || fail "showing an ordinary body did not roll its loot, so marking hers searched is not what protects it"
 
 # Name and body (P4-R103): the game's own isFemale decides.
@@ -87,7 +92,8 @@ report="$EVIDENCE/$id-case-body.txt"
     echo "body: $(tr '\t' ' ' <<<"$body")"
     echo "log: ${line:-none}"
     echo "notebook lead: $(tr '\t' ' ' <<<"$lead")"
-    echo "comparison body: $(tr '\t' ' ' <<<"$pb"), searched once shown: $plain_rolled"
+    echo "her body searched at spawn: $at_spawn"
+    echo "comparison body: searched at spawn: $plain_spawn, searched once shown: $plain_rolled"
     echo "sex matching: $(tr '\t' ' ' <<<"$sx")"
     for x in "${fails[@]}"; do echo "FAIL: $x"; done
 } > "$report"

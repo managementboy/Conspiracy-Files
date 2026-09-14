@@ -147,7 +147,8 @@ inspect_doc() {
     h="$(cut -f3 <<<"$f")"
     # Outside first, as core_loop.sh does: a truck bed is never shown to someone inside the vehicle.
     if [[ "$h" == vehicle* ]]; then
-        { [ "$(ev 'return CFLoop.reachPart()' | cut -f1)" = true ] && wait_true 20 'CFLoop.partAccess()' >/dev/null; } \
+        { [ "$(ev 'return CFLoop.reachPart()' | cut -f1)" = true ] && { wait_true 12 'CFLoop.partAccess()' >/dev/null \
+            || { ev 'return CFLoop.forceOpen()' >/dev/null; wait_true 8 'CFLoop.partAccess()' >/dev/null; }; }; } \
             || { ev 'return CFLoop.enterVehicle()' >/dev/null; wait_true 30 'CFLoop.inVehicle()' >/dev/null; }
     else ev "return CFLoop.goTo($i)" >/dev/null; fi
     for _ in 1 2 3 4 5 6; do [ "$(ev 'return CFLoop.openContainer()' | cut -f1)" = true ] && break; sleep 1; done
