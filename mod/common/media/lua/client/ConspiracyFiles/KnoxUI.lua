@@ -11,7 +11,11 @@
 -- Everything here works in NATIVE pixels. The caller passes the panel, the
 -- scale and the glass origin; this draws, and returns hit boxes in screen
 -- pixels so a stylus tap can be matched to a widget.
-local Font=require("ConspiracyFiles/Generated/OrganiserFont")
+local BASE=require("ConspiracyFiles/Generated/OrganiserFont")
+-- The face the current drawing pass uses (P4-R99): the 16 pt face at 1x-3x, or
+-- its 24 pt cut for the size between Small and Medium. One screen draws at a
+-- time, so it is simply the face the pass began with (K.begin).
+local Font=BASE
 ConspiracyFiles=ConspiracyFiles or {}
 local K=ConspiracyFiles.KnoxUI or {}
 ConspiracyFiles.KnoxUI=K
@@ -23,9 +27,12 @@ K.LINE=Font.line
 
 -- A drawing context: where the glass is, how big a pixel is, and the list of
 -- hit boxes built up as widgets are drawn.
-function K.begin(panel,scale,x,y,w,h)
-    return {panel=panel,scale=scale,x=x,y=y,w=w,h=h,hits={},cursor=0}
+function K.begin(panel,scale,x,y,w,h,face)
+    Font=face or BASE
+    K.current=Font
+    return {panel=panel,scale=scale,x=x,y=y,w=w,h=h,hits={},cursor=0,font=Font}
 end
+K.current=BASE
 
 -- One glyph picture, cached per scale and then per character code.
 --
@@ -38,12 +45,16 @@ end
 -- `false` still marks a glyph the game does not have, so a missing texture is
 -- looked up once rather than on every frame forever.
 K.cache=K.cache or {}
+-- Keyed by face, then scale, then code: tables as keys, so nothing is built
+-- per glyph. A face's pictures live under its own folder (b1x/ for 24 pt).
 local function glyph(code,scale)
-    local byScale=K.cache[scale]
-    if not byScale then byScale={}; K.cache[scale]=byScale end
+    local byFace=K.cache[Font]
+    if not byFace then byFace={}; K.cache[Font]=byFace end
+    local byScale=byFace[scale]
+    if not byScale then byScale={}; byFace[scale]=byScale end
     local hit=byScale[code]
     if hit~=nil then return hit or nil end
-    local ok,texture=pcall(getTexture,"media/ui/CFOrg/"..scale.."x/"..code..".png")
+    local ok,texture=pcall(getTexture,"media/ui/CFOrg/"..(Font.folder or "")..scale.."x/"..code..".png")
     byScale[code]=(ok and texture) or false
     return ok and texture or nil
 end
@@ -206,6 +217,32 @@ end
 -- sitting where the screen is. Drawn only when there is more than fits.
 -- Tapping above the thumb steps up and below it steps down, as the rocker does.
 -- `top` is the first line shown, `room` how many fit, `total` how many exist.
+-- A Palm popup list (owner, 2026-09-14, with a photo of one): a bordered box
+-- over the screen with a title, the current choice inverted, and a tap on a
+-- line to choose it. A tap anywhere else leaves the setting as it was, so the
+-- catcher is registered first and the lines, drawn after it, win the tap.
+function K.popup(c,title,labels,selected)
+    local line=Font.line
+    hit(c,"POPUP_CLOSE",0,0,c.w,c.h)
+    local w=K.width(title)+12
+    for _,label in ipairs(labels) do w=math.max(w,K.width(label)+12) end
+    w=math.min(w,c.w-4)
+    local h=line*(#labels+1)+4
+    local x=math.floor((c.w-w)/2)
+    local y=math.max(line+2,math.floor((c.h-h)/2))
+    K.fill(c,x,y,w,h,K.GLASS)
+    K.frame(c,x,y,w,h,K.INK)
+    K.text(c,K.fit(title,w-6),x+3,y+1,K.DIM)
+    K.fill(c,x+1,y+line+1,w-2,1,K.INK)
+    for i,label in ipairs(labels) do
+        local ly=y+2+i*line
+        if i==selected then K.fill(c,x+1,ly,w-2,line,K.INK) end
+        K.text(c,K.fit(label,w-6),x+3,ly,i==selected and K.GLASS or K.INK)
+        hit(c,"POPUP",x,ly,w,line,i)
+    end
+    return x,y,w,h
+end
+
 function K.scrollbar(c,ny,height,top,room,total)
     if type(total)~="number" or total<=room then return end
     local w=5

@@ -27,7 +27,10 @@
 -- Keys mirror them for a player whose hand is on WASD: arrows, M, I, L, and
 -- Escape to close. The stylus does all of it by tapping.
 local CFLog=require("ConspiracyFiles/Log")
-local Font=require("ConspiracyFiles/Generated/OrganiserFont")
+-- The two cuts of the Palm face (P4-R99): 16 pt, drawn at 1x-3x, and 24 pt for
+-- the size between Small and Medium. tools/build_palm_font.py makes both.
+local FACE_BASE=require("ConspiracyFiles/Generated/OrganiserFont")
+local FACE_24=require("ConspiracyFiles/Generated/OrganiserFont24")
 local FG=require("Fieldnote/Geometry")
 require("Fieldnote/Panel")
 -- The case is the Fieldnote device, drawn from its design manifest with
@@ -107,21 +110,9 @@ local GLASS_LIT={0.76,0.70,0.46}
 local INK={0.15,0.17,0.13}
 local INK_DIM={0.38,0.42,0.33}
 
--- The screen draws its own letters. Handing the game a font in its own format
--- was tried first and killed it on startup: the manifest override is picked up,
--- then the engine looks for the .fnt through its own file access, which cannot
--- see a mod's files ("FileNotFoundException: media/palmos.fnt", 2026-09-12).
--- So: one small texture per glyph, kept once it is found or missed.
-local glyphs={}
-local function glyph(code,scale)
-    local key=scale.."/"..code
-    local hit=glyphs[key]
-    if hit~=nil then return hit or nil end
-    local texture=getTexture and safe(getTexture,"media/ui/CFOrg/"..scale.."x/"..code..".png")
-    glyphs[key]=texture or false
-    return texture
-end
-local function measure(text,scale) return Font.width(text,scale) end
+-- The screen draws its own letters, one texture per glyph, in KnoxUI: handing
+-- the game a font in its own format killed it on startup (2026-09-12). This
+-- file's own copy of that glyph lookup was never called and is gone.
 
 local Screen=ISPanel:derive("CFOrganiserScreen")
 S.Screen=Screen
@@ -130,13 +121,15 @@ function S.metrics(scale)
     return {scale=scale,glass=Case.glass,w=Case.w*scale,h=Case.h*scale}
 end
 
--- The player's font size, as a multiplier on the machine's own pixels. Three,
--- like a Palm's. Medium is the size this face was actually cut for; small is
--- the dense setting and large is for reading at arm's length.
-S.FONT_SIZES={{id="small",label="Small",mult=1},
-              {id="medium",label="Medium",mult=2},
-              {id="large",label="Large",mult=3}}
-S.FONT_DEFAULT=2
+-- The player's text size (P4-R99, owner, 2026-09-14): four, because the jump
+-- from Small to Medium was too big and the owner chose to keep Small and add a
+-- size between them. A size is a face and a whole multiple of it, in screen
+-- pixels - 11, 17, 22 and 33 px tall. The machine size no longer multiplies it.
+S.FONT_SIZES={{id="small",label="Small",mult=1,face=FACE_BASE},
+              {id="normal",label="Normal",mult=1,face=FACE_24},
+              {id="medium",label="Medium",mult=2,face=FACE_BASE},
+              {id="large",label="Large",mult=3,face=FACE_BASE}}
+S.FONT_DEFAULT=3
 S.fontSize=S.fontSize or S.FONT_DEFAULT
 
 -- Both size choices are the player's PREFERENCE, so they live in the machine
@@ -149,24 +142,29 @@ local function prefsStore()
 end
 function S.loadPrefs()
     local root=prefsStore(); if not root then return end
-    if type(root.scale)=="number" and root.scale>=1 and root.scale<=S.MAX then
-        S.scale=math.floor(root.scale)
-    end
-    if type(root.fontSize)=="number" and S.FONT_SIZES[root.fontSize] then
-        S.fontSize=math.floor(root.fontSize)
+    local at=S.scaleIndex(root.scale)
+    if at then S.scale=S.SCALES[at] end
+    -- By id, so adding a size never shifts a saved choice onto its neighbour. A
+    -- save from before P4-R99 kept an index into three sizes; map it across.
+    local byId
+    for i,f in ipairs(S.FONT_SIZES) do if f.id==root.fontId then byId=i end end
+    if byId then S.fontSize=byId
+    elseif type(root.fontSize)=="number" then
+        S.fontSize=({[1]=1,[2]=3,[3]=4})[root.fontSize] or S.fontSize
     end
 end
 function S.savePrefs()
     local root=prefsStore(); if not root then return end
     root.scale=S.scale; root.fontSize=S.fontSize
+    local f=S.FONT_SIZES[S.fontSize or S.FONT_DEFAULT]
+    root.fontId=f and f.id or nil
 end
 
--- The glyph set a given device scale and font size land on. Every product of
--- 1..3 and 1..3 is generated (tools/build_palm_font.py SCALES), so this is
--- always a whole number with pictures behind it.
+-- The glyph multiple a text size draws at. The machine size no longer enters
+-- into it (P4-R99); `scale` is still accepted so older callers keep working.
 function S.typeScale(scale,fontSize)
     local f=S.FONT_SIZES[fontSize or S.FONT_DEFAULT] or S.FONT_SIZES[S.FONT_DEFAULT]
-    return scale*f.mult
+    return f.mult
 end
 
 local art={}
@@ -191,10 +189,26 @@ end
 -- size of the game's own radio panel beside it (owner screenshot, 2026-09-13).
 -- Half the height is a device you hold, not a window you live in.
 S.FILL=0.5
--- Three, because the type is drawn at scale x fontSize and 3 x 3 = 9 is the
--- largest glyph set generated. A fourth device size would need 12x pictures
--- and would not fit a 4K screen anyway.
-S.MAX=3
+-- The machine sizes (P4-R99). Half size, because 1x is already big on the
+-- owner's 4K screen and smaller screens need smaller still; a half step between
+-- one and two. The type no longer scales with the machine, so a fractional
+-- machine costs the text nothing - the case is rectangles. Three fills 4K.
+S.SCALES={0.5,1,1.5,2,3}
+S.MIN,S.MAX=S.SCALES[1],S.SCALES[#S.SCALES]
+function S.scaleIndex(scale)
+    if type(scale)~="number" then return nil end
+    for i,v in ipairs(S.SCALES) do if math.abs(v-scale)<0.01 then return i end end
+    return nil
+end
+function S.nearestScale(value)
+    local best=S.SCALES[1]
+    for _,v in ipairs(S.SCALES) do if math.abs(v-value)<math.abs(best-value) then best=v end end
+    return best
+end
+function S.scaleLabel(scale)
+    if type(scale)~="number" then return "?" end
+    return (scale%1==0 and tostring(math.floor(scale)) or tostring(scale)).."x"
+end
 -- `height` is for the checks, which must be able to ask what this picks for a
 -- screen they are not running on. It defaulted to the real screen and the
 -- check reimplemented the formula instead, which is how it came to still be
@@ -257,9 +271,10 @@ function Screen:initialise() ISPanel.initialise(self); self:setWantKeyEvents(tru
 -- place the two meet.
 function Screen:lcd()
     local s=self.scale
-    local t=S.typeScale(s,self.fontSize)
+    local f=S.FONT_SIZES[self.fontSize or S.FONT_DEFAULT] or S.FONT_SIZES[S.FONT_DEFAULT]
+    local t=f.mult
     return {x=Case.glass.x*s,y=Case.glass.y*s,
-            w=math.floor(Case.glass.w*s/t),h=math.floor(Case.glass.h*s/t),t=t}
+            w=math.floor(Case.glass.w*s/t),h=math.floor(Case.glass.h*s/t),t=t,face=f.face}
 end
 
 -- The size grip: the bottom-right corner of the case. Nothing is DRAWN there
@@ -508,7 +523,7 @@ local function wrapTo(text,width)
     local line=""
     for word in tostring(text or ""):gmatch("%S+") do
         local candidate=line=="" and word or (line.." "..word)
-        if Font.width(candidate,1)<=width then line=candidate
+        if K.current.width(candidate,1)<=width then line=candidate
         else if line~="" then out[#out+1]=line end; line=word end
     end
     if line~="" then out[#out+1]=line end
@@ -524,7 +539,7 @@ local function pages(detail,width)
             local line=""
             for word in paragraph:gmatch("%S+") do
                 local candidate=line=="" and word or (line.." "..word)
-                if Font.width(candidate,1)<=width then line=candidate
+                if K.current.width(candidate,1)<=width then line=candidate
                 else if line~="" then lines[#lines+1]=line end; line=word end
             end
             if line~="" then lines[#lines+1]=line end
@@ -533,11 +548,22 @@ local function pages(detail,width)
     return lines
 end
 
+-- The screen, then a popup list over it when SETUP has one open.
 function Screen:draw(gx,gy)
+    self:drawScreen(gx,gy)
+    local p=self.popup
+    if p and self.context and self.on and not self.booting then
+        local labels={}
+        for i,o in ipairs(p.options) do labels[i]=o.label end
+        K.popup(self.context,p.title,labels,p.index)
+    end
+end
+
+function Screen:drawScreen(gx,gy)
     local l=self:lcd()
-    local c=K.begin(self,l.t,gx,gy,l.w,l.h)
+    local c=K.begin(self,l.t,gx,gy,l.w,l.h,l.face)
     self.context=c
-    local line=Font.line
+    local line=K.current.line
     local room=K.rows(c)
     if self.booting then
         -- The machine waking up, with the mod's real state on it: no invented
@@ -685,7 +711,7 @@ end
 -- Eight to six, as the Date Book opened, widened to take in anything earlier
 -- or later. A line opens its record; a day in the week opens that day.
 function Screen:drawDay(c)
-    local line=Font.line
+    local line=K.current.line
     local day=self.record
     local y=K.dayHeader(c,day.short or day.title or "",day.shorter,day.week,day.dayNumber)
     local entries=day.entries or {}
@@ -720,6 +746,15 @@ function Screen:drawDay(c)
     K.command(c,"BACK",2,footY,"BACK")
 end
 
+-- SETUP's choices open as a Palm popup list (owner, 2026-09-14, with a photo of
+-- one): tap a line to choose it, tap outside to leave the setting as it was.
+-- The rocker moves the choice and applies it as it goes; BACK closes the list.
+function Screen:openPopup(title,labels,index,apply)
+    local options={}
+    for i,label in ipairs(labels) do options[i]={label=label} end
+    self.popup={title=title,options=options,index=index or 1,apply=apply}
+end
+
 function Screen:openRow(index)
     local rows=self:list()
     local row=rows[index]
@@ -728,14 +763,18 @@ function Screen:openRow(index)
     if row.todo and row.index then
         Apps.tickToDo(row.index); self.cachedList=nil
     elseif row.setup=="text" then
-        S.stepFont(1)
+        local labels={}
+        for i,f in ipairs(S.FONT_SIZES) do labels[i]=f.label end
+        self:openPopup("Text size",labels,self.fontSize or S.fontSize or S.FONT_DEFAULT,S.setFont)
     elseif row.setup=="machine" then
         -- S.scale is nil until the player has chosen a size (P4-R94 opens at
         -- the default without writing one), so read the size actually drawn.
         -- Comparing nil crashed the first tap in every new game (owner,
         -- Windows, 2026-09-14).
         local now=self.scale or S.scale or S.fit()
-        S.step(now>=S.MAX and -(S.MAX-1) or 1)
+        local labels={}
+        for i,v in ipairs(S.SCALES) do labels[i]=S.scaleLabel(v) end
+        self:openPopup("Machine size",labels,S.scaleIndex(now) or 2,function(i) S.zoom(S.SCALES[i]) end)
     else
         self.record=row; self.record.index=index; self.card=1
     end
@@ -765,6 +804,18 @@ function Screen:press(id)
     -- annoys people (knox check, 2026-09-12: every tap landed on nothing
     -- because the boot screen was still up).
     if self.booting then self:finishBoot(); return end
+    if self.popup then
+        local p=self.popup
+        local action=S.ACTION[id]
+        if action=="UP" or action=="DOWN" then
+            p.index=math.max(1,math.min(#p.options,p.index+(action=="UP" and -1 or 1)))
+            safe(p.apply,p.index)
+        else
+            self.popup=nil
+        end
+        log("knox key "..id)
+        return
+    end
     local rows=self:list()
     -- Four buttons, four verbs, nothing overloaded. They used to jump straight
     -- to FILES, NAMES, DATES and TO DO, which is what a Palm's four keys did -
@@ -810,6 +861,13 @@ function Screen:tap(x,y)
     local id=widget.id
     if self.writer and id~="NOTE_DONE" and id~="NOTE_CANCEL" then
         self:finishNote(false)
+    end
+    if self.popup then
+        local p=self.popup
+        self.popup=nil
+        if id=="POPUP" and p.options[widget.payload] then safe(p.apply,widget.payload) end
+        log("knox tap: "..tostring(id))
+        return
     end
     if id=="APP" then
         self.app=widget.payload; self.launcher=false; self.record=nil
@@ -885,16 +943,14 @@ function Screen:onMouseDown(x,y)
     return ISPanel.onMouseDown(self,x,y)
 end
 
--- Dragging the corner. The corner follows the pointer and the size SNAPS to a
--- whole multiple, because a fractional scale softens the pixel face and
--- misaligns the housing - the exact problem the rebuild exists to escape
--- (P4-R89). So it reads as a window you pull, and it clicks between sizes.
+-- Dragging the corner. The corner follows the pointer and the size SNAPS to the
+-- machine sizes (S.SCALES): the type no longer scales with the machine, so a
+-- half step costs the pixel face nothing (P4-R99). So it reads as a window you pull, and it clicks between sizes.
 function Screen:onMouseMove(dx,dy)
     local r=self.resizing
     if r then
         r.dy=r.dy+(dy or 0)
-        local want=math.floor((Case.h*r.scale+r.dy)/Case.h+0.5)
-        if want<1 then want=1 elseif want>S.MAX then want=S.MAX end
+        local want=S.nearestScale((Case.h*r.scale+r.dy)/Case.h)
         if want~=self.scale then S.zoom(want) end
         return true
     end
@@ -998,13 +1054,13 @@ function Screen:writeNote()
     require("ISUI/ISTextEntryBox")
     local l=self:lcd()
     -- Where the field is drawn, in the machine's own pixels.
-    local fx,fy=2,l.h-Font.line*4
+    local fx,fy=2,l.h-K.current.line*4
     -- Parked off the case, not merely made transparent. setFrameAlpha(0) and
     -- transparent text still left the box painting a dark slab over the glass,
     -- so the field's own text was drawn dark-on-dark and could not be read
     -- (owner, 2026-09-13: "unreadable"). Keystrokes follow FOCUS, not
     -- position, so a box nobody can see still types.
-    local box=ISTextEntryBox:new("",-10000,-10000,(l.w-4)*l.t,Font.line*l.t)
+    local box=ISTextEntryBox:new("",-10000,-10000,(l.w-4)*l.t,K.current.line*l.t)
     box:initialise(); box:instantiate()
     box:setMaxTextLength(200)
     -- No setFrameAlpha: the box builds its frame the first time it is drawn,
@@ -1042,9 +1098,9 @@ function Screen:drawNote(c)
     local at=self.writerAt
     if not at or not self.writer then return end
     local text=safe(function() return self.writer:getText() end) or ""
-    K.text(c,"Write a note:",at.x,at.y-Font.line,K.DIM)
-    K.fill(c,at.x-1,at.y-1,c.w-at.x*2+2,Font.line+2,K.GLASS)
-    K.frame(c,at.x-1,at.y-1,c.w-at.x*2+2,Font.line+2,K.INK)
+    K.text(c,"Write a note:",at.x,at.y-K.current.line,K.DIM)
+    K.fill(c,at.x-1,at.y-1,c.w-at.x*2+2,K.current.line+2,K.GLASS)
+    K.frame(c,at.x-1,at.y-1,c.w-at.x*2+2,K.current.line+2,K.INK)
     -- The tail of the line, so a long note keeps its caret in view.
     local shown=text
     while K.width(shown)>c.w-at.x*2-6 and #shown>0 do shown=shown:sub(2) end
@@ -1053,7 +1109,7 @@ function Screen:drawNote(c)
     -- one you can type into.
     local now=getTimeInMillis and getTimeInMillis() or 0
     if math.floor(now/500)%2==0 then
-        K.fill(c,at.x+1+K.width(shown),at.y,1,Font.line-1,K.INK)
+        K.fill(c,at.x+1+K.width(shown),at.y,1,K.current.line-1,K.INK)
     end
     local foot=K.foot(c,self:footText(""))
     local x=K.command(c,"SEND",2,foot,"NOTE_DONE")
@@ -1106,8 +1162,9 @@ end
 -- it (owner, 2026-09-13: "help gives us no information on how to resize").
 -- Now it is on - and = , and HELP says so.
 function S.zoom(scale)
-    if type(scale)=="number" and scale>=1 and scale<=S.MAX then S.scale=math.floor(scale)
-    else S.scale=((S.scale or S.fit())%S.MAX)+1 end
+    local at=S.scaleIndex(scale)
+    if at then S.scale=S.SCALES[at]
+    else S.scale=S.SCALES[(S.scaleIndex(S.scale or S.fit()) or 1)%#S.SCALES+1] end
     -- Resized in place, not closed and reopened. A rebuild dropped the player
     -- back on the launcher, which made "tap here to step the machine size"
     -- throw away the screen you were reading to change its size.
@@ -1143,11 +1200,21 @@ end
 -- One step smaller or larger, stopping at the ends rather than wrapping round
 -- to the opposite extreme, which is what a size control should do.
 function S.step(by)
-    local now=S.scale or S.fit()
-    local want=now+by
-    if want<1 then want=1 elseif want>S.MAX then want=S.MAX end
-    if want==now then return now end
-    return S.zoom(want)
+    local now=S.scaleIndex(S.scale or S.fit()) or S.scaleIndex(S.DEFAULT_SCALE)
+    local want=math.max(1,math.min(#S.SCALES,now+(by or 1)))
+    if want==now then return S.SCALES[now] end
+    return S.zoom(S.SCALES[want])
+end
+
+-- Choose a text size outright, from SETUP's list.
+function S.setFont(index)
+    if not S.FONT_SIZES[index] then return S.fontSize end
+    S.fontSize=index
+    local w=S.window
+    if w then w.fontSize=index; w.cachedList=nil end
+    S.savePrefs()
+    log("text size: "..S.FONT_SIZES[index].id)
+    return index
 end
 
 return S

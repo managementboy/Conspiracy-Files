@@ -201,7 +201,7 @@ function CFGAME.survivesCorruption()
     if not ok then return false, "would not open: " .. tostring(why) end
     local w = S.window
     if not w then return false, "no window after open" end
-    if type(w.scale) ~= "number" or w.scale < 1 or w.scale > S.MAX then
+    if not S.scaleIndex(w.scale) then
         problems[#problems + 1] = "bad prefs produced scale " .. tostring(w.scale)
     end
     if type(w.fontSize) ~= "number" or not S.FONT_SIZES[w.fontSize] then

@@ -142,7 +142,7 @@ function CFLIFE.sizes()
     local w = S.window or S.open()
     if not w then return false, "no screen" end
     local missing, drawn = {}, 0
-    for scale = 1, S.MAX do
+    for _, scale in ipairs(S.SCALES) do
         for font = 1, #S.FONT_SIZES do
             S.fontSize = font
             S.zoom(scale)

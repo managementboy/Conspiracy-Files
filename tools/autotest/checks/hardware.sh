@@ -73,7 +73,7 @@ ev 'return CFHW.step(-1)' >/dev/null; back="$(ev 'return CFHW.size()' | f 2)"
 say "zoom: $before -> $up -> $back"
 # Stepping past the end must stop, not wrap to the opposite extreme.
 ev 'return CFHW.step(-5)' >/dev/null; low="$(ev 'return CFHW.size()' | f 2)"
-[ "$low" = 1 ] || fail "stepping down repeatedly did not stop at 1: $low"
+[ "$low" = 0.5 ] || fail "stepping down repeatedly did not stop at half size (P4-R99): $low"
 top="$(ev 'return CFHW.step(5)')"; high="$(ev 'return CFHW.size()' | f 2)"
 # Against S.MAX, not a number typed here: the owner's SVG now exports four
 # sizes and this assertion said three (2026-09-13).
@@ -84,7 +84,16 @@ maxs="$(f 3 <<<"$top")"
 # on the owner's first try (Windows, 2026-09-14).
 fresh="$(ev 'return CFHW.freshMachineTap()')"
 [ "$(f 1 <<<"$fresh")" = true ] || fail "SETUP > Machine crashed in a game with no saved size: $fresh"
-[ "$(f 3 <<<"$fresh")" = 2 ] || fail "SETUP > Machine did not step 1x to 2x in a game with no saved size: $fresh"
+[ "$(f 3 <<<"$fresh")" = true ] || fail "SETUP > Machine did not open its list in a game with no saved size: $fresh"
+[ "$(f 4 <<<"$fresh")" = 2 ] || fail "the Machine list did not mark 1x as the size drawn: $fresh"
+
+# SETUP > Text is a Palm popup list of four sizes (P4-R99); a tap chooses and closes it.
+tl="$(ev 'return CFHW.textList()')"
+say "text list: sizes=$(f 2 <<<"$tl") line tapped=$(f 3 <<<"$tl") chosen=$(f 4 <<<"$tl") closed=$(f 5 <<<"$tl")"
+[ "$(f 2 <<<"$tl")" = 4 ] || fail "there are not four text sizes: $tl"
+[ "$(f 3 <<<"$tl")" = true ] || fail "the Text list drew no line to tap: $tl"
+[ "$(f 4 <<<"$tl")" = true ] || fail "tapping a line in the Text list did not choose that size: $tl"
+[ "$(f 5 <<<"$tl")" = true ] || fail "choosing from the Text list did not close it: $tl"
 
 # Growing drags the corner away from the machine, so the pointer is outside it.
 drag="$(ev 'return CFHW.dragOutside()')"
@@ -101,10 +110,9 @@ say "clock: without a watch='$(f 2 <<<"$clk")' with a watch='$(f 3 <<<"$clk")'"
 [ "$(f 2 <<<"$clk")" = nil ] || fail "the launcher showed the time with no watch or clock carried: $clk"
 grep -qE '^[0-9]{1,2}:[0-9]{2}' <<<"$(f 3 <<<"$clk")" || fail "the launcher showed no time with a watch carried: $clk"
 say "zoom clamps: down->$low up->$high"
-# The two controls must be INDEPENDENT (P4-R89): the machine size changes the
-# window and not how much text fits; the text size changes how much text fits
-# and not the window. Either one moving both numbers means they are one
-# control wearing two hats.
+# The two controls must stay two controls (P4-R89, turned round by P4-R99): the
+# machine size changes the window AND how much fits; the text size changes how
+# big the type is, and so how much fits, but never the window.
 sizes="$(ev 'return CFHW.sizes()')"
 if [ "$(f 1 <<<"$sizes")" = true ]; then
     say "two size controls: $(f 2 <<<"$sizes")"

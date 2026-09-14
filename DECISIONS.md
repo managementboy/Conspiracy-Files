@@ -669,3 +669,17 @@ lost. Lines that fire together are shown one after another.
 Found alongside it, not decided: a named case zombie does not survive a save and
 reload. CN-01 (`case_person.sh`) fails at that step on the code before P4-R101
 and after it alike, so it is older than that fix and still open.
+
+**P4-R99, as built.** Four text sizes: Small (11 px), Normal (17 px, the face
+re-cut at 24 pt so it stays sharp), Medium (22 px) and Large (33 px). Machine
+sizes 0.5x, 1x, 1.5x, 2x and 3x; a bigger machine shows more of the text and
+the type keeps the size chosen. SETUP's Text and Machine lines open Palm popup
+lists, as in the owner's photo: tap a line to choose, tap outside to leave it,
+the rocker steps through it. A saved text size is kept by name; saves from
+before keep Small, Medium and Large. **The machine still first opens at 1x, not
+at the new half size** (P4-R94 said "the smallest"): at 0.5x only Small or
+Normal text leaves a readable page. Say so if it should open at half.
+
+**P4-R105 — the organiser reads in either hand.** Owner: "the left hand should
+leave the PDA open." Held in the off hand it stays open beside a one-handed
+weapon; a two-handed weapon fills both hands and puts it away. HELP says so.

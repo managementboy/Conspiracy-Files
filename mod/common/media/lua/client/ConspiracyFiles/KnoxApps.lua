@@ -433,11 +433,11 @@ A.setup={
         local sizes=O.FONT_SIZES or {}
         local f=sizes[O.fontSize or O.FONT_DEFAULT] or sizes[O.FONT_DEFAULT] or {label="?"}
         return {
-            {label="Text ...... "..tostring(f.label),title="Text size",
-             detail="How big the type is on the screen, and so how much of it fits at once.\n\nSmall, Medium or Large. Medium is the size this face was drawn for; Small fits more and wants a larger machine to read comfortably.\n\nTap this line to step it.",
+            {label="Text size: "..tostring(f.label).." v",title="Text size",
+             detail="How big the type is on the screen: Small, Normal, Medium or Large.\n\nThe machine size decides how much of it fits.\n\nTap this line for the list.",
              id="setup-text",setup="text"},
-            {label="Machine ... "..tostring(O.scale or 1).."x",title="Machine size",
-             detail="How big the whole machine is drawn. It changes nothing about how much text fits - that is the text size above.\n\nDrag the bottom-right corner of the case, or tap this line to step it. Every size is a whole multiple, so a pixel stays square.",
+            {label="Machine size: "..(O.scaleLabel and O.scaleLabel(O.scale or O.DEFAULT_SCALE or 1) or "?").." v",title="Machine size",
+             detail="How big the whole machine is drawn, from half size to three times.\n\nA bigger machine shows more of the text, and the type stays the size you chose.\n\nDrag the bottom-right corner of the case, point at it and press - and =, or tap this line for the list.",
              id="setup-machine",setup="machine"},
         }
     end,
@@ -455,7 +455,7 @@ A.help={
             {label="The keys",title="The keys",
              detail="HOME opens the programs, and wakes the machine.\nBACK steps out of a record, then out to the programs.\nThe rocker goes up and down: a line in a list, a page in a record.\n\nThe two keys between HOME and BACK are blank. They do nothing yet.\n\nThere is no power switch. Hold HOME for the lamp. Left alone it switches itself off."},
             {label="Size",title="Size",
-             detail="Two sizes, and they are different things. SETUP holds both.\n\nText size is how much fits on the screen: Small, Medium or Large.\n\nMachine size is how big the case is drawn. Drag its bottom-right corner, or point at it and press - and = . Three sizes; it starts at whichever suits your screen.\n\nThose are the only keys it takes, and only while you are pointing at it: it never takes the map or the inventory off you.\n\nEvery size is a whole multiple, so a pixel stays square."},
+             detail="Two sizes, and they are different things. SETUP holds both.\n\nText size is how big the type is: Small, Normal, Medium or Large.\n\nMachine size is how big the case is drawn, and so how much fits on it. Drag its bottom-right corner, or point at it and press - and = . From half size to three times.\n\nThose are the only keys it takes, and only while you are pointing at it: it never takes the map or the inventory off you."},
             {label="The stylus",title="The stylus",
              detail="Tap a program to open it. Tap a record to read it. Tap the arrows in the right margin to page. Tap the name in the title bar to come back here."},
             {label="Files",title="Files",

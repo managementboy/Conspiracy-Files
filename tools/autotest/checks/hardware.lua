@@ -112,19 +112,18 @@ function CFHW.sizes()
     local c = state()                       -- text bigger, machine unchanged
     local bad = {}
     if not (b.ww > a.ww and b.wh > a.wh) then bad[#bad+1] = "machine size did not resize the window" end
-    if b.cols ~= a.cols or b.rows ~= a.rows then bad[#bad+1] = "machine size changed how much text fits" end
+    -- P4-R99 turned this round: the machine size decides how much fits.
+    if not (b.cols > a.cols and b.rows > a.rows) then bad[#bad+1] = "a bigger machine did not fit more text" end
     if c.ww ~= b.ww or c.wh ~= b.wh then bad[#bad+1] = "text size resized the window" end
-    if c.cols == b.cols then bad[#bad+1] = "text size did not change how much text fits" end
+    if c.cols >= b.cols then bad[#bad+1] = "bigger text did not fit less" end
     -- Every glyph set the two controls can land on must actually exist.
-    local Font = require("ConspiracyFiles/Generated/OrganiserFont")
+    -- Each text size is a face and a multiple; the multiple must be one that
+    -- face was generated at (tools/build_palm_font.py FACES).
     local missing = {}
-    for d = 1, S.MAX do
-        for f = 1, #S.FONT_SIZES do
-            local t = S.typeScale(d, f)
-            local ok = false
-            for _, have in ipairs(Font.scales or {}) do if have == t then ok = true end end
-            if not ok then missing[#missing+1] = tostring(t) .. "x" end
-        end
+    for _, size in ipairs(S.FONT_SIZES) do
+        local ok = false
+        for _, have in ipairs((size.face and size.face.scales) or {}) do if have == size.mult then ok = true end end
+        if not ok then missing[#missing+1] = tostring(size.id) end
     end
     if #missing > 0 then bad[#bad+1] = "no glyph set for " .. table.concat(missing, ",") end
     S.zoom(1); S.fontSize = S.FONT_DEFAULT; w.fontSize = S.FONT_DEFAULT
@@ -217,9 +216,34 @@ function CFHW.freshMachineTap()
     w.list = function() return {{id = "setup-machine", setup = "machine"}} end
     local ok, err = pcall(w.openRow, w, 1)
     w.list = nil
-    local after = S.scale
+    -- SETUP > Machine opens a list now (owner, 2026-09-14), with the size the
+    -- machine is actually drawn at marked.
+    local popup = w.popup
+    w.popup = nil
     S.zoom(1)
-    return ok, tostring(err), tostring(after)
+    return ok, tostring(err), tostring(popup ~= nil), tostring(popup and popup.index)
+end
+
+-- SETUP > Text: a Palm popup list; tapping a line chooses it and closes it.
+function CFHW.textList()
+    local w = S.window; if not w then return false, "no window" end
+    w.on = true; w.booting = false; w.launcher = false; w.record = nil
+    w.list = function() return {{id = "setup-text", setup = "text"}} end
+    w:openRow(1)
+    w.list = nil
+    w:prerender()
+    local hit
+    for _, h in ipairs((w.context or {}).hits or {}) do
+        if h.id == "POPUP" and h.payload == 2 then hit = h end
+    end
+    local chosen = false
+    if hit then
+        w:onMouseDown(hit.x + 1, hit.y + 1); w:onMouseUp(hit.x + 1, hit.y + 1)
+        chosen = S.fontSize == 2 and w.fontSize == 2
+    end
+    local closed = w.popup == nil
+    S.setFont(S.FONT_DEFAULT); w.popup = nil
+    return true, tostring(#S.FONT_SIZES), tostring(hit ~= nil), tostring(chosen), tostring(closed)
 end
 
 -- Growing the machine drags its corner AWAY from it, so the pointer is outside
