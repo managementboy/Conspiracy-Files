@@ -1,0 +1,7 @@
+Linux mutation proof 20260914T214459
+worktree: /home/elkin/cf-wp345 at 1975bd1 prove.py keeps each run's output and reports a run that could not start
+
+FAILED, BUT NOT FOR THIS body-searched (case_body): FAIL: an ordinary body was already searched before anyone opened it, so the comparison proves nothing: true	true | case-body: FAIL: an ordinary body was already searched before anyone opened it, so the comparison proves nothing: true	true
+
+caught 0 of 1
+worktree clean afterwards: yes

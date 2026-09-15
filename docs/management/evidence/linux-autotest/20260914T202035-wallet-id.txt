@@ -1,0 +1,12 @@
+Linux wallet ID check 20260914T202035: PASS
+source: bae5970 + uncommitted mod changes
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+wallet ID: 'ID Card: Jeanette Paine'; wallet stamp after carrying it off: corpse-wallet:860134773
+notebook summary: Identity document - container
+notebook text:
+  I saw a document labelled "ID Card: Jeanette Paine" inside Wallet. That container was taken off a corpse.
+  The name on a document is a lead. It does not establish who owned the container or identify the body.
+  Observed at 102 E Maple St.
+loose ID on a body: PASS: 'ID Card: Gertrude Ramon' recorded as Identity document - corpse
+errors inside the mod: 0
+screenshot: dev/eval/linux/runs/20260914T202035-wallet.png (not committed)

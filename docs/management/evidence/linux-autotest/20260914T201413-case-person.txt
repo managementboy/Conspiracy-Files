@@ -1,0 +1,8 @@
+Linux case person check 20260914T201413: PASS
+source: 192cf62
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+case person: Roy Hale
+binding: bound Roy Hale to a body near 10840,10148 with an ID card; no zombie of her sex within reach, so the nearest
+zombie before reload: true Roy Hale ID Card: Roy Hale 10806,10124 generated:1877846679:case
+after save and reload: yes: Roy Hale with 'ID Card: Roy Hale'
+card on the body in the notebook: nil

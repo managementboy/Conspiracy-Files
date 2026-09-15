@@ -1,0 +1,11 @@
+Linux mutation proof 20260915T075905
+worktree: /home/elkin/cf-wp345 at 6875b53 Merge branch 'story-fixes' into integration/v0.1-corrected-candidate
+
+baseline core_loop: PASS
+
+CAUGHT dates-real-paper (core_loop): FAIL: DATES could not show today's page for a real paper: the day view drew no entry for Access memo / 7C-41 | FAIL: tapping a real paper's DATES entry did not open its record: false	the day view drew no entry for Access memo / 7C-41 | FAIL: BACK from a paper opened in DATES did not return to the day: false	the day view drew no entry for Access memo / 7C-41
+CAUGHT last-seen (core_loop): FAIL: after the case completed, only 0 of 7 documents say where they were last seen | core-loop: FAIL: after the case completed, only 0 of 7 documents say where they were last seen
+MISSED date-note (core_loop): core-loop: dates tap: true true true Access memo / 7C-41 | pz: stopped
+
+caught 2 of 3
+worktree clean afterwards: yes

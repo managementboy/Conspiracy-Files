@@ -1,0 +1,7 @@
+PASS fieldnote - 2026-09-14T23:06:36+02:00
+commit: 36b0e77
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+session: 20260914T230450
+loaded:  true	DEV-0.33.3-relay-memo	1	400x620	400x620
+lcd:     true	480,100 320x422	0	
+labels:  true	C14:HOME top=22 icon=17 gap=5 | C17:BACK top=22 icon=17 gap=5

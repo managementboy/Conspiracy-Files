@@ -1,0 +1,14 @@
+FAIL pdalife - 2026-09-14T20:12:27+02:00
+commit: 192cf62
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+session: 20260914T201043
+cycles:   200 open/close - errors=0, ui 27->27, closed=true
+handlers: [] -> []
+memory:   heap 1474560KB->1484800KB (+10240KB, +51.20KB per cycle) [reported, not asserted: see pdalife.lua]
+control:  -10.24KB per idle iteration with no device work, same call
+churn:    40 rounds, 360 screens, 0 errors
+sizes:    20/9 device-and-font combinations drew
+abuse:    survived every state
+stores:   ConspiracyFilesOrganiserPrefs=0 ConspiracyFiles.KnoxNotes=0 ConspiracyFiles.KnoxToDo=0 ConspiracyFiles.DeadAir=0  ->  ConspiracyFilesOrganiserPrefs=3 ConspiracyFiles.KnoxNotes=0 ConspiracyFiles.KnoxToDo=0 ConspiracyFiles.DeadAir=0
+log:      0 new mod error lines
+FAIL: not every size combination drew: 20/9

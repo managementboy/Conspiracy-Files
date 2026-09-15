@@ -1,0 +1,9 @@
+Linux mutation proof 20260914T221742
+worktree: /home/elkin/cf-wp345 at 36b0e77 case_body opens the body with retries; prove.py keeps baseline output
+
+baseline case_body: PASS
+
+CAUGHT body-searched (case_body): FAIL: the body is not marked searched when it appears (the mod's own reading: false), so the game will roll its own cards in her name | case-body: FAIL: the body is not marked searched when it appears (the mod's own reading: false), so the game will roll its own cards in her name
+
+caught 1 of 1
+worktree clean afterwards: yes

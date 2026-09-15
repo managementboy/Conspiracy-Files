@@ -1,0 +1,23 @@
+Linux core loop check 20260915T080316: FAIL
+source: 6875b53 + uncommitted mod changes
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+first case: 7 documents, all found and inspected through the right-click menu:
+  1. Hire note / HK-700, in shelves, room hall, floor 0 (container icon clicked: yes)
+  2. Return note / HK-700, in desk, room office, floor 0 (container icon clicked: yes)
+  3. Hire ledger note / HK-700, in shelves, room office, floor 0 (container icon clicked: yes)
+  4. Press clipping / HK-700, in counter, room kitchen, floor 0 (container icon clicked: yes)
+  5. Umbrella white, marked Adele Prosser, in counter, room kitchen, floor 0 (container icon clicked: yes)
+  6. Tagged key / HK-700, in counter, room kitchen, floor 0 (container icon clicked: yes)
+  7. Access memo / 7C-41, in counter, room kitchen, floor 0 (container icon clicked: yes)
+notebook entries: 7; case completion reported: yes
+map marks without a pen (written/pending/missing): 0/7/0
+map marks after a pen, case already retired: 7/0/0
+second case appeared (gap removed): yes
+errors inside the mod: 0
+FINDING: relay memo date notes: memo found=true, dated in its week=0, carrying the note=0
+FINDING: last seen after completion: 7 of 7 documents, e.g. 'Carried.'; retired cases in the save=1, rows with a stored last seen=7
+FINDING: last-seen log: 
+FAIL: DATES could not show today's page for a real paper: the day view drew no entry for Access memo / 7C-41
+FAIL: tapping a real paper's DATES entry did not open its record: false	the day view drew no entry for Access memo / 7C-41
+FAIL: BACK from a paper opened in DATES did not return to the day: false	the day view drew no entry for Access memo / 7C-41
+screenshot: dev/eval/linux/runs/20260915T080316-map.png (not committed)

@@ -1,0 +1,13 @@
+Linux core loop check 20260914T141615: PASS
+source: 2f1c37e
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+first case: 3 documents, all found and inspected through the right-click menu:
+  1. Transfer notice / WB-797, in shelves, room hall, floor 0 (container icon clicked: yes)
+  2. Receiving roster / WB-797, in shelves, room kitchen, floor 0 (container icon clicked: yes)
+  3. File review / WB-797, in counter, room kitchen, floor 0 (container icon clicked: yes)
+notebook entries: 3; case completion reported: yes
+map marks without a pen (written/pending/missing): 0/3/0
+map marks after a pen, case already retired: 3/0/0
+second case appeared (gap removed): yes
+errors inside the mod: 0
+screenshot: dev/eval/linux/runs/20260914T141615-map.png (not committed)

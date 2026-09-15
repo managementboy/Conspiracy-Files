@@ -1,0 +1,13 @@
+Linux case body check 20260914T220258: FAIL
+source: e912ba3
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+case person: Joanne Voss
+bound zombie: true Joanne Voss 10875,10114
+body: true true 1 1 ID Card: Joanne Voss 8
+log: case person's body (generated:1255249993:case): marked searched; card added
+notebook lead: true Identity document - corpse
+her body searched at spawn: nil
+comparison body: searched at spawn: nil, searched once shown: yes
+sex matching: true true true true true
+FAIL: the body is not marked searched when it appears (at spawn: nil), so the game will roll its own cards in her name
+FAIL: an ordinary body was already searched when it appeared (at spawn: nil), so the comparison proves nothing

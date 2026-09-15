@@ -1,0 +1,7 @@
+FAIL reshuffle - 2026-09-14T20:05:27+02:00
+commit: 192cf62
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+before: 7	1:placed@102 E Maple St; 2:placed@127 S Main St; 3:placed@127 S Main St; 4:placed@102 E Maple St; 5:placed@127 S Main St; 6:placed@102 E Maple St; 7:placed@127 S Main St
+after:  
+FAIL: no new case was placed after the reshuffle
+FAIL: the reshuffle produced the same documents

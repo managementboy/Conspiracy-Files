@@ -1,0 +1,10 @@
+Linux case body check 20260914T213751: PASS
+source: 1975bd1
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+case person: Warren Nagy
+bound zombie: true Warren Nagy 10870,10120
+body: true true 1 1 ID Card: Warren Nagy 6
+log: case person's body (generated:232729143:case): marked searched; card added
+notebook lead: true Identity document - corpse
+comparison body: true false, searched once shown: yes
+sex matching: true true true true true

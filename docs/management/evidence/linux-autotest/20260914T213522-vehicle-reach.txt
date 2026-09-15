@@ -1,0 +1,8 @@
+Linux vehicle reach check 20260914T213522: FAIL
+source: 1975bd1
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+van: true Base.PickUpVan 10831,10145
+TruckBed: allowed while shut=false, reached from outside=no, from a seat=yes, loot-panel icon=no, taken=yes (TrunkDoor)
+GloveBox: allowed while shut=, reached from outside=no, from a seat=yes, loot-panel icon=yes, taken=yes (reached from a seat)
+FAIL: the TruckBed could not be reached from outside the van
+FAIL: the loot panel never showed the TruckBed

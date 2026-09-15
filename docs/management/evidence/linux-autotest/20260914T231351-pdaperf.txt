@@ -1,0 +1,15 @@
+PASS pdaperf - 2026-09-14T23:13:51+02:00
+commit: 36b0e77
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+session: 20260914T231158
+device:  1x scale, font 3, glyphs 2x, lcd 160x211
+launcher: 215 draw calls/frame
+list: 198 draw calls/frame
+ms per frame: launcher 1.2000
+ms per frame: list 1.0167
+ms per frame: launcher split case=0.6583 content=0.6167 checks=0.0083 whole=1.1500
+ms per frame: list split case=0.5417 content=0.3167 checks=0.0083 whole=0.8250
+ms per frame: notes-list 4.9167
+ms per frame: notes-list calls 782
+ms per frame: notes-list split case=0.5250 content=3.9167 checks=0.0083 whole=3.9167
+ticks:   Organiser.tick=0.0050ms/call LocalPersonIntegration.tick=0.0033ms/call AutomaticInvestigations.onTick=0.0000ms/call

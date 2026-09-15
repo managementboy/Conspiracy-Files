@@ -1,0 +1,9 @@
+Linux reload check 20260915T073748: PASS
+source: 6875b53
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+world: 74619617983672390444; three save/quit/continue round trips after two documents were inspected
+notebook before: 2 1=1764966393:document-1:Internal directory / BF-497 | 2=1764966393:document-2:Revised directory / BF-497
+placements before: 6 1764966393:document-1@10840,10148,0:placed 1764966393:document-2@10836,10184,0:placed 1764966393:document-3@10837,10184,0:placed 1764966393:document-4@10836,10146,0:placed 1764966393:document-5@10836,10147,0:placed 1764966393:document-6@10835,10177,0:placed
+schedule before (count, last created hour, scheduled): 1 2.068739891052246 true
+save-budget total per round (bytes): 169704 169704 169704 169704
+errors inside the mod: 0

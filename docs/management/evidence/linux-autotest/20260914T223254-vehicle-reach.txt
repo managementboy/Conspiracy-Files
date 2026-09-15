@@ -1,0 +1,6 @@
+Linux vehicle reach check 20260914T223254: PASS
+source: 36b0e77
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+van: true Base.PickUpVan 10831,10145
+TruckBed: allowed while shut=false, door opened outright=no, reached from outside=yes, from a seat=no, loot-panel icon=yes, taken=yes (TrunkDoor)
+GloveBox: allowed while shut=, door opened outright=no, reached from outside=no, from a seat=yes, loot-panel icon=yes, taken=yes (reached from a seat)

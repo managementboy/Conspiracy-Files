@@ -1,0 +1,7 @@
+Linux mutation proof 20260914T215802
+worktree: /home/elkin/cf-wp345 at a4e7441 Checks: body searched read at spawn, guard door opened outright when the action stalls, last-seen diagnosis
+
+CAUGHT body-searched (case_body): FAIL: the body is not marked searched when it appears (at spawn: nil), so the game will roll its own cards in her name | FAIL: an ordinary body was already searched when it appeared (at spawn: nil), so the comparison proves nothing | case-body: FAIL: the body is not marked searched when it appears (at spawn: nil), so the game will roll its own cards in her name
+
+caught 1 of 1
+worktree clean afterwards: yes

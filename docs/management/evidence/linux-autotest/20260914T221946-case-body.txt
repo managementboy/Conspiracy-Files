@@ -1,0 +1,12 @@
+Linux case body check 20260914T221946: FAIL
+source: 36b0e77 + uncommitted mod changes
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+case person: Roy Hale
+bound zombie: true Roy Hale 10836,10110
+body: true false 1 1 ID Card: Roy Hale 1
+log: case person's body (generated:1294244657:case): searched=false; card added
+notebook lead: true Identity document - corpse
+her body searched at spawn: false
+comparison body: searched before it was shown: false, searched once shown: yes
+sex matching: true true true true true
+FAIL: the body is not marked searched when it appears (the mod's own reading: false), so the game will roll its own cards in her name

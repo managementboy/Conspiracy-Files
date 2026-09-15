@@ -1,0 +1,11 @@
+Linux case body check 20260914T223029: PASS
+source: 36b0e77
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+case person: Marion Ellis
+bound zombie: true Marion Ellis 10865,10187
+body: true true 1 1 ID Card: Marion Ellis 9
+log: case person's body (generated:1729752085:case): searched=true; card added
+notebook lead: true Identity document - corpse
+her body searched at spawn: true
+comparison body: searched before it was shown: false, searched once shown: yes
+sex matching: true true true true true

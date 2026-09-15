@@ -1,0 +1,17 @@
+Linux core loop check 20260915T075905: PASS
+source: 6875b53
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+first case: 4 documents, all found and inspected through the right-click menu:
+  1. Hire note / HK-319, in shelves, room hall, floor 0 (container icon clicked: yes)
+  2. Return note / HK-319, in vehicle GloveBox, room vehicle, floor 0 (container icon clicked: yes)
+  3. Hire ledger note / HK-319, in shelves, room hall, floor 0 (container icon clicked: yes)
+  4. Access memo / 7C-41, in shelves, room hall, floor 0 (container icon clicked: yes)
+notebook entries: 4; case completion reported: yes
+map marks without a pen (written/pending/missing): 0/4/0
+map marks after a pen, case already retired: 4/0/0
+second case appeared (gap removed): yes
+errors inside the mod: 0
+FINDING: relay memo date notes: memo found=true, dated in its week=0, carrying the note=0
+FINDING: last seen after completion: 4 of 4 documents, e.g. 'Carried.'; retired cases in the save=1, rows with a stored last seen=4
+FINDING: last-seen log: 
+screenshot: dev/eval/linux/runs/20260915T075905-map.png (not committed)
