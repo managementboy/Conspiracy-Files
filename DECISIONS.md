@@ -805,6 +805,29 @@ branches holding files found nowhere in `main` (the Dead Air location
 inspection, the location shortlist, the T10 probe extras) and the
 `preservation/` and `engineering/` archives are kept. Replaces P4-R75.
 
+**P4-R118 — a finished case's papers are marked Old.** Owner, 2026-09-15, after
+the Windows playtest of DEV-0.36.0: two papers of a completed case were found
+in the house and had no Investigation option at all, which read as broken. "We
+should change the category to Evidence / Old." When a case retires, its papers'
+inventory category changes from Evidence to **Evidence / Old**, so the loot list
+itself says the paper belongs to a closed case. The mark survives save and
+reload the same way the Evidence stamp does, and papers of cases retired in
+existing saves get it too. Secondary: right-clicking such a paper shows a
+greyed "Already in the organiser" instead of nothing. A paper from no case gets
+neither.
+
+**P4-R119 — first cut of "What do I make of it?" (P4-R113).** Owner,
+2026-09-15, answering the three open questions: the survivor is asked **only at
+a case's end**; **"leave it cold" is left out** of the first cut until the cold
+trail state of COLD_TRAIL_AND_PULL.md exists; the next case **keeps the
+24-hour timer** (`minGapHours`) and uses whatever has been answered by then.
+
+**P4-R120 — whole-map house numbers apply to new saves (AD-10).** Owner,
+2026-09-15: when addresses for the whole Build 42.20 map ship with the mod,
+**new saves use the shipped numbers; existing saves keep the address book they
+already froze**, so nothing already written in a notebook changes. Design:
+docs/design/WHOLE_MAP_ADDRESSES.md.
+
 **P4-R106 — how a car's containers are reached.** Owner, 2026-09-14: "The globe
 box only opens when sitting in the front of the car", and a truck bed or trunk
 is reached from outside, "only if they are open". Placement may still put a
