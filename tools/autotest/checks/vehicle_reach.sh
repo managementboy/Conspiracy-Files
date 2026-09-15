@@ -41,7 +41,7 @@ for part in TruckBed GloveBox; do
         # Only if it is open (owner, 2026-09-14): standing in its area with the
         # door shut, refused. The player walks there, as a player does; a
         # teleport could land just outside the thin truck-bed strip (2026-09-15).
-        ev 'return CFLoop.walkToPartArea()' >/dev/null
+        walkstart="$(ev 'return CFLoop.walkToPartArea()')"
         # A walk still under way is slow, not failed: wait while the player is
         # walking, up to 40 s, and fail only if the walk ended outside the area.
         # A flat 15 s failed two runs of three before the player arrived
@@ -54,7 +54,7 @@ for part in TruckBed GloveBox; do
             sleep 0.5
         done
         walked=$(( $(date +%s) - walk_start ))
-        say "walk into the TruckBed area: ${walked}s, $(ev 'return CFLoop.walkState()' | cut -f2- | tr '\t' ' ')"
+        say "walk into the TruckBed area: ${walked}s ($(f 3 <<<"$walkstart")), $(ev 'return CFLoop.walkState()' | cut -f2- | tr '\t' ' ')"
         [ "$(ev 'return CFLoop.inPartArea()' | f 1)" = true ] || \
             fail "the player could not walk into the TruckBed area after ${walked}s: $(ev 'return CFLoop.walkState()' | cut -f2- | tr '\t' ' ')"
         shut="$(ev 'return CFVan.accessWhileShut()')"

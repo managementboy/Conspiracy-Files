@@ -175,13 +175,37 @@ local GUARD = { TruckBed = { "TrunkDoor", "DoorRear" }, TrunkDoor = { "TrunkDoor
 -- with its door open (vehicle_reach 20260914T213522, 20260915T122922; probe and
 -- rule in docs/research/PZ_VEHICLE_AREAS_AND_ZONES.md). The door action queues
 -- behind the walk, so the door opens once the player is there.
+-- Close first, then only the last step on foot (owner, 2026-09-15: "why are we
+-- walking and not teleporting closer to the place?"). The walk in from where
+-- the van check leaves the player took 6-7 s every time. A teleport cannot
+-- land inside the thin area itself - it lands on a tile corner - so it lands
+-- on a free square just beyond the area, on the side away from the vehicle,
+-- and the game's own path action takes the step in.
+local function squareNearArea(v, area)
+    local c = v:getAreaCenter(area)
+    if not c then return nil end
+    local dx, dy = c:getX() - v:getX(), c:getY() - v:getY()
+    local len = math.sqrt(dx * dx + dy * dy)
+    if len < 0.01 then return nil end
+    dx, dy = dx / len, dy / len
+    local cell, z = getCell(), math.floor(v:getZ())
+    for _, step in ipairs({ 1.5, 2.5, 1.0, 3.5 }) do
+        local sq = cell:getGridSquare(math.floor(c:getX() + dx * step), math.floor(c:getY() + dy * step), z)
+        if sq and sq:isFree(false) then return sq end
+    end
+    return nil
+end
+
 function L.walkToPartArea()
     local v, part = L.vehicle, L.part
     if not v or not part then return false, "no vehicle part" end
     local area = part:getArea()
     if not area or not v:getAreaCenter(area) then return false, "the part has no area" end
+    if L.inPartArea() then return true, tostring(area), "already in the area" end
+    local sq = squareNearArea(v, area)
+    if sq then getPlayer():teleportTo(sq:getX() + 0.5, sq:getY() + 0.5, sq:getZ()) end
     ISTimedActionQueue.add(ISPathFindAction:pathToVehicleArea(getPlayer(), v, area))
-    return true, tostring(area)
+    return true, tostring(area), sq and "teleported beside the area" or "walked from where the player stood"
 end
 
 -- Whether the player stands inside the part's own area - the game's first
