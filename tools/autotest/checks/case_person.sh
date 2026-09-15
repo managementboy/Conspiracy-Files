@@ -77,6 +77,6 @@ report="$EVIDENCE/$id-case-person.txt"
     echo "after save and reload: $persisted"
     echo "card on the body in the notebook: $lead"
     for f in "${fails[@]}"; do echo "FAIL: $f"; done
-} > "$report"
+} > "$report.part"; mv "$report.part" "$report"
 cat "$report"
 [ "$verdict" = PASS ]

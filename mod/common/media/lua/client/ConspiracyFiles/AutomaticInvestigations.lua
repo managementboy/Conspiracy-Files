@@ -28,6 +28,9 @@ function A.poll()
   A.initialized=true
  end
  if status.count>=status.limit or not status.scheduled then return end
+ -- Four unfinished cases is all the save allows: do not even try until one is
+ -- finished (a refused attempt used to cost a nearby scan every ten seconds).
+ if status.active and status.activeLimit and status.active>=status.activeLimit then return end
  local hours=getGameTime():getWorldAgeHours()
  if type(hours)~="number" or hours~=hours or hours==math.huge or hours<status.lastCreatedHours+A.config.minGapHours then return end
  if type(status.lastCompletedHours)=="number" and hours<status.lastCompletedHours+A.config.afterCompletionHours then return end

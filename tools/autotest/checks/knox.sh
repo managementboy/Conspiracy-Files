@@ -124,13 +124,14 @@ dates="$(ev 'return CFOrg.knox()')"
 [ "$(cut -f3 <<<"$dates")" -gt 0 ] 2>/dev/null || fail "the date book has no days in it"
 shot dates
 
-# The four buttons are MENU / UP / DOWN / BACK now, printed on the case
-# (owner, 2026-09-13). MENU goes to the Applications screen from anywhere.
+# The keys read HOME and BACK with the rocker between them (P4-R87). HOME - the
+# MODE key, still the MENU action inside OrganiserScreen - goes to the
+# Applications screen from anywhere.
 ev 'return CFOrg.wake()' >/dev/null
 ev 'return CFOrg.openProgram("FILES")' >/dev/null; sleep 1
 ev 'return CFOrg.pressButton("MODE")' >/dev/null; sleep 1
 menu_key="$(ev 'return CFOrg.knox()')"
-[ "$(cut -f4 <<<"$menu_key")" = true ] || fail "the MENU button did not open the launcher: $menu_key"
+[ "$(cut -f4 <<<"$menu_key")" = true ] || fail "the HOME key did not open the launcher: $menu_key"
 # BACK stops at the launcher rather than falling off the top.
 ev 'return CFOrg.pressButton("INDEX")' >/dev/null; sleep 1
 [ "$(ev 'return CFOrg.knox()' | cut -f4)" = true ] || fail "BACK went somewhere past the launcher"

@@ -149,7 +149,7 @@ cutting it off.
 | The case's people and organisation | Exist: two people (`identities`) and one `organisation` per case. | `Generator.lua:328-339`, `:694-697` | Nothing, but see the next row. |
 | Those names after the case ends | **Gone.** Retirement keeps only the case id, the rows and the discovery order. People, organisation, premise and outline are dropped. | `RetiredCase.lua:1-10`, `:17`, `:123` | Retirement must keep a small "offered" note: two names, the organisation, the premise id and the outline. |
 | Investigation "ways" | **No such concept in code.** Nothing is called follow / records / listen. The nearest things are the optional evidence roles. | `Generator.lua:407-621` (roles), `:630-656` (selection) | A fixed table from each way to the roles it prefers (section 4). |
-| "Listen for it" | **Nothing carries sound or broadcast.** The only public-notice paper is the press clipping. The organiser is a radio underneath, but that has no content. | `Generator.lua:418-420`; `KNOX_OS.md:137-157` | First cut maps to the clipping only (open question Q1). |
+| "Listen for it" | **Nothing carries sound or broadcast.** The only public-notice paper is the press clipping. The organiser is a radio underneath, but that has no content. | `Generator.lua:418-420`; `KNOX_OS.md:137-157` | Built: a radio call-in transcript, added only to a case steered to it (P4-R121, P4-R123). |
 | Moment of case completion | Exists. | `GeneratedRuntime.lua:639-666` (logs "Case complete; placement details retired.", then calls `onCaseComplete`); the drop-to-note path goes through the same function (`DropToNote.lua:64`) | One call there to record the offered note, done inside the retirement swap. |
 | Next case creation | Exists. It runs when fewer than 10 cases exist and 24 world hours have passed **since the last case was created**. That is not counted from completion, and cases may overlap (up to 4 open at once). | `AutomaticInvestigations.lua:6`, `:28-31`; `GeneratedRuntime.lua:563-577`; `SuccessiveCases.lua:31`, `:116` | Pass the answers into case creation. |
 | Anchoring near the player | Exists: the player's position when the next case is prepared, sites not used before, reach set by hours survived (250/500/1500 tiles). | `GeneratedRuntime.lua:360-370`, `:388-391`; `Generator.lua:768-780`; `Reach.lua:6-9` | Unchanged. Answers never move a case. |
@@ -232,7 +232,7 @@ least one** optional paper:
 |---|---|
 | Follow the person | card with a name (8), ticket/itinerary (9), timing stub (11), duty log (12), private diary (5), objects marked with the name (13, 15) |
 | Check the place against its records | tagged key (4), payment slip (10), shift notebook (6), the counted piles (16-19), where the file's count disagrees with the cupboard |
-| Listen for it | press clipping (7) only, for now (Q1) |
+| Listen for it | press clipping (7) first, plus the radio call-in transcript, which takes the last optional slot (P4-R123) |
 
 The existing rules about which papers cannot share a case (`Generator.lua:636-655`)
 still apply.

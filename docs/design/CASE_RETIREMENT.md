@@ -1,6 +1,14 @@
 # Case retirement — the path to genuinely unlimited mysteries
 
-**Status:** Design note, not implemented. Raising `MAX_CASES` to 8 buys time;
+**Status (updated 2026-09-15):** built. `Generated/RetiredCase.lua` shrinks a
+finished case to its rows; `SuccessiveCases.lua` holds `MAX_CASES=10` with at
+most `MAX_ACTIVE=4` unfinished at once, measured by `test/case_budget_headroom.lua`
+(1,000 seeds). A retired case also keeps where its papers were last seen
+(P4-R104), what its questions are about and the answers (P4-R113). The archive
+that would lift the ten-case ceiling (P4-R111) is not built. The note below is
+the original design, kept as written.
+
+**Original status:** Design note, not implemented. Raising `MAX_CASES` to 8 buys time;
 retirement is what removes the ceiling.
 
 ## Measurement

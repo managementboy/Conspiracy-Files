@@ -271,6 +271,10 @@ end
 local function openAll()
     -- Replacing the session set invalidates queued closures over old APIs.
     scheduler=Scheduler.new(getTimeInMillis,function(system,why) if system=="preparation" then preparing=false end;log(system..": "..why) end);scheduler.maxSteps=24;scheduler.budgetMs=1
+    -- The old scheduler's queued preparation is dropped with it, so the flag
+    -- that said it was running must go too, or no case comes again until a
+    -- reload (campaign check, 2026-09-15).
+    preparing=false
     sessions={}; refreshRetired(); local stale=0
     for index,root in ipairs(Cases.sessions(wrapper)) do
         -- A retired root is not a Session and must never be opened as one
@@ -576,13 +580,24 @@ function R.nextCase(seed)
     if type(seed)~="number" or seed~=math.floor(seed) or seed<1 or seed>=2147483647 then return false,"invalid seed" end
     if not allowed() then return false,"debug single-player required" end
     if #Cases.sessions(wrapper)>=Cases.MAX_CASES then return false,"development case limit reached" end
+    -- Four unfinished cases is all the save allows (MAX_ACTIVE). A scan started
+    -- here could only be refused at the final swap; three refusals disabled
+    -- preparation, the next attempt set `preparing` with a job the scheduler
+    -- would not take, and no case ever came again - not even after one was
+    -- finished (campaign check, 2026-09-15). Refuse before scanning instead.
+    local active=0
+    for _,root in ipairs(Cases.sessions(wrapper)) do if not Retired.isRetired(root) then active=active+1 end end
+    if active>=Cases.MAX_ACTIVE then return false,"wait for an unfinished case to be finished" end
+    if scheduler.isDisabled("preparation") then return false,"case preparation is disabled after repeated failures" end
     for _,api in ipairs(sessions or {}) do
         for _,a in pairs(api.snapshot().assignments) do
             if a.status=="pending" or a.status=="placing" then return false,"wait for current placement to finish" end
         end
     end
     local probe=require("ConspiracyFiles/T3Nearby");local ok,why; ok,why=probe.start(nil,seed); if not ok then return false,why end
-    preparing=true; local waited=0; scheduler.enqueue("next-metadata","preparation",function() waited=waited+1;if probe.error then preparing=false;error(probe.error) end;if probe.result then prepare(probe.result,seed,true);return true end;if waited>240000 then preparing=false;error("metadata extraction did not complete") end;return false end)
+    preparing=true; local waited=0; local queued=scheduler.enqueue("next-metadata","preparation",function() waited=waited+1;if probe.error then preparing=false;error(probe.error) end;if probe.result then prepare(probe.result,seed,true);return true end;if waited>240000 then preparing=false;error("metadata extraction did not complete") end;return false end)
+    -- A refused job never runs, so nothing else would ever clear the flag.
+    if not queued then preparing=false; return false,"case preparation could not be queued" end
     return true
 end
 -- `inPlace` records a document without taking it. Owner, 2026-09-10: "we
@@ -799,14 +814,16 @@ function R.automaticStatus()
     local schedule=wrapper and wrapper.schedule
     -- When the most recent case finished, so the next one can wait a little
     -- for the survivor's answers (P4-R121). nil when none recorded one.
-    local lastCompleted
+    local lastCompleted,active=nil,0
     for _,root in ipairs(roots) do
         local h=type(root)=="table" and root.completedHours
         if type(h)=="number" and (not lastCompleted or h>lastCompleted) then lastCompleted=h end
+        if not Retired.isRetired(root) then active=active+1 end
     end
     return {count=#roots,preparing=preparing==true,scheduled=schedule~=nil,
         lastCreatedHours=schedule and schedule.createdHours[#schedule.createdHours],
-        lastCompletedHours=lastCompleted,limit=Cases.MAX_CASES}
+        lastCompletedHours=lastCompleted,limit=Cases.MAX_CASES,
+        active=active,activeLimit=Cases.MAX_ACTIVE}
 end
 -- Bounded scan of a destination site's own bounding box for any container of
 -- an allowed type. Mirrors Storage.scan's tile-stepping discipline, but the

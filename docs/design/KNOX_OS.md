@@ -14,7 +14,10 @@ slice named at the end.
 
 ## The two rules that make it a game, not a menu
 
-1. **A stylus needs a hand.** The device is read in the MAIN hand, not the off
+1. **A stylus needs a hand.** *(Replaced by P4-R105, 2026-09-14: the organiser
+   reads in either hand; held in the off hand it stays open beside a one-handed
+   weapon, and a two-handed weapon puts it away. The original wording follows.)*
+   The device is read in the MAIN hand, not the off
    hand. You cannot hold a shotgun and your notes at once. Opening it puts it
    in your hand through the game's own equip action, and being attacked while
    reading costs you what being attacked while holding a book costs you.

@@ -25,4 +25,8 @@ hours=31.01; A.poll(); assert(built==1,"the next case comes once the hour has pa
 built=0; status.lastCompletedHours=nil
 hours=23; A.poll(); assert(built==0,"the 24-hour gap still applies")
 hours=24; A.poll(); assert(built==1,"with no completion recorded the timer alone decides")
+-- At the active-case limit the timer does not try at all (test/preparation_flag.lua).
+built=0; hours=100; status.active=4; status.activeLimit=4
+A.poll(); assert(built==0,"no attempt while the save's four unfinished cases are in play")
+status.active=nil; status.activeLimit=nil
 print("PASS the next case waits an hour after a completion, on top of the 24-hour gap")
