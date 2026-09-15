@@ -154,13 +154,19 @@ refused="$(ev 'return CFHW.holdPower()')"
 say "lamp: full=lit, 0.05=refused and reported"
 
 # --- low battery ------------------------------------------------------------
+# The screen re-reads the cell once a second (Screen:charge), and a refused lamp
+# holds the command line for 2.5 s, so a footer read straight after changing the
+# cell can still show the old state. Every step used to take a second to answer,
+# which hid that; with faster steps (eb029c7) the healthy-cell read failed twice
+# (20260915T125133, 130626 - the first blamed on the lamp message, wrongly).
+# Wait for the screen to catch up, up to 4 s, and say what it showed if not.
 ev 'return CFHW.setPower(0.5)' >/dev/null
 [ "$(ev 'return CFHW.low()' | f 1)" = false ] || fail "half a cell reported as low"
-[ "$(ev 'return CFHW.foot()' | f 2)" = "HINT" ] || fail "a healthy cell overwrote the command line"
+wait_true 4 "select(2, CFHW.foot()) == 'HINT'" || \
+    fail "a healthy cell overwrote the command line: $(ev 'return CFHW.foot()' | f 2)"
 ev 'return CFHW.setPower(0.1)' >/dev/null
 [ "$(ev 'return CFHW.low()' | f 1)" = true ] || fail "a tenth of a cell not reported as low"
-sleep 3   # let the lamp-refused message age out, so this is the low warning
-[ "$(ev 'return CFHW.foot()' | f 2)" = "BATTERY LOW" ] || \
+wait_true 4 "select(2, CFHW.foot()) == 'BATTERY LOW'" || \
     fail "a low cell says nothing on screen: $(ev 'return CFHW.foot()' | f 2)"
 say "low battery: 0.5 quiet, 0.1 warns on every screen"
 
