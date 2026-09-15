@@ -1,0 +1,41 @@
+Linux campaign check 20260915T190315: FAIL
+source: f007b8a
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+cases: 1 generated:46697758:case, 2 generated:1984715242:case, 3 generated:398034928:case; at the end 
+stages:
+  start                  cases 1 (0 finished) | notebook 0 | FILES questions 0 | NAMES 1 | PLACES 0 | Old 0/0 wrong | Evidence 0/0 wrong | order  | save 163754 B
+  case 1 finished        cases 1 (1 finished) | notebook 5 | FILES questions 1 | NAMES 2 | PLACES 5 | Old 5/0 wrong | Evidence 0/0 wrong | order 11111 | save 157942 B
+  after reload 1         cases 1 (1 finished) | notebook 5 | FILES questions 1 | NAMES 2 | PLACES 5 | Old 5/0 wrong | Evidence 0/0 wrong | order 11111 | save 158627 B
+  case 2 finished        cases 5 (1 finished) | notebook 7 | FILES questions 1 | NAMES 2 | PLACES 7 | Old 5/0 wrong | Evidence 2/0 wrong | order 1111122 | save 260793 B
+  case 3, two papers     cases 5 (2 finished) | notebook 9 | FILES questions 2 | NAMES 2 | PLACES 9 | Old 6/1 wrong | Evidence 2/0 wrong | order 111112255 | save 251407 B
+  after reload 2         cases 5 (2 finished) | notebook 9 | FILES questions 2 | NAMES 2 | PLACES 9 | Old 7/0 wrong | Evidence 2/0 wrong | order 111112255 | save 251487 B
+  four cases unfinished  cases 6 (2 finished) | notebook 9 | FILES questions 2 | NAMES 2 | PLACES 9 | Old 7/0 wrong | Evidence 2/0 wrong | order 111112255 | save 279339 B
+  after the limit        cases 6 (2 finished) | notebook 9 | FILES questions 2 | NAMES 2 | PLACES 9 | Old 7/0 wrong | Evidence 2/0 wrong | order 111112255 | save 279339 B
+case 1 answers on the organiser: true two person2 records nil Warren Nagy Adele Prosser Knox County Health Office
+case 2 steer: generated:46697758:case two records Adele Prosser Adele Prosser true
+errors inside the mod, all sessions: 0
+FINDING: case 1 relay memo: found=true, dated in its week=0, carrying the date note=0
+FINDING: the date note was not exercised: no record of case 1 fell in the memo's week
+FINDING: case 1 note on the organiser: I think it was a visit that was never logged. Adele Prosser matters here. Next I would check the place against its records.
+FINDING: frame cost during case 1: AutomaticInvestigations.onTick calls=2500 avg=0.033ms max=67ms over2ms=1 | CaseFile.onTick calls=2488 avg=0.011ms max=1ms over2ms=0 | ClueMarkers.draw calls=0 avg=0.000ms max=0ms over2ms=0 | ClueMarkers.update calls=46 avg=0.652ms max=6ms over2ms=5 | IdentityObserver.afterRender calls=5006 avg=0.146ms max=1ms over2ms=0 | IdentityObserver.tick calls=2535 avg=0.001ms max=1ms over2ms=0 | LocalPersonI
+FINDING: reload 1 save size: 158219 -> 158627 bytes; before [Generated.G2=20511 AddressBook.Muldraugh=131854 KeyConnections=762 DiscoveryLedger=2705 VisitedBuildings=359]; after [Generated.G2=20919 AddressBook.Muldraugh=131854 KeyConnections=762 DiscoveryLedger=2705 VisitedBuildings=359]
+FINDING: case 2 placement: reach 250: t3:10977704480342047, t3:10977704480342021
+FINDING: case 2 papers: Staff photograph / PS-416 | Establishment list / PS-416 | Duty log / PS-416 | Tagged key / PS-416
+FINDING: frame cost during case 2: AutomaticInvestigations.onTick calls=9814 avg=0.005ms max=5ms over2ms=4 | CaseFile.onTick calls=9802 avg=0.010ms max=5ms over2ms=1 | ClueMarkers.draw calls=0 avg=0.000ms max=0ms over2ms=0 | ClueMarkers.update calls=171 avg=0.591ms max=9ms over2ms=4 | IdentityObserver.afterRender calls=19592 avg=0.057ms max=1ms over2ms=0 | IdentityObserver.tick calls=9850 avg=0.003ms max=1ms over2ms=0 | LocalPerson
+FINDING: case 3 placement: reach 250: t3:10977700185374753, t3:10977704480342020
+FINDING: frame cost during case 3: AutomaticInvestigations.onTick calls=10122 avg=0.006ms max=5ms over2ms=4 | CaseFile.onTick calls=10110 avg=0.012ms max=14ms over2ms=3 | ClueMarkers.draw calls=0 avg=0.000ms max=0ms over2ms=0 | ClueMarkers.update calls=179 avg=0.709ms max=15ms over2ms=6 | IdentityObserver.afterRender calls=20188 avg=0.058ms max=1ms over2ms=0 | IdentityObserver.tick calls=10158 avg=0.003ms max=1ms over2ms=0 | LocalP
+FINDING: reload 2 save size: 251407 -> 251487 bytes; before [Generated.G2=108840 AddressBook.Muldraugh=131854 KeyConnections=1674 DiscoveryLedger=4733 VisitedBuildings=710]; after [Generated.G2=108920 AddressBook.Muldraugh=131854 KeyConnections=1674 DiscoveryLedger=4733 VisitedBuildings=710]
+FINDING: map marks after reload 2 (written/pending/missing): 9/0/0
+FINDING: at the limit for 90 s: unfinished=4, preparing=false, refusals logged=0
+FINDING: frame cost during the limit: AutomaticInvestigations.onTick calls=42772 avg=0.004ms max=2ms over2ms=1 | CaseFile.onTick calls=42760 avg=0.008ms max=1ms over2ms=0 | ClueMarkers.draw calls=0 avg=0.000ms max=0ms over2ms=0 | ClueMarkers.update calls=733 avg=0.585ms max=1ms over2ms=0 | IdentityObserver.afterRender calls=85368 avg=0.059ms max=1ms over2ms=0 | IdentityObserver.tick calls=42808 avg=0.002ms max=1ms over2ms=0 | LocalPer
+FAIL: case 1984715242:case: document 1 not found: not on or next to its square (skipped generated:1984715242:document-2)
+FAIL: case 1984715242:case: document 1 not found: not on or next to its square (skipped generated:1984715242:document-3)
+FAIL: case 2: only 2 of 4 papers could be played
+FAIL: case 2 did not finish
+FAIL: case 2: the second thought "What do I make of it?" was said 0 times, not once
+FAIL: case 2 finished: FILES shows 1 question rows, not 2
+FAIL: reload 2: case 3 gained a steer
+FAIL: case 398034928:case: papers never all placed (0 0 0)
+FAIL: case 3 did not finish at the limit
+FAIL: at the limit, case 3 finished but no new case came within five minutes (preparing=false)
+screenshot: dev/eval/linux/runs/20260915T190315-campaign.png (not committed)

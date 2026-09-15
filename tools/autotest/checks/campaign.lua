@@ -163,6 +163,26 @@ function C.order()
     return tostring(ok), table.concat(seq)
 end
 
+-- The timer's gaps: off (0) while waiting for the next case, back to normal
+-- (24 h after a case is created, 1 h after one finishes) once it has come, so
+-- further cases do not pile up while this one is played.
+function C.gap(normal)
+    local c = ConspiracyFiles.AutomaticInvestigations.config
+    if normal then c.minGapHours, c.afterCompletionHours = 24, 1
+    else c.minGapHours, c.afterCompletionHours = 0, 0 end
+    return c.minGapHours, c.afterCompletionHours
+end
+
+-- The paper the harness is about to look for: where the case says it is, its
+-- placement state, and where the runtime last saw it.
+function C.describeFirst()
+    local d = CFLoop.list and CFLoop.list[1]
+    if not d then return "none" end
+    local state, where = R.whereabouts(d.id)
+    return string.format("%s at %s,%s floor %s (%s) [%s]; runtime: %s %s", d.id, tostring(d.x), tostring(d.y),
+        tostring(d.z), tostring(d.place), tostring(d.status), tostring(state), tostring(where))
+end
+
 -- Where the survivor stands and how long they have survived: the anchor and
 -- the reach a later case is prepared from.
 function C.here()

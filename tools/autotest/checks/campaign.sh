@@ -100,10 +100,11 @@ play_case() { # play_case CASEID [LIMIT]: find, take and inspect its next papers
     while [ "$PLAYED" -lt "$limit" ] && [ "$tries" -lt "$n" ]; do
         tries=$((tries + 1))
         [ "$(field 1 "$(ev "return CFCamp.useCase([[$cid]])")")" -gt 0 ] 2>/dev/null || break
+        local where; where="$(ev 'return CFCamp.describeFirst()' | tr '\t' ' ')"
         if out="$(inspect_doc 1)"; then
             PLAYED=$((PLAYED + 1)); say "case ${cid#generated:}: paper $PLAYED of $n: $out"
         else
-            fail "case ${cid#generated:}: $out (skipped $(ev 'return CFCamp.skipFirst()'))"
+            fail "case ${cid#generated:}: $out; $where (skipped $(ev 'return CFCamp.skipFirst()'))"
         fi
     done
 }
@@ -181,10 +182,11 @@ stage "after reload 1"
 reload_growth "reload 1" "$bytes_before" "$parts_before"
 
 # --- case 2: built from the answers ------------------------------------------
-ev 'return CFLoop.noGap()' >/dev/null
+ev 'return CFCamp.gap(false)' >/dev/null
 here="$(ev 'return CFCamp.here()')"
 wait_case_count 2 240 || fail "no second case within four minutes of the gap being removed"
 case2="$(ev 'return CFCamp.newestLive()' | field 1)"
+ev 'return CFCamp.gap(true)' >/dev/null   # no further case while this one is played
 say "case 2: $case2"
 placed_well "case 2" "$case2" "$(field 1 "$here")" "$(field 2 "$here")" "$(field 3 "$here")"
 steer2="$(ev "return CFCamp.steerOf([[$case2]])")"
@@ -209,8 +211,10 @@ stage "case 2 finished"
 perf_note "case 2"
 
 # --- case 3: built from nothing ---------------------------------------------
+ev 'return CFCamp.gap(false)' >/dev/null
 wait_case_count 3 240 || fail "no third case within four minutes"
 case3="$(ev 'return CFCamp.newestLive()' | field 1)"
+ev 'return CFCamp.gap(true)' >/dev/null
 say "case 3: $case3"
 placed_well "case 3" "$case3" "$(field 1 "$here")" "$(field 2 "$here")" "$(field 3 "$here")"
 [ "$(ev "return CFCamp.steerOf([[$case3]])" | field 1)" = unsteered ] || fail "case 3 should be unsteered (case 1's answers used, case 2's empty)"

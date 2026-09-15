@@ -8,12 +8,12 @@ local T = { version = "T3-nearby-2", reachPolicy = "P4-R55" }
 ConspiracyFiles.T3Nearby = T
 local job, tick
 local function now() return getTimeInMillis() end
-local function emit(row)
+local function emit(row, level)
     local keys, parts = {}, {}
     for k in pairs(row) do keys[#keys+1] = k end
     table.sort(keys)
     for _,k in ipairs(keys) do parts[#parts+1] = k .. "=" .. string.format("%q", tostring(row[k])) end
-    CFLog.message("nearby","scan","" .. table.concat(parts, " "))
+    CFLog.message("nearby","scan","" .. table.concat(parts, " "), level)
 end
 function T.cancel()
     if tick and Events then Events.OnTick.Remove(tick) end
@@ -95,8 +95,12 @@ local function step()
             x=r:getX(),y=r:getY(),x2=r:getX2(),y2=r:getY2(),z=r:getZ(),area=r:getArea()}
         j.rects,j.rectIndex,j.roomZ=r:getRects(),0,r:getZ()
     elseif j.phase == "output" then
+        -- Every row is debug detail. As info they wrote thousands of lines per
+        -- case, one a step, filling the console and delaying each new case
+        -- (campaign check, 2026-09-15). The summary below stays at info.
+        if not CFLog.enabled("d") then j.index = #j.rows + 1 end
         if j.index <= #j.rows then
-            emit(j.rows[j.index]); j.index=j.index+1
+            emit(j.rows[j.index], "d"); j.index=j.index+1
         else
             T.result={version=T.version,anchor=j.anchor,gameVersion=j.gameVersion,map=j.map,
                 radius=j.radius,seed=j.seed,buildings=#j.selected,rooms=j.roomCount,rectangles=j.rectCount,rows=j.rows}
