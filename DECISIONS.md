@@ -772,6 +772,16 @@ what the survivor makes of it. The organiser now shows the same headings as the
 notebook; the labelled fields (WHEN, FOUND, WHERE, OBJECT, NOTES) are unchanged.
 No new game.
 
+**P4-R115 — a body's clothes may disagree with the papers on it.** Owner,
+2026-09-15, asked whether the unbuilt half of USING_GAME_ASSETS Phase 1 is still
+wanted: "yes that would hint toward a mistery. Why does a firefighter have a
+police badge?" Where the trade a corpse is dressed for and the trade a document
+on the same body names are both known and differ, the notebook says so - as the
+survivor's question, never an answer: not stolen, not a disguise, not a second
+job. Both trades come from closed, hand-written tables (outfit id to trade,
+document type to trade); anything not listed stays silent, as outfit lines
+already do (WP3). Agreement is not remarked on. Not built yet.
+
 **P4-R106 — how a car's containers are reached.** Owner, 2026-09-14: "The globe
 box only opens when sitting in the front of the car", and a truck bed or trunk
 is reached from outside, "only if they are open". Placement may still put a
