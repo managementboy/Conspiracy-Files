@@ -55,6 +55,61 @@ Spiffo's, Jay's, Seahorse, the Rosewood prison, the base in the southwest woods
 Structure per case stays claim / response / review. What changes is what is
 being claimed.
 
+## Dates: a calendar per case
+
+Owner decision P4-R108, 2026-09-15. Every case used to be dated July 2-6
+1993, so every paper sat inside the relay memo's week (30 June - 8 July) and
+its DATE NOTE was true of everything. Now each case draws a calendar from its
+seed alone (`Generator.calendar`, never the world clock, so a case still
+rebuilds byte for byte):
+
+- the claim falls between 1 May and 28 June 1993;
+- the response follows it by one to nine days, the review follows the
+  response by one to nine days, and nothing is dated after 8 July (the
+  outbreak begins after);
+- two cases in five put the response and review inside the memo's week, the
+  rest end by 29 June. Measured over 400 seeds: 160 calendars reach the week,
+  134 cases (34%) carry a dated paper inside it, 266 carry none.
+
+Premise text never splices a day into a month. The placeholders are whole
+phrases: `{DATE1}` claim, `{DATE2}` response, `{DATE3}` review ("June 14,
+1993"), `{DATE0}` the day before the claim, `{DATE1CAPS}`/`{DATE2CAPS}` in
+capitals, `{DAYS12}` the claim-to-response gap ("four days"), `{PRIORMONTH}`
+the month before the claim's, `{SINCE11}` eleven months before it. A relative
+phrase - "the day before", "for four days", "four months" - is rendered from
+the same numbers as the dates it relates, or declared in the premise's
+`asserts` so the test can check it. A paper that says "the day before" is only
+ever printed where that is true.
+
+## Both branches, both meanings
+
+Owner decision P4-R107, 2026-09-15: fix every story defect and test for them.
+The audit found a dozen responses whose only WHAT IT MIGHT MEAN said "one of
+them is wrong" or "backdated" beside a line saying the records matched. So:
+
+- **every response carries `meaningAgree`**, read where the case corroborates;
+  `meaning` is read where it disputes. Premises.lua refuses to load without it.
+  A review carries one wherever its meaning only fits one branch. Both keep
+  two honest readings.
+- `found` text is read in both branches, so it describes the paper, never
+  which way the paper goes (no "same smudge" on a list that may differ).
+- A premise whose disputing response is dated before its claim (the
+  resignation, the payment) says so with `asserts.precedes`, and the order
+  each line states is true by construction.
+
+## Before a premise is added
+
+`test/premise_consistency.lua` must pass. It renders every premise both ways
+on three hundred calendars plus the edge cases, and generates cases until
+every premise x outline x review present/absent has occurred, and fails on:
+dates out of order or outside 30 April - 8 July 1993; a "N days", "the day
+before" or "N months" phrase that does not match its asserted dates; "for
+weeks" or "each week" in a case that lasts days; a meaning with a
+disagreement marker where the records agree, or an agreement marker where
+they do not; two papers in a case with one title; one person placed at both
+sites on the same date; a placeholder left in the text; and a relay-memo week
+rate outside 15-55%.
+
 ---
 
 ## People who stopped being where they should be

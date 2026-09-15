@@ -65,7 +65,10 @@ for seed = 1, 600 do
                 assert(storesLine, "the stores note for " .. doc.label .. " must be findable")
                 assert(storesLine:find(onPaper, 1, true),
                     "the stores note must give the count on paper")
-                assert(not storesLine:find(actual, 1, true),
+                -- As a whole word: "nine letter handwrittens received" holds
+                -- "ten" inside "handwrittens" (seed 253 once g13 moved the
+                -- draws, 2026-09-15), and that is not a count.
+                assert(not storesLine:find("%f[%a]" .. actual .. "%f[%A]"),
                     "the paperwork must not know how many are actually there")
                 assert(not doc.body:find(onPaper .. " " .. doc.label, 1, true),
                     "the pile must not quote the paperwork's count back at the player")
