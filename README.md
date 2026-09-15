@@ -33,6 +33,7 @@ A Project Zomboid Build 42 investigation/conspiracy module.
 - `docs/research/` — spike templates and observed PZ API results.
 - `docs/decisions/` — ADRs.
 - `docs/reviews/` — engineering review trail.
+- [`docs/reference/pzwiki/`](docs/reference/pzwiki/README.md) — offline PZwiki modding references, examples, and category indexes for development; external context, not a replacement for verified project research.
 - `test/fixtures/` — hand-authored content fixtures before schemas.
 - `mod/` — future loadable mod.
 - `tools/` — future validators/build helpers.
