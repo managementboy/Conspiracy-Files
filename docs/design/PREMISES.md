@@ -127,7 +127,7 @@ towns away at a funeral.
 
 **3. The employee with two start dates.**
 Payroll has him starting in March. His own union card says November. The
-difference is eight months of somewhere else.
+difference is four months of somewhere else.
 *Dull:* a rehire after a gap, recorded carelessly.
 
 **4. The last week of a job.**
@@ -146,7 +146,7 @@ never returns a single item. Its own utility record shows nobody living there.
 
 **6. Two buildings, one inventory.**
 A stock list for a warehouse matches, item for item, a list from a building
-four miles away - down to a damaged crate number.
+across town - down to a damaged crate number.
 *Dull:* a template copied and never updated.
 
 **7. The room that is not on the plan.**
@@ -179,7 +179,7 @@ they went out, initialled twice.
 *Dull:* somebody was being kind about wear.
 
 **12. Two crates, one number.**
-Consecutive receipts at MassGenFac carry the same crate reference eight days
+Consecutive receipts at MassGenFac carry the same crate reference days
 apart, both signed, neither cancelled.
 *Dull:* a reused number on a reprinted book.
 
