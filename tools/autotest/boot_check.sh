@@ -54,7 +54,7 @@ mod_errors="$(mod_errors)"
 n_errors="$(grep -c . <<<"$mod_errors")"
 cf_warn="$(grep -E '\[CF\] v=1 .*lvl=(w|e) ' <<<"$log" | sed 's/^.*> //')"
 load="$(grep -o 'game loading took [0-9]* seconds' <<<"$log" | tail -1)"
-# The survivor's papers open by themselves at start (catalogue NB-29).
+# The survivor's evidence album opens by itself at start (catalogue NB-29).
 papers="$(grep -oE 'evidence album (opened in the inventory panel[^"]*|not opened[^"]*)' <<<"$log" | tail -1)"
 end_world
 
