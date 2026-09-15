@@ -1,0 +1,5 @@
+PASS call-form - 2026-09-15T18:03:58+02:00
+commit: ea59f5e
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+session: 20260915T180225
+result: AddItem: colon added=true, helper added=true; searched flag set true by colon: colon read=true, helper read=true; set false by helper: colon read=false, helper read=false; pencils left behind=0

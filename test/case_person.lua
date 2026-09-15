@@ -173,9 +173,20 @@ print('PASS case person: where() finds her, and her death records what she carri
 -- OnDeadBodySpawn fires once that copy and the searched flag are both set.
 local function deadBody(md, items)
     local explored = false
-    local c = {
-        setExplored = function(_, v) explored = v end,
-        AddItem = function(_, fullType)
+    -- Every method insists on its own container as the receiver, as a Java
+    -- method called from Kahlua does: a call made without the object (the
+    -- shape AGENTS.md's engine call rule forbids) fails here instead of
+    -- passing on a plain table (audit, 2026-09-15).
+    local c
+    local function own(self, name) assert(self == c, name .. " was called without its container") end
+    c = {
+        setExplored = function(self, v) own(self, "setExplored"); explored = v end,
+        -- The game's own read-back, which CasePerson logs ("searched=...").
+        -- Without it the code's read returned nil while the test still passed
+        -- on a private helper (audit, 2026-09-15).
+        isExplored = function(self) own(self, "isExplored"); return explored end,
+        AddItem = function(self, fullType)
+            own(self, "AddItem")
             local item = { fullType = fullType, md = {},
                 getModData = function(self) return self.md end,
                 setName = function(self, n) self.name = n end,
@@ -184,7 +195,8 @@ local function deadBody(md, items)
             items[#items + 1] = item
             return item
         end,
-        getItems = function()
+        getItems = function(self)
+            own(self, "getItems")
             return { size = function() return #items end, get = function(_, i) return items[i + 1] end }
         end,
     }
@@ -199,7 +211,7 @@ local dying = assert(P.bind("Roy Hale", "case-11", 10, 10, 0))
 -- As the game does it: the pockets emptied, then a body made from the zombie.
 local body = deadBody(dying.md, {})
 P.onDeadBodySpawn(body)
-assert(body.explored(), "the body must be marked searched, or the game rolls its own ID cards in her name")
+assert(body.getContainer():isExplored(), "the body must be marked searched, or the game rolls its own ID cards in her name")
 assert(#body.items == 1, "the body must carry exactly one card, got " .. #body.items)
 assert(body.items[1].name == "ID Card: Roy Hale", tostring(body.items[1].name))
 assert(body.items[1].md.cfCasePerson == "case-11", "and it must be this case's card")
@@ -208,7 +220,7 @@ assert(#body.items == 1, "a second spawn event must not add a second card")
 -- Any other body is left exactly as the game makes it.
 local stranger = deadBody({}, {})
 P.onDeadBodySpawn(stranger)
-assert(not stranger.explored() and #stranger.items == 0, "an unbound body must be left as the game made it")
+assert(not stranger.getContainer():isExplored() and #stranger.items == 0, "an unbound body must be left as the game made it")
 print("PASS case person: her body is marked searched and carries exactly one card, with her name")
 
 -- Name and body match. Owner saw a man's name on a zombie in women's clothes.

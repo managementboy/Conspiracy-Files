@@ -66,6 +66,18 @@ method first.**
     BAD    square.HasStairs()             -- throws
     BAD    pcall(player.setHaloNote, player, ...)   -- may silently do nothing
 
+**One measured exception (P4-R124, 2026-09-15).** A keyed read helper that
+calls the method inside a Lua closure with the object passed explicitly,
+
+    ALLOWED   pcall(function(...) return o[k](o, ...) end, ...)   -- CasePerson.lua read()
+
+behaves exactly like the colon call on Build 42.20.4:
+`tools/autotest/checks/call_form.sh` compared both on the same object for
+`AddItem`, `setExplored` and `isExplored` and they agreed
+(docs/management/evidence/linux-autotest/20260915T180358-call-form.txt). Only
+that shape is allowed. Handing the method itself to `pcall` stays banned, and a
+new helper of any other shape needs its own live comparison first.
+
 Kahlua does not treat an extracted method as a real method call. This failed
 twice in one day, in two different ways:
 

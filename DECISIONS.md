@@ -868,6 +868,17 @@ question and never answers it. It is placed only in a case steered to "Listen
 for it", after every random draw (as the relay memo is), so no existing case
 changes. Text: docs/design/WHAT_DO_I_MAKE_OF_IT.md, step 11.
 
+**P4-R124 — the keyed read helper is a measured exception to the call rule.**
+Owner, 2026-09-15, on the audit finding that CasePerson.lua and four other files
+read engine objects through `o[k](o,...)`: "probe, then decide". The probe
+(`tools/autotest/checks/call_form.sh`, real game) compared that helper with plain
+colon calls on the same object for `AddItem`, `setExplored` and `isExplored`;
+both did the same thing (PASS, 20260915T180358). So that one shape - the method
+called inside a Lua closure with the object passed - is allowed and recorded in
+AGENTS.md; `pcall(obj.method, obj, ...)` stays banned, and any other helper
+shape needs its own live comparison. The case-person test's mocks now demand
+their receiver, so a call without the object fails offline.
+
 **P4-R106 — how a car's containers are reached.** Owner, 2026-09-14: "The globe
 box only opens when sitting in the front of the car", and a truck bed or trunk
 is reached from outside, "only if they are open". Placement may still put a
