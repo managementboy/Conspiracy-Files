@@ -104,7 +104,6 @@ out="$REPO/docs/management/evidence/linux-autotest/$(date +%Y%m%dT%H%M%S)-fieldn
 {
     echo "$verdict fieldnote - $(date -Is)"
     source_line
-    renderer_line
     echo "session: $id"
     echo "loaded:   $state"
     echo "hitboxes: $h"
