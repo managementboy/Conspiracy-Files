@@ -60,6 +60,17 @@ for _,line in ipairs({"NOT CASE EVIDENCE","ALREADY NOTED","NOTED 64 OF 64"}) do
     assert(#line<=17,"the footer must fit the largest text size: "..line)
 end
 
+-- A finished case's papers are no longer placement subjects - retiring the
+-- case drops that bookkeeping - but they are still noted. Dropping them again
+-- must say so, not call them ordinary items (drop_note check 20260915T111000:
+-- a whole case noted in one drop, then "NOT CASE EVIDENCE").
+local retired=item("retired",inventory,true)
+inspected[retired]=true
+runtime.subject=function(it) return it~=retired and it.case==true end
+local done=Drop.note({retired},runtime,inventory)
+assert(done.known==1 and done.other==0,"a noted paper from a finished case is known, not ordinary: "..Drop.describe(done))
+assert(Drop.footer(done)=="ALREADY NOTED","a finished case's papers dropped again: "..Drop.footer(done))
+
 -- The organiser takes a drop before handing the mouse-up to its panel.
 local f=assert(io.open("mod/common/media/lua/client/ConspiracyFiles/OrganiserScreen.lua","r"))
 local src=f:read("*a"); f:close()

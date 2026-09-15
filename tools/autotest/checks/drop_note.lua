@@ -8,6 +8,21 @@ local R = ConspiracyFiles.GeneratedRuntime
 local S = ConspiracyFiles.OrganiserScreen
 local A = ConspiracyFiles.KnoxApps
 D.carried = D.carried or {}
+D.people = D.people or {}
+
+-- The case's people, read while the case is live. Noting its last paper
+-- finishes a case, and a finished case keeps only its rows - the first run of
+-- this check looked the people up after the drop and found none (20260915T111000).
+local function rememberPeople(item)
+    local md = item and item:getModData()
+    if not md or not md.cfGeneratedId then return end
+    local Cases = require("ConspiracyFiles/Generated/SuccessiveCases")
+    local wrapper = Cases.current(ModData.get("ConspiracyFiles.Generated.G2"))
+    local root = Cases.find(wrapper, md.cfGeneratedId)
+    for _, person in ipairs((root and root.case and root.case.people) or {}) do
+        if person.name then D.people[person.name] = true end
+    end
+end
 
 -- Which documents are in furniture rather than a car: approach and find only.
 function D.inFurniture(n)
@@ -17,9 +32,15 @@ function D.inFurniture(n)
     return not tostring(holder):find("^vehicle"), tostring(holder)
 end
 
-function D.keepCarried() D.carried[#D.carried + 1] = L.item; return true, tostring(#D.carried) end
+function D.keepCarried()
+    D.carried[#D.carried + 1] = L.item
+    rememberPeople(L.item)
+    return true, tostring(#D.carried)
+end
+
 function D.keepLying()
     D.lying = L.item
+    rememberPeople(L.item)
     return true, tostring(L.item:getContainer() and L.item:getContainer():getType())
 end
 
@@ -70,19 +91,17 @@ function D.where()
     return true, tostring(still), tostring(lying), tostring(D.plain ~= nil and R.isInspected(D.plain) == true)
 end
 
--- Every case person whose name is written on a noted paper is in NAMES.
+-- Every case person whose name is written on a noted paper is in NAMES - read
+-- from the rows, which a finished case keeps.
 function D.names()
-    local Cases = require("ConspiracyFiles/Generated/SuccessiveCases")
-    local wrapper = Cases.current(ModData.get("ConspiracyFiles.Generated.G2"))
     local rows = ConspiracyFiles.NotebookUI.generatedRows("evidence") or {}
     local expected, seen = {}, {}
     for _, row in ipairs(rows) do
-        local root = Cases.find(wrapper, row.id)
         local text = tostring(row.title) .. "\n" .. tostring(row.detailText)
-        for _, person in ipairs((root and root.case and root.case.people) or {}) do
-            if person.name and not seen[person.name] and text:find(person.name, 1, true) then
-                seen[person.name] = true
-                expected[#expected + 1] = person.name
+        for name in pairs(D.people) do
+            if not seen[name] and text:find(name, 1, true) then
+                seen[name] = true
+                expected[#expected + 1] = name
             end
         end
     end

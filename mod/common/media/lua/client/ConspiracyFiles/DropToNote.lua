@@ -47,13 +47,17 @@ function M.note(items,runtime,inventory)
     local r={noted=0,known=0,failed=0,other=0}
     if type(runtime)~="table" then r.other=#items; return r end
     for _,item in ipairs(items) do
-        local okS,subject=pcall(runtime.subject,item)
-        if not okS or not subject then
-            r.other=r.other+1
+        -- Known first. A finished case's papers are no longer placement
+        -- subjects - retiring a case drops that bookkeeping - but they are
+        -- still noted, and dropping them again said NOT CASE EVIDENCE
+        -- (drop_note check, 20260915T111000: a whole case noted in one drop).
+        local okK,known=pcall(runtime.isInspected,item)
+        if okK and known then
+            r.known=r.known+1
         else
-            local okK,known=pcall(runtime.isInspected,item)
-            if okK and known then
-                r.known=r.known+1
+            local okS,subject=pcall(runtime.subject,item)
+            if not okS or not subject then
+                r.other=r.other+1
             else
                 local okC,outer=pcall(function() return item:getOutermostContainer() end)
                 local carried=okC and inventory~=nil and outer==inventory
