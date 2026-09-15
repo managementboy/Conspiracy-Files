@@ -828,6 +828,20 @@ trail state of COLD_TRAIL_AND_PULL.md exists; the next case **keeps the
 already froze**, so nothing already written in a notebook changes. Design:
 docs/design/WHOLE_MAP_ADDRESSES.md.
 
+**P4-R121 — the four open points of "What do I make of it?".** Owner,
+2026-09-15, answering the plan (docs/design/WHAT_DO_I_MAKE_OF_IT.md):
+- **"Listen for it" stays, through a new broadcast paper** (a transcript or
+  scanner-log kind of document) that the next case leans on when that answer
+  is chosen. It is a new document kind, not a new premise or organiser
+  program, so the P4-R107 freeze as written is not broken.
+- **Several finished cases with unused answers:** the most recently changed
+  answers steer the next case; older unused answers are not used.
+- **The next case waits a little after a case ends**, so answers given right
+  away can steer it (a short delay after completion, on top of the 24-hour
+  timer).
+- **A returning person never gets a second body.** Someone who already has a
+  body in an earlier case returns through papers and mentions only.
+
 **P4-R106 — how a car's containers are reached.** Owner, 2026-09-14: "The globe
 box only opens when sitting in the front of the car", and a truck bed or trunk
 is reached from outside, "only if they are open". Placement may still put a

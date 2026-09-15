@@ -259,27 +259,26 @@ before the screen exists: with nothing answered, nothing changes.
 
 ## 7. Open questions and risks
 
-### Open questions for the owner
+### Owner answers (P4-R121, 2026-09-15)
 
-- **Q1. What is "Listen for it" in the first cut?** No paper or radio content
-  carries sound today. Options: (a) map it to the press clipping and public
-  notices only (thin, but ready now); (b) leave the option out until there is
-  broadcast content, as with "leave it cold"; (c) write a new paper kind, such
-  as a transcript or a scanner log. (c) is new content and may fall under the
-  P4-R107 freeze.
-- **Q2. Several finished cases, one next case.** If two finished cases both
-  have unused answers when the timer fires, use the most recently changed set
-  (recommended) or the oldest?
-- **Q3. Answers usually arrive after the timer.** The timer counts 24 hours
-  from the last case *created*, not finished. Once a case has taken more than a
-  day, the next case is built within seconds of the last paper, before the
-  survivor can open the organiser. The answers then shape the case *after*
-  that one. Is that acceptable under P4-R119, or should creation wait a short
-  time after a completion?
-- **Q4. A returning person's body.** A person who returns has either already
-  been searched (no new body, as today) or is still walking around under the
-  old case. Recommended: a returning person never gets a second body, and her
-  old record keeps carrying her. Agree?
+- **Q1. "Listen for it": a new broadcast paper.** A transcript or scanner-log
+  kind of document, which the next case leans on when that answer is chosen.
+  It is a new document kind, not a new premise or organiser program, so the
+  P4-R107 freeze as written is not broken. Added as step 11 below.
+- **Q2. Several finished cases:** the most recently changed unused answers
+  steer the next case (step 6).
+- **Q3. Timing:** creation waits a short time after a case completes (on top
+  of the 24-hour timer) so answers given right away can steer it (step 6).
+- **Q4. A returning person never gets a second body**; she returns through
+  papers and mentions only. The generator needs a cross-case check (step 3).
+
+**Added steps:**
+
+| # | Step | Unit test | Linux game check | Size |
+|---|---|---|---|---|
+| 3b | **Cross-case body check.** A person who has a body in any earlier case (live or retired) is never bound to a body again; the returning person appears in papers only. | extend `test/case_steer.lua` and the CasePerson tests | `case_body.sh` unaffected; `core_loop.sh` second case asserts no second body for the returning name | S |
+| 6b | **Wait after completion.** No new case is created until a short delay after the last completion (proposed 1 in-game hour), in addition to `minGapHours`. | extend `automatic_investigations.lua` | `core_loop.sh` with `noGap`: second case appears only after the delay | S |
+| 11 | **Broadcast paper.** A new document kind (transcript or scanner log) written for the "listen for it" way, with its text passing the premise consistency and lint tests; used only when that answer steers a case. | extend `premise_consistency.lua`, `text_lint.lua`, `case_steer.lua` | `core_loop.sh`: a case steered to "listen for it" places a broadcast paper | M (writing) |
 
 ### Risks
 
