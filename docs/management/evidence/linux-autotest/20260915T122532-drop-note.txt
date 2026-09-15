@@ -1,0 +1,8 @@
+Linux drop-to-note check 20260915T122532: PASS
+source: eb029c7
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+case: 7	1:placed@102 E Maple St; 2:placed@103 Dewey St; 3:placed@103 Dewey St; 4:placed@102 E Maple St; 5:placed@102 E Maple St; 6:placed@102 E Maple St; 7:placed@103 Dewey St
+carried: 3, left lying: Access memo / 7C-41
+drop: true	4	NOTED 4
+second drop: true	0	ALREADY NOTED
+names from papers: true	1	Warren Nagy	

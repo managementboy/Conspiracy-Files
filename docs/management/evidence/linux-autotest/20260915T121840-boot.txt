@@ -1,0 +1,10 @@
+Linux boot check 20260915T121840: PASS
+source: eb029c7
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+mod version / game version / player alive: DEV-0.36.0-drop-to-note	42.20.4 b0bbce05d5	true
+game loading took 40 seconds; soaked 60s
+mod files loaded: 102 of 102
+survivor's papers: papers opened in the inventory panel after 0 ticks
+errors inside the mod: 0
+mod warnings/errors logged by the mod itself: 0
+screenshot: dev/eval/linux/runs/20260915T121840.png (not committed)
