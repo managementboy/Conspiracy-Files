@@ -1,0 +1,11 @@
+FAIL fieldnote - 2026-09-15T10:28:52+02:00
+source: 256f2e8 + uncommitted mod changes
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+session: 20260915T102706
+loaded:   true	DEV-0.35.1-loose-ends	0.5,1,1.5,2,3	400x620	400x620
+hitboxes: true	6 keys at 5 machine sizes, 30 boxes, both ends
+legends:  false	no legend picture for HOME@0.5,HOME@1.5,HOME@0.5,HOME@1.5,HOME@0.5,HOME@1.5,HOME@0.5,HOME@1.5,BACK@0.5,BACK@1.5,BACK@0.5,BACK@1.5,BACK@0.5,BACK@1.5,BACK@0.5,BACK@1.5
+lcd:      true	glass at 40,50 device 320x422	0	
+labels:   true	C14:HOME top=22 icon=17 gap=5 | C17:BACK top=22 icon=17 gap=5
+FAIL: legends: no legend picture for HOME@0.5,HOME@1.5,HOME@0.5,HOME@1.5,HOME@0.5,HOME@1.5,HOME@0.5,HOME@1.5,BACK@0.5,BACK@1.5,BACK@0.5,BACK@1.5,BACK@0.5,BACK@1.5,BACK@0.5,BACK@1.5
