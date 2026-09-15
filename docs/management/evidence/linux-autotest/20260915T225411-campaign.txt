@@ -1,0 +1,46 @@
+Linux campaign check 20260915T225411: FAIL
+source: 45d70bf
+renderer: Mesa llvmpipe (LLVM 20.1.2, 256 bits) (SOFTWARE) on display :0
+cases: 1 generated:1575974036:case, 2 generated:975464382:case, 3 generated:975464382:case; at the end 
+stages:
+  start                  cases 1 (0 finished) | record 0 | FILES questions 0 | NAMES 1 | PLACES 0 | Old 0/0 wrong | Evidence 0/0 wrong | order  | save 28180 B
+  case 1 finished        cases 1 (1 finished) | record 4 | FILES questions 1 | NAMES 1 | PLACES 5 | Old 4/0 wrong | Evidence 0/0 wrong | order 1111 | save 154387 B
+  after reload 1         cases 1 (1 finished) | record 4 | FILES questions 1 | NAMES 1 | PLACES 5 | Old 4/0 wrong | Evidence 0/0 wrong | order 1111 | save 155016 B
+  case 2 finished        cases 2 (1 finished) | record 8 | FILES questions 1 | NAMES 3 | PLACES 9 | Old 4/0 wrong | Evidence 5/0 wrong | order 11112222 | save 190515 B
+  case 3, two clues      cases 2 (1 finished) | record 8 | FILES questions 1 | NAMES 3 | PLACES 9 | Old 4/0 wrong | Evidence 5/0 wrong | order 11112222 | save 190515 B
+  after reload 2         cases 2 (1 finished) | record 8 | FILES questions 1 | NAMES 3 | PLACES 9 | Old 4/0 wrong | Evidence 5/0 wrong | order 11112222 | save 190515 B
+  at the limit           cases 2 (1 finished) | record 8 | FILES questions 1 | NAMES 3 | PLACES 9 | Old 4/0 wrong | Evidence 5/0 wrong | order 11112222 | save 190515 B
+  after the limit        cases 2 (1 finished) | record 8 | FILES questions 1 | NAMES 3 | PLACES 9 | Old 4/0 wrong | Evidence 5/0 wrong | order 11112222 | save 190515 B
+case 1 answers on the organiser: true two person2 records nil Curtis Vance Joanne Voss Fossoil Transport
+case 2 steer: generated:1575974036:case two records Joanne Voss Joanne Voss true
+errors inside the mod, all sessions: 0
+FINDING: fresh worlds started for a case 1 with a document in the memo's week: 1 (memo=true, dated documents=1)
+FINDING: case 1 relay memo: found=true, dated in its week=1, carrying the date note=1
+FINDING: the date note was exercised: 1 of 1 records dated in the memo's week carry it
+FINDING: case 1 note on the organiser: I think it was part of the load going elsewhere. Joanne Voss matters here. Next I would check the place against its records.
+FINDING: frame cost during case 1: AutomaticInvestigations.onTick calls=239 avg=0.008ms max=1ms over2ms=0 | CaseFile.onTick calls=237 avg=0.004ms max=1ms over2ms=0 | ClueMarkers.draw calls=0 avg=0.000ms max=0ms over2ms=0 | ClueMarkers.update calls=42 avg=0.952ms max=6ms over2ms=6 | IdentityObserver.afterRender calls=492 avg=0.331ms max=4ms over2ms=8 | IdentityObserver.tick calls=245 avg=0.012ms max=1ms over2ms=0 | LocalPersonIntegr
+FINDING: reload 1 save size: 154664 -> 155016 bytes; before [Generated.G2=18598 AddressBook.Muldraugh=131854 KeyConnections=778 DiscoveryLedger=1518 VisitedBuildings=242]; after [Generated.G2=18950 AddressBook.Muldraugh=131854 KeyConnections=778 DiscoveryLedger=1518 VisitedBuildings=242]
+FINDING: case 2 placement: reach 250: t3:10977704480342035, t3:10977704480342034
+FINDING: case 2 clues: Transfer notice / AV-197 | Receiving roster / AV-197 | File review / AV-197 | Duty log / AV-197 | Tagged key / AV-197
+FINDING: frame cost during case 2: AutomaticInvestigations.onTick calls=2537 avg=0.009ms max=3ms over2ms=1 | CaseFile.onTick calls=2535 avg=0.029ms max=3ms over2ms=6 | ClueMarkers.draw calls=0 avg=0.000ms max=0ms over2ms=0 | ClueMarkers.update calls=384 avg=1.039ms max=7ms over2ms=74 | IdentityObserver.afterRender calls=5088 avg=0.290ms max=7ms over2ms=33 | IdentityObserver.tick calls=2542 avg=0.007ms max=2ms over2ms=1 | LocalPerso
+FINDING: case 3 placement: reach 250: t3:10977704480342035, t3:10977704480342034
+FINDING: frame cost during case 3: AutomaticInvestigations.onTick calls=5523 avg=0.009ms max=5ms over2ms=2 | CaseFile.onTick calls=5521 avg=0.027ms max=4ms over2ms=8 | ClueMarkers.draw calls=0 avg=0.000ms max=0ms over2ms=0 | ClueMarkers.update calls=828 avg=1.286ms max=7ms over2ms=287 | IdentityObserver.afterRender calls=11060 avg=0.302ms max=7ms over2ms=74 | IdentityObserver.tick calls=5528 avg=0.008ms max=6ms over2ms=3 | LocalPer
+FINDING: reload 2 save size: 190515 -> 190515 bytes; before [Generated.G2=50393 AddressBook.Muldraugh=131854 KeyConnections=778 DiscoveryLedger=3538 VisitedBuildings=359]; after [Generated.G2=50393 AddressBook.Muldraugh=131854 KeyConnections=778 DiscoveryLedger=3538 VisitedBuildings=359]
+FINDING: map marks after reload 2 (written/pending/missing): 8/0/0
+FINDING: the fourth unfinished case did not arrive within twenty minutes: 2 1 1:1575974036:retired 2:975464382:live
+FINDING: after 90 s with 1 unfinished: preparing=false, cases 2 1 1:1575974036:retired 2:975464382:live
+FINDING: frame cost during the limit: AutomaticInvestigations.onTick calls=15175 avg=0.011ms max=7ms over2ms=11 | CaseFile.onTick calls=15173 avg=0.023ms max=6ms over2ms=5 | ClueMarkers.draw calls=0 avg=0.000ms max=0ms over2ms=0 | ClueMarkers.update calls=2150 avg=1.459ms max=8ms over2ms=902 | IdentityObserver.afterRender calls=30364 avg=0.309ms max=10ms over2ms=179 | IdentityObserver.tick calls=15180 avg=0.006ms max=3ms over2ms=3 | L
+FAIL: case 975464382:case: document 1 never reached the inventory; generated:975464382:document-1 at 10874,10188 floor 0 (107 E Maple St) [placed]; runtime: accounted On shelves at 107 E Maple St. (skipped generated:975464382:document-1)
+FAIL: case 2: only 4 of 5 clues could be played
+FAIL: case 2 did not finish
+FAIL: case 2: the second thought "What do I make of it?" was said 0 times, not once
+FAIL: case 2 finished: FILES shows 1 question rows, not 2
+FAIL: no third case within four minutes
+FAIL: case 3 should be unsteered (case 1's answers used, case 2's empty)
+FAIL: case 975464382:case: clues never all placed (0 0 0)
+FAIL: case 3: only 0 of 2 clues could be played
+FAIL: reload 2: case 3 gained a steer (generated:1575974036:case)
+FAIL: case 975464382:case: document 1 not found: not on or next to its square; generated:975464382:document-1 at 10874,10188 floor 0 (107 E Maple St) [placed]; runtime: accounted Carried, in Deanne's Evidence. (skipped generated:975464382:document-1)
+FAIL: the oldest unfinished case 975464382:case did not finish
+FAIL: after a case was finished at the limit, no new case came within fifteen minutes (preparing=true)
+screenshot: dev/eval/linux/runs/20260915T225411-campaign.png (not committed)

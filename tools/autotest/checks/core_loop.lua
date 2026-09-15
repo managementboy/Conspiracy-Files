@@ -309,8 +309,12 @@ function L.take()
     return true
 end
 
+-- Carried anywhere on the survivor. The evidence album files a paper into itself
+-- once it is picked up, so on a slow machine the item had already left the top
+-- level by the time this was asked, and a clue in hand read as never taken
+-- (campaign 20260915T225411).
 function L.carried()
-    return L.item:getContainer() == getPlayer():getInventory()
+    return L.item:getOutermostContainer() == getPlayer():getInventory()
 end
 
 -- The real right-click menu on the carried item, then its Inspect option.
