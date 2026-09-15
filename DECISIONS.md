@@ -879,6 +879,22 @@ AGENTS.md; `pcall(obj.method, obj, ...)` stays banned, and any other helper
 shape needs its own live comparison. The case-person test's mocks now demand
 their receiver, so a call without the object fails offline.
 
+**P4-R125 — a refused new case waits for the survivor to move on.** Owner,
+2026-09-15, choosing option A. When a new case finds no unused, loaded buildings
+with enough containers near the survivor, the game used to scan the same
+neighbourhood again every 10-20 seconds (61 refused scans in about 25 minutes in
+the campaign check). Now it does not try again until the survivor has moved about
+50 tiles or half an in-game hour has passed. What the player sees is unchanged:
+the case still comes once they move on. A case created, or loading the save,
+clears the wait. Placing cases in unloaded areas was not chosen.
+
+**P4-R126 — the long campaign check exercises the relay memo's date note.**
+Owner, 2026-09-15, choosing option A. In four campaign runs no paper of case 1
+fell inside the memo's nine days, so the date note passed on "0 of 0". The check
+now starts fresh worlds (at most eight) until case 1 has a paper dated in that
+week, and then requires every such paper to carry the note. Test only: the game
+does not force any case into that week (P4-R108 stands).
+
 **P4-R106 — how a car's containers are reached.** Owner, 2026-09-14: "The globe
 box only opens when sitting in the front of the car", and a truck bed or trunk
 is reached from outside, "only if they are open". Placement may still put a

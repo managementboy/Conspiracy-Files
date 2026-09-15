@@ -135,16 +135,29 @@ reload_world() { # reload_world LABEL: save, quit, continue, reload the Lua
 
 # ---------------------------------------------------------------------------
 claim_game || exit 2
-start_cold "${start_args[@]}" || abort "the game did not reach a playable world"
+# P4-R126: the relay memo's date note is only tested when case 1 has a paper
+# dated inside the memo's week, which about a third of cases do. Fresh worlds are
+# started, at most eight, until one does.
+worlds=0
+while :; do
+    worlds=$((worlds + 1))
+    start_cold "${start_args[@]}" || abort "the game did not reach a playable world"
+    load_lua || abort "could not load the check's Lua"
+    wait_true 90 'ConspiracyFiles.GeneratedRuntime.metrics()~=nil' || abort "no case started"
+    wait_case_count 1 120 || abort "no first case"
+    case1="$(ev 'return CFCamp.newestLive()' | field 1)"
+    week="$(ev "return CFCamp.memoWeek([[$case1]])")"
+    if [ "$(field 1 "$week")" = true ] && [ "$(field 2 "$week")" -gt 0 ] 2>/dev/null; then break; fi
+    if [ "$worlds" -ge 8 ]; then findings+=("no case 1 in $worlds fresh worlds had a paper in the relay memo's week"); break; fi
+    say "world $worlds: case 1 has no paper in the memo's week; starting a fresh world"
+    "$PZ" stop >/dev/null 2>&1
+done
+findings+=("fresh worlds started for a case 1 with a paper in the memo's week: $worlds (memo=$(field 1 "$week"), dated papers=$(field 2 "$week"))")
 first="$(session)"; world="$(cat "$REPO/dev/eval/linux/world")"
-load_lua || abort "could not load the check's Lua"
-wait_true 90 'ConspiracyFiles.GeneratedRuntime.metrics()~=nil' || abort "no case started"
 wrap_perf
 ev 'return CFLoop.givePen()' >/dev/null
 
 # --- case 1 -----------------------------------------------------------------
-wait_case_count 1 120 || abort "no first case"
-case1="$(ev 'return CFCamp.newestLive()' | field 1)"
 say "case 1: $case1"
 stage "start"
 names_start="$NAMES_NOW"
@@ -155,8 +168,13 @@ wait_finished 1 || fail "case 1 did not finish after its papers were inspected"
 thought_once "case 1" "$thought0"
 notes="$(ev 'return CFLoop.dateNotes()')"
 findings+=("case 1 relay memo: found=$(field 1 "$notes"), dated in its week=$(field 2 "$notes"), carrying the date note=$(field 3 "$notes")")
-[ "$(field 1 "$notes")" != true ] || [ "$(field 2 "$notes")" = "$(field 3 "$notes")" ] || fail "case 1: records in the memo's week without the date note"
-[ "$(field 2 "$notes")" != 0 ] || findings+=("the date note was not exercised: no record of case 1 fell in the memo's week")
+[ "$(field 1 "$notes")" = true ] || fail "case 1: the relay memo is not among the papers found"
+[ "$(field 2 "$notes")" = "$(field 3 "$notes")" ] || fail "case 1: $(field 2 "$notes") records dated in the memo's week, but $(field 3 "$notes") carry the date note"
+if [ "$(field 2 "$notes")" -gt 0 ] 2>/dev/null; then
+    findings+=("the date note was exercised: $(field 3 "$notes") of $(field 2 "$notes") records dated in the memo's week carry it")
+else
+    findings+=("the date note was not exercised: case 1 had no paper in the memo's week")
+fi
 old_settled "case 1 finished"
 stage "case 1 finished"
 [ "$QROWS" = 1 ] || fail "case 1 finished: FILES shows $QROWS question rows, not 1"

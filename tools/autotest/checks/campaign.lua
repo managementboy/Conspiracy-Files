@@ -37,6 +37,22 @@ function C.oldestLive()
     return "none"
 end
 
+-- Whether a live case carries the relay memo, and how many of its other papers
+-- are dated inside the memo's week (P4-R126: the date note needs at least one).
+function C.memoWeek(caseId)
+    local Memo = require("ConspiracyFiles/Generated/RelayMemo")
+    for _, root in ipairs(roots()) do
+        if root.case and root.case.caseId == caseId then
+            local memo, dated = false, 0
+            for _, d in ipairs(root.case.documents) do
+                if d.kind == Memo.KIND then memo = true elseif Memo.inWeek(d.body) then dated = dated + 1 end
+            end
+            return tostring(memo), dated
+        end
+    end
+    return "false", 0
+end
+
 -- The newest case still being played, or "none".
 function C.newestLive()
     local id = "none"

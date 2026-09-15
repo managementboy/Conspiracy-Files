@@ -19,6 +19,8 @@ local sessions,scheduler,wrapper,ticks,preparing
 -- Rows of retired cases. They have no Session to project from, but the player
 -- learned them and the notebook must still render them.
 local retiredRows={}
+-- Where and when a later case last found nothing usable nearby (P4-R125).
+local deferredAt=nil
 -- Declared with the identity scan further down. Retirement (R.inspect) reads
 -- both to keep where each paper was last seen, and sits above that code.
 local sightings,placeOf
@@ -410,10 +412,14 @@ local function prepare(result,seed,later,house)
         local case,err
         if house then case,err=firstCase(filtered,seed,options,context,house,candidates)
         else case,err=G.generateNew(filtered,seed,options,context) end
-        if not case then log(later and "Deferred: insufficient distinct loaded storage nearby." or "Waiting for suitable loaded storage: "..tostring(err)); return end
+        if not case then
+            if later then deferredAt={x=p:getX(),y=p:getY(),hours=worldHours()} end
+            log(later and "Deferred: insufficient distinct loaded storage nearby." or "Waiting for suitable loaded storage: "..tostring(err)); return
+        end
         local required=assert(G.requiredContainers(case))
         for siteId,count in pairs(required) do
             if not candidates[siteId] or #candidates[siteId]<count then
+                if later then deferredAt={x=p:getX(),y=p:getY(),hours=worldHours()} end
                 log("Deferred: selected evidence needs "..count.." distinct containers at "..siteId..".")
                 return
             end
@@ -429,6 +435,7 @@ local function prepare(result,seed,later,house)
         checked(Session.validate(root))
         if later then
             swap(assert(Cases.stage(wrapper,root,wrapper.schedule and worldHours() or nil,steerFrom)))
+            deferredAt=nil
             if steerFrom then log("Case shaped by the survivor's answers about "..tostring(case.steer and case.steer.fromCase)) end
         elseif house then swap({canonical=root,schedule={schema=1,createdHours={worldHours()}}})
         else swap({canonical=root}) end
@@ -583,6 +590,10 @@ function R.known()
     for _,api in ipairs(sessions) do for _,row in ipairs(api.project()) do byId[row.id]=row end end
     local rows={}; for _,id in ipairs(Cases.discoveries(wrapper)) do if byId[id] then rows[#rows+1]=byId[id] end end; return rows
 end
+-- After a refused later case (P4-R125): how far the survivor must move, or how
+-- long must pass, before the neighbourhood is scanned again.
+R.DEFER_TILES=50
+R.DEFER_HOURS=0.5
 function R.nextCase(seed)
     if preparing then return false,"preparation already running" end
     if not wrapper or not wrapper.canonical then return false,"start the first generated case before requesting another" end
@@ -598,6 +609,17 @@ function R.nextCase(seed)
     for _,root in ipairs(Cases.sessions(wrapper)) do if not Retired.isRetired(root) then active=active+1 end end
     if active>=Cases.MAX_ACTIVE then return false,"wait for an unfinished case to be finished" end
     if scheduler.isDisabled("preparation") then return false,"case preparation is disabled after repeated failures" end
+    -- Nothing usable nearby last time: do not scan the same neighbourhood again
+    -- until the survivor has moved on or half an in-game hour has passed
+    -- (P4-R125; the campaign check saw 61 refused scans in about 25 minutes).
+    if deferredAt then
+        local p=getPlayer()
+        local dx=p and (p:getX()-deferredAt.x) or 0
+        local dy=p and (p:getY()-deferredAt.y) or 0
+        if dx*dx+dy*dy<R.DEFER_TILES*R.DEFER_TILES and worldHours()<deferredAt.hours+R.DEFER_HOURS then
+            return false,"nothing suitable nearby; waiting for the survivor to move on"
+        end
+    end
     for _,api in ipairs(sessions or {}) do
         for _,a in pairs(api.snapshot().assignments) do
             if a.status=="pending" or a.status=="placing" then return false,"wait for current placement to finish" end
@@ -1291,6 +1313,7 @@ Events.OnGameStart.Add(function()
         if n>0 then log("re-stamped "..n.." documents as Evidence after loading") end
     end)
     sessions,scheduler,preparing,wrapper=nil,nil,false,nil
+    deferredAt=nil
     -- Forget what we could see last time. A new session has not looked yet,
     -- and should say so rather than inherit yesterday's confidence.
     sightings={}
