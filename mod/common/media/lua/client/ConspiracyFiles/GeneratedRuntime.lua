@@ -270,11 +270,20 @@ local function refreshRetired()
 end
 local function openAll()
     -- Replacing the session set invalidates queued closures over old APIs.
-    scheduler=Scheduler.new(getTimeInMillis,function(system,why) if system=="preparation" then preparing=false end;log(system..": "..why) end);scheduler.maxSteps=24;scheduler.budgetMs=1
-    -- The old scheduler's queued preparation is dropped with it, so the flag
-    -- that said it was running must go too, or no case comes again until a
-    -- reload (campaign check, 2026-09-15).
-    preparing=false
+    -- Reopening the sessions invalidates queued jobs that hold the old session
+    -- APIs (identity, relocation, tracking, last seen) - but not a case being
+    -- prepared. Dropping that restarted a nearby scan that takes minutes every
+    -- time a case finished, and the flag it left behind stopped later cases
+    -- (campaign check, 2026-09-15). Keep preparation, drop the rest, and forgive
+    -- past failures as a fresh scheduler did.
+    if scheduler and scheduler.retain then
+        scheduler.retain(function(job) return job.subsystem=="preparation" end)
+        scheduler.forgive()
+    else
+        scheduler=Scheduler.new(getTimeInMillis,function(system,why) if system=="preparation" then preparing=false end;log(system..": "..why) end);scheduler.maxSteps=24;scheduler.budgetMs=1
+    end
+    -- A flag with no preparation behind it would stop every later case.
+    if not scheduler.has("preparation") then preparing=false end
     sessions={}; refreshRetired(); local stale=0
     for index,root in ipairs(Cases.sessions(wrapper)) do
         -- A retired root is not a Session and must never be opened as one
@@ -622,7 +631,14 @@ function R.inspect(item,inPlace)
     local a=api and api.assignment(md.cfGeneratedId)
     if not a or md.cfPhysicalToken~=a.physicalToken or a.status=="conflict" then return false end
     -- A positively observed surviving item can reconcile an uncertain intent.
+    -- Known before this inspection? PlayerVoice's once-per-thing memory lives
+    -- only while the game runs, so after a reload re-inspecting an old paper
+    -- announced its connection again (audit follow-up, 2026-09-15).
+    local already=false
+    for _,known in ipairs(api.snapshot().known or {}) do if known==md.cfGeneratedId then already=true end end
     checked(api.status(md.cfGeneratedId,"placed",worldHours())); checked(api.inspect(md.cfGeneratedId))
+    -- The paper in hand shows as Evidence however it reached the hand.
+    pcall(function() item:setDisplayCategory(categoryOf(md.cfGeneratedId)) end)
     local ledger=ConspiracyFiles.DiscoveryLog
     if ledger and ledger.record then ledger.record("evidence",md.cfGeneratedId) end
     -- The moment two records meet. A document only connects to one already
@@ -630,7 +646,7 @@ function R.inspect(item,inPlace)
     -- not have known a second earlier - which is the rule every voice trigger
     -- has to pass. The survivor never says which record is true.
     local voice=ConspiracyFiles.PlayerVoice
-    if voice and voice.onConnection then
+    if voice and voice.onConnection and not already then
         local snapshot=api.snapshot()
         local held={}
         for _,id in ipairs(snapshot.known or {}) do held[id]=true end
@@ -1130,6 +1146,10 @@ local function identity(api)
     return function()
         if not done then scan(); return false end
         for id,items in pairs(found) do
+            -- The category is not saved with an item, so a paper in an area
+            -- that streamed out and back lost it while its case was live
+            -- (campaign check, 2026-09-15). The scan that finds it restores it.
+            for _,it in ipairs(items) do pcall(function() it:setDisplayCategory(categoryOf(id)) end) end
             local want=expected[id] or 1
             if #items>want then checked(api.status(id,"conflict"))
             elseif #items>=1 and api.assignment(id).status~="conflict" then checked(api.status(id,"placed",worldHours())) end

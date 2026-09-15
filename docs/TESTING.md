@@ -78,6 +78,7 @@ running two at once is safe, the second waits.
 | `hardware.sh` | the battery, the lamp, auto-off, the dead-cell restore, the journal replay |
 | `knox.sh` | Knox.OS driven by taps and key presses |
 | `../fieldnote-test/boot_test.sh` | the case's hardware contract on the real organiser: every key's hitbox at every machine size, legends at every size, press colours, a release off a key cancels it |
+| `campaign.sh` (not in the suite, about half an hour) | a player's week: three cases in one save with two save/quit/continue rounds. Case 1 played through and answered on the organiser; case 2 built from those answers (the person returns without a second body, the answers lock); case 3 built from nothing; placement within reach on fresh sites; answers, notebook order and Evidence / Old surviving reloads; NAMES growing; marks with a pen; save size and frame cost per stage; then four unfinished cases, the most the save allows, and a new case arriving once one is finished |
 
 Anything in `test/` is **simulated**: it stubs the engine. That is the right
 tool for logic and the wrong tool for "does this work in the game", and the

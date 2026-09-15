@@ -1,0 +1,35 @@
+Linux campaign check 20260915T183321: FAIL
+source: 323829d
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+cases: 1 generated:215656906:case, 2 generated:103656398:case, 3 generated:1852602122:case; at the end 
+stages:
+  start                  cases 1 (0 finished) | notebook 0 | FILES questions 0 | NAMES 1 | PLACES 0 | Old 0/0 wrong | Evidence 0/0 wrong | order  | save 162034 B
+  case 1 finished        cases 1 (1 finished) | notebook 4 | FILES questions 1 | NAMES 2 | PLACES 4 | Old 4/0 wrong | Evidence 0/0 wrong | order 1111 | save 156651 B
+  after reload 1         cases 1 (1 finished) | notebook 4 | FILES questions 1 | NAMES 2 | PLACES 4 | Old 4/0 wrong | Evidence 0/0 wrong | order 1111 | save 157248 B
+  case 2 finished        cases 3 (2 finished) | notebook 9 | FILES questions 2 | NAMES 3 | PLACES 9 | Old 9/0 wrong | Evidence 0/0 wrong | order 111122222 | save 200783 B
+  case 3, two papers     cases 3 (2 finished) | notebook 11 | FILES questions 2 | NAMES 3 | PLACES 11 | Old 9/0 wrong | Evidence 1/1 wrong | order 11112222233 | save 203810 B
+  after reload 2         cases 3 (2 finished) | notebook 11 | FILES questions 2 | NAMES 3 | PLACES 11 | Old 9/0 wrong | Evidence 2/0 wrong | order 11112222233 | save 204327 B
+  four cases unfinished  cases 5 (2 finished) | notebook 11 | FILES questions 2 | NAMES 3 | PLACES 11 | Old 9/0 wrong | Evidence 2/0 wrong | order 11112222233 | save 260549 B
+  after the limit        cases 5 (3 finished) | notebook 13 | FILES questions 3 | NAMES 4 | PLACES 13 | Old 13/0 wrong | Evidence 0/0 wrong | order 1111222223333 | save 252418 B
+case 1 answers on the organiser: true two person2 records nil Warren Nagy Marion Ellis Building at 10836, 10141 Site Office
+case 2 steer: generated:215656906:case two records Marion Ellis Marion Ellis true
+errors inside the mod, all sessions: 0
+FINDING: case 1 relay memo: found=true, dated in its week=0, carrying the date note=0
+FINDING: the date note was not exercised: no record of case 1 fell in the memo's week
+FINDING: case 1 note on the organiser: I think it was a page removed on purpose. Marion Ellis matters here. Next I would check the place against its records.
+FINDING: frame cost during case 1: AutomaticInvestigations.onTick calls=1957 avg=0.039ms max=68ms over2ms=1 | CaseFile.onTick calls=1945 avg=0.011ms max=1ms over2ms=0 | ClueMarkers.draw calls=0 avg=0.000ms max=0ms over2ms=0 | ClueMarkers.update calls=38 avg=0.711ms max=7ms over2ms=4 | IdentityObserver.afterRender calls=3958 avg=0.113ms max=1ms over2ms=0 | IdentityObserver.tick calls=1988 avg=0.003ms max=1ms over2ms=0 | LocalPersonI
+FINDING: case 2 placement: reach 250: t3:10977704480342043, t3:10977704480342035
+FINDING: case 2 papers: Follow-up note / WB-825 | Attendance card / WB-825 | Records check / WB-825 | Duty log / WB-825 | fourteen clay shingles
+FINDING: frame cost during case 2: AutomaticInvestigations.onTick calls=3570 avg=0.005ms max=4ms over2ms=3 | CaseFile.onTick calls=3558 avg=0.011ms max=1ms over2ms=0 | ClueMarkers.draw calls=0 avg=0.000ms max=0ms over2ms=0 | ClueMarkers.update calls=64 avg=0.953ms max=9ms over2ms=6 | IdentityObserver.afterRender calls=7168 avg=0.080ms max=1ms over2ms=0 | IdentityObserver.tick calls=3606 avg=0.001ms max=1ms over2ms=0 | LocalPersonIn
+FINDING: case 3 placement: reach 250: t3:10977704480342045, t3:10977704480342042
+FINDING: frame cost during case 3: AutomaticInvestigations.onTick calls=3842 avg=0.005ms max=4ms over2ms=3 | CaseFile.onTick calls=3830 avg=0.011ms max=1ms over2ms=0 | ClueMarkers.draw calls=0 avg=0.000ms max=0ms over2ms=0 | ClueMarkers.update calls=71 avg=1.183ms max=12ms over2ms=8 | IdentityObserver.afterRender calls=7690 avg=0.081ms max=1ms over2ms=0 | IdentityObserver.tick calls=3878 avg=0.001ms max=1ms over2ms=0 | LocalPersonI
+FINDING: map marks after reload 2 (written/pending/missing): 11/0/0
+FINDING: cases 4 to 6 did not all arrive within ten minutes: 5 2 1:215656906:retired 2:103656398:retired 3:1852602122:live 4:1934459345:live 5:1482665319:live
+FINDING: at the limit for 90 s: unfinished=3, preparing=true, refusals logged=0
+FINDING: frame cost during the limit: AutomaticInvestigations.onTick calls=51618 avg=0.024ms max=55ms over2ms=43 | CaseFile.onTick calls=51606 avg=0.011ms max=43ms over2ms=2 | ClueMarkers.draw calls=0 avg=0.000ms max=0ms over2ms=0 | ClueMarkers.update calls=1004 avg=0.785ms max=38ms over2ms=5 | IdentityObserver.afterRender calls=102960 avg=0.030ms max=1ms over2ms=0 | IdentityObserver.tick calls=51654 avg=0.003ms max=1ms over2ms=0 | Lo
+FAIL: reload 1: the save grew from 156928 to 157248 bytes
+FAIL: case 2: the second thought "What do I make of it?" was said 0 times, not once
+FAIL: case 3, two papers: 1 carried papers of a live case are not Evidence
+FAIL: reload 2: the save grew from 203927 to 204327 bytes
+FAIL: at the limit, case 3 finished but no new case came within five minutes (preparing=true)
+screenshot: dev/eval/linux/runs/20260915T183321-campaign.png (not committed)

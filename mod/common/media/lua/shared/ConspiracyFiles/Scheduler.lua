@@ -18,6 +18,21 @@ function Scheduler.new(clock, report)
         end
     end
     function api.isDisabled(subsystem) return disabled[subsystem] == true end
+    -- Keep only the queued jobs `keep(job)` accepts, releasing the others' keys.
+    -- The runtime reopens its sessions without dropping a case being prepared.
+    function api.retain(keep)
+        local kept = {}
+        for _, job in ipairs(queue) do
+            if keep(job) then kept[#kept + 1] = job else keys[job.key] = nil end
+        end
+        queue = kept
+    end
+    function api.has(subsystem)
+        for _, job in ipairs(queue) do if job.subsystem == subsystem then return true end end
+        return false
+    end
+    -- Clear failure counts and disabled subsystems, as a fresh scheduler would.
+    function api.forgive() failures, disabled = {}, {} end
     function api.step()
         local started, steps = clock(), 0
         while #queue > 0 and steps < api.maxSteps and clock() - started < api.budgetMs do

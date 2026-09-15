@@ -66,4 +66,15 @@ assert(runtime:find('function R.retiredPaper(item)',1,true),'R.retiredPaper must
 local translations=read('mod/common/media/lua/shared/Translate/EN/IG_UI.json')
 assert(translations:find('"IGUI_ItemCat_EvidenceOld": "Evidence / Old"',1,true),'the Old category needs its translation')
 
+-- A live paper keeps showing as Evidence. The category is not saved with an
+-- item, so a paper in an area that streamed out and back lost it while its case
+-- was live (campaign check, 2026-09-15); the scan that finds a live case's
+-- papers and inspecting a paper both restore it.
+local identity=runtime:match('local function identity%(api%)(.-)\nend\n')
+assert(identity and identity:find('it:setDisplayCategory(categoryOf(id))',1,true),
+    "the scan over a live case's papers must restore their category")
+local inspectFn=runtime:match('function R%.inspect%(item[^)]*%)(.-)\nfunction ')
+assert(inspectFn and inspectFn:find('item:setDisplayCategory(categoryOf(md.cfGeneratedId))',1,true),
+    "inspecting a paper must restore its category")
+
 print('PASS retired_papers')

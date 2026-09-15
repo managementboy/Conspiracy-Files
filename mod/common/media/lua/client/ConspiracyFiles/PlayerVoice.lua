@@ -189,7 +189,7 @@ local QUEUE_MAX=4
 local queue={}
 local lastSpokenAt,lastHold=-1/0,0
 local function holdFor(text) return math.max(3000,1500+60*#tostring(text)) end
-local function speak(player,text,label)
+local function speak(player,text,label,priority)
     if not player then log("no player; line not delivered") return false,false end
     assert(type(label)=="string" and label~="" and label~=text,
         "the halo must say something other than the spoken line, or it echoes it")
@@ -199,10 +199,20 @@ local function speak(player,text,label)
         return deliver(player,text,label)
     end
     if #queue>=QUEUE_MAX then
-        log("line dropped, "..QUEUE_MAX.." already waiting: \""..tostring(text).."\"")
-        return false,false
+        -- A case's closing words must not be lost behind a busy moment
+        -- (campaign check, 2026-09-15: "What do I make of it?" was never said
+        -- after a case whose last papers brought connections and a pile). They
+        -- push out the oldest ordinary line waiting instead.
+        local room
+        if priority then for i,q in ipairs(queue) do if not q.priority then room=i; break end end end
+        if not room then
+            log("line dropped, "..QUEUE_MAX.." already waiting: \""..tostring(text).."\"")
+            return false,false
+        end
+        log("line dropped for a case's closing words: \""..tostring(queue[room].text).."\"")
+        table.remove(queue,room)
     end
-    queue[#queue+1]={text=text,label=label}
+    queue[#queue+1]={text=text,label=label,priority=priority}
     log("queued \""..tostring(text).."\" behind "..(#queue-1).." waiting line(s)")
     return false,false
 end
@@ -319,11 +329,12 @@ function V.onCaseComplete(caseId)
     local p=player(); if not p then return end
     if not once("done:"..tostring(caseId)) then return end
     indexF=indexF%#SET_F+1
-    speak(p,SET_F[indexF],"Nothing left to find here")
+    speak(p,SET_F[indexF],"Nothing left to find here",true)
     -- A moment later, a second thought (P4-R113, P4-R122): the question the
     -- organiser's FILES now holds. It waits in the queue behind the first line;
-    -- the organiser never opens by itself.
-    speak(p,"What do I make of it?","A question for the organiser")
+    -- the organiser never opens by itself. Both are the case's closing words and
+    -- are never dropped from a full queue.
+    speak(p,"What do I make of it?","A question for the organiser",true)
 end
 
 -- Set G: arrival at a building an earlier document named. The caller owns

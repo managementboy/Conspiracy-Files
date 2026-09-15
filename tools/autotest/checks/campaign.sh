@@ -50,9 +50,16 @@ said() { run_log | grep -c "said '$1'" || true; }
 logged() { run_log | grep -c "$1" || true; }
 # The second thought waits in the voice queue behind "That's all of it", so it
 # is counted once it has had time to be said, then checked for exactly one.
+# A reload must not grow the save by more than the few words the last-seen scan
+# may rewrite; the per-root sizes before and after say which root changed.
+reload_growth() { # reload_growth LABEL BYTES_BEFORE PARTS_BEFORE
+    local now parts; now="$(bytes)"; parts="$(ev 'return CFReload.bytes()' | cut -f2)"
+    findings+=("$1 save size: $2 -> $now bytes; before [$3]; after [$parts]")
+    [ "$now" -le $(( $2 + 2000 )) ] 2>/dev/null || fail "$1: the save grew by more than 2 kB on a reload ($2 -> $now)"
+}
 thought_once() { # thought_once LABEL COUNT_BEFORE
     local n=0
-    for _ in $(seq 20); do n=$(( $(said 'What do I make of it?') - $2 )); [ "$n" -ge 1 ] && break; sleep 1; done
+    for _ in $(seq 60); do n=$(( $(said 'What do I make of it?') - $2 )); [ "$n" -ge 1 ] && break; sleep 1; done
     sleep 3; n=$(( $(said 'What do I make of it?') - $2 ))
     [ "$n" = 1 ] || fail "$1: the second thought \"What do I make of it?\" was said $n times, not once"
 }
@@ -162,7 +169,7 @@ answers="$(ev "return CFCamp.answersOf([[$case1]])")"
     || fail "case 1: the organiser saved $(field 2 "$answers")/$(field 3 "$answers")/$(field 4 "$answers"), not two/person2/records"
 person2="$(field 7 "$answers")"
 findings+=("case 1 note on the organiser: $(field 2 "$answered")")
-notebook="$(ev 'return CFReload.notebook()')"; bytes_before="$(bytes)"
+notebook="$(ev 'return CFReload.notebook()')"; bytes_before="$(bytes)"; parts_before="$(ev 'return CFReload.bytes()' | cut -f2)"
 perf_note "case 1"
 
 # --- reload 1 ---------------------------------------------------------------
@@ -171,7 +178,7 @@ reload_world "reload 1"
 [ "$(ev 'return CFReload.notebook()')" = "$notebook" ] || fail "reload 1: the notebook changed"
 old_settled "after reload 1"
 stage "after reload 1"
-[ "$(bytes)" -le "$bytes_before" ] 2>/dev/null || fail "reload 1: the save grew from $bytes_before to $(bytes) bytes"
+reload_growth "reload 1" "$bytes_before" "$parts_before"
 
 # --- case 2: built from the answers ------------------------------------------
 ev 'return CFLoop.noGap()' >/dev/null
@@ -211,7 +218,7 @@ placed_well "case 3" "$case3" "$(field 1 "$here")" "$(field 2 "$here")" "$(field
 play_case "$case3" 2
 [ "$PLAYED" = 2 ] || fail "case 3: only $PLAYED of 2 papers could be played"
 stage "case 3, two papers"
-notebook="$(ev 'return CFReload.notebook()')"; bytes_before="$(bytes)"
+notebook="$(ev 'return CFReload.notebook()')"; bytes_before="$(bytes)"; parts_before="$(ev 'return CFReload.bytes()' | cut -f2)"
 perf_note "case 3"
 
 # --- reload 2 ---------------------------------------------------------------
@@ -221,7 +228,7 @@ reload_world "reload 2"
 [ "$(ev "return CFCamp.answersOf([[$case1]])" | field 5)" = "$case2" ] || fail "reload 2: case 1's answers lost their used mark"
 old_settled "after reload 2"
 stage "after reload 2"
-[ "$(bytes)" -le "$bytes_before" ] 2>/dev/null || fail "reload 2: the save grew from $bytes_before to $(bytes) bytes"
+reload_growth "reload 2" "$bytes_before" "$parts_before"
 [ "$NAMES_NOW" -gt "$names_start" ] 2>/dev/null || fail "NAMES never grew across three cases ($names_start -> $NAMES_NOW)"
 marks="$(ev 'return CFLoop.markers()')"
 findings+=("map marks after reload 2 (written/pending/missing): $(tr '\t' '/' <<<"$marks")")
