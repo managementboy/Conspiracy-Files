@@ -81,6 +81,14 @@ assert(not Memo.inWeek("June 29, 1993"),"29 June is outside")
 assert(not Memo.inWeek("July 9, 1993"),"9 July is outside")
 assert(not Memo.inWeek("July 5, 1994"),"another year is outside")
 assert(not Memo.inWeek("no date at all"),"an undated paper is outside")
+-- P4-R108: cases run from May into July, and a diary heading is in capitals.
+assert(Memo.inWeek("JULY 3, 1993"),"a capitalised heading inside the week is read")
+assert(Memo.inWeek("JUNE 30, 1993\n'called again'"),"a capitalised 30 June is read")
+assert(not Memo.inWeek("May 30, 1993"),"30 May is not 30 June")
+assert(not Memo.inWeek("June 14, 1993"),"mid-June is outside")
+assert(not Memo.inWeek("Drawn weekly since June 1993."),"a month with no day is not a date in the week")
+assert(not Memo.inWeek("August 5, 1993"),"5 August is not 5 July")
+assert(Memo.inWeek("Issued June 21, 1993\nReviewed July 2, 1993"),"any date in the week counts")
 
 -- The note: only once the memo is found, only on dated papers, never on the
 -- memo itself, and never as a statement of fact.

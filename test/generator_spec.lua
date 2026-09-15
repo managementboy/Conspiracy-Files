@@ -19,7 +19,7 @@ test("generated 100-seed sample varies sites outlines text, carriers and bounded
     for seed=1,100 do
         local c=generated(seed); assertTrue(G.validate(c)); assertTrue(#c.documents>=G.MIN_EVIDENCE and #c.documents<=G.MAX_EVIDENCE)
         assertTrue(c.identities[1].name~=c.identities[2].name)
-        assertTrue(c.facts.dispatchDay<c.facts.receiptDay and c.facts.receiptDay<c.facts.reviewDay)
+        assertTrue(c.facts.claimDate<c.facts.responseDate and c.facts.responseDate<c.facts.reviewDate)
         outlines[c.outline]=true; locationPairs[c.locations[1].id.."/"..c.locations[2].id]=true
         bodies[c.documents[2].body]=true; kinds[c.documents[2].links[1].kind]=true
         counts[#c.documents]=true

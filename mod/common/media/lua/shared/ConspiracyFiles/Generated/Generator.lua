@@ -7,11 +7,15 @@ local Roles=require("ConspiracyFiles/Generated/EvidenceRoles")
 local Premises=require("ConspiracyFiles/Generated/Premises")
 local ObjectRoles=require("ConspiracyFiles/Generated/ObjectRules")
 local Catalogue=require("ConspiracyFiles/Generated/ObjectCatalogue")
+local Calendar=require("ConspiracyFiles/Calendar")
 -- Schema two deliberately refuses the earlier fixed-seven case shape.  Before
 -- 1.0 callers must use a fresh save rather than reinterpret an existing case.
 -- MIN_EVIDENCE is two, not three: a claim and a record contradicting it is a
 -- whole case. See the review note in build().
-local G={REVISION="g12-real-objects-1",SCHEMA=2,MIN_EVIDENCE=2,MAX_EVIDENCE=7}
+-- g13: case dates drawn across May-July 1993 and the story defects fixed
+-- (owner decisions P4-R107, P4-R108, 2026-09-15). Every g12 case is refused;
+-- that is a new game (P4-R77).
+local G={REVISION="g13-true-stories-1",SCHEMA=2,MIN_EVIDENCE=2,MAX_EVIDENCE=7}
 local function copy(v) if type(v)~="table" then return v end; local out={}; for k,c in pairs(v) do out[k]=copy(c) end; return out end
 local function same(a,b)
     if type(a)~=type(b) then return false end
@@ -39,7 +43,11 @@ local function subst(text,key,value)
     if not out then return text end
     return out..string.sub(text,at)
 end
-local FIELDS={"CODE","ORG","P1","P2","A","B","D1","D2","D3","SUBJECT","UNKNOWN"}
+-- The date fields are whole phrases ("June 14, 1993"), never a bare day spliced
+-- into "July {D1}, 1993": once cases cross a month end (P4-R108) only the
+-- calendar knows which month a day is in.
+local FIELDS={"CODE","ORG","P1","P2","A","B","DATE0","DATE1","DATE2","DATE3","DATE1CAPS","DATE2CAPS",
+    "DAYS12","PRIORMONTH","SINCE11","SUBJECT","UNKNOWN"}
 local function fill(text,map)
     for _,key in ipairs(FIELDS) do text=subst(text,key,map[key]) end
     return text
@@ -176,6 +184,95 @@ local function article(label)
     if first=="a" or first=="e" or first=="i" or first=="o" or first=="u" then return "an" end
     return "a"
 end
+-- THE CASE CALENDAR (P4-R108, owner 2026-09-15). Every case used to be dated
+-- July 2-6 1993, so every paper sat inside the relay memo's nine days (30 June
+-- - 8 July) and the memo's DATE NOTE was true of everything, which is a note
+-- saying nothing. Now the claim falls between 1 May and 28 June, the response
+-- and the review follow it by one to nine days each, and nothing is dated after
+-- 8 July (the outbreak begins after). Two cases in five have their response
+-- and review inside the memo's week, which leaves about a third of all cases
+-- with a dated paper there once optional papers and undated responses are
+-- counted (measured over 400 seeds, test/premise_consistency.lua); the rest
+-- end by 29 June, so a note on a paper is a signal again. Drawn from the seed alone - never the world clock - or a
+-- case could not rebuild byte for byte (Generator.validate).
+--
+-- Dates are day-of-year ordinals in 1993 (1 = 1 January; not a leap year).
+local MAY_1,JUNE_28,JUNE_29,JUNE_30,JULY_8=121,179,180,181,189
+local MONTH_NAMES={"January","February","March","April","May","June","July",
+                   "August","September","October","November","December"}
+local function monthOf(ordinal)
+    local month=1
+    while ordinal>Calendar.monthLength(month,1993) do
+        ordinal=ordinal-Calendar.monthLength(month,1993); month=month+1
+    end
+    return month,ordinal
+end
+local function dateText(ordinal)
+    local month,day=monthOf(ordinal)
+    return MONTH_NAMES[month].." "..day..", 1993"
+end
+-- Four draws, always, in this order: whether the case reaches the memo's
+-- week, then the three numbers that place its dates.
+function G.calendar(random)
+    local near=random(5)<=2
+    local x,g1,g2=random(58),random(9),random(9)
+    local claim,response,review
+    if near then
+        -- The response in 30 June - 7 July, so the review after it still
+        -- fits by 8 July; the claim no more than nine days before, and never
+        -- after 28 June.
+        response=JUNE_30+(x-1)%8
+        claim=response-math.max(g1,response-JUNE_28)
+        review=response+(g2-1)%(JULY_8-response)+1
+    else
+        claim=MAY_1+x-1
+        response=claim+(g1-1)%math.min(9,JUNE_28-claim)+1
+        review=response+(g2-1)%math.min(9,JUNE_29-response)+1
+    end
+    return {claimDate=claim,responseDate=response,reviewDate=review}
+end
+-- The placeholders a calendar supplies. Relative phrases are rendered from
+-- the same numbers as the dates they relate, so "one day before" or "for
+-- four days" is true by construction rather than by a writer's arithmetic
+-- (P4-R107: "differ by eight months" was four; "eight days later" landed
+-- after the review).
+function G.dateFields(cal)
+    local gap=cal.responseDate-cal.claimDate
+    local month=monthOf(cal.claimDate)
+    local sinceMonth,sinceYear=month-11,1993
+    if sinceMonth<1 then sinceMonth=sinceMonth+12; sinceYear=1992 end
+    return {
+        DATE0=dateText(cal.claimDate-1),DATE1=dateText(cal.claimDate),
+        DATE2=dateText(cal.responseDate),DATE3=dateText(cal.reviewDate),
+        DATE1CAPS=string.upper(dateText(cal.claimDate)),DATE2CAPS=string.upper(dateText(cal.responseDate)),
+        DAYS12=numeral(gap)..(gap==1 and " day" or " days"),
+        -- The month before the claim's: always 1993, since the claim is May or June.
+        PRIORMONTH=MONTH_NAMES[month-1],
+        SINCE11=MONTH_NAMES[sinceMonth].." "..sinceYear,
+    }
+end
+-- One anchor document, rendered. Every anchor is assembled in the same three
+-- parts, because Generated/DocumentPages.lua reads them: the physical
+-- description is dropped from the readable pages, the document's own words
+-- become the pages, and everything from WHAT IT MIGHT MEAN stays in the
+-- notebook. A premise that reordered these would put an interpretation on a
+-- page the survivor is supposed to have found already written.
+--
+-- Exposed so test/premise_consistency.lua renders every premise both ways
+-- through the same assembly build() uses.
+function G.renderAnchor(doc,useBranch,agreeing,map)
+    local text=doc.text
+    local meaning=doc.meaning
+    if useBranch then
+        text=text.."\n"..(agreeing and doc.agree or doc.dispute)
+        -- A response or review written for the version where the records
+        -- conflict would, reused where they agree, put a suspicion on the page
+        -- the paperwork does not support. Every response now carries its own
+        -- meaningAgree (P4-R107, 2026-09-15).
+        if agreeing and doc.meaningAgree then meaning=doc.meaningAgree end
+    end
+    return fill("WHAT YOU FOUND\n"..doc.found.."\n\n"..text.."\n\nWHAT IT MIGHT MEAN\n"..meaning,map)
+end
 local function build(seed,revision,sites,cast,relayMemo)
     local random=rng(seed)
     -- The premise is drawn first, so it is the seed's most significant choice:
@@ -223,12 +320,14 @@ local function build(seed,revision,sites,cast,relayMemo)
     -- An organisation may name one of the two sites ("{A} Site Office"), so it
     -- is resolved before it becomes {ORG} for everything else.
     local organisation=subst(subst(premise.orgs[random(#premise.orgs)],"A",a.name),"B",b.name)
-    local facts={sender=names[first],recipient=names[second],organisation=organisation,
-        code=REFERENCE[random(#REFERENCE)].."-"..(100+random(899)),dispatchDay=1+random(3),receiptDay=5,reviewDay=6,
+    local code=REFERENCE[random(#REFERENCE)].."-"..(100+random(899))
+    local cal=G.calendar(random)
+    local facts={sender=names[first],recipient=names[second],organisation=organisation,code=code,
+        claimDate=cal.claimDate,responseDate=cal.responseDate,reviewDate=cal.reviewDate,
         premise=premise.id,subject=premise.subject,unknown=premise.unknown}
-    local map={CODE=facts.code,ORG=organisation,P1=facts.sender,P2=facts.recipient,
-        A=a.name,B=b.name,D1=tostring(facts.dispatchDay),D2=tostring(facts.receiptDay),
-        D3=tostring(facts.reviewDay),SUBJECT=premise.subject,UNKNOWN=premise.unknown}
+    local map=G.dateFields(cal)
+    map.CODE=code; map.ORG=organisation; map.P1=facts.sender; map.P2=facts.recipient
+    map.A=a.name; map.B=b.name; map.SUBJECT=premise.subject; map.UNKNOWN=premise.unknown
     local function wasMet(name) for _,m in ipairs(met) do if m==name then return true end end return false end
     -- `met` marks a person whose body the player has already searched, so
     -- CasePerson does not name a SECOND zombie after someone already dead.
@@ -240,26 +339,9 @@ local function build(seed,revision,sites,cast,relayMemo)
         documents[n]={id=prefix.."document-"..n,kind=kind or "dispatch",title=title,locationId=location.id,body=body,
             references=refs,links=links or {},leads=leads or {}}
     end
-    -- Every anchor is assembled in the same three parts, because
-    -- Generated/DocumentPages.lua reads them: the physical description is
-    -- dropped from the readable pages, the document's own words become the
-    -- pages, and everything from WHAT IT MIGHT MEAN stays in the notebook. A
-    -- premise that reordered these would put an interpretation on a page the
-    -- survivor is supposed to have found already written.
+    -- Anchors are assembled by G.renderAnchor, above.
     local agreeing=outline=="corroboration"
-    local branch=agreeing and "agree" or "dispute"
-    local function anchor(doc,useBranch)
-        local text=doc.text
-        local meaning=doc.meaning
-        if useBranch then
-            text=text.."\n"..doc[branch]
-            -- Several reviews are written for the version where the records
-            -- conflict. Reusing that wording where they agree would put a
-            -- suspicion on the page the paperwork does not support.
-            if agreeing and doc.meaningAgree then meaning=doc.meaningAgree end
-        end
-        return fill("WHAT YOU FOUND\n"..doc.found.."\n\n"..text.."\n\nWHAT IT MIGHT MEAN\n"..meaning,map)
-    end
+    local function anchor(doc,useBranch) return G.renderAnchor(doc,useBranch,agreeing,map) end
     -- 1. The claim: a record that asserts something, found at the first site,
     --    and the only document that leads anywhere - to the second site.
     document(1,fill(premise.claim.title,map),a,anchor(premise.claim,false),
@@ -319,16 +401,18 @@ local function build(seed,revision,sites,cast,relayMemo)
         assert(Roles.fits(roleId,kind,body))
         return kind
     end
-    local accessBody=fill("WHAT YOU FOUND\nA small worn key on a wire loop, with a card tag tied through its bow. The tag carries {CODE} and the initials {P1}. There is no address or lock number. The metal is polished around the grip but dull between the teeth.\n\nON THE TAG\n'Return separately. Do not leave with the driver.' On the reverse, in smaller writing: 'Ask before making another copy.' A crossed-out word is too smeared to read reliably.\n\nWHAT IT MIGHT MEAN\nThe matching reference links this key to the paperwork about {SUBJECT}, but does not identify what it opens. It could belong to an ordinary cupboard, equipment box or unrelated office lock. Keeping it separate suggests someone controlled access; it is not proof that this key secured anything in the file. You have no confirmed matching lock.",map)
+    -- "The initials {P1}" printed a full name after the word initials (P4-R107,
+    -- 2026-09-15); the tag now says what it carries.
+    local accessBody=fill("WHAT YOU FOUND\nA small worn key on a wire loop, with a card tag tied through its bow. The tag carries {CODE} and a name, {P1}. There is no address or lock number. The metal is polished around the grip but dull between the teeth.\n\nON THE TAG\n'Return separately. Do not leave with the driver.' On the reverse, in smaller writing: 'Ask before making another copy.' A crossed-out word is too smeared to read reliably.\n\nWHAT IT MIGHT MEAN\nThe matching reference links this key to the paperwork about {SUBJECT}, but does not identify what it opens. It could belong to an ordinary cupboard, equipment box or unrelated office lock. Keeping it separate suggests someone controlled access; it is not proof that this key secured anything in the file. You have no confirmed matching lock.",map)
     document(4,fill("Tagged key / {CODE}",map),a,accessBody,
         {people[1].id,a.id},{{target=documents[1].id,kind="recontextualises"}},nil,carrierFor("access",accessBody))
-    local diaryBody=fill("WHAT YOU FOUND\nA small diary with a soft cover and a broken elastic band. Most entries concern shopping, shifts and missed sleep. One page has been folded down beside a reference you recognise: {CODE}.\n\nJULY {D2}, 1993\n'{P1} called again. Wanted to know whether I had signed. I asked why the signature mattered more than the answer. There was a long silence, then something about everyone being tired and the office needing to close the file. I told them my copy would say only what I could stand behind.'\n\n'Perhaps I made too much of it. People have been short with each other all week. Still, I kept the carbon instead of putting it with the rubbish.'\n\nWHAT IT MIGHT MEAN\nThis is a private account of pressure to sign, not an independent record of the call. It adds a human reason for the careful wording, while leaving room for exhaustion, misunderstanding or deliberate pressure. Nothing here establishes {UNKNOWN}.",map)
+    local diaryBody=fill("WHAT YOU FOUND\nA small diary with a soft cover and a broken elastic band. Most entries concern shopping, shifts and missed sleep. One page has been folded down beside a reference you recognise: {CODE}.\n\n{DATE2CAPS}\n'{P1} called again. Wanted to know whether I had signed. I asked why the signature mattered more than the answer. There was a long silence, then something about everyone being tired and the office needing to close the file. I told them my copy would say only what I could stand behind.'\n\n'Perhaps I made too much of it. People have been short with each other all week. Still, I kept the carbon instead of putting it with the rubbish.'\n\nWHAT IT MIGHT MEAN\nThis is a private account of pressure to sign, not an independent record of the call. It adds a human reason for the careful wording, while leaving room for exhaustion, misunderstanding or deliberate pressure. Nothing here establishes {UNKNOWN}.",map)
     document(5,fill("Private diary / {CODE}",map),b,diaryBody,
         {people[1].id,people[2].id,b.id},{{target=documents[2].id,kind="recontextualises"}},nil,carrierFor("diaryContext",diaryBody))
-    local notebookBody=fill("WHAT YOU FOUND\nA ruled pocket notebook with oil-darkened page edges. Routine meter readings share space with tea orders and a sketch of a loading bay. A short entry uses the same reference, {CODE}.\n\nJULY {D1}, 1993\n'Asked about {SUBJECT}. No normal stores entry. Office supplied the reference and said the description would follow. Asked twice. Leave space below.'\n\nThe next three ruled lines are empty. Beneath them: 'If anyone asks, send them to {ORG}. I can account for the time on this page, not for anything that was settled before my shift.' No name identifies the writer.\n\nWHAT IT MIGHT MEAN\nThe writer separated what they witnessed from what they were told. The blank lines could be a forgotten update or a deliberately avoided description. This supports asking how the matter was recorded; it cannot establish {UNKNOWN}.",map)
+    local notebookBody=fill("WHAT YOU FOUND\nA ruled pocket notebook with oil-darkened page edges. Routine meter readings share space with tea orders and a sketch of a loading bay. A short entry uses the same reference, {CODE}.\n\n{DATE1CAPS}\n'Asked about {SUBJECT}. No normal stores entry. Office supplied the reference and said the description would follow. Asked twice. Leave space below.'\n\nThe next three ruled lines are empty. Beneath them: 'If anyone asks, send them to {ORG}. I can account for the time on this page, not for anything that was settled before my shift.' No name identifies the writer.\n\nWHAT IT MIGHT MEAN\nThe writer separated what they witnessed from what they were told. The blank lines could be a forgotten update or a deliberately avoided description. This supports asking how the matter was recorded; it cannot establish {UNKNOWN}.",map)
     document(6,fill("Shift notebook / {CODE}",map),a,notebookBody,
         {org.id,a.id},{{target=documents[1].id,kind="recontextualises"}},nil,carrierFor("notebookContext",notebookBody))
-    local clippingBody=fill("WHAT YOU FOUND\nA newspaper folded around a narrow cut-out from its local news column. Someone has underlined the words 'routine maintenance' and pencilled {CODE} in the margin. The article itself does not use that reference.\n\nLOCAL SERVICES NOTICE - JULY 2, 1993\nResidents were advised that service vehicles might visit local facilities outside ordinary hours while scheduled maintenance was completed. A spokesperson described the work as routine and asked that access routes be kept clear. The notice supplied no list of deliveries and no explanation of what equipment would be moved.\n\nWHAT IT MIGHT MEAN\nSomeone associated this public notice with the private reference, but the pencil annotation is their interpretation. Routine maintenance could explain unusual hours around {SUBJECT}. It could also offer a convenient explanation for unrelated activity. The clipping cannot tell you which, and its unnamed annotator may have been guessing too.",map)
+    local clippingBody=fill("WHAT YOU FOUND\nA newspaper folded around a narrow cut-out from its local news column. Someone has underlined the words 'routine maintenance' and pencilled {CODE} in the margin. The article itself does not use that reference.\n\nLOCAL SERVICES NOTICE - {DATE1CAPS}\nResidents were advised that service vehicles might visit local facilities outside ordinary hours while scheduled maintenance was completed. A spokesperson described the work as routine and asked that access routes be kept clear. The notice supplied no list of deliveries and no explanation of what equipment would be moved.\n\nWHAT IT MIGHT MEAN\nSomeone associated this public notice with the private reference, but the pencil annotation is their interpretation. Routine maintenance could explain unusual hours around {SUBJECT}. It could also offer a convenient explanation for unrelated activity. The clipping cannot tell you which, and its unnamed annotator may have been guessing too.",map)
     document(7,fill("Press clipping / {CODE}",map),b,clippingBody,
         {b.id},{{target=documents[1].id,kind="recontextualises"}},nil,carrierFor("clippingContext",clippingBody))
     -- The extra documents name the case's own matter as well as its number.
@@ -351,7 +435,7 @@ local function build(seed,revision,sites,cast,relayMemo)
     -- number is a filing label; a name on a card is a person.
     document(8,K.get(affiliationKind).short..": "..facts.sender,a,affiliationBody,
         {people[1].id,org.id,a.id},{{target=documents[1].id,kind="recontextualises"}},nil,affiliationKind)
-    local itineraryBody=fill("Ref {CODE} - {SUBJECT}\n{P2} - {B}\nJuly {D2}, 1993",map)
+    local itineraryBody=fill("Ref {CODE} - {SUBJECT}\n{P2} - {B}\n{DATE2}",map)
     local itineraryKind=carrierFor("itineraryLead",itineraryBody)
     document(9,K.get(itineraryKind).short..": "..facts.recipient,b,itineraryBody,
         {people[2].id,b.id},{{target=documents[2].id,kind="recontextualises"}},nil,itineraryKind)
@@ -362,7 +446,14 @@ local function build(seed,revision,sites,cast,relayMemo)
     -- A payment dated before the record it settles. That is a fact about
     -- paperwork order, not proof of anything, and the wording keeps it that
     -- way.
-    local paymentBody=fill("WHAT YOU FOUND\nA carbon payment slip with a smudged duplicate line, kept in a wallet fold rather than filed.\n\n{ORG}\nPayment against {SUBJECT}, record {CODE}\nRaised July "..(facts.dispatchDay-1)..", 1993 - one day before the entry it settles.\nAuthorised by: {P1}\nCounter-signature: none.",map)
+    --
+    -- "One day before the entry it settles" was printed whatever the entry
+    -- said, and some claims carry no date at all (P4-R107, 2026-09-15). It is
+    -- now said only where the claim is dated {DATE1}, and the slip is dated
+    -- {DATE0}, the day before - true by construction.
+    local raised=string.find(premise.claim.text,"{DATE1}",1,true)
+        and "Raised {DATE0} - the day before the entry it settles." or "Raised {DATE0}."
+    local paymentBody=fill("WHAT YOU FOUND\nA carbon payment slip with a smudged duplicate line, kept in a wallet fold rather than filed.\n\n{ORG}\nPayment against {SUBJECT}, record {CODE}\n"..raised.."\nAuthorised by: {P1}\nCounter-signature: none.",map)
     local paymentKind=carrierFor("paymentRecord",paymentBody)
     -- Titled by what it IS, not by the paper it is written on: a payment slip
     -- on a notepad used to be called "Review", and the owner found himself
@@ -370,13 +461,16 @@ local function build(seed,revision,sites,cast,relayMemo)
     document(10,"Payment slip / "..facts.code,a,paymentBody,
         {people[1].id,org.id,a.id},{{target=documents[1].id,kind="disputes-delivery"}},nil,paymentKind)
     -- A stub placing the second person elsewhere on the day of the response.
-    local timingBody=fill("Ref {CODE} - {SUBJECT}\n{P2}\nJuly {D2}, 1993 - {A}",map)
+    -- It never shares a case with the duty log or the itinerary, which put
+    -- the same person at the other site on the same day: see the selection
+    -- below.
+    local timingBody=fill("Ref {CODE} - {SUBJECT}\n{P2}\n{DATE2} - {A}",map)
     local timingKind=carrierFor("timingDispute",timingBody)
     document(11,K.get(timingKind).short..": "..facts.recipient,a,timingBody,
         {people[2].id,a.id},{{target=documents[2].id,kind="disputes-delivery"}},nil,timingKind)
     -- And one that agrees. A case where everything disagrees is as flat as one
     -- where nothing does.
-    local presenceBody=fill("WHAT YOU FOUND\nA duty log with a soft cover, the current week held open by a bent paperclip.\n\nJuly {D2}, 1993 - {B}\n{P2} signed in at the gate and again at the store.\nNo vehicle number recorded.\nEntry against {SUBJECT}, record {CODE}, initialled twice.",map)
+    local presenceBody=fill("WHAT YOU FOUND\nA duty log with a soft cover, the current week held open by a bent paperclip.\n\n{DATE2} - {B}\n{P2} signed in at the gate and again at the store.\nNo vehicle number recorded.\nEntry against {SUBJECT}, record {CODE}, initialled twice.",map)
     local presenceKind=carrierFor("presenceNote",presenceBody)
     document(12,"Duty log / "..facts.code,b,presenceBody,
         {people[2].id,b.id},{{target=documents[2].id,kind="corroborates"}},nil,presenceKind)
@@ -536,11 +630,26 @@ local function build(seed,revision,sites,cast,relayMemo)
     local optionalCapacity=G.MAX_EVIDENCE-mandatory
     local optionalCount=random(optionalCapacity+1)-1
     for i=#optional,2,-1 do local j=random(i); optional[i],optional[j]=optional[j],optional[i] end
+    -- Papers that must not share a case (P4-R107, 2026-09-15). The timing
+    -- stub puts the second person at the first site on the response's day;
+    -- the duty log and the itinerary put them at the second site that same
+    -- day. And no two papers in a case may carry one title: paid-before-ordered's
+    -- own response is "Payment slip / {CODE}", the same as document 10, and
+    -- two object piles can draw the same item.
+    local timing,itinerary,presence=documents[11],documents[9],documents[12]
     while #documents>mandatory do documents[#documents]=nil end
-    for i=1,optionalCount do
+    local titles,chosen={},{}
+    for _,d in ipairs(documents) do titles[d.title]=true end
+    for i=1,#optional do
+        if #documents>=mandatory+optionalCount then break end
         local d=optional[i]
-        d.id=prefix.."document-"..(#documents+1)
-        documents[#documents+1]=d
+        local clash=(d==timing and (chosen[itinerary] or chosen[presence]))
+            or ((d==itinerary or d==presence) and chosen[timing])
+        if not titles[d.title] and not clash then
+            d.id=prefix.."document-"..(#documents+1)
+            documents[#documents+1]=d
+            titles[d.title]=true; chosen[d]=true
+        end
     end
     -- Now that the case knows what is actually in it, the paperwork can refer
     -- to it. Owner, 2026-09-10, on finding ten clay pots beside a file that
