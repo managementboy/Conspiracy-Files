@@ -51,8 +51,8 @@ fixed, so a case has far fewer shapes than the carrier count suggests. Roles are
 free in save terms - `MAX_EVIDENCE` caps a case at seven documents regardless.
 Phase 4 is broadcast anchoring against the game's 1.16 MB radio corpus.
 
-Also open: the wallet click defect (narrowed to nested container panes, with a
-diagnostic ready to name the failing check), and the audit remainder in
+The wallet click defect is closed (a stale drag flag, not nested panes; fixed
+in 0.8.20, `checks/wallet_id.sh` passing since). Also open: the audit remainder in
 `docs/management/AUDIT_2026-09-07.md`.
 
 ## Rules that are not negotiable

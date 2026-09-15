@@ -11,6 +11,25 @@ local L=ConspiracyFiles.BodyOutfitLog or {}
 ConspiracyFiles.BodyOutfitLog=L
 local TAG="ConspiracyFiles.BodyOutfitObservations"
 
+-- Why an outfit line did NOT appear. Every way to it is silent by design - a
+-- body with no readable outfit records nothing, an outfit with no written
+-- line says nothing - which leaves a playtest unable to tell "never met a
+-- distinctively dressed body" from "met one and dropped it" (O2, and the
+-- 2026-09-08 audit's silent returns). Off by default; from the debug console:
+--   ConspiracyFiles.BodyOutfitLog.verbose=true
+-- Each reason is said once per body, so a list refreshing every second does
+-- not repeat it.
+L.verbose=false
+local said,saidCount={},0
+local SAID_MAX=200
+local function why(token,reason)
+    if not L.verbose then return end
+    local key=tostring(token).."|"..reason
+    if said[key] or saidCount>=SAID_MAX then return end
+    said[key]=true; saidCount=saidCount+1
+    CFLog.message("outfit","outfit","no outfit line for token "..tostring(token)..": "..reason)
+end
+
 local function root()
     local store=ModData.get(TAG)
     if not store then return Outfits.empty() end
@@ -43,9 +62,15 @@ function L.record(token,outfit)
     return recorded
 end
 
+-- The body was observed but gave no outfit to record.
+function L.noOutfit(token)
+    why(token,"the body reported no readable outfit")
+end
+
 function L.outfitFor(token)
     local ok,outfit=pcall(Outfits.outfitFor,L.root(),token)
-    return ok and outfit or nil
+    if not ok then why(token,"the outfit store could not be read: "..tostring(outfit)); return nil end
+    return outfit
 end
 
 -- What the notebook may print. outfitFor returns the game's raw id, because
@@ -58,8 +83,12 @@ function L.readableOutfitFor(token)
     -- has no words for stays unsaid rather than being turned into words
     -- automatically. A future game update must not be able to put a new word
     -- in the survivor's mouth.
-    local ok,outfit=pcall(Outfits.describe,L.outfitFor(token))
-    return ok and outfit or nil
+    local raw=L.outfitFor(token)
+    if raw==nil then why(token,"no outfit recorded for this body"); return nil end
+    local ok,outfit=pcall(Outfits.describe,raw)
+    if not ok then why(token,"describing '"..tostring(raw).."' failed: "..tostring(outfit)); return nil end
+    if outfit==nil then why(token,"outfit '"..tostring(raw).."' has no written line (generic clothes, or not in the table)") end
+    return outfit
 end
 
 return L

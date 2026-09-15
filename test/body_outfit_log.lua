@@ -95,4 +95,43 @@ assert(Outfits.record("corpse-item:501","PoliceStory")==true,"re-recording the s
 assert(Outfits.record("corpse-item:501","JanitorFemale")==false,"a disagreeing outfit for the same token is refused")
 assert(Outfits.outfitFor("corpse-item:501")=="PoliceStory","the refusal must not overwrite the settled observation")
 
-print("PASS body outfit log: engine receiver form, adjacent-body separation, unreadable/absent degrade silently, contradiction refused")
+-- Why no outfit line appeared, when a playtest asks (O2; the 2026-09-08
+-- audit's silent returns). Off by default and silent; switched on, each reason
+-- is said once per body, in words that tell a generic outfit from one never read.
+local Log=require('ConspiracyFiles/Log')
+local said={}
+local message=Log.message
+Log.message=function(channel,kind,text) said[#said+1]=tostring(text); return message(channel,kind,text) end
+local function saidAbout(fragment)
+    local n=0
+    for _,line in ipairs(said) do if line:find(fragment,1,true) then n=n+1 end end
+    return n
+end
+
+assert(Outfits.verbose==false,"the switch is off by default")
+assert(Outfits.readableOutfitFor("corpse-item:503")==nil)
+assert(#said==0,"switched off, a missing outfit line says nothing: "..table.concat(said," | "))
+
+Outfits.verbose=true
+assert(Outfits.readableOutfitFor("corpse-item:503")==nil)
+assert(Outfits.readableOutfitFor("corpse-item:503")==nil)
+assert(saidAbout("corpse-item:503: no outfit recorded")==1,
+    "names why no outfit line, once per body - nothing recorded: "..table.concat(said," | "))
+assert(Outfits.record("corpse-item:600","Generic01")==true)
+assert(Outfits.readableOutfitFor("corpse-item:600")==nil,"a generic outfit has no written line")
+assert(saidAbout("corpse-item:600: outfit 'Generic01' has no written line")==1,
+    "names why no outfit line - an outfit with no words: "..table.concat(said," | "))
+
+P.reset()
+local bodyMDE={}
+local bodyE=strict.object("bodyE",{class="IsoDeadBody",getModData=function() return bodyMDE end,
+    getOutfitName=function() return "" end})
+local containerE=containerFor(bodyE)
+local shirtE=item("Base.Shirt",505,"Shirt");shirtE.container=containerE
+items={shirtE};P.see(shirtE,containerE);tick()
+assert(bodyMDE.cfObservedSource=="corpse-item:505")
+assert(saidAbout("corpse-item:505: the body reported no readable outfit")==1,
+    "names why no outfit line - the body gave none: "..table.concat(said," | "))
+Outfits.verbose=false
+
+print("PASS body outfit log: engine receiver form, adjacent-body separation, unreadable/absent degrade silently, contradiction refused, verbose names why a line is missing")

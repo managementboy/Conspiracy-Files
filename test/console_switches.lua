@@ -24,6 +24,10 @@ local SWITCHES = {
       field  = 'verboseDoors',
       file   = 'mod/common/media/lua/client/ConspiracyFiles/LocalPersonIntegration.lua',
       table  = 'P' },
+    { global = 'ConspiracyFiles.BodyOutfitLog',
+      field  = 'verbose',
+      file   = 'mod/common/media/lua/client/ConspiracyFiles/BodyOutfitLog.lua',
+      table  = 'L' },
 }
 
 for _, s in ipairs(SWITCHES) do

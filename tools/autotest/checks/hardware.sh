@@ -365,7 +365,7 @@ out="$REPO/docs/management/evidence/linux-autotest/$(date +%Y%m%dT%H%M%S)-hardwa
     echo "boot offline: $boot_off"
     echo "boot restore: $boot"
     for f in "${fails[@]:-}"; do [ -n "$f" ] && echo "FAIL: $f"; done
-} > "$out"
+} > "$out.part" && mv "$out.part" "$out"
 say "written: $out"
 echo "Linux hardware check $id: $verdict"
 cat "$out"

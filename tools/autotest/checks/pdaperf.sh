@@ -132,7 +132,7 @@ out="$EVIDENCE/$(date +%Y%m%dT%H%M%S)-pdaperf.txt"
     [ -f "$RUNS/$id-pdaperf-times.txt" ] && sed 's/^/ms per frame: /' "$RUNS/$id-pdaperf-times.txt"
     echo "ticks:   $(f 3 <<<"$ticks")"
     for x in "${fails[@]}"; do echo "FAIL: $x"; done
-} > "$out"
+} > "$out.part" && mv "$out.part" "$out"
 say "written: $out"
 echo "Linux PDA performance check $id: $verdict"
 cat "$out"

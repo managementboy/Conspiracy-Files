@@ -43,6 +43,7 @@ log, play, report. Every session below assumes diagnostics on:
 
     ConspiracyFiles.IdentityObserver.verbose=true
     ConspiracyFiles.LocalPersonIntegration.verboseDoors=true
+    ConspiracyFiles.BodyOutfitLog.verbose=true
 
 **A session that finds nothing is still a pass.** Record it as such. The
 failure mode to avoid is a criterion marked green because nobody looked.
@@ -59,7 +60,7 @@ first real evidence for two criteria.
 
 | Target | What to do | Pass looks like |
 |---|---|---|
-| **O2** | Loot corpses until one wears something distinctive | A notebook entry reads "The body itself wore a security guard" or similar, in plain words |
+| **O2** | Loot corpses until one wears something distinctive | A notebook entry reads "The body itself wore a security guard" or similar, in plain words. A body that gives no line logs `no outfit line for token ...` with the reason, so a generic outfit is told from one never read |
 | **O3** | Take a **vanilla** house key off any corpse, try nearby doors | `[CF-PERSON] observedKeyDoor` plus a named voice line. A case key will not work: `observedCorpseKey` excludes it |
 | **O4** | Open a wallet holding a watched card, do not click | Contents recorded, or `[CF-IDENTITY] bailed: <reason>` names the check |
 | **E12** | Nothing; the log records it | `[CF-T3-NEARBY] callbacksOver2Ms=0` and `peakMs<=2` under a real scan |

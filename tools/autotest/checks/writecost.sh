@@ -99,7 +99,7 @@ out="$REPO/docs/management/evidence/linux-autotest/$(date +%Y%m%dT%H%M%S)-writec
     echo "spread evenly across the parts, only then is a deferred write queue"
     echo "worth its risk."
     [ -n "$errors" ] && { echo; echo "errors inside the mod:"; echo "$errors"; }
-} > "$out"
+} > "$out.part" && mv "$out.part" "$out"
 say "written: $out"
 cat "$out"
 exit 0

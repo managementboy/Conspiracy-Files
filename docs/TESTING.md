@@ -69,7 +69,7 @@ running two at once is safe, the second waits.
 | `pdaperf.sh` | draw-call counts and frame times from the real renderer |
 | `hardware.sh` | the battery, the lamp, auto-off, the dead-cell restore, the journal replay |
 | `knox.sh` | Knox.OS driven by taps and key presses |
-| `../fieldnote-test/boot_test.sh` | the device's hardware contract: every hitbox, press colours, label clearance |
+| `../fieldnote-test/boot_test.sh` | the case's hardware contract on the real organiser: every key's hitbox at every machine size, legends at every size, press colours, a release off a key cancels it |
 
 Anything in `test/` is **simulated**: it stubs the engine. That is the right
 tool for logic and the wrong tool for "does this work in the game", and the
@@ -191,7 +191,9 @@ checks to be brought up to "good", and this is the bar:
     tools/autotest/prove.py --only clock-needs-watch
 
 For each entry it puts ONE deliberate bug back into the spare worktree
-(`~/cf-wp345`), runs the check named for it there, requires a FAIL carrying the
+(`~/cf-wp345`), runs the check named for it there (a name under `checks/`, a
+path as `suite.sh` lists it such as `../fieldnote-test/boot_test`, or
+`unit:<test>` for an offline test), requires a FAIL carrying the
 expected text, and restores the file. A result is **CAUGHT**, **MISSED** (the
 check passed with the bug in: the check is decoration), or **FAILED, BUT NOT
 FOR THIS** (it failed on something else, so it proved nothing about this bug).
@@ -208,4 +210,12 @@ body in the notebook" that way with nothing recorded. Return an explicit
 Every check writes a file to `docs/management/evidence/linux-autotest/` with
 its verdict, the commit, **the renderer**, and its own numbers. Those are
 committed: they are the record of what was true at a given commit on a given
-machine.
+machine. Commit them from whichever checkout ran the check - the 14-15 Sep runs
+sat untracked in `~/cf-wp345` for a day while the repo's newest core-loop
+record was a FAIL.
+
+A report is written to `<file>.part` and moved into place only when whole, so a
+run that dies mid-write leaves an ignored `.part`, never an empty record (one
+was committed on 2026-09-13). `test/evidence_files.lua` fails on an empty
+evidence file and on any check script that writes its report straight into
+place.

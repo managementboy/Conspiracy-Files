@@ -87,6 +87,6 @@ report="$EVIDENCE/$id-vehicle-reach.txt"
     echo "van: $(tr '\t' ' ' <<<"$van")"
     printf '%s\n' "${rows[@]}"
     for x in "${fails[@]}"; do echo "FAIL: $x"; done
-} > "$report"
+} > "$report.part" && mv "$report.part" "$report"
 cat "$report"
 [ "$verdict" = PASS ]

@@ -1,15 +1,16 @@
-# Fieldnote PDA — the device, and the tools that generate it
+# Fieldnote PDA — the organiser's case, and the tools that generate it
 
-The rectangle-built PDA from `design/manifest.json`, drawn with **only native
-`drawRect` calls and the mod's own pixel typeface**. No textures for the
+The rectangle-built housing from `design/manifest.json`, drawn with **only
+native `drawRect` calls and the mod's own pixel typeface**. No textures for the
 hardware, no SVG, no PNG at runtime, and nothing measured from the player's
 machine.
 
-**This was a standalone test mod so it could be looked at before it replaced
-anything.** It was, and the owner approved its drawing in his own play
-(2026-09-13), so the device now lives in the mod proper — `Fieldnote/Panel.lua`
-and the generated `Fieldnote/Geometry.lua` — and it is the PDA's case. What is
-left in this folder is the design package, the generator and the boot check.
+**It began as a standalone test mod so it could be looked at before it replaced
+anything.** The owner approved it in his own play (2026-09-13) and it became the
+organiser's case: `ConspiracyFiles.OrganiserScreen` draws it and takes its keys.
+The test mod and its stand-alone window are gone (the window lasted until
+2026-09-15, kept alive only by the check below). What is left in this folder is
+the design package, the generator and the check.
 
 The LCD is drawn as a blank filled rectangle and nothing hardware ever
 enters it. No branding, no handwriting pad. Wear scuffs are on by default,
@@ -20,10 +21,11 @@ tools/fieldnote-test/
   design/                      the package's manifest.json + DESIGN.md + reference PNG
   build_fieldnote.py           manifest.json  ->  Geometry.lua  (the ONLY way geometry changes)
   probe.lua                    eval-channel checks used by boot_test.sh
-  boot_test.sh                 boots a real game and proves the hardware contract
+  boot_test.sh                 boots a real game and proves the contract on the organiser
 
 mod/common/media/lua/shared/Fieldnote/Geometry.lua    GENERATED - do not edit
-mod/common/media/lua/client/Fieldnote/Panel.lua       the renderer + input
+mod/common/media/lua/client/Fieldnote/Panel.lua       draws the case (S.render); no window of its own
+mod/common/media/lua/client/ConspiracyFiles/OrganiserScreen.lua   the window: keys, glass, sizes
 ```
 
 ## What was verified against the installed game, not from memory
@@ -41,65 +43,63 @@ to fix an argument order.
 **The label baseline problem, and why it no longer exists.** The design gives
 *baselines*; `drawText` anchors by the *top* of the glyph box and PZ exposes no
 ascent. That was solved by disassembling `AngelCodeFont.getHeight(str, real,
-offset)` — `MeasureStringYOffset` is the rows above the ink and
-`MeasureStringYReal` the ink height, so their sum is the ink bottom. It worked,
-and it was still machine-dependent: the same code cleared the icons here and
-collided with them on the owner's 4K machine, because the game's font metrics
-were the only input to this device that came from the player's settings.
+offset)`, and it was still machine-dependent: the same code cleared the icons
+here and collided with them on the owner's 4K machine, because the game's font
+metrics were the only input to this device that came from the player's
+settings.
 
 So the legends moved to the mod's own pixel face (P4-R90). The cell is 11px
 with its baseline at `ascent` and every capital inks rows 2..8, so a legend
 sits at `baseline − ascent` and draws identically on every machine — 5px clear
-of its icon, everywhere. `boot_test.sh` still asserts it.
+of its icon, everywhere.
+
+The legend pictures exist at 1x, 2x and 3x. The machine also comes at half and
+one-and-a-half size (P4-R99); at those sizes a legend uses the next picture up,
+drawn at the machine's size. Before 2026-09-15 it looked for `0.5x` and `1.5x`
+folders that were never built, and HOME and BACK were not drawn at those sizes.
 
 ## Install
 
-**LINUX dev machine** — the harness does it for you (see Test). To do it by
-hand, copy (do not symlink — item scripts fail through a link) the mod folder:
+Nothing to install: the case is part of Conspiracy-Files.
 
-```bash
-rsync -a --delete tools/fieldnote-test/FieldnoteTest/ ~/Zomboid/mods/FieldnoteTest/
-```
-
-**WINDOWS play machine** — copy the `FieldnoteTest` folder to
-`C:\Users\<you>\Zomboid\mods\FieldnoteTest\`, then enable **Fieldnote PDA
-(test)** in the game's Mods menu. It coexists with Conspiracy-Files; enable
-both or either.
+**WINDOWS play machine** — if a `FieldnoteTest` folder is still in
+`C:\Users\<you>\Zomboid\mods\` from the old instructions, delete it and disable
+**Fieldnote PDA (test)** in the Mods menu: it would draw a second, blank device
+on screen.
 
 ## Test
 
 Automated, on the LINUX dev machine, through the same harness as every other
-check (boots a real game, ~4 minutes):
+check (boots a real game, ~4 minutes; also run by `tools/autotest/suite.sh`):
 
 ```bash
 tools/fieldnote-test/boot_test.sh --hidden
 ```
 
-It proves: the mod loads and opens; it draws with and without wear; every
-manifest hitbox resolves at both ends of its half-open box and not one pixel
-past; the rocker divider row `y=577` is inactive; a key's face takes its
-pressed colour while held and restores on release; a click dispatches exactly
-once and a drag off the key dispatches nothing; no hardware primitive enters
-the LCD; every key label sits below its icon (the baseline rule, measured); no
-errors inside the mod. A screenshot lands in
-`dev/eval/linux/runs/<session>-fieldnote.png` and an evidence file in
-`docs/management/evidence/linux-autotest/`.
+It opens the organiser and proves, on that window: it draws its case with and
+without wear; at every machine size (0.5x to 3x) every key resolves at both
+ends of its half-open box and not one pixel past, and a press there lands on
+that key; every legend letter has a picture at every machine size; the rocker
+divider row `y=577` is inactive; a key's face takes its pressed colour while
+held and restores after; a click dispatches exactly once; a release off the key,
+on the glass or on another key, dispatches nothing; no hardware primitive
+enters the LCD; every key label sits below its icon; no errors inside the mod.
+A screenshot lands in `dev/eval/linux/runs/<session>-fieldnote.png` and an
+evidence file in `docs/management/evidence/linux-autotest/`.
+`tools/autotest/prove.py --only key-drag-off key-half-open legend-sizes` shows
+the check fails when each of those is broken.
 
 By hand, in-game, from the debug console:
 
 ```lua
-Fieldnote.toggle()      -- show / hide
-Fieldnote.zoom()        -- cycle 1x / 2x / 3x   (or Fieldnote.zoom(2))
-Fieldnote.wear(false)   -- pristine housing;  Fieldnote.wear(true) restores scuffs
+ConspiracyFiles.OrganiserScreen.open()
+ConspiracyFiles.OrganiserScreen.zoom(0.5)   -- 0.5, 1, 1.5, 2 or 3
+Fieldnote.Panel.showWear=false              -- pristine housing; true restores scuffs
 ```
 
-Every button press prints `[FIELDNOTE] press: <id> -> <action>` to the
-console. Nothing is wired to a game action — deliberately, per the design.
+## It replaced the old PDA case — done, 2026-09-13
 
-## It replaced the current PDA — done, 2026-09-13
-
-The three steps this section used to describe are done and gated, so it is
-kept only as the record of what changed.
+Kept as the record of what changed.
 
 1. **Geometry.** `OrganiserScreen` draws into `Fieldnote`'s `320 x 422` LCD at
    `(40, 50)`. The old `Generated/OrganiserCase.lua` and its `glass` are gone,
@@ -121,13 +121,12 @@ kept only as the record of what changed.
    The rocker taking up and down is what frees the two inner keys; MENU and
    BACK have to live on keys because there is no power tab and MENU is also how
    the device wakes. The inner two keep their moulded faces and depress, but
-   print nothing and do nothing until play shows what they are for. They still
-   dispatch `unassigned`, so a press shows up in the log.
+   print nothing and do nothing until play shows what they are for. A key acts
+   when it is let go over the key it went down on; sliding off cancels it.
 
-3. **Sizes.** Two independent controls (P4-R89): how big the machine is drawn,
-   and how big its type is. The glyph set is the product of the two, so how
-   much text fits depends only on the text size. SETUP holds both, and the
-   case's bottom-right corner drags, snapping to whole sizes.
+3. **Sizes.** Two independent controls (P4-R89, P4-R99): how big the machine is
+   drawn, and how big its type is. SETUP holds both, and the case's
+   bottom-right corner drags, snapping to the machine sizes.
 
 The lamp is one `drawRect` over the LCD, as it always was; the design has no
 lamp control and no power tab, so a held MENU still lights it (P4-R84).

@@ -78,12 +78,18 @@ end
 
 -- The lamp, asked for the way the player asks: a held MENU release. The case
 -- has no power tab any more (owner, 2026-09-13), so MENU carries it.
+-- Released over the MENU key itself: a key now acts only when let go over the
+-- key it went down on (2026-09-15), and this used to set a pretend "MODE" key
+-- down and let go at the window's corner.
 function CFHW.holdPower()
     local w = S.window; if not w then return false, "no screen" end
     w.on = true
-    w.down = "MODE"
+    local menu
+    for _, b in ipairs(w:buttons()) do if S.ACTION[b.id] == "MENU" then menu = b end end
+    if not menu then return false, "no MENU key on the case" end
+    w.down = menu.id
     w.downAt = getTimeInMillis() - (S.HOLD_MS + 50)
-    w:onMouseUp(0, 0)
+    w:onMouseUp(menu.x + 2, menu.y + 2)
     return true, tostring(w.lamp), tostring(w.lampRefused ~= nil)
 end
 

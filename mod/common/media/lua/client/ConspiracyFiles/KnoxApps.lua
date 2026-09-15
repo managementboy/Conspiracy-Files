@@ -82,9 +82,11 @@ local function split(detail)
         local heading,rest=block:match("^(%u[%u%s]+)\n(.*)$")
         if heading and FIELD[heading] then
             fields[#fields+1]={label=FIELD[heading],value=rest:gsub("\n"," ")}
-        elseif heading then
-            body[#body+1]=rest
         elseif block:find("%S") then
+            -- Every other block keeps its heading (P4-R114). They were dropped
+            -- for the look of a Palm record, and with them went the only thing
+            -- telling the paper's own words from WHAT IT MIGHT MEAN and the
+            -- DATE NOTE, which are the survivor thinking.
             body[#body+1]=block
         end
     end

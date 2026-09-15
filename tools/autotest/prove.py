@@ -92,13 +92,39 @@ MUTATIONS = [
      'detail=detail.."\\n\\n"..RelayMemo.NOTE',
      "detail=detail",
      "a paper dated in the week is noted once the memo is found"),
+    # The organiser's case (2026-09-15): the Fieldnote check drives the real
+    # organiser now, not the stand-alone window it used to prove.
+    ("key-drag-off", "../fieldnote-test/boot_test", C + "OrganiserScreen.lua",
+     "    if not over or over.id~=id then return true end\n",
+     "",
+     "a drag off C10 still dispatched"),
+    ("key-half-open", "../fieldnote-test/boot_test", C + "OrganiserScreen.lua",
+     "if x>=b.x and x<b.x+b.w and y>=b.y and y<b.y+b.h then return b end",
+     "if x>=b.x and x<=b.x+b.w and y>=b.y and y<=b.y+b.h then return b end",
+     "past-edge-hit"),
+    ("legend-sizes", "../fieldnote-test/boot_test", "mod/common/media/lua/client/Fieldnote/Panel.lua",
+     "local folder=S.glyphFolder(scale)",
+     "local folder=scale",
+     "no legend picture for"),
+    ("organiser-labels", "unit:knox_files_labels", C + "KnoxApps.lua",
+     "body[#body+1]=block",
+     "body[#body+1]=(heading and rest) or block",
+     "the organiser keeps WHAT"),
+    ("outfit-why", "unit:body_outfit_log", C + "BodyOutfitLog.lua",
+     "    if not L.verbose then return end\n",
+     "    do return end\n",
+     "names why no outfit line"),
 ]
 
 
 def check_command(check):
-    """A real-game check script, or `unit:<name>` for an offline test in test/."""
+    """A real-game check: a name under tools/autotest/checks, or a path relative
+    to tools/autotest as suite.sh lists it (../fieldnote-test/boot_test); or
+    `unit:<name>` for an offline test in test/."""
     if check.startswith("unit:"):
         return "lua5.1 test/%s.lua" % check[len("unit:"):]
+    if "/" in check:
+        return "timeout 1500 tools/autotest/%s.sh" % check
     return "timeout 1500 tools/autotest/checks/%s.sh" % check
 
 

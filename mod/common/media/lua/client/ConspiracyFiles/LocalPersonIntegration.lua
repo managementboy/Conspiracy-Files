@@ -252,10 +252,11 @@ local function remember(entry)
         -- else about this body. Two adjacent corpses never share a token
         -- (each token is derived from that specific body/item), so they
         -- never share an outfit observation either. A missing or unreadable
-        -- outfit degrades silently -- outfitOf returns nil and nothing is
-        -- recorded.
+        -- outfit records nothing; with ConspiracyFiles.BodyOutfitLog.verbose
+        -- on it says so, because otherwise no outfit line looks the same
+        -- whether the body wore nothing distinctive or was never read.
         local outfit=outfitOf(entry.body)
-        if outfit then Outfits.record(entry.token,outfit) end
+        if outfit then Outfits.record(entry.token,outfit) else Outfits.noOutfit(entry.token) end
     end
     for _,item in ipairs(entry.carried) do
         local md=read(item,"getModData")

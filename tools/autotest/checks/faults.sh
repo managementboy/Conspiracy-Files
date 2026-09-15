@@ -100,6 +100,6 @@ report="$EVIDENCE/$id-faults.txt"
     printf '%s\n' "${rows[@]}"
     echo "recovery afterwards: $recovery"
     for f in "${fails[@]}"; do echo "FAIL: $f"; done
-} > "$report"
+} > "$report.part" && mv "$report.part" "$report"
 cat "$report"
 [ "$verdict" = PASS ]

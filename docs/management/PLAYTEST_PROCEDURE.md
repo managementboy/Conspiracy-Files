@@ -212,8 +212,10 @@ headline feature and the cheapest to reach.
    unusual or missing name should fall back to `Survivor's Notebook` rather
    than break the window.
 
-Also open and worth watching for: the wallet click defect, narrowed to nested
-container panes.
+The wallet click defect is closed. It was never about nested container panes:
+a stale drag flag in the loot pane stopped the mod watching after an ordinary
+click, fixed in 0.8.20 (`PLAYTEST_2026-09-09.md`), and `checks/wallet_id.sh`
+has passed on it since.
 
 ## Rules that do not change during a playtest
 

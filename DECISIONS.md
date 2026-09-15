@@ -763,6 +763,15 @@ saved inside the case they shape, as met names are, so a case still rebuilds
 from its seed. Not built yet; when it is offered (only at a case's end, or
 also at any time) is still open.
 
+**P4-R114 — the organiser keeps the survivor's headings.** Owner, 2026-09-15
+("Fix loose ends", on the recommendation to keep them). FILES on the organiser
+dropped every heading that was not one of its labelled fields, for the look of
+a Palm record, so WHAT IT MIGHT MEAN and the relay memo's DATE NOTE ran straight
+on from the paper's own words and what a document says could not be told from
+what the survivor makes of it. The organiser now shows the same headings as the
+notebook; the labelled fields (WHEN, FOUND, WHERE, OBJECT, NOTES) are unchanged.
+No new game.
+
 **P4-R106 — how a car's containers are reached.** Owner, 2026-09-14: "The globe
 box only opens when sitting in the front of the car", and a truck bed or trunk
 is reached from outside, "only if they are open". Placement may still put a

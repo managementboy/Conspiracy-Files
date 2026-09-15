@@ -921,6 +921,17 @@ function Screen:tap(x,y)
     log("knox tap: "..tostring(id))
 end
 
+-- The key under a point on the window, or nil. Half-open, exactly as the
+-- manifest states it: a pixel on the far edge belongs to whatever is next, not
+-- to this key. One test for the press and the release, and the one the
+-- Fieldnote check measures at every machine size.
+function Screen:controlAt(x,y)
+    for _,b in ipairs(self:buttons()) do
+        if x>=b.x and x<b.x+b.w and y>=b.y and y<b.y+b.h then return b end
+    end
+    return nil
+end
+
 function Screen:onMouseDown(x,y)
     self.downAt=getTimeInMillis and getTimeInMillis() or 0
     local g=self:grip()
@@ -929,11 +940,8 @@ function Screen:onMouseDown(x,y)
         self.down="GRIP"
         return true
     end
-    for _,b in ipairs(self:buttons()) do
-        -- Half-open, exactly as the manifest states it: a pixel on the far
-        -- edge belongs to whatever is next, not to this key.
-        if x>=b.x and x<b.x+b.w and y>=b.y and y<b.y+b.h then self.down=b.id; return true end
-    end
+    local b=self:controlAt(x,y)
+    if b then self.down=b.id; return true end
     local s=self.scale
     local gx,gy=Case.glass.x*s,Case.glass.y*s
     if self.on and x>=gx and y>=gy and x<Case.glass.x*s+Case.glass.w*s and y<Case.glass.y*s+Case.glass.h*s then
@@ -978,6 +986,11 @@ function Screen:onMouseUp(x,y)
     if id=="GRIP" then self.resizing=nil; S.savePrefs(); return true end
     if id=="GLASS" then self:tap(x,y); return true end
     if not id then return ISPanel.onMouseUp(self,x,y) end
+    -- A key acts when it is let go over the key it went down on. Sliding off
+    -- first cancels it, as a real key does and as the Fieldnote design asks;
+    -- it used to act wherever the button came up, even on another key.
+    local over=self:controlAt(x,y)
+    if not over or over.id~=id then return true end
     local held=(getTimeInMillis and getTimeInMillis() or 0)-(self.downAt or 0)
     -- The lamp moved from the power tab to a held MENU when the owner's case
     -- lost the tab (2026-09-13). Same gesture, the only button that can still
