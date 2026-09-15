@@ -130,6 +130,18 @@ local function stampEvidence(item,title)
     item:setName(title); item:setCustomName(true)
     pcall(function() item:setDisplayCategory("Evidence") end)
 end
+-- A finished case's papers are Old. Owner, 2026-09-15, after finding two papers
+-- of a completed case in the house with no Investigation option at all: "We
+-- should change the category to Evidence / Old" (P4-R118). The loot list then
+-- says the paper belongs to a closed case. Same rules as Evidence: a
+-- translation key (IGUI_ItemCat_EvidenceOld) and a runtime property, so every
+-- place that stamps a category asks this instead of assuming Evidence.
+local function retiredId(id)
+    if not id then return false end
+    for _,row in ipairs(retiredRows) do if row.id==id then return true end end
+    return false
+end
+local function categoryOf(id) return retiredId(id) and "EvidenceOld" or "Evidence" end
 
 local function applyWear(item,doc)
     if not item or not doc or not doc.wear then return end
@@ -640,6 +652,9 @@ function R.inspect(item,inPlace)
                 local staged,why=Cases.retire(wrapper,index,seen)
                 if staged then
                     swap(staged); openAll(); log("Case complete; placement details retired.")
+                    -- The paper in hand is Old at once; the rest are marked
+                    -- as the last-seen scan passes them (P4-R118).
+                    pcall(function() item:setDisplayCategory(categoryOf(md.cfGeneratedId)) end)
                     -- Not "solved" - the mod does not know that and never will.
                     -- Only that there is nothing further to find.
                     local v=ConspiracyFiles.PlayerVoice
@@ -655,6 +670,15 @@ function R.subject(item)
     if not sessions or not item then return false end
     local md=item:getModData(); local root=md and Cases.find(wrapper,md.cfGeneratedId); local a=root and root.assignments[md.cfGeneratedId]
     return a and md.cfPhysicalToken==a.physicalToken and a.status~="conflict"
+end
+-- A paper of a case that has retired. Retirement drops the case's
+-- assignments, so the paper is no longer a subject and the menu used to offer
+-- nothing at all, which read as broken in play (2026-09-15). Its id is still
+-- in a retired row, so the menu can say it is already recorded (P4-R118).
+function R.retiredPaper(item)
+    if not item then return false end
+    local md=item:getModData(); if type(md)~="table" or not md.cfGeneratedId then return false end
+    return retiredId(md.cfGeneratedId) and not R.subject(item)
 end
 -- True once the item's document id has been inspected (recorded in the
 -- ledger via R.inspect). Distinct from R.subject: a subject item can be
@@ -1098,6 +1122,9 @@ local function lastSeenJob()
             local item=rd(items,"get",index); index=index+1; examined=examined+1
             local md=item and rd(item,"getModData")
             local id=type(md)=="table" and md.cfGeneratedId
+            -- Marked Old wherever this scan meets it: after a reload, and in
+            -- saves whose case retired before the mark existed (P4-R118).
+            if id and rows[id] then pcall(function() item:setDisplayCategory("EvidenceOld") end) end
             if id and rows[id] and not found[id] then
                 local ok,where=pcall(placeOf,item)
                 if ok and type(where)=="string" then found[id]=where end
@@ -1156,7 +1183,10 @@ local function restampEvidence(container,depth)
         local item=items:get(i)
         local md=item and item.getModData and item:getModData()
         if type(md)=="table" and md.cfGeneratedId then
-            pcall(function() item:setDisplayCategory("Evidence") end)
+            -- Old for a retired case's paper (P4-R118). At game start the
+            -- campaign is not open yet, so this says Evidence and the
+            -- last-seen scan corrects it within ten seconds.
+            pcall(function() item:setDisplayCategory(categoryOf(md.cfGeneratedId)) end)
             n=n+1
         end
         local inner=item and item.getInventory and item:getInventory()

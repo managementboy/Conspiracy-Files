@@ -400,6 +400,32 @@ function L.lastSeen()
     return tostring(have), tostring(total), sample, tostring(retired), tostring(stored)
 end
 
+-- A finished case's papers are Evidence / Old (P4-R118, owner 2026-09-15: "We
+-- should change the category to Evidence / Old"). Walks the inventory and bags
+-- the loop filled: how many papers it holds, how many the runtime calls
+-- retired papers, and how many the loot list would show as Old.
+function L.oldPapers()
+    local papers, retired, old = 0, 0, 0
+    local function walk(container, depth)
+        if not container or depth > 3 then return end
+        local items = container:getItems()
+        for i = 0, items:size() - 1 do
+            local item = items:get(i)
+            local md = item:getModData()
+            if type(md) == "table" and md.cfGeneratedId then
+                papers = papers + 1
+                if R.retiredPaper(item) then retired = retired + 1 end
+                local ok, category = pcall(function() return item:getDisplayCategory() end)
+                if ok and category == "EvidenceOld" then old = old + 1 end
+            end
+            local inner = item.getInventory and item:getInventory()
+            if inner then walk(inner, depth + 1) end
+        end
+    end
+    walk(getPlayer():getInventory(), 0)
+    return tostring(papers), tostring(retired), tostring(old)
+end
+
 -- The relay memo's date note, in the real game (P4-R96): once the memo is
 -- found, every record dated inside 30 June - 8 July 1993 carries it. Until
 -- now only a unit test had seen it.

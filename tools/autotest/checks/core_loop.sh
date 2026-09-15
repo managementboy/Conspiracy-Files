@@ -100,6 +100,21 @@ findings+=("last-seen log: $(run_log | grep -oE '(Last-seen[^\"]*|lastseen: [^\"
 if [ "$completed" = yes ] && [ "$(cut -f1 <<<"$seen")" != "$(cut -f2 <<<"$seen")" ]; then
     fail "after the case completed, only $(cut -f1 <<<"$seen") of $(cut -f2 <<<"$seen") documents say where they were last seen"
 fi
+# A finished case's papers are Evidence / Old (P4-R118). The paper in hand is
+# marked at once, the rest by the last-seen scan every ten seconds.
+old="0	0	0"
+for _ in $(seq 1 15); do
+    old="$(ev 'return CFLoop.oldPapers()')"
+    [ "$(cut -f1 <<<"$old")" != 0 ] && [ "$(cut -f3 <<<"$old")" = "$(cut -f1 <<<"$old")" ] && break
+    sleep 2
+done
+say "old papers: $(cut -f1 <<<"$old") carried, $(cut -f2 <<<"$old") retired, $(cut -f3 <<<"$old") shown as Evidence / Old"
+findings+=("Evidence / Old after completion: $(cut -f1 <<<"$old") papers carried, $(cut -f2 <<<"$old") known as retired papers, $(cut -f3 <<<"$old") in the Old category")
+if [ "$completed" = yes ]; then
+    [ "$(cut -f1 <<<"$old")" != 0 ] || fail "no case papers found in the inventory after completion"
+    [ "$(cut -f2 <<<"$old")" = "$(cut -f1 <<<"$old")" ] || fail "only $(cut -f2 <<<"$old") of $(cut -f1 <<<"$old") carried papers are known as a finished case's papers"
+    [ "$(cut -f3 <<<"$old")" = "$(cut -f1 <<<"$old")" ] || fail "only $(cut -f3 <<<"$old") of $(cut -f1 <<<"$old") carried papers show as Evidence / Old"
+fi
 # DATES opens a real paper the loop found (owner, 2026-09-14).
 dt="$(ev 'return CFLoop.datesTap()')"
 say "dates tap: $(tr '\t' ' ' <<<"$dt")"

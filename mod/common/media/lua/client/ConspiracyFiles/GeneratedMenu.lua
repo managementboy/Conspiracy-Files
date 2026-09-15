@@ -15,7 +15,15 @@ function M.fill(playerNum,context,items)
     local subjects,overflow=Menu.normalize(items)
     if overflow or #subjects~=1 then return end
     local item=subjects[1]
-    if not R.subject(item) then return end
+    if not R.subject(item) then
+        -- A finished case's own paper is already in the organiser. Showing
+        -- nothing read as "cannot be logged" in play (2026-09-15, P4-R118).
+        if R.retiredPaper and R.retiredPaper(item) then
+            local done=context:addOption("Already in the organiser",nil,nil)
+            if done then done.notAvailable=true end
+        end
+        return
+    end
     local expected=item:getOutermostContainer()
     -- An icon for the ACTION, not for the thing. Owner, 2026-09-10: "I meant
     -- an Icon that represents the action not the content. In the case of
