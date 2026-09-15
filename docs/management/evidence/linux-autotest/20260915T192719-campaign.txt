@@ -1,0 +1,35 @@
+Linux campaign check 20260915T192719: FAIL
+source: b0c7a6f
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+cases: 1 generated:893523062:case, 2 generated:1496278498:case, 3 generated:246458264:case; at the end 
+stages:
+  start                  cases 1 (0 finished) | notebook 0 | FILES questions 0 | NAMES 1 | PLACES 0 | Old 0/0 wrong | Evidence 0/0 wrong | order  | save 160377 B
+  case 1 finished        cases 1 (1 finished) | notebook 4 | FILES questions 1 | NAMES 1 | PLACES 4 | Old 4/0 wrong | Evidence 0/0 wrong | order 1111 | save 155076 B
+  after reload 1         cases 1 (1 finished) | notebook 4 | FILES questions 1 | NAMES 1 | PLACES 4 | Old 4/0 wrong | Evidence 0/0 wrong | order 1111 | save 155641 B
+  case 2 finished        cases 2 (2 finished) | notebook 11 | FILES questions 2 | NAMES 3 | PLACES 11 | Old 11/0 wrong | Evidence 0/0 wrong | order 11112222222 | save 187507 B
+  case 3, two papers     cases 3 (3 finished) | notebook 13 | FILES questions 3 | NAMES 3 | PLACES 13 | Old 12/1 wrong | Evidence 0/0 wrong | order 1111222222233 | save 196945 B
+  after reload 2         cases 3 (3 finished) | notebook 13 | FILES questions 3 | NAMES 3 | PLACES 13 | Old 13/0 wrong | Evidence 0/0 wrong | order 1111222222233 | save 197593 B
+  four cases unfinished  cases 5 (3 finished) | notebook 13 | FILES questions 3 | NAMES 3 | PLACES 13 | Old 13/0 wrong | Evidence 0/0 wrong | order 1111222222233 | save 258572 B
+  after the limit        cases 5 (3 finished) | notebook 13 | FILES questions 3 | NAMES 3 | PLACES 13 | Old 13/0 wrong | Evidence 0/0 wrong | order 1111222222233 | save 258572 B
+case 1 answers on the organiser: true two person2 records nil Delia Mercer Warren Nagy MassGenFac
+case 2 steer: generated:893523062:case two records Warren Nagy Warren Nagy true
+errors inside the mod, all sessions: 0
+FINDING: case 1 relay memo: found=true, dated in its week=0, carrying the date note=0
+FINDING: the date note was not exercised: no record of case 1 fell in the memo's week
+FINDING: case 1 note on the organiser: I think it was a story told for the public. Warren Nagy matters here. Next I would check the place against its records.
+FINDING: frame cost during case 1: AutomaticInvestigations.onTick calls=2085 avg=0.032ms max=52ms over2ms=1 | CaseFile.onTick calls=2073 avg=0.012ms max=1ms over2ms=0 | ClueMarkers.draw calls=0 avg=0.000ms max=0ms over2ms=0 | ClueMarkers.update calls=38 avg=0.368ms max=3ms over2ms=4 | IdentityObserver.afterRender calls=4204 avg=0.151ms max=1ms over2ms=0 | IdentityObserver.tick calls=2117 avg=0.002ms max=1ms over2ms=0 | LocalPersonI
+FINDING: reload 1 save size: 155353 -> 155641 bytes; before [Generated.G2=18490 AddressBook.Muldraugh=131854 KeyConnections=770 DiscoveryLedger=2222 VisitedBuildings=359]; after [Generated.G2=18778 AddressBook.Muldraugh=131854 KeyConnections=770 DiscoveryLedger=2222 VisitedBuildings=359]
+FINDING: case 2 placement: reach 250: t3:10977704480342040, t3:10977704480342043
+FINDING: case 2 papers: Rent statement / WB-244 | Key return note / WB-244 | Property review / WB-244 | Duty log / WB-244 | Tagged key / WB-244 | Shift notebook / WB-244 | seven insect repellents
+FINDING: frame cost during case 2: AutomaticInvestigations.onTick calls=3235 avg=0.005ms max=2ms over2ms=1 | CaseFile.onTick calls=3223 avg=0.010ms max=1ms over2ms=0 | ClueMarkers.draw calls=0 avg=0.000ms max=0ms over2ms=0 | ClueMarkers.update calls=61 avg=1.164ms max=8ms over2ms=7 | IdentityObserver.afterRender calls=6508 avg=0.139ms max=1ms over2ms=0 | IdentityObserver.tick calls=3271 avg=0.002ms max=1ms over2ms=0 | LocalPersonIn
+FINDING: case 3 placement: reach 250: t3:10977704480342048, t3:10977704480342036
+FINDING: frame cost during case 3: AutomaticInvestigations.onTick calls=5042 avg=0.006ms max=2ms over2ms=2 | CaseFile.onTick calls=5030 avg=0.011ms max=1ms over2ms=0 | ClueMarkers.draw calls=0 avg=0.000ms max=0ms over2ms=0 | ClueMarkers.update calls=92 avg=1.185ms max=8ms over2ms=10 | IdentityObserver.afterRender calls=10076 avg=0.144ms max=3ms over2ms=2 | IdentityObserver.tick calls=5078 avg=0.003ms max=1ms over2ms=0 | LocalPerson
+FINDING: reload 2 save size: 196945 -> 197593 bytes; before [Generated.G2=50789 AddressBook.Muldraugh=131854 KeyConnections=1682 DiscoveryLedger=6714 VisitedBuildings=710]; after [Generated.G2=51437 AddressBook.Muldraugh=131854 KeyConnections=1682 DiscoveryLedger=6714 VisitedBuildings=710]
+FINDING: map marks after reload 2 (written/pending/missing): 13/0/0
+FINDING: cases 4 to 6 did not all arrive within ten minutes: 5 3 1:893523062:retired 2:1496278498:retired 3:246458264:retired 4:1139078212:live 5:946232909:live
+FINDING: at the limit for 90 s: unfinished=2, preparing=false, refusals logged=0
+FINDING: frame cost during the limit: AutomaticInvestigations.onTick calls=73714 avg=0.007ms max=10ms over2ms=57 | CaseFile.onTick calls=73702 avg=0.008ms max=1ms over2ms=0 | ClueMarkers.draw calls=0 avg=0.000ms max=0ms over2ms=0 | ClueMarkers.update calls=1238 avg=0.724ms max=2ms over2ms=4 | IdentityObserver.afterRender calls=146844 avg=0.105ms max=1ms over2ms=0 | IdentityObserver.tick calls=73750 avg=0.002ms max=1ms over2ms=0 | Loca
+FAIL: reload 2: case 3 gained a steer
+FAIL: case 246458264:case: papers never all placed (0 0 0)
+FAIL: at the limit, case 3 finished but no new case came within five minutes (preparing=true)
+screenshot: dev/eval/linux/runs/20260915T192719-campaign.png (not committed)

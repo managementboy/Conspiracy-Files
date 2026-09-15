@@ -31,6 +31,12 @@ function C.cases()
     return #out, retired, table.concat(out, " ")
 end
 
+-- The unfinished case created first: it has had longest to be placed.
+function C.oldestLive()
+    for _, root in ipairs(roots()) do if root.case then return root.case.caseId end end
+    return "none"
+end
+
 -- The newest case still being played, or "none".
 function C.newestLive()
     local id = "none"

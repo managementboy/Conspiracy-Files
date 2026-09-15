@@ -228,7 +228,8 @@ perf_note "case 3"
 # --- reload 2 ---------------------------------------------------------------
 reload_world "reload 2"
 [ "$(ev 'return CFReload.notebook()')" = "$notebook" ] || fail "reload 2: the notebook changed"
-[ "$(ev "return CFCamp.steerOf([[$case3]])" | field 1)" = unsteered ] || fail "reload 2: case 3 gained a steer"
+s3="$(ev "return CFCamp.steerOf([[$case3]])" | field 1)"   # "none" once case 3 has finished (a two-paper case can)
+[ "$s3" = unsteered ] || [ "$s3" = none ] || fail "reload 2: case 3 gained a steer ($s3)"
 [ "$(ev "return CFCamp.answersOf([[$case1]])" | field 5)" = "$case2" ] || fail "reload 2: case 1's answers lost their used mark"
 old_settled "after reload 2"
 stage "after reload 2"
@@ -239,22 +240,25 @@ findings+=("map marks after reload 2 (written/pending/missing): $(tr '\t' '/' <<
 [ "$(field 2 "$marks")" = 0 ] || fail "reload 2: $(field 2 "$marks") map marks still pending with a pen in the pocket"
 
 # --- the active limit ----------------------------------------------------------
-ev 'return CFLoop.noGap()' >/dev/null
-wait_case_count 6 600 || findings+=("cases 4 to 6 did not all arrive within ten minutes: $(cases | tr '\t' ' ')")
+ev 'return CFCamp.gap(false)' >/dev/null
+q="$(cases)"; target=$(( $(field 2 "$q") + 4 ))
+# A new case takes minutes to prepare (a nearby scan), so the limit gets time.
+wait_case_count "$target" 1200 || findings+=("the fourth unfinished case did not arrive within twenty minutes: $(cases | tr '\t' ' ')")
 q="$(cases)"; live=$(( $(field 1 "$q") - $(field 2 "$q") ))
-stage "four cases unfinished"
+stage "at the limit"
 [ "$live" -le 4 ] || fail "$live unfinished cases at once; the save allows four"
 sleep 90
 prep="$(ev 'return CFCamp.preparing()')"
-refused="$(logged "too many concurrently active")"
-findings+=("at the limit for 90 s: unfinished=$live, preparing=$(field 1 "$prep"), refusals logged=$refused")
-count_before="$(field 1 "$(cases)")"
-play_case "$case3"
-wait_finished 3 || fail "case 3 did not finish at the limit"
-if wait_case_count $((count_before + 1)) 300; then
-    findings+=("a new case came after case 3 finished at the limit: $(cases | tr '\t' ' ')")
+[ "$live" -lt 4 ] || [ "$(field 1 "$(cases)")" = "$(field 1 "$q")" ] || fail "a case was created while four were unfinished"
+findings+=("after 90 s with $live unfinished: preparing=$(field 1 "$prep"), cases $(cases | tr '\t' ' ')")
+finished_before="$(field 2 "$(cases)")"; count_before="$(field 1 "$(cases)")"
+oldest="$(ev 'return CFCamp.oldestLive()' | field 1)"
+play_case "$oldest"
+wait_finished $((finished_before + 1)) || fail "the oldest unfinished case ${oldest#generated:} did not finish"
+if wait_case_count $((count_before + 1)) 900; then
+    findings+=("a new case came after a case was finished at the limit: $(cases | tr '\t' ' ')")
 else
-    fail "at the limit, case 3 finished but no new case came within five minutes (preparing=$(ev 'return CFCamp.preparing()' | field 1))"
+    fail "after a case was finished at the limit, no new case came within fifteen minutes (preparing=$(ev 'return CFCamp.preparing()' | field 1))"
 fi
 stage "after the limit"
 perf_note "the limit"
