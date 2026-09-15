@@ -74,7 +74,7 @@ report="$evidence/$session-boot.txt"
     echo "mod version / game version / player alive: $(sed 's/^ok //' <<<"$facts")"
     echo "${load:-load time not found}; soaked ${soak}s"
     echo "mod files loaded: ${loaded:-?} of $total${missing:+; missing: $missing}"
-    echo "survivor's papers: ${papers:-no open attempt logged}"
+    echo "survivor's evidence album: ${papers:-no open attempt logged}"
     echo "errors inside the mod: $n_errors"
     [ -z "$mod_errors" ] || sed 's/^/  /' <<<"$mod_errors" | head -10
     echo "mod warnings/errors logged by the mod itself: $(grep -c . <<<"$cf_warn")"
