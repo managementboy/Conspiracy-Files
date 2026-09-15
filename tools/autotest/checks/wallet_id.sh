@@ -19,7 +19,7 @@ say() { echo "wallet-id: $*" >&2; }
 abort() { say "$*"; "$PZ" stop; exit 2; }
 
 claim_game || exit 2
-"$PZ" start "${start_args[@]}" || abort "the game did not reach a playable world"
+start_world "${start_args[@]}" || abort "the game did not reach a playable world"
 id="$(session)"
 ev -f "$REPO/tools/autotest/checks/wallet_id.lua" >/dev/null || abort "could not load the check's Lua"
 wait_true 90 'CFWallet.caseActive()' || abort "no case started, so the identity observer stays off"
@@ -64,7 +64,7 @@ row="$(ev "return CFWallet.row([[$wallet]])")"
 summary="$(cut -f1 <<<"$row")"; detail="$(cut -f2- <<<"$row")"
 "$PZ" shot "$RUNS/$id-wallet.png" >/dev/null 2>&1
 errors="$(mod_errors)"
-"$PZ" stop
+end_world
 
 verdict=PASS; why=""
 [ -n "$summary" ] || { verdict=FAIL; why="the wallet ID was on screen and never recorded"; }

@@ -1,0 +1,8 @@
+PASS knox.os - 2026-09-15T14:06:52+02:00
+commit: a87b440
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+session: 20260915T140345
+opened:   true	FILES	1	false	false	1
+names:    true	NAMES	1	false	false	2
+dates:    true	DATES	1	false	false	4
+to do:    true	TO DO	1	false	false	5

@@ -36,7 +36,7 @@ f() { cut -f"$1"; }
 load_probe() { ev -f "$HERE/pdagame.lua" >/dev/null; }
 
 claim_game || exit 2
-"$PZ" start "${start_args[@]}" || abort "the game did not reach a playable world"
+start_cold "${start_args[@]}" || abort "the game did not reach a playable world"
 world="$(cat "$REPO/dev/eval/linux/world")"
 export CF_EVAL_TIMEOUT=120
 wait_true 120 'ConspiracyFiles~=nil and ConspiracyFiles.OrganiserScreen~=nil' || abort "the mod never loaded"

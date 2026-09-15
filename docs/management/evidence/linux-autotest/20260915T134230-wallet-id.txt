@@ -1,0 +1,12 @@
+Linux wallet ID check 20260915T134230: PASS
+source: a87b440
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+wallet ID: 'ID Card: Damian Norman'; wallet stamp after carrying it off: corpse-wallet:67183722
+notebook summary: Identity document - container
+notebook text:
+  I saw a document labelled "ID Card: Damian Norman" inside Wallet. That container was taken off a corpse.
+  The name on a document is a lead. It does not establish who owned the container or identify the body.
+  Observed at 102 E Maple St.
+loose ID on a body: not exercised: no body carried a loose ID
+errors inside the mod: 0
+screenshot: dev/eval/linux/runs/20260915T134230-wallet.png (not committed)

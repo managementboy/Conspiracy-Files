@@ -16,7 +16,7 @@ abort() { say "$*"; "$PZ" stop; exit 2; }
 fails=(); fail() { fails+=("$*"); say "FAIL: $*"; }
 
 claim_game || exit 2
-"$PZ" start "${start_args[@]}" || abort "the game did not reach a playable world"
+start_world "${start_args[@]}" || abort "the game did not reach a playable world"
 id="$(session)"
 for f in core_loop reload death; do ev -f "$REPO/tools/autotest/checks/$f.lua" >/dev/null || abort "could not load $f.lua"; done
 wait_true 90 'ConspiracyFiles.GeneratedRuntime.metrics()~=nil' || abort "no case started"
@@ -85,7 +85,7 @@ else
 fi
 errors="$(mod_errors)"
 "$PZ" shot "$RUNS/$id-death.png" >/dev/null 2>&1
-"$PZ" stop >/dev/null 2>&1
+end_world
 
 verdict=PASS; [ ${#fails[@]} -eq 0 ] || verdict=FAIL
 [ -z "$errors" ] || { verdict=FAIL; fails+=("errors inside the mod"); }

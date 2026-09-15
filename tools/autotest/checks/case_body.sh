@@ -16,7 +16,7 @@ fails=(); fail() { fails+=("$*"); say "FAIL: $*"; }
 f() { cut -f"$1"; }
 
 claim_game || exit 2
-"$PZ" start "${start_args[@]}" || abort "the game did not reach a playable world"
+start_world "${start_args[@]}" || abort "the game did not reach a playable world"
 id="$(session)"
 wait_true 120 'ConspiracyFiles~=nil and ConspiracyFiles.CasePerson~=nil' || abort "the mod never answered"
 ev -f "$REPO/tools/autotest/checks/case_body.lua" >/dev/null || abort "could not load the check's Lua"
@@ -91,7 +91,7 @@ say "log: ${line:-nothing logged}"
 [ -n "$line" ] || fail "the body handler logged nothing"
 errors="$(mod_errors)"
 [ -z "$errors" ] || fail "errors inside the mod: $(head -1 <<<"$errors")"
-"$PZ" stop >/dev/null 2>&1
+end_world
 
 verdict=PASS; [ ${#fails[@]} -eq 0 ] || verdict=FAIL
 report="$EVIDENCE/$id-case-body.txt"

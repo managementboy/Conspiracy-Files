@@ -6,6 +6,7 @@
 #   tools/autotest/pz.sh shot out.png        screenshot of the game window
 #   tools/autotest/pz.sh log [N]             last N mod log lines of this run
 #   tools/autotest/pz.sh status
+#   tools/autotest/pz.sh fresh [ARGS]        new world in the running game (back to menu, mods reload)
 #   tools/autotest/pz.sh start --continue [WORLD]  reload the last run's save (or WORLD)
 #   tools/autotest/pz.sh stop [--save]       quit the game (force after 60s); --save saves first
 #
@@ -120,6 +121,99 @@ click_window() {
     xdotool mousemove "$X" "$Y" 2>/dev/null || true
 }
 
+# The session file the helper mod reads on the main menu, and the id every log
+# line of this run is found by. Prints the id. Shared by start and fresh.
+write_session() { # write_session MORTAL CONTINUE_WORLD AT
+    local mortal="$1" cont="$2" at="$3" id
+    id="$(date +%Y%m%dT%H%M%S)"
+    echo "$id" > "$LOCAL/session"
+    {
+        echo "session=$id"
+        echo "expires=$(( $(date +%s) + 600 ))"
+        [ -z "$mortal" ] || echo "mortal=1"
+        [ -z "$cont" ] || { echo "mode=continue"; echo "world=$cont"; }
+        if [ -n "$at" ]; then IFS=, read -r x y z <<<"$at"; echo "x=$x"; echo "y=$y"; echo "z=${z:-0}"; fi
+    } > "$SESSION_FILE"
+    echo "$id"
+}
+
+# Wait for this session's world to be playable: the helper mod's launch marker,
+# "game loading took", the click past "click to start", then DevEval's ready
+# line. Everything is found after THIS session's marker, so a game that has run
+# earlier worlds (fresh) cannot be mistaken for ready. Shared by start and fresh.
+wait_ready() { # wait_ready CONSOLE_FLAG
+    local console="$1" deadline=$(( $(date +%s) + 300 )) stage=launch last_click=0 seen=""
+    while [ "$(date +%s)" -lt "$deadline" ]; do
+        if [ -n "$(pid)" ]; then seen=1
+        elif [ -n "$seen" ]; then say "game exited during start"; rm -f "$SESSION_FILE"; exit 1; fi
+        local out; out="$(since_launch)"
+        case "$stage" in
+            launch) [ -n "$out" ] && { stage=loading; say "new world is loading"; } ;;
+            loading) grep -q "game loading took" <<<"$out" && { stage=click; say "$(grep -o 'game loading took.*' <<<"$out" | tail -1)"; } ;;
+            click)
+                if grep -qF "[CF-EVAL] ready" <<<"$out"; then
+                    rm -f "$SESSION_FILE"
+                    # Check for a command every 200 ms instead of every second: each step
+                    # of a check waits on this (owner, 2026-09-15). Set here, not in the mod,
+                    # so the shipped build is unchanged.
+                    CF_EVAL_TIMEOUT=15 "$REPO/tools/cf_eval.sh" 'ConspiracyFiles.DevEval.POLL_MS=200; return true' >/dev/null 2>&1 || say "could not speed up command polling"
+                    # Remember the world, so `start --continue` can reload it.
+                    CF_EVAL_TIMEOUT=15 "$REPO/tools/cf_eval.sh" 'return getWorld():getWorld()' 2>/dev/null | sed -n 's/^ok //p' > "$LOCAL/world"
+                    [ -n "$console" ] || CF_EVAL_TIMEOUT=15 "$REPO/tools/cf_eval.sh" 'return CFAutoTest.hideConsole()' >/dev/null 2>&1 || say "could not hide the Lua console"
+                    grep -E '\[CF-SELFCHECK\]|version=|\[CF\] v=' <<<"$out" | sed 's/^.*> //' | head -3 >&2 || true
+                    say "ready; use: tools/autotest/pz.sh eval 'return getPlayer():getX()'"
+                    return 0
+                fi
+                if [ $(( $(date +%s) - last_click )) -ge 4 ]; then click_window; last_click=$(date +%s); fi ;;
+        esac
+        sleep 1
+    done
+    say "start timed out at stage '$stage'; see: tools/autotest/pz.sh shot /tmp/pz.png"
+    rm -f "$SESSION_FILE"
+    exit 2
+}
+
+# A new world in the game that is already running (owner, 2026-09-15: "to start
+# a fresh game you dont have to start the whole game"). Going back to the main
+# menu reloads every mod's Lua (owner, the same day), so the helper mod launches
+# the new world from the menu just as after a cold start, and DevEval comes up
+# fresh in it. Starts the game instead when none is running, when it does not
+# answer, or when it runs on a different display than the one asked for.
+# `--continue` needs a real save and reload, so fresh refuses it.
+cmd_fresh() {
+    local at="" hidden="" console="" mortal="" args=("$@")
+    while [ $# -gt 0 ]; do
+        case "$1" in
+            --at) at="${2:?--at X,Y,Z}"; shift 2 ;;
+            --hidden) hidden=1; shift ;;
+            --console) console=1; shift ;;
+            --mortal) mortal=1; shift ;;
+            --continue) say "fresh cannot continue a save; use start --continue"; exit 2 ;;
+            *) say "unknown option $1"; exit 2 ;;
+        esac
+    done
+    local p running_hidden=""
+    p="$(pid)"
+    [ -f "$LOCAL/display" ] && running_hidden=1
+    if [ -z "$p" ]; then cmd_start "${args[@]}"; return; fi
+    if [ "$running_hidden" != "$hidden" ] || ! CF_EVAL_TIMEOUT=10 "$REPO/tools/cf_eval.sh" 'return true' >/dev/null 2>&1; then
+        say "the running game cannot be reused; starting it again"
+        cmd_stop
+        cmd_start "${args[@]}"
+        return
+    fi
+    setup
+    local last id
+    last="$(cat "$LOCAL/session" 2>/dev/null || true)"
+    id="$(write_session "$mortal" "" "$at")"
+    # Every run is found in the log by its session id, and the log is no longer
+    # wiped between worlds: two ids in the same second would find the old world.
+    if [ "$id" = "$last" ]; then sleep 1; id="$(write_session "$mortal" "" "$at")"; fi
+    say "new world in the running game, session $id"
+    CF_EVAL_TIMEOUT=5 "$REPO/tools/cf_eval.sh" 'getCore():exitToMenu(); return true' >/dev/null 2>&1 || true
+    wait_ready "$console"
+}
+
 cmd_start() {
     local at="" hidden="" console="" mortal="" cont="" p
     while [ $# -gt 0 ]; do
@@ -146,15 +240,7 @@ cmd_start() {
         rm -f "$LOCAL/display"
         export DISPLAY="$REAL_DISPLAY"
     fi
-    local id; id="$(date +%Y%m%dT%H%M%S)"
-    echo "$id" > "$LOCAL/session"
-    {
-        echo "session=$id"
-        echo "expires=$(( $(date +%s) + 600 ))"
-        [ -z "$mortal" ] || echo "mortal=1"
-        [ -z "$cont" ] || { echo "mode=continue"; echo "world=$cont"; }
-        if [ -n "$at" ]; then IFS=, read -r x y z <<<"$at"; echo "x=$x"; echo "y=$y"; echo "z=${z:-0}"; fi
-    } > "$SESSION_FILE"
+    local id; id="$(write_session "$mortal" "$cont" "$at")"
     say "launching session $id"
     # setsid -f: the launcher must not keep this script's stdout open, or
     # anything reading our output (a pipe, a test runner) never sees EOF.
@@ -230,6 +316,7 @@ cmd_shot() {
 
 case "${1:-}" in
     start) shift; cmd_start "$@" ;;
+    fresh) shift; cmd_fresh "$@" ;;
     eval) shift; exec "$REPO/tools/cf_eval.sh" "$@" ;;
     stop) shift; cmd_stop "$@" ;;
     shot) shift; cmd_shot "$@" ;;

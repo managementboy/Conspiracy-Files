@@ -28,7 +28,7 @@ CYCLES="${CF_PDA_CYCLES:-200}"
 CHURN="${CF_PDA_CHURN:-40}"
 
 claim_game || exit 2
-"$PZ" start "${start_args[@]}" || abort "the game did not reach a playable world"
+start_world "${start_args[@]}" || abort "the game did not reach a playable world"
 export CF_EVAL_TIMEOUT=180
 wait_true 120 'ConspiracyFiles~=nil and ConspiracyFiles.OrganiserScreen~=nil' || abort "the mod never loaded"
 ev -f "$HERE/pdalife.lua" >/dev/null || abort "could not load the probe"
@@ -106,12 +106,14 @@ say "stores after:   $(f 2 <<<"$stores1")"
 after_errors="$(mod_error_count)"
 new_errors=$((after_errors - before_errors))
 [ "$new_errors" -le 0 ] || fail "$new_errors new error lines logged by the mod during this run"
-mod_errors="$( { grep -c 'ERROR.*ConspiracyFiles\|Exception.*ConspiracyFiles' "$CONSOLE" 2>/dev/null || true; } | head -1 )"
+# This run only: in a suite the game keeps running, so the log holds earlier
+# checks' worlds too.
+mod_errors="$( { run_log | grep -c 'ERROR.*ConspiracyFiles\|Exception.*ConspiracyFiles' || true; } | head -1 )"
 mod_errors="${mod_errors:-0}"
 say "log: $new_errors new mod error lines, $mod_errors engine exceptions naming the mod"
 
 "$PZ" shot "$RUNS/$(session)-pdalife.png" >/dev/null 2>&1
-"$PZ" stop
+end_world
 
 id="$(session)"
 verdict=PASS; [ ${#fails[@]} -eq 0 ] || verdict=FAIL

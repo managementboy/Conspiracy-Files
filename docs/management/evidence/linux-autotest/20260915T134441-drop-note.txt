@@ -1,0 +1,9 @@
+Linux drop-to-note check 20260915T134441: PASS
+source: a87b440
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+case: 5	1:placed@102 E Maple St; 2:placed@127 S Main St; 3:placed@127 S Main St; 4:placed@127 S Main St; 5:placed@127 S Main St
+carried: 4, left lying: Access memo / 7C-41
+drop: true	5	NOTED 5
+second drop: true	0	ALREADY NOTED
+names from papers: true	0		
+FINDING: no noted paper named a case person, so NAMES was not exercised

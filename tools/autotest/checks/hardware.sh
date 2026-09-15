@@ -20,7 +20,7 @@ fails=(); fail() { fails+=("$*"); say "FAIL: $*"; }
 f() { cut -f"$1"; }
 
 claim_game || exit 2
-"$PZ" start "${start_args[@]}" || abort "the game did not reach a playable world"
+start_world "${start_args[@]}" || abort "the game did not reach a playable world"
 export CF_EVAL_TIMEOUT=90
 wait_true 120 'ConspiracyFiles~=nil and ConspiracyFiles.Organiser~=nil' || abort "the mod never answered"
 ev -f "$REPO/tools/autotest/checks/hardware.lua" >/dev/null || abort "could not load the check's Lua"
@@ -354,7 +354,7 @@ grep -q 'This is me' <<<"$card" || fail "the survivor's card lost its own text: 
 errors="$(mod_errors)"
 [ -z "$errors" ] || fail "errors inside the mod: $errors"
 id="$(session)"
-"$PZ" stop
+end_world
 
 verdict=PASS; [ ${#fails[@]} -eq 0 ] || verdict=FAIL
 out="$REPO/docs/management/evidence/linux-autotest/$(date +%Y%m%dT%H%M%S)-hardware.txt"

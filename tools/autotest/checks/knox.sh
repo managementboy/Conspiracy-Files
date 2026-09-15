@@ -18,7 +18,7 @@ fails=(); fail() { fails+=("$*"); say "FAIL: $*"; }
 shot() { "$PZ" shot "$RUNS/$(session)-knox-$1.png" >/dev/null 2>&1; }
 
 claim_game || exit 2
-"$PZ" start "${start_args[@]}" || abort "the game did not reach a playable world"
+start_world "${start_args[@]}" || abort "the game did not reach a playable world"
 # A fresh world spends its first half-minute indexing addresses, and a driver
 # sent into that gets no slot before the eval channel gives up. Wait for the
 # mod to answer, then allow a long load and retry it (knox check, 2026-09-12).
@@ -173,7 +173,7 @@ say "to do: $(ev 'return CFOrg.programs()' | cut -f2)"
 errors="$(mod_errors)"
 [ -z "$errors" ] || fail "errors inside the mod: $errors"
 id="$(session)"
-"$PZ" stop
+end_world
 
 verdict=PASS; [ ${#fails[@]} -eq 0 ] || verdict=FAIL
 out="$REPO/docs/management/evidence/linux-autotest/$(date +%Y%m%dT%H%M%S)-knox.txt"

@@ -22,7 +22,7 @@ findings=()
 f() { cut -f"$1"; }
 
 claim_game || exit 2
-"$PZ" start "${start_args[@]}" || abort "the game did not reach a playable world"
+start_world "${start_args[@]}" || abort "the game did not reach a playable world"
 id="$(session)"
 ev -f "$REPO/tools/autotest/checks/core_loop.lua" >/dev/null || abort "could not load core_loop.lua"
 ev -f "$REPO/tools/autotest/checks/drop_note.lua" >/dev/null || abort "could not load the check's Lua"
@@ -100,7 +100,7 @@ say "names from papers: $(f 3 <<<"$nm")"
 
 errors="$(mod_errors)"
 [ -z "$errors" ] || fail "errors inside the mod: $errors"
-"$PZ" stop
+end_world
 
 verdict=PASS; [ ${#fails[@]} -eq 0 ] || verdict=FAIL
 report="$EVIDENCE/$id-drop-note.txt"

@@ -22,7 +22,7 @@ fails=(); fail() { fails+=("$*"); say "FAIL: $*"; }
 f() { cut -f"$1"; }
 
 claim_game || exit 2
-"$PZ" start "${start_args[@]}" || abort "the game did not reach a playable world"
+start_cold "${start_args[@]}" || abort "the game did not reach a playable world"
 export CF_EVAL_TIMEOUT=90
 wait_true 120 'ConspiracyFiles~=nil and ConspiracyFiles.OrganiserScreen~=nil' || abort "the mod never loaded"
 ev 'ConspiracyFiles.OrganiserScreen.open()' >/dev/null

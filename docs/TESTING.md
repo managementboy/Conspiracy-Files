@@ -35,10 +35,17 @@ These boot an actual Project Zomboid, drive it through the eval channel and
 read the console log back.
 
 ```bash
-tools/autotest/suite.sh                  # everything: 17 checks, 43 min 41 s on 2026-09-15
+tools/autotest/suite.sh                  # everything: 17 checks, 35 min 8 s on 2026-09-15
 tools/autotest/checks/pdagame.sh         # one check
 tools/autotest/checks/pdagame.sh --hidden
 ```
+
+**The suite keeps one game running.** `suite.sh` sets `CF_KEEP_GAME=1`, so
+each check starts its world with `pz.sh fresh`: back to the main menu (which
+reloads the mods) and straight into a new world, without restarting the game.
+Checks that need a cold start of their own (`reload`, `pdagame`, `perf`,
+`pdaperf`) still restart it. Run on its own, every check restarts the game as
+before. This took the suite from 43 min 41 s to 35 min 8 s.
 
 **`--hidden` costs you the GPU.** It runs the game inside `Xvfb`, which has no
 DRI device, so OpenGL falls back to `llvmpipe` — a software rasteriser. Every
