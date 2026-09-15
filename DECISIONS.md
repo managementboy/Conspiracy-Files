@@ -737,6 +737,15 @@ loot; condition, fuel and access are the game's.
 A finished case shrinks to its notebook rows and last-seen lines outside the
 live case budget, so a save keeps getting new cases after ten.
 
+**P4-R112 — the survivor asks themself, in the first person.** Owner,
+2026-09-15, on the proposed end-of-case questions: "We should use the player's
+voice when writing: What do you make of it? Should be What do I make of it?"
+Questions the organiser puts to the player, and the answers it writes back into
+the journal, are the survivor thinking - "What do I make of it?", "Which reading
+do I believe?", "Who do I think matters here?", "What would I check next?", "I
+can't tell" - never a narrator or a quiz master addressing "you". (The question
+set itself is proposed, not yet approved or built.)
+
 **P4-R106 — how a car's containers are reached.** Owner, 2026-09-14: "The globe
 box only opens when sitting in the front of the car", and a truck bed or trunk
 is reached from outside, "only if they are open". Placement may still put a
