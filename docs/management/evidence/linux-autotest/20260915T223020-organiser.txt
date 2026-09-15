@@ -1,0 +1,5 @@
+PASS organiser - 2026-09-15T22:30:20+02:00
+commit: 94988aa
+renderer: Mesa llvmpipe (LLVM 20.1.2, 256 bits) (SOFTWARE) on display :0
+issued: true	ConspiracyFiles.Organiser	1	true
+after reload: true	ConspiracyFiles.Organiser	1	true

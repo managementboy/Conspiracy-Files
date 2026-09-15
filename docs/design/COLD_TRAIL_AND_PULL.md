@@ -15,7 +15,7 @@ that it **never sets objectives**.
 The switch dissolves it. The mod does not decide the player should travel; the
 player decides a trail has gone cold and asks for something else. A response to
 a request is not an objective. "A lead is never proof" is untouched, and so is
-"the notebook records, it does not direct".
+"the organiser records, it does not direct".
 
 It is also the right call for survival play. An unrequested pull across Knox
 can get somebody killed a long way from their base, and a mod that does that
@@ -28,7 +28,7 @@ The codebase already has retirement, and this is **not** it.
 
 - **Retired** (`Generated/RetiredCase.lua`): every document was found. The
   session root becomes worthless and is compressed to the evidence rows the
-  notebook renders. A finished thread.
+  organiser renders. A finished thread.
 - **Cold** (new): the player is done with it, and documents are **still out
   there undiscovered**. An abandoned thread.
 
@@ -46,7 +46,7 @@ or keep a dead case occupying one of the four active slots forever.
    relocate on abandonment. If the player passes that building in three weeks,
    the clue is still in the drawer, and finding it then is a better moment than
    any the mod could have engineered.
-4. **Keep what was learned.** Everything already in the notebook stays, in
+4. **Keep what was learned.** Everything already in the case record stays, in
    order. Going cold on a trail does not unlearn it.
 5. **Stay reversible.** A cold trail that the player stumbles back into should
    be able to warm up again. Nothing about "cold" should be permanent, because
@@ -57,14 +57,14 @@ or keep a dead case occupying one of the four active slots forever.
 The next case anchors somewhere distant and distinctive rather than in the next
 street. **But the pull must still be a lead, not a waypoint.**
 
-The wrong shape: a notebook entry saying "travel to the race track". That is a
+The wrong shape: a FILES entry saying "travel to the race track". That is a
 quest marker with better prose.
 
 The right shape: **a document, found locally, that refers to somewhere else.** A
 delivery manifest routed to a hospital's loading bay. A membership card for a
 club two towns over. A payroll stub from an employer that is not here. The
 player reads it, forms an intention, and travels because they decided to - the
-notebook only ever recorded what the evidence said.
+organiser only ever recorded what the evidence said.
 
 This is exactly the mechanism `USING_GAME_ASSETS.md` Phase 3 describes: a role
 that **names an organisation** or **places a person somewhere**. The pull is not
@@ -110,7 +110,7 @@ These are the ways this idea goes wrong, written down before it is built:
 ## What this needs, smallest first
 
 1. A **cold** state distinct from retired, with the five behaviours above.
-2. A player action to enter it - in the notebook, worded as the survivor's own
+2. A player action to enter it - on the organiser, worded as the survivor's own
    judgement rather than as a game function.
 3. A **role that names a distant place** (Phase 3 work, already planned).
 4. A **curated landmark list** with coordinates, as T3 requires.

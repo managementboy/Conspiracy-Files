@@ -23,8 +23,8 @@ and does nothing, silently.
 
 ## Confirm it is working
 
-Open the notebook. In debug mode its title bar shows the build, e.g.
-`Survivor's Notebook [DEV-0.8.12-selfcheck]`. Check it matches the version you
+Look at `console.txt`: every `[CF-DEAD-AIR]` line carries the build, e.g.
+`version=DEV-0.8.12-selfcheck`. Check it matches the version you
 were given - a stale install is the single most common cause of "it does not
 work".
 
@@ -51,7 +51,7 @@ Useful lines all begin `[CF-`:
     [CF-PERSON]     the corpse / key / building chain
     [CF-IDENTITY]   why an inventory pane was or was not observed
 
-Send `console.txt` plus what you were doing. A screenshot of the notebook helps
+Send `console.txt` plus what you were doing. A screenshot of the organiser helps
 for anything about ordering or wording.
 
 ## Known and expected
@@ -60,4 +60,4 @@ for anything about ordering or wording.
   case revision". That is deliberate: the case format changed. Start a new save.
 - A clue hint is a quiet speech bubble with floating text and a soft blip. It is
   meant to be missable; the log records every one either way.
-- The notebook records; it never sets objectives and never announces a solution.
+- The organiser records; it never sets objectives and never announces a solution.

@@ -6,6 +6,10 @@ package.preload["ConspiracyFiles/Generated/PlaceNames"]=function()
     return {render=function(text) return text end}
 end
 getTexture=function(path) return {path=path} end
+local current={}
+package.preload["ConspiracyFiles/EvidenceRows"]=function()
+    return {list=function() return current end,where=function() return nil end}
+end
 ConspiracyFiles={}
 local G=require("ConspiracyFiles/Generated/Generator")
 local A=require("ConspiracyFiles/KnoxApps")
@@ -19,7 +23,7 @@ local rows={
     {id="d4",title="Receipt / LD-527",detailText="Received from Delia Mercer. Countersigned Joanne Vossberg."},
     {id="d5",title="Note",detailText="Left for Jarvis Harding."},
 }
-ConspiracyFiles.NotebookUI={generatedRows=function() return rows end}
+current=rows
 ConspiracyFiles.PersonNameLog={names=function() return {"Jarvis Harding"} end}
 ConspiracyFiles.IdentityObserver={rows=function()
     return {{title="Found Ines Kubiak's ID card",detailText="An ID card.",id="id1",person="Ines Kubiak"}}
@@ -45,7 +49,7 @@ assert(#A.names.list("Named")==#list,"a name from evidence is Named")
 assert(#A.names.list("Unnamed")==0,"and never Unnamed")
 assert(#A.names.list("Linked")==0,"Linked stays what the player connected")
 
-ConspiracyFiles.NotebookUI={generatedRows=function() return {} end}
+current={}
 assert(#A.names.list("All")==1,"no evidence inspected, no names from evidence")
 
 print("PASS knox case names: names on inspected case evidence reach NAMES, whole names only, identity rows kept, filters honest")

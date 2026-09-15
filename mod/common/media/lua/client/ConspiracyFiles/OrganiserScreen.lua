@@ -1261,6 +1261,12 @@ function S.open()
     local w=Screen:new()
     w:initialise(); w:instantiate(); w:addToUIManager()
     S.window=w
+    -- WP6. Opening your notes somewhere means you were thinking about that
+    -- place, which is a better signal than standing in it - and it is the one
+    -- stamp a debug teleport cannot fake. Whether it counts as a RETURN is
+    -- decided by PlaceVisits. The boot screen is not a read, so it is not one.
+    local discoveries=ConspiracyFiles.DiscoveryLog
+    if not S.booting and discoveries and discoveries.visit then safe(discoveries.visit) end
     log("organiser screen opened")
     return w
 end
@@ -1271,7 +1277,9 @@ function S.close() if S.window then S.window:close() end end
 -- what the mod is actually doing. It does NOT take the survivor's hand for
 -- this - a boot screen is the device in your bag, not in your fist.
 function S.boot()
+    S.booting=true
     local w=S.open()
+    S.booting=nil
     if w then w.booting=true end
     return w
 end

@@ -679,7 +679,7 @@ These instantiate the targets in `docs/requirements/PLAYER_MOMENTS.md`.
 
 **Encounter now:** D6 states that Pike's shift did not have the advance memo, while D5 is dated before the seizure; D6 also records two incompatible descriptions of `H. Vale`.
 
-**On screen:** both source records remain visible. The notebook adds a concise contradiction entry/major marker only when the required documents are actually known. It does not choose which source is correct.
+**On screen:** both source records remain visible. The record adds a concise contradiction entry/major marker only when the required documents are actually known. It does not choose which source is correct.
 
 **Journal/evidence change:** append the deterministic contradiction journal event; evidence remains immutable.
 

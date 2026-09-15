@@ -11,7 +11,7 @@
 #           "What do I make of it?" said once; FILES gains its row. Its questions
 #           are answered on the organiser: the other reading, the second person,
 #           the records.
-#   reload  save, quit, continue: the answers, the notebook order, the Old
+#   reload  save, quit, continue: the answers, the record order, the Old
 #           evidence comes back, and the save has not grown.
 #   case 2  built from those answers: placed within reach and on sites no case
 #           used; the second person returns without a second body; the case
@@ -22,7 +22,7 @@
 #   limit   more cases arrive until four are unfinished, the most the save
 #           allows; the timer keeps trying; then case 3 is finished and a new
 #           case must still come (the preparation flag must not stick).
-# Throughout: the notebook reads case by case, finished evidence stays Old and live
+# Throughout: the record reads case by case, finished evidence stays Old and live
 # ones Evidence, NAMES grows, map marks catch up with a pen, the save size is
 # recorded per stage, the per-frame cost is sampled, and the mod logs no errors
 # in any session. Takes about half an hour. Not in suite.sh.
@@ -68,12 +68,12 @@ stage() { # stage LABEL: one row of the stage table, and the checks every stage 
     local s q c o b
     s="$(ev 'return CFCamp.surfaces()')"; q="$(cases)"
     c="$(ev 'return CFCamp.categories()')"; o="$(ev 'return CFCamp.order()')"; b="$(bytes)"
-    stages+=("$(printf '%-22s cases %s (%s finished) | notebook %s | FILES questions %s | NAMES %s | PLACES %s | Old %s/%s wrong | Evidence %s/%s wrong | order %s | save %s B' \
+    stages+=("$(printf '%-22s cases %s (%s finished) | record %s | FILES questions %s | NAMES %s | PLACES %s | Old %s/%s wrong | Evidence %s/%s wrong | order %s | save %s B' \
         "$1" "$(field 1 "$q")" "$(field 2 "$q")" "$(field 5 "$s")" "$(field 1 "$s")" "$(field 3 "$s")" "$(field 4 "$s")" \
         "$(field 1 "$c")" "$(field 2 "$c")" "$(field 3 "$c")" "$(field 4 "$c")" "$(field 2 "$o")" "$b")")
     saves+=("$1 $b")
     say "${stages[-1]}"
-    [ "$(field 1 "$o")" = true ] || fail "$1: the notebook does not read case by case: $(field 2 "$o")"
+    [ "$(field 1 "$o")" = true ] || fail "$1: the record does not read case by case: $(field 2 "$o")"
     [ "$(field 4 "$c")" = 0 ] || fail "$1: $(field 4 "$c") carried items of a live case are not Evidence"
     [ "$b" -le 500000 ] 2>/dev/null || fail "$1: the save measured $b bytes, over the 500 kB budget"
     QROWS="$(field 1 "$s")"; NAMES_NOW="$(field 3 "$s")"; PLACES_NOW="$(field 4 "$s")"
@@ -188,13 +188,13 @@ answers="$(ev "return CFCamp.answersOf([[$case1]])")"
     || fail "case 1: the organiser saved $(field 2 "$answers")/$(field 3 "$answers")/$(field 4 "$answers"), not two/person2/records"
 person2="$(field 7 "$answers")"
 findings+=("case 1 note on the organiser: $(field 2 "$answered")")
-notebook="$(ev 'return CFReload.notebook()')"; bytes_before="$(bytes)"; parts_before="$(ev 'return CFReload.bytes()' | cut -f2)"
+record="$(ev 'return CFReload.record()')"; bytes_before="$(bytes)"; parts_before="$(ev 'return CFReload.bytes()' | cut -f2)"
 perf_note "case 1"
 
 # --- reload 1 ---------------------------------------------------------------
 reload_world "reload 1"
 [ "$(ev "return CFCamp.answersOf([[$case1]])")" = "$answers" ] || fail "reload 1: the answers changed: $(ev "return CFCamp.answersOf([[$case1]])" | tr '\t' ' ')"
-[ "$(ev 'return CFReload.notebook()')" = "$notebook" ] || fail "reload 1: the notebook changed"
+[ "$(ev 'return CFReload.record()')" = "$record" ] || fail "reload 1: the record changed"
 old_settled "after reload 1"
 stage "after reload 1"
 reload_growth "reload 1" "$bytes_before" "$parts_before"
@@ -240,12 +240,12 @@ placed_well "case 3" "$case3" "$(field 1 "$here")" "$(field 2 "$here")" "$(field
 play_case "$case3" 2
 [ "$PLAYED" = 2 ] || fail "case 3: only $PLAYED of 2 clues could be played"
 stage "case 3, two clues"
-notebook="$(ev 'return CFReload.notebook()')"; bytes_before="$(bytes)"; parts_before="$(ev 'return CFReload.bytes()' | cut -f2)"
+record="$(ev 'return CFReload.record()')"; bytes_before="$(bytes)"; parts_before="$(ev 'return CFReload.bytes()' | cut -f2)"
 perf_note "case 3"
 
 # --- reload 2 ---------------------------------------------------------------
 reload_world "reload 2"
-[ "$(ev 'return CFReload.notebook()')" = "$notebook" ] || fail "reload 2: the notebook changed"
+[ "$(ev 'return CFReload.record()')" = "$record" ] || fail "reload 2: the record changed"
 s3="$(ev "return CFCamp.steerOf([[$case3]])" | field 1)"   # "none" once case 3 has finished (a two-clue case can)
 [ "$s3" = unsteered ] || [ "$s3" = none ] || fail "reload 2: case 3 gained a steer ($s3)"
 [ "$(ev "return CFCamp.answersOf([[$case1]])" | field 5)" = "$case2" ] || fail "reload 2: case 1's answers lost their used mark"

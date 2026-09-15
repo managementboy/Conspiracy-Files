@@ -431,8 +431,7 @@ end
 -- now only a unit test had seen it.
 function L.dateNotes()
     local Memo = require("ConspiracyFiles/Generated/RelayMemo")
-    local ui = ConspiracyFiles.NotebookUI
-    local rows = (ui and ui.generatedRows and ui.generatedRows("evidence")) or {}
+    local rows = require("ConspiracyFiles/EvidenceRows").list("evidence") or {}
     local memo, dated, noted = false, 0, 0
     for _, r in ipairs(R.known()) do
         if r.kind == Memo.KIND then memo = true
@@ -444,7 +443,7 @@ function L.dateNotes()
     return tostring(memo), tostring(dated), tostring(noted)
 end
 
--- What the notebook knows: count and the newest titles.
+-- What the survivor has noted: count and the newest titles.
 function L.known()
     local rows = R.known()
     local titles = {}

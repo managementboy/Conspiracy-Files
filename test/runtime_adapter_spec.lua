@@ -10,7 +10,6 @@ end
 local function environment(fn,server)
     local names={"ConspiracyFiles","Events","ModData","isClient","isServer","isDebugEnabled","getTimestampMs","getGameVersion","ZombRand","getCell","getPlayer","getSpecificPlayer","instanceItem","instanceof","print"}
     local previous={}; for _,name in ipairs(names) do previous[name]=_G[name] end
-    local oldUI=package.loaded["ConspiracyFiles/Notebook"]
     local logs,handlers,stored={},{},{}
     _G.print=function(text) logs[#logs+1]=text end
     _G.ConspiracyFiles=nil
@@ -54,11 +53,9 @@ local function environment(fn,server)
         return item
     end
     _G.instanceof=function(item,kind) return kind=="InventoryItem" and type(item)=="table" and item.isMockItem==true end
-    local readerCalls,readerContext=0,nil
-    package.loaded["ConspiracyFiles/Notebook"]={open=function() end,refresh=function() end,openReader=function(_,_,context) readerCalls=readerCalls+1; readerContext=context end}
     local rt=dofile(runtimePath)
     local e={rt=rt,stored=stored,containers=containers,inventory=inventory,handlers=handlers,logs=logs,
-        writes=function() return writes end,reader=function() return readerCalls,readerContext end}
+        writes=function() return writes end}
     function e.tick(count) for _=1,count do for _,handler in ipairs(handlers.OnTick) do handler() end end end
     function e.menu(item)
         local menu={options={}}
@@ -73,7 +70,6 @@ local function environment(fn,server)
     end
     local ok,why=pcall(fn,e)
     for _,name in ipairs(names) do _G[name]=previous[name] end
-    package.loaded["ConspiracyFiles/Notebook"]=oldUI
     assertTrue(ok,why)
 end
 test("runtime mock composes seven exact placements and reloads without duplicate items",function()
@@ -133,19 +129,18 @@ test("menu mock generic marks require ownership and retain a durable single inte
         e.rt.start(); assertTrue(investigationAction(e.menu(item)).notAvailable)
     end)
 end)
-test("menu mock delivers approved context only after a successful committed discovery",function()
+test("menu mock records a discovery only after a successful committed inspection",function()
     environment(function(e)
         e.rt.start(); e.tick(500); dofile(menuPath)
         local item=e.find(Content.ids.d1)
         local menu=e.menu(item); local action=investigationAction(menu)
-        local source=item.outer; item.outer=nil; action.callback(); assertEqual(0,e.reader()); item.outer=source
+        local source=item.outer; item.outer=nil; action.callback(); assertEqual(0,#e.rt.state.snapshot().evidence); item.outer=source
         e.rt.faultPoint="before-canonical-swap"; action.callback()
-        assertEqual(0,e.reader()); assertEqual(0,#e.rt.state.snapshot().evidence)
-        action.callback(); local count,context=e.reader()
-        assertEqual(1,count); assertEqual(Content.assets[Content.ids.d1].contextText,context)
+        assertEqual(0,#e.rt.state.snapshot().evidence)
+        action.callback(); assertEqual(1,#e.rt.state.snapshot().evidence)
         assertEqual(2,#e.rt.state.snapshot().journal)
         action.callback(); assertEqual(2,#e.rt.state.snapshot().journal)
-        item:getModData().cfPhysicalToken="stale"; action.callback(); assertEqual(2,e.reader())
+        item:getModData().cfPhysicalToken="stale"; action.callback(); assertEqual(2,#e.rt.state.snapshot().journal)
         dofile(menuPath); assertEqual(1,#e.handlers.OnFillInventoryObjectContextMenu)
     end)
 end)

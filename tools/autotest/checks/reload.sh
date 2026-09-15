@@ -4,7 +4,7 @@
 #   tools/autotest/checks/reload.sh [--hidden]
 #
 # Fresh world; find and inspect two of the first case's documents; snapshot
-# the notebook order, the case's placements, the schedule and the save-budget
+# the order of noted evidence, the case's placements, the schedule and the save-budget
 # total; save, quit, reload through the main menu's Continue; compare; repeat
 # for three reloads. Catalogue PS-07 (round trip keeps order, text, size),
 # PS-08 (no growth over three reloads), CG-02 (no reroll), AS-04 (clock kept).
@@ -18,8 +18,8 @@ fails=(); fail() { fails+=("$*"); say "FAIL: $*"; }
 load_lua() {
     ev -f "$REPO/tools/autotest/checks/core_loop.lua" >/dev/null && ev -f "$REPO/tools/autotest/checks/reload.lua" >/dev/null
 }
-snapshot() { # prints four lines: notebook, placement, schedule, bytes
-    ev 'return CFReload.notebook()'; ev 'return CFReload.placement()'
+snapshot() { # prints four lines: record, placement, schedule, bytes
+    ev 'return CFReload.record()'; ev 'return CFReload.placement()'
     ev 'return CFReload.schedule()'; ev 'return CFReload.bytes()'
 }
 
@@ -51,7 +51,7 @@ for round in 1 2 3; do
     wait_true 60 'ConspiracyFiles.GeneratedRuntime.metrics()~=nil' || fail "reload $round: the case did not resume"
     sleep 5
     after="$(snapshot)"
-    [ "$(sed -n 1p <<<"$after")" = "$(sed -n 1p <<<"$before")" ] || fail "reload $round: notebook changed: $(sed -n 1p <<<"$after" | cut -c1-200)"
+    [ "$(sed -n 1p <<<"$after")" = "$(sed -n 1p <<<"$before")" ] || fail "reload $round: noted evidence changed: $(sed -n 1p <<<"$after" | cut -c1-200)"
     [ "$(sed -n 2p <<<"$after")" = "$(sed -n 2p <<<"$before")" ] || fail "reload $round: placements changed (reroll?): $(sed -n 2p <<<"$after" | cut -c1-200)"
     [ "$(sed -n 3p <<<"$after" | cut -f1-2)" = "$(sed -n 3p <<<"$before" | cut -f1-2)" ] || fail "reload $round: schedule changed: $(sed -n 3p <<<"$after")"
     sizes+=("$(sed -n 4p <<<"$after" | cut -f1)")
@@ -69,7 +69,7 @@ report="$EVIDENCE/$first-reload.txt"
     echo "Linux reload check $first: $verdict"
     source_line
     echo "world: $world; three save/quit/continue round trips after two documents were inspected"
-    echo "notebook before: $(sed -n 1p <<<"$before" | tr '\t' ' ')"
+    echo "noted evidence before: $(sed -n 1p <<<"$before" | tr '\t' ' ')"
     echo "placements before: $(sed -n 2p <<<"$before" | tr '\t' ' ')"
     echo "schedule before (count, last created hour, scheduled): $(sed -n 3p <<<"$before" | tr '\t' ' ')"
     echo "save-budget total per round (bytes): ${sizes[*]}"

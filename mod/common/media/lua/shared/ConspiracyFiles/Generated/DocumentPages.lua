@@ -1,6 +1,6 @@
 -- The words that are actually on the paper, split into pages an item can hold.
 --
--- A notebook entry is three things: a description of the object, the text
+-- A noted-evidence entry is three things: a description of the object, the text
 -- written on it, and what the survivor makes of it. Only the middle one
 -- belongs on the object. "WHAT YOU FOUND" describes what a player can see by
 -- looking at it, and "WHAT IT MIGHT MEAN" is their own reasoning - a document

@@ -29,7 +29,8 @@ say "issued: $type power=$power favourite=$fav"
 
 r="$(ev 'return CFOrg.read()')"
 [ "$(cut -f1 <<<"$r")" = true ] || fail "reading refused: $(cut -f2 <<<"$r")"
-[ "$(ev 'return CFOrg.uiOpen()' | cut -f1)" = true ] || fail "reading did not open the investigation"
+# Reading takes the machine in hand first; the screen opens when it arrives.
+wait_true 15 'CFOrg.uiOpen()' >/dev/null || fail "reading did not open the organiser's screen"
 "$PZ" shot "$RUNS/$(session)-organiser.png" >/dev/null 2>&1
 ev 'return CFOrg.closeUI()' >/dev/null
 

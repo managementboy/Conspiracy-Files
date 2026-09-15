@@ -4,7 +4,7 @@
 --   "A key I found among a body's belongings matches the building at
 --    11259175162085419."
 --
--- No survivor writes a seventeen-digit number in a notebook. Same class as
+-- No survivor writes a seventeen-digit number in their record. Same class as
 -- "wore a Generic03" and "generic skirt": an internal identifier reaching
 -- player-facing prose.
 --
@@ -45,7 +45,7 @@ assert(unknown:find("a building I have been to", 1, true),
 local none = textOf(nil)
 assert(not none:find("11259175162085419", 1, true), "no lookup must not leak the id")
 
--- A lookup that throws must not take the notebook with it.
+-- A lookup that throws must not take the record with it.
 local threw = textOf(function() error("book not ready") end)
 assert(not threw:find("11259175162085419", 1, true), "a throwing lookup must not leak the id")
 assert(threw:find("a building I have been to", 1, true), "a throwing lookup degrades quietly")

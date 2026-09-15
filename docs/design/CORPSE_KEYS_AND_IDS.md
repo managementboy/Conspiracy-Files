@@ -80,7 +80,7 @@ wrapped in wallets.
 A wallet ID and a second loose ID on the same corpse is exactly the kind of
 ambiguity the project's caution rule exists for: an ID on a body is a lead,
 never proof of who the body was. Two conflicting IDs make that concrete, and
-the notebook's existing wording already handles it without asserting identity.
+the case record's existing wording already handles it without asserting identity.
 
 ## Constraints if this is pursued
 

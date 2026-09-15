@@ -5,7 +5,7 @@
 -- locations, seed/revision bookkeeping) -- is worthless. Nothing needs to
 -- place, reconcile or relocate a clue the player already has. This module
 -- replaces a completed root with a much smaller record that keeps only the
--- case id and the discovered evidence rows the notebook renders: an
+-- case id and the discovered evidence rows FILES renders: an
 -- immutable fact the player learned is never dropped, only the placement
 -- bookkeeping around it.
 -- Pure domain: zero PZ dependencies, testable in plain Lua 5.1.
@@ -39,9 +39,9 @@ M.NAME_MAX=60
 M.ORG_MAX=80
 M.CASE_ID_MAX=80
 -- lastSeen (P4-R104): where the mod last saw this piece of evidence,
--- in the same words the notebook uses ("Carried, in your Una's Evidence.").
+-- in the same words the record uses ("Carried, in your Una's Evidence.").
 -- Owner in play, 2026-09-14, after a case completed: "I lost my files
--- somewhere?" Retirement had dropped every placement detail, so the notebook
+-- somewhere?" Retirement had dropped every placement detail, so the record
 -- could no longer say where the evidence was. Optional, so a schema-2 root
 -- saved before this still validates and SCHEMA stays 2: a save is never
 -- refused for lacking a sentence we did not write yet.

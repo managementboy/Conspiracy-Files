@@ -2,8 +2,8 @@
 -- read must say nothing at all.
 --
 -- The owner asked for this so he can tell which of several documents he is
--- carrying without opening the notebook. The item already carries its real
--- title as its name, so the tooltip only has to confirm the notebook has it.
+-- carrying without opening the organiser. The item already carries its real
+-- title as its name, so the tooltip only has to confirm the record has it.
 --
 -- The restriction is the important half. A tooltip on an UNDISCOVERED document
 -- would let a player find every clue by hovering over furniture, which
@@ -57,9 +57,8 @@ end
 print('PASS inspected tooltip: written only on inspection, key ships with the '
     .. 'mod, wording reports a note rather than announcing importance')
 
--- Noting a document without taking it (owner, 2026-09-10: "we should be able
--- to right click and add it to our Notebook without adding them to our
--- inventory"). A pile of eleven credit cards should not have to be pocketed.
+-- Noting a document without taking it (owner, 2026-09-10: a right click
+-- should note it without putting it in the inventory). A pile of eleven credit cards should not have to be pocketed.
 --
 -- Possession was required so discovery stayed deliberate - a player must not
 -- sweep a street by hovering over furniture. A right-click on a named option is

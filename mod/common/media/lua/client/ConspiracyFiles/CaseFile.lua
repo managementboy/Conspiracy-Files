@@ -1,15 +1,14 @@
 -- The survivor's case file: a physical thing the evidence is filed in.
 --
--- Owner, 2026-09-10, from a screenshot of a vanilla photo album: "it seems
--- like a Photoalbum can contain many photos but also text... we could provide
--- at game start such a Photoalbum and call it Survivor Notebook. Set it to
--- favorite so it does not get lost easily."
+-- Owner, 2026-09-10, from a screenshot of a vanilla photo album: a photo
+-- album can hold text as well as photos, so the owner asked for such a photo
+-- album at game start, set to favourite so it does not get lost easily.
 --
 -- Base.PhotoAlbum is a container whose AcceptItemFunction is Wallet, which
 -- takes maps, literature and anything tagged as fitting a wallet - almost
 -- exactly this mod's written evidence: notes, receipts, letters, diaries,
 -- cards, tickets, keys. The game already treats it as a folder for paper, and it
--- looks like a notebook on the icon.
+-- looks like a bound book of papers on the icon.
 --
 -- WHAT IT IS NOT. Capacity 5, MaxItemSize 0.2, so it holds a case rather than
 -- a career, and it will never hold the object evidence - a worn hammer, a pile
@@ -30,7 +29,7 @@ local MARK="cfCaseFile"
 
 local function log(message) CFLog.message("casefile","note",message) end
 
--- The survivor's own forename, guarded the way the notebook title guards it:
+-- The survivor's own forename, guarded the way the old evidence window's title guarded it:
 -- a descriptor can be absent mid-load, and a missing name must fall back
 -- rather than stop the file being issued.
 local function forename(player)

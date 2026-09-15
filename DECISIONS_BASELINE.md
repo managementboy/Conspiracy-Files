@@ -43,7 +43,7 @@ This is the detailed discovery record. Question numbers refer to the discovery p
 
 | Q | Decision |
 |---|---|
-| 1 | Journal role: active investigation tool + memory aid + narrative archive + character-aware notebook. AI storytelling is part of the module. |
+| 1 | Journal role: active investigation tool + memory aid + narrative archive + character-aware record. AI storytelling is part of the module. |
 | 2 | AI: narrate discoveries, summarize investigation history, write in-character journal material, but never invent factual world state. AI also pre-generates approved asset text during development and may generate dynamic descriptions from verified in-game data. |
 | 3 | Any listed thing may be a clue: documents, printed media, maps, objects, environment, corpses/zombies, broadcasts, vehicles, character observations, timed events, relationships between ordinary facts, player-created observations. |
 | 4 | Clues enter mainly through manual capture plus delayed interpretation. Player can mark acquired objects/facts as interesting. |
@@ -185,26 +185,26 @@ This is the detailed discovery record. Question numbers refer to the discovery p
 | 135 | Selecting a node locks graph focus. |
 | 136 | Outdated links remain visible but faded during focus. |
 
-## Notebook, asset interaction, UI
+## Case record, asset interaction, UI
 
 | Q | Decision |
 |---|---|
 | 137 | Evidence attachments: related documents in a normal PZ-style list view. |
 | 138 | Use same list behaviors/options as vanilla game wherever possible. |
 | 139 | Hybrid UI: vanilla conventions for ordinary lists/records; custom UI only for graph/theory-specific needs. |
-| 140 | Journal is presented like a survivor notebook. |
-| 141 | Notebook visual style: minimal decoration, clean and readable. |
-| 142 | Notebook opens via dedicated key binding. |
-| 143 | Whether notebook pauses game is player-configurable. |
-| 144 | Pause option is configured inside the notebook. |
-| 145 | Notebook remembers last open page + last selected evidence/theory/node. |
-| 146 | Notebook contains all major sections: journal, evidence, theories, graph, archive, help/reference. |
-| 147 | Sections may combine physical dividers/tabs, bookmarks, page-turn navigation, and vanilla controls styled as notebook UI. |
-| 148 | Archive feels like older notebook pages deeper in the same notebook. |
+| 140 | Journal is presented like a survivor's own written record. |
+| 141 | Case record visual style: minimal decoration, clean and readable. |
+| 142 | The case record opens via dedicated key binding. |
+| 143 | Whether the case record pauses the game is player-configurable. |
+| 144 | Pause option is configured inside the case record. |
+| 145 | The case record remembers last open page + last selected evidence/theory/node. |
+| 146 | The case record contains all major sections: journal, evidence, theories, graph, archive, help/reference. |
+| 147 | Sections may combine physical dividers/tabs, bookmarks, page-turn navigation, and vanilla controls styled as the survivor's record. |
+| 148 | Archive feels like older pages deeper in the same record. |
 | 149 | Newest page is appended at the end. |
 | 150 | Updated pages stay in original chronological position. |
 | 151 | Long entries continue across multiple pages automatically. |
-| 152 | Native-first asset interaction: use vanilla read/open behavior where it exists; notebook references the original evidence rather than copying full documents into notebook pages. |
+| 152 | Native-first asset interaction: use vanilla read/open behavior where it exists; the case record references the original evidence rather than copying full documents into its pages. |
 | 153 | Custom action for non-readable evidence is named `Inspect`. |
 | 154 | Inspect shows all: basic details, discovery context, player note, related graph connections, mark-as-interesting action. |
 | 155 | Inspect never reveals unknowable information, but may show legitimate module-injected text/content. |
@@ -290,7 +290,7 @@ This is the detailed discovery record. Question numbers refer to the discovery p
 |---|---|
 | 1 | Core implementation philosophy: vanilla Lua first. Use normal PZ Lua/events/exposed Java APIs wherever sufficient. |
 | 2 | ZombieBuddy/Java is justified for missing API access, demonstrated Lua performance bottlenecks, or persistence/data-processing complexity. External AI communication alone is not an automatic reason to use Java. |
-| 3 | Source of truth: one authoritative core conspiracy model with notebook, graph, archive, diagnostics, and UI as derived views. |
+| 3 | Source of truth: one authoritative core conspiracy model with case record, graph, archive, diagnostics, and UI as derived views. |
 | 4 | Persistence strategy: minimal canonical state plus rebuildable indexes/caches. |
 | 5 | Canonical persistent state includes world conspiracy model, discovery state, player-authored state, evidence lifecycle, graph layout, journal chronology, and version/configuration state. |
 | 6 | Internal model: typed entity collections plus a separate relationship store. |
@@ -308,5 +308,5 @@ The previous story-focused Question 219 was intentionally not answered. Architec
 Current next focus:
 1. review/refine `docs/architecture/ARCHITECTURE_PROPOSAL.md`,
 2. verify Build 42 technical assumptions,
-3. prove persistence, location registry, building-entry detection, deferred placement, item identity, Inspect integration, notebook persistence, and graph persistence,
+3. prove persistence, location registry, building-entry detection, deferred placement, item identity, Inspect integration, case record persistence, and graph persistence,
 4. decide the narrowest possible ZombieBuddy boundary only after those proofs.

@@ -182,7 +182,7 @@ The key is an Asset because it is deliberately authored world content, but it is
 
 ### Why no separate Fact type
 
-Dead Air does not need machine-addressable atomic facts in v0.1. The notebook/evidence list only needs:
+Dead Air does not need machine-addressable atomic facts in v0.1. The journal/evidence list only needs:
 - document text;
 - deterministic journal summaries;
 - simple authored references/contradictions.

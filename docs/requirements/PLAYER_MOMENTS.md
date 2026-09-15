@@ -16,7 +16,7 @@ During routine scavenging, the player picks up an apparently ordinary object in 
 
 A document gives only a landmark-style description. The player survives the trip, explores the area, and physically enters the relevant building.
 
-**On screen:** the vague location wording in the notebook resolves to the confirmed building; a major-discovery marker may appear; related evidence becomes easier to connect in the journal/evidence list. No objective-complete banner appears.
+**On screen:** the vague location wording in the case record resolves to the confirmed building; a major-discovery marker may appear; related evidence becomes easier to connect in the journal/evidence list. No objective-complete banner appears.
 
 **Why it feels good:** survival travel and investigation become the same activity.
 
@@ -24,6 +24,6 @@ A document gives only a landmark-style description. The player survives the trip
 
 Late in a run, two independently found documents connect the same people/organisation but contradict each other about what happened.
 
-**On screen:** both evidence records remain; the notebook surfaces the relationship/contradiction without resolving it. If the survivor later dies, the deterministic death recap calls back to the unresolved contradiction in the project's irreverent fatalistic voice.
+**On screen:** both evidence records remain; the case record surfaces the relationship/contradiction without resolving it. If the survivor later dies, the deterministic death recap calls back to the unresolved contradiction in the project's irreverent fatalistic voice.
 
 **Why it feels good:** the player owns the interpretation, and death closes the character's investigation without revealing a canonical answer.

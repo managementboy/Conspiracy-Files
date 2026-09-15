@@ -19,7 +19,6 @@ package.preload['ConspiracyFiles/GeneratedRuntime']=function() return {
     inspect=function() end,
 } end
 package.preload['ConspiracyFiles/ContextMenu']=function() return {normalize=function(items) return items,false end} end
-package.preload['ConspiracyFiles/Notebook']=function() return {} end
 getDebug=function() return true end; isClient=function() return false end; isServer=function() return false end
 Events={OnFillInventoryObjectContextMenu={Add=function() end}}
 getSpecificPlayer=function() return {getInventory=function() return 'inventory' end} end

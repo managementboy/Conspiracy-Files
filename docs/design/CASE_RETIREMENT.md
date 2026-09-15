@@ -44,7 +44,7 @@ campaign genuinely open-ended.
 Retire a **completed** case — every document discovered and read — by replacing
 its full session root with a much smaller record:
 
-- **Keep:** case id, title, the discovered evidence rows the notebook renders,
+- **Keep:** case id, title, the discovered evidence rows the organiser renders,
   and the discovery ledger events (ordering is derived from real events and
   must never be rewritten).
 - **Drop:** assignments, physical targets, container coordinates, sprites,
@@ -56,7 +56,7 @@ player already has.
 
 ## Constraints
 
-- Retirement must never alter the discovery ledger, the notebook's order or
+- Retirement must never alter the discovery ledger, the case record's order or
   its numbering.
 - Immutable evidence facts: retirement drops *placement bookkeeping*, never a
   fact the player learned.

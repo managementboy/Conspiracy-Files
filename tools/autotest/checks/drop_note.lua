@@ -97,7 +97,7 @@ end
 -- Every case person whose name is written on noted evidence is in NAMES - read
 -- from the rows, which a finished case keeps.
 function D.names()
-    local rows = ConspiracyFiles.NotebookUI.generatedRows("evidence") or {}
+    local rows = require("ConspiracyFiles/EvidenceRows").list("evidence") or {}
     local expected, seen = {}, {}
     for _, row in ipairs(rows) do
         local text = tostring(row.title) .. "\n" .. tostring(row.detailText)

@@ -117,7 +117,7 @@ end
 --
 -- Resolved at RENDER time, not once at observation. The address book fills in
 -- as the player explores, so a door opened early may have no label yet and
--- gain one later; reopening the notebook then shows it.
+-- gain one later; reopening FILES then shows it.
 -- A building id is not something a survivor would write down. Name the place
 -- if the address book knows it, and say nothing identifying if it does not:
 -- "the building at 11259175162085419" reached a player on 2026-09-09 and is

@@ -25,7 +25,7 @@ action_for() {
         DiscoveryLog.record|SaveBudget.check|GeneratedRuntime.inspect|ClueMarkers.update) echo inspect ;;
         ClueMarkers.draw) echo map ;;
         WorldAccess.resolve|WorldAccess.count) echo near ;;
-        AddressMap.labelForBuilding) echo notebook ;;
+        AddressMap.labelForBuilding) echo organiser ;;
         IdentityObservations.add) echo bodies ;;
     esac
 }
@@ -59,8 +59,9 @@ for point in "${points[@]}"; do
                 action="opened the world map" ;;
         near)   if [ "$next" -le "$docs" ]; then ev "return CFLoop.approach($next)" >/dev/null; ev "CFLoop.find($next); return CFLoop.goTo($next)" >/dev/null
                     action="stood by unfound document $next"; else action="idle (no documents left)"; fi ;;
-        notebook) ev 'ConspiracyFiles.NotebookUI.open("journal"); return true' >/dev/null; sleep 3
-                  ev 'ConspiracyFiles.NotebookUI.open("evidence"); return true' >/dev/null; action="opened the notebook" ;;
+        organiser) ev 'local A=require("ConspiracyFiles/KnoxApps"); A.files.list(); A.places.list(); return true' >/dev/null; sleep 3
+                   ev 'ConspiracyFiles.OrganiserScreen.open(); return true' >/dev/null; sleep 3
+                   ev 'ConspiracyFiles.OrganiserScreen.close(); return true' >/dev/null; action="read FILES and PLACES on the organiser" ;;
         inspect) if [ "$next" -le "$docs" ]; then
                     r="$(inspect_doc "$next")" && action="inspected document $next ($r)" || action="document $next: $r"
                     next=$((next + 1))

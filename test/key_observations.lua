@@ -51,6 +51,6 @@ assert(single[1].detailText:find("a lock I have not matched", 1, true), single[1
 local observer = assert(io.open("mod/common/media/lua/client/ConspiracyFiles/IdentityObserver.lua")):read("*a")
 assert(observer:find('(source=="corpse" or source=="container")', 1, true),
     "keys must only be recorded off a body or a bag taken from one")
-local notebook = assert(io.open("mod/common/media/lua/client/ConspiracyFiles/Notebook.lua")):read("*a")
-assert(notebook:find("ConspiracyFiles.KeyObserver", 1, true), "the journal must read the key rows")
-print("PASS key observations: keys off a body are one journal entry naming the buildings they are cut for, and nothing more")
+local rows = assert(io.open("mod/common/media/lua/client/ConspiracyFiles/EvidenceRows.lua")):read("*a")
+assert(rows:find([["KeyObserver"]], 1, true), "FILES must read the key rows")
+print("PASS key observations: keys off a body are one entry naming the buildings they are cut for, and nothing more")

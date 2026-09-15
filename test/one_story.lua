@@ -44,7 +44,7 @@ end
 assert(sawPayment and sawLog, "both documents must actually occur for this to mean anything")
 
 -- C: the projection reports links to unfound documents by title only, and the
--- notebook turns them into a question.
+-- record turns them into a question.
 local case
 for seed = 1, 400 do
     local c = G.generate(catalog, seed, opts)
@@ -68,12 +68,11 @@ assert(#rows[1].connections == 0, "and it must not count as a connection until f
 -- The survivor wondering about an unfound document - in the owner's words, and
 -- as a question, because a question can be wrong - is asserted on the OUTPUT
 -- in test/evidence_rows.lua against the real projection. It was checked here
--- by searching Notebook.lua for the literal source line, which asserted
+-- by searching the old window's source for the literal source line, which asserted
 -- nothing about what a reader sees and broke when the projection moved.
-local notebook = assert(io.open("mod/common/media/lua/client/ConspiracyFiles/Notebook.lua")):read("*a")
 -- The connection verbs not assuming every case is about a delivery is
 -- asserted on the RENDERED phrase in test/evidence_rows.lua, for every link
 -- kind. It was checked here by pattern-matching the lookup table out of
--- Notebook.lua, which said nothing about what a reader sees.
+-- the old window's source, which said nothing about what a reader sees.
 print("PASS one story: documents are titled by what they are, name the same matter, "
     .. "and the survivor wonders about the ones not found yet")

@@ -67,7 +67,7 @@ assert(M.headingText("42 McCoy Lane", 5):find("5 times", 1, true))
 
 -- The place view is the SAME rows in the SAME order, with headings laid over
 -- the runs that earned one. Never a sort: sorting by address would turn the
--- notebook into a checklist to sweep.
+-- record into a checklist to sweep.
 local view = M.index(placed, { ["109 Walker Road"] = 2 })
 local order, headings = {}, 0
 for _, entry in ipairs(view) do

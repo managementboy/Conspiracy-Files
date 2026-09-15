@@ -27,12 +27,12 @@ for seed = 1, 500 do
             local named = doc.body:find("carrying a name", 1, true)
             if single and not named then
                 -- The worn thing and the out-of-place thing must now carry the
-                -- case person's name, both on the item and in the notebook.
+                -- case person's name, both on the item and in the record.
                 if doc.title:find(", marked ", 1, true) then
                     marked = marked + 1
                     assert(doc.title:find(person, 1, true),
                         "an object is marked with somebody other than the case person: " .. doc.title)
-                    assert(doc.body:find(person, 1, true), "the notebook must say whose name is on it")
+                    assert(doc.body:find(person, 1, true), "the record must say whose name is on it")
                     -- The mark is the one thing asserted. Not ownership, not
                     -- presence - a name is on the object.
                     for _, claim in ipairs({ "belonged to", "was theirs", "left it", "owned by" }) do

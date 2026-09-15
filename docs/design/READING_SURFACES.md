@@ -24,7 +24,7 @@ says is only what the survivor earned.** The grouping question and the device
 question are the same question asked twice. Both are answered by separating
 
 - the **store** (one ledger, already exists),
-- the **projection** (what a surface is allowed to show — `NotebookProjection`),
+- the **projection** (what a surface is allowed to show — now `EvidenceRows`),
 - the **surface** (a window today, a device and a desk later).
 
 ## Work packages
@@ -45,7 +45,7 @@ with where the thing was found, captured once.
   is stamped, from `AddressMap.labelForBuilding(buildingId)`, falling back to
   `AddressMap.nearest(x,y,30)`. Never recompute it: a car that is later driven
   away must not rewrite history.
-- `client/ConspiracyFiles/Notebook.lua` — in `generatedRows`, build `placeOf`
+- the old evidence window's row builder (now `EvidenceRows`) — build `placeOf`
   in the same pass that builds `seqOf`, and put the place in the row summary
   and in a `FOUND` block in the detail pane. The carrier name is demoted to a
   detail line; it is the last fallback, so nothing regresses on old events.
@@ -104,7 +104,7 @@ silence, proven by a test that passes a nonsense id.
 The evidence album sits in the off hand only because the game opens a container panel
 only for a held item.
 
-- Ship them in the bag. The notebook's open action borrows the off hand:
+- Ship them in the bag. The album's open action borrows the off hand:
   remember what was there, equip the album, open, and restore on close.
 - Every step through the game's own timed actions, never by setting hand slots
   directly, so it is animated, interruptible and save-safe.
@@ -129,7 +129,7 @@ raw save write, the map mark, the ledger index, the full-case re-validation.
   that checks the new entry and its edges while playing, keeping the full
   rebuild for load, where a pause is invisible. No queue, no new state.
 - Only if the cost is spread evenly is a deferred write queue worth it, and
-  then it needs a journal: the notebook must never show a discovery the save
+  then it needs a journal: the organiser must never show a discovery the save
   cannot reconstruct. Note that the game serialises saves at its own save
   points, so the honest promise is "nothing is lost past the last save".
 
@@ -146,13 +146,13 @@ decides which groups deserve a name.
 **Three moves, all small.**
 
 1. **The stamp is intent, not position.** Record the place when the player
-   OPENS their notes there (`UI.open` in `Notebook.lua`), and when a discovery
+   OPENS their notes there (then the old window's open; now the organiser), and when a discovery
    is recorded there (`DiscoveryLog.record`, which WP1 already touches).
    Opening your notes somewhere means you were thinking about that place. It
    also sidesteps the debug teleport hole, which fires no movement event.
 2. **A return only counts if something changed.** Store, per place, the highest
-   discovery number at the time of the visit (`highestDiscoverySeq()` already
-   exists in `Notebook.lua`). Same number on the next visit means the player
+   discovery number at the time of the visit (the discovery ledger already
+   knows it). Same number on the next visit means the player
    learned nothing in between: the visit is swallowed, silently. A higher
    number means a real return, and the count goes to 2, 3, 4. Pacing a doorway
    earns nothing; coming back after you learned something earns everything.
@@ -201,8 +201,8 @@ produce returns, the whole idea dies cheaply.
   come to a narrator.
 - **Absence as information.** A place stopped being visited could earn
   "haven't been back to the warehouse since". Tempting, and dangerous: a faded
-  row is indistinguishable from a lost one, and the notebook's own help text
-  promises entry numbers never change. Rule if it is ever built: absence may
+  row is indistinguishable from a lost one, and the old evidence window's help
+  text promised entry numbers never change. Rule if it is ever built: absence may
   change decoration only — never a row's existence, its number, or whether a
   search finds it — and it must be written as a line the mod ADDS, never as
   something it takes away. A two-week siege must not grey out a player's leads,
@@ -220,7 +220,7 @@ where an investigator would really work: sat at a desk or a pinned board. Losing
 the device costs the field view, never the case.
 
 - **Step 1 (pure Lua, deletable in one commit):** give
-  `NotebookProjection.evidence` and `.journal` a surface argument, default
+  the projection's evidence and journal lists a surface argument, default
   `"desk"` (today's behaviour unchanged), plus a `"pocket"` projection that is a
   trailing slice with leads and connections stripped. Test it. No item, no
   world menu, no UI.

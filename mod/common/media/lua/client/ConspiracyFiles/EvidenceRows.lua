@@ -1,26 +1,27 @@
--- The projection from what the survivor has actually found to the rows a
--- reading surface shows. ONE store, ONE projection, TWO surfaces: the notebook
--- window and the organiser's screen both read this (docs/design/READING_SURFACES.md).
+-- The projection from what the survivor has actually found to the rows the
+-- organiser shows. ONE store, ONE projection: FILES, NAMES, DATES and PLACES all
+-- read this (docs/design/READING_SURFACES.md).
 --
--- It lived inside Notebook.lua as a local, which made it unreachable except by
--- loading a 1700-line client module that needs the game. test/g2_smoke.lua
--- therefore tested it by SLICING IT OUT OF THE SOURCE between two literal
--- string markers and loadstring-ing the fragment against a fake environment -
--- and broke the moment the text after it changed, because the slice swallowed
--- the following line and that line touches UI.
+-- It is a module rather than a local inside a screen, so the thing every app
+-- depends on can be required and tested directly (test/evidence_rows.lua).
 --
--- So it is a module. The notebook and the PDA are unchanged; the difference is
--- that the thing they both depend on can now be required and tested directly,
--- which is what it deserved for being the PDA's primary data source
--- (KnoxApps FILES, NAMES and PLACES all read it).
---
--- `runtime` is injected rather than reached for: the notebook decides what
--- counts as an active generated runtime (its probe state can stand in for
--- one), and that decision stays where it is made.
+-- Rows.build is the evidence alone, in the order the runtime knows it.
+-- Rows.list is what a screen reads: those rows plus the survivor's other
+-- findings, in true discovery order, with where each was found (P4-R128).
+-- The old evidence window used to do that second half for itself, so the
+-- organiser never received it; it moved here when the window was removed.
 local PlaceNames=require("ConspiracyFiles/Generated/PlaceNames")
 local RelayMemo=require("ConspiracyFiles/Generated/RelayMemo")
+local PlaceIndex=require("ConspiracyFiles/PlaceIndex")
 
 local Rows={}
+
+-- The generated runtime, once it has a case. `runtime` arguments below are
+-- functions returning one, so a test can stand in for it.
+function Rows.live()
+    local rt=ConspiracyFiles and ConspiracyFiles.GeneratedRuntime
+    if rt and rt.metrics and rt.metrics() then return rt end
+end
 
 function Rows.build(section,runtime)
     -- No case generated yet is a normal state, not a fault: a new world spends
@@ -88,9 +89,6 @@ function Rows.build(section,runtime)
         if memoFound and r.kind~=RelayMemo.KIND and RelayMemo.inWeek(r.body) then
             detail=detail.."\n\n"..RelayMemo.NOTE
         end
-        -- No "Inspected " prefix: every journal row carried it, so it told the
-        -- reader nothing and cost ten characters of a narrow column. The
-        -- summary line already says the row was inspected.
         -- Several cases interleave chronologically by design; the case's own
         -- short dispatch code (already shown in document titles, e.g.
         -- "Dispatch copy / R-482") orients the reader without grouping or
@@ -99,7 +97,7 @@ function Rows.build(section,runtime)
         local caseMarker=case and type(case.facts)=="table" and type(case.facts.code)=="string" and case.facts.code
         -- EvidenceKinds.label is a human phrase for the twelve document carriers
         -- ("Dispatch document"), but an object carrier's label is its raw
-        -- catalogue id - "ClayPot" reached the notebook on 2026-09-10. An
+        -- catalogue id - "ClayPot" reached the screen on 2026-09-10. An
         -- object already says what it is in its own title, so the summary says
         -- what kind of thing it is rather than repeating the id.
         local carrier=require("ConspiracyFiles/Generated/EvidenceKinds").get(r.kind) or {}
@@ -115,6 +113,102 @@ function Rows.build(section,runtime)
                 ..(caseMarker and " - Case "..caseMarker or ""),detailText=detail}
     end
     return rows
+end
+
+-- Where a piece of evidence physically is, as the survivor would put it, or
+-- nil when nothing is known. Knowledge, never fate: the scan only sees a small
+-- area, so no state may claim a document was lost or destroyed.
+Rows.WHEREABOUTS={
+    -- The fallback stays deliberately plain for the rare case where the item
+    -- was seen but its surroundings could not be read.
+    accounted="Last accounted for close by.",
+    uncertain="Not seen recently. Its whereabouts are uncertain.",
+    conflict="More than one copy has been seen. Which is the original is uncertain.",
+    unchecked="Not checked since you loaded this save.",
+    -- A finished case: where its evidence was last seen, kept in the save
+    -- (P4-R104; owner, 2026-09-14: "I lost my files somewhere?"). Only shown
+    -- with a place; never a claim of loss.
+    lastseen="Last seen: ",
+}
+function Rows.where(id)
+    local rt=ConspiracyFiles and ConspiracyFiles.GeneratedRuntime
+    if not rt or not rt.whereabouts then return nil end
+    local ok,state,place=pcall(rt.whereabouts,id)
+    if not ok then return nil end
+    place=type(place)=="string" and place~="" and place or nil
+    -- Say where it is when we saw it, rather than describing everywhere it
+    -- might be. Vagueness is for what we cannot know.
+    if state=="accounted" then return place or Rows.WHEREABOUTS.accounted end
+    if state=="uncertain" then return Rows.WHEREABOUTS.uncertain..(place and (" Last seen: "..place) or "") end
+    if state=="lastseen" then return place and (Rows.WHEREABOUTS.lastseen..place) or nil end
+    return Rows.WHEREABOUTS[state]
+end
+
+-- The survivor's findings that are not evidence items: what a key fits, keys
+-- off a body, key leads - and, for PLACES, the identity cards NAMES also lists.
+local function otherRows(withIdentity)
+    local out={}
+    local CF=ConspiracyFiles or {}
+    -- Names, not a list of modules: a module that is absent would leave a hole
+    -- and ipairs stops at the first one, silently dropping every source after it.
+    local names={"KeyJournal","ObservedKeyLeads","KeyObserver"}
+    if withIdentity then table.insert(names,1,"IdentityObserver") end
+    for _,name in ipairs(names) do
+        local source=CF[name]
+        if source and source.rows then
+            local ok,rows=pcall(source.rows)
+            if ok and type(rows)=="table" then for _,row in ipairs(rows) do out[#out+1]=row end end
+        end
+    end
+    return out
+end
+
+-- What a screen reads. `section` is:
+--   "evidence" - the evidence items only (NAMES, DATES)
+--   "files"    - evidence plus the key findings (FILES)
+--   "places"   - every finding, with a heading over a place the survivor has
+--                come back to (PLACES, P4-R81); the heading rows carry cfHeading.
+-- Every section is in true discovery order, numbered by it, and carries where
+-- each row was found as a FOUND block.
+function Rows.list(section,runtime)
+    local rows=Rows.build(section,runtime or Rows.live)
+    if section=="files" or section=="places" then
+        for _,row in ipairs(otherRows(section=="places")) do rows[#rows+1]=row end
+    end
+    -- One shared ledger decides order and numbering for every source, so the
+    -- list reflects real discovery order rather than source groups.
+    local log=ConspiracyFiles and ConspiracyFiles.DiscoveryLog
+    if log and log.order then rows=log.order(rows) else for index,row in ipairs(rows) do row.ordinal=index end end
+    local placeOf={}
+    if log and log.places then
+        local ok,found=pcall(log.places)
+        if ok and type(found)=="table" then placeOf=found end
+    end
+    PlaceIndex.decorate(rows,placeOf)
+    if section~="places" then return rows end
+    -- The same rows in the same order, with a heading laid over the runs that
+    -- earned one. Deliberately not sorted: bucketing by address would turn the
+    -- record into a checklist to sweep.
+    local visits=ConspiracyFiles and ConspiracyFiles.PlaceVisitLog
+    local counts={}
+    if visits and visits.counts then
+        local ok,found=pcall(visits.counts)
+        if ok and type(found)=="table" then counts=found end
+    end
+    local out,any={},false
+    for _,entry in ipairs(PlaceIndex.index(rows,PlaceIndex.headings(counts))) do
+        if entry.heading then
+            any=true
+            out[#out+1]={cfHeading=true,title=entry.heading,
+                detailText=entry.crossesCases and "This place touches more than one case." or nil}
+        else
+            out[#out+1]=entry.row
+        end
+    end
+    -- Flat is the correct and expected state for the first hour of a save. Say
+    -- why, in the survivor's voice, so it does not read as a failed panel.
+    if not any and #rows>0 then table.insert(out,1,{cfHeading=true,title=PlaceIndex.EMPTY,detailText=PlaceIndex.EMPTY}) end
+    return out
 end
 
 return Rows

@@ -26,8 +26,8 @@ function S.bytes()
     return total, table.concat(parts, " ")
 end
 
--- Notebook order: ids and titles in discovery order.
-function S.notebook()
+-- The record's order: noted evidence ids and titles in discovery order.
+function S.record()
     local out = {}
     for i, row in ipairs(R.known()) do out[#out + 1] = i .. "=" .. tostring(row.id):gsub("^generated:", "") .. ":" .. tostring(row.title) end
     return #out, table.concat(out, " | ")

@@ -1,4 +1,4 @@
--- An outfit the notebook cannot say out loud is not a lead.
+-- An outfit the record cannot say out loud is not a lead.
 --
 -- Playtest 2026-09-08: the first outfit line ever to reach a player read
 -- "The body itself wore a Generic03." Two faults in six words. Generic03 is
@@ -6,7 +6,7 @@
 -- so saying it at all adds noise to a record whose whole value is restraint.
 --
 -- The raw id is still what gets stored - it is the game's own fact - so this
--- is a presentation rule, applied when the notebook asks.
+-- is a presentation rule, applied when the record asks.
 package.path = "mod/common/media/lua/shared/?.lua;" .. package.path
 local M = require("ConspiracyFiles/BodyOutfitObservations")
 
@@ -30,7 +30,7 @@ end
 assert(M.readable('Cook_Generic') ~= nil, 'Cook_Generic identifies a cook and must survive')
 
 -- An id that describes the person, not the clothes. "Young" reached the
--- notebook as "The body itself wore: young." (Linux wallet check, 2026-09-11).
+-- record as "The body itself wore: young." (Linux wallet check, 2026-09-11).
 -- Exact match only: YoungCowpoke is still an outfit.
 assert(M.readable('Young') == nil, 'Young describes the person, not what they wore')
 assert(M.readable('YoungCowpoke') == 'young cowpoke', tostring(M.readable('YoungCowpoke')))

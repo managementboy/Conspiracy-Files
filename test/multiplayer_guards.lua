@@ -38,8 +38,6 @@ local MUST_GUARD = {
     "ClueHints.lua",
     "IdentityObserver.lua",
     "T3Nearby.lua",
-    "NotebookToolbar.lua",
-    "Notebook.lua",
     "AddressMap.lua",
     "GeneratedMenu.lua",
     "GeneratedDiagnostic.lua",

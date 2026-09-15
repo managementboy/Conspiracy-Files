@@ -1,11 +1,10 @@
 -- ConspiracyFiles/EvidenceRows: the projection from what the survivor has
 -- found to the rows a reading surface shows. The PDA's FILES, NAMES and PLACES
--- all read it, and so does the notebook window - one store, one projection,
--- two surfaces.
+-- all read it, as the old evidence window once did - one store, one projection.
 --
 -- These are OUTCOME assertions. The three behaviours below used to be checked
--- by searching Notebook.lua for the literal source lines that implemented
--- them (test/notebook_title.lua and test/one_story.lua both did it), which
+-- by searching the old evidence window's source for the literal source lines that implemented
+-- them (a window-title test and test/one_story.lua both did it), which
 -- asserted nothing about what a reader actually sees and broke the moment the
 -- code moved. Here the projection is called and its output inspected.
 package.path="mod/common/media/lua/client/?.lua;mod/common/media/lua/shared/?.lua;"..package.path
@@ -95,7 +94,7 @@ assert(many[1].id=="a" and many[3].id=="c","rows keep their own ids")
 -- delivery. The link KIND is an internal id and keeps its name; what the
 -- player reads must fit any of the twenty stories. Asserted on the rendered
 -- phrase, not on the lookup table: the table was previously pattern-matched
--- out of Notebook.lua's source, which said nothing about what a reader sees.
+-- out of the old evidence window's source, which said nothing about what a reader sees.
 for _,kind in ipairs({"corroborates","disputes-delivery","recontextualises"}) do
     local r=Rows.build("evidence",runtimeWith({
         {id="d1",title="Dispatch copy / R-482",body="in a desk",kind="dispatch",

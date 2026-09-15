@@ -1,4 +1,4 @@
--- What a notebook row says about WHERE, and how rows read when they are
+-- What a row of noted evidence says about WHERE, and how rows read when they are
 -- grouped by place instead of by case. Pure domain: no PZ runtime, no UI, so
 -- every rule below is testable in plain Lua 5.1.
 --
@@ -97,7 +97,7 @@ end
 -- The place view: the SAME rows as the case view, in the same discovery
 -- order, with a heading inserted wherever an earned place's run begins.
 --
--- Deliberately not a sort. Sorting by place would turn the notebook into an
+-- Deliberately not a sort. Sorting by place would turn the record into an
 -- address checklist to sweep, which is the failure this whole index was
 -- supposed to avoid; discovery order is still the true order, and a heading
 -- is a marker laid over it rather than a bucket rows are poured into.

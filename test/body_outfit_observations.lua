@@ -1,4 +1,4 @@
--- Pure domain: token -> observed-outfit association the notebook reads to
+-- Pure domain: token -> observed-outfit association the record reads to
 -- mention a corpse's clothing alongside a document found on the same body
 -- (docs/design/USING_GAME_ASSETS.md, Phase 1). Same discipline as
 -- person_name_observations.lua: validate, bound, copy-on-write, never

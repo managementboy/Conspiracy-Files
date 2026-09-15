@@ -17,13 +17,13 @@ function CFOrg.read()
 end
 
 function CFOrg.uiOpen()
-    local ui = ConspiracyFiles.NotebookUI
-    return ui ~= nil and ui.notebook ~= nil
+    local screen = ConspiracyFiles.OrganiserScreen
+    return screen ~= nil and screen.window ~= nil
 end
 
 function CFOrg.closeUI()
-    local ui = ConspiracyFiles.NotebookUI
-    if ui and ui.notebook then ui.notebook:close() end
+    local screen = ConspiracyFiles.OrganiserScreen
+    if screen then screen.close() end
     return true
 end
 

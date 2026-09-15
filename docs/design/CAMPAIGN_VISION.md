@@ -62,7 +62,7 @@ So which is it? Three honest positions:
    rule; the risk is that the player wanders and the arc never lands.
 2. **Leads with a pull.** Cases are still leads and still refuse to conclude,
    but placement is *biased* along a corridor, so the journey emerges from
-   where evidence is, not from instruction. The notebook still never sets an
+   where evidence is, not from instruction. The organiser still never sets an
    objective. This keeps the rule while making the arc reliable.
 3. **Explicit objectives for the campaign layer.** The individual mystery keeps
    its caution, but the campaign tells the player where to go next. Honest, and
@@ -87,7 +87,7 @@ Beyond the existing skeleton:
   or a sequence of anchors, not a radius.
 - **Inter-case linkage.** Cases are currently independent. "Build upon each
   other" means a later case must be able to reference an earlier one's people,
-  places or organisations - and the notebook must express that without
+  places or organisations - and the organiser must express that without
   concluding.
 - **The amnesiac opening.** A first case whose subject is the player. This is
   the strongest idea in the statement and the one most likely to define the
@@ -126,6 +126,6 @@ four of six roles currently permit exactly one carrier.
 ## What this does not change
 
 - A lead is never proof. Two disagreeing leads remain the feature.
-- The notebook records; it does not assign objectives.
+- The organiser records; it does not assign objectives.
 - Never delete, reset or rewrite a player's save.
 - Solo-first. Multiplayer stays out.

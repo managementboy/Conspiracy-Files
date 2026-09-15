@@ -58,7 +58,7 @@ local J=require('ConspiracyFiles/KeyJournal')
 local B=require('ConspiracyFiles/SaveBudget')
 -- A DISCOVERY LANDING is what re-derives clue facts, and the production code
 -- keys that on DiscoveryLog.highestSeq() advancing: P.tick refuses to rebuild
--- derived facts otherwise, because doing it unconditionally cost two notebook
+-- derived facts otherwise, because doing it unconditionally cost two evidence
 -- row rebuilds and a fistful of street-address lookups every second of every
 -- save (measured in game, 2026-09-12).
 --

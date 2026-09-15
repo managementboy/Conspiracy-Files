@@ -23,7 +23,7 @@ local M={}
 local DENY={
     -- Placing evidence must never become a loot faucet. A pipe bomb found in a
     -- drawer is a pipe bomb the player now owns, and the mod would be paying
-    -- them to read the notebook.
+    -- them to read the organiser.
     Explosives="a working explosive is loot, not evidence",
     -- Craftable and salvage families are enormous, near-identical, and read as
     -- inventory rather than as anything having happened.
@@ -67,7 +67,7 @@ local rules={
     physicalTrace={requires={"condition","blood"},refuse={"firearm"},wear="poor",
         text="found in a state that does not match where it was found"},
     -- An object the engine itself stamps with a person's name. No prose at
-    -- all: the object names someone, and the notebook records only that.
+    -- all: the object names someone, and the record notes only that.
     bearsName={requires={"name"},wear="intact",
         text="carries a name the survivor did not write"},
     -- A key is the one object a player can TEST. It opens a door or it does
@@ -179,7 +179,7 @@ local function legible(id)
     end
     if string.find(id,"Generic",1,true) then return false end
     -- Three of the same letter in a row is a joke item name, not a thing a
-    -- survivor writes down: "seven painting aaaaahs" reached the notebook.
+    -- survivor writes down: "seven painting aaaaahs" reached the record.
     for i=1,#id-2 do
         local c=string.sub(id,i,i)
         if c==string.sub(id,i+1,i+1) and c==string.sub(id,i+2,i+2) then return false end

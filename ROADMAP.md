@@ -1,6 +1,6 @@
 # Conspiracy-Files — Roadmap
 
-**Current checkpoint (2026-09-06):** generated placement, notebook evidence persistence and core found-clue map-marker behavior have owner-observed live passes, including writing-tool queue/catch-up, removal, grouped labels and annotation save/reload. See [live evidence and remaining limits](docs/management/LIVE_SESSION_2026-09-06.md).
+**Current checkpoint (2026-09-06):** generated placement, evidence persistence and core found-clue map-marker behavior have owner-observed live passes, including writing-tool queue/catch-up, removal, grouped labels and annotation save/reload. See [live evidence and remaining limits](docs/management/LIVE_SESSION_2026-09-06.md).
 
 ## Active destination and next increment
 
@@ -14,7 +14,7 @@ P4-R53 remains the destination: automatically selected locations and dynamically
 4. Manual successive investigations now pass live: evidence from R-208 and R-781, global numbering, map annotations and save/reload coexist correctly. Automatic case progression remains the next integration milestone.
 5. P4-R64: include richer narrative descriptions and physically varied evidence in the next playable test: keys, diaries, notebooks and newspaper clippings, with further conspiracy-related evidence selected for coherent story roles. See [next playable milestone](docs/management/NEXT_PLAYABLE_MILESTONE.md).
 
-Offline hardening includes shared canonical budget accounting, safe marker failure handling, notebook map-status messages and a manual one-command trial entry. It does not replace native-engine acceptance.
+Offline hardening includes shared canonical budget accounting, safe marker failure handling, evidence window map-status messages and a manual one-command trial entry. It does not replace native-engine acceptance.
 
 ## Historical v0.1 — Dead Air mechanism fixture
 
@@ -27,7 +27,7 @@ Purpose: retained regression fixture for placement, discovery, UI and persistenc
 - 1 organisation;
 - 2 hand-curated/hardcoded locations;
 - 1 anchor clue + 1 fallback;
-- chronological survivor notebook journal;
+- chronological survivor journal;
 - evidence list;
 - manual **Mark Interesting**;
 - minimal persistence required by the slice;
@@ -67,12 +67,12 @@ A negative result is a valid result and must update the decision record.
 
 ## Historical fixture gates — retained, not the next owner itinerary
 
-The isolated mechanism spikes do not accept complete slice assembly. Conditional runtime/notebook code already exists locally; the following gates control its acceptance and promotion. P4-R48 now selects the two-site Muldraugh candidate with D4 at relay. Exact live binding remains open; see the [correction report](docs/management/CORRECTION_REPORT_2026-09-05.md).
+The isolated mechanism spikes do not accept complete slice assembly. Conditional runtime/evidence window code already exists locally; the following gates control its acceptance and promotion. P4-R48 now selects the two-site Muldraugh candidate with D4 at relay. Exact live binding remains open; see the [correction report](docs/management/CORRECTION_REPORT_2026-09-05.md).
 
 1. [ ] **Location binding / Issue #28:** verify the Muldraugh route, exact targets and candidate-specific arrival negatives; promote bindings only after observation.
 2. [ ] **Content reconciliation / Issue #26:** owner approval of `dead-air-r1` with added context is verified on 2026-09-05. Finish context delivery/disclosure and dependent-document corrections; do not ask for the same approval again or equate it with live acceptance.
 3. [ ] **T11 adapter composition / Issue #29:** combine T1/T4/T5/T8/T10 mechanisms with the accepted domain core on one real bound fixture item and publish observed live evidence.
-4. [ ] **T12 UI runtime feasibility / Issue #25:** validate the approved notebook/Inspect interaction requirements against Build 42 ISUI and feed any limitations back into the design.
+4. [ ] **T12 UI runtime feasibility / Issue #25:** validate the approved evidence window/Inspect interaction requirements against Build 42 ISUI and feed any limitations back into the design.
 5. [x] **Decision reconciliation / Issue #30:** owner selected ordinary police arrival, plain-language availability and death recap deferred; recorded in P4-R50–R52. Runtime usability remains a separate gate.
 
 These gates retain their historical evidence status. Their fixed-site itinerary is suspended under P4-R53. Reusable adapter/UI checks will be applied to generated output; no gate is marked passed by changing direction.
@@ -80,7 +80,7 @@ These gates retain their historical evidence status. Their fixed-site itinerary 
 ## v1 — Generated investigation experience
 Expand only after the generated prototype passes its technical and playtest checks:
 - dynamically assembled investigations from authored building blocks and consistent per-case facts;
-- notebook + evidence list;
+- journal + evidence list;
 - progressively larger capability-based location database and automatic site/container selection, with provenance and explicit exclusions; no per-place owner approval;
 - evidence context capture within proven save budget;
 - reinterpretation/update markers;
@@ -134,7 +134,7 @@ One-case generated placement/Inspect/journal/save-resume path implemented; 52 su
 
 ## Muldraugh addressing trial — 2026-09-05
 
-Implemented fixed per-save fictional address book, native-known-area map overlay and notebook address presentation. Unit/mocked adapter checks pass; native label visibility, cost, paper-map reveal and ordinary-player navigation await owner run. See [address trial](docs/research/MULDRAUGH_ADDRESS_TRIAL.md). Found-clue markers remain the next increment.
+Implemented fixed per-save fictional address book, native-known-area map overlay and evidence window address presentation. Unit/mocked adapter checks pass; native label visibility, cost, paper-map reveal and ordinary-player navigation await owner run. See [address trial](docs/research/MULDRAUGH_ADDRESS_TRIAL.md). Found-clue markers remain the next increment.
 
 Clue-marker follow-up: P4-R60 requires a qualifying inventory writing tool before adding clue annotations. Preserve discovery/source records without a tool, catch up unmarked known clues when one is acquired, and pause new writing when removed. Existing marks persist. Verify vanilla eligibility during implementation; include Help and save/reload/idempotency checks.
 

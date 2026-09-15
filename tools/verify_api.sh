@@ -31,7 +31,7 @@ CHECKS=(
   "zombie.inventory.InventoryItem:getKeyId:matching a key against a door's building"
   "zombie.inventory.InventoryItem:getModData:item provenance and generated-case stamps"
   "zombie.inventory.InventoryItem:getContainer:resolving each row's own container in a merged pane"
-  "zombie.inventory.InventoryItem:getDisplayName:the label a notebook entry quotes"
+  "zombie.inventory.InventoryItem:getDisplayName:the label a noted-evidence entry quotes"
   "zombie.inventory.InventoryItem:getFullType:deciding whether an item is a watched identity document"
   "zombie.inventory.InventoryItem:getID:the per-item key for seen/queued bookkeeping"
   "zombie.inventory.ItemContainer:getContainingItem:a wallet is the carrier of the ID inside it"
@@ -59,8 +59,8 @@ CHECKS=(
   # and presence in the jar is not capability (T9).
   "zombie.iso.RoomDef:getProceduralSpawnedContainer:O1, which containers vanilla already filled"
   "zombie.characters.IsoPlayer:getInventory:distinguishing the player's own pane"
-  "zombie.characters.IsoGameCharacter:getDescriptor:the survivor forename in the notebook title"
-  "zombie.characters.SurvivorDesc:getForename:the survivor forename in the notebook title"
+  "zombie.characters.IsoGameCharacter:getDescriptor:the survivor forename on the case file"
+  "zombie.characters.SurvivorDesc:getForename:the survivor forename on the case file"
   "zombie.characters.SurvivorDesc:getSurname:identity observation on bodies"
 )
 

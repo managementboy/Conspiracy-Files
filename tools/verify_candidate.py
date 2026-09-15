@@ -39,7 +39,7 @@ fixture_bodies = re.findall(r'```text\n(.*?)\n```', fixture, re.S)
 assert len(fixture_bodies) >= 6 and current_bodies == fixture_bodies[:6], 'fixture bodies differ'
 (out / 'content-integrity.txt').write_text('Six bodies unchanged from de4439a and identical to fixture text (LF-normalized).\n', encoding='utf-8')
 
-source_files = sorted(p for folder in ['mod', 'dev/t11-adapter-integration', 'dev/t12-ui-runtime'] for p in (root / folder).rglob('*') if p.is_file() and (p.suffix == '.lua' or p.name == 'mod.info'))
+source_files = sorted(p for folder in ['mod', 'dev/t11-adapter-integration'] for p in (root / folder).rglob('*') if p.is_file() and (p.suffix == '.lua' or p.name == 'mod.info'))
 manifest = {str(p.relative_to(root)).replace('\\', '/'): hashlib.sha256(p.read_bytes()).hexdigest() for p in source_files}
 (out / 'candidate-sha256.json').write_text(json.dumps(manifest, indent=2) + '\n', encoding='utf-8')
 diff = run(['git', 'diff', '--check'])

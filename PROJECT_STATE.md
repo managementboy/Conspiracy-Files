@@ -6,7 +6,7 @@ Target: Project Zomboid Build 42; T1/T2/T3/T4/T5/T7/T8/T9/T10 verified stable Bu
 ## MILESTONE — person/key/place connection proven live, 2026-09-07
 
 **DEV-0.8.9-proxinv.** The full four-fact chain closed in play for the first
-time, deriving a connection and rendering it in the notebook as entry #6:
+time, deriving a connection and rendering it in the evidence window as entry #6:
 
     [CF-PERSON] keyDoorMatch door=10714:9986:0:2 building=10977700185374755
     [CF-LEDGER] #6 connection connection:...document-1;...identity:2063428190;
@@ -17,7 +17,7 @@ The connection id carries the whole inference: the clue found, the ID naming
 Norman Valle, the key found with his body, and the door that key opened. Four
 independently observed facts joined into one interpretation.
 
-Notebook #6 reads: "A key observed with a document naming Norman Valle matches
+Entry #6 reads: "A key observed with a document naming Norman Valle matches
 the building where I found Dispatch copy / R-340. This suggests a connection
 between those belongings and that place. It does not establish who lived there
 or wrote the clue. The original clue remains unchanged." Cautious register held
@@ -94,16 +94,16 @@ over a silent return in any path the player can observe.
 documents plus one identity observation, DEV-0.8.6-discovery-ledger.
 
 Documents were discovered out of generation order (document-1, 3, 4, 2) and
-the notebook rendered them #1-#4 in that true order, then placed the ID card
+the evidence window rendered them #1-#4 in that true order, then placed the ID card
 at #5 in its real chronological position. Under the previous code identity
 rows were appended after all evidence regardless of when they were found.
-Ledger log and notebook agreed exactly:
+Ledger log and evidence window agreed exactly:
 
-    #1 evidence document-1 hour 3.30      notebook #1 Dispatch copy
-    #2 evidence document-3 hour 4.72      notebook #2 File review
-    #3 evidence document-4 hour 5.46      notebook #3 Press clipping
-    #4 evidence document-2 hour 5.58      notebook #4 Receiving copy
-    #5 identity IDcard_Male hour 6.74     notebook #5 Found ID Card
+    #1 evidence document-1 hour 3.30      window   #1 Dispatch copy
+    #2 evidence document-3 hour 4.72      window   #2 File review
+    #3 evidence document-4 hour 5.46      window   #3 Press clipping
+    #4 evidence document-2 hour 5.58      window   #4 Receiving copy
+    #5 identity IDcard_Male hour 6.74     window   #5 Found ID Card
 
 Also observed live: clue hints fired at four separate containers with speech,
 halo text and UI sound, with varied phrasing and correct suppression once a
@@ -122,7 +122,7 @@ rather than the normal path.
 - The person/key chain beyond `anonymousClue`. `bound`, `nameDocument` and
   `key placed` have still never fired.
 - Stale clue relocation, which needs 72 game hours.
-- Notebook window position/open-state across a real quit and reload.
+- Evidence window position/open-state across a real quit and reload (moot: the window was removed, P4-R128).
 
 Two defects were found and fixed during the run: engine methods called
 without a receiver in ReachabilityRequest (77d46ef), and a corpse provenance
@@ -132,7 +132,7 @@ queue entry is re-queued indefinitely rather than dropped once.
 
 ## Latest persistent handoff — 2026-09-06
 
-**Discovery ledger (DEV-0.8.6-discovery-ledger, installed 2026-09-06):** a single shared chronological ledger `ConspiracyFiles/DiscoveryLedger` (domain) plus `ConspiracyFiles/DiscoveryLog` (ModData, tag `ConspiracyFiles.DiscoveryLedger`) now records every discovery as it happens: generated evidence on inspect, identity documents on observation commit, and derived key/person/building connections after the fact that completes them. Each event carries a stable sequence number and the world-age hour, because several discoveries share one game-time interval. `Window:rows()` orders and numbers both notebook sections from that ledger, so journal numbering follows real discovery order instead of grouping by source. Under P4-R63 no migration was written: existing saves have no ledger, and unledgered rows fall back to their previous source order. Requires a fresh test save. No player save data was altered. Backup of the replaced install: `C:/Users/elkin.fricke/Zomboid/ConspiracyFiles-backups/20260906-210547-discovery-ledger`.
+**Discovery ledger (DEV-0.8.6-discovery-ledger, installed 2026-09-06):** a single shared chronological ledger `ConspiracyFiles/DiscoveryLedger` (domain) plus `ConspiracyFiles/DiscoveryLog` (ModData, tag `ConspiracyFiles.DiscoveryLedger`) now records every discovery as it happens: generated evidence on inspect, identity documents on observation commit, and derived key/person/building connections after the fact that completes them. Each event carries a stable sequence number and the world-age hour, because several discoveries share one game-time interval. `Window:rows()` orders and numbers both evidence window sections from that ledger, so journal numbering follows real discovery order instead of grouping by source. Under P4-R63 no migration was written: existing saves have no ledger, and unledgered rows fall back to their previous source order. Requires a fresh test save. No player save data was altered. Backup of the replaced install: `C:/Users/elkin.fricke/Zomboid/ConspiracyFiles-backups/20260906-210547-discovery-ledger`.
 
 **Current policy P4-R63:** no backwards compatibility of old saves is required before 1.0. Use fresh saves when breaking schemas; compatibility scaffolding is no longer a design/delivery requirement. Current-build save/reload integrity and failed-write safeguards remain required. This supersedes earlier legacy-save preservation instructions below.
 
@@ -144,7 +144,7 @@ Core found-clue markers passed manual live testing: no-tool suppression, pencil 
 
 New annotations retain the writing tool's vanilla colour at writing time; legacy records without ink display neutral graphite. Multiple tools use deterministic priority: black pen, pencil, red, blue, green. Pending marks also passed owner testing across save/reload followed by pencil acquisition, appearing at the original finding location. Blue text/question colour passed live using the temporary fixture, with earlier graphite annotations unchanged. Red ink and retention of existing blue ink after switching tools also passed live. Green remains untested live. Owner subsequently confirmed explored-area and Muldraugh paper-map house-number coverage, with undiscovered clues remaining hidden. Map panning, zooming and repeated close/reopen passed owner testing without observed visual problems, noticeable pauses or Lua errors. Runtime cost remains a separate, unmeasured gate. Current annotations are mod overlays, not native draggable/rotatable notes.
 
-Latest focused update installed and SHA256 verified: ClueMarkers.lua, synced Notebook.lua and manually started MarkerColourTest.lua. Backup: `C:/Users/elkin.fricke/Zomboid/ConspiracyFiles-backups/20260906-115559-temporary-colour-notes`. Owner approved two temporary physical colour-test notes after exhausting the case; these have session-only annotations and no canonical/journal writes. Temporary fixture ran live and blue appearance passed. Its ground papers initially lacked visible rendering until picked up and dropped; cause unproven, tracked separately. See live-session log. Offline case-expansion modules remain undeployed. For the existing marker module use `reloadLuaFile("media/lua/client/ConspiracyFiles/ClueMarkers.lua"); ConspiracyFiles.ClueMarkers.start()`. Earlier `dofile` instruction caused a Lua error; do not repeat it.
+Latest focused update installed and SHA256 verified: ClueMarkers.lua, the synced evidence window file and manually started MarkerColourTest.lua. Backup: `C:/Users/elkin.fricke/Zomboid/ConspiracyFiles-backups/20260906-115559-temporary-colour-notes`. Owner approved two temporary physical colour-test notes after exhausting the case; these have session-only annotations and no canonical/journal writes. Temporary fixture ran live and blue appearance passed. Its ground papers initially lacked visible rendering until picked up and dropped; cause unproven, tracked separately. See live-session log. Offline case-expansion modules remain undeployed. For the existing marker module use `reloadLuaFile("media/lua/client/ConspiracyFiles/ClueMarkers.lua"); ConspiracyFiles.ClueMarkers.start()`. Earlier `dofile` instruction caused a Lua error; do not repeat it.
 
 ## Source of truth order
 
@@ -250,7 +250,7 @@ One built-in hand-authored thread:
 - 1 organisation;
 - 2 locations;
 - 1 anchor + 1 fallback;
-- chronological notebook journal + evidence list;
+- chronological journal + evidence list;
 - manual Mark Interesting;
 - hardcoded/curated locations;
 - no graph, theories, runtime AI, content packs, retrofit, migration, or MP.
@@ -266,7 +266,7 @@ One built-in hand-authored thread:
 
 ## Immediate work
 
-The active build is the generated G2 investigation with the shared notebook, fixed Muldraugh addresses, and a found-clue marker trial. Owner play verified placement/Inspect, notebook display, save/reload of evidence, and retention after returning physical notes. Address labels were observed live; curves/setback coverage and clue markers still need the next owner run.
+The active build is the generated G2 investigation with the shared evidence window, fixed Muldraugh addresses, and a found-clue marker trial. Owner play verified placement/Inspect, evidence display, save/reload of evidence, and retention after returning physical notes. Address labels were observed live; curves/setback coverage and clue markers still need the next owner run.
 
 The offline batch on 2026-09-05 adds aggregate save-budget checks, marker failure isolation, player-facing map status, and the manual Trial.start entry point. Follow [next live session](docs/management/TOMORROW_PLAYTEST.md) after a full game restart. No live checks were automated while the owner was away.
 
@@ -282,7 +282,7 @@ One-case generated placement/Inspect/journal/save-resume path implemented; 52 su
 
 ## Muldraugh addressing trial — 2026-09-05
 
-Implemented fixed per-save fictional address book, native-known-area map overlay and notebook address presentation. Unit/mocked adapter checks pass; native label visibility, cost, paper-map reveal and ordinary-player navigation await owner run. See [address trial](docs/research/MULDRAUGH_ADDRESS_TRIAL.md). Found-clue markers remain the next increment.
+Implemented fixed per-save fictional address book, native-known-area map overlay and evidence window address presentation. Unit/mocked adapter checks pass; native label visibility, cost, paper-map reveal and ordinary-player navigation await owner run. See [address trial](docs/research/MULDRAUGH_ADDRESS_TRIAL.md). Found-clue markers remain the next increment.
 
 ## Found-clue marker trial — 2026-09-05
 
@@ -292,17 +292,17 @@ P4-R59/P4-R60 implementation added: actual pickup-source capture, known-evidence
 
 P4-R61 recorded in DECISIONS.md and AGENTS.md. One scoped Terra Low worker at a time is the default for independent routine implementation; primary integrates/reviews. Use compact handoffs without conversation forks. Do not claim current primary effort settings changed; actual model settings remain app-controlled.
 
-## Queued notebook shortcut — 2026-09-06
+## Queued evidence window shortcut — 2026-09-06
 
-Owner requested separate UI task 01a07637-87a5-71c0-bbce-803b2d6c1b51 (Terra Low): replace inventory Open Journal entry with a conspiracy-notebook icon immediately right of Investigate Area, opening the existing notebook. Preserve clue inspection. Project Cook reference screenshot mentioned but not received in that message; PM requested attachment. Worker starts read-only research, defers implementation until successive-case worker is finished to avoid shared-file conflicts, and respects the 30% allowance reserve. Handoff: docs/management/NOTEBOOK_TOOLBAR_DEVELOPMENT.md. No live deployment yet.
+Owner requested separate UI task 01a07637-87a5-71c0-bbce-803b2d6c1b51 (Terra Low): replace inventory Open Journal entry with a case-record icon immediately right of Investigate Area, opening the existing evidence window. Preserve clue inspection. Project Cook reference screenshot mentioned but not received in that message; PM requested attachment. Worker starts read-only research, defers implementation until successive-case worker is finished to avoid shared-file conflicts, and respects the 30% allowance reserve. Handoff: docs/management/EVIDENCE_TOOLBAR_DEVELOPMENT.md. No live deployment yet.
 
 
-Notebook toolbar reference received: codex-clipboard-77b33368-f76a-436e-afc0-d8262c2edb41.png shows Project Cook's pan beside the crafting icon. This demonstrates horizontal placement only; the approved notebook anchor remains immediately right of Investigate Area/search. Reference forwarded to UI task. Successive-investigation go-ahead reconfirmed; no duplicate worker created.
+Evidence toolbar reference received: codex-clipboard-77b33368-f76a-436e-afc0-d8262c2edb41.png shows Project Cook's pan beside the crafting icon. This demonstrates horizontal placement only; the approved toolbar button anchor remains immediately right of Investigate Area/search. Reference forwarded to UI task. Successive-investigation go-ahead reconfirmed; no duplicate worker created.
 
 
 ## Current successive-case handoff — 2026-09-06
 
-PM completed the worker's partial storage/reader changes and installed the reviewed test build at backup 20260906-141630-successive-campaign. Source/live now use one campaign field with frozen legacy fallback, global discovery ordering, multi-case markers/Notebook and validated budgeted replacement. All focused checks passed; native acceptance pending. Restart PZ fully before testing; existing save remains the test target. See docs/management/SUCCESSIVE_CASES_DEVELOPMENT.md for exact files/tests/commands. Development tasks are idle because work is handed back; PM must actively consume completion before reporting ongoing work. Do not promise background review after ending the PM turn.
+PM completed the worker's partial storage/reader changes and installed the reviewed test build at backup 20260906-141630-successive-campaign. Source/live now use one campaign field with frozen legacy fallback, global discovery ordering, multi-case markers/evidence window and validated budgeted replacement. All focused checks passed; native acceptance pending. Restart PZ fully before testing; existing save remains the test target. See docs/management/SUCCESSIVE_CASES_DEVELOPMENT.md for exact files/tests/commands. Development tasks are idle because work is handed back; PM must actively consume completion before reporting ongoing work. Do not promise background review after ending the PM turn.
 
 ## Current allowance reserve — owner update, 2026-09-06
 Owner authorizes continuing development down to 25% weekly remaining (75% used), superseding prior 30% checkpoint. Earlier task/budget entries are historical. Resume with Wood St missing-number audit; no reset credits or paused automations authorized.
@@ -333,19 +333,19 @@ Identity follow-up: requested reload-test rerun returned the same corpse Shauna 
 
 P4-R65: owner accepts authored occupations regardless of clothing, corpses as future evidence/opening candidates, and journal observations only for ID/credit cards actually seen on corpses or in opened containers/wallets. Closed nested contents remain unknown. Known corpse candidate recorded at10792,10287,0. Sequential Terra Low worker implementing bounded observed-card journal slice with verified native visibility hooks and current-build dedup/budget tests; occupation assignment and corpse placement are subsequent slices. Not yet installed or native-tested.
 
-Observed-card slice implemented/reviewed by PM after bounded Terra pure-model handoff. Four Lua files installed with matching source/live hashes; backup20260906-170746-identity-observations. Pure model, native-adapter mocks, actual Notebook journal integration, combined save budget, menu and G2 regressions plus syntax checks passed. Full PZ restart required for new modules; native corpse/open-wallet/no-duplicate acceptance pending. No cards planted, occupations written or saves reset. Journal observations append after case rows; native card-ID persistence still needs verification. See docs/research/IDENTITY_OBSERVATIONS.md for exact behavior and test sequence.
+Observed-card slice implemented/reviewed by PM after bounded Terra pure-model handoff. Four Lua files installed with matching source/live hashes; backup20260906-170746-identity-observations. Pure model, native-adapter mocks, actual evidence window journal integration, combined save budget, menu and G2 regressions plus syntax checks passed. Full PZ restart required for new modules; native corpse/open-wallet/no-duplicate acceptance pending. No cards planted, occupations written or saves reset. Journal observations append after case rows; native card-ID persistence still needs verification. See docs/research/IDENTITY_OBSERVATIONS.md for exact behavior and test sequence.
 
 P4-R66 automatic investigations implemented: DEV-0.8.3-automatic. Automatic debug-SP startup, opening site fixed to current building with exact ID/recheck and no neighbour fallback, later cases at current anchor after24 in-game hours (test default), cap3 retained with no completion requirement. Case clock commits atomically and survives all replacements/reload; fresh save required for automatic acceptance. T3 retains required initial building within12-site cap. Parking/speeding tickets join visible identity-document observations. Focused clock, full mocked runtime, T3, identity and G2 regressions pass; native acceptance pending. Details docs/management/AUTOMATIC_INVESTIGATIONS.md. Latest allowance check80% used, stop remains95% used.
 
 DEV-0.8.3-automatic installed:8 matching source/live hashes, backup20260906-172207-automatic-investigations. Owner next step: full PZ restart, fresh debug-SP save indoors, no Trial.start/nextCase commands. First-house and24h successive native acceptance still pending. Current saves were not changed/deleted.
 
-Native startup log2026-09-06: automatic metadata begins frame30 at10770,10271,0, completes657 (12 buildings,627 frames,peak2ms,zero callbacks over2ms). First case commits757; opening container10766,10276,0; all7 placements acknowledged by876. Owner screenshot shows empty DEV-0.8.3 notebook, appropriate before inspection. Log also exposes repeated Notebook.layout setVisible(nil) in narrow empty state. Fixed optional detailOnly expressions to explicit booleans; actual layout regression passes narrow-empty/selected/wide. Notebook fix installed and hash verified. Reload same save after full restart; no fresh save needed for this UI-only correction. Later24h native scheduling and visible-document observations still pending.
+Native startup log2026-09-06: automatic metadata begins frame30 at10770,10271,0, completes657 (12 buildings,627 frames,peak2ms,zero callbacks over2ms). First case commits757; opening container10766,10276,0; all7 placements acknowledged by876. Owner screenshot shows empty DEV-0.8.3 evidence window, appropriate before inspection. Log also exposes repeated evidence window layout setVisible(nil) in narrow empty state. Fixed optional detailOnly expressions to explicit booleans; actual layout regression passes narrow-empty/selected/wide. Window fix installed and hash verified. Reload same save after full restart; no fresh save needed for this UI-only correction. Later24h native scheduling and visible-document observations still pending.
 
-Notebook window memory implemented/installed: player UI preferences now retain x/y/width/height, isOpen and selected section while open as well as on close. Unchanged frames do not rewrite preferences; OnGameStart clears transient geometry and restores once runtime is ready through OnPostUIDraw (also works paused). Closed preference remains closed; no cross-save geometry leakage. Focused actual-code regression and syntax pass. Native test pending: after loading update, open/reposition notebook, save with it open, quit/reload same save; repeat leaving it closed. Existing pre-update saves cannot reveal their former open state; no fresh save required.
+Evidence window memory implemented/installed: player UI preferences now retain x/y/width/height, isOpen and selected section while open as well as on close. Unchanged frames do not rewrite preferences; OnGameStart clears transient geometry and restores once runtime is ready through OnPostUIDraw (also works paused). Closed preference remains closed; no cross-save geometry leakage. Focused actual-code regression and syntax pass. Native test pending: after loading update, open/reposition the window, save with it open, quit/reload same save; repeat leaving it closed. Existing pre-update saves cannot reveal their former open state; no fresh save required.
 
 P4-R67 DEV-0.8.4-scattered: new cases use seven distinct containers rather than one shared container per building. Storage collection capped8/site, overlapping rectangle dedup, same selected floor retained, real loaded targets revalidated before atomic case commit. Starting building requires3 containers, partner4; later random pair conservatively requires4 each. No shared-container fallback; shortage defers. Existing committed clues remain unchanged. Focused candidate/distribution test plus updated realistic four-container G2/automatic fixtures pass; native acceptance pending. One Terra Low worker supplied collection change, PM completed tests/integration. Reserve check83%used, stop95%.
 
-DEV-0.8.4-scattered installed: Storage, Session, GeneratedRuntime and Notebook source/live hashes matched. Full PZ restart required. Current case retains original placements; native test requires a newly generated investigation (fresh save for immediate first-house test, or later case in existing save). No saves or placed items changed.
+DEV-0.8.4-scattered installed: Storage, Session, GeneratedRuntime and evidence window source/live hashes matched. Full PZ restart required. Current case retains original placements; native test requires a newly generated investigation (fresh save for immediate first-house test, or later case in existing save). No saves or placed items changed.
 
 Native identity observation PASS: owner confirms Damian McGowan ID journal entry remains recorded after transfer to player inventory and save/reload, retaining original observed source (corpse belongings) and location10799,10280,0 without duplicate entry. This validates direct visible corpse-card capture and persistence, not original ownership (owner manually placed this test card), nested-wallet provenance, other card/ticket variants or corpse-name integration into generated stories. Journal identity ordinal restarts at#1 after case rows: known UI defect still pending.
 

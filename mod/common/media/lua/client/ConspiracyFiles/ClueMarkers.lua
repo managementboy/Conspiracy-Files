@@ -161,8 +161,6 @@ function M.update()
  end
  if next then
   commit(next);log("Pending clue locations added to the map.")
-  local ui=ConspiracyFiles.NotebookUI
-  if ui and ui.refresh then pcall(ui.refresh) end
  end
 end
 -- Forget the marks of documents that no longer belong to any case. Only a

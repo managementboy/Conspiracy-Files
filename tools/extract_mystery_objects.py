@@ -111,7 +111,7 @@ def properties(fields, source):
         out.append("keyed")
     # A firearm is marked so selection rules can refuse it. Evidence must never
     # be better loot than the loot; a working gun in a drawer pays the player
-    # for reading the notebook.
+    # for reading the organiser.
     if fields.get("AmmoType") or fields.get("MagazineType"):
         out.append("firearm")
     # Countable: no condition track, so two of them are indistinguishable and

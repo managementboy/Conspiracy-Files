@@ -1,4 +1,8 @@
-# What the notebook is meant to look like
+# What the evidence window was meant to look like
+
+Status: history. This describes the old evidence window, removed in P4-R128,
+and is kept for the reasoning. The organiser has its own look
+([KNOX_OS.md](KNOX_OS.md)).
 
 Owner intent, recorded 2026-09-09. Not a work item - UI is not the current
 focus - but written down so the next person to touch it starts from the idea
@@ -7,7 +11,7 @@ rather than guessing.
 ## The buttons on the right are tabs
 
 Journal, Evidence, Help, Contrast and Close are meant to read as the **index
-tabs of a real notebook** - the card dividers that stick out of the edge so you
+tabs of a real record book** - the card dividers that stick out of the edge so you
 can thumb straight to a section. They are not a toolbar.
 
 That single fact changes how they should look:
@@ -22,7 +26,7 @@ That single fact changes how they should look:
 An earlier attempt (DEV-0.8.19, reverted) restyled the page as a dark
 monospace case file with amber headings, taken from a reference the owner
 shared. It was the wrong reading: the reference showed a *quality* of design,
-not a request for that specific look. The notebook is a physical object a
+not a request for that specific look. The window stood for a physical object a
 survivor carries, and it should read as one.
 
 ## Current state
@@ -35,7 +39,7 @@ described above.
 
 ## If this is picked up
 
-Do not start from a mockup. Start from the object: a notebook a person carries,
+Do not start from a mockup. Start from the object: a record book a person carries,
 with dividers you can see the edges of. Check every change against a screenshot
 at the size a player actually sees, because the last two attempts both looked
 correct in the code and wrong or invisible on screen.

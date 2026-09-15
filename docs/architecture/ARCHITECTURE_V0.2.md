@@ -10,7 +10,7 @@ The reviewed `ARCHITECTURE_PROPOSAL.md` remains as the historical first draft. T
 
 ## 1. Non-negotiable invariants
 
-- One authoritative domain model; notebook/evidence UI are projections.
+- One authoritative domain model; journal/evidence UI are projections.
 - **If rebuilding a cache can change story truth, it is not a cache.**
 - Evidence facts are immutable; interpretation is mutable.
 - Deterministic IDs for authored content; generated IDs for player/runtime records.
@@ -62,9 +62,9 @@ Curated location arrival follows T8: evaluate only referenced bindings on a boun
 
 ### Projection/UI layer
 v0.1:
-- notebook journal;
+- journal;
 - evidence list;
-- separate dark Help utility window opened from labeled notebook chrome under P4-R46; one configurable notebook toggle with native X close controls and Escape reserved for the game under P4-R47.
+- separate dark Help utility window opened from a labeled control on the window's frame under P4-R46; one configurable window toggle with native X close controls and Escape reserved for the game under P4-R47.
 
 v2 candidate:
 - relationship graph.
@@ -260,4 +260,4 @@ The first six critical probes are T1, T9, T2, T3, T4 and T5. T7, T8 and T10 are 
 
 ## Generated trial extension — 2026-09-05
 
-P4-R53 and P4-R58–R60 extend the historical fixed fixture with per-save fictional addresses and per-character finding/mark records. These are authoritative retained records, not rebuildable display caches. Active generated/address/marker writers use a common client SaveBudget adapter and the pure Validator.validateCombined check; each subsystem still validates its own schema before commit. Notebook map status and map overlays are projections. Manual Trial.start is development-only and initializes source capture before starting/resuming a case. See ../management/TOMORROW_PLAYTEST.md for remaining native gates; this does not establish production, multi-case or multiplayer support.
+P4-R53 and P4-R58–R60 extend the historical fixed fixture with per-save fictional addresses and per-character finding/mark records. These are authoritative retained records, not rebuildable display caches. Active generated/address/marker writers use a common client SaveBudget adapter and the pure Validator.validateCombined check; each subsystem still validates its own schema before commit. Evidence window map status and map overlays are projections. Manual Trial.start is development-only and initializes source capture before starting/resuming a case. See ../management/TOMORROW_PLAYTEST.md for remaining native gates; this does not establish production, multi-case or multiplayer support.

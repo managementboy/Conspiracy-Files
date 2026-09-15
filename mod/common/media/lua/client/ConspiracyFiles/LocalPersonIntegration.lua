@@ -57,7 +57,7 @@ end
 -- calls on this type -- see SpawnRateChecker.lua:260
 -- (container:getParent():getOutfitName()), which is the verified reference
 -- for this API. This never reads getPersistentOutfitID: that numeric ID is
--- not a readable outfit name and is not what the notebook can say to the
+-- not a readable outfit name and is not what the record can say to the
 -- player.
 local function outfitOf(body)
     local name=read(body,"getOutfitName")
@@ -87,7 +87,7 @@ end
 local function cases()
     local wrapper=Cases.currentCached(ModData.get("ConspiracyFiles.Generated.G2") or {},getTimeInMillis and getTimeInMillis())
     local all=wrapper and Cases.sessions(wrapper) or {}
-    -- A retired case keeps only the evidence rows the notebook renders: its
+    -- A retired case keeps only the evidence rows FILES renders: its
     -- documents, identities and case envelope are deliberately discarded once
     -- everything has been found. Five call sites below read root.case, and on
     -- 2026-09-09 finding the last document of a case retired it and then threw
@@ -118,7 +118,7 @@ end
 -- True once a body's own vanilla key has already produced an observed lead.
 -- Constraint: the observed and fabricated key paths must never both run for
 -- the same corpse/case, so `place` below refuses to spawn a key here.
--- The notebook reads sources off the shared table, so leads must be
+-- The record reads sources off the shared table, so leads must be
 -- published there like IdentityObserver and KeyJournal are. A lead nobody
 -- can read is not a lead.
 ConspiracyFiles.ObservedKeyLeads=ConspiracyFiles.ObservedKeyLeads or {}
@@ -134,12 +134,10 @@ ConspiracyFiles.ObservedKeyLeads.rows=function()
     end)
     return ok and rows or {}
 end
--- Ledger ref must equal the notebook row id, or ordering cannot place it.
+-- Ledger ref must equal the evidence row id, or ordering cannot place it.
 local function recordLeadDiscovery(fact)
     local logger=ConspiracyFiles.DiscoveryLog
     if logger and logger.record then logger.record("connection","observedKeyLead:"..fact.id) end
-    local ui=ConspiracyFiles.NotebookUI
-    if ui and ui.refresh then pcall(ui.refresh) end
 end
 local function hasLead(sourceToken)
     if type(sourceToken)~="string" then return false end
@@ -409,7 +407,7 @@ function P.tick()
     -- A failed observation must not stop derived clue facts being recorded.
     --
     -- Only when something has actually been discovered, though. This ran twice
-    -- a second for the life of the save, and P.known rebuilds every notebook
+    -- a second for the life of the save, and P.known rebuilds every evidence
     -- row - which resolves a street address per row. Idle, with nothing open,
     -- that was two row rebuilds and a fistful of address lookups every second
     -- (measured in game, 2026-09-12, chasing the fault check's "a retry every

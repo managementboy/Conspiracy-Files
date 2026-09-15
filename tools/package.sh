@@ -26,7 +26,7 @@ cp -r "$REPO/mod/42" "$staging/ConspiracyFiles/42"
 # Stamp the build into mod.info so the in-game mod list names the build it is
 # actually about to load. A static "0.1.0-dev" there cost three restarts on
 # 2026-09-08 chasing whether Steam had delivered an update: the only way to
-# tell was to load a save and read the notebook title bar. The version stays
+# tell was to load a save and read the old evidence window's title bar. The version stays
 # single-sourced in Version.lua; this is a copy made at package time, which is
 # why the repo's mod.info keeps a placeholder.
 info="$staging/ConspiracyFiles/42/mod.info"

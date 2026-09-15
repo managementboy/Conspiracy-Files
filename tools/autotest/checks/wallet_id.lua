@@ -108,7 +108,7 @@ function W.openWallet()
     return false
 end
 
--- The notebook row for a name, if the observer recorded one.
+-- The evidence row for a name, if the observer recorded one.
 function W.row(name)
     for _, r in ipairs(ConspiracyFiles.IdentityObserver.rows()) do
         if r.title == "Found " .. name then return r.summary, (r.detailText:gsub("\n+", " \\n ")) end

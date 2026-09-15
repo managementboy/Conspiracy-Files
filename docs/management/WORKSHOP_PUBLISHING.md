@@ -64,7 +64,7 @@ publish creates a second, unrelated Workshop item.
 1. Develop here. `tools/autotest/unit.sh`, then `tools/autotest/boot_check.sh` (P4-R76: only builds
    that pass it are published).
 2. Bump `ConspiracyFiles.VERSION` in `mod/common/media/lua/shared/ConspiracyFiles/Version.lua`
-   (the single source since it moved out of Notebook.lua). It names the archive and the title bar,
+   (the single source since it moved out of the old evidence window). It names the archive and every log line,
    and it is the only in-game signal of what is running.
 3. `tools/publish_workshop.sh --changenote "<what changed>"`.
 4. On the play machine, Steam pushes the update to the subscription. Enable the
@@ -119,7 +119,7 @@ when the other machine needs the build.
 ## Do not publish public yet
 
 As of 2026-09-08 six features have reached a game exactly once and none is
-verified in play: role/carrier evidence selection, case retirement, the notebook
+verified in play: role/carrier evidence selection, case retirement, the evidence window
 UI improvements, the evidence-pickup voice line, corpse outfits as observed
 leads, and room-aware placement. Unlisted is the right setting until
 `[CF-SELFCHECK]` is clean and those have been played.

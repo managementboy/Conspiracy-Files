@@ -34,7 +34,7 @@ For this prototype, discovery preparation uses checked-in catalog data. Do not s
 
 ## Compatibility work required before G2
 
-Current Content/Placement/Session validators assume a fixed seven-asset Dead Air registry, and NotebookProjection contains authored-ID logic. They cannot consume arbitrary cases today. Introduce the smallest case-definition/resolver boundary needed by generation, retaining the existing fixture as a consumer and preserving its regression tests. Do not replace the domain or weaken validation wholesale.
+Current Content/Placement/Session validators assume a fixed seven-asset Dead Air registry, and the evidence row projection contains authored-ID logic. They cannot consume arbitrary cases today. Introduce the smallest case-definition/resolver boundary needed by generation, retaining the existing fixture as a consumer and preserving its regression tests. Do not replace the domain or weaken validation wholesale.
 
 Generalize authoritative text resolution, lead/connection projection, placement membership and stable saved IDs together. A new save/schema may be needed; decide and document that during implementation rather than implying compatibility or adding migrations.
 

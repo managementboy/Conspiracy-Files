@@ -66,7 +66,7 @@ for _ in 1 2 3 4 5 6 7 8 9 10; do
     sleep 1
 done
 say "lead: $(tr '\t' ' ' <<<"$lead")"
-[ "$(f 1 <<<"$lead")" = true ] || fail "her ID card on the body did not become a notebook lead: $lead"
+[ "$(f 1 <<<"$lead")" = true ] || fail "her ID card on the body did not become a lead in the record: $lead"
 
 # The comparison: an ordinary body is unsearched until shown, and showing it
 # rolls its loot. That is the roll her body is marked searched against.
@@ -102,7 +102,7 @@ report="$EVIDENCE/$id-case-body.txt"
     echo "bound zombie: $(tr '\t' ' ' <<<"$found")"
     echo "body: $(tr '\t' ' ' <<<"$body")"
     echo "log: ${line:-none}"
-    echo "notebook lead: $(tr '\t' ' ' <<<"$lead")"
+    echo "record lead: $(tr '\t' ' ' <<<"$lead")"
     echo "her body searched at spawn: $at_spawn"
     echo "comparison body: searched before it was shown: $(f 2 <<<"$pb"), searched once shown: $plain_rolled"
     echo "sex matching: $(tr '\t' ' ' <<<"$sx")"

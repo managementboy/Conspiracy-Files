@@ -1,9 +1,9 @@
 -- Pin a mock to the interface it impersonates.
 --
--- WHY THIS EXISTS. test/notebook_toolbar.lua stubbed the notebook module with
--- {notebook=..., open=function(section) ... end} and asserted hard on that
--- stub's behaviour. Meanwhile the real module's entry point had become
--- UI.openSurface(section, preferred). The stub went on satisfying the test
+-- WHY THIS EXISTS. A toolbar test (since removed with the old evidence window,
+-- P4-R128) stubbed the window module with {open=function(section) ... end}
+-- and asserted hard on that stub's behaviour. Meanwhile the real module's
+-- entry point had been renamed. The stub went on satisfying the test
 -- while the code under test called a function that did not exist on it, so a
 -- green suite and a nil call could coexist - and did, for as long as anyone
 -- had been running it.

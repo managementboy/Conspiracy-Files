@@ -9,7 +9,7 @@ The prose they generate ships without a separate approval step (P4-R97,
 Each premise supplies three organisations and three anchor documents (claim,
 response, review - the last of which it may mark optional) in the shape the generator already used. It does **not**
 supply the case reference: the links between documents already carry the
-connection and the notebook sorts on them, so a reference that encoded the
+connection and the case record sorts on them, so a reference that encoded the
 premise would only announce which story the player had drawn before they had
 read a word of it.
 The premise is the seed's **first** draw, so it is the most significant thing a

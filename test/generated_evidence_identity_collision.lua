@@ -45,7 +45,7 @@ getPlayer=function() return player end;getSpecificPlayer=function(n) if n==0 the
 getGameTime=function() return {getWorldAgeHours=function() return 1 end} end
 getDebug=function() return true end;isClient=function() return false end;isServer=function() return false end
 instanceof=function(o,k) return type(o)=='table' and o.kind==k end
-ConspiracyFiles={GeneratedRuntime={metrics=function() return {} end},NotebookUI={refresh=function() end}}
+ConspiracyFiles={GeneratedRuntime={metrics=function() return {} end}}
 local corpse={kind='IsoDeadBody'}
 local container={getParent=function() return corpse end,getType=function() return 'inventorymale' end}
 local function item(id,fullType,modData)

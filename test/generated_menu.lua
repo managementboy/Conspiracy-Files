@@ -1,5 +1,4 @@
 package.path="mod/common/media/lua/client/?.lua;"..package.path
-local actualUI={open=function() end}
 local normalize=function(items) return items,false end
 local menu={normalize=normalize}
 local inspected=0
@@ -7,7 +6,6 @@ local inv={};local item={getOutermostContainer=function() return inv end,getModD
 local R={metrics=function() return {} end,subject=function(v) return v==item end,inspect=function() inspected=inspected+1;return true end}
 package.loaded["ConspiracyFiles/GeneratedRuntime"]=R
 package.loaded["ConspiracyFiles/ContextMenu"]=menu
-package.loaded["ConspiracyFiles/Notebook"]=actualUI
 Events={OnFillInventoryObjectContextMenu={Add=function() end}}
 getDebug=function() return true end;isClient=function() return false end;isServer=function() return false end
 getSpecificPlayer=function() return {getInventory=function() return inv end} end

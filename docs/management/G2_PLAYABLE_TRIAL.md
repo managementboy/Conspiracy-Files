@@ -1,6 +1,6 @@
 # G2 generated investigation — development playtest
 
-Status: implemented development path; owner confirmed placement/reading, shared notebook and evidence save/reload retention. New marker/address refinements and recovery/performance gates remain pending. One generated case per save. New reusable prose remains development draft, not an accepted content release.
+Status: implemented development path; owner confirmed placement/reading, shared evidence window and evidence save/reload retention. New marker/address refinements and recovery/performance gates remain pending. One generated case per save. New reusable prose remains development draft, not an accepted content release.
 
 ## What is connected
 
@@ -41,16 +41,16 @@ Travel manually, loot the note into your inventory, right-click **Inspect Invest
 
 Owner successfully looted and inspected the dispatch note, but its raw-coordinate destination requires debug knowledge. P4-R57 requires recognizable place names/available real addresses and a grounded fallback that distinguishes the actual destination. T3 does not currently extract addresses or signage. Naming is a playability blocker; do not treat successful note display as proof that the investigation is navigable without debug assistance.
 
-## Shared notebook restored
+## Shared evidence window restored
 
-Owner approved bringing generated discoveries into the existing Survivor Notebook. DEV-0.7-generated-notebook uses the shared evidence list, selected-document pane, discovery-order journal, contrast, help and keyboard/compact-layout controls. Generated rows come only from the known projection; canonical facts, saved text and discovery order are unchanged. UI tests cover selection, journal order, hidden-link exclusion and generated Help; all 52 suite tests pass. Owner visual verification remains pending. Hot-load the existing Notebook.lua file, then use Open Investigation Journal.
+Owner approved bringing generated discoveries into the existing survivor evidence window. The DEV-0.7 generated build uses the shared evidence list, selected-document pane, discovery-order journal, contrast, help and keyboard/compact-layout controls. Generated rows come only from the known projection; canonical facts, saved text and discovery order are unchanged. UI tests cover selection, journal order, hidden-link exclusion and generated Help; all 52 suite tests pass. Owner visual verification remains pending. Hot-load the existing evidence window file, then use Open Investigation Journal.
 
 ## Owner live confirmation — 2026-09-05
 
-Owner confirmed the restored DEV-0.7 notebook works, then reported that all discoveries survive saving/reloading. Returning the physical documents to storage also leaves the evidence in the journal, as intended. Record these as owner-observed passes for generated notebook display, discovery persistence across reload, and independence of learned evidence from continued item possession.
+Owner confirmed the restored DEV-0.7 evidence window works, then reported that all discoveries survive saving/reloading. Returning the physical documents to storage also leaves the evidence in the journal, as intended. Record these as owner-observed passes for generated evidence display, discovery persistence across reload, and independence of learned evidence from continued item possession.
 
 This does not certify all interruption/duplicate recovery paths, proximity hint behavior, performance limits or non-debug navigation. Those retain their separately recorded status.
 
 ## Street-based presentation trial
 
-DEV-0.7.1-place-labels removes legacy coordinate labels from the generated notebook using installed-map streets and relative directions. Current case: receiving building near 3rd St, roughly 30 paces east of dispatch building. No house numbers or business names were invented. Saved facts/targets are unchanged. Street coverage is limited to the Muldraugh trial rectangle; broader address/name coverage and ordinary-player navigation remain open. Reload Notebook.lua to apply to the current case.
+DEV-0.7.1-place-labels removes legacy coordinate labels from the generated evidence window using installed-map streets and relative directions. Current case: receiving building near 3rd St, roughly 30 paces east of dispatch building. No house numbers or business names were invented. Saved facts/targets are unchanged. Street coverage is limited to the Muldraugh trial rectangle; broader address/name coverage and ordinary-player navigation remain open. Reload the evidence window file to apply to the current case.

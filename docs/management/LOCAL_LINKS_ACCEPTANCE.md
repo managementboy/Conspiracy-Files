@@ -13,12 +13,12 @@ Implemented candidate:
 
 Native sequence:
 
-1. Restart PZ fully; start a fresh debug-SP game indoors. Confirm notebook title DEV-0.8.5-local-links and automatic opening evidence in that house.
+1. Restart PZ fully; start a fresh debug-SP game indoors. Confirm the evidence window title shows DEV-0.8.5-local-links and automatic opening evidence in that house.
 2. Inspect the unsigned first document. Note the house; do not require a specific clue count/type.
 3. Nearby, show a named ID card row in a corpse's inventory, with the initial house still loaded. Briefly unpause for queued observations. Reopen/refresh the corpse inventory and find Electrician's house key. The first slice requires a displayed label with the existing `: Name` format; it does not invent a missing ID.
 4. Show the key row before taking it. Take the key (a key ring is supported), return to the starting house, and use a door. If its lock ID is still uninitialised, use the game's normal Lock/Unlock action. The mod never initialises or changes the lock itself.
 5. Journal should add one Possible connection naming the observed ID, while preserving the earlier clue. Repeat the interaction and save/reload: no duplicate journal entry or key.
 
-Automated verification: 53-test main suite plus focused generator/storage/automatic-start, identity visibility, local-person reducer/placement integration, key reducer/adapter/journal, aggregate budget, notebook memory and cooperative action-hook checks pass under Lua5.1. These are mocks/source checks, not native gameplay acceptance. The new corpse/key path has not yet been accepted in-game. Broader living-zombie casting, additional story templates and custom photo/recording mechanics are future work.
+Automated verification: 53-test main suite plus focused generator/storage/automatic-start, identity visibility, local-person reducer/placement integration, key reducer/adapter/journal, aggregate budget, evidence window memory and cooperative action-hook checks pass under Lua5.1. These are mocks/source checks, not native gameplay acceptance. The new corpse/key path has not yet been accepted in-game. Broader living-zombie casting, additional story templates and custom photo/recording mechanics are future work.
 
 Installed 2026-09-06: 14 changed/new Lua files hash verified. Replaced-file backup: C:/Users/elkin.fricke/Zomboid/ConspiracyFiles-backups/20260906-200423-local-links. Final moved-wallet correction also installed and hash verified. No game saves were modified.

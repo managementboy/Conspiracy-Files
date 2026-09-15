@@ -4,6 +4,6 @@ Owner exhausted the current one-case save and explicitly chose temporary test no
 
 Installed Build 42.20.4 sources verify `character:getCurrentSquare():AddWorldInventoryItem(item,xOffset,yOffset,zOffset)` in `media/lua/shared/ActionManager.lua:16`; `square:AddWorldInventoryItem(item,0.0,0.0,0.0)` also occurs in `media/lua/server/Camping/SCampfireGlobalObject.lua:143`. Use bounded local square placement without world search. No Lua API existence is inferred from a web reference.
 
-The existing Notebook hot-load bundle hosts an explicit fixture-start function so a running game need not index a newly installed Lua file before the owner can start it. Loading Notebook alone does not spawn notes.
+The existing evidence window hot-load bundle hosts an explicit fixture-start function so a running game need not index a newly installed Lua file before the owner can start it. Loading that window alone does not spawn notes.
 
 Return-value verification: installed `shared/Items/OnBreak.lua:35` immediately treats the string-overload return as InventoryItem; `shared/TimedActions/ISDropWorldItemAction.lua:81` calls getWorldItem on its returned inventory item. Fixture uses the returned item directly, not getItem().

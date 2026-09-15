@@ -1,6 +1,5 @@
 local CFLog=require("ConspiracyFiles/Log")
 local Content=require("ConspiracyFiles/Content")
-local UI=require("ConspiracyFiles/Notebook")
 ConspiracyFiles=ConspiracyFiles or {}
 ConspiracyFiles.ContextMenu=ConspiracyFiles.ContextMenu or {}
 local Menu=ConspiracyFiles.ContextMenu
@@ -55,9 +54,7 @@ local function activate(mark,playerNum,item,expectedToken,expectedContainer)
         else ok,id,changed=rt.inspect(asset.assetId,"Inspected "..asset.displayName,assignment.locationId) end
         if not ok then error(id) end
         local known=rt.state.resolveEvidence(id); if not known then return end
-        UI.refresh("evidence",id)
-        if not mark then UI.openReader(known.displayName,known.bodyText,asset.contextText) end
-        CFLog.message("notebook","note","|MANUAL_ACTION|action="..(mark and "mark" or "inspect").."|asset="..asset.assetId.."|changed="..tostring(changed))
+        CFLog.message("evidence","note","|MANUAL_ACTION|action="..(mark and "mark" or "inspect").."|asset="..asset.assetId.."|changed="..tostring(changed))
     end)
 end
 local function add(context,key,label,callback,disabled)
@@ -90,7 +87,6 @@ function Menu.fill(playerNum,context,items)
                 if type(intent)~="string" or #intent>200 then return end
                 current.cfMarkIntent=intent
                 local ok,id=rt.markGeneric(intent,tostring(item:getName())); if not ok then error(id) end
-                UI.refresh("evidence",id)
             end)
         end,md.cfMarkIntent and rt.hasMarkIntent(md.cfMarkIntent))
         return

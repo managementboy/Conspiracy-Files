@@ -1,10 +1,10 @@
 -- What goes on the paper, and what does not.
 --
 -- The owner found a diary in play on 2026-09-09 with forty blank pages while
--- the notebook held its text. An object that contradicts its own record is
+-- the record held its text. An object that contradicts its own record is
 -- worse than one that cannot be opened at all.
 --
--- A notebook entry is three things: a description of the object, the words
+-- A noted-evidence entry is three things: a description of the object, the words
 -- written on it, and what the survivor makes of them. Only the middle belongs
 -- on the object. A document carrying its own interpretation would be a very
 -- strange document.

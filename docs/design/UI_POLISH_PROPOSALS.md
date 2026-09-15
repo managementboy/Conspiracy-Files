@@ -1,4 +1,8 @@
-# Notebook UI and interaction polish — proposals, 2026-09-07
+# Evidence window UI and interaction polish — proposals, 2026-09-07
+
+Status: history. These proposals were for the old evidence window, removed in
+P4-R128; the organiser has its own look, and the window's filter, contrast
+toggle and "new" marks were dropped with it.
 
 From observing live play today, not from theory. Ranked by value per unit of
 risk. Nothing here changes what is recorded, only how it reads and behaves.
@@ -35,13 +39,13 @@ The active section is currently shown by wrapping its label in brackets:
 section a distinct border or background so the current view is obvious without
 reading.
 
-## 4. Mark entries added since the notebook was last opened
+## 4. Mark entries added since the evidence window was last opened
 
 The journal reached nine entries in a single short session and will hold far
 more across several cases. Nothing distinguishes what is new.
 
 The discovery ledger already assigns every entry a stable, increasing sequence
-number. Store the highest sequence seen when the notebook closes, and mark
+number. Store the highest sequence seen when the evidence window closes, and mark
 rows above it. That is a few lines, needs no new state beyond one number, and
 uses ordering machinery that already exists.
 
@@ -81,5 +85,5 @@ that already exists and is proven visible.
 - Reordering, grouping or renumbering the journal. Chronological order across
   evidence, identities and connections is the thing this whole session existed
   to build.
-- Anything that hides an entry by default. The notebook is a record; a filter
+- Anything that hides an entry by default. The evidence window is a record; a filter
   is a lens, not a redaction.

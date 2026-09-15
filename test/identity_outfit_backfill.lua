@@ -1,6 +1,6 @@
 -- An identity record must be able to gain its body token later.
 --
--- Playtest 2026-09-08 found the outfit lead never reaching the notebook, by two
+-- Playtest 2026-09-08 found the outfit lead never reaching the record, by two
 -- routes. Read an ID before looting the body and the record is written before
 -- LocalPersonIntegration stamps the corpse, so it has no token; nothing then
 -- updated it, so the outfit paragraph could never attach. Read an ID inside a

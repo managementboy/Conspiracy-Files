@@ -8,7 +8,7 @@ and 6b (most recent unused answers steer the next case, marked used in the
 same swap; the next case waits one in-game hour after a completion), 7 (FILES
 row, question view, wrapping pick lists, ANSWER), 8 (the second thought). Also
 fixed on the way: a first case with every story clue plus the relay memo could
-never retire. Still to do: step 9 (the note in the notebook), 10 (a reload
+never retire. Still to do: step 9 (the note in FILES), 10 (a reload
 check for answers) and 11 (the broadcast clue for "Listen for it"; until it
 exists that way leans on the press clipping).
 
@@ -125,7 +125,7 @@ First cut, as the owner set it:
    The two example readings come from premise 1's own "WHAT IT MIGHT MEAN"
    text (`Premises.lua:76`, `:89`).
 6. Once any question is answered, the row reads back as the survivor's own
-   note, and the notebook shows the same words:
+   note, and FILES shows the same words:
    *"I think it was a move nobody would sign for. Delia Mercer matters here.
    Next I would follow the person."*
 7. When a new case is built from those answers, the row keeps the words and
@@ -295,7 +295,7 @@ days.
 | 6 | **Use at creation.** `prepare` picks the most recent unused answers, passes `steer`, and sets `usedBy` in the same swap. | extend `automatic_investigations.lua`, `successive_cases.lua` (lock is atomic; failed build leaves answers open) | `core_loop.sh`: answer through a check helper before `noGap`, then assert the second case's `steer` and the first case's `usedBy` | M |
 | 7 | **The question screen.** FILES row, question view, three popups, clear option, read-back note, "gone on" line. | extend `knox_files_labels.lua`, `knoxui_popup.lua`, `evidence_files.lua` | `knox.sh`/`organiser.sh`: open the row, tap each popup, answer, change, clear; screenshot at 0.5x Small and 1x Large | M |
 | 8 | **Second thought line** after "That's all of it". | extend `player_voice.lua`, `voice_moments.lua` | `core_loop.sh`: the line is logged once per case | S |
-| 9 | **Notebook shows the note** (read-only). | extend `multi_case_notebook.lua` | none | S |
+| 9 | **FILES shows the note** (read-only). | extend `evidence_files.lua` | none | S |
 | 10 | **Survives reload.** Answers, lock and steer after save and reload. | covered by 2/3 validation | `reload.sh`: answer, reload, answers intact; still editable if unused | S |
 
 **Suggested order:** 2, 3, 4 (the data and the rules, all offline), then 5 and

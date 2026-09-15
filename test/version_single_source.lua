@@ -1,9 +1,9 @@
 -- One build string, defined once.
 --
--- Notebook's UI.VERSION and Runtime.VERSION were both maintained by hand and
+-- The old evidence window's UI.VERSION and Runtime.VERSION were both maintained by hand and
 -- drifted six releases apart. On 2026-09-08 a log pulled from a DEV-0.8.12
 -- build reported "version=DEV-0.6-transactional-candidate" on every
--- [CF-DEAD-AIR] line, because only the notebook constant had ever been bumped.
+-- [CF-DEAD-AIR] line, because only the window's constant had ever been bumped.
 -- A version that lies in the logs is worse than none: the logs are where a
 -- problem gets diagnosed, and the packaging scripts name the archive from it.
 --
@@ -51,10 +51,6 @@ if #offenders > 0 then
 end
 
 -- Both consumers must read the shared module rather than restate the string.
-local notebook = read('mod/common/media/lua/client/ConspiracyFiles/Notebook.lua')
-assert(notebook:find('UI.VERSION=require("ConspiracyFiles/Version")', 1, true),
-    'Notebook must take its version from the shared module')
-
 local runtime = read('mod/common/media/lua/shared/ConspiracyFiles/Runtime.lua')
 assert(runtime:find('Runtime.VERSION = require("ConspiracyFiles/Version")', 1, true),
     'Runtime must take its version from the shared module')

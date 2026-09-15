@@ -10,7 +10,7 @@ getPlayer=function() return player end;getSpecificPlayer=function(n) if n==0 the
 getGameTime=function() return {getWorldAgeHours=function() return 1 end} end
 getDebug=function() return true end;isClient=function() return false end;isServer=function() return false end
 instanceof=function(o,k) return type(o)=='table' and o.kind==k end
-ConspiracyFiles={GeneratedRuntime={metrics=function() return {} end},NotebookUI={refresh=function() end}}
+ConspiracyFiles={GeneratedRuntime={metrics=function() return {} end}}
 -- Engine doubles demand a receiver, as Kahlua does. A permissive table lets a
 -- receiver-less call pass here and fail in game; see AGENTS.md.
 local strict=dofile('test/support/strict.lua')

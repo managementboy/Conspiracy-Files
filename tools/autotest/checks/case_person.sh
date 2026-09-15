@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Case person check (catalogue CN-01): the case's named person walks nearby as
 # a zombie with an ID card in that name, keeps it through a save and reload,
-# and the card on the body becomes a notebook lead.
+# and the card on the body becomes a lead in the record.
 #
 #   tools/autotest/checks/case_person.sh [--hidden]
 #
@@ -47,7 +47,7 @@ else
     fail "after a reload the case person is gone (zombie name, card or mark not saved)"
 fi
 
-# The body: its card is a lead in the notebook.
+# The body: its card is a lead in the record.
 lead="not tried"
 if [ "$(cut -f1 <<<"$after")" = true ]; then
     ev 'return CFPerson.goTo()' >/dev/null; sleep 2
@@ -59,7 +59,7 @@ if [ "$(cut -f1 <<<"$after")" = true ]; then
     # 2026-09-15; 20260914T201413 recorded PASS with "nil").
     row="$(ev "local s=CFWallet.row([[ID Card: $case_name]]); return s~=nil, tostring(s)")"
     if [ "$(cut -f1 <<<"$row")" = true ]; then lead="$(cut -f2 <<<"$row")"
-    else lead="none"; fail "the case person's ID card on the body was not recorded in the notebook"; fi
+    else lead="none"; fail "the case person's ID card on the body was not noted in the record"; fi
 fi
 errors="$(mod_errors)"
 [ -z "$errors" ] || fail "errors inside the mod"
@@ -75,7 +75,7 @@ report="$EVIDENCE/$id-case-person.txt"
     echo "binding: ${bound:-no log line}"
     echo "zombie before reload: $(tr '\t' ' ' <<<"$found")"
     echo "after save and reload: $persisted"
-    echo "card on the body in the notebook: $lead"
+    echo "card on the body in the record: $lead"
     for f in "${fails[@]}"; do echo "FAIL: $f"; done
 } > "$report.part"; mv "$report.part" "$report"
 cat "$report"

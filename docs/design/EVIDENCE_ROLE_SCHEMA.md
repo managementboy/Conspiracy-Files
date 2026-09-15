@@ -29,7 +29,7 @@ Counted against installed 42.20.4, not assumed.
 | Radio + TV broadcast script (`Translate/EN/RadioData.json`) | 1.16 MB of authored text | none |
 | Room labels from T3 | office, toolstore, garagestorage, medical, derelict, ... | placement only |
 | Body descriptor | forename, surname, profession, outfit id | name + profession |
-| Street/address data | Muldraugh road geometry, fixed address book | notebook text |
+| Street/address data | Muldraugh road geometry, fixed address book | case record text |
 | Building keys | `getKeyId()` bound per building | person/key strand |
 
 ## Proposed direction

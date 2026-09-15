@@ -32,13 +32,13 @@ test("generated 100-seed sample varies sites outlines text, carriers and bounded
         -- player ties three documents into one file. Object evidence
         -- (2026-09-09) carries none, and cannot: nothing is written on a
         -- hammer. It belongs to the case by having been kept with the documents
-        -- and by the connection the notebook records - never by a reference we
+        -- and by the connection the record notes - never by a reference we
         -- would have had to pretend was engraved on it.
         for _,doc in ipairs(c.documents) do
             local carrier=assert(Kinds.get(doc.kind))
             if carrier.capacity=="object" then
                 -- Nothing is written ON a hammer, and the item's NAME is just
-                -- what the thing is. What the notebook sentence may say is what
+                -- what the thing is. What the record's sentence may say is what
                 -- the object sat beside - and from 2026-09-10 it names that
                 -- file by its reference, because "the file on the extension"
                 -- is opaque when you are looking at ten clay pots.

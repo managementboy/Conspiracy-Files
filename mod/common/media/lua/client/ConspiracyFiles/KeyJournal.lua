@@ -34,8 +34,6 @@ function J.observe(fact)
         for _, connection in ipairs(Connections.connections(staged) or {}) do
             Log.record("connection", "connection:" .. connection.id)
         end
-        local ui = ConspiracyFiles and ConspiracyFiles.NotebookUI
-        if ui and ui.refresh then pcall(ui.refresh) end
         return true, "recorded"
     end)
     if not ok then return false, tostring(accepted) end

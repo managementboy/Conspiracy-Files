@@ -34,13 +34,13 @@ local dup=clone(b);dup.events[2].ref=dup.events[1].ref;assert(not L.validate(dup
 local back=clone(b);back.events[2].seq=1;assert(not L.validate(back))
 local behind=clone(b);behind.nextSeq=2;assert(not L.validate(behind))
 
--- The reported player order: cover letter, notebook, ID card, file review.
+-- The reported player order: cover letter, shift notebook (the item), ID card, file review.
 local ledger=L.empty()
 for _,step in ipairs({{"evidence","doc-cover",4},{"evidence","doc-shift",5},
     {"identity","identity:Base.IDcard:7",5},{"evidence","doc-review",9}}) do
     ledger=assert(L.record(ledger,step[1],step[2],step[3]))
 end
--- Sources still hand the notebook their own grouped rows.
+-- Sources still hand the record their own grouped rows.
 local rows={{id="doc-cover"},{id="doc-shift"},{id="doc-review"},{id="identity:Base.IDcard:7"}}
 local ordered=L.order(ledger,rows)
 local ids={}

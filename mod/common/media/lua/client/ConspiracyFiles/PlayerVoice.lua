@@ -297,7 +297,7 @@ end
 -- Everything below fires only when the player learns something they could not
 -- have known a second earlier. That is the rule that keeps a mod with nine
 -- voice triggers from becoming a mod that natters, and it rules out ambient
--- observation entirely: walking past a marker, opening the notebook and
+-- observation entirely: walking past a marker, opening the organiser and
 -- reading a page all stay silent.
 --
 -- Each is gated on its own once-per-thing flag rather than on the shared

@@ -77,7 +77,7 @@ done
 
 sleep 5
 known="$(ev 'return CFLoop.known()' | cut -f1)"
-[ "$known" = "$n" ] || fail "notebook knows $known of $n documents"
+[ "$known" = "$n" ] || fail "record knows $known of $n documents"
 # The relay memo's date note (P4-R96), in the real game at last.
 notes="$(ev 'return CFLoop.dateNotes()')"
 say "date notes: memo found=$(cut -f1 <<<"$notes") records dated in its week=$(cut -f2 <<<"$notes") carrying the note=$(cut -f3 <<<"$notes")"
@@ -170,7 +170,7 @@ report="$EVIDENCE/$id-core-loop.txt"
     source_line
     echo "first case: $n documents, all found and inspected through the right-click menu:"
     printf '%s\n' "${rows[@]}"
-    echo "notebook entries: $known; case completion reported: $completed"
+    echo "record entries: $known; case completion reported: $completed"
     echo "map marks without a pen (written/pending/missing): $(tr '\t' '/' <<<"$before_pen")"
     echo "map marks after a pen, case already retired: $(tr '\t' '/' <<<"$after_pen")"
     echo "second case appeared (gap removed): $next_case"

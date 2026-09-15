@@ -5,7 +5,7 @@
 --
 -- What only shows across cases and over time is what this is for: a finished
 -- case turning into questions, the answers surviving a reload, the next case
--- built from them, the case after that built from nothing, the notebook's order
+-- built from them, the case after that built from nothing, the record's order
 -- across cases, finished evidence staying Old, and the save growing case by case.
 CFCamp = CFCamp or {}
 local C = CFCamp
@@ -70,7 +70,7 @@ end
 
 -- Point CFLoop at one case's clues still to find, in document order, so
 -- inspect_doc 1 always plays the next one of that case and no other. Clues
--- already in the notebook, and clues skipped, are left out. Returns how many
+-- already noted, and clues skipped, are left out. Returns how many
 -- remain, how many are placed, how many still waiting to be placed.
 function C.useCase(caseId)
     local prefix = tostring(caseId):gsub(":case$", ":")
@@ -161,7 +161,7 @@ function C.answer(caseId, l1, l2, l3)
 end
 
 -- What the organiser shows: question rows and evidence in FILES, NAMES, PLACES,
--- and the notebook's discoveries.
+-- and the record's discoveries.
 function C.surfaces()
     local A = require("ConspiracyFiles/KnoxApps")
     local qrows, papers = 0, 0
@@ -169,7 +169,7 @@ function C.surfaces()
     return qrows, papers, #(A.names.list("All") or {}), #(A.places.list() or {}), #R.known()
 end
 
--- The notebook's discoveries, by case index in campaign order. Cases played
+-- The record's discoveries, by case index in campaign order. Cases played
 -- one after another must read as a non-decreasing run such as 11111122222233.
 function C.order()
     local index = {}

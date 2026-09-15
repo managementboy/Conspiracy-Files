@@ -78,8 +78,8 @@ one-liner below needs no file at all:
    An older save is refused as an unsupported generated case revision, which is
    correct under P4-R63. Never delete an existing save to make room; make a new
    one alongside it.
-3. **Check the title bar.** It should read
-   `<YourName>'s Notebook [DEV-0.25.1-realobjects]` or later. If it shows an
+3. **Check the build.** The `[CF-DEAD-AIR]` lines in `console.txt` carry
+   `version=`; it should name the build you expect or later. If it names an
    older build, Steam has not finished updating the subscription and everything
    you are about to test is the previous build.
 
@@ -198,19 +198,20 @@ a real Workshop delivery, or both. Test in roughly this order - the first is the
 headline feature and the cheapest to reach.
 
 1. **Corpse outfits as observed leads.** A body in a security guard's uniform
-   carrying an accountant's ID. The notebook must record two leads that
+   carrying an accountant's ID. The organiser must show two leads that
    disagree and refuse to conclude which is true. Reading an ID from a corpse
    wallet has autotest evidence (`checks/wallet_id.sh`); the two leads
    disagreeing has never been seen.
 2. **Room-aware placement.** Paperwork in offices, not in a garage. `[CF-G2]`.
 3. **Evidence-pickup voice line.** Speech on picking up a document. `[CF-VOICE]`
    records whether it actually displayed, which is not the same as being said.
-4. **The eight notebook UI improvements.**
+4. **Reading evidence on the organiser.** FILES, NAMES, DATES and PLACES show
+   what was found, in discovery order.
 5. **Case retirement.**
 6. **Role/carrier evidence selection.**
-7. **The survivor's forename in the notebook title.** A character with an
-   unusual or missing name should fall back to `Survivor's Notebook` rather
-   than break the window.
+7. **The survivor's forename on the case file.** A character with an unusual
+   or missing name should get a fallback name rather than stop the case file
+   being issued.
 
 The wallet click defect is closed. It was never about nested container panes:
 a stale drag flag in the loot pane stopped the mod watching after an ordinary
@@ -227,5 +228,5 @@ has passed on it since.
   session with no injected helpers.
 - **Never delete, reset or rewrite a save.** A fresh save may be required; say
   so, never do it for them.
-- **A lead is never proof.** Two disagreeing leads are the feature. A notebook
+- **A lead is never proof.** Two disagreeing leads are the feature. A record
   that resolves the disagreement is the bug.

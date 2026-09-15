@@ -22,7 +22,7 @@ local opts = { mapId = "SYNTHETIC-MAP", buildLine = "TEST-ONLY", allowSynthetic 
 assert(Premises.count() == 20, "expected twenty premises, got " .. Premises.count())
 
 -- The case reference must not give the premise away. The links between
--- documents already carry the connection and the notebook sorts on them, so a
+-- documents already carry the connection and the record sorts on them, so a
 -- reference that encoded the story would only tell the player which case they
 -- had drawn before they had read a word of it.
 local perPremise, perPrefix = {}, {}

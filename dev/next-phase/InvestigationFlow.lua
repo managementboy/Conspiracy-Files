@@ -5,7 +5,7 @@ local Catalog=require("ConspiracyFiles/Generated/Catalog")
 local V=require("ConspiracyFiles/Validator")
 local Reach=require("ConspiracyFiles/Reach")
 local Campaign=require("CampaignPolicy")
-local Notebook=require("MultiCaseNotebook")
+local Record=require("MultiCaseRecord")
 local Encounter=require("EncounterContext")
 local Updates=require("InterpretationUpdates")
 local Archive=require("EvidenceArchive")
@@ -122,12 +122,12 @@ function F.restore(saved,peers,nowHours,ttlHours,archiveAgeHours)
  local ok,why=rootOK(saved); if not ok then return nil,why end; local clock,clockWhy=Updates.visible({},nowHours,ttlHours); if not clock then return nil,clockWhy end; ok,why=Archive.project({}, {},nowHours,archiveAgeHours); if not ok then return nil,why end; ok,why=budget(saved,peers); if not ok then return nil,why end; local state=copy(saved); local projections={}
  for _,bookmark in ipairs(state.bookmarks) do if nowHours<bookmark.markedHours then return nil,"restore clock precedes bookmark" end end
  for id,case in pairs(state.cases) do local rows,err=G.project(case,state.known[id]); if not rows then return nil,err end projections[id]=rows end
- local notebook; notebook,why=Notebook.project(state.ledger,projections); if not notebook then return nil,why end
- local group=1; for _,record in ipairs(state.ledger.records) do local rows=projections[record.caseId]; if rows and #rows>0 then local visible=notebook[group]; local active,err=Updates.visible(state.updates[record.caseId] or {},nowHours,ttlHours); if not active then return nil,err end; local ages=copy(state.learned[record.caseId]); for id,at in pairs(state.relevance[record.caseId]) do ages[id]=at end; local archived; archived,err=Archive.project(visible.rows,ages,nowHours,archiveAgeHours); if not archived then return nil,err end; visible.rows=archived; for i,row in ipairs(visible.rows) do row.context=Encounter.display(state.encounters[record.caseId] and state.encounters[record.caseId][rows[i].id]); for _,affected in pairs(active) do if affected==rows[i].id then row.updated=true end end end; group=group+1 end end
+ local groups; groups,why=Record.project(state.ledger,projections); if not groups then return nil,why end
+ local group=1; for _,record in ipairs(state.ledger.records) do local rows=projections[record.caseId]; if rows and #rows>0 then local visible=groups[group]; local active,err=Updates.visible(state.updates[record.caseId] or {},nowHours,ttlHours); if not active then return nil,err end; local ages=copy(state.learned[record.caseId]); for id,at in pairs(state.relevance[record.caseId]) do ages[id]=at end; local archived; archived,err=Archive.project(visible.rows,ages,nowHours,archiveAgeHours); if not archived then return nil,err end; visible.rows=archived; for i,row in ipairs(visible.rows) do row.context=Encounter.display(state.encounters[record.caseId] and state.encounters[record.caseId][rows[i].id]); for _,affected in pairs(active) do if affected==rows[i].id then row.updated=true end end end; group=group+1 end end
  if #state.bookmarks>0 then
   local rows={}; for i,record in ipairs(state.bookmarks) do rows[i]=Bookmarks.display(record) end
-  notebook[#notebook+1]={name="Personal notes",rows=rows,personal=true}
+  groups[#groups+1]={name="Personal notes",rows=rows,personal=true}
  end
- return {state=state,notebook=notebook}
+ return {state=state,record=groups}
 end
 return F

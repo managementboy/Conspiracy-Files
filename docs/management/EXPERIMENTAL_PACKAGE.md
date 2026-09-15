@@ -20,6 +20,6 @@ Before trying an experimental package, quit the game. Keep the mod zip and a cop
 
 Use the runtime archive ending `-r2.zip` and the review archive ending `-batch2.zip` in the parent workspace `artifacts/experimental/` folder. Earlier archives are retained as superseded review snapshots. The final review bundle includes packaging tools/tests; its manifest captures the exact ledger snapshot. Reproducibility is verified under the same Python/compression runtime; byte identity across different compression-library versions is not claimed.
 
-The approved-policy review snapshot also contains CampaignPolicy and MultiCaseNotebook, their focused tests and research contracts. The suffix indicates policy decisions were received, not gameplay or prose acceptance. Runtime r2 remains unchanged.
+The approved-policy review snapshot also contains CampaignPolicy and MultiCaseRecord, their focused tests and research contracts. The suffix indicates policy decisions were received, not gameplay or prose acceptance. Runtime r2 remains unchanged.
 
 Second-batch review includes the integrated offline flow, encounter/update/archive/bookmark modules and tests. Its shared Generator dependency includes the additive generateSelected API, which is not deployed. Runtime r2 remains the earlier live-test baseline; do not treat the review bundle as a save-compatible replacement mod.

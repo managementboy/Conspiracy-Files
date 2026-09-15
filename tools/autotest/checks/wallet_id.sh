@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# Wallet ID check: does an ID card inside a body's wallet become a notebook
-# identity lead, the way the owner's playtests expect?
+# Wallet ID check: does an ID card inside a body's wallet become an
+# identity lead in the record, the way the owner's playtests expect?
 #
 #   tools/autotest/checks/wallet_id.sh [--hidden]
 #
@@ -77,8 +77,8 @@ report="$EVIDENCE/$id-wallet-id.txt"
     echo "Linux wallet ID check $id: $verdict${why:+ ($why)}"
     source_line
     echo "wallet ID: '$wallet'; wallet stamp after carrying it off: $stamp"
-    echo "notebook summary: ${summary:-none}"
-    [ -z "$detail" ] || { echo "notebook text:"; sed 's/ \\n /\n/g' <<<"$detail" | sed 's/^/  /'; }
+    echo "record summary: ${summary:-none}"
+    [ -z "$detail" ] || { echo "record text:"; sed 's/ \\n /\n/g' <<<"$detail" | sed 's/^/  /'; }
     echo "loose ID on a body: $loose_result"
     echo "errors inside the mod: $(grep -c . <<<"$errors")"
     [ -z "$errors" ] || sed 's/^/  /' <<<"$errors" | head -10

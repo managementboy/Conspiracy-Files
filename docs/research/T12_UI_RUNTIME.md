@@ -1,4 +1,4 @@
-# Spike T12 — Build 42 ISUI notebook runtime feasibility
+# Spike T12 — Build 42 ISUI evidence window runtime feasibility
 
 - **Status:** In progress — unresolved scrollbar/contrast failures; final feasibility verdict pending
 - **Project Zomboid build tested:** Archived console excerpt reports 42.20; exact build/revision must be independently verified for the final versioned run
@@ -9,7 +9,7 @@
 
 ## Question
 
-Can Build 42 ISUI implement the approved minimum Inspect and survivor-notebook interaction model without fragile global overrides, inaccessible focus behavior or resolution/font-scaling failures?
+Can Build 42 ISUI implement the approved minimum Inspect and survivor evidence window interaction model without fragile global overrides, inaccessible focus behavior or resolution/font-scaling failures?
 
 ## Method
 
@@ -17,11 +17,11 @@ Build a disposable UI-only mod using synthetic known-state data. Validate each c
 
 The minimum matrix is:
 
-1. movable and resizable notebook window with enforced minimum usable dimensions;
+1. movable and resizable evidence window with enforced minimum usable dimensions;
 2. master-detail layout at wide width and list-then-detail compact behavior after resize;
 3. right-edge Journal/Evidence controls with visible labels and stable active state;
 4. independently scrolling long-document body while title/actions remain fixed;
-5. separate Help utility window, native X close controls, one configurable notebook open/close binding and best-effort focus restoration; Escape remains reserved for the game under owner decision P4-R47;
+5. separate Help utility window, native X close controls, one configurable evidence window open/close binding and best-effort focus restoration; Escape remains reserved for the game under owner decision P4-R47;
 6. PZ font-size changes and common resolutions without clipped essential text or horizontal document scrolling;
 7. keyboard navigation and visible focus through tabs, list, detail actions, Help and Close;
 8. controller discovery, activation and return path, recording an explicit unsupported verdict if no cooperative route exists;
@@ -32,7 +32,7 @@ The minimum matrix is:
 
 The earlier owner-attended task reports wheel scrolling without a visible scrollbar, unreadable high contrast, and repeated unsuccessful corrections. [Archived owner statements](../management/evidence/2026-09-05-takeover/owner-provenance.json) include the final missing-scrollbar report at 2026-09-05 11:55:39 UTC.
 
-[Archived console excerpts](../management/evidence/2026-09-05-takeover/t12-console-excerpt.txt) identify `DEV-0.4-scrollbar`, notebook open and row-selection callbacks at 3200×2000 with font setting 3. These callbacks do not prove visual usability. The historical DEV-0.5 candidate has no passing observation. Current DEV-0.6 uses the production Notebook/DocumentPane directly through a synthetic-data wrapper; it also has no archived live pass. See the [takeover audit](../management/PM_TAKEOVER_AUDIT_2026-09-05.md).
+[Archived console excerpts](../management/evidence/2026-09-05-takeover/t12-console-excerpt.txt) identify `DEV-0.4-scrollbar`, evidence window open and row-selection callbacks at 3200×2000 with font setting 3. These callbacks do not prove visual usability. The historical DEV-0.5 candidate has no passing observation. Current DEV-0.6 uses the production evidence window/DocumentPane directly through a synthetic-data wrapper; it also has no archived live pass. See the [takeover audit](../management/PM_TAKEOVER_AUDIT_2026-09-05.md).
 
 ## Measurements
 
@@ -44,7 +44,7 @@ Browser prototype behavior is design evidence only. Static inspection of install
 
 ## Verdict
 
-Pending completion of the versioned live matrix. DEV-0.6 uses the shared candidate Notebook/DocumentPane, including separate Help, explicit ink, sibling scrollbar and keyboard navigation. Synthetic fixture preparation performs no world/canonical writes. Browser, mock and source results do not accept rendering, controller, focus or usability. Final verification must include the production manual Inspect path under T11/full acceptance.
+Pending completion of the versioned live matrix. DEV-0.6 uses the shared candidate evidence window/DocumentPane, including separate Help, explicit ink, sibling scrollbar and keyboard navigation. Synthetic fixture preparation performs no world/canonical writes. Browser, mock and source results do not accept rendering, controller, focus or usability. Final verification must include the production manual Inspect path under T11/full acceptance.
 
 ## Decision links
 

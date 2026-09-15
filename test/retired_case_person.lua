@@ -6,7 +6,7 @@
 --
 -- Retirement deliberately discards the case envelope: once every document has
 -- been found, the documents, identities and targets are worthless, and only
--- the evidence rows the notebook renders are kept. Five places in the person
+-- the evidence rows FILES renders are kept. Five places in the person
 -- module read root.case, and none of them expected a root without one.
 --
 -- The fix filters retired roots where the list is built, so nothing downstream

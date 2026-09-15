@@ -1,18 +1,21 @@
-# v0.1 usable notebook UI specification
+# v0.1 usable evidence window UI specification
 
-**DEV-0.6 update:** Notebook and immediate Inspect now share DocumentPane, explicit RGB ink and a sibling scrollbar. Titles/actions are outside the scrolling body; Help is a separate dark utility. Keyboard navigation and remembered/clamped geometry are candidate implementations. Availability uses P4-R51 plain-language copy; police arrival stays ordinary and death recap is deferred. Controller support is unimplemented and must receive an explicit T12 verdict. None of these source changes is a visual pass.
+Status: history. This describes the old evidence window, removed in P4-R128, and
+is kept as history. The organiser is the reading surface now (P4-R79).
+
+**DEV-0.6 update:** The evidence window and immediate Inspect now share DocumentPane, explicit RGB ink and a sibling scrollbar. Titles/actions are outside the scrolling body; Help is a separate dark utility. Keyboard navigation and remembered/clamped geometry are candidate implementations. Availability uses P4-R51 plain-language copy; police arrival stays ordinary and death recap is deferred. Controller support is unimplemented and must receive an explicit T12 verdict. None of these source changes is a visual pass.
 
 Status: conditional implementation target; T12 runtime feasibility is in progress with unresolved scrollbar/contrast failures, and T11 composition is unaccepted. These gates cover functional correctness as well as visual/input usability. See [PM audit](../management/PM_TAKEOVER_AUDIT_2026-09-05.md).
 
 ## Goal
 
-Provide one small, durable retrieval surface for everything the survivor has actually encountered. The player can open it from an explicit inventory-pane action, browse Journal or Evidence in discovery order, read complete known documents, and see only knowledge-bounded leads or connections. Inspect and Mark Interesting update an already-open notebook immediately.
+Provide one small, durable retrieval surface for everything the survivor has actually encountered. The player can open it from an explicit inventory-pane action, browse Journal or Evidence in discovery order, read complete known documents, and see only knowledge-bounded leads or connections. Inspect and Mark Interesting update an already-open evidence window immediately.
 
 ## First usable surface
 
-- `Open Survivor Notebook` is a cooperative inventory-pane context-menu action. The production UI also exposes an unassigned-by-default, configurable `Conspiracy-Files: Toggle Survivor Notebook` binding; it opens or closes the notebook when the player chooses a keyboard/controller button, while native X buttons close individual windows. Escape remains reserved for the game options flow.
+- An open action for the window is a cooperative inventory-pane context-menu action. The production UI also exposes an unassigned-by-default, configurable `Conspiracy-Files` toggle binding; it opens or closes the window when the player chooses a keyboard/controller button, while native X buttons close individual windows. Escape remains reserved for the game options flow.
 - P4-R47 records the owner-approved X/configurable-toggle behavior. The implemented keyBinding path does not establish controller mapping/support; that requires an explicit T12 observation.
-- The notebook is one movable, resizable `ISCollapsableWindow` with `Journal` and `Evidence` buttons, a list, a detail panel, and Close.
+- The evidence window is one movable, resizable `ISCollapsableWindow` with `Journal` and `Evidence` buttons, a list, a detail panel, and Close.
 - At wide widths the list and detail appear together. At compact widths selection opens detail and `Back to list` returns to the list.
 - Journal and Evidence are always ordered oldest to newest, using canonical ordinals rather than authored asset order.
 - Empty Journal and Evidence states are useful and non-quest-like.
@@ -47,11 +50,11 @@ known to the player.
 
 ## Inspect contract
 
-`Inspect Document` performs an idempotent domain discovery and persistence commit before opening a reader. The reader shows the resolved title, contextual introduction and complete authoritative body. If the notebook is already open it refreshes immediately and selects the resulting evidence record. Repeat inspection opens the same body without duplicating Evidence or Journal entries. Internal thread identifiers remain diagnostic/logging details rather than player-facing labels.
+`Inspect Document` performs an idempotent domain discovery and persistence commit before opening a reader. The reader shows the resolved title, contextual introduction and complete authoritative body. If the evidence window is already open it refreshes immediately and selects the resulting evidence record. Repeat inspection opens the same body without duplicating Evidence or Journal entries. Internal thread identifiers remain diagnostic/logging details rather than player-facing labels.
 
 ## Refresh and failure behavior
 
-- Opening or refocusing the notebook rebuilds its view from `Runtime.state`.
+- Opening or refocusing the evidence window rebuilds its view from `Runtime.state`.
 - Successful Inspect and Mark Interesting call the same refresh function synchronously after persistence.
 - Selection is retained by stable entry/evidence ID where possible.
 - Every PZ-facing action is contained by `pcall`; a UI failure logs one concise boundary error and does not roll back already-committed discovery truth.

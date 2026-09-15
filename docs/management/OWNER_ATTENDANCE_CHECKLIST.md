@@ -26,7 +26,7 @@ Open the ordinary debug console and manually enter ConspiracyFiles.T12Probe.open
 - [ ] Verify the visible 22 px scrollbar, wheel, track paging, thumb drag and reaching both ends without title/actions moving.
 - [ ] Test wide and compact layouts, long titles, Back, separate Help, native X and repeated reopening.
 - [ ] Test keyboard Tab/arrows/Enter/Page Up/Page Down; confirm Escape still reaches the game.
-- [ ] Assign the notebook toggle through game settings and verify open/close.
+- [ ] Assign the evidence window toggle through game settings and verify open/close (moot: the window and its key bind were removed, P4-R128).
 - [ ] Check agreed lower resolutions/font sizes, vanilla coexistence and geometry after resize/reopen.
 - [ ] Record controller unsupported/unavailable unless a cooperative route is actually observed. Do not infer support from keyboard behavior.
 - [ ] Archive visible verdict and console/version evidence. A repeated failure should produce one focused correction, not another unchanged full rerun.

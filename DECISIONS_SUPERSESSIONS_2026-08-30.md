@@ -10,10 +10,10 @@ This file is an authoritative overlay on the original `DECISIONS.md` baseline. I
 - P2-Q20: graph is not primary in v1; journal + evidence list are primary, graph moves to v2.
 - P2-Q34/P2-Q35: compatible text-only revisions may update without migration; semantic/schema changes require compatibility handling.
 - P2-Q54: no-AI is primary; AI is optional enhancement.
-- P2-Q62/P2-Q63: popup onboarding removed; use an in-fiction notebook/help page.
+- P2-Q62/P2-Q63: popup onboarding removed; use an in-fiction case record/help page.
 - P2-Q69: provenance remains internally stored and may be exposed by an optional toggle.
 - P2-Q100: the universal rule that location confirmation occurs when the player enters a building is superseded by P4-R39's exact binding-specific room/building/floor/basement/radius/rectangle/zone predicates. P2-Q97-Q99 and P2-Q101 remain compatible as progressive-precision rules. See [`T8_LOCATION_ARRIVAL.md`](docs/research/T8_LOCATION_ARRIVAL.md) and [T8 / GitHub Issue #9](https://github.com/managementboy/Conspiracy-Files/issues/9).
-- P2-Q144: pause/help preferences move to mod options; one normal-play notebook keybind.
+- P2-Q144: pause/help preferences move to mod options; one normal-play case record keybind.
 - P2-Q180/P2-Q181: full hidden-state diagnostics are development/debug only.
 - P2-Q190/P2-Q191: exact pack/core version matching retired; future compatibility separates content revision, CF schema/API, and PZ minor line.
 - P2-Q198: retain a minimal one-line migration audit if migrations return.
@@ -35,9 +35,9 @@ These rulings incorporate the lead-developer review. They supersede earlier deci
 | P4-R08 | Expected asset-text model is **hybrid**: normal vanilla inventory/container behaviour plus custom reader/Inspect rendering for world-specific ModData; native readable behaviour may be used for static pre-baked assets. Final ruling awaits T7. | PZ runtime item text capabilities are load-bearing and unproven. |
 | P4-R09 | Ship usable defaults, but no default is sacred. | Resolves P1-Q17/P2-Q49 without forcing configuration from scratch. |
 | P4-R10 | Decouple **content revision**, **Conspiracy-Files schema/API compatibility**, and **PZ build compatibility**. Typo/text-only compatible fixes do not require save migration. PZ support targets a minor line (provisionally 42.20.x), not every patch. | Exact-match versioning makes a never-finished content project unmaintainable. |
-| P4-R11 | Runtime-AI/system/player provenance is stored and an **optional provenance toggle** may display it. AI-assisted, human-approved authored assets are treated as normal authored content in-fiction. | Players need a way to audit generated interpretation without making the notebook visually noisy by default. |
+| P4-R11 | Runtime-AI/system/player provenance is stored and an **optional provenance toggle** may display it. AI-assisted, human-approved authored assets are treated as normal authored content in-fiction. | Players need a way to audit generated interpretation without making the case record visually noisy by default. |
 | P4-R12 | Localise UI/static strings. Dynamic/template-composed story prose is English-first and not guaranteed localisable in v1. | Runtime composition and full localisation conflict. |
-| P4-R13 | Replace popup onboarding with an **in-fiction first notebook/help page**. Use **one global notebook keybind**; help lives inside the notebook. Pause preference lives in mod options. | Reduces quest-like UI and keybind collisions. |
+| P4-R13 | Replace popup onboarding with an **in-fiction first case record/help page**. Use **one global case record keybind**; help lives inside the case record. Pause preference lives in mod options. | Reduces quest-like UI and keybind collisions. |
 | P4-R14 | Archive relevance is re-evaluated **only on affected evidence/relationship events**, using shared entity/metadata indexes; never re-score all evidence pairs continuously. | Makes auto-resurface compatible with the performance rules. |
 | P4-R15 | Organisation refinement vs identity non-merge is deliberate: an organisation record's label may become known, while separate identity nodes preserve alias encounter history even when linked SAME_PERSON. | Resolves apparent inconsistency without discarding useful history. |
 | P4-R16 | Provisional non-initialisation runtime budget: **≤2 ms/frame** for Conspiracy-Files work, with a queued work scheduler and bounded per-frame batches. | PZ Lua runs on the main thread; performance needs an explicit budget. |
@@ -53,7 +53,7 @@ These rulings incorporate the lead-developer review. They supersede earlier deci
 | P4-R26 | Content owner: the project owner writes/approves canonical content; AI may assist drafting during development. First fixture is hand-authored before schema extraction. | Establishes ownership and avoids schema-first content design. |
 | P4-R27 | Three target reward moments are specified in `docs/requirements/PLAYER_MOMENTS.md`. | The mod needs concrete emotional/UI payoffs despite no completion state. |
 | P4-R28 | “Long inactivity” means a **real-world gap between play sessions**, not in-game elapsed time; implementation mechanism remains to be proven. | The intent is return-player memory assistance. |
-| P4-R29 | One normal-play global keybind: open notebook. Diagnostics use debug tooling, not another normal-play key. | Reduces conflicts in heavily modded games. |
+| P4-R29 | One normal-play global keybind: open the case record. Diagnostics use debug tooling, not another normal-play key. | Reduces conflicts in heavily modded games. |
 | P4-R30 | Successful migrations (future feature) retain a minimal audit record: from-version, to-version, timestamp/result. | Needed for diagnostics/support even if full migration history is unnecessary. |
 
 ---

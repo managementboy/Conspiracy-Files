@@ -54,7 +54,7 @@ local function fill(text,map)
 end
 -- A case reference exists so that three documents look like one file,
 -- which is how paperwork works. It is drawn independently of the premise: the
--- links between documents already carry the connection and the notebook sorts
+-- links between documents already carry the connection and the record sorts
 -- on them, so a reference that encoded the premise would only announce which
 -- story the player had drawn before they had read a word of it.
 local REFERENCE={"R","RC","GT","PS","WB","HK","MC","BF","LD","TN","AV","QS"}
@@ -255,7 +255,7 @@ end
 -- parts, because Generated/DocumentPages.lua reads them: the physical
 -- description is dropped from the readable pages, the document's own words
 -- become the pages, and everything from WHAT IT MIGHT MEAN stays in the
--- notebook. A premise that reordered these would put an interpretation on a
+-- record. A premise that reordered these would put an interpretation on a
 -- page the survivor is supposed to have found already written.
 --
 -- Exposed so test/premise_consistency.lua renders every premise both ways
@@ -503,7 +503,7 @@ local function build(seed,revision,sites,cast,relayMemo,steer)
     -- these three roles reach several hundred objects between them rather than
     -- the handful a person would have listed.
     --
-    -- The notebook sentence records that the thing was found with the documents
+    -- The record's sentence notes that the thing was found with the documents
     -- and stops. It must not say what the object means, because the object is
     -- the one piece of evidence the player can interpret entirely without us.
     -- How a person's name ends up on a thing, by what kind of thing it is. A
@@ -586,7 +586,7 @@ local function build(seed,revision,sites,cast,relayMemo,steer)
         body=subst(body,"COUNT",numeral(count))
         body=string.upper(string.sub(body,1,1))..string.sub(body,2)
         assert(Roles.fits(roleId,kind,body))
-        -- The notebook row names the pile; each physical copy is numbered by
+        -- The evidence row names the pile; each physical copy is numbered by
         -- the runtime (owner, 2026-09-10: "1 of x should be counted on each
         -- item"), which needs the bare label rather than the row's wording.
         -- "six lunchboxes", not "lunchbox, six of them".
@@ -926,7 +926,7 @@ function G.project(case,discovered)
     for i,id in ipairs(discovered) do
         local doc=byId[id]; local links={}
         -- Links to documents NOT yet found are reported as `unseen`, by the
-        -- kind of document only - never its text. The notebook turns them into
+        -- kind of document only - never its text. The record turns them into
         -- the survivor wondering aloud: "Probably refers to another stock
         -- list?" (owner, 2026-09-11: "that creates tension"). A question can be
         -- wrong, which is exactly what keeps it from being a quest marker.

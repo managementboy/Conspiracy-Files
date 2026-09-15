@@ -1,8 +1,8 @@
 -- The survivor starts with something to keep their evidence in.
 --
--- Owner, 2026-09-10, from a screenshot of a vanilla photo album: "we could
--- provide at game start such a Photoalbum and call it Survivor Notebook. Set
--- it to favorite so it does not get lost easily." And then: "I would rather
+-- Owner, 2026-09-10, from a screenshot of a vanilla photo album: the owner
+-- asked for such a photo album at game start, set to favourite so it does not
+-- get lost easily. And then: "I would rather
 -- the player starts with it in his/her inventory."
 --
 -- Base.PhotoAlbum accepts maps, literature and wallet-tagged items, which is

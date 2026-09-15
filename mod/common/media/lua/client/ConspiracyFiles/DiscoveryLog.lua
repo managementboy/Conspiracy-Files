@@ -1,5 +1,5 @@
 -- ModData-backed writer/reader for the shared chronological discovery ledger.
--- Every discovery source appends here as it happens; the notebook reads only
+-- Every discovery source appends here as it happens; the organiser reads only
 -- this ledger for ordering, so numbering matches what the player actually did.
 local CFLog=require("ConspiracyFiles/Log")
 local Ledger=require("ConspiracyFiles/DiscoveryLedger")
@@ -28,7 +28,7 @@ D.root=function() local ok,value=pcall(root); return ok and value or Ledger.empt
 -- Where the player is standing when a discovery is stamped, as the address
 -- book names it. Stamped ONCE, here, and never recomputed: a document found
 -- in a car that is later driven across town was still found where it was
--- found, and a notebook that quietly rewrites its own history is worse than
+-- found, and a record that quietly rewrites its own history is worse than
 -- one that says nothing.
 --
 -- Two readings, in order. The building the player is standing in is the

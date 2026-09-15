@@ -4,7 +4,7 @@
 -- None of them invent knowledge and none state what the player has not earned;
 -- a smarter screen does not change that rule.
 --
---   FILES    the evidence, with record numbers        (the notebook's own rows)
+--   FILES    the evidence, with record numbers        (EvidenceRows)
 --   NAMES    every identity seen, and where           (IdentityObservations)
 --   DATES    what was found on which day              (DiscoveryLedger hours)
 --   TO DO    leads the survivor set for themselves    (written here, by tapping)
@@ -13,6 +13,7 @@
 -- optionally `open(row)` for what a tap on a row does. Everything else - the
 -- title bar, the scrolling, the arrows - belongs to the shell.
 local K=require("ConspiracyFiles/KnoxUI")
+local Rows=require("ConspiracyFiles/EvidenceRows")
 ConspiracyFiles=ConspiracyFiles or {}
 local A=ConspiracyFiles.KnoxApps or {}
 ConspiracyFiles.KnoxApps=A
@@ -72,7 +73,7 @@ end
 --
 -- The fields come out of the projection's own ALLCAPS blocks (FOUND, MAP,
 -- PHYSICAL OBJECT ...), so nothing is invented here and any wording the
--- notebook improves arrives on the device with it.
+-- projection improves arrives on the device with it.
 local FIELD={FOUND="FOUND",["MAP"]="MAP",["PHYSICAL OBJECT"]="OBJECT",
              ["ATTACHED"]="NOTES",["ORIGINAL CONTEXT"]="CONTEXT"}
 
@@ -96,8 +97,7 @@ end
 A.files={
     id="FILES",title="FILES",icon="files",
     list=function()
-        local ui=ConspiracyFiles.NotebookUI
-        local rows=(ui and ui.generatedRows and safe(ui.generatedRows,"evidence")) or {}
+        local rows=safe(Rows.list,"files") or {}
         local log=ConspiracyFiles.DiscoveryLog
         local when={}
         for _,event in ipairs((log and log.events and safe(log.events)) or {}) do
@@ -109,16 +109,7 @@ A.files={
         -- somewhere?", P4-R104). Knowledge only: what the scan saw, or where a
         -- finished case's evidence was last seen - never that it is lost.
         local runtime=ConspiracyFiles.GeneratedRuntime
-        local function whereOf(id)
-            if not runtime or not runtime.whereabouts then return nil end
-            local ok,state,place=pcall(runtime.whereabouts,id)
-            if not ok then return nil end
-            local known=type(place)=="string" and place~="" and place or nil
-            if state=="accounted" then return known or "Last accounted for close by." end
-            if state=="uncertain" then return "Not seen recently."..(known and (" Last seen: "..known) or "") end
-            if state=="lastseen" and known then return "Last seen: "..known end
-            return nil
-        end
+        local whereOf=Rows.where
         local out={}
         -- "What do I make of it?" (P4-R113, P4-R122): a row at the top for every
         -- finished case, newest first. Opening it shows the three questions;
@@ -251,8 +242,7 @@ local function nameIn(text,name)
 end
 
 function A.caseNames()
-    local ui=ConspiracyFiles.NotebookUI
-    local rows=(ui and ui.generatedRows and safe(ui.generatedRows,"evidence")) or {}
+    local rows=safe(Rows.list,"evidence") or {}
     if #rows==0 then return {} end
     local candidates,seen={},{}
     local function add(name)
@@ -313,7 +303,7 @@ A.names={
         if me and (filter=="All" or filter=="Named") then out[1]=me end
         for _,row in ipairs(rows) do
           if passesFilter(row,filter) then
-            -- The notebook says "Found Ines Kubiak's ID card" because it is a
+            -- FILES says "Found Ines Kubiak's ID card" because it is a
             -- list of findings. An address book is a list of PEOPLE, so the
             -- name leads and the document is the detail.
             local label=tostring(row.title or ""):gsub("^Found ","")
@@ -344,8 +334,7 @@ local monthLength,firstWeekday=Calendar.monthLength,Calendar.firstWeekday
 function A.diary()
     local log=ConspiracyFiles.DiscoveryLog
     local events=(log and log.events and safe(log.events)) or {}
-    local ui=ConspiracyFiles.NotebookUI
-    local rows=(ui and ui.generatedRows and safe(ui.generatedRows,"evidence")) or {}
+    local rows=safe(Rows.list,"evidence") or {}
     local titles={}
     for _,row in ipairs(rows) do if row.id then titles[row.id]=row.title end end
     local byKey,newest={},nil
@@ -580,8 +569,7 @@ A.help={
 A.places={
     id="PLACES",title="PLACES",icon="places",
     list=function()
-        local ui=ConspiracyFiles.NotebookUI
-        local rows=(ui and ui.generatedRows and safe(ui.generatedRows,"places")) or {}
+        local rows=safe(Rows.list,"places") or {}
         local out={}
         for _,row in ipairs(rows) do
             if row.cfHeading then

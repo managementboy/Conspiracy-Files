@@ -1,6 +1,6 @@
 -- The build string, in one place.
 --
--- It was in two: Notebook's UI.VERSION named the title bar and the packaged
+-- It was in two: the old evidence window's UI.VERSION named the title bar and the packaged
 -- archive, while Runtime.VERSION stamped every [CF-DEAD-AIR] log line. Both
 -- were maintained by hand and drifted six releases apart, so a log collected
 -- on 2026-09-08 from a DEV-0.8.12 build reported DEV-0.6-transactional-
@@ -14,5 +14,5 @@
 -- This module deliberately requires nothing, so anything can read it without
 -- dragging in a dependency chain.
 ConspiracyFiles = ConspiracyFiles or {}
-ConspiracyFiles.VERSION = "DEV-0.39.0-clues-evidence-hunches"
+ConspiracyFiles.VERSION = "DEV-0.40.0-one-reading-surface"
 return ConspiracyFiles.VERSION

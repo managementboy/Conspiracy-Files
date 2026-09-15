@@ -3,6 +3,9 @@
 -- survivor's own note once anything is answered.
 package.path="mod/common/media/lua/client/?.lua;mod/common/media/lua/shared/?.lua;"..package.path
 getTexture=function(path) return {path=path} end
+package.preload["ConspiracyFiles/EvidenceRows"]=function()
+    return {list=function() return {{id="d1",ordinal=1,title="Dispatch copy / R-482",detailText="Some words."}} end,where=function() return nil end}
+end
 ConspiracyFiles={}
 local A=require("ConspiracyFiles/KnoxApps")
 local offered={premiseId="transfer-nobody-arranged",outline="corroboration",people={"Delia Mercer","Roy Hale"},organisation="County Personnel Office"}
@@ -11,7 +14,6 @@ local questions={
     {caseId="generated:4:case",number=1,offered=offered},
 }
 ConspiracyFiles.GeneratedRuntime={questions=function() return questions end,whereabouts=function() return nil end}
-ConspiracyFiles.NotebookUI={generatedRows=function() return {{id="d1",ordinal=1,title="Dispatch copy / R-482",detailText="Some words."}} end}
 
 local files=A.files.list()
 assert(#files==3,"two question rows and one piece of evidence: "..#files)

@@ -1,7 +1,7 @@
 -- Single chronological ledger of what the player actually discovered.
 -- Pure domain: no PZ runtime dependency.  Sources (generated evidence,
 -- identity documents, derived connections) append here in real time so the
--- notebook can render one true discovery order instead of grouping by source.
+-- organiser can render one true discovery order instead of grouping by source.
 local V=require("ConspiracyFiles/Validator")
 local M={SCHEMA=2,MAX=512,MAX_REF=700,MAX_PLACE=160}
 local KINDS={evidence=true,identity=true,connection=true}

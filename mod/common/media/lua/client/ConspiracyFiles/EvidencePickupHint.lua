@@ -114,7 +114,7 @@ E.install()
 -- done that?" The pickup line fired once, as designed, and was missed - and
 -- once is all it ever says for an item.
 --
--- So while anything carried is live evidence the notebook has not recorded,
+-- So while anything carried is live evidence the record has not noted,
 -- the halo repeats every few minutes. Halo ONLY: no speech and no sound. The
 -- speech line is the survivor noticing a thing once; this is a quiet mark
 -- above their head, and a mod whose survivor repeats himself every three

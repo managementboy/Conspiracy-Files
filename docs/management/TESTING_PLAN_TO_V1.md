@@ -60,7 +60,7 @@ first real evidence for two criteria.
 
 | Target | What to do | Pass looks like |
 |---|---|---|
-| **O2** | Loot corpses until one wears something distinctive | A notebook entry reads "The body itself wore a security guard" or similar, in plain words. A body that gives no line logs `no outfit line for token ...` with the reason, so a generic outfit is told from one never read |
+| **O2** | Loot corpses until one wears something distinctive | A FILES entry reads "The body itself wore a security guard" or similar, in plain words. A body that gives no line logs `no outfit line for token ...` with the reason, so a generic outfit is told from one never read |
 | **O3** | Take a **vanilla** house key off any corpse, try nearby doors | `[CF-PERSON] observedKeyDoor` plus a named voice line. A case key will not work: `observedCorpseKey` excludes it |
 | **O4** | Open a wallet holding a watched card, do not click | Contents recorded, or `[CF-IDENTITY] bailed: <reason>` names the check |
 | **E12** | Nothing; the log records it | `[CF-T3-NEARBY] callbacksOver2Ms=0` and `peakMs<=2` under a real scan |
@@ -75,7 +75,7 @@ Carry one discovered document through every state a player can put it in:
 inventory, a container, the floor, a vehicle, back to inventory. Save and
 reload between at least two of those. Then let it be destroyed or lost.
 
-**Pass:** the notebook's account of the item stays truthful at each step, and
+**Pass:** the organiser's account of the item stays truthful at each step, and
 never claims an item exists after it is genuinely gone. T5 proved the mechanism;
 this proves the mod's use of it.
 
@@ -111,7 +111,7 @@ reload not disturbing it.
 
 **Setup.** A save with at least **three discoveries** already recorded and, if
 possible, one document still in the world uncollected - a partially explored
-case exercises more than a finished one. Diagnostics on. Note the notebook's
+case exercises more than a finished one. Diagnostics on. Note the organiser's
 entry order before starting; it is the thing being protected.
 
 **The measurement.** E09 requires the encoded size, not a guess. Before and
@@ -132,7 +132,7 @@ It prints to `console.txt`, so the numbers arrive in the stream and the delta
 across phases is the "encoded delta" E09 asks for.
 
 **Phase 1 - clean round trip (E09).** Save and quit properly. Reload. Compare
-the notebook against the order noted at the start.
+FILES against the order noted at the start.
 *Pass:* every entry present, same order, same text, same ordinals. Derived
 views - evidence list, connections - rebuild identically. `[BUDGET] TOTAL`
 unchanged or trivially different.
@@ -145,7 +145,7 @@ this phase will find.
 **Phase 3 - death after discoveries (E10).** Get killed deliberately, with all
 discoveries recorded. Continue as a new character in the same save.
 *Pass:* canonical discoveries are intact and in order. The new survivor's
-notebook is titled with the **new** forename. Death recap is out of v0.1
+evidence album is titled with the **new** forename. Death recap is out of v0.1
 (P4-R52), so its absence is correct, not a gap.
 
 **Phase 4 - death mid-discovery (E10).** Start again, find a document, and die
@@ -262,7 +262,7 @@ an oversight.
 
 - **T11 adapter composition.** Largely evidenced by S1–S6 running on one real
   bound case; write it up rather than re-running it.
-- **T12 UI runtime feasibility.** Partly evidenced already by the notebook work
+- **T12 UI runtime feasibility.** Partly evidenced already by the evidence window work
   of 2026-09-08. Finish it by recording which ISUI limitations were hit -
   `ISRichTextPanel` has no font tag, `defaultFont` is settable, tags are limited
   to RGB/SIZE/H1/CENTRE/INDENT/SPACE/LINE.

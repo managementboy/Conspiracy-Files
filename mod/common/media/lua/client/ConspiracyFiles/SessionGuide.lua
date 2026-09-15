@@ -10,7 +10,7 @@ ConspiracyFiles.SessionGuide=Guide
 Guide.VERSION="GUIDE-0.1 / candidate DEV-0.6"
 Guide.steps={
     {id="ui-scroll",mode="T12",title="1. Readability and scrolling",text="Enable ConspiracyFiles + T12 only in a disposable debug save. Open test UI. Start at 3200 x 2000 / font setting 3. Check ordinary and high-contrast ink, visible scrollbar, wheel, track paging, thumb drag and both ends. Titles/actions must stay fixed. Record your observation; stop on a repeatable failure."},
-    {id="ui-navigation",mode="T12",title="2. Navigation and scale",text="Check wide/compact resize, long titles, Back, Help, native X and repeated reopening. Test Tab/arrows/Enter/Page Up/Down and a configured notebook toggle. Escape must remain with the game. Try lower resolution/font settings. Controller is unimplemented: record Not tested with a note, not a guessed pass. This step's verdict covers keyboard/mouse only."},
+    {id="ui-navigation",mode="T12",title="2. Navigation and scale",text="Check wide/compact resize, long titles, Back, Help, native X and repeated reopening. Test Tab/arrows/Enter/Page Up/Down. Escape must remain with the game. Try lower resolution/font settings. Controller is unimplemented: record Not tested with a note, not a guessed pass. This step's verdict covers keyboard/mouse only."},
     {id="relay",mode="T12",title="3. Electronics / relay location",text="Travel manually to the Muldraugh candidate around (10614,9604,0). Check believable paperwork/tool storage and access. Snapshot the exact square at each useful container. Test inside, adjacent-room/outside, boundary and wrong-floor squares. The candidate rectangle is x [10613,10617), y [9603,9607), z 0. A match alone is not proof that the room is suitable."},
     {id="police",mode="T12",title="4. Police location and route",text="Travel by an ordinary road route to police around (10637,10410,0). Record route/access plausibility and exact storage squares. Test inside, adjacent room/outside, boundary and wrong floor. Candidate rectangle: x [10636,10640), y [10409,10413), z 0. Return observations for a binding patch; Pass here does not set Bindings.accepted."},
     {id="placement",mode="T11",title="5. One real D1 placement",text="Leave the save. Disable T12 and enable T11 with ConspiracyFiles. Use a fresh disposable schema-2 save. Never enable both wrappers. Reopen this guide. T11 permits D1 only; inspect its snapshot after loading the relay target. Require one stamped physical item and placed status. Repeat callbacks and stream out/in. Exact binding is still provisional unless an observed binding patch has been applied."},
@@ -96,7 +96,7 @@ function Window:createChildren()
         {"Next",function() Guide.index=math.min(#Guide.steps,Guide.index+1); self:refresh() end},
         {"Open test UI",function()
             if Guide.mode()=="T12" and ConspiracyFiles.T12Probe then ConspiracyFiles.T12Probe.open()
-            elseif Guide.mode()=="T11" then ConspiracyFiles.NotebookUI.open() end
+            elseif Guide.mode()=="T11" and ConspiracyFiles.Organiser then ConspiracyFiles.Organiser.read() end
         end},
         {"Snapshot",Guide.capture},
         {"Pass",function() Guide.record("Pass") end},

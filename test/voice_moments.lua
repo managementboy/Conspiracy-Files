@@ -6,7 +6,7 @@
 --
 -- THE RULE: speak only when the player learns something they could not have
 -- known a second earlier. It rules out ambient observation entirely - walking
--- past a marker, opening the notebook, reading a page - and it rules in all
+-- past a marker, opening the organiser, reading a page - and it rules in all
 -- five of these. A line the survivor has not earned makes the next one cheaper,
 -- and Project Zomboid players uninstall mods that natter.
 package.path = "mod/common/media/lua/client/?.lua;mod/common/media/lua/shared/?.lua;" .. package.path

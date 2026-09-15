@@ -9,7 +9,7 @@ Implementation philosophy: Vanilla Lua first; ZombieBuddy/Java only for missing 
 ## 1. Architecture principles
 
 1. **Vanilla-first** — use normal Project Zomboid Lua events and exposed Java APIs wherever possible.
-2. **One authoritative model** — the Conspiracy Model is the source of truth. Notebook, graph, diagnostics, archive, and AI context are projections of that model.
+2. **One authoritative model** — the Conspiracy Model is the source of truth. Case record views, graph, diagnostics, archive, and AI context are projections of that model.
 3. **Minimal canonical persistence** — persist only state that cannot safely be reconstructed. Rebuild indexes, caches, lookup tables, and UI views on load.
 4. **Entity + relationship architecture** — domain entities are stored in typed collections. Relationships are canonical records in a central relationship store.
 5. **Event boundary** — PZ events are translated into internal Conspiracy-Files domain events. Internal systems do not depend directly on each other through ad-hoc calls.
@@ -129,7 +129,7 @@ Desired boundary triggers include:
 - building/room entered;
 - chunk/cell loaded;
 - item/container becoming available;
-- notebook opened;
+- case record opened;
 - save requested.
 
 Exact PZ hooks must be verified during technical implementation.
@@ -564,9 +564,9 @@ System-derived relevance does not become world truth merely because it scores hi
 
 ---
 
-# 13. Journal / Survivor Notebook
+# 13. Journal / Case Record
 
-Notebook is a view/controller over the canonical model and owns no independent story truth.
+The case record view is a view/controller over the canonical model and owns no independent story truth.
 
 Sections:
 - chronological journal
@@ -578,16 +578,16 @@ Sections:
 
 Behavior:
 - opens by dedicated key;
-- pause behavior configured inside notebook;
+- pause behavior configured inside the case record;
 - remembers last page;
 - remembers last selected object;
 - new pages append;
 - long entries paginate;
-- archive appears as older notebook material;
+- archive appears as older case record material;
 - update marker expires based on in-game time;
 - major discoveries get a dedicated marker.
 
-UI principle: reuse vanilla PZ controls/list behaviors where practical. Use custom UI only where notebook/graph functionality requires it.
+UI principle: reuse vanilla PZ controls/list behaviors where practical. Use custom UI only where case record/graph functionality requires it.
 
 ---
 
@@ -826,7 +826,7 @@ Preferred work scheduling:
 - update journal;
 - invalidate affected derived caches.
 
-### On notebook open
+### On case record open
 - rebuild/refresh stale projections.
 
 ### On explicit AI request
@@ -847,7 +847,7 @@ Rules:
 - only write canonical placement state after successful injection;
 - migration is transactional;
 - runtime AI failure never changes evidence state;
-- notebook/graph rendering failure never changes conspiracy truth;
+- case record/graph rendering failure never changes conspiracy truth;
 - derived caches may always be discarded and rebuilt.
 
 ---
@@ -884,7 +884,7 @@ ConspiracyFiles/
   journal/       JournalProjection, Archive
   graph/         GraphProjection, GraphLayout
   ai/            AIService, ContextBuilder
-  ui/            Notebook, Inspect, Help, Diagnostics
+  ui/            Records, Inspect, Help, Diagnostics
   integration/   PZEvents, Inventory, Literature, Map, OptionalJavaBridge
 ```
 
@@ -903,7 +903,7 @@ Before feature implementation:
 5. prove exact-once deferred placement;
 6. prove evidence item identity/persistence;
 7. prove native-style Inspect;
-8. prove notebook persistence;
+8. prove case record persistence;
 9. prove graph persistence/manual positions;
 10. decide whether any of these genuinely requires ZombieBuddy.
 
@@ -955,7 +955,7 @@ Meaning:
 - one authoritative Lua domain model;
 - clearly separated subsystems;
 - an internal event bus;
-- derived notebook/graph projections;
+- derived case record/graph projections;
 - canonical persistence;
 - optional narrow Java bridge behind an interface.
 

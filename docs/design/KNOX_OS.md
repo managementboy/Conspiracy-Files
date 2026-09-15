@@ -79,7 +79,7 @@ programs as a list with their record counts. Knox.OS boots into Files.
 
 The mod has spent months building exactly what a PIM needs: records with dates,
 names, places and cross-references. What has been missing is a shape for them
-that is not one long notebook. A 1993 organiser is that shape. The Address Book
+that is not one long list. A 1993 organiser is that shape. The Address Book
 and the Date Book are not new features so much as the right windows onto
 observations the player has already earned.
 

@@ -1,5 +1,5 @@
 package.path="dev/next-phase/?.lua;mod/common/media/lua/shared/?.lua;"..package.path
-local C=require("CampaignPolicy"); local M=require("MultiCaseNotebook")
+local C=require("CampaignPolicy"); local M=require("MultiCaseRecord")
 local ledger=C.new(); local cfg={minGapHours=0,maxConcurrent=2,maxRetained=3}
 local function q(id,h,sites) return {caseId=id,createdHours=h,survivalHours=h,anchor={x=1,y=2},radius=250,siteIds=sites,activeIds={},activeCount=0} end
 ledger=assert(C.stage(ledger,cfg,q("one",0,{"a","b"}),{})); ledger=assert(C.stage(ledger,cfg,q("two",1,{"c","d"}),{}))
@@ -10,4 +10,4 @@ projections.one[1].title="changed"; assert(groups[1].rows[1].title=="Known A", "
 groups[1].rows[1].title="returned"; assert(projections.one[1].title=="changed", "source must not alias return")
 local reordered=assert(M.project(ledger,{one={{id="b",title="B",body="b",locationId="x",leads={},connections={{target="a",kind="link"}}},{id="a",title="A",body="a",locationId="x",leads={},connections={}}}})); assert(#reordered==1 and reordered[1].rows[1].id=="b" and #reordered[1].rows[1].links==1, "known row order and same-case links preserve")
 assert(not M.project(ledger,{ghost={}}) and not M.project(ledger,{one={{id="x",title="x",body="x",locationId="x",leads={},connections={},target="raw"}}}), "unknown cases and raw fields reject")
-print("PASS MultiCaseNotebook: learned-only grouping, isolation, namespaced IDs, and filtered links")
+print("PASS MultiCaseRecord: learned-only grouping, isolation, namespaced IDs, and filtered links")

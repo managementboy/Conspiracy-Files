@@ -7,7 +7,7 @@ entry, and again when a person-key-door link is discovered.
 
 The **journal stays hedged**; the **character may speculate**. A survivor
 thinking aloud is not the record asserting a fact, so these lines can carry
-excitement the notebook never will. They still stop short of certainty: no line
+excitement the record never will. They still stop short of certainty: no line
 states as fact that the named person lived somewhere or owned anything. "Their
 place, I'd bet" is in character. "This was their house" is not.
 
@@ -82,7 +82,7 @@ properly, never at the keybind or the context-menu action by name.
   second earlier.** Owner, 2026-09-10: "I would also like us to use it much
   more to interact with the player." The rule is what lets that be true without
   the mod nattering: it rules out ambient observation entirely - walking past a
-  marker, opening the notebook, reading a page - and rules in every moment
+  marker, opening the organiser, reading a page - and rules in every moment
   below. A line the survivor has not earned makes the next one cheaper.
 
   | Moment | Halo (white) | Bubble (colour) |

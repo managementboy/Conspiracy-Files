@@ -6,7 +6,7 @@
 -- when validation fails - all correct for discoveries, all wrong for visits.
 -- Visits are orders of magnitude more frequent: a single afternoon of walking
 -- would burn a case's entire history. This is small, bounded, evictable
--- bookkeeping that lives beside the notebook's other player-save state, and
+-- bookkeeping that lives beside the record's other player-save state, and
 -- losing all of it costs headings, never a discovery.
 --
 -- THE RULE IT EXISTS TO ENFORCE (P4-R81): a return only counts if something

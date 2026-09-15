@@ -41,7 +41,7 @@ Two things currently fix a name at creation:
 - A separate, mutable `names` table in the session root maps each role to a
   name, together with whether that name is **locked**.
 - A name is locked **the first time any document showing it is read** - opened
-  in the notebook, or read in game. After that it never changes.
+  on the organiser, or read in game. After that it never changes.
 - Until it is locked, a role's name may be replaced. When the player loots an
   identity document off a body and a role is still unlocked, that name fills
   the role.
@@ -64,7 +64,7 @@ before it shows an empty page.
   met, as `identities[n].met` already is, so `CasePerson` gives no second
   zombie that name.
 - **No claims.** A name reaching a document is still only a name on a
-  document; the notebook still says a name is a lead.
+  document; the organiser still says a name is a lead.
 - **Old saves keep working.** Cases created before this carry names in their
   text and must go on validating exactly as they do today.
 
@@ -82,7 +82,7 @@ before it shows an empty page.
 
 1. Placeholders in case text, and a name table in the session. Validation
    compares placeholders.
-2. Locking on first read in the notebook.
+2. Locking on first read on the organiser.
 3. Pages written at first read rather than placement, including the in-game
    Read action.
 4. Filling unlocked roles from looted bodies.

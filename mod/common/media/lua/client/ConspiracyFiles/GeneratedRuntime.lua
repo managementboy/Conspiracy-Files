@@ -17,7 +17,7 @@ ConspiracyFiles.GeneratedRuntime=R
 if R.loaded then return R end
 local sessions,scheduler,wrapper,ticks,preparing
 -- Rows of retired cases. They have no Session to project from, but the player
--- learned them and the notebook must still render them.
+-- learned them and FILES must still render them.
 local retiredRows={}
 -- Where and when a later case last found nothing usable nearby (P4-R125).
 local deferredAt=nil
@@ -97,7 +97,7 @@ local function setup()
     ticks=0; return true
 end
 -- Put the document's own words on the object. A diary you can pick up, open
--- and find blank contradicts the record the notebook keeps of it, and the
+-- and find blank contradicts the record the organiser keeps of it, and the
 -- object is the thing the player actually holds.
 --
 -- Literature.addPage was proven to persist across save and reload by T7 on
@@ -298,7 +298,7 @@ local function openAll()
             -- forever - the same shape of failure as the retired-case loop
             -- fixed on 2026-09-09. A case from an older build is a case we
             -- stop tracking, not a crash. Its evidence stays in the player's
-            -- world and its notebook rows stay readable; only placement and
+            -- world and its evidence rows stay readable; only placement and
             -- discovery stop.
             local api,why=Session.open(root,function(staged) swap(assert(Cases.replace(wrapper,index,staged))) end)
             if api then
@@ -311,7 +311,7 @@ local function openAll()
     end
     enqueue()
     if stale>0 then
-        log(stale.." saved case(s) predate this build. New cases will generate normally; the old ones stay in the notebook.")
+        log(stale.." saved case(s) predate this build. New cases will generate normally; the old ones stay on the organiser.")
     end
     log("Generated case active. Take an evidence item, then right-click Inspect Investigation Evidence.")
 end
@@ -631,9 +631,8 @@ function R.nextCase(seed)
     if not queued then preparing=false; return false,"case preparation could not be queued" end
     return true
 end
--- `inPlace` records a document without taking it. Owner, 2026-09-10: "we
--- should be able to right click and add it to our Notebook without adding them
--- to our inventory" - which is plainly right for a pile of eleven credit cards
+-- `inPlace` records a document without taking it. Owner, 2026-09-10: a right
+-- click should note it without putting it in the inventory - which is plainly right for a pile of eleven credit cards
 -- or, later, a body in a boot.
 --
 -- Possession was required so that discovery stayed deliberate: a player must
@@ -688,9 +687,9 @@ function R.inspect(item,inPlace)
         end
     end
     -- Hovering a document you have already read should say so, without having
-    -- to open the notebook to find out which of the four you are holding. The
+    -- to open the organiser to find out which of the four you are holding. The
     -- item already carries its real title as its name, so this only needs to
-    -- confirm the notebook has it.
+    -- confirm the record has it.
     --
     -- Set on INSPECTION and never before. A tooltip on an undiscovered
     -- document would let a player find every clue by hovering, which would
@@ -705,7 +704,7 @@ function R.inspect(item,inPlace)
             if not Retired.isRetired(root) and root.case and root.case.caseId==done.case.caseId then
                 -- Keep where each clue was last seen. Owner, 2026-09-14: "I
                 -- lost my files somewhere?" - retiring dropped every placement
-                -- detail, and the notebook could no longer say (P4-R104). The
+                -- detail, and the record could no longer say (P4-R104). The
                 -- document in hand is where it is right now, not where the
                 -- last scan happened to see it.
                 local seen={}
@@ -1037,7 +1036,7 @@ end
 -- rather than in the save on purpose: a saved flag cannot tell "we looked and
 -- it is not there" apart from "we have not looked since you loaded", and
 -- claiming the first when we mean the second is exactly the kind of unearned
--- certainty this notebook exists to avoid. After a reload we say so.
+-- certainty this record exists to avoid. After a reload we say so.
 --
 -- The scan covers the player, two tiles around them, their vehicle, and the
 -- container the document was originally placed in. Absence therefore means
@@ -1046,7 +1045,7 @@ end
 sightings={}
 -- Every engine call guarded: a document can be in a container whose parent has
 -- gone, on a square that has streamed out, or held by an object that does not
--- answer the call at all. None of that should cost the player their notebook.
+-- answer the call at all. None of that should cost the player their record.
 local function rd(o,k,...)
     if not o or not o[k] then return nil end
     local ok,v=pcall(function(...) return o[k](o,...) end,...)
@@ -1131,7 +1130,7 @@ placeOf=function(item)
     return address and ("On the floor at "..address..".") or "On the ground."
 end
 -- Five consecutive misses, at one scan per 120 ticks. Long enough that walking
--- through a doorway does not make the notebook doubt itself.
+-- through a doorway does not make the record doubt itself.
 local MISSES_BEFORE_UNCERTAIN=5
 function R.whereabouts(id)
     if type(id)~="string" or not sessions then return nil end

@@ -265,7 +265,7 @@ function I.afterRender(pane)
   end
   -- A carrier stamped by GeneratedRuntime (cfGeneratedId set in ModData) is
   -- generated-case evidence, not a plain identity document: it already gets
-  -- its own notebook row and ledger event, so it must not also become an
+  -- its own evidence row and ledger event, so it must not also become an
   -- identity observation here. See EvidenceKinds.lua for the shared fullType
   -- collision this guards against (Base.IDcard, Base.CreditCard,
   -- Base.BusinessCard, Base.ParkingTicket).
@@ -341,8 +341,6 @@ function I.flush()
  if record.token==nil then tokenless[record.id]=true else tokenless[record.id]=nil end
  -- Chronological order lives in one shared ledger, not per-source lists.
  Log.record("identity","identity:"..record.id)
- local ui=ConspiracyFiles.NotebookUI
- if ui and ui.refresh then ui.refresh() end
 end
 function I.tick()
  elapsed=elapsed+1
@@ -374,7 +372,7 @@ if Events and Events.OnGameStart and not I.startHandler then
  local function reportModules()
   local expected={"AutomaticInvestigations","LocalPersonHooks","LocalPersonRuntime",
    "GeneratedRuntime","DiscoveryLog","PlayerVoice","PersonNameLog","ClueHints",
-   "ClueMarkers","IdentityObserver","NotebookUI","ObservedKeyLeads","EvidencePickupHint",
+   "ClueMarkers","IdentityObserver","ObservedKeyLeads","EvidencePickupHint",
    "CaseFile","CasePerson","KeyObserver","VehicleProbe","Organiser"}
   local missing={}
   for _,name in ipairs(expected) do

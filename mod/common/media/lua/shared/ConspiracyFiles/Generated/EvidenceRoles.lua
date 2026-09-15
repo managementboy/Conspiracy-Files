@@ -60,7 +60,7 @@ local roles={
     -- than whatever a person remembered to type.
     --
     -- They carry no readable text. A bloodied hammer in a bedside drawer says
-    -- what it says by being there; the notebook records that it was found,
+    -- what it says by being there; the record notes that it was found,
     -- and nothing interprets it.
     physicalTrace={capacity="object",rule="physicalTrace"},
     bearsName={capacity="object",rule="bearsName"},

@@ -1,12 +1,25 @@
 local R=require("ConspiracyFiles/GeneratedRuntime")
 local Menu=require("ConspiracyFiles/ContextMenu")
-local UI=require("ConspiracyFiles/Notebook")
 ConspiracyFiles=ConspiracyFiles or {}
 local M=ConspiracyFiles.GeneratedMenu or {}
 ConspiracyFiles.GeneratedMenu=M
-function M.open(id)
-    if UI.reader then UI.reader:close() end
-    UI.openSurface("evidence",type(id)=="string" and id or nil)
+-- ONE READING SURFACE (P4-R79, P4-R128): the organiser the survivor carries.
+-- The hand is the switch (Organiser.handTick): this only asks the survivor to
+-- take the machine out, and Knox.OS opens when it reaches their hand. No
+-- machine, no reading - a survivor without one has to find one, which is why
+-- organisers exist in the world (P4-R80).
+function M.open()
+    local organiser=ConspiracyFiles.Organiser
+    if organiser and organiser.held then
+        local ok,item=pcall(organiser.held)
+        if ok and item and pcall(organiser.read) then return true end
+    end
+    local voice=ConspiracyFiles.PlayerVoice
+    local player=getPlayer and getPlayer()
+    if voice and voice.speak and player then
+        pcall(voice.speak,player,"I need something to read this on.","No machine")
+    end
+    return false
 end
 function M.fill(playerNum,context,items)
     if not getDebug or not getDebug() or not context or playerNum~=0 then return end
@@ -75,7 +88,7 @@ function M.fill(playerNum,context,items)
     end
     -- Note it where it lies. A pile of eleven credit cards is evidence the
     -- player should be able to record without emptying a drawer into their
-    -- pockets; so, later, is a body in a boot. The notebook opens either way,
+    -- pockets; so, later, is a body in a boot. The organiser opens either way,
     -- because the point of noting a thing is to read what was noted.
     -- The separate wording is only worth showing when Inspect cannot do it.
     if not carried and not reading then

@@ -9,7 +9,7 @@ The guide reuses the candidate UI and adapters. It is debug-only and disabled in
 1. Back up any existing local ConspiracyFiles mod folders before installation. Extract the bundle's three mod folders into your Project Zomboid user mods folder. Each folder contains common/ and 42/. Avoid duplicate copies of the same mod ID.
 2. Launch PZ in debug mode. Enable **ConspiracyFiles + ConspiracyFiles_T12_Probe** only, using a disposable save. Keep T11 disabled.
 3. In an inventory-pane context menu choose **CF Debug: Guided session**. Alternatively enter **ConspiracyFiles.SessionGuide.open()** in the ordinary debug console.
-4. Confirm **GUIDE-0.1 / candidate DEV-0.6**, then follow the numbered checks. **Open test UI** opens the shared synthetic notebook in T12. The guide remains a separate window.
+4. Confirm **GUIDE-0.1 / candidate DEV-0.6**, then follow the numbered checks. **Open test UI** opens the shared synthetic evidence window in T12. The guide remains a separate window.
 
 ## One guided session, separate test phases
 

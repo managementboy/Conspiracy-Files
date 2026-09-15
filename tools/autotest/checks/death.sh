@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 # Death check (catalogue E10): discoveries survive the survivor's death, the
-# next survivor gets their own notebook, and evidence taken back off the body
+# next survivor reads the same record, and evidence taken back off the body
 # is the same evidence, not a new discovery.
 #
 #   tools/autotest/checks/death.sh [--hidden]
 #
 # Fresh world; inspect two documents and carry them; die; respawn through the
-# post-death panel and character creation; compare the notebook; walk back to
+# post-death panel and character creation; compare the record; walk back to
 # the body and take one document. PS-10 and PS-12. Exit 0 pass, 1 fail, 2 could not run.
 set -uo pipefail
 . "$(dirname "${BASH_SOURCE[0]}")/../lib.sh"
@@ -28,15 +28,15 @@ for i in 1 2; do
     r="$(inspect_doc "$i")" || fail "could not inspect document $i: $r"
 done
 sleep 3
-before="$(ev 'return CFReload.notebook()')"; first="$(ev 'return CFDeath.forename()')"
+before="$(ev 'return CFReload.record()')"; first="$(ev 'return CFDeath.forename()')"
 carried="$(ev 'return CFDeath.carried()')"
-say "before death: $first carries $(cut -f1 <<<"$carried") case documents; notebook $(cut -f1 <<<"$before")"
+say "before death: $first carries $(cut -f1 <<<"$carried") case documents; record $(cut -f1 <<<"$before")"
 
 ev 'return CFDeath.die()' >/dev/null
 wait_true 30 'CFDeath.dead()' || abort "the survivor did not die"
 sleep 8
-after_death="$(ev 'return CFReload.notebook()')"
-[ "$after_death" = "$before" ] || fail "notebook changed at death: $after_death"
+after_death="$(ev 'return CFReload.record()')"
+[ "$after_death" = "$before" ] || fail "record changed at death: $after_death"
 
 ev 'return CFDeath.respawn()' >/dev/null || fail "no post-death panel to respawn from"
 steps=()
@@ -48,14 +48,14 @@ done
 wait_true 60 'CFDeath.alive()' || abort "no new survivor after respawn (steps: ${steps[*]})"
 sleep 10
 second="$(ev 'return CFDeath.forename()')"
-after="$(ev 'return CFReload.notebook()')"
-[ "$after" = "$before" ] || fail "notebook differs for the new survivor: $after"
+after="$(ev 'return CFReload.record()')"
+[ "$after" = "$before" ] || fail "record differs for the new survivor: $after"
 [ "$second" != "$first" ] || say "note: the new survivor has the same forename ($second)"
 # THE DEVICE, for the new survivor. A new survivor is still issued an
 # organiser (P4-R83: a survivor who can never read the mod in their first hour
 # is the worse failure), and losing the old one costs convenience and never the
 # case (P4-R80). None of that was asserted anywhere: this check covered the
-# notebook and the evidence album across a death and said nothing about the PDA.
+# record and the evidence album across a death and said nothing about the PDA.
 organiser="$(ev 'local O=ConspiracyFiles.Organiser; local p=getPlayer(); if not O or not p then return false,"no organiser module" end; local item=O.held(p); if not item then return false,"none carried" end; return true,tostring(item:getModData().cfOrganiser==true)')"
 if [ "$(cut -f1 <<<"$organiser")" = true ]; then
     say "the new survivor carries an organiser (marked=$(cut -f2 <<<"$organiser"))"
@@ -78,8 +78,8 @@ if [ "$(cut -f1 <<<"$body")" = true ]; then
     wait_true 20 'CFDeath.recovered()' || fail "could not take the document off the body"
     sleep 4
     [ "$(ev 'return CFDeath.stillInspected()' | cut -f1)" = true ] || fail "the recovered document is no longer known as inspected"
-    recovered="$(ev 'return CFReload.notebook()')"
-    [ "$recovered" = "$before" ] || fail "taking the document back changed the notebook: $recovered"
+    recovered="$(ev 'return CFReload.record()')"
+    [ "$recovered" = "$before" ] || fail "taking the document back changed the record: $recovered"
 else
     fail "PS-12: $(cut -f2 <<<"$body")"
 fi
@@ -94,9 +94,9 @@ report="$EVIDENCE/$id-death.txt"
     echo "Linux death check $id: $verdict"
     source_line
     echo "first survivor: $first, carrying $(cut -f1 <<<"$carried") case documents at death"
-    echo "notebook before death: $(tr '\t' ' ' <<<"$before")"
+    echo "record before death: $(tr '\t' ' ' <<<"$before")"
     echo "new survivor: $second; evidence album: ${title:-no evidence album issued line}"
-    echo "notebook for the new survivor: $(tr '\t' ' ' <<<"$after")"
+    echo "record for the new survivor: $(tr '\t' ' ' <<<"$after")"
     echo "the new survivor's organiser: carried=$(cut -f1 <<<"$organiser") marked=$(cut -f2 <<<"$organiser"); reads for them=$(cut -f1 <<<"$device")"
     echo "document taken back off the body: $(cut -f2 <<<"$body")"
     echo "errors inside the mod: $(grep -c . <<<"$errors")"

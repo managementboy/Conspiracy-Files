@@ -85,7 +85,7 @@ end
 
 -- Show her body in the loot panel, as a player opening it does. The identity
 -- observer records a card only from rows the inventory pane actually draws,
--- so the container must be selected and drawn before the notebook can know it.
+-- so the container must be selected and drawn before the record can know it.
 function B.openBody()
     -- Stand beside her body first: the loot panel lists only what is within a
     -- tile, and the kill left the player where the zombie was, not where the
@@ -113,15 +113,15 @@ function B.openBody()
     return false, "her body is not in the loot panel"
 end
 
--- Whether the notebook holds a lead for the card, as a plain true or false.
+-- Whether the record holds a lead for the card, as a plain true or false.
 -- CN-01 asked a helper that returns nil when there is no row, and counted the
--- printed word "nil" as a row - so its "card on the body in the notebook"
+-- printed word "nil" as a row - so its "card on the body in the record"
 -- passed with nothing recorded (20260914T201413).
 function B.lead(name)
     for _, r in ipairs(ConspiracyFiles.IdentityObserver.rows()) do
         if r.title == "Found ID Card: " .. tostring(name) then return true, tostring(r.summary) end
     end
-    return false, "no notebook row for ID Card: " .. tostring(name)
+    return false, "no evidence row for ID Card: " .. tostring(name)
 end
 
 -- The comparison body. The check above shows her body is marked searched with

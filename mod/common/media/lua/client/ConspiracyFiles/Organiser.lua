@@ -1,7 +1,7 @@
 -- The pocket organiser: the thing the survivor reads the investigation on.
 --
--- Owner, 2026-09-12: "why not drop the notebook completely and replace it with
--- a PalmPilot kind of device that our survivor has on him?" The PalmPilot is
+-- Owner, 2026-09-12: the old evidence window should go completely, and a
+-- PalmPilot kind of device the survivor carries should replace it. The PalmPilot is
 -- 1996 and this is July 1993, so the object is a pocket electronic organiser -
 -- the kind sold in every mall in Kentucky that summer. The item script
 -- (media/scripts/conspiracyfiles_organiser.txt) declares it as a radio, which

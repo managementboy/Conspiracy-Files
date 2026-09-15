@@ -38,7 +38,7 @@ end
 print('PASS identity observations: owner-named documents accepted, non-documents deliberately excluded')
 
 -- Phase 1 (docs/design/USING_GAME_ASSETS.md): a document found directly on a
--- corpse can carry that body's provenance token, and the notebook row for it
+-- corpse can carry that body's provenance token, and the evidence row for it
 -- can mention the outfit BodyOutfitLog observed on the SAME token -- two
 -- independent leads, stated side by side, never resolved.
 local withToken=clone(r);withToken.token='corpse-item:7'
@@ -86,7 +86,7 @@ local furniture = {
 }
 assert(M.validate(furniture), "a furniture-sourced observation must be accepted")
 local rows = M.rows(furniture)
-assert(#rows == 1, "it must reach the notebook")
+assert(#rows == 1, "it must reach the record")
 local body = rows[1].detailText
 assert(type(body) == "string", "a row must carry its own text")
 assert(body:find("put away in a dresser", 1, true), body)

@@ -51,7 +51,7 @@ A corpse in a security guard's uniform carrying an accountant's ID is two
 observed leads that disagree.
 
 This suits the standing caution rule better than any single lead can: instead of
-asserting who the body was, the notebook can record that two independent
+asserting who the body was, the case record can note that two independent
 signals point different ways and let the player weigh them. No new content to
 author, no fabrication, and it uses a probe that already exists.
 

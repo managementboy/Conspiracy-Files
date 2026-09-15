@@ -41,7 +41,7 @@ If a spike disproves a decision, technical reality wins: supersede the decision 
 | P2-Q51/Q52 | Save-affecting gameplay configuration is selected at world creation and stays fixed for that save. | Prevents mid-save story inconsistency. |
 | P2-Q54 / P4-R03 | **No-AI is the primary experience.** Runtime AI is optional enhancement only. | Core play cannot depend on API keys/network/cost. |
 | P2-Q58/Q59 | Optional AI narrative voice is in-character, funny, irreverent and fatalistic; humour remains present even in grim moments. | Defines the optional narration tone. |
-| P2-Q62/Q63 / P4-R13 / P4-R46 | Onboarding remains quiet, in-fiction guidance rather than a quest tutorial, but Help is a separate dark utility window opened from a labeled notebook-chrome control; it is not a notebook page or tab. No objective popup is introduced. | The owner-approved 2026-09-01 UI direction found that instructional copy inside the survivor-authored notebook breaks immersion. This supersedes only the earlier notebook-page placement, while preserving the non-quest onboarding intent. See [Issue #30](https://github.com/managementboy/Conspiracy-Files/issues/30). |
+| P2-Q62/Q63 / P4-R13 / P4-R46 | Onboarding remains quiet, in-fiction guidance rather than a quest tutorial, but Help is a separate dark utility window opened from a labeled control on the evidence window's frame; it is not a page or tab of the case record. No objective popup is introduced. | The owner-approved 2026-09-01 UI direction found that instructional copy inside the survivor-authored record breaks immersion. This supersedes only the earlier record-page placement, while preserving the non-quest onboarding intent. See [Issue #30](https://github.com/managementboy/Conspiracy-Files/issues/30). |
 | P2-Q69 / P4-R11 | Provenance is stored internally and may be shown with an optional toggle; approved AI-assisted authored assets are normal in-fiction content. | Makes interpretation auditable without cluttering default presentation. |
 | P2-Q74-Q78 / P4-R14 | Old material may archive by in-game time and resurface when relevant; re-scoring is event-scoped using affected indexes, never all-pairs polling. | Keeps long investigations usable within the runtime budget. |
 | P2-Q81/Q82 | Progression is emergent; the module never announces case/mystery completion. | Avoids turning PZ into a quest game. |
@@ -49,7 +49,7 @@ If a spike disproves a decision, technical reality wins: supersede the decision 
 | P2-Q108/Q109 | Preserve conflicting evidence and do not automatically reconcile it. | Contradiction is part of the conspiracy. |
 | P2-Q113 / P4-R15 | Identity nodes remain separate even when confirmed as the same person; organisation labels may refine in place. | Alias encounter history is valuable; organisation naming is a different problem. |
 | P2-Q118 | Original evidence facts remain immutable when interpretation changes. | Core integrity invariant. |
-| P2-Q142 / P4-R29 / P4-R46 | One normal-play global keybind opens the notebook. A labeled notebook-chrome control opens the separate Help utility window; diagnostics use debug tooling. | Minimises mod key conflicts while keeping system instructions outside the survivor-authored notebook fiction. |
+| P2-Q142 / P4-R29 / P4-R46 | One normal-play global keybind opens the evidence window. A labeled control on the window's frame opens the separate Help utility window (the window, its keybind and its Help were removed, P4-R128); diagnostics use debug tooling. | Minimises mod key conflicts while keeping system instructions outside the survivor-authored record fiction. |
 | P2-Q152-Q159 / P4-R08 | **T7 resolves the asset-text model as hybrid:** preserve vanilla inventory/container behaviour and persistent per-instance custom names, keep the authoritative world-specific title/description/body in item ModData, and render the body through the cooperative custom `Inspect` reader. Locked `Literature.customPages` may present deliberately short plain-text page artifacts, but are not the universal store. Never rely on `InventoryItem.description`, raw runtime `printMedia` keys, or key/map/generic native UI for body text. | T7 on Build 42.20.4 proved names, ModData and custom pages persist; descriptions do not, journal markup is literal/size-limited, runtime-shaped print media is unsafe, and non-literature native UIs do not consume the body. See `docs/research/T7_RUNTIME_ITEM_TEXT.md`. |
 | P2-Q161-Q163 | Randomness is low and never changes core conspiracy logic, canon-critical facts, major anchor relationships or tone. | Coherence over procedural novelty. |
 | P2-Q180/Q181 / P4-R07 | Normal play has no truth-dump diagnostics. Development/debug diagnostics may expose everything read-only. | Protects the central mystery. |
@@ -106,7 +106,7 @@ If a spike disproves a decision, technical reality wins: supersede the decision 
 
 ## Takeover reconciliation — 2026-09-05
 
-- **P4-R47 — notebook input:** the owner directed native X close controls and one configurable notebook open/close binding, with Escape reserved for the game's options flow. Do not assign a fixed function key. This supersedes the Escape-close expectation in earlier T12/browser material; controller mapping remains unverified. Direct owner instruction: 2026-09-05 11:18:36 UTC, archived in [owner provenance](docs/management/evidence/2026-09-05-takeover/owner-provenance.json).
+- **P4-R47 — evidence window input:** (window and binding removed, P4-R128) the owner directed native X close controls and one configurable open/close binding for the window, with Escape reserved for the game's options flow. Do not assign a fixed function key. This supersedes the Escape-close expectation in earlier T12/browser material; controller mapping remains unverified. Direct owner instruction: 2026-09-05 11:18:36 UTC, archived in [owner provenance](docs/management/evidence/2026-09-05-takeover/owner-provenance.json).
 - **Content approval record:** `dead-air-r1` was owner-approved on 2026-09-05 with explanatory context, followed by a required D1/D4 timing correction. Approval is not pending; delivery/disclosure inconsistencies are tracked under Issue #26 and the [takeover audit](docs/management/PM_TAKEOVER_AUDIT_2026-09-05.md).
 - **Historical scope reconciliation (resolved by P4-R48 below):** the owner explicitly selected a Muldraugh test route and bounded per-save randomized placement on 2026-09-04. The current takeover still specifies two locations and P2/R2. Preserve both records; do not infer a final three-location shipping approval or silently supersede P4-R01/R40/R41–R43. Issue #28/#30 must settle route, motel membership and the relationship between order-independent evidence and fallback opportunity.
 
@@ -238,7 +238,7 @@ Owner lowers the reserve from 30% to 25% weekly allowance remaining. Checkpoint 
 
 **P4-R64 — owner requests the next playable expansion.** Evidence descriptions must be more substantive: explain what was found, add story and context, and offer what the survivor could infer. Keep observations separate from tentative interpretation; preserve grounded ambiguity and avoid spoilers from undiscovered evidence. This extends prose and content, not authoritative inference of an unproven conspiracy.
 
-The next playable test must include keys, diaries, notebooks and newspaper clippings, expanding beyond dispatch copies/files toward further conspiracy-related evidence. Use distinct appropriate physical item forms and story roles; maintain established inspection, discovery/source capture, notebook and map-marker behavior. Proposed additional forms are photos, receipts, annotated maps, letters, logs and recordings, subject to verified engine support and story usefulness. Working locks or audio playback are not automatically promised by adding keys or recordings. Implementation/testing plan: docs/management/NEXT_PLAYABLE_MILESTONE.md. These are requirements, not a claim of completed development.
+The next playable test must include keys, diaries, notebooks and newspaper clippings, expanding beyond dispatch copies/files toward further conspiracy-related evidence. Use distinct appropriate physical item forms and story roles; maintain established inspection, discovery/source capture, case record and map-marker behavior. Proposed additional forms are photos, receipts, annotated maps, letters, logs and recordings, subject to verified engine support and story usefulness. Working locks or audio playback are not automatically promised by adding keys or recordings. Implementation/testing plan: docs/management/NEXT_PLAYABLE_MILESTONE.md. These are requirements, not a claim of completed development.
 
 ## Development allowance reserve update — 2026-09-06, latest
 Owner now sets the stop threshold to 5% weekly allowance remaining (95% used), superseding the previous 25% reserve and all earlier thresholds. Continue economical sequential development and checkpoint at this threshold. No reset credits or paused automation use is authorized.
@@ -259,7 +259,7 @@ Owner notes parking and speeding tickets also carry names associated with zombie
 
 Owner adds business cards as another possible name source. Installed literature.txt declares Base.BusinessCard, Base.BusinessCard_Personal and Base.BusinessCard_Nolans. Include these in visible-document observations; the card label is evidence of what was seen, not automatic proof of the corpse's name or profession.
 
-Owner requests native-like notebook window memory: remember placement/size and whether left open or closed. Implement per-save player UI preferences, including active Journal/Evidence tab. Capture layout while open, restore after runtime readiness, and do not carry another save's window state across loads.
+Owner requests native-like evidence window memory (the window was removed, P4-R128; the organiser remembers its own size, P4-R94): remember placement/size and whether left open or closed. Implement per-save player UI preferences, including active Journal/Evidence tab. Capture layout while open, restore after runtime readiness, and do not carry another save's window state across loads.
 
 **P4-R67 — spread clues across containers.** Owner rejects discovering several investigation clues together in one container. Newly generated investigations assign each clue to a different physical container, retaining the required first-house opening. If there are insufficient suitable containers, defer creation instead of silently stacking clues. Already committed placements are not reshuffled or duplicated. Native acceptance remains required.
 
@@ -293,7 +293,7 @@ unaffected by this decision.
 **The cost, stated so it is chosen rather than forgotten.** Once the mod edits
 vanilla items, a player can no longer assume that anything they find is simply
 the game's. For an investigation mod that ambiguity is arguably a feature. It
-does mean the notebook's own restraint matters more, not less: an edited item
+does mean the case record's own restraint matters more, not less: an edited item
 may still only ever say what it says, never what it proves.
 
 ## Linux auto-testing, commits and where decisions live — 2026-09-11
@@ -585,8 +585,9 @@ every rules change means a new game (P4-R77).
 **P4-R92 — the editorial pass is approved.** The corrected key help, the
 footers, the two voice lines and the tooltip wording may ship.
 
-**P4-R93 — "Open Survivor Notebook" is renamed.** The device replaced the
-notebook (P4-R79), so the fallback window's button no longer calls itself one.
+**P4-R93 — the fallback window's button is renamed.** The device replaced the
+old evidence window (P4-R79), so that window's button no longer named the old
+reading surface. (The window and its button were removed, P4-R128.)
 
 **P4-R94 — the organiser always opens small, then remembers.** The first open
 is the smallest size on every screen. Once the player changes the size, that
@@ -735,7 +736,7 @@ holds. The mod still creates no loot and evidence is still never better than
 loot; condition, fuel and access are the game's.
 
 **P4-R111 — finished cases are archived, so the tenth case is not the last.**
-A finished case shrinks to its notebook rows and last-seen lines outside the
+A finished case shrinks to its evidence rows and last-seen lines outside the
 live case budget, so a save keeps getting new cases after ten.
 
 **P4-R112 — the survivor asks themself, in the first person.** Owner,
@@ -770,14 +771,14 @@ dropped every heading that was not one of its labelled fields, for the look of
 a Palm record, so WHAT IT MIGHT MEAN and the relay memo's DATE NOTE ran straight
 on from the document's own words and what a document says could not be told from
 what the survivor makes of it. The organiser now shows the same headings as the
-notebook; the labelled fields (WHEN, FOUND, WHERE, OBJECT, NOTES) are unchanged.
+case record projection; the labelled fields (WHEN, FOUND, WHERE, OBJECT, NOTES) are unchanged.
 No new game.
 
 **P4-R115 — a body's clothes may disagree with the clues on it.** Owner,
 2026-09-15, asked whether the unbuilt half of USING_GAME_ASSETS Phase 1 is still
 wanted: "yes that would hint toward a mistery. Why does a firefighter have a
 police badge?" Where the trade a corpse is dressed for and the trade a document
-on the same body names are both known and differ, the notebook says so - as the
+on the same body names are both known and differ, the organiser says so - as the
 survivor's question, never an answer: not stolen, not a disguise, not a second
 job. Both trades come from closed, hand-written tables (outfit id to trade,
 document type to trade); anything not listed stays silent, as outfit lines
@@ -825,7 +826,7 @@ trail state of COLD_TRAIL_AND_PULL.md exists; the next case **keeps the
 **P4-R120 — whole-map house numbers apply to new saves (AD-10).** Owner,
 2026-09-15: when addresses for the whole Build 42.20 map ship with the mod,
 **new saves use the shipped numbers; existing saves keep the address book they
-already froze**, so nothing already written in a notebook changes. Design:
+already froze**, so nothing already written in the case record changes. Design:
 docs/design/WHOLE_MAP_ADDRESSES.md.
 
 **P4-R121 — the four open points of "What do I make of it?".** Owner,
@@ -910,6 +911,32 @@ rewritten: dated evidence reports and handoffs, which record what was said at
 the time, and the imported reference libraries. In game, the survivor's filing
 item "Papers" is renamed (e.g. "Una's Evidence").
 
+**P4-R128 — there is no notebook; the organiser is the one reading surface.**
+Owner, 2026-09-15: "There is no notebook anymore" and "Let's remove all mentions
+of notebook. If we can all the code that still do a notebook". Removed: the old
+evidence window (its Journal, Evidence and Places views, reader, help, filter,
+contrast toggle, unread marks, key bind and window memory), its toolbar button,
+the legacy notebook projection and the tests that existed only for them.
+
+What only the window did moved into the shared projection (EvidenceRows.list),
+so the organiser now receives it: true discovery order across every source, the
+FOUND field, whereabouts words for every state, PLACES headings earned by a
+return (P4-R81), and the key findings (what a key fits, keys off a body, key
+leads), which now appear in FILES. Dropped on purpose (P4-R79): the filter, the
+contrast toggle and the unread marks.
+
+The way back to reading (P4-R80; owner: "You have to find it"): the case record
+lives in the world, not in the character, so any organiser reads every case.
+One is issued to every new character, a dead survivor's is on their corpse, and
+organisers are found in office, police and medical desks and electronics shops.
+The evidence album still holds the paper evidence, readable in the game's own
+reader. A survivor with no working machine says "I need something to read this
+on."
+
+Kept (owner: "In-game notebooks those we keep"): notebooks as things in the
+world, such as the field notebook a clue can be, "Shift notebook" documents and
+Rourke's notebook page. No new game.
+
 **P4-R106 — how a car's containers are reached.** Owner, 2026-09-14: "The globe
 box only opens when sitting in the front of the car", and a truck bed or trunk
 is reached from outside, "only if they are open". Placement may still put a
@@ -925,10 +952,10 @@ weapon; a two-handed weapon fills both hands and puts it away. HELP says so.
 lost my files somewhere?" A case completed, retirement dropped its placement
 details, and nothing could say where its evidence was any more. A finished
 case's documents now keep **where they were last seen** in the save (one short
-line per document, in the words the notebook already used). While a case is
+line per document, in the words the case record already used). While a case is
 finished, the mod still looks for its evidence in the survivor's inventory and
 bags and in the containers the loot panel is showing, every ten seconds, and
-updates that line at most once a minute per document. The notebook shows it as
-"Last seen: …" and PDA FILES shows a WHERE line for every document, live or
+updates that line at most once a minute per document. The old evidence window showed it as
+"Last seen: …" (removed, P4-R128) and PDA FILES shows a WHERE line for every document, live or
 finished. Neither ever says a document is lost. The evidence album (called Papers until P4-R127) is now found
 inside bags too, so filing keeps working with it in a backpack.

@@ -9,6 +9,6 @@ Expected topics include:
 - persistence/save schema;
 - AI boundaries and context construction;
 - evidence lifecycle;
-- notebook and graph behavior.
+- case record and graph behavior.
 
 Design documents should refine architecture without silently changing settled requirements.

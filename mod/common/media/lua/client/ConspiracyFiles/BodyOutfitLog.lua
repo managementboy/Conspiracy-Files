@@ -1,5 +1,5 @@
 -- ModData-backed store for the token->observed-outfit association the
--- notebook needs to mention a corpse's outfit alongside a document found on
+-- record needs to mention a corpse's outfit alongside a document found on
 -- the same body (docs/design/USING_GAME_ASSETS.md, Phase 1). Same house
 -- style as PersonNameLog: validated, bounded, copy-on-write, gated by
 -- SaveBudget, no metatables.
@@ -73,7 +73,7 @@ function L.outfitFor(token)
     return outfit
 end
 
--- What the notebook may print. outfitFor returns the game's raw id, because
+-- What the record may print. outfitFor returns the game's raw id, because
 -- that is the observation and the store keeps facts; this is the same value
 -- turned into words, and nil where the id identifies nobody. Keeping them
 -- apart means a stored observation is never rewritten for presentation.

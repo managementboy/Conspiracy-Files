@@ -68,7 +68,7 @@ end
 
 -- getOutfitName returns the outfit's internal id: "ConstructionWorker",
 -- "Bathrobe", "Generic03". The raw id is stored, because it is the game's own
--- fact, but it is not what the notebook can say to a player.
+-- fact, but it is not what the record can say to a player.
 --
 -- Two rules, both conservative. An outfit that identifies nobody is not a
 -- lead: "Generic03" says only that the game dressed a zombie, so it is
@@ -92,7 +92,7 @@ function M.readable(name)
     local head=trimmed:match("^%u%l+") or trimmed:match("^%a+") or trimmed
     if UNINFORMATIVE[head:lower()] then return nil end
     -- Whole ids that describe the person, not the clothes. "Young" reached the
-    -- notebook as "The body itself wore: young." (Linux wallet check,
+    -- record as "The body itself wore: young." (Linux wallet check,
     -- 2026-09-11). Exact match only: "YoungCowpoke" still describes an outfit.
     if NOT_CLOTHING[trimmed:lower()] then return nil end
     -- CamelCase and underscores into words, without disturbing an id that is
@@ -106,7 +106,7 @@ end
 -- WP3. What the survivor actually says about what a body was wearing.
 --
 -- `readable` above turns an id into words, which was enough for
--- "ConstructionWorker" and not nearly enough for "Goth": the notebook printed
+-- "ConstructionWorker" and not nearly enough for "Goth": the record printed
 -- "The body itself wore: goth", which is a game id wearing a lower-case hat.
 -- Nobody looking at a corpse thinks the word "goth". They think: a lot of
 -- black, chains, boots.
@@ -116,7 +116,7 @@ end
 -- ships around 250 outfit ids and a future update can add more; none of them
 -- may put a word in the survivor's mouth that nobody wrote. Silence about one
 -- body costs a lead. An id leaking into prose costs the register the whole
--- notebook is built on, and it has happened three times already - Generic03,
+-- record is built on, and it has happened three times already - Generic03,
 -- Generic_Skirt, Young.
 --
 -- Adding an entry is therefore a deliberate act of writing, never a mapping.

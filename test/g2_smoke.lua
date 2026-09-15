@@ -59,7 +59,6 @@ end
 local probe={start=function() return true end,result=result}
 package.preload["ConspiracyFiles/T3Nearby"]=function() return probe end
 package.preload["ConspiracyFiles/GeneratedMenu"]=function() return {} end
-package.preload["ConspiracyFiles/NotebookToolbar"]=function() return {} end
 local R=require("ConspiracyFiles/GeneratedRuntime")
 local originalStore=saved
 saved=setmetatable({},{__newindex=function() error('injected initial campaign write failure') end})
@@ -160,7 +159,7 @@ saved=stableStore;assert(R.inspect(late));assert(R.known()[2].id==newItem:getMod
 Markers.update()
 UIFont={Small=1};getTextManager=function() return {getFontHeight=function() return 12 end,MeasureStringX=function(_,_,v) return #v end} end
 local texts={};local map={width=1000,height=800,mapAPI={getZoomF=function() return 18 end,worldToUIX=function(_,x) return x+100 end,worldToUIY=function(_,x,y) return y+100 end},drawText=function(_,text) texts[#texts+1]=text end}
-Markers.draw(map);local all=table.concat(texts,'|');assert(all:find('#2 ',1,true) and all:find('#3 ',1,true),'global marker numbering matches interleaved notebook projection')
+Markers.draw(map);local all=table.concat(texts,'|');assert(all:find('#2 ',1,true) and all:find('#3 ',1,true),'global marker numbering matches interleaved evidence projection')
 texts={};Markers.drawRecords(map,{known={'fixture'},case={documents={{id='fixture',title='Isolated fixture'}}}},{records={fixture={x=0,y=0,z=0,map='mock',written=true,ink='BluePen'}}})
 assert(table.concat(texts,'|'):find('Isolated fixture',1,true),'fixture renderer uses supplied context')
 print('PASS two-case marker capture, ink catch-up, interleaved projection and failed durable write')
@@ -182,22 +181,22 @@ assert(#saved.campaign.successive.cases==1, 'insufficient distinct storage defer
 print('PASS G2 mock: loaded storage -> generated case -> 3 placed notes -> owned Inspect -> saved discovery -> resume without reroll/duplication -> duplicate conflict')
 
 -- The real projection, required like any other module. This used to SLICE the
--- function out of Notebook.lua between two literal string markers and
+-- function out of the old evidence window's source between two literal string markers and
 -- loadstring the fragment: it broke as soon as the line after it changed,
 -- because the slice swallowed that line and it touches UI. The projection is
 -- ConspiracyFiles/EvidenceRows now, so this exercises the shipped code path
--- the PDA and the notebook both use, instead of a copy of its text.
+-- the organiser's FILES, NAMES and PLACES all use, instead of a copy of its text.
 package.preload['ConspiracyFiles/Generated/PlaceNames']=function()
     return {render=function(text,case) return case.caseId..'|'..text end}
 end
 local EvidenceRows=require('ConspiracyFiles/EvidenceRows')
-local notebookRows=EvidenceRows.build('evidence',function() return R end)
-assert(notebookRows[2].id==newItem:getModData().cfGeneratedId and notebookRows[2].ordinal==2)
-assert(notebookRows[2].detailText:find(saved.campaign.successive.cases[1].case.caseId,1,true)==1,'notebook resolves new owning case')
-assert(notebookRows[3].detailText:find(saved.campaign.canonical.case.caseId,1,true)==1,'late old clue resolves original owning case')
+local recordRows=EvidenceRows.build('evidence',function() return R end)
+assert(recordRows[2].id==newItem:getModData().cfGeneratedId and recordRows[2].ordinal==2)
+assert(recordRows[2].detailText:find(saved.campaign.successive.cases[1].case.caseId,1,true)==1,'record resolves new owning case')
+assert(recordRows[3].detailText:find(saved.campaign.canonical.case.caseId,1,true)==1,'late old clue resolves original owning case')
 Markers.update();assert(playerData['ConspiracyFiles.ClueMarkers'].records[newItem:getModData().cfGeneratedId].ink=='BluePen')
 assert(saved.canonical==legacyRoot,'later discoveries never rewrite fallback')
-print('PASS real notebook projection, legacy upgrade, global ordinals and frozen ink after reload')
+print('PASS real evidence projection, legacy upgrade, global ordinals and frozen ink after reload')
 -- Inspect every remaining physical kind in both cases, beyond the old aggregate cap.
 -- One item per DOCUMENT, not per item: a pile is six bottles of the same
 -- ordinary thing and one discovery (2026-09-09). Picking one out of the pile
@@ -256,7 +255,7 @@ run(0)
 assert(retiredRow(docId).lastSeen=='Carried.','the scan records carried evidence: '..tostring(retiredRow(docId).lastSeen))
 local state,place=R.whereabouts(docId)
 assert(state=='lastseen' and place=='Carried.','whereabouts reports where finished evidence was last seen')
--- Into a bag: found inside it, in the words the notebook uses.
+-- Into a bag: found inside it, in the words the record uses.
 local satchelInv=container(); local satchel=instanceItem('Base.Bag_Satchel')
 satchel.getInventory=function() return satchelInv end; satchel.getName=function() return 'Satchel' end
 satchel.getOutermostContainer=function() return inventory end

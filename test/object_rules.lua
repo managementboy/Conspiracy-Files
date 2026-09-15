@@ -41,7 +41,7 @@ for _, id in ipairs(Rules.list()) do
 end
 
 -- Evidence must never be better loot than the loot. A working firearm found in
--- a drawer would pay the player for reading the notebook.
+-- a drawer would pay the player for reading the organiser.
 for _, id in ipairs(Rules.candidates("physicalTrace")) do
     local item = assert(Catalogue.get(id))
     assert(not Catalogue.has(item, "firearm"), id .. " is a firearm and must not be placed as evidence")
@@ -142,7 +142,7 @@ for seed = 1, 400 do
                 placed[doc.kind] = true
                 assert(doc.wear, doc.kind .. " must record the state it was found in")
                 -- Nothing is written on an object. A body longer than a
-                -- notebook sentence would be the mod explaining the object.
+                -- record's sentence would be the mod explaining the object.
                 assert(#doc.body <= Kinds.OBJECT_MAX_CHARS, doc.kind .. " carries too much text for an object")
                 -- Nor may the mod CLAIM blood: setBloodLevel exists on the jar
                 -- but nothing has proven it survives a save, so no wording may
@@ -259,7 +259,7 @@ for seed = 1, 400 do
                 -- "six lunchboxes", not "lunchbox, six of them".
                 assert(not doc.title:find(", ", 1, true), "a pile title reads as a count and a plural: " .. doc.title)
                 -- Junk names must not reach the player.
-                assert(not doc.title:find("aaa"), "a joke item name reached the notebook: " .. doc.title)
+                assert(not doc.title:find("aaa"), "a joke item name reached the record: " .. doc.title)
                 assert(not doc.title:find(" rights") and not doc.title:find(" lefts"),
                     "which side of a pair a thing is does not matter: " .. doc.title)
             end

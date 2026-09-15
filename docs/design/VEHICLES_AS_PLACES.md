@@ -142,7 +142,7 @@ should be treated as such.
 `vehicleBulk`'s wording says "loaded together as cargo", never "in a vehicle".
 Room preference is exactly that - a preference - and `createDistributed` falls
 back to any usable container, so a sentence asserting a car would be false the
-first time a case had no car near it. Where the thing actually is, the notebook
+first time a case had no car near it. Where the thing actually is, the organiser
 already reports.
 
 ## Bodies in seats
