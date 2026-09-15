@@ -55,7 +55,7 @@ after="$(ev 'return CFReload.notebook()')"
 # organiser (P4-R83: a survivor who can never read the mod in their first hour
 # is the worse failure), and losing the old one costs convenience and never the
 # case (P4-R80). None of that was asserted anywhere: this check covered the
-# notebook and the papers across a death and said nothing about the PDA.
+# notebook and the evidence album across a death and said nothing about the PDA.
 organiser="$(ev 'local O=ConspiracyFiles.Organiser; local p=getPlayer(); if not O or not p then return false,"no organiser module" end; local item=O.held(p); if not item then return false,"none carried" end; return true,tostring(item:getModData().cfOrganiser==true)')"
 if [ "$(cut -f1 <<<"$organiser")" = true ]; then
     say "the new survivor carries an organiser (marked=$(cut -f2 <<<"$organiser"))"
@@ -66,9 +66,9 @@ fi
 device="$(ev 'local O,S=ConspiracyFiles.Organiser,ConspiracyFiles.OrganiserScreen; local p=getPlayer(); pcall(function() p:setPrimaryHandItem(O.held(p)) end); for _=1,10 do pcall(O.tick) end; local w=S.window; if not w then return false,"would not open" end; local ok,e=pcall(function() w:prerender() end); return ok,tostring(e)')"
 [ "$(cut -f1 <<<"$device")" = true ] || fail "the device does not read for the new survivor: $(cut -f2 <<<"$device")"
 say "the device reads for the new survivor"
-title="$(run_log | grep -oE "papers issued: [^\"]*" | tail -1)"
+title="$(run_log | grep -oE "evidence album issued: [^\"]*" | tail -1)"
 # The new survivor gets papers of their own (found missing 2026-09-11).
-[[ "$title" == "papers issued: ${second}'s Papers" ]] || fail "the new survivor ($second) was not issued papers: ${title:-none}"
+[[ "$title" == "evidence album issued: ${second}'s Evidence" ]] || fail "the new survivor ($second) was not issued an evidence album: ${title:-none}"
 
 # PS-12: the new survivor takes a document back off the old body.
 ev 'return CFDeath.goToBody()' >/dev/null; sleep 3
@@ -95,7 +95,7 @@ report="$EVIDENCE/$id-death.txt"
     source_line
     echo "first survivor: $first, carrying $(cut -f1 <<<"$carried") case documents at death"
     echo "notebook before death: $(tr '\t' ' ' <<<"$before")"
-    echo "new survivor: $second; papers: ${title:-no papers issued line}"
+    echo "new survivor: $second; evidence album: ${title:-no evidence album issued line}"
     echo "notebook for the new survivor: $(tr '\t' ' ' <<<"$after")"
     echo "the new survivor's organiser: carried=$(cut -f1 <<<"$organiser") marked=$(cut -f2 <<<"$organiser"); reads for them=$(cut -f1 <<<"$device")"
     echo "document taken back off the body: $(cut -f2 <<<"$body")"

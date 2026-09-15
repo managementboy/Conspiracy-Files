@@ -64,7 +64,7 @@ The right shape: **a document, found locally, that refers to somewhere else.** A
 delivery manifest routed to a hospital's loading bay. A membership card for a
 club two towns over. A payroll stub from an employer that is not here. The
 player reads it, forms an intention, and travels because they decided to - the
-notebook only ever recorded what was on the paper.
+notebook only ever recorded what the evidence said.
 
 This is exactly the mechanism `USING_GAME_ASSETS.md` Phase 3 describes: a role
 that **names an organisation** or **places a person somewhere**. The pull is not

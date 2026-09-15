@@ -87,7 +87,7 @@ if [ "$(cut -f1 <<<"$notes")" = true ]; then
 fi
 completed=no; run_log | grep -q "Case complete" && completed=yes
 [ "$completed" = yes ] || fail "the case never reported completion"
-# A finished case's papers still say where they were last seen (P4-R104).
+# A finished case's evidence still says where it was last seen (P4-R104).
 seen="0"
 for _ in $(seq 1 20); do
     seen="$(ev 'return CFLoop.lastSeen()')"
@@ -100,7 +100,7 @@ findings+=("last-seen log: $(run_log | grep -oE '(Last-seen[^\"]*|lastseen: [^\"
 if [ "$completed" = yes ] && [ "$(cut -f1 <<<"$seen")" != "$(cut -f2 <<<"$seen")" ]; then
     fail "after the case completed, only $(cut -f1 <<<"$seen") of $(cut -f2 <<<"$seen") documents say where they were last seen"
 fi
-# A finished case's papers are Evidence / Old (P4-R118). The paper in hand is
+# A finished case's evidence shows as Evidence / Old (P4-R118). The item in hand is
 # marked at once, the rest by the last-seen scan every ten seconds.
 old="0	0	0"
 for _ in $(seq 1 15); do
@@ -108,23 +108,23 @@ for _ in $(seq 1 15); do
     [ "$(cut -f1 <<<"$old")" != 0 ] && [ "$(cut -f3 <<<"$old")" = "$(cut -f1 <<<"$old")" ] && break
     sleep 2
 done
-say "old papers: $(cut -f1 <<<"$old") carried, $(cut -f2 <<<"$old") retired, $(cut -f3 <<<"$old") shown as Evidence / Old"
-findings+=("Evidence / Old after completion: $(cut -f1 <<<"$old") papers carried, $(cut -f2 <<<"$old") known as retired papers, $(cut -f3 <<<"$old") in the Old category")
+say "old evidence: $(cut -f1 <<<"$old") carried, $(cut -f2 <<<"$old") retired, $(cut -f3 <<<"$old") shown as Evidence / Old"
+findings+=("Evidence / Old after completion: $(cut -f1 <<<"$old") pieces of evidence carried, $(cut -f2 <<<"$old") known as retired evidence, $(cut -f3 <<<"$old") in the Old category")
 if [ "$completed" = yes ]; then
-    [ "$(cut -f1 <<<"$old")" != 0 ] || fail "no case papers found in the inventory after completion"
-    [ "$(cut -f2 <<<"$old")" = "$(cut -f1 <<<"$old")" ] || fail "only $(cut -f2 <<<"$old") of $(cut -f1 <<<"$old") carried papers are known as a finished case's papers"
-    [ "$(cut -f3 <<<"$old")" = "$(cut -f1 <<<"$old")" ] || fail "only $(cut -f3 <<<"$old") of $(cut -f1 <<<"$old") carried papers show as Evidence / Old"
+    [ "$(cut -f1 <<<"$old")" != 0 ] || fail "no case evidence found in the inventory after completion"
+    [ "$(cut -f2 <<<"$old")" = "$(cut -f1 <<<"$old")" ] || fail "only $(cut -f2 <<<"$old") of $(cut -f1 <<<"$old") carried pieces of evidence are known as a finished case's evidence"
+    [ "$(cut -f3 <<<"$old")" = "$(cut -f1 <<<"$old")" ] || fail "only $(cut -f3 <<<"$old") of $(cut -f1 <<<"$old") carried pieces of evidence show as Evidence / Old"
 fi
-# DATES opens a real paper the loop found (owner, 2026-09-14).
+# DATES opens a real document the loop found (owner, 2026-09-14).
 dt="$(ev 'return CFLoop.datesTap()')"
 say "dates tap: $(tr '\t' ' ' <<<"$dt")"
-[ "$(cut -f1 <<<"$dt")" = true ] || fail "DATES could not show today's page for a real paper: $(cut -f2 <<<"$dt")"
-[ "$(cut -f2 <<<"$dt")" = true ] || fail "tapping a real paper's DATES entry did not open its record: $dt"
-[ "$(cut -f3 <<<"$dt")" = true ] || fail "BACK from a paper opened in DATES did not return to the day: $dt"
+[ "$(cut -f1 <<<"$dt")" = true ] || fail "DATES could not show today's page for a real document: $(cut -f2 <<<"$dt")"
+[ "$(cut -f2 <<<"$dt")" = true ] || fail "tapping a real document's DATES entry did not open its record: $dt"
+[ "$(cut -f3 <<<"$dt")" = true ] || fail "BACK from a document opened in DATES did not return to the day: $dt"
 before_pen="$(ev 'return CFLoop.markers()')"
 if [ "$(ev 'return CFLoop.hasPen()')" = true ]; then
-    # One of the case's own papers was a pen, so the survivor could already write.
-    findings+=("marks before a pen not tested: a case paper was itself a writing tool; marks $(tr '\t' '/' <<<"$before_pen")")
+    # One of the case's own clues was a pen, so the survivor could already write.
+    findings+=("marks before a pen not tested: a case clue was itself a writing tool; marks $(tr '\t' '/' <<<"$before_pen")")
 else
     [ "$(cut -f2 <<<"$before_pen")" = "$n" ] || fail "without a pen, expected $n pending marks: $before_pen"
 fi

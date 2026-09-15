@@ -23,7 +23,7 @@ This enables finding capture, starts/reuses addressing, and starts/resumes the g
 1. Leave every pen/pencil outside your carried inventory (including bags). Pick up a clue, walk away, then Inspect it. Journal learns it; MAP NOTE says marking waits. No map X yet.
 2. Acquire a pen or pencil. After an unpaused second, the original pickup location receives X plus the clue's notebook number/title. The place where you read it must not be marked.
 3. Remove the writing tool. Find and Inspect the next clue: previous maasssssrks stay, new one waits. Recover the tool and verify catch-up without duplicate marks.
-4. Where two clues share one container, inspect both: one X, both titles. Drop the papers; journal and marks remain.
+4. Where two clues share one container, inspect both: one X, both titles. Drop the evidence; journal and marks remain.
 5. Save and reload. Check marked clues and a queued clue (if available) persist. A pen inside a carried bag should qualify. Ordinary vanilla annotations remain unchanged.
 
 Floor pickups and whole-bag pickups have mocked coverage; only test these in-game if convenient after the main path. Native rendering, nested-container API behavior, actual save serialization and frame cost remain unaccepted until observed. Stop and report any Lua error; do not rerun a failed action repeatedly.

@@ -9,7 +9,7 @@
 #
 # PASS needs, in order: a case placed; a dry run that names every document
 # without changing anything; a real reshuffle; a NEW case placed in the same
-# save with different document ids; the old papers still in the world but no
+# save with different document ids; the old clues still in the world but no
 # longer evidence; no errors inside the mod. Exit 0 pass, 1 fail, 2 could not run.
 set -uo pipefail
 . "$(dirname "${BASH_SOURCE[0]}")/../lib.sh"
@@ -51,7 +51,7 @@ after="$(ev 'return CFLoop.ids()')"
 say "after reshuffle: $second"
 [ -n "$after" ] && [ "$after" != "$before" ] || fail "the reshuffle produced the same documents"
 
-# The old papers are still in the world, but they are ordinary loot now: the
+# The old clues are still in the world, but they are ordinary loot now: the
 # player may be carrying one, and an item disappearing from a hand is worse
 # than a page nobody records.
 orphans="$(ev 'return CFLoop.orphanEvidence()' | cut -f1)"

@@ -5,7 +5,7 @@
 #
 # Starts a fresh world, lets it run (default 60s, so tick-driven modules get to
 # work), then passes only if every mod Lua file was loaded and nothing in the
-# log errored inside the mod, and the survivor's papers opened by themselves. Writes a short report to
+# log errored inside the mod, and the survivor's evidence album opened by itself. Writes a short report to
 # docs/management/evidence/linux-autotest/ and a screenshot beside the run
 # data in dev/eval/linux/runs/. Exit 0 pass, 1 fail, 2 could not run.
 set -uo pipefail
@@ -55,7 +55,7 @@ n_errors="$(grep -c . <<<"$mod_errors")"
 cf_warn="$(grep -E '\[CF\] v=1 .*lvl=(w|e) ' <<<"$log" | sed 's/^.*> //')"
 load="$(grep -o 'game loading took [0-9]* seconds' <<<"$log" | tail -1)"
 # The survivor's papers open by themselves at start (catalogue NB-29).
-papers="$(grep -oE 'papers (opened in the inventory panel[^"]*|not opened[^"]*)' <<<"$log" | tail -1)"
+papers="$(grep -oE 'evidence album (opened in the inventory panel[^"]*|not opened[^"]*)' <<<"$log" | tail -1)"
 end_world
 
 loaded="$(sed -n 's/^ok \([0-9]*\).*/\1/p' <<<"$files")"
@@ -64,7 +64,7 @@ verdict=PASS
 [ "$loaded" = "$total" ] || verdict=FAIL
 [ "$n_errors" = 0 ] || verdict=FAIL
 grep -q 'true$' <<<"$facts" || verdict=FAIL
-[[ "$papers" == "papers opened"* ]] || verdict=FAIL
+[[ "$papers" == "evidence album opened"* ]] || verdict=FAIL
 
 evidence="$REPO/docs/management/evidence/linux-autotest"; mkdir -p "$evidence"
 report="$evidence/$session-boot.txt"

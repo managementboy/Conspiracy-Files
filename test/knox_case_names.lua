@@ -1,4 +1,4 @@
--- NAMES holds the names written on the case's own papers (owner, Windows,
+-- NAMES holds the names written on the case's own evidence (owner, Windows,
 -- 2026-09-15: "the pencil and key are marked with a name, but we did not create
 -- an entry in the contacts").
 package.path="mod/common/media/lua/client/?.lua;mod/common/media/lua/shared/?.lua;"..package.path
@@ -30,22 +30,22 @@ local labels={}
 for _,r in ipairs(list) do labels[#labels+1]=r.label end
 local function entry(name) for _,r in ipairs(list) do if r.label==name then return r end end end
 
-local marion=assert(entry("Marion Ellis"),"a name on the case's own papers is in the book: "..table.concat(labels,", "))
+local marion=assert(entry("Marion Ellis"),"a name on the case's own evidence is in the book: "..table.concat(labels,", "))
 assert(marion.detail:find("Tagged key / LD-527",1,true) and marion.detail:find("Pencil spiffo, marked Marion Ellis",1,true),
-    "every paper carrying the name is listed: "..marion.detail)
-assert(select(2,marion.detail:gsub("Tagged key",""))==1,"each paper once: "..marion.detail)
+    "every piece of evidence carrying the name is listed: "..marion.detail)
+assert(select(2,marion.detail:gsub("Tagged key",""))==1,"each piece of evidence once: "..marion.detail)
 assert(marion.detail:find("A name on a paper is a lead",1,true),"a name stays a lead")
-assert(entry("Delia Mercer"),"a name in a paper's text counts")
-assert(entry("Jarvis Harding"),"a name met on a body and written on a case paper counts")
+assert(entry("Delia Mercer"),"a name in a document's text counts")
+assert(entry("Jarvis Harding"),"a name met on a body and written on case evidence counts")
 assert(not entry("Roy Hale"),"Roy Haley is not Roy Hale")
 assert(not entry("Joanne Voss"),"Joanne Vossberg is not Joanne Voss")
 assert(entry("Ines Kubiak's ID card"),"identity documents stay in the book")
 
-assert(#A.names.list("Named")==#list,"a name from a paper is Named")
+assert(#A.names.list("Named")==#list,"a name from evidence is Named")
 assert(#A.names.list("Unnamed")==0,"and never Unnamed")
 assert(#A.names.list("Linked")==0,"Linked stays what the player connected")
 
 ConspiracyFiles.NotebookUI={generatedRows=function() return {} end}
-assert(#A.names.list("All")==1,"no papers inspected, no names from papers")
+assert(#A.names.list("All")==1,"no evidence inspected, no names from evidence")
 
-print("PASS knox case names: names on inspected case papers reach NAMES, whole names only, identity rows kept, filters honest")
+print("PASS knox case names: names on inspected case evidence reach NAMES, whole names only, identity rows kept, filters honest")

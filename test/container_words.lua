@@ -1,4 +1,4 @@
--- Where a paper lies reads as words (owner screenshot, Windows, 2026-09-15:
+-- Where a clue lies reads as words (owner screenshot, Windows, 2026-09-15:
 -- "In a shelves at 105 Pattern St.").
 package.path="mod/common/media/lua/shared/?.lua;"..package.path
 local W=require("ConspiracyFiles/ContainerWords")

@@ -1,5 +1,5 @@
 -- A case's closing words are never dropped from a full voice queue (campaign
--- check, 2026-09-15): after a case whose last papers brought connections and a
+-- check, 2026-09-15): after a case whose last evidence brought connections and a
 -- pile, "What do I make of it?" was never said. The queue holds four waiting
 -- lines; the closing pair pushes out the oldest ordinary lines instead.
 package.path="mod/common/media/lua/shared/?.lua;mod/common/media/lua/client/?.lua;"..package.path

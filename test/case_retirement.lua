@@ -147,15 +147,15 @@ assert(total+RESERVED_FOR_OTHER_ROOTS<=V.MAX_ENCODED_BYTES,
 print(string.format("PASS %d-case campaign (%d retired, %d active) fits budget: %d root bytes + %d reserved = %d of %d",
     Cases.MAX_CASES,retiredTotal,Cases.MAX_ACTIVE,total,RESERVED_FOR_OTHER_ROOTS,total+RESERVED_FOR_OTHER_ROOTS,V.MAX_ENCODED_BYTES))
 
--- 7. Where a finished case's papers were last seen (P4-R104). Owner in play,
+-- 7. Where a finished case's evidence was last seen (P4-R104). Owner in play,
 --    2026-09-14: "I lost my files somewhere?" - retirement had dropped every
 --    placement detail. Retired rows keep an optional lastSeen line.
 local lsRoot=discoverAll(makeRoot(401))
 local firstId,secondId=lsRoot.known[1],lsRoot.known[2]
-local lsWrapper=assert(Cases.retire({canonical=lsRoot},1,{[firstId]="Carried, in Una's Papers.",[secondId]="bad\nline"}))
+local lsWrapper=assert(Cases.retire({canonical=lsRoot},1,{[firstId]="Carried, in Una's Evidence.",[secondId]="bad\nline"}))
 local lsRows=Cases.sessions(lsWrapper)[1].rows
 local byId={}; for _,row in ipairs(lsRows) do byId[row.id]=row end
-assert(byId[firstId].lastSeen=="Carried, in Una's Papers.","retirement keeps where a paper was last seen")
+assert(byId[firstId].lastSeen=="Carried, in Una's Evidence.","retirement keeps where a paper was last seen")
 assert(byId[secondId].lastSeen=="bad line","control characters become spaces rather than refusing retirement")
 assert(Cases.validate(lsWrapper))
 -- Round trip: the stored root validates again on load.
@@ -181,7 +181,7 @@ local moved,changedLs=assert(Cases.noteLastSeen(lsWrapper,{[firstId]="In a count
 assert(changedLs==true and moved~=lsWrapper)
 local movedRows={}; for _,row in ipairs(Cases.sessions(moved)[1].rows) do movedRows[row.id]=row end
 assert(movedRows[firstId].lastSeen=="In a counter at 102 Pattern St.","the new place is stored")
-assert(byId[firstId].lastSeen=="Carried, in Una's Papers." and Cases.sessions(lsWrapper)[1].rows==before,"the old wrapper is untouched")
+assert(byId[firstId].lastSeen=="Carried, in Una's Evidence." and Cases.sessions(lsWrapper)[1].rows==before,"the old wrapper is untouched")
 local same,changedSame=Cases.noteLastSeen(moved,{[firstId]="In a counter at 102 Pattern St.",["not-a-document"]="Carried."})
 assert(same==moved and changedSame==false,"unchanged text and unknown ids write nothing")
 -- A live case is not touched: it has its own scan.
@@ -189,7 +189,7 @@ local live={canonical=makeRoot(402)}
 local liveId=live.canonical.case.documents[1].id
 local liveSame,liveChanged=Cases.noteLastSeen(live,{[liveId]="Carried."})
 assert(liveSame==live and liveChanged==false,"live documents are not given a stored last-seen")
-print("PASS retired papers keep where they were last seen: stored, cleaned, validated, old roots still load, updates copy-on-write")
+print("PASS retired evidence keeps where it was last seen: stored, cleaned, validated, old roots still load, updates copy-on-write")
 
 -- 8. What the survivor is asked about at a case's end, and the answers
 --    ("What do I make of it?", P4-R113; first cut P4-R119, P4-R121). Retirement
@@ -227,12 +227,12 @@ assert(not Retired.validate(withOffered(function(o) o.people={string.rep("a",Ret
 assert(not Retired.validate(withRoot(function(c) c.answers={usedBy=string.rep("u",Retired.CASE_ID_MAX+1)} end)),"an over-long case id is refused")
 print("PASS a retired case keeps what the survivor will be asked about; answers validated, old roots still load")
 
--- 9. The first case of a game can hold every story paper PLUS the relay memo
+-- 9. The first case of a game can hold every story clue PLUS the relay memo
 --    (P4-R96), and must still retire. It did not: rows were capped at
 --    MAX_EVIDENCE, so such a case finished and never retired (core-loop check
 --    2026-09-15: "Case complete but not retired: invalid retired rows").
 local memoCase=assert(G.generate(catalog(),3,{mapId="SYNTHETIC-MAP",buildLine="TEST-ONLY",allowSynthetic=true,relayMemo=true}))
-assert(#memoCase.documents==G.MAX_EVIDENCE+1,"fixture: seed 3 must give every story paper plus the memo")
+assert(#memoCase.documents==G.MAX_EVIDENCE+1,"fixture: seed 3 must give every story clue plus the memo")
 local memoTargets={}
 for _,site in ipairs(memoCase.locations) do
     memoTargets[site.id]={x=site.bounds.x1,y=site.bounds.y1,z=site.bounds.z,objectIndex=0,
@@ -241,6 +241,6 @@ end
 local memoRoot=discoverAll(assert(Session.create(memoCase,memoTargets)))
 local memoRetired=assert(Cases.retire({canonical=memoRoot},1))
 local memoRows=Cases.sessions(memoRetired)[1].rows
-assert(#memoRows==G.MAX_EVIDENCE+1,"every paper, the memo included, survives retirement")
+assert(#memoRows==G.MAX_EVIDENCE+1,"every clue, the memo included, survives retirement")
 assert(Cases.validate(memoRetired))
-print("PASS a first case with every story paper and the relay memo retires")
+print("PASS a first case with every story clue and the relay memo retires")

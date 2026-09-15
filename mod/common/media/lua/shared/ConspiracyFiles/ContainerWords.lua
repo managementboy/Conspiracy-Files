@@ -1,4 +1,4 @@
--- Where a paper lies, in words (owner screenshot, Windows, 2026-09-15: "In a
+-- Where a clue lies, in words (owner screenshot, Windows, 2026-09-15: "In a
 -- shelves at 105 Pattern St."). The line put the container's raw type id after
 -- "In a", which is right for a desk and wrong for shelves. The game's own
 -- container titles are no better as prose - a counter is "Cupboard", a dresser

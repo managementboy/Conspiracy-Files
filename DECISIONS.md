@@ -278,7 +278,7 @@ that the mod only ever placed its own evidence and left vanilla loot alone.
 **Why it no longer held.** It had already been broken, deliberately, several
 times: a nearby zombie is given the case person's name and an ID card
 (CasePerson), placed evidence sets its own display category, and the survivor's
-papers are a vanilla photo album renamed. Each was the right call for the
+evidence album (called Papers until P4-R127) is a vanilla photo album renamed. Each was the right call for the
 investigation, and a rule that is routinely broken for good reasons is not a
 rule; it is a trap for whoever reads it next.
 
@@ -376,7 +376,7 @@ Answers to the three open calls at the foot of
 window" over the handoff's own assumption that the window becomes a desk. There
 is one reading surface and the survivor carries it. The desk/board surface in
 that document's Step 3 is therefore **not** to be built, and the staging drops
-to: projection surface argument, Papers as the surface, then the device as a
+to: projection surface argument, the evidence album (then Papers) as the surface, then the device as a
 real item. Consequence to hold onto: a single surface can never lay the case out
 larger than what the survivor is holding, so anything the old window could only
 show at 1000x680 must survive the move or be dropped on purpose, not by
@@ -601,13 +601,13 @@ Settles the visibility question P4-R91 left open. The owner chose that the
 records point the week out, then — told the relay memo could not be found
 while generated cases run — chose to put the memo in. The approved Dead Air
 memo (Relay 31, "EFFECTIVE 30 JUNE THROUGH 08 JULY") is placed as one extra
-paper in the **first** case of a game, at that case's second site, taking no
+clue in the **first** case of a game, at that case's second site, taking no
 story role. Once it has been found, any record dated inside those nine days
 gets a short note saying so, as a maybe; the memo is never noted against
 itself and nothing is said before it is found. Its words are read from
 `Content.lua`, not copied. Later cases are unchanged, so games already under
 way keep their cases but never see the memo — **the memo needs a new game.**
-The paper's description, its two readings and the note are new prose, reviewed
+The memo's description, its two readings and the note are new prose, reviewed
 by the owner in play (P4-R97).
 
 **P4-R97 — the approval rule for AI-written text is removed.** ADR-0002 said
@@ -717,9 +717,9 @@ new organiser program is added until the first new-style case ships. Changes
 case text, so a new game.
 
 **P4-R108 — case dates are spread across the calendar.** Every case used to be
-dated 2-6 July 1993, which put every dated paper inside the relay memo's nine
+dated 2-6 July 1993, which put every dated clue inside the relay memo's nine
 days and made its date note say nothing. Dates now spread across the weeks
-before the outbreak, so a paper landing in the memo's week is a real signal.
+before the outbreak, so a clue landing in the memo's week is a real signal.
 New game.
 
 **P4-R109 — one settled fact per case, about objects and places.** Amends "a
@@ -749,7 +749,7 @@ can't tell" - never a narrator or a quiz master addressing "you".
 **P4-R113 — "What do I make of it?" steers the next case.** Owner's own idea
 for ending a case, 2026-09-15: give the player a set of questions about how
 they see the mystery, "and we run from there". The organiser offers a short
-first-person set when a case's papers are all found - which reading I believe
+first-person set when a case's clues are all found - which reading I believe
 (the case's two readings, or "I can't tell"), who I think matters (the case's
 people and organisation, or nobody), what I would check next (follow the
 person, check the place against its records, listen for it, leave it cold).
@@ -768,12 +768,12 @@ also at any time) is still open.
 ("Fix loose ends", on the recommendation to keep them). FILES on the organiser
 dropped every heading that was not one of its labelled fields, for the look of
 a Palm record, so WHAT IT MIGHT MEAN and the relay memo's DATE NOTE ran straight
-on from the paper's own words and what a document says could not be told from
+on from the document's own words and what a document says could not be told from
 what the survivor makes of it. The organiser now shows the same headings as the
 notebook; the labelled fields (WHEN, FOUND, WHERE, OBJECT, NOTES) are unchanged.
 No new game.
 
-**P4-R115 — a body's clothes may disagree with the papers on it.** Owner,
+**P4-R115 — a body's clothes may disagree with the clues on it.** Owner,
 2026-09-15, asked whether the unbuilt half of USING_GAME_ASSETS Phase 1 is still
 wanted: "yes that would hint toward a mistery. Why does a firefighter have a
 police badge?" Where the trade a corpse is dressed for and the trade a document
@@ -783,13 +783,13 @@ job. Both trades come from closed, hand-written tables (outfit id to trade,
 document type to trade); anything not listed stays silent, as outfit lines
 already do (WP3). Agreement is not remarked on. Not built yet.
 
-**P4-R116 — several papers are noted at once by dropping them on the
+**P4-R116 — several clues are noted at once by dropping them on the
 organiser.** Owner, 2026-09-15, in play: "being able to inspect several
 evidences by marking them and dragging them onto the pda on top of right click
 inspect." Items selected in any inventory pane and let go on the open organiser
-are noted together: carried papers the ordinary way, papers in a container
+are noted together: carried clues the ordinary way, clues in a container
 where they lie (as right-click Inspect already does with the organiser open),
-ordinary items ignored, papers already noted left alone. The footer says what
+ordinary items ignored, evidence already noted left alone. The footer says what
 happened (NOTED 3, ALREADY NOTED, NOT CASE EVIDENCE). Right-click Inspect is
 unchanged.
 
@@ -805,15 +805,15 @@ branches holding files found nowhere in `main` (the Dead Air location
 inspection, the location shortlist, the T10 probe extras) and the
 `preservation/` and `engineering/` archives are kept. Replaces P4-R75.
 
-**P4-R118 — a finished case's papers are marked Old.** Owner, 2026-09-15, after
-the Windows playtest of DEV-0.36.0: two papers of a completed case were found
+**P4-R118 — a finished case's evidence is marked Old.** Owner, 2026-09-15, after
+the Windows playtest of DEV-0.36.0: two clues of a completed case were found
 in the house and had no Investigation option at all, which read as broken. "We
-should change the category to Evidence / Old." When a case retires, its papers'
+should change the category to Evidence / Old." When a case retires, its clues'
 inventory category changes from Evidence to **Evidence / Old**, so the loot list
-itself says the paper belongs to a closed case. The mark survives save and
-reload the same way the Evidence stamp does, and papers of cases retired in
-existing saves get it too. Secondary: right-clicking such a paper shows a
-greyed "Already in the organiser" instead of nothing. A paper from no case gets
+itself says the clue belongs to a closed case. The mark survives save and
+reload the same way the Evidence stamp does, and clues of cases retired in
+existing saves get it too. Secondary: right-clicking such a clue shows a
+greyed "Already in the organiser" instead of nothing. An item from no case gets
 neither.
 
 **P4-R119 — first cut of "What do I make of it?" (P4-R113).** Owner,
@@ -830,7 +830,7 @@ docs/design/WHOLE_MAP_ADDRESSES.md.
 
 **P4-R121 — the four open points of "What do I make of it?".** Owner,
 2026-09-15, answering the plan (docs/design/WHAT_DO_I_MAKE_OF_IT.md):
-- **"Listen for it" stays, through a new broadcast paper** (a transcript or
+- **"Listen for it" stays, through a new broadcast clue** (a transcript or
   scanner-log kind of document) that the next case leans on when that answer
   is chosen. It is a new document kind, not a new premise or organiser
   program, so the P4-R107 freeze as written is not broken.
@@ -840,7 +840,7 @@ docs/design/WHOLE_MAP_ADDRESSES.md.
   away can steer it (a short delay after completion, on top of the 24-hour
   timer).
 - **A returning person never gets a second body.** Someone who already has a
-  body in an earlier case returns through papers and mentions only.
+  body in an earlier case returns through clues and mentions only.
 
 **P4-R122 — the words of "What do I make of it?".** Owner, 2026-09-15,
 approving the draft in docs/design/WHAT_DO_I_MAKE_OF_IT.md section 1 as written:
@@ -862,8 +862,8 @@ approving the draft in docs/design/WHAT_DO_I_MAKE_OF_IT.md section 1 as written:
 
 **P4-R123 — "Listen for it" brings a radio call-in transcript.** Owner,
 2026-09-15, choosing between a scanner log and a call-in transcript for the
-broadcast paper of P4-R121: **a typed page from a local radio station's evening
-call-in show**, filed against the case's reference. Like every paper it raises a
+broadcast clue of P4-R121: **a typed page from a local radio station's evening
+call-in show**, filed against the case's reference. Like every clue it raises a
 question and never answers it. It is placed only in a case steered to "Listen
 for it", after every random draw (as the relay memo is), so no existing case
 changes. Text: docs/design/WHAT_DO_I_MAKE_OF_IT.md, step 11.
@@ -889,11 +889,26 @@ the case still comes once they move on. A case created, or loading the save,
 clears the wait. Placing cases in unloaded areas was not chosen.
 
 **P4-R126 — the long campaign check exercises the relay memo's date note.**
-Owner, 2026-09-15, choosing option A. In four campaign runs no paper of case 1
+Owner, 2026-09-15, choosing option A. In four campaign runs no clue of case 1
 fell inside the memo's nine days, so the date note passed on "0 of 0". The check
-now starts fresh worlds (at most eight) until case 1 has a paper dated in that
-week, and then requires every such paper to carry the note. Test only: the game
+now starts fresh worlds (at most eight) until case 1 has a clue dated in that
+week, and then requires every such clue to carry the note. Test only: the game
 does not force any case into that week (P4-R108 stands).
+
+**P4-R127 — clues, evidence and hunches; never "papers".** Owner, 2026-09-15:
+"Clues evidence.hunches. But papers not." A case hides keys, cards, photographs,
+objects and piles as well as documents, so "papers" was wrong. From now on:
+- **Clue** - something a case has hidden that the survivor has not found yet.
+- **Evidence** - a clue the survivor has found and noted (what the loot list
+  already labels Evidence, and Evidence / Old once its case is finished).
+- **Hunch** - what the survivor makes of it: leads, readings and the answers to
+  "What do I make of it?". A hunch is never proof.
+"Paper" stays only where the thing really is paper (a newspaper clipping, a
+paper map, story text about paperwork). Corrected: living docs, decisions
+(outside quoted owner words), code comments and test and check messages. Not
+rewritten: dated evidence reports and handoffs, which record what was said at
+the time, and the imported reference libraries. In game, the survivor's filing
+item "Papers" is renamed (e.g. "Una's Evidence").
 
 **P4-R106 — how a car's containers are reached.** Owner, 2026-09-14: "The globe
 box only opens when sitting in the front of the car", and a truck bed or trunk
@@ -906,14 +921,14 @@ glove box from a front seat).
 leave the PDA open." Held in the off hand it stays open beside a one-handed
 weapon; a two-handed weapon fills both hands and puts it away. HELP says so.
 
-**P4-R104 — a finished case's papers can still be found.** Owner in play: "I
+**P4-R104 — a finished case's evidence can still be found.** Owner in play: "I
 lost my files somewhere?" A case completed, retirement dropped its placement
-details, and nothing could say where its papers were any more. A finished
+details, and nothing could say where its evidence was any more. A finished
 case's documents now keep **where they were last seen** in the save (one short
 line per document, in the words the notebook already used). While a case is
-finished, the mod still looks for its papers in the survivor's inventory and
+finished, the mod still looks for its evidence in the survivor's inventory and
 bags and in the containers the loot panel is showing, every ten seconds, and
 updates that line at most once a minute per document. The notebook shows it as
 "Last seen: …" and PDA FILES shows a WHERE line for every document, live or
-finished. Neither ever says a document is lost. The Papers album is now found
+finished. Neither ever says a document is lost. The evidence album (called Papers until P4-R127) is now found
 inside bags too, so filing keeps working with it in a backpack.

@@ -142,8 +142,8 @@ function L.enterVehicle()
     if c then getPlayer():teleportTo(c:getX(), c:getY(), v:getZ())
     else getPlayer():teleportTo(v:getX() + 2.5, v:getY() + 0.5, v:getZ()) end
     -- A locked car, as a player with its key would find it. Without this the
-    -- harness took a paper out of a locked glove box it could never have
-    -- reached, the mod saw no ordinary pickup, and that paper's map mark went
+    -- harness took a clue out of a locked glove box it could never have
+    -- reached, the mod saw no ordinary pickup, and that clue's map mark went
     -- missing (20260914T203902). The lock itself is reported as a finding.
     for p = 0, v:getPartCount() - 1 do
         local part = v:getPartByIndex(p)
@@ -331,10 +331,10 @@ end
 
 function L.inspected() return R.isInspected(L.item) == true end
 
--- DATES with a real paper (owner, Windows, 2026-09-14: "an entry in the
+-- DATES with a real document (owner, Windows, 2026-09-14: "an entry in the
 -- calendar should open the file if we click on it"). pdagame proves the tap
 -- with a stand-in record; this one uses a document the loop actually found and
--- read, so it proves a real paper opens from the date book, and BACK returns.
+-- read, so it proves a real document opens from the date book, and BACK returns.
 function L.datesTap()
     local S = ConspiracyFiles.OrganiserScreen
     local w = S.window or S.open()
@@ -372,7 +372,7 @@ function L.datesTap()
     return true, tostring(opened), tostring(back), tostring(doc.title)
 end
 
--- A finished case's papers can still be found (P4-R104, owner: "I lost my files
+-- A finished case's evidence can still be found (P4-R104, owner: "I lost my files
 -- somewhere?"): once the case has retired, every document it held says where
 -- it was last seen. Until now only unit tests had seen it.
 function L.lastSeen()
@@ -400,10 +400,10 @@ function L.lastSeen()
     return tostring(have), tostring(total), sample, tostring(retired), tostring(stored)
 end
 
--- A finished case's papers are Evidence / Old (P4-R118, owner 2026-09-15: "We
+-- A finished case's evidence shows as Evidence / Old (P4-R118, owner 2026-09-15: "We
 -- should change the category to Evidence / Old"). Walks the inventory and bags
--- the loop filled: how many papers it holds, how many the runtime calls
--- retired papers, and how many the loot list would show as Old.
+-- the loop filled: how many case items it holds, how many the runtime calls
+-- retired evidence, and how many the loot list would show as Old.
 function L.oldPapers()
     local papers, retired, old = 0, 0, 0
     local function walk(container, depth)
@@ -460,7 +460,7 @@ end
 
 -- Whether the survivor can already write. A case's own evidence can be a pen
 -- ("Green pen, marked Adele Prosser", 20260915T171041), and the loop picks up
--- every paper, so "without a pen" cannot always be arranged.
+-- every clue, so "without a pen" cannot always be arranged.
 function L.hasPen()
     return ConspiracyFiles.ClueMarkers.canWrite(getPlayer()) == true
 end
@@ -579,7 +579,7 @@ function L.steerCheck()
 end
 
 -- Reshuffle support (checks/reshuffle.sh). ids() is the fingerprint of the
--- case currently in the save; orphanEvidence() counts papers left in the world
+-- case currently in the save; orphanEvidence() counts clues left in the world
 -- that still claim to belong to a case nothing knows about any more.
 function L.ids()
     local out = {}

@@ -97,7 +97,7 @@ function Rows.build(section,runtime)
         -- reordering anything. Identity and connection rows never reach this
         -- function, so no case marker is invented for them.
         local caseMarker=case and type(case.facts)=="table" and type(case.facts.code)=="string" and case.facts.code
-        -- EvidenceKinds.label is a human phrase for the twelve paper carriers
+        -- EvidenceKinds.label is a human phrase for the twelve document carriers
         -- ("Dispatch document"), but an object carrier's label is its raw
         -- catalogue id - "ClayPot" reached the notebook on 2026-09-10. An
         -- object already says what it is in its own title, so the summary says

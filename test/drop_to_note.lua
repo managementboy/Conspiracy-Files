@@ -1,4 +1,4 @@
--- Several papers noted at once by dropping them on the open organiser
+-- Several clues noted at once by dropping them on the open organiser
 -- (P4-R116, owner 2026-09-15). The rules, without the game: what a drag holds,
 -- which items are inspected and how, and what the footer says.
 package.path="mod/common/media/lua/client/?.lua;mod/common/media/lua/shared/?.lua;"..package.path
@@ -34,10 +34,10 @@ local r=Drop.note(items,runtime,inventory)
 assert(r.noted==3 and r.known==1 and r.other==1 and r.failed==0,Drop.describe(r))
 local how={}
 for _,c in ipairs(calls) do how[c.it.name]=c.inPlace end
-assert(how.docket==false and how.key==false,"carried papers are inspected the ordinary way")
-assert(how.pencil==true,"a paper in a drawer is noted where it lies")
+assert(how.docket==false and how.key==false,"carried clues are inspected the ordinary way")
+assert(how.pencil==true,"a clue in a drawer is noted where it lies")
 assert(how.hoodie==nil,"an ordinary item is never inspected")
-assert(how.memo==nil,"a paper already noted is not inspected again")
+assert(how.memo==nil,"evidence already noted is not inspected again")
 assert(Drop.footer(r)=="NOTED 3",Drop.footer(r))
 
 calls={}
@@ -60,7 +60,7 @@ for _,line in ipairs({"NOT CASE EVIDENCE","ALREADY NOTED","NOTED 64 OF 64"}) do
     assert(#line<=17,"the footer must fit the largest text size: "..line)
 end
 
--- A finished case's papers are no longer placement subjects - retiring the
+-- A finished case's evidence is no longer placement subjects - retiring the
 -- case drops that bookkeeping - but they are still noted. Dropping them again
 -- must say so, not call them ordinary items (drop_note check 20260915T111000:
 -- a whole case noted in one drop, then "NOT CASE EVIDENCE").
@@ -68,8 +68,8 @@ local retired=item("retired",inventory,true)
 inspected[retired]=true
 runtime.subject=function(it) return it~=retired and it.case==true end
 local done=Drop.note({retired},runtime,inventory)
-assert(done.known==1 and done.other==0,"a noted paper from a finished case is known, not ordinary: "..Drop.describe(done))
-assert(Drop.footer(done)=="ALREADY NOTED","a finished case's papers dropped again: "..Drop.footer(done))
+assert(done.known==1 and done.other==0,"noted evidence from a finished case is known, not ordinary: "..Drop.describe(done))
+assert(Drop.footer(done)=="ALREADY NOTED","a finished case's evidence dropped again: "..Drop.footer(done))
 
 -- The organiser takes a drop before handing the mouse-up to its panel.
 local f=assert(io.open("mod/common/media/lua/client/ConspiracyFiles/OrganiserScreen.lua","r"))

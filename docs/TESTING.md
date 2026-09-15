@@ -74,7 +74,7 @@ running two at once is safe, the second waits.
 | `pdagame.sh` | the organiser is issued at spawn; the device opens by being put in the MAIN HAND; every program opened by TAPPING ITS ICON; a real save, quit and `--continue` reload; the item removed from the inventory with the screen up |
 | `pdalife.sh` | hundreds of open/close cycles, screen churn, every size combination, deliberate abuse — all against the game's own UI manager and Events tables |
 | `pdaperf.sh` | draw-call counts and frame times from the real renderer |
-| `drop_note.sh` | real case papers, some carried and one left in its drawer, dropped together on the open organiser: all noted, none moved, an ordinary item ignored, a second drop notes nothing; names on the papers reach NAMES |
+| `drop_note.sh` | real case clues, some carried and one left in its drawer, dropped together on the open organiser: all noted, none moved, an ordinary item ignored, a second drop notes nothing; names on the clues reach NAMES |
 | `hardware.sh` | the battery, the lamp, auto-off, the dead-cell restore, the journal replay |
 | `knox.sh` | Knox.OS driven by taps and key presses |
 | `../fieldnote-test/boot_test.sh` | the case's hardware contract on the real organiser: every key's hitbox at every machine size, legends at every size, press colours, a release off a key cancels it |

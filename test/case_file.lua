@@ -1,4 +1,4 @@
--- The survivor starts with something to keep the paperwork in.
+-- The survivor starts with something to keep their evidence in.
 --
 -- Owner, 2026-09-10, from a screenshot of a vanilla photo album: "we could
 -- provide at game start such a Photoalbum and call it Survivor Notebook. Set
@@ -6,7 +6,7 @@
 -- the player starts with it in his/her inventory."
 --
 -- Base.PhotoAlbum accepts maps, literature and wallet-tagged items, which is
--- almost exactly this mod's paperwork. It is not a magic box: capacity 5,
+-- almost exactly this mod's written evidence. It is not a magic box: capacity 5,
 -- MaxItemSize 0.2, and it will never hold the object evidence.
 package.path = "mod/common/media/lua/client/?.lua;mod/common/media/lua/shared/?.lua;" .. package.path
 
@@ -16,6 +16,7 @@ local function makeItem(fullType)
     return { fullType = fullType, md = md, name = nil, custom = false, fav = false,
         getModData = function(self) return self.md end,
         setName = function(self, n) self.name = n end,
+        getName = function(self) return self.name end,
         setCustomName = function(self, v) self.custom = v end,
         setFavorite = function(self, v) self.fav = v end }
 end
@@ -47,9 +48,9 @@ local item = assert(F.give(player), "a case file must be issued")
 assert(item.fullType == "Base.PhotoAlbum", item.fullType)
 
 -- Named for the survivor, and NOT "Case File": that made them sound like an
--- investigator, and they are a person who kept some papers (owner,
--- 2026-09-10).
-assert(item.name == "Una's Papers", item.name)
+-- investigator (owner, 2026-09-10). It was "Una's Papers" until P4-R127: a case
+-- hides more than paper, so what the survivor keeps is their evidence.
+assert(item.name == "Una's Evidence", item.name)
 assert(item.custom, "the name must persist, which needs setCustomName")
 
 -- Favourite, so it is not dropped with the rest of a bag by accident. It does
@@ -63,6 +64,15 @@ local again = F.give(player)
 assert(again == item, "a second issue must return the existing file")
 assert(#added == 1, "issued " .. #added .. " case files; expected one")
 
+-- An album issued before P4-R127 is still called "Una's Papers". The next issue
+-- finds it by its mark, gives it the current name, and issues nothing new.
+item.name = "Una's Papers"
+assert(F.give(player) == item and item.name == "Una's Evidence", "an old album keeps its place and gets the new name: " .. tostring(item.name))
+assert(#added == 1, "renaming an old album must not issue a second one")
+item.name = "Una's diary scraps"
+assert(F.give(player) == item and item.name == "Una's diary scraps", "a name the player chose is left alone")
+item.name = "Una's Evidence"
+
 -- Recognised by our own mark, not by type: a photo album the player looted is
 -- an ordinary photo album and must not be mistaken for theirs.
 local looted = inventory:AddItem("Base.PhotoAlbum")
@@ -73,7 +83,7 @@ assert(F.held(player) == item, "a looted album must not be taken for the case fi
 -- descriptor can be absent mid-load.
 local nameless = { getInventory = function() return { AddItem = inventory.AddItem, getItems = function() return { size = function() return 0 end, get = function() end } end, items = {} } end,
                    getDescriptor = function() return nil end }
-assert(F.titleFor(nameless) == "Papers", F.titleFor(nameless))
+assert(F.titleFor(nameless) == "Evidence", F.titleFor(nameless))
 
 -- And it never throws: this runs from a game-start event, where an error would
 -- be silent and permanent.
@@ -103,7 +113,7 @@ local menu = source('mod/common/media/lua/client/ConspiracyFiles/GeneratedMenu.l
 -- (a) Open in the inventory panel at the start, rather than making the player
 -- hunt for the icon. Guarded: the panel may not exist on the first tick, and a
 -- failure must not cost them the item.
-assert(caseFile:find('selectButtonForContainer', 1, true), 'the papers must open in the inventory panel')
+assert(caseFile:find('selectButtonForContainer', 1, true), 'the evidence album must open in the inventory panel')
 assert(caseFile:find('pcall(function()', 1, true), 'and must not throw if the panel is not there yet')
 -- Not on the tick the item is added: the panel builds a container's button on
 -- a later update, so an immediate selection finds nothing and silently does
@@ -130,7 +140,7 @@ assert(menu:find('pcall(getTexture,path)', 1, true), 'a missing texture must not
 local titleFor = caseFile:match('function F%.titleFor%(player%).-\nend')
 assert(titleFor, 'titleFor must be findable')
 assert(not titleFor:find('Case File', 1, true), 'the name must not make them an investigator')
-assert(titleFor:find("'s Papers", 1, true), 'they kept some papers')
+assert(titleFor:find("'s Evidence", 1, true), 'they keep their evidence (P4-R127)')
 
 -- (d) Evidence sorts as Evidence, not as Junk.
 assert(runtime:find('item:setDisplayCategory("Evidence")', 1, true),
@@ -221,12 +231,12 @@ local reborn = { getInventory = function() return inv5 end,
     getSecondaryHandItem = function() return nil end, setSecondaryHandItem = function() end }
 getPlayer = function() return reborn end
 F4.createHandler(0, reborn); F4.onTick()
-assert(F4.held(reborn), 'the new survivor gets their own papers')
-print('PASS case file: the papers open as soon as the panel offers them, held in a free off hand; a respawned survivor gets papers')
+assert(F4.held(reborn), 'the new survivor gets their own evidence album')
+print('PASS case file: the evidence album opens as soon as the panel offers it, held in a free off hand; a respawned survivor gets one')
 
--- The Papers inside a backpack (P4-R104). Found in play, 2026-09-14: once the
--- album went into a bag it was not found, filing stopped and the papers seemed
--- lost. Found three deep; never deeper; and never filed into when it is not in
+-- The evidence album inside a backpack (P4-R104). Found in play, 2026-09-14:
+-- once the album went into a bag it was not found, filing stopped and the
+-- evidence seemed lost. Found three deep; never deeper; and never filed into when it is not in
 -- the player's own inventory tree.
 local function box(items)
     return { items = items,
@@ -247,9 +257,9 @@ local carrier = { getInventory = function() return top end,
 getPlayer = function() return carrier end
 local clock5 = 0; getTimeInMillis = function() clock5 = clock5 + 5000; return clock5 end
 local F5 = dofile('mod/common/media/lua/client/ConspiracyFiles/CaseFile.lua')
-assert(F5.held(carrier) == album, 'the Papers are found inside a backpack')
+assert(F5.held(carrier) == album, 'the album is found inside a backpack')
 assert(F5.give(carrier) == album, 'and a second album is not issued because of the bag')
-assert(F5.fileEvidence() == 1 and albumInv.items[1] == doc and #top.items == 1, 'filing still works with the Papers in a bag')
+assert(F5.fileEvidence() == 1 and albumInv.items[1] == doc and #top.items == 1, 'filing still works with the album in a bag')
 -- Four bags deep is past the walk.
 local deepAlbum = makeItem("Base.PhotoAlbum"); deepAlbum.md.cfCaseFile = true
 local deep = box({ bag(box({ bag(box({ bag(box({ bag(box({ deepAlbum })) })) })) })) })
@@ -259,4 +269,4 @@ local stray = makeItem("Base.Note"); stray.md.cfGeneratedId = "doc-2"
 top.items[#top.items + 1] = stray
 album.getOutermostContainer = function() return { shelf = true } end
 assert(F5.fileEvidence() == 0 and top.items[#top.items] == stray, 'nothing is filed into an album outside the inventory tree')
-print('PASS case file: the Papers are found inside bags, three deep, and are only filed into while carried')
+print('PASS case file: the evidence album is found inside bags, three deep, and is only filed into while carried')

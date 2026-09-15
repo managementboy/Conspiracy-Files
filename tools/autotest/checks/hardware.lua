@@ -481,7 +481,7 @@ function CFHW.tapDay(n)
     return true, tostring(row.title), tostring(row.detail):gsub("\n", " | ")
 end
 
--- Filing evidence into the Papers, and inspecting where it lies.
+-- Filing evidence into the evidence album, and inspecting where it lies.
 local CaseFile = require("ConspiracyFiles/CaseFile")
 
 function CFHW.pocketCount()

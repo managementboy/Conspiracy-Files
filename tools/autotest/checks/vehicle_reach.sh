@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Vehicle reach check: a paper in a van's truck bed and in its glove box is
+# Vehicle reach check: a note in a van's truck bed and in its glove box is
 # reached from OUTSIDE the van, shows in the loot panel and can be taken.
 #
 # The game never shows a truck bed to someone sitting inside the vehicle, and a
@@ -91,7 +91,7 @@ for part in TruckBed GloveBox; do
         [ "$seated" = yes ] || fail "the GloveBox could not be reached from the front seat"
     fi
     [ "$opened" = yes ] || fail "the loot panel never showed the $part"
-    [ "$taken" = yes ] || fail "the paper in the $part never reached the inventory"
+    [ "$taken" = yes ] || fail "the note in the $part never reached the inventory"
 done
 
 errors="$(mod_errors)"

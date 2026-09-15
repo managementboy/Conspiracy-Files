@@ -20,7 +20,7 @@
 local M={}
 
 -- "the same place" means THE BUILDING. Not the room, not the container, not
--- the tile. Four papers in one desk, and a fifth in the wardrobe upstairs,
+-- the tile. Four clues in one desk, and a fifth in the wardrobe upstairs,
 -- were all found at 109 Walker Road; a player who searched that house
 -- remembers the house. The building id travels beside the label in the
 -- ledger, so this grain can be narrowed or widened later without rewriting a

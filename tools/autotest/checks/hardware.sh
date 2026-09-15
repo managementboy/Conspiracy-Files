@@ -314,12 +314,12 @@ say "day 28: $(f 2 <<<"$empty") -> $(f 3 <<<"$empty")"
 
 # --- evidence files itself away ----------------------------------------------
 # Owner, 2026-09-13: emptying a drawer into your pockets to read it "makes the
-# game unplayable". Documents go into the Papers - but only while the organiser
+# game unplayable". Documents go into the evidence album - but only while the organiser
 # is closed, because things moving under you while you read is not help.
 ev 'return CFHW.plantDoc()' >/dev/null
 before="$(ev 'return CFHW.pocketCount()')"
-say "planted: loose=$(f 2 <<<"$before") filed=$(f 3 <<<"$before") papers=$(f 4 <<<"$before")"
-[ "$(f 4 <<<"$before")" = true ] || abort "no papers carried; cannot test filing"
+say "planted: loose=$(f 2 <<<"$before") filed=$(f 3 <<<"$before") album=$(f 4 <<<"$before")"
+[ "$(f 4 <<<"$before")" = true ] || abort "no evidence album carried; cannot test filing"
 [ "$(f 2 <<<"$before")" -ge 1 ] || fail "the planted document is not in the pocket"
 # Organiser OPEN: nothing may move.
 ev 'return CFHW.setScreen(true)' >/dev/null

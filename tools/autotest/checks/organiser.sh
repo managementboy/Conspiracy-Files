@@ -5,7 +5,7 @@
 #
 # PASS needs: one issued at spawn, marked favourite, with power; reading it
 # opens the investigation; a flat battery refuses instead of opening; the
-# Papers are still carried, so losing the device never costs the case
+# The evidence album is still carried, so losing the device never costs the case
 # (P4-R80); and it is still there, still ours, after a save and reload.
 # Exit 0 pass, 1 fail, 2 could not run.
 set -uo pipefail
@@ -38,7 +38,7 @@ ev 'return CFOrg.drain()' >/dev/null
 flat="$(ev 'return CFOrg.read()')"
 [ "$(cut -f1 <<<"$flat")" = false ] || fail "a flat organiser still opened the investigation"
 [ "$(cut -f2 <<<"$flat")" = "flat battery" ] || say "refusal reason: $(cut -f2 <<<"$flat")"
-[ "$(ev 'return CFOrg.papersHeld()' | cut -f1)" = true ] || fail "no Papers carried: nothing to read when the device is dead"
+[ "$(ev 'return CFOrg.papersHeld()' | cut -f1)" = true ] || fail "no evidence album carried: nothing to read when the device is dead"
 ev 'return CFOrg.charge()' >/dev/null
 
 # Save, reload, and it is still ours: the mark lives on the item, not in a flag.

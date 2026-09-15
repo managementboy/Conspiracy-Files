@@ -1,12 +1,12 @@
 -- Long campaign check (checks/campaign.sh): several generated cases played end
 -- to end in one save, with a save and reload between them. Loaded after
 -- core_loop.lua and reload.lua, whose stages it reuses: CFLoop finds, takes
--- and inspects a paper the player's way; CFReload measures the save.
+-- and inspects a clue the player's way; CFReload measures the save.
 --
 -- What only shows across cases and over time is what this is for: a finished
 -- case turning into questions, the answers surviving a reload, the next case
 -- built from them, the case after that built from nothing, the notebook's order
--- across cases, finished papers staying Old, and the save growing case by case.
+-- across cases, finished evidence staying Old, and the save growing case by case.
 CFCamp = CFCamp or {}
 local C = CFCamp
 local R = ConspiracyFiles.GeneratedRuntime
@@ -37,7 +37,7 @@ function C.oldestLive()
     return "none"
 end
 
--- Whether a live case carries the relay memo, and how many of its other papers
+-- Whether a live case carries the relay memo, and how many of its other documents
 -- are dated inside the memo's week (P4-R126: the date note needs at least one).
 function C.memoWeek(caseId)
     local Memo = require("ConspiracyFiles/Generated/RelayMemo")
@@ -60,7 +60,7 @@ function C.newestLive()
     return id
 end
 
--- Papers the harness could not reach, so the next pass moves on to another.
+-- Clues the harness could not reach, so the next pass moves on to another.
 C.skipped = C.skipped or {}
 function C.skipFirst()
     local d = CFLoop.list and CFLoop.list[1]
@@ -68,9 +68,9 @@ function C.skipFirst()
     return d and d.id or "none"
 end
 
--- Point CFLoop at one case's papers still to find, in document order, so
--- inspect_doc 1 always plays the next one of that case and no other. Papers
--- already in the notebook, and papers skipped, are left out. Returns how many
+-- Point CFLoop at one case's clues still to find, in document order, so
+-- inspect_doc 1 always plays the next one of that case and no other. Clues
+-- already in the notebook, and clues skipped, are left out. Returns how many
 -- remain, how many are placed, how many still waiting to be placed.
 function C.useCase(caseId)
     local prefix = tostring(caseId):gsub(":case$", ":")
@@ -91,7 +91,7 @@ function C.useCase(caseId)
 end
 
 -- How a live case was built: its steer (or "unsteered"), its first person and
--- whether they are marked met (no body), and every paper title.
+-- whether they are marked met (no body), and every clue title.
 function C.steerOf(caseId)
     for _, root in ipairs(roots()) do
         if root.case and root.case.caseId == caseId then
@@ -160,7 +160,7 @@ function C.answer(caseId, l1, l2, l3)
     return "true", note
 end
 
--- What the organiser shows: question rows and papers in FILES, NAMES, PLACES,
+-- What the organiser shows: question rows and evidence in FILES, NAMES, PLACES,
 -- and the notebook's discoveries.
 function C.surfaces()
     local A = require("ConspiracyFiles/KnoxApps")
@@ -195,7 +195,7 @@ function C.gap(normal)
     return c.minGapHours, c.afterCompletionHours
 end
 
--- The paper the harness is about to look for: where the case says it is, its
+-- The clue the harness is about to look for: where the case says it is, its
 -- placement state, and where the runtime last saw it.
 function C.describeFirst()
     local d = CFLoop.list and CFLoop.list[1]
@@ -251,7 +251,7 @@ function C.preparing()
     return tostring(s.preparing), s.count, s.limit
 end
 
--- Carried papers by category: a finished case's must be Evidence / Old, a live
+-- Carried evidence by category: a finished case's must be Evidence / Old, a live
 -- case's must be Evidence.
 function C.categories()
     local oldOk, oldBad, liveOk, liveBad = 0, 0, 0, 0

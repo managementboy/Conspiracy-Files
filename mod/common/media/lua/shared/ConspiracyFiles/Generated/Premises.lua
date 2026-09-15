@@ -56,8 +56,8 @@ local M={}
 -- 2026-09-15): the audit found a dozen responses whose only meaning said "one
 -- of them is wrong" or "backdated" beside a line saying the records matched. A
 -- review carries one wherever its meaning speaks to only one branch. The
--- `found` text is read in both branches, so it describes the paper and never
--- which way the paper goes.
+-- `found` text is read in both branches, so it describes the evidence and never
+-- which way the evidence goes.
 --
 -- `asserts` (optional, read only by test/premise_consistency.lua) says what a
 -- relative phrase in the premise is relative TO, so the test can check it on

@@ -22,7 +22,7 @@ local retiredRows={}
 -- Where and when a later case last found nothing usable nearby (P4-R125).
 local deferredAt=nil
 -- Declared with the identity scan further down. Retirement (R.inspect) reads
--- both to keep where each paper was last seen, and sits above that code.
+-- both to keep where each clue was last seen, and sits above that code.
 local sightings,placeOf
 -- Building id -> address, or false for "the book has no name for it". Cleared
 -- when the address book finishes building, so early misses are not permanent.
@@ -132,10 +132,10 @@ local function stampEvidence(item,title)
     item:setName(title); item:setCustomName(true)
     pcall(function() item:setDisplayCategory("Evidence") end)
 end
--- A finished case's papers are Old. Owner, 2026-09-15, after finding two papers
+-- A finished case's evidence is Old. Owner, 2026-09-15, after finding two clues
 -- of a completed case in the house with no Investigation option at all: "We
 -- should change the category to Evidence / Old" (P4-R118). The loot list then
--- says the paper belongs to a closed case. Same rules as Evidence: a
+-- says the item belongs to a closed case. Same rules as Evidence: a
 -- translation key (IGUI_ItemCat_EvidenceOld) and a runtime property, so every
 -- place that stamps a category asks this instead of assuming Evidence.
 local function retiredId(id)
@@ -654,12 +654,12 @@ function R.inspect(item,inPlace)
     if not a or md.cfPhysicalToken~=a.physicalToken or a.status=="conflict" then return false end
     -- A positively observed surviving item can reconcile an uncertain intent.
     -- Known before this inspection? PlayerVoice's once-per-thing memory lives
-    -- only while the game runs, so after a reload re-inspecting an old paper
+    -- only while the game runs, so after a reload re-inspecting old evidence
     -- announced its connection again (audit follow-up, 2026-09-15).
     local already=false
     for _,known in ipairs(api.snapshot().known or {}) do if known==md.cfGeneratedId then already=true end end
     checked(api.status(md.cfGeneratedId,"placed",worldHours())); checked(api.inspect(md.cfGeneratedId))
-    -- The paper in hand shows as Evidence however it reached the hand.
+    -- The item in hand shows as Evidence however it reached the hand.
     pcall(function() item:setDisplayCategory(categoryOf(md.cfGeneratedId)) end)
     local ledger=ConspiracyFiles.DiscoveryLog
     if ledger and ledger.record then ledger.record("evidence",md.cfGeneratedId) end
@@ -703,7 +703,7 @@ function R.inspect(item,inPlace)
     if #done.known>=#done.case.documents then
         for index,root in ipairs(Cases.sessions(wrapper)) do
             if not Retired.isRetired(root) and root.case and root.case.caseId==done.case.caseId then
-                -- Keep where each paper was last seen. Owner, 2026-09-14: "I
+                -- Keep where each clue was last seen. Owner, 2026-09-14: "I
                 -- lost my files somewhere?" - retiring dropped every placement
                 -- detail, and the notebook could no longer say (P4-R104). The
                 -- document in hand is where it is right now, not where the
@@ -717,7 +717,7 @@ function R.inspect(item,inPlace)
                 local staged,why=Cases.retire(wrapper,index,seen,worldHours())
                 if staged then
                     swap(staged); openAll(); log("Case complete; placement details retired.")
-                    -- The paper in hand is Old at once; the rest are marked
+                    -- The item in hand is Old at once; the rest are marked
                     -- as the last-seen scan passes them (P4-R118).
                     pcall(function() item:setDisplayCategory(categoryOf(md.cfGeneratedId)) end)
                     -- Not "solved" - the mod does not know that and never will.
@@ -736,8 +736,8 @@ function R.subject(item)
     local md=item:getModData(); local root=md and Cases.find(wrapper,md.cfGeneratedId); local a=root and root.assignments[md.cfGeneratedId]
     return a and md.cfPhysicalToken==a.physicalToken and a.status~="conflict"
 end
--- A paper of a case that has retired. Retirement drops the case's
--- assignments, so the paper is no longer a subject and the menu used to offer
+-- Evidence of a case that has retired. Retirement drops the case's
+-- assignments, so the item is no longer a subject and the menu used to offer
 -- nothing at all, which read as broken in play (2026-09-15). Its id is still
 -- in a retired row, so the menu can say it is already recorded (P4-R118).
 function R.retiredPaper(item)
@@ -1146,7 +1146,7 @@ function R.whereabouts(id)
             return "unchecked"
         end
     end
-    -- A finished case keeps no scan of its own, only where its paper was last
+    -- A finished case keeps no scan of its own, only where its evidence was last
     -- seen (P4-R104). No record means we say nothing, never that it is gone.
     for _,row in ipairs(retiredRows) do
         if row.id==id then
@@ -1168,7 +1168,7 @@ local function identity(api)
     return function()
         if not done then scan(); return false end
         for id,items in pairs(found) do
-            -- The category is not saved with an item, so a paper in an area
+            -- The category is not saved with an item, so a clue in an area
             -- that streamed out and back lost it while its case was live
             -- (campaign check, 2026-09-15). The scan that finds it restores it.
             for _,it in ipairs(items) do pcall(function() it:setDisplayCategory(categoryOf(id)) end) end
@@ -1189,16 +1189,16 @@ local function identity(api)
         return true
     end
 end
--- Where a finished case's papers are now (P4-R104). Owner, 2026-09-14: "I lost
+-- Where a finished case's evidence is now (P4-R104). Owner, 2026-09-14: "I lost
 -- my files somewhere?" The case had completed, retirement had dropped its
--- placement details, and nothing could say where the papers had gone.
+-- placement details, and nothing could say where the evidence had gone.
 --
 -- A retired case has no identity scan, so this is a smaller one: the player's
 -- inventory with bags inside it (depth 3, as restampEvidence walks it) and the
 -- containers the loot panel is showing, one item per scheduler step, at most
 -- every ten seconds of real time. What it finds is written to the save only
 -- when the words changed, and never more than once a minute per document: a
--- player walking round with the Papers must not cost a 20 ms validation every
+-- player walking round with the evidence album must not cost a 20 ms validation every
 -- time a bag changes hands.
 local LAST_SEEN_EVERY_MS=10000
 local LAST_SEEN_WRITE_MS=60000
@@ -1283,7 +1283,7 @@ end)
 -- setDisplayCategory is a RUNTIME property: the custom name is saved with the
 -- item and the category is not, so reloading a save dropped every document
 -- back into Junk (owner, 2026-09-13). Re-stamped on load, for anything still
--- carrying our marker. Walks bags too, because the Papers are a container and
+-- carrying our marker. Walks bags too, because the evidence album is a container and
 -- that is where the evidence actually lives.
 local function restampEvidence(container,depth)
     if not container or (depth or 0)>3 then return 0 end
@@ -1294,7 +1294,7 @@ local function restampEvidence(container,depth)
         local item=items:get(i)
         local md=item and item.getModData and item:getModData()
         if type(md)=="table" and md.cfGeneratedId then
-            -- Old for a retired case's paper (P4-R118). At game start the
+            -- Old for a retired case's evidence (P4-R118). At game start the
             -- campaign is not open yet, so this says Evidence and the
             -- last-seen scan corrects it within ten seconds.
             pcall(function() item:setDisplayCategory(categoryOf(md.cfGeneratedId)) end)

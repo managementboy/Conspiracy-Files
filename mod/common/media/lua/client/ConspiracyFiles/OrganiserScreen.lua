@@ -357,7 +357,7 @@ function Screen:footText(hint)
     if self.lampRefused and now-self.lampRefused<2500 then
         return "LAMP NEEDS MORE CHARGE"
     end
-    -- What a drop of papers did (P4-R116), for as long as it takes to read.
+    -- What a drop of evidence did (P4-R116), for as long as it takes to read.
     if self.dropped and now-self.dropped.at<3000 then
         return self.dropped.text
     end
@@ -1058,7 +1058,7 @@ function Screen:onMouseUpOutside(x,y)
     return ISPanel.onMouseUpOutside(self,x,y)
 end
 
--- Papers dragged out of an inventory and let go on the machine are noted, all
+-- Evidence dragged out of an inventory and let go on the machine are noted, all
 -- of them (P4-R116). The inventory pane hands its drag to whichever window the
 -- mouse comes up over and clears it on its next update, and over a window it
 -- drops nothing on the floor (ISInventoryPane:update). A drop wakes the

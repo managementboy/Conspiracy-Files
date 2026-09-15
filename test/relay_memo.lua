@@ -1,6 +1,6 @@
 -- P4-R91 made the shared week real, and the owner chose how the player meets
 -- it: the relay memo turns up in the FIRST generated case of a game, and once
--- it has been found the records note - as a maybe - which papers are dated
+-- it has been found the records note - as a maybe - which documents are dated
 -- inside the nine days it covers. These are outcome assertions on the
 -- generator, the pages a reader turns and the rows both surfaces show.
 package.path="mod/common/media/lua/client/?.lua;mod/common/media/lua/shared/?.lua;"..package.path
@@ -34,7 +34,7 @@ for seed=1,120 do
         assert(#memosIn(without)==0,"a later case must not carry the memo (seed "..seed..")")
         assert(without.relayMemo==nil,"a later case carries no memo flag")
         assert(with,"the memo must never stop a first case from generating (seed "..seed..")")
-        -- The first case is the later case plus exactly one paper, last.
+        -- The first case is the later case plus exactly one clue, last.
         local memos=memosIn(with)
         assert(#memos==1,"a first case carries exactly one memo (seed "..seed..")")
         assert(with.documents[#with.documents]==memos[1],"the memo comes after every story document")
@@ -63,7 +63,7 @@ assert(memo.body:find(approved,1,true),"the memo reproduces the approved text ex
 local pages=table.concat(Pages.pages(memo.body),"\n")
 assert(pages:find("CUMBERLAND SIGNAL SERVICES",1,true),"the pages carry the memo")
 assert(not pages:find("WHAT IT MIGHT MEAN",1,true),"the pages carry no interpretation")
-assert(not pages:find("WHAT YOU FOUND",1,true),"the pages carry no description of the paper")
+assert(not pages:find("WHAT YOU FOUND",1,true),"the pages carry no description of the document")
 
 -- Tampering is refused like any other generated text.
 local forged=assert(G.restore(case)); forged.relayMemo=false
@@ -80,7 +80,7 @@ assert(Memo.inWeek("July 8, 1993"),"8 July closes the week")
 assert(not Memo.inWeek("June 29, 1993"),"29 June is outside")
 assert(not Memo.inWeek("July 9, 1993"),"9 July is outside")
 assert(not Memo.inWeek("July 5, 1994"),"another year is outside")
-assert(not Memo.inWeek("no date at all"),"an undated paper is outside")
+assert(not Memo.inWeek("no date at all"),"an undated document is outside")
 -- P4-R108: cases run from May into July, and a diary heading is in capitals.
 assert(Memo.inWeek("JULY 3, 1993"),"a capitalised heading inside the week is read")
 assert(Memo.inWeek("JUNE 30, 1993\n'called again'"),"a capitalised 30 June is read")
@@ -90,7 +90,7 @@ assert(not Memo.inWeek("Drawn weekly since June 1993."),"a month with no day is 
 assert(not Memo.inWeek("August 5, 1993"),"5 August is not 5 July")
 assert(Memo.inWeek("Issued June 21, 1993\nReviewed July 2, 1993"),"any date in the week counts")
 
--- The note: only once the memo is found, only on dated papers, never on the
+-- The note: only once the memo is found, only on dated documents, never on the
 -- memo itself, and never as a statement of fact.
 local function runtimeWith(known)
     return function() return {known=function() return known end} end
@@ -105,11 +105,11 @@ assert(not before[1].detailText:find("DATE NOTE",1,true),"no note before the mem
 
 local after=Rows.build("evidence",runtimeWith({dated,undated,late,found}))
 local note=after[1].detailText
-assert(note:find("DATE NOTE",1,true),"a paper dated in the week is noted once the memo is found: "..note)
+assert(note:find("DATE NOTE",1,true),"a document dated in the week is noted once the memo is found: "..note)
 assert(note:find("may",1,true) or note:find("coincidence",1,true),"the note is a maybe: "..note)
 assert(not note:find("proves",1,true) and not note:find("because",1,true),"the note asserts nothing: "..note)
-assert(not after[2].detailText:find("DATE NOTE",1,true),"an undated paper is not noted")
-assert(not after[3].detailText:find("DATE NOTE",1,true),"a paper dated outside the week is not noted")
+assert(not after[2].detailText:find("DATE NOTE",1,true),"an undated document is not noted")
+assert(not after[3].detailText:find("DATE NOTE",1,true),"a document dated outside the week is not noted")
 assert(not after[4].detailText:find("DATE NOTE",1,true),"the memo is not noted against itself")
 assert(after[4].cfCarrier=="Office memo",after[4].cfCarrier)
 

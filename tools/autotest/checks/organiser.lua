@@ -45,7 +45,7 @@ function CFOrg.charge()
     return true
 end
 
--- The way back to reading when the device is gone (P4-R80): the Papers.
+-- The way back to reading when the device is gone (P4-R80): the evidence album.
 function CFOrg.papersHeld()
     local F = ConspiracyFiles.CaseFile
     return F ~= nil and F.held(getPlayer()) ~= nil

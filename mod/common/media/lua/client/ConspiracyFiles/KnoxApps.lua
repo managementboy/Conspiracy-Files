@@ -85,7 +85,7 @@ local function split(detail)
         elseif block:find("%S") then
             -- Every other block keeps its heading (P4-R114). They were dropped
             -- for the look of a Palm record, and with them went the only thing
-            -- telling the paper's own words from WHAT IT MIGHT MEAN and the
+            -- telling the document's own words from WHAT IT MIGHT MEAN and the
             -- DATE NOTE, which are the survivor thinking.
             body[#body+1]=block
         end
@@ -104,10 +104,10 @@ A.files={
             local date=A.dateOf(event.at)
             if date then when[event.ref]=string.format("%s, %02d:00",date.label,date.hour) end
         end
-        -- Where the paper is. FILES never said, even for a live case, and once a
+        -- Where the evidence is. FILES never said, even for a live case, and once a
         -- case finished nothing did (owner, 2026-09-14: "I lost my files
         -- somewhere?", P4-R104). Knowledge only: what the scan saw, or where a
-        -- finished case's paper was last seen - never that it is lost.
+        -- finished case's evidence was last seen - never that it is lost.
         local runtime=ConspiracyFiles.GeneratedRuntime
         local function whereOf(id)
             if not runtime or not runtime.whereabouts then return nil end
@@ -228,7 +228,7 @@ local function passesFilter(row,filter)
     return true
 end
 
--- Names written on the case's own papers (owner, Windows, 2026-09-15: "the
+-- Names written on the case's own evidence (owner, Windows, 2026-09-15: "the
 -- pencil and key are marked with a name, but we did not create an entry in the
 -- contacts"). The book only ever read identity documents - ID cards, badges,
 -- diaries - so a name on a tagged key or a delivery docket never reached it,
@@ -661,7 +661,7 @@ function A.bootLines()
 end
 
 -- SITES -----------------------------------------------------------------------
--- The hidden program: where the case's papers actually are. Owner's idea, and
+-- The hidden program: where the case's clues actually are. Owner's idea, and
 -- it only exists in debug - a player must never be handed the answers.
 A.sites={
     id="SITES",title="SITES",icon="sites",hidden=true,
@@ -670,7 +670,7 @@ A.sites={
         local text=runtime and runtime.devLocations and safe(runtime.devLocations)
         -- Which of them the player has actually found. The ledger's reference
         -- IS the document id devLocations prints, so the two match directly.
-        -- Owner, 2026-09-13: "sites should mark those found." Four papers at
+        -- Owner, 2026-09-13: "sites should mark those found." Four clues at
         -- one address are otherwise four identical rows.
         local found={}
         local log=ConspiracyFiles.DiscoveryLog

@@ -161,7 +161,7 @@ assert(#W.partsWithRoom(fakeVehicle(1, 1, { GloveBox = 5 }), W.BODY_WEIGHT) == 0
     "a car with only a glovebox offers nowhere for a body")
 -- And a glovebox is still the right place for a document.
 assert(#W.partsWithRoom(fakeVehicle(1, 1, { GloveBox = 5 }), 0.2) == 1,
-    "a glovebox must still take a piece of paper")
+    "a glovebox must still take a document")
 
 -- The scan is bounded: a cell can hold a great many vehicles.
 local many = {}

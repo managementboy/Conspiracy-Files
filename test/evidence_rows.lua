@@ -38,7 +38,7 @@ assert(not object[1].summary:find("ClayPot",1,true),
     "the catalogue id must never reach the summary: "..object[1].summary)
 assert(object[1].summary=="Object found - Discovery 1",object[1].summary)
 
--- A paper carrier does have a human phrase, and keeps it.
+-- A document carrier does have a human phrase, and keeps it.
 local paper=Rows.build("evidence",runtimeWith({
     {id="d1",title="Dispatch copy / R-482",body="in a desk",kind="dispatch"},
 }))
@@ -118,4 +118,4 @@ local unknown=Rows.build("evidence",runtimeWith({
 assert(unknown[1].detailText:find("Connected to: Receiving receipt / X%-9"),
     "an unrecognised link kind falls back to a plain phrase: "..unknown[1].detailText)
 
-print("PASS evidence rows: empty runtime, object vs paper carrier, the unfound-document question with article and 'another', found connections, and global ordinals, connection verbs that fit any story, and an unknown link kind")
+print("PASS evidence rows: empty runtime, object vs document carrier, the unfound-document question with article and 'another', found connections, and global ordinals, connection verbs that fit any story, and an unknown link kind")

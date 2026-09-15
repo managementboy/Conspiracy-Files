@@ -66,7 +66,7 @@ local SET_C={
 -- pass it in silence.
 --
 -- The survivor NEVER says which record is true. "They do not match" is a fact
--- about two pieces of paper; "someone is lying" is a conclusion, and the whole
+-- about two records; "someone is lying" is a conclusion, and the whole
 -- discipline of this project is that a lead is never proof.
 local SET_E_DISPUTE={
     "This doesn't match what the other one said.",
@@ -201,7 +201,7 @@ local function speak(player,text,label,priority)
     if #queue>=QUEUE_MAX then
         -- A case's closing words must not be lost behind a busy moment
         -- (campaign check, 2026-09-15: "What do I make of it?" was never said
-        -- after a case whose last papers brought connections and a pile). They
+        -- after a case whose last evidence brought connections and a pile). They
         -- push out the oldest ordinary line waiting instead.
         local room
         if priority then for i,q in ipairs(queue) do if not q.priority then room=i; break end end end

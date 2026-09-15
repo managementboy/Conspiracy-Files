@@ -58,7 +58,7 @@ being claimed.
 ## Dates: a calendar per case
 
 Owner decision P4-R108, 2026-09-15. Every case used to be dated July 2-6
-1993, so every paper sat inside the relay memo's week (30 June - 8 July) and
+1993, so every clue sat inside the relay memo's week (30 June - 8 July) and
 its DATE NOTE was true of everything. Now each case draws a calendar from its
 seed alone (`Generator.calendar`, never the world clock, so a case still
 rebuilds byte for byte):
@@ -69,7 +69,7 @@ rebuilds byte for byte):
   outbreak begins after);
 - two cases in five put the response and review inside the memo's week, the
   rest end by 29 June. Measured over 400 seeds: 160 calendars reach the week,
-  134 cases (34%) carry a dated paper inside it, 266 carry none.
+  134 cases (34%) carry a dated clue inside it, 266 carry none.
 
 Premise text never splices a day into a month. The placeholders are whole
 phrases: `{DATE1}` claim, `{DATE2}` response, `{DATE3}` review ("June 14,
@@ -78,7 +78,7 @@ capitals, `{DAYS12}` the claim-to-response gap ("four days"), `{PRIORMONTH}`
 the month before the claim's, `{SINCE11}` eleven months before it. A relative
 phrase - "the day before", "for four days", "four months" - is rendered from
 the same numbers as the dates it relates, or declared in the premise's
-`asserts` so the test can check it. A paper that says "the day before" is only
+`asserts` so the test can check it. A clue that says "the day before" is only
 ever printed where that is true.
 
 ## Both branches, both meanings
@@ -91,8 +91,8 @@ them is wrong" or "backdated" beside a line saying the records matched. So:
   `meaning` is read where it disputes. Premises.lua refuses to load without it.
   A review carries one wherever its meaning only fits one branch. Both keep
   two honest readings.
-- `found` text is read in both branches, so it describes the paper, never
-  which way the paper goes (no "same smudge" on a list that may differ).
+- `found` text is read in both branches, so it describes the clue, never
+  which way the clue goes (no "same smudge" on a list that may differ).
 - A premise whose disputing response is dated before its claim (the
   resignation, the payment) says so with `asserts.precedes`, and the order
   each line states is true by construction.
@@ -106,7 +106,7 @@ dates out of order or outside 30 April - 8 July 1993; a "N days", "the day
 before" or "N months" phrase that does not match its asserted dates; "for
 weeks" or "each week" in a case that lasts days; a meaning with a
 disagreement marker where the records agree, or an agreement marker where
-they do not; two papers in a case with one title; one person placed at both
+they do not; two clues in a case with one title; one person placed at both
 sites on the same date; a placeholder left in the text; and a relay-memo week
 rate outside 15-55%.
 

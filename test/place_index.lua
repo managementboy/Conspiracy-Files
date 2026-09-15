@@ -20,7 +20,7 @@ local placed = M.decorate(rows(), { a = "109 Walker Road", b = "109 Walker Road"
 assert(placed[1].summary == "109 Walker Road - Discovery 1 - Case R-482", placed[1].summary)
 assert(placed[3].summary == "42 McCoy Lane - Discovery 3 - Case R-340", placed[3].summary)
 
--- Four papers from one desk sit next to each other. They must still be four
+-- Four clues from one desk sit next to each other. They must still be four
 -- distinguishable rows, which the true discovery number guarantees - the
 -- ordinal comes from the ledger, so no two rows can ever carry the same one.
 assert(placed[1].summary ~= placed[2].summary, "two finds in one place must not read identically")

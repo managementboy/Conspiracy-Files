@@ -81,10 +81,10 @@ assert(runtime:find('"Carried, in "..name', 1, true), 'it reads "Carried, in Ome
 assert(runtime:find('"Carried, in your "..name', 1, true), 'and an ordinary bag still reads "your"')
 print('PASS document whereabouts: no double possessive on a named container')
 
--- A finished case's papers (P4-R104). Owner in play, 2026-09-14: "I lost my
+-- A finished case's evidence (P4-R104). Owner in play, 2026-09-14: "I lost my
 -- files somewhere?" Retirement dropped every placement detail, so nothing
--- could say where the papers were. The notebook and FILES now say where they
--- were last seen - and still never that they are lost.
+-- could say where the evidence was. The notebook and FILES now say where it
+-- was last seen - and still never that it is lost.
 assert(runtime:find('return "lastseen",row.lastSeen', 1, true), 'a retired document reports where it was last seen')
 local lastseen = notebook:match('lastseen="([^"]+)"')
 assert(lastseen and lastseen:find('Last seen', 1, true), 'the notebook has wording for a finished case')
@@ -101,7 +101,7 @@ ConspiracyFiles.NotebookUI = { generatedRows = function()
              { id = "c", title = "C", detailText = "body" }, { id = "d", title = "D", detailText = "body" },
              { id = "e", title = "E", detailText = "body" } }
 end }
-local states = { a = { "accounted", "Carried." }, b = { "uncertain", "In a desk." }, c = { "lastseen", "Carried, in Una's Papers." },
+local states = { a = { "accounted", "Carried." }, b = { "uncertain", "In a desk." }, c = { "lastseen", "Carried, in Una's Evidence." },
                  d = { "unchecked" }, e = { "lastseen" } }
 ConspiracyFiles.GeneratedRuntime = { whereabouts = function(id) local s = states[id]; return s[1], s[2] end }
 local okApps, A = pcall(dofile, 'mod/common/media/lua/client/ConspiracyFiles/KnoxApps.lua')
@@ -112,7 +112,7 @@ for _, row in ipairs(A.files.list()) do
 end
 assert(listed.a == "Carried.", tostring(listed.a))
 assert(listed.b == "Not seen recently. Last seen: In a desk.", tostring(listed.b))
-assert(listed.c == "Last seen: Carried, in Una's Papers.", tostring(listed.c))
+assert(listed.c == "Last seen: Carried, in Una's Evidence.", tostring(listed.c))
 assert(listed.d == nil and listed.e == nil, 'no WHERE line where nothing is known')
 for _, v in pairs(listed) do assert(not v:lower():find('lost') and not v:lower():find('destroy'), v) end
-print('PASS document whereabouts: a finished case says where its papers were last seen, in the notebook and in FILES')
+print('PASS document whereabouts: a finished case says where its evidence was last seen, in the notebook and in FILES')

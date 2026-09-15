@@ -1,7 +1,7 @@
 -- The organiser shows a file with the survivor's own headings on it, as the
 -- notebook does (P4-R114, owner 2026-09-15). FILES used to strip every heading
 -- that was not one of its labelled fields, so WHAT IT MIGHT MEAN and the relay
--- memo's DATE NOTE ran straight on from the paper's own words, and what a
+-- memo's DATE NOTE ran straight on from the document's own words, and what a
 -- document says could not be told from what the survivor makes of it.
 -- Asserted through the real projection (EvidenceRows) into the real program.
 package.path="mod/common/media/lua/client/?.lua;mod/common/media/lua/shared/?.lua;"..package.path
@@ -27,7 +27,7 @@ ConspiracyFiles.NotebookUI={generatedRows=function(section)
 end}
 
 local files=A.files.list()
-assert(#files==2,"both papers are files: "..#files)
+assert(#files==2,"both documents are files: "..#files)
 local d=files[1].detail
 local function at(text)
     local i=d:find(text,1,true)

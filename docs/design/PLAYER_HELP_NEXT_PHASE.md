@@ -10,7 +10,7 @@ Addresses only appear for places your map already reveals. Reading a paper map r
 
 ## Finding clues
 
-When you successfully take a clue, the game remembers where it came from. Inspecting it records the evidence in your notes. Once inspected, that evidence stays in your notes even if you later drop the paper. Reading it somewhere else does not move its finding location.
+When you successfully take a clue, the game remembers where it came from. Inspecting it records the evidence in your notes. Once inspected, that evidence stays in your notes even if you later drop the clue. Reading it somewhere else does not move its finding location.
 
 Map marks need a pen or pencil in your carried inventory, including bags. Without one, your notes can still record the clue and its original finding place. The map mark waits until you have a suitable writing tool, then catches up at the original location. Existing marks remain if you drop the tool or the document.
 

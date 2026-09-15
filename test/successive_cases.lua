@@ -52,7 +52,7 @@ end
 
 -- A reshuffle replaces every case in the save the player is standing in, so
 -- the ids and tokens of what is already lying in the world must be captured
--- BEFORE the swap: afterwards nothing knows those papers exist. Retired cases
+-- BEFORE the swap: afterwards nothing knows those clues exist. Retired cases
 -- count too - their documents were placed in the world like any other.
 local manifest = assert(A.abandon(staged))
 local documents = 0
@@ -68,4 +68,4 @@ for _, id in ipairs(manifest.documentIds) do
 end
 assert(not A.abandon(nil), 'no store, no manifest')
 assert(#A.abandon({canonical = first}).documentIds == #first.case.documents, 'a single-case store lists its own')
-print('PASS SuccessiveCases: a reshuffle can name every paper it is about to abandon')
+print('PASS SuccessiveCases: a reshuffle can name every clue it is about to abandon')

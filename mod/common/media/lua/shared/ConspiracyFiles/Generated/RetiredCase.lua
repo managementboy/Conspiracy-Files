@@ -29,7 +29,7 @@ M.OUTLINES={corroboration=true,["conflicting-account"]=true}
 M.READINGS={one=true,two=true,unsure=true}
 M.MATTERS={person1=true,person2=true,organisation=true,nobody=true}
 -- "leave it cold" is left out until the cold-trail state exists (P4-R119);
--- "listen" stays and is served by a broadcast paper (P4-R121).
+-- "listen" stays and is served by a broadcast transcript (P4-R121).
 M.WAYS={person=true,records=true,listen=true}
 -- Lengths are save-budget costs, measured worst case (2026-09-15): a person's
 -- name is at most what the cast accepts (Generator.castFrom, 60); the longest
@@ -38,11 +38,11 @@ M.WAYS={person=true,records=true,listen=true}
 M.NAME_MAX=60
 M.ORG_MAX=80
 M.CASE_ID_MAX=80
--- lastSeen (P4-R104): where the mod last saw this document's physical paper,
--- in the same words the notebook uses ("Carried, in your Una's Papers.").
+-- lastSeen (P4-R104): where the mod last saw this piece of evidence,
+-- in the same words the notebook uses ("Carried, in your Una's Evidence.").
 -- Owner in play, 2026-09-14, after a case completed: "I lost my files
 -- somewhere?" Retirement had dropped every placement detail, so the notebook
--- could no longer say where the papers were. Optional, so a schema-2 root
+-- could no longer say where the evidence was. Optional, so a schema-2 root
 -- saved before this still validates and SCHEMA stays 2: a save is never
 -- refused for lacking a sentence we did not write yet.
 local ROW_FIELDS={id=true,kind=true,title=true,body=true,locationId=true,leads=true,connections=true,lastSeen=true}
@@ -125,7 +125,7 @@ function M.validate(root)
     if not fields(root,ROOT_FIELDS) or root.schema~=M.SCHEMA then return false,"invalid retired case" end
     if not text(root.caseId) then return false,"invalid retired case" end
     -- The relay memo (P4-R96) takes no story role, so the first case of a game
-    -- can hold MAX_EVIDENCE story papers plus the memo. Capping rows at
+    -- can hold MAX_EVIDENCE story clues plus the memo. Capping rows at
     -- MAX_EVIDENCE refused that case at retirement for good ("Case complete
     -- but not retired: invalid retired rows", core-loop check 2026-09-15; the
     -- "0 of 8 last seen" of 2026-09-14 was the same fault).

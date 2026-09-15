@@ -1,4 +1,4 @@
--- Stages for checks/vehicle_reach.sh: a paper in a van's truck bed and in its
+-- Stages for checks/vehicle_reach.sh: a note in a van's truck bed and in its
 -- glove box, reached as a player reaches them - from outside, through the door
 -- that guards the part. Cases put clues in cars at random, so the core loop met
 -- a car on some runs only, and the fix for reaching one (after 20260914T173417)
@@ -41,7 +41,7 @@ function V.spawn()
     return true, tostring(v:getScriptName()), sq:getX() .. "," .. sq:getY()
 end
 
--- A paper in `partId`, with every door shut, the player stood a few tiles away,
+-- A note in `partId`, with every door shut, the player stood a few tiles away,
 -- and the core loop's stages pointed at it - so reaching it has to walk to the
 -- part's own area and open the door that guards it.
 function V.place(partId)
@@ -55,7 +55,7 @@ function V.place(partId)
         if d then pcall(function() d:setLocked(false); d:setOpen(false) end) end
     end
     local item = c:AddItem("Base.Note")
-    if not item then return false, "could not put a paper in the " .. partId end
+    if not item then return false, "could not put a note in the " .. partId end
     item:getModData().cfVanProbe = partId
     getPlayer():teleportTo(v:getX() - 6, v:getY() + 0.5, v:getZ())
     L.vehicle, L.part, L.item = v, part, item

@@ -14,7 +14,7 @@
 -- WHAT THIS IS NOT, and must never become: the record. Owner decision P4-R80 -
 -- the ledger stays the record and the device is a reader. Lose it, burn it,
 -- leave it in a car, and you lose a convenience, never a case. Reading also
--- never depends on it alone: the Papers are still issued and still readable,
+-- never depends on it alone: the evidence album is still issued and still readable,
 -- so there is always a way back (the obligation P4-R80 left open). The
 -- organiser is the better surface, not the only one.
 --
@@ -26,7 +26,7 @@ local O=ConspiracyFiles.Organiser or {}
 ConspiracyFiles.Organiser=O
 O.TYPE="ConspiracyFiles.Organiser"
 -- On the item, not in a saved flag of ours, so "already issued" survives a
--- reload exactly as the Papers' mark does.
+-- reload exactly as the evidence album's mark does.
 local MARK="cfOrganiser"
 
 local function log(message) CFLog.message("casefile","note",message) end
@@ -284,7 +284,7 @@ function O.readable(item)
     return true
 end
 
--- Issue one, the same way the Papers are issued. A new character gets an
+-- Issue one, the same way the evidence album is issued. A new character gets an
 -- organiser; an existing save gets one the first time it loads under a build
 -- that has this.
 function O.give(player)
@@ -297,14 +297,14 @@ function O.give(player)
     if not item then return nil,"could not create "..O.TYPE end
     safe(function()
         item:getModData()[MARK]=true
-        -- Favourite for the same reason as the Papers: the game then warns
+        -- Favourite for the same reason as the evidence album: the game then warns
         -- before it is discarded with a bag. It is not indestructible, and
         -- nothing here pretends otherwise.
         item:setFavorite(true)
     end)
     -- Switched on, so the first read does not begin with a puzzle. The battery
     -- the game gives it is the battery it has; when that runs out the survivor
-    -- says so and the Papers still read.
+    -- says so and the evidence album still reads.
     safe(function()
         local data=item:getDeviceData()
         if data then data:setIsTurnedOn(true) end

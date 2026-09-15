@@ -78,6 +78,14 @@ behaves exactly like the colon call on Build 42.20.4:
 that shape is allowed. Handing the method itself to `pcall` stays banned, and a
 new helper of any other shape needs its own live comparison first.
 
+## Words — owner rule P4-R127, 2026-09-15
+
+Never call what a case hides "papers": it can be a key, a card, a photograph, an
+object or a pile. Write **clue** for something hidden and not yet found,
+**evidence** for a clue found and noted, and **hunch** for what the survivor makes
+of it (leads, readings, "What do I make of it?" answers - never proof). "Paper"
+only where the thing really is paper.
+
 Kahlua does not treat an extracted method as a real method call. This failed
 twice in one day, in two different ways:
 

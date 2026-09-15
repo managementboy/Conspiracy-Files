@@ -5,7 +5,7 @@
 --     steering existed, or every save in play would be refused;
 --   - a returning person or organisation appears, and a returning person never
 --     gets a second body;
---   - the chosen way of investigating and the chosen reading each bring a paper;
+--   - the chosen way of investigating and the chosen reading each bring a clue;
 --   - the story and its agree/disagree outline are never changed by steering;
 --   - the same seed and steer always give the same case, and a tampered or
 --     invalid steer is refused.
@@ -64,7 +64,7 @@ for seed=1,80 do
 end
 print("PASS a returning person or organisation appears; a returning person gets no body; the story is untouched")
 
--- 3. The way of investigating and the reading each bring a paper.
+-- 3. The way of investigating and the reading each bring a clue.
 local ways={
     person=function(d) return starts("Private diary /")(d) or starts("Duty log /")(d) or d.title:find(", marked ",1,true)
         or d.title:find(": ",1,true) and not d.title:find(" / ",1,true) end,
@@ -87,19 +87,19 @@ for seed=1,120 do
         end
         for reading,test in pairs(leans) do
             local c=assert(G.generate(catalog,seed,opts{steer={fromCase=FROM,reading=reading}}))
-            assert(c.outline==base.outline,"the reading leans on a paper and never changes the outline")
+            assert(c.outline==base.outline,"the reading leans on a clue and never changes the outline")
             total[reading]=(total[reading] or 0)+1
             if hasTitle(c,test) then leanHits[reading]=(leanHits[reading] or 0)+1 end
         end
     end
 end
 for way in pairs(ways) do
-    assert((wayHits[way] or 0)==total[way],string.format("way %s brought its paper in %d of %d cases",way,wayHits[way] or 0,total[way]))
+    assert((wayHits[way] or 0)==total[way],string.format("way %s brought its clue in %d of %d cases",way,wayHits[way] or 0,total[way]))
 end
 for reading in pairs(leans) do
-    assert((leanHits[reading] or 0)==total[reading],string.format("reading %s brought its paper in %d of %d cases",reading,leanHits[reading] or 0,total[reading]))
+    assert((leanHits[reading] or 0)==total[reading],string.format("reading %s brought its clue in %d of %d cases",reading,leanHits[reading] or 0,total[reading]))
 end
-print("PASS each way of investigating and each reading brings its paper in every case")
+print("PASS each way of investigating and each reading brings its clue in every case")
 
 -- 3b. "Listen for it" brings the radio call-in transcript (P4-R123): exactly one,
 --     last, after every draw, with every placeholder filled; no other answer does.

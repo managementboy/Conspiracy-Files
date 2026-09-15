@@ -100,7 +100,7 @@ properly, never at the keybind or the context-menu action by name.
 
   Two of them carry a rule of their own. The **connection** line never says
   which record is true - "they do not match" is a fact about two pieces of
-  paper, "someone is lying" is a conclusion. The **arrival** line fires only
+  evidence, "someone is lying" is a conclusion. The **arrival** line fires only
   from a document the player has already read, and only once they are inside:
   a step earlier, or from an unread lead, it stops being recognition and
   becomes a quest marker.

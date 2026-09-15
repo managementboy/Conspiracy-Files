@@ -16,7 +16,7 @@ function M.fill(playerNum,context,items)
     if overflow or #subjects~=1 then return end
     local item=subjects[1]
     if not R.subject(item) then
-        -- A finished case's own paper is already in the organiser. Showing
+        -- A finished case's own evidence is already in the organiser. Showing
         -- nothing read as "cannot be logged" in play (2026-09-15, P4-R118).
         if R.retiredPaper and R.retiredPaper(item) then
             local done=context:addOption("Already in the organiser",nil,nil)
@@ -48,11 +48,11 @@ function M.fill(playerNum,context,items)
     -- Inspecting records the thing; it does NOT open the machine. Owner,
     -- 2026-09-12: "Inspecting an object does not open it." Reading happens when
     -- the survivor takes the organiser in hand, and not as a side effect of
-    -- picking a paper up.
+    -- picking a clue up.
     local carried=expected==getSpecificPlayer(playerNum):getInventory()
     -- With the organiser in hand you can record a document where it lies.
     --
-    -- Inspect used to be greyed out unless the paper was in your pockets, so
+    -- Inspect used to be greyed out unless the clue was in your pockets, so
     -- reading a drawer meant emptying it into them first - "very very
     -- bothersome and makes the game unplayable" (owner, 2026-09-13). The two
     -- paths were never different work: R.inspect(item,true) records exactly

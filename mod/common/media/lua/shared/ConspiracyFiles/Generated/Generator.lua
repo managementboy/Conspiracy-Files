@@ -52,7 +52,7 @@ local function fill(text,map)
     for _,key in ipairs(FIELDS) do text=subst(text,key,map[key]) end
     return text
 end
--- A case reference exists so that three pieces of paper look like one file,
+-- A case reference exists so that three documents look like one file,
 -- which is how paperwork works. It is drawn independently of the premise: the
 -- links between documents already carry the connection and the notebook sorts
 -- on them, so a reference that encoded the premise would only announce which
@@ -185,15 +185,15 @@ local function article(label)
     return "a"
 end
 -- THE CASE CALENDAR (P4-R108, owner 2026-09-15). Every case used to be dated
--- July 2-6 1993, so every paper sat inside the relay memo's nine days (30 June
+-- July 2-6 1993, so every document sat inside the relay memo's nine days (30 June
 -- - 8 July) and the memo's DATE NOTE was true of everything, which is a note
 -- saying nothing. Now the claim falls between 1 May and 28 June, the response
 -- and the review follow it by one to nine days each, and nothing is dated after
 -- 8 July (the outbreak begins after). Two cases in five have their response
 -- and review inside the memo's week, which leaves about a third of all cases
--- with a dated paper there once optional papers and undated responses are
+-- with a dated document there once optional documents and undated responses are
 -- counted (measured over 400 seeds, test/premise_consistency.lua); the rest
--- end by 29 June, so a note on a paper is a signal again. Drawn from the seed alone - never the world clock - or a
+-- end by 29 June, so a note on a document is a signal again. Drawn from the seed alone - never the world clock - or a
 -- case could not rebuild byte for byte (Generator.validate).
 --
 -- Dates are day-of-year ordinals in 1993 (1 = 1 January; not a leap year).
@@ -277,7 +277,7 @@ end
 -- given this name and an ID to match, and "M. Ellis" on a corpse is not
 -- something a player can connect to a letter signed "M. Ellis" - it is the
 -- same abbreviation twice. A full name is a person. Exposed so the organiser's
--- NAMES can find these names on the papers the player has read; never edit it
+-- NAMES can find these names on the evidence the player has read; never edit it
 -- in place - a case rebuilds from it (Generator.validate).
 G.INVENTED_NAMES={"Marion Ellis","Delia Mercer","Roy Hale","Joanne Voss",
                   "Curtis Vance","Adele Prosser","Warren Nagy","Ines Kubiak"}
@@ -352,7 +352,7 @@ local function build(seed,revision,sites,cast,relayMemo,steer)
     -- `met` marks a person whose body the player has already searched, so
     -- CasePerson does not name a SECOND zombie after someone already dead.
     -- A returning person never gets a second body (P4-R121): she is carried by
-    -- the papers only, exactly as someone already met is.
+    -- the evidence only, exactly as someone already met is.
     local people={{id=prefix.."person-1",name=facts.sender,met=(wasMet(facts.sender) or (steer~=nil and steer.person==facts.sender)) or nil},
                   {id=prefix.."person-2",name=facts.recipient,met=wasMet(facts.recipient) or nil}}
     local org={id=prefix.."organisation",name=facts.organisation}
@@ -503,7 +503,7 @@ local function build(seed,revision,sites,cast,relayMemo,steer)
     -- these three roles reach several hundred objects between them rather than
     -- the handful a person would have listed.
     --
-    -- The notebook sentence records that the thing was found with the papers
+    -- The notebook sentence records that the thing was found with the documents
     -- and stops. It must not say what the object means, because the object is
     -- the one piece of evidence the player can interpret entirely without us.
     -- How a person's name ends up on a thing, by what kind of thing it is. A
@@ -653,8 +653,8 @@ local function build(seed,revision,sites,cast,relayMemo,steer)
     local optionalCount=random(optionalCapacity+1)-1
     for i=#optional,2,-1 do local j=random(i); optional[i],optional[j]=optional[j],optional[i] end
     -- Steering reorders the shuffled list and never draws again. First one
-    -- paper the chosen reading has to explain (a disputing record for the
-    -- ordinary reading, the duty log for the other), then the papers of the
+    -- clue the chosen reading has to explain (a disputing record for the
+    -- ordinary reading, the duty log for the other), then the clues of the
     -- chosen way of investigating; the case then takes at least those.
     if steer and (steer.way or steer.reading) then
         local WAY={person={[5]=true,[8]=true,[9]=true,[11]=true,[12]=true,[13]=true,[15]=true},
@@ -677,13 +677,13 @@ local function build(seed,revision,sites,cast,relayMemo,steer)
         -- the last optional slot rather than an eighth place, so the case stays
         -- inside the save budget (measured 2026-09-15: adding it on top of a full
         -- case put a ten-case save at 521 kB of 500). Decided here, before the
-        -- claim lists its piles, so no paper mentions one that is not in the case.
+        -- claim lists its piles, so no document mentions one that is not in the case.
         if steer.way=="listen" then optionalCount=math.min(optionalCount,optionalCapacity-1) end
     end
-    -- Papers that must not share a case (P4-R107, 2026-09-15). The timing
+    -- Clues that must not share a case (P4-R107, 2026-09-15). The timing
     -- stub puts the second person at the first site on the response's day;
     -- the duty log and the itinerary put them at the second site that same
-    -- day. And no two papers in a case may carry one title: paid-before-ordered's
+    -- day. And no two documents in a case may carry one title: paid-before-ordered's
     -- own response is "Payment slip / {CODE}", the same as document 10, and
     -- two object piles can draw the same item.
     local timing,itinerary,presence=documents[11],documents[9],documents[12]
@@ -732,14 +732,14 @@ local function build(seed,revision,sites,cast,relayMemo,steer)
         end
     end
     -- The first case of a game carries the relay memo (P4-R96): one more
-    -- paper, last, at the second site, after every draw above so no story
+    -- clue, last, at the second site, after every draw above so no story
     -- document changes. It takes no role and links to nothing.
     if relayMemo then
         documents[#documents+1]={id=prefix.."document-"..(#documents+1),kind=Memo.KIND,title=Memo.TITLE,
             locationId=b.id,body=Memo.body(),references={b.id},links={},leads={}}
     end
     -- "Listen for it" brings a radio call-in transcript (P4-R121, text P4-R123):
-    -- one more paper, last, at the second site, after every draw, like the relay
+    -- one more clue, last, at the second site, after every draw, like the relay
     -- memo, so it takes no role and no unsteered case changes. It raises a
     -- question and answers nothing.
     if steer and steer.way=="listen" then
@@ -798,7 +798,7 @@ function G.steerFrom(s)
         local cast=G.castFrom({s.person})
         if not cast or cast[1]~=s.person then return nil,"invalid returning person" end
     end
-    -- An organisation's name is repeated through a case's papers, so its length
+    -- An organisation's name is repeated through a case's documents, so its length
     -- is a save-budget cost. The longest the generator writes is 43 characters;
     -- a longer returning name is simply not carried over (SuccessiveCases.
     -- pendingSteer keeps the rest of the answers).
@@ -884,7 +884,7 @@ function G.validate(case)
     if #case.locations~=2 then return false,"expected two locations" end
     if case.relayMemo~=nil and case.relayMemo~=true then return false,"invalid relay memo flag" end
     -- The relay memo takes no story role, so it is not counted against the
-    -- role bounds; the rebuild below still proves it is exactly the one paper.
+    -- role bounds; the rebuild below still proves it is exactly the one clue.
     -- Nor does the radio transcript of a case steered to "Listen for it" (P4-R123).
     local roleCount=#case.documents-(case.relayMemo and 1 or 0)
         -((type(case.steer)=="table" and case.steer.way=="listen") and 1 or 0)

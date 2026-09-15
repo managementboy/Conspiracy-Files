@@ -133,7 +133,7 @@ Three things follow, and all three are now built:
    the last one worked. Your own is usually on your own corpse, exactly where
    you left it.
 
-The papers keep the physical documents and the organiser reads them; losing
+The evidence album keeps the physical documents and the organiser reads them; losing
 either costs convenience, never the case. The organiser is marked favourite so
 a new player does not throw it away in their first panic.
 

@@ -225,7 +225,7 @@ function Window:rows()
                 uncertain="Not seen recently. Its whereabouts are uncertain.",
                 conflict="More than one copy has been seen. Which is the original is uncertain.",
                 unchecked="Not checked since you loaded this save.",
-                -- A finished case: where its paper was last seen, kept in the
+                -- A finished case: where its evidence was last seen, kept in the
                 -- save (P4-R104; owner, 2026-09-14: "I lost my files
                 -- somewhere?"). Only shown with a place; never a claim of loss.
                 lastseen="Last seen: ",

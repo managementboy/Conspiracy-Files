@@ -1,4 +1,4 @@
--- Papers dropped on the open organiser are noted, all of them (P4-R116; owner,
+-- Evidence dropped on the open organiser are noted, all of them (P4-R116; owner,
 -- 2026-09-15: "being able to inspect several evidences by marking them and
 -- dragging them onto the pda on top of right click inspect"). Right-click
 -- Inspect stays as it was and takes one item.
@@ -41,13 +41,13 @@ function M.items(dragging)
 end
 
 -- Note each case item: a carried one the ordinary way, the rest where they
--- lie. Nothing that is not case evidence is touched, and a paper already noted
+-- lie. Nothing that is not case evidence is touched, and evidence already noted
 -- is not inspected again. What happened comes back counted.
 function M.note(items,runtime,inventory)
     local r={noted=0,known=0,failed=0,other=0}
     if type(runtime)~="table" then r.other=#items; return r end
     for _,item in ipairs(items) do
-        -- Known first. A finished case's papers are no longer placement
+        -- Known first. A finished case's evidence is no longer placement
         -- subjects - retiring a case drops that bookkeeping - but they are
         -- still noted, and dropping them again said NOT CASE EVIDENCE
         -- (drop_note check, 20260915T111000: a whole case noted in one drop).

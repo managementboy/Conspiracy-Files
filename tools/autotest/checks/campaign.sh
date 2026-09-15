@@ -6,23 +6,23 @@
 #
 # Every other check proves one thing on one case. This one plays on and judges
 # what only shows across cases and over time:
-#   case 1  every paper found, taken and inspected; the case retires; its papers
+#   case 1  every clue found, taken and inspected; the case retires; its evidence
 #           turn Evidence / Old; the relay memo's date notes; the second thought
 #           "What do I make of it?" said once; FILES gains its row. Its questions
 #           are answered on the organiser: the other reading, the second person,
 #           the records.
 #   reload  save, quit, continue: the answers, the notebook order, the Old
-#           papers come back, and the save has not grown.
+#           evidence comes back, and the save has not grown.
 #   case 2  built from those answers: placed within reach and on sites no case
 #           used; the second person returns without a second body; the case
 #           leans on the duty log; the answers are marked used and can no longer
 #           be changed. Played through and NOT answered.
 #   case 3  built from nothing (case 1's answers used, case 2's empty): no
-#           steer, no "shaped" line. Two papers found, then saved and reloaded.
+#           steer, no "shaped" line. Two clues found, then saved and reloaded.
 #   limit   more cases arrive until four are unfinished, the most the save
 #           allows; the timer keeps trying; then case 3 is finished and a new
 #           case must still come (the preparation flag must not stick).
-# Throughout: the notebook reads case by case, finished papers stay Old and live
+# Throughout: the notebook reads case by case, finished evidence stays Old and live
 # ones Evidence, NAMES grows, map marks catch up with a pen, the save size is
 # recorded per stage, the per-frame cost is sampled, and the mod logs no errors
 # in any session. Takes about half an hour. Not in suite.sh.
@@ -74,26 +74,26 @@ stage() { # stage LABEL: one row of the stage table, and the checks every stage 
     saves+=("$1 $b")
     say "${stages[-1]}"
     [ "$(field 1 "$o")" = true ] || fail "$1: the notebook does not read case by case: $(field 2 "$o")"
-    [ "$(field 4 "$c")" = 0 ] || fail "$1: $(field 4 "$c") carried papers of a live case are not Evidence"
+    [ "$(field 4 "$c")" = 0 ] || fail "$1: $(field 4 "$c") carried items of a live case are not Evidence"
     [ "$b" -le 500000 ] 2>/dev/null || fail "$1: the save measured $b bytes, over the 500 kB budget"
     QROWS="$(field 1 "$s")"; NAMES_NOW="$(field 3 "$s")"; PLACES_NOW="$(field 4 "$s")"
 }
-old_settled() { # every carried paper of a finished case is Old (the scan marks them within ~10 s)
+old_settled() { # every carried piece of a finished case is Old (the scan marks them within ~10 s)
     local c
     for _ in $(seq 20); do
         c="$(ev 'return CFCamp.categories()')"
         [ "$(field 1 "$c")" -gt 0 ] 2>/dev/null && [ "$(field 2 "$c")" = 0 ] && return 0
         sleep 2
     done
-    fail "$1: finished papers not all Evidence / Old ($(tr '\t' ' ' <<<"$c"): ok, wrong, live ok, live wrong)"
+    fail "$1: finished evidence not all Evidence / Old ($(tr '\t' ' ' <<<"$c"): ok, wrong, live ok, live wrong)"
 }
-play_case() { # play_case CASEID [LIMIT]: find, take and inspect its next papers; sets CASE_LEFT and PLAYED
+play_case() { # play_case CASEID [LIMIT]: find, take and inspect its next clues; sets CASE_LEFT and PLAYED
     local cid="$1" limit="${2:-99}" r n waiting deadline out tries=0
     deadline=$(( $(date +%s) + 240 ))
     while :; do
         r="$(ev "return CFCamp.useCase([[$cid]])")"; n="$(field 1 "$r")"; waiting="$(field 3 "$r")"
         [ "${n:-0}" -gt 0 ] 2>/dev/null && [ "$waiting" = 0 ] && break
-        [ "$(date +%s)" -lt "$deadline" ] || { fail "case ${cid#generated:}: papers never all placed ($(tr '\t' ' ' <<<"$r"))"; CASE_LEFT=0; PLAYED=0; return 1; }
+        [ "$(date +%s)" -lt "$deadline" ] || { fail "case ${cid#generated:}: clues never all placed ($(tr '\t' ' ' <<<"$r"))"; CASE_LEFT=0; PLAYED=0; return 1; }
         sleep 2
     done
     CASE_LEFT="$n"; PLAYED=0
@@ -102,7 +102,7 @@ play_case() { # play_case CASEID [LIMIT]: find, take and inspect its next papers
         [ "$(field 1 "$(ev "return CFCamp.useCase([[$cid]])")")" -gt 0 ] 2>/dev/null || break
         local where; where="$(ev 'return CFCamp.describeFirst()' | tr '\t' ' ')"
         if out="$(inspect_doc 1)"; then
-            PLAYED=$((PLAYED + 1)); say "case ${cid#generated:}: paper $PLAYED of $n: $out"
+            PLAYED=$((PLAYED + 1)); say "case ${cid#generated:}: clue $PLAYED of $n: $out"
         else
             fail "case ${cid#generated:}: $out; $where (skipped $(ev 'return CFCamp.skipFirst()'))"
         fi
@@ -135,7 +135,7 @@ reload_world() { # reload_world LABEL: save, quit, continue, reload the Lua
 
 # ---------------------------------------------------------------------------
 claim_game || exit 2
-# P4-R126: the relay memo's date note is only tested when case 1 has a paper
+# P4-R126: the relay memo's date note is only tested when case 1 has a document
 # dated inside the memo's week, which about a third of cases do. Fresh worlds are
 # started, at most eight, until one does.
 worlds=0
@@ -148,11 +148,11 @@ while :; do
     case1="$(ev 'return CFCamp.newestLive()' | field 1)"
     week="$(ev "return CFCamp.memoWeek([[$case1]])")"
     if [ "$(field 1 "$week")" = true ] && [ "$(field 2 "$week")" -gt 0 ] 2>/dev/null; then break; fi
-    if [ "$worlds" -ge 8 ]; then findings+=("no case 1 in $worlds fresh worlds had a paper in the relay memo's week"); break; fi
-    say "world $worlds: case 1 has no paper in the memo's week; starting a fresh world"
+    if [ "$worlds" -ge 8 ]; then findings+=("no case 1 in $worlds fresh worlds had a document in the relay memo's week"); break; fi
+    say "world $worlds: case 1 has no document in the memo's week; starting a fresh world"
     "$PZ" stop >/dev/null 2>&1
 done
-findings+=("fresh worlds started for a case 1 with a paper in the memo's week: $worlds (memo=$(field 1 "$week"), dated papers=$(field 2 "$week"))")
+findings+=("fresh worlds started for a case 1 with a document in the memo's week: $worlds (memo=$(field 1 "$week"), dated documents=$(field 2 "$week"))")
 first="$(session)"; world="$(cat "$REPO/dev/eval/linux/world")"
 wrap_perf
 ev 'return CFLoop.givePen()' >/dev/null
@@ -163,17 +163,17 @@ stage "start"
 names_start="$NAMES_NOW"
 thought0="$(said 'What do I make of it?')"
 play_case "$case1"
-[ "$PLAYED" = "$CASE_LEFT" ] || fail "case 1: only $PLAYED of $CASE_LEFT papers could be played"
-wait_finished 1 || fail "case 1 did not finish after its papers were inspected"
+[ "$PLAYED" = "$CASE_LEFT" ] || fail "case 1: only $PLAYED of $CASE_LEFT clues could be played"
+wait_finished 1 || fail "case 1 did not finish after its clues were inspected"
 thought_once "case 1" "$thought0"
 notes="$(ev 'return CFLoop.dateNotes()')"
 findings+=("case 1 relay memo: found=$(field 1 "$notes"), dated in its week=$(field 2 "$notes"), carrying the date note=$(field 3 "$notes")")
-[ "$(field 1 "$notes")" = true ] || fail "case 1: the relay memo is not among the papers found"
+[ "$(field 1 "$notes")" = true ] || fail "case 1: the relay memo is not among the evidence found"
 [ "$(field 2 "$notes")" = "$(field 3 "$notes")" ] || fail "case 1: $(field 2 "$notes") records dated in the memo's week, but $(field 3 "$notes") carry the date note"
 if [ "$(field 2 "$notes")" -gt 0 ] 2>/dev/null; then
     findings+=("the date note was exercised: $(field 3 "$notes") of $(field 2 "$notes") records dated in the memo's week carry it")
 else
-    findings+=("the date note was not exercised: case 1 had no paper in the memo's week")
+    findings+=("the date note was not exercised: case 1 had no document in the memo's week")
 fi
 old_settled "case 1 finished"
 stage "case 1 finished"
@@ -214,12 +214,12 @@ steer2="$(ev "return CFCamp.steerOf([[$case2]])")"
 [ "$(field 6 "$steer2")" = true ] || fail "case 2: the returning person could be given a second body"
 grep -q "Duty log / " <<<"$(field 7 "$steer2")" || fail "case 2 does not include the duty log the other reading leans on"
 [ "$(logged "Case shaped by the survivor's answers")" = 1 ] || fail "case 2: the steered case was not logged exactly once"
-findings+=("case 2 papers: $(field 7 "$steer2")")
+findings+=("case 2 clues: $(field 7 "$steer2")")
 [ "$(ev "return CFCamp.answersOf([[$case1]])" | field 5)" = "$case2" ] || fail "case 1's answers are not marked used by case 2"
 [ "$(ev "return CFCamp.tryChange([[$case1]])" | field 1)" = false ] || fail "case 1's answers could still be changed after shaping case 2"
 thought0="$(said 'What do I make of it?')"
 play_case "$case2"
-[ "$PLAYED" = "$CASE_LEFT" ] || fail "case 2: only $PLAYED of $CASE_LEFT papers could be played"
+[ "$PLAYED" = "$CASE_LEFT" ] || fail "case 2: only $PLAYED of $CASE_LEFT clues could be played"
 wait_finished 2 || fail "case 2 did not finish"
 thought_once "case 2" "$thought0"
 here="$(ev 'return CFCamp.here()')"
@@ -238,15 +238,15 @@ placed_well "case 3" "$case3" "$(field 1 "$here")" "$(field 2 "$here")" "$(field
 [ "$(ev "return CFCamp.steerOf([[$case3]])" | field 1)" = unsteered ] || fail "case 3 should be unsteered (case 1's answers used, case 2's empty)"
 [ "$(logged "Case shaped by the survivor's answers")" = 1 ] || fail "case 3 was logged as shaped by answers"
 play_case "$case3" 2
-[ "$PLAYED" = 2 ] || fail "case 3: only $PLAYED of 2 papers could be played"
-stage "case 3, two papers"
+[ "$PLAYED" = 2 ] || fail "case 3: only $PLAYED of 2 clues could be played"
+stage "case 3, two clues"
 notebook="$(ev 'return CFReload.notebook()')"; bytes_before="$(bytes)"; parts_before="$(ev 'return CFReload.bytes()' | cut -f2)"
 perf_note "case 3"
 
 # --- reload 2 ---------------------------------------------------------------
 reload_world "reload 2"
 [ "$(ev 'return CFReload.notebook()')" = "$notebook" ] || fail "reload 2: the notebook changed"
-s3="$(ev "return CFCamp.steerOf([[$case3]])" | field 1)"   # "none" once case 3 has finished (a two-paper case can)
+s3="$(ev "return CFCamp.steerOf([[$case3]])" | field 1)"   # "none" once case 3 has finished (a two-clue case can)
 [ "$s3" = unsteered ] || [ "$s3" = none ] || fail "reload 2: case 3 gained a steer ($s3)"
 [ "$(ev "return CFCamp.answersOf([[$case1]])" | field 5)" = "$case2" ] || fail "reload 2: case 1's answers lost their used mark"
 old_settled "after reload 2"

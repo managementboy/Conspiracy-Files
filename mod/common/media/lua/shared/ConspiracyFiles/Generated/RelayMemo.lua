@@ -5,11 +5,11 @@
 -- it: the
 -- Dead Air relay memo - authorised access "EFFECTIVE 30 JUNE THROUGH 08 JULY" -
 -- turns up in the first case of a game, and once it has been found the
--- records note which papers are dated inside those nine days. As a maybe:
+-- records note which documents are dated inside those nine days. As a maybe:
 -- the mod does not know the dates mean anything, so it never says they do.
 -- Since P4-R108 (2026-09-15) cases are spread from May into July and about a
 -- third reach those nine days (Generator.calendar), so the note marks some
--- papers and not others - a signal, where it used to be true of everything.
+-- documents and not others - a signal, where it used to be true of everything.
 --
 -- The memo's own words are read from Content.lua, not copied, so the one
 -- approved text is the only text. A consequence to hold onto: generated cases
@@ -40,11 +40,11 @@ function M.body()
     return FOUND.."\n\n"..Content.assets[M.ASSET].bodyText.."\n\n"..MEANING
 end
 
--- Whether a paper carries a date inside 30 June - 8 July 1993, both ends
--- included. Generated papers write dates as "June 14, 1993", and a diary
+-- Whether a document carries a date inside 30 June - 8 July 1993, both ends
+-- included. Generated documents write dates as "June 14, 1993", and a diary
 -- heading as "JUNE 14, 1993": since P4-R108 (2026-09-15) cases run from May
 -- into July, so any month is read, in either case. The capitals were missed
--- before, while every paper was in the week anyway.
+-- before, while every document was in the week anyway.
 function M.inWeek(text)
     if type(text)~="string" then return false end
     for month,day in string.lower(text):gmatch("(%a+) (%d+), 1993") do

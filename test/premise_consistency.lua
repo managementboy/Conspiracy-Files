@@ -5,13 +5,13 @@
 -- eight months" for November to March; "Dated after the letter" on a payslip
 -- dated before it on every seed; a meaning saying "One of them is wrong" beside
 -- a line saying the records matched; "eight days later" landing after the
--- review that read both; two "Payment slip" papers in one case; the same person
+-- review that read both; two "Payment slip" documents in one case; the same person
 -- at both sites on one day. None of it was caught because nothing checked what
 -- the words claimed against the dates and the branch they were printed in.
 --
--- And P4-R108: case dates are spread from May into July, so a paper inside the
+-- And P4-R108: case dates are spread from May into July, so a document inside the
 -- relay memo's week (30 June - 8 July 1993) is a signal rather than true of
--- every paper. The rate is asserted here as a band.
+-- every document. The rate is asserted here as a band.
 --
 -- Two passes:
 --   1. every premise x outline x a spread of calendars (seeded and the edge
@@ -238,7 +238,7 @@ for _, cal in ipairs(calendars) do
                 checkRelations(body, days, months, where .. " " .. name)
                 checkMarkers(body, agreeing, where .. " " .. name)
             end
-            -- claim < response < review, as far as each paper is dated. Where
+            -- claim < response < review, as far as each document is dated. Where
             -- a premise's whole point is a response dated BEFORE its claim, the
             -- disputing branch must actually be.
             local cLo, cHi = range(datesIn(claim, where .. " claim"))
@@ -313,7 +313,7 @@ while seed < 400 or not covered() do
                 checkRelations(doc.body, days, months, dw)
             end
             checkMarkers(doc.body, agreeing, dw)
-            -- Where a paper puts a person on a date: "June 3, 1993 - site",
+            -- Where a document puts a person on a date: "June 3, 1993 - site",
             -- or "Name - site" above a date line.
             local lines = {}
             for line in (doc.body .. "\n"):gmatch("(.-)\n") do lines[#lines + 1] = line end
@@ -342,14 +342,14 @@ while seed < 400 or not covered() do
     end
 end
 
--- P4-R108: roughly a third of cases carry a paper inside the memo's week, and
+-- P4-R108: roughly a third of cases carry a document inside the memo's week, and
 -- the rest none - so the note is a signal. Measured 2026-09-15; the band is
 -- wide on purpose, the point is "some, not all".
 local generatedIn400 = 0
 for s = 1, 400 do if G.generate(catalog, s, opts) then generatedIn400 = generatedIn400 + 1 end end
 local rate = weekCases / generatedIn400
 if rate < 0.15 or rate > 0.55 then
-    problem(string.format("%d of %d cases (%.0f%%) carry a paper in the relay memo's week; expected 15-55%%",
+    problem(string.format("%d of %d cases (%.0f%%) carry a document in the relay memo's week; expected 15-55%%",
         weekCases, generatedIn400, rate * 100))
 end
 

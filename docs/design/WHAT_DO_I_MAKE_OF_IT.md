@@ -7,12 +7,12 @@ and never gets a second body), 4 (budget), 5 (offered frozen at retirement), 6
 and 6b (most recent unused answers steer the next case, marked used in the
 same swap; the next case waits one in-game hour after a completion), 7 (FILES
 row, question view, wrapping pick lists, ANSWER), 8 (the second thought). Also
-fixed on the way: a first case with every story paper plus the relay memo could
+fixed on the way: a first case with every story clue plus the relay memo could
 never retire. Still to do: step 9 (the note in the notebook), 10 (a reload
-check for answers) and 11 (the broadcast paper for "Listen for it"; until it
+check for answers) and 11 (the broadcast clue for "Listen for it"; until it
 exists that way leans on the press clipping).
 
-**Step 11 built (2026-09-15).** The transcript takes the last optional-paper slot
+**Step 11 built (2026-09-15).** The transcript takes the last optional-clue slot
 instead of an eighth place: added on top of a full case it put a worst-case
 ten-case save at 521 kB of the 500 kB budget (P4-R17). Stored names and ids were
 also capped at realistic lengths (a person 60 characters, as the cast already
@@ -55,7 +55,7 @@ ships).
 
 First cut, as the owner set it:
 
-- Asked **only at a case's end**, once all its papers are found.
+- Asked **only at a case's end**, once all its clues are found.
 - **"Leave it cold" is left out** until the cold trail of
   `COLD_TRAIL_AND_PULL.md` exists.
 - The next case **keeps the 24-hour timer** and uses whatever has been
@@ -71,7 +71,7 @@ First cut, as the owner set it:
 
 **Wording approved by the owner as written (P4-R122, 2026-09-15).**
 
-1. The last paper of a case is noted, by right-click Inspect or by dropping it
+1. The last clue of a case is noted, by right-click Inspect or by dropping it
    on the organiser. Today the survivor says one of the lines already written,
    such as "That's all of it, I think.", with the tag "Nothing left to find
    here" (`PlayerVoice.lua:84-88`, `:318-323`).
@@ -149,7 +149,7 @@ cutting it off.
 | The case's people and organisation | Exist: two people (`identities`) and one `organisation` per case. | `Generator.lua:328-339`, `:694-697` | Nothing, but see the next row. |
 | Those names after the case ends | **Gone.** Retirement keeps only the case id, the rows and the discovery order. People, organisation, premise and outline are dropped. | `RetiredCase.lua:1-10`, `:17`, `:123` | Retirement must keep a small "offered" note: two names, the organisation, the premise id and the outline. |
 | Investigation "ways" | **No such concept in code.** Nothing is called follow / records / listen. The nearest things are the optional evidence roles. | `Generator.lua:407-621` (roles), `:630-656` (selection) | A fixed table from each way to the roles it prefers (section 4). |
-| "Listen for it" | **Nothing carries sound or broadcast.** The only public-notice paper is the press clipping. The organiser is a radio underneath, but that has no content. | `Generator.lua:418-420`; `KNOX_OS.md:137-157` | Built: a radio call-in transcript, added only to a case steered to it (P4-R121, P4-R123). |
+| "Listen for it" | **Nothing carries sound or broadcast.** The only public-notice clue is the press clipping. The organiser is a radio underneath, but that has no content. | `Generator.lua:418-420`; `KNOX_OS.md:137-157` | Built: a radio call-in transcript, added only to a case steered to it (P4-R121, P4-R123). |
 | Moment of case completion | Exists. | `GeneratedRuntime.lua:639-666` (logs "Case complete; placement details retired.", then calls `onCaseComplete`); the drop-to-note path goes through the same function (`DropToNote.lua:64`) | One call there to record the offered note, done inside the retirement swap. |
 | Next case creation | Exists. It runs when fewer than 10 cases exist and 24 world hours have passed **since the last case was created**. That is not counted from completion, and cases may overlap (up to 4 open at once). | `AutomaticInvestigations.lua:6`, `:28-31`; `GeneratedRuntime.lua:563-577`; `SuccessiveCases.lua:31`, `:116` | Pass the answers into case creation. |
 | Anchoring near the player | Exists: the player's position when the next case is prepared, sites not used before, reach set by hours survived (250/500/1500 tiles). | `GeneratedRuntime.lua:360-370`, `:388-391`; `Generator.lua:768-780`; `Reach.lua:6-9` | Unchanged. Answers never move a case. |
@@ -212,7 +212,7 @@ saves keep working (to be proven by test, step 3).
 
 **Who matters: that person or organisation returns.**
 - *A person:* the returning name becomes the case's first person, the one the
-  papers are signed by and whose body the case gives a name (`Generator.lua:320`,
+  documents are signed by and whose body the case gives a name (`Generator.lua:320`,
   `:328`, `:337`; `GeneratedRuntime.lua:419-431`). If the draw already picked
   the same name as the second person, the second person moves to the next name
   in the pool.
@@ -223,31 +223,31 @@ saves keep working (to be proven by test, step 3).
 - *Nobody, really* or unanswered: no change.
 
 **What I would check next: that way of investigating is used.** The generator
-already shuffles optional papers and takes between 0 and 4 of them
-(`Generator.lua:630-656`). With a way chosen, the papers belonging to that way
+already shuffles optional clues and takes between 0 and 4 of them
+(`Generator.lua:630-656`). With a way chosen, the clues belonging to that way
 move to the front of the shuffled list (no new draw), and the case takes **at
-least one** optional paper:
+least one** optional clue:
 
-| Way | Papers it prefers (existing roles) |
+| Way | Clues it prefers (existing roles) |
 |---|---|
 | Follow the person | card with a name (8), ticket/itinerary (9), timing stub (11), duty log (12), private diary (5), objects marked with the name (13, 15) |
 | Check the place against its records | tagged key (4), payment slip (10), shift notebook (6), the counted piles (16-19), where the file's count disagrees with the cupboard |
 | Listen for it | press clipping (7) first, plus the radio call-in transcript, which takes the last optional slot (P4-R123) |
 
-The existing rules about which papers cannot share a case (`Generator.lua:636-655`)
+The existing rules about which clues cannot share a case (`Generator.lua:636-655`)
 still apply.
 
 **Which reading I believe: evidence tests it.** The next case is a different
 story, so what carries over is the survivor's *stance*: the ordinary reading or
 the other one. The case's own agree/disagree draw (`Generator.lua:290`) is
 **never** changed, because changing it would confirm or deny. Instead, one
-optional paper is added that the chosen stance has to explain:
-- Believed the **ordinary** reading: prefer one paper that disputes (payment
+optional clue is added that the chosen stance has to explain:
+- Believed the **ordinary** reading: prefer one clue that disputes (payment
   slip 10, timing stub 11, or a pile whose count disagrees).
-- Believed the **other** reading: prefer one paper that agrees (duty log 12).
+- Believed the **other** reading: prefer one clue that agrees (duty log 12).
 - *I can't tell:* no lean.
 
-No paper says why it is there, and the survivor never remarks on it.
+No clue says why it is there, and the survivor never remarks on it.
 
 **Unanswered.** Every unanswered question means "no lean" for that part. If
 nothing is answered, the next case is built exactly as today.
@@ -258,7 +258,7 @@ finished cases have unused answers, **the most recently changed set** is used
 after that.
 
 **P2-Q27 holds.** Only *what is generated next* follows the theory. Nothing
-already in the world moves, no person acts differently, and no paper changes.
+already in the world moves, no person acts differently, and no clue changes.
 
 ---
 
@@ -289,7 +289,7 @@ days.
 |---|---|---|---|---|
 | 1 | **Readings text.** Add a short `readings` pair to each of the 20 premises (per outline where the meaning differs); options 34 characters or fewer. Not part of the built case. | extend `premise_consistency.lua` (every premise has both, lengths, no "you"); `text_lint.lua` | none | M (writing) |
 | 2 | **Retired record fields.** Optional `offered` and `answers` on `RetiredCase`, with validation (known values only, names 60 characters or fewer, `usedBy` a known case id). Old records still load. | extend `case_retirement.lua`, `retired_papers.lua` | none | S |
-| 3 | **Generator `steer` input.** New option saved in the case, checked on rebuild. Person, organisation, way and reading rules as in section 4, with no draw added or moved. | new `test/case_steer.lua`, modelled on `case_cast.lua`: same seed with or without steer; tamper fails; unsteered cases identical to today over 400 seeds; returning name present; way paper present; the agree/disagree draw never changed. Extend `generator_spec.lua`, `premise_consistency.lua` | none | M |
+| 3 | **Generator `steer` input.** New option saved in the case, checked on rebuild. Person, organisation, way and reading rules as in section 4, with no draw added or moved. | new `test/case_steer.lua`, modelled on `case_cast.lua`: same seed with or without steer; tamper fails; unsteered cases identical to today over 400 seeds; returning name present; way clue present; the agree/disagree draw never changed. Extend `generator_spec.lua`, `premise_consistency.lua` | none | M |
 | 4 | **Budget.** Worst-case `offered` + `answers` + `steer` counted in the headroom sum. | extend `case_budget_headroom.lua` | none | S |
 | 5 | **Record at completion.** In the retirement swap, save `offered` from the case being retired. | extend `successive_cases.lua`, `case_retirement.lua` | `core_loop.sh`: after "Case complete", the retired record carries `offered` | S |
 | 6 | **Use at creation.** `prepare` picks the most recent unused answers, passes `steer`, and sets `usedBy` in the same swap. | extend `automatic_investigations.lua`, `successive_cases.lua` (lock is atomic; failed build leaves answers open) | `core_loop.sh`: answer through a check helper before `noGap`, then assert the second case's `steer` and the first case's `usedBy` | M |
@@ -309,7 +309,7 @@ before the screen exists: with nothing answered, nothing changes.
 
 ### Owner answers (P4-R121, 2026-09-15)
 
-- **Q1. "Listen for it": a new broadcast paper.** A transcript or scanner-log
+- **Q1. "Listen for it": a new broadcast clue.** A transcript or scanner-log
   kind of document, which the next case leans on when that answer is chosen.
   It is a new document kind, not a new premise or organiser program, so the
   P4-R107 freeze as written is not broken. Added as step 11 below.
@@ -318,15 +318,15 @@ before the screen exists: with nothing answered, nothing changes.
 - **Q3. Timing:** creation waits a short time after a case completes (on top
   of the 24-hour timer) so answers given right away can steer it (step 6).
 - **Q4. A returning person never gets a second body**; she returns through
-  papers and mentions only. The generator needs a cross-case check (step 3).
+  clues and mentions only. The generator needs a cross-case check (step 3).
 
 **Added steps:**
 
 | # | Step | Unit test | Linux game check | Size |
 |---|---|---|---|---|
-| 3b | **Cross-case body check.** A person who has a body in any earlier case (live or retired) is never bound to a body again; the returning person appears in papers only. | extend `test/case_steer.lua` and the CasePerson tests | `case_body.sh` unaffected; `core_loop.sh` second case asserts no second body for the returning name | S |
+| 3b | **Cross-case body check.** A person who has a body in any earlier case (live or retired) is never bound to a body again; the returning person appears in clues only. | extend `test/case_steer.lua` and the CasePerson tests | `case_body.sh` unaffected; `core_loop.sh` second case asserts no second body for the returning name | S |
 | 6b | **Wait after completion.** No new case is created until a short delay after the last completion (proposed 1 in-game hour), in addition to `minGapHours`. | extend `automatic_investigations.lua` | `core_loop.sh` with `noGap`: second case appears only after the delay | S |
-| 11 | **Broadcast paper.** A new document kind (transcript or scanner log) written for the "listen for it" way, with its text passing the premise consistency and lint tests; used only when that answer steers a case. | extend `premise_consistency.lua`, `text_lint.lua`, `case_steer.lua` | `core_loop.sh`: a case steered to "listen for it" places a broadcast paper | M (writing) |
+| 11 | **Broadcast clue.** A new document kind (transcript or scanner log) written for the "listen for it" way, with its text passing the premise consistency and lint tests; used only when that answer steers a case. | extend `premise_consistency.lua`, `text_lint.lua`, `case_steer.lua` | `core_loop.sh`: a case steered to "listen for it" places a broadcast clue | M (writing) |
 
 ### Risks
 

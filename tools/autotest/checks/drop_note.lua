@@ -1,6 +1,6 @@
--- Drives checks/drop_note.sh: several case papers noted at once by dropping
+-- Drives checks/drop_note.sh: several case clues noted at once by dropping
 -- them on the open organiser (P4-R116), and the names on them reaching NAMES.
--- Needs checks/core_loop.lua loaded first: it finds, reaches and takes papers.
+-- Needs checks/core_loop.lua loaded first: it finds, reaches and takes clues.
 CFDROP = CFDROP or {}
 local D = CFDROP
 local L = CFLoop
@@ -10,7 +10,7 @@ local A = ConspiracyFiles.KnoxApps
 D.carried = D.carried or {}
 D.people = D.people or {}
 
--- The case's people, read while the case is live. Noting its last paper
+-- The case's people, read while the case is live. Noting its last clue
 -- finishes a case, and a finished case keeps only its rows - the first run of
 -- this check looked the people up after the drop and found none (20260915T111000).
 local function rememberPeople(item)
@@ -61,8 +61,8 @@ function D.open()
     return true
 end
 
--- A drag the way the inventory pane builds one - the carried papers as one
--- stack whose items[1] is the header copy, the paper lying in its container as
+-- A drag the way the inventory pane builds one - the carried clues as one
+-- stack whose items[1] is the header copy, the clue lying in its container as
 -- a loose item, an ordinary pencil from the pockets - let go on the glass.
 function D.drop()
     local w = S.window; if not w then return false, "no window" end
@@ -94,7 +94,7 @@ function D.where()
     return true, tostring(still), tostring(lying), tostring(D.plain ~= nil and R.isInspected(D.plain) == true)
 end
 
--- Every case person whose name is written on a noted paper is in NAMES - read
+-- Every case person whose name is written on noted evidence is in NAMES - read
 -- from the rows, which a finished case keeps.
 function D.names()
     local rows = ConspiracyFiles.NotebookUI.generatedRows("evidence") or {}

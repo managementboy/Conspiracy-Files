@@ -29,9 +29,9 @@ test("generated 100-seed sample varies sites outlines text, carriers and bounded
         for _,n in pairs(required) do total=total+n end
         assertEqual(#c.documents,total,"required distinct containers follows selected evidence")
         -- Every READABLE document carries the case reference, which is how a
-        -- player ties three pieces of paper into one file. Object evidence
+        -- player ties three documents into one file. Object evidence
         -- (2026-09-09) carries none, and cannot: nothing is written on a
-        -- hammer. It belongs to the case by having been kept with the papers
+        -- hammer. It belongs to the case by having been kept with the documents
         -- and by the connection the notebook records - never by a reference we
         -- would have had to pretend was engraved on it.
         for _,doc in ipairs(c.documents) do

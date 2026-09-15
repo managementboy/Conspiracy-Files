@@ -49,7 +49,7 @@ with where the thing was found, captured once.
   in the same pass that builds `seqOf`, and put the place in the row summary
   and in a `FOUND` block in the detail pane. The carrier name is demoted to a
   detail line; it is the last fallback, so nothing regresses on old events.
-- **Duplicate rows are the risk.** Four papers from one desk all read the same,
+- **Duplicate rows are the risk.** Four pieces of evidence from one desk read the same,
   and they sit next to each other. Add a tidying pass over the rendered set:
   rows sharing a subtitle drop the shared part and keep what differs.
 - **"Unknown" must not be a place.** A missing place is no heading and no
@@ -99,25 +99,25 @@ player finds the overlap rather than being shown it.
 Done when: the six known styles read as sentences, and an invented id produces
 silence, proven by a test that passes a nonsense id.
 
-### WP4 — The papers stop owning a hand (answers Q1)
+### WP4 — The evidence album stops owning a hand (answers Q1)
 
-The papers sit in the off hand only because the game opens a container panel
+The evidence album sits in the off hand only because the game opens a container panel
 only for a held item.
 
 - Ship them in the bag. The notebook's open action borrows the off hand:
-  remember what was there, equip the papers, open, and restore on close.
+  remember what was there, equip the album, open, and restore on close.
 - Every step through the game's own timed actions, never by setting hand slots
   directly, so it is animated, interruptible and save-safe.
 - **The failure paths are the work**, not the happy path: a full bag, an
   interrupted unequip, a two-handed weapon, and the container button vanishing
   from the panel the instant the item moves. A failed put-away must leave the
-  papers in hand and say so in the survivor's voice, never on the ground.
+  album in hand and say so in the survivor's voice, never on the ground.
 - Build `stow()` first and drive it from the debug console before wiring it to
   anything automatic. Watch what the game does with a full bag.
 - The fallback, if this proves ugly: hand-hold on the first load of a save only,
   released for good the first time the player closes the panel.
 
-Done when: a fresh survivor spawns with both hands free, opening the papers
+Done when: a fresh survivor spawns with both hands free, opening the album
 works, closing restores what was held, and a full bag cannot lose them.
 
 ### WP5 — Find out what the 12 ms is before changing anything (answers Q4)
@@ -224,7 +224,7 @@ the device costs the field view, never the case.
   `"desk"` (today's behaviour unchanged), plus a `"pocket"` projection that is a
   trailing slice with leads and connections stripped. Test it. No item, no
   world menu, no UI.
-- **Step 2:** the existing Papers become the field surface. Nothing new to
+- **Step 2:** the existing evidence album becomes the field surface. Nothing new to
   build, and it tells us whether a thin field view is pleasant or annoying.
 - **Step 3:** the desk. A world-object context menu option on a desk, table or
   corkboard, defined by capability (a container plus somewhere to sit), never by

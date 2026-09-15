@@ -1,4 +1,4 @@
--- The survivor's case file: a physical thing the paperwork lives in.
+-- The survivor's case file: a physical thing the evidence is filed in.
 --
 -- Owner, 2026-09-10, from a screenshot of a vanilla photo album: "it seems
 -- like a Photoalbum can contain many photos but also text... we could provide
@@ -7,8 +7,8 @@
 --
 -- Base.PhotoAlbum is a container whose AcceptItemFunction is Wallet, which
 -- takes maps, literature and anything tagged as fitting a wallet - almost
--- exactly this mod's paperwork: notes, receipts, letters, diaries, cards,
--- tickets, keys. The game already treats it as a folder for paper, and it
+-- exactly this mod's written evidence: notes, receipts, letters, diaries,
+-- cards, tickets, keys. The game already treats it as a folder for paper, and it
 -- looks like a notebook on the icon.
 --
 -- WHAT IT IS NOT. Capacity 5, MaxItemSize 0.2, so it holds a case rather than
@@ -45,19 +45,22 @@ local function forename(player)
 end
 
 -- "Case File" made the survivor sound like an investigator. Owner, 2026-09-10:
--- "he/she is a survivor. other name?" They are someone who kept some papers.
+-- "he/she is a survivor. other name?" It was "Papers" until P4-R127 (owner,
+-- 2026-09-15: "Clues evidence.hunches. But papers not."): a case hides keys,
+-- cards and objects as well as documents, so what the survivor keeps is their
+-- evidence.
 function F.titleFor(player)
     local name=player and forename(player)
-    if name then return name.."'s Papers" end
-    return "Papers"
+    if name then return name.."'s Evidence" end
+    return "Evidence"
 end
 
 -- Already carrying one? Searched by our own mark rather than by type, so a
 -- photo album the player looted stays an ordinary photo album.
 --
 -- Inside bags too, three deep (as GeneratedRuntime's restampEvidence walks).
--- Found in play, 2026-09-14 (P4-R104): Papers put in a backpack were not found,
--- so filing stopped and the papers seemed gone. Level by level, so the album
+-- Found in play, 2026-09-14 (P4-R104): an album put in a backpack was not found,
+-- so filing stopped and the evidence seemed gone. Level by level, so the album
 -- at hand is preferred over one at the bottom of a bag. Only ever the player's
 -- own inventory tree: an album on a shelf is not "held".
 F.HELD_DEPTH=3
@@ -90,7 +93,17 @@ function F.give(player)
     player=player or (getPlayer and getPlayer())
     if not player then return nil,"no player" end
     local existing=F.held(player)
-    if existing then return existing end
+    if existing then
+        -- An album issued before P4-R127 is still called "Papers": give it the
+        -- current name, once, and change nothing else about it.
+        pcall(function()
+            local old=existing:getName()
+            if old=="Papers" or (type(old)=="string" and old:sub(-9)=="'s Papers") then
+                existing:setName(F.titleFor(player)); existing:setCustomName(true)
+            end
+        end)
+        return existing
+    end
     local ok,item=pcall(function() return player:getInventory():AddItem(F.TYPE) end)
     if not ok or not item then return nil,"could not create "..F.TYPE end
     pcall(function()
@@ -105,14 +118,14 @@ function F.give(player)
     end)
     -- Hold them. The inventory panel gives a carried container a button only
     -- while it is equipped (vanilla ISInventoryPage:refreshBackpacks: equipped,
-    -- or a key ring), so papers loose in the main inventory could never be
+    -- or a key ring), so an album loose in the main inventory could never be
     -- opened automatically: 370c1d6 waited for a button that never comes (Linux
     -- run, 2026-09-11: "2 buttons: Inventory, Key Ring"). Only into a FREE off
     -- hand - never take something out of the player's hand for this.
     pcall(function()
         if player:getSecondaryHandItem()==nil then player:setSecondaryHandItem(item) end
     end)
-    log("papers issued: "..tostring(F.titleFor(player)))
+    log("evidence album issued: "..tostring(F.titleFor(player)))
     -- Open it in the inventory panel. Not immediately: the item is added this
     -- very tick, and the panel only builds a button for a new container on a
     -- later update, so a selection now finds nothing and silently does nothing
@@ -131,7 +144,7 @@ end
 --
 -- The first version gave up after five seconds counted from the FIRST TICK. On
 -- a new game the inventory panel can appear well after that, so the whole
--- budget was spent waiting for a panel rather than for a button, and the papers
+-- budget was spent waiting for a panel rather than for a button, and the album
 -- never opened (2026-09-11, twice). Attempts now count only once the panel is
 -- there to be asked.
 F.OPEN_ATTEMPTS=1800
@@ -171,8 +184,8 @@ end
 local tried=false
 -- Filing evidence away by itself -----------------------------------------------
 --
--- Documents you pick up go into the Papers, so the survivor's pockets do not
--- fill with paper (owner, 2026-09-13). Only while the organiser is CLOSED: with
+-- Evidence you pick up goes into the evidence album, so the survivor's pockets
+-- do not fill up with it (owner, 2026-09-13). Only while the organiser is CLOSED: with
 -- it in hand you are reading, and things moving under you while you read is the
 -- kind of help nobody asked for.
 --
@@ -188,15 +201,15 @@ function F.fileEvidence()
     if screen and screen.window and screen.window.on then return 0 end
     local player=getPlayer and getPlayer()
     if not player then return 0 end
-    local papers=F.held(player)
-    local into=papers and papers.getInventory and papers:getInventory()
+    local album=F.held(player)
+    local into=album and album.getInventory and album:getInventory()
     if not into then return 0 end
     local ok,inventory=pcall(function() return player:getInventory() end)
     if not ok or not inventory then return 0 end
     -- Never file INTO an album outside the player's inventory tree: a document
     -- moved onto a shelf would leave the survivor's hands without them asking.
-    if papers.getOutermostContainer then
-        local okOuter,outer=pcall(function() return papers:getOutermostContainer() end)
+    if album.getOutermostContainer then
+        local okOuter,outer=pcall(function() return album:getOutermostContainer() end)
         if not okOuter or outer~=inventory then return 0 end
     end
     local items=inventory.getItems and inventory:getItems()
@@ -207,14 +220,14 @@ function F.fileEvidence()
     for i=0,items:size()-1 do
         local item=items:get(i)
         local md=item and item.getModData and item:getModData()
-        if type(md)=="table" and md.cfGeneratedId and item~=papers then
+        if type(md)=="table" and md.cfGeneratedId and item~=album then
             moving[#moving+1]=item
         end
     end
     local moved=0
     for _,item in ipairs(moving) do
-        -- Room, and only room the papers actually have: silently vanishing a
-        -- document because a container was full would be far worse than
+        -- Room, and only room the album actually has: silently vanishing a
+        -- piece of evidence because a container was full would be far worse than
         -- leaving it in a pocket.
         local fits=pcall(function()
             return into:hasRoomFor(player,item)
@@ -227,7 +240,7 @@ function F.fileEvidence()
             if done then moved=moved+1 end
         end
     end
-    if moved>0 then log("filed "..moved.." document(s) into the papers") end
+    if moved>0 then log("filed "..moved.." piece(s) of evidence into the album") end
     return moved
 end
 
@@ -236,12 +249,12 @@ function F.onTick()
     if F.pendingOpen then
         local state=tryOpen(F.pendingOpen)
         if state=="opened" then
-            log("papers opened in the inventory panel after "..tostring(F.openTries or 0).." ticks")
+            log("evidence album opened in the inventory panel after "..tostring(F.openTries or 0).." ticks")
             F.pendingOpen=nil
         elseif state=="no-button" then
             F.openTries=(F.openTries or 0)+1
             if F.openTries>=F.OPEN_ATTEMPTS then
-                log("papers not opened: the panel never offered them a button - "..describePanel())
+                log("evidence album not opened: the panel never offered it a button - "..describePanel())
                 F.pendingOpen=nil
             end
         end
@@ -251,7 +264,7 @@ function F.onTick()
     if not getPlayer or not getPlayer() then return end
     tried=true
     local item,why=F.give()
-    if not item then log("papers not issued: "..tostring(why)) end
+    if not item then log("evidence album not issued: "..tostring(why)) end
 end
 
 if Events and not F.tickHandler then
@@ -260,7 +273,7 @@ if Events and not F.tickHandler then
     F.startHandler=function() tried=false end
     Events.OnGameStart.Add(F.startHandler)
     -- A survivor who respawns after a death is a new character, and OnGameStart
-    -- does not fire for them: the new survivor got no papers at all (Linux death
+    -- does not fire for them: the new survivor got no evidence album (Linux death
     -- check, 2026-09-11). OnCreatePlayer does. give() skips anyone who already
     -- holds a file, so the first survivor is never given two.
     if Events.OnCreatePlayer then

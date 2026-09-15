@@ -125,7 +125,7 @@ local lastScan,lastRemind=0,0
 
 -- Distinct unread documents carried, counting a pile once: six lunchboxes are
 -- one piece of evidence. Searches the inventory and one level into containers
--- in it, which covers a bag and the survivor's own papers.
+-- in it, which covers a bag and the survivor's own evidence album.
 function E.unreadCarried(player)
     local runtime=ConspiracyFiles.GeneratedRuntime
     if not player or not runtime or not runtime.subject or not runtime.isInspected then return 0 end

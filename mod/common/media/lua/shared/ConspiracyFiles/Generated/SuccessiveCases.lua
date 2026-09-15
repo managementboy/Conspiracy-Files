@@ -59,7 +59,7 @@ local function aggregateOK(a)
    local token=rootToken(s,did); if token then if tokens[token] then return false,"duplicate physical token" end; tokens[token]=true end
   end
  end
- -- One paper per case beyond its story papers: the relay memo of the first case
+ -- One clue per case beyond its story clues: the relay memo of the first case
  -- (P4-R96), or the radio transcript of a case steered to "Listen for it" (P4-R123).
  local ordered=dense(a.discoveries,M.MAX_CASES*(Generator.MAX_EVIDENCE+1)); if not ordered then return false,"invalid global discovery order" end
  return true
@@ -131,7 +131,7 @@ function M.validate(wrapper)
 end
 -- Everything a reshuffle would have to clean up, captured BEFORE the store is
 -- replaced: once the wrapper is swapped this list cannot be recovered from
--- anywhere, and the papers are already lying in drawers around Muldraugh.
+-- anywhere, and the clues are already lying in drawers around Muldraugh.
 --
 -- Owner, 2026-09-12: every change to case rules costs a fresh game, several
 -- times a day. A reshuffle builds new cases in the save the player is already
@@ -211,7 +211,7 @@ end
 -- is never an observable half-retired wrapper. Idempotent: retiring an
 -- already-retired root is a recognised no-op, not an error and not a second
 -- shrink. `lastSeen` (document id -> words) is where the runtime last saw
--- each paper; it is kept on the retired rows (P4-R104).
+-- each clue; it is kept on the retired rows (P4-R104).
 function M.retire(wrapper,index,lastSeen,completedHours)
  local ok,why=M.validate(wrapper); if not ok then return nil,why end
  local roots=M.sessions(wrapper); local root=roots[index]; if not root then return nil,"unknown generated case" end
@@ -223,7 +223,7 @@ function M.retire(wrapper,index,lastSeen,completedHours)
  ok,why=M.validate(out); if not ok then return nil,why end
  return out,true
 end
--- Where a finished case's papers were last seen, updated copy-on-write.
+-- Where a finished case's evidence was last seen, updated copy-on-write.
 -- Owner, 2026-09-14: "I lost my files somewhere?" - a completed case had
 -- dropped every placement detail. `updates` maps document id -> words; only
 -- retired rows are touched (a live document has its own scan), unchanged or
