@@ -48,6 +48,10 @@ local kinds={
  -- Never chosen by a story role: only the relay memo is written on it
  -- (Generated/RelayMemo.lua, P4-R96).
  memo={fullType="Base.Note",label="Office memo",short="Memo",capacity="prose"},
+ -- Never chosen by a story role either: only the radio call-in transcript is
+ -- written on it, in a case steered to "Listen for it" (P4-R123). A typed page
+ -- on the same proven carrier as the memo.
+ transcript={fullType="Base.Note",label="Radio transcript",short="Transcript",capacity="prose"},
 }
 local function copy(v) return {kind=v.kind,fullType=v.fullType,label=v.label,short=v.short,capacity=v.capacity} end
 -- A third capacity, added 2026-09-09: "object". Every carrier above is

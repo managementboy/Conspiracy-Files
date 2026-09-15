@@ -31,7 +31,13 @@ M.MATTERS={person1=true,person2=true,organisation=true,nobody=true}
 -- "leave it cold" is left out until the cold-trail state exists (P4-R119);
 -- "listen" stays and is served by a broadcast paper (P4-R121).
 M.WAYS={person=true,records=true,listen=true}
-M.NAME_MAX=160
+-- Lengths are save-budget costs, measured worst case (2026-09-15): a person's
+-- name is at most what the cast accepts (Generator.castFrom, 60); the longest
+-- organisation the generator writes is 43, so 80 leaves room for a long
+-- building name; a case id is "generated:<seed>:case", about 25.
+M.NAME_MAX=60
+M.ORG_MAX=80
+M.CASE_ID_MAX=80
 -- lastSeen (P4-R104): where the mod last saw this document's physical paper,
 -- in the same words the notebook uses ("Carried, in your Una's Papers.").
 -- Owner in play, 2026-09-14, after a case completed: "I lost my files
@@ -101,7 +107,7 @@ local function offeredOK(o)
     if not text(o.premiseId,80) or not M.OUTLINES[o.outline] then return false end
     local ok,n=dense(o.people,2); if not ok or n~=2 then return false end
     for i=1,2 do if not printable(o.people[i],M.NAME_MAX) then return false end end
-    return printable(o.organisation,M.NAME_MAX)
+    return printable(o.organisation,M.ORG_MAX)
 end
 local function answersOK(a)
     if not fields(a,ANSWER_FIELDS) then return false end
@@ -110,7 +116,7 @@ local function answersOK(a)
     if a.way~=nil and not M.WAYS[a.way] then return false end
     if a.changedHours~=nil and (type(a.changedHours)~="number" or a.changedHours~=a.changedHours
         or a.changedHours<0 or a.changedHours==math.huge) then return false end
-    if a.usedBy~=nil and not text(a.usedBy,300) then return false end
+    if a.usedBy~=nil and not text(a.usedBy,M.CASE_ID_MAX) then return false end
     return true
 end
 

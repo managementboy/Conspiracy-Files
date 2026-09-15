@@ -673,6 +673,12 @@ local function build(seed,revision,sites,cast,relayMemo,steer)
         optional={}
         for _,list in ipairs({lean,way,rest}) do for _,d in ipairs(list) do optional[#optional+1]=d end end
         optionalCount=math.max(optionalCount,math.min(optionalCapacity,(leanSet and 1 or 0)+(waySet and 1 or 0)))
+        -- "Listen for it" adds the radio transcript at the end (P4-R123). It takes
+        -- the last optional slot rather than an eighth place, so the case stays
+        -- inside the save budget (measured 2026-09-15: adding it on top of a full
+        -- case put a ten-case save at 521 kB of 500). Decided here, before the
+        -- claim lists its piles, so no paper mentions one that is not in the case.
+        if steer.way=="listen" then optionalCount=math.min(optionalCount,optionalCapacity-1) end
     end
     -- Papers that must not share a case (P4-R107, 2026-09-15). The timing
     -- stub puts the second person at the first site on the response's day;
@@ -732,6 +738,22 @@ local function build(seed,revision,sites,cast,relayMemo,steer)
         documents[#documents+1]={id=prefix.."document-"..(#documents+1),kind=Memo.KIND,title=Memo.TITLE,
             locationId=b.id,body=Memo.body(),references={b.id},links={},leads={}}
     end
+    -- "Listen for it" brings a radio call-in transcript (P4-R121, text P4-R123):
+    -- one more paper, last, at the second site, after every draw, like the relay
+    -- memo, so it takes no role and no unsteered case changes. It raises a
+    -- question and answers nothing.
+    if steer and steer.way=="listen" then
+        local transcript=fill("WHAT YOU FOUND\nA typed page from a local radio station's evening call-in show, kept in a card folder with {CODE} pencilled on the tab. One caller's words are underlined.\n\n"
+            .."{DATE1CAPS} - EVENING CALL-IN\nCALLER: There were trucks at {B} past ten last night. Nobody I asked knew anything about it.\n"
+            .."HOST: Probably maintenance. They do that at night so nobody is held up.\n"
+            .."CALLER: Could be. There was no sign on the gate, is all.\n"
+            .."HOST: We'll put the question to {ORG} and see if anybody rings back. Next caller.\n\n"
+            .."WHAT IT MIGHT MEAN\nA caller noticed work at {B} at an hour nobody had explained, and someone later filed the page against the reference. "
+            .."Night work is ordinary, and so is a curious caller; a quiet arrangement looks exactly the same from the road. "
+            .."The transcript records what one person said on air. It cannot say what {SUBJECT} was, or {UNKNOWN}.",map)
+        documents[#documents+1]={id=prefix.."document-"..(#documents+1),kind="transcript",title=fill("Radio transcript / {CODE}",map),
+            locationId=b.id,body=transcript,references={b.id,org.id},links={{target=documents[1].id,kind="recontextualises"}},leads={}}
+    end
     return {schemaVersion=G.SCHEMA,generatorRevision=G.REVISION,catalogRevision=revision,seed=seed,
         caseId=prefix.."case",outline=outline,premiseId=premise.id,contentStatus="development-draft-unapproved",
         locations=copy(sites),cast=#met>0 and copy(met) or nil,facts=facts,identities=people,
@@ -762,11 +784,13 @@ end
 -- refused, so a hand-edited save cannot steer a case the generator would not.
 G.STEER_READINGS={one=true,two=true}
 G.STEER_WAYS={person=true,records=true,listen=true}
+G.STEER_ORG_MAX=60
 local STEER_FIELDS={fromCase=true,reading=true,way=true,person=true,organisation=true}
 function G.steerFrom(s)
     if type(s)~="table" then return nil,"invalid steer" end
     for k in pairs(s) do if not STEER_FIELDS[k] then return nil,"unknown steer field" end end
-    if type(s.fromCase)~="string" or s.fromCase=="" or #s.fromCase>300 or s.fromCase:find("%c") then return nil,"steer needs the case it came from" end
+    -- A case id is "generated:<seed>:case", about 25 characters; 80 is the cap.
+    if type(s.fromCase)~="string" or s.fromCase=="" or #s.fromCase>80 or s.fromCase:find("%c") then return nil,"steer needs the case it came from" end
     if s.reading~=nil and not G.STEER_READINGS[s.reading] then return nil,"invalid steer reading" end
     if s.way~=nil and not G.STEER_WAYS[s.way] then return nil,"invalid steer way" end
     if s.person~=nil and s.organisation~=nil then return nil,"at most one returning name" end
@@ -774,7 +798,11 @@ function G.steerFrom(s)
         local cast=G.castFrom({s.person})
         if not cast or cast[1]~=s.person then return nil,"invalid returning person" end
     end
-    if s.organisation~=nil and (type(s.organisation)~="string" or s.organisation=="" or #s.organisation>160
+    -- An organisation's name is repeated through a case's papers, so its length
+    -- is a save-budget cost. The longest the generator writes is 43 characters;
+    -- a longer returning name is simply not carried over (SuccessiveCases.
+    -- pendingSteer keeps the rest of the answers).
+    if s.organisation~=nil and (type(s.organisation)~="string" or s.organisation=="" or #s.organisation>G.STEER_ORG_MAX
         or s.organisation:find("%c")) then return nil,"invalid returning organisation" end
     if s.reading==nil and s.way==nil and s.person==nil and s.organisation==nil then return nil,"nothing to steer" end
     return {fromCase=s.fromCase,reading=s.reading,way=s.way,person=s.person,organisation=s.organisation}
@@ -857,7 +885,9 @@ function G.validate(case)
     if case.relayMemo~=nil and case.relayMemo~=true then return false,"invalid relay memo flag" end
     -- The relay memo takes no story role, so it is not counted against the
     -- role bounds; the rebuild below still proves it is exactly the one paper.
+    -- Nor does the radio transcript of a case steered to "Listen for it" (P4-R123).
     local roleCount=#case.documents-(case.relayMemo and 1 or 0)
+        -((type(case.steer)=="table" and case.steer.way=="listen") and 1 or 0)
     if roleCount<G.MIN_EVIDENCE or roleCount>G.MAX_EVIDENCE then return false,"invalid evidence role count" end
     local a,b=case.locations[1],case.locations[2]
     if not Catalog.distinct(a,b) or a.mapId~=b.mapId or a.buildLine~=b.buildLine then return false,"incompatible saved locations" end

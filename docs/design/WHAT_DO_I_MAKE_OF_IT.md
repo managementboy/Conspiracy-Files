@@ -12,6 +12,14 @@ never retire. Still to do: step 9 (the note in the notebook), 10 (a reload
 check for answers) and 11 (the broadcast paper for "Listen for it"; until it
 exists that way leans on the press clipping).
 
+**Step 11 built (2026-09-15).** The transcript takes the last optional-paper slot
+instead of an eighth place: added on top of a full case it put a worst-case
+ten-case save at 521 kB of the 500 kB budget (P4-R17). Stored names and ids were
+also capped at realistic lengths (a person 60 characters, as the cast already
+required; an organisation 80, a returning one 60; a case id 80). The budget test
+now measures 1,000 seeds instead of 60, which had missed the worst case: worst
+campaign 486 kB of 500.
+
 **Step 11 text (owner chose a radio call-in transcript, P4-R123).** Placed only
 in a case steered to "Listen for it", after every draw, so no existing case
 changes. Placeholders as in Premises.lua.

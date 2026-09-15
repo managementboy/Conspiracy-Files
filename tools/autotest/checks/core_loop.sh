@@ -146,7 +146,7 @@ say "answers: $(tr '\t' ' ' <<<"$ans")"
 # The next case, with the 24 h gap and the wait after a completion removed for test pacing.
 ev 'return CFLoop.noGap()' >/dev/null
 wait_true 150 'CFLoop.caseCount()>=2' && next_case=yes || { next_case=no; fail "no second case within 150 s with the gap removed"; }
-steer="false	false	false	false	none"
+steer="false	false	false	false	none	false"
 if [ "$next_case" = yes ]; then
     steer="$(ev 'return CFLoop.steerCheck()')"
     say "steer: $(tr '\t' ' ' <<<"$steer")"
@@ -155,7 +155,9 @@ if [ "$next_case" = yes ]; then
     [ "$(cut -f3 <<<"$steer")" = true ] || fail "the chosen person did not return in the second case: $(tr '\t' ' ' <<<"$steer")"
     [ "$(cut -f4 <<<"$steer")" = true ] || fail "the returning person could be given a second body: $(tr '\t' ' ' <<<"$steer")"
     run_log | grep -q "Case shaped by the survivor's answers" || fail "the runtime never logged a steered case"
+    [ "$(cut -f6 <<<"$steer")" = true ] || fail "'Listen for it' did not bring the radio transcript into the second case: $(tr '\t' ' ' <<<"$steer")"
 fi
+findings+=("radio transcript in the case steered to 'Listen for it': $(cut -f6 <<<"$steer")")
 findings+=("What do I make of it?: answered=$(cut -f1 <<<"$ans") (person $(cut -f3 <<<"$ans")); second case built from the answers=$(cut -f2 <<<"$steer"), answers marked used=$(cut -f1 <<<"$steer"), person returned=$(cut -f3 <<<"$steer"), no second body=$(cut -f4 <<<"$steer")")
 errors="$(mod_errors)"
 [ -z "$errors" ] || fail "errors inside the mod"

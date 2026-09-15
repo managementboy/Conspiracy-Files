@@ -18,8 +18,14 @@ local Retired=require("ConspiracyFiles/Generated/RetiredCase")
 local catalog=dofile("test/fixtures/synthetic_locations.lua")
 local opts={mapId="SYNTHETIC-MAP",buildLine="TEST-ONLY",allowSynthetic=true}
 local largestLive,largestRetired,measured=0,0,0
-for seed=1,60 do
-    local case=G.generate(catalog,seed,opts)
+-- A thousand seeds, not sixty: sixty missed the worst "Listen for it" case by
+-- more than the whole remaining headroom (2026-09-15).
+for seed=1,1000 do
+    -- Worst case: a case steered by earlier answers (P4-R113) - the longest
+    -- source id and returning organisation allowed, and "Listen for it", which
+    -- adds the radio transcript (P4-R123). Really generated, so it validates.
+    local case=G.generate(catalog,seed,{mapId=opts.mapId,buildLine=opts.buildLine,allowSynthetic=true,
+        steer={fromCase=string.rep("c",Retired.CASE_ID_MAX),reading="one",way="listen",organisation=string.rep("o",G.STEER_ORG_MAX)}})
     if case then
         local targets={}
         for _,site in ipairs(case.locations) do
@@ -33,13 +39,7 @@ for seed=1,60 do
             local known={}
             for i,doc in ipairs(case.documents) do known[i]=doc.id end
             root.known=known
-            -- A live case steered by earlier answers carries them (P4-R113):
-            -- measured with the longest source id and returning name allowed.
-            -- Measured only: a hand-set steer does not match the rebuilt case,
-            -- so it comes off again before the case is retired below.
-            root.case.steer={fromCase=string.rep("c",300),reading="one",way="records",organisation=string.rep("o",160)}
             local liveBytes=V.estimateEncodedBytes(root)
-            root.case.steer=nil
             measured=measured+1
             if liveBytes>largestLive then largestLive=liveBytes end
             -- Every retired row carries where its paper was last seen, at the
@@ -53,9 +53,9 @@ for seed=1,60 do
             -- used by a case with the longest id allowed.
             assert(retired.offered,"a retired case must carry what its questions are about")
             retired.offered.people={string.rep("n",Retired.NAME_MAX),string.rep("m",Retired.NAME_MAX)}
-            retired.offered.organisation=string.rep("o",Retired.NAME_MAX)
+            retired.offered.organisation=string.rep("o",Retired.ORG_MAX)
             retired.answers={reading="unsure",matters="organisation",way="records",
-                changedHours=123456.75,usedBy=string.rep("u",300)}
+                changedHours=123456.75,usedBy=string.rep("u",Retired.CASE_ID_MAX)}
             assert(Retired.validate(retired),"the worst-case answers must still be a valid retired case")
             local retiredBytes=V.estimateEncodedBytes(retired)
             if retiredBytes>largestRetired then largestRetired=retiredBytes end

@@ -221,7 +221,10 @@ assert(Retired.validate(withRoot(function(c) c.offered=nil end)),"a retired root
 assert(not Retired.validate(withOffered(function(o) o.outline="maybe" end)),"an unknown outline is refused")
 assert(not Retired.validate(withOffered(function(o) o.people={o.people[1]} end)),"exactly two people")
 assert(not Retired.validate(withOffered(function(o) o.organisation="bad\nname" end)),"control characters in a name are refused")
-assert(not Retired.validate(withOffered(function(o) o.organisation=string.rep("a",Retired.NAME_MAX+1) end)),"over-long names refused")
+assert(not Retired.validate(withOffered(function(o) o.organisation=string.rep("a",Retired.ORG_MAX+1) end)),"an over-long organisation is refused")
+assert(Retired.validate(withOffered(function(o) o.organisation=string.rep("a",Retired.ORG_MAX) end)),"an organisation at the limit is accepted")
+assert(not Retired.validate(withOffered(function(o) o.people={string.rep("a",Retired.NAME_MAX+1),o.people[2]} end)),"an over-long person's name is refused")
+assert(not Retired.validate(withRoot(function(c) c.answers={usedBy=string.rep("u",Retired.CASE_ID_MAX+1)} end)),"an over-long case id is refused")
 print("PASS a retired case keeps what the survivor will be asked about; answers validated, old roots still load")
 
 -- 9. The first case of a game can hold every story paper PLUS the relay memo

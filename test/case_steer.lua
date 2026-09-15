@@ -69,7 +69,7 @@ local ways={
     person=function(d) return starts("Private diary /")(d) or starts("Duty log /")(d) or d.title:find(", marked ",1,true)
         or d.title:find(": ",1,true) and not d.title:find(" / ",1,true) end,
     records=function(d) return starts("Tagged key /")(d) or starts("Shift notebook /")(d) or starts("Payment slip /")(d) or d.quantity~=nil end,
-    listen=starts("Press clipping /"),
+    listen=starts("Radio transcript /"),
 }
 local leans={
     one=function(d) return starts("Payment slip /")(d) or d.quantity~=nil or (d.title:find(": ",1,true) and d.kind~="dispatch" and not d.title:find(" / ",1,true)) end,
@@ -101,6 +101,35 @@ for reading in pairs(leans) do
 end
 print("PASS each way of investigating and each reading brings its paper in every case")
 
+-- 3b. "Listen for it" brings the radio call-in transcript (P4-R123): exactly one,
+--     last, after every draw, with every placeholder filled; no other answer does.
+local transcripts=0
+for seed=1,60 do
+    local c=G.generate(catalog,seed,opts{steer={fromCase=FROM,way="listen"}})
+    if c then
+        local n=0
+        for _,d in ipairs(c.documents) do
+            if d.kind=="transcript" then
+                n=n+1
+                assert(d.title:match("^Radio transcript / "),d.title)
+                assert(not d.body:find("[{}%%]"),"a placeholder or percent sign left in the transcript: "..d.body)
+                assert(d.body:find("EVENING CALL-IN",1,true) and d.body:find("WHAT IT MIGHT MEAN",1,true))
+            end
+        end
+        assert(n==1,"exactly one transcript, got "..n)
+        assert(c.documents[#c.documents].kind=="transcript","the transcript comes last, after every draw")
+        assert(#c.documents<=G.MAX_EVIDENCE,"the transcript takes a slot, never an eighth place: "..#c.documents)
+        assert(G.validate(c))
+        transcripts=transcripts+1
+    end
+end
+assert(transcripts>=20,"needed a real sample of listen-steered cases")
+for _,way in ipairs({"person","records"}) do
+    local other=assert(G.generate(catalog,7,opts{steer={fromCase=FROM,way=way}}))
+    for _,d in ipairs(other.documents) do assert(d.kind~="transcript","only 'Listen for it' brings the transcript") end
+end
+print("PASS 'Listen for it' brings exactly one radio call-in transcript, last and fully written, in "..transcripts.." cases")
+
 -- 4. Deterministic, saved, and tamper-proof.
 local s={fromCase=FROM,reading="one",way="records",person="Una Carver"}
 local c1=assert(G.generate(catalog,5,opts{steer=s}))
@@ -118,6 +147,7 @@ local bad={
     {fromCase=FROM,reading="unsure"},                  -- can't tell is simply no reading
     {fromCase=FROM,person="Una Carver",organisation="X Office"}, -- one returning name at most
     {fromCase=FROM,person="Una"},                      -- not a name the cast would accept
+    {fromCase=FROM,organisation=string.rep("o",G.STEER_ORG_MAX+1)}, -- a returning name over the budget cap
     {fromCase=FROM,way="records",verdict="right"},     -- never a verdict
 }
 for i,steer in ipairs(bad) do

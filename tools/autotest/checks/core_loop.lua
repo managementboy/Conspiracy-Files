@@ -542,8 +542,10 @@ function L.answerViaOrganiser()
     if not at then pcall(S.close); return "false", "FILES has no question row", "" end
     if not tapHit("ROW", at) then pcall(S.close); return "false", "the question row was not drawn", "" end
     if not (w.record and w.record.questions) then pcall(S.close); return "false", "the row did not open the questions", "" end
-    -- Reading: the first (ordinary) reading. Who matters: the first person. Next: records.
-    for question, line in ipairs({1, 1, 2}) do
+    -- Reading: the first (ordinary) reading. Who matters: the first person.
+    -- Next: "Listen for it", which brings the radio transcript (P4-R123); the
+    -- records way was proven in the real game on 20260915T172134.
+    for question, line in ipairs({1, 1, 3}) do
         if not tapHit("QUESTION", question) then pcall(S.close); return "false", "question " .. question .. " was not drawn", "" end
         if not w.popup then pcall(S.close); return "false", "question " .. question .. " opened no pick list", "" end
         if not tapHit("POPUP", line) then pcall(S.close); return "false", "pick list line " .. line .. " was not drawn", "" end
@@ -551,7 +553,7 @@ function L.answerViaOrganiser()
     local q = w.record.questions
     local Q = require("ConspiracyFiles/Generated/Questions")
     local note = Q.note(q.answers, q.offered) or ""
-    local ok = q.answers and q.answers.reading == "one" and q.answers.matters == "person1" and q.answers.way == "records"
+    local ok = q.answers and q.answers.reading == "one" and q.answers.matters == "person1" and q.answers.way == "listen"
     pcall(S.close)
     return tostring(ok == true), note, tostring(q.offered.people[1])
 end
@@ -562,13 +564,18 @@ function L.steerCheck()
         if type(root.rows) == "table" and root.offered then finished = finished or root
         elseif root.case and root.case.steer then live = root end
     end
-    if not finished or not live then return "false", "false", "false", "false", "no steered case" end
+    if not finished or not live then return "false", "false", "false", "false", "no steered case", "false" end
     local steer, person = live.case.steer, live.case.identities[1]
+    local transcript = false
+    if steer.way == "listen" then
+        for _, d in ipairs(live.case.documents) do if d.kind == "transcript" then transcript = true end end
+    end
     return tostring(finished.answers ~= nil and finished.answers.usedBy == live.case.caseId),
         tostring(steer.fromCase == finished.caseId),
         tostring(person.name == finished.offered.people[1]),
         tostring(person.met == true),
-        tostring(live.case.caseId)
+        tostring(live.case.caseId),
+        tostring(transcript)
 end
 
 -- Reshuffle support (checks/reshuffle.sh). ids() is the fingerprint of the

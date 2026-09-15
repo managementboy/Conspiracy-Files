@@ -59,8 +59,9 @@ local function aggregateOK(a)
    local token=rootToken(s,did); if token then if tokens[token] then return false,"duplicate physical token" end; tokens[token]=true end
   end
  end
- -- +1: a game holds one relay memo (P4-R96) on top of every case's story papers.
- local ordered=dense(a.discoveries,M.MAX_CASES*Generator.MAX_EVIDENCE+1); if not ordered then return false,"invalid global discovery order" end
+ -- One paper per case beyond its story papers: the relay memo of the first case
+ -- (P4-R96), or the radio transcript of a case steered to "Listen for it" (P4-R123).
+ local ordered=dense(a.discoveries,M.MAX_CASES*(Generator.MAX_EVIDENCE+1)); if not ordered then return false,"invalid global discovery order" end
  return true
 end
 -- Global store compatibility: legacy canonical is fallback only.  Once a
