@@ -167,14 +167,66 @@ end
 -- 2026-09-14: "The globe box only opens when sitting in the front of the car"),
 -- so for it this returns false and the caller gets in.
 local GUARD = { TruckBed = { "TrunkDoor", "DoorRear" }, TrunkDoor = { "TrunkDoor" } }
+-- The player walks into the part's area, as the game walks a player there
+-- (ISPathFindAction:pathToVehicleArea, which ISVehicleMenu uses for the hood).
+-- This used to teleport to the area's centre, but a teleport lands on the
+-- tile's corner and a truck bed's area is a thin strip behind the tailgate: on
+-- some runs the corner was just outside it, and the truck bed stayed refused
+-- with its door open (vehicle_reach 20260914T213522, 20260915T122922; probe and
+-- rule in docs/research/PZ_VEHICLE_AREAS_AND_ZONES.md). The door action queues
+-- behind the walk, so the door opens once the player is there.
+function L.walkToPartArea()
+    local v, part = L.vehicle, L.part
+    if not v or not part then return false, "no vehicle part" end
+    local area = part:getArea()
+    if not area or not v:getAreaCenter(area) then return false, "the part has no area" end
+    ISTimedActionQueue.add(ISPathFindAction:pathToVehicleArea(getPlayer(), v, area))
+    return true, tostring(area)
+end
+
+-- Whether the player stands inside the part's own area - the game's first
+-- condition for reaching a truck bed from outside (Vehicles.ContainerAccess).
+function L.inPartArea()
+    local v, part = L.vehicle, L.part
+    local area = part and part:getArea()
+    if not v or not area then return false end
+    return v:isInArea(area, getPlayer()) == true
+end
+
+-- Whether the player is still walking there: a path action in their queue. A
+-- walk still under way is slow, not failed; one that has ended with the player
+-- outside the area could not get there.
+function L.walking()
+    local q = ISTimedActionQueue.getTimedActionQueue(getPlayer())
+    for _, action in ipairs((q and q.queue) or {}) do
+        if action.Type == "ISPathFindAction" then return true end
+    end
+    return false
+end
+
+-- Where the player is against the part's area, for a failure message: the
+-- first walk-in failures (20260915T131626, 131829) left nothing to say why.
+function L.walkState()
+    local v, part, p = L.vehicle, L.part, getPlayer()
+    local area = part and part:getArea()
+    local c = v and area and v:getAreaCenter(area)
+    local q = ISTimedActionQueue.getTimedActionQueue(p)
+    local current = (q and q.queue and q.queue[1] and q.queue[1].Type) or "none"
+    local function r1(n) return tostring(math.floor((n or 0) * 10 + 0.5) / 10) end
+    local dist = c and math.sqrt((p:getX() - c:getX()) ^ 2 + (p:getY() - c:getY()) ^ 2)
+    return true, "player " .. r1(p:getX()) .. "," .. r1(p:getY()),
+        "area centre " .. (c and (r1(c:getX()) .. "," .. r1(c:getY())) or "none"),
+        "distance " .. (dist and r1(dist) or "?"),
+        "in area " .. tostring(L.inPartArea()),
+        "action " .. tostring(current)
+end
+
 function L.reachPart()
     local v, part = L.vehicle, L.part
     if not v or not part then return false, "no vehicle part" end
     if not GUARD[part:getId()] then return false, tostring(part:getId()), "reached from a seat" end
-    local area = part:getArea()
-    local c = area and v:getAreaCenter(area)
-    if not c then return false, "the part has no area" end
-    getPlayer():teleportTo(c:getX(), c:getY(), v:getZ())
+    local walked, why = L.walkToPartArea()
+    if not walked then return false, why end
     local opened = "none"
     for _, doorId in ipairs(GUARD[part:getId()] or {}) do
         local door = v:getPartById(doorId)

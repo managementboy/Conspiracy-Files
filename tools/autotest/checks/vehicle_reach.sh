@@ -38,10 +38,28 @@ for part in TruckBed GloveBox; do
     sleep 2
     shut=""
     if [ "$part" = TruckBed ]; then
-        # Only if it is open (owner, 2026-09-14): beside it with the door shut, refused.
-        shut="$(ev 'return CFVan.accessWhileShut()')"; sleep 1
+        # Only if it is open (owner, 2026-09-14): standing in its area with the
+        # door shut, refused. The player walks there, as a player does; a
+        # teleport could land just outside the thin truck-bed strip (2026-09-15).
+        ev 'return CFLoop.walkToPartArea()' >/dev/null
+        # A walk still under way is slow, not failed: wait while the player is
+        # walking, up to 40 s, and fail only if the walk ended outside the area.
+        # A flat 15 s failed two runs of three before the player arrived
+        # (20260915T131626, 131829), with nothing recorded to say why.
+        walk_start=$(date +%s)
+        while :; do
+            [ "$(ev 'return CFLoop.inPartArea()' | f 1)" = true ] && break
+            [ "$(ev 'return CFLoop.walking()' | f 1)" = true ] || break
+            [ $(( $(date +%s) - walk_start )) -lt 40 ] || break
+            sleep 0.5
+        done
+        walked=$(( $(date +%s) - walk_start ))
+        say "walk into the TruckBed area: ${walked}s, $(ev 'return CFLoop.walkState()' | cut -f2- | tr '\t' ' ')"
+        [ "$(ev 'return CFLoop.inPartArea()' | f 1)" = true ] || \
+            fail "the player could not walk into the TruckBed area after ${walked}s: $(ev 'return CFLoop.walkState()' | cut -f2- | tr '\t' ' ')"
         shut="$(ev 'return CFVan.accessWhileShut()')"
         [ "$(f 1 <<<"$shut")" = true ] || fail "could not stand at the TruckBed: $shut"
+        [ "$(f 3 <<<"$shut")" = true ] || fail "the shut-door test was not taken inside the TruckBed area: $shut"
         [ "$(f 2 <<<"$shut")" = false ] || fail "the TruckBed opened from outside with its trunk door still shut"
     fi
     reach="$(ev 'return CFLoop.reachPart()')"
@@ -54,6 +72,7 @@ for part in TruckBed GloveBox; do
             wait_true 8 'CFLoop.partAccess()' && outside=yes
         fi
     fi
+    inarea="$(ev 'return CFLoop.inPartArea()' | f 1)"
     seated=no
     if [ "$outside" = no ]; then
         ev 'return CFLoop.enterVehicle()' >/dev/null; wait_true 30 'CFVan.inVehicle()' && seated=yes
@@ -63,8 +82,8 @@ for part in TruckBed GloveBox; do
     ev 'return CFLoop.take()' >/dev/null
     taken=no; wait_true 20 'CFLoop.carried()' && taken=yes
     ev 'return CFLoop.exitVehicle()' >/dev/null; sleep 2
-    say "$part: from outside=$outside from a seat=$seated icon=$opened taken=$taken ($(f 3 <<<"$reach"))"
-    rows+=("$part: allowed while shut=$(f 2 <<<"$shut"), door opened outright=$forced, reached from outside=$outside, from a seat=$seated, loot-panel icon=$opened, taken=$taken ($(f 3 <<<"$reach"))")
+    say "$part: in its area=$inarea from outside=$outside from a seat=$seated icon=$opened taken=$taken ($(f 3 <<<"$reach"))"
+    rows+=("$part: allowed while shut=$(f 2 <<<"$shut"), shut test in its area=$(f 3 <<<"$shut"), door opened outright=$forced, player in its area after reaching=$inarea, reached from outside=$outside, from a seat=$seated, loot-panel icon=$opened, taken=$taken ($(f 3 <<<"$reach"))")
     # A truck bed from outside; a glove box only from a front seat (owner, 2026-09-14).
     if [ "$part" = TruckBed ]; then
         [ "$outside" = yes ] || fail "the TruckBed could not be reached from outside the van"

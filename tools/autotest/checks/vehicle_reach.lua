@@ -66,14 +66,16 @@ end
 -- are open". So the rule is proved from both sides: standing in the part's own
 -- area with its door still shut, the game must refuse the container; the reach
 -- stage then opens the door and the game must allow it.
+--
+-- The caller walks the player into the area first (CFLoop.walkToPartArea) and
+-- waits until CFLoop.inPartArea(). This used to teleport to the area's centre,
+-- which lands on a tile corner that can fall outside the thin truck-bed strip:
+-- a refusal then proved nothing about the door (2026-09-15). Returns whether
+-- the game allows the container, and whether the player was in the area.
 function V.accessWhileShut()
     local v, part = L.vehicle, L.part
     if not v or not part then return false, "no part" end
-    local area = part:getArea()
-    local c = area and v:getAreaCenter(area)
-    if not c then return false, "the part has no area" end
-    getPlayer():teleportTo(c:getX(), c:getY(), v:getZ())
-    return true, tostring(v:canAccessContainer(part:getIndex(), getPlayer()) == true)
+    return true, tostring(v:canAccessContainer(part:getIndex(), getPlayer()) == true), tostring(L.inPartArea())
 end
 
 function V.inVehicle() return getPlayer():getVehicle() ~= nil end
