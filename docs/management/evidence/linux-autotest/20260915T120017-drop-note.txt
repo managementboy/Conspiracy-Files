@@ -1,0 +1,8 @@
+Linux drop-to-note check 20260915T120017: PASS
+source: 05fa17b
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+case: 5	1:placed@102 E Maple St; 2:placed@102 Dewey St; 3:placed@102 Dewey St; 4:placed@102 E Maple St; 5:placed@102 Dewey St
+carried: 4, left lying: Access memo / 7C-41
+drop: true	5	NOTED 5
+second drop: true	0	ALREADY NOTED
+names from papers: true	1	Ines Kubiak	

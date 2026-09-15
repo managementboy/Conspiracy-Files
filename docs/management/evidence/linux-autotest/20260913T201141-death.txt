@@ -1,0 +1,9 @@
+Linux death check 20260913T201141: PASS
+source: d0c1800 + uncommitted mod changes
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+first survivor: Mercedes, carrying 2 case documents at death
+notebook before death: 2 1=835051129:document-1:Fuel account statement / RC-200 | 2=835051129:document-2:Maintenance log / RC-200
+new survivor: Robert; papers: papers issued: Robert's Papers
+notebook for the new survivor: 2 1=835051129:document-1:Fuel account statement / RC-200 | 2=835051129:document-2:Maintenance log / RC-200
+document taken back off the body: Fuel account statement / RC-200
+errors inside the mod: 0

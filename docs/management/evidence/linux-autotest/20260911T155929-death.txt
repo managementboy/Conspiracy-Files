@@ -1,0 +1,8 @@
+Linux death check 20260911T155929: PASS
+source: ee58ce3
+first survivor: Lucia, carrying 2 case documents at death
+notebook before death: 2 1=851092431:document-1:Goods receipt / AV-998 | 2=851092431:document-2:Second goods receipt / AV-998
+new survivor: Booker; papers: papers issued: Lucia's Papers
+notebook for the new survivor: 2 1=851092431:document-1:Goods receipt / AV-998 | 2=851092431:document-2:Second goods receipt / AV-998
+document taken back off the body: Goods receipt / AV-998
+errors inside the mod: 0

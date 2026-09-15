@@ -1,0 +1,12 @@
+Linux wallet ID check 20260914T192213: FAIL (recorded, but without its corpse provenance)
+source: 192cf62
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+wallet ID: 'ID Card: Tommie Holloway'; wallet stamp after carrying it off: corpse-item:1724685267
+notebook summary: Identity document - corpse
+notebook text:
+  I saw a document labelled "ID Card: Tommie Holloway" among a corpse's belongings.
+  The name on a document is a lead. It does not establish who owned the container or identify the body.
+  Observed at 102 E Maple St.
+loose ID on a body: PASS: 'ID Card: Tommie Holloway' recorded as Identity document - corpse
+errors inside the mod: 0
+screenshot: dev/eval/linux/runs/20260914T192213-wallet.png (not committed)

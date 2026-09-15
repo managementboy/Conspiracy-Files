@@ -1,0 +1,9 @@
+Linux death check 20260913T192328: PASS
+source: 00d42ea
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+first survivor: Morgan, carrying 2 case documents at death
+notebook before death: 2 1=2001837323:document-1:Public notice / GT-119 | 2=2001837323:document-2:Internal memo / GT-119
+new survivor: Jody; papers: papers issued: Jody's Papers
+notebook for the new survivor: 2 1=2001837323:document-1:Public notice / GT-119 | 2=2001837323:document-2:Internal memo / GT-119
+document taken back off the body: Public notice / GT-119
+errors inside the mod: 0

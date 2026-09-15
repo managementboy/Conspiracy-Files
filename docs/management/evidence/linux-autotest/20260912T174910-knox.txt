@@ -1,0 +1,9 @@
+FAIL knox.os - 2026-09-12T17:49:10+02:00
+commit: 34d2b58
+session: 20260912T174739
+opened:   true	FILES	1	nil	false	1
+names:    true	NAMES	0	false	false	2
+dates:    true	DATES	1	false	false	3
+to do:    
+FAIL: the address book is empty after looting an ID
+FAIL: TO DO did not open: 

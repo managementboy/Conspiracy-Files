@@ -1,0 +1,9 @@
+Linux death check 20260913T215129: PASS
+source: 1a7bf6f
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+first survivor: Benito, carrying 2 case documents at death
+notebook before death: 2 1=1123640871:document-1:Employment record / RC-812 | 2=1123640871:document-2:Union card / RC-812
+new survivor: Louis; papers: papers issued: Louis's Papers
+notebook for the new survivor: 2 1=1123640871:document-1:Employment record / RC-812 | 2=1123640871:document-2:Union card / RC-812
+document taken back off the body: Employment record / RC-812
+errors inside the mod: 0

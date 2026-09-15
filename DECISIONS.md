@@ -41,7 +41,7 @@ If a spike disproves a decision, technical reality wins: supersede the decision 
 | P2-Q51/Q52 | Save-affecting gameplay configuration is selected at world creation and stays fixed for that save. | Prevents mid-save story inconsistency. |
 | P2-Q54 / P4-R03 | **No-AI is the primary experience.** Runtime AI is optional enhancement only. | Core play cannot depend on API keys/network/cost. |
 | P2-Q58/Q59 | Optional AI narrative voice is in-character, funny, irreverent and fatalistic; humour remains present even in grim moments. | Defines the optional narration tone. |
-| P2-Q62/Q63 / P4-R13 | Onboarding is an in-fiction notebook/help page, not one-time quest-like popups. | Fits the fiction and reduces UI intrusion. |
+| P2-Q62/Q63 / P4-R13 / P4-R46 | Onboarding remains quiet, in-fiction guidance rather than a quest tutorial, but Help is a separate dark utility window opened from a labeled notebook-chrome control; it is not a notebook page or tab. No objective popup is introduced. | The owner-approved 2026-09-01 UI direction found that instructional copy inside the survivor-authored notebook breaks immersion. This supersedes only the earlier notebook-page placement, while preserving the non-quest onboarding intent. See [Issue #30](https://github.com/managementboy/Conspiracy-Files/issues/30). |
 | P2-Q69 / P4-R11 | Provenance is stored internally and may be shown with an optional toggle; approved AI-assisted authored assets are normal in-fiction content. | Makes interpretation auditable without cluttering default presentation. |
 | P2-Q74-Q78 / P4-R14 | Old material may archive by in-game time and resurface when relevant; re-scoring is event-scoped using affected indexes, never all-pairs polling. | Keeps long investigations usable within the runtime budget. |
 | P2-Q81/Q82 | Progression is emergent; the module never announces case/mystery completion. | Avoids turning PZ into a quest game. |
@@ -49,7 +49,7 @@ If a spike disproves a decision, technical reality wins: supersede the decision 
 | P2-Q108/Q109 | Preserve conflicting evidence and do not automatically reconcile it. | Contradiction is part of the conspiracy. |
 | P2-Q113 / P4-R15 | Identity nodes remain separate even when confirmed as the same person; organisation labels may refine in place. | Alias encounter history is valuable; organisation naming is a different problem. |
 | P2-Q118 | Original evidence facts remain immutable when interpretation changes. | Core integrity invariant. |
-| P2-Q142 / P4-R29 | One normal-play global keybind opens the notebook. Help lives inside it; diagnostics use debug tooling. | Minimises mod key conflicts. |
+| P2-Q142 / P4-R29 / P4-R46 | One normal-play global keybind opens the notebook. A labeled notebook-chrome control opens the separate Help utility window; diagnostics use debug tooling. | Minimises mod key conflicts while keeping system instructions outside the survivor-authored notebook fiction. |
 | P2-Q152-Q159 / P4-R08 | **T7 resolves the asset-text model as hybrid:** preserve vanilla inventory/container behaviour and persistent per-instance custom names, keep the authoritative world-specific title/description/body in item ModData, and render the body through the cooperative custom `Inspect` reader. Locked `Literature.customPages` may present deliberately short plain-text page artifacts, but are not the universal store. Never rely on `InventoryItem.description`, raw runtime `printMedia` keys, or key/map/generic native UI for body text. | T7 on Build 42.20.4 proved names, ModData and custom pages persist; descriptions do not, journal markup is literal/size-limited, runtime-shaped print media is unsafe, and non-literature native UIs do not consume the body. See `docs/research/T7_RUNTIME_ITEM_TEXT.md`. |
 | P2-Q161-Q163 | Randomness is low and never changes core conspiracy logic, canon-critical facts, major anchor relationships or tone. | Coherence over procedural novelty. |
 | P2-Q180/Q181 / P4-R07 | Normal play has no truth-dump diagnostics. Development/debug diagnostics may expose everything read-only. | Protects the central mystery. |
@@ -80,15 +80,15 @@ If a spike disproves a decision, technical reality wins: supersede the decision 
 | P4-R32 | Before swapping canonical ModData, recursively validate a staged full replacement: allow only string/number keys and string/number/boolean/plain-table values (nil means absence); reject cycles; reject multiply referenced tables or normalize/copy them so meaning cannot depend on alias identity; reject metatables, functions, userdata, threads and exposed Java objects; enforce maximum depth 64; validate schema and estimated serialized size against P4-R17; swap only after the complete replacement passes, preserving the last known-good canonical root on rejection. | T1 found silent dropping of unsupported values and keys, loss of shared-reference identity, and catastrophic whole-tag loss from a cycle even when `saveGame()` returned; pre-save validation is therefore mandatory. |
 | P4-R33 | **Any future general runtime-AI network transport must cross a Java/ZombieBuddy or external-companion boundary and remains outside v0.1.** Vanilla Lua may use DNS and fixed engine services, but it must not be treated as an arbitrary HTTP client. | T9 on Build 42.20.4 found no callable general GET, POST, TLS-control, timeout-control or asynchronous HTTP surface; the sole fixed HTTPS helper blocked `OnTick` for 312 ms and returned no usable response. See `docs/research/T9_NETWORK_EGRESS.md`. |
 | P4-R34 | **Future map-wide discovery is a rebuildable, non-persistent, filtered session process. Never synchronously scan the full map in normal play; queue work behind both a conservative record cap below the tested 100-record/frame boundary and an elapsed-time deadline under P4-R16, and retain only candidate facts needed downstream.** v0.1 continues to use curated locations. | T2 on Build 42.20.4 counted 96,414 building/room records; synchronous scans occupied 227–244 ms, 100 records/frame peaked at 2 ms, and a generic rich full-map Lua index retained an observed 90–102 MiB of JVM heap. Persisting or retaining the unfiltered registry is unjustified. See `docs/research/T2_MAP_ENUMERATION_COST.md`. |
-| P4-R35 | **Automatic location categorisation is advisory candidate discovery, not authoritative story truth. v0.1 and v1 use curated location catalogs. Future automation is room/area-first, preserves the exact matched-property/rule provenance, supports explicit per-map aliases/overrides, and remains filtered, rebuildable, non-persistent, and dual-bounded under P4-R34. Non-building landmarks require curated/object-specific handling.** | T3 on Build 42.20.4 found strong exact room labels for sampled bookstores and clinics/hospitals, but generic office/medical/communications labels were context-sensitive, a conservative 55-row matrix missed a large police HQ and communications-tower building, and no semantic non-building transmission zone existed. See `docs/research/T3_LOCATION_CATEGORISATION.md`. |
+| P4-R35 — catalog policy revised by P4-R53; technical findings retained | **Automatic location categorisation is advisory candidate discovery, not authoritative story truth. v0.1 and v1 use curated location catalogs. Future automation is room/area-first, preserves the exact matched-property/rule provenance, supports explicit per-map aliases/overrides, and remains filtered, rebuildable, non-persistent, and dual-bounded under P4-R34. Non-building landmarks require curated/object-specific handling.** | T3 on Build 42.20.4 found strong exact room labels for sampled bookstores and clinics/hospitals, but generic office/medical/communications labels were context-sensitive, a conservative 55-row matrix missed a large police HQ and communications-tower building, and no semantic non-building transmission zone existed. See `docs/research/T3_LOCATION_CATEGORISATION.md`. |
 | P4-R36 | **Deferred placement uses `LoadGridsquare` only to enqueue relevant curated bindings plus an `OnGameStart` catch-up; reconciliation scans the exact target for a deterministic item stamp before any add. Stage `placing` under P4-R32, create and stamp the item while detached, add that exact instance, verify count one, then stage `placed`. One target stamp repairs stale intent; more than one becomes `conflict`. Terminal pre-placement target loss becomes `unavailable`; mere unloading remains pending. After `placed`, zero in the original container triggers P4-R37 physical-identity reconciliation, not immediate loss.** | T4 proved exact-once pre-placement behavior; T5 proved a normally moved item is legitimately absent from that container while remaining available elsewhere. See `docs/research/T4_EXACT_ONCE_PLACEMENT.md` and `docs/research/T5_PHYSICAL_ITEM_IDENTITY.md`. |
 | P4-R37 | **Physical evidence identity is a save-scoped mod-owned string token, unique per intended physical instance and stamped in item ModData before exposure. Engine item IDs are diagnostics only. Placement outcome and physical availability are separate. One token match is `available`; confirmed destruction/complete covered absence is `unavailable`; unknown/unloaded coverage is `unknown`/`untracked`; two or more distinct items with one token are sticky `conflict`. Never automatically delete, choose, restamp or clear a conflict, and copy/transform paths must omit or deliberately replace the token.** | T5 on Build 42.20.4 preserved one token across inventory/container/floor/vehicle/reload and real corpse transfer, while both ModData copy methods created persistent duplicate identities on different engine items. See `docs/research/T5_PHYSICAL_ITEM_IDENTITY.md`. |
 | P4-R38 | **The PZ-facing asset adapter writes a persistent custom item name and validated plain ModData fields for resolved title/description/body. The domain/authored body remains authoritative and is never derived back from presentation pages. The custom `Inspect` reader is the default world-specific body surface; optional locked Literature pages are generated projections for short plain-text artifacts only.** | T7 separated durable storage from presentation and found no safe universal native body carrier. See `docs/research/T7_RUNTIME_ITEM_TEXT.md`. |
 | P4-R39 | **Curated location arrival uses bounded, debounced state sampling as its authority, not `OnPlayerMove` alone. At approximately 4 Hz, evaluate only referenced bindings, require two consecutive samples for the same logical square, apply exact binding-specific room/building/floor/basement/radius/rectangle/zone predicates, and persist a sticky confirmed location ID before emitting one domain event.** `OnPlayerMove` may only be an opportunistic wake-up. | T8 observed zero `OnPlayerMove` callbacks for scripted teleports, while 15-tick sampling confirmed the reached room/building/floor/outdoor/zone matrix in 248–344 ms with no false positives in the clean core and no duplicates on leave/re-entry. See `docs/research/T8_LOCATION_ARRIVAL.md`. |
-| P4-R40 | **If D1 was durably placed but remained undiscovered and later becomes conclusively `unavailable` only after T5/P4-R37 reconciliation, D2 may activate once as the fallback introduction.** Mere unloading, absence from D1's original container, `unknown`, `untracked` or `conflict` does not qualify. D1 never respawns. | Preserves a viable introduction after confirmed physical loss without turning incomplete identity coverage into a duplicate-clue trigger. |
-| P4-R41 | **Dead Air targets a regional journey of roughly 1,000–1,600 straight-line tiles between its two curated story locations, subject to live route and access verification.** | The two-sided investigation should require meaningful travel while remaining a regional survival journey rather than a map-spanning expedition. |
-| P4-R42 | **Prefer a medium local police station over the large headquarters. Candidate P2 at `(13206,3073)` is the first police site to inspect; the headquarters remains fallback if P2 lacks credible property/records containers.** This is a verification priority, not a final binding. | The local-station scale better fits the story, but physical container and access plausibility must decide the binding in live Build 42. |
-| P4-R43 | **Candidate R2 at `(13549,1572)`, the compact communications/news facility with a service garage, is the first relay site to inspect. It is provisionally paired with P2 at roughly 1,538 straight-line tiles and must pass live newsroom-character, access, boundary and container-plausibility checks.** This is not a final binding. | T3's checked-in live candidate matrix supplies enough provenance to prioritize inspection, but not enough evidence to bind either story Location. |
+| P4-R40 — superseded as specified by P4-R48/R49 | **If D1 was durably placed but remained undiscovered and later becomes conclusively `unavailable` only after T5/P4-R37 reconciliation, D2 may activate once as the fallback introduction.** Mere unloading, absence from D1's original container, `unknown`, `untracked` or `conflict` does not qualify. D1 never respawns. | Preserves a viable introduction after confirmed physical loss without turning incomplete identity coverage into a duplicate-clue trigger. |
+| P4-R41 — superseded as specified by P4-R48/R49 | **Dead Air targets a regional journey of roughly 1,000–1,600 straight-line tiles between its two curated story locations, subject to live route and access verification.** | The two-sided investigation should require meaningful travel while remaining a regional survival journey rather than a map-spanning expedition. |
+| P4-R42 — superseded as specified by P4-R48/R49 | **Prefer a medium local police station over the large headquarters. Candidate P2 at `(13206,3073)` is the first police site to inspect; the headquarters remains fallback if P2 lacks credible property/records containers.** This is a verification priority, not a final binding. | The local-station scale better fits the story, but physical container and access plausibility must decide the binding in live Build 42. |
+| P4-R43 — superseded as specified by P4-R48/R49 | **Candidate R2 at `(13549,1572)`, the compact communications/news facility with a service garage, is the first relay site to inspect. It is provisionally paired with P2 at roughly 1,538 straight-line tiles and must pass live newsroom-character, access, boundary and container-plausibility checks.** This is not a final binding. | T3's checked-in live candidate matrix supplies enough provenance to prioritize inspection, but not enough evidence to bind either story Location. |
 | P4-R44 | **T10 and any rerun use only the manual-GUI procedure.** No helper/injected agent, quarantine restoration, antivirus exclusion or bypass, alternate injection, synthetic input or computer control is permitted. The project owner manually launches/enters the disposable save and performs right-clicks while the pure-Lua probe only logs callbacks/assertions. | The completed manual run produced no security alert and did not reintroduce the abandoned injected-helper route; the earlier `runner.exe` alert provenance remains unknown. |
 | P4-R45 | **The supported cooperative asset-action surface is `OnFillInventoryObjectContextMenu` for player inventory and Ground/loot inventory panes.** Add privately keyed `Inspect`/`Mark Interesting` actions after vanilla construction, remove only stored mod callback identities, normalize/deduplicate selection, revalidate at activation, disable ambiguous/unowned/already-marked intent and wrap the boundary in `pcall`. Do not promise direct-world-item right-click actions. | T10's live manual matrix preserved vanilla and another additive listener, reached Inspect once and Mark intent once, persisted the disabled Mark state across reload, and contained injected faults. Direct photo-sprite right-click fired the world event with zero inventory subjects, while the Ground pane worked. See `docs/research/T10_COOPERATIVE_INSPECT.md`. |
 
@@ -96,16 +96,721 @@ If a spike disproves a decision, technical reality wins: supersede the decision 
 
 | ID | Current decision | Rationale |
 |---|---|---|
-| P4-R01 | v0.1 = one hand-authored thread, 6 documents, 3 identities, 1 organisation, 2 curated locations, 1 anchor + 1 fallback, journal + evidence list, manual Mark Interesting. | Smallest end-to-end proof of the experience. |
-| P4-R02 / P4-R26 | Content precedes generic schema; project owner writes/approves canonical content, with AI only assisting drafts. | Avoid schema-first design. |
+| P4-R01 — historical fixture scope; see P4-R53 | v0.1 = one hand-authored thread, 6 documents, 3 identities, 1 organisation, 2 curated locations, 1 anchor + 1 fallback, journal + evidence list, manual Mark Interesting. | Smallest end-to-end proof of the experience. |
+| P4-R02 / P4-R26 | Content precedes generic schema; project owner writes/approves canonical content, with AI only assisting drafts. **Approval part removed by P4-R97 (2026-09-14):** AI-written text ships without a separate approval step. | Avoid schema-first design. |
 | P4-R04 | Retrofit, migration and external content packs are not in v1. | De-risk core first. |
 | P4-R05/P4-R25 | Graph is v2; prototype separately with provisional 250 visible-node cap. | Biggest UI risk. |
 | P4-R22 | Death recap has a deterministic no-AI fallback; optional AI may enhance it later. | Death payoff cannot depend on network success. |
 | P4-R27 | Three concrete reward moments are defined in `docs/requirements/PLAYER_MOMENTS.md`. | Ensures the mod rewards the player without completion banners. |
 | P4-R28 | “Long inactivity” means a real-world gap between play sessions. | It is a return-player memory aid, not an in-world timer. |
 
-## Technical decisions intentionally pending spikes
+## Takeover reconciliation — 2026-09-05
+
+- **P4-R47 — notebook input:** the owner directed native X close controls and one configurable notebook open/close binding, with Escape reserved for the game's options flow. Do not assign a fixed function key. This supersedes the Escape-close expectation in earlier T12/browser material; controller mapping remains unverified. Direct owner instruction: 2026-09-05 11:18:36 UTC, archived in [owner provenance](docs/management/evidence/2026-09-05-takeover/owner-provenance.json).
+- **Content approval record:** `dead-air-r1` was owner-approved on 2026-09-05 with explanatory context, followed by a required D1/D4 timing correction. Approval is not pending; delivery/disclosure inconsistencies are tracked under Issue #26 and the [takeover audit](docs/management/PM_TAKEOVER_AUDIT_2026-09-05.md).
+- **Historical scope reconciliation (resolved by P4-R48 below):** the owner explicitly selected a Muldraugh test route and bounded per-save randomized placement on 2026-09-04. The current takeover still specifies two locations and P2/R2. Preserve both records; do not infer a final three-location shipping approval or silently supersede P4-R01/R40/R41–R43. Issue #28/#30 must settle route, motel membership and the relationship between order-independent evidence and fallback opportunity.
+
+## Remaining conditional spike
 
 - **T6:** never-loaded chunk detection, only if retrofit returns.
 
 See GitHub issues #1–#10 and `docs/research/SPIKE_TEMPLATE.md`.
+
+## Approved correction decisions — 2026-09-05
+
+The owner directed “I want to follow all your recommendations” after the takeover audit and explicitly answered “Use those three recommendations” for the police-arrival, availability-language and death-recap choices in this task. Prior Muldraugh direction is archived in the takeover owner-provenance record.
+
+- **P4-R48 — two-site Muldraugh candidate:** retain exactly two story locations, use the owner-selected Muldraugh electronics/relay site and police station, and return D4 to the relay location. The motel is excluded. This supersedes P4-R42/R43's P2/R2 inspection priority and P4-R41's 1,000–1,600-tile target for this candidate. The provisional centres are approximately 806 tiles apart; route/access plausibility and exact container/arrival predicates still require owner observation. P4-R01's two-location limit stands. Preserve the older P2/R2 checkpoint as history; do not resume it by default.
+- **P4-R49 — entry opportunity and physical eligibility:** all six distinct documents and the optional key are eligible at their own locations regardless of discovery order. D2 is not a duplicate copy of D1 and is not withheld until D1 is lost. Either can introduce the thread once; the first eligible D1/D2 discovery records anchor/fallback selection. Conclusive undiscovered D1 loss can select the fallback opportunity; mere absence, unknown coverage or conflict cannot. No D1 respawn. This narrows P4-R40 to fallback introduction bookkeeping, superseding any implied delayed D2 materialisation.
+- **P4-R50 — ordinary police arrival:** police-property confirmation is an ordinary journal entry. Only the existing eligible Major event classes remain.
+- **P4-R51 — availability copy:** normal players see plain-language consequences; internal available/unknown/untracked/unavailable/conflict identifiers remain diagnostic state. Immutable Evidence survives physical loss or conflict.
+- **P4-R52 — death recap deferred:** no death recap in v0.1. Actual death/corpse/save/reload integrity under E10 remains required; deferring prose does not waive lifecycle acceptance.
+- **Implementation boundary:** the corrected aggregate schema uses one validated canonical root. Incompatible development saves are refused without migration or overwrite. T11 and T12 wrappers exercise shared candidate modules with explicit differences recorded in their runbooks. Offline tests and source inspection do not accept their live gates.
+
+## Product direction restored — 2026-09-05
+
+**P4-R53 — dynamic investigations and automatic location selection.** The owner clarified that the intended mod uses a large database of possible locations and dynamically generates conspiracies. Manual owner approval of individual places is not a product requirement. The owner approved a bounded roadmap/prototype-specification increment; this does not authorize claiming that generation already exists.
+
+- Dead Air and its fixed Muldraugh bindings remain regression/test fixtures, not the final product model. P4-R01 and P4-R48's prescribed-location scope no longer define the active delivery destination or require an owner plausibility tour.
+- This supersedes P4-R35's curated-only v1 catalog policy, not T3's measured limitations. Catalog entries may come from filtered map metadata and explicit capability rules. Uncertain categories remain uncertain; automation cannot invent a police station or radio mast from a generic office label.
+- An automatically selected, technically eligible candidate does not require per-place owner approval. Automated predicates must validate location/container suitability for the template; the owner evaluates the generated investigation through play. Runtime placement, boundaries, persistence and performance still require technical verification.
+- Authored building blocks and constraints may generate different case facts, people, documents and connections for different new saves. Facts are consistent and fixed within a committed case. This extends earlier low-randomness/static-story rulings for the new prototype; it does not permit changing established evidence or contradicting PZ canon.
+- No-AI remains the complete primary experience. No graph, external content-pack platform, retrofit, migrations or multiplayer is added by this correction.
+- The next work increment is the specification in docs/design/GENERATED_INVESTIGATION_PROTOTYPE.md. Implementation follows separately in bounded steps; the existing hard-coded registries cannot be relabeled as a generator.
+
+**CPU clarification:** the owner reported that the observed CPU strain was unrelated to the mod. Remove that incident as a project blocker. This is an owner clarification, not a measured performance pass; the existing runtime budget and live performance criterion remain.
+
+## Initial location sources — 2026-09-05
+
+**P4-R54 — owner nominations plus technical enrichment:** the owner will supply 12 interesting places in Muldraugh. Use those as the prototype's real candidate set, with stable provenance, supplemented/enriched by existing map research as needed. This updates P4-R53's initial research-only catalog assumption, not its automatic-selection goal. Nominations do not establish observed storage or require owner inspection of containers. Synthetic test records remain separate and are ineligible by default. See docs/design/MULDRAUGH_LOCATION_INTAKE.md.
+
+## Investigation reach progression — 2026-09-05
+
+**P4-R55 — new conspiracy range grows with character survival time.** Owner approved these initial playtest defaults to keep early investigations close while the player establishes survival:
+
+| Completed days survived by the character | Maximum radius for newly generated conspiracies |
+|---|---:|
+| 0–3 | 250 tiles |
+| 4–10 | 500 tiles |
+| 11–20 | 1,000 tiles |
+| 21+ | 1,500 tiles |
+
+- Use character survival duration, not real-world time or the world's calendar age. Tier boundaries are 4, 11 and 21 completed days survived.
+- Apply the radius when generating a new case. Existing conspiracies retain their committed locations and facts as time advances.
+- If the allowed area has few suitable buildings, accept less category variety. Never silently expand beyond the early-game limit. Required technical suitability and distinct-site constraints still apply; if no valid case can be formed, defer generation.
+- These values are approved starting defaults, subject to playtesting, not proven travel or difficulty measurements.
+- The current manual T3 probe's explicit radius argument remains a development control; this decision records intended gameplay behavior and does not claim runtime progression is implemented.
+- The radius anchor for later cases (original spawn, current position or another reference) remains an implementation/design choice to resolve separately; this decision approves the distance progression only.
+
+See [Generated investigation prototype](docs/design/GENERATED_INVESTIGATION_PROTOTYPE.md#investigation-reach-progression).
+
+**P4-R55 implementation follow-up:** pure reach policy, `Generator.generateNew` filtering and automatic survival-based T3 default implemented. Boundary/scarcity/restoration tests pass (51 suite tests plus focused probe checks). Live automatic-radius verification and full gameplay integration remain pending; see generator design.
+
+## Nearby clue assistance — 2026-09-05
+
+**P4-R56 — proximity text:** owner requested varied overhead text when one tile from a clue. Implemented five tentative phrases using native Say text, same-floor one-tile proximity including diagonals, only for undiscovered physically present generated documents. Implementation defaults: 60-second global cooldown, one hint per container visit, rearm after moving more than three tiles away. No discovery is granted and no clue facts are revealed. Missing, duplicate or conflicted items remain silent. Tests pass; live display awaits owner check.
+
+## Player-facing location references — 2026-09-05
+
+**P4-R57 — addresses and recognizable place names, not debug coordinates.** Owner identified that ordinary players cannot use coordinate-based document leads. Player-facing generated documents, journal entries and leads must identify destinations through verified place names or real available addresses. Raw coordinates remain internal placement data and development diagnostics only.
+
+- T3 currently supplies room labels and geometry; the current extraction does not establish street names, house numbers or business signage. Do not invent an address or promote a generic office label into a named institution.
+- Prefer a verified place name/address. Where those are unavailable, a grounded landmark/directional description may provide a fallback only if it distinguishes the destination sufficiently for normal play. Generic descriptions shared by several nearby buildings are not a solved lead.
+- Naming requires provenance and must remain consistent across all documents referencing the same location. Technical IDs and exact container coordinates stay separate from presentation.
+- Existing saved case facts/text remain immutable. Any presentation correction for the active prototype must preserve the referenced location and case identity; do not silently regenerate the case or rewrite canonical evidence.
+- The current coordinate-heavy G2 prose is an acknowledged prototype defect. A naming/resolution layer and owner navigation check are required before ordinary-player playability can be accepted. This decision records the requirement; no real-address database or naming implementation is claimed.
+
+## Town addressing baseline and player Help — 2026-09-05
+
+**P4-R58 — stable town baselines with player-visible addressing rules.** Owner approved using Main Street and/or First Street as town numbering baselines where suitable, and a fixed named alternative baseline where they are absent or unsuitable. The selected baseline must be documented for each town and explained in player Help. Do not infer that every town has those streets from the preliminary spawn-proximity check.
+
+- Implement the agreed fictional mod address system: fixed town baselines, increasing block ranges away from the baseline, hundred-number ranges for successive defined street blocks, odd/even numbers on opposite sides, stable building addresses independent of case seed and candidate selection. Detached sheds/garages share their main property's address where that relationship is established.
+- Adopt the previously researched Louisville parity as the mod convention: north side odd/south side even on east-west roads; east side odd/west side even on north-south roads. Curved roads and ambiguous frontage need explicit deterministic rules before assignment.
+- This supersedes P4-R57's prohibition on fictional house numbers only for the explicitly labelled, consistent mod addressing system. Do not claim these are real-world or original vanilla addresses. Street names continue to require map provenance.
+- Numbers must be visible to ordinary players at buildings or on their map; a number in a document alone is insufficient. Help must explain how to read them and identify the chosen baseline for supported towns.
+- Town baseline choices, full building/frontage indexing and visible address display remain to be implemented. The current Help describes this as planned, rather than pretending numbered buildings already exist. Existing case identities and discoveries remain unchanged.
+
+## Discovery markers and knowledge-limited house labels — 2026-09-05
+
+**P4-R59 — map annotations follow player knowledge.** Owner requests a map marker for each found clue at its finding location, plus house-number labels only for buildings already exposed by the game's map knowledge. Reading a town map should allow labels throughout the area that map actually reveals.
+
+- Capture the actual finding/source location; do not substitute the player's later reading position. Do not automatically mark all placement targets or disclose unfound evidence. Where original finding location is unavailable, do not invent it.
+- Clue markers and journal knowledge persist after dropping the physical item and across save/reload. Repeated inspection does not duplicate markers. Multiple clues at one location remain individually identifiable without unreadable stacked labels.
+- Assign house addresses independently of exploration and conspiracy selection; reveal their labels according to native map knowledge. House labels do not reveal clue presence.
+- Follow the area actually revealed by opening/reading a paper map, not merely possessing an item named Muldraugh Map. Do not reveal additional terrain or buildings to make numbering easier. Player annotations must be preserved.
+- Installed ISMap:initMapData calls MapUtils.revealKnownArea, which uses WorldMapVisited:setKnownInSquares for the map's bounds. Map symbol APIs are present. Exact known-area read/masking granularity and annotation persistence still require implementation and live verification; these capabilities are not accepted from source inspection alone.
+- This is an approved requirement, not a claim that house numbering or map annotations are already implemented. P4-R58 baseline/address assignment work remains prerequisite for house labels.
+
+## Writing tools gate clue-map annotations — 2026-09-05
+
+**P4-R60 — record knowledge immediately; annotate the map only with a writing tool.** Owner requires automatic clue markers to depend on a suitable pen/pencil in the player's inventory. Implementation may follow with the clue-marker increment; this is not implemented in the address trial.
+
+- Journal discovery and captured actual finding location persist independently of writing-tool possession. Existing map marks remain when the tool is removed.
+- Without a qualifying tool, queue known clues for map annotation; never lose or relocate their original finding positions.
+- On acquiring a qualifying tool, catch up all known, unmarked clues with valid recorded finding locations. Removing the tool pauses further writing; acquiring one again resumes the backlog.
+- Catch-up is idempotent across repeated inventory changes and save/reload. No duplicate markers and no disclosure of undiscovered clues. Missing historical finding locations are not guessed from the current player position.
+- Match the installed vanilla game's writing-tool eligibility/inventory handling after source verification; do not assume an exhaustive item list yet. Use bounded updates rather than continuous full inventory/world scans.
+- This requirement concerns clue annotations. Knowledge-limited house-address labels remain map information governed by P4-R59.
+- Explain the writing-tool requirement and deferred catch-up in player Help when implemented.
+
+## Economical task delegation — 2026-09-05
+
+**P4-R61 — owner-approved focused worker strategy.** Primary handles PM, integration and difficult bugs; routine independent work goes to one short-context worker at a time, normally Terra Low (Luna for simpler scopes). Higher Astra effort is reserved for demanding reviews; Astra Low is preferred for routine primary work when explicitly set through the app. Do not claim self-reconfiguration. Delegate compact scopes without full-history forks, share authoritative project files, test once at the proper level, and review before integration. All tasks consume the shared allowance; no guaranteed savings. See AGENTS.md for operating instructions. Owner authorized recording and immediately applying this strategy.
+
+
+## Successive investigations and story tone — 2026-09-05
+
+**P4-R62 — owner accepted all three offered recommendations.** Later investigations use the player's current position at creation as their reach anchor. Availability uses a minimum in-game time gap and a small concurrent-case cap, without requiring completion of a previous case. Authored conspiracies keep a grounded, ambiguous cover-up tone. Existing cases keep their committed anchors, reach, places and facts.
+
+The owner accepted the policy directions, not specific numerical gap/cap values or individual draft prose. Offline prototypes may take explicit tunable policy inputs; do not claim an unoffered number is owner-approved. Retention must not silently erase learned evidence. Native integration and individual new story drafts retain their existing review/playtest gates.
+
+## Pre-1.0 save compatibility — 2026-09-06
+
+**P4-R63 — no backwards compatibility obligation before version 1.0.** Owner explicitly removes old-save compatibility from the design requirements until the mod reaches 1.0. Breaking data/schema changes may require a fresh save. Do not build or retain fallback readers, upgrade adapters, migrations or compatibility tests solely to support saves created by older mod versions. Prefer one current authoritative schema and simpler current-build paths.
+
+This supersedes earlier requirements to preserve cross-version generated saves or retain a legacy canonical fallback in the successive-case design. Historical work and its test evidence remain history; existing code need not be ripped out merely to record this policy, but subsequent storage changes may remove the compatibility scaffolding. Cross-version preservation is no longer a delivery gate.
+
+Save/reload integrity within the current supported build, failed-write protection, immutable evidence within an ongoing supported save, validation, bounded save budgets and duplicate prevention still apply. State plainly when a build requires a fresh save. Do not silently reset, erase or reinterpret user saves. This decision is not authorization to delete saves, and does not itself define the eventual 1.0 compatibility contract.
+
+## Development allowance reserve update — 2026-09-06
+Owner lowers the reserve from 30% to 25% weekly allowance remaining. Checkpoint and stop development at 75% used. This overrides previous reserve thresholds in task handoffs; economical sequential development continues. No authorization to consume reset credits or resume paused automations.
+## Richer story and varied physical evidence — 2026-09-06
+
+**P4-R64 — owner requests the next playable expansion.** Evidence descriptions must be more substantive: explain what was found, add story and context, and offer what the survivor could infer. Keep observations separate from tentative interpretation; preserve grounded ambiguity and avoid spoilers from undiscovered evidence. This extends prose and content, not authoritative inference of an unproven conspiracy.
+
+The next playable test must include keys, diaries, notebooks and newspaper clippings, expanding beyond dispatch copies/files toward further conspiracy-related evidence. Use distinct appropriate physical item forms and story roles; maintain established inspection, discovery/source capture, notebook and map-marker behavior. Proposed additional forms are photos, receipts, annotated maps, letters, logs and recordings, subject to verified engine support and story usefulness. Working locks or audio playback are not automatically promised by adding keys or recordings. Implementation/testing plan: docs/management/NEXT_PLAYABLE_MILESTONE.md. These are requirements, not a claim of completed development.
+
+## Development allowance reserve update — 2026-09-06, latest
+Owner now sets the stop threshold to 5% weekly allowance remaining (95% used), superseding the previous 25% reserve and all earlier thresholds. Continue economical sequential development and checkpoint at this threshold. No reset credits or paused automation use is authorized.
+
+## Corpse identities and observed cards — 2026-09-06
+
+**P4-R65 — owner-approved identity/story direction.** For the first conspiracy, a story may assign a spawned character an occupation independently of clothing; an electrician need not wear work clothes. Assigned occupation is authored world data, not a claim that a probe discovered a reliable native occupation. Commit story facts consistently; do not overwrite established case facts when sampling characters again.
+
+Corpses are candidate locations for planting conspiracy evidence and can provide the opening discovery. Track/revalidate suitable loaded corpse candidates internally before any future placement; no automatic journal revelation from candidate enumeration. The current known probe candidate is at10792,10287,0 (descriptor name Shauna Strickland); this is an encounter location, not a home address or proof of card ownership. Corpse placement itself remains a separate implementation slice.
+
+Generate a journal observation when the player actually sees an ID or credit card on a corpse or inside an opened container, including a wallet. Seeing a closed wallet or merely approaching a corpse does not reveal the cards inside it. No pickup or right-click is required if the card is visibly listed. Record only information exposed by the observed item and its source; a card's name does not by itself establish the corpse's identity. Reopening, transferring and save/reload must not duplicate the same observation. Hidden descriptor names/occupations and unopened nested contents must not leak into journal knowledge. Current-build validation and shared save budget still apply.
+
+## Automatic start and named tickets — 2026-09-06
+
+**P4-R66 — owner requests automatic successive investigations now.** The first investigation's opening evidence must be placed inside the house the player currently occupies, not a random nearby building. If indoors/eligible storage is unavailable, wait rather than silently choosing another building. Later cases appear automatically near the player's current position under P4-R62 timing/reach/cap policy; no console commands required for the gameplay flow. Keep learned cases intact and persist timing with case creation. Numeric test pacing remains a configurable implementation choice, not a previously approved owner number.
+
+Owner notes parking and speeding tickets also carry names associated with zombies/corpses. Include visible named tickets as identity-document observations under P4-R65's same knowledge gate; capture displayed labels, not unseen descriptor facts. Installed item scripts verify Base.ParkingTicket and Base.SpeedingTicket; actual owner-name behavior remains subject to native item testing.
+
+Owner adds business cards as another possible name source. Installed literature.txt declares Base.BusinessCard, Base.BusinessCard_Personal and Base.BusinessCard_Nolans. Include these in visible-document observations; the card label is evidence of what was seen, not automatic proof of the corpse's name or profession.
+
+Owner requests native-like notebook window memory: remember placement/size and whether left open or closed. Implement per-save player UI preferences, including active Journal/Evidence tab. Capture layout while open, restore after runtime readiness, and do not carry another save's window state across loads.
+
+**P4-R67 — spread clues across containers.** Owner rejects discovering several investigation clues together in one container. Newly generated investigations assign each clue to a different physical container, retaining the required first-house opening. If there are insufficient suitable containers, defer creation instead of silently stacking clues. Already committed placements are not reshuffled or duplicated. Native acceptance remains required.
+
+**P4-R68 — variable evidence and local people.** Owner explicitly rejects seven fixed clues and fixed evidence types. Earlier object examples were suggestions, not a mandatory checklist. Audit installed game objects for mystery roles and actual usable mechanics; choose evidence count/types around each coherent mystery, required connections and available placements. No new numerical min/max approved yet. The three/four building split is an implementation limitation to remove with this change, not a design requirement.
+
+Nearby zombie/corpse names and occupations should participate in generated mysteries. Reuse available existing names; occupations may be authored consistently per P4-R65 where native profession is default/unknown. Keep chosen world facts stable and reveal them only through observed evidence. Clues may begin without a known person and acquire inferred connections later. Owner example: unnamed clue in101 Main St; later a key found on a named zombie actually opens that house, providing a connection from person to place and earlier clue. Record observed key provenance, verified key/lock relationship, and derived interpretation separately. Access supports association, not necessarily residence, ownership or authorship. Preserve original clue text and discovery context; add new journal interpretation rather than retrospectively inventing a name on the original object. Implement/test functioning native key relationship before claiming it works.
+
+## The mod may change what the world already contains — 2026-09-11
+
+**Decision (owner):** "we have broken that rule a lot since we started
+developing this mod. So remove that constraint from our project."
+
+**Withdrawn:** "never rewrite what a player's world already contains" - the rule
+that the mod only ever placed its own evidence and left vanilla loot alone.
+
+**Why it no longer held.** It had already been broken, deliberately, several
+times: a nearby zombie is given the case person's name and an ID card
+(CasePerson), placed evidence sets its own display category, and the survivor's
+papers are a vanilla photo album renamed. Each was the right call for the
+investigation, and a rule that is routinely broken for good reasons is not a
+rule; it is a trap for whoever reads it next.
+
+**What this allows.** Filling an empty vanilla diary with a looted person's
+story; naming and equipping zombies; changing vanilla items where that serves a
+case.
+
+**What still holds, and is a different rule.** Never delete, reset or rewrite a
+player's SAVE, and never do it for them. That concerns their save file and is
+unaffected by this decision.
+
+**The cost, stated so it is chosen rather than forgotten.** Once the mod edits
+vanilla items, a player can no longer assume that anything they find is simply
+the game's. For an investigation mod that ambiguity is arguably a feature. It
+does mean the notebook's own restraint matters more, not less: an edited item
+may still only ever say what it says, never what it proves.
+
+## Linux auto-testing, commits and where decisions live — 2026-09-11
+
+**P4-R69 — Claude tests in the real game on the Linux development machine.**
+Owner: "auto-testing by you (claude) can be done on the machine", and asked
+whether those runs count as evidence: "absolutely". Claude may launch and drive
+the game unattended there with `tools/autotest/` (see
+`docs/management/LINUX_AUTOTEST.md`), and the reports in
+`docs/management/evidence/linux-autotest/` are evidence. This narrows "no live
+game interaction while the owner is away" to the Windows play machine. Attended
+Windows sessions keep their role: how the game feels, Workshop delivery, and
+owner acceptance.
+
+**P4-R70 — the Linux PC is dedicated to this mod.** Owner: "this PC is only for
+development of this mod. I could not care less if you use the display." Claude
+may use its screen, pointer and focus during test runs, and tune its game
+settings for testing (speed and screenshot readability over frame rate; owner:
+"fps should not be as important to you as for a real player"). The original
+settings are kept in `~/Zomboid/options.ini.before-autotest`.
+
+**P4-R71 — commit without asking.** Owner: "always auto commit when you think it
+is appropriate." Claude commits finished, verified work on the current branch
+without asking first. Pushing, merging and publishing keep their existing rules.
+
+**P4-R72 — owner decisions are stored in the project.** Owner: "store my
+decisions in our project." Decisions go into this file (and a pointer into
+`AGENTS.md` where agents must see them), so every agent and session reads the
+same record, not one assistant's private memory.
+
+## Weekend autonomy — 2026-09-11
+
+**P4-R73 — keep working until the task list is done.** Owner: "always continue
+with tasks until you finish them", "dont wait for my confirmation on continuing
+testing", "you have the whole weekend to work through all possible scenarios".
+Claude works through the test catalogue (`docs/management/TEST_CATALOGUE.md`)
+without asking between steps, minds token usage, and splits work into
+subagents/threads where that is cheaper or faster.
+
+**P4-R74 — defects found by tests are fixed.** Owner chose: fix, re-test with
+the same test, commit. Questions of game design or tone are not decided by
+Claude; they are written up for the owner.
+
+**P4-R75 — push the branch.** Claude pushes `integration/v0.1-corrected-candidate`
+after each verified batch. No merges to `main`.
+
+**P4-R76 — publish passing builds.** A build that passes the Linux boot check
+may be published to the unlisted Workshop item (version bumped each time), so
+the Windows play machine has the latest build.
+
+## Old cases after a rules change — 2026-09-11
+
+**P4-R77 — no compatibility for cases made under older rules.** Every change
+to how cases are built bumps the generator revision, and a save's case made
+under an earlier revision is set aside on load (not deleted). Claude proposed
+keeping old cases playable; owner: "no, all new". A playtest after a rules
+change starts a fresh game. Do not build revision compatibility, and do not
+offer it again; say plainly when an update needs a new game.
+
+## Evidence for a settled fact — 2026-09-12
+
+**P4-R78 — a settled fact cites a command or an archived log, never a
+recollection.** Anything written down as established about the engine, a build
+or a live result must carry a citation that another session can check: a
+command that can be re-run (`tools/autotest/...`, `tools/kahlua/run.sh`,
+`lua5.1 test/...`), or a file under `docs/management/evidence/` or
+`dev/playtest-logs/`. Attribution to a person is not a citation. If only a
+recollection exists, write it as a claim to test and say what would settle it;
+do not build on it. Owner endorsed the rule as stated after a task handoff
+asserted an in-game confirmation the owner did not recall giving — the claim
+happened to be true, which is exactly why it went unchallenged.
+
+## Reading surfaces — 2026-09-12
+
+Answers to the three open calls at the foot of
+`docs/design/READING_SURFACES.md`, asked and answered in one sitting.
+
+**P4-R79 — the device replaces the window.** Owner chose "device replaces the
+window" over the handoff's own assumption that the window becomes a desk. There
+is one reading surface and the survivor carries it. The desk/board surface in
+that document's Step 3 is therefore **not** to be built, and the staging drops
+to: projection surface argument, Papers as the surface, then the device as a
+real item. Consequence to hold onto: a single surface can never lay the case out
+larger than what the survivor is holding, so anything the old window could only
+show at 1000x680 must survive the move or be dropped on purpose, not by
+accident.
+
+**P4-R80 — losing the device costs convenience, never the case.** The ledger
+stays the record; the device is a reader. Combined with P4-R79 this creates an
+obligation, because with one surface a lost device is a mod the player cannot
+read: **there must always be a way back to reading.** Whatever form that takes
+(a replaceable common item, a craftable, a spawn guarantee) is unsettled and is
+flagged for the owner before the device becomes a real item. Not built on the
+assumption that it resolves itself.
+
+**P4-R81 — a heading is earned by a return, not by a count.** WP6 wins over
+WP2 where they disagree. A place earns a heading only when the player comes
+back to it having learned something since the last visit; two finds in one
+sweep earn nothing. Consequence accepted deliberately: the place view is flat
+for the first hour of a save, so it must say so in the survivor's voice rather
+than render as an empty panel.
+
+## Knox.OS, the four open calls — 2026-09-13
+
+The four decisions left for the owner at the foot of
+`docs/management/HANDOFF_2026-09-13.md`, asked and answered in one sitting.
+Two changed nothing; two changed the build.
+
+**P4-R82 — the type stays at 23 rows.** The device screen is 225 x 297 and the
+type is sized for the original 160-wide canvas, so it renders at roughly 71% of
+the proportion the design intends and reads small. Three ways out were put to
+the owner — redraw the glass to 320 wide so doubled type lands pixel-perfect,
+double the type inside the current art (23 rows falls to 10), or scale by ~1.4
+to fit exactly and accept a soft pixel font. Owner chose **none of them: keep
+23 rows**. Information density beats legibility here. Consequence to hold onto:
+this is a known, accepted readability cost, not an oversight — do not "fix" it
+in a later pass, and if the case art is ever redrawn for another reason, the
+320-wide option becomes free and should be raised again.
+
+**P4-R83 — a new survivor is still issued an organiser.** Considered too
+generous now that finding one is the continuity mechanic, and it was put to the
+owner alongside stopping the issue outright, or issuing it switched off and
+flat. Owner chose to **keep issuing at spawn, unchanged**. A survivor who can
+never read the mod in their first hour is the worse failure. `O.give` is already
+idempotent per player, so this stays exactly as built.
+
+**P4-R84 — the lamp stays, and now costs battery.** Held POWER lights the glass
+as a real Palm's backlight did. Owner kept it but rejected it being a free
+toggle: it now drains the cell **on top of** the engine's own drain for the
+device being on. A full charge, lamp alone, lasts `O.LAMP_HOURS` = 10 in-game
+hours, and the lamp switches itself off when the cell goes flat. Charged
+against in-game time rather than ticks, and the drain function returns
+immediately when the lamp is not lit, so this does not reintroduce the
+per-tick cost stripped out on 2026-09-12.
+
+**P4-R85 — the clock is removed.** This reverses the 2026-09-12 ruling recorded
+in `OrganiserScreen.lua`, which argued a digital organiser plausibly has a
+clock. Owner ruled the vanilla rule wins: knowing the time costs you a watch,
+and a reading device must not quietly buy that slot back. The launcher header
+now carries only the battery and the category. `K.status` keeps its `time`
+parameter and skips it when nil, so the header can carry a clock again if this
+is ever reversed.
+
+## A dead battery costs access, never data — 2026-09-13
+
+**P4-R86 — the organiser never loses the survivor's writing.** The first cut
+of volatile memory did what the hardware really did: a flat cell cleared the
+machine's notes and to-dos for good, because a Palm's RAM was battery-backed
+and a dead cell was a dead cell. The owner reversed it on sight. A dead battery
+now takes the stores **offline** — a flat machine shows you nothing — and a
+fresh cell brings every entry back, with the boot screen saying "Restoring from
+backup ...".
+
+The reasoning is that the realism worth having is the interruption, not the
+punishment. Losing an evening's notes to a battery is the kind of authenticity
+that makes people stop playing, and it buys nothing the temporary blackout does
+not already buy.
+
+Consequence, and the reason this is written down rather than just fixed: the
+destructive version is **not cancelled, it is deferred**. It becomes a hard
+mode once the mod has a PC to sync the organiser to, because only then is
+losing your data the consequence of a choice — you did not sync — rather than
+of a battery the player never saw coming. See `docs/design/KNOX_OS.md`.
+
+This extends P4-R80 rather than replacing it. That decision said losing the
+device costs convenience, never the case. This says flattening the device does
+not even cost the convenience permanently.
+
+## The Fieldnote keys, and the wear — 2026-09-13
+
+**P4-R87 — two keys do the work, two stay blank on purpose.** The Fieldnote
+housing puts two big keys left of the rocker and two right of it. The design
+package named all four (NOTE / TASK / ADDR / FIND) and the handoff asked which
+two should become program keys now that the rocker takes up and down. Owner
+ruled: the **far left key is HOME** and the **far right key is BACK** — the two
+ends of the bank, the two verbs the device cannot work without — and the **two
+inner keys stay blank** until play shows what they are for. Both end keys get
+new icons: a house for HOME (a Palm's own Home silkscreen was a house) and a
+left arrow for BACK.
+
+The point of the rebuild, in the owner's words, was to make the buttons
+flexible for development, and that is what the blank pair buys. They keep their
+moulded faces and still depress, but they print nothing and do nothing. They do
+dispatch `unassigned`, so a press lands in the play log while the owner works
+out what he keeps reaching for.
+
+Consequence to hold onto: this reverses nothing, but it does retire the design
+package's own four words. The symbol layers C15 and C16 are gone from the
+manifest and `DESIGN.md` carries a divergence note, because the manifest is
+authoritative and the package's tables now describe a device that does not
+exist. The reason a blank key beats a labelled one here is the same reason the
+program-jump mapping was dropped earlier the same day: a key that prints a word
+and does something else is worse than a key that prints nothing.
+
+**P4-R88 — the wear scuffs stay.** Six sparse one-pixel scuffs on the exposed
+housing, on by default per the manifest. Owner kept them, and flagged that
+**blood is wanted on the device later** — not now. Recorded so that arrives as
+a deliberate addition to a housing that already admits wear, rather than as a
+surprise on a pristine case.
+
+## Size is two controls, not one — 2026-09-13
+
+**P4-R89 — the device resizes and the type resizes, independently.** This
+**supersedes P4-R82**, which kept 23 rows because the choice was framed as
+rows-versus-legibility at one fixed size. The premise was wrong. The handoff
+then re-raised it as 52-versus-36 characters, which was the same mistake in
+new clothes; the owner rejected the framing outright.
+
+A real PalmPilot had a **font size selector with three sizes**, and a physical
+device has a physical size. So the device gets both: the PDA can be **pulled
+bigger and smaller like a window**, and the player picks their **own font
+size** inside it. Asked whether dragging should magnify the text or fit more
+of it, the owner's answer was **both** — they are two separate controls and
+neither substitutes for the other.
+
+What makes this work is that the two are genuinely independent: the glyph set
+drawn is the product of the two, so how much text fits depends **only** on the
+font setting, and the device size only changes how big the whole thing is.
+
+| font size | characters/line | rows | glyph set at device 1x / 2x / 3x |
+|---|---|---|---|
+| small | 78 | 35 | 1x / 2x / 3x |
+| medium | 38 | 16 | 2x / 4x / 6x |
+| large | 25 | 9 | 3x / 6x / 9x |
+
+Medium is the size the face was actually cut for. Small is the dense setting
+and is only comfortable once the device is drawn large; that is the player's
+business, not ours.
+
+**Both controls step in whole numbers, and that is not negotiable.** Every
+rectangle and every glyph on this device is pixel-exact at integer scales. A
+freely-dragged 1.4x would soften the pixel face and misalign the housing
+geometry — which is precisely the blurry-upscale problem the Fieldnote rebuild
+was built to escape. A drag handle therefore **snaps** to 1x / 2x / 3x. On a
+3200x1894 screen those are the three that fit; 4x would need a 2480-pixel-tall
+screen.
+
+Consequence, and the reason this is written down rather than just built: it
+enlarges WP1. Knox.OS's drawing context currently uses one number for both the
+device scale and the glyph set, so those have to come apart; a font-size
+preference has to be stored per player and given somewhere to be changed; and
+the auto-fit that opens the device has to stop rounding 1.52 down to 1x. The
+font itself is already done — `build_palm_font.py` now emits all six scales the
+grid needs.
+
+## The words on the plastic — 2026-09-13
+
+**P4-R90 — the silkscreen legends use the device's own typeface, not the
+game's.** The design package specified built-in UI Small for the key legends,
+and that made them the only thing on the entire device whose size came from the
+player's machine rather than from us. The symptom was the unresolved label bug:
+on the owner's 3200x1894 machine the labels drew on top of their icons, while
+the same code on the development machine measured them 3-4px clear. A UI
+font-size setting was the leading hypothesis and was never proven; a metrics
+script was staged to read the owner's real font metrics out of his own session.
+
+Put the choice to the owner and he took it: the legends are drawn in the pixel
+face the mod already ships, at every scale the device can be drawn at.
+
+This does not work around the bug, it removes the category. There is nothing
+left to measure: the face has a fixed 11px cell with its baseline at `ascent`,
+every capital inks rows 2..8, so a legend's position is arithmetic and every
+machine draws it identically — 5px clear of its icon, everywhere. It also
+retires the `MeasureStringYOffset` + `MeasureStringYReal` baseline rule that
+cost most of a day to derive from `AngelCodeFont.getHeight`'s bytecode, and the
+staged metrics script with it. **The owner's numbers are no longer needed and
+that eval slot is free.**
+
+Consequence to hold onto: real silkscreen lettering was printed sans, not a
+screen face, so this is a small deliberate loss of fidelity bought with total
+machine independence. It is also a divergence from the design package's text
+contract, recorded in `DESIGN.md` alongside the key changes. And it means the
+legends scale with the DEVICE, not with the player's font size — they are on
+the plastic, not on the screen.
+
+## Five calls on the device and the story — 2026-09-14
+
+**P4-R91 — the shared week is real.** Every generated case is dated inside the
+same days of early July 1993, and the same few names recur across cases. That
+was an artefact of a single-case design reused for a ten-case campaign, and it
+made attentive players see one operation behind all of it with no payoff. Put
+to the owner as "keep them separate" or "make it real"; owner: **make it
+real.** The coincidence becomes the connecting thread. How visible that thread
+is to the player is still to be settled with the owner before content is
+written. The owner also restated the standing rule: while the mod is below 1.0,
+every rules change means a new game (P4-R77).
+
+**P4-R92 — the editorial pass is approved.** The corrected key help, the
+footers, the two voice lines and the tooltip wording may ship.
+
+**P4-R93 — "Open Survivor Notebook" is renamed.** The device replaced the
+notebook (P4-R79), so the fallback window's button no longer calls itself one.
+
+**P4-R94 — the organiser always opens small, then remembers.** The first open
+is the smallest size on every screen. Once the player changes the size, that
+size is kept.
+
+**P4-R95 — the drag corner gets a visible grip.** Resizing by dragging the
+bottom-right corner existed but nothing showed it. A grip is drawn there, as
+part of the design manifest like every other piece of the housing.
+
+**P4-R96 — the thread is the relay memo, and the records point it out.**
+Settles the visibility question P4-R91 left open. The owner chose that the
+records point the week out, then — told the relay memo could not be found
+while generated cases run — chose to put the memo in. The approved Dead Air
+memo (Relay 31, "EFFECTIVE 30 JUNE THROUGH 08 JULY") is placed as one extra
+paper in the **first** case of a game, at that case's second site, taking no
+story role. Once it has been found, any record dated inside those nine days
+gets a short note saying so, as a maybe; the memo is never noted against
+itself and nothing is said before it is found. Its words are read from
+`Content.lua`, not copied. Later cases are unchanged, so games already under
+way keep their cases but never see the memo — **the memo needs a new game.**
+The paper's description, its two readings and the note are new prose, reviewed
+by the owner in play (P4-R97).
+
+**P4-R97 — the approval rule for AI-written text is removed.** ADR-0002 said
+development-time AI may draft but a human must approve canonical assets
+before they ship. Owner, 2026-09-14: "that is a very old rule. remove it."
+AI-written text now ships with the build like any other change, and the owner
+reviews it in play. Removed from ADR-0002, `AI_PROVENANCE.md`,
+`AI_BOUNDARIES.md`, the glossary and the premise notes; the rest of ADR-0002
+(no-AI play is primary, runtime AI optional) stands. Dated approval records
+elsewhere are history and stay as written. The `contentStatus` labels inside
+saved cases are left alone: they are part of each case's byte-for-byte
+rebuild, so changing them would set aside every case in play for a label.
+
+## Live Windows test — 2026-09-14
+
+**P4-R98 — no free window resize.** Dragging the corner zooms the organiser in
+whole steps. The owner had pictured pulling the window freely, into a wide
+shape; seeing it, the owner called that a bad idea. Dropped.
+
+**P4-R99 — machine size decides how much fits; text has four sizes.** Owner
+feedback in play: 1x is already big on a 4K screen, a 0.5x size is needed for
+smaller screens, and the jump from Small to Medium text is too big. Offered a
+picture of the options, the owner chose to **keep Small and add a size between
+Small and Medium** (four text sizes), and that the **machine size controls how
+much fits** while the text keeps the size the player picked — which is what
+makes a 0.5x machine possible with every text size. This **amends P4-R89**:
+both controls stay, but machine size no longer magnifies the text.
+
+**P4-R100 — DATES opens a day as the Date Book did, and the launcher has a
+clock for a survivor with a watch.** The owner sent photos of the real Palm
+home screen and Date Book day view and approved both. A day now shows the date
+and its week across the top (tap a day to open it) and a line per hour, eight to
+six widened to take in earlier or later finds, each find on its hour's line and
+opening its record. The clock returns to the launcher, which reopens P4-R85 only
+as far as P4-R85 allows: **it shows only while the survivor carries a watch or
+an alarm clock**, the vanilla clock's own rule, so the organiser still never
+buys back what the game charges a watch for. Say so if the clock should show
+without one.
+
+**P4-R101 — a case has one person, and her body carries one card.** Found in
+play: the first case named its person Roy Hale and gave a nearby zombie that
+name and an ID card, but a second system bound the case to the first named
+card seen on any corpse (Abbie Tidwell) and gave that body the house key; and
+the game, which empties a zombie's pockets as it dies and rolls a body's loot
+from its name when first opened, put "Roy Hale" on two of its own ID cards.
+Owner approved the fix. **Only a card carrying the case's own person's name
+binds the case to a body.** When that person's body appears it is **marked
+searched** and holds **exactly one card with her name** — the clothes she wore
+and nothing the game rolls. Still open: the name is given to whichever zombie
+is nearest, so a body can wear clothes that do not match it.
+
+**P4-R103 — the case person survives a reload.** The game never saves an
+ordinary zombie: on load it builds a new one from a position and an outfit id,
+with no name, no mark and empty pockets, so the named zombie vanished at every
+save (CN-01). A dead body is saved whole. So each case now keeps **one small
+record in the world save** (`ConspiracyFiles.CasePeople`): her name, where she
+was last seen (refreshed every few seconds while she is loaded, only once she
+has moved), the outfit id and sex of the zombie carrying her, and whether she
+is dead. After a load, a sweep of the loaded zombies finds none carrying her and
+**dresses the zombie nearest her last position as her again** — name, mark and
+exactly one card — preferring the same outfit id, then the same sex. A case
+never binds a second person, and once she is **dead no zombie is dressed as her
+again**; her body carries her. **Name and body now match:** every invented name
+has a sex, and she is given the nearest zombie of that sex, the nearest of any
+only when none is in reach (logged). A name met on a corpse takes any body.
+Accepted limit: the outfit is preferred, not guaranteed, so after a load she
+can look different — the game may not recreate a zombie in her clothes near
+that spot.
+
+**P4-R102 — the survivor's words in white, the tag in the coloured bubble.**
+Owner in play: "switch arround the speach text. colored and white. it makes more
+sence." The white halo now carries the survivor's line and holds the longer
+display; the coloured speech bubble carries the short fact (`Noted`,
+`Two records disagree`, `Something nearby`). Clue hints follow the same split. A
+player object with no halo gets the words in the bubble, so a line is never
+lost. Lines that fire together are shown one after another.
+
+Found alongside it, not decided: a named case zombie does not survive a save and
+reload. CN-01 (`case_person.sh`) fails at that step on the code before P4-R101
+and after it alike, so it is older than that fix and still open.
+
+**P4-R99, as built.** Four text sizes: Small (11 px), Normal (17 px, the face
+re-cut at 24 pt so it stays sharp), Medium (22 px) and Large (33 px). Machine
+sizes 0.5x, 1x, 1.5x, 2x and 3x; a bigger machine shows more of the text and
+the type keeps the size chosen. SETUP's Text and Machine lines open Palm popup
+lists, as in the owner's photo: tap a line to choose, tap outside to leave it,
+the rocker steps through it. A saved text size is kept by name; saves from
+before keep Small, Medium and Large. **A save first opens the machine at 1x,
+and from then on at the size it was last left at** - owner, 2026-09-14: "We
+load at 1x and remember the last close size in the save." This settles P4-R94
+for the new sizes: 1x rather than the new half size, because at 0.5x only Small
+or Normal text leaves a readable page. The size is written to the save's own
+ModData the moment it changes, so a crash does not lose it either.
+
+## Answering the outside design review — 2026-09-15
+
+An outside reviewer judged that the mod risks replacing repetitive looting with
+repetitive evidence collection. Each criticism was checked against the code and
+answered in a plan (artifact "Answering the Monotony Review"). The owner chose:
+
+**P4-R107 — fix the stories first, then freeze the pool.** The audit found 30
+defects in the twenty premises and the shared documents: dates and durations
+that do not add up, and above all "agreeing" cases whose response still reasons
+as if the records disagree. All 30 are fixed, a consistency test renders every
+premise in both versions for every possible set of dates, and no new premise or
+new organiser program is added until the first new-style case ships. Changes
+case text, so a new game.
+
+**P4-R108 — case dates are spread across the calendar.** Every case used to be
+dated 2-6 July 1993, which put every dated paper inside the relay memo's nine
+days and made its date note say nothing. Dates now spread across the weeks
+before the outbreak, so a paper landing in the memo's week is a real signal.
+New game.
+
+**P4-R109 — one settled fact per case, about objects and places.** Amends "a
+lead is never proof" for exactly one kind of statement: a fact the game itself
+confirms - a found key opening a door, a count the player took from an open
+container. People, motives, which record is true, and the Knox Event stay open,
+and the row says what it does not establish. Conflicting records are still
+never reconciled (P2-Q108/109).
+
+**P4-R110 — cases may point at survival opportunities that already exist.** A
+case may lead to a locked building, a vehicle or a generator the world already
+holds. The mod still creates no loot and evidence is still never better than
+loot; condition, fuel and access are the game's.
+
+**P4-R111 — finished cases are archived, so the tenth case is not the last.**
+A finished case shrinks to its notebook rows and last-seen lines outside the
+live case budget, so a save keeps getting new cases after ten.
+
+**P4-R112 — the survivor asks themself, in the first person.** Owner,
+2026-09-15, on the proposed end-of-case questions: "We should use the player's
+voice when writing: What do you make of it? Should be What do I make of it?"
+Questions the organiser puts to the player, and the answers it writes back into
+the journal, are the survivor thinking - "What do I make of it?", "Which reading
+do I believe?", "Who do I think matters here?", "What would I check next?", "I
+can't tell" - never a narrator or a quiz master addressing "you".
+
+**P4-R113 — "What do I make of it?" steers the next case.** Owner's own idea
+for ending a case, 2026-09-15: give the player a set of questions about how
+they see the mystery, "and we run from there". The organiser offers a short
+first-person set when a case's papers are all found - which reading I believe
+(the case's two readings, or "I can't tell"), who I think matters (the case's
+people and organisation, or nobody), what I would check next (follow the
+person, check the place against its records, listen for it, leave it cold).
+Owner: **"It should steer"** - the answers shape the next case: that person or
+organisation returns, that way of investigating is used, and the evidence leans
+toward testing the reading chosen, never toward confirming it. Nothing is ever
+marked right or wrong. **Changing one's mind: yes** - answers stay revisable
+until the next case has been built from them. This amends P2-Q27 for case
+generation only: what the mod generates next may follow the player's theory;
+the world itself still does not react to what the player knows. The answers are
+saved inside the case they shape, as met names are, so a case still rebuilds
+from its seed. Not built yet; when it is offered (only at a case's end, or
+also at any time) is still open.
+
+**P4-R114 — the organiser keeps the survivor's headings.** Owner, 2026-09-15
+("Fix loose ends", on the recommendation to keep them). FILES on the organiser
+dropped every heading that was not one of its labelled fields, for the look of
+a Palm record, so WHAT IT MIGHT MEAN and the relay memo's DATE NOTE ran straight
+on from the paper's own words and what a document says could not be told from
+what the survivor makes of it. The organiser now shows the same headings as the
+notebook; the labelled fields (WHEN, FOUND, WHERE, OBJECT, NOTES) are unchanged.
+No new game.
+
+**P4-R115 — a body's clothes may disagree with the papers on it.** Owner,
+2026-09-15, asked whether the unbuilt half of USING_GAME_ASSETS Phase 1 is still
+wanted: "yes that would hint toward a mistery. Why does a firefighter have a
+police badge?" Where the trade a corpse is dressed for and the trade a document
+on the same body names are both known and differ, the notebook says so - as the
+survivor's question, never an answer: not stolen, not a disguise, not a second
+job. Both trades come from closed, hand-written tables (outfit id to trade,
+document type to trade); anything not listed stays silent, as outfit lines
+already do (WP3). Agreement is not remarked on. Not built yet.
+
+**P4-R116 — several papers are noted at once by dropping them on the
+organiser.** Owner, 2026-09-15, in play: "being able to inspect several
+evidences by marking them and dragging them onto the pda on top of right click
+inspect." Items selected in any inventory pane and let go on the open organiser
+are noted together: carried papers the ordinary way, papers in a container
+where they lie (as right-click Inspect already does with the organiser open),
+ordinary items ignored, papers already noted left alone. The footer says what
+happened (NOTED 3, ALREADY NOTED, NOT CASE EVIDENCE). Right-click Inspect is
+unchanged.
+
+**P4-R106 — how a car's containers are reached.** Owner, 2026-09-14: "The globe
+box only opens when sitting in the front of the car", and a truck bed or trunk
+is reached from outside, "only if they are open". Placement may still put a
+clue in either; the checks now reach them exactly that way (vehicle_reach:
+truck bed refused while its door is shut, allowed once open, from outside;
+glove box from a front seat).
+
+**P4-R105 — the organiser reads in either hand.** Owner: "the left hand should
+leave the PDA open." Held in the off hand it stays open beside a one-handed
+weapon; a two-handed weapon fills both hands and puts it away. HELP says so.
+
+**P4-R104 — a finished case's papers can still be found.** Owner in play: "I
+lost my files somewhere?" A case completed, retirement dropped its placement
+details, and nothing could say where its papers were any more. A finished
+case's documents now keep **where they were last seen** in the save (one short
+line per document, in the words the notebook already used). While a case is
+finished, the mod still looks for its papers in the survivor's inventory and
+bags and in the containers the loot panel is showing, every ten seconds, and
+updates that line at most once a minute per document. The notebook shows it as
+"Last seen: …" and PDA FILES shows a WHERE line for every document, live or
+finished. Neither ever says a document is lost. The Papers album is now found
+inside bags too, so filing keeps working with it in a backpack.

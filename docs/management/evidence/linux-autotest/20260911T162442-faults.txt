@@ -1,0 +1,13 @@
+Linux fault containment check 20260911T162442: FAIL
+source: 2dc0f91
+each function made to throw for 15 s of play, then restored:
+  WorldAccess.resolve: inspected document 1 (Delivery schedule / LD-323); 119 mod lines in 15 s; most repeated x24; game answering: true; case valid: true
+  WorldAccess.count: inspected document 2 (Utility record / LD-323); 10 mod lines in 15 s; most repeated x1; game answering: true; case valid: true
+  AddressMap.labelForBuilding: inspected document 3 (Route review / LD-323); 200 mod lines in 15 s; most repeated x32; game answering: true; case valid: true
+  DiscoveryLog.record: inspected document 4 (clay tile (1 of 6)); 22 mod lines in 15 s; most repeated x2; game answering: true; case valid: true
+  SaveBudget.check: idle (no documents left); 0 mod lines in 15 s; most repeated x1; game answering: true; case valid: true
+  GeneratedRuntime.inspect: idle (no documents left); 0 mod lines in 15 s; most repeated x1; game answering: true; case valid: true
+  ClueMarkers.update: idle (no documents left); 4 mod lines in 15 s; most repeated x2; game answering: true; case valid: true
+  IdentityObservations.add: opened 4 fresh bodies; 7 mod lines in 15 s; most repeated x6; game answering: true; case valid: true
+recovery afterwards: no document left to try
+FAIL: AddressMap.labelForBuilding: log spam, one message x32 in 15 s: 	Lua((MOD:Conspiracy-Files: Dead Air)).step(Scheduler.lua:27)

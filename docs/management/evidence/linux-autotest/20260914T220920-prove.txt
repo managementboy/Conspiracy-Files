@@ -1,0 +1,9 @@
+Linux mutation proof 20260914T220920
+worktree: /home/elkin/cf-wp345 at 81c7777 The case body's searched flag is read back by the mod and logged; the check asserts that reading
+
+baseline case_body: FAIL (exit 2)
+
+BASELINE FAILED body-searched (case_body): the clean check fails, so this mutation proves nothing
+
+caught 0 of 1
+worktree clean afterwards: yes

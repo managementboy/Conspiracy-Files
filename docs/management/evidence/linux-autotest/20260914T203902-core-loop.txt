@@ -1,0 +1,23 @@
+Linux core loop check 20260914T203902: FAIL
+source: ded3683
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+first case: 7 documents, all found and inspected through the right-click menu:
+  1. Transfer notice / GT-752, in shelves, room hall, floor 0 (container icon clicked: yes)
+  2. Receiving roster / GT-752, in vehicle GloveBox (locked), room vehicle, floor 0 (container icon clicked: no)
+  3. File review / GT-752, in shelves, room livingroom, floor 0 (container icon clicked: yes)
+  4. Wheat seed sack, marked Ines Kubiak, in counter, room kitchen, floor 0 (container icon clicked: yes)
+  5. glasses round shades (1 of 16), in shelves, room livingroom, floor 0 (container icon clicked: yes)
+  6. Business Card: Ines Kubiak, in counter, room kitchen, floor 0 (container icon clicked: yes)
+  7. Access memo / 7C-41, in counter, room kitchen, floor 0 (container icon clicked: yes)
+notebook entries: 7; case completion reported: yes
+map marks without a pen (written/pending/missing): 0/6/1
+map marks after a pen, case already retired: 6/0/1
+second case appeared (gap removed): yes
+errors inside the mod: 0
+FINDING: document 2 (Receiving roster / GT-752) is in a LOCKED car: a player needs its key or a broken window
+FINDING: document 2 (Receiving roster / GT-752): the game would not open its vehicle GloveBox (locked) from where the harness stood
+FINDING: relay memo date notes: memo found=true, dated in its week=3, carrying the note=3
+FINDING: last seen after completion: 7 of 7 documents, e.g. 'Carried.'
+FAIL: without a pen, expected 7 pending marks: 0	6	1
+FAIL: with a pen after completion, expected 7 written marks: 6	0	1
+screenshot: dev/eval/linux/runs/20260914T203902-map.png (not committed)

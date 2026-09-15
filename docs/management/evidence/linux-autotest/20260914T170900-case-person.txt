@@ -1,0 +1,9 @@
+Linux case person check 20260914T170900: FAIL
+source: 2d08f01 + uncommitted mod changes
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+case person: Warren Nagy
+binding: bound Warren Nagy to a body near 10840,10148 with an ID card
+zombie before reload: true Warren Nagy ID Card: Warren Nagy 10800,10104 generated:421868382:case
+after save and reload: no: no bound case person loaded
+card on the body in the notebook: not tried
+FAIL: after a reload the case person is gone (zombie name, card or mark not saved)

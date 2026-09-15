@@ -1,0 +1,10 @@
+FAIL knox.os - 2026-09-12T17:43:45+02:00
+commit: 0f89367
+session: 20260912T174027
+opened:   true	FILES	1	nil	false	1
+names:    true	NAMES	0	false	false	2
+dates:    true	DATES	1	false	false	3
+to do:    true	TO DO	1	false	false	4
+FAIL: the address book is empty after looting an ID
+FAIL: errors inside the mod: General      f:1631 at KahluaThread.flushErrorMessage      > -------------------------------------------------------------
+General      f:1631> Lua((MOD:Conspiracy-Files: Dead Air)).safe> Exception thrown  |  attempted index: new of non-table: null at KahluaThread.tableget(KahluaThread.java:1430).

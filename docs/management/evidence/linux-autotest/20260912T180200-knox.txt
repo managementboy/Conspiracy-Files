@@ -1,0 +1,11 @@
+FAIL knox.os - 2026-09-12T18:02:00+02:00
+commit: 65c758e
+session: 20260912T175819
+opened:   true	FILES	1	nil	false	1
+names:    true	FILES	1	true	false	1
+dates:    true	FILES	1	false	false	1
+to do:    true	FILES	1	false	false	1
+FAIL: a tap on the NAMES icon did not open it: true	FILES	1	true	false	1
+FAIL: a tap on the DATES icon did not open it: true	FILES	1	false	false	1
+FAIL: a tap on a record did not open it
+FAIL: TO DO did not open: true	FILES	1	false	false	1

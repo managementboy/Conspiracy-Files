@@ -1,0 +1,8 @@
+PASS hardware - 2026-09-12T23:42:09+02:00
+commit: 4064542
+session: 20260912T233754
+auto-off:     60s on=true  180s on=false
+lamp drain:   2 in-game hours: 1.0 -> 0.800000011920929
+volatile:     notes 1->0  to-dos 1->0
+ledger:       0 -> 0 (must not change)
+boot notice:  LECTROMAX DATALINE 160 | KNOX.OS 1.0 | (c) 1993 Knox Systems |  | Address book .... reading | Case ............ preparing | Records ......... 0 | Memory .......... 128K free | ** MEMORY LOST ** | notes and to-dos cleared |  | Working. You can play; | this finishes by itself.

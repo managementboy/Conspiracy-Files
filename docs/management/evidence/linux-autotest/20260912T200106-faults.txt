@@ -1,0 +1,14 @@
+Linux fault containment check 20260912T200106: FAIL
+source: 249a6f2
+each function made to throw for 15 s of play, then restored:
+  DiscoveryLog.record: inspected document 1 (Timesheet / R-741); 8 mod log lines and 1 caught errors in 15 s; most repeated line x1; game answering: true; case valid: true
+  SaveBudget.check: inspected document 2 (Gate log / R-741); 15 mod log lines and 14 caught errors in 15 s; most repeated line x2; game answering: true; case valid: true
+  GeneratedRuntime.inspect: inspected document 3 (Press clipping / R-741); 4 mod log lines and 1 caught errors in 15 s; most repeated line x1; game answering: true; case valid: true
+  ClueMarkers.update: inspected document 4 (Tagged key / R-741); 11 mod log lines and 1 caught errors in 15 s; most repeated line x1; game answering: true; case valid: true
+  ClueMarkers.draw: opened the world map; 1 mod log lines and 1 caught errors in 15 s; most repeated line x1; game answering: true; case valid: true
+  WorldAccess.resolve: stood by unfound document 5; 1 mod log lines and 10 caught errors in 15 s; most repeated line x1; game answering: true; case valid: true
+  WorldAccess.count: stood by unfound document 5; 0 mod log lines and 0 caught errors in 15 s; most repeated line x1; game answering: true; case valid: true
+  AddressMap.labelForBuilding: opened the notebook; 1 mod log lines and 52 caught errors in 15 s; most repeated line x1; game answering: true; case valid: true
+  IdentityObservations.add: opened 4 fresh bodies; 0 mod log lines and 0 caught errors in 15 s; most repeated line x1; game answering: true; case valid: true
+recovery afterwards: document 5 inspected (leather kneepad (1 of 8))
+FAIL: AddressMap.labelForBuilding: 52 caught errors in 15 s (a retry every frame?)

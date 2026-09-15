@@ -1,8 +1,10 @@
 # THREAD-001 — Dead Air
 
-**Status:** Complete authored v0.1 content candidate. Development-time AI assisted this draft; human approval is required before it is treated as canonical shipped content under `docs/design/AI_PROVENANCE.md`.
+**Status:** Development-time AI-assisted authored content; owner approval with explanatory context is verified for 2026-09-05 under `docs/design/AI_PROVENANCE.md`. See [approval record](../../docs/reviews/DEAD_AIR_CONTENT_REVIEW_2026-09-03.md). Issue #26 remains open for context delivery/disclosure and projection-copy reconciliation; this is not live integration acceptance.
 **Content revision:** `dead-air-r1`
 **Purpose:** one hand-authored narrative thread that proves the v0.1 investigation loop before any generic content-pack schema exists.
+
+**Correction, 2026-09-05:** six bodies preserved; display names, contextual introductions and journal summaries now match Content.lua. P4-R48 selects two Muldraugh sites with D4 at relay; exact live binding is pending. P4-R49 preserves order-independent physical eligibility. See the correction report.
 
 ## Authorial boundary
 
@@ -79,7 +81,7 @@ The player may enter through either story location and may never see all six doc
 
 ## Story locations (2)
 
-Exact vanilla map targets remain deliberately **unbound** until live inspection. The intended geography is a regional journey of roughly 1,000–1,600 straight-line tiles, subject to live route and access verification. v0.1 uses hand-curated targets; T3 candidate evidence prioritizes inspection but does not create story truth, while T4/T8 still govern placement and arrival mechanics.
+Exact vanilla map targets remain deliberately **unbound** until live inspection. P4-R48 selects the Muldraugh electronics/relay and police candidate, approximately 806 straight-line tiles apart, subject to live route and access verification; it supersedes the earlier P2/R2 priority and distance target. v0.1 uses hand-curated targets; T3 candidate evidence prioritizes inspection but does not create story truth, while T4/T8 still govern placement and arrival mechanics.
 
 ### `dead-air:location:relay-office` — Relay Site 31 service office
 
@@ -87,11 +89,11 @@ Exact vanilla map targets remain deliberately **unbound** until live inspection.
 
 **Real PZ location type to map later:** a believable transmission/utility communications site or small service building associated with a mast/tower, fenced utility compound, radio infrastructure or equivalent hand-curated vanilla location. It needs plausible storage for service paperwork and tools, not a purpose-built conspiracy bunker.
 
-**Provisional inspection priority:** candidate R2 at `(13549,1572)`, the compact communications/news facility with a service garage recorded in T3's checked-in live candidate matrix. Inspect it first for convincing newsroom character, access, usable boundaries and plausible containers. R2 is not a final binding.
+**Provisional inspection priority:** owner-selected Muldraugh electronics/relay centre (10614,9604,0). Verify the exact shelves, access and room/floor/boundary negatives before binding.
 
 **What the player knows before reaching it:** if led from the police side, only `Relay Site 31`, `south service road`, a fenced communications mast/utility structure, and CSS ticket `93-0714`. This should read as a landmark-style lead, not a quest marker.
 
-**What confirms it:** physical arrival at the selected hand-curated location plus matching story dressing/asset context, subject to T8's eventual arrival-detection result.
+**What confirms it:** physical arrival at the selected hand-curated location plus matching story dressing/asset context, using T8/P4-R39's bounded, debounced, exact-predicate arrival mechanism.
 
 **Associated documents/items:** D1, D3, D4; optional ordinary B-37 key relevance.
 
@@ -103,7 +105,7 @@ Exact vanilla map targets remain deliberately **unbound** until live inspection.
 
 **Real PZ location type to map later:** a hand-curated vanilla police station with a believable desk, records room, property/evidence area or office container.
 
-**Provisional inspection priority:** prefer a medium local station and inspect candidate P2 at `(13206,3073)` first. The large headquarters remains fallback only if P2 lacks credible property/records containers. P2 is not a final binding.
+**Provisional inspection priority:** owner-selected Muldraugh police centre (10637,10410,0); owner previously confirmed inside at (10638,10411,0). Exact containers and arrival boundaries still require observation.
 
 **What the player knows before reaching it:** if led from D1, Rourke's portable receiver was taken by county police and entered as property record `4471`. Candidate coordinates are development provenance, not player-facing knowledge or a final station binding.
 
@@ -115,14 +117,15 @@ Exact vanilla map targets remain deliberately **unbound** until live inspection.
 
 # Six documents
 
-The six document Assets below are the complete v0.1 authored document set. Each has a separate real-world purpose and voice. The implementation mechanism for showing the text remains T7/T10-dependent.
+The six document Assets below are the complete v0.1 authored document set. Each has a separate real-world purpose and voice. T7/T10 established persistent custom names plus validated ModData and the cooperative inventory-pane `Inspect` reader boundary; production integration remains outstanding.
 
 ---
 
-## D1 — CSS Field Service Ticket 93-0714
+## D1 — Cumberland Signal Services Field Service Ticket 93-0714
 
 **Document ID:** `dead-air:asset:service-ticket-93-0714`  
-**Display name:** CSS Field Service Ticket 93-0714  
+**Display name:** Cumberland Signal Services Field Service Ticket 93-0714
+**What this is:** A field-service ticket from Cumberland Signal Services (CSS), the private communications contractor that maintained the relay equipment.
 **Author/source:** Cumberland Signal Services; field entries signed `M. Rourke`  
 **Approximate date:** overnight 1–2 July 1993  
 **Physical form:** grease-smudged three-part carbon service ticket; technician copy  
@@ -155,10 +158,10 @@ Spare exciter cabinet B-37
 
 Work performed:
 23:52  Checked normal county channels. No fault found.
-00:11  Installed customer-supplied frequency-control package marked
+23:58  Installed customer-supplied frequency-control package marked
        "7C-41" in spare exciter per dispatch instruction.
 00:24  Key test, five seconds. No voice path requested.
-00:31  Dispatch instructed: LEAVE 7C ENABLED. DO NOT ENTER FREQ. ON COPY.
+00:31  Dispatch instructed: LEAVE 7C-41 ENABLED. DO NOT ENTER FREQ. ON COPY.
 00:47  Carrier observed on reserve channel. No voice, tone or station ID.
 00:53  Carrier repeated.
 00:59  Carrier repeated.
@@ -171,7 +174,7 @@ Work performed:
 03:41  County unit arrived at south gate with typed hold request.
        My portable monitor was taken for property intake.
        No equipment removed from relay cabinet.
-04:05  Dispatch: leave 7C package installed. Close ticket as routine setup.
+04:05  Dispatch: leave 7C-41 package installed. Close ticket as routine setup.
 
 Parts:
 1 customer-supplied frequency-control package .......... N/C
@@ -209,10 +212,11 @@ The carrier could be a test signal, telemetry, interference, a procedural exerci
 
 ---
 
-## D2 — Property Record 4471
+## D2 — Police Property Record 4471
 
 **Document ID:** `dead-air:asset:property-record-4471`  
-**Display name:** Police Property Record 4471  
+**Display name:** Police Property Record 4471
+**What this is:** A police intake form for a seized radio receiver. The initials C.S.S. identify its communications maintenance contractor; this record does not spell out the company name.
 **Author/source:** county police property desk; intake signed Sgt. Dana Pike  
 **Approximate date:** 2 July 1993, early morning  
 **Physical form:** property/evidence intake card with stapled continuation strip  
@@ -291,10 +295,11 @@ The receiver may have been legitimately held, informally seized, or taken becaus
 
 ---
 
-## D3 — CSS Invoice / Stock Transfer 9327
+## D3 — Cumberland Signal Services Invoice / Stock Transfer 9327
 
 **Document ID:** `dead-air:asset:invoice-9327`  
-**Display name:** CSS Invoice / Stock Transfer 9327  
+**Display name:** Cumberland Signal Services Invoice / Stock Transfer 9327
+**What this is:** An invoice and stock-transfer sheet from Cumberland Signal Services (CSS). It records the equipment and authorization code used at Relay Site 31.
 **Author/source:** Cumberland Signal Services billing/stock office  
 **Approximate date:** 2 July 1993  
 **Physical form:** dot-matrix invoice/stock transfer on tractor-feed paper  
@@ -363,10 +368,11 @@ Vale may be CSS staff, the customer, a liaison or merely the name attached to an
 
 ---
 
-## D4 — Rourke Notebook Page
+## D4 — Torn Page from Rourke's Work Notebook
 
 **Document ID:** `dead-air:asset:rourke-notebook-0703`  
-**Display name:** Torn Page from Rourke's Work Notebook  
+**Display name:** Torn Page from Rourke's Work Notebook
+**What this is:** A private notebook page by M. Rourke, a field technician for the communications maintenance contractor identified as C.S.S. It describes the Relay Site 31 job outside the official paperwork.
 **Author/source:** M. Rourke  
 **Approximate date:** 3 July 1993  
 **Physical form:** torn lined pocket-notebook page, written in pencil and blue pen  
@@ -383,7 +389,7 @@ Vale may be CSS staff, the customer, a liaison or merely the name attached to an
 Keeping this one off the official pad because the official pad has developed
 a sudden allergy to events.
 
-Thursday night dispatch says "Vale wants 7C live before midnight."
+Thursday night dispatch says "Vale wants 7C-41 live before midnight."
 I ask WHICH Vale. Answer: "the one on the authorization."
 Excellent. Very helpful. I will repair radios by horoscope next.
 
@@ -427,10 +433,11 @@ Rourke is writing privately and may be more candid, but private notes are not au
 
 ---
 
-## D5 — Temporary Access and Reporting Procedure
+## D5 — Temporary Access and Reporting Procedure — Relay 31
 
 **Document ID:** `dead-air:asset:access-memo-7c`  
-**Display name:** Temporary Access and Reporting Procedure — Relay 31  
+**Display name:** Temporary Access and Reporting Procedure — Relay 31
+**What this is:** An administrative memo on Cumberland Signal Services (CSS) letterhead, addressed to local patrol, property, and communications supervisors.
 **Author/source:** Cumberland Signal Services administrative copy; signed `H. Vale`  
 **Approximate date:** 30 June 1993  
 **Physical form:** typed one-page memo on CSS letterhead; photocopy with a faint top edge  
@@ -509,10 +516,11 @@ This could be legitimate emergency-communications bureaucracy, a contractor over
 
 ---
 
-## D6 — Pike Shift Note
+## D6 — Property Desk Shift Note
 
 **Document ID:** `dead-air:asset:pike-shift-note-0705`  
-**Display name:** Property Desk Shift Note  
+**Display name:** Property Desk Shift Note
+**What this is:** A handwritten note by Sgt. Dana Pike, the police property supervisor who logged the receiver under record 4471.
 **Author/source:** Sgt. Dana Pike  
 **Approximate date:** 5 July 1993  
 **Physical form:** handwritten note on the back of a property-room count sheet  
@@ -685,12 +693,12 @@ Journal chronology is discovery order, not story chronology. Text below is imple
 
 | Discovery | Journal entry | Major discovery? |
 |---|---|---|
-| D1 | `Found a CSS service ticket for Relay Site 31. Rourke logged a 37-second dead carrier and says police took his receiver.` | Major **only if** this is the first Dead Air document discovered; it triggers the thread-introduced event. |
-| D2 | `Police logged a modified receiver from Relay Site 31. No requesting agency is named; the set carries a CSS service number.` | Major **only if** this is the first Dead Air document discovered; it triggers the same thread-introduced event. |
-| D3 | `CSS billed ordinary relay work around a customer-supplied 7C-41 package. H. Vale approved it without a customer name.` | No. |
-| D4 | `Rourke kept a private account. He says he was told to make 7C live, then told the test never happened.` | No. |
-| D5 | `A memo signed H. Vale says police were warned about the relay work in advance and told not to report the tests by themselves.` | No by itself. |
-| D6 | `Pike's shift note says the advance memo was not there when the receiver was taken, and callers could not agree what "H. Vale" meant.` | Major when this discovery completes the authored contradiction prerequisites. |
+| D1 | `Found a Cumberland Signal Services (CSS) service ticket for Relay Site 31. Rourke logged a 37-second dead carrier and says police took his receiver.` | Major **only if** this is the first Dead Air document discovered; it triggers the thread-introduced event. |
+| D2 | `Police logged a modified receiver from Relay Site 31. No requesting agency is named; the set carries a service number from the communications maintenance contractor, listed here as C.S.S.` | Major **only if** this is the first Dead Air document discovered; it triggers the same thread-introduced event. |
+| D3 | `Cumberland Signal Services (CSS) billed ordinary relay work around a customer-supplied 7C-41 package. H. Vale approved it without a customer name.` | No. |
+| D4 | `Rourke, the communications maintenance technician, kept a private account. He says he was told to make 7C-41 live, then told the test never happened.` | No. |
+| D5 | `A Cumberland Signal Services (CSS) memo signed H. Vale says police were warned about the relay work in advance and told not to report the tests by themselves.` | No by itself. |
+| D6 | `Pike's shift note says the contractor's advance memo was not there when the receiver was taken, and callers could not agree what "H. Vale" meant.` | Major when this discovery completes the authored contradiction prerequisites. |
 
 Additional major-discovery events:
 - **Relay location confirmed** — major, once, when the player actually reaches the selected Relay Site 31 location after it has been referenced.
@@ -741,13 +749,13 @@ This is a content preference, not a Build 42 API decision.
 
 | Asset | Preferred interaction | Engine status |
 |---|---|---|
-| D1 service ticket | Read / Inspect | T7/T10-dependent |
-| D2 property record | Examine / Read | T7/T10-dependent |
-| D3 invoice | Examine | T7/T10-dependent |
-| D4 notebook page | Read | T7/T10-dependent |
-| D5 memo | Read | T7/T10-dependent |
-| D6 shift note | Examine | T7/T10-dependent |
-| B-37 key | Examine / Mark Interesting | T5/T7/T10-dependent |
+| D1 service ticket | Read / Inspect | T7/T10 mechanism proven; production adapter pending |
+| D2 property record | Examine / Read | T7/T10 mechanism proven; production adapter pending |
+| D3 invoice | Examine | T7/T10 mechanism proven; production adapter pending |
+| D4 notebook page | Read | T7/T10 mechanism proven; production adapter pending |
+| D5 memo | Read | T7/T10 mechanism proven; production adapter pending |
+| D6 shift note | Examine | T7/T10 mechanism proven; production adapter pending |
+| B-37 key | Examine / Mark Interesting | T5/T7/T10 mechanisms proven; production adapter pending |
 
 No choice above decides native reader vs ModData-backed text vs custom reader UI.
 
@@ -759,7 +767,7 @@ No choice above decides native reader vs ModData-backed text vs custom reader UI
 - **T5:** use the accepted mod-owned per-instance token with separate availability/conflict state and P4-R37 reconciliation; engine IDs remain diagnostic, incomplete coverage cannot prove loss, and copied-token duplication is sticky `conflict`.
 - **T7:** use a persistent custom item name plus validated plain ModData title/description/body, with the custom T10 `Inspect` reader as the world-specific presentation boundary; optional locked Literature pages are limited projections only.
 - **T8:** use P4-R39's bounded/debounced sampling and exact binding predicates; delayed-reference ordering and reload-inside remain production-adapter acceptance cases rather than completed probe claims.
-- **T10:** cooperative Inspect/context-menu behavior remains open and may resume only as a P4-R44 manual-GUI session; the probe logs menu callbacks/assertions while the project owner manually enters the disposable save and performs the requested right-clicks.
+- **T10:** complete on Build 42.20.4 through the P4-R44 manual-GUI route. Use P4-R45's privately keyed, activation-revalidated player/Ground inventory-pane actions; direct-world-item right-click is not a supported dependency. Production reader/adapter integration remains outstanding.
 
 # Self-review
 

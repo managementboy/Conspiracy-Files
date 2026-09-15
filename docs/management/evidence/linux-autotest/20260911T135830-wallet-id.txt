@@ -1,0 +1,11 @@
+Linux wallet ID check 20260911T135830: PASS
+source: a0e0dcf
+wallet ID: 'ID Card: Felipe Burt'; wallet stamp after carrying it off: corpse-wallet:1837183594
+notebook summary: Identity document - container
+notebook text:
+  I saw a document labelled "ID Card: Felipe Burt" inside Wallet. That container was taken off a corpse. The same one carried: Credit Card: Felipe Burt (same name as the ID).
+  The name on a document is a lead. It does not establish who owned the container or identify the body.
+  Observed at 102 E Maple St.
+loose ID on a body: PASS: 'ID Card: Kaitlyn Klein' recorded as Identity document - corpse
+errors inside the mod: 0
+screenshot: dev/eval/linux/runs/20260911T135830-wallet.png (not committed)

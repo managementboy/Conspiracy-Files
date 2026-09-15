@@ -1,0 +1,11 @@
+Linux wallet ID check 20260912T210023: PASS
+source: 2b10c06
+wallet ID: 'ID Card: Candice Pauley'; wallet stamp after carrying it off: corpse-wallet:1105645362
+notebook summary: Identity document - container
+notebook text:
+  I saw a document labelled "ID Card: Candice Pauley" inside Wallet. That container was taken off a corpse.
+  The name on a document is a lead. It does not establish who owned the container or identify the body.
+  Observed at 102 E Maple St.
+loose ID on a body: PASS: 'ID Card: Janell Golden' recorded as Identity document - corpse
+errors inside the mod: 0
+screenshot: dev/eval/linux/runs/20260912T210023-wallet.png (not committed)

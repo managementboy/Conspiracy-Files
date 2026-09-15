@@ -72,6 +72,32 @@ Verified live isolated single-player findings on the same exact Build 42.20.4 in
 - Police and Office/Offices zone names existed only as `ZombiesType` rectangles. No semantic bookstore, medical or transmission landmark zone was found.
 - Automatic categorisation is advisory, room/area-first candidate discovery only. v0.1 and v1 remain curated; non-building landmarks require curated/object-specific handling.
 
+## Running Lua sent from outside the game — verified 2026-09-11/12
+
+Mod Lua has no `loadstring` or `loadstream`: `LuaCompiler.register` was removed
+from the shipped jar, so code cannot be compiled from a string at runtime. Code
+therefore has to arrive as a *file*.
+
+`reloadLuaFile(path)` accepts an **absolute** path (no `..` segments) outside
+the mod tree, and `getFileReader(name, false)` reads from the user's
+`Zomboid/Lua` folder. Both are load-bearing for the eval channel.
+
+**Citation, per P4-R78:** this is the mechanism every Linux autotest run uses —
+`tools/autotest/pz.sh eval` calls `tools/cf_eval.sh`, which writes
+`cf_inbox.lua`, which `DevEval` runs with an absolute path. Re-runnable:
+
+    tools/autotest/pz.sh start --hidden
+    tools/autotest/pz.sh eval 'return getPlayer():getX()'
+    tools/autotest/pz.sh stop
+
+Archived runs: `docs/management/evidence/linux-autotest/` (2026-09-11 onward;
+the suite could not have passed had the path not loaded). An earlier task
+handoff recorded this as an in-game confirmation by the owner, who did not
+recall giving one — the mechanism is proven, the attribution was not.
+
+`OnTick` does not fire while the game is paused, and the world map pauses it,
+so a poll that must answer with the map open belongs on `OnTickEvenPaused`.
+
 ## Documentation context
 
 - Official version metadata: <https://projectzomboid.com/version_announce/>

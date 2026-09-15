@@ -1,0 +1,15 @@
+[CF-MARKERS] Clue markers active; pickup sources are now recorded.
+[CF-MARKERS] Marked=0; waiting for writing tool=0; historical finding location unavailable=0
+[CF-MARKERS] Finding location recorded. Inspect the document to add it to your evidence.
+[CF-MARKERS] Pending clue locations added to the map.
+[CF-MARKERS] Finding location recorded. Inspect the document to add it to your evidence.
+[CF-MARKERS] Pending clue locations added to the map.
+[CF-MARKERS] Marked=2; waiting for writing tool=0; historical finding location unavailable=1
+[CF-MARKERS] Clue markers active; pickup sources are now recorded.
+[CF-MARKERS] Marked=2; waiting for writing tool=0; historical finding location unavailable=1
+PASS clue markers: source capture, transfer preservation, pickup versus inspection, pen/tag catch-up, pause/resume, drop, historical safety, reload, grouped map rendering, failed transfer
+[CF-MARKERS] Finding location recorded. Inspect the document to add it to your evidence.
+PASS whole-bag source capture
+[CF-MARKERS] Skipped: ...mon/media/lua/client/ConspiracyFiles/ClueMarkers.lua:34: saved marker records refused
+[CF-MARKERS] Skipped: test/clue_markers.lua:85: simulated save failure
+PASS marker status, corrupt-state isolation, failed save preserves root/native transfer, mid-transfer conflict

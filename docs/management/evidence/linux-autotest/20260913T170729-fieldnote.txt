@@ -1,0 +1,7 @@
+FAIL fieldnote - 2026-09-13T17:07:29+02:00
+commit: d4ac15d
+session: 20260913T170328
+loaded:  true	0.1.0-test	1	400x620	400x620
+lcd:     true	480,100 320x422	0	
+labels:  false	C14:NOTE overlaps icon by 5; C15:TASK overlaps icon by 6; C16:ADDR overlaps icon by 5; C17:FIND overlaps icon by 6	C14:NOTE top=13 icon=17 gap=-4 | C15:TASK top=13 icon=18 gap=-5 | C16:ADDR top=13 icon=17 gap=-4 | C17:FIND top=13 icon=18 gap=-5
+FAIL: labels overlap their icons: C14:NOTE overlaps icon by 5; C15:TASK overlaps icon by 6; C16:ADDR overlaps icon by 5; C17:FIND overlaps icon by 6

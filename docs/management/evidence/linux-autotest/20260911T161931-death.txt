@@ -1,0 +1,8 @@
+Linux death check 20260911T161931: PASS
+source: eb72c75
+first survivor: Cecelia, carrying 2 case documents at death
+notebook before death: 2 1=577554200:document-1:Maintenance callout / WB-831 | 2=577554200:document-2:Floor plan copy / WB-831
+new survivor: Reed; papers: papers issued: Reed's Papers
+notebook for the new survivor: 2 1=577554200:document-1:Maintenance callout / WB-831 | 2=577554200:document-2:Floor plan copy / WB-831
+document taken back off the body: Maintenance callout / WB-831
+errors inside the mod: 0

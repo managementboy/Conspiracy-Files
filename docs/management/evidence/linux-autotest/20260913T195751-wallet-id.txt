@@ -1,0 +1,12 @@
+Linux wallet ID check 20260913T195751: PASS
+source: d0c1800
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+wallet ID: 'ID Card: Cecilia Rohr'; wallet stamp after carrying it off: corpse-wallet:1237844587
+notebook summary: Identity document - container
+notebook text:
+  I saw a document labelled "ID Card: Cecilia Rohr" inside Wallet. That container was taken off a corpse.
+  The name on a document is a lead. It does not establish who owned the container or identify the body.
+  Observed at 102 E Maple St.
+loose ID on a body: PASS: 'ID Card: Marvin Dunham' recorded as Identity document - corpse
+errors inside the mod: 0
+screenshot: dev/eval/linux/runs/20260913T195751-wallet.png (not committed)

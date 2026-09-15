@@ -2,7 +2,7 @@
 
 **Current decision:** no-AI is the primary supported experience. See `docs/decisions/ADR-0002-ai-boundary.md` and `docs/design/AI_PROVENANCE.md`.
 
-- Development-time AI may draft content; human approval is required.
+- Development-time AI may write content; no separate approval step (P4-R97).
 - Runtime AI is optional and never creates authoritative facts.
 - Every runtime-AI feature requires a deterministic no-AI path.
 - Provider credentials never live in the save or repository.

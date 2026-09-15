@@ -1,0 +1,26 @@
+FAIL pdagame - 2026-09-13T21:28:07+02:00
+commit: c9e8656
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+session: 20260913T212628
+issued:     marked= readable=
+hand:      opens in hand=, closes when put away=true
+screens:   no screen programs toured by tapping icons: 
+controls:  no screen
+restart:   notes=-1 todos=-1 -> notes=-1 todos=-1; sizes 2/3 -> nil/2
+inventory: removed while open -> closed=; reissued=
+transfer:  stashed in a bag -> still found=, organisers ->
+corrupted: opened and drew every program on corrupted stores
+log:       0 new mod error lines
+FAIL: no organiser was issued: 
+FAIL: the issued organiser carries no mark, so it will be issued again
+FAIL: putting the organiser in the main hand did not open Knox.OS
+FAIL: the device would not reopen after being put away
+FAIL: screen tour: no screen
+FAIL: controls: no screen
+FAIL: the machine size did not survive a restart: 2 -> nil
+FAIL: the text size did not survive a restart: 3 -> 2
+FAIL: the device would not open after a restart
+FAIL: after a restart the screen tour failed: no screen
+FAIL: removing the organiser from the inventory left Knox.OS on screen
+FAIL: the organiser was not actually removed
+FAIL: a replacement organiser was not issued: 

@@ -1,0 +1,13 @@
+Linux fault containment check 20260911T163037: PASS
+source: 2dc0f91
+each function made to throw for 15 s of play, then restored:
+  DiscoveryLog.record: inspected document 1 (Delivery schedule / QS-474); 5 mod log lines and 1 caught errors in 15 s; most repeated line x1; game answering: true; case valid: true
+  SaveBudget.check: inspected document 2 (Utility record / QS-474); 17 mod log lines and 14 caught errors in 15 s; most repeated line x2; game answering: true; case valid: true
+  GeneratedRuntime.inspect: inspected document 3 (Route review / QS-474); 3 mod log lines and 1 caught errors in 15 s; most repeated line x1; game answering: true; case valid: true
+  ClueMarkers.update: inspected document 4 (Shift notebook / QS-474); 8 mod log lines and 1 caught errors in 15 s; most repeated line x1; game answering: true; case valid: true
+  ClueMarkers.draw: opened the world map; 1 mod log lines and 1 caught errors in 15 s; most repeated line x1; game answering: true; case valid: true
+  WorldAccess.resolve: stood by unfound document 5; 1 mod log lines and 10 caught errors in 15 s; most repeated line x1; game answering: true; case valid: true
+  WorldAccess.count: stood by unfound document 5; 0 mod log lines and 0 caught errors in 15 s; most repeated line x1; game answering: true; case valid: true
+  AddressMap.labelForBuilding: opened the notebook; 0 mod log lines and 30 caught errors in 15 s; most repeated line x1; game answering: true; case valid: true
+  IdentityObservations.add: opened 4 fresh bodies; 8 mod log lines and 0 caught errors in 15 s; most repeated line x4; game answering: true; case valid: true
+recovery afterwards: document 5 inspected (Press clipping / QS-474)

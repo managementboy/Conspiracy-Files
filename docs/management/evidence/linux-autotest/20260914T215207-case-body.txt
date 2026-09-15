@@ -1,0 +1,13 @@
+Linux case body check 20260914T215207: FAIL
+source: a4e7441
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+case person: Curtis Vance
+bound zombie: true Curtis Vance 10875,10179
+body: true true 1 1 ID Card: Curtis Vance 9
+log: case person's body (generated:861385942:case): marked searched; card added
+notebook lead: true Identity document - corpse
+her body searched at spawn: nil
+comparison body: searched at spawn: nil, searched once shown: yes
+sex matching: true true true true true
+FAIL: the body is not marked searched when it appears (at spawn: nil), so the game will roll its own cards in her name
+FAIL: an ordinary body was already searched when it appeared (at spawn: nil), so the comparison proves nothing

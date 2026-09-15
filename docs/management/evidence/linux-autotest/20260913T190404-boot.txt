@@ -1,0 +1,9 @@
+Linux boot check 20260913T190404: PASS
+source: 1037a9b
+mod version / game version / player alive: DEV-0.32.0-fieldnote	42.20.4 b0bbce05d5	true
+game loading took 61 seconds; soaked 60s
+mod files loaded: 97 of 97
+survivor's papers: papers opened in the inventory panel after 0 ticks
+errors inside the mod: 0
+mod warnings/errors logged by the mod itself: 0
+screenshot: dev/eval/linux/runs/20260913T190404.png (not committed)

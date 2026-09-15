@@ -1,0 +1,7 @@
+name=Conspiracy-Files: Dead Air
+id=ConspiracyFiles
+author=Conspiracy-Files development
+url=https://github.com/managementboy/Conspiracy-Files
+modversion=0.1.0-dev
+versionMin=42.0.0
+description=Dead Air vertical-slice runtime with bounded development logging.

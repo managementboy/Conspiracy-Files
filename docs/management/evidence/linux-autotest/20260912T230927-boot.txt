@@ -1,0 +1,9 @@
+Linux boot check 20260912T230927: PASS
+source: bc5d814
+mod version / game version / player alive: DEV-0.26.1-knoxos	42.20.4 b0bbce05d5	true
+game loading took 150 seconds; soaked 60s
+mod files loaded: 95 of 95
+survivor's papers: papers opened in the inventory panel after 0 ticks
+errors inside the mod: 0
+mod warnings/errors logged by the mod itself: 0
+screenshot: dev/eval/linux/runs/20260912T230927.png (not committed)

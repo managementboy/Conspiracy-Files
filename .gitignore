@@ -24,3 +24,20 @@ dist/
 out/
 tmp/
 coverage/
+# A check's report while it is being written; moved into place when whole
+*.part
+__pycache__/
+
+# Kahlua CLI runner: game-owned stdlib copied in locally, never committed
+stdlib.lua
+tools/kahlua/*.class
+
+# Build output from tools/package.sh
+dist/
+dev/playtest-logs/
+
+# Live Lua eval channel (tools/cf_eval.sh): local commands, never committed
+dev/eval/
+
+# graphify knowledge graph (derived, LINUX dev machine only)
+graphify-out/

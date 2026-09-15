@@ -1,0 +1,8 @@
+Linux death check 20260912T195824: PASS
+source: 249a6f2
+first survivor: Melanie, carrying 2 case documents at death
+notebook before death: 2 1=1806417538:document-1:Hire note / WB-563 | 2=1806417538:document-2:Return note / WB-563
+new survivor: Guy; papers: papers issued: Guy's Papers
+notebook for the new survivor: 2 1=1806417538:document-1:Hire note / WB-563 | 2=1806417538:document-2:Return note / WB-563
+document taken back off the body: Hire note / WB-563
+errors inside the mod: 0

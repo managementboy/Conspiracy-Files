@@ -1,0 +1,17 @@
+Linux core loop check 20260912T194732: PASS
+source: 249a6f2
+first case: 7 documents, all found and inspected through the right-click menu:
+  1. Delivery docket / LD-876, in shelves, room hall, floor 0 (container icon clicked: yes)
+  2. Attendance note / LD-876, in vehicle GloveBox (locked), room vehicle, floor 0 (container icon clicked: no)
+  3. Query sheet / LD-876, in shelves, room hall, floor 0 (container icon clicked: yes)
+  4. camera disposable (1 of 12), in counter, room kitchen, floor 0 (container icon clicked: yes)
+  5. Payment slip / LD-876, in counter, room kitchen, floor 0 (container icon clicked: yes)
+  6. Hunting knife, marked Delia Mercer, in counter, room kitchen, floor 0 (container icon clicked: yes)
+  7. kneepad (1 of 6), in shelves, room livingroom, floor 0 (container icon clicked: yes)
+notebook entries: 7; case completion reported: yes
+map marks without a pen (written/pending/missing): 0/7/0
+map marks after a pen, case already retired: 7/0/0
+second case appeared (gap removed): yes
+errors inside the mod: 0
+FINDING: document 2 (Attendance note / LD-876) is in a LOCKED car: a player needs its key or a broken window
+screenshot: dev/eval/linux/runs/20260912T194732-map.png (not committed)

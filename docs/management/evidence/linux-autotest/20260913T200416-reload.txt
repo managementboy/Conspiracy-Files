@@ -1,0 +1,9 @@
+Linux reload check 20260913T200416: PASS
+source: d0c1800 + uncommitted mod changes
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+world: 1163932947287426423; three save/quit/continue round trips after two documents were inspected
+notebook before: 2 1=615810551:document-1:Rent statement / BF-691 | 2=615810551:document-2:Key return note / BF-691
+placements before: 3 615810551:document-1@10840,10148,0:placed 615810551:document-2@10880,10153,0:placed 615810551:document-3@10880,10156,0:placed
+schedule before (count, last created hour, scheduled): 1 2.0691232681274414 true
+save-budget total per round (bytes): 154599 154599 154599 154599
+errors inside the mod: 0

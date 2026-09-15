@@ -1,0 +1,10 @@
+Linux death check 20260914T193711: PASS
+source: 192cf62
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+first survivor: Tamera, carrying 2 case documents at death
+notebook before death: 2 1=590063482:document-1:Delivery docket / HK-989 | 2=590063482:document-2:Attendance note / HK-989
+new survivor: Clyde; papers: papers issued: Clyde's Papers
+notebook for the new survivor: 2 1=590063482:document-1:Delivery docket / HK-989 | 2=590063482:document-2:Attendance note / HK-989
+the new survivor's organiser: carried=true marked=true; reads for them=true
+document taken back off the body: Delivery docket / HK-989
+errors inside the mod: 0

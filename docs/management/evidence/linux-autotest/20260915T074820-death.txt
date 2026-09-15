@@ -1,0 +1,10 @@
+Linux death check 20260915T074820: PASS
+source: 6875b53
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+first survivor: Joann, carrying 2 case documents at death
+notebook before death: 2 1=1855221155:document-1:Staff photograph / MC-101 | 2=1855221155:document-2:Establishment list / MC-101
+new survivor: Scott; papers: papers issued: Scott's Papers
+notebook for the new survivor: 2 1=1855221155:document-1:Staff photograph / MC-101 | 2=1855221155:document-2:Establishment list / MC-101
+the new survivor's organiser: carried=true marked=true; reads for them=true
+document taken back off the body: Staff photograph / MC-101
+errors inside the mod: 0

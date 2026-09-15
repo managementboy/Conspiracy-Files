@@ -1,0 +1,12 @@
+Linux wallet ID check 20260915T122043: FAIL (recorded, but without its corpse provenance)
+source: eb029c7
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+wallet ID: 'ID Card: Theo Chang'; wallet stamp after carrying it off: corpse-wallet:659172301
+notebook summary: Identity document - corpse
+notebook text:
+  I saw a document labelled "ID Card: Theo Chang" among a corpse's belongings.
+  The name on a document is a lead. It does not establish who owned the container or identify the body.
+  Observed at 102 E Maple St.
+loose ID on a body: PASS: 'ID Card: Randal Burnette' recorded as Identity document - corpse
+errors inside the mod: 0
+screenshot: dev/eval/linux/runs/20260915T122043-wallet.png (not committed)

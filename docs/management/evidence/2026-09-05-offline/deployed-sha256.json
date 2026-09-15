@@ -1,0 +1,30 @@
+[
+  {
+    "file": "shared/ConspiracyFiles/Validator.lua",
+    "sha256": "C08D3305BF491BB990EE64C17C55202DB3090B3F4E988DAACA940DFD1C4FC29C"
+  },
+  {
+    "file": "client/ConspiracyFiles/SaveBudget.lua",
+    "sha256": "559B50E6C58C9C66C232C0163514CD33BFD59C4E753B3080124B4D98B7E284D6"
+  },
+  {
+    "file": "client/ConspiracyFiles/GeneratedRuntime.lua",
+    "sha256": "09554BA4E3ACAA06A6586A7D898C82DE5D41F954994038ABC69C69DE15151937"
+  },
+  {
+    "file": "client/ConspiracyFiles/ClueMarkers.lua",
+    "sha256": "66701C277DFE63FFB3677FFF817F0F4D4F757DD425AA433B9873CFF8D187E194"
+  },
+  {
+    "file": "client/ConspiracyFiles/Trial.lua",
+    "sha256": "751EF89980E5CE417A2EF6335A200CCD74B9CA42E0DF1005921A46AB29FE0CD8"
+  },
+  {
+    "file": "client/ConspiracyFiles/AddressMap.lua",
+    "sha256": "D73F51BDC5461A8065352952DB5E25BC73FC264CE2F134F65AD3F67C276BA055"
+  },
+  {
+    "file": "client/ConspiracyFiles/Notebook.lua",
+    "sha256": "CFD3FDFE5C33CE3C2C155164E311DF8A7D2F532FC02099D9795A4F4828AC3323"
+  }
+]

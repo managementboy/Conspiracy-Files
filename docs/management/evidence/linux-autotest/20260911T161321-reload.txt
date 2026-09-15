@@ -1,0 +1,8 @@
+Linux reload check 20260911T161321: PASS
+source: eb72c75
+world: 4180256652212495361; three save/quit/continue round trips after two documents were inspected
+notebook before: 2 1=1876817453:document-1:Delivery docket / HK-313 | 2=1876817453:document-2:Attendance note / HK-313
+placements before: 0 
+schedule before (count, last created hour, scheduled): 1 2.150692939758301 true
+save-budget total per round (bytes): 141221 141221 141221 141221
+errors inside the mod: 0
