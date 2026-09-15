@@ -338,7 +338,8 @@ the same test, commit. Questions of game design or tone are not decided by
 Claude; they are written up for the owner.
 
 **P4-R75 — push the branch.** Claude pushes `integration/v0.1-corrected-candidate`
-after each verified batch. No merges to `main`.
+after each verified batch. No merges to `main`. *(Replaced 2026-09-15 by
+P4-R117: all work goes into `main`.)*
 
 **P4-R76 — publish passing builds.** A build that passes the Linux boot check
 may be published to the unlisted Workshop item (version bumped each time), so
@@ -791,6 +792,18 @@ where they lie (as right-click Inspect already does with the organiser open),
 ordinary items ignored, papers already noted left alone. The footer says what
 happened (NOTED 3, ALREADY NOTED, NOT CASE EVIDENCE). Right-click Inspect is
 unchanged.
+
+**P4-R117 — all work goes into main.** Owner, 2026-09-15, accepting the
+recommendation to stop using separate branches: "follow all your
+recomendations". Verified work is committed and pushed straight to `main`; the
+Linux test run, not a branch, is the gate. Each build published to the Workshop
+gets a git tag so any build can be found again. The integration branch
+(`integration/v0.1-corrected-candidate`, last commit merged as PR #36) and
+`work/wp3-wp5` are retired; `~/cf-wp345` stays as a detached spare checkout for
+`tools/autotest/prove.py`. Branches fully contained in `main` are deleted;
+branches holding files found nowhere in `main` (the Dead Air location
+inspection, the location shortlist, the T10 probe extras) and the
+`preservation/` and `engineering/` archives are kept. Replaces P4-R75.
 
 **P4-R106 — how a car's containers are reached.** Owner, 2026-09-14: "The globe
 box only opens when sitting in the front of the car", and a truck bed or trunk
