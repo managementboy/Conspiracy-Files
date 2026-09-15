@@ -1,0 +1,10 @@
+Linux death check 20260915T135336: PASS
+source: a87b440
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+first survivor: Lu, carrying 2 case documents at death
+notebook before death: 2 1=508665637:document-1:Records log / BF-820 | 2=508665637:document-2:Registry list / BF-820
+new survivor: Pansy; papers: papers issued: Pansy's Papers
+notebook for the new survivor: 2 1=508665637:document-1:Records log / BF-820 | 2=508665637:document-2:Registry list / BF-820
+the new survivor's organiser: carried=true marked=true; reads for them=true
+document taken back off the body: Records log / BF-820
+errors inside the mod: 0

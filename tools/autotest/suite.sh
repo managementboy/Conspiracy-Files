@@ -12,6 +12,10 @@ checks=(boot_check.sh checks/wallet_id.sh checks/core_loop.sh checks/drop_note.s
         checks/hardware.sh checks/reshuffle.sh
         ../fieldnote-test/boot_test.sh
         checks/pdagame.sh checks/pdalife.sh checks/pdaperf.sh)
+# One game for the whole suite (owner, 2026-09-15): each check asks the running
+# game for a new world instead of launching it again, and the game is stopped
+# once, at the end. A check run on its own still starts and stops its own game.
+export CF_KEEP_GAME=1
 pass=0; total=0
 for c in "${checks[@]}"; do
     # Each check claims the machine itself now (claim_game), so the suite does

@@ -29,7 +29,7 @@ placed() { # wait until every document of the current case is placed; echoes the
 }
 
 claim_game || exit 2
-"$PZ" start "${start_args[@]}" || abort "the game did not reach a playable world"
+start_world "${start_args[@]}" || abort "the game did not reach a playable world"
 ev -f "$REPO/tools/autotest/checks/core_loop.lua" >/dev/null || abort "could not load the loop driver"
 wait_true 90 'ConspiracyFiles.GeneratedRuntime.metrics()~=nil' || abort "no case started"
 first="$(placed)" || abort "first case never fully placed"
@@ -59,7 +59,7 @@ orphans="$(ev 'return CFLoop.orphanEvidence()' | cut -f1)"
 
 errors="$(mod_errors)"
 [ -z "$errors" ] || fail "errors inside the mod: $errors"
-"$PZ" stop
+end_world
 
 verdict=PASS; [ ${#fails[@]} -eq 0 ] || verdict=FAIL
 out="$REPO/docs/management/evidence/linux-autotest/$(date +%Y%m%dT%H%M%S)-reshuffle.txt"

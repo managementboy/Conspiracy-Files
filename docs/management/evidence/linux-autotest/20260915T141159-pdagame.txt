@@ -1,0 +1,13 @@
+PASS pdagame - 2026-09-15T14:11:59+02:00
+commit: a87b440
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+session: 20260915T141034
+issued:    ConspiracyFiles.Organiser marked=true readable=true
+hand:      opens in hand=true, closes when put away=true
+screens:   9 programs toured by tapping icons: FILES,NAMES,PLACES,DATES,TO DO,NOTES,SETUP,HELP,SITES
+controls:  HOME, BACK, the rocker both ways, and two keys that do nothing
+restart:   notes=1 todos=1 -> notes=1 todos=1; sizes 2/3 -> 2/3
+inventory: removed while open -> closed=true; reissued=true
+transfer:  stashed in a bag -> still found=true, organisers 1->1
+corrupted: opened and drew every program on corrupted stores
+log:       0 new mod error lines

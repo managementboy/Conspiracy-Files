@@ -38,8 +38,14 @@ claim_game() {
         return 1
     fi
     # The lock is ours. A game still running now is a leftover from a run that
-    # died without stopping it, so clear it rather than refusing to work.
+    # died without stopping it, so clear it rather than refusing to work -
+    # unless the suite is keeping one game for all its checks (CF_KEEP_GAME, set
+    # by suite.sh), where a running game that still answers is the point. One
+    # that does not answer is cleared as before.
     if ! not_running; then
+        if [ -n "${CF_KEEP_GAME:-}" ] && CF_EVAL_TIMEOUT=10 "$PZ" eval 'return true' >/dev/null 2>&1; then
+            return 0
+        fi
         echo "a leftover game is still running; stopping it" >&2
         "$PZ" stop >/dev/null 2>&1
         local deadline=$(( $(date +%s) + 90 ))
@@ -49,6 +55,24 @@ claim_game() {
         done
     fi
     return 0
+}
+
+# Starting and ending a check's world (owner, 2026-09-15: "to start a fresh
+# game you dont have to start the whole game"). Run on its own, a check starts
+# the game and stops it, as before. Inside suite.sh (CF_KEEP_GAME) it asks the
+# running game for a new world, and leaves the game running for the next check.
+start_world() {
+    if [ -n "${CF_KEEP_GAME:-}" ]; then "$PZ" fresh "$@"; else "$PZ" start "$@"; fi
+}
+end_world() {
+    [ -n "${CF_KEEP_GAME:-}" ] && return 0
+    "$PZ" stop >/dev/null 2>&1
+}
+# For checks that need a real launch of their own: a save, quit and reload
+# (reload, pdagame), or numbers comparable with earlier runs (perf, pdaperf).
+start_cold() {
+    not_running || "$PZ" stop >/dev/null 2>&1
+    "$PZ" start "$@"
 }
 
 not_running() { grep -q "not running" <<<"$("$PZ" status)"; }

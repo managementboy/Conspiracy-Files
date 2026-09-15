@@ -24,7 +24,7 @@ snapshot() { # prints four lines: notebook, placement, schedule, bytes
 }
 
 claim_game || exit 2
-"$PZ" start "${start_args[@]}" || abort "the game did not reach a playable world"
+start_cold "${start_args[@]}" || abort "the game did not reach a playable world"
 first="$(session)"; world="$(cat "$REPO/dev/eval/linux/world")"
 load_lua || abort "could not load the check's Lua"
 wait_true 90 'ConspiracyFiles.GeneratedRuntime.metrics()~=nil' || abort "no case started"

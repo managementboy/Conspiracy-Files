@@ -20,7 +20,7 @@ while [ $# -gt 0 ]; do
 done
 
 claim_game || exit 2
-"$PZ" start "${start_args[@]}" || { echo "boot check: the game did not reach a playable world" >&2; "$PZ" stop; exit 2; }
+start_world "${start_args[@]}" || { echo "boot check: the game did not reach a playable world" >&2; "$PZ" stop; exit 2; }
 session="$(cat "$REPO/dev/eval/linux/session")"
 runs="$REPO/dev/eval/linux/runs"; mkdir -p "$runs"
 echo "soaking ${soak}s" >&2; sleep "$soak"
@@ -56,7 +56,7 @@ cf_warn="$(grep -E '\[CF\] v=1 .*lvl=(w|e) ' <<<"$log" | sed 's/^.*> //')"
 load="$(grep -o 'game loading took [0-9]* seconds' <<<"$log" | tail -1)"
 # The survivor's papers open by themselves at start (catalogue NB-29).
 papers="$(grep -oE 'papers (opened in the inventory panel[^"]*|not opened[^"]*)' <<<"$log" | tail -1)"
-"$PZ" stop
+end_world
 
 loaded="$(sed -n 's/^ok \([0-9]*\).*/\1/p' <<<"$files")"
 missing="$(sed -n 's/^ok [0-9]*\t\{0,1\}//p' <<<"$files")"

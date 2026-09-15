@@ -23,7 +23,7 @@ points=(IdentityObserver.afterRender IdentityObserver.tick ClueMarkers.update Cl
         LocalPersonIntegration.tick DevEval.tick)
 
 claim_game || exit 2
-"$PZ" start "${start_args[@]}" || abort "the game did not reach a playable world"
+start_cold "${start_args[@]}" || abort "the game did not reach a playable world"
 id="$(session)"
 for f in core_loop wallet_id perf; do ev -f "$REPO/tools/autotest/checks/$f.lua" >/dev/null || abort "could not load $f.lua"; done
 wait_true 90 'ConspiracyFiles.GeneratedRuntime.metrics()~=nil' || abort "no case started"

@@ -1,0 +1,14 @@
+Linux fault containment check 20260915T135553: PASS
+source: a87b440
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+each function made to throw for 15 s of play, then restored:
+  DiscoveryLog.record: inspected document 1 (Rent statement / HK-704); 4 mod log lines and 1 caught errors in 15 s; most repeated line x1; game answering: true; case valid: true
+  SaveBudget.check: inspected document 2 (Key return note / HK-704); 14 mod log lines and 13 caught errors in 15 s; most repeated line x2; game answering: true; case valid: true
+  GeneratedRuntime.inspect: inspected document 3 (Property review / HK-704); 4 mod log lines and 1 caught errors in 15 s; most repeated line x1; game answering: true; case valid: true
+  ClueMarkers.update: inspected document 4 (Hammer, marked Joanne Voss); 12 mod log lines and 1 caught errors in 15 s; most repeated line x1; game answering: true; case valid: true
+  ClueMarkers.draw: opened the world map; 1 mod log lines and 1 caught errors in 15 s; most repeated line x1; game answering: true; case valid: true
+  WorldAccess.resolve: stood by unfound document 5; 2 mod log lines and 8 caught errors in 15 s; most repeated line x1; game answering: true; case valid: true
+  WorldAccess.count: stood by unfound document 5; 0 mod log lines and 0 caught errors in 15 s; most repeated line x1; game answering: true; case valid: true
+  AddressMap.labelForBuilding: opened the notebook; 0 mod log lines and 2 caught errors in 15 s; most repeated line x1; game answering: true; case valid: true
+  IdentityObservations.add: opened 4 fresh bodies; 11 mod log lines and 0 caught errors in 15 s; most repeated line x6; game answering: true; case valid: true
+recovery afterwards: document 5 inspected (Ticket: Marion Ellis)

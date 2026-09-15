@@ -17,7 +17,7 @@ abort() { say "$*"; "$PZ" stop; exit 2; }
 fails=(); fail() { fails+=("$*"); say "FAIL: $*"; }
 
 claim_game || exit 2
-"$PZ" start "${start_args[@]}" || abort "the game did not reach a playable world"
+start_world "${start_args[@]}" || abort "the game did not reach a playable world"
 id="$(session)"
 ev -f "$REPO/tools/autotest/checks/core_loop.lua" >/dev/null || abort "could not load the check's Lua"
 wait_true 90 'ConspiracyFiles.GeneratedRuntime.metrics()~=nil' || abort "no case started"
@@ -123,7 +123,7 @@ ev 'return CFLoop.noGap()' >/dev/null
 wait_true 150 'CFLoop.caseCount()>=2' && next_case=yes || { next_case=no; fail "no second case within 150 s with the gap removed"; }
 errors="$(mod_errors)"
 [ -z "$errors" ] || fail "errors inside the mod"
-"$PZ" stop
+end_world
 
 verdict=PASS; [ ${#fails[@]} -eq 0 ] || verdict=FAIL
 report="$EVIDENCE/$id-core-loop.txt"

@@ -31,7 +31,7 @@ action_for() {
 }
 
 claim_game || exit 2
-"$PZ" start "${start_args[@]}" || abort "the game did not reach a playable world"
+start_world "${start_args[@]}" || abort "the game did not reach a playable world"
 id="$(session)"
 for f in core_loop faults wallet_id; do ev -f "$REPO/tools/autotest/checks/$f.lua" >/dev/null || abort "could not load $f.lua"; done
 wait_true 90 'ConspiracyFiles.GeneratedRuntime.metrics()~=nil' || abort "no case started"
@@ -89,7 +89,7 @@ if [ "$next" -le "$docs" ]; then
     r="$(inspect_doc "$next")" && recovery="document $next inspected ($r)" || { recovery="$r"; fail "no recovery after the faults: $r"; }
 else recovery="no document left to try"; fi
 "$PZ" shot "$RUNS/$id-faults.png" >/dev/null 2>&1
-"$PZ" stop >/dev/null 2>&1
+end_world
 
 verdict=PASS; [ ${#fails[@]} -eq 0 ] || verdict=FAIL
 report="$EVIDENCE/$id-faults.txt"
