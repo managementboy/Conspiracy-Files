@@ -273,6 +273,14 @@ function G.renderAnchor(doc,useBranch,agreeing,map)
     end
     return fill("WHAT YOU FOUND\n"..doc.found.."\n\n"..text.."\n\nWHAT IT MIGHT MEAN\n"..meaning,map)
 end
+-- Full names, not initials. Owner, 2026-09-10: a nearby body is going to be
+-- given this name and an ID to match, and "M. Ellis" on a corpse is not
+-- something a player can connect to a letter signed "M. Ellis" - it is the
+-- same abbreviation twice. A full name is a person. Exposed so the organiser's
+-- NAMES can find these names on the papers the player has read; never edit it
+-- in place - a case rebuilds from it (Generator.validate).
+G.INVENTED_NAMES={"Marion Ellis","Delia Mercer","Roy Hale","Joanne Voss",
+                  "Curtis Vance","Adele Prosser","Warren Nagy","Ines Kubiak"}
 local function build(seed,revision,sites,cast,relayMemo)
     local random=rng(seed)
     -- The premise is drawn first, so it is the seed's most significant choice:
@@ -280,12 +288,7 @@ local function build(seed,revision,sites,cast,relayMemo)
     -- ConspiracyFiles/Generated/Premises.lua and docs/design/PREMISES.md.
     local premise=Premises.choose(random)
     local outline=random(2)==1 and "corroboration" or "conflicting-account"
-    -- Full names, not initials. Owner, 2026-09-10: a nearby body is going to
-    -- be given this name and an ID to match, and "M. Ellis" on a corpse is not
-    -- something a player can connect to a letter signed "M. Ellis" - it is the
-    -- same abbreviation twice. A full name is a person.
-    local invented={"Marion Ellis","Delia Mercer","Roy Hale","Joanne Voss",
-                    "Curtis Vance","Adele Prosser","Warren Nagy","Ines Kubiak"}
+    local invented=G.INVENTED_NAMES
     -- People the player has ALREADY MET, if there are any. Owner, 2026-09-11:
     -- "do we track the names of corpses so we can fill out other evidence with
     -- it?" We did, and every case still drew from eight invented names.

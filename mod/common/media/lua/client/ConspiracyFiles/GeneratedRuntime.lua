@@ -986,8 +986,16 @@ placeOf=function(item)
         return address and (where.." at "..address..".") or (where..".")
     end
     if kind and kind~="floor" then
-        return address and ("In a "..tostring(kind).." at "..address..".")
-            or ("In a "..tostring(kind)..".")
+        -- Words, not the type id: this said "In a shelves" (ContainerWords).
+        local Words=require("ConspiracyFiles/ContainerWords")
+        local title
+        if getText then
+            local key="IGUI_ContainerTitle_"..tostring(kind)
+            local ok,text=pcall(getText,key)
+            if ok and type(text)=="string" and text~="" and text~=key then title=text end
+        end
+        local phrase=Words.phrase(tostring(kind),title) or ("In a "..tostring(kind))
+        return address and (phrase.." at "..address..".") or (phrase..".")
     end
     return address and ("On the floor at "..address..".") or "On the ground."
 end

@@ -220,6 +220,73 @@ local function passesFilter(row,filter)
     return true
 end
 
+-- Names written on the case's own papers (owner, Windows, 2026-09-15: "the
+-- pencil and key are marked with a name, but we did not create an entry in the
+-- contacts"). The book only ever read identity documents - ID cards, badges,
+-- diaries - so a name on a tagged key or a delivery docket never reached it,
+-- though HELP has always said it holds every name seen on a document.
+--
+-- A reading of what has been inspected; nothing is stored. The names looked
+-- for are the ones a case can use: the generator's own and the names met on
+-- bodies (Generator.build draws from exactly those). A whole name only, so
+-- "Roy Haley" is not "Roy Hale".
+local function nameIn(text,name)
+    local from=1
+    while true do
+        local i,j=string.find(text,name,from,true)
+        if not i then return false end
+        local before=i>1 and string.sub(text,i-1,i-1) or ""
+        local after=string.sub(text,j+1,j+1)
+        if not before:find("%a") and not after:find("%a") then return true end
+        from=j+1
+    end
+end
+
+function A.caseNames()
+    local ui=ConspiracyFiles.NotebookUI
+    local rows=(ui and ui.generatedRows and safe(ui.generatedRows,"evidence")) or {}
+    if #rows==0 then return {} end
+    local candidates,seen={},{}
+    local function add(name)
+        if type(name)=="table" then name=name.name end
+        if type(name)=="string" and name:find("%S") and not seen[name] then
+            seen[name]=true
+            candidates[#candidates+1]=name
+        end
+    end
+    local okG,G=pcall(require,"ConspiracyFiles/Generated/Generator")
+    if okG and type(G)=="table" then for _,n in ipairs(G.INVENTED_NAMES or {}) do add(n) end end
+    local log=ConspiracyFiles.PersonNameLog
+    for _,n in ipairs((log and log.names and safe(log.names)) or {}) do add(n) end
+    local inOrder,byName={},{}
+    for _,row in ipairs(rows) do
+        if not row.cfHeading then
+            local text=tostring(row.title or "").."\n"..tostring(row.detailText or "")
+            for _,name in ipairs(candidates) do
+                if nameIn(text,name) then
+                    local entry=byName[name]
+                    if not entry then
+                        entry={name=name,papers={}}
+                        byName[name]=entry
+                        inOrder[#inOrder+1]=entry
+                    end
+                    entry.papers[#entry.papers+1]=tostring(row.title or "a record")
+                end
+            end
+        end
+    end
+    local out={}
+    for _,entry in ipairs(inOrder) do
+        local lines={"Written on:"}
+        for _,paper in ipairs(entry.papers) do lines[#lines+1]="  "..paper end
+        lines[#lines+1]=""
+        lines[#lines+1]="A name on a paper is a lead. It does not say who anybody is."
+        out[#out+1]={label=entry.name,title=entry.name,detail=table.concat(lines,"\n"),
+                     id="case-name:"..entry.name,person=entry.name}
+    end
+    return out
+end
+
 A.names={
     id="NAMES",title="NAMES",icon="names",
     filters=function() return A.NAME_FILTERS end,
@@ -244,6 +311,9 @@ A.names={
             local label=tostring(row.title or ""):gsub("^Found ","")
             out[#out+1]={label=label,title=label,detail=tostring(row.detailText or ""),id=row.id}
           end
+        end
+        for _,row in ipairs(A.caseNames()) do
+            if passesFilter(row,filter) then out[#out+1]=row end
         end
         return out
     end,
@@ -478,7 +548,7 @@ A.help={
             {label="The stylus",title="The stylus",
              detail="Tap a program to open it. Tap a record to read it. Tap the arrows in the right margin to page. Tap the name in the title bar to come back here."},
             {label="Files",title="Files",
-             detail="Everything you have inspected, numbered in the order you found it. A number never changes."},
+             detail="Everything you have inspected, numbered in the order you found it. A number never changes.\n\nTo note several things at once, select them in an inventory and drag them onto this screen. Things already noted, and things that are not evidence, are left alone."},
             {label="Names",title="Names",
              detail="Every name you have seen on a document, and where you saw it.\n\nA name on a paper is a lead. It does not say who anybody is."},
             {label="Dates",title="Dates",

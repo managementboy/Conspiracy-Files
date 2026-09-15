@@ -782,6 +782,16 @@ job. Both trades come from closed, hand-written tables (outfit id to trade,
 document type to trade); anything not listed stays silent, as outfit lines
 already do (WP3). Agreement is not remarked on. Not built yet.
 
+**P4-R116 — several papers are noted at once by dropping them on the
+organiser.** Owner, 2026-09-15, in play: "being able to inspect several
+evidences by marking them and dragging them onto the pda on top of right click
+inspect." Items selected in any inventory pane and let go on the open organiser
+are noted together: carried papers the ordinary way, papers in a container
+where they lie (as right-click Inspect already does with the organiser open),
+ordinary items ignored, papers already noted left alone. The footer says what
+happened (NOTED 3, ALREADY NOTED, NOT CASE EVIDENCE). Right-click Inspect is
+unchanged.
+
 **P4-R106 — how a car's containers are reached.** Owner, 2026-09-14: "The globe
 box only opens when sitting in the front of the car", and a truck bed or trunk
 is reached from outside, "only if they are open". Placement may still put a

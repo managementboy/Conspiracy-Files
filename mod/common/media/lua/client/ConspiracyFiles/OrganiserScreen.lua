@@ -357,6 +357,10 @@ function Screen:footText(hint)
     if self.lampRefused and now-self.lampRefused<2500 then
         return "LAMP NEEDS MORE CHARGE"
     end
+    -- What a drop of papers did (P4-R116), for as long as it takes to read.
+    if self.dropped and now-self.dropped.at<3000 then
+        return self.dropped.text
+    end
     local organiser=ConspiracyFiles.Organiser
     local charge=self:charge()
     if charge~=nil and charge>0 and charge<(organiser and organiser.LOW_POWER or 0) then
@@ -980,11 +984,38 @@ function Screen:onMouseUpOutside(x,y)
     return ISPanel.onMouseUpOutside(self,x,y)
 end
 
+-- Papers dragged out of an inventory and let go on the machine are noted, all
+-- of them (P4-R116). The inventory pane hands its drag to whichever window the
+-- mouse comes up over and clears it on its next update, and over a window it
+-- drops nothing on the floor (ISInventoryPane:update). A drop wakes the
+-- machine, as a key does.
+function Screen:dropPapers()
+    local drag=ISMouseDrag and ISMouseDrag.dragging
+    if type(drag)~="table" or ISMouseDrag.draggingFocus==self then return false end
+    local Drop=require("ConspiracyFiles/DropToNote")
+    local items=Drop.items(drag)
+    if #items==0 then return false end
+    self:touch()
+    if not self.on then
+        self.on=true
+        local organiser=ConspiracyFiles.Organiser
+        if organiser and organiser.checkPower then safe(organiser.checkPower) end
+    end
+    local player=getPlayer and getPlayer()
+    local inventory=player and safe(function() return player:getInventory() end)
+    local result=Drop.note(items,ConspiracyFiles.GeneratedRuntime,inventory)
+    self.dropped={at=getTimeInMillis and getTimeInMillis() or 0,text=Drop.footer(result)}
+    self.cachedList=nil
+    log("organiser drop: "..Drop.describe(result))
+    return true
+end
+
 function Screen:onMouseUp(x,y)
     local id=self.down
     self.down=nil
     if id=="GRIP" then self.resizing=nil; S.savePrefs(); return true end
     if id=="GLASS" then self:tap(x,y); return true end
+    if not id and self:dropPapers() then return true end
     if not id then return ISPanel.onMouseUp(self,x,y) end
     -- A key acts when it is let go over the key it went down on. Sliding off
     -- first cancels it, as a real key does and as the Fieldnote design asks;

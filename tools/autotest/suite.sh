@@ -7,7 +7,7 @@ set -uo pipefail
 # pdaperf were written on 2026-09-13 and living outside the suite would have
 # meant nobody ran them; the Fieldnote hardware contract was in the same
 # position, reachable only by knowing the path to it.
-checks=(boot_check.sh checks/wallet_id.sh checks/core_loop.sh checks/case_body.sh checks/vehicle_reach.sh checks/reload.sh
+checks=(boot_check.sh checks/wallet_id.sh checks/core_loop.sh checks/drop_note.sh checks/case_body.sh checks/vehicle_reach.sh checks/reload.sh
         checks/death.sh checks/faults.sh checks/perf.sh checks/knox.sh
         checks/hardware.sh checks/reshuffle.sh
         ../fieldnote-test/boot_test.sh

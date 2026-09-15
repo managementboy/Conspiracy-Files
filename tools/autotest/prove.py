@@ -114,6 +114,24 @@ MUTATIONS = [
      "    if not L.verbose then return end\n",
      "    do return end\n",
      "names why no outfit line"),
+    # DEV-0.36.0: papers dropped on the organiser (P4-R116), names on case
+    # papers in NAMES, and containers in words.
+    ("drop-note", "drop_note", C + "OrganiserScreen.lua",
+     "    if not id and self:dropPapers() then return true end\n",
+     "",
+     "case papers on the organiser noted"),
+    ("drop-stack-items", "unit:drop_to_note", C + "DropToNote.lua",
+     "            for i=2,#value.items do add(value.items[i]) end",
+     "            -- mutation: a stack's items are not read",
+     "a drag reads loose items and a stack's own items"),
+    ("case-names", "unit:knox_case_names", C + "KnoxApps.lua",
+     "for _,row in ipairs(A.caseNames()) do",
+     "for _,row in ipairs({}) do",
+     "a name on the case's own papers is in the book"),
+    ("container-words", "unit:container_words", "mod/common/media/lua/shared/ConspiracyFiles/ContainerWords.lua",
+     "local known=M.PHRASES[kind]",
+     "local known=nil",
+     "shelves read as"),
 ]
 
 
