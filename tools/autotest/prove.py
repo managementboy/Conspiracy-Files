@@ -83,11 +83,23 @@ MUTATIONS = [
      "local r=rank(zombie,female,nil)",
      "local r=0",
      "the case person picker chose a zombie that is not"),
-    ("date-note", "core_loop", C + "EvidenceRows.lua",
+    # Proven by the unit test, not the core loop. Since case dates spread across
+    # the calendar (P4-R108) only about a third of cases put a paper in the
+    # memo's week, so the core loop meets the note by chance and missed this
+    # mutation on a case with none (20260915). test/relay_memo.lua always has
+    # a paper inside the week.
+    ("date-note", "unit:relay_memo", C + "EvidenceRows.lua",
      'detail=detail.."\\n\\n"..RelayMemo.NOTE',
      "detail=detail",
-     "carry the date note"),
+     "a paper dated in the week is noted once the memo is found"),
 ]
+
+
+def check_command(check):
+    """A real-game check script, or `unit:<name>` for an offline test in test/."""
+    if check.startswith("unit:"):
+        return "lua5.1 test/%s.lua" % check[len("unit:"):]
+    return "timeout 1500 tools/autotest/checks/%s.sh" % check
 
 
 def run(cmd, cwd, timeout=None):
@@ -120,7 +132,7 @@ def main():
     baseline = {}
     for check in sorted({m[1] for m in chosen}):
         print("baseline %s ..." % check, flush=True)
-        clean = run("timeout 1500 tools/autotest/checks/%s.sh" % check, wt, timeout=1600)
+        clean = run(check_command(check), wt, timeout=1600)
         # Kept like every mutation run: a baseline that could not start (exit 2,
         # 20260914 body-searched) left nothing to say why.
         runs = os.path.join(REPO, "dev/eval/linux/runs")
@@ -145,7 +157,7 @@ def main():
         open(full, "w", newline="").write(text.replace(good, bad))
         try:
             print("mutation %s -> %s ..." % (name, check), flush=True)
-            result = run("timeout 1500 tools/autotest/checks/%s.sh" % check, wt, timeout=1600)
+            result = run(check_command(check), wt, timeout=1600)
             out = result.stdout + result.stderr
             # Every run's whole output is kept: the first proof had one result
             # it could not explain ("FAILED, BUT NOT FOR THIS ... no FAIL line")
