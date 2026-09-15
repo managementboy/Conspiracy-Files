@@ -743,8 +743,25 @@ voice when writing: What do you make of it? Should be What do I make of it?"
 Questions the organiser puts to the player, and the answers it writes back into
 the journal, are the survivor thinking - "What do I make of it?", "Which reading
 do I believe?", "Who do I think matters here?", "What would I check next?", "I
-can't tell" - never a narrator or a quiz master addressing "you". (The question
-set itself is proposed, not yet approved or built.)
+can't tell" - never a narrator or a quiz master addressing "you".
+
+**P4-R113 — "What do I make of it?" steers the next case.** Owner's own idea
+for ending a case, 2026-09-15: give the player a set of questions about how
+they see the mystery, "and we run from there". The organiser offers a short
+first-person set when a case's papers are all found - which reading I believe
+(the case's two readings, or "I can't tell"), who I think matters (the case's
+people and organisation, or nobody), what I would check next (follow the
+person, check the place against its records, listen for it, leave it cold).
+Owner: **"It should steer"** - the answers shape the next case: that person or
+organisation returns, that way of investigating is used, and the evidence leans
+toward testing the reading chosen, never toward confirming it. Nothing is ever
+marked right or wrong. **Changing one's mind: yes** - answers stay revisable
+until the next case has been built from them. This amends P2-Q27 for case
+generation only: what the mod generates next may follow the player's theory;
+the world itself still does not react to what the player knows. The answers are
+saved inside the case they shape, as met names are, so a case still rebuilds
+from its seed. Not built yet; when it is offered (only at a case's end, or
+also at any time) is still open.
 
 **P4-R106 — how a car's containers are reached.** Owner, 2026-09-14: "The globe
 box only opens when sitting in the front of the car", and a truck bed or trunk
