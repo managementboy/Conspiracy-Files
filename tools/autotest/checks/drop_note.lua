@@ -19,7 +19,10 @@ local function rememberPeople(item)
     local Cases = require("ConspiracyFiles/Generated/SuccessiveCases")
     local wrapper = Cases.current(ModData.get("ConspiracyFiles.Generated.G2"))
     local root = Cases.find(wrapper, md.cfGeneratedId)
-    for _, person in ipairs((root and root.case and root.case.people) or {}) do
+    -- A case keeps its people as `identities` (Generator.build). The first
+    -- version read `people`, found nothing, and reported NAMES as unexercised
+    -- on every run (20260915T113943, 114251).
+    for _, person in ipairs((root and root.case and root.case.identities) or {}) do
         if person.name then D.people[person.name] = true end
     end
 end

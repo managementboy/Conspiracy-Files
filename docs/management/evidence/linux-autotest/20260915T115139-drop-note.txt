@@ -1,0 +1,14 @@
+Linux drop-to-note check 20260915T115139: FAIL
+source: ab1a4c5 + uncommitted mod changes
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+case: 8	1:placed@102 E Maple St; 2:placed@104 E Maple St; 3:placed@104 E Maple St; 4:placed@102 E Maple St; 5:placed@104 E Maple St; 6:placed@104 E Maple St; 7:placed@102 E Maple St; 8:placed@104 E Maple St
+carried: 7, left lying: Access memo / 7C-41
+drop: true	0	
+second drop: true	0	
+names from papers: true	0		
+FINDING: no noted paper named a case person, so NAMES was not exercised
+FAIL: dropping 8 case papers on the organiser noted 0 of the 7 carried
+FAIL: dropping 8 case papers on the organiser did not note the one lying in its container
+FAIL: the drop recorded 0 discoveries, not 8
+FAIL: the footer said '', not 'NOTED 8'
+FAIL: a second drop said '', not 'ALREADY NOTED'

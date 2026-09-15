@@ -1,0 +1,11 @@
+Linux mutation proof 20260915T114251
+worktree: /home/elkin/cf-wp345 at ab1a4c5 Drop to note: a finished case's papers dropped again say ALREADY NOTED
+
+baseline drop_note: PASS
+baseline unit:drop_to_note: PASS
+
+CAUGHT drop-note (drop_note): FAIL: dropping 8 case papers on the organiser noted 0 of the 7 carried | FAIL: dropping 8 case papers on the organiser did not note the one lying in its container | FAIL: the drop recorded 0 discoveries, not 8
+CAUGHT drop-stack-items (unit:drop_to_note): test/drop_to_note.lua:31: in main chunk | [C]: ?
+
+caught 2 of 2
+worktree clean afterwards: yes
