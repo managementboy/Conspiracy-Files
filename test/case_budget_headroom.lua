@@ -33,7 +33,13 @@ for seed=1,60 do
             local known={}
             for i,doc in ipairs(case.documents) do known[i]=doc.id end
             root.known=known
+            -- A live case steered by earlier answers carries them (P4-R113):
+            -- measured with the longest source id and returning name allowed.
+            -- Measured only: a hand-set steer does not match the rebuilt case,
+            -- so it comes off again before the case is retired below.
+            root.case.steer={fromCase=string.rep("c",300),reading="one",way="records",organisation=string.rep("o",160)}
             local liveBytes=V.estimateEncodedBytes(root)
+            root.case.steer=nil
             measured=measured+1
             if liveBytes>largestLive then largestLive=liveBytes end
             -- Every retired row carries where its paper was last seen, at the
@@ -42,6 +48,15 @@ for seed=1,60 do
             for _,doc in ipairs(case.documents) do lastSeen[doc.id]=string.rep("x",Retired.LAST_SEEN_MAX) end
             local retired=assert(Retired.retire(root,lastSeen))
             for _,row in ipairs(retired.rows) do assert(#row.lastSeen==Retired.LAST_SEEN_MAX,"worst case must be measured at max lastSeen") end
+            -- And what the survivor was asked and answered ("What do I make of
+            -- it?", P4-R113): names at their longest, every answer given and
+            -- used by a case with the longest id allowed.
+            assert(retired.offered,"a retired case must carry what its questions are about")
+            retired.offered.people={string.rep("n",Retired.NAME_MAX),string.rep("m",Retired.NAME_MAX)}
+            retired.offered.organisation=string.rep("o",Retired.NAME_MAX)
+            retired.answers={reading="unsure",matters="organisation",way="records",
+                changedHours=123456.75,usedBy=string.rep("u",300)}
+            assert(Retired.validate(retired),"the worst-case answers must still be a valid retired case")
             local retiredBytes=V.estimateEncodedBytes(retired)
             if retiredBytes>largestRetired then largestRetired=retiredBytes end
         end

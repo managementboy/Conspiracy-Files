@@ -281,7 +281,13 @@ end
 -- in place - a case rebuilds from it (Generator.validate).
 G.INVENTED_NAMES={"Marion Ellis","Delia Mercer","Roy Hale","Joanne Voss",
                   "Curtis Vance","Adele Prosser","Warren Nagy","Ines Kubiak"}
-local function build(seed,revision,sites,cast,relayMemo)
+-- `steer` ("What do I make of it?", P4-R113/P4-R121) is the survivor's answers
+-- about an earlier case, saved in this case like `cast`. It is applied only
+-- AFTER the ordinary draws and never adds or moves one: a case with no steer
+-- is byte-for-byte what it was before steering existed
+-- (test/fixtures/generator_unsteered_digest.lua), and the case's own
+-- agree/disagree outline is never touched, so nothing is confirmed or denied.
+local function build(seed,revision,sites,cast,relayMemo,steer)
     local random=rng(seed)
     -- The premise is drawn first, so it is the seed's most significant choice:
     -- what the case is ABOUT, before who is in it or how it resolves. See
@@ -318,14 +324,25 @@ local function build(seed,revision,sites,cast,relayMemo)
         end
     end
     local first=random(#names); local second=(first+random(#names-1)-1)%#names+1
+    -- A returning person takes the first person's place, after the draw. If the
+    -- draw had already given that name to the second person, the second person
+    -- moves on to the next name in the pool.
+    local sender,recipient=names[first],names[second]
+    if steer and steer.person then
+        sender=steer.person
+        local step=0
+        while recipient==sender and step<#names do step=step+1; recipient=names[(second-1+step)%#names+1] end
+    end
     local prefix="generated:"..seed..":"
     local a,b=sites[1],sites[2]
     -- An organisation may name one of the two sites ("{A} Site Office"), so it
     -- is resolved before it becomes {ORG} for everything else.
     local organisation=subst(subst(premise.orgs[random(#premise.orgs)],"A",a.name),"B",b.name)
+    -- A returning organisation replaces the drawn one; the draw still happened.
+    if steer and steer.organisation then organisation=steer.organisation end
     local code=REFERENCE[random(#REFERENCE)].."-"..(100+random(899))
     local cal=G.calendar(random)
-    local facts={sender=names[first],recipient=names[second],organisation=organisation,code=code,
+    local facts={sender=sender,recipient=recipient,organisation=organisation,code=code,
         claimDate=cal.claimDate,responseDate=cal.responseDate,reviewDate=cal.reviewDate,
         premise=premise.id,subject=premise.subject,unknown=premise.unknown}
     local map=G.dateFields(cal)
@@ -334,7 +351,9 @@ local function build(seed,revision,sites,cast,relayMemo)
     local function wasMet(name) for _,m in ipairs(met) do if m==name then return true end end return false end
     -- `met` marks a person whose body the player has already searched, so
     -- CasePerson does not name a SECOND zombie after someone already dead.
-    local people={{id=prefix.."person-1",name=facts.sender,met=wasMet(facts.sender) or nil},
+    -- A returning person never gets a second body (P4-R121): she is carried by
+    -- the papers only, exactly as someone already met is.
+    local people={{id=prefix.."person-1",name=facts.sender,met=(wasMet(facts.sender) or (steer~=nil and steer.person==facts.sender)) or nil},
                   {id=prefix.."person-2",name=facts.recipient,met=wasMet(facts.recipient) or nil}}
     local org={id=prefix.."organisation",name=facts.organisation}
     local documents={}
@@ -633,6 +652,28 @@ local function build(seed,revision,sites,cast,relayMemo)
     local optionalCapacity=G.MAX_EVIDENCE-mandatory
     local optionalCount=random(optionalCapacity+1)-1
     for i=#optional,2,-1 do local j=random(i); optional[i],optional[j]=optional[j],optional[i] end
+    -- Steering reorders the shuffled list and never draws again. First one
+    -- paper the chosen reading has to explain (a disputing record for the
+    -- ordinary reading, the duty log for the other), then the papers of the
+    -- chosen way of investigating; the case then takes at least those.
+    if steer and (steer.way or steer.reading) then
+        local WAY={person={[5]=true,[8]=true,[9]=true,[11]=true,[12]=true,[13]=true,[15]=true},
+                   records={[4]=true,[6]=true,[10]=true,[16]=true,[17]=true,[18]=true,[19]=true},
+                   listen={[7]=true}}
+        local LEAN={one={[10]=true,[11]=true,[16]=true,[17]=true,[18]=true,[19]=true},two={[12]=true}}
+        local roleOf={}; for i=4,19 do roleOf[documents[i]]=i end
+        local leanSet,waySet=LEAN[steer.reading],WAY[steer.way]
+        local lean,way,rest={},{},{}
+        for _,d in ipairs(optional) do
+            local role=roleOf[d]
+            if leanSet and leanSet[role] and #lean==0 then lean[1]=d
+            elseif waySet and waySet[role] then way[#way+1]=d
+            else rest[#rest+1]=d end
+        end
+        optional={}
+        for _,list in ipairs({lean,way,rest}) do for _,d in ipairs(list) do optional[#optional+1]=d end end
+        optionalCount=math.max(optionalCount,math.min(optionalCapacity,(leanSet and 1 or 0)+(waySet and 1 or 0)))
+    end
     -- Papers that must not share a case (P4-R107, 2026-09-15). The timing
     -- stub puts the second person at the first site on the response's day;
     -- the duty log and the itinerary put them at the second site that same
@@ -694,7 +735,7 @@ local function build(seed,revision,sites,cast,relayMemo)
     return {schemaVersion=G.SCHEMA,generatorRevision=G.REVISION,catalogRevision=revision,seed=seed,
         caseId=prefix.."case",outline=outline,premiseId=premise.id,contentStatus="development-draft-unapproved",
         locations=copy(sites),cast=#met>0 and copy(met) or nil,facts=facts,identities=people,
-        organisation=org,documents=documents,relayMemo=relayMemo and true or nil}
+        organisation=org,documents=documents,relayMemo=relayMemo and true or nil,steer=steer and copy(steer) or nil}
 end
 -- What the player has met, reduced to what a case may safely carry: plain
 -- two-word-or-more names, printable, bounded, deduplicated and ORDERED, since
@@ -714,6 +755,30 @@ function G.castFrom(names)
     if #out==0 then return nil end
     return out
 end
+-- The survivor's answers about an earlier case, reduced to what a case may
+-- carry (P4-R113, P4-R121): the case they came from, the reading leaned on
+-- ("one" ordinary, "two" the other; "can't tell" is simply no reading), the
+-- way of investigating, and at most one returning name. Anything else is
+-- refused, so a hand-edited save cannot steer a case the generator would not.
+G.STEER_READINGS={one=true,two=true}
+G.STEER_WAYS={person=true,records=true,listen=true}
+local STEER_FIELDS={fromCase=true,reading=true,way=true,person=true,organisation=true}
+function G.steerFrom(s)
+    if type(s)~="table" then return nil,"invalid steer" end
+    for k in pairs(s) do if not STEER_FIELDS[k] then return nil,"unknown steer field" end end
+    if type(s.fromCase)~="string" or s.fromCase=="" or #s.fromCase>300 or s.fromCase:find("%c") then return nil,"steer needs the case it came from" end
+    if s.reading~=nil and not G.STEER_READINGS[s.reading] then return nil,"invalid steer reading" end
+    if s.way~=nil and not G.STEER_WAYS[s.way] then return nil,"invalid steer way" end
+    if s.person~=nil and s.organisation~=nil then return nil,"at most one returning name" end
+    if s.person~=nil then
+        local cast=G.castFrom({s.person})
+        if not cast or cast[1]~=s.person then return nil,"invalid returning person" end
+    end
+    if s.organisation~=nil and (type(s.organisation)~="string" or s.organisation=="" or #s.organisation>160
+        or s.organisation:find("%c")) then return nil,"invalid returning organisation" end
+    if s.reading==nil and s.way==nil and s.person==nil and s.organisation==nil then return nil,"nothing to steer" end
+    return {fromCase=s.fromCase,reading=s.reading,way=s.way,person=s.person,organisation=s.organisation}
+end
 -- Number of actual containers a generated case needs at each selected site.
 -- Session.createDistributed remains the final authority on target uniqueness.
 function G.requiredContainers(case)
@@ -726,9 +791,11 @@ function G.generate(catalog,seed,options)
     if not seedOK(seed) then return nil,"seed must be an integer from 1 through 2147483646" end
     options=options or {}
     if type(options)~="table" then return nil,"invalid generator options" end
-    for key in pairs(options) do if key~="mapId" and key~="buildLine" and key~="allowSynthetic" and key~="names" and key~="relayMemo" then return nil,"unknown generator option" end end
+    for key in pairs(options) do if key~="mapId" and key~="buildLine" and key~="allowSynthetic" and key~="names" and key~="relayMemo" and key~="steer" then return nil,"unknown generator option" end end
     if type(options.mapId)~="string" or type(options.buildLine)~="string" then return nil,"map and build are required" end
     if options.relayMemo~=nil and type(options.relayMemo)~="boolean" then return nil,"invalid relay memo option" end
+    local steer
+    if options.steer~=nil then local bad; steer,bad=G.steerFrom(options.steer); if not steer then return nil,bad end end
     local eligible,why=Catalog.eligible(catalog,options.mapId,options.buildLine,options.allowSynthetic)
     if not eligible then return nil,why end
     local pairs={}
@@ -739,7 +806,7 @@ function G.generate(catalog,seed,options)
     local random=rng((seed+4099)%2147483646+1)
     local selected=pairs[random(#pairs)]
     if random(2)==1 then selected={selected[2],selected[1]} end
-    local result=build(seed,catalog.revision,selected,G.castFrom(options.names),options.relayMemo==true)
+    local result=build(seed,catalog.revision,selected,G.castFrom(options.names),options.relayMemo==true,steer)
     local valid,err=G.validate(result); if not valid then return nil,err end
     return copy(result)
 end
@@ -748,8 +815,10 @@ function G.generateSelected(catalog,seed,options,orderedSiteIds)
     local safe=V.validateStructure({options=options,orderedSiteIds=orderedSiteIds})
     if not safe or type(options)~="table" or type(orderedSiteIds)~="table" then return nil,"invalid selected-generation input" end
     for key in pairs(options) do
-        if key~="mapId" and key~="buildLine" and key~="allowSynthetic" and key~="names" and key~="relayMemo" then return nil,"unknown generator option" end
+        if key~="mapId" and key~="buildLine" and key~="allowSynthetic" and key~="names" and key~="relayMemo" and key~="steer" then return nil,"unknown generator option" end
     end
+    local steer
+    if options.steer~=nil then local bad; steer,bad=G.steerFrom(options.steer); if not steer then return nil,bad end end
     for key in pairs(orderedSiteIds) do if key~=1 and key~=2 then return nil,"exactly two ordered site IDs required" end end
     for i=1,2 do if type(orderedSiteIds[i])~="string" or #orderedSiteIds[i]==0 or #orderedSiteIds[i]>300 then return nil,"invalid ordered site ID" end end
     if orderedSiteIds[1]==orderedSiteIds[2] then return nil,"two distinct site IDs required" end
@@ -760,7 +829,7 @@ function G.generateSelected(catalog,seed,options,orderedSiteIds)
     local byId={}; for _,site in ipairs(eligible) do byId[site.id]=site end
     local a,b=byId[orderedSiteIds[1]],byId[orderedSiteIds[2]]
     if not a or not b or not Catalog.distinct(a,b) then return nil,"selected sites are not eligible and distinct" end
-    local result=build(seed,catalog.revision,{a,b},G.castFrom(options.names),options.relayMemo==true); local valid,err=G.validate(result); if not valid then return nil,err end
+    local result=build(seed,catalog.revision,{a,b},G.castFrom(options.names),options.relayMemo==true,steer); local valid,err=G.validate(result); if not valid then return nil,err end
     return copy(result)
 end
 -- Gameplay-facing creation entry point. Legacy generate remains an offline fixture API.
@@ -803,7 +872,12 @@ function G.validate(case)
         local canonical=G.castFrom(case.cast)
         if not canonical or not same(canonical,case.cast) then return false,"invalid case cast" end
     end
-    if not same(case,build(case.seed,case.catalogRevision,case.locations,case.cast,case.relayMemo)) then return false,"case facts, text or structure do not match recorded revision" end
+    -- The steer, like the cast, must already be in its canonical form.
+    if case.steer~=nil then
+        local canonical=G.steerFrom(case.steer)
+        if not canonical or not same(canonical,case.steer) then return false,"invalid case steer" end
+    end
+    if not same(case,build(case.seed,case.catalogRevision,case.locations,case.cast,case.relayMemo,case.steer)) then return false,"case facts, text or structure do not match recorded revision" end
     return true
 end
 function G.restore(saved)
