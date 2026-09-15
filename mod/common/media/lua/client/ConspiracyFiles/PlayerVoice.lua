@@ -320,6 +320,10 @@ function V.onCaseComplete(caseId)
     if not once("done:"..tostring(caseId)) then return end
     indexF=indexF%#SET_F+1
     speak(p,SET_F[indexF],"Nothing left to find here")
+    -- A moment later, a second thought (P4-R113, P4-R122): the question the
+    -- organiser's FILES now holds. It waits in the queue behind the first line;
+    -- the organiser never opens by itself.
+    speak(p,"What do I make of it?","A question for the organiser")
 end
 
 -- Set G: arrival at a building an earlier document named. The caller owns

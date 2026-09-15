@@ -849,7 +849,9 @@ approving the draft in docs/design/WHAT_DO_I_MAKE_OF_IT.md section 1 as written:
   "(not yet)". Options: the case's two readings or "I can't tell."; the two
   people, the organisation or "Nobody, really."; "Follow the person.", "Check
   the place against its records.", "Listen for it."; every list ends with
-  "Clear my answer.". Every option 34 characters or fewer.
+  "Clear my answer.". **No length limit** (owner, same day: "the wording can be
+  as long as necessary, change our limit"): a pick list wraps a long option
+  onto more lines instead of cutting it off.
 - **The invitation:** after "That's all of it", a second thought "What do I
   make of it?" appears, and FILES gains a row at the top. The organiser never
   opens by itself.
@@ -857,6 +859,14 @@ approving the draft in docs/design/WHAT_DO_I_MAKE_OF_IT.md section 1 as written:
   think it was a move nobody would sign for. Delia Mercer matters here. Next I
   would follow the person."), adding "I've gone on from here." once a case is
   built from it. Nothing ever says right or wrong.
+
+**P4-R123 — "Listen for it" brings a radio call-in transcript.** Owner,
+2026-09-15, choosing between a scanner log and a call-in transcript for the
+broadcast paper of P4-R121: **a typed page from a local radio station's evening
+call-in show**, filed against the case's reference. Like every paper it raises a
+question and never answers it. It is placed only in a case steered to "Listen
+for it", after every random draw (as the relay memo is), so no existing case
+changes. Text: docs/design/WHAT_DO_I_MAKE_OF_IT.md, step 11.
 
 **P4-R106 — how a car's containers are reached.** Owner, 2026-09-14: "The globe
 box only opens when sitting in the front of the car", and a truck bed or trunk

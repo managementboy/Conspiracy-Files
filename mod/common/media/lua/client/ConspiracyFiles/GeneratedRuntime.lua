@@ -385,6 +385,14 @@ local function prepare(result,seed,later,house)
             local ok,met=pcall(nameLog.names)
             if ok and type(met)=="table" and #met>0 then options.names=met end
         end
+        -- "What do I make of it?" (P4-R113): the most recently changed unused
+        -- answers about a finished case steer this one. Read here, saved in
+        -- the case, and marked used in the same swap below.
+        local steerFrom
+        if later then
+            local okSteer,steer,index=pcall(Cases.pendingSteer,wrapper)
+            if okSteer and steer then options.steer=steer; steerFrom=index end
+        end
         local context={hoursSurvived=p:getHoursSurvived(),anchor=anchor}
         local case,err
         if house then case,err=firstCase(filtered,seed,options,context,house,candidates)
@@ -406,7 +414,9 @@ local function prepare(result,seed,later,house)
         end
         -- Validate once more before the single authoritative swap.
         checked(Session.validate(root))
-        if later then swap(assert(Cases.stage(wrapper,root,wrapper.schedule and worldHours() or nil)))
+        if later then
+            swap(assert(Cases.stage(wrapper,root,wrapper.schedule and worldHours() or nil,steerFrom)))
+            if steerFrom then log("Case shaped by the survivor's answers about "..tostring(case.steer and case.steer.fromCase)) end
         elseif house then swap({canonical=root,schedule={schema=1,createdHours={worldHours()}}})
         else swap({canonical=root}) end
         openAll()
@@ -649,7 +659,9 @@ function R.inspect(item,inPlace)
                 for sid,s in pairs(sightings) do if s.where then seen[sid]=s.where end end
                 local okHere,here=pcall(placeOf,item)
                 if okHere and here then seen[md.cfGeneratedId]=here end
-                local staged,why=Cases.retire(wrapper,index,seen)
+                -- The hour it finished lets the next case wait a little for
+                -- the survivor's answers (P4-R121).
+                local staged,why=Cases.retire(wrapper,index,seen,worldHours())
                 if staged then
                     swap(staged); openAll(); log("Case complete; placement details retired.")
                     -- The paper in hand is Old at once; the rest are marked
@@ -679,6 +691,38 @@ function R.retiredPaper(item)
     if not item then return false end
     local md=item:getModData(); if type(md)~="table" or not md.cfGeneratedId then return false end
     return retiredId(md.cfGeneratedId) and not R.subject(item)
+end
+-- Every finished case that carries questions ("What do I make of it?",
+-- P4-R113), newest case first: its id, its place in the campaign, what it asks
+-- about and the answers so far. Copies, so the organiser cannot change a save
+-- by editing what it was handed.
+function R.questions()
+    if not wrapper then return {} end
+    local function dup(v) if type(v)~="table" then return v end local o={} for k,x in pairs(v) do o[k]=dup(x) end return o end
+    local out={}
+    for index,root in ipairs(Cases.sessions(wrapper) or {}) do
+        if Retired.isRetired(root) and root.offered then
+            out[#out+1]={caseId=root.caseId,number=index,offered=dup(root.offered),answers=dup(root.answers)}
+        end
+    end
+    table.sort(out,function(a,b) return a.number>b.number end)
+    return out
+end
+-- The survivor's answers about a finished case ("What do I make of it?",
+-- P4-R113): reading, who matters, way. An empty table clears them. Refused
+-- once a case has been built from them. Used by the organiser's question
+-- screen and by the Linux core-loop check.
+function R.setAnswers(caseId,answers)
+    if not allowed() or not wrapper then return false,"no campaign" end
+    for index,root in ipairs(Cases.sessions(wrapper) or {}) do
+        if Retired.isRetired(root) and root.caseId==caseId then
+            local staged,why=Cases.setAnswers(wrapper,index,answers,worldHours())
+            if not staged then return false,why end
+            swap(staged); refreshRetired()
+            return true
+        end
+    end
+    return false,"no finished case "..tostring(caseId)
 end
 -- True once the item's document id has been inspected (recorded in the
 -- ledger via R.inspect). Distinct from R.subject: a subject item can be
@@ -753,8 +797,16 @@ function R.metrics() return scheduler and {peakMs=scheduler.peakMs} end
 function R.automaticStatus()
     local roots=wrapper and Cases.sessions(wrapper) or {}
     local schedule=wrapper and wrapper.schedule
+    -- When the most recent case finished, so the next one can wait a little
+    -- for the survivor's answers (P4-R121). nil when none recorded one.
+    local lastCompleted
+    for _,root in ipairs(roots) do
+        local h=type(root)=="table" and root.completedHours
+        if type(h)=="number" and (not lastCompleted or h>lastCompleted) then lastCompleted=h end
+    end
     return {count=#roots,preparing=preparing==true,scheduled=schedule~=nil,
-        lastCreatedHours=schedule and schedule.createdHours[#schedule.createdHours],limit=Cases.MAX_CASES}
+        lastCreatedHours=schedule and schedule.createdHours[#schedule.createdHours],
+        lastCompletedHours=lastCompleted,limit=Cases.MAX_CASES}
 end
 -- Bounded scan of a destination site's own bounding box for any container of
 -- an allowed type. Mirrors Storage.scan's tile-stepping discipline, but the

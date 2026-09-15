@@ -50,4 +50,22 @@ local inverted=false
 for _,r in ipairs(rects) do if r.y==third.y and r.h==Base.line then inverted=true end end
 assert(inverted,"the current choice is drawn inverted")
 
+-- A long choice wraps onto more lines instead of being cut off (P4-R122, owner
+-- 2026-09-15: "the wording can be as long as necessary"), stays on the glass,
+-- and a tap on any of its lines chooses it.
+textures,rects={},{}
+-- A narrow glass, so the option cannot fit on one line (it is 142 px at Small).
+c=K.begin(panel,1,0,0,100,211)
+local long="Check the place against its records."
+assert(K.width(long)>96,"fixture: the option must be wider than the list can be")
+x,y,w,h=K.popup(c,"What would I check next?",{"Follow the person.",long,"Listen for it."},2)
+assert(x>=0 and y>=0 and x+w<=100 and y+h<=211,"a wrapped list stays on the glass")
+local second
+for _,hit in ipairs(c.hits) do if hit.id=="POPUP" and hit.payload==2 then second=hit end end
+assert(second and second.h>=Base.line*2,"the long option takes more than one line")
+local low=K.at(c,second.x+1,second.y+second.h-1)
+assert(low and low.id=="POPUP" and low.payload==2,"a tap on its second line still chooses it")
+local lines=K.wrap(long,w-6)
+assert(#lines>=2 and table.concat(lines," ")==long,"wrapping keeps every word, in order")
+
 print("PASS knoxui faces and popup: the 24 pt cut draws from its own folder between Small and Medium, the popup list chooses on a tap and closes on a tap elsewhere")

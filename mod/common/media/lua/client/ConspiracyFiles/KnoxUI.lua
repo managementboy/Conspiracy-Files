@@ -221,24 +221,45 @@ end
 -- over the screen with a title, the current choice inverted, and a tap on a
 -- line to choose it. A tap anywhere else leaves the setting as it was, so the
 -- catcher is registered first and the lines, drawn after it, win the tap.
+-- A choice longer than the box WRAPS onto more lines rather than being cut
+-- (owner, 2026-09-15, P4-R122: "the wording can be as long as necessary"), and
+-- a tap anywhere on its lines chooses it.
+function K.wrap(value,width)
+    local out,line={}, ""
+    for word in tostring(value or ""):gmatch("%S+") do
+        local candidate=line=="" and word or (line.." "..word)
+        if line=="" or K.width(candidate)<=width then line=candidate
+        else out[#out+1]=line; line=word end
+    end
+    if line~="" then out[#out+1]=line end
+    if #out==0 then out[1]="" end
+    return out
+end
+
 function K.popup(c,title,labels,selected)
     local line=Font.line
     hit(c,"POPUP_CLOSE",0,0,c.w,c.h)
     local w=K.width(title)+12
     for _,label in ipairs(labels) do w=math.max(w,K.width(label)+12) end
     w=math.min(w,c.w-4)
-    local h=line*(#labels+1)+4
+    local wrapped,count={},0
+    for i,label in ipairs(labels) do wrapped[i]=K.wrap(label,w-6); count=count+#wrapped[i] end
+    local h=line*(count+1)+4
     local x=math.floor((c.w-w)/2)
     local y=math.max(line+2,math.floor((c.h-h)/2))
     K.fill(c,x,y,w,h,K.GLASS)
     K.frame(c,x,y,w,h,K.INK)
     K.text(c,K.fit(title,w-6),x+3,y+1,K.DIM)
     K.fill(c,x+1,y+line+1,w-2,1,K.INK)
-    for i,label in ipairs(labels) do
-        local ly=y+2+i*line
-        if i==selected then K.fill(c,x+1,ly,w-2,line,K.INK) end
-        K.text(c,K.fit(label,w-6),x+3,ly,i==selected and K.GLASS or K.INK)
-        hit(c,"POPUP",x,ly,w,line,i)
+    local ly=y+2+line
+    for i,lines in ipairs(wrapped) do
+        local tall=line*#lines
+        if i==selected then K.fill(c,x+1,ly,w-2,tall,K.INK) end
+        for j,text in ipairs(lines) do
+            K.text(c,K.fit(text,w-6),x+3,ly+(j-1)*line,i==selected and K.GLASS or K.INK)
+        end
+        hit(c,"POPUP",x,ly,w,tall,i)
+        ly=ly+tall
     end
     return x,y,w,h
 end

@@ -1,0 +1,23 @@
+Linux core loop check 20260915T172134: PASS
+source: 6c84990 + uncommitted mod changes
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+first case: 8 documents, all found and inspected through the right-click menu:
+  1. Letter of resignation / AV-206, in shelves, room hall, floor 0 (container icon clicked: yes)
+  2. Final payslip / AV-206, in counter, room kitchen, floor 0 (container icon clicked: yes)
+  3. Leavers list / AV-206, in counter, room kitchen, floor 0 (container icon clicked: yes)
+  4. Private diary / AV-206, in counter, room kitchen, floor 0 (container icon clicked: yes)
+  5. Payment slip / AV-206, in counter, room kitchen, floor 0 (container icon clicked: yes)
+  6. Business Card: Marion Ellis, in counter, room kitchen, floor 0 (container icon clicked: yes)
+  7. Ticket: Joanne Voss, in counter, room kitchen, floor 0 (container icon clicked: yes)
+  8. Access memo / 7C-41, in counter, room kitchen, floor 0 (container icon clicked: yes)
+notebook entries: 8; case completion reported: yes
+map marks without a pen (written/pending/missing): 0/8/0
+map marks after a pen, case already retired: 8/0/0
+second case appeared (gap removed): yes
+errors inside the mod: 0
+FINDING: relay memo date notes: memo found=true, dated in its week=0, carrying the note=0
+FINDING: last seen after completion: 8 of 8 documents, e.g. 'Carried.'; retired cases in the save=1, rows with a stored last seen=8
+FINDING: last-seen log: 
+FINDING: Evidence / Old after completion: 8 papers carried, 8 known as retired papers, 8 in the Old category
+FINDING: What do I make of it?: answered=true (person Marion Ellis); second case built from the answers=true, answers marked used=true, person returned=true, no second body=true
+screenshot: dev/eval/linux/runs/20260915T172134-map.png (not committed)

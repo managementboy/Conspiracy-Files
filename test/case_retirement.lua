@@ -223,3 +223,21 @@ assert(not Retired.validate(withOffered(function(o) o.people={o.people[1]} end))
 assert(not Retired.validate(withOffered(function(o) o.organisation="bad\nname" end)),"control characters in a name are refused")
 assert(not Retired.validate(withOffered(function(o) o.organisation=string.rep("a",Retired.NAME_MAX+1) end)),"over-long names refused")
 print("PASS a retired case keeps what the survivor will be asked about; answers validated, old roots still load")
+
+-- 9. The first case of a game can hold every story paper PLUS the relay memo
+--    (P4-R96), and must still retire. It did not: rows were capped at
+--    MAX_EVIDENCE, so such a case finished and never retired (core-loop check
+--    2026-09-15: "Case complete but not retired: invalid retired rows").
+local memoCase=assert(G.generate(catalog(),3,{mapId="SYNTHETIC-MAP",buildLine="TEST-ONLY",allowSynthetic=true,relayMemo=true}))
+assert(#memoCase.documents==G.MAX_EVIDENCE+1,"fixture: seed 3 must give every story paper plus the memo")
+local memoTargets={}
+for _,site in ipairs(memoCase.locations) do
+    memoTargets[site.id]={x=site.bounds.x1,y=site.bounds.y1,z=site.bounds.z,objectIndex=0,
+        containerIndex=0,containerType=site.containerTypes[1],sprite="sprite_placeholder"}
+end
+local memoRoot=discoverAll(assert(Session.create(memoCase,memoTargets)))
+local memoRetired=assert(Cases.retire({canonical=memoRoot},1))
+local memoRows=Cases.sessions(memoRetired)[1].rows
+assert(#memoRows==G.MAX_EVIDENCE+1,"every paper, the memo included, survives retirement")
+assert(Cases.validate(memoRetired))
+print("PASS a first case with every story paper and the relay memo retires")

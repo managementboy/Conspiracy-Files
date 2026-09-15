@@ -55,7 +55,9 @@ Voice.onCaseComplete("case-1"); Voice.onCaseComplete("case-1")
 Voice.onNamedPlace("t3:12"); Voice.onNamedPlace("t3:12")
 Voice.onPile("doc-4"); Voice.onPile("doc-4")
 Voice.onBody("boot"); Voice.onBody("boot")
-assert(#says == 5, "each moment speaks exactly once, got " .. #says)
+-- A finished case says two things, once: its line, then the second thought
+-- "What do I make of it?" (P4-R113, P4-R122). Every other moment says one.
+assert(#says == 6, "each moment speaks exactly once (a finished case twice), got " .. #says)
 
 -- The bubble's tag is read at a glance; the white halo is the survivor
 -- thinking (swapped round, owner, 2026-09-14).
@@ -65,6 +67,8 @@ for _, h in ipairs(says) do assert(#h <= 30, "the bubble's tag is too long to re
 fresh(); Voice.onCaseComplete("case-2")
 assert(says[1] == "Nothing left to find here", says[1])
 assert(not halos[1]:lower():find("solved", 1, true), "a case is never solved, only exhausted")
+assert(halos[2] == "What do I make of it?", "the second thought follows the first: " .. tostring(halos[2]))
+assert(says[2] == "A question for the organiser", tostring(says[2]))
 
 -- The callers, checked at the source: a behavioural test only covers the paths
 -- it exercises, and these fire deep inside the runtime.

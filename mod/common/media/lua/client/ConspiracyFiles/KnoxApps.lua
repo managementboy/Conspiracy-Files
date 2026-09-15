@@ -120,6 +120,14 @@ A.files={
             return nil
         end
         local out={}
+        -- "What do I make of it?" (P4-R113, P4-R122): a row at the top for every
+        -- finished case, newest first. Opening it shows the three questions;
+        -- its words are the survivor's own note once anything is answered.
+        local Q=require("ConspiracyFiles/Generated/Questions")
+        for _,q in ipairs((runtime and runtime.questions and safe(runtime.questions)) or {}) do
+            out[#out+1]={label=Q.rowLabel(q.number),title=Q.TITLE,questions=q,id="questions:"..q.caseId,
+                         detail=Q.note(q.answers,q.offered) or "",fields={}}
+        end
         for _,row in ipairs(rows) do
             if not row.cfHeading then
                 local body,fields=split(row.detailText)

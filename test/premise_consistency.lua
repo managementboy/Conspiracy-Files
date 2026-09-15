@@ -357,6 +357,32 @@ if problemCount > 0 then
     error("premise consistency: " .. problemCount .. " problems, first " .. #problems .. ":\n  "
         .. table.concat(problems, "\n  "), 0)
 end
+-- The two readings the survivor may choose between at a case's end ("What do I
+-- make of it?", P4-R113, wording P4-R122): every premise has exactly two, each
+-- a plain sentence. No length limit: the organiser's pick list wraps (owner,
+-- 2026-09-15: "the wording can be as long as necessary").
+for _, id in ipairs(Premises.list()) do
+    local premise = Premises.get(id)
+    local r = premise.readings
+    if type(r) ~= "table" or #r ~= 2 then
+        problem(id .. ": needs exactly two readings")
+    else
+        for i = 1, 2 do
+            local t = r[i]
+            if type(t) ~= "string" or t == "" then problem(id .. ": reading " .. i .. " is empty")
+            else
+                if t:find("[{}%%]") then problem(id .. ": reading " .. i .. " has a placeholder or percent sign") end
+                if t:lower():find("%f[%a]you") then problem(id .. ": reading " .. i .. " addresses the player") end
+                if not t:find("%.$") then problem(id .. ": reading " .. i .. " must end with a full stop") end
+            end
+        end
+        if r[1] == r[2] then problem(id .. ": the two readings are the same") end
+    end
+end
+if problemCount > 0 then
+    error("premise readings: " .. problemCount .. " problem(s):\n  " .. table.concat(problems, "\n  "))
+end
+
 print(string.format("PASS premise consistency: %d anchor renders on %d calendars; %d cases (%d seeds) cover all %d "
     .. "premise/outline/review shapes; %d of %d cases (%.0f%%) dated in the memo's week; %d placements checked",
     renders, #calendars, cases, seed, #wanted, weekCases, generatedIn400, rate * 100, clashesChecked))

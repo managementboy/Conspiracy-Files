@@ -1,0 +1,23 @@
+Linux core loop check 20260915T171041: FAIL
+source: 6c84990 + uncommitted mod changes
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+first case: 7 documents, all found and inspected through the right-click menu:
+  1. Employment record / LD-233, in shelves, room hall, floor 0 (container icon clicked: yes)
+  2. Union card / LD-233, in counter, room kitchen, floor 0 (container icon clicked: yes)
+  3. Records note / LD-233, in counter, room kitchen, floor 0 (container icon clicked: yes)
+  4. Tagged key / LD-233, in counter, room kitchen, floor 0 (container icon clicked: yes)
+  5. Green pen, marked Adele Prosser, in counter, room kitchen, floor 0 (container icon clicked: yes)
+  6. Credit Card: Ines Kubiak, in counter, room kitchen, floor 0 (container icon clicked: yes)
+  7. Access memo / 7C-41, in counter, room kitchen, floor 0 (container icon clicked: yes)
+notebook entries: 7; case completion reported: yes
+map marks without a pen (written/pending/missing): 7/0/0
+map marks after a pen, case already retired: 7/0/0
+second case appeared (gap removed): yes
+errors inside the mod: 0
+FINDING: relay memo date notes: memo found=true, dated in its week=0, carrying the note=0
+FINDING: last seen after completion: 7 of 7 documents, e.g. 'Carried.'; retired cases in the save=1, rows with a stored last seen=7
+FINDING: last-seen log: 
+FINDING: Evidence / Old after completion: 7 papers carried, 7 known as retired papers, 7 in the Old category
+FINDING: What do I make of it?: answered=true (person Adele Prosser); second case built from the answers=true, answers marked used=true, person returned=true, no second body=true
+FAIL: without a pen, expected 7 pending marks: 7	0	0
+screenshot: dev/eval/linux/runs/20260915T171041-map.png (not committed)

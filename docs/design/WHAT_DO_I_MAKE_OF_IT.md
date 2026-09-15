@@ -1,5 +1,43 @@
 # "What do I make of it?" - implementation plan (first cut)
 
+**Status 2026-09-15.** Built: step 1 (two readings per premise, written as
+noun phrases so the note reads "I think it was ..."), 2 (offered/answers on the
+retired record), 3 and 3b (generator `steer`; a returning person is marked met
+and never gets a second body), 4 (budget), 5 (offered frozen at retirement), 6
+and 6b (most recent unused answers steer the next case, marked used in the
+same swap; the next case waits one in-game hour after a completion), 7 (FILES
+row, question view, wrapping pick lists, ANSWER), 8 (the second thought). Also
+fixed on the way: a first case with every story paper plus the relay memo could
+never retire. Still to do: step 9 (the note in the notebook), 10 (a reload
+check for answers) and 11 (the broadcast paper for "Listen for it"; until it
+exists that way leans on the press clipping).
+
+**Step 11 text (owner chose a radio call-in transcript, P4-R123).** Placed only
+in a case steered to "Listen for it", after every draw, so no existing case
+changes. Placeholders as in Premises.lua.
+
+```
+Radio transcript / {CODE}
+
+WHAT YOU FOUND
+A typed page from a local radio station's evening call-in show, kept in a card
+folder with {CODE} pencilled on the tab. One caller's words are underlined.
+
+{DATE1CAPS} - EVENING CALL-IN
+CALLER: There were trucks at {B} past ten last night. Nobody I asked knew
+anything about it.
+HOST: Probably maintenance. They do that at night so nobody is held up.
+CALLER: Could be. There was no sign on the gate, is all.
+HOST: We'll put the question to {ORG} and see if anybody rings back. Next caller.
+
+WHAT IT MIGHT MEAN
+A caller noticed work at {B} at an hour nobody had explained, and someone later
+filed the page against the reference. Night work is ordinary, and so is a
+curious caller; a quiet arrangement looks exactly the same from the road. The
+transcript records what one person said on air. It cannot say what {SUBJECT}
+was, or {UNKNOWN}.
+```
+
 Status: plan only, nothing built. Decisions it follows: **P4-R113** (the idea),
 **P4-R119** (first cut), **P4-R112** (first-person voice), **P2-Q27** (the
 world does not react; amended for case generation only), P4-R17 (500 kB save
@@ -88,8 +126,10 @@ First cut, as the owner set it:
 
 Size check (P4-R89/P4-R99): at Large text the line holds about 25
 characters, and each option wraps to at most two lines. At a 0.5x machine the
-owner already expects only Small or Normal text. **Rule for writers: every
-option 34 characters or fewer.**
+owner already expects only Small or Normal text. **No length limit on options**
+(owner, 2026-09-15, P4-R122: "the wording can be as long as necessary, change
+our limit"): the pick list wraps a long option onto more lines rather than
+cutting it off.
 
 ---
 

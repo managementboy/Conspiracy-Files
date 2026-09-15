@@ -458,6 +458,13 @@ function L.givePen()
     return true
 end
 
+-- Whether the survivor can already write. A case's own evidence can be a pen
+-- ("Green pen, marked Adele Prosser", 20260915T171041), and the loop picks up
+-- every paper, so "without a pen" cannot always be arranged.
+function L.hasPen()
+    return ConspiracyFiles.ClueMarkers.canWrite(getPlayer()) == true
+end
+
 function L.markers()
     local written, pending, missing = ConspiracyFiles.ClueMarkers.status()
     return written, pending, missing
@@ -486,7 +493,82 @@ end
 -- Test pacing: the 24 h gap between cases (catalogue INF-04, AS-02).
 function L.noGap()
     ConspiracyFiles.AutomaticInvestigations.config.minGapHours = 0
+    -- And the wait after a completion (P4-R121); unit-tested on its own.
+    ConspiracyFiles.AutomaticInvestigations.config.afterCompletionHours = 0
     return true
+end
+
+-- "What do I make of it?" (P4-R113): the survivor answers about the finished
+-- case, so the next case is built from the answers - the chosen person returns,
+-- and the case leans on records.
+local function campaign()
+    local Cases = require("ConspiracyFiles/Generated/SuccessiveCases")
+    local store = ModData.get("ConspiracyFiles.Generated.G2")
+    local wrapper = store and Cases.current(store)
+    return (wrapper and Cases.sessions(wrapper)) or {}
+end
+function L.answerFirst()
+    for _, root in ipairs(campaign()) do
+        if type(root.rows) == "table" and root.offered then
+            local ok, why = R.setAnswers(root.caseId, {reading = "one", matters = "person1", way = "records"})
+            return tostring(ok), tostring(why or root.caseId), tostring(root.offered.people[1])
+        end
+    end
+    return "false", "no finished case with questions", ""
+end
+-- The same answers, given the way a player gives them: open FILES on the
+-- organiser, tap "What do I make of it?", tap each question and a line of its
+-- pick list (P4-R113, P4-R122). Returns ok, the note it shows, the person chosen.
+function L.answerViaOrganiser()
+    local S = ConspiracyFiles.OrganiserScreen
+    local w = S.window or S.open()
+    if not w then return "false", "the organiser would not open", "" end
+    w.on = true; w.booting = false; w.launcher = false; w.record = nil; w.popup = nil
+    for i, p in ipairs(w:programs()) do if p.id == "FILES" then w.app = i end end
+    w.cachedList = nil; w.entry = 1
+    local function tapHit(id, payload)
+        w:prerender()
+        for _, h in ipairs((w.context or {}).hits or {}) do
+            if h.id == id and (payload == nil or h.payload == payload) then
+                w:onMouseDown(h.x + 2, h.y + 2); w:onMouseUp(h.x + 2, h.y + 2)
+                return true
+            end
+        end
+        return false
+    end
+    local rows = w:list()
+    local at
+    for i, row in ipairs(rows) do if row.questions and not at then at = i end end
+    if not at then pcall(S.close); return "false", "FILES has no question row", "" end
+    if not tapHit("ROW", at) then pcall(S.close); return "false", "the question row was not drawn", "" end
+    if not (w.record and w.record.questions) then pcall(S.close); return "false", "the row did not open the questions", "" end
+    -- Reading: the first (ordinary) reading. Who matters: the first person. Next: records.
+    for question, line in ipairs({1, 1, 2}) do
+        if not tapHit("QUESTION", question) then pcall(S.close); return "false", "question " .. question .. " was not drawn", "" end
+        if not w.popup then pcall(S.close); return "false", "question " .. question .. " opened no pick list", "" end
+        if not tapHit("POPUP", line) then pcall(S.close); return "false", "pick list line " .. line .. " was not drawn", "" end
+    end
+    local q = w.record.questions
+    local Q = require("ConspiracyFiles/Generated/Questions")
+    local note = Q.note(q.answers, q.offered) or ""
+    local ok = q.answers and q.answers.reading == "one" and q.answers.matters == "person1" and q.answers.way == "records"
+    pcall(S.close)
+    return tostring(ok == true), note, tostring(q.offered.people[1])
+end
+
+function L.steerCheck()
+    local finished, live
+    for _, root in ipairs(campaign()) do
+        if type(root.rows) == "table" and root.offered then finished = finished or root
+        elseif root.case and root.case.steer then live = root end
+    end
+    if not finished or not live then return "false", "false", "false", "false", "no steered case" end
+    local steer, person = live.case.steer, live.case.identities[1]
+    return tostring(finished.answers ~= nil and finished.answers.usedBy == live.case.caseId),
+        tostring(steer.fromCase == finished.caseId),
+        tostring(person.name == finished.offered.people[1]),
+        tostring(person.met == true),
+        tostring(live.case.caseId)
 end
 
 -- Reshuffle support (checks/reshuffle.sh). ids() is the fingerprint of the

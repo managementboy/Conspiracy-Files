@@ -122,7 +122,12 @@ say "dates tap: $(tr '\t' ' ' <<<"$dt")"
 [ "$(cut -f2 <<<"$dt")" = true ] || fail "tapping a real paper's DATES entry did not open its record: $dt"
 [ "$(cut -f3 <<<"$dt")" = true ] || fail "BACK from a paper opened in DATES did not return to the day: $dt"
 before_pen="$(ev 'return CFLoop.markers()')"
-[ "$(cut -f2 <<<"$before_pen")" = "$n" ] || fail "without a pen, expected $n pending marks: $before_pen"
+if [ "$(ev 'return CFLoop.hasPen()')" = true ]; then
+    # One of the case's own papers was a pen, so the survivor could already write.
+    findings+=("marks before a pen not tested: a case paper was itself a writing tool; marks $(tr '\t' '/' <<<"$before_pen")")
+else
+    [ "$(cut -f2 <<<"$before_pen")" = "$n" ] || fail "without a pen, expected $n pending marks: $before_pen"
+fi
 
 # A pen after the case retired: the marks must still catch up.
 ev 'return CFLoop.givePen()' >/dev/null; sleep 4
@@ -133,9 +138,25 @@ ev 'return CFLoop.showMap()' >/dev/null; sleep 3
 ev 'return CFLoop.hideMap()' >/dev/null
 run_log | grep -qE "Map overlay stopped|Worker stopped" && fail "a marker component stopped: $(run_log | grep -oE '(Map overlay|Worker) stopped: .*' | head -1)"
 
-# The next case, with the 24 h gap removed for test pacing.
+# "What do I make of it?" (P4-R113): answer about the finished case first, so
+# the next case is built from the answers.
+ans="$(ev 'return CFLoop.answerViaOrganiser()')"
+say "answers: $(tr '\t' ' ' <<<"$ans")"
+[ "$(cut -f1 <<<"$ans")" = true ] || fail "could not answer about the finished case: $(cut -f2 <<<"$ans")"
+# The next case, with the 24 h gap and the wait after a completion removed for test pacing.
 ev 'return CFLoop.noGap()' >/dev/null
 wait_true 150 'CFLoop.caseCount()>=2' && next_case=yes || { next_case=no; fail "no second case within 150 s with the gap removed"; }
+steer="false	false	false	false	none"
+if [ "$next_case" = yes ]; then
+    steer="$(ev 'return CFLoop.steerCheck()')"
+    say "steer: $(tr '\t' ' ' <<<"$steer")"
+    [ "$(cut -f2 <<<"$steer")" = true ] || fail "the second case was not built from the answers: $(tr '\t' ' ' <<<"$steer")"
+    [ "$(cut -f1 <<<"$steer")" = true ] || fail "the answers were not marked used by the second case: $(tr '\t' ' ' <<<"$steer")"
+    [ "$(cut -f3 <<<"$steer")" = true ] || fail "the chosen person did not return in the second case: $(tr '\t' ' ' <<<"$steer")"
+    [ "$(cut -f4 <<<"$steer")" = true ] || fail "the returning person could be given a second body: $(tr '\t' ' ' <<<"$steer")"
+    run_log | grep -q "Case shaped by the survivor's answers" || fail "the runtime never logged a steered case"
+fi
+findings+=("What do I make of it?: answered=$(cut -f1 <<<"$ans") (person $(cut -f3 <<<"$ans")); second case built from the answers=$(cut -f2 <<<"$steer"), answers marked used=$(cut -f1 <<<"$steer"), person returned=$(cut -f3 <<<"$steer"), no second body=$(cut -f4 <<<"$steer")")
 errors="$(mod_errors)"
 [ -z "$errors" ] || fail "errors inside the mod"
 end_world

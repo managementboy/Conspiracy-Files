@@ -608,6 +608,10 @@ function Screen:drawScreen(gx,gy)
         self:drawDay(c)
         return
     end
+    if self.record and self.record.questions then
+        self:drawQuestions(c)
+        return
+    end
     if self.record then
         -- A record, laid out as a Palm application laid one out: the title,
         -- the few facts as labelled fields, a rule, then what the survivor
@@ -759,6 +763,67 @@ function Screen:openPopup(title,labels,index,apply)
     self.popup={title=title,options=options,index=index or 1,apply=apply}
 end
 
+-- "What do I make of it?" (P4-R113, wording P4-R122): the three questions with
+-- the answer so far or "(not yet)", then the survivor's own note. Nothing here
+-- ever says right or wrong. Once a case has been built from the answers the
+-- note says so and ANSWER is gone.
+function Screen:drawQuestions(c)
+    local line=K.current.line
+    local q=self.record.questions
+    local Q=require("ConspiracyFiles/Generated/Questions")
+    K.titleBar(c,"FILES","Case "..tostring(q.number))
+    local y=line+2
+    for i,question in ipairs(Q.QUESTIONS) do
+        y=K.row(c,question.text,y,i==(self.question or 1),"QUESTION",i)
+        local answer=Q.answerLabel(question.key,q.answers,q.offered)
+        for _,text in ipairs(wrapTo(answer,c.w-14)) do
+            K.text(c,text,10,y,answer==Q.NOT_YET and K.DIM or K.INK); y=y+line
+        end
+    end
+    local note=Q.note(q.answers,q.offered)
+    if note then
+        K.fill(c,0,y,c.w,1,K.DIM); y=y+2
+        for _,text in ipairs(wrapTo(note,c.w-4)) do
+            if y>c.h-line*2-2 then break end
+            K.text(c,text,2,y,K.INK); y=y+line
+        end
+    end
+    local foot=K.foot(c,self:footText(""))
+    local x=K.command(c,"BACK",2,foot,"BACK")
+    if not (q.answers and q.answers.usedBy) then K.command(c,"ANSWER",x,foot,"ANSWER") end
+end
+
+-- One question's pick list. Choosing saves through the runtime straight away,
+-- as SETUP's lists apply as they go; "Clear my answer." takes it back to
+-- "(not yet)". Answers that already shaped a case do not open.
+function Screen:openQuestion(i)
+    local q=self.record and self.record.questions
+    if not q or (q.answers and q.answers.usedBy) then return end
+    local Q=require("ConspiracyFiles/Generated/Questions")
+    local question=Q.QUESTIONS[i]
+    if not question then return end
+    local options=Q.options(question.key,q.offered) or {}
+    local labels,current={},1
+    for n,o in ipairs(options) do
+        labels[n]=o.label
+        if q.answers and o.value==q.answers[question.key] then current=n end
+    end
+    local runtime=ConspiracyFiles.GeneratedRuntime
+    self:openPopup(question.text,labels,current,function(n)
+        local o=options[n]
+        if not o or not runtime or not runtime.setAnswers then return end
+        local answers={}
+        for _,key in ipairs({"reading","matters","way"}) do answers[key]=q.answers and q.answers[key] or nil end
+        if o.value==false then answers[question.key]=nil else answers[question.key]=o.value end
+        local ok,why=runtime.setAnswers(q.caseId,answers)
+        if not ok then log("answer not saved: "..tostring(why)); return end
+        for _,fresh in ipairs(runtime.questions() or {}) do
+            if fresh.caseId==q.caseId then q.answers=fresh.answers end
+        end
+        self.cachedList=nil
+    end)
+end
+
 function Screen:openRow(index)
     local rows=self:list()
     local row=rows[index]
@@ -779,6 +844,9 @@ function Screen:openRow(index)
         local labels={}
         for i,v in ipairs(S.SCALES) do labels[i]=S.scaleLabel(v) end
         self:openPopup("Machine size",labels,S.scaleIndex(now) or 2,function(i) S.zoom(S.SCALES[i]) end)
+    elseif row.questions then
+        -- "What do I make of it?" (P4-R113): the three questions, the first chosen.
+        self.record=row; self.record.index=index; self.card=1; self.question=1
     else
         self.record=row; self.record.index=index; self.card=1
     end
@@ -842,10 +910,12 @@ function Screen:press(id)
         elseif self.record then self.record=nil; self.card=1
         elseif not self.launcher then self.launcher=true end
     elseif action=="UP" then
-        if self.record then self.card=math.max(1,self.card-1)
+        if self.record and self.record.questions then self.question=math.max(1,(self.question or 1)-1)
+        elseif self.record then self.card=math.max(1,self.card-1)
         else self.entry=math.max(1,self.entry-1) end
     elseif action=="DOWN" then
-        if self.record then self.card=self.card+1
+        if self.record and self.record.questions then self.question=math.min(3,(self.question or 1)+1)
+        elseif self.record then self.card=self.card+1
         else self.entry=math.min(math.max(1,#rows),self.entry+1) end
     end
     log("knox key "..id)
@@ -896,6 +966,10 @@ function Screen:tap(x,y)
                 end
             end
         end
+    elseif id=="QUESTION" then
+        self.question=widget.payload; self:openQuestion(widget.payload)
+    elseif id=="ANSWER" then
+        self:openQuestion(self.question or 1)
     elseif id=="CATEGORY" then self:cycleCategory()
     elseif id=="SELECT" then self.launcher=true; self.record=nil
     elseif id=="ROW" then

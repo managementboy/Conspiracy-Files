@@ -20,7 +20,9 @@ local M={SCHEMA=2}
 -- names, and the survivor's answers. Both optional, like lastSeen, so older
 -- schema-2 roots still load and SCHEMA stays 2. Only names and choices are
 -- stored; the question and reading wording is looked up by premise id.
-local ROOT_FIELDS={schema=true,caseId=true,rows=true,known=true,offered=true,answers=true}
+-- completedHours: the world hour the case finished, so the next case can wait
+-- a little for the survivor's answers (P4-R121). Optional, like the rest.
+local ROOT_FIELDS={schema=true,caseId=true,rows=true,known=true,offered=true,answers=true,completedHours=true}
 local OFFERED_FIELDS={premiseId=true,outline=true,people=true,organisation=true}
 local ANSWER_FIELDS={reading=true,matters=true,way=true,changedHours=true,usedBy=true}
 M.OUTLINES={corroboration=true,["conflicting-account"]=true}
@@ -116,7 +118,12 @@ function M.validate(root)
     local safe=V.validateStructure(root); if not safe then return false,"invalid retired case" end
     if not fields(root,ROOT_FIELDS) or root.schema~=M.SCHEMA then return false,"invalid retired case" end
     if not text(root.caseId) then return false,"invalid retired case" end
-    local ok,n=dense(root.rows,G.MAX_EVIDENCE); if not ok then return false,"invalid retired rows" end
+    -- The relay memo (P4-R96) takes no story role, so the first case of a game
+    -- can hold MAX_EVIDENCE story papers plus the memo. Capping rows at
+    -- MAX_EVIDENCE refused that case at retirement for good ("Case complete
+    -- but not retired: invalid retired rows", core-loop check 2026-09-15; the
+    -- "0 of 8 last seen" of 2026-09-14 was the same fault).
+    local ok,n=dense(root.rows,G.MAX_EVIDENCE+1); if not ok then return false,"invalid retired rows" end
     if n<G.MIN_EVIDENCE then return false,"invalid retired rows" end
     local ids={}
     for i=1,n do
@@ -140,6 +147,8 @@ function M.validate(root)
     -- Answers name "person 1" or "the organisation", so they mean nothing
     -- without the names they were given about.
     if root.answers~=nil and (root.offered==nil or not answersOK(root.answers)) then return false,"invalid retired answers" end
+    local h=root.completedHours
+    if h~=nil and (type(h)~="number" or h~=h or h<0 or h==math.huge) then return false,"invalid retired completion hour" end
     if V.estimateEncodedBytes(root)>500000 then return false,"retired case size exceeded" end
     return true
 end
@@ -150,7 +159,7 @@ end
 -- whole aggregate and swaps atomically, same as every other canonical
 -- mutation. `lastSeen` optionally maps document id -> where the scan last saw
 -- it; anything unusable is left out rather than failing the retirement.
-function M.retire(root,lastSeen)
+function M.retire(root,lastSeen,completedHours)
     local ok,why=Session.validate(root); if not ok then return nil,why end
     if #root.known~=#root.case.documents then return nil,"case is not fully discovered" end
     local rows,rowsWhy=G.project(root.case,root.known); if not rows then return nil,rowsWhy end
@@ -165,6 +174,8 @@ function M.retire(root,lastSeen)
     local offered={premiseId=c.premiseId,outline=c.outline,
         people={who[1] and who[1].name,who[2] and who[2].name},organisation=c.organisation and c.organisation.name}
     if offeredOK(offered) then out.offered=offered end
+    if type(completedHours)=="number" and completedHours==completedHours and completedHours>=0
+        and completedHours~=math.huge then out.completedHours=completedHours end
     ok,why=M.validate(out); if not ok then return nil,why end
     return out
 end

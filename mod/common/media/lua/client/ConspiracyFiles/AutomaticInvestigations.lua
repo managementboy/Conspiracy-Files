@@ -3,7 +3,9 @@ local CFLog=require("ConspiracyFiles/Log")
 ConspiracyFiles=ConspiracyFiles or {}
 local A=ConspiracyFiles.AutomaticInvestigations or {}
 ConspiracyFiles.AutomaticInvestigations=A
-A.config={minGapHours=24,retryTicks=600}
+-- afterCompletionHours (P4-R121): after a case finishes, the next one waits
+-- this long, on top of minGapHours, so answers given right away can steer it.
+A.config={minGapHours=24,afterCompletionHours=1,retryTicks=600}
 local ticks,ready=0,false
 local function allowed()
  return getDebug and getDebug() and not (isClient and isClient()) and not (isServer and isServer())
@@ -28,6 +30,7 @@ function A.poll()
  if status.count>=status.limit or not status.scheduled then return end
  local hours=getGameTime():getWorldAgeHours()
  if type(hours)~="number" or hours~=hours or hours==math.huge or hours<status.lastCreatedHours+A.config.minGapHours then return end
+ if type(status.lastCompletedHours)=="number" and hours<status.lastCompletedHours+A.config.afterCompletionHours then return end
  runtime.nextCase(ZombRand(2147483646)+1)
 end
 function A.onStart() ticks=0;ready=true;A.initialized=false;A.lastError=nil end

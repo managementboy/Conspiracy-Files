@@ -68,6 +68,8 @@ local M={}
 -- phrase with no assert fails the test.
 local P={
 {id="transfer-nobody-arranged",title="A transfer nobody arranged",
+ -- What the survivor may believe at the end (P4-R113, P4-R122): ordinary, then the other.
+ readings={"A rota somebody filed badly.","A move nobody would sign for."},
  subject="the transfer",unknown="who asked for it",
  orgs={"County Personnel Office","Regional Staffing Service","District Works Department"},
  claim={kind="dispatch",title="Transfer notice / {CODE}",
@@ -90,6 +92,8 @@ local P={
   meaning="Somebody wanted the disagreement preserved, or somebody wanted it tidied. The sheet raises a question about authority without answering who exercised it."}},
 
 {id="signed-by-someone-absent",reviewOptional=true,title="Signed for by someone who was not there",
+ -- What the survivor may believe at the end (P4-R113, P4-R122): ordinary, then the other.
+ readings={"A colleague signing for it.","Someone using another name."},
  subject="the signature",unknown="whose hand it was",
  orgs={"Knox County Supply Office","Regional Distribution Depot","County Equipment Service"},
  claim={kind="dispatch",title="Delivery docket / {CODE}",
@@ -113,6 +117,8 @@ local P={
   meaning="A closed query is not a settled one. Who closed it, and on what basis, is the part the sheet does not record."}},
 
 {id="two-start-dates",reviewOptional=true,title="The employee with two start dates",
+ -- What the survivor may believe at the end (P4-R113, P4-R122): ordinary, then the other.
+ readings={"A record retyped for no reason.","A date that became inconvenient."},
  subject="the start date",unknown="where the missing months were spent",
  orgs={"McCoy Logging Corp","Knox County Public Works","Fossoil Regional Office"},
  asserts={months={"November 1992","March 1993"}},
@@ -140,6 +146,8 @@ local P={
 -- before it where they do not, so the order each line states is true on every
 -- calendar. It was dated before the letter in both (P4-R107, 2026-09-15).
 {id="resignation-after-payslip",title="The last week of a job",
+ -- What the survivor may believe at the end (P4-R113, P4-R122): ordinary, then the other.
+ readings={"A plain letter of resignation.","A letter written to close a file."},
  subject="the resignation",unknown="who wrote it",
  orgs={"Knox County Schools","Regional Health Service","{A} Site Office"},
  asserts={days={{"{DATE1}","{DATE2}"},{"{DATE0}","{DATE1}"}},precedes="dispute"},
@@ -163,6 +171,8 @@ local P={
   meaning="Somebody noticed and stopped short of writing down what they suspected. The underlining is the whole of their comment."}},
 
 {id="address-that-only-receives",reviewOptional=true,title="The address that receives but never sends",
+ -- What the survivor may believe at the end (P4-R113, P4-R122): ordinary, then the other.
+ readings={"Just a store room.","Things leaving out of sight."},
  subject="the deliveries",unknown="who was there to take them",
  orgs={"Regional Supply Office","County Equipment Service","Valu-Line Distribution"},
  -- Eleven months from {SINCE11} to the schedule's own date. It said "since
@@ -188,6 +198,8 @@ local P={
   meaning="Somebody took the address off a list and somebody put it back within hours. Neither of them wrote down why."}},
 
 {id="identical-inventories",reviewOptional=true,title="Two buildings, one inventory",
+ -- What the survivor may believe at the end (P4-R113, P4-R122): ordinary, then the other.
+ readings={"A lazy count copied across.","A count made up on purpose."},
  subject="the inventory",unknown="which building it describes",
  orgs={"MassGenFac Stores","Regional Distribution Depot","County Equipment Service"},
  claim={kind="dispatch",title="Stock list / {CODE}",
@@ -213,6 +225,8 @@ local P={
   meaning="An audit that stops mid-sentence has a reason, and the reason is not on the page."}},
 
 {id="room-not-on-the-plan",title="The room that is not on the plan",
+ -- What the survivor may believe at the end (P4-R113, P4-R122): ordinary, then the other.
+ readings={"An old numbering scheme.","A room kept off the drawings."},
  subject="the callout",unknown="which room was worked on",
  orgs={"County Building Maintenance","District Works Department","{B} Facilities Office"},
  claim={kind="dispatch",title="Maintenance callout / {CODE}",
@@ -236,6 +250,8 @@ local P={
   meaning="Two records of the same hours. Crews are moved without the ledger being told, and hours are also written down for work that was not done."}},
 
 {id="lease-outlived-tenant",title="The lease that outlived the tenant",
+ -- What the survivor may believe at the end (P4-R113, P4-R122): ordinary, then the other.
+ readings={"A standing order nobody stopped.","Someone still using the place."},
  subject="the tenancy",unknown="who holds the keys now",
  orgs={"Knox County Property Trust","Regional Estates Office","Valu-Line Distribution"},
  -- The found text said the letterhead and the body named different names while
@@ -262,6 +278,8 @@ local P={
   meaning="Access not obtained can mean nobody had the time or nobody was let in. The sheet was designed to record the visit, not the reason it failed."}},
 
 {id="load-that-got-lighter",reviewOptional=true,title="The load that got lighter",
+ -- What the survivor may believe at the end (P4-R113, P4-R122): ordinary, then the other.
+ readings={"A weighbridge that was wrong.","Part of the load going elsewhere."},
  subject="the load",unknown="what came off it",
  orgs={"McCoy Logging Corp","Regional Haulage Service","Fossoil Transport"},
  claim={kind="dispatch",title="Weighbridge ticket / {CODE}",
@@ -284,6 +302,8 @@ local P={
   meaning="A missing certificate makes the numbers unprovable in either direction, which is convenient for whoever would rather they stayed that way - and is also just what a filing system does."}},
 
 {id="fuel-for-a-dead-truck",reviewOptional=true,title="Fuel for a vehicle that was off the road",
+ -- What the survivor may believe at the end (P4-R113, P4-R122): ordinary, then the other.
+ readings={"The card used for another van.","A journey kept off someone's name."},
  subject="the fuel account",unknown="which vehicle was being filled",
  orgs={"Fossoil Regional Office","Gas 2 Go Commercial Accounts","County Motor Pool"},
  -- "Through June and July 1993" was read in early July at the latest; the
@@ -310,6 +330,8 @@ local P={
   meaning="Nobody stopped the card. That is either indifference or someone protecting the arrangement, and a query note cannot tell you which."}},
 
 {id="returned-cleaner",title="The equipment that came back cleaner",
+ -- What the survivor may believe at the end (P4-R113, P4-R122): ordinary, then the other.
+ readings={"Ordinary cleaning before return.","Something being cleaned away."},
  subject="the hire",unknown="where it had been",
  orgs={"County Equipment Service","Regional Plant Hire","{A} Site Office"},
  -- The hire runs from the claim to the response, the day it came back "on
@@ -335,6 +357,8 @@ local P={
   meaning="An item accepted back under the wrong serial has left the system as one thing and returned as another. Clerks do this in a hurry every week."}},
 
 {id="two-crates-one-number",reviewOptional=true,title="Two crates, one number",
+ -- What the survivor may believe at the end (P4-R113, P4-R122): ordinary, then the other.
+ readings={"A printing error.","One thing moved twice."},
  subject="the crate reference",unknown="which crate is which",
  orgs={"MassGenFac Stores","Regional Distribution Depot","County Equipment Service"},
  -- The second crate arrives on the response's day. "Eight days later" could
@@ -363,6 +387,8 @@ local P={
 -- records agree, the day before it where they do not. Generator leaves out its
 -- own "Payment slip / {CODE}" for this premise, whose response already is one.
 {id="paid-before-ordered",reviewOptional=true,title="Paid before it was ordered",
+ -- What the survivor may believe at the end (P4-R113, P4-R122): ordinary, then the other.
+ readings={"Shorthand between old contacts.","Words chosen to say nothing."},
  subject="the payment",unknown="who authorised it",
  orgs={"County Accounts Office","County Finance Department","Regional Supply Office"},
  asserts={days={{"{DATE1}","{DATE2}"},{"{DATE0}","{DATE1}"}},precedes="dispute"},
@@ -386,6 +412,8 @@ local P={
   meaning="A specimen signature settles a question of hands, not of intent. Somebody may have signed for a colleague at a desk, as happens hourly."}},
 
 {id="overtime-nobody-worked",reviewOptional=true,title="The overtime nobody worked",
+ -- What the survivor may believe at the end (P4-R113, P4-R122): ordinary, then the other.
+ readings={"A generous supervisor.","Hours paid for something else."},
  subject="the night shift",unknown="who was on the site",
  orgs={"County Public Works","McCoy Logging Corp","{B} Site Office"},
  claim={kind="dispatch",title="Timesheet / {CODE}",
@@ -407,6 +435,8 @@ local P={
   meaning="The person who approved the hours also settled the question about them. That is poor practice everywhere and it is not, by itself, evidence of anything else."}},
 
 {id="closure-announced-twice",title="A closure announced twice",
+ -- What the survivor may believe at the end (P4-R113, P4-R122): ordinary, then the other.
+ readings={"Just a public notice.","A story told for the public."},
  subject="the closure",unknown="whether the place was still working",
  orgs={"Knox County Administration","Regional Health Service","MassGenFac"},
  -- Closed the month before the claim's, so the memo is always after the
@@ -431,6 +461,8 @@ local P={
   meaning="Recovering circulated copies is ordinary practice for confidential paper. The urgency in the wording is the only unusual thing here, and urgency is not proof."}},
 
 {id="appointment-out-of-order",reviewOptional=true,title="The medical appointment that came first",
+ -- What the survivor may believe at the end (P4-R113, P4-R122): ordinary, then the other.
+ readings={"A first record that got lost.","A visit that was never logged."},
  subject="the follow-up",unknown="when the patient was first seen",
  orgs={"Knox County Health Office","Regional Health Service","{B} Medical Centre"},
  claim={kind="dispatch",title="Follow-up note / {CODE}",
@@ -456,6 +488,8 @@ local P={
   meaning="Nobody asked, or nobody wrote the answer down. A gap in a card index is a gap in an index."}},
 
 {id="file-signed-out",title="The file that was signed out and never returned",
+ -- What the survivor may believe at the end (P4-R113, P4-R122): ordinary, then the other.
+ readings={"A file signed out for someone.","Someone hiding who took it."},
  subject="the missing file",unknown="who took it",
  orgs={"Knox County Courthouse","Rosewood Correctional","County Records Office"},
  -- The list is {DAYS12} after the file was drawn, not "each week" or "for
@@ -481,6 +515,8 @@ local P={
   meaning="Somebody worked out whose initials they were and thought better of writing it down. What they concluded is not on the sheet."}},
 
 {id="missing-ledger-page",reviewOptional=true,title="The page that is missing",
+ -- What the survivor may believe at the end (P4-R113, P4-R122): ordinary, then the other.
+ readings={"A spoiled page, rewritten.","A page removed on purpose."},
  subject="the ledger",unknown="what the removed page said",
  orgs={"{A} Site Office","County Public Works","Rosewood Correctional"},
  claim={kind="dispatch",title="Duty ledger / {CODE}",
@@ -503,6 +539,8 @@ local P={
   meaning="A book that nobody tried to reconstruct was either unimportant or better left incomplete. The note does not say which and the person who wrote it did not sign."}},
 
 {id="photograph-without-a-name",reviewOptional=true,title="The photograph with no caption",
+ -- What the survivor may believe at the end (P4-R113, P4-R122): ordinary, then the other.
+ readings={"Nobody knowing the temp's name.","Someone left unaccounted for."},
  subject="the photograph",unknown="who the unnamed person is",
  orgs={"{A} Site Office","McCoy Logging Corp","Knox County Schools"},
  claim={kind="photograph",title="Staff photograph / {CODE}",
@@ -527,6 +565,8 @@ local P={
   meaning="A query filed rather than pursued is the commonest end for a question about staff numbers. It also leaves the face in the photograph where it started, without a name."}},
 
 {id="withdrawn-extension",reviewOptional=true,title="The number that was withdrawn",
+ -- What the survivor may believe at the end (P4-R113, P4-R122): ordinary, then the other.
+ readings={"A directory printing error.","A department left off on purpose."},
  subject="the extension",unknown="what department used it",
  orgs={"Knox County Administration","MassGenFac","Regional Health Service"},
  claim={kind="dispatch",title="Internal directory / {CODE}",

@@ -59,7 +59,8 @@ local function aggregateOK(a)
    local token=rootToken(s,did); if token then if tokens[token] then return false,"duplicate physical token" end; tokens[token]=true end
   end
  end
- local ordered=dense(a.discoveries,M.MAX_CASES*Generator.MAX_EVIDENCE); if not ordered then return false,"invalid global discovery order" end
+ -- +1: a game holds one relay memo (P4-R96) on top of every case's story papers.
+ local ordered=dense(a.discoveries,M.MAX_CASES*Generator.MAX_EVIDENCE+1); if not ordered then return false,"invalid global discovery order" end
  return true
 end
 -- Global store compatibility: legacy canonical is fallback only.  Once a
@@ -179,13 +180,25 @@ function M.replace(wrapper,index,root)
 end
 -- Staging never mutates or reconstructs `canonical`; only a new companion
 -- aggregate is added/replaced after full validation by the caller.
-function M.stage(wrapper,root,createdHours)
+-- `usedIndex` ("What do I make of it?", P4-R113): when the new case was built
+-- from a finished case's answers, those answers are marked used by it IN THE
+-- SAME SWAP, so there is never a moment where a case exists built from
+-- answers that could still be changed.
+function M.stage(wrapper,root,createdHours,usedIndex)
  local ok,why=M.validate(wrapper); if not ok then return nil,why end
  ok,why=Session.validate(root); if not ok then return nil,why end
  if wrapper.schedule and (type(createdHours)~="number" or createdHours~=createdHours or createdHours==math.huge or createdHours==-math.huge or createdHours<0) then return nil,"valid created hours required" end
  if not wrapper.schedule and createdHours~=nil then return nil,"schedule absent" end
+ local source
+ if usedIndex~=nil then
+  source=M.sessions(wrapper)[usedIndex]
+  if not Retired.isRetired(source) or not source.answers or source.answers.usedBy
+   or not root.case.steer or root.case.steer.fromCase~=source.caseId then return nil,"steer source does not match" end
+ end
  local out={canonical=wrapper.canonical}; if wrapper.schedule then out.schedule=copy(wrapper.schedule);local prior=out.schedule.createdHours[#out.schedule.createdHours];if prior and createdHours<prior then return nil,"schedule cannot move backwards" end;out.schedule.createdHours[#out.schedule.createdHours+1]=createdHours end; local cases={}
  if wrapper.successive then for i,s in ipairs(wrapper.successive.cases) do cases[i]=copy(s) end end
+ if usedIndex==1 then out.canonical=copy(wrapper.canonical); out.canonical.answers.usedBy=root.case.caseId
+ elseif usedIndex then cases[usedIndex-1].answers.usedBy=root.case.caseId end
  cases[#cases+1]=copy(root); out.successive={schema=M.SCHEMA,cases=cases,discoveries=M.discoveries(wrapper)}
  ok,why=M.validate(out); if not ok then return nil,why end
  return out
@@ -198,11 +211,11 @@ end
 -- already-retired root is a recognised no-op, not an error and not a second
 -- shrink. `lastSeen` (document id -> words) is where the runtime last saw
 -- each paper; it is kept on the retired rows (P4-R104).
-function M.retire(wrapper,index,lastSeen)
+function M.retire(wrapper,index,lastSeen,completedHours)
  local ok,why=M.validate(wrapper); if not ok then return nil,why end
  local roots=M.sessions(wrapper); local root=roots[index]; if not root then return nil,"unknown generated case" end
  if Retired.isRetired(root) then return wrapper,false end
- local retired,rwhy=Retired.retire(root,lastSeen); if not retired then return nil,rwhy end
+ local retired,rwhy=Retired.retire(root,lastSeen,completedHours); if not retired then return nil,rwhy end
  local out={canonical=index==1 and retired or wrapper.canonical}; if wrapper.schedule then out.schedule=copy(wrapper.schedule) end; local cases={}
  for i=2,#roots do cases[i-1]=copy(i==index and retired or roots[i]) end
  if #cases>0 or wrapper.successive then out.successive={schema=M.SCHEMA,cases=cases,discoveries=M.discoveries(wrapper)} end
@@ -238,5 +251,50 @@ function M.noteLastSeen(wrapper,updates)
  if #cases>0 or wrapper.successive then w.successive={schema=M.SCHEMA,cases=cases,discoveries=M.discoveries(wrapper)} end
  ok,why=M.validate(w); if not ok then return nil,why end
  return w,true
+end
+-- The answers that will steer the next case (P4-R113, P4-R121): of the finished
+-- cases whose answers no case has used yet, the most recently changed. "I can't
+-- tell" and "nobody, really" steer nothing. Returns the steer and the index of
+-- the case it came from, or nil when nothing is answered.
+function M.pendingSteer(wrapper)
+ local G=require("ConspiracyFiles/Generated/Generator")
+ local best,bestHours,bestIndex
+ for i,root in ipairs(M.sessions(wrapper) or {}) do
+  local a=Retired.isRetired(root) and root.offered and root.answers
+  if a and not a.usedBy then
+   local s={fromCase=root.caseId,way=a.way}
+   if a.reading=="one" or a.reading=="two" then s.reading=a.reading end
+   if a.matters=="person1" then s.person=root.offered.people[1]
+   elseif a.matters=="person2" then s.person=root.offered.people[2]
+   elseif a.matters=="organisation" then s.organisation=root.offered.organisation end
+   local steer=G.steerFrom(s)
+   -- A name the generator would not take (an unusual organisation name) costs
+   -- only that part of the steer, not the survivor's other answers.
+   if not steer and (s.person or s.organisation) then s.person,s.organisation=nil,nil; steer=G.steerFrom(s) end
+   local hours=a.changedHours or 0
+   if steer and (not best or hours>=bestHours) then best,bestHours,bestIndex=steer,hours,i end
+  end
+ end
+ if best then return best,bestIndex end
+ return nil
+end
+-- The survivor answers, changes or clears the questions about a finished case,
+-- copy-on-write like every other change. Refused once a case has been built
+-- from the answers. An empty answer set clears them.
+local ANSWER_KEYS={"reading","matters","way"}
+function M.setAnswers(wrapper,index,answers,hours)
+ local ok,why=M.validate(wrapper); if not ok then return nil,why end
+ if type(answers)~="table" then return nil,"invalid answers" end
+ local roots=M.sessions(wrapper); local root=roots[index]
+ if not Retired.isRetired(root) or not root.offered then return nil,"no finished case to answer about" end
+ if root.answers and root.answers.usedBy then return nil,"these answers already shaped a case" end
+ local next=copy(root); local a={}; local any=false
+ for _,k in ipairs(ANSWER_KEYS) do if answers[k]~=nil then a[k]=answers[k]; any=true end end
+ if any then a.changedHours=hours; next.answers=a else next.answers=nil end
+ local w={canonical=index==1 and next or wrapper.canonical}; if wrapper.schedule then w.schedule=copy(wrapper.schedule) end; local cases={}
+ for i=2,#roots do cases[i-1]=copy(i==index and next or roots[i]) end
+ if #cases>0 or wrapper.successive then w.successive={schema=M.SCHEMA,cases=cases,discoveries=M.discoveries(wrapper)} end
+ ok,why=M.validate(w); if not ok then return nil,why end
+ return w
 end
 return M
