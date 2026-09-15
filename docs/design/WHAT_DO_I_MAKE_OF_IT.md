@@ -23,7 +23,7 @@ First cut, as the owner set it:
 
 ## 1. What the survivor sees
 
-**All wording below is DRAFT for owner approval.**
+**Wording approved by the owner as written (P4-R122, 2026-09-15).**
 
 1. The last paper of a case is noted, by right-click Inspect or by dropping it
    on the organiser. Today the survivor says one of the lines already written,

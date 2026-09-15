@@ -842,6 +842,22 @@ docs/design/WHOLE_MAP_ADDRESSES.md.
 - **A returning person never gets a second body.** Someone who already has a
   body in an earlier case returns through papers and mentions only.
 
+**P4-R122 — the words of "What do I make of it?".** Owner, 2026-09-15,
+approving the draft in docs/design/WHAT_DO_I_MAKE_OF_IT.md section 1 as written:
+- The three questions: **"Which reading do I believe?"**, **"Who do I think
+  matters here?"**, **"What would I check next?"**, each shown with its answer or
+  "(not yet)". Options: the case's two readings or "I can't tell."; the two
+  people, the organisation or "Nobody, really."; "Follow the person.", "Check
+  the place against its records.", "Listen for it."; every list ends with
+  "Clear my answer.". Every option 34 characters or fewer.
+- **The invitation:** after "That's all of it", a second thought "What do I
+  make of it?" appears, and FILES gains a row at the top. The organiser never
+  opens by itself.
+- **Read-back:** once answered the row reads as the survivor's own note ("I
+  think it was a move nobody would sign for. Delia Mercer matters here. Next I
+  would follow the person."), adding "I've gone on from here." once a case is
+  built from it. Nothing ever says right or wrong.
+
 **P4-R106 — how a car's containers are reached.** Owner, 2026-09-14: "The globe
 box only opens when sitting in the front of the car", and a truck bed or trunk
 is reached from outside, "only if they are open". Placement may still put a
