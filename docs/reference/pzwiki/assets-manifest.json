@@ -1,0 +1,592 @@
+[
+  {
+    "source": "https://pzwiki.net/w/images/0/03/WorldEd_%28Alree%29_-_icon.png",
+    "path": "assets/742b2ebbbc61d3bd1926.png",
+    "sha256": "b5110270dbfeebcbe4add8ba090edc3a47e0c0f08030be64a3c5d539b9f25854"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/0/0e/Daddy_Dirkie_Dirks_zomboid_mapping_tutorials_-_thumbnail.webp",
+    "path": "assets/7907e6d37f96df5d2378.webp",
+    "sha256": "216edc056d2cc4915ee8921e673cd0c9ad64374e441a8a3303898ff4065910ba"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/1/15/HairGuide_Export.png",
+    "path": "assets/98c57600d517310c0b55.png",
+    "sha256": "7ee5477b00edf368792e0cf4146bc5590722a99f9321d65a68de48edd84fd71c"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/1/17/WorldEd_-_preview.png",
+    "path": "assets/034e189d10f796fac51c.png",
+    "sha256": "b70a7139b835a7114e835fa0b340cdbcad3ad1c4abe5ef0395706d95908460e4"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/2/28/VSCode_exampleUmbrella.png",
+    "path": "assets/69e02077f917686ff421.png",
+    "sha256": "a26f953f8e6fb91da433e1ad2643e57e6aa6400589c85332f7cb957a16b15553"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/2/2f/Cell_grid_-_placement_comparison.png",
+    "path": "assets/af25b9db9e6b8717dc04.png",
+    "sha256": "80a902fe2a031d72b01451dadbf169513d22ed2b0d8ab23d294c65444f375598"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/3/34/HairGuide_BlenderScene.png",
+    "path": "assets/470db868846b056fd03f.png",
+    "sha256": "3f71414f239b1e2496399627f945deea31f3074d387729f747befce34ec0f6c8"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/3/35/LuaDocs_-_preview.png",
+    "path": "assets/76dacf39276d5e87f41f.png",
+    "sha256": "898f9bbeb8ef884e537d6ff452bb2b714df0eb8ac8af7699ef0965892f0f74ff"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/3/35/Tilezed.jpg",
+    "path": "assets/f0a039bfa2e66b3830f0.jpg",
+    "sha256": "3c244beb40164018f9c8c74886ad0edc13f40381c8ab32bcd9c398332ba4da50"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/3/38/PZ_Modding_Guides_-_setting_up_a_mod_structure_-_thumbnail.png",
+    "path": "assets/588b8e519eca2f9958b0.png",
+    "sha256": "8fcaa3c8e0ef2689abef73ace0ddefff0a68c562a53ed434994172a33009d258"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/3/39/PZ_Modding_Configs_-_preview.png",
+    "path": "assets/932a9bd4378b052a4913.png",
+    "sha256": "366ebdd5535eebf3a479b4e2cca72cadd232587972947c867268b844042dacf0"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/3/3a/Project_Zomboid_-_Depthmap_Tutorial.webp",
+    "path": "assets/d88387cec953a27c85ff.webp",
+    "sha256": "4c4de13c56c3864b3320fce92ded358d7839dd6e8f2a92ad5ce9c5686b7fd279"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/3/3a/SpriteGridPos.png",
+    "path": "assets/2f800ccd58a838529198.png",
+    "sha256": "0b472ba0cee9a4984014524271fd57ceb657643def5adfcdc0a1816f8ccd16ac"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/4/42/SteamCMD_-_preview.png",
+    "path": "assets/bb6b320dfdd14c45582f.png",
+    "sha256": "a51e9de922dc8e15782d1c4cbda3c80f56310251e2abde1718acf26587143dec"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/4/44/Animation_structure.png",
+    "path": "assets/ce38a3d4cd064dacb23e.png",
+    "sha256": "e0038e7f5e6bb95c2640daa4797815149053b60c83c24ff6bc4322af31e73e02"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/4/44/Debug_On_128.png",
+    "path": "assets/cdd9357c030593822516.png",
+    "sha256": "fa471be2c9a171ce202732134660d47ea335b6dca9f70f73a87139f9f04ebcff"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/4/4b/346421b034310b16b40eaf1186c17eda256c2977.jpg",
+    "path": "assets/1fab1e7922c2c86d109a.jpg",
+    "sha256": "fbd85e8ea4c5314834a2441ac10bc6bab993cedc91646abc506bb67fc2ad3f8f"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/5/53/SteamUploader_-_demonstration_thumbnail.png",
+    "path": "assets/4371a3cbc68c57933eb9.png",
+    "sha256": "c4d6feef9c9b9aec9b856d02327948e7e36e544c70028849a01132bf38779cc1"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/5/57/UI_Tick.png",
+    "path": "assets/237a88499d02d265848e.png",
+    "sha256": "1b5caa657d46f8e42ef2974cb02206baf482d24bc8b4540f09725d4cd2ae702a"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/5/58/Item_full_type.png",
+    "path": "assets/b0df3e4a8cabc69c259d.png",
+    "sha256": "b4b94fc22d62c9484b8b322a7a62b0b36c7894da3edc88d87e1baabf4d953f34"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/5/59/User_Interface_-_children_UIs.png",
+    "path": "assets/658fdcc6f2e01a36190d.png",
+    "sha256": "897bde0c463fc9bbbe9dde04cdeea249f9ce7a4e9741ddabb0e87f08265bed7c"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/5/5c/Tileset_flowchart.png",
+    "path": "assets/2a8f0c605881f854c322.png",
+    "sha256": "d6c29917a336d98971b87aa6a375a3fe21509d02b25e31b47a8b2e8febce87dd"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/5/5f/ActionEditor.png",
+    "path": "assets/3156f3fa1fd23f4ca48c.png",
+    "sha256": "2c2d5bbc3858f547f3447bf1b0bc3540d9387d23a006e0912897f740bf86e150"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/6/62/SpiffosWorkshop.png",
+    "path": "assets/bac350186147432bb4ba.png",
+    "sha256": "e48832163a56b20ce5156cd5bbf312b46014d5b58c4cb2657d880fb988fe66ee"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/6/6b/Debug-Cheats.png",
+    "path": "assets/b8ac97a6b48ffbdcdefe.png",
+    "sha256": "8f7c4ef78cb2ed5fc902a60160cb3c7c5e0a4697609215586e88946a4d25a4a8"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/7/72/ModOptions_VisualPresentation.png",
+    "path": "assets/7357ac1e438242902fae.png",
+    "sha256": "d78e6c2bf233ef4d6b673089beda2e6ae6d94a3171b836ea28e9a65ae43b999d"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/7/77/Debug_Off_128.png",
+    "path": "assets/00b7a582cf5250175b98.png",
+    "sha256": "3b6fe391979d86d1dabcd9c29d0dcf738bcf97cc65d6ce6086e7b5ba38daed20"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/7/77/LuaDocs_-_showcase.png",
+    "path": "assets/2ca45456ad2979165b93.png",
+    "sha256": "8d480d9b6697b1808c10d6523d8edee368ee3493ecd9a5066f0bd9265e236476"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/7/7e/PlushSpiffo.png",
+    "path": "assets/6485de712fa66e331d66.png",
+    "sha256": "6d7ae6b6299f855955726c13dd9d10acdd56305cc258564b6f2edf494b0e83e5"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/7/7f/Stash-debug-ui.png",
+    "path": "assets/d462f3b164e88288378b.png",
+    "sha256": "a1753313b0f9879a927495ed8ee376593ccb9275c370a9303f913ac68d9589d6"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/8/88/Java_logo.png",
+    "path": "assets/bce18a984901240b71cd.png",
+    "sha256": "6a3f5d42a24d67abf8229585d76fccebbed3dca249476380d0a06e8eb9603c5b"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/8/8b/User_Interface_-_appearance_change.png",
+    "path": "assets/238e4e92028c1879a55f.png",
+    "sha256": "8508201d975e09317757564af64d34a8a4fbbad0f6c7c2352db40656692882fc"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/9/97/Pack_file_structure.png",
+    "path": "assets/00518d320c1ec991dd49.png",
+    "sha256": "59756cc4e7734f02cd4d41fab3f23f3d7a2e270d3e2ce6f94d521f9d43ba1d57"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/9/99/Code_icon.png",
+    "path": "assets/73c8ffc1fdd2bf2be94e.png",
+    "sha256": "efb3fc07e0f3ea1fc105cef3e4226f32396cdd751cf0dc5abc7f5e07aef63fea"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/9/9d/HairGuide_ArmatureDeform.png",
+    "path": "assets/20dbe91a726b13149ed9.png",
+    "sha256": "73e7046a0e998b4b2e1606d05d692d41bb1fd8007a208d53ae36284c3e36851e"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/9/9d/SteamUploader_-_CLI_preview.png",
+    "path": "assets/73269b1cd04166069519.png",
+    "sha256": "b1a609b446550ecced2b78ee245b4e80e1b3348841ab2868eaf1ac4832f340ed"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/9/9e/EmmyLua_-_logo.png",
+    "path": "assets/4fbb495f3c047afeadc4.png",
+    "sha256": "2afa498cdea0ef163d7720f4559ac34b1adc1cc39295a170a2d00756f0dbb9a7"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/a/a1/TileZed_-_preview.png",
+    "path": "assets/4393d5a13be844066d94.png",
+    "sha256": "94556fead1f0a92fa4d1667f4b6ab630ff8c101f4e9c9eea33cde033188c0be0"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/a/a3/LuaLs_-_logo.png",
+    "path": "assets/18c5994d735138712611.png",
+    "sha256": "56e6948e5b173210745dc288751460191d97ff2a2286ed73c39d3b75cfde37db"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/a/a6/Cell_grid_-_exported_cells.png",
+    "path": "assets/65cb6b2f56a4841ee54a.png",
+    "sha256": "449907d9e883401ab8f689631453a46c93bd61fe739026f7b37392f31a7104b0"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/b/b1/PZ_Modding_Guides_-_Introduction_to_Scripts.png",
+    "path": "assets/76ee65194e418eca5dc3.png",
+    "sha256": "175ad546a368f8188c1adbbab82761f4e8608dfc06f0efb879c4325c20f9df6f"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/b/bb/UI_Cross.png",
+    "path": "assets/48b0158346876686e73b.png",
+    "sha256": "f257cf27bda8757bc08ace12541c65628e795be77b5d96a183a49a475c781007"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/c/c6/PZ_Modding_Guides_-_Lua_API%2C_Java-Lua_interface_-_thumbnail.png",
+    "path": "assets/a0ad5a808ad74ae7c526.png",
+    "sha256": "bdd588375fcf83fde0f736cd3f19c05bc3187db64d2f46ed5c03268aa39cb0b0"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/c/c8/WorldEd_%28Crater%29_-_icon.png",
+    "path": "assets/e82d6fac75cbc352feed.png",
+    "sha256": "bf0a3d1f50f3ef26133f6b9568e2018b5720a835e29decc6122673064f963d14"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/d/d0/Tilesheet_Workflow_b40.png",
+    "path": "assets/64054a247520aace9ae5.png",
+    "sha256": "cc05307c0b355f34ca29f53fd510dc435a12b529a5efccdcf31e8570a9d0654c"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/d/d6/Procedural_distribution_-_system_problem.png",
+    "path": "assets/1a28a73b3d48f8a63c42.png",
+    "sha256": "93024d7df0588ef17af95b308b9ec04fa18bc29c698160e5c468a501434ba90c"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/d/d9/FramerateSettings.png",
+    "path": "assets/f419630198195beca6a9.png",
+    "sha256": "65d645a938c1e502b12b6a6b4973fe13f4224f23067b5797b0db27e7ce263973"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/d/db/Visual_Studio_Code_-_logo.png",
+    "path": "assets/f4198c63a45021a963da.png",
+    "sha256": "554306b9b135a5853d58c8a7c3fb17370e6f74d370f5d4004b1facb06f74d2fa"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/e/e5/Cell_grid_-_active_vs_inactive_areas.png",
+    "path": "assets/525d250febc24733bf53.png",
+    "sha256": "c3496538f2c8d74368348969764b409ee7633301098e830986d4aabd0d6e0123"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/e/e7/Selection.png",
+    "path": "assets/ffb7d13072de65f798e1.png",
+    "sha256": "d7ddcc51fd698ad618ddf8f97f2a3cf25cf69c8e22475499a01c322dc7a4ab7f"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/e/e8/Umbrella_-_preview.png",
+    "path": "assets/1386473171ed856d9d0b.png",
+    "sha256": "ba3ca8545c4f0d03f884d4bbda3d45520ada4c7d181495ec3488e1b3d85d688f"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/e/ed/PZ_Modding_Guides_-_Converting_DirectX_assets.png",
+    "path": "assets/56ff3c30f1fc560f4e44.png",
+    "sha256": "4cf982c0862b7466f8624dfe43576b4c01a0f4f5f329109e0fbfbe7ccb3528e8"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/f/f2/Zomboid_Map_Making_Quick_Guide_-_thumbnail.webp",
+    "path": "assets/8532f8de40955e550240.webp",
+    "sha256": "fde40412352b9552af2ce5f3e0b1f3e24a5c6a74efa4cd05e4346c3edf4b7d17"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/thumb/0/09/LuaDebugger_-_Coroutine_inspection.jpg/300px-LuaDebugger_-_Coroutine_inspection.jpg",
+    "path": "assets/8a30286df3de92760210.jpg",
+    "sha256": "2c293f1b9bca165bd599f23274c8bf2649e25d56f1d973d8e267798398ecc14e"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/thumb/0/09/LuaDebugger_-_menu_bar.jpg/1000px-LuaDebugger_-_menu_bar.jpg",
+    "path": "assets/16e589c9a92017bcf58e.jpg",
+    "sha256": "a6bf19b67b397a5b7813667a6f8efbc75dca1d3a27401b1c9ba5b4ba5c7ccdc2"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/thumb/0/0e/Debug-General-Blood.png/450px-Debug-General-Blood.png",
+    "path": "assets/4ce48bfe2509f01ce805.png",
+    "sha256": "81ee1c5bb9f3d321d2c653026555441d35b1148e748da11ff4b6b253d6a34bb5"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/thumb/1/14/Zombie-population.png/450px-Zombie-population.png",
+    "path": "assets/b4610fdaa67446cf7bea.png",
+    "sha256": "9718dcf34925332f6269b0f75acd919b2842e977735b97575c4082037788ef3b"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/thumb/2/23/LuaDebugger.jpg/300px-LuaDebugger.jpg",
+    "path": "assets/263bff0ed0fe3e2d13eb.jpg",
+    "sha256": "683b35010905ef422a549303b63ab4fb64051dae030dc34b2ebae559cab2672b"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/thumb/2/24/Mapping_tools_-_diagram.png/1200px-Mapping_tools_-_diagram.png",
+    "path": "assets/d0f7973409ecbce165f3.png",
+    "sha256": "eab43af63e267b8197df4a7bf3aabb9554fbfa54a9eb61fed098cf16a3e50b0f"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/thumb/2/24/ModMenuExampleNumbers.png/900px-ModMenuExampleNumbers.png",
+    "path": "assets/42f64e5cffd50825b55c.png",
+    "sha256": "a854f2dd2e8b75a26137a51786ed0082b0e51b8209039810bf3793b8f8cd34ac"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/thumb/2/26/Favicon.png/38px-Favicon.png",
+    "path": "assets/e46a6c94fc5172ad3956.png",
+    "sha256": "cd22a287619bb67b476108846893176791b37e26f900fcd19979c9c41d7d6f12"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/thumb/2/2c/Lua_%28API%29_-_subclasses.png/750px-Lua_%28API%29_-_subclasses.png",
+    "path": "assets/d8ad9dcaf1a7e79b20c7.png",
+    "sha256": "3ed1eaad220dde37a1ab4deead15d16150d4b57f2d857f030bfde8019f87a318"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/thumb/2/2c/Tile_property_-_Surface.png/400px-Tile_property_-_Surface.png",
+    "path": "assets/0526e45a6b3b861e8e47.png",
+    "sha256": "e9e43326305395b38b670073b032621355604f14e06982a4dbb3ad1e76660407"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/thumb/2/2d/Discord-Logo-Color.png/38px-Discord-Logo-Color.png",
+    "path": "assets/6c9133460373f8954d71.png",
+    "sha256": "332a407228ad86caaeb0709a2e41f3798d2e16c46b51106dbf33347f3ebe8897"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/thumb/3/33/ISRichTextPanel_exampleSandboxOptions2.png/400px-ISRichTextPanel_exampleSandboxOptions2.png",
+    "path": "assets/0c3cfbbd2f6683a5cb27.png",
+    "sha256": "7ed37199020630e55bd3870d4e457f5c50f1c9e588b7cedc0d2ff08b17d66015"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/thumb/3/3a/AttachMentEditor1.png/300px-AttachMentEditor1.png",
+    "path": "assets/73a54a739a87cef3920c.png",
+    "sha256": "496cafb1fe7a71f99f029094413d4f79b72e3761cad53f55ca98d11791ab5ba8"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/thumb/4/42/Pz-b42-cell-grids-explained.png/750px-Pz-b42-cell-grids-explained.png",
+    "path": "assets/7ba8a5d13e0e772f44f4.png",
+    "sha256": "25bcd9a0106afda73172ca7b8de2cafe8d181cf7b75781e284b8467ce1551ed4"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/thumb/4/43/Github-Logo.png/38px-Github-Logo.png",
+    "path": "assets/940b03325f7011617faf.png",
+    "sha256": "51ae9285132d72463592b24e906211c24c051a48adb42eabc7ff7943e80d5b54"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/thumb/4/46/Debug-menu.png/180px-Debug-menu.png",
+    "path": "assets/e8b93914693ca10d5b14.png",
+    "sha256": "b2741363c0b4dbbc1b3b089b7520e248563d4918c72b18cbeb22acec04c29550"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/thumb/4/4a/ISRichTextPanel_exampleCustomRichTag.png/600px-ISRichTextPanel_exampleCustomRichTag.png",
+    "path": "assets/db7f73d6b04ff12f8da0.png",
+    "sha256": "b7b8ff8e2d52c8d99109adb904c9b5b9b7cfc16580bfd3d37492db21e5765368"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/thumb/4/4b/HairGuide_Hair1.png/750px-HairGuide_Hair1.png",
+    "path": "assets/4501b9708ee249ba6fff.png",
+    "sha256": "341ec050b4d59bd5109599174067933293361d5f6c16d6e4b5b103610f4587f1"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/thumb/5/5f/Keyboard_White_Mouse_Left.png/42px-Keyboard_White_Mouse_Left.png",
+    "path": "assets/a557d5fd52c8dd477929.png",
+    "sha256": "fe39bcbc543447564d8fb96b2558bb03b555b3058ef122a04f314dc991afa227"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/thumb/6/6c/Paddlefruit%27s_rig_-_preview.png/450px-Paddlefruit%27s_rig_-_preview.png",
+    "path": "assets/72d24f3b5c2573ff9c90.png",
+    "sha256": "c08e0a8f00d090fcd588e605810d345d5856ef78f769adc117ec87b543576dd1"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/thumb/6/6f/ISRichTextPanel_exampleSandboxOptions1.png/400px-ISRichTextPanel_exampleSandboxOptions1.png",
+    "path": "assets/d8145cde5128aa69420d.png",
+    "sha256": "940e2df39e363aaf52c3565e84b3f5f9d5b3c70b80f896e3dd1851edebba16bd"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/thumb/7/78/Optimization_reducing_texture_size.jpg/900px-Optimization_reducing_texture_size.jpg",
+    "path": "assets/9e2e6577765396d96869.jpg",
+    "sha256": "b2d081d6e977b6f68bbe7c077ba477564c25e2edcf40fae21f79c8f8312ed6ed"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/thumb/7/7b/Steam_logo.png/38px-Steam_logo.png",
+    "path": "assets/d03ff34628a84515ee3e.png",
+    "sha256": "d70fb9f13962c3be7173aba3c9e28c829d0b300cc490cd95d5e8fe5f9fcc84f0"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/thumb/8/84/HairGuide_Hair3.png/750px-HairGuide_Hair3.png",
+    "path": "assets/4db685b1a8f057174392.png",
+    "sha256": "1c2f93e509a114ba0c8b256465418fbdfe57c56f160b2c05112bd75c7af0d40a"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/thumb/8/85/HairGuide_Hair2.png/750px-HairGuide_Hair2.png",
+    "path": "assets/65ed946f41b54dc0111f.png",
+    "sha256": "239fb68a880cd63bce75dd423907e589fe3b16cbeab6e302d849852137d3bc04"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/thumb/8/89/Optimization_hairTexture.png/600px-Optimization_hairTexture.png",
+    "path": "assets/7beab3d24be5c2c468b9.png",
+    "sha256": "c7dc2f26781d923256d633b74858123bbe547e5d4e400e2916c4a90bf22d3ff7"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/thumb/8/8c/LuaDebugger_-_Lua_files.jpg/300px-LuaDebugger_-_Lua_files.jpg",
+    "path": "assets/d57e2d8df63a6b7c032f.jpg",
+    "sha256": "8240737c34fdfac3d22f584e4ba2a906995f4217a812dddf0d634df5aba06007"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/thumb/9/96/ZedScript-Items.png/450px-ZedScript-Items.png",
+    "path": "assets/797b91280de323ef411a.png",
+    "sha256": "6320578048936cdf6b8248007da739a92fb0db7dcd063fd03a1bbd7bd47f8040"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/thumb/9/97/Player-stats.png/450px-Player-stats.png",
+    "path": "assets/1b72a51605cc01aed662.png",
+    "sha256": "520bce7ea9634c907c027b2509fe743c70b7d128ceaf38938e8c9e56a722f801"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/thumb/9/98/Mod_structure.png/450px-Mod_structure.png",
+    "path": "assets/a43ef25c2ab2bcab98d0.png",
+    "sha256": "285bae5be4d3c8bacde4cf839da5901ddc811fef92f4913da7dbdb4f4120dae7"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/thumb/9/9e/IsoRegionDebug.png/450px-IsoRegionDebug.png",
+    "path": "assets/a3b2864bfd641f17fe5b.png",
+    "sha256": "7a85231b2c85dc850875912525e16fcfdacb2280350b458e87fd91458338cd6d"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/thumb/9/9f/Steam_debug_mode_general_launch_options.png/450px-Steam_debug_mode_general_launch_options.png",
+    "path": "assets/958dd2eff42373f01b28.png",
+    "sha256": "a203c5e6bd47f6c1dae309761b4edd165f8d1f968041c31f92a971f98928c18a"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/thumb/a/a5/Mod_structure_-_maps.webp/450px-Mod_structure_-_maps.webp.png",
+    "path": "assets/faa3e8be224edc18085b.png",
+    "sha256": "1c7fca2e4a329aad8b31719b6baa32c09d0b95f1a19efc3e254acb49ca0a9491"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/thumb/a/a6/General-debuggers.png/450px-General-debuggers.png",
+    "path": "assets/1dee7a5a9ba3e5af526d.png",
+    "sha256": "266e85351e7daa102a007c787de3a4dacb7535496f1a73476b0932989f013609"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/thumb/a/a7/HairGuide_Shading.png/600px-HairGuide_Shading.png",
+    "path": "assets/15f62345bc12b6b427b6.png",
+    "sha256": "8195fe6f85393359df9a35aaec4e80f12d7ce0a11ae9a7f6a2aa91ad1e3350fd"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/thumb/a/a8/AttachmentEditor_exampleMenu.png/450px-AttachmentEditor_exampleMenu.png",
+    "path": "assets/5dab59f06ee3b53335b4.png",
+    "sha256": "f603fc30062a827e9d37ef30013df07a57e2c33e12070d519d773b63e99515df"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/thumb/a/aa/Optimization_lowPoly.png/600px-Optimization_lowPoly.png",
+    "path": "assets/15469141ccfc4955fc63.png",
+    "sha256": "43004175f1022d8d4f430f0e7d041e7d01424b3b3a837b6f0d425258ba982b27"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/thumb/a/ac/Sources_of_truth.png/750px-Sources_of_truth.png",
+    "path": "assets/d146dde5510065acfc02.png",
+    "sha256": "b94795b4dcfc1b1e3006ae5aef554734aea12481dc0ff062bdac80dfff7de229"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/thumb/b/b0/LuaDebugger_-_Watch_window.jpg/300px-LuaDebugger_-_Watch_window.jpg",
+    "path": "assets/b0e7404d82ebc18125e8.jpg",
+    "sha256": "2a113d1f456742a4aebaf80950d49d39f94ca6649b33a83ca3854740ddac77db"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/thumb/b/b0/User_Interface_-_simple_example.png/300px-User_Interface_-_simple_example.png",
+    "path": "assets/9248e65afaccad9c25b6.png",
+    "sha256": "6dc6b22ba99bd607d207c723a6797b5d6ba4bd37123ccc2350d2562ac77fda1e"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/thumb/b/b1/Optimization_UVmapping.png/600px-Optimization_UVmapping.png",
+    "path": "assets/058ec57599e0fd99a7c8.png",
+    "sha256": "d88fe8aced5fcb44d0870d00e363160d02906795a161165b207269938d4be9c7"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/thumb/b/b7/Dunning-Kruger_effect.png/500px-Dunning-Kruger_effect.png",
+    "path": "assets/2cc22ba628822147bdb5.png",
+    "sha256": "1a1d7d2390ecd092b6979a809c3f32963a868c2f8bd927e6fe84d673cc7db999"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/thumb/c/c0/Networking.png/800px-Networking.png",
+    "path": "assets/b7adacb7334769e4b13f.png",
+    "sha256": "92fbfb2430fb97834b70f76a60c35367663a5473b9aebb3b5cd0116b53a91fcd"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/thumb/c/c0/PZ_API_Documentation_-_preview.png/38px-PZ_API_Documentation_-_preview.png",
+    "path": "assets/fb45af02ba5e969db0d9.png",
+    "sha256": "bb6c663454f266f01ab911e181791e667c2d2c9cab6ab414723c5bf8f61cdf12"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/thumb/c/c2/Items-list-viewer.png/450px-Items-list-viewer.png",
+    "path": "assets/7e7f07d691f0170b4984.png",
+    "sha256": "aa4eeee27071cabfcb3d8f1beea26cd5db5880db307dc6f1428020ec62b45766"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/thumb/c/cc/VSCode_exampleSearchInFolder.png/400px-VSCode_exampleSearchInFolder.png",
+    "path": "assets/93efab33a21c6ee27e89.png",
+    "sha256": "a02c71ef13d66fcb4e51403379804f76cd00a2a6ac1906055906434e6ee42b30"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/thumb/d/d3/ZedScript-Vehicle.png/450px-ZedScript-Vehicle.png",
+    "path": "assets/f3ea401cc5a9e7651bde.png",
+    "sha256": "1bbf322f55424d609473d45d8a04106fb840501a7d8bf6ea1b58751baaf35f82"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/thumb/d/d5/New_tileset.png/300px-New_tileset.png",
+    "path": "assets/5d560f655f1e31ddf8fd.png",
+    "sha256": "fe769e88739606f68153b64338d784d89f7bf021467b1a3e50fdada9500496f0"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/thumb/d/d6/Procedural_distribution_-_system_problem.png/800px-Procedural_distribution_-_system_problem.png",
+    "path": "assets/51fb0a693b36c566c2d0.png",
+    "sha256": "199de07f22a29e6812806e8fc1c179c7773662b5e05587d8c530e5db7664238e"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/thumb/d/db/Visual_Studio_Code_-_logo.png/25px-Visual_Studio_Code_-_logo.png",
+    "path": "assets/ef8e2b80cc135d3a7b32.png",
+    "sha256": "b3d9f388825eb19c5b0c137c4d712fa9f42993dea5cbb6b33f40a1c740192cf2"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/thumb/d/db/Visual_Studio_Code_-_logo.png/38px-Visual_Studio_Code_-_logo.png",
+    "path": "assets/a775601e7a3c121973d2.png",
+    "sha256": "390f35307c33cf8e83d96b1afd76c17a40a9454db2ebe8d6371959132564eadb"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/thumb/d/df/ExportScript.png/508px-ExportScript.png",
+    "path": "assets/fd147eda98462c088d8f.png",
+    "sha256": "ded93f1c54b7d9abed8756c0407c83ee0fd1eaf347a12ece6f27290e6d02602c"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/thumb/e/e5/Google_Drive_icon.webp/38px-Google_Drive_icon.webp.png",
+    "path": "assets/c37864f8d44870179dcb.png",
+    "sha256": "a9498c5bcc299e9b21c95639e0d01fe83e0adb5e6149b0b8f933aabb99c07725"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/thumb/e/e9/Mannequin_-_mapping_guide.png/300px-Mannequin_-_mapping_guide.png",
+    "path": "assets/50b7949566a2b08c75d4.png",
+    "sha256": "a3505d65fe0482c4c850e4173e1802c4dcf23b62993a80a0ace772a8922c6faa"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/thumb/e/e9/Visual_Studio_Code_-_Wikitext_extension.png/800px-Visual_Studio_Code_-_Wikitext_extension.png",
+    "path": "assets/f29d7b1f8b4fb35695b5.png",
+    "sha256": "e3cc85161f4fe7e9782569a9a26fbf76609feb2c512700b64c2e42b1ba3d37a4"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/thumb/e/ed/Debug-dev.png/180px-Debug-dev.png",
+    "path": "assets/c1d0964b65c2ba074489.png",
+    "sha256": "80cbdabae842de58ccfeb920590e36cd334d487c9bed3de661614350c0d0b16a"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/thumb/f/f0/Depthmap_editor.jpg/450px-Depthmap_editor.jpg",
+    "path": "assets/e9ab0d88528063dfd2ac.jpg",
+    "sha256": "b9805fdaaee2536d796eaed7fa07250f23d013313db3426f4ceb149aff92fef4"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/thumb/f/f0/Seam_editor.jpg/450px-Seam_editor.jpg",
+    "path": "assets/86e0916ce5b1f8a2841c.jpg",
+    "sha256": "e39d56faa28a86a146ddfe29ce3955475fc56c736fd657abbbc5a269a442e9cd"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/thumb/f/f1/LuaDebugger_-_Lua_file_inspector.jpg/300px-LuaDebugger_-_Lua_file_inspector.jpg",
+    "path": "assets/bae88a568a10a3607851.jpg",
+    "sha256": "9c5210240f72e759be26fd86bd92062dc52ac2031cc983261a8e70fba6910c09"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/thumb/f/f3/Climate-control.png/450px-Climate-control.png",
+    "path": "assets/d4cc613098c66c609bac.png",
+    "sha256": "18149cd36dbc6f13403c4455f95803eb3677d6fdd18de04061657e10ff51d7e6"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/thumb/f/f4/Debug-SearchMode.png/450px-Debug-SearchMode.png",
+    "path": "assets/02930c3da2bc48656973.png",
+    "sha256": "36c8b71be07da1a06652879d5d5cb857df9801e5760295341365626e610af6d6"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/thumb/f/f5/Tile_property_-_ItemHeight.png/300px-Tile_property_-_ItemHeight.png",
+    "path": "assets/934cf934e30f84c1a738.png",
+    "sha256": "e576237802624891334d64b5b01c1d32b55985a0bca48087a9f6c10ac81ea429"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/thumb/f/f6/Debug-Player-Stats-Body.png/450px-Debug-Player-Stats-Body.png",
+    "path": "assets/fd36e624a847601dc569.png",
+    "sha256": "005ee116e4ee7aafb0d9b5fb529512a0111d20359b2ddd99a75c10b28de4b13c"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/thumb/f/f6/Debug-scenario.png/450px-Debug-scenario.png",
+    "path": "assets/20065bfb6da475e7f934.png",
+    "sha256": "8ca011c98649c48188671433d41f536e95c93c71c61bf0a7dff322eee6cbd842"
+  },
+  {
+    "source": "https://pzwiki.net/w/images/thumb/f/fa/Link-icon.webp/38px-Link-icon.webp.png",
+    "path": "assets/d9057a9f19548a000bdb.png",
+    "sha256": "110853427981552f899735a78ac473bce9097163ebc1bdfb175e40188696d347"
+  }
+]

@@ -1,0 +1,21 @@
+# assets-and-animation
+
+[Library index](../INDEX.md)
+
+- [ActionGroup](ActionGroup.md)
+- [ActionState](ActionState.md)
+- [AnimNode](AnimNode.md)
+- [AnimSet](AnimSet.md)
+- [AnimState](AnimState.md)
+- [Animation](Animation.md)
+- [Attachment editor](Attachment_editor.md)
+- [Character rigs](Character_rigs.md)
+- [Creating a clothing mod](Creating_a_clothing_mod.md)
+- [Creating a flier mod](Creating_a_flier_mod.md)
+- [Creating a hair mod](Creating_a_hair_mod.md)
+- [Creating custom animations](Creating_custom_animations.md)
+- [Hot reloading](Hot_reloading.md)
+- [Importing assets](Importing_assets.md)
+- [Modeling](Modeling.md)
+- [Rendering](Rendering.md)
+- [Transition file](Transition_file.md)
