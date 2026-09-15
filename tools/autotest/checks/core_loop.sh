@@ -28,13 +28,13 @@ while :; do
     summary="$(ev 'return CFLoop.summary()')"; n="$(cut -f1 <<<"$summary")"
     [ "${n:-0}" -gt 0 ] && ! grep -qE "[0-9]+:(pending|placing)" <<<"$summary" && break
     [ "$(date +%s)" -lt "$deadline" ] || abort "documents never all placed: $summary"
-    sleep 3
+    sleep 1
 done
 say "case placed: $summary"
 
 rows=(); findings=()
 for i in $(seq 1 "$n"); do
-    ev "return CFLoop.approach($i)" >/dev/null; sleep 2
+    ev "return CFLoop.approach($i)" >/dev/null; wait_true 10 "CFLoop.loaded($i)" >/dev/null
     found="$(ev "return CFLoop.find($i)")"
     [ "$(cut -f1 <<<"$found")" = true ] || { fail "document $i not found where the runtime says: $(cut -f2 <<<"$found")"; continue; }
     name="$(cut -f2 <<<"$found")"; holder="$(cut -f3 <<<"$found")"; room="$(cut -f4 <<<"$found")"; floor="$(cut -f5 <<<"$found")"
@@ -61,7 +61,7 @@ for i in $(seq 1 "$n"); do
         ev "return CFLoop.goTo($i)" >/dev/null
     fi
     opened=no
-    for _ in 1 2 3 4 5 6 7 8; do [ "$(ev 'return CFLoop.openContainer()' | cut -f1)" = true ] && { opened=yes; break; }; sleep 1; done
+    for _ in $(seq 16); do [ "$(ev 'return CFLoop.openContainer()' | cut -f1)" = true ] && { opened=yes; break; }; sleep 0.5; done
     ev 'return CFLoop.take()' >/dev/null
     wait_true 20 'CFLoop.carried()' || { fail "document $i ($name) never reached the inventory"; continue; }
     menu="$(ev 'return CFLoop.inspect()')"

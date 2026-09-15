@@ -30,7 +30,7 @@ load_lua || abort "could not load the check's Lua"
 wait_true 90 'ConspiracyFiles.GeneratedRuntime.metrics()~=nil' || abort "no case started"
 deadline=$(( $(date +%s) + 180 ))
 until s="$(ev 'return CFLoop.summary()')"; [ "$(cut -f1 <<<"$s")" -gt 1 ] 2>/dev/null && ! grep -qE ":(pending|placing)" <<<"$s"; do
-    [ "$(date +%s)" -lt "$deadline" ] || abort "documents never all placed: $s"; sleep 3
+    [ "$(date +%s)" -lt "$deadline" ] || abort "documents never all placed: $s"; sleep 1
 done
 
 # Progress worth keeping: two documents found and inspected.

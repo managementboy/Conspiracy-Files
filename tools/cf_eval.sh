@@ -66,7 +66,7 @@ while [ "$(date +%s)" -lt "$deadline" ]; do
         case "$out" in error\ *) exit 1 ;; esac
         exit 0
     fi
-    sleep 0.5
+    sleep 0.1
 done
 
 log="$(newest_log)"

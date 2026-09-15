@@ -47,10 +47,10 @@ while :; do
     [ "$(date +%s)" -lt "$deadline" ] || abort "documents never placed: $s"
     sleep 3
 done
-ev 'return CFLoop.approach(1)' >/dev/null; sleep 2
+ev 'return CFLoop.approach(1)' >/dev/null; wait_true 10 'CFLoop.loaded(1)' >/dev/null
 ev 'return CFLoop.find(1)' >/dev/null
 ev 'return CFLoop.goTo(1)' >/dev/null
-for _ in 1 2 3 4 5 6; do [ "$(ev 'return CFLoop.openContainer()' | cut -f1)" = true ] && break; sleep 1; done
+for _ in $(seq 12); do [ "$(ev 'return CFLoop.openContainer()' | cut -f1)" = true ] && break; sleep 0.5; done
 ev 'return CFLoop.take()' >/dev/null
 wait_true 20 'CFLoop.carried()' || say "the document never reached the inventory"
 ev 'return CFLoop.inspect()' >/dev/null; sleep 2

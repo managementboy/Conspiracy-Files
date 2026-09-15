@@ -29,7 +29,7 @@ for f in core_loop wallet_id perf; do ev -f "$REPO/tools/autotest/checks/$f.lua"
 wait_true 90 'ConspiracyFiles.GeneratedRuntime.metrics()~=nil' || abort "no case started"
 deadline=$(( $(date +%s) + 180 ))
 until s="$(ev 'return CFLoop.summary()')"; [ "$(cut -f1 <<<"$s")" -gt 1 ] 2>/dev/null && ! grep -qE ":(pending|placing)" <<<"$s"; do
-    [ "$(date +%s)" -lt "$deadline" ] || abort "documents never all placed: $s"; sleep 3
+    [ "$(date +%s)" -lt "$deadline" ] || abort "documents never all placed: $s"; sleep 1
 done
 for p in "${points[@]}"; do
     r="$(ev "return CFPerf.wrap('$p')")"; [ "$(cut -f1 <<<"$r")" = true ] || say "not timed: $p ($(cut -f2 <<<"$r"))"

@@ -59,7 +59,7 @@ for part in TruckBed GloveBox; do
         ev 'return CFLoop.enterVehicle()' >/dev/null; wait_true 30 'CFVan.inVehicle()' && seated=yes
     fi
     opened=no
-    for _ in 1 2 3 4 5 6 7 8; do [ "$(ev 'return CFLoop.openContainer()' | f 1)" = true ] && { opened=yes; break; }; sleep 1; done
+    for _ in $(seq 16); do [ "$(ev 'return CFLoop.openContainer()' | f 1)" = true ] && { opened=yes; break; }; sleep 0.5; done
     ev 'return CFLoop.take()' >/dev/null
     taken=no; wait_true 20 'CFLoop.carried()' && taken=yes
     ev 'return CFLoop.exitVehicle()' >/dev/null; sleep 2

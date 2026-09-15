@@ -33,7 +33,7 @@ while :; do
     summary="$(ev 'return CFLoop.summary()')"; n="$(f 1 <<<"$summary")"
     [ "${n:-0}" -gt 0 ] && ! grep -qE "[0-9]+:(pending|placing)" <<<"$summary" && break
     [ "$(date +%s)" -lt "$deadline" ] || abort "documents never all placed: $summary"
-    sleep 3
+    sleep 1
 done
 say "case placed: $summary"
 
@@ -47,12 +47,12 @@ last="${furniture[${#furniture[@]}-1]}"
 
 carried=0; lying=""
 for i in "${furniture[@]}"; do
-    ev "return CFLoop.approach($i)" >/dev/null; sleep 2
+    ev "return CFLoop.approach($i)" >/dev/null; wait_true 10 "CFLoop.loaded($i)" >/dev/null
     found="$(ev "return CFLoop.find($i)")"
     [ "$(f 1 <<<"$found")" = true ] || { findings+=("document $i not found where the runtime says"); continue; }
     ev "return CFLoop.goTo($i)" >/dev/null
     opened=no
-    for _ in 1 2 3 4 5 6 7 8; do [ "$(ev 'return CFLoop.openContainer()' | f 1)" = true ] && { opened=yes; break; }; sleep 1; done
+    for _ in $(seq 16); do [ "$(ev 'return CFLoop.openContainer()' | f 1)" = true ] && { opened=yes; break; }; sleep 0.5; done
     if [ "$i" = "$last" ]; then
         [ "$opened" = yes ] || abort "the loot panel never showed the paper to leave lying ($(f 2 <<<"$found"))"
         ev 'return CFDROP.keepLying()' >/dev/null; lying="$(f 2 <<<"$found")"

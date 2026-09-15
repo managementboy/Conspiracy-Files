@@ -58,7 +58,7 @@ done
 ev 'return CFLoop.givePen()' >/dev/null
 
 for i in $(seq 1 "$n"); do
-    ev "return CFLoop.approach($i)" >/dev/null; sleep 2
+    ev "return CFLoop.approach($i)" >/dev/null; wait_true 10 "CFLoop.loaded($i)" >/dev/null
     found="$(ev "return CFLoop.find($i)")"
     [ "$(cut -f1 <<<"$found")" = true ] || { say "document $i not where the runtime says; skipped"; continue; }
     holder="$(cut -f3 <<<"$found")"

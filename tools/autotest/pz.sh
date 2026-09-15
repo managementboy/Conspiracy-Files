@@ -183,6 +183,10 @@ cmd_start() {
             click)
                 if grep -qF "[CF-EVAL] ready" <<<"$out"; then
                     rm -f "$SESSION_FILE"
+                    # Check for a command every 200 ms instead of every second: each step
+                    # of a check waits on this (owner, 2026-09-15). Set here, not in the mod,
+                    # so the shipped build is unchanged.
+                    CF_EVAL_TIMEOUT=15 "$REPO/tools/cf_eval.sh" 'ConspiracyFiles.DevEval.POLL_MS=200; return true' >/dev/null 2>&1 || say "could not speed up command polling"
                     # Remember the world, so `start --continue` can reload it.
                     CF_EVAL_TIMEOUT=15 "$REPO/tools/cf_eval.sh" 'return getWorld():getWorld()' 2>/dev/null | sed -n 's/^ok //p' > "$LOCAL/world"
                     [ -n "$console" ] || CF_EVAL_TIMEOUT=15 "$REPO/tools/cf_eval.sh" 'return CFAutoTest.hideConsole()' >/dev/null 2>&1 || say "could not hide the Lua console"

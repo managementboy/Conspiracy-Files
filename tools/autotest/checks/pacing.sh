@@ -24,7 +24,7 @@ for f in core_loop reload pacing; do ev -f "$REPO/tools/autotest/checks/$f.lua" 
 wait_true 90 'ConspiracyFiles.GeneratedRuntime.metrics()~=nil' || abort "no case started"
 deadline=$(( $(date +%s) + 180 ))
 until s="$(ev 'return CFLoop.summary()')"; [ "$(cut -f1 <<<"$s")" -gt 1 ] 2>/dev/null && ! grep -qE ":(pending|placing)" <<<"$s"; do
-    [ "$(date +%s)" -lt "$deadline" ] || abort "documents never all placed: $s"; sleep 3
+    [ "$(date +%s)" -lt "$deadline" ] || abort "documents never all placed: $s"; sleep 1
 done
 placed_before="$(ev 'return CFReload.placement()' | cut -f2)"
 created="$(ev 'return CFPace.cases()' | cut -f2)"

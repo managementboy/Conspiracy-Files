@@ -72,6 +72,21 @@ function L.approach(n)
     return true
 end
 
+-- Whether document n's square and the eight around it have loaded, so a
+-- search there can find something. Replaces a fixed two-second pause after
+-- every teleport (owner, 2026-09-15: "is there a reason why between each
+-- command ... we leave so much time?"): the caller waits for exactly as long
+-- as loading takes, and no longer.
+function L.loaded(n)
+    local d = L.list[n]
+    local cell = getCell()
+    if not d or not cell then return false end
+    for dx = -1, 1 do for dy = -1, 1 do
+        if not cell:getGridSquare(d.x + dx, d.y + dy, d.z) then return false end
+    end end
+    return true
+end
+
 -- The physical item for document n, searched on its square and neighbours.
 function L.find(n)
     local d = L.list[n]
