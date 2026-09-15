@@ -83,6 +83,6 @@ report="$EVIDENCE/$id-wallet-id.txt"
     echo "errors inside the mod: $(grep -c . <<<"$errors")"
     [ -z "$errors" ] || sed 's/^/  /' <<<"$errors" | head -10
     echo "screenshot: dev/eval/linux/runs/$id-wallet.png (not committed)"
-} > "$report.part" && mv "$report.part" "$report"
+} > "$report.part"; mv "$report.part" "$report"
 cat "$report"
 [ "$verdict" = PASS ]

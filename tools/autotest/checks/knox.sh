@@ -187,7 +187,7 @@ out="$REPO/docs/management/evidence/linux-autotest/$(date +%Y%m%dT%H%M%S)-knox.t
     echo "dates:    $dates"
     echo "to do:    $todo"
     for f in "${fails[@]:-}"; do [ -n "$f" ] && echo "FAIL: $f"; done
-} > "$out.part" && mv "$out.part" "$out"
+} > "$out.part"; mv "$out.part" "$out"
 say "written: $out"
 echo "Linux Knox.OS check $id: $verdict"
 cat "$out"

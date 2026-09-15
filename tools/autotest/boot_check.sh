@@ -80,6 +80,6 @@ report="$evidence/$session-boot.txt"
     echo "mod warnings/errors logged by the mod itself: $(grep -c . <<<"$cf_warn")"
     [ -z "$cf_warn" ] || sed 's/^/  /' <<<"$cf_warn" | head -10
     echo "screenshot: dev/eval/linux/runs/$session.png (not committed)"
-} > "$report.part" && mv "$report.part" "$report"
+} > "$report.part"; mv "$report.part" "$report"
 cat "$report"
 [ "$verdict" = PASS ]

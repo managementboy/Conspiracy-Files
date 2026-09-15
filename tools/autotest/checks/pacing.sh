@@ -75,6 +75,6 @@ report="$EVIDENCE/$id-pacing.txt"
     echo "errors inside the mod: $(grep -c . <<<"$errors")"
     [ -z "$errors" ] || sed 's/^/  /' <<<"$errors" | head -10
     for f in "${fails[@]}"; do echo "FAIL: $f"; done
-} > "$report.part" && mv "$report.part" "$report"
+} > "$report.part"; mv "$report.part" "$report"
 cat "$report"
 [ "$verdict" = PASS ]

@@ -131,7 +131,7 @@ out="$EVIDENCE/$(date +%Y%m%dT%H%M%S)-pdalife.txt"
     echo "stores:   $(f 2 <<<"$stores0")  ->  $(f 2 <<<"$stores1")"
     echo "log:      $new_errors new mod error lines"
     for x in "${fails[@]}"; do echo "FAIL: $x"; done
-} > "$out.part" && mv "$out.part" "$out"
+} > "$out.part"; mv "$out.part" "$out"
 say "written: $out"
 echo "Linux PDA lifecycle check $id: $verdict"
 cat "$out"

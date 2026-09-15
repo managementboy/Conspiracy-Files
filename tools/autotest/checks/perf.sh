@@ -80,6 +80,6 @@ report="$EVIDENCE/$id-perf.txt"
     echo "nearby scan for the second case: ${scan:-no scan line}"
     for f in "${findings[@]}"; do echo "FINDING: $f"; done
     for f in "${fails[@]}"; do echo "FAIL: $f"; done
-} > "$report.part" && mv "$report.part" "$report"
+} > "$report.part"; mv "$report.part" "$report"
 cat "$report"
 [ "$verdict" = PASS ]

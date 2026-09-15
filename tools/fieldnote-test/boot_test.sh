@@ -112,7 +112,7 @@ out="$REPO/docs/management/evidence/linux-autotest/$(date +%Y%m%dT%H%M%S)-fieldn
     echo "lcd:      $l"
     echo "labels:   $lb"
     for x in "${fails[@]:-}"; do [ -n "$x" ] && echo "FAIL: $x"; done
-} > "$out.part" && mv "$out.part" "$out"
+} > "$out.part"; mv "$out.part" "$out"
 say "written: $out"
 echo "Linux fieldnote check $id: $verdict"
 cat "$out"

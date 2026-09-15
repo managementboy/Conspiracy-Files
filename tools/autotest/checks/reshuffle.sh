@@ -70,7 +70,7 @@ out="$REPO/docs/management/evidence/linux-autotest/$(date +%Y%m%dT%H%M%S)-reshuf
     echo "before: $first"
     echo "after:  $second"
     for f in "${fails[@]:-}"; do [ -n "$f" ] && echo "FAIL: $f"; done
-} > "$out.part" && mv "$out.part" "$out"
+} > "$out.part"; mv "$out.part" "$out"
 say "written: $out"
 echo "Linux reshuffle check $(session): $verdict"
 cat "$out"

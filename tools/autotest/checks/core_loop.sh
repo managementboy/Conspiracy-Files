@@ -141,6 +141,6 @@ report="$EVIDENCE/$id-core-loop.txt"
     for f in "${findings[@]}"; do echo "FINDING: $f"; done
     for f in "${fails[@]}"; do echo "FAIL: $f"; done
     echo "screenshot: dev/eval/linux/runs/$id-map.png (not committed)"
-} > "$report.part" && mv "$report.part" "$report"
+} > "$report.part"; mv "$report.part" "$report"
 cat "$report"
 [ "$verdict" = PASS ]

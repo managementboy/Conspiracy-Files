@@ -179,7 +179,7 @@ outf="$EVIDENCE/$(date +%Y%m%dT%H%M%S)-pdagame.txt"
     echo "corrupted: $(f 2 <<<"$cor")"
     echo "log:       $new_errors new mod error lines"
     for x in "${fails[@]}"; do echo "FAIL: $x"; done
-} > "$outf.part" && mv "$outf.part" "$outf"
+} > "$outf.part"; mv "$outf.part" "$outf"
 say "written: $outf"
 echo "Linux PDA gameplay check $id: $verdict"
 cat "$outf"

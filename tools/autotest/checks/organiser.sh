@@ -61,7 +61,7 @@ out="$REPO/docs/management/evidence/linux-autotest/$(date +%Y%m%dT%H%M%S)-organi
     echo "issued: $state"
     echo "after reload: $again"
     for f in "${fails[@]:-}"; do [ -n "$f" ] && echo "FAIL: $f"; done
-} > "$out.part" && mv "$out.part" "$out"
+} > "$out.part"; mv "$out.part" "$out"
 say "written: $out"
 cat "$out"
 [ "$verdict" = PASS ] && exit 0 || exit 1

@@ -163,7 +163,9 @@ def main():
         # 20260914 body-searched) left nothing to say why.
         runs = os.path.join(REPO, "dev/eval/linux/runs")
         os.makedirs(runs, exist_ok=True)
-        open(os.path.join(runs, "%s-prove-baseline-%s.txt" % (stamp, check)), "w").write(clean.stdout + clean.stderr)
+        # A suite path such as ../fieldnote-test/boot_test is not a file name.
+        label = check.replace("../", "").replace("/", "-").replace(":", "-")
+        open(os.path.join(runs, "%s-prove-baseline-%s.txt" % (stamp, label)), "w").write(clean.stdout + clean.stderr)
         baseline[check] = clean.returncode == 0
         lines.append("baseline %s: %s" % (check, "PASS" if baseline[check] else "FAIL (exit %d)" % clean.returncode))
         print(lines[-1], flush=True)

@@ -76,6 +76,6 @@ report="$EVIDENCE/$first-reload.txt"
     echo "errors inside the mod: $(grep -c . <<<"$errors_seen")"
     [ -z "$errors_seen" ] || sed 's/^/  /' <<<"$errors_seen" | head -10
     for f in "${fails[@]}"; do echo "FAIL: $f"; done
-} > "$report.part" && mv "$report.part" "$report"
+} > "$report.part"; mv "$report.part" "$report"
 cat "$report"
 [ "$verdict" = PASS ]

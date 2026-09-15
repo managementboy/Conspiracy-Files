@@ -30,14 +30,21 @@ assert(#empty==0,"empty evidence files: "..table.concat(empty,", "))
 -- Every committed script that writes a report writes it whole.
 local scripts=lines("git ls-files 'tools/autotest/*.sh' 'tools/fieldnote-test/*.sh' 2>/dev/null")
 assert(#scripts>=15,"the check scripts must be listable: "..#scripts)
-local bare={}
+local bare,chained={},{}
 for _,path in ipairs(scripts) do
     local f=assert(io.open(path,"r"))
     local src=f:read("*a")
     f:close()
     for target in src:gmatch('}%s*>%s*"%$(%w+)"') do bare[#bare+1]=path.." ($"..target..")" end
+    if src:find('%.part"%s*&&%s*mv') then chained[#chained+1]=path end
 end
 assert(#bare==0,"a report written straight into place leaves an empty file when the run dies: "
     ..table.concat(bare,", "))
+-- The first version moved the report with `&& mv`. A report block ends with the
+-- loop that prints FAIL lines, and on a PASS that loop's last test is false,
+-- so the move never ran and three passing records stayed behind as ignored
+-- .part files (2026-09-15, fieldnote, hardware and knox).
+assert(#chained==0,"a report moved with && is not moved when its block ends on a false test, "
+    .."so a passing run's evidence is lost: "..table.concat(chained,", "))
 
 print("PASS evidence files: "..#files.." records, none empty; "..#scripts.." scripts write their reports whole")
