@@ -8,7 +8,7 @@ The upstream project identifies this snapshot as **42.20.4**. A source version l
 
 ## Read selectively
 
-1. Find the relevant topic in [INDEX.md](INDEX.md).
+1. Find the relevant topic in [INDEX.md](CATALOG.md).
 2. Read its definition, parent/child hierarchy, types, defaults, warnings, and examples.
 3. Follow local section links for related parameters or blocks.
 4. Use the [PZwiki index](../pzwiki/INDEX.md) for explanations and tutorials.

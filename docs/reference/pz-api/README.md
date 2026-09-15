@@ -2,7 +2,7 @@
 
 Offline Markdown snapshot of **PZ API Documentation, Build 42.20.4**, by Modding Wiki / PZ-Wiki-Modding contributors. This complements the [PZwiki library](../pzwiki/README.md) with structured definitions and data.
 
-- [Full index](INDEX.md)
+- [Full index](CATALOG.md)
 - [AI reading guide](AI_READING_GUIDE.md)
 - [Coverage and validation](COVERAGE.md)
 - [Attribution](ATTRIBUTION.md) and [upstream permission](LICENSE.txt)

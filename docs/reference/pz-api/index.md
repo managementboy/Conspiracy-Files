@@ -1,155 +1,40 @@
-# API reference index
+---
+title: "PZ API Documentation"
+source: "https://pz-wiki-modding.github.io/PZ-API-Docs/index.html"
+source_repository: "https://github.com/PZ-Wiki-Modding/PZ-API-Docs"
+source_commit: "effa0bc0f07b2be60da80a3bc374132b95d3118c"
+source_path: "docs/source/index.rst"
+game_version: "42.20.4"
+retrieved: "2026-09-15"
+document_kind: "full source conversion"
+authority: "external reference; verify against installed build and project research"
+license: "Upstream custom permission; see ATTRIBUTION.md and LICENSE.txt"
+---
 
-Build 42.20.4. Full source conversions. See [reading guide](AI_READING_GUIDE.md).
+<a id="pz-api-documentation"></a>
 
-## Overview
+# PZ API Documentation
 
-- [PZ API Documentation](index.md)
-- [Java](java.md)
-- [Mapping](mapping.md)
+Welcome to the **PZ API Documentation**. This documentation currently provides API documentation for [Scripts](../pzwiki/scripts/Scripts.md). It also links to other external documentations.
+
+This documentation is auto-generated from different sources:
+
+- pz-scripts-data
+- pz-translation-data
+- pz-lua-parser
+- pz-java-parser
+
+To contribute or suggest improvements, please refer to the main repository's contribution guidelines.
+
+<a id="documentation-structure"></a>
+
+## Documentation Structure
+
 - [ScriptsDocs](scripts.md)
+- [Mapping](mapping.md)
 - [Translations](translations.md)
+- [Java](java.md)
 - [XML](xml.md)
-
-## Scripts
-
-- [_COMPONENT_BLOCK](scripts/_component_block.md)
-- [alias](scripts/alias.md)
-- [anim](scripts/anim.md)
-- [animation](scripts/animation.md)
-- [animationsMesh](scripts/animationsmesh.md)
-- [area](scripts/area.md)
-- [attachment](scripts/attachment.md)
-- [blend](scripts/blend.md)
-- [BlendBlackList](scripts/blendblacklist.md)
-- [BlendWhiteList](scripts/blendwhitelist.md)
-- [box](scripts/box.md)
-- [Categories](scripts/categories.md)
-- [character_profession_definition](scripts/character_profession_definition.md)
-- [character_trait_definition](scripts/character_trait_definition.md)
-- [clip](scripts/clip.md)
-- [clock](scripts/clock.md)
-- [colors](scripts/colors.md)
-- [component ContextMenuConfig](scripts/component/component-contextmenuconfig.md)
-- [component CraftBench](scripts/component/component-craftbench.md)
-- [component CraftBenchSounds](scripts/component/component-craftbenchsounds.md)
-- [component CraftRecipe](scripts/component/component-craftrecipe.md)
-- [component DryingCraftLogic](scripts/component/component-dryingcraftlogic.md)
-- [component Durability](scripts/component/component-durability.md)
-- [component FluidContainer](scripts/component/component-fluidcontainer.md)
-- [component Resources](scripts/component/component-resources.md)
-- [component SpriteConfig](scripts/component/component-spriteconfig.md)
-- [component SpriteOverlayConfig](scripts/component/component-spriteoverlayconfig.md)
-- [component UiConfig](scripts/component/component-uiconfig.md)
-- [component WallCoveringConfig](scripts/component/component-wallcoveringconfig.md)
-- [component](scripts/component.md)
-- [components](scripts/components.md)
-- [container](scripts/container.md)
-- [contextEntry](scripts/contextentry.md)
-- [CopyFrame](scripts/copyframe.md)
-- [CopyFrames](scripts/copyframes.md)
-- [craftRecipe](scripts/craftrecipe.md)
-- [crawlThroughWheel](scripts/crawlthroughwheel.md)
-- [cylinder](scripts/cylinder.md)
-- [data](scripts/data.md)
-- [door](scripts/door.md)
-- [energy](scripts/energy.md)
-- [entity](scripts/entity.md)
-- [evolvedrecipe](scripts/evolvedrecipe.md)
-- [face](scripts/face.md)
-- [fixing](scripts/fixing.md)
-- [fluid](scripts/fluid.md)
-- [Fluids](scripts/fluids.md)
-- [group](scripts/group.md)
-- [hand](scripts/hand.md)
-- [imports](scripts/imports.md)
-- [inputs](scripts/inputs.md)
-- [ISBaseComponentPanel](scripts/isbasecomponentpanel.md)
-- [ISTableLayoutCell](scripts/istablelayoutcell.md)
-- [item](scripts/item.md)
-- [itemMapper](scripts/itemmapper.md)
-- [layer](scripts/layer.md)
-- [layers](scripts/layers.md)
-- [lightbar](scripts/lightbar.md)
-- [lua](scripts/lua.md)
-- [mannequin](scripts/mannequin.md)
-- [maps](scripts/maps.md)
-- [model](scripts/model.md)
-- [mods](scripts/mods.md)
-- [module](scripts/module.md)
-- [option](scripts/option.md)
-- [outputs](scripts/outputs.md)
-- [overlayMapper](scripts/overlaymapper.md)
-- [part](scripts/part.md)
-- [passenger](scripts/passenger.md)
-- [physics](scripts/physics.md)
-- [physicsHitReaction](scripts/physicshitreaction.md)
-- [physicsShape](scripts/physicsshape.md)
-- [Poison](scripts/poison.md)
-- [polygon](scripts/polygon.md)
-- [position](scripts/position.md)
-- [progress](scripts/progress.md)
-- [Properties](scripts/properties.md)
-- [ragdoll](scripts/ragdoll.md)
-- [ROOT-Blends](scripts/root_files/blends.md)
-- [ROOT-Default](scripts/root_files/default.md)
-- [ROOT-MapBaseXML](scripts/root_files/mapbasexml.md)
-- [ROOT-MapInfo](scripts/root_files/mapinfo.md)
-- [ROOT-ModInfo](scripts/root_files/modinfo.md)
-- [ROOT-Rules](scripts/root_files/rules.md)
-- [ROOT-SandboxOptions](scripts/root_files/sandboxoptions.md)
-- [ROOT-Scripts](scripts/root_files/scripts.md)
-- [ROOT-SpriteModels](scripts/root_files/spritemodels.md)
-- [ROOT-TileGeometry](scripts/root_files/tilegeometry.md)
-- [ROOT-TMXconfig](scripts/root_files/tmxconfig.md)
-- [Root Files](scripts/root_files.md)
-- [rule](scripts/rule.md)
-- [skin](scripts/skin.md)
-- [sound](scripts/sound.md)
-- [soundTimeline](scripts/soundtimeline.md)
-- [spriteModel](scripts/spritemodel.md)
-- [style](scripts/style.md)
-- [switchSeat](scripts/switchseat.md)
-- [table](scripts/table.md)
-- [template](scripts/template.md)
-- [tile](scripts/tile.md)
-- [tileGeometry](scripts/tilegeometry.md)
-- [tileset](scripts/tileset.md)
-- [timedAction](scripts/timedaction.md)
-- [vehicle](scripts/vehicle.md)
-- [vehicleEngineRPM](scripts/vehicleenginerpm.md)
-- [wheel](scripts/wheel.md)
-- [whitelist](scripts/whitelist.md)
-- [window](scripts/window.md)
-- [xuiSkin](scripts/xuiskin.md)
-
-## Mapping
-
-- [ItemPickerContainer properties](mapping/item_picker_container_properties.md)
-- [Procedural distributions](mapping/procedural_distributions.md)
-- [Procedural distributions properties](mapping/procedural_distributions_properties.md)
-- [Room names](mapping/rooms.md)
-- [Room distributions](mapping/rooms_distributions.md)
-- [Tile Properties](mapping/tile_properties.md)
-
-## Java
-
-- [ActionSoundTime](java/action_sound_time.md)
-- [Colors](java/colors.md)
-- [ItemBodyLocation](java/item_body_locations.md)
-- [Item Tags](java/item_tags.md)
-- [Magazine Subject](java/magazine_subject.md)
-- [Metabolics](java/metabolics.md)
-
-## Translations
-
-- [Language Codes](translations/language_codes.md)
-- [Translation Files](translations/translation_files.md)
-
-## Xml
-
-- [animNode](xml/animnode.md)
-- [clothing](xml/clothing.md)
-- [clothingDecals](xml/clothingdecals.md)
-- [clothingItem](xml/clothingitem.md)
-- [fileGuidTable](xml/fileguidtable.md)
+- JavaDocs
+- LuaDocs
+- ZedScripts
