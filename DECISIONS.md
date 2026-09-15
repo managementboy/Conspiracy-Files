@@ -701,6 +701,42 @@ for the new sizes: 1x rather than the new half size, because at 0.5x only Small
 or Normal text leaves a readable page. The size is written to the save's own
 ModData the moment it changes, so a crash does not lose it either.
 
+## Answering the outside design review — 2026-09-15
+
+An outside reviewer judged that the mod risks replacing repetitive looting with
+repetitive evidence collection. Each criticism was checked against the code and
+answered in a plan (artifact "Answering the Monotony Review"). The owner chose:
+
+**P4-R107 — fix the stories first, then freeze the pool.** The audit found 30
+defects in the twenty premises and the shared documents: dates and durations
+that do not add up, and above all "agreeing" cases whose response still reasons
+as if the records disagree. All 30 are fixed, a consistency test renders every
+premise in both versions for every possible set of dates, and no new premise or
+new organiser program is added until the first new-style case ships. Changes
+case text, so a new game.
+
+**P4-R108 — case dates are spread across the calendar.** Every case used to be
+dated 2-6 July 1993, which put every dated paper inside the relay memo's nine
+days and made its date note say nothing. Dates now spread across the weeks
+before the outbreak, so a paper landing in the memo's week is a real signal.
+New game.
+
+**P4-R109 — one settled fact per case, about objects and places.** Amends "a
+lead is never proof" for exactly one kind of statement: a fact the game itself
+confirms - a found key opening a door, a count the player took from an open
+container. People, motives, which record is true, and the Knox Event stay open,
+and the row says what it does not establish. Conflicting records are still
+never reconciled (P2-Q108/109).
+
+**P4-R110 — cases may point at survival opportunities that already exist.** A
+case may lead to a locked building, a vehicle or a generator the world already
+holds. The mod still creates no loot and evidence is still never better than
+loot; condition, fuel and access are the game's.
+
+**P4-R111 — finished cases are archived, so the tenth case is not the last.**
+A finished case shrinks to its notebook rows and last-seen lines outside the
+live case budget, so a save keeps getting new cases after ten.
+
 **P4-R106 — how a car's containers are reached.** Owner, 2026-09-14: "The globe
 box only opens when sitting in the front of the car", and a truck bed or trunk
 is reached from outside, "only if they are open". Placement may still put a
