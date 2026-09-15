@@ -1,9 +1,13 @@
 # T12 live run
 
+**Current candidate:** DEV-0.6; enable ConspiracyFiles plus the matching wrapper only. Record candidate commit and deployed file hashes. No current live result is populated. Historical version observations must not be carried forward as passing results.
+
 - Status: Not run
 - Date/operator:
 - Build/revision/Steam build ID:
 - Probe commit:
+- Visible probe version and source/deployed SHA256:
+- Production-intended UI version/hash and differences from synthetic probe:
 - Save name:
 - Enabled mods:
 - Input devices:
@@ -37,7 +41,7 @@
 
 ## Required design corrections
 
-None recorded.
+Carry forward the known scrollbar/contrast failures in `docs/research/T12_UI_RUNTIME.md`; record this run's correction/verdict separately. Use X/configurable notebook toggle under P4-R47; Escape belongs to the game. Existing callbacks or generic “all good” statements cannot pass the remaining environment/focus/controller/coexistence matrix.
 
 ## Limitations
 

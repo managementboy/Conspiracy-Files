@@ -1,0 +1,7 @@
+Linux case body check 20260914T172204: PASS
+source: 2d08f01 + uncommitted mod changes
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+case person: Ines Kubiak
+bound zombie: true Ines Kubiak 10878,10186
+body: true true 1 1 ID Card: Ines Kubiak 7
+log: case person's body (generated:1271392975:case): marked searched; card added

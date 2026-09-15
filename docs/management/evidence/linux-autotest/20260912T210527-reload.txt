@@ -1,0 +1,8 @@
+Linux reload check 20260912T210527: PASS
+source: 2b10c06
+world: 88060291412140563745; three save/quit/continue round trips after two documents were inspected
+notebook before: 2 1=1715926338:document-1:Weighbridge ticket / RC-229 | 2=1715926338:document-2:Arrival ticket / RC-229
+placements before: 6 1715926338:document-1@10840,10148,0:placed 1715926338:document-2@10874,10188,0:placed 1715926338:document-3@10876,10189,0:placed 1715926338:document-4@10836,10147,0:placed 1715926338:document-5@10877,10187,0:placed 1715926338:document-6@10877,10189,0:placed
+schedule before (count, last created hour, scheduled): 1 2.0730371475219727 true
+save-budget total per round (bytes): 162958 162958 162958 162958
+errors inside the mod: 0

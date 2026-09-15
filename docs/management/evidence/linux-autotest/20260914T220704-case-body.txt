@@ -1,0 +1,13 @@
+Linux case body check 20260914T220704: FAIL
+source: 81c7777
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+case person: Delia Mercer
+bound zombie: true Delia Mercer 10844,10108
+body: true true 1 1 ID Card: Delia Mercer 5
+log: case person's body (generated:879141876:case): searched=true; card added
+notebook lead: false no notebook row for ID Card: Delia Mercer
+her body searched at spawn: true
+comparison body: searched before it was shown: false, searched once shown: yes
+sex matching: true true true true true
+FAIL: could not open her body in the loot panel: false	her body is not in the loot panel
+FAIL: her ID card on the body did not become a notebook lead: false	no notebook row for ID Card: Delia Mercer

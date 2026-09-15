@@ -1,0 +1,8 @@
+Linux reload check 20260911T152624: PASS
+source: 9230e43
+world: 8514425056787895201; three save/quit/continue round trips after two documents were inspected
+notebook before: 2 1=760091283:document-1:Staff photograph / PS-629 | 2=760091283:document-2:Establishment list / PS-629
+placements before: 7 760091283:document-1@10840,10148,0:placed 760091283:document-2@10792,10105,0:placed 760091283:document-3@10792,10107,0:placed 760091283:document-4@10836,10146,0:placed 760091283:document-5@10797,10111,0:placed 760091283:document-6@10797,10113,0:placed 760091283:document-7@10797,10113,0:placed
+schedule before (count, last created hour, scheduled): 1 2.061795234680176 true
+save-budget total per round (bytes): 168768 168768 168768 168768
+errors inside the mod: 0

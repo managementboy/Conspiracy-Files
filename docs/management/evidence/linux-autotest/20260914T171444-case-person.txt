@@ -1,0 +1,9 @@
+Linux case person check 20260914T171444: FAIL
+source: 2d08f01
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+case person: Joanne Voss
+binding: bound Joanne Voss to a body near 10840,10148 with an ID card
+zombie before reload: true Joanne Voss ID Card: Joanne Voss 10878,10188 generated:142921189:case
+after save and reload: no: no bound case person loaded
+card on the body in the notebook: not tried
+FAIL: after a reload the case person is gone (zombie name, card or mark not saved)

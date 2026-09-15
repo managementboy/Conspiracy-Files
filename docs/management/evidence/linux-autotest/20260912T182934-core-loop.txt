@@ -1,0 +1,14 @@
+Linux core loop check 20260912T182934: PASS
+source: b83adbf
+first case: 5 documents, all found and inspected through the right-click menu:
+  1. Rent statement / RC-397, in shelves, room hall, floor 0 (container icon clicked: yes)
+  2. Key return note / RC-397, in counter, room kitchen, floor 0 (container icon clicked: yes)
+  3. Property review / RC-397, in counter, room kitchen, floor 0 (container icon clicked: yes)
+  4. Dog tag, in counter, room kitchen, floor 0 (container icon clicked: yes)
+  5. Carving fork, marked Ines Kubiak, in counter, room kitchen, floor 0 (container icon clicked: yes)
+notebook entries: 5; case completion reported: yes
+map marks without a pen (written/pending/missing): 0/5/0
+map marks after a pen, case already retired: 5/0/0
+second case appeared (gap removed): yes
+errors inside the mod: 0
+screenshot: dev/eval/linux/runs/20260912T182934-map.png (not committed)

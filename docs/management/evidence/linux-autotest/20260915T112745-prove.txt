@@ -1,0 +1,15 @@
+Linux mutation proof 20260915T112745
+worktree: /home/elkin/cf-wp345 at 7e9e773 DEV-0.36.0: drop papers on the organiser to note them; names on case papers in NAMES; containers in words
+
+baseline drop_note: PASS
+baseline unit:container_words: PASS
+baseline unit:drop_to_note: PASS
+baseline unit:knox_case_names: PASS
+
+CAUGHT drop-note (drop_note): FAIL: dropping 5 case papers on the organiser noted 0 of the 4 carried | FAIL: dropping 5 case papers on the organiser did not note the one lying in its container | FAIL: the drop recorded 0 discoveries, not 5
+CAUGHT drop-stack-items (unit:drop_to_note): test/drop_to_note.lua:31: in main chunk | [C]: ?
+CAUGHT case-names (unit:knox_case_names): test/knox_case_names.lua:33: in main chunk | [C]: ?
+CAUGHT container-words (unit:container_words): test/container_words.lua:10: in main chunk | [C]: ?
+
+caught 4 of 4
+worktree clean afterwards: yes

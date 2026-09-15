@@ -1,0 +1,9 @@
+Linux mutation proof 20260914T220258
+worktree: /home/elkin/cf-wp345 at e912ba3 prove.py counts a catch only when the clean check passes; body-spawn listener reports firing and errors
+
+baseline case_body: FAIL (exit 1)
+
+BASELINE FAILED body-searched (case_body): the clean check fails, so this mutation proves nothing
+
+caught 0 of 1
+worktree clean afterwards: yes

@@ -1,0 +1,19 @@
+write cost, by part - 2026-09-12T14:43:06+02:00
+build: DEV-0.25.1-realobjects
+commit: 4aaf4e7
+session: 20260912T144039   documents: 5
+
+ClueMarkers.after calls=5 avg=3.200ms max=5ms over2ms=5 
+ ClueMarkers.update calls=58 avg=1.672ms max=20ms over2ms=5 
+ DiscoveryLedger.record calls=5 avg=0.000ms max=0ms over2ms=0 
+ DiscoveryLedger.validate calls=38 avg=0.105ms max=1ms over2ms=0 
+ DiscoveryLog.record calls=5 avg=6.200ms max=7ms over2ms=5 
+ PlayerVoice.onDiscovery calls=5 avg=2.000ms max=2ms over2ms=5 
+ SaveBudget.check calls=23 avg=1.087ms max=3ms over2ms=9
+
+Read it as: max is the single stall the player feels; avg over calls is
+what it costs across a session. If DiscoveryLedger.validate carries most
+of DiscoveryLog.record's max, the fix is to check only the new entry
+while playing and keep the full check for load (WP5). If the cost is
+spread evenly across the parts, only then is a deferred write queue
+worth its risk.

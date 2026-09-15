@@ -1,0 +1,8 @@
+Linux boot check 20260911T150500: PASS
+source: 471e25b + uncommitted mod changes
+mod version / game version / player alive: DEV-0.24.6-retired	42.20.4 b0bbce05d5	true
+game loading took 37 seconds; soaked 60s
+mod files loaded: 85 of 85
+errors inside the mod: 0
+mod warnings/errors logged by the mod itself: 0
+screenshot: dev/eval/linux/runs/20260911T150500.png (not committed)

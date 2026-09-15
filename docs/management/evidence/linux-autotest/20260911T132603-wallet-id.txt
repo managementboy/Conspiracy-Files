@@ -1,0 +1,11 @@
+Linux wallet ID check 20260911T132603: PASS
+source: 7983376
+wallet ID: 'ID Card: Jamie Ledford'; wallet stamp after carrying it off: corpse-wallet:178408255
+notebook summary: Identity document - container
+notebook text:
+  I saw a document labelled "ID Card: Jamie Ledford" inside Wallet. That container was taken off a corpse.
+  The name on a document is a lead. It does not establish who owned the container or identify the body.
+  Observed at 102 E Maple St.
+loose ID on a body: PASS: 'ID Card: Delmer Quick' recorded as Identity document - corpse
+errors inside the mod: 0
+screenshot: dev/eval/linux/runs/20260911T132603-wallet.png (not committed)

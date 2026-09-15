@@ -1,0 +1,10 @@
+PASS hardware - 2026-09-13T15:58:50+02:00
+commit: b14cdac
+session: 20260913T155313
+auto-off:     60s on=true  180s on=false
+lamp drain:   2 in-game hours: 1.0 -> 0.800000011920929
+dead cell:    notes 1->0  to-dos 1->0 (offline)
+fresh cell:   notes 0->1  to-dos 0->1 (restored)
+ledger:       0 -> 0 -> 0 (must never change)
+boot offline: LECTROMAX DATALINE 160 | KNOX.OS 1.0 | (c) 1993 Knox Systems |  | Address book .... reading | Case ............ preparing | Records ......... 0 | Memory .......... 128K free | ** MEMORY OFFLINE ** | fit a cell to restore |  | Working. You can play; | this finishes by itself.
+boot restore: LECTROMAX DATALINE 160 | KNOX.OS 1.0 | (c) 1993 Knox Systems |  | Address book .... reading | Case ............ preparing | Records ......... 0 | Memory .......... 127K free | Restoring from backup ... | Notes and to-dos restored. |  | Working. You can play; | this finishes by itself.

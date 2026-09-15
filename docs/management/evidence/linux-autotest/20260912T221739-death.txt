@@ -1,0 +1,8 @@
+Linux death check 20260912T221739: PASS
+source: 65c2bbf
+first survivor: Danielle, carrying 2 case documents at death
+notebook before death: 2 1=873555350:document-1:Stock list / TN-860 | 2=873555350:document-2:Second stock list / TN-860
+new survivor: Kathie; papers: papers issued: Kathie's Papers
+notebook for the new survivor: 2 1=873555350:document-1:Stock list / TN-860 | 2=873555350:document-2:Second stock list / TN-860
+document taken back off the body: Stock list / TN-860
+errors inside the mod: 0

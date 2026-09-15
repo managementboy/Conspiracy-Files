@@ -1,0 +1,15 @@
+Linux core loop check 20260912T214721: PASS
+source: 5eacd89
+first case: 6 documents, all found and inspected through the right-click menu:
+  1. Fuel account statement / R-793, in shelves, room hall, floor 0 (container icon clicked: yes)
+  2. Maintenance log / R-793, in counter, room kitchen, floor 0 (container icon clicked: yes)
+  3. Account query / R-793, in counter, room kitchen, floor 0 (container icon clicked: yes)
+  4. Credit Card: Curtis Vance, in counter, room kitchen, floor 0 (container icon clicked: yes)
+  5. wood thigh (1 of 6), in counter, room kitchen, floor 0 (container icon clicked: yes)
+  6. broccoli bag seed (1 of 10), in counter, room kitchen, floor 0 (container icon clicked: yes)
+notebook entries: 6; case completion reported: yes
+map marks without a pen (written/pending/missing): 0/6/0
+map marks after a pen, case already retired: 6/0/0
+second case appeared (gap removed): yes
+errors inside the mod: 0
+screenshot: dev/eval/linux/runs/20260912T214721-map.png (not committed)

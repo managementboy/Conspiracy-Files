@@ -1,0 +1,8 @@
+Linux death check 20260912T211248: PASS
+source: 2b10c06
+first survivor: Rachael, carrying 2 case documents at death
+notebook before death: 2 1=50150376:document-1:Rent statement / HK-265 | 2=50150376:document-2:Key return note / HK-265
+new survivor: Kristofer; papers: papers issued: Kristofer's Papers
+notebook for the new survivor: 2 1=50150376:document-1:Rent statement / HK-265 | 2=50150376:document-2:Key return note / HK-265
+document taken back off the body: Rent statement / HK-265
+errors inside the mod: 0

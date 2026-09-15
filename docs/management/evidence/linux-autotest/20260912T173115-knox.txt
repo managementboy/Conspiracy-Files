@@ -1,0 +1,32 @@
+FAIL knox.os - 2026-09-12T17:31:15+02:00
+commit: ea0166e
+session: 20260912T172814
+opened:   true	FILES	1	nil	false	1
+names:    true	NAMES	0	false	false	2
+dates:    true	DATES	1	false	false	3
+to do:    true	TO DO	1	false	false	4
+FAIL: the address book is empty after looting an ID
+FAIL: errors inside the mod: General      f:2158 at KahluaThread.flushErrorMessage      > -------------------------------------------------------------
+General      f:2158> Lua(Vanilla).takeWallet> Exception thrown  |  attempted index: button of non-table: null at KahluaThread.tableget(KahluaThread.java:1430).
+General      f:2397 at KahluaThread.flushErrorMessage      > -------------------------------------------------------------
+General      f:2397> Lua(Vanilla).walletCarried> Exception thrown  |  attempted index: item of non-table: null at KahluaThread.tableget(KahluaThread.java:1430).
+General      f:2577 at KahluaThread.flushErrorMessage      > -------------------------------------------------------------
+General      f:2577> Lua(Vanilla).walletCarried> Exception thrown  |  attempted index: item of non-table: null at KahluaThread.tableget(KahluaThread.java:1430).
+General      f:2759 at KahluaThread.flushErrorMessage      > -------------------------------------------------------------
+General      f:2759> Lua(Vanilla).walletCarried> Exception thrown  |  attempted index: item of non-table: null at KahluaThread.tableget(KahluaThread.java:1430).
+General      f:2940 at KahluaThread.flushErrorMessage      > -------------------------------------------------------------
+General      f:2940> Lua(Vanilla).walletCarried> Exception thrown  |  attempted index: item of non-table: null at KahluaThread.tableget(KahluaThread.java:1430).
+General      f:3480 at KahluaThread.flushErrorMessage      > -------------------------------------------------------------
+General      f:3480> Lua((MOD:Conspiracy-Files: Dead Air)).safe> Exception thrown  |  attempted index: new of non-table: null at KahluaThread.tableget(KahluaThread.java:1430).
+General      f:3716 at KahluaThread.flushErrorMessage      > -------------------------------------------------------------
+General      f:3716> Lua(Vanilla).takeWallet> Exception thrown  |  attempted index: button of non-table: null at KahluaThread.tableget(KahluaThread.java:1430).
+General      f:3955 at KahluaThread.flushErrorMessage      > -------------------------------------------------------------
+General      f:3955> Lua(Vanilla).walletCarried> Exception thrown  |  attempted index: item of non-table: null at KahluaThread.tableget(KahluaThread.java:1430).
+General      f:4136 at KahluaThread.flushErrorMessage      > -------------------------------------------------------------
+General      f:4136> Lua(Vanilla).walletCarried> Exception thrown  |  attempted index: item of non-table: null at KahluaThread.tableget(KahluaThread.java:1430).
+General      f:4255 at KahluaThread.flushErrorMessage      > -------------------------------------------------------------
+General      f:4255> Lua(Vanilla).takeWallet> Exception thrown  |  attempted index: button of non-table: null at KahluaThread.tableget(KahluaThread.java:1430).
+General      f:4315 at KahluaThread.flushErrorMessage      > -------------------------------------------------------------
+General      f:4315> Lua(Vanilla).walletCarried> Exception thrown  |  attempted index: item of non-table: null at KahluaThread.tableget(KahluaThread.java:1430).
+General      f:4496 at KahluaThread.flushErrorMessage      > -------------------------------------------------------------
+General      f:4496> Lua(Vanilla).walletCarried> Exception thrown  |  attempted index: item of non-table: null at KahluaThread.tableget(KahluaThread.java:1430).

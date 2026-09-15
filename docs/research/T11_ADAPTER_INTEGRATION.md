@@ -1,11 +1,15 @@
 # Spike T11 — v0.1 adapter composition
 
-- **Status:** Planned
+- **Status:** Prepared — not live-run
 - **Project Zomboid build tested:** Not yet tested; final run must verify the installed build independently
 - **Platform:** Windows, manual GUI route
 - **Probe path/commit:** `dev/t11-adapter-integration/`
 - **GitHub issue:** [#29](https://github.com/managementboy/Conspiracy-Files/issues/29)
 - **API/event/classes used:** To be recorded from the final probe implementation and installed-build audit
+
+## Takeover scope update — 2026-09-05
+
+The corrected source now has a runnable wrapper requiring the production candidate. It sets T11Mode before OnGameStart, selects a separate canonical tag and permits D1 placement only. All adapter/UI logic comes from mod/. The previous direct-domain harness has been replaced with read-only snapshots and one-shot fault arming. Scope is the two-site Muldraugh candidate; exact bindings remain unaccepted. See the wrapper runbook and correction report.
 
 ## Question
 
@@ -13,13 +17,13 @@ Do the separately proven T1, T4, T5, T8 and T10 mechanisms compose safely with t
 
 ## Method
 
-Use one disposable save and one probe mod. Use the final bound D1 target unless location validation requires another smallest representative item. Copy no probe code into production. Run the matrix in `dev/t11-adapter-integration/README.md`, archive the save/log/setup state, and report only directly observed behavior.
+Use one fresh disposable save with ConspiracyFiles plus ConspiracyFiles_T11_Probe enabled, and no T12 wrapper. Use the final bound D1 target unless location validation requires another smallest representative item. Copy no probe code into production. Run the matrix in `dev/t11-adapter-integration/README.md`, archive the save/log/setup state, and report only directly observed behavior.
 
 The minimum matrix is:
 
 1. clean pending placement through detached token stamping, exact-container add, world verification and canonical `placed` commit;
 2. repeated target callbacks and true stream-out/in without duplicate materialisation;
-3. one Inspect activation creating exactly one Evidence and one JournalEntry, followed immediately by save/reload;
+3. one manual Inspect activation creating exactly one Evidence, one asset-discovered entry and, for a fresh D1/D2 introduction, one thread-introduced entry; save/reload immediately and require repeat Inspect to append neither entry;
 4. a T8 sample on the same tick as placement/identity reconciliation without partial or duplicated domain effects;
 5. move the item away from its original container and prove original-container absence does not imply loss;
 6. inject a copied-token duplicate and prove sticky `conflict` with no automatic winner or extra placement;
@@ -40,7 +44,7 @@ T11 is deliberately one-item composition evidence. It does not accept all six pl
 
 ## Verdict
 
-Pending live run. Full production adapter assembly remains blocked until this report has an evidence-backed verdict.
+Pending live run. Acceptance/promotion of the existing conditional production adapter candidate remains blocked until this report has an evidence-backed verdict. No current E01–E13 result is supplied by the historical scaffold summary.
 
 ## Decision links
 

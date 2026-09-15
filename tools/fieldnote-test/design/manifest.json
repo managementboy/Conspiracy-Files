@@ -1,0 +1,2224 @@
+{
+  "schema_version": 1,
+  "device": {
+    "id": "device",
+    "width": 400,
+    "height": 620,
+    "origin": [
+      0,
+      0
+    ]
+  },
+  "lcd": {
+    "component": "C05",
+    "rect": [
+      40,
+      50,
+      320,
+      422
+    ],
+    "bounds_half_open": [
+      40,
+      50,
+      360,
+      472
+    ]
+  },
+  "palette": {
+    "edge": {
+      "hex": "#171C1D",
+      "rgba": [
+        0.090196,
+        0.109804,
+        0.113725,
+        1
+      ]
+    },
+    "shadow": {
+      "hex": "#282E2F",
+      "rgba": [
+        0.156863,
+        0.180392,
+        0.184314,
+        1
+      ]
+    },
+    "body": {
+      "hex": "#3B4243",
+      "rgba": [
+        0.231373,
+        0.258824,
+        0.262745,
+        1
+      ]
+    },
+    "face": {
+      "hex": "#4B5353",
+      "rgba": [
+        0.294118,
+        0.32549,
+        0.32549,
+        1
+      ]
+    },
+    "highlight": {
+      "hex": "#707A77",
+      "rgba": [
+        0.439216,
+        0.478431,
+        0.466667,
+        1
+      ]
+    },
+    "key": {
+      "hex": "#596260",
+      "rgba": [
+        0.34902,
+        0.384314,
+        0.376471,
+        1
+      ]
+    },
+    "legend": {
+      "hex": "#B3BCAC",
+      "rgba": [
+        0.701961,
+        0.737255,
+        0.67451,
+        1
+      ]
+    },
+    "lcd": {
+      "hex": "#A7B394",
+      "rgba": [
+        0.654902,
+        0.701961,
+        0.580392,
+        1
+      ]
+    },
+    "ink": {
+      "hex": "#303C30",
+      "rgba": [
+        0.188235,
+        0.235294,
+        0.188235,
+        1
+      ]
+    },
+    "lcd_mid": {
+      "hex": "#7F8F73",
+      "rgba": [
+        0.498039,
+        0.560784,
+        0.45098,
+        1
+      ]
+    },
+    "lcd_light": {
+      "hex": "#BDCAAC",
+      "rgba": [
+        0.741176,
+        0.792157,
+        0.67451,
+        1
+      ]
+    }
+  },
+  "text_contract": {
+    "coordinates": "x anchor and baseline_y, component-local integer pixels",
+    "reference_font": "Arial (system font); Arial Bold for bold text",
+    "raster": "Pillow baseline anchor; one-bit text coverage to preserve the solid palette",
+    "svg": "Arial, sans-serif. Text remains ordinary text; a viewer may substitute fonts.",
+    "game": "Use built-in UI Small/Medium. Pixel font sizes are reference intentions, not verified PZ font sizes."
+  },
+  "components": [
+    {
+      "id": "C01",
+      "name": "Housing silhouette",
+      "order": 1,
+      "parent": "device",
+      "bounds": [
+        0,
+        0,
+        400,
+        620
+      ],
+      "purpose": "Stepped charcoal shell; a real rectangular opening reserves every LCD pixel.",
+      "role": "hardware",
+      "optional": false,
+      "primitives": [
+        {
+          "id": "C01.01",
+          "type": "rect",
+          "rect": [
+            12,
+            0,
+            376,
+            4
+          ],
+          "color": "edge",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C01.02",
+          "type": "rect",
+          "rect": [
+            6,
+            4,
+            388,
+            4
+          ],
+          "color": "edge",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C01.03",
+          "type": "rect",
+          "rect": [
+            2,
+            8,
+            396,
+            4
+          ],
+          "color": "edge",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C01.04",
+          "type": "rect",
+          "rect": [
+            0,
+            12,
+            400,
+            38
+          ],
+          "color": "edge",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C01.05",
+          "type": "rect",
+          "rect": [
+            0,
+            50,
+            40,
+            422
+          ],
+          "color": "edge",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C01.06",
+          "type": "rect",
+          "rect": [
+            360,
+            50,
+            40,
+            422
+          ],
+          "color": "edge",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C01.07",
+          "type": "rect",
+          "rect": [
+            0,
+            472,
+            400,
+            136
+          ],
+          "color": "edge",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C01.08",
+          "type": "rect",
+          "rect": [
+            2,
+            608,
+            396,
+            4
+          ],
+          "color": "edge",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C01.09",
+          "type": "rect",
+          "rect": [
+            6,
+            612,
+            388,
+            4
+          ],
+          "color": "edge",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C01.10",
+          "type": "rect",
+          "rect": [
+            12,
+            616,
+            376,
+            4
+          ],
+          "color": "edge",
+          "alpha": 1,
+          "border_thickness": 0
+        }
+      ]
+    },
+    {
+      "id": "C02",
+      "name": "Housing face and edge bevels",
+      "order": 2,
+      "parent": "device",
+      "bounds": [
+        2,
+        2,
+        396,
+        616
+      ],
+      "purpose": "Flat top-left highlights and bottom-right shadows soften stepped corners.",
+      "role": "hardware",
+      "optional": false,
+      "primitives": [
+        {
+          "id": "C02.01",
+          "type": "rect",
+          "rect": [
+            10,
+            0,
+            376,
+            4
+          ],
+          "color": "body",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C02.02",
+          "type": "rect",
+          "rect": [
+            4,
+            4,
+            388,
+            4
+          ],
+          "color": "body",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C02.03",
+          "type": "rect",
+          "rect": [
+            0,
+            8,
+            396,
+            40
+          ],
+          "color": "body",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C02.04",
+          "type": "rect",
+          "rect": [
+            0,
+            48,
+            38,
+            422
+          ],
+          "color": "body",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C02.05",
+          "type": "rect",
+          "rect": [
+            358,
+            48,
+            38,
+            422
+          ],
+          "color": "body",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C02.06",
+          "type": "rect",
+          "rect": [
+            0,
+            470,
+            396,
+            132
+          ],
+          "color": "body",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C02.07",
+          "type": "rect",
+          "rect": [
+            4,
+            602,
+            388,
+            8
+          ],
+          "color": "body",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C02.08",
+          "type": "rect",
+          "rect": [
+            10,
+            610,
+            376,
+            4
+          ],
+          "color": "body",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C02.09",
+          "type": "rect",
+          "rect": [
+            10,
+            4,
+            374,
+            2
+          ],
+          "color": "highlight",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C02.10",
+          "type": "rect",
+          "rect": [
+            4,
+            8,
+            2,
+            38
+          ],
+          "color": "highlight",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C02.11",
+          "type": "rect",
+          "rect": [
+            2,
+            46,
+            2,
+            552
+          ],
+          "color": "highlight",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C02.12",
+          "type": "rect",
+          "rect": [
+            6,
+            598,
+            2,
+            8
+          ],
+          "color": "highlight",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C02.13",
+          "type": "rect",
+          "rect": [
+            390,
+            10,
+            4,
+            590
+          ],
+          "color": "shadow",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C02.14",
+          "type": "rect",
+          "rect": [
+            8,
+            606,
+            380,
+            4
+          ],
+          "color": "shadow",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C02.15",
+          "type": "rect",
+          "rect": [
+            12,
+            610,
+            372,
+            2
+          ],
+          "color": "shadow",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C02.16",
+          "type": "rect",
+          "rect": [
+            12,
+            10,
+            370,
+            32
+          ],
+          "color": "face",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C02.17",
+          "type": "rect",
+          "rect": [
+            12,
+            42,
+            18,
+            438
+          ],
+          "color": "face",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C02.18",
+          "type": "rect",
+          "rect": [
+            366,
+            42,
+            16,
+            438
+          ],
+          "color": "face",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C02.19",
+          "type": "rect",
+          "rect": [
+            12,
+            480,
+            370,
+            116
+          ],
+          "color": "face",
+          "alpha": 1,
+          "border_thickness": 0
+        }
+      ]
+    },
+    {
+      "id": "C03",
+      "name": "Power indicator",
+      "order": 3,
+      "parent": "device",
+      "bounds": [
+        40,
+        17,
+        320,
+        23
+      ],
+      "purpose": "Passive rectangular status lamp on an unbranded top casing.",
+      "role": "hardware",
+      "optional": false,
+      "primitives": [
+        {
+          "id": "C03.01",
+          "type": "rect",
+          "rect": [
+            306,
+            5,
+            14,
+            8
+          ],
+          "color": "edge",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C03.02",
+          "type": "rect",
+          "rect": [
+            308,
+            7,
+            10,
+            4
+          ],
+          "color": "lcd_mid",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C03.03",
+          "type": "rect",
+          "rect": [
+            308,
+            7,
+            10,
+            1
+          ],
+          "color": "lcd_light",
+          "alpha": 1,
+          "border_thickness": 0
+        }
+      ]
+    },
+    {
+      "id": "C04",
+      "name": "Recessed screen surround",
+      "order": 4,
+      "parent": "device",
+      "bounds": [
+        32,
+        42,
+        336,
+        438
+      ],
+      "purpose": "Eight-pixel inset built solely from strips around the exact LCD aperture.",
+      "role": "hardware",
+      "optional": false,
+      "primitives": [
+        {
+          "id": "C04.01",
+          "type": "rect",
+          "rect": [
+            0,
+            0,
+            336,
+            2
+          ],
+          "color": "highlight",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C04.02",
+          "type": "rect",
+          "rect": [
+            0,
+            436,
+            336,
+            2
+          ],
+          "color": "highlight",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C04.03",
+          "type": "rect",
+          "rect": [
+            0,
+            2,
+            2,
+            434
+          ],
+          "color": "highlight",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C04.04",
+          "type": "rect",
+          "rect": [
+            334,
+            2,
+            2,
+            434
+          ],
+          "color": "highlight",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C04.05",
+          "type": "rect",
+          "rect": [
+            2,
+            2,
+            332,
+            4
+          ],
+          "color": "edge",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C04.06",
+          "type": "rect",
+          "rect": [
+            2,
+            432,
+            332,
+            4
+          ],
+          "color": "edge",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C04.07",
+          "type": "rect",
+          "rect": [
+            2,
+            6,
+            4,
+            426
+          ],
+          "color": "edge",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C04.08",
+          "type": "rect",
+          "rect": [
+            330,
+            6,
+            4,
+            426
+          ],
+          "color": "edge",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C04.09",
+          "type": "rect",
+          "rect": [
+            6,
+            6,
+            324,
+            2
+          ],
+          "color": "shadow",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C04.10",
+          "type": "rect",
+          "rect": [
+            6,
+            8,
+            2,
+            422
+          ],
+          "color": "shadow",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C04.11",
+          "type": "rect",
+          "rect": [
+            328,
+            8,
+            2,
+            422
+          ],
+          "color": "lcd_mid",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C04.12",
+          "type": "rect",
+          "rect": [
+            6,
+            430,
+            324,
+            2
+          ],
+          "color": "lcd_mid",
+          "alpha": 1,
+          "border_thickness": 0
+        }
+      ]
+    },
+    {
+      "id": "C05",
+      "name": "LCD background",
+      "order": 5,
+      "parent": "device",
+      "bounds": [
+        40,
+        50,
+        320,
+        422
+      ],
+      "purpose": "Continuous exact 320 x 422 blank LCD.",
+      "role": "lcd",
+      "optional": false,
+      "primitives": [
+        {
+          "id": "C05.01",
+          "type": "rect",
+          "rect": [
+            0,
+            0,
+            320,
+            422
+          ],
+          "color": "lcd",
+          "alpha": 1,
+          "border_thickness": 0
+        }
+      ]
+    },
+    {
+      "id": "C08",
+      "name": "Lower control recess",
+      "order": 6,
+      "parent": "device",
+      "bounds": [
+        24,
+        551,
+        352,
+        55
+      ],
+      "purpose": "Shallow stepped pocket beneath the plain lower housing face.",
+      "role": "hardware",
+      "optional": false,
+      "primitives": [
+        {
+          "id": "C08.01",
+          "type": "rect",
+          "rect": [
+            4,
+            0,
+            344,
+            2
+          ],
+          "color": "shadow",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C08.02",
+          "type": "rect",
+          "rect": [
+            0,
+            2,
+            352,
+            49
+          ],
+          "color": "shadow",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C08.03",
+          "type": "rect",
+          "rect": [
+            4,
+            51,
+            344,
+            4
+          ],
+          "color": "highlight",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C08.04",
+          "type": "rect",
+          "rect": [
+            2,
+            4,
+            348,
+            47
+          ],
+          "color": "edge",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C08.05",
+          "type": "rect",
+          "rect": [
+            6,
+            51,
+            340,
+            2
+          ],
+          "color": "body",
+          "alpha": 1,
+          "border_thickness": 0
+        }
+      ]
+    },
+    {
+      "id": "C09",
+      "name": "Home button",
+      "order": 7,
+      "parent": "device",
+      "bounds": [
+        34,
+        559,
+        62,
+        36
+      ],
+      "purpose": "Independent stepped physical application key with a rectangular hitbox.",
+      "role": "hardware",
+      "optional": false,
+      "primitives": [
+        {
+          "id": "C09.01",
+          "type": "rect",
+          "rect": [
+            3,
+            0,
+            56,
+            2
+          ],
+          "color": "shadow",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C09.02",
+          "type": "rect",
+          "rect": [
+            0,
+            2,
+            62,
+            32
+          ],
+          "color": "shadow",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C09.03",
+          "type": "rect",
+          "rect": [
+            3,
+            34,
+            56,
+            2
+          ],
+          "color": "shadow",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C09.04",
+          "type": "rect",
+          "rect": [
+            3,
+            2,
+            56,
+            31
+          ],
+          "color": "key",
+          "alpha": 1,
+          "border_thickness": 0,
+          "pressed_color": "body"
+        },
+        {
+          "id": "C09.05",
+          "type": "rect",
+          "rect": [
+            3,
+            2,
+            56,
+            2
+          ],
+          "color": "highlight",
+          "alpha": 1,
+          "border_thickness": 0,
+          "pressed_color": "shadow"
+        },
+        {
+          "id": "C09.06",
+          "type": "rect",
+          "rect": [
+            1,
+            4,
+            2,
+            27
+          ],
+          "color": "highlight",
+          "alpha": 1,
+          "border_thickness": 0,
+          "pressed_color": "shadow"
+        },
+        {
+          "id": "C09.07",
+          "type": "rect",
+          "rect": [
+            3,
+            31,
+            56,
+            2
+          ],
+          "color": "body",
+          "alpha": 1,
+          "border_thickness": 0,
+          "pressed_color": "highlight"
+        },
+        {
+          "id": "C09.08",
+          "type": "rect",
+          "rect": [
+            59,
+            4,
+            2,
+            27
+          ],
+          "color": "body",
+          "alpha": 1,
+          "border_thickness": 0,
+          "pressed_color": "highlight"
+        }
+      ],
+      "control_id": "C09"
+    },
+    {
+      "id": "C10",
+      "name": "Unassigned button (left inner)",
+      "order": 8,
+      "parent": "device",
+      "bounds": [
+        104,
+        559,
+        62,
+        36
+      ],
+      "purpose": "Moulded key face left deliberately blank: the control exists and depresses, but nothing is printed on it and nothing is assigned, until play shows what it is for.",
+      "role": "hardware",
+      "optional": false,
+      "primitives": [
+        {
+          "id": "C10.01",
+          "type": "rect",
+          "rect": [
+            3,
+            0,
+            56,
+            2
+          ],
+          "color": "shadow",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C10.02",
+          "type": "rect",
+          "rect": [
+            0,
+            2,
+            62,
+            32
+          ],
+          "color": "shadow",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C10.03",
+          "type": "rect",
+          "rect": [
+            3,
+            34,
+            56,
+            2
+          ],
+          "color": "shadow",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C10.04",
+          "type": "rect",
+          "rect": [
+            3,
+            2,
+            56,
+            31
+          ],
+          "color": "key",
+          "alpha": 1,
+          "border_thickness": 0,
+          "pressed_color": "body"
+        },
+        {
+          "id": "C10.05",
+          "type": "rect",
+          "rect": [
+            3,
+            2,
+            56,
+            2
+          ],
+          "color": "highlight",
+          "alpha": 1,
+          "border_thickness": 0,
+          "pressed_color": "shadow"
+        },
+        {
+          "id": "C10.06",
+          "type": "rect",
+          "rect": [
+            1,
+            4,
+            2,
+            27
+          ],
+          "color": "highlight",
+          "alpha": 1,
+          "border_thickness": 0,
+          "pressed_color": "shadow"
+        },
+        {
+          "id": "C10.07",
+          "type": "rect",
+          "rect": [
+            3,
+            31,
+            56,
+            2
+          ],
+          "color": "body",
+          "alpha": 1,
+          "border_thickness": 0,
+          "pressed_color": "highlight"
+        },
+        {
+          "id": "C10.08",
+          "type": "rect",
+          "rect": [
+            59,
+            4,
+            2,
+            27
+          ],
+          "color": "body",
+          "alpha": 1,
+          "border_thickness": 0,
+          "pressed_color": "highlight"
+        }
+      ],
+      "control_id": "C10"
+    },
+    {
+      "id": "C11",
+      "name": "Unassigned button (right inner)",
+      "order": 9,
+      "parent": "device",
+      "bounds": [
+        234,
+        559,
+        62,
+        36
+      ],
+      "purpose": "Moulded key face left deliberately blank: the control exists and depresses, but nothing is printed on it and nothing is assigned, until play shows what it is for.",
+      "role": "hardware",
+      "optional": false,
+      "primitives": [
+        {
+          "id": "C11.01",
+          "type": "rect",
+          "rect": [
+            3,
+            0,
+            56,
+            2
+          ],
+          "color": "shadow",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C11.02",
+          "type": "rect",
+          "rect": [
+            0,
+            2,
+            62,
+            32
+          ],
+          "color": "shadow",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C11.03",
+          "type": "rect",
+          "rect": [
+            3,
+            34,
+            56,
+            2
+          ],
+          "color": "shadow",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C11.04",
+          "type": "rect",
+          "rect": [
+            3,
+            2,
+            56,
+            31
+          ],
+          "color": "key",
+          "alpha": 1,
+          "border_thickness": 0,
+          "pressed_color": "body"
+        },
+        {
+          "id": "C11.05",
+          "type": "rect",
+          "rect": [
+            3,
+            2,
+            56,
+            2
+          ],
+          "color": "highlight",
+          "alpha": 1,
+          "border_thickness": 0,
+          "pressed_color": "shadow"
+        },
+        {
+          "id": "C11.06",
+          "type": "rect",
+          "rect": [
+            1,
+            4,
+            2,
+            27
+          ],
+          "color": "highlight",
+          "alpha": 1,
+          "border_thickness": 0,
+          "pressed_color": "shadow"
+        },
+        {
+          "id": "C11.07",
+          "type": "rect",
+          "rect": [
+            3,
+            31,
+            56,
+            2
+          ],
+          "color": "body",
+          "alpha": 1,
+          "border_thickness": 0,
+          "pressed_color": "highlight"
+        },
+        {
+          "id": "C11.08",
+          "type": "rect",
+          "rect": [
+            59,
+            4,
+            2,
+            27
+          ],
+          "color": "body",
+          "alpha": 1,
+          "border_thickness": 0,
+          "pressed_color": "highlight"
+        }
+      ],
+      "control_id": "C11"
+    },
+    {
+      "id": "C12",
+      "name": "Back button",
+      "order": 10,
+      "parent": "device",
+      "bounds": [
+        304,
+        559,
+        62,
+        36
+      ],
+      "purpose": "Independent stepped physical application key with a rectangular hitbox.",
+      "role": "hardware",
+      "optional": false,
+      "primitives": [
+        {
+          "id": "C12.01",
+          "type": "rect",
+          "rect": [
+            3,
+            0,
+            56,
+            2
+          ],
+          "color": "shadow",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C12.02",
+          "type": "rect",
+          "rect": [
+            0,
+            2,
+            62,
+            32
+          ],
+          "color": "shadow",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C12.03",
+          "type": "rect",
+          "rect": [
+            3,
+            34,
+            56,
+            2
+          ],
+          "color": "shadow",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C12.04",
+          "type": "rect",
+          "rect": [
+            3,
+            2,
+            56,
+            31
+          ],
+          "color": "key",
+          "alpha": 1,
+          "border_thickness": 0,
+          "pressed_color": "body"
+        },
+        {
+          "id": "C12.05",
+          "type": "rect",
+          "rect": [
+            3,
+            2,
+            56,
+            2
+          ],
+          "color": "highlight",
+          "alpha": 1,
+          "border_thickness": 0,
+          "pressed_color": "shadow"
+        },
+        {
+          "id": "C12.06",
+          "type": "rect",
+          "rect": [
+            1,
+            4,
+            2,
+            27
+          ],
+          "color": "highlight",
+          "alpha": 1,
+          "border_thickness": 0,
+          "pressed_color": "shadow"
+        },
+        {
+          "id": "C12.07",
+          "type": "rect",
+          "rect": [
+            3,
+            31,
+            56,
+            2
+          ],
+          "color": "body",
+          "alpha": 1,
+          "border_thickness": 0,
+          "pressed_color": "highlight"
+        },
+        {
+          "id": "C12.08",
+          "type": "rect",
+          "rect": [
+            59,
+            4,
+            2,
+            27
+          ],
+          "color": "body",
+          "alpha": 1,
+          "border_thickness": 0,
+          "pressed_color": "highlight"
+        }
+      ],
+      "control_id": "C12"
+    },
+    {
+      "id": "C13",
+      "name": "Central up/down rocker",
+      "order": 11,
+      "parent": "device",
+      "bounds": [
+        176,
+        555,
+        48,
+        45
+      ],
+      "purpose": "Split rectangular rocker with independent upper and lower hit regions.",
+      "role": "hardware",
+      "optional": false,
+      "primitives": [
+        {
+          "id": "C13.01",
+          "type": "rect",
+          "rect": [
+            4,
+            0,
+            40,
+            2
+          ],
+          "color": "shadow",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C13.02",
+          "type": "rect",
+          "rect": [
+            0,
+            2,
+            48,
+            41
+          ],
+          "color": "shadow",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C13.03",
+          "type": "rect",
+          "rect": [
+            4,
+            43,
+            40,
+            2
+          ],
+          "color": "shadow",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C13.04",
+          "type": "rect",
+          "rect": [
+            3,
+            2,
+            42,
+            19
+          ],
+          "color": "key",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C13.05",
+          "type": "rect",
+          "rect": [
+            3,
+            23,
+            42,
+            19
+          ],
+          "color": "key",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C13.06",
+          "type": "rect",
+          "rect": [
+            3,
+            2,
+            42,
+            2
+          ],
+          "color": "highlight",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C13.07",
+          "type": "rect",
+          "rect": [
+            1,
+            4,
+            2,
+            16
+          ],
+          "color": "highlight",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C13.08",
+          "type": "rect",
+          "rect": [
+            3,
+            40,
+            42,
+            2
+          ],
+          "color": "body",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C13.09",
+          "type": "rect",
+          "rect": [
+            45,
+            24,
+            2,
+            16
+          ],
+          "color": "body",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C13.10",
+          "type": "rect",
+          "rect": [
+            3,
+            21,
+            42,
+            2
+          ],
+          "color": "edge",
+          "alpha": 1,
+          "border_thickness": 0
+        }
+      ],
+      "state_overrides": {
+        "up": {
+          "C13.04": "body",
+          "C13.06": "shadow",
+          "C13.07": "shadow"
+        },
+        "down": {
+          "C13.05": "body",
+          "C13.08": "highlight",
+          "C13.09": "highlight"
+        }
+      }
+    },
+    {
+      "id": "C14",
+      "name": "Home symbol and label",
+      "order": 12,
+      "parent": "device",
+      "bounds": [
+        34,
+        559,
+        62,
+        36
+      ],
+      "purpose": "Rectangle-built house and its silkscreen label.",
+      "role": "hardware",
+      "optional": false,
+      "primitives": [
+        {
+          "id": "C14.01",
+          "type": "rect",
+          "rect": [
+            29,
+            4,
+            5,
+            1
+          ],
+          "color": "legend",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C14.02",
+          "type": "rect",
+          "rect": [
+            28,
+            5,
+            7,
+            1
+          ],
+          "color": "legend",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C14.03",
+          "type": "rect",
+          "rect": [
+            27,
+            6,
+            9,
+            1
+          ],
+          "color": "legend",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C14.04",
+          "type": "rect",
+          "rect": [
+            26,
+            7,
+            11,
+            1
+          ],
+          "color": "legend",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C14.05",
+          "type": "rect",
+          "rect": [
+            25,
+            8,
+            13,
+            1
+          ],
+          "color": "legend",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C14.06",
+          "type": "rect",
+          "rect": [
+            27,
+            9,
+            9,
+            8
+          ],
+          "color": "legend",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C14.07",
+          "type": "text",
+          "x": 31,
+          "baseline_y": 29,
+          "text": "HOME",
+          "size_px": 9,
+          "font_category": "UI Small",
+          "weight": "normal",
+          "align": "center",
+          "color": "legend",
+          "alpha": 1,
+          "border_thickness": 0
+        }
+      ],
+      "control_id": "C09"
+    },
+    {
+      "id": "C17",
+      "name": "Back symbol and label",
+      "order": 15,
+      "parent": "device",
+      "bounds": [
+        304,
+        559,
+        62,
+        36
+      ],
+      "purpose": "Rectangle-built left arrow and its silkscreen label.",
+      "role": "hardware",
+      "optional": false,
+      "primitives": [
+        {
+          "id": "C17.01",
+          "type": "rect",
+          "rect": [
+            24,
+            11,
+            1,
+            1
+          ],
+          "color": "legend",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C17.02",
+          "type": "rect",
+          "rect": [
+            25,
+            10,
+            1,
+            3
+          ],
+          "color": "legend",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C17.03",
+          "type": "rect",
+          "rect": [
+            26,
+            9,
+            1,
+            5
+          ],
+          "color": "legend",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C17.04",
+          "type": "rect",
+          "rect": [
+            27,
+            8,
+            1,
+            7
+          ],
+          "color": "legend",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C17.05",
+          "type": "rect",
+          "rect": [
+            28,
+            7,
+            1,
+            9
+          ],
+          "color": "legend",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C17.06",
+          "type": "rect",
+          "rect": [
+            29,
+            6,
+            1,
+            11
+          ],
+          "color": "legend",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C17.07",
+          "type": "rect",
+          "rect": [
+            30,
+            9,
+            9,
+            5
+          ],
+          "color": "legend",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C17.08",
+          "type": "text",
+          "x": 31,
+          "baseline_y": 29,
+          "text": "BACK",
+          "size_px": 9,
+          "font_category": "UI Small",
+          "weight": "normal",
+          "align": "center",
+          "color": "legend",
+          "alpha": 1,
+          "border_thickness": 0
+        }
+      ],
+      "control_id": "C12"
+    },
+    {
+      "id": "C18",
+      "name": "Rocker symbols",
+      "order": 16,
+      "parent": "device",
+      "bounds": [
+        176,
+        555,
+        48,
+        45
+      ],
+      "purpose": "Up and down direction symbols formed from centered rectangle steps.",
+      "role": "hardware",
+      "optional": false,
+      "primitives": [
+        {
+          "id": "C18.01",
+          "type": "rect",
+          "rect": [
+            23,
+            7,
+            2,
+            2
+          ],
+          "color": "legend",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C18.02",
+          "type": "rect",
+          "rect": [
+            21,
+            9,
+            6,
+            2
+          ],
+          "color": "legend",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C18.03",
+          "type": "rect",
+          "rect": [
+            19,
+            11,
+            10,
+            2
+          ],
+          "color": "legend",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C18.04",
+          "type": "rect",
+          "rect": [
+            19,
+            30,
+            10,
+            2
+          ],
+          "color": "legend",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C18.05",
+          "type": "rect",
+          "rect": [
+            21,
+            32,
+            6,
+            2
+          ],
+          "color": "legend",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C18.06",
+          "type": "rect",
+          "rect": [
+            23,
+            34,
+            2,
+            2
+          ],
+          "color": "legend",
+          "alpha": 1,
+          "border_thickness": 0
+        }
+      ]
+    },
+    {
+      "id": "C20",
+      "name": "Resize grip",
+      "order": 17,
+      "parent": "device",
+      "bounds": [
+        378,
+        590,
+        12,
+        12
+      ],
+      "purpose": "Embossed corner grip: drag here to change the size of the whole device.",
+      "role": "hardware",
+      "optional": false,
+      "primitives": [
+        {
+          "id": "C20.01",
+          "type": "rect",
+          "rect": [
+            9,
+            9,
+            2,
+            2
+          ],
+          "color": "shadow",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C20.02",
+          "type": "rect",
+          "rect": [
+            11,
+            11,
+            1,
+            1
+          ],
+          "color": "highlight",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C20.03",
+          "type": "rect",
+          "rect": [
+            5,
+            9,
+            2,
+            2
+          ],
+          "color": "shadow",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C20.04",
+          "type": "rect",
+          "rect": [
+            7,
+            11,
+            1,
+            1
+          ],
+          "color": "highlight",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C20.05",
+          "type": "rect",
+          "rect": [
+            1,
+            9,
+            2,
+            2
+          ],
+          "color": "shadow",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C20.06",
+          "type": "rect",
+          "rect": [
+            3,
+            11,
+            1,
+            1
+          ],
+          "color": "highlight",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C20.07",
+          "type": "rect",
+          "rect": [
+            9,
+            5,
+            2,
+            2
+          ],
+          "color": "shadow",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C20.08",
+          "type": "rect",
+          "rect": [
+            11,
+            7,
+            1,
+            1
+          ],
+          "color": "highlight",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C20.09",
+          "type": "rect",
+          "rect": [
+            5,
+            5,
+            2,
+            2
+          ],
+          "color": "shadow",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C20.10",
+          "type": "rect",
+          "rect": [
+            7,
+            7,
+            1,
+            1
+          ],
+          "color": "highlight",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C20.11",
+          "type": "rect",
+          "rect": [
+            9,
+            1,
+            2,
+            2
+          ],
+          "color": "shadow",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C20.12",
+          "type": "rect",
+          "rect": [
+            11,
+            3,
+            1,
+            1
+          ],
+          "color": "highlight",
+          "alpha": 1,
+          "border_thickness": 0
+        }
+      ]
+    },
+    {
+      "id": "C19",
+      "name": "Optional wear overlay",
+      "order": 18,
+      "parent": "device",
+      "bounds": [
+        0,
+        0,
+        400,
+        620
+      ],
+      "purpose": "Six sparse fixed scuffs on exposed housing; omit for a pristine device.",
+      "role": "hardware",
+      "optional": true,
+      "primitives": [
+        {
+          "id": "C19.01",
+          "type": "rect",
+          "rect": [
+            16,
+            29,
+            8,
+            1
+          ],
+          "color": "highlight",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C19.02",
+          "type": "rect",
+          "rect": [
+            19,
+            31,
+            4,
+            1
+          ],
+          "color": "body",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C19.03",
+          "type": "rect",
+          "rect": [
+            376,
+            167,
+            1,
+            11
+          ],
+          "color": "highlight",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C19.04",
+          "type": "rect",
+          "rect": [
+            19,
+            456,
+            1,
+            7
+          ],
+          "color": "shadow",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C19.05",
+          "type": "rect",
+          "rect": [
+            61,
+            609,
+            12,
+            1
+          ],
+          "color": "highlight",
+          "alpha": 1,
+          "border_thickness": 0
+        },
+        {
+          "id": "C19.06",
+          "type": "rect",
+          "rect": [
+            333,
+            608,
+            7,
+            1
+          ],
+          "color": "shadow",
+          "alpha": 1,
+          "border_thickness": 0
+        }
+      ]
+    }
+  ],
+  "controls": [
+    {
+      "id": "C09",
+      "hitbox": [
+        34,
+        559,
+        62,
+        36
+      ],
+      "action": "home"
+    },
+    {
+      "id": "C10",
+      "hitbox": [
+        104,
+        559,
+        62,
+        36
+      ],
+      "action": "unassigned"
+    },
+    {
+      "id": "C11",
+      "hitbox": [
+        234,
+        559,
+        62,
+        36
+      ],
+      "action": "unassigned"
+    },
+    {
+      "id": "C12",
+      "hitbox": [
+        304,
+        559,
+        62,
+        36
+      ],
+      "action": "back"
+    },
+    {
+      "id": "rocker_up",
+      "hitbox": [
+        176,
+        555,
+        48,
+        22
+      ],
+      "action": "scroll_up"
+    },
+    {
+      "id": "rocker_down",
+      "hitbox": [
+        176,
+        578,
+        48,
+        22
+      ],
+      "action": "scroll_down"
+    }
+  ],
+  "control_states": {
+    "normal": "Use color on each primitive.",
+    "pressed": "Application keys: use pressed_color where given. Symbols stay fixed. Rocker: use state_overrides for selected half. No geometry changes.",
+    "release": "Restore normal colors. Hitboxes never move.",
+    "hit_test": "Half-open rectangles: x <= pointerX < x+w and y <= pointerY < y+h. Rocker center y=577 is inactive."
+  },
+  "default_visibility": {
+    "content": false,
+    "wear": true
+  }
+}

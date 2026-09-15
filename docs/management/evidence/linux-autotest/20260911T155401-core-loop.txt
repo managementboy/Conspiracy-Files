@@ -1,0 +1,19 @@
+Linux core loop check 20260911T155401: FAIL
+source: ee58ce3
+first case: 4 documents, all found and inspected through the right-click menu:
+  1. Follow-up note / GT-809, in vehicle GloveBox, room vehicle, floor 0 (container icon clicked: no)
+  4. Mop, marked Delia Mercer, in shelves, room hall, floor 0 (container icon clicked: yes)
+notebook entries: 2; case completion reported: no
+map marks without a pen (written/pending/missing): 0/2/0
+map marks after a pen, case already retired: 2/0/0
+second case appeared (gap removed): yes
+errors inside the mod: 0
+FAIL: document 1 (Follow-up note / GT-809, vehicle GloveBox): could not get into the vehicle
+FAIL: document 1 (Follow-up note / GT-809): the loot panel never showed its vehicle GloveBox
+FAIL: document 2 not found where the runtime says: not on or next to its square
+FAIL: document 3 not found where the runtime says: not on or next to its square
+FAIL: notebook knows 2 of 4 documents
+FAIL: the case never reported completion
+FAIL: without a pen, expected 4 pending marks: 0	2	0
+FAIL: with a pen after completion, expected 4 written marks: 2	0	0
+screenshot: dev/eval/linux/runs/20260911T155401-map.png (not committed)

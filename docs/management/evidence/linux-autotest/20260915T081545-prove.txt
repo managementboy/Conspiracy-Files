@@ -1,0 +1,9 @@
+Linux mutation proof 20260915T081545
+worktree: /home/elkin/cf-wp345 at 1bec5bc prove.py: the date note is proven by its unit test, not by chance in the core loop
+
+baseline unit:relay_memo: PASS
+
+CAUGHT date-note (unit:relay_memo): test/relay_memo.lua:108: in main chunk | [C]: ?
+
+caught 1 of 1
+worktree clean afterwards: yes

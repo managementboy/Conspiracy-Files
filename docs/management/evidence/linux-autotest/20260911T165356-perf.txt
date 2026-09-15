@@ -1,0 +1,17 @@
+Linux performance check 20260911T165356: FAIL
+source: b740019 + uncommitted mod changes
+machine: 12 threads, 13th Gen Intel(R) Core(TM) i7-1355U; display :0
+per-frame handlers during three minutes of busy play (ms clock, aggregated):
+  AutomaticInvestigations.onTick calls=5545 avg=0.004ms max=5ms over2ms=2 
+  CaseFile.onTick calls=5485 avg=0.001ms max=1ms over2ms=0 
+  ClueMarkers.draw calls=1241 avg=0.265ms max=1ms over2ms=0 
+  ClueMarkers.update calls=95 avg=0.632ms max=23ms over2ms=2 
+  DevEval.tick calls=6546 avg=0.072ms max=129ms over2ms=28 
+  EvidencePickupHint.remindTick calls=5425 avg=0.002ms max=1ms over2ms=0 
+  IdentityObserver.afterRender calls=14010 avg=0.079ms max=1ms over2ms=0 
+  IdentityObserver.tick calls=5725 avg=0.003ms max=1ms over2ms=0 
+  LocalPersonIntegration.tick calls=0 avg=0.000ms max=0ms over2ms=0
+runtime scheduler peak: 51 ms
+nearby scan for the second case: callbacksOver2Ms='209' frames='785' kind='complete' peakMs='6'
+FAIL: ClueMarkers.update: at 2 ms or more in 2 of 95 calls
+FAIL: ClueMarkers.update: averages 0.632 ms per call

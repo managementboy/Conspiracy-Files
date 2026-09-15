@@ -1,0 +1,12 @@
+FAIL knox.os - 2026-09-12T23:56:10+02:00
+commit: fd5e039
+session: 20260912T234316
+opened:   true	FILES	1	nil	false	1
+names:    true	FILES	1	nil	false	1
+dates:    true	FILES	1	nil	false	1
+to do:    true	FILES	1	nil	false	1
+FAIL: a tap on the title bar did not open the launcher
+FAIL: a tap on the NAMES icon did not open it: true	FILES	1	nil	false	1
+FAIL: a tap on the DATES icon did not open it: true	FILES	1	nil	false	1
+FAIL: a tap on a record did not open it
+FAIL: TO DO did not open: true	FILES	1	nil	false	1

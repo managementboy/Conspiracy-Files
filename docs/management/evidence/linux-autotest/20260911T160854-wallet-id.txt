@@ -1,0 +1,11 @@
+Linux wallet ID check 20260911T160854: PASS
+source: 715949d
+wallet ID: 'ID Card: Dion Oaks'; wallet stamp after carrying it off: corpse-wallet:1195685984
+notebook summary: Identity document - container
+notebook text:
+  I saw a document labelled "ID Card: Dion Oaks" inside Wallet. That container was taken off a corpse. The same one carried: Credit Card: Dion Oaks (same name as the ID).
+  The name on a document is a lead. It does not establish who owned the container or identify the body.
+  Observed at 102 E Maple St.
+loose ID on a body: PASS: 'ID Card: Dale Winkler' recorded as Identity document - corpse
+errors inside the mod: 0
+screenshot: dev/eval/linux/runs/20260911T160854-wallet.png (not committed)

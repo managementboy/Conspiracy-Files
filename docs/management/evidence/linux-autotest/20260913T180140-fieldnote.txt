@@ -1,0 +1,6 @@
+PASS fieldnote - 2026-09-13T18:01:40+02:00
+commit: 3520ce7
+session: 20260913T180009
+loaded:  true	0.2.0-test	1	400x620	400x620
+lcd:     true	480,100 320x422	0	
+labels:  true	C14:HOME top=21 icon=17 gap=4 | C17:BACK top=20 icon=17 gap=3

@@ -1,0 +1,8 @@
+Linux death check 20260912T184002: PASS
+source: b83adbf
+first survivor: Reyes, carrying 2 case documents at death
+notebook before death: 2 1=1494925444:document-1:Hire note / GT-488 | 2=1494925444:document-2:Return note / GT-488
+new survivor: Autumn; papers: papers issued: Autumn's Papers
+notebook for the new survivor: 2 1=1494925444:document-1:Hire note / GT-488 | 2=1494925444:document-2:Return note / GT-488
+document taken back off the body: Hire note / GT-488
+errors inside the mod: 0

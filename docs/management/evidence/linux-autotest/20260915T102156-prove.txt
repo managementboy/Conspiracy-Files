@@ -1,0 +1,15 @@
+Linux mutation proof 20260915T102156
+worktree: /home/elkin/cf-wp345 at 256f2e8 Reports move with ; not &&, so a passing run keeps its record; DEV-0.35.1 evidence
+
+baseline ../fieldnote-test/boot_test: PASS
+baseline unit:body_outfit_log: PASS
+baseline unit:knox_files_labels: PASS
+
+CAUGHT key-drag-off (../fieldnote-test/boot_test): FAIL: a drag off C10 still dispatched when released on the glass | FAIL: a drag off C10 still dispatched when released on C12 | fieldnote: FAIL: a drag off C10 still dispatched when released on the glass
+CAUGHT key-half-open (../fieldnote-test/boot_test): FAIL: hitboxes: C09@0.5:past-edge-hit,C10@0.5:past-edge-hit,C11@0.5:past-edge-hit,C12@0.5:past-edge-hit,rocker_up@0.5:past-edge-hit,rocker_down@0.5:past-edge-hit,C09@1:past-edge-hit,C10@1:past-edge-hit,C11@1:past-edge-hit,C12@1:past-edge-hit,rocker_up@1:past-edge-hit,rocker_down@1:past-edge-hit,C09@1.5:past-edge-hit,C10@1.5:past-edge-hit,C11@1.5:past-edge-hit,C12@1.5:past-edge-hit,rocker_up@1.5:past-edge-hit,rocker_down@1.5:past-edge-hit,C09@2:past-edge-hit,C10@2:past-edge-hit,C11@2:past-edge-hit,C12@2:past-edge-hit,rocker_up@2:past-edge-hit,rocker_down@2:past-edge-hit,C09@3:past-edge-hit,C10@3:past-edge-hit,C11@3:past-edge-hit,C12@3:past-edge-hit,rocker_up@3:past-edge-hit,rocker_down@3:past-edge-hit | FAIL: y=577 should be inactive: true	rocker_up	rocker_up	rocker_down | fieldnote: FAIL: hitboxes: C09@0.5:past-edge-hit,C10@0.5:past-edge-hit,C11@0.5:past-edge-hit,C12@0.5:past-edge-hit,rocker_up@0.5:past-edge-hit,rocker_down@0.5:past-edge-hit,C09@1:past-edge-hit,C10@1:past-edge-hit,C11@1:past-edge-hit,C12@1:past-edge-hit,rocker_up@1:past-edge-hit,rocker_down@1:past-edge-hit,C09@1.5:past-edge-hit,C10@1.5:past-edge-hit,C11@1.5:past-edge-hit,C12@1.5:past-edge-hit,rocker_up@1.5:past-edge-hit,rocker_down@1.5:past-edge-hit,C09@2:past-edge-hit,C10@2:past-edge-hit,C11@2:past-edge-hit,C12@2:past-edge-hit,rocker_up@2:past-edge-hit,rocker_down@2:past-edge-hit,C09@3:past-edge-hit,C10@3:past-edge-hit,C11@3:past-edge-hit,C12@3:past-edge-hit,rocker_up@3:past-edge-hit,rocker_down@3:past-edge-hit
+CAUGHT legend-sizes (../fieldnote-test/boot_test): FAIL: legends: no legend picture for HOME@0.5,HOME@1.5,HOME@0.5,HOME@1.5,HOME@0.5,HOME@1.5,HOME@0.5,HOME@1.5,BACK@0.5,BACK@1.5,BACK@0.5,BACK@1.5,BACK@0.5,BACK@1.5,BACK@0.5,BACK@1.5 | fieldnote: FAIL: legends: no legend picture for HOME@0.5,HOME@1.5,HOME@0.5,HOME@1.5,HOME@0.5,HOME@1.5,HOME@0.5,HOME@1.5,BACK@0.5,BACK@1.5,BACK@0.5,BACK@1.5,BACK@0.5,BACK@1.5,BACK@0.5,BACK@1.5
+CAUGHT organiser-labels (unit:knox_files_labels): test/knox_files_labels.lua:37: in main chunk | [C]: ?
+CAUGHT outfit-why (unit:body_outfit_log): test/body_outfit_log.lua:118: in main chunk | [C]: ?
+
+caught 5 of 5
+worktree clean afterwards: yes

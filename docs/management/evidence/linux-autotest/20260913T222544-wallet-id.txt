@@ -1,0 +1,12 @@
+Linux wallet ID check 20260913T222544: PASS
+source: 09c6ab8 + uncommitted mod changes
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+wallet ID: 'ID Card: Jeremy DaSilva'; wallet stamp after carrying it off: corpse-wallet:1836791203
+notebook summary: Identity document - container
+notebook text:
+  I saw a document labelled "ID Card: Jeremy DaSilva" inside Wallet. That container was taken off a corpse.
+  The name on a document is a lead. It does not establish who owned the container or identify the body.
+  Observed at 102 E Maple St.
+loose ID on a body: not exercised: no body carried a loose ID
+errors inside the mod: 0
+screenshot: dev/eval/linux/runs/20260913T222544-wallet.png (not committed)

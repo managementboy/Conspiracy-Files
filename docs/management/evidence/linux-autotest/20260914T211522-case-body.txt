@@ -1,0 +1,15 @@
+Linux case body check 20260914T211522: FAIL
+source: ded3683 + uncommitted mod changes
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+case person: Marion Ellis
+bound zombie: true Marion Ellis 10799,10124
+body: true true 0 0  8
+log: case person's body (generated:2123143799:case): marked searched; card could not be added
+notebook lead: false no notebook row for ID Card: Marion Ellis
+comparison body: true false, searched once shown: yes
+sex matching: true true true true true
+FAIL: the body holds 0 ID cards, not exactly one: true	true	0	0		8
+FAIL: the card on the body is not the case's own: true	true	0	0		8
+FAIL: the card on the body reads '', not 'ID Card: Marion Ellis'
+FAIL: could not open her body in the loot panel: false	her body is not in the loot panel
+FAIL: her ID card on the body did not become a notebook lead: false	no notebook row for ID Card: Marion Ellis

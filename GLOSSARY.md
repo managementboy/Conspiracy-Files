@@ -18,4 +18,4 @@ Terms are deliberately separated so content, domain model and UI do not use the 
 - **Interpretation** — current meaning assigned to immutable evidence facts.
 - **Provenance** — internal origin of a statement/link (game fact, authored content, player note, system inference, runtime AI).
 - **Runtime AI** — optional player-invoked external model functionality; never required for core play.
-- **Development-time AI** — authoring assistant used before shipping; output requires human approval.
+- **Development-time AI** — authoring assistant used before shipping; its output ships without a separate approval step (P4-R97).

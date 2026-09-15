@@ -1,0 +1,11 @@
+Linux case body check 20260915T074637: PASS
+source: 6875b53
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+case person: Delia Mercer
+bound zombie: true Delia Mercer 10804,10127
+body: true true 1 1 ID Card: Delia Mercer 10
+log: case person's body (generated:2006176105:case): searched=true; card added
+notebook lead: true Identity document - corpse
+her body searched at spawn: true
+comparison body: searched before it was shown: false, searched once shown: yes
+sex matching: true true true true true

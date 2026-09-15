@@ -1,0 +1,11 @@
+Linux death check 20260912T215811: FAIL
+source: 5eacd89
+first survivor: Bernie, carrying 2 case documents at death
+notebook before death: 2 1=1782403469:document-1:Goods receipt / GT-891 | 2=1782403469:document-2:Second goods receipt / GT-891
+new survivor: Jamel; papers: papers issued: Jamel's Papers
+notebook for the new survivor: 2 1=1782403469:document-1:Goods receipt / GT-891 | 2=1782403469:document-2:Second goods receipt / GT-891
+document taken back off the body: Goods receipt / GT-891
+errors inside the mod: 2
+  General      f:4753 at KahluaThread.flushErrorMessage      > -------------------------------------------------------------
+  General      f:4753> Lua((MOD:Conspiracy-Files: Dead Air)).before> Exception thrown  |  attempted index: generated:1782403469:document-1 of non-table: null at KahluaThread.tableget(KahluaThread.java:1430).
+FAIL: errors inside the mod

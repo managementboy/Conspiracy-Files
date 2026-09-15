@@ -1,0 +1,10 @@
+Linux death check 20260915T123805: PASS
+source: eb029c7
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+first survivor: Jeanie, carrying 2 case documents at death
+notebook before death: 2 1=1610025866:document-1:Records log / RC-807 | 2=1610025866:document-2:Registry list / RC-807
+new survivor: Celina; papers: papers issued: Celina's Papers
+notebook for the new survivor: 2 1=1610025866:document-1:Records log / RC-807 | 2=1610025866:document-2:Registry list / RC-807
+the new survivor's organiser: carried=true marked=true; reads for them=true
+document taken back off the body: Records log / RC-807
+errors inside the mod: 0

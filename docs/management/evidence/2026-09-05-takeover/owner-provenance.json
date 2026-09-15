@@ -1,0 +1,92 @@
+{
+  "sourceTask": "Assess game engine buildability",
+  "sourceTaskId": "01a06d98-325c-7bd1-9d2d-3596789a1d7b",
+  "note": "Selected direct user text only; image references stripped, images not reviewed. Owner observations do not establish a full live gate.",
+  "excerpts": [
+    {
+      "timestampUtc": "2026-09-04T18:09:21.445Z",
+      "role": "user",
+      "text": "we have been stuck in a repetitive validation of the validator loop for days.\n\nI want the workflow to be as follows:\n\nThe game opens. we have a mod that provides the basic dead air functionality. it also has enough logging for you to keep track of that I am testing for you.&#x20;\n\nyou the give me a step by step instruction of what we need to validate.\n\nyou do not have to open the game for me, you do not have to wait for anything. I will tell you when everything is loaded.\n\nI will create a clean start, all you have to tell me is in what city we start and where I have to go.\n\nis that clear or do you have questions"
+    },
+    {
+      "timestampUtc": "2026-09-04T18:23:24.963Z",
+      "role": "user",
+      "text": "allright we have two problems we should have adressed longer ago.\n\nlousville is the wors place to have our test. it is littered with zombies and vanilla game does not allow us to spawn there\n\nour new police station is located at the screenshot I sent you . The relay station will be in the electronic store of the second screenshot. We will have to adapt a bit of the story."
+    },
+    {
+      "timestampUtc": "2026-09-04T19:48:56.477Z",
+      "role": "user",
+      "text": "confirmed! 10638, 10411 is the inside of the Police station disregard all others"
+    },
+    {
+      "timestampUtc": "2026-09-04T20:48:36.221Z",
+      "role": "user",
+      "text": "nicest motel room"
+    },
+    {
+      "timestampUtc": "2026-09-04T21:55:56.559Z",
+      "role": "user",
+      "text": "exactly. Only when we find all objects does the interpretation make sense, but we can find the objects regardless.\n\nalso: if we find an object, we should be able to inspect it for future reference even if we currently dont understand why..."
+    },
+    {
+      "timestampUtc": "2026-09-04T21:57:43.982Z",
+      "role": "user",
+      "text": "yes, and also a bit of randomness. The police station has many rooms. we should not spawn our evidence in the exact same location every time. that would make it boring."
+    },
+    {
+      "timestampUtc": "2026-09-04T22:00:53.900Z",
+      "role": "user",
+      "text": "should we also start developing the UI. Right now I have to guess if we have found something important. If we had the notebook, even only basic, that would make it easyer to help you test"
+    },
+    {
+      "timestampUtc": "2026-09-04T22:24:22.203Z",
+      "role": "user",
+      "text": "Commit please"
+    },
+    {
+      "timestampUtc": "2026-09-05T09:35:54.211Z",
+      "role": "user",
+      "text": "approved. Just make sure we add more context to the discovered documents. I mean CSS is an abreviation no one undrstands for example.&#x20;\n\nhow will a player know about the back story?"
+    },
+    {
+      "timestampUtc": "2026-09-05T09:53:04.698Z",
+      "role": "user",
+      "text": "No! It has to be consistent"
+    },
+    {
+      "timestampUtc": "2026-09-05T11:15:56.476Z",
+      "role": "user",
+      "text": "all good but for the scrolling. no bar"
+    },
+    {
+      "timestampUtc": "2026-09-05T11:16:26.238Z",
+      "role": "user",
+      "text": "the document scrolls, just no bar"
+    },
+    {
+      "timestampUtc": "2026-09-05T11:18:36.640Z",
+      "role": "user",
+      "text": "do not use escape as way of closing windows. that is resserved for the main options window of the game please. the player has an x to close the window if needed. make a selectable button mapping for open and close"
+    },
+    {
+      "timestampUtc": "2026-09-05T11:21:28.465Z",
+      "role": "user",
+      "text": "high contrast is unreadable"
+    },
+    {
+      "timestampUtc": "2026-09-05T11:24:49.172Z",
+      "role": "user",
+      "text": "please write somewhere in our project that testing should be done in debug mode and that you will always preffer giving me a lua command rather than having to restart game or game save"
+    },
+    {
+      "timestampUtc": "2026-09-05T11:32:56.000Z",
+      "role": "user",
+      "text": "as a side note. Lets record a to-do: the text describing each major, minor etc is way to short. it should be prose to inmerse the player into the conspiracy"
+    },
+    {
+      "timestampUtc": "2026-09-05T11:55:39.841Z",
+      "role": "user",
+      "text": "you are not doing it correctly ... still no scroll bar"
+    }
+  ]
+}

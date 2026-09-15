@@ -1,0 +1,5 @@
+PASS reshuffle - 2026-09-13T22:13:46+02:00
+commit: 1a7bf6f
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+before: 5	1:placed@102 E Maple St; 2:placed@102 Dewey St; 3:placed@102 Dewey St; 4:placed@102 Dewey St; 5:placed@102 E Maple St
+after:  4	1:placed@102 E Maple St; 2:placed@102 Dewey St; 3:placed@102 Dewey St; 4:placed@102 E Maple St

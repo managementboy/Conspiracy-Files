@@ -1,0 +1,18 @@
+Linux core loop check 20260913T195945: PASS
+source: d0c1800
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+first case: 7 documents, all found and inspected through the right-click menu:
+  1. Requisition / BF-209, in shelves, room hall, floor 0 (container icon clicked: yes)
+  2. Payment slip / BF-209, in desk, room office, floor 0 (container icon clicked: yes)
+  3. Business Card: Delia Mercer, in counter, room kitchen, floor 0 (container icon clicked: yes)
+  4. Tagged key / BF-209, in counter, room kitchen, floor 0 (container icon clicked: yes)
+  5. Press clipping / BF-209, in shelves, room office, floor 0 (container icon clicked: yes)
+  6. Private diary / BF-209, in vehicle GloveBox (locked), room vehicle, floor 0 (container icon clicked: no)
+  7. cow skull wall (1 of 6), in counter, room kitchen, floor 0 (container icon clicked: yes)
+notebook entries: 7; case completion reported: yes
+map marks without a pen (written/pending/missing): 0/7/0
+map marks after a pen, case already retired: 7/0/0
+second case appeared (gap removed): yes
+errors inside the mod: 0
+FINDING: document 6 (Private diary / BF-209) is in a LOCKED car: a player needs its key or a broken window
+screenshot: dev/eval/linux/runs/20260913T195945-map.png (not committed)

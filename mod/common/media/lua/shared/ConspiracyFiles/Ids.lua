@@ -19,6 +19,7 @@ end
 
 function Ids.markedEvidence(ordinal)
     assert(type(ordinal) == "number" and ordinal >= 1 and ordinal == math.floor(ordinal), "invalid marked Evidence ordinal")
+    -- %04d is a minimum width, not a cap; persisted IDs remain consistent after 9999.
     return string.format("dead-air:evidence:marked:%04d", ordinal)
 end
 

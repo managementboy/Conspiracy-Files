@@ -1,0 +1,20 @@
+Linux core loop check 20260914T215420: PASS
+source: a4e7441
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+first case: 7 documents, all found and inspected through the right-click menu:
+  1. Stock list / GT-328, in shelves, room hall, floor 0 (container icon clicked: yes)
+  2. Second stock list / GT-328, in shelves, room livingroom, floor 0 (container icon clicked: yes)
+  3. Ticket: Curtis Vance, in shelves, room livingroom, floor 0 (container icon clicked: yes)
+  4. Tagged key / GT-328, in counter, room kitchen, floor 0 (container icon clicked: yes)
+  5. brazier (1 of 10), in counter, room kitchen, floor 0 (container icon clicked: yes)
+  6. dirty bandage (1 of 9), in counter, room kitchen, floor 0 (container icon clicked: yes)
+  7. Access memo / 7C-41, in counter, room kitchen, floor 0 (container icon clicked: yes)
+notebook entries: 7; case completion reported: yes
+map marks without a pen (written/pending/missing): 0/7/0
+map marks after a pen, case already retired: 7/0/0
+second case appeared (gap removed): yes
+errors inside the mod: 0
+FINDING: relay memo date notes: memo found=true, dated in its week=2, carrying the note=2
+FINDING: last seen after completion: 7 of 7 documents, e.g. 'Carried.'; retired cases in the save=1, rows with a stored last seen=7
+FINDING: last-seen log: 
+screenshot: dev/eval/linux/runs/20260914T215420-map.png (not committed)

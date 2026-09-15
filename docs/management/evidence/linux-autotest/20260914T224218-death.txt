@@ -1,0 +1,10 @@
+Linux death check 20260914T224218: PASS
+source: 36b0e77
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+first survivor: Jesus, carrying 2 case documents at death
+notebook before death: 2 1=348906645:document-1:Delivery docket / LD-730 | 2=348906645:document-2:Attendance note / LD-730
+new survivor: Owen; papers: papers issued: Owen's Papers
+notebook for the new survivor: 2 1=348906645:document-1:Delivery docket / LD-730 | 2=348906645:document-2:Attendance note / LD-730
+the new survivor's organiser: carried=true marked=true; reads for them=true
+document taken back off the body: Delivery docket / LD-730
+errors inside the mod: 0

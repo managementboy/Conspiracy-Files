@@ -1,0 +1,11 @@
+Linux wallet ID check 20260913T185627: PASS
+source: 1037a9b
+wallet ID: 'ID Card: Crystal Valerii'; wallet stamp after carrying it off: corpse-wallet:1615651222
+notebook summary: Identity document - container
+notebook text:
+  I saw a document labelled "ID Card: Crystal Valerii" inside Wallet. That container was taken off a corpse.
+  The name on a document is a lead. It does not establish who owned the container or identify the body.
+  Observed somewhere with no address nearby.
+loose ID on a body: not exercised: no body carried a loose ID
+errors inside the mod: 0
+screenshot: dev/eval/linux/runs/20260913T185627-wallet.png (not committed)

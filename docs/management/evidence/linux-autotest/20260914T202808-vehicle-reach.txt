@@ -1,0 +1,7 @@
+Linux vehicle reach check 20260914T202808: FAIL
+source: ded3683
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+van: true Base.PickUpVan 10831,10145
+TruckBed: reached from outside=yes, loot-panel icon=yes, taken=yes, door opened: TrunkDoor
+GloveBox: reached from outside=no, loot-panel icon=yes, taken=yes, door opened: DoorFrontRight
+FAIL: the GloveBox could not be reached from outside the van

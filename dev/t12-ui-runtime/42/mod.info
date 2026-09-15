@@ -1,5 +1,6 @@
 name=Conspiracy-Files T12 ISUI Runtime Probe
 id=ConspiracyFiles_T12_Probe
+require=ConspiracyFiles
 author=Conspiracy-Files development
 modversion=0.0.1
 versionMin=42.0.0

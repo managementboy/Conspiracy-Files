@@ -1,0 +1,56 @@
+module ConspiracyFiles
+{
+    /*
+     * The survivor's pocket organiser: the thing they read the investigation on.
+     *
+     * Owner, 2026-09-12: "why not drop the notebook completely and replace it
+     * with a PalmPilot kind of device that our survivor has on him?" The
+     * PalmPilot is 1996 and this is July 1993, so the period-correct object is
+     * a pocket electronic organiser - a Casio SF-series digital diary, sold in
+     * every mall in Kentucky that summer.
+     *
+     * It is a LECTROMAX, because that is who makes appliances in this world
+     * (Lectromax Manufacturing, all over the game's own job ads and product
+     * names - "Lectromax Franklin Valuline"). The hardware belongs to Knox
+     * County; only the software on it is ours. Owner, 2026-09-12: "our PDA
+     * should be part of that lore."
+     *
+     * It is declared as a RADIO on purpose. Basing it on base:radio buys the
+     * whole battery model from the game for nothing: the power level, the
+     * on/off state, the vanilla "insert battery" menu, and persistence across
+     * save and reload, all engine-side. TwoWay is false and the channel range
+     * is a single dead frequency, so it transmits nothing and receives nothing
+     * - today. The mod is called Dead Air, and a device that genuinely is a
+     * radio underneath can one day be tuned.
+     *
+     * The inventory icon is the mod's own: media/ui/Item_PocketOrganiser.png,
+     * drawn to the silhouette the owner sent on 2026-09-12 - a portrait case,
+     * a big screen taking most of the front, four round buttons with a rocker
+     * between them. The world MODEL is still a stand-in (a toy walkie-talkie),
+     * because a dropped organiser is seen from ten tiles up and rarely.
+     */
+    item Organiser
+    {
+        DisplayName = Lectromax Dataline 160,
+        DisplayCategory = Electronics,
+        ItemType = base:radio,
+        Weight = 0.3,
+        Icon = PocketOrganiser,
+        StaticModel = WalkieTalkieToy,
+        WorldStaticModel = WalkieTalkieToy,
+        BaseVolumeRange = 0,
+        DisappearOnUse = false,
+        IsHighTier = false,
+        IsPortable = true,
+        IsTelevision = false,
+        MicRange = 0,
+        MinChannel = 88000,
+        MaxChannel = 88000,
+        TransmitRange = 0,
+        TwoWay = false,
+        UseWhileEquipped = true,
+        UsesBattery = true,
+        UseDelta = 0.0005,
+        Tags = usesbattery,
+    }
+}

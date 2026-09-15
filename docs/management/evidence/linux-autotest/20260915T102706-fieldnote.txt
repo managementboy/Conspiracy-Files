@@ -1,0 +1,12 @@
+FAIL fieldnote - 2026-09-15T10:27:06+02:00
+source: 256f2e8 + uncommitted mod changes
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+session: 20260915T102520
+loaded:   true	DEV-0.35.1-loose-ends	0.5,1,1.5,2,3	400x620	400x620
+hitboxes: false	C09@0.5:past-edge-hit,C10@0.5:past-edge-hit,C11@0.5:past-edge-hit,C12@0.5:past-edge-hit,rocker_up@0.5:past-edge-hit,rocker_down@0.5:past-edge-hit,C09@1:past-edge-hit,C10@1:past-edge-hit,C11@1:past-edge-hit,C12@1:past-edge-hit,rocker_up@1:past-edge-hit,rocker_down@1:past-edge-hit,C09@1.5:past-edge-hit,C10@1.5:past-edge-hit,C11@1.5:past-edge-hit,C12@1.5:past-edge-hit,rocker_up@1.5:past-edge-hit,rocker_down@1.5:past-edge-hit,C09@2:past-edge-hit,C10@2:past-edge-hit,C11@2:past-edge-hit,C12@2:past-edge-hit,rocker_up@2:past-edge-hit,rocker_down@2:past-edge-hit,C09@3:past-edge-hit,C10@3:past-edge-hit,C11@3:past-edge-hit,C12@3:past-edge-hit,rocker_up@3:past-edge-hit,rocker_down@3:past-edge-hit
+legends:  true	8 letters at 5 machine sizes
+lcd:      true	glass at 40,50 device 320x422	0	
+labels:   true	C14:HOME top=22 icon=17 gap=5 | C17:BACK top=22 icon=17 gap=5
+FAIL: hitboxes: C09@0.5:past-edge-hit,C10@0.5:past-edge-hit,C11@0.5:past-edge-hit,C12@0.5:past-edge-hit,rocker_up@0.5:past-edge-hit,rocker_down@0.5:past-edge-hit,C09@1:past-edge-hit,C10@1:past-edge-hit,C11@1:past-edge-hit,C12@1:past-edge-hit,rocker_up@1:past-edge-hit,rocker_down@1:past-edge-hit,C09@1.5:past-edge-hit,C10@1.5:past-edge-hit,C11@1.5:past-edge-hit,C12@1.5:past-edge-hit,rocker_up@1.5:past-edge-hit,rocker_down@1.5:past-edge-hit,C09@2:past-edge-hit,C10@2:past-edge-hit,C11@2:past-edge-hit,C12@2:past-edge-hit,rocker_up@2:past-edge-hit,rocker_down@2:past-edge-hit,C09@3:past-edge-hit,C10@3:past-edge-hit,C11@3:past-edge-hit,C12@3:past-edge-hit,rocker_up@3:past-edge-hit,rocker_down@3:past-edge-hit
+FAIL: y=577 should be inactive: true	rocker_up	rocker_up	rocker_down

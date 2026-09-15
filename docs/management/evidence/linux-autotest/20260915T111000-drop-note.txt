@@ -1,0 +1,10 @@
+Linux drop-to-note check 20260915T111000: FAIL
+source: 7e9e773
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+case: 7	1:placed@102 E Maple St; 2:placed@127 S Main St; 3:placed@127 S Main St; 4:placed@102 E Maple St; 5:placed@127 S Main St; 6:placed@127 S Main St; 7:placed@127 S Main St
+carried: 6, left lying: Access memo / 7C-41
+drop: true	7	NOTED 7
+second drop: true	0	NOT CASE EVIDENCE
+names from papers: true	0		
+FINDING: no noted paper named a case person, so NAMES was not exercised
+FAIL: a second drop said 'NOT CASE EVIDENCE', not 'ALREADY NOTED'

@@ -1,0 +1,11 @@
+Linux wallet ID check 20260912T194559: PASS
+source: 249a6f2
+wallet ID: 'ID Card: Gregory Urban'; wallet stamp after carrying it off: corpse-wallet:374684054
+notebook summary: Identity document - container
+notebook text:
+  I saw a document labelled "ID Card: Gregory Urban" inside Wallet. That container was taken off a corpse. The same one carried: Credit Card: Gregory Urban (same name as the ID).
+  The name on a document is a lead. It does not establish who owned the container or identify the body.
+  Observed at 102 E Maple St.
+loose ID on a body: not exercised: no body carried a loose ID
+errors inside the mod: 0
+screenshot: dev/eval/linux/runs/20260912T194559-wallet.png (not committed)
