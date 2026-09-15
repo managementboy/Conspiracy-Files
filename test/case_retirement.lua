@@ -190,3 +190,36 @@ local liveId=live.canonical.case.documents[1].id
 local liveSame,liveChanged=Cases.noteLastSeen(live,{[liveId]="Carried."})
 assert(liveSame==live and liveChanged==false,"live documents are not given a stored last-seen")
 print("PASS retired papers keep where they were last seen: stored, cleaned, validated, old roots still load, updates copy-on-write")
+
+-- 8. What the survivor is asked about at a case's end, and the answers
+--    ("What do I make of it?", P4-R113; first cut P4-R119, P4-R121). Retirement
+--    drops the case envelope, so the names are frozen on the retired record.
+local oRoot=discoverAll(makeRoot(501))
+local oRetired=Cases.sessions(assert(Cases.retire({canonical=oRoot},1)))[1]
+local off=oRetired.offered
+assert(off,"retirement keeps what the questions are about")
+assert(off.premiseId==oRoot.case.premiseId and off.outline==oRoot.case.outline,"premise and outline kept")
+assert(off.people[1]==oRoot.case.identities[1].name and off.people[2]==oRoot.case.identities[2].name,"both people's names kept")
+assert(off.organisation==oRoot.case.organisation.name,"the organisation's name kept")
+assert(oRetired.answers==nil,"nothing is answered at retirement")
+assert(Retired.validate(oRetired))
+local function withRoot(mutate) local c={} for k,x in pairs(oRetired) do c[k]=x end; mutate(c); return c end
+local function withOffered(mutate) return withRoot(function(c) local o={} for k,x in pairs(off) do o[k]=x end
+    o.people={off.people[1],off.people[2]}; mutate(o); c.offered=o end) end
+assert(Retired.validate(withRoot(function(c) c.answers={reading="two",matters="person1",way="listen",changedHours=12.5} end)),"a full answer set is accepted")
+assert(Retired.validate(withRoot(function(c) c.answers={way="records"} end)),"a partial answer set is accepted")
+assert(Retired.validate(withRoot(function(c) c.answers={reading="unsure",changedHours=0,usedBy="generated:9:case"} end)),"used answers are accepted")
+assert(not Retired.validate(withRoot(function(c) c.answers={reading="maybe"} end)),"an unknown reading is refused")
+assert(not Retired.validate(withRoot(function(c) c.answers={matters="somebody"} end)),"an unknown person choice is refused")
+assert(not Retired.validate(withRoot(function(c) c.answers={way="cold"} end)),"'leave it cold' is not in the first cut (P4-R119)")
+assert(not Retired.validate(withRoot(function(c) c.answers={way="person",verdict="right"} end)),"no extra field, and never a verdict")
+assert(not Retired.validate(withRoot(function(c) c.answers={changedHours=-1} end)),"negative hours refused")
+assert(not Retired.validate(withRoot(function(c) c.answers={changedHours=0/0} end)),"NaN hours refused")
+assert(not Retired.validate(withRoot(function(c) c.answers={usedBy=""} end)),"empty usedBy refused")
+assert(not Retired.validate(withRoot(function(c) c.offered=nil; c.answers={way="person"} end)),"answers without what they are about are refused")
+assert(Retired.validate(withRoot(function(c) c.offered=nil end)),"a retired root saved before offered existed still loads")
+assert(not Retired.validate(withOffered(function(o) o.outline="maybe" end)),"an unknown outline is refused")
+assert(not Retired.validate(withOffered(function(o) o.people={o.people[1]} end)),"exactly two people")
+assert(not Retired.validate(withOffered(function(o) o.organisation="bad\nname" end)),"control characters in a name are refused")
+assert(not Retired.validate(withOffered(function(o) o.organisation=string.rep("a",Retired.NAME_MAX+1) end)),"over-long names refused")
+print("PASS a retired case keeps what the survivor will be asked about; answers validated, old roots still load")

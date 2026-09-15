@@ -14,7 +14,22 @@ local G=require("ConspiracyFiles/Generated/Generator")
 local EvidenceKinds=require("ConspiracyFiles/Generated/EvidenceKinds")
 local Session=require("ConspiracyFiles/Generated/Session")
 local M={SCHEMA=2}
-local ROOT_FIELDS={schema=true,caseId=true,rows=true,known=true}
+-- offered / answers ("What do I make of it?", P4-R113, first cut P4-R119 and
+-- P4-R121): what the survivor is asked about at a case's end, frozen when the
+-- case retires because retirement drops the case envelope that holds the
+-- names, and the survivor's answers. Both optional, like lastSeen, so older
+-- schema-2 roots still load and SCHEMA stays 2. Only names and choices are
+-- stored; the question and reading wording is looked up by premise id.
+local ROOT_FIELDS={schema=true,caseId=true,rows=true,known=true,offered=true,answers=true}
+local OFFERED_FIELDS={premiseId=true,outline=true,people=true,organisation=true}
+local ANSWER_FIELDS={reading=true,matters=true,way=true,changedHours=true,usedBy=true}
+M.OUTLINES={corroboration=true,["conflicting-account"]=true}
+M.READINGS={one=true,two=true,unsure=true}
+M.MATTERS={person1=true,person2=true,organisation=true,nobody=true}
+-- "leave it cold" is left out until the cold-trail state exists (P4-R119);
+-- "listen" stays and is served by a broadcast paper (P4-R121).
+M.WAYS={person=true,records=true,listen=true}
+M.NAME_MAX=160
 -- lastSeen (P4-R104): where the mod last saw this document's physical paper,
 -- in the same words the notebook uses ("Carried, in your Una's Papers.").
 -- Owner in play, 2026-09-14, after a case completed: "I lost my files
@@ -79,6 +94,24 @@ local function rowOK(row)
     return true
 end
 
+local function offeredOK(o)
+    if not fields(o,OFFERED_FIELDS) then return false end
+    if not text(o.premiseId,80) or not M.OUTLINES[o.outline] then return false end
+    local ok,n=dense(o.people,2); if not ok or n~=2 then return false end
+    for i=1,2 do if not printable(o.people[i],M.NAME_MAX) then return false end end
+    return printable(o.organisation,M.NAME_MAX)
+end
+local function answersOK(a)
+    if not fields(a,ANSWER_FIELDS) then return false end
+    if a.reading~=nil and not M.READINGS[a.reading] then return false end
+    if a.matters~=nil and not M.MATTERS[a.matters] then return false end
+    if a.way~=nil and not M.WAYS[a.way] then return false end
+    if a.changedHours~=nil and (type(a.changedHours)~="number" or a.changedHours~=a.changedHours
+        or a.changedHours<0 or a.changedHours==math.huge) then return false end
+    if a.usedBy~=nil and not text(a.usedBy,300) then return false end
+    return true
+end
+
 function M.validate(root)
     local safe=V.validateStructure(root); if not safe then return false,"invalid retired case" end
     if not fields(root,ROOT_FIELDS) or root.schema~=M.SCHEMA then return false,"invalid retired case" end
@@ -103,6 +136,10 @@ function M.validate(root)
         seen[id]=true
     end
     for id in pairs(ids) do if not seen[id] then return false,"invalid retired known" end end
+    if root.offered~=nil and not offeredOK(root.offered) then return false,"invalid retired offered" end
+    -- Answers name "person 1" or "the organisation", so they mean nothing
+    -- without the names they were given about.
+    if root.answers~=nil and (root.offered==nil or not answersOK(root.answers)) then return false,"invalid retired answers" end
     if V.estimateEncodedBytes(root)>500000 then return false,"retired case size exceeded" end
     return true
 end
@@ -121,6 +158,13 @@ function M.retire(root,lastSeen)
         for _,row in ipairs(rows) do row.lastSeen=M.cleanLastSeen(lastSeen[row.id]) end
     end
     local out={schema=M.SCHEMA,caseId=root.case.caseId,rows=rows,known=copy(root.known)}
+    -- What the survivor will be asked about. Left out rather than failing the
+    -- retirement if anything in it would not validate: a case must always be
+    -- able to retire, and a missing question costs less than a stuck save.
+    local c,who=root.case,root.case.identities or {}
+    local offered={premiseId=c.premiseId,outline=c.outline,
+        people={who[1] and who[1].name,who[2] and who[2].name},organisation=c.organisation and c.organisation.name}
+    if offeredOK(offered) then out.offered=offered end
     ok,why=M.validate(out); if not ok then return nil,why end
     return out
 end
