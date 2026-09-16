@@ -959,6 +959,13 @@ title ("Noted: Tagged key / AV-197"). An identity names the document, never
 the person. Objects, several keys and unknown records keep the original ten
 lines. Wording and rules: docs/design/PLAYER_VOICE.md, Set A.
 
+**P4-R131 — an old save stays Muldraugh-only; the whole map is for new games.**
+Owner, Windows, 2026-09-16: an Irvington save started under DEV-0.40 reopened
+on DEV-0.41.0 showed no house numbers, because its first case had frozen the
+Muldraugh trial book (352 addresses) and P4-R120 keeps it. Offered filling in
+the shipped numbers outside the old trial area, the owner chose "Keep it;
+start a new game". P4-R120 stands unchanged.
+
 **P4-R106 — how a car's containers are reached.** Owner, 2026-09-14: "The globe
 box only opens when sitting in the front of the car", and a truck bed or trunk
 is reached from outside, "only if they are open". Placement may still put a
