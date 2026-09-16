@@ -26,6 +26,32 @@ Delivered whenever a new discovery reaches the ledger, whatever its kind.
 9. "Let me key this in while I've got it."
 10. "That's a detail I shouldn't lose."
 
+**Saying what is noted (P4-R130, owner 2026-09-16).** When a plain noun can be
+read from the record, the line names it, and the coloured tag carries the
+record's own title ("Noted: Tagged key / AV-197"):
+
+1. "That <what> is worth writing down."
+2. "Interesting. The <what> goes in the machine."
+3. "I should note this <what> before I forget."
+4. "Hm. That <what> is going in my notes."
+5. "Better write this <what> down."
+6. "That <what> means something. Noting it."
+7. "I'll want to remember this <what>."
+8. "Worth keeping a record of that <what>."
+9. "Let me key this <what> in while I've got it."
+10. "That <what> is a detail I shouldn't lose."
+
+Where `<what>` comes from:
+- a document: its title before " / " or ":", without "Second"/"Another",
+  lowercased except words in capitals ("Tagged key / AV-197" -> "tagged key");
+- an identity document: the document after the person's name ("Found Ines
+  Kubiak's ID card" -> "ID card"), never the name;
+- one key off a body: "key"; a possible connection: "possible connection".
+
+No `<what>` (the plain lines above, tag "Noted", or "Noted: <title>" when a
+title is known): objects (their titles are counts and names, not nouns),
+several keys, a noun longer than 24 characters, and anything not found.
+
 ## Set B — a person-key-door link was discovered
 
 `<name>` is the name observed on a document found with that body. Used only

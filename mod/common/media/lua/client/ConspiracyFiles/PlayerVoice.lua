@@ -34,6 +34,21 @@ local SET_A={
     "Let me key this in while I've got it.",
     "That's a detail I shouldn't lose.",
 }
+-- The same ten, naming the thing (P4-R130; owner, Windows, 2026-09-16: "can we
+-- describe what we are noting? we have the data to do it"). <what> is a plain
+-- noun read from the record, used only when one reads well (V.describe).
+local SET_A_WHAT={
+    "That <what> is worth writing down.",
+    "Interesting. The <what> goes in the machine.",
+    "I should note this <what> before I forget.",
+    "Hm. That <what> is going in my notes.",
+    "Better write this <what> down.",
+    "That <what> means something. Noting it.",
+    "I'll want to remember this <what>.",
+    "Worth keeping a record of that <what>.",
+    "Let me key this <what> in while I've got it.",
+    "That <what> is a detail I shouldn't lose.",
+}
 
 -- <name> is substituted with the name observed on a document found with that
 -- body. Used only when a name is actually known.
@@ -140,10 +155,71 @@ end
 
 -- Plain substring replace, not gsub: an observed name is player-facing text
 -- we do not control, and gsub's replacement string treats "%" specially.
-local function withName(template,name)
-    local i,j=template:find("<name>",1,true)
+local function fill(template,slot,value)
+    local i,j=template:find(slot,1,true)
     if not i then return template end
-    return template:sub(1,i-1)..name..template:sub(j+1)
+    return template:sub(1,i-1)..value..template:sub(j+1)
+end
+local function withName(template,name) return fill(template,"<name>",name) end
+
+-- What a discovery is, for the survivor to say (P4-R130). Returns a plain noun
+-- or nil, and the record's own title or nil. Read-only: every source is asked
+-- for the rows it already renders.
+local function titleOf(reference)
+    local CF=ConspiracyFiles or {}
+    local runtime=CF.GeneratedRuntime
+    if runtime and runtime.known then
+        local ok,rows=pcall(runtime.known)
+        if ok and type(rows)=="table" then
+            for _,r in ipairs(rows) do if r.id==reference then return r.title,r end end
+        end
+    end
+    for _,name in ipairs({"IdentityObserver","KeyJournal","ObservedKeyLeads","KeyObserver"}) do
+        local source=CF[name]
+        if source and source.rows then
+            local ok,rows=pcall(source.rows)
+            if ok and type(rows)=="table" then
+                for _,r in ipairs(rows) do if r.id==reference then return r.title,nil end end
+            end
+        end
+    end
+    return nil,nil
+end
+-- Lowercase a phrase for the middle of a sentence, keeping words written in
+-- capitals as they are ("ID card", not "id card").
+local function midSentence(text)
+    return (text:gsub("%S+",function(word) if word:find("%l") then return word:lower() end return word end))
+end
+function V.describe(reference)
+    if type(reference)~="string" then return nil,nil end
+    local title,record=titleOf(reference)
+    if type(title)~="string" or title=="" then return nil,nil end
+    -- Identity rows are listed as findings ("Found Ines Kubiak's ID card");
+    -- the tag names the thing itself.
+    title=title:gsub("^Found ","")
+    local noun
+    if record then
+        -- An object's title is a count or a name ("thirteen radio receivers"),
+        -- not a noun that fits "this ...".
+        local okKinds,Kinds=pcall(require,"ConspiracyFiles/Generated/EvidenceKinds")
+        local carrier=okKinds and type(Kinds)=="table" and Kinds.get and Kinds.get(record.kind)
+        if not (type(carrier)=="table" and carrier.capacity=="object") then
+            noun=title:gsub("%s*/.*$",""):gsub(":.*$","")
+            noun=noun:gsub("^[Ss]econd ",""):gsub("^[Aa]nother ","")
+            noun=midSentence(noun)
+        end
+    elseif reference:find("^identity:") then
+        -- The document, never the person: "Ines Kubiak's ID card" -> "ID card".
+        noun=title:match("'s (.+)$")
+    elseif reference:find("^keys:") then
+        if title:find("^A key") then noun="key" end
+    elseif reference:find("^connection:") then
+        noun="possible connection"
+    elseif reference:find("^observedKeyLead:") then
+        noun="key"
+    end
+    if type(noun)~="string" or noun=="" or #noun>24 then noun=nil end
+    return noun,title
 end
 
 -- A line the player misses and a line that never fired look identical unless
@@ -245,7 +321,14 @@ function V.onDiscovery(kind,reference)
     if t-lastSetAAt<COOLDOWN_MS then log("journal line suppressed by cooldown ("..(t-lastSetAAt).."ms)") return end
     lastSetAAt=t
     indexA=indexA%#SET_A+1
-    speak(p,SET_A[indexA],"Noted")
+    local ok,what,title=pcall(V.describe,reference)
+    if not ok then what,title=nil,nil end
+    local label="Noted"
+    if type(title)=="string" and title~="" then
+        label="Noted: "..(#title>40 and (title:sub(1,37).."...") or title)
+    end
+    if what then speak(p,fill(SET_A_WHAT[indexA],"<what>",what),label)
+    else speak(p,SET_A[indexA],label) end
 end
 
 -- Set B/C: a real key looted from a body opened a door. Never gated by the
