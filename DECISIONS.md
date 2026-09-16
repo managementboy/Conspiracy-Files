@@ -966,6 +966,29 @@ Muldraugh trial book (352 addresses) and P4-R120 keeps it. Offered filling in
 the shipped numbers outside the old trial area, the owner chose "Keep it;
 start a new game". P4-R120 stands unchanged.
 
+**P4-R132 — clues are found by searching (design; not built).** Owner,
+2026-09-16, unhappy with how announcements over the survivor are ordered and
+asking for a new idea rather than a reshuffle: "I would love to mix both", then
+"perfect!" with a screenshot of the game's Investigate Area window, "the
+investigate area dropdown would need another entry". The shape:
+- Passing near an unrecognised clue may give a wordless cue ("Hm?", later
+  "...again?"): once per place, only when the survivor could see the spot,
+  weaker in the dark, never a direction or distance.
+- Only the game's own Search Mode actually spots a clue, through its own
+  spotting timer, light, weather and traits. "If you don't search you don't
+  find."
+- A clue is an ordinary game item until recognised: no title, no Evidence
+  category, no Inspect option. Recognition happens when it is spotted, or
+  through "Look it over", a short timed action on something already carried, so
+  a clue picked up without searching is never lost to the case.
+- Noting is a timed action with the game's progress bar, then the item changes.
+- The survivor's voice is kept for realisations that happen in the head:
+  records that disagree, a body's key fitting a door, nothing left to find,
+  "What do I make of it?".
+- The Investigate Area window's Search Focus list gains an entry (proposed:
+  "Clues"); with it chosen, clues are spotted faster and further.
+Design: docs/design/SEARCH_TO_FIND.md. Rules change, so a new game (P4-R77).
+
 **P4-R106 — how a car's containers are reached.** Owner, 2026-09-14: "The globe
 box only opens when sitting in the front of the car", and a truck bed or trunk
 is reached from outside, "only if they are open". Placement may still put a
