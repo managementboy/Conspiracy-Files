@@ -1,6 +1,8 @@
 # House numbers for the whole map (AD-10)
 
-- **Status:** Draft design, 2026-09-15. Nothing here is built.
+- **Status:** Built, 2026-09-16 (owner go-ahead P4-R129). Section 9 records what
+  shipped and how it differs from this draft; sections 1-8 are the design as
+  drafted.
 - **Request:** AD-10, queued 2026-09-15 (`docs/management/PM_HANDOFF.md`, "house
   numbers for the whole map").
 - **Game:** Build 42.20 (Linux test machine reports `42.20.4 b0bbce05d5`).
@@ -355,3 +357,73 @@ Sizes: **S** is under half a day, **M** about a day, **L** two or more days.
 
 Order: 1 → 2 → 3 → 4 → 5 → 6 → 7/8 → 9. Nothing here should start during a
 playtest.
+
+## 9. What was built (2026-09-16)
+
+**Pipeline, as shipped.**
+
+1. `tools/autotest/checks/address_export.sh NAME` exports every building from
+   a fresh world into `dev/addresses/NAME.tsv` (9,978 buildings in about 90
+   seconds). It is driven in steps from the shell; a per-tick handler never ran
+   from a file loaded through the eval channel. Two fresh worlds gave
+   **byte-identical exports**, so building ids and footprints are stable across
+   worlds (risk 1 in section 7 is retired). `dev/addresses/world1.tsv` is the
+   committed source.
+2. `lua5.1 tools/addresses/build.lua --export dev/addresses/world1.tsv
+   --streets <streets.xml> --regions <regions.lua> --annotations
+   <worldmap-annotations.lua> --out
+   mod/common/media/lua/shared/ConspiracyFiles/Generated/AddressBook.lua
+   --report <report.md>` numbers the map in under a second and writes the
+   shipped book (370 KB, 6,796 houses, revision `whole-map-1`).
+3. `AddressMap` reads the shipped book at game start: ready before any case,
+   nothing scanned, nothing written to the save. A save that already froze a
+   Muldraugh book keeps it (P4-R120). Another map, or a missing book, gets no
+   numbers and no scan.
+
+**Differences from the draft.**
+
+- **Towns regions.lua does not name** (Brandenburg, Echo Creek, Ekron, Fallas
+  Lake, Irvington) come from the game's own world-map town labels
+  (`worldmap-annotations.lua`, style `text-town`): a building outside every
+  regions.lua box belongs to the nearest such label within 800 tiles, with its
+  own starting street and numbering. regions.lua still wins where it covers.
+- **Street blocks** are cut where a differently named street crosses or ends
+  within half its width plus 3 tiles (2,738 blocks). The trial's road file could
+  not be reproduced exactly.
+- **Railways** (names with "Railroad", plus the Old Muldraugh Station Branch
+  Line) are never streets; **highways** (KY-*, Dixie Highway, Brandenburg
+  Bypass, Lakeshore Pkwy) are never a starting street.
+- `AddressMap.townForBuilding(id)` gives a house's town, or nil for an unnamed
+  area. Text does not add the town name yet (section 3.2 item 6 is open).
+
+**Result on the real map (report of 2026-09-16).**
+
+| Town | Starting street | Numbered | No street within 60 |
+|---|---|---|---|
+| Brandenburg (map label) | Main St | 322 | 13 |
+| Echo Creek (map label) | Main St | 70 | 3 |
+| Ekron (map label) | Haysville Road (longest) | 163 | 17 |
+| Fallas Lake (map label) | Main St | 132 | 16 |
+| Irvington (map label) | Main St | 370 | 12 |
+| Jefferson | South Park Road (longest) | 254 | 35 |
+| LAA | Terminal Dr (partly inside) | 7 | 18 |
+| Louisville | E Main St / W Main St | 3,122 | 113 |
+| MarchRidge | Fiddler's Trail (longest) | 241 | 0 |
+| Muldraugh | N Main St / S Main St | 436 | 77 |
+| Riverside | E Main St / W Main St | 451 | 36 |
+| Rosewood | North Main St / South Main St | 245 | 42 |
+| ValleyStation | Bearcamp Road (longest) | 142 | 20 |
+| WestPoint | Main St | 360 | 30 |
+| 23 unnamed rural areas | longest street, or along a highway | 488 | 0 |
+
+Totals: 7,604 homes and businesses considered, 6,796 numbered, no street block
+over its 49 slots. 376 rural buildings have no named street within 60 tiles.
+
+**Checks.** `test/address_numbering.lua` (the rules), `test/address_shipped.lua`
+(the runtime), and the Linux in-game check `tools/autotest/checks/addresses.sh`
+(ready at game start with no case, nothing saved, every shipped building live
+with the same footprint, sample addresses per town, load time).
+
+**Still open.** Town names in text for places outside the survivor's town; a
+small override list for naming rural areas; the attended Windows check on a
+found paper map (section 6).

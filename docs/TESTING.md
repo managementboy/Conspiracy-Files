@@ -77,6 +77,7 @@ running two at once is safe, the second waits.
 | `drop_note.sh` | real case clues, some carried and one left in its drawer, dropped together on the open organiser: all noted, none moved, an ordinary item ignored, a second drop notes nothing; names on the clues reach NAMES |
 | `hardware.sh` | the battery, the lamp, auto-off, the dead-cell restore, the journal replay |
 | `knox.sh` | Knox.OS driven by taps and key presses |
+| `addresses.sh` | whole-map house numbers (AD-10): the shipped book is ready at game start with no case, nothing is saved, every shipped building exists live with the same footprint, sample addresses per town, load time. `address_export.sh NAME` (not in the suite) re-exports the building list the book is built from |
 | `../fieldnote-test/boot_test.sh` | the case's hardware contract on the real organiser: every key's hitbox at every machine size, legends at every size, press colours, a release off a key cancels it |
 | `campaign.sh` (not in the suite, about half an hour) | a player's week: three cases in one save with two save/quit/continue rounds. Case 1 played through and answered on the organiser; case 2 built from those answers (the person returns without a second body, the answers lock); case 3 built from nothing; placement within reach on fresh sites; answers, discovery order and Evidence / Old surviving reloads; NAMES growing; marks with a pen; save size and frame cost per stage; then four unfinished cases, the most the save allows, and a new case arriving once one is finished |
 

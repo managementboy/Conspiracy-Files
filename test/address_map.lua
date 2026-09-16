@@ -1,4 +1,7 @@
 getPlayer=function() return nil end
+-- This file tests the saved-book path old saves use (P4-R120): no shipped book.
+-- The shipped whole-map numbers are tested in test/address_shipped.lua.
+package.preload['ConspiracyFiles/Generated/AddressBook']=function() return nil end
 package.path="mod/common/media/lua/shared/?.lua;mod/common/media/lua/client/?.lua;"..package.path
 local Core=require("ConspiracyFiles/Generated/AddressIndex")
 local roads={{street="Test St",block=1,segments={{10900,9700,11050,9700,0}}}}

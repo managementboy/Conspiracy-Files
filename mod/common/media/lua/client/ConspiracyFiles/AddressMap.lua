@@ -42,6 +42,38 @@ local function use(root)
     end
 end
 function M.ready() return book~=nil end
+-- AD-10 (P4-R129): house numbers for the whole map ship with the mod, worked
+-- out once from the real game's building list (tools/addresses/build.lua). A
+-- new save reads them at game start: nothing is scanned and nothing is written
+-- to the save. A save that already froze a Muldraugh book keeps it (P4-R120).
+-- Rows are "id|x|y|x2|y2|area|street|number"; labels are unique per town, not
+-- across the map, and a record carries its town's name when the town has one.
+local SHIPPED_REVISION="whole-map-1"
+local function shippedBook(map,build)
+    local ok,B=pcall(require,"ConspiracyFiles/Generated/AddressBook")
+    if not ok or type(B)~="table" or B.revision~=SHIPPED_REVISION or type(B.rows)~="table"
+        or type(B.streets)~="table" or type(B.areas)~="table" then return nil,"no shipped address book" end
+    if type(B.map)~="string" or not tostring(map):find(B.map,1,true) then return nil,"shipped addresses are for "..tostring(B.map) end
+    local records={}
+    for _,row in ipairs(B.rows) do
+        local id,x,y,x2,y2,area,street,number=row:match("^([^|]+)|(%-?%d+)|(%-?%d+)|(%-?%d+)|(%-?%d+)|(%d+)|(%d+)|(%d+)$")
+        local name=id and B.streets[tonumber(street)]
+        if name then
+            local a=B.areas[tonumber(area)]
+            records[#records+1]={id=id,x=tonumber(x),y=tonumber(y),x2=tonumber(x2),y2=tonumber(y2),
+                label=number.." "..name,town=(a and a.town==1) and a.name or nil}
+        end
+    end
+    if #records==0 then return nil,"shipped address book is empty" end
+    return {revision=B.revision,map=tostring(map),build=build,records=records,coverage=3,shipped=true}
+end
+-- The town a building's number belongs to, or nil (an unnamed area never gets
+-- an invented name).
+function M.townForBuilding(id)
+    if not book or type(id)~="string" then return nil end
+    local r=byId["t3:"..id]
+    return r and r.town or nil
+end
 -- The named building nearest to a point, and how far away it is. For things
 -- found OUTDOORS: a wallet on the street beside 109 Walker Road was reported as
 -- "in a building the address book does not name" (2026-09-11), which was false
@@ -191,7 +223,8 @@ local function hook()
         ConspiracyFiles.addressMapRenderHook=true
     end
 end
-function M.start()
+function M.start(options)
+    options=options or {}
     if not allowed() then return false,"debug single player required for trial" end
     if job then return false,"address index already building" end
     local world=getWorld(); if not world then return false,"load a game first" end
@@ -200,6 +233,20 @@ function M.start()
     if not map:find("Muldraugh, KY",1,true) then return false,"unsupported map" end
     hook()
     local existing=ModData.get(TAG)
+    if not (existing and existing.canonical) then
+        if book and book.shipped then return true end
+        local loadStarted=getTimeInMillis()
+        local shipped,why=shippedBook(map,build)
+        if shipped then
+            use(shipped)
+            M.loadMs=getTimeInMillis()-loadStarted
+            status="Ready: "..#shipped.records.." shipped addresses for the whole map in "..M.loadMs.." ms; nothing scanned or saved. Zoom in on the world map."
+            log(status)
+            return true
+        end
+        log("Shipped addresses not used: "..tostring(why))
+        if options.noScan then return false,why end
+    end
     local frozen
     if existing and existing.canonical then
         if not valid(existing.canonical) or existing.canonical.map~=map or existing.canonical.build~=build then return false,"saved address book refused; no renumbering" end
@@ -254,5 +301,7 @@ function M.start()
     Events.OnTick.Add(handler); log("Building full Muldraugh trial address index; no terrain revealed.")
     return true
 end
-Events.OnGameStart.Add(function() if allowed() and ModData.get(TAG) then M.start() end end)
+-- At game start: a save's own book when it has one, otherwise the shipped
+-- numbers - never a scan, which still only begins when a case asks for one.
+Events.OnGameStart.Add(function() if allowed() then M.start({noScan=not ModData.get(TAG)}) end end)
 return M
