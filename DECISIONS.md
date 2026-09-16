@@ -937,6 +937,28 @@ Kept (owner: "In-game notebooks those we keep"): notebooks as things in the
 world, such as the field notebook a clue can be, "Shift notebook" documents and
 Rourke's notebook page. No new game.
 
+**P4-R129 — whole-map house numbers: go ahead (AD-10).** Owner, 2026-09-16,
+after a Windows game outside Muldraugh showed no numbers: "its a go ahead!".
+Built as docs/design/WHOLE_MAP_ADDRESSES.md sets out: every building on the map
+is exported once from the real game on the Linux machine, numbered offline per
+town, and shipped with the mod; nothing is scanned or saved per game. Existing
+saves keep their frozen Muldraugh book (P4-R120). The design's two open calls
+take its defaults, and the owner reviews the result:
+- each town's starting street is chosen automatically (a Main St, else 1st
+  St / First St, else the town's longest named street that is not a highway or
+  railway), listed in a report for the owner to check;
+- buildings outside the named towns are numbered too when a named street is
+  within 60 tiles; they never carry an invented town name.
+
+**P4-R130 — the survivor says what they are noting.** Owner, Windows,
+2026-09-16, over "I should note this before I forget." for a key on the road:
+"can we describe what we are noting? we have the data to do it". When a plain
+noun can be read from the record, the journal line names it ("I should note
+this tagged key before I forget.") and the coloured tag carries the record's
+title ("Noted: Tagged key / AV-197"). An identity names the document, never
+the person. Objects, several keys and unknown records keep the original ten
+lines. Wording and rules: docs/design/PLAYER_VOICE.md, Set A.
+
 **P4-R106 — how a car's containers are reached.** Owner, 2026-09-14: "The globe
 box only opens when sitting in the front of the car", and a truck bed or trunk
 is reached from outside, "only if they are open". Placement may still put a
