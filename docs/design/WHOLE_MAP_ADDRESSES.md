@@ -424,6 +424,11 @@ over its 49 slots. 376 rural buildings have no named street within 60 tiles.
 (ready at game start with no case, nothing saved, every shipped building live
 with the same footprint, sample addresses per town, load time).
 
+**Attended Windows check, 2026-09-16 (owner).** A new game on DEV-0.41.0:
+"confirmed, houses have numbers". An existing save kept its frozen Muldraugh
+book and showed none outside it, as P4-R120/P4-R131 intend.
+
 **Still open.** Town names in text for places outside the survivor's town; a
-small override list for naming rural areas; the attended Windows check on a
-found paper map (section 6).
+small override list for naming rural areas; the rest of the attended check in
+section 6 (a found paper map of another town, and one house's address in the
+organiser matching its map number).
