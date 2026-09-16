@@ -1,0 +1,34 @@
+Linux campaign check 20260916T015425: PASS
+source: 196b648
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+cases: 1 generated:1365388806:case, 2 generated:1302680466:case, 3 generated:843002292:case; at the end 
+stages:
+  start                  cases 1 (0 finished) | record 0 | FILES questions 0 | NAMES 1 | PLACES 0 | Old 0/0 wrong | Evidence 0/0 wrong | order  | save 171531 B
+  case 1 finished        cases 1 (1 finished) | record 7 | FILES questions 1 | NAMES 2 | PLACES 11 | Old 7/0 wrong | Evidence 0/0 wrong | order 1111111 | save 165103 B
+  after reload 1         cases 1 (1 finished) | record 7 | FILES questions 1 | NAMES 2 | PLACES 11 | Old 7/0 wrong | Evidence 0/0 wrong | order 1111111 | save 165968 B
+  case 2 finished        cases 2 (2 finished) | record 12 | FILES questions 2 | NAMES 4 | PLACES 19 | Old 12/0 wrong | Evidence 0/0 wrong | order 111111122222 | save 190969 B
+  case 3, two clues      cases 3 (2 finished) | record 14 | FILES questions 2 | NAMES 4 | PLACES 21 | Old 12/0 wrong | Evidence 2/0 wrong | order 11111112222233 | save 215538 B
+  after reload 2         cases 3 (2 finished) | record 14 | FILES questions 2 | NAMES 4 | PLACES 21 | Old 12/0 wrong | Evidence 2/0 wrong | order 11111112222233 | save 215958 B
+  at the limit           cases 4 (2 finished) | record 14 | FILES questions 2 | NAMES 4 | PLACES 21 | Old 12/0 wrong | Evidence 2/0 wrong | order 11111112222233 | save 245970 B
+  after the limit        cases 5 (3 finished) | record 16 | FILES questions 3 | NAMES 4 | PLACES 26 | Old 16/0 wrong | Evidence 0/0 wrong | order 1111111222223333 | save 262433 B
+case 1 answers on the organiser: true two person2 records nil Ines Kubiak Joanne Voss County Motor Pool
+case 2 steer: generated:1365388806:case two records Joanne Voss Joanne Voss true
+errors inside the mod, all sessions: 0
+FINDING: fresh worlds started for a case 1 with a document in the memo's week: 8 (memo=true, dated documents=1)
+FINDING: case 1 relay memo: found=true, dated in its week=1, carrying the date note=1
+FINDING: the date note was exercised: 1 of 1 records dated in the memo's week carry it
+FINDING: case 1 note on the organiser: I think it was a journey kept off someone's name. Joanne Voss matters here. Next I would check the place against its records.
+FINDING: frame cost during case 1: AutomaticInvestigations.onTick calls=2115 avg=0.023ms max=42ms over2ms=1 | CaseFile.onTick calls=2103 avg=0.011ms max=1ms over2ms=0 | ClueMarkers.draw calls=0 avg=0.000ms max=0ms over2ms=0 | ClueMarkers.update calls=41 avg=0.659ms max=4ms over2ms=7 | IdentityObserver.afterRender calls=4252 avg=0.131ms max=2ms over2ms=1 | IdentityObserver.tick calls=2152 avg=0.003ms max=1ms over2ms=0 | LocalPersonI
+FINDING: reload 1 save size: 165380 -> 165968 bytes; before [Generated.G2=25841 AddressBook.Muldraugh=131854 KeyConnections=778 DiscoveryLedger=3692 VisitedBuildings=359]; after [Generated.G2=26429 AddressBook.Muldraugh=131854 KeyConnections=778 DiscoveryLedger=3692 VisitedBuildings=359]
+FINDING: case 2 placement: reach 250: t3:10977700185374753, t3:10977704480342027
+FINDING: case 2 clues: Internal directory / AV-583 | Revised directory / AV-583 | Duty log / AV-583 | Tagged key / AV-583 | Shift notebook / AV-583
+FINDING: frame cost during case 2: AutomaticInvestigations.onTick calls=4375 avg=0.007ms max=1ms over2ms=0 | CaseFile.onTick calls=4363 avg=0.009ms max=1ms over2ms=0 | ClueMarkers.draw calls=0 avg=0.000ms max=0ms over2ms=0 | ClueMarkers.update calls=78 avg=0.923ms max=7ms over2ms=9 | IdentityObserver.afterRender calls=8808 avg=0.076ms max=1ms over2ms=0 | IdentityObserver.tick calls=4409 avg=0.002ms max=1ms over2ms=0 | LocalPersonIn
+FINDING: case 3 placement: reach 250: t3:10977704480342021, t3:10977700185374752
+FINDING: frame cost during case 3: AutomaticInvestigations.onTick calls=6394 avg=0.006ms max=2ms over2ms=1 | CaseFile.onTick calls=6382 avg=0.008ms max=1ms over2ms=0 | ClueMarkers.draw calls=0 avg=0.000ms max=0ms over2ms=0 | ClueMarkers.update calls=114 avg=0.982ms max=7ms over2ms=15 | IdentityObserver.afterRender calls=12840 avg=0.071ms max=1ms over2ms=0 | IdentityObserver.tick calls=6428 avg=0.002ms max=1ms over2ms=0 | LocalPerso
+FINDING: reload 2 save size: 215538 -> 215958 bytes; before [Generated.G2=68829 AddressBook.Muldraugh=131854 KeyConnections=1690 DiscoveryLedger=6849 VisitedBuildings=710]; after [Generated.G2=69249 AddressBook.Muldraugh=131854 KeyConnections=1690 DiscoveryLedger=6849 VisitedBuildings=710]
+FINDING: map marks after reload 2 (written/pending/missing): 14/0/0
+FINDING: the fourth unfinished case did not arrive within twenty minutes: 4 2 1:1365388806:retired 2:1302680466:retired 3:843002292:live 4:602023452:live
+FINDING: after 90 s with 2 unfinished: preparing=false, cases 4 2 1:1365388806:retired 2:1302680466:retired 3:843002292:live 4:602023452:live
+FINDING: a new case came after a case was finished at the limit: 5 3 1:1365388806:retired 2:1302680466:retired 3:843002292:retired 4:602023452:live 5:1663483685:live
+FINDING: frame cost during the limit: AutomaticInvestigations.onTick calls=98012 avg=0.005ms max=10ms over2ms=17 | CaseFile.onTick calls=98000 avg=0.009ms max=5ms over2ms=2 | ClueMarkers.draw calls=0 avg=0.000ms max=0ms over2ms=0 | ClueMarkers.update calls=1636 avg=0.904ms max=9ms over2ms=21 | IdentityObserver.afterRender calls=195412 avg=0.055ms max=4ms over2ms=1 | IdentityObserver.tick calls=98048 avg=0.002ms max=1ms over2ms=0 | Loc
+screenshot: dev/eval/linux/runs/20260916T015425-campaign.png (not committed)

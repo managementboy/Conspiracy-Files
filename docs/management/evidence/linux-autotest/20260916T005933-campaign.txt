@@ -1,0 +1,53 @@
+Linux campaign check 20260916T005933: FAIL
+source: 196b648
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+cases: 1 generated:1763324545:case, 2 none, 3 generated:1984154950:case; at the end 
+stages:
+  start                  cases 1 (0 finished) | record 0 | FILES questions 0 | NAMES 1 | PLACES 0 | Old 0/0 wrong | Evidence 0/0 wrong | order  | save 168823 B
+  case 1 finished        cases 1 (1 finished) | record 7 | FILES questions 1 | NAMES 3 | PLACES 11 | Old 7/0 wrong | Evidence 0/0 wrong | order 1111111 | save 162754 B
+  after reload 1         cases 1 (1 finished) | record 7 | FILES questions 1 | NAMES 3 | PLACES 11 | Old 7/0 wrong | Evidence 0/0 wrong | order 1111111 | save 163703 B
+  case 2 finished        cases 1 (1 finished) | record 7 | FILES questions 1 | NAMES 3 | PLACES 11 | Old 7/0 wrong | Evidence 0/0 wrong | order 1111111 | save 163589 B
+  case 3, two clues      cases 2 (1 finished) | record 9 | FILES questions 1 | NAMES 3 | PLACES 13 | Old 7/0 wrong | Evidence 2/0 wrong | order 111111122 | save 194581 B
+  after reload 2         cases 2 (1 finished) | record 9 | FILES questions 1 | NAMES 3 | PLACES 13 | Old 7/0 wrong | Evidence 2/0 wrong | order 111111122 | save 194581 B
+  at the limit           cases 3 (1 finished) | record 9 | FILES questions 1 | NAMES 3 | PLACES 13 | Old 7/0 wrong | Evidence 2/0 wrong | order 111111122 | save 215832 B
+  after the limit        cases 4 (2 finished) | record 11 | FILES questions 2 | NAMES 4 | PLACES 18 | Old 11/0 wrong | Evidence 0/0 wrong | order 11111112222 | save 232514 B
+case 1 answers on the organiser: true two person2 records nil Ines Kubiak Adele Prosser Building at 10836, 10141 Site Office
+case 2 steer: none     
+errors inside the mod, all sessions: 0
+FINDING: fresh worlds started for a case 1 with a document in the memo's week: 2 (memo=true, dated documents=2)
+FINDING: case 1 relay memo: found=true, dated in its week=2, carrying the date note=2
+FINDING: the date note was exercised: 2 of 2 records dated in the memo's week carry it
+FINDING: case 1 note on the organiser: I think it was something being cleaned away. Adele Prosser matters here. Next I would check the place against its records.
+FINDING: frame cost during case 1: AutomaticInvestigations.onTick calls=2171 avg=0.027ms max=46ms over2ms=1 | CaseFile.onTick calls=2159 avg=0.016ms max=1ms over2ms=0 | ClueMarkers.draw calls=0 avg=0.000ms max=0ms over2ms=0 | ClueMarkers.update calls=41 avg=0.902ms max=7ms over2ms=7 | IdentityObserver.afterRender calls=4364 avg=0.140ms max=1ms over2ms=0 | IdentityObserver.tick calls=2196 avg=0.004ms max=1ms over2ms=0 | LocalPersonI
+FINDING: reload 1 save size: 163031 -> 163703 bytes; before [Generated.G2=23397 AddressBook.Muldraugh=131854 KeyConnections=778 DiscoveryLedger=3787 VisitedBuildings=359]; after [Generated.G2=24069 AddressBook.Muldraugh=131854 KeyConnections=778 DiscoveryLedger=3787 VisitedBuildings=359]
+FINDING: case 2 placement: no live case none
+FINDING: case 2 clues: 
+FINDING: frame cost during case 2: AutomaticInvestigations.onTick calls=37273 avg=0.005ms max=2ms over2ms=1 | CaseFile.onTick calls=37261 avg=0.010ms max=1ms over2ms=0 | ClueMarkers.draw calls=0 avg=0.000ms max=0ms over2ms=0 | ClueMarkers.update calls=622 avg=0.151ms max=2ms over2ms=1 | IdentityObserver.afterRender calls=74638 avg=0.090ms max=1ms over2ms=0 | IdentityObserver.tick calls=37309 avg=0.003ms max=1ms over2ms=0 | LocalPer
+FINDING: case 3 placement: reach 250: t3:10977704480342034, t3:10977704480342035
+FINDING: frame cost during case 3: AutomaticInvestigations.onTick calls=52051 avg=0.004ms max=2ms over2ms=4 | CaseFile.onTick calls=52039 avg=0.009ms max=3ms over2ms=1 | ClueMarkers.draw calls=0 avg=0.000ms max=0ms over2ms=0 | ClueMarkers.update calls=871 avg=0.242ms max=4ms over2ms=5 | IdentityObserver.afterRender calls=104172 avg=0.089ms max=1ms over2ms=0 | IdentityObserver.tick calls=52087 avg=0.002ms max=1ms over2ms=0 | LocalPe
+FINDING: reload 2 save size: 194581 -> 194581 bytes; before [Generated.G2=52443 AddressBook.Muldraugh=131854 KeyConnections=1238 DiscoveryLedger=4809 VisitedBuildings=593]; after [Generated.G2=52443 AddressBook.Muldraugh=131854 KeyConnections=1238 DiscoveryLedger=4809 VisitedBuildings=593]
+FINDING: map marks after reload 2 (written/pending/missing): 9/0/0
+FINDING: the fourth unfinished case did not arrive within twenty minutes: 3 1 1:1763324545:retired 2:1984154950:live 3:1430923891:live
+FINDING: after 90 s with 2 unfinished: preparing=false, cases 3 1 1:1763324545:retired 2:1984154950:live 3:1430923891:live
+FINDING: a new case came after a case was finished at the limit: 4 2 1:1763324545:retired 2:1984154950:retired 3:1430923891:live 4:1396642693:live
+FINDING: frame cost during the limit: AutomaticInvestigations.onTick calls=78842 avg=0.004ms max=3ms over2ms=11 | CaseFile.onTick calls=78830 avg=0.007ms max=5ms over2ms=2 | ClueMarkers.draw calls=0 avg=0.000ms max=0ms over2ms=0 | ClueMarkers.update calls=1317 avg=0.496ms max=8ms over2ms=2 | IdentityObserver.afterRender calls=157290 avg=0.087ms max=1ms over2ms=0 | IdentityObserver.tick calls=78878 avg=0.002ms max=1ms over2ms=0 | Local
+FAIL: no second case within four minutes of the gap being removed
+FAIL: case 2: a site is outside the reach of where the survivor stood (no live case none)
+FAIL: case 2: a site an earlier case already used was used again (no live case none)
+FAIL: case 2 was not built from case 1's answers (steer from: none)
+FAIL: case 2's steer is /, not two/records
+FAIL: case 2's first person is , not the returning Adele Prosser
+FAIL: case 2: the returning person could be given a second body
+FAIL: case 2 does not include the duty log the other reading leans on
+FAIL: case 2: the steered case was not logged exactly once
+FAIL: case 1's answers are not marked used by case 2
+FAIL: case 1's answers could still be changed after shaping case 2
+FAIL: case none: clues never all placed (0 0 0)
+FAIL: case 2 did not finish
+FAIL: case 2: the second thought "What do I make of it?" was said 0 times, not once
+FAIL: case 2 finished: FILES shows 1 question rows, not 2
+FAIL: no third case within four minutes
+FAIL: case 3 should be unsteered (case 1's answers used, case 2's empty)
+FAIL: reload 2: case 3 gained a steer (generated:1763324545:case)
+FAIL: reload 2: case 1's answers lost their used mark
+screenshot: dev/eval/linux/runs/20260916T005933-campaign.png (not committed)

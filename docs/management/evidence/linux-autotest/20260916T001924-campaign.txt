@@ -1,0 +1,36 @@
+Linux campaign check 20260916T001924: FAIL
+source: 196b648
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+cases: 1 generated:450073385:case, 2 generated:1168870802:case, 3 generated:1483114250:case; at the end 
+stages:
+  start                  cases 1 (0 finished) | record 0 | FILES questions 0 | NAMES 1 | PLACES 0 | Old 0/0 wrong | Evidence 0/0 wrong | order  | save 163699 B
+  case 1 finished        cases 1 (1 finished) | record 5 | FILES questions 1 | NAMES 2 | PLACES 6 | Old 5/0 wrong | Evidence 0/0 wrong | order 11111 | save 158258 B
+  after reload 1         cases 1 (1 finished) | record 5 | FILES questions 1 | NAMES 2 | PLACES 6 | Old 5/0 wrong | Evidence 0/0 wrong | order 11111 | save 158955 B
+  case 2 finished        cases 2 (2 finished) | record 11 | FILES questions 2 | NAMES 3 | PLACES 16 | Old 11/0 wrong | Evidence 0/0 wrong | order 11111222222 | save 184575 B
+  case 3, two clues      cases 3 (3 finished) | record 13 | FILES questions 3 | NAMES 3 | PLACES 18 | Old 12/1 wrong | Evidence 0/0 wrong | order 1111122222233 | save 194364 B
+  after reload 2         cases 3 (3 finished) | record 13 | FILES questions 3 | NAMES 3 | PLACES 18 | Old 13/0 wrong | Evidence 0/0 wrong | order 1111122222233 | save 194352 B
+  at the limit           cases 3 (3 finished) | record 13 | FILES questions 3 | NAMES 3 | PLACES 18 | Old 13/0 wrong | Evidence 0/0 wrong | order 1111122222233 | save 194352 B
+  after the limit        cases 4 (3 finished) | record 13 | FILES questions 3 | NAMES 3 | PLACES 18 | Old 13/0 wrong | Evidence 0/0 wrong | order 1111122222233 | save 216861 B
+case 1 answers on the organiser: true two person2 records nil Marion Ellis Curtis Vance Building at 10836, 10141 Site Office
+case 2 steer: generated:450073385:case two records Curtis Vance Curtis Vance true
+errors inside the mod, all sessions: 0
+FINDING: fresh worlds started for a case 1 with a document in the memo's week: 1 (memo=true, dated documents=2)
+FINDING: case 1 relay memo: found=true, dated in its week=2, carrying the date note=2
+FINDING: the date note was exercised: 2 of 2 records dated in the memo's week carry it
+FINDING: case 1 note on the organiser: I think it was a letter written to close a file. Curtis Vance matters here. Next I would check the place against its records.
+FINDING: frame cost during case 1: AutomaticInvestigations.onTick calls=1699 avg=0.034ms max=51ms over2ms=1 | CaseFile.onTick calls=1687 avg=0.008ms max=1ms over2ms=0 | ClueMarkers.draw calls=0 avg=0.000ms max=0ms over2ms=0 | ClueMarkers.update calls=33 avg=0.606ms max=4ms over2ms=5 | IdentityObserver.afterRender calls=3478 avg=0.122ms max=1ms over2ms=0 | IdentityObserver.tick calls=1735 avg=0.003ms max=1ms over2ms=0 | LocalPersonI
+FINDING: reload 1 save size: 158535 -> 158955 bytes; before [Generated.G2=20779 AddressBook.Muldraugh=131854 KeyConnections=770 DiscoveryLedger=2725 VisitedBuildings=359]; after [Generated.G2=21199 AddressBook.Muldraugh=131854 KeyConnections=770 DiscoveryLedger=2725 VisitedBuildings=359]
+FINDING: case 2 placement: reach 250: t3:10977704480342042, t3:10977704480342043
+FINDING: case 2 clues: Goods receipt / HK-318 | Second goods receipt / HK-318 | Duty log / HK-318 | Tagged key / HK-318 | thirteen radio receivers | thirteen bouillon cubes
+FINDING: frame cost during case 2: AutomaticInvestigations.onTick calls=11033 avg=0.005ms max=2ms over2ms=1 | CaseFile.onTick calls=11021 avg=0.011ms max=3ms over2ms=1 | ClueMarkers.draw calls=0 avg=0.000ms max=0ms over2ms=0 | ClueMarkers.update calls=188 avg=0.415ms max=10ms over2ms=8 | IdentityObserver.afterRender calls=22064 avg=0.094ms max=1ms over2ms=0 | IdentityObserver.tick calls=11069 avg=0.003ms max=1ms over2ms=0 | LocalPe
+FINDING: case 3 placement: reach 250: t3:10977704480342035, t3:10977704480342039
+FINDING: frame cost during case 3: AutomaticInvestigations.onTick calls=12585 avg=0.005ms max=2ms over2ms=2 | CaseFile.onTick calls=12573 avg=0.011ms max=4ms over2ms=3 | ClueMarkers.draw calls=0 avg=0.000ms max=0ms over2ms=0 | ClueMarkers.update calls=216 avg=0.519ms max=10ms over2ms=13 | IdentityObserver.afterRender calls=25142 avg=0.101ms max=1ms over2ms=0 | IdentityObserver.tick calls=12621 avg=0.003ms max=1ms over2ms=0 | LocalP
+FINDING: reload 2 save size: 194364 -> 194352 bytes; before [Generated.G2=48089 AddressBook.Muldraugh=131854 KeyConnections=1690 DiscoveryLedger=6821 VisitedBuildings=710]; after [Generated.G2=48077 AddressBook.Muldraugh=131854 KeyConnections=1690 DiscoveryLedger=6821 VisitedBuildings=710]
+FINDING: map marks after reload 2 (written/pending/missing): 13/0/0
+FINDING: the fourth unfinished case did not arrive within twenty minutes: 3 3 1:450073385:retired 2:1168870802:retired 3:1483114250:retired
+FINDING: after 90 s with 0 unfinished: preparing=false, cases 3 3 1:450073385:retired 2:1168870802:retired 3:1483114250:retired
+FINDING: a new case came after a case was finished at the limit: 4 3 1:450073385:retired 2:1168870802:retired 3:1483114250:retired 4:2090675999:live
+FINDING: frame cost during the limit: AutomaticInvestigations.onTick calls=102743 avg=0.004ms max=3ms over2ms=11 | CaseFile.onTick calls=102731 avg=0.009ms max=1ms over2ms=0 | ClueMarkers.draw calls=0 avg=0.000ms max=0ms over2ms=0 | ClueMarkers.update calls=1712 avg=0.791ms max=2ms over2ms=4 | IdentityObserver.afterRender calls=205558 avg=0.115ms max=1ms over2ms=0 | IdentityObserver.tick calls=102779 avg=0.002ms max=1ms over2ms=0 | Lo
+FAIL: case none: clues never all placed (0 0 0)
+FAIL: the oldest unfinished case none did not finish
+screenshot: dev/eval/linux/runs/20260916T001924-campaign.png (not committed)
