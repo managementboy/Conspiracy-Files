@@ -35,6 +35,8 @@
 --    each is walked from its end nearer the baseline, and its blocks are
 --    numbered 1,2,3... continuing across the polylines.
 --  * Railways never count as streets (no cuts, no matches, no baseline).
+--  * Towns are the regions.lua areas plus, with --annotations, the map's town
+--    labels that regions.lua does not name (L.towns, L.locate).
 local L={}
 L.REVISION="whole-map-1"
 L.MATCH_DISTANCE2=3600   -- AddressIndex.lua: 60 tiles
@@ -44,6 +46,15 @@ L.PAD=12                 -- grid padding: widest street (17) / 2 + TOUCH
 L.MIN_GAP=1.0            -- no block shorter than this at a cut
 L.SAMPLE=4.0             -- step when measuring how much of a street is in an area
 L.ORDER_QUANTUM=1.0      -- distance from the baseline is compared in whole tiles
+-- A town label (worldmap-annotations.lua, style text-town) names what lies
+-- within LABEL_RADIUS tiles of it, outside regions.lua. Chosen from the 42.20
+-- map: ordinary-street length per ring around the five labels regions.lua
+-- lacks (Brandenburg, Ekron, Irvington, Echo Creek, Fallas Lake) falls from
+-- 0.013-0.022 tiles of street per square tile inside 200 to the rural
+-- 0.001-0.0035 by 600-1000; Irvington's Main St reaches 700 from its label and
+-- the owner's Irvington clue (1917,14380) lies 550 away. The nearest two of
+-- these labels are 3,191 apart, so 800 never makes two towns compete.
+L.LABEL_RADIUS=800
 
 ---------------------------------------------------------------------------
 -- Names
@@ -167,13 +178,70 @@ function L.areaAt(areas,x,y)
     local best
     for i,a in ipairs(areas) do
         local bb=a.bbox
-        if x>=bb[1] and x<bb[3] and y>=bb[2] and y<bb[4] then
+        if bb and x>=bb[1] and x<bb[3] and y>=bb[2] and y<bb[4] then
             for _,b in ipairs(a.boxes) do
                 if x>=b[1] and x<b[1]+b[3] and y>=b[2] and y<b[2]+b[4] then
                     if not best or a.area<areas[best].area then best=i end
                     break
                 end
             end
+        end
+    end
+    return best
+end
+-- worldmap-annotations.lua text -> town labels {key,name,x,y}, file order.
+-- Read as text, never run. A label is a line that is not a "--" comment and
+-- matches, exactly (Lua pattern):
+--   addUntranslatedText%(%s*"([^"]*)"%s*,%s*"text%-town"%s*,%s*(%-?[%d%.]+)%s*,%s*(%-?[%d%.]+)%s*%)
+-- Every other style (text-place, text-water..., text-building) is ignored.
+-- Name: the key without a leading "MapLabel_", with a space put between a
+-- lower-case letter or digit and the upper-case letter after it
+-- (gsub "([%l%d])(%u)" -> "%1 %2"): FallasLake -> Fallas Lake.
+L.LABEL_PATTERN='addUntranslatedText%(%s*"([^"]*)"%s*,%s*"text%-town"%s*,%s*(%-?[%d%.]+)%s*,%s*(%-?[%d%.]+)%s*%)'
+function L.labelName(key)
+    return (key:gsub("^MapLabel_",""):gsub("([%l%d])(%u)","%1 %2"))
+end
+function L.parseAnnotations(text)
+    local out={}
+    for line in (text.."\n"):gmatch("([^\n]*)\n") do
+        if not line:find("^%s*%-%-") then
+            for key,x,y in line:gmatch(L.LABEL_PATTERN) do
+                out[#out+1]={key=key,name=L.labelName(key),x=tonumber(x),y=tonumber(y)}
+            end
+        end
+    end
+    return out
+end
+local function compact(name) return (name:gsub("[%s_]",""):lower()) end
+-- Town areas: every regions.lua area, plus one area per town label whose name
+-- regions.lua does not already have (compared without spaces or case, so the
+-- "West Point" label is the WestPoint region). Sorted by name.
+function L.towns(regions,labels)
+    local out,have={},{}
+    for _,r in ipairs(regions) do out[#out+1]=r; have[compact(r.name)]=true end
+    local seen={}
+    for _,l in ipairs(labels or {}) do
+        local k=compact(l.name)
+        if not have[k] and not seen[k] then
+            seen[k]=true
+            out[#out+1]={name=l.name,label={l.x,l.y}}
+        end
+    end
+    table.sort(out,function(a,b) return a.name<b.name end)
+    return out
+end
+-- The town a point belongs to: a regions.lua area first (areaAt); only outside
+-- all of them, the nearest label town within LABEL_RADIUS (equal distance:
+-- name order). A label never takes ground a regions.lua box covers.
+function L.locate(towns,x,y)
+    local i=L.areaAt(towns,x,y)
+    if i then return i end
+    local best,bestD
+    local r2=L.LABEL_RADIUS*L.LABEL_RADIUS
+    for j,a in ipairs(towns) do
+        if a.label then
+            local d=(x-a.label[1])^2+(y-a.label[2])^2
+            if d<=r2 and (not bestD or d<bestD) then best,bestD=j,d end
         end
     end
     return best
@@ -412,7 +480,7 @@ function L.polylineAreas(streets,areas)
             local n=math.max(1,math.ceil(l/L.SAMPLE))
             for k=0,n-1 do
                 local f=(k+0.5)/n
-                local ai=L.areaAt(areas,a[1]+f*(b[1]-a[1]),a[2]+f*(b[2]-a[2]))
+                local ai=L.locate(areas,a[1]+f*(b[1]-a[1]),a[2]+f*(b[2]-a[2]))
                 if ai then inside[ai]=(inside[ai] or 0)+l/n end
             end
         end
@@ -471,9 +539,11 @@ function L.chooseBaseline(candidates,lengthOf)
     return {},{},"no street besides highways/railways: ordered along the street only"
 end
 
--- The whole numbering. opts: streets (parsed), regions (parsed areas),
--- buildings (parsed export rows). Returns a result table (see build.lua).
-function L.number(streets,regions,buildings)
+-- The whole numbering: streets (parsed), regions (parsed areas), buildings
+-- (parsed export rows), labels (parsed annotations, optional). Returns a
+-- result table (see build.lua).
+function L.number(streets,regions,buildings,labels)
+    regions=L.towns(regions,labels)
     local pieces,neighbours=L.splitBlocks(streets)
     L.polylineAreas(streets,regions)
     local nearby=L.segmentIndex(pieces)
@@ -497,7 +567,7 @@ function L.number(streets,regions,buildings)
     local areas={}          -- output areas in order
     local named={}          -- region index -> area
     for i,r in ipairs(regions) do
-        local a={name=r.name,town=1,region=r,buildings={},considered=0,numbered=0,noStreet=0,overflow=0}
+        local a={name=r.name,town=1,region=r,fromLabel=r.label~=nil,buildings={},considered=0,numbered=0,noStreet=0,overflow=0}
         areas[#areas+1]=a; named[i]=a
     end
     local unnamedByRoot,unnamedList={},{}
@@ -510,7 +580,7 @@ function L.number(streets,regions,buildings)
             stats.considered=stats.considered+1
             local cx,cy=(b.x+b.x2-1)/2,(b.y+b.y2-1)/2
             local m=L.match(nearby,b)
-            local ri=L.areaAt(regions,cx,cy)
+            local ri=L.locate(regions,cx,cy)
             local area
             if ri then area=named[ri]
             elseif m then
@@ -545,7 +615,7 @@ function L.number(streets,regions,buildings)
             if parent[p.index] and find(p.index)==a.root then
                 for _,pt in ipairs(p.pts) do
                     for _,r in ipairs(regions) do
-                        for _,bx in ipairs(r.boxes) do
+                        for _,bx in ipairs(r.boxes or {{r.label[1],r.label[2],0,0}}) do
                             local dx=math.max(bx[1]-pt[1],0,pt[1]-(bx[1]+bx[3]))
                             local dy=math.max(bx[2]-pt[2],0,pt[2]-(bx[2]+bx[4]))
                             local d=dx*dx+dy*dy
@@ -687,11 +757,12 @@ function L.render(result,meta)
     local out={}
     local function w(s) out[#out+1]=s end
     w("-- DERIVED FILE - do not edit by hand. Whole-map house numbers (AD-10).\n")
-    w("--   lua5.1 tools/addresses/build.lua --export <export> --streets <streets.xml> --regions <regions.lua> --out <this file> --report <report.md>\n")
+    w("--   lua5.1 tools/addresses/build.lua --export <export> --streets <streets.xml> --regions <regions.lua> --out <this file> --report <report.md> [--annotations <worldmap-annotations.lua>]\n")
     w("-- game: "..tostring(meta.game).."\n")
     w("-- map: "..tostring(meta.map).."\n")
     w("-- streets.xml sha256: "..tostring(meta.streetsSha).."\n")
     w("-- regions.lua sha256: "..tostring(meta.regionsSha).."\n")
+    w("-- worldmap-annotations.lua sha256: "..tostring(meta.annotationsSha or "not used").."\n")
     w("-- export sha256: "..tostring(meta.exportSha).."\n")
     w("-- numbering revision: "..L.REVISION.."\n")
     w("-- rows: id|x|y|x2|y2|area|street|number; label = number..\" \"..streets[street];\n")
@@ -751,12 +822,13 @@ function L.report(result,meta)
     local function w(s) out[#out+1]=s end
     w("# Whole-map address report ("..L.REVISION..")\n\n")
     w("- game: "..tostring(meta.game).."\n- map: "..tostring(meta.map).."\n")
-    w("- streets.xml sha256: "..tostring(meta.streetsSha).."\n- export sha256: "..tostring(meta.exportSha).."\n\n")
+    w("- streets.xml sha256: "..tostring(meta.streetsSha).."\n- export sha256: "..tostring(meta.exportSha).."\n")
+    w("- worldmap-annotations.lua sha256: "..tostring(meta.annotationsSha or "not used")..string.format(" (map-label towns reach %d tiles from their label)\n\n",L.LABEL_RADIUS))
     w("| # | Area | Baseline | Chosen by | Considered | Numbered | No street within 60 | Overflow |\n")
     w("|---|---|---|---|---|---|---|---|\n")
     local tot={considered=0,numbered=0,noStreet=0,overflow=0}
     for _,a in ipairs(result.areas) do
-        local name=a.town==1 and a.name or ("unnamed area "..a.number.." near "..tostring(a.near))
+        local name=a.town==1 and (a.fromLabel and a.name.." (map label)" or a.name) or ("unnamed area "..a.number.." near "..tostring(a.near))
         local bl=#a.baselineNames>0 and table.concat(a.baselineNames," / ") or "none"
         w(string.format("| %d | %s | %s | %s | %d | %d | %d | %d |\n",a.index,name,bl,a.rule,a.considered,a.numbered,a.noStreet,a.overflow))
         for k in pairs(tot) do tot[k]=tot[k]+a[k] end

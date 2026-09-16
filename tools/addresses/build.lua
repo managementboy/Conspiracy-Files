@@ -3,7 +3,8 @@
 --   lua5.1 tools/addresses/build.lua --export <export.tsv> \
 --       --streets "<PZ>/media/maps/Muldraugh, KY/streets.xml" \
 --       --regions "<PZ>/media/maps/Muldraugh, KY/regions.lua" \
---       --out <AddressBook.lua> --report <report.md>
+--       --out <AddressBook.lua> --report <report.md> \
+--       [--annotations "<PZ>/media/maps/Muldraugh, KY/worldmap-annotations.lua"]
 --
 -- Same inputs give a byte-identical book and report. All rules: lib.lua.
 local here=(arg and arg[0] or ""):match("^(.*)[/\\]") or "."
@@ -18,7 +19,7 @@ while arg[i] do
 end
 for _,k in ipairs({"export","streets","regions","out","report"}) do
     if not opts[k] then
-        io.stderr:write("usage: lua5.1 tools/addresses/build.lua --export <file> --streets <streets.xml> --regions <regions.lua> --out <AddressBook.lua> --report <report.md>\n")
+        io.stderr:write("usage: lua5.1 tools/addresses/build.lua --export <file> --streets <streets.xml> --regions <regions.lua> --out <AddressBook.lua> --report <report.md> [--annotations <worldmap-annotations.lua>]\n")
         os.exit(2)
     end
 end
@@ -40,9 +41,11 @@ if header.count and tonumber(header.count)~=#buildings then
 end
 local streets=L.parseStreets(L.readAll(opts.streets))
 local regions=L.parseRegions(L.readAll(opts.regions))
-local result=L.number(streets,regions,buildings)
+local labels=opts.annotations and L.parseAnnotations(L.readAll(opts.annotations)) or nil
+local result=L.number(streets,regions,buildings,labels)
 local meta={game=header.game,map=header.map,streetsSha=sha256(opts.streets),
-    regionsSha=sha256(opts.regions),exportSha=sha256(opts.export)}
+    regionsSha=sha256(opts.regions),exportSha=sha256(opts.export),
+    annotationsSha=opts.annotations and sha256(opts.annotations) or nil}
 local book=L.render(result,meta)
 write(opts.out,book)
 write(opts.report,L.report(result,meta))

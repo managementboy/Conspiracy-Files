@@ -27,8 +27,9 @@ local function house(cx,cy,opts)
     return {id=id,x=cx-2,y=cy-2,x2=cx+3,y2=cy+3,basement=opts.basement or false,
         roomCount=opts.roomCount or 2,rooms=opts.rooms or {"bedroom","kitchen"}}
 end
-local function run(streetList,regionList,buildings)
-    local result=L.number(L.parseStreets(xml(streetList)),L.parseRegions(regionsText(regionList)),buildings)
+local function run(streetList,regionList,buildings,annotations)
+    local labels=annotations and L.parseAnnotations(annotations) or nil
+    local result=L.number(L.parseStreets(xml(streetList)),L.parseRegions(regionsText(regionList)),buildings,labels)
     local byId={}
     for _,a in ipairs(result.areas) do
         for _,r in ipairs(a.records) do byId[r.id]={label=r.label,area=a,number=r.number} end
@@ -338,6 +339,70 @@ do
     assert(outs[1][2]:find("unnamed area 1 near Beta | Farm Rd",1,true))
     assert(outs[1][2]:find("garage/shed only: 1",1,true))
     os.remove(exportPath); os.remove(streetsPath); os.remove(regionsPath)
+end
+
+-- 10. Town labels from worldmap-annotations.lua ---------------------------------
+local function labelLine(key,style,x,y)
+    return '\tsymbol = symbolsAPI:addUntranslatedText("'..key..'", "'..style..'", '..x..', '..y..')\n'
+end
+do
+    local text="local function f(symbolsAPI)\n"
+        ..labelLine("MapLabel_FallasLake","text-town",7253,8279)
+        ..labelLine("MapLabel_EchoCreek","text-town",3589,10952)
+        ..labelLine("MapLabel_WestPoint","text-town",11654,6864)
+        ..labelLine("MapLabel_Ekron","text-town",634,9746)
+        ..labelLine("MapLabel_OhioRiver","text-water",100,200)
+        ..labelLine("MapLabel_KnoxBank","text-place",300,400)
+        .."--"..labelLine("MapLabel_Ghost","text-town",1,2)
+        .."\tsymbol:setAnchor(0.5, 0.5)\nend\n"
+    local labels=L.parseAnnotations(text)
+    assert(#labels==4,"only text-town, uncommented: "..#labels)
+    assert(labels[1].name=="Fallas Lake" and labels[1].x==7253 and labels[1].y==8279 and labels[1].key=="MapLabel_FallasLake")
+    assert(labels[2].name=="Echo Creek" and labels[3].name=="West Point" and labels[4].name=="Ekron")
+    assert(L.labelName("MapLabel_MarchRidge")=="March Ridge" and L.labelName("Irvington")=="Irvington")
+    -- a labelled town beside the same street names elsewhere
+    local farHouse,townHouse,mainHouse,clue=house(5010,4990),house(510,490),house(510,510),house(4600,5510)
+    local result,byId=run({
+        street("Main St",8,{{100,500},{900,500}}),
+        street("Main St",8,{{4900,5000},{5100,5000}}),
+        street("Long Rd",6,{{4000,5500},{5000,5500}}),
+    },{{"Town",0,0,1000,1000},{"WestPoint",20000,0,100,100}},{farHouse,townHouse,mainHouse,clue},
+        (text:gsub("7253, 8279","5000, 5000")))
+    local fallas=areaNamed(result,"Fallas Lake")
+    assert(fallas and fallas.town==1 and fallas.fromLabel,"a label town is a named area")
+    assert(byId[farHouse.id].area==fallas and byId[clue.id].area==fallas,"within the radius: "..byId[clue.id].area.name)
+    assert(fallas.baselineNames[1]=="Main St" and fallas.rule=="Main St rule")
+    assert(byId[farHouse.id].label=="101 Main St" and byId[townHouse.id].label=="101 Main St","own numbering per town")
+    assert(not areaNamed(result,"West Point"),"a label for a regions.lua town adds no area")
+    local names={}
+    for _,a in ipairs(result.areas) do names[#names+1]=a.name end
+    assert(table.concat(names,",")=="Echo Creek,Ekron,Fallas Lake,Town,WestPoint","towns sorted by name: "..table.concat(names,","))
+end
+do
+    -- two labels on one connected street: nearest label wins; past both radii stays unnamed
+    local a,b,mid=house(6900,-10),house(7500,-10),house(8600,-10)   -- a and b lie within both radii
+    local annotations=labelLine("MapLabel_Alpha","text-town",6800,0)..labelLine("MapLabel_BetaTown","text-town",7600,0)
+    local result,byId=run({street("Long Rd",6,{{6000,0},{9000,0}})},
+        {{"Far",0,0,100,100}},{a,b,mid},annotations)
+    local A,B=areaNamed(result,"Alpha"),areaNamed(result,"Beta Town")
+    assert(byId[a.id].area==A and byId[b.id].area==B,"split by nearest label")
+    assert(A.baselineNames[1]=="Long Rd" and B.baselineNames[1]=="Long Rd")
+    assert(byId[mid.id].area.town==0,"beyond every radius: unnamed as before")
+    assert(result.areas[#result.areas]==byId[mid.id].area,"unnamed areas after the towns")
+    assert(L.LABEL_RADIUS==800)
+end
+do
+    -- a regions.lua town is never taken by a nearby label
+    local inBox,justOut,dupe=house(990,500),house(1050,500),house(500,2900)
+    local annotations=labelLine("MapLabel_Other","text-town",1100,500)..labelLine("MapLabel_Town","text-town",500,3000)
+    local result,byId=run({street("Edge Rd",6,{{1020,0},{1020,2000}}),street("Dupe Rd",6,{{0,2890},{1000,2890}})},
+        {{"Town",0,0,1000,1000}},{inBox,justOut,dupe},annotations)
+    assert(byId[inBox.id].area.name=="Town","regions.lua wins where it covers")
+    assert(byId[justOut.id].area.name=="Other")
+    assert(byId[dupe.id].area.town==0,"the Town label does not grow Town past its boxes")
+    local count=0
+    for _,x in ipairs(result.areas) do if x.name=="Town" then count=count+1 end end
+    assert(count==1)
 end
 
 print("address_numbering: ok")
