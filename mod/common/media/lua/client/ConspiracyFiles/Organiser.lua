@@ -533,6 +533,15 @@ end
 -- (media/lua/client/RadioCom/ISRadioWindow.lua:9).
 function O.isOurs(item)
     if not item then return false end
+    -- A TV or a radio standing in a room is a world object, not an item, and
+    -- has no getFullType. The pcall below did catch that, but in a debug game
+    -- the engine still reports the caught throw as a Lua error: clicking any TV
+    -- raised one (owner, Windows, 2026-09-16). Only an inventory item can be
+    -- ours, so ask that first and never reach for a method the object lacks.
+    if instanceof then
+        local ok,isItem=pcall(instanceof,item,"InventoryItem")
+        if not (ok and isItem) then return false end
+    end
     local full=safe(function() return item:getFullType() end)
     if full==O.TYPE then return true end
     local md=item.getModData and safe(function() return item:getModData() end)
