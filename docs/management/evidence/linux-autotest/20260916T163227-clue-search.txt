@@ -1,0 +1,20 @@
+Linux clue search check 20260916T163227: FAIL
+source: 5a9240f + uncommitted mod changes
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+FINDING: focus: defined=true text='Clues' offered=true registered=listed; loot zones=17 items=0 picked=0 rolls=0 chanceToCreateIcon=0 focusChanceMax=0
+FINDING: clues: generated:429740997:document-1:placed generated:429740997:document-2:placed generated:429740997:document-3:placed generated:429740997:document-4:placed generated:429740997:document-5:placed
+FINDING: game running: paused=false 1
+FINDING: forage count taken outdoors at 10835,10145
+FINDING: forage icons, no focus: total=8 active=4 world=0 stash=0 clue icons=1 clues-category=0 [Animals=1,Clothing=1,FishBait=1,Fruits=1,Insects=2,Junk=1,Trash=1]
+FINDING: forage icons, Clues focus: total=8 active=4 world=0 stash=0 clue icons=1 clues-category=0 [Animals=1,Clothing=1,FishBait=1,Fruits=1,Insects=2,Junk=1,Trash=1]
+FINDING: clue 1 before: Letter|Junk
+FINDING: clue 2 before: Receipt|Junk
+FINDING: clue 2 (Clues): spotted and recognised after 3.0 s (limit 120 s)
+FINDING: clue 2 icon after spotting: true true true true 0/2500 4.50 1.61 true clueObject
+FINDING: clue 2 after: Internal memo / GT-473|Evidence
+FINDING: counters (icons added, dropped, spots, recognitions, search mode re-enabled): 7 0 1 1 0
+errors inside the mod: 15
+FAIL: clue 1 (None): not spotted within 120 s; last icon state: true true true false 0/10000 3.00 0.73 false clueObject; false nil nil
+FAIL: 15 errors inside the mod: General      f:0 at CellLoader.DoTileObjectCreation     > CellLoader> missing tile vegetation_groundcover_01_18
+General      f:11957> Lua((MOD:Conspiracy-Files: Dead Air)).pcall> Exception thrown  |   at KahluaUtil.fail(KahluaUtil.java:100).
+General      f:11957> Lua((MOD:Conspiracy-Files: Dead Air)).pcall> Exception thrown  |   at KahluaUtil.fail(KahluaUtil.java:100).

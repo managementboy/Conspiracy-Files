@@ -1,0 +1,13 @@
+Linux clue search check 20260916T161440: FAIL
+source: 5a9240f + uncommitted mod changes
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+FINDING: focus: defined=true text='Clues' offered=true registered=listed; loot zones=17 items=0 picked=0 rolls=0 chanceToCreateIcon=0 focusChanceMax=0
+FINDING: clues: generated:731690290:document-1:placed generated:731690290:document-2:placed generated:731690290:document-3:placed generated:731690290:document-4:placed
+FINDING: forage icons, no focus: total=0 active=0 world=0 stash=0 clue icons=0 clues-category=0 []
+FINDING: forage icons, Clues focus: total=0 active=0 world=0 stash=0 clue icons=0 clues-category=0 []
+FINDING: clue 1 before: Weighbridge ticket / AV-792|Evidence
+FINDING: clue 2 before: Arrival ticket / AV-792|Evidence
+FINDING: counters (icons added, dropped, spots, recognitions, search mode re-enabled): 0 0 0 0 0
+errors inside the mod: 0
+FAIL: clue 1: no clue icon with Search Mode on (no icon	true)
+FAIL: clue 2: no clue icon with Search Mode on (no icon	true)

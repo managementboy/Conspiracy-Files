@@ -1,6 +1,6 @@
 # Clues are found by searching (P4-R132)
 
-- **Status:** Design, 2026-09-16. Not built.
+- **Status:** Design, 2026-09-16. Stage 1 (search and recognise) built 2026-09-17; see the end.
 - **Owner:** shaped in conversation on 2026-09-16 ("I would love to mix both",
   "perfect!", "the investigate area dropdown would need another entry").
 - **Game:** Build 42.20. Everything marked *verified* was read in the installed
@@ -129,3 +129,60 @@ Rules change, so a new game is needed (P4-R77).
 4. The wordless cue with its guardrails; retire ClueHints' spoken hints.
 5. Update the checks (core_loop, campaign, knox) with search and spot steps;
    unit tests; boot check; publish; attended Windows playtest.
+
+## Stage 1 built (2026-09-17, DEV-0.42.0-search-to-find-1)
+
+Built: search and recognise. Not yet: "Look it over", timed Inspect, the
+wordless cue, retiring ClueHints' spoken hints, and the checks that inspect
+clues (core_loop, campaign, knox, drop_note) - those now fail at Inspect until
+stage 3 adds a search or look step (`ConspiracyFiles.ClueSearch.debugRecognise(docId)`).
+
+**Proven in the real game** (`tools/autotest/checks/clue_search.sh`, PASS,
+docs/management/evidence/linux-autotest/20260917T135239-clue-search.txt):
+- The "Clues" focus is in `forageSystem.catDefs`, `IGUI_SearchMode_Categories_Clues`
+  resolves to "Clues", and the Investigate Area window offers it. Across all 17
+  loot-table zones it has 0 items and 0 rolls, and `pickRandomItemType(zone, "Clues")`
+  returned nothing in 170 tries. This settles the design's "to verify in game".
+- Forage icons counted outdoors near the start after 20 s of Search Mode: 9
+  with no focus, 9 with Clues, same categories, none of category Clues.
+- With Search Mode on, each unrecognised clue within 16 tiles has an icon of
+  our class (`ISClueIcon`, iconClass `clueObject`) on its container square.
+- Standing at a clue with no focus: spotted and recognised 4.2 s after Search
+  Mode went on (game timer 2500 ms at Foraging 0, view 3.0 tiles). With Clues:
+  2.9 s (timer fills twice as fast, view 4.5 tiles). Times include the check's
+  own polling. The item read "Photograph of a First Birthday Party / Memento"
+  before and "Staff photograph / BF-441 / Evidence" after.
+- 0 errors inside the mod; the boot check passed on the same build.
+
+**Numbers chosen:** icons within 16 tiles, dropped past 24; Clues focus spots
+2x as fast and 1.5x as far (capped at the game's 15-tile vision cap); the pin
+lingers 8 s after recognition. All in `ClueSearchRules.lua`.
+
+**Differs from the design:**
+- *No ground marker.* The game only draws its iso marker for forage icons, and
+  its marker housekeeping removes any other; a spotted clue shows the game's
+  bouncing pin (a "?" pin, never the item's picture) and the item changes name.
+- *Seeing furniture.* The game's own sight test failed for clues in shelves
+  (the shelf blocks its own square, and the game does not count that square as
+  seen). Our icon also counts a clue as seen when the lighting passes the game's
+  rule and a side of it with no wall is the survivor's square or one they can
+  see. Darkness is unchanged: a clue in a room darker than the game's cutoff
+  (light penalty 0.50) is not spotted at all, as with forage. The first run hit
+  exactly that; "Look it over" (stage 2) is the way for dark rooms.
+- *Clues in cars* get an icon where the car stood at placement; if the car has
+  since moved, the icon is in the wrong place (stage 2's "Look it over" covers it).
+- *Other leaks closed as well:* the evidence album no longer files an
+  unrecognised clue, the pickup line and unread reminder ignore it, and dropping
+  one on the organiser counts it as not evidence.
+
+**Interfaces for stages 2 and 3** (all in the client runtime):
+- `R.recognise(itemOrDocId, how)` - how is "search", "look" or "debug"; returns
+  ok, newlyRecognised. Saves the flag (`recognised` list in the case root,
+  validated by Session) and stamps title and category on every reachable copy.
+- `R.isRecognised(item)`, `R.isRecognisedId(id)` - noted and finished-case
+  evidence count as recognised.
+- `R.inspect` refuses an unrecognised clue; GeneratedMenu offers nothing for one
+  (stage 2 adds "Look it over" at that spot).
+- `R.clueTargets()` - {id,x,y,z,status,recognised,vehicle} for live clues.
+- `ConspiracyFiles.ClueSearch`: `sync()`, `state()`, `spotted`, `counters`,
+  `debugRecognise(docId)`, `Rules.debugSpotScale` (checks only).

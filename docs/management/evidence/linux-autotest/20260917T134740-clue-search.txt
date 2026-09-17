@@ -1,0 +1,17 @@
+Linux clue search check 20260917T134740: FAIL
+source: 5a9240f + uncommitted mod changes
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+FINDING: focus: defined=true text='Clues' offered=true registered=listed; loot zones=17 items=0 picked=0 rolls=0 chanceToCreateIcon=0 focusChanceMax=0
+FINDING: clues: generated:285848624:document-1:placed:vehicle generated:285848624:document-2:placed generated:285848624:document-3:placed generated:285848624:document-4:placed generated:285848624:document-5:placed generated:285848624:document-6:placed generated:285848624:document-7:placed
+FINDING: game running: paused=false 1
+FINDING: forage count taken outdoors at 10835,10145
+FINDING: forage icons, no focus: total=9 active=1 world=0 stash=0 clue icons=2 clues-category=0 [Clothing=1,Firewood=1,FishBait=1,Fruits=1,JunkFood=1,Trash=2,WildPlants=2]
+FINDING: forage icons, Clues focus: total=9 active=1 world=0 stash=0 clue icons=2 clues-category=0 [Clothing=1,Firewood=1,FishBait=1,Fruits=1,JunkFood=1,Trash=2,WildPlants=2]
+FINDING: clue 1 before: Receipt|Junk
+FINDING: clue 2 before: Notepad|Literature
+FINDING: clue 2 (Clues): spotted and recognised after 2.7 s (limit 120 s)
+FINDING: clue 2 icon after spotting: true true true true 0/2500 4.50 1.56 true clueObject at=10791,10107 base=true ours=true canSee=true blocked=false light=0.62 dark=1 running=false south=false/false/false/false west=true/false/false/true
+FINDING: clue 2 after: Account query / LD-915|Evidence
+FINDING: counters (icons added, dropped, spots, recognitions, search mode re-enabled): 14 0 1 1 0
+errors inside the mod: 0
+FAIL: clue 1 (None): not spotted within 120 s; last icon state: true true true false 0/10000 3.00 1.58 false clueObject at=10791,10105 base=false ours=false canSee=true blocked=false light=0.50 dark=1 running=false west=true/false/false/true; false nil nil

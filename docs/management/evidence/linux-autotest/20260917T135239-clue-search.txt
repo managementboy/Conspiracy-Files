@@ -1,0 +1,19 @@
+Linux clue search check 20260917T135239: PASS
+source: 5a9240f + uncommitted mod changes
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+FINDING: focus: defined=true text='Clues' offered=true registered=listed; loot zones=17 items=0 picked=0 rolls=0 chanceToCreateIcon=0 focusChanceMax=0
+FINDING: clues: generated:512381967:document-1:placed generated:512381967:document-2:placed generated:512381967:document-3:placed generated:512381967:document-4:placed
+FINDING: game running: paused=false 1
+FINDING: forage count taken outdoors at 10835,10145
+FINDING: forage icons, no focus: total=9 active=0 world=0 stash=0 clue icons=2 clues-category=0 [FishBait=1,Insects=1,Junk=1,JunkFood=1,Mushrooms=1,Stones=3,Trash=1]
+FINDING: forage icons, Clues focus: total=9 active=0 world=0 stash=0 clue icons=2 clues-category=0 [FishBait=1,Insects=1,Junk=1,JunkFood=1,Mushrooms=1,Stones=3,Trash=1]
+FINDING: clue 1 before: Photograph of a First Birthday Party|Memento
+FINDING: clue 1 (None): spotted and recognised after 4.2 s (limit 120 s)
+FINDING: clue 1 icon after spotting: true true true true 300/2500 3.00 0.70 true clueObject at=10841,10148 base=true ours=true canSee=true blocked=false light=0.62 dark=1 running=false south=true/false/false/false east=true/false/false/true
+FINDING: clue 1 after: Staff photograph / BF-441|Evidence
+FINDING: clue 1 before: Receipt|Junk
+FINDING: clue 1 (Clues): spotted and recognised after 2.9 s (limit 120 s)
+FINDING: clue 1 icon after spotting: true true true true 0/2500 4.50 0.69 true clueObject at=10837,10184 base=true ours=true canSee=true blocked=false light=0.56 dark=1 running=false south=true/false/false/false east=true/false/false/true west=true/false/false/false
+FINDING: clue 1 after: Establishment list / BF-441|Evidence
+FINDING: counters (icons added, dropped, spots, recognitions, search mode re-enabled): 8 0 3 3 0
+errors inside the mod: 0

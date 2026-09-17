@@ -1,0 +1,17 @@
+Linux clue search check 20260916T163841: FAIL
+source: 5a9240f + uncommitted mod changes
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+FINDING: focus: defined=true text='Clues' offered=true registered=listed; loot zones=17 items=0 picked=0 rolls=0 chanceToCreateIcon=0 focusChanceMax=0
+FINDING: clues: generated:1406098114:document-1:placed generated:1406098114:document-2:placed generated:1406098114:document-3:placed generated:1406098114:document-4:placed
+FINDING: game running: paused=false 1
+FINDING: forage count taken outdoors at 10835,10145
+FINDING: forage icons, no focus: total=12 active=1 world=0 stash=0 clue icons=1 clues-category=0 [Insects=2,JunkFood=2,Stones=1,Trash=7]
+FINDING: forage icons, Clues focus: total=12 active=1 world=0 stash=0 clue icons=1 clues-category=0 [Insects=2,JunkFood=2,Stones=1,Trash=7]
+FINDING: clue 1 before: Note|Junk
+FINDING: clue 2 before: Receipt|Junk
+FINDING: clue 2 (Clues): spotted and recognised after 2.5 s (limit 120 s)
+FINDING: clue 2 icon after spotting: true true true true 0/2500 4.50 1.56 true clueObject
+FINDING: clue 2 after: Payment slip / R-445|Evidence
+FINDING: counters (icons added, dropped, spots, recognitions, search mode re-enabled): 6 0 1 1 0
+errors inside the mod: 0
+FAIL: clue 1 (None): not spotted within 120 s; last icon state: true true true false 0/10000 3.00 0.73 false clueObject; false nil nil
