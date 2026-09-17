@@ -1,0 +1,35 @@
+Linux clue field check 20260918T001740: PASS
+source: 89e2313
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+FINDING: mod version DEV-0.42.0-search-to-find-3 24; 5 clues placed, 0 of them in a car
+FINDING: clues: generated:771921795:document-1:placed generated:771921795:document-2:placed generated:771921795:document-3:placed generated:771921795:document-4:placed generated:771921795:document-5:placed
+FINDING: game running: paused/speed=false 1
+FINDING: interruption clue: generated:771921795:document-1 (found as "Note")
+FINDING: walking through Look it over: action seen running=yes at progress 0.32; the game reported walking/aiming=yes; the action left the queue=yes; queue now nil -1.00 true false false false
+FINDING: after walking through Look it over: recognised=false, last look ran (ok, ms)=nil nil
+FINDING: aiming through Look it over: action seen running=yes at progress 0.32; the game reported walking/aiming=yes; the action left the queue=yes; queue now nil -1.00 false true false false
+FINDING: after aiming through Look it over: recognised=false
+FINDING: left alone, Look it over recognised the clue: item now Weighbridge ticket / GT-642 Evidence true false
+FINDING: walking through Inspect: action seen running=yes at progress 0.49; the game reported walking/aiming=yes; the action left the queue=yes; queue now nil -1.00 true false true false
+FINDING: after walking through Inspect: noted=false, in the record=false
+FINDING: left alone, Inspect noted it: true Weighbridge ticket / GT-642
+FINDING: before the save: generated:771921795:document-3 was "Disposable Camera", now camera disposable (1 of 5) Evidence true false (name, category, recognised, noted)
+FINDING: after the reload: name "camera disposable (1 of 5)", category Evidence, recognised true, noted false, recognised by id true
+FINDING: menu after the reload: Inspect Investigation Evidence
+FINDING: inspected after the reload: true five camera disposables; ran (ok, ms) true 2113
+FINDING: darkness clue: generated:771921795:document-2 in room "office"
+FINDING: standing back from it: 10881,10156, 3.2 tiles away, room "office"
+FINDING: at 01:00 in "office": light penalty 1.00, the game calls it too dark=false, the mod's sight test true/nil, darkMulti 1.00, cutoff 50
+FINDING: the room did not go dark enough for the game's own cutoff, so darkness was not really tested
+FINDING: car try 1: moved on 300 tiles to 10688,9926, parked 4 vans at 10688,9932 10688,9920 10694,9932 10697,9926
+FINDING: car try 1: the new case placed 9 clues, 1 in a car
+FINDING: car clue: generated:15106886:document-4 at 10684,9920,0, part GloveBox
+FINDING: the car: Base.PickUpVan at 10682,9920, clue in its GloveBox as "Key"
+FINDING: beside the parked car's part: 10683,9919 1.00 GloveBox
+FINDING: icon before the car moved: square 10683,9920,0, our class true, seen false, timer 0/2500
+FINDING: car moved from 10682,9920 to 10692,9920 [removeFromWorld=ok physicsOff=ok setPosition=ok squareFromPosition=ok addToWorld=ok createPhysics=ok]
+FINDING: the mod places the clue at 10693,9920,0 after the move (the car is at 10692,9920)
+FINDING: icon after the car moved: at 10693,9920, the part's square is 10693,9920 and the car's middle 10692,9920: 0.00 tiles from the part (1.00 from the middle), inside the mod's 2-tile tolerance
+FINDING: standing as close to the GloveBox as the car's body allows: 10693,9920, 0.00 tiles from the part's own square
+FINDING: the clue in the moved car was spotted with NO search focus, 0s, at 0.00 tiles
+errors inside the mod (this session): 0

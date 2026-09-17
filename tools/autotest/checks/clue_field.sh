@@ -295,28 +295,36 @@ fi
 # 1.5 tiles) but returns "seen" straight away for a survivor standing ON the
 # square (isOnSquare is tested before the light). So darkness is tested from a
 # few tiles back, and the on-the-square case is reported for what it is.
+# The clock first, then a clue whose square the game really calls too dark.
+# One office read a light penalty of 1.00 at one in the morning
+# (20260918T001740) - a window, a lit lamp, or the engine's lighting not yet
+# caught up - and a stage that takes the first indoor clue it finds tests
+# nothing at all half the time. So: set the clock, then walk the indoor clues
+# until one is dark, standing where the survivor would stand.
+clock="$(ev 'return CFField.night(1.0)')"
+note "the clock set to 01:00: the game reads $(f 2 <<<"$clock")"
+sleep 10
 darkclue=""
-for k in 1 2 3 4 5 6; do
+for k in 1 2 3 4 5 6 7 8; do
     p="$(ev "return CFField.pick('box', $k)")"
     [ "$(f 1 <<<"$p")" = true ] || break
     ev "return CFField.teleport($(f 3 <<<"$p"))" >/dev/null
     wait_true 20 'CFField.loaded()' >/dev/null || continue
     r="$(ev 'return CFField.inRoom()')"
     [ "$(f 1 <<<"$r")" = true ] || { say "clue $k is $(f 2 <<<"$r"); looking for one indoors"; continue; }
-    darkclue="$(f 2 <<<"$p")"; room="$(f 2 <<<"$r")"; darkk="$k"; break
+    back="$(ev 'return CFField.stepBack(3)')"
+    [ "$(f 1 <<<"$back")" = true ] || { say "clue $k: nowhere to stand back to in its room"; continue; }
+    sleep 2
+    dark="$(ev 'return CFField.light()')"
+    if [ "$(f 3 <<<"$dark")" = true ]; then
+        darkclue="$(f 2 <<<"$p")"; room="$(f 2 <<<"$r")"; darkk="$k"; break
+    fi
+    say "clue $k in \"$(f 2 <<<"$r")\" reads light penalty $(f 2 <<<"$dark") from $(f 3 <<<"$back") tiles: not dark enough; trying another"
 done
 if [ -z "$darkclue" ]; then
-    note "no unrecognised clue indoors was left, so the darkness stage was not exercised"
+    note "no unrecognised clue indoors was dark enough at 01:00 for the game's own cutoff, so the darkness stage was not exercised"
 else
-    note "darkness clue: $darkclue in room \"$room\""
-    ev 'return CFField.night(1.0)' >/dev/null
-    sleep 8
-    back="$(ev 'return CFField.stepBack(3)')"
-    if [ "$(f 1 <<<"$back")" != true ]; then
-        note "nowhere to stand back to in the same room ($(f 2 <<<"$back")); the darkness stage needs one"
-    fi
-    note "standing back from it: $(f 2 <<<"$back"), $(f 3 <<<"$back") tiles away, room \"$(f 4 <<<"$back")\""
-    dark="$(ev 'return CFField.light()')"
+    note "darkness clue: $darkclue in room \"$room\", standing $(f 3 <<<"$back") tiles back at $(f 2 <<<"$back")"
     note "at 01:00 in \"$room\": light penalty $(f 2 <<<"$dark"), the game calls it too dark=$(f 3 <<<"$dark"), the mod's sight test $(f 4 <<<"$dark")/$(f 5 <<<"$dark"), darkMulti $(f 6 <<<"$dark"), cutoff $(f 7 <<<"$dark")"
     if [ "$(f 3 <<<"$dark")" != true ]; then
         note "the room did not go dark enough for the game's own cutoff, so darkness was not really tested"
