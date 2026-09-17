@@ -138,8 +138,15 @@ while activeCount(wrapper)>Cases.MAX_ACTIVE do wrapper=retireOldestActive(wrappe
 assert(Cases.validate(wrapper))
 local roots=Cases.sessions(wrapper)
 assert(#roots==Cases.MAX_CASES,"campaign must reach the cap")
-local retiredTotal=0; for _,root in ipairs(roots) do if Retired.isRetired(root) then retiredTotal=retiredTotal+1 end end
+local retiredTotal,stubbed=0,0
+for _,root in ipairs(roots) do
+    if Retired.isRetired(root) then retiredTotal=retiredTotal+1 end
+    if Retired.isStub(root) then stubbed=stubbed+1 end
+end
 assert(retiredTotal==Cases.MAX_CASES-Cases.MAX_ACTIVE,"only the active bound may remain unretired at the cap")
+-- Past MAX_FULL_ARCHIVED finished cases the oldest archived one loses its bulk
+-- (P4-R111); the rules of that archive are test/case_archive.lua's subject.
+assert(retiredTotal-stubbed==Cases.MAX_FULL_ARCHIVED,"the archive must keep MAX_FULL_ARCHIVED cases' rows at the cap")
 local total=0; for _,root in ipairs(roots) do total=total+V.estimateEncodedBytes(root) end
 local RESERVED_FOR_OTHER_ROOTS=120000
 assert(total+RESERVED_FOR_OTHER_ROOTS<=V.MAX_ENCODED_BYTES,

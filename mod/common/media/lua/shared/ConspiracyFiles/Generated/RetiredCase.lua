@@ -13,7 +13,7 @@ local V=require("ConspiracyFiles/Validator")
 local G=require("ConspiracyFiles/Generated/Generator")
 local EvidenceKinds=require("ConspiracyFiles/Generated/EvidenceKinds")
 local Session=require("ConspiracyFiles/Generated/Session")
-local M={SCHEMA=2}
+local M={SCHEMA=2,STUB_SCHEMA=3}
 -- offered / answers ("What do I make of it?", P4-R113, first cut P4-R119 and
 -- P4-R121): what the survivor is asked about at a case's end, frozen when the
 -- case retires because retirement drops the case envelope that holds the
@@ -23,6 +23,24 @@ local M={SCHEMA=2}
 -- completedHours: the world hour the case finished, so the next case can wait
 -- a little for the survivor's answers (P4-R121). Optional, like the rest.
 local ROOT_FIELDS={schema=true,caseId=true,rows=true,known=true,offered=true,answers=true,completedHours=true}
+-- A deep-archived case (schema 3, P4-R111). The archive is what stops the tenth
+-- case being the last, but 500 KB (P4-R17) cannot hold the documents of every
+-- case a save will ever make: measured, four live cases and six full-size
+-- archived ones already use most of the room the campaign has. So when more
+-- cases finish than the full archive holds, the OLDEST archived case keeps only
+-- what the rest of the mod still needs to know it existed:
+--   * its case id, so nothing collides with it and its name is still spoken;
+--   * its documents' ids, in the order they were found - the discovery ledger
+--     references them (P4-R106), the loot list still marks the clue itself
+--     Evidence / Old (P4-R118) and right-click still says it is already in the
+--     organiser;
+--   * what the survivor was asked about it and what they answered (P4-R113,
+--     P4-R122), so an old answer can still steer a later case.
+-- What is lost is what only the organiser's FILES list read: the document's
+-- title and text, its leads and connections, the site it came from, and where
+-- it was last seen (P4-R104). Those rows leave the record; the clue in the
+-- world stays marked, and nothing ever says a document is lost.
+local STUB_FIELDS={schema=true,caseId=true,known=true,offered=true,answers=true,completedHours=true}
 local OFFERED_FIELDS={premiseId=true,outline=true,people=true,organisation=true}
 local ANSWER_FIELDS={reading=true,matters=true,way=true,changedHours=true,usedBy=true}
 M.OUTLINES={corroboration=true,["conflicting-account"]=true}
@@ -63,7 +81,13 @@ end
 
 -- Distinguishes a retired root from a live Session root (schema 1) so
 -- SuccessiveCases can hold a mix of the two without guessing at shape.
-function M.isRetired(root) return type(root)=="table" and root.schema==M.SCHEMA end
+-- Both kinds of archived case answer yes: nothing outside this module and
+-- SuccessiveCases has to know which tier a finished case is in, and every
+-- caller that asks this is really asking "is this still a live Session?".
+function M.isRetired(root) return type(root)=="table" and (root.schema==M.SCHEMA or root.schema==M.STUB_SCHEMA) end
+-- A deep-archived case: no rows. Readers that walk `root.rows` must use
+-- `root.rows or {}`; this says plainly why it can be absent.
+function M.isStub(root) return type(root)=="table" and root.schema==M.STUB_SCHEMA end
 
 -- Printable text only: a custom container name is player-typed and reaches the
 -- save through this field, so a control character is refused, not stored.
@@ -120,8 +144,34 @@ local function answersOK(a)
     return true
 end
 
+-- A deep-archived case (P4-R111). Deliberately not a shrunken schema-2 root:
+-- a retired row must always carry the text the player read, so a root with
+-- empty rows would be a lie in the shape of a valid record. This is its own
+-- shape, and `known` doubles as the document list -- a case only archives when
+-- every one of its documents is known, so the two were always the same list.
+local function stubOK(root)
+    if not fields(root,STUB_FIELDS) or root.schema~=M.STUB_SCHEMA then return false,"invalid archived case" end
+    if not text(root.caseId) then return false,"invalid archived case" end
+    local ok,n=dense(root.known,G.MAX_EVIDENCE+1); if not ok then return false,"invalid archived known" end
+    if n<G.MIN_EVIDENCE then return false,"invalid archived known" end
+    local seen={}
+    for i=1,n do
+        local id=root.known[i]
+        if not text(id,300) or seen[id] then return false,"invalid archived known" end
+        seen[id]=true
+    end
+    if root.offered~=nil and not offeredOK(root.offered) then return false,"invalid archived offered" end
+    if root.answers~=nil and (root.offered==nil or not answersOK(root.answers)) then return false,"invalid archived answers" end
+    local h=root.completedHours
+    if h~=nil and (type(h)~="number" or h~=h or h<0 or h==math.huge) then return false,"invalid archived completion hour" end
+    return true
+end
+
 function M.validate(root)
     local safe=V.validateStructure(root); if not safe then return false,"invalid retired case" end
+    -- Both archived tiers arrive here: every caller already asks isRetired
+    -- first and must not have to know which tier it got.
+    if M.isStub(root) then return stubOK(root) end
     if not fields(root,ROOT_FIELDS) or root.schema~=M.SCHEMA then return false,"invalid retired case" end
     if not text(root.caseId) then return false,"invalid retired case" end
     -- The relay memo (P4-R96) takes no story role, so the first case of a game
@@ -184,6 +234,19 @@ function M.retire(root,lastSeen,completedHours)
         and completedHours~=math.huge then out.completedHours=completedHours end
     ok,why=M.validate(out); if not ok then return nil,why end
     return out
+end
+
+-- Deep-archive an already retired case: drop the rows, keep the ids, the
+-- questions and the answers (see STUB_FIELDS above for what that costs the
+-- player). Idempotent, like retire: a stub handed back unchanged is a
+-- recognised no-op, so a caller may compact as often as it likes.
+function M.shrink(root)
+    if M.isStub(root) then return root,false end
+    local ok,why=M.validate(root); if not ok then return nil,why end
+    local out={schema=M.STUB_SCHEMA,caseId=root.caseId,known=copy(root.known),
+        offered=copy(root.offered),answers=copy(root.answers),completedHours=root.completedHours}
+    ok,why=stubOK(out); if not ok then return nil,why end
+    return out,true
 end
 
 return M

@@ -17,7 +17,7 @@ local Retired=require("ConspiracyFiles/Generated/RetiredCase")
 
 local catalog=dofile("test/fixtures/synthetic_locations.lua")
 local opts={mapId="SYNTHETIC-MAP",buildLine="TEST-ONLY",allowSynthetic=true}
-local largestLive,largestRetired,measured=0,0,0
+local largestLive,largestRetired,largestStub,measured=0,0,0,0
 -- A thousand seeds, not sixty: sixty missed the worst "Listen for it" case by
 -- more than the whole remaining headroom (2026-09-15).
 for seed=1,1000 do
@@ -59,6 +59,12 @@ for seed=1,1000 do
             assert(Retired.validate(retired),"the worst-case answers must still be a valid retired case")
             local retiredBytes=V.estimateEncodedBytes(retired)
             if retiredBytes>largestRetired then largestRetired=retiredBytes end
+            -- And the third tier (P4-R111): an archived case older than
+            -- MAX_FULL_ARCHIVED keeps only its ids, its questions and its
+            -- answers, which is what lets the campaign go past the old cap.
+            local stub=assert(Retired.shrink(retired))
+            local stubBytes=V.estimateEncodedBytes(stub)
+            if stubBytes>largestStub then largestStub=stubBytes end
         end
     end
 end
@@ -67,18 +73,24 @@ assert(measured>=20,"needed a real sample of generated cases, got "..measured)
 -- Room must remain for every other canonical root: identities, key connections,
 -- local people, markers, addresses, the discovery ledger and visited buildings.
 local RESERVED_FOR_OTHER_ROOTS=120000
-local worstCampaign=Cases.MAX_ACTIVE*largestLive+(Cases.MAX_CASES-Cases.MAX_ACTIVE)*largestRetired
+-- Three tiers now (P4-R111): MAX_ACTIVE live, MAX_FULL_ARCHIVED archived with
+-- every row FILES renders, and the rest archived with their bulk dropped.
+local stubbed=Cases.MAX_CASES-Cases.MAX_ACTIVE-Cases.MAX_FULL_ARCHIVED
+local worstCampaign=Cases.MAX_ACTIVE*largestLive+Cases.MAX_FULL_ARCHIVED*largestRetired+stubbed*largestStub
 assert(worstCampaign+RESERVED_FOR_OTHER_ROOTS<=V.MAX_ENCODED_BYTES,
-    string.format("MAX_ACTIVE=%d live at %d bytes plus %d retired at %d bytes is %d, which leaves under %d bytes for other roots",
-        Cases.MAX_ACTIVE,largestLive,Cases.MAX_CASES-Cases.MAX_ACTIVE,largestRetired,worstCampaign,RESERVED_FOR_OTHER_ROOTS))
+    string.format("%d live at %d bytes plus %d archived at %d plus %d stubbed at %d is %d, which leaves under %d bytes for other roots",
+        Cases.MAX_ACTIVE,largestLive,Cases.MAX_FULL_ARCHIVED,largestRetired,stubbed,largestStub,worstCampaign,RESERVED_FOR_OTHER_ROOTS))
 
 -- The cap is a real limit, not decoration: it must still bound the campaign,
 -- and retirement must actually be worth doing.
 assert(Cases.MAX_CASES>Cases.MAX_ACTIVE,"MAX_CASES must allow more than the concurrently-active bound")
 assert(Cases.MAX_CASES>=4,"three cases ended automatic progression far below the budget")
 assert(largestRetired<largestLive,"a retired case must measurably shrink, or retirement buys nothing")
+assert(largestStub<largestRetired,"a stubbed archive entry must be smaller than a full one, or the archive buys nothing")
+assert(stubbed>0,"the archive must reach past the live and full-archived tiers, or the tenth case is still the last")
 assert(Cases.MAX_ACTIVE*largestLive<=V.MAX_ENCODED_BYTES,"the active bound alone must not exceed the budget")
 
 print(string.format(
-    "PASS case budget headroom: %d active x %d bytes + %d retired x %d bytes = %d of %d, %d reserved",
-    Cases.MAX_ACTIVE,largestLive,Cases.MAX_CASES-Cases.MAX_ACTIVE,largestRetired,worstCampaign,V.MAX_ENCODED_BYTES,RESERVED_FOR_OTHER_ROOTS))
+    "PASS case budget headroom: %d live x %d + %d archived x %d + %d stubbed x %d = %d of %d, %d reserved",
+    Cases.MAX_ACTIVE,largestLive,Cases.MAX_FULL_ARCHIVED,largestRetired,stubbed,largestStub,
+    worstCampaign,V.MAX_ENCODED_BYTES,RESERVED_FOR_OTHER_ROOTS))

@@ -1,12 +1,50 @@
 # Case retirement — the path to genuinely unlimited mysteries
 
-**Status (updated 2026-09-15):** built. `Generated/RetiredCase.lua` shrinks a
-finished case to its rows; `SuccessiveCases.lua` holds `MAX_CASES=10` with at
-most `MAX_ACTIVE=4` unfinished at once, measured by `test/case_budget_headroom.lua`
-(1,000 seeds). A retired case also keeps where its evidence was last seen
-(P4-R104), what its questions are about and the answers (P4-R113). The archive
-that would lift the ten-case ceiling (P4-R111) is not built. The note below is
-the original design, kept as written.
+**Status (updated 2026-09-17):** built, including the archive of P4-R111. A
+finished case now leaves the live budget in two steps, and a save holds three
+tiers of case:
+
+| tier | how many | what it holds |
+|---|---:|---|
+| live (`Session`, schema 1) | `MAX_ACTIVE` = 4 | everything: assignments, targets, the case envelope |
+| archived (`RetiredCase`, schema 2) | `MAX_FULL_ARCHIVED` = 4 | every row FILES renders - title, text, leads, connections, the site, where it was last seen (P4-R104) - plus the questions and answers (P4-R113) |
+| archived, bulk dropped (schema 3) | the rest, to `MAX_CASES` = 16 | the case id, its documents' ids in the order they were found, the questions and the answers |
+
+`RetiredCase.shrink` makes the third tier and `SuccessiveCases` applies it
+inside the same validate-then-swap as the retirement or the staged case that
+caused it: the OLDEST archived case is always the one that loses its bulk, it is
+replaced in place, so no index, no schedule entry and no discovery order ever
+moves.
+
+**What a stubbed case still does:** its clues in the world are still marked
+Evidence / Old and still say "already in the organiser" (P4-R118 - the runtime
+marks from the ids, not the rows); the discovery ledger's references all still
+belong to a case, so its numbering is untouched; its answers can still be
+changed and can still steer a later case (P4-R113, P4-R122).
+
+**What is lost:** its rows leave the organiser's FILES list - the document's
+title and text, its leads and connections, the site it came from, and where it
+was last seen. FILES numbering is derived from the rows it has, so later records
+move up as those rows go. Nothing ever says a document is lost. Its sites also
+stop being excluded from later placement, so a new case may use a building an
+archived case once used.
+
+**Measured (test/case_archive.lua, 1,000 seeds, worst case per root):** live
+42,024 bytes, archived 33,135, stubbed 3,130; the discovery ledger costs about
+545 bytes for every document ever found, whatever tier its case is in. Whole
+save, worst case: ten cases as the old cap allowed = campaign 371,264 + ledger
+38,169 + 73,000 reserved for every other root = 482,433 of 500,000; sixteen
+cases with this archive = 338,540 + 60,975 + 73,000 = 472,515, **26,617 spare**.
+Sixteen cases therefore leave more headroom than ten did. The one number to
+move is `MAX_FULL_ARCHIVED`: each full-size archived case costs about eight
+stubbed ones. **The real ceiling on a longer campaign is the discovery ledger**
+(545 bytes an event, and its own `MAX=512` events), not the case store.
+
+An unbounded archive does not fit: four live cases alone cost 168 kB of the
+500 kB, and each archived case that keeps its documents costs 33 kB, so about
+fifteen cases' worth of read documents is all the budget can ever hold.
+
+The note below is the original design, kept as written.
 
 **Original status:** Design note, not implemented. Raising `MAX_CASES` to 8 buys time;
 retirement is what removes the ceiling.

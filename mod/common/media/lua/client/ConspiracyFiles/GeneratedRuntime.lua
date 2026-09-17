@@ -19,6 +19,9 @@ local sessions,scheduler,wrapper,ticks,preparing
 -- Rows of retired cases. They have no Session to project from, but the player
 -- learned them and FILES must still render them.
 local retiredRows={}
+-- Every document of every archived case, rows or not (P4-R111): what marks a
+-- clue Evidence / Old and answers "already in the organiser".
+local retiredIds={}
 -- Where and when a later case last found nothing usable nearby (P4-R125).
 local deferredAt=nil
 -- Declared with the identity scan further down. Retirement (R.inspect) reads
@@ -140,10 +143,14 @@ end
 -- says the item belongs to a closed case. Same rules as Evidence: a
 -- translation key (IGUI_ItemCat_EvidenceOld) and a runtime property, so every
 -- place that stamps a category asks this instead of assuming Evidence.
+-- Asked of every archived case, not only the ones that still carry rows: the
+-- oldest lose their bulk to the archive cap (P4-R111) and their clues are
+-- still lying in drawers around Muldraugh. A clue whose case no longer has a
+-- row must still say Evidence / Old and still say it is already recorded,
+-- because that missing menu is exactly what read as broken in play.
 local function retiredId(id)
     if not id then return false end
-    for _,row in ipairs(retiredRows) do if row.id==id then return true end end
-    return false
+    return retiredIds[id]==true
 end
 local function categoryOf(id) return retiredId(id) and "EvidenceOld" or "Evidence" end
 
@@ -266,9 +273,14 @@ end
 -- Retired rows, re-read from the stored wrapper. A last-seen write changes
 -- only these, so it refreshes them without reopening every live session.
 local function refreshRetired()
-    retiredRows={}
+    retiredRows={}; retiredIds={}
     for _,root in ipairs(Cases.sessions(wrapper) or {}) do
-        if Retired.isRetired(root) then for _,row in ipairs(root.rows) do retiredRows[#retiredRows+1]=row end end
+        if Retired.isRetired(root) then
+            -- `rows` is absent once a case is deep-archived; `known` is still
+            -- every document it placed, and that is what marks the items.
+            for _,row in ipairs(root.rows or {}) do retiredRows[#retiredRows+1]=row; retiredIds[row.id]=true end
+            for _,id in ipairs(root.known or {}) do retiredIds[id]=true end
+        end
     end
 end
 local function openAll()
@@ -560,7 +572,7 @@ function R.reshuffle(mode)
     -- first-house path again, exactly as it does in a brand-new save.
     local store=ModData.getOrCreate(TAG)
     store.canonical=nil; store.campaign=nil
-    wrapper=nil; sessions={}; retiredRows={}
+    wrapper=nil; sessions={}; retiredRows={}; retiredIds={}
     pcall(Cases.remember,store,getTimeInMillis and getTimeInMillis())
     -- Starting the new case here would race the automatic starter: both call
     -- the nearby scan, and T3Nearby.cancel() means the second start kills the
@@ -600,7 +612,10 @@ function R.nextCase(seed)
     if not wrapper or not wrapper.canonical then return false,"start the first generated case before requesting another" end
     if type(seed)~="number" or seed~=math.floor(seed) or seed<1 or seed>=2147483647 then return false,"invalid seed" end
     if not allowed() then return false,"debug single-player required" end
-    if #Cases.sessions(wrapper)>=Cases.MAX_CASES then return false,"development case limit reached" end
+    -- Finished cases are archived and no longer block a new one (P4-R111);
+    -- this is the store's own cap, reached only when the archive itself is
+    -- full - 16 cases on the measured worst case, where it used to be ten.
+    if #Cases.sessions(wrapper)>=Cases.MAX_CASES then return false,"the save's case archive is full" end
     -- Four unfinished cases is all the save allows (MAX_ACTIVE). A scan started
     -- here could only be refused at the final swap; three refusals disabled
     -- preparation, the next attempt set `preparing` with a job the scheduler

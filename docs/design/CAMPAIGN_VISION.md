@@ -27,7 +27,7 @@ Four things, none of which the current roadmap describes:
 
 More than the roadmap suggests. The campaign skeleton is built and tested:
 
-- `Generated/SuccessiveCases.lua` - `MAX_CASES=10`, `MAX_ACTIVE=4`, case
+- `Generated/SuccessiveCases.lua` - `MAX_CASES=16` (the store's cap), `MAX_ACTIVE=4` live, `MAX_FULL_ARCHIVED=4` archived with rows (P4-R111), case
   retirement, and a **global discovery ordering** across cases. The bound is
   derived from the save budget, not invented: 2 x 45.6 kB + 8 x 31.9 kB =
   346.3 kB of the 500 kB ceiling.
