@@ -1,0 +1,24 @@
+Linux carriers check 20260918T002532: PASS
+source: bc5516f
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+FINDING: game running: paused/speed=false 1
+FINDING: Storage.MAILBOX is "mailbox"; a container of that type within 40 tiles: false
+FINDING: ANSWER (mailbox): containers whose type or sprite says mail: postbox=5 (type)
+FINDING: every container type on 6561 loaded squares: barbecue=1 barbecuepropane=3 bin=18 campfire=1 cardboardbox=2 clothingdryer=2 clothingwasher=3 counter=51 crate=1 dishescabinet=2 dishwasher=2 dresser=3 fireplace=3 freezer=6 fridge=4 locker=1 medicine=2 metal_shelves=23 microwave=3 overhead=4 postbox=5 shelves=27 sidetable=12 stove=4 toolcabinet=1 wardrobe=6
+FINDING: widened to 60 tiles: mail-ish containers: composter=2 (type), postbox=6 (type)
+FINDING: bodies and walkers parked beside the survivor by the harness: 4 (the mod never spawns one)
+FINDING: usable carriers within 12 tiles, through the mod's own scan: 2 (zombie@10841,10149 zombie@10843,10149)
+FINDING: carrier chosen: zombie at 10841,10149,0
+FINDING: before anything: usable=true, refusal=none, searched=false, loot open=false, marked=false, case person=false
+FINDING: the body's container did not appear in the loot panel (no loot-panel icon for the carrier); the open-window guard was not tested
+FINDING: after looking inside: the game had already marked it searched=false, searched now=true
+FINDING: once searched: usable=false, refusal=already searched, searched=true
+FINDING: clues of the live cases: 0 placed rows, 0 on a carrier ()
+FINDING: carrier try 1: moved 304 tiles to 10881,9849, parked 6 bodies, waiting for case 1
+FINDING: carrier try 1: clues now 958829508:document-1:placed 958829508:document-2:placed 958829508:document-3:placed 958829508:document-5:placed 958829508:document-7:placed
+FINDING: carrier try 2: moved 301 tiles to 10663,10057, parked 6 bodies, waiting for case 2
+FINDING: carrier try 2: clues now 958829508:document-1:placed 958829508:document-2:placed 958829508:document-3:placed 958829508:document-5:placed 958829508:document-7:placed 580476887:document-1:placed 580476887:document-2:placed
+FINDING: carrier try 3: moved 300 tiles to 10657,9757, parked 6 bodies, waiting for case 3
+FINDING: carrier try 3: clues now 958829508:document-1:placed 958829508:document-2:placed 958829508:document-3:placed 958829508:document-5:placed 958829508:document-7:placed 580476887:document-1:placed 580476887:document-2:placed 1894996770:document-1:placed 1894996770:document-2:placed:car
+FINDING: no clue landed on a carrier in 3 tries (no unrecognised clue on a carrier); a carrier is only used for a clue the generator had to defer at a site with no free container, so this is a matter of which neighbourhood the case chose
+errors inside the mod: 0

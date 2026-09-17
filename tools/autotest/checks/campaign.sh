@@ -437,14 +437,19 @@ perf_note "the limit"
 # whole), and the run has finished three or four by now, so two more cases are
 # played out here - which is also the only way to see a case keep coming past
 # the point where one is archived.
-for extra in 1 2; do
+tried=""
+for extra in 1 2 3; do
     finished="$(field 2 "$(cases)")"
     [ "$finished" -ge 5 ] 2>/dev/null && break
-    oldest="$(ev 'return CFCamp.oldestLive()' | field 1)"
-    [ "$oldest" != none ] || { findings+=("archive: no unfinished case left to play for the fifth finish"); break; }
-    say "archive: playing ${oldest#generated:} to reach five finished cases"
-    play_case "$oldest"
-    wait_finished $((finished + 1)) || findings+=("archive: case ${oldest#generated:} did not finish")
+    next=""
+    for cid in $(ev 'return CFCamp.liveIds()' | field 1); do
+        case " $tried " in *" $cid "*) ;; *) next="$cid"; break ;; esac
+    done
+    [ -n "$next" ] || { findings+=("archive: no unfinished case left to play for the fifth finish"); break; }
+    tried+=" $next"
+    say "archive: playing ${next#generated:} to reach five finished cases"
+    play_case "$next"
+    wait_finished $((finished + 1)) || findings+=("archive: case ${next#generated:} did not finish")
 done
 arch="$(ev 'return CFCamp.archive()')"
 findings+=("archive: $(field 1 "$arch") finished cases full, $(field 2 "$arch") stubbed, $(field 3 "$arch") rows kept in all, $(field 4 "$arch") stubs still offering questions; $(field 5 "$arch")")
@@ -460,12 +465,13 @@ findings+=("a finished case's clues carried: $(field 1 "$old") checked, $(field 
 # 300 tiles, so the survivor is walked a long way off and the records read again.
 towns="$(ev 'return CFCamp.townNames()')"
 findings+=("AD-10 town names, standing in $(field 1 "$towns"): of $(field 5 "$towns") records $(field 2 "$towns") name a town and $(field 3 "$towns") do not; e.g. $(field 4 "$towns")")
-far="$(ev 'return CFCamp.moveOn(1500)')"
+far="$(ev 'return CFCamp.moveToTown()')"
 if [ "$(field 1 "$far")" = true ]; then
+    findings+=("AD-10: walked from $(field 2 "$far") to $(field 3 "$far") at $(field 4 "$far"), $(field 5 "$far") tiles")
     wait_true 120 'CFCamp.settled()' >/dev/null || true
     sleep 5
     towns2="$(ev 'return CFCamp.townNames()')"
-    findings+=("AD-10 town names, after $(field 4 "$far") tiles, standing in $(field 1 "$towns2"): of $(field 5 "$towns2") records $(field 2 "$towns2") name a town and $(field 3 "$towns2") do not; e.g. $(field 4 "$towns2")")
+    findings+=("AD-10 town names, standing in $(field 1 "$towns2"): of $(field 5 "$towns2") records $(field 2 "$towns2") name a town and $(field 3 "$towns2") do not; e.g. $(field 4 "$towns2")")
     if [ "$(field 1 "$towns2")" != "$(field 1 "$towns")" ] && [ "$(field 1 "$towns2")" != nil ]; then
         [ "$(field 2 "$towns2")" -gt 0 ] 2>/dev/null \
             || fail "read from $(field 1 "$towns2"), not one of $(field 5 "$towns2") records about $(field 1 "$towns") names its town"

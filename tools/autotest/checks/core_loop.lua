@@ -126,6 +126,31 @@ function L.find(n)
             return true, it:getDisplayName(), where, room, d.z
         end
     end end
+    -- A CARRIER WALKS OFF (P4-R134). The recorded square is where the body was
+    -- when the filler claimed it; a zombie does not stay there. The mod finds
+    -- it again by its own mark - which is how Search Mode keeps the icon on it -
+    -- so the harness asks the same question rather than searching the ground
+    -- where it used to be (campaign 20260918T003507: "uncertain In a none").
+    local resolved, state = nil, nil
+    pcall(function()
+        local Carriers = require("ConspiracyFiles/Carriers")
+        for _, row in ipairs(R.clueTargets()) do
+            if row.id == d.id and row.carrier then
+                resolved, state = Carriers.resolve(row.target, Carriers.FIND_RADIUS)
+            end
+        end
+    end)
+    if resolved then
+        local items = resolved.getItems and resolved:getItems()
+        for j = 0, (items and items:size() or 0) - 1 do
+            local it = items:get(j)
+            if it:getModData().cfGeneratedId == d.id then
+                L.item, L.holder, L.carrier = it, state and state.object or nil, state
+                return true, it:getDisplayName(), "carrier " .. tostring(state and state.kind),
+                    tostring(state and state.kind), d.z
+            end
+        end
+    end
     L.item = nil
     return false, "not on or next to its square"
 end

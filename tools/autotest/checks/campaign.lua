@@ -539,3 +539,37 @@ function C.townNames()
     end
     return tostring(here), withTown, plain, sample .. (other ~= "" and ("; own town: " .. other) or ""), #rows
 end
+
+-- Every unfinished case, so a check that needs to finish one can move on from
+-- one it could not (campaign 20260918T003507 asked the same broken case twice).
+function C.liveIds()
+    local out = {}
+    for _, root in ipairs(roots()) do if root.case then out[#out + 1] = root.case.caseId end end
+    return table.concat(out, " ")
+end
+
+-- ANOTHER TOWN (AD-10, P4-R129). Every case of a run is within 300 tiles, so
+-- all its records are in the survivor's own town and none carries a town name -
+-- correct, and only half the rule. The shipped address book knows which
+-- buildings are in which town, so this walks to one in a different town and the
+-- records can be read from there.
+function C.moveToTown()
+    local map = ConspiracyFiles.AddressMap
+    local B = require("ConspiracyFiles/Generated/AddressBook")
+    local here = map and map.currentTown and map.currentTown() or nil
+    local p = getPlayer()
+    local px, py = p:getX(), p:getY()
+    local best, bestTown, bestD
+    for _, row in ipairs(B.rows or {}) do
+        local id, x, y = row:match("^([^|]+)|(%-?%d+)|(%-?%d+)|")
+        local town = id and map.townForBuilding and map.townForBuilding(id) or nil
+        if town and town ~= here then
+            local d = math.sqrt((tonumber(x) - px) ^ 2 + (tonumber(y) - py) ^ 2)
+            -- The NEAREST other town: a shorter walk loads fewer cells.
+            if not bestD or d < bestD then best, bestTown, bestD = { x = tonumber(x), y = tonumber(y) }, town, d end
+        end
+    end
+    if not best then return "false", "the address book knows no town but " .. tostring(here) end
+    p:teleportTo(best.x + 0.5, best.y + 0.5, 0)
+    return "true", tostring(here), tostring(bestTown), best.x .. "," .. best.y, string.format("%.0f", bestD)
+end
