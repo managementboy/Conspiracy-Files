@@ -143,6 +143,45 @@ function K.carFind()
     return "false", "no vehicle holding " .. tostring(t.id) .. " within two tiles of " .. t.x .. "," .. t.y
 end
 
+-- Cars for a case to put a clue in. The mod never spawns one (P4-R134: it only
+-- uses what the world put there), and in three worlds running not one case had
+-- a car parked near the buildings it chose (20260917T214331), so the harness
+-- parks some - as checks/vehicle_reach.lua already does for the same reason -
+-- and then asks for a case. Placement offers a vehicle part as a candidate for
+-- a site when the car is within Session.VEHICLE_RADIUS (12 tiles) of it, so
+-- they go around the survivor, who is standing in a building.
+local function openGround(cx, cy, z)
+    local cell = getCell()
+    for ax = -2, 2 do for ay = -2, 2 do
+        local sq = cell:getGridSquare(cx + ax, cy + ay, z)
+        if not sq or not sq:isOutside() or not sq:isFree(false) then return nil end
+    end end
+    return cell:getGridSquare(cx, cy, z)
+end
+function K.parkCars(n)
+    n = tonumber(n) or 4
+    local p = player()
+    local px, py, pz = math.floor(p:getX()), math.floor(p:getY()), math.floor(p:getZ())
+    local made, where = 0, {}
+    for r = 6, 30, 3 do
+        for _, d in ipairs({ { r, 0 }, { 0, r }, { -r, 0 }, { 0, -r }, { r, r }, { -r, -r } }) do
+            if made < n then
+                local sq = openGround(px + d[1], py + d[2], pz)
+                if sq then
+                    local v = addVehicleDebug("Base.PickUpVan", IsoDirections.N, nil, sq)
+                    if v then
+                        pcall(function() v:repair() end)
+                        pcall(function() v:setLocked(false) end)
+                        made = made + 1
+                        where[#where + 1] = sq:getX() .. "," .. sq:getY()
+                    end
+                end
+            end
+        end
+    end
+    return made, table.concat(where, " ")
+end
+
 -- Move the car, as driving it would: the vehicle object is taken out of the
 -- world, put down on a free square `dist` tiles away and given its physics
 -- back. Every step is reported, because which of them the build needs is
@@ -295,6 +334,40 @@ function K.light()
     local seen, why = Search.seesSpot(p, sq)
     return "true", string.format("%.2f", penalty), tostring(dark), tostring(seen == true), tostring(why),
         string.format("%.2f", sq:getDarkMulti(p:getPlayerNum())), tostring(forageSystem.lightPenaltyCutoff)
+end
+
+-- Stand `tiles` away from the clue, facing it, on a free square - the game's
+-- own darkness rule is that an unlit spot has to be stood ON to be seen
+-- (ISBaseIcon.getCanSeeThisUpdate returns true for isOnSquare before it tests
+-- the light, and doVisionCheck caps the view to darkVisionRadius 1.5), so a
+-- darkness stage that teleports onto the clue's square tests nothing.
+function K.stepBack(tiles)
+    tiles = tonumber(tiles) or 3
+    local l = K.livePosition()
+    if not l then return "false", "no clue picked" end
+    local cell = getCell()
+    local best
+    for dx = -tiles, tiles do for dy = -tiles, tiles do
+        if math.max(math.abs(dx), math.abs(dy)) == tiles then
+            local sq = cell:getGridSquare(l.x + dx, l.y + dy, l.z)
+            if not best and sq and sq:isFree(false) then best = sq end
+        end
+    end end
+    -- A tile closer, rather than not moving back at all.
+    if not best and tiles > 2 then return K.stepBack(tiles - 1) end
+    if not best then return "false", "no free square " .. tiles .. " tiles from the clue" end
+    local p = player()
+    p:teleportTo(best:getX() + 0.5, best:getY() + 0.5, best:getZ())
+    pcall(function() p:faceLocation(l.x + 0.5, l.y + 0.5) end)
+    local dx, dy = best:getX() - l.x, best:getY() - l.y
+    return "true", best:getX() .. "," .. best:getY(), string.format("%.1f", math.sqrt(dx * dx + dy * dy))
+end
+-- Stand ON the clue's square, which is what the game asks for in the dark.
+function K.standOn()
+    local l = K.livePosition()
+    if not l then return "false", "no clue picked" end
+    player():teleportTo(l.x + 0.5, l.y + 0.5, l.z)
+    return "true", l.x .. "," .. l.y
 end
 
 -- A lit torch in the survivor's hand: the item, in a hand, switched on.

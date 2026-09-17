@@ -1,0 +1,30 @@
+Linux clue field check 20260917T214331: FAIL
+source: 59e5652 + uncommitted mod changes
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+worlds started for a clue in a car: 3
+FINDING: world 1: 4 clues placed, 0 of them in a car
+FINDING: world 2: 4 clues placed, 0 of them in a car
+FINDING: world 3: 7 clues placed, 0 of them in a car
+FINDING: no case in 3 worlds put a clue in a car; the car stage was not exercised
+FINDING: mod version DEV-0.42.0-search-to-find-3 24; clues: generated:1909971422:document-1:placed generated:1909971422:document-2:placed generated:1909971422:document-3:placed generated:1909971422:document-4:placed generated:1909971422:document-5:placed generated:1909971422:document-6:placed generated:1909971422:document-7:placed
+FINDING: game running: paused/speed=false 1
+FINDING: interruption clue: generated:1909971422:document-1 (found as "Photograph of a Foreign Vacation")
+FINDING: walking through Look it over: action seen running=yes at progress 0.33; the game reported walking/aiming=yes; the action left the queue=yes; queue now nil -1.00 true false false false
+FINDING: after walking through Look it over: recognised=false, last look ran (ok, ms)=nil nil
+FINDING: aiming through Look it over: action seen running=yes at progress 0.32; the game reported walking/aiming=yes; the action left the queue=yes; queue now nil -1.00 false true false false
+FINDING: after aiming through Look it over: recognised=false
+FINDING: left alone, Look it over recognised the clue: item now Staff photograph / HK-937 Evidence true false
+FINDING: walking through Inspect: action seen running=yes at progress 0.48; the game reported walking/aiming=yes; the action left the queue=yes; queue now nil -1.00 true false true false
+FINDING: after walking through Inspect: noted=false, in the record=false
+FINDING: left alone, Inspect noted it: true Staff photograph / HK-937
+FINDING: before the save: generated:1909971422:document-2 was "Receipt", now Establishment list / HK-937 Evidence true false (name, category, recognised, noted)
+FINDING: after the reload: name "Establishment list / HK-937", category Evidence, recognised true, noted false, recognised by id true
+FINDING: menu after the reload: Inspect Investigation Evidence
+FINDING: inspected after the reload: true Establishment list / HK-937; ran (ok, ms) true 2131
+FINDING: darkness clue: generated:1909971422:document-3 in room "kitchen"
+FINDING: at 01:00 in "kitchen": light penalty 0.25, the game calls it too dark=true, the mod's sight test false/too dark, darkMulti 1.00, cutoff 50
+FINDING: torch: Flashlight - Heavy Duty (On), lit=true, in a hand=true, light strength 2
+FINDING: with the torch lit: light penalty 1.00 (was 0.25), too dark=false, sight test true/nil, darkMulti 1.00
+FINDING: ANSWER: a lit torch makes the clue spottable - recognised 0s after the torch went on in a room that refused before
+errors inside the mod (this session): 0
+FAIL: a clue in a room the game calls too dark was spotted anyway, after 3s

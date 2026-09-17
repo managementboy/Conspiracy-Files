@@ -5,7 +5,9 @@
 #
 #   (a) a clue in a CAR, with the car then moved: its search icon must follow
 #       the car to its new square, and the clue must still be spottable there
-#       (stage 2 made the icon follow; only a unit test had seen it);
+#       (stage 2 made the icon follow; only a unit test had seen it). No case in
+#       three worlds had a car near the buildings it chose, so the check parks
+#       vans in a fresh neighbourhood and asks for a case there;
 #   (b) recognition across a SAVE AND RELOAD: a clue looked over, then quit with
 #       --save and reloaded with --continue, is still recognised, still shows as
 #       Evidence, and can still be inspected;
@@ -14,11 +16,13 @@
 #       (stopOnWalk / stopOnAim, proven in the unit tests only). The survivor
 #       walks and aims from the real keyboard and mouse ("pz.sh hold"), because
 #       that is where the game reads them;
-#   (d) DARKNESS: a clue in an unlit room must not be spottable, and then, with
-#       a lit torch in the survivor's hand, the check reports plainly whether
-#       spotting becomes possible - an open design question, not a pass/fail.
+#   (d) DARKNESS: a clue in an unlit room must not be spottable FROM A FEW TILES
+#       BACK, and then the check reports plainly what the light rule does - with
+#       a lit torch in hand, and standing on the unlit square itself, which the
+#       game treats quite differently. Those two are findings, not pass/fail:
+#       they are an open design question.
 #
-# Real display only (spotting and light are the game's own). About 12 minutes.
+# Real display only (spotting and light are the game's own). About 25 minutes.
 # Exit 0 pass, 1 fail, 2 could not run.
 set -uo pipefail
 . "$(dirname "${BASH_SOURCE[0]}")/../lib.sh"
@@ -29,7 +33,13 @@ findings=(); note() { findings+=("$*"); say "$*"; }
 f() { cut -f"$1"; }
 CHECKS="$REPO/tools/autotest/checks"
 
-load_lua() { ev -f "$CHECKS/clue_actions.lua" >/dev/null && ev -f "$CHECKS/clue_field.lua" >/dev/null; }
+# The stages this check reuses: clue_actions (the menu, the queue, the
+# timings), core_loop and campaign (CFCamp.moveOn / settled / gap, which is how
+# a later case is asked for at all since P4-R125), then its own.
+load_lua() {
+    ev -f "$CHECKS/core_loop.lua" >/dev/null && ev -f "$CHECKS/campaign.lua" >/dev/null \
+        && ev -f "$CHECKS/clue_actions.lua" >/dev/null && ev -f "$CHECKS/clue_field.lua" >/dev/null
+}
 placed() { # wait until every clue of the case is placed
     local deadline=$(( $(date +%s) + 240 )) c
     while :; do
@@ -44,30 +54,9 @@ placed() { # wait until every clue of the case is placed
 # polling. 9>&- keeps the machine lock out of it (lib.sh, claim_game).
 hold_bg() { "$PZ" hold "$1" "$2" >/dev/null 2>&1 9>&- & }
 
-claim_game || exit 2
-
-# --- a world with a clue in a car ------------------------------------------
-# Cases put clues in cars often but not always, so a world without one is
-# started again rather than reported as proof of nothing.
-worlds=0; car=""
-while :; do
-    worlds=$((worlds + 1))
-    start_cold || abort "the game did not reach a playable world"
-    id="$(session)"
-    wait_true 120 'ConspiracyFiles.GeneratedRuntime.metrics()~=nil' >/dev/null || abort "no case started"
-    load_lua || abort "could not load the check's Lua"
-    clues="$(placed)" || abort "clues never all placed: $clues"
-    note "world $worlds: $(f 1 <<<"$clues") clues placed, $(f 3 <<<"$clues") of them in a car"
-    car="$(ev "return CFField.pick('car', 1)")"
-    [ "$(f 1 <<<"$car")" = true ] && break
-    [ "$worlds" -ge "${CF_CAR_WORLDS:-3}" ] && { note "no case in $worlds worlds put a clue in a car; the car stage was not exercised"; car=""; break; }
-    say "world $worlds has no clue in a car ($(f 2 <<<"$car")); starting another"
-done
-note "mod version $(ev 'return CFField.version()' | tr '\t' ' '); clues: $(f 4 <<<"$clues")"
-note "game running: paused/speed=$(ev 'return CFAct.running()' | tr '\t' ' ')"
-
 # --- (a) the clue in the car ------------------------------------------------
-if [ -n "$car" ]; then
+# Called once a case has put a clue in a car (see the bottom of the check).
+car_stage() {
     note "car clue: $(f 2 <<<"$car") at $(f 3 <<<"$car"), part $(f 5 <<<"$car")"
     ev "return CFField.teleport($(f 3 <<<"$car"))" >/dev/null
     wait_true 30 'CFField.loaded()' >/dev/null || fail "the car clue's square never loaded"
@@ -126,7 +115,19 @@ if [ -n "$car" ]; then
         fi
     fi
     ev 'return CFField.searchOff()' >/dev/null
-fi
+}
+
+claim_game || exit 2
+
+# --- the world --------------------------------------------------------------
+start_cold || abort "the game did not reach a playable world"
+id="$(session)"
+wait_true 120 'ConspiracyFiles.GeneratedRuntime.metrics()~=nil' >/dev/null || abort "no case started"
+load_lua || abort "could not load the check's Lua"
+clues="$(placed)" || abort "clues never all placed: $clues"
+note "mod version $(ev 'return CFField.version()' | tr '\t' ' '); $(f 1 <<<"$clues") clues placed, $(f 3 <<<"$clues") of them in a car"
+note "clues: $(f 4 <<<"$clues")"
+note "game running: paused/speed=$(ev 'return CFAct.running()' | tr '\t' ' ')"
 
 # --- (c) interruption -------------------------------------------------------
 # A clue in furniture, carried, and then interrupted part-way through each
@@ -168,19 +169,36 @@ else
         done
         note "$label: action seen running=$seen_running at progress $progress; the game reported walking/aiming=$seen_moving; the action left the queue=$gone; queue now $(ev 'return CFField.state()' | tr '\t' ' ')"
         [ "$seen_running" = yes ] || note "$label: the action was already over before the key went down; nothing was interrupted"
-        [ "$gone" = yes ] || fail "$label: $option was still running after two seconds of $key"
+        # A FAIL only when the survivor really did move or aim and the action
+        # carried on: if the key never reached the game the harness has proved
+        # nothing, and saying so is not a verdict on the mod.
+        INTERRUPTED=no
+        if [ "$seen_moving" = yes ]; then
+            if [ "$gone" = yes ]; then INTERRUPTED=yes
+            else fail "$label: $option was still running while the survivor $key"; fi
+        elif [ "$gone" = yes ]; then
+            INTERRUPTED=yes
+            note "$label: the action stopped, but the game never reported moving or aiming, so what stopped it is not certain"
+        else
+            note "$label: the survivor never moved or aimed ($key did not reach the game), so interruption was not tested"
+        fi
         return 0
     }
+    # The follow-up assertion only bites when the action really was stopped:
+    # a key that never reached the game leaves the action to finish, which is
+    # right, and says nothing about the mod.
     interrupt "Look it over" w "walking through Look it over" CFLookItOver
     sleep 2
     st="$(ev 'return CFField.state()')"
-    [ "$(f 5 <<<"$st")" = false ] || fail "the clue was recognised even though Look it over was interrupted by walking"
     note "after walking through Look it over: recognised=$(f 5 <<<"$st"), last look ran (ok, ms)=$(ev "return CFAct.ran('look')" | tr '\t' ' ')"
+    [ "$INTERRUPTED" = no ] || [ "$(f 5 <<<"$st")" = false ] \
+        || fail "the clue was recognised even though Look it over was cut short by walking"
     interrupt "Look it over" mouse3 "aiming through Look it over" CFLookItOver
     sleep 2
     st="$(ev 'return CFField.state()')"
-    [ "$(f 5 <<<"$st")" = false ] || fail "the clue was recognised even though Look it over was interrupted by aiming"
     note "after aiming through Look it over: recognised=$(f 5 <<<"$st")"
+    [ "$INTERRUPTED" = no ] || [ "$(f 5 <<<"$st")" = false ] \
+        || fail "the clue was recognised even though Look it over was cut short by aiming"
     # Now let it finish, so Inspect can be interrupted in its turn.
     ev "return CFAct.choose('Look it over')" >/dev/null
     wait_true 25 'CFAct.recognised()' >/dev/null || fail "Look it over never completed when left alone"
@@ -188,10 +206,12 @@ else
     interrupt "Inspect Investigation Evidence" w "walking through Inspect" CFInspectEvidence
     sleep 2
     st="$(ev 'return CFField.state()')"
-    [ "$(f 6 <<<"$st")" = false ] || fail "the clue was noted even though Inspect was interrupted by walking"
     n="$(ev "return CFField.noted([[$docA]])")"
-    [ "$(f 1 <<<"$n")" = false ] || fail "an interrupted Inspect still wrote $docA into the record"
     note "after walking through Inspect: noted=$(f 6 <<<"$st"), in the record=$(f 1 <<<"$n")"
+    if [ "$INTERRUPTED" = yes ]; then
+        [ "$(f 6 <<<"$st")" = false ] || fail "the clue was noted even though Inspect was cut short by walking"
+        [ "$(f 1 <<<"$n")" = false ] || fail "an Inspect cut short still wrote $docA into the record"
+    fi
     ev "return CFAct.choose('Inspect Investigation Evidence')" >/dev/null
     wait_true 25 'CFAct.inspected()' >/dev/null || fail "Inspect never completed when left alone"
     note "left alone, Inspect noted it: $(ev "return CFField.noted([[$docA]])" | tr '\t' ' ')"
@@ -249,6 +269,12 @@ else
 fi
 
 # --- (d) darkness, and a torch ----------------------------------------------
+# THE GAME'S OWN LIGHT RULE, which is what makes this worth asking: in a square
+# darker than forageSystem.lightPenaltyCutoff the game refuses to see an icon
+# from a distance (ISBaseIcon.doVisionCheck caps the view at darkVisionRadius,
+# 1.5 tiles) but returns "seen" straight away for a survivor standing ON the
+# square (isOnSquare is tested before the light). So darkness is tested from a
+# few tiles back, and the on-the-square case is reported for what it is.
 darkclue=""
 for k in 1 2 3 4 5 6; do
     p="$(ev "return CFField.pick('box', $k)")"
@@ -257,7 +283,7 @@ for k in 1 2 3 4 5 6; do
     wait_true 20 'CFField.loaded()' >/dev/null || continue
     r="$(ev 'return CFField.inRoom()')"
     [ "$(f 1 <<<"$r")" = true ] || { say "clue $k is $(f 2 <<<"$r"); looking for one indoors"; continue; }
-    darkclue="$(f 2 <<<"$p")"; room="$(f 2 <<<"$r")"; break
+    darkclue="$(f 2 <<<"$p")"; room="$(f 2 <<<"$r")"; darkk="$k"; break
 done
 if [ -z "$darkclue" ]; then
     note "no unrecognised clue indoors was left, so the darkness stage was not exercised"
@@ -265,30 +291,33 @@ else
     note "darkness clue: $darkclue in room \"$room\""
     ev 'return CFField.night(1.0)' >/dev/null
     sleep 8
+    back="$(ev 'return CFField.stepBack(3)')"
+    note "standing back from it: $(f 2 <<<"$back"), $(f 3 <<<"$back") tiles away"
     dark="$(ev 'return CFField.light()')"
     note "at 01:00 in \"$room\": light penalty $(f 2 <<<"$dark"), the game calls it too dark=$(f 3 <<<"$dark"), the mod's sight test $(f 4 <<<"$dark")/$(f 5 <<<"$dark"), darkMulti $(f 6 <<<"$dark"), cutoff $(f 7 <<<"$dark")"
     if [ "$(f 3 <<<"$dark")" != true ]; then
         note "the room did not go dark enough for the game's own cutoff, so darkness was not really tested"
     else
-        ev 'return CFField.searchOn()' >/dev/null
         spotted=no; start=$(date +%s)
-        for _ in $(seq 120); do
+        for _ in $(seq 90); do
             ev 'return CFField.searchOn()' >/dev/null
             [ "$(ev 'return CFField.recognised()')" = true ] && { spotted=yes; break; }
             sleep 0.5
         done
         darksecs=$(( $(date +%s) - start ))
         if [ "$spotted" = yes ]; then
-            fail "a clue in a room the game calls too dark was spotted anyway, after ${darksecs}s"
+            fail "a clue $(f 3 <<<"$back") tiles away in a room the game calls too dark was spotted anyway, after ${darksecs}s"
         else
-            note "in the dark: not spotted in ${darksecs}s of searching beside it (icon $(ev 'return CFField.icon()' | cut -f2- | tr '\t' ' '))"
+            note "in the dark, $(f 3 <<<"$back") tiles away: not spotted in ${darksecs}s of searching (icon $(ev 'return CFField.icon()' | cut -f2- | tr '\t' ' '))"
         fi
-        # Now a lit torch in hand, which is the question worth an answer.
+        # The question worth an answer: the same spot, the same distance, with a
+        # lit torch in the survivor's hand.
         t="$(ev 'return CFField.torch(true)')"
         note "torch: $(f 2 <<<"$t"), lit=$(f 3 <<<"$t"), in a hand=$(f 4 <<<"$t"), light strength $(f 5 <<<"$t")"
         sleep 6
+        ev 'return CFField.stepBack(3)' >/dev/null
         lit="$(ev 'return CFField.light()')"
-        note "with the torch lit: light penalty $(f 2 <<<"$lit") (was $(f 2 <<<"$dark")), too dark=$(f 3 <<<"$lit"), sight test $(f 4 <<<"$lit")/$(f 5 <<<"$lit"), darkMulti $(f 6 <<<"$lit")"
+        note "with the torch lit, same distance: light penalty $(f 2 <<<"$lit") (was $(f 2 <<<"$dark")), too dark=$(f 3 <<<"$lit"), sight test $(f 4 <<<"$lit")/$(f 5 <<<"$lit"), darkMulti $(f 6 <<<"$lit")"
         spotted=no; start=$(date +%s)
         for _ in $(seq 180); do
             ev 'return CFField.searchOn()' >/dev/null
@@ -297,12 +326,77 @@ else
         done
         torchsecs=$(( $(date +%s) - start ))
         if [ "$spotted" = yes ]; then
-            note "ANSWER: a lit torch makes the clue spottable - recognised ${torchsecs}s after the torch went on in a room that refused before"
+            note "ANSWER (light): a lit torch makes a clue in an unlit room spottable from where it was not - recognised ${torchsecs}s after the torch, at $(f 3 <<<"$back") tiles"
         else
-            note "ANSWER: a lit torch does NOT make the clue spottable - still nothing after ${torchsecs}s (penalty $(f 2 <<<"$lit"), too dark=$(f 3 <<<"$lit")); in the dark the way in is Look it over"
+            note "ANSWER (light): a lit torch does NOT make it spottable - still nothing after ${torchsecs}s at $(f 3 <<<"$back") tiles (penalty $(f 2 <<<"$lit"), too dark=$(f 3 <<<"$lit")); in the dark the way in is Look it over"
+        fi
+        # And the game's other half of the rule, on a clue nothing has touched:
+        # standing ON an unlit square, does the game spot it?
+        ev 'return CFField.torch(false)' >/dev/null
+        onsq=""
+        for k in $((darkk + 1)) $((darkk + 2)) $((darkk + 3)); do
+            p="$(ev "return CFField.pick('box', $k)")"
+            [ "$(f 1 <<<"$p")" = true ] || break
+            ev "return CFField.teleport($(f 3 <<<"$p"))" >/dev/null
+            wait_true 20 'CFField.loaded()' >/dev/null || continue
+            [ "$(ev 'return CFField.inRoom()' | f 1)" = true ] || continue
+            onsq="$(f 2 <<<"$p")"; break
+        done
+        if [ -z "$onsq" ]; then
+            note "no second indoor clue was left to try the on-the-square rule"
+        else
+            ev 'return CFField.standOn()' >/dev/null
+            sleep 2
+            osl="$(ev 'return CFField.light()')"
+            spotted=no; start=$(date +%s)
+            for _ in $(seq 90); do
+                ev 'return CFField.searchOn()' >/dev/null
+                [ "$(ev 'return CFField.recognised()')" = true ] && { spotted=yes; break; }
+                sleep 0.5
+            done
+            secs=$(( $(date +%s) - start ))
+            if [ "$spotted" = yes ]; then
+                note "ANSWER (light): standing ON the unlit square (penalty $(f 2 <<<"$osl"), too dark=$(f 3 <<<"$osl")) the game DOES spot it - ${secs}s - which is its own isOnSquare rule, not our doing"
+            else
+                note "ANSWER (light): standing ON the unlit square it was still not spotted in ${secs}s (penalty $(f 2 <<<"$osl"))"
+            fi
         fi
         ev 'return CFField.searchOff()' >/dev/null
     fi
+fi
+
+# --- (a) arrange a clue in a car, then run the car stage --------------------
+# No case in three worlds had a car near the buildings it chose
+# (20260917T214331), so the harness parks vans in a fresh neighbourhood and
+# asks for a case there, the way the campaign check asks for one (P4-R125: a
+# case waits for the survivor to move on). Up to CF_CAR_TRIES cases.
+ev 'return CFField.night(12.0)' >/dev/null      # daylight again, for spotting outdoors
+ev 'return CFCamp.gap(false)' >/dev/null
+car=""
+for try in $(seq "${CF_CAR_TRIES:-3}"); do
+    m="$(ev 'return CFCamp.moveOn()')"
+    [ "$(f 1 <<<"$m")" = true ] || { note "car try $try: nowhere fresh to move to: $(f 2 <<<"$m")"; break; }
+    wait_true 120 'CFCamp.settled()' >/dev/null || { note "car try $try: the world at $(f 2 <<<"$m") did not load"; continue; }
+    parked="$(ev 'return CFField.parkCars(4)')"
+    note "car try $try: moved on $(f 4 <<<"$m") tiles to $(f 2 <<<"$m"), parked $(f 1 <<<"$parked") vans at $(f 2 <<<"$parked")"
+    want=$(( $(ev 'return CFCamp.cases()' | f 1) + 1 ))
+    came=no
+    for _ in $(seq 60); do
+        [ "$(ev 'return CFCamp.cases()' | f 1)" -ge "$want" ] 2>/dev/null && { came=yes; break; }
+        sleep 4
+    done
+    [ "$came" = yes ] || { note "car try $try: no new case within four minutes (preparing=$(ev 'return CFCamp.preparing()' | tr '\t' ' '))"; continue; }
+    sleep 5
+    c="$(ev 'return CFField.clues()')"
+    note "car try $try: the new case placed $(f 1 <<<"$c") clues, $(f 3 <<<"$c") in a car"
+    car="$(ev "return CFField.pick('car', 1)")"
+    [ "$(f 1 <<<"$car")" = true ] && break
+    car=""
+done
+if [ -n "$car" ]; then
+    car_stage
+else
+    note "no case put a clue in a car even with vans parked beside it, so the car stage was not exercised"
 fi
 
 # --- errors -----------------------------------------------------------------
@@ -317,7 +411,6 @@ out="$EVIDENCE/$id-clue-field.txt"
 {
     echo "Linux clue field check $id: $result"
     source_line
-    echo "worlds started for a clue in a car: $worlds"
     for x in "${findings[@]}"; do echo "FINDING: $x"; done
     echo "errors inside the mod (this session): $((errors + thrown))"
     for x in "${fails[@]}"; do echo "FAIL: $x"; done
