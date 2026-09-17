@@ -991,6 +991,11 @@ investigate area dropdown would need another entry". The shape:
   "Clues"); with it chosen, clues are spotted faster and further.
 Design: docs/design/SEARCH_TO_FIND.md. Rules change, so a new game (P4-R77).
 
+Built in three stages and published as DEV-0.42.0-search-to-find-3 on
+2026-09-17. Owner's first feedback in play: "this is the best decisison we have
+done". Kept as the shape to follow: hand a job to a system the game already
+has, rather than arranging our own announcements differently.
+
 **P4-R106 — how a car's containers are reached.** Owner, 2026-09-14: "The globe
 box only opens when sitting in the front of the car", and a truck bed or trunk
 is reached from outside, "only if they are open". Placement may still put a
