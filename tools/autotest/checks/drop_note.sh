@@ -55,14 +55,33 @@ for i in "${furniture[@]}"; do
     for _ in $(seq 16); do [ "$(ev 'return CFLoop.openContainer()' | f 1)" = true ] && { opened=yes; break; }; sleep 0.5; done
     if [ "$i" = "$last" ]; then
         [ "$opened" = yes ] || abort "the loot panel never showed the clue to leave lying ($(f 2 <<<"$found"))"
-        ev 'return CFDROP.keepLying()' >/dev/null; lying="$(f 2 <<<"$found")"
+        # A clue lying in its drawer is recognised by searching (P4-R132): Search
+        # Mode on, facing it, until the game's own spotting recognises it. A room
+        # too dark for spotting falls back to the debug recognition, reported.
+        how=search
+        for _ in $(seq 30); do
+            ev 'return CFLoop.searchOn()' >/dev/null
+            [ "$(ev 'return CFLoop.recognised()' | f 1)" = true ] && break
+            sleep 0.5
+        done
+        ev 'return CFLoop.searchOff()' >/dev/null
+        if [ "$(ev 'return CFLoop.recognised()' | f 1)" != true ]; then
+            how=debug; ev 'return CFLoop.debugRecognise()' >/dev/null
+            findings+=("the clue left lying was not spotted in 15 s of Search Mode (dark?); recognised through ClueSearch.debugRecognise")
+        fi
+        [ "$(ev 'return CFLoop.recognised()' | f 1)" = true ] || abort "the clue to leave lying could not be recognised"
+        ev 'return CFDROP.keepLying()' >/dev/null; lying="$(ev 'return CFLoop.name()' | f 1) (found as $(f 2 <<<"$found"), recognised by $how)"
         say "left lying: $lying"
         continue
     fi
     ev 'return CFLoop.take()' >/dev/null
     wait_true 20 'CFLoop.carried()' || { findings+=("document $i never reached the inventory"); continue; }
+    # A plain item until recognised (P4-R132): look it over from the real menu.
+    r="$(ev 'return CFLoop.lookOver()')"
+    [ "$(f 1 <<<"$r")" = true ] || { fail "document $i: $(f 2 <<<"$r")"; continue; }
+    wait_true 20 'CFLoop.recognised()' || { fail "document $i not recognised 20 s after Look it over"; continue; }
     ev 'return CFDROP.keepCarried()' >/dev/null; carried=$((carried + 1))
-    say "carried: $(f 2 <<<"$found")"
+    say "carried: $(ev 'return CFLoop.name()' | f 1) (found as $(f 2 <<<"$found"))"
 done
 [ "$carried" -ge 1 ] && [ -n "$lying" ] || abort "needs a carried clue and one lying: carried=$carried lying=${lying:-none}"
 total=$((carried + 1))

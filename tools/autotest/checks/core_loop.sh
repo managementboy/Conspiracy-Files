@@ -64,12 +64,15 @@ for i in $(seq 1 "$n"); do
     for _ in $(seq 16); do [ "$(ev 'return CFLoop.openContainer()' | cut -f1)" = true ] && { opened=yes; break; }; sleep 0.5; done
     ev 'return CFLoop.take()' >/dev/null
     wait_true 20 'CFLoop.carried()' || { fail "document $i ($name) never reached the inventory"; continue; }
-    menu="$(ev 'return CFLoop.inspect()')"
-    [ "$(cut -f1 <<<"$menu")" = true ] || { fail "document $i ($name): $(cut -f2 <<<"$menu")"; continue; }
-    wait_true 10 'CFLoop.inspected()' || fail "document $i ($name) not marked inspected"
+    # A plain item until recognised (P4-R132): Look it over, then Inspect,
+    # both timed actions from the real menu (note_carried in lib.sh).
+    plain="$name"
+    why="$(note_carried)" || { fail "document $i ($name): $why"; [[ "$holder" == vehicle* ]] && ev 'return CFLoop.exitVehicle()' >/dev/null; continue; }
+    name="$(ev 'return CFLoop.name()' | cut -f1)"
+    [ "$name" != "$plain" ] || findings+=("document $i ($name): its name did not change when it was recognised")
     ev "return CFLoop.remember($i)" >/dev/null
     [[ "$holder" == vehicle* ]] && { ev 'return CFLoop.exitVehicle()' >/dev/null; sleep 3; }
-    rows+=("  $i. $name, in $holder, room $room, floor $floor (container icon clicked: $opened)")
+    rows+=("  $i. $name (found as $plain), in $holder, room $room, floor $floor (container icon clicked: $opened)")
     # A missing icon is a failure only when the game itself allowed the part.
     [ "$opened" = yes ] || [ "$access" != true ] || fail "document $i ($name): the game allowed its $holder but the loot panel never showed it"
     say "document $i: $name"
@@ -168,7 +171,7 @@ report="$EVIDENCE/$id-core-loop.txt"
 {
     echo "Linux core loop check $id: $verdict"
     source_line
-    echo "first case: $n documents, all found and inspected through the right-click menu:"
+    echo "first case: $n documents, all found, looked over and inspected through the right-click menu:"
     printf '%s\n' "${rows[@]}"
     echo "record entries: $known; case completion reported: $completed"
     echo "map marks without a pen (written/pending/missing): $(tr '\t' '/' <<<"$before_pen")"

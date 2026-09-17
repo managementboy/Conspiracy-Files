@@ -70,8 +70,7 @@ for i in $(seq 1 "$n"); do
     for _ in 1 2 3 4 5 6 7 8; do [ "$(ev 'return CFLoop.openContainer()' | cut -f1)" = true ] && break; sleep 1; done
     ev 'return CFLoop.take()' >/dev/null
     wait_true 20 'CFLoop.carried()' || { say "document $i never reached the inventory"; continue; }
-    ev 'return CFLoop.inspect()' >/dev/null
-    wait_true 10 'CFLoop.inspected()' || say "document $i not marked inspected"
+    why="$(note_carried)" || say "document $i not noted: $why"
     [[ "$holder" == vehicle* ]] && { ev 'return CFLoop.exitVehicle()' >/dev/null; sleep 3; }
     say "document $i inspected"
 done

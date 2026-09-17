@@ -160,9 +160,26 @@ source_line() {
     renderer_line
 }
 
+# Note the clue CFLoop holds, carried, the player's way (P4-R132): a clue is a
+# plain item until recognised, so "Look it over" from the real menu first and
+# wait for recognition, then Inspect and wait for the note. Both are timed
+# actions (3.1 s and 2.1 s at normal speed). Prints nothing on success; the
+# reason on failure. checks/core_loop.lua must be loaded.
+note_carried() {
+    local r
+    if [ "$(ev 'return CFLoop.recognised()' | cut -f1)" != true ]; then
+        r="$(ev 'return CFLoop.lookOver()')"
+        [ "$(cut -f1 <<<"$r")" = true ] || { echo "$(cut -f2 <<<"$r")"; return 1; }
+        wait_true 20 'CFLoop.recognised()' || { echo "not recognised 20 s after Look it over (queue, paused, last look: $(ev 'return CFLoop.queue()' | tr '\t' ' '))"; return 1; }
+    fi
+    r="$(ev 'return CFLoop.inspect()')"
+    [ "$(cut -f1 <<<"$r")" = true ] || { echo "$(cut -f2 <<<"$r")"; return 1; }
+    wait_true 20 'CFLoop.inspected()' || { echo "not noted 20 s after Inspect (queue, paused, last look: $(ev 'return CFLoop.queue()' | tr '\t' ' '))"; return 1; }
+}
+
 # Find document N of the placed case, take it and inspect it the player's way
-# (checks/core_loop.lua must be loaded). Prints the document's name; fails
-# with a reason. Cars go through the vehicle menu.
+# (checks/core_loop.lua must be loaded). Prints the document's name as it
+# reads once recognised; fails with a reason. Cars go through the vehicle menu.
 inspect_doc() {
     local i="$1" f h
     ev "return CFLoop.approach($i)" >/dev/null; wait_true 10 "CFLoop.loaded($i)" >/dev/null
@@ -178,7 +195,7 @@ inspect_doc() {
     for _ in $(seq 12); do [ "$(ev 'return CFLoop.openContainer()' | cut -f1)" = true ] && break; sleep 0.5; done
     ev 'return CFLoop.take()' >/dev/null
     wait_true 20 'CFLoop.carried()' || { echo "document $i never reached the inventory"; return 1; }
-    [ "$(ev 'return CFLoop.inspect()' | cut -f1)" = true ] || { echo "document $i could not be inspected"; return 1; }
+    local why; why="$(note_carried)" || { [[ "$h" == vehicle* ]] && ev 'return CFLoop.exitVehicle()' >/dev/null; echo "document $i could not be inspected: $why"; return 1; }
     [[ "$h" == vehicle* ]] && { ev 'return CFLoop.exitVehicle()' >/dev/null; sleep 3; }
-    cut -f2 <<<"$f"
+    ev 'return CFLoop.name()' | cut -f1
 }

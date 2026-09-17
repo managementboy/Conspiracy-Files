@@ -53,7 +53,7 @@ ev 'return CFLoop.goTo(1)' >/dev/null
 for _ in $(seq 12); do [ "$(ev 'return CFLoop.openContainer()' | cut -f1)" = true ] && break; sleep 0.5; done
 ev 'return CFLoop.take()' >/dev/null
 wait_true 20 'CFLoop.carried()' || say "the document never reached the inventory"
-ev 'return CFLoop.inspect()' >/dev/null; sleep 2
+why="$(note_carried)" || say "the document could not be noted: $why"
 
 # A body with an ID in its wallet, so NAMES has a real person in it. The game
 # decides what a corpse carries, so keep rolling bodies until one has a wallet

@@ -317,23 +317,61 @@ function L.carried()
     return L.item:getOutermostContainer() == getPlayer():getInventory()
 end
 
--- The real right-click menu on the carried item, then its Inspect option.
-function L.inspect()
+-- The real right-click menu on the carried item, then one of its options.
+local function choose(name, done)
     local ctx = ISInventoryPaneContextMenu.createMenu(0, true, { L.item }, 200, 200)
     if not ctx then return false, "no context menu" end
-    local option = ctx:getOptionFromName("Inspect Investigation Evidence")
+    local option = ctx:getOptionFromName(name)
     local result
-    if not option then result = "the menu has no Inspect Investigation Evidence option"
-    elseif option.notAvailable then result = "the Inspect option is greyed out"
+    if not option then result = "the menu has no " .. name .. " option"
+    elseif option.notAvailable then result = "the " .. name .. " option is greyed out"
     else
         option.onSelect(option.target, option.param1, option.param2, option.param3)
         result = true
     end
     ctx:closeAll()
-    return result == true, result == true and "inspected" or result
+    return result == true, result == true and done or result
 end
 
+-- Since P4-R132 a clue is a plain item until it is recognised, and "Look it
+-- over" (carried) and Inspect are timed actions: choosing an option only
+-- queues it, and the caller waits for recognised() / inspected().
+function L.lookOver() return choose("Look it over", "looking it over") end
+function L.inspect() return choose("Inspect Investigation Evidence", "inspecting") end
+
+function L.recognised() return R.isRecognised(L.item) == true end
 function L.inspected() return R.isInspected(L.item) == true end
+-- A clue lying in its container is recognised by searching (P4-R132, stage 1):
+-- the game's Search Mode on, facing the clue. Something in the game can turn
+-- Search Mode off again, so the caller repeats searchOn while it waits.
+function L.searchOn()
+    local m = ISSearchManager.getManager(getPlayer())
+    if not m.isSearchMode then m:toggleSearchMode(true) end
+    local sq = L.item and L.item:getWorldItem() == nil and L.holder and L.holder.getSquare and L.holder:getSquare()
+    if sq then pcall(function() getPlayer():faceLocation(sq:getX() + 0.5, sq:getY() + 0.5) end) end
+    return m.isSearchMode == true
+end
+function L.searchOff()
+    local m = ISSearchManager.getManager(getPlayer())
+    if m.isSearchMode then m:toggleSearchMode(false) end
+    return true
+end
+-- Where searching cannot work (a room darker than the game's spotting cutoff),
+-- the debug recognition stage 1 exposes for checks; the caller reports it.
+function L.debugRecognise()
+    local id = L.item and L.item:getModData().cfGeneratedId
+    return ConspiracyFiles.ClueSearch.debugRecognise(id) and true or false
+end
+-- The item's name now: the plain game name before recognition, the clue's
+-- title after it.
+function L.name() return tostring(L.item and L.item:getDisplayName()) end
+-- For a failure message: what the survivor's action queue is doing.
+function L.queue()
+    local q = ISTimedActionQueue.getTimedActionQueue(getPlayer())
+    local current = q and q.queue and q.queue[1]
+    return tostring(current and current.Type), tostring(isGamePaused()),
+        tostring(ConspiracyFiles.ClueActions.lastLook and ConspiracyFiles.ClueActions.lastLook.ok)
+end
 
 -- DATES with a real document (owner, Windows, 2026-09-14: "an entry in the
 -- calendar should open the file if we click on it"). pdagame proves the tap
