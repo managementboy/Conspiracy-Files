@@ -8,6 +8,7 @@ local World=require("ConspiracyFiles/WorldAccess")
 local Scheduler=require("ConspiracyFiles/Scheduler")
 local Budget=require("ConspiracyFiles/SaveBudget")
 local StaleClue=require("ConspiracyFiles/StaleClue")
+local Carriers=require("ConspiracyFiles/Carriers")
 local Visited=require("ConspiracyFiles/VisitedBuildingLog")
 local Reachability=require("ConspiracyFiles/ReachabilityAdapter")
 require("ConspiracyFiles/DiscoveryLog")
@@ -1103,6 +1104,7 @@ function R.recognise(target,how)
 end
 -- Where each live clue is, for Search Mode (ClueSearch). Plain rows read from
 -- the stored case, no copies of the case text.
+local function integerish(n) return type(n)=="number" and n==math.floor(n) end
 function R.clueTargets()
     if not allowed() or not wrapper or not sessions then return {} end
     local out={}
@@ -1113,15 +1115,24 @@ function R.clueTargets()
             for _,id in ipairs(root.recognised or {}) do seen[id]=true end
             for id,a in pairs(root.assignments) do
                 local t=a.target
-                if type(t)=="table" then
+                -- A clue still waiting for somewhere to go has no target and no
+                -- coordinates at all, and is skipped here rather than handed on
+                -- as nil x,y,z (P4-R133, P4-R134). Every row this returns can be
+                -- pinned somewhere.
+                if type(t)=="table" and integerish(t.x) and integerish(t.y) and integerish(t.z) then
                     local vehicle=type(t.vehiclePart)=="string"
-                    -- `place` names the container (or the car's part) for the
-                    -- wordless cue's once-per-place rule; `token` and `part`
-                    -- find a car wherever it has been driven.
+                    local carrier=type(t.carrierMark)=="string"
+                    -- `place` names the container (the car's part, or the body)
+                    -- for the wordless cue's once-per-place rule; `token` and
+                    -- `part` find a car wherever it has been driven, and `mark`
+                    -- finds a carrier wherever it has walked (P4-R134).
                     out[#out+1]={id=id,x=t.x,y=t.y,z=t.z,status=a.status,recognised=seen[id]==true,
-                        vehicle=vehicle,case=root.case and root.case.caseId,token=a.physicalToken,
+                        vehicle=vehicle,carrier=carrier,case=root.case and root.case.caseId,token=a.physicalToken,
                         part=vehicle and t.vehiclePart or nil,target=t,
-                        place=vehicle and ("vehicle:"..tostring(a.physicalToken))
+                        mark=carrier and t.carrierMark or nil,
+                        carrierKind=carrier and t.carrierKind or nil,
+                        place=(carrier and ("carrier:"..t.carrierMark))
+                            or (vehicle and ("vehicle:"..tostring(a.physicalToken)))
                             or (t.x..":"..t.y..":"..t.z..":"..tostring(t.objectIndex)..":"..tostring(t.containerIndex))}
                 end
             end
@@ -1339,6 +1350,12 @@ local function relocation(api)
         end
         local a=root.assignments[id]
         if not a or a.status~="placed" then return true end
+        -- A clue on a carrier does not relocate (P4-R134). Relocation gives a
+        -- clue one new home when the survivor never came looking; a body or a
+        -- zombie has already moved of its own accord, and taking the note out
+        -- of a dead man's jacket to put it in a drawer would undo the find the
+        -- whole decision exists for. Its answer to going stale is expiry.
+        if Session.isMobile(a.target) and type(a.target.carrierMark)=="string" then return true end
         if not StaleClue.canAttempt(a) then return true end
         local hours=worldHours()
         if not StaleClue.isStale({status=a.status,placedHours=a.placedHours,id=id},root.known,hours) then return true end
@@ -1448,8 +1465,28 @@ local function usedPhysicalKeys()
     end
     return keys
 end
+-- A CARRIER FOR A CLUE WITH NOWHERE TO GO (P4-R134). Fixed containers are a
+-- finite resource near a settled player - that is the whole of P4-R133's fault
+-- - and carriers are not: a body in the street and a zombie in the yard
+-- replenish themselves. So when no free container is loaded at a waiting clue's
+-- own site, the filler looks for a carrier there instead.
+--
+-- The mod never spawns one. Every guard is checked fresh: the carrier is not
+-- already carrying a clue (its mark is the distinctness key, P4-R67), the
+-- survivor has not already searched it, its loot window is not open, it is
+-- inside the site's footprint as S.target will demand, the case has no mobile
+-- clue yet (S.MOBILE_PER_CASE), and the survivor is not standing next to it.
+local function carrierScanFor(site,found)
+    local b=site.bounds
+    local r=Session.CARRIER_RADIUS
+    local reach=math.max(b.x2-b.x1,b.y2-b.y1)+r
+    return Carriers.scan(math.floor((b.x1+b.x2)/2),math.floor((b.y1+b.y2)/2),b.z,reach,found,
+        function(entry)
+            return entry.x>=b.x1-r and entry.x<b.x2+r and entry.y>=b.y1-r and entry.y<b.y2+r and entry.z==b.z
+        end)
+end
 local function filler(api)
-    local id,site,scan,target
+    local id,site,scan,target,bodyScan,carrier
     return function()
         local hours=worldHours()
         -- The whole case is read ONCE per attempt, not once per step: a
@@ -1480,13 +1517,38 @@ local function filler(api)
         end
         local a=api.assignment(id)
         if not a or a.status~="deferred" then return true end
-        if not target then
+        if not target and scan then
             if scan() then
-                -- Nothing loaded and free at that site yet. Debug, not info:
-                -- this is the ordinary state of an open order and would
-                -- otherwise be a line every two seconds.
-                if not target then CFLog.write("d","skip",{doc=id,why="no-containers"}); return true end
+                -- Nothing loaded and free at that site: a carrier next, which
+                -- is the one place that does not run out (P4-R134).
+                if not target then scan=nil end
             else return false end
+        end
+        if not target then
+            if not Session.mobileAllowed(api.snapshot(),id) then
+                -- Debug, not info: this is the ordinary state of an open order
+                -- and would otherwise be a line every two seconds.
+                CFLog.write("d","skip",{doc=id,why="no-containers"}); return true
+            end
+            if not bodyScan then bodyScan=carrierScanFor(site,function(entry) carrier=entry end) end
+            if not carrier then
+                if bodyScan() then
+                    if not carrier then CFLog.write("d","skip",{doc=id,why="no-containers"}); return true end
+                else return false end
+            end
+            local pc=getPlayer()
+            if pc and StaleClue.tooClose(math.floor(pc:getX()),math.floor(pc:getY()),math.floor(pc:getZ()),carrier) then
+                return false
+            end
+            local mark=Carriers.newMark(carrier.x,carrier.y,carrier.z,hours)
+            local claimed,whyNot=Carriers.claim(carrier,mark)
+            if not claimed then
+                CFLog.write("d","skip",{doc=id,why="carrier-"..tostring(whyNot or "refused")})
+                carrier=nil; return false
+            end
+            target={x=carrier.x,y=carrier.y,z=carrier.z,objectIndex=0,containerIndex=0,
+                containerType=Session.CARRIER_CONTAINER,sprite=carrier.kind,
+                carrierKind=carrier.kind,carrierMark=mark}
         end
         -- Nothing materialises under the survivor's feet: the same guard
         -- relocation uses, with the same radius.
@@ -1502,6 +1564,46 @@ local function filler(api)
         scheduler.enqueue("place:"..id,"placement",placement(api,id))
         CFLog.write("i","placed",{doc=id,place=addressFor(a.locationId),
             at=target.x..","..target.y..","..target.z,why="instalment"})
+        return true
+    end
+end
+-- A CARRIER THAT IS GONE (P4-R134). A zombie walks into a horde, a body burns,
+-- a car is wrecked: the clue is then somewhere nobody will ever reach. It
+-- shares P4-R133's expiry to the hour - three in-game days and it is dropped,
+-- the case completes on the clues it got, and no record ever claims the
+-- document is lost (P4-R104).
+--
+-- "Gone" is only ever concluded where we could actually have looked: the
+-- survivor must be within the carrier search radius of where the clue went in.
+-- A carrier in an unloaded cell is not a carrier that is gone, and the hour is
+-- cleared the moment it turns up again. One clue per attempt, one job per
+-- session, beside the filler.
+local function carrierWatch(api)
+    return function()
+        local root=api.snapshot()
+        local hours=worldHours()
+        local gone=Session.missingIds(root,hours)
+        if #gone>0 then
+            local ok,why=api.dropMissing(gone[1],hours)
+            if ok then CFLog.write("i","stale",{doc=gone[1],why="carrier-gone",n=#gone})
+            else log("could not drop a clue whose carrier is gone: "..tostring(why)) end
+            return true
+        end
+        local p=getPlayer and getPlayer()
+        if not p then return true end
+        local px,py,pz=math.floor(p:getX()),math.floor(p:getY()),math.floor(p:getZ())
+        for _,d in ipairs(root.case.documents) do
+            local a=root.assignments[d.id]
+            local t=a and a.target
+            if t and Session.isMobile(t) and a.status~="conflict" and pz==t.z
+                and math.max(math.abs(px-t.x),math.abs(py-t.y))<=Carriers.FIND_RADIUS then
+                local ok,container=pcall(World.resolve,t,a.physicalToken)
+                local found=ok and container~=nil
+                local wrote,why=api.missing(d.id,found and nil or hours)
+                if not wrote then log("could not note a carrier's whereabouts: "..tostring(why)) end
+                return true
+            end
+        end
         return true
     end
 end
@@ -1781,6 +1883,9 @@ Events.OnTick.Add(function()
         -- Beside relocation, and bounded the same way: one job per session,
         -- one waiting clue per attempt (P4-R133).
         for i,api in ipairs(sessions) do scheduler.enqueue("fill:"..i,"filler",filler(api)) end
+        -- And the carrier watch, the same shape: one job per session, one clue
+        -- per attempt (P4-R134).
+        for i,api in ipairs(sessions) do scheduler.enqueue("carrier:"..i,"carrier",carrierWatch(api)) end
         scheduler.enqueue("visited-building","tracking",trackVisited)
         if #retiredRows>0 then
             local now=getTimeInMillis and getTimeInMillis() or 0

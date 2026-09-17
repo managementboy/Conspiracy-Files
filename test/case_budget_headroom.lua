@@ -19,6 +19,13 @@ local catalog=dofile("test/fixtures/synthetic_locations.lua")
 local opts={mapId="SYNTHETIC-MAP",buildLine="TEST-ONLY",allowSynthetic=true}
 local largestLive,largestRetired,largestStub,measured=0,0,0,0
 local largestPartial=0
+-- A live case carrying a clue on something that moves (P4-R134): a carrier
+-- target is the biggest target there is - a kind, a mark at its longest, and
+-- the hour the carrier went missing on top of a placed clue's own fields - so
+-- the budget is re-derived with one in EVERY live case rather than assumed to
+-- be covered by the car target it resembles.
+local largestMobile=0
+local CARRIER_MARK_MAX=120
 -- A thousand seeds, not sixty: sixty missed the worst "Listen for it" case by
 -- more than the whole remaining headroom (2026-09-15).
 for seed=1,1000 do
@@ -47,6 +54,31 @@ for seed=1,1000 do
                 assert(waiting==#case.documents-1,"the partial fixture must really be half-placed")
                 local partialBytes=V.estimateEncodedBytes(partial)
                 if partialBytes>largestPartial then largestPartial=partialBytes end
+            end
+            -- The same case with its one mobile clue on a carrier, at every
+            -- field's maximum, and its carrier missing (P4-R134). The mobile
+            -- clue is the case's last document, which is the one the generator
+            -- may put on something that moves.
+            local mobileId=Session.mobileDocId(case)
+            local mobileDoc
+            for _,d in ipairs(case.documents) do if d.id==mobileId then mobileDoc=d end end
+            local mobileSite
+            for _,s in ipairs(case.locations) do if s.id==mobileDoc.locationId then mobileSite=s end end
+            local carrier={x=mobileSite.bounds.x1,y=mobileSite.bounds.y1,z=mobileSite.bounds.z,
+                objectIndex=0,containerIndex=0,containerType=Session.CARRIER_CONTAINER,
+                sprite="corpse",carrierKind="corpse",carrierMark=string.rep("m",CARRIER_MARK_MAX)}
+            assert(Session.target(carrier,mobileSite),"the worst-case carrier target must be a valid one")
+            local withCarrier=Session.create(case,targets)
+            if withCarrier then
+                local a=withCarrier.assignments[mobileId]
+                a.target=carrier; a.status="placed"; a.placedHours=123456.75
+                a.missingHours=123450.25; a.relocations=Session.RELOCATE_CAP
+                local mobileKnown={}
+                for i,doc in ipairs(case.documents) do mobileKnown[i]=doc.id end
+                withCarrier.known=mobileKnown
+                assert(Session.validate(withCarrier),"a live case with a carrier clue must validate")
+                local mobileBytes=V.estimateEncodedBytes(withCarrier)
+                if mobileBytes>largestMobile then largestMobile=mobileBytes end
             end
             -- Worst case for a still-live root is fully discovered but not
             -- yet retired: every document known, connections all resolved.
@@ -116,10 +148,20 @@ assert(largestPartial<largestLive,
 local worstPartial=Cases.MAX_ACTIVE*largestPartial+Cases.MAX_FULL_ARCHIVED*largestRetired+stubbed*largestStub+scheduleBytes
 assert(worstPartial+RESERVED_FOR_OTHER_ROOTS<=V.MAX_ENCODED_BYTES,
     string.format("four partial cases plus the archive is %d bytes",worstPartial))
+-- And four live cases each carrying a clue on something that moves (P4-R134).
+-- The design claimed "a carrier target is about the size of a car target, which
+-- the budget already carries"; this measures it instead of believing it.
+assert(largestMobile>0,"the carrier-clue fixture must have been measured")
+local worstMobile=Cases.MAX_ACTIVE*largestMobile+Cases.MAX_FULL_ARCHIVED*largestRetired
+    +stubbed*largestStub+scheduleBytes
+assert(worstMobile+RESERVED_FOR_OTHER_ROOTS<=V.MAX_ENCODED_BYTES,
+    string.format("four live cases with a mobile clue each is %d bytes, which leaves under %d for other roots",
+        worstMobile,RESERVED_FOR_OTHER_ROOTS))
 assert(stubbed>0,"the archive must reach past the live and full-archived tiers, or the tenth case is still the last")
 assert(Cases.MAX_ACTIVE*largestLive<=V.MAX_ENCODED_BYTES,"the active bound alone must not exceed the budget")
 
 print(string.format(
-    "PASS case budget headroom: %d live x %d + %d archived x %d + %d stubbed x %d + schedule %d = %d of %d, %d reserved (four partial cases instead of live: %d)",
+    "PASS case budget headroom: %d live x %d + %d archived x %d + %d stubbed x %d + schedule %d = %d of %d, %d reserved "
+    .."(four partial cases instead of live: %d; four with a mobile clue each: %d)",
     Cases.MAX_ACTIVE,largestLive,Cases.MAX_FULL_ARCHIVED,largestRetired,stubbed,largestStub,scheduleBytes,
-    worstCampaign,V.MAX_ENCODED_BYTES,RESERVED_FOR_OTHER_ROOTS,worstPartial))
+    worstCampaign,V.MAX_ENCODED_BYTES,RESERVED_FOR_OTHER_ROOTS,worstPartial,worstMobile))

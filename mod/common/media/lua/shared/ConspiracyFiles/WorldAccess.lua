@@ -5,6 +5,12 @@ local function spriteName(object)
     return sprite and sprite:getName() or nil
 end
 function World.resolve(target,mark)
+    -- Nor is a carrier - a corpse or a zombie (P4-R134). It is found by the
+    -- mark on the body itself, wherever the body now is. Required lazily so
+    -- nothing that only reads squares pays for it.
+    if type(target)=="table" and type(target.carrierMark)=="string" then
+        return require("ConspiracyFiles/Carriers").resolve(target)
+    end
     -- A vehicle target is not addressed by a square. See resolveVehicle.
     if type(target)=="table" and type(target.vehiclePart)=="string" then
         return World.resolveVehicle(target,mark)

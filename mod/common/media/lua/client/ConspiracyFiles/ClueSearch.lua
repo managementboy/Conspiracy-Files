@@ -113,14 +113,37 @@ function C.vehicleSpot(clue,player)
     C.vehicleSpots[clue.id]={at=t,x=x,y=y,z=z}
     return x,y,z
 end
--- The clue rows with each car's clue moved to where its car is now.
+-- Where a clue on a carrier is now (P4-R134): the body or the zombie is found
+-- by our mark on it, so a clue in a dead man's jacket stays where he lies and a
+-- clue on a walker goes wherever it walks. Same cache and same failure as a
+-- car: a carrier the game has not loaded is not found, and the square the clue
+-- went in on stands - never nil coordinates into the icon layer.
+C.carrierSpots=C.carrierSpots or {}
+function C.carrierSpot(clue)
+    if not (clue and clue.carrier and clue.mark) then return nil end
+    local t=now()
+    local cached=C.carrierSpots[clue.id]
+    if cached and t-cached.at<C.VEHICLE_SPOT_MS then return cached.x,cached.y,cached.z end
+    local x,y,z
+    local Carriers=require("ConspiracyFiles/Carriers")
+    local ok,found=pcall(Carriers.findMark,clue.mark,clue.x,clue.y,clue.z)
+    if ok and found then x,y,z=found.x,found.y,found.z end
+    C.carrierSpots[clue.id]={at=t,x=x,y=y,z=z}
+    return x,y,z
+end
+
+-- The clue rows with each car's and each carrier's clue moved to where it is
+-- now. A clue that cannot be found keeps the square it was placed on, so every
+-- row always has usable coordinates.
 function C.liveClues(player)
     local R=ConspiracyFiles.GeneratedRuntime
     local clues=(R and R.clueTargets) and R.clueTargets() or {}
     for i,clue in ipairs(clues) do
-        if clue.vehicle and clue.status=="placed" and not clue.recognised then
-            local x,y,z=C.vehicleSpot(clue,player)
-            if x then
+        if clue.status=="placed" and not clue.recognised then
+            local x,y,z
+            if clue.vehicle then x,y,z=C.vehicleSpot(clue,player)
+            elseif clue.carrier then x,y,z=C.carrierSpot(clue) end
+            if x and y and z then
                 local moved={}
                 for k,v in pairs(clue) do moved[k]=v end
                 moved.x,moved.y,moved.z=x,y,z

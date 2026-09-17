@@ -26,6 +26,14 @@ S.FOCUS_REACH=1.5
 -- the icon is dropped, so the survivor sees where it was.
 S.LINGER_MS=8000
 
+-- How far a clue may move before its icon is picked up and put down again
+-- (P4-R134). A clue on a zombie moves every few seconds, and re-adding the icon
+-- restarts the game's spot timer: at zero tolerance a wandering carrier could
+-- never be spotted at all. Two tiles is close enough that the pin is still on
+-- the thing the survivor is looking at, and a driven car or a zombie that has
+-- really gone somewhere is far past it.
+S.MOVE_TILES=2
+
 -- Development knob for checks only: multiplies the spot timer. Never set by
 -- the mod itself.
 S.debugSpotScale=1
@@ -112,13 +120,15 @@ end
 
 -- An existing icon is dropped when Search Mode is off, its clue is gone from
 -- the record, the survivor has walked away, it was recognised and has lingered
--- long enough, or the clue is no longer on the icon's square: a car with a clue
--- in it has been driven (stage 2). `iconX`/`iconY` are the icon's square, when
--- known; the icon comes back on the clue's new square on the next pass.
+-- long enough, or the clue has moved away from the icon's square: a car with a
+-- clue in it has been driven (stage 2), or the zombie carrying one has walked
+-- on (P4-R134). `iconX`/`iconY` are the icon's square, when known; the icon
+-- comes back on the clue's new square on the next pass.
 function S.dropIcon(clue,px,py,searchMode,spottedAt,now,iconX,iconY)
     if not searchMode or type(clue)~="table" then return true end
     if distance2D(px,py,clue.x,clue.y)>S.REMOVE_RADIUS then return true end
-    if iconX and iconY and not clue.recognised and (iconX~=clue.x or iconY~=clue.y) then return true end
+    if iconX and iconY and not clue.recognised
+        and distance2D(iconX,iconY,clue.x,clue.y)>S.MOVE_TILES then return true end
     if clue.recognised then
         if not spottedAt then return true end
         return (now or 0)-spottedAt>=S.LINGER_MS
