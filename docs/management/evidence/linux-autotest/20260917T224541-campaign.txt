@@ -1,0 +1,39 @@
+Linux campaign check 20260917T224541: FAIL
+source: 674799b
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+cases: 1 generated:2078211696:case, 2 generated:1700342235:case, 3 generated:672720674:case; at the end 
+stages:
+  start                  cases 1 (0 finished) | record 0 | FILES questions 0 | NAMES 1 | PLACES 0 | Old 0/0 wrong | Evidence 0/0 wrong | order  | save 31341 B
+  case 1 finished        cases 1 (1 finished) | record 5 | FILES questions 1 | NAMES 1 | PLACES 7 | Old 5/0 wrong | Evidence 0/0 wrong | order 11111 | save 25944 B
+  after reload 1         cases 1 (1 finished) | record 5 | FILES questions 1 | NAMES 1 | PLACES 7 | Old 5/0 wrong | Evidence 0/0 wrong | order 11111 | save 26621 B
+  case 2 finished        cases 2 (2 finished) | record 11 | FILES questions 2 | NAMES 3 | PLACES 18 | Old 11/0 wrong | Evidence 0/0 wrong | order 11111222222 | save 52445 B
+  case 3, two clues      cases 3 (2 finished) | record 13 | FILES questions 2 | NAMES 4 | PLACES 20 | Old 11/0 wrong | Evidence 2/0 wrong | order 1111122222233 | save 77443 B
+  after reload 2         cases 3 (2 finished) | record 13 | FILES questions 2 | NAMES 4 | PLACES 20 | Old 11/0 wrong | Evidence 2/0 wrong | order 1111122222233 | save 77923 B
+  at the limit           cases 6 (2 finished) | record 13 | FILES questions 2 | NAMES 4 | PLACES 20 | Old 11/0 wrong | Evidence 2/0 wrong | order 1111122222233 | save 150686 B
+  after the limit        cases 6 (3 finished) | record 15 | FILES questions 3 | NAMES 4 | PLACES 23 | Old 15/0 wrong | Evidence 0/0 wrong | order 111112222223333 | save 143004 B
+case 1 answers on the organiser: true two person2 records nil Delia Mercer Roy Hale Regional Distribution Depot
+case 2 steer: generated:2078211696:case two records Roy Hale Roy Hale true
+errors inside the mod, all sessions: 0
+FINDING: fresh worlds started for a case 1 with a document in the memo's week: 3 (memo=true, dated documents=1)
+FINDING: case 1 relay memo: found=true, dated in its week=1, carrying the date note=1
+FINDING: the date note was exercised: 1 of 1 records dated in the memo's week carry it
+FINDING: case 1 note on the organiser: I think it was a count made up on purpose. Roy Hale matters here. Next I would check the place against its records.
+FINDING: frame cost during case 1: AutomaticInvestigations.onTick calls=2949 avg=0.014ms max=27ms over2ms=1 | CaseFile.onTick calls=2937 avg=0.012ms max=1ms over2ms=0 | ClueMarkers.draw calls=0 avg=0.000ms max=0ms over2ms=0 | ClueMarkers.update calls=56 avg=0.714ms max=3ms over2ms=5 | IdentityObserver.afterRender calls=5868 avg=0.198ms max=3ms over2ms=3 | IdentityObserver.tick calls=2985 avg=0.003ms max=1ms over2ms=0 | LocalPersonI
+FINDING: reload 1 save size: 26221 -> 26621 bytes; before [Generated.G2=20239 KeyConnections=778 DiscoveryLedger=2777 VisitedBuildings=359]; after [Generated.G2=20639 KeyConnections=778 DiscoveryLedger=2777 VisitedBuildings=359]
+FINDING: case 2 placement: reach 250: t3:10977704480342021, t3:10977704480342042
+FINDING: case 2 clues: Stock list / PS-448 | Second stock list / PS-448 | Duty log / PS-448 | Tagged key / PS-448 | twelve kneepad left tacticals | Payment slip / PS-448
+FINDING: frame cost during case 2: AutomaticInvestigations.onTick calls=5105 avg=0.005ms max=2ms over2ms=1 | CaseFile.onTick calls=5093 avg=0.010ms max=1ms over2ms=0 | ClueMarkers.draw calls=0 avg=0.000ms max=0ms over2ms=0 | ClueMarkers.update calls=90 avg=0.689ms max=5ms over2ms=7 | IdentityObserver.afterRender calls=10276 avg=0.104ms max=1ms over2ms=0 | IdentityObserver.tick calls=5141 avg=0.002ms max=1ms over2ms=0 | LocalPersonI
+FINDING: case 3 placement: reach 250: t3:10977704480342028, t3:10977704480342033
+FINDING: frame cost during case 3: AutomaticInvestigations.onTick calls=7201 avg=0.006ms max=2ms over2ms=1 | CaseFile.onTick calls=7189 avg=0.012ms max=1ms over2ms=0 | ClueMarkers.draw calls=0 avg=0.000ms max=0ms over2ms=0 | ClueMarkers.update calls=128 avg=0.703ms max=5ms over2ms=12 | IdentityObserver.afterRender calls=14432 avg=0.103ms max=1ms over2ms=0 | IdentityObserver.tick calls=7237 avg=0.002ms max=1ms over2ms=0 | LocalPerso
+FINDING: reload 2 save size: 77443 -> 77923 bytes; before [Generated.G2=62901 KeyConnections=1690 DiscoveryLedger=6813 VisitedBuildings=827]; after [Generated.G2=63381 KeyConnections=1690 DiscoveryLedger=6813 VisitedBuildings=827]
+FINDING: map marks after reload 2 (written/pending/missing): 13/0/0
+FINDING: the limit, move 1: moved on 305 tiles to 10775,9736 (t3:10696229503631368, 6 rooms, 35 unused buildings within 120 tiles); 25 containers loaded within 8 tiles
+FINDING: the limit: the case came after 1 move(s) to a fresh neighbourhood
+FINDING: at the limit: moved on 301 tiles to 10821,9439 (t3:10133279550210051, 8 rooms, 32 unused buildings within 120 tiles); 23 containers loaded within 8 tiles
+FINDING: after 90 s with 4 unfinished: preparing=false, cases 6 2 1:2078211696:retired 2:1700342235:retired 3:672720674:live 4:1035792755:live 5:1241390924:live 6:1039770679:live
+FINDING: after the limit, move 1: moved on 301 tiles to 10659,10297 (t3:11259175162085408, 5 rooms, 48 unused buildings within 120 tiles); 25 containers loaded within 8 tiles
+FINDING: after the limit, move 2: moved on 305 tiles to 10758,10585 (t3:11540650138796040, 27 rooms, 12 unused buildings within 120 tiles); 15 containers loaded within 8 tiles
+FINDING: after the limit, move 3: moved on 305 tiles to 10659,10297 (t3:11259175162085408, 5 rooms, 48 unused buildings within 120 tiles); 25 containers loaded within 8 tiles
+FINDING: frame cost during the limit: AutomaticInvestigations.onTick calls=58931 avg=0.005ms max=3ms over2ms=3 | CaseFile.onTick calls=58919 avg=0.010ms max=1ms over2ms=0 | ClueMarkers.draw calls=0 avg=0.000ms max=0ms over2ms=0 | ClueMarkers.update calls=995 avg=0.882ms max=19ms over2ms=51 | IdentityObserver.afterRender calls=117696 avg=0.042ms max=1ms over2ms=0 | IdentityObserver.tick calls=58967 avg=0.002ms max=1ms over2ms=0 | Local
+FAIL: after a case was finished at the limit, no new case came over three fresh neighbourhoods (preparing=false)
+screenshot: dev/eval/linux/runs/20260917T224541-campaign.png (not committed)

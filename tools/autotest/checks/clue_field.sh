@@ -65,7 +65,7 @@ car_stage() {
         fail "the car holding the clue could not be found: $(f 2 <<<"$found")"
     else
         note "the car: $(f 2 <<<"$found") at $(f 3 <<<"$found"), clue in its $(f 4 <<<"$found") as \"$(f 5 <<<"$found")\""
-        note "beside the parked car: $(ev 'return CFField.standByCar()' | cut -f2- | tr '\t' ' ') tiles from its square"
+        note "beside the parked car's part: $(ev 'return CFField.standByPart()' | cut -f2- | tr '\t' ' ')"
         ev 'return CFField.searchOn()' >/dev/null
         icon_before=""
         for _ in $(seq 40); do
@@ -87,25 +87,29 @@ car_stage() {
             sleep 2
             live="$(ev 'return CFField.live()')"
             note "the mod places the clue at $(f 2 <<<"$live") after the move (the car is at $(f 3 <<<"$moved"))"
+            # The icon must follow the car, ON THE PART'S square (674799b): the
+            # middle of a car cannot be stood beside, so that is where the mod
+            # pins it, and the tolerance is the mod's own MOVE_TILES.
             icon_after=""
             for _ in $(seq 60); do
                 ev 'return CFField.searchOn()' >/dev/null
-                i="$(ev 'return CFField.icon()')"
-                [ "$(f 1 <<<"$i")" = true ] && [ "$(f 2 <<<"$i" | cut -d, -f1-2)" = "$(f 3 <<<"$moved")" ] && { icon_after="$i"; break; }
+                i="$(ev 'return CFField.iconOnCar()')"
+                [ "$(f 1 <<<"$i")" = true ] && [ "$(f 7 <<<"$i")" = true ] && { icon_after="$i"; break; }
                 sleep 0.5
             done
             if [ -n "$icon_after" ]; then
-                note "icon after the car moved: square $(f 2 <<<"$icon_after") (the car's), seen $(f 4 <<<"$icon_after"), timer $(f 5 <<<"$icon_after"), $(f 6 <<<"$icon_after") tiles away"
+                note "icon after the car moved: at $(f 2 <<<"$icon_after"), the part's square is $(f 3 <<<"$icon_after") and the car's middle $(f 4 <<<"$icon_after"): $(f 5 <<<"$icon_after") tiles from the part ($(f 6 <<<"$icon_after") from the middle), inside the mod's $(f 8 <<<"$icon_after")-tile tolerance"
             else
-                fail "the search icon did not follow the car: it is at $(ev 'return CFField.icon()' | f 2), the car at $(f 3 <<<"$moved")"
+                i="$(ev 'return CFField.iconOnCar()')"
+                fail "the search icon did not follow the car to its part: icon $(f 2 <<<"$i"), part $(f 3 <<<"$i"), car $(f 4 <<<"$i"), $(f 5 <<<"$i") tiles off (tolerance $(f 8 <<<"$i"))"
             fi
             # And the clue is still findable there: the game's own spotting,
             # first with no Search Focus and then with "Clues" - which reaches
             # 4.5 tiles instead of 3, and a car's body decides how close anyone
             # can stand (20260917T215847 stood 3.54 tiles off and never spotted
             # it). Both numbers are reported; a FAIL only if neither works.
-            stood="$(ev 'return CFField.standByCar()')"
-            note "standing as close to the car as its body allows: $(f 2 <<<"$stood"), $(f 3 <<<"$stood") tiles from its square"
+            stood="$(ev 'return CFField.standByPart()')"
+            note "standing as close to the $(f 4 <<<"$stood") as the car's body allows: $(f 2 <<<"$stood"), $(f 3 <<<"$stood") tiles from the part's own square"
             try_spot() { # try_spot SECONDS LABEL
                 local end=$(( $(date +%s) + $1 )) start=$(date +%s)
                 while [ "$(date +%s)" -lt "$end" ]; do

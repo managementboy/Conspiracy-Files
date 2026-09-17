@@ -1,0 +1,36 @@
+Linux campaign check 20260917T221347: PASS
+source: 36c6369
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+cases: 1 generated:478383756:case, 2 generated:1951877006:case, 3 generated:755707145:case; at the end 
+stages:
+  start                  cases 1 (0 finished) | record 0 | FILES questions 0 | NAMES 1 | PLACES 0 | Old 0/0 wrong | Evidence 0/0 wrong | order  | save 35738 B
+  case 1 finished        cases 1 (1 finished) | record 6 | FILES questions 1 | NAMES 3 | PLACES 10 | Old 6/0 wrong | Evidence 0/0 wrong | order 111111 | save 30046 B
+  after reload 1         cases 1 (1 finished) | record 6 | FILES questions 1 | NAMES 3 | PLACES 10 | Old 6/0 wrong | Evidence 0/0 wrong | order 111111 | save 30851 B
+  case 2 finished        cases 2 (2 finished) | record 12 | FILES questions 2 | NAMES 4 | PLACES 20 | Old 12/0 wrong | Evidence 0/0 wrong | order 111111222222 | save 53950 B
+  case 3, two clues      cases 3 (2 finished) | record 14 | FILES questions 2 | NAMES 6 | PLACES 22 | Old 12/0 wrong | Evidence 2/0 wrong | order 11111122222233 | save 84745 B
+  after reload 2         cases 3 (2 finished) | record 14 | FILES questions 2 | NAMES 6 | PLACES 22 | Old 12/0 wrong | Evidence 2/0 wrong | order 11111122222233 | save 85273 B
+  at the limit           cases 6 (2 finished) | record 14 | FILES questions 2 | NAMES 6 | PLACES 22 | Old 12/0 wrong | Evidence 2/0 wrong | order 11111122222233 | save 172524 B
+  after the limit        cases 7 (3 finished) | record 17 | FILES questions 3 | NAMES 6 | PLACES 29 | Old 17/0 wrong | Evidence 0/0 wrong | order 11111122222233333 | save 200410 B
+case 1 answers on the organiser: true two person2 records nil Warren Nagy Delia Mercer MassGenFac Stores
+case 2 steer: generated:478383756:case two records Delia Mercer Delia Mercer true
+errors inside the mod, all sessions: 0
+FINDING: fresh worlds started for a case 1 with a document in the memo's week: 3 (memo=true, dated documents=2)
+FINDING: case 1 relay memo: found=true, dated in its week=2, carrying the date note=2
+FINDING: the date note was exercised: 2 of 2 records dated in the memo's week carry it
+FINDING: case 1 note on the organiser: I think it was a count made up on purpose. Delia Mercer matters here. Next I would check the place against its records.
+FINDING: frame cost during case 1: AutomaticInvestigations.onTick calls=3401 avg=0.021ms max=44ms over2ms=1 | CaseFile.onTick calls=3389 avg=0.012ms max=1ms over2ms=0 | ClueMarkers.draw calls=0 avg=0.000ms max=0ms over2ms=0 | ClueMarkers.update calls=64 avg=0.641ms max=4ms over2ms=6 | IdentityObserver.afterRender calls=6748 avg=0.158ms max=1ms over2ms=0 | IdentityObserver.tick calls=3437 avg=0.003ms max=1ms over2ms=0 | LocalPersonI
+FINDING: reload 1 save size: 30323 -> 30851 bytes; before [Generated.G2=23488 KeyConnections=770 DiscoveryLedger=3268 VisitedBuildings=359]; after [Generated.G2=24016 KeyConnections=770 DiscoveryLedger=3268 VisitedBuildings=359]
+FINDING: case 2 placement: reach 250: t3:10977704480342021, t3:10977704480342020
+FINDING: case 2 clues: Weighbridge ticket / TN-334 | Arrival ticket / TN-334 | Weights review / TN-334 | Duty log / TN-334 | six small parcels | twelve juice box apples
+FINDING: frame cost during case 2: AutomaticInvestigations.onTick calls=5402 avg=0.004ms max=2ms over2ms=1 | CaseFile.onTick calls=5390 avg=0.010ms max=1ms over2ms=0 | ClueMarkers.draw calls=0 avg=0.000ms max=0ms over2ms=0 | ClueMarkers.update calls=96 avg=0.885ms max=6ms over2ms=7 | IdentityObserver.afterRender calls=10796 avg=0.131ms max=2ms over2ms=1 | IdentityObserver.tick calls=5437 avg=0.003ms max=1ms over2ms=0 | LocalPersonI
+FINDING: case 3 placement: reach 250: t3:10977704480342025, t3:10977700185374741
+FINDING: frame cost during case 3: AutomaticInvestigations.onTick calls=7280 avg=0.005ms max=2ms over2ms=2 | CaseFile.onTick calls=7268 avg=0.011ms max=1ms over2ms=0 | ClueMarkers.draw calls=0 avg=0.000ms max=0ms over2ms=0 | ClueMarkers.update calls=129 avg=0.938ms max=6ms over2ms=13 | IdentityObserver.afterRender calls=14530 avg=0.128ms max=2ms over2ms=1 | IdentityObserver.tick calls=7315 avg=0.003ms max=1ms over2ms=0 | LocalPerso
+FINDING: reload 2 save size: 84745 -> 85273 bytes; before [Generated.G2=69708 KeyConnections=1682 DiscoveryLedger=7340 VisitedBuildings=827]; after [Generated.G2=70236 KeyConnections=1682 DiscoveryLedger=7340 VisitedBuildings=827]
+FINDING: map marks after reload 2 (written/pending/missing): 13/0/1
+FINDING: the limit, move 1: moved on 304 tiles to 10698,9778 (t3:10696225208664082, 7 rooms, 38 unused buildings within 120 tiles); 23 containers loaded within 8 tiles
+FINDING: the limit: the case came after 1 move(s) to a fresh neighbourhood
+FINDING: at the limit: moved on 301 tiles to 10981,9675 (t3:10414754526920736, 4 rooms, 25 unused buildings within 120 tiles); 14 containers loaded within 8 tiles
+FINDING: after 90 s with 4 unfinished: preparing=false, cases 6 2 1:478383756:retired 2:1951877006:retired 3:755707145:live 4:230315754:live 5:1979747648:live 6:773188160:live
+FINDING: a new case came after a case was finished at the limit: 7 3 1:478383756:retired 2:1951877006:retired 3:755707145:retired 4:230315754:live 5:1979747648:live 6:773188160:live 7:1670622377:live
+FINDING: frame cost during the limit: AutomaticInvestigations.onTick calls=14101 avg=0.006ms max=4ms over2ms=4 | CaseFile.onTick calls=14089 avg=0.011ms max=2ms over2ms=3 | ClueMarkers.draw calls=0 avg=0.000ms max=0ms over2ms=0 | ClueMarkers.update calls=248 avg=0.879ms max=11ms over2ms=16 | IdentityObserver.afterRender calls=28080 avg=0.066ms max=1ms over2ms=0 | IdentityObserver.tick calls=14137 avg=0.002ms max=1ms over2ms=0 | LocalP
+screenshot: dev/eval/linux/runs/20260917T221347-campaign.png (not committed)

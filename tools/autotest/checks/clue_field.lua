@@ -243,6 +243,64 @@ function K.standByCar()
     return "true", best:getX() .. "," .. best:getY(), string.format("%.2f", bestD)
 end
 
+-- WHERE A CAR'S CLUE IS PINNED. Since 674799b the icon sits on the PART's own
+-- area square - the tailgate, the driver's door - not the middle of the car,
+-- because a car's body blocks the squares it stands on and the game only
+-- advances a spot timer within forageSystem.minVisionRadius (3 tiles at
+-- Foraging 0): the middle of a car is unreachable by construction. So the
+-- check asks whether the icon is on the part's square, within the tolerance
+-- the mod itself uses before it picks an icon up and puts it down again
+-- (ClueSearchRules.MOVE_TILES).
+function K.partSquare()
+    local v, part = K.vehicle, K.part
+    local area = part and part.getArea and part:getArea()
+    local c = area and v.getAreaCenter and v:getAreaCenter(area)
+    if not c then return "false", "the part has no area" end
+    return "true", math.floor(c:getX()) .. "," .. math.floor(c:getY()), math.floor(c:getX()), math.floor(c:getY())
+end
+function K.iconOnCar()
+    local t, m, v = K.target, manager(), K.vehicle
+    local icon = m.clueIcons and m.clueIcons[Search.iconIdFor(t.id)]
+    if not icon then return "false", "no icon" end
+    local ix, iy = math.floor(icon.xCoord), math.floor(icon.yCoord)
+    local cx, cy = math.floor(v:getX()), math.floor(v:getY())
+    local px, py = cx, cy
+    local area = K.part and K.part.getArea and K.part:getArea()
+    local c = area and v.getAreaCenter and v:getAreaCenter(area)
+    if c then px, py = math.floor(c:getX()), math.floor(c:getY()) end
+    local tol = (Search.Rules and Search.Rules.MOVE_TILES) or 2
+    local d = math.sqrt((ix - px) ^ 2 + (iy - py) ^ 2)
+    local dcar = math.sqrt((ix - cx) ^ 2 + (iy - cy) ^ 2)
+    return "true", ix .. "," .. iy, px .. "," .. py, cx .. "," .. cy,
+        string.format("%.2f", d), string.format("%.2f", dcar), tostring(d <= tol), tostring(tol)
+end
+-- Stand as close to the PART as the game lets anyone stand: a square with no
+-- vehicle on it (isFree ignores a vehicle, so the first run was standing
+-- inside the car's own body and being shoved out of it).
+function K.standByPart()
+    local v, part = K.vehicle, K.part
+    if not v then return "false", "no car" end
+    local area = part and part.getArea and part:getArea()
+    local c = area and v.getAreaCenter and v:getAreaCenter(area)
+    local tx, ty = math.floor(v:getX()), math.floor(v:getY())
+    if c then tx, ty = math.floor(c:getX()), math.floor(c:getY()) end
+    local cell, z = getCell(), math.floor(v:getZ())
+    local best, bestD
+    for dx = -5, 5 do for dy = -5, 5 do
+        local sq = cell:getGridSquare(tx + dx, ty + dy, z)
+        if sq and sq:isFree(false) and not sq:getVehicleContainer() then
+            local d = math.sqrt(dx * dx + dy * dy)
+            if not bestD or d < bestD then best, bestD = sq, d end
+        end
+    end end
+    if not best then return "false", "no free square off the car within five tiles of the part" end
+    local p = player()
+    p:teleportTo(best:getX() + 0.5, best:getY() + 0.5, best:getZ())
+    pcall(function() p:faceLocation(tx + 0.5, ty + 0.5) end)
+    return "true", best:getX() .. "," .. best:getY(), string.format("%.2f", bestD),
+        tostring(part and part:getId())
+end
+
 -- The Investigate Area window's Search Focus (P4-R132): with "Clues" chosen the
 -- spot timer fills twice as fast and reaches half as far again, which is the
 -- difference between 3 tiles and 4.5. Same stage as checks/clue_search.lua.

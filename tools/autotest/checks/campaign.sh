@@ -69,6 +69,53 @@ thought_once() { # thought_once LABEL COUNT_BEFORE
     [ "$n" = 1 ] || fail "$1: the second thought \"What do I make of it?\" was said $n times, not once"
 }
 cases() { ev 'return CFCamp.cases()'; }
+# THE GENERATOR'S PROMISE (P4-R133 step 6). A refusal carries a code, a count,
+# an in-game due time and a rung, so "no case came" is no longer a finding to
+# shrug at: past the promised hour it is a failure, and the message says what
+# was refused, how often and how far the ladder had climbed. Only the codes
+# that mean the world could not supply a case bite; for cap, active-limit and
+# disabled the due time is a formality.
+promise() { ev 'return CFCamp.promise()'; }
+promise_words() { # promise_words TEXT
+    printf 'why=%s n=%s due=%s rung=%s/%s now=%s overdue=%s(%sh) preparing=%s active=%s cases=%s' \
+        "$(field 1 "$1")" "$(field 2 "$1")" "$(field 3 "$1")" "$(field 4 "$1")" "$(field 5 "$1")" \
+        "$(field 6 "$1")" "$(field 7 "$1")" "$(field 8 "$1")" "$(field 9 "$1")" "$(field 10 "$1")" "$(field 11 "$1")"
+}
+promise_broken() { # promise_broken LABEL: fail when the promised hour has passed
+    local p why; p="$(promise)"; why="$(field 1 "$p")"
+    case "$why" in
+        no-containers|no-reach|cooldown) ;;
+        *) findings+=("$1: nothing was promised worth failing on ($(promise_words "$p"))"); return 1 ;;
+    esac
+    if [ "$(field 7 "$p")" = true ]; then
+        fail "$1: the generator promised a case by $(field 3 "$p") and none came ($(promise_words "$p")); assignments $(ev 'return CFCamp.assignments()')"
+        return 0
+    fi
+    findings+=("$1: no case yet, but the promise still stands ($(promise_words "$p"))")
+    return 1
+}
+ladder_climbed() { # ladder_climbed LABEL: the rung must keep up with the count
+    local l; l="$(ev 'return CFCamp.ladder()')"
+    [ "$(field 1 "$l")" = true ] \
+        || fail "$1: $(field 4 "$l") refusals of one code earn rung $(field 3 "$l") but the generator stands on $(field 2 "$l") (every $(field 5 "$l") refusals, up to $(field 6 "$l"))"
+}
+# Every ev=defer line of every session of the run, kept across the reloads that
+# truncate console.txt, so the evidence can print a refusal histogram.
+defers=""
+keep_defers() { defers+="$(run_log | grep -o 'ev=defer why=[^ ]* n=[0-9]* due=[0-9:]* rung=[0-9]*' || true)
+"; }
+histogram() { # code -> count -> highest n seen -> rung reached
+    awk '{ split($0, f, " ");
+           why = ""; n = 0; rung = 0
+           for (i in f) { if (f[i] ~ /^why=/) why = substr(f[i], 5)
+                          if (f[i] ~ /^n=/) n = substr(f[i], 3) + 0
+                          if (f[i] ~ /^rung=/) rung = substr(f[i], 6) + 0 }
+           if (why == "") next
+           lines[why]++
+           if (n > worst[why]) worst[why] = n
+           if (rung > top[why]) top[why] = rung }
+         END { for (w in lines) printf "%s: %d lines, longest run of %d, rung %d\n", w, lines[w], worst[w], top[w] }' <<<"$1"
+}
 stage() { # stage LABEL: one row of the stage table, and the checks every stage makes
     local s q c o b
     s="$(ev 'return CFCamp.surfaces()')"; q="$(cases)"
@@ -82,6 +129,8 @@ stage() { # stage LABEL: one row of the stage table, and the checks every stage 
     [ "$(field 4 "$c")" = 0 ] || fail "$1: $(field 4 "$c") carried items of a live case are not Evidence"
     [ "$b" -le 500000 ] 2>/dev/null || fail "$1: the save measured $b bytes, over the 500 kB budget"
     QROWS="$(field 1 "$s")"; NAMES_NOW="$(field 3 "$s")"; PLACES_NOW="$(field 4 "$s")"
+    findings+=("$1: assignments $(ev 'return CFCamp.assignments()'); $(promise_words "$(promise)")")
+    ladder_climbed "$1"
 }
 old_settled() { # every carried piece of a finished case is Old (the scan marks them within ~10 s)
     local c
@@ -92,25 +141,52 @@ old_settled() { # every carried piece of a finished case is Old (the scan marks 
     done
     fail "$1: finished evidence not all Evidence / Old ($(tr '\t' ' ' <<<"$c"): ok, wrong, live ok, live wrong)"
 }
-play_case() { # play_case CASEID [LIMIT]: find, take and inspect its next clues; sets CASE_LEFT and PLAYED
-    local cid="$1" limit="${2:-99}" r n waiting deadline out tries=0
-    deadline=$(( $(date +%s) + 240 ))
+play_case() { # play_case CASEID [LIMIT]: find, take and inspect its next clues
+    # Since P4-R133 a case may go live with only the clues that fit, the rest
+    # waiting as deferred assignments that the filler places once the survivor
+    # gives it somewhere to put them. So this plays what is placed, moves on
+    # when something is still waiting, and only gives up when the clues never
+    # arrive - which is the assertion the design asks for: clues reaching
+    # `placed`, not merely a case existing.
+    local cid="$1" limit="${2:-99}" r n waiting dropped out tries=0 moves=0
+    local deadline=$(( $(date +%s) + 900 ))
+    CASE_LEFT=0; PLAYED=0
     while :; do
-        r="$(ev "return CFCamp.useCase([[$cid]])")"; n="$(field 1 "$r")"; waiting="$(field 3 "$r")"
-        [ "${n:-0}" -gt 0 ] 2>/dev/null && [ "$waiting" = 0 ] && break
-        [ "$(date +%s)" -lt "$deadline" ] || { fail "case ${cid#generated:}: clues never all placed ($(tr '\t' ' ' <<<"$r"))"; CASE_LEFT=0; PLAYED=0; return 1; }
-        sleep 2
-    done
-    CASE_LEFT="$n"; PLAYED=0
-    while [ "$PLAYED" -lt "$limit" ] && [ "$tries" -lt "$n" ]; do
-        tries=$((tries + 1))
-        [ "$(field 1 "$(ev "return CFCamp.useCase([[$cid]])")")" -gt 0 ] 2>/dev/null || break
-        local where; where="$(ev 'return CFCamp.describeFirst()' | tr '\t' ' ')"
-        if out="$(inspect_doc 1)"; then
-            PLAYED=$((PLAYED + 1)); say "case ${cid#generated:}: clue $PLAYED of $n: $out"
-        else
-            fail "case ${cid#generated:}: $out; $where (skipped $(ev 'return CFCamp.skipFirst()'))"
+        r="$(ev "return CFCamp.useCase([[$cid]])")"
+        n="$(field 1 "$r")"; waiting="$(field 3 "$r")"; dropped="$(field 4 "$r")"
+        if [ "${n:-0}" -gt 0 ] 2>/dev/null; then
+            CASE_LEFT=$(( PLAYED + n ))
+            while [ "$PLAYED" -lt "$limit" ] && [ "$tries" -lt "$((PLAYED + n))" ]; do
+                tries=$((tries + 1))
+                [ "$(field 1 "$(ev "return CFCamp.useCase([[$cid]])")")" -gt 0 ] 2>/dev/null || break
+                local where; where="$(ev 'return CFCamp.describeFirst()' | tr '\t' ' ')"
+                if out="$(inspect_doc 1)"; then
+                    PLAYED=$((PLAYED + 1)); say "case ${cid#generated:}: clue $PLAYED of $CASE_LEFT: $out"
+                else
+                    fail "case ${cid#generated:}: $out; $where (skipped $(ev 'return CFCamp.skipFirst()'))"
+                fi
+            done
+            [ "$PLAYED" -lt "$limit" ] || return 0
+            r="$(ev "return CFCamp.useCase([[$cid]])")"
+            n="$(field 1 "$r")"; waiting="$(field 3 "$r")"; dropped="$(field 4 "$r")"
         fi
+        [ "${waiting:-0}" -gt 0 ] 2>/dev/null || return 0
+        # Something is still waiting for a container. A player walks on; so do we.
+        if [ "$(date +%s)" -ge "$deadline" ]; then
+            fail "case ${cid#generated:}: $waiting clue(s) never reached a container in fifteen minutes (statuses $(field 5 "$r"); assignments $(ev 'return CFCamp.assignments()'); $(promise_words "$(promise)"))"
+            return 1
+        fi
+        moves=$((moves + 1))
+        findings+=("case ${cid#generated:}: $waiting clue(s) still waiting after $PLAYED played, $dropped dropped (statuses $(field 5 "$r")); moving on for the filler, move $moves")
+        move_on "case ${cid#generated:}, waiting clue, move $moves" || sleep 30
+        # Give the filler its own time: it places one clue per attempt.
+        local until_t=$(( $(date +%s) + 120 ))
+        while [ "$(date +%s)" -lt "$until_t" ]; do
+            r="$(ev "return CFCamp.useCase([[$cid]])")"
+            [ "$(field 1 "$r")" -gt 0 ] 2>/dev/null && break
+            [ "$(field 3 "$r")" = 0 ] && break
+            sleep 5
+        done
     done
 }
 wait_finished() { for _ in $(seq 60); do [ "$(field 2 "$(cases)")" -ge "$1" ] 2>/dev/null && return 0; sleep 1; done; return 1; }
@@ -159,12 +235,17 @@ next_case() { # next_case LABEL WANT [MOVES]: wait for case number WANT, moving 
         wait_case_count "$want" 45 && return 0
         move_on "$label, move $i" || continue
         wait_case_count "$want" 210 && { findings+=("$label: the case came after $i move(s) to a fresh neighbourhood"); return 0; }
-        say "$label: no case three and a half minutes after move $i (preparing=$(ev 'return CFCamp.preparing()' | tr '\t' ' '))"
+        say "$label: no case three and a half minutes after move $i ($(promise_words "$(promise)"))"
+        ladder_climbed "$label, move $i"
     done
+    # Out of moves: the generator's own promise decides whether that is a
+    # failure or a wait that has not run out yet (P4-R133).
+    promise_broken "$label" || findings+=("$label: no case after $moves moves; assignments $(ev 'return CFCamp.assignments()')")
     return 1
 }
 reload_world() { # reload_world LABEL: save, quit, continue, reload the Lua
     errors_seen+="$(mod_errors)"
+    keep_defers
     "$PZ" stop --save >/dev/null 2>&1
     "$PZ" start --continue "$world" "${start_args[@]}" >/dev/null 2>&1 || abort "$1: the saved game did not load"
     load_lua || abort "$1: could not load the check's Lua after the reload"
@@ -336,7 +417,24 @@ fi
 stage "after the limit"
 perf_note "the limit"
 
+# --- the archive (P4-R111) and AD-10 town names -----------------------------
+# By now four or five cases have finished, which is what the archive is about:
+# the four most recent keep their rows, anything older is a stub, and a clue in
+# the world whose case is a stub must still read Evidence / Old and still offer
+# the greyed "already noted" option rather than an empty menu.
+arch="$(ev 'return CFCamp.archive()')"
+findings+=("archive: $(field 1 "$arch") finished cases full, $(field 2 "$arch") stubbed, $(field 3 "$arch") rows kept in all, $(field 4 "$arch") stubs still offering questions; $(field 5 "$arch")")
+old="$(ev 'return CFCamp.oldEvidence()')"
+findings+=("a finished case's clues carried: $(field 1 "$old") checked, $(field 2 "$old") show Evidence / Old, $(field 3 "$old") offer the greyed already-noted option, $(field 4 "$old") offer no such option ($(field 5 "$old"))")
+[ "$(field 1 "$old")" = 0 ] || [ "$(field 2 "$old")" = "$(field 1 "$old")" ] \
+    || fail "$(( $(field 1 "$old") - $(field 2 "$old") )) of $(field 1 "$old") finished clues do not read Evidence / Old"
+[ "$(field 1 "$old")" = 0 ] || [ "$(field 4 "$old")" = 0 ] \
+    || fail "$(field 4 "$old") finished clues offer no already-noted option at all ($(field 5 "$old"))"
+towns="$(ev 'return CFCamp.townNames()')"
+findings+=("AD-10 town names: the survivor is in $(field 1 "$towns"); of $(field 5 "$towns") records $(field 2 "$towns") name a town and $(field 3 "$towns") do not; e.g. $(field 4 "$towns")")
+
 errors_seen+="$(mod_errors)"
+keep_defers
 [ -z "$errors_seen" ] || fail "errors inside the mod"
 "$PZ" shot "$RUNS/$first-campaign.png" >/dev/null 2>&1
 "$PZ" stop >/dev/null 2>&1
@@ -351,6 +449,8 @@ report="$EVIDENCE/$first-campaign.txt"
     printf '  %s\n' "${stages[@]}"
     echo "case 1 answers on the organiser: $(tr '\t' ' ' <<<"$answers")"
     echo "case 2 steer: $(cut -f1-6 <<<"${steer2:-}" | tr '\t' ' ')"
+    echo "refusals (P4-R133), all sessions:"
+    if [ -n "$(tr -d '[:space:]' <<<"$defers")" ]; then histogram "$defers" | sed 's/^/  /'; else echo "  none"; fi
     echo "errors inside the mod, all sessions: $(grep -c . <<<"$errors_seen")"
     [ -z "$errors_seen" ] || sed 's/^/  /' <<<"$errors_seen" | head -10
     for f in "${findings[@]}"; do echo "FINDING: $f"; done

@@ -70,24 +70,42 @@ end
 
 -- Point CFLoop at one case's clues still to find, in document order, so
 -- inspect_doc 1 always plays the next one of that case and no other. Clues
--- already noted, and clues skipped, are left out. Returns how many
--- remain, how many are placed, how many still waiting to be placed.
+-- already noted, and clues skipped, are left out.
+--
+-- The STATUS comes from the store, not from the diagnostic: since P4-R133 a
+-- case goes live with the clues that fit and the rest wait as `deferred`
+-- assignments with no target, so R.devLocations gives them no coordinates and
+-- CFLoop.docs() cannot see them at all. A check reading only the diagnostic
+-- would think a partial case was whole, play its three placed clues and then
+-- wait for a completion that cannot come.
+--
+-- Returns: findable now, placed, waiting (pending, placing or deferred),
+-- dropped (expired, accounted for and never coming), and the statuses.
 function C.useCase(caseId)
     local prefix = tostring(caseId):gsub(":case$", ":")
     local known = {}
     for _, row in ipairs(R.known()) do known[row.id] = true end
-    local out, placed, waiting = {}, 0, 0
-    for _, d in ipairs(CFLoop.docs()) do
-        if d.id:sub(1, #prefix) == prefix and not known[d.id] and not C.skipped[d.id] then
-            out[#out + 1] = d
-            if d.status == "pending" or d.status == "placing" then waiting = waiting + 1 else placed = placed + 1 end
+    local status = {}
+    for _, root in ipairs(roots()) do
+        for id, a in pairs(root.assignments or {}) do status[id] = a.status end
+    end
+    local byId = {}
+    for _, d in ipairs(CFLoop.docs()) do byId[d.id] = d end
+    local out, placed, waiting, dropped, seen = {}, 0, 0, 0, {}
+    for id, st in pairs(status) do
+        if id:sub(1, #prefix) == prefix and not known[id] and not C.skipped[id] then
+            seen[#seen + 1] = id:match("document%-(%d+)$") .. ":" .. tostring(st)
+            if st == "dropped" then dropped = dropped + 1
+            elseif st == "placed" and byId[id] then out[#out + 1] = byId[id]; placed = placed + 1
+            else waiting = waiting + 1 end
         end
     end
     table.sort(out, function(a, b)
         return (tonumber(a.id:match("document%-(%d+)$")) or 0) < (tonumber(b.id:match("document%-(%d+)$")) or 0)
     end)
+    table.sort(seen)
     CFLoop.list = out
-    return #out, placed, waiting
+    return #out, placed, waiting, dropped, table.concat(seen, " ")
 end
 
 -- How a live case was built: its steer (or "unsteered"), its first person and
@@ -379,4 +397,133 @@ function C.categories()
     end
     walk(getPlayer():getInventory(), 0)
     return oldOk, oldBad, liveOk, liveBad
+end
+
+-- THE GENERATOR'S OWN PROMISE (P4-R133, docs/design/CASE_PACING.md step 6).
+-- A refusal now carries a code from a closed set, a per-code count, the
+-- in-game hour a case is promised BY, and the rung of the ladder that count
+-- has earned. So the check no longer writes a finding when no case comes: it
+-- reads the promise and fails when the hour passes.
+--
+-- Returns: code, count, due (hh:mm), rung, rungMax, now (hh:mm), overdue,
+-- hours overdue, preparing, active/activeLimit, cases/limit.
+local function hhmm(h)
+    if type(h) ~= "number" or h ~= h then return "-" end
+    local m = math.floor(h * 60 + 0.5) % 1440
+    return string.format("%02d:%02d", math.floor(m / 60), m % 60)
+end
+function C.promise()
+    local s = R.automaticStatus()
+    local now = getGameTime():getWorldAgeHours()
+    local over = type(s.dueHours) == "number" and now > s.dueHours
+    return tostring(s.why), tostring(s.deferCount), hhmm(s.dueHours), tostring(s.rung), tostring(s.rungMax),
+        hhmm(now), tostring(over == true),
+        string.format("%.2f", type(s.dueHours) == "number" and (now - s.dueHours) or 0),
+        tostring(s.preparing), tostring(s.active) .. "/" .. tostring(s.activeLimit),
+        tostring(s.count) .. "/" .. tostring(s.limit)
+end
+
+-- The ladder must climb with the count (P4-R133): three refusals of one code
+-- earn a rung, up to MAX_RUNG. A count that walks past a threshold while the
+-- rung stands still means the generator is refusing without ever lowering its
+-- standard, which is the fault the ladder exists to prevent.
+function C.ladder()
+    local Cases2 = require("ConspiracyFiles/Generated/SuccessiveCases")
+    local s = R.automaticStatus()
+    local per, max = Cases2.REFUSALS_PER_RUNG, Cases2.MAX_RUNG
+    local expected = math.min(max, math.floor((s.deferCount or 0) / per))
+    return tostring((s.rung or 0) >= expected), tostring(s.rung), tostring(expected),
+        tostring(s.deferCount), tostring(per), tostring(max)
+end
+
+-- Every assignment of every case by status, so a case that will not come can
+-- be read against what the save is still holding: a `placing` that never ends
+-- refuses every later case as `busy`, and that refusal is logged at debug
+-- level, which never reaches the console.
+function C.assignments()
+    local n, parts = {}, {}
+    for _, root in ipairs(roots()) do
+        for _, a in pairs(root.assignments or {}) do n[tostring(a.status)] = (n[tostring(a.status)] or 0) + 1 end
+    end
+    for k, v in pairs(n) do parts[#parts + 1] = k .. "=" .. v end
+    table.sort(parts)
+    return table.concat(parts, " ")
+end
+
+-- THE ARCHIVE (P4-R111, docs/design/CASE_RETIREMENT.md). A finished case keeps
+-- its rows while it is one of the four most recent; older ones become stubs.
+-- What a check can read: how many are full, how many are stubs, how many rows
+-- each still offers the reading surface, and whether a stubbed case still
+-- offers its questions.
+function C.archive()
+    local Retired = require("ConspiracyFiles/Generated/RetiredCase")
+    local full, stubs, rows, stubbedWithQuestions, ids = 0, 0, 0, 0, {}
+    for i, root in ipairs(roots()) do
+        if type(root.rows) == "table" then
+            local isStub = Retired.isStub and Retired.isStub(root) or (root.stub == true)
+            if isStub then stubs = stubs + 1 else full = full + 1 end
+            rows = rows + #root.rows
+            ids[#ids + 1] = i .. ":" .. short(caseIdOf(root)) .. (isStub and ":stub" or ":full") .. ":" .. #root.rows
+            if isStub and root.offered then stubbedWithQuestions = stubbedWithQuestions + 1 end
+        end
+    end
+    return full, stubs, rows, stubbedWithQuestions, table.concat(ids, " ")
+end
+
+-- A record of a finished case, as the loot list and the right-click menu show
+-- it: the one thing the archive could break is a clue in the world whose case
+-- is now a stub. Walks the survivor's own inventory, which is where the
+-- campaign check's finished clues are.
+function C.oldEvidence()
+    local checked, old, greyed, missing, sample = 0, 0, 0, 0, ""
+    local items = getPlayer():getInventory():getItems()
+    local function look(item)
+        local md = item:getModData()
+        if type(md) ~= "table" or not md.cfGeneratedId then return end
+        if not R.retiredPaper(item) then return end
+        checked = checked + 1
+        local ok, category = pcall(function() return item:getDisplayCategory() end)
+        if ok and category == "EvidenceOld" then old = old + 1 end
+        local ctx = ISInventoryPaneContextMenu.createMenu(0, true, { item }, 200, 200)
+        local option = ctx and ctx:getOptionFromName("Already in the Investigation")
+        if not option and ctx then option = ctx:getOptionFromName("Already in the organiser") end
+        if option then
+            if option.notAvailable then greyed = greyed + 1 end
+            if sample == "" then sample = tostring(item:getDisplayName()) .. " -> " .. tostring(option.name) end
+        else
+            missing = missing + 1
+            if sample == "" then sample = tostring(item:getDisplayName()) .. " -> no such option (" ..
+                tostring(ctx and #(ctx.options or {}) or "no menu") .. " options)" end
+        end
+        if ctx then ctx:closeAll() end
+    end
+    for i = 0, items:size() - 1 do pcall(look, items:get(i)) end
+    return checked, old, greyed, missing, sample
+end
+
+-- AD-10 town names in the record (P4-R129): a place in another town carries the
+-- town, a place in the survivor's own town does not. Read from the reading
+-- surface's own rows, with the town the survivor is standing in.
+function C.townNames()
+    local rows = require("ConspiracyFiles/EvidenceRows").list("evidence") or {}
+    local map = ConspiracyFiles.AddressMap
+    -- The town the survivor is standing in, the same way the record decides
+    -- whether to write one (AddressMap.qualified: a place in your own town is
+    -- written without it).
+    local here = map and map.currentTown and map.currentTown() or nil
+    local withTown, plain, sample, other = 0, 0, "", ""
+    for _, row in ipairs(rows) do
+        local words = tostring(row.detailText or "") .. " | " .. tostring(row.text or "")
+        -- A house number, a street, then a comma and a capitalised name: that
+        -- comma is only ever written for a place in another town.
+        local address, town = words:match("(%d+ [%u][%a%.]* ?[%a%.]*),%s*(%u%a+[%a ]*)")
+        if address and town then
+            withTown = withTown + 1
+            if sample == "" then sample = address .. ", " .. town end
+        elseif words:match("%d+ [%u][%a%.]* ?[%a%.]*") then
+            plain = plain + 1
+            if other == "" then other = tostring(words:match("(%d+ [%u][%a%.]* ?[%a%.]*)")) end
+        end
+    end
+    return tostring(here), withTown, plain, sample .. (other ~= "" and ("; own town: " .. other) or ""), #rows
 end

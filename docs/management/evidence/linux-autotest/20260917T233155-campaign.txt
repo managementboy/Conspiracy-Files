@@ -1,0 +1,39 @@
+Linux campaign check 20260917T233155: PASS
+source: 674799b
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+cases: 1 generated:422828266:case, 2 generated:2097457825:case, 3 generated:712463063:case; at the end 
+stages:
+  start                  cases 1 (0 finished) | record 0 | FILES questions 0 | NAMES 1 | PLACES 0 | Old 0/0 wrong | Evidence 0/0 wrong | order  | save 28928 B
+  case 1 finished        cases 1 (1 finished) | record 4 | FILES questions 1 | NAMES 1 | PLACES 6 | Old 4/0 wrong | Evidence 0/0 wrong | order 1111 | save 23666 B
+  after reload 1         cases 1 (1 finished) | record 4 | FILES questions 1 | NAMES 1 | PLACES 6 | Old 4/0 wrong | Evidence 0/0 wrong | order 1111 | save 24295 B
+  case 2 finished        cases 2 (2 finished) | record 9 | FILES questions 2 | NAMES 3 | PLACES 12 | Old 9/0 wrong | Evidence 0/0 wrong | order 111122222 | save 45107 B
+  case 3, two clues      cases 3 (2 finished) | record 11 | FILES questions 2 | NAMES 4 | PLACES 14 | Old 9/0 wrong | Evidence 2/0 wrong | order 11112222233 | save 80637 B
+  after reload 2         cases 3 (2 finished) | record 11 | FILES questions 2 | NAMES 4 | PLACES 14 | Old 9/0 wrong | Evidence 2/0 wrong | order 11112222233 | save 81077 B
+  at the limit           cases 6 (2 finished) | record 11 | FILES questions 2 | NAMES 4 | PLACES 14 | Old 9/0 wrong | Evidence 2/0 wrong | order 11112222233 | save 160560 B
+  after the limit        cases 7 (3 finished) | record 16 | FILES questions 3 | NAMES 5 | PLACES 23 | Old 16/0 wrong | Evidence 0/0 wrong | order 1111222223333333 | save 176874 B
+case 1 answers on the organiser: true two person2 records nil Joanne Voss Marion Ellis Knox County Schools
+case 2 steer: generated:422828266:case two records Marion Ellis Marion Ellis true
+errors inside the mod, all sessions: 0
+FINDING: no case 1 in 3 fresh worlds had a document in the relay memo's week; carrying on in this world
+FINDING: fresh worlds started for a case 1 with a document in the memo's week: 3 (memo=true, dated documents=0)
+FINDING: case 1 relay memo: found=true, dated in its week=0, carrying the date note=0
+FINDING: the date note was not exercised: case 1 had no document in the memo's week
+FINDING: case 1 note on the organiser: I think it was someone left unaccounted for. Marion Ellis matters here. Next I would check the place against its records.
+FINDING: frame cost during case 1: AutomaticInvestigations.onTick calls=2599 avg=0.011ms max=21ms over2ms=1 | CaseFile.onTick calls=2586 avg=0.009ms max=1ms over2ms=0 | ClueMarkers.draw calls=0 avg=0.000ms max=0ms over2ms=0 | ClueMarkers.update calls=46 avg=0.391ms max=2ms over2ms=3 | IdentityObserver.afterRender calls=5216 avg=0.130ms max=1ms over2ms=0 | IdentityObserver.tick calls=2636 avg=0.003ms max=1ms over2ms=0 | LocalPersonI
+FINDING: reload 1 save size: 23943 -> 24295 bytes; before [Generated.G2=18934 KeyConnections=770 DiscoveryLedger=2222 VisitedBuildings=359]; after [Generated.G2=19286 KeyConnections=770 DiscoveryLedger=2222 VisitedBuildings=359]
+FINDING: case 2 placement: reach 250: t3:10977704480342043, t3:10977704480342042
+FINDING: case 2 clues: Timesheet / PS-522 | Gate log / PS-522 | Payroll query / PS-522 | Duty log / PS-522 | nine fur tuft browndarks
+FINDING: frame cost during case 2: AutomaticInvestigations.onTick calls=4765 avg=0.004ms max=2ms over2ms=1 | CaseFile.onTick calls=4753 avg=0.012ms max=1ms over2ms=0 | ClueMarkers.draw calls=0 avg=0.000ms max=0ms over2ms=0 | ClueMarkers.update calls=83 avg=0.482ms max=4ms over2ms=6 | IdentityObserver.afterRender calls=9544 avg=0.103ms max=1ms over2ms=0 | IdentityObserver.tick calls=4802 avg=0.003ms max=1ms over2ms=0 | LocalPersonIn
+FINDING: case 3 placement: reach 250: t3:10977704480342019, t3:10977704480342047
+FINDING: frame cost during case 3: AutomaticInvestigations.onTick calls=6542 avg=0.005ms max=2ms over2ms=2 | CaseFile.onTick calls=6530 avg=0.013ms max=1ms over2ms=0 | ClueMarkers.draw calls=0 avg=0.000ms max=0ms over2ms=0 | ClueMarkers.update calls=116 avg=0.647ms max=4ms over2ms=9 | IdentityObserver.afterRender calls=13058 avg=0.090ms max=1ms over2ms=0 | IdentityObserver.tick calls=6579 avg=0.003ms max=1ms over2ms=0 | LocalPerson
+FINDING: reload 2 save size: 80637 -> 81077 bytes; before [Generated.G2=67945 KeyConnections=1682 DiscoveryLedger=5775 VisitedBuildings=827]; after [Generated.G2=68385 KeyConnections=1682 DiscoveryLedger=5775 VisitedBuildings=827]
+FINDING: map marks after reload 2 (written/pending/missing): 11/0/0
+FINDING: the limit, move 1: moved on 304 tiles to 10778,9765 (t3:10696229503631367, 5 rooms, 38 unused buildings within 120 tiles); 21 containers loaded within 8 tiles
+FINDING: the limit: the case came after 1 move(s) to a fresh neighbourhood
+FINDING: at the limit: moved on 301 tiles to 10910,10035 (t3:10977704480342051, 7 rooms, 19 unused buildings within 120 tiles); 29 containers loaded within 8 tiles
+FINDING: after 90 s with 4 unfinished: preparing=false, cases 6 2 1:422828266:retired 2:2097457825:retired 3:712463063:live 4:37653602:live 5:1528522444:live 6:363262231:live
+FINDING: after the limit, move 1: moved on 302 tiles to 10730,9783 (t3:10696225208664086, 5 rooms, 38 unused buildings within 120 tiles); 22 containers loaded within 8 tiles
+FINDING: after the limit: the case came after 1 move(s) to a fresh neighbourhood
+FINDING: a new case came after a case was finished at the limit: 7 3 1:422828266:retired 2:2097457825:retired 3:712463063:retired 4:37653602:live 5:1528522444:live 6:363262231:live 7:237828178:live
+FINDING: frame cost during the limit: AutomaticInvestigations.onTick calls=18934 avg=0.004ms max=3ms over2ms=6 | CaseFile.onTick calls=18922 avg=0.009ms max=5ms over2ms=4 | ClueMarkers.draw calls=0 avg=0.000ms max=0ms over2ms=0 | ClueMarkers.update calls=328 avg=0.872ms max=10ms over2ms=19 | IdentityObserver.afterRender calls=37698 avg=0.050ms max=1ms over2ms=0 | IdentityObserver.tick calls=18970 avg=0.003ms max=1ms over2ms=0 | LocalP
+screenshot: dev/eval/linux/runs/20260917T233155-campaign.png (not committed)

@@ -1,0 +1,40 @@
+Linux campaign check 20260917T222719: PASS
+source: 36c6369 + uncommitted mod changes
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+cases: 1 generated:83523109:case, 2 generated:1259417965:case, 3 generated:1672216376:case; at the end 
+stages:
+  start                  cases 1 (0 finished) | record 0 | FILES questions 0 | NAMES 1 | PLACES 0 | Old 0/0 wrong | Evidence 0/0 wrong | order  | save 41886 B
+  case 1 finished        cases 1 (1 finished) | record 7 | FILES questions 1 | NAMES 3 | PLACES 11 | Old 7/0 wrong | Evidence 0/0 wrong | order 1111111 | save 35460 B
+  after reload 1         cases 1 (1 finished) | record 7 | FILES questions 1 | NAMES 3 | PLACES 11 | Old 7/0 wrong | Evidence 0/0 wrong | order 1111111 | save 36361 B
+  case 2 finished        cases 2 (2 finished) | record 11 | FILES questions 2 | NAMES 4 | PLACES 18 | Old 11/0 wrong | Evidence 0/0 wrong | order 11111112222 | save 55949 B
+  case 3, two clues      cases 3 (2 finished) | record 13 | FILES questions 2 | NAMES 5 | PLACES 20 | Old 11/0 wrong | Evidence 2/0 wrong | order 1111111222233 | save 80994 B
+  after reload 2         cases 3 (2 finished) | record 13 | FILES questions 2 | NAMES 5 | PLACES 20 | Old 11/0 wrong | Evidence 2/0 wrong | order 1111111222233 | save 81346 B
+  at the limit           cases 6 (2 finished) | record 13 | FILES questions 2 | NAMES 5 | PLACES 20 | Old 11/0 wrong | Evidence 2/0 wrong | order 1111111222233 | save 167174 B
+  after the limit        cases 7 (3 finished) | record 15 | FILES questions 3 | NAMES 5 | PLACES 23 | Old 15/0 wrong | Evidence 0/0 wrong | order 111111122223333 | save 183038 B
+case 1 answers on the organiser: true two person2 records nil Adele Prosser Joanne Voss District Works Department
+case 2 steer: generated:83523109:case two records Joanne Voss Joanne Voss true
+errors inside the mod, all sessions: 0
+FINDING: fresh worlds started for a case 1 with a document in the memo's week: 1 (memo=true, dated documents=2)
+FINDING: case 1 relay memo: found=true, dated in its week=2, carrying the date note=2
+FINDING: the date note was exercised: 2 of 2 records dated in the memo's week carry it
+FINDING: case 1 note on the organiser: I think it was a move nobody would sign for. Joanne Voss matters here. Next I would check the place against its records.
+FINDING: frame cost during case 1: AutomaticInvestigations.onTick calls=4396 avg=0.009ms max=20ms over2ms=1 | CaseFile.onTick calls=4384 avg=0.012ms max=1ms over2ms=0 | ClueMarkers.draw calls=0 avg=0.000ms max=0ms over2ms=0 | ClueMarkers.update calls=78 avg=0.449ms max=3ms over2ms=6 | IdentityObserver.afterRender calls=8816 avg=0.151ms max=1ms over2ms=0 | IdentityObserver.tick calls=4433 avg=0.004ms max=1ms over2ms=0 | LocalPersonI
+FINDING: reload 1 save size: 35737 -> 36361 bytes; before [Generated.G2=28065 KeyConnections=762 DiscoveryLedger=3751 VisitedBuildings=359]; after [Generated.G2=28689 KeyConnections=762 DiscoveryLedger=3751 VisitedBuildings=359]
+FINDING: case 2 placement: reach 250: t3:10977704480342039, t3:10977704480342034
+FINDING: case 2 clues: Requisition / HK-261 | Payment slip / HK-261 | Duty log / HK-261 | Tagged key / HK-261
+FINDING: frame cost during case 2: AutomaticInvestigations.onTick calls=3607 avg=0.003ms max=1ms over2ms=0 | CaseFile.onTick calls=3595 avg=0.011ms max=1ms over2ms=0 | ClueMarkers.draw calls=0 avg=0.000ms max=0ms over2ms=0 | ClueMarkers.update calls=71 avg=1.070ms max=6ms over2ms=13 | IdentityObserver.afterRender calls=7098 avg=0.152ms max=1ms over2ms=0 | IdentityObserver.tick calls=3643 avg=0.003ms max=1ms over2ms=0 | LocalPersonI
+FINDING: case 3 placement: reach 250: t3:10977704480342036, t3:10977704480342035
+FINDING: frame cost during case 3: AutomaticInvestigations.onTick calls=5476 avg=0.005ms max=3ms over2ms=1 | CaseFile.onTick calls=5464 avg=0.011ms max=1ms over2ms=0 | ClueMarkers.draw calls=0 avg=0.000ms max=0ms over2ms=0 | ClueMarkers.update calls=105 avg=1.162ms max=6ms over2ms=21 | IdentityObserver.afterRender calls=10772 avg=0.144ms max=1ms over2ms=0 | IdentityObserver.tick calls=5512 avg=0.004ms max=1ms over2ms=0 | LocalPerso
+FINDING: reload 2 save size: 80994 -> 81346 bytes; before [Generated.G2=66496 KeyConnections=1682 DiscoveryLedger=6825 VisitedBuildings=827]; after [Generated.G2=66848 KeyConnections=1682 DiscoveryLedger=6825 VisitedBuildings=827]
+FINDING: map marks after reload 2 (written/pending/missing): 13/0/0
+FINDING: the limit, move 1: moved on 303 tiles to 10885,9884 (t3:10696229503631375, 5 rooms, 29 unused buildings within 120 tiles); 20 containers loaded within 8 tiles
+FINDING: the limit: the case came after 1 move(s) to a fresh neighbourhood
+FINDING: the limit, move 1: moved on 302 tiles to 10680,10106 (t3:10977700185374739, 5 rooms, 48 unused buildings within 120 tiles); 21 containers loaded within 8 tiles
+FINDING: the limit: the case came after 1 move(s) to a fresh neighbourhood
+FINDING: at the limit: moved on 300 tiles to 10772,10392 (t3:11259179457052676, 4 rooms, 39 unused buildings within 120 tiles); 24 containers loaded within 8 tiles
+FINDING: after 90 s with 4 unfinished: preparing=false, cases 6 2 1:83523109:retired 2:1259417965:retired 3:1672216376:live 4:1099924873:live 5:296570250:live 6:1413563421:live
+FINDING: after the limit, move 1: moved on 304 tiles to 10711,10443 (t3:11259175162085398, 5 rooms, 36 unused buildings within 120 tiles); 51 containers loaded within 8 tiles
+FINDING: after the limit: the case came after 1 move(s) to a fresh neighbourhood
+FINDING: a new case came after a case was finished at the limit: 7 3 1:83523109:retired 2:1259417965:retired 3:1672216376:retired 4:1099924873:live 5:296570250:live 6:1413563421:live 7:1810671631:live
+FINDING: frame cost during the limit: AutomaticInvestigations.onTick calls=18911 avg=0.005ms max=3ms over2ms=6 | CaseFile.onTick calls=18899 avg=0.009ms max=2ms over2ms=1 | ClueMarkers.draw calls=0 avg=0.000ms max=0ms over2ms=0 | ClueMarkers.update calls=332 avg=1.054ms max=10ms over2ms=33 | IdentityObserver.afterRender calls=37644 avg=0.099ms max=2ms over2ms=1 | IdentityObserver.tick calls=18947 avg=0.003ms max=1ms over2ms=0 | LocalP
+screenshot: dev/eval/linux/runs/20260917T222719-campaign.png (not committed)
