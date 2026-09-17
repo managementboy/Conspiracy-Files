@@ -65,7 +65,7 @@ car_stage() {
         fail "the car holding the clue could not be found: $(f 2 <<<"$found")"
     else
         note "the car: $(f 2 <<<"$found") at $(f 3 <<<"$found"), clue in its $(f 4 <<<"$found") as \"$(f 5 <<<"$found")\""
-        ev 'return CFField.standByCar()' >/dev/null
+        note "beside the parked car: $(ev 'return CFField.standByCar()' | cut -f2- | tr '\t' ' ') tiles from its square"
         ev 'return CFField.searchOn()' >/dev/null
         icon_before=""
         for _ in $(seq 40); do
@@ -99,18 +99,34 @@ car_stage() {
             else
                 fail "the search icon did not follow the car: it is at $(ev 'return CFField.icon()' | f 2), the car at $(f 3 <<<"$moved")"
             fi
-            # And the clue is still findable there: the game's own spotting.
-            spot_start=$(date +%s); spotted=no
-            for _ in $(seq 180); do
-                ev 'return CFField.searchOn()' >/dev/null
-                [ "$(ev 'return CFField.recognised()')" = true ] && { spotted=yes; break; }
-                sleep 0.5
-            done
-            secs=$(( $(date +%s) - spot_start ))
-            if [ "$spotted" = yes ]; then
-                note "the clue in the moved car was spotted and recognised ${secs}s after searching beside its new square"
+            # And the clue is still findable there: the game's own spotting,
+            # first with no Search Focus and then with "Clues" - which reaches
+            # 4.5 tiles instead of 3, and a car's body decides how close anyone
+            # can stand (20260917T215847 stood 3.54 tiles off and never spotted
+            # it). Both numbers are reported; a FAIL only if neither works.
+            stood="$(ev 'return CFField.standByCar()')"
+            note "standing as close to the car as its body allows: $(f 2 <<<"$stood"), $(f 3 <<<"$stood") tiles from its square"
+            try_spot() { # try_spot SECONDS LABEL
+                local end=$(( $(date +%s) + $1 )) start=$(date +%s)
+                while [ "$(date +%s)" -lt "$end" ]; do
+                    ev 'return CFField.searchOn()' >/dev/null
+                    [ "$(ev 'return CFField.recognised()')" = true ] && { SPOT_SECS=$(( $(date +%s) - start )); return 0; }
+                    sleep 0.5
+                done
+                SPOT_SECS=$(( $(date +%s) - start )); return 1
+            }
+            ev "return CFField.setFocus('')" >/dev/null
+            if try_spot 60 "no focus"; then
+                note "the clue in the moved car was spotted with NO search focus, ${SPOT_SECS}s, at $(f 3 <<<"$stood") tiles"
             else
-                fail "the clue in the moved car could not be spotted in ${secs}s (icon $(ev 'return CFField.icon()' | cut -f2- | tr '\t' ' '); light $(ev 'return CFField.light()' | cut -f2- | tr '\t' ' '))"
+                note "with no search focus: not spotted in ${SPOT_SECS}s at $(f 3 <<<"$stood") tiles (icon $(ev 'return CFField.icon()' | cut -f2- | tr '\t' ' '))"
+                focus="$(ev "return CFField.setFocus('Clues')")"
+                note "Search Focus set to Clues: $(f 2 <<<"$focus")"
+                if try_spot 120 "Clues"; then
+                    note "ANSWER (car): the clue in the moved car needed the Clues focus - spotted ${SPOT_SECS}s after choosing it, at $(f 3 <<<"$stood") tiles from the car's square"
+                else
+                    fail "the clue in the moved car could not be spotted at $(f 3 <<<"$stood") tiles even with the Clues focus, in ${SPOT_SECS}s (icon $(ev 'return CFField.icon()' | cut -f2- | tr '\t' ' '); light $(ev 'return CFField.light()' | cut -f2- | tr '\t' ' '))"
+                fi
             fi
         fi
     fi

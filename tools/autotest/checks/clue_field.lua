@@ -217,26 +217,41 @@ function K.carMove(dist)
     return "true", vx .. "," .. vy, math.floor(v:getX()) .. "," .. math.floor(v:getY()), table.concat(steps, " ")
 end
 
--- Stand beside the car where it is now, so the icon is inside the add radius
--- and the survivor can see the car.
+-- Stand beside the car where it is now, as CLOSE as the car lets anyone stand:
+-- the game's own spotting only reaches 3 tiles at Foraging 0 with no focus, and
+-- the first run stood 3.54 tiles from the car's square and never spotted
+-- anything (20260917T215847). A car's body blocks the squares around it, so
+-- which free square is nearest decides whether a clue in a car is findable at
+-- all - which is worth measuring rather than stumbling over.
 function K.standByCar()
     local v = K.vehicle
     if not v then return "false", "no car" end
     local cell = getCell()
     local vx, vy, vz = math.floor(v:getX()), math.floor(v:getY()), math.floor(v:getZ())
-    for r = 2, 5 do
-        for dx = -r, r do for dy = -r, r do
-            if math.max(math.abs(dx), math.abs(dy)) == r then
-                local sq = cell:getGridSquare(vx + dx, vy + dy, vz)
-                if sq and sq:isFree(false) then
-                    player():teleportTo(sq:getX() + 0.5, sq:getY() + 0.5, sq:getZ())
-                    pcall(function() player():faceLocation(vx + 0.5, vy + 0.5) end)
-                    return "true", sq:getX() .. "," .. sq:getY()
-                end
-            end
-        end end
-    end
-    return "false", "no free square beside the car"
+    local best, bestD
+    for dx = -5, 5 do for dy = -5, 5 do
+        local sq = cell:getGridSquare(vx + dx, vy + dy, vz)
+        if sq and sq:isFree(false) then
+            local d = math.sqrt(dx * dx + dy * dy)
+            if not bestD or d < bestD then best, bestD = sq, d end
+        end
+    end end
+    if not best then return "false", "no free square within five tiles of the car" end
+    local p = player()
+    p:teleportTo(best:getX() + 0.5, best:getY() + 0.5, best:getZ())
+    pcall(function() p:faceLocation(vx + 0.5, vy + 0.5) end)
+    return "true", best:getX() .. "," .. best:getY(), string.format("%.2f", bestD)
+end
+
+-- The Investigate Area window's Search Focus (P4-R132): with "Clues" chosen the
+-- spot timer fills twice as fast and reaches half as far again, which is the
+-- difference between 3 tiles and 4.5. Same stage as checks/clue_search.lua.
+function K.setFocus(category)
+    ISSearchWindow.createUI(player():getPlayerNum())
+    local window = ISSearchWindow.players[player()]
+    if not window then return "false", "no Investigate Area window" end
+    window.searchFocusCategory = (category ~= "" and category) or nil
+    return "true", tostring(Search.focusOf and Search.focusOf(player()))
 end
 -- Is the clue still really in the car's part, after the move?
 function K.stillInCar()

@@ -1,0 +1,39 @@
+Linux clue field check 20260917T215847: FAIL
+source: 7a63ed8
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+FINDING: mod version DEV-0.42.0-search-to-find-3 24; 5 clues placed, 0 of them in a car
+FINDING: clues: generated:957789520:document-1:placed generated:957789520:document-2:placed generated:957789520:document-3:placed generated:957789520:document-4:placed generated:957789520:document-5:placed
+FINDING: game running: paused/speed=false 1
+FINDING: interruption clue: generated:957789520:document-1 (found as "Note")
+FINDING: walking through Look it over: action seen running=yes at progress 0.34; the game reported walking/aiming=yes; the action left the queue=yes; queue now nil -1.00 true false false false
+FINDING: after walking through Look it over: recognised=false, last look ran (ok, ms)=nil nil
+FINDING: aiming through Look it over: action seen running=yes at progress 0.32; the game reported walking/aiming=yes; the action left the queue=yes; queue now nil -1.00 false true false false
+FINDING: after aiming through Look it over: recognised=false
+FINDING: left alone, Look it over recognised the clue: item now Duty ledger / BF-578 Evidence true false
+FINDING: walking through Inspect: action seen running=yes at progress 0.48; the game reported walking/aiming=yes; the action left the queue=yes; queue now nil -1.00 true false true false
+FINDING: after walking through Inspect: noted=false, in the record=false
+FINDING: left alone, Inspect noted it: true Duty ledger / BF-578
+FINDING: before the save: generated:957789520:document-2 was "Receipt", now Carbon duplicate / BF-578 Evidence true false (name, category, recognised, noted)
+FINDING: after the reload: name "Carbon duplicate / BF-578", category Evidence, recognised true, noted false, recognised by id true
+FINDING: menu after the reload: Inspect Investigation Evidence
+FINDING: inspected after the reload: true Carbon duplicate / BF-578; ran (ok, ms) true 2108
+FINDING: darkness clue: generated:957789520:document-3 in room "office"
+FINDING: standing back from it: 10880,10154, 2.0 tiles away, room "office"
+FINDING: at 01:00 in "office": light penalty 0.07, the game calls it too dark=true, the mod's sight test false/too dark, darkMulti 1.00, cutoff 50
+FINDING: in the dark, 2.0 tiles away: not spotted in 80s of searching (icon 10880,10156,0 true false 0/10000 2.53)
+FINDING: torch: Flashlight - Heavy Duty (On), lit=true, in a hand=true, light strength 2
+FINDING: with the torch lit, same distance: light penalty 1.00 (was 0.07), too dark=false, sight test true/nil, darkMulti 1.00
+FINDING: ANSWER (light): a lit torch makes a clue in an unlit room spottable from where it was not - recognised 0s after the torch, at 2.0 tiles
+FINDING: ANSWER (light): standing ON the unlit square (penalty 0.59, too dark=false) the game DOES spot it - 16s - which is its own isOnSquare rule, not our doing
+FINDING: car try 1: moved on 305 tiles to 10693,10400, parked 4 vans at 10702,10400 10684,10400 10693,10391 10702,10409
+FINDING: car try 1: the new case placed 7 clues, 0 in a car
+FINDING: car try 2: moved on 302 tiles to 10751,10104, parked 4 vans at 10757,10110 10760,10104 10751,10113 10742,10104
+FINDING: car try 2: the new case placed 13 clues, 1 in a car
+FINDING: car clue: generated:1607307449:document-2 at 10757,10125,0, part GloveBox
+FINDING: the car: Base.CarNormal at 10757,10125, clue in its GloveBox as "Receipt"
+FINDING: icon before the car moved: square 10757,10125,0, our class true, seen false, timer 0/2500
+FINDING: car moved from 10757,10125 to 10767,10125 [removeFromWorld=ok physicsOff=ok setPosition=ok squareFromPosition=ok addToWorld=ok createPhysics=ok]
+FINDING: the mod places the clue at 10767,10125,0 after the move (the car is at 10767,10125)
+FINDING: icon after the car moved: square 10767,10125,0 (the car's), seen false, timer 0/2500, 3.54 tiles away
+errors inside the mod (this session): 0
+FAIL: the clue in the moved car could not be spotted in 156s (icon 10767,10125,0 true false 0/2500 3.54; light 1.00 false true nil 1.00 50)
