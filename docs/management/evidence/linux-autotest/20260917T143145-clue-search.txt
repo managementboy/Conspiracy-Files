@@ -1,0 +1,19 @@
+Linux clue search check 20260917T143145: PASS
+source: 00d8da4
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+FINDING: focus: defined=true text='Clues' offered=true registered=listed; loot zones=17 items=0 picked=0 rolls=0 chanceToCreateIcon=0 focusChanceMax=0
+FINDING: clues: generated:1304914287:document-1:placed generated:1304914287:document-2:placed generated:1304914287:document-3:placed generated:1304914287:document-4:placed
+FINDING: game running: paused=false 1
+FINDING: forage count taken outdoors at 10835,10145
+FINDING: forage icons, no focus: total=7 active=1 world=0 stash=0 clue icons=1 clues-category=0 [Artifacts=1,CraftingMaterials=2,Firewood=2,FishBait=1,Trash=1]
+FINDING: forage icons, Clues focus: total=7 active=1 world=0 stash=0 clue icons=1 clues-category=0 [Artifacts=1,CraftingMaterials=2,Firewood=2,FishBait=1,Trash=1]
+FINDING: clue 1 before: Note|Junk
+FINDING: clue 1 (None): spotted and recognised after 4.2 s (limit 120 s)
+FINDING: clue 1 icon after spotting: true true true true 200/2500 3.00 0.70 true clueObject at=10841,10148 base=true ours=true canSee=true blocked=false light=0.62 dark=1 running=false south=true/false/false/false east=true/false/false/true
+FINDING: clue 1 after: Transfer notice / MC-131|Evidence
+FINDING: clue 1 before: Receipt|Junk
+FINDING: clue 1 (Clues): spotted and recognised after 2.6 s (limit 120 s)
+FINDING: clue 1 icon after spotting: true true true true 0/2500 4.50 0.69 true clueObject at=10837,10184 base=true ours=true canSee=true blocked=false light=0.56 dark=1 running=false south=true/false/false/false east=true/false/false/true west=true/false/false/false
+FINDING: clue 1 after: Receiving roster / MC-131|Evidence
+FINDING: counters (icons added, dropped, spots, recognitions, search mode re-enabled): 6 0 3 3 0
+errors inside the mod: 0

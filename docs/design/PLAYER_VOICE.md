@@ -11,46 +11,16 @@ excitement the record never will. They still stop short of certainty: no line
 states as fact that the named person lived somewhere or owned anything. "Their
 place, I'd bet" is in character. "This was their house" is not.
 
-## Set A — a journal entry was added
+## Set A — removed (P4-R132, stage 2, 2026-09-17)
 
-Delivered whenever a new discovery reaches the ledger, whatever its kind.
-
-1. "That's worth writing down."
-2. "Interesting. That's going in the machine."
-3. "I should note this before I forget."
-4. "Hm. That's going in my notes."
-5. "Better write this one down."
-6. "That means something. Noting it."
-7. "I'll want to remember this."
-8. "Worth keeping a record of that."
-9. "Let me key this in while I've got it."
-10. "That's a detail I shouldn't lose."
-
-**Saying what is noted (P4-R130, owner 2026-09-16).** When a plain noun can be
-read from the record, the line names it, and the coloured tag carries the
-record's own title ("Noted: Tagged key / AV-197"):
-
-1. "That <what> is worth writing down."
-2. "Interesting. The <what> goes in the machine."
-3. "I should note this <what> before I forget."
-4. "Hm. That <what> is going in my notes."
-5. "Better write this <what> down."
-6. "That <what> means something. Noting it."
-7. "I'll want to remember this <what>."
-8. "Worth keeping a record of that <what>."
-9. "Let me key this <what> in while I've got it."
-10. "That <what> is a detail I shouldn't lose."
-
-Where `<what>` comes from:
-- a document: its title before " / " or ":", without "Second"/"Another",
-  lowercased except words in capitals ("Tagged key / AV-197" -> "tagged key");
-- an identity document: the document after the person's name ("Found Ines
-  Kubiak's ID card" -> "ID card"), never the name;
-- one key off a body: "key"; a possible connection: "possible connection".
-
-No `<what>` (the plain lines above, tag "Noted", or "Noted: <title>" when a
-title is known): objects (their titles are counts and names, not nouns),
-several keys, a noun longer than 24 characters, and anything not found.
+Set A was a line whenever a discovery reached the ledger ("That's worth
+writing down.", tag "Noted"), and from P4-R130 it named the thing noted. Clues
+are now found by searching (docs/design/SEARCH_TO_FIND.md): noting is a timed
+action with the game's progress bar, and the item changing is what says it was
+noted. So nothing is said, and P4-R130's "say what is noted" is moot. The
+lines, the naming code (`V.describe`) and its test are gone.
+`PlayerVoice.onDiscovery` stays as the hook DiscoveryLog calls, and logs
+`discovery <kind> <ref>; nothing said`.
 
 ## Set B — a person-key-door link was discovered
 
@@ -80,10 +50,10 @@ that body. Never invent a name.
 
 Owner request 2026-09-07, UI proposal 8: reading evidence requires a
 right-click "Inspect Investigation Evidence" action a new player has no
-reason to guess. Proximity clue hints say something nearby is worth finding;
-nothing says what to do once it is in hand. Fired once, the first time a
-generated-case evidence item the player has not yet inspected settles into
-their inventory. Never fired for ordinary loot, and never again once the item
+reason to guess. Fired once, the first time a generated-case evidence item the
+player has recognised (P4-R132: spotted or looked over) but not yet inspected
+settles into their inventory. A clue nobody has recognised is the plain item it
+looks like and says nothing. Never fired for ordinary loot, and never again once the item
 is inspected or has already spoken once. Points at the *idea* of reading it
 properly, never at the keybind or the context-menu action by name.
 
@@ -99,7 +69,7 @@ properly, never at the keybind or the context-menu action by name.
 ## Delivery rules
 
 - Speech bubble plus a halo note with an explicit duration, exactly as
-  `ClueHints` does. `HaloTextHelper.addText` takes no duration and flashes too
+  the clue hints did. `HaloTextHelper.addText` takes no duration and flashes too
   fast to read; `setHaloNote(text, r, g, b, duration)` is the one to use.
 - Never a world sound and never an emitter: UI channel only, so the survivor's
   thinking never attracts zombies.
@@ -137,7 +107,8 @@ properly, never at the keybind or the context-menu action by name.
 
   The white halo is the survivor thinking, in their own words, and holds the
   longer display. The coloured bubble is the fact, in as few words as fit
-  above a head: `Noted`, `Unread`, `Key matches this door`, `Something nearby`.
+  above a head: `Unread`, `Key matches this door`, `Records agree`. (`Noted`
+  and the clue hints' `Something nearby` are gone since P4-R132 stage 2.)
   Swapped round on 2026-09-14 (owner: "switch arround the speach text. colored
   and white. it makes more sence"); a player object with no halo gets the words
   in the bubble instead. Lines that fire together are shown one after another,
@@ -148,11 +119,19 @@ properly, never at the keybind or the context-menu action by name.
   because two tests asserted the echo instead of questioning it; those
   assertions are now inverted rather than deleted, so the reversal is on the
   record.
-- A cooldown so a burst of discoveries does not produce a burst of chatter.
-- Set B/C is the more significant event and must not be suppressed by a Set A
+- A cooldown (45 s) on Set D so a burst of looting does not produce a burst of
+  chatter. It was shared with Set A until Set A was removed.
+- Set B/C is the more significant event and must not be suppressed by a Set D
   line fired moments earlier.
-- Set D shares Set A's cooldown, not a cooldown of its own: both are ambient
-  survivor musing, so a burst of looting or discovery in one trip produces at
-  most one line of either kind, not one of each. Set D also fires at most
-  once per physical item, tracked on the item itself so it survives a
-  drop/re-pickup or a save/reload.
+- Set D fires at most once per physical item, tracked on the item itself so it
+  survives a drop/re-pickup or a save/reload.
+
+## The wordless cue (P4-R132, stage 2)
+
+Not a voice line in the sense above, and not delivered through `speak`: near a
+clue nobody has recognised, where the survivor could see it, the speech bubble
+alone may say "Hm?" (no halo, only the soft UI tick). The first cue of a save
+says "Hm? I should have a proper look around here." - the only teaching - and a
+later cue of the same case says "...again?". Rules and numbers:
+docs/design/SEARCH_TO_FIND.md, "Stage 2 built". It replaced the clue hints
+("Is this a clue?", "Something nearby").

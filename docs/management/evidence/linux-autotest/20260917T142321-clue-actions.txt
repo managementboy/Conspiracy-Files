@@ -1,0 +1,23 @@
+Linux clue actions check 20260917T142321: FAIL
+source: f98c099 + uncommitted mod changes
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+FINDING: mod version DEV-0.42.0-search-to-find-2; action times (look, inspect): 150 100
+FINDING: clues: generated:1909263655:document-1:placed generated:1909263655:document-2:placed:vehicle generated:1909263655:document-3:placed generated:1909263655:document-4:placed generated:1909263655:document-5:placed generated:1909263655:document-6:placed
+FINDING: game running: paused/speed=false 1
+FINDING: cue before the walk (said, suppressed, first given, places, last line, last doc): 1 1 true 1 Hm? I should have a proper look around here. generated:1909263655:document-4
+FINDING: after the walk (walked=yes): 2 6 true 2 ...again? generated:1909263655:document-5
+FINDING: a cue was already given before the walk; this one said: ...again?
+FINDING: the first cue of this save: "cue said 'Hm? I should have a proper look around here.' at 10836:10146:0:2:0 doc=generated:1909263655:document-4 light=1.00 weather=1.00 bubble=true sound=true"
+FINDING: back at the same place: 3 6 true 3 ...again? generated:1909263655:document-1
+FINDING: cue lines in the log: said=3; last suppression: "cue suppressed at 10840:10148:0:2:0 doc=generated:1909263655:document-1: cooldown (light=0.62 weather=1.00)"
+FINDING: before: Note Junk
+FINDING: menu on the carried unrecognised clue: Look it over
+FINDING: look it over: queue busy on 5 polls (last progress 0.83, progress bar forced=true), action ran (ok, ms) true 3151, seen recognised 3597 ms after choosing; item now: Timesheet / R-316 Evidence true false
+FINDING: menu on the recognised clue: Inspect Investigation Evidence
+FINDING: inspect: queue busy on 4 polls, action ran (ok, ms) true 2105, seen noted 2997 ms after choosing; item now: Timesheet / R-316 Evidence true true
+FINDING: voice while noting: 'Noted' lines=0, discovery hook said nothing=1, other voice lines said=0 ()
+errors inside the mod: 0
+FAIL: the cue was for generated:1909263655:document-5, not the clue walked to
+FAIL: a second cue at the same place
+FAIL: the second approach was not weighed (no suppression logged)
+FAIL: noted while the action was still running

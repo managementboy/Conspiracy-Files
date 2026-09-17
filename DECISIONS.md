@@ -957,7 +957,9 @@ noun can be read from the record, the journal line names it ("I should note
 this tagged key before I forget.") and the coloured tag carries the record's
 title ("Noted: Tagged key / AV-197"). An identity names the document, never
 the person. Objects, several keys and unknown records keep the original ten
-lines. Wording and rules: docs/design/PLAYER_VOICE.md, Set A.
+lines. Wording and rules: docs/design/PLAYER_VOICE.md, Set A. *(Moot since
+2026-09-17: P4-R132 stage 2 removed Set A - noting is a timed action and
+says nothing.)*
 
 **P4-R131 — an old save stays Muldraugh-only; the whole map is for new games.**
 Owner, Windows, 2026-09-16: an Irvington save started under DEV-0.40 reopened

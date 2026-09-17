@@ -1,6 +1,6 @@
 # Clues are found by searching (P4-R132)
 
-- **Status:** Design, 2026-09-16. Stage 1 (search and recognise) built 2026-09-17; see the end.
+- **Status:** Design, 2026-09-16. Stage 1 (search and recognise) and stage 2 (look it over, timed Inspect, the wordless cue) built 2026-09-17; see the end.
 - **Owner:** shaped in conversation on 2026-09-16 ("I would love to mix both",
   "perfect!", "the investigate area dropdown would need another entry").
 - **Game:** Build 42.20. Everything marked *verified* was read in the installed
@@ -186,3 +186,83 @@ lingers 8 s after recognition. All in `ClueSearchRules.lua`.
 - `R.clueTargets()` - {id,x,y,z,status,recognised,vehicle} for live clues.
 - `ConspiracyFiles.ClueSearch`: `sync()`, `state()`, `spotted`, `counters`,
   `debugRecognise(docId)`, `Rules.debugSpotScale` (checks only).
+
+## Stage 2 built (2026-09-17, DEV-0.42.0-search-to-find-2)
+
+Built: "Look it over", Inspect as a timed action, Set A removed, the wordless
+cue (ClueHints retired), a Knox.OS HELP entry, car icons that follow the car.
+Not yet: the checks that inspect clues (core_loop, campaign, knox, drop_note)
+still need a search or look step, now also a wait for the timed action or
+`ClueActions.instant` (stage 3).
+
+**Proven in the real game** (`tools/autotest/checks/clue_actions.sh`, PASS on
+00d8da4, docs/management/evidence/linux-autotest/20260917T142928-clue-actions.txt):
+- *The cue.* Walking (the game's own walk action) from 7 tiles up to a lit
+  clue in a hall, the survivor said "Hm? I should have a proper look around
+  here." once (the first cue of the save). Leaving, clearing the session's
+  cooldown and coming back to the same place gave no second cue; the log says
+  `place already cued`. In an earlier run the cue came by itself right after
+  spawn, at a clue in the start house, with the teaching line
+  (20260917T142321-clue-actions.txt; that run failed on faults in the check
+  itself, fixed since: a walk past a second clue rightly cued that one first).
+- *Look it over.* A plain "Friendly Letter / Junk", taken into the inventory,
+  had exactly one mod option, "Look it over". Choosing it ran `CFLookItOver`
+  in the action queue with the progress bar for 3.1 s (150 units); it was not
+  recognised while running and afterwards read "Public notice / MC-811 /
+  Evidence".
+- *Inspect.* Then "Inspect Investigation Evidence" (not greyed) ran
+  `CFInspectEvidence` for 2.1 s (100 units); not noted while running, noted
+  after. No "Noted" line; the discovery hook logged `nothing said`.
+- 0 errors inside the mod. The stage 1 check (`clue_search.sh`, PASS on the
+  same commit, 20260917T143145-clue-search.txt) still spots and recognises
+  after the sight test was moved into a shared helper, and the boot check
+  passed (105 of 105 mod files, 20260917T143449-boot.txt).
+
+**Numbers chosen** (ClueCueRules.lua, ClueActions.lua): cue within 3 tiles on
+the same floor, re-armed past 5; 60 s cooldown between cues; chance 0.8 times
+the game's foraging light factor times its weather factor
+(`forageSystem.getLightLevelPenalty`, `getWeatherPenalty`), rolled once per
+approach; a spot darker than the game's light cutoff gives no cue at all; at
+most 64 cued places kept. Look it over 150 units (3.1 s), Inspect 100 (2.1 s).
+
+**How the cue decides** (ClueCue.lua): a placed clue nobody has recognised,
+still really in its container (a clue already taken keeps its "placed"
+status), seen by `ClueSearch.seesSpot` - same floor; same room, or both out of
+doors; lit; in view the game's way or from an open side of the furniture, as
+stage 1's icons. Once per place (container, or the car's part) for the life of
+the case, remembered in the world's ModData (`ConspiracyFiles.ClueCue`:
+`first`, `cases`, `places`; finished cases pruned). The bubble only, no halo,
+the soft UI tick. Logged once per approach: `cue said`, `cue suppressed ...:
+<why>`, or `cue not possible ...: <why>`.
+
+**Differs from the design or the brief:**
+- *Carried only.* Look it over is offered only for a clue whose outermost
+  container is the survivor (bags included); in the world, searching is the
+  way.
+- *No organiser taken out.* Inspect keeps today's conditions (carried, or the
+  organiser open; "Note in the Investigation" in place otherwise) and does not
+  equip the organiser. Both actions use the game's reading pose.
+- *"Same room"* is the game's room: in an open-plan house two areas without a
+  wall between are different rooms and give no cue across.
+- *Interruption by moving* is the game's `stopOnWalk`/`stopOnRun`/`stopOnAim`,
+  proven in the unit tests only, not in the game.
+- *Car icons* follow the car when it is loaded (found by the mark on its part
+  within 24 tiles of the survivor, looked up at most every 2 s); unit-tested,
+  not yet seen in the game with a driven car.
+- *T3Nearby's old copy* of the spoken hints (`T3Nearby.enableHints`) was
+  removed with ClueHints.
+
+**Interfaces for stage 3** (all debug-only knobs, never set by the mod):
+- `ConspiracyFiles.ClueActions.instant=true` - "Look it over", Inspect and Note
+  complete at once when chosen (same guards), so a check driving the menu need
+  not wait. Otherwise wait for `R.isRecognised(item)` / `R.isInspected(item)`,
+  or read the queue (`ISTimedActionQueue.getTimedActionQueue(p).queue[1].Type`
+  is `CFLookItOver` / `CFInspectEvidence`).
+- `ClueActions.lookItOver(player,item)`, `ClueActions.inspect(player,item,inPlace,expected)`;
+  `ClueActions.lastLook` / `lastInspect` = {ok, ms}; `LOOK_TIME`, `INSPECT_TIME`.
+- `ConspiracyFiles.ClueCue`: `state()`, `debugReset()` (session memory and
+  cooldown, never the save), `debugOnly=<docId>`, `Rules.debugChance=<0..1>`.
+- `ClueSearch.debugRecognise(docId)` as before; `ClueSearch.seesSpot(player,square)`,
+  `ClueSearch.liveClues(player)`.
+- `R.clueTargets()` rows now also carry `case`, `place`, `token`, `part` and
+  `target` (the stored table; read, never change).
