@@ -4,6 +4,7 @@
 #   tools/autotest/pz.sh start [--hidden] [--console] [--mortal] [--at X,Y,Z]  fresh world
 #   tools/autotest/pz.sh eval 'return getPlayer():getX()'   (or: eval -f file.lua)
 #   tools/autotest/pz.sh shot out.png        screenshot of the game window
+#   tools/autotest/pz.sh hold KEY SECS      hold a key (or mouse1..3) down in the game
 #   tools/autotest/pz.sh log [N]             last N mod log lines of this run
 #   tools/autotest/pz.sh status
 #   tools/autotest/pz.sh fresh [ARGS]        new world in the running game (back to menu, mods reload)
@@ -314,12 +315,36 @@ cmd_shot() {
     import -window "$w" "$out" && echo "$out"
 }
 
+# Hold a key, or a mouse button ("mouse1".."mouse3"), down in the game window
+# for SECONDS - the survivor's own hand. Lua cannot do this: walking and aiming
+# are read from the real keyboard and mouse in Java, and they are what
+# interrupts a timed action (stopOnWalk / stopOnRun / stopOnAim). Real events
+# after activating the window, for the same reason click_window moves the real
+# pointer: the game ignores synthetic per-window events.
+cmd_hold() { # cmd_hold KEY SECONDS
+    local k="${1:?key}" s="${2:-1}" w X Y; w="$(window)"
+    [ -n "$w" ] || { say "no game window"; return 1; }
+    eval "$(xdotool getmouselocation --shell)"
+    xdotool windowactivate --sync "$w" 2>/dev/null || true
+    case "$k" in
+        mouse[123]) xdotool mousemove --window "$w" 640 360 mousedown "${k#mouse}" 2>/dev/null || true ;;
+        *)          xdotool keydown "$k" 2>/dev/null || true ;;
+    esac
+    sleep "$s"
+    case "$k" in
+        mouse[123]) xdotool mouseup "${k#mouse}" 2>/dev/null || true; xdotool mousemove "$X" "$Y" 2>/dev/null || true ;;
+        *)          xdotool keyup "$k" 2>/dev/null || true ;;
+    esac
+    echo "held $k for ${s}s"
+}
+
 case "${1:-}" in
     start) shift; cmd_start "$@" ;;
     fresh) shift; cmd_fresh "$@" ;;
     eval) shift; exec "$REPO/tools/cf_eval.sh" "$@" ;;
     stop) shift; cmd_stop "$@" ;;
     shot) shift; cmd_shot "$@" ;;
+    hold) shift; cmd_hold "$@" ;;
     log) since_launch | grep -E '\[CF' | sed 's/^.*> //' | tail -n "${2:-30}" ;;
     status) p="$(pid)"; if [ -n "$p" ]; then echo "game: running pid $p"; else echo "game: not running"; fi; echo "session: $(cat "$LOCAL/session" 2>/dev/null || echo none)" ;;
     *) sed -n '2,10p' "$0" | sed 's/^# \{0,1\}//'; exit 2 ;;

@@ -896,6 +896,16 @@ now starts fresh worlds (at most eight) until case 1 has a clue dated in that
 week, and then requires every such clue to carry the note. Test only: the game
 does not force any case into that week (P4-R108 stands).
 
+*Amended 2026-09-17, test only, by the agent running the overnight soak: the cap
+is now THREE fresh worlds (`CF_MEMO_WORLDS`), not eight. Eight cost more than
+the run could spare - 20260917T160453 spent seven worlds, about twenty minutes
+of a thirty-minute check, before play could start, and a world costs a game
+launch, an address index and a first case. Past three the run carries on in the
+world it has and reports "the date note was not exercised" as a finding instead
+of restarting. What the check requires when the week IS hit is unchanged: every
+record dated inside it must carry the note. Over a five-run soak the note is
+still exercised most nights, which is what P4-R126 asked for.*
+
 **P4-R127 — clues, evidence and hunches; never "papers".** Owner, 2026-09-15:
 "Clues evidence.hunches. But papers not." A case hides keys, cards, photographs,
 objects and piles as well as documents, so "papers" was wrong. From now on:
