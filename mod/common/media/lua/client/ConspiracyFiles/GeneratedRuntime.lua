@@ -519,10 +519,26 @@ local function prepare(result,seed,later,house)
         -- root.case.locations for a retired case threw here, so once a player's
         -- only case was complete no further case could ever be prepared
         -- (Linux core-loop check, 2026-09-11; same class as 3fe1813).
+        -- THE LADDER (P4-R133). After three refusals of one code the generator
+        -- lowers its own standard, one rung at a time. Only for a later case:
+        -- the first case's site is the house the player is standing in
+        -- (P4-R66), which is not a standard that can be lowered.
+        local rung=later and rungNow() or 0
         local used={}
-        for _,root in ipairs(Cases.sessions(wrapper) or {}) do
-            if root.case then for _,site in ipairs(root.case.locations) do used[site.id]=true end
-            else for _,row in ipairs(root.rows or {}) do if row.locationId then used[row.locationId]=true end end end
+        -- RUNG 3: release the oldest finished case's sites back into the pool.
+        -- A deep-archived case (P4-R111) already has no rows and so excludes
+        -- nothing; this is the oldest one that still does.
+        local released=nil
+        if rung>=3 then
+            for index,root in ipairs(Cases.sessions(wrapper) or {}) do
+                if Retired.isRetired(root) and root.rows then released=index; break end
+            end
+        end
+        for index,root in ipairs(Cases.sessions(wrapper) or {}) do
+            if index~=released then
+                if root.case then for _,site in ipairs(root.case.locations) do used[site.id]=true end
+                else for _,row in ipairs(root.rows or {}) do if row.locationId then used[row.locationId]=true end end end
+            end
         end
         local filtered={revision=catalog.revision,locations={}}
         for _,site in ipairs(catalog.locations) do
@@ -556,9 +572,43 @@ local function prepare(result,seed,later,house)
             if okSteer and steer then options.steer=steer; steerFrom=index end
         end
         local context={hoursSurvived=p:getHoursSurvived(),anchor=anchor}
+        -- RUNG 2: one step wider reach. The nearby scan was already started at
+        -- the wider radius (R.nextCase); this is the generator's own filter
+        -- being told the same thing, or it would throw the extra buildings
+        -- straight back out. Reachability itself is never traded: an
+        -- unreachable clue is not a clue, and Storage.scan's basement gate is
+        -- untouched.
+        if rung>=2 then
+            local Reach=require("ConspiracyFiles/Reach")
+            local base=Reach.radius(context.hoursSurvived)
+            context.radius=base and Reach.wider(base) or nil
+        end
         local case,err,code
         if house then case,err,code=firstCase(filtered,seed,options,context,house,candidates)
-        else case,err=G.generateNew(filtered,seed,options,context) end
+        else
+            case,err=G.generateNew(filtered,seed,options,context)
+            -- RUNG 1: a smaller case. A case is re-derived from its seed, so
+            -- its clues cannot be trimmed - a smaller case is a DIFFERENT
+            -- case. So try a bounded, deterministic sequence of seeds and keep
+            -- the smallest case any of them gives, down to the generator's own
+            -- minimum (a claim and a record contradicting it, which every case
+            -- carries by construction). Bounded at three tries because each
+            -- one is a full generate-and-validate.
+            if rung>=1 then
+                local best=case
+                for step=1,R.RUNG1_TRIES do
+                    if best and #best.documents<=G.MIN_EVIDENCE then break end
+                    local other=(seed*31+step*1013904223)%2147483646+1
+                    local try=G.generateNew(filtered,other,options,context)
+                    if try and (not best or #try.documents<#best.documents) then best=try end
+                end
+                if best and best~=case then
+                    log("rung 1: a smaller case, "..#best.documents.." clue(s) instead of "
+                        ..(case and #case.documents or "none"))
+                    case=best
+                end
+            end
+        end
         if not case then
             -- Which refusal it is, honestly: nothing eligible within reach at
             -- all is a different fault from buildings that hold no loaded
@@ -776,6 +826,11 @@ end
 -- long must pass, before the neighbourhood is scanned again.
 R.DEFER_TILES=50
 R.DEFER_HOURS=0.5
+-- How many extra seeds the ladder's first rung may try for a smaller case.
+-- Each one is a full generate-and-validate (about 20 ms on the test laptop),
+-- and this runs inside the storage scan's own callback, so three is the most
+-- a single frame should carry.
+R.RUNG1_TRIES=3
 function R.nextCase(seed)
     if preparing then return refuse("busy") end
     -- Not refusals of a case the world could have supplied, so they carry no
@@ -815,7 +870,19 @@ function R.nextCase(seed)
             if a.status=="pending" or a.status=="placing" then return refuse("busy") end
         end
     end
-    local probe=require("ConspiracyFiles/T3Nearby");local ok,why; ok,why=probe.start(nil,seed); if not ok then return false,why end
+    local probe=require("ConspiracyFiles/T3Nearby");local ok,why
+    -- RUNG 2 of the ladder (P4-R133): the scan itself looks one step further,
+    -- under its own label so the log still tells policy from a console
+    -- override. prepare widens the generator's filter to match.
+    local radius,radiusSource
+    if rungNow()>=2 then
+        local Reach=require("ConspiracyFiles/Reach")
+        local p=getPlayer()
+        local base=p and Reach.radius(p:getHoursSurvived())
+        local wider=base and Reach.wider(base)
+        if wider and wider>base then radius,radiusSource=wider,"P4-R133-rung2" end
+    end
+    ok,why=probe.start(radius,seed,nil,radiusSource); if not ok then return false,why end
     preparing=true; local waited=0; local queued=scheduler.enqueue("next-metadata","preparation",function() waited=waited+1;if probe.error then preparing=false;error(probe.error) end;if probe.result then prepare(probe.result,seed,true);return true end;if waited>240000 then preparing=false;error("metadata extraction did not complete") end;return false end)
     -- A refused job never runs, so nothing else would ever clear the flag.
     if not queued then preparing=false; return refuse("busy") end

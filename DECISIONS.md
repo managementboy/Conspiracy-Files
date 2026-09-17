@@ -1039,6 +1039,17 @@ Decided:
 
 Design: docs/design/CASE_PACING.md. Built after the P4-R111 archive work.
 
+*Built 2026-09-17 (steps 1-5 of the design's build order): typed refusals with
+the count and rung kept in the save, instalments, the filler, three-day expiry
+and the ladder's first three rungs. The checks (step 6) are separate. Two things
+the code forced, both recorded in the design doc: **the ladder's fourth rung, a
+single-site case, is not built** - a case is re-derived from its seed and the
+schema requires two distinct buildings, so a one-location case is a generator
+revision and therefore a fresh game, and the owner has not been asked for that;
+and **a case still needs one container at each of its two sites**, because a
+case with a single clue could never finish and would squat an active slot for
+ever. Rules change, so a new game (P4-R77).*
+
 **P4-R134 — clues may arrive on things that move.** Owner, 2026-09-17,
 approving the whole queue ("implement 1 to 11") including the candidate raised
 under P4-R133. A clue may be carried by a fresh corpse, a wandering zombie, a

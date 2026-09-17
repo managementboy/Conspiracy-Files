@@ -867,6 +867,14 @@ function G.generateNew(catalog,seed,options,context)
     if type(context)~="table" or not Reach.validAnchor(context.anchor) then return nil,"generation anchor required" end
     local radius,why=Reach.radius(context.hoursSurvived)
     if not radius then return nil,why end
+    -- One step wider, on purpose (P4-R133, the ladder's second rung). Only ever
+    -- WIDER than the survival policy allows and never beyond the scan's own
+    -- limit: a caller may lower the generator's standard, never its reach.
+    if context.radius~=nil then
+        local wider=context.radius
+        if type(wider)~="number" or wider~=wider or wider<radius or wider>5000 then return nil,"invalid widened reach" end
+        radius=wider
+    end
     local valid,err=Catalog.validate(catalog)
     if not valid then return nil,err end
     local filtered={revision=catalog.revision,locations={}}

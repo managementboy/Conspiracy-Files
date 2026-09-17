@@ -125,7 +125,11 @@ tick = function()
     if elapsed>2 then j.over=j.over+1 end
     if not ok then T.error=tostring(err);emit({kind="error",message=err}); T.cancel() end
 end
-function T.start(radius,seed,requiredId)
+-- `radiusSource` names WHY a radius was given, for the log and the evidence
+-- file. A caller that widens the reach on purpose (P4-R133's second rung) must
+-- not have to borrow the debug override's label: the two are read by a person
+-- deciding whether a scan was policy or a hand-typed console command.
+function T.start(radius,seed,requiredId,radiusSource)
     if not getDebug or not getDebug() then return false,"debug mode required" end
     if (isClient and isClient()) or (isServer and isServer()) then return false,"single player only" end
     seed=seed or 1
@@ -154,7 +158,8 @@ function T.start(radius,seed,requiredId)
     emit({kind="begin",version=T.version,gameVersion=job.gameVersion,map=job.map,
         x=job.anchor.x,y=job.anchor.y,z=job.anchor.z,anchorSource=job.anchor.source,radius=radius,
         selection="category-round-robin-nearest-3-seeded",seed=seed,storage="unknown",
-        hoursSurvived=hours,radiusSource=automatic and "P4-R55" or "explicit-debug-override"})
+        hoursSurvived=hours,radiusSource=(type(radiusSource)=="string" and #radiusSource>0 and #radiusSource<=40
+            and radiusSource) or (automatic and "P4-R55" or "explicit-debug-override")})
     Events.OnTick.Add(tick)
     return true
 end

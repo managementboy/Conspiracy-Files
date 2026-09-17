@@ -1,8 +1,11 @@
 # Cases keep coming, and a refusal is honest (P4-R133)
 
-- **Status:** Design, 2026-09-17. Not built. Owner approved the shape ("I agree
-  with all you wrote"); build after the P4-R111 archive work, which touches the
-  same files.
+- **Status:** **Built 2026-09-17**, steps 1-5 of the build order below. Step 6
+  (the campaign assertions, the refusal histogram in evidence and the
+  `prove.py` mutation) belongs to the checks and is not in this change. The
+  fourth rung of the ladder is **not built** and cannot be without a generator
+  revision - see "What was built differently" below. Owner approved the shape
+  ("I agree with all you wrote").
 - **Game:** Build 42.20.
 - **Related decisions:** P4-R67 (each clue in a different container, defer
   rather than stack), P4-R125 (a refused case waits 50 tiles or half an hour),
@@ -133,6 +136,76 @@ home a different kind of play rather than a starved one.
 6. **Checks:** campaign assertions, the refusal histogram in evidence, a
    `prove.py` mutation for the deadline assertion, then the full suite, a boot
    check and a long soak.
+
+## Where it lives
+
+| part | code | test |
+|---|---|---|
+| the closed code set, the thresholds, the stored debt | `Generated/SuccessiveCases.lua` (`DEFER_CODES`, `REFUSALS_PER_RUNG`, `MAX_RUNG`, `defer`, `setDefer`, schedule validation) | `test/case_refusals.lua` |
+| `refuse(code)`, the `ev=defer` line, the promise, the rung, `automaticStatus` | `client/GeneratedRuntime.lua` | `test/case_refusals.lua`, `test/nearby_deferral.lua` |
+| the `deferred` / `dropped` assignment, `assign`, `drop`, `accounted`, `expiredIds`, `physicalKey` | `Generated/Session.lua` | `test/case_instalments.lua`, `test/storage_candidates.lua` |
+| the filler job and the expiry it applies | `client/GeneratedRuntime.lua` (`filler`, `usedPhysicalKeys`, `boundsScan`'s accept predicate) | `test/case_instalments.lua` |
+| a finished case that lost a clue | `Generated/RetiredCase.lua` (`retire` asks `Session.accounted`) | `test/case_instalments.lua` |
+| the ladder | `client/GeneratedRuntime.lua` (`rungNow`, rungs in `prepare` and `R.nextCase`), `Reach.wider`, `T3Nearby.start`'s radius source, `Generator.generateNew`'s `context.radius` | `test/case_ladder.lua` |
+| the budget | - | `test/case_budget_headroom.lua` |
+
+## What was built differently, and why
+
+Everything above is built as decided except these five points, each of which the
+code forced.
+
+1. **The fourth rung - a single-site case - is not built.** A case is
+   re-derived from its seed on every load (`Generator.validate` rebuilds it and
+   compares), and the schema requires exactly two locations, each a distinct
+   building with observed storage. A one-location case is therefore a generator
+   revision: every case in every existing save stops validating, which is a
+   fresh game (P4-R77). Nor can the second site simply be a building with no
+   loaded container: a site is only eligible once a container has actually been
+   seen in it, and reserving a site to write the clue later is the idea this
+   design already rejected. `SuccessiveCases.MAX_RUNG` is therefore **3**, and
+   `automaticStatus` reports `rungMax` so a check can tell a ladder that has
+   run out of rungs from one that is stuck. **Owner decision needed** if the
+   fourth rung is wanted: it costs a generator revision, so a new game.
+2. **A case still needs one container at each of its two sites**, not merely
+   "anything at all that fits". A case is a claim and a record that contradicts
+   it, in two places (`Generator.MIN_EVIDENCE`), and a case that went live with
+   a single clue could never finish: `RetiredCase` needs at least two rows, so
+   the case would squat one of the four active slots for ever - the starvation
+   this design's own risk section warns about. The first case's opening clue is
+   also never an instalment (P4-R66).
+3. **`cooldown` and `busy` are logged but never counted.** A cooldown is the
+   wait we imposed ourselves (P4-R125) and busy is a placement in progress.
+   Both are polled every ten seconds, so counting them would walk the ladder up
+   for nothing and would validate and rewrite the whole case store every ten
+   seconds - the fault P4-R125 was written to fix, in a new place. They are
+   logged at debug level with the standing debt's numbers. The counted codes
+   are `no-reach`, `no-containers`, `cap`, `active-limit` and `disabled`, and
+   the same code counts at most once every quarter of an in-game hour.
+4. **The rung is the highest any one code has earned**, not the current code's.
+   Refusals are counted per code (so a `busy` in between cannot reset a
+   `no-containers` count), and the ladder position is a property of the
+   generator rather than of one refusal.
+5. **Rung 1 searches seeds rather than trimming clues.** A case cannot be made
+   smaller: a smaller case is a different case. So the rung generates up to
+   three further cases from seeds derived deterministically from the one asked
+   for and keeps the smallest, down to the generator's own minimum (measured:
+   two clues, seed 7 of the synthetic fixture). It re-draws the site pair too,
+   which is a second reason it helps.
+
+**Measured.** The debt costs 358 bytes by the project's own estimator (a
+deliberate 4x ceiling; the real record is about 90 characters) and the whole
+schedule 1,548 bytes at sixteen cases. Four partial cases plus the full archive
+come to 314,944 bytes against 326,108 for four fully-placed ones, so
+instalments make the worst case *smaller*: a waiting clue has no target, no
+sprite and no coordinates. Worst case whole save is unchanged at 326,108 +
+120,000 reserved of 500,000 (test/case_budget_headroom.lua).
+
+**What still needs a real game.** Everything above is proven in plain Lua. Not
+yet proven in play: that the filler's `boundsScan` really finds containers in a
+house the survivor has walked into, that a clue arriving late is found by
+Search Mode exactly like any other (P4-R132), that nothing appears in view of
+the survivor, and that a long run's `ev=defer` lines show a count rising and a
+rung rising with it.
 
 ## Risks
 
