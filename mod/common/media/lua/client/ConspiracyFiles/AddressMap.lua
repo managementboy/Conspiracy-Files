@@ -6,6 +6,8 @@ if ConspiracyFiles.AddressMap and ConspiracyFiles.AddressMap.stop then Conspirac
 local M={}; ConspiracyFiles.AddressMap=M
 local TAG="ConspiracyFiles.AddressBook.Muldraugh"
 local job,handler,book,byId,buckets,peak=nil,nil,nil,{}, {},0
+-- Where the survivor is, for AD-10's out-of-town town names (see M.currentTown).
+local where={}
 local CFLog=require("ConspiracyFiles/Log")
 local function log(s) CFLog.message("address","address",s) end
 local status="Not started"
@@ -30,6 +32,8 @@ local function valid(root)
 end
 local function use(root)
     book=root; byId,buckets={},{}
+    -- A different book may put the survivor in a different town.
+    where.x,where.y,where.at,where.town=nil,nil,nil,nil
  -- Anything asked before the book existed was answered with a refusal and
  -- remembered as one; let those readers ask again now.
  local observer=ConspiracyFiles.IdentityObserver
@@ -49,6 +53,12 @@ function M.ready() return book~=nil end
 -- Rows are "id|x|y|x2|y2|area|street|number"; labels are unique per town, not
 -- across the map, and a record carries its town's name when the town has one.
 local SHIPPED_REVISION="whole-map-1"
+-- The regions file names a town as an id - "WestPoint", "MarchRidge". The
+-- survivor writes it the way it is said, so these three are spelled out. A
+-- closed, hand-written table, like the outfit trades: a name that is not
+-- listed is used exactly as the file spells it and is never invented or split
+-- up, so "LAA" stays "LAA" rather than becoming "L A A".
+local TOWN_NAMES={WestPoint="West Point",MarchRidge="March Ridge",ValleyStation="Valley Station"}
 local function shippedBook(map,build)
     local ok,B=pcall(require,"ConspiracyFiles/Generated/AddressBook")
     if not ok or type(B)~="table" or B.revision~=SHIPPED_REVISION or type(B.rows)~="table"
@@ -61,7 +71,7 @@ local function shippedBook(map,build)
         if name then
             local a=B.areas[tonumber(area)]
             records[#records+1]={id=id,x=tonumber(x),y=tonumber(y),x2=tonumber(x2),y2=tonumber(y2),
-                label=number.." "..name,town=(a and a.town==1) and a.name or nil}
+                label=number.." "..name,town=(a and a.town==1) and (TOWN_NAMES[a.name] or a.name) or nil}
         end
     end
     if #records==0 then return nil,"shipped address book is empty" end
@@ -74,13 +84,25 @@ function M.townForBuilding(id)
     local r=byId["t3:"..id]
     return r and r.town or nil
 end
--- The named building nearest to a point, and how far away it is. For things
--- found OUTDOORS: a wallet on the street beside 109 Walker Road was reported as
--- "in a building the address book does not name" (2026-09-11), which was false
--- twice over - it was not in a building, and the building next to it had a
--- name. Searches the point's own 64-tile bucket and its neighbours, which the
--- book already builds, so this costs a handful of comparisons.
-function M.nearest(x,y,within)
+-- AD-10, the last of its "Still open": when the mod's text names a place
+-- OUTSIDE the town the survivor is in, the town's name is added - "102 2nd St,
+-- West Point". Inside their own town nothing changes: nobody names the town
+-- they are standing in, and labels are only unique per town, so an address read
+-- in another town could otherwise be the survivor's own street.
+--
+-- The survivor's town is the town of the numbered building nearest to them, and
+-- it is STICKY: walking into the woods does not make someone a stranger to the
+-- town they just left, and outside the towns there is no town to be in. When it
+-- is not known at all - no player, no book, or a save that has never been near
+-- a numbered house - the label reads exactly as it does today: the mod says
+-- nothing rather than guessing at a town.
+--
+-- Kept out of the hot paths: a label costs one field read and one compare, and
+-- the town itself is worked out again only after the survivor has moved
+-- TOWN_MOVED_TILES or TOWN_EVERY_MS has passed - never per rendered row.
+M.TOWN_EVERY_MS=5000
+M.TOWN_MOVED_TILES=32
+local function nearestRecord(x,y,within)
     if not book or type(x)~="number" or type(y)~="number" then return nil end
     within=within or 30
     local bx,by=math.floor(x/64),math.floor(y/64)
@@ -98,7 +120,46 @@ function M.nearest(x,y,within)
         end
     end end
     if not best then return nil end
-    return best.label,bestDistance
+    return best,bestDistance
+end
+-- The town the survivor is in, or nil while that is not known.
+function M.currentTown()
+    if not book then return nil end
+    -- The clock first, and nothing else while the answer is fresh: FILES
+    -- rebuilds every row on every refresh, and asking the player where they
+    -- are once per row would be an engine call per line of the record.
+    local now=(getTimeInMillis and getTimeInMillis()) or 0
+    if where.at and now>=where.at and now-where.at<M.TOWN_EVERY_MS then return where.town end
+    local player=getPlayer and getPlayer()
+    if not player or not player.getX then return where.town end
+    local x,y=player:getX(),player:getY()
+    if type(x)~="number" or type(y)~="number" then return where.town end
+    x,y=math.floor(x),math.floor(y)
+    where.at=now
+    -- Still on the same street: the buckets do not need searching again.
+    if where.x and math.abs(x-where.x)<M.TOWN_MOVED_TILES and math.abs(y-where.y)<M.TOWN_MOVED_TILES then return where.town end
+    where.x,where.y=x,y
+    local r=nearestRecord(x,y,64)
+    if r and r.town then where.town=r.town end
+    return where.town
+end
+-- What the survivor would write down for this address, here.
+local function qualified(label,town)
+    if type(label)~="string" or label=="" or type(town)~="string" or town=="" then return label end
+    local here=M.currentTown()
+    if here==nil or here==town then return label end
+    return label..", "..town
+end
+-- The named building nearest to a point, and how far away it is. For things
+-- found OUTDOORS: a wallet on the street beside 109 Walker Road was reported as
+-- "in a building the address book does not name" (2026-09-11), which was false
+-- twice over - it was not in a building, and the building next to it had a
+-- name. Searches the point's own 64-tile bucket and its neighbours, which the
+-- book already builds, so this costs a handful of comparisons.
+function M.nearest(x,y,within)
+    local best,distance=nearestRecord(x,y,within)
+    if not best then return nil end
+    return qualified(best.label,best.town),distance
 end
 -- The address for a building id, or nil. Keyed exactly as the book is built:
 -- every id here comes from BuildingDef:getIDString(), the same call T3Nearby
@@ -109,7 +170,7 @@ function M.labelForBuilding(id)
     if not book or type(id)~="string" or id=="" then return nil end
     local r=byId["t3:"..id]
     if not r or type(r.label)~="string" or r.label=="" then return nil end
-    return r.label
+    return qualified(r.label,r.town)
 end
 function M.stop() if handler then Events.OnTick.Remove(handler) end; job=nil;stopAudit() end
 function M.describe(body,case)
@@ -122,7 +183,7 @@ function M.describe(body,case)
         while true do
             local a,b=out:find(site.name,start,true)
             if not a then parts[#parts+1]=out:sub(start); break end
-            parts[#parts+1]=out:sub(start,a-1);parts[#parts+1]=r.label;start=b+1
+            parts[#parts+1]=out:sub(start,a-1);parts[#parts+1]=qualified(r.label,r.town);start=b+1
         end
         out=table.concat(parts)
     end

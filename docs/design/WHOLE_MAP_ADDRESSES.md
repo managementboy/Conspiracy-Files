@@ -428,7 +428,27 @@ with the same footprint, sample addresses per town, load time).
 "confirmed, houses have numbers". An existing save kept its frozen Muldraugh
 book and showed none outside it, as P4-R120/P4-R131 intend.
 
-**Still open.** Town names in text for places outside the survivor's town; a
-small override list for naming rural areas; the rest of the attended check in
-section 6 (a found paper map of another town, and one house's address in the
-organiser matching its map number).
+**Town names in text, built 2026-09-17 (section 3.2 item 6).** When the mod's
+text names a place outside the town the survivor is in, the town is added -
+"102 Main St, West Point". Inside their own town the address reads exactly as
+before: nobody names the town they are standing in. The survivor's town is the
+town of the nearest numbered building (`AddressMap.currentTown`), worked out at
+most every five seconds and only after they have moved 32 tiles, so a label
+costs one field read and one compare - a reading surface pays nothing per row.
+It is **sticky**: out in the country, with nothing numbered nearby, the
+survivor stays of the town they last stood in. While it is not known at all -
+no player yet, no book, or a save that has never been near a numbered house -
+the label reads as it does today rather than guessing at a town. A building in
+an unnamed rural area still gets no town, as before. `WestPoint`, `MarchRidge`
+and `ValleyStation` are written out as said ("West Point"); any other area name
+is used exactly as `regions.lua` spells it, so `LAA` stays `LAA`. Applied
+inside `AddressMap.labelForBuilding`, `nearest` and `describe`, so every reader
+gets it at once; map labels are untouched, because the map already shows where
+a town is. The longest qualified label in the shipped book is 43 characters
+("102 Chapelmount Downs Back Road, Louisville"), well inside every store's
+limit. Checked by `test/address_shipped.lua`.
+
+**Still open.** A small override list for naming rural areas; the rest of the
+attended check in section 6 (a found paper map of another town, and one house's
+address in the organiser matching its map number). Owner check wanted: read a
+case file about another town and confirm the town reads well in the record.
