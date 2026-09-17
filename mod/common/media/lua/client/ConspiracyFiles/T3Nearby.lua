@@ -175,9 +175,14 @@ function D.run()
     local tasks={}
     for _,doc in ipairs(root.case.documents) do
         local a=root.assignments[doc.id]; local t=a.target
+        -- A clue can be waiting for a container and have no target at all
+        -- (P4-R133); it is not a thing this probe can look at.
+        if not t then log("document="..doc.title.." status="..a.status.." target=none")
+        else
         log("document="..doc.title.." status="..a.status.." target="..t.x..","..t.y..","..t.z..
             " object="..t.objectIndex.." container="..t.containerIndex.." type="..t.containerType.." sprite="..t.sprite)
         tasks[#tasks+1]={doc=doc,a=a,oi=0,ci=0,ii=0}
+        end
     end
     local cursor=1
     local function step()

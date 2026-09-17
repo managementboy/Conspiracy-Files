@@ -217,7 +217,12 @@ end
 -- it; anything unusable is left out rather than failing the retirement.
 function M.retire(root,lastSeen,completedHours)
     local ok,why=Session.validate(root); if not ok then return nil,why end
-    if #root.known~=#root.case.documents then return nil,"case is not fully discovered" end
+    -- Every clue accounted for (P4-R133): found, or dropped after three
+    -- in-game days with nowhere to go. A dropped clue was never in the world,
+    -- so the case closes on the clues it got and keeps no row for it - a
+    -- four-clue case is still a case. A clue still WAITING is not accounted
+    -- for, and Session.accounted is what the runtime asks before retiring.
+    if not Session.accounted(root) then return nil,"case is not fully discovered" end
     local rows,rowsWhy=G.project(root.case,root.known); if not rows then return nil,rowsWhy end
     if type(lastSeen)=="table" then
         for _,row in ipairs(rows) do row.lastSeen=M.cleanLastSeen(lastSeen[row.id]) end

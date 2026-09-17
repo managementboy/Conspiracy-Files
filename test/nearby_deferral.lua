@@ -34,12 +34,15 @@ end
 assert(strings==3,"only the three caller-bug refusals stay untyped, found "..strings)
 
 local prepare=assert(runtime:match("local function prepare%(result,seed,later,house%)(.-)\nfunction R%.start"),"prepare must exist")
--- Both of the refusals that come from a nearby scan start the wait, and they
--- are the only ones that do: a placement still running, or a container that
--- changed under us, is not a reason to stand still for half an hour.
-local _,waits=prepare:gsub('refuse%("no%-containers",later==true%)',"")
-local _,reach=prepare:gsub('refuse%(code,later==true%)',"")
-assert(waits+reach==2,"both scan refusals start the wait, found "..(waits+reach))
+-- Every refusal that comes from the nearby scan starts the wait, and only a
+-- LATER case waits: no eligible pair at all, nothing the distribution could
+-- place, and a site that took no clue. A placement still running, or a
+-- container that changed under us, is not a reason to stand still for half an
+-- hour, and the first case's own house is not a neighbourhood to move on from.
+local _,waits=prepare:gsub("later==true%)","")
+assert(waits==3,"the three scan refusals start the wait for a later case, found "..waits)
+local _,unconditional=prepare:gsub("refuse%([^)]*,true%)","")
+assert(unconditional==0,"a first case must never start the move-on wait, found "..unconditional)
 assert(prepare:find("clearDebt()",1,true),"a case created clears the wait and the debt")
 assert(runtime:find("sessions,scheduler,preparing,wrapper=nil,nil,false,nil\n    clearDebt()",1,true),
     "loading a game clears the wait")

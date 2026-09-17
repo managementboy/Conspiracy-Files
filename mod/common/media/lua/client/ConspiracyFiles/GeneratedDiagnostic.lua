@@ -19,9 +19,13 @@ function D.run()
     local tasks={}
     for _,doc in ipairs(root.case and root.case.documents or {}) do
         local a=root.assignments[doc.id]; local t=a.target
+        -- A clue still waiting for a container has no target (P4-R133).
+        if not t then log("document="..doc.title.." status="..a.status.." target=none")
+        else
         log("document="..doc.title.." status="..a.status.." target="..t.x..","..t.y..","..t.z..
             " object="..t.objectIndex.." container="..t.containerIndex.." type="..t.containerType.." sprite="..t.sprite)
         tasks[#tasks+1]={doc=doc,a=a,oi=0,ci=0,ii=0}
+        end
     end
     local cursor=1
     local function step()
@@ -83,11 +87,14 @@ function D.access(radius)
     local targets,levels,box={},{},nil
     for _,root in ipairs(roots) do
         for _,doc in ipairs(root.case and root.case.documents or {}) do
+            -- A clue waiting for a container has no target (P4-R133).
             local t=root.assignments[doc.id].target
+            if t then
             targets[#targets+1]={title=doc.title,t=t}
             levels[t.z]=true
             if not box then box={x1=t.x,y1=t.y,x2=t.x,y2=t.y}
             else box.x1=math.min(box.x1,t.x); box.y1=math.min(box.y1,t.y); box.x2=math.max(box.x2,t.x); box.y2=math.max(box.y2,t.y) end
+            end
         end
     end
     for _,entry in ipairs(targets) do

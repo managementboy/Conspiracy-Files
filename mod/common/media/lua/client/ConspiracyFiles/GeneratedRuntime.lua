@@ -189,6 +189,9 @@ local function placement(api,id)
     return function()
         local a=api.assignment(id)
         if a.status=="placed" or a.status=="conflict" or a.status=="unknown" then return true end
+        -- A clue with no container yet is the filler's business, not this job's
+        -- (P4-R133); a dropped one is nobody's.
+        if a.status=="deferred" or a.status=="dropped" then return true end
         -- The physical token doubles as the mark on a vehicle part, so a clue
         -- in a car is found again wherever the player has since driven it.
         local current=World.resolve(a.target,a.physicalToken)
@@ -478,11 +481,15 @@ local function firstCase(catalog,seed,options,context,house,candidates)
     table.sort(partners,function(a,b) return a.id<b.id end)
     -- Before commitment, try each deterministic partner once.  Capacity follows
     -- the selected story roles, not the former 3/4 building split.
+    --
+    -- One container at each site is enough (P4-R133): the clues that do not fit
+    -- now wait as an open order and the filler places them as the survivor
+    -- moves about. Demanding every container up front is what stopped cases
+    -- coming for a player who stays in one house.
     for offset=0,#partners-1 do
         local partner=partners[(seed+offset)%#partners+1]
         local case=G.generateSelected(catalog,seed,options,{intro.id,partner.id})
-        local required=case and G.requiredContainers(case)
-        if required and #candidates[intro.id]>=required[intro.id] and #candidates[partner.id]>=required[partner.id] then return case end
+        if case and #(candidates[intro.id] or {})>=1 and #(candidates[partner.id] or {})>=1 then return case end
     end
     return nil,"first house and partner lack containers for this generated evidence set","no-containers"
 end
@@ -562,19 +569,38 @@ local function prepare(result,seed,later,house)
             log("no case: "..tostring(err))
             refuse(code,later==true); return
         end
-        local required=assert(G.requiredContainers(case))
-        for siteId,count in pairs(required) do
-            if not candidates[siteId] or #candidates[siteId]<count then
-                refuse("no-containers",later==true)
-                return
-            end
-        end
         for _,site in ipairs(case.locations) do
             if not World.resolve(targets[site.id]) then refuse("busy"); return end
         end
-        local root=assert(Session.createDistributed(case,candidates,rooms,occupied))
+        -- INSTALMENTS (P4-R133). The case goes live with the clues that fit
+        -- now; the rest wait as an open order and the filler places them as
+        -- the survivor moves about and more of the world loads. This is where
+        -- the old fault was: the whole case was thrown away unless every site
+        -- could supply its share of distinct containers at that moment, so a
+        -- player who stays in one house got no further cases at all.
+        local root,waiting=Session.createDistributed(case,candidates,rooms,occupied,worldHours())
+        if not root then refuse("no-containers",later==true); return end
+        -- A case is a claim and a record that contradicts it, in two different
+        -- places (Generator.MIN_EVIDENCE). One clue on its own is not a case,
+        -- and a case with one clue could never finish - it would squat an
+        -- active slot for ever, which is worse than the refusal this change
+        -- exists to fix. So each of the two sites must take a clue now; the
+        -- rest may wait.
+        local placedAt={}
+        for _,doc in ipairs(case.documents) do
+            local a=root.assignments[doc.id]
+            if a.status~="deferred" then placedAt[doc.locationId]=(placedAt[doc.locationId] or 0)+1 end
+        end
+        for _,site in ipairs(case.locations) do
+            if not placedAt[site.id] then refuse("no-containers",later==true); return end
+        end
+        -- The opening clue of the FIRST case is in the house the player is
+        -- standing in (P4-R66), so it is never an instalment.
+        if house and root.assignments[case.documents[1].id].status=="deferred" then
+            refuse("no-containers",false); return
+        end
         for _,assignment in pairs(root.assignments) do
-            if not World.resolve(assignment.target) then refuse("busy");return end
+            if assignment.target and not World.resolve(assignment.target) then refuse("busy");return end
         end
         -- Validate once more before the single authoritative swap.
         checked(Session.validate(root))
@@ -592,6 +618,12 @@ local function prepare(result,seed,later,house)
         openAll()
         local first=case.documents[1]; local t=targets[first.locationId]
         log("DEV first clue container: "..t.x..", "..t.y..", floor "..t.z..". No discoveries granted.")
+        -- How much of the case is an open order. A count, in the log, never on
+        -- any surface the player reads: the record shows what was found and
+        -- never a total (P4-R133).
+        if #waiting>0 then
+            CFLog.write("i","case",{case=case.caseId,n=#waiting,why="instalments"})
+        end
         -- Give the case's person a body. The case keeps its own name and a
         -- nearby zombie is given THAT name and an ID to match, because a name
         -- read off the world could never be rebuilt from the seed. See
@@ -860,7 +892,12 @@ function R.inspect(item,inPlace)
     -- just been found no longer needs its placement bookkeeping, and shedding
     -- it is what keeps later cases inside the shared save budget.
     local done=api.snapshot()
-    if #done.known>=#done.case.documents then
+    -- Every clue accounted for, not merely every clue found (P4-R133): a clue
+    -- still waiting for a container is not accounted for, so "nothing left to
+    -- find" and the closing question cannot fire while one is unwritten. A
+    -- clue that waited three in-game days and was dropped IS accounted for -
+    -- a four-clue case is still a case.
+    if Session.accounted(done) then
         for index,root in ipairs(Cases.sessions(wrapper)) do
             if not Retired.isRetired(root) and root.case and root.case.caseId==done.case.caseId then
                 -- Keep where each clue was last seen. Owner, 2026-09-14: "I
@@ -1166,7 +1203,11 @@ end
 -- box is small (one catalog location) and already known, so no rectangle
 -- list is needed. Never resumes across relocation attempts; a fresh scan
 -- starts once per chosen destination site.
-local function boundsScan(site,done)
+-- `accept` is OPTIONAL: when given, a container it refuses is stepped over and
+-- the scan carries on, so the filler can skip a container another clue already
+-- holds (P4-R67) without a second kind of scan. Omitted, this is exactly the
+-- scan relocation has always used.
+local function boundsScan(site,done,accept)
     local b=site.bounds
     local kinds={}; for _,kind in ipairs(site.containerTypes) do kinds[kind]=true end
     local x,y,objects,oi,ci=b.x1,b.y1,nil,0,0
@@ -1187,7 +1228,8 @@ local function boundsScan(site,done)
         local c=o:getContainerByIndex(ci)
         local sprite=o:getSprite(); local name=sprite and sprite:getName()
         if c and name and kinds[c:getType()] then
-            done({x=x,y=y,z=b.z,objectIndex=oi,containerIndex=ci,containerType=c:getType(),sprite=name}); return true
+            local found={x=x,y=y,z=b.z,objectIndex=oi,containerIndex=ci,containerType=c:getType(),sprite=name}
+            if not accept or accept(found) then done(found); return true end
         end
         ci=ci+1
         return false
@@ -1306,6 +1348,84 @@ local function relocation(api)
         local cue=ConspiracyFiles.ClueCue
         if cue and cue.invalidate then cue.invalidate(id) end
         log("[CF-G2-RELOCATE] relocated "..id.." to "..target.x..","..target.y..",floor "..target.z)
+        return true
+    end
+end
+-- THE FILLER (P4-R133, docs/design/CASE_PACING.md). A case that went live with
+-- only the clues that fit keeps the rest as an open order; this is what fills
+-- it, one clue per attempt, one job per session, on the same tick dispatch as
+-- relocation. `Storage.scan` only ever sees loaded squares, so ordinary
+-- movement is what makes the room: a house catalogued from the street yields
+-- one or two candidates and eight once the survivor walks in.
+--
+-- Every guard is checked fresh on each attempt: the clue is still deferred,
+-- its own site is where it goes, the container is not one any other clue
+-- already holds (P4-R67, live cases and finished ones alike), and the survivor
+-- is not standing next to it. Nothing is ever said to the player: a clue
+-- appearing is exactly as quiet as a clue placed at creation.
+local function usedPhysicalKeys()
+    local keys={}
+    -- A finished case has no assignments left (retirement drops them), so a
+    -- retired case contributes nothing here: its containers are free again,
+    -- which is also what the ladder's third rung trades on.
+    for _,root in ipairs(Cases.sessions(wrapper) or {}) do
+        for _,a in pairs(root.assignments or {}) do
+            if a.target then keys[Session.physicalKey(a.target)]=true end
+        end
+    end
+    return keys
+end
+local function filler(api)
+    local id,site,scan,target
+    return function()
+        local root=api.snapshot()
+        local hours=worldHours()
+        if not id then
+            -- A clue that has waited three in-game days is dropped, and that
+            -- is the whole of this attempt: the case then completes on the
+            -- clues it got rather than squatting an active slot.
+            local expired=Session.expiredIds(root,hours)
+            if #expired>0 then
+                local ok,why=api.drop(expired[1])
+                if ok then CFLog.write("i","stale",{doc=expired[1],why="expired",n=#expired})
+                else log("could not drop a waiting clue: "..tostring(why)) end
+                return true
+            end
+            local waiting=Session.deferredIds(root)
+            if #waiting==0 then return true end
+            id=waiting[1]
+        end
+        local a=root.assignments[id]
+        if not a or a.status~="deferred" then return true end
+        if not site then
+            for _,s in ipairs(root.case.locations) do if s.id==a.locationId then site=s end end
+            if not site then return true end
+            local taken=usedPhysicalKeys()
+            scan=boundsScan(site,function(t) target=t end,
+                function(candidate) return not taken[Session.physicalKey(candidate)] end)
+        end
+        if not target then
+            if scan() then
+                -- Nothing loaded and free at that site yet. Debug, not info:
+                -- this is the ordinary state of an open order and would
+                -- otherwise be a line every two seconds.
+                if not target then CFLog.write("d","skip",{doc=id,why="no-containers"}); return true end
+            else return false end
+        end
+        -- Nothing materialises under the survivor's feet: the same guard
+        -- relocation uses, with the same radius.
+        local p=getPlayer()
+        if p and StaleClue.tooClose(math.floor(p:getX()),math.floor(p:getY()),math.floor(p:getZ()),target) then
+            return false
+        end
+        if not World.resolve(target) then return true end
+        local ok,why=api.assign(id,target,hours)
+        if not ok then log("could not place a waiting clue: "..tostring(why)); return true end
+        -- The ordinary placement job writes the item, exactly as it does for a
+        -- clue placed at creation: one path that creates evidence, not two.
+        scheduler.enqueue("place:"..id,"placement",placement(api,id))
+        CFLog.write("i","placed",{doc=id,place=addressFor(a.locationId),
+            at=target.x..","..target.y..","..target.z,why="instalment"})
         return true
     end
 end
@@ -1468,6 +1588,13 @@ local function identity(api)
     return function()
         if not done then scan(); return false end
         for id,items in pairs(found) do
+          -- A clue still waiting for a container, or dropped, was never in the
+          -- world: the scan finding nothing says nothing about it, and a
+          -- record that called it uncertain would be claiming to have looked
+          -- (P4-R133).
+          local waiting=snapshot.assignments[id]
+          waiting=waiting and (waiting.status=="deferred" or waiting.status=="dropped")
+          if not waiting then
             -- The category is not saved with an item, so a clue in an area
             -- that streamed out and back lost it while its case was live
             -- (campaign check, 2026-09-15). The scan that finds it restores it.
@@ -1489,6 +1616,7 @@ local function identity(api)
                 s.where=ok and where or nil
             else s.misses=s.misses+1 end
             sightings[id]=s
+          end
         end
         return true
     end
@@ -1574,6 +1702,9 @@ Events.OnTick.Add(function()
     if sessions and ticks%120==0 then
         enqueue(); for i,api in ipairs(sessions) do scheduler.enqueue("identity:"..i,"identity",identity(api)) end
         for i,api in ipairs(sessions) do scheduler.enqueue("relocate:"..i,"relocation",relocation(api)) end
+        -- Beside relocation, and bounded the same way: one job per session,
+        -- one waiting clue per attempt (P4-R133).
+        for i,api in ipairs(sessions) do scheduler.enqueue("fill:"..i,"filler",filler(api)) end
         scheduler.enqueue("visited-building","tracking",trackVisited)
         if #retiredRows>0 then
             local now=getTimeInMillis and getTimeInMillis() or 0

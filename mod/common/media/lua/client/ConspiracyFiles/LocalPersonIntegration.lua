@@ -189,7 +189,10 @@ local function observeKeyLead(entry)
 end
 local function buildingFor(root)
     local doc=root.case.documents[1]
+    -- The opening clue is never an instalment, but a nil target must not throw
+    -- here if one ever is (P4-R133).
     local target=root.assignments[doc.id].target
+    if not target then return nil end
     local square=read(getCell(),"getGridSquare",target.x,target.y,target.z)
     local building=read(square,"getBuilding")
     local def=read(building,"getDef")
