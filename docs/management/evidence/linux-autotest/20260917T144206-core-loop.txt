@@ -1,0 +1,21 @@
+Linux core loop check 20260917T144206: FAIL
+source: 1e642b1
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+first case: 4 documents, all found, looked over and inspected through the right-click menu:
+  1. Stock list / TN-304 (found as Note), in shelves, room hall, floor 0 (container icon clicked: yes)
+  2. Second stock list / TN-304 (found as Receipt), in shelves, room hall, floor 0 (container icon clicked: yes)
+  3. Audit note / TN-304 (found as Notepad), in shelves, room hall, floor 0 (container icon clicked: yes)
+  4. Access memo / 7C-41 (found as Note), in shelves, room hall, floor 0 (container icon clicked: yes)
+record entries: 4; case completion reported: yes
+map marks without a pen (written/pending/missing): 0/4/0
+map marks after a pen, case already retired: 4/0/0
+second case appeared (gap removed): no
+errors inside the mod: 0
+FINDING: relay memo date notes: memo found=true, dated in its week=1, carrying the note=1
+FINDING: last seen after completion: 4 of 4 documents, e.g. 'Carried.'; retired cases in the save=1, rows with a stored last seen=4
+FINDING: last-seen log: 
+FINDING: Evidence / Old after completion: 4 pieces of evidence carried, 4 known as retired evidence, 4 in the Old category
+FINDING: radio transcript in the case steered to 'Listen for it': false
+FINDING: What do I make of it?: answered=true (person Ines Kubiak); second case built from the answers=false, answers marked used=false, person returned=false, no second body=false
+FAIL: no second case within 150 s with the gap removed
+screenshot: dev/eval/linux/runs/20260917T144206-map.png (not committed)

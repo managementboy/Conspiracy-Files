@@ -1,0 +1,10 @@
+Linux drop-to-note check 20260917T145344: FAIL
+source: 1e642b1
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+case: 8	1:placed@202 E Maple St; 2:placed@2301 S Main St; 3:placed@2301 S Main St; 4:placed@2301 S Main St; 5:placed@2301 S Main St; 6:placed@2301 S Main St; 7:placed@2301 S Main St; 8:placed@2301 S Main St
+carried: 6, left lying: Access memo / 7C-41 (found as Note, recognised by search)
+drop: true	7	NOTED 7
+second drop: true	0	ALREADY NOTED
+names from evidence: true	2	Warren Nagy,Joanne Voss	
+FAIL: errors inside the mod: General      f:0 at CellLoader.DoTileObjectCreation     > CellLoader> missing tile vegetation_groundcover_01_18
+General      f:1642> Lua((MOD:Conspiracy-Files: Dead Air)).pcall> Exception thrown  |  Object tried to call nil in pcall at KahluaUtil.fail(KahluaUtil.java:100).

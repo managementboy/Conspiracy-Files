@@ -130,4 +130,23 @@ local late=item(inventory,"doc-10")
 assert(Actions.lookItOver(player,late)==true and #queue==1,"instant is ignored outside debug")
 Actions.instant=false
 
-print("PASS look it over: only on a carried unrecognised clue (bags too), a timed action with the progress bar, interrupted by moving, recognises only on completion, nothing said, instant for checks")
+-- A clue that is not literature (wooden armour) is never asked its read type:
+-- only Literature has getReadType, and the game logs the throw as a mod error
+-- even inside pcall (drop_note 20260917T145344). Literature keeps its own.
+instanceof=function(o,class) return o.class==class end
+local asked=false
+local armour=item(inventory,"doc-11"); armour.class="Clothing"
+function armour:getReadType() asked=true; error("Object tried to call nil") end
+function armour:getType() return "Shoulderpad_Wood_L" end
+queue={}
+Actions.lookItOver(player,armour)
+queue[1]:start()
+assert(not asked and queue[1].vars.ReadType=="book","a clue that is not literature is not asked its read type")
+local paper=item(inventory,"doc-12"); paper.class="Literature"
+function paper:getReadType() return "newspaper" end
+queue={}
+Actions.lookItOver(player,paper)
+queue[1]:start()
+assert(queue[1].vars.ReadType=="newspaper","literature keeps its own reading pose")
+
+print("PASS look it over: not-literature clues are not asked their read type; only on a carried unrecognised clue (bags too), a timed action with the progress bar, interrupted by moving, recognises only on completion, nothing said, instant for checks")

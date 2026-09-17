@@ -30,7 +30,10 @@ local function instant() return A.instant==true and getDebug and getDebug() end
 -- for everything else, as ISReadABook chooses.
 local function readType(item)
     local ok,kind=pcall(function()
-        if item:getReadType() then return item:getReadType() end
+        -- Only Literature has getReadType. Asked of anything else it throws,
+        -- and the game logs that as a mod error even inside pcall (a clue that
+        -- is a piece of wooden armour, drop_note 20260917T145344).
+        if instanceof(item,"Literature") and item:getReadType() then return item:getReadType() end
         if item:getType()=="Newspaper" then return "newspaper" end
         if ItemTag and item:hasTag(ItemTag.PICTURE) then return "photo" end
         return "book"
