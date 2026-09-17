@@ -996,6 +996,41 @@ Built in three stages and published as DEV-0.42.0-search-to-find-3 on
 done". Kept as the shape to follow: hand a job to a system the game already
 has, rather than arranging our own announcements differently.
 
+**P4-R133 — a case may arrive in instalments, and a refusal must be honest.**
+Owner, 2026-09-17, on cases quietly stopping for a player who stays in one
+house: "decide alone", then "I agree with all you wrote". The cause: a case is
+thrown away whole unless the loaded area can supply every distinct container it
+needs (P4-R67), and the refusal then waits for the survivor to move (P4-R125).
+One long run refused 17 times and never delivered a second case.
+
+Decided:
+1. **Instalments.** A case goes live with the clues that fit now; the rest wait
+   as an open order and place themselves as the survivor moves about. A waiting
+   clue names its intended site and has no target yet, and costs less to store
+   than a placed one. The record still shows only what was found, never a total.
+2. **Honest refusals.** Every refusal carries a reason (no reach, no
+   containers, cap, cooldown, disabled), a count and the in-game time by which
+   the next case is expected. After three refusals of the same reason the
+   generator lowers its own standard in a fixed order: a smaller case, a wider
+   reach, then releasing an old finished case's sites. Reachability is never
+   traded: an unreachable clue is not a clue.
+3. **The checks stop forgiving it.** A passed deadline with no case, and a
+   refusal count that grows while the standard never lowers, are FAILURES in
+   the long campaign check, not findings.
+4. **Waiting clues expire.** A clue that cannot be placed within three in-game
+   days is dropped and the case completes on the clues it got. A four-clue case
+   is still a case. Without this, half-placed cases would squat the four active
+   slots and block new cases worse than the original fault.
+5. **Rejected: reserving sites and writing the clue later.** It would allow
+   preparation in unloaded areas, but a container is identified by its position
+   in the engine's object list, which shifts as the world changes; resolving a
+   reservation later would weaken "one clue per container" (P4-R67) to one per
+   room. Not worth the guarantee.
+
+Design: docs/design/CASE_PACING.md. Built after the P4-R111 archive work.
+Later candidate, not decided: clues carried in on bodies, zombie pockets,
+parked cars and mailboxes.
+
 **P4-R106 — how a car's containers are reached.** Owner, 2026-09-14: "The globe
 box only opens when sitting in the front of the car", and a truck bed or trunk
 is reached from outside, "only if they are open". Placement may still put a
