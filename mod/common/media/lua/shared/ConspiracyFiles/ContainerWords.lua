@@ -15,6 +15,10 @@ M.PHRASES={
     locker="In a locker", fridge="In a fridge", freezer="In a freezer", bin="In a bin",
     medicine="In a medicine cabinet", clothingrack="On a clothing rack",
     smallbox="In a box", cardboardbox="In a box", toolbox="In a toolbox",
+    -- P4-R134: a mailbox at the gate. Its engine type string is unverified on
+    -- Build 42.20 (Generated/Storage.lua names it once); the phrase is right
+    -- whatever the string turns out to be, because the phrase is keyed on it.
+    mailbox="In a mailbox",
 }
 
 local function article(word)

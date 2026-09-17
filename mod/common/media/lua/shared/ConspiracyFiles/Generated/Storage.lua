@@ -3,7 +3,29 @@ local N=require("ConspiracyFiles/Generated/NearbyCatalog")
 local V=require("ConspiracyFiles/Validator")
 local W=require("ConspiracyFiles/WorldAccess")
 local M={}
-local kinds={desk=true,counter=true,shelves=true,filingcabinet=true,locker=true}
+-- MAILBOXES (P4-R134, docs/design/CLUES_ON_THE_MOVE.md). A mailbox at the gate
+-- is a distinct, replenishing place a survivor already searches, and it is the
+-- only new fixed container kind the design needs.
+--
+-- *** THE TYPE STRING IS UNVERIFIED ON BUILD 42.20. *** Every other kind below
+-- was read off a real container in a real game; this one has not been. It is a
+-- named constant, and the kinds a real game has yet to confirm are listed in
+-- M.UNVERIFIED so a check can print exactly what it found and this line can be
+-- corrected in one place. Nothing else in the mod spells a mailbox out.
+--
+-- If the string is wrong the only consequence is that no mailbox is ever
+-- offered as a candidate - a mailbox would read as no container at all, which
+-- is the same as before this existed. It cannot place a clue somewhere wrong.
+M.MAILBOX="mailbox"
+M.UNVERIFIED={[M.MAILBOX]=true}
+local kinds={desk=true,counter=true,shelves=true,filingcabinet=true,locker=true,[M.MAILBOX]=true}
+M.KINDS=kinds
+-- How many kinds one site may report. Six furniture kinds plus "vehicle" is
+-- seven; Generated/Catalog.lua allows eight. It was five while there were five
+-- kinds, and a site that found a mailbox as well would silently have lost one
+-- of them - a candidate whose kind is missing from the list is a candidate
+-- S.target refuses.
+M.MAX_KINDS=7
 function M.scan(result,done,reachable)
     reachable=reachable or function(x,y,z) return z==0 end
     local catalog,why=N.fromResult(result); if not catalog then return nil,why end
@@ -61,7 +83,7 @@ function M.scan(result,done,reachable)
                             occupiedOut[site.id][#list]=(items and items.size and items:size() or 0)>0
                             local types={}
                             for _,v in ipairs(site.containerTypes) do types[v]=true end
-                            if not types[S.VEHICLE_CONTAINER] and #site.containerTypes<5 then
+                            if not types[S.VEHICLE_CONTAINER] and #site.containerTypes<M.MAX_KINDS then
                                 site.containerTypes[#site.containerTypes+1]=S.VEHICLE_CONTAINER
                                 table.sort(site.containerTypes)
                             end
@@ -132,7 +154,7 @@ function M.scan(result,done,reachable)
                 occupied[id]=occupied[id] or {}
                 occupied[id][#candidates[id]]=count>0
                 if not targets[id] then targets[id]=target;site.bounds.z=r.z end
-                site.paperStorage="observed";local types={};for _,v in ipairs(site.containerTypes) do types[v]=true end;types[c:getType()]=true;site.containerTypes={};for k in pairs(types) do if #site.containerTypes<5 then site.containerTypes[#site.containerTypes+1]=k end end;table.sort(site.containerTypes)
+                site.paperStorage="observed";local types={};for _,v in ipairs(site.containerTypes) do types[v]=true end;types[c:getType()]=true;site.containerTypes={};for k in pairs(types) do if #site.containerTypes<M.MAX_KINDS then site.containerTypes[#site.containerTypes+1]=k end end;table.sort(site.containerTypes)
                 site.source.reference="G2 loaded container inside T3 room footprint"
             end
         end
