@@ -1,9 +1,12 @@
--- Player voice lines: the survivor thinks out loud when the journal gains an
--- entry (Set A), and again when a person-key-door link is discovered (Set B,
--- or Set C when no name is known). Exact wording and delivery rules live in
--- docs/design/PLAYER_VOICE.md -- lines are used verbatim, never reworded.
+-- Player voice lines: the survivor thinks out loud when something happens in
+-- their head - a person-key-door link (Set B, or Set C when no name is known),
+-- records that agree or disagree, nothing left to find, an address from the
+-- file, a pile, a body. Noting evidence says nothing any more (Set A removed,
+-- P4-R132 stage 2): the progress bar and the item changing say it. Exact
+-- wording and delivery rules live in docs/design/PLAYER_VOICE.md -- lines are
+-- used verbatim, never reworded.
 --
--- Delivery follows ClueHints.announce: Say() speech bubble, setHaloNote with
+-- Delivery: Say() speech bubble, setHaloNote with
 -- an explicit duration (HaloTextHelper.addText has none and flashes too fast
 -- to read), and a UI-channel sound only -- never an emitter, never addSound,
 -- never character:playSound, so the survivor thinking aloud cannot attract
@@ -22,34 +25,6 @@ pcall(require,"ConspiracyFiles/EvidencePickupHint")
 
 -- Register: the journal stays hedged, the character may speculate. No line
 -- states as fact that the named person lived somewhere or owned anything.
-local SET_A={
-    "That's worth writing down.",
-    "Interesting. That's going in the machine.",
-    "I should note this before I forget.",
-    "Hm. That's going in my notes.",
-    "Better write this one down.",
-    "That means something. Noting it.",
-    "I'll want to remember this.",
-    "Worth keeping a record of that.",
-    "Let me key this in while I've got it.",
-    "That's a detail I shouldn't lose.",
-}
--- The same ten, naming the thing (P4-R130; owner, Windows, 2026-09-16: "can we
--- describe what we are noting? we have the data to do it"). <what> is a plain
--- noun read from the record, used only when one reads well (V.describe).
-local SET_A_WHAT={
-    "That <what> is worth writing down.",
-    "Interesting. The <what> goes in the machine.",
-    "I should note this <what> before I forget.",
-    "Hm. That <what> is going in my notes.",
-    "Better write this <what> down.",
-    "That <what> means something. Noting it.",
-    "I'll want to remember this <what>.",
-    "Worth keeping a record of that <what>.",
-    "Let me key this <what> in while I've got it.",
-    "That <what> is a detail I shouldn't lose.",
-}
-
 -- <name> is substituted with the name observed on a document found with that
 -- body. Used only when a name is actually known.
 local SET_B={
@@ -132,20 +107,19 @@ local SET_D={
     "This isn't something to skim. Read it properly, later.",
 }
 
--- setHaloNote is the only halo API that takes a duration; ClueHints already
--- established 900 as a readable value for a short line of speech.
+-- setHaloNote is the only halo API that takes a duration; 900 was established
+-- (for the old clue hints) as a readable value for a short line of speech.
 local HALO_DURATION=900
 -- UI channel only. playUISound never reaches the world sound manager, so it
--- cannot attract zombies -- same choice ClueHints made, for the same reason.
+-- cannot attract zombies.
 local VOICE_SOUND="UIObjectMenuEnter"
--- A burst of discoveries (e.g. reading several documents back to back) must
--- not produce a burst of chatter. This gates Set A only: Set B/C is the more
--- significant event and must never be suppressed by it.
+-- A burst of looting must not produce a burst of chatter. This gates Set D
+-- only: Set B/C is the more significant event and must never be suppressed.
 local COOLDOWN_MS=45000
 
 local indexE,indexF,indexG,indexH,indexI=0,0,0,0,0
-local indexA,indexB,indexC,indexD=0,0,0,0
-local lastSetAAt=-1/0
+local indexB,indexC,indexD=0,0,0
+local lastMusingAt=-1/0
 
 local function now()
     if not getTimeInMillis then return 0 end
@@ -161,66 +135,6 @@ local function fill(template,slot,value)
     return template:sub(1,i-1)..value..template:sub(j+1)
 end
 local function withName(template,name) return fill(template,"<name>",name) end
-
--- What a discovery is, for the survivor to say (P4-R130). Returns a plain noun
--- or nil, and the record's own title or nil. Read-only: every source is asked
--- for the rows it already renders.
-local function titleOf(reference)
-    local CF=ConspiracyFiles or {}
-    local runtime=CF.GeneratedRuntime
-    if runtime and runtime.known then
-        local ok,rows=pcall(runtime.known)
-        if ok and type(rows)=="table" then
-            for _,r in ipairs(rows) do if r.id==reference then return r.title,r end end
-        end
-    end
-    for _,name in ipairs({"IdentityObserver","KeyJournal","ObservedKeyLeads","KeyObserver"}) do
-        local source=CF[name]
-        if source and source.rows then
-            local ok,rows=pcall(source.rows)
-            if ok and type(rows)=="table" then
-                for _,r in ipairs(rows) do if r.id==reference then return r.title,nil end end
-            end
-        end
-    end
-    return nil,nil
-end
--- Lowercase a phrase for the middle of a sentence, keeping words written in
--- capitals as they are ("ID card", not "id card").
-local function midSentence(text)
-    return (text:gsub("%S+",function(word) if word:find("%l") then return word:lower() end return word end))
-end
-function V.describe(reference)
-    if type(reference)~="string" then return nil,nil end
-    local title,record=titleOf(reference)
-    if type(title)~="string" or title=="" then return nil,nil end
-    -- Identity rows are listed as findings ("Found Ines Kubiak's ID card");
-    -- the tag names the thing itself.
-    title=title:gsub("^Found ","")
-    local noun
-    if record then
-        -- An object's title is a count or a name ("thirteen radio receivers"),
-        -- not a noun that fits "this ...".
-        local okKinds,Kinds=pcall(require,"ConspiracyFiles/Generated/EvidenceKinds")
-        local carrier=okKinds and type(Kinds)=="table" and Kinds.get and Kinds.get(record.kind)
-        if not (type(carrier)=="table" and carrier.capacity=="object") then
-            noun=title:gsub("%s*/.*$",""):gsub(":.*$","")
-            noun=noun:gsub("^[Ss]econd ",""):gsub("^[Aa]nother ","")
-            noun=midSentence(noun)
-        end
-    elseif reference:find("^identity:") then
-        -- The document, never the person: "Ines Kubiak's ID card" -> "ID card".
-        noun=title:match("'s (.+)$")
-    elseif reference:find("^keys:") then
-        if title:find("^A key") then noun="key" end
-    elseif reference:find("^connection:") then
-        noun="possible connection"
-    elseif reference:find("^observedKeyLead:") then
-        noun="key"
-    end
-    if type(noun)~="string" or noun=="" or #noun>24 then noun=nil end
-    return noun,title
-end
 
 -- A line the player misses and a line that never fired look identical unless
 -- delivery is logged. That cost an hour on clue hints; do not repeat it.
@@ -312,27 +226,15 @@ function V.drain()
 end
 if Events and Events.OnTick and Events.OnTick.Add then Events.OnTick.Add(V.drain) end
 
--- Set A: fire whenever a new discovery reaches the shared ledger, whatever
--- its kind. Callers (DiscoveryLog.record) must only invoke this on a
--- genuinely new event, never on a duplicate.
+-- Set A is gone (P4-R132, stage 2): noting evidence is a timed action with the
+-- game's progress bar, and the item changing says it was noted. The hook stays
+-- so DiscoveryLog's call is still a known, logged place, but nothing is said.
 function V.onDiscovery(kind,reference)
-    local p=player(); if not p then return end
-    local t=now()
-    if t-lastSetAAt<COOLDOWN_MS then log("journal line suppressed by cooldown ("..(t-lastSetAAt).."ms)") return end
-    lastSetAAt=t
-    indexA=indexA%#SET_A+1
-    local ok,what,title=pcall(V.describe,reference)
-    if not ok then what,title=nil,nil end
-    local label="Noted"
-    if type(title)=="string" and title~="" then
-        label="Noted: "..(#title>40 and (title:sub(1,37).."...") or title)
-    end
-    if what then speak(p,fill(SET_A_WHAT[indexA],"<what>",what),label)
-    else speak(p,SET_A[indexA],label) end
+    log("discovery "..tostring(kind).." "..tostring(reference).."; nothing said")
 end
 
 -- Set B/C: a real key looted from a body opened a door. Never gated by the
--- Set A cooldown -- this is the more significant event. `sourceToken` is the
+-- Set D cooldown -- this is the more significant event. `sourceToken` is the
 -- corpse/wallet provenance token; a name is used only when PersonNameLog
 -- already associated one with that exact token. Never invents a name.
 function V.onKeyDoorLink(sourceToken)
@@ -360,9 +262,10 @@ end
 -- Once-per-item is a flag written directly onto the item's own mod data, the
 -- same way GeneratedRuntime and ClueMarkers already tag items -- it survives
 -- the item being dropped and picked back up, and a save/reload, without any
--- new persistent state of our own. Gated by the same cooldown as Set A: both
--- are ambient survivor musing, not the significant Set B/C revelation, so a
--- burst of loot in one trip should not produce a burst of either kind.
+-- new persistent state of our own. Gated by a cooldown (it shared Set A's
+-- until Set A was removed): ambient musing, not the significant Set B/C
+-- revelation, so a burst of loot in one trip gives at most one line. Only for
+-- a clue already recognised (EvidencePickupHint, P4-R132).
 function V.onEvidenceFound(item)
     if not item then return end
     local p=player(); if not p then return end
@@ -370,8 +273,8 @@ function V.onEvidenceFound(item)
     if not ok or type(md)~="table" then log("evidence hint not delivered: item has no mod data") return end
     if md.cfVoiceHinted then log("evidence hint suppressed: already delivered for this item") return end
     local t=now()
-    if t-lastSetAAt<COOLDOWN_MS then log("evidence hint suppressed by cooldown ("..(t-lastSetAAt).."ms)") return end
-    lastSetAAt=t
+    if t-lastMusingAt<COOLDOWN_MS then log("evidence hint suppressed by cooldown ("..(t-lastMusingAt).."ms)") return end
+    lastMusingAt=t
     md.cfVoiceHinted=true
     indexD=indexD%#SET_D+1
     speak(p,SET_D[indexD],"Unread")
@@ -448,7 +351,7 @@ end
 
 -- Test/debug hook: reset rotation and cooldown state.
 function V.reset()
-    indexA,indexB,indexC,indexD,lastSetAAt=0,0,0,0,-1/0
+    indexB,indexC,indexD,lastMusingAt=0,0,0,-1/0
     indexE,indexF,indexG,indexH,indexI=0,0,0,0,0
     said={}
     queue={}; lastSpokenAt,lastHold=-1/0,0

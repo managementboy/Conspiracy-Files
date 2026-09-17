@@ -1,6 +1,6 @@
--- Player voice lines: Set A (journal entry added), Set B/C (person-key-door
--- link). See docs/design/PLAYER_VOICE.md for the exact wording this test
--- checks verbatim, and ClueHints.announce for the delivery pattern.
+-- Player voice lines: Set A (removed, P4-R132 stage 2: noting says nothing),
+-- Set B/C (person-key-door link). See docs/design/PLAYER_VOICE.md for the exact
+-- wording this test checks verbatim.
 --
 -- Engine doubles below demand a receiver, exactly like Kahlua does for a real
 -- Java method: a plain-table mock that tolerates player.Say(text) as well as
@@ -56,37 +56,20 @@ local Voice=dofile("mod/common/media/lua/client/ConspiracyFiles/PlayerVoice.lua"
 Voice.HOLD_MS=0
 
 -- ---------------------------------------------------------------------
--- Set A: every line reachable, never repeated back to back.
+-- Set A is gone (P4-R132, stage 2): a new discovery says nothing at all - no
+-- bubble, no halo, no sound. The progress bar and the item changing say it.
 -- ---------------------------------------------------------------------
-local SET_A_COUNT=10
-local seenA={}
-local previous
-for i=1,40 do
-    clock=clock+60000 -- clear the cooldown every time, isolating rotation
-    local before=#says
+for i=1,12 do
+    clock=clock+60000
     Voice.onDiscovery("evidence","doc-"..i)
-    assert(#says==before+1,"Set A must speak once cooldown has cleared")
-    local line=haloNotes[#haloNotes].text
-    seenA[line]=true
-    assert(line~=previous,"must never repeat the previous line twice running")
-    previous=line
+    Voice.onDiscovery("identity","identity:"..i)
+    Voice.onDiscovery("connection","observedKeyLead:door:"..i)
 end
-local distinctA=0
-for _ in pairs(seenA) do distinctA=distinctA+1 end
-assert(distinctA==SET_A_COUNT,"every Set A line must be reachable, got "..distinctA)
-
--- ---------------------------------------------------------------------
--- Cooldown: a burst of Set A discoveries does not produce a burst of chatter.
--- ---------------------------------------------------------------------
-Voice.reset(); says={}
-clock=clock+60000
-Voice.onDiscovery("evidence","burst-0") -- primes the cooldown
-local burstStart=#says
-for i=1,10 do Voice.onDiscovery("evidence","burst-"..i) end
-assert(#says==burstStart,"a burst of Set A triggers within the cooldown window must not add chatter, got "..(#says-burstStart).." extra lines")
-clock=clock+45000
-Voice.onDiscovery("evidence","burst-after")
-assert(#says==burstStart+1,"once the cooldown elapses, Set A must speak again")
+assert(#says==0 and #haloNotes==0 and #uiSounds==0,"noting evidence must say nothing, got "..#says.." lines")
+for _,gone in ipairs({"SET_A","describe","Noted"}) do
+    local f=assert(io.open("mod/common/media/lua/client/ConspiracyFiles/PlayerVoice.lua","r")); local src=f:read("*a"); f:close()
+    assert(not src:find(gone,1,true),"Set A's lines and naming are removed, found "..gone)
+end
 
 -- ---------------------------------------------------------------------
 -- Set B: a name observed on a document with the body is used verbatim.
@@ -144,20 +127,21 @@ assert(#says==3,"a missing PersonNameLog module must degrade to Set C, not throw
 
 -- ---------------------------------------------------------------------
 -- The link line is the more significant event: it must NOT be suppressed by
--- a Set A line that just fired (and just consumed the Set A cooldown).
+-- a Set D line that just fired (and just consumed the musing cooldown).
 -- ---------------------------------------------------------------------
 Voice.reset(); says={}
 ConspiracyFiles.PersonNameLog={nameFor=function() return "Dana Vale" end}
 clock=clock+60000
-Voice.onDiscovery("connection","observedKeyLead:door:corpse-item:1") -- Set A fires, cooldown now active
+local evidence={md={}}; function evidence:getModData() return self.md end
+Voice.onEvidenceFound(evidence) -- Set D fires, cooldown now active
 assert(#says==1)
 Voice.onKeyDoorLink("corpse-item:1") -- fired moments later, must still speak
-assert(#says==2,"the link line must not be suppressed by a Set A line fired moments earlier")
+assert(#says==2,"the link line must not be suppressed by a Set D line fired moments earlier")
 assert(haloNotes[#haloNotes].text:find("Dana Vale",1,true))
--- And repeating the link back-to-back (still within the Set A cooldown)
--- keeps speaking too -- Set B/C carries no cooldown of its own.
+-- And repeating the link back-to-back (still within the cooldown) keeps
+-- speaking too -- Set B/C carries no cooldown of its own.
 Voice.onKeyDoorLink("corpse-item:1")
-assert(#says==3,"Set B/C is never gated by the Set A cooldown")
+assert(#says==3,"Set B/C is never gated by the Set D cooldown")
 
 -- ---------------------------------------------------------------------
 -- Delivery channel: halo note carries an explicit duration, and the sound is
@@ -165,7 +149,7 @@ assert(#says==3,"Set B/C is never gated by the Set A cooldown")
 -- ---------------------------------------------------------------------
 Voice.reset(); says={}; haloNotes={}; uiSounds={}; otherSounds={}
 clock=clock+60000
-Voice.onDiscovery("evidence","halo-check")
+Voice.onBody("halo-check")
 -- Two channels, two strings (owner, 2026-09-10: "some messages on top of the
 -- player repeated once in colour once in white"). The bubble carries the
 -- survivor's line; the halo carries the fact in as few words as fit above a
@@ -194,11 +178,11 @@ local bareCalls=0
 player={Say=function(self,text) assert(self==player,"Say needs an explicit receiver"); bareCalls=bareCalls+1; says[#says+1]=text end}
 getSoundManager=nil
 clock=clock+60000
-local ok=pcall(Voice.onDiscovery,"evidence","bare")
+local ok=pcall(Voice.onBody,"bare")
 assert(ok and #says==1,"a player without setHaloNote/sound manager must still speak, not throw")
-assert(says[1]~="Noted","with no halo, the survivor's words go in the bubble rather than the tag")
+assert(says[1]~="A body","with no halo, the survivor's words go in the bubble rather than the tag")
 
-print("PASS player voice: every Set A/B/C line reachable, no immediate repeats, name never fabricated, cooldown gates Set A only, link line escapes it, halo duration and UI-only sound")
+print("PASS player voice: noting says nothing (Set A removed), every Set B/C line reachable, no immediate repeats, name never fabricated, link line escapes the Set D cooldown, halo duration and UI-only sound")
 
 -- The defect this guards: Say and setHaloNote were both handed the same
 -- sentence, so every line appeared twice above the player - once in the
@@ -216,8 +200,10 @@ assert(voice:find('Say(halo and label or text)', 1, true),
     'the bubble carries the tag, or the words when there is no halo')
 assert(voice:find('label~=text', 1, true),
     'the split must be enforced at the call, not left to whoever adds the next line')
-local g = assert(io.open('mod/common/media/lua/client/ConspiracyFiles/ClueHints.lua', 'r'))
-local hints = g:read('*a'); g:close()
-assert(hints:find('setHaloNote(text', 1, true), 'the hint phrase goes in the white halo too')
-assert(hints:find('Say(halo and HINT_HALO or text)', 1, true), 'and its bubble carries the fact, or the phrase without a halo')
+-- The wordless cue (which replaced the clue hints) has no halo at all: the
+-- speech bubble only, never a name.
+local g = assert(io.open('mod/common/media/lua/client/ConspiracyFiles/ClueCue.lua', 'r'))
+local cue = g:read('*a'); g:close()
+assert(not cue:find('setHaloNote', 1, true) and not cue:find('HaloTextHelper', 1, true), 'the cue has no halo')
+assert(cue:find('player:Say(line)', 1, true), 'the cue is said in the bubble')
 print('PASS player voice: the bubble and the halo never say the same thing')

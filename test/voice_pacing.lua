@@ -20,9 +20,11 @@ for _,fn in ipairs(ticks) do if fn==Voice.drain then registered=true end end
 assert(registered,"waiting lines must be delivered from the tick")
 local function tick(ms) clock=clock+ms; Voice.drain() end
 
--- The moment from the owner's log.
+-- The moment from the owner's log (its first line, Set A, is gone since
+-- P4-R132 stage 2; three lines still fire together here).
 clock=60000
 Voice.onDiscovery("evidence","doc-6")
+Voice.onBody("doc-6")
 Voice.onConnection("disputes-delivery","doc-6")
 Voice.onPile("doc-6")
 assert(#says==1,"only one line may show at a time, got "..#says)
