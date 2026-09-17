@@ -1071,6 +1071,30 @@ in-game days is dropped like any other unplaceable clue (P4-R133).
 
 Design: docs/design/CLUES_ON_THE_MOVE.md.
 
+**P4-R135 — four decisions taken while building the overnight queue.** Owner,
+2026-09-17: "implement 1 to 11", with the standing instruction to decide alone
+where the code forces a choice. Recorded so they can be overruled:
+1. **The archive keeps four finished cases fully readable, not all of them**
+   (P4-R111). The 500 KB budget cannot hold rows for every case: each fully
+   readable archived case costs about eight stubbed ones. Sixteen cases now fit
+   in 472 kB, where ten used to take 482 kB. The dial is one constant
+   (MAX_FULL_ARCHIVED = 4): six readable gives about twelve cases, two gives
+   about twenty-two. Past sixteen the binding constraint is the discovery
+   ledger (about 545 bytes per clue ever found), not the case store.
+2. **The ladder's fourth rung is not built** (P4-R133). "Accept a single-site
+   case" needs a generator revision and a fresh game: a case is rebuilt from
+   its seed and the schema requires two buildings with observed storage. Rungs
+   1 to 3 (a smaller case, a wider reach, an old site released) carry the
+   guarantee; the status reports "out of rungs" so a check can tell that from
+   being stuck.
+3. **At most one mobile clue per case** (P4-R134), counting a carrier and a car
+   part alike. A side effect: a case near several cars can no longer scatter
+   clues across all of them, as it could before.
+4. **The mailbox container type is a guess and is labelled as one.** The string
+   the engine uses was not verified; it is named once (Storage.MAILBOX), listed
+   as unverified, and fails closed - a wrong string means no mailbox is ever
+   chosen, never a broken case.
+
 *Built 2026-09-17 (the design's build order 1-5; the real-game checks of step 6
 are separate). The carrier target shape, corpse and zombie carriers, mailboxes
 as a container kind, the deliberate car part, one mobile clue per case
