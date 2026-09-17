@@ -341,26 +341,34 @@ end
 -- (ISBaseIcon.getCanSeeThisUpdate returns true for isOnSquare before it tests
 -- the light, and doVisionCheck caps the view to darkVisionRadius 1.5), so a
 -- darkness stage that teleports onto the clue's square tests nothing.
+-- It must be the SAME ROOM. Three tiles back through a doorway is a different
+-- room, which the mod refuses for its own reasons ("other room") and where the
+-- engine reported the clue's square as fully lit at one in the morning
+-- (20260917T215304) - so nothing about darkness was being measured.
 function K.stepBack(tiles)
     tiles = tonumber(tiles) or 3
     local l = K.livePosition()
     if not l then return "false", "no clue picked" end
     local cell = getCell()
+    local at = cell:getGridSquare(l.x, l.y, l.z)
+    local room = at and at:getRoom()
     local best
-    for dx = -tiles, tiles do for dy = -tiles, tiles do
-        if math.max(math.abs(dx), math.abs(dy)) == tiles then
-            local sq = cell:getGridSquare(l.x + dx, l.y + dy, l.z)
-            if not best and sq and sq:isFree(false) then best = sq end
-        end
-    end end
-    -- A tile closer, rather than not moving back at all.
-    if not best and tiles > 2 then return K.stepBack(tiles - 1) end
-    if not best then return "false", "no free square " .. tiles .. " tiles from the clue" end
+    for radius = tiles, 2, -1 do
+        for dx = -radius, radius do for dy = -radius, radius do
+            if math.max(math.abs(dx), math.abs(dy)) == radius then
+                local sq = cell:getGridSquare(l.x + dx, l.y + dy, l.z)
+                if not best and sq and sq:isFree(false) and sq:getRoom() == room then best = sq end
+            end
+        end end
+        if best then break end
+    end
+    if not best then return "false", "no free square in the same room " .. tiles .. " tiles from the clue" end
     local p = player()
     p:teleportTo(best:getX() + 0.5, best:getY() + 0.5, best:getZ())
     pcall(function() p:faceLocation(l.x + 0.5, l.y + 0.5) end)
     local dx, dy = best:getX() - l.x, best:getY() - l.y
-    return "true", best:getX() .. "," .. best:getY(), string.format("%.1f", math.sqrt(dx * dx + dy * dy))
+    return "true", best:getX() .. "," .. best:getY(), string.format("%.1f", math.sqrt(dx * dx + dy * dy)),
+        tostring(best:getRoom() and best:getRoom():getName())
 end
 -- Stand ON the clue's square, which is what the game asks for in the dark.
 function K.standOn()

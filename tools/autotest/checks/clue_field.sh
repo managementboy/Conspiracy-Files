@@ -292,7 +292,10 @@ else
     ev 'return CFField.night(1.0)' >/dev/null
     sleep 8
     back="$(ev 'return CFField.stepBack(3)')"
-    note "standing back from it: $(f 2 <<<"$back"), $(f 3 <<<"$back") tiles away"
+    if [ "$(f 1 <<<"$back")" != true ]; then
+        note "nowhere to stand back to in the same room ($(f 2 <<<"$back")); the darkness stage needs one"
+    fi
+    note "standing back from it: $(f 2 <<<"$back"), $(f 3 <<<"$back") tiles away, room \"$(f 4 <<<"$back")\""
     dark="$(ev 'return CFField.light()')"
     note "at 01:00 in \"$room\": light penalty $(f 2 <<<"$dark"), the game calls it too dark=$(f 3 <<<"$dark"), the mod's sight test $(f 4 <<<"$dark")/$(f 5 <<<"$dark"), darkMulti $(f 6 <<<"$dark"), cutoff $(f 7 <<<"$dark")"
     if [ "$(f 3 <<<"$dark")" != true ]; then
@@ -311,7 +314,11 @@ else
             note "in the dark, $(f 3 <<<"$back") tiles away: not spotted in ${darksecs}s of searching (icon $(ev 'return CFField.icon()' | cut -f2- | tr '\t' ' '))"
         fi
         # The question worth an answer: the same spot, the same distance, with a
-        # lit torch in the survivor's hand.
+        # lit torch in the survivor's hand. The game's own rule is worth knowing
+        # while reading the numbers: forageSystem.getLightLevelPenalty raises a
+        # square's light to the torch's strength only for the square the
+        # survivor is STANDING on; anything further away depends on the engine
+        # lighting it, which is what this measures.
         t="$(ev 'return CFField.torch(true)')"
         note "torch: $(f 2 <<<"$t"), lit=$(f 3 <<<"$t"), in a hand=$(f 4 <<<"$t"), light strength $(f 5 <<<"$t")"
         sleep 6
