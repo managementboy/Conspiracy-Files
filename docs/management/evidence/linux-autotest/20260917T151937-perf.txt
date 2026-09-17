@@ -1,0 +1,20 @@
+Linux performance check 20260917T151937: PASS
+source: 6a19a6a
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+machine: 12 threads, 13th Gen Intel(R) Core(TM) i7-1355U; display :0
+per-frame handlers during three minutes of busy play (ms clock, aggregated):
+  AutomaticInvestigations.onTick calls=4624 avg=0.008ms max=19ms over2ms=3 
+  CaseFile.onTick calls=4612 avg=0.010ms max=1ms over2ms=0 
+  ClueMarkers.draw calls=1193 avg=0.396ms max=2ms over2ms=1 
+  ClueMarkers.update calls=80 avg=0.250ms max=2ms over2ms=2 
+  DevEval.tick calls=5769 avg=0.087ms max=134ms over2ms=73 
+  EvidencePickupHint.remindTick calls=4600 avg=0.003ms max=2ms over2ms=1 
+  IdentityObserver.afterRender calls=11686 avg=0.117ms max=1ms over2ms=0 
+  IdentityObserver.tick calls=4660 avg=0.001ms max=1ms over2ms=0 
+  LocalPersonIntegration.tick calls=0 avg=0.000ms max=0ms over2ms=0
+runtime scheduler peak: 87 ms
+nearby scan for the second case: callbacksOver2Ms='0' frames='546' kind='complete' peakMs='1'
+FINDING: AutomaticInvestigations.onTick: 3 single stall(s), worst 19 ms
+FINDING: ClueMarkers.draw: 1 single stall(s), worst 2 ms
+FINDING: ClueMarkers.update: 2 single stall(s), worst 2 ms
+FINDING: EvidencePickupHint.remindTick: 1 single stall(s), worst 2 ms

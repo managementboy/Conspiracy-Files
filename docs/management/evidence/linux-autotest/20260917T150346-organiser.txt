@@ -1,0 +1,5 @@
+PASS organiser - 2026-09-17T15:03:46+02:00
+commit: 6a19a6a
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+issued: true	ConspiracyFiles.Organiser	1	true
+after reload: true	ConspiracyFiles.Organiser	1	true

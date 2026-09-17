@@ -1,0 +1,10 @@
+Linux death check 20260917T151058: PASS
+source: 6a19a6a
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+first survivor: Consuela, carrying 2 case documents at death
+record before death: 2 1=54234543:document-1:Transfer notice / PS-510 | 2=54234543:document-2:Receiving roster / PS-510
+new survivor: Veronica; evidence album: evidence album issued: Veronica's Evidence
+record for the new survivor: 2 1=54234543:document-1:Transfer notice / PS-510 | 2=54234543:document-2:Receiving roster / PS-510
+the new survivor's organiser: carried=true marked=true; reads for them=true
+document taken back off the body: Transfer notice / PS-510
+errors inside the mod: 0

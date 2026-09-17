@@ -1,0 +1,14 @@
+Linux fault containment check 20260917T151338: PASS
+source: 6a19a6a
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+each function made to throw for 15 s of play, then restored:
+  DiscoveryLog.record: inspected document 1 (Fuel account statement / PS-320); 7 mod log lines and 1 caught errors in 15 s; most repeated line x1; game answering: true; case valid: true
+  SaveBudget.check: document 2: document 2 could not be inspected: not recognised 20 s after Look it over (queue, paused, last look: nil false false); 25 mod log lines and 20 caught errors in 15 s; most repeated line x2; game answering: true; case valid: true
+  GeneratedRuntime.inspect: document 3: document 3 could not be inspected: not noted 20 s after Inspect (queue, paused, last look: nil false true); 5 mod log lines and 1 caught errors in 15 s; most repeated line x1; game answering: true; case valid: true
+  ClueMarkers.update: inspected document 4 (Badge); 9 mod log lines and 1 caught errors in 15 s; most repeated line x1; game answering: true; case valid: true
+  ClueMarkers.draw: opened the world map; 3 mod log lines and 1 caught errors in 15 s; most repeated line x1; game answering: true; case valid: true
+  WorldAccess.resolve: stood by unfound document 5; 0 mod log lines and 8 caught errors in 15 s; most repeated line x1; game answering: true; case valid: true
+  WorldAccess.count: stood by unfound document 5; 0 mod log lines and 0 caught errors in 15 s; most repeated line x1; game answering: true; case valid: true
+  AddressMap.labelForBuilding: read FILES and PLACES on the organiser; 3 mod log lines and 0 caught errors in 15 s; most repeated line x1; game answering: true; case valid: true
+  IdentityObservations.add: opened 4 fresh bodies; 4 mod log lines and 0 caught errors in 15 s; most repeated line x3; game answering: true; case valid: true
+recovery afterwards: document 5 inspected (Access memo / 7C-41)

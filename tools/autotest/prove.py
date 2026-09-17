@@ -132,6 +132,20 @@ MUTATIONS = [
      "local known=M.PHRASES[kind]",
      "local known=nil",
      "shelves read as"),
+    # Clues are found by searching (P4-R132, stage 3 of the build): the two
+    # in-game checks written for stages 1 and 2, each shown to fail.
+    ("spot-recognises", "clue_search", C + "ClueSearch.lua",
+     'local ok,done,why=pcall(R.recognise,id,"search")',
+     'local ok,done,why=true,false,"mutation: spotting does not recognise"',
+     "not spotted within"),
+    ("look-recognises", "clue_actions", C + "ClueActions.lua",
+     'local ok,done,why=pcall(R.recognise,self.item,"look")',
+     'local ok,done,why=true,false,"mutation: looking it over does not recognise"',
+     "not recognised after Look it over"),
+    ("cue-once-per-place", "clue_actions", "mod/common/media/lua/shared/ConspiracyFiles/ClueCueRules.lua",
+     'if store.places and store.places[placeKey(clue)] then return nil,"place already cued" end',
+     "-- mutation: a place already cued cues again",
+     "a second cue at the same place"),
 ]
 
 
