@@ -62,6 +62,30 @@ local function scanSquare(sq, id)
         local it = world:get(i):getItem()
         if it and it:getModData().cfGeneratedId == id then return it, world:get(i) end
     end
+    -- CARRIERS (P4-R134): a body or a zombie has an inventory of its own and is
+    -- on no object list of the square at all, so a clue the filler put in a
+    -- dead man's jacket read as "not on or next to its square" and the case it
+    -- belonged to could never be finished (campaign 20260917T234706, where the
+    -- record said "accounted In a none at 102 Dewey St."). The survivor finds
+    -- it by looting the body, so this looks there too.
+    local carriers = {}
+    local bodies = sq.getDeadBodys and sq:getDeadBodys()
+    for i = 0, (bodies and bodies:size() or 0) - 1 do carriers[#carriers + 1] = bodies:get(i) end
+    local cell = getCell()
+    local zombies = cell and cell.getZombieList and cell:getZombieList()
+    for i = 0, math.min((zombies and zombies:size() or 0), 60) - 1 do
+        local z = zombies:get(i)
+        local ok = z and z.getSquare and z:getSquare() == sq
+        if ok then carriers[#carriers + 1] = z end
+    end
+    for _, carrier in ipairs(carriers) do
+        local inv = carrier.getInventory and carrier:getInventory()
+        local items = inv and inv.getItems and inv:getItems()
+        for j = 0, (items and items:size() or 0) - 1 do
+            local it = items:get(j)
+            if it:getModData().cfGeneratedId == id then L.carrier = carrier; return it, carrier end
+        end
+    end
 end
 
 -- Teleport onto document n's coordinates so its squares load before searching:

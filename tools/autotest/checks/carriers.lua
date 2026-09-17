@@ -49,11 +49,20 @@ function K.containerTypes(radius)
             end
         end
     end end
-    local types, mails, found = {}, {}, false
+    -- The guess, and the types that look like the thing it is guessing at. The
+    -- first run answered this outright: the engine calls it "postbox", and
+    -- Storage.MAILBOX is "mailbox", so a mailbox can never be chosen
+    -- (20260918T001512, 5 postbox containers within 40 tiles).
+    local types, mails, found, near = {}, {}, false, {}
     for t, n in pairs(byType) do
         types[#types + 1] = t .. "=" .. n
         if t == Storage.MAILBOX then found = true end
+        local lower = t:lower()
+        if lower:find("post") or lower:find("mail") or lower:find("letter") then
+            near[#near + 1] = t .. "=" .. n
+        end
     end
+    for _, x in ipairs(near) do mails[#mails + 1] = x .. " (type)" end
     for k, n in pairs(mailish) do mails[#mails + 1] = k .. "=" .. n end
     table.sort(types); table.sort(mails)
     return tostring(Storage.MAILBOX), tostring(found), table.concat(mails, ", "),
@@ -185,9 +194,12 @@ end
 function K.clueCarrier()
     local c = K.clue
     if not c then return "false", "no carrier clue" end
-    local px, py, pz = here()
-    local container = Carriers.findMark(c.mark, px, py, pz, Carriers.FIND_RADIUS)
-    if not container then return "false", "the mark was not found within " .. Carriers.FIND_RADIUS .. " tiles" end
+    -- The mod's own resolver, anchored on the TARGET as WorldAccess anchors it:
+    -- findMark returns a carrier state, not a container, and it looks around the
+    -- clue's own square, not around the survivor (the first run read it as a
+    -- container and the stage threw, 20260918T001512).
+    local container, state = Carriers.resolve(c.target, Carriers.FIND_RADIUS)
+    if not container then return "false", tostring(state or "not found") end
     local items = container.getItems and container:getItems()
     local found
     for i = 0, (items and items:size() or 0) - 1 do
@@ -195,10 +207,11 @@ function K.clueCarrier()
         if it:getModData().cfGeneratedId == c.id then found = it end
     end
     K.item = found
+    K.carrierState = state
     if found then CFAct.item = found end
-    local sq = container.getParent and container:getParent()
     return "true", tostring(found ~= nil), tostring(found and found:getName()),
-        tostring(container:getType()), tostring(sq and sq.getX and (sq:getX() .. "," .. sq:getY()))
+        tostring(container.getType and container:getType()),
+        tostring(state and (state.kind .. " at " .. state.x .. "," .. state.y))
 end
 
 function K.takeClue()

@@ -163,7 +163,18 @@ play_case() { # play_case CASEID [LIMIT]: find, take and inspect its next clues
                 if out="$(inspect_doc 1)"; then
                     PLAYED=$((PLAYED + 1)); say "case ${cid#generated:}: clue $PLAYED of $CASE_LEFT: $out"
                 else
-                    fail "case ${cid#generated:}: $out; $where (skipped $(ev 'return CFCamp.skipFirst()'))"
+                    # A clue can be mid-relocation (the mod moves an unfound one
+                    # once the survivor is far away), and the harness has just
+                    # teleported hundreds of tiles: one retry before giving up,
+                    # because a skipped clue means the case can never finish and
+                    # every later assertion follows it down.
+                    say "case ${cid#generated:}: $out; $where - one more try"
+                    sleep 15
+                    if out="$(inspect_doc 1)"; then
+                        PLAYED=$((PLAYED + 1)); say "case ${cid#generated:}: clue $PLAYED of $CASE_LEFT (second try): $out"
+                    else
+                        fail "case ${cid#generated:}: $out; $where (skipped $(ev 'return CFCamp.skipFirst()'))"
+                    fi
                 fi
             done
             [ "$PLAYED" -lt "$limit" ] || return 0

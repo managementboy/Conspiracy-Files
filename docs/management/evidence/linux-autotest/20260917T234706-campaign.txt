@@ -1,0 +1,60 @@
+Linux campaign check 20260917T234706: FAIL
+source: eb9f119
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+cases: 1 generated:719533812:case, 2 generated:921853681:case, 3 generated:857126368:case; at the end 
+stages:
+  start                  cases 1 (0 finished) | record 0 | FILES questions 0 | NAMES 1 | PLACES 0 | Old 0/0 wrong | Evidence 0/0 wrong | order  | save 31571 B
+  case 1 finished        cases 1 (1 finished) | record 5 | FILES questions 1 | NAMES 3 | PLACES 9 | Old 5/0 wrong | Evidence 0/0 wrong | order 11111 | save 25924 B
+  after reload 1         cases 1 (1 finished) | record 5 | FILES questions 1 | NAMES 3 | PLACES 9 | Old 5/0 wrong | Evidence 0/0 wrong | order 11111 | save 26641 B
+  case 2 finished        cases 2 (1 finished) | record 9 | FILES questions 1 | NAMES 3 | PLACES 16 | Old 5/0 wrong | Evidence 4/0 wrong | order 111112222 | save 59931 B
+  case 3, two clues      cases 3 (1 finished) | record 11 | FILES questions 1 | NAMES 3 | PLACES 18 | Old 5/0 wrong | Evidence 6/0 wrong | order 11111222233 | save 96125 B
+  after reload 2         cases 3 (1 finished) | record 11 | FILES questions 1 | NAMES 3 | PLACES 18 | Old 5/0 wrong | Evidence 6/0 wrong | order 11111222233 | save 96125 B
+  at the limit           cases 5 (1 finished) | record 11 | FILES questions 1 | NAMES 3 | PLACES 18 | Old 5/0 wrong | Evidence 6/0 wrong | order 11111222233 | save 136982 B
+  after the limit        cases 5 (1 finished) | record 11 | FILES questions 1 | NAMES 3 | PLACES 18 | Old 5/0 wrong | Evidence 6/0 wrong | order 11111222233 | save 136982 B
+case 1 answers on the organiser: true two person2 records nil Curtis Vance Delia Mercer Knox County Supply Office
+case 2 steer: generated:719533812:case two records Delia Mercer Delia Mercer true
+refusals (P4-R133), all sessions:
+  no-containers: 1 lines, longest run of 1, rung 0
+errors inside the mod, all sessions: 0
+FINDING: fresh worlds started for a case 1 with a document in the memo's week: 1 (memo=true, dated documents=2)
+FINDING: start: assignments placed=5; why=nil n=0 due=- rung=0/3 now=02:05 overdue=false(0.00h) preparing=false active=1/4 cases=1/16
+FINDING: case 1 relay memo: found=true, dated in its week=2, carrying the date note=2
+FINDING: the date note was exercised: 2 of 2 records dated in the memo's week carry it
+FINDING: case 1 finished: assignments ; why=nil n=0 due=- rung=0/3 now=02:19 overdue=false(0.00h) preparing=false active=0/4 cases=1/16
+FINDING: case 1 note on the organiser: I think it was someone using another name. Delia Mercer matters here. Next I would check the place against its records.
+FINDING: frame cost during case 1: AutomaticInvestigations.onTick calls=3008 avg=0.013ms max=25ms over2ms=1 | CaseFile.onTick calls=2996 avg=0.014ms max=1ms over2ms=0 | ClueMarkers.draw calls=0 avg=0.000ms max=0ms over2ms=0 | ClueMarkers.update calls=57 avg=0.526ms max=4ms over2ms=5 | IdentityObserver.afterRender calls=5992 avg=0.144ms max=1ms over2ms=0 | IdentityObserver.tick calls=3041 avg=0.004ms max=1ms over2ms=0 | LocalPersonI
+FINDING: after reload 1: assignments ; why=nil n=0 due=- rung=0/3 now=02:25 overdue=false(0.00h) preparing=false active=0/4 cases=1/16
+FINDING: reload 1 save size: 26201 -> 26641 bytes; before [Generated.G2=20291 KeyConnections=770 DiscoveryLedger=2733 VisitedBuildings=359]; after [Generated.G2=20731 KeyConnections=770 DiscoveryLedger=2733 VisitedBuildings=359]
+FINDING: case 2 placement: reach 250: t3:10977704480342034, t3:10977704480342027
+FINDING: case 2 clues: Delivery schedule / HK-661 | Utility record / HK-661 | Route review / HK-661 | Duty log / HK-661 | five sunflower bag seeds
+FINDING: case 2 finished: assignments placed=5; why=nil n=0 due=- rung=0/3 now=03:17 overdue=false(0.00h) preparing=false active=1/4 cases=2/16
+FINDING: frame cost during case 2: AutomaticInvestigations.onTick calls=11647 avg=0.004ms max=1ms over2ms=0 | CaseFile.onTick calls=11635 avg=0.010ms max=2ms over2ms=1 | ClueMarkers.draw calls=0 avg=0.000ms max=0ms over2ms=0 | ClueMarkers.update calls=198 avg=0.763ms max=3ms over2ms=5 | IdentityObserver.afterRender calls=23330 avg=0.097ms max=2ms over2ms=1 | IdentityObserver.tick calls=11683 avg=0.003ms max=1ms over2ms=0 | LocalPer
+FINDING: case 3 placement: reach 250: t3:10977704480342040, t3:10977704480342039
+FINDING: case 3, two clues: assignments placed=12; why=nil n=0 due=- rung=0/3 now=03:28 overdue=false(0.00h) preparing=false active=2/4 cases=3/16
+FINDING: frame cost during case 3: AutomaticInvestigations.onTick calls=13915 avg=0.004ms max=2ms over2ms=1 | CaseFile.onTick calls=13903 avg=0.011ms max=2ms over2ms=3 | ClueMarkers.draw calls=0 avg=0.000ms max=0ms over2ms=0 | ClueMarkers.update calls=239 avg=0.782ms max=4ms over2ms=9 | IdentityObserver.afterRender calls=27816 avg=0.096ms max=2ms over2ms=1 | IdentityObserver.tick calls=13951 avg=0.002ms max=1ms over2ms=0 | LocalPer
+FINDING: after reload 2: assignments placed=12; why=nil n=0 due=- rung=0/3 now=03:33 overdue=false(0.00h) preparing=false active=2/4 cases=3/16
+FINDING: reload 2 save size: 96125 -> 96125 bytes; before [Generated.G2=83683 KeyConnections=1674 DiscoveryLedger=5553 VisitedBuildings=827]; after [Generated.G2=83683 KeyConnections=1674 DiscoveryLedger=5553 VisitedBuildings=827]
+FINDING: map marks after reload 2 (written/pending/missing): 11/0/0
+FINDING: the limit, move 1: moved on 304 tiles to 10659,10297 (t3:11259175162085408, 5 rooms, 48 unused buildings within 120 tiles); 25 containers loaded within 8 tiles
+FINDING: the limit: the case came after 1 move(s) to a fresh neighbourhood
+FINDING: at the limit: assignments placed=19; why=nil n=0 due=- rung=0/3 now=03:56 overdue=false(0.00h) preparing=false active=4/4 cases=5/16
+FINDING: at the limit: moved on 305 tiles to 10758,10585 (t3:11540650138796040, 27 rooms, 12 unused buildings within 120 tiles); 15 containers loaded within 8 tiles
+FINDING: after 90 s with 4 unfinished: preparing=false, cases 5 1 1:719533812:retired 2:921853681:live 3:857126368:live 4:299860324:live 5:2049486033:live
+FINDING: after the limit, move 1: moved on 300 tiles to 10772,10407 (t3:11259179457052675, 4 rooms, 35 unused buildings within 120 tiles); 20 containers loaded within 8 tiles
+FINDING: after the limit, move 2: moved on 301 tiles to 10626,10144 (t3:10977700185374730, 17 rooms, 35 unused buildings within 120 tiles); 19 containers loaded within 8 tiles
+FINDING: after the limit, move 3: moved on 301 tiles to 10772,10407 (t3:11259179457052675, 4 rooms, 35 unused buildings within 120 tiles); 20 containers loaded within 8 tiles
+FINDING: after the limit: nothing was promised worth failing on (why=nil n=0 due=- rung=0/3 now=08:08 overdue=false(0.00h) preparing=false active=4/4 cases=5/16)
+FINDING: after the limit: no case after 3 moves; assignments placed=19
+FINDING: after the limit: assignments placed=19; why=nil n=0 due=- rung=0/3 now=08:08 overdue=false(0.00h) preparing=false active=4/4 cases=5/16
+FINDING: frame cost during the limit: AutomaticInvestigations.onTick calls=60968 avg=0.005ms max=4ms over2ms=3 | CaseFile.onTick calls=60956 avg=0.012ms max=1ms over2ms=0 | ClueMarkers.draw calls=0 avg=0.000ms max=0ms over2ms=0 | ClueMarkers.update calls=1029 avg=0.691ms max=26ms over2ms=13 | IdentityObserver.afterRender calls=121566 avg=0.068ms max=1ms over2ms=0 | IdentityObserver.tick calls=61004 avg=0.002ms max=1ms over2ms=0 | Loca
+FINDING: archive: 1 finished cases full, 0 stubbed, 5 rows kept in all, 0 stubs still offering questions; 1:719533812:full:5
+FINDING: a finished case's clues carried: 0 checked, 0 show Evidence / Old, 0 offer the greyed already-noted option, 0 offer no such option ()
+FINDING: AD-10 town names: the survivor is in Muldraugh; of 11 records 0 name a town and 11 do not; e.g. ; own town: 202 E Maple
+FAIL: case 921853681:case: document 1 not found: not on or next to its square; generated:921853681:document-4 at 10838,10114 floor 0 (address unknown) [placed]; runtime: accounted In a none at 102 Dewey St. (skipped generated:921853681:document-4)
+FAIL: case 2 did not finish
+FAIL: case 2: the second thought "What do I make of it?" was said 0 times, not once
+FAIL: case 2 finished: FILES shows 1 question rows, not 2
+FAIL: case 921853681:case: document 1 not found: not on or next to its square; generated:921853681:document-4 at 10838,10114 floor 0 (address unknown) [placed]; runtime: uncertain nil (skipped generated:921853681:document-4)
+FAIL: the oldest unfinished case 921853681:case did not finish
+FAIL: after a case was finished at the limit, no new case came over three fresh neighbourhoods (preparing=false)
+screenshot: dev/eval/linux/runs/20260917T234706-campaign.png (not committed)
