@@ -22,8 +22,19 @@ local retiredRows={}
 -- Every document of every archived case, rows or not (P4-R111): what marks a
 -- clue Evidence / Old and answers "already in the organiser".
 local retiredIds={}
--- Where and when a later case last found nothing usable nearby (P4-R125).
-local deferredAt=nil
+-- What the last refusal of a new case owed the player (P4-R133), and where and
+-- when a later case last found nothing usable nearby (P4-R125). One record:
+-- the wait P4-R125 asks for is one property of a refusal, not a separate fact.
+--   code,count,sinceHours,dueHours,rung  the debt; mirrored into the case
+--                                        store's schedule slot so a reload
+--                                        does not reset the count
+--   atHours                              when this code was last counted
+--   x,y,waitHours                        only for a refusal that came from a
+--                                        nearby scan: the 50 tiles / half hour
+--                                        the survivor must move on. In memory
+--                                        only, so loading a save clears the
+--                                        wait but not the debt (P4-R125).
+local debt=nil
 -- Declared with the identity scan further down. Retirement (R.inspect) reads
 -- both to keep where each clue was last seen, and sits above that code.
 local sightings,placeOf
@@ -283,6 +294,122 @@ local function refreshRetired()
         end
     end
 end
+-- HONEST REFUSALS (P4-R133, docs/design/CASE_PACING.md).
+--
+-- A refusal used to be a sentence in a log line, so nothing could count them,
+-- nothing could act on them, and nothing could say when the next case was due.
+-- One long campaign run refused seventeen times and never delivered a second
+-- case, and the mod said nothing at all. Now every refusal carries:
+--   * a code from the closed set (SuccessiveCases.DEFER_CODES),
+--   * a per-code count, which resets when the reason changes,
+--   * dueHours, the in-game hour by which the next case IS expected, and
+--   * the rung of the ladder the count has earned.
+-- The count and rung are written into the case store's schedule slot, so they
+-- survive a reload. Nothing of this reaches the player: no voice line, no
+-- marker, no hint. The world simply thins out.
+local REFUSALS_PER_RUNG=Cases.REFUSALS_PER_RUNG
+R.RUNG_MAX=Cases.MAX_RUNG
+-- A repeated refusal of the same code inside this much in-game time is the
+-- same refusal still standing, not a new one: it neither counts nor writes to
+-- the save. Without it a ten-second poll would count a standing wait a hundred
+-- times an hour and validate the whole store each time - which is the fault
+-- P4-R125 was written to fix, in a new place.
+R.DEBT_GAP_HOURS=0.25
+-- The in-game clock as the reader sees it, for the log's `due` field.
+local function hhmm(h)
+    if type(h)~="number" or h~=h or h==math.huge then return nil end
+    local minutes=math.floor(h*60+0.5)%1440
+    return string.format("%02d:%02d",math.floor(minutes/60),minutes%60)
+end
+-- When the next case is expected. A standing wait promises its own end; every
+-- other refusal promises the ordinary gap between cases, measured from the
+-- last case created, which is exactly what AutomaticInvestigations waits for.
+local function dueFor(code,now)
+    if code=="cooldown" then return now+R.DEFER_HOURS end
+    local auto=ConspiracyFiles.AutomaticInvestigations
+    local gap=(auto and auto.config and auto.config.minGapHours) or 24
+    local schedule=wrapper and wrapper.schedule
+    local last=schedule and schedule.createdHours and schedule.createdHours[#schedule.createdHours]
+    if type(last)=="number" then return math.max(now,last+gap) end
+    return now+gap
+end
+local function rememberDebt()
+    if not wrapper or not wrapper.schedule then return end
+    local staged,why=Cases.setDefer(wrapper,debt and {code=debt.code,count=debt.count,
+        sinceHours=debt.sinceHours,dueHours=debt.dueHours,rung=debt.rung} or nil)
+    if not staged then log("refusal not recorded: "..tostring(why)); return end
+    -- A refusal must never throw: the debt is bookkeeping, and a save that
+    -- refuses the write is already saying something louder.
+    local ok,err=pcall(swap,staged)
+    if not ok then log("refusal not recorded: "..tostring(err)) end
+end
+-- Refusals per code, so an interleaved `busy` cannot reset the count that the
+-- ladder reads. Only the standing refusal's own count is written to the save;
+-- the rest are this session's, which is what P4-R125 already assumed.
+local refusals={}
+-- Two codes are never counted. A `cooldown` is the wait we imposed ourselves
+-- (P4-R125) and `busy` is a placement in progress: neither is the world
+-- failing to supply a case, and counting a ten-second poll would walk the
+-- ladder up for nothing. Both are still logged, once per occurrence.
+local COUNTED={["no-reach"]=true,["no-containers"]=true,cap=true,["active-limit"]=true,disabled=true}
+-- The rung the ladder has reached: the highest any one code has earned. A
+-- property of the generator, not of one refusal, so a different code refusing
+-- in between never lowers it back.
+local function rungNow()
+    local rung=0
+    for _,r in pairs(refusals) do
+        rung=math.max(rung,math.min(R.RUNG_MAX,math.floor(r.count/REFUSALS_PER_RUNG)))
+    end
+    return rung
+end
+function R.rung() return rungNow() end
+-- `wait` marks the refusals that came from a nearby scan: those, and only
+-- those, make the next attempt wait for the survivor to move on (P4-R125).
+local function refuse(code,wait)
+    assert(Cases.DEFER_CODES[code],"unknown refusal code "..tostring(code))
+    local now=worldHours()
+    if not COUNTED[code] then
+        local standing=debt and debt.count or 0
+        CFLog.write("d","defer",{why=code,n=standing,rung=rungNow(),
+            due=hhmm(debt and debt.dueHours or dueFor(code,now))})
+        return false,code
+    end
+    local r=refusals[code]
+    local counted=not r or (now-r.atHours)>=R.DEBT_GAP_HOURS or now<r.atHours
+    if counted then
+        r=r or {count=0,sinceHours=now}
+        r.count=r.count+1; r.atHours=now; refusals[code]=r
+    end
+    local next={code=code,count=r.count,sinceHours=r.sinceHours,
+        dueHours=dueFor(code,now),rung=rungNow()}
+    if wait then
+        local p=getPlayer()
+        next.x=p and p:getX(); next.y=p and p:getY(); next.waitHours=now
+    elseif debt and debt.x then
+        -- A standing wait is not cancelled by some other refusal happening.
+        next.x,next.y,next.waitHours=debt.x,debt.y,debt.waitHours
+    end
+    debt=next
+    CFLog.write(counted and "i" or "d","defer",
+        {why=code,n=debt.count,rung=debt.rung,due=hhmm(debt.dueHours)})
+    if counted then rememberDebt() end
+    return false,code
+end
+-- A case arrived: nothing is owed and the ladder starts from the bottom again.
+local function clearDebt()
+    debt=nil; refusals={}
+end
+-- What the save still owes, after a reload (P4-R133). The count and the rung
+-- come back; the wait does not - a load clears the wait, which is what P4-R125
+-- decided and what the player expects after coming back to the game.
+local function restoreDebt()
+    debt=Cases.defer(wrapper)
+    refusals={}
+    if debt then
+        refusals[debt.code]={count=debt.count,sinceHours=debt.sinceHours,atHours=0}
+        debt.rung=rungNow()
+    end
+end
 local function openAll()
     -- Replacing the session set invalidates queued closures over old APIs.
     -- Reopening the sessions invalidates queued jobs that hold the old session
@@ -338,16 +465,16 @@ local function firstCase(catalog,seed,options,context,house,candidates)
     local Catalog=require("ConspiracyFiles/Generated/Catalog")
     local Reach=require("ConspiracyFiles/Reach")
     local eligible,why=Catalog.eligible(catalog,options.mapId,options.buildLine,false)
-    if not eligible then return nil,why end
-    local radius=Reach.radius(context.hoursSurvived);if not radius then return nil,"invalid survival reach" end
+    if not eligible then return nil,why,"no-containers" end
+    local radius=Reach.radius(context.hoursSurvived);if not radius then return nil,"invalid survival reach","no-reach" end
     local intro,partners
     partners={}
     for _,site in ipairs(eligible) do if site.id==house and Reach.contains(site.bounds,context.anchor,radius) then intro=site end end
-    if not intro then return nil,"current house needs suitable loaded storage" end
+    if not intro then return nil,"current house needs suitable loaded storage","no-containers" end
     for _,site in ipairs(eligible) do
         if Catalog.distinct(intro,site) and Reach.contains(site.bounds,context.anchor,radius) then partners[#partners+1]=site end
     end
-    if #partners==0 then return nil,"no second loaded site within reach" end
+    if #partners==0 then return nil,"no second loaded site within reach","no-reach" end
     table.sort(partners,function(a,b) return a.id<b.id end)
     -- Before commitment, try each deterministic partner once.  Capacity follows
     -- the selected story roles, not the former 3/4 building split.
@@ -357,7 +484,7 @@ local function firstCase(catalog,seed,options,context,house,candidates)
         local required=case and G.requiredContainers(case)
         if required and #candidates[intro.id]>=required[intro.id] and #candidates[partner.id]>=required[partner.id] then return case end
     end
-    return nil,"first house and partner lack containers for this generated evidence set"
+    return nil,"first house and partner lack containers for this generated evidence set","no-containers"
 end
 -- A basement candidate only ever becomes usable once ConspiracyFiles/
 -- Connectivity, fed by ReachabilityAdapter, proves the exact square
@@ -397,7 +524,7 @@ local function prepare(result,seed,later,house)
         end
         local anchor=later and {x=math.floor(p:getX()),y=math.floor(p:getY())} or result.anchor
         preparing=false
-        if house and currentHouse()~=house then log("First case deferred: player changed building.");return end
+        if house and currentHouse()~=house then refuse("busy");return end
         local options={mapId=result.map,buildLine=result.gameVersion}
         -- The first case of a game carries the relay memo (P4-R96); later
         -- cases never do, so a game holds exactly one.
@@ -422,36 +549,46 @@ local function prepare(result,seed,later,house)
             if okSteer and steer then options.steer=steer; steerFrom=index end
         end
         local context={hoursSurvived=p:getHoursSurvived(),anchor=anchor}
-        local case,err
-        if house then case,err=firstCase(filtered,seed,options,context,house,candidates)
+        local case,err,code
+        if house then case,err,code=firstCase(filtered,seed,options,context,house,candidates)
         else case,err=G.generateNew(filtered,seed,options,context) end
         if not case then
-            if later then deferredAt={x=p:getX(),y=p:getY(),hours=worldHours()} end
-            log(later and "Deferred: insufficient distinct loaded storage nearby." or "Waiting for suitable loaded storage: "..tostring(err)); return
+            -- Which refusal it is, honestly: nothing eligible within reach at
+            -- all is a different fault from buildings that hold no loaded
+            -- container, and only the second one is cured by walking inside.
+            if not code then
+                code=(#catalog.locations<2) and "no-reach" or "no-containers"
+            end
+            log("no case: "..tostring(err))
+            refuse(code,later==true); return
         end
         local required=assert(G.requiredContainers(case))
         for siteId,count in pairs(required) do
             if not candidates[siteId] or #candidates[siteId]<count then
-                if later then deferredAt={x=p:getX(),y=p:getY(),hours=worldHours()} end
-                log("Deferred: selected evidence needs "..count.." distinct containers at "..siteId..".")
+                refuse("no-containers",later==true)
                 return
             end
         end
         for _,site in ipairs(case.locations) do
-            if not World.resolve(targets[site.id]) then log("Storage changed before commit; retry start."); return end
+            if not World.resolve(targets[site.id]) then refuse("busy"); return end
         end
         local root=assert(Session.createDistributed(case,candidates,rooms,occupied))
         for _,assignment in pairs(root.assignments) do
-            if not World.resolve(assignment.target) then log("Distributed storage changed before commit; retry later.");return end
+            if not World.resolve(assignment.target) then refuse("busy");return end
         end
         -- Validate once more before the single authoritative swap.
         checked(Session.validate(root))
         if later then
-            swap(assert(Cases.stage(wrapper,root,wrapper.schedule and worldHours() or nil,steerFrom)))
-            deferredAt=nil
+            local staged=assert(Cases.stage(wrapper,root,wrapper.schedule and worldHours() or nil,steerFrom))
+            -- A case arrived: nothing is owed. Cleared in the same swap that
+            -- stages the case, so the store is never observably in debt for a
+            -- case it already has.
+            if staged.schedule then staged.schedule.defer=nil end
+            swap(staged)
+            clearDebt()
             if steerFrom then log("Case shaped by the survivor's answers about "..tostring(case.steer and case.steer.fromCase)) end
-        elseif house then swap({canonical=root,schedule={schema=1,createdHours={worldHours()}}})
-        else swap({canonical=root}) end
+        elseif house then swap({canonical=root,schedule={schema=1,createdHours={worldHours()}}}); clearDebt()
+        else swap({canonical=root}); clearDebt() end
         openAll()
         local first=case.documents[1]; local t=targets[first.locationId]
         log("DEV first clue container: "..t.x..", "..t.y..", floor "..t.z..". No discoveries granted.")
@@ -608,14 +745,17 @@ end
 R.DEFER_TILES=50
 R.DEFER_HOURS=0.5
 function R.nextCase(seed)
-    if preparing then return false,"preparation already running" end
+    if preparing then return refuse("busy") end
+    -- Not refusals of a case the world could have supplied, so they carry no
+    -- code and no debt: a caller asking for a second case before the first, or
+    -- with a seed no generator would take, is a caller bug.
     if not wrapper or not wrapper.canonical then return false,"start the first generated case before requesting another" end
     if type(seed)~="number" or seed~=math.floor(seed) or seed<1 or seed>=2147483647 then return false,"invalid seed" end
     if not allowed() then return false,"debug single-player required" end
     -- Finished cases are archived and no longer block a new one (P4-R111);
     -- this is the store's own cap, reached only when the archive itself is
     -- full - 16 cases on the measured worst case, where it used to be ten.
-    if #Cases.sessions(wrapper)>=Cases.MAX_CASES then return false,"the save's case archive is full" end
+    if #Cases.sessions(wrapper)>=Cases.MAX_CASES then return refuse("cap") end
     -- Four unfinished cases is all the save allows (MAX_ACTIVE). A scan started
     -- here could only be refused at the final swap; three refusals disabled
     -- preparation, the next attempt set `preparing` with a job the scheduler
@@ -623,28 +763,30 @@ function R.nextCase(seed)
     -- finished (campaign check, 2026-09-15). Refuse before scanning instead.
     local active=0
     for _,root in ipairs(Cases.sessions(wrapper)) do if not Retired.isRetired(root) then active=active+1 end end
-    if active>=Cases.MAX_ACTIVE then return false,"wait for an unfinished case to be finished" end
-    if scheduler.isDisabled("preparation") then return false,"case preparation is disabled after repeated failures" end
+    if active>=Cases.MAX_ACTIVE then return refuse("active-limit") end
+    if scheduler.isDisabled("preparation") then return refuse("disabled") end
     -- Nothing usable nearby last time: do not scan the same neighbourhood again
     -- until the survivor has moved on or half an in-game hour has passed
     -- (P4-R125; the campaign check saw 61 refused scans in about 25 minutes).
-    if deferredAt then
+    -- `debt.x` is set only by the refusals that came from a nearby scan, so
+    -- the other codes wait for nothing, exactly as before.
+    if debt and debt.x then
         local p=getPlayer()
-        local dx=p and (p:getX()-deferredAt.x) or 0
-        local dy=p and (p:getY()-deferredAt.y) or 0
-        if dx*dx+dy*dy<R.DEFER_TILES*R.DEFER_TILES and worldHours()<deferredAt.hours+R.DEFER_HOURS then
-            return false,"nothing suitable nearby; waiting for the survivor to move on"
+        local dx=p and (p:getX()-debt.x) or 0
+        local dy=p and (p:getY()-debt.y) or 0
+        if dx*dx+dy*dy<R.DEFER_TILES*R.DEFER_TILES and worldHours()<debt.waitHours+R.DEFER_HOURS then
+            return refuse("cooldown")
         end
     end
     for _,api in ipairs(sessions or {}) do
         for _,a in pairs(api.snapshot().assignments) do
-            if a.status=="pending" or a.status=="placing" then return false,"wait for current placement to finish" end
+            if a.status=="pending" or a.status=="placing" then return refuse("busy") end
         end
     end
     local probe=require("ConspiracyFiles/T3Nearby");local ok,why; ok,why=probe.start(nil,seed); if not ok then return false,why end
     preparing=true; local waited=0; local queued=scheduler.enqueue("next-metadata","preparation",function() waited=waited+1;if probe.error then preparing=false;error(probe.error) end;if probe.result then prepare(probe.result,seed,true);return true end;if waited>240000 then preparing=false;error("metadata extraction did not complete") end;return false end)
     -- A refused job never runs, so nothing else would ever clear the flag.
-    if not queued then preparing=false; return false,"case preparation could not be queued" end
+    if not queued then preparing=false; return refuse("busy") end
     return true
 end
 -- `inPlace` records a document without taking it. Owner, 2026-09-10: a right
@@ -1005,10 +1147,19 @@ function R.automaticStatus()
         if type(h)=="number" and (not lastCompleted or h>lastCompleted) then lastCompleted=h end
         if not Retired.isRetired(root) then active=active+1 end
     end
+    -- What the last refusal owed (P4-R133): the code, how many times it has
+    -- refused, when that started, the in-game hour a case is promised by and
+    -- the rung of the ladder. `defer` is nil when nothing is owed; the flat
+    -- fields are there so a check can read them without a nil test.
     return {count=#roots,preparing=preparing==true,scheduled=schedule~=nil,
         lastCreatedHours=schedule and schedule.createdHours[#schedule.createdHours],
         lastCompletedHours=lastCompleted,limit=Cases.MAX_CASES,
-        active=active,activeLimit=Cases.MAX_ACTIVE}
+        active=active,activeLimit=Cases.MAX_ACTIVE,
+        defer=debt and {code=debt.code,count=debt.count,sinceHours=debt.sinceHours,
+            dueHours=debt.dueHours,rung=debt.rung} or nil,
+        why=debt and debt.code or nil,deferCount=debt and debt.count or 0,
+        dueHours=debt and debt.dueHours or nil,
+        rung=rungNow(),rungMax=R.RUNG_MAX}
 end
 -- Bounded scan of a destination site's own bounding box for any container of
 -- an allowed type. Mirrors Storage.scan's tile-stepping discipline, but the
@@ -1460,7 +1611,7 @@ end
 
 Events.OnGameStart.Add(function()
     sessions,scheduler,preparing,wrapper=nil,nil,false,nil
-    deferredAt=nil
+    clearDebt()
     -- Forget what we could see last time. A new session has not looked yet,
     -- and should say so rather than inherit yesterday's confidence.
     sightings={}
@@ -1470,6 +1621,10 @@ Events.OnGameStart.Add(function()
     if saved.canonical or saved.campaign then
         local ok,why=pcall(function() checked(setup()); wrapper=assert(Cases.current(saved)); openAll() end)
         if not ok then scheduler=nil; log("Saved case refused: "..tostring(why)) end
+        -- What the last session was still owed: the count and the rung, never
+        -- the wait (P4-R133, P4-R125). Read after the store is open, and never
+        -- allowed to stop a save from loading.
+        if ok then pcall(restoreDebt) end
     end
     -- After the campaign is open, so recognition can be read (P4-R132).
     pcall(function()

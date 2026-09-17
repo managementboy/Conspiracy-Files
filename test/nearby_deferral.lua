@@ -1,10 +1,15 @@
 -- A refused new case waits for the survivor to move on (P4-R125, owner
--- 2026-09-15). When a later case found no unused, loaded buildings with enough
--- containers nearby, the timer asked again every 10-20 seconds and each attempt
--- re-scanned the same neighbourhood: 61 refused scans in about 25 minutes in the
--- campaign check. Now the next attempt waits until the survivor has moved about
--- 50 tiles or half an in-game hour has passed; a case created, or a load,
--- clears the wait.
+-- 2026-09-15), and says honestly why it refused (P4-R133). When a later case
+-- found no unused, loaded buildings with enough containers nearby, the timer
+-- asked again every 10-20 seconds and each attempt re-scanned the same
+-- neighbourhood: 61 refused scans in about 25 minutes in the campaign check.
+-- Now the next attempt waits until the survivor has moved about 50 tiles or
+-- half an in-game hour has passed; a case created, or a load, clears the wait.
+--
+-- The wait is one property of a wider record (P4-R133): the same refusal also
+-- carries its reason code, its count, the hour it started and the hour a case
+-- is promised by. The position and the wait clock are the only parts that are
+-- NOT persisted, because loading a save clears the wait and nothing else.
 local function read(path) local f=assert(io.open(path,"r")); local s=f:read("*a"); f:close(); return s end
 local runtime=read("mod/common/media/lua/client/ConspiracyFiles/GeneratedRuntime.lua")
 
@@ -12,16 +17,46 @@ assert(runtime:find("R.DEFER_TILES=50",1,true) and runtime:find("R.DEFER_HOURS=0
     "the wait is 50 tiles or half an in-game hour")
 
 local nextCase=assert(runtime:match("function R%.nextCase%(seed%)(.-)\nend\n"),"R.nextCase must exist")
-local guard=nextCase:find("if deferredAt then",1,true)
+local guard=nextCase:find("if debt and debt.x then",1,true)
 local probe=nextCase:find("probe.start",1,true)
 assert(guard and probe and guard<probe,"R.nextCase must wait out a refusal BEFORE scanning again")
-assert(nextCase:find("dx*dx+dy*dy<R.DEFER_TILES*R.DEFER_TILES and worldHours()<deferredAt.hours+R.DEFER_HOURS",1,true),
+assert(nextCase:find("dx*dx+dy*dy<R.DEFER_TILES*R.DEFER_TILES and worldHours()<debt.waitHours+R.DEFER_HOURS",1,true),
     "moving on OR the time passing ends the wait")
+assert(nextCase:find('return refuse("cooldown")',1,true),
+    "the standing wait refuses with the cooldown code")
+
+-- Every refusal in R.nextCase is typed: the caller-bug cases (no first case
+-- yet, an impossible seed, no debug mode) are the only plain strings left.
+local strings=0
+for line in nextCase:gmatch("[^\n]+") do
+    if line:find("return false,\"",1,true) then strings=strings+1 end
+end
+assert(strings==3,"only the three caller-bug refusals stay untyped, found "..strings)
 
 local prepare=assert(runtime:match("local function prepare%(result,seed,later,house%)(.-)\nfunction R%.start"),"prepare must exist")
-local _,marks=prepare:gsub("if later then deferredAt={x=p:getX%(%),y=p:getY%(%),hours=worldHours%(%)} end","")
-assert(marks==2,"both refusals - no storage nearby, too few containers - start the wait, found "..marks)
-assert(prepare:find("deferredAt=nil",1,true),"a case created clears the wait")
-assert(runtime:find("sessions,scheduler,preparing,wrapper=nil,nil,false,nil\n    deferredAt=nil",1,true),
+-- Both of the refusals that come from a nearby scan start the wait, and they
+-- are the only ones that do: a placement still running, or a container that
+-- changed under us, is not a reason to stand still for half an hour.
+local _,waits=prepare:gsub('refuse%("no%-containers",later==true%)',"")
+local _,reach=prepare:gsub('refuse%(code,later==true%)',"")
+assert(waits+reach==2,"both scan refusals start the wait, found "..(waits+reach))
+assert(prepare:find("clearDebt()",1,true),"a case created clears the wait and the debt")
+assert(runtime:find("sessions,scheduler,preparing,wrapper=nil,nil,false,nil\n    clearDebt()",1,true),
     "loading a game clears the wait")
-print("PASS a refused new case waits until the survivor moves on or half an hour passes")
+assert(runtime:find("pcall(restoreDebt)",1,true),
+    "...but the count and the rung are read back from the save (P4-R133)")
+
+-- The log line a whole run is audited with: ev=defer why=<code> n=<count>
+-- rung=<rung> due=<hh:mm>.
+assert(runtime:find('CFLog.write(counted and "i" or "d","defer",',1,true),
+    "one log line per refusal, in the existing logfmt")
+assert(runtime:find("{why=code,n=debt.count,rung=debt.rung,due=hhmm(debt.dueHours)}",1,true),
+    "the refusal line carries the code, the count, the rung and the promise")
+
+-- What automaticStatus must report, because the campaign check polls it.
+local status=assert(runtime:match("function R%.automaticStatus%(%)(.-)\nend\n"),"R.automaticStatus must exist")
+for _,field in ipairs({"defer=","why=","deferCount=","dueHours=","rung=","rungMax="}) do
+    assert(status:find(field,1,true),"automaticStatus must report "..field)
+end
+
+print("PASS a refused case waits until the survivor moves on, and says why, how often and by when")

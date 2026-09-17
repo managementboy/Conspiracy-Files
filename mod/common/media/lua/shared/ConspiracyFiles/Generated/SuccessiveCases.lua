@@ -53,6 +53,26 @@ local Retired=require("ConspiracyFiles/Generated/RetiredCase")
 -- LEGACY_MAX_CASES grandfathers a save written before the archive: it may hold
 -- up to ten full-size roots, which is what the old cap allowed and still fits.
 local M={SCHEMA=1,MAX_CASES=16,MAX_ACTIVE=4,MAX_FULL_ARCHIVED=4,LEGACY_MAX_CASES=10}
+-- HONEST REFUSALS (P4-R133, docs/design/CASE_PACING.md). The closed set of
+-- reasons a new case did not come. It lives here, in the domain module,
+-- because the debt a refusal leaves behind is stored in the case store's own
+-- `schedule` slot and must be validated before it is ever written - a count
+-- and a rung that reset on every reload would make the ladder unreachable for
+-- a player who saves and loads in the same crowded house.
+--   no-reach       nothing eligible within the survivor's reach
+--   no-containers  no two loaded sites could supply a clue each
+--   cap            the store's own case cap (MAX_CASES) is reached
+--   active-limit   MAX_ACTIVE unfinished cases already
+--   cooldown       a refusal is still standing (P4-R125's wait)
+--   disabled       generation is off, or gave up after repeated failures
+--   busy           a case is being prepared or placed right now
+M.DEFER_CODES={["no-reach"]=true,["no-containers"]=true,cap=true,["active-limit"]=true,
+ cooldown=true,disabled=true,busy=true}
+-- The ladder: after this many refusals of the SAME code the generator lowers
+-- its own standard by one rung. MAX_RUNG is the highest rung the code can
+-- actually take (see docs/design/CASE_PACING.md on the fourth rung).
+M.REFUSALS_PER_RUNG=3
+M.MAX_RUNG=3
 local function copy(v) if type(v)~="table" then return v end local o={} for k,x in pairs(v) do o[k]=copy(x) end return o end
 local function fields(t,allowed) if type(t)~="table" then return false end for k in pairs(t) do if not allowed[k] then return false end end return true end
 local function text(v) return type(v)=="string" and v~="" and #v<=160 end
@@ -176,10 +196,25 @@ function M.validate(wrapper)
  -- retirement or the next staged case, not on load.
  if full>M.MAX_FULL_ARCHIVED and #roots>M.LEGACY_MAX_CASES then return false,"too many full-size archived cases" end
  if wrapper.schedule~=nil then
-  if not fields(wrapper.schedule,{schema=true,createdHours=true}) or wrapper.schedule.schema~=1 or type(wrapper.schedule.createdHours)~="table" then return false,"invalid case schedule" end
+  if not fields(wrapper.schedule,{schema=true,createdHours=true,defer=true}) or wrapper.schedule.schema~=1 or type(wrapper.schedule.createdHours)~="table" then return false,"invalid case schedule" end
   local n=0;for k in pairs(wrapper.schedule.createdHours) do if type(k)~="number" or k~=math.floor(k) or k<1 then return false,"invalid case schedule" end;n=n+1 end
   if n~=#M.sessions(wrapper) then return false,"case schedule count mismatch" end
   local previous=nil;for i=1,n do local h=wrapper.schedule.createdHours[i];if type(h)~="number" or h~=h or h==math.huge or h==-math.huge or h<0 or (previous and h<previous) then return false,"invalid case schedule" end;previous=h end
+  -- The debt a refusal left behind (P4-R133). Optional, like the schedule
+  -- itself, so a save written before it loads unchanged; every field is
+  -- checked, because a hand-edited count or rung would silently lower the
+  -- generator's standard.
+  local d=wrapper.schedule.defer
+  if d~=nil then
+   if not fields(d,{code=true,count=true,sinceHours=true,dueHours=true,rung=true}) then return false,"invalid case defer record" end
+   if not M.DEFER_CODES[d.code] then return false,"invalid case defer record" end
+   if type(d.count)~="number" or d.count~=math.floor(d.count) or d.count<1 or d.count>1000000 then return false,"invalid case defer record" end
+   if type(d.rung)~="number" or d.rung~=math.floor(d.rung) or d.rung<0 or d.rung>M.MAX_RUNG then return false,"invalid case defer record" end
+   for _,k in ipairs({"sinceHours","dueHours"}) do
+    local h=d[k]
+    if type(h)~="number" or h~=h or h==math.huge or h==-math.huge or h<0 then return false,"invalid case defer record" end
+   end
+  end
  end
  local discoveries=M.discoveries(wrapper); local seen={}
  for _,id in ipairs(discoveries) do if not docs[id] or seen[id] then return false,"unknown or duplicate global discovery" end; seen[id]=true end
@@ -187,6 +222,33 @@ function M.validate(wrapper)
  for _,root in ipairs(M.sessions(wrapper)) do for _,id in ipairs(root.known) do if not seen[id] then return false,"session discovery missing from global order" end; known[id]=true end end
  for id in pairs(seen) do if not known[id] then return false,"global discovery is not known by its case" end end
  return true
+end
+-- What a refusal left owed, or nil when nothing is (P4-R133). A copy: a reader
+-- must not be able to change a save by editing what it was handed.
+function M.defer(wrapper)
+ local s=type(wrapper)=="table" and wrapper.schedule
+ local d=s and s.defer
+ if not d then return nil end
+ return copy(d)
+end
+-- Record (or, with nil, clear) that debt, copy-on-write like every other
+-- canonical change. A case arrived means nothing is owed, so the caller clears
+-- it in the same swap that stages the case. Refused when the store has no
+-- schedule at all: a legacy single-case save has nowhere to keep it, and the
+-- runtime then carries the debt in memory only, as it did before.
+function M.setDefer(wrapper,record)
+ local ok,why=M.validate(wrapper); if not ok then return nil,why end
+ if not wrapper.schedule then return nil,"schedule absent" end
+ local out={canonical=wrapper.canonical,schedule=copy(wrapper.schedule)}
+ if wrapper.successive then out.successive=copy(wrapper.successive) end
+ if record==nil then out.schedule.defer=nil
+ elseif type(record)~="table" then return nil,"invalid defer record"
+ else
+  out.schedule.defer={code=record.code,count=record.count,
+   sinceHours=record.sinceHours,dueHours=record.dueHours,rung=record.rung}
+ end
+ ok,why=M.validate(out); if not ok then return nil,why end
+ return out
 end
 -- Everything a reshuffle would have to clean up, captured BEFORE the store is
 -- replaced: once the wrapper is swapped this list cannot be recovered from

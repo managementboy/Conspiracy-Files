@@ -43,6 +43,10 @@ local EVENTS={
     -- cases and evidence
     case=true,placed=true,relocated=true,conflict=true,found=true,inspected=true,
     retired=true,stale=true,recognised=true,
+    -- A refusal to start a case, with its reason code, count, rung and the
+    -- in-game time the next case is promised by (P4-R133). One line per
+    -- refusal, so a whole run is auditable with one grep.
+    defer=true,
     -- what the player is told
     voice=true,hint=true,marker=true,note=true,
     -- people, keys, places

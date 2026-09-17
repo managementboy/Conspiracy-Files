@@ -42,5 +42,18 @@ end
 local root=assert(S.createDistributed(case,choices));local assigned={}
 for _,a in pairs(root.assignments) do local t=a.target;local key=t.x..':'..t.y..':'..t.objectIndex;assert(not assigned[key]);assigned[key]=true end
 local site=case.locations[1].id;local previous=choices[site][2];choices[site][2]=choices[site][1];assert(not S.createDistributed(case,choices))
-choices[site][2]=previous;local required=assert(G.requiredContainers(case))[site];choices[site][required]=nil;assert(not S.createDistributed(case,choices));assert(S.validate(root))
-print('PASS storage candidates: separate targets, rectangle dedup, floor/cap8, unloaded/mismatch rejection, bounded reads, immutable distributed plan, shortage refusal')
+-- A SHORTAGE is no longer a refusal (P4-R133): the case goes live with the
+-- clues that fit and the rest wait as an open order. What must not happen is
+-- two clues in one container, which is the assert above.
+choices[site][2]=previous;local required=assert(G.requiredContainers(case))[site];choices[site][required]=nil
+local short,waiting=S.createDistributed(case,choices)
+assert(short,'a shortage must not throw the whole case away')
+assert(#waiting>=1,'the clues that did not fit must be reported as waiting')
+for _,id in ipairs(waiting) do
+ local a=short.assignments[id]
+ assert(a.status=='deferred' and a.target==nil and a.locationId==site,
+  'a waiting clue names its site and has no container')
+end
+assert(S.validate(short),'a half-placed case must validate')
+assert(S.validate(root))
+print('PASS storage candidates: separate targets, rectangle dedup, floor/cap8, unloaded/mismatch rejection, bounded reads, immutable distributed plan, a shortage defers instead of refusing')

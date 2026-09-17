@@ -8,6 +8,18 @@ local S={}
 -- document cannot churn forever.
 S.RELOCATE_AFTER_HOURS=72
 S.RELOCATE_CAP=3
+-- INSTALMENTS (P4-R133, docs/design/CASE_PACING.md). A case goes live with the
+-- clues that fit now; the rest are an open order. A `deferred` assignment has
+-- no target and no sprite - only the site it is meant for, named by the
+-- locationId the schema already validates - and the filler gives it one as the
+-- survivor moves about and more of the world loads.
+--
+-- A clue that cannot be placed within three in-game days is `dropped`: the
+-- case then completes on the clues it got, because a half-placed case that
+-- squats one of the four active slots blocks new cases worse than the refusal
+-- this whole change exists to fix.
+S.DEFER_EXPIRE_HOURS=72
+local WAITING={deferred=true,dropped=true}
 local function copy(v) if type(v)~="table" then return v end local out={} for k,c in pairs(v) do out[k]=copy(c) end return out end
 local function fields(t,allowed)
     if type(t)~="table" then return false end
@@ -59,22 +71,37 @@ function S.validate(root)
     for _,d in ipairs(root.case.documents) do
         ids[d.id]=true
         local a=root.assignments[d.id]
-        if not fields(a,{physicalToken=true,target=true,status=true,placedHours=true,relocations=true,locationId=true}) or a.physicalToken~="cf-g2:"..d.id
-            or not ({pending=true,placing=true,placed=true,unknown=true,conflict=true})[a.status] then return false,"invalid assignment" end
+        if not fields(a,{physicalToken=true,target=true,status=true,placedHours=true,relocations=true,
+                         locationId=true,deferredHours=true}) or a.physicalToken~="cf-g2:"..d.id
+            or not ({pending=true,placing=true,placed=true,unknown=true,conflict=true,
+                     deferred=true,dropped=true})[a.status] then return false,"invalid assignment" end
         -- Relocation moves the physical object, never the document's own
         -- narrative locationId: a present `locationId` is the assignment's
         -- current site once it differs from where the case first placed it.
         if a.locationId~=nil and (type(a.locationId)~="string" or not sites[a.locationId]) then return false,"invalid assignment" end
-        if not S.target(a.target,sites[a.locationId or d.locationId]) then return false,"invalid assignment" end
-        if not integer(a.relocations) or a.relocations<0 or a.relocations>S.RELOCATE_CAP then return false,"invalid assignment" end
         local function validHours(h) return type(h)=="number" and h==h and h~=math.huge and h~=-math.huge and h>=0 end
-        if a.status=="placed" and not validHours(a.placedHours) then return false,"invalid assignment" end
-        if a.placedHours~=nil and not validHours(a.placedHours) then return false,"invalid assignment" end
+        if WAITING[a.status] then
+            -- A clue still waiting for somewhere to go (P4-R133): no target at
+            -- all, the intended site named, and the hour the wait started, so
+            -- three in-game days can be measured against it. Nothing about it
+            -- may claim a physical place: that is the whole difference.
+            if a.target~=nil or a.placedHours~=nil then return false,"invalid assignment" end
+            if type(a.locationId)~="string" or not sites[a.locationId] then return false,"invalid assignment" end
+            if not validHours(a.deferredHours) then return false,"invalid assignment" end
+        else
+            if a.deferredHours~=nil then return false,"invalid assignment" end
+            if not S.target(a.target,sites[a.locationId or d.locationId]) then return false,"invalid assignment" end
+            if a.status=="placed" and not validHours(a.placedHours) then return false,"invalid assignment" end
+            if a.placedHours~=nil and not validHours(a.placedHours) then return false,"invalid assignment" end
+        end
+        if not integer(a.relocations) or a.relocations<0 or a.relocations>S.RELOCATE_CAP then return false,"invalid assignment" end
     end
     for id in pairs(root.assignments) do if not ids[id] then return false,"extra assignment" end end
     local seen,n={},0
     for k,id in pairs(root.known) do
         if not integer(k) or k<1 or k>#root.case.documents or not ids[id] or seen[id] then return false,"invalid discoveries" end
+        -- A clue that was never put anywhere cannot have been found.
+        if WAITING[root.assignments[id].status] then return false,"invalid discoveries" end
         seen[id]=true; n=n+1
     end
     for i=1,n do if not root.known[i] then return false,"sparse discoveries" end end
@@ -87,6 +114,8 @@ function S.validate(root)
         local rseen,rn={},0
         for k,id in pairs(root.recognised) do
             if not integer(k) or k<1 or k>#root.case.documents or not ids[id] or rseen[id] then return false,"invalid recognition" end
+            -- Nor can one be looked over: it is not in the world yet.
+            if WAITING[root.assignments[id].status] then return false,"invalid recognition" end
             rseen[id]=true; rn=rn+1
         end
         for i=1,rn do if not root.recognised[i] then return false,"invalid recognition" end end
@@ -94,11 +123,57 @@ function S.validate(root)
     if V.estimateEncodedBytes(root)>500000 then return false,"canonical size exceeded" end
     return true
 end
-function S.create(case,targets,documentTargets)
+-- `hours` is the world clock, and is only ever read for a document that has no
+-- target: that clue goes in as `deferred` and the filler places it later
+-- (P4-R133). A caller that supplies every target never needs it.
+function S.create(case,targets,documentTargets,hours)
     local root={schema=1,case=copy(case),assignments={},known={}}
-    for _,d in ipairs(case.documents) do root.assignments[d.id]={physicalToken="cf-g2:"..d.id,target=copy(documentTargets and documentTargets[d.id] or targets[d.locationId]),status="pending",relocations=0} end
+    for _,d in ipairs(case.documents) do
+        local target=documentTargets and documentTargets[d.id] or targets[d.locationId]
+        if target==nil then
+            root.assignments[d.id]={physicalToken="cf-g2:"..d.id,status="deferred",
+                locationId=d.locationId,deferredHours=hours or 0,relocations=0}
+        else
+            root.assignments[d.id]={physicalToken="cf-g2:"..d.id,target=copy(target),status="pending",relocations=0}
+        end
+    end
     local ok,why=S.validate(root); if not ok then return nil,why end
     return root
+end
+-- The clues still waiting for somewhere to go, in document order so the filler
+-- takes them in the order the case tells them.
+function S.deferredIds(root)
+    local out={}
+    if type(root)~="table" or type(root.case)~="table" or type(root.assignments)~="table" then return out end
+    for _,d in ipairs(root.case.documents or {}) do
+        local a=root.assignments[d.id]
+        if a and a.status=="deferred" then out[#out+1]=d.id end
+    end
+    return out
+end
+-- Those that have waited three in-game days and are to be dropped.
+function S.expiredIds(root,hours)
+    local out={}
+    if type(hours)~="number" or hours~=hours or hours==math.huge then return out end
+    for _,id in ipairs(S.deferredIds(root)) do
+        local a=root.assignments[id]
+        if hours-a.deferredHours>=S.DEFER_EXPIRE_HOURS then out[#out+1]=id end
+    end
+    return out
+end
+-- Is every clue of this case accounted for? A found clue is; a dropped one is
+-- too - it was never in the world and never will be. A deferred one is NOT,
+-- which is what stops "nothing left to find" and the closing question firing
+-- while a clue is still unwritten (P4-R133).
+function S.accounted(root)
+    if type(root)~="table" or type(root.case)~="table" then return false end
+    local known={}
+    for _,id in ipairs(root.known or {}) do known[id]=true end
+    for _,d in ipairs(root.case.documents) do
+        local a=root.assignments[d.id]
+        if not known[d.id] and not (a and a.status=="dropped") then return false end
+    end
+    return true
 end
 -- `rooms` is OPTIONAL (Phase 2, docs/design/USING_GAME_ASSETS.md): when it is
 -- omitted this runs the exact original counts-indexed loop below, so
@@ -111,13 +186,24 @@ end
 -- ordering only: S.target's allow-list and the distinct/repeated-container
 -- checks below are untouched, so a stored target is unaffected by whether a
 -- room fit.
-local function physicalKey(target)
+-- One container, named so nothing else can claim it: the square, the object and
+-- container index on it, and the vehicle part where there is one. Exported
+-- because the filler (GeneratedRuntime) must check a late clue's container
+-- against every clue already placed, in any case, live or finished.
+function S.physicalKey(target)
     return table.concat({target.x,target.y,target.z,target.objectIndex,target.containerIndex,
                          target.vehiclePart or "-"},":")
 end
-function S.createDistributed(case,candidates,rooms,occupied)
+local physicalKey=S.physicalKey
+-- Returns the root and, second, the ids it could NOT place - the open order
+-- (P4-R133). It no longer fails for want of containers: a case goes live with
+-- the clues that fit and the rest wait as `deferred` assignments. It still
+-- fails for a case that is not a case (an invalid envelope), and it still
+-- never puts two clues in one container (P4-R67).
+function S.createDistributed(case,candidates,rooms,occupied,hours)
     local valid,why=G.validate(case);if not valid then return nil,why end
     local sites,used,counts,taken,targets={},{},{},{},{}
+    local deferred={}
     for _,site in ipairs(case.locations) do sites[site.id]=site end
     for _,doc in ipairs(case.documents) do
         local list=type(candidates)=="table" and candidates[doc.locationId]
@@ -181,15 +267,24 @@ function S.createDistributed(case,candidates,rooms,occupied)
             if index then siteTaken[index]=true end
             target=index and list[index]
         end
-        if not S.target(target,sites[doc.locationId]) then return nil,"not enough distinct suitable containers" end
-        -- Two documents may share a car but never a part, so the part joins
-        -- the uniqueness key: without it, a glovebox and a boot at the same
-        -- parking square would look like one container.
-        local key=physicalKey(target)
-        if used[key] then return nil,"repeated physical container" end
-        used[key]=true;targets[doc.id]=target
+        -- Nothing usable at this site right now: the clue waits rather than the
+        -- whole case being thrown away. This is the fault P4-R133 was written
+        -- for - standing still exhausts the loaded area, and a house yields one
+        -- candidate from the street and eight once the survivor walks in.
+        if not S.target(target,sites[doc.locationId]) then
+            deferred[#deferred+1]=doc.id
+        else
+            -- Two documents may share a car but never a part, so the part joins
+            -- the uniqueness key: without it, a glovebox and a boot at the same
+            -- parking square would look like one container.
+            local key=physicalKey(target)
+            if used[key] then return nil,"repeated physical container" end
+            used[key]=true;targets[doc.id]=target
+        end
     end
-    return S.create(case,{},targets)
+    local root,why=S.create(case,{},targets,hours)
+    if not root then return nil,why end
+    return root,deferred
 end
 function S.open(initial,sink)
     local ok,why=S.validate(initial); if not ok then return nil,why end
@@ -210,6 +305,10 @@ function S.open(initial,sink)
     -- placement, is kept rather than rejecting the call.
     function api.status(id,status,hours)
         local a=root.assignments[id]; if not a then return false,"unknown document" end
+        -- A clue with no container has no placement to reconcile: only
+        -- api.assign (an instalment arriving) or api.drop (it expired) may
+        -- move it, so a stray identity scan cannot claim it was placed.
+        if WAITING[a.status] then return false,"clue is still waiting for a container" end
         if a.status=="conflict" and status~="conflict" then return false,"sticky conflict" end
         if status=="pending" or (status=="placing" and a.status~="pending") then return false,"cannot reset placement" end
         -- Periodic identity reconciliation often reports the same status.
@@ -238,6 +337,32 @@ function S.open(initial,sink)
             local ra=r.assignments[id]
             ra.target=copy(target); ra.placedHours=hours; ra.relocations=ra.relocations+1; ra.locationId=site.id
         end)
+    end
+    -- An instalment arrives (P4-R133): a deferred clue is given the container
+    -- the filler found for it and becomes an ordinary pending placement, so
+    -- the same placement job that writes every other clue writes this one.
+    -- The target must belong to the site the clue was always meant for: a
+    -- waiting clue is not a licence to put it anywhere.
+    function api.assign(id,target,hours)
+        local a=root.assignments[id]; if not a then return false,"unknown document" end
+        if a.status~="deferred" then return false,"only a deferred clue is waiting for a container" end
+        local site
+        for _,s in ipairs(root.case.locations) do if s.id==a.locationId then site=s end end
+        if not site or not S.target(target,site) then return false,"target does not match the clue's own site" end
+        if hours~=nil and not validHours(hours) then return false,"invalid placement hours" end
+        return commit(function(r)
+            local ra=r.assignments[id]
+            ra.target=copy(target); ra.status="pending"; ra.deferredHours=nil
+        end)
+    end
+    -- Three in-game days with nowhere to go and the clue is dropped: the case
+    -- completes on the clues it got (a four-clue case is still a case) rather
+    -- than squatting an active slot for ever.
+    function api.drop(id)
+        local a=root.assignments[id]; if not a then return false,"unknown document" end
+        if a.status=="dropped" then return true end
+        if a.status~="deferred" then return false,"only a deferred clue can be dropped" end
+        return commit(function(r) r.assignments[id].status="dropped" end)
     end
     function api.inspect(id)
         if not root.assignments[id] or root.assignments[id].status~="placed" then return false,"document unavailable" end
