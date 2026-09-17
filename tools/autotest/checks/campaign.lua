@@ -476,7 +476,6 @@ end
 -- campaign check's finished clues are.
 function C.oldEvidence()
     local checked, old, greyed, missing, sample = 0, 0, 0, 0, ""
-    local items = getPlayer():getInventory():getItems()
     local function look(item)
         local md = item:getModData()
         if type(md) ~= "table" or not md.cfGeneratedId then return end
@@ -497,7 +496,20 @@ function C.oldEvidence()
         end
         if ctx then ctx:closeAll() end
     end
-    for i = 0, items:size() - 1 do pcall(look, items:get(i)) end
+    -- Down into the bags: the evidence album files a clue into itself as soon
+    -- as it is picked up, so the top level of the inventory holds none of them
+    -- (the first run read "0 checked", 20260917T234706).
+    local function walk(container, depth)
+        if not container or depth > 3 then return end
+        local items = container:getItems()
+        for i = 0, items:size() - 1 do
+            local item = items:get(i)
+            pcall(look, item)
+            local inner = item.getInventory and item:getInventory()
+            if inner then walk(inner, depth + 1) end
+        end
+    end
+    walk(getPlayer():getInventory(), 0)
     return checked, old, greyed, missing, sample
 end
 

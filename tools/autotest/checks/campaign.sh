@@ -433,6 +433,19 @@ perf_note "the limit"
 # the four most recent keep their rows, anything older is a stub, and a clue in
 # the world whose case is a stub must still read Evidence / Old and still offer
 # the greyed "already noted" option rather than an empty menu.
+# The archive only stubs the FIFTH finished case (the four most recent stay
+# whole), and the run has finished three or four by now, so two more cases are
+# played out here - which is also the only way to see a case keep coming past
+# the point where one is archived.
+for extra in 1 2; do
+    finished="$(field 2 "$(cases)")"
+    [ "$finished" -ge 5 ] 2>/dev/null && break
+    oldest="$(ev 'return CFCamp.oldestLive()' | field 1)"
+    [ "$oldest" != none ] || { findings+=("archive: no unfinished case left to play for the fifth finish"); break; }
+    say "archive: playing ${oldest#generated:} to reach five finished cases"
+    play_case "$oldest"
+    wait_finished $((finished + 1)) || findings+=("archive: case ${oldest#generated:} did not finish")
+done
 arch="$(ev 'return CFCamp.archive()')"
 findings+=("archive: $(field 1 "$arch") finished cases full, $(field 2 "$arch") stubbed, $(field 3 "$arch") rows kept in all, $(field 4 "$arch") stubs still offering questions; $(field 5 "$arch")")
 old="$(ev 'return CFCamp.oldEvidence()')"
@@ -441,8 +454,27 @@ findings+=("a finished case's clues carried: $(field 1 "$old") checked, $(field 
     || fail "$(( $(field 1 "$old") - $(field 2 "$old") )) of $(field 1 "$old") finished clues do not read Evidence / Old"
 [ "$(field 1 "$old")" = 0 ] || [ "$(field 4 "$old")" = 0 ] \
     || fail "$(field 4 "$old") finished clues offer no already-noted option at all ($(field 5 "$old"))"
+# AD-10 town names (P4-R129) need TWO places to mean anything: a record about a
+# place in the survivor's own town is written without the town, and the same
+# record read from another town carries it. Every case of this run was within
+# 300 tiles, so the survivor is walked a long way off and the records read again.
 towns="$(ev 'return CFCamp.townNames()')"
-findings+=("AD-10 town names: the survivor is in $(field 1 "$towns"); of $(field 5 "$towns") records $(field 2 "$towns") name a town and $(field 3 "$towns") do not; e.g. $(field 4 "$towns")")
+findings+=("AD-10 town names, standing in $(field 1 "$towns"): of $(field 5 "$towns") records $(field 2 "$towns") name a town and $(field 3 "$towns") do not; e.g. $(field 4 "$towns")")
+far="$(ev 'return CFCamp.moveOn(1500)')"
+if [ "$(field 1 "$far")" = true ]; then
+    wait_true 120 'CFCamp.settled()' >/dev/null || true
+    sleep 5
+    towns2="$(ev 'return CFCamp.townNames()')"
+    findings+=("AD-10 town names, after $(field 4 "$far") tiles, standing in $(field 1 "$towns2"): of $(field 5 "$towns2") records $(field 2 "$towns2") name a town and $(field 3 "$towns2") do not; e.g. $(field 4 "$towns2")")
+    if [ "$(field 1 "$towns2")" != "$(field 1 "$towns")" ] && [ "$(field 1 "$towns2")" != nil ]; then
+        [ "$(field 2 "$towns2")" -gt 0 ] 2>/dev/null \
+            || fail "read from $(field 1 "$towns2"), not one of $(field 5 "$towns2") records about $(field 1 "$towns") names its town"
+    else
+        findings+=("the long move stayed in $(field 1 "$towns2"), so the other-town half of AD-10 was not exercised")
+    fi
+else
+    findings+=("nowhere to move 1500 tiles to ($(field 2 "$far")), so the other-town half of AD-10 was not exercised")
+fi
 
 errors_seen+="$(mod_errors)"
 keep_defers
