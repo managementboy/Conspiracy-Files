@@ -22,6 +22,11 @@
 #   limit   more cases arrive until four are unfinished, the most the save
 #           allows; the timer keeps trying; then case 3 is finished and a new
 #           case must still come (the preparation flag must not stick).
+# Between cases the survivor MOVES ON, as a player does: CFCamp.moveOn goes to
+# an unused building a few hundred tiles away and the check waits for the world
+# there to load before asking for the next case. Without that no second case
+# ever comes - a refused case waits for the survivor to move (P4-R125) - and
+# five runs in a row failed on exactly that.
 # Throughout: the record reads case by case, finished evidence stays Old and live
 # ones Evidence, NAMES grows, map marks catch up with a pen, the save size is
 # recorded per stage, the per-frame cost is sampled, and the mod logs no errors
@@ -123,6 +128,41 @@ placed_well() { # placed_well LABEL CASEID X Y HOURS
     [ "$(field 1 "$p")" = true ] || fail "$1: a site is outside the reach of where the survivor stood ($(field 3 "$p"))"
     [ "$(field 2 "$p")" = true ] || fail "$1: a site an earlier case already used was used again ($(field 3 "$p"))"
 }
+# BETWEEN CASES THE SURVIVOR MOVES ON (P4-R125). A refused case is not tried
+# again until the survivor has moved about 50 tiles or half an in-game hour has
+# passed, and this check used to stand where the last case left it: the mod
+# logged "insufficient distinct loaded storage nearby" 17 times and no second
+# case ever came (20260917T160453 and the four runs before it). So now the
+# check walks to a new neighbourhood the way a player does - CFCamp.moveOn
+# teleports into an unused building a few hundred tiles off - waits for the
+# world there to load, and only then waits for the case. `here` is re-read
+# after the move, because the case is prepared from where the survivor stands,
+# which is what placed_well then measures the reach against.
+move_on() { # move_on LABEL
+    local m s
+    m="$(ev 'return CFCamp.moveOn()')"
+    [ "$(field 1 "$m")" = true ] || { findings+=("$1: nowhere fresh to move to: $(field 2 "$m")"); return 1; }
+    if ! wait_true 120 'CFCamp.settled()'; then
+        findings+=("$1: the world at $(field 2 "$m") did not load enough to place a case ($(ev 'return CFCamp.settled()' | tr '\t' ' '))")
+        return 1
+    fi
+    s="$(ev 'return CFCamp.settled()')"
+    here="$(ev 'return CFCamp.here()')"
+    findings+=("$1: moved on $(field 4 "$m") tiles to $(field 2 "$m") ($(field 3 "$m")); $(field 3 "$s") containers loaded within 8 tiles")
+    say "${findings[-1]}"
+    return 0
+}
+next_case() { # next_case LABEL WANT [MOVES]: wait for case number WANT, moving on between tries
+    local label="$1" want="$2" moves="${3:-4}" i
+    ev 'return CFCamp.gap(false)' >/dev/null
+    for i in $(seq "$moves"); do
+        wait_case_count "$want" 45 && return 0
+        move_on "$label, move $i" || continue
+        wait_case_count "$want" 210 && { findings+=("$label: the case came after $i move(s) to a fresh neighbourhood"); return 0; }
+        say "$label: no case three and a half minutes after move $i (preparing=$(ev 'return CFCamp.preparing()' | tr '\t' ' '))"
+    done
+    return 1
+}
 reload_world() { # reload_world LABEL: save, quit, continue, reload the Lua
     errors_seen+="$(mod_errors)"
     "$PZ" stop --save >/dev/null 2>&1
@@ -136,9 +176,15 @@ reload_world() { # reload_world LABEL: save, quit, continue, reload the Lua
 # ---------------------------------------------------------------------------
 claim_game || exit 2
 # P4-R126: the relay memo's date note is only tested when case 1 has a document
-# dated inside the memo's week, which about a third of cases do. Fresh worlds are
-# started, at most eight, until one does.
+# dated inside the memo's week, which about a third of cases do. Fresh worlds
+# are started until one has it - at most THREE (P4-R126 said eight). Eight is
+# too dear: the run of 20260917T160453 spent seven worlds, about twenty
+# minutes, before it could start playing, and a world costs a game launch, an
+# address index and a first case. Past three the run carries on in the world it
+# has and the date note becomes a finding ("not exercised") rather than a
+# restart; over five runs the note is still exercised most nights.
 worlds=0
+CF_MEMO_WORLDS="${CF_MEMO_WORLDS:-3}"
 while :; do
     worlds=$((worlds + 1))
     start_cold "${start_args[@]}" || abort "the game did not reach a playable world"
@@ -148,7 +194,7 @@ while :; do
     case1="$(ev 'return CFCamp.newestLive()' | field 1)"
     week="$(ev "return CFCamp.memoWeek([[$case1]])")"
     if [ "$(field 1 "$week")" = true ] && [ "$(field 2 "$week")" -gt 0 ] 2>/dev/null; then break; fi
-    if [ "$worlds" -ge 8 ]; then findings+=("no case 1 in $worlds fresh worlds had a document in the relay memo's week"); break; fi
+    if [ "$worlds" -ge "$CF_MEMO_WORLDS" ]; then findings+=("no case 1 in $worlds fresh worlds had a document in the relay memo's week; carrying on in this world"); break; fi
     say "world $worlds: case 1 has no document in the memo's week; starting a fresh world"
     "$PZ" stop >/dev/null 2>&1
 done
@@ -200,9 +246,8 @@ stage "after reload 1"
 reload_growth "reload 1" "$bytes_before" "$parts_before"
 
 # --- case 2: built from the answers ------------------------------------------
-ev 'return CFCamp.gap(false)' >/dev/null
 here="$(ev 'return CFCamp.here()')"
-wait_case_count 2 240 || fail "no second case within four minutes of the gap being removed"
+next_case "case 2" 2 || fail "no second case, after moving on to four fresh neighbourhoods"
 case2="$(ev 'return CFCamp.newestLive()' | field 1)"
 ev 'return CFCamp.gap(true)' >/dev/null   # no further case while this one is played
 say "case 2: $case2"
@@ -229,8 +274,7 @@ stage "case 2 finished"
 perf_note "case 2"
 
 # --- case 3: built from nothing ---------------------------------------------
-ev 'return CFCamp.gap(false)' >/dev/null
-wait_case_count 3 240 || fail "no third case within four minutes"
+next_case "case 3" 3 || fail "no third case, after moving on to four fresh neighbourhoods"
 case3="$(ev 'return CFCamp.newestLive()' | field 1)"
 ev 'return CFCamp.gap(true)' >/dev/null
 say "case 3: $case3"
@@ -260,11 +304,22 @@ findings+=("map marks after reload 2 (written/pending/missing): $(tr '\t' '/' <<
 # --- the active limit ----------------------------------------------------------
 ev 'return CFCamp.gap(false)' >/dev/null
 q="$(cases)"; target=$(( $(field 2 "$q") + 4 ))
-# A new case takes minutes to prepare (a nearby scan), so the limit gets time.
-wait_case_count "$target" 1200 || findings+=("the fourth unfinished case did not arrive within twenty minutes: $(cases | tr '\t' ' ')")
+# A new case takes minutes to prepare (a nearby scan) and needs a neighbourhood
+# no case has used, so each one is asked for the same way: move on, then wait.
+limit_deadline=$(( $(date +%s) + 1200 ))
+until [ "$(field 1 "$(cases)")" -ge "$target" ] 2>/dev/null; do
+    [ "$(date +%s)" -lt "$limit_deadline" ] || { findings+=("twenty minutes was not enough to fill the four unfinished cases: $(cases | tr '\t' ' ')"); break; }
+    next_case "the limit" $(( $(field 1 "$(cases)") + 1 )) 2 \
+        || { findings+=("cases stopped coming short of four unfinished: $(cases | tr '\t' ' ')"); break; }
+done
+[ "$(field 1 "$(cases)")" -ge "$target" ] 2>/dev/null \
+    || findings+=("the fourth unfinished case did not arrive: $(cases | tr '\t' ' ')")
 q="$(cases)"; live=$(( $(field 1 "$q") - $(field 2 "$q") ))
 stage "at the limit"
 [ "$live" -le 4 ] || fail "$live unfinished cases at once; the save allows four"
+# Move on first, so what refuses a fifth case is the limit itself and not the
+# wait for a survivor who has not moved (P4-R125).
+move_on "at the limit" || true
 sleep 90
 prep="$(ev 'return CFCamp.preparing()')"
 [ "$live" -lt 4 ] || [ "$(field 1 "$(cases)")" = "$(field 1 "$q")" ] || fail "a case was created while four were unfinished"
@@ -273,10 +328,10 @@ finished_before="$(field 2 "$(cases)")"; count_before="$(field 1 "$(cases)")"
 oldest="$(ev 'return CFCamp.oldestLive()' | field 1)"
 play_case "$oldest"
 wait_finished $((finished_before + 1)) || fail "the oldest unfinished case ${oldest#generated:} did not finish"
-if wait_case_count $((count_before + 1)) 900; then
+if next_case "after the limit" $((count_before + 1)) 3; then
     findings+=("a new case came after a case was finished at the limit: $(cases | tr '\t' ' ')")
 else
-    fail "after a case was finished at the limit, no new case came within fifteen minutes (preparing=$(ev 'return CFCamp.preparing()' | field 1))"
+    fail "after a case was finished at the limit, no new case came over three fresh neighbourhoods (preparing=$(ev 'return CFCamp.preparing()' | field 1))"
 fi
 stage "after the limit"
 perf_note "the limit"

@@ -212,6 +212,109 @@ function C.here()
     return math.floor(p:getX()), math.floor(p:getY()), p:getHoursSurvived()
 end
 
+-- MOVING ON BETWEEN CASES (P4-R125, P4-R67). A new case is refused where the
+-- survivor has no unused, loaded buildings with containers near them, and once
+-- refused it is not tried again until they have moved about 50 tiles or half an
+-- in-game hour has passed. This check used to stand where case 1 left it, so
+-- after case 1 no further case ever came: "Deferred: insufficient distinct
+-- loaded storage nearby", 17 times in 20260917T160453 and in the four runs
+-- before it. Between cases it now does what a player does - goes to another
+-- neighbourhood - and the checks keep their meaning, because the case is
+-- prepared from wherever the survivor is standing and the shell reads
+-- CFCamp.here() after the move.
+local function usedSites()
+    local used = {}
+    for _, root in ipairs(roots()) do
+        if root.case then for _, s in ipairs(root.case.locations) do used[s.id] = true end
+        else for _, row in ipairs(root.rows or {}) do if row.locationId then used[row.locationId] = true end end end
+    end
+    return used
+end
+
+-- Every building on the map that no case has used, from the metagrid
+-- (checks/addresses.lua reads the same list): a building needs no loaded cell
+-- to be considered, only to be scanned once the survivor is standing in it.
+-- Site ids are "t3:" .. the building's id string (Generated/NearbyCatalog).
+local function freshBuildings(minRooms)
+    local grid = getWorld() and getWorld():getMetaGrid()
+    local list = grid and grid:getBuildings()
+    local used = usedSites()
+    local out = {}
+    for i = 0, (list and list:size() or 0) - 1 do
+        local b = list:get(i)
+        local id = "t3:" .. tostring(b:getIDString())
+        local rooms = b:getRooms():size()
+        if not used[id] and rooms >= minRooms then
+            out[#out + 1] = { id = id, rooms = rooms,
+                x = math.floor((b:getX() + b:getX2()) / 2), y = math.floor((b:getY() + b:getY2()) / 2) }
+        end
+    end
+    return out
+end
+
+-- Move on: into the middle of a building no case has used, just beyond
+-- `minTiles` away, preferring one with unused neighbours - a case needs two
+-- sites with containers of its own, so a lone barn in a field is no use.
+-- Returns ok, where, what was chosen, how far it was.
+C.NEIGHBOURS = 120
+function C.moveOn(minTiles)
+    minTiles = tonumber(minTiles) or 300
+    local p = getPlayer()
+    if not p then return "false", "no player" end
+    local px, py = p:getX(), p:getY()
+    local all = freshBuildings(2)
+    if #all == 0 then return "false", "no building on the map is unused" end
+    local ring = {}
+    for _, b in ipairs(all) do
+        local d = math.sqrt((b.x - px) ^ 2 + (b.y - py) ^ 2)
+        if d >= minTiles and b.rooms >= 4 then ring[#ring + 1] = { b = b, d = d } end
+    end
+    if #ring == 0 then
+        return "false", "no unused building with four rooms over " .. minTiles .. " tiles away (" .. #all .. " unused on the map)"
+    end
+    table.sort(ring, function(a, z) return a.d < z.d end)
+    local pick, neighbours = nil, 0
+    for i = 1, math.min(#ring, 20) do
+        local c = ring[i].b
+        local n = 0
+        for _, b in ipairs(all) do
+            if b.id ~= c.id and math.abs(b.x - c.x) <= C.NEIGHBOURS and math.abs(b.y - c.y) <= C.NEIGHBOURS then n = n + 1 end
+        end
+        if n >= 5 then pick, neighbours = ring[i], n; break end
+    end
+    pick = pick or ring[1]
+    local b = pick.b
+    p:teleportTo(b.x + 0.5, b.y + 0.5, 0)
+    C.movedTo = b
+    return "true", b.x .. "," .. b.y,
+        b.id .. ", " .. b.rooms .. " rooms, " .. neighbours .. " unused buildings within " .. C.NEIGHBOURS .. " tiles",
+        string.format("%.0f", pick.d)
+end
+
+-- Has the world around the survivor loaded enough for a case to be placed?
+-- Generated/Storage.scan accepts only loaded real furniture, so the answer is
+-- the squares the cell has and the containers standing on them. Returns
+-- whether it is worth asking for a case, the squares and the containers.
+function C.settled(radius)
+    radius = tonumber(radius) or 8
+    local p, cell = getPlayer(), getCell()
+    if not p or not cell then return "false", 0, 0 end
+    local px, py, pz = math.floor(p:getX()), math.floor(p:getY()), math.floor(p:getZ())
+    local squares, containers = 0, 0
+    for dx = -radius, radius do for dy = -radius, radius do
+        local sq = cell:getGridSquare(px + dx, py + dy, pz)
+        if sq then
+            squares = squares + 1
+            local objects = sq:getObjects()
+            for i = 0, objects:size() - 1 do
+                local o = objects:get(i)
+                if o.getContainerCount and o:getContainerCount() > 0 then containers = containers + 1 end
+            end
+        end
+    end end
+    return tostring(containers >= 6), squares, containers
+end
+
 -- A live case's two sites: inside the reach of (x, y) for that many hours
 -- survived, and not a site any other case already used.
 function C.placement(caseId, x, y, hours)
