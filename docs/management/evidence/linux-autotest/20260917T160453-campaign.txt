@@ -1,0 +1,53 @@
+Linux campaign check 20260917T160453: FAIL
+source: 84611b0
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+cases: 1 generated:1421646464:case, 2 none, 3 generated:39639624:case; at the end 
+stages:
+  start                  cases 1 (0 finished) | record 0 | FILES questions 0 | NAMES 1 | PLACES 0 | Old 0/0 wrong | Evidence 0/0 wrong | order  | save 35954 B
+  case 1 finished        cases 1 (1 finished) | record 5 | FILES questions 1 | NAMES 2 | PLACES 9 | Old 5/0 wrong | Evidence 0/0 wrong | order 11111 | save 30644 B
+  after reload 1         cases 1 (1 finished) | record 5 | FILES questions 1 | NAMES 2 | PLACES 9 | Old 5/0 wrong | Evidence 0/0 wrong | order 11111 | save 31341 B
+  case 2 finished        cases 1 (1 finished) | record 5 | FILES questions 1 | NAMES 2 | PLACES 9 | Old 5/0 wrong | Evidence 0/0 wrong | order 11111 | save 31227 B
+  case 3, two clues      cases 2 (1 finished) | record 7 | FILES questions 1 | NAMES 3 | PLACES 11 | Old 5/0 wrong | Evidence 2/0 wrong | order 1111122 | save 57976 B
+  after reload 2         cases 2 (1 finished) | record 7 | FILES questions 1 | NAMES 3 | PLACES 11 | Old 5/0 wrong | Evidence 2/0 wrong | order 1111122 | save 57976 B
+  at the limit           cases 2 (1 finished) | record 7 | FILES questions 1 | NAMES 3 | PLACES 11 | Old 5/0 wrong | Evidence 2/0 wrong | order 1111122 | save 57976 B
+  after the limit        cases 2 (2 finished) | record 9 | FILES questions 2 | NAMES 4 | PLACES 14 | Old 9/0 wrong | Evidence 0/0 wrong | order 111112222 | save 49549 B
+case 1 answers on the organiser: true two person2 records nil Curtis Vance Roy Hale Knox County Administration
+case 2 steer: none     
+errors inside the mod, all sessions: 0
+FINDING: fresh worlds started for a case 1 with a document in the memo's week: 7 (memo=true, dated documents=1)
+FINDING: case 1 relay memo: found=true, dated in its week=1, carrying the date note=1
+FINDING: the date note was exercised: 1 of 1 records dated in the memo's week carry it
+FINDING: case 1 note on the organiser: I think it was a department left off on purpose. Roy Hale matters here. Next I would check the place against its records.
+FINDING: frame cost during case 1: AutomaticInvestigations.onTick calls=3069 avg=0.012ms max=26ms over2ms=1 | CaseFile.onTick calls=3057 avg=0.007ms max=1ms over2ms=0 | ClueMarkers.draw calls=0 avg=0.000ms max=0ms over2ms=0 | ClueMarkers.update calls=54 avg=0.352ms max=3ms over2ms=3 | IdentityObserver.afterRender calls=6200 avg=0.115ms max=1ms over2ms=0 | IdentityObserver.tick calls=3105 avg=0.003ms max=1ms over2ms=0 | LocalPersonI
+FINDING: reload 1 save size: 30921 -> 31341 bytes; before [Generated.G2=24939 KeyConnections=778 DiscoveryLedger=2777 VisitedBuildings=359]; after [Generated.G2=25359 KeyConnections=778 DiscoveryLedger=2777 VisitedBuildings=359]
+FINDING: case 2 placement: no live case none
+FINDING: case 2 clues: 
+FINDING: frame cost during case 2: AutomaticInvestigations.onTick calls=37275 avg=0.006ms max=2ms over2ms=1 | CaseFile.onTick calls=37263 avg=0.012ms max=1ms over2ms=0 | ClueMarkers.draw calls=0 avg=0.000ms max=0ms over2ms=0 | ClueMarkers.update calls=621 avg=0.121ms max=1ms over2ms=0 | IdentityObserver.afterRender calls=74630 avg=0.096ms max=1ms over2ms=0 | IdentityObserver.tick calls=37311 avg=0.002ms max=1ms over2ms=0 | LocalPer
+FINDING: case 3 placement: reach 250: t3:10977704480342043, t3:10977704480342035
+FINDING: frame cost during case 3: AutomaticInvestigations.onTick calls=52723 avg=0.005ms max=2ms over2ms=3 | CaseFile.onTick calls=52711 avg=0.011ms max=3ms over2ms=2 | ClueMarkers.draw calls=0 avg=0.000ms max=0ms over2ms=0 | ClueMarkers.update calls=881 avg=0.119ms max=4ms over2ms=2 | IdentityObserver.afterRender calls=105506 avg=0.095ms max=1ms over2ms=0 | IdentityObserver.tick calls=52759 avg=0.002ms max=1ms over2ms=0 | LocalPe
+FINDING: reload 2 save size: 57976 -> 57976 bytes; before [Generated.G2=49530 KeyConnections=1222 DiscoveryLedger=3791 VisitedBuildings=593]; after [Generated.G2=49530 KeyConnections=1222 DiscoveryLedger=3791 VisitedBuildings=593]
+FINDING: map marks after reload 2 (written/pending/missing): 7/0/0
+FINDING: the fourth unfinished case did not arrive within twenty minutes: 2 1 1:1421646464:retired 2:39639624:live
+FINDING: after 90 s with 1 unfinished: preparing=false, cases 2 1 1:1421646464:retired 2:39639624:live
+FINDING: frame cost during the limit: AutomaticInvestigations.onTick calls=133093 avg=0.006ms max=3ms over2ms=14 | CaseFile.onTick calls=133081 avg=0.013ms max=3ms over2ms=2 | ClueMarkers.draw calls=0 avg=0.000ms max=0ms over2ms=0 | ClueMarkers.update calls=2218 avg=0.142ms max=12ms over2ms=6 | IdentityObserver.afterRender calls=266214 avg=0.088ms max=2ms over2ms=2 | IdentityObserver.tick calls=133129 avg=0.002ms max=1ms over2ms=0 | L
+FAIL: no second case within four minutes of the gap being removed
+FAIL: case 2: a site is outside the reach of where the survivor stood (no live case none)
+FAIL: case 2: a site an earlier case already used was used again (no live case none)
+FAIL: case 2 was not built from case 1's answers (steer from: none)
+FAIL: case 2's steer is /, not two/records
+FAIL: case 2's first person is , not the returning Roy Hale
+FAIL: case 2: the returning person could be given a second body
+FAIL: case 2 does not include the duty log the other reading leans on
+FAIL: case 2: the steered case was not logged exactly once
+FAIL: case 1's answers are not marked used by case 2
+FAIL: case 1's answers could still be changed after shaping case 2
+FAIL: case none: clues never all placed (0 0 0)
+FAIL: case 2 did not finish
+FAIL: case 2: the second thought "What do I make of it?" was said 0 times, not once
+FAIL: case 2 finished: FILES shows 1 question rows, not 2
+FAIL: no third case within four minutes
+FAIL: case 3 should be unsteered (case 1's answers used, case 2's empty)
+FAIL: reload 2: case 3 gained a steer (generated:1421646464:case)
+FAIL: reload 2: case 1's answers lost their used mark
+FAIL: after a case was finished at the limit, no new case came within fifteen minutes (preparing=false)
+screenshot: dev/eval/linux/runs/20260917T160453-campaign.png (not committed)

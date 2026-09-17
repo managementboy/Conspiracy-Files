@@ -1,6 +1,6 @@
 # Clues are found by searching (P4-R132)
 
-- **Status:** Design, 2026-09-16. Stage 1 (search and recognise) and stage 2 (look it over, timed Inspect, the wordless cue) built 2026-09-17; see the end.
+- **Status:** Design, 2026-09-16. Stage 1 (search and recognise) and stage 2 (look it over, timed Inspect, the wordless cue) built 2026-09-17; stage 3 (the checks) the same day; see the end.
 - **Owner:** shaped in conversation on 2026-09-16 ("I would love to mix both",
   "perfect!", "the investigate area dropdown would need another entry").
 - **Game:** Build 42.20. Everything marked *verified* was read in the installed
@@ -266,3 +266,72 @@ the soft UI tick. Logged once per approach: `cue said`, `cue suppressed ...:
   `ClueSearch.liveClues(player)`.
 - `R.clueTargets()` rows now also carry `case`, `place`, `token`, `part` and
   `target` (the stored table; read, never change).
+
+## Stage 3 built (2026-09-17, DEV-0.42.0-search-to-find-3)
+
+Built: the checks that inspect clues now recognise them first, the player's
+way. One mod bug found and fixed on the way (below), hence the version.
+
+**How the checks find, recognise and inspect now.** One helper,
+`note_carried` in `tools/autotest/lib.sh`, used by `inspect_doc` (reload, death,
+faults, perf, campaign), core_loop, knox and writecost:
+- find and take the clue as before (`CFLoop.find` looks up the item by its
+  `cfGeneratedId`, never by name or category, so the plain name does not
+  matter);
+- choose **"Look it over"** from the real right-click menu (`CFLoop.lookOver`)
+  and wait up to 20 s for `CFLoop.recognised()`;
+- choose **"Inspect Investigation Evidence"** (`CFLoop.inspect`) and wait up to
+  20 s for `CFLoop.inspected()`. A failure names the action queue's head.
+
+Reports now print the recognised title and the plain name it was found as
+("Timesheet / LD-832 (found as Note)"). drop_note looks each carried clue over
+(not inspected: the drop notes them) and recognises the one it leaves lying in
+its drawer by Search Mode (`CFLoop.searchOn`, facing it); only if that fails in
+15 s (a room too dark to spot) does it use `ClueSearch.debugRecognise`, and says
+so as a finding. It was spotted by search in both runs.
+
+**`ClueActions.instant` is not used by any check.** The two timed actions add
+about 6 s per clue; no check's budget needed more.
+
+**Results in the real game (Linux, Intel GPU, `docs/management/evidence/linux-autotest/`):**
+
+| Check | Result | Evidence |
+|---|---|---|
+| core_loop | FAIL, then PASS | 20260917T144206 (all 4 clues looked over and inspected; failed only on "no second case within 150 s": the mod logged "insufficient distinct loaded storage nearby", the standing-still limitation of 98c3e42), 20260917T144714 PASS |
+| knox | PASS | 20260917T145339-knox.txt |
+| drop_note | FAIL, then PASS | 20260917T145344 (mod error, the bug below), 20260917T145803 PASS on the fix |
+| organiser | PASS | 20260917T150346-organiser.txt |
+| reload | PASS | 20260917T150351-reload.txt |
+| death | PASS | 20260917T151058-death.txt |
+| faults | PASS | 20260917T151338-faults.txt |
+| perf | PASS | 20260917T151937-perf.txt |
+| clue_actions, clue_search | PASS after the proof | 20260917T154859, 20260917T155112 |
+
+Other suite members do not inspect clues (vehicle_reach only takes one;
+wallet_id, case_body, reshuffle, hardware, pdagame, pdalife, pdaperf, boot and
+the Fieldnote check touch no clue) and were not re-run.
+
+**Mod bug found.** `ClueActions` chose the reading pose with
+`item:getReadType()`, which only Literature has. On a clue that is a piece of
+wooden armour it threw inside `pcall`, and the game still logs that as a mod
+error (drop_note 20260917T145344). Now asked only when
+`instanceof(item,"Literature")`; `test/look_it_over.lua` covers it.
+
+**prove.py** (20260917T152343-prove.txt, caught 3 of 3, both baselines PASS,
+worktree clean afterwards):
+- `spot-recognises` (clue_search): spotting no longer recognises. CAUGHT: "not
+  spotted within 120 s" for both focuses.
+- `look-recognises` (clue_actions): Look it over completes but does not
+  recognise. CAUGHT: "not recognised after Look it over".
+- `cue-once-per-place` (clue_actions): the once-per-place rule removed. CAUGHT:
+  "a second cue at the same place".
+
+**campaign** (run once, 20260917T160453-campaign.txt): FAIL, only on the known
+limitation. Case 1 was played end to end (5 clues looked over and inspected,
+Evidence / Old, FILES question row, save/reload); case 3's four clues were
+played the same way; 0 mod errors in every session. Every failure follows from
+"no second case within four minutes of the gap being removed": the mod logged
+"Deferred: insufficient distinct loaded storage nearby" 17 times, which is
+P4-R125/P4-R67 waiting for a survivor who moves, and the check stands still
+(as in the runs of 98c3e42). Not chased. The boot check passed on the final
+build (20260917T170357-boot.txt, 105 of 105 files, 0 errors).
