@@ -51,7 +51,7 @@ function S.target(t,site)
 end
 function S.validate(root)
     local ok,why=V.validateStructure(root); if not ok then return false,why end
-    if not fields(root,{schema=true,case=true,assignments=true,known=true}) or root.schema~=1 then return false,"invalid generated session" end
+    if not fields(root,{schema=true,case=true,assignments=true,known=true,recognised=true}) or root.schema~=1 then return false,"invalid generated session" end
     ok,why=G.validate(root.case); if not ok then return false,why end
     if type(root.assignments)~="table" or type(root.known)~="table" then return false,"missing session fields" end
     local ids,sites={},{}
@@ -78,6 +78,19 @@ function S.validate(root)
         seen[id]=true; n=n+1
     end
     for i=1,n do if not root.known[i] then return false,"sparse discoveries" end end
+    -- Recognised clues (P4-R132): spotted in Search Mode or looked over, so the
+    -- item now shows as evidence. Optional, a dense list of distinct document
+    -- ids, in the order they were recognised. Noting implies recognising, so a
+    -- known id need not be listed twice.
+    if root.recognised~=nil then
+        if type(root.recognised)~="table" then return false,"invalid recognition" end
+        local rseen,rn={},0
+        for k,id in pairs(root.recognised) do
+            if not integer(k) or k<1 or k>#root.case.documents or not ids[id] or rseen[id] then return false,"invalid recognition" end
+            rseen[id]=true; rn=rn+1
+        end
+        for i=1,rn do if not root.recognised[i] then return false,"invalid recognition" end end
+    end
     if V.estimateEncodedBytes(root)>500000 then return false,"canonical size exceeded" end
     return true
 end
@@ -230,6 +243,18 @@ function S.open(initial,sink)
         if not root.assignments[id] or root.assignments[id].status~="placed" then return false,"document unavailable" end
         for _,known in ipairs(root.known) do if known==id then return true end end
         return commit(function(r) r.known[#r.known+1]=id end)
+    end
+    -- A clue becomes evidence the survivor can see (P4-R132). Any assignment,
+    -- whatever its placement status: a clue already in hand is still a clue.
+    function api.isRecognised(id)
+        for _,known in ipairs(root.known) do if known==id then return true end end
+        for _,seen in ipairs(root.recognised or {}) do if seen==id then return true end end
+        return false
+    end
+    function api.recognise(id)
+        if not root.assignments[id] then return false,"unknown document" end
+        if api.isRecognised(id) then return true end
+        return commit(function(r) r.recognised=r.recognised or {}; r.recognised[#r.recognised+1]=id end)
     end
     function api.project() return G.project(root.case,root.known) end
     return api

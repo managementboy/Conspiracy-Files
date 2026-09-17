@@ -190,7 +190,8 @@ assert(not runtime:find("if count>1 then", 1, true),
     "placement still calls a second copy a conflict; every pile would die on placement")
 assert(runtime:find("if count>expected then", 1, true), "placement must compare against the expected count")
 assert(runtime:find("for copy=1,expected do", 1, true), "placement must create the whole pile")
-assert(runtime:find('copy.." of "..expected', 1, true),
+-- Since P4-R132 the copies are named when the pile is recognised, not placed.
+assert(runtime:find('copy.." of "..of', 1, true),
     "each copy of a pile must count itself; eleven items all reading 'one of eleven' says nothing")
 assert(runtime:find("expectedCount(api,candidate)==1", 1, true),
     "relocation must skip piles; it is built on there being exactly one item with the token")

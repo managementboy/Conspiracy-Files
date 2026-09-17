@@ -55,6 +55,11 @@ function E.consider(character,item)
     if not R or not R.subject or not R.isInspected or not V or not V.onEvidenceFound then return end
     local ok,subject=pcall(R.subject,item)
     if not ok or not subject then return end
+    -- An unrecognised clue is just the item it looks like (P4-R132).
+    if R.isRecognised then
+        local okR,recognised=pcall(R.isRecognised,item)
+        if not okR or not recognised then return end
+    end
     local ok2,inspected=pcall(R.isInspected,item)
     if not ok2 or inspected then return end
     safe(V.onEvidenceFound,item)
@@ -136,6 +141,11 @@ function E.unreadCarried(player)
         if not id or seen[id] then return end
         local okS,subject=pcall(runtime.subject,item)
         local okI,read=pcall(runtime.isInspected,item)
+        -- Only evidence the survivor has recognised (P4-R132).
+        if runtime.isRecognised then
+            local okR,recognised=pcall(runtime.isRecognised,item)
+            if not okR or not recognised then return end
+        end
         if okS and subject and okI and not read then seen[id]=true; count=count+1 end
     end
     local function walk(container,depth)

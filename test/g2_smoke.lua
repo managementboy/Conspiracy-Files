@@ -83,10 +83,14 @@ for _,c in pairs(containers) do for _,v in ipairs(c.items) do seenTypes[v.fullTy
 assert(seenTypes['Base.Note'], 'minimum anonymous lead carrier missing')
 assert(#R.known()==0, 'placement must not discover')
 assert(not R.inspect(item), 'inspection requires possession')
+-- A clue is only noted once recognised (P4-R132): recognise before each Inspect.
+assert(not R.isRecognised(item), 'placed clues start unrecognised')
+local plainInspect=R.inspect
+local function inspectRecognised(v,...) assert(R.recognise(v,'search')); return plainInspect(v,...) end
 local origin=item.container
 for i,v in ipairs(origin.items) do if v==item then table.remove(origin.items,i); break end end
 inventory:AddItem(item)
-assert(R.inspect(item)); assert(#R.known()==1)
+assert(inspectRecognised(item)); assert(#R.known()==1)
 local token=item:getModData().cfPhysicalToken
 local body=R.known()[1].body
 local function waitPlaced(getRoot,limit)
@@ -141,7 +145,7 @@ local function capture(item)
 end
 local newFinding=capture(newItem);assert(newFinding,'real second-case capture')
 local newOrigin=newItem.container; for i,v in ipairs(newOrigin.items) do if v==newItem then table.remove(newOrigin.items,i); break end end
-inventory:AddItem(newItem);Markers.after(newFinding,newItem); assert(R.inspect(newItem)); assert(#R.known()==2 and R.known()[1].body==body, 'interleaved new discovery appends without renumbering old evidence')
+inventory:AddItem(newItem);Markers.after(newFinding,newItem); assert(inspectRecognised(newItem)); assert(#R.known()==2 and R.known()[1].body==body, 'interleaved new discovery appends without renumbering old evidence')
 Markers.update();assert(not playerData["ConspiracyFiles.ClueMarkers"].records[newItem:getModData().cfGeneratedId].written)
 pen=true;Markers.update()
 local mark=playerData["ConspiracyFiles.ClueMarkers"].records[newItem:getModData().cfGeneratedId]
@@ -151,6 +155,7 @@ for _,c in pairs(containers) do for _,v in ipairs(c.items) do if saved.campaign.
 assert(late,'remaining old document exists');local lateFinding=capture(late)
 local lateOrigin=late.container;for i,v in ipairs(lateOrigin.items) do if v==late then table.remove(lateOrigin.items,i);break end end
 inventory:AddItem(late);Markers.after(lateFinding,late)
+assert(R.recognise(late,'search'))
 local stableStore=saved;local stableCampaign=saved.campaign
 saved=setmetatable({},{__index=stableStore,__newindex=function() error('injected durable field failure') end})
 assert(not pcall(R.inspect,late),'failed single-field write propagates')
@@ -219,7 +224,7 @@ local tamperSource=saved.campaign.successive.cases[1].case
 for _,v in ipairs(remaining) do
  local finding=assert(capture(v));local c=v.container
  for n,other in ipairs(c.items) do if other==v then table.remove(c.items,n);break end end
- inventory:AddItem(v);Markers.after(finding,v);assert(R.inspect(v))
+ inventory:AddItem(v);Markers.after(finding,v);assert(inspectRecognised(v))
 end
 local all=R.known()
 -- Documents, not items: a pile is many items and one thing learned.

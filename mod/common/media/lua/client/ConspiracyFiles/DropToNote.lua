@@ -56,6 +56,11 @@ function M.note(items,runtime,inventory)
             r.known=r.known+1
         else
             local okS,subject=pcall(runtime.subject,item)
+            -- A clue nobody has recognised is not evidence yet (P4-R132).
+            if okS and subject and runtime.isRecognised then
+                local okR,recognised=pcall(runtime.isRecognised,item)
+                subject=okR and recognised
+            end
             if not okS or not subject then
                 r.other=r.other+1
             else

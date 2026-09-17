@@ -37,6 +37,9 @@ function M.fill(playerNum,context,items)
         end
         return
     end
+    -- A clue nobody has recognised is the plain item it looks like: no
+    -- Inspect, no Note (P4-R132). Stage 2 adds "Look it over" here.
+    if R.isRecognised and not R.isRecognised(item) then return end
     local expected=item:getOutermostContainer()
     -- An icon for the ACTION, not for the thing. Owner, 2026-09-10: "I meant
     -- an Icon that represents the action not the content. In the case of

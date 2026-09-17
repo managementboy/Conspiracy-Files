@@ -118,8 +118,10 @@ end
 -- saved field, so this survives a reload; blood is deliberately NOT applied,
 -- because setBloodLevel exists on the installed jar but nothing has proven it
 -- persists, and no wording anywhere claims an object is bloodied.
--- Everything a created evidence document needs to look like one. Both places
--- that build an item call this: first placement, and relocation.
+-- Everything a RECOGNISED clue needs to look like evidence. Placement no longer
+-- calls this (P4-R132): a clue is the plain game item until the survivor
+-- recognises it, and then R.recognise stamps it. Relocation calls it only for a
+-- clue already recognised.
 --
 -- The category is a display string only; nothing in the game keys off it. It
 -- is also a TRANSLATION KEY - the inventory renders IGUI_ItemCat_<category>,
@@ -225,9 +227,8 @@ local function placement(api,id)
             -- Each copy of a pile counts itself. Eleven items all reading "one
             -- of eleven" told the player nothing about which one they were
             -- holding (owner, 2026-09-10).
-            local name=doc.title
-            if expected>1 and doc.label then name=doc.label.." ("..copy.." of "..expected..")" end
-            stampEvidence(item,name)
+            -- No title and no category here (P4-R132): the plain item, until
+            -- the survivor recognises it (R.recognise).
             applyWear(item,doc)
             writePages(item,doc)
             assert(current:AddItem(item),"could not add note")
@@ -651,6 +652,9 @@ function R.inspect(item,inPlace)
     if root then for _,candidate in ipairs(sessions) do if candidate.snapshot().case.caseId==root.case.caseId then api=candidate end end end
     local a=api and api.assignment(md.cfGeneratedId)
     if not a or md.cfPhysicalToken~=a.physicalToken or a.status=="conflict" then return false end
+    -- Only a recognised clue can be noted (P4-R132): spotted in Search Mode or
+    -- looked over first.
+    if not R.isRecognisedId(md.cfGeneratedId) then return false end
     -- A positively observed surviving item can reconcile an uncertain intent.
     -- Known before this inspection? PlayerVoice's once-per-thing memory lives
     -- only while the game runs, so after a reload re-inspecting old evidence
@@ -734,6 +738,128 @@ function R.subject(item)
     if not sessions or not item then return false end
     local md=item:getModData(); local root=md and Cases.find(wrapper,md.cfGeneratedId); local a=root and root.assignments[md.cfGeneratedId]
     return a and md.cfPhysicalToken==a.physicalToken and a.status~="conflict"
+end
+-- RECOGNITION (P4-R132, docs/design/SEARCH_TO_FIND.md). A clue is placed as the
+-- plain game item it is, and becomes evidence - its title, the Evidence
+-- category, the Inspect option - only once the survivor recognises it: spotted
+-- in Search Mode, or looked over in hand. The flag lives in the case record, not
+-- on the item, so it survives relocation and every copy of a pile shares it.
+-- Anything noted is recognised; a finished case's evidence always is.
+local function liveApi(id)
+    if not sessions or not wrapper or type(id)~="string" then return nil end
+    local root=Cases.find(wrapper,id)
+    if not root or not root.case then return nil end
+    for _,api in ipairs(sessions) do
+        -- The stored root, not a snapshot: this runs from menus and ticks, and a
+        -- snapshot deep-copies the whole case.
+        if api.caseId==nil then api.caseId=api.snapshot().case.caseId end
+        if api.caseId==root.case.caseId then return api,root end
+    end
+    return nil
+end
+function R.isRecognisedId(id)
+    if type(id)~="string" then return false end
+    if retiredId(id) then return true end
+    if not wrapper then return false end
+    local root=Cases.find(wrapper,id)
+    if not root then return false end
+    for _,known in ipairs(root.known or {}) do if known==id then return true end end
+    for _,seen in ipairs(root.recognised or {}) do if seen==id then return true end end
+    return false
+end
+function R.isRecognised(item)
+    if not item then return false end
+    local ok,md=pcall(function() return item:getModData() end)
+    if not ok or type(md)~="table" or not md.cfGeneratedId then return false end
+    return R.isRecognisedId(md.cfGeneratedId)
+end
+-- Title and category on one copy. `copy`/`of` name a pile's copies.
+local function stampRecognised(item,doc,id,copy,of)
+    if not item or not doc then return end
+    local name=doc.title
+    if of and of>1 and doc.label then name=doc.label.." ("..copy.." of "..of..")" end
+    pcall(function() item:setName(name); item:setCustomName(true) end)
+    pcall(function() item:setDisplayCategory(categoryOf(id)) end)
+end
+-- Every copy of document `id` the runtime can reach now: the survivor's
+-- inventory and bags (three deep, as restampEvidence walks) and the container
+-- the case placed it in. Returns how many were stamped.
+local function stampReachable(id,root)
+    local doc
+    for _,d in ipairs(root and root.case and root.case.documents or {}) do if d.id==id then doc=d end end
+    if not doc then return 0 end
+    local of=doc.quantity or 1
+    local n,seen=0,{}
+    local function walk(container,depth)
+        if not container or depth>3 or seen[container] then return end
+        seen[container]=true
+        local ok,items=pcall(function() return container:getItems() end)
+        if not ok or not items then return end
+        for i=0,items:size()-1 do
+            local item=items:get(i)
+            local okM,md=pcall(function() return item:getModData() end)
+            if okM and type(md)=="table" and md.cfGeneratedId==id then
+                n=n+1; stampRecognised(item,doc,id,n,of)
+            end
+            -- Asked only of items that have the method: an engine call that
+            -- throws inside pcall is still logged as an error by the game.
+            local inner=item and item.getInventory and item:getInventory()
+            if inner then walk(inner,depth+1) end
+        end
+    end
+    local player=getPlayer and getPlayer()
+    if player then walk(player:getInventory(),0) end
+    local a=root.assignments and root.assignments[id]
+    if a and a.target then
+        local ok,container=pcall(World.resolve,a.target,a.physicalToken)
+        if ok and container then walk(container,0) end
+    end
+    return n
+end
+-- Recognise a clue: an item carrying it, or its document id. `how` is "search"
+-- (spotted in Search Mode), "look" (looked over in hand) or "debug" (checks).
+-- Returns true when the clue is recognised afterwards, and whether this call
+-- was the one that recognised it.
+function R.recognise(target,how)
+    if not allowed() or not sessions then return false,"no case" end
+    local id=target
+    if type(target)~="string" then
+        local ok,md=pcall(function() return target:getModData() end)
+        id=ok and type(md)=="table" and md.cfGeneratedId or nil
+    end
+    if type(id)~="string" then return false,"not a clue" end
+    if retiredId(id) then return true,false end
+    local api,root=liveApi(id)
+    if not api then return false,"not a live clue" end
+    if R.isRecognisedId(id) then return true,false end
+    local ok,why=api.recognise(id)
+    if not ok then return false,tostring(why) end
+    -- The commit swapped the wrapper; stamp from the stored root now in it.
+    root=Cases.find(wrapper,id) or root
+    local stamped=stampReachable(id,root)
+    CFLog.write("i","recognised",{doc=id,how=tostring(how or "?"),n=stamped})
+    return true,true
+end
+-- Where each live clue is, for Search Mode (ClueSearch). Plain rows read from
+-- the stored case, no copies of the case text.
+function R.clueTargets()
+    if not allowed() or not wrapper or not sessions then return {} end
+    local out={}
+    for _,root in ipairs(Cases.sessions(wrapper) or {}) do
+        if not Retired.isRetired(root) and root.assignments then
+            local seen={}
+            for _,id in ipairs(root.known or {}) do seen[id]=true end
+            for _,id in ipairs(root.recognised or {}) do seen[id]=true end
+            for id,a in pairs(root.assignments) do
+                local t=a.target
+                if type(t)=="table" then
+                    out[#out+1]={id=id,x=t.x,y=t.y,z=t.z,status=a.status,recognised=seen[id]==true,
+                        vehicle=type(t.vehiclePart)=="string"}
+                end
+            end
+        end
+    end
+    return out
 end
 -- Evidence of a case that has retired. Retirement drops the case's
 -- assignments, so the item is no longer a subject and the menu used to offer
@@ -977,7 +1103,9 @@ local function relocation(api)
             -- of a session (owner, 2026-09-13, at 101 4th St). Same stamp as
             -- first placement now, from one function, so a third creation path
             -- cannot drift the same way.
-            stampEvidence(newItem,doc.title)
+            -- Still a plain item unless the survivor had already recognised
+            -- it (P4-R132).
+            if R.isRecognisedId(id) then stampEvidence(newItem,doc.title) end
             applyWear(newItem,doc)
             writePages(newItem,doc)
             newDestination=destination
@@ -1170,7 +1298,11 @@ local function identity(api)
             -- The category is not saved with an item, so a clue in an area
             -- that streamed out and back lost it while its case was live
             -- (campaign check, 2026-09-15). The scan that finds it restores it.
-            for _,it in ipairs(items) do pcall(function() it:setDisplayCategory(categoryOf(id)) end) end
+            -- Only for a recognised clue: an unrecognised one stays the plain
+            -- item it looks like (P4-R132).
+            if R.isRecognisedId(id) then
+                for _,it in ipairs(items) do pcall(function() it:setDisplayCategory(categoryOf(id)) end) end
+            end
             local want=expected[id] or 1
             if #items>want then checked(api.status(id,"conflict"))
             elseif #items>=1 and api.assignment(id).status~="conflict" then checked(api.status(id,"placed",worldHours())) end
@@ -1292,10 +1424,9 @@ local function restampEvidence(container,depth)
     for i=0,items:size()-1 do
         local item=items:get(i)
         local md=item and item.getModData and item:getModData()
-        if type(md)=="table" and md.cfGeneratedId then
-            -- Old for a retired case's evidence (P4-R118). At game start the
-            -- campaign is not open yet, so this says Evidence and the
-            -- last-seen scan corrects it within ten seconds.
+        -- Recognised clues only (P4-R132); the campaign is open by now, so a
+        -- retired case's evidence is Old at once (P4-R118).
+        if type(md)=="table" and md.cfGeneratedId and R.isRecognisedId(md.cfGeneratedId) then
             pcall(function() item:setDisplayCategory(categoryOf(md.cfGeneratedId)) end)
             n=n+1
         end
@@ -1306,11 +1437,6 @@ local function restampEvidence(container,depth)
 end
 
 Events.OnGameStart.Add(function()
-    pcall(function()
-        local player=getPlayer and getPlayer()
-        local n=player and restampEvidence(player:getInventory(),0) or 0
-        if n>0 then log("re-stamped "..n.." documents as Evidence after loading") end
-    end)
     sessions,scheduler,preparing,wrapper=nil,nil,false,nil
     deferredAt=nil
     -- Forget what we could see last time. A new session has not looked yet,
@@ -1323,6 +1449,12 @@ Events.OnGameStart.Add(function()
         local ok,why=pcall(function() checked(setup()); wrapper=assert(Cases.current(saved)); openAll() end)
         if not ok then scheduler=nil; log("Saved case refused: "..tostring(why)) end
     end
+    -- After the campaign is open, so recognition can be read (P4-R132).
+    pcall(function()
+        local player=getPlayer and getPlayer()
+        local n=player and restampEvidence(player:getInventory(),0) or 0
+        if n>0 then log("re-stamped "..n.." documents as Evidence after loading") end
+    end)
 end)
 R.loaded=true
 return R

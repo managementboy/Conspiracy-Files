@@ -138,13 +138,15 @@ do
     duplicate:getModData().cfGeneratedId=id; duplicate:getModData().cfPhysicalToken=a.physicalToken; f.inventory:AddItem(duplicate)
     f.tick(240)
     assert(f.saved.campaign.canonical.assignments[id].status=="conflict", "duplicate tokens must become conflict")
+    -- Recognised first (P4-R132), so the refusal is the conflict's.
+    assert(f.R.recognise(id,"search"))
     assert(not f.R.inspect(f.items(a.physicalToken)[1]), "conflicted evidence must not be inspected")
 end
 
 -- Known evidence is saved independently of later placement reconciliation.
 do
     local f=newFixture(); f.boot(); local id,a=oneAssignment(f); local item=f.items(a.physicalToken)[1]
-    f.remove(item); f.inventory:AddItem(item); assert(f.R.inspect(item)); assert(#f.R.known()==1)
+    f.remove(item); f.inventory:AddItem(item); assert(f.R.recognise(item,"search")); assert(f.R.inspect(item)); assert(#f.R.known()==1)
     restart(f)
     assert(#f.R.known()==1, "saved positive discovery must survive restart")
 end

@@ -41,6 +41,8 @@ local function eligible(root,id)
     local a=root and root.assignments and root.assignments[id]
     if not a or a.status~="placed" then return nil end
     for _,known in ipairs(root.known or {}) do if known==id then return nil end end
+    -- Only clues nobody has recognised yet (P4-R132).
+    for _,seen in ipairs(root.recognised or {}) do if seen==id then return nil end end
     return a
 end
 local function enabled()

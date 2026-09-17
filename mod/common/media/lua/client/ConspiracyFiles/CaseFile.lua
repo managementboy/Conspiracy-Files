@@ -220,7 +220,13 @@ function F.fileEvidence()
         local item=items:get(i)
         local md=item and item.getModData and item:getModData()
         if type(md)=="table" and md.cfGeneratedId and item~=album then
-            moving[#moving+1]=item
+            -- Only recognised evidence is filed: an unrecognised clue is the
+            -- plain item it looks like, and filing it would give it away
+            -- (P4-R132).
+            local R=ConspiracyFiles.GeneratedRuntime
+            local okR,recognised=true,true
+            if R and R.isRecognised then okR,recognised=pcall(R.isRecognised,item) end
+            if okR and recognised then moving[#moving+1]=item end
         end
     end
     local moved=0

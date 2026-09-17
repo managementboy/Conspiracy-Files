@@ -14,5 +14,5 @@
 -- This module deliberately requires nothing, so anything can read it without
 -- dragging in a dependency chain.
 ConspiracyFiles = ConspiracyFiles or {}
-ConspiracyFiles.VERSION = "DEV-0.41.0-whole-map-addresses"
+ConspiracyFiles.VERSION = "DEV-0.42.0-search-to-find-1"
 return ConspiracyFiles.VERSION
