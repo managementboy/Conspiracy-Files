@@ -188,8 +188,20 @@ play_case() { # play_case CASEID [LIMIT]: find, take and inspect its next clues
             return 1
         fi
         moves=$((moves + 1))
-        findings+=("case ${cid#generated:}: $waiting clue(s) still waiting after $PLAYED played, $dropped dropped (statuses $(field 5 "$r")); moving on for the filler, move $moves")
-        move_on "case ${cid#generated:}, waiting clue, move $moves" || sleep 30
+        # The filler needs the WAITING CLUE'S OWN SITE loaded, not a fresh
+        # neighbourhood: it scans that site's bounds for a free container and
+        # Storage only sees loaded squares. So the survivor goes back to the
+        # site the clue belongs to, which is what a player does when a case
+        # still has something at the warehouse.
+        at="$(ev "return CFCamp.goToWaitingSite([[$cid]])")"
+        if [ "$(field 1 "$at")" = true ]; then
+            findings+=("case ${cid#generated:}: $waiting clue(s) still waiting after $PLAYED played, $dropped dropped (statuses $(field 5 "$r")); standing at $(field 2 "$at")'s own site $(field 3 "$at") at $(field 4 "$at"), move $moves")
+            say "${findings[-1]}"
+            wait_true 60 'CFCamp.settled()' >/dev/null || true
+        else
+            findings+=("case ${cid#generated:}: $waiting waiting, but its site could not be reached ($(field 2 "$at")); moving on instead, move $moves")
+            move_on "case ${cid#generated:}, waiting clue, move $moves" || sleep 30
+        fi
         # Give the filler its own time: it places one clue per attempt.
         local until_t=$(( $(date +%s) + 120 ))
         while [ "$(date +%s)" -lt "$until_t" ]; do

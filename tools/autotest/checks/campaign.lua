@@ -579,3 +579,32 @@ function C.moveToTown()
     p:teleportTo(best.x + 0.5, best.y + 0.5, 0)
     return "true", tostring(here), tostring(bestTown), best.x .. "," .. best.y, string.format("%.0f", bestD)
 end
+
+-- WHERE A WAITING CLUE IS WAITING (P4-R133). The filler scans the deferred
+-- clue's OWN site for a free container, and Storage only ever sees loaded
+-- squares - so walking on to a fresh neighbourhood, which is what brings the
+-- next case, is exactly the wrong way for an instalment: the survivor has to
+-- be at the site the clue belongs to. (Six moves away from it placed nothing,
+-- 20260918T011509.) This teleports into the middle of that site.
+function C.goToWaitingSite(caseId)
+    local prefix = tostring(caseId):gsub(":case$", ":")
+    for _, root in ipairs(roots()) do
+        if root.case and root.assignments then
+            for id, a in pairs(root.assignments) do
+                if id:sub(1, #prefix) == prefix and a.status == "deferred" then
+                    for _, site in ipairs(root.case.locations) do
+                        if site.id == a.locationId then
+                            local b = site.bounds
+                            local x = math.floor((b.x1 + b.x2) / 2)
+                            local y = math.floor((b.y1 + b.y2) / 2)
+                            getPlayer():teleportTo(x + 0.5, y + 0.5, b.z or 0)
+                            return "true", id, site.id, x .. "," .. y, tostring(a.deferredHours)
+                        end
+                    end
+                    return "false", "site " .. tostring(a.locationId) .. " is not in the case"
+                end
+            end
+        end
+    end
+    return "false", "no deferred clue in " .. short(caseId)
+end
