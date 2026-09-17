@@ -102,6 +102,7 @@ function Q.step()
     local store
     for _,clue in ipairs(clues) do
         if not clue.recognised and clue.status=="placed" and not weighed[clue.id]
+            and (Q.debugOnly==nil or Q.debugOnly==clue.id)
             and Rules.near(px,py,pz,clue.x,clue.y,clue.z,Rules.RADIUS) then
             local square=getCell():getGridSquare(clue.x,clue.y,clue.z)
             local seen,why=false,"not loaded"
@@ -154,6 +155,9 @@ function Q.state()
     return {said=Q.counters.said,suppressed=Q.counters.suppressed,first=store and store.first==true,
         places=places,last=Q.last,lastAt=lastAt}
 end
+-- For checks: weigh only this clue (a document id), so a walk past other clues
+-- of the case cannot use up the cue or its cooldown. Never set by the mod.
+Q.debugOnly=nil
 -- For checks: forget this session's approach memory and cooldown (never the save).
 function Q.debugReset() weighed={}; unseen={}; lastAt=nil; nextPoll=0 end
 

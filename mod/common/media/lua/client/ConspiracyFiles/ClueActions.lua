@@ -18,7 +18,7 @@ if not ISBaseTimedAction then pcall(require,"TimedActions/ISBaseTimedAction") en
 -- Durations in the game's timed-action units (ISReadABook reads a page in
 -- these). Measured on Linux at normal speed: see SEARCH_TO_FIND.md, stage 2.
 A.LOOK_TIME=150
-A.INSPECT_TIME=120
+A.INSPECT_TIME=100
 -- Checks only (stage 3): complete at once instead of queueing, so a check that
 -- is not about the progress bar need not wait for it. Debug builds only.
 A.instant=false
@@ -38,7 +38,9 @@ local function readType(item)
     return ok and kind or "book"
 end
 
+local function stamp() return getTimestampMs and getTimestampMs() or 0 end
 local function begin(self,label,holdItem)
+    self.startedAt=stamp()
     pcall(function() self.item:setJobType(label) end)
     pcall(function() self.item:setJobDelta(0.0) end)
     pcall(function()
@@ -69,7 +71,7 @@ if ISBaseTimedAction then
         local R=runtime()
         local ok,done,why=pcall(R.recognise,self.item,"look")
         log("look it over: "..tostring(ok and done)..(why and (" "..tostring(why)) or ""))
-        A.lastLook={ok=ok and done==true,at=getTimestampMs and getTimestampMs() or 0}
+        A.lastLook={ok=ok and done==true,ms=stamp()-(self.startedAt or stamp())}
         ISBaseTimedAction.perform(self)
     end
     function Look:complete() return true end
@@ -103,7 +105,7 @@ if ISBaseTimedAction then
         local R=runtime()
         local ok,done=pcall(R.inspect,self.item,self.inPlace)
         log("inspect: "..tostring(ok and done)..(self.inPlace and " in place" or ""))
-        A.lastInspect={ok=ok and done==true,at=getTimestampMs and getTimestampMs() or 0}
+        A.lastInspect={ok=ok and done==true,ms=stamp()-(self.startedAt or stamp())}
         ISBaseTimedAction.perform(self)
     end
     function Inspect:complete() return true end
