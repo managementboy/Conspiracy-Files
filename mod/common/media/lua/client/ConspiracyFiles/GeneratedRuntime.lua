@@ -1219,10 +1219,16 @@ function R.devLocations()
             end
             for id,a in pairs(snap.assignments) do
                 local t=a.target
+                local where=addressOf(a.locationId or siteOf[id]) or "address unknown"
                 if t then
-                    local where=addressOf(a.locationId or siteOf[id]) or "address unknown"
                     out[#out+1]=string.format("%s  %s  %s,%s floor %s  [%s]",
                         tostring(id),where,tostring(t.x),tostring(t.y),tostring(t.z),tostring(a.status))
+                else
+                    -- A clue waiting for a container, or dropped (P4-R133):
+                    -- there is no drawer to send the owner to, only the site
+                    -- it is meant for and how long it has waited.
+                    out[#out+1]=string.format("%s  %s  waiting since hour %s  [%s]",
+                        tostring(id),where,tostring(a.deferredHours),tostring(a.status))
                 end
             end
         end
@@ -1445,9 +1451,12 @@ end
 local function filler(api)
     local id,site,scan,target
     return function()
-        local root=api.snapshot()
         local hours=worldHours()
+        -- The whole case is read ONCE per attempt, not once per step: a
+        -- snapshot copies the case, and the steps after this one wait for the
+        -- survivor to move or for the scan to reach the next square.
         if not id then
+            local root=api.snapshot()
             -- A clue that has waited three in-game days is dropped, and that
             -- is the whole of this attempt: the case then completes on the
             -- clues it got rather than squatting an active slot.
@@ -1461,16 +1470,16 @@ local function filler(api)
             local waiting=Session.deferredIds(root)
             if #waiting==0 then return true end
             id=waiting[1]
-        end
-        local a=root.assignments[id]
-        if not a or a.status~="deferred" then return true end
-        if not site then
-            for _,s in ipairs(root.case.locations) do if s.id==a.locationId then site=s end end
+            for _,s in ipairs(root.case.locations) do
+                if s.id==root.assignments[id].locationId then site=s end
+            end
             if not site then return true end
             local taken=usedPhysicalKeys()
             scan=boundsScan(site,function(t) target=t end,
                 function(candidate) return not taken[Session.physicalKey(candidate)] end)
         end
+        local a=api.assignment(id)
+        if not a or a.status~="deferred" then return true end
         if not target then
             if scan() then
                 -- Nothing loaded and free at that site yet. Debug, not info:
