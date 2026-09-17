@@ -376,3 +376,47 @@ the nearest free square and try the Clues focus (05e98c5), which is the right
 answer for the check; the pin on the part is the right answer for the mod. A
 real game still has to show a clue in a car spotted and recognised - nothing
 below the icon layer has been proven for a car yet.
+
+## What the game answered, overnight 2026-09-17/18 (`checks/clue_field.sh`)
+
+Four things this design had shipped on unit tests or on a reading of the game's
+Lua. All four were put to the running game (Linux, Intel GPU); the check is
+`tools/autotest/checks/clue_field.sh`, evidence
+`docs/management/evidence/linux-autotest/20260917T21{4331,5304,5847}-clue-field.txt`
+and `20260918T001740-clue-field.txt` (PASS).
+
+**Interruption is real.** Walking cut "Look it over" at 33-34% of the bar and
+the clue stayed unrecognised (`ClueActions.lastLook` nil); aiming cut it at 32%;
+walking cut Inspect at 48% and nothing reached the record. Left alone, both
+completed (Inspect 2.1 s). The survivor walked and aimed from the real keyboard
+and mouse - `pz.sh hold w 2` and `pz.sh hold mouse3 2` - and the game itself
+reported them moving and aiming, so this is `stopOnWalk`/`stopOnAim` doing the
+work, not a Lua guess.
+
+**Recognition survives a save and a reload.** A "Receipt" looked over became
+"Establishment list / HK-937 / Evidence"; after `stop --save` and
+`start --continue` it was still that, still Evidence, still recognised by the
+record, still offered Inspect (not greyed), and Inspect then noted it in 2.1 s.
+Repeated on three runs with different clues.
+
+**A clue in a car, once the car moves.** A case put a clue in a parked van's
+glove box; the van was taken out of the world, put down ten tiles away and
+given its physics back (`removeFromWorld`, `setPhysicsActive(false)`,
+`setPosition`, `setCurrentSquareFromPosition`, `addToWorld`, `createPhysics` -
+all accepted on Build 42.20). The clue's icon followed to the **part's own
+square**: 0.00 tiles off it, 1.00 from the car's middle, and it was spotted
+there with **no search focus at all**, at once. The run before the part-pinning
+fix stood 3.54 tiles from the car's middle and never spotted it in 156 s, which
+is what that fix was for.
+
+**Darkness, and what a torch does.** At 01:00 in an office the clue's square
+read a light penalty of 0.07 - below the game's own cutoff (50) - and standing
+2.0 tiles away in the same room it was NOT spotted in 80 s of searching, with
+the spot timer stuck at 0/10000. With a lit heavy-duty flashlight in hand at
+the same distance the square read 1.00, "too dark" cleared, and it was
+recognised at once. The game's rule underneath, read in `ISBaseIcon`, is worth
+knowing: `getCanSeeThisUpdate` returns true for `isOnSquare` BEFORE it tests the
+light, and `doVisionCheck` caps an unlit spot at `darkVisionRadius` 1.5 tiles.
+So an unlit clue is not "unfindable" - it is findable only by standing on it,
+or by bringing a light. A check that teleports onto the clue's square, as the
+first run did, spots it in 3 s and proves nothing about darkness.
