@@ -42,7 +42,7 @@ local EVENTS={
     start=true,ready=true,stop=true,error=true,skip=true,
     -- cases and evidence
     case=true,placed=true,relocated=true,conflict=true,found=true,inspected=true,
-    retired=true,stale=true,
+    retired=true,stale=true,recognised=true,
     -- what the player is told
     voice=true,hint=true,marker=true,note=true,
     -- people, keys, places
