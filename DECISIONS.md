@@ -1028,8 +1028,27 @@ Decided:
    room. Not worth the guarantee.
 
 Design: docs/design/CASE_PACING.md. Built after the P4-R111 archive work.
-Later candidate, not decided: clues carried in on bodies, zombie pockets,
-parked cars and mailboxes.
+
+**P4-R134 — clues may arrive on things that move.** Owner, 2026-09-17,
+approving the whole queue ("implement 1 to 11") including the candidate raised
+under P4-R133. A clue may be carried by a fresh corpse, a wandering zombie, a
+car part or a mailbox, not only by a fixed container. Fixed containers run out
+near a settled player; carriers that move do not, and a note in a dead man's
+jacket at the fence is a better find than the twelfth cupboard.
+
+Two carriers already exist in the code: CasePerson binds a case's person to a
+nearby zombie or corpse and puts an item in its inventory, and a clue in a car
+is already found by its mark wherever the car has been driven. Mailboxes are
+the only new container kind.
+
+Rules kept: never two clues on one carrier (the register keys on the carrier's
+mark); the mod never spawns the carrier, only uses what the world put there;
+searching is still how a clue is found (P4-R132), with the icon following a
+carrier that moves; a body holding a clue looks like any other body until it is
+searched; at most one mobile clue per case by default; a carrier gone for three
+in-game days is dropped like any other unplaceable clue (P4-R133).
+
+Design: docs/design/CLUES_ON_THE_MOVE.md.
 
 **P4-R106 — how a car's containers are reached.** Owner, 2026-09-14: "The globe
 box only opens when sitting in the front of the car", and a truck bed or trunk
