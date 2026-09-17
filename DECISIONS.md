@@ -1071,6 +1071,18 @@ in-game days is dropped like any other unplaceable clue (P4-R133).
 
 Design: docs/design/CLUES_ON_THE_MOVE.md.
 
+*Built 2026-09-17 (the design's build order 1-5; the real-game checks of step 6
+are separate). The carrier target shape, corpse and zombie carriers, mailboxes
+as a container kind, the deliberate car part, one mobile clue per case
+(`Session.MOBILE_PER_CASE`), the clue icon following a carrier, and a carrier
+gone for three in-game days dropped like any other unplaceable clue. Seven
+things the code settled are recorded at the foot of the design doc; none needed
+an owner decision. Two engine facts are still UNVERIFIED and are named in the
+design doc and in the code: the mailbox's own container type string on Build
+42.20 (`Generated/Storage.MAILBOX`, listed in `Generated/Storage.UNVERIFIED`)
+and `IsoGridSquare:getDeadBodys()`. Both fail closed - no candidate at all, the
+same state as before this existed. Rules change, so a new game (P4-R77).*
+
 **P4-R106 — how a car's containers are reached.** Owner, 2026-09-14: "The globe
 box only opens when sitting in the front of the car", and a truck bed or trunk
 is reached from outside, "only if they are open". Placement may still put a

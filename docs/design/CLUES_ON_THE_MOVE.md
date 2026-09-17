@@ -1,7 +1,9 @@
 # Clues on the move (P4-R134)
 
-- **Status:** Design, 2026-09-17. Not built. Owner approved the shape ("implement
-  1 to 11"), after it was raised as the later candidate in P4-R133.
+- **Status:** Built 2026-09-17 (build order 1-5; the real-game checks of step 6
+  are separate). Owner approved the shape ("implement 1 to 11"), after it was
+  raised as the later candidate in P4-R133. What the code forced is at the
+  bottom of this file, under "What the build settled".
 - **Game:** Build 42.20.
 - **Related decisions:** P4-R67 (each clue in a different container), P4-R125
   (a refused case waits for the survivor to move on), P4-R133 (instalments and
@@ -103,3 +105,72 @@ Rules that stay:
   budget already carries.
 - **Determinism:** the case's content still comes from its seed. Only where a
   clue lands may differ.
+
+## What the build settled
+
+Seven things the code decided that the design above left open. None of them
+needs an owner decision; all of them are in the tests.
+
+1. **A carrier is not checked against a site's `containerTypes`, and a car part
+   is.** That list records the fixed storage the scan observed inside the
+   building, and a body in the yard will never be in it - so requiring it would
+   have made a carrier clue unplaceable in principle. A carrier target is
+   validated by its kind, its mark and the site's footprint instead
+   (`Session.CARRIER_RADIUS`, twelve tiles, the same as a car's).
+
+2. **The mark names the carrier, not the clue.** A car part carries the
+   assignment's own physical token; if a carrier did the same, two clues could
+   each stamp their own mark on one body and the register would see two
+   containers. So the mark is minted per carrier (`Carriers.newMark`) and
+   `Session.physicalKey` keys a carrier on that mark **alone** - not on a
+   square, because a zombie stays on none and two bodies may lie on one.
+
+3. **The carrier is claimed before the clue is written.** The mark goes onto the
+   body first and the ordinary placement job then resolves it, so between
+   choosing and writing nothing else can take the same body.
+
+4. **The filler is what reaches for a carrier, not only the generator.** Fixed
+   containers running out near a settled player is the whole of P4-R133's
+   fault, and that shortage is felt by the filler. So when no free container is
+   loaded at a waiting clue's own site, the filler looks for a carrier there -
+   which is where this decision actually pays. At creation the generator
+   *prefers* a mobile candidate for the one clue that may be mobile (the case's
+   last document, so the opening clue never drives off); after that any waiting
+   clue may take a carrier while the case has none.
+
+5. **"Gone" needs an hour of its own.** P4-R133's expiry is measured from
+   `deferredHours`, which a placed clue does not have. A placed clue on a
+   carrier gets `missingHours` instead - the in-game hour we FIRST could not
+   find the body - and is dropped at the same 72 hours. It is only ever set
+   where the survivor was close enough to have looked (`Carriers.FIND_RADIUS`),
+   and cleared the moment the carrier turns up, because a zombie in an unloaded
+   cell is not a zombie that is gone. A dropped carrier clue ends up in exactly
+   the shape of a clue that never arrived: no target, its site remembered, no
+   row in the finished record, and nothing anywhere saying it is lost
+   (P4-R104).
+
+6. **A clue on a carrier does not relocate.** Relocation gives a clue one new
+   home when nobody came looking; a body or a zombie has already moved of its
+   own accord, and taking the note out of a dead man's jacket to put it in a
+   drawer would undo the find this whole decision exists for. Expiry is its
+   answer to going stale.
+
+7. **The case's own person is never a carrier.** `CasePerson` re-dresses her
+   after a reload and re-binds her to a new body when hers is lost; two systems
+   writing into one body's inventory is a fault waiting to happen. The carrier
+   code reuses CasePerson's *pattern* - the bounded zombie-list scan, the
+   ModData mark, the inventory path, the keyed read of P4-R124 - in its own
+   module (`shared/ConspiracyFiles/Carriers.lua`) rather than calling into a
+   system whose marks mean something else.
+
+Also: a clue's Search Mode icon is now picked up and put down only once its
+clue has moved more than `ClueSearchRules.MOVE_TILES` (two tiles). Re-adding an
+icon restarts the game's own spot timer, so at zero tolerance a clue on a
+walking zombie could never have been spotted at all.
+
+**Still unverified in a real game** (build order 6): the mailbox's own container
+type string on Build 42.20, named once as `Generated/Storage.MAILBOX` and listed
+in `Generated/Storage.UNVERIFIED`; and `IsoGridSquare:getDeadBodys()`, which is
+how a corpse carrier is found. Both fail closed - a wrong string or a missing
+method means no candidate at all, which is exactly the state before this
+existed, and neither can put a clue somewhere wrong.
