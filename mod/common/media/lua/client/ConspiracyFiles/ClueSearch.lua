@@ -89,6 +89,36 @@ function C.seesSpot(character,square)
     return false,"not in view"
 end
 
+-- WHERE IN THE CAR. The game locates a part by its area:
+-- vehicle:getAreaCenter(part:getArea()) is the point a survivor walks to in
+-- order to open it (the game's own ISVehiclePartMenu.lua:28), and the square
+-- under it is where the glovebox, the boot or the seat actually is. The middle
+-- of the car is not.
+--
+-- That difference decides whether a clue in a car can be found at all. The
+-- game's spot timer only fills while the survivor is within the icon's
+-- viewDistance (ISBaseIcon:updateSpotTimer), and at Foraging 0 in daylight
+-- viewDistance is exactly minVisionRadius, 3.0 tiles: doVisionCheck multiplies
+-- the radius down by the level-0 difficulty penalty and the item-size penalty
+-- and then clamps it back up to minRadius (ISBaseIcon.lua:373,
+-- forageSystem.lua:112). A car's body blocks the squares it stands on, so the
+-- survivor can only stand outside it - and the middle of a car is more than 3
+-- tiles from any square they can stand on at its front or its back. A clue in
+-- a pickup's bed, pinned at the car's centre, can never be spotted from the
+-- tailgate; a clue 3.54 tiles from where the survivor could stand was not
+-- spotted in 156 s of searching in a real game
+-- (20260917T215847-clue-field.txt). Pinned on the part, the pin is where the
+-- clue is and the survivor stands beside it.
+local function partSquare(vehiclePart)
+    local area=vehiclePart.getArea and vehiclePart:getArea()
+    local vehicle=vehiclePart.getVehicle and vehiclePart:getVehicle()
+    if not (area and vehicle and vehicle.getAreaCenter) then return nil end
+    local centre=vehicle:getAreaCenter(area)
+    local cell=centre and getCell and getCell()
+    if not cell then return nil end
+    return cell:getGridSquare(centre:getX(),centre:getY(),vehicle:getZ())
+end
+
 -- Where a clue in a car is now. A car is found by the mark on its part, near
 -- the survivor, so a driven car takes its clue's icon (and cue) with it. Only a
 -- car the game has loaded can be found; otherwise nil and the placement square
@@ -106,7 +136,10 @@ function C.vehicleSpot(clue,player)
     local ok,container=pcall(World.resolveVehicle,here,clue.token,Rules.REMOVE_RADIUS)
     if ok and container then
         pcall(function()
-            local square=container:getVehiclePart():getVehicle():getSquare()
+            local vehiclePart=container:getVehiclePart()
+            -- The part's own square, and the car's only when the part has no
+            -- area to be at (engine parts, or a car script without one).
+            local square=partSquare(vehiclePart) or vehiclePart:getVehicle():getSquare()
             x,y,z=square:getX(),square:getY(),square:getZ()
         end)
     end

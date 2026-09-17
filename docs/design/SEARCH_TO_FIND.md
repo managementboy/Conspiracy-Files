@@ -335,3 +335,44 @@ played the same way; 0 mod errors in every session. Every failure follows from
 P4-R125/P4-R67 waiting for a survivor who moves, and the check stands still
 (as in the runs of 98c3e42). Not chased. The boot check passed on the final
 build (20260917T170357-boot.txt, 105 of 105 files, 0 errors).
+
+## The pin for a clue in a car goes on the part (2026-09-17, after stage 3)
+
+**The bug.** `ClueSearch.vehicleSpot` pinned the icon at
+`part:getVehicle():getSquare()` - the middle of the car. The game's spot timer
+only fills while the survivor is within the icon's `viewDistance`
+(`ISBaseIcon:updateSpotTimer`), and at Foraging 0 in daylight `viewDistance` is
+exactly `forageSystem.minVisionRadius`, 3.0 tiles: `doVisionCheck` multiplies
+the radius down by the level-0 difficulty penalty (0.1) and the item-size
+penalty (0.5) and then clamps it back up to `minRadius`. A car's body blocks the
+squares it stands on, so the middle of a car is further from any square the
+survivor can stand on at its front or its back than the game will ever reach -
+a clue in a pickup's bed could not be spotted from the tailgate at all.
+
+**The evidence** (`20260917T215847-clue-field.txt`): the icon existed and
+followed the moved car, the sight test passed, the light was clear
+(penalty 1.00, too dark false), and the spot timer stayed at 0 of 2500 through
+156 s of searching, 3.54 tiles away. Every number in that run follows from the
+game's own code: `spotTimerMax` 2500 means `updateSpotTimer` was running, so
+the icon was being *seen*; 3.54 > 3.0 means the timer could only ever decay.
+The darkness stage's `0/10000` in the same run is the same reading in reverse -
+`spotTimerMax` untouched from `ISBaseIcon:new`, because a spot the game calls
+too dark never reaches `updateSpotTimer` at all.
+
+**The fix.** `vehicleSpot` now asks the game where the part is, the way the
+game's own UI does (`ISVehiclePartMenu.lua:28`):
+`vehicle:getAreaCenter(part:getArea())`, then the square under that point. A
+glovebox sits at the front passenger seat, a boot at the tailgate, a seat at
+its door - all squares the survivor can stand beside. A part with no area (an
+engine part, or a car script without one) keeps the car's own square, so a clue
+is never pinned nowhere. `test/clue_search_rules.lua` pins it: the bed of a
+truck two tiles behind its middle is inside the 3.0-tile reach from the
+tailgate and the middle is not, and the icon goes up on the bed's square.
+
+**Half of that failing run was the check, not the mod**, and it is worth saying
+plainly: at Foraging 0 the reach is 3.0 tiles, and the harness searched from
+3.54. `tools/autotest/checks/clue_field.lua` has since been changed to stand on
+the nearest free square and try the Clues focus (05e98c5), which is the right
+answer for the check; the pin on the part is the right answer for the mod. A
+real game still has to show a clue in a car spotted and recognised - nothing
+below the icon layer has been proven for a car yet.

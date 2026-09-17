@@ -197,6 +197,76 @@ across.visible=true
 across.blocked=true
 assert(not seeIcon:getCanSeeThisUpdate(),"not when that side is blocked from the survivor")
 
+-- ---------------------------------------------------------------------------
+-- A clue in a car is pinned where the clue IS: the part, not the middle of the
+-- car. The game's spot timer only fills while the survivor is inside the
+-- icon's viewDistance (ISBaseIcon:updateSpotTimer), and at Foraging 0 in
+-- daylight that is exactly minVisionRadius, 3.0 tiles - doVisionCheck clamps
+-- the radius back up to it. A car's body blocks the squares it stands on, so
+-- the middle of a car is further from any square the survivor can stand on at
+-- its front or its back than the game will ever reach: a clue 3.54 tiles away
+-- was not spotted in 156 s of real searching, with the icon on the car's
+-- square, the sight test passing and the timer stuck at 0 of 2500
+-- (20260917T215847-clue-field.txt).
+local REACH=3.0     -- forageSystem.minVisionRadius: the reach at Foraging 0
+local function gridSquare(x,y,z)
+    local sq={}
+    function sq:getX() return x end
+    function sq:getY() return y end
+    function sq:getZ() return z end
+    return sq
+end
+local cell={}
+function cell:getGridSquare(x,y,z) return gridSquare(math.floor(x),math.floor(y),math.floor(z)) end
+getCell=function() return cell end
+-- A pickup at 10767,10125 whose bed is two tiles behind its middle, as the
+-- game's own area geometry puts it (vehicle:getAreaCenter(part:getArea())).
+local bedCentre={}
+function bedCentre:getX() return 10767.5 end
+function bedCentre:getY() return 10123.4 end
+local truck={}
+function truck:getSquare() return gridSquare(10767,10125,0) end
+function truck:getZ() return 0 end
+function truck:getAreaCenter(area) if area=="TruckBed" then return bedCentre end end
+local bedPart={area="TruckBed"}
+function bedPart:getArea() return self.area end
+function bedPart:getVehicle() return truck end
+local bedContainer={}
+function bedContainer:getVehiclePart() return bedPart end
+package.loaded["ConspiracyFiles/WorldAccess"]={resolveVehicle=function() return bedContainer end}
+
+local truckClue={id="v-bed",x=10767,y=10125,z=0,status="placed",recognised=false,
+    vehicle=true,token="cf-v-bed",part="TruckBed"}
+local sx,sy,sz=C.vehicleSpot(truckClue,player)
+assert(sx==10767 and sy==10123 and sz==0,
+    "the pin belongs on the bed of the truck, not in the middle of it: "..tostring(sx)..","..tostring(sy))
+local function distance(ax,ay,bx,by) local dx,dy=ax-bx,ay-by; return math.sqrt(dx*dx+dy*dy) end
+assert(distance(10767.5,10121.5,sx+0.5,sy+0.5)<=REACH,
+    "the survivor at the tailgate is inside the game's reach of the bed")
+assert(distance(10767.5,10121.5,10767.5,10125.5)>REACH,
+    "and outside it of the car's middle, which is why the middle of a car is the wrong pin")
+-- A part with no area to be at (an engine part, or a car script without one)
+-- keeps the car's own square: a clue is never pinned nowhere.
+bedPart.area=nil
+clock=clock+C.VEHICLE_SPOT_MS
+sx,sy,sz=C.vehicleSpot(truckClue,player)
+assert(sx==10767 and sy==10125 and sz==0,"no area: the car's own square stands")
+bedPart.area="TruckBed"
+-- A car the game cannot find moves nothing, and the placement square stands.
+package.loaded["ConspiracyFiles/WorldAccess"]={resolveVehicle=function() return nil,"vehicle-not-found" end}
+clock=clock+C.VEHICLE_SPOT_MS
+assert(C.vehicleSpot(truckClue,player)==nil,"a car that is not there moves nothing")
+-- End to end: the icon goes up on the part's square.
+package.loaded["ConspiracyFiles/WorldAccess"]={resolveVehicle=function() return bedContainer end}
+clock=clock+C.VEHICLE_SPOT_MS
+clues[1],clues[2]=truckClue,nil
+px,py=10767,10121
+ISSearchManager.players={[player]=manager}
+assert(C.sync()==1,"the clue in the car gets an icon")
+local bedIcon=manager.clueIcons["cf-clue:v-bed"]
+assert(bedIcon and bedIcon.xCoord==10767.5 and bedIcon.yCoord==10123.5,
+    "and it is centred on the bed's square, within reach of the tailgate")
+
 -- The check helper goes through the runtime, debug only.
 assert(C.debugRecognise("d9")==true and recognisedCalls[#recognisedCalls]=="d9:debug")
 getDebug=function() return false end
