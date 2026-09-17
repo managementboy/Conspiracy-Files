@@ -74,7 +74,7 @@ running two at once is safe, the second waits.
 | `pdagame.sh` | the organiser is issued at spawn; the device opens by being put in the MAIN HAND; every program opened by TAPPING ITS ICON; a real save, quit and `--continue` reload; the item removed from the inventory with the screen up |
 | `pdalife.sh` | hundreds of open/close cycles, screen churn, every size combination, deliberate abuse — all against the game's own UI manager and Events tables |
 | `pdaperf.sh` | draw-call counts and frame times from the real renderer |
-| `drop_note.sh` | real case clues, some carried and one left in its drawer, dropped together on the open organiser: all noted, none moved, an ordinary item ignored, a second drop notes nothing; names on the clues reach NAMES |
+| `drop_note.sh` | real case clues, some carried (each looked over first) and one left in its drawer (recognised by Search Mode), dropped together on the open organiser: all noted, none moved, an ordinary item ignored, a second drop notes nothing; names on the clues reach NAMES |
 | `hardware.sh` | the battery, the lamp, auto-off, the dead-cell restore, the journal replay |
 | `knox.sh` | Knox.OS driven by taps and key presses |
 | `addresses.sh` | whole-map house numbers (AD-10): the shipped book is ready at game start with no case, nothing is saved, every shipped building exists live with the same footprint, sample addresses per town, load time. `address_export.sh NAME` (not in the suite) re-exports the building list the book is built from |
@@ -159,6 +159,20 @@ up; if a check ever hangs, run:
 ```bash
 fuser -v ~/Zomboid/.cf-autotest.lock
 ```
+
+**A clue is a plain item until it is recognised** (P4-R132). Since
+DEV-0.42.0-search-to-find-2 a clue offers no Inspect until it has been spotted
+in Search Mode or looked over, and both "Look it over" and Inspect are timed
+actions: choosing the option only queues it. A check that takes a clue and
+inspects it straight away fails at Inspect. Use `note_carried` from `lib.sh`
+(`inspect_doc` does): it chooses "Look it over" from the real menu, waits for
+`CFLoop.recognised()`, then Inspect, and waits for `CFLoop.inspected()` - about
+6 s a clue. The name a clue is found under is the game's plain name; read
+`CFLoop.name()` after recognition for its title. A clue left lying is
+recognised by `CFLoop.searchOn()` (Search Mode, facing it), with
+`CFLoop.debugRecognise()` only where the room is too dark to spot, reported as a
+finding. `ConspiracyFiles.ClueActions.instant` exists for a check whose time
+budget cannot take the wait; no check uses it today.
 
 **Empty strings are not numbers.** `[ "$n" -lt 2000 ]` and `$(( ))` both blow
 up on an empty or non-numeric value. `is_number` from `lib.sh`.

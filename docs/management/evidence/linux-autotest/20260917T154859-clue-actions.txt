@@ -1,0 +1,19 @@
+Linux clue actions check 20260917T154859: PASS
+source: 1462c4a
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+FINDING: mod version DEV-0.42.0-search-to-find-3; action times (look, inspect): 150 100
+FINDING: clues: generated:1066848282:document-1:placed generated:1066848282:document-2:placed generated:1066848282:document-3:placed generated:1066848282:document-4:placed generated:1066848282:document-5:placed generated:1066848282:document-6:placed
+FINDING: game running: paused/speed=false 1
+FINDING: cue before the walk (said, suppressed, first given, places, last line, last doc): 1 0 true 1 Hm? I should have a proper look around here. generated:1066848282:document-4
+FINDING: after the walk (walked=yes): 2 2 true 2 ...again? generated:1066848282:document-1
+FINDING: a cue was already given before the walk; this one said: ...again?
+FINDING: the first cue of this save: "cue said 'Hm? I should have a proper look around here.' at 10836:10146:0:2:0 doc=generated:1066848282:document-4 light=1.00 weather=1.00 bubble=true sound=true"
+FINDING: back at the same place: 2 3 true 2 ...again? generated:1066848282:document-1
+FINDING: cue lines in the log: said=2; last suppression: "cue suppressed at 10840:10148:0:2:0 doc=generated:1066848282:document-1: place already cued (light=0.62 weather=1.00)"
+FINDING: before: Resignation Letter Junk
+FINDING: menu on the carried unrecognised clue: Look it over
+FINDING: look it over: queue busy on 8 polls (last progress 0.96, progress bar forced=true), action ran (ok, ms) true 3148, seen recognised 3596 ms after choosing; item now: Employment record / RC-920 Evidence true false
+FINDING: menu on the recognised clue: Inspect Investigation Evidence
+FINDING: inspect: queue busy on 5 polls, action ran (ok, ms) true 2124, seen noted 2397 ms after choosing; item now: Employment record / RC-920 Evidence true true
+FINDING: voice while noting: 'Noted' lines=0, discovery hook said nothing=1, other voice lines said=0 ()
+errors inside the mod: 0

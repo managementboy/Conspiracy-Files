@@ -1,0 +1,20 @@
+Linux clue search check 20260917T155112: PASS
+source: 1462c4a
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+FINDING: focus: defined=true text='Clues' offered=true registered=listed; loot zones=17 items=0 picked=0 rolls=0 chanceToCreateIcon=0 focusChanceMax=0
+FINDING: clues: generated:119233686:document-1:placed generated:119233686:document-2:placed generated:119233686:document-3:placed generated:119233686:document-4:placed generated:119233686:document-5:placed
+FINDING: game running: paused=false 1
+FINDING: forage count taken outdoors at 10835,10145
+FINDING: forage icons, no focus: total=11 active=0 world=0 stash=0 clue icons=2 clues-category=0 [Clothing=1,CraftingMaterials=1,Insects=2,Junk=1,JunkWeapons=2,Stones=3,Trash=1]
+FINDING: forage icons, Clues focus: total=11 active=0 world=0 stash=0 clue icons=2 clues-category=0 [Clothing=1,CraftingMaterials=1,Insects=2,Junk=1,JunkWeapons=2,Stones=3,Trash=1]
+FINDING: clue 1 before: Note|Junk
+FINDING: clue 1 (None): spotted and recognised after 3.8 s (limit 120 s)
+FINDING: clue 1 icon after spotting: true true true true 700/2500 3.00 0.70 true clueObject at=10841,10148 base=true ours=true canSee=true blocked=false light=1.00 dark=1 running=false south=true/false/false/false east=true/false/false/true
+FINDING: clue 1 after: Maintenance callout / WB-932|Evidence
+FINDING: clue 1 before: Receipt|Junk
+FINDING: clue 1: could not stand on an open side of it; spotting from where the game put the survivor
+FINDING: clue 1 (Clues): spotted and recognised after 3.0 s (limit 120 s)
+FINDING: clue 1 icon after spotting: true true true true 0/2500 4.50 0.71 true clueObject at=10836,10113 base=true ours=true canSee=true blocked=false light=1.00 dark=1 running=false west=true/true/false/false
+FINDING: clue 1 after: Floor plan copy / WB-932|Evidence
+FINDING: counters (icons added, dropped, spots, recognitions, search mode re-enabled): 9 0 4 4 0
+errors inside the mod: 0

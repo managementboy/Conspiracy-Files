@@ -1,0 +1,12 @@
+Linux mutation proof 20260917T152343
+worktree: /home/elkin/cf-wp345 at 1462c4a Search to find, stage 3: drop_note, organiser, reload, death, faults, perf PASS; prove.py entries for clue_search and clue_actions
+
+baseline clue_actions: PASS
+baseline clue_search: PASS
+
+CAUGHT spot-recognises (clue_search): FAIL: clue 1 (None): not spotted within 120 s; last icon state: true true true true 0/2500 3.00 0.70 true clueObject at=10841,10148 base=true ours=true canSee=true blocked=false light=1.00 dark=1 running=false south=true/false/false/false east=true/false/false/true; false false mutation: spotting does not recognise | FAIL: clue 1 (Clues): not spotted within 120 s; last icon state: true true true true 0/2500 4.50 0.70 true clueObject at=10841,10148 base=true ours=true canSee=true blocked=false light=1.00 dark=1 running=false south=true/false/false/false east=true/false/false/true; false false mutation: spotting does not recognise | clue-search: FAIL: clue 1 (None): not spotted within 120 s; last icon state: true true true true 0/2500 3.00 0.70 true clueObject at=10841,10148 base=true ours=true canSee=true blocked=false light=1.00 dark=1 running=false south=true/false/false/false east=true/false/false/true; false false mutation: spotting does not recognise
+CAUGHT look-recognises (clue_actions): FAIL: not recognised after Look it over | FAIL: not categorised Evidence after Look it over: Junk | FAIL: the item kept its plain name after Look it over
+CAUGHT cue-once-per-place (clue_actions): FAIL: a second cue at the same place | FAIL: the second approach was not weighed (no suppression logged) | clue-actions: FAIL: a second cue at the same place
+
+caught 3 of 3
+worktree clean afterwards: yes
