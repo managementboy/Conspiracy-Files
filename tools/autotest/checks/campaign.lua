@@ -11,6 +11,13 @@ CFCamp = CFCamp or {}
 local C = CFCamp
 local R = ConspiracyFiles.GeneratedRuntime
 local Cases = require("ConspiracyFiles/Generated/SuccessiveCases")
+-- A FINISHED case is one the mod calls retired, which since P4-R111 includes a
+-- STUB: the fifth finished case archives the first, and a stub has no `rows`
+-- array at all. Counting by `rows` made the finished count go DOWN when a case
+-- was archived, so wait_finished waited for a number that could never come
+-- again and the archive stage reported "did not finish" twice
+-- (20260918T005315). Ask RetiredCase, as the mod does.
+local Retired = require("ConspiracyFiles/Generated/RetiredCase")
 
 local function roots()
     local store = ModData.get("ConspiracyFiles.Generated.G2")
@@ -24,7 +31,7 @@ local function short(id) return (tostring(id):gsub("^generated:", ""):gsub(":cas
 function C.cases()
     local out, retired = {}, 0
     for i, root in ipairs(roots()) do
-        local done = type(root.rows) == "table"
+        local done = Retired.isRetired(root)
         if done then retired = retired + 1 end
         out[#out + 1] = i .. ":" .. short(caseIdOf(root)) .. ":" .. (done and "retired" or "live")
     end
@@ -456,14 +463,13 @@ end
 -- each still offers the reading surface, and whether a stubbed case still
 -- offers its questions.
 function C.archive()
-    local Retired = require("ConspiracyFiles/Generated/RetiredCase")
     local full, stubs, rows, stubbedWithQuestions, ids = 0, 0, 0, 0, {}
     for i, root in ipairs(roots()) do
-        if type(root.rows) == "table" then
-            local isStub = Retired.isStub and Retired.isStub(root) or (root.stub == true)
+        if Retired.isRetired(root) then
+            local isStub = Retired.isStub(root)
             if isStub then stubs = stubs + 1 else full = full + 1 end
-            rows = rows + #root.rows
-            ids[#ids + 1] = i .. ":" .. short(caseIdOf(root)) .. (isStub and ":stub" or ":full") .. ":" .. #root.rows
+            rows = rows + #(root.rows or {})
+            ids[#ids + 1] = i .. ":" .. short(caseIdOf(root)) .. (isStub and ":stub" or ":full") .. ":" .. #(root.rows or {})
             if isStub and root.offered then stubbedWithQuestions = stubbedWithQuestions + 1 end
         end
     end

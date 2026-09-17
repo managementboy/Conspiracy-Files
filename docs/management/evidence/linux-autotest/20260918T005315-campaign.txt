@@ -1,0 +1,56 @@
+Linux campaign check 20260918T005315: FAIL
+source: 7ee5e95
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+cases: 1 generated:919163394:case, 2 generated:799840859:case, 3 generated:578928506:case; at the end 
+stages:
+  start                  cases 1 (0 finished) | record 0 | FILES questions 0 | NAMES 1 | PLACES 0 | Old 0/0 wrong | Evidence 0/0 wrong | order  | save 39765 B
+  case 1 finished        cases 1 (1 finished) | record 7 | FILES questions 1 | NAMES 3 | PLACES 11 | Old 7/0 wrong | Evidence 0/0 wrong | order 1111111 | save 33736 B
+  after reload 1         cases 1 (1 finished) | record 7 | FILES questions 1 | NAMES 3 | PLACES 11 | Old 7/0 wrong | Evidence 0/0 wrong | order 1111111 | save 34629 B
+  case 2 finished        cases 2 (2 finished) | record 12 | FILES questions 2 | NAMES 4 | PLACES 19 | Old 12/0 wrong | Evidence 0/0 wrong | order 111111122222 | save 55920 B
+  case 3, two clues      cases 3 (2 finished) | record 14 | FILES questions 2 | NAMES 5 | PLACES 21 | Old 12/0 wrong | Evidence 2/0 wrong | order 11111112222233 | save 86175 B
+  after reload 2         cases 3 (2 finished) | record 14 | FILES questions 2 | NAMES 5 | PLACES 21 | Old 12/0 wrong | Evidence 2/0 wrong | order 11111112222233 | save 86615 B
+  at the limit           cases 6 (2 finished) | record 14 | FILES questions 2 | NAMES 5 | PLACES 21 | Old 12/0 wrong | Evidence 2/0 wrong | order 11111112222233 | save 151011 B
+  after the limit        cases 7 (3 finished) | record 18 | FILES questions 3 | NAMES 5 | PLACES 30 | Old 18/0 wrong | Evidence 0/0 wrong | order 111111122222333333 | save 164123 B
+case 1 answers on the organiser: true two person2 records nil Delia Mercer Marion Ellis Knox County Administration
+case 2 steer: generated:919163394:case two records Marion Ellis Marion Ellis true
+refusals (P4-R133), all sessions:
+  no-containers: 5 lines, longest run of 3, rung 1
+errors inside the mod, all sessions: 0
+FINDING: fresh worlds started for a case 1 with a document in the memo's week: 1 (memo=true, dated documents=3)
+FINDING: start: assignments placed=7; why=nil n=0 due=- rung=0/3 now=02:05 overdue=false(0.00h) preparing=false active=1/4 cases=1/16
+FINDING: case 1 relay memo: found=true, dated in its week=3, carrying the date note=3
+FINDING: the date note was exercised: 3 of 3 records dated in the memo's week carry it
+FINDING: case 1 finished: assignments ; why=nil n=0 due=- rung=0/3 now=02:24 overdue=false(0.00h) preparing=false active=0/4 cases=1/16
+FINDING: case 1 note on the organiser: I think it was a story told for the public. Marion Ellis matters here. Next I would check the place against its records.
+FINDING: frame cost during case 1: AutomaticInvestigations.onTick calls=4090 avg=0.012ms max=25ms over2ms=1 | CaseFile.onTick calls=4078 avg=0.012ms max=1ms over2ms=0 | ClueMarkers.draw calls=0 avg=0.000ms max=0ms over2ms=0 | ClueMarkers.update calls=72 avg=0.597ms max=3ms over2ms=6 | IdentityObserver.afterRender calls=8200 avg=0.141ms max=1ms over2ms=0 | IdentityObserver.tick calls=4126 avg=0.002ms max=1ms over2ms=0 | LocalPersonI
+FINDING: after reload 1: assignments ; why=nil n=0 due=- rung=0/3 now=02:29 overdue=false(0.00h) preparing=false active=0/4 cases=1/16
+FINDING: reload 1 save size: 34013 -> 34629 bytes; before [Generated.G2=26277 KeyConnections=770 DiscoveryLedger=3779 VisitedBuildings=359]; after [Generated.G2=26893 KeyConnections=770 DiscoveryLedger=3779 VisitedBuildings=359]
+FINDING: case 2 placement: reach 250: t3:10977704480342039, t3:10977704480342043
+FINDING: case 2 clues: Letter of resignation / QS-822 | Final payslip / QS-822 | Leavers list / QS-822 | Duty log / QS-822 | sixteen paper napkins
+FINDING: case 2 finished: assignments ; why=nil n=0 due=- rung=0/3 now=02:51 overdue=false(0.00h) preparing=false active=0/4 cases=2/16
+FINDING: frame cost during case 2: AutomaticInvestigations.onTick calls=4842 avg=0.007ms max=1ms over2ms=0 | CaseFile.onTick calls=4830 avg=0.012ms max=1ms over2ms=0 | ClueMarkers.draw calls=0 avg=0.000ms max=0ms over2ms=0 | ClueMarkers.update calls=85 avg=0.988ms max=6ms over2ms=8 | IdentityObserver.afterRender calls=9726 avg=0.161ms max=1ms over2ms=0 | IdentityObserver.tick calls=4876 avg=0.002ms max=1ms over2ms=0 | LocalPersonIn
+FINDING: case 3 placement: reach 250: t3:10977704480342034, t3:10977704480342036
+FINDING: case 3, two clues: assignments placed=6; why=nil n=0 due=- rung=0/3 now=03:03 overdue=false(0.00h) preparing=false active=1/4 cases=3/16
+FINDING: frame cost during case 3: AutomaticInvestigations.onTick calls=7351 avg=0.006ms max=2ms over2ms=1 | CaseFile.onTick calls=7339 avg=0.012ms max=1ms over2ms=0 | ClueMarkers.draw calls=0 avg=0.000ms max=0ms over2ms=0 | ClueMarkers.update calls=130 avg=1.038ms max=6ms over2ms=15 | IdentityObserver.afterRender calls=14700 avg=0.152ms max=1ms over2ms=0 | IdentityObserver.tick calls=7385 avg=0.002ms max=1ms over2ms=0 | LocalPerso
+FINDING: after reload 2: assignments placed=6; why=nil n=0 due=- rung=0/3 now=03:08 overdue=false(0.00h) preparing=false active=1/4 cases=3/16
+FINDING: reload 2 save size: 86175 -> 86615 bytes; before [Generated.G2=70768 KeyConnections=1674 DiscoveryLedger=7348 VisitedBuildings=827]; after [Generated.G2=71208 KeyConnections=1674 DiscoveryLedger=7348 VisitedBuildings=827]
+FINDING: map marks after reload 2 (written/pending/missing): 14/0/0
+FINDING: the limit, move 1: moved on 304 tiles to 10753,9838 (t3:10696225208664076, 7 rooms, 39 unused buildings within 120 tiles); 35 containers loaded within 8 tiles
+FINDING: the limit: the case came after 1 move(s) to a fresh neighbourhood
+FINDING: at the limit: assignments placed=16; why=nil n=0 due=- rung=0/3 now=03:38 overdue=false(0.00h) preparing=false active=4/4 cases=6/16
+FINDING: at the limit: moved on 301 tiles to 10662,9551 (t3:10414750231953412, 12 rooms, 35 unused buildings within 120 tiles); 15 containers loaded within 8 tiles
+FINDING: after 90 s with 4 unfinished: preparing=false, cases 6 2 1:919163394:retired 2:799840859:retired 3:578928506:live 4:1851146120:live 5:1001940703:live 6:833059767:live
+FINDING: after the limit, move 1: moved on 301 tiles to 10813,10410 (t3:11259179457052681, 7 rooms, 22 unused buildings within 120 tiles); 15 containers loaded within 8 tiles
+FINDING: after the limit: the case came after 1 move(s) to a fresh neighbourhood
+FINDING: a new case came after a case was finished at the limit: 7 3 1:919163394:retired 2:799840859:retired 3:578928506:retired 4:1851146120:live 5:1001940703:live 6:833059767:live 7:673770952:live
+FINDING: after the limit: assignments placed=14; why=nil n=0 due=- rung=0/3 now=04:29 overdue=false(0.00h) preparing=false active=4/4 cases=7/16
+FINDING: frame cost during the limit: AutomaticInvestigations.onTick calls=17600 avg=0.005ms max=3ms over2ms=6 | CaseFile.onTick calls=17588 avg=0.009ms max=3ms over2ms=3 | ClueMarkers.draw calls=0 avg=0.000ms max=0ms over2ms=0 | ClueMarkers.update calls=305 avg=1.121ms max=9ms over2ms=29 | IdentityObserver.afterRender calls=35076 avg=0.080ms max=1ms over2ms=0 | IdentityObserver.tick calls=17637 avg=0.002ms max=1ms over2ms=0 | LocalPe
+FINDING: archive: case 1001940703:case did not finish
+FINDING: archive: case 833059767:case did not finish
+FINDING: archive: 4 finished cases full, 0 stubbed, 16 rows kept in all, 0 stubs still offering questions; 3:578928506:full:6 4:1851146120:full:3 5:1001940703:full:5 6:833059767:full:2
+FINDING: a finished case's clues carried: 28 checked, 28 show Evidence / Old, 28 offer the greyed already-noted option, 0 offer no such option (ID Card: Delia Mercer -> Already in the organiser)
+FINDING: AD-10 town names, standing in Muldraugh: of 16 records 0 name a town and 16 do not; e.g. ; own town: 103 Dewey St
+FINDING: AD-10: walked from Muldraugh to West Point at 11684,8363, 1770 tiles
+FINDING: AD-10 town names, standing in West Point: of 16 records 0 name a town and 16 do not; e.g. ; own town: 103 Dewey St
+FAIL: read from West Point, not one of 16 records about Muldraugh names its town
+screenshot: dev/eval/linux/runs/20260918T005315-campaign.png (not committed)
