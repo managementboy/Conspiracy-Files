@@ -45,6 +45,92 @@ C.focusOf=focusOf
 local function iconIdFor(docId) return "cf-clue:"..tostring(docId) end
 C.iconIdFor=iconIdFor
 
+-- A clue is in furniture, and furniture blocks its own square: the game's
+-- test (the square is not blocked to the survivor's) failed for a clue on a
+-- shelf from the very next square, and the game did not even count the shelf's
+-- own square as seen (Linux check, 2026-09-16). So the spot also counts as seen
+-- when it is lit as the game requires and one of its sides, with no wall
+-- between, is the survivor's square or a square the survivor can see and
+-- reach: seeing the front of the furniture is seeing it.
+local function tooDark(character,square,playerNum)
+    local lightPenalty=1-forageSystem.getLightLevelPenalty(character,square,true)
+    return lightPenalty>=(forageSystem.lightPenaltyCutoff/100) and square:getDarkMulti(playerNum)<=2.0
+end
+function C.seenFromSide(character,square,playerNum,sides)
+    if not (square and character) or square:getZ()~=character:getZ() then return false end
+    if tooDark(character,square,playerNum) then return false end
+    local current=character:getCurrentSquare()
+    if not current then return false end
+    sides=sides or {square:getN(),square:getS(),square:getE(),square:getW()}
+    for _,side in pairs(sides) do
+        if side==current or (side:isCanSee(playerNum) and not side:isBlockedTo(current)) then
+            if not square:isWallTo(side) then return true end
+        end
+    end
+    return false
+end
+-- Could the survivor see this spot now, as the wordless cue needs it (stage 2):
+-- same floor; same room, or both out of doors; lit as the game requires; and in
+-- view the game's way or from a side as above. Returns true, or false and why.
+function C.seesSpot(character,square)
+    if not (square and character) then return false,"no square" end
+    if square:getZ()~=character:getZ() then return false,"other floor" end
+    local current=character:getCurrentSquare()
+    if not current then return false,"no square" end
+    local playerNum=character:getPlayerNum()
+    if square~=current then
+        local here,there=current:getRoom(),square:getRoom()
+        if (here or there) and here~=there then return false,"other room" end
+    end
+    if tooDark(character,square,playerNum) then return false,"too dark" end
+    if square==current then return true end
+    if square:isCanSee(playerNum) and not square:isBlockedTo(current) then return true end
+    if C.seenFromSide(character,square,playerNum) then return true end
+    return false,"not in view"
+end
+
+-- Where a clue in a car is now. A car is found by the mark on its part, near
+-- the survivor, so a driven car takes its clue's icon (and cue) with it. Only a
+-- car the game has loaded can be found; otherwise nil and the placement square
+-- stands. Cached briefly: this walks the cell's vehicles.
+C.vehicleSpots=C.vehicleSpots or {}
+C.VEHICLE_SPOT_MS=2000
+function C.vehicleSpot(clue,player)
+    if not (clue and clue.vehicle and clue.token and clue.part and player) then return nil end
+    local t=now()
+    local cached=C.vehicleSpots[clue.id]
+    if cached and t-cached.at<C.VEHICLE_SPOT_MS then return cached.x,cached.y,cached.z end
+    local x,y,z
+    local World=require("ConspiracyFiles/WorldAccess")
+    local here={vehiclePart=clue.part,x=math.floor(player:getX()),y=math.floor(player:getY()),z=math.floor(player:getZ())}
+    local ok,container=pcall(World.resolveVehicle,here,clue.token,Rules.REMOVE_RADIUS)
+    if ok and container then
+        pcall(function()
+            local square=container:getVehiclePart():getVehicle():getSquare()
+            x,y,z=square:getX(),square:getY(),square:getZ()
+        end)
+    end
+    C.vehicleSpots[clue.id]={at=t,x=x,y=y,z=z}
+    return x,y,z
+end
+-- The clue rows with each car's clue moved to where its car is now.
+function C.liveClues(player)
+    local R=ConspiracyFiles.GeneratedRuntime
+    local clues=(R and R.clueTargets) and R.clueTargets() or {}
+    for i,clue in ipairs(clues) do
+        if clue.vehicle and clue.status=="placed" and not clue.recognised then
+            local x,y,z=C.vehicleSpot(clue,player)
+            if x then
+                local moved={}
+                for k,v in pairs(clue) do moved[k]=v end
+                moved.x,moved.y,moved.z=x,y,z
+                clues[i]=moved
+            end
+        end
+    end
+    return clues
+end
+
 -- The icon class. Only ever built while the game's ISBaseIcon exists, and kept
 -- on our own table rather than as a global.
 if ISBaseIcon and not C.Icon then
@@ -72,18 +158,7 @@ if ISClueIcon then
     -- can see and reach: seeing the front of the furniture is seeing it.
     function ISClueIcon:getCanSeeThisUpdate()
         if ISBaseIcon.getCanSeeThisUpdate(self) then return true end
-        local square,character=self.square,self.character
-        if not (square and character) or square:getZ()~=character:getZ() then return false end
-        local lightPenalty=1-forageSystem.getLightLevelPenalty(character,square,true)
-        if lightPenalty>=(forageSystem.lightPenaltyCutoff/100) and square:getDarkMulti(self.player)<=2.0 then return false end
-        local current=character:getCurrentSquare()
-        if not current then return false end
-        for _,side in pairs(self.adjacentSquares or {}) do
-            if side==current or (side:isCanSee(self.player) and not side:isBlockedTo(current)) then
-                if not square:isWallTo(side) then return true end
-            end
-        end
-        return false
+        return C.seenFromSide(self.character,self.square,self.player,self.adjacentSquares)
     end
     -- The base class reads an item list a clue icon never has.
     function ISClueIcon:checkForPoison() self.isKnownPoison=false end
@@ -160,14 +235,14 @@ function C.sync()
     local player=getPlayer and getPlayer()
     local manager=player and managerFor(player)
     if not manager or not ISClueIcon then return 0 end
-    local R=ConspiracyFiles.GeneratedRuntime
-    local clues=(R and R.clueTargets) and R.clueTargets() or {}
+    local clues=C.liveClues(player)
     local icons=manager.clueIcons or {}
     local byDoc={}
     for _,icon in pairs(icons) do
         if icon.clueId then
             local spot=C.spotted[icon.clueId]
-            byDoc[icon.clueId]={icon=icon,spottedAt=(icon:getIsSeen() and spot and spot.at) or nil}
+            byDoc[icon.clueId]={icon=icon,spottedAt=(icon:getIsSeen() and spot and spot.at) or nil,
+                x=icon.xCoord and math.floor(icon.xCoord),y=icon.yCoord and math.floor(icon.yCoord)}
         end
     end
     local searching=manager.isSearchMode==true

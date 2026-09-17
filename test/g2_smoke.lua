@@ -1,4 +1,4 @@
-package.preload["ConspiracyFiles/ClueHints"]=function() return {} end
+package.preload["ConspiracyFiles/ClueCue"]=function() return {} end
 next=nil -- PZ Kahlua: fresh-save setup must not depend on the next global.
 package.path="mod/common/media/lua/shared/?.lua;mod/common/media/lua/client/?.lua;"..package.path
 local events={}

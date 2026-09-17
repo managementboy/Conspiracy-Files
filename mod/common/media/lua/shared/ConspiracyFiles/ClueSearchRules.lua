@@ -111,11 +111,14 @@ function S.wantsIcon(clue,px,py,searchMode)
 end
 
 -- An existing icon is dropped when Search Mode is off, its clue is gone from
--- the record, the survivor has walked away, or it was recognised and has
--- lingered long enough.
-function S.dropIcon(clue,px,py,searchMode,spottedAt,now)
+-- the record, the survivor has walked away, it was recognised and has lingered
+-- long enough, or the clue is no longer on the icon's square: a car with a clue
+-- in it has been driven (stage 2). `iconX`/`iconY` are the icon's square, when
+-- known; the icon comes back on the clue's new square on the next pass.
+function S.dropIcon(clue,px,py,searchMode,spottedAt,now,iconX,iconY)
     if not searchMode or type(clue)~="table" then return true end
     if distance2D(px,py,clue.x,clue.y)>S.REMOVE_RADIUS then return true end
+    if iconX and iconY and not clue.recognised and (iconX~=clue.x or iconY~=clue.y) then return true end
     if clue.recognised then
         if not spottedAt then return true end
         return (now or 0)-spottedAt>=S.LINGER_MS
@@ -124,13 +127,13 @@ function S.dropIcon(clue,px,py,searchMode,spottedAt,now)
 end
 
 -- Which icons to add and which to drop, given the clues, the icons already up
--- (id -> {spottedAt=ms or nil}) and the survivor. Pure; the caller acts.
+-- (id -> {spottedAt=ms or nil, x=, y=}) and the survivor. Pure; the caller acts.
 function S.plan(clues,icons,px,py,searchMode,now)
     local byId={}
     for _,clue in ipairs(clues or {}) do byId[clue.id]=clue end
     local add,drop={},{}
     for id,state in pairs(icons or {}) do
-        if S.dropIcon(byId[id],px,py,searchMode,state and state.spottedAt,now) then drop[#drop+1]=id end
+        if S.dropIcon(byId[id],px,py,searchMode,state and state.spottedAt,now,state and state.x,state and state.y) then drop[#drop+1]=id end
     end
     for _,clue in ipairs(clues or {}) do
         if not (icons and icons[clue.id]) and S.wantsIcon(clue,px,py,searchMode) then add[#add+1]=clue.id end

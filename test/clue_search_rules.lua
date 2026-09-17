@@ -60,7 +60,16 @@ assert(Rules.dropIcon(seen,12,12,true,nil,5),"recognised some other way: dropped
 local add,drop=Rules.plan({clue,{id="d2",x=90,y=90,z=0,status="placed"},{id="d3",x=11,y=11,z=0,status="placed"}},
     {d3={},gone={}},12,12,true,0)
 assert(table.concat(add,",")=="d1" and table.concat(drop,",")=="gone","plan: "..table.concat(add,",").." / "..table.concat(drop,","))
-print("PASS clue search rules: focus entry, registration, spot rate and reach, icon add/remove")
+-- A car with a clue in it has been driven (stage 2): the icon on the old
+-- square is dropped, and the clue (now at the car) gets one on the next pass.
+local car={id="v1",x=30,y=10,z=0,status="placed",recognised=false,vehicle=true}
+assert(Rules.dropIcon(car,30,12,true,nil,0,20,10),"the icon is not where the car is")
+assert(not Rules.dropIcon(car,30,12,true,nil,0,30,10),"the icon is where the car is")
+add,drop=Rules.plan({car},{v1={x=20,y=10}},30,12,true,0)
+assert(table.concat(drop,",")=="v1" and #add==0,"moved: dropped this pass")
+add,drop=Rules.plan({car},{},30,12,true,0)
+assert(table.concat(add,",")=="v1","and added again at the car")
+print("PASS clue search rules: focus entry, registration, spot rate and reach, icon add/remove, an icon follows a driven car")
 
 -- The client module against doubles of the game's classes.
 Events={OnTick={Add=function(f) Events.tick=f end,Remove=function() end}}

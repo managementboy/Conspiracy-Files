@@ -467,7 +467,7 @@ local function prepare(result,seed,later,house)
 end
 function R.start(seed,options)
     require("ConspiracyFiles/GeneratedMenu")
-    require("ConspiracyFiles/ClueHints")
+    require("ConspiracyFiles/ClueCue")
     if preparing then return false,"preparation already running" end
     local house
     local saved=ModData.get(TAG)
@@ -853,8 +853,15 @@ function R.clueTargets()
             for id,a in pairs(root.assignments) do
                 local t=a.target
                 if type(t)=="table" then
+                    local vehicle=type(t.vehiclePart)=="string"
+                    -- `place` names the container (or the car's part) for the
+                    -- wordless cue's once-per-place rule; `token` and `part`
+                    -- find a car wherever it has been driven.
                     out[#out+1]={id=id,x=t.x,y=t.y,z=t.z,status=a.status,recognised=seen[id]==true,
-                        vehicle=type(t.vehiclePart)=="string"}
+                        vehicle=vehicle,case=root.case and root.case.caseId,token=a.physicalToken,
+                        part=vehicle and t.vehiclePart or nil,target=t,
+                        place=vehicle and ("vehicle:"..tostring(a.physicalToken))
+                            or (t.x..":"..t.y..":"..t.z..":"..tostring(t.objectIndex)..":"..tostring(t.containerIndex))}
                 end
             end
         end
@@ -1130,8 +1137,8 @@ local function relocation(api)
             return true
         end
         checked(api.relocate(id,target,hours))
-        local hints=ConspiracyFiles.ClueHints
-        if hints and hints.invalidate then hints.invalidate(a.target) end
+        local cue=ConspiracyFiles.ClueCue
+        if cue and cue.invalidate then cue.invalidate(id) end
         log("[CF-G2-RELOCATE] relocated "..id.." to "..target.x..","..target.y..",floor "..target.z)
         return true
     end

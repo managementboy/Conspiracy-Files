@@ -371,7 +371,7 @@ if Events and Events.OnGameStart and not I.startHandler then
  -- truth at game start instead of leaving it to be discovered mid-test.
  local function reportModules()
   local expected={"AutomaticInvestigations","LocalPersonHooks","LocalPersonRuntime",
-   "GeneratedRuntime","DiscoveryLog","PlayerVoice","PersonNameLog","ClueHints",
+   "GeneratedRuntime","DiscoveryLog","PlayerVoice","PersonNameLog","ClueCue",
    "ClueMarkers","IdentityObserver","ObservedKeyLeads","EvidencePickupHint",
    "CaseFile","CasePerson","KeyObserver","VehicleProbe","Organiser"}
   local missing={}

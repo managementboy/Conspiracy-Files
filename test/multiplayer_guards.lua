@@ -35,7 +35,7 @@ local MUST_GUARD = {
     "OrganiserScreen.lua",      -- draws Knox.OS and writes notes/to-dos
     "AutomaticInvestigations.lua",
     "ClueMarkers.lua",
-    "ClueHints.lua",
+    "ClueCue.lua",
     "IdentityObserver.lua",
     "T3Nearby.lua",
     "AddressMap.lua",

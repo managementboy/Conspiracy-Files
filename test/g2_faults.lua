@@ -4,7 +4,7 @@ package.path="mod/common/media/lua/shared/?.lua;mod/common/media/lua/client/?.lu
 local function newFixture()
     ConspiracyFiles=nil
     package.loaded["ConspiracyFiles/GeneratedRuntime"]=nil
-    package.preload["ConspiracyFiles/ClueHints"]=function() return {} end
+    package.preload["ConspiracyFiles/ClueCue"]=function() return {} end
     package.preload["ConspiracyFiles/GeneratedMenu"]=function() return {} end
     local events={}
     Events={OnTick={Add=function(f) events.tick=f end},OnGameStart={Add=function(f) events.start=f end}}

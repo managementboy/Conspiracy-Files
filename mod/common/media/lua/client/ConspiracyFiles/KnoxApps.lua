@@ -538,6 +538,10 @@ A.help={
         return {
             {label="Survive first",title="Survive first",
              detail="This machine records what you find. It sets no objectives and promises no answer.\n\nReading it takes a hand, either one. A two-handed weapon puts it away. Something can reach you while you read."},
+            -- Searching (P4-R132, stage 2). The one place besides the first
+            -- "Hm?" that says how clues are found.
+            {label="Looking around",title="Looking around",
+             detail="What matters rarely jumps out. Most of it looks like any other thing in a drawer.\n\nA proper search finds it: Investigate Area, with Clues as the focus. Slower in the dark and the rain, like any search.\n\nSomething already in your pockets can be looked over. Once it means something, it can be noted here."},
             {label="The keys",title="The keys",
              detail="HOME opens the programs, and wakes the machine.\nBACK steps out of a record, then out to the programs.\nThe rocker goes up and down: a line in a list, a page in a record.\n\nThe two keys between HOME and BACK are blank. They do nothing yet.\n\nThere is no power switch. Hold HOME for the lamp. Left alone it switches itself off."},
             {label="Size",title="Size",

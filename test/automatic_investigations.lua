@@ -51,7 +51,7 @@ for _,x in ipairs(places) do
 end
 local requestedHouse;local probes=0
 package.preload['ConspiracyFiles/T3Nearby']=function() return {result=result,start=function(_,_,required) requestedHouse=required;probes=probes+1;return true end} end
-for _,name in ipairs({'GeneratedMenu','ClueHints','ClueMarkers','AddressMap'}) do package.preload['ConspiracyFiles/'..name]=function() return {start=function() return true end} end end
+for _,name in ipairs({'GeneratedMenu','ClueCue','ClueMarkers','AddressMap'}) do package.preload['ConspiracyFiles/'..name]=function() return {start=function() return true end} end end
 local R=require('ConspiracyFiles/GeneratedRuntime')
 local A=require('ConspiracyFiles/AutomaticInvestigations')
 local C=require('ConspiracyFiles/Generated/SuccessiveCases')
