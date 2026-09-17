@@ -55,7 +55,8 @@ out="$REPO/docs/management/evidence/linux-autotest/$id-addresses.txt"
     for f in "${findings[@]}"; do echo "FINDING: $f"; done
     echo "errors inside the mod: $errors"
     for f in "${fails[@]}"; do echo "FAIL: $f"; done
-} > "$out"
+} > "$out.part"
+mv "$out.part" "$out"
 say "written: $out"
 cat "$out"
 "$PZ" stop >/dev/null 2>&1
