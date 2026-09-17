@@ -70,7 +70,11 @@ assert(inspect:find('container==getPlayer():getInventory() then return false', 1
     'noting in place must refuse an item already in hand: that is the ordinary path')
 local menu = read('mod/common/media/lua/client/ConspiracyFiles/GeneratedMenu.lua')
 assert(menu:find('"Note in the Investigation"', 1, true), 'the option must exist')
-assert(menu:find('R.inspect,item,true', 1, true), 'it must record in place')
+-- Recording is a timed action since P4-R132 stage 2: the menu queues it in
+-- place, and the action calls R.inspect with its inPlace flag when it completes.
+assert(menu:find('Actions.inspect,player,item,true,expected', 1, true), 'it must record in place')
+local actions = read('mod/common/media/lua/client/ConspiracyFiles/ClueActions.lua')
+assert(actions:find('R.inspect,self.item,self.inPlace', 1, true), 'the action records with its inPlace flag')
 -- The prefix, not the whole line: the guard gained "and not reading" when
 -- reading a drawer stopped needing the item in your pockets (d4ac15d), and
 -- pinning the exact wording made this fail on a change that was correct.

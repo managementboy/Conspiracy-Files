@@ -1,5 +1,6 @@
 local R=require("ConspiracyFiles/GeneratedRuntime")
 local Menu=require("ConspiracyFiles/ContextMenu")
+local Actions=require("ConspiracyFiles/ClueActions")
 ConspiracyFiles=ConspiracyFiles or {}
 local M=ConspiracyFiles.GeneratedMenu or {}
 ConspiracyFiles.GeneratedMenu=M
@@ -37,10 +38,9 @@ function M.fill(playerNum,context,items)
         end
         return
     end
-    -- A clue nobody has recognised is the plain item it looks like: no
-    -- Inspect, no Note (P4-R132). Stage 2 adds "Look it over" here.
-    if R.isRecognised and not R.isRecognised(item) then return end
     local expected=item:getOutermostContainer()
+    local player=getSpecificPlayer(playerNum)
+    local carried=expected==player:getInventory()
     -- An icon for the ACTION, not for the thing. Owner, 2026-09-10: "I meant
     -- an Icon that represents the action not the content. In the case of
     -- inspect something like magnifying glass?"
@@ -59,13 +59,26 @@ function M.fill(playerNum,context,items)
     end
     local lookIcon=icon("media/ui/Search_Icon_On.png",
         "media/ui/Properties/InventoryProperty_Research.png")
+    -- A clue nobody has recognised is the plain item it looks like: no
+    -- Inspect, no Note (P4-R132). Carried, it can be looked over - a short
+    -- timed action - so a clue looted without searching is never lost to the
+    -- case. Lying in the world, searching is the way.
+    if R.isRecognised and not R.isRecognised(item) then
+        if carried then
+            local look=context:addOption("Look it over",nil,function()
+                if item:getOutermostContainer()~=player:getInventory() then return end
+                pcall(Actions.lookItOver,player,item)
+            end)
+            if look then look.iconTexture=lookIcon end
+        end
+        return
+    end
     local noteIcon=icon("Item_Notebook","media/ui/Properties/InventoryProperty_Research.png",
         "media/ui/Search_Icon_On.png")
     -- Inspecting records the thing; it does NOT open the machine. Owner,
     -- 2026-09-12: "Inspecting an object does not open it." Reading happens when
     -- the survivor takes the organiser in hand, and not as a side effect of
     -- picking a clue up.
-    local carried=expected==getSpecificPlayer(playerNum):getInventory()
     -- With the organiser in hand you can record a document where it lies.
     --
     -- Inspect used to be greyed out unless the clue was in your pockets, so
@@ -82,7 +95,10 @@ function M.fill(playerNum,context,items)
     local reading=(screen and screen.window and screen.window.on)==true
     local option=context:addOption("Inspect Investigation Evidence",nil,function()
         if item:getOutermostContainer()~=expected then return end
-        pcall(R.inspect,item,not carried)
+        -- A timed action with the game's progress bar (P4-R132); the record
+        -- is written when the bar completes, and only if the thing is still
+        -- where it was.
+        pcall(Actions.inspect,player,item,not carried,expected)
     end)
     if option then
         option.notAvailable=not (carried or reading)
@@ -97,7 +113,7 @@ function M.fill(playerNum,context,items)
     if not carried and not reading then
         local here=context:addOption("Note in the Investigation",nil,function()
             if item:getOutermostContainer()~=expected then return end
-            pcall(R.inspect,item,true)
+            pcall(Actions.inspect,player,item,true,expected)
         end)
         if here then here.notAvailable=false; here.iconTexture=noteIcon end
     end

@@ -1,4 +1,4 @@
-package.path="mod/common/media/lua/client/?.lua;"..package.path
+package.path="mod/common/media/lua/client/?.lua;mod/common/media/lua/shared/?.lua;"..package.path
 local normalize=function(items) return items,false end
 local menu={normalize=normalize}
 local inspected=0
@@ -9,8 +9,11 @@ package.loaded["ConspiracyFiles/ContextMenu"]=menu
 Events={OnFillInventoryObjectContextMenu={Add=function() end}}
 getDebug=function() return true end;isClient=function() return false end;isServer=function() return false end
 getSpecificPlayer=function() return {getInventory=function() return inv end} end
-ConspiracyFiles={}
+ConspiracyFiles={GeneratedRuntime=R}
 local M=require("ConspiracyFiles/GeneratedMenu")
+-- Checks (stage 3) complete the timed action at once; that path is what this
+-- test drives. The queued path is test/inspect_timed.lua.
+ConspiracyFiles.ClueActions.instant=true
 local options={};local context={addOption=function(_,label,_,callback) local o={label=label,callback=callback};options[#options+1]=o;return o end}
 M.fill(0,context,{}) assert(#options==0,"generic journal option removed")
 M.fill(0,context,{item}) assert(#options==1 and options[1].label=="Inspect Investigation Evidence")

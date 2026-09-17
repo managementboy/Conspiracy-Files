@@ -3,7 +3,7 @@
 -- Evidence category. Recognition (spotted in Search Mode, or looked over) is a
 -- small saved flag in the case record; it stamps every copy the runtime can
 -- reach, it survives a reload, and only then does the menu offer Inspect.
-package.preload["ConspiracyFiles/ClueHints"]=function() return {} end
+package.preload["ConspiracyFiles/ClueCue"]=function() return {} end
 package.path="mod/common/media/lua/shared/?.lua;mod/common/media/lua/client/?.lua;"..package.path
 local events={}
 Events={OnTick={Add=function(f) events.tick=f end},OnGameStart={Add=function(f) events.start=f end},
@@ -142,7 +142,8 @@ bad.recognised={[2]=id}; assert(not Session.validate(bad),"a sparse list is refu
 bad.recognised="yes"; assert(not Session.validate(bad))
 bad.recognised=nil; assert(Session.validate(bad),"a case nobody has recognised anything in is valid")
 
--- The menu: nothing on an unrecognised clue, Inspect on a recognised one.
+-- The menu: only "Look it over" on an unrecognised carried clue (stage 2),
+-- Inspect on a recognised one.
 package.loaded["ConspiracyFiles/GeneratedMenu"]=nil
 package.preload["ConspiracyFiles/GeneratedMenu"]=nil
 instanceof=function(_,class) return class=="InventoryItem" end
@@ -153,7 +154,8 @@ local function options(target)
     Menu.fill(0,context,{target})
     return out
 end
-assert(#options(plain)==0,"no Inspect before recognition")
+local before=options(plain)
+assert(#before==1 and before[1].label=="Look it over","no Inspect before recognition, only Look it over while carried")
 assert(R.recognise(plain,"look"))
 local shown=options(plain)
 assert(#shown>=1 and shown[1].label=="Inspect Investigation Evidence","Inspect once recognised")
