@@ -13,7 +13,13 @@
 #       on a second clue when there is one);
 #   (d) no errors inside the mod;
 #   (e) the game's own forage icons are counted with no focus and with "Clues":
-#       none is a Clues icon, and the focus does not multiply them.
+#       none is a Clues icon, and the focus does not multiply them;
+#   (f) THE MAP MARK: with a pen in the inventory, a spotted clue noted WHERE IT
+#       LIES is marked on the world map at the clue's own square and building -
+#       not where the survivor stood - and the record's MAP NOTE line says so;
+#       then the same for a clue picked up first, which is the path that always
+#       worked (owner, 2026-09-18: "I have a pen and found a clue. are we not
+#       writing them to the map anymore?").
 # Real display only. Exit 0 pass, 1 fail, 2 could not run.
 set -uo pipefail
 . "$(dirname "${BASH_SOURCE[0]}")/../lib.sh"
@@ -147,7 +153,53 @@ spot_lit() { # spot_lit FOCUS: the first clue lit enough to be spotted
     fail "no clue lit enough to spot with focus $1"
 }
 spot_lit None
+
+# --- (f) THE MAP MARK for a clue found by searching -------------------------
+# Owner, 2026-09-18, with the world map open: "I have a pen and found a clue.
+# are we not writing them to the map anymore?" A clue recognised by searching
+# and noted WHERE IT LIES is never picked up, and the marker module learned a
+# finding location only from a pickup - so the pen had nothing to write. Both
+# halves are asked here: noted in place, and noted after being picked up.
+mark_stage() { # mark_stage in-place|carried
+    local how="$1" it m note_line n=0
+    [ "$(ev 'return CFClue.recognised()' | cut -f1)" = true ] || { note "marks ($how): the clue was not recognised; nothing to note"; return 3; }
+    it="$(ev 'return CFClue.item()')"
+    [ "$(cut -f1 <<<"$it")" = true ] || { fail "marks ($how): no item for the spotted clue: $(cut -f2 <<<"$it")"; return 1; }
+    note "marks ($how): '$(cut -f2 <<<"$it")' at $(cut -f3 <<<"$it"), pen in the inventory=$(ev 'return CFClue.pen()' | cut -f1)"
+    if [ "$how" = carried ]; then
+        ev 'return CFClue.take()' >/dev/null
+        wait_true 25 'CFClue.carried()' || { fail "marks (carried): the clue never reached the inventory"; return 1; }
+        m="$(ev 'return CFClue.noteCarried()')"
+    else
+        m="$(ev 'return CFClue.noteInPlace()')"
+    fi
+    [ "$(cut -f1 <<<"$m")" = true ] || { fail "marks ($how): the note was refused: $(cut -f2 <<<"$m")"; return 1; }
+    wait_true 30 'CFClue.noted()' || { fail "marks ($how): the clue was never noted"; return 1; }
+    # The marker worker writes on its own tick, once a second.
+    for n in $(seq 20); do
+        m="$(ev 'return CFClue.mark()')"
+        [ "$(cut -f5 <<<"$m")" = true ] && break
+        sleep 1
+    done
+    IFS=$'\t' read -r found at stood line written ink same house clue_house away <<<"$m"
+    note "marks ($how): record=$found at $at, survivor at $stood, clue's square $(cut -f3 <<<"$it"); written=$written ink=$ink; on the clue's own square=$same; building of the mark=$house, of the clue=$clue_house"
+    note "marks ($how): MAP NOTE line reads '$line'"
+    [ "$found" = true ] || { fail "marks ($how): no finding location was recorded at all ($at)"; return 1; }
+    [ "$same" = true ] || fail "marks ($how): the mark is at $at, but the clue is at $(cut -f3 <<<"$it")"
+    [ "$house" = "$clue_house" ] || fail "marks ($how): the mark is in building $house, the clue in $clue_house"
+    [ "$away" = true ] || fail "marks ($how): the mark is on the square the survivor was standing on ($stood)"
+    [ "$written" = true ] || fail "marks ($how): with a pen in the inventory the mark was never written ($line)"
+    note_line="$(ev 'return CFClue.mapNote()')"
+    [ "$(cut -f1 <<<"$note_line")" = true ] || fail "marks ($how): the record has no MAP NOTE line: $(cut -f2 <<<"$note_line")"
+    [ "$(cut -f2 <<<"$note_line")" = "Finding location marked on your world map." ] \
+        || fail "marks ($how): the record's MAP NOTE line reads '$(cut -f2 <<<"$note_line")'"
+    note "marks ($how): written/pending/missing = $(ev 'return CFClue.marks()' | tr '\t' '/')"
+    return 0
+}
+mark_stage in-place
+
 spot_lit Clues
+mark_stage carried
 ev 'return CFClue.teleport('"$sx,$sy,$sz"')' >/dev/null
 
 note "counters (icons added, dropped, spots, recognitions, search mode re-enabled): $(ev 'return CFClue.counters()' | tr '\t' ' ')"

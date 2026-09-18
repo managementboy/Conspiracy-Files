@@ -274,3 +274,115 @@ function K.lit()
     local dark = (1 - light) >= (forageSystem.lightPenaltyCutoff / 100) and sq:getDarkMulti(player():getPlayerNum()) <= 2.0
     return not dark, string.format("%.2f", light)
 end
+
+-- WHERE IT LAY (owner, 2026-09-18). A clue found by SEARCHING and noted where
+-- it lies is never picked up, so nothing in the pickup path ever sees it. These
+-- stages ask the real game for the mark: the pen, the note through the same
+-- call the right-click option makes, the saved record, and the MAP NOTE line
+-- the survivor reads in the organiser.
+local function markers() return ConspiracyFiles.ClueMarkers end
+
+function K.pen()
+    player():getInventory():AddItem("Base.Pen")
+    return markers().canWrite(player()) == true
+end
+
+-- The item of the picked clue, wherever it is: its container, or the survivor.
+function K.item()
+    local t = K.target
+    for dx = -1, 1 do for dy = -1, 1 do
+        local sq = getCell():getGridSquare(t.x + dx, t.y + dy, t.z)
+        local objects = sq and sq:getObjects()
+        for i = 0, (objects and objects:size() or 0) - 1 do
+            local o = objects:get(i)
+            for c = 0, o:getContainerCount() - 1 do
+                local items = o:getContainerByIndex(c):getItems()
+                for j = 0, items:size() - 1 do
+                    local it = items:get(j)
+                    if it:getModData().cfGeneratedId == t.id then
+                        K.thing = it
+                        return true, tostring(it:getName()), sq:getX() .. "," .. sq:getY() .. "," .. sq:getZ()
+                    end
+                end
+            end
+        end
+    end end
+    local inv = player():getInventory():getItems()
+    for i = 0, inv:size() - 1 do
+        local it = inv:get(i)
+        if it:getModData().cfGeneratedId == t.id then K.thing = it; return true, tostring(it:getName()), "carried" end
+    end
+    return false, "no item for " .. tostring(t.id)
+end
+
+-- "Note in the Investigation" / Inspect where it lies: the same call the menu
+-- option makes (GeneratedMenu), the same timed action, nothing picked up.
+function K.noteInPlace()
+    local it = K.thing
+    if not it then return false, "no item" end
+    K.noteSquare = it:getContainer() and it:getContainer():getSourceGrid()
+    return ConspiracyFiles.ClueActions.inspect(player(), it, true, it:getOutermostContainer())
+end
+function K.noted()
+    return ConspiracyFiles.GeneratedRuntime.isInspected(K.thing) == true
+end
+
+-- Take it the way the loot window does, then note it in hand: the path that
+-- always worked, so a fix for the other one cannot quietly break it.
+function K.take()
+    local p = player()
+    ISTimedActionQueue.add(ISInventoryTransferAction:new(p, K.thing, K.thing:getContainer(), p:getInventory()))
+    return true
+end
+function K.carried() return K.thing:getOutermostContainer() == player():getInventory() end
+function K.noteCarried()
+    return ConspiracyFiles.ClueActions.inspect(player(), K.thing, false, player():getInventory())
+end
+
+local function buildingOf(x, y, z)
+    local sq = getCell():getGridSquare(x, y, z)
+    local b = sq and sq:getBuilding()
+    local def = b and b:getDef()
+    return def and tostring(def:getID()) or "outdoors"
+end
+
+-- The saved mark for the picked clue: where it is, whether it is written, and
+-- whether it sits on the CLUE's square and in the CLUE's building rather than
+-- wherever the survivor was standing when they noted it.
+function K.mark()
+    local t = K.target
+    local r = player():getModData()["ConspiracyFiles.ClueMarkers"]
+    local v = r and r.records and r.records[t.id]
+    local p = player()
+    local px, py, pz = math.floor(p:getX()), math.floor(p:getY()), math.floor(p:getZ())
+    if not v then
+        return false, "no record", px .. "," .. py .. "," .. pz, tostring(markers().note(t.id))
+    end
+    return true, v.x .. "," .. v.y .. "," .. v.z, px .. "," .. py .. "," .. pz,
+        tostring(markers().note(t.id)), tostring(v.written), tostring(v.ink),
+        tostring(v.x == t.x and v.y == t.y and v.z == t.z),
+        buildingOf(v.x, v.y, v.z), buildingOf(t.x, t.y, t.z),
+        tostring(v.x ~= px or v.y ~= py)
+end
+
+-- The MAP NOTE line the survivor reads in the organiser, for this clue.
+function K.mapNote()
+    local rows = require("ConspiracyFiles/EvidenceRows").list("evidence") or {}
+    for _, row in ipairs(rows) do
+        if row.id == K.target.id then
+            local detail = tostring(row.detailText)
+            -- Plain find/sub only: Kahlua's string library is incomplete, and
+            -- this is the part of it the engine really implements.
+            local at = string.find(detail, "MAP NOTE", 1, true)
+            local stop = at and string.find(detail, "\n", at + 9, true)
+            local line = at and string.sub(detail, at + 9, stop and stop - 1 or nil) or ""
+            return at ~= nil, line
+        end
+    end
+    return false, "no record row for " .. tostring(K.target.id)
+end
+
+function K.marks()
+    local written, pending, missing = markers().status()
+    return written, pending, missing
+end

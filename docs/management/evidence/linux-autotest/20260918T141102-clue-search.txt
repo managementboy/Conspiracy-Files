@@ -1,0 +1,28 @@
+Linux clue search check 20260918T141102: PASS
+source: 0009212
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+FINDING: focus: defined=true text='Clues' offered=true registered=listed; loot zones=17 items=0 picked=0 rolls=0 chanceToCreateIcon=0 focusChanceMax=0
+FINDING: clues: generated:1274351559:document-1:placed generated:1274351559:document-2:placed generated:1274351559:document-4:placed generated:1274351559:document-5:placed generated:1274351559:document-6:placed
+FINDING: game running: paused=false 1
+FINDING: forage count taken outdoors at 10835,10145
+FINDING: forage icons, no focus: total=9 active=2 world=0 stash=0 clue icons=4 clues-category=0 [Clothing=1,Insects=2,Junk=1,Stones=2,Vegetables=1,WildPlants=2]
+FINDING: forage icons, Clues focus: total=9 active=2 world=0 stash=0 clue icons=2 clues-category=0 [Clothing=1,Insects=2,Junk=1,Stones=2,Vegetables=1,WildPlants=2]
+FINDING: clue 1 before: Note|Junk
+FINDING: clue 1 (None): spotted and recognised after 4.0 s (limit 120 s)
+FINDING: clue 1 icon after spotting: true true true true 367/2500 3.00 0.70 true clueObject at=10841,10148 base=true ours=true canSee=true blocked=false light=0.64 dark=1 running=false south=true/false/false/false east=true/false/false/true
+FINDING: clue 1 after: Delivery docket / TN-726|Evidence
+FINDING: marks (in-place): 'Delivery docket / TN-726' at 10840,10148,0, pen in the inventory=true
+FINDING: marks (in-place): record=true at 10840,10148,0, survivor at 10841,10148,0, clue's square 10840,10148,0; written=true ink=Pen; on the clue's own square=true; building of the mark=1.0977704480342044E16, of the clue=1.0977704480342044E16
+FINDING: marks (in-place): MAP NOTE line reads 'Finding location marked on your world map.'
+FINDING: marks (in-place): written/pending/missing = 1/0/0
+FINDING: clue 1 before: Receipt|Junk
+FINDING: clue 1: could not stand on an open side of it; spotting from where the game put the survivor
+FINDING: clue 1 (Clues): spotted and recognised after 2.7 s (limit 120 s)
+FINDING: clue 1 icon after spotting: true true true true 0/2500 4.50 1.61 true clueObject at=10851,10180 base=true ours=true canSee=true blocked=false light=1.00 dark=1 running=false north=true/false/false/false south=true/false/false/false east=true/false/false/false west=true/false/false/false
+FINDING: clue 1 after: Attendance note / TN-726|Evidence
+FINDING: marks (carried): 'Attendance note / TN-726' at 10853,10181,0, pen in the inventory=true
+FINDING: marks (carried): record=true at 10853,10181,0, survivor at 10851,10180,0, clue's square 10853,10181,0; written=true ink=Pen; on the clue's own square=true; building of the mark=outdoors, of the clue=outdoors
+FINDING: marks (carried): MAP NOTE line reads 'Finding location marked on your world map.'
+FINDING: marks (carried): written/pending/missing = 2/0/0
+FINDING: counters (icons added, dropped, spots, recognitions, search mode re-enabled): 11 2 4 4 0
+errors inside the mod: 0
