@@ -262,15 +262,27 @@ function I.standBeside()
     if not t then return "false", "no clue picked" end
     local live = CFField.livePosition() or { x = t.x, y = t.y, z = t.z }
     local cell = getCell()
-    for _, d in ipairs({ { 1, 0 }, { 0, 1 }, { -1, 0 }, { 0, -1 }, { 1, 1 }, { -1, -1 }, { 2, 0 }, { 0, 2 } }) do
-        local sq = cell:getGridSquare(live.x + d[1], live.y + d[2], live.z)
-        if sq and sq:isFree(false) then
-            player():teleportTo(sq:getX() + 0.5, sq:getY() + 0.5, sq:getZ())
-            pcall(function() player():faceLocation(live.x + 0.5, live.y + 0.5) end)
-            return "true", sq:getX() .. "," .. sq:getY(), live.x .. "," .. live.y
-        end
+    -- RINGS, not eight offsets. A mailbox stands at a fence or a hedge and the
+    -- eight squares around it can all be occupied: the first mailbox clue a
+    -- real game placed could not be stood beside at all ("no free square beside
+    -- 10853,10181", 20260918T062030) and the stage failed on the harness rather
+    -- than on the mod. Search Mode has a radius of its own, so a square two or
+    -- three tiles off is still a square the clue can be spotted from; the
+    -- distance is reported so a reader knows how close the survivor got.
+    for radius = 1, 4 do
+        for dx = -radius, radius do for dy = -radius, radius do
+            if math.max(math.abs(dx), math.abs(dy)) == radius then
+                local sq = cell:getGridSquare(live.x + dx, live.y + dy, live.z)
+                if sq and sq:isFree(false) then
+                    player():teleportTo(sq:getX() + 0.5, sq:getY() + 0.5, sq:getZ())
+                    pcall(function() player():faceLocation(live.x + 0.5, live.y + 0.5) end)
+                    return "true", sq:getX() .. "," .. sq:getY(), live.x .. "," .. live.y,
+                        tostring(radius)
+                end
+            end
+        end end
     end
-    return "false", "no free square beside " .. live.x .. "," .. live.y
+    return "false", "no free square within 4 tiles of " .. live.x .. "," .. live.y
 end
 
 -- ---------------------------------------------------------------------------

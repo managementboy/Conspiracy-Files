@@ -4,7 +4,10 @@
   done 2026-09-18**: the campaign assertions, the refusal histogram in the
   evidence, a ten-minute `promise.sh` that provokes every refusal code, and
   three `prove.py` mutations (the promise from the wrong clock, a ladder that
-  never climbs, the poller's gap going quiet). What a real game then showed is
+  never climbs, the poller's gap going quiet). Step 6 then found a fault in the
+  mod itself - **every promise was made in the past** - which was fixed the same
+  day and is the last section of this file; `promise.sh` PASSES since
+  `20260918T061309-promise.txt`. What a real game then showed is
   under "What the running game said (2026-09-18)" below. The
   fourth rung of the ladder is **not built** and cannot be without a generator
   revision - see "What was built differently" below. Owner approved the shape

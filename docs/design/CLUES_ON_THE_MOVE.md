@@ -325,17 +325,21 @@ widen the footprint rather than pretend the kerb is a room.
   is a place for a waiting clue as well as for a new case.
 - the band is a wider place to LOOK, never a way round the allow-list: a kind
   absent from `Storage.KINDS` is not offered from the band either.
-- **Twelve tiles, and the width is measured.** A band is walked square by
-  square on every case attempt, so its width is a real cost - about 1,050
-  squares a site, against 380 at six tiles - and six was tried first.
-  `instalments.sh` now prints how far outside the nearest live site every real
-  postbox lies, and a running game answered
-  (`20260918T060614-instalments.txt`): of six postboxes within sixty tiles of
-  the survivor, the nearest two stood **8 and 9 tiles** out and the rest at 25,
-  28, 30 and 50. Six tiles reached none of them, and the check failed on
-  exactly that - "not one within 6 tiles of a live site footprint, so the band
-  cannot reach a mailbox at all". Twelve is the number a car in the driveway
-  already gets, for the same ground.
+- **Twelve tiles, and the width is measured, not guessed.** A band is walked
+  square by square on every case attempt, so its width is a real cost - about
+  1,050 squares a site, against 380 at six tiles - and six was tried first. The
+  check now prints, for every real postbox, how far it lies from the nearest
+  **building**, which is what a band grown from a site's rectangle has to
+  cover. A running game answered (`20260918T062030-instalments.txt`):
+
+      6 of 6 within 12 tiles
+      10786,10113=3t 10853,10123=10t 10853,10148=9t
+      10853,10181=7t 10859,10184=9t 10875,10142=9t
+
+  Six tiles would have reached one of the six; twelve reaches all six. It is
+  also the number a car in the driveway already gets, for the same ground. The
+  run at six tiles failed on exactly this and named the distances
+  (`20260918T060614`, the mailbox stage).
 - **The cost is bounded and mostly not paid.** The band comes after every room
   rectangle, and the scan skips a whole rectangle in ONE step for a site that
   already has its eight candidates: a furnished, loaded house never walks its
