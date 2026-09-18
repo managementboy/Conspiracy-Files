@@ -95,7 +95,7 @@ assert(body:find("Somebody kept this here", 1, true), "a drawer says only that i
 -- The disclaimer has to name what it is NOT, because a name in a house reads
 -- as ownership unless the text refuses it out loud.
 assert(body:find("not that they lived here", 1, true), body)
-assert(body:find("not that they are the person on the document", 1, true), body)
+assert(body:find("not that they are the person named on it", 1, true), body)
 -- And a corpse still reads as a corpse: the stronger source must not have been
 -- levelled down to match the weaker one.
 local corpse = {

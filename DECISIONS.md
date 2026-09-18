@@ -1111,6 +1111,18 @@ passed, so every promise was already overdue and the rule meant nothing. A
 refusal now promises a time in the future, which is what the campaign check
 asserts against.
 
+**P4-R137 — the survivor names what they picked up.** Owner, Windows,
+2026-09-18, reading "I saw a document labelled \"Badge: Roger Whitfield\"": "a
+badge is not a document". An identity record now says what the thing is - a
+badge, an ID card, a credit card, a passport, a press card, a diary, a parking
+or speeding ticket, a business card - and only something unrecognised is still
+called a document. Where the label carries a name, the line reads "I saw a
+badge with the name \"Roger Whitfield\" on it" instead of repeating the label.
+The same wording carries into the lead sentence ("The name on a badge is a
+lead"), the outfit sentence and the row's own summary. Also: a container reads
+as a survivor would write it - "inside a wallet", not "inside Wallet" - while a
+name that already possesses ("Una's Evidence") is left alone. No new game.
+
 *Built 2026-09-17 (the design's build order 1-5; the real-game checks of step 6
 are separate). The carrier target shape, corpse and zombie carriers, mailboxes
 as a container kind, the deliberate car part, one mobile clue per case

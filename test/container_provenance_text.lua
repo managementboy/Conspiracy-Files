@@ -2,6 +2,8 @@
 --
 -- Playtest 2026-09-09: an ID inside a wallet on Ursula Schultz's corpse
 -- produced an entry reading "I saw a document labelled ... inside Wallet." The
+-- wording since changed twice (P4-R137): the thing is named by its kind, and a
+-- container reads "a wallet", not "Wallet".
 -- mod had already stamped that wallet with the body's provenance token, bound
 -- a case to that corpse and recorded the name against the same token - and
 -- then told the player none of it. The owner's words: "connection to the
@@ -28,13 +30,13 @@ end
 
 -- A wallet carrying a body's token: the entry says where the wallet came from.
 local carried = detail(record("container", "Wallet", "corpse-item:1659515547"))
-assert(carried:find("inside Wallet", 1, true), "still names the container")
+assert(carried:find("inside a wallet", 1, true), "still names the container, as a survivor would write it")
 assert(carried:find("taken off a corpse", 1, true),
     "a container with body provenance must say so")
 
 -- No token: nothing is claimed. A wallet found on a shelf is a wallet on a shelf.
 local shelf = detail(record("container", "Wallet", nil))
-assert(shelf:find("inside Wallet", 1, true), "still names the container")
+assert(shelf:find("inside a wallet", 1, true), "still names the container, as a survivor would write it")
 assert(not shelf:find("corpse", 1, true),
     "without provenance the entry must not mention a body at all")
 

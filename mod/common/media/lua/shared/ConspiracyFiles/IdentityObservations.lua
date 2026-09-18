@@ -3,6 +3,31 @@ local M={MAX=128}
 local types={['Base.IDcard']=true,['Base.IDcard_Stolen']=true,['Base.IDcard_Female']=true,
  ['Base.IDcard_Male']=true,['Base.CreditCard']=true,['Base.CreditCard_Stolen']=true,['Base.ParkingTicket']=true,['Base.SpeedingTicket']=true,['Base.BusinessCard']=true,['Base.BusinessCard_Personal']=true,['Base.BusinessCard_Nolans']=true,['Base.Passport']=true,['Base.PressID']=true,['Base.Badge']=true,['Base.Diary1']=true,['Base.Diary2']=true}
 local fields={id=true,fullType=true,label=true,source=true,container=true,x=true,y=true,z=true,observedAt=true,token=true}
+-- What the thing IS. Owner, 2026-09-18, reading "I saw a document labelled
+-- \"Badge: Roger Whitfield\"": "a badge is not a document". The survivor names
+-- what they picked up; only the fallback is generic, and no record says
+-- "document" about a badge, a diary or a credit card again.
+local NOUNS={['Base.IDcard']="ID card",['Base.IDcard_Stolen']="ID card",['Base.IDcard_Female']="ID card",
+ ['Base.IDcard_Male']="ID card",['Base.CreditCard']="credit card",['Base.CreditCard_Stolen']="credit card",
+ ['Base.ParkingTicket']="parking ticket",['Base.SpeedingTicket']="speeding ticket",
+ ['Base.BusinessCard']="business card",['Base.BusinessCard_Personal']="business card",
+ ['Base.BusinessCard_Nolans']="business card",['Base.Passport']="passport",['Base.PressID']="press card",
+ ['Base.Badge']="badge",['Base.Diary1']="diary",['Base.Diary2']="diary"}
+function M.noun(fullType) return NOUNS[fullType] or "document" end
+local function article(noun) local first=noun:sub(1,1):lower(); return (first=="a" or first=="e" or first=="i" or first=="o" or first=="u") and "an" or "a" end
+function M.aNoun(fullType) local noun=M.noun(fullType); return article(noun).." "..noun end
+-- A container as the survivor would write it, not as the game names the item:
+-- "inside a wallet", never "inside Wallet" (owner, 2026-09-18). A name already
+-- carrying its own article or possessive is left alone ("Una's Evidence").
+function M.aContainer(name)
+ local text=tostring(name or "")
+ if text=="" then return "something" end
+ if text:find("'") or text:find("^[Aa] ") or text:find("^[Aa]n ") or text:find("^[Tt]he ") then return text end
+ local lowered=text:gsub("^%u%l",string.lower)
+ return article(lowered).." "..lowered
+end
+-- The name written on it, when the label carries one ("Badge: Roger Whitfield").
+local function nameOn(label) return type(label)=="string" and label:match(": (.+)$") or nil end
 local function finite(v) return type(v)=="number" and v==v and v~=math.huge and v~=-math.huge end
 local function text(v,n) return type(v)=="string" and #v<=n and v:find("%S") and not v:find("[%c]") end
 local function copyRecord(r) local o={};for k in pairs(fields) do o[k]=r[k] end;return o end
@@ -100,9 +125,12 @@ function M.rows(root,outfitFor,placeFor)
   -- says only that the document was kept in that house.
   local where
   if r.source=="corpse" then where="among a corpse's belongings"
-  elseif r.source=="furniture" then where="put away in a "..r.container
-  else where="inside "..r.container end
-  local detail="I saw a document labelled \""..r.label.."\" "..where.."."
+  elseif r.source=="furniture" then where="put away in "..M.aContainer(r.container)
+  else where="inside "..M.aContainer(r.container) end
+  local named=nameOn(r.label)
+  local detail=named
+   and ("I saw "..M.aNoun(r.fullType).." with the name \""..named.."\" on it, "..where..".")
+   or ("I saw "..M.aNoun(r.fullType).." labelled \""..r.label.."\" "..where..".")
   -- A container carrying a body's provenance token was taken off that body,
   -- and the player is entitled to know it. Saying only "inside Wallet" threw
   -- away a fact the mod had already established - the same failure as losing
@@ -149,7 +177,7 @@ function M.rows(root,outfitFor,placeFor)
     detail=detail.." The same one carried: "..table.concat(names,"; ").."."
     if not BEARER[r.fullType] then
      if sameAsBearer(r) then
-      detail=detail.." It carries the same name as the ID it was found with. That ties the two documents together, not either of them to the body."
+      detail=detail.." It carries the same name as the ID it was found with. That ties the two of them together, not either of them to the body."
      else
       detail=detail.." A card like this one names somebody else - it says it was carried, not that they met."
      end
@@ -157,14 +185,14 @@ function M.rows(root,outfitFor,placeFor)
    end
   end
   if r.source=="furniture" then
-   detail=detail.."\n\nSomebody kept this here. That is all it shows: not that they lived here, not that they are nearby, and not that they are the person on the document."
+   detail=detail.."\n\nSomebody kept this here. That is all it shows: not that they lived here, not that they are nearby, and not that they are the person named on it."
   else
-   detail=detail.."\n\nThe name on a document is a lead. It does not establish who owned the container or identify the body."
+   detail=detail.."\n\nThe name on "..M.aNoun(r.fullType).." is a lead. It does not establish who owned the container or identify the body."
   end
   if r.token and outfitFor then
    local ok,outfit=pcall(outfitFor,r.token)
    if ok and text(outfit,120) then
-    detail=detail.."\n\nThe body itself wore: "..outfit..". A worn outfit and a labelled document are two separate observations from the same body; this record does not decide which one, if either, describes who the body is."
+    detail=detail.."\n\nThe body itself wore: "..outfit..". A worn outfit and a name on "..M.noun(r.fullType).." are two separate observations from the same body; this record does not decide which one, if either, describes who the body is."
    end
   end
   -- An address, when the address book knows one. Owner, 2026-09-10: "under
@@ -212,7 +240,7 @@ function M.rows(root,outfitFor,placeFor)
     if other.id~=r.id then linked=true; break end
    end
   end
-  rows[i]={id="identity:"..r.id,ordinal=i,title="Found "..r.label,summary="Identity document - "..r.source,
+  rows[i]={id="identity:"..r.id,ordinal=i,title="Found "..r.label,summary=(M.noun(r.fullType):gsub("^%l",string.upper)).." - "..r.source,
    detailText=detail,person=person,linked=linked,source=r.source}
  end
  return rows
