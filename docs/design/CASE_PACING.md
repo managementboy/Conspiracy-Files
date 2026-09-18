@@ -90,6 +90,30 @@ own standard, in this order, one rung at a time:
 
 Reachability itself is never traded: an unreachable clue is not a clue.
 
+**And it turns out the reach filter is not what keeps a case near the survivor**
+(measured 2026-09-19, `20260919T003043-prove.txt`, mutation `reach-traded`).
+`Reach.radius` was doubled for a fresh survivor (250 to 500 tiles) and the
+travel check's per-leg reach assertion did not move: `CFCamp.placement` duly
+reported "reach 500", and all 6 sites and 18 placed clues of the run's three
+cases were still inside 250 tiles of the trail. Three other guarantees bind
+first, and any one of them is enough:
+
+- `T3Nearby` keeps the **nearest three buildings per category**, so a wider
+  radius adds candidates that the selection then never reaches;
+- `prepare` keeps only sites with **observed storage** (`#available>=1`), and
+  storage can only be observed in the streamed world, which is where the
+  survivor is;
+- `Session.target` requires every container to lie **inside the site's own
+  footprint**, so a site cannot be recorded in one place and filled in another.
+
+So a site outside the reach of anywhere the survivor has been is not something
+a single-line reach bug can produce - the assertion is a consequence of those
+three rather than a guard of its own, and it is kept as a regression net, not
+as a proven-falsifiable assertion. What DID have to change first is the check:
+`travel.lua` judged every site with `Reach.radius` itself, so widening the
+mod's reach widened the yardstick with it and no reach mutation could ever have
+been caught at all. It now keeps its own copy of P4-R55's radii.
+
 **In fiction the player sees nothing.** No voice line, no marker, no hint. The
 world simply thins out: the next case is a little smaller or a little further.
 

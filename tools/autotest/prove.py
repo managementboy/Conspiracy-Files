@@ -192,30 +192,46 @@ MUTATIONS = [
      ' if hours<due then return quiet(runtime,"gap",due) end',
      " if hours<due then return end",
      "never reported why=gap"),
-    # REACHABILITY IS NEVER TRADED (P4-R67, and P4-R133 again in so many words:
-    # "an unreachable clue is not a clue"). The travel check's per-leg reach
-    # assertion is the one thing in it P4-R133 forbids outright, and it had no
-    # mutation - it was the cheapest assertion in the check left unproven,
-    # because everything it needs is already measured on every leg.
+    # THE TRAVEL CHECK'S REACH ASSERTION CANNOT BE FALSIFIED, and that is a
+    # result rather than an omission. Recorded here because it was the one
+    # assertion in travel.sh with no mutation, and the next person to look will
+    # otherwise spend an hour of game time learning it again.
     #
-    # It was UNFALSIFIABLE until 2026-09-18: travel.lua judged each site with
-    # `Reach.radius(anchor.hours)`, the very function the mod filters by, so
-    # widening the mod's reach widened the yardstick with it and every site
-    # stayed "inside the reach" however far the generator was allowed to go.
-    # travel.lua now keeps its own copy of P4-R55's radii (`ruleRadius`), so the
-    # two can disagree - and this mutation is the disagreement.
+    # Two things were done. First, travel.lua judged every site with
+    # `Reach.radius(anchor.hours)` - the very function the mod filters by - so
+    # widening the mod's reach widened the yardstick with it and NO reach
+    # mutation could ever have been caught. It now keeps its own copy of
+    # P4-R55's radii (`ruleRadius`), which was the necessary fix either way.
     #
-    # ONE RUNG, not a wild number, on purpose. A fresh survivor is given the
-    # 264-hour reach, which is the shape a real off-by-one in the ladder would
-    # take, and it keeps the extra sites PLACEABLE: a building 250-500 tiles off
-    # is still inside the streamed world, so it can hold a clue and the case is
-    # still created - which is what the assertion needs in order to fail. A far
-    # bigger radius would mostly yield unloaded sites, no containers, and a
-    # refused case, which fails the check for a different reason.
-    ("reach-traded", "travel", "mod/common/media/lua/shared/ConspiracyFiles/Reach.lua",
-     "    if hours<96 then return 250 end",
-     "    if hours<96 then return 500 end",
-     "outside the reach of anywhere the survivor has been"),
+    # Then the mutation was run: Reach.radius 250 -> 500 for a fresh survivor,
+    # one rung of the ladder, which is the shape a real off-by-one would take.
+    # MISSED (20260919T003043-prove.txt, baseline PASS). The mod really did use
+    # the wider reach - `CFCamp.placement` reported "reach 500" - and all 6
+    # sites and 18 placed clues of the run's three cases were still inside 250
+    # tiles of the trail. Three other guarantees bind first, and any one of them
+    # is enough: T3Nearby keeps the nearest THREE buildings per category, so a
+    # wider radius adds candidates the selection never reaches; `prepare` keeps
+    # only sites with observed storage, which exists only in the streamed world
+    # where the survivor is; and `Session.target` requires every container to
+    # lie inside the site's own footprint, so a site cannot be recorded in one
+    # place and filled in another. A bigger radius does not help - it yields
+    # unloaded sites, no containers and a refused case, which fails the check
+    # for a different reason. See docs/design/CASE_PACING.md, section 3.
+    #
+    # So the reach assertion stays as a regression net over those three, and
+    # what is proven here instead is the assertion travel.sh gained the same
+    # day - the first case's own wait, which is cheap and sharp.
+    #
+    # EVERY SILENCE HAS A REASON, in the real game this time (P4-R133). The
+    # first case of a save waits for the survivor to be inside a building, and
+    # that wait reported nothing at all until 2026-09-18: a player who spawned
+    # on a street got no case and `automaticStatus()` read why=nil. travel.sh's
+    # stage (0) steps out of the start house before any case exists and requires
+    # the wait to name itself.
+    ("first-house-silent", "travel", C + "AutomaticInvestigations.lua",
+     '  if not ok and why==runtime.WAITING_INDOORS then return quiet(runtime,"outdoors") end',
+     "  -- mutation: the wait for the first house says nothing",
+     "rather than outdoors"),
 ]
 
 

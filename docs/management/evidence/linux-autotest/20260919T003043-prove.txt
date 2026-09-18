@@ -1,0 +1,9 @@
+Linux mutation proof 20260919T003043
+worktree: /home/elkin/cf-wp345 at d979881 Both faults proven in a real game: two journeys and a boot check
+
+baseline travel: PASS
+
+MISSED reach-traded (travel): travel: what the record knows of each live case's clues at the destination: 1339271594[accounted=1 uncertain=5] 186206719[accounted=1 uncertain=6] 428138439[accounted=5] | travel: address book coverage: the shipped book numbers 6 of the 6 sites this run's cases used (1339271594 2/2; 186206719 2/2; 428138439 2/2), and 5932 of the 6663 buildings on the map with two or more rooms
+
+caught 0 of 1
+worktree clean afterwards: yes
