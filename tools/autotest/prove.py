@@ -156,6 +156,17 @@ MUTATIONS = [
     # carries the hour a case is promised BY. Compute that hour from the wrong
     # clock and the promise is broken the moment it is made, which is exactly
     # the state the assertion exists to catch.
+    #
+    # *** THIS ONE CANNOT BE CAUGHT YET, and the reason is a fault in the mod,
+    # not in the check (found 2026-09-18, twice MISSED: prove 20260918T040042
+    # and 20260918T045930). `dueFor` returns math.max(now, last+gap) for every
+    # code but `cooldown`, and the generator is only ever ASKED once the gap has
+    # passed - so `last+gap <= now`, the due hour IS now, and a fresh
+    # `no-containers` refusal is overdue one second after it is made. The clean
+    # code already behaves as this mutation does, so the mutation changes
+    # nothing to notice. promise.sh now says so out loud (promise_is_future).
+    # Fix dueFor to name a future hour for the world-supply codes and this
+    # mutation becomes catchable. ***
     ("promise-overdue", "promise", C + "GeneratedRuntime.lua",
      '    if type(last)=="number" then return math.max(now,last+gap) end',
      '    if type(last)=="number" then return now-1 end',

@@ -44,8 +44,8 @@ promise_words() { # the same words the campaign check prints, so two reports com
 }
 # THE PROMISE (P4-R133). Identical in wording to campaign.sh's, deliberately:
 # this is the same assertion, run cheaply, and prove.py must see the same text.
-promise_broken() { # promise_broken LABEL
-    local p why; p="$(promise)"; why="$(field 1 "$p")"
+promise_broken() { # promise_broken LABEL [TEXT]
+    local p why; p="${2:-$(promise)}"; why="$(field 1 "$p")"
     case "$why" in
         no-containers|no-reach|cooldown) ;;
         *) note "$1: nothing was promised worth failing on ($(promise_words "$p"))"; return 1 ;;
@@ -62,15 +62,32 @@ ladder_climbed() { # ladder_climbed LABEL
     [ "$(field 1 "$l")" = true ] \
         || fail "$1: $(field 4 "$l") refusals of one code earn rung $(field 3 "$l") but the generator stands on $(field 2 "$l") (every $(field 5 "$l") refusals, up to $(field 6 "$l"))"
 }
-# Wait until the poller (or the generator) reports one of these codes.
+# Wait until the poller (or the generator) reports one of these codes, and keep
+# the line it matched: the standing code changes every ten seconds, so an
+# assertion that re-reads the promise is asking about a different refusal than
+# the one it waited for.
+LAST_PROMISE=""
 wait_code() { # wait_code SECONDS CODE...
     local deadline=$(( $(date +%s) + $1 )); shift
     while [ "$(date +%s)" -lt "$deadline" ]; do
-        local why; why="$(promise | field 1)"
-        for want in "$@"; do [ "$why" = "$want" ] && return 0; done
+        local p why; p="$(promise)"; why="$(field 1 "$p")"
+        for want in "$@"; do [ "$why" = "$want" ] && { LAST_PROMISE="$p"; return 0; }; done
         sleep 3
     done
     return 1
+}
+# IS THE PROMISE A PROMISE? A refusal that means the world could not supply a
+# case must name an hour in the FUTURE, or "past the promised hour it is a
+# failure" can never mean anything: it is failed the moment it is made. This
+# reads the refusal AS IT WAS REPORTED, not whatever stands a second later.
+promise_is_future() { # promise_is_future LABEL TEXT
+    local why; why="$(field 1 "$2")"
+    case "$why" in
+        no-containers|no-reach) ;;
+        *) note "$1: the refusal that stands is $why, whose due hour is not dueFor's to give"; return 0 ;;
+    esac
+    [ "$(field 7 "$2")" = false ] \
+        || fail "$1: the refusal promised $(field 3 "$2") and it is already $(field 6 "$2") - a promise cannot be kept, or broken, if it is made in the past ($(promise_words "$2"))"
 }
 logged_code() { run_log | grep -c "ev=defer why=$1" || true; }
 
@@ -110,7 +127,8 @@ if wait_code 240 no-containers no-reach cooldown; then
     # about the wrong thing: the promise-overdue mutation was overdue by an hour
     # at the first refusal and had become a cooldown by the time the count had
     # climbed, and the check passed with the bug in (prove, 20260918T051216).
-    promise_broken "the promise, at the refusal" || true
+    promise_is_future "the promise, at the refusal" "$LAST_PROMISE"
+    promise_broken "the promise, at the refusal" "$LAST_PROMISE" || true
     # AND THE LADDER NEEDS THREE COUNTED REFUSALS. One is counted only a quarter
     # of an in-game hour after the last, and after a counted one the generator
     # is not asked again until the survivor has moved about fifty tiles or half
