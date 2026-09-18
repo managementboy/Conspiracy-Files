@@ -82,6 +82,10 @@ running two at once is safe, the second waits.
 | `clue_actions.sh` | clues are found by searching (P4-R132, stage 2): walking (the game's walk action) up to a lit clue gives the wordless cue once, the first of the save teaching, and not again at the same place; the clue, carried, offers only "Look it over", which runs as a timed action in the game's queue and recognises only on completion (title and Evidence after); Inspect then runs as a timed action and notes only on completion, with no "Noted" line; no mod errors |
 | `clue_field.sh` | clues are found by searching (P4-R132), the four answers only a running game has: a clue in a **car** whose car is then moved (its icon must follow to the car's new square and the clue still be spottable there); recognition across a real **save and `--continue` reload** (still recognised, still Evidence, still inspectable); **interruption** - walking and aiming from the real keyboard and mouse (`pz.sh hold`) part-way through "Look it over" and Inspect must cancel them and leave the clue unrecognised / unnoted; **darkness** - a clue in a room the game calls too dark is not spottable, and the check then reports plainly whether a lit torch in hand changes that (a design question, reported, not asserted) |
 | `../fieldnote-test/boot_test.sh` | the case's hardware contract on the real organiser: every key's hitbox at every machine size, legends at every size, press colours, a release off a key cancels it |
+| `carriers.sh` | clues on carriers (P4-R134): what the engine really calls every container around the survivor (it calls a mailbox `postbox`), the carrier guards asked of a real corpse - fresh, loot window open, already searched - and a clue on a carrier taken out of it by looting |
+| `body_carrier.sh` (four minutes) | whether a fresh CORPSE is a carrier at all: bodies and walkers parked beside the survivor, and for each one what every inventory accessor returns, what class the object is and what `Carriers.refusal` says. It fails if no body is usable - which is what it found on 2026-09-18 |
+| `promise.sh` (about ten minutes) | the generator's promise and the poller's own silence (P4-R133 step 6): a neighbourhood stripped of every container makes the generator refuse with `no-containers`, and the promise must still stand and the ladder keep up with the count; then `gap`, `active-limit` and `cap` are each provoked and each must carry a non-nil `why`, an `ev=defer` line and no spurious broken promise |
+| `instalments.sh` (about twenty-five minutes) | the states a fresh suburb never reaches: a clue placed later as an instalment (`ev=placed why=instalment`), a clue on a carrier with the record's own words for it, the clue spotted in Search Mode where it now is, a clue that never found a home expiring (`ev=stale why=expired`), whether a postbox is anywhere the nearby scan can see it, and AD-10's town read from another town |
 | `campaign.sh` (not in the suite, about half an hour) | a player's week: three cases in one save with two save/quit/continue rounds. Case 1 played through and answered on the organiser; case 2 built from those answers (the person returns without a second body, the answers lock); case 3 built from nothing; placement within reach on fresh sites; answers, discovery order and Evidence / Old surviving reloads; NAMES growing; marks with a pen; save size and frame cost per stage; then four unfinished cases, the most the save allows, and a new case arriving once one is finished |
 
 Anything in `test/` is **simulated**: it stubs the engine. That is the right
@@ -191,6 +195,29 @@ field names and says "unreadable" rather than reporting a confident zero. When
 it says that, the handler-duplication assertion is vacuous — read the note, do
 not read a pass.
 
+## Making the world do something rare
+
+Three of the mod's behaviours only happen in a world that has been used up: a
+clue placed as a later instalment, a clue on a carrier, and a clue that expires
+having found no home (P4-R133, P4-R134). A fresh suburb never reaches any of
+them - with only kitchen cupboards allowed a case still placed all eight of its
+clues (20260918T025841) - so `instalments.lua` and `promise.lua` turn down what
+the mod is allowed to SEE, and every check that does it says so in its evidence
+and restores it afterwards:
+
+| knob | what it imitates | where |
+|---|---|---|
+| `Generated/Storage.KINDS`, narrowed **in place** | a neighbourhood already stripped of that furniture. `Storage.scan` closes over the same table, so replacing it changes nothing - remove keys from it | `CFInst.narrow`, `CFInst.widen` |
+| a case asked for the moment the survivor arrives | the design's own sentence: "a house catalogued from the street yields one or two candidates and eight once the survivor walks in". This, not the kinds, is what leaves a clue waiting | `get_case LABEL TRIES SECONDS 8` |
+| `Session.VEHICLE_RADIUS = 0` | no car in the driveway, so the case's one mobile slot is free for a body | `CFInst.noCars` |
+| `Session.DEFER_EXPIRE_HOURS`, lowered from 72 | three in-game days, which is forty minutes of real time even at the fastest speed. The constant is the only thing changed; the path that drops the clue is the shipped one | `CFInst.expire` |
+| `SuccessiveCases.MAX_ACTIVE` / `MAX_CASES`, lowered to what the world already has | a long save at its limits, without first playing sixteen cases | `CFProm.squeezeActive`, `CFProm.squeezeCap` |
+| `ConspiracyFiles.logLevel("d")` | nothing - but `gap`, `cooldown`, `busy` and the filler's `ev=skip` lines are written at debug level, so at the default level they are not in the console at all | any check that greps for them |
+
+None of these is a mod change and none is a mock: the branch that then runs is
+the shipped one, with the shipped code. A check that uses one must print it as
+a finding, or a reader cannot tell what the run was.
+
 ## Adding a test
 
 - Logic, text, a reducer, a projection → `test/`, offline, assert outcomes.
@@ -226,6 +253,13 @@ check passed with the bug in: the check is decoration), or **FAILED, BUT NOT
 FOR THIS** (it failed on something else, so it proved nothing about this bug).
 It refuses a worktree with uncommitted changes, so a mutation can never be
 committed, and writes `<stamp>-prove.txt` beside the other evidence.
+
+**Choose the cheapest check that carries the assertion.** A mutation costs a
+baseline run of its check plus one run per mutation, so an assertion that lives
+only in `campaign.sh` costs an hour and a half to prove. The promise and the
+ladder (P4-R133 step 6) are asserted in `campaign.sh` and, word for word, in
+`promise.sh`, which takes ten minutes - so that is where their mutations point.
+Keep the two wordings identical: `prove.py` matches on the FAIL text.
 
 A trap that made one check vacuous: a Lua stage that returns `nil` prints the
 word `nil`, and `[ -n "$x" ]` treats that as a result. CN-01 passed "card on the

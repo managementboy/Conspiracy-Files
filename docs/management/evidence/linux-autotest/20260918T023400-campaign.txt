@@ -1,0 +1,66 @@
+Linux campaign check 20260918T023400: FAIL
+source: 1a5d81c
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+cases: 1 generated:521704413:case, 2 generated:1293201510:case, 3 generated:363472732:case; at the end 
+stages:
+  start                  cases 1 (0 finished) | record 0 | FILES questions 0 | NAMES 1 | PLACES 0 | Old 0/0 wrong | Evidence 0/0 wrong | order  | save 37854 B
+  case 1 finished        cases 1 (1 finished) | record 6 | FILES questions 1 | NAMES 3 | PLACES 10 | Old 6/0 wrong | Evidence 0/0 wrong | order 111111 | save 32146 B
+  after reload 1         cases 1 (1 finished) | record 6 | FILES questions 1 | NAMES 3 | PLACES 10 | Old 6/0 wrong | Evidence 0/0 wrong | order 111111 | save 32951 B
+  case 2 finished        cases 2 (2 finished) | record 11 | FILES questions 2 | NAMES 3 | PLACES 16 | Old 11/0 wrong | Evidence 0/0 wrong | order 11111122222 | save 54381 B
+  case 3, two clues      cases 3 (2 finished) | record 13 | FILES questions 2 | NAMES 4 | PLACES 19 | Old 11/0 wrong | Evidence 2/0 wrong | order 1111112222233 | save 84289 B
+  after reload 2         cases 3 (2 finished) | record 13 | FILES questions 2 | NAMES 4 | PLACES 19 | Old 11/0 wrong | Evidence 2/0 wrong | order 1111112222233 | save 84729 B
+  at the limit           cases 6 (2 finished) | record 13 | FILES questions 2 | NAMES 4 | PLACES 19 | Old 11/0 wrong | Evidence 2/0 wrong | order 1111112222233 | save 174508 B
+  after the limit        cases 7 (3 finished) | record 16 | FILES questions 3 | NAMES 5 | PLACES 25 | Old 16/0 wrong | Evidence 0/0 wrong | order 1111112222233333 | save 184870 B
+  after reload 3, stubs present cases 7 (5 finished) | record 26 | FILES questions 5 | NAMES 7 | PLACES 40 | Old 28/0 wrong | Evidence 4/0 wrong | order 22222333334444555555666666 | save 158551 B
+case 1 answers on the organiser: true two person2 records nil Delia Mercer Ines Kubiak County Equipment Service
+case 2 steer: generated:521704413:case two records Ines Kubiak Ines Kubiak true
+refusals (P4-R133), all sessions:
+  active-limit: 5 lines, longest run of 3, rung 1
+  no-containers: 2 lines, longest run of 1, rung 1
+instalments placed and clues dropped (P4-R133, P4-R134), all sessions:
+  lines: 1
+  ev=placed doc=generated:936981237:document-5 why=instalment at=10762,10120,0
+errors inside the mod, all sessions: 0
+FINDING: fresh worlds started for a case 1 with a document in the memo's week: 1 (memo=true, dated documents=3)
+FINDING: start: assignments placed=6; why=nil n=0 due=- rung=0/3 now=02:05 overdue=false(0.00h) preparing=false active=1/4 cases=1/16
+FINDING: case 1 relay memo: found=true, dated in its week=3, carrying the date note=3
+FINDING: the date note was exercised: 3 of 3 records dated in the memo's week carry it
+FINDING: case 1 finished: assignments ; why=gap n=0 due=02:03 rung=0/3 now=02:21 overdue=false(-23.70h) preparing=false active=0/4 cases=1/16
+FINDING: case 1 note on the organiser: I think it was someone using another name. Ines Kubiak matters here. Next I would check the place against its records.
+FINDING: frame cost during case 1: AutomaticInvestigations.onTick calls=3617 avg=0.012ms max=20ms over2ms=1 | CaseFile.onTick calls=3605 avg=0.009ms max=1ms over2ms=0 | ClueMarkers.draw calls=0 avg=0.000ms max=0ms over2ms=0 | ClueMarkers.update calls=65 avg=0.446ms max=3ms over2ms=6 | IdentityObserver.afterRender calls=7276 avg=0.126ms max=1ms over2ms=0 | IdentityObserver.tick calls=3654 avg=0.004ms max=1ms over2ms=0 | LocalPersonI
+FINDING: after reload 1: assignments ; why=gap n=0 due=02:03 rung=0/3 now=02:27 overdue=false(-23.61h) preparing=false active=0/4 cases=1/16
+FINDING: reload 1 save size: 32423 -> 32951 bytes; before [Generated.G2=25588 KeyConnections=770 DiscoveryLedger=3268 VisitedBuildings=359]; after [Generated.G2=26116 KeyConnections=770 DiscoveryLedger=3268 VisitedBuildings=359]
+FINDING: case 2 placement: reach 250: t3:10977704480342021, t3:10977704480342020
+FINDING: case 2 clues: Public notice / TN-192 | Internal memo / TN-192 | Circulation note / TN-192 | Duty log / TN-192 | sixteen earring dangly emeralds
+FINDING: case 2 finished: assignments ; why=gap n=0 due=02:32 rung=0/3 now=02:49 overdue=false(-23.72h) preparing=false active=0/4 cases=2/16
+FINDING: frame cost during case 2: AutomaticInvestigations.onTick calls=4824 avg=0.006ms max=1ms over2ms=0 | CaseFile.onTick calls=4812 avg=0.010ms max=1ms over2ms=0 | ClueMarkers.draw calls=0 avg=0.000ms max=0ms over2ms=0 | ClueMarkers.update calls=85 avg=0.729ms max=5ms over2ms=5 | IdentityObserver.afterRender calls=9640 avg=0.106ms max=1ms over2ms=0 | IdentityObserver.tick calls=4860 avg=0.003ms max=1ms over2ms=0 | LocalPersonIn
+FINDING: case 3 placement: reach 250: t3:10977700185374741, t3:10977704480342061
+FINDING: case 3, two clues: assignments placed=5; why=gap n=0 due=02:52 rung=0/3 now=02:58 overdue=false(-23.90h) preparing=false active=1/4 cases=3/16
+FINDING: frame cost during case 3: AutomaticInvestigations.onTick calls=6779 avg=0.006ms max=2ms over2ms=1 | CaseFile.onTick calls=6767 avg=0.010ms max=1ms over2ms=0 | ClueMarkers.draw calls=0 avg=0.000ms max=0ms over2ms=0 | ClueMarkers.update calls=119 avg=0.824ms max=5ms over2ms=8 | IdentityObserver.afterRender calls=13522 avg=0.105ms max=1ms over2ms=0 | IdentityObserver.tick calls=6815 avg=0.003ms max=1ms over2ms=0 | LocalPerson
+FINDING: after reload 2: assignments placed=5; why=gap n=0 due=02:52 rung=0/3 now=03:03 overdue=false(-23.81h) preparing=false active=1/4 cases=3/16
+FINDING: reload 2 save size: 84289 -> 84729 bytes; before [Generated.G2=69846 KeyConnections=1682 DiscoveryLedger=6746 VisitedBuildings=827]; after [Generated.G2=70286 KeyConnections=1682 DiscoveryLedger=6746 VisitedBuildings=827]
+FINDING: map marks after reload 2 (written/pending/missing): 13/0/0
+FINDING: the limit, move 1: moved on 301 tiles to 10638,10361 (t3:11259175162085404, 5 rooms, 42 unused buildings within 120 tiles); 19 containers loaded within 8 tiles
+FINDING: the limit: the case came after 1 move(s) to a fresh neighbourhood
+FINDING: at the limit: assignments placed=22; why=nil n=0 due=- rung=0/3 now=03:32 overdue=false(0.00h) preparing=false active=4/4 cases=6/16
+FINDING: at the limit: moved on 305 tiles to 10663,10057 (t3:10977700185374745, 4 rooms, 36 unused buildings within 120 tiles); 19 containers loaded within 8 tiles
+FINDING: after 90 s with 4 unfinished: preparing=false, cases 6 2 1:521704413:retired 2:1293201510:retired 3:363472732:live 4:936981237:live 5:2041583939:live 6:756216408:live
+FINDING: a new case came after a case was finished at the limit: 7 3 1:521704413:retired 2:1293201510:retired 3:363472732:retired 4:936981237:live 5:2041583939:live 6:756216408:live 7:1789435629:live
+FINDING: after the limit: assignments placed=19; why=nil n=0 due=- rung=0/3 now=04:08 overdue=false(0.00h) preparing=false active=4/4 cases=7/16
+FINDING: frame cost during the limit: AutomaticInvestigations.onTick calls=14015 avg=0.020ms max=103ms over2ms=6 | CaseFile.onTick calls=14002 avg=0.008ms max=3ms over2ms=3 | ClueMarkers.draw calls=0 avg=0.000ms max=0ms over2ms=0 | ClueMarkers.update calls=246 avg=1.077ms max=12ms over2ms=26 | IdentityObserver.afterRender calls=27960 avg=0.060ms max=1ms over2ms=0 | IdentityObserver.tick calls=14052 avg=0.003ms max=1ms over2ms=0 | Loca
+FINDING: archive: case 936981237:case did not finish
+FINDING: archive: 4 finished cases full, 1 stubbed, 22 rows kept in all, 1 stubs still offering questions; 1:521704413:stub:0 2:1293201510:full:5 3:363472732:full:5 5:2041583939:full:6 6:756216408:full:6
+FINDING: a finished case's clues carried: 28 checked, 23 show Evidence / Old, 28 offer the greyed already-noted option, 0 offer no such option (Delivery docket / GT-499 -> Already in the organiser)
+FINDING: KNOX boot line "Records ......... 33": the ledger holds 33 discoveries, 6 of them from stubbed cases
+FINDING: stubbed cases: 1 stubs, 1 still offering questions, 1 carrying saved answers, 1 of those marked used by a later case (521704413 -> two/person2/records usedBy=generated:1293201510:case)
+FINDING: archive after the reload: 4 full, 1 stubbed, 22 rows; 1:521704413:stub:0 2:1293201510:full:5 3:363472732:full:5 5:2041583939:full:6 6:756216408:full:6
+FINDING: refusals in the log of the session loaded with stubs present: 0
+FINDING: after reload 3, stubs present: assignments placed=7; why=gap n=1 due=04:07 rung=0/3 now=05:17 overdue=false(-22.84h) preparing=false active=2/4 cases=7/16
+FINDING: reload 3 save size: 158551 -> 158551 bytes; before [Generated.G2=123899 IdentityObservations=921 KeyConnections=3046 DiscoveryLedger=16768 VisitedBuildings=1295]; after [Generated.G2=123899 IdentityObservations=921 KeyConnections=3046 DiscoveryLedger=16768 VisitedBuildings=1295]
+FINDING: AD-10 town names, standing in Muldraugh: of 26 records the LIVE label names a town on 0 and not on 0; the stored FOUND lines (history, frozen by design) name one on 0 and not on 33; e.g. 
+FINDING: AD-10: walked from Muldraugh to Rosewood at 9077,11503, 1990 tiles
+FINDING: AD-10 town names, standing in Rosewood: of 26 records the LIVE label names a town on 0 and not on 0; the stored FOUND lines (history, frozen by design) name one on 0 and not on 33; e.g. 
+FAIL: case 936981237:case: document 1 not found: not on or next to its square; generated:936981237:document-5 at 10762,10120 floor 0 (address unknown) [placed]; runtime: uncertain On a zombie close by. | FAULT5: generated:936981237:document-5; status=placed relocations=0 site=t3:10977704480342026 placedHours=3.144773483276367 deferredHours=nil missingHours=4.146984100341797; target=10762,10120,0 object=0 container=0 type=carrier sprite=zombie carrier=zombie; World.resolve REFUSED the target (nil); no item carrying the token within 4 tiles of the recorded square or of the survivor; whereabouts=uncertain (On a zombie close by.) (skipped generated:936981237:document-5)
+FAIL: 5 of 28 finished clues do not read Evidence / Old
+FAIL: read from Rosewood, not one of 26 records about Muldraugh names its town in its LIVE label (stored FOUND lines: 0 with a town, 33 without - that half is history and frozen by design)
+screenshot: dev/eval/linux/runs/20260918T023400-campaign.png (not committed)

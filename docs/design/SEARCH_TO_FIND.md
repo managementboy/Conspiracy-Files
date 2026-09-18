@@ -1,6 +1,14 @@
 # Clues are found by searching (P4-R132)
 
 - **Status:** Design, 2026-09-16. Stage 1 (search and recognise) and stage 2 (look it over, timed Inspect, the wordless cue) built 2026-09-17; stage 3 (the checks) the same day; see the end.
+- **Still unproven, 2026-09-18:** a clue **on a carrier** spotted in Search
+  Mode. Every other kind has been spotted in a real game (in furniture, in a
+  car whose car was then moved, across a save and reload); a carrier clue has
+  not, because the only carrier the mod can currently use is a walking zombie
+  (see `docs/design/CLUES_ON_THE_MOVE.md`, "What the running game said") and it
+  left the find radius before the check reached it both times. The stage is
+  written in `tools/autotest/checks/instalments.sh` and waiting for a run where
+  the carrier stays put.
 - **Owner:** shaped in conversation on 2026-09-16 ("I would love to mix both",
   "perfect!", "the investigate area dropdown would need another entry").
 - **Game:** Build 42.20. Everything marked *verified* was read in the installed

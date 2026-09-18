@@ -126,7 +126,7 @@ note "the gap between cases turned off, and cars kept out of the mobile slot (VE
 
 # --- (a) the mailbox ---------------------------------------------------------
 if [ "$carriers_only" = yes ]; then
-    note "the mailbox and AD-10 stages were answered by 20260918T033352 and are skipped in this run (--carriers-only)"
+    note "the mailbox and AD-10 stages were answered by 20260918T025841 and are skipped in this run (--carriers-only)"
 else
 pb="$(ev 'return CFInst.postboxes(60)')"
 note "postboxes within 60 tiles of the survivor: $(field 1 "$pb") containers, $(field 2 "$pb") of them on a square the game calls a room, $(field 3 "$pb") inside one of the $(field 5 "$pb") live site footprints (first: $(field 4 "$pb"))"
@@ -162,13 +162,13 @@ fi
 carrier_done=""
 # The ladder of scarcity. `counter` is a kitchen cupboard and a house has
 # several, so a case placed every clue it had even with nothing else allowed
-# (20260918T033352): the tighter kinds come first now, and each case is asked
+# (20260918T025841): the tighter kinds come first now, and each case is asked
 # for the moment the survivor arrives rather than after the building has
 # finished loading.
 LADDER=("desk" "shelves" "locker,filingcabinet" "counter")
 for kind in corpse zombie; do
     waiting=no
-    # A carrier clue of this kind may already be in the world: run 20260918T042707
+    # A carrier clue of this kind may already be in the world: run 20260918T032829
     # placed one on a zombie as an instalment while the check was looking for a
     # corpse, and then spent four ladder steps asking for a case it did not
     # need. Take what is there first.
@@ -288,7 +288,7 @@ fi
 # because retirement drops the envelope AddressMap.describe needs and the only
 # address left in its record rows is the frozen FOUND line.
 if [ "$carriers_only" = yes ]; then
-    note "AD-10 was proven in 20260918T033352 (5 of 5 buildings gained \", Muldraugh\" read from West Point) and is skipped here"
+    note "AD-10 was proven in 20260918T025841 (5 of 5 buildings gained \", Muldraugh\" read from West Point) and is skipped here"
 else
 probe="$(ev 'return CFCamp.qualifyProbe()')"
 note "AD-10, standing in $(field 1 "$probe"): of $(field 5 "$probe") buildings the cases used, $(field 2 "$probe") would be written with their town and $(field 3 "$probe") without; $(field 4 "$probe")"

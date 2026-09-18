@@ -1,7 +1,32 @@
 # Case retirement — the path to genuinely unlimited mysteries
 
-**Status (updated 2026-09-17):** built, including the archive of P4-R111. A
-finished case now leaves the live budget in two steps, and a save holds three
+**Status (updated 2026-09-18):** built, including the archive of P4-R111, and
+**the stub tier is now proven in a running game** - campaign run
+`20260918T023400` reached five finished cases and archived the oldest:
+
+    cases 7 (5 finished) | record 26 | FILES questions 5 | save 158551 B
+    archive: 4 finished cases full, 1 stubbed, 22 rows kept in all,
+             1 stubs still offering questions
+    stubbed cases: 1 stub, 1 still offering questions, 1 carrying saved
+             answers, 1 of those marked used by a later case
+             (521704413 -> two/person2/records usedBy=generated:1293201510:case)
+    KNOX boot line "Records ......... 33": the ledger holds 33 discoveries,
+             6 of them from stubbed cases
+    a finished case's clues carried: 28 checked, 28 offer the greyed
+             already-noted option, 0 offer no such option
+    refusals in the log of the session loaded with stubs present: 0
+    reload 3 save size: 158551 -> 158551 bytes
+
+So: the fifth finish stubs the first, the stub keeps its questions and its
+answers keep steering, the boot count still counts its discoveries, its clues in
+the world still read Evidence / Old and still offer the greyed "Already in the
+organiser", and a save/quit/reload with a stub present changes nothing and
+refuses nothing. Cases kept coming past the archive point (seven in that run, of
+sixteen); **eleven or more cases in one save is still only proven offline**, by
+`test/case_retirement.lua`, which drives a full `MAX_CASES` campaign and
+measures the budget - an hour's play reaches seven.
+
+A finished case now leaves the live budget in two steps, and a save holds three
 tiers of case:
 
 | tier | how many | what it holds |

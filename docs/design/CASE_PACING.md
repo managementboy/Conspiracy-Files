@@ -1,8 +1,11 @@
 # Cases keep coming, and a refusal is honest (P4-R133)
 
-- **Status:** **Built 2026-09-17**, steps 1-5 of the build order below. Step 6
-  (the campaign assertions, the refusal histogram in evidence and the
-  `prove.py` mutation) belongs to the checks and is not in this change. The
+- **Status:** **Built 2026-09-17**, steps 1-5 of the build order below. **Step 6
+  done 2026-09-18**: the campaign assertions, the refusal histogram in the
+  evidence, a ten-minute `promise.sh` that provokes every refusal code, and
+  three `prove.py` mutations (the promise from the wrong clock, a ladder that
+  never climbs, the poller's gap going quiet). What a real game then showed is
+  under "What the running game said (2026-09-18)" below. The
   fourth rung of the ladder is **not built** and cannot be without a generator
   revision - see "What was built differently" below. Owner approved the shape
   ("I agree with all you wrote").
@@ -241,9 +244,46 @@ Search Mode exactly like any other (P4-R132), that nothing appears in view of
 the survivor, and that a long run's `ev=defer` lines show a count rising and a
 rung rising with it.
 
+## What the running game said (2026-09-18)
+
+Step 6, run on the Linux machine at commit `dbbf659` and after. Every number
+below is in the evidence file named beside it.
+
+| what | seen | where |
+|---|---|---|
+| a clue placed later as an instalment | **yes**, `ev=placed doc=generated:1442066456:document-4 why=instalment` - and it went onto a carrier, because the site had no free container left | `20260918T032829-instalments.txt` |
+| a clue that never found a home expiring | **yes**, `ev=stale doc=generated:1442066456:document-6 why=expired n=1`, with `DEFER_EXPIRE_HOURS` lowered from 72 to 1 for the stage (the constant is the only thing changed) | `20260918T032829-instalments.txt` |
+| the filler placing at the waiting clue's own site | **yes** - the only instalment of the campaign run was placed after the survivor was sent back to that clue's site | `20260918T023400-campaign.txt` |
+| every refusal code carrying a non-nil `why`, a due hour and an `ev=defer` line | **yes** for `gap` (`due=17:03`), `active-limit` (`active=1/1`, and `n=3 rung=1/3` at `active=4/4`) and `cap` | `20260918T035305-promise.txt` |
+| `why` no longer nil at `active=4/4` | **yes**: `why=active-limit n=3 due=03:16 rung=1/3 active=4/4`. It does read nil for the few seconds after a case arrives, which is correct - nothing is being withheld then | `20260918T035305-promise.txt` |
+| no spurious broken promise | **yes**: `gap`, `active-limit` and `cap` were each offered to the assertion and each answered "nothing was promised worth failing on" | `20260918T035305-promise.txt` |
+| the ladder rising with the count | **yes**: 3 refusals of one code, rung 1 of 3, in both the campaign histogram and `promise.sh` | both |
+| the count rising over a long run | **yes**: `active-limit: 5 lines, longest run of 3, rung 1` and `no-containers: 2 lines` | `20260918T023400-campaign.txt` |
+| a clue arriving late found by Search Mode | **not yet**: the one late clue of these runs went onto a zombie that then walked out of the mod's find radius (see CLUES_ON_THE_MOVE, "What the running game said") | - |
+
 ## Known unexplained
 
 ### A clue the record calls `placed` that is not in its container
+
+**2026-09-18: the diagnostic is in, and it has fired once - on something else.**
+`CFCamp.faultFive` now prints, on any clue the harness cannot find, the stored
+target, `World.resolve`'s verdict on it, the `relocations` count, the last
+sighting, and whether the item is really in the world within four tiles of its
+recorded square (suspect 1 below). The campaign run `20260918T023400` fired it
+once, and the answer was not this fault:
+
+    status=placed relocations=0 site=t3:10977704480342026 missingHours=4.15;
+    target=10762,10120,0 type=carrier sprite=zombie carrier=zombie;
+    World.resolve REFUSED the target (nil); no item carrying the token within
+    4 tiles of the recorded square or of the survivor;
+    whereabouts=uncertain (On a zombie close by.)
+
+That is a clue on a zombie that walked off - P4-R134's own "a carrier that is
+gone", already counting its hours towards the drop - not a clue missing from a
+cupboard. Suspect 1 (the mod sees two tiles, the harness searched one) is
+therefore still untested by a real firing, and suspects 2 to 4 are untouched.
+The diagnostic stays in; the next run that fires it on a FIXED container will
+say which suspect it is.
 
 **What was seen.** Three of nine overnight runs (2026-09-17/18) reported one
 clue the record called `placed` and the harness could not find: `accounted In a

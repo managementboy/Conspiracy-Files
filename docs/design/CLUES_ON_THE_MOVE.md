@@ -4,6 +4,14 @@
   are separate). Owner approved the shape ("implement 1 to 11"), after it was
   raised as the later candidate in P4-R133. What the code forced is at the
   bottom of this file, under "What the build settled".
+- **Checked in a real game 2026-09-18, and two of the four carriers do not
+  work.** A clue on a **zombie** is placed, worded and recorded correctly. A
+  clue on a **fresh corpse cannot happen at all** (the engine answers
+  `getInventory()` with nil on `IsoDeadBody`), and a **mailbox can never be
+  offered** (every postbox stands outside every room rectangle, and the scan
+  only looks inside one). Both are open mod faults with evidence; neither was
+  fixed by the checking agent. See "What the running game said (2026-09-18)" at
+  the end of this file.
 - **Game:** Build 42.20.
 - **Related decisions:** P4-R67 (each clue in a different container), P4-R125
   (a refused case waits for the survivor to move on), P4-R133 (instalments and
@@ -210,3 +218,81 @@ last-seen line. A container that declares no type and is not a carrier reads
 
 **`IsoGridSquare:getDeadBodys()` works**: the same run found bodies parked beside
 the survivor and the mod's own scan offered two usable carriers from them.
+
+> **Correction, 2026-09-18.** The second half of that sentence was wrong. The
+> two usable carriers of `20260918T001512` were the two **live zombies** the
+> same call parked, read out of the cell's zombie list; the corpses beside them
+> were refused. `getDeadBodys` does return the bodies - `Carriers.refusal` then
+> rejects every one of them. See the end of this file.
+
+## What the running game said (2026-09-18)
+
+Run on the Linux machine at commits `dbbf659` and before; every number is in
+the evidence file named beside it.
+
+### What works
+
+| what | seen | where |
+|---|---|---|
+| a clue placed on a **zombie** carrier | **yes**: `1442066456:document-4:placed:zombie`, placed by the filler as an instalment at a site with no free container | `20260918T032829-instalments.txt` |
+| the record's words for it | **yes**: `On a zombie close by.` - the no-address form, because the address book does not name that building. Never `In a none` again | `20260918T023400-campaign.txt` |
+| a zombie carrier found again after it has walked | **yes**, by the mod's own mark, inside `Carriers.FIND_RADIUS` | `20260918T023400-campaign.txt` |
+| the guards on a real body (fresh, loot window open, already searched) | **yes**, 2026-09-18 | `20260918T002532-carriers.txt` |
+| a carrier clue that is gone expiring | **yes**, `ev=stale why=expired` (with the hour shortened for the run) | `20260918T032829-instalments.txt` |
+
+### Fault 1: a fresh corpse is never a carrier
+
+`tools/autotest/checks/body_carrier.sh` parked four corpses and two walkers
+beside the survivor and asked the engine about each
+(`20260918T035135-body-carrier.txt`, FAIL):
+
+    body@10839,10150 IsoDeadBody getInventory=nil getContainer=inventorymale
+                                 getItemContainer=inventorymale
+                                 refusal=no inventory
+    walker@10843,10149 IsoZombie getInventory=none getContainer=nil
+                                 getItemContainer=nil
+                                 refusal=none, usable
+
+    within 10 tiles: 4 dead bodies on squares, 2 walkers, 2 usable as a carrier
+    corpses the mod would use: 0 of 4
+
+`Carriers.stateOf` reads `getInventory` for every kind of carrier. On Build
+42.20 that is the right call for an `IsoZombie` and returns **nil** for an
+`IsoDeadBody`, whose inventory is `getContainer()` (equivalently
+`getItemContainer()`, type `inventorymale`). So `refusal` says "no inventory"
+for every fresh body, `Carriers.scan` offers only walkers, and the design's own
+headline example - a note in a dead man's jacket at your own fence - cannot
+happen. **Not fixed here** (the checking agent may not touch `mod/`).
+
+This is also why the campaign run stranded a case: the only carrier the mod can
+use is one that walks, and the zombie carrying
+`generated:936981237:document-5` left the find radius. The clue then cannot be
+found and cannot be dropped for three in-game days, so the case cannot finish -
+a real-play consequence worth the owner's attention beside the fix.
+
+### Fault 2: a mailbox can never be offered as a place
+
+`Storage.MAILBOX` is the engine's verified word and `Catalog` allows it, but no
+mailbox is anywhere the scan looks (`20260918T025841-instalments.txt`):
+
+    postboxes within 60 tiles of the survivor: 6 containers, 0 of them on a
+    square the game calls a room, 0 inside one of the 2 live site footprints
+    container kinds the mod offered the live sites: counter+shelves,
+    counter+shelves - postbox among them on 0 site(s)
+
+A site is a **room rectangle inside a building** and both `Storage.scan` and the
+filler's `boundsScan` only consider squares inside one. A mailbox stands at the
+gate, outdoors, so it is never a candidate however the allow-list reads. With
+`postbox` the only kind the mod could see, **no case could be created at all**
+in two fresh neighbourhoods. The fix is not a word but a widening - the same
+kind of widening `addVehicles` already does for a car in the driveway
+(`Session.VEHICLE_RADIUS`) - and it is a design decision for the owner, not a
+typo. **Not fixed here.**
+
+### Still unproven
+
+A carrier clue **spotted in Search Mode**. Both attempts were spent on a
+carrier that had walked out of reach, and the only forced placements landed on
+zombies that then moved. The stage is written and waiting in
+`instalments.sh`; it needs a run where a carrier clue is still where the record
+says it is.

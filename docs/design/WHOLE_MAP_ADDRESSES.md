@@ -3,6 +3,26 @@
 - **Status:** Built, 2026-09-16 (owner go-ahead P4-R129). Section 9 records what
   shipped and how it differs from this draft; sections 1-8 are the design as
   drafted.
+- **The out-of-town town name is proven in a running game, 2026-09-18.** After
+  the frozen-label fix (`labelParts` + `qualify`), run
+  `20260918T025841-instalments.txt` walked 1,934 tiles from Muldraugh to West
+  Point and asked the address book for every building the cases had used:
+
+      standing in Muldraugh: 0 of 5 would be written with their town, 5 without
+      standing in West Point: 5 of 5 would be written with their town, 0 without
+        202 E Maple St [Muldraugh] -> "202 E Maple St, Muldraugh"
+        2302 S Main St [Muldraugh] -> "2302 S Main St, Muldraugh"
+
+  **What a record row shows is a different question, and the answer is "history
+  is frozen on purpose".** A finished case's rows carry no live address at all:
+  `EvidenceRows` renders addresses through `AddressMap.describe(body, case)` and
+  retirement drops the case envelope, so the only address left in a finished row
+  is the FOUND block the discovery ledger kept at the moment of the find. That
+  is the survivor's own note of where they were and does not rewrite itself when
+  they walk to the next town. The campaign check's AD-10 assertion was reading
+  that half and reported "0 of 16 records name their town"
+  (`20260918T005315`); it now asks the address book, and reports both halves of
+  the record as findings.
 - **Request:** AD-10, queued 2026-09-15 (`docs/management/PM_HANDOFF.md`, "house
   numbers for the whole map").
 - **Game:** Build 42.20 (Linux test machine reports `42.20.4 b0bbce05d5`).

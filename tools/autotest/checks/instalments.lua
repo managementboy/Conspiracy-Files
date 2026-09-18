@@ -352,7 +352,7 @@ end
 
 -- ---------------------------------------------------------------------------
 -- (e) IS A FRESH CORPSE A CARRIER AT ALL? Three runs now have found only
--- ZOMBIES usable (20260918T001512, 20260918T002532, 20260918T041500: "usable
+-- ZOMBIES usable (20260918T001512, 20260918T002532, 20260918T032829: "usable
 -- carriers ... 2 (zombie@..., zombie@...)" with corpses lying on the same
 -- squares, and a carrier scan that saw 0 with five bodies loaded at the site).
 -- The design's own headline example is a note in a dead man's jacket, so this

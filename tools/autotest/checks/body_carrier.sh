@@ -10,7 +10,7 @@
 #   20260918T001512 and 20260918T002532: "usable carriers within 12 tiles,
 #   through the mod's own scan: 2 (zombie@10841,10149 zombie@10843,10149)" -
 #   with two corpses lying on the squares beside them, parked by the same call.
-#   20260918T041500: the mod's own carrier scan saw 0 usable with five bodies
+#   20260918T032829: the mod's own carrier scan saw 0 usable with five bodies
 #   loaded at the site, and every one of 486 filler refusals read
 #   `ev=skip why=no-containers`.
 #
