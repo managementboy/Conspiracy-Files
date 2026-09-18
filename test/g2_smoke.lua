@@ -62,12 +62,16 @@ package.preload["ConspiracyFiles/GeneratedMenu"]=function() return {} end
 local R=require("ConspiracyFiles/GeneratedRuntime")
 local originalStore=saved
 saved=setmetatable({},{__newindex=function() error('injected initial campaign write failure') end})
-assert(R.start(1));for i=1,80 do events.tick() end
+-- Four hundred ticks, not eighty: a storage scan now walks a mailbox band
+-- around every site as well (Session.OUTDOOR_RADIUS), and a scan that has
+-- not finished leaves preparation running - which is what the next start
+-- would refuse.
+assert(R.start(1));for i=1,400 do events.tick() end
 assert(originalStore.campaign==nil and #R.known()==0,'initial failed write grants no case or knowledge')
 for _,c in pairs(containers) do assert(#c.items==0,'initial failed save places nothing') end
 saved=originalStore
 assert(R.start(1))
-for i=1,80 do events.tick() end
+for i=1,400 do events.tick() end
 assert(saved.campaign and saved.campaign.canonical)
 local count=0; local item
 for _,c in pairs(containers) do count=count+#c.items; item=item or c.items[1] end
@@ -169,7 +173,7 @@ texts={};Markers.drawRecords(map,{known={'fixture'},case={documents={{id='fixtur
 assert(table.concat(texts,'|'):find('Isolated fixture',1,true),'fixture renderer uses supplied context')
 print('PASS two-case marker capture, ink catch-up, interleaved projection and failed durable write')
 assert(R.start(999), 'existing case resumes rather than rerolls')
-for i=1,80 do events.tick() end
+for i=1,400 do events.tick() end
 assert(R.known()[1].body==body)
 count=#inventory.items; for _,c in pairs(containers) do count=count+#c.items end
 assert(count==firstEvidence+secondEvidence, 'resume must not duplicate evidence')

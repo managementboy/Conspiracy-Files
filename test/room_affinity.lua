@@ -54,7 +54,11 @@ local result={version="T3-nearby-2",buildings=1,map="mock",gameVersion="42.20",r
 local Storage=require("ConspiracyFiles/Generated/Storage")
 local catalog,targets,candidates,rooms
 local step=assert(Storage.scan(result,function(a,b,c,d) catalog,targets,candidates,rooms=a,b,c,d end))
-for n=1,1000 do local done=step(); if done then break end end
+-- The scan walks each room rectangle AND a band of Session.OUTDOOR_RADIUS
+-- around the site for a mailbox (P4-R134), so a whole scan is thousands of
+-- steps, not hundreds. The budget is the test's, not the mod's: in the game
+-- this is 48 steps a tick.
+for n=1,200000 do local done=step(); if done then break end end
 assert(candidates and #candidates["t3:home"]==4, "expected one candidate per rect")
 assert(rooms["t3:home"][1]=="office", "usable room name must be joined to its candidate")
 assert(rooms["t3:home"][2]==nil, "an empty room name must record nothing")

@@ -150,19 +150,19 @@ do
     -- 5a. reachable(2,0,-1)==false -> the whole site gets no candidates.
     local catalogA,targetsA,candidatesA
     local stepA=assert(ScanStorage.scan(result,function(a,b,c) catalogA,targetsA,candidatesA=a,b,c end,function() return false end))
-    for i=1,1000 do if stepA() then break end end
+    for i=1,200000 do if stepA() then break end end
     assert(candidatesA["t3:home"]==nil,"an unproven basement candidate must never be accepted")
 
     -- 5b. reachable(x,0,-1)==true for every tile -> the site gets its candidates.
     local catalogB,targetsB,candidatesB
     local stepB=assert(ScanStorage.scan(result,function(a,b,c) catalogB,targetsB,candidatesB=a,b,c end,function() return true end))
-    for i=1,1000 do if stepB() then break end end
+    for i=1,200000 do if stepB() then break end end
     assert(candidatesB["t3:home"] and #candidatesB["t3:home"]==3,"a proven-reachable basement candidate must be accepted")
 
     -- 5c. Omitting `reachable` entirely keeps the old, safe default: ground only.
     local catalogC,targetsC,candidatesC
     local stepC=assert(ScanStorage.scan(result,function(a,b,c) catalogC,targetsC,candidatesC=a,b,c end))
-    for i=1,1000 do if stepC() then break end end
+    for i=1,200000 do if stepC() then break end end
     assert(candidatesC["t3:home"]==nil,"the default gate (no `reachable` supplied) must still reject non-ground candidates")
     print("test 5 ok: Generated/Storage.scan wires the reachability gate correctly, default stays ground-only")
 end
