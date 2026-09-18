@@ -1,0 +1,53 @@
+Linux instalments check 20260918T062030: FAIL
+source: 38557a0
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+instalments and drops in the log:
+  ev=placed doc=generated:921842428:document-3 place="201 E Maple St" why=instalment at=10876,10155,0
+  ev=stale doc=generated:921842428:document-3 why=carrier-gone n=1
+  ev=stale doc=generated:921842428:document-6 why=expired n=1
+the filler's refusals, by code:
+  none
+errors inside the mod: 0
+FINDING: log level set to d for this run, so the filler's own ev=skip refusals reach the console
+FINDING: the survivor is kept alive while zombies are parked beside them: setGodMod=true setInvincible=true setInvisible=true
+FINDING: container kinds the mod may see, as shipped: counter,desk,filingcabinet,locker,postbox,shelves
+FINDING: the gap between cases turned off, and cars kept out of the mobile slot (VEHICLE_RADIUS=0)
+FINDING: postboxes within 60 tiles of the survivor: 6 containers, 0 of them on a square the game calls a room, 0 inside one of the 2 live site footprints (first: 10786,10113 room=nil inside a site=false tiles outside the nearest site=50)
+FINDING: how far each postbox lies outside the nearest live site, against the 12-tile band the scan walks: 2 of 6 are within it (10786,10113=50t 10853,10123=18t 10853,10148=9t 10853,10181=11t 10859,10184=14t 10875,10142=22t)
+FINDING: and how far each lies from the nearest BUILDING, which is what the band has to cover for a NEW case: 6 of 6 within 12 tiles (10786,10113=3t 10853,10123=10t 10853,10148=9t 10853,10181=7t 10859,10184=9t 10875,10142=9t)
+FINDING: container kinds the mod offered the live sites: 10977704480342044=counter+shelves 10977704480342054=postbox - postbox among them on 1 site(s)
+FINDING: ANSWER (mailbox): every postbox found stands on a square the game does not call a room - which is why the room pass alone could never offer one. What matters now is the band: 2 of them lie within 12 tiles of a live site and can be offered as that site's mailbox.
+FINDING: container kinds narrowed to: postbox
+FINDING: the mailbox case: case 2 came after 1 move(s), with only postbox allowed
+FINDING: live sites now: 10977704480342044=counter+shelves 10977704480342054=postbox 10696225208664097=postbox 10696225208664096=postbox
+FINDING: a clue in a mailbox: generated:921842428:document-2 at 10853,10181,0, the record reads "In a mailbox."
+FINDING: the clue in a mailbox: could not stand beside it (no free square beside 10853,10181)
+FINDING: corpse stage: container kinds narrowed to desk
+FINDING: the corpse case, desk: no case after move 1 (busy 0 04:05 0)
+FINDING: corpse stage: container kinds narrowed to shelves
+FINDING: the corpse case, shelves: no case after move 1 (busy 1 04:45 0)
+FINDING: corpse stage: container kinds narrowed to filingcabinet,locker
+FINDING: the corpse case, locker,filingcabinet: no case after move 1 (cooldown 2 05:26 0)
+FINDING: corpse stage: container kinds narrowed to counter
+FINDING: the corpse case, counter: case 3 came after 1 move(s), with only counter allowed
+FINDING: corpse stage, the cases as they stand: 14 placed, 1 on a carrier, 2 waiting
+FINDING: corpse stage: generated:1008181025:document-3 waits for the site t3:10696225208664096 at 10650,9927 (kinds there: postbox, waiting since hour 2.879908561706543, the case's mobile slot free: true)
+FINDING: corpse stage: parked 5 zombie(s) at the site, 5 of them killed where they stood
+FINDING: corpse stage: the mod's own carrier scan at the site sees 1 corpse=1 corpse@10650,9925
+FINDING: corpse stage: the survivor stands at 10675,9927, 25 tiles off, so the filler is allowed to place (169 16 5 squares/containers/bodies loaded)
+FINDING: a clue on a corpse: generated:921842428:document-3 at 10876,10155,0, the record reads "On a body at 102 E Maple St."
+FINDING: the clue on a corpse: could not stand beside it (no free square beside 10876,10155)
+FINDING: corpse stage: ev=placed why=instalment lines so far: 1
+FINDING: ANSWER (instalments): 1 clue(s) were placed later as instalments; e.g. ev=placed doc=generated:921842428:document-3 place="201 E Maple St" why=instalment
+FINDING: carriers proven in this run: corpse
+FINDING: expiry: DEFER_EXPIRE_HOURS lowered from 72 to 1 in-game hour(s) - seventy-two is forty minutes of real time even at the fastest speed; the path that drops the clue is the shipped one
+FINDING: expiry: generated:1008181025:document-3 waits for t3:10696225208664096 at 10650,9927
+FINDING: expiry: the survivor moves 603 tiles away to 10618,10527 so the waiting clue's site unloads
+FINDING: ANSWER (expiry): 1 clue(s) expired between in-game hour 5.49484920501709 and 5.586094856262207; e.g. ev=stale doc=generated:921842428:document-6 why=expired n=1
+FINDING: expiry: the case afterwards: 3 0 1:921842428:live 2:1008181025:live 3:252076211:live; assignments deferred=1 dropped=2 placed=13
+FINDING: AD-10, standing in Muldraugh: of 6 buildings the cases used, 0 would be written with their town and 6 without; 202 E Maple St [Muldraugh] -> "202 E Maple St"; 201 E Maple St [Muldraugh] -> "201 E Maple St"; 107 Hill St [Muldraugh] -> "107 Hill St"; 104 Hill St [Muldraugh] -> "104 Hill St"
+FINDING: AD-10: walked from Muldraugh to Rosewood at 9077,11503, 1824 tiles
+FINDING: AD-10, standing in Rosewood: of 6 buildings the cases used, 6 would be written with their town and 0 without; 202 E Maple St [Muldraugh] -> "202 E Maple St, Muldraugh"; 201 E Maple St [Muldraugh] -> "201 E Maple St, Muldraugh"; 107 Hill St [Muldraugh] -> "107 Hill St, Muldraugh"; 104 Hill St [Muldraugh] -> "104 Hill St, Muldraugh"
+FINDING: knobs restored: kinds=counter,desk,filingcabinet,locker,postbox,shelves 12 72
+FAIL: a clue in a mailbox could not be spotted by searching beside it
+FAIL: a clue on a corpse could not be spotted in Search Mode beside it
