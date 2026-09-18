@@ -101,7 +101,12 @@ spot_it() { # spot_it LABEL SECONDS
         [ "$(ev 'return CFField.recognised()')" = true ] && { note "$1: spotted by Search Mode in $(( $(date +%s) - start ))s"; return 0; }
         sleep 1
     done
-    note "$1: not spotted in $(( $(date +%s) - start ))s (icon $(ev 'return CFField.icon()' | cut -f2- | tr '\t' ' '); light $(ev 'return CFField.light()' | cut -f2- | tr '\t' ' '))"
+    # WHY it was not spotted matters more than that it was not: the game turns
+    # Search Mode off by itself when a zombie is close, and a clue on a zombie
+    # is a clue you have to stand next to (20260918T045929: "icon no icon
+    # false" - the third field is isSearchMode). So say what Search Mode
+    # answered and how many walkers were within a few tiles.
+    note "$1: not spotted in $(( $(date +%s) - start ))s (Search Mode answered $(ev 'return CFField.searchOn()' | field 1); icon $(ev 'return CFField.icon()' | cut -f2- | tr '\t' ' '); light $(ev 'return CFField.light()' | cut -f2- | tr '\t' ' '); carriers within 5 tiles: $(ev "return CFInst.carriersNear($(ev 'return CFCamp.here()' | field 1), $(ev 'return CFCamp.here()' | field 2), 0, 5)" | cut -f1-2 | tr '\t' ' '))"
     return 1
 }
 

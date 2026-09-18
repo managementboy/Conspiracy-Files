@@ -289,10 +289,41 @@ kind of widening `addVehicles` already does for a car in the driveway
 (`Session.VEHICLE_RADIUS`) - and it is a design decision for the owner, not a
 typo. **Not fixed here.**
 
+### Fault 3: a clue on a zombie cannot be spotted, because Search Mode will not stay on beside a zombie
+
+`20260918T045929-instalments.txt`, with a clue on a zombie one tile away and the
+survivor facing it:
+
+    a clue on a zombie: generated:1502809855:document-7 at 10876,10093,0,
+        the record reads "On a zombie close by."
+    the clue on a zombie: standing at 10877,10093, the clue at 10876,10093
+    the clue on a zombie: not spotted in 120s (icon no icon false; ...)
+
+The third field of that icon line is `isSearchMode`, and it is **false** after
+120 seconds of the check turning Search Mode on once a second. The game turns
+Search Mode off by itself when a zombie is close (the same behaviour
+`clue_field.lua` has noted since P4-R132's checks were written) - and a clue on
+a zombie is a clue you must stand next to. The mod's own side is built: a
+carrier clue has coordinates that follow the mark (`ClueSearch.carrierSpot`,
+`liveClues`), so the icon would be in the right place if the game would let
+Search Mode run.
+
+This is a **collision between two decisions**, not a coding slip: P4-R132 says
+clues are found by searching, P4-R134 says a clue may ride a zombie, and the
+engine will not search next to one. It needs an owner's call. The two obvious
+directions:
+
+1. **Fix fault 1 and lean on corpses.** A body is not a threat, so Search Mode
+   stays on beside it - which makes "a note in a dead man's jacket" both
+   possible and findable, and leaves the walking zombie as the rarer case.
+2. **Let a carrier clue be found another way**: looting the body is already a
+   second way in (`carriers.sh` proved a clue can be taken out of a carrier by
+   looting), so a zombie carrier could be exempt from the searching route by
+   design rather than by accident.
+
 ### Still unproven
 
-A carrier clue **spotted in Search Mode**. Both attempts were spent on a
-carrier that had walked out of reach, and the only forced placements landed on
-zombies that then moved. The stage is written and waiting in
-`instalments.sh`; it needs a run where a carrier clue is still where the record
-says it is.
+A carrier clue **spotted in Search Mode** - and by fault 3 above it cannot be
+proven at all until either a corpse can carry a clue or the design says a
+zombie's clue is not found that way. The stage is written and waiting in
+`instalments.sh`.

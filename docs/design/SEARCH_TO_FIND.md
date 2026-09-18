@@ -1,14 +1,18 @@
 # Clues are found by searching (P4-R132)
 
 - **Status:** Design, 2026-09-16. Stage 1 (search and recognise) and stage 2 (look it over, timed Inspect, the wordless cue) built 2026-09-17; stage 3 (the checks) the same day; see the end.
-- **Still unproven, 2026-09-18:** a clue **on a carrier** spotted in Search
-  Mode. Every other kind has been spotted in a real game (in furniture, in a
-  car whose car was then moved, across a save and reload); a carrier clue has
-  not, because the only carrier the mod can currently use is a walking zombie
-  (see `docs/design/CLUES_ON_THE_MOVE.md`, "What the running game said") and it
-  left the find radius before the check reached it both times. The stage is
-  written in `tools/autotest/checks/instalments.sh` and waiting for a run where
-  the carrier stays put.
+- **Found unprovable, 2026-09-18:** a clue **on a carrier** cannot be spotted in
+  Search Mode as things stand, and it is a collision between this decision and
+  P4-R134 rather than a bug in either. The only carrier the mod can currently
+  use is a walking zombie (a corpse is refused - see
+  `docs/design/CLUES_ON_THE_MOVE.md`, faults 1 and 3), and **the game turns
+  Search Mode off by itself when a zombie is close**, which is exactly where the
+  survivor has to stand. Evidence: `20260918T045929-instalments.txt`, a clue on
+  a zombie one tile away, facing it, `isSearchMode` still false after 120
+  seconds of the check turning it on once a second. Every other kind of clue has
+  been spotted in a real game - in furniture, in a car whose car was then moved,
+  across a save and reload. Needs an owner's call; the stage is written in
+  `tools/autotest/checks/instalments.sh`.
 - **Owner:** shaped in conversation on 2026-09-16 ("I would love to mix both",
   "perfect!", "the investigate area dropdown would need another entry").
 - **Game:** Build 42.20. Everything marked *verified* was read in the installed

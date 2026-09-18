@@ -1,0 +1,37 @@
+Linux instalments check 20260918T045929: FAIL
+source: ea0f6dd
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+instalments and drops in the log:
+  ev=placed doc=generated:1502809855:document-7 place="101 Dewey St" why=instalment at=10876,10093,0
+the filler's refusals, by code:
+  none
+errors inside the mod: 0
+FINDING: log level set to d for this run, so the filler's own ev=skip refusals reach the console
+FINDING: the survivor is kept alive while zombies are parked beside them: setGodMod=true setInvincible=true setInvisible=true
+FINDING: container kinds the mod may see, as shipped: counter,desk,filingcabinet,locker,postbox,shelves
+FINDING: the gap between cases turned off, and cars kept out of the mobile slot (VEHICLE_RADIUS=0)
+FINDING: the mailbox and AD-10 stages were answered by 20260918T025841 and are skipped in this run (--carriers-only)
+FINDING: corpse stage: container kinds narrowed to desk
+FINDING: the corpse case, desk: no case after move 1 (busy 1 02:44 0)
+FINDING: corpse stage: container kinds narrowed to shelves
+FINDING: the corpse case, shelves: case 2 came after 1 move(s), with only shelves allowed
+FINDING: corpse stage, the cases as they stand: 6 placed, 0 on a carrier, 1 waiting
+FINDING: corpse stage: generated:1502809855:document-7 waits for the site t3:10977704480342040 at 10874,10078 (kinds there: shelves, waiting since hour 3.349102020263672, the case's mobile slot free: true)
+FINDING: corpse stage: parked 5 zombie(s) at the site, 5 of them killed where they stood
+FINDING: corpse stage: the mod's own carrier scan at the site sees 3 zombie=3 zombie@10879,10081 zombie@10868,10081 zombie@10879,10072
+FINDING: corpse stage: the survivor stands at 10899,10078, 25 tiles off, so the filler is allowed to place (169 23 5 squares/containers/bodies loaded)
+FINDING: corpse stage: no clue landed on a corpse in five minutes (no placed clue on a carrier of kind corpse); targets 1502809855:document-1:placed:shelves | 1502809855:document-2:placed:shelves [On shelves at 101 Dewey St.] | 1502809855:document-3:placed:shelves [On shelves at 101 Dewey St.] | 1502809855:document-4:placed:shelves [On shelves at 101 Dewey St.] | 1502809855:document-5:placed:shelves [On shelves at 10
+FINDING: corpse stage: the filler's own refusals, latest: 
+FINDING: corpse stage: what the mod could see at the site: 5 3 0 3 bodies/zombie-list/dead-in-list/usable; body@10873,10078 IsoDeadBody getInventory=nil getContainer=inventorymale getItemContainer=inventorymale refusal=no inventory | body@10874,10077 IsoDeadBody getInventory=nil getContainer=inventorymale getItemContainer=inventorymale refusal=no inventory | body@10874,10078 IsoDeadBody getInventory=nil 
+FINDING: zombie stage: a clue is already on a zombie (generated:1502809855:document-7), so no case has to be arranged
+FINDING: zombie stage, the cases as they stand: 15 placed, 1 on a carrier, 0 waiting
+FINDING: a clue on a zombie: generated:1502809855:document-7 at 10876,10093,0, the record reads "On a zombie close by."
+FINDING: the clue on a zombie: standing at 10877,10093, the clue at 10876,10093
+FINDING: the clue on a zombie: not spotted in 120s (icon no icon false; light 1.00 false true nil 1.00 50)
+FINDING: zombie stage: ev=placed why=instalment lines so far: 1
+FINDING: ANSWER (instalments): 1 clue(s) were placed later as instalments; e.g. ev=placed doc=generated:1502809855:document-7 place="101 Dewey St" why=instalment
+FINDING: carriers proven in this run: zombie
+FINDING: ANSWER (expiry): not asked for in this run (--no-expiry)
+FINDING: AD-10 was proven in 20260918T025841 (5 of 5 buildings gained ", Muldraugh" read from West Point) and is skipped here
+FINDING: knobs restored: kinds=counter,desk,filingcabinet,locker,postbox,shelves 12 72
+FAIL: a clue on a zombie could not be spotted in Search Mode beside it
