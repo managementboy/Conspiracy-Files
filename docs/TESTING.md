@@ -86,6 +86,7 @@ running two at once is safe, the second waits.
 | `body_carrier.sh` (four minutes) | whether a fresh CORPSE is a carrier at all: bodies and walkers parked beside the survivor, and for each one what every inventory accessor returns, what class the object is and what `Carriers.refusal` says. It fails if no body is usable - which is what it found on 2026-09-18 |
 | `promise.sh` (about ten minutes) | the generator's promise and the poller's own silence (P4-R133 step 6): a neighbourhood stripped of every container makes the generator refuse with `no-containers`, and the promise must still stand and the ladder keep up with the count; then `gap`, `active-limit` and `cap` are each provoked and each must carry a non-nil `why`, an `ev=defer` line and no spurious broken promise |
 | `instalments.sh` (about twenty-five minutes) | the states a fresh suburb never reaches: a clue placed later as an instalment (`ev=placed why=instalment`), a clue on a carrier with the record's own words for it, the clue spotted in Search Mode where it now is, a clue that never found a home expiring (`ev=stale why=expired`), whether a postbox is anywhere the nearby scan can see it, and AD-10's town read from another town |
+| `travel.sh` (not in the suite, about twenty-five minutes) | a journey: Irvington to Muldraugh, about 9,700 tiles in legs of at most 400, through Rosewood. One line per leg with the position and the town, the cases, every live case's clue statuses, whether any site or placed clue is outside the reach of the trail, the refusal code / count / rung / promised hour, the save size and the mod's error count. A clue is found the player's way (Search Mode with the Clues focus, then Inspect) in Irvington before setting off and again at the town reached mid-journey, where a new case is asked for and its placement measured; each record's address is read where it was written and again from Muldraugh, which is the only honest test of P4-R129 / AD-10. It fails on a mod error, a clue outside reach, a promise passing with no case, a wrong town in a record, or the save over budget |
 | `campaign.sh` (not in the suite, about half an hour) | a player's week: three cases in one save with two save/quit/continue rounds. Case 1 played through and answered on the organiser; case 2 built from those answers (the person returns without a second body, the answers lock); case 3 built from nothing; placement within reach on fresh sites; answers, discovery order and Evidence / Old surviving reloads; NAMES growing; marks with a pen; save size and frame cost per stage; then four unfinished cases, the most the save allows, and a new case arriving once one is finished |
 
 Anything in `test/` is **simulated**: it stubs the engine. That is the right
@@ -274,6 +275,27 @@ A trap that made one check vacuous: a Lua stage that returns `nil` prints the
 word `nil`, and `[ -n "$x" ]` treats that as a result. CN-01 passed "card on the
 body in the case record" that way with nothing recorded. Return an explicit
 `true`/`false` and compare against it.
+
+**A record has two halves and the marker between them is `\n\nFOUND\n`.**
+Everything before it is rendered fresh through `AddressMap.describe` on every
+refresh and is the half P4-R129 applies to; the block after it is what the
+discovery ledger kept at the moment of the find and is frozen by design. Every
+generated document *opens* with the heading `WHAT YOU FOUND`, so splitting on
+the bare word `FOUND` cuts the row after nine characters and makes the "live"
+half the string `WHAT YOU ` - which reads as "no address anywhere" and gets
+blamed on the mod. `campaign.lua`'s `townNames` did exactly that and reported
+"0 of 16" (20260918T005315); it was fixed on 2026-09-18 when `travel.lua` hit
+the same wall. And the live half is not necessarily the address the clue was
+FOUND at: `describe` rewrites every mention of a site's *name* in the
+document's own words, so a callout found at 301 Merino St reads "Attend 105
+Bullet Dr, room 14" - the place it is about. Ask the rule of every address the
+row actually writes, not of the one you expect.
+
+**A document that names no place carries no address, and that is not a fault.**
+`describe` only substitutes where the body mentions a site's name, and a letter
+of resignation mentions none. A check that needs an address to judge must pick
+a clue whose own words name one of its case's places (`CFTrav.pickClue`'s
+`needBook`), or it will fail the mod for writing a letter.
 
 ## Reading the evidence
 
