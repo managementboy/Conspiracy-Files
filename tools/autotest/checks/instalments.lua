@@ -197,7 +197,8 @@ end
 -- The first clue in a container of one type (the mailbox stage's other half).
 function I.pickTypeClue(kind)
     for _, c in ipairs(R.clueTargets()) do
-        if c.status == "placed" and not c.carrier and tostring(c.containerType) == kind then
+        if c.status == "placed" and not c.carrier
+            and tostring(c.target and c.target.containerType) == kind then
             CFField.target = c
             local _, where = R.whereabouts(c.id)
             return "true", c.id, tostring(where), c.x .. "," .. c.y .. "," .. c.z, tostring(c.recognised)

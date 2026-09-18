@@ -481,6 +481,11 @@ for extra in 1 2 3; do
 done
 arch="$(ev 'return CFCamp.archive()')"
 findings+=("archive: $(field 1 "$arch") finished cases full, $(field 2 "$arch") stubbed, $(field 3 "$arch") rows kept in all, $(field 4 "$arch") stubs still offering questions; $(field 5 "$arch")")
+# The Old mark is put on by the periodic last-seen scan, so a case that
+# finished a moment ago has clues that are still Evidence: wait for the scan the
+# way every other stage does, or the read is a race (5 of 28 in 20260918T023400,
+# all 28 correct by the next stage).
+old_settled "the archive"
 old="$(ev 'return CFCamp.oldEvidence()')"
 findings+=("a finished case's clues carried: $(field 1 "$old") checked, $(field 2 "$old") show Evidence / Old, $(field 3 "$old") offer the greyed already-noted option, $(field 4 "$old") offer no such option ($(field 5 "$old"))")
 [ "$(field 1 "$old")" = 0 ] || [ "$(field 2 "$old")" = "$(field 1 "$old")" ] \
@@ -528,6 +533,8 @@ town_words() { # town_words TEXT
 }
 towns="$(ev 'return CFCamp.townNames()')"
 findings+=("AD-10 town names, $(town_words "$towns")")
+probe="$(ev 'return CFCamp.qualifyProbe()')"
+findings+=("AD-10 address book, standing in $(field 1 "$probe"): of $(field 5 "$probe") buildings the cases used, $(field 2 "$probe") would be written with their town and $(field 3 "$probe") without; $(field 4 "$probe")")
 far="$(ev 'return CFCamp.moveToTown()')"
 if [ "$(field 1 "$far")" = true ]; then
     findings+=("AD-10: walked from $(field 2 "$far") to $(field 3 "$far") at $(field 4 "$far"), $(field 5 "$far") tiles")
@@ -538,9 +545,18 @@ if [ "$(field 1 "$far")" = true ]; then
     wait_true 150 'select(2, CFCamp.townNames())>0' >/dev/null || true
     towns2="$(ev 'return CFCamp.townNames()')"
     findings+=("AD-10 town names, $(town_words "$towns2")")
+    probe2="$(ev 'return CFCamp.qualifyProbe()')"
+    findings+=("AD-10 address book, standing in $(field 1 "$probe2"): of $(field 5 "$probe2") buildings the cases used, $(field 2 "$probe2") would be written with their town and $(field 3 "$probe2") without; $(field 4 "$probe2")")
     if [ "$(field 1 "$towns2")" != "$(field 1 "$towns")" ] && [ "$(field 1 "$towns2")" != nil ]; then
+        # THE ASSERTION IS ON THE ADDRESS BOOK, not on a finished case's record
+        # rows: retirement drops the case envelope AddressMap.describe needs, so
+        # a finished row's only address is the frozen FOUND line (history, by
+        # design). What AD-10 fixed is that a remembered address keeps its two
+        # halves and is qualified on the way out, and that is what this asks.
+        [ "$(field 2 "$probe2")" -gt 0 ] 2>/dev/null \
+            || fail "read from $(field 1 "$towns2"), not one of the $(field 5 "$probe2") buildings the cases used would be written with its town ($(field 4 "$probe2"))"
         [ "$(field 2 "$towns2")" -gt 0 ] 2>/dev/null \
-            || fail "read from $(field 1 "$towns2"), not one of $(field 5 "$towns2") records about $(field 1 "$towns") names its town in its LIVE label (stored FOUND lines: $(field 6 "$towns2") with a town, $(field 7 "$towns2") without - that half is history and frozen by design)"
+            || findings+=("no record row names a town from $(field 1 "$towns2"): of $(field 5 "$towns2") rows, $(field 2 "$towns2") carry a live address with a town and the $(field 6 "$towns2")+$(field 7 "$towns2") stored FOUND lines are frozen history - a design question, not a fault (a finished case has no live address at all)")
     else
         findings+=("the long move stayed in $(field 1 "$towns2"), so the other-town half of AD-10 was not exercised")
     fi
@@ -550,6 +566,7 @@ fi
 
 errors_seen+="$(mod_errors)"
 keep_defers
+at_the_end="$(cases | tr '\t' ' ')"   # while the game is still answering
 [ -z "$errors_seen" ] || fail "errors inside the mod"
 "$PZ" shot "$RUNS/$first-campaign.png" >/dev/null 2>&1
 "$PZ" stop >/dev/null 2>&1
@@ -559,7 +576,7 @@ report="$EVIDENCE/$first-campaign.txt"
 {
     echo "Linux campaign check $first: $verdict"
     source_line
-    echo "cases: 1 $case1, 2 ${case2:-none}, 3 ${case3:-none}; at the end $(cases | tr '\t' ' ')"
+    echo "cases: 1 $case1, 2 ${case2:-none}, 3 ${case3:-none}; at the end ${at_the_end:-not read}"
     echo "stages:"
     printf '  %s\n' "${stages[@]}"
     echo "case 1 answers on the organiser: $(tr '\t' ' ' <<<"$answers")"

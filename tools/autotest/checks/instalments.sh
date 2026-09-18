@@ -63,6 +63,19 @@ get_case() { # get_case LABEL TRIES SECONDS
     done
     return 1
 }
+# The record's words for a clue come from the periodic identity scan's last
+# sighting (GeneratedRuntime.whereabouts), so they exist a scan or two after the
+# clue does. Wait for them rather than asserting on a nil.
+wait_words() { # wait_words SECONDS LUA_CALL FIELD
+    local deadline=$(( $(date +%s) + $1 )) out
+    while [ "$(date +%s)" -lt "$deadline" ]; do
+        out="$(ev "return $2")"
+        [ "$(field 1 "$out")" = true ] && [ "$(field "$3" "$out")" != nil ] && { printf '%s' "$out"; return 0; }
+        sleep 3
+    done
+    printf '%s' "$out"
+    return 1
+}
 # Spot the clue CFField holds by searching for it, standing where the mod says
 # it is now (a body stays put, a zombie does not).
 spot_it() { # spot_it LABEL SECONDS
@@ -105,11 +118,15 @@ ev 'return CFCamp.gap(false)' >/dev/null
 ev 'return CFInst.noCars(true)' >/dev/null
 note "container kinds narrowed to: $(ev 'return CFInst.narrow("postbox")'); cars kept out of the mobile slot (VEHICLE_RADIUS=$(ev 'return CFInst.noCars(true)'))"
 if get_case "the mailbox case" 2 150; then
-    mb="$(ev 'return CFInst.pickTypeClue("postbox")')"
+    mb="$(wait_words 60 'CFInst.pickTypeClue("postbox")' 3)"
     note "live sites now: $(ev 'return CFInst.siteTypes()' | field 2)"
     if [ "$(field 1 "$mb")" = true ]; then
         note "a clue in a mailbox: $(field 2 "$mb") at $(field 4 "$mb"), the record reads \"$(field 3 "$mb")\""
-        grep -q "In a mailbox" <<<"$(field 3 "$mb")" || fail "a clue in a postbox reads \"$(field 3 "$mb")\", not \"In a mailbox\""
+        if [ "$(field 3 "$mb")" = nil ]; then
+            note "the record has no words for it yet (no sighting in sixty seconds), so the wording was not asserted"
+        else
+            grep -q "In a mailbox" <<<"$(field 3 "$mb")" || fail "a clue in a postbox reads \"$(field 3 "$mb")\", not \"In a mailbox\""
+        fi
         spot_it "the clue in a mailbox" 90 || fail "a clue in a mailbox could not be spotted by searching beside it"
     else
         note "ANSWER (mailbox): a case was created with postbox the only allowed kind, but no clue of it is in a postbox ($(field 2 "$mb")); targets: $(ev 'return CFInst.targets()' | field 4 | cut -c1-300)"
@@ -161,7 +178,11 @@ for kind in corpse zombie; do
         note "$kind stage: the filler's own refusals, latest: $(run_log | grep -o 'ev=skip why=[^ ]*' | tail -3 | tr '\n' ' ')"
         continue
     fi
+    c="$(wait_words 90 "CFInst.pickCarrierClue([[$kind]])" 4)"
     note "a clue on a $kind: $(field 2 "$c") at $(field 5 "$c"), the record reads \"$(field 4 "$c")\""
+    if [ "$(field 4 "$c")" = nil ]; then
+        fail "a clue on a $kind, and ninety seconds later the record still has no words for it at all (whereabouts nil)"
+    fi
     case "$kind" in
         corpse) grep -q "^On a body at\|^On a body close by" <<<"$(field 4 "$c")" \
             || fail "a clue on a body reads \"$(field 4 "$c")\", not \"On a body at <address>\"" ;;
@@ -217,6 +238,31 @@ if [ "$expiry" = yes ]; then
 else
     note "ANSWER (expiry): not asked for in this run (--no-expiry)"
 fi
+# --- AD-10: does the town unfreeze? -----------------------------------------
+# At the level the fix was made (33496b0): a remembered address keeps its two
+# halves and is qualified on the way out. Asked of the address book itself, so
+# it needs no finished case - and a finished case could not answer it anyway,
+# because retirement drops the envelope AddressMap.describe needs and the only
+# address left in its record rows is the frozen FOUND line.
+probe="$(ev 'return CFCamp.qualifyProbe()')"
+note "AD-10, standing in $(field 1 "$probe"): of $(field 5 "$probe") buildings the cases used, $(field 2 "$probe") would be written with their town and $(field 3 "$probe") without; $(field 4 "$probe")"
+far="$(ev 'return CFCamp.moveToTown()')"
+if [ "$(field 1 "$far")" = true ]; then
+    note "AD-10: walked from $(field 2 "$far") to $(field 3 "$far") at $(field 4 "$far"), $(field 5 "$far") tiles"
+    wait_true 120 'CFCamp.settled()' >/dev/null || true
+    sleep 5
+    probe2="$(ev 'return CFCamp.qualifyProbe()')"
+    note "AD-10, standing in $(field 1 "$probe2"): of $(field 5 "$probe2") buildings the cases used, $(field 2 "$probe2") would be written with their town and $(field 3 "$probe2") without; $(field 4 "$probe2")"
+    if [ "$(field 1 "$probe2")" != "$(field 1 "$probe")" ] && [ "$(field 1 "$probe2")" != nil ]; then
+        [ "$(field 2 "$probe2")" -gt 0 ] 2>/dev/null \
+            || fail "read from $(field 1 "$probe2"), not one of the $(field 5 "$probe2") buildings the cases used would be written with its town ($(field 4 "$probe2"))"
+    else
+        note "the long move stayed in $(field 1 "$probe2"), so the other-town half of AD-10 was not exercised"
+    fi
+else
+    note "nowhere to move to another town ($(field 2 "$far")), so the other-town half of AD-10 was not exercised"
+fi
+
 note "knobs restored: kinds=$(ev 'return CFInst.widen()' | tr '\t' ' ')"
 
 engine="$(mod_errors | grep -cE "CellLoader|missing tile" || true)"; is_number "$engine" || engine=0

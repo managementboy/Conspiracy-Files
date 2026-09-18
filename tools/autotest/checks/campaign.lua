@@ -604,17 +604,71 @@ local function townOf(words)
     if address then return address, town end
     return tostring(words):match("(%d+ [%u][%a%.]* ?[%a%.]*)")
 end
+-- AD-10 AT THE LEVEL THE FIX WAS MADE (33496b0). A remembered address keeps
+-- its two halves and is qualified on the way out, so the question "does the
+-- town unfreeze?" can be asked of the address book directly, without a case
+-- and without a record: for every building any case used, the label, its town,
+-- and what the survivor would write for it HERE. Standing in another town,
+-- every one of them must gain ", <town>".
+--
+-- This is the probe the record-level assertion needed, because a FINISHED
+-- case's record rows carry no live address at all: EvidenceRows asks
+-- AddressMap.describe(body, case) and retirement drops the case envelope, so
+-- the only address left in a finished row is the frozen FOUND line.
+function C.qualifyProbe()
+    local map = ConspiracyFiles.AddressMap
+    if not map or not map.labelParts then return "nil", 0, 0, "no address map" end
+    local here = map.currentTown and map.currentTown() or nil
+    local ids, seen = {}, {}
+    local function add(id)
+        if type(id) == "string" and id ~= "" and not seen[id] then seen[id] = true; ids[#ids + 1] = id end
+    end
+    for _, root in ipairs(roots()) do
+        for _, s in ipairs((root.case and root.case.locations) or {}) do add(s.id) end
+        for _, r in ipairs(root.rows or {}) do add(r.locationId) end
+    end
+    local named, plain, parts = 0, 0, {}
+    for _, id in ipairs(ids) do
+        local label, town = map.labelParts((id:gsub("^t3:", "")))
+        if label then
+            local q = map.qualify(label, town)
+            if town and q ~= label then named = named + 1 else plain = plain + 1 end
+            if #parts < 4 then
+                parts[#parts + 1] = string.format("%s [%s] -> %q", label, tostring(town), tostring(q))
+            end
+        end
+    end
+    return tostring(here), named, plain, table.concat(parts, "; "), #ids
+end
+
 function C.townNames()
     local map = ConspiracyFiles.AddressMap
     -- The town the survivor is standing in, the same way the record decides
     -- whether to write one (AddressMap.qualified: a place in your own town is
     -- written without it).
     local here = map and map.currentTown and map.currentTown() or nil
+    local rows = require("ConspiracyFiles/EvidenceRows").list("evidence") or {}
+    -- WHICH HALF OF THE ROW. PlaceIndex.decorate appends a FOUND block holding
+    -- the words the discovery ledger kept at the find; everything before it is
+    -- rendered fresh on every refresh, through AddressMap.describe, and is the
+    -- half AD-10's fix applies to. Counting the whole detailText measured the
+    -- frozen half and read "0 of 16" (20260918T005315).
     local live, livePlain, sample, other = 0, 0, "", ""
-    local rows = R.known()
+    local stored, storedPlain = 0, 0
+    local liveCaseRows = 0
+    local Cases2 = require("ConspiracyFiles/Generated/SuccessiveCases")
+    local store = ModData.get("ConspiracyFiles.Generated.G2")
+    local wrapper = store and Cases2.current(store)
     for _, row in ipairs(rows) do
-        local _, where = R.whereabouts(row.id)
-        local address, town = townOf(where or "")
+        local detail = tostring(row.detailText or "")
+        local cut = detail:find("FOUND", 1, true)
+        local fresh = cut and detail:sub(1, cut - 1) or detail
+        local found = cut and detail:sub(cut) or ""
+        -- Only a row whose case is still live can carry a rendered address at
+        -- all: retirement drops the case envelope AddressMap.describe needs.
+        local root = row.id and Cases2.find(wrapper, row.id)
+        if root and root.case then liveCaseRows = liveCaseRows + 1 end
+        local address, town = townOf(fresh .. " | " .. tostring(row.text or ""))
         if address and town then
             live = live + 1
             if sample == "" then sample = address .. ", " .. town end
@@ -622,16 +676,12 @@ function C.townNames()
             livePlain = livePlain + 1
             if other == "" then other = address end
         end
+        local fa, ft = townOf(found)
+        if fa and ft then stored = stored + 1 elseif fa then storedPlain = storedPlain + 1 end
     end
-    -- The frozen half, for the report: the ledger's own FOUND words.
-    local stored, storedPlain = 0, 0
-    local log = ConspiracyFiles.DiscoveryLog
-    local ok, places = pcall(function() return log and log.places and log.places() end)
-    for _, where in pairs((ok and places) or {}) do
-        local address, town = townOf(where)
-        if address and town then stored = stored + 1 elseif address then storedPlain = storedPlain + 1 end
-    end
-    return tostring(here), live, livePlain, sample .. (other ~= "" and ("; own town: " .. other) or ""),
+    return tostring(here), live, livePlain,
+        sample .. (other ~= "" and ("; own town: " .. other) or "")
+            .. "; rows whose case is still live: " .. liveCaseRows,
         #rows, stored, storedPlain
 end
 
