@@ -192,6 +192,30 @@ MUTATIONS = [
      ' if hours<due then return quiet(runtime,"gap",due) end',
      " if hours<due then return end",
      "never reported why=gap"),
+    # REACHABILITY IS NEVER TRADED (P4-R67, and P4-R133 again in so many words:
+    # "an unreachable clue is not a clue"). The travel check's per-leg reach
+    # assertion is the one thing in it P4-R133 forbids outright, and it had no
+    # mutation - it was the cheapest assertion in the check left unproven,
+    # because everything it needs is already measured on every leg.
+    #
+    # It was UNFALSIFIABLE until 2026-09-18: travel.lua judged each site with
+    # `Reach.radius(anchor.hours)`, the very function the mod filters by, so
+    # widening the mod's reach widened the yardstick with it and every site
+    # stayed "inside the reach" however far the generator was allowed to go.
+    # travel.lua now keeps its own copy of P4-R55's radii (`ruleRadius`), so the
+    # two can disagree - and this mutation is the disagreement.
+    #
+    # ONE RUNG, not a wild number, on purpose. A fresh survivor is given the
+    # 264-hour reach, which is the shape a real off-by-one in the ladder would
+    # take, and it keeps the extra sites PLACEABLE: a building 250-500 tiles off
+    # is still inside the streamed world, so it can hold a clue and the case is
+    # still created - which is what the assertion needs in order to fail. A far
+    # bigger radius would mostly yield unloaded sites, no containers, and a
+    # refused case, which fails the check for a different reason.
+    ("reach-traded", "travel", "mod/common/media/lua/shared/ConspiracyFiles/Reach.lua",
+     "    if hours<96 then return 250 end",
+     "    if hours<96 then return 500 end",
+     "outside the reach of anywhere the survivor has been"),
 ]
 
 
@@ -201,9 +225,13 @@ def check_command(check):
     `unit:<name>` for an offline test in test/."""
     if check.startswith("unit:"):
         return "lua5.1 test/%s.lua" % check[len("unit:"):]
+    # The cap is per RUN and has to fit the longest check, not the average one:
+    # travel.sh walks nine thousand tiles and takes about half an hour, and at
+    # the old 1500 s its baseline was killed mid-journey and reported as a
+    # BASELINE FAILED that had nothing to do with any mutation.
     if "/" in check:
-        return "timeout 1500 tools/autotest/%s.sh" % check
-    return "timeout 1500 tools/autotest/checks/%s.sh" % check
+        return "timeout 3000 tools/autotest/%s.sh" % check
+    return "timeout 3000 tools/autotest/checks/%s.sh" % check
 
 
 def run(cmd, cwd, timeout=None):
@@ -236,7 +264,7 @@ def main():
     baseline = {}
     for check in sorted({m[1] for m in chosen}):
         print("baseline %s ..." % check, flush=True)
-        clean = run(check_command(check), wt, timeout=1600)
+        clean = run(check_command(check), wt, timeout=3100)
         # Kept like every mutation run: a baseline that could not start (exit 2,
         # 20260914 body-searched) left nothing to say why.
         runs = os.path.join(REPO, "dev/eval/linux/runs")
@@ -263,7 +291,7 @@ def main():
         open(full, "w", newline="").write(text.replace(good, bad))
         try:
             print("mutation %s -> %s ..." % (name, check), flush=True)
-            result = run(check_command(check), wt, timeout=1600)
+            result = run(check_command(check), wt, timeout=3100)
             out = result.stdout + result.stderr
             # Every run's whole output is kept: the first proof had one result
             # it could not explain ("FAILED, BUT NOT FOR THIS ... no FAIL line")

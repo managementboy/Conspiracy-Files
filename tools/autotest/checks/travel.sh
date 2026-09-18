@@ -62,10 +62,12 @@ SPOT_LIMIT="${CF_TRAVEL_SPOT:-150}"
 # name:x,y - the start, the town on the way, and the destination. Every
 # coordinate is the middle of a numbered building in the shipped address book,
 # so the survivor arrives among houses rather than in a field - and, at the
-# start, INSIDE one: the very first case of a save is refused with "waiting
-# until player is inside a building" (GeneratedRuntime.start's firstHouse),
-# and a survivor who spawns on the street gets no case at all until they step
-# indoors. That refusal carries no code, so automaticStatus() reads why=nil.
+# start, INSIDE one: the very first case of a save waits until the survivor is
+# inside a building (GeneratedRuntime.start's firstHouse), because the first
+# case is anchored on the house they are standing in, and a survivor who spawns
+# on the street gets no case at all until they step indoors. Since 2026-09-18
+# that wait carries the typed code `outdoors` (P4-R133), and stage (0) below
+# steps out of the start house to make it say so.
 WAYPOINTS=("Irvington:2228,14200" "Rosewood:8228,11601" "Muldraugh:10617,9764")
 
 legs=(); leg_no=0; overdue_run=0; reach_failed=""; budget_failed=""; promise_failed=""
@@ -268,6 +270,34 @@ id="$(session)"
 for f in core_loop reload campaign clue_search pacing travel; do
     ev -f "$CHECKS/$f.lua" >/dev/null || abort "could not load $f.lua"
 done
+# --- (0) THE FIRST CASE'S OWN WAIT, before anything else --------------------
+# The first case is anchored on the building the survivor is standing in, so it
+# waits until they are inside one - and until 2026-09-18 that wait said nothing:
+# automaticStatus() read why=nil and a player who spawned on a street got no
+# case and no reason (P4-R133, "every silence has a reason"). The survivor steps
+# out of the house the journey starts in BEFORE the first case exists, the wait
+# must name itself as `outdoors`, and then they step back in. Done first
+# because it is the only moment in a save when no case exists at all.
+inside0="$(ev 'return CFTrav.insideAndCases()')"
+if [ "$(field 2 "$inside0")" = 0 ]; then
+    out="$(ev 'return CFTrav.stepOutside(40)')"
+    if [ "$(field 1 "$out")" = true ]; then
+        note "the first case's wait: the survivor stepped out of $(field 3 "$out") to $(field 2 "$out") ($(field 4 "$out") tiles), with no case in the save yet"
+        if wait_true 180 'CFTrav.waitIsNamed()'; then
+            note "the first case's wait names itself: $(promise_words); ev=defer why=outdoors lines so far: $(run_log | grep -c 'ev=defer why=outdoors' || true)"
+        else
+            w="$(ev 'return CFTrav.waitIsNamed()')"
+            fail "no case, the survivor outside a building, and the first case's wait reports why=$(field 2 "$w") (cases $(field 3 "$w"), outside=$(field 4 "$w")) rather than outdoors - P4-R133"
+        fi
+        [ "$(ev 'return CFTrav.stepBackInside()' | field 1)" = true ] \
+            || abort "the survivor could not step back into the house the journey starts in"
+        note "the first case's wait: the survivor stepped back inside to $(ev 'return CFTrav.pos()' | cut -f1-2 | tr '\t' ',')"
+    else
+        note "the first case's wait was not tested: $(field 2 "$out")"
+    fi
+else
+    note "the first case's wait was not tested: the save already held $(field 2 "$inside0") case(s) before the harness could step outside"
+fi
 wait_true 120 'ConspiracyFiles.GeneratedRuntime.metrics()~=nil' || abort "the generated runtime never started"
 ev 'return CFLoop.givePen()' >/dev/null
 ev 'return CFClue.running()' >/dev/null

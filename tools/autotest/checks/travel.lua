@@ -20,7 +20,9 @@ local T = CFTrav
 local R = ConspiracyFiles.GeneratedRuntime
 local Cases = require("ConspiracyFiles/Generated/SuccessiveCases")
 local Retired = require("ConspiracyFiles/Generated/RetiredCase")
-local Reach = require("ConspiracyFiles/Reach")
+-- ConspiracyFiles/Reach is deliberately NOT required here: the reach assertion
+-- keeps its own copy of P4-R55's radii (see ruleRadius below), so widening the
+-- mod's reach cannot widen the yardstick that judges it.
 local Book = require("ConspiracyFiles/Generated/AddressBook")
 
 local function roots()
@@ -121,15 +123,90 @@ function T.walked()
 end
 
 -- ---------------------------------------------------------------------------
+-- THE FIRST CASE'S OWN WAIT (P4-R133, fixed 2026-09-18). The first case of a
+-- save is anchored on the building the survivor is standing in, so
+-- GeneratedRuntime.start's firstHouse path waits until they are inside one.
+-- Until 2026-09-18 that wait said nothing at all: automaticStatus() read
+-- why=nil, and a player who spawned on a street got no case and no reason -
+-- which this check's own header used to record as a fact to live with. It now
+-- reports the typed code `outdoors`.
+--
+-- Proven by stepping OUT of the house the journey starts in rather than by
+-- starting the journey on a street: the waypoint is deliberately the middle of
+-- a numbered building, so the first case is made where it can be found and its
+-- record can carry an address. Stepping out before the first case exists is
+-- also the player's own way into this state - walk out of the house you woke up
+-- in - and it drives nothing but the shipped path: the survivor moves, and the
+-- mod is asked why nothing is happening.
+T.home = T.home or nil
+function T.stepOutside(within)
+    local p, cell = getPlayer(), getCell()
+    if not p or not cell then return "false", "no player or cell" end
+    local px, py, pz = math.floor(p:getX()), math.floor(p:getY()), math.floor(p:getZ())
+    T.home = { x = px, y = py, z = pz }
+    for r = 3, (tonumber(within) or 40), 3 do
+        for _, d in ipairs({ { 1, 0 }, { 0, 1 }, { -1, 0 }, { 0, -1 }, { 1, 1 }, { -1, -1 }, { 1, -1 }, { -1, 1 } }) do
+            local sq = cell:getGridSquare(px + d[1] * r, py + d[2] * r, pz)
+            if sq and sq:isFree(false) and not sq:getBuilding() then
+                p:teleportTo(sq:getX() + 0.5, sq:getY() + 0.5, sq:getZ())
+                return "true", sq:getX() .. "," .. sq:getY(), px .. "," .. py, tostring(r)
+            end
+        end
+    end
+    return "false", "no square outside a building within " .. (tonumber(within) or 40) .. " tiles"
+end
+function T.stepBackInside()
+    local p = getPlayer()
+    if not p or not T.home then return "false", "nowhere to step back to" end
+    p:teleportTo(T.home.x + 0.5, T.home.y + 0.5, T.home.z)
+    return "true", T.home.x .. "," .. T.home.y
+end
+-- Is the survivor in a building, how many cases does the save have, and what
+-- does the mod say about the silence? The three facts this wait depends on.
+function T.insideAndCases()
+    local p = getPlayer()
+    local sq = p and p:getCurrentSquare()
+    local total = select(1, CFCamp.cases())
+    return tostring((sq and sq:getBuilding()) ~= nil), tostring(total),
+        tostring(R.automaticStatus().why)
+end
+-- Does the wait NAME itself? True only while the save really has no case and
+-- the survivor really is outside a building, so a case arriving in the middle
+-- of the wait cannot make this pass by accident.
+function T.waitIsNamed()
+    local s = R.automaticStatus()
+    local p = getPlayer()
+    local sq = p and p:getCurrentSquare()
+    local outside = (sq and sq:getBuilding()) == nil
+    return tostring(s.why == "outdoors" and s.count == 0 and outside),
+        tostring(s.why), tostring(s.count), tostring(outside)
+end
+
+-- ---------------------------------------------------------------------------
 -- IS EVERY CLUE INSIDE THE REACH OF THE TRAIL? Measured against every anchor
 -- the journey recorded, with the radius that anchor's survival hours bought -
 -- which is the strict reading of P4-R67: a case is filtered by the reach it had
 -- when it was prepared, and the survivor cannot have prepared one from a place
 -- they had not yet reached.
+--
+-- THE RADIUS IS THIS CHECK'S OWN COPY of P4-R55, not Reach.radius. Sharing the
+-- yardstick with the code under test made the assertion unfalsifiable: widen
+-- the mod's reach and the check widens with it, so every site stayed "inside
+-- the reach" however far the generator was allowed to go, and prove.py could
+-- never catch a traded reach. This is the rule as the decision states it (250
+-- tiles under 96 hours survived, then 500, 1000 and 1500), written out where a
+-- reader can compare the two. If the policy is ever changed on purpose, this
+-- table changes with it - deliberately, in a second place.
+local P4_R55 = { { 96, 250 }, { 264, 500 }, { 504, 1000 } }
+local function ruleRadius(hours)
+    if type(hours) ~= "number" or hours ~= hours or hours < 0 then return 250 end
+    for _, step in ipairs(P4_R55) do if hours < step[1] then return step[2] end end
+    return 1500
+end
 local function nearestAnchor(bounds)
     local best, bestRadius, bestAnchor
     for _, a in ipairs(T.visited) do
-        local radius = Reach.radius(a.hours) or 250
+        local radius = ruleRadius(a.hours)
         local dx = math.max(bounds.x1 - a.x, 0, a.x - (bounds.x2 - 1))
         local dy = math.max(bounds.y1 - a.y, 0, a.y - (bounds.y2 - 1))
         local d = math.sqrt(dx * dx + dy * dy)
