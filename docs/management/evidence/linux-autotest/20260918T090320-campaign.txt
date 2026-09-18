@@ -1,0 +1,90 @@
+Linux campaign check 20260918T090320: FAIL
+source: 243ea4b
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+cases: 1 generated:1519778797:case, 2 generated:1902179420:case, 3 generated:161036606:case; at the end 6 4 1:1519778797:retired 2:1902179420:retired 3:161036606:live 4:1039637511:retired 5:1281752907:retired 6:1678880107:live
+stages:
+  start                  cases 1 (0 finished) | record 0 | FILES questions 0 | NAMES 1 | PLACES 0 | Old 0/0 wrong | Evidence 0/0 wrong | order  | save 30276 B
+  case 1 finished        cases 1 (1 finished) | record 4 | FILES questions 1 | NAMES 3 | PLACES 6 | Old 4/0 wrong | Evidence 0/0 wrong | order 1111 | save 25074 B
+  after reload 1         cases 1 (1 finished) | record 4 | FILES questions 1 | NAMES 3 | PLACES 6 | Old 4/0 wrong | Evidence 0/0 wrong | order 1111 | save 25719 B
+  case 2 finished        cases 2 (2 finished) | record 8 | FILES questions 2 | NAMES 4 | PLACES 13 | Old 8/0 wrong | Evidence 0/0 wrong | order 11112222 | save 44914 B
+  case 3, two clues      cases 3 (2 finished) | record 10 | FILES questions 2 | NAMES 4 | PLACES 16 | Old 8/0 wrong | Evidence 2/0 wrong | order 1111222233 | save 88178 B
+  after reload 2         cases 3 (2 finished) | record 10 | FILES questions 2 | NAMES 4 | PLACES 16 | Old 8/0 wrong | Evidence 2/0 wrong | order 1111222233 | save 88546 B
+  at the limit           cases 4 (2 finished) | record 10 | FILES questions 2 | NAMES 4 | PLACES 16 | Old 8/0 wrong | Evidence 2/0 wrong | order 1111222233 | save 107452 B
+  after the limit        cases 6 (2 finished) | record 13 | FILES questions 2 | NAMES 4 | PLACES 19 | Old 8/0 wrong | Evidence 5/0 wrong | order 1111222233333 | save 153859 B
+  after reload 3, stubs present cases 6 (4 finished) | record 19 | FILES questions 4 | NAMES 5 | PLACES 26 | Old 14/0 wrong | Evidence 5/0 wrong | order 1111222233333444555 | save 143605 B
+case 1 answers on the organiser: true two person2 records nil Delia Mercer Roy Hale County Personnel Office
+case 2 steer: generated:1519778797:case two records Roy Hale Roy Hale true
+refusals (P4-R133), all sessions:
+  active-limit: 23 lines, longest run of 23, rung 3
+  no-containers: 5 lines, longest run of 2, rung 0
+instalments placed and clues dropped (P4-R133, P4-R134), all sessions:
+  none in this run
+errors inside the mod, all sessions: 0
+FINDING: no case 1 in 3 fresh worlds had a document in the relay memo's week; carrying on in this world
+FINDING: fresh worlds started for a case 1 with a document in the memo's week: 3 (memo=true, dated documents=0)
+FINDING: start: assignments placed=4; why=nil n=0 due=- rung=0/3 now=02:08 overdue=false(0.00h) preparing=false active=1/4 cases=1/16
+FINDING: case 1 relay memo: found=true, dated in its week=0, carrying the date note=0
+FINDING: the date note was not exercised: case 1 had no document in the memo's week
+FINDING: case 1 finished: assignments ; why=gap n=0 due=02:06 rung=0/3 now=02:19 overdue=false(-23.79h) preparing=false active=0/4 cases=1/16
+FINDING: case 1 note on the organiser: I think it was a move nobody would sign for. Roy Hale matters here. Next I would check the place against its records.
+FINDING: frame cost during case 1: AutomaticInvestigations.onTick calls=2712 avg=0.009ms max=18ms over2ms=1 | CaseFile.onTick calls=2700 avg=0.009ms max=1ms over2ms=0 | ClueMarkers.draw calls=0 avg=0.000ms max=0ms over2ms=0 | ClueMarkers.update calls=48 avg=0.354ms max=2ms over2ms=3 | IdentityObserver.afterRender calls=5490 avg=0.109ms max=1ms over2ms=0 | IdentityObserver.tick calls=2749 avg=0.001ms max=1ms over2ms=0 | LocalPersonI
+FINDING: after reload 1: assignments ; why=gap n=0 due=02:06 rung=0/3 now=02:25 overdue=false(-23.69h) preparing=false active=0/4 cases=1/16
+FINDING: reload 1 save size: 25351 -> 25719 bytes; before [Generated.G2=20278 KeyConnections=778 DiscoveryLedger=2262 VisitedBuildings=359]; after [Generated.G2=20646 KeyConnections=778 DiscoveryLedger=2262 VisitedBuildings=359]
+FINDING: case 2 placement: reach 250: t3:10977704480342018, t3:10977704480342027
+FINDING: case 2 clues: Delivery docket / WB-394 | Attendance note / WB-394 | Duty log / WB-394 | Tagged key / WB-394
+FINDING: case 2 finished: assignments ; why=gap n=0 due=02:33 rung=0/3 now=02:46 overdue=false(-23.78h) preparing=false active=0/4 cases=2/16
+FINDING: frame cost during case 2: AutomaticInvestigations.onTick calls=4728 avg=0.007ms max=2ms over2ms=1 | CaseFile.onTick calls=4716 avg=0.011ms max=1ms over2ms=0 | ClueMarkers.draw calls=0 avg=0.000ms max=0ms over2ms=0 | ClueMarkers.update calls=83 avg=0.687ms max=4ms over2ms=7 | IdentityObserver.afterRender calls=9446 avg=0.108ms max=2ms over2ms=1 | IdentityObserver.tick calls=4764 avg=0.004ms max=1ms over2ms=0 | LocalPersonIn
+FINDING: case 3 placement: reach 250: t3:10977700185374752, t3:10977704480342026
+FINDING: case 3, two clues: assignments deferred=2 placed=5; why=gap n=0 due=02:54 rung=0/3 now=02:59 overdue=false(-23.92h) preparing=false active=1/4 cases=3/16
+FINDING: frame cost during case 3: AutomaticInvestigations.onTick calls=7583 avg=0.007ms max=2ms over2ms=2 | CaseFile.onTick calls=7571 avg=0.011ms max=1ms over2ms=0 | ClueMarkers.draw calls=0 avg=0.000ms max=0ms over2ms=0 | ClueMarkers.update calls=132 avg=0.644ms max=4ms over2ms=9 | IdentityObserver.afterRender calls=15118 avg=0.090ms max=2ms over2ms=1 | IdentityObserver.tick calls=7619 avg=0.004ms max=1ms over2ms=0 | LocalPerson
+FINDING: after reload 2: assignments deferred=2 placed=5; why=gap n=0 due=02:54 rung=0/3 now=03:05 overdue=false(-23.82h) preparing=false active=1/4 cases=3/16
+FINDING: reload 2 save size: 88178 -> 88546 bytes; before [Generated.G2=76612 KeyConnections=1690 DiscoveryLedger=5019 VisitedBuildings=827]; after [Generated.G2=76980 KeyConnections=1690 DiscoveryLedger=5019 VisitedBuildings=827]
+FINDING: map marks after reload 2 (written/pending/missing): 10/0/0
+FINDING: the limit, move 1: moved on 303 tiles to 10701,9836 (t3:10696225208664092, 7 rooms, 37 unused buildings within 120 tiles); 12 containers loaded within 8 tiles
+FINDING: the limit, move 2: moved on 305 tiles to 10704,10141 (t3:10977700185374737, 12 rooms, 49 unused buildings within 120 tiles); 29 containers loaded within 8 tiles
+FINDING: the limit: nothing was promised worth failing on (why=nil n=0 due=- rung=0/3 now=05:23 overdue=false(0.00h) preparing=false active=2/4 cases=4/16)
+FINDING: the limit: no case after 2 moves; assignments deferred=2 placed=8
+FINDING: cases stopped coming short of four unfinished: 4 2 1:1519778797:retired 2:1902179420:retired 3:161036606:live 4:1039637511:live
+FINDING: the fourth unfinished case did not arrive: 4 2 1:1519778797:retired 2:1902179420:retired 3:161036606:live 4:1039637511:live
+FINDING: at the limit: assignments deferred=2 placed=8; why=nil n=0 due=- rung=0/3 now=05:24 overdue=false(0.00h) preparing=false active=2/4 cases=4/16
+FINDING: at the limit: moved on 301 tiles to 10666,10440 (t3:11259175162085389, 8 rooms, 35 unused buildings within 120 tiles); 24 containers loaded within 8 tiles
+FINDING: after 90 s with 2 unfinished: preparing=true, cases 4 2 1:1519778797:retired 2:1902179420:retired 3:161036606:live 4:1039637511:live
+FINDING: case 161036606:case: 2 clue(s) still waiting after 3 played, 0 dropped (statuses 5:deferred 7:deferred); loaded generated:161036606:document-5's own site t3:10977704480342026 at 10764,10133 and stepped back to 10789,10133, move 1
+FINDING: case 161036606:case: 2 clue(s) still waiting after 3 played, 0 dropped (statuses 5:deferred 7:deferred); loaded generated:161036606:document-5's own site t3:10977704480342026 at 10764,10133 and stepped back to 10789,10133, move 2
+FINDING: case 161036606:case: 2 clue(s) still waiting after 3 played, 0 dropped (statuses 5:deferred 7:deferred); loaded generated:161036606:document-5's own site t3:10977704480342026 at 10764,10133 and stepped back to 10789,10133, move 3
+FINDING: case 161036606:case: 2 clue(s) still waiting after 3 played, 0 dropped (statuses 5:deferred 7:deferred); loaded generated:161036606:document-5's own site t3:10977704480342026 at 10764,10133 and stepped back to 10789,10133, move 4
+FINDING: case 161036606:case: 2 clue(s) still waiting after 3 played, 0 dropped (statuses 5:deferred 7:deferred); loaded generated:161036606:document-5's own site t3:10977704480342026 at 10764,10133 and stepped back to 10789,10133, move 5
+FINDING: case 161036606:case: 2 clue(s) still waiting after 3 played, 0 dropped (statuses 5:deferred 7:deferred); loaded generated:161036606:document-5's own site t3:10977704480342026 at 10764,10133 and stepped back to 10789,10133, move 6
+FINDING: case 161036606:case: 2 clue(s) still waiting after 3 played, 0 dropped (statuses 5:deferred 7:deferred); loaded generated:161036606:document-5's own site t3:10977704480342026 at 10764,10133 and stepped back to 10789,10133, move 7
+FINDING: case 161036606:case: 2 clue(s) still waiting after 3 played, 0 dropped (statuses 5:deferred 7:deferred); loaded generated:161036606:document-5's own site t3:10977704480342026 at 10764,10133 and stepped back to 10789,10133, move 8
+FINDING: a new case came after a case was finished at the limit: 6 2 1:1519778797:retired 2:1902179420:retired 3:161036606:live 4:1039637511:live 5:1281752907:live 6:1678880107:live
+FINDING: after the limit: assignments deferred=2 placed=15; why=active-limit n=6 due=11:02 rung=2/3 now=10:35 overdue=false(-0.46h) preparing=false active=4/4 cases=6/16
+FINDING: frame cost during the limit: AutomaticInvestigations.onTick calls=99617 avg=0.009ms max=103ms over2ms=12 | CaseFile.onTick calls=99605 avg=0.008ms max=2ms over2ms=3 | ClueMarkers.draw calls=0 avg=0.000ms max=0ms over2ms=0 | ClueMarkers.update calls=1697 avg=0.213ms max=4ms over2ms=11 | IdentityObserver.afterRender calls=198878 avg=0.036ms max=2ms over2ms=1 | IdentityObserver.tick calls=99654 avg=0.001ms max=1ms over2ms=0 | Lo
+FINDING: case 161036606:case: 2 clue(s) still waiting after 0 played, 0 dropped (statuses 5:deferred 7:deferred); loaded generated:161036606:document-5's own site t3:10977704480342026 at 10764,10133 and stepped back to 10789,10133, move 1
+FINDING: case 161036606:case: 2 clue(s) still waiting after 0 played, 0 dropped (statuses 5:deferred 7:deferred); loaded generated:161036606:document-5's own site t3:10977704480342026 at 10764,10133 and stepped back to 10789,10133, move 2
+FINDING: case 161036606:case: 2 clue(s) still waiting after 0 played, 0 dropped (statuses 5:deferred 7:deferred); loaded generated:161036606:document-5's own site t3:10977704480342026 at 10764,10133 and stepped back to 10789,10133, move 3
+FINDING: case 161036606:case: 2 clue(s) still waiting after 0 played, 0 dropped (statuses 5:deferred 7:deferred); loaded generated:161036606:document-5's own site t3:10977704480342026 at 10764,10133 and stepped back to 10789,10133, move 4
+FINDING: case 161036606:case: 2 clue(s) still waiting after 0 played, 0 dropped (statuses 5:deferred 7:deferred); loaded generated:161036606:document-5's own site t3:10977704480342026 at 10764,10133 and stepped back to 10789,10133, move 5
+FINDING: case 161036606:case: 2 clue(s) still waiting after 0 played, 0 dropped (statuses 5:deferred 7:deferred); loaded generated:161036606:document-5's own site t3:10977704480342026 at 10764,10133 and stepped back to 10789,10133, move 6
+FINDING: case 161036606:case: 2 clue(s) still waiting after 0 played, 0 dropped (statuses 5:deferred 7:deferred); loaded generated:161036606:document-5's own site t3:10977704480342026 at 10764,10133 and stepped back to 10789,10133, move 7
+FINDING: case 161036606:case: 2 clue(s) still waiting after 0 played, 0 dropped (statuses 5:deferred 7:deferred); loaded generated:161036606:document-5's own site t3:10977704480342026 at 10764,10133 and stepped back to 10789,10133, move 8
+FINDING: archive: case 161036606:case did not finish
+FINDING: archive: 4 finished cases full, 0 stubbed, 14 rows kept in all, 0 stubs still offering questions; 1:1519778797:full:4 2:1902179420:full:4 4:1039637511:full:3 5:1281752907:full:3
+FINDING: a finished case's clues carried: 14 checked, 14 show Evidence / Old, 14 offer the greyed already-noted option, 0 offer no such option (Transfer notice / R-474 -> Already in the organiser)
+FINDING: KNOX boot line "Records ......... 19": the ledger holds 19 discoveries, 0 of them from stubbed cases
+FINDING: stubbed cases: 0 stubs, 0 still offering questions, 0 carrying saved answers, 0 of those marked used by a later case ()
+FINDING: no case was stubbed in this run, so the stub half of P4-R111 was not exercised in the game
+FINDING: archive after the reload: 4 full, 0 stubbed, 14 rows; 1:1519778797:full:4 2:1902179420:full:4 4:1039637511:full:3 5:1281752907:full:3
+FINDING: refusals in the log of the session loaded with stubs present: 0
+FINDING: after reload 3, stubs present: assignments deferred=2 placed=9; why=gap n=23 due=09:00 rung=3/3 now=15:26 overdue=false(-17.56h) preparing=false active=2/4 cases=6/16
+FINDING: reload 3 save size: 143605 -> 143605 bytes; before [Generated.G2=122645 KeyConnections=2610 DiscoveryLedger=9491 VisitedBuildings=1295]; after [Generated.G2=122645 KeyConnections=2610 DiscoveryLedger=9491 VisitedBuildings=1295]
+FINDING: AD-10 town names, standing in Muldraugh: of 19 records the LIVE label names a town on 0 and not on 0; the stored FOUND lines (history, frozen by design) name one on 0 and not on 19; e.g. ; rows whose case is still live: 5
+FINDING: AD-10 address book, standing in Muldraugh: of 12 buildings the cases used, 0 would be written with their town and 9 without; 202 E Maple St [Muldraugh] -> "202 E Maple St"; 2302 S Main St [Muldraugh] -> "2302 S Main St"; 403 Perrine St [Muldraugh] -> "403 Perrine St"; 405 Perrine St [Muldraugh] -> "405 Perrine St"
+FINDING: AD-10: walked from Muldraugh to West Point at 11684,8363, 1946 tiles
+FINDING: AD-10 town names, standing in West Point: of 19 records the LIVE label names a town on 0 and not on 0; the stored FOUND lines (history, frozen by design) name one on 0 and not on 19; e.g. ; rows whose case is still live: 5
+FINDING: AD-10 address book, standing in West Point: of 12 buildings the cases used, 9 would be written with their town and 0 without; 202 E Maple St [Muldraugh] -> "202 E Maple St, Muldraugh"; 2302 S Main St [Muldraugh] -> "2302 S Main St, Muldraugh"; 403 Perrine St [Muldraugh] -> "403 Perrine St, Muldraugh"; 405 Perrine St [Muldraugh] -> "405 Perrine St, Muldraugh"
+FINDING: no record row names a town from West Point: of 19 rows, 0 carry a live address with a town and the 0+19 stored FOUND lines are frozen history - a design question, not a fault (a finished case has no live address at all)
+FAIL: case 161036606:case: 2 clue(s) never reached a container in fifteen minutes (statuses 5:deferred 7:deferred; assignments deferred=2 placed=15; why=active-limit n=5 due=10:42 rung=1/3 now=10:14 overdue=false(-0.47h) preparing=false active=4/4 cases=6/16)
+FAIL: the oldest unfinished case 161036606:case did not finish
+FAIL: case 161036606:case: 2 clue(s) never reached a container in fifteen minutes (statuses 5:deferred 7:deferred; assignments deferred=2 placed=15; why=active-limit n=21 due=15:09 rung=3/3 now=14:41 overdue=false(-0.46h) preparing=false active=4/4 cases=6/16)
+screenshot: dev/eval/linux/runs/20260918T090320-campaign.png (not committed)
