@@ -350,4 +350,73 @@ function I.carriersNear(x, y, z, radius)
     return #seen, table.concat(counts, " "), table.concat(parts, " ")
 end
 
+-- ---------------------------------------------------------------------------
+-- (e) IS A FRESH CORPSE A CARRIER AT ALL? Three runs now have found only
+-- ZOMBIES usable (20260918T001512, 20260918T002532, 20260918T041500: "usable
+-- carriers ... 2 (zombie@..., zombie@...)" with corpses lying on the same
+-- squares, and a carrier scan that saw 0 with five bodies loaded at the site).
+-- The design's own headline example is a note in a dead man's jacket, so this
+-- asks the engine directly: for every dead body near a point, what each
+-- inventory accessor returns, what class the object is, and what
+-- Carriers.refusal says about it. Whatever the answer, it is evidence rather
+-- than a guess.
+function I.bodyProbe(x, y, z, radius)
+    x, y, z = math.floor(tonumber(x)), math.floor(tonumber(y)), math.floor(tonumber(z) or 0)
+    radius = tonumber(radius) or 8
+    local cell = getCell()
+    local open = Carriers.openContainers()
+    local read = Carriers.read
+    local function accessors(o)
+        local parts = {}
+        for _, call in ipairs({ "getInventory", "getContainer", "getItemContainer" }) do
+            local v = read(o, call)
+            parts[#parts + 1] = call .. "=" .. (v and (tostring(read(v, "getType") or "container")) or "nil")
+        end
+        local class = "?"
+        pcall(function()
+            for _, name in ipairs({ "IsoDeadBody", "IsoZombie", "IsoPlayer" }) do
+                if instanceof(o, name) then class = name end
+            end
+        end)
+        return class .. " " .. table.concat(parts, " ")
+    end
+    local bodies, usable, parts = 0, 0, {}
+    for dx = -radius, radius do for dy = -radius, radius do
+        local sq = cell:getGridSquare(x + dx, y + dy, z)
+        for _, body in ipairs(sq and Carriers.bodiesOn(sq) or {}) do
+            bodies = bodies + 1
+            local state = Carriers.stateOf(body, Carriers.CORPSE, open, x + dx, y + dy, z)
+            local why = Carriers.refusal(state)
+            if not why then usable = usable + 1 end
+            if #parts < 6 then
+                parts[#parts + 1] = string.format("body@%s,%s %s refusal=%s",
+                    x + dx, y + dy, accessors(body), tostring(why or "none, usable"))
+            end
+        end
+    end end
+    -- And the cell's zombie list, dead entries included: a zombie that has just
+    -- been killed may still be in it, and Carriers.scan reads it first.
+    local zombies, deadInList, zparts = 0, 0, {}
+    local list = read(cell, "getZombieList")
+    local total = read(list, "size") or 0
+    for i = 1, (total < 60 and total or 60) do
+        local zed = read(list, "get", i - 1)
+        local zx, zy, zz = Carriers.position(zed)
+        if zx and zz == z and math.abs(zx - x) <= radius and math.abs(zy - y) <= radius then
+            zombies = zombies + 1
+            local dead = read(zed, "isDead") == true
+            if dead then deadInList = deadInList + 1 end
+            local state = Carriers.stateOf(zed, dead and Carriers.CORPSE or Carriers.ZOMBIE, open, zx, zy, zz)
+            local why = Carriers.refusal(state)
+            if not why then usable = usable + 1 end
+            if #zparts < 6 then
+                zparts[#zparts + 1] = string.format("%s@%s,%s %s refusal=%s",
+                    dead and "dead-in-list" or "walker", zx, zy, accessors(zed), tostring(why or "none, usable"))
+            end
+        end
+    end
+    return bodies, zombies, deadInList, usable,
+        table.concat(parts, " | "), table.concat(zparts, " | ")
+end
+
 return CFInst

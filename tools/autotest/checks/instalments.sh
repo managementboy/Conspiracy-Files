@@ -168,7 +168,17 @@ carrier_done=""
 LADDER=("desk" "shelves" "locker,filingcabinet" "counter")
 for kind in corpse zombie; do
     waiting=no
+    # A carrier clue of this kind may already be in the world: run 20260918T042707
+    # placed one on a zombie as an instalment while the check was looking for a
+    # corpse, and then spent four ladder steps asking for a case it did not
+    # need. Take what is there first.
+    have="$(ev "return CFInst.pickCarrierClue([[$kind]])")"
+    if [ "$(field 1 "$have")" = true ]; then
+        note "$kind stage: a clue is already on a $kind ($(field 2 "$have")), so no case has to be arranged"
+        waiting=already
+    fi
     for kinds in "${LADDER[@]}"; do
+        [ "$waiting" = already ] && break
         note "$kind stage: container kinds narrowed to $(ev "return CFInst.narrow([[$kinds]])")"
         get_case "the $kind case, $kinds" 1 150 8 || continue
         w="$(ev 'return CFInst.waitingSite()')"
@@ -176,12 +186,15 @@ for kind in corpse zombie; do
         [ "$(field 1 "$w")" = true ] && note "$kind stage: $(field 2 "$w") waits, but its case has already spent its one mobile slot, so no carrier can take it"
         note "$kind stage: the case placed every clue it had with only $kinds allowed ($(ev 'return CFInst.targets()' | field 3) waiting)"
     done
-    if [ "$waiting" != yes ]; then
+    if [ "$waiting" = no ]; then
         note "$kind stage: no case in the whole ladder (${LADDER[*]}) left a clue waiting, so the filler never had to look for a carrier"
         continue
     fi
     t="$(ev 'return CFInst.targets()')"
     note "$kind stage, the cases as they stand: $(field 1 "$t") placed, $(field 2 "$t") on a carrier, $(field 3 "$t") waiting"
+    if [ "$waiting" = already ]; then
+        got=yes; c="$have"
+    else
     x="$(field 4 "$w")"; y="$(field 5 "$w")"; z="$(field 6 "$w")"
     note "$kind stage: $(field 2 "$w") waits for the site $(field 3 "$w") at $x,$y (kinds there: $(field 8 "$w"), waiting since hour $(field 7 "$w"), the case's mobile slot free: $(field 9 "$w"))"
     # Load that site, park carriers of this kind in it, then stand back beyond
@@ -204,7 +217,9 @@ for kind in corpse zombie; do
     if [ "$got" != yes ]; then
         note "$kind stage: no clue landed on a $kind in five minutes ($(field 2 "$c")); targets $(ev 'return CFInst.targets()' | field 4 | cut -c1-300)"
         note "$kind stage: the filler's own refusals, latest: $(run_log | grep -o 'ev=skip why=[^ ]*' | tail -3 | tr '\n' ' ')"
+        note "$kind stage: what the mod could see at the site: $(ev "return CFInst.bodyProbe($x, $y, $z, 8)" | cut -f1-4 | tr '\t' ' ') bodies/zombie-list/dead-in-list/usable; $(ev "return CFInst.bodyProbe($x, $y, $z, 8)" | field 5 | cut -c1-300)"
         continue
+    fi
     fi
     c="$(wait_words 90 "CFInst.pickCarrierClue([[$kind]])" 4)"
     note "a clue on a $kind: $(field 2 "$c") at $(field 5 "$c"), the record reads \"$(field 4 "$c")\""
