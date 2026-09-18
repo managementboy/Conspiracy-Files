@@ -245,12 +245,18 @@ the evidence file named beside it.
 
 ### What works
 
+Everything below is from a run of `body_carrier.sh` at commit `af9b236`,
+**PASS**, `20260918T060108-body-carrier.txt`, except where another file is
+named.
+
 | what | seen | where |
 |---|---|---|
-| a clue placed on a **carrier** by the filler, as an instalment at a site with no free container | **yes**, on a zombie before P4-R136 (`1442066456:document-4:placed:zombie`) and on a **body** after the fix (`152858632:document-4`, five bodies parked at the waiting clue's own site) | `20260918T032829-instalments.txt`, `20260918T055418-body-carrier.txt` |
-| a carrier found again by the mod's own mark, with the clue really in its inventory | **yes**: `in its inventory=true item=Invitation Letter container type=inventoryfemale carrier=corpse at 10675,9894` | `20260918T055418-body-carrier.txt` |
-| a fresh corpse usable at all | **yes since the fix**: `corpses the mod would use: 4 of 4`, where it had been 0 of 4 | `20260918T055418-body-carrier.txt` |
-| a walking zombie refused (P4-R136) | **yes**: the two walkers parked beside those bodies read `refusal=not a carrier`, and the mod's own scan saw `4 usable (corpse=4)` | `20260918T055418-body-carrier.txt` |
+| a fresh corpse usable at all | **yes**: `corpses the mod would use: 4 of 4`, where the same check had said 0 of 4 before the fix | `20260918T060108` (`20260918T035135` before) |
+| a walking zombie refused (P4-R136) | **yes**: the two walkers parked beside those bodies read `refusal=not a carrier`, and the mod's own scan saw `4 usable (corpse=4)` - no zombie at all | `20260918T060108` |
+| a clue placed on a **body** by the filler, as an instalment at a site with no free container | **yes**: `generated:465571758:document-3`, five bodies parked at the waiting clue's own site, the survivor 25 tiles off | `20260918T060108` |
+| the record's words for it | **yes**: `On a body at 102 E Maple St.` | `20260918T060108` |
+| the clue really in the body the mod marked | **yes**: `in its inventory=true item=Notepad container type=inventoryfemale carrier=corpse at 10880,10156` | `20260918T060108` |
+| a clue placed on a carrier at all, before P4-R136 | yes, on a zombie: `1442066456:document-4:placed:zombie` | `20260918T032829-instalments.txt` |
 | the guards on a real body (fresh, loot window open, already searched) | **yes**, 2026-09-18 | `20260918T002532-carriers.txt` |
 | a carrier clue that is gone expiring | **yes**, `ev=stale why=expired` (with the hour shortened for the run) | `20260918T032829-instalments.txt` |
 

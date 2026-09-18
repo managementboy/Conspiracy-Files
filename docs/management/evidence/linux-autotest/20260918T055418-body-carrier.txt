@@ -1,0 +1,24 @@
+Linux body_carrier check 20260918T055418: FAIL
+source: 9dc07d4
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+errors inside the mod: 0
+FINDING: the survivor is kept alive while zombies stand beside them: setGodMod=true setInvincible=true setInvisible=true
+FINDING: corpses parked: 4 zombies created, 4 killed where they stood
+FINDING: walkers parked: 2
+FINDING: within 10 tiles: 4 dead bodies on squares, 2 entries in the cell's zombie list (0 of them dead), 4 of all of them usable as a carrier
+FINDING: the bodies, as the engine answers for them: body@10839,10150 IsoDeadBody getInventory=nil getContainer=inventorymale getItemContainer=inventorymale refusal=none, usable | body@10840,10149 IsoDeadBody getInventory=nil getContainer=inventorymale getItemContainer=inventorymale refusal=none, usable | body@10840,10149 IsoDeadBody getInventory=nil getContainer=inventorymale getItemContainer=inventorymale refusal=none, usable | body@10840,10150 IsoDeadBody getInventory=nil getContainer=inventorymale getItemContainer=inventorymale refusal=none, usable
+FINDING: the zombie list: walker@10843,10149 IsoZombie getInventory=none getContainer=nil getItemContainer=nil refusal=not a carrier | walker@10844,10149 IsoZombie getInventory=none getContainer=nil getItemContainer=nil refusal=not a carrier
+FINDING: the mod's own carrier scan over the same ground: 4 usable (corpse=4) corpse@10839,10150 corpse@10840,10149 corpse@10840,10149 corpse@10840,10150
+FINDING: corpses the mod would use: 4 of 4
+FINDING: the gap between cases turned off, and cars kept out of the case's mobile slot (VEHICLE_RADIUS=0)
+FINDING: log level set to d, so the filler's own ev=skip refusals reach the console
+FINDING: container kinds narrowed to desk
+FINDING: generated:152858632:document-4 waits for the site t3:10696225208664074 at 10677,9894 (kinds there: postbox, the case's mobile slot free: true)
+FINDING: parked 5 zombie(s) at the site, 5 of them killed where they stood
+FINDING: the mod's own carrier scan at the site sees 3 corpse=3 corpse@10675,9894 corpse@10678,9893 corpse@10678,9894
+FINDING: the survivor stands at 10702,9894, 25 tiles off, so the filler is allowed to place (169 23 5 squares/containers/bodies loaded)
+FINDING: a clue on a body: generated:152858632:document-4 at 10675,9894,0, the record reads "In a corpse at 105 Hill St."
+FINDING: the clue read back out of the body the mod marked: in its inventory=true item=Invitation Letter container type=inventoryfemale carrier=corpse at 10675,9894
+FINDING: ev=placed why=instalment lines in this run: 1
+FINDING: knobs restored: kinds=counter,desk,filingcabinet,locker,postbox,shelves 12 72
+FAIL: a clue on a body reads "In a corpse at 105 Hill St.", not "On a body at <address>"
