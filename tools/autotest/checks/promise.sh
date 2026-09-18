@@ -104,20 +104,35 @@ ev 'return CFPace.speed(4)' >/dev/null
 note "time set to the fastest speed at in-game hour $(ev 'return CFPace.hours()' | field 1), the survivor standing where case 1 was played"
 if wait_code 240 no-containers no-reach cooldown; then
     note "the world refused: $(promise_words "$(promise)")"
-    deadline=$(( $(date +%s) + 240 ))
+    # THE MOMENT OF THE REFUSAL is the one to ask about. A `cooldown` promises
+    # its own end (P4-R125's half hour) and comes from a different line than
+    # every other code's due hour, so a check that only asks once, later, asks
+    # about the wrong thing: the promise-overdue mutation was overdue by an hour
+    # at the first refusal and had become a cooldown by the time the count had
+    # climbed, and the check passed with the bug in (prove, 20260918T051216).
+    promise_broken "the promise, at the refusal" || true
+    # AND THE LADDER NEEDS THREE COUNTED REFUSALS. One is counted only a quarter
+    # of an in-game hour after the last, and after a counted one the generator
+    # is not asked again until the survivor has moved about fifty tiles or half
+    # an in-game hour has passed (P4-R125) - which is why four minutes of fast
+    # time yielded two and left the assertion vacuous. So the survivor moves a
+    # short way between tries, which is exactly what clears that wait.
+    deadline=$(( $(date +%s) + 420 ))
     until [ "$(promise | field 2)" -ge 3 ] 2>/dev/null; do
         [ "$(date +%s)" -lt "$deadline" ] || break
-        sleep 5
+        ev 'return CFCamp.moveOn(60)' >/dev/null
+        sleep 15
     done
     p="$(promise)"
-    note "after waiting for the count to climb: $(promise_words "$p")"
+    note "after waiting for the count to climb, moving a short way between tries: $(promise_words "$p")"
     if [ "$(field 2 "$p")" -ge 3 ] 2>/dev/null; then
         ladder_climbed "the ladder"
         note "the ladder: $(field 2 "$p") refusals of one code, rung $(field 4 "$p") of $(field 5 "$p")"
     else
-        note "only $(field 2 "$p") counted refusal(s) in four minutes of fast time, so the ladder's threshold was not reached; the assertion is vacuous in this run"
+        fail "only $(field 2 "$p") counted refusal(s) of one code in seven minutes of fast time with nowhere to put a case; the ladder's threshold is 3, so the ladder assertion could not be made at all"
         ladder_climbed "the ladder"
     fi
+    wait_code 90 no-containers no-reach >/dev/null || true
     promise_broken "the promise" || true
 else
     fail "with no container kind the mod may see, the generator still did not refuse with no-containers, no-reach or cooldown in four minutes ($(promise_words "$(promise)"))"

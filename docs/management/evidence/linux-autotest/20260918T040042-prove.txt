@@ -1,0 +1,11 @@
+Linux mutation proof 20260918T040042
+worktree: /home/elkin/cf-wp345 at dbbf659 The promise is asked first, of a neighbourhood with nothing left in it
+
+baseline promise: PASS
+
+MISSED promise-overdue (promise): promise: limits restored: MAX_ACTIVE=4, MAX_CASES=16 | promise: at the end: why=cap n=1 due=02:21 rung=0/3 now=03:21 overdue=true(1.01h) preparing=false active=1/4 cases=1/16; cases 1 0 1:1612647362:live
+MISSED ladder-stuck (promise): promise: limits restored: MAX_ACTIVE=4, MAX_CASES=16 | promise: at the end: why=cap n=1 due=03:21 rung=0/3 now=03:22 overdue=true(0.01h) preparing=false active=1/4 cases=1/16; cases 1 0 1:821552473:live
+CAUGHT poller-silent-gap (promise): FAIL: the poller never reported why=gap with a 999 hour gap between cases (why=nil n=0 due=- rung=0/3 now=03:57 overdue=false(0.00h) preparing=false active=2/4 cases=2/16) | promise: FAIL: the poller never reported why=gap with a 999 hour gap between cases (why=nil n=0 due=- rung=0/3 now=03:57 overdue=false(0.00h) preparing=false active=2/4 cases=2/16)
+
+caught 1 of 3
+worktree clean afterwards: yes
