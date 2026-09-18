@@ -1137,6 +1137,10 @@ works page for page, making reading uneccessary dififcult".
 - Inside a record the view's position was a page number, so reading jumped a
   screenful at a time. It is the top line now: one press, one line, clamped at
   the last full screen. Lists are unchanged (one press, one entry).
+- Added the same day, on "hold and drag works too?": the stylus drags the page
+  on the glass (after four pixels, so a tap still picks a record, and a drag
+  that moved never opens one), and the mouse wheel turns it - a line inside a
+  record, an entry in a list, in the game's own direction.
 No new game.
 
 *Built 2026-09-17 (the design's build order 1-5; the real-game checks of step 6
