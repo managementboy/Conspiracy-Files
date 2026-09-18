@@ -1,0 +1,51 @@
+Linux instalments check 20260918T063555: FAIL
+source: 91cc66e
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+instalments and drops in the log:
+  ev=stale doc=generated:403759462:document-5 why=expired n=2
+  ev=stale doc=generated:403759462:document-6 why=expired n=1
+the filler's refusals, by code:
+  none
+errors inside the mod: 0
+FINDING: log level set to d for this run, so the filler's own ev=skip refusals reach the console
+FINDING: the survivor is kept alive while zombies are parked beside them: setGodMod=true setInvincible=true setInvisible=true
+FINDING: container kinds the mod may see, as shipped: counter,desk,filingcabinet,locker,postbox,shelves
+FINDING: the gap between cases turned off, and cars kept out of the mobile slot (VEHICLE_RADIUS=0)
+FINDING: postboxes within 60 tiles of the survivor: 6 containers, 0 of them on a square the game calls a room, 0 inside one of the 2 live site footprints (first: 10786,10113 room=nil inside a site=false tiles outside the nearest site=50)
+FINDING: how far each postbox lies outside the nearest live site, against the 12-tile band the scan walks: 2 of 6 are within it (10786,10113=50t 10853,10123=8t 10853,10148=9t 10853,10181=25t 10859,10184=28t 10875,10142=30t)
+FINDING: and how far each lies from the nearest BUILDING, which is what the band has to cover for a NEW case: 6 of 6 within 12 tiles (10786,10113=3t 10853,10123=10t 10853,10148=9t 10853,10181=7t 10859,10184=9t 10875,10142=9t)
+FINDING: container kinds the mod offered the live sites: 10977704480342044=counter+shelves 10977704480342042=counter - postbox among them on 0 site(s)
+FINDING: ANSWER (mailbox): every postbox found stands on a square the game does not call a room - which is why the room pass alone could never offer one. What matters now is the band: 2 of them lie within 12 tiles of a live site and can be offered as that site's mailbox.
+FINDING: container kinds narrowed to: postbox
+FINDING: the mailbox case: case 2 came after 1 move(s), with only postbox allowed
+FINDING: live sites now: 10977704480342044=counter+shelves 10977704480342042=counter 10696225208664096=postbox 10696225208664074=postbox
+FINDING: a clue in a mailbox: generated:403759462:document-1 at 10652,9912,0, the record reads "In a mailbox."
+FINDING: the clue in a mailbox: standing at 10651,9911, the clue at 10652,9912
+FINDING: the clue in a mailbox: spotted by Search Mode in 4s
+FINDING: corpse stage: container kinds narrowed to desk
+FINDING: the corpse case, desk: no case after move 1 (busy 0 03:31 0)
+FINDING: corpse stage: container kinds narrowed to shelves
+FINDING: the corpse case, shelves: no case after move 1 (busy 1 04:14 0)
+FINDING: corpse stage: container kinds narrowed to filingcabinet,locker
+FINDING: the corpse case, locker,filingcabinet: no case after move 1 (cooldown 2 04:54 0)
+FINDING: corpse stage: container kinds narrowed to counter
+FINDING: the corpse case, counter: case 3 came after 1 move(s), with only counter allowed
+FINDING: corpse stage, the cases as they stand: 11 placed, 0 on a carrier, 2 waiting
+FINDING: corpse stage: generated:403759462:document-5 waits for the site t3:10696225208664096 at 10650,9927 (kinds there: postbox, waiting since hour 2.341207504272461, the case's mobile slot free: true)
+FINDING: corpse stage: parked 5 zombie(s) at the site, 5 of them killed where they stood
+FINDING: corpse stage: the mod's own carrier scan at the site sees 0  
+FINDING: corpse stage: the survivor stands at 10675,9927, 25 tiles off, so the filler is allowed to place (169 16 5 squares/containers/bodies loaded)
+FINDING: corpse stage: no clue landed on a corpse in five minutes (no placed clue on a carrier of kind corpse); targets 1570209314:document-1:placed:shelves [On shelves at 202 E Maple St.] | 1570209314:document-2:placed:counter [In a cupboard at 102 Dewey St.] | 1570209314:document-3:placed:counter [In a cupboard at 102 Dewey St.] | 1570209314:document-4:placed:counter [In a cupboard at 202 E Maple St.] | 1570209314:
+FINDING: corpse stage: the filler's own refusals, latest: 
+FINDING: corpse stage: what the mod could see at the site: 5 0 0 0 bodies/zombie-list/dead-in-list/usable; body@10650,9926 IsoDeadBody getInventory=nil getContainer=inventoryfemale getItemContainer=inventoryfemale refusal=already searched | body@10650,9927 IsoDeadBody getInventory=nil getContainer=inventoryfemale getItemContainer=inventoryfemale refusal=already searched | body@10650,9927 IsoDeadBody getI
+FINDING: carriers proven in this run: none
+FINDING: expiry: DEFER_EXPIRE_HOURS lowered from 72 to 1 in-game hour(s) - seventy-two is forty minutes of real time even at the fastest speed; the path that drops the clue is the shipped one
+FINDING: expiry: generated:403759462:document-5 waits for t3:10696225208664096 at 10650,9927
+FINDING: expiry: the survivor moves 603 tiles away to 10618,10527 so the waiting clue's site unloads
+FINDING: ANSWER (expiry): 2 clue(s) expired between in-game hour 6.34281063079834 and 6.478701591491699; e.g. ev=stale doc=generated:403759462:document-5 why=expired n=2
+FINDING: expiry: the case afterwards: 3 0 1:1570209314:live 2:403759462:live 3:276048300:live; assignments dropped=2 placed=13 placing=1
+FINDING: AD-10, standing in Muldraugh: of 6 buildings the cases used, 0 would be written with their town and 6 without; 202 E Maple St [Muldraugh] -> "202 E Maple St"; 102 Dewey St [Muldraugh] -> "102 Dewey St"; 104 Hill St [Muldraugh] -> "104 Hill St"; 105 Hill St [Muldraugh] -> "105 Hill St"
+FINDING: AD-10: walked from Muldraugh to Rosewood at 9077,11503, 1824 tiles
+FINDING: AD-10, standing in Rosewood: of 6 buildings the cases used, 6 would be written with their town and 0 without; 202 E Maple St [Muldraugh] -> "202 E Maple St, Muldraugh"; 102 Dewey St [Muldraugh] -> "102 Dewey St, Muldraugh"; 104 Hill St [Muldraugh] -> "104 Hill St, Muldraugh"; 105 Hill St [Muldraugh] -> "105 Hill St, Muldraugh"
+FINDING: knobs restored: kinds=counter,desk,filingcabinet,locker,postbox,shelves 12 72
+FAIL: no ev=placed why=instalment line in the whole run, with clues left waiting on purpose

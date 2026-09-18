@@ -30,6 +30,11 @@
 #       world is made short of cupboards the way instalments.sh does it - one
 #       container kind allowed - so a clue is left waiting and the filler
 #       reaches for a body at that clue's own site.
+#   (c) AND IT CAN BE SPOTTED BY SEARCHING (P4-R132), which is the whole point
+#       of P4-R136: the game turns Search Mode off beside a walking zombie, and
+#       a body is no threat. This is the one stage instalments.sh cannot be
+#       relied on for - its corpse stage only gets a body when the ladder
+#       leaves a clue waiting - and a body is what this check always has.
 #
 # About eight minutes. Exit 0 pass, 1 fail, 2 could not run.
 set -uo pipefail
@@ -152,6 +157,31 @@ else
             fail "the body carrying the clue could not be found again by its mark ($(field 2 "$cc"))"
         fi
         note "ev=placed why=instalment lines in this run: $(run_log | grep -c 'ev=placed .*why=instalment' || true)"
+
+        # --- (c) spotted by searching, beside the body -----------------------
+        # The survivor stands within four tiles of where the mod says the clue
+        # is now and turns Search Mode on once a second, exactly as the clue
+        # field check does. Beside a BODY, Search Mode stays on - which is the
+        # difference P4-R136 was decided for (a clue on a walking zombie could
+        # not be spotted at all: 20260918T045929).
+        b="$(ev 'return CFInst.standBeside()')"
+        if [ "$(field 1 "$b")" != true ]; then
+            fail "could not put the survivor near the body ($(field 2 "$b"))"
+        else
+            note "standing at $(field 2 "$b"), the clue at $(field 3 "$b"), $(field 4 "$b") tile(s) away"
+            spotted=no; start=$(date +%s); deadline=$(( start + 150 ))
+            while [ "$(date +%s)" -lt "$deadline" ]; do
+                ev 'return CFInst.standBeside()' >/dev/null
+                ev 'return CFField.searchOn()' >/dev/null
+                [ "$(ev 'return CFField.recognised()')" = true ] && { spotted=yes; break; }
+                sleep 1
+            done
+            if [ "$spotted" = yes ]; then
+                note "the clue on a body: spotted by Search Mode in $(( $(date +%s) - start ))s"
+            else
+                fail "a clue on a body could not be spotted in Search Mode in $(( $(date +%s) - start ))s beside it (Search Mode answered $(ev 'return CFField.searchOn()' | field 1); icon $(ev 'return CFField.icon()' | cut -f2- | tr '\t' ' '); light $(ev 'return CFField.light()' | cut -f2- | tr '\t' ' '))"
+            fi
+        fi
     fi
 fi
 note "knobs restored: kinds=$(ev 'return CFInst.widen()' | tr '\t' ' ')"
