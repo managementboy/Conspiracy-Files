@@ -241,6 +241,105 @@ Search Mode exactly like any other (P4-R132), that nothing appears in view of
 the survivor, and that a long run's `ev=defer` lines show a count rising and a
 rung rising with it.
 
+## Known unexplained
+
+### A clue the record calls `placed` that is not in its container
+
+**What was seen.** Three of nine overnight runs (2026-09-17/18) reported one
+clue the record called `placed` and the harness could not find: `accounted In a
+cupboard at 302 Irma Dr.` with nothing in that cupboard, after the survivor had
+travelled away and come back. Two other failures of the same shape were harness
+faults and are fixed (a clue in a dead man's jacket, which the harness did not
+know to look in, and a carrier that had walked off, which it now finds by the
+mod's own mark - campaigns `20260917T234706` and `20260918T003507`). This one
+has no cause. Nothing was invented to fix it; what follows is what the code can
+and cannot do, so the next run can settle it.
+
+**Ruled out, with the reason.**
+
+1. **The filler cannot write an item into a container that then fails
+   validation.** It validates the target through `api.assign` *before* anything
+   is created: a refused assignment is logged and the attempt ends, and only a
+   successful one enqueues the ordinary placement job. That job re-resolves the
+   container, creates the item, counts it, and only then records `placed`. So a
+   clue's first `placed` is always true. *(One wrinkle, not a fault: the
+   filler's `ev=placed why=instalment` line is written when the clue is
+   ASSIGNED, a moment before the item exists. A reader auditing the log, rather
+   than the store, can see "placed" for an item that is one scheduler step
+   away.)*
+2. **A chunk unloading and reloading does not lose the item.** Item ModData
+   survives it - that is how the clue is recognised again at all - and the only
+   thing the mod re-stamps on load is `setDisplayCategory`, which is a runtime
+   property the engine never saved (2026-09-13). If the square's object list
+   shifts, `World.resolve` refuses the target on its sprite and container type,
+   which makes the clue temporarily *unresolvable*, never removed: the record
+   then says "uncertain", and the periodic scan finds the item again by walking
+   every container within two tiles of the survivor.
+3. **The whereabouts scan does not invent `accounted`.** Both `placed` and
+   `accounted` require a real sighting of an item carrying the clue's token.
+
+**Not ruled out, in the order I would bet on them.**
+
+1. **`placed` does not mean "in the container the record names".** The periodic
+   identity scan sets `placed` whenever it sees the item *anywhere* it looks:
+   the survivor's inventory and bags, their vehicle, the resolved target
+   container, and **every container within two tiles of the survivor**. The
+   harness searches the recorded square and the eight around it - **one** tile.
+   A clue genuinely findable two tiles from its recorded square therefore reads
+   as "not on or next to its square" while the record honestly says "In a
+   cupboard at 302 Irma Dr". This costs nothing to test and would explain the
+   record and the failure together.
+2. **Relocation is not atomic, and the canonical write comes last.** The
+   relocation job removes the old item and adds the new one, and only then calls
+   `api.relocate` to move the target. If that canonical write is refused - a
+   save refusing the write, the budget, any validation - the clue is already in
+   its new cupboard while the record still names the old one, and the scheduler
+   swallows the error as a subsystem failure, so nothing in a run's evidence
+   would show it. The shape it leaves is exactly the shape reported, including
+   the address: relocation moves a clue to ANOTHER of the case's sites, so the
+   record's words would name the new building while its coordinates name the
+   old one. It also only ever fires while the survivor is more than twenty tiles
+   away from both ends - which is "travelled away and came back".
+3. **A stale sighting reads as current for longer than it should.** A miss never
+   clears `seen`: the state stays `accounted` with the old words until
+   `MISSES_BEFORE_UNCERTAIN` (5) reported scans have missed. Worse, the
+   scheduler takes at most `maxJobs=32` queued jobs and silently refuses the
+   rest, and each tick enqueues a placement job per document of every live case
+   *first*: at four active cases with twenty-two documents that is 22 jobs
+   before the four identity jobs, the four relocation jobs, the four filler jobs
+   and the carrier watches are even offered. So near the active limit the scan
+   that would notice a clue had gone can be skipped for whole ticks, and
+   "accounted" can be minutes old rather than seconds. (The same cap starves the
+   filler at the limit, which is worth its own look: it is a plausible second
+   reason a waiting clue sometimes never arrives.)
+4. **Relocation may put a clue in a container another CASE's clue holds.** Its
+   destination scan passes no accept predicate, unlike the filler's, and
+   `Session.validate` does not check container distinctness - P4-R67 is enforced
+   at creation (`createDistributed`) and by the filler (`usedPhysicalKeys`)
+   only. `StaleClue.destinations` excludes sites holding another clue of the
+   same case, so this needs two cases sharing a building. It would not lose a
+   clue, but it breaks a guarantee the design leans on.
+
+**The cheapest next diagnostic.** One read-only line, and the next campaign
+failure answers the question by itself. When the check cannot find a document,
+it should print, beside what it prints now:
+
+- the target as the store holds it (`x,y,z`, `objectIndex`, `containerIndex`,
+  `containerType`, `sprite`) and **what `World.resolve` says about it** -
+  `unloaded`, `target-changed`, or a container;
+- **where the last sighting actually was, in coordinates** - the square of the
+  item's own container, not only the words - and how many scans ago it was
+  (`sightings[id].misses`);
+- the assignment's `relocations` count.
+
+That distinguishes every candidate above in one line: two tiles away (candidate
+1) shows a resolvable target and a sighting square one or two tiles off; a
+failed relocation (candidate 2) shows `relocations` unchanged with the sighting
+in a different building; a stale record (candidate 3) shows misses climbing with
+no sighting square at all. It needs `sightings` to remember the coordinates it
+already reads from the item, and a `R.devSighting(id)` beside `R.devLocations` -
+both read-only, both debug-only, neither touching how a clue is placed.
+
 ## Risks
 
 - **Starvation moving up a level:** deferred clues that never place would block
