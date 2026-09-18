@@ -325,12 +325,23 @@ widen the footprint rather than pretend the kerb is a room.
   is a place for a waiting clue as well as for a new case.
 - the band is a wider place to LOOK, never a way round the allow-list: a kind
   absent from `Storage.KINDS` is not offered from the band either.
-- **Six tiles, not the car's twelve,** and the difference is cost: a car is
-  found through the engine's own vehicle list, while a mailbox must be looked
-  for square by square on every case attempt. Six is a front garden and costs
-  about 380 squares a site where twelve would cost 1,050. `instalments.sh` now
-  reports how far outside the nearest site each real postbox lies, so the number
-  is measured rather than guessed.
+- **Twelve tiles, and the width is measured.** A band is walked square by
+  square on every case attempt, so its width is a real cost - about 1,050
+  squares a site, against 380 at six tiles - and six was tried first.
+  `instalments.sh` now prints how far outside the nearest live site every real
+  postbox lies, and a running game answered
+  (`20260918T060614-instalments.txt`): of six postboxes within sixty tiles of
+  the survivor, the nearest two stood **8 and 9 tiles** out and the rest at 25,
+  28, 30 and 50. Six tiles reached none of them, and the check failed on
+  exactly that - "not one within 6 tiles of a live site footprint, so the band
+  cannot reach a mailbox at all". Twelve is the number a car in the driveway
+  already gets, for the same ground.
+- **The cost is bounded and mostly not paid.** The band comes after every room
+  rectangle, and the scan skips a whole rectangle in ONE step for a site that
+  already has its eight candidates: a furnished, loaded house never walks its
+  band, and a bare one does - which is exactly where a mailbox is needed. The
+  scan's runaway cap rose from 100,000 steps to 200,000 to keep twelve bare
+  sites clear of it, because hitting that cap commits no case at all.
 
 P4-R67 (one clue per container) is untouched: a mailbox is keyed by its square
 and indices like any fixed container, and the reach gate still applies.

@@ -42,14 +42,20 @@ S.VEHICLE_CONTAINER="vehicle"
 -- the way a car in the driveway is (S.VEHICLE_RADIUS): the gate and the
 -- driveway are the same few tiles of ground.
 --
--- SIX, not the car's twelve, and the difference is cost. A car is found through
--- the engine's own vehicle list; a mailbox has to be looked for square by
--- square, so this number is the width of a band walked around every candidate
--- site on every case attempt. Six tiles is a front garden - measured against
--- the real postboxes a running game offers (see the mailbox finding in
--- instalments.sh, which reports how far each one lies outside the nearest
--- site) - and it costs about 380 squares a site where twelve would cost 1,050.
-S.OUTDOOR_RADIUS=6
+-- TWELVE, and it is measured, not guessed. A band is walked square by square
+-- around every candidate site on every case attempt, so the width is a real
+-- cost (about 1,050 squares a site, against 380 at six tiles) and was set at
+-- six first. A running game then said six is not enough: of the six postboxes
+-- within sixty tiles of the survivor, the nearest two stood **8 and 9 tiles**
+-- outside the nearest live site footprint and the rest further
+-- (`20260918T060614-instalments.txt`, which prints the distance for every one).
+-- Twelve is the same number a car in the driveway gets, for the same ground.
+--
+-- The cost is bounded and mostly not paid: the band is ordered after every room
+-- rectangle, and Storage.scan skips a whole rect in ONE step for a site that
+-- already has its eight candidates - so a furnished, loaded house never walks
+-- its band, and a bare one does, which is exactly where a mailbox is needed.
+S.OUTDOOR_RADIUS=12
 -- The kinds allowed out there. The engine's own word for a mailbox is named
 -- ONCE, in Generated/Storage.MAILBOX, so it is asked for rather than spelled
 -- again here; if that module cannot be loaded nothing is outdoor, which is the

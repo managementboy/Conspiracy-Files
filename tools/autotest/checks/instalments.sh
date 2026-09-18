@@ -140,13 +140,18 @@ else
 pb="$(ev 'return CFInst.postboxes(60)')"
 note "postboxes within 60 tiles of the survivor: $(field 1 "$pb") containers, $(field 2 "$pb") of them on a square the game calls a room, $(field 3 "$pb") inside one of the $(field 5 "$pb") live site footprints (first: $(field 4 "$pb"))"
 note "how far each postbox lies outside the nearest live site, against the $(field 7 "$pb")-tile band the scan walks: $(field 6 "$pb") of $(field 1 "$pb") are within it ($(field 8 "$pb"))"
+note "and how far each lies from the nearest BUILDING, which is what the band has to cover for a NEW case: $(field 9 "$pb") of $(field 1 "$pb") within $(field 7 "$pb") tiles ($(field 10 "$pb"))"
 st="$(ev 'return CFInst.siteTypes()')"
 note "container kinds the mod offered the live sites: $(field 2 "$st") - postbox among them on $(field 1 "$st") site(s)"
 if [ "$(field 1 "$pb")" -gt 0 ] 2>/dev/null && [ "$(field 2 "$pb")" = 0 ]; then
     note "ANSWER (mailbox): every postbox found stands on a square the game does not call a room - which is why the room pass alone could never offer one. What matters now is the band: $(field 6 "$pb") of them lie within $(field 7 "$pb") tiles of a live site and can be offered as that site's mailbox."
 fi
-if [ "$(field 1 "$pb")" -gt 0 ] 2>/dev/null && [ "$(field 6 "$pb")" = 0 ]; then
-    fail "$(field 1 "$pb") postbox(es) near the survivor and not one within $(field 7 "$pb") tiles of a live site footprint, so the band cannot reach a mailbox at all ($(field 8 "$pb"))"
+# The band is grown from a SITE's rectangle, and a new case may take any
+# building the nearby scan offered - so the number that decides whether a
+# mailbox can ever be a place is its distance from the nearest building, not
+# from the two sites this case happens to use.
+if [ "$(field 1 "$pb")" -gt 0 ] 2>/dev/null && [ "$(field 9 "$pb")" = 0 ]; then
+    fail "$(field 1 "$pb") postbox(es) near the survivor and not one within $(field 7 "$pb") tiles of any building, so no band could ever reach a mailbox ($(field 10 "$pb"))"
 fi
 note "container kinds narrowed to: $(ev 'return CFInst.narrow("postbox")')"
 if get_case "the mailbox case" 2 150; then

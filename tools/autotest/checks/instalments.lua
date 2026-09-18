@@ -115,7 +115,23 @@ function I.postboxes(radius)
     -- fix needs: Session.OUTDOOR_RADIUS has to reach the gate from the
     -- building, and a band is walked square by square, so it must be no wider
     -- than it needs to be. `near` counts the ones the shipped radius reaches.
-    local dists, near = {}, 0
+    local dists, near, nearBuilding, buildingDists = {}, 0, 0, {}
+    -- AND HOW FAR FROM THE BUILDING IT SERVES, which is the question the band's
+    -- width actually has to answer: a band is grown from a site's own
+    -- rectangle, and a new case may pick any of the twelve buildings the
+    -- nearby scan offered, not only the two this case happens to use.
+    local function distanceToAnyBuilding(x, y)
+        local reach = 20
+        local best
+        for dx = -reach, reach do for dy = -reach, reach do
+            local d = math.max(math.abs(dx), math.abs(dy))
+            if (not best or d < best) then
+                local sq = cell:getGridSquare(x + dx, y + dy, 0)
+                if sq and sq:getBuilding() then best = d end
+            end
+        end end
+        return best
+    end
     local function distanceToSites(x, y)
         local best
         for _, s in ipairs(sites) do
@@ -149,6 +165,13 @@ function I.postboxes(radius)
                         if #dists < 12 then dists[#dists + 1] = string.format("%s,%s=%st", px + dx, py + dy, d) end
                         if d <= Session.OUTDOOR_RADIUS then near = near + 1 end
                     end
+                    local b = distanceToAnyBuilding(px + dx, py + dy)
+                    if b then
+                        if #buildingDists < 12 then
+                            buildingDists[#buildingDists + 1] = string.format("%s,%s=%st", px + dx, py + dy, b)
+                        end
+                        if b <= Session.OUTDOOR_RADIUS then nearBuilding = nearBuilding + 1 end
+                    end
                     if sample == "" then
                         sample = string.format("%s,%s room=%s inside a site=%s tiles outside the nearest site=%s",
                             px + dx, py + dy, tostring(room and room:getName()), tostring(inside), tostring(d))
@@ -158,7 +181,8 @@ function I.postboxes(radius)
         end
     end end
     return total, inRoom, inSite, sample, #sites, near,
-        tostring(Session.OUTDOOR_RADIUS), table.concat(dists, " ")
+        tostring(Session.OUTDOOR_RADIUS), table.concat(dists, " "),
+        nearBuilding, table.concat(buildingDists, " ")
 end
 
 -- What container kinds the mod itself offered each live site: the other half of

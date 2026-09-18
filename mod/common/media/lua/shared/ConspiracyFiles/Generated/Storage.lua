@@ -132,7 +132,13 @@ function M.scan(result,done,reachable)
     end
     return function()
         steps=steps+1
-        if steps>100000 then error("storage scan safety cap; no case committed") end
+        -- The cap is a runaway guard, not a budget: the scan is stepped at 48
+        -- steps a tick. It was 100,000 while only room rectangles were walked;
+        -- the mailbox band adds about 1,050 squares a site (Session.OUTDOOR_
+        -- RADIUS) for the bare sites that do not skip it, and twelve such sites
+        -- would have sat near the old cap - where hitting it commits no case at
+        -- all, which is a worse answer than a slow scan.
+        if steps>200000 then error("storage scan safety cap; no case committed") end
         local r=rects[index]
         if not r then
             -- Vehicles are added last, so a car never displaces a container
