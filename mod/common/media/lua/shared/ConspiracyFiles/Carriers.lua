@@ -32,7 +32,7 @@ local C={}
 C.CORPSE="corpse"
 C.KINDS={[C.CORPSE]=true}
 
--- Our handle, stamped into the body's or the zombie's own ModData. Distinct
+-- Our handle, stamped into the body's own ModData. Distinct
 -- from CasePerson's `cfCasePerson`: a case person is somebody the case is
 -- about, a carrier is only somewhere a clue happens to be.
 C.MARK="cfClueCarrier"

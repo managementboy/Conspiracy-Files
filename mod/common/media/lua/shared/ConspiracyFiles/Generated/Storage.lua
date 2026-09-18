@@ -74,7 +74,9 @@ function M.scan(result,done,reachable)
     for _,site in ipairs(catalog.locations) do
         local b=site.bounds
         local r=Session.OUTDOOR_RADIUS
-        rects[#rects+1]={kind="rect",outdoor=true,building=(site.id:gsub("^t3:","")),
+        -- `string.sub`, not `gsub` with a pattern: Kahlua's string library is
+        -- incomplete and the site id is always "t3:" and then the building's.
+        rects[#rects+1]={kind="rect",outdoor=true,building=string.sub(site.id,4),
             -- Street level: a mailbox is never in a basement, and the z-guard
             -- below skips this band for a site whose target sits elsewhere.
             x=b.x1-r,y=b.y1-r,z=0,w=(b.x2-b.x1)+2*r,h=(b.y2-b.y1)+2*r}

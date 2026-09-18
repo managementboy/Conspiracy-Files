@@ -26,9 +26,9 @@
 
 Fixed containers are a finite resource near a settled player: that is the whole
 of P4-R133's fault. Carriers that move are not finite. A body in the street, a
-zombie that wanders into the yard, a parked car's glovebox and a mailbox at the
-gate are all distinct, all replenishing, and all places a survivor already
-searches. Finding a note in a dead man's jacket at your own fence is a better
+zombie the survivor killed in the yard, a parked car's glovebox and a mailbox
+at the gate are all distinct, all replenishing, and all places a survivor
+already searches. Finding a note in a dead man's jacket at your own fence is a better
 moment than the twelfth cupboard.
 
 ## What already exists
@@ -66,7 +66,7 @@ Rules that stay:
 - **Never two clues on one carrier.** The distinctness register keys on the
   carrier's own mark, exactly as it keys on a container today.
 - **Never invented loot.** The mod does not spawn the carrier. It uses a body,
-  zombie, car or mailbox that the world already put there. If none is in reach,
+  a car or a mailbox that the world already put there. If none is in reach,
   the case simply waits, as P4-R133 says.
 - **Reachability.** A body in the street is reachable where it lies; a clue in
   a car obeys P4-R106 (a glovebox from a front seat, a truck bed from
@@ -86,7 +86,7 @@ Rules that stay:
    that cannot be placed. A carrier that is gone for three in-game days is
    dropped the same way, and the case closes on the clues it got.
 2. **Bodies the player made.** A zombie the survivor killed is the most likely
-   body they will search. A clue may be placed on one, but only before it is
+   body they will search, and since P4-R136 it is the ONLY kind of carrier. A clue may be placed on one, but only before it is
    searched, never while the loot window is open on it, and never on a body the
    survivor has already emptied.
 3. **How many of a case's clues may be mobile.** Default: at most one. A case
@@ -96,17 +96,18 @@ Rules that stay:
 
 1. The carrier target shape in the session schema, validated, with the
    distinctness register keyed on the carrier mark. Pure Lua, tested first.
-2. Corpse and zombie carriers, reusing CasePerson's inventory path and its
-   mark; the clue-search icon following the carrier.
+2. Corpse carriers, reusing CasePerson's inventory path and its mark; the
+   clue-search icon following the carrier. *(A zombie carrier was built too and
+   removed the next day: P4-R136.)*
 3. Mailboxes as a container kind in `Storage`, with the game's own container
-   type checked in a real game first. *(Checked 2026-09-18: it is `postbox` -
-   see "What the real game answered" below.)*
+   type checked in a real game first. *(Checked 2026-09-18: it is `postbox`,
+   and it stands in no room - see "What the real game answered" and fault 2
+   below, which is what the band around each site is for.)*
 4. Car parts: no new work beyond letting the case generator choose one
    deliberately rather than by chance.
 5. Expiry and the "gone" case, sharing P4-R133's expiry.
-6. Checks: a real-game check that places a clue on a body and on a zombie,
-   searches it out, drives the car away and still finds the clue, and a
-   `prove.py` mutation.
+6. Checks: a real-game check that places a clue on a body, searches it out,
+   drives the car away and still finds the clue, and a `prove.py` mutation.
 
 ## Risks
 
@@ -174,15 +175,16 @@ needs an owner decision; all of them are in the tests.
 7. **The case's own person is never a carrier.** `CasePerson` re-dresses her
    after a reload and re-binds her to a new body when hers is lost; two systems
    writing into one body's inventory is a fault waiting to happen. The carrier
-   code reuses CasePerson's *pattern* - the bounded zombie-list scan, the
-   ModData mark, the inventory path, the keyed read of P4-R124 - in its own
+   code reuses CasePerson's *pattern* - the bounded stepped scan, the ModData
+   mark, the inventory path, the keyed read of P4-R124 - in its own
    module (`shared/ConspiracyFiles/Carriers.lua`) rather than calling into a
    system whose marks mean something else.
 
 Also: a clue's Search Mode icon is now picked up and put down only once its
 clue has moved more than `ClueSearchRules.MOVE_TILES` (two tiles). Re-adding an
-icon restarts the game's own spot timer, so at zero tolerance a clue on a
-walking zombie could never have been spotted at all.
+icon restarts the game's own spot timer, so at zero tolerance a clue on
+anything that moves - a body being dragged, a car - could never have been
+spotted at all.
 
 ## What the real game answered (2026-09-18)
 
@@ -245,13 +247,14 @@ the evidence file named beside it.
 
 | what | seen | where |
 |---|---|---|
-| a clue placed on a **zombie** carrier | **yes**: `1442066456:document-4:placed:zombie`, placed by the filler as an instalment at a site with no free container | `20260918T032829-instalments.txt` |
-| the record's words for it | **yes**: `On a zombie close by.` - the no-address form, because the address book does not name that building. Never `In a none` again | `20260918T023400-campaign.txt` |
-| a zombie carrier found again after it has walked | **yes**, by the mod's own mark, inside `Carriers.FIND_RADIUS` | `20260918T023400-campaign.txt` |
+| a clue placed on a **carrier** by the filler, as an instalment at a site with no free container | **yes**, on a zombie before P4-R136 (`1442066456:document-4:placed:zombie`) and on a **body** after the fix (`152858632:document-4`, five bodies parked at the waiting clue's own site) | `20260918T032829-instalments.txt`, `20260918T055418-body-carrier.txt` |
+| a carrier found again by the mod's own mark, with the clue really in its inventory | **yes**: `in its inventory=true item=Invitation Letter container type=inventoryfemale carrier=corpse at 10675,9894` | `20260918T055418-body-carrier.txt` |
+| a fresh corpse usable at all | **yes since the fix**: `corpses the mod would use: 4 of 4`, where it had been 0 of 4 | `20260918T055418-body-carrier.txt` |
+| a walking zombie refused (P4-R136) | **yes**: the two walkers parked beside those bodies read `refusal=not a carrier`, and the mod's own scan saw `4 usable (corpse=4)` | `20260918T055418-body-carrier.txt` |
 | the guards on a real body (fresh, loot window open, already searched) | **yes**, 2026-09-18 | `20260918T002532-carriers.txt` |
 | a carrier clue that is gone expiring | **yes**, `ev=stale why=expired` (with the hour shortened for the run) | `20260918T032829-instalments.txt` |
 
-### Fault 1: a fresh corpse is never a carrier
+### Fault 1, FIXED: a fresh corpse was never a carrier
 
 `tools/autotest/checks/body_carrier.sh` parked four corpses and two walkers
 beside the survivor and asked the engine about each
@@ -267,40 +270,66 @@ beside the survivor and asked the engine about each
     within 10 tiles: 4 dead bodies on squares, 2 walkers, 2 usable as a carrier
     corpses the mod would use: 0 of 4
 
-`Carriers.stateOf` reads `getInventory` for every kind of carrier. On Build
-42.20 that is the right call for an `IsoZombie` and returns **nil** for an
-`IsoDeadBody`, whose inventory is `getContainer()` (equivalently
-`getItemContainer()`, type `inventorymale`). So `refusal` says "no inventory"
-for every fresh body, `Carriers.scan` offers only walkers, and the design's own
-headline example - a note in a dead man's jacket at your own fence - cannot
-happen. **Not fixed here** (the checking agent may not touch `mod/`).
+**The cause:** `Carriers.stateOf` read `getInventory` for every kind of carrier.
+On Build 42.20 that is the right call for an `IsoZombie` and returns **nil** for
+an `IsoDeadBody`, whose inventory is `getContainer()` (equivalently
+`getItemContainer()`, type `inventorymale`). So `refusal` said "no inventory"
+for every fresh body and the design's own headline example - a note in a dead
+man's jacket at your own fence - could not happen.
 
-This is also why the campaign run stranded a case: the only carrier the mod can
-use is one that walks, and the zombie carrying
-`generated:936981237:document-5` left the find radius. The clue then cannot be
-found and cannot be dropped for three in-game days, so the case cannot finish -
-a real-play consequence worth the owner's attention beside the fix.
+**The fix (2026-09-18):** `getContainer()`, which is also what the GAME reads
+for a body - the loot window gathers a square's static moving objects through
+`so:getContainer()` and marks that container explored (ISInventoryPage), and
+`CasePerson.onDeadBodySpawn` has written into a body through the same call since
+2026-09-08. The identity matters twice: the loot-window guard compares our
+container with the one the loot page is showing, and only the same call can
+match it. A dead **animal** is now refused as well, because the game's own loot
+window refuses to show one as a body (`so:isAnimal()`).
 
-### Fault 2: a mailbox can never be offered as a place
+Two harness reads had the same fault and are fixed with it: `core_loop.lua`'s
+own "is the clue inside this body" and `carriers.sh`'s loot-panel stage.
+
+### Fault 2, FIXED: a mailbox could never be offered as a place
 
 `Storage.MAILBOX` is the engine's verified word and `Catalog` allows it, but no
-mailbox is anywhere the scan looks (`20260918T025841-instalments.txt`):
+mailbox was anywhere the scan looked (`20260918T025841-instalments.txt`):
 
     postboxes within 60 tiles of the survivor: 6 containers, 0 of them on a
     square the game calls a room, 0 inside one of the 2 live site footprints
     container kinds the mod offered the live sites: counter+shelves,
     counter+shelves - postbox among them on 0 site(s)
 
-A site is a **room rectangle inside a building** and both `Storage.scan` and the
-filler's `boundsScan` only consider squares inside one. A mailbox stands at the
-gate, outdoors, so it is never a candidate however the allow-list reads. With
-`postbox` the only kind the mod could see, **no case could be created at all**
-in two fresh neighbourhoods. The fix is not a word but a widening - the same
-kind of widening `addVehicles` already does for a car in the driveway
-(`Session.VEHICLE_RADIUS`) - and it is a design decision for the owner, not a
-typo. **Not fixed here.**
+**The cause:** both `Storage.scan` and the filler's `boundsScan` only ever
+considered squares inside a room rectangle (the filler, inside the footprint). A
+mailbox stands at the gate, outdoors, in no room - so it was never a candidate
+however the allow-list read, and with `postbox` the only allowed kind **no case
+could be created at all** in two fresh neighbourhoods.
 
-### Fault 3: a clue on a zombie cannot be spotted, because Search Mode will not stay on beside a zombie
+**The fix, and what was chosen.** The cheapest honest answer is the one the mod
+already uses for a car in the driveway (`addVehicles`, `Session.VEHICLE_RADIUS`):
+widen the footprint rather than pretend the kerb is a room.
+
+- `Storage.scan` appends one **band** per site - the site's own rectangle grown
+  by `Session.OUTDOOR_RADIUS` - after all the room rectangles, walked by the
+  same stepped machinery, and takes **only the mailbox kind** from it. Nothing
+  else may be outside a room: a clue never lands in a crate in the street.
+- `Session.target` allows that one kind the same margin, and nothing else: an
+  ordinary container is still refused outside the footprint to the tile.
+- the filler's `boundsScan` walks the same band for the same kind, so a mailbox
+  is a place for a waiting clue as well as for a new case.
+- the band is a wider place to LOOK, never a way round the allow-list: a kind
+  absent from `Storage.KINDS` is not offered from the band either.
+- **Six tiles, not the car's twelve,** and the difference is cost: a car is
+  found through the engine's own vehicle list, while a mailbox must be looked
+  for square by square on every case attempt. Six is a front garden and costs
+  about 380 squares a site where twelve would cost 1,050. `instalments.sh` now
+  reports how far outside the nearest site each real postbox lies, so the number
+  is measured rather than guessed.
+
+P4-R67 (one clue per container) is untouched: a mailbox is keyed by its square
+and indices like any fixed container, and the reach gate still applies.
+
+### Fault 3, SETTLED BY THE OWNER: a clue on a zombie cannot be spotted
 
 `20260918T045929-instalments.txt`, with a clue on a zombie one tile away and the
 survivor facing it:
@@ -312,29 +341,44 @@ survivor facing it:
 
 The third field of that icon line is `isSearchMode`, and it is **false** after
 120 seconds of the check turning Search Mode on once a second. The game turns
-Search Mode off by itself when a zombie is close (the same behaviour
-`clue_field.lua` has noted since P4-R132's checks were written) - and a clue on
-a zombie is a clue you must stand next to. The mod's own side is built: a
-carrier clue has coordinates that follow the mark (`ClueSearch.carrierSpot`,
-`liveClues`), so the icon would be in the right place if the game would let
-Search Mode run.
+Search Mode off by itself when a zombie is close - and a clue on a zombie is a
+clue you must stand next to.
 
-This is a **collision between two decisions**, not a coding slip: P4-R132 says
-clues are found by searching, P4-R134 says a clue may ride a zombie, and the
-engine will not search next to one. It needs an owner's call. The two obvious
-directions:
+This was a collision between two decisions, not a coding slip, and the owner
+settled it: **P4-R136 - a corpse carries a clue, a walking zombie does not.** A
+walker had also carried a clue out of the find radius and stranded a case for
+three in-game days while holding its one mobile slot.
 
-1. **Fix fault 1 and lean on corpses.** A body is not a threat, so Search Mode
-   stays on beside it - which makes "a note in a dead man's jacket" both
-   possible and findable, and leaves the walking zombie as the rarer case.
-2. **Let a carrier clue be found another way**: looting the body is already a
-   second way in (`carriers.sh` proved a clue can be taken out of a carrier by
-   looting), so a zombie carrier could be exempt from the searching route by
-   design rather than by accident.
+**What that removed:** the `zombie` carrier kind (`Carriers.KINDS`,
+`Session.CARRIER_KINDS`), the bounded pass over the cell's zombie list in both
+`Carriers.scan` and `Carriers.findMark` (with `Carriers.MAX_ZOMBIES`, and the
+radius argument `findMark` no longer needs, since a body is looked for on its
+own square and the two around it), the `IsoZombie` arm of the wording's owner
+question, and the words `On a zombie near <address>`. All of it is **deleted,
+not kept**: with no zombie carrier there is no path that could reach any of it.
+`Carriers.FIND_RADIUS` stays, for the one thing it still means - how close the
+survivor must be before "we looked and it is not there" is worth saying.
 
-### Still unproven
+### Fault 4, FIXED the same day: the record called a body a corpse
 
-A carrier clue **spotted in Search Mode** - and by fault 3 above it cannot be
-proven at all until either a corpse can carry a clue or the design says a
-zombie's clue is not found that way. The stage is written and waiting in
-`instalments.sh`.
+Found by the first run of the fix (`20260918T055418-body-carrier.txt`): a clue
+on a body read
+
+    In a corpse at 105 Hill St.
+
+**The cause:** a body's inventory DOES declare a container type of its own -
+`inventoryfemale` - and the game translates that container's title as "Corpse",
+so the wording never reached the carrier arm. This had been hidden by the very
+fault above: a zombie's inventory answers the type `none`, which is what sent
+the zombie carrier down the carrier arm.
+
+**The fix:** the wording asks the container's **owner** whether it is a body
+before it asks the type, and it asks the owner rather than the case's own target
+- what the container IS now, not where the clue was put - so a clue the survivor
+has since moved into a cupboard still reads as being in one.
+
+### Still to prove
+
+A carrier clue **spotted in Search Mode**. It was unprovable while the only
+carrier was a walker (fault 3); a body is no threat, so Search Mode stays on
+beside it, and the stage that asks is the corpse stage of `instalments.sh`.
