@@ -146,6 +146,33 @@ MUTATIONS = [
      'if store.places and store.places[placeKey(clue)] then return nil,"place already cued" end',
      "-- mutation: a place already cued cues again",
      "a second cue at the same place"),
+    # The generator's promise and the ladder (P4-R133 step 6). Both assertions
+    # live in campaign.sh as well, but a campaign run is fifty minutes and a
+    # mutation needs two of them; promise.sh carries the same two assertions,
+    # with the same wording, in about ten - which is the cheapest mutation per
+    # assertion, as the owner asked on 2026-09-18.
+    #
+    # THE PROMISE: a refusal that means the world could not supply a case
+    # carries the hour a case is promised BY. Compute that hour from the wrong
+    # clock and the promise is broken the moment it is made, which is exactly
+    # the state the assertion exists to catch.
+    ("promise-overdue", "promise", C + "GeneratedRuntime.lua",
+     '    if type(last)=="number" then return math.max(now,last+gap) end',
+     '    if type(last)=="number" then return now-1 end',
+     "and none came"),
+    # THE LADDER: three refusals of one code earn a rung. A generator that
+    # refuses without ever lowering its standard is the fault the ladder exists
+    # to prevent, and it looks exactly like this.
+    ("ladder-stuck", "promise", C + "GeneratedRuntime.lua",
+     "        rung=math.max(rung,math.min(R.RUNG_MAX,math.floor(r.count/REFUSALS_PER_RUNG)))",
+     "        rung=0",
+     "but the generator stands on 0"),
+    # EVERY SILENCE HAS A CODE: the poller's own wait between cases, back to
+    # returning quietly the way all five of its early returns used to.
+    ("poller-silent-gap", "promise", C + "AutomaticInvestigations.lua",
+     ' if hours<due then return quiet(runtime,"gap",due) end',
+     " if hours<due then return end",
+     "never reported why=gap"),
 ]
 
 
