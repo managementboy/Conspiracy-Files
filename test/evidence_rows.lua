@@ -11,8 +11,18 @@ package.path="mod/common/media/lua/client/?.lua;mod/common/media/lua/shared/?.lu
 package.preload["ConspiracyFiles/Generated/PlaceNames"]=function()
     return {render=function(text,case) return text end}
 end
+-- A case reaches a row only through the case store, so the two writers of a
+-- place (below) need one. Only `current` and `find` are used by Rows.build.
+local store
+package.preload["ConspiracyFiles/Generated/SuccessiveCases"]=function()
+    return {current=function(s) return s end,
+        find=function(wrapper,id) return wrapper and wrapper.root end}
+end
 ConspiracyFiles=ConspiracyFiles or {}
 local Rows=require("ConspiracyFiles/EvidenceRows")
+-- The very table EvidenceRows holds, so a section below can change what
+-- PlaceNames does without reloading the module under test.
+local PlaceNames=require("ConspiracyFiles/Generated/PlaceNames")
 
 local function runtimeWith(known)
     return function() return {known=function() return known end} end
@@ -118,3 +128,60 @@ assert(unknown[1].detailText:find("Connected to: Receiving receipt / X%-9"),
     "an unrecognised link kind falls back to a plain phrase: "..unknown[1].detailText)
 
 print("PASS evidence rows: empty runtime, object vs document carrier, the unfound-document question with article and 'another', found connections, and global ordinals, connection verbs that fit any story, and an unknown link kind")
+
+-- THE TWO WRITERS OF A PLACE (fault found in a real game 2026-09-18,
+-- 20260918T230942-travel.txt). AddressMap names the sites the shipped address
+-- book has a number for; PlaceNames reads whatever place words are LEFT. This
+-- used to be an either/or - `describe(...) or PlaceNames.render(...)` - and
+-- because describe refused a whole case when ONE of its sites was unnumbered, a
+-- case like that showed no address for any of its clues. About one case in five
+-- is shaped like that, so this is the composition, in order, asserted on what a
+-- reader actually sees.
+local body="Dispatched from HOUSE A, received at HOUSE B."
+local case={locations={{id="t3:a",name="HOUSE A"},{id="t3:b",name="HOUSE B"}}}
+store={root={case=case}}
+ModData={get=function(key) return key=="ConspiracyFiles.Generated.G2" and store or nil end}
+local sawInPlaceNames
+PlaceNames.render=function(text,c)
+    sawInPlaceNames=text
+    assert(c==case,"PlaceNames must be handed the case the row belongs to")
+    return (text:gsub("HOUSE B","the receiving building near B Road"))
+end
+local function oneRow()
+    return Rows.build("evidence",runtimeWith({
+        {id="d1",title="Dispatch copy / R-482",body=body,kind="dispatch"},
+    }))[1].detailText
+end
+
+-- 1. A MIXED CASE: the numbered site is an address, the other reads as it did
+-- before AD-10 existed, and both are in the same sentence.
+ConspiracyFiles.AddressMap={describe=function(text,c)
+    assert(c==case,"describe must be handed the case the row belongs to")
+    return (text:gsub("HOUSE A","201 N Carl St"))
+end}
+local mixed=oneRow()
+assert(mixed:find("201 N Carl St",1,true),"the site the book numbers must be written as an address: "..mixed)
+assert(mixed:find("the receiving building near B Road",1,true),
+    "and the site it does not number must still read as PlaceNames writes it: "..mixed)
+assert(not mixed:find("HOUSE A",1,true) and not mixed:find("HOUSE B",1,true),
+    "no raw site name may survive: "..mixed)
+assert(sawInPlaceNames=="Dispatched from 201 N Carl St, received at HOUSE B.",
+    "PlaceNames must be handed what AddressMap left, not the original body: "..tostring(sawInPlaceNames))
+
+-- 2. A CASE THE BOOK CAN NAME NOTHING OF reads exactly as it does today:
+-- describe returns nil and PlaceNames gets the untouched body.
+ConspiracyFiles.AddressMap={describe=function() return nil end}
+local none=oneRow()
+assert(sawInPlaceNames==body,"PlaceNames must get the original body when nothing was named: "..tostring(sawInPlaceNames))
+assert(none=="Dispatched from HOUSE A, received at the receiving building near B Road.",none)
+
+-- 3. NO ADDRESS BOOK AT ALL (a map the book is not for, or a save read before
+-- the book loads) is the same state, and must not throw.
+ConspiracyFiles.AddressMap=nil
+assert(oneRow()==none,"with no address book the row reads as it did before AD-10")
+ConspiracyFiles.AddressMap={}
+local ok,why=pcall(oneRow)
+assert(ok,"an address book that is still starting up must not break a row: "..tostring(why))
+
+ConspiracyFiles.AddressMap=nil; ModData=nil; store=nil
+print("PASS evidence rows: a case's numbered sites are written as addresses and its unnumbered ones still read as PlaceNames writes them")

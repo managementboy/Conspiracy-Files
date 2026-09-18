@@ -62,8 +62,27 @@ function Rows.build(section,runtime)
     end
     for i,r in ipairs(known) do
         local root=Cases and Cases.find(wrapper,r.id);local case=root and root.case
-        local addresses=case and ConspiracyFiles.AddressMap and ConspiracyFiles.AddressMap.describe(r.body,case)
-        local detail=addresses or (case and PlaceNames.render(r.body,case) or r.body)
+        -- THE TWO WRITERS OF A PLACE, in order, not one or the other.
+        -- AddressMap names the sites the shipped book has a number for
+        -- (P4-R129); PlaceNames then reads whatever place words are LEFT the
+        -- way it always did - "the receiving building near Schoolhouse St" for
+        -- a site the book does not number, and nothing at all for a case it
+        -- cannot speak for. This used to be an either/or, and because describe
+        -- refused a whole case when one of its sites was unnumbered, a case
+        -- like that showed no address for any of its clues
+        -- (20260918T230942-travel.txt; about one case in five).
+        -- A fully numbered case is unaffected: describe has already replaced
+        -- every mention of both site names, so PlaceNames finds nothing to
+        -- replace and adds no location guide, exactly as before.
+        local detail=r.body
+        if case then
+            local map=ConspiracyFiles.AddressMap
+            -- `map.describe and` because a live reload replaces the module: for
+            -- one refresh ConspiracyFiles.AddressMap can be a table with
+            -- nothing in it yet, and a row must not throw over that.
+            detail=(map and map.describe and map.describe(detail,case)) or detail
+            detail=PlaceNames.render(detail,case)
+        end
         local markers=ConspiracyFiles.ClueMarkers
         if markers and markers.note then
             local ok,note=pcall(markers.note,r.id)

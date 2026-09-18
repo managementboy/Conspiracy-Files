@@ -40,17 +40,38 @@
   place the document is ABOUT, not where the clue was found (`describe`
   rewrites every mention of a site's NAME in the document's own words), and a
   document that names no place carries no address at all.
-- **Still open, found by the same run: one unnumbered site costs a case every
-  address it has.** `describe` returns nil unless EVERY site of the case has a
-  book row, and `EvidenceRows` then falls back to `PlaceNames`, which writes no
-  street - so a case with one unnumbered site shows no address for any of its
-  clues. `20260918T230942-travel.txt` caught it in Rosewood ("AddressMap.describe
+- **Fixed 2026-09-18: one unnumbered site used to cost a case every address it
+  had.** `describe` returned nil unless EVERY site of the case had a book row,
+  and `EvidenceRows` then fell back to `PlaceNames`, which writes no street - so
+  a case with one unnumbered site showed no address for any of its clues.
+  `20260918T230942-travel.txt` caught it in Rosewood ("AddressMap.describe
   refused the row"), and the book numbers 5,932 of the 6,663 buildings on the
   map with two or more rooms, which is about one site in nine and so roughly one
   case in five. Numbering every building was deliberately not done (P4-R129:
   buildings outside the named towns are numbered only near a named street, and
-  never carry an invented town), so the fix belongs in `describe`: qualify the
-  sites it CAN name and leave the others as they read today.
+  never carry an invented town), so the fix is in `describe`, per site instead
+  of per case:
+
+  - a site the book numbers, and whose footprint still matches its row, is
+    written as an address and qualified with its town exactly as before;
+  - a site the book does not number, or one whose footprint has moved, is left
+    **exactly as the text already reads** - no number is ever invented for it -
+    and no longer costs the case's other sites theirs;
+  - a case the book can name **nothing** of still returns nil, so the row reads
+    as it read before AD-10 existed;
+  - a case belonging to another **map** is still refused whole: that is the
+    header check, not a missing number.
+
+  `EvidenceRows` now runs **both** writers of a place in order rather than one
+  or the other - `AddressMap.describe` first, then `PlaceNames.render` over
+  whatever place words are left, so an unnumbered site still reads "the
+  receiving building near Schoolhouse St". One consequence, small and
+  deliberate: a mixed case no longer gets `PlaceNames`' LOCATION GUIDE ("roughly
+  80 paces east of the dispatch building"), because the site names it keys on
+  have been replaced - which is already true of every fully numbered case.
+  Tests: `test/address_shipped.lua` (the four shapes above, plus the town
+  qualifier on a mixed case), `test/evidence_rows.lua` (the composition, in
+  order, on a rendered row).
 - **Request:** AD-10, queued 2026-09-15 (`docs/management/PM_HANDOFF.md`, "house
   numbers for the whole map").
 - **Game:** Build 42.20 (Linux test machine reports `42.20.4 b0bbce05d5`).

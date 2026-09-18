@@ -135,6 +135,81 @@ for _=1,100 do assert(M.qualify(rawLabel,rawTown)=="101 Main St, Riverside") end
 assert(asked<=1,"qualifying must not re-measure the survivor's town: asked "..asked.." times")
 print("PASS address shipped: labelParts and qualify let a caller cache an address without freezing its town")
 
+-- ONE UNNUMBERED SITE USED TO COST A CASE EVERY ADDRESS IT HAD (fault found in
+-- a real game 2026-09-18, 20260918T230942-travel.txt). describe refused the
+-- whole row unless EVERY site of the case was in the book, and EvidenceRows
+-- then fell back to PlaceNames, which writes no street - so a Rosewood case
+-- with one unnumbered site showed no address for any of its clues. The book
+-- numbers 5,932 of the 6,663 buildings on the map with two or more rooms, about
+-- one site in nine, so roughly one case in five was shaped like that.
+local function site(id,name,x1,y1,x2,y2)
+    return {id=id,mapId="Muldraugh, KY",name=name,bounds={x1=x1,y1=y1,x2=x2,y2=y2}}
+end
+local IN_BOOK=site("t3:9007319513825330","Building at 1900, 14370",1900,14370,1910,14380)
+local NOT_IN_BOOK=site("t3:no-such-building","Building at 2000, 14400",2000,14400,2010,14410)
+-- The same footprint the book has a row for, moved: a building whose bounds no
+-- longer match its row is as unnameable as one with no row at all, and for the
+-- same reason - the mod must not quote a number at a place that has changed.
+local MOVED=site("t3:12103458358296577","Building at 1921, 14371",1921,14371,1931,14381)
+local IN_BOOK_TOO=site("t3:12103458358296577","Building at 1920, 14370",1920,14370,1930,14380)
+stand(1905,14385)
+assert(M.currentTown()=="Irvington","these cases are read from Irvington")
+
+-- 1. A MIXED CASE keeps the addresses the book does have.
+local mixed={locations={IN_BOOK,NOT_IN_BOOK}}
+local body="Dispatched from Building at 1900, 14370 to Building at 2000, 14400."
+assert(M.describe(body,mixed)=="Dispatched from 201 N Carl St to Building at 2000, 14400.",
+    "a case with one unnumbered site must still name the other: "..tostring(M.describe(body,mixed)))
+-- Either way round, and however many times the words appear.
+local reversed={locations={NOT_IN_BOOK,IN_BOOK}}
+assert(M.describe(body,reversed)=="Dispatched from 201 N Carl St to Building at 2000, 14400.",
+    "the order of the case's sites cannot matter")
+assert(M.describe("Building at 1900, 14370 twice: Building at 1900, 14370.",mixed)
+    =="201 N Carl St twice: 201 N Carl St.","every mention of a named site is written")
+assert(M.describe(body,{locations={MOVED,IN_BOOK}})
+    =="Dispatched from 201 N Carl St to Building at 2000, 14400.",
+    "a site whose bounds no longer match its row is left alone, and costs the case nothing")
+
+-- 2. NO NUMBERED SITE AT ALL reads exactly as it does today: nil, which is the
+-- caller's signal to read the row the way it read before AD-10 existed.
+assert(M.describe(body,{locations={NOT_IN_BOOK}})==nil,
+    "a case the book can name nothing of is refused whole, as it always was")
+assert(M.describe(body,{locations={NOT_IN_BOOK,MOVED}})==nil,
+    "and so is one whose only book row is for a footprint that moved")
+
+-- 3. THE TOWN QUALIFIER still applies to whatever is named (P4-R137), on a
+-- mixed case as much as a whole one.
+local far={locations={site("t3:12103458358296576","Building at 6500, 5400",6500,5400,6510,5410),NOT_IN_BOOK}}
+assert(M.describe("Loaded at Building at 6500, 5400 for Building at 2000, 14400.",far)
+    =="Loaded at 101 Main St, Riverside for Building at 2000, 14400.",
+    "a named site in another town carries its town even when its partner has no number")
+stand(6505,5415)
+assert(M.currentTown()=="Riverside")
+assert(M.describe("Loaded at Building at 6500, 5400 for Building at 2000, 14400.",far)
+    =="Loaded at 101 Main St for Building at 2000, 14400.",
+    "and reads plainly once the survivor is standing in that town")
+stand(1905,14385)
+
+-- 4. A FULLY NUMBERED CASE is untouched by all of this.
+local whole={locations={IN_BOOK,IN_BOOK_TOO}}
+assert(M.describe("From Building at 1900, 14370 to Building at 1920, 14370.",whole)
+    =="From 201 N Carl St to 101 Main St.","a case the book numbers throughout reads as it always did")
+assert(M.describe("No place is named here.",whole)=="No place is named here.",
+    "and a document that names no place is returned unchanged rather than refused")
+
+-- 5. THE HEADER CHECK is not a missing number and still refuses the whole row.
+assert(M.describe(body,{locations={site("t3:9007319513825330","Building at 1900, 14370",1900,14370,1910,14380)},
+    })~=nil,"the same site on this map is nameable")
+local otherMap={locations={IN_BOOK,site("t3:12103458358296577","Building at 1920, 14370",1920,14370,1930,14380)}}
+otherMap.locations[2]={id="t3:12103458358296577",mapId="Some Other Map",name="Building at 1920, 14370",
+    bounds={x1=1920,y1=14370,x2=1930,y2=14380}}
+assert(M.describe("From Building at 1900, 14370 to Building at 1920, 14370.",otherMap)==nil,
+    "a case from another map is refused whole: that is the header check, not a missing number")
+-- And nothing above may have edited the case it was handed.
+assert(IN_BOOK.name=="Building at 1900, 14370" and NOT_IN_BOOK.name=="Building at 2000, 14400",
+    "describe never rewrites the case itself")
+print("PASS address shipped: a case's numbered sites are named even when one of its sites has no number")
+
 -- And the one caller that does cache: every address in the case record goes
 -- through GeneratedRuntime.addressFor, which held the finished label.
 local f=assert(io.open("mod/common/media/lua/client/ConspiracyFiles/GeneratedRuntime.lua","r"))

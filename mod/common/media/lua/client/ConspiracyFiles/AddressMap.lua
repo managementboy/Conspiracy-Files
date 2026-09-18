@@ -190,20 +190,44 @@ function M.labelForBuilding(id)
     return qualified(label,town)
 end
 function M.stop() if handler then Events.OnTick.Remove(handler) end; job=nil;stopAudit() end
+-- THE CASE'S OWN WORDS, with every place the book can name written as an
+-- address. Returns nil when the book can name NONE of them, which is the
+-- caller's signal to read the row the way it read before AD-10 existed.
+--
+-- PER SITE, NOT PER CASE (fault found in a real game 2026-09-18). This used to
+-- refuse the whole row unless EVERY site of the case had a book row, and
+-- EvidenceRows then fell back to PlaceNames, which writes no street at all - so
+-- a case with ONE unnumbered site showed no address for ANY of its clues.
+-- Measured in the same run: the shipped book numbers 5,932 of the 6,663
+-- buildings on the map with two or more rooms, about one site in nine, so
+-- roughly one case in five was affected. 20260918T230942-travel.txt caught it
+-- in Rosewood, where "106 Schoolhouse St" was in the book and the case's other
+-- site was not ("AddressMap.describe refused the row").
+--
+-- Two guarantees are unchanged. A site the book does not number, or whose
+-- footprint no longer matches the row it has, is left EXACTLY as the text
+-- already reads: no number is ever invented for it (P4-R129 numbers buildings
+-- outside the named towns only near a named street, and never gives them a
+-- town). And a case belonging to another MAP is still refused whole - that is
+-- the header check, not a missing number.
 function M.describe(body,case)
     if not book then return nil end
-    local out=body
+    local out,named=body,false
     for _,site in ipairs(case.locations) do
+        if site.mapId~=book.map then return nil end
         local r=byId[site.id]
-        if not r or site.mapId~=book.map or site.bounds.x1~=r.x or site.bounds.y1~=r.y or site.bounds.x2~=r.x2 or site.bounds.y2~=r.y2 then return nil end
-        local parts,start={},1
-        while true do
-            local a,b=out:find(site.name,start,true)
-            if not a then parts[#parts+1]=out:sub(start); break end
-            parts[#parts+1]=out:sub(start,a-1);parts[#parts+1]=qualified(r.label,r.town);start=b+1
+        if r and site.bounds.x1==r.x and site.bounds.y1==r.y and site.bounds.x2==r.x2 and site.bounds.y2==r.y2 then
+            local parts,start={},1
+            while true do
+                local a,b=out:find(site.name,start,true)
+                if not a then parts[#parts+1]=out:sub(start); break end
+                parts[#parts+1]=out:sub(start,a-1);parts[#parts+1]=qualified(r.label,r.town);start=b+1
+            end
+            out=table.concat(parts)
+            named=true
         end
-        out=table.concat(parts)
     end
+    if not named then return nil end
     return out
 end
 function M.draw(ui)
