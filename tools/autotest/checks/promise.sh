@@ -126,7 +126,7 @@ if wait_code 240 no-containers no-reach cooldown; then
     # every other code's due hour, so a check that only asks once, later, asks
     # about the wrong thing: the promise-overdue mutation was overdue by an hour
     # at the first refusal and had become a cooldown by the time the count had
-    # climbed, and the check passed with the bug in (prove, 20260918T051216).
+    # climbed, and the check passed with the bug in (prove, 20260918T040042).
     promise_is_future "the promise, at the refusal" "$LAST_PROMISE"
     promise_broken "the promise, at the refusal" "$LAST_PROMISE" || true
     # AND THE LADDER NEEDS THREE COUNTED REFUSALS. One is counted only a quarter

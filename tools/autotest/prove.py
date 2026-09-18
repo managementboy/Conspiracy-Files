@@ -159,7 +159,7 @@ MUTATIONS = [
     #
     # *** THIS ONE CANNOT BE CAUGHT YET, and the reason is a fault in the mod,
     # not in the check (found 2026-09-18, twice MISSED: prove 20260918T040042
-    # and 20260918T045930). `dueFor` returns math.max(now, last+gap) for every
+    # and 20260918T043041). `dueFor` returns math.max(now, last+gap) for every
     # code but `cooldown`, and the generator is only ever ASKED once the gap has
     # passed - so `last+gap <= now`, the due hour IS now, and a fresh
     # `no-containers` refusal is overdue one second after it is made. The clean
@@ -177,7 +177,7 @@ MUTATIONS = [
     #
     # CAUGHT 2026-09-18 at commit c0071c3 ("the ladder: 3 refusals of one code
     # earn rung 1 but the generator stands on 0"), evidence
-    # 20260918T045930-prove.txt. NOTE: re-running it today prints BASELINE
+    # 20260918T043041-prove.txt. NOTE: re-running it today prints BASELINE
     # FAILED, because promise.sh now fails on the promise-made-in-the-past
     # fault above. Fix dueFor and both become runnable again.
     ("ladder-stuck", "promise", C + "GeneratedRuntime.lua",
