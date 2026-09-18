@@ -476,6 +476,67 @@ function C.archive()
     return full, stubs, rows, stubbedWithQuestions, table.concat(ids, " ")
 end
 
+-- KNOX'S BOOT LINE (P4-R111). "Records ....... N" counts the DISCOVERY LEDGER,
+-- which the archive never prunes: stubbing a case drops its rows, not the
+-- record of what was found. So the boot count must still include a stubbed
+-- case's documents. Returns the number on the boot screen, the ledger's own
+-- count, how many of those belong to stubbed cases, and the line itself.
+function C.bootRecords()
+    local A = require("ConspiracyFiles/KnoxApps")
+    local line, shown = "", nil
+    for _, l in ipairs(A.bootLines() or {}) do
+        if tostring(l):find("^Records") then line = tostring(l); shown = tonumber(tostring(l):match("(%d+)%s*$")) end
+    end
+    local log = ConspiracyFiles.DiscoveryLog
+    local ok, events = pcall(function() return log and log.events and log.events() end)
+    events = (ok and events) or {}
+    -- Which discoveries belong to a case that is now a stub.
+    local stubbed = {}
+    for _, root in ipairs(roots()) do
+        if Retired.isRetired(root) and Retired.isStub(root) then
+            stubbed[tostring(caseIdOf(root)):gsub(":case$", ":")] = true
+        end
+    end
+    local fromStubs = 0
+    for _, e in ipairs(events) do
+        local prefix = tostring(e.ref or e.id or ""):match("^(generated:%d+:)")
+        if prefix and stubbed[prefix] then fromStubs = fromStubs + 1 end
+    end
+    return tostring(shown), #events, fromStubs, line
+end
+
+-- A STUB'S QUESTIONS AND ANSWERS (P4-R111). Archiving a finished case keeps
+-- what the survivor made of it: its "What do I make of it?" questions must
+-- still be offered, its saved answers must still be readable, and an answer
+-- already used must still name the case it steered. Returns how many stubs
+-- there are, how many still offer questions, how many carry saved answers, how
+-- many of those are marked used, and a sample.
+function C.stubQuestions()
+    local stubs, offered, answered, used, sample = 0, 0, 0, 0, ""
+    local questions = R.questions() or {}
+    for _, root in ipairs(roots()) do
+        if Retired.isRetired(root) and Retired.isStub(root) then
+            stubs = stubs + 1
+            local id = caseIdOf(root)
+            if root.offered then offered = offered + 1 end
+            for _, q in ipairs(questions) do
+                if q.caseId == id then
+                    local a = q.answers or {}
+                    if a.reading or a.matters or a.way then
+                        answered = answered + 1
+                        if a.usedBy then used = used + 1 end
+                        if sample == "" then
+                            sample = short(id) .. " -> " .. tostring(a.reading) .. "/" .. tostring(a.matters)
+                                .. "/" .. tostring(a.way) .. " usedBy=" .. tostring(a.usedBy)
+                        end
+                    end
+                end
+            end
+        end
+    end
+    return stubs, offered, answered, used, sample
+end
+
 -- A record of a finished case, as the loot list and the right-click menu show
 -- it: the one thing the archive could break is a clue in the world whose case
 -- is now a stub. Walks the survivor's own inventory, which is where the
@@ -522,28 +583,56 @@ end
 -- AD-10 town names in the record (P4-R129): a place in another town carries the
 -- town, a place in the survivor's own town does not. Read from the reading
 -- surface's own rows, with the town the survivor is standing in.
+--
+-- WHICH LINE IS WHICH. A record row carries two addresses and they are not the
+-- same kind of thing (the AD-10 fixer's caveat, 2026-09-18):
+--   * the LIVE label - where the mod says the clue is NOW, from
+--     GeneratedRuntime.whereabouts / the retired case's last-seen line. It is
+--     recomputed as the survivor moves and is what AD-10's "unfreeze the town"
+--     fix applies to.
+--   * the stored FOUND block - the words the discovery ledger kept at the
+--     moment of the find (PlaceIndex.decorate writes them into detailText).
+--     That is HISTORY and is frozen by design: a survivor's note of where they
+--     were does not rewrite itself when they walk to the next town.
+-- Reading detailText alone therefore measures the frozen half, which is what
+-- made the assertion read "0 of 16" in 20260918T005315. Both are counted here
+-- and the check asserts on the live one.
+local function townOf(words)
+    -- A house number, a street, then a comma and a capitalised name: that comma
+    -- is only ever written for a place in another town.
+    local address, town = tostring(words):match("(%d+ [%u][%a%.]* ?[%a%.]*),%s*(%u%a+[%a ]*)")
+    if address then return address, town end
+    return tostring(words):match("(%d+ [%u][%a%.]* ?[%a%.]*)")
+end
 function C.townNames()
-    local rows = require("ConspiracyFiles/EvidenceRows").list("evidence") or {}
     local map = ConspiracyFiles.AddressMap
     -- The town the survivor is standing in, the same way the record decides
     -- whether to write one (AddressMap.qualified: a place in your own town is
     -- written without it).
     local here = map and map.currentTown and map.currentTown() or nil
-    local withTown, plain, sample, other = 0, 0, "", ""
+    local live, livePlain, sample, other = 0, 0, "", ""
+    local rows = R.known()
     for _, row in ipairs(rows) do
-        local words = tostring(row.detailText or "") .. " | " .. tostring(row.text or "")
-        -- A house number, a street, then a comma and a capitalised name: that
-        -- comma is only ever written for a place in another town.
-        local address, town = words:match("(%d+ [%u][%a%.]* ?[%a%.]*),%s*(%u%a+[%a ]*)")
+        local _, where = R.whereabouts(row.id)
+        local address, town = townOf(where or "")
         if address and town then
-            withTown = withTown + 1
+            live = live + 1
             if sample == "" then sample = address .. ", " .. town end
-        elseif words:match("%d+ [%u][%a%.]* ?[%a%.]*") then
-            plain = plain + 1
-            if other == "" then other = tostring(words:match("(%d+ [%u][%a%.]* ?[%a%.]*)")) end
+        elseif address then
+            livePlain = livePlain + 1
+            if other == "" then other = address end
         end
     end
-    return tostring(here), withTown, plain, sample .. (other ~= "" and ("; own town: " .. other) or ""), #rows
+    -- The frozen half, for the report: the ledger's own FOUND words.
+    local stored, storedPlain = 0, 0
+    local log = ConspiracyFiles.DiscoveryLog
+    local ok, places = pcall(function() return log and log.places and log.places() end)
+    for _, where in pairs((ok and places) or {}) do
+        local address, town = townOf(where)
+        if address and town then stored = stored + 1 elseif address then storedPlain = storedPlain + 1 end
+    end
+    return tostring(here), live, livePlain, sample .. (other ~= "" and ("; own town: " .. other) or ""),
+        #rows, stored, storedPlain
 end
 
 -- Every unfinished case, so a check that needs to finish one can move on from
@@ -578,6 +667,104 @@ function C.moveToTown()
     if not best then return "false", "the address book knows no town but " .. tostring(here) end
     p:teleportTo(best.x + 0.5, best.y + 0.5, 0)
     return "true", tostring(here), tostring(bestTown), best.x .. "," .. best.y, string.format("%.0f", bestD)
+end
+
+-- FAULT 5, THE CHEAPEST DIAGNOSTIC (docs/design/CASE_PACING.md, "Known
+-- unexplained": a clue the record calls `placed` that is not in its container).
+-- Three of nine overnight runs saw it and no cause is proven, so when the
+-- harness cannot find a clue this prints everything the four suspects would
+-- each leave behind:
+--   * the STORED TARGET and World.resolve's verdict on it (suspect 2: a
+--     relocation whose canonical write was refused leaves the item in the new
+--     cupboard while the record still names the old one);
+--   * the RELOCATIONS count (same suspect: zero means it never moved);
+--   * the last sighting's words and the runtime's own state (suspect 3: a
+--     stale sighting reading as current);
+--   * and WHERE THE ITEM ACTUALLY IS, searched wider than CFLoop.find does
+--     (suspect 1, the one the doc bets on: the mod's identity scan sees every
+--     container within TWO tiles of the survivor, CFLoop.find searches ONE
+--     around the recorded square, so a clue two tiles out reads as missing
+--     while the record honestly names its cupboard). The Chebyshev distance
+--     from the recorded square is the number that settles it.
+local function tokenNear(cx, cy, cz, radius, token)
+    local cell = getCell()
+    for r = 0, radius do
+        for dx = -r, r do for dy = -r, r do
+            if math.max(math.abs(dx), math.abs(dy)) == r then
+                local sq = cell:getGridSquare(cx + dx, cy + dy, cz)
+                local objects = sq and sq:getObjects()
+                for i = 0, (objects and objects:size() or 0) - 1 do
+                    local o = objects:get(i)
+                    for c = 0, (o.getContainerCount and o:getContainerCount() or 0) - 1 do
+                        local cont = o:getContainerByIndex(c)
+                        local items = cont and cont.getItems and cont:getItems()
+                        for j = 0, (items and items:size() or 0) - 1 do
+                            local md = items:get(j):getModData()
+                            if type(md) == "table" and md.cfPhysicalToken == token then
+                                return cx + dx, cy + dy, cz, r,
+                                    tostring(cont.getType and cont:getType()),
+                                    tostring(o:getSprite() and o:getSprite():getName())
+                            end
+                        end
+                    end
+                end
+            end
+        end end
+    end
+    return nil
+end
+function C.faultFive(id)
+    id = id or (CFLoop.list and CFLoop.list[1] and CFLoop.list[1].id)
+    if not id then return "no clue to diagnose" end
+    local a
+    for _, root in ipairs(roots()) do
+        if root.assignments and root.assignments[id] then a = root.assignments[id] end
+    end
+    if not a then return "no assignment for " .. tostring(id) end
+    local parts = { id }
+    parts[#parts + 1] = string.format("status=%s relocations=%s site=%s placedHours=%s deferredHours=%s missingHours=%s",
+        tostring(a.status), tostring(a.relocations), tostring(a.locationId), tostring(a.placedHours),
+        tostring(a.deferredHours), tostring(a.missingHours))
+    local t = a.target
+    if not t then parts[#parts + 1] = "target=none (still waiting)" else
+        parts[#parts + 1] = string.format("target=%s,%s,%s object=%s container=%s type=%s sprite=%s%s",
+            tostring(t.x), tostring(t.y), tostring(t.z), tostring(t.objectIndex), tostring(t.containerIndex),
+            tostring(t.containerType), tostring(t.sprite),
+            t.carrierMark and (" carrier=" .. tostring(t.carrierKind))
+                or (t.vehiclePart and (" part=" .. tostring(t.vehiclePart)) or ""))
+        local W = require("ConspiracyFiles/WorldAccess")
+        local ok, container = pcall(W.resolve, t, a.physicalToken)
+        if not ok then parts[#parts + 1] = "World.resolve THREW: " .. tostring(container)
+        elseif not container then parts[#parts + 1] = "World.resolve REFUSED the target (nil)"
+        else
+            local items = container.getItems and container:getItems()
+            local size, mine = items and items:size() or 0, 0
+            for i = 0, size - 1 do
+                local md = items:get(i):getModData()
+                if type(md) == "table" and md.cfPhysicalToken == a.physicalToken then mine = mine + 1 end
+            end
+            parts[#parts + 1] = string.format("World.resolve ok: type=%s items=%s carrying the token=%s",
+                tostring(container.getType and container:getType()), size, mine)
+        end
+        local x, y, z, r, ctype, sprite = tokenNear(t.x, t.y, t.z, 4, a.physicalToken)
+        if x then
+            parts[#parts + 1] = string.format("the item IS in the world at %s,%s,%s - %s tile(s) from its recorded square, in a %s [%s]",
+                x, y, z, r, ctype, sprite)
+        else
+            local p = getPlayer()
+            local px, py, pz = math.floor(p:getX()), math.floor(p:getY()), math.floor(p:getZ())
+            local ax, ay, _, ar = tokenNear(px, py, pz, 4, a.physicalToken)
+            if ax then
+                parts[#parts + 1] = string.format("not within 4 tiles of its square, but %s tile(s) from the survivor at %s,%s",
+                    ar, ax, ay)
+            else
+                parts[#parts + 1] = "no item carrying the token within 4 tiles of the recorded square or of the survivor"
+            end
+        end
+    end
+    local state, where = R.whereabouts(id)
+    parts[#parts + 1] = "whereabouts=" .. tostring(state) .. " (" .. tostring(where) .. ")"
+    return table.concat(parts, "; ")
 end
 
 -- WHERE A WAITING CLUE IS WAITING (P4-R133). The filler scans the deferred

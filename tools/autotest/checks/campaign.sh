@@ -102,7 +102,17 @@ ladder_climbed() { # ladder_climbed LABEL: the rung must keep up with the count
 # Every ev=defer line of every session of the run, kept across the reloads that
 # truncate console.txt, so the evidence can print a refusal histogram.
 defers=""
+# INSTALMENTS AND EXPIRY IN THE LOG (P4-R133). `ev=placed why=instalment` is
+# the filler giving a waiting clue a container once the survivor gave it
+# somewhere to put one; `ev=stale why=expired` is a clue that waited three
+# in-game days and was dropped, and `why=carrier-gone` its P4-R134 twin. All
+# three are kept across the reloads that truncate console.txt, because the
+# evidence has to be able to say plainly whether a run of this length saw them.
+instalments=""
 keep_defers() { defers+="$(run_log | grep -o 'ev=defer why=[^ ]* n=[0-9]* due=[0-9:]* rung=[0-9]*' || true)
+"
+    instalments+="$(run_log | grep -E 'ev=placed .*why=instalment|ev=stale .*why=(expired|carrier-gone)' \
+        | grep -oE 'ev=(placed|stale) .*' | cut -c1-150 || true)
 "; }
 histogram() { # code -> count -> highest n seen -> rung reached
     awk '{ split($0, f, " ");
@@ -173,7 +183,13 @@ play_case() { # play_case CASEID [LIMIT]: find, take and inspect its next clues
                     if out="$(inspect_doc 1)"; then
                         PLAYED=$((PLAYED + 1)); say "case ${cid#generated:}: clue $PLAYED of $CASE_LEFT (second try): $out"
                     else
-                        fail "case ${cid#generated:}: $out; $where (skipped $(ev 'return CFCamp.skipFirst()'))"
+                        # FAULT 5's cheapest diagnostic (CASE_PACING, "Known
+                        # unexplained"): the stored target, World.resolve's
+                        # verdict, how far the item really is from its recorded
+                        # square, the last sighting and the relocations count.
+                        # Taken BEFORE skipFirst, which drops the clue from the
+                        # list the diagnostic reads.
+                        fail "case ${cid#generated:}: $out; $where | FAULT5: $(ev 'return CFCamp.faultFive()' | tr '\t' ' ') (skipped $(ev 'return CFCamp.skipFirst()'))"
                     fi
                 fi
             done
@@ -471,22 +487,60 @@ findings+=("a finished case's clues carried: $(field 1 "$old") checked, $(field 
     || fail "$(( $(field 1 "$old") - $(field 2 "$old") )) of $(field 1 "$old") finished clues do not read Evidence / Old"
 [ "$(field 1 "$old")" = 0 ] || [ "$(field 4 "$old")" = 0 ] \
     || fail "$(field 4 "$old") finished clues offer no already-noted option at all ($(field 5 "$old"))"
+# KNOX's boot count, the stub's questions, and a save with stubs in it. The
+# archive drops a finished case's ROWS; everything the survivor made of it and
+# every discovery it contributed must survive that, and so must a reload.
+boot="$(ev 'return CFCamp.bootRecords()')"
+findings+=("KNOX boot line \"$(field 4 "$boot")\": the ledger holds $(field 2 "$boot") discoveries, $(field 3 "$boot") of them from stubbed cases")
+[ "$(field 1 "$boot")" = "$(field 2 "$boot")" ] \
+    || fail "KNOX boots \"Records ....... $(field 1 "$boot")\" while the ledger holds $(field 2 "$boot") discoveries"
+stubq="$(ev 'return CFCamp.stubQuestions()')"
+findings+=("stubbed cases: $(field 1 "$stubq") stubs, $(field 2 "$stubq") still offering questions, $(field 3 "$stubq") carrying saved answers, $(field 4 "$stubq") of those marked used by a later case ($(field 5 "$stubq"))")
+if [ "$(field 1 "$stubq")" -gt 0 ] 2>/dev/null; then
+    [ "$(field 2 "$stubq")" = "$(field 1 "$stubq")" ] \
+        || fail "$(( $(field 1 "$stubq") - $(field 2 "$stubq") )) of $(field 1 "$stubq") stubbed cases no longer offer their questions"
+    [ "$(field 3 "$boot")" -gt 0 ] 2>/dev/null \
+        || findings+=("the stubbed case contributed no discovery to the ledger, so the boot count could not be tested against one")
+else
+    findings+=("no case was stubbed in this run, so the stub half of P4-R111 was not exercised in the game")
+fi
+record="$(ev 'return CFReload.record()')"; bytes_before="$(bytes)"; parts_before="$(ev 'return CFReload.bytes()' | cut -f2)"
+reload_world "reload 3, with stubs present"
+[ "$(ev 'return CFReload.record()')" = "$record" ] || fail "reload 3: the record changed with a stubbed case in the save"
+arch2="$(ev 'return CFCamp.archive()')"
+findings+=("archive after the reload: $(field 1 "$arch2") full, $(field 2 "$arch2") stubbed, $(field 3 "$arch2") rows; $(field 5 "$arch2")")
+[ "$(field 2 "$arch2")" = "$(field 2 "$arch")" ] \
+    || fail "reload 3: the archive changed across the reload ($(field 2 "$arch") stubs before, $(field 2 "$arch2") after)"
+refusals="$(run_log | grep -iE "refus|rejected|budget" | grep -v "ev=defer" | head -5 || true)"
+findings+=("refusals in the log of the session loaded with stubs present: $(grep -c . <<<"$refusals")")
+[ -z "$(tr -d '[:space:]' <<<"$refusals")" ] || fail "the session loaded with stubs present logged a refusal: $(head -2 <<<"$refusals" | cut -c1-200)"
+old_settled "after reload 3"
+stage "after reload 3, stubs present"
+reload_growth "reload 3" "$bytes_before" "$parts_before"
 # AD-10 town names (P4-R129) need TWO places to mean anything: a record about a
 # place in the survivor's own town is written without the town, and the same
 # record read from another town carries it. Every case of this run was within
 # 300 tiles, so the survivor is walked a long way off and the records read again.
+town_words() { # town_words TEXT
+    printf 'standing in %s: of %s records the LIVE label names a town on %s and not on %s; the stored FOUND lines (history, frozen by design) name one on %s and not on %s; e.g. %s' \
+        "$(field 1 "$1")" "$(field 5 "$1")" "$(field 2 "$1")" "$(field 3 "$1")" \
+        "$(field 6 "$1")" "$(field 7 "$1")" "$(field 4 "$1")"
+}
 towns="$(ev 'return CFCamp.townNames()')"
-findings+=("AD-10 town names, standing in $(field 1 "$towns"): of $(field 5 "$towns") records $(field 2 "$towns") name a town and $(field 3 "$towns") do not; e.g. $(field 4 "$towns")")
+findings+=("AD-10 town names, $(town_words "$towns")")
 far="$(ev 'return CFCamp.moveToTown()')"
 if [ "$(field 1 "$far")" = true ]; then
     findings+=("AD-10: walked from $(field 2 "$far") to $(field 3 "$far") at $(field 4 "$far"), $(field 5 "$far") tiles")
     wait_true 120 'CFCamp.settled()' >/dev/null || true
-    sleep 5
+    # The live label of a finished case's evidence is rewritten by the last-seen
+    # scan, which runs every ten seconds and writes at most once a minute per
+    # document - so give it two minutes rather than five seconds.
+    wait_true 150 'select(2, CFCamp.townNames())>0' >/dev/null || true
     towns2="$(ev 'return CFCamp.townNames()')"
-    findings+=("AD-10 town names, standing in $(field 1 "$towns2"): of $(field 5 "$towns2") records $(field 2 "$towns2") name a town and $(field 3 "$towns2") do not; e.g. $(field 4 "$towns2")")
+    findings+=("AD-10 town names, $(town_words "$towns2")")
     if [ "$(field 1 "$towns2")" != "$(field 1 "$towns")" ] && [ "$(field 1 "$towns2")" != nil ]; then
         [ "$(field 2 "$towns2")" -gt 0 ] 2>/dev/null \
-            || fail "read from $(field 1 "$towns2"), not one of $(field 5 "$towns2") records about $(field 1 "$towns") names its town"
+            || fail "read from $(field 1 "$towns2"), not one of $(field 5 "$towns2") records about $(field 1 "$towns") names its town in its LIVE label (stored FOUND lines: $(field 6 "$towns2") with a town, $(field 7 "$towns2") without - that half is history and frozen by design)"
     else
         findings+=("the long move stayed in $(field 1 "$towns2"), so the other-town half of AD-10 was not exercised")
     fi
@@ -512,6 +566,8 @@ report="$EVIDENCE/$first-campaign.txt"
     echo "case 2 steer: $(cut -f1-6 <<<"${steer2:-}" | tr '\t' ' ')"
     echo "refusals (P4-R133), all sessions:"
     if [ -n "$(tr -d '[:space:]' <<<"$defers")" ]; then histogram "$defers" | sed 's/^/  /'; else echo "  none"; fi
+    echo "instalments placed and clues dropped (P4-R133, P4-R134), all sessions:"
+    if [ -n "$(tr -d '[:space:]' <<<"$instalments")" ]; then grep -c . <<<"$instalments" | sed 's/^/  lines: /'; sort -u <<<"$instalments" | grep . | sed 's/^/  /'; else echo "  none in this run"; fi
     echo "errors inside the mod, all sessions: $(grep -c . <<<"$errors_seen")"
     [ -z "$errors_seen" ] || sed 's/^/  /' <<<"$errors_seen" | head -10
     for f in "${findings[@]}"; do echo "FINDING: $f"; done
