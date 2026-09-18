@@ -18,6 +18,9 @@ local Cases = require("ConspiracyFiles/Generated/SuccessiveCases")
 -- again and the archive stage reported "did not finish" twice
 -- (20260918T005315). Ask RetiredCase, as the mod does.
 local Retired = require("ConspiracyFiles/Generated/RetiredCase")
+-- The filler's own proximity guard, by name: goToWaitingSite steps back beyond
+-- it so a clue CAN be placed at the site the survivor has just loaded.
+local StaleClue = require("ConspiracyFiles/StaleClue")
 
 local function roots()
     local store = ModData.get("ConspiracyFiles.Generated.G2")
@@ -834,8 +837,37 @@ function C.goToWaitingSite(caseId)
                             local b = site.bounds
                             local x = math.floor((b.x1 + b.x2) / 2)
                             local y = math.floor((b.y1 + b.y2) / 2)
-                            getPlayer():teleportTo(x + 0.5, y + 0.5, b.z or 0)
-                            return "true", id, site.id, x .. "," .. y, tostring(a.deferredHours)
+                            local z = b.z or 0
+                            -- STAND AT THE SITE, THEN STEP BACK. The filler
+                            -- needs the site LOADED, which is why the survivor
+                            -- goes there - but it also refuses to place a clue
+                            -- within StaleClue.PROXIMITY_GUARD_TILES of the
+                            -- survivor, so standing on the site is standing
+                            -- exactly where nothing may be placed. Run
+                            -- 20260918T072821 waited fifteen minutes on that
+                            -- and failed ("2 clue(s) never reached a container
+                            -- in fifteen minutes"); instalments.sh has stepped
+                            -- back for the same reason since it was written.
+                            -- The site stays loaded at this distance (that
+                            -- check reports 169 squares loaded from 25 tiles).
+                            local pc = getPlayer()
+                            pc:teleportTo(x + 0.5, y + 0.5, z)
+                            local guard = StaleClue.PROXIMITY_GUARD_TILES + 5
+                            local cell = getCell()
+                            local back
+                            for _, d in ipairs({ { 1, 0 }, { 0, 1 }, { -1, 0 }, { 0, -1 },
+                                                 { 1, 1 }, { -1, 1 }, { 1, -1 }, { -1, -1 } }) do
+                                for extra = 0, 10 do
+                                    local tx, ty = x + d[1] * (guard + extra), y + d[2] * (guard + extra)
+                                    local sq = cell:getGridSquare(tx, ty, z)
+                                    if not back and sq and sq:isFree(false) then
+                                        pc:teleportTo(tx + 0.5, ty + 0.5, z)
+                                        back = tx .. "," .. ty
+                                    end
+                                end
+                            end
+                            return "true", id, site.id, x .. "," .. y, tostring(a.deferredHours),
+                                tostring(back or "nowhere free to step back to; standing on the site")
                         end
                     end
                     return "false", "site " .. tostring(a.locationId) .. " is not in the case"

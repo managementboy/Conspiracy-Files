@@ -211,7 +211,7 @@ play_case() { # play_case CASEID [LIMIT]: find, take and inspect its next clues
         # still has something at the warehouse.
         at="$(ev "return CFCamp.goToWaitingSite([[$cid]])")"
         if [ "$(field 1 "$at")" = true ]; then
-            findings+=("case ${cid#generated:}: $waiting clue(s) still waiting after $PLAYED played, $dropped dropped (statuses $(field 5 "$r")); standing at $(field 2 "$at")'s own site $(field 3 "$at") at $(field 4 "$at"), move $moves")
+            findings+=("case ${cid#generated:}: $waiting clue(s) still waiting after $PLAYED played, $dropped dropped (statuses $(field 5 "$r")); loaded $(field 2 "$at")'s own site $(field 3 "$at") at $(field 4 "$at") and stepped back to $(field 6 "$at"), move $moves")
             say "${findings[-1]}"
             wait_true 60 'CFCamp.settled()' >/dev/null || true
         else
