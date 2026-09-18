@@ -284,7 +284,25 @@ if [ "$(field 2 "$inside0")" = 0 ]; then
     if [ "$(field 1 "$out")" = true ]; then
         note "the first case's wait: the survivor stepped out of $(field 3 "$out") to $(field 2 "$out") ($(field 4 "$out") tiles), with no case in the save yet"
         if wait_true 180 'CFTrav.waitIsNamed()'; then
-            note "the first case's wait names itself: $(promise_words); ev=defer why=outdoors lines so far: $(run_log | grep -c 'ev=defer why=outdoors' || true)"
+            # AND IT IS LOGGED LIKE THE OTHERS. `outdoors` is uncounted, so its
+            # ev=defer line is written at DEBUG level exactly as `cooldown`,
+            # `busy` and `gap` are, and the console has to be turned up to see
+            # it at all (promise.sh turns it up for the whole run for the same
+            # reason). Safe here and nowhere else in this check: the first
+            # case's own metadata scan has already stopped, so nothing is
+            # streaming the thousands of debug rows a running scan emits.
+            was="$(ev 'return ConspiracyFiles.logLevel()' | field 1)"
+            ev 'return ConspiracyFiles.logLevel([[d]])' >/dev/null
+            lines=0; deadline=$(( $(date +%s) + 60 ))
+            while [ "$(date +%s)" -lt "$deadline" ]; do
+                lines="$(run_log | grep -c 'ev=defer why=outdoors' || true)"
+                is_number "$lines" && [ "$lines" -ge 1 ] && break
+                sleep 3
+            done
+            ev "return ConspiracyFiles.logLevel([[${was:-i}]])" >/dev/null
+            note "the first case's wait names itself: $(promise_words); ev=defer why=outdoors lines in the log with it turned up: $lines"
+            is_number "$lines" && [ "$lines" -ge 1 ] \
+                || fail "the first case's wait reported why=outdoors but logged no ev=defer line for it, so a run cannot be audited for it (P4-R133)"
         else
             w="$(ev 'return CFTrav.waitIsNamed()')"
             fail "no case, the survivor outside a building, and the first case's wait reports why=$(field 2 "$w") (cases $(field 3 "$w"), outside=$(field 4 "$w")) rather than outdoors - P4-R133"
