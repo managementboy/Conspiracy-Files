@@ -381,41 +381,66 @@ local function rungNow()
     return rung
 end
 function R.rung() return rungNow() end
+-- THE REASON FOR THE SILENCE, counted or not. `debt` is what the save owes -
+-- only a counted code writes that - and `silence` is the last reason a case did
+-- not come, which is what a reader asking "why is nothing happening?" needs.
+-- Before this, an uncounted code was logged and nothing else, so
+-- automaticStatus().why was nil in exactly the states a long save sits in.
+local silence
 -- `wait` marks the refusals that came from a nearby scan: those, and only
 -- those, make the next attempt wait for the survivor to move on (P4-R125).
-local function refuse(code,wait)
+-- `dueAt` is for a caller that knows when it is waiting until better than
+-- dueFor does (the poller's extra hour after a case finished, P4-R121).
+local function refuse(code,wait,dueAt)
     assert(Cases.DEFER_CODES[code],"unknown refusal code "..tostring(code))
     local now=worldHours()
-    if not COUNTED[code] then
-        local standing=debt and debt.count or 0
-        CFLog.write("d","defer",{why=code,n=standing,rung=rungNow(),
-            due=hhmm(debt and debt.dueHours or dueFor(code,now))})
-        return false,code
+    if type(dueAt)~="number" or dueAt~=dueAt or dueAt==math.huge or dueAt==-math.huge then dueAt=nil end
+    local record={code=code,count=0,sinceHours=now,rung=rungNow(),
+        dueHours=dueAt or dueFor(code,now)}
+    local counted=false
+    if COUNTED[code] then
+        local r=refusals[code]
+        counted=not r or (now-r.atHours)>=R.DEBT_GAP_HOURS or now<r.atHours
+        if counted then
+            r=r or {count=0,sinceHours=now}
+            r.count=r.count+1; r.atHours=now; refusals[code]=r
+        end
+        record.count=r.count; record.sinceHours=r.sinceHours; record.rung=rungNow()
+        if wait then
+            local p=getPlayer()
+            record.x=p and p:getX(); record.y=p and p:getY(); record.waitHours=now
+        elseif debt and debt.x then
+            -- A standing wait is not cancelled by some other refusal happening.
+            record.x,record.y,record.waitHours=debt.x,debt.y,debt.waitHours
+        end
+        debt=record
+    else
+        -- Never counted, never written to the save: a cooldown, a placement in
+        -- progress and the ordinary gap between cases are all our own pacing
+        -- rather than the world failing to supply a case, and all three are
+        -- polled every ten seconds. The standing count is reported so the line
+        -- still says how much is owed.
+        record.count=debt and debt.count or 0
     end
-    local r=refusals[code]
-    local counted=not r or (now-r.atHours)>=R.DEBT_GAP_HOURS or now<r.atHours
-    if counted then
-        r=r or {count=0,sinceHours=now}
-        r.count=r.count+1; r.atHours=now; refusals[code]=r
-    end
-    local next={code=code,count=r.count,sinceHours=r.sinceHours,
-        dueHours=dueFor(code,now),rung=rungNow()}
-    if wait then
-        local p=getPlayer()
-        next.x=p and p:getX(); next.y=p and p:getY(); next.waitHours=now
-    elseif debt and debt.x then
-        -- A standing wait is not cancelled by some other refusal happening.
-        next.x,next.y,next.waitHours=debt.x,debt.y,debt.waitHours
-    end
-    debt=next
+    silence=record
     CFLog.write(counted and "i" or "d","defer",
-        {why=code,n=debt.count,rung=debt.rung,due=hhmm(debt.dueHours)})
+        {why=code,n=record.count,rung=record.rung,due=hhmm(record.dueHours)})
     if counted then rememberDebt() end
     return false,code
 end
+-- WHY NO CASE CAME, from the one place that decides whether to ask for one
+-- (P4-R133). AutomaticInvestigations.poll had five silent early returns, so
+-- "no case came" was still entirely unexplained - including `active=4/4`, the
+-- state a long save actually sits in. This gives the poller's own silence a
+-- code from the same closed set and the same `ev=defer` line. It changes
+-- nothing about WHEN a case is created.
+function R.deferPoll(code,dueAt)
+    if not allowed() then return false,"debug single-player required" end
+    return refuse(code,false,dueAt)
+end
 -- A case arrived: nothing is owed and the ladder starts from the bottom again.
 local function clearDebt()
-    debt=nil; refusals={}
+    debt=nil; refusals={}; silence=nil
 end
 -- What the save still owes, after a reload (P4-R133). The count and the rung
 -- come back; the wait does not - a load clears the wait, which is what P4-R125
@@ -1271,18 +1296,22 @@ function R.automaticStatus()
         if type(h)=="number" and (not lastCompleted or h>lastCompleted) then lastCompleted=h end
         if not Retired.isRetired(root) then active=active+1 end
     end
-    -- What the last refusal owed (P4-R133): the code, how many times it has
-    -- refused, when that started, the in-game hour a case is promised by and
-    -- the rung of the ladder. `defer` is nil when nothing is owed; the flat
-    -- fields are there so a check can read them without a nil test.
+    -- WHY NO CASE HAS COME (P4-R133): the code, how many times it has refused,
+    -- when that started, the in-game hour a case is promised by and the rung of
+    -- the ladder. The last reason reported wins - counted or not, the
+    -- generator's or the poller's - and the debt the save came back with
+    -- answers before anything has refused this session. `defer` is nil only
+    -- when nothing is being withheld at all; the flat fields are there so a
+    -- check can read them without a nil test.
+    local reported=silence or debt
     return {count=#roots,preparing=preparing==true,scheduled=schedule~=nil,
         lastCreatedHours=schedule and schedule.createdHours[#schedule.createdHours],
         lastCompletedHours=lastCompleted,limit=Cases.MAX_CASES,
         active=active,activeLimit=Cases.MAX_ACTIVE,
-        defer=debt and {code=debt.code,count=debt.count,sinceHours=debt.sinceHours,
-            dueHours=debt.dueHours,rung=debt.rung} or nil,
-        why=debt and debt.code or nil,deferCount=debt and debt.count or 0,
-        dueHours=debt and debt.dueHours or nil,
+        defer=reported and {code=reported.code,count=reported.count,sinceHours=reported.sinceHours,
+            dueHours=reported.dueHours,rung=reported.rung} or nil,
+        why=reported and reported.code or nil,deferCount=reported and reported.count or 0,
+        dueHours=reported and reported.dueHours or nil,
         rung=rungNow(),rungMax=R.RUNG_MAX}
 end
 -- Bounded scan of a destination site's own bounding box for any container of

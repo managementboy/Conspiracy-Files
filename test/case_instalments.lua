@@ -152,7 +152,7 @@ assert(filler:find('scheduler.enqueue("place:"..id,"placement",placement(api,id)
 assert(runtime:find("if Session.accounted(done) then",1,true),
     "completion asks whether every clue is accounted for, not merely how many were found")
 -- The player is told nothing on the refusal or the waiting path.
-local refuse=assert(runtime:match("local function refuse%(code,wait%)(.-)\nend\n"),"refuse must exist")
+local refuse=assert(runtime:match("local function refuse%(code,wait,dueAt%)(.-)\nend\n"),"refuse must exist")
 for _,forbidden in ipairs({"PlayerVoice","setHaloNote","ClueHints","ClueMarkers","onCase"}) do
     assert(not refuse:find(forbidden,1,true),"a refusal must say nothing to the player: "..forbidden)
     assert(not filler:find(forbidden,1,true),"nor must a clue arriving late: "..forbidden)

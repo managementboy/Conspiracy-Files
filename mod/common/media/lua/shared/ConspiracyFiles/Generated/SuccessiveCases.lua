@@ -66,8 +66,22 @@ local M={SCHEMA=1,MAX_CASES=16,MAX_ACTIVE=4,MAX_FULL_ARCHIVED=4,LEGACY_MAX_CASES
 --   cooldown       a refusal is still standing (P4-R125's wait)
 --   disabled       generation is off, or gave up after repeated failures
 --   busy           a case is being prepared or placed right now
+--   gap            the ordinary wait between cases has not passed yet
+--                  (AutomaticInvestigations.config.minGapHours, and the extra
+--                  hour after a case finished, P4-R121)
+--
+-- `gap` was added on 2026-09-18, and it is the only code added since the set
+-- was closed. The five silent early returns in AutomaticInvestigations.poll
+-- needed codes (P4-R133's honesty stopped at the generator's door: the poller
+-- never reached it), and four of them had one already - cap, active-limit,
+-- disabled and busy. The ordinary wait between cases had none: `cooldown` is
+-- P4-R125's "move on fifty tiles" wait, whose promise is half an hour, and
+-- reusing it would have told a reader a case was due in half an hour when it
+-- was twenty-three hours away - and the long campaign check fails on a broken
+-- promise. Like cooldown and busy it is never counted, because it is our own
+-- pacing rather than the world failing to supply a case.
 M.DEFER_CODES={["no-reach"]=true,["no-containers"]=true,cap=true,["active-limit"]=true,
- cooldown=true,disabled=true,busy=true}
+ cooldown=true,disabled=true,busy=true,gap=true}
 -- The ladder: after this many refusals of the SAME code the generator lowers
 -- its own standard by one rung. MAX_RUNG is the highest rung the code can
 -- actually take (see docs/design/CASE_PACING.md on the fourth rung).

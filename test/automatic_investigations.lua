@@ -83,6 +83,16 @@ local required=assert(require('ConspiracyFiles/Generated/Generator').requiredCon
 assert(inHouse==required,'selected opening evidence occupies its required separate containers')
 local firstId=first.canonical.case.caseId
 hours=33.99;tick(650);assert(#C.sessions(active())==1)
+-- P4-R133, 2026-09-18: silence has a reason, and the real runtime reports it.
+-- Inside the 24-hour gap the poller withholds a case, and `why` used to be nil
+-- - the state a long save sits in, with nothing anywhere saying so.
+do
+ local s=R.automaticStatus()
+ assert(s.why=="gap","inside the ordinary gap the status says gap, not "..tostring(s.why))
+ assert(s.defer and s.defer.code=="gap","and the whole record is there for a reader")
+ assert(s.dueHours==10+24,"promising the hour the gap ends: "..tostring(s.dueHours))
+ assert(s.rung==0,"our own pacing never walks the ladder")
+end
 -- Change anchor and allow24 hours; first case has no discoveries/completion.
 position=4000;hours=34;tick(1300);assert(#C.sessions(active())==1,'later reach uses current position, not old metadata anchor')
 position=40;house='40';hours=34;tick(1300)

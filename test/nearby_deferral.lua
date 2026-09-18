@@ -53,7 +53,7 @@ assert(runtime:find("pcall(restoreDebt)",1,true),
 -- rung=<rung> due=<hh:mm>.
 assert(runtime:find('CFLog.write(counted and "i" or "d","defer",',1,true),
     "one log line per refusal, in the existing logfmt")
-assert(runtime:find("{why=code,n=debt.count,rung=debt.rung,due=hhmm(debt.dueHours)}",1,true),
+assert(runtime:find("{why=code,n=record.count,rung=record.rung,due=hhmm(record.dueHours)}",1,true),
     "the refusal line carries the code, the count, the rung and the promise")
 
 -- What automaticStatus must report, because the campaign check polls it.
@@ -61,5 +61,18 @@ local status=assert(runtime:match("function R%.automaticStatus%(%)(.-)\nend\n"),
 for _,field in ipairs({"defer=","why=","deferCount=","dueHours=","rung=","rungMax="}) do
     assert(status:find(field,1,true),"automaticStatus must report "..field)
 end
+-- And it reports the LAST reason, counted or not (P4-R133, 2026-09-18): the
+-- uncounted codes used to be logged and nothing else, so `why` was nil in
+-- exactly the states a long save sits in - a standing cooldown, a placement in
+-- progress, the ordinary gap between cases.
+assert(status:find("local reported=silence or debt",1,true),
+    "automaticStatus must answer with the last reason for the silence, not only the debt")
+local refuseBody=assert(runtime:match("local function refuse%(code,wait,dueAt%)(.-)\nend\n"),"refuse must exist")
+assert(refuseBody:find("silence=record",1,true),
+    "every refusal, counted or not, records why it refused")
+assert(refuseBody:find("if COUNTED[code] then",1,true) and refuseBody:find("if counted then rememberDebt() end",1,true),
+    "but only a counted code walks the ladder and writes the save")
+assert(runtime:find("function R.deferPoll(code,dueAt)",1,true),
+    "the poller has a way to say why it stayed silent (P4-R133)")
 
 print("PASS a refused case waits until the survivor moves on, and says why, how often and by when")

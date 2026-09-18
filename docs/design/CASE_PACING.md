@@ -57,7 +57,8 @@ worse than the original fault.
 ### 3. Honest refusals
 
 One closed set of reason codes replaces the refusal strings: `no-reach`,
-`no-containers`, `cap`, `active-limit`, `cooldown`, `disabled`, `busy`. Each
+`no-containers`, `cap`, `active-limit`, `cooldown`, `disabled`, `busy`, and
+`gap` (added 2026-09-18, see below). Each
 refusal records the code, a per-code count, and `dueHours`, the in-game time by
 which the next case is expected. The record lives in the case store's existing
 `schedule` slot (about 150 bytes) so it survives a reload.
@@ -78,6 +79,38 @@ world simply thins out: the next case is a little smaller or a little further.
 **One log line per refusal**, in the existing format, e.g.
 `ev=defer why=no-containers n=17 rung=2 due=13:15`, plus the rung and debt on
 delivery, so a whole run can be audited with one grep.
+
+**The poller's own silence, added 2026-09-18.** The honesty above stopped at
+the generator's door. `AutomaticInvestigations.poll` is what decides whether to
+ask for a case at all, and it returned quietly five times over: at the store's
+cap, with no schedule to pace from, at the four-case active limit, inside the
+ordinary gap between cases, and inside the extra hour after one finished. So "no
+case came" was still unexplained (`why=nil`) in exactly the states a long save
+sits in - `active=4/4` above all, which is where a real run was found sitting.
+Each of those now reports its code through `R.deferPoll`, which is `refuse`
+under another name: the same `ev=defer` line, the same `automaticStatus().defer`.
+
+Two things this required:
+
+- **One new code, `gap`** - the ordinary wait between cases (`minGapHours`, and
+  the extra hour of P4-R121). It is the only code added since the set was
+  closed. `cooldown` does not fit: that is P4-R125's "move on fifty tiles" wait
+  and its promise is half an hour, so reusing it would have promised a case in
+  half an hour when it was twenty-three hours away - and section 4 below fails
+  the run on a broken promise. Like `cooldown` and `busy` it is **never
+  counted**: it is our own pacing, not the world failing to supply a case.
+- **An uncounted code is now reported, not merely logged.** `refuse` kept the
+  counted debt in the save and returned early for the rest, so `why` was nil
+  for every wait of our own making. The last reason for the silence is now
+  remembered beside the debt (counted or not, generator's or poller's) and is
+  what `automaticStatus` answers with; only a counted code still walks the
+  ladder or writes the save. Both waits also promise the hour they are actually
+  waiting for, so a promise a poller makes is never already broken.
+
+Nothing about WHEN a case is created changed: every condition, and their order,
+is what it was. Pinned by `test/auto_poll_reasons.lua` (every exit's code, and a
+healthy save still getting its case), `test/nearby_deferral.lua` and the real
+runtime in `test/automatic_investigations.lua`.
 
 ### 4. The checks stop forgiving it
 
@@ -143,6 +176,7 @@ home a different kind of play rather than a starved one.
 |---|---|---|
 | the closed code set, the thresholds, the stored debt | `Generated/SuccessiveCases.lua` (`DEFER_CODES`, `REFUSALS_PER_RUNG`, `MAX_RUNG`, `defer`, `setDefer`, schedule validation) | `test/case_refusals.lua` |
 | `refuse(code)`, the `ev=defer` line, the promise, the rung, `automaticStatus` | `client/GeneratedRuntime.lua` | `test/case_refusals.lua`, `test/nearby_deferral.lua` |
+| the poller's own silence (`gap`, `busy`, `cap`, `disabled`, `active-limit`) | `client/AutomaticInvestigations.lua` (`poll`), `client/GeneratedRuntime.lua` (`R.deferPoll`, `silence`) | `test/auto_poll_reasons.lua`, `test/automatic_investigations.lua` |
 | the `deferred` / `dropped` assignment, `assign`, `drop`, `accounted`, `expiredIds`, `physicalKey` | `Generated/Session.lua` | `test/case_instalments.lua`, `test/storage_candidates.lua` |
 | the filler job and the expiry it applies | `client/GeneratedRuntime.lua` (`filler`, `usedPhysicalKeys`, `boundsScan`'s accept predicate) | `test/case_instalments.lua` |
 | a finished case that lost a clue | `Generated/RetiredCase.lua` (`retire` asks `Session.accounted`) | `test/case_instalments.lua` |
