@@ -82,9 +82,10 @@ function K.spawnBodies(n)
         local list = addZombiesInOutfit(px + 2 + i, py + 2, pz, 1, nil, 50)
         local z = list and list:size() > 0 and list:get(0) or nil
         if z then
-            -- A body, not a walker: a corpse is the carrier a player meets
-            -- most, and a dead one stays where the check put it.
-            if i % 2 == 1 then pcall(function() z:Kill(player()) end) end
+            -- A BODY, always (P4-R136): a walking zombie is not a carrier at
+            -- all any more, so a check that left half of them standing would
+            -- be parking things the mod must ignore.
+            pcall(function() z:Kill(player()) end)
             made = made + 1
         end
     end
@@ -139,7 +140,9 @@ function K.standBy()
 end
 function K.openBody()
     local c = K.carrier
-    local container = c and Carriers.read(c.object, "getInventory")
+    -- getContainer, as the engine answers for an IsoDeadBody and as the loot
+    -- panel itself reads it; getInventory is nil on a body (P4-R136 fix).
+    local container = c and Carriers.read(c.object, "getContainer")
     if not container then return "false", "the carrier has no inventory" end
     local loot = getPlayerLoot(0)
     loot:refreshBackpacks()
@@ -153,7 +156,7 @@ end
 -- and sets it the way the game's own call does, so the guard is still asked.
 function K.markSearched()
     local c = K.carrier
-    local container = c and Carriers.read(c.object, "getInventory")
+    local container = c and Carriers.read(c.object, "getContainer")
     if not container then return "false", "no inventory" end
     local was = container:isExplored() == true
     if not was then container:setExplored(true) end

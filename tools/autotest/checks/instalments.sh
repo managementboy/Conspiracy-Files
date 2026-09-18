@@ -7,22 +7,26 @@
 # Four things the mod grew last night that no run had yet seen happen:
 #
 #   (a) THE MAILBOX. "postbox" is the engine's own word and is in the
-#       allow-list. This asks the harder question a running game can answer:
-#       is a postbox anywhere the nearby scan can SEE it? A site is a room
-#       rectangle inside a building and the scan only looks at squares inside
-#       one, while a mailbox stands at the gate. The check reports every
-#       postbox around the survivor with whether its square is in a room and
-#       inside a case's footprint, then tries to make a case whose only
-#       allowed container kind is the postbox, and - if one comes - takes a
-#       clue out of a mailbox by searching for it.
+#       allow-list, but a mailbox stands at the gate, in no room, and until
+#       2026-09-18 the scan only looked at squares inside one - so no mailbox
+#       could ever be offered and a neighbourhood with nothing else could
+#       supply no case at all (20260918T025841). The scan now walks a band of
+#       Session.OUTDOOR_RADIUS around each site for that one kind. The check
+#       reports every postbox around the survivor, whether its square is in a
+#       room, and how far outside the nearest site footprint it lies (which is
+#       what the band's width has to cover), then makes a case whose only
+#       allowed container kind is the postbox and takes a clue out of a
+#       mailbox by searching for it.
 #   (b) A CLUE PLACED LATER (`ev=placed why=instalment`). A case goes live with
 #       the clues that fit; the filler gives the rest a container as the
 #       survivor moves. The harness narrows what the mod may see so a case
 #       really does go live with clues waiting, then loads the waiting clue's
 #       own site and stands back.
-#   (c) A CLUE ON A CARRIER, on a body AND on a zombie: the record must read
-#       "On a body at ..." and "On a zombie near ...", never "In a none", and
-#       the clue must be SPOTTABLE in Search Mode where it now is.
+#   (c) A CLUE ON A CARRIER - on a BODY, which is the only carrier there is
+#       (P4-R136: the game will not keep Search Mode on beside a walking
+#       zombie, so a clue on one could never be searched out). The record must
+#       read "On a body at ...", never "In a none", and the clue must be
+#       SPOTTABLE in Search Mode beside the body.
 #   (d) EXPIRY (`ev=stale why=expired`). A clue that finds no home in three
 #       in-game days is dropped and the case completes on the clues it got.
 #       Seventy-two in-game hours is forty minutes of real time even at the
@@ -135,10 +139,14 @@ if [ "$carriers_only" = yes ]; then
 else
 pb="$(ev 'return CFInst.postboxes(60)')"
 note "postboxes within 60 tiles of the survivor: $(field 1 "$pb") containers, $(field 2 "$pb") of them on a square the game calls a room, $(field 3 "$pb") inside one of the $(field 5 "$pb") live site footprints (first: $(field 4 "$pb"))"
+note "how far each postbox lies outside the nearest live site, against the $(field 7 "$pb")-tile band the scan walks: $(field 6 "$pb") of $(field 1 "$pb") are within it ($(field 8 "$pb"))"
 st="$(ev 'return CFInst.siteTypes()')"
 note "container kinds the mod offered the live sites: $(field 2 "$st") - postbox among them on $(field 1 "$st") site(s)"
 if [ "$(field 1 "$pb")" -gt 0 ] 2>/dev/null && [ "$(field 2 "$pb")" = 0 ]; then
-    note "ANSWER (mailbox): every postbox found stands on a square the game does not call a room. Storage.scan and the filler's boundsScan only ever look at squares INSIDE a site's room rectangle, so a mailbox at the gate cannot be offered as a container however the allow-list reads. A design question for the owner, not a harness fault."
+    note "ANSWER (mailbox): every postbox found stands on a square the game does not call a room - which is why the room pass alone could never offer one. What matters now is the band: $(field 6 "$pb") of them lie within $(field 7 "$pb") tiles of a live site and can be offered as that site's mailbox."
+fi
+if [ "$(field 1 "$pb")" -gt 0 ] 2>/dev/null && [ "$(field 6 "$pb")" = 0 ]; then
+    fail "$(field 1 "$pb") postbox(es) near the survivor and not one within $(field 7 "$pb") tiles of a live site footprint, so the band cannot reach a mailbox at all ($(field 8 "$pb"))"
 fi
 note "container kinds narrowed to: $(ev 'return CFInst.narrow("postbox")')"
 if get_case "the mailbox case" 2 150; then
@@ -153,10 +161,10 @@ if get_case "the mailbox case" 2 150; then
         fi
         spot_it "the clue in a mailbox" 90 || fail "a clue in a mailbox could not be spotted by searching beside it"
     else
-        note "ANSWER (mailbox): a case was created with postbox the only allowed kind, but no clue of it is in a postbox ($(field 2 "$mb")); targets: $(ev 'return CFInst.targets()' | field 4 | cut -c1-300)"
+        fail "a case was created with postbox the only allowed kind, but no clue of it is in a postbox ($(field 2 "$mb")); targets: $(ev 'return CFInst.targets()' | field 4 | cut -c1-300)"
     fi
 else
-    note "ANSWER (mailbox): with postbox the only container kind the mod may see, no case could be created at all in two fresh neighbourhoods - which is what the room-rectangle finding above predicts: the scan never sees a mailbox."
+    fail "with postbox the only container kind the mod may see, no case could be created at all in two fresh neighbourhoods - a mailbox is still not a place the scan can offer"
 fi
 fi
 
@@ -171,7 +179,12 @@ carrier_done=""
 # for the moment the survivor arrives rather than after the building has
 # finished loading.
 LADDER=("desk" "shelves" "locker,filingcabinet" "counter")
-for kind in corpse zombie; do
+# ONE CARRIER KIND, not two (P4-R136, owner, 2026-09-18). The zombie stage is
+# gone with the zombie carrier: the game turns Search Mode off beside a walker,
+# so a clue on one could never be spotted (that is exactly what this check
+# reported in 20260918T045929), and a walker that wandered off stranded a case
+# for three in-game days. A body is what the design always meant.
+for kind in corpse; do
     waiting=no
     # A carrier clue of this kind may already be in the world: run 20260918T032829
     # placed one on a zombie as an instalment while the check was looking for a
@@ -231,12 +244,8 @@ for kind in corpse zombie; do
     if [ "$(field 4 "$c")" = nil ]; then
         fail "a clue on a $kind, and ninety seconds later the record still has no words for it at all (whereabouts nil)"
     fi
-    case "$kind" in
-        corpse) grep -q "^On a body at\|^On a body close by" <<<"$(field 4 "$c")" \
-            || fail "a clue on a body reads \"$(field 4 "$c")\", not \"On a body at <address>\"" ;;
-        zombie) grep -q "^On a zombie near\|^On a zombie close by" <<<"$(field 4 "$c")" \
-            || fail "a clue on a zombie reads \"$(field 4 "$c")\", not \"On a zombie near <address>\"" ;;
-    esac
+    grep -q "^On a body at\|^On a body close by" <<<"$(field 4 "$c")" \
+        || fail "a clue on a body reads \"$(field 4 "$c")\", not \"On a body at <address>\""
     grep -q "In a none" <<<"$(field 4 "$c")" && fail "the record still says \"In a none\" for a clue on a $kind"
     spot_it "the clue on a $kind" 120 || fail "a clue on a $kind could not be spotted in Search Mode beside it"
     carrier_done+=" $kind"

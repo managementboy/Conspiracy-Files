@@ -111,6 +111,22 @@ function I.postboxes(radius)
         for _, s in ipairs((root.case and root.case.locations) or {}) do sites[#sites + 1] = s end
     end
     local total, inRoom, inSite, sample = 0, 0, 0, ""
+    -- HOW FAR OUTSIDE a site footprint each one lies, which is the number the
+    -- fix needs: Session.OUTDOOR_RADIUS has to reach the gate from the
+    -- building, and a band is walked square by square, so it must be no wider
+    -- than it needs to be. `near` counts the ones the shipped radius reaches.
+    local dists, near = {}, 0
+    local function distanceToSites(x, y)
+        local best
+        for _, s in ipairs(sites) do
+            local b = s.bounds
+            local dx = math.max(b.x1 - x, 0, x - (b.x2 - 1))
+            local dy = math.max(b.y1 - y, 0, y - (b.y2 - 1))
+            local d = math.max(dx, dy)
+            if not best or d < best then best = d end
+        end
+        return best
+    end
     for dx = -radius, radius do for dy = -radius, radius do
         local sq = cell:getGridSquare(px + dx, py + dy, pz)
         local objects = sq and sq:getObjects()
@@ -128,15 +144,21 @@ function I.postboxes(radius)
                         if px + dx >= b.x1 and px + dx < b.x2 and py + dy >= b.y1 and py + dy < b.y2 then inside = true end
                     end
                     if inside then inSite = inSite + 1 end
+                    local d = distanceToSites(px + dx, py + dy)
+                    if d then
+                        if #dists < 12 then dists[#dists + 1] = string.format("%s,%s=%st", px + dx, py + dy, d) end
+                        if d <= Session.OUTDOOR_RADIUS then near = near + 1 end
+                    end
                     if sample == "" then
-                        sample = string.format("%s,%s room=%s inside a site=%s",
-                            px + dx, py + dy, tostring(room and room:getName()), tostring(inside))
+                        sample = string.format("%s,%s room=%s inside a site=%s tiles outside the nearest site=%s",
+                            px + dx, py + dy, tostring(room and room:getName()), tostring(inside), tostring(d))
                     end
                 end
             end
         end
     end end
-    return total, inRoom, inSite, sample, #sites
+    return total, inRoom, inSite, sample, #sites, near,
+        tostring(Session.OUTDOOR_RADIUS), table.concat(dists, " ")
 end
 
 -- What container kinds the mod itself offered each live site: the other half of
@@ -406,7 +428,10 @@ function I.bodyProbe(x, y, z, radius)
             zombies = zombies + 1
             local dead = read(zed, "isDead") == true
             if dead then deadInList = deadInList + 1 end
-            local state = Carriers.stateOf(zed, dead and Carriers.CORPSE or Carriers.ZOMBIE, open, zx, zy, zz)
+            -- "zombie" as a literal, not a carrier kind: there is no such
+            -- kind any more (P4-R136), and what this prints is the mod
+            -- refusing a walker - "not a carrier" - which is the point.
+            local state = Carriers.stateOf(zed, dead and Carriers.CORPSE or "zombie", open, zx, zy, zz)
             local why = Carriers.refusal(state)
             if not why then usable = usable + 1 end
             if #zparts < 6 then

@@ -62,24 +62,19 @@ local function scanSquare(sq, id)
         local it = world:get(i):getItem()
         if it and it:getModData().cfGeneratedId == id then return it, world:get(i) end
     end
-    -- CARRIERS (P4-R134): a body or a zombie has an inventory of its own and is
-    -- on no object list of the square at all, so a clue the filler put in a
-    -- dead man's jacket read as "not on or next to its square" and the case it
+    -- CARRIERS (P4-R134, P4-R136): a body has an inventory of its own and is on
+    -- no object list of the square at all, so a clue the filler put in a dead
+    -- man's jacket read as "not on or next to its square" and the case it
     -- belonged to could never be finished (campaign 20260917T234706, where the
     -- record said "accounted In a none at 102 Dewey St."). The survivor finds
-    -- it by looting the body, so this looks there too.
+    -- it by looting the body, so this looks there too. A BODY's inventory is
+    -- getContainer(); getInventory() is nil on one, which is the fault of
+    -- 20260918T035135 in the harness's own words.
     local carriers = {}
     local bodies = sq.getDeadBodys and sq:getDeadBodys()
     for i = 0, (bodies and bodies:size() or 0) - 1 do carriers[#carriers + 1] = bodies:get(i) end
-    local cell = getCell()
-    local zombies = cell and cell.getZombieList and cell:getZombieList()
-    for i = 0, math.min((zombies and zombies:size() or 0), 60) - 1 do
-        local z = zombies:get(i)
-        local ok = z and z.getSquare and z:getSquare() == sq
-        if ok then carriers[#carriers + 1] = z end
-    end
     for _, carrier in ipairs(carriers) do
-        local inv = carrier.getInventory and carrier:getInventory()
+        local inv = carrier.getContainer and carrier:getContainer()
         local items = inv and inv.getItems and inv:getItems()
         for j = 0, (items and items:size() or 0) - 1 do
             local it = items:get(j)
@@ -126,11 +121,12 @@ function L.find(n)
             return true, it:getDisplayName(), where, room, d.z
         end
     end end
-    -- A CARRIER WALKS OFF (P4-R134). The recorded square is where the body was
-    -- when the filler claimed it; a zombie does not stay there. The mod finds
-    -- it again by its own mark - which is how Search Mode keeps the icon on it -
-    -- so the harness asks the same question rather than searching the ground
-    -- where it used to be (campaign 20260918T003507: "uncertain In a none").
+    -- A CARRIER IS ADDRESSED BY ITS MARK (P4-R134). The recorded square is
+    -- where the body was when the filler claimed it, and a body can be dragged
+    -- off it. The mod finds it again by its own mark - which is how Search Mode
+    -- keeps the icon on it - so the harness asks the same question rather than
+    -- searching the ground where it used to be (campaign 20260918T003507:
+    -- "uncertain In a none").
     local resolved, state = nil, nil
     pcall(function()
         local Carriers = require("ConspiracyFiles/Carriers")

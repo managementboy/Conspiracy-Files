@@ -157,19 +157,18 @@ MUTATIONS = [
     # clock and the promise is broken the moment it is made, which is exactly
     # the state the assertion exists to catch.
     #
-    # *** THIS ONE CANNOT BE CAUGHT YET, and the reason is a fault in the mod,
-    # not in the check (found 2026-09-18, twice MISSED: prove 20260918T040042
-    # and 20260918T043041). `dueFor` returns math.max(now, last+gap) for every
-    # code but `cooldown`, and the generator is only ever ASKED once the gap has
-    # passed - so `last+gap <= now`, the due hour IS now, and a fresh
-    # `no-containers` refusal is overdue one second after it is made. The clean
-    # code already behaves as this mutation does, so the mutation changes
-    # nothing to notice. promise.sh now says so out loud (promise_is_future).
-    # Fix dueFor to name a future hour for the world-supply codes and this
-    # mutation becomes catchable. ***
-    ("promise-overdue", "promise", C + "GeneratedRuntime.lua",
-     '    if type(last)=="number" then return math.max(now,last+gap) end',
-     '    if type(last)=="number" then return now-1 end',
+    # It was UNCATCHABLE until 2026-09-18 (twice MISSED: prove 20260918T040042
+    # and 20260918T043041), because the clean code behaved exactly as this
+    # mutation does: `dueFor` returned math.max(now, last+gap) for every code
+    # but `cooldown` and the generator is only ever ASKED once the gap has
+    # passed, so the due hour WAS now and a fresh `no-containers` refusal was
+    # overdue a minute later. The rule is now pure and in the domain module
+    # (SuccessiveCases.dueHours), floored at P4-R125's own wait, so a due hour
+    # in the past can only come from a bug - and this mutation is that bug.
+    ("promise-overdue", "promise",
+     "mod/common/media/lua/shared/ConspiracyFiles/Generated/SuccessiveCases.lua",
+     "    local floor=now+math.max(wait,M.MIN_PROMISE_HOURS)",
+     "    local floor=now-1",
      "and none came"),
     # THE LADDER: three refusals of one code earn a rung. A generator that
     # refuses without ever lowering its standard is the fault the ladder exists
