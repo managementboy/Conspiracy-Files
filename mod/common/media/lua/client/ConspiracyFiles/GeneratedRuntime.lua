@@ -757,6 +757,14 @@ local function prepare(result,seed,later,house)
     scheduler.enqueue("storage","preparation",scan)
   end)
 end
+-- WHY THE FIRST CASE OF A SAVE IS STILL WAITING: the survivor is not inside a
+-- building yet (the firstHouse option below; the first case is anchored on the
+-- house the survivor is standing in). Named rather than written twice, because
+-- AutomaticInvestigations turns exactly this wait into the typed refusal
+-- `outdoors` (P4-R133, "every silence has a reason") and matching on a
+-- sentence would come apart the day someone rewords it. Every other refusal
+-- from R.start is a different reason and stays untyped.
+R.WAITING_INDOORS="waiting until player is inside a building"
 function R.start(seed,options)
     require("ConspiracyFiles/GeneratedMenu")
     require("ConspiracyFiles/ClueCue")
@@ -764,7 +772,7 @@ function R.start(seed,options)
     local house
     local saved=ModData.get(TAG)
     if options and options.firstHouse and not (saved and (saved.canonical or saved.campaign)) then
-        house=currentHouse();if not house then return false,"waiting until player is inside a building" end
+        house=currentHouse();if not house then return false,R.WAITING_INDOORS end
     end
     seed=seed or (ZombRand(2147483646)+1)
     if type(seed)~="number" or seed~=math.floor(seed) or seed<1 or seed>=2147483647 then return false,"invalid seed" end

@@ -74,8 +74,8 @@ worse than the original fault.
 ### 3. Honest refusals
 
 One closed set of reason codes replaces the refusal strings: `no-reach`,
-`no-containers`, `cap`, `active-limit`, `cooldown`, `disabled`, `busy`, and
-`gap` (added 2026-09-18, see below). Each
+`no-containers`, `cap`, `active-limit`, `cooldown`, `disabled`, `busy`,
+`gap` and `outdoors` (both added 2026-09-18, see below). Each
 refusal records the code, a per-code count, and `dueHours`, the in-game time by
 which the next case is expected. The record lives in the case store's existing
 `schedule` slot (about 150 bytes) so it survives a reload.
@@ -116,6 +116,19 @@ Two things this required:
   half an hour when it was twenty-three hours away - and section 4 below fails
   the run on a broken promise. Like `cooldown` and `busy` it is **never
   counted**: it is our own pacing, not the world failing to supply a case.
+- **One more new code, `outdoors`** (2026-09-18, found by the travel check).
+  The first case of a save is anchored on the building the survivor is standing
+  in, so `GeneratedRuntime.start`'s `firstHouse` path waits until they are
+  inside one - and that wait said nothing at all: a player who spawned on a
+  street got no case and `automaticStatus()` read `why=nil`, the one gap left in
+  "every silence has a reason". `travel.sh` had written it into its own header
+  as a fact to live with. None of the eight existing codes fits: `busy` is a
+  placement already running, `cooldown` is P4-R125's fifty-tile wait and would
+  promise half an hour, `gap` is the wait between cases and there is no previous
+  case to pace from, and a counted code would walk the ladder up for a standard
+  no rung can lower - only stepping indoors ends this wait. Like `cooldown`,
+  `busy` and `gap` it is **never counted**, and like them it changes nothing
+  about WHEN the first case is created: only what is said about the wait.
 - **An uncounted code is now reported, not merely logged.** `refuse` kept the
   counted debt in the save and returned early for the rest, so `why` was nil
   for every wait of our own making. The last reason for the silence is now
@@ -193,7 +206,7 @@ home a different kind of play rather than a starved one.
 |---|---|---|
 | the closed code set, the thresholds, the stored debt | `Generated/SuccessiveCases.lua` (`DEFER_CODES`, `REFUSALS_PER_RUNG`, `MAX_RUNG`, `defer`, `setDefer`, schedule validation) | `test/case_refusals.lua` |
 | `refuse(code)`, the `ev=defer` line, the promise, the rung, `automaticStatus` | `client/GeneratedRuntime.lua` | `test/case_refusals.lua`, `test/nearby_deferral.lua` |
-| the poller's own silence (`gap`, `busy`, `cap`, `disabled`, `active-limit`) | `client/AutomaticInvestigations.lua` (`poll`), `client/GeneratedRuntime.lua` (`R.deferPoll`, `silence`) | `test/auto_poll_reasons.lua`, `test/automatic_investigations.lua` |
+| the poller's own silence (`gap`, `busy`, `cap`, `disabled`, `active-limit`, `outdoors`) | `client/AutomaticInvestigations.lua` (`poll`), `client/GeneratedRuntime.lua` (`R.deferPoll`, `silence`) | `test/auto_poll_reasons.lua`, `test/automatic_investigations.lua` |
 | the `deferred` / `dropped` assignment, `assign`, `drop`, `accounted`, `expiredIds`, `physicalKey` | `Generated/Session.lua` | `test/case_instalments.lua`, `test/storage_candidates.lua` |
 | the filler job and the expiry it applies | `client/GeneratedRuntime.lua` (`filler`, `usedPhysicalKeys`, `boundsScan`'s accept predicate) | `test/case_instalments.lua` |
 | a finished case that lost a clue | `Generated/RetiredCase.lua` (`retire` asks `Session.accounted`) | `test/case_instalments.lua` |

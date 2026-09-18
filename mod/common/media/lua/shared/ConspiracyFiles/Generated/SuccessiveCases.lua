@@ -80,8 +80,18 @@ local M={SCHEMA=1,MAX_CASES=16,MAX_ACTIVE=4,MAX_FULL_ARCHIVED=4,LEGACY_MAX_CASES
 -- was twenty-three hours away - and the long campaign check fails on a broken
 -- promise. Like cooldown and busy it is never counted, because it is our own
 -- pacing rather than the world failing to supply a case.
+-- `outdoors` joined on 2026-09-18, for the LAST silence with no reason: the
+-- first case of a save waits for the survivor to be inside a building
+-- (GeneratedRuntime.start's firstHouse), and a player who spawned on a street
+-- got nothing while automaticStatus() read why=nil - which travel.sh had
+-- written into its own header as a fact to live with. None of the eight fitted:
+-- `busy` is a placement already running, `cooldown` is P4-R125's fifty-tile
+-- wait and would promise half an hour, `gap` is the wait between cases and
+-- there is no previous case to pace from, and the counted codes would walk the
+-- ladder up for a standard no rung can lower - only stepping indoors ends this
+-- wait. Uncounted, like the other three waits of our own making.
 M.DEFER_CODES={["no-reach"]=true,["no-containers"]=true,cap=true,["active-limit"]=true,
- cooldown=true,disabled=true,busy=true,gap=true}
+ cooldown=true,disabled=true,busy=true,gap=true,outdoors=true}
 -- The ladder: after this many refusals of the SAME code the generator lowers
 -- its own standard by one rung. MAX_RUNG is the highest rung the code can
 -- actually take (see docs/design/CASE_PACING.md on the fourth rung).

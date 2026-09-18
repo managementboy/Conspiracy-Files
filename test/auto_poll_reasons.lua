@@ -30,14 +30,23 @@ ZombRand=function() return 7 end
 -- is about what the poller says, and test/nearby_deferral.lua is about what the
 -- runtime does with it.
 local said,status,cases,trialStarts,trialOK={},{},0,0,true
+local trialWhy=nil
+-- The sentence R.start really returns while the survivor is outdoors, read from
+-- the runtime itself rather than copied: the poller matches on that constant,
+-- and a test that copied the words would still pass the day it was reworded.
+local WAITING_INDOORS=assert(io.open("mod/common/media/lua/client/ConspiracyFiles/GeneratedRuntime.lua","r"))
+local runtimeSource=WAITING_INDOORS:read("*a"); WAITING_INDOORS:close()
+WAITING_INDOORS=assert(runtimeSource:match('R%.WAITING_INDOORS="([^"]+)"'),
+    "GeneratedRuntime must name the wait for the first house, so the poller can type it")
 local function reset() said={}; cases=0; trialStarts=0 end
 package.preload["ConspiracyFiles/GeneratedRuntime"]=function()
     return {automaticStatus=function() return status end,
+        WAITING_INDOORS=WAITING_INDOORS,
         deferPoll=function(code,dueAt) said[#said+1]={code=code,due=dueAt}; return false,code end,
         nextCase=function(seed) cases=cases+1; return true end}
 end
 package.preload["ConspiracyFiles/Trial"]=function()
-    return {start=function() trialStarts=trialStarts+1; return trialOK end}
+    return {start=function() trialStarts=trialStarts+1; return trialOK,trialWhy end}
 end
 local A=require("ConspiracyFiles/AutomaticInvestigations")
 assert(A.config.minGapHours==24 and A.config.afterCompletionHours==1,
@@ -105,9 +114,33 @@ assert(gap.due>hours and after.due>hours,"a promise a poller makes is never alre
 status=healthy(); status.count=0; reset()
 A.poll()
 assert(trialStarts==1 and #said==0 and cases==0,"an empty save starts the first case and refuses nothing")
+-- AND THE ONE SILENCE THAT WAS LEFT (fault found in a real game 2026-09-18).
+-- The first case of a save is anchored on the building the survivor is standing
+-- in, so it waits until they are inside one - and that wait said nothing: a
+-- player who spawned on a street got no case and automaticStatus() read
+-- why=nil, the one gap left in P4-R133's rule that every silence has a reason.
+-- travel.sh had written it into its own header as a fact to live with.
+status=healthy(); status.count=0; trialOK=false; trialWhy=WAITING_INDOORS; reset()
+A.poll()
+assert(said[1],"the wait for the first house must say why it is waiting")
+assert(said[1].code=="outdoors","the survivor is outdoors, reported "..tostring(said[1].code))
+assert(Cases.DEFER_CODES[said[1].code],said[1].code.." is not in the closed set")
+assert(trialStarts==1 and cases==0,
+    "and the first case is still ASKED FOR in exactly the same state: this fix is about saying why, not when")
+-- Any OTHER reason the trial will not start yet is not the outdoors wait, and
+-- must keep the code it already had.
+status=healthy(); status.count=0; trialOK=false; trialWhy="load a save first"; reset()
+A.poll()
+assert(#said==0,"a different refusal from the trial is not the outdoors wait: "..tostring(said[1] and said[1].code))
+-- ONCE A CASE EXISTS the wait is over and nothing reports it again: this branch
+-- is not even reached, and a healthy save gets its case.
+trialOK=true; trialWhy=nil
+assert(poll()==nil,"with a case in the save nothing is withheld")
+assert(cases==1 and trialStarts==0,"and the outdoors wait is behind us")
+
 -- Trial.start refusing means the first case is still being prepared - which is
 -- the one early return of the five that already had somewhere to belong.
-A.initialized=false; trialOK=false
+A.initialized=false; trialOK=false; trialWhy=nil
 status=healthy(); reset()
 A.poll()
 assert(said[1] and said[1].code=="busy","a first case that will not start yet is busy")

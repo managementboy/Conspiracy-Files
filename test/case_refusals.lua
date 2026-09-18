@@ -28,9 +28,11 @@ end
 -- 1. The vocabulary is closed, and the log has a word for a refusal ----------
 -- `gap` joined the set on 2026-09-18, for the poller's own wait between cases
 -- (P4-R133's honesty had stopped at the generator's door: AutomaticInvestigations
--- returned silently five times over). It is the only code added since the set
--- was closed, and it is uncounted like the other two waits of our own making.
-local expected={"no-reach","no-containers","cap","active-limit","cooldown","disabled","busy","gap"}
+-- returned silently five times over), and `outdoors` the same day for the last
+-- silence of all: the first case of a save waits for the survivor to be inside
+-- a building, and a player who spawned on a street got no case and no reason.
+-- Both are uncounted, like the other two waits of our own making.
+local expected={"no-reach","no-containers","cap","active-limit","cooldown","disabled","busy","gap","outdoors"}
 local n=0
 for code in pairs(A.DEFER_CODES) do n=n+1 end
 assert(n==#expected,"the refusal codes are a closed set of "..#expected..", got "..n)

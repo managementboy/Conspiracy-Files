@@ -35,7 +35,16 @@ function A.poll()
  local status=runtime.automaticStatus()
  if status.preparing then return quiet(runtime,"busy") end
  if status.count==0 then
-  require("ConspiracyFiles/Trial").start(nil,{firstHouse=true})
+  local ok,why=require("ConspiracyFiles/Trial").start(nil,{firstHouse=true})
+  -- THE LAST SILENCE WITH NO REASON (P4-R133, found in a real game
+  -- 2026-09-18). The first case of a save is anchored on the building the
+  -- survivor is standing in, so it waits until they are inside one - and that
+  -- wait said nothing at all: a player who spawned on a street got no case and
+  -- automaticStatus() read why=nil, so the mod could not answer "why is
+  -- nothing happening?". It now carries `outdoors`, logged like every other
+  -- refusal. Only what is SAID changes: the wait itself, and when the first
+  -- case is created, are untouched.
+  if not ok and why==runtime.WAITING_INDOORS then return quiet(runtime,"outdoors") end
   return
  end
  if not A.initialized then
