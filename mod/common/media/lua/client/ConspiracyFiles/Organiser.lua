@@ -302,13 +302,15 @@ function O.give(player)
         -- nothing here pretends otherwise.
         item:setFavorite(true)
     end)
-    -- Switched on, so the first read does not begin with a puzzle. The battery
-    -- the game gives it is the battery it has; when that runs out the survivor
-    -- says so and the evidence album still reads.
-    safe(function()
-        local data=item:getDeviceData()
-        if data then data:setIsTurnedOn(true) end
-    end)
+    -- The RADIO underneath stays off, always. The device is declared as a radio
+    -- to borrow the game's battery model (power, the insert-battery menu, the
+    -- save round-trip), not to listen to anything: the mod is called Dead Air.
+    -- Switched on it received the game's emergency broadcast and printed its
+    -- static over the survivor - "<szzt>" above her head beside a car (owner,
+    -- Windows, 2026-09-18). Knox.OS has its own on/off; the cell is read
+    -- straight from the device and drained by us (O.power, O.drain), so nothing
+    -- here needs the radio to be on.
+    safe(function() O.silence(item) end)
     log("organiser issued")
     return item
 end
@@ -319,6 +321,26 @@ end
 -- Knox.OS equips the organiser through the game's own action - the survivor
 -- puts down whatever they were holding - and a player who is jumped while
 -- reading pays for it exactly as they would for reading a book.
+-- Off, and kept off. A save issued before 2026-09-18 has a radio that is on,
+-- so every load quietly silences whatever the survivor is carrying.
+function O.silence(item)
+    if not item then return false end
+    local data=safe(function() return item:getDeviceData() end)
+    if not data then return false end
+    local on=safe(function() return data:getIsTurnedOn() end)
+    if on==false then return false end
+    safe(function() data:setIsTurnedOn(false) end)
+    return true
+end
+
+function O.silenceCarried(player)
+    player=player or (getPlayer and getPlayer())
+    local n=0
+    for _,item in ipairs(carriedOrganisers(player)) do if O.silence(item) then n=n+1 end end
+    if n>0 then log("radio silenced on "..n.." organiser(s); the device listens to nothing") end
+    return n
+end
+
 function O.read(player)
     player=player or (getPlayer and getPlayer())
     local item=O.held(player)
@@ -612,7 +634,7 @@ if Events and not O.startHooked then
     O.startHooked=true
     local function issue() safe(O.give) end
     if Events.OnCreatePlayer then Events.OnCreatePlayer.Add(function() issue() end) end
-    if Events.OnGameStart then Events.OnGameStart.Add(function() issue(); safe(O.install) end) end
+    if Events.OnGameStart then Events.OnGameStart.Add(function() issue(); safe(O.silenceCarried); safe(O.install) end) end
 end
 O.install()
 

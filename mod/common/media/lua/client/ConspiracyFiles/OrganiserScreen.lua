@@ -534,9 +534,29 @@ local function wrapTo(text,width)
     return out
 end
 
+-- A record's text carries the line breaks it was written with, and a document
+-- is written to about sixty characters. Wrapping each stored line on its own
+-- put a long line next to a stub on the survivor's screen - "under standing" /
+-- "emergency-maintenance procedure." at 1.5x (owner, Windows, 2026-09-18). So a
+-- paragraph is reflowed first: a line joins the one before it when it begins in
+-- lower case, which is how a sentence continues. A numbered item, a letterhead,
+-- a heading and anything starting with a capital keep their own break.
+local function reflow(detail)
+    local out={}
+    for line in (tostring(detail or "").."\n"):gmatch("([^\n]*)\n") do
+        local previous=out[#out]
+        if line~="" and previous and previous~="" and line:find("^%l") then
+            out[#out]=previous.." "..line
+        else
+            out[#out+1]=line
+        end
+    end
+    return table.concat(out,"\n")
+end
+
 local function pages(detail,width)
     local lines={}
-    for paragraph in (tostring(detail or "").."\n"):gmatch("([^\n]*)\n") do
+    for paragraph in (reflow(detail).."\n"):gmatch("([^\n]*)\n") do
         if paragraph=="" then
             if #lines>0 and lines[#lines]~="" then lines[#lines+1]="" end
         else
@@ -1246,6 +1266,7 @@ end
 -- Single player only, like the rest of the mod (see Organiser.lua). Guarded
 -- here as well as at the item, so no future caller can open a device that has
 -- no runtime behind it just by reaching for the screen directly.
+S.reflow=reflow
 function S.multiplayer() return (isClient and isClient()) or (isServer and isServer()) end
 
 function S.open()

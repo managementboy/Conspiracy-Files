@@ -63,8 +63,27 @@ end
 -- The FOUND block's text. Placeless is not an error state and must not read
 -- like one: the survivor simply did not note it, which is an ordinary thing
 -- for someone to not do.
+-- "It was office memo." read as a missing word (owner, Windows, 2026-09-18).
+-- A carrier is a thing, so it takes an article; the generic object carrier
+-- ("Object found") is just an object.
+local function aCarrier(carrier)
+    -- Lower-case only what has lower case: an ID card is not an id card.
+    local text=tostring(carrier or ""):gsub("%S+",function(word)
+        if word:find("%l") then return word:lower() end
+        return word
+    end)
+    if text=="" then return nil end
+    if text:lower()=="object found" then return "an object" end
+    -- "Evidence" is the projection's fallback when the kind is unknown. It is
+    -- not a thing a survivor would name, so the sentence is left out.
+    if text:lower()=="evidence" then return nil end
+    local first=text:sub(1,1):lower()
+    local article=(first=="a" or first=="e" or first=="i" or first=="o" or first=="u") and "an" or "a"
+    return article.." "..text
+end
 function M.foundLine(where,carrier)
-    local tail=carrier and (" It was "..carrier:lower()..".") or ""
+    local named=aCarrier(carrier)
+    local tail=named and (" It was "..named..".") or ""
     if where then return where..tail end
     return "I didn't note where I was."..tail
 end
