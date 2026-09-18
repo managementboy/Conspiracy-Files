@@ -1095,6 +1095,22 @@ where the code forces a choice. Recorded so they can be overruled:
    as unverified, and fails closed - a wrong string means no mailbox is ever
    chosen, never a broken case.
 
+**P4-R136 — a corpse carries a clue; a walking zombie does not.** Decided
+2026-09-18 from the real-game verification of P4-R134. The game turns Search
+Mode off when a zombie is near, which is exactly where a zombie-carried clue
+would have to be searched for, and a walker that wandered off stranded a case
+for three in-game days while holding one of the four active slots. A corpse
+cannot walk away, and "a note in a dead man's jacket" was the point of the
+feature. Cars and mailboxes are unaffected. A clue is therefore placed only on
+a body that is already dead; a zombie the survivor kills later is an ordinary
+body like any other.
+
+Also corrected: the promise a refusal makes (P4-R133) was computed as
+`max(now, last + gap)` and the generator is only asked once the gap has
+passed, so every promise was already overdue and the rule meant nothing. A
+refusal now promises a time in the future, which is what the campaign check
+asserts against.
+
 *Built 2026-09-17 (the design's build order 1-5; the real-game checks of step 6
 are separate). The carrier target shape, corpse and zombie carriers, mailboxes
 as a container kind, the deliberate car part, one mobile clue per case
