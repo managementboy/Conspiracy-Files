@@ -1146,6 +1146,23 @@ works page for page, making reading uneccessary dififcult".
   worse fault than the one it solved. Reading is served by the stylus drag and
   the rocker; the machine never takes a control the player expects the world to
   have.
+
+**P4-R139 — an unnumbered building costs only its own address, and waiting
+indoors says so.** Two faults a travel run from Irvington to Muldraugh found
+(2026-09-18/19, evidence 20260918T230942 and 20260919T001915-travel.txt):
+1. The address writer refused a whole case when any one of its sites had no
+   number in the shipped book, so a case like that showed no address for any of
+   its clues - about one case in five, since the book numbers 5,932 of the
+   6,663 buildings with two or more rooms. It now names the sites it can and
+   leaves the rest reading as they did ("the receiving building near
+   Schoolhouse St"). A case the book can name nothing of reads exactly as
+   before AD-10; no number is ever invented.
+2. The first case of a save waits for the survivor to be indoors, and that
+   silence had no reason, so the mod could not say why a player who spawned on
+   a street had no case. A ninth refusal code, `outdoors`, was added to the
+   closed set: none of the eight fitted, and it is uncounted like our other
+   self-imposed waits, so it never walks the ladder up for a standard no rung
+   can lower. When the first case is created is unchanged.
 No new game.
 
 *Built 2026-09-17 (the design's build order 1-5; the real-game checks of step 6
