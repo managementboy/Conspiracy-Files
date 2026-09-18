@@ -1650,6 +1650,43 @@ local function rd(o,k,...)
     local ok,v=pcall(function(...) return o[k](o,...) end,...)
     if ok then return v end
 end
+-- IS THIS CONTAINER A CARRIER - a body or a zombie (P4-R134)? Both answer the
+-- container type "none", so the record read `accounted In a none at 102 Dewey
+-- St.` (campaign 20260917T234706). Two answers, in the order of what we know
+-- best:
+--   * the case's own target, which is where the clue was put and which kind of
+--     carrier took it;
+--   * failing that, the container's owner, which is all a FINISHED case has
+--     left once retirement has dropped its assignments. `getParent` on a
+--     body's inventory is how IdentityObserver has named a corpse since
+--     2026-09-08.
+-- nil means "not a carrier", never "not sure".
+local function carrierOf(item,container)
+    local md=rd(item,"getModData")
+    local id=type(md)=="table" and md.cfGeneratedId or nil
+    if type(id)=="string" and sessions then
+        for _,api in ipairs(sessions) do
+            local ok,a=pcall(api.assignment,id)
+            local t=ok and type(a)=="table" and a.target
+            if type(t)=="table" and type(t.carrierMark)=="string" and Carriers.KINDS[t.carrierKind] then
+                return t.carrierKind
+            end
+        end
+    end
+    local owner=container and rd(container,"getParent")
+    if owner and instanceof then
+        local dead=instanceof(owner,"IsoDeadBody")
+        if dead then return Carriers.CORPSE end
+        if instanceof(owner,"IsoZombie") then
+            -- A zombie on the floor is a corpse, and the survivor searches it
+            -- as one: the words follow what it is now, not which list it came
+            -- from (the same rule Carriers.scan uses).
+            if rd(owner,"isDead")==true then return Carriers.CORPSE end
+            return Carriers.ZOMBIE
+        end
+    end
+    return nil
+end
 -- Where a document actually is, in words a survivor would use. "Close by" was
 -- vague where we were not: the scan holds the item itself, so it can say
 -- whether it is carried, in something, or on the floor - and the address book
@@ -1723,8 +1760,15 @@ placeOf=function(item)
             local ok,text=pcall(getText,key)
             if ok and type(text)=="string" and text~="" and text~=key then title=text end
         end
-        local phrase=Words.phrase(tostring(kind),title) or ("In a "..tostring(kind))
-        return address and (phrase.." at "..address..".") or (phrase..".")
+        local phrase=Words.phrase(tostring(kind),title)
+        if phrase then return address and (phrase.." at "..address..".") or (phrase..".") end
+        -- The type said nothing usable ("none"): a body, a zombie, or any other
+        -- container that never declared a type. A carrier gets its own words
+        -- (P4-R134); anything else says what it honestly knows - that the clue
+        -- is inside something, and where - and never that it is lost (P4-R104).
+        local carrier=carrierOf(item,container)
+        if carrier then return Words.carrier(carrier,address) end
+        return address and ("In something at "..address..".") or "In something close by."
     end
     return address and ("On the floor at "..address..".") or "On the ground."
 end

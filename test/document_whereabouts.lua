@@ -92,14 +92,43 @@ assert(not lastseen:lower():find('lost') and not lastseen:lower():find('destroy'
 assert(runtime:find('LAST_SEEN_WRITE_MS=60000', 1, true), 'a last-seen write happens at most once a minute per document')
 assert(runtime:find('LAST_SEEN_EVERY_MS=10000', 1, true), 'the last-seen scan is throttled to every ten seconds')
 
+-- A CLUE ON A CARRIER (P4-R134). A body's and a zombie's inventory both answer
+-- the container type "none", and the record duly said `accounted In a none at
+-- 102 Dewey St.` (campaign 20260917T234706). The raw type must never be the
+-- fallback wording, and a carrier must be named as what it is: the same one
+-- line feeds the case record, the FILES WHERE line and a finished case's
+-- last-seen line, so it is fixed once.
+assert(not runtime:find('or ("In a "..tostring(kind))', 1, true),
+    'the raw container type must never be the fallback wording - that is what "In a none" was')
+assert(runtime:find('local carrier=carrierOf(item,container)', 1, true),
+    'a container with no usable type must ask whether it is a carrier')
+assert(runtime:find('return Words.carrier(carrier,address)', 1, true),
+    'and a carrier must be worded as a carrier (ContainerWords.carrier)')
+assert(runtime:find('"In something at "..address', 1, true),
+    'a container that declares no type and is no carrier says where, not what')
+-- Two ways to know, because a finished case keeps no assignments (P4-R104):
+-- the case's own target while it is live, the body itself once it is not.
+assert(runtime:find('type(t.carrierMark)=="string" and Carriers.KINDS[t.carrierKind]', 1, true),
+    "a live case's own target says which kind of carrier took the clue")
+assert(runtime:find('instanceof(owner,"IsoDeadBody")', 1, true)
+    and runtime:find('instanceof(owner,"IsoZombie")', 1, true),
+    'and a finished case can still tell a body from a walker by asking the container owner')
+local carrierOf = assert(runtime:match('local function carrierOf%(item,container%)(.-)\nend\n'),
+    'carrierOf must exist')
+assert(not carrierOf:find('setHaloNote', 1, true) and not carrierOf:find('AddItem', 1, true),
+    'naming where a clue is only reads; it never says anything and never moves anything')
+
 -- PDA FILES, through fakes: a WHERE field for live and finished documents.
 package.path = "mod/common/media/lua/client/?.lua;mod/common/media/lua/shared/?.lua;" .. package.path
 package.preload["ConspiracyFiles/KnoxUI"] = function() return {} end
 ConspiracyFiles = ConspiracyFiles or {}
 local known = {}
-for _, id in ipairs({ "a", "b", "c", "d", "e" }) do known[#known + 1] = { id = id, title = id:upper(), body = "body" } end
+for _, id in ipairs({ "a", "b", "c", "d", "e", "f", "g" }) do known[#known + 1] = { id = id, title = id:upper(), body = "body" } end
 local states = { a = { "accounted", "Carried." }, b = { "uncertain", "In a desk." }, c = { "lastseen", "Carried, in Una's Evidence." },
-                 d = { "unchecked" }, e = { "lastseen" } }
+                 d = { "unchecked" }, e = { "lastseen" },
+                 -- A carrier reaches FILES in the same words as any container.
+                 f = { "accounted", "On a body at 102 Dewey St." },
+                 g = { "uncertain", "On a zombie near 102 Dewey St." } }
 ConspiracyFiles.GeneratedRuntime = { metrics = function() return {} end, known = function() return known end,
     whereabouts = function(id) local s = states[id]; return s[1], s[2] end }
 local okApps, A = pcall(dofile, 'mod/common/media/lua/client/ConspiracyFiles/KnoxApps.lua')
@@ -113,5 +142,12 @@ assert(listed.b == "Not seen recently. Its whereabouts are uncertain. Last seen:
 assert(listed.c == "Last seen: Carried, in Una's Evidence.", tostring(listed.c))
 assert(listed.d == "Not checked since you loaded this save.", tostring(listed.d))
 assert(listed.e == nil, 'no WHERE line where nothing is known')
-for _, v in pairs(listed) do assert(not v:lower():find('lost') and not v:lower():find('destroy'), v) end
-print('PASS document whereabouts: a finished case says where its evidence was last seen, in FILES')
+assert(listed.f == "On a body at 102 Dewey St.", tostring(listed.f))
+assert(listed.g == "Not seen recently. Its whereabouts are uncertain. Last seen: On a zombie near 102 Dewey St.",
+    tostring(listed.g))
+for _, v in pairs(listed) do
+    assert(not v:lower():find('lost') and not v:lower():find('destroy'), v)
+    assert(not v:find('a none', 1, true), 'no surface may ever read "In a none": ' .. v)
+end
+print('PASS document whereabouts: a finished case says where its evidence was last seen, in FILES, '
+    .. 'and a clue on a body or a zombie says so instead of reading "In a none"')
