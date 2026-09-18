@@ -68,6 +68,17 @@ without thinking.
    marks already use the pen action; filing into the album is the game's own
    move-item action. None of these has a line over the head.
 
+   **The finding location is taken at the note, not at a pickup.** Before this
+   stage every clue was picked up, so the marker module learned where a clue was
+   found from its wraps of the transfer actions alone. Noting a clue where it
+   lies never picks it up, and for a while that whole way of playing recorded
+   nothing: no map mark however many pens the survivor carried (owner,
+   2026-09-18). `ClueMarkers.foundHere(item)` takes the CLUE's square - the
+   drawer across the room, the car, the body on the floor - and never the
+   survivor's, which is the one thing a note in place must not record. A clue
+   already in the pockets is refused there: its pickup recorded where it came
+   from, and that is still the honest answer.
+
 The survivor's voice stays only for realisations that happen in the head:
 records that disagree or agree, a body's key fitting this door, nothing left to
 find, and "What do I make of it?". They are rare, so they no longer compete in
