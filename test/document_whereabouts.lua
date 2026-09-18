@@ -92,16 +92,31 @@ assert(not lastseen:lower():find('lost') and not lastseen:lower():find('destroy'
 assert(runtime:find('LAST_SEEN_WRITE_MS=60000', 1, true), 'a last-seen write happens at most once a minute per document')
 assert(runtime:find('LAST_SEEN_EVERY_MS=10000', 1, true), 'the last-seen scan is throttled to every ten seconds')
 
--- A CLUE ON A CARRIER (P4-R134). A body's and a zombie's inventory both answer
--- the container type "none", and the record duly said `accounted In a none at
--- 102 Dewey St.` (campaign 20260917T234706). The raw type must never be the
--- fallback wording, and a carrier must be named as what it is: the same one
--- line feeds the case record, the FILES WHERE line and a finished case's
--- last-seen line, so it is fixed once.
+-- A CLUE ON A CARRIER (P4-R134, P4-R136). A zombie's inventory answers the
+-- container type "none", and the record duly said `accounted In a none at 102
+-- Dewey St.` (campaign 20260917T234706); a BODY's answers `inventoryfemale`,
+-- whose title the game translates as "Corpse", and the record read `In a corpse
+-- at 105 Hill St.` (20260918T055418). Neither the raw type nor the game's
+-- title for it is the wording: a carrier is named as what it is, in one line
+-- that feeds the case record, the FILES WHERE line and a finished case's
+-- last-seen line alike.
 assert(not runtime:find('or ("In a "..tostring(kind))', 1, true),
     'the raw container type must never be the fallback wording - that is what "In a none" was')
 assert(runtime:find('local carrier=carrierOf(item,container)', 1, true),
     'a container with no usable type must ask whether it is a carrier')
+-- AND THE BODY QUESTION COMES FIRST. A body's inventory DOES declare a type -
+-- `inventoryfemale`, whose own title the game translates as "Corpse" - so
+-- asking the type first read "In a corpse at 105 Hill St." in a real game
+-- (20260918T055418-body-carrier.txt). A body is a body, not a kind of
+-- furniture, and the owner is what says so about where the clue is NOW.
+local onBody = assert(runtime:find('local onBody=carrierByOwner(container)', 1, true),
+    "the wording must ask the container's owner whether it is a body")
+local byType = assert(runtime:find('local phrase=Words.phrase(tostring(kind),title)', 1, true),
+    'and word a container by its type')
+assert(onBody < byType,
+    'the body question must be asked BEFORE the container type, or a corpse is worded as furniture')
+assert(runtime:find('if onBody then return Words.carrier(onBody,address) end', 1, true),
+    'and a body is worded as a body')
 assert(runtime:find('return Words.carrier(carrier,address)', 1, true),
     'and a carrier must be worded as a carrier (ContainerWords.carrier)')
 assert(runtime:find('"In something at "..address', 1, true),

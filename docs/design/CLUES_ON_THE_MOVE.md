@@ -4,14 +4,17 @@
   are separate). Owner approved the shape ("implement 1 to 11"), after it was
   raised as the later candidate in P4-R133. What the code forced is at the
   bottom of this file, under "What the build settled".
-- **Checked in a real game 2026-09-18, and two of the four carriers do not
-  work.** A clue on a **zombie** is placed, worded and recorded correctly. A
-  clue on a **fresh corpse cannot happen at all** (the engine answers
-  `getInventory()` with nil on `IsoDeadBody`), and a **mailbox can never be
-  offered** (every postbox stands outside every room rectangle, and the scan
-  only looks inside one). Both are open mod faults with evidence; neither was
-  fixed by the checking agent. See "What the running game said (2026-09-18)" at
-  the end of this file.
+- **Checked in a real game 2026-09-18. Three faults were found and all three
+  are fixed** (see "What the running game said", at the end):
+  1. a clue on a **fresh corpse could not happen at all** - `IsoDeadBody`
+     answers `getInventory()` with nil, and the carrier code read that call;
+  2. a **mailbox could never be offered** - every postbox stands outside every
+     room rectangle and the scan only looked inside one;
+  3. a clue on a **walking zombie could not be spotted** - the game turns
+     Search Mode off beside a zombie. That one was a collision between two
+     decisions rather than a slip, and the owner settled it: **P4-R136, only a
+     corpse carries a clue.** The zombie carrier, its scan and its wording are
+     gone.
 - **Game:** Build 42.20.
 - **Related decisions:** P4-R67 (each clue in a different container), P4-R125
   (a refused case waits for the survivor to move on), P4-R133 (instalments and
@@ -51,10 +54,12 @@ target**.
 
 | Carrier | Where the clue goes | How it is found again |
 |---|---|---|
-| Fresh corpse | the body's own inventory | the mod's mark on the body, scanned nearby |
-| Wandering zombie | its inventory | the mark, when it is killed and searched |
+| A body | the body's own inventory, which the engine calls `getContainer()` | the mod's mark on the body, scanned nearby |
 | Car part | glovebox, boot, truck bed (existing) | the part's mark, wherever the car is |
-| Mailbox | a new fixed container kind | its square, as today |
+| Mailbox | a fixed container kind, offered from a band around the site | its square, as any container |
+
+A **walking zombie is not a carrier** (P4-R136). One the survivor kills is an
+ordinary body from that moment and may be chosen then.
 
 Rules that stay:
 
@@ -63,19 +68,20 @@ Rules that stay:
 - **Never invented loot.** The mod does not spawn the carrier. It uses a body,
   zombie, car or mailbox that the world already put there. If none is in reach,
   the case simply waits, as P4-R133 says.
-- **Reachability.** A clue on a wandering zombie is reachable by definition; a
-  clue in a car obeys P4-R106 (a glovebox from a front seat, a truck bed from
+- **Reachability.** A body in the street is reachable where it lies; a clue in
+  a car obeys P4-R106 (a glovebox from a front seat, a truck bed from
   outside).
 - **Searching still finds it (P4-R132).** A carrier gets the same clue icon in
   Search Mode as a container, anchored to the carrier's current square, and the
-  same wordless cue. A zombie carrier's icon moves with it.
+  same wordless cue. This is why a walker cannot be one: the game turns Search
+  Mode off when a zombie is close.
 - **Nothing is said about what it is.** A body with a clue is not marked as
   special: it looks like any other body until searched.
 
 ## What must be decided while building
 
-1. **A carrier that leaves.** A zombie can wander off, a car can be driven
-   away by nobody, a body can be burned. The clue's whereabouts already handle
+1. **A carrier that leaves.** A body can be burned, buried or dragged away, a
+   car can be driven off. The clue's whereabouts already handle
    "not seen recently" (P4-R104), and P4-R133's expiry already drops a clue
    that cannot be placed. A carrier that is gone for three in-game days is
    dropped the same way, and the case closes on the clues it got.
@@ -132,7 +138,8 @@ needs an owner decision; all of them are in the tests.
    each stamp their own mark on one body and the register would see two
    containers. So the mark is minted per carrier (`Carriers.newMark`) and
    `Session.physicalKey` keys a carrier on that mark **alone** - not on a
-   square, because a zombie stays on none and two bodies may lie on one.
+   square, because two bodies may lie on one and a body may be dragged off the
+   one it died on.
 
 3. **The carrier is claimed before the clue is written.** The mark goes onto the
    body first and the ordinary placement job then resolves it, so between
@@ -152,15 +159,15 @@ needs an owner decision; all of them are in the tests.
    carrier gets `missingHours` instead - the in-game hour we FIRST could not
    find the body - and is dropped at the same 72 hours. It is only ever set
    where the survivor was close enough to have looked (`Carriers.FIND_RADIUS`),
-   and cleared the moment the carrier turns up, because a zombie in an unloaded
-   cell is not a zombie that is gone. A dropped carrier clue ends up in exactly
+   and cleared the moment the carrier turns up, because a body in an unloaded
+   cell is not a body that is gone. A dropped carrier clue ends up in exactly
    the shape of a clue that never arrived: no target, its site remembered, no
    row in the finished record, and nothing anywhere saying it is lost
    (P4-R104).
 
 6. **A clue on a carrier does not relocate.** Relocation gives a clue one new
-   home when nobody came looking; a body or a zombie has already moved of its
-   own accord, and taking the note out of a dead man's jacket to put it in a
+   home when nobody came looking; a body is where the world left it, and
+   taking the note out of a dead man's jacket to put it in a
    drawer would undo the find this whole decision exists for. Expiry is its
    answer to going stale.
 
@@ -197,20 +204,20 @@ says **"In a mailbox at 102 Dewey St."** The engine string is named once
 (`Storage.MAILBOX`) and the phrase is keyed on it in `ContainerWords`, which is
 the same arrangement that already reads a `counter` as "In a cupboard".
 
-**A clue on a carrier says what it is on.** A body's and a zombie's inventory
-both answer the container type `none`, and the record duly read `accounted In a
-none at 102 Dewey St.` (campaign `20260917T234706`). `none` is not a kind of
-container and is never worded as one. What the survivor knows differs between
-the two carriers, so the words do too:
+**A clue on a carrier says what it is on.** A body's inventory answers the
+container type `none`, and the record duly read `accounted In a none at 102
+Dewey St.` (campaign `20260917T234706`). `none` is not a kind of container and
+is never worded as one, so a carrier gets words of its own:
 
 | carrier | the record says |
 |---|---|
-| a corpse | `On a body at 102 Dewey St.` |
-| a zombie | `On a zombie near 102 Dewey St.` |
-| either, in a building the book cannot name | `On a body close by.` |
+| a body | `On a body at 102 Dewey St.` |
+| a body in a building the book cannot name | `On a body close by.` |
 
-A body lies **at** an address and will still be there; a zombie is only ever
-**near** one, because it walks. Neither ever says the clue is lost (P4-R104).
+A body lies **at** an address and will still be there. The line never says the
+clue is lost (P4-R104). *(The `On a zombie near ...` phrasing existed until
+P4-R136 and is now deleted rather than kept: with no zombie carrier, no path
+could reach it.)*
 The same wording serves every surface, because they all read the one whereabouts
 line: the case record, the PDA's FILES WHERE line, and a finished case's
 last-seen line. A container that declares no type and is not a carrier reads
@@ -223,7 +230,11 @@ the survivor and the mod's own scan offered two usable carriers from them.
 > two usable carriers of `20260918T001512` were the two **live zombies** the
 > same call parked, read out of the cell's zombie list; the corpses beside them
 > were refused. `getDeadBodys` does return the bodies - `Carriers.refusal` then
-> rejects every one of them. See the end of this file.
+> rejected every one of them, for the wrong inventory call. Fixed the same day.
+
+**And a body's inventory is `getContainer()`, not `getInventory()`**, which is
+fault 1 below. Both engine facts are verified now and `Storage.UNVERIFIED` is
+still empty.
 
 ## What the running game said (2026-09-18)
 

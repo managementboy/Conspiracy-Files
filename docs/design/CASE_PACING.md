@@ -259,36 +259,48 @@ below is in the evidence file named beside it.
 | no spurious broken promise | **yes**: `gap`, `active-limit` and `cap` were each offered to the assertion and each answered "nothing was promised worth failing on" | `20260918T035305-promise.txt` |
 | the ladder rising with the count | **yes**: 3 refusals of one code, rung 1 of 3, in both the campaign histogram and `promise.sh` | both |
 | the count rising over a long run | **yes**: `active-limit: 5 lines, longest run of 3, rung 1` and `no-containers: 2 lines` | `20260918T023400-campaign.txt` |
-| a clue arriving late found by Search Mode | **not yet**: the one late clue of these runs went onto a zombie that then walked out of the mod's find radius (see CLUES_ON_THE_MOVE, "What the running game said") | - |
+| a clue arriving late found by Search Mode | **not until 2026-09-18**: the one late clue of these runs went onto a zombie that then walked out of the mod's find radius, and Search Mode will not stay on beside a walker. A corpse can carry a clue since the `getContainer` fix, and only a corpse may (P4-R136) - see CLUES_ON_THE_MOVE | - |
 
-### Fault: the promise is made in the past
+### Fixed 2026-09-18: the promise was made in the past
 
-`promise.sh` fails on this deliberately, at commit c0071c3 and after
+`promise.sh` failed on this deliberately, at commit c0071c3 and after
 (`20260918T045250-promise.txt`):
 
     why=no-containers n=1 due=02:10 rung=0/3 now=02:11 overdue=true(0.01h)
     FAIL: the refusal promised 02:10 and it is already 02:11 - a promise cannot
           be kept, or broken, if it is made in the past
 
-`dueFor` answers `math.max(now, last+gap)` for every code but `cooldown`, and
+`dueFor` answered `math.max(now, last+gap)` for every code but `cooldown`, and
 `AutomaticInvestigations.poll` only ever asks the generator for a case once that
-gap has passed - so `last+gap <= now` by construction, the due hour IS `now`,
-and a fresh `no-containers` or `no-reach` refusal is overdue a minute of in-game
-time later. Step 6's own rule - "before the promised hour it is a finding, past
-it a failure" - therefore cannot mean anything for exactly the two codes it was
-written for.
+gap has passed - so `last+gap <= now` by construction, the due hour WAS `now`,
+and a fresh `no-containers` or `no-reach` refusal was overdue a minute of
+in-game time later. Step 6's own rule - "before the promised hour it is a
+finding, past it a failure" - therefore could not mean anything for exactly the
+two codes it was written for.
 
-It was not noticed until now because the code that stands a second later is
-usually `cooldown`, whose due hour comes from the other line (`now +
-DEFER_HOURS`) and is honest; a check that re-read the promise instead of keeping
-the refusal it matched was always asking about the cooldown.
+It was not noticed for a day because the code that stands a second later is
+usually `cooldown`, whose due hour came from the other line (`now +
+DEFER_HOURS`) and was honest; a check that re-read the promise instead of
+keeping the refusal it matched was always asking about the cooldown.
 
-**What it costs today:** the `promise-overdue` mutation cannot be caught (the
-clean code already behaves as the bug), and with `promise.sh` failing, the two
-mutations it did catch cannot be re-run until this is fixed. **A fix would name
-a future hour for the world-supply codes** - `now + gap`, or `now +
-DEFER_HOURS` as `cooldown` does: "we will try again, and expect one by then".
-Not done here: this file's checking agent may not touch `mod/`.
+**The fix.** The rule is now pure and lives in the domain module,
+`Generated/SuccessiveCases.dueHours(code, now, wait, gap, last)`, where a unit
+test can hold it to account without a game (`test/case_refusals.lua`, section
+1b: every code, every state of the save, always in the future):
+
+- `wait` - P4-R125's half hour - is the **floor** under every promise, because
+  nothing is re-scanned inside it. A `cooldown` is that wait still standing, so
+  its end is the whole of its promise.
+- every other code promises whichever is later, the floor or the ordinary gap
+  measured from the last case created. Never `now`, and never `math.max(now,
+  ...)`, which is the shape of the fault.
+- the least a promise may be is `MIN_PROMISE_HOURS` (a quarter of an in-game
+  hour, the same interval inside which a repeated refusal is the same refusal),
+  so a check that turns the movement wait down to nothing still gets a promise
+  that means something.
+
+`prove.py`'s `promise-overdue` mutation now points at that floor and is
+catchable for the first time.
 
 ## Known unexplained
 

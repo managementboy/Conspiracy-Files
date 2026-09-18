@@ -499,6 +499,13 @@ assert(gateSite.source.reference:find("mailbox",1,true),
     "and says it came from a mailbox, not from inside a room it was never in")
 local _,farCandidates=scanWithBoxAt(10+S.OUTDOOR_RADIUS+2,2)
 assert(not farCandidates["t3:gate"],"a postbox beyond the band is not this building's mailbox")
+-- The band is a wider place to LOOK, not a way round the allow-list: take the
+-- mailbox out of Storage.KINDS and the band offers nothing.
+Storage.KINDS[Storage.MAILBOX]=nil
+local _,noneCandidates=scanWithBoxAt(13,2)
+Storage.KINDS[Storage.MAILBOX]=true
+assert(not noneCandidates["t3:gate"],
+    "a kind the mod may not see is not offered from the band either")
 getCell=realCell; WA.resolve=realResolve
 
 -- ---------------------------------------------------------------------------

@@ -167,7 +167,10 @@ function M.scan(result,done,reachable)
         -- Outside a room only a mailbox counts; inside one, any kind the mod
         -- knows. Nothing else changes: the reach gate, the one-clue-per-
         -- container key (P4-R67) and the resolve-it-again proof all stand.
-        local allowed=(r.outdoor and c and c:getType()==M.MAILBOX) or (not r.outdoor and c and kinds[c:getType()])
+        -- `kinds` governs both: the band is a wider place to look, never a way
+        -- round the allow-list. A mod, a check or an owner decision that takes
+        -- the mailbox out of KINDS takes it out of the band too.
+        local allowed=c and kinds[c:getType()] and (not r.outdoor or c:getType()==M.MAILBOX)
         if c and name and allowed and (r.z==0 or reachable(x,y,r.z)) then
             local target={x=x,y=y,z=r.z,objectIndex=oi,containerIndex=ci,containerType=c:getType(),sprite=name}
             local key=x..":"..y..":"..r.z..":"..oi..":"..ci

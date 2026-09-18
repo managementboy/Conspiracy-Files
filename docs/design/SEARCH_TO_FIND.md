@@ -1,18 +1,17 @@
 # Clues are found by searching (P4-R132)
 
 - **Status:** Design, 2026-09-16. Stage 1 (search and recognise) and stage 2 (look it over, timed Inspect, the wordless cue) built 2026-09-17; stage 3 (the checks) the same day; see the end.
-- **Found unprovable, 2026-09-18:** a clue **on a carrier** cannot be spotted in
-  Search Mode as things stand, and it is a collision between this decision and
-  P4-R134 rather than a bug in either. The only carrier the mod can currently
-  use is a walking zombie (a corpse is refused - see
-  `docs/design/CLUES_ON_THE_MOVE.md`, faults 1 and 3), and **the game turns
-  Search Mode off by itself when a zombie is close**, which is exactly where the
-  survivor has to stand. Evidence: `20260918T045929-instalments.txt`, a clue on
-  a zombie one tile away, facing it, `isSearchMode` still false after 120
-  seconds of the check turning it on once a second. Every other kind of clue has
-  been spotted in a real game - in furniture, in a car whose car was then moved,
-  across a save and reload. Needs an owner's call; the stage is written in
-  `tools/autotest/checks/instalments.sh`.
+- **The collision with P4-R134, found and settled 2026-09-18.** A clue on a
+  **walking zombie** cannot be spotted: **the game turns Search Mode off by
+  itself when a zombie is close**, which is exactly where the survivor would
+  have to stand. Evidence `20260918T045929-instalments.txt` - a clue on a zombie
+  one tile away, facing it, `isSearchMode` still false after 120 seconds of the
+  check turning it on once a second. The owner settled it in favour of this
+  decision (**P4-R136**): a clue is placed only on a body, which is no threat,
+  so Search Mode stays on beside it. The corpse carrier itself was broken by a
+  wrong inventory call and was fixed the same day (see
+  `docs/design/CLUES_ON_THE_MOVE.md`, fault 1). Searching is therefore still how
+  every kind of clue is found.
 - **Owner:** shaped in conversation on 2026-09-16 ("I would love to mix both",
   "perfect!", "the investigate area dropdown would need another entry").
 - **Game:** Build 42.20. Everything marked *verified* was read in the installed

@@ -1723,6 +1723,16 @@ end
 --     body's inventory is how IdentityObserver has named a corpse since
 --     2026-09-08.
 -- nil means "not a carrier", never "not sure".
+-- IS THIS CONTAINER A BODY'S? The one question the world itself can answer,
+-- asked of the object that owns the container. `getParent` on a body's
+-- inventory is how IdentityObserver has named a corpse since 2026-09-08.
+local function carrierByOwner(container)
+    local owner=container and rd(container,"getParent")
+    -- A body, and only a body (P4-R136). A living zombie's inventory can hold
+    -- no clue of ours any more, so there is no zombie arm here to reach.
+    if owner and instanceof and instanceof(owner,"IsoDeadBody") then return Carriers.CORPSE end
+    return nil
+end
 local function carrierOf(item,container)
     local md=rd(item,"getModData")
     local id=type(md)=="table" and md.cfGeneratedId or nil
@@ -1735,11 +1745,7 @@ local function carrierOf(item,container)
             end
         end
     end
-    local owner=container and rd(container,"getParent")
-    -- A body, and only a body (P4-R136). A living zombie's inventory can hold
-    -- no clue of ours any more, so there is no zombie arm here to reach.
-    if owner and instanceof and instanceof(owner,"IsoDeadBody") then return Carriers.CORPSE end
-    return nil
+    return carrierByOwner(container)
 end
 -- Where a document actually is, in words a survivor would use. "Close by" was
 -- vague where we were not: the scan holds the item itself, so it can say
@@ -1804,9 +1810,20 @@ placeOf=function(item)
         if type(slot)=="string" and slot~="" then where=where.." ("..slot..")" end
         return address and (where.." at "..address..".") or (where..".")
     end
+    local Words=require("ConspiracyFiles/ContainerWords")
+    -- A BODY IS ASKED ABOUT BEFORE ANY CONTAINER TYPE (P4-R134, P4-R136). A
+    -- body's inventory does declare a type of its own - `inventorymale` or
+    -- `inventoryfemale`, whose title the game itself translates as "Corpse" -
+    -- so asking the type first read `In a corpse at 105 Hill St.` in a real
+    -- game (20260918T055418-body-carrier.txt). It is a body, and a survivor
+    -- writes "On a body at 105 Hill St." This asks the OWNER, which is what the
+    -- container is now, rather than the case's own target, which is where the
+    -- clue was put: a clue the survivor has since moved into a cupboard must
+    -- read as being in that cupboard.
+    local onBody=carrierByOwner(container)
+    if onBody then return Words.carrier(onBody,address) end
     if kind and kind~="floor" then
         -- Words, not the type id: this said "In a shelves" (ContainerWords).
-        local Words=require("ConspiracyFiles/ContainerWords")
         local title
         if getText then
             local key="IGUI_ContainerTitle_"..tostring(kind)
@@ -1815,10 +1832,12 @@ placeOf=function(item)
         end
         local phrase=Words.phrase(tostring(kind),title)
         if phrase then return address and (phrase.." at "..address..".") or (phrase..".") end
-        -- The type said nothing usable ("none"): a body, a zombie, or any other
-        -- container that never declared a type. A carrier gets its own words
-        -- (P4-R134); anything else says what it honestly knows - that the clue
-        -- is inside something, and where - and never that it is lost (P4-R104).
+        -- The type said nothing usable ("none"): a container that never
+        -- declared a type. A carrier gets its own words (P4-R134) - the case's
+        -- own target is asked here, which is all a FINISHED case has left once
+        -- retirement has dropped its assignments; anything else says what it
+        -- honestly knows - that the clue is inside something, and where - and
+        -- never that it is lost (P4-R104).
         local carrier=carrierOf(item,container)
         if carrier then return Words.carrier(carrier,address) end
         return address and ("In something at "..address..".") or "In something close by."
