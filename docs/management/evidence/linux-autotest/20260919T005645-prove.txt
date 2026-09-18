@@ -1,0 +1,9 @@
+Linux mutation proof 20260919T005645
+worktree: /home/elkin/cf-wp345 at 7540b4d The travel check's reach assertion cannot be falsified, and why
+
+baseline travel: PASS
+
+CAUGHT first-house-silent (travel): FAIL: no case, the survivor outside a building, and the first case's wait reports why=busy (cases 0, outside=true) rather than outdoors - P4-R133 | travel: FAIL: no case, the survivor outside a building, and the first case's wait reports why=busy (cases 0, outside=true) rather than outdoors - P4-R133
+
+caught 1 of 1
+worktree clean afterwards: yes
