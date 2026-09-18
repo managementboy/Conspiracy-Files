@@ -339,17 +339,38 @@ local function hhmm(h)
     local minutes=math.floor(h*60+0.5)%1440
     return string.format("%02d:%02d",math.floor(minutes/60),minutes%60)
 end
--- When the next case is expected. A standing wait promises its own end; every
--- other refusal promises the ordinary gap between cases, measured from the
--- last case created, which is exactly what AutomaticInvestigations waits for.
+-- When the next case is expected, AND IT IS ALWAYS A TIME IN THE FUTURE.
+--
+-- This used to return `math.max(now,last+gap)` for every code but `cooldown`,
+-- and the generator is only ever ASKED once the gap has passed - so
+-- `last+gap<=now`, the promised hour WAS the current hour, and a fresh
+-- `no-containers` refusal was overdue a minute later (evidence
+-- 20260918T045250-promise.txt, FAIL "the refusal promised 02:10 and it is
+-- already 02:11"). A promise that cannot be kept cannot be broken either, so
+-- P4-R133's "past the promised hour it is a failure" meant nothing at all, and
+-- prove.py's promise-overdue mutation could not be caught because the clean
+-- code already behaved as the bug.
+--
+-- Every refusal now promises the wait that actually applies to it, measured
+-- from now, and no case can arrive before the ordinary gap either - so the
+-- promise is the later of the two:
+--   * `cooldown` is P4-R125's own wait still standing: its end, half an
+--     in-game hour, is the whole of the promise.
+--   * `no-containers` and `no-reach` impose that same wait (the generator is
+--     not asked again until the survivor has moved about fifty tiles or half
+--     an hour has passed), so it is their floor too.
+--   * every other code - the cap, the active limit, `disabled`, and the
+--     ordinary `gap` - waits for the gap measured from the last case created,
+--     which is exactly what AutomaticInvestigations waits for, and never for
+--     an hour already gone.
+-- The rule itself is pure and lives in the domain module (Cases.dueHours); this
+-- is only what the runtime knows that the rule needs.
 local function dueFor(code,now)
-    if code=="cooldown" then return now+R.DEFER_HOURS end
     local auto=ConspiracyFiles.AutomaticInvestigations
     local gap=(auto and auto.config and auto.config.minGapHours) or 24
     local schedule=wrapper and wrapper.schedule
     local last=schedule and schedule.createdHours and schedule.createdHours[#schedule.createdHours]
-    if type(last)=="number" then return math.max(now,last+gap) end
-    return now+gap
+    return Cases.dueHours(code,now,R.DEFER_HOURS,gap,last)
 end
 local function rememberDebt()
     if not wrapper or not wrapper.schedule then return end
@@ -1323,12 +1344,20 @@ end
 -- the scan carries on, so the filler can skip a container another clue already
 -- holds (P4-R67) without a second kind of scan. Omitted, this is exactly the
 -- scan relocation has always used.
+-- A mailbox stands at the gate, in no room and outside the footprint, so this
+-- walks the site's own rectangle WIDENED by Session.OUTDOOR_RADIUS - the same
+-- band Storage.scan offers a mailbox from at creation, and the same box
+-- Session.target accepts one in. Only that kind is taken from the widened part:
+-- a clue never lands in something in the street that merely happens to be near
+-- a house (P4-R134, fixed 2026-09-18).
 local function boundsScan(site,done,accept)
     local b=site.bounds
     local kinds={}; for _,kind in ipairs(site.containerTypes) do kinds[kind]=true end
-    local x,y,objects,oi,ci=b.x1,b.y1,nil,0,0
+    local margin=kinds[Storage.MAILBOX] and Session.OUTDOOR_RADIUS or 0
+    local x1,y1,x2,y2=b.x1-margin,b.y1-margin,b.x2+margin,b.y2+margin
+    local x,y,objects,oi,ci=x1,y1,nil,0,0
     return function()
-        if y>=b.y2 then done(nil); return true end
+        if y>=y2 then done(nil); return true end
         if objects==nil then
             local square=getCell():getGridSquare(x,y,b.z)
             objects=square and square:getObjects() or false
@@ -1336,14 +1365,15 @@ local function boundsScan(site,done,accept)
         end
         if not objects or oi>=objects:size() then
             objects=nil; x=x+1
-            if x>=b.x2 then x=b.x1; y=y+1 end
+            if x>=x2 then x=x1; y=y+1 end
             return false
         end
         local o=objects:get(oi)
         if not o or not o.getContainerCount or ci>=o:getContainerCount() then oi=oi+1; ci=0; return false end
         local c=o:getContainerByIndex(ci)
         local sprite=o:getSprite(); local name=sprite and sprite:getName()
-        if c and name and kinds[c:getType()] then
+        local inside=x>=b.x1 and x<b.x2 and y>=b.y1 and y<b.y2
+        if c and name and kinds[c:getType()] and (inside or c:getType()==Storage.MAILBOX) then
             local found={x=x,y=y,z=b.z,objectIndex=oi,containerIndex=ci,containerType=c:getType(),sprite=name}
             if not accept or accept(found) then done(found); return true end
         end
@@ -1383,8 +1413,8 @@ local function relocation(api)
         local a=root.assignments[id]
         if not a or a.status~="placed" then return true end
         -- A clue on a carrier does not relocate (P4-R134). Relocation gives a
-        -- clue one new home when the survivor never came looking; a body or a
-        -- zombie has already moved of its own accord, and taking the note out
+        -- clue one new home when the survivor never came looking; a body is
+        -- where the world left it, and taking the note out
         -- of a dead man's jacket to put it in a drawer would undo the find the
         -- whole decision exists for. Its answer to going stale is expiry.
         if Session.isMobile(a.target) and type(a.target.carrierMark)=="string" then return true end
@@ -1499,8 +1529,8 @@ local function usedPhysicalKeys()
 end
 -- A CARRIER FOR A CLUE WITH NOWHERE TO GO (P4-R134). Fixed containers are a
 -- finite resource near a settled player - that is the whole of P4-R133's fault
--- - and carriers are not: a body in the street and a zombie in the yard
--- replenish themselves. So when no free container is loaded at a waiting clue's
+-- - and carriers are not: the bodies in the street replenish themselves, and
+-- every zombie the survivor kills adds one. So when no free container is loaded at a waiting clue's
 -- own site, the filler looks for a carrier there instead.
 --
 -- The mod never spawns one. Every guard is checked fresh: the carrier is not
@@ -1599,8 +1629,8 @@ local function filler(api)
         return true
     end
 end
--- A CARRIER THAT IS GONE (P4-R134). A zombie walks into a horde, a body burns,
--- a car is wrecked: the clue is then somewhere nobody will ever reach. It
+-- A CARRIER THAT IS GONE (P4-R134). A body burns, a body is buried, a car is
+-- wrecked: the clue is then somewhere nobody will ever reach. It
 -- shares P4-R133's expiry to the hour - three in-game days and it is dropped,
 -- the case completes on the clues it got, and no record ever claims the
 -- document is lost (P4-R104).
@@ -1682,10 +1712,10 @@ local function rd(o,k,...)
     local ok,v=pcall(function(...) return o[k](o,...) end,...)
     if ok then return v end
 end
--- IS THIS CONTAINER A CARRIER - a body or a zombie (P4-R134)? Both answer the
--- container type "none", so the record read `accounted In a none at 102 Dewey
--- St.` (campaign 20260917T234706). Two answers, in the order of what we know
--- best:
+-- IS THIS CONTAINER A CARRIER - a body (P4-R134, P4-R136)? A body's inventory
+-- answers the container type "none", so the record read `accounted In a none at
+-- 102 Dewey St.` (campaign 20260917T234706). Two answers, in the order of what
+-- we know best:
 --   * the case's own target, which is where the clue was put and which kind of
 --     carrier took it;
 --   * failing that, the container's owner, which is all a FINISHED case has
@@ -1706,17 +1736,9 @@ local function carrierOf(item,container)
         end
     end
     local owner=container and rd(container,"getParent")
-    if owner and instanceof then
-        local dead=instanceof(owner,"IsoDeadBody")
-        if dead then return Carriers.CORPSE end
-        if instanceof(owner,"IsoZombie") then
-            -- A zombie on the floor is a corpse, and the survivor searches it
-            -- as one: the words follow what it is now, not which list it came
-            -- from (the same rule Carriers.scan uses).
-            if rd(owner,"isDead")==true then return Carriers.CORPSE end
-            return Carriers.ZOMBIE
-        end
-    end
+    -- A body, and only a body (P4-R136). A living zombie's inventory can hold
+    -- no clue of ours any more, so there is no zombie arm here to reach.
+    if owner and instanceof and instanceof(owner,"IsoDeadBody") then return Carriers.CORPSE end
     return nil
 end
 -- Where a document actually is, in words a survivor would use. "Close by" was

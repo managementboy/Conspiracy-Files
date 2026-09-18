@@ -87,6 +87,44 @@ M.DEFER_CODES={["no-reach"]=true,["no-containers"]=true,cap=true,["active-limit"
 -- actually take (see docs/design/CASE_PACING.md on the fourth rung).
 M.REFUSALS_PER_RUNG=3
 M.MAX_RUNG=3
+-- THE PROMISE A REFUSAL MAKES (P4-R133), and why it lives here.
+--
+-- `dueHours` is the in-game hour by which the next case IS expected. P4-R133
+-- turned a passed deadline with no case into a FAILURE in the checks, and that
+-- rule can only mean something if the hour promised is in the FUTURE when it is
+-- made. It was computed in GeneratedRuntime as `math.max(now,last+gap)`, and
+-- the generator is only ever asked once the gap has passed - so `last+gap<=now`
+-- and every promise was already overdue: the real game failed on its own
+-- promise a minute after making it (evidence 20260918T045250-promise.txt), and
+-- the mutation written to prove the assertion could not be caught, because the
+-- clean code behaved exactly as the bug.
+--
+-- It is a rule about pacing, not about the engine, so it is pure and here:
+--   code  the refusal's own code
+--   now   the in-game hour of the refusal
+--   wait  the wait this refusal imposes before anything is tried again -
+--         P4-R125's half hour for the codes that come from a nearby scan. No
+--         scan happens inside it, so it is the floor under every promise.
+--   gap   the ordinary wait between cases (AutomaticInvestigations.minGapHours)
+--   last  the in-game hour the last case was created, when the save knows one
+-- A `cooldown` is that wait still standing, so its end is the whole of its
+-- promise; every other code also cannot beat the gap, so it promises whichever
+-- of the two is later. Never `now`, and never a time already gone.
+M.MIN_PROMISE_HOURS=0.25
+function M.dueHours(code,now,wait,gap,last)
+    now=tonumber(now) or 0
+    wait=tonumber(wait) or 0
+    gap=tonumber(gap) or 0
+    -- A refusal of the same code inside a quarter of an in-game hour is the
+    -- same refusal still standing (DEBT_GAP_HOURS), so nothing can change
+    -- inside it either: that is the least a promise may be, even where a
+    -- check has turned the movement wait down to nothing.
+    local floor=now+math.max(wait,M.MIN_PROMISE_HOURS)
+    if code=="cooldown" then return floor end
+    local due=(type(last)=="number" and last+gap) or now+gap
+    if due>floor then return due end
+    return floor
+end
 local function copy(v) if type(v)~="table" then return v end local o={} for k,x in pairs(v) do o[k]=copy(x) end return o end
 local function fields(t,allowed) if type(t)~="table" then return false end for k in pairs(t) do if not allowed[k] then return false end end return true end
 local function text(v) return type(v)=="string" and v~="" and #v<=160 end

@@ -40,13 +40,16 @@ assert(W.phrase("none")==nil and W.phrase("none","Inventory")==nil,
 assert(W.NO_KIND.none and W.NO_KIND.floor,"the types that say nothing are named")
 assert(W.carrier("corpse","102 Dewey St")=="On a body at 102 Dewey St.",
     "a body lies at an address: "..tostring(W.carrier("corpse","102 Dewey St")))
-assert(W.carrier("zombie","102 Dewey St")=="On a zombie near 102 Dewey St.",
-    "a zombie only walks near one: "..tostring(W.carrier("zombie","102 Dewey St")))
-assert(W.carrier("corpse")=="On a body close by." and W.carrier("zombie")=="On a zombie close by.",
+assert(W.carrier("corpse")=="On a body close by.",
     "and an unnamed building still says where, without claiming an address")
+-- P4-R136: the walking carrier is gone and so are its words. No path can reach
+-- them - the scan, Carriers.KINDS and Session.CARRIER_KINDS all know only a
+-- corpse - and words nothing can produce are worse than no words.
+assert(W.carrier("zombie","102 Dewey St")==nil and W.CARRIER_PHRASES.zombie==nil,
+    "a zombie is not a carrier any more, so it has no carrier words")
 assert(W.carrier("cupboard","x")==nil and W.carrier(nil)==nil,
     "nothing but a carrier kind may be worded as a carrier")
-for _,words in ipairs({W.carrier("corpse","x"),W.carrier("zombie","x"),W.carrier("corpse")}) do
+for _,words in ipairs({W.carrier("corpse","x"),W.carrier("corpse")}) do
     local low=words:lower()
     assert(not low:find("lost") and not low:find("gone") and not low:find("none"),
         "a carrier line never says a clue is lost (P4-R104): "..words)
@@ -72,4 +75,4 @@ assert(src:find('require("ConspiracyFiles/ContainerWords")',1,true),"GeneratedRu
 assert(not src:find('("In a "..tostring(kind).." at "',1,true),"GeneratedRuntime still prints the raw container id after 'In a'")
 
 print("PASS container words: shelves are on, not in a; the game's own title otherwise; no article before a "
-    .."plural; the engine's postbox reads as a mailbox; a body and a zombie each have their own words")
+    .."plural; the engine's postbox reads as a mailbox; a body lies at an address and a zombie has no words")

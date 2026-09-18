@@ -41,6 +41,36 @@ assert(events.defer,"the log's closed vocabulary must know ev=defer")
 assert(A.REFUSALS_PER_RUNG==3,"the ladder moves after three refusals of one code")
 assert(A.MAX_RUNG>=1,"there must be a rung to climb")
 
+-- 1b. THE PROMISE IS IN THE FUTURE, always ----------------------------------
+-- A refusal promises the hour the next case is expected BY, and P4-R133 made a
+-- passed promise with no case a FAILURE in the checks. That rule needs the hour
+-- to be in the future when it is made. It was `math.max(now,last+gap)` and the
+-- generator is only ever asked once the gap has passed, so every promise was
+-- overdue the moment it existed: the real game failed on its own promise a
+-- minute after making it (20260918T045250-promise.txt) and the mutation written
+-- to prove the assertion could not be caught, because the clean code behaved
+-- exactly as the bug. Every code, every state of the save:
+local now,wait,gap=100,0.5,24
+for _,code in ipairs(expected) do
+    -- The state the fault lived in: a case was created long ago, so the gap
+    -- has passed and `last+gap` is in the PAST.
+    local due=A.dueHours(code,now,wait,gap,now-100)
+    assert(due>now,code..": a promise must name an hour in the future, got "..tostring(due-now).."h from now")
+    assert(due>=now+A.MIN_PROMISE_HOURS,code..": and one far enough off that nothing could have changed")
+    -- No case yet at all, and inside the gap: the gap itself is the promise.
+    assert(A.dueHours(code,now,wait,gap,nil)>now,code..": with no case created yet either")
+    assert(A.dueHours(code,now,wait,gap,now-1)>now,code..": and while the gap still has hours to run")
+end
+-- `cooldown` is P4-R125's own wait standing: its end is the whole of it, never
+-- twenty-four hours away, or a reader would be told a case is a day off when it
+-- is half an hour off (which is why `gap` had to have a code of its own).
+assert(A.dueHours("cooldown",now,wait,gap,now-100)==now+wait,
+    "a cooldown promises the end of its own wait")
+assert(A.dueHours("gap",now,wait,gap,now-1)==now-1+gap,"the gap promises the gap's own end")
+-- A check that turns the movement wait down to nothing still gets a promise
+-- that means something.
+assert(A.dueHours("no-containers",now,0,0,now-100)>now,"and a promise is never simply now")
+
 -- 2. The debt is written, read back and cleared ------------------------------
 local wrapper={canonical=root(17),schedule={schema=1,createdHours={10}}}
 assert(A.validate(wrapper))

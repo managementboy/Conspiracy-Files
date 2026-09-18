@@ -56,6 +56,29 @@ function M.scan(result,done,reachable)
             rects[#rects+1]=row
         end
     end
+    -- A MAILBOX STANDS AT THE GATE, and the gate is in no room (P4-R134, fixed
+    -- 2026-09-18). A site is a BUILDING's rectangle and the rows above are its
+    -- ROOM rectangles; a real game found six postboxes within sixty tiles of
+    -- the survivor and not one of them on a square the game calls a room
+    -- (evidence 20260918T025841-instalments.txt), so the pass above could never
+    -- see one however the allow-list read - and with `postbox` the only kind
+    -- allowed, no case could be created at all.
+    --
+    -- The answer is the one `addVehicles` below already uses for a car in the
+    -- driveway: widen the footprint rather than pretend the kerb is a room. One
+    -- band per site, walked by the same stepped machinery, accepting ONLY the
+    -- mailbox kind - a clue never lands in some crate in the street. Ordered
+    -- last, so a room is still the first place to look and a site that already
+    -- has its eight candidates skips its whole band in a single step.
+    local Session=require("ConspiracyFiles/Generated/Session")
+    for _,site in ipairs(catalog.locations) do
+        local b=site.bounds
+        local r=Session.OUTDOOR_RADIUS
+        rects[#rects+1]={kind="rect",outdoor=true,building=(site.id:gsub("^t3:","")),
+            -- Street level: a mailbox is never in a basement, and the z-guard
+            -- below skips this band for a site whose target sits elsewhere.
+            x=b.x1-r,y=b.y1-r,z=0,w=(b.x2-b.x1)+2*r,h=(b.y2-b.y1)+2*r}
+    end
     -- Vehicles near a site, added once the room scan is done. A site is a room
     -- rectangle inside a building and a car is in the driveway, so this is the
     -- one place the mod looks outside a site's own footprint - by
@@ -121,7 +144,12 @@ function M.scan(result,done,reachable)
         if not site or (targets[id] and r.z~=targets[id].z) or (candidates[id] and #candidates[id]>=8) then index=index+1; dx,dy,oi,ci=0,0,0,0; objects=nil; return false end
         local x,y=r.x+dx,r.y+dy
         local b=site.bounds
-        if x<b.x1 or x>=b.x2 or y<b.y1 or y>=b.y2 then nextTile(r); return false end
+        -- The footprint a candidate must fall inside, which is the site's own
+        -- for a room rectangle and the widened one for the mailbox band - the
+        -- same box Session.target will accept it in, or it could never be
+        -- chosen (addVehicles keeps the same promise for a car).
+        local margin=r.outdoor and Session.OUTDOOR_RADIUS or 0
+        if x<b.x1-margin or x>=b.x2+margin or y<b.y1-margin or y>=b.y2+margin then nextTile(r); return false end
         if not objects then
             local square=getCell():getGridSquare(x,y,r.z)
             if not square then nextTile(r); return false end
@@ -136,7 +164,11 @@ function M.scan(result,done,reachable)
         -- through ReachabilityAdapter) before they can ever become a site's
         -- target; an unproven basement tile is treated exactly like no
         -- container being there at all, never placed on a guess.
-        if c and name and kinds[c:getType()] and (r.z==0 or reachable(x,y,r.z)) then
+        -- Outside a room only a mailbox counts; inside one, any kind the mod
+        -- knows. Nothing else changes: the reach gate, the one-clue-per-
+        -- container key (P4-R67) and the resolve-it-again proof all stand.
+        local allowed=(r.outdoor and c and c:getType()==M.MAILBOX) or (not r.outdoor and c and kinds[c:getType()])
+        if c and name and allowed and (r.z==0 or reachable(x,y,r.z)) then
             local target={x=x,y=y,z=r.z,objectIndex=oi,containerIndex=ci,containerType=c:getType(),sprite=name}
             local key=x..":"..y..":"..r.z..":"..oi..":"..ci
             if W.resolve(target)==c and not seen[key] then
@@ -159,7 +191,14 @@ function M.scan(result,done,reachable)
                 occupied[id][#candidates[id]]=count>0
                 if not targets[id] then targets[id]=target;site.bounds.z=r.z end
                 site.paperStorage="observed";local types={};for _,v in ipairs(site.containerTypes) do types[v]=true end;types[c:getType()]=true;site.containerTypes={};for k in pairs(types) do if #site.containerTypes<M.MAX_KINDS then site.containerTypes[#site.containerTypes+1]=k end end;table.sort(site.containerTypes)
-                site.source.reference="G2 loaded container inside T3 room footprint"
+                -- Say which it was: a mailbox is NOT inside a room footprint,
+                -- and a reference that claimed it was would be a lie in the
+                -- one field a reader uses to tell where a site came from.
+                -- The room rectangles are walked before any band, so a site
+                -- that found furniture keeps that reference and only a site
+                -- whose sole candidate is the mailbox says so.
+                if not r.outdoor then site.source.reference="G2 loaded container inside T3 room footprint"
+                elseif #candidates[id]==1 then site.source.reference="G2 loaded mailbox within reach of a T3 building footprint" end
             end
         end
         ci=ci+1

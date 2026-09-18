@@ -1,28 +1,36 @@
 -- CLUES ON THE MOVE (P4-R134, docs/design/CLUES_ON_THE_MOVE.md).
 --
--- A carrier is something the world already put there that can hold a clue and
--- need not stay where it was found: a fresh corpse or a wandering zombie. Two
--- rules govern everything here.
+-- A carrier is a BODY the world already put there: something that can hold a
+-- clue and need not stay where it was found. Two rules govern everything here.
 --
--- THE MOD NEVER SPAWNS A CARRIER. It uses a body or a zombie the world already
--- put in reach. If none is there, the clue waits, exactly as P4-R133 says. A
--- body that appears because the mod wanted somewhere to put a note would be
--- invented loot, and invented loot is the one thing this whole design refuses.
+-- THE MOD NEVER SPAWNS A CARRIER. It uses a body the world already put in
+-- reach. If none is there, the clue waits, exactly as P4-R133 says. A body that
+-- appears because the mod wanted somewhere to put a note would be invented
+-- loot, and invented loot is the one thing this whole design refuses.
 --
 -- A CARRIER IS ADDRESSED BY OUR OWN MARK, never by a square. A cupboard cannot
--- walk away; a zombie can, and does. So the carrier's ModData carries a mark of
--- ours, and the clue is found again by that mark wherever the carrier now is -
--- the same trick a clue in a car has used since VEHICLES_AS_PLACES, for the
--- same reason. The mark identifies the CARRIER, not the clue, which is what
--- lets the distinctness register (P4-R67) refuse a second clue on one body.
+-- be dragged off; a body can be, and the clue must still be found - so the
+-- carrier's ModData carries a mark of ours, and the clue is found again by that
+-- mark wherever the carrier now lies. The same trick a clue in a car has used
+-- since VEHICLES_AS_PLACES, for the same reason. The mark identifies the
+-- CARRIER, not the clue, which is what lets the distinctness register (P4-R67)
+-- refuse a second clue on one body.
+--
+-- ONLY A CORPSE, NEVER A WALKING ZOMBIE (P4-R136, owner, 2026-09-18). A clue is
+-- found by searching (P4-R132) and the game turns Search Mode off by itself
+-- when a zombie is close - which is exactly where a zombie-carried clue would
+-- have to be searched for (evidence 20260918T045929). A walker also carried one
+-- out of reach and stranded a case for three in-game days while holding its one
+-- mobile slot. So a candidate must be a body that is ALREADY DEAD. A zombie the
+-- survivor kills later is an ordinary body like any other and may be chosen
+-- then; nothing here looks at the cell's zombie list any more.
 --
 -- The pure rules are at the top and testable with no game at all; the engine
 -- readers below are the only part that touches PZ.
 local C={}
 
 C.CORPSE="corpse"
-C.ZOMBIE="zombie"
-C.KINDS={[C.CORPSE]=true,[C.ZOMBIE]=true}
+C.KINDS={[C.CORPSE]=true}
 
 -- Our handle, stamped into the body's or the zombie's own ModData. Distinct
 -- from CasePerson's `cfCasePerson`: a case person is somebody the case is
@@ -37,12 +45,9 @@ C.MARK_MAX=120
 -- person is never a carrier.
 C.CASE_PERSON_MARK="cfCasePerson"
 
--- Bounds. The zombie list is walked at most this far (CasePerson.MAX_SCAN uses
--- the same number for the same reason: a cell can hold a great many).
-C.MAX_ZOMBIES=60
--- How far a marked ZOMBIE is looked for. It walks, so it is looked for in the
--- cell's own list rather than on a square, and this is only the box that list
--- is filtered by.
+-- How close the survivor must be to where a carrier clue went in before "we
+-- looked and it is not there" means anything at all (GeneratedRuntime's
+-- carrierWatch). A body in an unloaded cell is not a body that is gone.
 C.FIND_RADIUS=60
 -- How far a marked CORPSE is looked for: a body does not walk, so its own
 -- square and its immediate neighbours are the whole of it. Two tiles allows
@@ -61,6 +66,11 @@ function C.refusal(state)
     if type(state)~="table" then return "no carrier" end
     if not C.KINDS[state.kind] then return "not a carrier" end
     if not state.container then return "no inventory" end
+    -- A dead deer is a body on a square and answers every call a dead man's
+    -- body answers, so the engine's own loot window asks this question before
+    -- it will show one (ISInventoryPage: `instanceof(so,"IsoDeadBody") and
+    -- so:isAnimal()`). A note in a dog's jacket is not the design's example.
+    if state.animal then return "an animal" end
     if state.mark~=nil then return "already carries a clue" end
     if state.casePerson then return "already the case's person" end
     if state.explored then return "already searched" end
@@ -110,12 +120,27 @@ function C.openContainers()
 end
 
 -- What one candidate carrier is, as `refusal` above wants it.
+--
+-- A BODY'S INVENTORY IS `getContainer()`, NOT `getInventory()`. On Build 42.20
+-- an `IsoDeadBody` answers `getInventory()` with nil and `getContainer()` with
+-- its own `inventorymale`/`inventoryfemale` container - four fresh bodies said
+-- so in a real game (evidence 20260918T035135-body-carrier.txt), and while this
+-- read the wrong call every corpse was refused "no inventory" and the design's
+-- headline example, a note in a dead man's jacket, could not happen.
+--
+-- `getContainer` is also the call the GAME itself makes for a body: the loot
+-- window gathers a square's static moving objects through `so:getContainer()`
+-- and marks that container explored (ISInventoryPage), and CasePerson has
+-- written into a body through the same call since 2026-09-08. That identity
+-- matters twice over - the loot-window guard below compares our container with
+-- the one the loot page is showing, and only the same call can match it.
 function C.stateOf(object,kind,open,x,y,z)
-    local container=read(object,"getInventory")
+    local container=read(object,"getContainer")
     local md=read(object,"getModData")
     local mark=type(md)=="table" and md[C.MARK] or nil
     return {kind=kind,object=object,container=container,
             mark=type(mark)=="string" and mark or nil,
+            animal=read(object,"isAnimal")==true,
             casePerson=type(md)=="table" and md[C.CASE_PERSON_MARK]~=nil or false,
             explored=read(container,"isExplored")==true,
             lootOpen=container~=nil and open[container]==true,
@@ -144,18 +169,18 @@ end
 C.bodiesOn=bodiesOn
 
 -- A carrier in reach of (x,y,z) that will take a clue, stepped like every other
--- scan in this mod: one bounded pass over the cell's zombie list, then one
--- square per step for the bodies lying about. `done` is called with the carrier
--- or with nil when there is none; `accept` is the caller's own extra guard (the
--- filler uses it for the site's footprint).
+-- scan in this mod: one square per step for the bodies lying about. `done` is
+-- called with the carrier or with nil when there is none; `accept` is the
+-- caller's own extra guard (the filler uses it for the site's footprint).
 --
--- Zombies first, deliberately: a zombie is reachable by definition, whereas a
--- body might be behind a locked door.
+-- The cell's zombie list is not read at all (P4-R136): a walker is not a
+-- carrier, and one that is killed later arrives here as an ordinary body on a
+-- square like any other.
 function C.scan(x,y,z,radius,done,accept)
     radius=math.floor(tonumber(radius) or 12)
     x,y,z=math.floor(x),math.floor(y),math.floor(z)
     local open=C.openContainers()
-    local phase,dx,dy=1,-radius,-radius
+    local dx,dy=-radius,-radius
     local function offer(object,kind,ox,oy,oz)
         if not object then return false end
         local state=C.stateOf(object,kind,open,ox,oy,oz)
@@ -164,27 +189,6 @@ function C.scan(x,y,z,radius,done,accept)
         done(state); return true
     end
     return function()
-        if phase==1 then
-            phase=2
-            local cell=getCell and getCell()
-            local list=read(cell,"getZombieList")
-            local total=read(list,"size")
-            if type(total)=="number" then
-                local limit=total<C.MAX_ZOMBIES and total or C.MAX_ZOMBIES
-                for i=1,limit do
-                    local zombie=read(list,"get",i-1)
-                    local zx,zy,zz=position(zombie)
-                    if zx and zz==z and math.abs(zx-x)<=radius and math.abs(zy-y)<=radius then
-                        -- A zombie already on the floor is a corpse, and it is
-                        -- searched as one; the kind is what the survivor would
-                        -- call it, not which list it came out of.
-                        local kind=read(zombie,"isDead")==true and C.CORPSE or C.ZOMBIE
-                        if offer(zombie,kind,zx,zy,zz) then return true end
-                    end
-                end
-            end
-            return false
-        end
         if dx>radius then done(nil); return true end
         local cell=getCell and getCell()
         local square=read(cell,"getGridSquare",x+dx,y+dy,z)
@@ -212,10 +216,16 @@ end
 
 -- The carrier we marked, wherever it now is: its container, and its CURRENT
 -- square, which is what Search Mode anchors the clue's icon to.
-function C.findMark(mark,x,y,z,radius)
+--
+-- A body does not walk (P4-R136), so it is looked for on its own square and the
+-- ones beside it, and nowhere else. Callers that still pass a radius are
+-- ignored rather than obeyed: a sixty-tile square walk would be 14,641
+-- getGridSquare calls in one frame.
+function C.findMark(mark,x,y,z)
     if type(mark)~="string" or mark=="" then return nil,"no mark" end
     x,y,z=math.floor(x or 0),math.floor(y or 0),math.floor(z or 0)
     local open=C.openContainers()
+    local cell=getCell and getCell()
     local function matches(object,kind,ox,oy,oz)
         local md=read(object,"getModData")
         if type(md)~="table" or md[C.MARK]~=mark then return nil end
@@ -224,24 +234,8 @@ function C.findMark(mark,x,y,z,radius)
         state.mark=mark
         return state
     end
-    -- A zombie walks: it is looked for in the cell's list, not on a square.
-    local cell=getCell and getCell()
-    local list=read(cell,"getZombieList")
-    local total=read(list,"size")
-    local reach=math.floor(tonumber(radius) or C.FIND_RADIUS)
-    if type(total)=="number" then
-        local limit=total<C.MAX_ZOMBIES and total or C.MAX_ZOMBIES
-        for i=1,limit do
-            local zombie=read(list,"get",i-1)
-            local zx,zy,zz=position(zombie)
-            if zx and zz==z and math.abs(zx-x)<=reach and math.abs(zy-y)<=reach then
-                local found=matches(zombie,read(zombie,"isDead")==true and C.CORPSE or C.ZOMBIE,zx,zy,zz)
-                if found then return found end
-            end
-        end
-    end
-    -- A body does not: its own square and the ones beside it are the whole of
-    -- the search, so a burned or removed body is simply not found.
+    -- A burned or removed body is simply not found, which is what expiry is
+    -- for; nothing here ever claims a clue is lost (P4-R104).
     for ddx=-C.CORPSE_RADIUS,C.CORPSE_RADIUS do
         for ddy=-C.CORPSE_RADIUS,C.CORPSE_RADIUS do
             local square=read(cell,"getGridSquare",x+ddx,y+ddy,z)
@@ -257,9 +251,9 @@ end
 -- WorldAccess.resolve's carrier arm: the container a carrier clue is in, or nil
 -- and why. `mark` comes off the target, never off the clue: the mark names the
 -- body, which is what keeps two clues off one body.
-function C.resolve(target,radius)
+function C.resolve(target)
     if type(target)~="table" or type(target.carrierMark)~="string" then return nil,"not a carrier target" end
-    local found,why=C.findMark(target.carrierMark,target.x,target.y,target.z,radius)
+    local found,why=C.findMark(target.carrierMark,target.x,target.y,target.z)
     if not found then return nil,why end
     return found.container,found
 end

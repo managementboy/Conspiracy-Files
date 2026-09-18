@@ -10,8 +10,10 @@
 --   * the carrier target validates, and is checked as strictly as a car's;
 --   * a carrier is keyed on its own mark, so two clues can never share a body
 --     (P4-R67) and a body that wandered off is still the same container;
---   * a corpse and a zombie each take a clue and it is found again after the
---     carrier has moved;
+--   * a corpse takes a clue - read out of the engine's own accessor for a
+--     body - and it is found again after the body has been dragged;
+--   * a WALKING ZOMBIE is never a carrier (P4-R136): the game will not keep
+--     Search Mode on beside one, so a clue on one could never be searched out;
 --   * the guards refuse: a body already searched, a loot window open on it, a
 --     carrier already carrying a clue, one outside the site's footprint, and
 --     the survivor standing next to it;
@@ -19,7 +21,8 @@
 --   * a carrier clue's icon follows the carrier;
 --   * a vanished carrier expires like any unplaceable clue and the case still
 --     completes, with no row claiming a document is lost;
---   * the mailbox kind exists, is a named constant, and is declared unverified.
+--   * the mailbox kind exists, is a named constant the engine's own word, and
+--     is offered from the band around a site though it stands in no room.
 package.path="mod/common/media/lua/shared/?.lua;mod/common/media/lua/client/?.lua;"..package.path
 
 -- ---------------------------------------------------------------------------
@@ -35,13 +38,21 @@ local function inventory(explored)
     function inv:AddItem(item) self.items[#self.items+1]=item; return item end
     return inv
 end
-local function carrierObject(x,y,z,dead,explored)
-    local o={md={},inv=inventory(explored),x=x,y=y,z=z,dead=dead==true}
+local function carrierObject(x,y,z,dead,explored,animal)
+    local o={md={},inv=inventory(explored),x=x,y=y,z=z,dead=dead==true,animal=animal==true}
     function o:getX() return self.x end
     function o:getY() return self.y end
     function o:getZ() return self.z end
     function o:getModData() return self.md end
-    function o:getInventory() return self.inv end
+    -- THE ENGINE'S OWN SHAPE, as four fresh bodies answered it in a real game
+    -- (evidence 20260918T035135-body-carrier.txt): an IsoDeadBody answers
+    -- getInventory() with NIL and getContainer() with its own inventorymale,
+    -- while a walking IsoZombie answers getInventory() and no getContainer. A
+    -- double that answered both could never have caught the fault that kept
+    -- every corpse out ("refusal=no inventory" for all four).
+    function o:getInventory() if self.dead then return nil end return self.inv end
+    function o:getContainer() if self.dead then return self.inv end return nil end
+    function o:isAnimal() return self.animal end
     function o:isDead() return self.dead end
     -- The engine demands a receiver; a plain-table double that accepted
     -- `o.getX()` could not catch an extracted method (AGENTS.md, engine call
@@ -76,20 +87,25 @@ local site={id="site-a",mapId="SYNTHETIC-MAP",buildLine="TEST-ONLY",
     bounds={x1=100,x2=110,y1=100,y2=110,z=0},containerTypes={"counter"}}
 local function target(over)
     local t={x=105,y=105,z=0,objectIndex=0,containerIndex=0,containerType=S.CARRIER_CONTAINER,
-        sprite="zombie",carrierKind="zombie",carrierMark="cfc:105:105:0:100:1"}
+        sprite="corpse",carrierKind="corpse",carrierMark="cfc:105:105:0:100:1"}
     for k,v in pairs(over or {}) do t[k]=v end
     return t
 end
-assert(S.target(target(),site),"a zombie in the yard must be usable")
+assert(S.target(target(),site),"a body in the yard must be usable")
+-- P4-R136: a walking zombie is not a carrier and a target that names one is
+-- refused outright, wherever it came from.
+assert(not S.target(target({carrierKind="zombie",sprite="zombie"}),site),
+    "a walking zombie is not a carrier (P4-R136)")
+assert(S.CARRIER_KINDS.zombie==nil and S.CARRIER_KINDS.corpse==true,
+    "a corpse is the only carrier kind there is")
 -- A carrier is deliberately NOT checked against the site's containerTypes: a
 -- body is not the building's furniture and the scan would never list it there.
 assert(#site.containerTypes==1 and site.containerTypes[1]=="counter")
-assert(S.target(target({carrierKind="corpse",sprite="corpse"}),site),"a fresh corpse too")
 assert(S.target(target({x=110+S.CARRIER_RADIUS-1}),site),"a body at the kerb belongs to the house")
 assert(not S.target(target({x=110+S.CARRIER_RADIUS}),site),
     "a body in the next street does not; a site's clue must stay findable from the site")
 assert(not S.target(target({z=1}),site),"a carrier target names the site's own floor")
-assert(not S.target(target({carrierKind="dog"}),site),"a carrier is a corpse or a zombie, nothing else")
+assert(not S.target(target({carrierKind="dog"}),site),"a carrier is a corpse, nothing else")
 local kindless=target(); kindless.carrierKind=nil
 assert(not S.target(kindless,site),"and it must say which")
 assert(not S.target(target({carrierMark=""}),site),"an unmarked carrier could never be found again")
@@ -101,36 +117,47 @@ assert(not S.target(target({vehiclePart="GloveBox"}),site),"a carrier is not a c
 assert(S.target({x=105,y=105,z=0,objectIndex=2,containerIndex=1,containerType="counter",
     sprite="furniture_01"},site),"an ordinary container target must still validate")
 
--- Keyed on the mark and nothing else: one zombie does not stay on any square,
--- and two bodies may lie on one.
+-- Keyed on the mark and nothing else: two bodies may lie on one square, and a
+-- body may be dragged off the one it died on.
 local a1=target({carrierMark="cfc:a"})
 local a2=target({carrierMark="cfc:a",x=100,y=100})
 local b1=target({carrierMark="cfc:b"})
-assert(S.physicalKey(a1)==S.physicalKey(a2),"a carrier that walked is still the same container")
+assert(S.physicalKey(a1)==S.physicalKey(a2),"a carrier that was moved is still the same container")
 assert(S.physicalKey(a1)~=S.physicalKey(b1),"two bodies on one square are two containers")
 assert(S.physicalKey(a1)~=S.physicalKey({x=105,y=105,z=0,objectIndex=0,containerIndex=0,
     containerType="counter",sprite="s"}),"a carrier key can never collide with a cupboard's")
 assert(S.isMobile(a1) and S.isMobile(target({carrierMark=nil,vehiclePart="GloveBox",
-    containerType="vehicle",carrierKind=nil}))==true,"both kinds of carrier travel")
+    containerType="vehicle",carrierKind=nil}))==true,"a body and a car both count against the mobile cap")
 assert(not S.isMobile({x=1,y=1,z=0,objectIndex=0,containerIndex=0,containerType="counter",sprite="s"}),
     "a cupboard does not")
 
 -- ---------------------------------------------------------------------------
 -- 2. Finding a carrier, claiming it, and finding it again after it moved ----
 -- ---------------------------------------------------------------------------
-local walker=carrierObject(105,105,0,false)
+local walker=carrierObject(105,105,0,false)         -- a live zombie: never a carrier
 local corpse=carrierObject(106,105,0,true)
 local searched=carrierObject(104,105,0,true,true)   -- the survivor already emptied it
 local watched=carrierObject(103,105,0,true)         -- its loot window is open
 local person=carrierObject(102,105,0,true)          -- the case's own person
 person.md[Carriers.CASE_PERSON_MARK]="case-1"
-bodies={corpse,searched,watched,person}
+local deer=carrierObject(101,105,0,true,false,true) -- a dead animal
+bodies={corpse,searched,watched,person,deer}
 zombies={walker}
 openContainers={{inventory=watched.inv}}
 
+-- A BODY'S INVENTORY IS getContainer(), not getInventory(). This is the whole
+-- of fault 1: `stateOf` read getInventory for every candidate, an IsoDeadBody
+-- answers that with nil, and so all four fresh bodies of the real-game run
+-- were refused "no inventory" - the design's headline example, a note in a
+-- dead man's jacket, could not happen at all.
+local state=Carriers.stateOf(corpse,Carriers.CORPSE,{},106,105,0)
+assert(state.container==corpse.inv,
+    "a body's inventory must be read the way the engine (and the game's own loot window) reads it")
+assert(Carriers.usable(state),"so a fresh corpse is usable as a carrier: "..tostring(Carriers.refusal(state)))
+
 -- The guards, as pure rules first: every refusal has a reason.
-assert(Carriers.refusal({kind="zombie",container=walker.inv})==nil,"an unmarked zombie takes a clue")
-assert(Carriers.refusal({kind="zombie",container=walker.inv,mark="cfc:x"})=="already carries a clue",
+assert(Carriers.refusal({kind="corpse",container=corpse.inv})==nil,"an unmarked body takes a clue")
+assert(Carriers.refusal({kind="corpse",container=corpse.inv,mark="cfc:x"})=="already carries a clue",
     "never two clues on one carrier (P4-R67)")
 assert(Carriers.refusal({kind="corpse",container=corpse.inv,explored=true})=="already searched",
     "a body the survivor has already emptied must never sprout a clue behind them")
@@ -139,46 +166,49 @@ assert(Carriers.refusal({kind="corpse",container=corpse.inv,lootOpen=true})=="lo
 assert(Carriers.refusal({kind="corpse",container=corpse.inv,casePerson=true})=="already the case's person",
     "nor the case's own person: CasePerson re-dresses and re-binds her, and two systems writing into one "
     .."body's inventory is a fault waiting to happen")
+assert(Carriers.refusal({kind="corpse",container=corpse.inv,animal=true})=="an animal",
+    "nor a dead deer, which the game's own loot window refuses to show as a body")
 assert(Carriers.refusal({kind="corpse"})=="no inventory","nor one with nothing to put it in")
 assert(Carriers.refusal({kind="dog",container=corpse.inv})=="not a carrier")
+-- P4-R136: the kind itself is gone, so a zombie cannot be offered by any
+-- caller, in the game or in a check.
+assert(Carriers.KINDS.zombie==nil and Carriers.ZOMBIE==nil,"a zombie is not a carrier kind (P4-R136)")
+assert(Carriers.refusal({kind="zombie",container=walker.inv})=="not a carrier",
+    "and a walker offered as one is refused")
 
--- The scan: the zombie first (reachable by definition), then the bodies, and
--- never the two that are guarded.
+-- The scan: bodies only, and never the three that are guarded nor the animal.
 local found
 local step=Carriers.scan(105,105,0,4,function(entry) found=entry end)
 for _=1,2000 do if step() then break end end
-assert(found and found.object==walker and found.kind=="zombie","the zombie in the yard is the first carrier")
+assert(found and found.object==corpse and found.kind=="corpse",
+    "the fresh corpse in the yard is the carrier, and the walking zombie beside it is not")
 local mark=Carriers.newMark(found.x,found.y,found.z,120)
 assert(#mark<=Carriers.MARK_MAX and mark:sub(1,4)=="cfc:","a mark is short and ours")
 assert(Carriers.claim(found,mark),"claiming stamps the mark on the body itself")
-assert(walker.md[Carriers.MARK]==mark)
+assert(corpse.md[Carriers.MARK]==mark)
 assert(not Carriers.claim(found,Carriers.newMark(105,105,0,121)),
     "a carrier already carrying a clue refuses a second one")
 
--- With the zombie taken, the scan reaches the bodies - and refuses the one
--- already searched and the one being looked into.
-found=nil
-step=Carriers.scan(105,105,0,4,function(entry) found=entry end)
-for _=1,2000 do if step() then break end end
-assert(found and found.object==corpse and found.kind=="corpse","the fresh corpse is next")
-local corpseMark=Carriers.newMark(found.x,found.y,found.z,120)
-assert(Carriers.claim(found,corpseMark))
+-- With that body taken there is nothing left: the walker is not a candidate,
+-- the searched body and the open loot window are refused, the case's person is
+-- never a carrier, and the animal is not a body a survivor searches for notes.
 found=nil
 step=Carriers.scan(105,105,0,4,function(entry) found=entry end)
 for _=1,2000 do if step() then break end end
 assert(found==nil,
-    "a searched body, an open loot window and the case's own person leave no carrier at all")
+    "a walker, a searched body, an open loot window, the case's own person and a dead animal leave no carrier")
 
--- The zombie walks. The clue goes with it, and is found by the mark.
-walker.x,walker.y=118,121
-local resolved,where=Carriers.resolve({carrierMark=mark,x=105,y=105,z=0})
-assert(resolved==walker.inv,"a clue on a walker is found wherever it walked")
-assert(where.x==118 and where.y==121,"and its CURRENT square is what comes back")
--- A body does not walk, so it is only ever looked for where it lies.
-assert(Carriers.resolve({carrierMark=corpseMark,x=106,y=105,z=0})==corpse.inv)
-corpse.x,corpse.y=106+Carriers.CORPSE_RADIUS+1,105
-assert(Carriers.resolve({carrierMark=corpseMark,x=106,y=105,z=0})==nil,
-    "a body that is not where it lay is not found, which is what expiry is for")
+-- The clue is found again by the mark, wherever the body now lies - a body
+-- that was dragged a tile or two is the same container.
+local resolved,where=Carriers.resolve({carrierMark=mark,x=106,y=105,z=0})
+assert(resolved==corpse.inv,"a clue in a dead man's jacket is found by our mark on him")
+assert(where.x==106 and where.y==105,"and its CURRENT square is what comes back")
+corpse.x,corpse.y=106+Carriers.CORPSE_RADIUS,105
+assert(Carriers.resolve({carrierMark=mark,x=106,y=105,z=0})==corpse.inv,
+    "a body dragged to the edge of the corpse radius is still found")
+corpse.x=106+Carriers.CORPSE_RADIUS+1
+assert(Carriers.resolve({carrierMark=mark,x=106,y=105,z=0})==nil,
+    "a body carried right away is not found, which is what expiry is for")
 corpse.x=106
 -- A carrier that is simply gone.
 local gone=select(1,Carriers.resolve({carrierMark="cfc:never",x=105,y=105,z=0}))
@@ -218,10 +248,12 @@ assert(root and #waiting>0,"the fixture must really leave clues waiting")
 local api=assert(S.open(root,function() end))
 local first=waiting[1]
 local waitingSite=(api.assignment(first).locationId==siteA.id) and siteA or siteB
-assert(api.assign(first,carrierAt(waitingSite,"one","zombie"),101),
+assert(api.assign(first,carrierAt(waitingSite,"one"),101),
     "a clue with nowhere to go may arrive on a carrier")
 assert(S.validate(api.snapshot()),"and the case still validates")
-assert(api.assignment(first).target.carrierKind=="zombie")
+assert(api.assignment(first).target.carrierKind=="corpse")
+assert(not api.assign(first,carrierAt(waitingSite,"walker","zombie"),101),
+    "and never on a walking zombie (P4-R136)")
 -- Never two clues on one body: the same mark is the same container.
 local second=S.deferredIds(api.snapshot())[1]
 assert(second,"the fixture must leave a second clue waiting")
@@ -323,7 +355,7 @@ local lost=assert(S.createDistributed(case,
 local lostApi=assert(S.open(lost,function() end))
 local mobileId=S.deferredIds(lostApi.snapshot())[1]
 local mobileSite=(lostApi.assignment(mobileId).locationId==siteA.id) and siteA or siteB
-assert(lostApi.assign(mobileId,carrierAt(mobileSite,"walks-off","zombie"),200))
+assert(lostApi.assign(mobileId,carrierAt(mobileSite,"burns"),200))
 assert(lostApi.status(mobileId,"placed",200))
 -- A carrier we could not find. Only the FIRST such hour counts: the wait is
 -- measured from when it went, not from the last time we looked.
@@ -333,10 +365,10 @@ assert(lostApi.assignment(mobileId).missingHours==210,"the wait starts when the 
 assert(S.validate(lostApi.snapshot()),"a clue whose carrier is missing still validates")
 assert(#S.missingIds(lostApi.snapshot(),210+S.DEFER_EXPIRE_HOURS-0.1)==0,
     "a carrier has the same three in-game days as a clue with nowhere to go")
--- It turns up again: a zombie in an unloaded cell is not a zombie that is gone.
+-- It turns up again: a body in an unloaded cell is not a body that is gone.
 assert(lostApi.missing(mobileId,nil))
 assert(lostApi.assignment(mobileId).missingHours==nil)
-assert(#S.missingIds(lostApi.snapshot(),1000)==0,"a carrier that came back never expires")
+assert(#S.missingIds(lostApi.snapshot(),1000)==0,"a carrier that turned up again never expires")
 -- Gone for good.
 assert(lostApi.missing(mobileId,300))
 local expired=S.missingIds(lostApi.snapshot(),300+S.DEFER_EXPIRE_HOURS)
@@ -407,6 +439,68 @@ assert(Storage.MAX_KINDS>=6,"six furniture kinds must fit in a site's list, or o
 local Words=require("ConspiracyFiles/ContainerWords")
 assert(Words.phrase(Storage.MAILBOX)=="In a mailbox","the record says where in words")
 
+-- A MAILBOX STANDS IN NO ROOM, and that is why none could ever be offered
+-- (fault 3, evidence 20260918T025841: six postboxes within sixty tiles of the
+-- survivor, not one of them on a square the game calls a room, and with
+-- `postbox` the only allowed kind NO CASE could be created at all). A site is a
+-- building's rectangle, the scan's rows are its ROOM rectangles, so the answer
+-- is the widening a car in the driveway already gets: Storage.scan walks a band
+-- around each site and takes a mailbox from it, Session.target accepts one
+-- there, and nothing else is allowed outside a room.
+assert(S.OUTDOOR_RADIUS>0,"the band has a named width")
+local wideSite={id="t3:wide",name="Wide",areaId="a",mapId="SYNTHETIC-MAP",buildLine="TEST-ONLY",
+    bounds={x1=0,y1=0,x2=4,y2=4,z=0},source={kind="synthetic",reference="test"},
+    paperStorage="observed",containerTypes={"counter",Storage.MAILBOX},excluded=false}
+local function boxTarget(x)
+    return {x=x,y=1,z=0,objectIndex=0,containerIndex=0,containerType=Storage.MAILBOX,sprite="postbox_01"}
+end
+assert(S.target(boxTarget(4+S.OUTDOOR_RADIUS-1),wideSite),"a mailbox at the gate belongs to the house")
+assert(not S.target(boxTarget(4+S.OUTDOOR_RADIUS),wideSite),"a mailbox down the road does not")
+assert(not S.target({x=5,y=1,z=0,objectIndex=0,containerIndex=0,containerType="counter",
+    sprite="furniture_01"},wideSite),
+    "and no other kind is allowed outside the footprint: only the mailbox is ever in no room")
+
+-- Storage.scan itself, with a postbox four tiles beyond the building and no
+-- container in the one room. Without the band this offers nothing at all.
+local WA=require("ConspiracyFiles/WorldAccess")
+local realResolve,realCell=WA.resolve,getCell
+local boxContainer={getType=function() return Storage.MAILBOX end,
+    getItems=function() return javaList({}) end}
+local boxObject={getContainerCount=function() return 1 end,
+    getContainerByIndex=function() return boxContainer end,
+    getSprite=function() return {getName=function() return "postbox_01" end} end}
+local function scanWithBoxAt(bx,by)
+    getCell=function() return {getGridSquare=function(_,x,y,z)
+        if x==bx and y==by and z==0 then return {getObjects=function() return javaList({boxObject}) end} end
+        return {getObjects=function() return javaList({}) end}
+    end} end
+    WA.resolve=function(t) if t.x==bx and t.y==by then return boxContainer end return nil end
+    local result={version="T3-nearby-2",buildings=1,map="SYNTHETIC-MAP",gameVersion="TEST-ONLY",rows={
+        {kind="building",id="gate",x=0,y=0,x2=10,y2=6,minLevel=0},
+        {kind="room",building="gate",ordinal=1,name="livingroom",x=1,y=1,x2=4,y2=4,z=0,area=9},
+        {kind="rect",building="gate",room=1,x=1,y=1,z=0,w=3,h=3},
+    }}
+    local cat,cands
+    local step=assert(Storage.scan(result,function(a,_,c) cat,cands=a,c end))
+    for _=1,400000 do if step() then break end end
+    return cat,cands
+end
+local gateCatalog,gateCandidates=scanWithBoxAt(13,2)
+local offered=gateCandidates and gateCandidates["t3:gate"]
+assert(offered and #offered==1 and offered[1].containerType==Storage.MAILBOX,
+    "a postbox at the gate must be offered as a place, though it stands in no room")
+local gateSite=gateCatalog.locations[1]
+assert(S.target(offered[1],gateSite),
+    "and where it stands must be somewhere the target validator accepts, or it could never be chosen")
+local kinds={}; for _,k in ipairs(gateSite.containerTypes) do kinds[k]=true end
+assert(kinds[Storage.MAILBOX] and gateSite.paperStorage=="observed",
+    "the site reports the mailbox as observed storage, so a case may be created on it")
+assert(gateSite.source.reference:find("mailbox",1,true),
+    "and says it came from a mailbox, not from inside a room it was never in")
+local _,farCandidates=scanWithBoxAt(10+S.OUTDOOR_RADIUS+2,2)
+assert(not farCandidates["t3:gate"],"a postbox beyond the band is not this building's mailbox")
+getCell=realCell; WA.resolve=realResolve
+
 -- ---------------------------------------------------------------------------
 -- 8. The runtime is wired the way the design says --------------------------
 -- ---------------------------------------------------------------------------
@@ -435,6 +529,14 @@ assert(watch:find("api.missing(d.id,found and nil or hours)",1,true),
 local relocate=assert(runtime:match("local function relocation%(api%)(.-)\nend\n"))
 assert(relocate:find('type(a.target.carrierMark)=="string" then return true',1,true),
     "a clue on a carrier does not relocate; its answer to going stale is expiry")
+-- The filler's own container scan reaches the gate too, or a clue could be
+-- offered a mailbox at creation and never as an instalment.
+local bounds=assert(runtime:match("local function boundsScan%(site,done,accept%)(.-)\nend\n"),
+    "the filler's container scan must exist")
+assert(bounds:find("Session.OUTDOOR_RADIUS",1,true) and bounds:find("Storage.MAILBOX",1,true),
+    "the filler looks for a mailbox in the band around the site, by the same named width")
+assert(bounds:find('(inside or c:getType()==Storage.MAILBOX)',1,true),
+    "and takes nothing but a mailbox from outside the footprint")
 local search=read("mod/common/media/lua/client/ConspiracyFiles/ClueSearch.lua")
 assert(search:find("Carriers.findMark",1,true) and search:find("C.carrierSpot(clue)",1,true),
     "Search Mode anchors a carrier clue's icon to where the carrier is now")
@@ -444,7 +546,8 @@ assert(runtime:find("integerish(t.x) and integerish(t.y) and integerish(t.z)",1,
     "clueTargets never hands nil coordinates to the icon layer")
 
 print(string.format(
-    "PASS clues on the move: carrier target validated and keyed on its mark, a zombie and a corpse each "
-    .."took a clue and were found after moving, %d mobile clue per case, a vanished carrier dropped at %d "
-    .."in-game hours and the case closed on %d rows, mailbox kind %q as the engine spells it",
-    S.MOBILE_PER_CASE,S.DEFER_EXPIRE_HOURS,#closed.rows,Storage.MAILBOX))
+    "PASS clues on the move: carrier target validated and keyed on its mark, a corpse read through the "
+    .."engine's own accessor took a clue and was found again, a walking zombie is refused everywhere "
+    .."(P4-R136), %d mobile clue per case, a vanished carrier dropped at %d in-game hours and the case "
+    .."closed on %d rows, a %s at the gate offered from the %d-tile band",
+    S.MOBILE_PER_CASE,S.DEFER_EXPIRE_HOURS,#closed.rows,Storage.MAILBOX,S.OUTDOOR_RADIUS))

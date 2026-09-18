@@ -110,9 +110,11 @@ assert(runtime:find('"In something at "..address', 1, true),
 -- the case's own target while it is live, the body itself once it is not.
 assert(runtime:find('type(t.carrierMark)=="string" and Carriers.KINDS[t.carrierKind]', 1, true),
     "a live case's own target says which kind of carrier took the clue")
+-- P4-R136: a body is the only carrier there is, so the owner question is the
+-- one question - and a living zombie's inventory can hold no clue of ours.
 assert(runtime:find('instanceof(owner,"IsoDeadBody")', 1, true)
-    and runtime:find('instanceof(owner,"IsoZombie")', 1, true),
-    'and a finished case can still tell a body from a walker by asking the container owner')
+    and not runtime:find('instanceof(owner,"IsoZombie")', 1, true),
+    'and a finished case can still tell a body by asking the container owner, with no walker arm left to reach')
 local carrierOf = assert(runtime:match('local function carrierOf%(item,container%)(.-)\nend\n'),
     'carrierOf must exist')
 assert(not carrierOf:find('setHaloNote', 1, true) and not carrierOf:find('AddItem', 1, true),

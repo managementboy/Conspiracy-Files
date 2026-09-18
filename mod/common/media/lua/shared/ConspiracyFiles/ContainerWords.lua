@@ -22,16 +22,18 @@ M.PHRASES={
     postbox="In a mailbox",
 }
 
--- A CLUE ON A CARRIER (P4-R134). A body's or a zombie's inventory has no
--- container type of its own: the engine answers "none", and the record read
--- "accounted In a none at 102 Dewey St." (campaign 20260917T234706).
+-- A CLUE ON A CARRIER (P4-R134). A body's inventory has no container type of
+-- its own: the engine answers "none", and the record read "accounted In a none
+-- at 102 Dewey St." (campaign 20260917T234706).
 --
--- The survivor knows one thing about a corpse and a different thing about a
--- zombie, so the words differ. A body lies AT an address and will still be
--- there; a zombie is only ever NEAR one, because it walks. Neither ever says
--- the clue is lost (P4-R104).
-M.CARRIER_PHRASES={corpse="On a body", zombie="On a zombie"}
-M.CARRIER_JOIN={corpse="at", zombie="near"}
+-- A body lies AT an address and will still be there, so that is how it is
+-- worded. The "On a zombie near ..." phrasing went with the walking carrier
+-- itself (P4-R136, 2026-09-18): no path can reach it any more - Carriers.KINDS,
+-- Session.CARRIER_KINDS and the scan all know only a corpse - so it is gone
+-- rather than kept as words nothing can produce. A carrier line never says the
+-- clue is lost (P4-R104).
+M.CARRIER_PHRASES={corpse="On a body"}
+M.CARRIER_JOIN={corpse="at"}
 
 -- Where a clue on a carrier is, in one sentence. `address` may be nil - the
 -- address book does not name every building, and a zombie walks out of town.

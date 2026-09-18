@@ -33,18 +33,49 @@ local function integer(n) return type(n)=="number" and n==math.floor(n) and math
 -- Twelve tiles is a driveway, a verge or a kerb; it is not the next street.
 S.VEHICLE_RADIUS=12
 S.VEHICLE_CONTAINER="vehicle"
+-- A MAILBOX IS IN NO ROOM (P4-R134, fixed 2026-09-18). It stands at the gate,
+-- outdoors, and a real game found six postboxes near the survivor with not one
+-- of them on a square the game calls a room (evidence 20260918T025841) - so
+-- while a fixed container had to be strictly inside the footprint, a mailbox
+-- could never be offered as a place and a neighbourhood with nothing but
+-- mailboxes could supply no case at all. It is allowed a widening of its own,
+-- the way a car in the driveway is (S.VEHICLE_RADIUS): the gate and the
+-- driveway are the same few tiles of ground.
+--
+-- SIX, not the car's twelve, and the difference is cost. A car is found through
+-- the engine's own vehicle list; a mailbox has to be looked for square by
+-- square, so this number is the width of a band walked around every candidate
+-- site on every case attempt. Six tiles is a front garden - measured against
+-- the real postboxes a running game offers (see the mailbox finding in
+-- instalments.sh, which reports how far each one lies outside the nearest
+-- site) - and it costs about 380 squares a site where twelve would cost 1,050.
+S.OUTDOOR_RADIUS=6
+-- The kinds allowed out there. The engine's own word for a mailbox is named
+-- ONCE, in Generated/Storage.MAILBOX, so it is asked for rather than spelled
+-- again here; if that module cannot be loaded nothing is outdoor, which is the
+-- state before this existed - a mailbox is then never chosen, never a bad
+-- placement.
+local function outdoorKind(kind)
+    local ok,Storage=pcall(require,"ConspiracyFiles/Generated/Storage")
+    return ok and type(Storage)=="table" and kind==Storage.MAILBOX
+end
 -- A vehicle target names a part and carries the mark the runtime stamps on it.
 -- It is addressed by that mark rather than by a parking space, because only
 -- the player can move a car and the clue travels with them when they do.
 local function vehicleTarget(t) return type(t)=="table" and type(t.vehiclePart)=="string" end
 -- CLUES ON THE MOVE (P4-R134, docs/design/CLUES_ON_THE_MOVE.md). A third target
--- shape beside the fixed container and the car part: a CARRIER - a fresh corpse
--- or a wandering zombie the world already put in reach. Like a car part it is
--- addressed by a mark of ours rather than by a square, because it need not stay
--- where it was found; unlike a car part the mark names the CARRIER, so the
--- distinctness register below can refuse a second clue on one body (P4-R67).
+-- shape beside the fixed container and the car part: a CARRIER - a body the
+-- world already put in reach. Like a car part it is addressed by a mark of ours
+-- rather than by a square, because it need not stay where it was found; unlike
+-- a car part the mark names the CARRIER, so the distinctness register below can
+-- refuse a second clue on one body (P4-R67).
+--
+-- A CORPSE IS THE ONLY CARRIER KIND (P4-R136, owner, 2026-09-18): the game will
+-- not keep Search Mode on beside a walking zombie, so a clue on one could never
+-- be searched out, and a walker that wandered off stranded a case for three
+-- in-game days. A zombie the survivor kills is an ordinary body from then on.
 S.CARRIER_CONTAINER="carrier"
-S.CARRIER_KINDS={corpse=true,zombie=true}
+S.CARRIER_KINDS={corpse=true}
 -- How far outside a site's own footprint a carrier may be. Sites are room
 -- rectangles inside buildings and a body lies in the yard or at the kerb; the
 -- same twelve tiles a car in the driveway gets, for the same reason. A clue
@@ -126,7 +157,11 @@ function S.target(t,site)
     for _,k in ipairs({"x","y","z","objectIndex","containerIndex"}) do if not integer(t[k]) then return false end end
     if t.objectIndex<0 or t.containerIndex<0 or type(t.sprite)~="string" or #t.sprite>300 then return false end
     local b=site.bounds
-    if t.x<b.x1 or t.x>=b.x2 or t.y<b.y1 or t.y>=b.y2 or t.z~=b.z then return false end
+    -- Inside the footprint, unless it is a mailbox at the gate (above), which
+    -- gets the driveway's twelve tiles. The kind must still be one the scan
+    -- actually observed at this site, exactly as before.
+    local margin=outdoorKind(t.containerType) and S.OUTDOOR_RADIUS or 0
+    if t.x<b.x1-margin or t.x>=b.x2+margin or t.y<b.y1-margin or t.y>=b.y2+margin or t.z~=b.z then return false end
     for _,kind in ipairs(site.containerTypes) do if kind==t.containerType then return true end end
     return false
 end
@@ -288,7 +323,7 @@ end
 -- against every clue already placed, in any case, live or finished.
 function S.physicalKey(target)
     -- A CARRIER is keyed on its own mark and nothing else (P4-R134). Two bodies
-    -- may lie on one square and a zombie stays on no square at all, so a square
+    -- may lie on one square and a body may be dragged off it, so a square
     -- cannot name a carrier; the mark can, and does, which is what makes "never
     -- two clues on one carrier" the same check as "never two clues in one
     -- cupboard" (P4-R67).

@@ -146,9 +146,9 @@ function C.vehicleSpot(clue,player)
     C.vehicleSpots[clue.id]={at=t,x=x,y=y,z=z}
     return x,y,z
 end
--- Where a clue on a carrier is now (P4-R134): the body or the zombie is found
--- by our mark on it, so a clue in a dead man's jacket stays where he lies and a
--- clue on a walker goes wherever it walks. Same cache and same failure as a
+-- Where a clue on a carrier is now (P4-R134): the body is found by our mark on
+-- it, so a clue in a dead man's jacket stays where he lies - and is still found
+-- if the body was dragged a tile or two. Same cache and same failure as a
 -- car: a carrier the game has not loaded is not found, and the square the clue
 -- went in on stands - never nil coordinates into the icon layer.
 C.carrierSpots=C.carrierSpots or {}
