@@ -398,8 +398,29 @@ before it asks the type, and it asks the owner rather than the case's own target
 - what the container IS now, not where the clue was put - so a clue the survivor
 has since moved into a cupboard still reads as being in one.
 
-### Still to prove
+### Proven at the end of the day (2026-09-18)
 
-A carrier clue **spotted in Search Mode**. It was unprovable while the only
-carrier was a walker (fault 3); a body is no threat, so Search Mode stays on
-beside it, and the stage that asks is the corpse stage of `instalments.sh`.
+A carrier clue **spotted in Search Mode**, which was unprovable while the only
+carrier was a walker (fault 3). `body_carrier.sh`, PASS,
+`20260918T103604-body-carrier.txt`:
+
+    container kinds narrowed to postbox
+    generated:659427018:document-4 waits for the site t3:10696225208664074
+        at 10677,9894 (kinds there: postbox, the case's mobile slot free: true)
+    parked 5 zombie(s) at the site, 5 of them killed where they stood
+    the survivor stands at 10702,9894, 25 tiles off
+    a clue on a body: generated:659427018:document-4 at 10678,9893,0,
+        the record reads "On a body at 105 Hill St."
+    the clue read back out of the body the mod marked: in its inventory=true
+        container type=inventoryfemale carrier=corpse at 10678,9893
+    standing at 10677,9892, the clue at 10678,9893, 1 tile(s) away
+    the clue on a body: spotted by Search Mode in 3s
+
+Three seconds, where a clue on a zombie could not be spotted in 120 (fault 3).
+
+**And the mailbox band is what made that arrangement reliable.** A house has
+several cupboards but exactly ONE mailbox, so a case allowed nothing but
+`postbox` has one container per site and MUST leave clues waiting - which is the
+only state that sends the filler to a body. Four rungs of furniture kinds had
+failed to produce it twice (`20260918T085147`, `20260918T100615`: a case that
+fits places every clue, and the ladder's own first rung makes it fit).

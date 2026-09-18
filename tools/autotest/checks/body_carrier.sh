@@ -96,11 +96,17 @@ ev 'return CFCamp.gap(false)' >/dev/null
 note "the gap between cases turned off, and cars kept out of the case's mobile slot (VEHICLE_RADIUS=$(ev 'return CFInst.noCars(true)'))"
 note "log level set to $(ev 'return ConspiracyFiles.logLevel("d")' | field 1), so the filler's own ev=skip refusals reach the console"
 waiting=no
-# Which kind is scarce enough to leave a clue waiting is the world's business,
-# not ours: 20260918T060108 got there on `shelves`, the instalments run of
-# 062030 on `counter`, and 085147 found none of the first three tight enough and
-# proved only the engine's answer. So the ladder has four rungs, cheapest first.
-for kinds in "desk" "shelves" "locker,filingcabinet" "counter"; do
+# POSTBOX FIRST, and it is the reliable rung. Which furniture kind is scarce
+# enough to leave a clue waiting is the world's business: 20260918T060108 got
+# there on `shelves` and 085147/100615 found none of four tight enough - a case
+# that fits places every clue, and the ladder's own first rung (a smaller case,
+# P4-R133) makes it fit. A MAILBOX is different: there is one per building, so a
+# case allowed nothing else has exactly one container per site and MUST leave
+# clues waiting - and the filler then has no free container at the site, which
+# is the only state that sends it to a body. The mailbox band (P4-R134, fixed
+# 2026-09-18) is what makes a postbox-only case possible at all;
+# 20260918T062030 and 20260918T063555 both got one.
+for kinds in "postbox" "shelves" "counter" "locker,filingcabinet"; do
     note "container kinds narrowed to $(ev "return CFInst.narrow([[$kinds]])")"
     want=$(( $(ev 'return CFCamp.cases()' | field 1) + 1 ))
     m="$(ev 'return CFCamp.moveOn()')"
