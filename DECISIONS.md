@@ -1140,7 +1140,12 @@ works page for page, making reading uneccessary dififcult".
 - Added the same day, on "hold and drag works too?": the stylus drags the page
   on the glass (after four pixels, so a tap still picks a record, and a drag
   that moved never opens one), and the mouse wheel turns it - a line inside a
-  record, an entry in a list, in the game's own direction.
+  record, an entry in a list. **The wheel was taken straight back out the same
+  day**: owner, "Careful. Scroll wheel is zoom in zoom out in vanilla". A panel
+  that answers the wheel stops the world's zoom wherever it sits, which is a
+  worse fault than the one it solved. Reading is served by the stylus drag and
+  the rocker; the machine never takes a control the player expects the world to
+  have.
 No new game.
 
 *Built 2026-09-17 (the design's build order 1-5; the real-game checks of step 6

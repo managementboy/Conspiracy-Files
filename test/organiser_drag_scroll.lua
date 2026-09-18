@@ -44,22 +44,13 @@ view:onMouseMove(0,64)
 assert(view.card<afterUp,"dragging down moves back up: "..view.card)
 assert(view.card>=1,"never above the first line")
 
--- The wheel turns a line at a time, and never below the first.
+-- THE WHEEL IS NOT OURS: it zooms the world in vanilla, so the machine must
+-- pass it through rather than answer it (owner, 2026-09-18).
 local wheeled=setmetatable({on=true,record={detail="x"},card=3,scale=1,touch=function() end},{__index=Screen})
--- The game's own convention: a positive notch reads further down the page
--- (ISScrollingListBox scrolls by -delta).
-wheeled:onMouseWheel(1); assert(wheeled.card==4,"a notch down is a line down: "..wheeled.card)
-for _=1,4 do wheeled:onMouseWheel(-1) end
-assert(wheeled.card==1,"and it stops at the top")
-
--- In a list the wheel moves the selected entry, not a record's lines.
-local list=setmetatable({on=true,entry=2,scale=1,touch=function() end},{__index=Screen})
-list:onMouseWheel(1); assert(list.entry==3,"a list moves an entry: "..list.entry)
-
--- A machine that is off ignores both.
-local off=setmetatable({on=false,record={detail="x"},card=2,scale=1,touch=function() end},{__index=Screen})
-assert(off:onMouseWheel(1)==false and off.card==2,"a dark screen scrolls nothing")
-print("PASS organiser drag scroll: the stylus drags the page after a few pixels, and the wheel turns it a line at a time")
+assert(wheeled:onMouseWheel(1)==false,"the wheel is not handled")
+assert(wheeled.card==3,"and it scrolls nothing")
+local listed=setmetatable({on=true,entry=2,scale=1,touch=function() end},{__index=Screen})
+assert(listed:onMouseWheel(1)==false and listed.entry==2,"a list is not scrolled by the wheel either")
 
 -- Letting go after a drag must not also open whatever is under the stylus.
 local tapped=0

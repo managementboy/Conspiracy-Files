@@ -1037,16 +1037,12 @@ end
 -- manifest states it: a pixel on the far edge belongs to whatever is next, not
 -- to this key. One test for the press and the release, and the one the
 -- Fieldnote check measures at every machine size.
--- The wheel reads like the drag: a notch is a line inside a record, an entry
--- in a list. The machine wakes for it, as it does for a key.
-function Screen:onMouseWheel(delta)
-    if not self.on then return false end
-    self:touch()
-    local step=(delta or 0)>0 and 1 or -1
-    if self.record and not self.record.questions then self.card=math.max(1,(self.card or 1)+step)
-    elseif not self.record then self.entry=math.max(1,(self.entry or 1)+step) end
-    return true
-end
+-- THE WHEEL IS NOT OURS. It zooms the world in vanilla, and a panel that
+-- answers it stops the zoom wherever it sits (owner, Windows, 2026-09-18:
+-- "Careful. Scroll wheel is zoom in zoom out in vanilla"). Reading is served by
+-- the stylus drag and the rocker; the wheel passes straight through, so the
+-- machine never quietly takes a control the player expects the world to have.
+function Screen:onMouseWheel(delta) return false end
 
 function Screen:controlAt(x,y)
     for _,b in ipairs(self:buttons()) do
