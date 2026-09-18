@@ -4,8 +4,9 @@
   are separate). Owner approved the shape ("implement 1 to 11"), after it was
   raised as the later candidate in P4-R133. What the code forced is at the
   bottom of this file, under "What the build settled".
-- **Checked in a real game 2026-09-18. Three faults were found and all three
-  are fixed** (see "What the running game said", at the end):
+- **Checked in a real game 2026-09-18. Four faults were found and all four are
+  fixed, and every carrier claim in this file is now proven in a running game**
+  (see "What the running game said", at the end):
   1. a clue on a **fresh corpse could not happen at all** - `IsoDeadBody`
      answers `getInventory()` with nil, and the carrier code read that call;
   2. a **mailbox could never be offered** - every postbox stands outside every
@@ -14,7 +15,11 @@
      Search Mode off beside a zombie. That one was a collision between two
      decisions rather than a slip, and the owner settled it: **P4-R136, only a
      corpse carries a clue.** The zombie carrier, its scan and its wording are
-     gone.
+     gone; a clue on a body is spotted in three seconds
+     (`20260918T103604-body-carrier.txt`).
+  4. the record called a body **"In a corpse"** - a body's inventory declares a
+     container type of its own and the game titles it "Corpse", so the wording
+     never reached the carrier arm. Found by the first run of the fix.
 - **Game:** Build 42.20.
 - **Related decisions:** P4-R67 (each clue in a different container), P4-R125
   (a refused case waits for the survivor to move on), P4-R133 (instalments and
