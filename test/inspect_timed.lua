@@ -81,13 +81,15 @@ note.where=desk
 assert(not queue[1]:isValid(),"a thing moved since the option was chosen is not inspected")
 table.remove(queue,1)
 
--- In a drawer, organiser closed: Inspect greyed, "Note in the Investigation"
--- queues an in-place action.
+-- In a drawer, organiser closed: one Inspect, available, queueing an in-place
+-- action (P4-R138 - it used to be greyed out beside a second entry that did the
+-- same work).
 local drawer=item(desk)
 o=options(drawer)
-assert(o["Inspect Investigation Evidence"].notAvailable==true,"Inspect needs it carried or the organiser open")
-assert(o["Note in the Investigation"] and o["Note in the Investigation"].notAvailable==false)
-o["Note in the Investigation"].callback()
+assert(o["Inspect Investigation Evidence"],"Inspect is offered for a clue in a drawer")
+assert(not o["Inspect Investigation Evidence"].notAvailable,"and it is not greyed out")
+assert(o["Note in the Investigation"]==nil,"the second entry is gone")
+o["Inspect Investigation Evidence"].callback()
 action=queue[1]
 assert(action and action.inPlace==true and action.expected==desk)
 action:start()

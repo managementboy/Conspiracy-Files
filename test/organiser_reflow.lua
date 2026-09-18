@@ -53,3 +53,16 @@ assert(heading=="WHAT IT MIGHT MEAN\nSomebody kept this here.","a heading keeps 
 assert(reflow("")=="" or reflow("")=="\n","empty text survives")
 assert(reflow("one line")=="one line")
 print("PASS organiser reflow: a wrapped sentence joins up, headings and numbered items keep their breaks")
+
+-- Scrolling inside a record moves a LINE, not a page (P4-R138). The view's
+-- position is the top line, clamped so the last page cannot scroll past the end.
+local topLine=(ConspiracyFiles.OrganiserScreen or {}).topLine
+assert(type(topLine)=="function","the screen exposes its top-line clamp")
+local view={card=1}
+assert(topLine(view,40,10)==1,"a record opens at the top")
+view.card=2; assert(topLine(view,40,10)==2,"one press moves one line")
+view.card=99; assert(topLine(view,40,10)==31,"the end is the last full screen, not beyond")
+assert(view.card==31,"and the clamp is remembered, so the next press is not lost")
+view.card=0; assert(topLine(view,40,10)==1,"never above the first line")
+assert(topLine({card=1},3,10)==1,"a record shorter than the screen does not scroll")
+print("PASS organiser scrolling: a record moves line by line and stops at its end")

@@ -128,8 +128,9 @@ assert(caseFile:find('F.OPEN_ATTEMPTS', 1, true), 'and must give up eventually')
 assert(not menu:find('item:getTexture()', 1, true),
     "the option must not wear the item's own icon; that says what it is, not what it does")
 assert(menu:find('media/ui/Search_Icon_On.png', 1, true), 'inspect wants a magnifying glass')
-assert(menu:find('option.iconTexture=lookIcon', 1, true))
-assert(menu:find('here.iconTexture=noteIcon', 1, true), 'a different action gets a different icon')
+-- One option since P4-R138, and it wears the icon that fits what it is doing:
+-- the magnifying glass for a clue in hand, the note icon for one where it lies.
+assert(menu:find('option.iconTexture=(carried and lookIcon) or noteIcon', 1, true))
 -- Item icons are packed in Build 42, so candidates are tried in turn and a
 -- missing texture must never cost the player the option.
 assert(menu:find('pcall(getTexture,path)', 1, true), 'a missing texture must not throw')

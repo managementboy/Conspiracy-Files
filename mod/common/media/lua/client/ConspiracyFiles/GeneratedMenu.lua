@@ -81,18 +81,15 @@ function M.fill(playerNum,context,items)
     -- picking a clue up.
     -- With the organiser in hand you can record a document where it lies.
     --
-    -- Inspect used to be greyed out unless the clue was in your pockets, so
-    -- reading a drawer meant emptying it into them first - "very very
-    -- bothersome and makes the game unplayable" (owner, 2026-09-13). The two
-    -- paths were never different work: R.inspect(item,true) records exactly
-    -- the same thing, and the only distinction was where the item was allowed
-    -- to be.
-    --
-    -- The organiser being OPEN is the condition, because it is the machine
-    -- doing the recording and the mod's rule is that it must be in your hand
-    -- to do anything. Without it, the old behaviour stands.
-    local screen=ConspiracyFiles.OrganiserScreen
-    local reading=(screen and screen.window and screen.window.on)==true
+    -- ONE OPTION, always available (P4-R138). It was greyed out unless the clue
+    -- was in your pockets or the organiser was already open, with a second
+    -- entry, "Note in the Investigation", doing the identical work in place -
+    -- so the menu offered one act twice, one of them refused. Owner, Windows,
+    -- 2026-09-18, on the greyed line: "I cant access the inspect evidence
+    -- button... don't remember why?" Nobody should have to. Inspecting a clue
+    -- where it lies records exactly what inspecting a carried one does, marks
+    -- the map the same way (P4-R137), and the organiser is taken in hand by the
+    -- action itself.
     local option=context:addOption("Inspect Investigation Evidence",nil,function()
         if item:getOutermostContainer()~=expected then return end
         -- A timed action with the game's progress bar (P4-R132); the record
@@ -100,23 +97,7 @@ function M.fill(playerNum,context,items)
         -- where it was.
         pcall(Actions.inspect,player,item,not carried,expected)
     end)
-    if option then
-        option.notAvailable=not (carried or reading)
-        option.iconTexture=lookIcon
-
-    end
-    -- Note it where it lies. A pile of eleven credit cards is evidence the
-    -- player should be able to record without emptying a drawer into their
-    -- pockets; so, later, is a body in a boot. The organiser opens either way,
-    -- because the point of noting a thing is to read what was noted.
-    -- The separate wording is only worth showing when Inspect cannot do it.
-    if not carried and not reading then
-        local here=context:addOption("Note in the Investigation",nil,function()
-            if item:getOutermostContainer()~=expected then return end
-            pcall(Actions.inspect,player,item,true,expected)
-        end)
-        if here then here.notAvailable=false; here.iconTexture=noteIcon end
-    end
+    if option then option.iconTexture=(carried and lookIcon) or noteIcon end
 end
 if not M.handler then
     M.handler=function(...) return M.fill(...) end

@@ -1123,6 +1123,22 @@ lead"), the outfit sentence and the row's own summary. Also: a container reads
 as a survivor would write it - "inside a wallet", not "inside Wallet" - while a
 name that already possesses ("Una's Evidence") is left alone. No new game.
 
+**P4-R138 — one Inspect, and a record scrolls by the line.** Owner, Windows,
+2026-09-18, on a greyed menu entry: "I cant access the inspect evidence
+button... don't remember why?", and on reading a record: "scrolling also only
+works page for page, making reading uneccessary dififcult".
+- The menu offered one act twice: "Inspect Investigation Evidence", greyed
+  unless the clue was carried or the organiser already open, beside "Note in
+  the Investigation", which did identical work in place. There is now one
+  entry, always available; it records in place when the clue is not in hand,
+  marks the map the same way (P4-R137), and takes the organiser in hand itself.
+  The icon follows the act: the glass for a clue in hand, the note for one
+  where it lies.
+- Inside a record the view's position was a page number, so reading jumped a
+  screenful at a time. It is the top line now: one press, one line, clamped at
+  the last full screen. Lists are unchanged (one press, one entry).
+No new game.
+
 *Built 2026-09-17 (the design's build order 1-5; the real-game checks of step 6
 are separate). The carrier target shape, corpse and zombie carriers, mailboxes
 as a container kind, the deliberate car part, one mobile clue per case

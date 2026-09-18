@@ -69,16 +69,17 @@ assert(inspect:find('if not inPlace and item:getOutermostContainer()', 1, true),
 assert(inspect:find('container==getPlayer():getInventory() then return false', 1, true),
     'noting in place must refuse an item already in hand: that is the ordinary path')
 local menu = read('mod/common/media/lua/client/ConspiracyFiles/GeneratedMenu.lua')
-assert(menu:find('"Note in the Investigation"', 1, true), 'the option must exist')
--- Recording is a timed action since P4-R132 stage 2: the menu queues it in
--- place, and the action calls R.inspect with its inPlace flag when it completes.
-assert(menu:find('Actions.inspect,player,item,true,expected', 1, true), 'it must record in place')
+-- One option since P4-R138: Inspect is always offered and records in place
+-- when the clue is not carried, so there is no second entry to look for.
+assert(not menu:find('addOption("Note in the Investigation"', 1, true), 'the second entry is gone')
+-- Recording is a timed action since P4-R132 stage 2: the menu queues it, and
+-- the action calls R.inspect with its inPlace flag when it completes.
+assert(menu:find('Actions.inspect,player,item,not carried,expected', 1, true), 'it records in place when not carried')
 local actions = read('mod/common/media/lua/client/ConspiracyFiles/ClueActions.lua')
 assert(actions:find('R.inspect,self.item,self.inPlace', 1, true), 'the action records with its inPlace flag')
--- The prefix, not the whole line: the guard gained "and not reading" when
--- reading a drawer stopped needing the item in your pockets (d4ac15d), and
--- pinning the exact wording made this fail on a change that was correct.
--- What matters here is that being carried still suppresses the option.
-assert(menu:find('if not carried', 1, true),
-    'it must appear only when the item is NOT already carried, or it duplicates Inspect')
-print('PASS inspected tooltip: a document can be noted where it lies, and possession still gates the ordinary path')
+-- Being carried no longer changes WHETHER the option appears, only what it
+-- does: one entry, always offered, recording in place when the clue is not in
+-- hand (P4-R138). What must stay is that the in-place flag follows possession.
+assert(menu:find('local carried=expected==player:getInventory()', 1, true),
+    'possession still decides whether the record is made in place')
+print('PASS inspected tooltip: one Inspect, offered wherever the clue lies, recording in place when it is not carried')

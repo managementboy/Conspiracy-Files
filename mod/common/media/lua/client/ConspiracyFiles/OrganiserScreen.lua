@@ -554,7 +554,20 @@ local function reflow(detail)
     return table.concat(out,"\n")
 end
 
+-- Where the view starts, in LINES. It used to be a page number, so reading a
+-- record meant jumping a screenful at a time and losing the sentence you were
+-- on (owner, Windows, 2026-09-18: "scrolling also only works page for page,
+-- making reading uneccessary dififcult"). The top line is clamped here, at the
+-- one place that knows how many lines there are and how many fit.
+local function topLine(self,count,room)
+    local highest=math.max(1,count-room+1)
+    local top=math.max(1,math.min(math.floor(self.card or 1),highest))
+    self.card=top
+    return top
+end
+
 local function pages(detail,width)
+
     local lines={}
     for paragraph in (reflow(detail).."\n"):gmatch("([^\n]*)\n") do
         if paragraph=="" then
@@ -669,7 +682,7 @@ function Screen:drawScreen(gx,gy)
             -- A day in DATES lists what was found on it, and each line opens
             -- the record it names (owner, Windows, 2026-09-14).
             local entries=self.record.entries
-            local top=(self.card-1)*room+1
+            local top=topLine(self,#entries,room)
             for i=0,room-1 do
                 local entry=entries[top+i]
                 if not entry then break end
@@ -678,7 +691,7 @@ function Screen:drawScreen(gx,gy)
             K.scrollbar(c,y,room*line,top,room,#entries)
         else
             local body=pages(self.record.detail,c.w-4-8)
-            local top=(self.card-1)*room+1
+            local top=topLine(self,#body,room)
             for i=0,room-1 do
                 local text=body[top+i]
                 if not text then break end
@@ -763,7 +776,7 @@ function Screen:drawDay(c)
     end
     local foot=c.h-line-1
     local room=math.max(2,math.floor((foot-2-y)/line))
-    local top=(self.card-1)*room+1
+    local top=topLine(self,#lines,room)
     for i=0,room-1 do
         local l=lines[top+i]
         if not l then break end
@@ -930,12 +943,13 @@ function Screen:press(id)
         elseif self.record then self.record=nil; self.card=1
         elseif not self.launcher then self.launcher=true end
     elseif action=="UP" then
+        -- One LINE inside a record, one entry in a list (P4-R138).
         if self.record and self.record.questions then self.question=math.max(1,(self.question or 1)-1)
-        elseif self.record then self.card=math.max(1,self.card-1)
+        elseif self.record then self.card=math.max(1,(self.card or 1)-1)
         else self.entry=math.max(1,self.entry-1) end
     elseif action=="DOWN" then
         if self.record and self.record.questions then self.question=math.min(3,(self.question or 1)+1)
-        elseif self.record then self.card=self.card+1
+        elseif self.record then self.card=(self.card or 1)+1
         else self.entry=math.min(math.max(1,#rows),self.entry+1) end
     end
     log("knox key "..id)
@@ -1267,6 +1281,7 @@ end
 -- here as well as at the item, so no future caller can open a device that has
 -- no runtime behind it just by reaching for the screen directly.
 S.reflow=reflow
+S.topLine=topLine
 function S.multiplayer() return (isClient and isClient()) or (isServer and isServer()) end
 
 function S.open()
