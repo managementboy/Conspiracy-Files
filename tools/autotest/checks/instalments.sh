@@ -117,6 +117,13 @@ note "log level set to $(ev 'return ConspiracyFiles.logLevel("d")' | field 1) fo
 note "the survivor is kept alive while zombies are parked beside them: $(ev 'return CFInst.safe()')"
 note "container kinds the mod may see, as shipped: $(ev 'return CFInst.kinds()')"
 
+# THE TIMER, FIRST OF ALL. Every stage of this check asks for a case straight
+# away, so the ordinary gap between cases is turned off before anything else -
+# it was set inside the mailbox stage, and skipping that stage left the poller
+# refusing with `why=gap` for twenty-four in-game hours (20260918T031808).
+ev 'return CFCamp.gap(false)' >/dev/null
+note "the gap between cases turned off, and cars kept out of the mobile slot (VEHICLE_RADIUS=$(ev 'return CFInst.noCars(true)'))"
+
 # --- (a) the mailbox ---------------------------------------------------------
 if [ "$carriers_only" = yes ]; then
     note "the mailbox and AD-10 stages were answered by 20260918T033352 and are skipped in this run (--carriers-only)"
@@ -128,9 +135,7 @@ note "container kinds the mod offered the live sites: $(field 2 "$st") - postbox
 if [ "$(field 1 "$pb")" -gt 0 ] 2>/dev/null && [ "$(field 2 "$pb")" = 0 ]; then
     note "ANSWER (mailbox): every postbox found stands on a square the game does not call a room. Storage.scan and the filler's boundsScan only ever look at squares INSIDE a site's room rectangle, so a mailbox at the gate cannot be offered as a container however the allow-list reads. A design question for the owner, not a harness fault."
 fi
-ev 'return CFCamp.gap(false)' >/dev/null
-ev 'return CFInst.noCars(true)' >/dev/null
-note "container kinds narrowed to: $(ev 'return CFInst.narrow("postbox")'); cars kept out of the mobile slot (VEHICLE_RADIUS=$(ev 'return CFInst.noCars(true)'))"
+note "container kinds narrowed to: $(ev 'return CFInst.narrow("postbox")')"
 if get_case "the mailbox case" 2 150; then
     mb="$(wait_words 60 'CFInst.pickTypeClue("postbox")' 3)"
     note "live sites now: $(ev 'return CFInst.siteTypes()' | field 2)"
