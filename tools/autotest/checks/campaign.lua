@@ -664,9 +664,14 @@ function C.townNames()
     local wrapper = store and Cases2.current(store)
     for _, row in ipairs(rows) do
         local detail = tostring(row.detailText or "")
-        local cut = detail:find("FOUND", 1, true)
+        -- THE MARKER IS "\n\nFOUND\n". Every generated document opens with the
+        -- heading "WHAT YOU FOUND", so splitting on the bare word cut the row
+        -- after nine characters and made the "live" half the string
+        -- "WHAT YOU " - so this counted no live address in any row and the
+        -- shortfall was reported against the mod (travel check, 2026-09-18).
+        local cut = detail:find("\n\nFOUND\n", 1, true)
         local fresh = cut and detail:sub(1, cut - 1) or detail
-        local found = cut and detail:sub(cut) or ""
+        local found = cut and detail:sub(cut + 2) or ""
         -- Only a row whose case is still live can carry a rendered address at
         -- all: retirement drops the case envelope AddressMap.describe needs.
         local root = row.id and Cases2.find(wrapper, row.id)
