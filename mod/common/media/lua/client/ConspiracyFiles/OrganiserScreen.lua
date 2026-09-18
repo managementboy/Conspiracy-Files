@@ -1037,6 +1037,17 @@ end
 -- manifest states it: a pixel on the far edge belongs to whatever is next, not
 -- to this key. One test for the press and the release, and the one the
 -- Fieldnote check measures at every machine size.
+-- The wheel reads like the drag: a notch is a line inside a record, an entry
+-- in a list. The machine wakes for it, as it does for a key.
+function Screen:onMouseWheel(delta)
+    if not self.on then return false end
+    self:touch()
+    local step=(delta or 0)>0 and 1 or -1
+    if self.record and not self.record.questions then self.card=math.max(1,(self.card or 1)+step)
+    elseif not self.record then self.entry=math.max(1,(self.entry or 1)+step) end
+    return true
+end
+
 function Screen:controlAt(x,y)
     for _,b in ipairs(self:buttons()) do
         if x>=b.x and x<b.x+b.w and y>=b.y and y<b.y+b.h then return b end
@@ -1057,7 +1068,7 @@ function Screen:onMouseDown(x,y)
     local s=self.scale
     local gx,gy=Case.glass.x*s,Case.glass.y*s
     if self.on and x>=gx and y>=gy and x<Case.glass.x*s+Case.glass.w*s and y<Case.glass.y*s+Case.glass.h*s then
-        self.down="GLASS"; return true
+        self.down="GLASS"; self.dragging={dy=0,moved=false}; return true
     end
     self.down=nil
     return ISPanel.onMouseDown(self,x,y)
@@ -1066,8 +1077,33 @@ end
 -- Dragging the corner. The corner follows the pointer and the size SNAPS to the
 -- machine sizes (S.SCALES): the type no longer scales with the machine, so a
 -- half step costs the pixel face nothing (P4-R99). So it reads as a window you pull, and it clicks between sizes.
+-- The stylus drags the page, as a Palm's did its scrollbar (owner, Windows,
+-- 2026-09-18: "hold and drag works too?"). A press on the glass only becomes a
+-- drag after a few pixels, so a tap still picks a record; after that every line
+-- height of movement is one line of text, and the direction is the paper's -
+-- drag up, read down.
+S.DRAG_START=4
+function Screen:dragGlass(dy)
+    if not self.record or not self.on then return false end
+    local drag=self.dragging
+    if not drag then return false end
+    drag.dy=drag.dy+(dy or 0)
+    if not drag.moved and math.abs(drag.dy)<S.DRAG_START then return true end
+    drag.moved=true
+    -- A line of text on the glass, in screen pixels: the face's own line height
+    -- times how big the machine is drawn.
+    local line=math.max(1,(K.LINE or 8)*(self.scale or S.scale or 1))
+    local steps=math.floor(math.abs(drag.dy)/line)
+    if steps>0 then
+        self.card=math.max(1,(self.card or 1)+(drag.dy<0 and steps or -steps))
+        drag.dy=drag.dy-(drag.dy<0 and -steps*line or steps*line)
+    end
+    return true
+end
+
 function Screen:onMouseMove(dx,dy)
     local r=self.resizing
+    if self.dragging and self.down=="GLASS" then return self:dragGlass(dy) end
     if r then
         r.dy=r.dy+(dy or 0)
         local want=S.nearestScale((Case.h*r.scale+r.dy)/Case.h)
@@ -1088,7 +1124,7 @@ end
 
 function Screen:onMouseUpOutside(x,y)
     if self.down=="GRIP" then S.savePrefs() end
-    self.resizing=nil; self.down=nil
+    self.resizing=nil; self.down=nil; self.dragging=nil
     return ISPanel.onMouseUpOutside(self,x,y)
 end
 
@@ -1120,9 +1156,12 @@ end
 
 function Screen:onMouseUp(x,y)
     local id=self.down
-    self.down=nil
+    local dragged=self.dragging and self.dragging.moved==true
+    self.down=nil; self.dragging=nil
     if id=="GRIP" then self.resizing=nil; S.savePrefs(); return true end
-    if id=="GLASS" then self:tap(x,y); return true end
+    -- A drag that moved the page is not a tap: letting go after scrolling must
+    -- not also open whatever the stylus happens to be over.
+    if id=="GLASS" then if not dragged then self:tap(x,y) end; return true end
     if not id and self:dropPapers() then return true end
     if not id then return ISPanel.onMouseUp(self,x,y) end
     -- A key acts when it is let go over the key it went down on. Sliding off
