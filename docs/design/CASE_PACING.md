@@ -261,6 +261,35 @@ below is in the evidence file named beside it.
 | the count rising over a long run | **yes**: `active-limit: 5 lines, longest run of 3, rung 1` and `no-containers: 2 lines` | `20260918T023400-campaign.txt` |
 | a clue arriving late found by Search Mode | **not yet**: the one late clue of these runs went onto a zombie that then walked out of the mod's find radius (see CLUES_ON_THE_MOVE, "What the running game said") | - |
 
+### Fault: the promise is made in the past
+
+`promise.sh` fails on this deliberately, at commit c0071c3 and after
+(`20260918T045250-promise.txt`):
+
+    why=no-containers n=1 due=02:10 rung=0/3 now=02:11 overdue=true(0.01h)
+    FAIL: the refusal promised 02:10 and it is already 02:11 - a promise cannot
+          be kept, or broken, if it is made in the past
+
+`dueFor` answers `math.max(now, last+gap)` for every code but `cooldown`, and
+`AutomaticInvestigations.poll` only ever asks the generator for a case once that
+gap has passed - so `last+gap <= now` by construction, the due hour IS `now`,
+and a fresh `no-containers` or `no-reach` refusal is overdue a minute of in-game
+time later. Step 6's own rule - "before the promised hour it is a finding, past
+it a failure" - therefore cannot mean anything for exactly the two codes it was
+written for.
+
+It was not noticed until now because the code that stands a second later is
+usually `cooldown`, whose due hour comes from the other line (`now +
+DEFER_HOURS`) and is honest; a check that re-read the promise instead of keeping
+the refusal it matched was always asking about the cooldown.
+
+**What it costs today:** the `promise-overdue` mutation cannot be caught (the
+clean code already behaves as the bug), and with `promise.sh` failing, the two
+mutations it did catch cannot be re-run until this is fixed. **A fix would name
+a future hour for the world-supply codes** - `now + gap`, or `now +
+DEFER_HOURS` as `cooldown` does: "we will try again, and expect one by then".
+Not done here: this file's checking agent may not touch `mod/`.
+
 ## Known unexplained
 
 ### A clue the record calls `placed` that is not in its container

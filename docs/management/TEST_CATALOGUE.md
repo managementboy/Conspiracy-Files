@@ -149,7 +149,7 @@ persistence · P3 edges, polish, performance headroom.
 - **AD-04** [A][P3] Full-viewport audit without the 60-detail cap; Wood St root cause. ◻ native
 - **AD-06/08** [A][P3] Coverage repairs; curved/diagonal roads. ◻ native
 - **AD-09** [S][P3] Overlay masking via `WorldMapVisited:isKnown`. ◻
-- **AD-10** [—] Address book for all of Knox. ⛔ not built (owner request)
+- **AD-10** [—] Address book for all of Knox: computed once, shipped, revealed by map knowledge incl. found paper maps. ⛔ not built (owner request; queued for PM 2026-09-15, see `PM_HANDOFF.md`)
 
 ## H. Performance
 

@@ -254,6 +254,15 @@ FOR THIS** (it failed on something else, so it proved nothing about this bug).
 It refuses a worktree with uncommitted changes, so a mutation can never be
 committed, and writes `<stamp>-prove.txt` beside the other evidence.
 
+**A baseline that fails stops everything behind it.** `prove.py` runs each
+check clean first and skips its mutations if that run fails, because a check
+that already fails proves nothing about a bug put back into it. So a check
+failing on a *real* fault - `promise.sh` does, on the promise made in the past
+(P4-R133, see `docs/design/CASE_PACING.md`) - takes its mutations out of service
+until the fault is fixed. The catches already made are in the evidence with
+their commit; note them in the `MUTATIONS` entry when that happens, as those
+two do.
+
 **Choose the cheapest check that carries the assertion.** A mutation costs a
 baseline run of its check plus one run per mutation, so an assertion that lives
 only in `campaign.sh` costs an hour and a half to prove. The promise and the

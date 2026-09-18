@@ -174,12 +174,21 @@ MUTATIONS = [
     # THE LADDER: three refusals of one code earn a rung. A generator that
     # refuses without ever lowering its standard is the fault the ladder exists
     # to prevent, and it looks exactly like this.
+    #
+    # CAUGHT 2026-09-18 at commit c0071c3 ("the ladder: 3 refusals of one code
+    # earn rung 1 but the generator stands on 0"), evidence
+    # 20260918T045930-prove.txt. NOTE: re-running it today prints BASELINE
+    # FAILED, because promise.sh now fails on the promise-made-in-the-past
+    # fault above. Fix dueFor and both become runnable again.
     ("ladder-stuck", "promise", C + "GeneratedRuntime.lua",
      "        rung=math.max(rung,math.min(R.RUNG_MAX,math.floor(r.count/REFUSALS_PER_RUNG)))",
      "        rung=0",
      "but the generator stands on 0"),
     # EVERY SILENCE HAS A CODE: the poller's own wait between cases, back to
     # returning quietly the way all five of its early returns used to.
+    # CAUGHT 2026-09-18 at commit dbbf659 ("the poller never reported why=gap
+    # with a 999 hour gap between cases"), evidence 20260918T040042-prove.txt.
+    # Same baseline note as above.
     ("poller-silent-gap", "promise", C + "AutomaticInvestigations.lua",
      ' if hours<due then return quiet(runtime,"gap",due) end',
      " if hours<due then return end",
