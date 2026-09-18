@@ -7,17 +7,21 @@ local M={}
 -- is a distinct, replenishing place a survivor already searches, and it is the
 -- only new fixed container kind the design needs.
 --
--- *** THE TYPE STRING IS UNVERIFIED ON BUILD 42.20. *** Every other kind below
--- was read off a real container in a real game; this one has not been. It is a
--- named constant, and the kinds a real game has yet to confirm are listed in
--- M.UNVERIFIED so a check can print exactly what it found and this line can be
--- corrected in one place. Nothing else in the mod spells a mailbox out.
+-- *** VERIFIED ON BUILD 42.20, 2026-09-18. *** The engine calls it "postbox",
+-- not "mailbox": a real game found five `postbox` containers within 40 tiles of
+-- the survivor and no `mailbox` anywhere on 6,561 loaded squares
+-- (tools/autotest/checks/carriers.sh, evidence
+-- docs/management/evidence/linux-autotest/20260918T002532-carriers.txt). While
+-- the guess stood, no mailbox could ever be chosen - it failed closed, as
+-- P4-R135 point 4 said it would.
 --
--- If the string is wrong the only consequence is that no mailbox is ever
--- offered as a candidate - a mailbox would read as no container at all, which
--- is the same as before this existed. It cannot place a clue somewhere wrong.
-M.MAILBOX="mailbox"
-M.UNVERIFIED={[M.MAILBOX]=true}
+-- The string is the ENGINE's word and is named once, here; the word the
+-- survivor uses is "mailbox" and lives once in ContainerWords, keyed on this
+-- string. Nothing else in the mod spells either out.
+M.MAILBOX="postbox"
+-- Kinds a real game has yet to confirm. Empty since the mailbox was verified;
+-- kept so a check can still print "nothing unverified" rather than nothing.
+M.UNVERIFIED={}
 local kinds={desk=true,counter=true,shelves=true,filingcabinet=true,locker=true,[M.MAILBOX]=true}
 M.KINDS=kinds
 -- How many kinds one site may report. Six furniture kinds plus "vehicle" is

@@ -38,15 +38,17 @@ function Catalog.validate(c)
             -- driveway belongs to the house it is outside, and
             -- Generated/Session.lua's S.target is where that widening is
             -- bounded - to VEHICLE_RADIUS, and to vehicle targets only.
-            -- "mailbox" (P4-R134) is the one new kind clues-on-the-move needs:
-            -- a distinct, replenishing place at the gate that a survivor
-            -- already searches. Its engine type string is UNVERIFIED on Build
-            -- 42.20 and is named once, in Generated/Storage.lua.
+            -- "postbox" (P4-R134) is the one new kind clues-on-the-move needs:
+            -- the mailbox at the gate, a distinct, replenishing place that a
+            -- survivor already searches. "postbox" is the engine's own word,
+            -- verified in a real game on 2026-09-18 and named once, in
+            -- Generated/Storage.lua; the survivor's word for it is in
+            -- ContainerWords.
             -- A CARRIER (a corpse, a zombie) is deliberately NOT here: it is
             -- not the building's storage and is validated by its own mark and
             -- kind instead - see S.target in Generated/Session.lua.
             if not ({desk=true,counter=true,shelves=true,filingcabinet=true,locker=true,vehicle=true,
-                     mailbox=true})[kind]
+                     postbox=true})[kind]
                 or types[kind] then return false,"unsupported/duplicate container type" end
             types[kind]=true
         end

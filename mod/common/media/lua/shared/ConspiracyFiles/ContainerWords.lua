@@ -15,11 +15,40 @@ M.PHRASES={
     locker="In a locker", fridge="In a fridge", freezer="In a freezer", bin="In a bin",
     medicine="In a medicine cabinet", clothingrack="On a clothing rack",
     smallbox="In a box", cardboardbox="In a box", toolbox="In a toolbox",
-    -- P4-R134: a mailbox at the gate. Its engine type string is unverified on
-    -- Build 42.20 (Generated/Storage.lua names it once); the phrase is right
-    -- whatever the string turns out to be, because the phrase is keyed on it.
-    mailbox="In a mailbox",
+    -- P4-R134: the mailbox at the gate. The ENGINE calls it "postbox" (verified
+    -- in a real game, 2026-09-18; Generated/Storage.MAILBOX names the string
+    -- once). A survivor in Kentucky writes "mailbox", so that is what the
+    -- record says - the same trick as "counter" reading "In a cupboard".
+    postbox="In a mailbox",
 }
+
+-- A CLUE ON A CARRIER (P4-R134). A body's or a zombie's inventory has no
+-- container type of its own: the engine answers "none", and the record read
+-- "accounted In a none at 102 Dewey St." (campaign 20260917T234706).
+--
+-- The survivor knows one thing about a corpse and a different thing about a
+-- zombie, so the words differ. A body lies AT an address and will still be
+-- there; a zombie is only ever NEAR one, because it walks. Neither ever says
+-- the clue is lost (P4-R104).
+M.CARRIER_PHRASES={corpse="On a body", zombie="On a zombie"}
+M.CARRIER_JOIN={corpse="at", zombie="near"}
+
+-- Where a clue on a carrier is, in one sentence. `address` may be nil - the
+-- address book does not name every building, and a zombie walks out of town.
+-- Returns nil for anything that is not a carrier kind, so a caller cannot
+-- accidentally word a cupboard this way.
+function M.carrier(kind,address)
+    local phrase=M.CARRIER_PHRASES[kind]
+    if not phrase then return nil end
+    if type(address)~="string" or address=="" then return phrase.." close by." end
+    return phrase.." "..M.CARRIER_JOIN[kind].." "..address.."."
+end
+
+-- Container types that say nothing about what the container is. "none" is what
+-- the engine gives a body, a zombie and anything else that never declared a
+-- type; "floor" is the ground itself, which has its own wording. A caller must
+-- choose words from what it knows instead of putting these after "In a".
+M.NO_KIND={none=true, floor=true}
 
 local function article(word)
     local first=string.lower(string.sub(word,1,1))
@@ -30,6 +59,8 @@ end
 -- there is one. A plural takes no article: "In seed bags", never "In a seed bags".
 function M.phrase(kind,title)
     if type(kind)~="string" or kind=="" then return nil end
+    -- Nothing usable: the caller says where from what else it knows.
+    if M.NO_KIND[kind] then return nil end
     local known=M.PHRASES[kind]
     if known then return known end
     local word=(type(title)=="string" and title~="") and title or kind

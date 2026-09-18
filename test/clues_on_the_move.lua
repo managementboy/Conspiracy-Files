@@ -389,8 +389,12 @@ assert(not heldApi.dropMissing(heldId,900),"a clue already found is never droppe
 -- 7. The mailbox kind ------------------------------------------------------
 -- ---------------------------------------------------------------------------
 assert(Storage.KINDS[Storage.MAILBOX],"a mailbox is a container kind")
-assert(Storage.UNVERIFIED[Storage.MAILBOX],
-    "and it is declared UNVERIFIED until a real game confirms the engine's own type string")
+-- The string was a guess ("mailbox") and the guess was wrong: the engine calls
+-- it "postbox" (real game, 2026-09-18, five of them within 40 tiles and no
+-- "mailbox" on 6,561 squares). While it was wrong no mailbox could ever be
+-- chosen, which is what failing closed bought us.
+assert(Storage.MAILBOX=="postbox","the engine's own type string for a mailbox is postbox")
+assert(not next(Storage.UNVERIFIED),"nothing about a container kind is a guess any more")
 local Catalog=require("ConspiracyFiles/Generated/Catalog")
 local mailSite={id="t3:mail",name="Mail",areaId="a",mapId="SYNTHETIC-MAP",buildLine="TEST-ONLY",
     bounds={x1=0,y1=0,x2=4,y2=4,z=0},source={kind="synthetic",reference="test"},
@@ -442,5 +446,5 @@ assert(runtime:find("integerish(t.x) and integerish(t.y) and integerish(t.z)",1,
 print(string.format(
     "PASS clues on the move: carrier target validated and keyed on its mark, a zombie and a corpse each "
     .."took a clue and were found after moving, %d mobile clue per case, a vanished carrier dropped at %d "
-    .."in-game hours and the case closed on %d rows, mailbox kind %q declared unverified",
+    .."in-game hours and the case closed on %d rows, mailbox kind %q as the engine spells it",
     S.MOBILE_PER_CASE,S.DEFER_EXPIRE_HOURS,#closed.rows,Storage.MAILBOX))

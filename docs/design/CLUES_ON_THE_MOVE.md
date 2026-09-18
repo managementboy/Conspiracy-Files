@@ -85,7 +85,8 @@ Rules that stay:
 2. Corpse and zombie carriers, reusing CasePerson's inventory path and its
    mark; the clue-search icon following the carrier.
 3. Mailboxes as a container kind in `Storage`, with the game's own container
-   type checked in a real game first.
+   type checked in a real game first. *(Checked 2026-09-18: it is `postbox` -
+   see "What the real game answered" below.)*
 4. Car parts: no new work beyond letting the case generator choose one
    deliberately rather than by chance.
 5. Expiry and the "gone" case, sharing P4-R133's expiry.
@@ -168,9 +169,44 @@ clue has moved more than `ClueSearchRules.MOVE_TILES` (two tiles). Re-adding an
 icon restarts the game's own spot timer, so at zero tolerance a clue on a
 walking zombie could never have been spotted at all.
 
-**Still unverified in a real game** (build order 6): the mailbox's own container
-type string on Build 42.20, named once as `Generated/Storage.MAILBOX` and listed
-in `Generated/Storage.UNVERIFIED`; and `IsoGridSquare:getDeadBodys()`, which is
-how a corpse carrier is found. Both fail closed - a wrong string or a missing
-method means no candidate at all, which is exactly the state before this
-existed, and neither can put a clue somewhere wrong.
+## What the real game answered (2026-09-18)
+
+Both unverified facts were put to the running game, and one of them was wrong.
+
+**The mailbox is a `postbox`.** `Generated/Storage.MAILBOX` held the guess
+`"mailbox"`. A real game found **five `postbox` containers within 40 tiles** of
+the survivor, six within 60, and **no `mailbox` at all** among the 26 container
+types on 6,561 loaded squares (`tools/autotest/checks/carriers.sh`, evidence
+`20260918T002532-carriers.txt`). So while the guess stood, a mailbox could never
+be chosen - it failed closed exactly as P4-R135 point 4 promised, and no clue
+was ever placed wrongly. `Storage.MAILBOX` is now `"postbox"`, the engine's own
+word, and `Storage.UNVERIFIED` is empty. `Generated/Catalog`'s allow-list takes
+the same word, or a site that reported a postbox would be refused as a site.
+
+**The word the player sees is "mailbox".** The engine's word is not the
+survivor's: a Kentucky survivor writes "mailbox", never "postbox". So the record
+says **"In a mailbox at 102 Dewey St."** The engine string is named once
+(`Storage.MAILBOX`) and the phrase is keyed on it in `ContainerWords`, which is
+the same arrangement that already reads a `counter` as "In a cupboard".
+
+**A clue on a carrier says what it is on.** A body's and a zombie's inventory
+both answer the container type `none`, and the record duly read `accounted In a
+none at 102 Dewey St.` (campaign `20260917T234706`). `none` is not a kind of
+container and is never worded as one. What the survivor knows differs between
+the two carriers, so the words do too:
+
+| carrier | the record says |
+|---|---|
+| a corpse | `On a body at 102 Dewey St.` |
+| a zombie | `On a zombie near 102 Dewey St.` |
+| either, in a building the book cannot name | `On a body close by.` |
+
+A body lies **at** an address and will still be there; a zombie is only ever
+**near** one, because it walks. Neither ever says the clue is lost (P4-R104).
+The same wording serves every surface, because they all read the one whereabouts
+line: the case record, the PDA's FILES WHERE line, and a finished case's
+last-seen line. A container that declares no type and is not a carrier reads
+"In something at 102 Dewey St." - we know it is inside something and not what.
+
+**`IsoGridSquare:getDeadBodys()` works**: the same run found bodies parked beside
+the survivor and the mod's own scan offered two usable carriers from them.
