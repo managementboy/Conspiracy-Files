@@ -1,0 +1,10 @@
+Linux boot check 20260919T000119: PASS
+source: 64563e6
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+mod version / game version / player alive: DEV-0.43.3-wheel-is-the-worlds	42.20.4 b0bbce05d5	true
+game loading took 54 seconds; soaked 60s
+mod files loaded: 106 of 106
+survivor's evidence album: evidence album opened in the inventory panel after 0 ticks
+errors inside the mod: 0
+mod warnings/errors logged by the mod itself: 0
+screenshot: dev/eval/linux/runs/20260919T000119.png (not committed)
