@@ -96,7 +96,11 @@ ev 'return CFCamp.gap(false)' >/dev/null
 note "the gap between cases turned off, and cars kept out of the case's mobile slot (VEHICLE_RADIUS=$(ev 'return CFInst.noCars(true)'))"
 note "log level set to $(ev 'return ConspiracyFiles.logLevel("d")' | field 1), so the filler's own ev=skip refusals reach the console"
 waiting=no
-for kinds in "desk" "shelves" "locker,filingcabinet"; do
+# Which kind is scarce enough to leave a clue waiting is the world's business,
+# not ours: 20260918T060108 got there on `shelves`, the instalments run of
+# 062030 on `counter`, and 085147 found none of the first three tight enough and
+# proved only the engine's answer. So the ladder has four rungs, cheapest first.
+for kinds in "desk" "shelves" "locker,filingcabinet" "counter"; do
     note "container kinds narrowed to $(ev "return CFInst.narrow([[$kinds]])")"
     want=$(( $(ev 'return CFCamp.cases()' | field 1) + 1 ))
     m="$(ev 'return CFCamp.moveOn()')"

@@ -1,0 +1,22 @@
+Linux body_carrier check 20260918T085147: PASS
+source: 87e8e5f
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+errors inside the mod: 0
+FINDING: the survivor is kept alive while zombies stand beside them: setGodMod=true setInvincible=true setInvisible=true
+FINDING: corpses parked: 4 zombies created, 4 killed where they stood
+FINDING: walkers parked: 2
+FINDING: within 10 tiles: 4 dead bodies on squares, 2 entries in the cell's zombie list (0 of them dead), 4 of all of them usable as a carrier
+FINDING: the bodies, as the engine answers for them: body@10839,10149 IsoDeadBody getInventory=nil getContainer=inventorymale getItemContainer=inventorymale refusal=none, usable | body@10839,10150 IsoDeadBody getInventory=nil getContainer=inventorymale getItemContainer=inventorymale refusal=none, usable | body@10840,10149 IsoDeadBody getInventory=nil getContainer=inventoryfemale getItemContainer=inventoryfemale refusal=none, usable | body@10841,10149 IsoDeadBody getInventory=nil getContainer=inventoryfemale getItemContainer=inventoryfemale refusal=none, usable
+FINDING: the zombie list: walker@10843,10149 IsoZombie getInventory=none getContainer=nil getItemContainer=nil refusal=not a carrier | walker@10844,10149 IsoZombie getInventory=none getContainer=nil getItemContainer=nil refusal=not a carrier
+FINDING: the mod's own carrier scan over the same ground: 4 usable (corpse=4) corpse@10839,10149 corpse@10839,10150 corpse@10840,10149 corpse@10841,10149
+FINDING: corpses the mod would use: 4 of 4
+FINDING: the gap between cases turned off, and cars kept out of the case's mobile slot (VEHICLE_RADIUS=0)
+FINDING: log level set to d, so the filler's own ev=skip refusals reach the console
+FINDING: container kinds narrowed to desk
+FINDING: with only desk allowed, no case left a clue waiting that a body could take (0 waiting)
+FINDING: container kinds narrowed to shelves
+FINDING: with only shelves allowed, no case left a clue waiting that a body could take (0 waiting)
+FINDING: container kinds narrowed to filingcabinet,locker
+FINDING: with only locker,filingcabinet allowed, no case left a clue waiting that a body could take (0 waiting)
+FINDING: no case in three tries left a clue waiting, so the filler never had to look for a body; the engine answer above is all this run proves
+FINDING: knobs restored: kinds=counter,desk,filingcabinet,locker,postbox,shelves 12 72
