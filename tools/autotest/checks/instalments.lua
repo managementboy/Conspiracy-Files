@@ -231,8 +231,15 @@ end
 -- (c) THE WAITING CLUE, and the ground prepared for it. Where the first clue
 -- still waiting belongs, so the harness can load that site, park bodies in it
 -- and then stand far enough away that the filler is allowed to place.
+-- A waiting clue whose case still has its ONE mobile slot free is the only
+-- one a carrier can ever take (Session.MOBILE_PER_CASE): a case that already
+-- has a clue on a body or in a car will refuse the next one with
+-- `ev=skip why=no-containers` for ever, and a check waiting for it would wait
+-- for ever too. The mobile-allowed ones come first, and the last field says
+-- which kind was returned.
 function I.waitingSite(caseId)
     local prefix = caseId and tostring(caseId):gsub(":case$", ":") or nil
+    local best
     for _, root in ipairs(roots()) do
         if root.case and root.assignments then
             for id, a in pairs(root.assignments) do
@@ -240,15 +247,20 @@ function I.waitingSite(caseId)
                     for _, s in ipairs(root.case.locations) do
                         if s.id == a.locationId then
                             local b = s.bounds
-                            return "true", id, s.id, math.floor((b.x1 + b.x2) / 2),
+                            local mobile = Session.mobileAllowed(root, id) == true
+                            local row = { "true", id, s.id, math.floor((b.x1 + b.x2) / 2),
                                 math.floor((b.y1 + b.y2) / 2), b.z or 0,
-                                tostring(a.deferredHours), table.concat(s.containerTypes or {}, "+")
+                                tostring(a.deferredHours), table.concat(s.containerTypes or {}, "+"),
+                                tostring(mobile) }
+                            if mobile then return unpack(row) end
+                            best = best or row
                         end
                     end
                 end
             end
         end
     end
+    if best then return unpack(best) end
     return "false", "no clue is waiting"
 end
 

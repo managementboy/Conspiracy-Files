@@ -34,8 +34,12 @@
 # Real display, about twenty-five minutes. Exit 0 pass, 1 fail, 2 could not run.
 set -uo pipefail
 . "$(dirname "${BASH_SOURCE[0]}")/../lib.sh"
-start_args=(); expiry=yes
-for a in "$@"; do case "$a" in --hidden) start_args+=(--hidden) ;; --no-expiry) expiry=no ;; esac; done
+start_args=(); expiry=yes; carriers_only=no
+for a in "$@"; do case "$a" in
+    --hidden) start_args+=(--hidden) ;;
+    --no-expiry) expiry=no ;;
+    --carriers-only) carriers_only=yes ;;
+esac; done
 say() { echo "instalments: $*" >&2; }
 abort() { say "$*"; "$PZ" stop >/dev/null 2>&1; exit 2; }
 fails=(); fail() { fails+=("$*"); say "FAIL: $*"; }
@@ -47,12 +51,19 @@ logged() { run_log | grep -c "$1" || true; }
 
 # Wait for a case to arrive, moving on between tries the way a player does
 # (P4-R125: a refused case waits for the survivor to move).
-get_case() { # get_case LABEL TRIES SECONDS
-    local want=$(( $(cases_now) + 1 )) i
+get_case() { # get_case LABEL TRIES SECONDS [SETTLE]
+    local want=$(( $(cases_now) + 1 )) i settle="${4:-120}"
     for i in $(seq "$2"); do
         local m; m="$(ev 'return CFCamp.moveOn()')"
         if [ "$(field 1 "$m")" != true ]; then note "$1: nowhere fresh to move to ($(field 2 "$m"))"; return 1; fi
-        wait_true 120 'CFCamp.settled()' >/dev/null || true
+        # HOW A CLUE COMES TO BE WAITING. "Movement is what makes the room: a
+        # house catalogued from the street yields one or two candidates and
+        # eight once the survivor walks in" (GeneratedRuntime). A case asked for
+        # the moment the survivor arrives is prepared from a half-loaded
+        # building, which is exactly the state P4-R133's instalments exist for -
+        # and with only one container kind allowed as well, several clues have
+        # nowhere to go.
+        [ "$settle" = 0 ] || wait_true "$settle" 'CFCamp.settled()' >/dev/null || true
         say "$1: moved $(field 4 "$m") tiles to $(field 2 "$m"), waiting up to $3 s for case $want"
         local deadline=$(( $(date +%s) + $3 ))
         while [ "$(date +%s)" -lt "$deadline" ]; do
@@ -107,6 +118,9 @@ note "the survivor is kept alive while zombies are parked beside them: $(ev 'ret
 note "container kinds the mod may see, as shipped: $(ev 'return CFInst.kinds()')"
 
 # --- (a) the mailbox ---------------------------------------------------------
+if [ "$carriers_only" = yes ]; then
+    note "the mailbox and AD-10 stages were answered by 20260918T033352 and are skipped in this run (--carriers-only)"
+else
 pb="$(ev 'return CFInst.postboxes(60)')"
 note "postboxes within 60 tiles of the survivor: $(field 1 "$pb") containers, $(field 2 "$pb") of them on a square the game calls a room, $(field 3 "$pb") inside one of the $(field 5 "$pb") live site footprints (first: $(field 4 "$pb"))"
 st="$(ev 'return CFInst.siteTypes()')"
@@ -134,28 +148,37 @@ if get_case "the mailbox case" 2 150; then
 else
     note "ANSWER (mailbox): with postbox the only container kind the mod may see, no case could be created at all in two fresh neighbourhoods - which is what the room-rectangle finding above predicts: the scan never sees a mailbox."
 fi
+fi
 
 # --- (b) and (c) a clue placed later, on a body ------------------------------
 # One or two kinds allowed is a ransacked neighbourhood: a case goes live with
 # the clues that fit and the rest wait, which is the state the filler and the
 # carrier exist for.
-note "container kinds narrowed to: $(ev 'return CFInst.narrow("counter")')"
 carrier_done=""
+# The ladder of scarcity. `counter` is a kitchen cupboard and a house has
+# several, so a case placed every clue it had even with nothing else allowed
+# (20260918T033352): the tighter kinds come first now, and each case is asked
+# for the moment the survivor arrives rather than after the building has
+# finished loading.
+LADDER=("desk" "shelves" "locker,filingcabinet" "counter")
 for kind in corpse zombie; do
-    if ! get_case "the $kind case" 3 180; then
-        note "no case could be created for the $kind stage with $(ev 'return CFInst.kinds()') allowed; widening to counter+shelves"
-        ev 'return CFInst.narrow("counter,shelves")' >/dev/null
-        get_case "the $kind case, wider" 2 180 || { note "the $kind stage never got a case"; continue; }
+    waiting=no
+    for kinds in "${LADDER[@]}"; do
+        note "$kind stage: container kinds narrowed to $(ev "return CFInst.narrow([[$kinds]])")"
+        get_case "the $kind case, $kinds" 1 150 8 || continue
+        w="$(ev 'return CFInst.waitingSite()')"
+        [ "$(field 1 "$w")" = true ] && [ "$(field 9 "$w")" = true ] && { waiting=yes; break; }
+        [ "$(field 1 "$w")" = true ] && note "$kind stage: $(field 2 "$w") waits, but its case has already spent its one mobile slot, so no carrier can take it"
+        note "$kind stage: the case placed every clue it had with only $kinds allowed ($(ev 'return CFInst.targets()' | field 3) waiting)"
+    done
+    if [ "$waiting" != yes ]; then
+        note "$kind stage: no case in the whole ladder (${LADDER[*]}) left a clue waiting, so the filler never had to look for a carrier"
+        continue
     fi
     t="$(ev 'return CFInst.targets()')"
     note "$kind stage, the cases as they stand: $(field 1 "$t") placed, $(field 2 "$t") on a carrier, $(field 3 "$t") waiting"
-    w="$(ev 'return CFInst.waitingSite()')"
-    if [ "$(field 1 "$w")" != true ]; then
-        note "$kind stage: every clue found a container even with only $(ev 'return CFInst.kinds()') allowed ($(field 2 "$w")), so nothing was waiting for a carrier"
-        continue
-    fi
     x="$(field 4 "$w")"; y="$(field 5 "$w")"; z="$(field 6 "$w")"
-    note "$kind stage: $(field 2 "$w") waits for the site $(field 3 "$w") at $x,$y (kinds there: $(field 8 "$w"), waiting since hour $(field 7 "$w"))"
+    note "$kind stage: $(field 2 "$w") waits for the site $(field 3 "$w") at $x,$y (kinds there: $(field 8 "$w"), waiting since hour $(field 7 "$w"), the case's mobile slot free: $(field 9 "$w"))"
     # Load that site, park carriers of this kind in it, then stand back beyond
     # the filler's twenty-tile proximity guard.
     ev "return CFField.teleport($x, $y, $z)" >/dev/null
@@ -244,6 +267,9 @@ fi
 # it needs no finished case - and a finished case could not answer it anyway,
 # because retirement drops the envelope AddressMap.describe needs and the only
 # address left in its record rows is the frozen FOUND line.
+if [ "$carriers_only" = yes ]; then
+    note "AD-10 was proven in 20260918T033352 (5 of 5 buildings gained \", Muldraugh\" read from West Point) and is skipped here"
+else
 probe="$(ev 'return CFCamp.qualifyProbe()')"
 note "AD-10, standing in $(field 1 "$probe"): of $(field 5 "$probe") buildings the cases used, $(field 2 "$probe") would be written with their town and $(field 3 "$probe") without; $(field 4 "$probe")"
 far="$(ev 'return CFCamp.moveToTown()')"
@@ -261,6 +287,7 @@ if [ "$(field 1 "$far")" = true ]; then
     fi
 else
     note "nowhere to move to another town ($(field 2 "$far")), so the other-town half of AD-10 was not exercised"
+fi
 fi
 
 note "knobs restored: kinds=$(ev 'return CFInst.widen()' | tr '\t' ' ')"
