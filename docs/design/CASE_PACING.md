@@ -12,6 +12,17 @@
   fourth rung of the ladder is **not built** and cannot be without a generator
   revision - see "What was built differently" below. Owner approved the shape
   ("I agree with all you wrote").
+- **Proven over a journey as well as in one neighbourhood, 2026-09-18.**
+  `tools/autotest/checks/travel.sh` walks 9,689 tiles from Irvington to
+  Muldraugh in legs of 400 and reads the promise at every one.
+  `20260918T232132-travel.txt`: four cases arrived over the journey - one where
+  the survivor started, one in the town on the way, two at the destination -
+  every refusal typed (`no-containers`, `no-reach`, `active-limit`), no promise
+  overdue, no clue placed outside the reach of the trail, and no mod error. A
+  case still needs the survivor to have MOVED and to stand still long enough
+  for a nearby scan: in three runs out of three the town on the way gave its
+  case only after one 80-tile move (`why=busy`, then the case), which is P4-R125
+  working as written.
 - **Game:** Build 42.20.
 - **Related decisions:** P4-R67 (each clue in a different container, defer
   rather than stack), P4-R125 (a refused case waits 50 tiles or half an hour),

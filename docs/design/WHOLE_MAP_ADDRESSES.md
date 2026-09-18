@@ -23,6 +23,34 @@
   that half and reported "0 of 16 records name their town"
   (`20260918T005315`); it now asks the address book, and reports both halves of
   the record as findings.
+- **The record itself is proven in a running game, 2026-09-18, by the travel
+  check** (`tools/autotest/checks/travel.sh`,
+  `20260918T232132-travel.txt`). A survivor walked 9,689 tiles from Irvington
+  through Rosewood to Muldraugh, finding and inspecting a clue in each of the
+  first two towns, and the LIVE half of each record was read again from
+  Muldraugh:
+
+      in Irvington: "In the shop at 104 Bullet Dr."
+      from Muldraugh: "In the shop at 104 Bullet Dr, Irvington."
+      in Rosewood:  "Loaded at 702 Frederick Lane."
+      from Muldraugh: "Loaded at 702 Frederick Lane, Rosewood."
+
+  Both halves of the rule, on a real record, about a town the survivor really
+  left. Two things that read as faults and are not: the live address is the
+  place the document is ABOUT, not where the clue was found (`describe`
+  rewrites every mention of a site's NAME in the document's own words), and a
+  document that names no place carries no address at all.
+- **Still open, found by the same run: one unnumbered site costs a case every
+  address it has.** `describe` returns nil unless EVERY site of the case has a
+  book row, and `EvidenceRows` then falls back to `PlaceNames`, which writes no
+  street - so a case with one unnumbered site shows no address for any of its
+  clues. `20260918T230942-travel.txt` caught it in Rosewood ("AddressMap.describe
+  refused the row"), and the book numbers 5,932 of the 6,663 buildings on the
+  map with two or more rooms, which is about one site in nine and so roughly one
+  case in five. Numbering every building was deliberately not done (P4-R129:
+  buildings outside the named towns are numbered only near a named street, and
+  never carry an invented town), so the fix belongs in `describe`: qualify the
+  sites it CAN name and leave the others as they read today.
 - **Request:** AD-10, queued 2026-09-15 (`docs/management/PM_HANDOFF.md`, "house
   numbers for the whole map").
 - **Game:** Build 42.20 (Linux test machine reports `42.20.4 b0bbce05d5`).

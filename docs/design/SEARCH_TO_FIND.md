@@ -1,6 +1,17 @@
 # Clues are found by searching (P4-R132)
 
 - **Status:** Design, 2026-09-16. Stage 1 (search and recognise) and stage 2 (look it over, timed Inspect, the wordless cue) built 2026-09-17; stage 3 (the checks) the same day; see the end.
+- **Searched out on the road, 2026-09-18.** `tools/autotest/checks/travel.sh`
+  finds a clue the player's way twice on a 9,689-tile journey - the Clues focus
+  in the game's own Search Mode, then Inspect through the real menu - once
+  before setting off and once in the town reached mid-journey
+  (`20260918T232132-travel.txt`, `20260918T230942-travel.txt`). Two field notes
+  worth keeping: a lit clue is spotted in about **two seconds** with the focus
+  on, and **the light, not the distance, decides** - in both runs the first
+  clue offered stood in a room the game reads at 0.05 against its 0.50 cutoff,
+  so the check steps over the dark ones rather than timing a search the game
+  will never allow. "If you don't search you don't find" holds on the move; a
+  clue the survivor could not spot is still recovered by "Look it over".
 - **The collision with P4-R134, found and settled 2026-09-18.** A clue on a
   **walking zombie** cannot be spotted: **the game turns Search Mode off by
   itself when a zombie is close**, which is exactly where the survivor would
