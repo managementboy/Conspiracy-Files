@@ -77,7 +77,7 @@ logged_code() { run_log | grep -c "ev=defer why=$1" || true; }
 claim_game || exit 2
 start_cold "${start_args[@]}" || abort "the game did not reach a playable world"
 id="$(session)"
-for f in core_loop reload campaign pacing promise; do
+for f in core_loop reload campaign pacing instalments promise; do
     ev -f "$CHECKS/$f.lua" >/dev/null || abort "could not load $f.lua"
 done
 wait_true 120 'ConspiracyFiles.GeneratedRuntime.metrics()~=nil' || abort "no case started"
@@ -88,6 +88,42 @@ wait_true 180 'select(1, CFCamp.cases())>=1' || abort "no first case"
 note "log level set to $(ev 'return ConspiracyFiles.logLevel("d")' | field 1) for this run, so the uncounted refusals reach the console too"
 note "limits as shipped: MAX_ACTIVE=$(ev 'return CFProm.limits()' | field 1), MAX_CASES=$(ev 'return CFProm.limits()' | field 2); this world holds $(ev 'return CFProm.limits()' | field 3) unfinished of $(ev 'return CFProm.limits()' | field 4) cases"
 note "at the start: $(promise_words "$(promise)")"
+
+# --- (b) and (c): the promise and the ladder, where the world refuses --------
+# FIRST, while only one case is live: the poller's branches all come before the
+# generator's, so a save at the active limit or inside its gap never asks the
+# world for a case at all - and run 20260918T035305 reached the end with
+# `why=active-limit` and the promise never exercised. So the world is made
+# genuinely bare here: CFInst.narrow with a kind the scan does not know empties
+# Storage.KINDS in place, which is a neighbourhood already stripped of every
+# cupboard, and the generator then refuses with `no-containers` - a counted
+# code, which is what walks the ladder.
+note "container kinds emptied: \"$(ev 'return CFInst.narrow("nothing-at-all")')\" (was counter,desk,filingcabinet,locker,postbox,shelves), so the generator has nowhere to put a case"
+ev 'return CFProm.gapHours(0, 0)' >/dev/null
+ev 'return CFPace.speed(4)' >/dev/null
+note "time set to the fastest speed at in-game hour $(ev 'return CFPace.hours()' | field 1), the survivor standing where case 1 was played"
+if wait_code 240 no-containers no-reach cooldown; then
+    note "the world refused: $(promise_words "$(promise)")"
+    deadline=$(( $(date +%s) + 240 ))
+    until [ "$(promise | field 2)" -ge 3 ] 2>/dev/null; do
+        [ "$(date +%s)" -lt "$deadline" ] || break
+        sleep 5
+    done
+    p="$(promise)"
+    note "after waiting for the count to climb: $(promise_words "$p")"
+    if [ "$(field 2 "$p")" -ge 3 ] 2>/dev/null; then
+        ladder_climbed "the ladder"
+        note "the ladder: $(field 2 "$p") refusals of one code, rung $(field 4 "$p") of $(field 5 "$p")"
+    else
+        note "only $(field 2 "$p") counted refusal(s) in four minutes of fast time, so the ladder's threshold was not reached; the assertion is vacuous in this run"
+        ladder_climbed "the ladder"
+    fi
+    promise_broken "the promise" || true
+else
+    fail "with no container kind the mod may see, the generator still did not refuse with no-containers, no-reach or cooldown in four minutes ($(promise_words "$(promise)"))"
+fi
+ev 'return CFPace.speed(1)' >/dev/null
+note "container kinds restored: $(ev 'return CFInst.widen()' | tr '\t' ' ')"
 
 # --- (a1) the gap: our own wait between cases -------------------------------
 g="$(ev 'return CFProm.gapHours(999, 999)')"
@@ -137,35 +173,6 @@ fi
 r="$(ev 'return CFProm.restore()')"
 note "limits restored: MAX_ACTIVE=$(field 2 "$r"), MAX_CASES=$(field 3 "$r")"
 
-# --- (b) and (c): the promise and the ladder, where the world refuses --------
-# The survivor stays in the building case 1 emptied and time runs fast: that is
-# the state that used to refuse seventeen times in a row without explanation,
-# and the state the ladder was built for. A counted refusal needs a quarter of
-# an in-game hour between it and the last one, so time is what this stage
-# spends rather than tiles.
-ev 'return CFPace.speed(4)' >/dev/null
-note "time set to the fastest speed at in-game hour $(ev 'return CFPace.hours()' | field 1), the survivor standing where case 1 was played"
-if wait_code 240 no-containers no-reach cooldown; then
-    note "the world refused: $(promise_words "$(promise)")"
-    deadline=$(( $(date +%s) + 240 ))
-    until [ "$(promise | field 2)" -ge 3 ] 2>/dev/null; do
-        [ "$(date +%s)" -lt "$deadline" ] || break
-        sleep 5
-    done
-    p="$(promise)"
-    note "after waiting for the count to climb: $(promise_words "$p")"
-    if [ "$(field 2 "$p")" -ge 3 ] 2>/dev/null; then
-        ladder_climbed "the ladder"
-        note "the ladder: $(field 2 "$p") refusals of one code, rung $(field 4 "$p") of $(field 5 "$p")"
-    else
-        note "only $(field 2 "$p") counted refusal(s) in four minutes of fast time, so the ladder's threshold was not reached; the assertion is vacuous in this run"
-        ladder_climbed "the ladder"
-    fi
-    promise_broken "the promise" || true
-else
-    note "the world supplied cases instead of refusing in four minutes ($(promise_words "$(promise)")), so neither the promise nor the ladder was exercised"
-fi
-ev 'return CFPace.speed(1)' >/dev/null
 note "at the end: $(promise_words "$(promise)"); cases $(ev 'return CFCamp.cases()' | tr '\t' ' ')"
 
 # The engine's own cell-loader complaints about base-game tiles are not ours
