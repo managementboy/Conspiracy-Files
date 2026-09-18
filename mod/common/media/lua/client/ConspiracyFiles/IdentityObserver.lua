@@ -57,7 +57,14 @@ function I.rows()
  local function placeFor(x,y,z)
   local map=ConspiracyFiles.AddressMap
   if not map then return nil end
-  local key=tostring(x)..","..tostring(y)..","..tostring(z)
+  -- THE SURVIVOR'S TOWN IS PART OF THE KEY (AD-10). A place does not move, but
+  -- what the survivor would write for it does: away from its town the address
+  -- gains ", Muldraugh", and a cache keyed on the square alone froze the first
+  -- reading for the whole session (the same fault as GeneratedRuntime's
+  -- address cache, campaign 20260918T005315). currentTown is throttled to
+  -- AddressMap.TOWN_EVERY_MS, so this costs one compare per row.
+  local here=map.currentTown and map.currentTown() or ""
+  local key=tostring(here)..":"..tostring(x)..","..tostring(y)..","..tostring(z)
   local remembered=placeCache[key]
   if remembered~=nil then return remembered or nil end
   local cell=getCell and getCell()

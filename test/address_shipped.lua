@@ -104,6 +104,60 @@ assert(M.labelForBuilding("12103458358296581")=="102 Main St, West Point",
     "WestPoint is written West Point")
 assert(M.townForBuilding("12103458358296581")=="West Point")
 print("PASS address shipped: a place outside the survivor's town is named with its town, their own town is not")
+
+-- A CALLER THAT REMEMBERS AN ADDRESS (AD-10, fault found in a real game
+-- 2026-09-18). The qualified form depends on where the survivor is standing, so
+-- anything that caches labelForBuilding's OUTPUT freezes the town for the
+-- session: standing in West Point, 0 of 16 records about Muldraugh named
+-- Muldraugh (campaign 20260918T005315). labelParts hands back the two halves
+-- unqualified, and qualify finishes them at read time.
+stand(1905,14385)
+local rawLabel,rawTown=M.labelParts(RIVERSIDE)
+assert(rawLabel=="101 Main St" and rawTown=="Riverside","labelParts is the label and its town, unqualified")
+assert(M.labelParts(RURAL)=="3 Main St" and select(2,M.labelParts(RURAL))==nil,
+    "a rural house has a label and no town")
+assert(M.labelParts("no-such-building")==nil and M.labelParts(nil)==nil and M.labelParts("")==nil,
+    "an unknown building has no parts")
+-- The two halves, remembered ONCE here, must read correctly from both towns.
+assert(M.qualify(rawLabel,rawTown)=="101 Main St, Riverside","from Irvington the town is said")
+stand(6505,5415)
+assert(M.qualify(rawLabel,rawTown)=="101 Main St","and in Riverside the same two halves read plainly")
+-- The frozen form is the fault: what a caching caller used to keep.
+local frozenOnce=M.labelForBuilding(IRVINGTON_MAIN)
+stand(1905,14385)
+assert(frozenOnce=="101 Main St, Irvington" and M.labelForBuilding(IRVINGTON_MAIN)=="101 Main St",
+    "a remembered finished address would have been wrong here, which is why nothing may remember one")
+-- Qualifying is not a hot path either: it reads the town through the same
+-- throttle, so a hundred remembered labels re-measure at most once.
+clock=clock+1
+asked=0
+for _=1,100 do assert(M.qualify(rawLabel,rawTown)=="101 Main St, Riverside") end
+assert(asked<=1,"qualifying must not re-measure the survivor's town: asked "..asked.." times")
+print("PASS address shipped: labelParts and qualify let a caller cache an address without freezing its town")
+
+-- And the one caller that does cache: every address in the case record goes
+-- through GeneratedRuntime.addressFor, which held the finished label.
+local f=assert(io.open("mod/common/media/lua/client/ConspiracyFiles/GeneratedRuntime.lua","r"))
+local runtime=f:read("*a"); f:close()
+local addressFor=assert(runtime:match("local function addressFor%(id%)(.-)\nend\n"),"addressFor must exist")
+assert(addressFor:find("map.labelParts",1,true) and addressFor:find("map.qualify",1,true),
+    "addressFor must cache the raw parts and qualify at read time")
+assert(not addressFor:find("labelForBuilding",1,true),
+    "caching what labelForBuilding returned is the AD-10 fault")
+assert(addressFor:find("remembered={label=label,town=town}",1,true),
+    "what is remembered is the two halves, not the sentence")
+local _,copies=runtime:gsub("addressCache%[","")
+assert(copies<=3,"one address cache in the file, not a second copy beside it: "..copies.." uses")
+assert(runtime:find("local addressOf=addressFor",1,true),
+    "the dev diagnostic reads the same lookup rather than keeping its own frozen copy")
+-- The other cache of a finished address: the identity rows' place, rebuilt on
+-- every refresh and keyed on the square alone, which froze the same way.
+local g=assert(io.open("mod/common/media/lua/client/ConspiracyFiles/IdentityObserver.lua","r"))
+local observer=g:read("*a"); g:close()
+assert(observer:find("local here=map.currentTown and map.currentTown() or \"\"",1,true)
+    and observer:find('local key=tostring(here)..":"',1,true),
+    "a cache of a FINISHED address must carry the survivor's town in its key (AD-10)")
+print("PASS address shipped: the case record's address lookup qualifies the town on the way out")
 standing=nil
 
 -- A save that already froze a Muldraugh book keeps it (P4-R120).

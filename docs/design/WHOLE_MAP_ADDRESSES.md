@@ -448,6 +448,41 @@ a town is. The longest qualified label in the shipped book is 43 characters
 ("102 Chapelmount Downs Back Road, Louisville"), well inside every store's
 limit. Checked by `test/address_shipped.lua`.
 
+**The town was frozen per session; fixed 2026-09-18.** The first real-game
+measurement of the item above failed: standing in West Point, **0 of 16 records
+about Muldraugh named Muldraugh** (campaign `20260918T005315`). Nothing was
+wrong with `labelForBuilding` - the fault was a caller that REMEMBERED what it
+returned. `GeneratedRuntime`'s `addressCache` (and a second copy of it inside
+the dev diagnostic) held the finished, town-qualified address, so whichever town
+the survivor happened to be in when a building was first read became that
+building's address for the rest of the session.
+
+The rule this leaves behind, and the reason the fix is shaped this way:
+
+> **A cache may hold the two halves of an address, never the finished one.**
+> `AddressMap.labelParts(id)` returns the raw label and its town;
+> `AddressMap.qualify(label,town)` finishes it against where the survivor is
+> standing now. A cache that must hold a finished address has to carry the
+> survivor's town in its key instead - which is what `IdentityObserver`'s place
+> cache now does, since it caches sentences ("right outside 109 Walker Road")
+> rather than labels.
+
+Qualifying on the way out is not a hot path: it is one compare over
+`currentTown`, which is itself re-measured at most every five seconds and only
+after 32 tiles of movement. Pinned by `test/address_shipped.lua` (the two halves
+read correctly from both towns; the finished form does not; and neither cache
+may key a finished address without the town).
+
+*Not covered by that fix, and still frozen by design:* the **FOUND** line on a
+record row comes from the discovery ledger, which stores the address as words at
+the moment of the find (`DiscoveryLedger.places`), and a key lead stores the
+address it was written with. Those are history - what the survivor noted at the
+time - not a live lookup. If the real-game assertion still reports "0 of N"
+after this fix, that is what it is reading: the ledger also keeps `placeIds`, so
+re-deriving the label live for rows that have a building id would be the next
+step, and needs an owner call on whether a remembered note should change its
+wording after the fact.
+
 **Still open.** A small override list for naming rural areas; the rest of the
 attended check in section 6 (a found paper map of another town, and one house's
 address in the organiser matching its map number). Owner check wanted: read a

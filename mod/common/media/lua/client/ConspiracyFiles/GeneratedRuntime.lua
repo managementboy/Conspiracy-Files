@@ -46,18 +46,33 @@ local sightings,placeOf
 -- places that asked the book directly run on the scheduler, so a case being
 -- placed resolved the same two addresses about twice a second for as long as
 -- the save was open (traced in game, 2026-09-12).
+--
+-- WHAT IS CACHED IS THE RAW LABEL AND ITS TOWN, never the finished address
+-- (AD-10). The finished form depends on where the survivor is standing: inside
+-- their own town an address reads as it always did, and away from it the town
+-- is added ("102 2nd St, Muldraugh"). This cache used to hold the OUTPUT of
+-- labelForBuilding, so the first reading of a label froze for the session -
+-- standing in West Point, 0 of 16 records about Muldraugh named Muldraugh
+-- (campaign 20260918T005315). Qualifying on the way out costs one compare, and
+-- the town behind it is re-measured at most every AddressMap.TOWN_EVERY_MS and
+-- only after TOWN_MOVED_TILES of movement, so this stays off the hot path.
 local addressCache={}
 local function addressFor(id)
     if type(id)~="string" or id=="" then return nil end
     local trimmed=string.sub(id,1,3)=="t3:" and string.sub(id,4) or id
-    local remembered=addressCache[trimmed]
-    if remembered~=nil then return remembered or nil end
     local map=ConspiracyFiles.AddressMap
-    if not map or not map.labelForBuilding then return nil end
-    local ok,label=pcall(map.labelForBuilding,trimmed)
-    if ok and type(label)=="string" and label~="" then addressCache[trimmed]=label; return label end
-    addressCache[trimmed]=false
-    return nil
+    if not map or not map.labelParts or not map.qualify then return nil end
+    local remembered=addressCache[trimmed]
+    if remembered==nil then
+        local ok,label,town=pcall(map.labelParts,trimmed)
+        if ok and type(label)=="string" and label~="" then remembered={label=label,town=town}
+        else remembered=false end
+        addressCache[trimmed]=remembered
+    end
+    if not remembered then return nil end
+    local ok,words=pcall(map.qualify,remembered.label,remembered.town)
+    if ok and type(words)=="string" and words~="" then return words end
+    return remembered.label
 end
 local TAG="ConspiracyFiles.Generated.G2"
 local CFLog=require("ConspiracyFiles/Log")
@@ -211,7 +226,6 @@ local function placement(api,id)
             -- owner asked where the clues were. The fields exist; use them.
             local address
             do
-                local map=ConspiracyFiles.AddressMap
                 local site=a.locationId
                 if not site then
                     for _,d in ipairs(api.snapshot().case.documents) do if d.id==id then site=d.locationId end end
@@ -1201,24 +1215,13 @@ function R.devLocations()
     -- Coordinates alone made this diagnostic almost useless in play: the owner
     -- had searched seven houses and could not tell which of them held the rest.
     -- The address book already knows what a building is called, so say it.
-    local map=ConspiracyFiles.AddressMap
-    -- Ask the address book ONCE per building, and remember a refusal as well as
-    -- an answer. Rows are rebuilt whenever the reading surface refreshes, and
-    -- an address book that is failing was being asked again every time - 52
-    -- caught errors in fifteen seconds (fault check, 2026-09-12).
-    local function addressOf(siteId)
-        if type(siteId)~="string" or not map or not map.labelForBuilding then return nil end
-        local remembered=addressCache[siteId]
-        if remembered~=nil then return remembered or nil end
-        -- Site ids are "t3:<buildingId>"; labelForBuilding adds that prefix
-        -- itself, so it is stripped here rather than doubled.
-        local buildingId=siteId
-        if string.sub(buildingId,1,3)=="t3:" then buildingId=string.sub(buildingId,4) end
-        local ok,label=pcall(map.labelForBuilding,buildingId)
-        if ok and type(label)=="string" and label~="" then addressCache[siteId]=label; return label end
-        addressCache[siteId]=false
-        return nil
-    end
+    -- addressFor is the one address lookup in this file: it asks the book once
+    -- per building, remembers a refusal as well as an answer (an address book
+    -- that is failing was being asked again for every rebuilt row - 52 caught
+    -- errors in fifteen seconds, fault check 2026-09-12), strips the "t3:"
+    -- prefix itself, and qualifies the town on the way out rather than freezing
+    -- it (AD-10). This had its own copy of that cache, which froze the town.
+    local addressOf=addressFor
     for _,api in ipairs(sessions) do
         local ok,snap=pcall(api.snapshot)
         if ok and snap and snap.assignments then
@@ -1720,7 +1723,6 @@ placeOf=function(item)
     local def=building and rd(building,"getDef")
     local id=def and rd(def,"getIDString")
     if id then
-        local map=ConspiracyFiles.AddressMap
         address=addressFor(tostring(id))
     end
     local kind=container and rd(container,"getType")

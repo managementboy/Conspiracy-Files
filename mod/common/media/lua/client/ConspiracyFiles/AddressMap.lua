@@ -161,16 +161,33 @@ function M.nearest(x,y,within)
     if not best then return nil end
     return qualified(best.label,best.town),distance
 end
+-- THE TWO HALVES OF AN ADDRESS, unqualified: the label as the book holds it,
+-- and the town it belongs to (nil outside the named towns).
+--
+-- A caller that REMEMBERS an address must remember these two and call M.qualify
+-- at read time, never keep what labelForBuilding returned. The qualified form
+-- depends on where the survivor is standing now, so a remembered one is frozen:
+-- a label first read in Muldraugh never gained ", Muldraugh" once the survivor
+-- was in West Point, and a real game found 0 of 16 records naming the town they
+-- were about (campaign 20260918T005315). Qualifying costs one compare and the
+-- town is re-measured at most every TOWN_EVERY_MS - never per rendered row.
+function M.labelParts(id)
+    if not book or type(id)~="string" or id=="" then return nil end
+    local r=byId["t3:"..id]
+    if not r or type(r.label)~="string" or r.label=="" then return nil end
+    return r.label,r.town
+end
+-- What the survivor would write for those two halves, here and now.
+function M.qualify(label,town) return qualified(label,town) end
 -- The address for a building id, or nil. Keyed exactly as the book is built:
 -- every id here comes from BuildingDef:getIDString(), the same call T3Nearby
 -- and the audit at line 121 use, so an observedKeyDoor building id resolves
 -- directly. Returns nil for a building the book never gave an address to -
 -- a shed off a dirt road is not "useful" and never gets one.
 function M.labelForBuilding(id)
-    if not book or type(id)~="string" or id=="" then return nil end
-    local r=byId["t3:"..id]
-    if not r or type(r.label)~="string" or r.label=="" then return nil end
-    return qualified(r.label,r.town)
+    local label,town=M.labelParts(id)
+    if not label then return nil end
+    return qualified(label,town)
 end
 function M.stop() if handler then Events.OnTick.Remove(handler) end; job=nil;stopAudit() end
 function M.describe(body,case)
