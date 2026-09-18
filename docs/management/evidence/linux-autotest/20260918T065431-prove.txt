@@ -1,0 +1,11 @@
+Linux mutation proof 20260918T065431
+worktree: /home/elkin/cf-wp345 at 38557a0 Stand within four tiles of the clue, not only next to it
+
+baseline promise: PASS
+
+CAUGHT promise-overdue (promise): FAIL: the promise, at the refusal: the refusal promised 02:07 and it is already 02:21 - a promise cannot be kept, or broken, if it is made in the past (why=no-containers n=1 due=02:07 rung=0/3 now=02:21 overdue=true(0.24h) preparing=false active=1/4 cases=1/16) | FAIL: the promise, at the refusal: the generator promised a case by 02:07 and none came (why=no-containers n=1 due=02:07 rung=0/3 now=02:21 overdue=true(0.24h) preparing=false active=1/4 cases=1/16); assignments placed=5 | FAIL: the promise: the generator promised a case by 02:30 and none came (why=cooldown n=3 due=02:30 rung=1/3 now=03:32 overdue=true(1.03h) preparing=false active=1/4 cases=1/16); assignments placed=5
+CAUGHT ladder-stuck (promise): FAIL: the ladder: 3 refusals of one code earn rung 1 but the generator stands on 0 (every 3 refusals, up to 3) | promise: FAIL: the ladder: 3 refusals of one code earn rung 1 but the generator stands on 0 (every 3 refusals, up to 3)
+CAUGHT poller-silent-gap (promise): FAIL: the poller never reported why=gap with a 999 hour gap between cases (why=cooldown n=3 due=04:03 rung=1/3 now=04:15 overdue=true(0.21h) preparing=false active=1/4 cases=1/16) | promise: FAIL: the poller never reported why=gap with a 999 hour gap between cases (why=cooldown n=3 due=04:03 rung=1/3 now=04:15 overdue=true(0.21h) preparing=false active=1/4 cases=1/16)
+
+caught 3 of 3
+worktree clean afterwards: yes
