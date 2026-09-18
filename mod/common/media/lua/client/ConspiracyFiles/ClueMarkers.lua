@@ -95,7 +95,20 @@ local function sourceSquare(source)
  local grid=source:getSourceGrid();if grid then return grid end
  local parent=source:getParent()
  if parent and instanceof and instanceof(parent,"BaseVehicle") then return parent:getSquare() end
+ -- A CARRIER stands where it fell (P4-R134): a body's container is reached
+ -- through getContainer(), and it has no grid square of its own either. The
+ -- mark belongs where the body is, so ask whatever holds the container.
+ if parent and parent.getSquare then return parent:getSquare() end
  return nil
+end
+-- The CLUE's own square, for a clue recorded where it lies: the tile it sits
+-- on, or the square of whatever holds it - a drawer two tiles away across an
+-- open loot window, a car, a body. Never the survivor's.
+local function restingSquare(item)
+ local world=item.getWorldItem and item:getWorldItem()
+ local square=world and world:getSquare()
+ if square then return square end
+ return sourceSquare(item.getContainer and item:getContainer())
 end
 -- Called before vanilla removes the item. Never use a placement target or reading position.
 function M.before(character,item,source,destination,square)
@@ -145,6 +158,35 @@ function M.after(candidate,item)
  local r=read();if r.records[candidate.id] then return end
  local next=copy(r);next.records[candidate.id]={x=candidate.x,y=candidate.y,z=candidate.z,map=candidate.map,written=false}
  commit(next);log("Finding location recorded. Inspect the item to add it to your evidence.")
+end
+-- WHERE IT LAY. Until P4-R132 every clue was picked up, so the wraps of the
+-- transfer actions above saw every finding location. Since then a clue can be
+-- recognised by searching and noted where it lies, with the organiser open, and
+-- that whole way of playing recorded nothing: the pen had nothing to write and
+-- the record's MAP NOTE line said the location was not recorded (owner,
+-- 2026-09-18, "I have a pen and found a clue. are we not writing them to the
+-- map anymore?").
+--
+-- The same commit into the same store as a pickup, taken from the clue's own
+-- square rather than the survivor's. Call it BEFORE the discovery is committed:
+-- a clue already known is refused here, exactly as a re-looted historical one
+-- is in M.before.
+function M.foundHere(item)
+ if not allowed() or not item then return false end
+ local player=getPlayer();if not player then return false end
+ if not session() then return false end
+ -- Carried: the pickup already recorded where it came from, and where the
+ -- survivor happens to be standing is never the answer.
+ if item:getOutermostContainer()==player:getInventory() then return false end
+ local md=item:getModData();local c=md and session(md.cfGeneratedId)
+ local a=c and c.assignments and c.assignments[md.cfGeneratedId]
+ if not a or a.status=="conflict" or md.cfPhysicalToken~=a.physicalToken then return false end
+ local r=read();if not r or r.records[md.cfGeneratedId] or known(c,md.cfGeneratedId) then return false end
+ local square=restingSquare(item);if not square then return false end
+ local next=copy(r)
+ next.records[md.cfGeneratedId]={x=square:getX(),y=square:getY(),z=square:getZ(),map=tostring(getWorld():getMap()),written=false}
+ commit(next);log("Finding location recorded where it lay.")
+ return true
 end
 function M.update()
  if not allowed() or not getPlayer() then return end

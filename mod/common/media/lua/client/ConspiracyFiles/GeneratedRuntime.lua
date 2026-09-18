@@ -978,6 +978,15 @@ function R.inspect(item,inPlace)
     -- announced its connection again (audit follow-up, 2026-09-15).
     local already=false
     for _,known in ipairs(api.snapshot().known or {}) do if known==md.cfGeneratedId then already=true end end
+    -- WHERE IT LAY. A clue noted in place is never picked up, so the marker
+    -- module's pickup wraps never see it and no finding location is recorded -
+    -- no map mark, however many pens the survivor carries (owner, 2026-09-18).
+    -- Taken here, from the clue's own square, and before the discovery is
+    -- committed: ClueMarkers refuses a location for a clue already known.
+    if inPlace then
+        local markers=ConspiracyFiles.ClueMarkers
+        if markers and markers.foundHere then pcall(markers.foundHere,item) end
+    end
     checked(api.status(md.cfGeneratedId,"placed",worldHours())); checked(api.inspect(md.cfGeneratedId))
     -- The item in hand shows as Evidence however it reached the hand.
     pcall(function() item:setDisplayCategory(categoryOf(md.cfGeneratedId)) end)

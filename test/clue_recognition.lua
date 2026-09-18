@@ -160,3 +160,22 @@ assert(R.recognise(plain,"look"))
 local shown=options(plain)
 assert(#shown>=1 and shown[1].label=="Inspect Investigation Evidence","Inspect once recognised")
 print("PASS clue recognition: placed plain, recognised once by search or look, stamped where it can be reached, saved and validated, re-stamped on load only when recognised, Inspect only afterwards")
+
+-- NOTED WHERE IT LIES (owner, 2026-09-18: "I have a pen and found a clue. are
+-- we not writing them to the map anymore?"). A clue recognised by searching and
+-- noted in its container is never picked up, so the marker module's pickup
+-- wraps never see it: the finding location has to be taken at the note, or the
+-- pen has nothing to write.
+local marked={}
+ConspiracyFiles.ClueMarkers={foundHere=function(it) marked[#marked+1]=it; return true end}
+local lying
+for _,c in pairs(containers) do
+    for _,v in ipairs(c.items) do
+        if not lying and R.isRecognised(v) and not R.isInspected(v) then lying=v end
+    end
+end
+assert(lying,"a recognised clue is still lying in its container")
+print("documents in the fixture case: "..#root.case.documents..", noted so far: "..#R.known())
+assert(R.inspect(lying,true),"a recognised clue is noted where it lies")
+assert(marked[1]==lying,"noting a clue where it lies records its finding location")
+print("PASS noted in place records the finding location")
