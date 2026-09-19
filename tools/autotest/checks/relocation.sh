@@ -93,26 +93,48 @@ for _ in $(seq 24); do sleep 5; done
 
 say "relocation trail from the mod's own log:"
 reloc_log | sed 's/^/    /' >&2
-attempts="$(reloc_log | grep -c "CF-G2-RELOCATE" || true)"
+# A REFUSAL IS NOT A RELOCATION. `attempts` counted every CF-G2-RELOCATE line -
+# including "no unvisited candidate", "no loaded container at destination",
+# "guard refused" and "destination changed" - so a run where nothing moved could
+# still report relocation as having happened and exit 0 saying "no mismatch
+# after relocation". Only a reported MOVE counts as the experiment occurring.
+lines="$(reloc_log | grep -c "CF-G2-RELOCATE" || true)"
 moved="$(reloc_log | grep -c "relocated " || true)"
-say "log: $attempts relocation line(s), $moved reported move(s)"
+refusals="$(reloc_log | grep -cE "leaving in place|guard refused|marked unknown" || true)"
+say "log: $lines relocation line(s) - $moved MOVE(s), $refusals refusal(s)"
+if [ "$refusals" -gt 0 ]; then
+    say "refusal reasons seen:"
+    reloc_log | grep -E "leaving in place|guard refused|marked unknown" \
+        | sed 's/.*CF-G2-RELOCATE\] /    /' | sort | uniq -c | sed 's/^/    /' >&2
+fi
 
 # --- 4. compare record against world, immediately ---------------------------
 say "comparing record against world, per clue:"
 ids="$(ev 'return CFReloc.captured()')"
-mismatch=0
+mismatch=0; compared=0; noverdict=0
 for id in $ids; do
     ev "return CFReloc.teleportTo('$id')" >/dev/null
-    wait_true 40 'CFReloc.loaded()=="true"' >/dev/null || { say "  $id: square never loaded - no verdict"; continue; }
+    wait_true 40 'CFReloc.loaded()=="true"' >/dev/null \
+        || { say "  $id: square never loaded - NO VERDICT"; noverdict=$((noverdict+1)); continue; }
     sleep 2
     line="$(ev "return CFReloc.compare('$id')")"
     echo "    $line" >&2
-    grep -q "verdict=MISMATCH" <<<"$line" && mismatch=$((mismatch+1))
+    # Only these two are real comparisons. unloaded, read-error, in-hand and
+    # skipped are NOT, and used to leave the success condition untouched - so a
+    # run that compared nothing could still pass.
+    if grep -q "verdict=DISCREPANCY" <<<"$line"; then
+        mismatch=$((mismatch+1)); compared=$((compared+1))
+    elif grep -q "verdict=none" <<<"$line"; then
+        compared=$((compared+1))
+    else
+        noverdict=$((noverdict+1))
+    fi
 done
+say "before reload: $compared real comparison(s), $mismatch mismatch(es), $noverdict without a verdict"
 
-if [ "$attempts" = 0 ] && [ "$moved" = 0 ]; then
-    say "RELOCATION NEVER RAN. That is not evidence about placement either way -"
-    say "it means the conditions were not met, and the conditions are printed above."
+if [ "$moved" = 0 ]; then
+    say "NOTHING WAS RELOCATED. That is not evidence about placement either way -"
+    say "the conditions and every refusal reason are printed above."
 fi
 
 # --- 5. save, reload, and repeat --------------------------------------------
@@ -125,36 +147,55 @@ kept="$(ev "return CFReloc.importBaseline([==[$blob]==])")"
 say "baseline restored after reload: $kept clue(s)"
 say "clock after reload: $(ev 'return CFReloc.clock()')"
 
-mismatch_after=0
+mismatch_after=0; compared_after=0; noverdict_after=0
 for id in $ids; do
     ev "return CFReloc.teleportTo('$id')" >/dev/null
-    wait_true 40 'CFReloc.loaded()=="true"' >/dev/null || { say "  $id: square never loaded after reload - no verdict"; continue; }
+    wait_true 40 'CFReloc.loaded()=="true"' >/dev/null \
+        || { say "  $id: square never loaded after reload - NO VERDICT"; noverdict_after=$((noverdict_after+1)); continue; }
     sleep 2
     line="$(ev "return CFReloc.compare('$id')")"
     echo "    $line" >&2
-    grep -q "verdict=MISMATCH" <<<"$line" && mismatch_after=$((mismatch_after+1))
+    if grep -q "verdict=DISCREPANCY" <<<"$line"; then
+        mismatch_after=$((mismatch_after+1)); compared_after=$((compared_after+1))
+    elif grep -q "verdict=none" <<<"$line"; then
+        compared_after=$((compared_after+1))
+    else
+        noverdict_after=$((noverdict_after+1))
+    fi
 done
+say "after reload: $compared_after real comparison(s), $mismatch_after mismatch(es), $noverdict_after without a verdict"
 
 errs="$(mod_error_count 2>/dev/null || echo 0)"
 "$PZ" stop >/dev/null 2>&1
 
 say "---"
-say "relocation lines: $attempts    reported moves: $moved    clues stale: $stale_count"
-say "mismatches before reload: $mismatch    after reload: $mismatch_after    mod errors: $errs"
+say "relocation log lines: $lines    MOVES: $moved    refusals: $refusals    clues stale: $stale_count"
+say "before reload: compared=$compared mismatches=$mismatch no-verdict=$noverdict"
+say "after reload:  compared=$compared_after mismatches=$mismatch_after no-verdict=$noverdict_after"
+say "mod errors: $errs"
 [ "$errs" = 0 ] || fail "the mod logged $errs error(s)"
 for x in "${fails[@]:-}"; do [ -n "$x" ] && say "FAIL: $x"; done
 
 if [ "$mismatch" -gt 0 ] || [ "$mismatch_after" -gt 0 ]; then
-    say "A MISMATCH WAS CAPTURED after relocation. The lines above are the evidence."
-    say "Whether a refused canonical write caused it is still a HYPOTHESIS - read the"
-    say "relocation trail and the mod errors above before concluding anything."
+    say "A MISMATCH WAS CAPTURED. The lines above are the evidence."
+    say "Whether a refused canonical write caused it remains a HYPOTHESIS - read the"
+    say "relocation trail and the mod errors before concluding anything."
     exit 1
 fi
-if [ "$attempts" = 0 ] && [ "$moved" = 0 ]; then
-    say "INCONCLUSIVE: relocation never ran, so this says nothing about the fault."
+if [ "${#fails[@]}" -gt 0 ]; then exit 1; fi
+# THREE SEPARATE WAYS THIS RUN CAN FAIL TO BE AN EXPERIMENT AT ALL.
+if [ "$moved" = 0 ]; then
+    say "INCONCLUSIVE: nothing was relocated, so this says nothing about the fault."
+    say "Refusals are not relocations - the reasons above say which condition withheld it."
     exit 2
 fi
-say "No mismatch after relocation, in this one save, across $(wc -w <<<"$ids") clue(s)."
-say "NOT proof of absence: one save, one case, and only the clues that were stale."
-[ "${#fails[@]}" -gt 0 ] && exit 1
+if [ "$compared" -eq 0 ] && [ "$compared_after" -eq 0 ]; then
+    say "INCONCLUSIVE: relocation ran but not one clue could actually be compared."
+    exit 2
+fi
+say "Relocation ran ($moved move(s)) and no mismatch was found:"
+say "  $compared clue(s) compared before the reload, $compared_after after."
+[ "$noverdict" -gt 0 ] || [ "$noverdict_after" -gt 0 ] && \
+    say "  PARTIAL: $noverdict before and $noverdict_after after gave no verdict."
+say "NOT proof of absence: one save, one case, and only the clues that went stale."
 exit 0

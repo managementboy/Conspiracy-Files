@@ -35,6 +35,27 @@ local Cases = require("ConspiracyFiles/Generated/SuccessiveCases")
 local Retired = require("ConspiracyFiles/Generated/RetiredCase")
 local StaleClue = require("ConspiracyFiles/StaleClue")
 local World = require("ConspiracyFiles/WorldAccess")
+-- The runtime's OWN visited-buildings source. destinations(root,{}) ignores
+-- visited sites, so the conditions this check printed did not match the ones
+-- the runtime applies - it could not explain every refusal.
+local Visited = require("ConspiracyFiles/VisitedBuildingLog")
+
+-- World.count is an incremental stepper: it returns a function to call until
+-- its `done` callback fires. Driven to completion here, bounded, with every
+-- step guarded - an unfinished or throwing count is reported, never guessed.
+local function countToken(container, token)
+    local n, done = nil, false
+    local ok, step = pcall(World.count, container, token, function(c) n = c; done = true end)
+    if not ok then return nil, "count threw: " .. tostring(step) end
+    if type(step) ~= "function" then return nil, "count gave no stepper" end
+    for _ = 1, 4000 do
+        if done then break end
+        local okS, err = pcall(step)
+        if not okS then return nil, "count step threw: " .. tostring(err) end
+    end
+    if not done then return nil, "count did not finish" end
+    return n
+end
 
 local TAG = "ConspiracyFiles.Generated.G2"
 local function roots()
@@ -97,12 +118,16 @@ function CFReloc.capture()
         for _, d in ipairs(root.case.documents) do
             local a = root.assignments[d.id]
             if a and a.status == "placed" and not known[d.id] then
+                -- `holds` stays "unreadable" unless the walk SUCCEEDS. It used
+                -- to be set to "false" before walking, so a throw mid-walk left
+                -- a read failure recorded as absence - the baseline itself
+                -- lying about the starting state.
                 local okR, container = pcall(World.resolve, a.target, a.physicalToken)
                 local holds = "unreadable"
-                if okR and container then
+                if okR and not container then holds = "no-container"
+                elseif okR and container then
                     local okI, items = pcall(function() return container:getItems() end)
                     if okI and items then
-                        holds = "false"
                         local okW, found = pcall(function()
                             for i = 0, items:size() - 1 do
                                 local md = items:get(i):getModData()
@@ -112,7 +137,7 @@ function CFReloc.capture()
                         end)
                         if okW then holds = tostring(found) end
                     end
-                elseif okR then holds = "no-container" end
+                end
                 CFReloc.baseline[d.id] = { token = a.physicalToken, target = a.target,
                                            placedHours = a.placedHours, relocations = a.relocations,
                                            locationId = a.locationId, holds = holds }
@@ -134,34 +159,71 @@ end
 function CFReloc.conditions()
     local gt = getGameTime and getGameTime()
     local hours = gt and gt:getWorldAgeHours() or -1
+    local p = getPlayer and getPlayer()
+    local px, py, pz
+    if p then px, py, pz = math.floor(p:getX()), math.floor(p:getY()), math.floor(p:getZ()) end
     local out = {}
     for _, root in ipairs(roots()) do
         local stale = {}
         for _, id in ipairs(StaleClue.staleIds(root, hours)) do stale[id] = true end
+        -- THE RUNTIME'S OWN visited set, not an empty table.
+        local okV, visited = pcall(Visited.set)
+        local okD, dests = pcall(StaleClue.destinations, root, okV and visited or {})
         for _, d in ipairs(root.case.documents) do
             local a = root.assignments[d.id]
             if a and a.status == "placed" then
-                local carrier = S.isMobile(a.target) and type(a.target.carrierMark) == "string"
-                local okD, dests = pcall(StaleClue.destinations, root, {})
-                -- tooClose is a real refusal: relocation will not move a clue
-                -- out from under the survivor. Reported, because this check
-                -- teleports the player about and must not mistake its own
-                -- position for an absent fault.
-                local close = "n/a"
-                local p = getPlayer and getPlayer()
-                if p and a.target and StaleClue.tooClose then
-                    local okC, res = pcall(StaleClue.tooClose,
-                        math.floor(p:getX()), math.floor(p:getY()), math.floor(p:getZ()), a.target)
-                    close = okC and tostring(res) or "threw"
+                local parts = { d.id }
+                local function add(k, v) parts[#parts + 1] = k .. "=" .. tostring(v) end
+                add("stale", stale[d.id] == true)
+                add("age-placed", string.format("%.1f", hours - (a.placedHours or 0)))
+                add("canAttempt", StaleClue.canAttempt(a))
+                add("relocations", a.relocations)
+                -- quantity: a pile never relocates (the runtime's
+                -- expectedCount(api,id)==1 guard).
+                add("quantity", d.quantity or 1)
+                add("onCarrier", S.isMobile(a.target) and type(a.target.carrierMark) == "string")
+                -- the old container must resolve, or the runtime has nothing
+                -- safe to verify against and simply returns
+                local okOld, oldContainer = pcall(World.resolve, a.target)
+                add("oldContainer", okOld and (oldContainer and "resolved" or "nil") or "THREW")
+                add("visitedKnown", okV and "yes" or "THREW")
+                add("destinations", okD and #dests or "THREW")
+                if px then
+                    local okC, close = pcall(StaleClue.tooClose, px, py, pz, a.target)
+                    add("tooCloseToOld", okC and close or "THREW")
+                    -- proximity to the DESTINATION is a second, separate refusal
+                    -- the runtime applies after choosing a site; approximated
+                    -- here by the chosen site's own bounds corner, which is the
+                    -- best a report can do without running boundsScan.
+                    if okD and dests and dests[1] and dests[1].bounds then
+                        local b = dests[1].bounds
+                        local okC2, close2 = pcall(StaleClue.tooClose, px, py, pz,
+                            { x = b.x1, y = b.y1, z = b.z })
+                        add("tooCloseToDest~", okC2 and close2 or "THREW")
+                    else
+                        add("tooCloseToDest~", "no-dest")
+                    end
+                else
+                    add("tooCloseToOld", "no-player"); add("tooCloseToDest~", "no-player")
                 end
-                out[#out + 1] = table.concat({ d.id,
-                    "stale=" .. tostring(stale[d.id] == true),
-                    "canAttempt=" .. tostring(StaleClue.canAttempt(a)),
-                    "relocations=" .. tostring(a.relocations),
-                    "onCarrier=" .. tostring(carrier),
-                    "destinations=" .. (okD and tostring(#dests) or "THREW"),
-                    "playerTooClose=" .. close,
-                    "age-placed=" .. string.format("%.1f", hours - (a.placedHours or 0)) }, "\t")
+                -- THE TWO COUNT GUARDS the runtime applies before moving
+                -- anything: exactly one item in the old container, and none in
+                -- the survivor's inventory (StaleClue.canRelocate).
+                local tokenCount, tErr, carryCount, cErr
+                if okOld and oldContainer then tokenCount, tErr = countToken(oldContainer, a.physicalToken) end
+                if p then
+                    local okInv, inv = pcall(function() return p:getInventory() end)
+                    if okInv and inv then carryCount, cErr = countToken(inv, a.physicalToken)
+                    else cErr = "inventory unreadable" end
+                end
+                add("inOldContainer", tokenCount ~= nil and tokenCount or ("?" .. tostring(tErr)))
+                add("carried", carryCount ~= nil and carryCount or ("?" .. tostring(cErr)))
+                if tokenCount ~= nil and carryCount ~= nil then
+                    add("canRelocate", StaleClue.canRelocate(tokenCount, carryCount))
+                else
+                    add("canRelocate", "unknown - a count could not be read")
+                end
+                out[#out + 1] = table.concat(parts, "\t")
             end
         end
     end
@@ -208,8 +270,14 @@ local function locate(token, t, radius)
     return nil
 end
 
--- One clue, compared against its captured baseline. Every outcome is named, and
--- a read failure is never a finding (the discipline placement.lua earned).
+-- One clue, compared against its captured baseline.
+--
+-- THE VERDICT COMES FROM CFPlace.verify, not from a second implementation. An
+-- earlier version re-read the world here and lost every protection
+-- placement.lua had earned: it never checked assignment status, never excluded
+-- the survivor's bags, and its wider search could throw or silently swallow an
+-- unreadable container. Duplicating that reading was the mistake; this only
+-- adds what verify() cannot know - what the record looked like BEFORE.
 function CFReloc.compare(id)
     local base = CFReloc.baseline[id]
     if not base then return "no-baseline\t" .. tostring(id) end
@@ -223,32 +291,23 @@ function CFReloc.compare(id)
                 "status=" .. tostring(a.status),
                 "was=" .. targetWords(base.target),
                 "now=" .. targetWords(a.target) }
-            local okR, container = pcall(World.resolve, a.target, a.physicalToken)
-            if not okR then
-                parts[#parts + 1] = "verdict=read-error resolver threw: " .. tostring(container)
-            elseif not container then
-                parts[#parts + 1] = "verdict=read-error resolution refused"
-            else
-                local okW, holds = pcall(function()
-                    local items = container:getItems()
-                    for i = 0, items:size() - 1 do
-                        local md = items:get(i):getModData()
-                        if type(md) == "table" and md.cfPhysicalToken == a.physicalToken then return true end
-                    end
-                    return false
-                end)
-                if not okW then
-                    parts[#parts + 1] = "verdict=read-error contents unreadable: " .. tostring(holds)
-                elseif holds then
-                    parts[#parts + 1] = "verdict=record-matches-world"
-                else
-                    -- THE INTERESTING CASE. Where is it instead?
-                    local elsewhere = locate(a.physicalToken, a.target, 20)
-                    local atOld = locate(a.physicalToken, base.target, 3)
-                    parts[#parts + 1] = "verdict=MISMATCH"
-                    parts[#parts + 1] = "foundNear=" .. tostring(elsewhere or "not within 20 tiles")
-                    parts[#parts + 1] = "atOldTarget=" .. tostring(atOld or "no")
-                end
+            -- The guarded verdict, from the diagnostic that was already
+            -- fault-injected: none / DISCREPANCY / read-error / in-hand /
+            -- unloaded / skipped.
+            local verdict = "no-CFPlace"
+            if CFPlace and CFPlace.verify then
+                local okV, v = pcall(CFPlace.verify, id)
+                verdict = okV and tostring(v) or ("verify threw: " .. tostring(v))
+            end
+            local headline = verdict:match("^[^\n\t]*") or verdict
+            parts[#parts + 1] = "verdict=" .. headline
+            if headline == "DISCREPANCY" then
+                -- Only now is the wider search worth doing, and it is guarded.
+                local okE, elsewhere = pcall(locate, a.physicalToken, a.target, 20)
+                local okO, atOld = pcall(locate, a.physicalToken, base.target, 3)
+                parts[#parts + 1] = "foundNear=" .. (okE and tostring(elsewhere or "not within 20 tiles") or "SEARCH THREW")
+                parts[#parts + 1] = "atOldTarget=" .. (okO and tostring(atOld or "no") or "SEARCH THREW")
+                parts[#parts + 1] = "\n" .. verdict
             end
             return table.concat(parts, "\t")
         end
