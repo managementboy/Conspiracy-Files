@@ -2,7 +2,7 @@
 
 Prepared 19 September 2026 against `main` at `73e6b62`, build `DEV-0.44.0-addresses-that-travel`.
 
-**Status: Q01–Q10 confirmed, including a replacement lead prototype and a later map-line goal. Q16 is partially answered through Q03. Remaining choices await answers. This review builds a new wishlist and revisits all existing commitments.**
+**Status: Q01–Q11 confirmed, including a replacement lead prototype and a later map-line goal. Q16 is partially answered through Q03. Remaining choices await answers. This review builds a new wishlist and revisits all existing commitments.**
 
 **Confirmed scope:** version 1.0 enriches ordinary survival with investigations (Q01 A). A survivor-centered campaign (Q01 B) is a possible future option. All remaining recommendations must be considered within that boundary; campaign features are not implied 1.0 commitments.
 
@@ -229,7 +229,7 @@ Give a concrete expectation: during one typical real-world play session, how muc
 
 **Suggested answer — not approved:** A — Focus attention on one principal mystery; let incidental discoveries be retained quietly for later. Initial playtest target: one meaningful discovery or connection in roughly 30–60 minutes of ordinary play, with no obligation to investigate every session. This is a tuning hypothesis, not a guarantee or a reason to spawn clues beside the player. Timing: next milestone; test before changing fixed case limits.
 
-**Owner decision:** _unanswered_
+**Owner decision — confirmed 19 September 2026:** A: one principal mystery, with incidental discoveries saved for later. This is an attention/pacing goal; it does not itself fix an internal active-case limit. The suggested 30–60-minute target and exact implementation timing were not approved. Recorded as DR-20260919-Q11 in `DECISIONS.md`.
 
 ### Q12 — What should happen to an unfinished or impossible trail?
 
@@ -539,6 +539,7 @@ Copy one row for each answered question. Keep any uncertainty visible.
 | Q07 | A: keep discovery loop; improve detection/prioritisation of game-placed indoor corpses and car wrecks after research | Research at the end of today's list, before development | DR-20260919-Q07; reaffirms P4-R132's experience; new research request | Verified corpse/wreck detection, provenance limits, storage/access and prioritisation options | Before implementing scene selection changes or substituting zombies for existing corpses |
 | Q08 | A and B: understanding a connection and reaching somewhere useful or memorable; no ranking specified | New wishlist; informs content and acceptance criteria | DR-20260919-Q08; renews the connection and destination player moments | Owner playtest can describe what was understood and why the destination mattered | A proposal that equates rewards solely with collecting records or assumes permission to spawn rewards |
 | Q10 | A: recognisable cases and conclusions without hidden-clue counts; later connect clues leading to a conclusion with map lines | Case presentation: wishlist; map lines: later | DR-20260919-Q10; revises blanket P2-Q82 closure prohibition; separate graph stays open in Q21 | Connection meaning and map-line interaction design still needed | A proposal that exposes hidden clues or assumes automatic/manual drawing without a decision |
+| Q11 | A: one principal mystery, incidental discoveries retained for later | New wishlist; detailed pacing pending | DR-20260919-Q11; current case cap and timer not automatically reaffirmed | Playtest attention and continuity; design handling of background discoveries | A proposal that equates principal mystery with deleting other cases or imposes an unapproved timer |
 
 Before implementation begins, check the answers together: travel guidance against survival freedom; answer-driven cases against a fixed underlying truth; physical device costs against accessibility; finite storage against promised campaign length; and new-game rules against a long personal campaign. Present conflicts for a decision instead of resolving them silently.
 

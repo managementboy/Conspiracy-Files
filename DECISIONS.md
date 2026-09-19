@@ -6,6 +6,10 @@ If a spike disproves a decision, technical reality wins: supersede the decision 
 
 ## Direction review — 2026-09-19
 
+**DR-20260919-Q11 — focus attention on one principal mystery.** Owner selected Q11 A: one principal mystery, with incidental discoveries saved for later. This sets the desired player experience alongside ordinary survival and supports keeping the personal opening understandable. It does not require discarding incidental evidence or removing the continuing web confirmed in Q06.
+
+No numerical spawn interval, session-length target or internal active-case limit was approved. In particular, one principal mystery is not automatically an instruction to set the storage/runtime active-case cap to one; how background discoveries and future mysteries are retained needs design. The current 24-hour gap and four-active-case implementation are not reaffirmed merely by this answer. Timing and detailed pacing remain open.
+
 **DR-20260919-Q10 — recognisable cases and conclusions; later connect clues on the map.** Owner selected Q10 A and added: “the goal would be later paint lines on the Map between the clues that lead to a meaningfull conclusion”. Keep recognisable cases and meaningful conclusions without revealing how many hidden clues remain. Add a later goal of drawing lines on the map between clues that lead to a meaningful conclusion, connecting the investigation's reasoning to its geography.
 
 This permits visible conclusions consistently with Q04 and revises any blanket prohibition on case closure in P2-Q82. It does not approve a hidden-clue checklist. The map-line goal is distinct from the separate player-facing relationship graph still awaiting Q21. Whether lines are drawn manually or automatically, how they distinguish supported connections from tentative ones, how co-located or moved clues are represented, and what writing tools they require remain open. Do not infer those interface rules from the request. Timing is later; implementation is not requested during the questionnaire.
