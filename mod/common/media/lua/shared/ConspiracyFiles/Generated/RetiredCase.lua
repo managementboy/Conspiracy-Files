@@ -27,7 +27,7 @@ local M={SCHEMA=2,STUB_SCHEMA=3}
 -- (DR-20260919-SOLVABLE-WITHDRAWN). Both optional, like lastSeen, so older
 -- schema-2 roots still load and SCHEMA stays 2.
 local ROOT_FIELDS={schema=true,caseId=true,rows=true,known=true,offered=true,answers=true,completedHours=true,
-                   completion=true,gaps=true,gapsFrom=true}
+                   completion=true,gaps=true,gapsFrom=true,thread=true,followsFrom=true}
 -- A deep-archived case (schema 3, P4-R111). The archive is what stops the tenth
 -- case being the last, but 500 KB (P4-R17) cannot hold the documents of every
 -- case a save will ever make: measured, four live cases and six full-size
@@ -48,7 +48,7 @@ local ROOT_FIELDS={schema=true,caseId=true,rows=true,known=true,offered=true,ans
 -- A stub keeps completion/gaps too: it is a few dozen bytes and it is the
 -- answer the deep archive was destroying.
 local STUB_FIELDS={schema=true,caseId=true,known=true,offered=true,answers=true,completedHours=true,
-                   completion=true,gaps=true,gapsFrom=true}
+                   completion=true,gaps=true,gapsFrom=true,thread=true,followsFrom=true}
 local OFFERED_FIELDS={premiseId=true,outline=true,people=true,organisation=true}
 local ANSWER_FIELDS={reading=true,matters=true,way=true,changedHours=true,usedBy=true}
 M.OUTLINES={corroboration=true,["conflicting-account"]=true}
@@ -161,6 +161,22 @@ end
 -- from the closed set, and gap ids that are ids. "complete" carries no gaps and
 -- "complete-with-gaps" carries at least one, so a record can never claim a
 -- state its own list contradicts (DR-20260919-SOLVABLE-WITHDRAWN).
+-- The carried thread, checked as strictly as it is written. Its `document` is an
+-- id from a case whose documents are no longer here, so the id itself cannot be
+-- cross-checked - what CAN be checked is that it is well formed and complete,
+-- so a half-carried thread never reaches a follow-up.
+local function threadOK(root)
+    if root.thread==nil then return true end
+    local t=root.thread
+    if type(t)~="table" then return false end
+    for key in pairs(t) do
+        if key~="document" and key~="reference" and key~="point" and key~="question" then return false end
+    end
+    for _,key in ipairs({"document","reference","point","question"}) do
+        if not text(t[key],120) then return false end
+    end
+    return true
+end
 local function completionOK(root)
     if root.completion==nil then
         -- No state carried: then no gap list and no history either. An older
@@ -217,6 +233,8 @@ local function stubOK(root)
     if root.offered~=nil and not offeredOK(root.offered) then return false,"invalid archived offered" end
     if root.answers~=nil and (root.offered==nil or not answersOK(root.answers)) then return false,"invalid archived answers" end
     if not completionOK(root) then return false,"invalid archived completion" end
+    if not threadOK(root) then return false,"invalid archived thread" end
+    if root.followsFrom~=nil and not text(root.followsFrom,80) then return false,"invalid archived followsFrom" end
     local h=root.completedHours
     if h~=nil and (type(h)~="number" or h~=h or h<0 or h==math.huge) then return false,"invalid archived completion hour" end
     return true
@@ -235,6 +253,8 @@ function M.validate(root)
     -- but not retired: invalid retired rows", core-loop check 2026-09-15; the
     -- "0 of 8 last seen" of 2026-09-14 was the same fault).
     if not completionOK(root) then return false,"invalid retired completion" end
+    if not threadOK(root) then return false,"invalid retired thread" end
+    if root.followsFrom~=nil and not text(root.followsFrom,80) then return false,"invalid retired followsFrom" end
     local ok,n=dense(root.rows,G.MAX_EVIDENCE+1); if not ok then return false,"invalid retired rows" end
     -- A CASE THAT ENDED WITHOUT CLUES MAY RETIRE WITH FEWER ROWS, INCLUDING
     -- NONE. The blunt minimum here was the last link in the stall: the drop
@@ -312,6 +332,23 @@ function M.retire(root,lastSeen,completedHours)
     -- because after that nothing can work it out: a retired record has no
     -- assignments and no case envelope, so asked afterwards it reported no
     -- gaps and every finished case read as clean.
+    -- THE THREAD SURVIVES RETIREMENT AND THE DEEP ARCHIVE. A follow-up inherits
+    -- a sourced finding from this case, and a retired root keeps no case
+    -- envelope at all - so without carrying it here the connection would die
+    -- the moment the opening retired, which is precisely when the follow-up is
+    -- meant to arrive (PHASE_C_CONTINUITY_CARRIER.md). A few dozen bytes.
+    if type(root.case)=="table" and type(root.case.thread)=="table" then
+        out.thread=copy(root.case.thread)
+    end
+    -- WHICH CASE THIS ONE FOLLOWED, kept so a spent thread stays spent. Without
+    -- it, a retired follow-up would forget its own inheritance and the opening's
+    -- thread would look unused for ever - offering a third case, then a fourth,
+    -- all following the same finding. Only the id, not the whole carrier: it is
+    -- the one field the "already followed" test needs, and a retired record is
+    -- charged against a 500 kB budget.
+    if type(root.case)=="table" and type(root.case.follows)=="table" then
+        out.followsFrom=root.case.follows.fromCase
+    end
     local carried=Session.retiredGapFields(root)
     if carried.completion then
         out.completion=carried.completion; out.gaps=carried.gaps; out.gapsFrom=carried.gapsFrom
@@ -329,7 +366,10 @@ function M.shrink(root)
     local ok,why=M.validate(root); if not ok then return nil,why end
     local out={schema=M.STUB_SCHEMA,caseId=root.caseId,known=copy(root.known),
         offered=copy(root.offered),answers=copy(root.answers),completedHours=root.completedHours,
-        completion=root.completion,gaps=copy(root.gaps),gapsFrom=copy(root.gapsFrom)}
+        completion=root.completion,gaps=copy(root.gaps),gapsFrom=copy(root.gapsFrom),
+        -- Kept in the stub too: a case whose rows are gone can still hand its
+        -- thread to a follow-up, which is the whole point of carrying it.
+        thread=copy(root.thread),followsFrom=root.followsFrom}
     ok,why=stubOK(out); if not ok then return nil,why end
     return out,true
 end

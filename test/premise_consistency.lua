@@ -227,6 +227,14 @@ for _, cal in ipairs(calendars) do
         -- The opening premise names the survivor; without a SELF the placeholder
         -- would simply be skipped and this test would never read that line.
         map.SELF = "Ada Whitlock"
+    -- The opening routes to a point of its own; the follow-up inherits that
+    -- point and the earlier reference. All three are premise/thread data, so
+    -- without them here every render would leave a placeholder and the real
+    -- defect - a phrase that contradicts its calendar - would be buried under
+    -- thousands of false ones.
+    map.POINT = "the district transfer desk"
+    map.FROMPOINT = "the district transfer desk"
+    map.FROMREF = "AV-306"
         map.ORG = render(premise.orgs[1], { A = map.A, B = map.B })
         local days, months = allowed(premise, map)
         for _, agreeing in ipairs({ true, false }) do
@@ -273,7 +281,7 @@ end
 local wanted, seen = {}, {}
 for _, id in ipairs(Premises.list()) do
     local premise = Premises.get(id)
-    if not premise.opening then
+    if not premise.opening and not premise.followUp then
     for _, outline in ipairs({ "corroboration", "conflicting-account" }) do
         wanted[#wanted + 1] = id .. "/" .. outline .. "/review"
         if premise.reviewOptional then wanted[#wanted + 1] = id .. "/" .. outline .. "/no-review" end

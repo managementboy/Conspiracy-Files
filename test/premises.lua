@@ -27,8 +27,11 @@ local opts = { mapId = "SYNTHETIC-MAP", buildLine = "TEST-ONLY", allowSynthetic 
 -- total separately, so a second opening cannot quietly widen the pool either.
 assert(Premises.choosableCount() == 20,
     "expected twenty premises an ordinary case can draw, got " .. Premises.choosableCount())
-assert(Premises.count() == 21,
-    "expected twenty-one premises in total - twenty ordinary and the opening, got " .. Premises.count())
+-- Twenty ordinary, plus the two that are asked for by name rather than drawn:
+-- the personal opening and its connected follow-up (Phase C). Both are excluded
+-- from `choose`, so the ordinary pool above is what an ordinary case can tell.
+assert(Premises.count() == 22,
+    "expected twenty-two in total - twenty ordinary, the opening and the follow-up, got " .. Premises.count())
 
 -- The case reference must not give the premise away. The links between
 -- documents already carry the connection and the record sorts on them, so a
@@ -94,9 +97,10 @@ end
 -- survivor's own name into an arbitrary later case. Both are checked, in the
 -- way each is meant to be reached.
 for _, id in ipairs(Premises.list()) do
-    if Premises.get(id).opening then
+    local kind = Premises.get(id)
+    if kind.opening or kind.followUp then
         assert((seen[id] or 0) == 0,
-            "the opening premise " .. id .. " must be unreachable from ordinary seeds, but a seed drew it")
+            "premise " .. id .. " is asked for by name and must be unreachable from ordinary seeds, but a seed drew it")
     else
     assert((seen[id] or 0) > 0, "premise " .. id .. " is unreachable from any of 600 seeds")
     -- Both readings must occur. This is the whole design rule: the mod lays

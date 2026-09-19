@@ -40,7 +40,9 @@ assert(Premises.get(opening.id),"and reachable by id like any other premise")
 -- save's second case could open with the survivor's own name in it.
 assert(Premises.choosableCount()==20,
     "an ordinary case draws from twenty premises: got "..Premises.choosableCount())
-assert(Premises.count()==21,"and twenty-one exist in total: got "..Premises.count())
+-- Twenty-two: twenty ordinary, the opening, and the connected follow-up. What
+-- matters is that the ORDINARY pool stayed at twenty, asserted above.
+assert(Premises.count()==22,"and twenty-two exist in total: got "..Premises.count())
 
 -- EVERY INDEX of the ordinary pool, not a sample. `choose` takes the caller's
 -- seeded PRNG, so a stub returning each index in turn walks the whole pool -
@@ -52,6 +54,7 @@ local drawn={}
 for index=1,Premises.choosableCount() do
     local p=assert(Premises.choose(function() return index end),"index "..index.." draws a premise")
     assert(not p.opening,"no opening premise is ever drawn: index "..index.." gave "..p.id)
+    assert(not p.followUp,"no follow-up premise is ever drawn either: index "..index.." gave "..p.id)
     assert(p.id~="no-contact-at-premises","the opening was drawn at index "..index)
     assert(not drawn[p.id],"each index draws a distinct premise: "..p.id.." twice")
     drawn[p.id]=true

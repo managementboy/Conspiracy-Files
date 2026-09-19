@@ -662,8 +662,19 @@ local function prepare(result,seed,later,house)
         -- the case, and marked used in the same swap below.
         local steerFrom
         if later then
-            local okSteer,steer,index=pcall(Cases.pendingSteer,wrapper)
-            if okSteer and steer then options.steer=steer; steerFrom=index end
+            -- THE CONNECTED FOLLOW-UP FIRST (Phase C, DR-20260919-CONTINUITY).
+            -- A thread is what the survivor FOUND and where; a steer is what
+            -- they concluded, read from the closing questions. Only the first
+            -- may drive continuity, so a pending thread takes precedence and
+            -- the steer is left alone for the case after.
+            local okThread,thread=pcall(Cases.pendingThread,wrapper)
+            if okThread and thread then
+                options.follows=thread
+                log("next case follows the finding recorded in "..tostring(thread.fromCase))
+            else
+                local okSteer,steer,index=pcall(Cases.pendingSteer,wrapper)
+                if okSteer and steer then options.steer=steer; steerFrom=index end
+            end
         end
         local context={hoursSurvived=p:getHoursSurvived(),anchor=anchor}
         -- RUNG 2: one step wider reach. The nearby scan was already started at

@@ -445,6 +445,36 @@ end
 -- cases whose answers no case has used yet, the most recently changed. "I can't
 -- tell" and "nobody, really" steer nothing. Returns the steer and the index of
 -- the case it came from, or nil when nothing is answered.
+-- A FINISHED CASE'S THREAD THAT NOTHING HAS FOLLOWED YET (Phase C).
+--
+-- The analogue of pendingSteer, and deliberately NOT part of it: a steer carries
+-- what the survivor concluded, from the closing questions; a thread carries what
+-- the survivor FOUND and where (DR-20260919-CONTINUITY). Only the second may
+-- drive continuity.
+--
+-- A thread is spent once any case follows it - live or retired. A retired
+-- follow-up keeps `followsFrom` for exactly this, or the same finding would be
+-- handed out again for every case that came after.
+--
+-- Returns the follows carrier and the index of the case it came from.
+function M.pendingThread(wrapper)
+ local followed={}
+ for _,root in ipairs(M.sessions(wrapper) or {}) do
+  if Retired.isRetired(root) then
+   if root.followsFrom then followed[root.followsFrom]=true end
+  elseif root.case and type(root.case.follows)=="table" then
+   followed[root.case.follows.fromCase]=true
+  end
+ end
+ for i,root in ipairs(M.sessions(wrapper) or {}) do
+  if Retired.isRetired(root) and type(root.thread)=="table" and not followed[root.caseId] then
+   return {fromCase=root.caseId,document=root.thread.document,reference=root.thread.reference,
+           point=root.thread.point,question=root.thread.question},i
+  end
+ end
+ return nil
+end
+
 function M.pendingSteer(wrapper)
  local G=require("ConspiracyFiles/Generated/Generator")
  local best,bestHours,bestIndex

@@ -60,7 +60,7 @@ end
 -- list rather than the map's keys, which is why adding map.SELF alone rendered
 -- nothing - the placeholder stayed literal in the slip.
 local FIELDS={"CODE","ORG","P1","P2","A","B","DATE0","DATE1","DATE2","DATE3","DATE1CAPS","DATE2CAPS",
-    "DAYS12","PRIORMONTH","SINCE11","SUBJECT","UNKNOWN","SELF"}
+    "DAYS12","PRIORMONTH","SINCE11","SUBJECT","UNKNOWN","SELF","POINT","FROMPOINT","FROMREF"}
 local function fill(text,map)
     for _,key in ipairs(FIELDS) do text=subst(text,key,map[key]) end
     return text
@@ -303,7 +303,7 @@ G.INVENTED_NAMES={"Marion Ellis","Delia Mercer","Roy Hale","Joanne Voss",
 -- `opening` names the survivor for the personal opening premise and asks for
 -- that premise by name. Passed in rather than read from a closure: build is a
 -- file-local function and `options` belongs to generate.
-local function build(seed,revision,sites,cast,relayMemo,steer,opening)
+local function build(seed,revision,sites,cast,relayMemo,steer,opening,follows)
     local random=rng(seed)
     -- The premise is drawn first, so it is the seed's most significant choice:
     -- what the case is ABOUT, before who is in it or how it resolves. See
@@ -312,6 +312,9 @@ local function build(seed,revision,sites,cast,relayMemo,steer,opening)
     if opening and opening.premise then
         local why; premise,why=Premises.opening()
         if not premise then return nil,why or "no opening premise" end
+    elseif follows then
+        local why; premise,why=Premises.followUp()
+        if not premise then return nil,why or "no follow-up premise" end
     else
         premise=Premises.choose(random)
     end
@@ -375,6 +378,14 @@ local function build(seed,revision,sites,cast,relayMemo,steer,opening)
     -- never mentions {SELF}, so the key is harmless when absent and a missing
     -- one could not silently blank a document.
     map.SELF=opening and opening.self or nil
+    -- The routing point, from the premise's own thread declaration. Rendered
+    -- into the record the player reads AND recorded on the case, from one value.
+    map.POINT=type(premise.thread)=="table" and premise.thread.point or nil
+    -- Inherited from the finished case's thread: the point its register routed
+    -- to, and its own reference. Both appear in the follow-up's documents, so
+    -- the connection is on the paper the player reads.
+    map.FROMPOINT=follows and follows.point or nil
+    map.FROMREF=follows and follows.reference or nil
     local function wasMet(name) for _,m in ipairs(met) do if m==name then return true end end return false end
     -- `met` marks a person whose body the player has already searched, so
     -- CasePerson does not name a SECOND zombie after someone already dead.
@@ -784,6 +795,19 @@ local function build(seed,revision,sites,cast,relayMemo,steer,opening)
     -- THE ESSENTIAL DOCUMENTS, resolved to ids now that the documents exist.
     -- An anchor the case did not build (an optional review that was rolled out)
     -- is simply absent - a link cannot be essential if the case never had it.
+    -- THE THREAD, resolved now that the documents exist. Recorded on the case so
+    -- the follow-up can inherit a SOURCED finding rather than a repeated name
+    -- (DR-20260919-CONTINUITY) - and recorded rather than re-derived, because a
+    -- case rebuilds from its own record (the case.opening lesson).
+    local thread
+    if type(premise.thread)=="table" then
+        local index=ANCHOR_INDEX[premise.thread.document]
+        local doc=index and documents[index]
+        if doc then
+            thread={document=doc.id,reference=code,
+                    point=premise.thread.point,question=premise.thread.question}
+        end
+    end
     local essentialIds
     if type(premise.essential)=="table" then
         essentialIds={}
@@ -812,7 +836,11 @@ local function build(seed,revision,sites,cast,relayMemo,steer,opening)
         -- wording alone does not deliver a mystery (DR-20260919-GAP-NOT-PROGRESSION).
         -- Absent for every ordinary premise, where all clues are equal and
         -- behaviour is unchanged.
-        essential=essentialIds}
+        essential=essentialIds,thread=thread,
+        -- Recorded, like the opening, because the case rebuilds from its own
+        -- record: a follow-up whose inheritance was not stored would draw an
+        -- ordinary premise on reload and be refused.
+        follows=follows and copy(follows) or nil}
 end
 -- What the player has met, reduced to what a case may safely carry: plain
 -- two-word-or-more names, printable, bounded, deduplicated and ORDERED, since
@@ -874,7 +902,7 @@ function G.generate(catalog,seed,options)
     if not seedOK(seed) then return nil,"seed must be an integer from 1 through 2147483646" end
     options=options or {}
     if type(options)~="table" then return nil,"invalid generator options" end
-    for key in pairs(options) do if key~="mapId" and key~="buildLine" and key~="allowSynthetic" and key~="names" and key~="relayMemo" and key~="steer" and key~="opening" and key~="self" then return nil,"unknown generator option" end end
+    for key in pairs(options) do if key~="mapId" and key~="buildLine" and key~="allowSynthetic" and key~="names" and key~="relayMemo" and key~="steer" and key~="opening" and key~="self" and key~="follows" then return nil,"unknown generator option" end end
     -- THE PERSONAL OPENING (DR-20260919-BUILD-PAIR). `opening` asks for the
     -- opening premise by name instead of drawing one from the seed; `self` is
     -- the survivor's own name, which the caller reads from the engine because
@@ -886,6 +914,32 @@ function G.generate(catalog,seed,options)
     -- An opening without a name would render "{SELF}" into the slip, and the
     -- slip is the case's only personal anchor - the one finding with no
     -- alternative. Refused outright rather than shipped blank.
+    -- THE CONNECTED FOLLOW-UP (Phase C). `follows` is a thread a finished case
+    -- left: the document the survivor actually recorded, that case's own
+    -- reference, the point its register routed to, and the question it ended
+    -- without settling. A sourced finding, not a repeated name
+    -- (DR-20260919-CONTINUITY) - and it is what makes the follow-up the same
+    -- paperwork rather than a coincidence.
+    --
+    -- No thread, no follow-up. Link D has no alternative on purpose: a follow-up
+    -- that can stand alone proves nothing about continuity
+    -- (OPENING_PAIR_COMPLETION.md), so this refuses rather than substituting.
+    local follows
+    if options.follows~=nil then
+        if type(options.follows)~="table" then return nil,"invalid follows" end
+        for key in pairs(options.follows) do
+            if key~="fromCase" and key~="document" and key~="reference"
+                and key~="point" and key~="question" then return nil,"unknown follows field" end
+        end
+        for _,key in ipairs({"fromCase","document","reference","point","question"}) do
+            local v=options.follows[key]
+            if type(v)~="string" or #v==0 or #v>120 or v:find("%c") then return nil,"invalid follows "..key end
+        end
+        follows={fromCase=options.follows.fromCase,document=options.follows.document,
+                 reference=options.follows.reference,point=options.follows.point,
+                 question=options.follows.question}
+    end
+    if options.opening and follows then return nil,"an opening cannot also be a follow-up" end
     if options.opening and not options.self then return nil,"the opening needs the survivor's name" end
     if type(options.mapId)~="string" or type(options.buildLine)~="string" then return nil,"map and build are required" end
     if options.relayMemo~=nil and type(options.relayMemo)~="boolean" then return nil,"invalid relay memo option" end
@@ -902,7 +956,7 @@ function G.generate(catalog,seed,options)
     local selected=pairs[random(#pairs)]
     if random(2)==1 then selected={selected[2],selected[1]} end
     local result=build(seed,catalog.revision,selected,G.castFrom(options.names),options.relayMemo==true,steer,
-        options.opening and {premise=true,self=options.self} or nil)
+        options.opening and {premise=true,self=options.self} or nil,follows)
     local valid,err=G.validate(result); if not valid then return nil,err end
     return copy(result)
 end
@@ -912,7 +966,7 @@ function G.generateSelected(catalog,seed,options,orderedSiteIds)
     if not safe or type(options)~="table" or type(orderedSiteIds)~="table" then return nil,"invalid selected-generation input" end
     for key in pairs(options) do
         if key~="mapId" and key~="buildLine" and key~="allowSynthetic" and key~="names" and key~="relayMemo"
-            and key~="steer" and key~="opening" and key~="self" then return nil,"unknown generator option" end
+            and key~="steer" and key~="opening" and key~="self" and key~="follows" then return nil,"unknown generator option" end
     end
     -- THE SAME TWO OPTIONS AS G.generate, validated the same way. This path is
     -- the one the FIRST case of a save actually takes (firstCase ->
@@ -937,7 +991,7 @@ function G.generateSelected(catalog,seed,options,orderedSiteIds)
     local a,b=byId[orderedSiteIds[1]],byId[orderedSiteIds[2]]
     if not a or not b or not Catalog.distinct(a,b) then return nil,"selected sites are not eligible and distinct" end
     local result=build(seed,catalog.revision,{a,b},G.castFrom(options.names),options.relayMemo==true,steer,
-        options.opening and {premise=true,self=options.self} or nil); local valid,err=G.validate(result); if not valid then return nil,err end
+        options.opening and {premise=true,self=options.self} or nil,follows); local valid,err=G.validate(result); if not valid then return nil,err end
     return copy(result)
 end
 -- Gameplay-facing creation entry point. Legacy generate remains an offline fixture API.
@@ -971,6 +1025,36 @@ function G.validate(case)
     if not valid then return false,err end
     if #case.locations~=2 then return false,"expected two locations" end
     if case.relayMemo~=nil and case.relayMemo~=true then return false,"invalid relay memo flag" end
+    if case.follows~=nil then
+        local f=case.follows
+        if type(f)~="table" then return false,"invalid follows" end
+        for key in pairs(f) do
+            if key~="fromCase" and key~="document" and key~="reference"
+                and key~="point" and key~="question" then return false,"unknown follows field" end
+        end
+        for _,key in ipairs({"fromCase","document","reference","point","question"}) do
+            if type(f[key])~="string" or #f[key]==0 or #f[key]>120 then return false,"invalid follows "..key end
+        end
+        if f.fromCase==case.caseId then return false,"a case cannot follow itself" end
+    end
+    if case.thread~=nil then
+        local t=case.thread
+        if type(t)~="table" then return false,"invalid thread" end
+        for key in pairs(t) do
+            if key~="document" and key~="reference" and key~="point" and key~="question" then
+                return false,"unknown thread field"
+            end
+        end
+        local byId={}
+        for _,d in ipairs(case.documents) do byId[d.id]=true end
+        if type(t.document)~="string" or not byId[t.document] then
+            return false,"thread names a document the case does not have"
+        end
+        if t.reference~=case.facts.code then return false,"thread reference is not the case's own" end
+        for _,key in ipairs({"point","question"}) do
+            if type(t[key])~="string" or #t[key]==0 or #t[key]>120 then return false,"invalid thread "..key end
+        end
+    end
     if case.essential~=nil then
         if type(case.essential)~="table" or #case.essential==0 then return false,"invalid essential list" end
         local byId={}
@@ -1012,7 +1096,7 @@ function G.validate(case)
         local canonical=G.steerFrom(case.steer)
         if not canonical or not same(canonical,case.steer) then return false,"invalid case steer" end
     end
-    if not same(case,build(case.seed,case.catalogRevision,case.locations,case.cast,case.relayMemo,case.steer,case.opening)) then return false,"case facts, text or structure do not match recorded revision" end
+    if not same(case,build(case.seed,case.catalogRevision,case.locations,case.cast,case.relayMemo,case.steer,case.opening,case.follows)) then return false,"case facts, text or structure do not match recorded revision" end
     return true
 end
 function G.restore(saved)

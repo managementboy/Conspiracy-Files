@@ -609,6 +609,18 @@ local P={
 -- having happened (DR-20260919-OPENING-PAYOFF). No employer, no relative, no
 -- official visitor and no proven visit appears anywhere in it.
 {id="no-contact-at-premises",opening=true,reviewOptional=true,
+ -- THE THREAD THIS CASE LEAVES for its follow-up (Phase C,
+ -- PHASE_C_CONTINUITY_CARRIER.md). `point` is the collection point the register
+ -- routes to and `question` is what the case ends without settling. Both are
+ -- DATA rather than prose, and the register's own text renders {POINT} from the
+ -- same value - so the words the player reads and the thread the follow-up
+ -- inherits cannot drift apart.
+ --
+ -- `document` names which anchor carries it: the response, because that is the
+ -- record with the routing stamp on it (link C). The follow-up inherits the
+ -- READING of it, never the paper (P4-R80, DR-20260919-NO-RESIDENCE).
+ thread={document="response",point="the district transfer desk",
+         question="whether the visit in the record happened at all"},
  -- THE ESSENTIAL CHAIN (OPENING_PAIR_COMPLETION.md). The slip is link A - the
  -- case's only personal anchor, with no alternative - and the register is link
  -- C. The round sheet is corroboration: it supports that a round ran, which is
@@ -626,7 +638,7 @@ local P={
   meaning="A collection was scheduled in this name, for that address. The address is not the one this was found at. That could be a number written down wrong, or a number written down differently on purpose; the slip settles neither, and the address on it is a real place to go and compare."},
  response={kind="receipt",title="Collection register / {CODE}",
   found="A register page carried on a clipboard, its top edge grubby where a thumb held it. One line is struck through in the same ink as the annotation beside it.",
-  text="{DATE2}\nRecord: {CODE}\nRound: {B} and adjoining\nEntry closed.",
+  text="{DATE2}\nRecord: {CODE}\nRound: {B} and adjoining\nReturns to: {POINT}\nEntry closed.",
   agree="Attended as scheduled. Reference retained against the name.",
   dispute="No contact at premises. Entry cancelled; no further attempt scheduled under this reference.",
   meaningAgree="The register says the collection was attended and the reference kept. A register records what was entered, not what happened at a door, and an entry that agrees with a slip still does not put anyone at an address.",
@@ -638,6 +650,50 @@ local P={
   dispute="The round is marked covered on a day an entry under this reference was closed for no contact. The sheet speaks for the street, not for a door.",
   meaningAgree="A covered round and a closed entry agree on paper. Neither says which doors were knocked on.",
   meaning="A round that covered the street, and an entry closed for no contact on it. The sheet corroborates that a round ran; it does not say this address was reached, and cannot stand in for the register."}},
+
+-- THE CONNECTED FOLLOW-UP (Phase C, DR-20260919-SECOND-CASE,
+-- DR-20260919-STILL-FILING-NARROW). Like the opening it is never drawn: it is
+-- asked for by name, and only when a finished case hands it a thread.
+--
+-- CHRONOLOGY IS CORRECT BY CONSTRUCTION, which is why the anchors are in this
+-- order. The generator dates claim < response < review, so the TERMINATION is
+-- the claim and the CLOSURES are the response - giving closures dated after the
+-- termination the records themselves state. The other way round would have
+-- produced the opposite of the finding on every seed.
+--
+-- WHAT IT MAY NOT SAY (DR-20260919-STILL-FILING-NARROW): that any entry lacked
+-- a visit. Staff processing records late, after genuine earlier visits, fits
+-- this evidence exactly as well. The payoff is continued PAPERWORK after the
+-- rounds these records cover had stopped, and nothing more.
+--
+-- {FROMPOINT} and {FROMREF} are inherited from the opening's thread - the point
+-- its register routed to and its own reference. That is what makes this the same
+-- paperwork rather than a case that merely repeats a name
+-- (DR-20260919-CONTINUITY).
+{id="still-filing",followUp=true,reviewOptional=true,
+ title="Still filing",
+ readings={"Paperwork catching up with itself.","Paperwork outliving what it recorded."},
+ subject="the closures",unknown="who kept signing them off",
+ orgs={"District Transfer Desk","Regional Collection Service","Knox County Transport Office"},
+ essential={"claim","response"},
+ claim={kind="dispatch",title="Termination notice / {CODE}",
+  found="A notice on thin duplicating paper, curled at one corner, pinned through twice as though it had hung somewhere.",
+  text="{ORG}\n{DATE1}\nRecord: {CODE}\nCollection rounds covered by this office are DISCONTINUED from today.\nOutstanding paperwork to {FROMPOINT}.\nNo further scheduling under the rounds named above.",
+  meaning="This office states its rounds ended on that date, and sends what was outstanding to {FROMPOINT} - the same place the earlier register routed to. It speaks for the rounds it covers and for nothing beyond them."},
+ response={kind="receipt",title="Closure sheet / {CODE}",
+  found="A closure sheet in a bundle held by a bulldog clip, the dates running on down the page in the same hand.",
+  text="{DATE2}\nRecord: {CODE}\nHeld at: {FROMPOINT}\nEntries closed this day, against reference {FROMREF} and others.",
+  agree="Closures entered in order, the earlier reference among them.",
+  dispute="Closures entered against rounds this office had already discontinued, the earlier reference among them.",
+  meaningAgree="Entries closed in order at the point the notice named. A sheet records when a pen moved, which is not the same as when anything was done.",
+  meaning="Entries were still being closed on a date after the rounds these records cover had been discontinued. That is paperwork outliving what it recorded - and it does NOT show that any visit was missed: someone working through a backlog of genuine earlier calls would leave exactly this sheet."},
+ review={kind="notepad",title="Standing instruction / {CODE}",
+  found="A standing instruction typed on a half sheet, the lower half torn away.",
+  text="{ORG}\n{DATE3}\nRecord: {CODE}\nOutstanding entries at {FROMPOINT} are to be closed without further attempt.\nRecord the reference and move on.",
+  agree="An instruction to close what was outstanding, issued after the sheets were already in order. It explains the tidiness rather than contradicting it.",
+  dispute="An instruction to close outstanding entries WITHOUT FURTHER ATTEMPT, and closure sheets that cite it. Together those say some entries were closed with no call made - which ones, it does not say.",
+  meaningAgree="An instruction to tidy up, arriving after the tidying. It says what the office wanted done, not what was done before it.",
+  meaning="An instruction is a proposal until something shows it was applied; a closure citing it is that something. Together they support that SOME entries were closed without a further attempt. Never which, and never whose."}},
 }
 
 -- Ordered ids. Callers must never rely on Lua table iteration order: the
@@ -716,7 +772,11 @@ end
 -- filtering rather than by slicing, so appending another opening later cannot
 -- silently change what an ordinary seed picks.
 local CHOOSABLE={}
-for _,premise in ipairs(P) do if not premise.opening then CHOOSABLE[#CHOOSABLE+1]=premise end end
+for _,premise in ipairs(P) do
+    -- Neither an opening nor a follow-up is ever drawn: one belongs to the first
+    -- case of a save, the other only to a case handed a thread.
+    if not premise.opening and not premise.followUp then CHOOSABLE[#CHOOSABLE+1]=premise end
+end
 
 function M.choose(random)
     if type(random)~="function" then return nil,"random generator required" end
@@ -729,6 +789,11 @@ function M.choosableCount() return #CHOOSABLE end
 function M.opening()
     for _,premise in ipairs(P) do if premise.opening then return copy(premise) end end
     return nil,"no opening premise"
+end
+-- The follow-up premise, by name. Only ever generated with a thread to inherit.
+function M.followUp()
+    for _,premise in ipairs(P) do if premise.followUp then return copy(premise) end end
+    return nil,"no follow-up premise"
 end
 
 
