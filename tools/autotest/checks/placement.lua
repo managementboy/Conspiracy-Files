@@ -271,9 +271,15 @@ local function dump(root, id, a, why)
         add("whereabouts=" .. (ok and (tostring(st) .. " / " .. tostring(place)) or "THREW"))
     end
     add("recognised=" .. tostring(R and R.isRecognised and select(2, pcall(R.isRecognised, id))))
-    -- 5. the player, so the distance is readable
-    local p = getPlayer and getPlayer()
-    if p then add(string.format("player=%d,%d,%d", math.floor(p:getX()), math.floor(p:getY()), math.floor(p:getZ()))) end
+    -- 5. the player, so the distance is readable. Guarded like every other
+    -- world read here: this is the last line of the capture, and losing the
+    -- whole dump to it would be the worst possible trade.
+    local okPos, pos = pcall(function()
+        local p = getPlayer and getPlayer()
+        if not p then return "none" end
+        return string.format("%d,%d,%d", math.floor(p:getX()), math.floor(p:getY()), math.floor(p:getZ()))
+    end)
+    add("player=" .. (okPos and tostring(pos) or ("THREW " .. tostring(pos))))
     return table.concat(out, "\n")
 end
 
@@ -306,8 +312,18 @@ function CFPlace.verify(id)
                 return "unloaded\t" .. targetWords(a.target)
             end
             local token = a.physicalToken
+            -- THE BAGS MUST BE RULED OUT, NOT MERELY ATTEMPTED. A failed
+            -- inventory read used to fall through as though the survivor were
+            -- not carrying the clue, so an empty container then read as a
+            -- mismatch without the exclusion ever having been made - a false
+            -- accusation from a failed read. Found by fault injection.
             local okHand, hand = pcall(inPlayer, token)
-            if okHand and hand then
+            if not okHand then
+                count("readerror")
+                return "read-error\tinventory unreadable\n" .. dump(root, id, a,
+                    "the survivor's bags could not be searched: " .. tostring(hand))
+            end
+            if hand then
                 count("inhand")
                 return "in-hand\t" .. tostring(hand)
             end
@@ -373,7 +389,11 @@ function CFPlace.recheck(id)
                 return "unloaded\t" .. targetWords(a.target) .. "\n" .. dump(root, id, a, "after reload, square not loaded")
             end
             local okHand, hand = pcall(inPlayer, token)
-            if okHand and hand then
+            if not okHand then
+                return "read-error\tinventory unreadable\n" .. dump(root, id, a,
+                    "after reload, the survivor's bags could not be searched: " .. tostring(hand))
+            end
+            if hand then
                 return "in-hand\t" .. tostring(hand) .. "\n" .. dump(root, id, a, "after reload, in hand")
             end
             local ok, container = pcall(CFPlace.resolver, a.target, token)

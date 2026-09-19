@@ -279,6 +279,45 @@ local midWalk = CFPlace.verify(id)
 assert(midWalk:find("^read%-error") and cov().readerror == 1,
     "a throw while walking items is a read error too: " .. midWalk:sub(1,60))
 
+-- (e) INVENTORY READ FAILURE. Injected by a player whose bags throw. This used
+-- to fall through as "not carried" and then report the empty container as a
+-- DISCREPANCY: a false accusation produced by a failed read, with compared=1
+-- and read-errors=0.
+CFPlace.resetCoverage()
+CFPlace.resolver = function() return containerWith({"cf-g2:someone-else"}) end
+local realPlayer = getPlayer
+getPlayer = function()
+    return {getInventory=function() error("injected inventory failure") end}
+end
+local bagsThrew = CFPlace.verify(id)
+assert(bagsThrew:find("^read%-error"),
+    "an unreadable inventory is a read error: " .. tostring(bagsThrew):sub(1,70))
+assert(not bagsThrew:find("DISCREPANCY", 1, true),
+    "and is NEVER the fault - the bags were never ruled out, so no accusation is possible")
+assert(cov().compared == 0, "and is not counted as a comparison")
+assert(cov().readerror == 1, "it is counted as a read error")
+assert(bagsThrew:find("injected inventory failure", 1, true), "the error text is preserved")
+assert(bagsThrew:find("id=" .. id, 1, true) and bagsThrew:find("token=", 1, true),
+    "and the clue id, token and assignment survive")
+
+-- A throw deeper in, while walking the bags' contents, is the same answer.
+CFPlace.resetCoverage()
+getPlayer = function()
+    return {getInventory=function()
+        return {getItems=function() error("injected bag-walk failure") end}
+    end}
+end
+local walkThrew = CFPlace.verify(id)
+assert(walkThrew:find("^read%-error") and cov().readerror == 1,
+    "a throw while walking the bags is a read error too: " .. walkThrew:sub(1,60))
+
+-- And the same discipline after a reload.
+local reloadBags = CFPlace.recheck(id)
+assert(reloadBags:find("^read%-error"),
+    "recheck refuses a verdict when the bags cannot be searched: " .. reloadBags:sub(1,60))
+assert(not reloadBags:find("^absent"), "and never calls it a persistent mismatch")
+
+getPlayer = realPlayer
 CFPlace.resolver = realResolver
 print("PASS placement fixture: only an actual container comparison counts as coverage")
 
