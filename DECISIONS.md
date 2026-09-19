@@ -6,6 +6,8 @@ If a spike disproves a decision, technical reality wins: supersede the decision 
 
 ## Direction review — 2026-09-19
 
+**DR-20260919-Q24 — fatalistic bureaucratic dark comedy throughout.** Owner selected Q24 B. Fatalistic, bureaucratic dark comedy is the ongoing tone of the mysteries. This reaffirms the tone direction of P1-Q21/P2-Q59 in the new wishlist. The assistant's recommendation to lead with unease and use humour only when appropriate was not adopted. Specific writing examples and implementation timing were not selected by this answer.
+
 **DR-20260919-Q23 — help through fresh opportunities to find missed clues.** Owner selected Q23 D: “place clues never found, in new locations. or do you suggest something different.” Use renewed physical discovery opportunities for unfound clues as the chosen assistance direction, consistent with Q12's delayed relocation. The proposed recap or stronger navigation UI is not selected by this answer. Relocation timing, knowledge boundaries and handling of old copies remain the design questions recorded under Q12.
 
 **DR-20260919-RELAY — named destinations should support actual investigation.** During Q23 the owner supplied a screenshot of an access memo naming Relay Site 31 and proposed using it as a place the player travels to for more clues. Add this example to today's maps/flyers brainstorm as a concrete text → destination → further-discovery opportunity. The owner supplied [radio relay station examples](https://pzwiki.net/wiki/Radio_relay_station) and [1635x5764](https://map.projectzomboid.com/?1635x5764) as one candidate among many, not a binding identification of fictional Site 31.

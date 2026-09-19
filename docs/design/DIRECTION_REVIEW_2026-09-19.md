@@ -2,7 +2,7 @@
 
 Prepared 19 September 2026 against `main` at `73e6b62`, build `DEV-0.44.0-addresses-that-travel`.
 
-**Status: Q01–Q23 confirmed. Missed clues get new discovery opportunities; the Relay Site 31 example is recorded for the maps/flyers brainstorm. Remaining choices await answers. This review builds a new wishlist and revisits all existing commitments.**
+**Status: Q01–Q24 confirmed. Fatalistic bureaucratic dark comedy is the chosen tone throughout. The Relay Site 31 example is recorded for the maps/flyers brainstorm. Remaining choices await answers. This review builds a new wishlist and revisits all existing commitments.**
 
 **Confirmed scope:** version 1.0 enriches ordinary survival with investigations (Q01 A). A survivor-centered campaign (Q01 B) is a possible future option. All remaining recommendations must be considered within that boundary; campaign features are not implied 1.0 commitments.
 
@@ -435,9 +435,9 @@ If A or B, should the system sometimes connect these suspicions to a case, or sh
 
 Name one moment that should feel funny and one that should be allowed to stay serious.
 
-**Suggested answer — not approved:** A — Put unease and mystery first, with dark humour when the situation earns it. A form requiring approval from a department that no longer exists can be funny; a personal farewell on a body should be allowed to stay serious. Reason: constant humour flattens emotional contrast and can weaken discoveries. Timing: next milestone's writing guidance.
+**Original assistant suggestion — not adopted:** A — unease and mystery first, with humour when appropriate. The owner chose B instead.
 
-**Owner decision:** _unanswered_
+**Owner decision — confirmed 19 September 2026:** B: fatalistic bureaucratic dark comedy throughout. Reaffirms the tone direction of P1-Q21/P2-Q59 in the new wishlist. Specific examples and implementation timing remain open. Recorded as DR-20260919-Q24 in `DECISIONS.md`.
 
 ## Round 5 — What are we willing to support? (Q25–Q30)
 
@@ -583,6 +583,7 @@ Copy one row for each answered question. Keep any uncertainty visible.
 | Q21 | B: separate relationship graph is a future option; assess organiser and map connections first | Possible future, not a release commitment | DR-20260919-Q21; replaces mandatory graph scope inherited from P2-Q20–Q25; Q10 map lines stand | Observe relationship-navigation needs before deciding on a graph | A proposal that assumes a graph must ship or restores old detailed graph requirements automatically |
 | Q22 | Remove the requirement to capture suspicions/bookmarks about ordinary objects | Outside revised requirements | DR-20260919-Q22; retires ordinary-object capture promises in P2-Q4/Q5/Q17 at this scope; Q09a stands | None required to remove a wishlist requirement | A proposal that reintroduces arbitrary-object leads as an inherited obligation or deletes free notes by inference |
 | Q23 | D: renewed discovery opportunities by putting unfound clues in new locations | New wishlist; detail coordinated with Q12 | DR-20260919-Q23; recap proposal not adopted; relay example in DR-20260919-RELAY | Define relocation versus established destinations; verify candidate sites before binding them | A proposal that silently removes required travel or treats a sample relay coordinate as the chosen Site 31 |
+| Q24 | B: fatalistic bureaucratic dark comedy throughout | New wishlist; timing open | DR-20260919-Q24; reaffirms P1-Q21/P2-Q59 tone | Representative writing reviewed in play | A proposed change to the overall tone |
 
 Before implementation begins, check the answers together: travel guidance against survival freedom; answer-driven cases against a fixed underlying truth; physical device costs against accessibility; finite storage against promised campaign length; and new-game rules against a long personal campaign. Present conflicts for a decision instead of resolving them silently.
 
