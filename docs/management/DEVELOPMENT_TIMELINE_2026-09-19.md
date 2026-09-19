@@ -1,169 +1,143 @@
-# Development timeline — from the 19 September reconciled direction
+# Development plan — from the 19 September reconciled direction
 
 Planning document. Nothing here is built. Written in plain language for the
 owner; the decisions it implements are in [DECISIONS.md](../../DECISIONS.md)
-under *Reconciled development direction — 2026-09-19 (evening)*.
+under *Reconciled development direction — 2026-09-19*.
+
+**Revised the same evening**, after review, in six ways: the groundwork is now
+built around the first concrete pair of cases instead of ahead of all content;
+the retention claim is bounded rather than permanent; the placement fix no
+longer claims to guarantee solvability; the follow-up's completion criteria are
+objective rather than a feeling; the occupation pilot's refusal policy is marked
+as an open question rather than a decision; and map coverage follows a map's
+destination rather than where the map was found.
 
 The agreed order of focuses is fixed (`DR-20260919-Q31`): the personal opening
-mystery, then a survival connection, then improvements to the current loop.
-Everything below either serves that order or protects it. The milestone gate is
-unchanged (`DR-20260919-Q30`): passing technical checks.
-
-Estimates are working days and they are estimates. Each stage names the goal it
-reaches, how we know it is finished, and what it deliberately does not include.
+mystery, then a survival connection, then improvements to the current loop. The
+milestone gate is unchanged (`DR-20260919-Q30`): passing technical checks.
 
 ---
 
-## Stage 0 — Make the ground trustworthy
-**2–3 days. Highest priority.**
+# The committed increment
 
-Fix the fault where a clue the record calls placed is not actually in the
-container it names. It appeared in three of nine long runs; four possible causes
-remain and the diagnostic to catch it is already in place.
+One increment, three parts, in this order. **No duration is given.** The
+earlier three-week estimate was an estimate presented as a necessity; estimates
+for everything after this increment are revised once it has actually landed.
 
-**Why first:** a mystery with a clue that isn't there cannot be solved. Every
-stage after this one assumes a clue is where the record says it is.
+The evidence rules and the retention change are built **for this pair of cases
+and no further**. Generalising them across all content comes after the pair
+works, not before it exists.
 
-**Goal reached:** a mystery is always solvable.
+## A — Reproduce and fix the placement mismatch
 
-**Finished when:** a long run finds no mismatch, and a deliberate test catches
-the fault if it is ever reintroduced.
+A clue the record calls placed is sometimes not in the container it names.
+Reported from my own long runs — three of nine, evidence under
+`docs/management/evidence/linux-autotest/` — and not independently verified.
 
-**Not included:** anything new.
+Three things are required, not one:
 
----
+1. **Reproduce it.** A fault seen but not reproduced is not understood. Four
+   possible causes remain and the diagnostic is in place.
+2. **A targeted regression check** that fails if the fault returns. Not a clean
+   long run — a clean run is weak evidence and proves nothing about the general
+   case.
+3. **A check that essential evidence which cannot be reached never silently
+   counts as a delivered ending.** This is a separate failure from the
+   placement bug and is the more dangerous of the two: a case that quietly
+   completes without its evidence hides the problem instead of reporting it.
 
-## Stage 1 — Say only what the evidence supports
-**3–4 days.**
+**Goal reached:** a specific, reproduced fault is fixed and guarded, and a case
+that cannot be completed says so instead of pretending. Not "a mystery is
+always solvable" — that guarantee cannot be established this way and is
+withdrawn.
 
-Keep three things apart everywhere a finding is recorded: what the survivor
-observed, what a document claims, and what those sources actually support. An
-unsigned memo's accusation stays an accusation that was found, and never becomes
-an established fact by having been written down.
+## B — The personal opening
 
-**Why now:** every clue and conclusion written afterwards inherits this shape.
-Done after the opening mystery, the opening gets written twice.
+The first case of a new save, built on the survivor's **actual starting
+skills**. No invented employment history: the game gives occupations and skill
+levels, not a biography, and the mystery hangs on what this character can
+demonstrably do and notice. The electrician is the pilot because electrical
+skill gives the clearest observations to build on.
 
-**Goal reached:** the mod can state a concrete local conclusion without ever
-overclaiming — which is what makes retiring the old never-conclude rule safe
-rather than reckless.
+Its payoff is written before its clues. It depends on no printed item and no
+lucky drop. It still pays off for a player who plays it badly.
 
-**Finished when:** a conclusion that outruns its evidence fails a check, and
-every existing case still reads correctly under the distinction.
+Carried with it, sized to this case only: the observed / claimed / supported
+distinction where this case's findings need it, and enough retained source
+context for its own findings to be reconsidered later.
 
-**Not included:** new mysteries.
+**Goal reached:** the first hour of a new save is a mystery grounded in this
+survivor's skills — the first focus of the agreed order.
 
----
+**Finished when:** checks pass, and it plays through on a fresh save in the
+real game.
 
-## Stage 2 — Make a finished case leave something behind
-**2–3 days.**
+**Open question, not decided:** what happens when a survivor's starting skills
+give the opening nothing to work with. My recommendation was that the mod
+refuse and say so, replacing the proposed unemployed fallback — that is a
+recommendation, not an agreed decision, and it needs an owner ruling before it
+is built either way.
 
-A retired case keeps its sourced findings and the question it ended on,
-permanently. The write-up is what is allowed to disappear. This is measured, not
-assumed: keeping the findings costs a few hundred bytes a case, comfortably
-inside the 26,617 bytes of measured spare, while restoring a full write-up costs
-about 30,000 a case and cannot fit.
+## C — The follow-up, built to keep
 
-**Why now:** continuity is the main thing the audit found missing, and the next
-stage's cases need something real to follow.
+A second case that follows a finding from the opening and can challenge how it
+was read. Kept, not thrown away.
 
-**Goal reached:** older cases stop collapsing into blank stubs, meeting the
-retention goal already set (`DR-20260919-Q18`).
+**Completion criteria — objective, per the agreed gate.** The earlier "feels
+like one investigation" is withdrawn; it restored a subjective gate after that
+was already settled. What must hold:
 
-**Finished when:** a finding from an old case can be followed by a new one and
-shows in the organiser as a standing open thread.
+- **A sourced connection** — the follow-up cites a specific finding from the
+  opening, with its source, not a repeated name.
+- **Consistent chronology** — the two cases' events order correctly against the
+  event record and against each other.
+- **Meaningful new evidence** — the follow-up adds findings rather than
+  restating the opening's.
+- **Persistence** — the connection survives a save and reload, and survives the
+  opening being retired.
 
----
+Play feedback is still wanted, and is a source of requirements; it is not the
+criterion.
 
-## Stage 3 — Write the event record
-**2–3 days, mostly writing, then your review.**
-
-One readable document of specific events — a pickup cancelled, a radio desk
-logging a message, an official burying a decision — with its sources named and
-its uncertainty stated. No explanation of why Knox happened, and none implied.
-Several separate clues may illuminate one event; events are not handed out one
-per clue.
-
-**Why now:** the opening mystery's clues have to point at real events, or they
-are decoration.
-
-**Goal reached:** every mystery draws on one consistent history, while the large
-question stays genuinely open instead of secretly answered.
-
-**Finished when:** you have read it and corrected it.
-
----
-
-## Stage 4 — The personal opening: the electrician
-**About a week. This is the first thing you can play.**
-
-The first case of a new save, tied to the survivor's former job. Its payoff is
-written before its clues. It depends on no printed item and no lucky drop. It
-still pays off for a player who plays it badly. And where a survivor's
-background gives it nothing true to work with, the mod says so plainly instead
-of substituting a generic story.
-
-**Goal reached:** the first hour of a new save is a mystery about *this*
-survivor — the first focus of the agreed order.
-
-**Finished when:** checks pass and it plays through on a fresh save in the real
-game.
+**Goal reached:** the investigation demonstrably continues instead of
+resetting. This is the specific gap the audit identified.
 
 ---
 
-## Stage 5 — The follow-up that proves continuity
-**4–5 days.**
+# Roadmap after the increment
 
-A second case that follows a finding from the opening and can challenge how you
-read it. Built to keep, not to throw away.
+Kept as direction, deliberately unestimated until the increment lands.
 
-**Goal reached:** the investigation continues instead of resetting. This is the
-specific gap the audit identified.
+**Generalise the evidence rules.** Extend observed / claimed / supported across
+all existing content, once the pair has shown what the distinction actually
+needs to carry.
 
-**Finished when:** playing the two in order feels like one investigation rather
-than two cases sharing a name.
+**Retention and growth.** Preserve source context and the player's own notes,
+then **test growth across many cases** rather than asserting a limit. The
+measured reserve below does not establish that findings can be kept
+indefinitely — see the provenance section; the discovery ledger's cap is the
+real wall and has not been tested at its limit.
 
----
+**The survival connection.** The second focus of the agreed order: a mystery
+that touches staying alive — a journey involving your base, or a skill or tool
+that opens something up.
 
-## Stage 6 — The survival connection
-**About a week.**
+**Believable discovery.** The third focus: the ten dust masks in a place
+already searched (`DR-20260919-SEARCH`); places going stale so one cupboard is
+not searched forever; and settling the instalment timing, where the long check
+assumes about four in-game hours and the rule says three in-game days.
 
-The second focus of the agreed order: a mystery that touches staying alive — a
-journey that involves your base, or a skill or tool that opens something up.
-
-**Goal reached:** the investigation earns its place inside a survival game
-instead of running alongside it.
-
----
-
-## Stage 7 — Believable discovery
-**4–6 days.**
-
-The loop improvements, third in the agreed order: the ten dust masks found in a
-place already searched (`DR-20260919-SEARCH`); places going stale so one
-cupboard is not searched forever; and settling the instalment timing, where the
-long check assumes about four in-game hours and the rule says three in-game
-days.
-
-**Goal reached:** finding things stays plausible across a long save.
+**Annotated maps, by destination.** Support one town as a pilot: every
+annotated map **whose marks point into that town** gets real evidence at those
+marks, wherever the map itself was found. A map is honoured by its destination,
+not by where it dropped. Each map's payoff is written before its clues.
+Coverage is stated in release notes and development feedback, never in the
+survivor's voice; vanilla maps behave exactly as they do now; universal
+coverage stays on the books as unfinished work (`DR-20260919-MAP-PAYOFF`).
 
 ---
 
-## Stage 8 — One town of annotated maps
-**1–1½ weeks.**
-
-Pick one town. Every annotated map pointing into it gets real evidence at its
-marks, with each map's payoff written before its clues. Coverage is stated in
-release notes and development feedback, never in the survivor's voice; vanilla
-maps elsewhere behave exactly as they do now; universal coverage stays on the
-books as unfinished work (`DR-20260919-MAP-PAYOFF`).
-
-**Goal reached:** a map found in that town is a real lead, and we learn what one
-town actually costs so the rest of the map can be priced instead of guessed.
-
----
-
-## Deliberately not in this timeline
+# Deliberately not in this plan
 
 - The other 24 professions. One is a pilot; the premises still need approval
   under `DR-20260919-Q27`.
@@ -175,21 +149,33 @@ town actually costs so the rest of the map can be priced instead of guessed.
 
 ---
 
-## How to prioritise this
+# Where the storage figures come from
 
-**About six to seven weeks of working days** to the end of Stage 8. The first
-genuinely new thing you can play is Stage 4, roughly three weeks in.
+Attached because they were being used to set policy without their conditions.
 
-That wait is the one real weakness of this order, and there is a faster route if
-you want it: **0 → 3 → 4** puts a playable opening mystery in your hands in
-about two weeks. The cost is that Stages 1 and 2 then land afterwards, and the
-opening's texts get rewritten once to fit them.
+**Test:** `test/case_archive.lua`. **Code revision:** the archive code and this
+test last changed at `7a63ed8` (2026-09-17); re-run on 2026-09-19 against the
+working tree at `34ecdb4` and reproducing its figures exactly.
 
-- **If only one stage happens: Stage 0.** A mystery with a missing clue is worse
-  than no mystery.
-- **If three: 0, 1, 2.** These are what let the opening be built once rather
-  than twice, and together they answer what the audit found.
-- **If you want to play something soon: 0, 3, 4**, and accept the rewrite.
+**Conditions:** 1,000 seeds, worst case per tier; the **synthetic location
+fixture** (`test/fixtures/synthetic_locations.lua`), not the real world
+catalogue; 7 documents a case; one worst-case save assembled from distinct
+seeds.
 
-Stages 1, 2 and 3 need nothing from you except the Stage 3 review. Stage 4
-onwards is where your play feedback starts deciding things again.
+**Figures:** live case 42,024 bytes; archived with rows 33,135; stubbed 3,130;
+shrink 12,914 → 1,821 (−86%). Sixteen-case save: campaign 338,540 + ledger
+61,843 + 73,000 reserved = 473,383 of 500,000, leaving 26,617.
+
+**What these figures do not establish:**
+
+- **The 73,000 reserve is an allowance, not a measurement.** Every other stored
+  root is assumed to fit inside it. The 26,617 spare rests on that assumption.
+- **Synthetic locations are not real ones.** Real addresses now carry street
+  names and town qualifiers, so real per-case costs may differ.
+- **Nothing about indefinite growth.** The figures describe a sixteen-case save.
+  Sixteen is a storage ceiling, not a playthrough length, and the discovery
+  ledger — 545 bytes for every document ever found, capped at 512 entries — is
+  the real wall and has never been tested at its limit.
+- **Therefore findings cannot be promised permanently.** The honest claim is
+  that source context and player notes are preserved, and that growth is
+  measured across many cases before any retention limit is fixed.

@@ -1,5 +1,66 @@
 # Conspiracy-Files — Current Decision Index
 
+## Plan revision after review — 2026-09-19 (late)
+
+*Six corrections to the first development plan, all of them narrowing claims I
+had overreached on. Recorded as the agreed direction; the owner has not
+separately ruled on each line.*
+
+**DR-20260919-INCREMENT — the groundwork is built around the first pair of
+cases, not ahead of all content.** The evidence rules and the retention change
+are sized to the personal opening and its follow-up, and only generalised once
+that concrete pair works. One committed increment: reproduce and fix the
+placement fault, then the opening, then the follow-up. **No durations are
+given** — the earlier three-week figure was an estimate presented as a
+necessity, and estimates for later work are revised after this increment lands.
+See [the plan](docs/management/DEVELOPMENT_TIMELINE_2026-09-19.md).
+
+**DR-20260919-RETENTION-BOUND — retention is bounded and unproven, not
+permanent.** A measured 26,617-byte reserve in a sixteen-case save cannot
+establish that findings survive an indefinitely growing investigation. The
+commitment is to preserve source context and the player's own notes, then
+**measure growth across many cases** before fixing any retention limit. The
+figures now carry their source revision and conditions (`7a63ed8`, re-run at
+`34ecdb4`, 1,000 seeds, worst case per tier, the synthetic location fixture,
+seven documents a case), and three stated limits: the 73,000-byte reserve inside
+them is an allowance rather than a measurement; synthetic locations are not real
+ones; and the discovery ledger's 512-entry cap has never been tested at its
+limit. Qualifies P4-R140, which stated the figures without these conditions.
+
+**DR-20260919-SOLVABLE-WITHDRAWN — "a mystery is always solvable" is withdrawn
+as a guarantee.** One clean long run cannot establish it. Fixing the reported
+placement mismatch requires **reproduction**, a **targeted regression check**,
+and a check that **essential evidence which cannot be reached never silently
+counts as a delivered ending** — a separate and more dangerous failure, since a
+case that quietly completes without its evidence hides the fault instead of
+reporting it. The three-in-nine failure rate is my own report from Linux runs
+and is not independently verified.
+
+**DR-20260919-FOLLOWUP-CRITERIA — the follow-up's completion criteria are
+objective.** "Feels like one investigation" is withdrawn; it restored a
+subjective gate after DR-20260919-GATE-UNCHANGED had settled the matter. What
+must hold: a **sourced connection** (a specific finding cited with its source,
+not a repeated name), **consistent chronology** against the event record and
+between the two cases, **meaningful new evidence** rather than a restatement,
+and **persistence** across save and reload and across the opening's retirement.
+Play feedback remains a source of requirements, not the criterion.
+
+**DR-20260919-PILOT-POLICY — the occupation pilot uses actual starting skills,
+and the refusal policy is open.** The opening is built on the survivor's real
+starting skills and skill levels; **no employment history is invented**, since
+the game supplies occupations and skills rather than a biography. The electrician
+is the pilot. Whether the mod should refuse an opening outright when the
+starting skills give it nothing to work with — my recommendation, replacing the
+proposed unemployed fallback — is **an open question awaiting an owner ruling**,
+not an agreed decision, and is not built either way until ruled on.
+
+**DR-20260919-MAP-DESTINATION — a map is honoured by its destination, not by
+where it dropped.** The pilot town supports every annotated map **whose marks
+point into that town**, wherever the map itself was found. Corrects a plan goal
+that read "a map found in that town", which would have missed maps found
+elsewhere pointing inward. Reaffirms DR-20260919-MAP-PAYOFF and
+DR-20260919-COVERAGE-HONESTY.
+
 ## Reconciled development direction — 2026-09-19 (evening)
 
 *Reached by review between the Linux development side and the owner's Windows
