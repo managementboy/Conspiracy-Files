@@ -2,7 +2,7 @@
 
 Prepared 19 September 2026 against `main` at `73e6b62`, build `DEV-0.44.0-addresses-that-travel`.
 
-**Status: Q01–Q03 confirmed by the owner; Q16 partially answered through Q03. Remaining choices await answers. This review builds a new wishlist and revisits all existing commitments.**
+**Status: Q01–Q04 confirmed by the owner; Q16 partially answered through Q03. Remaining choices await answers. This review builds a new wishlist and revisits all existing commitments.**
 
 **Confirmed scope:** version 1.0 enriches ordinary survival with investigations (Q01 A). A survivor-centered campaign (Q01 B) is a possible future option. All remaining recommendations must be considered within that boundary; campaign features are not implied 1.0 commitments.
 
@@ -115,7 +115,7 @@ If A or B: what may the mod establish about the survivor without taking away the
 
 **Suggested answer — not approved:** B — Allow well-supported local conclusions about people and motives while leaving the cause of the Knox Event unresolved. Evidence must distinguish what was observed, what a source claims and what remains a hunch. Reason: some earned answers make the remaining uncertainty meaningful. Timing: next milestone's narrative design; new truth rules need implementation and testing.
 
-**Owner decision:** _unanswered_
+**Owner decision — confirmed 19 September 2026:** B: local mysteries, including parts of the survivor's past, may have discoverable answers; the Knox Event's cause stays unexplained. This broadens the former objects-and-places-only limit on settled local facts. It does not require every mystery to be resolved. Recorded as DR-20260919-Q04 in `DECISIONS.md`. The recommendation's specific presentation, timing and implementation details remain proposals.
 
 ### Q05 — Who decides when and where the player should travel?
 
@@ -506,6 +506,7 @@ Copy one row for each answered question. Keep any uncertainty visible.
 | Q01 | A for 1.0: investigations enriching ordinary survival; B may be a future option | A: 1.0; B: possible future | DR-20260919-Q01; reaffirms P1-Q2/P2-Q208; qualifies P1-Q1 and campaign-vision scope | Normal-survival playtest criteria to be decided in Q30–Q31 | Any proposal to require a personal campaign for 1.0 |
 | Q02 | D: build a new wishlist; all existing commitments are being revised today | This review | DR-20260919-Q02; replaces P1-Q24's blanket commitment | Explicit owner answers; check omitted commitments before relying on them | Any proposed requirement justified only by an old decision |
 | Q03 | A: prioritise a missing-past opening and early mysteries fitting starting skills; electrician/power/radio is an example | Priority for next development | DR-20260919-Q03; personal opening adopted within Q01; starting-skill theme relevance also answers part of Q16 | Opening and character-fit acceptance criteria to be defined in Q30–Q31 | A proposal that assigns unapproved biography, adds hard skill gates or treats the example as mandatory |
+| Q04 | B: local mysteries, including the survivor's past, may have answers; Knox Event's cause remains unexplained | New wishlist; informs personal-opening design | DR-20260919-Q04; broadens P4-R109, revises P1-Q15 for local mysteries, reaffirms P1-Q22's Knox boundary | Evidence and conclusion rules to be designed | A proposal that prohibits all local answers or reveals the Knox Event's cause |
 
 Before implementation begins, check the answers together: travel guidance against survival freedom; answer-driven cases against a fixed underlying truth; physical device costs against accessibility; finite storage against promised campaign length; and new-game rules against a long personal campaign. Present conflicts for a decision instead of resolving them silently.
 
