@@ -1,5 +1,40 @@
 # Conspiracy-Files — Current Decision Index
 
+## Case two's inference corrected — 2026-09-19 (late)
+
+**DR-20260919-STILL-FILING-NARROW — case two's payoff is continued paperwork,
+not absent visits.** My draft concluded that entries closed after the last round
+had stopped were therefore written **without visits**. That does not follow:
+staff could have processed records **late, after genuine earlier visits**. The
+dates support **continued paperwork after collections stopped** and nothing more
+— which is meaningful on its own and is now the payoff. The case establishes
+nothing about whether any entry lacked a visit, which entries are affected, or
+the survivor's own, which **stays uncertain**. This challenges confidence in the
+cancellation record without erasing what case one established. Corrects
+`DR-20260919-SECOND-CASE`.
+
+**DR-20260919-NO-ATTEMPT-EVIDENCE — the stronger claim needs its own
+evidence.** To establish that some entries were closed with no visit behind
+them requires evidence specifically supporting it: **an instruction** to close
+outstanding entries without further attempts, **together with records showing it
+was applied** (entries closed carrying that instruction's reference). Together
+those support that some entries were closed without further attempts — still not
+which, and **never** the survivor's own. Both are an **extension**, not part of
+the essential chain, so the case completes on the narrow payoff; what they change
+is the size of what it leaves open.
+
+**DR-20260919-SUITABLE-SITE — "suitable office" is two tests and a site must
+pass both.** A **narrative rule**: why would this place hold collection records?
+It must plausibly handle routing, posting or civil administration — a post
+office counter, a warden's or civil-defence table, a depot office; never a
+house, a shop back room, or any desk that merely has a container. And an
+**engine check**: the particular carrier must exist, be openable, sit inside the
+site, and not be behind an impassable route — verified per save against the real
+world, never assumed from the building's type. **Reachability alone does not make
+a placement believable, and plausibility alone does not make it reachable.** A
+site failing either test is rejected; if none passes, the case says so rather
+than placing the record somewhere unbelievable.
+
 ## Build the opening pair — 2026-09-19 (late)
 
 **DR-20260919-BUILD-PAIR — "No contact at premises" is approved as the first

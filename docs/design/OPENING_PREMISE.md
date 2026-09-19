@@ -158,6 +158,23 @@ destination, or a desk copy in a suitable office. **Never an arbitrary
 container.** The record's location is part of what makes it readable as a
 record.
 
+**"Suitable" is two tests, and a site must pass both.**
+
+- **The narrative rule — why would *this* place hold collection records?** The
+  office must be one that plausibly handles routing, posting or civil
+  administration: a post office counter, a warden's or civil-defence table, a
+  depot office. Not a house, not a shop back room, not any desk that happens to
+  have a container on it.
+- **The engine check — is this particular carrier actually reachable?** The
+  container must exist, be openable, sit inside the site, and not be behind a
+  route the player cannot pass. Verified per save against the real world, never
+  assumed from the building's type.
+
+**Reachability alone does not make a placement believable, and plausibility
+alone does not make it reachable.** A site failing either test is rejected and
+another chosen; if none passes, the case says so rather than placing the record
+somewhere unbelievable.
+
 **3 — The first trip is short.** Same neighbourhood. Longer travel belongs to
 later mysteries, and the travel machinery is already proven (three towns, four
 cases), so nothing is lost by keeping the opening close.
@@ -203,18 +220,24 @@ explanation open.
 
 ## What the player ends up knowing
 
-> **Cancellation entries were being closed after the last collection round had
-> already stopped running.** At least some "no contact" entries were written
-> without a visit behind them.
+> **Paperwork on the collection list carried on after the collection rounds had
+> stopped running.** Entries were still being closed on dates when no round was
+> out.
 
-**It does not establish which ones** — including whether the survivor's own was
-one of them. That limit is the point: the follow-up makes the first case's
+**Revised.** The first draft of this payoff said those entries were therefore
+written *without visits*. That does not follow: staff could have processed
+records late, after genuine earlier visits. The dates establish **continued
+paperwork after collections stopped** — which is meaningful on its own, and is
+all they support.
+
+**It does not establish** that any entry lacked a visit, which entries are
+affected, or anything about the survivor's own. The survivor's entry stays
+uncertain. That limit is the point: the follow-up makes the first case's
 conclusion *less* settled rather than more, which is what an investigation
-actually does. It challenges the earlier reading without erasing the finding
-that earned it.
+actually does — it challenges confidence in the cancellation record without
+erasing what case one established.
 
-**Open, and not answered:** why entries were closed with no round behind them —
-procedure, backlog, or decision — and on whose authority.
+**Open, and not answered:** why the paperwork continued, and on whose authority.
 
 ## The essential chain
 
@@ -230,8 +253,27 @@ in a pair, because no single clue can carry it.
 
 Each link keeps its three readings separate. The batch of closures **claims**
 those entries were attempted; the field record **supports** that no round was
-out on some of those dates; what follows is that **some** closures had no visit
-behind them — never which, and never the survivor's.
+out on some of those dates; what follows is that **the paperwork continued after
+the collections did not** — and no more than that.
+
+## The extension: entries closed without further attempts
+
+The stronger claim — that some entries were closed with no visit behind them —
+**needs its own evidence** and cannot be inferred from dates. Two further
+findings, which a player may or may not reach:
+
+- **An instruction** to close outstanding entries without further attempts. A
+  directive, in the plainest possible officialese.
+- **Records showing it was applied** — entries closed carrying that
+  instruction's reference.
+
+**Together they support:** some entries were closed without further attempts
+being made. **Still not:** which entries, and **never** the survivor's own,
+which stays uncertain however much of this the player finds.
+
+Both findings are an extension, not part of the essential chain, so the case
+still completes on the narrow payoff. What they change is the size of what the
+case leaves open, not whether it resolves.
 
 ## Continuity requirements it must satisfy
 
