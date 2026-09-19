@@ -1,5 +1,40 @@
 # Conspiracy-Files — Current Decision Index
 
+## Open question — essential-evidence recovery, 2026-09-19 (overnight)
+
+**Q: when a case loses evidence its conclusion rests on, should it retire at
+once as incomplete, or stay open while the clue is offered another home?**
+
+Implemented tonight (commit `08e5876`): the mod now DETECTS an essential gap and
+refuses to claim a payoff for it — a fifth completion state
+(`incomplete-essential`), no closing words, no "What do I make of it?", and the
+state survives retirement and the deep archive so the record never looks solved.
+
+**Not implemented: the recovery route.** `OPENING_PAIR_COMPLETION.md` says such
+a case "keeps a recovery opportunity open", and `DR-20260919-Q23` chose renewed
+physical discovery for unfound clues as the mechanism. Neither exists yet, so
+what happens today is:
+
+- the case **retires immediately**, marked incomplete. Its active slot is freed.
+
+I chose that deliberately over holding the case open, because holding it open is
+exactly the progression stall `P4-R142` was written to prevent: a case that can
+never complete would occupy one of four active slots for the rest of the save,
+and no ladder rung can free a slot a live case is holding. Between two honest
+failures I took the one that does not break the game.
+
+**The alternative, which needs your ruling:** keep the case live and re-defer
+the essential clue so the filler tries again, bounded by a retry count, and only
+retire as incomplete once those are exhausted. That delivers the recovery the
+design document promises, at the cost of a case holding a slot for up to three
+in-game days per retry.
+
+Both are defensible; they differ in what the player experiences when a
+neighbourhood simply has nowhere to put the slip. Left unimplemented pending
+your answer, and the opening pair works either way — this only decides what
+happens on the unlucky save.
+
+
 ## The guard is reporting, not progression — 2026-09-19 (late)
 
 **DR-20260919-GAP-NOT-PROGRESSION — honest reporting does not satisfy the
