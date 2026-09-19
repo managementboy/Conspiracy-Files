@@ -312,6 +312,35 @@ function S.accounted(root)
     end
     return true
 end
+-- THE DOCUMENTS THIS CASE ENDED WITHOUT (DR-20260919-SOLVABLE-WITHDRAWN).
+--
+-- `accounted` above counts a DROPPED clue as accounted for, which is right: a
+-- clue with nowhere to go after three in-game days must not squat an active
+-- slot for ever, and a four-clue case is still a case (P4-R133). But it makes
+-- "accounted for" and "found" the same answer at the one moment they differ,
+-- and the completion path then says "That's all of it" over a case that was
+-- never fully placed. That is the mod claiming an ending it did not deliver.
+--
+-- So the ending is not blocked - a case may still complete on the clues it got
+-- - but it may no longer be SILENT about the ones it never had. This returns
+-- those ids, in the case's own document order, so the caller can say so.
+--
+-- Deliberately not "lost": nothing here knows a document was destroyed or
+-- taken, and no record may ever say so (P4-R104). A dropped clue was never
+-- placed in the world at all, so the honest statement is about the survivor's
+-- reach, never about the document's fate.
+function S.gaps(root)
+    local out={}
+    if type(root)~="table" or type(root.case)~="table" then return out end
+    local known={}
+    for _,id in ipairs(root.known or {}) do known[id]=true end
+    for _,seen in ipairs(root.recognised or {}) do known[seen]=true end
+    for _,d in ipairs(root.case.documents) do
+        local a=root.assignments[d.id]
+        if not known[d.id] and a and a.status=="dropped" then out[#out+1]=d.id end
+    end
+    return out
+end
 -- `rooms` is OPTIONAL (Phase 2, docs/design/USING_GAME_ASSETS.md): when it is
 -- omitted this runs the exact original counts-indexed loop below, so
 -- behaviour is byte-identical to before Phase 2 existed. When `rooms` is

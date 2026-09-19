@@ -76,6 +76,21 @@ local SET_F={
     "I don't think there's any more of this one.",
     "That's the last of the paperwork.",
 }
+--- Set F, the other ending: the case finished with a clue it never had
+--- (DR-20260919-SOLVABLE-WITHDRAWN). Set F above is hedged but still says the
+--- paperwork is complete, and over a case that was never fully placed that is
+--- the mod claiming an ending it did not deliver.
+---
+--- These say the survivor did not get everything, and nothing more. Never that
+--- a document was lost, taken or destroyed - a dropped clue was never placed in
+--- the world at all, so nothing here knows its fate and no line may invent one
+--- (P4-R104).
+local SET_F_GAP={
+    "That's all I could get hold of.",
+    "Some of this never turned up.",
+    "There's a piece of this I never found.",
+}
+local indexFGap=0
 -- Set G: the player has walked into a building an earlier document named.
 -- Fires on ARRIVAL and never before: said a moment early it is a quest marker,
 -- said on the doorstep it is recognition.
@@ -311,11 +326,19 @@ function V.onConnection(kind,documentId)
 end
 
 -- Set F: the last document of a case has been found.
-function V.onCaseComplete(caseId)
+-- `gaps` is the number of the case's clues that were never placed and so never
+-- found (Session.gaps). Zero, nil or absent keeps the original wording exactly,
+-- so a case that delivered everything reads as it always did.
+function V.onCaseComplete(caseId,gaps)
     local p=player(); if not p then return end
     if not once("done:"..tostring(caseId)) then return end
-    indexF=indexF%#SET_F+1
-    speak(p,SET_F[indexF],"Nothing left to find here",true)
+    if type(gaps)=="number" and gaps>0 then
+        indexFGap=indexFGap%#SET_F_GAP+1
+        speak(p,SET_F_GAP[indexFGap],"Something in this was never found",true)
+    else
+        indexF=indexF%#SET_F+1
+        speak(p,SET_F[indexF],"Nothing left to find here",true)
+    end
     -- A moment later, a second thought (P4-R113, P4-R122): the question the
     -- organiser's FILES now holds. It waits in the queue behind the first line;
     -- the organiser never opens by itself. Both are the case's closing words and

@@ -1063,9 +1063,17 @@ function R.inspect(item,inPlace)
                     -- as the last-seen scan passes them (P4-R118).
                     pcall(function() item:setDisplayCategory(categoryOf(md.cfGeneratedId)) end)
                     -- Not "solved" - the mod does not know that and never will.
-                    -- Only that there is nothing further to find.
+                    -- Only that there is nothing further to find - and where a
+                    -- clue was never placed at all, not even that
+                    -- (DR-20260919-SOLVABLE-WITHDRAWN). The count of clues the
+                    -- case ended without decides which closing line is honest;
+                    -- the log carries the ids so a run can be read afterwards.
+                    local gaps=Session.gaps(done)
+                    if #gaps>0 then
+                        log("Case complete with "..#gaps.." clue(s) never placed: "..table.concat(gaps,", "))
+                    end
                     local v=ConspiracyFiles.PlayerVoice
-                    if v and v.onCaseComplete then pcall(v.onCaseComplete,done.case.caseId) end
+                    if v and v.onCaseComplete then pcall(v.onCaseComplete,done.case.caseId,#gaps) end
                 else log("Case complete but not retired: "..tostring(why)) end
                 break
             end
