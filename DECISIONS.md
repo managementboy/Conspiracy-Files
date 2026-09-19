@@ -6,6 +6,12 @@ If a spike disproves a decision, technical reality wins: supersede the decision 
 
 ## Direction review — 2026-09-19
 
+**DR-20260919-Q12 — bring unfound evidence closer after a delay.** Owner added Q12 D: “after a time we can place the Evidence not found in new containers closer to the player. What the player doesnt know never happened.” After a delay, the mod may place still-undiscovered evidence in new containers nearer the player, keeping an unfinished mystery discoverable as the survivor moves. Unknown placement is allowed to change; facts already learned by the player must remain consistent.
+
+This replaces automatic acceptance of P2-Q218's indefinitely untouched leads as the sole policy and reopens the earlier expiry/relocation rules for this behavior. It does not automatically approve the existing three-game-day timing, deletion of discovered evidence, duplicate copies, or a claim that the mystery was solved. The delay, proximity, eligible containers, relocation frequency, handling of the previous physical copy, and definition of player knowledge remain to be designed and tested. In particular, a location named in an already-read clue or an item previously seen but not yet formally noted may already be known; do not equate “not in the organiser” with “unknown”. This question remains open at that boundary.
+
+Q05 still requires later mysteries to involve travel. How closer replacement opportunities preserve meaningful travel must be resolved rather than silently making every distant lead local. The owner selected relocation, not the assistant's proposed voluntary shelving system; shelving is not approved by this answer. Implementation order is pending.
+
 **DR-20260919-Q11 — focus attention on one principal mystery.** Owner selected Q11 A: one principal mystery, with incidental discoveries saved for later. This sets the desired player experience alongside ordinary survival and supports keeping the personal opening understandable. It does not require discarding incidental evidence or removing the continuing web confirmed in Q06.
 
 No numerical spawn interval, session-length target or internal active-case limit was approved. In particular, one principal mystery is not automatically an instruction to set the storage/runtime active-case cap to one; how background discoveries and future mysteries are retained needs design. The current 24-hour gap and four-active-case implementation are not reaffirmed merely by this answer. Timing and detailed pacing remain open.

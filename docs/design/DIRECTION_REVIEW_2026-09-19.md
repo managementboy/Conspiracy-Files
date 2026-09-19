@@ -2,7 +2,7 @@
 
 Prepared 19 September 2026 against `main` at `73e6b62`, build `DEV-0.44.0-addresses-that-travel`.
 
-**Status: Q01–Q11 confirmed, including a replacement lead prototype and a later map-line goal. Q16 is partially answered through Q03. Remaining choices await answers. This review builds a new wishlist and revisits all existing commitments.**
+**Status: Q01–Q12 confirmed, including relocation of undiscovered evidence after a delay. Q16 is partially answered through Q03. Remaining choices await answers. This review builds a new wishlist and revisits all existing commitments.**
 
 **Confirmed scope:** version 1.0 enriches ordinary survival with investigations (Q01 A). A survivor-centered campaign (Q01 B) is a possible future option. All remaining recommendations must be considered within that boundary; campaign features are not implied 1.0 commitments.
 
@@ -241,9 +241,13 @@ Give a concrete expectation: during one typical real-world play session, how muc
 
 For the selected approach, what must the player be told about missing evidence, and should an unplaceable clue ever count toward a case being finished?
 
-**Suggested answer — not approved:** C — Let the player shelve and resume a trail. Preserve discovered facts and physically placed evidence. Handle placement failures as incomplete opportunities, not as evidence discovered or truth resolved; report that a trail has stalled without revealing hidden totals. Reason: player disinterest and technical inability to place a clue need different outcomes. Timing: next milestone's design and a bounded cold-trail prototype.
+- D. After a delay, place evidence the player has not found in new containers closer to them; unknown placement may change. (Owner's added option.)
 
-**Owner decision:** _unanswered_
+**Original assistant suggestion — not adopted:** C, voluntary shelving and resumption. The owner instead selected renewed discovery opportunities through relocation.
+
+**Owner decision — confirmed 19 September 2026:** D: “after a time we can place the Evidence not found in new containers closer to the player. What the player doesnt know never happened.” Unfound evidence may be placed closer after a delay. Already-learned facts remain consistent. Recorded as DR-20260919-Q12 in `DECISIONS.md`.
+
+**Still to establish:** delay, distance, eligible containers, relocation frequency, safe handling of the previous copy and the boundary of player knowledge. A location mentioned in a read clue or an item seen but not noted may already be known. Relocation must also be reconciled with Q05's later travel requirement; no specific exception or algorithm is assumed. Voluntary shelving is not approved by this answer.
 
 ## Round 3 — How does this belong in survival? (Q13–Q18)
 
@@ -540,6 +544,7 @@ Copy one row for each answered question. Keep any uncertainty visible.
 | Q08 | A and B: understanding a connection and reaching somewhere useful or memorable; no ranking specified | New wishlist; informs content and acceptance criteria | DR-20260919-Q08; renews the connection and destination player moments | Owner playtest can describe what was understood and why the destination mattered | A proposal that equates rewards solely with collecting records or assumes permission to spawn rewards |
 | Q10 | A: recognisable cases and conclusions without hidden-clue counts; later connect clues leading to a conclusion with map lines | Case presentation: wishlist; map lines: later | DR-20260919-Q10; revises blanket P2-Q82 closure prohibition; separate graph stays open in Q21 | Connection meaning and map-line interaction design still needed | A proposal that exposes hidden clues or assumes automatic/manual drawing without a decision |
 | Q11 | A: one principal mystery, incidental discoveries retained for later | New wishlist; detailed pacing pending | DR-20260919-Q11; current case cap and timer not automatically reaffirmed | Playtest attention and continuity; design handling of background discoveries | A proposal that equates principal mystery with deleting other cases or imposes an unapproved timer |
+| Q12 | D: after a delay place unfound evidence in new containers closer to the player; unknown placement may change | New wishlist; implementation order pending | DR-20260919-Q12; reopens untouched-lead and expiry/relocation assumptions | Define knowledge boundary, timing, proximity and safe physical relocation; reconcile Q05 travel | A proposal that changes learned facts, duplicates evidence or makes all required travel disappear |
 
 Before implementation begins, check the answers together: travel guidance against survival freedom; answer-driven cases against a fixed underlying truth; physical device costs against accessibility; finite storage against promised campaign length; and new-game rules against a long personal campaign. Present conflicts for a decision instead of resolving them silently.
 
