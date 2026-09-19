@@ -2,7 +2,7 @@
 
 Prepared 19 September 2026 against `main` at `73e6b62`, build `DEV-0.44.0-addresses-that-travel`.
 
-**Status: Q01 confirmed by the owner; Q02–Q32 remain recommendations awaiting answers.**
+**Status: Q01–Q02 confirmed by the owner; Q03–Q32 remain recommendations awaiting answers. This review builds a new wishlist and revisits all existing commitments.**
 
 **Confirmed scope:** version 1.0 enriches ordinary survival with investigations (Q01 A). A survivor-centered campaign (Q01 B) is a possible future option. All remaining recommendations must be considered within that boundary; campaign features are not implied 1.0 commitments.
 
@@ -14,7 +14,7 @@ Answer one round at a time. Round 1 is enough for a first conversation. Use `Q01
 
 For each answer, also say whether it belongs **in the next playable milestone**, **later**, or **outside the intended mod**. This distinguishes a feature you still want from work you want now.
 
-An unanswered question means **not reaffirmed in this review**, not agreement with the old rule and not automatic repeal. Existing behavior remains the observable baseline. A new feature or redesign that depends on an unanswered choice should bring that choice back to the owner. Routine fixes can preserve existing behavior without deciding the product direction for them.
+An unanswered question means **pending in the new wishlist**, not agreement with the old rule and not automatic rejection. Under confirmed Q02, all existing commitments are being revised today; none carries forward simply because it was approved before. Existing behavior is evidence for the discussion, not a requirement to keep it. A new feature or redesign that depends on an unanswered choice should bring that choice back to the owner. Reviewing commitments does not itself authorize removing features or changing game behavior. If an old commitment is missing from these questions, add it to the review before treating it as a requirement.
 
 After a round is answered, read back the decision in plain language, its consequences, and exactly which older decisions it keeps, changes or retires. Record the confirmed wording in `DECISIONS.md`; retain dated history. A recommendation, source-code comment, old plan, or this questionnaire is not an owner answer.
 
@@ -81,9 +81,11 @@ The Linux development PC is offline. This review uses source and archived eviden
 - B. Replace it with a small set of essential experiences; everything else must earn its place.
 - C. Treat the original list as ideas and choose one bounded release at a time.
 
-**Suggested answer — not approved:** B — Replace the mandatory wishlist with five essential experiences: noticing clues, making useful connections, choosing what to pursue, surviving meaningful journeys, and retaining a coherent record. Reason: a feature should serve one of these experiences rather than survive because it was once requested. Timing: next milestone planning.
+- D. Build a new wishlist; all existing commitments are being revised today. (Owner's added option.)
 
-**Owner decision:** _unanswered_
+**Original assistant suggestion — not adopted:** B, a small set of essential experiences. The owner instead chose to rebuild the wishlist through today's review; the assistant's proposed essentials are not confirmed requirements.
+
+**Owner decision — confirmed 19 September 2026:** D: “we are building a new wishlist. all commitments are being revised today”. Start the new wishlist from confirmed answers in this review. Previously approved commitments remain open to revision; unanswered or omitted topics do not carry forward automatically. Recorded as DR-20260919-Q02 in `DECISIONS.md`.
 
 ### Q03 — Is the survivor's missing past still the opening we want?
 
@@ -496,6 +498,7 @@ Copy one row for each answered question. Keep any uncertainty visible.
 | Question | Owner's confirmed wording | Next / later / outside | Older IDs kept, amended or retired | Evidence needed | Review trigger |
 |---|---|---|---|---|---|
 | Q01 | A for 1.0: investigations enriching ordinary survival; B may be a future option | A: 1.0; B: possible future | DR-20260919-Q01; reaffirms P1-Q2/P2-Q208; qualifies P1-Q1 and campaign-vision scope | Normal-survival playtest criteria to be decided in Q30–Q31 | Any proposal to require a personal campaign for 1.0 |
+| Q02 | D: build a new wishlist; all existing commitments are being revised today | This review | DR-20260919-Q02; replaces P1-Q24's blanket commitment | Explicit owner answers; check omitted commitments before relying on them | Any proposed requirement justified only by an old decision |
 
 Before implementation begins, check the answers together: travel guidance against survival freedom; answer-driven cases against a fixed underlying truth; physical device costs against accessibility; finite storage against promised campaign length; and new-game rules against a long personal campaign. Present conflicts for a decision instead of resolving them silently.
 
