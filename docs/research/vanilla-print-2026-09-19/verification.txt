@@ -1,0 +1,1 @@
+PASS: both extraction/review commands completed. 258 unique categorised designs; 594 resolved marks; 133 print texts/destinations; 125 map bounds; 15 base map items (14 fixed bounds); 9 flagged anchors. HTML JavaScript syntax passes Node --check. No engine test or browser-render verification claimed.

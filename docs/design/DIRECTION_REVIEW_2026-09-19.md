@@ -558,6 +558,8 @@ For the chosen rule, define what agents may decide independently, what needs an 
 
 ## Maps and flyers brainstorm — initial proposals, awaiting discussion
 
+**Update after Q32:** owner requested offline inspection before deciding how to integrate these media. That inspection is complete: see [the inventory, categorisation and grounded proposals](../research/vanilla-print-2026-09-19/README.md). The initial proposals below remain discussion history. The collection contains 125 annotated maps, 111 flyers and 22 brochures, with ordinary map sheets documented separately. No proposed story connection has been approved by the research request.
+
 The owner's starting point: **finding an annotated map or flyer gives purpose and a reason to act.** The art-gallery final request and Relay Site 31 memo are the concrete examples. These proposals are not yet approved mechanics:
 
 1. **Written lead to a real destination.** A memo references a relay site; a map or flyer helps identify where it is; travelling there reveals connected evidence. Verify candidate stations before binding a fictional site name to one.
