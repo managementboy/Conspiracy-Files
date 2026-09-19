@@ -62,11 +62,19 @@ assert(type(waiting)=="table" and #waiting>0,
     "the fixture must really leave a clue waiting - without this the whole test is vacuous")
 local api=assert(S.open(root,function() end))
 
-local gapId=waiting[1]
-local deferred=api.assignment(gapId)
-assert(deferred.status=="deferred","the waiting clue really is deferred: got "..tostring(deferred.status))
-assert(deferred.target==nil,"a deferred clue has no target")
-assert(type(deferred.deferredHours)=="number","and carries the hour its wait began")
+-- EVERY waiting clue is dropped, and every one is expected as a gap. An
+-- earlier draft dropped only waiting[1] and then asserted exactly one gap -
+-- but this fixture leaves TWO clues waiting of four documents (verified by
+-- running it: documents=4 waiting=2 found=2), so a second clue was still
+-- deferred and the case was not accounted at all. The assertions were simply
+-- wrong about their own fixture. Counting from `waiting` instead of assuming
+-- one makes the test correct however the generator distributes.
+for _,id in ipairs(waiting) do
+    local a=api.assignment(id)
+    assert(a.status=="deferred","each waiting clue really is deferred: got "..tostring(a.status))
+    assert(a.target==nil,"a deferred clue has no target")
+    assert(type(a.deferredHours)=="number","and carries the hour its wait began")
+end
 
 -- Find and record every clue that DID get a container.
 local found={}
@@ -79,18 +87,31 @@ for _,d in ipairs(case.documents) do
     end
 end
 assert(#found>0,"some clues were placed")
-assert(S.completion(api.snapshot())==UNFINISHED,"a clue still waiting means unfinished")
+assert(#found+#waiting==#case.documents,
+    string.format("the fixture accounts for every document: found=%d waiting=%d documents=%d",
+        #found,#waiting,#case.documents))
+assert(S.completion(api.snapshot())==UNFINISHED,"clues still waiting means unfinished")
 assert(not S.accounted(api.snapshot()),"which agrees with the existing gate")
 
--- Three in-game days with nowhere to go and it is dropped. Unconditional.
-assert(api.drop(gapId),"a deferred clue is dropped after its three days")
+-- Three in-game days with nowhere to go and they are dropped. Unconditional,
+-- and ALL of them, so the case really does become accounted.
+for _,id in ipairs(waiting) do
+    assert(api.drop(id),"a deferred clue is dropped after its three days")
+end
 local done=api.snapshot()
-assert(done.assignments[gapId].status=="dropped","it really is dropped now")
-assert(done.assignments[gapId].droppedFrom=="deferred","recorded as never having found a container")
+local expected={}
+for _,id in ipairs(waiting) do
+    assert(done.assignments[id].status=="dropped","it really is dropped now")
+    assert(done.assignments[id].droppedFrom=="deferred","recorded as never having found a container")
+    expected[id]=true
+end
 
 local state,gaps=S.completion(done)
-assert(state==WITH_GAPS,"a case that ended without a clue says so: got "..tostring(state))
-assert(#gaps==1 and gaps[1]==gapId,"and names the clue it never had")
+assert(state==WITH_GAPS,"a case that ended without clues says so: got "..tostring(state))
+assert(#gaps==#waiting,
+    string.format("every dropped clue is a gap: %d gaps for %d dropped",#gaps,#waiting))
+for _,id in ipairs(gaps) do assert(expected[id],"and each gap is one of the dropped clues: "..id) end
+local gapId=gaps[1]
 assert(S.accounted(done),"the case may still close (P4-R133) - it just may not pretend")
 print("PASS completion state: a genuinely deferred clue, dropped, makes a complete-with-gaps case")
 
@@ -122,7 +143,8 @@ assert(Retired.validate(retiredShort),
     "and passes the retired validator - ROOT_FIELDS is strict, so the fields must be allowed there")
 state,gaps=S.completion(retiredShort)
 assert(state==WITH_GAPS,"a retired case remembers it ended with a gap: got "..tostring(state))
-assert(#gaps==1 and gaps[1]==gapId,"and which clue it was")
+assert(#gaps==#waiting,"and how many clues it was")
+for _,id in ipairs(gaps) do assert(expected[id],"each named: "..id) end
 local _,history=S.gaps(retiredShort)
 assert(history[gapId]=="deferred","and the drop path survives retirement")
 
@@ -131,7 +153,7 @@ assert(Retired.validate(stub),"and passes the stub validator - STUB_FIELDS is st
 assert(Retired.isStub(stub),"it really is a stub")
 state,gaps=S.completion(stub)
 assert(state==WITH_GAPS,"a deep-archived case still knows it ended with a gap: got "..tostring(state))
-assert(#gaps==1 and gaps[1]==gapId,"and still names it")
+assert(#gaps==#waiting,"and still names them all")
 local _,stubHistory=S.gaps(stub)
 assert(stubHistory[gapId]=="deferred","and the drop path survives the deep archive too")
 print("PASS completion state: completion and drop history survive real retirement and the deep archive")
@@ -166,7 +188,7 @@ end
 assert(restored,"the retired case is readable back out of the wrapper")
 state,gaps=S.completion(restored)
 assert(state==WITH_GAPS,"restored from the wrapper, it still knows it ended with a gap")
-assert(#gaps==1 and gaps[1]==gapId,"the gap ID survives the wrapper")
+assert(#gaps==#waiting,"the gap IDs survive the wrapper")
 local _,restoredHistory=S.gaps(restored)
 assert(restoredHistory[gapId]=="deferred","and so does the drop-path history")
 print("PASS completion state: gap IDs and drop history survive the real save wrapper and its validator")

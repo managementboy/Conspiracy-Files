@@ -149,12 +149,18 @@ assert(state.missingHours==nil,"the timer is actually cleared on the same state,
 assert(#S.missingIds(session,10000)==0,"a carrier that came back never expires")
 
 -- (c) It disappears AGAIN: a fresh timer, from the new hour, on the same state.
-calls={}; resolveFinds=false; setHours(200); watch()
-assert(calls[1].hours==200,"gone again starts again from the new hour: "..tostring(calls[1].hours))
-assert(state.missingHours==200,"not 100 - the return cancelled the first wait")
+-- The clock only ever moves FORWARD from here. An earlier draft ran
+-- 100 -> 140 -> 150 -> 200 -> 172 -> 272, stepping time backwards at the
+-- expiry check, which no game clock does and which made the survival assertion
+-- meaningless. The second disappearance is at 160 so that 100 + three days
+-- (172) lands AFTER it and still tests the right thing.
+calls={}; resolveFinds=false; setHours(160); watch()
+assert(calls[1].hours==160,"gone again starts again from the new hour: "..tostring(calls[1].hours))
+assert(state.missingHours==160,"not 100 - the return cancelled the first wait")
 
--- (d) Expiry runs from the LAST disappearance. Had (b) failed to clear - the
---     fault - this clue would already have been dropped at 100 + three days.
+-- (d) Expiry runs from the LAST disappearance. At 172 the FIRST disappearance
+--     is three days old but the second is not, so the clue must survive. Had
+--     (b) failed to clear - the fault - it would be dropped here.
 calls={}; resolveFinds=false; setHours(100+S.DEFER_EXPIRE_HOURS); watch()
 for _,c in ipairs(calls) do
     assert(not c.dropMissing,
@@ -162,8 +168,8 @@ for _,c in ipairs(calls) do
 end
 assert(state.status=="placed","and it is still placed")
 
--- On the three days from 200, it goes.
-calls={}; setHours(200+S.DEFER_EXPIRE_HOURS); watch()
+-- On the three days from 160, it goes.
+calls={}; setHours(160+S.DEFER_EXPIRE_HOURS); watch()
 local dropped=false
 for _,c in ipairs(calls) do if c.dropMissing then dropped=true end end
 assert(dropped,"three in-game days gone and the clue is dropped")
