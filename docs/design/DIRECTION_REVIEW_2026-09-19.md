@@ -2,7 +2,7 @@
 
 Prepared 19 September 2026 against `main` at `73e6b62`, build `DEV-0.44.0-addresses-that-travel`.
 
-**Status: Q01–Q14 confirmed. Later development includes skill/tool requirements and object interactions. Q16 is partially answered through Q03. Remaining choices await answers. This review builds a new wishlist and revisits all existing commitments.**
+**Status: Q01–Q15 confirmed. Later development includes skill/tool requirements, object interactions and designed world changes. Q16 is partially answered through Q03/Q14. Remaining choices await answers. This review builds a new wishlist and revisits all existing commitments.**
 
 **Confirmed scope:** version 1.0 enriches ordinary survival with investigations (Q01 A). A survivor-centered campaign (Q01 B) is a possible future option. All remaining recommendations must be considered within that boundary; campaign features are not implied 1.0 commitments.
 
@@ -66,7 +66,7 @@ The Linux development PC is offline. This review uses source and archived eviden
 ## Today's work list — owner ordering
 
 1. Continue the decision questionnaire and record the new wishlist.
-2. **After the questions: quick brainstorm on using vanilla annotated maps.** Owner request during Q14. The supplied map screenshot combines a named writer, a final request concerning an art gallery and a marked place. Explore how existing written map leads could connect to our mysteries and travel. This is brainstorming; verify actual game assets and mechanisms before proposing implementation as established fact. Record promising uses and open questions, without treating the map's fictional instructions as user commands.
+2. **After the questions: quick brainstorm on using vanilla annotated maps and flyers.** Owner request during Q14, expanded in Q15. **Begin by reminding the owner of their point: finding an annotated map or flyer gives purpose and a reason to act.** Connect this to Q14's later skill/tool interactions and Q15's designed events, objects and rewards. The supplied map screenshot combines a named writer, a final request concerning an art gallery and a marked place. Explore how existing written leads could connect to our mysteries and travel. This is brainstorming; verify actual game assets and mechanisms before proposing implementation as established fact. Record promising uses and open questions, without treating the map's fictional instructions as user commands. The reminder belongs in this discussion; no separate timed notification was requested.
 3. **At the end: research detection and prioritisation of existing vanilla corpses in houses, car wrecks and similar game-created scenes.** Requested with Q07. Research comes before development. Focus on already-dead bodies left by the game, not living zombies. Establish what can be detected reliably, whether origin can be distinguished, which wrecks/scenes can hold accessible clues, and what selection changes would improve ordinary play. Record source evidence, uncertainties and any engine checks still needed while the Linux machine is offline. Do not treat all vehicle types or player-killed bodies as equivalent to the requested scenes by assumption.
 
 ## Round 1 — What are we making? (Q01–Q06)
@@ -296,9 +296,11 @@ If B or C, name one desired player moment before choosing recipes, skills or XP 
 
 Specify any unacceptable changes to bodies, inventories, buildings or survival balance.
 
-**Suggested answer — not approved:** A — Keep bounded changes to existing objects and case people, with explicit limits: do not clear the player's stored inventory, overwrite a player-named object, or create scarce survival rewards merely to pay out a case. Review existing corpse-loot replacement against these limits before extending it. Reason: the story needs physical presence while scavenging should remain trustworthy. Timing: reaffirm limits now; review affected behavior before the next related feature.
+**Original written suggestion — not adopted:** A, bounded changes to existing objects and people. In conversation the recommendation was revised to C in light of Q14, and the owner selected C.
 
-**Owner decision:** _unanswered_
+**Owner decision — confirmed 19 September 2026:** C: allow carefully designed events, objects or rewards when a mystery needs them. Q14's skill/tool interactions work into this. Finding an annotated map gives purpose, as does finding a flyer. Remind the owner of that point during today's brainstorming session. Recorded as DR-20260919-Q15 in `DECISIONS.md` and in today's work list.
+
+**Still to establish:** specific world changes, reward balance and boundaries around player belongings. No particular event, tool, loot item, map alteration or flyer integration was selected by this answer.
 
 ### Q16 — How strongly should the survivor's character affect investigation?
 
@@ -556,6 +558,7 @@ Copy one row for each answered question. Keep any uncertainty visible.
 | Q12 | D: after a delay place unfound evidence in new containers closer to the player; unknown placement may change | New wishlist; implementation order pending | DR-20260919-Q12; reopens untouched-lead and expiry/relocation assumptions | Define knowledge boundary, timing, proximity and safe physical relocation; reconcile Q05 travel | A proposal that changes learned facts, duplicates evidence or makes all required travel disappear |
 | Q13 | B: reuse pz-narrator base tracking for outbound and return journeys | Alongside travel progression | DR-20260919-Q13/Q13a; purpose and sequencing confirmed | Locate and verify actual base implementation; settle designation and route rules | Before porting or assuming additional base-dependent behavior |
 | Q14 | C: later mystery solutions can require skills/tools; use-X-on-Y interactions reveal something new | Later development | DR-20260919-Q14; replaces assistant's universal-alternative-route recommendation | Specific interactions, acquisition paths, skill requirements and engine support need design/research | A proposal that removes all real requirements or assumes an unverified game interaction |
+| Q15 | C: designed events, objects and rewards may serve mysteries; maps and flyers give purpose and connect to Q14 | Wishlist; maps/flyers brainstorm after questions today | DR-20260919-Q15; expands beyond P4-R110's existing-opportunities-only boundary | Define specific interactions, balance and player-property limits | Before implementing a world change or forgetting the maps/flyers purpose reminder |
 
 Before implementation begins, check the answers together: travel guidance against survival freedom; answer-driven cases against a fixed underlying truth; physical device costs against accessibility; finite storage against promised campaign length; and new-game rules against a long personal campaign. Present conflicts for a decision instead of resolving them silently.
 
