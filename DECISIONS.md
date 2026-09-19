@@ -1,5 +1,110 @@
 # Conspiracy-Files — Current Decision Index
 
+## Reconciled development direction — 2026-09-19 (evening)
+
+*Reached by review between the Linux development side and the owner's Windows
+review session. Recorded as the agreed direction; the owner has not separately
+ruled on each line and may correct any of them.*
+
+**DR-20260919-NUMBERING — the two decision registers are not rival numbering
+schemes, and neither renumbers.** Flagged as a discrepancy earlier today and
+withdrawn on inspection: `DR-<date>-<topic>` records **what the product must
+be** (the wishlist and review answers, made on the Windows side), and
+`P4-R###` records **what a build settled** (implementation decisions, quoted by
+name in code comments and tests, now at R139). They are two registers in one
+file, not two conventions for one thing. No entry is renumbered and no parallel
+trial run is needed. Cross-reference between registers where a build decision
+implements a product decision.
+
+**DR-20260919-CONSISTENT-EVENTS — consistent events, no canonical
+explanation.** Replaces the "sealed answer" proposal, which was rejected for
+manufacturing a canonical truth that clues would converge on even if no
+document stated it. What is fixed is a record of **specific events** — a pickup
+cancelled, a radio desk receiving a message, an official concealing a decision —
+with the ultimate explanation left genuinely open. Several independent clues may
+illuminate one event; events are not allocated one per clue. The event record is
+a readable, version-controlled document carrying source references and explicit
+uncertainty. Reaffirms DR-20260919-CENTRAL-PREMISE. The earlier proposals of a
+minimum count of hidden details, and of forbidding whole subjects (agency,
+order, helicopter), are both rejected: the count was arbitrary, and a subject
+ban would block worthwhile local discoveries.
+
+**DR-20260919-SUPPORT — cited evidence is not the same as a justified
+conclusion.** An organiser record can cite three found objects and still draw an
+unsupported inference, so the record and its checks must keep three things
+apart: **what was observed**, **what a document claims**, and **what those
+sources actually support**. The event record preserves the same distinction: an
+unsigned memo's allegation is recorded as an allegation that was found, and
+never graduates into an established event by having been written down.
+Supersedes the "receipts" proposal, which only required that objects be listed.
+Extends two existing instincts into a rule — the survivor's "probably refers to
+another list?" being a question that may be wrong, and the relay-memo week
+being stored as a maybe and never a finding.
+
+**DR-20260919-CONTINUITY — continuity carries discovered evidence, not selected
+opinions.** A later case follows a finding the player actually made and the
+question a case ended on, and may challenge an earlier interpretation. The three
+closing questions are **not** restored as the steering mechanism; the discarded
+hunch system stays discarded. Serves DR-20260919-Q18's retention goal.
+
+**DR-20260919-PAYOFF-SCOPE — each mystery's payoff is designed before its
+clues, at mystery scale.** Accepted for individual mysteries, including each
+annotated map's destination. The proposal of one final building with four
+required objects is **rejected**: it makes a campaign with a collection
+checklist, where the agreed direction is an investigation layer that enriches
+survival. A full campaign remains a future possibility, not this scope.
+
+**DR-20260919-COVERAGE-HONESTY — incomplete map coverage is communicated
+outside the fiction.** A pilot town may be wired first, but an unfunded
+annotated map must not draw an in-character reaction: "can't make anything of
+this yet" would read as a clue needing more skill or evidence, which is a
+falsehood in the survivor's voice. Coverage is a development fact and belongs in
+release notes and clearly labelled development feedback. Vanilla map
+functionality stays intact. Universal coverage per DR-20260919-MAP-PAYOFF
+remains acknowledged unfinished work.
+
+**DR-20260919-ORDER-KEEP — the personal opening stays first, and the
+continuity demonstration is built to keep.** The personal opening mystery is the
+first case (DR-20260919-Q31); a follow-up case then demonstrates genuine
+continuity from it. The proposal to prove continuity on a throwaway case first
+is rejected in favour of combining them, which preserves the development order
+and produces reusable work.
+
+**DR-20260919-GATE-UNCHANGED — passing technical checks remains the milestone
+gate; playtesting is a source of requirements.** DR-20260919-Q30 stands
+unchanged and the proposed "I felt clever" acceptance grade is withdrawn.
+Recorded because every fault the owner caught on 2026-09-18/19 — a badge called
+a document, line breaks at 1.5x, page-at-a-time scrolling, the organiser's radio
+audible, map marks not recorded in place, Inspect unavailable — passed the
+technical checks. Play is where we learn what to write checks for; it is not a
+second gate.
+
+**P4-R140 — the archive's measurements are re-verified, and the stub does not
+yet meet the retention goal.** Checked before letting them set policy, as
+requested. `test/case_archive.lua` passes on current code and reproduces its
+figures exactly: worst case per root, live 42,024 bytes, archived with rows
+33,135, stubbed 3,130; shrink 12,914 → 1,821 bytes (−86%); a sixteen-case save
+at campaign 338,540 + ledger 61,843 + 73,000 reserved = 473,383 of 500,000,
+**26,617 spare**. What "retained" means per tier is the table in
+[CASE_RETIREMENT.md](docs/design/CASE_RETIREMENT.md): a stub keeps the case id,
+its document ids in discovery order, and the questions and answers — and drops
+titles, text, leads, connections, the site and where evidence was last seen.
+Two consequences:
+1. **The stub fails DR-20260919-Q18** ("concise summaries, important
+   connections and the player's own notes", and anything still needed for an
+   unresolved or inherited investigation). The gap is measured, not argued.
+2. **Sixteen cases is a storage ceiling, not a playthrough length.** The real
+   wall is the discovery ledger: 545 bytes for every document ever found, capped
+   at `MAX=512` events — about seventy cases' worth at seven documents a case,
+   whatever the case store does. Content budgets must be set against that, never
+   against the case count. The earlier "roughly eighty clue slots a save" figure
+   is withdrawn as unsound.
+The spare 26,617 bytes is what a retention rule may spend. A stub gaining its
+sourced findings and open question costs a few hundred bytes a case, so eight
+stubs fit inside the spare with room left; restoring full rows costs about
+30,000 a case and does not fit. Design for variety and continuity, then measure
+repetition in play.
+
 ## Audit before development handoff — 2026-09-19
 
 **DR-20260919-EXISTING-AUDIT — review current evidence and generator here before handing off.** Owner explicitly requested a deep audit of existing texts and mystery-creation logic against arrival, apparent isolation, absent help and related central questions. [The audit](docs/design/EXISTING_EVIDENCE_AUDIT_2026-09-19.md) covers all 20 runtime premise families, shared templates, Dead Air and continuity/completion/archive logic at `edf55d3`. Findings distinguish source behavior from proposed repairs. The audit is completed planning work; none of its new fictional examples is automatically approved or implemented. [The development handoff](docs/management/CENTRAL_MYSTERY_DEVELOPMENT_HANDOFF_2026-09-19.md) now carries concrete repair scope rather than delegating the audit itself.
