@@ -2,9 +2,11 @@
 
 Prepared 19 September 2026 against `main` at `73e6b62`, build `DEV-0.44.0-addresses-that-travel`.
 
-**Status: Q01–Q02 confirmed by the owner; Q03–Q32 remain recommendations awaiting answers. This review builds a new wishlist and revisits all existing commitments.**
+**Status: Q01–Q03 confirmed by the owner; Q16 partially answered through Q03. Remaining choices await answers. This review builds a new wishlist and revisits all existing commitments.**
 
 **Confirmed scope:** version 1.0 enriches ordinary survival with investigations (Q01 A). A survivor-centered campaign (Q01 B) is a possible future option. All remaining recommendations must be considered within that boundary; campaign features are not implied 1.0 commitments.
+
+**Confirmed next-development priority:** a mystery about the survivor's missing past/how they arrived, with early mysteries prioritised to match starting skills (Q03 A). This personal opening belongs within the ordinary-survival investigation direction and does not require the full future campaign. Electrician/power/radio is the owner's example of thematic fit, not a mandatory template.
 
 The owner requested this review after returning to the Windows workspace: read the campaign vision, revisit the goals from the original design, and assess the developed mod so that old decisions are not silently treated as permanent requirements.
 
@@ -97,9 +99,11 @@ The Linux development PC is offline. This review uses source and archived eviden
 
 If A or B: what may the mod establish about the survivor without taking away their roleplay?
 
-**Suggested answer — not approved, revised after Q01:** C for version 1.0: leave the survivor's past player-defined. Keep B, an optional missing-past opening, as a candidate only if a future campaign is chosen. Reason: ordinary-survival investigations do not require an imposed personal history. Timing: outside 1.0; future option, not a promise.
+**Original assistant suggestion — not adopted:** defer the missing-past opening to a possible future campaign.
 
-**Owner decision:** _unanswered_
+**Owner decision — confirmed 19 September 2026:** A, as one of the priorities for next development. Also prioritise mysteries that match the survivor's skills at game start: an electrician might encounter mysteries involving power or radio. The example illustrates thematic fit; it does not prescribe a fixed case or prohibit other themes. Recorded as DR-20260919-Q03 in `DECISIONS.md`.
+
+**Still to establish:** how much of the survivor's past the opening may define; how actual starting skill levels and profession influence selection; and whether skills affect only theme or also observations/actions. No hard skill gate is approved by this answer.
 
 ### Q04 — What kinds of truth may the player actually establish?
 
@@ -264,11 +268,13 @@ Specify any unacceptable changes to bodies, inventories, buildings or survival b
 
 **Starting point:** P1-Q14 wants profession-, trait- and skill-specific interpretation; current Search Mode already inherits some vanilla perception conditions.
 
+**Already confirmed through Q03:** prioritise early mysteries matching skills at game start. This is a next-development priority. The remaining question is how those skills affect observations and ways of investigating, beyond choosing a suitable theme.
+
 - A. Keep differences mainly in spotting and survival ability.
 - B. Let traits, professions and skills reveal different observations, with alternative routes.
 - C. Give different characters substantially different campaign possibilities.
 
-**Suggested answer — not approved:** B — Let professions, traits and skills produce different observations with alternative routes to important information. Start with a few meaningful differences supported by verified game APIs. Reason: character identity becomes relevant without excluding a build from the campaign. Timing: later; this shares the same implementation increment as Q14.
+**Suggested answer — not approved, revised after Q03:** build the confirmed starting-skill theme prioritisation in the next development increment. For additional mechanics, B: let skills and professions provide different observations with alternative routes to important information. Reason: the opening can feel appropriate to the character without silently introducing hard gates. Timing: theme prioritisation is confirmed for next development; additional observation mechanics await this answer and need verified game APIs. Q14's crafting progression remains a separate open choice.
 
 **Owner decision:** _unanswered_
 
@@ -475,7 +481,7 @@ Choose after Q01–Q30, not from momentum. These are candidates, not a preselect
 
 Write: **“The milestone is done when I can ___ in a normal Steam-delivered game, and we have observed ___.”** List at most three essential experiences and explicitly defer the rest.
 
-**Suggested answer — not approved, revised after Q01:** A — Consolidate the investigation layer for ordinary survival. Suggested finish line: 'In a normal Steam-delivered survival game I can notice and inspect clues, understand a meaningful connection, choose whether to pursue it, and resume after saving and returning; cases continue at a useful pace and the record remains coherent.' Reason: this tests the confirmed 1.0 identity using the systems already built. Personal origins, a deliberate campaign route, bases as campaign stages and crafting mastery are not required by Q01. Timing: next milestone, with its exact acceptance criteria still awaiting the remaining answers.
+**Suggested answer — not approved, revised after Q03:** B, narrowed to the confirmed personal-opening priority, supported by necessary fixes to the existing loop. Suggested finish line: 'In a normal Steam-delivered survival game I encounter a mystery about how I arrived, its subject fits my character's starting skills, and I can follow and resume that investigation through the existing discovery and record systems.' Compare contrasting starting characters and a character without a strongly specialised skill profile. Reason: this tests the newly confirmed priority within ordinary survival. A deliberate campaign route, bases as campaign stages and crafting mastery remain separate open choices. Timing: next milestone proposal; exact scope and acceptance criteria still await the remaining answers.
 
 **Owner decision:** _unanswered_
 
@@ -499,6 +505,7 @@ Copy one row for each answered question. Keep any uncertainty visible.
 |---|---|---|---|---|---|
 | Q01 | A for 1.0: investigations enriching ordinary survival; B may be a future option | A: 1.0; B: possible future | DR-20260919-Q01; reaffirms P1-Q2/P2-Q208; qualifies P1-Q1 and campaign-vision scope | Normal-survival playtest criteria to be decided in Q30–Q31 | Any proposal to require a personal campaign for 1.0 |
 | Q02 | D: build a new wishlist; all existing commitments are being revised today | This review | DR-20260919-Q02; replaces P1-Q24's blanket commitment | Explicit owner answers; check omitted commitments before relying on them | Any proposed requirement justified only by an old decision |
+| Q03 | A: prioritise a missing-past opening and early mysteries fitting starting skills; electrician/power/radio is an example | Priority for next development | DR-20260919-Q03; personal opening adopted within Q01; starting-skill theme relevance also answers part of Q16 | Opening and character-fit acceptance criteria to be defined in Q30–Q31 | A proposal that assigns unapproved biography, adds hard skill gates or treats the example as mandatory |
 
 Before implementation begins, check the answers together: travel guidance against survival freedom; answer-driven cases against a fixed underlying truth; physical device costs against accessibility; finite storage against promised campaign length; and new-game rules against a long personal campaign. Present conflicts for a decision instead of resolving them silently.
 
