@@ -6,6 +6,10 @@ If a spike disproves a decision, technical reality wins: supersede the decision 
 
 ## Direction review — 2026-09-19
 
+**DR-20260919-Q17 — inherit an investigation through physical recovery.** Owner selected Q17 B with “b exactly”: a new survivor must recover the previous survivor's evidence or organiser to inherit that investigation. The investigation can survive its investigator, but the replacement character does not automatically know it. Acquiring a generic organiser is not itself recovery of the previous survivor's record.
+
+This changes P4-R128's automatic world-record access for a new survivor and revises the original P1-Q6/P2-Q28 assumption that the investigation necessarily ends with the character. Existing discovered facts remain historical facts; the new character's access to them must follow recovery. Whether particular recovered evidence grants partial knowledge or an entire record, how provenance is identified, and how the predecessor's personal missing-past mystery is attributed remain to be designed. No death recap was selected by this answer. Development timing is pending.
+
 **DR-20260919-Q16 — skills affect observations and understanding.** Owner selected Q16 B: provide skill-specific observations and interpretations while exploring, in addition to Q03's starting-skill influence on mystery selection and Q14's later skill/tool requirements. The example of an electrician recognising an altered circuit illustrates expertise affecting what the survivor can notice or understand; it is not a mandatory scenario or a verified engine mechanic.
 
 This reaffirms the skill-specific observation aspect of P1-Q14 in the new wishlist. It does not require separate story paths for every profession, approve specific skill thresholds, or imply that every Q14 requirement must have an alternative route. Profession and trait effects beyond the confirmed skill behavior, the exact observations and their implementation order remain to be designed. Observations must be supported by the world/story facts; expertise is not permission to invent a conclusion.

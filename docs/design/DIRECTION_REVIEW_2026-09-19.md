@@ -2,7 +2,7 @@
 
 Prepared 19 September 2026 against `main` at `73e6b62`, build `DEV-0.44.0-addresses-that-travel`.
 
-**Status: Q01–Q16 confirmed. Skills shape early mystery selection, observations and understanding, with specific skill/tool requirements planned for later mysteries. Remaining choices await answers. This review builds a new wishlist and revisits all existing commitments.**
+**Status: Q01–Q17 confirmed. Investigation inheritance requires recovery of the previous survivor's evidence or organiser. Remaining choices await answers. This review builds a new wishlist and revisits all existing commitments.**
 
 **Confirmed scope:** version 1.0 enriches ordinary survival with investigations (Q01 A). A survivor-centered campaign (Q01 B) is a possible future option. All remaining recommendations must be considered within that boundary; campaign features are not implied 1.0 commitments.
 
@@ -328,7 +328,9 @@ Should a death recap be wanted now, later, or dropped? What may it reveal?
 
 **Suggested answer — not approved:** B — Make inherited investigation knowledge something a new survivor acquires through recovery of the previous survivor's records or device. Recovering a generic empty organiser alone should not grant another person's memories. Keep personal notes attributed to their author. A death recap can come later and contain only discovered information. Reason: this connects persistence to the physical world and preserves the meaning of death. Timing: later, as an explicit change from today's world-wide access.
 
-**Owner decision:** _unanswered_
+**Owner decision — confirmed 19 September 2026:** “b exactly”. A new survivor must recover the previous survivor's evidence or organiser to inherit the investigation. Automatic access merely from being in the same world or acquiring a generic organiser is not the chosen behavior. Recorded as DR-20260919-Q17 in `DECISIONS.md`.
+
+**Still to establish:** partial versus full knowledge from recovered items, how inherited records identify their original author, how a predecessor's personal opening is presented to the new survivor, and implementation timing. The death-recap subquestion has not been answered.
 
 ### Q18 — How much investigation history must remain readable?
 
@@ -560,6 +562,7 @@ Copy one row for each answered question. Keep any uncertainty visible.
 | Q14 | C: later mystery solutions can require skills/tools; use-X-on-Y interactions reveal something new | Later development | DR-20260919-Q14; replaces assistant's universal-alternative-route recommendation | Specific interactions, acquisition paths, skill requirements and engine support need design/research | A proposal that removes all real requirements or assumes an unverified game interaction |
 | Q15 | C: designed events, objects and rewards may serve mysteries; maps and flyers give purpose and connect to Q14 | Wishlist; maps/flyers brainstorm after questions today | DR-20260919-Q15; expands beyond P4-R110's existing-opportunities-only boundary | Define specific interactions, balance and player-property limits | Before implementing a world change or forgetting the maps/flyers purpose reminder |
 | Q16 | B: skills affect observations and understanding, alongside mystery selection and later requirements | New wishlist; detailed timing pending | DR-20260919-Q16; reaffirms skill-specific observations from P1-Q14; complements Q03/Q14 | Define supported observations, skill thresholds and verified game interfaces | A proposal that invents facts from expertise or assumes every required skill has a bypass |
+| Q17 | B: a new survivor must recover the predecessor's evidence or organiser to inherit the investigation | New wishlist; timing pending | DR-20260919-Q17; changes P4-R128 automatic access and original death-ending assumption | Test character knowledge, physical recovery and persistence; decide partial/full access and authorship | A proposal that grants automatic inherited knowledge or treats the predecessor's personal history as the new survivor's |
 
 Before implementation begins, check the answers together: travel guidance against survival freedom; answer-driven cases against a fixed underlying truth; physical device costs against accessibility; finite storage against promised campaign length; and new-game rules against a long personal campaign. Present conflicts for a decision instead of resolving them silently.
 
