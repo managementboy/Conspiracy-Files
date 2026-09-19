@@ -1570,6 +1570,63 @@ end
 -- survivor has not already searched it, its loot window is not open, it is
 -- inside the site's footprint as S.target will demand, the case has no mobile
 -- clue yet (S.MOBILE_PER_CASE), and the survivor is not standing next to it.
+-- RETIRE A CASE THAT HAS JUST BECOME ACCOUNTED FOR, FROM ANY PATH.
+--
+-- Session.accounted used to be consulted in exactly ONE place: the path that
+-- runs when a clue is inspected. Both drop paths - a deferred clue that has
+-- waited three in-game days, and a clue whose carrier is gone - dropped the
+-- clue and never asked again. So this sequence stuck a case for the rest of
+-- the save:
+--   1. the survivor finds and inspects every clue that HAS a container;
+--   2. the last one is still deferred, so the case is not accounted for and
+--      does not retire - correct so far (P4-R133);
+--   3. three in-game days later that clue expires and is dropped;
+--   4. the case is NOW accounted for, and nothing will ever look again,
+--      because looking only happened on inspection and there is nothing left
+--      to inspect.
+-- The case keeps its active slot for ever. With MAX_ACTIVE slots held that way
+-- every later case is refused `active-limit`, and no ladder rung can free a
+-- slot a finished case is still holding - the rungs release an old FINISHED
+-- case's sites, which does nothing here.
+--
+-- Returns false when there is nothing to do, so a caller can tell "not ready"
+-- from "retired". Exposed as R.retireIfAccounted for
+-- test/retire_after_final_drop.lua, because the bug was that nothing was
+-- called and only a test that watches the call can hold that.
+local function retireIfAccounted(done)
+    if type(done)~="table" or type(done.case)~="table" then return false end
+    if not Session.accounted(done) then return false end
+    -- No campaign loaded is a normal state, not a fault: a drop can fire during
+    -- a reset or before the store exists, and ipairs(nil) would throw inside a
+    -- scheduler job. Nothing to retire into, so nothing to do.
+    if type(wrapper)~="table" then return false end
+    for index,root in ipairs(Cases.sessions(wrapper)) do
+        if not Retired.isRetired(root) and root.case and root.case.caseId==done.case.caseId then
+            -- Where each clue was last seen, from the scan's own sightings
+            -- (P4-R104). No item in hand on this path: nothing was just picked
+            -- up, a clue simply ran out of time.
+            local seen={}
+            for sid,s in pairs(sightings or {}) do if s.where then seen[sid]=s.where end end
+            local staged,why=Cases.retire(wrapper,index,seen,worldHours())
+            if not staged then log("case accounted for but not retired: "..tostring(why)); return false end
+            swap(staged); openAll()
+            local gaps,history=Session.gaps(done)
+            if #gaps>0 then
+                local parts={}
+                for _,gid in ipairs(gaps) do parts[#parts+1]=gid.."("..tostring(history[gid])..")" end
+                log("Case complete with "..#gaps.." clue(s) the case never had: "..table.concat(parts,", ")
+                    .." [case="..tostring(done.case.caseId).."]")
+            else
+                log("Case complete; placement details retired.")
+            end
+            local v=ConspiracyFiles.PlayerVoice
+            if v and v.onCaseComplete then pcall(v.onCaseComplete,done.case.caseId,#gaps) end
+            return true
+        end
+    end
+    return false
+end
+R.retireIfAccounted=retireIfAccounted
 local function carrierScanFor(site,found)
     local b=site.bounds
     local r=Session.CARRIER_RADIUS
@@ -1594,7 +1651,13 @@ local function filler(api)
             local expired=Session.expiredIds(root,hours)
             if #expired>0 then
                 local ok,why=api.drop(expired[1])
-                if ok then CFLog.write("i","stale",{doc=expired[1],why="expired",n=#expired})
+                if ok then
+                    CFLog.write("i","stale",{doc=expired[1],why="expired",n=#expired})
+                    -- The drop may have been the event that completed this case.
+                    -- Nothing else will ever look again: retirement used to be
+                    -- checked only when a clue was inspected, and there is
+                    -- nothing left to inspect.
+                    retireIfAccounted(api.snapshot())
                 else log("could not drop a waiting clue: "..tostring(why)) end
                 return true
             end
@@ -1672,6 +1735,9 @@ end
 -- A carrier in an unloaded cell is not a carrier that is gone, and the hour is
 -- cleared the moment it turns up again. One clue per attempt, one job per
 -- session, beside the filler.
+-- Exposed as R.carrierWatch for test/carrier_timer.lua: the fault was in the
+-- arguments this passes to api.missing, and only a test that reads those
+-- arguments can hold it. A source-text check cannot.
 local function carrierWatch(api)
     return function()
         local root=api.snapshot()
@@ -1679,7 +1745,10 @@ local function carrierWatch(api)
         local gone=Session.missingIds(root,hours)
         if #gone>0 then
             local ok,why=api.dropMissing(gone[1],hours)
-            if ok then CFLog.write("i","stale",{doc=gone[1],why="carrier-gone",n=#gone})
+            if ok then
+                CFLog.write("i","stale",{doc=gone[1],why="carrier-gone",n=#gone})
+                -- Same window as the expiry path above.
+                retireIfAccounted(api.snapshot())
             else log("could not drop a clue whose carrier is gone: "..tostring(why)) end
             return true
         end
@@ -1693,7 +1762,12 @@ local function carrierWatch(api)
                 and math.max(math.abs(px-t.x),math.abs(py-t.y))<=Carriers.FIND_RADIUS then
                 local ok,container=pcall(World.resolve,t,a.physicalToken)
                 local found=ok and container~=nil
-                local wrote,why=api.missing(d.id,found and nil or hours)
+                -- `found and nil or hours` yielded the hour on BOTH branches (Lua: `true and
+                -- nil` is nil, then `nil or hours` is hours), so the clear-the-timer
+                -- branch was unreachable and a carrier standing right here stayed
+                -- marked missing until its clue was dropped. The decision now lives in
+                -- Session.missingMark, where a plain Lua test can hold it (P4-R141).
+                local wrote,why=api.missing(d.id,Session.missingMark(found,hours))
                 if not wrote then log("could not note a carrier's whereabouts: "..tostring(why)) end
                 return true
             end
@@ -1701,6 +1775,7 @@ local function carrierWatch(api)
         return true
     end
 end
+R.carrierWatch=carrierWatch
 local function trackVisited()
     local house=currentHouse()
     if not house then return true end
@@ -2034,6 +2109,7 @@ Events.OnTick.Add(function()
         -- And the carrier watch, the same shape: one job per session, one clue
         -- per attempt (P4-R134).
         for i,api in ipairs(sessions) do scheduler.enqueue("carrier:"..i,"carrier",carrierWatch(api)) end
+
         scheduler.enqueue("visited-building","tracking",trackVisited)
         if #retiredRows>0 then
             local now=getTimeInMillis and getTimeInMillis() or 0

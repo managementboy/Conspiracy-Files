@@ -531,8 +531,20 @@ assert(watch:find("Session.missingIds(root,hours)",1,true) and watch:find("api.d
     "three in-game days with no carrier and the clue is dropped")
 assert(watch:find("Carriers.FIND_RADIUS",1,true),
     '"gone" is only concluded where the survivor could actually have looked')
-assert(watch:find("api.missing(d.id,found and nil or hours)",1,true),
-    "and the hour is cleared the moment the carrier turns up again")
+-- This line used to read:
+--     assert(watch:find("api.missing(d.id,found and nil or hours)",1,true),
+--         "and the hour is cleared the moment the carrier turns up again")
+-- which asserted the BUG and described it as the fix. `found and nil or hours`
+-- yields the hour on both branches, so the hour was never cleared - and this
+-- assertion would have blocked anyone correcting it. A source-text check can
+-- only ever confirm that a file says what it says; it cannot tell whether what
+-- it says is right. The behaviour is now held by test/carrier_timer.lua, which
+-- drives the real watcher and reads the arguments that reach api.missing.
+assert(watch:find("Session.missingMark(found,hours)",1,true),
+    "the mark is decided in one tested place, not re-derived inline (P4-R141)")
+-- No "the idiom is absent" assertion here: the first attempt at one matched the
+-- comment that EXPLAINS the idiom, which is the same trap one level up. Absence
+-- of a string is not a behaviour. test/carrier_timer.lua asserts the behaviour.
 local relocate=assert(runtime:match("local function relocation%(api%)(.-)\nend\n"))
 assert(relocate:find('type(a.target.carrierMark)=="string" then return true',1,true),
     "a clue on a carrier does not relocate; its answer to going stale is expiry")

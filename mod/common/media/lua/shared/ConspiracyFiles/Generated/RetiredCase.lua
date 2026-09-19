@@ -22,7 +22,12 @@ local M={SCHEMA=2,STUB_SCHEMA=3}
 -- stored; the question and reading wording is looked up by premise id.
 -- completedHours: the world hour the case finished, so the next case can wait
 -- a little for the survivor's answers (P4-R121). Optional, like the rest.
-local ROOT_FIELDS={schema=true,caseId=true,rows=true,known=true,offered=true,answers=true,completedHours=true}
+-- completion/gaps: what the case finished as, carried forward so a retired
+-- record can still answer whether it delivered its chain
+-- (DR-20260919-SOLVABLE-WITHDRAWN). Both optional, like lastSeen, so older
+-- schema-2 roots still load and SCHEMA stays 2.
+local ROOT_FIELDS={schema=true,caseId=true,rows=true,known=true,offered=true,answers=true,completedHours=true,
+                   completion=true,gaps=true,gapsFrom=true}
 -- A deep-archived case (schema 3, P4-R111). The archive is what stops the tenth
 -- case being the last, but 500 KB (P4-R17) cannot hold the documents of every
 -- case a save will ever make: measured, four live cases and six full-size
@@ -40,7 +45,10 @@ local ROOT_FIELDS={schema=true,caseId=true,rows=true,known=true,offered=true,ans
 -- title and text, its leads and connections, the site it came from, and where
 -- it was last seen (P4-R104). Those rows leave the record; the clue in the
 -- world stays marked, and nothing ever says a document is lost.
-local STUB_FIELDS={schema=true,caseId=true,known=true,offered=true,answers=true,completedHours=true}
+-- A stub keeps completion/gaps too: it is a few dozen bytes and it is the
+-- answer the deep archive was destroying.
+local STUB_FIELDS={schema=true,caseId=true,known=true,offered=true,answers=true,completedHours=true,
+                   completion=true,gaps=true,gapsFrom=true}
 local OFFERED_FIELDS={premiseId=true,outline=true,people=true,organisation=true}
 local ANSWER_FIELDS={reading=true,matters=true,way=true,changedHours=true,usedBy=true}
 M.OUTLINES={corroboration=true,["conflicting-account"]=true}
@@ -149,6 +157,41 @@ end
 -- empty rows would be a lie in the shape of a valid record. This is its own
 -- shape, and `known` doubles as the document list -- a case only archives when
 -- every one of its documents is known, so the two were always the same list.
+-- The two carried fields, checked as strictly as everything else here: a state
+-- from the closed set, and gap ids that are ids. "complete" carries no gaps and
+-- "complete-with-gaps" carries at least one, so a record can never claim a
+-- state its own list contradicts (DR-20260919-SOLVABLE-WITHDRAWN).
+local function completionOK(root)
+    if root.completion==nil then
+        -- No state carried: then no gap list and no history either. An older
+        -- record says nothing, and Session.completion reads it as unknown.
+        return root.gaps==nil and root.gapsFrom==nil
+    end
+    if root.completion~=Session.COMPLETE and root.completion~=Session.WITH_GAPS then return false end
+    if root.completion==Session.COMPLETE then
+        return (root.gaps==nil or #root.gaps==0) and root.gapsFrom==nil
+    end
+    local ok,n=dense(root.gaps,G.MAX_EVIDENCE+1); if not ok or n<1 then return false end
+    local seen={}
+    for i=1,n do
+        local id=root.gaps[i]
+        if not text(id,300) or seen[id] then return false end
+        seen[id]=true
+    end
+    -- The history is optional, but if present it may only describe THESE gaps,
+    -- and only with a value from the closed set.
+    if root.gapsFrom~=nil then
+        if type(root.gapsFrom)~="table" then return false end
+        local count=0
+        for id,from in pairs(root.gapsFrom) do
+            if not seen[id] then return false end
+            if from~="deferred" and from~="carrier" and from~="unrecorded" then return false end
+            count=count+1
+        end
+        if count>n then return false end
+    end
+    return true
+end
 local function stubOK(root)
     if not fields(root,STUB_FIELDS) or root.schema~=M.STUB_SCHEMA then return false,"invalid archived case" end
     if not text(root.caseId) then return false,"invalid archived case" end
@@ -162,6 +205,7 @@ local function stubOK(root)
     end
     if root.offered~=nil and not offeredOK(root.offered) then return false,"invalid archived offered" end
     if root.answers~=nil and (root.offered==nil or not answersOK(root.answers)) then return false,"invalid archived answers" end
+    if not completionOK(root) then return false,"invalid archived completion" end
     local h=root.completedHours
     if h~=nil and (type(h)~="number" or h~=h or h<0 or h==math.huge) then return false,"invalid archived completion hour" end
     return true
@@ -179,6 +223,7 @@ function M.validate(root)
     -- MAX_EVIDENCE refused that case at retirement for good ("Case complete
     -- but not retired: invalid retired rows", core-loop check 2026-09-15; the
     -- "0 of 8 last seen" of 2026-09-14 was the same fault).
+    if not completionOK(root) then return false,"invalid retired completion" end
     local ok,n=dense(root.rows,G.MAX_EVIDENCE+1); if not ok then return false,"invalid retired rows" end
     if n<G.MIN_EVIDENCE then return false,"invalid retired rows" end
     local ids={}
@@ -237,6 +282,14 @@ function M.retire(root,lastSeen,completedHours)
     if offeredOK(offered) then out.offered=offered end
     if type(completedHours)=="number" and completedHours==completedHours and completedHours>=0
         and completedHours~=math.huge then out.completedHours=completedHours end
+    -- WHAT THIS CASE FINISHED AS. Carried before the assignments are dropped,
+    -- because after that nothing can work it out: a retired record has no
+    -- assignments and no case envelope, so asked afterwards it reported no
+    -- gaps and every finished case read as clean.
+    local carried=Session.retiredGapFields(root)
+    if carried.completion then
+        out.completion=carried.completion; out.gaps=carried.gaps; out.gapsFrom=carried.gapsFrom
+    end
     ok,why=M.validate(out); if not ok then return nil,why end
     return out
 end
@@ -249,7 +302,8 @@ function M.shrink(root)
     if M.isStub(root) then return root,false end
     local ok,why=M.validate(root); if not ok then return nil,why end
     local out={schema=M.STUB_SCHEMA,caseId=root.caseId,known=copy(root.known),
-        offered=copy(root.offered),answers=copy(root.answers),completedHours=root.completedHours}
+        offered=copy(root.offered),answers=copy(root.answers),completedHours=root.completedHours,
+        completion=root.completion,gaps=copy(root.gaps),gapsFrom=copy(root.gapsFrom)}
     ok,why=stubOK(out); if not ok then return nil,why end
     return out,true
 end

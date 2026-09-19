@@ -299,6 +299,24 @@ end
 -- the zombie walked into a horde, the body burned, the car was wrecked. They
 -- share P4-R133's expiry to the hour, because the survivor's position is the
 -- same either way - there is nothing there to find and never will be.
+-- THE CARRIER MARK: what the watcher should record after looking for a carrier.
+-- nil when it is there - clear the timer - and the hour when it is not.
+--
+-- This exists as a function because the watcher used to decide it inline with
+--
+--     api.missing(d.id, found and nil or hours)
+--
+-- and `true and nil` is nil, so `nil or hours` is hours; `false and nil` is
+-- false, so `false or hours` is hours. BOTH branches passed the hour. The
+-- clear-the-timer branch was unreachable, and since api.missing keeps only the
+-- FIRST missing hour, a carrier standing in front of the survivor was marked
+-- missing once, never cleared, and its clue dropped three in-game days later.
+-- The decision is one line and it was wrong for weeks, so it lives here where
+-- a plain Lua test can hold it to account (test/carrier_timer.lua).
+function S.missingMark(found,hours)
+    if found then return nil end
+    return hours
+end
 function S.missingIds(root,hours)
     local out={}
     if type(hours)~="number" or hours~=hours or hours==math.huge then return out end
@@ -352,7 +370,19 @@ end
 -- return, keyed by id, so a caller that only wants the count is unaffected.
 function S.gaps(root)
     local out,history={},{}
-    if type(root)~="table" or type(root.case)~="table" then return out,history end
+    if type(root)~="table" then return out,history end
+    -- A RETIRED record answers from what it carried (S.retiredGapFields). The
+    -- ids alone were not enough: the owner asked for the drop-path history to
+    -- survive retirement too, and without it a finished case could say WHICH
+    -- clue it never had but not whether that clue was never in the world or
+    -- was on a carrier that went away - the distinction P4-R141 exists for.
+    if type(root.case)~="table" or type(root.assignments)~="table" then
+        for _,id in ipairs(root.gaps or {}) do
+            out[#out+1]=id
+            history[id]=(root.gapsFrom or {})[id] or "unrecorded"
+        end
+        return out,history
+    end
     local known={}
     for _,id in ipairs(root.known or {}) do known[id]=true end
     for _,seen in ipairs(root.recognised or {}) do known[seen]=true end
@@ -366,6 +396,56 @@ function S.gaps(root)
         end
     end
     return out,history
+end
+-- WHICH COMPLETION STATE A CASE IS IN. Four answers, not a boolean and not a
+-- count (DR-20260919-SOLVABLE-WITHDRAWN):
+--   "unfinished"          - clues left to find, or a clue still waiting
+--   "complete"            - every clue placed and found
+--   "complete-with-gaps"  - finished, but the case ended without a clue
+--   "unknown"             - this record cannot answer the question
+--
+-- "unknown" is a real answer and the reason this exists. A retired case keeps
+-- only {schema,caseId,rows,known,offered,answers,completedHours}: no
+-- assignments, no case envelope. Asked the old way it reported no gaps, so
+-- every FINISHED case - precisely where completion happened - read as clean,
+-- and the harness printed "every clue accounted for and found". An absence of
+-- evidence rendered as a positive finding. A record that cannot answer says so.
+--
+-- A retired case that carried its completion forward (S.retiredGapFields) CAN
+-- answer, and is read from those fields.
+S.UNFINISHED="unfinished"; S.COMPLETE="complete"
+S.WITH_GAPS="complete-with-gaps"; S.UNKNOWN="unknown"
+function S.completion(root)
+    if type(root)~="table" then return S.UNKNOWN,{} end
+    if type(root.case)~="table" or type(root.assignments)~="table" then
+        if root.completion==S.COMPLETE then return S.COMPLETE,{} end
+        if root.completion==S.WITH_GAPS then
+            local out={}
+            for _,id in ipairs(root.gaps or {}) do out[#out+1]=id end
+            return S.WITH_GAPS,out
+        end
+        return S.UNKNOWN,{}
+    end
+    if not S.accounted(root) then return S.UNFINISHED,{} end
+    local gaps=S.gaps(root)
+    if #gaps>0 then return S.WITH_GAPS,gaps end
+    return S.COMPLETE,{}
+end
+-- What a retiring case must carry forward so the answer above survives it. Two
+-- short fields, never the assignments: a finished case knew whether it
+-- delivered its chain, and that is the kind of sourced fact retirement is meant
+-- to keep (DR-20260919-Q18) rather than discard. An unfinished or unanswerable
+-- case carries nothing, so no record ever claims a state it did not reach.
+function S.retiredGapFields(root)
+    local state,gaps=S.completion(root)
+    if state==S.UNKNOWN or state==S.UNFINISHED then return {} end
+    if #gaps==0 then return {completion=state,gaps=gaps} end
+    -- The history too, as a map id -> "deferred"/"carrier"/"unrecorded". A few
+    -- dozen bytes, and it is the half that says WHICH failure the case had.
+    local _,history=S.gaps(root)
+    local from={}
+    for _,id in ipairs(gaps) do from[id]=history[id] or "unrecorded" end
+    return {completion=state,gaps=gaps,gapsFrom=from}
 end
 -- `rooms` is OPTIONAL (Phase 2, docs/design/USING_GAME_ASSETS.md): when it is
 -- omitted this runs the exact original counts-indexed loop below, so

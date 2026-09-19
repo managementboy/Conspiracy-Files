@@ -1,0 +1,90 @@
+Campaign check, ABORTED BY OWNER after 1h17m (budgeted ~30m).
+Mod revision under test: 00a3c92. Harness: 383c252. Session 20260919T174431.
+Aborted deliberately: the run could not reach the drop path (DEFER_EXPIRE_HOURS=72,
+the deferred clue had waited ~8 in-game hours), so it could neither confirm nor
+refute the retirement-after-final-drop gap it was started to investigate.
+NOT evidence that any case retired: wait_finished logs a failure and continues.
+---
+pz: launching session 20260919T174431
+pz: new world is loading
+pz: game loading took 57 seconds
+[CF] v=1 t=09:00 lvl=i ev=note mod=casefile msg="organiser issued"
+[CF-DEAD-AIR]|DISABLED|version=DEV-0.44.0-addresses-that-travel|generated development session active
+[CF] v=1 t=09:00 lvl=i ev=address mod=address msg="Ready: 6796 shipped addresses for the whole map in 131 ms; nothing scanned or saved. Zoom in on the world map."
+pz: ready; use: tools/autotest/pz.sh eval 'return getPlayer():getX()'
+campaign: world 1: case 1 has no document in the memo's week; starting a fresh world
+pz: launching session 20260919T174615
+pz: new world is loading
+pz: game loading took 59 seconds
+[CF] v=1 t=09:00 lvl=i ev=note mod=casefile msg="organiser issued"
+[CF-DEAD-AIR]|DISABLED|version=DEV-0.44.0-addresses-that-travel|generated development session active
+[CF] v=1 t=09:00 lvl=i ev=address mod=address msg="Ready: 6796 shipped addresses for the whole map in 143 ms; nothing scanned or saved. Zoom in on the world map."
+pz: ready; use: tools/autotest/pz.sh eval 'return getPlayer():getX()'
+campaign: case 1: generated:1057661794:case
+campaign: start                  cases 1 (0 finished) | record 0 | FILES questions 0 | NAMES 1 | PLACES 0 | Old 0/0 wrong | Evidence 0/0 wrong | order  | save 40837 B
+campaign: case 1057661794:case: clue 1 of 7: Records log / MC-811
+campaign: case 1057661794:case: clue 2 of 7: Registry list / MC-811
+campaign: case 1057661794:case: clue 3 of 7: Registry review / MC-811
+campaign: case 1057661794:case: clue 4 of 7: Shift notebook / MC-811
+campaign: case 1057661794:case: clue 5 of 7: Duty log / MC-811
+campaign: case 1057661794:case: clue 6 of 7: kneepad left sport (1 of 10)
+campaign: case 1057661794:case: clue 7 of 7: Access memo / 7C-41
+campaign: case 1 finished        cases 1 (1 finished) | record 7 | FILES questions 1 | NAMES 2 | PLACES 11 | Old 7/0 wrong | Evidence 0/0 wrong | order 1111111 | save 34321 B
+campaign: after reload 1         cases 1 (1 finished) | record 7 | FILES questions 1 | NAMES 2 | PLACES 11 | Old 7/0 wrong | Evidence 0/0 wrong | order 1111111 | save 35158 B
+campaign: case 2: generated:839321478:case
+campaign: case 839321478:case: clue 1 of 6: Records log / TN-107
+campaign: case 839321478:case: clue 2 of 6: Registry list / TN-107
+campaign: case 839321478:case: clue 3 of 6: Registry review / TN-107
+campaign: case 839321478:case: clue 4 of 6: Duty log / TN-107
+campaign: case 839321478:case: clue 5 of 6: poppy pods (1 of 15)
+campaign: case 839321478:case: clue 6 of 6: clipboard (1 of 6)
+campaign: case 2 finished        cases 2 (2 finished) | record 13 | FILES questions 2 | NAMES 3 | PLACES 20 | Old 13/0 wrong | Evidence 0/0 wrong | order 1111111222222 | save 58400 B
+campaign: case 3: generated:499278804:case
+campaign: case 499278804:case: clue 1 of 4: Hire note / AV-718
+campaign: case 499278804:case: clue 2 of 4: Return note / AV-718
+campaign: case 3, two clues      cases 3 (2 finished) | record 15 | FILES questions 2 | NAMES 4 | PLACES 22 | Old 13/0 wrong | Evidence 2/0 wrong | order 111111122222233 | save 88689 B
+campaign: after reload 2         cases 3 (2 finished) | record 15 | FILES questions 2 | NAMES 4 | PLACES 22 | Old 13/0 wrong | Evidence 2/0 wrong | order 111111122222233 | save 89169 B
+campaign: the limit, move 1: moved on 300 tiles to 10689,10365 (t3:11259175162085400, 16 rooms, 49 unused buildings within 120 tiles); 40 containers loaded within 8 tiles
+campaign: the limit: no case three and a half minutes after move 1 (why=busy n=1 due=04:58 rung=0/3 now=04:30 overdue=false(-0.46h) preparing=true active=1/4 cases=3/16)
+campaign: the limit, move 1: moved on 309 tiles to 10691,10056 (t3:10977700185374744, 5 rooms, 50 unused buildings within 120 tiles); 22 containers loaded within 8 tiles
+campaign: the limit: no case three and a half minutes after move 1 (why=cooldown n=2 due=06:08 rung=0/3 now=05:40 overdue=false(-0.46h) preparing=false active=2/4 cases=4/16)
+campaign: the limit, move 2: moved on 301 tiles to 10657,9757 (t3:10696225208664079, 6 rooms, 32 unused buildings within 120 tiles); 29 containers loaded within 8 tiles
+campaign: the limit, move 1: moved on 300 tiles to 10663,10057 (t3:10977700185374745, 4 rooms, 39 unused buildings within 120 tiles); 19 containers loaded within 8 tiles
+campaign: the limit: no case three and a half minutes after move 1 (why=busy n=1 due=07:53 rung=0/3 now=07:24 overdue=false(-0.48h) preparing=true active=3/4 cases=5/16)
+campaign: at the limit           cases 6 (2 finished) | record 15 | FILES questions 2 | NAMES 4 | PLACES 22 | Old 13/0 wrong | Evidence 2/0 wrong | order 111111122222233 | save 155225 B
+campaign: at the limit: moved on 300 tiles to 10657,9757 (t3:10696225208664079, 6 rooms, 30 unused buildings within 120 tiles); 29 containers loaded within 8 tiles
+campaign: case 499278804:case: clue 1 of 2: Hire ledger note / AV-718
+campaign: case 499278804:case: clue 2 of 2: Shift notebook / AV-718
+campaign: case 499278804:case: 1 clue(s) still waiting after 2 played, 0 dropped (statuses 5:deferred); loaded generated:499278804:document-5's own site t3:10977704480342027 at 10830,10101 and stepped back to 10864,10101, move 1
+campaign: case 499278804:case: 1 clue(s) still waiting after 2 played, 0 dropped (statuses 5:deferred); loaded generated:499278804:document-5's own site t3:10977704480342027 at 10830,10101 and stepped back to 10855,10101, move 2
+campaign: case 499278804:case: 1 clue(s) still waiting after 2 played, 0 dropped (statuses 5:deferred); loaded generated:499278804:document-5's own site t3:10977704480342027 at 10830,10101 and stepped back to 10855,10101, move 3
+campaign: case 499278804:case: 1 clue(s) still waiting after 2 played, 0 dropped (statuses 5:deferred); loaded generated:499278804:document-5's own site t3:10977704480342027 at 10830,10101 and stepped back to 10855,10101, move 4
+campaign: case 499278804:case: 1 clue(s) still waiting after 2 played, 0 dropped (statuses 5:deferred); loaded generated:499278804:document-5's own site t3:10977704480342027 at 10830,10101 and stepped back to 10855,10101, move 5
+campaign: FAIL: case 499278804:case: 1 clue(s) never reached a container in fifteen minutes (statuses 5:deferred; assignments deferred=1 placed=16; why=active-limit n=17 due=12:31 rung=3/3 now=12:03 overdue=false(-0.47h) preparing=false active=4/4 cases=6/16)
+campaign: FAIL: the oldest unfinished case 499278804:case did not finish
+campaign: after the limit, move 1: moved on 302 tiles to 10787,9807 (t3:10696229503631365, 8 rooms, 44 unused buildings within 120 tiles); 23 containers loaded within 8 tiles
+campaign: after the limit: no case three and a half minutes after move 1 (why=active-limit n=22 due=14:02 rung=3/3 now=13:32 overdue=false(-0.49h) preparing=false active=4/4 cases=6/16)
+campaign: after the limit, move 2: moved on 301 tiles to 10667,10083 (t3:10977700185374735, 6 rooms, 41 unused buildings within 120 tiles); 28 containers loaded within 8 tiles
+campaign: after the limit: no case three and a half minutes after move 2 (why=active-limit n=27 due=15:10 rung=3/3 now=14:41 overdue=false(-0.48h) preparing=false active=4/4 cases=6/16)
+campaign: after the limit, move 3: moved on 301 tiles to 10787,9807 (t3:10696229503631365, 8 rooms, 44 unused buildings within 120 tiles); 23 containers loaded within 8 tiles
+campaign: after the limit: no case three and a half minutes after move 3 (why=active-limit n=31 due=16:18 rung=3/3 now=15:51 overdue=false(-0.46h) preparing=false active=4/4 cases=6/16)
+campaign: FAIL: after a case was finished at the limit, no new case came over three fresh neighbourhoods (preparing=false)
+campaign: after the limit        cases 6 (2 finished) | record 17 | FILES questions 2 | NAMES 4 | PLACES 27 | Old 13/0 wrong | Evidence 4/0 wrong | order 11111112222223333 | save 158212 B
+campaign: archive: playing 499278804:case to reach five finished cases
+campaign: case 499278804:case: 1 clue(s) still waiting after 0 played, 0 dropped (statuses 5:deferred); loaded generated:499278804:document-5's own site t3:10977704480342027 at 10830,10101 and stepped back to nowhere free to step back to; standing on the site, move 1
+campaign: case 499278804:case: 1 clue(s) still waiting after 0 played, 0 dropped (statuses 5:deferred); loaded generated:499278804:document-5's own site t3:10977704480342027 at 10830,10101 and stepped back to 10855,10101, move 2
+campaign: case 499278804:case: 1 clue(s) still waiting after 0 played, 0 dropped (statuses 5:deferred); loaded generated:499278804:document-5's own site t3:10977704480342027 at 10830,10101 and stepped back to 10855,10101, move 3
+campaign: case 499278804:case: 1 clue(s) still waiting after 0 played, 0 dropped (statuses 5:deferred); loaded generated:499278804:document-5's own site t3:10977704480342027 at 10830,10101 and stepped back to 10855,10101, move 4
+campaign: case 499278804:case: 1 clue(s) still waiting after 0 played, 0 dropped (statuses 5:deferred); loaded generated:499278804:document-5's own site t3:10977704480342027 at 10830,10101 and stepped back to 10855,10101, move 5
+campaign: FAIL: case 499278804:case: 1 clue(s) never reached a container in fifteen minutes (statuses 5:deferred; assignments deferred=1 placed=16; why=active-limit n=45 due=20:17 rung=3/3 now=19:47 overdue=false(-0.50h) preparing=false active=4/4 cases=6/16)
+campaign: archive: playing 1347146652:case to reach five finished cases
+campaign: case 1347146652:case: clue 1 of 4: Stock list / HK-397
+campaign: case 1347146652:case: clue 2 of 4: Second stock list / HK-397
+campaign: case 1347146652:case: clue 3 of 4: Audit note / HK-397
+campaign: case 1347146652:case: clue 4 of 4: Duty log / HK-397
+campaign: archive: playing 830334553:case to reach five finished cases
+campaign: case 830334553:case: clue 1 of 5: Follow-up note / AV-152
+campaign: case 830334553:case: clue 2 of 5: Attendance card / AV-152
+campaign: case 830334553:case: clue 3 of 5: Records check / AV-152
+campaign: case 830334553:case: clue 4 of 5: Ticket: Delia Mercer
+campaign: case 830334553:case: clue 5 of 5: Payment slip / AV-152
