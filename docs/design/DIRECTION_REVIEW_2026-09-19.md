@@ -2,7 +2,7 @@
 
 Prepared 19 September 2026 against `main` at `73e6b62`, build `DEV-0.44.0-addresses-that-travel`.
 
-**Status: Q01–Q05 confirmed by the owner; Q16 partially answered through Q03. Remaining choices await answers. This review builds a new wishlist and revisits all existing commitments.**
+**Status: Round 1 (Q01–Q06) confirmed by the owner; Q16 partially answered through Q03. Remaining choices await answers. This review builds a new wishlist and revisits all existing commitments.**
 
 **Confirmed scope:** version 1.0 enriches ordinary survival with investigations (Q01 A). A survivor-centered campaign (Q01 B) is a possible future option. All remaining recommendations must be considered within that boundary; campaign features are not implied 1.0 commitments.
 
@@ -145,7 +145,7 @@ If B or C: should guidance be prose and landmarks, exact map destinations, or a 
 
 **Suggested answer — not approved:** B — Build a continuing web of recurring people, organisations and unresolved consequences. Use authored connections where they matter, with generated cases around them. Reason: continuity can make earlier discoveries useful without requiring a fully scripted chapter structure. Timing: next milestone, demonstrated with two linked cases.
 
-**Owner decision:** _unanswered_
+**Owner decision — confirmed 19 September 2026:** B: recurring people, organisations and discoveries form a continuing web across mysteries. Owner: “yes the mod has developed well into this direction”. Individual mysteries can still have their own answers (Q04). This confirms the direction, not every older implementation rule or the assistant's suggested milestone. How hunches steer later cases remains open in Q09. Recorded as DR-20260919-Q06 in `DECISIONS.md`.
 
 ## Round 2 — What should playing feel like? (Q07–Q12)
 
@@ -512,6 +512,7 @@ Copy one row for each answered question. Keep any uncertainty visible.
 | Q03 | A: prioritise a missing-past opening and early mysteries fitting starting skills; electrician/power/radio is an example | Priority for next development | DR-20260919-Q03; personal opening adopted within Q01; starting-skill theme relevance also answers part of Q16 | Opening and character-fit acceptance criteria to be defined in Q30–Q31 | A proposal that assigns unapproved biography, adds hard skill gates or treats the example as mandatory |
 | Q04 | B: local mysteries, including the survivor's past, may have answers; Knox Event's cause remains unexplained | New wishlist; informs personal-opening design | DR-20260919-Q04; broadens P4-R109, revises P1-Q15 for local mysteries, reaffirms P1-Q22's Knox boundary | Evidence and conclusion rules to be designed | A proposal that prohibits all local answers or reveals the Knox Event's cause |
 | Q05 | A early, C later: begin around player exploration; later mysteries require travel | 1.0 direction; implementation sequence pending | DR-20260919-Q05; revises assistant's A-only baseline; qualifies Q01 without committing a full campaign | Transition, travel distances, destination selection and guidance to be decided | A proposal for a fixed route/threshold or to defer all required travel to a future campaign |
+| Q06 | B: recurring people, organisations and discoveries form a continuing web; the developed direction is supported | 1.0 direction | DR-20260919-Q06; reaffirms inter-case continuity in P4-R91/R96/R113 at product level; Q09 reviews steering details | Specific continuity and player-understanding checks to be chosen in Q30–Q31 | A proposal to make cases wholly independent or require a central chapter storyline |
 
 Before implementation begins, check the answers together: travel guidance against survival freedom; answer-driven cases against a fixed underlying truth; physical device costs against accessibility; finite storage against promised campaign length; and new-game rules against a long personal campaign. Present conflicts for a decision instead of resolving them silently.
 
