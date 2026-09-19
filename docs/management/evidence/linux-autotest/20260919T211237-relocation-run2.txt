@@ -1,0 +1,103 @@
+Relocation check, run 2. Revision 4437ab5. Session 20260919T211237. CHECK_EXIT=2.
+RESULT: relocation again did not run. Correctly INCONCLUSIVE (exit 2), not a pass.
+
+THE TWO RUN-1 DEFECTS ARE FIXED, and this run proves both:
+  clock:    advance before=2.14 after=98.14 moved=96.0000h enough=true
+  coverage: 6 compared BEFORE reload and 6 AFTER, 0 no-verdict, 0 no-baseline
+            (run 1 managed 8 before and 1 after, with 7 no-baseline)
+  exit:     captured properly this time - CHECK_EXIT=2
+
+WHY RELOCATION STILL DID NOT RUN - destinations=0 for every clue, and the
+reason is structural. StaleClue.destinations returns a site only when it is
+BOTH (a) not visited AND (b) occupied by no PLACED clue. In a fresh case
+every site holds clues, so (b) fails everywhere; and the ordinary way a site
+empties is the survivor going there to collect them, which makes (a) fail.
+The two conditions are close to mutually exclusive in normal play.
+
+Run 2's own attempt to open a destination failed for a knowable reason:
+marking ONE clue found does not free its site while sibling clues are still
+placed there. Six clues over two sites means both stay occupied.
+
+Pinned at tier 1 by test/relocation_reachability.lua, which needs no game:
+a fresh case has no destination; emptying a site opens it; visiting closes
+it again; and the one combination satisfying both conditions is a site whose
+clues were DEFERRED or DROPPED - never placed, so never worth visiting.
+
+CONSEQUENCE FOR THE ORIGINAL MISMATCH. The design notes' prime suspect was
+a relocation whose canonical write was refused. If relocation is this hard to
+reach, that suspect is materially WEAKER than assumed. This does not clear it
+- it means the mismatch seen in three of nine overnight runs is unlikely to
+have come from a mechanism that needs so narrow a window. A new hypothesis is
+required before any further long run, per the standing instruction.
+
+PHASE A REMAINS INCOMPLETE. No refusal, unreadable result or clean run
+establishes that the original mismatch is fixed, and none of tonight's runs
+reproduced it.
+---
+pz: launching session 20260919T211237
+pz: new world is loading
+pz: game loading took 61 seconds
+[CF] v=1 t=09:00 lvl=i ev=note mod=casefile msg="organiser issued"
+[CF-DEAD-AIR]|DISABLED|version=DEV-0.44.0-addresses-that-travel|generated development session active
+[CF] v=1 t=09:00 lvl=i ev=address mod=address msg="Ready: 6796 shipped addresses for the whole map in 151 ms; nothing scanned or saved. Zoom in on the world map."
+pz: ready; use: tools/autotest/pz.sh eval 'return getPlayer():getX()'
+relocation: clues: placed=6 pending=0 never-placed=0
+relocation: baseline (id, token, target, placedHours, relocations, in-its-container):
+    generated:1948974436:document-1	cf-g2:generated:1948974436:document-1	10840,10148,0/obj2/con0/shelves	2.1091651916503906	0	true
+    generated:1948974436:document-2	cf-g2:generated:1948974436:document-2	10874,10188,0/obj3/con0/shelves	2.1089353561401367	0	true
+    generated:1948974436:document-3	cf-g2:generated:1948974436:document-3	10876,10189,0/obj1/con0/counter	2.1075878143310547	0	true
+    generated:1948974436:document-4	cf-g2:generated:1948974436:document-4	10836,10146,0/obj2/con0/counter	2.1093549728393555	0	true
+    generated:1948974436:document-5	cf-g2:generated:1948974436:document-5	10836,10148,0/obj3/con0/counter	2.108628273010254	0	true
+    generated:1948974436:document-6	cf-g2:generated:1948974436:document-6	10877,10187,0/obj4/con0/shelves	2.107813835144043	0	true
+relocation: clock before: 2.12	8	0
+relocation: conditions before advancing:
+    generated:1948974436:document-1	stale=false	age-placed=0.0	canAttempt=true	relocations=0	quantity=1	onCarrier=false	oldContainer=resolved	visitedKnown=yes	destinations=0	tooCloseToOld=true	tooCloseToDest~=no-dest	inOldContainer=1	carried=0	canRelocate=true
+    generated:1948974436:document-2	stale=false	age-placed=0.0	canAttempt=true	relocations=0	quantity=1	onCarrier=false	oldContainer=resolved	visitedKnown=yes	destinations=0	tooCloseToOld=false	tooCloseToDest~=no-dest	inOldContainer=1	carried=0	canRelocate=true
+    generated:1948974436:document-3	stale=false	age-placed=0.0	canAttempt=true	relocations=0	quantity=1	onCarrier=false	oldContainer=resolved	visitedKnown=yes	destinations=0	tooCloseToOld=false	tooCloseToDest~=no-dest	inOldContainer=1	carried=0	canRelocate=true
+    generated:1948974436:document-4	stale=false	age-placed=0.0	canAttempt=true	relocations=0	quantity=11	onCarrier=false	oldContainer=resolved	visitedKnown=yes	destinations=0	tooCloseToOld=true	tooCloseToDest~=no-dest	inOldContainer=2	carried=0	canRelocate=false
+    generated:1948974436:document-5	stale=false	age-placed=0.0	canAttempt=true	relocations=0	quantity=1	onCarrier=false	oldContainer=resolved	visitedKnown=yes	destinations=0	tooCloseToOld=true	tooCloseToDest~=no-dest	inOldContainer=1	carried=0	canRelocate=true
+    generated:1948974436:document-6	stale=false	age-placed=0.0	canAttempt=true	relocations=0	quantity=1	onCarrier=false	oldContainer=resolved	visitedKnown=yes	destinations=0	tooCloseToOld=false	tooCloseToDest~=no-dest	inOldContainer=1	carried=0	canRelocate=true
+relocation: freeing one site by marking generated:1948974436:document-1 found: freed	nil
+relocation: standing the survivor well away: true	10920,10228
+relocation: baseline after freeing a site: 6 clue(s)
+relocation: advance: before=2.14 after=98.14 requested=96h nights=+4 moved=96.0000h enough=true
+relocation: conditions after advancing:
+    generated:1948974436:document-1	stale=true	age-placed=96.0	canAttempt=true	relocations=0	quantity=1	onCarrier=false	oldContainer=nil	visitedKnown=yes	destinations=0	tooCloseToOld=false	tooCloseToDest~=no-dest	inOldContainer=?nil	carried=0	canRelocate=unknown - a count could not be read
+    generated:1948974436:document-2	stale=true	age-placed=96.0	canAttempt=true	relocations=0	quantity=1	onCarrier=false	oldContainer=resolved	visitedKnown=yes	destinations=0	tooCloseToOld=false	tooCloseToDest~=no-dest	inOldContainer=1	carried=0	canRelocate=true
+    generated:1948974436:document-3	stale=true	age-placed=96.0	canAttempt=true	relocations=0	quantity=1	onCarrier=false	oldContainer=resolved	visitedKnown=yes	destinations=0	tooCloseToOld=false	tooCloseToDest~=no-dest	inOldContainer=1	carried=0	canRelocate=true
+    generated:1948974436:document-4	stale=true	age-placed=96.0	canAttempt=true	relocations=0	quantity=11	onCarrier=false	oldContainer=nil	visitedKnown=yes	destinations=0	tooCloseToOld=false	tooCloseToDest~=no-dest	inOldContainer=?nil	carried=0	canRelocate=unknown - a count could not be read
+    generated:1948974436:document-5	stale=true	age-placed=96.0	canAttempt=true	relocations=0	quantity=1	onCarrier=false	oldContainer=nil	visitedKnown=yes	destinations=0	tooCloseToOld=false	tooCloseToDest~=no-dest	inOldContainer=?nil	carried=0	canRelocate=unknown - a count could not be read
+    generated:1948974436:document-6	stale=true	age-placed=96.0	canAttempt=true	relocations=0	quantity=1	onCarrier=false	oldContainer=resolved	visitedKnown=yes	destinations=0	tooCloseToOld=false	tooCloseToDest~=no-dest	inOldContainer=1	carried=0	canRelocate=true
+relocation: destinations available: destinations=0 
+relocation: clues now stale: 6
+relocation: letting the scheduler run
+relocation: relocation trail from the mod's own log:
+relocation: log: 0 relocation line(s) - 0 MOVE(s), 0 refusal(s)
+relocation: comparing record against world, per clue:
+    generated:1948974436:document-1	recordMoved=false	relocations=0->0	status=placed	was=10840,10148,0/obj2/con0/shelves	now=10840,10148,0/obj2/con0/shelves	verdict=none
+    generated:1948974436:document-2	recordMoved=false	relocations=0->0	status=placed	was=10874,10188,0/obj3/con0/shelves	now=10874,10188,0/obj3/con0/shelves	verdict=none
+    generated:1948974436:document-3	recordMoved=false	relocations=0->0	status=placed	was=10876,10189,0/obj1/con0/counter	now=10876,10189,0/obj1/con0/counter	verdict=none
+    generated:1948974436:document-4	recordMoved=false	relocations=0->0	status=placed	was=10836,10146,0/obj2/con0/counter	now=10836,10146,0/obj2/con0/counter	verdict=none
+    generated:1948974436:document-5	recordMoved=false	relocations=0->0	status=placed	was=10836,10148,0/obj3/con0/counter	now=10836,10148,0/obj3/con0/counter	verdict=none
+    generated:1948974436:document-6	recordMoved=false	relocations=0->0	status=placed	was=10877,10187,0/obj4/con0/shelves	now=10877,10187,0/obj4/con0/shelves	verdict=none
+relocation: before reload: 6 real comparison(s), 0 mismatch(es), 0 without a verdict
+relocation: NOTHING WAS RELOCATED. That is not evidence about placement either way -
+relocation: the conditions and every refusal reason are printed above.
+relocation: saving and reloading, then repeating the comparisons
+relocation: baseline restored after reload: 6 clue(s)
+relocation: clock after reload: 98.82	8	4
+    generated:1948974436:document-1	recordMoved=false	relocations=0->0	status=placed	was=10840,10148,0/obj2/con0/shelves	now=10840,10148,0/obj2/con0/shelves	verdict=none
+    generated:1948974436:document-2	recordMoved=false	relocations=0->0	status=placed	was=10874,10188,0/obj3/con0/shelves	now=10874,10188,0/obj3/con0/shelves	verdict=none
+    generated:1948974436:document-3	recordMoved=false	relocations=0->0	status=placed	was=10876,10189,0/obj1/con0/counter	now=10876,10189,0/obj1/con0/counter	verdict=none
+    generated:1948974436:document-4	recordMoved=false	relocations=0->0	status=placed	was=10836,10146,0/obj2/con0/counter	now=10836,10146,0/obj2/con0/counter	verdict=none
+    generated:1948974436:document-5	recordMoved=false	relocations=0->0	status=placed	was=10836,10148,0/obj3/con0/counter	now=10836,10148,0/obj3/con0/counter	verdict=none
+    generated:1948974436:document-6	recordMoved=false	relocations=0->0	status=placed	was=10877,10187,0/obj4/con0/shelves	now=10877,10187,0/obj4/con0/shelves	verdict=none
+relocation: after reload: 6 real comparison(s), 0 mismatch(es), 0 without a verdict
+relocation: ---
+relocation: relocation log lines: 0    MOVES: 0    refusals: 0    clues stale: 6
+relocation: before reload: compared=6 mismatches=0 no-verdict=0
+relocation: after reload:  compared=6 mismatches=0 no-verdict=0
+relocation: mod errors: 0
+relocation: INCONCLUSIVE: complete evidence is required for every moved clue:
+relocation:   no CF-G2-RELOCATE move record in this run
+CHECK_EXIT=2
