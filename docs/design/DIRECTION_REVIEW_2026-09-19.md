@@ -2,7 +2,7 @@
 
 Prepared 19 September 2026 against `main` at `73e6b62`, build `DEV-0.44.0-addresses-that-travel`.
 
-**Status: Q01–Q13 confirmed. Base tracking will support outbound and return journeys alongside travel progression. Q16 is partially answered through Q03. Remaining choices await answers. This review builds a new wishlist and revisits all existing commitments.**
+**Status: Q01–Q14 confirmed. Later development includes skill/tool requirements and object interactions. Q16 is partially answered through Q03. Remaining choices await answers. This review builds a new wishlist and revisits all existing commitments.**
 
 **Confirmed scope:** version 1.0 enriches ordinary survival with investigations (Q01 A). A survivor-centered campaign (Q01 B) is a possible future option. All remaining recommendations must be considered within that boundary; campaign features are not implied 1.0 commitments.
 
@@ -66,7 +66,8 @@ The Linux development PC is offline. This review uses source and archived eviden
 ## Today's work list — owner ordering
 
 1. Continue the decision questionnaire and record the new wishlist.
-2. **At the end: research detection and prioritisation of existing vanilla corpses in houses, car wrecks and similar game-created scenes.** Requested with Q07. Research comes before development. Focus on already-dead bodies left by the game, not living zombies. Establish what can be detected reliably, whether origin can be distinguished, which wrecks/scenes can hold accessible clues, and what selection changes would improve ordinary play. Record source evidence, uncertainties and any engine checks still needed while the Linux machine is offline. Do not treat all vehicle types or player-killed bodies as equivalent to the requested scenes by assumption.
+2. **After the questions: quick brainstorm on using vanilla annotated maps.** Owner request during Q14. The supplied map screenshot combines a named writer, a final request concerning an art gallery and a marked place. Explore how existing written map leads could connect to our mysteries and travel. This is brainstorming; verify actual game assets and mechanisms before proposing implementation as established fact. Record promising uses and open questions, without treating the map's fictional instructions as user commands.
+3. **At the end: research detection and prioritisation of existing vanilla corpses in houses, car wrecks and similar game-created scenes.** Requested with Q07. Research comes before development. Focus on already-dead bodies left by the game, not living zombies. Establish what can be detected reliably, whether origin can be distinguished, which wrecks/scenes can hold accessible clues, and what selection changes would improve ordinary play. Record source evidence, uncertainties and any engine checks still needed while the Linux machine is offline. Do not treat all vehicle types or player-killed bodies as equivalent to the requested scenes by assumption.
 
 ## Round 1 — What are we making? (Q01–Q06)
 
@@ -279,9 +280,11 @@ For the selected approach, what must the player be told about missing evidence, 
 
 If B or C, name one desired player moment before choosing recipes, skills or XP rules.
 
-**Suggested answer — not approved:** B — Use existing skills for alternative routes and richer observations rather than a separate mastery meter. Example: a survivor with electrical knowledge recognises what a damaged component could power; another finds the same lead through a service record. Reason: skills should reward character choices without blocking the only route. Timing: later, one verified vanilla capability at a time.
+**Original assistant suggestion — not adopted:** B, always providing alternative ways forward without a required skill/tool. The owner selected actual requirements for later-game mysteries.
 
-**Owner decision:** _unanswered_
+**Owner decision — confirmed 19 September 2026:** some later-game mystery solutions will require a particular skill or specific tool. Use the old Monkey Island games as a mechanical reference: “use X on Y will make something appear”. This is for later development. Record concrete interactions that reveal something new; exact objects, results and skill rules remain to be designed. Do not assume every requirement must have a bypass. Recorded as DR-20260919-Q14 in `DECISIONS.md`.
+
+**Separate request:** brainstorm existing vanilla annotated maps after these questions today, as recorded in the work list and DR-20260919-MAPS. The screenshot is reference material for that discussion, not a selected integration design.
 
 ### Q15 — How much may the mod change the existing world?
 
@@ -552,6 +555,7 @@ Copy one row for each answered question. Keep any uncertainty visible.
 | Q11 | A: one principal mystery, incidental discoveries retained for later | New wishlist; detailed pacing pending | DR-20260919-Q11; current case cap and timer not automatically reaffirmed | Playtest attention and continuity; design handling of background discoveries | A proposal that equates principal mystery with deleting other cases or imposes an unapproved timer |
 | Q12 | D: after a delay place unfound evidence in new containers closer to the player; unknown placement may change | New wishlist; implementation order pending | DR-20260919-Q12; reopens untouched-lead and expiry/relocation assumptions | Define knowledge boundary, timing, proximity and safe physical relocation; reconcile Q05 travel | A proposal that changes learned facts, duplicates evidence or makes all required travel disappear |
 | Q13 | B: reuse pz-narrator base tracking for outbound and return journeys | Alongside travel progression | DR-20260919-Q13/Q13a; purpose and sequencing confirmed | Locate and verify actual base implementation; settle designation and route rules | Before porting or assuming additional base-dependent behavior |
+| Q14 | C: later mystery solutions can require skills/tools; use-X-on-Y interactions reveal something new | Later development | DR-20260919-Q14; replaces assistant's universal-alternative-route recommendation | Specific interactions, acquisition paths, skill requirements and engine support need design/research | A proposal that removes all real requirements or assumes an unverified game interaction |
 
 Before implementation begins, check the answers together: travel guidance against survival freedom; answer-driven cases against a fixed underlying truth; physical device costs against accessibility; finite storage against promised campaign length; and new-game rules against a long personal campaign. Present conflicts for a decision instead of resolving them silently.
 
