@@ -6,6 +6,10 @@ If a spike disproves a decision, technical reality wins: supersede the decision 
 
 ## Direction review — 2026-09-19
 
+**DR-20260919-Q22 — remove ordinary-object suspicion capture from the requirements.** After questioning what recording an ordinary-object suspicion would accomplish beyond a note, the owner instructed: “remove that requirement”. Remove the proposed requirement to bookmark ordinary objects or turn arbitrary observations into formal investigation leads. Do not retain it as an automatic later commitment from P2-Q4/Q5/Q17 or Player Moment 1's broad ordinary-item promise.
+
+This is a scope decision, not a request to delete existing free notes or remove current code. Q09a's bounded prototype for following a concrete lead from evidence remains confirmed; it does not require arbitrary-object suspicion capture. No new bookmark, comparison or ordinary-item integration system is authorised by Q22.
+
 **DR-20260919-Q21 — a separate relationship graph remains a future option.** Owner selected Q21 B: first assess how well the organiser and the planned map connections support understanding relationships; keep a separate graph as a future option rather than a committed feature. Q10's later map lines connecting clues to meaningful conclusions remain confirmed independently. This replaces any mandatory separate-graph commitment inherited from P2-Q20–Q25 or its old v2 allocation. Graph layout, interaction and persistence choices do not carry forward automatically. The development Graphify graph is unrelated to this player-facing feature.
 
 **DR-20260919-Q20 — retain the organiser's physical costs without battery-related data loss.** Owner answered “keep that way” to keeping all three proposed behaviors: reading occupies an available hand; battery power matters but ordinary reading should not drain it excessively; a lost organiser must be recovered or replaced. A dead battery never erases evidence or notes. This reaffirms the physical-device direction and P4-R86's protection against battery-related writing loss in the new wishlist.
