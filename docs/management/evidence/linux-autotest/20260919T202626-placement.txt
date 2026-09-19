@@ -1,0 +1,71 @@
+Placement diagnostic, 3 worlds. Mod revision d17f63b. Sessions 20260919T202626/202838/203042.
+Result: NO discrepancy captured. Coverage COMPLETE: 15 of 15 placed clues compared,
+0 unloaded, 0 in-hand, 0 skipped, 0 read errors, 0 mod errors. Exit 0.
+
+NOT proof of absence, and weaker than it looks. Two separate reasons:
+  1. If the per-sample rate were the 3-in-9 of the overnight runs, seeing nothing
+     in 3 samples has probability (2/3)^3 = 0.30 - an unremarkable outcome.
+  2. More importantly the SAMPLES ARE NOT COMPARABLE. The 3-in-9 came from long
+     campaign runs: several cases at once, clues sitting unfound for in-game hours,
+     stale-clue relocation (RELOCATE_AFTER_HOURS=72) running, and saves and reloads
+     between cases. This check verifies ONE case per fresh world immediately after
+     placement, with no time passing and no relocation. It may simply not create
+     the conditions the fault needs.
+
+Worth noting from world 2: never-placed=3 of 6 clues - half the case never found a
+container (P4-R133 instalments). Real, and separate from the fault under investigation.
+---
+placement: world 1 of 3: cold start
+pz: launching session 20260919T202626
+pz: new world is loading
+pz: game loading took 60 seconds
+[CF] v=1 t=09:00 lvl=i ev=note mod=casefile msg="organiser issued"
+[CF-DEAD-AIR]|DISABLED|version=DEV-0.44.0-addresses-that-travel|generated development session active
+[CF] v=1 t=09:00 lvl=i ev=address mod=address msg="Ready: 6796 shipped addresses for the whole map in 134 ms; nothing scanned or saved. Zoom in on the world map."
+pz: ready; use: tools/autotest/pz.sh eval 'return getPlayer():getX()'
+placement: world 1: placed=8 pending=0 never-placed=0 carrier=0 unknown-history=0
+placement:   generated:1872611543:document-1: in its container
+placement:   generated:1872611543:document-2: in its container
+placement:   generated:1872611543:document-3: in its container
+placement:   generated:1872611543:document-4: in its container
+placement:   generated:1872611543:document-5: in its container
+placement:   generated:1872611543:document-6: in its container
+placement:   generated:1872611543:document-7: in its container
+placement:   generated:1872611543:document-8: in its container
+placement: world 1: coverage - compared=8 of 8 placed (unloaded=0 in-hand=0 skipped=0 missing=0 read-errors=0)
+placement: world 1: no placed clue absent from its own loaded container (8 of 8 compared)
+placement: world 2 of 3: cold start
+pz: launching session 20260919T202838
+pz: new world is loading
+pz: game loading took 60 seconds
+[CF] v=1 t=09:00 lvl=i ev=note mod=casefile msg="organiser issued"
+[CF-DEAD-AIR]|DISABLED|version=DEV-0.44.0-addresses-that-travel|generated development session active
+[CF] v=1 t=09:00 lvl=i ev=address mod=address msg="Ready: 6796 shipped addresses for the whole map in 135 ms; nothing scanned or saved. Zoom in on the world map."
+pz: ready; use: tools/autotest/pz.sh eval 'return getPlayer():getX()'
+placement: world 2: placed=3 pending=0 never-placed=3 carrier=0 unknown-history=0
+placement:   generated:1587070632:document-1: in its container
+placement:   generated:1587070632:document-2: in its container
+placement:   generated:1587070632:document-5: in its container
+placement: world 2: coverage - compared=3 of 3 placed (unloaded=0 in-hand=0 skipped=0 missing=0 read-errors=0)
+placement: world 2: no placed clue absent from its own loaded container (3 of 3 compared)
+placement: world 3 of 3: cold start
+pz: launching session 20260919T203042
+pz: new world is loading
+pz: game loading took 59 seconds
+[CF] v=1 t=09:00 lvl=i ev=note mod=casefile msg="organiser issued"
+[CF-DEAD-AIR]|DISABLED|version=DEV-0.44.0-addresses-that-travel|generated development session active
+[CF] v=1 t=09:00 lvl=i ev=address mod=address msg="Ready: 6796 shipped addresses for the whole map in 119 ms; nothing scanned or saved. Zoom in on the world map."
+pz: ready; use: tools/autotest/pz.sh eval 'return getPlayer():getX()'
+placement: world 3: placed=4 pending=0 never-placed=0 carrier=0 unknown-history=0
+placement:   generated:1746205797:document-1: in its container
+placement:   generated:1746205797:document-2: in its container
+placement:   generated:1746205797:document-3: in its container
+placement:   generated:1746205797:document-4: in its container
+placement: world 3: coverage - compared=4 of 4 placed (unloaded=0 in-hand=0 skipped=0 missing=0 read-errors=0)
+placement: world 3: no placed clue absent from its own loaded container (4 of 4 compared)
+placement: ---
+placement: worlds: 3    compared: 15 of 15 placed clues
+placement: captured: 0    inconclusive worlds: 0    partial worlds: 0    mod errors: 0
+placement: No discrepancy in 15 compared clue(s) across 3 world(s).
+placement: THIS IS NOT PROOF OF ABSENCE: the fault appeared in three of nine overnight
+placement: runs, so this much clean evidence is consistent with it still being there.
