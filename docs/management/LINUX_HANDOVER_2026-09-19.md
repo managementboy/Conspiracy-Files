@@ -1,5 +1,10 @@
 # Linux handover — 19 September 2026
 
+## Superseded entry sequence — later clarification today
+
+Start with the [central-mystery development handoff](CENTRAL_MYSTERY_DEVELOPMENT_HANDOFF_2026-09-19.md) and [review of all 32 decisions](../design/CENTRAL_MYSTERY_REVIEW_2026-09-19.md). The personal opening is independent of vanilla media; media-identity work below is not its prerequisite. Every discovered annotated map needs a destination payoff, connected to the search for an explanation of isolation. Earlier optional-media and incidental-larger-connection assumptions are superseded. The inventory and technical limitations below remain valid.
+
+
 ## Resume here
 
 **Planning is complete for this session; implementation belongs on the Linux laptop.** The owner requested this handover and publication of accumulated work to Git. Windows gameplay and the Steam Workshop installation were not changed by this planning work.

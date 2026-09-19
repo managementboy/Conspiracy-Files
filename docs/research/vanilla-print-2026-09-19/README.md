@@ -1,5 +1,10 @@
 # Vanilla maps, flyers and brochures: offline inspection
 
+## Current narrative interpretation — later review, 19 September 2026
+
+Searching for an explanation of isolation in Knox is the central premise; no definitive cause is supplied. Local mysteries provide earned conclusions and substantive evidence relevant to that search. Our own clues establish the personal opening. Naturally discovered annotated maps each motivate travel and provide a destination payoff; universal flyer/brochure coverage remains open. See the [complete reassessment](../../design/CENTRAL_MYSTERY_REVIEW_2026-09-19.md). Earlier optional-map or occupation-flyer opening proposals are superseded; underlying source research remains valid.
+
+
 19 September 2026. Local Windows game folder: `C:/Program Files (x86)/Steam/steamapps/common/ProjectZomboid`. Local `Zomboid/version.txt` reports **42.20.4, revision b0bbce05d5**; Steam manifest build ID **24909800**. These identify this inspection, not a promise about another installation.
 
 ## Result

@@ -1,5 +1,10 @@
 # Player requirements — reviewed 19 September 2026
 
+## Current narrative interpretation — later review, 19 September 2026
+
+Searching for an explanation of isolation in Knox is the central premise; no definitive cause is supplied. Local mysteries provide earned conclusions and substantive evidence relevant to that search. Our own clues establish the personal opening. Naturally discovered annotated maps each motivate travel and provide a destination payoff; universal flyer/brochure coverage remains open. See the [complete reassessment](../design/CENTRAL_MYSTERY_REVIEW_2026-09-19.md). Earlier optional-map or occupation-flyer opening proposals are superseded; underlying source research remains valid.
+
+
 Confirmed direction, not a claim that every requirement is implemented. Question references identify the [owner review](../design/DIRECTION_REVIEW_2026-09-19.md).
 
 | Capability | Direction / status |

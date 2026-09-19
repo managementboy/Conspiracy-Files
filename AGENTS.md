@@ -1,5 +1,10 @@
 # Conspiracy-Files — Agent / Codex Instructions
 
+## Latest premise clarification — 2026-09-19
+
+The search for why the survivor is isolated in Knox drives the investigations, although the Knox Event has no definitive explanation. Start with the [revised development handoff](docs/management/CENTRAL_MYSTERY_DEVELOPMENT_HANDOFF_2026-09-19.md) and [all 32 decisions reassessed](docs/design/CENTRAL_MYSTERY_REVIEW_2026-09-19.md). Personal openings use our own local clues; naturally discovered annotated maps each lead to destination evidence and a meaningful local payoff connected to the central search. No random occupation-flyer prerequisite or secret final answer. Specific story details and unresolved trigger/coverage rules remain proposals. Planning only; no new engine verification.
+
+
 ## Current direction — 2026-09-19
 
 Start with the [Linux handover](docs/management/LINUX_HANDOVER_2026-09-19.md). The completed September 19 direction review in DECISIONS.md governs current product scope; conflicting earlier commitments below are historical. Unreviewed commitments remain pending. The current source baseline is DEV-0.44.0-addresses-that-travel; occupation/media integration is planned, not implemented or live-verified. Next work is on Linux: personal opening, then survival connections, then loop improvements. Runtime AI and the old hunch system are not current product goals; existing code may still contain superseded behavior.

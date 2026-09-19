@@ -1,5 +1,10 @@
 # Occupation mysteries and vanilla-media integration — Linux planning package
 
+## Later owner clarification — overrides earlier proposal details
+
+Read the [all-question reassessment](CENTRAL_MYSTERY_REVIEW_2026-09-19.md) and [revised development handoff](../management/CENTRAL_MYSTERY_DEVELOPMENT_HANDOFF_2026-09-19.md). Our own placed clues support personal openings; naturally discovered vanilla media are a separate route. Every discovered annotated map receives a destination mystery/payoff. The unanswered central search motivates local cases. The 25 rows below remain premise seeds: their vanilla-media column is optional later inspiration, not an opening dependency, and their local conclusions need a substantive central connection before content approval. None of the occupation stories is approved in full by this clarification.
+
+
 **Status: design proposals and verification plan, 19 September 2026. No implementation or new live-engine verification.** Owner explicitly requested planning on Windows and separate development on the Linux laptop. Premises below need agreement under Q27 before new story content is developed. The existing [media inventory](../research/vanilla-print-2026-09-19/README.md) is reused, not rebuilt.
 
 ## 1. Product boundary
@@ -14,7 +19,7 @@ Use actual starting skills to rank eligible themes; occupation is a useful prior
 
 Source: local Build 42.20.4 `media/scripts/generated/characters/character_professions.txt`. The table follows its 25 `CharacterProfession` values, including `smither`, `rancher` and `tailor`. Linux must enumerate the actual selectable definitions on its build before implementation; runtime availability and modded occupations are not inferred from this file alone. Mechanics and new records in this table are proposals. Existing media IDs are exact catalogue references.
 
-| Occupation / ID | Proposed personal opening and question | Existing vanilla lead / later place | Early discovery and later skill/tool interaction | Bounded conclusion / tone |
+| Occupation / ID | Proposed personal opening and question | Optional later vanilla reference (never required for opening) | Early discovery and later skill/tool interaction | Bounded conclusion / tone |
 |---|---|---|---|---|
 | Burglar / `burglar` | **The wrong key:** a key in the survivor's belongings has a storage-unit number that does not match its receipt. Who redirected its collection? | `UStoreItMuldraugh` or other local U-Store It flyer | Compare key tag and receipt locally; later a compatible key opens the relevant lockbox. Burglary skills offer observations, not proof the survivor stole anything. | Establish a clerical reassignment and who collected the original unit; cancellation required the missing key. |
 | Burger flipper / `burgerflipper` | **Cover my shift:** an unsigned shift swap explains why the survivor was expected somewhere other than their usual destination. Who approved it? | Local `SpiffosHiringDixie`, `SpiffosHiringWestPoint` or `SpiffosHiringLouisville` | Compare shift date with a kitchen handover record; later use a relevant tool to access a clearly identified maintenance compartment. | A manager reassigned staff to a private delivery while recording uninterrupted customer service. |
@@ -47,7 +52,7 @@ These are 25 entry premises, not 25 separate full campaigns. Reuse investigation
 ## 3. Proposed gameplay loop
 
 1. **Local personal trace:** discover one small plausible item explaining a recent appointment, collection or detour. Initial recognition follows the existing Search/Look it over/Inspect flow. The system must not require a specific distant flyer to randomly spawn before the player can progress.
-2. **Concrete lead:** evidence identifies a person, reference or place. A relevant vanilla flyer/map can identify that place or corroborate its address. Record the lead with its source; no generic suspicion bookmark is required.
+2. **Concrete opening lead:** our own evidence identifies a person, reference or place and supports progression without vanilla media. Naturally found flyers/maps form separate later opportunities. Record the source; no generic suspicion bookmark is required.
 3. **Destination opportunity:** prepare one appropriate follow-up at the specified place after technical eligibility checks. A read document never guarantees a living contact or validates its claims. The player travels and investigates normally.
 4. **Meaningful result:** an observed match, contradiction or physical finding answers the bounded question. A conclusion cites the evidence that supports it. Other connections may remain open in the continuing web.
 5. **Later interaction:** when a case is designed to require skill/tool X at object Y, explain the obstacle through an observation. Meeting the requirements reveals evidence or changes a specifically designed object. No universal bypass is implied; exact skill levels, consumables and recipes are future tuning decisions.
@@ -140,7 +145,7 @@ If an engine check fails, record the failed assumption and the smallest alternat
 
 ## 9. Recommended development slices and closeout
 
-1. **Identity and state spike:** M1/M2 plus O1. Confirm the smallest reliable observation boundary; no new story rollout yet.
+1. **Personal-opening preparation:** O1 and relevant placement/recording checks. Define local payoff and central connection. Media identity is a separate integration spike, not an opening prerequisite.
 2. **One personal opening:** electrician premise, one local evidence chain, one verified carrier; M3/R1/S1/S2/P1 as applicable. Keep distant relay travel as a later continuation unless it fits the agreed travel stage. Prove unemployed fallback alongside selection.
 3. **Extend the shared mechanics:** second contrasting premise (tailor or unemployed), then later tool interaction and destination floors. Add the remaining occupation premises in bounded content groups using the verified contracts.
 

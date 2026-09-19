@@ -1,5 +1,10 @@
 # The campaign — where this is actually going
 
+## Current narrative interpretation — later review, 19 September 2026
+
+Searching for an explanation of isolation in Knox is the central premise; no definitive cause is supplied. Local mysteries provide earned conclusions and substantive evidence relevant to that search. Our own clues establish the personal opening. Naturally discovered annotated maps each motivate travel and provide a destination payoff; universal flyer/brochure coverage remains open. See the [complete reassessment](CENTRAL_MYSTERY_REVIEW_2026-09-19.md). Earlier optional-map or occupation-flyer opening proposals are superseded; underlying source research remains valid.
+
+
 > September 19 review: a full survivor campaign is a future possibility. Version 1.0 enriches ordinary survival. Read the [current handover](../management/LINUX_HANDOVER_2026-09-19.md) before treating this historical vision as committed scope.
 
 

@@ -1,5 +1,10 @@
 # Conspiracy-Files
 
+## Latest premise clarification — 2026-09-19
+
+The search for why the survivor is isolated in Knox drives the investigations, although the Knox Event has no definitive explanation. Start with the [revised development handoff](docs/management/CENTRAL_MYSTERY_DEVELOPMENT_HANDOFF_2026-09-19.md) and [all 32 decisions reassessed](docs/design/CENTRAL_MYSTERY_REVIEW_2026-09-19.md). Personal openings use our own local clues; naturally discovered annotated maps each lead to destination evidence and a meaningful local payoff connected to the central search. No random occupation-flyer prerequisite or secret final answer. Specific story details and unresolved trigger/coverage rules remain proposals. Planning only; no new engine verification.
+
+
 A Project Zomboid Build 42 investigation/conspiracy module.
 
 **Current phase (2026-09-19):** playable development baseline DEV-0.44.0-addresses-that-travel; revised direction and occupation/media integration planning ready for Linux. Start with the [Linux handover](docs/management/LINUX_HANDOVER_2026-09-19.md).

@@ -1,5 +1,16 @@
 # Conspiracy-Files — Current Decision Index
 
+## Latest clarification — central mystery and naturally discovered maps, 2026-09-19
+
+**DR-20260919-CENTRAL-PREMISE — the unanswered question drives the game.** Owner reaffirmed: there is no definitive Knox Event explanation, but trying to find one is the whole premise. Questions about isolation, other survivors, responsibility, absent help and the helicopter motivate investigation. Local answers contribute to that search; preserving uncertainty does not mean excluding the central question. No canonical culprit/cause or proof of sole-survivor status is established. This clarifies Q01/Q04/Q06, without committing a full scripted campaign. [All 32 answers reviewed](docs/design/CENTRAL_MYSTERY_REVIEW_2026-09-19.md).
+
+**DR-20260919-MEDIA-SEPARATION — authored opening; natural media discovery.** Owner rejected depending on occupation-specific vanilla flyers/maps for the start. Our own clues establish the personal opening. Naturally discovered media support subsequent mysteries; occupation influences selection/observations without requiring matching flyers. Earlier occupation-to-media pairings are optional later references, not opening dependencies.
+
+**DR-20260919-MAP-PAYOFF — every discovered annotated map generates a mystery.** Owner explicitly requires every naturally discovered annotated map to motivate travel and provide evidence at its destination that resolves the local mystery clearly or ambiguously. A meaningful local payoff must coexist with relevance to the central search. Extra intermediate trips are not universally required. Exact seen/read/recorded trigger, duplicate policy, exceptional maps and pacing remain open. Universal flyer/brochure coverage is not confirmed. Source inventory and candidate engine hooks are not live verification.
+
+The [revised development handoff](docs/management/CENTRAL_MYSTERY_DEVELOPMENT_HANDOFF_2026-09-19.md) supersedes incompatible sequencing/media assumptions in the first handover. Specific story examples and proposed contracts remain design guidance for review, not newly shipped features.
+
+
 This file contains the **current** project decisions. The complete original discovery record is preserved in [`DECISIONS_BASELINE.md`](DECISIONS_BASELINE.md). Engineering-review corrections are also preserved in [`DECISIONS_SUPERSESSIONS_2026-08-30.md`](DECISIONS_SUPERSESSIONS_2026-08-30.md).
 
 If a spike disproves a decision, technical reality wins: supersede the decision explicitly and link the spike result.

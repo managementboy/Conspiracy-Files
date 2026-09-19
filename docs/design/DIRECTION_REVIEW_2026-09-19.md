@@ -1,5 +1,10 @@
 # Conspiracy-Files: decide the direction again
 
+## Subsequent owner clarification — read first
+
+The search for an explanation of isolation in Knox is the central premise, despite there being no definitive answer. Every one of the 32 answers below has been reconsidered in the [central-mystery review](CENTRAL_MYSTERY_REVIEW_2026-09-19.md). Original responses remain historical evidence; that addendum supplies the current interpretation. Personal openings use our own clues; naturally discovered annotated maps each receive a mystery and destination payoff. Flyer coverage remains open. This clarification does not change Q31's priority order or create a full-campaign requirement.
+
+
 Prepared 19 September 2026 against `main` at `73e6b62`, build `DEV-0.44.0-addresses-that-travel`.
 
 **Status: all 32 main questions answered. Review direction at each completed playable milestone. Development order: personal opening, then survival connection, then current-loop improvements. Passing technical checks is the milestone acceptance criterion. Today's settings work, maps/flyers brainstorm, discovery-redesign to-do and final vanilla-scene research remain on the agenda. Explicitly unresolved details remain open; completion of the questionnaire does not approve them by default.**
