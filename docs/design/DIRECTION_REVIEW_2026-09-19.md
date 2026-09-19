@@ -2,7 +2,7 @@
 
 Prepared 19 September 2026 against `main` at `73e6b62`, build `DEV-0.44.0-addresses-that-travel`.
 
-**Status: Q01–Q09 confirmed, including a replacement lead prototype for the wishlist. Q16 is partially answered through Q03. Remaining choices await answers. This review builds a new wishlist and revisits all existing commitments.**
+**Status: Q01–Q10 confirmed, including a replacement lead prototype and a later map-line goal. Q16 is partially answered through Q03. Remaining choices await answers. This review builds a new wishlist and revisits all existing commitments.**
 
 **Confirmed scope:** version 1.0 enriches ordinary survival with investigations (Q01 A). A survivor-centered campaign (Q01 B) is a possible future option. All remaining recommendations must be considered within that boundary; campaign features are not implied 1.0 commitments.
 
@@ -213,7 +213,9 @@ The game reacts to following the lead by linking newly discovered relevant evide
 
 **Suggested answer — not approved:** A — Keep visible cases and reflection points without showing a hidden-clue checklist. Phrase closure as 'enough to form a view' when appropriate; do not imply that an expired or inaccessible clue was found. Reason: players need orientation and a pause to think without being told every unknown. Timing: next milestone, coordinated with Q12.
 
-**Owner decision:** _unanswered_
+**Owner decision — confirmed 19 September 2026:** A: keep recognisable cases and meaningful conclusions without revealing hidden-clue counts. Later, draw lines on the map between clues that lead to a meaningful conclusion. Recorded as DR-20260919-Q10 in `DECISIONS.md`.
+
+**Still to establish for map lines:** manual versus automatic drawing, visual treatment of tentative versus supported connections, handling of co-located or moved clues, and any writing-tool requirement. These are not implied by accepting the goal. The separate relationship graph remains open in Q21.
 
 ### Q11 — What pace should the player experience?
 
@@ -355,6 +357,8 @@ Choose separately for **holding it**, **battery use**, and **needing a replaceme
 ### Q21 — Do we still want a player-facing relationship graph?
 
 **Starting point:** P2-Q20 made it the main browser; later scope moved it to v2. The development Graphify graph is a separate tool and does not implement this feature.
+
+**Already confirmed in Q10:** later draw map lines between clues leading to a meaningful conclusion. This question now asks whether a separate relationship-graph interface is also wanted; the map-line goal does not depend on choosing it.
 
 - A. Essential to the intended mod; schedule a player prototype.
 - B. A later option if ordinary records become difficult to navigate.
@@ -534,6 +538,7 @@ Copy one row for each answered question. Keep any uncertainty visible.
 | Q06 | B: recurring people, organisations and discoveries form a continuing web; the developed direction is supported | 1.0 direction | DR-20260919-Q06; reaffirms inter-case continuity in P4-R91/R96/R113 at product level; Q09 reviews steering details | Specific continuity and player-understanding checks to be chosen in Q30–Q31 | A proposal to make cases wholly independent or require a central chapter storyline |
 | Q07 | A: keep discovery loop; improve detection/prioritisation of game-placed indoor corpses and car wrecks after research | Research at the end of today's list, before development | DR-20260919-Q07; reaffirms P4-R132's experience; new research request | Verified corpse/wreck detection, provenance limits, storage/access and prioritisation options | Before implementing scene selection changes or substituting zombies for existing corpses |
 | Q08 | A and B: understanding a connection and reaching somewhere useful or memorable; no ranking specified | New wishlist; informs content and acceptance criteria | DR-20260919-Q08; renews the connection and destination player moments | Owner playtest can describe what was understood and why the destination mattered | A proposal that equates rewards solely with collecting records or assumes permission to spawn rewards |
+| Q10 | A: recognisable cases and conclusions without hidden-clue counts; later connect clues leading to a conclusion with map lines | Case presentation: wishlist; map lines: later | DR-20260919-Q10; revises blanket P2-Q82 closure prohibition; separate graph stays open in Q21 | Connection meaning and map-line interaction design still needed | A proposal that exposes hidden clues or assumes automatic/manual drawing without a decision |
 
 Before implementation begins, check the answers together: travel guidance against survival freedom; answer-driven cases against a fixed underlying truth; physical device costs against accessibility; finite storage against promised campaign length; and new-game rules against a long personal campaign. Present conflicts for a decision instead of resolving them silently.
 
