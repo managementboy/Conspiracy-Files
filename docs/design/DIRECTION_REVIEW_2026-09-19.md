@@ -2,7 +2,7 @@
 
 Prepared 19 September 2026 against `main` at `73e6b62`, build `DEV-0.44.0-addresses-that-travel`.
 
-**Status: Q01–Q15 confirmed. Later development includes skill/tool requirements, object interactions and designed world changes. Q16 is partially answered through Q03/Q14. Remaining choices await answers. This review builds a new wishlist and revisits all existing commitments.**
+**Status: Q01–Q16 confirmed. Skills shape early mystery selection, observations and understanding, with specific skill/tool requirements planned for later mysteries. Remaining choices await answers. This review builds a new wishlist and revisits all existing commitments.**
 
 **Confirmed scope:** version 1.0 enriches ordinary survival with investigations (Q01 A). A survivor-centered campaign (Q01 B) is a possible future option. All remaining recommendations must be considered within that boundary; campaign features are not implied 1.0 commitments.
 
@@ -312,9 +312,9 @@ Specify any unacceptable changes to bodies, inventories, buildings or survival b
 - B. Let traits, professions and skills reveal different observations, with alternative routes.
 - C. Give different characters substantially different campaign possibilities.
 
-**Suggested answer — not approved, revised after Q03:** build the confirmed starting-skill theme prioritisation in the next development increment. For additional mechanics, B: let skills and professions provide different observations with alternative routes to important information. Reason: the opening can feel appropriate to the character without silently introducing hard gates. Timing: theme prioritisation is confirmed for next development; additional observation mechanics await this answer and need verified game APIs. Q14's crafting progression remains a separate open choice.
+**Assistant recommendation as presented after Q14:** B, skill-specific observations that make expertise useful while exploring, without requiring separate stories for every profession. The earlier written suggestion of universally available alternative routes is superseded by Q14's accepted skill/tool requirements.
 
-**Owner decision:** _unanswered_
+**Owner decision — confirmed 19 September 2026:** B: skills also change what the survivor notices or understands. This complements Q03's starting-skill mystery selection and Q14's later required skills/tools. Exact skills, thresholds and observations remain to be designed; separate stories for every character build are not required by this answer. Recorded as DR-20260919-Q16 in `DECISIONS.md`.
 
 ### Q17 — Whose investigation survives death?
 
@@ -559,6 +559,7 @@ Copy one row for each answered question. Keep any uncertainty visible.
 | Q13 | B: reuse pz-narrator base tracking for outbound and return journeys | Alongside travel progression | DR-20260919-Q13/Q13a; purpose and sequencing confirmed | Locate and verify actual base implementation; settle designation and route rules | Before porting or assuming additional base-dependent behavior |
 | Q14 | C: later mystery solutions can require skills/tools; use-X-on-Y interactions reveal something new | Later development | DR-20260919-Q14; replaces assistant's universal-alternative-route recommendation | Specific interactions, acquisition paths, skill requirements and engine support need design/research | A proposal that removes all real requirements or assumes an unverified game interaction |
 | Q15 | C: designed events, objects and rewards may serve mysteries; maps and flyers give purpose and connect to Q14 | Wishlist; maps/flyers brainstorm after questions today | DR-20260919-Q15; expands beyond P4-R110's existing-opportunities-only boundary | Define specific interactions, balance and player-property limits | Before implementing a world change or forgetting the maps/flyers purpose reminder |
+| Q16 | B: skills affect observations and understanding, alongside mystery selection and later requirements | New wishlist; detailed timing pending | DR-20260919-Q16; reaffirms skill-specific observations from P1-Q14; complements Q03/Q14 | Define supported observations, skill thresholds and verified game interfaces | A proposal that invents facts from expertise or assumes every required skill has a bypass |
 
 Before implementation begins, check the answers together: travel guidance against survival freedom; answer-driven cases against a fixed underlying truth; physical device costs against accessibility; finite storage against promised campaign length; and new-game rules against a long personal campaign. Present conflicts for a decision instead of resolving them silently.
 
