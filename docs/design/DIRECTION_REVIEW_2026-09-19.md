@@ -2,7 +2,7 @@
 
 Prepared 19 September 2026 against `main` at `73e6b62`, build `DEV-0.44.0-addresses-that-travel`.
 
-**Status: Q01–Q08 confirmed; Q09 records the discarded hunch system, with a replacement proposal still open. Q16 is partially answered through Q03. Remaining choices await answers. This review builds a new wishlist and revisits all existing commitments.**
+**Status: Q01–Q09 confirmed, including a replacement lead prototype for the wishlist. Q16 is partially answered through Q03. Remaining choices await answers. This review builds a new wishlist and revisits all existing commitments.**
 
 **Confirmed scope:** version 1.0 enriches ordinary survival with investigations (Q01 A). A survivor-centered campaign (Q01 B) is a possible future option. All remaining recommendations must be considered within that boundary; campaign features are not implied 1.0 commitments.
 
@@ -201,7 +201,7 @@ Example: a radio service note mentions a workshop. The player records “Was thi
 
 The game reacts to following the lead by linking newly discovered relevant evidence and making the next known action easy to find. It does not create confirming evidence because the player wrote a suspicion or silently rewrite a future case. No match leaves the lead unresolved; the player may revise or shelve it. Investigation proceeds through ordinary search, travel and inspection. First prove one supported lead end to end; assess whether it adds more than a bookmark before building a general hunch system.
 
-**Owner decision on replacement:** _pending discussion_
+**Owner decision on replacement — confirmed 19 September 2026:** “good feedback. add as such”. Add the concrete-lead proposal above to the new wishlist as a bounded prototype: record a lead, pursue it through normal play, and connect newly discovered relevant evidence without inventing confirmation. Prove one complete interaction before committing to a general system. Its development order is not yet assigned; this does not revive the discarded end-of-case questionnaire. Recorded as DR-20260919-Q09a in `DECISIONS.md`.
 
 ### Q10 — How visible should a case's structure and completion be?
 
@@ -520,7 +520,7 @@ For the chosen rule, define what agents may decide independently, what needs an 
 
 ## Decision capture sheet
 
-Q09 correction is recorded as DR-20260919-Q09: the previous hunch system is discarded in the reviewed direction; the replacement proposal above is awaiting the owner's response. Remaining source code must be reconciled before related implementation.
+Q09 correction is recorded as DR-20260919-Q09: the previous hunch system is discarded. DR-20260919-Q09a adds the replacement above to the wishlist as a small prototype. Remaining source code must be reconciled before related implementation.
 
 Copy one row for each answered question. Keep any uncertainty visible.
 
