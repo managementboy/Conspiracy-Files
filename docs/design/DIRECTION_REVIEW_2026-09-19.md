@@ -2,7 +2,7 @@
 
 Prepared 19 September 2026 against `main` at `73e6b62`, build `DEV-0.44.0-addresses-that-travel`.
 
-**Status: Q01–Q08 confirmed by the owner; Q16 partially answered through Q03. Remaining choices await answers. This review builds a new wishlist and revisits all existing commitments.**
+**Status: Q01–Q08 confirmed; Q09 records the discarded hunch system, with a replacement proposal still open. Q16 is partially answered through Q03. Remaining choices await answers. This review builds a new wishlist and revisits all existing commitments.**
 
 **Confirmed scope:** version 1.0 enriches ordinary survival with investigations (Q01 A). A survivor-centered campaign (Q01 B) is a possible future option. All remaining recommendations must be considered within that boundary; campaign features are not implied 1.0 commitments.
 
@@ -183,13 +183,25 @@ Choose a primary reward and, optionally, a secondary one:
 
 **Starting point:** P4-R113/R119–R123 and the generator use answers to select returning entities and investigative emphasis, without marking the answer right or wrong.
 
+**Owner correction:** the previous hunch system was discarded because it was too difficult to react to. The question above assumed it remained a wanted system and is withdrawn in that form. The fetched source still contains question rows and generator steering, but retained source is not proof of the desired or current live experience.
+
 - A. Keep this: later evidence tests the chosen interpretation.
 - B. Hunches only change the survivor's record; the world story is fixed independently.
 - C. Hunches branch the campaign more strongly, changing later events or outcomes.
 
-**Suggested answer — not approved:** A — Let a hunch shape which thread the next case follows and which evidence it tests, but never change established facts to make the player correct. The next case should allow the chosen reading to be challenged. Reason: choices matter while the mystery remains credible. Timing: next milestone, with one understandable example of cause and effect.
+- D. The old hunch system was discarded; consider a new proposal only if its gameplay is clear. (Owner's added option.)
 
-**Owner decision:** _unanswered_
+**Original assistant suggestion — not adopted:** A, continuing the former steering system.
+
+**Owner correction — confirmed 19 September 2026:** D. The old system was discarded and was too difficult to react to. The owner asks whether a good gameplay system can record a hunch and respond to it. A replacement is not yet approved. Recorded as DR-20260919-Q09 in `DECISIONS.md`.
+
+**Replacement proposal — not approved: record a concrete lead to check.** While reading evidence, the player can choose a known person, place or reference mentioned in it and select “Follow this lead”. The organiser keeps the source, the selected subject and an optional personal note. For a first prototype, offer a small set of supported intentions such as checking a mentioned place or watching for the same reference. Free text is personal writing; the game does not attempt to interpret it.
+
+Example: a radio service note mentions a workshop. The player records “Was this radio repaired there?” against that known workshop. They travel there, search and inspect a service tag. If the discovered tag contains the same recorded radio serial, the organiser adds “The serial on this tag matches the radio record.” That is a concrete response; whether the workshop actually performed the repair still depends on what the evidence establishes. Only existing, observed identifiers may be matched. This example is a proposed content scenario, not a claim that serial matching or radio mechanics already exist.
+
+The game reacts to following the lead by linking newly discovered relevant evidence and making the next known action easy to find. It does not create confirming evidence because the player wrote a suspicion or silently rewrite a future case. No match leaves the lead unresolved; the player may revise or shelve it. Investigation proceeds through ordinary search, travel and inspection. First prove one supported lead end to end; assess whether it adds more than a bookmark before building a general hunch system.
+
+**Owner decision on replacement:** _pending discussion_
 
 ### Q10 — How visible should a case's structure and completion be?
 
@@ -507,6 +519,8 @@ For the chosen rule, define what agents may decide independently, what needs an 
 **Owner decision:** _unanswered_
 
 ## Decision capture sheet
+
+Q09 correction is recorded as DR-20260919-Q09: the previous hunch system is discarded in the reviewed direction; the replacement proposal above is awaiting the owner's response. Remaining source code must be reconciled before related implementation.
 
 Copy one row for each answered question. Keep any uncertainty visible.
 
