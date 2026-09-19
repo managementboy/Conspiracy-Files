@@ -2,7 +2,7 @@
 
 Prepared 19 September 2026 against `main` at `73e6b62`, build `DEV-0.44.0-addresses-that-travel`.
 
-**Status: Q01–Q29 confirmed. Breaking changes are acceptable until the owner judges the feature set playable long term. Version 1.0 targets single-player on the vanilla Build 42 map. Detailed player settings are requested for work today; implausible bulk discoveries need redesign. The maps/flyers brainstorm remains after the questionnaire, and vanilla-scene research remains last. Remaining choices await answers. This review builds a new wishlist and revisits all existing commitments.**
+**Status: Q01–Q30 confirmed. Passing technical checks is the milestone acceptance criterion. Breaking changes are acceptable until the owner judges the feature set playable long term. Detailed player settings are requested for work today; implausible bulk discoveries need redesign. The maps/flyers brainstorm remains after the questionnaire, and vanilla-scene research remains last. Remaining choices await answers. This review builds a new wishlist and revisits all existing commitments.**
 
 **Confirmed scope:** version 1.0 enriches ordinary survival with investigations (Q01 A). A survivor-centered campaign (Q01 B) is a possible future option. All remaining recommendations must be considered within that boundary; campaign features are not implied 1.0 commitments.
 
@@ -520,12 +520,13 @@ Is adding the mod to an already-running vanilla save still desired later, or sho
 - A. Technical checks pass, then you play one complete representative investigation.
 - B. Technical checks pass, then a multi-session journey proves continuity, pacing and returning to the save.
 - C. Define a small invited playtest with specific observations before calling the milestone accepted.
+- D. Technical checks pass. (Owner's added option.)
 
 Name three things you want to experience. Until Linux is back, choose the useful work: Windows playtest/feedback, documentation and design, or offline implementation held for later engine verification. Steam Workshop remains the delivery route you specified.
 
 **Suggested answer — not approved:** B — Require relevant technical checks plus your multi-session Steam playtest. Three outcomes: a discovered connection makes sense; following a chosen lead creates a worthwhile journey; after a break or reload you can understand and resume the investigation. While Linux is offline, prioritise this decision review, documentation and feedback on the already-published Windows build; hold new engine-dependent releases for verification. Reason: boot success and enjoyable continuity answer different questions. Timing: next milestone.
 
-**Owner decision:** _unanswered_
+**Owner decision — confirmed 19 September 2026:** D: technical checks pass. No additional owner or invited playtest is required for milestone acceptance. The assistant's combined technical-and-multi-session-playtest recommendation was not adopted. Relevant technical verification still needs actual evidence; offline equipment does not waive checks or make archived passes apply to new changes. Q29's owner judgment of long-term readiness remains separate. Recorded as DR-20260919-Q30 in `DECISIONS.md`.
 
 ## Final choices — What happens after the review? (Q31–Q32)
 
@@ -537,7 +538,7 @@ Choose after Q01–Q30, not from momentum. These are candidates, not a preselect
 - B. Prove one campaign connection: a personal opening or a player-requested distant lead, followed through to a meaningful return.
 - C. Prove one survival connection: a base or crafting moment that makes investigation change how you play.
 
-Write: **“The milestone is done when I can ___ in a normal Steam-delivered game, and we have observed ___.”** List at most three essential experiences and explicitly defer the rest.
+Describe the intended playable behavior and keep the scope bounded. Under confirmed Q30, milestone acceptance requires passing technical checks; an owner playthrough is not an additional gate.
 
 **Suggested answer — not approved, revised after Q03:** B, narrowed to the confirmed personal-opening priority, supported by necessary fixes to the existing loop. Suggested finish line: 'In a normal Steam-delivered survival game I encounter a mystery about how I arrived, its subject fits my character's starting skills, and I can follow and resume that investigation through the existing discovery and record systems.' Compare contrasting starting characters and a character without a strongly specialised skill profile. Reason: this tests the newly confirmed priority within ordinary survival. A deliberate campaign route, bases as campaign stages and crafting mastery remain separate open choices. Timing: next milestone proposal; exact scope and acceptance criteria still await the remaining answers.
 
@@ -591,6 +592,7 @@ Copy one row for each answered question. Keep any uncertainty visible.
 | Q27 | B: agree premise, tone and boundaries, then publish tested writing within scope | Content workflow | DR-20260919-Q27; qualifies P4-R97; separate P4-R107 freeze question open | Agreed story scope and tested content | New premises or content outside approved boundaries |
 | Q28 | A: single-player on the vanilla Build 42 map | Version 1.0 | DR-20260919-Q28; reaffirms P1-Q3/P1-Q19 and narrows P1-Q18 for 1.0 | Verify supported game revisions and vanilla-world play | A proposed 1.0 promise of multiplayer or broad custom-map support |
 | Q29 | A: allow breaking changes until the owner judges the feature set playable long term | Current development; owner decides transition | DR-20260919-Q29; reaffirms P4-R63/R77 with owner-controlled threshold | Clear notice when an update requires a fresh game | Owner declares long-term readiness or requests save continuity |
+| Q30 | D: technical checks pass; no additional playtest acceptance gate | Milestone acceptance | DR-20260919-Q30; combined technical-and-playtest suggestion not adopted | Actual passing checks relevant to the changed milestone | A proposed additional acceptance gate or claim based on stale technical evidence |
 
 Before implementation begins, check the answers together: travel guidance against survival freedom; answer-driven cases against a fixed underlying truth; physical device costs against accessibility; finite storage against promised campaign length; and new-game rules against a long personal campaign. Present conflicts for a decision instead of resolving them silently.
 
