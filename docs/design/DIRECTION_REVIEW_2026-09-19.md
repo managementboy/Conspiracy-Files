@@ -2,7 +2,7 @@
 
 Prepared 19 September 2026 against `main` at `73e6b62`, build `DEV-0.44.0-addresses-that-travel`.
 
-**Status: Q01–Q31 confirmed. Development order: personal opening, then survival connection, then current-loop improvements. Passing technical checks is the milestone acceptance criterion. Today's settings work, maps/flyers brainstorm, discovery-redesign to-do and final vanilla-scene research remain on the agenda. Q32 awaits an answer. This review builds a new wishlist and revisits all existing commitments.**
+**Status: all 32 main questions answered. Review direction at each completed playable milestone. Development order: personal opening, then survival connection, then current-loop improvements. Passing technical checks is the milestone acceptance criterion. Today's settings work, maps/flyers brainstorm, discovery-redesign to-do and final vanilla-scene research remain on the agenda. Explicitly unresolved details remain open; completion of the questionnaire does not approve them by default.**
 
 **Confirmed scope:** version 1.0 enriches ordinary survival with investigations (Q01 A). A survivor-centered campaign (Q01 B) is a possible future option. All remaining recommendations must be considered within that boundary; campaign features are not implied 1.0 commitments.
 
@@ -554,7 +554,17 @@ For the chosen rule, define what agents may decide independently, what needs an 
 
 **Suggested answer — not approved:** A, with a living one-page record — Review direction at each playable milestone and immediately when a change would contradict a confirmed decision. Agents may fix defects, improve diagnostics and choose internal implementation details that preserve agreed behavior; changes to story truth, player agency, save continuity, interface costs or release scope need an owner decision. Record confirmation, affected older IDs and the next review trigger. Reason: deliberate reviews prevent both stale assumptions and constant reopening of minor choices. Timing: begin with this questionnaire.
 
-**Owner decision:** _unanswered_
+**Owner decision — confirmed 19 September 2026:** A: revisit design decisions at each completed playable milestone, briefly checking what still fits before selecting the next focus. Q30's technical acceptance criterion remains in force. The detailed agent-authority proposal was not presented in chat and is not adopted wholesale. Recorded as DR-20260919-Q32 in `DECISIONS.md`.
+
+## Maps and flyers brainstorm — initial proposals, awaiting discussion
+
+The owner's starting point: **finding an annotated map or flyer gives purpose and a reason to act.** The art-gallery final request and Relay Site 31 memo are the concrete examples. These proposals are not yet approved mechanics:
+
+1. **Written lead to a real destination.** A memo references a relay site; a map or flyer helps identify where it is; travelling there reveals connected evidence. Verify candidate stations before binding a fictional site name to one.
+2. **Vanilla story connected to our mystery.** An existing annotated-map request supplies the motivation; a related discovery adds a conspiracy connection consistent with the original text. Determine existing vanilla consequences before extending them.
+3. **Later skill/tool interaction.** A lead brings the player to an object whose evidence is revealed through a particular skill or tool, following Q14. A radio technician's flyer or a service notice could suggest the relevant expertise; these are examples, not fixed templates.
+
+Suggested first prototype: one readable lead, one reachable destination, one meaningful connected discovery. Preserve player-known locations and the purpose of travel when relocating missed clues. Apply the dust-mask feedback: a newly discovered paper can be plausible where an unexplained bulk cache is not. First discussion choice: use vanilla maps as entry points, author our own maps/flyers, or combine both. Research is still needed before any integration claims.
 
 ## Decision capture sheet
 
@@ -594,6 +604,7 @@ Copy one row for each answered question. Keep any uncertainty visible.
 | Q29 | A: allow breaking changes until the owner judges the feature set playable long term | Current development; owner decides transition | DR-20260919-Q29; reaffirms P4-R63/R77 with owner-controlled threshold | Clear notice when an update requires a fresh game | Owner declares long-term readiness or requests save continuity |
 | Q30 | D: technical checks pass; no additional playtest acceptance gate | Milestone acceptance | DR-20260919-Q30; combined technical-and-playtest suggestion not adopted | Actual passing checks relevant to the changed milestone | A proposed additional acceptance gate or claim based on stale technical evidence |
 | Q31 | B → C → A: personal opening, survival connection, current-loop improvements | Successive development focuses; today's agenda retained | DR-20260919-Q31; follows Q03 priority | Passing relevant technical checks under Q30 | Reordering focuses or selecting the exact first survival connection |
+| Q32 | A: revisit design decisions at every completed playable milestone | Ongoing review cadence | DR-20260919-Q32; unresolved details remain open | Brief direction review before choosing the next focus | Completion of a playable milestone |
 
 Before implementation begins, check the answers together: travel guidance against survival freedom; answer-driven cases against a fixed underlying truth; physical device costs against accessibility; finite storage against promised campaign length; and new-game rules against a long personal campaign. Present conflicts for a decision instead of resolving them silently.
 
