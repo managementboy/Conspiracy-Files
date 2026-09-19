@@ -2,7 +2,7 @@
 
 Prepared 19 September 2026 against `main` at `73e6b62`, build `DEV-0.44.0-addresses-that-travel`.
 
-**Status: Q01–Q22 confirmed. Ordinary-object suspicion capture is removed from the requirements. Remaining choices await answers. This review builds a new wishlist and revisits all existing commitments.**
+**Status: Q01–Q23 confirmed. Missed clues get new discovery opportunities; the Relay Site 31 example is recorded for the maps/flyers brainstorm. Remaining choices await answers. This review builds a new wishlist and revisits all existing commitments.**
 
 **Confirmed scope:** version 1.0 enriches ordinary survival with investigations (Q01 A). A survivor-centered campaign (Q01 B) is a possible future option. All remaining recommendations must be considered within that boundary; campaign features are not implied 1.0 commitments.
 
@@ -70,6 +70,8 @@ The Linux development PC is offline. This review uses source and archived eviden
 3. **At the end: research detection and prioritisation of existing vanilla corpses in houses, car wrecks, burned-out houses and survivor houses.** Requested with Q07 and expanded in DR-20260919-Q07a. Research comes before development. Focus on already-dead bodies left by the game, not living zombies. Establish what can be detected reliably, whether origin can be distinguished, which wrecks/houses/scenes can hold accessible clues, and what selection changes would improve ordinary play. Record source evidence, uncertainties and any engine checks still needed while the Linux machine is offline. Do not treat all vehicle types or player-killed bodies as equivalent to the requested scenes by assumption. A vanilla survivor house is distinct from the player's base; using existing special houses is not permission to burn or create houses.
 
 ## Round 1 — What are we making? (Q01–Q06)
+
+**Additional reference for today's brainstorm (owner, during Q23):** the supplied access-memo screenshot names Relay Site 31. The owner wants such a reference to become a place the player can visit for more clues. [Radio relay stations](https://pzwiki.net/wiki/Radio_relay_station) and the [1635x5764 map link](https://map.projectzomboid.com/?1635x5764) are examples to investigate. The wiki lists that coordinate as Brandenburg; the map reader failed, and target-build suitability is not verified. Do not silently designate that station as Site 31. Discuss how a written reference becomes a discoverable destination and connects to maps, flyers and later skill/tool interactions. Keep this within the brainstorm; corpse/wreck/special-house research stays last.
 
 ### Q01 — What is the main product now?
 
@@ -413,9 +415,15 @@ If A or B, should the system sometimes connect these suspicions to a case, or sh
 - B. Add an optional return-to-session recap and clearer help when stuck.
 - C. Offer strong navigation and reminders as a normal or selectable mode.
 
-**Suggested answer — not approved:** B — Keep knowledge-limited location help and add an optional concise 'where I left off' recap based only on discovered evidence and self-chosen leads. Do not add omniscient destination hints. Reason: returning after a real-world break should not require rereading an entire archive. Timing: next milestone, first as a simple record summary.
+- D. Put never-found clues in new locations to create another discovery opportunity. (Owner's added option.)
 
-**Owner decision:** _unanswered_
+**Original assistant suggestion — not adopted:** B, an optional recap of known evidence and the lead being followed.
+
+**Owner decision — confirmed 19 September 2026:** D: place clues never found in new locations, consistent with Q12. The owner also invites further suggestions; the assistance direction is physical discovery opportunities, not an approved recap or navigation UI. Recorded as DR-20260919-Q23 in `DECISIONS.md`.
+
+**Related example:** the access memo naming Relay Site 31 should give the player a reason to find a real relay site and discover more clues there. Candidate station references and the supplied screenshot are recorded for today's brainstorm under DR-20260919-RELAY.
+
+**Assistant refinement — for discussion:** move an unfound connecting clue nearer the player to explain how to find Site 31, while retaining the established destination and a reason to travel there. This supports Q05 and avoids making relocation erase all travel. It is not yet a separately approved relocation rule.
 
 ### Q24 — What emotional tone should lead?
 
@@ -574,6 +582,7 @@ Copy one row for each answered question. Keep any uncertainty visible.
 | Q20 | Keep hand use, meaningful battery use and recovery/replacement when lost; dead batteries never erase evidence or notes | Retain in current direction; tuning pending | DR-20260919-Q20; reaffirms physical organiser and P4-R86 data protection | Check practical reading time, power persistence and Q17 knowledge access | A proposal that erases data on battery failure or grants inherited knowledge through a generic replacement |
 | Q21 | B: separate relationship graph is a future option; assess organiser and map connections first | Possible future, not a release commitment | DR-20260919-Q21; replaces mandatory graph scope inherited from P2-Q20–Q25; Q10 map lines stand | Observe relationship-navigation needs before deciding on a graph | A proposal that assumes a graph must ship or restores old detailed graph requirements automatically |
 | Q22 | Remove the requirement to capture suspicions/bookmarks about ordinary objects | Outside revised requirements | DR-20260919-Q22; retires ordinary-object capture promises in P2-Q4/Q5/Q17 at this scope; Q09a stands | None required to remove a wishlist requirement | A proposal that reintroduces arbitrary-object leads as an inherited obligation or deletes free notes by inference |
+| Q23 | D: renewed discovery opportunities by putting unfound clues in new locations | New wishlist; detail coordinated with Q12 | DR-20260919-Q23; recap proposal not adopted; relay example in DR-20260919-RELAY | Define relocation versus established destinations; verify candidate sites before binding them | A proposal that silently removes required travel or treats a sample relay coordinate as the chosen Site 31 |
 
 Before implementation begins, check the answers together: travel guidance against survival freedom; answer-driven cases against a fixed underlying truth; physical device costs against accessibility; finite storage against promised campaign length; and new-game rules against a long personal campaign. Present conflicts for a decision instead of resolving them silently.
 

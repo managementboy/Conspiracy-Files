@@ -6,6 +6,14 @@ If a spike disproves a decision, technical reality wins: supersede the decision 
 
 ## Direction review — 2026-09-19
 
+**DR-20260919-Q23 — help through fresh opportunities to find missed clues.** Owner selected Q23 D: “place clues never found, in new locations. or do you suggest something different.” Use renewed physical discovery opportunities for unfound clues as the chosen assistance direction, consistent with Q12's delayed relocation. The proposed recap or stronger navigation UI is not selected by this answer. Relocation timing, knowledge boundaries and handling of old copies remain the design questions recorded under Q12.
+
+**DR-20260919-RELAY — named destinations should support actual investigation.** During Q23 the owner supplied a screenshot of an access memo naming Relay Site 31 and proposed using it as a place the player travels to for more clues. Add this example to today's maps/flyers brainstorm as a concrete text → destination → further-discovery opportunity. The owner supplied [radio relay station examples](https://pzwiki.net/wiki/Radio_relay_station) and [1635x5764](https://map.projectzomboid.com/?1635x5764) as one candidate among many, not a binding identification of fictional Site 31.
+
+Reference check on 19 September: the wiki lists 1635x5764 as a Brandenburg relay station and lists other station locations; this is secondary location evidence, not verification of target-build storage, access or suitability. The linked interactive map could not be inspected with the web reader. The screenshot's access authorisation is fictional evidence, not permission to take actions outside the game. Exact Site 31 binding, how the player locates it and what they discover there need design and engine verification.
+
+Assistant refinement, not yet a separate owner decision: use relocation for unfound connecting clues that help the survivor locate a named destination, while keeping an already-established destination consistent. This would reconcile Q23 assistance with Q05's later required travel. Do not automatically move the destination's entire discovery payoff close to the player or treat the supplied coordinates as the final choice.
+
 **DR-20260919-Q22 — remove ordinary-object suspicion capture from the requirements.** After questioning what recording an ordinary-object suspicion would accomplish beyond a note, the owner instructed: “remove that requirement”. Remove the proposed requirement to bookmark ordinary objects or turn arbitrary observations into formal investigation leads. Do not retain it as an automatic later commitment from P2-Q4/Q5/Q17 or Player Moment 1's broad ordinary-item promise.
 
 This is a scope decision, not a request to delete existing free notes or remove current code. Q09a's bounded prototype for following a concrete lead from evidence remains confirmed; it does not require arbitrary-object suspicion capture. No new bookmark, comparison or ordinary-item integration system is authorised by Q22.
