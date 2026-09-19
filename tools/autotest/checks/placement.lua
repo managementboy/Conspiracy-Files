@@ -95,14 +95,33 @@ function CFPlace.clues()
                           n["carrier-path"] + n["carrier-missing"], n["unknown-history"], n.other }, "\t")
 end
 
--- Is the token in this container?
+-- THE RESOLVER, as a named seam. placement.lua is a diagnostic and its own
+-- failure modes matter, so the fixture injects a throwing resolver, an absent
+-- token and a throwing container through this rather than hoping.
+CFPlace.resolver = function(target, token) return World.resolve(target, token) end
+
+-- Is the token in this container? Returns ok,holds - because reading a
+-- container's contents CAN throw, and a throw here used to take the whole
+-- verify() down and lose the capture entirely (found by fault injection).
+local function readContainer(container, token)
+    if not container then return false, nil, "no container" end
+    local okItems, items = pcall(function() return container.getItems and container:getItems() end)
+    if not okItems then return false, nil, "getItems threw: " .. tostring(items) end
+    if not items then return false, nil, "no items list" end
+    local okWalk, holds = pcall(function()
+        for i = 0, items:size() - 1 do
+            local md = items:get(i):getModData()
+            if type(md) == "table" and md.cfPhysicalToken == token then return true end
+        end
+        return false
+    end)
+    if not okWalk then return false, nil, "reading items threw: " .. tostring(holds) end
+    return true, holds, nil
+end
+-- The old shape, for the wider search where a failed read is simply "not here".
 local function inContainer(container, token)
-    local items = container and container.getItems and container:getItems()
-    for i = 0, (items and items:size() or 0) - 1 do
-        local md = items:get(i):getModData()
-        if type(md) == "table" and md.cfPhysicalToken == token then return true end
-    end
-    return false
+    local ok, holds = readContainer(container, token)
+    return ok and holds or false
 end
 
 -- The item anywhere within `radius` squares of the recorded one, searched wider
@@ -174,9 +193,9 @@ end
 -- would otherwise end a clean run having looked at nothing. The shell reads
 -- these and calls that inconclusive. Counted here rather than in the shell so
 -- test/placement_fixture.lua can hold the counting.
-CFPlace.coverageCounts={compared=0,unloaded=0,inhand=0,skipped=0,missing=0}
+CFPlace.coverageCounts={compared=0,unloaded=0,inhand=0,skipped=0,missing=0,readerror=0}
 function CFPlace.resetCoverage()
-    CFPlace.coverageCounts={compared=0,unloaded=0,inhand=0,skipped=0,missing=0}
+    CFPlace.coverageCounts={compared=0,unloaded=0,inhand=0,skipped=0,missing=0,readerror=0}
     return "ok"
 end
 local function count(kind)
@@ -187,7 +206,7 @@ end
 -- is the only number that makes a clean result mean anything.
 function CFPlace.coverage()
     local c=CFPlace.coverageCounts
-    return table.concat({c.compared,c.unloaded,c.inhand,c.skipped,c.missing},"\t")
+    return table.concat({c.compared,c.unloaded,c.inhand,c.skipped,c.missing,c.readerror},"\t")
 end
 
 local function targetWords(t)
@@ -217,15 +236,20 @@ local function dump(root, id, a, why)
     add(targetWords(a and a.target))
     local t = a and a.target
     if t then
-        local ok, container = pcall(World.resolve, t, a.physicalToken)
+        local ok, container = pcall(CFPlace.resolver, t, a.physicalToken)
         if not ok then add("resolve=THREW " .. tostring(container))
         elseif not container then add("resolve=REFUSED (nil)")
         else
-            local items = container.getItems and container:getItems()
-            add(string.format("resolve=ok type=%s items=%d holdsOurToken=%s",
-                tostring(container.getType and container:getType()),
-                items and items:size() or -1,
-                tostring(inContainer(container, a.physicalToken))))
+            local okType, ctype = pcall(function() return container.getType and container:getType() end)
+            local readOK, holds, why = readContainer(container, a.physicalToken)
+            local okN, n = pcall(function()
+                local items = container.getItems and container:getItems()
+                return items and items:size() or -1
+            end)
+            add(string.format("resolve=ok type=%s items=%s holdsOurToken=%s",
+                okType and tostring(ctype) or "THREW",
+                okN and tostring(n) or "THREW",
+                readOK and tostring(holds) or ("UNREADABLE " .. tostring(why))))
         end
     end
     -- 3. where the item actually is: wider than the mod looks, and the bags
@@ -287,10 +311,31 @@ function CFPlace.verify(id)
                 count("inhand")
                 return "in-hand\t" .. tostring(hand)
             end
-            local ok, container = pcall(World.resolve, a.target, token)
-            -- From here a real comparison happened, whichever way it went.
+            -- A FAILED READ IS NOT A FINDING. Fault injection showed both ways
+            -- this went wrong: a throwing resolver was reported as DISCREPANCY
+            -- and counted as a comparison, and a throwing container took
+            -- verify() down and returned no capture at all. Neither is evidence
+            -- about placement; both are evidence the check could not look.
+            local ok, container = pcall(CFPlace.resolver, a.target, token)
+            if not ok then
+                count("readerror")
+                return "read-error\tresolver threw\n" .. dump(root, id, a,
+                    "resolution threw: " .. tostring(container))
+            end
+            if not container then
+                count("readerror")
+                return "read-error\tresolution refused\n" .. dump(root, id, a,
+                    "resolution returned no container")
+            end
+            local readOK, holds, why = readContainer(container, token)
+            if not readOK then
+                count("readerror")
+                return "read-error\tcontents unreadable\n" .. dump(root, id, a,
+                    "container contents unreadable: " .. tostring(why))
+            end
+            -- Only here has a real comparison happened, whichever way it went.
             count("compared")
-            if ok and container and inContainer(container, token) then return "none" end
+            if holds then return "none" end
             return "DISCREPANCY\n" .. dump(root, id, a, "placed but not in its container")
         end
     end
@@ -331,8 +376,17 @@ function CFPlace.recheck(id)
             if okHand and hand then
                 return "in-hand\t" .. tostring(hand) .. "\n" .. dump(root, id, a, "after reload, in hand")
             end
-            local ok, container = pcall(World.resolve, a.target, token)
-            if ok and container and inContainer(container, token) then
+            local ok, container = pcall(CFPlace.resolver, a.target, token)
+            if not ok or not container then
+                return "read-error\t" .. (ok and "resolution refused" or "resolver threw")
+                       .. "\n" .. dump(root, id, a, "after reload, could not read: " .. tostring(container))
+            end
+            local readOK, holds, why = readContainer(container, token)
+            if not readOK then
+                return "read-error\tcontents unreadable\n"
+                       .. dump(root, id, a, "after reload, contents unreadable: " .. tostring(why))
+            end
+            if holds then
                 return "holds\t" .. tostring(a.status) .. "\t" .. tostring(a.relocations)
                        .. "\n" .. dump(root, id, a, "after reload, container holds it")
             end

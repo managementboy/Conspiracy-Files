@@ -98,13 +98,17 @@ for world in $(seq 1 "$WORLDS"); do
             unloaded) say "  $id: its target square is not loaded - no verdict" ;;
             in-hand)  say "  $id: the survivor is carrying it - not a fault" ;;
             skipped)  say "  $id: not a placed clue ($(sed -n '1p' <<<"$r" | f 2))" ;;
+            read-error) say "  $id: COULD NOT READ ($(sed -n '1p' <<<"$r" | f 2)) - no verdict, and not the fault"
+                        echo "$r" | sed 's/^/      /' >&2 ;;
         esac
         if [ "$(sed -n '1p' <<<"$r" | f 1)" = "DISCREPANCY" ]; then result="$r"; bad="$id"; break; fi
     done
 
     cov="$(ev 'return CFPlace.coverage()')"
     compared="$(f 1 <<<"$cov")"
-    say "world $world: coverage - compared=$compared of $total placed (unloaded=$(f 2 <<<"$cov") in-hand=$(f 3 <<<"$cov") skipped=$(f 4 <<<"$cov") missing=$(f 5 <<<"$cov"))"
+    say "world $world: coverage - compared=$compared of $total placed (unloaded=$(f 2 <<<"$cov") in-hand=$(f 3 <<<"$cov") skipped=$(f 4 <<<"$cov") missing=$(f 5 <<<"$cov") read-errors=$(f 6 <<<"$cov"))"
+    readerrs="$(f 6 <<<"$cov")"
+    [ "${readerrs:-0}" -gt 0 ] 2>/dev/null && say "world $world: $readerrs clue(s) could not be READ - neither compared nor judged"
 
     if [ -z "$bad" ]; then
         # A CLEAN RESULT MEANS NOTHING WITHOUT A COMPARISON. No ids, or every
@@ -151,6 +155,7 @@ for world in $(seq 1 "$WORLDS"); do
         absent)   say "world $world: after the reload it is STILL absent - the discrepancy PERSISTS" ;;
         in-hand)  say "world $world: after the reload the survivor is carrying it - not the fault" ;;
         unloaded) say "world $world: after the reload its square is not loaded - NO verdict on persistence" ;;
+        read-error) say "world $world: after the reload the clue could not be READ ($(sed -n '1p' <<<"$again" | f 2)) - no verdict" ;;
         changed)  say "world $world: after the reload it is no longer a placed clue ($(sed -n '1p' <<<"$again" | f 2)/$(sed -n '1p' <<<"$again" | f 3)) - the record CHANGED, which is not the mismatch persisting" ;;
         retired)  say "world $world: after the reload the case has retired - no verdict, and not the fault" ;;
         gone)     say "world $world: after the reload there is no assignment for it - no verdict" ;;

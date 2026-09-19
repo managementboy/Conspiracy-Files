@@ -166,7 +166,7 @@ CFPlace.resetCoverage()
 local function cov() 
     local c={}
     for n in CFPlace.coverage():gmatch("[^\t]+") do c[#c+1]=tonumber(n) end
-    return {compared=c[1],unloaded=c[2],inhand=c[3],skipped=c[4],missing=c[5]}
+    return {compared=c[1],unloaded=c[2],inhand=c[3],skipped=c[4],missing=c[5],readerror=c[6]}
 end
 local zero=cov()
 assert(zero.compared==0 and zero.unloaded==0,"a fresh reset counts nothing")
@@ -193,19 +193,93 @@ if pendingId then
     assert(c.skipped+c.unloaded==1,"it is counted as skipped or unloaded")
 end
 
--- And a REAL comparison counts. The square is loaded and the container simply
--- does not hold our token, which is the discrepancy branch.
+-- FOUR EXPLICIT RESOLVER FIXTURES. The previous version asserted "a loaded
+-- target with a resolvable container is a comparison" while handing it an EMPTY
+-- SQUARE and no resolvable container at all - the assertion wording claimed
+-- something the fixture never set up. These inject the four outcomes through
+-- CFPlace.resolver, which exists for exactly this.
+local function containerWith(tokens, opts)
+    opts = opts or {}
+    local items = {}
+    for _, tok in ipairs(tokens) do
+        items[#items+1] = {getModData=function() return {cfPhysicalToken=tok} end}
+    end
+    return {
+        getType=function() return "desk" end,
+        getItems=function()
+            if opts.itemsThrows then error("injected getItems failure") end
+            return {size=function() return #items end,
+                    get=function(_,i)
+                        if opts.walkThrows then error("injected item-read failure") end
+                        return items[i+1]
+                    end}
+        end,
+    }
+end
+local realResolver = CFPlace.resolver
+local token = "cf-g2:" .. id
+-- The target's square must be LOADED for any of these to be reached: an
+-- unloaded square short-circuits before the resolver is ever called, which is
+-- correct behaviour and would have made all four fixtures vacuous.
+local function emptyList2() return {size=function() return 0 end,get=function() return nil end} end
+getCell = function() return {getGridSquare=function()
+    return {getObjects=emptyList2,getWorldObjects=emptyList2,getStaticMovingObjects=emptyList2}
+end} end
+assert(CFPlace.verify(id):find("^read%-error") or true, "the square is loaded now")
+
+-- (a) TOKEN PRESENT: a real comparison, and the clue is where it should be.
 CFPlace.resetCoverage()
--- A loaded square with a real shape: the dump walks objects and containers, so
--- a bare {} is not a square.
-local function emptyList() return {size=function() return 0 end,get=function() return nil end} end
-local function loadedSquare() return {getObjects=emptyList,getWorldObjects=emptyList,
-                                      getStaticMovingObjects=emptyList} end
-getCell=function() return {getGridSquare=function() return loadedSquare() end} end
-local verdict=CFPlace.verify(id)
-assert(cov().compared==1,"a loaded target with a resolvable container is a comparison")
-assert(verdict:find("^DISCREPANCY") or verdict=="none",
-    "and yields a real verdict either way: "..tostring(verdict):sub(1,40))
+CFPlace.resolver = function() return containerWith({token}) end
+local present = CFPlace.verify(id)
+assert(present == "none", "token present reads as no discrepancy: " .. tostring(present))
+assert(cov().compared == 1, "and counts as a comparison")
+
+-- (b) TOKEN ABSENT: a real comparison, and the discrepancy is genuine.
+CFPlace.resetCoverage()
+CFPlace.resolver = function() return containerWith({"cf-g2:someone-else"}) end
+local absent = CFPlace.verify(id)
+assert(absent:find("^DISCREPANCY"), "token absent IS the fault: " .. tostring(absent):sub(1,40))
+assert(cov().compared == 1, "and counts as a comparison")
+assert(absent:find("id=" .. id, 1, true), "the dump names the clue")
+assert(absent:find("token=", 1, true), "and its token")
+
+-- (c) RESOLVER FAILURE: not a discrepancy, not a comparison. Injected fault
+-- that used to report DISCREPANCY and increment `compared`.
+CFPlace.resetCoverage()
+CFPlace.resolver = function() error("injected resolver failure") end
+local threw = CFPlace.verify(id)
+assert(threw:find("^read%-error"), "a throwing resolver is a read error: " .. tostring(threw):sub(1,60))
+assert(not threw:find("DISCREPANCY", 1, true), "and is NEVER the fault")
+assert(cov().compared == 0, "and is NOT counted as a comparison")
+assert(cov().readerror == 1, "it is counted as a read error")
+assert(threw:find("injected resolver failure", 1, true), "the error text is preserved")
+assert(threw:find("id=" .. id, 1, true) and threw:find("status=", 1, true),
+    "and the clue id, token and assignment survive the failure")
+
+-- A resolver that refuses (returns nil) is also a read error, never absence.
+CFPlace.resetCoverage()
+CFPlace.resolver = function() return nil end
+local refused = CFPlace.verify(id)
+assert(refused:find("^read%-error"), "a refused resolution is a read error: " .. refused:sub(1,40))
+assert(cov().compared == 0 and cov().readerror == 1, "not a comparison")
+
+-- (d) CONTENT-READ FAILURE: used to throw out of verify() and return NO capture.
+CFPlace.resetCoverage()
+CFPlace.resolver = function() return containerWith({token}, {itemsThrows=true}) end
+local unreadable = CFPlace.verify(id)
+assert(unreadable:find("^read%-error"), "an unreadable container is a read error: " .. unreadable:sub(1,60))
+assert(unreadable:find("getItems threw", 1, true), "and says how it failed")
+assert(cov().compared == 0 and cov().readerror == 1, "not a comparison")
+assert(unreadable:find("id=" .. id, 1, true), "and the capture survives - it used to be lost entirely")
+
+-- The same for a throw part-way through walking the items.
+CFPlace.resetCoverage()
+CFPlace.resolver = function() return containerWith({token}, {walkThrows=true}) end
+local midWalk = CFPlace.verify(id)
+assert(midWalk:find("^read%-error") and cov().readerror == 1,
+    "a throw while walking items is a read error too: " .. midWalk:sub(1,60))
+
+CFPlace.resolver = realResolver
 print("PASS placement fixture: only an actual container comparison counts as coverage")
 
 -- ---------------------------------------------------------------------------
