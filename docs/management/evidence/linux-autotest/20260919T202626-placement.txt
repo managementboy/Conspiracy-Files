@@ -1,11 +1,21 @@
 Placement diagnostic, 3 worlds. Mod revision d17f63b. Sessions 20260919T202626/202838/203042.
-Result: NO discrepancy captured. Coverage COMPLETE: 15 of 15 placed clues compared,
-0 unloaded, 0 in-hand, 0 skipped, 0 read errors, 0 mod errors. Exit 0.
+Result: NO discrepancy captured. Coverage complete FOR PLACED CLUES: 15 of 15
+placed compared, 0 unloaded, 0 in-hand, 0 skipped, 0 read errors, 0 mod errors.
+
+That is NOT every intended clue. The three cases intended 18 (8 + 6 + 4); three
+of world 2's six never reached a container at all, so 15 of 18 INTENDED clues
+were verifiable. The unplaced three are a separate placement-availability
+finding (P4-R133), not part of this result either way.
 
 NOT proof of absence, and weaker than it looks. Two separate reasons:
-  1. If the per-sample rate were the 3-in-9 of the overnight runs, seeing nothing
-     in 3 samples has probability (2/3)^3 = 0.30 - an unremarkable outcome.
-  2. More importantly the SAMPLES ARE NOT COMPARABLE. The 3-in-9 came from long
+  1. ILLUSTRATIVE ARITHMETIC ONLY, not a confidence estimate: if the per-sample
+     rate were the overnight runs' 3-in-9 and the samples were independent and
+     comparable, seeing nothing in 3 would have probability (2/3)^3 = 0.30. None
+     of those assumptions holds here - the rate is not known, and reason 2 says
+     the samples are not comparable, which makes the figure self-undermining as
+     a measure of anything. It is kept only to show that a clean run of this
+     size would be unsurprising even if the fault were common.
+  2. The SAMPLES ARE NOT COMPARABLE, and this is the real point. The 3-in-9 came from long
      campaign runs: several cases at once, clues sitting unfound for in-game hours,
      stale-clue relocation (RELOCATE_AFTER_HOURS=72) running, and saves and reloads
      between cases. This check verifies ONE case per fresh world immediately after
