@@ -165,10 +165,34 @@ the campaign, run rarely and only when 1–3 are green. Tier 4 needs an
 **abort on first failure** — this run continued past four failures producing
 text that was then over-read.
 
-**Still open:** the whole sequence in a running game (inspect everything, wait
-out three in-game days, watch the slot free) is untested and needs the
-injectable clock. The original placement mismatch — a clue the record calls
-`placed` that is not in its container — remains separate and unreproduced.
+**CLOSED 2026-09-19 (late): the integration gap.**
+`test/expiry_to_retirement.lua` drives the **real scheduler** on a clock the
+test owns, for both drop paths: inspect every available clue leaving one
+deferred, advance past expiry, let the actual filler job perform the drop, and
+verify retirement, slot release and the gap ids and history kept — then the same
+for a carrier that goes missing, across a save and reload. Nothing calls
+`retireIfAccounted` directly. Before expiry it asserts that **nothing** is
+dropped, so the check cannot pass by dropping everything always.
+
+Four fixture faults had to be found first, each of which made the test prove
+nothing while appearing to run:
+1. a **nil player inventory** — the identity job runs on the same tick round as
+   the filler and calls methods on it, so the tick threw and the filler never
+   ran;
+2. a **millisecond clock advancing 1 per call** — the scheduler's 1 ms budget
+   was spent by its own first clock read, so it stepped **zero** jobs, silently
+   and without error;
+3. **`package.preload` ignored for an already-loaded module** — the second
+   runtime kept the first one's resolver, so flipping the carrier to "gone" had
+   no effect at all;
+4. a **hand-built WorldAccess stub** missing `identityScan`, for the same reason
+   as (1).
+Recorded because every one of them was a *silent* pass-shaped failure, which is
+the failure mode that matters in a mocked integration test.
+
+**Still open:** the original placement mismatch — a clue the record calls
+`placed` that is not in its container — remains separate and unreproduced. A
+broad campaign run waits until the focused checks above are the baseline.
 
 ## The opening premise narrowed — 2026-09-19 (late)
 
