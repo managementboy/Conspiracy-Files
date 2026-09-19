@@ -1,5 +1,51 @@
 # Conspiracy-Files — Current Decision Index
 
+## Build the opening pair — 2026-09-19 (late)
+
+**DR-20260919-BUILD-PAIR — "No contact at premises" is approved as the first
+opening, and the first playable target is the connected pair.** Premise agreed
+under `DR-20260919-Q27`, so writing within its boundaries may proceed. The
+target is **not the opening alone**: it includes **evidence persistence** (the
+first case's finding survives into the second and survives the first case's
+retirement) and **recovery when a necessary clue becomes unavailable** (the case
+says so plainly rather than completing silently or stranding the player). This
+demonstrates the intended experience better than expanding to more occupations,
+so the other twenty-four premises stay parked.
+
+**DR-20260919-SITING — six siting choices for the opening.**
+1. **Local, no fixed town.** Two verified nearby addresses with reachable
+   containers; where numbers are unavailable, verified building descriptions or
+   landmarks. This settles the earlier open question about spawning where nothing
+   is numbered: the opening degrades to descriptions rather than refusing.
+2. **The matching record sits where it would sit** — a returned notice near the
+   destination, or a desk copy in a suitable office. Never an arbitrary
+   container.
+3. **The first trip is short** — same neighbourhood. Longer travel belongs to
+   later mysteries; the travel machinery is already proven, so nothing is lost.
+4. **The reference code reuses the existing format** — one of the twelve
+   meaningless prefixes plus three digits (`PS-289`, `R-482`), exactly as
+   `Generator` already builds them. The code connects documents and must not
+   become a puzzle; the generator's own comment already forbids a reference that
+   encodes its premise.
+5. **"How did I arrive here?" waits for a later connected case.** The opening
+   establishes the missed collection record, which is itself a personal reason
+   to investigate. Qualifies `DR-20260919-OPENING-QUESTION`: the arrival
+   question is deferred, not dropped.
+6. **No expansion to more occupations yet.**
+
+**DR-20260919-SECOND-CASE — the follow-up is "Still filing".** It follows the
+first case's own open question (did the visit happen at all?) by tracing who
+maintained the collection list and where cancellation reports went. Its payoff:
+**cancellation entries were being closed after the last collection round had
+stopped running, so at least some "no contact" entries were written without a
+visit behind them.** It deliberately does **not** establish which ones,
+including whether the survivor's own was among them — the follow-up makes the
+first conclusion *less* settled, challenging the earlier reading without erasing
+the finding that earned it. Its three-link chain turns on two records that are
+unremarkable alone and together establish what neither claims, which is the
+shape worth proving in a pair. Open and unanswered: why entries were closed with
+no round behind them, and on whose authority.
+
 ## The opening premise narrowed — 2026-09-19 (late)
 
 **DR-20260919-OPENING-QUESTION — the opening answers "why was I left?", not

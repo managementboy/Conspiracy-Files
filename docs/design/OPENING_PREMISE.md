@@ -1,4 +1,4 @@
-# The opening premise — "Recorded at another address"
+# The opening premise — "No contact at premises"
 
 Design document. Nothing here is built. The premise and evidence sequence for
 the personal opening mystery (`DR-20260919-Q31`, and part B of
@@ -141,6 +141,41 @@ slip's address was the building next door. **Neither is true.**
 - **The placed slip is what makes this address matter.** It carries the
   survivor's name and ties them to a location without inventing home ownership.
 
+## Siting: where this happens, and how far
+
+Six choices settled by the owner, 2026-09-19.
+
+**1 — Local, with no fixed town.** The opening assumes no particular town. It
+needs two **verified nearby addresses** with **reachable evidence containers**.
+Where numbered addresses are unavailable, it falls back to **verified building
+descriptions or landmarks** — the place words the record already uses for a site
+the address book cannot number ("the receiving building near Schoolhouse St").
+This removes the open question about spawning where nothing is numbered: the
+opening degrades to descriptions rather than refusing.
+
+**2 — The matching record sits where it would sit.** A returned notice near the
+destination, or a desk copy in a suitable office. **Never an arbitrary
+container.** The record's location is part of what makes it readable as a
+record.
+
+**3 — The first trip is short.** Same neighbourhood. Longer travel belongs to
+later mysteries, and the travel machinery is already proven (three towns, four
+cases), so nothing is lost by keeping the opening close.
+
+**4 — The reference code reuses the existing format.** One of the twelve
+meaningless prefixes plus three digits — `PS-289`, `R-482` — exactly as
+`Generator` already builds them. The code's job is to **connect documents**, not
+to be solved. The generator's own comment already says a reference that encoded
+the premise would merely announce it; that holds here.
+
+**5 — "How did I arrive here?" waits for a later connected case.** The opening
+establishes the missed collection record, which is by itself a personal reason
+to investigate. The arrival question is not answered and is not gestured at.
+
+**6 — No expansion to more occupations yet.** The electrician's skill layer is
+the pilot. The other twenty-four wait until the pair below demonstrates the
+experience.
+
 ## Recovery, and refusing to play
 
 - **Interrupted or missed:** link 3 has two independent routes. Optional
@@ -157,9 +192,74 @@ and reported unsuccessful* — and two open questions: whether the address was
 entered wrongly or altered, and whether the visit in the record happened at all.
 The visitor thread starts here as a **question**, not a finding.
 
-A follow-up may **challenge** the reading: a second record placing the round on
-a different day would make the wrong-address conclusion look naive without
-erasing the finding that earned it.
+---
+
+# The second case — "Still filing"
+
+The follow-up, built to keep. It takes the first case's own open question —
+**did the visit in the record happen at all?** — and answers part of it with a
+specific new fact about the response effort, while leaving the larger
+explanation open.
+
+## What the player ends up knowing
+
+> **Cancellation entries were being closed after the last collection round had
+> already stopped running.** At least some "no contact" entries were written
+> without a visit behind them.
+
+**It does not establish which ones** — including whether the survivor's own was
+one of them. That limit is the point: the follow-up makes the first case's
+conclusion *less* settled rather than more, which is what an investigation
+actually does. It challenges the earlier reading without erasing the finding
+that earned it.
+
+**Open, and not answered:** why entries were closed with no round behind them —
+procedure, backlog, or decision — and on whose authority.
+
+## The essential chain
+
+| | Must be established | How |
+|---|---|---|
+| 1 | Cancellation reports were routed to a named collection point | A routing stamp or forwarding slip on the first case's record |
+| 2 | Entries were closed there on stated dates | A batch of closures at that point |
+| 3 | The last round ran before some of those dates | A field record — a round sheet, a gate log, a fuel book |
+
+Link 3 is what does the work: two records that are each unremarkable alone, and
+together establish something neither one claims. That is the shape worth proving
+in a pair, because no single clue can carry it.
+
+Each link keeps its three readings separate. The batch of closures **claims**
+those entries were attempted; the field record **supports** that no round was
+out on some of those dates; what follows is that **some** closures had no visit
+behind them — never which, and never the survivor's.
+
+## Continuity requirements it must satisfy
+
+The four objective criteria from `DR-20260919-FOLLOWUP-CRITERIA`:
+
+- **Sourced connection** — link 1 is physically the first case's own record,
+  carrying its reference code. Not a repeated name.
+- **Consistent chronology** — the closure dates and the last round's date order
+  correctly against each other and against the event record.
+- **Meaningful new evidence** — the routing point, the closure batch and the
+  field record are all new findings.
+- **Persistence** — the connection survives save and reload, and survives the
+  first case being retired to a stub.
+
+---
+
+# The first playable target
+
+**The connected pair**, not the opening alone, and specifically including:
+
+1. **Evidence persistence** — the first case's finding survives into the second,
+   and survives the first case's retirement.
+2. **Recovery when a necessary clue becomes unavailable** — if an essential link
+   cannot be reached, the case says so plainly. It never silently completes, and
+   it never strands the player with no route (`DR-20260919-SOLVABLE-WITHDRAWN`).
+
+This demonstrates the experience more clearly than expanding to more
+occupations, which is why the other twenty-four wait.
 
 ## Events this draws on
 
@@ -179,11 +279,13 @@ issued one per clue.
 
 ## Open
 
-- Which town the opening assumes, and whether the premise holds where the start
-  has no numbered door nearby.
-- Whether the matching record sits in a fixed kind of place or is selected per
-  save, and how its carrier is verified reachable.
-- How far apart the two addresses may be before the opening stops being local.
-- The reference code's shape, so it reads as furniture rather than a puzzle.
-- Whether an arrival question ("why did I wake up here?") is wanted as a
-  separate opening, since this premise deliberately does not answer it.
+Five of the six earlier open items are settled by the siting choices above. What
+remains:
+
+- The exact maximum distance between the two addresses, and the exact fallback
+  wording where neither address can be numbered — both to be fixed by
+  measurement in the real game rather than chosen on paper.
+- Which kinds of office are "suitable" for a desk copy, and how a candidate
+  carrier there is verified reachable before the case commits to it.
+- Which field record carries the last round's date in case two, and whether one
+  exists that a player can plausibly reach in the same neighbourhood.
