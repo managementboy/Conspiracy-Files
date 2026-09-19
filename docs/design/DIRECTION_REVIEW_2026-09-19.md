@@ -2,7 +2,7 @@
 
 Prepared 19 September 2026 against `main` at `73e6b62`, build `DEV-0.44.0-addresses-that-travel`.
 
-**Status: Q01–Q20 confirmed. The organiser retains hand, power and recovery requirements without battery-related data loss. Remaining choices await answers. This review builds a new wishlist and revisits all existing commitments.**
+**Status: Q01–Q21 confirmed. A separate relationship graph is a future option, pending experience with the organiser and map connections. Remaining choices await answers. This review builds a new wishlist and revisits all existing commitments.**
 
 **Confirmed scope:** version 1.0 enriches ordinary survival with investigations (Q01 A). A survivor-centered campaign (Q01 B) is a possible future option. All remaining recommendations must be considered within that boundary; campaign features are not implied 1.0 commitments.
 
@@ -389,7 +389,7 @@ Choose separately for **holding it**, **battery use**, and **needing a replaceme
 
 **Suggested answer — not approved:** B — Keep a player graph as a later option, conditional on actual difficulty following relationships in the organiser. First test whether a clear connection summary solves that problem. Reason: a graph is a possible interface, not itself the emotional goal of investigation. Timing: later; no graph-layout commitments return automatically.
 
-**Owner decision:** _unanswered_
+**Owner decision — confirmed 19 September 2026:** B: keep a separate relationship graph as a future option; first assess the organiser and the planned map connections. The map-line goal from Q10 remains independently confirmed. The separate graph is not a mandatory feature or assigned to a release by this answer. Recorded as DR-20260919-Q21 in `DECISIONS.md`.
 
 ### Q22 — May the player investigate things the generator did not mark as clues?
 
@@ -572,6 +572,7 @@ Copy one row for each answered question. Keep any uncertainty visible.
 | Q18 | B: full recent cases; older summaries, important connections and player notes retained; needed evidence remains available | New wishlist; timing pending | DR-20260919-Q18; revises archive requirements without reaffirming current numeric limits | Define recency and summary content, measure storage and verify Q17 access rules | A proposal that discards needed evidence/notes or confuses retention with automatic inheritance |
 | Q19 | A: organiser stays primary; future PC integration with mysterious CDs, such as government software or spreadsheets | Organiser: current direction; PC integration: future versions | DR-20260919-Q19; reaffirms P4-R79/R128 organiser direction and adds a future wishlist item | Identify PC mod; verify content APIs, game support and dependency model | Before assuming capabilities or making PC integration a 1.0 requirement |
 | Q20 | Keep hand use, meaningful battery use and recovery/replacement when lost; dead batteries never erase evidence or notes | Retain in current direction; tuning pending | DR-20260919-Q20; reaffirms physical organiser and P4-R86 data protection | Check practical reading time, power persistence and Q17 knowledge access | A proposal that erases data on battery failure or grants inherited knowledge through a generic replacement |
+| Q21 | B: separate relationship graph is a future option; assess organiser and map connections first | Possible future, not a release commitment | DR-20260919-Q21; replaces mandatory graph scope inherited from P2-Q20–Q25; Q10 map lines stand | Observe relationship-navigation needs before deciding on a graph | A proposal that assumes a graph must ship or restores old detailed graph requirements automatically |
 
 Before implementation begins, check the answers together: travel guidance against survival freedom; answer-driven cases against a fixed underlying truth; physical device costs against accessibility; finite storage against promised campaign length; and new-game rules against a long personal campaign. Present conflicts for a decision instead of resolving them silently.
 

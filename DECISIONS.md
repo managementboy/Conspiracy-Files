@@ -6,6 +6,8 @@ If a spike disproves a decision, technical reality wins: supersede the decision 
 
 ## Direction review — 2026-09-19
 
+**DR-20260919-Q21 — a separate relationship graph remains a future option.** Owner selected Q21 B: first assess how well the organiser and the planned map connections support understanding relationships; keep a separate graph as a future option rather than a committed feature. Q10's later map lines connecting clues to meaningful conclusions remain confirmed independently. This replaces any mandatory separate-graph commitment inherited from P2-Q20–Q25 or its old v2 allocation. Graph layout, interaction and persistence choices do not carry forward automatically. The development Graphify graph is unrelated to this player-facing feature.
+
 **DR-20260919-Q20 — retain the organiser's physical costs without battery-related data loss.** Owner answered “keep that way” to keeping all three proposed behaviors: reading occupies an available hand; battery power matters but ordinary reading should not drain it excessively; a lost organiser must be recovered or replaced. A dead battery never erases evidence or notes. This reaffirms the physical-device direction and P4-R86's protection against battery-related writing loss in the new wishlist.
 
 Exact power-consumption tuning remains to be measured; no new drain rate was selected. Recovery/replacement concerns device access and must preserve Q17's separate requirement for a new survivor to recover the predecessor's investigation. A generic replacement device must not automatically grant another character's knowledge. No optional realism mode or broader loss-of-device data policy was selected by this answer.
