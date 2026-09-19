@@ -2,7 +2,7 @@
 
 Prepared 19 September 2026 against `main` at `73e6b62`, build `DEV-0.44.0-addresses-that-travel`.
 
-**Status: Q01–Q24 confirmed. Fatalistic bureaucratic dark comedy is the chosen tone throughout. The Relay Site 31 example is recorded for the maps/flyers brainstorm. Remaining choices await answers. This review builds a new wishlist and revisits all existing commitments.**
+**Status: Q01–Q25 confirmed. Offline gameplay with authored content and local generation is retained, supported by positive owner play experience. The Relay Site 31 example is recorded for the maps/flyers brainstorm. Remaining choices await answers. This review builds a new wishlist and revisits all existing commitments.**
 
 **Confirmed scope:** version 1.0 enriches ordinary survival with investigations (Q01 A). A survivor-centered campaign (Q01 B) is a possible future option. All remaining recommendations must be considered within that boundary; campaign features are not implied 1.0 commitments.
 
@@ -451,7 +451,7 @@ Name one moment that should feel funny and one that should be allowed to stay se
 
 **Suggested answer — not approved:** A for the planned product — Keep gameplay offline and use authored content plus local generation rules. Runtime AI becomes a new proposal only if a concrete player need emerges that the local system cannot serve well. Development-time AI assistance remains separate. Reason: runtime AI adds service dependency and factual consistency work without yet solving the most important gameplay gap. Timing: outside the current roadmap, open to a future explicit review.
 
-**Owner decision:** _unanswered_
+**Owner decision — confirmed 19 September 2026:** A: keep gameplay entirely offline using authored content and local generation rules. The owner reports this approach has proved very good in play. Runtime AI is not part of the revised product direction; development-time AI assistance remains separate. Recorded as DR-20260919-Q25 in `DECISIONS.md`.
 
 ### Q26 — Which controls should players get?
 
@@ -584,6 +584,7 @@ Copy one row for each answered question. Keep any uncertainty visible.
 | Q22 | Remove the requirement to capture suspicions/bookmarks about ordinary objects | Outside revised requirements | DR-20260919-Q22; retires ordinary-object capture promises in P2-Q4/Q5/Q17 at this scope; Q09a stands | None required to remove a wishlist requirement | A proposal that reintroduces arbitrary-object leads as an inherited obligation or deletes free notes by inference |
 | Q23 | D: renewed discovery opportunities by putting unfound clues in new locations | New wishlist; detail coordinated with Q12 | DR-20260919-Q23; recap proposal not adopted; relay example in DR-20260919-RELAY | Define relocation versus established destinations; verify candidate sites before binding them | A proposal that silently removes required travel or treats a sample relay coordinate as the chosen Site 31 |
 | Q24 | B: fatalistic bureaucratic dark comedy throughout | New wishlist; timing open | DR-20260919-Q24; reaffirms P1-Q21/P2-Q59 tone | Representative writing reviewed in play | A proposed change to the overall tone |
+| Q25 | A: offline gameplay using authored content and local generation; owner reports very good results | Retain current approach | DR-20260919-Q25; supersedes runtime-AI expectation in P2-Q1/Q2 | Owner's positive play experience | Any proposal to introduce runtime AI |
 
 Before implementation begins, check the answers together: travel guidance against survival freedom; answer-driven cases against a fixed underlying truth; physical device costs against accessibility; finite storage against promised campaign length; and new-game rules against a long personal campaign. Present conflicts for a decision instead of resolving them silently.
 

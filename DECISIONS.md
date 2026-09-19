@@ -6,6 +6,8 @@ If a spike disproves a decision, technical reality wins: supersede the decision 
 
 ## Direction review — 2026-09-19
 
+**DR-20260919-Q25 — keep gameplay offline with authored content and local generation.** Owner selected Q25 A and reported that this approach “has proved to be very good.” Keep gameplay entirely offline using authored content and local generation rules. Runtime AI is not part of the revised product direction; this supersedes the runtime-AI capability expectation in P2-Q1/Q2. AI assistance used to develop the mod is a separate matter. The owner's positive play experience supports retaining this approach; it is not a claim of additional technical testing.
+
 **DR-20260919-Q24 — fatalistic bureaucratic dark comedy throughout.** Owner selected Q24 B. Fatalistic, bureaucratic dark comedy is the ongoing tone of the mysteries. This reaffirms the tone direction of P1-Q21/P2-Q59 in the new wishlist. The assistant's recommendation to lead with unease and use humour only when appropriate was not adopted. Specific writing examples and implementation timing were not selected by this answer.
 
 **DR-20260919-Q23 — help through fresh opportunities to find missed clues.** Owner selected Q23 D: “place clues never found, in new locations. or do you suggest something different.” Use renewed physical discovery opportunities for unfound clues as the chosen assistance direction, consistent with Q12's delayed relocation. The proposed recap or stronger navigation UI is not selected by this answer. Relocation timing, knowledge boundaries and handling of old copies remain the design questions recorded under Q12.
