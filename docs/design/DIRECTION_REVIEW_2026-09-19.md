@@ -2,7 +2,7 @@
 
 Prepared 19 September 2026 against `main` at `73e6b62`, build `DEV-0.44.0-addresses-that-travel`.
 
-**Status: Q01–Q27 confirmed. Story content requires agreement on premise, tone and boundaries before tested writing ships within that scope. Detailed player settings are requested for work today; implausible bulk discoveries need redesign. The maps/flyers brainstorm remains after the questionnaire, and vanilla-scene research remains last. Remaining choices await answers. This review builds a new wishlist and revisits all existing commitments.**
+**Status: Q01–Q28 confirmed. Version 1.0 targets single-player on the vanilla Build 42 map. Detailed player settings are requested for work today; implausible bulk discoveries need redesign. The maps/flyers brainstorm remains after the questionnaire, and vanilla-scene research remains last. Remaining choices await answers. This review builds a new wishlist and revisits all existing commitments.**
 
 **Confirmed scope:** version 1.0 enriches ordinary survival with investigations (Q01 A). A survivor-centered campaign (Q01 B) is a possible future option. All remaining recommendations must be considered within that boundary; campaign features are not implied 1.0 commitments.
 
@@ -497,7 +497,7 @@ Separately, are external story/content packs **required later**, **an optional e
 
 **Suggested answer — not approved:** A — Promise single-player on the verified vanilla Build 42 map for the next milestone. Add a small compatibility list when you name the mods you actually use; do not claim support merely because no conflict is known. External story packs should be an optional later extension, after a second genuinely different content set shows what is needed. Reason: broad compatibility is an expensive promise with no defined test matrix yet. Timing: next milestone for vanilla; later for named extensions.
 
-**Owner decision:** _unanswered_
+**Owner decision — confirmed 19 September 2026:** A for version 1.0: single-player on the vanilla Build 42 map. The owner's explicit version scope extends beyond the question's next-release framing. Exact supported Build 42 revisions need verification; broad custom-map or multiplayer support is not a 1.0 commitment. Future PC-mod integration remains on the wishlist. The separate external-content-pack question was not presented in chat and remains open. Recorded as DR-20260919-Q28 in `DECISIONS.md`.
 
 ### Q29 — How disruptive may development updates be to a save?
 
@@ -589,6 +589,7 @@ Copy one row for each answered question. Keep any uncertainty visible.
 | Q25 | A: offline gameplay using authored content and local generation; owner reports very good results | Retain current approach | DR-20260919-Q25; supersedes runtime-AI expectation in P2-Q1/Q2 | Owner's positive play experience | Any proposal to introduce runtime AI |
 | Q26 | B: detailed individual settings with sensible defaults | Tackle today after questions and brainstorm | DR-20260919-Q26; broad configuration confirmed, world-creation-only rule still open | Inspect existing support; define and verify useful controls | Settings that rewrite established facts or change confirmed physical-device behavior |
 | Q27 | B: agree premise, tone and boundaries, then publish tested writing within scope | Content workflow | DR-20260919-Q27; qualifies P4-R97; separate P4-R107 freeze question open | Agreed story scope and tested content | New premises or content outside approved boundaries |
+| Q28 | A: single-player on the vanilla Build 42 map | Version 1.0 | DR-20260919-Q28; reaffirms P1-Q3/P1-Q19 and narrows P1-Q18 for 1.0 | Verify supported game revisions and vanilla-world play | A proposed 1.0 promise of multiplayer or broad custom-map support |
 
 Before implementation begins, check the answers together: travel guidance against survival freedom; answer-driven cases against a fixed underlying truth; physical device costs against accessibility; finite storage against promised campaign length; and new-game rules against a long personal campaign. Present conflicts for a decision instead of resolving them silently.
 
