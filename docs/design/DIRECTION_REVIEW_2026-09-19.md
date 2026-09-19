@@ -2,7 +2,7 @@
 
 Prepared 19 September 2026 against `main` at `73e6b62`, build `DEV-0.44.0-addresses-that-travel`.
 
-**Status: Q01–Q30 confirmed. Passing technical checks is the milestone acceptance criterion. Breaking changes are acceptable until the owner judges the feature set playable long term. Detailed player settings are requested for work today; implausible bulk discoveries need redesign. The maps/flyers brainstorm remains after the questionnaire, and vanilla-scene research remains last. Remaining choices await answers. This review builds a new wishlist and revisits all existing commitments.**
+**Status: Q01–Q31 confirmed. Development order: personal opening, then survival connection, then current-loop improvements. Passing technical checks is the milestone acceptance criterion. Today's settings work, maps/flyers brainstorm, discovery-redesign to-do and final vanilla-scene research remain on the agenda. Q32 awaits an answer. This review builds a new wishlist and revisits all existing commitments.**
 
 **Confirmed scope:** version 1.0 enriches ordinary survival with investigations (Q01 A). A survivor-centered campaign (Q01 B) is a possible future option. All remaining recommendations must be considered within that boundary; campaign features are not implied 1.0 commitments.
 
@@ -542,7 +542,7 @@ Describe the intended playable behavior and keep the scope bounded. Under confir
 
 **Suggested answer — not approved, revised after Q03:** B, narrowed to the confirmed personal-opening priority, supported by necessary fixes to the existing loop. Suggested finish line: 'In a normal Steam-delivered survival game I encounter a mystery about how I arrived, its subject fits my character's starting skills, and I can follow and resume that investigation through the existing discovery and record systems.' Compare contrasting starting characters and a character without a strongly specialised skill profile. Reason: this tests the newly confirmed priority within ordinary survival. A deliberate campaign route, bases as campaign stages and crafting mastery remain separate open choices. Timing: next milestone proposal; exact scope and acceptance criteria still await the remaining answers.
 
-**Owner decision:** _unanswered_
+**Owner decision — confirmed 19 September 2026:** B, then C, then A. In the choices presented in chat, B means the personal opening with starting-skill relevance; C means a survival connection such as a base-related journey or skill/tool interaction; A means improving the current loop's believable discoveries, clarity and pacing. These are successive development focuses. The exact C interaction remains open, and necessary supporting fixes may accompany earlier work. Today's separately requested agenda remains in place. Recorded as DR-20260919-Q31 in `DECISIONS.md`.
 
 ### Q32 — What rule stops old decisions becoming permanent by accident?
 
@@ -593,6 +593,7 @@ Copy one row for each answered question. Keep any uncertainty visible.
 | Q28 | A: single-player on the vanilla Build 42 map | Version 1.0 | DR-20260919-Q28; reaffirms P1-Q3/P1-Q19 and narrows P1-Q18 for 1.0 | Verify supported game revisions and vanilla-world play | A proposed 1.0 promise of multiplayer or broad custom-map support |
 | Q29 | A: allow breaking changes until the owner judges the feature set playable long term | Current development; owner decides transition | DR-20260919-Q29; reaffirms P4-R63/R77 with owner-controlled threshold | Clear notice when an update requires a fresh game | Owner declares long-term readiness or requests save continuity |
 | Q30 | D: technical checks pass; no additional playtest acceptance gate | Milestone acceptance | DR-20260919-Q30; combined technical-and-playtest suggestion not adopted | Actual passing checks relevant to the changed milestone | A proposed additional acceptance gate or claim based on stale technical evidence |
+| Q31 | B → C → A: personal opening, survival connection, current-loop improvements | Successive development focuses; today's agenda retained | DR-20260919-Q31; follows Q03 priority | Passing relevant technical checks under Q30 | Reordering focuses or selecting the exact first survival connection |
 
 Before implementation begins, check the answers together: travel guidance against survival freedom; answer-driven cases against a fixed underlying truth; physical device costs against accessibility; finite storage against promised campaign length; and new-game rules against a long personal campaign. Present conflicts for a decision instead of resolving them silently.
 
