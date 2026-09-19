@@ -154,10 +154,14 @@ matched the comment explaining it; dropped, because absence of a string is not a
 behaviour. The lesson is recorded because it recurs: a source-text assertion can
 only confirm that a file says what it says.
 
-**Test tiers, adopted after a 77-minute campaign run answered nothing.**
-`DEFER_EXPIRE_HOURS` is 72 in-game hours and the run accumulated about eight, so
-it was structurally incapable of reaching the drop path it was started to
-investigate. Both bugs were provable in milliseconds. Tier 1 pure Lua for
+**Test tiers, adopted after a 77-minute campaign run could not reach the path it
+was started for.** `DEFER_EXPIRE_HOURS` is 72 in-game hours and the run
+accumulated about eight, so the expiry path was unreachable by construction. It
+is **not** true that the run produced nothing: it exercised case one, a reload,
+case two end to end, case three, the save sizes per stage, and the
+`active-limit` refusals with their stated reasons — and its record of one clue
+failing to reach a container across five neighbourhood moves is real evidence
+about placement. What it could not do was test expiry. Both bugs were provable in milliseconds. Tier 1 pure Lua for
 decisions and state machines; tier 2 mocked runtime for control flow — what gets
 called; tier 3 one short real-game check for one thing in a real world; tier 4
 the campaign, run rarely and only when 1–3 are green. Tier 4 needs an
@@ -187,8 +191,13 @@ nothing while appearing to run:
    no effect at all;
 4. a **hand-built WorldAccess stub** missing `identityScan`, for the same reason
    as (1).
-Recorded because every one of them was a *silent* pass-shaped failure, which is
-the failure mode that matters in a mocked integration test.
+Recorded because of what they have in common: each stopped the **intended path
+from running at all**, while the surrounding machinery carried on without error.
+They were **not false passes** — the final assertions exposed every one of them.
+The cost was diagnostic distance: the failure surfaced at the last assertion
+rather than at its cause, and (2) in particular produced no error and no log
+line, so the first reading was "the fix does not work" rather than "the
+scheduler never stepped".
 
 **Still open:** the original placement mismatch — a clue the record calls
 `placed` that is not in its container — remains separate and unreproduced. A
