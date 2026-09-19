@@ -2,7 +2,7 @@
 
 Prepared 19 September 2026 against `main` at `73e6b62`, build `DEV-0.44.0-addresses-that-travel`.
 
-**Status: Q01–Q26 confirmed. Detailed player settings are requested for work today. Implausible bulk discoveries in previously checked places need redesign. The maps/flyers brainstorm remains after the questionnaire, and vanilla-scene research remains last. Remaining choices await answers. This review builds a new wishlist and revisits all existing commitments.**
+**Status: Q01–Q27 confirmed. Story content requires agreement on premise, tone and boundaries before tested writing ships within that scope. Detailed player settings are requested for work today; implausible bulk discoveries need redesign. The maps/flyers brainstorm remains after the questionnaire, and vanilla-scene research remains last. Remaining choices await answers. This review builds a new wishlist and revisits all existing commitments.**
 
 **Confirmed scope:** version 1.0 enriches ordinary survival with investigations (Q01 A). A survivor-centered campaign (Q01 B) is a possible future option. All remaining recommendations must be considered within that boundary; campaign features are not implied 1.0 commitments.
 
@@ -481,7 +481,7 @@ Should the content freeze now stay, end, or be replaced by a different milestone
 
 **Suggested answer — not approved:** B — Agree the premise, tone and factual boundaries before a new story direction, then allow tested text within that scope to ship for owner review in play. Replace the ambiguous blanket freeze with the chosen milestone's explicit scope: content needed to prove it is allowed; unrelated expansion waits. Reason: this protects creative intent without requiring approval of every sentence. Timing: next milestone; this is a proposed amendment to the existing content workflow.
 
-**Owner decision:** _unanswered_
+**Owner decision — confirmed 19 September 2026:** B: agree the premise, tone and boundaries first, then publish tested writing within that scope. Individual text approval is not required within the agreed scope. The separate content-freeze question was not presented in chat and remains open; the recommendation's proposed freeze replacement is not adopted by inference. Recorded as DR-20260919-Q27 in `DECISIONS.md`.
 
 ### Q28 — What compatibility must the next release promise?
 
@@ -588,6 +588,7 @@ Copy one row for each answered question. Keep any uncertainty visible.
 | Q24 | B: fatalistic bureaucratic dark comedy throughout | New wishlist; timing open | DR-20260919-Q24; reaffirms P1-Q21/P2-Q59 tone | Representative writing reviewed in play | A proposed change to the overall tone |
 | Q25 | A: offline gameplay using authored content and local generation; owner reports very good results | Retain current approach | DR-20260919-Q25; supersedes runtime-AI expectation in P2-Q1/Q2 | Owner's positive play experience | Any proposal to introduce runtime AI |
 | Q26 | B: detailed individual settings with sensible defaults | Tackle today after questions and brainstorm | DR-20260919-Q26; broad configuration confirmed, world-creation-only rule still open | Inspect existing support; define and verify useful controls | Settings that rewrite established facts or change confirmed physical-device behavior |
+| Q27 | B: agree premise, tone and boundaries, then publish tested writing within scope | Content workflow | DR-20260919-Q27; qualifies P4-R97; separate P4-R107 freeze question open | Agreed story scope and tested content | New premises or content outside approved boundaries |
 
 Before implementation begins, check the answers together: travel guidance against survival freedom; answer-driven cases against a fixed underlying truth; physical device costs against accessibility; finite storage against promised campaign length; and new-game rules against a long personal campaign. Present conflicts for a decision instead of resolving them silently.
 
