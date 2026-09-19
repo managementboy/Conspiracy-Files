@@ -2,7 +2,7 @@
 
 Prepared 19 September 2026 against `main` at `73e6b62`, build `DEV-0.44.0-addresses-that-travel`.
 
-**Status: Q01–Q18 confirmed. Q07 now also includes vanilla burned-out houses and survivor houses. Remaining choices await answers. This review builds a new wishlist and revisits all existing commitments.**
+**Status: Q01–Q19 confirmed. The organiser remains primary; PC/CD-ROM investigation content is a future-version goal. Remaining choices await answers. This review builds a new wishlist and revisits all existing commitments.**
 
 **Confirmed scope:** version 1.0 enriches ordinary survival with investigations (Q01 A). A survivor-centered campaign (Q01 B) is a possible future option. All remaining recommendations must be considered within that boundary; campaign features are not implied 1.0 commitments.
 
@@ -358,7 +358,9 @@ Should a death recap be wanted now, later, or dropped? What may it reveal?
 
 **Suggested answer — not approved:** A — Keep the organiser as the main case-reading interface and retain ordinary readable physical evidence. Focus on legibility and navigation rather than rebuilding a second full interface. Reason: the device gives the mod a distinctive identity and is already substantially implemented. Timing: retain now; test during the next milestone.
 
-**Owner decision:** _unanswered_
+**Owner decision — confirmed 19 September 2026:** A: keep the organiser as the main investigation interface. In future versions, integrate a PC through an existing PC mod the owner recalls supporting booting and CD-ROM use. Provide mysterious CDs containing, for example, government software or spreadsheets that further immerse the player in investigations. Recorded as DR-20260919-Q19 in `DECISIONS.md`.
+
+**Future integration research:** identify the actual PC mod and verify supported game versions, media/content extension capabilities and dependency/distribution requirements. No specific mod or API is yet confirmed. Government software and spreadsheets are examples of in-game content; a full spreadsheet engine, organiser synchronisation and networking are not implied. This is future-version work, not an additional task ahead of today's explicitly ordered brainstorm and scene research.
 
 ### Q20 — Which costs of using the organiser improve the game?
 
@@ -566,6 +568,7 @@ Copy one row for each answered question. Keep any uncertainty visible.
 | Q16 | B: skills affect observations and understanding, alongside mystery selection and later requirements | New wishlist; detailed timing pending | DR-20260919-Q16; reaffirms skill-specific observations from P1-Q14; complements Q03/Q14 | Define supported observations, skill thresholds and verified game interfaces | A proposal that invents facts from expertise or assumes every required skill has a bypass |
 | Q17 | B: a new survivor must recover the predecessor's evidence or organiser to inherit the investigation | New wishlist; timing pending | DR-20260919-Q17; changes P4-R128 automatic access and original death-ending assumption | Test character knowledge, physical recovery and persistence; decide partial/full access and authorship | A proposal that grants automatic inherited knowledge or treats the predecessor's personal history as the new survivor's |
 | Q18 | B: full recent cases; older summaries, important connections and player notes retained; needed evidence remains available | New wishlist; timing pending | DR-20260919-Q18; revises archive requirements without reaffirming current numeric limits | Define recency and summary content, measure storage and verify Q17 access rules | A proposal that discards needed evidence/notes or confuses retention with automatic inheritance |
+| Q19 | A: organiser stays primary; future PC integration with mysterious CDs, such as government software or spreadsheets | Organiser: current direction; PC integration: future versions | DR-20260919-Q19; reaffirms P4-R79/R128 organiser direction and adds a future wishlist item | Identify PC mod; verify content APIs, game support and dependency model | Before assuming capabilities or making PC integration a 1.0 requirement |
 
 Before implementation begins, check the answers together: travel guidance against survival freedom; answer-driven cases against a fixed underlying truth; physical device costs against accessibility; finite storage against promised campaign length; and new-game rules against a long personal campaign. Present conflicts for a decision instead of resolving them silently.
 
