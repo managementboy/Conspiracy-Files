@@ -4,6 +4,12 @@ This file contains the **current** project decisions. The complete original disc
 
 If a spike disproves a decision, technical reality wins: supersede the decision explicitly and link the spike result.
 
+## Direction review — 2026-09-19
+
+**DR-20260919-Q01 — version 1.0 enriches ordinary survival; a personal campaign is a future option.** Owner, answering Q01 of the [direction questionnaire](docs/design/DIRECTION_REVIEW_2026-09-19.md): “a in version 1.0. b can be an option for the future”. Version 1.0 is an investigation layer that enriches ordinary survival. A survivor-centered campaign through connected investigations across Knox is a possible future option, not a committed follow-on release or a 1.0 acceptance requirement.
+
+This reaffirms the ordinary-survival focus of P1-Q2 and P2-Q208 and qualifies P1-Q1's broad product fantasy for version 1.0. It supersedes any reading of `CAMPAIGN_VISION.md` that makes its full personal campaign the required 1.0 destination. Existing case connections are not removed by this scope decision. Detailed choices about continuity, guidance and pacing remain open in the questionnaire. The assistant's prior Q01 recommendation of a campaign destination was not adopted.
+
 ## Product decisions
 
 | ID | Current decision | Rationale |

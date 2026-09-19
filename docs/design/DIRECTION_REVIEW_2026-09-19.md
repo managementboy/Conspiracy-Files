@@ -2,7 +2,9 @@
 
 Prepared 19 September 2026 against `main` at `73e6b62`, build `DEV-0.44.0-addresses-that-travel`.
 
-**Status: all 32 questions have assistant recommendations, requested by the owner. None is an approved owner decision.**
+**Status: Q01 confirmed by the owner; Q02–Q32 remain recommendations awaiting answers.**
+
+**Confirmed scope:** version 1.0 enriches ordinary survival with investigations (Q01 A). A survivor-centered campaign (Q01 B) is a possible future option. All remaining recommendations must be considered within that boundary; campaign features are not implied 1.0 commitments.
 
 The owner requested this review after returning to the Windows workspace: read the campaign vision, revisit the goals from the original design, and assess the developed mod so that old decisions are not silently treated as permanent requirements.
 
@@ -67,9 +69,9 @@ The Linux development PC is offline. This review uses source and archived eviden
 - B. A campaign about the survivor, built from connected investigations across Knox.
 - C. Both as explicitly separate modes, with a choice of which we finish first.
 
-**Suggested answer — not approved:** B — Make a survivor-centered campaign of connected investigations the destination, using the existing investigation loop as its foundation. Keep ordinary survival meaningful throughout. Reason: this gives the campaign vision a clear purpose and avoids supporting two divergent products immediately. Timing: confirm the destination now; build it in small playable steps.
+**Original assistant suggestion — not adopted:** B, a survivor-centered campaign as the destination.
 
-**Owner decision:** _unanswered_
+**Owner decision — confirmed 19 September 2026:** A for version 1.0: investigations that enrich ordinary survival. B may be an option for the future. This does not commit a campaign release or make its features requirements for 1.0. Recorded as DR-20260919-Q01 in `DECISIONS.md`.
 
 ### Q02 — Does the original “nothing is optional” promise still apply?
 
@@ -93,7 +95,7 @@ The Linux development PC is offline. This review uses source and archived eviden
 
 If A or B: what may the mod establish about the survivor without taking away their roleplay?
 
-**Suggested answer — not approved:** B — Make the missing-past opening an optional character background within the campaign, not a separate gameplay system. Limit it initially to a missing interval or unexplained arrival; do not overwrite the player's chosen profession, personality or entire life. Reason: a personal hook can be strong without forcing every survivor into the same biography. Timing: later, after one connected journey works.
+**Suggested answer — not approved, revised after Q01:** C for version 1.0: leave the survivor's past player-defined. Keep B, an optional missing-past opening, as a candidate only if a future campaign is chosen. Reason: ordinary-survival investigations do not require an imposed personal history. Timing: outside 1.0; future option, not a promise.
 
 **Owner decision:** _unanswered_
 
@@ -119,7 +121,7 @@ If A or B: what may the mod establish about the survivor without taking away the
 
 If B or C: should guidance be prose and landmarks, exact map destinations, or a player-selectable level?
 
-**Suggested answer — not approved:** B — Let the player request a new direction. A locally found clue can name a distant place using prose, landmarks and known addresses; exact marks should follow earned knowledge or the player's own annotation. Reason: travel becomes an intentional survival decision. Timing: next campaign prototype, with an explicit local fallback if the player declines.
+**Suggested answer — not approved, revised after Q01:** A for the 1.0 baseline: cases support the places the player chooses to visit. B, asking for a distant lead, is a possible later enhancement if the owner wants it; it need not become a campaign route. Reason: investigation should fit an ordinary survival run without requiring a directed journey. Timing: baseline for 1.0; optional distant guidance remains a separate choice.
 
 **Owner decision:** _unanswered_
 
@@ -471,7 +473,7 @@ Choose after Q01–Q30, not from momentum. These are candidates, not a preselect
 
 Write: **“The milestone is done when I can ___ in a normal Steam-delivered game, and we have observed ___.”** List at most three essential experiences and explicitly defer the rest.
 
-**Suggested answer — not approved:** B, with only the necessary A fixes — Prove two connected cases and one optional distant lead before adding a complete personal origin story, bases or crafting systems. Suggested finish line: 'In a normal Steam-delivered game I can discover a connection, choose to follow it to another place, and resume that thread after saving and returning; the evidence and my decisions remain understandable and consistent.' Reason: this tests the campaign's identity using the foundation already built. Timing: next milestone, conditional on your earlier answers.
+**Suggested answer — not approved, revised after Q01:** A — Consolidate the investigation layer for ordinary survival. Suggested finish line: 'In a normal Steam-delivered survival game I can notice and inspect clues, understand a meaningful connection, choose whether to pursue it, and resume after saving and returning; cases continue at a useful pace and the record remains coherent.' Reason: this tests the confirmed 1.0 identity using the systems already built. Personal origins, a deliberate campaign route, bases as campaign stages and crafting mastery are not required by Q01. Timing: next milestone, with its exact acceptance criteria still awaiting the remaining answers.
 
 **Owner decision:** _unanswered_
 
@@ -493,7 +495,7 @@ Copy one row for each answered question. Keep any uncertainty visible.
 
 | Question | Owner's confirmed wording | Next / later / outside | Older IDs kept, amended or retired | Evidence needed | Review trigger |
 |---|---|---|---|---|---|
-| — | No decisions confirmed yet | — | — | — | — |
+| Q01 | A for 1.0: investigations enriching ordinary survival; B may be a future option | A: 1.0; B: possible future | DR-20260919-Q01; reaffirms P1-Q2/P2-Q208; qualifies P1-Q1 and campaign-vision scope | Normal-survival playtest criteria to be decided in Q30–Q31 | Any proposal to require a personal campaign for 1.0 |
 
 Before implementation begins, check the answers together: travel guidance against survival freedom; answer-driven cases against a fixed underlying truth; physical device costs against accessibility; finite storage against promised campaign length; and new-game rules against a long personal campaign. Present conflicts for a decision instead of resolving them silently.
 
