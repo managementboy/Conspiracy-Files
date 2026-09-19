@@ -589,6 +589,49 @@ local P={
   dispute="Recorded as 'no longer connected' while three calls that week are logged as answered.",
   meaningAgree="Calls redirected on request, with a name for whoever took them, is a switchboard doing its work. The name is only what the operator was given to write.",
   meaning="A switchboard records what an operator was told to write. Both entries could be true of the same afternoon, which is exactly why neither settles it."}},
+
+-- THE PERSONAL OPENING (DR-20260919-BUILD-PAIR, DR-20260919-SITING).
+--
+-- Appended LAST on purpose. It is validated, listed and covered by
+-- test/premise_consistency.lua like any other, but `choose` draws only from the
+-- premises without an `opening` flag, so no existing seed tells a different
+-- story than it did - the premise is the seed's most significant choice, and
+-- moving those indices would rewrite every case ever generated.
+--
+-- {SELF} is the survivor's own name, passed in by the caller: the generator has
+-- no engine access and must not acquire any. Reached in the client through
+-- getDescriptor():getForename()/getSurname(), already used by CaseFile.lua and
+-- KnoxApps.lua, so this adds no new Build 42 assumption.
+--
+-- It obeys the two rules every premise obeys. Two honest readings - a number
+-- written down wrong, or one written down differently on purpose - and NOTHING
+-- IS WITNESSED: the register REPORTS a visit, which is not the same as a visit
+-- having happened (DR-20260919-OPENING-PAYOFF). No employer, no relative, no
+-- official visitor and no proven visit appears anywhere in it.
+{id="no-contact-at-premises",opening=true,reviewOptional=true,
+ title="No contact at premises",
+ -- Ordinary first, then the other. Neither is chosen (P4-R113, P4-R122).
+ readings={"A number written down wrong.","A number that was made wrong."},
+ subject="the collection",unknown="whether anyone came",
+ orgs={"Knox County Transport Office","Regional Collection Service","District Transfer Desk"},
+ claim={kind="dispatch",title="Collection slip / {CODE}",
+  found="A carbon slip folded twice, soft at the creases, the kind that is meant to be kept and never is.",
+  text="{ORG}\n{DATE1}\nRecord: {CODE}\nName: {SELF}\nCollection scheduled: {B}\nRETAIN THIS SLIP. Do not present it at the assembly point.\nEnquiries: after 0900, by telephone only.",
+  meaning="A collection was scheduled in this name, for that address. The address is not the one this was found at. That could be a number written down wrong, or a number written down differently on purpose; the slip settles neither, and the address on it is a real place to go and compare."},
+ response={kind="receipt",title="Collection register / {CODE}",
+  found="A register page carried on a clipboard, its top edge grubby where a thumb held it. One line is struck through in the same ink as the annotation beside it.",
+  text="{DATE2}\nRecord: {CODE}\nRound: {B} and adjoining\nEntry closed.",
+  agree="Attended as scheduled. Reference retained against the name.",
+  dispute="No contact at premises. Entry cancelled; no further attempt scheduled under this reference.",
+  meaningAgree="The register says the collection was attended and the reference kept. A register records what was entered, not what happened at a door, and an entry that agrees with a slip still does not put anyone at an address.",
+  meaning="The register reports the visit as unsuccessful and closes the entry. What is established is what the record SAYS: the annotation is unsigned, so who closed it and why are not on the paper, and the report is not itself proof that anyone went."},
+ review={kind="notepad",title="Round sheet / {CODE}",
+  found="A round sheet with the day's street names typed down one side and a pencil tick against most of them.",
+  text="{ORG}\n{DATE3}\nRecord: {CODE}\nStreet covered. Sheet held for the file.",
+  agree="The round is marked covered and the entry is closed to match. Both sheets say the same thing, which is what a file is for.",
+  dispute="The round is marked covered on a day an entry under this reference was closed for no contact. The sheet speaks for the street, not for a door.",
+  meaningAgree="A covered round and a closed entry agree on paper. Neither says which doors were knocked on.",
+  meaning="A round that covered the street, and an entry closed for no contact on it. The sheet corroborates that a round ran; it does not say this address was reached, and cannot stand in for the register."}},
 }
 
 -- Ordered ids. Callers must never rely on Lua table iteration order: the
@@ -662,9 +705,25 @@ end
 -- Deterministic premise choice. `random` must be the caller's seeded PRNG
 -- (Generator.rng), exactly as EvidenceRoles.choose requires, so the same seed
 -- always tells the same story.
+-- The premises an ordinary case may draw. An opening premise is never drawn at
+-- random: it is asked for by name, once, for the first case of a save. Built by
+-- filtering rather than by slicing, so appending another opening later cannot
+-- silently change what an ordinary seed picks.
+local CHOOSABLE={}
+for _,premise in ipairs(P) do if not premise.opening then CHOOSABLE[#CHOOSABLE+1]=premise end end
+
 function M.choose(random)
     if type(random)~="function" then return nil,"random generator required" end
-    return copy(P[random(#P)])
+    return copy(CHOOSABLE[random(#CHOOSABLE)])
 end
+-- How many an ordinary case may draw from. The test holds this at twenty, so
+-- adding an opening can never quietly widen the ordinary pool.
+function M.choosableCount() return #CHOOSABLE end
+-- The opening premise, by name rather than by chance.
+function M.opening()
+    for _,premise in ipairs(P) do if premise.opening then return copy(premise) end end
+    return nil,"no opening premise"
+end
+
 
 return M

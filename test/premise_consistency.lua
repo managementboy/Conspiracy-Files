@@ -224,6 +224,9 @@ for _, cal in ipairs(calendars) do
         map.CODE, map.P1, map.P2 = "R-123", "Marion Ellis", "Roy Hale"
         map.A, map.B = "Synthetic storage site 1", "Synthetic storage site 2"
         map.SUBJECT, map.UNKNOWN = premise.subject, premise.unknown
+        -- The opening premise names the survivor; without a SELF the placeholder
+        -- would simply be skipped and this test would never read that line.
+        map.SELF = "Ada Whitlock"
         map.ORG = render(premise.orgs[1], { A = map.A, B = map.B })
         local days, months = allowed(premise, map)
         for _, agreeing in ipairs({ true, false }) do
@@ -260,12 +263,21 @@ end
 -- Pass 2: real cases ----------------------------------------------------------------
 -- Every combination that can occur: premise x outline x review present/absent
 -- (absent only where the premise marks its review optional).
+-- ORDINARY PREMISES ONLY. The seed loop below generates ordinary cases, and the
+-- personal opening is deliberately undrawable from a seed - it is asked for by
+-- name for the first case of a save. Waiting for it here would spin to the
+-- 20,000-seed guard and fail. Its own renders are still checked above, where
+-- every premise in Premises.list() is walked; only the SEED-COVERAGE target
+-- excludes it. test/opening_premise.lua covers it through its own path,
+-- including that both readings occur.
 local wanted, seen = {}, {}
 for _, id in ipairs(Premises.list()) do
     local premise = Premises.get(id)
+    if not premise.opening then
     for _, outline in ipairs({ "corroboration", "conflicting-account" }) do
         wanted[#wanted + 1] = id .. "/" .. outline .. "/review"
         if premise.reviewOptional then wanted[#wanted + 1] = id .. "/" .. outline .. "/no-review" end
+    end
     end
 end
 local function covered()

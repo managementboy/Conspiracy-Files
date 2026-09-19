@@ -19,7 +19,16 @@ local Premises = require("ConspiracyFiles/Generated/Premises")
 local catalog = dofile("test/fixtures/synthetic_locations.lua")
 local opts = { mapId = "SYNTHETIC-MAP", buildLine = "TEST-ONLY", allowSynthetic = true }
 
-assert(Premises.count() == 20, "expected twenty premises, got " .. Premises.count())
+-- TWENTY IS THE ORDINARY POOL, not the file's length. The personal opening
+-- (DR-20260919-BUILD-PAIR) is a twenty-first premise that `choose` must never
+-- draw: it carries the survivor's own name and belongs to the first case of a
+-- save only. What this test has always cared about is how many stories an
+-- ordinary case can tell, so it asserts that directly now - and asserts the
+-- total separately, so a second opening cannot quietly widen the pool either.
+assert(Premises.choosableCount() == 20,
+    "expected twenty premises an ordinary case can draw, got " .. Premises.choosableCount())
+assert(Premises.count() == 21,
+    "expected twenty-one premises in total - twenty ordinary and the opening, got " .. Premises.count())
 
 -- The case reference must not give the premise away. The links between
 -- documents already carry the connection and the record sorts on them, so a
@@ -79,12 +88,22 @@ for seed = 1, 600 do
     end
 end
 
+-- REACHABILITY IS PER KIND. An ordinary premise must be reachable from ordinary
+-- seeds; the personal opening must NOT be - it is asked for by name, once, for
+-- the first case of a save, and a seed that could draw it would put the
+-- survivor's own name into an arbitrary later case. Both are checked, in the
+-- way each is meant to be reached.
 for _, id in ipairs(Premises.list()) do
+    if Premises.get(id).opening then
+        assert((seen[id] or 0) == 0,
+            "the opening premise " .. id .. " must be unreachable from ordinary seeds, but a seed drew it")
+    else
     assert((seen[id] or 0) > 0, "premise " .. id .. " is unreachable from any of 600 seeds")
     -- Both readings must occur. This is the whole design rule: the mod lays
     -- out paperwork that may or may not disagree, and never decides for you.
     assert(outlines[id]["corroboration"], "premise " .. id .. " never corroborates")
     assert(outlines[id]["conflicting-account"], "premise " .. id .. " never conflicts")
+    end
 end
 
 -- The three anchor carriers must all stay reachable: premises choose their own

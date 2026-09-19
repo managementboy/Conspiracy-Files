@@ -33,6 +33,14 @@ end
 -- is incomplete, and this stays inside the part of it the engine implements.
 local function subst(text,key,value)
     local token="{"..key.."}"
+    -- NO VALUE, NO SUBSTITUTION. A nil value used to be concatenated and threw
+    -- (Generator.lua:40) the moment SELF joined FIELDS, because a caller that
+    -- builds its own map - test/premise_consistency.lua does - has no SELF in
+    -- it. Leaving the text alone is the safe answer: the only premise that
+    -- mentions {SELF} is the opening, and the generator already refuses to build
+    -- an opening without a name, so a placeholder can never reach a document
+    -- through this path. test/opening_premise.lua asserts that directly.
+    if value==nil then return text end
     local out,at=nil,1
     while true do
         local s,e=string.find(text,token,at,true)
@@ -46,8 +54,13 @@ end
 -- The date fields are whole phrases ("June 14, 1993"), never a bare day spliced
 -- into "July {D1}, 1993": once cases cross a month end (P4-R108) only the
 -- calendar knows which month a day is in.
+-- SELF is the survivor's own name and is LAST, so the ordinary keys resolve
+-- exactly as they did. Only the opening premise mentions it; for every other
+-- case map.SELF is nil and subst leaves the text untouched. fill walks this
+-- list rather than the map's keys, which is why adding map.SELF alone rendered
+-- nothing - the placeholder stayed literal in the slip.
 local FIELDS={"CODE","ORG","P1","P2","A","B","DATE0","DATE1","DATE2","DATE3","DATE1CAPS","DATE2CAPS",
-    "DAYS12","PRIORMONTH","SINCE11","SUBJECT","UNKNOWN"}
+    "DAYS12","PRIORMONTH","SINCE11","SUBJECT","UNKNOWN","SELF"}
 local function fill(text,map)
     for _,key in ipairs(FIELDS) do text=subst(text,key,map[key]) end
     return text
@@ -287,12 +300,21 @@ G.INVENTED_NAMES={"Marion Ellis","Delia Mercer","Roy Hale","Joanne Voss",
 -- is byte-for-byte what it was before steering existed
 -- (test/fixtures/generator_unsteered_digest.lua), and the case's own
 -- agree/disagree outline is never touched, so nothing is confirmed or denied.
-local function build(seed,revision,sites,cast,relayMemo,steer)
+-- `opening` names the survivor for the personal opening premise and asks for
+-- that premise by name. Passed in rather than read from a closure: build is a
+-- file-local function and `options` belongs to generate.
+local function build(seed,revision,sites,cast,relayMemo,steer,opening)
     local random=rng(seed)
     -- The premise is drawn first, so it is the seed's most significant choice:
     -- what the case is ABOUT, before who is in it or how it resolves. See
     -- ConspiracyFiles/Generated/Premises.lua and docs/design/PREMISES.md.
-    local premise=Premises.choose(random)
+    local premise
+    if opening and opening.premise then
+        local why; premise,why=Premises.opening()
+        if not premise then return nil,why or "no opening premise" end
+    else
+        premise=Premises.choose(random)
+    end
     local outline=random(2)==1 and "corroboration" or "conflicting-account"
     local invented=G.INVENTED_NAMES
     -- People the player has ALREADY MET, if there are any. Owner, 2026-09-11:
@@ -348,6 +370,10 @@ local function build(seed,revision,sites,cast,relayMemo,steer)
     local map=G.dateFields(cal)
     map.CODE=code; map.ORG=organisation; map.P1=facts.sender; map.P2=facts.recipient
     map.A=a.name; map.B=b.name; map.SUBJECT=premise.subject; map.UNKNOWN=premise.unknown
+    -- The survivor's own name. Only the opening uses it; an ordinary premise
+    -- never mentions {SELF}, so the key is harmless when absent and a missing
+    -- one could not silently blank a document.
+    map.SELF=opening and opening.self or nil
     local function wasMet(name) for _,m in ipairs(met) do if m==name then return true end end return false end
     -- `met` marks a person whose body the player has already searched, so
     -- CasePerson does not name a SECOND zombie after someone already dead.
@@ -757,7 +783,13 @@ local function build(seed,revision,sites,cast,relayMemo,steer)
     return {schemaVersion=G.SCHEMA,generatorRevision=G.REVISION,catalogRevision=revision,seed=seed,
         caseId=prefix.."case",outline=outline,premiseId=premise.id,contentStatus="development-draft-unapproved",
         locations=copy(sites),cast=#met>0 and copy(met) or nil,facts=facts,identities=people,
-        organisation=org,documents=documents,relayMemo=relayMemo and true or nil,steer=steer and copy(steer) or nil}
+        organisation=org,documents=documents,relayMemo=relayMemo and true or nil,steer=steer and copy(steer) or nil,
+        -- RECORDED ON THE CASE, like relayMemo and steer, because G.validate
+        -- REBUILDS the case from its own record and compares. Without this the
+        -- rebuild would draw a premise from the seed instead of the opening, the
+        -- comparison would fail, and the opening case would be refused on every
+        -- reload - a save-breaking bug rather than a cosmetic one.
+        opening=opening and {premise=true,self=opening.self} or nil}
 end
 -- What the player has met, reduced to what a case may safely carry: plain
 -- two-word-or-more names, printable, bounded, deduplicated and ORDERED, since
@@ -819,7 +851,19 @@ function G.generate(catalog,seed,options)
     if not seedOK(seed) then return nil,"seed must be an integer from 1 through 2147483646" end
     options=options or {}
     if type(options)~="table" then return nil,"invalid generator options" end
-    for key in pairs(options) do if key~="mapId" and key~="buildLine" and key~="allowSynthetic" and key~="names" and key~="relayMemo" and key~="steer" then return nil,"unknown generator option" end end
+    for key in pairs(options) do if key~="mapId" and key~="buildLine" and key~="allowSynthetic" and key~="names" and key~="relayMemo" and key~="steer" and key~="opening" and key~="self" then return nil,"unknown generator option" end end
+    -- THE PERSONAL OPENING (DR-20260919-BUILD-PAIR). `opening` asks for the
+    -- opening premise by name instead of drawing one from the seed; `self` is
+    -- the survivor's own name, which the caller reads from the engine because
+    -- this file has no engine access and must not acquire any.
+    if options.opening~=nil and type(options.opening)~="boolean" then return nil,"invalid opening option" end
+    if options.self~=nil then
+        if type(options.self)~="string" or #options.self==0 or #options.self>60 then return nil,"invalid survivor name" end
+    end
+    -- An opening without a name would render "{SELF}" into the slip, and the
+    -- slip is the case's only personal anchor - the one finding with no
+    -- alternative. Refused outright rather than shipped blank.
+    if options.opening and not options.self then return nil,"the opening needs the survivor's name" end
     if type(options.mapId)~="string" or type(options.buildLine)~="string" then return nil,"map and build are required" end
     if options.relayMemo~=nil and type(options.relayMemo)~="boolean" then return nil,"invalid relay memo option" end
     local steer
@@ -834,7 +878,8 @@ function G.generate(catalog,seed,options)
     local random=rng((seed+4099)%2147483646+1)
     local selected=pairs[random(#pairs)]
     if random(2)==1 then selected={selected[2],selected[1]} end
-    local result=build(seed,catalog.revision,selected,G.castFrom(options.names),options.relayMemo==true,steer)
+    local result=build(seed,catalog.revision,selected,G.castFrom(options.names),options.relayMemo==true,steer,
+        options.opening and {premise=true,self=options.self} or nil)
     local valid,err=G.validate(result); if not valid then return nil,err end
     return copy(result)
 end
@@ -857,7 +902,8 @@ function G.generateSelected(catalog,seed,options,orderedSiteIds)
     local byId={}; for _,site in ipairs(eligible) do byId[site.id]=site end
     local a,b=byId[orderedSiteIds[1]],byId[orderedSiteIds[2]]
     if not a or not b or not Catalog.distinct(a,b) then return nil,"selected sites are not eligible and distinct" end
-    local result=build(seed,catalog.revision,{a,b},G.castFrom(options.names),options.relayMemo==true,steer); local valid,err=G.validate(result); if not valid then return nil,err end
+    local result=build(seed,catalog.revision,{a,b},G.castFrom(options.names),options.relayMemo==true,steer,
+        options.opening and {premise=true,self=options.self} or nil); local valid,err=G.validate(result); if not valid then return nil,err end
     return copy(result)
 end
 -- Gameplay-facing creation entry point. Legacy generate remains an offline fixture API.
@@ -891,6 +937,12 @@ function G.validate(case)
     if not valid then return false,err end
     if #case.locations~=2 then return false,"expected two locations" end
     if case.relayMemo~=nil and case.relayMemo~=true then return false,"invalid relay memo flag" end
+    if case.opening~=nil then
+        if type(case.opening)~="table" or case.opening.premise~=true then return false,"invalid opening flag" end
+        if type(case.opening.self)~="string" or #case.opening.self==0 or #case.opening.self>60 then
+            return false,"invalid opening survivor name"
+        end
+    end
     -- The relay memo takes no story role, so it is not counted against the
     -- role bounds; the rebuild below still proves it is exactly the one clue.
     -- Nor does the radio transcript of a case steered to "Listen for it" (P4-R123).
@@ -915,7 +967,7 @@ function G.validate(case)
         local canonical=G.steerFrom(case.steer)
         if not canonical or not same(canonical,case.steer) then return false,"invalid case steer" end
     end
-    if not same(case,build(case.seed,case.catalogRevision,case.locations,case.cast,case.relayMemo,case.steer)) then return false,"case facts, text or structure do not match recorded revision" end
+    if not same(case,build(case.seed,case.catalogRevision,case.locations,case.cast,case.relayMemo,case.steer,case.opening)) then return false,"case facts, text or structure do not match recorded revision" end
     return true
 end
 function G.restore(saved)
