@@ -2,7 +2,7 @@
 
 Prepared 19 September 2026 against `main` at `73e6b62`, build `DEV-0.44.0-addresses-that-travel`.
 
-**Status: Q01–Q07 confirmed by the owner; Q16 partially answered through Q03. Remaining choices await answers. This review builds a new wishlist and revisits all existing commitments.**
+**Status: Q01–Q08 confirmed by the owner; Q16 partially answered through Q03. Remaining choices await answers. This review builds a new wishlist and revisits all existing commitments.**
 
 **Confirmed scope:** version 1.0 enriches ordinary survival with investigations (Q01 A). A survivor-centered campaign (Q01 B) is a possible future option. All remaining recommendations must be considered within that boundary; campaign features are not implied 1.0 commitments.
 
@@ -177,7 +177,7 @@ Choose a primary reward and, optionally, a secondary one:
 
 **Suggested answer — not approved:** A primary, B secondary — Aim first for 'I worked something out', then reward following it with a useful or memorable destination. A changed personal story can grow from these later. Reason: collecting records alone is insufficient payoff. Timing: next milestone; ask the owner to describe the connection they understood and why the journey mattered.
 
-**Owner decision:** _unanswered_
+**Owner decision — confirmed 19 September 2026:** A and B: noticing a connection and working something out, and following it somewhere useful or memorable. No ranking was specified; the assistant's primary/secondary ordering is not adopted. This does not itself approve new loot rewards or guaranteed supplies. Recorded as DR-20260919-Q08 in `DECISIONS.md`.
 
 ### Q09 — How much should a hunch change the next case?
 
@@ -519,6 +519,7 @@ Copy one row for each answered question. Keep any uncertainty visible.
 | Q05 | A early, C later: begin around player exploration; later mysteries require travel | 1.0 direction; implementation sequence pending | DR-20260919-Q05; revises assistant's A-only baseline; qualifies Q01 without committing a full campaign | Transition, travel distances, destination selection and guidance to be decided | A proposal for a fixed route/threshold or to defer all required travel to a future campaign |
 | Q06 | B: recurring people, organisations and discoveries form a continuing web; the developed direction is supported | 1.0 direction | DR-20260919-Q06; reaffirms inter-case continuity in P4-R91/R96/R113 at product level; Q09 reviews steering details | Specific continuity and player-understanding checks to be chosen in Q30–Q31 | A proposal to make cases wholly independent or require a central chapter storyline |
 | Q07 | A: keep discovery loop; improve detection/prioritisation of game-placed indoor corpses and car wrecks after research | Research at the end of today's list, before development | DR-20260919-Q07; reaffirms P4-R132's experience; new research request | Verified corpse/wreck detection, provenance limits, storage/access and prioritisation options | Before implementing scene selection changes or substituting zombies for existing corpses |
+| Q08 | A and B: understanding a connection and reaching somewhere useful or memorable; no ranking specified | New wishlist; informs content and acceptance criteria | DR-20260919-Q08; renews the connection and destination player moments | Owner playtest can describe what was understood and why the destination mattered | A proposal that equates rewards solely with collecting records or assumes permission to spawn rewards |
 
 Before implementation begins, check the answers together: travel guidance against survival freedom; answer-driven cases against a fixed underlying truth; physical device costs against accessibility; finite storage against promised campaign length; and new-game rules against a long personal campaign. Present conflicts for a decision instead of resolving them silently.
 
