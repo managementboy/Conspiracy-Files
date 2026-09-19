@@ -190,7 +190,8 @@ function CFReloc.conditions()
                 add("destinations", okD and #dests or "THREW")
                 if px then
                     local okC, close = pcall(StaleClue.tooClose, px, py, pz, a.target)
-                    add("tooCloseToOld", okC and close or "THREW")
+                    if okC then add("tooCloseToOld", close)
+                    else add("tooCloseToOld", "THREW") end
                     -- proximity to the DESTINATION is a second, separate refusal
                     -- the runtime applies after choosing a site; approximated
                     -- here by the chosen site's own bounds corner, which is the
@@ -199,7 +200,8 @@ function CFReloc.conditions()
                         local b = dests[1].bounds
                         local okC2, close2 = pcall(StaleClue.tooClose, px, py, pz,
                             { x = b.x1, y = b.y1, z = b.z })
-                        add("tooCloseToDest~", okC2 and close2 or "THREW")
+                        if okC2 then add("tooCloseToDest~", close2)
+                        else add("tooCloseToDest~", "THREW") end
                     else
                         add("tooCloseToDest~", "no-dest")
                     end

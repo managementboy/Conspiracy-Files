@@ -20,5 +20,9 @@ for t in test/*.lua; do
         fail=$((fail + 1)); echo "FAIL $t"; echo "$out" | tail -5 | sed 's/^/    /'
     fi
 done
+if ! out="$(bash tools/autotest/checks/relocation_evidence_test.sh 2>&1)"; then
+    fail=$((fail + 1))
+fi
+echo "$out"
 echo "standalone: $n run, $fail failed (including specs)"
 [ "$fail" = 0 ]

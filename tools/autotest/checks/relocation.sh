@@ -33,6 +33,7 @@
 # (including: relocation never ran, which proves nothing either way).
 set -uo pipefail
 . "$(dirname "${BASH_SOURCE[0]}")/../lib.sh"
+. "$(dirname "${BASH_SOURCE[0]}")/relocation_evidence.sh"
 say() { echo "relocation: $*" >&2; }
 fails=(); fail() { fails+=("$*"); say "FAIL: $*"; }
 f() { cut -f"$1"; }
@@ -44,8 +45,13 @@ load_lua() {
     ev -f "$CHECKS/core_loop.lua" >/dev/null && ev -f "$CHECKS/placement.lua" >/dev/null \
         && ev -f "$CHECKS/relocation.lua" >/dev/null
 }
-reloc_log() { # the mod's own relocation trail since the run began
-    grep -a "CF-G2-RELOCATE\|relocation:" "${CONSOLE:-$HOME/Zomboid/console.txt}" 2>/dev/null | tail -40
+CONSOLE_PATH="${CONSOLE:-$HOME/Zomboid/console.txt}"
+reloc_log_since_mark() { # authoritative: all relocation records after the pre-scheduler checkpoint
+    [ -r "$CONSOLE_PATH" ] || return 0
+    tail -c "+$((reloc_log_mark + 1))" "$CONSOLE_PATH" 2>/dev/null | grep -a "CF-G2-RELOCATE\|relocation:" || true
+}
+reloc_log_display() { # display is deliberately bounded; verdict evidence is not
+    reloc_log_since_mark | tail -40
 }
 
 start_cold || { say "the world would not start"; exit 2; }
@@ -76,6 +82,10 @@ say "conditions before advancing:"
 ev 'return CFReloc.conditions()' | sed 's/^/    /' >&2
 
 # --- 2. advance the clock ---------------------------------------------------
+# Start the evidence window BEFORE advancing: scheduler ticks may happen
+# between the advance evaluation and the following conditions evaluation.
+reloc_log_mark=0
+[ -r "$CONSOLE_PATH" ] && reloc_log_mark="$(wc -c < "$CONSOLE_PATH")"
 adv="$(ev 'return CFReloc.advance(96)')"
 say "advance: before=$(f 1 <<<"$adv") after=$(f 2 <<<"$adv") requested=$(f 3 <<<"$adv")h nights=+$(f 4 <<<"$adv") enough=$(f 5 <<<"$adv")"
 [ "$(f 5 <<<"$adv")" = true ] || { fail "the clock did not advance far enough"; }
@@ -92,25 +102,30 @@ say "letting the scheduler run"
 for _ in $(seq 24); do sleep 5; done
 
 say "relocation trail from the mod's own log:"
-reloc_log | sed 's/^/    /' >&2
+reloc_log_display | sed 's/^/    /' >&2
 # A REFUSAL IS NOT A RELOCATION. `attempts` counted every CF-G2-RELOCATE line -
 # including "no unvisited candidate", "no loaded container at destination",
 # "guard refused" and "destination changed" - so a run where nothing moved could
 # still report relocation as having happened and exit 0 saying "no mismatch
 # after relocation". Only a reported MOVE counts as the experiment occurring.
-lines="$(reloc_log | grep -c "CF-G2-RELOCATE" || true)"
-moved="$(reloc_log | grep -c "relocated " || true)"
-refusals="$(reloc_log | grep -cE "leaving in place|guard refused|marked unknown" || true)"
+reloc_records="$(reloc_log_since_mark)"
+lines="$(grep -c "CF-G2-RELOCATE" <<<"$reloc_records" || true)"
+moved_ids="$(relocation_evidence_moved_ids <<<"$reloc_records")"
+moved="$(grep -c . <<<"$moved_ids" || true)"
+refusals="$(grep -cE "leaving in place|guard refused|marked unknown" <<<"$reloc_records" || true)"
 say "log: $lines relocation line(s) - $moved MOVE(s), $refusals refusal(s)"
 if [ "$refusals" -gt 0 ]; then
     say "refusal reasons seen:"
-    reloc_log | grep -E "leaving in place|guard refused|marked unknown" \
+    grep -E "leaving in place|guard refused|marked unknown" <<<"$reloc_records" \
         | sed 's/.*CF-G2-RELOCATE\] /    /' | sort | uniq -c | sed 's/^/    /' >&2
 fi
 
 # --- 4. compare record against world, immediately ---------------------------
 say "comparing record against world, per clue:"
 ids="$(ev 'return CFReloc.captured()')"
+relocation_evidence_reset
+for id in $ids; do relocation_evidence_baseline "$id"; done
+for id in $moved_ids; do relocation_evidence_moved "$id"; done
 mismatch=0; compared=0; noverdict=0
 for id in $ids; do
     ev "return CFReloc.teleportTo('$id')" >/dev/null
@@ -122,13 +137,15 @@ for id in $ids; do
     # Only these two are real comparisons. unloaded, read-error, in-hand and
     # skipped are NOT, and used to leave the success condition untouched - so a
     # run that compared nothing could still pass.
-    if grep -q "verdict=DISCREPANCY" <<<"$line"; then
+    verdict="$(relocation_evidence_verdict "$line")"
+    if [ "$verdict" = DISCREPANCY ]; then
         mismatch=$((mismatch+1)); compared=$((compared+1))
-    elif grep -q "verdict=none" <<<"$line"; then
+    elif [ "$verdict" = none ]; then
         compared=$((compared+1))
     else
         noverdict=$((noverdict+1))
     fi
+    relocation_evidence_comparison before "$id" "$line"
 done
 say "before reload: $compared real comparison(s), $mismatch mismatch(es), $noverdict without a verdict"
 
@@ -155,13 +172,15 @@ for id in $ids; do
     sleep 2
     line="$(ev "return CFReloc.compare('$id')")"
     echo "    $line" >&2
-    if grep -q "verdict=DISCREPANCY" <<<"$line"; then
+    verdict="$(relocation_evidence_verdict "$line")"
+    if [ "$verdict" = DISCREPANCY ]; then
         mismatch_after=$((mismatch_after+1)); compared_after=$((compared_after+1))
-    elif grep -q "verdict=none" <<<"$line"; then
+    elif [ "$verdict" = none ]; then
         compared_after=$((compared_after+1))
     else
         noverdict_after=$((noverdict_after+1))
     fi
+    relocation_evidence_comparison after "$id" "$line"
 done
 say "after reload: $compared_after real comparison(s), $mismatch_after mismatch(es), $noverdict_after without a verdict"
 
@@ -184,13 +203,9 @@ if [ "$mismatch" -gt 0 ] || [ "$mismatch_after" -gt 0 ]; then
 fi
 if [ "${#fails[@]}" -gt 0 ]; then exit 1; fi
 # THREE SEPARATE WAYS THIS RUN CAN FAIL TO BE AN EXPERIMENT AT ALL.
-if [ "$moved" = 0 ]; then
-    say "INCONCLUSIVE: nothing was relocated, so this says nothing about the fault."
-    say "Refusals are not relocations - the reasons above say which condition withheld it."
-    exit 2
-fi
-if [ "$compared" -eq 0 ] && [ "$compared_after" -eq 0 ]; then
-    say "INCONCLUSIVE: relocation ran but not one clue could actually be compared."
+if ! relocation_evidence_complete; then
+    say "INCONCLUSIVE: complete evidence is required for every moved clue:"
+    for issue in "${RELOC_EVIDENCE_ISSUES[@]}"; do say "  $issue"; done
     exit 2
 fi
 say "Relocation ran ($moved move(s)) and no mismatch was found:"

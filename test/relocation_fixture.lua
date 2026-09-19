@@ -142,6 +142,23 @@ end
 assert(conds:find("visitedKnown=yes",1,true) or conds:find("visitedKnown=THREW",1,true),
     "the visited lookup is reported either way")
 
+-- A successful false guard is different from a failed guard. Exercise both
+-- proximity reads, including the destination estimate, with all three outcomes.
+local staleClue=require("ConspiracyFiles/StaleClue")
+local realTooClose=staleClue.tooClose
+for _,expected in ipairs({"false","true","THREW"}) do
+    staleClue.tooClose=function()
+        if expected=="THREW" then error("injected proximity failure") end
+        return expected=="true"
+    end
+    local reported=CFReloc.conditions()
+    assert(reported:find("tooCloseToOld="..expected,1,true),
+        "old-target proximity preserves "..expected..": "..reported)
+    assert(reported:find("tooCloseToDest~="..expected,1,true),
+        "destination estimate preserves "..expected..": "..reported)
+end
+staleClue.tooClose=realTooClose
+
 -- An unreadable count must read as unknown, never as a satisfied guard.
 package.loaded["ConspiracyFiles/WorldAccess"].count=function() error("injected count failure") end
 local condsBad=CFReloc.conditions()
@@ -179,9 +196,15 @@ assert(not readErr:find("verdict=none",1,true),"and is NEVER a clean comparison 
 CFPlace.resolver=function() return containerWith({token}) end
 local before=CFReloc.compare(id)
 assert(before:find("recordMoved=false",1,true),"an unmoved record says so: "..before)
-assert(api.relocate(id,{x=999,y=999,z=0,objectIndex=0,containerIndex=0,
-    containerType=case.locations[1].containerTypes[1],sprite="s"},200)
-    or true,"the record may or may not accept this target; the delta is what matters")
+local destination=case.locations[2]
+assert(destination,"the generated fixture has a second valid site")
+local relocated,why=api.relocate(id,{x=destination.bounds.x1,y=destination.bounds.y1,
+    z=destination.bounds.z,objectIndex=7,containerIndex=0,
+    containerType=destination.containerTypes[1],sprite="s"},200)
+assert(relocated,"the valid relocation must succeed: "..tostring(why))
+local moved=CFReloc.compare(id)
+assert(moved:find("recordMoved=true",1,true),"the changed target is reported: "..moved)
+assert(moved:find("relocations=0->1",1,true),"the actual relocation is counted: "..moved)
 print("PASS relocation fixture: compare hands back the guarded verdict, and a read error is neither result")
 
 package.loaded["ConspiracyFiles/WorldAccess"].resolve=realWorldResolve
