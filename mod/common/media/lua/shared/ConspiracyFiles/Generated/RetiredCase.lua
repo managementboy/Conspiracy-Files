@@ -196,7 +196,13 @@ local function stubOK(root)
     if not fields(root,STUB_FIELDS) or root.schema~=M.STUB_SCHEMA then return false,"invalid archived case" end
     if not text(root.caseId) then return false,"invalid archived case" end
     local ok,n=dense(root.known,G.MAX_EVIDENCE+1); if not ok then return false,"invalid archived known" end
-    if n<G.MIN_EVIDENCE then return false,"invalid archived known" end
+    -- Same for the deep archive, and for the same reason: a stub of a case that
+    -- ended without clues has fewer known ids, and refusing it would strand the
+    -- case one tier further down.
+    if n<G.MIN_EVIDENCE then
+        if root.completion~=Session.WITH_GAPS then return false,"invalid archived known" end
+        if #(root.gaps or {})<G.MIN_EVIDENCE-n then return false,"invalid archived known" end
+    end
     local seen={}
     for i=1,n do
         local id=root.known[i]
@@ -225,7 +231,20 @@ function M.validate(root)
     -- "0 of 8 last seen" of 2026-09-14 was the same fault).
     if not completionOK(root) then return false,"invalid retired completion" end
     local ok,n=dense(root.rows,G.MAX_EVIDENCE+1); if not ok then return false,"invalid retired rows" end
-    if n<G.MIN_EVIDENCE then return false,"invalid retired rows" end
+    -- A CASE THAT ENDED WITHOUT CLUES MAY RETIRE WITH FEWER ROWS, INCLUDING
+    -- NONE. The blunt minimum here was the last link in the stall: the drop
+    -- paths now re-check retirement (P4-R142), retirement was reached, and then
+    -- refused with "invalid retired rows" because dropped clues project no row.
+    -- The case kept its active slot anyway, which is the whole fault.
+    -- Verified by the owner against a one-container fixture:
+    --   known=1 valid=true accounted=true retired=nil reason=invalid retired rows
+    -- The minimum is not dropped, it is EXPLAINED: a short case must carry the
+    -- gaps that account for the shortfall, so no record can be short for any
+    -- other reason.
+    if n<G.MIN_EVIDENCE then
+        if root.completion~=Session.WITH_GAPS then return false,"invalid retired rows" end
+        if #(root.gaps or {})<G.MIN_EVIDENCE-n then return false,"invalid retired rows" end
+    end
     local ids={}
     for i=1,n do
         local row=root.rows[i]

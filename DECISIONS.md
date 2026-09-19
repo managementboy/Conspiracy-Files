@@ -112,6 +112,64 @@ unremarkable alone and together establish what neither claims, which is the
 shape worth proving in a pair. Open and unanswered: why entries were closed with
 no round behind them, and on whose authority.
 
+## The progression stall, in two parts — 2026-09-19 (late)
+
+**P4-R142 — a case completed by a drop now retires, and the drop paths check.**
+`Session.accounted` was consulted in exactly one place, the inspection path.
+Both drop paths — a deferred clue that waited three in-game days, and a clue
+whose carrier is gone — dropped the clue and never re-checked. So a survivor who
+inspected everything available and whose last clue later expired left a case
+that **was** accounted for with nothing that would ever look again: it held an
+active slot for the rest of the save, and no ladder rung can free a slot a
+finished case still holds. `retireIfAccounted` is now called from both paths.
+Three faults in the fix itself were caught by tests, not by me: a forward
+reference (called before its `local` declaration, which in Lua reaches a nil
+global — caught by `local_before_use`), a missing nil-wrapper guard that threw
+`ipairs(nil)` inside a scheduler job, and gap **history** as well as gap ids
+needing to survive retirement.
+
+**P4-R143 — a short case may retire when its gaps explain the shortfall.**
+The second half of the stall, found by the owner reproducing it against a
+one-container fixture: `known=1 valid=true accounted=true retired=nil
+reason=invalid retired rows`. A dropped clue projects no row, and both archive
+tiers required at least `MIN_EVIDENCE` rows, so P4-R142 reached retirement and
+retirement **refused** — the slot stayed held. The minimum is now **explained
+rather than removed**: a case with fewer rows must carry gaps accounting for the
+shortfall, so a short record cannot be short for any other reason. A short case
+with no gaps is still refused. Same rule for the deep archive's `known`, or a
+case would be stranded one tier down.
+
+**Verified:** the owner's reproduction now gives `retired=ok rows=1 gaps=3` and
+deep-archives. `test/retire_frees_slot.lua` drives the real runtime with a saved
+campaign and asserts the live count falls to zero, read back from the store
+rather than from the test's own variable.
+
+**An existing test was pinning the carrier-timer bug in place.**
+`clues_on_the_move` asserted the literal buggy expression
+`api.missing(d.id,found and nil or hours)` under the message "and the hour is
+cleared the moment the carrier turns up again" — asserting the bug while
+describing the fix, so anyone correcting the code would have been told they broke
+a test. Replaced. The first replacement then asserted the idiom was *absent* and
+matched the comment explaining it; dropped, because absence of a string is not a
+behaviour. The lesson is recorded because it recurs: a source-text assertion can
+only confirm that a file says what it says.
+
+**Test tiers, adopted after a 77-minute campaign run answered nothing.**
+`DEFER_EXPIRE_HOURS` is 72 in-game hours and the run accumulated about eight, so
+it was structurally incapable of reaching the drop path it was started to
+investigate. Both bugs were provable in milliseconds. Tier 1 pure Lua for
+decisions and state machines; tier 2 mocked runtime for control flow — what gets
+called; tier 3 one short real-game check for one thing in a real world; tier 4
+the campaign, run rarely and only when 1–3 are green. Tier 4 needs an
+**injectable clock** before it can reach any expiry path at all, and should
+**abort on first failure** — this run continued past four failures producing
+text that was then over-read.
+
+**Still open:** the whole sequence in a running game (inspect everything, wait
+out three in-game days, watch the slot free) is untested and needs the
+injectable clock. The original placement mismatch — a clue the record calls
+`placed` that is not in its container — remains separate and unreproduced.
+
 ## The opening premise narrowed — 2026-09-19 (late)
 
 **DR-20260919-OPENING-QUESTION — the opening answers "why was I left?", not
