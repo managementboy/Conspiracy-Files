@@ -1,5 +1,10 @@
 # Conspiracy-Files — Project State
 
+## Current direction — 2026-09-19
+
+Start with the [Linux handover](docs/management/LINUX_HANDOVER_2026-09-19.md). The completed September 19 direction review in DECISIONS.md governs current product scope; conflicting earlier commitments below are historical. Unreviewed commitments remain pending. The current source baseline is DEV-0.44.0-addresses-that-travel; occupation/media integration is planned, not implemented or live-verified. Next work is on Linux: personal opening, then survival connections, then loop improvements. Runtime AI and the old hunch system are not current product goals; existing code may still contain superseded behavior.
+
+
 Status: **generated G2 playable loop and core found-clue map markers have owner-observed live passes (2026-09-06)**. Dynamic generation and automatic location selection remain the destination (P4-R53); the installed development runtime is still one case per save. Offline expansion work is not yet live acceptance or a production release.
 Target: Project Zomboid Build 42; T1/T2/T3/T4/T5/T7/T8/T9/T10 verified stable Build **42.20.4**, revision **b0bbce05d5**, Steam build ID **24909800**, with the limitations recorded in their reports. Other capability claims remain subject to their named spikes/research.
 

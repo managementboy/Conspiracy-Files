@@ -2,14 +2,14 @@
 
 A Project Zomboid Build 42 investigation/conspiracy module.
 
-**Current phase:** engineering de-risk and v0.1 definition. The project deliberately moved from a broad first-draft specification to a small vertical slice after lead-developer review.
+**Current phase (2026-09-19):** playable development baseline DEV-0.44.0-addresses-that-travel; revised direction and occupation/media integration planning ready for Linux. Start with the [Linux handover](docs/management/LINUX_HANDOVER_2026-09-19.md).
 
 ## Start here
 
 1. [`PROJECT_STATE.md`](PROJECT_STATE.md) — current state and immediate gates.
 2. [`ROADMAP.md`](ROADMAP.md) — v0.1/v1/v2 scope.
 3. [`DECISIONS.md`](DECISIONS.md) — **current authoritative decision index**.
-4. [`DECISIONS_BASELINE.md`](DECISIONS_BASELINE.md) — complete original 207-question discovery record.
+4. [`DECISIONS_BASELINE.md`](DECISIONS_BASELINE.md) — historical discovery record.
 5. [`DECISIONS_SUPERSESSIONS_2026-08-30.md`](DECISIONS_SUPERSESSIONS_2026-08-30.md) — engineering-review correction trail.
 6. [`docs/architecture/ARCHITECTURE_V0.2.md`](docs/architecture/ARCHITECTURE_V0.2.md) — current architecture.
 7. [`docs/research/`](docs/research/) — Build 42 probe results; observed technical facts override assumptions.
@@ -21,9 +21,9 @@ A Project Zomboid Build 42 investigation/conspiracy module.
 - Vanilla Lua first; narrow Java/ZombieBuddy boundary only if proven necessary.
 - One canonical domain model; UI is a projection.
 - Immutable evidence facts, mutable interpretation.
-- No-AI is the primary experience; AI is optional enhancement and development-time authoring assistance.
-- Journal + evidence list are the primary v1 interface; graph is v2.
-- Content comes before generic pack schema: build one real thread first.
+- Offline authored content and local generation are the gameplay direction; development-time AI is separate.
+- Organiser plus physical evidence are primary; meaningful map connections and a separate relationship graph are later work.
+- Personal opening comes next, followed by survival connections and loop improvements.
 
 ## Repository
 
@@ -36,7 +36,7 @@ A Project Zomboid Build 42 investigation/conspiracy module.
 - [`docs/reference/pzwiki/`](docs/reference/pzwiki/README.md) — offline PZwiki modding references, examples, and category indexes for development; external context, not a replacement for verified project research.
 - [`docs/reference/pz-api/`](docs/reference/pz-api/README.md) — offline Build 42.20.4 API and script definitions, examples, mapping data, translations, and XML references.
 - `test/fixtures/` — hand-authored content fixtures before schemas.
-- `mod/` — future loadable mod.
-- `tools/` — future validators/build helpers.
+- `mod/` — loadable mod source.
+- `tools/` — validators, build helpers and research tools.
 
 No production feature code should be built on an unverified Build 42 assumption when a listed spike can answer it first.

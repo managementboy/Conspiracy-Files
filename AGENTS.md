@@ -1,5 +1,10 @@
 # Conspiracy-Files — Agent / Codex Instructions
 
+## Current direction — 2026-09-19
+
+Start with the [Linux handover](docs/management/LINUX_HANDOVER_2026-09-19.md). The completed September 19 direction review in DECISIONS.md governs current product scope; conflicting earlier commitments below are historical. Unreviewed commitments remain pending. The current source baseline is DEV-0.44.0-addresses-that-travel; occupation/media integration is planned, not implemented or live-verified. Next work is on Linux: personal opening, then survival connections, then loop improvements. Runtime AI and the old hunch system are not current product goals; existing code may still contain superseded behavior.
+
+
 ## Token budget — owner instruction, 2026-09-05
 
 Conserve the shared weekly Codex allowance. Apply this to project management and implementation, not just response length.

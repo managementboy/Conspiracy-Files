@@ -1,5 +1,8 @@
 # The campaign — where this is actually going
 
+> September 19 review: a full survivor campaign is a future possibility. Version 1.0 enriches ordinary survival. Read the [current handover](../management/LINUX_HANDOVER_2026-09-19.md) before treating this historical vision as committed scope.
+
+
 Owner statement, 2026-09-08. Recorded because it reframes the roadmap: what the
 project currently calls "the product" is, in the owner's words, **"just a
 module of what we want to achieve"**.
