@@ -1,0 +1,10 @@
+Linux boot check 20260919T224515: PASS
+source: 420b098
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+mod version / game version / player alive: DEV-0.44.0-addresses-that-travel	42.20.4 b0bbce05d5	true
+game loading took 62 seconds; soaked 60s
+mod files loaded: 106 of 106
+survivor's evidence album: evidence album opened in the inventory panel after 0 ticks
+errors inside the mod: 0
+mod warnings/errors logged by the mod itself: 0
+screenshot: dev/eval/linux/runs/20260919T224515.png (not committed)
