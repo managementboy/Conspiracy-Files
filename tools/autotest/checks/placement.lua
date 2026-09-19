@@ -169,6 +169,27 @@ function CFPlace.targetLoaded(t)
     return cell:getGridSquare(t.x, t.y, t.z) ~= nil
 end
 
+-- COVERAGE. A diagnostic that performed NO container comparison must not be
+-- able to report "no discrepancy": no ids, or every clue unloaded or skipped,
+-- would otherwise end a clean run having looked at nothing. The shell reads
+-- these and calls that inconclusive. Counted here rather than in the shell so
+-- test/placement_fixture.lua can hold the counting.
+CFPlace.coverageCounts={compared=0,unloaded=0,inhand=0,skipped=0,missing=0}
+function CFPlace.resetCoverage()
+    CFPlace.coverageCounts={compared=0,unloaded=0,inhand=0,skipped=0,missing=0}
+    return "ok"
+end
+local function count(kind)
+    local c=CFPlace.coverageCounts
+    c[kind]=(c[kind] or 0)+1
+end
+-- compared: we actually resolved the container and compared its contents. This
+-- is the only number that makes a clean result mean anything.
+function CFPlace.coverage()
+    local c=CFPlace.coverageCounts
+    return table.concat({c.compared,c.unloaded,c.inhand,c.skipped,c.missing},"\t")
+end
+
 local function targetWords(t)
     if not t then return "target=none" end
     return string.format("target=%s,%s,%s object=%s container=%s type=%s sprite=%s%s",
@@ -208,11 +229,17 @@ local function dump(root, id, a, why)
         end
     end
     -- 3. where the item actually is: wider than the mod looks, and the bags
+    -- EVERY world read below is guarded. A dump that throws loses the capture
+    -- it exists to preserve, and these walk engine objects whose shape varies
+    -- with what the cell happens to hold.
     local token = a and a.physicalToken
     if token and t then
-        add("nearby=" .. tostring(tokenNear(t.x, t.y, t.z, 8, token) or "not found within 8 tiles"))
+        local ok, near = pcall(tokenNear, t.x, t.y, t.z, 8, token)
+        add("nearby=" .. (ok and tostring(near or "not found within 8 tiles")
+                             or ("SEARCH THREW " .. tostring(near))))
     end
-    add("onPlayer=" .. tostring(token and inPlayer(token) or "no"))
+    local okP, onP = pcall(inPlayer, token)
+    add("onPlayer=" .. (okP and tostring(onP or "no") or ("THREW " .. tostring(onP))))
     -- 4. the last sighting and the runtime's own state
     local R = ConspiracyFiles and ConspiracyFiles.GeneratedRuntime
     if R and R.whereabouts then
@@ -247,20 +274,27 @@ function CFPlace.verify(id)
         if a then
             local c = category(a)
             if c ~= "placed" or a.status ~= "placed" then
+                count("skipped")
                 return "skipped\t" .. c .. "\t" .. tostring(a.status)
             end
             if not CFPlace.targetLoaded(a.target) then
+                count("unloaded")
                 return "unloaded\t" .. targetWords(a.target)
             end
             local token = a.physicalToken
-            if token and inPlayer(token) then
-                return "in-hand\t" .. tostring(inPlayer(token))
+            local okHand, hand = pcall(inPlayer, token)
+            if okHand and hand then
+                count("inhand")
+                return "in-hand\t" .. tostring(hand)
             end
             local ok, container = pcall(World.resolve, a.target, token)
+            -- From here a real comparison happened, whichever way it went.
+            count("compared")
             if ok and container and inContainer(container, token) then return "none" end
             return "DISCREPANCY\n" .. dump(root, id, a, "placed but not in its container")
         end
     end
+    count("missing")
     return "no-assignment\t" .. tostring(id)
 end
 
@@ -280,12 +314,22 @@ function CFPlace.recheck(id)
     for _, root in ipairs(roots()) do
         local a = root.assignments[id]
         if a then
+            -- CLASSIFY FIRST. Without this a clue that is now pending,
+            -- relocating or deferred came back "absent" - reported as the fault
+            -- persisting when in fact the record had legitimately changed.
+            -- A changed state is its own answer and never a mismatch.
+            local c = category(a)
+            if c ~= "placed" or a.status ~= "placed" then
+                return "changed\t" .. c .. "\t" .. tostring(a.status)
+                       .. "\n" .. dump(root, id, a, "after reload, no longer a placed clue")
+            end
             local token = a.physicalToken
             if not CFPlace.targetLoaded(a.target) then
                 return "unloaded\t" .. targetWords(a.target) .. "\n" .. dump(root, id, a, "after reload, square not loaded")
             end
-            if token and inPlayer(token) then
-                return "in-hand\t" .. tostring(inPlayer(token)) .. "\n" .. dump(root, id, a, "after reload, in hand")
+            local okHand, hand = pcall(inPlayer, token)
+            if okHand and hand then
+                return "in-hand\t" .. tostring(hand) .. "\n" .. dump(root, id, a, "after reload, in hand")
             end
             local ok, container = pcall(World.resolve, a.target, token)
             if ok and container and inContainer(container, token) then

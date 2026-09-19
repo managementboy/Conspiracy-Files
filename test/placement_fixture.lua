@@ -119,7 +119,7 @@ assert(CFPlace.targetLoaded(nil)==false,"no target means not loaded")
 
 -- A cell that knows one square: that square is loaded, its neighbour is not.
 getCell=function() return {getGridSquare=function(_,x,y,z)
-    if x==10 and y==20 and z==0 then return {} end
+    if x==10 and y==20 and z==0 then return {getObjects=function() return {size=function() return 0 end,get=function() return nil end} end} end
     return nil
 end} end
 assert(CFPlace.targetLoaded({x=10,y=20,z=0})==true,"the loaded square is loaded")
@@ -152,3 +152,87 @@ if other then
         "a clue that is not placed is skipped or unloaded, not a discrepancy: "..skipped)
 end
 print("PASS placement fixture: an unloaded target and an unknown id both give no verdict")
+
+-- ---------------------------------------------------------------------------
+-- 4. COVERAGE: a clean result means nothing without a comparison ----------
+-- ---------------------------------------------------------------------------
+-- The shell used to reach "no discrepancy" and exit 0 with no ids, or with
+-- every clue unloaded or skipped - a diagnostic clearing a world it never
+-- examined. It now reads these counters and calls that inconclusive, so the
+-- counters are what must be right.
+assert(type(CFPlace.coverage)=="function" and type(CFPlace.resetCoverage)=="function",
+    "coverage is counted and resettable")
+CFPlace.resetCoverage()
+local function cov() 
+    local c={}
+    for n in CFPlace.coverage():gmatch("[^\t]+") do c[#c+1]=tonumber(n) end
+    return {compared=c[1],unloaded=c[2],inhand=c[3],skipped=c[4],missing=c[5]}
+end
+local zero=cov()
+assert(zero.compared==0 and zero.unloaded==0,"a fresh reset counts nothing")
+
+-- An unloaded target counts as unloaded and NEVER as a comparison.
+getCell=function() return {getGridSquare=function() return nil end} end
+CFPlace.verify(id)
+local afterUnloaded=cov()
+assert(afterUnloaded.unloaded==1,"an unloaded target is counted as unloaded")
+assert(afterUnloaded.compared==0,
+    "and is NOT a comparison - this is the whole point: no comparison, no clean result")
+
+-- An unknown id counts as missing, not as a comparison.
+CFPlace.verify("no-such-clue")
+assert(cov().missing==1 and cov().compared==0,"an unknown id is counted, and is not a comparison")
+
+-- A clue that is not placed counts as skipped, not as a comparison.
+CFPlace.resetCoverage()
+local pendingId=case.documents[2] and case.documents[2].id
+if pendingId then
+    CFPlace.verify(pendingId)
+    local c=cov()
+    assert(c.compared==0,"a clue that is not placed is never a comparison")
+    assert(c.skipped+c.unloaded==1,"it is counted as skipped or unloaded")
+end
+
+-- And a REAL comparison counts. The square is loaded and the container simply
+-- does not hold our token, which is the discrepancy branch.
+CFPlace.resetCoverage()
+-- A loaded square with a real shape: the dump walks objects and containers, so
+-- a bare {} is not a square.
+local function emptyList() return {size=function() return 0 end,get=function() return nil end} end
+local function loadedSquare() return {getObjects=emptyList,getWorldObjects=emptyList,
+                                      getStaticMovingObjects=emptyList} end
+getCell=function() return {getGridSquare=function() return loadedSquare() end} end
+local verdict=CFPlace.verify(id)
+assert(cov().compared==1,"a loaded target with a resolvable container is a comparison")
+assert(verdict:find("^DISCREPANCY") or verdict=="none",
+    "and yields a real verdict either way: "..tostring(verdict):sub(1,40))
+print("PASS placement fixture: only an actual container comparison counts as coverage")
+
+-- ---------------------------------------------------------------------------
+-- 5. RELOAD: a changed record is not a persistent mismatch ----------------
+-- ---------------------------------------------------------------------------
+-- recheck() used to return "absent" without ever requiring status=="placed", so
+-- a clue that had since become pending, deferred or relocating read as the
+-- fault persisting.
+local relocId=case.documents[1].id
+local api2=assert(S.open(rootFor(case),function() end))
+-- pending, the state a fresh placement sits in before it is confirmed
+local pendingRoot=api2.snapshot()
+store.campaign={canonical=pendingRoot,schedule={schema=1,createdHours={1}}}
+getCell=function() return {getGridSquare=function() return loadedSquare() end} end
+local r=CFPlace.recheck(relocId)
+assert(r:find("^changed"),"a clue that is no longer `placed` reports CHANGED, not absent: "..r:sub(1,60))
+assert(not r:find("^absent"),"and never absent")
+local firstLine=r:match("^[^\n]*")
+assert(firstLine:find("pending",1,true) or firstLine:find("placed",1,true),
+    "and names the state it changed to: "..firstLine)
+
+-- A deferred clue likewise.
+local defRoot=api2.snapshot()
+defRoot.assignments[relocId]={status="deferred",physicalToken="cf-g2:"..relocId,
+    locationId=defRoot.case.documents[1].locationId,deferredHours=0,relocations=0}
+store.campaign={canonical=defRoot,schedule={schema=1,createdHours={1}}}
+local r2=CFPlace.recheck(relocId)
+assert(r2:find("^changed"),"a deferred clue reports CHANGED: "..r2:sub(1,40))
+assert(r2:match("^[^\n]*"):find("never%-placed"),"classified, not just status-checked")
+print("PASS placement fixture: a record that changed after reload is not a persistent mismatch")

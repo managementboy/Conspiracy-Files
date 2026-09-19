@@ -59,7 +59,7 @@ settle() {
     done
 }
 
-captured=0
+captured=0; inconclusive=0; partial=0; compared_total=0; placed_total=0
 for world in $(seq 1 "$WORLDS"); do
     say "world $world of $WORLDS: cold start"
     start_cold || { fail "world $world would not start"; continue; }
@@ -70,8 +70,16 @@ for world in $(seq 1 "$WORLDS"); do
     fi
     say "world $world: placed=$(f 1 <<<"$counts") pending=$(f 2 <<<"$counts") never-placed=$(f 3 <<<"$counts") carrier=$(f 4 <<<"$counts") unknown-history=$(f 5 <<<"$counts")"
 
+    ev 'return CFPlace.resetCoverage()' >/dev/null
     ids="$(ev 'return CFPlace.placedIds()')"
-    [ -n "$ids" ] || { say "world $world: no placed clue to check"; "$PZ" stop >/dev/null 2>&1; continue; }
+    total=0; for _ in $ids; do total=$((total+1)); done
+    if [ "$total" = 0 ]; then
+        # NOT a clean world. Nothing was compared, so nothing is known.
+        say "world $world: INCONCLUSIVE - no placed clue to check at all"
+        inconclusive=$((inconclusive+1))
+        "$PZ" stop >/dev/null 2>&1
+        continue
+    fi
 
     # Stand beside each clue, wait for ITS square, and verify only THAT clue.
     # verify() takes the id for exactly this reason: every other clue sits in an
@@ -94,11 +102,32 @@ for world in $(seq 1 "$WORLDS"); do
         if [ "$(sed -n '1p' <<<"$r" | f 1)" = "DISCREPANCY" ]; then result="$r"; bad="$id"; break; fi
     done
 
+    cov="$(ev 'return CFPlace.coverage()')"
+    compared="$(f 1 <<<"$cov")"
+    say "world $world: coverage - compared=$compared of $total placed (unloaded=$(f 2 <<<"$cov") in-hand=$(f 3 <<<"$cov") skipped=$(f 4 <<<"$cov") missing=$(f 5 <<<"$cov"))"
+
     if [ -z "$bad" ]; then
-        say "world $world: no placed clue absent from its own loaded container"
+        # A CLEAN RESULT MEANS NOTHING WITHOUT A COMPARISON. No ids, or every
+        # clue unloaded or skipped, used to end here as "no discrepancy" and
+        # exit 0 - a diagnostic clearing a world it never examined.
+        if [ "${compared:-0}" -eq 0 ] 2>/dev/null; then
+            say "world $world: INCONCLUSIVE - not one container was compared"
+            inconclusive=$((inconclusive+1))
+        else
+            compared_total=$((compared_total + compared))
+            placed_total=$((placed_total + total))
+            if [ "$compared" -lt "$total" ]; then
+                say "world $world: PARTIAL - $compared of $total placed clues compared; the rest gave no verdict"
+                partial=$((partial+1))
+            else
+                say "world $world: no placed clue absent from its own loaded container ($compared of $total compared)"
+            fi
+        fi
         "$PZ" stop >/dev/null 2>&1
         continue
     fi
+    compared_total=$((compared_total + compared))
+    placed_total=$((placed_total + total))
 
     captured=$((captured + 1))
     say "world $world: CAPTURED a discrepancy on $bad"
@@ -122,6 +151,7 @@ for world in $(seq 1 "$WORLDS"); do
         absent)   say "world $world: after the reload it is STILL absent - the discrepancy PERSISTS" ;;
         in-hand)  say "world $world: after the reload the survivor is carrying it - not the fault" ;;
         unloaded) say "world $world: after the reload its square is not loaded - NO verdict on persistence" ;;
+        changed)  say "world $world: after the reload it is no longer a placed clue ($(sed -n '1p' <<<"$again" | f 2)/$(sed -n '1p' <<<"$again" | f 3)) - the record CHANGED, which is not the mismatch persisting" ;;
         retired)  say "world $world: after the reload the case has retired - no verdict, and not the fault" ;;
         gone)     say "world $world: after the reload there is no assignment for it - no verdict" ;;
         *)        say "world $world: unrecognised recheck result" ;;
@@ -134,7 +164,8 @@ errs="$(mod_error_count 2>/dev/null || echo 0)"
 [ "$errs" = 0 ] || fail "the mod logged $errs error(s)"
 
 say "---"
-say "worlds: $WORLDS    discrepancies captured: $captured    mod errors: $errs"
+say "worlds: $WORLDS    compared: $compared_total of $placed_total placed clues"
+say "captured: $captured    inconclusive worlds: $inconclusive    partial worlds: $partial    mod errors: $errs"
 if [ "${#fails[@]}" -gt 0 ]; then
     for x in "${fails[@]}"; do say "FAIL: $x"; done
 fi
@@ -142,8 +173,15 @@ if [ "$captured" -gt 0 ]; then
     say "A discrepancy was captured. The dump above is the evidence; nothing is concluded from it here."
     exit 1
 fi
-say "No discrepancy observed in $WORLDS world(s). THIS IS NOT PROOF OF ABSENCE:"
-say "the fault appeared in three of nine overnight runs, so a handful of clean"
-say "worlds is consistent with it still being there."
-[ "${#fails[@]}" -gt 0 ] && exit 1
+if [ "${#fails[@]}" -gt 0 ]; then exit 1; fi
+if [ "$compared_total" -eq 0 ]; then
+    say "INCONCLUSIVE: not one container was compared in any world. This is NOT a"
+    say "clean result - the check examined nothing, and says so rather than passing."
+    exit 2
+fi
+say "No discrepancy in $compared_total compared clue(s) across $WORLDS world(s)."
+[ "$partial" -gt 0 ] && say "Coverage was PARTIAL in $partial world(s): some clues gave no verdict."
+[ "$inconclusive" -gt 0 ] && say "$inconclusive world(s) were inconclusive and contribute nothing either way."
+say "THIS IS NOT PROOF OF ABSENCE: the fault appeared in three of nine overnight"
+say "runs, so this much clean evidence is consistent with it still being there."
 exit 0
