@@ -97,9 +97,15 @@ function CFReloc.advance(hours)
     local ok, err = pcall(function() gt:setNightsSurvived(gt:getNightsSurvived() + nights) end)
     if not ok then return "advance-threw\t" .. tostring(err) end
     local after = gt:getWorldAgeHours()
+    -- Float-safe. `after - before >= hours` read FALSE on an advance of exactly
+    -- +96.00 against a request of 96, because the subtraction lands a hair under
+    -- - so a perfectly good clock jump was reported as a failure. Compared
+    -- against the nights actually added, with a small tolerance.
+    local moved = after - before
+    local enough = moved >= (hours - 0.001)
     return table.concat({ string.format("%.2f", before), string.format("%.2f", after),
                           tostring(hours), tostring(nights),
-                          tostring(after - before >= hours) }, "\t")
+                          tostring(enough), string.format("%.4f", moved) }, "\t")
 end
 
 -- ---------------------------------------------------------------------------
@@ -109,6 +115,26 @@ end
 -- where the item actually is right now. This is the baseline every later
 -- comparison is made against.
 CFReloc.baseline = {}
+-- ONE LINE PER CALL. tools/autotest/lib.sh `ev` pipes the game's reply through
+-- `sed -n 's/^ok //p'`, and only the FIRST line carries the "ok " prefix - so
+-- every multi-line return was silently truncated to one line. The live run
+-- showed it plainly: the baseline, the conditions report and the export blob
+-- each covered 1 of 8 clues, and 7 clues came back "no-baseline" after the
+-- reload. Everything the shell reads per clue is now a single line.
+function CFReloc.captureIds()
+    CFReloc.capture()
+    local out = {}
+    for id in pairs(CFReloc.baseline) do out[#out + 1] = id end
+    table.sort(out)
+    return table.concat(out, "\t")
+end
+function CFReloc.baselineLine(id)
+    local b = CFReloc.baseline[id]
+    if not b then return "no-baseline\t" .. tostring(id) end
+    return table.concat({ id, tostring(b.token), targetWords(b.target),
+                          tostring(b.placedHours), tostring(b.relocations),
+                          tostring(b.holds) }, "\t")
+end
 function CFReloc.capture()
     CFReloc.baseline = {}
     local out = {}
@@ -156,7 +182,7 @@ end
 -- ---------------------------------------------------------------------------
 -- Reported per clue, so a check that sees no relocation can say WHICH condition
 -- withheld it rather than concluding anything about placement.
-function CFReloc.conditions()
+function CFReloc.conditionsAll()
     local gt = getGameTime and getGameTime()
     local hours = gt and gt:getWorldAgeHours() or -1
     local p = getPlayer and getPlayer()
@@ -231,6 +257,15 @@ function CFReloc.conditions()
     end
     if #out == 0 then return "none" end
     return table.concat(out, "\n")
+end
+
+-- One clue's conditions, as a single line (see captureIds on why).
+function CFReloc.conditionLine(id)
+    local all = CFReloc.conditionsAll()
+    for line in all:gmatch("[^\n]+") do
+        if line:sub(1, #id + 1) == id .. "\t" then return line end
+    end
+    return "no-conditions\t" .. tostring(id)
 end
 
 -- ---------------------------------------------------------------------------
@@ -334,6 +369,45 @@ function CFReloc.captured()
     return table.concat(out, "\t")
 end
 
+-- THE TWO CONDITIONS THE LIVE RUN FOUND UNMET, made satisfiable.
+--
+-- destinations=0: StaleClue.destinations needs a site that is in the case's own
+-- locations, NOT visited, and holds no other placed clue. A fully placed case
+-- occupies every one of its sites, so it can never have a destination - which
+-- is why relocation could not run at all. Marking one clue found frees its site
+-- (a found clue is no longer placed), which is exactly what happens in play
+-- when the survivor picks something up.
+function CFReloc.freeASite(id)
+    for _, root in ipairs(roots()) do
+        local a = root.assignments[id]
+        if a then
+            local rt = ConspiracyFiles and ConspiracyFiles.GeneratedRuntime
+            if not rt or not rt.recognise then return "no-runtime" end
+            local ok, err = pcall(rt.recognise, id, "test")
+            if not ok then return "recognise-threw\t" .. tostring(err) end
+            return "freed\t" .. tostring(a.locationId)
+        end
+    end
+    return "no-such-clue"
+end
+
+-- tooCloseToOld=true: relocation will not move a clue out from under the
+-- survivor. Standing well away is a precondition of the experiment, not a
+-- detail - and the run showed the spawn point sitting on top of a clue.
+function CFReloc.standAway(id, tiles)
+    tiles = tonumber(tiles) or 60
+    for _, root in ipairs(roots()) do
+        local a = root.assignments[id]
+        if a and a.target then
+            local p = getPlayer and getPlayer()
+            if not p then return "false\tno player" end
+            p:teleportTo(a.target.x + tiles + 0.5, a.target.y + tiles + 0.5, a.target.z)
+            return "true\t" .. math.floor(p:getX()) .. "," .. math.floor(p:getY())
+        end
+    end
+    return "false\tno such clue"
+end
+
 -- Stand on a clue's recorded square so its containers load.
 function CFReloc.teleportTo(id)
     for _, root in ipairs(roots()) do
@@ -358,16 +432,25 @@ end
 
 -- The baseline survives a reload only if we re-capture it, so the shell can ask
 -- for it as a serialised blob and hand it back. Keyed by id, tab separated.
-function CFReloc.exportBaseline()
-    local out = {}
-    for id, b in pairs(CFReloc.baseline) do
-        out[#out + 1] = table.concat({ id, b.token, b.target.x, b.target.y, b.target.z,
-                                       b.target.objectIndex, b.target.containerIndex,
-                                       tostring(b.target.containerType), tostring(b.relocations) }, "|")
-    end
-    table.sort(out)
-    return table.concat(out, "\n")
+function CFReloc.exportLine(id)
+    local b = CFReloc.baseline[id]
+    if not b then return "" end
+    return table.concat({ id, b.token, b.target.x, b.target.y, b.target.z,
+                          b.target.objectIndex, b.target.containerIndex,
+                          tostring(b.target.containerType), tostring(b.relocations) }, "|")
 end
+function CFReloc.importLine(line)
+    local f = {}
+    for part in tostring(line):gmatch("[^|]+") do f[#f + 1] = part end
+    if #f < 9 then return "bad-line" end
+    CFReloc.baseline[f[1]] = { token = f[2],
+        target = { x = tonumber(f[3]), y = tonumber(f[4]), z = tonumber(f[5]),
+                   objectIndex = tonumber(f[6]), containerIndex = tonumber(f[7]),
+                   containerType = f[8] },
+        relocations = tonumber(f[9]) }
+    return f[1]
+end
+function CFReloc.resetBaseline() CFReloc.baseline = {}; return "ok" end
 function CFReloc.importBaseline(blob)
     CFReloc.baseline = {}
     local n = 0

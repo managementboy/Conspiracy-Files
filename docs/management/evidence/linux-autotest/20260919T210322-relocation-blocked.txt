@@ -1,0 +1,86 @@
+Relocation check, run 1. Revision bbb7ec4. Session 20260919T210322.
+RESULT: RELOCATION DID NOT RUN. 0 moves, 0 refusals, 0 relocation log lines.
+Phase A is therefore INCOMPLETE - nothing here bears on the original mismatch.
+
+THE EXACT UNMET CONDITIONS, from the check's own per-clue report:
+  destinations=0    StaleClue.destinations needs a site in the case's own
+                    locations, NOT visited, holding no other PLACED clue.
+                    A fully placed case occupies every one of its sites, so
+                    it can never have a destination. This is structural, not
+                    incidental: with all 8 clues placed, relocation could not
+                    have run for any of them.
+  tooCloseToOld=true  The spawn point sat on the clue. Relocation will not
+                    move a clue out from under the survivor.
+No refusal was even logged, because the job returns before reaching a
+logging branch when there is no candidate at all.
+
+THREE DEFECTS IN THE CHECK, found by this run and now fixed:
+  1. ev() transport truncates a multi-line reply to its FIRST line
+     (lib.sh pipes it through sed -n 's/^ok //p'). The baseline, the
+     conditions report and the export blob each covered 1 of 8 clues, so
+     7 clues returned 'no-baseline' after the reload and after-reload
+     coverage collapsed to 1. Everything is now one line per clue.
+  2. CFReloc.advance reported enough=false on an advance of exactly
+     +96.00h against a request of 96 - a float comparison landing a hair
+     under. A good clock jump was reported as a failure. Now compared with
+     a tolerance and the actual movement is printed.
+  3. The run's exit status was never captured: the reported 'exit 0' was
+     the waiting wrapper's, not the check's. The check itself would have
+     exited 1 on its FAIL. Captured explicitly from now on.
+
+NEW HYPOTHESIS for run 2, which is why a re-run is warranted rather than a
+repeat: free one site by marking a clue found (as picking one up does in
+play) and stand the survivor 80 tiles away, so destinations>0 and
+tooClose=false. Then relocation has both a reason and somewhere to go.
+---
+pz: launching session 20260919T210322
+pz: new world is loading
+pz: game loading took 61 seconds
+[CF] v=1 t=09:00 lvl=i ev=note mod=casefile msg="organiser issued"
+[CF-DEAD-AIR]|DISABLED|version=DEV-0.44.0-addresses-that-travel|generated development session active
+[CF] v=1 t=09:00 lvl=i ev=address mod=address msg="Ready: 6796 shipped addresses for the whole map in 127 ms; nothing scanned or saved. Zoom in on the world map."
+pz: ready; use: tools/autotest/pz.sh eval 'return getPlayer():getX()'
+relocation: clues: placed=8 pending=0 never-placed=0
+relocation: baseline (id, token, target, placedHours, relocations, in-its-container):
+    generated:1304890065:document-1	cf-g2:generated:1304890065:document-1	10840,10148,0/obj2/con0/shelves	2.11165714263916	0	true
+relocation: clock before: 2.12	8	0
+relocation: conditions before advancing:
+    generated:1304890065:document-1	stale=false	age-placed=0.0	canAttempt=true	relocations=0	quantity=1	onCarrier=false	oldContainer=resolved	visitedKnown=yes	destinations=0	tooCloseToOld=true	tooCloseToDest~=no-dest	inOldContainer=1	carried=0	canRelocate=true
+relocation: advance: before=2.12 after=98.12 requested=96h nights=+4 enough=false
+relocation: FAIL: the clock did not advance far enough
+relocation: conditions after advancing:
+    generated:1304890065:document-1	stale=true	age-placed=96.0	canAttempt=true	relocations=0	quantity=1	onCarrier=false	oldContainer=resolved	visitedKnown=yes	destinations=0	tooCloseToOld=true	tooCloseToDest~=no-dest	inOldContainer=1	carried=0	canRelocate=true
+relocation: clues now stale: 1
+relocation: letting the scheduler run
+relocation: relocation trail from the mod's own log:
+relocation: log: 0 relocation line(s) - 0 MOVE(s), 0 refusal(s)
+relocation: comparing record against world, per clue:
+    generated:1304890065:document-1	recordMoved=false	relocations=0->0	status=placed	was=10840,10148,0/obj2/con0/shelves	now=10840,10148,0/obj2/con0/shelves	verdict=none
+    generated:1304890065:document-2	recordMoved=false	relocations=0->0	status=placed	was=10792,10105,0/obj3/con0/shelves	now=10792,10105,0/obj3/con0/shelves	verdict=none
+    generated:1304890065:document-3	recordMoved=false	relocations=0->0	status=placed	was=10836,10146,0/obj2/con0/counter	now=10836,10146,0/obj2/con0/counter	verdict=none
+    generated:1304890065:document-4	recordMoved=false	relocations=0->0	status=placed	was=10836,10147,0/obj4/con0/counter	now=10836,10147,0/obj4/con0/counter	verdict=none
+    generated:1304890065:document-5	recordMoved=false	relocations=0->0	status=placed	was=10836,10148,0/obj3/con0/counter	now=10836,10148,0/obj3/con0/counter	verdict=none
+    generated:1304890065:document-6	recordMoved=false	relocations=0->0	status=placed	was=10792,10107,0/obj2/con0/shelves	now=10792,10107,0/obj2/con0/shelves	verdict=none
+    generated:1304890065:document-7	recordMoved=false	relocations=0->0	status=placed	was=10836,10148,0/obj5/con0/counter	now=10836,10148,0/obj5/con0/counter	verdict=none
+    generated:1304890065:document-8	recordMoved=false	relocations=0->0	status=placed	was=10797,10111,0/obj2/con0/counter	now=10797,10111,0/obj2/con0/counter	verdict=none
+relocation: before reload: 8 real comparison(s), 0 mismatch(es), 0 without a verdict
+relocation: NOTHING WAS RELOCATED. That is not evidence about placement either way -
+relocation: the conditions and every refusal reason are printed above.
+relocation: saving and reloading, then repeating the comparisons
+relocation: baseline restored after reload: 1 clue(s)
+relocation: clock after reload: 98.81	8	4
+    generated:1304890065:document-1	recordMoved=false	relocations=0->0	status=placed	was=10840,10148,0/obj2/con0/shelves	now=10840,10148,0/obj2/con0/shelves	verdict=none
+    no-baseline	generated:1304890065:document-2
+    no-baseline	generated:1304890065:document-3
+    no-baseline	generated:1304890065:document-4
+    no-baseline	generated:1304890065:document-5
+    no-baseline	generated:1304890065:document-6
+    no-baseline	generated:1304890065:document-7
+    no-baseline	generated:1304890065:document-8
+relocation: after reload: 1 real comparison(s), 0 mismatch(es), 7 without a verdict
+relocation: ---
+relocation: relocation log lines: 0    MOVES: 0    refusals: 0    clues stale: 1
+relocation: before reload: compared=8 mismatches=0 no-verdict=0
+relocation: after reload:  compared=1 mismatches=0 no-verdict=7
+relocation: mod errors: 0
+relocation: FAIL: the clock did not advance far enough

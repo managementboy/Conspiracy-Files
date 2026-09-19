@@ -68,18 +68,47 @@ done
 say "clues: placed=$(f 1 <<<"$c") pending=$(f 2 <<<"$c") never-placed=$(f 3 <<<"$c")"
 
 # --- 1. the baseline, before anything moves ---------------------------------
-base="$(ev 'return CFReloc.capture()')"
-if [ "$base" = "none" ]; then
+# ONE LINE PER CLUE. `ev` keeps only the first line of a reply (lib.sh pipes it
+# through sed 's/^ok //p'), so the earlier multi-line returns were truncated to
+# one clue - the live run reported a baseline of 1 where there were 8, and 7
+# clues came back "no-baseline" after the reload.
+ids="$(ev 'return CFReloc.captureIds()')"
+if [ -z "$ids" ]; then
     say "no unfound placed clue to relocate - nothing to test"
     "$PZ" stop >/dev/null 2>&1; exit 2
 fi
 say "baseline (id, token, target, placedHours, relocations, in-its-container):"
-echo "$base" | sed 's/^/    /' >&2
-blob="$(ev 'return CFReloc.exportBaseline()')"
+blob=""
+for id in $ids; do
+    echo "    $(ev "return CFReloc.baselineLine('$id')")" >&2
+    line="$(ev "return CFReloc.exportLine('$id')")"
+    [ -n "$line" ] && blob="$blob$line
+"
+done
 
 say "clock before: $(ev 'return CFReloc.clock()')"
 say "conditions before advancing:"
-ev 'return CFReloc.conditions()' | sed 's/^/    /' >&2
+for id in $ids; do echo "    $(ev "return CFReloc.conditionLine('$id')")" >&2; done
+
+# THE TWO CONDITIONS THE FIRST LIVE RUN FOUND UNMET, satisfied deliberately.
+# destinations=0 because a fully placed case occupies every one of its own
+# sites, so relocation can never have anywhere to go; and tooCloseToOld=true
+# because the spawn point sat on a clue. Both are preconditions of the
+# experiment, and without them the run cannot test anything.
+first="$(awk '{print $1}' <<<"$ids")"
+freed="$(ev "return CFReloc.freeASite('$first')")"
+say "freeing one site by marking $first found: $freed"
+away="$(ev "return CFReloc.standAway('$first',80)")"
+say "standing the survivor well away: $away"
+# Re-capture: the freed clue is no longer a candidate, so the baseline changes.
+ids="$(ev 'return CFReloc.captureIds()')"
+blob=""
+for id in $ids; do
+    line="$(ev "return CFReloc.exportLine('$id')")"
+    [ -n "$line" ] && blob="$blob$line
+"
+done
+say "baseline after freeing a site: $(awk '{print NF}' <<<"$ids") clue(s)"
 
 # --- 2. advance the clock ---------------------------------------------------
 # Start the evidence window BEFORE advancing: scheduler ticks may happen
@@ -87,12 +116,18 @@ ev 'return CFReloc.conditions()' | sed 's/^/    /' >&2
 reloc_log_mark=0
 [ -r "$CONSOLE_PATH" ] && reloc_log_mark="$(wc -c < "$CONSOLE_PATH")"
 adv="$(ev 'return CFReloc.advance(96)')"
-say "advance: before=$(f 1 <<<"$adv") after=$(f 2 <<<"$adv") requested=$(f 3 <<<"$adv")h nights=+$(f 4 <<<"$adv") enough=$(f 5 <<<"$adv")"
+say "advance: before=$(f 1 <<<"$adv") after=$(f 2 <<<"$adv") requested=$(f 3 <<<"$adv")h nights=+$(f 4 <<<"$adv") moved=$(f 6 <<<"$adv")h enough=$(f 5 <<<"$adv")"
 [ "$(f 5 <<<"$adv")" = true ] || { fail "the clock did not advance far enough"; }
 say "conditions after advancing:"
-conds="$(ev 'return CFReloc.conditions()')"
-echo "$conds" | sed 's/^/    /' >&2
+conds=""
+for id in $ids; do
+    line="$(ev "return CFReloc.conditionLine('$id')")"
+    echo "    $line" >&2
+    conds="$conds$line
+"
+done
 stale_count="$(grep -c "stale=true" <<<"$conds" || true)"
+say "destinations available: $(grep -o 'destinations=[0-9]*' <<<"$conds" | sort -u | tr '\n' ' ')"
 say "clues now stale: $stale_count"
 
 # --- 3. let the scheduler run, then look for evidence relocation happened ---
@@ -160,7 +195,14 @@ say "saving and reloading, then repeating the comparisons"
 "$PZ" start --continue >/dev/null 2>&1 || { fail "could not reload"; exit 1; }
 load_lua || { fail "the check's Lua would not load after the reload"; exit 1; }
 sleep 5
-kept="$(ev "return CFReloc.importBaseline([==[$blob]==])")"
+# Restored one line at a time, for the same transport reason.
+ev 'return CFReloc.resetBaseline()' >/dev/null
+kept=0
+while IFS= read -r line; do
+    [ -z "$line" ] && continue
+    got="$(ev "return CFReloc.importLine('$line')")"
+    [ "$got" = "bad-line" ] || kept=$((kept+1))
+done <<<"$blob"
 say "baseline restored after reload: $kept clue(s)"
 say "clock after reload: $(ev 'return CFReloc.clock()')"
 
