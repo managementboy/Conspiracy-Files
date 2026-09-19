@@ -1,0 +1,64 @@
+Essential-gap behaviour in a REAL SAVE. Revision 11ecb29. Session 20260919T215905.
+PARTIAL: the state logic is verified in-engine; the retirement path is NOT,
+for a harness reason that is understood and recorded.
+
+VERIFIED in the real engine:
+  premise                  no-contact-at-premises
+  essential ids recorded   2  (Collection slip / GT-280, Collection register / GT-280)
+  completion state         incomplete-essential   gaps=1
+  essentialGaps            1
+  accounted                true   (so the slot CAN be freed - no stall)
+  mod errors               0
+
+NOT VERIFIED, and why:
+  retireIfAccounted returned false, and the runtime logged the reason:
+    "case accounted for but not retired: case is not fully discovered"
+  The check built the dropped-essential state by writing store.campaign
+  directly, which is BEHIND the runtime's own in-memory wrapper. Retired.retire
+  therefore validated the STALE root - all clues placed, none known - and
+  correctly refused. The runtime did the right thing: it declined to retire a
+  case from a wrapper it had not been given, and said so.
+
+  So this run says nothing about whether an essential gap retires correctly,
+  and it is NOT evidence that it does not.
+
+WHY IT WAS BUILT THAT WAY. A genuinely deferred clue cannot be manufactured
+through the session api: a deferred assignment has no target, so api.status
+cannot produce one and api.drop then declines - the same wall the earlier
+unit fixture hit, where the answer was to starve the containers at creation.
+That is not available against a case a live world has already placed.
+
+COVERAGE AS IT STANDS. test/essential_links.lua holds the whole rule at tier 1:
+the premise's declaration, the recorded ids, the state outranking
+complete-with-gaps, survival through retirement and the deep archive, and that
+BOTH runtime completion paths consult essentialGaps and guard the closing
+voice on it. What is missing is one live end-to-end confirmation.
+
+NEXT ACTION for this item: drive it through the runtime's own write path -
+start a world whose neighbourhood genuinely defers a clue (the placement
+baseline saw exactly that: world 2 left 3 of 6 never placed), advance the
+clock past expiry, and let the filler drop it. Then the wrapper the runtime
+holds is the wrapper that changed.
+---
+pz: launching session 20260919T215905
+pz: new world is loading
+pz: game loading took 62 seconds
+[CF-DEAD-AIR]|DISABLED|version=DEV-0.44.0-addresses-that-travel|generated development session active
+pz: ready; use: tools/autotest/pz.sh eval 'return getPlayer():getX()'
+essential: premise: no-contact-at-premises
+essential: building a dropped essential clue to the schema, then finding the rest
+    ok	generated:1859222568:document-1
+essential: completion state: incomplete-essential	gaps=1
+essential: essential gaps: 1
+essential: accounted: true
+essential: live slots before: 1
+essential: retireIfAccounted: false
+essential: live slots after: 1
+essential: retired record state: none
+essential: log says INCOMPLETE: 0
+0
+essential: log says complete-with-gaps wording: 0
+0
+essential: mod errors: 0
+--- the runtime's own refusal line:
+LOG  : Lua          f:3597> [CF] v=1 t=09:16 lvl=i ev=note mod=case msg="case accounted for but not retired: case is not fully discovered"
