@@ -1,5 +1,43 @@
 # Conspiracy-Files — Current Decision Index
 
+## The opening's requirements settled — 2026-09-19 (late)
+
+**DR-20260919-OPENING-SCOPE — the opening explains more than the player's
+skills.** A skills-grounded opening was the wrong target: it would allow an
+electrician to investigate an electrical fault while never addressing "why did I
+wake up here?". The opening must establish **four** things: a personal
+connection to the starting place; a question about how or why the survivor came
+to be here; a local payoff contributing to the wider search; and skill-specific
+observations as an **additional layer**, not the spine. Avoiding an invented
+biography does not forbid the **modest personal facts** required — a name, an
+address, belongings that are the survivor's. This corrects
+`DR-20260919-PILOT-POLICY`, whose "no invented employment history" was read too
+far.
+
+**DR-20260919-FALLBACK — a non-specialist route is retained, and the refusal
+recommendation is dropped.** This closes the open question in
+`DR-20260919-PILOT-POLICY`. Everyone can find an appointment slip, recognise
+their own belongings, or compare two addresses. **Missing the relevant skill
+changes the approach, never access to the opening**, so the mod does not refuse
+an opening for want of a matching skill and no unemployed special case is
+needed. My recommendation that the mod refuse outright is withdrawn.
+
+**DR-20260919-PLACED-CLUES — "no printed item" means no dependency on randomly
+spawned vanilla media.** The opening never waits on a flyer, map or brochure to
+drop. It may freely use a note the mod places itself. Earlier wording conflated
+our own authored clue with vanilla loot.
+
+**DR-20260919-BADLY-PLAYED — recovery has limits.** "Pays off even when played
+badly" is bounded: **interruption and missed clues must be recoverable**, by
+more than one route to the same supported conclusion, while **deliberate refusal
+to investigate need not force an ending** — an unpursued lead simply stays open,
+and a player who never investigates is not handed a conclusion.
+
+**Plan revision closed.** Owner direction: stop revising the overall plan and
+move to the opening premise and its evidence sequence. Drafted in
+[OPENING_PREMISE.md](docs/design/OPENING_PREMISE.md) — a premise for review, not
+approved content under `DR-20260919-Q27`.
+
 ## Plan revision after review — 2026-09-19 (late)
 
 *Six corrections to the first development plan, all of them narrowing claims I

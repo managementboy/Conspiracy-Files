@@ -53,30 +53,44 @@ withdrawn.
 
 ## B — The personal opening
 
-The first case of a new save, built on the survivor's **actual starting
-skills**. No invented employment history: the game gives occupations and skill
-levels, not a biography, and the mystery hangs on what this character can
-demonstrably do and notice. The electrician is the pilot because electrical
-skill gives the clearest observations to build on.
+The first case of a new save. It must establish **four** things, not one:
 
-Its payoff is written before its clues. It depends on no printed item and no
-lucky drop. It still pays off for a player who plays it badly.
+1. **A personal connection to the starting place.**
+2. **A question about how or why the survivor came to be here.**
+3. **A local payoff** that contributes to the wider search.
+4. **Skill-specific observations as an additional layer** — a layer, not the
+   spine.
+
+An earlier draft of this plan promised a mystery "grounded in this survivor's
+skills", which would have allowed an electrician to investigate an electrical
+fault while never addressing why they woke up here. Withdrawn. Avoiding an
+invented biography does not forbid the **modest personal facts** the opening
+needs — a name, an address, belongings that are yours.
+
+**A non-specialist route is always available.** Anyone can find an appointment
+slip, recognise their own belongings, or compare two addresses. Missing the
+relevant skill changes the **approach**, never access to the opening. The
+electrician is the pilot for the skill layer, not a requirement for the case.
+
+**No dependency on randomly spawned vanilla media** — the opening never waits
+on a flyer or map to drop. It may absolutely use a note we place ourselves.
+
+**Recovery, with limits.** Interruption and missed clues must be recoverable:
+more than one route reaches the same supported conclusion. Deliberate refusal
+to investigate need not force an ending — an unpursued lead simply stays open.
 
 Carried with it, sized to this case only: the observed / claimed / supported
 distinction where this case's findings need it, and enough retained source
 context for its own findings to be reconsidered later.
 
-**Goal reached:** the first hour of a new save is a mystery grounded in this
-survivor's skills — the first focus of the agreed order.
+**Goal reached:** the first hour of a new save asks why *this* survivor is
+still here, and answers part of it — the first focus of the agreed order.
 
 **Finished when:** checks pass, and it plays through on a fresh save in the
 real game.
 
-**Open question, not decided:** what happens when a survivor's starting skills
-give the opening nothing to work with. My recommendation was that the mod
-refuse and say so, replacing the proposed unemployed fallback — that is a
-recommendation, not an agreed decision, and it needs an owner ruling before it
-is built either way.
+The premise and its evidence sequence are in
+[OPENING_PREMISE.md](../design/OPENING_PREMISE.md).
 
 ## C — The follow-up, built to keep
 
