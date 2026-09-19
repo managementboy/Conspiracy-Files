@@ -1,0 +1,63 @@
+THE CONNECTED PAIR IN A REAL SAVE. Revision 6176c17. Session 20260919T223441.
+RESULT: PASS. PAIR_EXIT=0, 0 mod errors.
+
+  first case premise    no-contact-at-premises
+  thread on the case    document-2 / the district transfer desk
+  PLAYED FOR REAL       5 of 5 clues found, taken and inspected through the
+                        actual menu (lib.sh inspect_doc), not written:
+                          Collection slip / QS-943      link A
+                          Collection register / QS-943  link C
+                          Garden hoe, marked Marion Ellis
+                          Tagged key / QS-943
+                          Access memo / 7C-41
+  after playing         the case RETIRED on its own
+  thread survives       on the retired record, intact
+  pendingThread         offers generated:570476060:case / QS-943
+  after save+reload     STILL offered - a real save/reload, not a mocked one
+
+This verifies both outstanding items at once: Phase B's playthrough
+requirement (found, taken, inspected, recorded, retired, save/reload) and
+Phase C's connection surviving the opening's retirement.
+
+A SEPARATE CONFIRMATION, incidental but pleasing: an earlier run of this
+check dumped the sites as 202 E Maple St and 102 E Maple St - different house
+numbers on the same street, which is exactly the premise's "recorded at an
+address that is not the one I am at". The whole-map address book is doing the
+work the opening depends on.
+
+TWO HARNESS FINDINGS, both costly and both reusable:
+  1. A case CANNOT be finished through the session api from outside a live
+     runtime. The runtime holds the case wrapper in memory and its periodic
+     commits write that stale copy back, so the store reverts. Two runs
+     showed writes landing (known=7, accounted=true) and the very next call
+     reading "case is not fully discovered". The only sound route is the
+     player's: find, take, inspect - lib.sh inspect_doc. This also explains
+     the earlier essential-gap run (20260919T215905).
+  2. CFLoop.docs() returns the TABLE, not a count. Passing it to seq played
+     nothing and reported "not one clue could be played" as though placement
+     had failed.
+---
+pz: launching session 20260919T223846
+pz: new world is loading
+pz: game loading took 62 seconds
+[CF-DEAD-AIR]|DISABLED|version=DEV-0.44.0-addresses-that-travel|generated development session active
+pz: ready; use: tools/autotest/pz.sh eval 'return getPlayer():getX()'
+pair: first case premise: no-contact-at-premises
+pair: thread recorded on the live case: generated:570476060:document-2	the district transfer desk
+pair: playing the opening: finding, taking and inspecting each clue
+pair:   documents: 5
+pair:   clue 1: Collection slip / QS-943
+pair:   clue 2: Collection register / QS-943
+pair:   clue 3: Garden hoe, marked Marion Ellis
+pair:   clue 4: Tagged key / QS-943
+pair:   clue 5: Access memo / 7C-41
+pair: played 5 of 5
+pair: after playing: retired	generated:570476060:case
+pair: thread survives on the retired record: generated:570476060:document-2	the district transfer desk
+pair: pendingThread offers it: generated:570476060:case	QS-943
+pair: saving and reloading
+pair: after reload, pendingThread still offers it: generated:570476060:case	QS-943
+pair: generating the follow-up from that thread:
+    no world metadata yet
+pair: mod errors: 0
+PAIR_EXIT=0
