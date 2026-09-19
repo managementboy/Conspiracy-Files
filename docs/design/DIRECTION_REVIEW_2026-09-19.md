@@ -2,7 +2,7 @@
 
 Prepared 19 September 2026 against `main` at `73e6b62`, build `DEV-0.44.0-addresses-that-travel`.
 
-**Status: Q01–Q28 confirmed. Version 1.0 targets single-player on the vanilla Build 42 map. Detailed player settings are requested for work today; implausible bulk discoveries need redesign. The maps/flyers brainstorm remains after the questionnaire, and vanilla-scene research remains last. Remaining choices await answers. This review builds a new wishlist and revisits all existing commitments.**
+**Status: Q01–Q29 confirmed. Breaking changes are acceptable until the owner judges the feature set playable long term. Version 1.0 targets single-player on the vanilla Build 42 map. Detailed player settings are requested for work today; implausible bulk discoveries need redesign. The maps/flyers brainstorm remains after the questionnaire, and vanilla-scene research remains last. Remaining choices await answers. This review builds a new wishlist and revisits all existing commitments.**
 
 **Confirmed scope:** version 1.0 enriches ordinary survival with investigations (Q01 A). A survivor-centered campaign (Q01 B) is a possible future option. All remaining recommendations must be considered within that boundary; campaign features are not implied 1.0 commitments.
 
@@ -511,7 +511,7 @@ Is adding the mod to an already-running vanilla save still desired later, or sho
 
 **Suggested answer — not approved:** B — Work in stable playtest periods and group breaking changes between them. State exactly which build needs a new game and why; within a period, favour preserving the ongoing run. Adding the mod to an established vanilla save stays a later research candidate, not a release promise. Reason: a campaign cannot be judged if its save is repeatedly invalidated. Timing: start with the next playable milestone.
 
-**Owner decision:** _unanswered_
+**Owner decision — confirmed 19 September 2026:** A: allow breaking development changes until the owner feels the feature set is playable long term. Clearly identify updates requiring a fresh game. The transition depends on the owner's judgment, not an automatic version/date threshold. Stable periods were not selected; compatibility need not be broken when a change does not require it. The separate existing-vanilla-save question was not presented in chat and remains open. Recorded as DR-20260919-Q29 in `DECISIONS.md`.
 
 ### Q30 — What evidence is enough to call the next milestone good?
 
@@ -590,6 +590,7 @@ Copy one row for each answered question. Keep any uncertainty visible.
 | Q26 | B: detailed individual settings with sensible defaults | Tackle today after questions and brainstorm | DR-20260919-Q26; broad configuration confirmed, world-creation-only rule still open | Inspect existing support; define and verify useful controls | Settings that rewrite established facts or change confirmed physical-device behavior |
 | Q27 | B: agree premise, tone and boundaries, then publish tested writing within scope | Content workflow | DR-20260919-Q27; qualifies P4-R97; separate P4-R107 freeze question open | Agreed story scope and tested content | New premises or content outside approved boundaries |
 | Q28 | A: single-player on the vanilla Build 42 map | Version 1.0 | DR-20260919-Q28; reaffirms P1-Q3/P1-Q19 and narrows P1-Q18 for 1.0 | Verify supported game revisions and vanilla-world play | A proposed 1.0 promise of multiplayer or broad custom-map support |
+| Q29 | A: allow breaking changes until the owner judges the feature set playable long term | Current development; owner decides transition | DR-20260919-Q29; reaffirms P4-R63/R77 with owner-controlled threshold | Clear notice when an update requires a fresh game | Owner declares long-term readiness or requests save continuity |
 
 Before implementation begins, check the answers together: travel guidance against survival freedom; answer-driven cases against a fixed underlying truth; physical device costs against accessibility; finite storage against promised campaign length; and new-game rules against a long personal campaign. Present conflicts for a decision instead of resolving them silently.
 
