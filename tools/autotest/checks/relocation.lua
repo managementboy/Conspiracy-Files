@@ -259,6 +259,12 @@ function CFReloc.conditionsAll()
     return table.concat(out, "\n")
 end
 
+-- The whole report, kept under its original name as well: the fixture and any
+-- other caller ask for CFReloc.conditions, and renaming it to conditionsAll
+-- broke test/relocation_fixture.lua - caught by the suite, which is what the
+-- suite is for. The shell reads it a line at a time (see conditionLine).
+CFReloc.conditions = CFReloc.conditionsAll
+
 -- One clue's conditions, as a single line (see captureIds on why).
 function CFReloc.conditionLine(id)
     local all = CFReloc.conditionsAll()
