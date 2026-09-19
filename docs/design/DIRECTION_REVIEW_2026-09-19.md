@@ -2,7 +2,7 @@
 
 Prepared 19 September 2026 against `main` at `73e6b62`, build `DEV-0.44.0-addresses-that-travel`.
 
-**Status: Q01–Q12 confirmed. Q13 B selected with a request to reuse pz-narrator's base feature; its purpose is still under discussion. Q16 is partially answered through Q03. Remaining choices await answers. This review builds a new wishlist and revisits all existing commitments.**
+**Status: Q01–Q13 confirmed. Base tracking will support outbound and return journeys alongside travel progression. Q16 is partially answered through Q03. Remaining choices await answers. This review builds a new wishlist and revisits all existing commitments.**
 
 **Confirmed scope:** version 1.0 enriches ordinary survival with investigations (Q01 A). A survivor-centered campaign (Q01 B) is a possible future option. All remaining recommendations must be considered within that boundary; campaign features are not implied 1.0 commitments.
 
@@ -266,6 +266,8 @@ For the selected approach, what must the player be told about missing evidence, 
 **Initial inspection:** the local narrator checkout at `15ac5dc` (24 August) contains room/shelter observation in `StateReader.java` and `Delta.java`. Persistent base tracking has not been verified in that copy. Find the relevant newer or alternate source before porting. This is not a finding that the remembered feature never existed.
 
 **Purpose to resolve:** relocation toward the player can use current position. Home tracking would add a stable origin for outward travel and return journeys. It needs a concrete use; simply recording home does not create gameplay. The proposed manual designation, number of bases and timing have not been independently confirmed.
+
+**Follow-up confirmed 19 September 2026:** owner answered “yes” to using base tracking specifically for planning outbound and return journeys and implementing it alongside travel progression. Reuse the earlier feature after locating and verifying it. Manual versus automatic designation, multiple bases and precise travel rules remain open. Recorded as DR-20260919-Q13a in `DECISIONS.md`; this resolves the purpose and sequencing questions above.
 
 ### Q14 — What does “crafting mastery” mean now?
 
@@ -549,7 +551,7 @@ Copy one row for each answered question. Keep any uncertainty visible.
 | Q10 | A: recognisable cases and conclusions without hidden-clue counts; later connect clues leading to a conclusion with map lines | Case presentation: wishlist; map lines: later | DR-20260919-Q10; revises blanket P2-Q82 closure prohibition; separate graph stays open in Q21 | Connection meaning and map-line interaction design still needed | A proposal that exposes hidden clues or assumes automatic/manual drawing without a decision |
 | Q11 | A: one principal mystery, incidental discoveries retained for later | New wishlist; detailed pacing pending | DR-20260919-Q11; current case cap and timer not automatically reaffirmed | Playtest attention and continuity; design handling of background discoveries | A proposal that equates principal mystery with deleting other cases or imposes an unapproved timer |
 | Q12 | D: after a delay place unfound evidence in new containers closer to the player; unknown placement may change | New wishlist; implementation order pending | DR-20260919-Q12; reopens untouched-lead and expiry/relocation assumptions | Define knowledge boundary, timing, proximity and safe physical relocation; reconcile Q05 travel | A proposal that changes learned facts, duplicates evidence or makes all required travel disappear |
-| Q13 | B selected; reuse pz-narrator feature requested; why home must be known remains under discussion | Port requested; purpose, scope and timing pending | DR-20260919-Q13; do not substitute an invented base system for the requested prior feature | Locate actual base implementation; decide consuming gameplay and verify compatible APIs | Before starting a port or assuming base-dependent placement behavior |
+| Q13 | B: reuse pz-narrator base tracking for outbound and return journeys | Alongside travel progression | DR-20260919-Q13/Q13a; purpose and sequencing confirmed | Locate and verify actual base implementation; settle designation and route rules | Before porting or assuming additional base-dependent behavior |
 
 Before implementation begins, check the answers together: travel guidance against survival freedom; answer-driven cases against a fixed underlying truth; physical device costs against accessibility; finite storage against promised campaign length; and new-game rules against a long personal campaign. Present conflicts for a decision instead of resolving them silently.
 
