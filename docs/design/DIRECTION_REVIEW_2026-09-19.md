@@ -2,7 +2,7 @@
 
 Prepared 19 September 2026 against `main` at `73e6b62`, build `DEV-0.44.0-addresses-that-travel`.
 
-**Status: Round 1 (Q01–Q06) confirmed by the owner; Q16 partially answered through Q03. Remaining choices await answers. This review builds a new wishlist and revisits all existing commitments.**
+**Status: Q01–Q07 confirmed by the owner; Q16 partially answered through Q03. Remaining choices await answers. This review builds a new wishlist and revisits all existing commitments.**
 
 **Confirmed scope:** version 1.0 enriches ordinary survival with investigations (Q01 A). A survivor-centered campaign (Q01 B) is a possible future option. All remaining recommendations must be considered within that boundary; campaign features are not implied 1.0 commitments.
 
@@ -62,6 +62,11 @@ The Linux development PC is offline. This review uses source and archived eviden
 1. Answer Round 1 to establish what the mod is meant to become.
 2. Answer the remaining rounds in order of relevance, then select one playable milestone and its acceptance evidence.
 3. Publish a concise, confirmed direction in the existing vision and decision documents, with explicit supersessions and a remaining-open list.
+
+## Today's work list — owner ordering
+
+1. Continue the decision questionnaire and record the new wishlist.
+2. **At the end: research detection and prioritisation of existing vanilla corpses in houses, car wrecks and similar game-created scenes.** Requested with Q07. Research comes before development. Focus on already-dead bodies left by the game, not living zombies. Establish what can be detected reliably, whether origin can be distinguished, which wrecks/scenes can hold accessible clues, and what selection changes would improve ordinary play. Record source evidence, uncertainties and any engine checks still needed while the Linux machine is offline. Do not treat all vehicle types or player-killed bodies as equivalent to the requested scenes by assumption.
 
 ## Round 1 — What are we making? (Q01–Q06)
 
@@ -159,7 +164,7 @@ If B or C: should guidance be prose and landmarks, exact map destinations, or a 
 
 **Suggested answer — not approved:** A — Keep sense, search, recognition and noting as the standard. Preserve Look it over for clues already carried, and tune repetition through playtesting before adding exceptions. Reason: the current loop gives investigation a physical action in the world and already has positive owner feedback. Timing: retain and validate next milestone.
 
-**Owner decision:** _unanswered_
+**Owner decision — confirmed 19 September 2026:** A. Owner feedback: “it is very good playing it!” Keep the current discovery loop. Improve detection and prioritisation of vanilla corpses already left by the game in houses (not zombies), and prioritise car wrecks and similar existing scenes. Research this in detail before development; put the research at the end of today's list. Recorded as DR-20260919-Q07 in `DECISIONS.md` and in the work list above.
 
 ### Q08 — Which player reward should guide the next milestone?
 
@@ -513,6 +518,7 @@ Copy one row for each answered question. Keep any uncertainty visible.
 | Q04 | B: local mysteries, including the survivor's past, may have answers; Knox Event's cause remains unexplained | New wishlist; informs personal-opening design | DR-20260919-Q04; broadens P4-R109, revises P1-Q15 for local mysteries, reaffirms P1-Q22's Knox boundary | Evidence and conclusion rules to be designed | A proposal that prohibits all local answers or reveals the Knox Event's cause |
 | Q05 | A early, C later: begin around player exploration; later mysteries require travel | 1.0 direction; implementation sequence pending | DR-20260919-Q05; revises assistant's A-only baseline; qualifies Q01 without committing a full campaign | Transition, travel distances, destination selection and guidance to be decided | A proposal for a fixed route/threshold or to defer all required travel to a future campaign |
 | Q06 | B: recurring people, organisations and discoveries form a continuing web; the developed direction is supported | 1.0 direction | DR-20260919-Q06; reaffirms inter-case continuity in P4-R91/R96/R113 at product level; Q09 reviews steering details | Specific continuity and player-understanding checks to be chosen in Q30–Q31 | A proposal to make cases wholly independent or require a central chapter storyline |
+| Q07 | A: keep discovery loop; improve detection/prioritisation of game-placed indoor corpses and car wrecks after research | Research at the end of today's list, before development | DR-20260919-Q07; reaffirms P4-R132's experience; new research request | Verified corpse/wreck detection, provenance limits, storage/access and prioritisation options | Before implementing scene selection changes or substituting zombies for existing corpses |
 
 Before implementation begins, check the answers together: travel guidance against survival freedom; answer-driven cases against a fixed underlying truth; physical device costs against accessibility; finite storage against promised campaign length; and new-game rules against a long personal campaign. Present conflicts for a decision instead of resolving them silently.
 
