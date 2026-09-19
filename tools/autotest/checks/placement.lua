@@ -13,15 +13,23 @@
 -- way the dump describes the state that was actually wrong rather than the
 -- state after the mod tidied up.
 --
--- THREE FAILURES ARE KEPT APART, because they have different causes and looked
+-- THE FAILURES ARE KEPT APART, because they have different causes and looked
 -- identical in every log we have:
---   placed-absent   the record says `placed`, the container does not have it.
---                   THE FAULT UNDER INVESTIGATION.
---   never-placed    `deferred` or `dropped` - the clue was never in the world
---                   (P4-R133). Not a mismatch; the record is honest.
---   carrier-gone    a carrier clue whose carrier cannot be found, or one
---                   dropped by that path (`droppedFrom=="carrier"`, P4-R141).
---                   The clue WAS out there; its container walked away.
+--   placed-absent     the record says `placed`, its square IS loaded, the
+--                     survivor is not carrying it, and the container does not
+--                     have it. THE FAULT UNDER INVESTIGATION.
+--   never-placed      `deferred`, or dropped after waiting - never in the world
+--                     (P4-R133). Not a mismatch; the record is honest.
+--   carrier-path      dropped by the carrier path (`droppedFrom=="carrier"`).
+--                     That names the PATH and is NOT proof the clue was ever
+--                     placed: dropMissing needs only a mobile target, not a
+--                     `placed` status (P4-R141).
+--   carrier-missing   a carrier clue with a running missing timer.
+--   unknown-history   dropped, with no history recorded. Unknown, and never
+--                     rounded down to "never placed".
+-- And two outcomes that are NOT failures at all, excluded at the source rather
+-- than filtered afterwards: a clue in the survivor's own bags (it was picked
+-- up), and a target square that is not loaded (no verdict is possible).
 CFPlace = {}
 local S = require("ConspiracyFiles/Generated/Session")
 local Cases = require("ConspiracyFiles/Generated/SuccessiveCases")
@@ -29,8 +37,14 @@ local Retired = require("ConspiracyFiles/Generated/RetiredCase")
 local World = require("ConspiracyFiles/WorldAccess")
 
 local TAG = "ConspiracyFiles.Generated.G2"
-local function roots()
-    local wrapper = ModData and ModData.get and ModData.get(TAG)
+-- THE STORE IS NOT THE WRAPPER. Campaign cases live under `store.campaign` (or
+-- `store.canonical` for a single case), and Cases.current is what unwraps them -
+-- exactly as campaign.lua:25 does. Passing the raw store to Cases.sessions
+-- returns nothing, so the first version of this check would have inspected no
+-- cases at all and reported "no discrepancy" from an empty world. Exposed so
+-- test/placement_fixture.lua can hold it without a game.
+function CFPlace.storeRoots(store)
+    local wrapper = store and Cases.current(store)
     if not wrapper then return {} end
     local ok, list = pcall(Cases.sessions, wrapper)
     if not ok or type(list) ~= "table" then return {} end
@@ -38,23 +52,36 @@ local function roots()
     for _, r in ipairs(list) do if not Retired.isRetired(r) then live[#live + 1] = r end end
     return live
 end
+local function roots()
+    return CFPlace.storeRoots(ModData and ModData.get and ModData.get(TAG))
+end
 
--- Which failure is this, from the record alone.
-local function category(a)
+-- WHICH FAILURE IS THIS, from the record alone.
+--
+-- `droppedFrom` names the PATH that dropped a clue, and nothing more (P4-R141).
+-- "carrier" does not prove the clue was ever placed: dropMissing requires only a
+-- mobile target, not a `placed` status, and the watcher reaches pending and
+-- unknown assignments too. And a record written before the field existed has NO
+-- history, which is not evidence of anything - so it is "unknown-history", never
+-- rounded down to "never-placed". Exposed for test/placement_fixture.lua.
+function CFPlace.classify(a)
     if not a then return "no-assignment" end
     if a.status == "deferred" then return "never-placed" end
     if a.status == "dropped" then
-        if a.droppedFrom == "carrier" then return "carrier-gone" end
-        return "never-placed"
+        if a.droppedFrom == "deferred" then return "never-placed" end
+        if a.droppedFrom == "carrier" then return "carrier-path" end
+        return "unknown-history"
     end
-    if a.target and type(a.target.carrierMark) == "string" and a.missingHours then return "carrier-gone" end
+    if a.target and type(a.target.carrierMark) == "string" and a.missingHours then return "carrier-missing" end
     return "placed"
 end
+local category = CFPlace.classify
 
 -- Every clue of every live case, by category. Cheap, non-mutating, and the
 -- number the shell polls until placement has settled.
 function CFPlace.clues()
-    local n = { placed = 0, ["never-placed"] = 0, ["carrier-gone"] = 0, pending = 0, other = 0 }
+    local n = { placed = 0, ["never-placed"] = 0, ["carrier-path"] = 0, ["carrier-missing"] = 0,
+                ["unknown-history"] = 0, pending = 0, other = 0 }
     for _, root in ipairs(roots()) do
         for _, d in ipairs(root.case.documents) do
             local a = root.assignments[d.id]
@@ -64,7 +91,8 @@ function CFPlace.clues()
             elseif n[c] then n[c] = n[c] + 1 else n.other = n.other + 1 end
         end
     end
-    return table.concat({ n.placed, n.pending, n["never-placed"], n["carrier-gone"], n.other }, "\t")
+    return table.concat({ n.placed, n.pending, n["never-placed"],
+                          n["carrier-path"] + n["carrier-missing"], n["unknown-history"], n.other }, "\t")
 end
 
 -- Is the token in this container?
@@ -129,6 +157,18 @@ local function inPlayer(token, container, depth)
     return nil
 end
 
+-- IS THE TARGET'S OWN SQUARE LOADED? A clue in an unloaded cell cannot be
+-- resolved, and calling that a discrepancy is the loudest false alarm this
+-- check could produce: the shell loads ONE clue's square at a time, so every
+-- other clue is legitimately unreadable at that moment. Exposed for the
+-- fixture test.
+function CFPlace.targetLoaded(t)
+    if not t then return false end
+    local cell = getCell and getCell()
+    if not cell then return false end
+    return cell:getGridSquare(t.x, t.y, t.z) ~= nil
+end
+
 local function targetWords(t)
     if not t then return "target=none" end
     return string.format("target=%s,%s,%s object=%s container=%s type=%s sprite=%s%s",
@@ -186,54 +226,88 @@ local function dump(root, id, a, why)
     return table.concat(out, "\n")
 end
 
--- THE WHOLE CHECK, in one evaluation. Returns:
---   "none"                  no placed clue is absent from its container
---   "<id>\t<category>\n..." the FIRST discrepancy, fully described
--- A clue in the survivor's own bags is NOT a discrepancy: it was picked up.
-function CFPlace.verify()
-    local skipped = 0
+-- THE WHOLE CHECK FOR ONE CLUE, in one evaluation. Takes the id the shell has
+-- just stood next to.
+--
+-- It used to walk EVERY placed clue after the shell loaded one clue's square,
+-- so every other clue - sitting in an unloaded cell by definition - resolved to
+-- nothing and would have been reported as the fault. That would have produced a
+-- confident dump about a clue nobody had gone to look at.
+--
+-- Returns one line, then the dump when there is something to dump:
+--   "none"        the container really holds it
+--   "unloaded"    its square is not loaded; no verdict is possible
+--   "in-hand"     the survivor is carrying it; the record is not wrong
+--   "skipped"     not a `placed` clue at all, with its category
+--   "DISCREPANCY" placed, loaded, not in hand, and the container does not have it
+function CFPlace.verify(id)
+    if not id then return "no-id" end
     for _, root in ipairs(roots()) do
-        for _, d in ipairs(root.case.documents) do
-            local id = d.id
-            local a = root.assignments[id]
+        local a = root.assignments[id]
+        if a then
             local c = category(a)
-            if c ~= "placed" or not a or a.status ~= "placed" then
-                -- Not the fault under investigation. Counted, never confused
-                -- with it.
-                skipped = skipped + 1
-            else
-                local token = a.physicalToken
-                local ok, container = pcall(World.resolve, a.target, token)
-                local holds = ok and container and inContainer(container, token)
-                if not holds then
-                    if token and inPlayer(token) then
-                        skipped = skipped + 1 -- already in hand; the record is fine
-                    else
-                        return "DISCREPANCY\n" .. dump(root, id, a, "placed but not in its container")
-                    end
-                end
+            if c ~= "placed" or a.status ~= "placed" then
+                return "skipped\t" .. c .. "\t" .. tostring(a.status)
             end
+            if not CFPlace.targetLoaded(a.target) then
+                return "unloaded\t" .. targetWords(a.target)
+            end
+            local token = a.physicalToken
+            if token and inPlayer(token) then
+                return "in-hand\t" .. tostring(inPlayer(token))
+            end
+            local ok, container = pcall(World.resolve, a.target, token)
+            if ok and container and inContainer(container, token) then return "none" end
+            return "DISCREPANCY\n" .. dump(root, id, a, "placed but not in its container")
         end
     end
-    return "none\tskipped=" .. skipped
+    return "no-assignment\t" .. tostring(id)
 end
 
--- After a save and reload: is THIS clue still wrong? Takes the id so the shell
--- can ask about the exact one it captured.
+-- AFTER A SAVE AND RELOAD: what is true of THIS clue now.
+--
+-- The first version treated every outcome except `holds=true` as "still
+-- absent", which would have called a retired case, a clue in the survivor's
+-- bag and an unloaded square all persistence of the fault. Each is now its own
+-- verdict, and an unloaded target yields NO verdict at all.
+--   holds      the container has it: the discrepancy did not persist
+--   absent     loaded, not in hand, container does not have it: it persisted
+--   in-hand    the survivor is carrying it: not a fault
+--   unloaded   no verdict possible
+--   retired    the case is no longer live
+--   gone       no assignment for this id
 function CFPlace.recheck(id)
     for _, root in ipairs(roots()) do
         local a = root.assignments[id]
         if a then
             local token = a.physicalToken
+            if not CFPlace.targetLoaded(a.target) then
+                return "unloaded\t" .. targetWords(a.target) .. "\n" .. dump(root, id, a, "after reload, square not loaded")
+            end
+            if token and inPlayer(token) then
+                return "in-hand\t" .. tostring(inPlayer(token)) .. "\n" .. dump(root, id, a, "after reload, in hand")
+            end
             local ok, container = pcall(World.resolve, a.target, token)
-            local holds = ok and container and inContainer(container, token)
-            local onPlayer = token and inPlayer(token)
-            return table.concat({ tostring(holds and true or false), tostring(onPlayer or "no"),
-                                  tostring(a.status), tostring(a.relocations) }, "\t")
-                   .. "\n" .. dump(root, id, a, "after save and reload")
+            if ok and container and inContainer(container, token) then
+                return "holds\t" .. tostring(a.status) .. "\t" .. tostring(a.relocations)
+                       .. "\n" .. dump(root, id, a, "after reload, container holds it")
+            end
+            return "absent\t" .. tostring(a.status) .. "\t" .. tostring(a.relocations)
+                   .. "\n" .. dump(root, id, a, "after reload, still absent")
         end
     end
-    return "gone\tthe clue's case is no longer live (retired?)"
+    -- Live cases hold no assignment for it. Retired is the innocent
+    -- explanation and must not read as the fault persisting.
+    local store = ModData and ModData.get and ModData.get(TAG)
+    local wrapper = store and Cases.current(store)
+    for _, r in ipairs((wrapper and Cases.sessions(wrapper)) or {}) do
+        if Retired.isRetired(r) then
+            for _, kid in ipairs(r.known or {}) do
+                if kid == id then return "retired\tthe clue's case has retired" end
+            end
+        end
+    end
+    return "gone\tno assignment for " .. tostring(id)
 end
 
 -- Stand next to a clue so its containers are loaded. Placement cannot be

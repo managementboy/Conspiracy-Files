@@ -38,7 +38,9 @@ CHECKS="$REPO/tools/autotest/checks"
 WORLDS=3
 [ "${1:-}" = "--worlds" ] && { WORLDS="${2:-3}"; shift 2; }
 
-claim_game || abort "another run holds the machine"
+# NOT abort(): abort stops the game, and on a lock failure the game running is
+# SOMEONE ELSE'S RUN. Stopping it would destroy the very thing the lock protects.
+claim_game || { say "another run holds the machine - leaving it alone"; exit 2; }
 
 load_lua() {
     ev -f "$CHECKS/core_loop.lua" >/dev/null && ev -f "$CHECKS/placement.lua" >/dev/null
@@ -66,48 +68,64 @@ for world in $(seq 1 "$WORLDS"); do
     if ! counts="$(settle)"; then
         say "world $world: placement never settled ($counts) - stepping over, this is not the fault"
     fi
-    say "world $world: placed=$(f 1 <<<"$counts") pending=$(f 2 <<<"$counts") never-placed=$(f 3 <<<"$counts") carrier-gone=$(f 4 <<<"$counts")"
+    say "world $world: placed=$(f 1 <<<"$counts") pending=$(f 2 <<<"$counts") never-placed=$(f 3 <<<"$counts") carrier=$(f 4 <<<"$counts") unknown-history=$(f 5 <<<"$counts")"
 
     ids="$(ev 'return CFPlace.placedIds()')"
     [ -n "$ids" ] || { say "world $world: no placed clue to check"; "$PZ" stop >/dev/null 2>&1; continue; }
 
-    # Stand beside each clue so its containers are loaded, then verify. The
-    # verify walks every clue itself, so one call after each teleport is enough
-    # - and it is a single evaluation, which is what keeps the dump honest.
-    result="none"
+    # Stand beside each clue, wait for ITS square, and verify only THAT clue.
+    # verify() takes the id for exactly this reason: every other clue sits in an
+    # unloaded cell at that moment and would resolve to nothing, so a
+    # walk-them-all verify would have produced a confident dump about a clue
+    # nobody had gone to look at.
+    result=""; bad=""
     for id in $ids; do
         ev "return CFPlace.teleportTo('$id')" >/dev/null
         wait_true 40 'CFPlace.loaded()=="true"' >/dev/null \
-            || { say "  $id: its square never loaded - not a discrepancy, a cold cell"; continue; }
+            || { say "  $id: the survivor's square never loaded"; continue; }
         sleep 2
-        result="$(ev 'return CFPlace.verify()')"
-        [ "${result%%$'\n'*}" = "DISCREPANCY" ] && break
+        r="$(ev "return CFPlace.verify('$id')")"
+        case "$(sed -n '1p' <<<"$r" | f 1)" in
+            none)     say "  $id: in its container" ;;
+            unloaded) say "  $id: its target square is not loaded - no verdict" ;;
+            in-hand)  say "  $id: the survivor is carrying it - not a fault" ;;
+            skipped)  say "  $id: not a placed clue ($(sed -n '1p' <<<"$r" | f 2))" ;;
+        esac
+        if [ "$(sed -n '1p' <<<"$r" | f 1)" = "DISCREPANCY" ]; then result="$r"; bad="$id"; break; fi
     done
 
-    if [ "${result%%$'\n'*}" != "DISCREPANCY" ]; then
-        say "world $world: no placed clue absent from its container ($result)"
+    if [ -z "$bad" ]; then
+        say "world $world: no placed clue absent from its own loaded container"
         "$PZ" stop >/dev/null 2>&1
         continue
     fi
 
     captured=$((captured + 1))
-    bad="$(sed -n '2p' <<<"$result" | sed 's/^id=//')"
     say "world $world: CAPTURED a discrepancy on $bad"
     echo "$result" | sed 's/^/    /' >&2
 
-    # Does it survive a real save and reload?
+    # Does it survive a real save and reload? Every outcome is its own verdict.
+    # The first version called a retired case, a clue in the bag and an unloaded
+    # square all "STILL absent", which would have reported the fault persisting
+    # in three situations where it had not.
     say "world $world: saving and reloading to test persistence of $bad"
-    "$PZ" stop --save >/dev/null 2>&1 || { fail "could not save world $world"; continue; }
-    "$PZ" start --continue >/dev/null 2>&1 || { fail "could not reload world $world"; continue; }
+    if ! "$PZ" stop --save >/dev/null 2>&1; then fail "could not save world $world"; continue; fi
+    if ! "$PZ" start --continue >/dev/null 2>&1; then fail "could not reload world $world"; continue; fi
     load_lua || { fail "the check's Lua would not load after the reload"; continue; }
     sleep 5
+    ev "return CFPlace.teleportTo('$bad')" >/dev/null
+    wait_true 40 'CFPlace.loaded()=="true"' >/dev/null || say "  the square did not load after the reload"
+    sleep 2
     again="$(ev "return CFPlace.recheck('$bad')")"
-    holds="$(sed -n '1p' <<<"$again" | f 1)"
-    if [ "$holds" = "true" ]; then
-        say "world $world: after the reload the container DOES hold it - the discrepancy did not persist"
-    else
-        say "world $world: after the reload it is STILL absent - the discrepancy persists"
-    fi
+    case "$(sed -n '1p' <<<"$again" | f 1)" in
+        holds)    say "world $world: after the reload the container HOLDS it - the discrepancy did not persist" ;;
+        absent)   say "world $world: after the reload it is STILL absent - the discrepancy PERSISTS" ;;
+        in-hand)  say "world $world: after the reload the survivor is carrying it - not the fault" ;;
+        unloaded) say "world $world: after the reload its square is not loaded - NO verdict on persistence" ;;
+        retired)  say "world $world: after the reload the case has retired - no verdict, and not the fault" ;;
+        gone)     say "world $world: after the reload there is no assignment for it - no verdict" ;;
+        *)        say "world $world: unrecognised recheck result" ;;
+    esac
     echo "$again" | sed 's/^/    /' >&2
     "$PZ" stop >/dev/null 2>&1
 done
