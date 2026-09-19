@@ -2,13 +2,13 @@
 
 Prepared 19 September 2026 against `main` at `73e6b62`, build `DEV-0.44.0-addresses-that-travel`.
 
-**Status: questionnaire for the owner. No answers have been assumed or approved.**
+**Status: all 32 questions have assistant recommendations, requested by the owner. None is an approved owner decision.**
 
 The owner requested this review after returning to the Windows workspace: read the campaign vision, revisit the goals from the original design, and assess the developed mod so that old decisions are not silently treated as permanent requirements.
 
 ## How to answer
 
-Answer one round at a time. Round 1 is enough for a first conversation. Use `Q01 B — because ...`, or write your own answer. Every question also accepts **undecided**, **needs a playtest**, or **no longer wanted**. Options are discussion starters, not recommendations; none is selected by default.
+Answer one round at a time. Round 1 is enough for a first conversation. Use `Q01 B — because ...`, or write your own answer. Every question also accepts **undecided**, **needs a playtest**, or **no longer wanted**. Each question now has a suggested answer with a reason and timing. Suggestions are provisional and depend on the answers to earlier questions; none is selected on your behalf. We will discuss them here one at a time and revise later suggestions when your earlier choices change their premise.
 
 For each answer, also say whether it belongs **in the next playable milestone**, **later**, or **outside the intended mod**. This distinguishes a feature you still want from work you want now.
 
@@ -67,7 +67,9 @@ The Linux development PC is offline. This review uses source and archived eviden
 - B. A campaign about the survivor, built from connected investigations across Knox.
 - C. Both as explicitly separate modes, with a choice of which we finish first.
 
-**Answer / reason / timing:** _unanswered_
+**Suggested answer — not approved:** B — Make a survivor-centered campaign of connected investigations the destination, using the existing investigation loop as its foundation. Keep ordinary survival meaningful throughout. Reason: this gives the campaign vision a clear purpose and avoids supporting two divergent products immediately. Timing: confirm the destination now; build it in small playable steps.
+
+**Owner decision:** _unanswered_
 
 ### Q02 — Does the original “nothing is optional” promise still apply?
 
@@ -77,7 +79,9 @@ The Linux development PC is offline. This review uses source and archived eviden
 - B. Replace it with a small set of essential experiences; everything else must earn its place.
 - C. Treat the original list as ideas and choose one bounded release at a time.
 
-**Answer / reason / timing:** _unanswered_
+**Suggested answer — not approved:** B — Replace the mandatory wishlist with five essential experiences: noticing clues, making useful connections, choosing what to pursue, surviving meaningful journeys, and retaining a coherent record. Reason: a feature should serve one of these experiences rather than survive because it was once requested. Timing: next milestone planning.
+
+**Owner decision:** _unanswered_
 
 ### Q03 — Is the survivor's missing past still the opening we want?
 
@@ -89,7 +93,9 @@ The Linux development PC is offline. This review uses source and archived eviden
 
 If A or B: what may the mod establish about the survivor without taking away their roleplay?
 
-**Answer / reason / timing:** _unanswered_
+**Suggested answer — not approved:** B — Make the missing-past opening an optional character background within the campaign, not a separate gameplay system. Limit it initially to a missing interval or unexplained arrival; do not overwrite the player's chosen profession, personality or entire life. Reason: a personal hook can be strong without forcing every survivor into the same biography. Timing: later, after one connected journey works.
+
+**Owner decision:** _unanswered_
 
 ### Q04 — What kinds of truth may the player actually establish?
 
@@ -99,7 +105,9 @@ If A or B: what may the mod establish about the survivor without taking away the
 - B. Allow local mysteries about people and motives to be solved while keeping the Knox Event unexplained.
 - C. Reopen how much larger truth a campaign may reveal, including whether Knox's cause must remain unknowable.
 
-**Answer / reason / timing:** _unanswered_
+**Suggested answer — not approved:** B — Allow well-supported local conclusions about people and motives while leaving the cause of the Knox Event unresolved. Evidence must distinguish what was observed, what a source claims and what remains a hunch. Reason: some earned answers make the remaining uncertainty meaningful. Timing: next milestone's narrative design; new truth rules need implementation and testing.
+
+**Owner decision:** _unanswered_
 
 ### Q05 — Who decides when and where the player should travel?
 
@@ -111,7 +119,9 @@ If A or B: what may the mod establish about the survivor without taking away the
 
 If B or C: should guidance be prose and landmarks, exact map destinations, or a player-selectable level?
 
-**Answer / reason / timing:** _unanswered_
+**Suggested answer — not approved:** B — Let the player request a new direction. A locally found clue can name a distant place using prose, landmarks and known addresses; exact marks should follow earned knowledge or the player's own annotation. Reason: travel becomes an intentional survival decision. Timing: next campaign prototype, with an explicit local fallback if the player declines.
+
+**Owner decision:** _unanswered_
 
 ### Q06 — How tightly should investigations connect?
 
@@ -121,7 +131,9 @@ If B or C: should guidance be prose and landmarks, exact map destinations, or a 
 - B. Recurring people, organisations and consequences create a continuing web.
 - C. An authored central arc with generated cases serving its chapters.
 
-**Answer / reason / timing:** _unanswered_
+**Suggested answer — not approved:** B — Build a continuing web of recurring people, organisations and unresolved consequences. Use authored connections where they matter, with generated cases around them. Reason: continuity can make earlier discoveries useful without requiring a fully scripted chapter structure. Timing: next milestone, demonstrated with two linked cases.
+
+**Owner decision:** _unanswered_
 
 ## Round 2 — What should playing feel like? (Q07–Q12)
 
@@ -133,7 +145,9 @@ If B or C: should guidance be prose and landmarks, exact map destinations, or a 
 - B. Keep it for subtle clues; obvious clues can be recognised directly.
 - C. Make the recognition and timed-action requirements adjustable.
 
-**Answer / reason / timing:** _unanswered_
+**Suggested answer — not approved:** A — Keep sense, search, recognition and noting as the standard. Preserve Look it over for clues already carried, and tune repetition through playtesting before adding exceptions. Reason: the current loop gives investigation a physical action in the world and already has positive owner feedback. Timing: retain and validate next milestone.
+
+**Owner decision:** _unanswered_
 
 ### Q08 — Which player reward should guide the next milestone?
 
@@ -144,7 +158,9 @@ Choose a primary reward and, optionally, a secondary one:
 - B. “Following this led to somewhere useful or memorable.”
 - C. “My survivor's story moved forward because of what I chose.”
 
-**Answer / reason / timing:** _unanswered_
+**Suggested answer — not approved:** A primary, B secondary — Aim first for 'I worked something out', then reward following it with a useful or memorable destination. A changed personal story can grow from these later. Reason: collecting records alone is insufficient payoff. Timing: next milestone; ask the owner to describe the connection they understood and why the journey mattered.
+
+**Owner decision:** _unanswered_
 
 ### Q09 — How much should a hunch change the next case?
 
@@ -154,7 +170,9 @@ Choose a primary reward and, optionally, a secondary one:
 - B. Hunches only change the survivor's record; the world story is fixed independently.
 - C. Hunches branch the campaign more strongly, changing later events or outcomes.
 
-**Answer / reason / timing:** _unanswered_
+**Suggested answer — not approved:** A — Let a hunch shape which thread the next case follows and which evidence it tests, but never change established facts to make the player correct. The next case should allow the chosen reading to be challenged. Reason: choices matter while the mystery remains credible. Timing: next milestone, with one understandable example of cause and effect.
+
+**Owner decision:** _unanswered_
 
 ### Q10 — How visible should a case's structure and completion be?
 
@@ -164,7 +182,9 @@ Choose a primary reward and, optionally, a secondary one:
 - B. Make cases less explicit; let discoveries form one continuous record.
 - C. Show progress and completion clearly, including counts or checklists where useful.
 
-**Answer / reason / timing:** _unanswered_
+**Suggested answer — not approved:** A — Keep visible cases and reflection points without showing a hidden-clue checklist. Phrase closure as 'enough to form a view' when appropriate; do not imply that an expired or inaccessible clue was found. Reason: players need orientation and a pause to think without being told every unknown. Timing: next milestone, coordinated with Q12.
+
+**Owner decision:** _unanswered_
 
 ### Q11 — What pace should the player experience?
 
@@ -176,7 +196,9 @@ Choose a primary reward and, optionally, a secondary one:
 
 Give a concrete expectation: during one typical real-world play session, how much investigation should happen alongside survival?
 
-**Answer / reason / timing:** _unanswered_
+**Suggested answer — not approved:** A — Focus attention on one principal mystery; let incidental discoveries be retained quietly for later. Initial playtest target: one meaningful discovery or connection in roughly 30–60 minutes of ordinary play, with no obligation to investigate every session. This is a tuning hypothesis, not a guarantee or a reason to spawn clues beside the player. Timing: next milestone; test before changing fixed case limits.
+
+**Owner decision:** _unanswered_
 
 ### Q12 — What should happen to an unfinished or impossible trail?
 
@@ -188,7 +210,9 @@ Give a concrete expectation: during one typical real-world play session, how muc
 
 For the selected approach, what must the player be told about missing evidence, and should an unplaceable clue ever count toward a case being finished?
 
-**Answer / reason / timing:** _unanswered_
+**Suggested answer — not approved:** C — Let the player shelve and resume a trail. Preserve discovered facts and physically placed evidence. Handle placement failures as incomplete opportunities, not as evidence discovered or truth resolved; report that a trail has stalled without revealing hidden totals. Reason: player disinterest and technical inability to place a clue need different outcomes. Timing: next milestone's design and a bounded cold-trail prototype.
+
+**Owner decision:** _unanswered_
 
 ## Round 3 — How does this belong in survival? (Q13–Q18)
 
@@ -200,7 +224,9 @@ For the selected approach, what must the player be told about missing evidence, 
 - B. A chosen home becomes a reference point for leads and return journeys.
 - C. Several bases form deliberate stages of the campaign.
 
-**Answer / reason / timing:** _unanswered_
+**Suggested answer — not approved:** B — Let the player explicitly designate a home as a reference point for departures and returns. Start with one home and allow it to change; avoid inferring ownership from a passing visit. Reason: returning can give travel meaning without turning base building into compulsory chapters. Timing: later, after the first distant-lead journey.
+
+**Owner decision:** _unanswered_
 
 ### Q14 — What does “crafting mastery” mean now?
 
@@ -212,7 +238,9 @@ For the selected approach, what must the player be told about missing evidence, 
 
 If B or C, name one desired player moment before choosing recipes, skills or XP rules.
 
-**Answer / reason / timing:** _unanswered_
+**Suggested answer — not approved:** B — Use existing skills for alternative routes and richer observations rather than a separate mastery meter. Example: a survivor with electrical knowledge recognises what a damaged component could power; another finds the same lead through a service record. Reason: skills should reward character choices without blocking the only route. Timing: later, one verified vanilla capability at a time.
+
+**Owner decision:** _unanswered_
 
 ### Q15 — How much may the mod change the existing world?
 
@@ -224,7 +252,9 @@ If B or C, name one desired player moment before choosing recipes, skills or XP 
 
 Specify any unacceptable changes to bodies, inventories, buildings or survival balance.
 
-**Answer / reason / timing:** _unanswered_
+**Suggested answer — not approved:** A — Keep bounded changes to existing objects and case people, with explicit limits: do not clear the player's stored inventory, overwrite a player-named object, or create scarce survival rewards merely to pay out a case. Review existing corpse-loot replacement against these limits before extending it. Reason: the story needs physical presence while scavenging should remain trustworthy. Timing: reaffirm limits now; review affected behavior before the next related feature.
+
+**Owner decision:** _unanswered_
 
 ### Q16 — How strongly should the survivor's character affect investigation?
 
@@ -234,7 +264,9 @@ Specify any unacceptable changes to bodies, inventories, buildings or survival b
 - B. Let traits, professions and skills reveal different observations, with alternative routes.
 - C. Give different characters substantially different campaign possibilities.
 
-**Answer / reason / timing:** _unanswered_
+**Suggested answer — not approved:** B — Let professions, traits and skills produce different observations with alternative routes to important information. Start with a few meaningful differences supported by verified game APIs. Reason: character identity becomes relevant without excluding a build from the campaign. Timing: later; this shares the same implementation increment as Q14.
+
+**Owner decision:** _unanswered_
 
 ### Q17 — Whose investigation survives death?
 
@@ -246,7 +278,9 @@ Specify any unacceptable changes to bodies, inventories, buildings or survival b
 
 Should a death recap be wanted now, later, or dropped? What may it reveal?
 
-**Answer / reason / timing:** _unanswered_
+**Suggested answer — not approved:** B — Make inherited investigation knowledge something a new survivor acquires through recovery of the previous survivor's records or device. Recovering a generic empty organiser alone should not grant another person's memories. Keep personal notes attributed to their author. A death recap can come later and contain only discovered information. Reason: this connects persistence to the physical world and preserves the meaning of death. Timing: later, as an explicit change from today's world-wide access.
+
+**Owner decision:** _unanswered_
 
 ### Q18 — How much investigation history must remain readable?
 
@@ -256,7 +290,9 @@ Should a death recap be wanted now, later, or dropped? What may it reveal?
 - B. Keep full recent cases and permanent concise summaries of older ones.
 - C. Accept a bounded campaign/history and make that limit part of the experience.
 
-**Answer / reason / timing:** _unanswered_
+**Suggested answer — not approved:** B — Preserve full recent cases and permanent concise summaries of older ones, including important evidence sources, unresolved connections and the player's own writing. Never silently discard owner-written notes. Measure storage before promising unlimited history; resolve retention limits before advertising a long campaign. Reason: useful continuity matters more than retaining every rendered paragraph. Timing: next milestone's retention requirements, followed by a measured storage plan.
+
+**Owner decision:** _unanswered_
 
 ## Round 4 — What should the player read, control and believe? (Q19–Q24)
 
@@ -268,7 +304,9 @@ Should a death recap be wanted now, later, or dropped? What may it reveal?
 - B. Offer equally capable electronic and paper interfaces.
 - C. Make a simple accessible case view primary, with the device as an optional presentation.
 
-**Answer / reason / timing:** _unanswered_
+**Suggested answer — not approved:** A — Keep the organiser as the main case-reading interface and retain ordinary readable physical evidence. Focus on legibility and navigation rather than rebuilding a second full interface. Reason: the device gives the mod a distinctive identity and is already substantially implemented. Timing: retain now; test during the next milestone.
+
+**Owner decision:** _unanswered_
 
 ### Q20 — Which costs of using the organiser improve the game?
 
@@ -279,7 +317,9 @@ Choose separately for **holding it**, **battery use**, and **needing a replaceme
 - B. Optional realism setting.
 - C. Remove the restriction for easier reading.
 
-**Answer / reason / timing:** _unanswered_
+**Suggested answer — not approved:** Holding: A; battery use: A; replacement when lost: A for the default experience. Reading should work in either available hand, battery drain should allow a reasonable reading session, and power loss must preserve writing. Offer an optional easier-reading preset later if playtesting shows a need. Reason: the device belongs in survival, but its costs should create choices rather than repetitive interruptions. Timing: retain now and measure inconvenience in play.
+
+**Owner decision:** _unanswered_
 
 ### Q21 — Do we still want a player-facing relationship graph?
 
@@ -289,7 +329,9 @@ Choose separately for **holding it**, **battery use**, and **needing a replaceme
 - B. A later option if ordinary records become difficult to navigate.
 - C. Remove it from the intended product.
 
-**Answer / reason / timing:** _unanswered_
+**Suggested answer — not approved:** B — Keep a player graph as a later option, conditional on actual difficulty following relationships in the organiser. First test whether a clear connection summary solves that problem. Reason: a graph is a possible interface, not itself the emotional goal of investigation. Timing: later; no graph-layout commitments return automatically.
+
+**Owner decision:** _unanswered_
 
 ### Q22 — May the player investigate things the generator did not mark as clues?
 
@@ -301,7 +343,9 @@ Choose separately for **holding it**, **battery use**, and **needing a replaceme
 
 If A or B, should the system sometimes connect these suspicions to a case, or should they remain the player's own notes?
 
-**Answer / reason / timing:** _unanswered_
+**Suggested answer — not approved:** B — Start with free observations and bookmarking a limited set of ordinary objects. A personal suspicion must remain visibly player-authored; the system may connect it only when a real supported relationship exists. Reason: curiosity should extend beyond premarked clues without generating false confirmation for every object. Timing: later, in a small prototype after the connected-case milestone.
+
+**Owner decision:** _unanswered_
 
 ### Q23 — How much assistance should locating and remembering clues provide?
 
@@ -311,7 +355,9 @@ If A or B, should the system sometimes connect these suspicions to a case, or sh
 - B. Add an optional return-to-session recap and clearer help when stuck.
 - C. Offer strong navigation and reminders as a normal or selectable mode.
 
-**Answer / reason / timing:** _unanswered_
+**Suggested answer — not approved:** B — Keep knowledge-limited location help and add an optional concise 'where I left off' recap based only on discovered evidence and self-chosen leads. Do not add omniscient destination hints. Reason: returning after a real-world break should not require rereading an entire archive. Timing: next milestone, first as a simple record summary.
+
+**Owner decision:** _unanswered_
 
 ### Q24 — What emotional tone should lead?
 
@@ -323,7 +369,9 @@ If A or B, should the system sometimes connect these suspicions to a case, or sh
 
 Name one moment that should feel funny and one that should be allowed to stay serious.
 
-**Answer / reason / timing:** _unanswered_
+**Suggested answer — not approved:** A — Put unease and mystery first, with dark humour when the situation earns it. A form requiring approval from a department that no longer exists can be funny; a personal farewell on a body should be allowed to stay serious. Reason: constant humour flattens emotional contrast and can weaken discoveries. Timing: next milestone's writing guidance.
+
+**Owner decision:** _unanswered_
 
 ## Round 5 — What are we willing to support? (Q25–Q30)
 
@@ -335,7 +383,9 @@ Name one moment that should feel funny and one that should be allowed to stay se
 - B. Add optional on-demand summaries or character voice, with factual boundaries.
 - C. Reopen a larger AI role and assess cost, connectivity and consistency before designing it.
 
-**Answer / reason / timing:** _unanswered_
+**Suggested answer — not approved:** A for the planned product — Keep gameplay offline and use authored content plus local generation rules. Runtime AI becomes a new proposal only if a concrete player need emerges that the local system cannot serve well. Development-time AI assistance remains separate. Reason: runtime AI adds service dependency and factual consistency work without yet solving the most important gameplay gap. Timing: outside the current roadmap, open to a future explicit review.
+
+**Owner decision:** _unanswered_
 
 ### Q26 — Which controls should players get?
 
@@ -347,7 +397,9 @@ Name one moment that should feel funny and one that should be allowed to stay se
 
 Which settings must remain adjustable during an existing save?
 
-**Answer / reason / timing:** _unanswered_
+**Suggested answer — not approved:** A — Offer a few clear presets for pace, assistance and device realism once the core experience is tested. Reading/accessibility and reminder settings should be adjustable mid-save; story facts and generated content must remain stable. Apply changed future-case pacing prospectively. Reason: a few meaningful choices are easier to understand and support than many interacting switches. Timing: later; record the accessibility requirement now.
+
+**Owner decision:** _unanswered_
 
 ### Q27 — How should new story content be approved?
 
@@ -359,7 +411,9 @@ Which settings must remain adjustable during an existing save?
 
 Should the content freeze now stay, end, or be replaced by a different milestone?
 
-**Answer / reason / timing:** _unanswered_
+**Suggested answer — not approved:** B — Agree the premise, tone and factual boundaries before a new story direction, then allow tested text within that scope to ship for owner review in play. Replace the ambiguous blanket freeze with the chosen milestone's explicit scope: content needed to prove it is allowed; unrelated expansion waits. Reason: this protects creative intent without requiring approval of every sentence. Timing: next milestone; this is a proposed amendment to the existing content workflow.
+
+**Owner decision:** _unanswered_
 
 ### Q28 — What compatibility must the next release promise?
 
@@ -373,7 +427,9 @@ Name the map/mod combinations that actually matter to your play.
 
 Separately, are external story/content packs **required later**, **an optional extension**, or **no longer wanted**? P2-Q183–Q191 specified them before a second content set established what an extension format should contain.
 
-**Answer / reason / timing:** _unanswered_
+**Suggested answer — not approved:** A — Promise single-player on the verified vanilla Build 42 map for the next milestone. Add a small compatibility list when you name the mods you actually use; do not claim support merely because no conflict is known. External story packs should be an optional later extension, after a second genuinely different content set shows what is needed. Reason: broad compatibility is an expensive promise with no defined test matrix yet. Timing: next milestone for vanilla; later for named extensions.
+
+**Owner decision:** _unanswered_
 
 ### Q29 — How disruptive may development updates be to a save?
 
@@ -385,7 +441,9 @@ Separately, are external story/content packs **required later**, **an optional e
 
 Is adding the mod to an already-running vanilla save still desired later, or should that promise be retired?
 
-**Answer / reason / timing:** _unanswered_
+**Suggested answer — not approved:** B — Work in stable playtest periods and group breaking changes between them. State exactly which build needs a new game and why; within a period, favour preserving the ongoing run. Adding the mod to an established vanilla save stays a later research candidate, not a release promise. Reason: a campaign cannot be judged if its save is repeatedly invalidated. Timing: start with the next playable milestone.
+
+**Owner decision:** _unanswered_
 
 ### Q30 — What evidence is enough to call the next milestone good?
 
@@ -397,7 +455,9 @@ Is adding the mod to an already-running vanilla save still desired later, or sho
 
 Name three things you want to experience. Until Linux is back, choose the useful work: Windows playtest/feedback, documentation and design, or offline implementation held for later engine verification. Steam Workshop remains the delivery route you specified.
 
-**Answer / reason / timing:** _unanswered_
+**Suggested answer — not approved:** B — Require relevant technical checks plus your multi-session Steam playtest. Three outcomes: a discovered connection makes sense; following a chosen lead creates a worthwhile journey; after a break or reload you can understand and resume the investigation. While Linux is offline, prioritise this decision review, documentation and feedback on the already-published Windows build; hold new engine-dependent releases for verification. Reason: boot success and enjoyable continuity answer different questions. Timing: next milestone.
+
+**Owner decision:** _unanswered_
 
 ## Final choices — What happens after the review? (Q31–Q32)
 
@@ -411,7 +471,9 @@ Choose after Q01–Q30, not from momentum. These are candidates, not a preselect
 
 Write: **“The milestone is done when I can ___ in a normal Steam-delivered game, and we have observed ___.”** List at most three essential experiences and explicitly defer the rest.
 
-**Answer / reason / timing:** _unanswered_
+**Suggested answer — not approved:** B, with only the necessary A fixes — Prove two connected cases and one optional distant lead before adding a complete personal origin story, bases or crafting systems. Suggested finish line: 'In a normal Steam-delivered game I can discover a connection, choose to follow it to another place, and resume that thread after saving and returning; the evidence and my decisions remain understandable and consistent.' Reason: this tests the campaign's identity using the foundation already built. Timing: next milestone, conditional on your earlier answers.
+
+**Owner decision:** _unanswered_
 
 ### Q32 — What rule stops old decisions becoming permanent by accident?
 
@@ -421,7 +483,9 @@ Write: **“The milestone is done when I can ___ in a normal Steam-delivered gam
 
 For the chosen rule, define what agents may decide independently, what needs an owner choice, and how that choice is recorded. Age alone should neither invalidate a decision nor protect it from review.
 
-**Answer / reason / timing:** _unanswered_
+**Suggested answer — not approved:** A, with a living one-page record — Review direction at each playable milestone and immediately when a change would contradict a confirmed decision. Agents may fix defects, improve diagnostics and choose internal implementation details that preserve agreed behavior; changes to story truth, player agency, save continuity, interface costs or release scope need an owner decision. Record confirmation, affected older IDs and the next review trigger. Reason: deliberate reviews prevent both stale assumptions and constant reopening of minor choices. Timing: begin with this questionnaire.
+
+**Owner decision:** _unanswered_
 
 ## Decision capture sheet
 
