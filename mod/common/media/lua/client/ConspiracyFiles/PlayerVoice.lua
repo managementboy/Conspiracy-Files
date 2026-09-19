@@ -82,9 +82,12 @@ local SET_F={
 --- the mod claiming an ending it did not deliver.
 ---
 --- These say the survivor did not get everything, and nothing more. Never that
---- a document was lost, taken or destroyed - a dropped clue was never placed in
---- the world at all, so nothing here knows its fate and no line may invent one
---- (P4-R104).
+--- a document was lost, taken or destroyed: nothing here knows any document's
+--- fate and no line may invent one (P4-R104). That holds for both histories a
+--- gap can have - a clue that never found a container and so was never in the
+--- world, and one that was placed on a carrier that then went away - which is
+--- why the wording is about the survivor's reach and says nothing about where
+--- the paper went.
 local SET_F_GAP={
     "That's all I could get hold of.",
     "Some of this never turned up.",

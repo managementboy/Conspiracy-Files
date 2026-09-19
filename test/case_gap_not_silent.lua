@@ -45,6 +45,23 @@ local carried=root({d1="placed",d2="placed",d3="dropped"},{"d1","d2"})
 carried.recognised={"d3"}
 assert(#S.gaps(carried)==0,"a clue already in hand is not a gap even if its assignment was dropped")
 
+-- TWO HISTORIES. A dropped clue is NOT always one that was never placed:
+-- `dropMissing` drops a clue that WAS out there, on a carrier that went away
+-- (P4-R134), and it nils the target, so without droppedFrom the two paths are
+-- indistinguishable afterwards. A run has to be able to say which it saw.
+local both=root({d1="dropped",d2="placed",d3="dropped"},{"d2"})
+both.assignments.d1.droppedFrom="deferred"
+both.assignments.d3.droppedFrom="carrier"
+local ids,history=S.gaps(both)
+assert(#ids==2,"both gaps are reported")
+assert(history.d1=="deferred","a clue that never found a container: "..tostring(history.d1))
+assert(history.d3=="carrier","a clue whose carrier went away: "..tostring(history.d3))
+
+-- A save written before droppedFrom existed must not be guessed at.
+local old=root({d1="placed",d2="placed",d3="dropped"},{"d1","d2"})
+local _,oldHistory=S.gaps(old)
+assert(oldHistory.d3=="unrecorded","an older save says so rather than inventing a history")
+
 -- A clue still WAITING is not a gap: the case has not finished at all, and
 -- accounted already refuses. A gap is only ever a clue the case gave up on.
 local waiting=root({d1="placed",d2="placed",d3="deferred"},{"d1","d2"})

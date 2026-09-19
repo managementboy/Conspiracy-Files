@@ -1068,9 +1068,16 @@ function R.inspect(item,inPlace)
                     -- (DR-20260919-SOLVABLE-WITHDRAWN). The count of clues the
                     -- case ended without decides which closing line is honest;
                     -- the log carries the ids so a run can be read afterwards.
-                    local gaps=Session.gaps(done)
+                    -- The log names each gap AND which history it had - never
+                    -- placed, or placed on a carrier that went away - because
+                    -- the two are different failures and looked identical
+                    -- before `droppedFrom` recorded them.
+                    local gaps,history=Session.gaps(done)
                     if #gaps>0 then
-                        log("Case complete with "..#gaps.." clue(s) never placed: "..table.concat(gaps,", "))
+                        local parts={}
+                        for _,gid in ipairs(gaps) do parts[#parts+1]=gid.."("..tostring(history[gid])..")" end
+                        log("Case complete with "..#gaps.." clue(s) the case never had: "..table.concat(parts,", ")
+                            .." [case="..tostring(done.case.caseId).."]")
                     end
                     local v=ConspiracyFiles.PlayerVoice
                     if v and v.onCaseComplete then pcall(v.onCaseComplete,done.case.caseId,#gaps) end

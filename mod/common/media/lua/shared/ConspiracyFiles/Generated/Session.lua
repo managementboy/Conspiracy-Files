@@ -182,7 +182,7 @@ function S.validate(root)
         ids[d.id]=true
         local a=root.assignments[d.id]
         if not fields(a,{physicalToken=true,target=true,status=true,placedHours=true,relocations=true,
-                         locationId=true,deferredHours=true,missingHours=true}) or a.physicalToken~="cf-g2:"..d.id
+                         locationId=true,deferredHours=true,missingHours=true,droppedFrom=true}) or a.physicalToken~="cf-g2:"..d.id
             or not ({pending=true,placing=true,placed=true,unknown=true,conflict=true,
                      deferred=true,dropped=true})[a.status] then return false,"invalid assignment" end
         -- Relocation moves the physical object, never the document's own
@@ -209,6 +209,20 @@ function S.validate(root)
         -- against it exactly as they are for a clue that never found a
         -- container. Only ever on a clue that is really out there on something
         -- that moves: a cupboard cannot go missing.
+        -- HOW A DROPPED CLUE GOT THERE. Two paths reach `dropped` and they have
+        -- different histories: `drop` gives up on a clue that never found a
+        -- container and so was NEVER in the world, while `dropMissing` gives up
+        -- on one that WAS placed, on a carrier that then went away (P4-R134).
+        -- dropMissing nils the target, so after the fact the two were
+        -- indistinguishable - which made "a dropped clue was never placed" a
+        -- false statement about half of them, and left a run unable to say
+        -- which failure it had seen. This records it, and only on a dropped
+        -- clue: no other status may carry it.
+        if a.droppedFrom~=nil then
+            if a.status~="dropped" or not ({deferred=true,carrier=true})[a.droppedFrom] then
+                return false,"invalid assignment"
+            end
+        end
         if a.missingHours~=nil then
             if WAITING[a.status] or not validHours(a.missingHours) or not S.isMobile(a.target) then
                 return false,"invalid assignment"
@@ -326,20 +340,32 @@ end
 -- those ids, in the case's own document order, so the caller can say so.
 --
 -- Deliberately not "lost": nothing here knows a document was destroyed or
--- taken, and no record may ever say so (P4-R104). A dropped clue was never
--- placed in the world at all, so the honest statement is about the survivor's
--- reach, never about the document's fate.
+-- taken, and no record may ever say so (P4-R104). The honest statement is
+-- always about the survivor's reach, never about the document's fate.
+--
+-- TWO HISTORIES, and they are not the same thing. `droppedFrom` says which:
+--   "deferred" - never found a container, so never in the world at all
+--   "carrier"  - WAS placed, on a body, zombie or car that then went away
+-- An earlier version of this comment claimed every dropped clue was never
+-- placed. That was false for the carrier path, and it is the distinction a run
+-- needs in order to say which failure it actually saw. `history` is a second
+-- return, keyed by id, so a caller that only wants the count is unaffected.
 function S.gaps(root)
-    local out={}
-    if type(root)~="table" or type(root.case)~="table" then return out end
+    local out,history={},{}
+    if type(root)~="table" or type(root.case)~="table" then return out,history end
     local known={}
     for _,id in ipairs(root.known or {}) do known[id]=true end
     for _,seen in ipairs(root.recognised or {}) do known[seen]=true end
     for _,d in ipairs(root.case.documents) do
         local a=root.assignments[d.id]
-        if not known[d.id] and a and a.status=="dropped" then out[#out+1]=d.id end
+        if not known[d.id] and a and a.status=="dropped" then
+            out[#out+1]=d.id
+            -- A save written before droppedFrom existed has neither value, and
+            -- must not be guessed at: "unrecorded" is the truth about it.
+            history[d.id]=a.droppedFrom or "unrecorded"
+        end
     end
-    return out
+    return out,history
 end
 -- `rooms` is OPTIONAL (Phase 2, docs/design/USING_GAME_ASSETS.md): when it is
 -- omitted this runs the exact original counts-indexed loop below, so
@@ -565,7 +591,8 @@ function S.open(initial,sink)
         local a=root.assignments[id]; if not a then return false,"unknown document" end
         if a.status=="dropped" then return true end
         if a.status~="deferred" then return false,"only a deferred clue can be dropped" end
-        return commit(function(r) r.assignments[id].status="dropped" end)
+        -- Never in the world: this clue never found a container at all.
+        return commit(function(r) r.assignments[id].status="dropped"; r.assignments[id].droppedFrom="deferred" end)
     end
     -- A CARRIER THAT IS GONE (P4-R134). `hours` remembers when we FIRST could
     -- not find the body, the zombie or the car; nil clears it the moment it
@@ -604,6 +631,9 @@ function S.open(initial,sink)
             local ra=r.assignments[id]
             ra.status="dropped"; ra.target=nil; ra.placedHours=nil; ra.missingHours=nil
             ra.locationId=site; ra.deferredHours=hours
+            -- This one WAS out there, on a carrier that went away. Recorded
+            -- because nilling the target above erases the only other trace.
+            ra.droppedFrom="carrier"
         end)
     end
     function api.inspect(id)

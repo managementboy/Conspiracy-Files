@@ -1,5 +1,36 @@
 # Conspiracy-Files — Current Decision Index
 
+## The guard is reporting, not progression — 2026-09-19 (late)
+
+**DR-20260919-GAP-NOT-PROGRESSION — honest reporting does not satisfy the
+recovery requirement.** The closing-line change (commit `669afdc`) fixes
+**misleading reporting** only. "That's all I could get hold of" is more honest
+than "That's all of it, I think", but if the missing clue supported an
+**essential link**, the case still lacks its promised payoff. Required, and
+**not** delivered by that commit:
+1. **Record the case as incomplete**, distinctly from a case that delivered its
+   chain.
+2. **Preserve a recovery opportunity** for the missing link, rather than closing
+   the case over it.
+The revised voice line must not be treated as completing
+`DR-20260919-SOLVABLE-WITHDRAWN`. That requirement stays open, and needs the
+notion of an essential link (`DR-20260919-OPENING-CHAIN`) before it can be
+built, since today every clue in a case is equal.
+
+**P4-R141 — a dropped clue has two histories, and they were
+indistinguishable.** Correction to my own comment and to what a run could
+report. `drop` gives up on a clue that never found a container, so it was never
+in the world; `dropMissing` gives up on one that **was** placed, on a body,
+zombie or car that then went away (P4-R134) — and it nils the target, erasing
+the only remaining trace, so after the fact the two paths looked identical. My
+comment claiming every dropped clue was never placed was false for half of them.
+Assignments now carry `droppedFrom` (`"deferred"` or `"carrier"`, valid only on
+a dropped clue, in the strict field set), `Session.gaps` returns a history map
+beside the id list, and a save predating the field reads as `"unrecorded"`
+rather than being guessed at. Avoiding invented fates is still right for **both**
+paths — nothing knows where any document went — so the closing wording is
+unchanged and remains about the survivor's reach.
+
 ## Case two's inference corrected — 2026-09-19 (late)
 
 **DR-20260919-STILL-FILING-NARROW — case two's payoff is continued paperwork,
