@@ -1,5 +1,52 @@
 # Conspiracy-Files — Current Decision Index
 
+## The opening premise narrowed — 2026-09-19 (late)
+
+**DR-20260919-OPENING-QUESTION — the opening answers "why was I left?", not
+"why did I wake up here?".** Recorded explicitly rather than treated as though
+both were covered. The substitution is deliberate: the abandonment question
+connects to the central mystery, and the arrival question invites amnesia, which
+the survivor does not have. If an arrival question is wanted, it is a separate
+premise chosen knowingly.
+
+**DR-20260919-VISITOR-SEPARATE — the visitor is not part of the first
+payoff.** My first draft claimed someone with official access had been at the
+house and offered two observations as equivalent roads to it. **Neither
+establishes it:** a supply disconnected at the box identifies neither who nor
+when relative to the grid failing, and an undamaged door proves neither key use
+nor official access nor any visit. Both are demoted to optional observations
+that establish nothing. Establishing a visitor requires something attributable —
+a service record naming a party and a date, its claims kept distinct from
+verified fact — and belongs to a later case. This was an unsupported inference
+made inside the document that introduced `DR-20260919-SUPPORT`.
+
+**DR-20260919-OPENING-PAYOFF — the first payoff is narrowed, and worded to
+distinguish the record from the event.** It reads: *a collection was scheduled
+in my name; the record puts it at a different address from the one I am at; the
+record reports that visit as unsuccessful, and the entry cancelled.* An unsigned
+annotation establishes **what the record says**, never that the visit happened
+as described — and that distinction appears in the payoff itself, not only in
+the checks.
+
+**DR-20260919-OPENING-CHAIN — completion is defined by an essential chain of
+findings, not "three of five" clues.** Three links must be established: a
+collection was scheduled for the survivor; its destination differs from the
+survivor's established location; a matching record reports an unsuccessful visit
+and cancellation. Where a link has two routes, **each route must support that
+link on its own**. The first draft failed this by offering a counterfoil at the
+other address as an alternative to the desk copy: a completed counterfoil
+supports only that a round ran on that street, a different claim, so it is
+corroboration and never a route. Link 3's two real routes are the desk copy and
+a returned undelivered notice.
+
+**DR-20260919-NO-RESIDENCE — a spawn building is not the survivor's home, and
+an adjacent building is not the next number.** The address book identifies
+buildings and numbers; it does not establish residence, and the opening must not
+imply the survivor owns or lives where they woke. Both addresses must be
+verified world addresses with **accessible carriers**, checked rather than
+assumed. The placed personal slip is what makes an address matter, without
+inventing home ownership.
+
 ## The opening's requirements settled — 2026-09-19 (late)
 
 **DR-20260919-OPENING-SCOPE — the opening explains more than the player's
