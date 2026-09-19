@@ -1,0 +1,38 @@
+The personal opening in a REAL SAVE. Revision 7b88b37. Session 20260919T214224.
+RESULT: PASS. The first case of a fresh world is the opening, in the survivor's
+own name, and it survives an actual save and reload.
+
+  survivor name          Corey Blevins   (read via getDescriptor at creation)
+  first case premise     no-contact-at-premises
+  opening recorded       Corey Blevins   (stored ON the case, for rebuild)
+  document carrying it   Collection slip / RC-842   - link A, the retained slip
+  after reload premise   no-contact-at-premises
+  after reload validates true
+  mod errors             0
+
+This is a REAL save/reload, not a mocked one: pz.sh stop --save then start
+--continue, with G.validate re-run on the restored case. That is the property
+that was at risk - a case rebuilds from its own record, so an opening whose
+premise was not recorded would have been refused on every reload.
+
+WHAT THIS DOES NOT COVER, and remains Phase B work:
+  - the essential-link machinery (links A/B/C) does not exist yet, so a
+    missing essential clue still completes the case like any other;
+  - recovery for a missing essential link is not implemented;
+  - no playthrough: the clues were not searched out, found, recorded or
+    inspected in this run, and interruption was not exercised.
+---
+pz: launching session 20260919T214224
+pz: new world is loading
+pz: game loading took 59 seconds
+[CF-DEAD-AIR]|DISABLED|version=DEV-0.44.0-addresses-that-travel|generated development session active
+pz: ready; use: tools/autotest/pz.sh eval 'return getPlayer():getX()'
+opening: survivor name: Corey Blevins
+opening: first case premise: no-contact-at-premises
+opening: opening recorded: Corey Blevins
+opening: slip title / name present:
+    Collection slip / RC-842	NAME PRESENT
+opening: validates after reload test - saving
+opening: after reload, premise: no-contact-at-premises
+opening: after reload, validates: true	nil
+opening: mod errors: 0
