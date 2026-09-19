@@ -95,57 +95,79 @@ local function fixture()
 end
 
 local R,setHours=fixture()
+-- The watcher is a file-local function today. The fix must expose it - a named
+-- test access point, or the scheduler - because a source-text check cannot read
+-- the arguments, and the arguments ARE the fault.
 assert(type(R.carrierWatch)=="function",
-    "the watcher is reachable so its arguments can be read, not only its source text")
+    "the watcher has a test access point, so its arguments can be read rather than grepped for")
 
--- A fake session api: it answers snapshot and records what the watcher asks of
--- api.missing. Nothing else about the runtime is under test here.
-local function api(missingHours)
-    local state={status="placed",missingHours=missingHours,target=CARRIER,physicalToken="cf-g2:d1"}
-    local root={case={caseId="c1",documents={{id="d1"}}},assignments={d1=state},known={}}
-    return {
-        snapshot=function() return root end,
-        assignment=function() return state end,
-        missing=function(id,hours)
-            calls[#calls+1]={id=id,hours=hours}
-            if hours==nil then state.missingHours=nil
-            elseif state.missingHours==nil then state.missingHours=hours end
-            return true
-        end,
-        dropMissing=function() calls[#calls+1]={dropMissing=true}; return true end,
-    }
-end
+-- ONE session, reused through the whole sequence. An earlier draft built a
+-- fresh fake per scenario and set missingHours by hand, which meant it never
+-- proved disappearance -> return -> second disappearance on one continuous
+-- state - and the fault is precisely a state that is never cleared.
+local state={status="placed",missingHours=nil,target=CARRIER,physicalToken="cf-g2:d1"}
+local session={case={caseId="c1",documents={{id="d1"}}},assignments={d1=state},known={}}
+local api={
+    snapshot=function() return session end,
+    assignment=function() return state end,
+    -- The real semantics of Session.api.missing, so the sequence behaves as the
+    -- game would: nil clears, and only the FIRST missing hour is kept.
+    missing=function(id,hours)
+        calls[#calls+1]={id=id,hours=hours}
+        if hours==nil then state.missingHours=nil
+        elseif state.missingHours==nil then state.missingHours=hours end
+        return true
+    end,
+    dropMissing=function(id,hours)
+        calls[#calls+1]={dropMissing=true,id=id,hours=hours}
+        state.status="dropped"; state.target=nil; state.missingHours=nil
+        state.droppedFrom="carrier"
+        return true
+    end,
+}
+local watch=R.carrierWatch(api)
 
--- (a) The carrier is GONE: the watcher must pass the hour.
-calls={}; resolveFinds=false; setHours(100)
-R.carrierWatch(api(nil))()
+-- (a) The carrier disappears: the hour is recorded.
+calls={}; resolveFinds=false; setHours(100); watch()
 assert(#calls==1,"the watcher asked about the carrier exactly once: "..#calls)
 assert(calls[1].hours==100,"a carrier that is gone is marked with the hour: "..tostring(calls[1].hours))
+assert(state.missingHours==100,"and the timer is now running from 100")
 
--- (b) The carrier is THERE: the watcher must pass nil. This is the assertion
---     the fault fails - it passed the hour here too.
-calls={}; resolveFinds=true; setHours(150)
-R.carrierWatch(api(100))()
+-- Still gone: only the first hour counts.
+calls={}; setHours(140); watch()
+assert(state.missingHours==100,"the wait is measured from when it went, not the last look")
+
+-- (b) It RETURNS: the timer must be cleared. This is the assertion the fault
+--     fails, because `found and nil or hours` yields the hour on both branches.
+calls={}; resolveFinds=true; setHours(150); watch()
 assert(#calls==1,"the watcher asked once")
 assert(calls[1].hours==nil,
-    "a carrier that is THERE must clear the timer, not re-mark it. Got "..tostring(calls[1].hours)
-    .." - this is exactly the fault: `found and nil or hours` yields the hour on both branches")
+    "a carrier that is THERE must clear the timer, not re-mark it. Got "..tostring(calls[1].hours))
+assert(state.missingHours==nil,"the timer is actually cleared on the same state, not a fresh fixture")
 
--- (c) Gone again after returning: a fresh hour, not the old one.
-calls={}; resolveFinds=false; setHours(200)
-R.carrierWatch(api(nil))()
+-- The clue must not expire now, however long we wait.
+assert(#S.missingIds(session,10000)==0,"a carrier that came back never expires")
+
+-- (c) It disappears AGAIN: a fresh timer, from the new hour, on the same state.
+calls={}; resolveFinds=false; setHours(200); watch()
 assert(calls[1].hours==200,"gone again starts again from the new hour: "..tostring(calls[1].hours))
+assert(state.missingHours==200,"not 100 - the return cancelled the first wait")
 
--- (d) Expiry: the watcher drops only once the recorded hour is three days old,
---     and the hour it drops from is the LAST disappearance. Had (b) failed to
---     clear - the fault - this clue would have been dropped from hour 100.
-calls={}; resolveFinds=true; setHours(100+S.DEFER_EXPIRE_HOURS)
-R.carrierWatch(api(nil))()
-for _,c in ipairs(calls) do assert(not c.dropMissing,"a carrier that is there is never dropped") end
-calls={}; resolveFinds=false; setHours(200+S.DEFER_EXPIRE_HOURS)
-R.carrierWatch(api(200))()
+-- (d) Expiry runs from the LAST disappearance. Had (b) failed to clear - the
+--     fault - this clue would already have been dropped at 100 + three days.
+calls={}; resolveFinds=false; setHours(100+S.DEFER_EXPIRE_HOURS); watch()
+for _,c in ipairs(calls) do
+    assert(not c.dropMissing,
+        "the fault would have dropped this clue at the FIRST hour plus three days")
+end
+assert(state.status=="placed","and it is still placed")
+
+-- On the three days from 200, it goes.
+calls={}; setHours(200+S.DEFER_EXPIRE_HOURS); watch()
 local dropped=false
 for _,c in ipairs(calls) do if c.dropMissing then dropped=true end end
 assert(dropped,"three in-game days gone and the clue is dropped")
+assert(state.status=="dropped" and state.droppedFrom=="carrier",
+    "dropped by the carrier path, recorded as such")
 
-print("PASS carrier timer: the real watcher clears a present carrier and marks only an absent one")
+print("PASS carrier timer: one continuous session - gone, returned, gone again, expired from the last disappearance")

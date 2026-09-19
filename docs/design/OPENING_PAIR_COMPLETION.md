@@ -96,7 +96,7 @@ Re-placement for an essential clue is **unproven** — see the open risks.
 
 | Link | Statement | Required evidence | Alternative sources |
 |---|---|---|---|
-| **D** | Cancellation reports were routed to a named point | A routing stamp or forwarding slip on case one's own record | **None.** This link *is* the continuity: it must physically be case one's record, carrying its reference |
+| **D** | Cancellation reports were routed to a named point | Case one's **recorded, sourced reading** of the routing stamp on its own record, carrying its reference | **None** — but the *object* is not required, only the reading of it (see below) |
 | **E** | Entries were closed there on stated dates | A batch of closures at that point, dated | **None** identified. See the open risk below |
 | **F** | Closures are dated after the last round **documented in these records** | A record whose own scope states when rounds ended: a dispatch termination notice, a round sheet closed out, a schedule marked discontinued | Only records that state a **termination**, each on its own |
 
@@ -115,17 +115,24 @@ exclude a later round through another gate, and a fuel book's last transaction
 does not exclude another vehicle. Neither establishes when *collections* ended —
 only when that book stopped recording.
 
-Two ways out, and the second is what this design takes:
-1. Require an **explicitly scoped termination record** — a dispatch notice
-   ending the rounds, a schedule marked discontinued — which says on its own
-   face what it covers.
-2. **Narrow the conclusion** to what the records actually support: closures are
-   dated after the last round *documented in these records*.
+There were two ways out and they are not alternatives — **this design takes
+both, because each fixes a different half of the overclaim**:
 
-Both are honest; the narrowed conclusion is also cheaper and survives a world
-that happens not to contain a termination notice. So link F accepts only records
-that state a termination of the rounds they cover, and the conclusion says
-"documented in these records" rather than "the last round".
+1. **The source must be explicitly scoped.** Link F accepts only a record that
+   states a **termination of the rounds it covers** — a dispatch notice ending
+   them, a schedule marked discontinued. A log that merely stops is not
+   evidence that anything ended. This is what makes the source trustworthy.
+2. **The conclusion is narrowed to match.** Even a termination notice speaks
+   only for the rounds it covers, so the conclusion says closures are dated
+   after the last round *documented in these records* — never "the last round".
+   This is what keeps the claim inside the source.
+
+An earlier version of this section said the narrowed conclusion "survives a
+world that happens not to contain a termination notice" while simultaneously
+requiring one. That was incoherent: narrowing the wording does not lower the
+evidence bar. **If no termination record exists, link F is unavailable and the
+case is incomplete** — which is why F's scarcity is recorded as an open risk
+rather than waved away.
 
 ### What the conclusion may not say
 
