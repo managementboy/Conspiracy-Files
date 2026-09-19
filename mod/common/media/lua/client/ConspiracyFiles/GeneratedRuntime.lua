@@ -1112,8 +1112,26 @@ function R.inspect(item,inPlace)
                         log("Case complete with "..#gaps.." clue(s) the case never had: "..table.concat(parts,", ")
                             .." [case="..tostring(done.case.caseId).."]")
                     end
+                    -- A CASE THAT LOST AN ESSENTIAL CLUE OWES A PAYOFF IT
+                    -- CANNOT DELIVER (DR-20260919-GAP-NOT-PROGRESSION). It
+                    -- still RETIRES - holding an active slot for ever is the
+                    -- stall P4-R142 exists to prevent - but it is recorded as
+                    -- incomplete, and its closing words and its "What do I make
+                    -- of it?" do not fire. Honest wording was never the point;
+                    -- not claiming a delivered mystery is.
+                    local essential=Session.essentialGaps(done)
+                    if #essential>0 then
+                        local names={}
+                        for _,eid in ipairs(essential) do names[#names+1]=eid.."("..tostring(history[eid])..")" end
+                        log("Case INCOMPLETE: ended without evidence its conclusion rests on: "
+                            ..table.concat(names,", ").." [case="..tostring(done.case.caseId).."]")
+                    end
                     local v=ConspiracyFiles.PlayerVoice
-                    if v and v.onCaseComplete then pcall(v.onCaseComplete,done.case.caseId,#gaps) end
+                    if #essential==0 then
+                        if v and v.onCaseComplete then pcall(v.onCaseComplete,done.case.caseId,#gaps) end
+                    elseif v and v.onCaseIncomplete then
+                        pcall(v.onCaseIncomplete,done.case.caseId,#essential)
+                    end
                 else log("Case complete but not retired: "..tostring(why)) end
                 break
             end
@@ -1652,8 +1670,19 @@ local function retireIfAccounted(done)
             else
                 log("Case complete; placement details retired.")
             end
+            -- Same rule on the drop path (P4-R142): a case completed by a drop
+            -- that took an essential clue with it has not delivered a payoff.
+            local essential=Session.essentialGaps(done)
+            if #essential>0 then
+                log("Case INCOMPLETE on the drop path: ended without "..#essential
+                    .." clue(s) its conclusion rests on [case="..tostring(done.case.caseId).."]")
+            end
             local v=ConspiracyFiles.PlayerVoice
-            if v and v.onCaseComplete then pcall(v.onCaseComplete,done.case.caseId,#gaps) end
+            if #essential==0 then
+                if v and v.onCaseComplete then pcall(v.onCaseComplete,done.case.caseId,#gaps) end
+            elseif v and v.onCaseIncomplete then
+                pcall(v.onCaseIncomplete,done.case.caseId,#essential)
+            end
             return true
         end
     end

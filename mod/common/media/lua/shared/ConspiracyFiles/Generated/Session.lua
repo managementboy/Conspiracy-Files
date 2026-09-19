@@ -415,20 +415,51 @@ end
 -- answer, and is read from those fields.
 S.UNFINISHED="unfinished"; S.COMPLETE="complete"
 S.WITH_GAPS="complete-with-gaps"; S.UNKNOWN="unknown"
+-- A FIFTH STATE, and the one the opening pair needs. A case that ended without
+-- a clue its CONCLUSION rests on has not delivered its payoff, however honestly
+-- it words its closing line (DR-20260919-GAP-NOT-PROGRESSION): saying "some of
+-- this never turned up" is accurate reporting, not a mystery. Such a case is
+-- INCOMPLETE - it states no conclusion, asks no closing questions, and keeps a
+-- recovery route (OPENING_PAIR_COMPLETION.md).
+--
+-- Only a case whose premise declares essential links can reach it. For every
+-- ordinary premise `case.essential` is absent, all clues are equal, and nothing
+-- about the existing states changes.
+S.INCOMPLETE="incomplete-essential"
+
+-- The gaps that matter: those the case's own conclusion rests on.
+function S.essentialGaps(root)
+    local out={}
+    if type(root)~="table" then return out end
+    local essential=(type(root.case)=="table" and root.case.essential) or root.essential
+    if type(essential)~="table" then return out end
+    local need={}
+    for _,id in ipairs(essential) do need[id]=true end
+    local gaps=S.gaps(root)
+    for _,id in ipairs(gaps) do if need[id] then out[#out+1]=id end end
+    return out
+end
 function S.completion(root)
     if type(root)~="table" then return S.UNKNOWN,{} end
     if type(root.case)~="table" or type(root.assignments)~="table" then
         if root.completion==S.COMPLETE then return S.COMPLETE,{} end
-        if root.completion==S.WITH_GAPS then
+        if root.completion==S.WITH_GAPS or root.completion==S.INCOMPLETE then
             local out={}
             for _,id in ipairs(root.gaps or {}) do out[#out+1]=id end
-            return S.WITH_GAPS,out
+            return root.completion,out
         end
         return S.UNKNOWN,{}
     end
     if not S.accounted(root) then return S.UNFINISHED,{} end
     local gaps=S.gaps(root)
-    if #gaps>0 then return S.WITH_GAPS,gaps end
+    if #gaps>0 then
+        -- An essential gap outranks an ordinary one: the case owes a payoff it
+        -- cannot deliver, which is a different thing from having lost a
+        -- corroborating scrap.
+        local essential=S.essentialGaps(root)
+        if #essential>0 then return S.INCOMPLETE,gaps end
+        return S.WITH_GAPS,gaps
+    end
     return S.COMPLETE,{}
 end
 -- What a retiring case must carry forward so the answer above survives it. Two

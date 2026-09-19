@@ -167,10 +167,13 @@ local function completionOK(root)
         -- record says nothing, and Session.completion reads it as unknown.
         return root.gaps==nil and root.gapsFrom==nil
     end
-    if root.completion~=Session.COMPLETE and root.completion~=Session.WITH_GAPS then return false end
+    if root.completion~=Session.COMPLETE and root.completion~=Session.WITH_GAPS
+        and root.completion~=Session.INCOMPLETE then return false end
     if root.completion==Session.COMPLETE then
         return (root.gaps==nil or #root.gaps==0) and root.gapsFrom==nil
     end
+    -- An incomplete case carries gaps exactly as a gap-bearing one does: the
+    -- difference is WHICH clues they were, not how they are recorded.
     local ok,n=dense(root.gaps,G.MAX_EVIDENCE+1); if not ok or n<1 then return false end
     local seen={}
     for i=1,n do
@@ -200,7 +203,9 @@ local function stubOK(root)
     -- ended without clues has fewer known ids, and refusing it would strand the
     -- case one tier further down.
     if n<G.MIN_EVIDENCE then
-        if root.completion~=Session.WITH_GAPS then return false,"invalid archived known" end
+        if root.completion~=Session.WITH_GAPS and root.completion~=Session.INCOMPLETE then
+            return false,"invalid archived known"
+        end
         if #(root.gaps or {})<G.MIN_EVIDENCE-n then return false,"invalid archived known" end
     end
     local seen={}
@@ -242,7 +247,9 @@ function M.validate(root)
     -- gaps that account for the shortfall, so no record can be short for any
     -- other reason.
     if n<G.MIN_EVIDENCE then
-        if root.completion~=Session.WITH_GAPS then return false,"invalid retired rows" end
+        if root.completion~=Session.WITH_GAPS and root.completion~=Session.INCOMPLETE then
+            return false,"invalid retired rows"
+        end
         if #(root.gaps or {})<G.MIN_EVIDENCE-n then return false,"invalid retired rows" end
     end
     local ids={}

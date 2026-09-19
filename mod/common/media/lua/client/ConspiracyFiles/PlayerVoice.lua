@@ -94,6 +94,20 @@ local SET_F_GAP={
     "There's a piece of this I never found.",
 }
 local indexFGap=0
+--- Set F, the third ending: the case ended without evidence its CONCLUSION
+--- rests on (DR-20260919-GAP-NOT-PROGRESSION, OPENING_PAIR_COMPLETION.md).
+--- Distinct from Set F_GAP, which is for a case that merely lost a
+--- corroborating scrap and still reached its payoff.
+---
+--- These say the investigation is not finished - because it is not. They do not
+--- claim a document was lost, taken or destroyed, and they never invite the
+--- closing question: there is nothing to make of it yet.
+local SET_F_OPEN={
+    "I never got the part that mattered.",
+    "There's a hole in the middle of this one.",
+    "I can't say what this was. Not yet.",
+}
+local indexFOpen=0
 -- Set G: the player has walked into a building an earlier document named.
 -- Fires on ARRIVAL and never before: said a moment early it is a quest marker,
 -- said on the doorstep it is recognition.
@@ -347,6 +361,16 @@ function V.onCaseComplete(caseId,gaps)
     -- the organiser never opens by itself. Both are the case's closing words and
     -- are never dropped from a full queue.
     speak(p,"What do I make of it?","A question for the organiser",true)
+end
+
+--- The case is accounted for but never had the evidence its conclusion rests
+--- on. No second thought follows: "What do I make of it?" over a case with a
+--- hole in it would present an unfinished investigation as a finished one.
+function V.onCaseIncomplete(caseId,essential)
+    local p=player(); if not p then return end
+    if not once("incomplete:"..tostring(caseId)) then return end
+    indexFOpen=indexFOpen%#SET_F_OPEN+1
+    speak(p,SET_F_OPEN[indexFOpen],"Missing what this rested on",true)
 end
 
 -- Set G: arrival at a building an earlier document named. The caller owns

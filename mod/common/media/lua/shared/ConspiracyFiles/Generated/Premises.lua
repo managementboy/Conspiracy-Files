@@ -609,6 +609,12 @@ local P={
 -- having happened (DR-20260919-OPENING-PAYOFF). No employer, no relative, no
 -- official visitor and no proven visit appears anywhere in it.
 {id="no-contact-at-premises",opening=true,reviewOptional=true,
+ -- THE ESSENTIAL CHAIN (OPENING_PAIR_COMPLETION.md). The slip is link A - the
+ -- case's only personal anchor, with no alternative - and the register is link
+ -- C. The round sheet is corroboration: it supports that a round ran, which is
+ -- a DIFFERENT claim, and its own meaning says it cannot stand in for the
+ -- register. So claim and response are essential and review is not.
+ essential={"claim","response"},
  title="No contact at premises",
  -- Ordinary first, then the other. Neither is chosen (P4-R113, P4-R122).
  readings={"A number written down wrong.","A number that was made wrong."},

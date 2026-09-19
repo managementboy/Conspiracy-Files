@@ -364,6 +364,7 @@ local function build(seed,revision,sites,cast,relayMemo,steer,opening)
     if steer and steer.organisation then organisation=steer.organisation end
     local code=REFERENCE[random(#REFERENCE)].."-"..(100+random(899))
     local cal=G.calendar(random)
+    local ANCHOR_INDEX={claim=1,response=2,review=3}
     local facts={sender=sender,recipient=recipient,organisation=organisation,code=code,
         claimDate=cal.claimDate,responseDate=cal.responseDate,reviewDate=cal.reviewDate,
         premise=premise.id,subject=premise.subject,unknown=premise.unknown}
@@ -780,6 +781,19 @@ local function build(seed,revision,sites,cast,relayMemo,steer,opening)
         documents[#documents+1]={id=prefix.."document-"..(#documents+1),kind="transcript",title=fill("Radio transcript / {CODE}",map),
             locationId=b.id,body=transcript,references={b.id,org.id},links={{target=documents[1].id,kind="recontextualises"}},leads={}}
     end
+    -- THE ESSENTIAL DOCUMENTS, resolved to ids now that the documents exist.
+    -- An anchor the case did not build (an optional review that was rolled out)
+    -- is simply absent - a link cannot be essential if the case never had it.
+    local essentialIds
+    if type(premise.essential)=="table" then
+        essentialIds={}
+        for _,name in ipairs(premise.essential) do
+            local index=ANCHOR_INDEX[name]
+            local doc=index and documents[index]
+            if doc then essentialIds[#essentialIds+1]=doc.id end
+        end
+        if #essentialIds==0 then essentialIds=nil end
+    end
     return {schemaVersion=G.SCHEMA,generatorRevision=G.REVISION,catalogRevision=revision,seed=seed,
         caseId=prefix.."case",outline=outline,premiseId=premise.id,contentStatus="development-draft-unapproved",
         locations=copy(sites),cast=#met>0 and copy(met) or nil,facts=facts,identities=people,
@@ -789,7 +803,16 @@ local function build(seed,revision,sites,cast,relayMemo,steer,opening)
         -- rebuild would draw a premise from the seed instead of the opening, the
         -- comparison would fail, and the opening case would be refused on every
         -- reload - a save-breaking bug rather than a cosmetic one.
-        opening=opening and {premise=true,self=opening.self} or nil}
+        opening=opening and {premise=true,self=opening.self} or nil,
+        -- THE ESSENTIAL DOCUMENTS, by id, from the premise's own declaration
+        -- (OPENING_PAIR_COMPLETION.md). Anchor order is fixed by construction:
+        -- document 1 is the claim, 2 the response, 3 the review. Recorded so
+        -- the runtime can tell a case that ended without its PAYOFF from one
+        -- that merely ended without a corroborating scrap - honest closing
+        -- wording alone does not deliver a mystery (DR-20260919-GAP-NOT-PROGRESSION).
+        -- Absent for every ordinary premise, where all clues are equal and
+        -- behaviour is unchanged.
+        essential=essentialIds}
 end
 -- What the player has met, reduced to what a case may safely carry: plain
 -- two-word-or-more names, printable, bounded, deduplicated and ORDERED, since
@@ -948,6 +971,17 @@ function G.validate(case)
     if not valid then return false,err end
     if #case.locations~=2 then return false,"expected two locations" end
     if case.relayMemo~=nil and case.relayMemo~=true then return false,"invalid relay memo flag" end
+    if case.essential~=nil then
+        if type(case.essential)~="table" or #case.essential==0 then return false,"invalid essential list" end
+        local byId={}
+        for _,d in ipairs(case.documents) do byId[d.id]=true end
+        local seenEssential={}
+        for _,id in ipairs(case.essential) do
+            if type(id)~="string" or not byId[id] then return false,"essential names a document the case does not have" end
+            if seenEssential[id] then return false,"duplicate essential document" end
+            seenEssential[id]=true
+        end
+    end
     if case.opening~=nil then
         if type(case.opening)~="table" or case.opening.premise~=true then return false,"invalid opening flag" end
         if type(case.opening.self)~="string" or #case.opening.self==0 or #case.opening.self>60 then
