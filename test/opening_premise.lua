@@ -189,3 +189,40 @@ assert(outlines["conflicting-account"],"and conflicts on others - it is never on
 print(string.format(
     "PASS opening premise: reachable by name on %d seeds, both readings occur, %d documents carry no placeholder",
     made,docs))
+
+-- ---------------------------------------------------------------------------
+-- 7. THE PATH THE FIRST CASE ACTUALLY TAKES -------------------------------
+-- ---------------------------------------------------------------------------
+-- The runtime's first case goes through firstCase -> G.generateSelected, NOT
+-- G.generate. generateSelected forwarded the opening to build but its own
+-- option whitelist rejected the keys, so the premise was built, tested and
+-- unreachable in play: "unknown generator option". Both entry points must
+-- accept and validate the opening identically.
+local cat=catalog()
+local sites={}
+for _,site in ipairs(cat.locations) do sites[#sites+1]=site.id end
+assert(#sites>=2,"the fixture has two sites to select")
+
+local sel,selWhy=G.generateSelected(cat,101,openingOpts(NAME),{sites[1],sites[2]})
+assert(sel,"generateSelected accepts the opening: "..tostring(selWhy))
+assert(sel.facts.premise=="no-contact-at-premises","and builds the opening premise")
+assert(sel.opening and sel.opening.self==NAME,"and records it on the case")
+assert(G.validate(sel),"and it rebuilds from its own record")
+local selSlip=false
+for _,d in ipairs(sel.documents) do
+    if d.body:find(NAME,1,true) then selSlip=true end
+    assert(not d.body:find("{SELF}",1,true),"no placeholder survives this path either")
+end
+assert(selSlip,"the survivor's name reaches a document on this path too")
+
+-- And it refuses on the same terms, so the two entry points cannot drift.
+local noName=G.generateSelected(cat,101,
+    {mapId=OPTS.mapId,buildLine=OPTS.buildLine,allowSynthetic=true,opening=true},{sites[1],sites[2]})
+assert(noName==nil,"generateSelected refuses an opening with no name")
+assert(G.generateSelected(cat,101,openingOpts(""),{sites[1],sites[2]})==nil,"and an empty one")
+
+-- An ordinary selected case is unchanged.
+local ordSel=assert(G.generateSelected(cat,101,OPTS,{sites[1],sites[2]}),"an ordinary selected case still builds")
+assert(ordSel.facts.premise~="no-contact-at-premises" and ordSel.opening==nil,
+    "and is neither the opening nor marked as one")
+print("PASS opening premise: both entry points accept, validate and record the opening identically")

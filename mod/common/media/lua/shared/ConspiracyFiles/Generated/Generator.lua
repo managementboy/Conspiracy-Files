@@ -888,8 +888,19 @@ function G.generateSelected(catalog,seed,options,orderedSiteIds)
     local safe=V.validateStructure({options=options,orderedSiteIds=orderedSiteIds})
     if not safe or type(options)~="table" or type(orderedSiteIds)~="table" then return nil,"invalid selected-generation input" end
     for key in pairs(options) do
-        if key~="mapId" and key~="buildLine" and key~="allowSynthetic" and key~="names" and key~="relayMemo" and key~="steer" then return nil,"unknown generator option" end
+        if key~="mapId" and key~="buildLine" and key~="allowSynthetic" and key~="names" and key~="relayMemo"
+            and key~="steer" and key~="opening" and key~="self" then return nil,"unknown generator option" end
     end
+    -- THE SAME TWO OPTIONS AS G.generate, validated the same way. This path is
+    -- the one the FIRST case of a save actually takes (firstCase ->
+    -- generateSelected), so without them here the opening would have been
+    -- refused with "unknown generator option" - the premise built, tested and
+    -- unreachable in play.
+    if options.opening~=nil and type(options.opening)~="boolean" then return nil,"invalid opening option" end
+    if options.self~=nil then
+        if type(options.self)~="string" or #options.self==0 or #options.self>60 then return nil,"invalid survivor name" end
+    end
+    if options.opening and not options.self then return nil,"the opening needs the survivor's name" end
     local steer
     if options.steer~=nil then local bad; steer,bad=G.steerFrom(options.steer); if not steer then return nil,bad end end
     for key in pairs(orderedSiteIds) do if key~=1 and key~=2 then return nil,"exactly two ordered site IDs required" end end

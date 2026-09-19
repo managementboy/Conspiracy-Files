@@ -613,6 +613,39 @@ local function prepare(result,seed,later,house)
         -- The first case of a game carries the relay memo (P4-R96); later
         -- cases never do, so a game holds exactly one.
         if not later then options.relayMemo=true end
+        -- THE PERSONAL OPENING (DR-20260919-BUILD-PAIR, DR-20260919-Q31). The
+        -- first case of a save is the survivor's own: a collection scheduled in
+        -- their name, recorded at an address that is not the one they are at.
+        -- Only ever the first - a later case must never carry the survivor's
+        -- own name, which is why Premises.choose cannot draw this premise.
+        --
+        -- The name is read HERE, at creation, and saved in the case, exactly as
+        -- the cast and the steer are: re-reading it at load would break
+        -- validation, because the case rebuilds from its own record.
+        --
+        -- No name, no opening. The slip is the case's only personal anchor and
+        -- link A has no alternative (OPENING_PAIR_COMPLETION.md), so a nameless
+        -- survivor gets an ordinary first case rather than a blank slip. Both
+        -- the descriptor and its fields are read under pcall because a mod that
+        -- cannot generate a case is worse than one whose opening is ordinary.
+        if not later then
+            local name
+            local okD,descriptor=pcall(function() return p:getDescriptor() end)
+            if okD and descriptor then
+                local okN,fore=pcall(function() return descriptor:getForename() end)
+                local okS,sur=pcall(function() return descriptor:getSurname() end)
+                local parts={}
+                if okN and type(fore)=="string" and #fore>0 then parts[#parts+1]=fore end
+                if okS and type(sur)=="string" and #sur>0 then parts[#parts+1]=sur end
+                if #parts>0 then name=table.concat(parts," ") end
+            end
+            if name and #name<=60 then
+                options.opening=true; options.self=name
+                log("first case: the personal opening, in the survivor's own name")
+            else
+                log("first case: no readable survivor name, so an ordinary case rather than a blank slip")
+            end
+        end
         -- The people this case is about come from bodies the player has already
         -- searched, when there are any. Read once, here, at creation, and saved
         -- in the case - never re-read at load, which would break validation.
