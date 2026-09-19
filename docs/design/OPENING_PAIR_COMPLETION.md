@@ -55,16 +55,34 @@ an alternative, and none may appear in the conclusion's evidence list.
 
 ### Recovery
 
-| What is unavailable | What happens |
-|---|---|
-| **Link A** | The case does not open. Nothing is placed and no promise is made. This is a refusal with a stated reason, not a failure |
-| **Link B** | Cannot occur after siting: both addresses resolved before placement, and an address does not stop resolving |
-| **Link C, one source** | The other source is used. No recovery needed — this is why there are two |
-| **Link C, both sources** | The case is **incomplete**. It records itself as such, states that the record it needed was never found, and **keeps its recovery open**: link C may be re-placed for a later opportunity (`DR-20260919-Q23`, clues never found placed in new locations). It does not close, and it does not ask its closing questions |
+Three failures, not one. The earlier version only handled the first, which left
+the commonest real case — a clue that was placed and then destroyed — undefined.
 
-The distinction that matters: a case missing link C has **not** delivered its
-payoff, so it must not retire, must not present a conclusion, and must not read
-as finished with a rueful line. It stays open with a reachable route.
+| Failure | What it means | |
+|---|---|---|
+| **1 · Placement failure** | The clue never found a container. It was never in the world | Detected before the player could have met it |
+| **2 · Loss while undiscovered** | It was placed, then destroyed or its carrier went away, and the survivor never saw it | The player lost something they never knew existed |
+| **3 · Loss after recording** | The survivor found it, it is in the record, and the object is now gone | **The finding survives. This is not a loss of evidence** (`P4-R80`, `P4-R104`) |
+
+**Failure 3 never breaks a link.** A recorded, sourced reading is the evidence
+from that moment on; the paper is a souvenir. Any rule that re-broke a link when
+an object disappeared would mean a house fire retroactively unsolves a case.
+
+| Link | Failure 1 | Failure 2 | Failure 3 |
+|---|---|---|---|
+| **A** (the slip) | The case does not open. Nothing placed, no promise made — a refusal with a stated reason | The case is **incomplete** and keeps recovery open. The slip is re-placed, because without it nothing ties any record to this survivor. Never on a carrier, so this is rare by construction | Nothing. The reading stands and the case proceeds |
+| **B** (the comparison) | Cannot occur: both addresses resolved before siting | Cannot occur: an address is not an object | Cannot occur |
+| **C** (the record) | The other source is used | The other source is used. If both are lost, **incomplete** and recovery open | Nothing |
+
+### Recovery, precisely
+
+A case missing an essential link through failure 1 or 2 is **incomplete**. It
+records itself as such, states that a record it needed was never found, does
+**not** retire, does **not** present a conclusion, and does **not** ask its
+closing questions. Its missing link is re-placed for a later opportunity
+(`DR-20260919-Q23`).
+
+Re-placement for an essential clue is **unproven** — see the open risks.
 
 ---
 
@@ -72,23 +90,42 @@ as finished with a rueful line. It stays open with a reachable route.
 
 ### The conclusion, and exactly what it needs
 
-> Paperwork on the collection list carried on after the collection rounds had
-> stopped running. Entries were still being closed on dates when no round was
-> out.
+> Paperwork on the collection list carried on after the rounds these records
+> cover had been discontinued. Entries were still being closed on dates later
+> than the termination those same records state.
 
 | Link | Statement | Required evidence | Alternative sources |
 |---|---|---|---|
 | **D** | Cancellation reports were routed to a named point | A routing stamp or forwarding slip on case one's own record | **None.** This link *is* the continuity: it must physically be case one's record, carrying its reference |
 | **E** | Entries were closed there on stated dates | A batch of closures at that point, dated | **None** identified. See the open risk below |
-| **F** | The last round ran before some of those dates | A field record naming the last round's date — a round sheet, a gate log, a fuel book | Any one of those three, each carrying a date for the last round |
+| **F** | Closures are dated after the last round **documented in these records** | A record whose own scope states when rounds ended: a dispatch termination notice, a round sheet closed out, a schedule marked discontinued | Only records that state a **termination**, each on its own |
 
-**Link D has no alternative on purpose.** An alternative would let case two
-stand alone, and a case that can stand alone proves nothing about continuity.
-Requiring case one's physical record is what makes this a pair rather than two
-cases sharing a subject.
+**Link D has no alternative on purpose** — but it does **not** require the
+physical original. What it requires is case one's *sourced reading* of the
+routing stamp: the record the survivor made, with its source. Once that reading
+exists, the paper may be lost without breaking continuity. Requiring the object
+itself would mean losing a slip retroactively destroys the pair, which
+contradicts the rule that losing a thing must never cost you the case
+(`P4-R80`). **Recorded evidence stays usable.**
 
-**Link F's three sources are genuinely interchangeable** — each names a date for
-the last round, which is the whole of what link F needs.
+**Link F was overclaimed and is now narrowed.** The earlier version treated a
+round sheet, a gate log and a fuel book as interchangeable sources for "the last
+round ran before those dates". They are not: a gate log's last entry does not
+exclude a later round through another gate, and a fuel book's last transaction
+does not exclude another vehicle. Neither establishes when *collections* ended —
+only when that book stopped recording.
+
+Two ways out, and the second is what this design takes:
+1. Require an **explicitly scoped termination record** — a dispatch notice
+   ending the rounds, a schedule marked discontinued — which says on its own
+   face what it covers.
+2. **Narrow the conclusion** to what the records actually support: closures are
+   dated after the last round *documented in these records*.
+
+Both are honest; the narrowed conclusion is also cheaper and survives a world
+that happens not to contain a termination notice. So link F accepts only records
+that state a termination of the rounds they cover, and the conclusion says
+"documented in these records" rather than "the last round".
 
 ### What the conclusion may not say
 
@@ -111,19 +148,32 @@ A separate, stronger conclusion, available only with its own evidence
 
 Neither alone establishes it: an instruction that was never applied is a
 proposal, and closures without the instruction are the narrow finding again.
-**Still not which entries, and never the survivor's own.**
+
+**Corrected: the entries H identifies ARE named.** The earlier rule said "still
+not which entries" while H specifically identifies entries carrying the
+instruction's reference — a contradiction, and the wrong kind: it forbade a
+conclusion the evidence supported. Where H names entries, the survivor may
+conclude about **those** entries. That is what the evidence says.
+
+**The survivor's own entry stays uncertain because the evidence genuinely does
+not name it** — not because a rule forbids the conclusion. That has to be true
+by construction: H's closure batch must not contain the survivor's reference.
+If it ever did, the honest outcome is that the survivor *learns* their entry was
+closed without an attempt, and the design must then decide whether that is the
+story it wants — but it may not be prevented by a rule while the paper says
+otherwise.
 
 The extension is **not** part of the essential chain. Its absence is not a gap
 and triggers no recovery; the case completes on D, E and F.
 
 ### Recovery
 
-| What is unavailable | What happens |
-|---|---|
-| **Link D** | Case two does not open. It is the continuity, so without it there is no follow-up to offer — and case one stays answerable on its own |
-| **Link E** | The case is **incomplete** and keeps recovery open, as case one does for link C |
-| **Link F** | Same. The three sources make this the least likely failure, and the most likely to be recoverable at a different site |
-| **G or H** | Nothing. The extension simply does not appear. No gap, no recovery, no mention |
+| Link | Failure 1 · never placed | Failure 2 · lost unseen | Failure 3 · lost after recording |
+|---|---|---|---|
+| **D** (case one's routing stamp) | Case two does not open. It *is* the continuity, so there is no follow-up to offer; case one stays answerable on its own | Case two does not open. Its opening waits until case one's reading exists | **Nothing.** The sourced reading carries the continuity. Losing the slip after recording it must not destroy the pair (`P4-R80`) |
+| **E** (the closure batch) | **Incomplete**, recovery open | **Incomplete**, recovery open | Nothing |
+| **F** (the termination record) | **Incomplete**, recovery open | **Incomplete**, recovery open | Nothing |
+| **G**/**H** (the extension) | Nothing. It simply does not appear — no gap, no recovery, no mention | Nothing | Nothing |
 
 ---
 
@@ -145,10 +195,19 @@ and triggers no recovery; the case completes on D, E and F.
 - **Link E has no alternative source identified.** A single point of failure in
   case two's chain. Either a second source is found, or E's recovery must be
   especially reliable.
-- **Link F's field record may not exist within a short trip** — the same
-  neighbourhood constraint (`DR-20260919-SITING` 3) may not contain a round
-  sheet, gate log or fuel book. This is the risk most likely to force a redesign
-  and is worth checking in the real world early.
+- **Link F now needs a termination record, which is scarcer than a log.**
+  Narrowing F to records that state their own termination made it honest and
+  made it rarer: a round sheet or fuel book no longer qualifies. Whether such a
+  record can plausibly sit within a short trip
+  (`DR-20260919-SITING` 3) is the risk most likely to force a redesign, and is
+  worth checking in the real world early.
 - **Recovery by re-placement is unproven for an essential clue.** Relocating a
   never-found clue exists as a direction (`DR-20260919-Q23`) but has not been
   built or measured.
+- **Failure 3 depends on a sourced reading actually being retained**, which is
+  the retention work (`DR-20260919-RETENTION-BOUND`) — itself bounded and
+  unproven across many cases. If a reading does not survive, links A and D lose
+  their protection against object loss.
+- **The extension must be constructed so H cannot name the survivor's entry.**
+  That is a generation constraint, not a rule about conclusions, and nothing
+  enforces it yet.

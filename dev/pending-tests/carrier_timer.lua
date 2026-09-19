@@ -1,7 +1,6 @@
 -- THE CARRIER TIMER (P4-R134, and the fault found in review at `383c252`).
 --
--- RED BY DESIGN until the fix lands. This test is written first so the fix is
--- reviewable the moment the baseline run finishes.
+-- RED BY DESIGN until the fix lands.
 --
 -- The fault: GeneratedRuntime's carrier watcher decided the timer with
 --
@@ -9,101 +8,144 @@
 --
 -- and in Lua `true and nil` is nil, so `nil or hours` is hours; `false and nil`
 -- is false, so `false or hours` is hours. BOTH branches pass hours. The
--- clear-the-timer branch is unreachable, and because api.missing only records
+-- clear-the-timer branch is unreachable, and because api.missing records only
 -- the FIRST missing hour, a carrier standing in front of the survivor is marked
--- missing once, never cleared, and its clue is dropped three in-game days later
--- through dropMissing.
+-- missing once, never cleared, and its clue is dropped three in-game days later.
 --
--- Why no existing test caught it: every one of the four behaviours below is
--- already proven against Session's own api.missing in
--- test/clues_on_the_move.lua, and all four pass. The API was never wrong. The
--- bug is a single expression in client code that plain Lua cannot load - so the
--- decision has to move into the pure layer to be testable at all. That is what
--- S.missingMark is for, and this test is the reason it exists.
-package.path="mod/common/media/lua/shared/?.lua;"..package.path
+-- Why no existing test caught it: all four timer behaviours are already proven
+-- against Session's own api.missing in test/clues_on_the_move.lua, and all four
+-- pass. The API was never wrong. The bug is one expression in the CALLER.
+--
+-- So this test does two things, and the second is the one that would have caught
+-- it. An earlier draft claimed the client file "cannot be loaded outside the
+-- game" and checked the source text for the word `missingMark` instead - which
+-- proves only that the word appears somewhere. That was wrong on both counts:
+-- test/g2_smoke.lua, test/g2_faults.lua and test/clue_recognition.lua all load
+-- GeneratedRuntime under mocks, so the real watcher can be exercised, and the
+-- arguments actually reaching api.missing can be read.
+package.path="mod/common/media/lua/shared/?.lua;mod/common/media/lua/client/?.lua;"..package.path
 local S=require("ConspiracyFiles/Generated/Session")
 
 -- ---------------------------------------------------------------------------
--- 1. The decision itself, as a pure function ------------------------------
+-- 1. The decision as a pure function --------------------------------------
 -- ---------------------------------------------------------------------------
-assert(type(S.missingMark)=="function",
-    "Session decides the carrier mark, so the decision can be tested at all")
-
--- Found means present means NO mark: this is the branch the broken idiom could
--- never reach.
+-- The decision moves into the pure layer so it is testable on its own, not
+-- only through a mocked game.
+assert(type(S.missingMark)=="function","Session decides the carrier mark")
 assert(S.missingMark(true,10)==nil,"a carrier that is there clears the timer")
 assert(S.missingMark(true,0)==nil,"even at hour zero")
--- Not found means mark it with the hour we looked.
 assert(S.missingMark(false,10)==10,"a carrier that is gone starts the timer")
 assert(S.missingMark(false,0)==0,"hour zero is a real hour, not absent")
-
--- The exact shape of the bug, stated so it can never come back: whatever the
--- inputs, a found carrier and a missing one must not produce the same answer.
 for _,hour in ipairs({0,1,10,72,1000}) do
     assert(S.missingMark(true,hour)~=S.missingMark(false,hour),
         "found and not-found must differ at hour "..hour.." - the fault was that they did not")
 end
+print("PASS carrier timer: the mark distinguishes a carrier that is there from one that is gone")
 
 -- ---------------------------------------------------------------------------
--- 2. The four behaviours, driven through the mark ---------------------------
+-- 2. The four behaviours through Session's own API -------------------------
 -- ---------------------------------------------------------------------------
--- A minimal mobile assignment. The full world fixture lives in
--- test/clues_on_the_move.lua; here only the timer is under test.
-local function root()
+local function snap(missingHours,status,known)
     return {case={caseId="c1",documents={{id="d1"}}},
-            assignments={d1={status="placed",missingHours=nil}},known={}}
+            assignments={d1={status=status or "placed",missingHours=missingHours}},
+            known=known or {}}
 end
--- The watcher, written the way the runtime must write it: the mark decides.
-local function watch(r,found,hours)
-    local a=r.assignments.d1
-    local mark=S.missingMark(found,hours)
-    if mark==nil then a.missingHours=nil
-    elseif a.missingHours==nil then a.missingHours=mark end
-    return a.missingHours
-end
-
--- (a) Disappearance starts the timer.
-local r=root()
-assert(watch(r,false,100)==100,"gone at hour 100 starts the timer there")
-assert(watch(r,false,140)==100,"and only the first hour counts: the wait is from when it went")
-
--- (b) Return clears it.
-assert(watch(r,true,150)==nil,"the carrier turns up again and the timer is gone")
-assert(#S.missingIds({case=r.case,assignments=r.assignments,known={}},10000)==0,
-    "a carrier that came back never expires, however long we wait")
-
--- (c) A second disappearance starts a FRESH timer.
-assert(watch(r,false,200)==200,"gone again starts again, from the new hour")
-assert(r.assignments.d1.missingHours==200,"not the old hour: the first wait was cancelled by its return")
-
--- (d) Expiry behaves correctly, on the same three in-game days as a clue with
---     nowhere to go.
-local snap={case=r.case,assignments=r.assignments,known={}}
-assert(#S.missingIds(snap,200+S.DEFER_EXPIRE_HOURS-0.1)==0,"not expired a moment early")
-local expired=S.missingIds(snap,200+S.DEFER_EXPIRE_HOURS)
-assert(#expired==1 and expired[1]=="d1","expired exactly on the three days")
--- And the clock runs from the SECOND disappearance, not the first. Had the
--- return failed to clear - the fault - this would have expired at 100+72.
-assert(#S.missingIds(snap,100+S.DEFER_EXPIRE_HOURS)==0,
-    "the fault would have expired this clue at the FIRST hour plus three days")
-
--- A clue already found is never expiring, whatever the world did to its carrier.
-local held={case=r.case,assignments=r.assignments,known={"d1"}}
-assert(#S.missingIds(held,200+S.DEFER_EXPIRE_HOURS)==0,"a clue in hand is not missing")
-
-print("PASS carrier timer: present clears, gone starts, gone again restarts, expiry runs from the last disappearance")
+-- Expiry runs from the hour recorded, and only the first is kept.
+assert(#S.missingIds(snap(100),100+S.DEFER_EXPIRE_HOURS-0.1)==0,"not expired a moment early")
+assert(#S.missingIds(snap(100),100+S.DEFER_EXPIRE_HOURS)==1,"expired exactly on three in-game days")
+assert(#S.missingIds(snap(nil),10000)==0,"a cleared timer never expires, however long we wait")
+assert(#S.missingIds(snap(100,"placed",{"d1"}),100+S.DEFER_EXPIRE_HOURS)==0,
+    "a clue already in hand is never missing")
+print("PASS carrier timer: a cleared timer never expires and a set one expires on the three days")
 
 -- ---------------------------------------------------------------------------
--- 3. The runtime must USE it, not re-inline the decision -------------------
+-- 3. THE REAL WATCHER, with carrier resolution mocked ---------------------
 -- ---------------------------------------------------------------------------
--- The bug was an expression, so the guard is about the expression. A source
--- check is weak evidence in general; here it is the only evidence available,
--- because the file cannot be loaded outside the game.
-local f=assert(io.open("mod/common/media/lua/client/ConspiracyFiles/GeneratedRuntime.lua"))
-local src=f:read("*a"); f:close()
-assert(not src:find("found and nil or hours",1,true),
-    "the unreachable-branch idiom is gone from the carrier watcher")
-assert(not src:find("and nil or hours",1,true),"and no variant of it remains")
-assert(src:find("missingMark",1,true),
-    "the watcher asks Session for the mark rather than deciding inline")
-print("PASS carrier timer: the runtime asks for the mark instead of re-deriving it")
+-- What reaches api.missing is the whole of the fault, so it is what is read.
+local CARRIER={x=0,y=0,z=0,objectIndex=0,containerIndex=0,sprite="body",
+               carrierKind="corpse",carrierMark="mark-1",containerType=S.CARRIER_CONTAINER}
+assert(S.isMobile(CARRIER),"the fixture target really is a carrier")
+
+local resolveFinds=true          -- flipped per case below
+local calls                      -- every api.missing call, in order
+
+local function fixture()
+    ConspiracyFiles=nil
+    package.loaded["ConspiracyFiles/GeneratedRuntime"]=nil
+    package.preload["ConspiracyFiles/ClueCue"]=function() return {} end
+    package.preload["ConspiracyFiles/GeneratedMenu"]=function() return {} end
+    -- Carrier resolution is the one thing under test: it says found or not.
+    package.preload["ConspiracyFiles/WorldAccess"]=function()
+        return {resolve=function() return resolveFinds and {getItems=function() return {size=function() return 1 end,get=function() return nil end} end} or nil end,
+                count=function() end}
+    end
+    Events={OnTick={Add=function() end},OnGameStart={Add=function() end}}
+    local worldAge=0
+    getGameTime=function() return {getWorldAgeHours=function() return worldAge end} end
+    local player={getX=function() return 0 end,getY=function() return 0 end,getZ=function() return 0 end,
+                  getModData=function() return {} end,getVehicle=function() return nil end}
+    getPlayer=function() return player end
+    getDebug=function() return true end; isClient=function() return false end; isServer=function() return false end
+    getTimeInMillis=function() return 0 end
+    getCell=function() return {getGridSquare=function() return nil end} end
+    instanceof=function() return false end
+    ModData={getOrCreate=function() return {} end,get=function() return nil end}
+    local R=require("ConspiracyFiles/GeneratedRuntime")
+    return R,function(h) worldAge=h end
+end
+
+local R,setHours=fixture()
+assert(type(R.carrierWatch)=="function",
+    "the watcher is reachable so its arguments can be read, not only its source text")
+
+-- A fake session api: it answers snapshot and records what the watcher asks of
+-- api.missing. Nothing else about the runtime is under test here.
+local function api(missingHours)
+    local state={status="placed",missingHours=missingHours,target=CARRIER,physicalToken="cf-g2:d1"}
+    local root={case={caseId="c1",documents={{id="d1"}}},assignments={d1=state},known={}}
+    return {
+        snapshot=function() return root end,
+        assignment=function() return state end,
+        missing=function(id,hours)
+            calls[#calls+1]={id=id,hours=hours}
+            if hours==nil then state.missingHours=nil
+            elseif state.missingHours==nil then state.missingHours=hours end
+            return true
+        end,
+        dropMissing=function() calls[#calls+1]={dropMissing=true}; return true end,
+    }
+end
+
+-- (a) The carrier is GONE: the watcher must pass the hour.
+calls={}; resolveFinds=false; setHours(100)
+R.carrierWatch(api(nil))()
+assert(#calls==1,"the watcher asked about the carrier exactly once: "..#calls)
+assert(calls[1].hours==100,"a carrier that is gone is marked with the hour: "..tostring(calls[1].hours))
+
+-- (b) The carrier is THERE: the watcher must pass nil. This is the assertion
+--     the fault fails - it passed the hour here too.
+calls={}; resolveFinds=true; setHours(150)
+R.carrierWatch(api(100))()
+assert(#calls==1,"the watcher asked once")
+assert(calls[1].hours==nil,
+    "a carrier that is THERE must clear the timer, not re-mark it. Got "..tostring(calls[1].hours)
+    .." - this is exactly the fault: `found and nil or hours` yields the hour on both branches")
+
+-- (c) Gone again after returning: a fresh hour, not the old one.
+calls={}; resolveFinds=false; setHours(200)
+R.carrierWatch(api(nil))()
+assert(calls[1].hours==200,"gone again starts again from the new hour: "..tostring(calls[1].hours))
+
+-- (d) Expiry: the watcher drops only once the recorded hour is three days old,
+--     and the hour it drops from is the LAST disappearance. Had (b) failed to
+--     clear - the fault - this clue would have been dropped from hour 100.
+calls={}; resolveFinds=true; setHours(100+S.DEFER_EXPIRE_HOURS)
+R.carrierWatch(api(nil))()
+for _,c in ipairs(calls) do assert(not c.dropMissing,"a carrier that is there is never dropped") end
+calls={}; resolveFinds=false; setHours(200+S.DEFER_EXPIRE_HOURS)
+R.carrierWatch(api(200))()
+local dropped=false
+for _,c in ipairs(calls) do if c.dropMissing then dropped=true end end
+assert(dropped,"three in-game days gone and the clue is dropped")
+
+print("PASS carrier timer: the real watcher clears a present carrier and marks only an absent one")
