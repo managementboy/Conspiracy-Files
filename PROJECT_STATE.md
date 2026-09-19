@@ -1,5 +1,10 @@
 # Conspiracy-Files — Project State
 
+## Completed evidence audit — 2026-09-19
+
+[Existing texts and generation logic audited](docs/design/EXISTING_EVIDENCE_AUDIT_2026-09-19.md): all 20 generated premise families, shared templates, Dead Air, continuation, completion and archive behavior. Concrete repairs are now in the [development handoff](docs/management/CENTRAL_MYSTERY_DEVELOPMENT_HANDOFF_2026-09-19.md). Documentation only; no source changes or new engine passes.
+
+
 ## Latest premise clarification — 2026-09-19
 
 The search for why the survivor is isolated in Knox drives the investigations, although the Knox Event has no definitive explanation. Start with the [revised development handoff](docs/management/CENTRAL_MYSTERY_DEVELOPMENT_HANDOFF_2026-09-19.md) and [all 32 decisions reassessed](docs/design/CENTRAL_MYSTERY_REVIEW_2026-09-19.md). Personal openings use our own local clues; naturally discovered annotated maps each lead to destination evidence and a meaningful local payoff connected to the central search. No random occupation-flyer prerequisite or secret final answer. Specific story details and unresolved trigger/coverage rules remain proposals. Planning only; no new engine verification.

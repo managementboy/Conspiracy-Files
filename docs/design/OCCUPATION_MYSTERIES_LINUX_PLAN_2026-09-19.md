@@ -1,5 +1,10 @@
 # Occupation mysteries and vanilla-media integration — Linux planning package
 
+## Existing-content audit — later on 19 September 2026
+
+Read the [completed source audit](EXISTING_EVIDENCE_AUDIT_2026-09-19.md) before implementation. It reviews all 20 generated premises, shared templates, Dead Air and generation/continuation/retirement. Earlier rules forbidding all conclusions, treating name recurrence as sufficient continuity, or dropping archive connections are not the revised narrative target. Existing code still has those behaviors; proposed repairs are documented, not implemented. The developer receives the completed audit rather than a request to repeat it.
+
+
 ## Later owner clarification — overrides earlier proposal details
 
 Read the [all-question reassessment](CENTRAL_MYSTERY_REVIEW_2026-09-19.md) and [revised development handoff](../management/CENTRAL_MYSTERY_DEVELOPMENT_HANDOFF_2026-09-19.md). Our own placed clues support personal openings; naturally discovered vanilla media are a separate route. Every discovered annotated map receives a destination mystery/payoff. The unanswered central search motivates local cases. The 25 rows below remain premise seeds: their vanilla-media column is optional later inspiration, not an opening dependency, and their local conclusions need a substantive central connection before content approval. None of the occupation stories is approved in full by this clarification.

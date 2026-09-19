@@ -1,5 +1,10 @@
 # Central mystery — review of all 32 decisions
 
+## Existing-content audit — later on 19 September 2026
+
+Read the [completed source audit](EXISTING_EVIDENCE_AUDIT_2026-09-19.md) before implementation. It reviews all 20 generated premises, shared templates, Dead Air and generation/continuation/retirement. Earlier rules forbidding all conclusions, treating name recurrence as sufficient continuity, or dropping archive connections are not the revised narrative target. Existing code still has those behaviors; proposed repairs are documented, not implemented. The developer receives the completed audit rather than a request to repeat it.
+
+
 19 September 2026, after the questionnaire, initial handover and voice discussion. **Confirmed premise; design consequences below are planning, not implemented behavior.** This addendum takes precedence over incompatible interpretations in the earlier occupation/media plan. Original owner answers remain preserved.
 
 ## Confirmed premise

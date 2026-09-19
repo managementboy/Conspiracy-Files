@@ -1,5 +1,10 @@
 # Evidence role schema — removing the real generation cap
 
+## Existing-content audit — later on 19 September 2026
+
+Read the [completed source audit](EXISTING_EVIDENCE_AUDIT_2026-09-19.md) before implementation. It reviews all 20 generated premises, shared templates, Dead Air and generation/continuation/retirement. Earlier rules forbidding all conclusions, treating name recurrence as sufficient continuity, or dropping archive connections are not the revised narrative target. Existing code still has those behaviors; proposed repairs are documented, not implemented. The developer receives the completed audit rather than a request to repeat it.
+
+
 **Status:** Design note, not yet implemented.
 
 ## The problem is structure, not text

@@ -1,5 +1,10 @@
 # Conspiracy-Files — Current Decision Index
 
+## Audit before development handoff — 2026-09-19
+
+**DR-20260919-EXISTING-AUDIT — review current evidence and generator here before handing off.** Owner explicitly requested a deep audit of existing texts and mystery-creation logic against arrival, apparent isolation, absent help and related central questions. [The audit](docs/design/EXISTING_EVIDENCE_AUDIT_2026-09-19.md) covers all 20 runtime premise families, shared templates, Dead Air and continuity/completion/archive logic at `edf55d3`. Findings distinguish source behavior from proposed repairs. The audit is completed planning work; none of its new fictional examples is automatically approved or implemented. [The development handoff](docs/management/CENTRAL_MYSTERY_DEVELOPMENT_HANDOFF_2026-09-19.md) now carries concrete repair scope rather than delegating the audit itself.
+
+
 ## Latest clarification — central mystery and naturally discovered maps, 2026-09-19
 
 **DR-20260919-CENTRAL-PREMISE — the unanswered question drives the game.** Owner reaffirmed: there is no definitive Knox Event explanation, but trying to find one is the whole premise. Questions about isolation, other survivors, responsibility, absent help and the helicopter motivate investigation. Local answers contribute to that search; preserving uncertainty does not mean excluding the central question. No canonical culprit/cause or proof of sole-survivor status is established. This clarifies Q01/Q04/Q06, without committing a full scripted campaign. [All 32 answers reviewed](docs/design/CENTRAL_MYSTERY_REVIEW_2026-09-19.md).

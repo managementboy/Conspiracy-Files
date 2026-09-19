@@ -1,5 +1,23 @@
 # Development handoff — central mystery revision
 
+## Audit completed before handoff — latest starting point
+
+The owner required the planning agent to audit existing texts and generation logic before development. That work is now complete: [existing evidence audit](../design/EXISTING_EVIDENCE_AUDIT_2026-09-19.md), source `edf55d3`. It covers all 20 runtime premise families and both branches, shared optional evidence, the six Dead Air documents/key, and generation/continuation/completion/archive paths. Read its findings and per-premise repair table; do not assign the same broad audit again as the first development task.
+
+**Concrete changes to carry into implementation:**
+
+- Preserve deterministic generation, observed fact/claim separation, physical discovery and bounded key connections.
+- Replace the old universal non-conclusion rule with supported local payoffs and substantive central connections.
+- Carry the discovered source and open question between cases; repeating a name or choosing a counterargument is insufficient continuity.
+- Separate narrative payoff from technical accounting: dropped clues must not silently stand in for essential ending evidence.
+- Preserve compact sourced findings and unresolved connections when archiving; current deep archive discards these.
+- Keep historical evidence distinct from later/observed events. Existing calendars end by July 8; they do not establish a helicopter event or later rescue response.
+
+**Recommended first content repairs:** transfer-nobody-arranged for the personal opening; then withdrawn-extension plus a transport/resource premise for sourced continuation. These are proposed implementations under Q27, not approved details or new engine results. Completion/retention fixes needed to deliver the opening accompany it, preserving Q31's priority order. Remaining premises are retained for bounded adaptation, not discarded.
+
+**Development file boundaries:** start in `Generated/Premises.lua` and `Generated/Generator.lua` for adopted narrative changes; examine `Session.lua`/`GeneratedRuntime.lua` for payoff versus retirement and `RetiredCase.lua`/`SuccessiveCases.lua` for continuity preservation. Reuse `DocumentPages.lua` and the existing evidence projection unless a concrete adopted change requires edits. These are identified seams, not permission for a wholesale rewrite. Add targeted meaningful checks described in audit section 8; execute real Linux checks before claiming delivery. Do not implement annotated-map identity/stash work merely to unblock a media-independent opening.
+
+
 19 September 2026. **Documentation/planning only. Develop and verify on the Linux laptop.** Start here instead of the earlier media-first sequence. Read the [32-question reassessment](../design/CENTRAL_MYSTERY_REVIEW_2026-09-19.md), [latest decisions](../../DECISIONS.md), then the [existing technical integration plan](../design/OCCUPATION_MYSTERIES_LINUX_PLAN_2026-09-19.md). The [earlier handover](LINUX_HANDOVER_2026-09-19.md) retains inventory, baseline and delivery details.
 
 ## Outcome
