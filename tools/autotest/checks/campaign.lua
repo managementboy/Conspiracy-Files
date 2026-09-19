@@ -459,6 +459,32 @@ function C.assignments()
     table.sort(parts)
     return table.concat(parts, " ")
 end
+-- EVERY CASE'S GAPS, with the history of each (P4-R141,
+-- DR-20260919-SOLVABLE-WITHDRAWN). A gap is a clue the case ended without: the
+-- record says dropped and the survivor never found it. Reported per case with
+-- its id, so a run can be read afterwards and say which failure it saw rather
+-- than only that something went missing.
+--
+-- Note what this CANNOT capture yet: whether a gap removed an ESSENTIAL link or
+-- only optional context. Today every clue in a case is equal - the notion of an
+-- essential chain arrives with the opening pair (DR-20260919-OPENING-CHAIN) -
+-- so nothing here may claim it. Said plainly rather than guessed.
+function C.gaps()
+    local Session = require("ConspiracyFiles/Generated/Session")
+    local out = {}
+    for _, root in ipairs(roots()) do
+        local ok, ids, history = pcall(Session.gaps, root)
+        if ok and type(ids) == "table" and #ids > 0 then
+            local bits = {}
+            for _, id in ipairs(ids) do
+                bits[#bits + 1] = id .. "(" .. tostring(history and history[id]) .. ")"
+            end
+            out[#out + 1] = tostring(root.case and root.case.caseId) .. ": " .. table.concat(bits, " ")
+        end
+    end
+    if #out == 0 then return "none (every clue of every case accounted for and found)" end
+    return table.concat(out, " | ") .. " [essential-vs-optional: NOT CAPTURABLE YET, every clue is equal today]"
+end
 
 -- THE ARCHIVE (P4-R111, docs/design/CASE_RETIREMENT.md). A finished case keeps
 -- its rows while it is one of the four most recent; older ones become stubs.
@@ -780,9 +806,15 @@ function C.faultFive(id)
     end
     if not a then return "no assignment for " .. tostring(id) end
     local parts = { id }
-    parts[#parts + 1] = string.format("status=%s relocations=%s site=%s placedHours=%s deferredHours=%s missingHours=%s",
-        tostring(a.status), tostring(a.relocations), tostring(a.locationId), tostring(a.placedHours),
-        tostring(a.deferredHours), tostring(a.missingHours))
+    -- droppedFrom separates the TWO HISTORIES a dropped clue can have (P4-R141):
+    -- "deferred" never found a container and so was never in the world, while
+    -- "carrier" WAS placed on a body, zombie or car that then went away - and
+    -- dropMissing nils the target, so without this the two are indistinguishable
+    -- afterwards and a run cannot say which failure it saw. "unrecorded" means a
+    -- save older than the field, never a guess.
+    parts[#parts + 1] = string.format("status=%s droppedFrom=%s relocations=%s site=%s placedHours=%s deferredHours=%s missingHours=%s",
+        tostring(a.status), tostring(a.droppedFrom), tostring(a.relocations), tostring(a.locationId),
+        tostring(a.placedHours), tostring(a.deferredHours), tostring(a.missingHours))
     local t = a.target
     if not t then parts[#parts + 1] = "target=none (still waiting)" else
         parts[#parts + 1] = string.format("target=%s,%s,%s object=%s container=%s type=%s sprite=%s%s",
