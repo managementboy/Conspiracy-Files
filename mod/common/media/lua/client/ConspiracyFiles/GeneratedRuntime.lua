@@ -137,10 +137,12 @@ end
 -- Everything is guarded because not every carrier is Literature: a key or a
 -- credit card takes its name and nothing else.
 local Pages=require("ConspiracyFiles/Generated/DocumentPages")
+local PlaceNames=require("ConspiracyFiles/Generated/PlaceNames")
 local function writePages(item,doc,case)
     if not item or not doc or not item.addPage then return end
     local map=ConspiracyFiles.AddressMap
-    local ok,pages=pcall(Pages.pages,doc.body,case,map and map.describe)
+    local context=PlaceNames.context(case,Cases.sessions(wrapper))
+    local ok,pages=pcall(Pages.pages,doc.body,context,map and map.describe)
     if not ok or type(pages)~="table" or #pages==0 then return end
     pcall(function()
         if item.setNumberOfPages then item:setNumberOfPages(math.max(#pages,1)) end

@@ -342,13 +342,14 @@ local function candidate(square,object,index,ci,container,filled)
         containerIndex=ci,sprite=name,containerType=kind}
 end
 local function newCandidates() return {pool=Choices.new(),filled={},keys={}} end
-local function offerCandidate(candidates,target,filled)
+local function offerCandidate(candidates,target,filled,container)
     local key=targetKey(target)
     local kept=Choices.offer(candidates.pool,target)
-    -- Completion of vanilla filling is observational permission, not a call
-    -- to explore or generate loot. Keep it only with a bounded retained target.
+    -- Filling permission belongs to this exact live container, not just its
+    -- coordinates. A replacement at the same sprite/index must not inherit it.
+    -- These bounded references are ephemeral; canonical targets remain plain tables.
     if kept then candidates.keys[key]=true end
-    if filled and candidates.keys[key] then candidates.filled[key]=true end
+    if filled and candidates.keys[key] then candidates.filled[key]=container end
     return kept
 end
 local function prioritize(id)
@@ -379,7 +380,7 @@ function R.offerContainer(container,filled)
                 local candidates
                 if scan and scan.id==id then candidates=scan.destination
                 else offers[id]=offers[id] or newCandidates(); candidates=offers[id] end
-                queued=offerCandidate(candidates,target,filled) or queued
+                queued=offerCandidate(candidates,target,filled,container) or queued
                 prioritize(id)
             end
         end
@@ -422,7 +423,7 @@ local function selectStep(s)
     if not square then return false end
     if (choice.part==4)~=atDestination(s.id,square) then return false end
     if not candidate(square,object,target.objectIndex,target.containerIndex,container,
-        choice.filled[targetKey(target)]) then return false end
+        choice.filled[targetKey(target)]==container) then return false end
     -- Clear the scan BEFORE an attempted insertion. If interruption follows,
     -- the persisted intent is reconciled; this callback cannot replay it.
     scan=nil

@@ -146,6 +146,22 @@ advanceUntil(function() return payoff(second).state=="placed" end)
 assert(not R.offerContainer(container,true) and #contents==2)
 assert(contents[1]:getModData().cfMapDesign~=contents[2]:getModData().cfMapDesign)
 
+-- OnFill permission cannot migrate to replacement furniture at the same
+-- coordinates, object index, kind and sprite. The replacement is unexplored.
+db={};contents={};R.invalidate();assert(R.start());assert(R.read(id))
+local filledContainer=container
+assert(R.offerContainer(filledContainer,true))
+local replacement={}
+for k,v in pairs(filledContainer) do replacement[k]=v end
+replacement.isExplored=function(self) assert(self);return false end
+container=replacement
+for _=1,6000 do R.tick() end
+assert(#contents==0 and not payoff(id),"stale fill callback must not authorise replacement furniture")
+assert(R.offerContainer(container,true),"the replacement's own real fill completion can authorise it")
+advanceUntil(function() return payoff(id) and payoff(id).state=="placed" end)
+assert(#contents==1)
+container.isExplored=function(self) assert(self);return true end
+
 -- An actual marked outdoor destination can use fixed furniture without a
 -- building. Floors remain excluded; an ordinary drawer is eligible.
 db={};contents={};R.invalidate();containerKind="floor"

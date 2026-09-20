@@ -345,28 +345,68 @@ function P.labels(case)
     for i,site in ipairs(case.locations) do
         if legacy(site) then
             local road=P.street(site)
-            labels[site.id]=(i==1 and "the dispatch building" or "the receiving building")..(road and " near "..road or "")
+            labels[site.id]=(i==1 and "the local-copy building" or "the records building")..(road and " near "..road or "")
         else labels[site.id]=site.name end -- already authored place name: preserve it
     end
     return labels
 end
-function P.render(body,case)
+local function renderCurrent(body,case,sourceBody,describe)
     if type(case)~="table" or type(case.locations)~="table" or #case.locations~=2 then return body end
     local a,b=case.locations[1],case.locations[2]
     if not legacy(a) and not legacy(b) then return body end
-    local mentionsBoth=body:find(a.name,1,true) and body:find(b.name,1,true)
+    -- Address replacement may already have removed the origin's raw name.
+    -- Only destinations actually named in this source can receive a guide.
+    local source=sourceBody or body
+    local mentionsBoth=source:find(a.name,1,true) and source:find(b.name,1,true)
+    local needsGuide=legacy(b) and body:find(b.name,1,true)
     local labels=P.labels(case)
     for _,site in ipairs(case.locations) do body=replace(body,site.name,labels[site.id]) end
-    if mentionsBoth then
+    if mentionsBoth and needsGuide then
         local ax,ay=center(a); local bx,by=center(b); local dx,dy=bx-ax,by-ay
         local east=dx>=0 and "east" or "west"; local south=dy>=0 and "south" or "north"
         local direction=math.abs(dx)>math.abs(dy)*2 and east or math.abs(dy)>math.abs(dx)*2 and south or south..east
         local distance=math.sqrt(dx*dx+dy*dy)
         if distance>=1 then
             local steps=math.max(5,math.floor(distance/5+0.5)*5)
-            body=body.."\n\nLOCATION GUIDE\nThe receiving building is roughly "..steps.." paces "..direction..
-                " of the dispatch building."
+            local origin=type(describe)=="function" and describe(a.name,case) or nil
+            if not origin or origin==a.name then origin=labels[a.id] end
+            body=body.."\n\nLOCATION GUIDE\nThe records building is roughly "..steps.." paces "..direction..
+                " of "..origin.."."
         end
+    end
+    return body
+end
+-- The earlier file remains the authority for an inherited address. This is
+-- transient display context, never an extra field written into a saved case.
+function P.context(case,roots)
+    if type(case)~="table" then return case end
+    local from=case.follows and case.follows.fromCase or case.followsFrom
+    if not from then return case end
+    for _,root in ipairs(roots or {}) do
+        local prior=root.case or root
+        if (prior.caseId or root.caseId)==from and type(prior.locations)=="table" then
+            local thread=root.thread or prior.thread
+            local known=false
+            for _,id in ipairs(root.known or {}) do if thread and id==thread.document then known=true end end
+            if known then
+                local out={};for k,v in pairs(case) do out[k]=v end
+                out.sourcePlaces={locations=prior.locations,reference=prior.reference or (prior.facts and prior.facts.code)}
+                return out
+            end
+        end
+    end
+    return case
+end
+function P.render(body,case,sourceBody,describe)
+    body=renderCurrent(body,case,sourceBody,describe)
+    local prior=type(case)=="table" and case.sourcePlaces
+    if not prior then return body end
+    if type(describe)=="function" then body=describe(body,prior) or body end
+    local labels=P.labels(prior)
+    for _,site in ipairs(prior.locations) do
+        local label=labels[site.id]
+        if legacy(site) and prior.reference then label=label.." (file "..prior.reference..")" end
+        body=replace(body,site.name,label)
     end
     return body
 end

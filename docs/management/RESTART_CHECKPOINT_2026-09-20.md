@@ -1,3 +1,15 @@
+# Latest restart save — 20 September 2026
+
+The owner requested another durable save before a possible PC restart. This checkpoint includes all current source edits and the draft Linux handoff. Find its commit with `git log -1`; the preceding checkpoint was `0385075`. Saved locally on `main`; nothing has been pushed, built, tested or published by this save operation.
+
+Since `0385075`: strengthened optional-evidence and steering test drafts; removed optional notes that inferred unseen sources; preserved readable origin/destination and inherited parent-file addresses; removed unseen-title hints; tied map fill permission to the actual observed container; added related-place and replacement-container regression drafts. The development version is now `DEV-0.46.0-writing-rebuild`.
+
+`WRITING_REBUILD_LINUX_HANDOFF_2026-09-20.md` is saved as a draft for the single Linux build/testing phase. Before issuing it as the final handoff, finish the narrow static integration review (including `Cases.sessions` availability in `writePages`), reconcile the status note with the handoff, refresh the graph if needed, and verify the final commit. Do not repeat the full editorial rewrite. No tests, Lua execution, compiler, exporter, build or game should be run by Codex; Claude retains those checks. Native correctness and writing quality in the game remain unvalidated.
+
+The older checkpoint below is historical. Its source-review items concerning optional membership, listen coverage, source gating and address navigation have since been addressed in source; execution remains pending. Other worktrees are untouched. No active worker is required to preserve these saved files.
+
+---
+
 # Restart checkpoint — 20 September 2026
 
 User requested saving current work because the PC may restart. This is a **work-in-progress checkpoint**, not the final Claude handoff and not a tested build.

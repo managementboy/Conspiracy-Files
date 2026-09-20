@@ -77,6 +77,9 @@ function M.get(id,variant)
  local out=copy(scenario)
  out.organisation="McCoy Logging Co."
  out.grounding="McCoyLoggingCorp"
+ if not out.anchors.claim.source:find("{A}",1,true) then
+  out.anchors.claim.source=out.anchors.claim.source.."\nEnquiry copy filed at: {A}."
+ end
  return out
 end
 

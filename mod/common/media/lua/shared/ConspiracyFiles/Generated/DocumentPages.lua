@@ -37,8 +37,9 @@ end
 -- address resolver; this pure module never reads live world state itself.
 function M.resolve(body,case,describe)
     if type(case)~="table" or type(case.locations)~="table" then return body end
+    local source=body
     if type(describe)=="function" then body=describe(body,case) or body end
-    return PlaceNames.render(body,case)
+    return PlaceNames.render(body,case,source,describe)
 end
 
 function M.pages(body,case,describe)

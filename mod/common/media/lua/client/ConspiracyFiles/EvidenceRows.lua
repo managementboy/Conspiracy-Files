@@ -47,25 +47,12 @@ function Rows.build(section,runtime)
     -- "Disputes delivery in" was left over from when every case was about a
     -- delivery. Plain verbs that fit any of the twenty stories.
     local meanings={corroborates="Agrees with",['disputes-delivery']="Does not match",recontextualises="Adds context to"}
-    -- The kind of document a link points at, from its title alone: "Second
-    -- stock list / PS-289" is a stock list, "Credit Card: Joanne Voss" a credit
-    -- card. Never its text - the player has not found it.
-    local function nounOf(title)
-        local noun=tostring(title or "")
-        noun=noun:gsub("%s*/.*$",""):gsub(":.*$","")
-        noun=string.lower(noun):gsub("^second ",""):gsub("^another ","")
-        return noun
-    end
-    local function articleFor(noun)
-        local first=string.sub(noun,1,1)
-        return (first=="a" or first=="e" or first=="i" or first=="o" or first=="u") and "an" or "a"
-    end
     for i,r in ipairs(known) do
         local root=Cases and Cases.find(wrapper,r.id)
         -- Retired evidence keeps its original places and reference. Resolving
         -- a readable address must not stop working when placement work ends.
         local case=root and (root.case or (root.locations and
-            {locations=root.locations,facts={code=root.reference}}))
+            {locations=root.locations,facts={code=root.reference},followsFrom=root.followsFrom}))
         -- THE TWO WRITERS OF A PLACE, in order, not one or the other.
         -- AddressMap names the sites the shipped book has a number for
         -- (P4-R129); PlaceNames then reads whatever place words are LEFT the
@@ -78,6 +65,7 @@ function Rows.build(section,runtime)
         -- A fully numbered case is unaffected: describe has already replaced
         -- every mention of both site names, so PlaceNames finds nothing to
         -- replace and adds no location guide, exactly as before.
+        if case and Cases and Cases.sessions then case=PlaceNames.context(case,Cases.sessions(wrapper)) end
         local detail=r.body
         if case then
             local map=ConspiracyFiles.AddressMap
@@ -85,7 +73,7 @@ function Rows.build(section,runtime)
             -- one refresh ConspiracyFiles.AddressMap can be a table with
             -- nothing in it yet, and a row must not throw over that.
             detail=(map and map.describe and map.describe(detail,case)) or detail
-            detail=PlaceNames.render(detail,case)
+            detail=PlaceNames.render(detail,case,r.body,map and map.describe)
         end
         local markers=ConspiracyFiles.ClueMarkers
         if markers and markers.note then
@@ -95,18 +83,8 @@ function Rows.build(section,runtime)
         for _,link in ipairs(r.connections or {}) do
             if titles[link.target] then detail=detail.."\n\n"..(meanings[link.kind] or "Connected to")..": "..titles[link.target] end
         end
-        -- The survivor wondering about a document not found yet. Owner,
-        -- 2026-09-11: not "refers to a second list you have not found" but
-        -- "probably refers to another list?" - "that creates tension". A
-        -- question can be wrong, which is what keeps it from being a waypoint.
-        for _,link in ipairs(r.unseen or {}) do
-            local noun=nounOf(link.title)
-            if noun~="" then
-                local own=string.lower(tostring(r.title or ""))
-                local lead=string.find(own,noun,1,true) and "another" or articleFor(noun)
-                detail=detail.."\n\nProbably refers to "..lead.." "..noun.."?"
-            end
-        end
+        -- Unknown source titles cannot become hints through a backend link.
+        -- Authored questions already live in the discovered source's own note.
         -- A maybe, never a finding: the mod does not know the week means
         -- anything. The memo is not noted against itself.
         if memoFound and r.kind~=RelayMemo.KIND and RelayMemo.inWeek(r.body) then

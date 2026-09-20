@@ -51,8 +51,8 @@ assert(object[1].summary=="Object found - Discovery 1",object[1].summary)
 local paper=Rows.build("evidence",runtimeWith({
     {id="d1",title="Dispatch copy / R-482",body="in a desk",kind="dispatch"},
 }))
-assert(paper[1].cfCarrier=="Dispatch document",paper[1].cfCarrier)
-assert(paper[1].summary=="Dispatch document - Discovery 1",paper[1].summary)
+assert(paper[1].cfCarrier=="Note",paper[1].cfCarrier)
+assert(paper[1].summary=="Note - Discovery 1",paper[1].summary)
 
 -- Hidden links must never leak an unseen title into a known-only projection.
 -- 2026-09-11: not "refers to a second list you have not found" but "probably
@@ -63,7 +63,7 @@ local wondering=Rows.build("evidence",runtimeWith({
      unseen={{title="Second stock list / PS-289"}}},
 }))
 local detail=wondering[1].detailText
-assert(not detail:find("Second stock list",1,true) and not detail:find("PS%-289"),
+assert(detail=="in a crate",
     "a hidden link cannot leak its title or reference: "..detail)
 
 -- A link to a document that HAS been found is a statement, not a question.

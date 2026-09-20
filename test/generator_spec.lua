@@ -180,11 +180,15 @@ test("place descriptions remove debug coordinates without changing saved facts",
     local body="Route: "..a.name.." to "..b.name..". Record R-736."
     local rendered=P.render(body,case)
     assertFalse(rendered:find("10964",1,true)~=nil); assertFalse(rendered:find("10994",1,true)~=nil)
-    assertTrue(rendered:find("receiving building near 3rd St",1,true)~=nil)
+    assertTrue(rendered:find("records building near 3rd St",1,true)~=nil)
     assertTrue(rendered:find("30 paces east",1,true)~=nil)
     assertTrue(rendered:find("R-736",1,true)~=nil)
     assertEqual("Building at 10964, 9696",a.name)
-    assertFalse(P.render("Review at "..b.name,case):find("dispatch building",1,true)~=nil)
+    assertFalse(P.render("Review at "..b.name,case):find("LOCATION GUIDE",1,true)~=nil)
+    local function describe(text) return (text:gsub(a.name:gsub("([^%w])","%%%1"),"201 Named Road")) end
+    local mixed=P.render(describe(body),case,body,describe)
+    assertTrue(mixed:find("30 paces east of 201 Named Road",1,true)~=nil)
+    assertFalse(mixed:find("10964",1,true)~=nil)
     a.buildLine="unverified"; assertEqual(nil,P.street(a))
     a.name="Verified Shop"; b.name="Verified Home"
     assertEqual("Verified Shop to Verified Home",P.render("Verified Shop to Verified Home",case))

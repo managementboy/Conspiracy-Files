@@ -533,6 +533,13 @@ function M.get(id,variant)
  local family=scenarios[id] or InventoryScenarios[id] or AdministrativeScenarios[id] or CorrespondenceScenarios[id]
  local scenario=family and family[variant]
  if type(variant)~="number" or variant~=math.floor(variant) or not scenario then return nil end
- return copy(scenario)
+ local out=copy(scenario)
+ -- This retained copy and its counterpart both have actual bound addresses.
+ -- Naming the origin lets the reader locate an unnumbered counterpart without
+ -- turning either house into the business that issued the correspondence.
+ if not out.anchors.claim.source:find("{A}",1,true) then
+  out.anchors.claim.source=out.anchors.claim.source.."\nLocal copy filed at: {A}."
+ end
+ return out
 end
 return M
