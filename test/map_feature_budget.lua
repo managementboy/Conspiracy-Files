@@ -171,3 +171,60 @@ assert(fundableB<DESIGNS,"an ordinary-cost payoff is expected not to fund the wh
 print(string.format("PASS whole-save budget measured: %d bytes spendable after a justified %d reserve; "..
     "the full %d-destination catalogue does NOT fit at any representation measured here",
     spendable,RESERVE,DESIGNS))
+
+-- 7. ONE BOUNDED STORAGE CHANGE, COSTED -----------------------------------
+-- The revision-3 review asked for exactly this rather than a compression
+-- project: test one bounded change to redundant references and let the
+-- measured saving decide whether further engineering is justified.
+--
+-- These are COSTING MODELS, not implementations. Each builds the root shape
+-- the change would produce and measures it with the same estimator, so the
+-- saving is comparable with everything above.
+--
+-- The redundancy is real and visible in the data: every ordinary event stores
+-- its own place string and place id, and several documents of one case share a
+-- place; and every document reference repeats the "generated:<caseid>:" prefix
+-- seven times a case.
+local PLACES=48                      -- distinct places across a 16-case save
+local placePool={}
+for i=1,PLACES do
+    placePool[i]={p=string.format("%d West Point Road, West Point",1000+i),
+                  id=string.format("building:%d",100000+i)}
+end
+
+-- (a) intern the place strings: events carry an index into a table
+local interned={schema=2,nextSeq=#order+1,places=placePool,events={}}
+for i,id in ipairs(order) do
+    interned.events[i]={seq=i,kind="evidence",ref=id,at=i,pi=((i-1)%PLACES)+1}
+end
+local internedBytes=V.estimateEncodedBytes(interned)
+
+-- (b) intern the reference prefix too: "generated:<caseid>:" is repeated per
+-- document, so the case id moves to a table and the event keeps the suffix
+local prefixes,prefixIndex={},{}
+local shortRefs={}
+for i,id in ipairs(order) do
+    local head,tail=id:match("^(.*):([^:]+)$")
+    head=head or id; tail=tail or id
+    if not prefixIndex[head] then
+        prefixes[#prefixes+1]=head; prefixIndex[head]=#prefixes
+    end
+    shortRefs[i]={seq=i,kind="evidence",ri=prefixIndex[head],ref=tail,at=i,pi=((i-1)%PLACES)+1}
+end
+local both={schema=2,nextSeq=#order+1,places=placePool,refs=prefixes,events=shortRefs}
+local bothBytes=V.estimateEncodedBytes(both)
+
+print(string.format("MEASURED bounded changes to the ordinary ledger: as shipped %d, interned places %d (saves %d), places+ref prefixes %d (saves %d)",
+    baseLedger,internedBytes,baseLedger-internedBytes,bothBytes,baseLedger-bothBytes))
+
+-- The question the review actually posed: does that saving change the answer?
+local bestSaving=baseLedger-bothBytes
+local shortfallD=DESIGNS*payoffCoded+trailBytes+enteredBytes-spendable
+print(string.format("MEASURED against the shortfall: best bounded saving %d vs representation D shortfall %d",
+    bestSaving,shortfallD))
+assert(bestSaving<shortfallD,
+    "if a bounded ledger change now covers the shortfall, the coverage decision changes - re-read this test")
+local fundableAfter=fundable(payoffCoded,perTrail)
+print(string.format("FINDING compressing the existing ledger buys about %d bytes - roughly %d more destinations, not %d",
+    bestSaving,math.floor(bestSaving/(payoffCoded+perTrail)),DESIGNS-fundableAfter))
+print("PASS one bounded storage change measured: it helps and does not come close to funding the catalogue")
