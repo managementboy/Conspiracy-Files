@@ -217,12 +217,15 @@ function R.rows()
     local out={}
     for _,id in ipairs(Catalogue.list) do
         local t=root().trails[id]
-        if t then for part=1,4 do
+        if t then
+            local known={}
+            for source=1,4 do local p=State.get(root(),id,source);known[source]=p and p.noted==true end
+            for part=1,4 do
             local p=State.get(root(),id,part)
             if p and p.noted then
                 local d=doc(id,part,p.observation); local detail=d.body
-                if part==4 and t.fragments[1] and t.fragments[1].noted then
-                    detail=detail.."\n\nALONGSIDE THE OTHER RECORD\n"..Content.comparison(Catalogue.get(id),t.seed)
+                for _,finding in ipairs(Content.findings(Catalogue.get(id),t.seed,part,known)) do
+                    detail=detail.."\n\nALONGSIDE THE OTHER RECORDS\n"..finding
                 end
                 local source=Catalogue.get(id).sourceText
                 if source and source~="" then detail=detail.."\n\nMAP NOTE\nThe handwritten map reads:\n"..source end

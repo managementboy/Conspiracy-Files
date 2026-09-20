@@ -96,7 +96,7 @@ for _,d in ipairs(built.documents) do
     assert(not d.title:find("{SELF}",1,true),"nor any title")
 end
 assert(slip,"the survivor's own name appears on a document")
-assert(slip.title:lower():find("collection slip",1,true),
+assert(slip.title:lower():find("collection notice",1,true),
     "and it is the retained slip - link A: "..slip.title)
 
 -- THE PROPERTY THAT MATTERS MOST. G.validate rebuilds the case from its own
@@ -133,36 +133,16 @@ for _,d in ipairs(ordinary.documents) do
 end
 print("PASS opening premise: an ordinary case draws, renders and validates exactly as before")
 
--- ---------------------------------------------------------------------------
--- 5. The text claims nothing it cannot support ----------------------------
--- ---------------------------------------------------------------------------
--- The register REPORTS a visit. It does not witness one, name a visitor, or
--- invent a life for the survivor.
-local whole={}
-for _,d in ipairs(built.documents) do whole[#whole+1]=d.body end
-local text=table.concat(whole," "):lower()
-for _,forbidden in ipairs({"employer","employed by","my wife","my husband","my brother",
-                           "my sister","my mother","my father","called at the door",
-                           "attended in person","the officer who called","i saw him",
-                           "i saw her","witness"}) do
-    assert(not text:find(forbidden,1,true),
-        "the opening invents nothing: found \""..forbidden.."\"")
+-- The registry contains selection metadata only. Both authored opening
+-- events have their own readings and a bounded answer; personal_story covers
+-- source subsets, first-person voice and the inherited unanswered caller.
+local Personal=require("ConspiracyFiles/Generated/PersonalScenarios")
+assert(opening.readings==nil and opening.claim==nil,"no competing prose in registry")
+for variant=1,2 do
+    local story=assert(Personal.get(opening.id,variant))
+    assert(#story.readings==2 and story.readings[1]~=story.readings[2])
+    assert(story.outcome~="" and story.thread and story.unresolved~="")
 end
--- Both readings exist and neither is chosen.
-assert(#opening.readings==2,"two honest readings")
-assert(opening.readings[1]~=opening.readings[2],"and they differ")
--- The register's disputing line is a REPORT, and its meaning says so.
-assert(opening.response.dispute:lower():find("no contact at premises",1,true),
-    "the record's own words are the case's name")
-assert(opening.response.meaning:lower():find("what the record says",1,true)
-    or opening.response.meaning:lower():find("not itself proof",1,true),
-    "and its meaning separates what the record says from what happened")
--- The round sheet corroborates a round, never the visit - it must not read as
--- an alternative to the register (OPENING_PAIR_COMPLETION.md link C).
-assert(opening.review.meaning:lower():find("cannot stand in",1,true)
-    or opening.review.meaning:lower():find("does not say this address",1,true),
-    "the round sheet is corroboration, never a route to link C")
-print("PASS opening premise: it reports, and never witnesses")
 
 -- ---------------------------------------------------------------------------
 -- 6. Both readings occur through the opening's OWN path -------------------
@@ -188,9 +168,9 @@ for seed=101,260 do
 end
 assert(made>=8,"the opening generates across many seeds: "..made)
 assert(outlines["corroboration"],"the opening corroborates on some seeds")
-assert(outlines["conflicting-account"],"and conflicts on others - it is never one-sided")
+assert(outlines["conflicting-account"],"the second authored event occurs too")
 print(string.format(
-    "PASS opening premise: reachable by name on %d seeds, both readings occur, %d documents carry no placeholder",
+    "PASS opening premise: reachable by name on %d seeds, both event variants occur, %d documents carry no placeholder",
     made,docs))
 
 -- ---------------------------------------------------------------------------

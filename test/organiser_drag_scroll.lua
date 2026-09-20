@@ -44,6 +44,22 @@ view:onMouseMove(0,64)
 assert(view.card<afterUp,"dragging down moves back up: "..view.card)
 assert(view.card>=1,"never above the first line")
 
+-- The closing-question page is also a reading surface. Its long answers drag
+-- independently of a record card, so reading cannot change the selected answer.
+local questions=setmetatable({on=true,record={questions={}},card=4,question=2,questionTop=1,
+    scale=1,touch=function() end},{__index=Screen})
+questions.dragging={dy=0,moved=false}; questions.down="GLASS"
+questions:onMouseMove(0,-24)
+assert(questions.questionTop>1 and questions.card==4 and questions.question==2,
+    "dragging a question answer scrolls text without changing its answer selection")
+
+local popup=setmetatable({on=true,record={questions={}},card=4,questionTop=3,
+    popup={top=1},scale=1,touch=function() end},{__index=Screen})
+popup.dragging={dy=0,moved=false}; popup.down="GLASS"
+popup:onMouseMove(0,-24)
+assert(popup.popup.top>1 and popup.questionTop==3 and popup.card==4,
+    "dragging a popup scrolls its choices instead of the page beneath it")
+
 -- THE WHEEL IS NOT OURS: it zooms the world in vanilla, so the machine must
 -- pass it through rather than answer it (owner, 2026-09-18).
 local wheeled=setmetatable({on=true,record={detail="x"},card=3,scale=1,touch=function() end},{__index=Screen})

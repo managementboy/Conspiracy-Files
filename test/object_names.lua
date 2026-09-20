@@ -17,14 +17,11 @@ end
 local Kinds=require("ConspiracyFiles/Generated/EvidenceKinds")
 local photo=assert(Kinds.get("photograph"))
 assert(photo.fullType=="Base.Photo" and photo.label=="Photograph" and photo.capacity=="prose")
-local Premises=require("ConspiracyFiles/Generated/Premises")
-local found=false
-for _,id in ipairs(Premises.list()) do local p=Premises.get(id)
-    if p.claim and p.claim.title and p.claim.title:find("Staff photograph",1,true) then
-        assert(p.claim.kind=="photograph","the staff photograph is a photograph, not a "..tostring(p.claim.kind)); found=true
-    end
+local Ordinary=require("ConspiracyFiles/Generated/OrdinaryScenarios")
+for variant=1,2 do
+    local scenario=assert(Ordinary.get("photograph-without-a-name",variant))
+    assert(scenario.anchors.claim.kind=="photograph","authored photograph must use the photograph carrier")
 end
-assert(found,"the staff photograph premise exists")
 print("PASS object names: acronyms stay whole, variants drop, a photograph is a photograph")
 assert(G.words("PressID")=="press ID", G.words("PressID"))
 assert(G.words("LighterBBQ")=="lighter BBQ", G.words("LighterBBQ"))

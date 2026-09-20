@@ -27,7 +27,7 @@ used before that authorisation, not a continuing prohibition on main work.
 - Established a complete authored reference, with an underlying event, three distinct contributions, discovery subsets, personal voice, local answer and coherent variation rules: [personal collection example](../design/WRITING_REFERENCE_PERSONAL_COLLECTION_2026-09-20.md).
 - Owner's two follow-ups are recorded in `DR-20260920-WRITING-GROUNDING-TONE`: actual named businesses with causal roles, and Q24's fatalistic bureaucratic dark comedy throughout. Both are in the audit and agent instructions.
 - Added `Generated/Story.lua`: separate authoring fields for observation/source/survivor note; compatible optional sources; explicit knowledge requirements for comparisons; essential-source ending; notification of a new finding in any discovery order.
-- Generator now uses initial two-variant drafts for the opening, its continuation, and five ordinary families (`transfer-nobody-arranged`, `signed-by-someone-absent`, `two-start-dates`, `resignation-after-payslip`, `address-that-only-receives`). **Initial checkpoint: 7 of 22 families. Current checkpoint: 22 of 22**, after the correspondence batch below. This is not full implementation or a completed editorial pass. All generated families now have drafts; the obsolete generator fallback and premise metadata still need removal. All 17 map families still need rebuilding.
+- Generator now uses initial two-variant drafts for the opening, its continuation, and five ordinary families (`transfer-nobody-arranged`, `signed-by-someone-absent`, `two-start-dates`, `resignation-after-payslip`, `address-that-only-receives`). **Initial checkpoint: 7 of 22 families. Current checkpoint: 22 of 22**, after the correspondence batch below. This is not full implementation or a completed editorial pass. All generated families now have drafts. The later checkpoint below removes the obsolete prose fallback and adds drafts for all 17 map families; destination and editorial work remains.
 - Opening uses a borrowed McCoy vehicle; its cancellation variant diverts it to a mill drive belt. Personal recognition is gated on the named notice. Source dates now distinguish the trip day from the later filing day. Follow-up carriers preserve source person, organisation, survivor and documentary cutoff; the selected-site generator now actually passes the `follows` input.
 - Retirement freezes the authored readings and suppresses closing choices/continuation when essential evidence was missed. Runtime connection voice uses supported findings instead of treating every context link as agreement. Generic physical labels no longer call every note a dispatch document or every notepad a review.
 - Authored `test/personal_story.lua` for Claude: discovery permutations, withheld ending, source-only native pages, caller-copy isolation, saved-gate corruption, actual selected-site generation and continuation identity/time. **Not executed.** Existing g13/premise-text test assumptions still need revision before the final handoff.
@@ -151,14 +151,84 @@ storage, metadata alignment and the old mailbox constraints. These are authored
 source, not executed results. The remaining editorial, map and UI work below
 still blocks the single final testing/build handoff.
 
+## Event-only generator and map-story checkpoint
+
+`Generator` now requires an authored scenario for every generated family;
+`Premises` is a metadata/selection registry only. The competing generic role
+and premise-prose paths have been removed. Revision `g15-event-stories-2`
+requires three essential sources. Source-only projection has no fallback that
+reveals an undiscovered document title. A returning business selects an event
+actually authored for that business; it cannot rename another business's
+operation. Unsupported business requests return an explicit refusal. This
+selection and refusal path is source implementation, not an executed result.
+
+The first ten ordinary variants received a second editorial pass:
+
+| Family | Variant one | Variant two |
+|---|---|---|
+| Transfer nobody arranged | McCoy moves a roadside repair bill to the mill without moving the mechanic | U-Store It reports a claims team by dividing one clerk and counter into two headings |
+| Signed by someone absent | Fossoil's account-name rule requires the colleague receiving fuel to sign the absent holder's name | Sunstar authorises a manager signature stamp, then locks it away after a complaint |
+| Two start dates | McCoy recognises prior experience for training but resets the meal allowance | Fossoil's billing transfer creates a duplicate uniform deposit, subsequently refunded |
+| Resignation after payslip | Sunstar prepares a departure after a cook refuses an unpaid inventory shift, then obtains the resignation | U-Store It's locked resignation form makes a postal round trip after notice, final shift and pay |
+| Address that only receives | McCoy requires a destination receipt before releasing a belt, so the foreman signs in advance | Sunstar counts a transfer between storeroom shelves as a second delivery and charges its kitchen |
+
+All ten now answer their local question without a manufactured unanswered
+administrative detail. Their first-person notes react to the observed document;
+comparisons depend on the relevant sources. Relative dates were checked against
+the generator's variable one-to-nine-day gaps. These are authored incidents;
+McCoy, U-Store It, Fossoil and Sunstar business activities remain grounded in
+the archived vanilla print catalogue, not proof of these fictional events.
+
+`MapMediaServiceStories` and `MapMediaCivicStories` provide four distinct source
+records for each of 17 map families. Named businesses have causal roles, and
+ordinary destinations hold recipient copies rather than being silently turned
+into those businesses' premises. The gallery event uses the real Art Gallery
+of Louisville, Ashling Dwyer and Natalie Sigmundsson context; it does not claim
+the old records establish the artworks' current safety. The incidents resolve
+local booking, service, billing or reporting failures without explaining Knox.
+
+`MapMediaContent` revision 2 selects a coherent family from printed context,
+whole annotation words or an explicitly permitted family list. A generic
+recipient-copy pool remains for otherwise unclassified maps: **this is not a
+completed per-map editorial review**. Map state schema is 2 for fresh saves.
+Findings require actual noted parts: 1+2 on row 2, 3+4 on row 4, all four for
+the full comparison. Destination-first discovery cannot quote unseen sources.
+Native pages contain only the authored source, including after a profession
+observation; specialist commentary is restricted to the supported source part.
+
+The content regression draft covers all 125 real bindings and separate explicit
+fixtures for all 17 families, including all 16 discovery subsets. That is
+**content rendering coverage only**, not a claim that all 125 destinations
+exist. Archived native evidence still reports 11 zero-building designs, nine
+multi-building designs and no actual shared destination. All-three-part travel
+implementation, provenance and actual shared-destination authored content remain
+open; the old runtime placement filter is still separate from StorageChoices.
+
+Closing-question headings, answers and survivor notes now occupy a bounded
+line window. Long option lists reserve a scroll gutter and remain inside the
+LCD. Question popups scroll via rocker, arrows or drag without changing an
+answer; a tap selects it. SETUP retains its immediate-apply rocker behavior.
+The popup and drag regression drafts cover viewport bounds and separation from
+the underlying record. Static review corrected a gutter-width mismatch that
+would otherwise have clipped short, non-scrolling popup text. Native rendering,
+font sizes and touch/keyboard interaction remain Claude's acceptance work.
+
+The offline editorial exporter now includes generated cases, every map family
+and real catalogue selection at a fixed preview seed. It has not been run.
+Drafts for questions, source projection, calendars, opening/continuation and
+archive preservation were updated. More old optional-role/steering assertions
+still need reconciliation after their implementation is complete. No Lua,
+tests, compiler, build, exporter or game was executed in this checkpoint.
+
 ## Implementation still required
 
-1. Finish the editorial pass across all converted families, especially the first seven: some ordinary drafts still read like stock administration, their remaining questions can be arbitrary, and metadata must be checked against revised source text. All cases must have a meaningful comic situation and consequence. Structural validation cannot certify humour or a coherent story.
-2. Complete opening/continuation integration: verify inherited routing and readable locations outside the numbered address catalogue; finish bounded question-screen wording. The new follow-up explains how an enquiry became a booking without a passenger reply on file; it still cannot identify the original caller. Native address resolution, source history and closing-choice knowledge gates have implementation drafts, not executed verification.
-3. Apply the event contract to all 17 map families, preserving all destination coverage. All 22 generated families now have two scenario drafts. Replace legacy premise prose/old role generation after coverage is complete, rather than leaving two competing authoring truths.
-4. Replace unrelated optional-role selection everywhere; review relay memo/call-in integration, identities, keys and physical-object prose. Existing legacy dead-air content also needs the agreed tone/voice pass.
-5. Complete UI behavior and verify archive integration: source-row deletion has been removed; retired cases retain locations and reference, and native pages now use the same place resolvers as the journal. Closing-question layout remains unfinished. Keep the 1,000,000-byte provisional aggregate budget and honest admission failures without silent loss. The 16-case/full-map worst-case budget fixtures now retain all history; their fit is unverified until Claude runs them.
-6. Review and measure the new non-floor placement/variety implementation with Claude after the full rebuild. Source now retains eight kinds with up to eight targets each; seeded selection prevents repeated counters receiving extra votes. Native capacity, moved/dismantled containers, scan cost and first-case placement variety remain unexecuted acceptance checks.
-7. Revise obsolete test assumptions and extend the new transitional family contract and editorial exporter to full coverage. The exporter and regressions are authored but unexecuted; they do not certify narrative quality. Reconcile current map fixes, then hand over the complete implementation once for Claude's builds and tests.
+1. Finish the editorial pass over the remaining scenario modules and the personal pair. Structural contracts do not certify humour or narrative quality. Keep local answers, first-person reactions and the distinction between vanilla grounding and invented events.
+2. Complete opening/continuation routing and UI integration. Verify actual readable locations outside the numbered address catalogue. The follow-up preserves source identity/date and answers how a name became a booking; it does not identify the caller. Native address resolution and closing-question layout remain unverified.
+3. Complete map destination/content integration for all 125 designs, particularly the eleven non-building and nine multi-building cases. Do not invent an unrelated nearby address to satisfy a count. Author actual shared-destination content, check map-specific relevance, and broaden the separate map placement path with candidate-kind diversity.
+4. Finish compatible optional-source coverage and the relay memo/radio, identity, key and physical-object writing paths, including the retained Dead Air fixture. The removed random-role generator must not return as an unrelated-clue fallback. Answer-based steering must affect compatible content without changing an established event to flatter a chosen theory.
+5. Complete UI behavior and review archive integration. Keep all source history and the 1,000,000-byte provisional aggregate allowance; make admission failures explicit. The 16-case/full-map budget fixtures are drafts until Claude executes them.
+6. After full implementation, have Claude measure non-floor placement variety, native capacity, moved/dismantled furniture, scan cost and interrupted insertion recovery. Generated StorageChoices source is implemented; these are not accepted runtime results.
+7. Reconcile obsolete test assumptions, finish static integration review, then supply one complete Claude build/testing handoff. Content previews and test drafts remain unexecuted and cannot certify native behavior or writing quality.
 
-The full goal remains active. Audit and reference completion do not mean the writing has been fixed in the game.
+The full goal remains active. This is unfinished implementation on local main,
+not a validated build or the requested final testing handoff.

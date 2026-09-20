@@ -2,7 +2,6 @@
 -- engine dependencies, plain Lua 5.1: the three questions, the options one
 -- finished case offers for each, and the survivor's own note built from the
 -- answers. Nothing here ever says whether an answer is right.
-local Premises=require("ConspiracyFiles/Generated/Premises")
 local M={}
 M.TITLE="What do I make of it?"
 M.NOT_YET="(not yet)"
@@ -19,13 +18,13 @@ local WAYS={
     {value="listen",label="Listen for it.",note="listen for it"},
 }
 
--- The case's two readings, ordinary first, from its premise.
+-- Readings are frozen with the retired case. Registry metadata may name a
+-- family but must never reconstruct its ending or interpretations.
 function M.readings(offered)
-    if type(offered)=="table" and type(offered.readings)=="table" then return offered.readings end
-    local premise=type(offered)=="table" and Premises.get(offered.premiseId)
-    local r=premise and premise.readings
-    if type(r)=="table" and #r==2 then return r end
-    return nil
+    local r=type(offered)=="table" and offered.readings or nil
+    if type(r)~="table" or #r~=2 or type(r[1])~="string" or r[1]==""
+        or type(r[2])~="string" or r[2]=="" then return nil end
+    return r
 end
 
 -- The options for one question, in order, as {value=..., label=...}. The last
@@ -37,7 +36,7 @@ function M.options(key,offered)
         if r then out[1]={value="one",label=r[1]}; out[2]={value="two",label=r[2]} end
         out[#out+1]={value="unsure",label="I can't tell."}
     elseif key=="matters" then
-        local people=type(offered)=="table" and offered.people or {}
+        local people=type(offered)=="table" and type(offered.people)=="table" and offered.people or {}
         if people[1] then out[#out+1]={value="person1",label=people[1]} end
         if people[2] then out[#out+1]={value="person2",label=people[2]} end
         if type(offered)=="table" and offered.organisation then out[#out+1]={value="organisation",label=offered.organisation} end
@@ -70,11 +69,12 @@ function M.note(answers,offered)
         local r=M.readings(offered)
         if r then parts[#parts+1]="My reading: "..r[answers.reading=="one" and 1 or 2] end
     end
-    local people=type(offered)=="table" and offered.people or {}
+    local people=type(offered)=="table" and type(offered.people)=="table" and offered.people or {}
+    local organisation=type(offered)=="table" and offered.organisation or nil
     if answers.matters=="nobody" then parts[#parts+1]="Nobody really matters here."
     elseif answers.matters=="person1" and people[1] then parts[#parts+1]=people[1].." matters here."
     elseif answers.matters=="person2" and people[2] then parts[#parts+1]=people[2].." matters here."
-    elseif answers.matters=="organisation" and offered.organisation then parts[#parts+1]=offered.organisation.." matters here." end
+    elseif answers.matters=="organisation" and organisation then parts[#parts+1]=organisation.." matters here." end
     for _,w in ipairs(WAYS) do if answers.way==w.value then parts[#parts+1]="Next I would "..w.note.."." end end
     if #parts==0 then return nil end
     local text=table.concat(parts," "):gsub("  +"," ")

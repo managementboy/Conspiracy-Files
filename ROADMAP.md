@@ -1,5 +1,22 @@
 # Conspiracy-Files — Roadmap
 
+## Active writing and placement rebuild — 2026-09-20
+
+Implementation continues on local `main` after the owner authorised integration
+when Claude stopped. The previous map candidate and Claude's fixes are included;
+this new rewrite is not a build handoff. See
+[the writing rebuild status](docs/management/WRITING_REBUILD_STATUS_2026-09-20.md)
+for current source coverage and the remaining implementation list.
+
+There are initial authored drafts for 22 generated families (44 variants) and
+17 map families. The generator uses event scenarios exclusively; source and
+survivor voice are separated and comparisons require discovered evidence.
+Generated storage now retains non-floor furniture-kind variety. Map destination
+coverage, its separate storage path, optional/physical evidence and other writing
+surfaces still need implementation. UI scrolling and regression drafts are
+unexecuted. No Lua, tests, builds, game runs or publication in this pass. Complete
+implementation first, then one Claude testing/build handoff; fresh saves only.
+
 ## Current map-media sequence — owner, 2026-09-20
 
 Full implementation first; one Claude build/testing phase second. The development

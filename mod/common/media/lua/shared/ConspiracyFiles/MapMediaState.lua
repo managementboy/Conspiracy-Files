@@ -1,6 +1,6 @@
 -- Fresh-save map trails. Engine-free, copy-on-write, no case-slot dependency.
 local V=require("ConspiracyFiles/Validator")
-local M={SCHEMA=1}
+local M={SCHEMA=2}
 local function integer(n,lo,hi)
     return type(n)=="number" and n==n and n%1==0 and n>=lo and n<=hi
 end

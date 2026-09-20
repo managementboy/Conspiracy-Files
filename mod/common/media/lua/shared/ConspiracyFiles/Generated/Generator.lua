@@ -1,24 +1,16 @@
--- G1: offline generation and save-shaped restoration. Never loaded by the mod.
+-- Deterministic event generation and save-shaped restoration. No engine calls.
 local Catalog=require("ConspiracyFiles/Generated/Catalog")
 local V=require("ConspiracyFiles/Validator")
 local Memo=require("ConspiracyFiles/Generated/RelayMemo")
 local K=require("ConspiracyFiles/Generated/EvidenceKinds")
-local Roles=require("ConspiracyFiles/Generated/EvidenceRoles")
 local Premises=require("ConspiracyFiles/Generated/Premises")
-local ObjectRoles=require("ConspiracyFiles/Generated/ObjectRules")
-local Catalogue=require("ConspiracyFiles/Generated/ObjectCatalogue")
 local Calendar=require("ConspiracyFiles/Calendar")
 local Story=require("ConspiracyFiles/Generated/Story")
 local PersonalScenarios=require("ConspiracyFiles/Generated/PersonalScenarios")
 local OrdinaryScenarios=require("ConspiracyFiles/Generated/OrdinaryScenarios")
--- Schema two deliberately refuses the earlier fixed-seven case shape.  Before
--- 1.0 callers must use a fresh save rather than reinterpret an existing case.
--- MIN_EVIDENCE is two, not three: a claim and a record contradicting it is a
--- whole case. See the review note in build().
--- g13: case dates drawn across May-July 1993 and the story defects fixed
--- (owner decisions P4-R107, P4-R108, 2026-09-15). Every g12 case is refused;
--- that is a new game (P4-R77).
-local G={REVISION="g14-event-stories-1",SCHEMA=2,MIN_EVIDENCE=2,MAX_EVIDENCE=7}
+-- Fresh saves only: each family now supplies a whole authored event. There
+-- is no generic paperwork fallback and no optional omission of its answer.
+local G={REVISION="g15-event-stories-2",SCHEMA=2,MIN_EVIDENCE=3,MAX_EVIDENCE=7}
 local function copy(v) if type(v)~="table" then return v end; local out={}; for k,c in pairs(v) do out[k]=copy(c) end; return out end
 local function same(a,b)
     if type(a)~=type(b) then return false end
@@ -63,7 +55,7 @@ end
 -- list rather than the map's keys, which is why adding map.SELF alone rendered
 -- nothing - the placeholder stayed literal in the slip.
 local FIELDS={"CODE","ORG","P1","P2","A","B","DATE0","DATE1","DATE2","DATE3","DATE1CAPS","DATE2CAPS",
-    "DAYS12","PRIORMONTH","SINCE11","SUBJECT","UNKNOWN","SELF","POINT","FROMPOINT","FROMREF"}
+    "DAYS12","PRIORMONTH","SINCE11","SELF","FROMPOINT","FROMREF"}
 local function fill(text,map)
     for _,key in ipairs(FIELDS) do text=subst(text,key,map[key]) end
     return text
@@ -182,36 +174,11 @@ G.words=words
 local NUMERALS={"one","two","three","four","five","six","seven","eight","nine","ten",
                 "eleven","twelve","thirteen","fourteen","fifteen","sixteen"}
 local function numeral(n) return NUMERALS[n] or tostring(n) end
--- Naive plural, and deliberately so: these labels come from catalogue ids, so
--- "clay pot" and "credit card" are the shape of nearly all of them. A word
--- already ending in s, x, ch or sh is left alone rather than guessed at, which
--- is wrong less often than "boxs" is.
-local function plural(label)
-    local tail=string.sub(label,-1)
-    local two=string.sub(label,-2)
-    if tail=="s" or tail=="x" or two=="ch" or two=="sh" then return label end
-    return label.."s"
-end
--- "A idcard" is the kind of thing a player notices and we do not. The rule is
--- the sound of the first letter, which is right far more often than it is
--- wrong for the words a catalogue id produces.
-local function article(label)
-    local first=string.lower(string.sub(label,1,1))
-    if first=="a" or first=="e" or first=="i" or first=="o" or first=="u" then return "an" end
-    return "a"
-end
--- THE CASE CALENDAR (P4-R108, owner 2026-09-15). Every case used to be dated
--- July 2-6 1993, so every document sat inside the relay memo's nine days (30 June
--- - 8 July) and the memo's DATE NOTE was true of everything, which is a note
--- saying nothing. Now the claim falls between 1 May and 28 June, the response
--- and the review follow it by one to nine days each, and nothing is dated after
--- 8 July (the outbreak begins after). Two cases in five have their response
--- and review inside the memo's week, which leaves about a third of all cases
--- with a dated document there once optional documents and undated responses are
--- counted (measured over 400 seeds, test/premise_consistency.lua); the rest
--- end by 29 June, so a note on a document is a signal again. Drawn from the seed alone - never the world clock - or a
--- case could not rebuild byte for byte (Generator.validate).
---
+-- Seeded 1993 source dates: claim May 1-June 28, later entries one to nine
+-- days apart, never after July 8. A separate branch can place later entries in
+-- the relay memo's week. The current story pool's actual distribution belongs
+-- in Claude's verification; older prose-pool measurements do not establish it.
+-- Restoration uses saved inputs, never the current world clock.
 -- Dates are day-of-year ordinals in 1993 (1 = 1 January; not a leap year).
 local MAY_1,JUNE_28,JUNE_29,JUNE_30,JULY_8=121,179,180,181,189
 local MONTH_NAMES={"January","February","March","April","May","June","July",
@@ -267,28 +234,6 @@ function G.dateFields(cal)
         SINCE11=MONTH_NAMES[sinceMonth].." "..sinceYear,
     }
 end
--- One anchor document, rendered. Every anchor is assembled in the same three
--- parts, because Generated/DocumentPages.lua reads them: the physical
--- description is dropped from the readable pages, the document's own words
--- become the pages, and everything from WHAT IT MIGHT MEAN stays in the
--- record. A premise that reordered these would put an interpretation on a
--- page the survivor is supposed to have found already written.
---
--- Exposed so test/premise_consistency.lua renders every premise both ways
--- through the same assembly build() uses.
-function G.renderAnchor(doc,useBranch,agreeing,map)
-    local text=doc.text
-    local meaning=doc.meaning
-    if useBranch then
-        text=text.."\n"..(agreeing and doc.agree or doc.dispute)
-        -- A response or review written for the version where the records
-        -- conflict would, reused where they agree, put a suspicion on the page
-        -- the paperwork does not support. Every response now carries its own
-        -- meaningAgree (P4-R107, 2026-09-15).
-        if agreeing and doc.meaningAgree then meaning=doc.meaningAgree end
-    end
-    return fill("WHAT YOU FOUND\n"..doc.found.."\n\n"..text.."\n\nWHAT IT MIGHT MEAN\n"..meaning,map)
-end
 -- Full names, not initials. Owner, 2026-09-10: a nearby body is going to be
 -- given this name and an ID to match, and "M. Ellis" on a corpse is not
 -- something a player can connect to a letter signed "M. Ellis" - it is the
@@ -297,15 +242,8 @@ end
 -- in place - a case rebuilds from it (Generator.validate).
 G.INVENTED_NAMES={"Marion Ellis","Delia Mercer","Roy Hale","Joanne Voss",
                   "Curtis Vance","Adele Prosser","Warren Nagy","Ines Kubiak"}
--- `steer` ("What do I make of it?", P4-R113/P4-R121) is the survivor's answers
--- about an earlier case, saved in this case like `cast`. It is applied only
--- AFTER the ordinary draws and never adds or moves one: a case with no steer
--- is byte-for-byte what it was before steering existed
--- (test/fixtures/generator_unsteered_digest.lua), and the case's own
--- agree/disagree outline is never touched, so nothing is confirmed or denied.
--- `opening` names the survivor for the personal opening premise and asks for
--- that premise by name. Passed in rather than read from a closure: build is a
--- file-local function and `options` belongs to generate.
+-- Survivor choices may influence people and compatible optional contributions;
+-- they never determine what really happened. Saved inputs rebuild exactly.
 local function build(seed,revision,sites,cast,relayMemo,steer,opening,follows)
     local random=rng(seed)
     -- The premise is drawn first, so it is the seed's most significant choice:
@@ -321,12 +259,34 @@ local function build(seed,revision,sites,cast,relayMemo,steer,opening,follows)
     else
         premise=Premises.choose(random)
     end
+    if not premise then return nil,"no eligible story family" end
     local outline=random(2)==1 and "corroboration" or "conflicting-account"
     -- This draw selects a whole authored event, not a mandatory innocent /
     -- sinister interpretation of interchangeable paperwork. The old outline
     -- field remains a deterministic variant selector during the rebuild.
     local variant=outline=="corroboration" and 1 or 2
+    if steer and steer.organisation and not opening and not follows then
+        -- Return to an actual authored business event. Replacing letterheads
+        -- would make a motel operate a sawmill; ignoring the choice is no better.
+        local compatible={}
+        for _,id in ipairs(Premises.list()) do
+            local meta=Premises.get(id)
+            if not meta.opening and not meta.followUp then
+                for v=1,2 do
+                    local candidate=OrdinaryScenarios.get(id,v)
+                    if candidate and candidate.organisation==steer.organisation then
+                        compatible[#compatible+1]={premise=meta,variant=v}
+                    end
+                end
+            end
+        end
+        if #compatible==0 then return nil,"no authored event for returning organisation" end
+        local selected=compatible[random(#compatible)]
+        premise,variant=selected.premise,selected.variant
+        outline=variant==1 and "corroboration" or "conflicting-account"
+    end
     local scenario=PersonalScenarios.get(premise.id,variant) or OrdinaryScenarios.get(premise.id,variant)
+    if not scenario then return nil,"missing authored scenario for "..premise.id end
     local invented=G.INVENTED_NAMES
     -- People the player has ALREADY MET, if there are any. Owner, 2026-09-11:
     -- "do we track the names of corpses so we can fill out other evidence with
@@ -373,21 +333,10 @@ local function build(seed,revision,sites,cast,relayMemo,steer,opening,follows)
     end
     local prefix="generated:"..seed..":"
     local a,b=sites[1],sites[2]
-    -- An organisation may name one of the two sites ("{A} Site Office"), so it
-    -- is resolved before it becomes {ORG} for everything else.
-    local organisation=subst(subst(premise.orgs[random(#premise.orgs)],"A",a.name),"B",b.name)
-    -- A returning organisation replaces the drawn one; the draw still happened.
-    if steer and steer.organisation then organisation=steer.organisation end
-    -- The authored pickup borrows a logging-company vehicle. It does not
-    -- invent a transport authority or make the survivor a company employee.
-    -- McCoy's mill/truck activity is sourced in the vanilla McCoyLoggingCorp
-    -- flyer. Neither selected record location is asserted to be its mill.
-    if opening then organisation="McCoy Logging Co." end
-    if follows and follows.organisation then organisation=follows.organisation end
-    -- A named business's activity is part of the event. A preference from a
-    -- previous case cannot turn a mill's repair into a motel's repair by
-    -- replacing the letterhead. Undrafted families retain their old path.
-    if scenario and scenario.organisation then organisation=scenario.organisation end
+    -- The company's actual activity is part of the event, not a replaceable
+    -- letterhead. The continuation preserves its original company's identity.
+    local organisation=scenario.organisation
+    if follows and follows.organisation~=organisation then return nil,"continuation company mismatch" end
     local code=REFERENCE[random(#REFERENCE)].."-"..(100+random(899))
     local cal=G.calendar(random)
     if follows and follows.afterDate then
@@ -395,20 +344,16 @@ local function build(seed,revision,sites,cast,relayMemo,steer,opening,follows)
         -- not a newly dated event drawn independently of the original run.
         cal={claimDate=follows.afterDate,responseDate=follows.afterDate,reviewDate=follows.afterDate}
     end
-    local ANCHOR_INDEX={claim=1,response=2,review=3}
     local facts={sender=sender,recipient=recipient,organisation=organisation,code=code,
         claimDate=cal.claimDate,responseDate=cal.responseDate,reviewDate=cal.reviewDate,
-        premise=premise.id,subject=premise.subject,unknown=premise.unknown}
+        premise=premise.id}
     local map=G.dateFields(cal)
     map.CODE=code; map.ORG=organisation; map.P1=facts.sender; map.P2=facts.recipient
-    map.A=a.name; map.B=b.name; map.SUBJECT=premise.subject; map.UNKNOWN=premise.unknown
+    map.A=a.name; map.B=b.name
     -- The survivor's own name. Only the opening uses it; an ordinary premise
     -- never mentions {SELF}, so the key is harmless when absent and a missing
     -- one could not silently blank a document.
     map.SELF=(opening and opening.self) or (follows and follows.survivor) or nil
-    -- The routing point, from the premise's own thread declaration. Rendered
-    -- into the record the player reads AND recorded on the case, from one value.
-    map.POINT=type(premise.thread)=="table" and premise.thread.point or nil
     -- Inherited from the finished case's thread: the point its register routed
     -- to, and its own reference. Both appear in the follow-up's documents, so
     -- the connection is on the paper the player reads.
@@ -422,476 +367,29 @@ local function build(seed,revision,sites,cast,relayMemo,steer,opening,follows)
     local people={{id=prefix.."person-1",name=facts.sender,met=(wasMet(facts.sender) or (steer~=nil and steer.person==facts.sender)) or nil},
                   {id=prefix.."person-2",name=facts.recipient,met=wasMet(facts.recipient) or nil}}
     local org={id=prefix.."organisation",name=facts.organisation}
-    if scenario then
-        local authored,why=Story.build(scenario,function(value) return fill(value,map) end,
-            prefix,a,b,people,org,random,steer)
-        if not authored then return nil,why end
-        if authored.thread then
-            authored.thread.reference=code
-            authored.thread.person=recipient; authored.thread.organisation=organisation
-            authored.thread.survivor=map.SELF; authored.thread.afterDate=cal.reviewDate
-        end
-        -- A standalone historical memo is retained as its own source; it is
-        -- not an essential clue or an explanation of this collection.
-        if relayMemo then
-            authored.documents[#authored.documents+1]={id=prefix.."document-"..(#authored.documents+1),
-                kind=Memo.KIND,title=Memo.TITLE,locationId=b.id,body=Memo.body(),references={b.id},links={},leads={}}
-        end
-        return {schemaVersion=G.SCHEMA,generatorRevision=G.REVISION,catalogRevision=revision,seed=seed,
-            caseId=prefix.."case",outline=outline,premiseId=premise.id,contentStatus="development-draft-unapproved",
-            locations=copy(sites),cast=#met>0 and copy(met) or nil,facts=facts,identities=people,
-            organisation=org,documents=authored.documents,story=authored.story,
-            relayMemo=relayMemo and true or nil,steer=steer and copy(steer) or nil,
-            opening=opening and {premise=true,self=opening.self} or nil,
-            essential=authored.essential,thread=authored.thread,follows=follows and copy(follows) or nil}
+    facts.subject=fill(scenario.question,map)
+    facts.unknown=scenario.unresolved and fill(scenario.unresolved,map) or nil
+    local authored,why=Story.build(scenario,function(value) return fill(value,map) end,
+        prefix,a,b,people,org,random,steer)
+    if not authored then return nil,why end
+    if authored.thread then
+        authored.thread.reference=code
+        authored.thread.person=recipient; authored.thread.organisation=organisation
+        authored.thread.survivor=map.SELF; authored.thread.afterDate=cal.reviewDate
     end
-    local documents={}
-    local function document(n,title,location,body,refs,links,leads,kind)
-        documents[n]={id=prefix.."document-"..n,kind=kind or "dispatch",title=title,locationId=location.id,body=body,
-            references=refs,links=links or {},leads=leads or {}}
-    end
-    -- Anchors are assembled by G.renderAnchor, above.
-    local agreeing=outline=="corroboration"
-    local function anchor(doc,useBranch) return G.renderAnchor(doc,useBranch,agreeing,map) end
-    -- 1. The claim: a record that asserts something, found at the first site,
-    --    and the only document that leads anywhere - to the second site.
-    document(1,fill(premise.claim.title,map),a,anchor(premise.claim,false),
-        {people[1].id,people[2].id,org.id,a.id,b.id},{},{b.id},premise.claim.kind)
-    -- 2. The response: a second record that either agrees with the claim or
-    --    contradicts it. This is the case's outline, made physical.
-    document(2,fill(premise.response.title,map),b,anchor(premise.response,true),
-        {people[1].id,people[2].id,a.id,b.id},
-        {{target=documents[1].id,kind=agreeing and "corroborates" or "disputes-delivery"}},nil,premise.response.kind)
-    -- 3. The review: somebody inside the organisation looking at the pair and
-    --    writing down what they are going to do about it, which is usually
-    --    less than the reader would like.
-    --
-    -- Not always present. Owner, 2026-09-10, on whether cases are still built
-    -- to a set shape: for thirteen of the twenty premises the claim and the
-    -- response already hold the whole disagreement, and the review is worth
-    -- having without being load-bearing. Those cases may end on the
-    -- contradiction itself, which is a different kind of case to read - it
-    -- stops where the paperwork stops, with nobody having reacted at all.
-    --
-    -- The draw happens here, in a fixed place in the sequence, whether or not
-    -- it can be used: a case must rebuild identically from its seed, and a
-    -- conditional draw would shift every choice after it.
-    local reviewRoll=random(2)
-    local mandatory=3
-    if premise.reviewOptional and reviewRoll==1 then
-        mandatory=2
-    else
-        document(3,fill(premise.review.title,map),b,anchor(premise.review,true),
-            {org.id,b.id},{{target=documents[2].id,kind="recontextualises"}},nil,premise.review.kind)
-    end
-    -- Optional roles pick their carrier through EvidenceRoles instead of a
-    -- literal kind string. `key`/`diary`/`notebook`/`clipping` each still
-    -- resolve to their one prose-capable carrier (a role's carrier list of
-    -- one is a genuine, if narrow, selection -- not a hardcoded string in
-    -- Generator itself); `affiliationLead`/`itineraryLead` genuinely choose
-    -- between two card/ticket carriers whose short capacity fits a named
-    -- identifier, which is what makes idcard/creditcard/businesscard/ticket
-    -- reachable at all. See docs/design/EVIDENCE_ROLE_SCHEMA.md.
-    --
-    -- Their prose stays premise-independent by talking about {SUBJECT} - the
-    -- premise's own noun for the matter - and {UNKNOWN}, the thing the
-    -- paperwork cannot settle.
-    --
-    -- Where an object sits BESIDE a file, it names the file by its reference
-    -- rather than by the subject. Owner, 2026-09-10, reading "with the file on
-    -- the extension among it" while looking at ten clay pots: "what is this
-    -- file on the extension that is mentioned here?" The subject nouns are
-    -- written for the premise's own documents and go opaque when quoted next to
-    -- something unrelated; a record number is a thing the player can go and
-    -- match. A diary kept by someone under pressure reads
-    -- the same whether the pressure was about a sealed case or a night shift;
-    -- writing twenty diaries would have bought nothing but twenty chances to
-    -- contradict the premise they sit inside.
-    local function carrierFor(roleId,body)
-        local kind=assert(Roles.choose(random,roleId))
-        assert(Roles.fits(roleId,kind,body))
-        return kind
-    end
-    -- "The initials {P1}" printed a full name after the word initials (P4-R107,
-    -- 2026-09-15); the tag now says what it carries.
-    local accessBody=fill("WHAT YOU FOUND\nA small worn key on a wire loop, with a card tag tied through its bow. The tag carries {CODE} and a name, {P1}. There is no address or lock number. The metal is polished around the grip but dull between the teeth.\n\nON THE TAG\n'Return separately. Do not leave with the driver.' On the reverse, in smaller writing: 'Ask before making another copy.' A crossed-out word is too smeared to read reliably.\n\nWHAT IT MIGHT MEAN\nThe matching reference links this key to the paperwork about {SUBJECT}, but does not identify what it opens. It could belong to an ordinary cupboard, equipment box or unrelated office lock. Keeping it separate suggests someone controlled access; it is not proof that this key secured anything in the file. You have no confirmed matching lock.",map)
-    document(4,fill("Tagged key / {CODE}",map),a,accessBody,
-        {people[1].id,a.id},{{target=documents[1].id,kind="recontextualises"}},nil,carrierFor("access",accessBody))
-    local diaryBody=fill("WHAT YOU FOUND\nA small diary with a soft cover and a broken elastic band. Most entries concern shopping, shifts and missed sleep. One page has been folded down beside a reference you recognise: {CODE}.\n\n{DATE2CAPS}\n'{P1} called again. Wanted to know whether I had signed. I asked why the signature mattered more than the answer. There was a long silence, then something about everyone being tired and the office needing to close the file. I told them my copy would say only what I could stand behind.'\n\n'Perhaps I made too much of it. People have been short with each other all week. Still, I kept the carbon instead of putting it with the rubbish.'\n\nWHAT IT MIGHT MEAN\nThis is a private account of pressure to sign, not an independent record of the call. It adds a human reason for the careful wording, while leaving room for exhaustion, misunderstanding or deliberate pressure. Nothing here establishes {UNKNOWN}.",map)
-    document(5,fill("Private diary / {CODE}",map),b,diaryBody,
-        {people[1].id,people[2].id,b.id},{{target=documents[2].id,kind="recontextualises"}},nil,carrierFor("diaryContext",diaryBody))
-    local notebookBody=fill("WHAT YOU FOUND\nA ruled pocket notebook with oil-darkened page edges. Routine meter readings share space with tea orders and a sketch of a loading bay. A short entry uses the same reference, {CODE}.\n\n{DATE1CAPS}\n'Asked about {SUBJECT}. No normal stores entry. Office supplied the reference and said the description would follow. Asked twice. Leave space below.'\n\nThe next three ruled lines are empty. Beneath them: 'If anyone asks, send them to {ORG}. I can account for the time on this page, not for anything that was settled before my shift.' No name identifies the writer.\n\nWHAT IT MIGHT MEAN\nThe writer separated what they witnessed from what they were told. The blank lines could be a forgotten update or a deliberately avoided description. This supports asking how the matter was recorded; it cannot establish {UNKNOWN}.",map)
-    document(6,fill("Shift notebook / {CODE}",map),a,notebookBody,
-        {org.id,a.id},{{target=documents[1].id,kind="recontextualises"}},nil,carrierFor("notebookContext",notebookBody))
-    local clippingBody=fill("WHAT YOU FOUND\nA newspaper folded around a narrow cut-out from its local news column. Someone has underlined the words 'routine maintenance' and pencilled {CODE} in the margin. The article itself does not use that reference.\n\nLOCAL SERVICES NOTICE - {DATE1CAPS}\nResidents were advised that service vehicles might visit local facilities outside ordinary hours while scheduled maintenance was completed. A spokesperson described the work as routine and asked that access routes be kept clear. The notice supplied no list of deliveries and no explanation of what equipment would be moved.\n\nWHAT IT MIGHT MEAN\nSomeone associated this public notice with the private reference, but the pencil annotation is their interpretation. Routine maintenance could explain unusual hours around {SUBJECT}. It could also offer a convenient explanation for unrelated activity. The clipping cannot tell you which, and its unnamed annotator may have been guessing too.",map)
-    document(7,fill("Press clipping / {CODE}",map),b,clippingBody,
-        {b.id},{{target=documents[1].id,kind="recontextualises"}},nil,carrierFor("clippingContext",clippingBody))
-    -- The extra documents name the case's own matter as well as its number.
-    -- Owner, 2026-09-11, holding four documents of one case: "I cant figure out
-    -- why they are all part of one case". They were written to fit any of the
-    -- twenty stories, so the only thread was the reference number - which he
-    -- had asked to be less prominent. Naming {SUBJECT} ("the inventory", "the
-    -- night shift") makes each point at the same THING, not just the same
-    -- filing code.
-    --
-    -- Two short-text roles genuinely choose between the four card/ticket
-    -- carriers added 2026-09-06 (EvidenceKinds). Their bodies are a named
-    -- identifier and a line or two of context -- never the "WHAT YOU FOUND"
-    -- essay above -- because a card cannot hold that (T7).
-    local affiliationBody=fill("Ref {CODE} - {SUBJECT}\n{P1}\n{ORG}",map)
-    local affiliationKind=carrierFor("affiliationLead",affiliationBody)
-    -- A card is named the way the game names its own: "Credit Card: Genevieve
-    -- Ricks", not "Credit Card / PS-289". Owner, 2026-09-11, holding one of
-    -- ours: "we did not add a name to it. would have been cool". A reference
-    -- number is a filing label; a name on a card is a person.
-    document(8,K.get(affiliationKind).short..": "..facts.sender,a,affiliationBody,
-        {people[1].id,org.id,a.id},{{target=documents[1].id,kind="recontextualises"}},nil,affiliationKind)
-    local itineraryBody=fill("Ref {CODE} - {SUBJECT}\n{P2} - {B}\n{DATE2}",map)
-    local itineraryKind=carrierFor("itineraryLead",itineraryBody)
-    document(9,K.get(itineraryKind).short..": "..facts.recipient,b,itineraryBody,
-        {people[2].id,b.id},{{target=documents[2].id,kind="recontextualises"}},nil,itineraryKind)
-    -- Phase 3 roles. These are the optional documents that can DISAGREE with
-    -- what came before: every other one connects with "recontextualises", so
-    -- without them only the mandatory response could ever contradict anything.
-    --
-    -- A payment dated before the record it settles. That is a fact about
-    -- paperwork order, not proof of anything, and the wording keeps it that
-    -- way.
-    --
-    -- "One day before the entry it settles" was printed whatever the entry
-    -- said, and some claims carry no date at all (P4-R107, 2026-09-15). It is
-    -- now said only where the claim is dated {DATE1}, and the slip is dated
-    -- {DATE0}, the day before - true by construction.
-    local raised=string.find(premise.claim.text,"{DATE1}",1,true)
-        and "Raised {DATE0} - the day before the entry it settles." or "Raised {DATE0}."
-    local paymentBody=fill("WHAT YOU FOUND\nA carbon payment slip with a smudged duplicate line, kept in a wallet fold rather than filed.\n\n{ORG}\nPayment against {SUBJECT}, record {CODE}\n"..raised.."\nAuthorised by: {P1}\nCounter-signature: none.",map)
-    local paymentKind=carrierFor("paymentRecord",paymentBody)
-    -- Titled by what it IS, not by the paper it is written on: a payment slip
-    -- on a notepad used to be called "Review", and the owner found himself
-    -- holding two reviews of which only one reviewed anything.
-    document(10,"Payment slip / "..facts.code,a,paymentBody,
-        {people[1].id,org.id,a.id},{{target=documents[1].id,kind="disputes-delivery"}},nil,paymentKind)
-    -- A stub placing the second person elsewhere on the day of the response.
-    -- It never shares a case with the duty log or the itinerary, which put
-    -- the same person at the other site on the same day: see the selection
-    -- below.
-    local timingBody=fill("Ref {CODE} - {SUBJECT}\n{P2}\n{DATE2} - {A}",map)
-    local timingKind=carrierFor("timingDispute",timingBody)
-    document(11,K.get(timingKind).short..": "..facts.recipient,a,timingBody,
-        {people[2].id,a.id},{{target=documents[2].id,kind="disputes-delivery"}},nil,timingKind)
-    -- And one that agrees. A case where everything disagrees is as flat as one
-    -- where nothing does.
-    local presenceBody=fill("WHAT YOU FOUND\nA duty log with a soft cover, the current week held open by a bent paperclip.\n\n{DATE2} - {B}\n{P2} signed in at the gate and again at the store.\nNo vehicle number recorded.\nEntry against {SUBJECT}, record {CODE}, initialled twice.",map)
-    local presenceKind=carrierFor("presenceNote",presenceBody)
-    document(12,"Duty log / "..facts.code,b,presenceBody,
-        {people[2].id,b.id},{{target=documents[2].id,kind="corroborates"}},nil,presenceKind)
-    -- Object evidence (2026-09-09). These carry no readable text at all: a
-    -- worn hammer stored with a case file says what it says by being there.
-    -- Their carrier is not a name written here but whatever ObjectRules
-    -- answers from the catalogue derived from the game's own item scripts, so
-    -- these three roles reach several hundred objects between them rather than
-    -- the handful a person would have listed.
-    --
-    -- The record's sentence notes that the thing was found with the documents
-    -- and stops. It must not say what the object means, because the object is
-    -- the one piece of evidence the player can interpret entirely without us.
-    -- How a person's name ends up on a thing, by what kind of thing it is. A
-    -- name tape is sewn into a coat, not a hammer.
-    local function markOn(category)
-        if category=="Clothing" or category=="Accessory" or category=="ProtectiveGear" then
-            return "A name tape is sewn inside: {P1}."
-        elseif category=="Tool" or category=="ToolWeapon" or category=="GardeningWeapon"
-            or category=="Gardening" or category=="Weapon" or category=="SportsWeapon" then
-            return "A name is scratched into the handle: {P1}."
-        elseif category=="Household" or category=="Cooking" or category=="CookingWeapon"
-            or category=="Container" or category=="Junk" then
-            return "A strip of tape on it has a name written in pen: {P1}."
-        end
-        return "It is marked with a name: {P1}."
-    end
-    -- A single object belongs to SOMEBODY. Owner, 2026-09-11, on a worn fancy
-    -- pen that meant nothing: "why is this evidence relevant? the text gives no
-    -- interesting mystery", and then "if we linked it to a person, then it
-    -- would be perfect. a pen could be marked with the name."
-    --
-    -- It was right: a random object next to paperwork is the least surprising
-    -- thing in the world, and the text had to insist it mattered. Marked with
-    -- the case person's name - the same person CasePerson gives a body and an
-    -- ID card near the first clue - it is a thread the player can pull.
-    --
-    -- The mark is the one thing asserted: a name is on the object. The text
-    -- says nothing about whether it was theirs, or whether they left it here.
-    local function objectDocument(n,roleId,site,sentence,references,link,marked)
-        local kind=assert(Roles.choose(random,roleId))
-        local label=words(kind)
-        local item=Catalogue.get(kind)
-        if marked then sentence=sentence.." "..markOn(item and item.category) end
-        local body=fill(sentence,map)
-        body=subst(subst(body,"ARTICLE",article(label)),"LABEL",label)
-        body=string.upper(string.sub(body,1,1))..string.sub(body,2)
-        assert(Roles.fits(roleId,kind,body))
-        local wear=assert(ObjectRoles.describe(assert(Roles.ruleOf(roleId)))).wear
-        -- The item's own name: "Fancy pen, marked Ines Kubiak". No leading
-        -- article - "A pen fancy" read oddly in an inventory list.
-        local title=string.upper(string.sub(label,1,1))..string.sub(label,2)
-        if marked then title=title..", marked "..facts.sender end
-        document(n,title,site,body,references,{link},nil,kind)
-        documents[n].wear=wear
-    end
-    objectDocument(13,"physicalTrace",a,
-        "{ARTICLE} {LABEL}, badly worn, stored with the file marked {CODE}.",
-        {people[1].id,a.id},{target=documents[1].id,kind="recontextualises"},true)
-    objectDocument(14,"bearsName",b,
-        "{ARTICLE} {LABEL} carrying a name, filed with the papers marked {CODE}. Nothing here says the name is the owner's, or that the owner left it.",
-        {b.id},{target=documents[2].id,kind="recontextualises"})
-    objectDocument(15,"outOfPlace",a,
-        "{ARTICLE} {LABEL}, worn, kept with the file marked {CODE} - not the kind of thing anyone files with records.",
-        {people[1].id,a.id},{target=documents[1].id,kind="recontextualises"},true)
-    -- Quantity as evidence. Owner, 2026-09-09: "one of something is no misery
-    -- but a house full of bleach is a mystery", and then the two shapes that
-    -- makes: "100 eggs in the fridge? 50 bricks in the bedroom".
-    --
-    -- They are different anomalies. The eggs are in exactly the right place
-    -- and there are far too many; the bricks would be unremarkable on a
-    -- building site and are in a bedroom. So one document asks placement for
-    -- the room the item belongs in, and the other for a room it does not.
-    --
-    -- Nothing is written on any of them and they are all identical, which is
-    -- the point: the only fact is the count, and the count is the one thing
-    -- the mod states plainly and then declines to explain.
-    local function pile(n,roleId,site,sentences,link)
-        local kind=assert(Roles.choose(random,roleId))
-        -- The count depends on what the thing weighs and is worth, so the
-        -- catalogue row is needed, not just the id.
-        local item=assert(Catalogue.get(kind))
-        local count=assert(ObjectRoles.quantity(random,roleId,item))
-        local label=words(kind)
-        -- One of several phrasings, by seed. The draw happens whether or not
-        -- this document is selected, so the sequence a case rebuilds from
-        -- cannot shift.
-        local sentence=sentences[random(#sentences)]
-        local body=fill(sentence,map)
-        body=subst(subst(body,"LABELS",plural(label)),"LABEL",label)
-        body=subst(body,"COUNT",numeral(count))
-        body=string.upper(string.sub(body,1,1))..string.sub(body,2)
-        assert(Roles.fits(roleId,kind,body))
-        -- The evidence row names the pile; each physical copy is numbered by
-        -- the runtime (owner, 2026-09-10: "1 of x should be counted on each
-        -- item"), which needs the bare label rather than the row's wording.
-        -- "six lunchboxes", not "lunchbox, six of them".
-        document(n,numeral(count).." "..plural(label),site,body,{site.id},{link},nil,kind)
-        documents[n].label=label
-        documents[n].wear=assert(ObjectRoles.describe(roleId)).wear
-        -- The count is a fact about the world, so it has to reach placement:
-        -- the runtime creates exactly this many and treats any more as a
-        -- conflict. The room intent has to reach it too, or the bricks end up
-        -- in the garage where nobody would look twice at them.
-        documents[n].quantity=count
-        documents[n].roomIntent=assert(ObjectRoles.roomIntent(roleId))
-        documents[n].label=label
-        -- How many the PAPERWORK says there are. Fewer than are actually
-        -- there, and the player does the arithmetic: the file says eight, the
-        -- cupboard holds ten. Neither document states the disagreement - that
-        -- is the player's to notice, which is the whole discipline here.
-        --
-        -- Drawn in a fixed place whether or not this document is selected, so
-        -- the sequence a case rebuilds from cannot shift.
-        local short=random(3)
-        documents[n].onPaper=math.max(1,count-short)
-    end
-    -- Owner, 2026-09-10: "x of the same thing is a very repetitive way of
-    -- writing it and sounds like a robot." It was one sentence per rule, so
-    -- every pile in every case read identically. Four ways to say each, chosen
-    -- by the case seed, and none of them counting for the player.
-    pile(16,"accumulation",b,{
-        "{COUNT} {LABELS}, kept where such a thing is kept. One would be ordinary. This many is not.",
-        "Somebody put {COUNT} {LABELS} in here, tidily, in the place they belong. Nobody needs {COUNT}.",
-        "{COUNT} {LABELS}, in the right cupboard and the wrong number.",
-        "A shelf of {LABELS} - {COUNT} of them, where one or two would be unremarkable. The file marked {CODE} sits beside them.",
-    })
-    pile(17,"misplacedBulk",a,{
-        "{COUNT} {LABELS}, in a room with no use for any of them. Somewhere else this would not be worth writing down.",
-        "{COUNT} {LABELS}, stacked in a room that has nothing to do with them.",
-        "Somebody carried {COUNT} {LABELS} into this room and left them. There is nothing here they belong to.",
-        "{COUNT} {LABELS} where there is no reason for even one. The file marked {CODE} is among them.",
-    })
-    pile(18,"medicalHoard",b,{
-        "{COUNT} {LABELS}, every one already used, bagged together in a room that is not for them. One household does not get through this much.",
-        "Somebody kept {COUNT} used {LABELS}. Not clean ones. Used.",
-        "{COUNT} {LABELS}, spent and stacked, nowhere near a bathroom. The file marked {CODE} is with them.",
-        "A bag of {LABELS} - {COUNT}, every one of them already used. Nobody keeps this.",
-    })
-    pile(19,"vehicleBulk",a,{
-        "{COUNT} {LABELS}, loaded together as cargo. Nothing records where they were going.",
-        "{COUNT} {LABELS}, roped together like freight, with the file marked {CODE} among it.",
-        "Somebody loaded {COUNT} {LABELS} for a journey. There is no manifest and no destination written anywhere.",
-        "{COUNT} {LABELS}, packed as though they were going somewhere.",
-    })
-    -- The first three roles are the coherent minimum: a route lead,
-    -- an independently attributable response, and a review of that response.
-    -- Optional roles are shuffled and bounded, so neither their count nor their
-    -- carrier checklist is fixed, while every selected fact still resolves.
-    -- The pool now spans six roles/carriers (up from four) so the two new
-    -- short-text roles -- and therefore all four card/ticket carriers -- are
-    -- genuinely reachable, while MIN/MAX_EVIDENCE and their selection range
-    -- (0..4 optional slots on top of the 3 mandatory roles) stay unchanged.
-    local optional={documents[4],documents[5],documents[6],documents[7],documents[8],documents[9],
-                    documents[10],documents[11],documents[12],
-                    documents[13],documents[14],documents[15],documents[16],documents[17],documents[18],documents[19]}
-    local optionalCapacity=G.MAX_EVIDENCE-mandatory
-    local optionalCount=random(optionalCapacity+1)-1
-    for i=#optional,2,-1 do local j=random(i); optional[i],optional[j]=optional[j],optional[i] end
-    -- Steering reorders the shuffled list and never draws again. First one
-    -- clue the chosen reading has to explain (a disputing record for the
-    -- ordinary reading, the duty log for the other), then the clues of the
-    -- chosen way of investigating; the case then takes at least those.
-    if steer and (steer.way or steer.reading) then
-        local WAY={person={[5]=true,[8]=true,[9]=true,[11]=true,[12]=true,[13]=true,[15]=true},
-                   records={[4]=true,[6]=true,[10]=true,[16]=true,[17]=true,[18]=true,[19]=true},
-                   listen={[7]=true}}
-        local LEAN={one={[10]=true,[11]=true,[16]=true,[17]=true,[18]=true,[19]=true},two={[12]=true}}
-        local roleOf={}; for i=4,19 do roleOf[documents[i]]=i end
-        local leanSet,waySet=LEAN[steer.reading],WAY[steer.way]
-        local lean,way,rest={},{},{}
-        for _,d in ipairs(optional) do
-            local role=roleOf[d]
-            if leanSet and leanSet[role] and #lean==0 then lean[1]=d
-            elseif waySet and waySet[role] then way[#way+1]=d
-            else rest[#rest+1]=d end
-        end
-        optional={}
-        for _,list in ipairs({lean,way,rest}) do for _,d in ipairs(list) do optional[#optional+1]=d end end
-        optionalCount=math.max(optionalCount,math.min(optionalCapacity,(leanSet and 1 or 0)+(waySet and 1 or 0)))
-        -- "Listen for it" adds the radio transcript at the end (P4-R123). It takes
-        -- the last optional slot rather than an eighth place, so the case stays
-        -- inside the save budget (measured 2026-09-15: adding it on top of a full
-        -- case put a ten-case save at 521 kB of 500). Decided here, before the
-        -- claim lists its piles, so no document mentions one that is not in the case.
-        if steer.way=="listen" then optionalCount=math.min(optionalCount,optionalCapacity-1) end
-    end
-    -- Clues that must not share a case (P4-R107, 2026-09-15). The timing
-    -- stub puts the second person at the first site on the response's day;
-    -- the duty log and the itinerary put them at the second site that same
-    -- day. And no two documents in a case may carry one title: paid-before-ordered's
-    -- own response is "Payment slip / {CODE}", the same as document 10, and
-    -- two object piles can draw the same item.
-    local timing,itinerary,presence=documents[11],documents[9],documents[12]
-    while #documents>mandatory do documents[#documents]=nil end
-    local titles,chosen={},{}
-    for _,d in ipairs(documents) do titles[d.title]=true end
-    for i=1,#optional do
-        if #documents>=mandatory+optionalCount then break end
-        local d=optional[i]
-        local clash=(d==timing and (chosen[itinerary] or chosen[presence]))
-            or ((d==itinerary or d==presence) and chosen[timing])
-        if not titles[d.title] and not clash then
-            d.id=prefix.."document-"..(#documents+1)
-            documents[#documents+1]=d
-            titles[d.title]=true; chosen[d]=true
-        end
-    end
-    -- Now that the case knows what is actually in it, the paperwork can refer
-    -- to it. Owner, 2026-09-10, on finding ten clay pots beside a file that
-    -- never mentioned them: "if we have 10 clay pots, do we reference them in
-    -- any of our files we find?" We did not, and a pile nobody wrote down is
-    -- atmosphere rather than evidence.
-    --
-    -- The claim gains a stores line giving the count ON PAPER. It is lower than
-    -- the count in the cupboard, and nothing anywhere says so: the player
-    -- counts the pots and notices, or does not.
-    -- EVERY pile, not just the first: a case can hold two, and an unmentioned
-    -- one is back to being atmosphere. Found while previewing the change.
-    local stores={}
-    for _,d in ipairs(documents) do
-        if d.quantity and d.label and d.onPaper then
-            stores[#stores+1]=numeral(d.onPaper).." "..plural(d.label)
-                .." received. Signed for; no order number given."
-            -- The pile answers the claim, and disagrees with it.
-            d.links={{target=documents[1].id,kind="disputes-delivery"}}
-        end
-    end
-    if #stores>0 then
-        local line="\n\nATTACHED\nStores notes against this record:\n"..table.concat(stores,"\n")
-        local at=string.find(documents[1].body,"\n\nWHAT IT MIGHT MEAN",1,true)
-        if at then
-            documents[1].body=string.sub(documents[1].body,1,at-1)..line
-                ..string.sub(documents[1].body,at)
-        else
-            documents[1].body=documents[1].body..line
-        end
-    end
-    -- The first case of a game carries the relay memo (P4-R96): one more
-    -- clue, last, at the second site, after every draw above so no story
-    -- document changes. It takes no role and links to nothing.
+    -- A standalone historical memo is retained as its own source; it is
+    -- not an essential clue or an explanation of this collection.
     if relayMemo then
-        documents[#documents+1]={id=prefix.."document-"..(#documents+1),kind=Memo.KIND,title=Memo.TITLE,
-            locationId=b.id,body=Memo.body(),references={b.id},links={},leads={}}
-    end
-    -- "Listen for it" brings a radio call-in transcript (P4-R121, text P4-R123):
-    -- one more clue, last, at the second site, after every draw, like the relay
-    -- memo, so it takes no role and no unsteered case changes. It raises a
-    -- question and answers nothing.
-    if steer and steer.way=="listen" then
-        local transcript=fill("WHAT YOU FOUND\nA typed page from a local radio station's evening call-in show, kept in a card folder with {CODE} pencilled on the tab. One caller's words are underlined.\n\n"
-            .."{DATE1CAPS} - EVENING CALL-IN\nCALLER: There were trucks at {B} past ten last night. Nobody I asked knew anything about it.\n"
-            .."HOST: Probably maintenance. They do that at night so nobody is held up.\n"
-            .."CALLER: Could be. There was no sign on the gate, is all.\n"
-            .."HOST: We'll put the question to {ORG} and see if anybody rings back. Next caller.\n\n"
-            .."WHAT IT MIGHT MEAN\nA caller noticed work at {B} at an hour nobody had explained, and someone later filed the page against the reference. "
-            .."Night work is ordinary, and so is a curious caller; a quiet arrangement looks exactly the same from the road. "
-            .."The transcript records what one person said on air. It cannot say what {SUBJECT} was, or {UNKNOWN}.",map)
-        documents[#documents+1]={id=prefix.."document-"..(#documents+1),kind="transcript",title=fill("Radio transcript / {CODE}",map),
-            locationId=b.id,body=transcript,references={b.id,org.id},links={{target=documents[1].id,kind="recontextualises"}},leads={}}
-    end
-    -- THE ESSENTIAL DOCUMENTS, resolved to ids now that the documents exist.
-    -- An anchor the case did not build (an optional review that was rolled out)
-    -- is simply absent - a link cannot be essential if the case never had it.
-    -- THE THREAD, resolved now that the documents exist. Recorded on the case so
-    -- the follow-up can inherit a SOURCED finding rather than a repeated name
-    -- (DR-20260919-CONTINUITY) - and recorded rather than re-derived, because a
-    -- case rebuilds from its own record (the case.opening lesson).
-    local thread
-    if type(premise.thread)=="table" then
-        local index=ANCHOR_INDEX[premise.thread.document]
-        local doc=index and documents[index]
-        if doc then
-            thread={document=doc.id,reference=code,
-                    point=premise.thread.point,question=premise.thread.question}
-        end
-    end
-    local essentialIds
-    if type(premise.essential)=="table" then
-        essentialIds={}
-        for _,name in ipairs(premise.essential) do
-            local index=ANCHOR_INDEX[name]
-            local doc=index and documents[index]
-            if doc then essentialIds[#essentialIds+1]=doc.id end
-        end
-        if #essentialIds==0 then essentialIds=nil end
+        authored.documents[#authored.documents+1]={id=prefix.."document-"..(#authored.documents+1),
+            kind=Memo.KIND,title=Memo.TITLE,locationId=b.id,body=Memo.body(),references={b.id},links={},leads={}}
     end
     return {schemaVersion=G.SCHEMA,generatorRevision=G.REVISION,catalogRevision=revision,seed=seed,
         caseId=prefix.."case",outline=outline,premiseId=premise.id,contentStatus="development-draft-unapproved",
         locations=copy(sites),cast=#met>0 and copy(met) or nil,facts=facts,identities=people,
-        organisation=org,documents=documents,relayMemo=relayMemo and true or nil,steer=steer and copy(steer) or nil,
-        -- RECORDED ON THE CASE, like relayMemo and steer, because G.validate
-        -- REBUILDS the case from its own record and compares. Without this the
-        -- rebuild would draw a premise from the seed instead of the opening, the
-        -- comparison would fail, and the opening case would be refused on every
-        -- reload - a save-breaking bug rather than a cosmetic one.
+        organisation=org,documents=authored.documents,story=authored.story,
+        relayMemo=relayMemo and true or nil,steer=steer and copy(steer) or nil,
         opening=opening and {premise=true,self=opening.self} or nil,
-        -- THE ESSENTIAL DOCUMENTS, by id, from the premise's own declaration
-        -- (OPENING_PAIR_COMPLETION.md). Anchor order is fixed by construction:
-        -- document 1 is the claim, 2 the response, 3 the review. Recorded so
-        -- the runtime can tell a case that ended without its PAYOFF from one
-        -- that merely ended without a corroborating scrap - honest closing
-        -- wording alone does not deliver a mystery (DR-20260919-GAP-NOT-PROGRESSION).
-        -- Absent for every ordinary premise, where all clues are equal and
-        -- behaviour is unchanged.
-        essential=essentialIds,thread=thread,
-        -- Recorded, like the opening, because the case rebuilds from its own
-        -- record: a follow-up whose inheritance was not stored would draw an
-        -- ordinary premise on reload and be refused.
-        follows=follows and copy(follows) or nil}
+        essential=authored.essential,thread=authored.thread,follows=follows and copy(follows) or nil}
 end
 -- What the player has met, reduced to what a case may safely carry: plain
 -- two-word-or-more names, printable, bounded, deduplicated and ORDERED, since
@@ -1005,8 +503,9 @@ function G.generate(catalog,seed,options)
     local random=rng((seed+4099)%2147483646+1)
     local selected=pairs[random(#pairs)]
     if random(2)==1 then selected={selected[2],selected[1]} end
-    local result=build(seed,catalog.revision,selected,G.castFrom(options.names),options.relayMemo==true,steer,
+    local result,buildWhy=build(seed,catalog.revision,selected,G.castFrom(options.names),options.relayMemo==true,steer,
         options.opening and {premise=true,self=options.self} or nil,follows)
+    if not result then return nil,buildWhy end
     local valid,err=G.validate(result); if not valid then return nil,err end
     return copy(result)
 end
@@ -1046,8 +545,10 @@ function G.generateSelected(catalog,seed,options,orderedSiteIds)
     local byId={}; for _,site in ipairs(eligible) do byId[site.id]=site end
     local a,b=byId[orderedSiteIds[1]],byId[orderedSiteIds[2]]
     if not a or not b or not Catalog.distinct(a,b) then return nil,"selected sites are not eligible and distinct" end
-    local result=build(seed,catalog.revision,{a,b},G.castFrom(options.names),options.relayMemo==true,steer,
-        options.opening and {premise=true,self=options.self} or nil,follows); local valid,err=G.validate(result); if not valid then return nil,err end
+    local result,buildWhy=build(seed,catalog.revision,{a,b},G.castFrom(options.names),options.relayMemo==true,steer,
+        options.opening and {premise=true,self=options.self} or nil,follows)
+    if not result then return nil,buildWhy end
+    local valid,err=G.validate(result); if not valid then return nil,err end
     return copy(result)
 end
 -- Gameplay-facing creation entry point. Legacy generate remains an offline fixture API.
@@ -1132,9 +633,8 @@ function G.validate(case)
     end
     -- The relay memo takes no story role, so it is not counted against the
     -- role bounds; the rebuild below still proves it is exactly the one clue.
-    -- Nor does the radio transcript of a case steered to "Listen for it" (P4-R123).
+    if type(case.story)~="table" then return false,"missing authored event" end
     local roleCount=#case.documents-(case.relayMemo and 1 or 0)
-        -((not case.story and type(case.steer)=="table" and case.steer.way=="listen") and 1 or 0)
     if roleCount<G.MIN_EVIDENCE or roleCount>G.MAX_EVIDENCE then return false,"invalid evidence role count" end
     local a,b=case.locations[1],case.locations[2]
     if not Catalog.distinct(a,b) or a.mapId~=b.mapId or a.buildLine~=b.buildLine then return false,"incompatible saved locations" end
@@ -1171,21 +671,12 @@ function G.project(case,discovered)
     for i=1,count do local id=discovered[i]; if not byId[id] or known[id] then return nil,"unknown/duplicate discovery" end; known[id]=true end
     local rows={}
     for i,id in ipairs(discovered) do
-        local doc=byId[id]; local links={}
-        local body=doc.body
-        if case.story then body,links=Story.project(case.story,doc,known) end
-        -- Links to documents NOT yet found are reported as `unseen`, by the
-        -- kind of document only - never its text. The record turns them into
-        -- the survivor wondering aloud: "Probably refers to another stock
-        -- list?" (owner, 2026-09-11: "that creates tension"). A question can be
-        -- wrong, which is exactly what keeps it from being a quest marker.
-        local unseen={}
-        for _,link in ipairs(doc.links) do
-            if known[link.target] then links[#links+1]=copy(link)
-            elseif not case.story and byId[link.target] then unseen[#unseen+1]={kind=link.kind,title=byId[link.target].title} end
-        end
+        local doc=byId[id]
+        local body,links=Story.project(case.story,doc,known)
+        -- Declared comparisons are the sole authority for connections. A title
+        -- from an undiscovered source is knowledge too; don't manufacture it.
         rows[i]={id=id,kind=doc.kind,title=doc.title,body=body,locationId=doc.locationId,leads=copy(doc.leads),
-            connections=links,unseen=#unseen>0 and unseen or nil}
+            connections=links}
     end
     return rows
 end

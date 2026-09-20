@@ -77,7 +77,7 @@ assert(retired.case==nil,"and it survives WITHOUT the case envelope, which retir
 
 local stub=assert(Retired.shrink(retired),"the opening deep-archives")
 assert(Retired.validate(stub),"and the stub validates")
-assert(stub.rows==nil,"a stub keeps no rows at all")
+assert(#stub.rows==#retired.rows and #stub.known==#retired.known,"compaction retains every discovered row and order")
 assert(stub.thread and stub.thread.document==thread.document,
     "yet the thread is still there - the follow-up remains offerable after deep archiving")
 
@@ -100,8 +100,8 @@ end
 assert(Premises.choosableCount()==20,"the ordinary pool is untouched: "..Premises.choosableCount())
 
 local function threadFrom(case,override)
-    local f={fromCase=case.caseId,document=case.thread.document,reference=case.thread.reference,
-             point=case.thread.point,question=case.thread.question}
+    local f={fromCase=case.caseId}
+    for k,v in pairs(case.thread) do f[k]=v end
     for k,v in pairs(override or {}) do f[k]=v end
     return f
 end
@@ -109,7 +109,7 @@ local follows=threadFrom(one)
 
 -- Every field is required: link D has no alternative, so a partial thread is
 -- refused rather than filled in.
-for _,missing in ipairs({"fromCase","document","reference","point","question"}) do
+for _,missing in ipairs({"fromCase","document","reference","point","question","person","organisation","survivor","afterDate"}) do
     local partial=threadFrom(one)
     partial[missing]=nil
     assert(G.generate(catalog(),500,opts{follows=partial})==nil,
@@ -155,48 +155,19 @@ end
 assert(sawPoint,"the follow-up's paperwork routes through the inherited point")
 assert(sawRef,"and cites the earlier case's own reference - the same file, not the same name")
 
--- CHRONOLOGY. The termination is the claim and the closures are the response,
--- so the generator's claim < response dating puts the closures AFTER the
--- termination on every seed. The other anchor order would have produced the
--- opposite of the finding every time.
-local claimDate,responseDate=one and nil,nil
-claimDate,responseDate=two.facts.claimDate,two.facts.responseDate
-assert(claimDate and responseDate,"the case has its dates")
-assert(claimDate<responseDate,
-    "closures are dated after the termination: claim "..claimDate.." < response "..responseDate)
-local termination,closures
-for i,d in ipairs(two.documents) do
-    if i==1 then termination=d elseif i==2 then closures=d end
+-- Retained enquiries and audit copies use the source closing day, preserving
+-- the source person, business and survivor rather than drawing a different past.
+assert(two.facts.claimDate==one.thread.afterDate and two.facts.responseDate==one.thread.afterDate
+    and two.facts.reviewDate==one.thread.afterDate,"continuation copies preserve their documentary date")
+assert(two.facts.recipient==one.facts.recipient and two.organisation.name==one.organisation.name)
+local Personal=require("ConspiracyFiles/Generated/PersonalScenarios")
+local authored=assert(Personal.get("still-filing",two.outline=="corroboration" and 1 or 2))
+assert(two.story.unresolved==authored.unresolved,"caller remains unrecorded after the local copying question is answered")
+assert(#two.essential==3 and two.thread==nil,"the continuation has a full answer and no endlessly reusable new thread")
+for _,d in ipairs(two.documents) do
+    assert(d.body:find(follows.reference,1,true),"each continuation source cites the inherited file")
 end
-assert(termination.title:lower():find("termination",1,true),"document 1 is the termination notice")
-assert(closures.title:lower():find("closure",1,true),"document 2 is the closure sheet")
-print("PASS connected pair: the inheritance is on the paper, and closures postdate the termination")
-
--- ---------------------------------------------------------------------------
--- 5. What the follow-up may never say ------------------------------------
--- ---------------------------------------------------------------------------
--- It must not infer that no visit occurred merely because a cancellation was
--- entered later: late processing of genuine earlier calls fits the same
--- evidence (DR-20260919-STILL-FILING-NARROW).
-local body={}
-for _,d in ipairs(two.documents) do body[#body+1]=d.body end
-local text=table.concat(body," "):lower()
-for _,forbidden in ipairs({"nobody called","no one called","no visit was made",
-                           "never attended","proves no visit","no call was made at all",
-                           "your entry","the survivor's entry"}) do
-    assert(not text:find(forbidden,1,true),"the follow-up asserts nothing it cannot: \""..forbidden.."\"")
-end
--- The narrow payoff is stated, and the alternative reading is stated with it.
-local closureMeaning=follow.response.meaning:lower()
-assert(closureMeaning:find("after the rounds",1,true),"the payoff is continued paperwork after the rounds ended")
-assert(closureMeaning:find("backlog",1,true) or closureMeaning:find("does not show",1,true),
-    "and it says in its own words that this does NOT show a visit was missed")
--- The extension needs its own evidence and still names no one's entry.
-local instruction=follow.review.meaning:lower()
-assert(instruction:find("proposal until",1,true),"an instruction alone is a proposal")
-assert(instruction:find("never which",1,true) or instruction:find("never whose",1,true),
-    "and even with closures citing it, which entries stays unknown")
-print("PASS connected pair: it reports continued filing, and never that a visit was missed")
+print("PASS connected pair: inherited facts, chronology and a bounded local continuation")
 
 -- ---------------------------------------------------------------------------
 -- 6. A THREAD IS SPENT ONCE, and stays spent ------------------------------
@@ -246,19 +217,8 @@ assert(Retired.validate(retiredTwo),"and validates")
 local stubTwo=assert(Retired.shrink(retiredTwo),"and deep-archives")
 assert(stubTwo.followsFrom==one.caseId,"keeping that even as a stub")
 
-local bothRetired={canonical=retiredOpening,
-                   successive={cases={retiredTwo}},
-                   schedule={schema=1,createdHours={1,2}}}
-if Cases.validate(bothRetired) then
-    assert(Cases.pendingThread(bothRetired)==nil,
-        "a thread a RETIRED follow-up followed is still spent - otherwise the same finding is handed out for ever")
-else
-    -- The wrapper shape differs between versions; assert the property that
-    -- matters directly rather than on a shape this test invented.
-    local followed={}
-    for _,r in ipairs({retiredOpening,retiredTwo}) do
-        if r.followsFrom then followed[r.followsFrom]=true end
-    end
-    assert(followed[one.caseId],"the retired follow-up records the thread as spent")
-end
-print("PASS connected pair: a thread is offered once, and stays spent after the follow-up retires")
+local bothRetired=assert(Cases.replace(withLive,2,retiredTwo))
+assert(Cases.validate(bothRetired),"retired follow-up wrapper validates")
+assert(Cases.pendingThread(bothRetired)==nil,
+    "a retired follow-up keeps its source thread spent")
+print("PASS connected pair: a thread is offered once and stays spent after retirement")

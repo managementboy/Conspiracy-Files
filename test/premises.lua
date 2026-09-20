@@ -1,18 +1,5 @@
--- Twenty premises, and the properties that keep them honest.
---
--- Until this change the generator told exactly one story - a maintenance
--- company moving a sealed case between two addresses with a missing
--- authorisation. Every earlier improvement (carriers, then roles, then
--- disagreement) gave that story more ways to be told without giving it a
--- second story, so a player who had seen two cases had seen the mod.
---
--- What must be true now, and is checked below:
---   1. all twenty premises are reachable from ordinary seeds;
---   2. a case still rebuilds byte-identically from its seed, or it cannot
---      survive a save and reload (Generator.validate rebuilds and compares);
---   3. the same premise reads two ways - agreeing and disputing - because a
---      premise with one reading is a plot, not an investigation;
---   4. no document asserts a conclusion.
+-- Metadata pool reachability, seeded variants and reference independence.
+-- Local conclusions are required; the event contract gates them by sources.
 package.path = "mod/common/media/lua/shared/?.lua;" .. package.path
 local G = require("ConspiracyFiles/Generated/Generator")
 local Premises = require("ConspiracyFiles/Generated/Premises")
@@ -103,8 +90,8 @@ for _, id in ipairs(Premises.list()) do
             "premise " .. id .. " is asked for by name and must be unreachable from ordinary seeds, but a seed drew it")
     else
     assert((seen[id] or 0) > 0, "premise " .. id .. " is unreachable from any of 600 seeds")
-    -- Both readings must occur. This is the whole design rule: the mod lays
-    -- out paperwork that may or may not disagree, and never decides for you.
+    -- Both authored events must occur. Legacy outline names remain stored
+    -- identifiers; they no longer prescribe agreement or an unresolved ending.
     assert(outlines[id]["corroboration"], "premise " .. id .. " never corroborates")
     assert(outlines[id]["conflicting-account"], "premise " .. id .. " never conflicts")
     end
@@ -116,28 +103,6 @@ for _, kind in ipairs({ "dispatch", "letter", "receipt", "notepad" }) do
     assert((kinds[kind] or 0) > 0, "anchor carrier " .. kind .. " became unreachable")
 end
 
--- A lead is never proof. These are the phrasings that would break that, and
--- the ones a writer reaches for without noticing.
-local FORBIDDEN = {
-    "this proves", "proves that", "clearly shows", "there is no doubt",
-    "beyond doubt", "obviously", "must have been", "we know that",
-    "confirms that the", "the truth is",
-}
-local checked = 0
-for seed = 1, 600 do
-    local case = G.generate(catalog, seed, opts)
-    if case then
-        for _, doc in ipairs(case.documents) do
-            local body = string.lower(doc.body)
-            for _, phrase in ipairs(FORBIDDEN) do
-                assert(not string.find(body, phrase, 1, true),
-                    case.premiseId .. " asserts a conclusion (" .. phrase .. ") in " .. doc.title)
-            end
-            checked = checked + 1
-        end
-    end
-end
-
 -- The same seed must tell the same story twice running, or a reload changes
 -- what the player already read.
 for _, seed in ipairs({ 3, 91, 5000, 123456 }) do
@@ -147,5 +112,4 @@ for _, seed in ipairs({ 3, 91, 5000, 123456 }) do
     assert(first.documents[1].body == again.documents[1].body, "seed " .. seed .. " wrote two different documents")
 end
 
-print(string.format("PASS premises: %d premises, all reachable and readable both ways across %d cases; "
-    .. "%d documents carry no asserted conclusion", Premises.count(), cases, checked))
+print(string.format("PASS premises: %d metadata families, ordinary pool and both authored variants reached across %d cases",Premises.count(),cases))

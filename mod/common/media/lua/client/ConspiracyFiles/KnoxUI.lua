@@ -236,15 +236,41 @@ function K.wrap(value,width)
     return out
 end
 
-function K.popup(c,title,labels,selected)
+function K.popup(c,title,labels,selected,top,keepSelected)
     local line=Font.line
     hit(c,"POPUP_CLOSE",0,0,c.w,c.h)
     local w=K.width(title)+12
     for _,label in ipairs(labels) do w=math.max(w,K.width(label)+12) end
     w=math.min(w,c.w-4)
-    local wrapped,count={},0
-    for i,label in ipairs(labels) do wrapped[i]=K.wrap(label,w-6); count=count+#wrapped[i] end
-    local h=line*(count+1)+4
+    local function wrapOptions(width)
+        local wrapped,count={},0
+        for i,label in ipairs(labels) do wrapped[i]=K.wrap(label,width); count=count+#wrapped[i] end
+        return wrapped,count
+    end
+    local wrapped,count=wrapOptions(w-6)
+    -- A popup may be longer than the glass. Keep its title and a bounded run
+    -- of option lines visible, then let the scrollbar and rocker move through
+    -- the wording instead of drawing choices beyond the LCD.
+    -- Leave the popup's top margin in the glass as well as its title/frame.
+    local room=math.max(1,math.floor((c.h-line*2-6)/line))
+    local gutter=count>room and 6 or 0
+    local textWidth=w-6-gutter
+    if gutter>0 then wrapped,count=wrapOptions(textWidth) end
+    local highest=math.max(1,count-room+1)
+    top=math.max(1,math.min(math.floor(top or 1),highest))
+    -- SETUP's rocker still applies each choice immediately, so its selected
+    -- row must never move beyond the visible popup window.
+    local selectedStart,selectedEnd,at=1,1,0
+    for i,lines in ipairs(wrapped) do
+        if i==selected then selectedStart,selectedEnd=at+1,at+#lines end
+        at=at+#lines
+    end
+    if keepSelected then
+        if selectedStart<top then top=selectedStart end
+        if selectedEnd>top+room-1 then top=selectedEnd-room+1 end
+    end
+    local shown=math.min(room,count-top+1)
+    local h=line*(shown+1)+4
     local x=math.floor((c.w-w)/2)
     local y=math.max(line+2,math.floor((c.h-h)/2))
     K.fill(c,x,y,w,h,K.GLASS)
@@ -252,16 +278,27 @@ function K.popup(c,title,labels,selected)
     K.text(c,K.fit(title,w-6),x+3,y+1,K.DIM)
     K.fill(c,x+1,y+line+1,w-2,1,K.INK)
     local ly=y+2+line
+    local at=0
     for i,lines in ipairs(wrapped) do
-        local tall=line*#lines
-        if i==selected then K.fill(c,x+1,ly,w-2,tall,K.INK) end
-        for j,text in ipairs(lines) do
-            K.text(c,K.fit(text,w-6),x+3,ly+(j-1)*line,i==selected and K.GLASS or K.INK)
+        local start,finish=math.max(1,top-at),math.min(#lines,top+shown-1-at)
+        local tall=line*math.max(0,finish-start+1)
+        if tall>0 and i==selected then K.fill(c,x+1,ly,w-2-gutter,tall,K.INK) end
+        for j=start,finish do
+            K.text(c,K.fit(lines[j],textWidth),x+3,ly+(j-start)*line,i==selected and K.GLASS or K.INK)
         end
-        hit(c,"POPUP",x,ly,w,tall,i)
-        ly=ly+tall
+        if tall>0 then hit(c,"POPUP",x,ly,w-gutter,tall,i); ly=ly+tall end
+        at=at+#lines
     end
-    return x,y,w,h
+    if count>room then
+        local barX=x+w-6
+        K.fill(c,barX+2,y+line+3,1,1,K.INK)
+        K.fill(c,barX+1,y+line+4,3,1,K.INK)
+        K.fill(c,barX+1,y+h-5,3,1,K.INK)
+        K.fill(c,barX+2,y+h-4,1,1,K.INK)
+        hit(c,"POPUP_SCROLL",barX,y+line+2,6,math.floor((h-line-2)/2),-1)
+        hit(c,"POPUP_SCROLL",barX,y+line+2+math.floor((h-line-2)/2),6,math.ceil((h-line-2)/2),1)
+    end
+    return x,y,w,h,{top=top,room=room,total=count}
 end
 
 function K.scrollbar(c,ny,height,top,room,total)

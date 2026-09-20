@@ -592,7 +592,8 @@ function Screen:draw(gx,gy)
     if p and self.context and self.on and not self.booting then
         local labels={}
         for i,o in ipairs(p.options) do labels[i]=o.label end
-        K.popup(self.context,p.title,labels,p.index)
+        local _,_,_,_,layout=K.popup(self.context,p.title,labels,p.index,p.top,p.immediate)
+        p.top=layout.top
     end
 end
 
@@ -790,10 +791,10 @@ end
 -- SETUP's choices open as a Palm popup list (owner, 2026-09-14, with a photo of
 -- one): tap a line to choose it, tap outside to leave the setting as it was.
 -- The rocker moves the choice and applies it as it goes; BACK closes the list.
-function Screen:openPopup(title,labels,index,apply)
+function Screen:openPopup(title,labels,index,apply,immediate)
     local options={}
     for i,label in ipairs(labels) do options[i]={label=label} end
-    self.popup={title=title,options=options,index=index or 1,apply=apply}
+    self.popup={title=title,options=options,index=index or 1,apply=apply,immediate=immediate,top=1}
 end
 
 -- "What do I make of it?" (P4-R113, wording P4-R122): the three questions with
@@ -805,23 +806,38 @@ function Screen:drawQuestions(c)
     local q=self.record.questions
     local Q=require("ConspiracyFiles/Generated/Questions")
     K.titleBar(c,"FILES","Case "..tostring(q.number))
-    local y=line+2
+    local lines={}
     for i,question in ipairs(Q.QUESTIONS) do
-        y=K.row(c,question.text,y,i==(self.question or 1),"QUESTION",i)
+        for _,text in ipairs(wrapTo(question.text,c.w-11)) do
+            lines[#lines+1]={text=text,question=i}
+        end
         local answer=Q.answerLabel(question.key,q.answers,q.offered)
-        for _,text in ipairs(wrapTo(answer,c.w-14)) do
-            K.text(c,text,10,y,answer==Q.NOT_YET and K.DIM or K.INK); y=y+line
+        for _,text in ipairs(wrapTo(answer,c.w-19)) do
+            lines[#lines+1]={text=text,answer=true,dim=answer==Q.NOT_YET}
         end
     end
     local note=Q.note(q.answers,q.offered)
     if note then
-        K.fill(c,0,y,c.w,1,K.DIM); y=y+2
-        for _,text in ipairs(wrapTo(note,c.w-4)) do
-            if y>c.h-line*2-2 then break end
-            K.text(c,text,2,y,K.INK); y=y+line
+        lines[#lines+1]={rule=true}
+        for _,text in ipairs(wrapTo(note,c.w-11)) do
+            lines[#lines+1]={text=text}
         end
     end
     local foot=K.foot(c,self:footText(""))
+    local y=line+2
+    local room=math.max(1,math.floor((foot-y-1)/line))
+    local state={card=self.questionTop or 1}
+    local top=topLine(state,#lines,room)
+    self.questionTop=state.card
+    for i=0,room-1 do
+        local entry=lines[top+i]
+        if not entry then break end
+        local ny=y+i*line
+        if entry.rule then K.fill(c,0,ny+math.floor(line/2),c.w,1,K.DIM)
+        elseif entry.question then K.row(c,entry.text,ny,entry.question==(self.question or 1),"QUESTION",entry.question)
+        else K.text(c,entry.text,entry.answer and 10 or 2,ny,entry.dim and K.DIM or K.INK) end
+    end
+    K.scrollbar(c,y,room*line,top,room,#lines)
     local x=K.command(c,"BACK",2,foot,"BACK")
     if not (q.answers and q.answers.usedBy) then K.command(c,"ANSWER",x,foot,"ANSWER") end
 end
@@ -867,7 +883,7 @@ function Screen:openRow(index)
     elseif row.setup=="text" then
         local labels={}
         for i,f in ipairs(S.FONT_SIZES) do labels[i]=f.label end
-        self:openPopup("Text size",labels,self.fontSize or S.fontSize or S.FONT_DEFAULT,S.setFont)
+        self:openPopup("Text size",labels,self.fontSize or S.fontSize or S.FONT_DEFAULT,S.setFont,true)
     elseif row.setup=="machine" then
         -- S.scale is nil until the player has chosen a size (P4-R94 opens at
         -- the default without writing one), so read the size actually drawn.
@@ -876,10 +892,10 @@ function Screen:openRow(index)
         local now=self.scale or S.scale or S.fit()
         local labels={}
         for i,v in ipairs(S.SCALES) do labels[i]=S.scaleLabel(v) end
-        self:openPopup("Machine size",labels,S.scaleIndex(now) or 2,function(i) S.zoom(S.SCALES[i]) end)
+        self:openPopup("Machine size",labels,S.scaleIndex(now) or 2,function(i) S.zoom(S.SCALES[i]) end,true)
     elseif row.questions then
         -- "What do I make of it?" (P4-R113): the three questions, the first chosen.
-        self.record=row; self.record.index=index; self.card=1; self.question=1
+        self.record=row; self.record.index=index; self.card=1; self.question=1; self.questionTop=1
     else
         self.record=row; self.record.index=index; self.card=1
     end
@@ -913,8 +929,15 @@ function Screen:press(id)
         local p=self.popup
         local action=S.ACTION[id]
         if action=="UP" or action=="DOWN" then
-            p.index=math.max(1,math.min(#p.options,p.index+(action=="UP" and -1 or 1)))
-            safe(p.apply,p.index)
+            local step=action=="UP" and -1 or 1
+            if p.immediate then
+                p.index=math.max(1,math.min(#p.options,p.index+step))
+                safe(p.apply,p.index)
+            else
+                -- Read an answer before choosing it. The question popup's
+                -- rocker scrolls its wording and never writes an answer.
+                p.top=math.max(1,(p.top or 1)+step)
+            end
         else
             self.popup=nil
         end
@@ -944,11 +967,11 @@ function Screen:press(id)
         elseif not self.launcher then self.launcher=true end
     elseif action=="UP" then
         -- One LINE inside a record, one entry in a list (P4-R138).
-        if self.record and self.record.questions then self.question=math.max(1,(self.question or 1)-1)
+        if self.record and self.record.questions then self.questionTop=math.max(1,(self.questionTop or 1)-1)
         elseif self.record then self.card=math.max(1,(self.card or 1)-1)
         else self.entry=math.max(1,self.entry-1) end
     elseif action=="DOWN" then
-        if self.record and self.record.questions then self.question=math.min(3,(self.question or 1)+1)
+        if self.record and self.record.questions then self.questionTop=(self.questionTop or 1)+1
         elseif self.record then self.card=(self.card or 1)+1
         else self.entry=math.min(math.max(1,#rows),self.entry+1) end
     end
@@ -972,8 +995,12 @@ function Screen:tap(x,y)
     end
     if self.popup then
         local p=self.popup
-        self.popup=nil
-        if id=="POPUP" and p.options[widget.payload] then safe(p.apply,widget.payload) end
+        if id=="POPUP_SCROLL" then
+            p.top=math.max(1,(p.top or 1)+(widget.payload or 0))
+        else
+            self.popup=nil
+            if id=="POPUP" and p.options[widget.payload] then safe(p.apply,widget.payload) end
+        end
         log("knox tap: "..tostring(id))
         return
     end
@@ -1080,7 +1107,7 @@ end
 -- drag up, read down.
 S.DRAG_START=4
 function Screen:dragGlass(dy)
-    if not self.record or not self.on then return false end
+    if not self.on or (not self.record and not self.popup) then return false end
     local drag=self.dragging
     if not drag then return false end
     drag.dy=drag.dy+(dy or 0)
@@ -1091,7 +1118,10 @@ function Screen:dragGlass(dy)
     local line=math.max(1,(K.LINE or 8)*(self.scale or S.scale or 1))
     local steps=math.floor(math.abs(drag.dy)/line)
     if steps>0 then
-        self.card=math.max(1,(self.card or 1)+(drag.dy<0 and steps or -steps))
+        local change=drag.dy<0 and steps or -steps
+        if self.popup then self.popup.top=math.max(1,(self.popup.top or 1)+change)
+        elseif self.record.questions then self.questionTop=math.max(1,(self.questionTop or 1)+change)
+        else self.card=math.max(1,(self.card or 1)+change) end
         drag.dy=drag.dy-(drag.dy<0 and -steps*line or steps*line)
     end
     return true

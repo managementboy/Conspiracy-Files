@@ -1,78 +1,46 @@
--- Why are these all one case?
---
--- Owner, 2026-09-11, holding a stock list, a "review", a credit card and an
--- audit note: "as of now I cant figure out why they are all part of one case".
--- Three causes, each fixed and pinned here:
---   A. documents were titled by the paper, not the content - a payment slip on
---      a notepad was called "Review";
---   B. the extra documents fitted any story, so only the reference number tied
---      them together;
---   C. nothing noticed when a document refers to one not found yet. The
---      owner's wording: "probably refers to another list?" - a question,
---      because a question can be wrong.
-package.path = "mod/common/media/lua/shared/?.lua;" .. package.path
-local G = require("ConspiracyFiles/Generated/Generator")
-local Premises = require("ConspiracyFiles/Generated/Premises")
-local catalog = dofile("test/fixtures/synthetic_locations.lua")
-local opts = { mapId = "SYNTHETIC-MAP", buildLine = "TEST-ONLY", allowSynthetic = true }
-
-local sawPayment, sawLog = false, false
-for seed = 1, 400 do
-    local case = G.generate(catalog, seed, opts)
-    if case then
-        assert(G.validate(case))
-        local subject = Premises.get(case.premiseId).subject
-        for _, doc in ipairs(case.documents) do
-            -- A: a payment slip is a payment slip, whatever it is written on.
-            if doc.body:find("Payment against", 1, true) then
-                sawPayment = true
-                assert(doc.title:find("^Payment slip"), "a payment is titled " .. doc.title)
-                -- B: and it names the case's matter, not only its number.
-                assert(doc.body:find("Payment against " .. subject, 1, true), doc.body)
-            end
-            -- Recognised by its own found-text: a premise's gate log also says
-            -- somebody signed in at the gate, and is correctly titled "Gate log".
-            if doc.body:find("the current week held open by a bent paperclip", 1, true) then
-                sawLog = true
-                assert(doc.title:find("^Duty log"), "a duty log is titled " .. doc.title)
-                assert(doc.body:find(subject, 1, true), "the duty log must name the matter")
-            end
-            assert(not doc.title:find("^Review /"), "nothing may be titled 'Review' for its paper: " .. doc.title)
+-- Each source has an authored role; comparisons use only discovered sources.
+-- A family reference by itself is not a story, and unseen titles are knowledge.
+package.path="mod/common/media/lua/shared/?.lua;"..package.path
+local G=require("ConspiracyFiles/Generated/Generator")
+local Ordinary=require("ConspiracyFiles/Generated/OrdinaryScenarios")
+local Pages=require("ConspiracyFiles/Generated/DocumentPages")
+local catalog=dofile("test/fixtures/synthetic_locations.lua")
+local opts={mapId="SYNTHETIC-MAP",buildLine="TEST-ONLY",allowSynthetic=true}
+local seen,checked={},0
+for seed=1,400 do
+    local case=assert(G.generate(catalog,seed,opts))
+    local variant=case.outline=="corroboration" and 1 or 2
+    local authored=assert(Ordinary.get(case.premiseId,variant))
+    assert(case.story.question~="" and case.story.event~="" and case.story.outcome~="")
+    local sources={authored.anchors.claim,authored.anchors.response,authored.anchors.review}
+    for i=1,3 do
+        local doc=case.documents[i]
+        assert(doc.kind==sources[i].kind,"source identity determines its actual carrier")
+        local title=sources[i].title:gsub("{CODE}",case.facts.code)
+        assert(doc.title==title,"source title must describe the authored evidence")
+        assert(Pages.text(doc.body)~=doc.body,"source-only page excludes observation and interpretation")
+        local rows=assert(G.project(case,{doc.id}))
+        assert(#rows==1 and rows[1].id==doc.id and rows[1].body==doc.body)
+        assert(#rows[1].connections==0 and rows[1].unseen==nil,"one source leaks no unseen title or comparison")
+    end
+    local known={case.documents[3].id,case.documents[1].id,case.documents[2].id}
+    local rows=assert(G.project(case,known))
+    local complete
+    for _,finding in ipairs(case.story.comparisons) do
+        if #finding.requires==3 then complete=finding;break end
+    end
+    assert(complete,"a three-source local finding is authored")
+    local displayed=false
+    for i,row in ipairs(rows) do
+        assert(row.id==known[i],"projection preserves discovery order")
+        if row.id==complete.from then
+            assert(row.body:find(complete.text,1,true),"supported local answer must become readable")
+            displayed=true
         end
     end
+    assert(displayed)
+    seen[case.premiseId..":"..variant]=true;checked=checked+1
 end
-assert(sawPayment and sawLog, "both documents must actually occur for this to mean anything")
-
--- C: the projection reports links to unfound documents by title only, and the
--- record turns them into a question.
-local case
-for seed = 1, 400 do
-    local c = G.generate(catalog, seed, opts)
-    if c and #c.documents >= 3 then
-        for _, doc in ipairs(c.documents) do
-            for _, link in ipairs(doc.links) do
-                if link.target ~= doc.id then case = c; break end
-            end
-        end
-    end
-    if case then break end
-end
-local reviewer
-for _, doc in ipairs(case.documents) do if #doc.links > 0 then reviewer = doc; break end end
-local rows = assert(G.project(case, { reviewer.id }))
-assert(rows[1].unseen and #rows[1].unseen >= 1, "a link to an unfound document must be reported")
-assert(rows[1].unseen[1].title and not rows[1].unseen[1].body,
-    "only the unfound document's title may travel, never its text")
-assert(#rows[1].connections == 0, "and it must not count as a connection until found")
-
--- The survivor wondering about an unfound document - in the owner's words, and
--- as a question, because a question can be wrong - is asserted on the OUTPUT
--- in test/evidence_rows.lua against the real projection. It was checked here
--- by searching the old window's source for the literal source line, which asserted
--- nothing about what a reader sees and broke when the projection moved.
--- The connection verbs not assuming every case is about a delivery is
--- asserted on the RENDERED phrase in test/evidence_rows.lua, for every link
--- kind. It was checked here by pattern-matching the lookup table out of
--- the old window's source, which said nothing about what a reader sees.
-print("PASS one story: documents are titled by what they are, name the same matter, "
-    .. "and the survivor wonders about the ones not found yet")
+local count=0;for _ in pairs(seen) do count=count+1 end
+assert(checked==400 and count==40,"all ordinary variants must be exercised")
+print("PASS one story: authored sources, no unseen titles, supported local answer in discovery order")

@@ -68,4 +68,24 @@ assert(low and low.id=="POPUP" and low.payload==2,"a tap on its second line stil
 local lines=K.wrap(long,w-6)
 assert(#lines>=2 and table.concat(lines," ")==long,"wrapping keeps every word, in order")
 
+-- Closing readings can be longer than the Palm glass. The popup stays inside
+-- it, exposes a bounded line window, and reaches a later option after scroll.
+textures,rects={},{ }
+c=K.begin(panel,1,0,0,100,70)
+local choices={}
+for i=1,8 do choices[i]="Reading "..i.." keeps every part of this longer local explanation." end
+local layout
+x,y,w,h,layout=K.popup(c,"Choose a reading",choices,1)
+assert(y>=0 and y+h<=70 and layout.total>layout.room,"a long popup is bounded to the glass")
+local _,_,_,bottom,after=K.popup(c,"Choose a reading",choices,8,layout.total,true)
+assert(bottom<=70 and after.top>1,"the final wording can be scrolled into the bounded popup")
+local last
+for _,hit in ipairs(c.hits) do
+    if hit.id=="POPUP" then
+        assert(hit.x+hit.w<=x+w-6,"choice text never overlaps the popup scroll gutter")
+        if hit.payload==8 then last=hit end
+    end
+end
+assert(last and K.at(c,last.x+1,last.y+1).payload==8,"a visible late option remains tappable")
+
 print("PASS knoxui faces and popup: the 24 pt cut draws from its own folder between Small and Medium, the popup list chooses on a tap and closes on a tap elsewhere")
