@@ -68,4 +68,4 @@ Archive commit/version, setup, actions, observations and logs for each result. T
 
 ## Delivery state
 
-This handoff and the implementation are committed on local Windows `main`. They have not been pushed or published by this pass. Transfer the completed commits to the Linux checkout before using the commands above; the presence of the old map-media branch or Workshop candidate is insufficient. The knowledge graph was refreshed locally with AST extraction only and is ignored by Git. No runtime acceptance result is claimed.
+Delivery branch: `main` in `managementboy/Conspiracy-Files`. On Linux, fetch `origin`, inspect the working tree, and fast-forward main without overwriting unrelated work. The resulting history must include `636e456` and this delivery-note update before using the commands above; the old map-media branch or Workshop candidate is insufficient. This Git handoff does not publish a Workshop build. The knowledge graph was refreshed locally with AST extraction only and is ignored by Git. No runtime acceptance result is claimed.

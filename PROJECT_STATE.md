@@ -11,7 +11,8 @@ non-floor placement variety, readable addresses, retained history and UI integra
 
 This is an unvalidated development candidate requiring fresh saves. Claude owns
 all compilation, tests, previews, builds and native acceptance. No execution or
-publication occurred in this implementation pass; commits are local, not pushed.
+Workshop publication occurred in this implementation pass. Git delivery uses
+`origin/main`; Linux must fetch and fast-forward to the completed handoff commit.
 The handoff identifies the exact source markers, commands and remaining native
 gates. Historical sections below do not override this current delivery state.
 

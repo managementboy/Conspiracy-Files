@@ -236,4 +236,4 @@ The last integration review confirmed:
 
 Build version: `DEV-0.46.0-writing-rebuild`. Claude now owns the single build/testing phase on fresh saves, including all-map native coverage, loot/manual-read travel, save/load, actual scan cost, UI and humour/readability acceptance. Generic recipient correspondence does not mean 125 unique stories; source footprints do not prove reachable containers. Those limits are explicit in the handoff.
 
-All work is local on main. No push, package, boot, test run or publication is implied by completion of implementation.
+Git delivery uses `origin/main`; the owner requested uploading the completed work for Linux. Fetch and fast-forward before building. Git delivery does not imply a package, boot, test run or Workshop publication.

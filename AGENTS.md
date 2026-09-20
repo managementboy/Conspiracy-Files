@@ -18,7 +18,7 @@ variants, not unrelated suspicious objects. Apply the standard across the full
 existing family pool; one good opening is not completion. See
 `docs/management/WRITING_REBUILD_STATUS_2026-09-20.md` for the audit and reference example. Source implementation is now complete; use
 `docs/management/WRITING_REBUILD_LINUX_HANDOFF_2026-09-20.md` for the single
-Linux handoff. The candidate remains unvalidated and local-only. Claude retains
+Linux handoff. The candidate remains unvalidated; Git delivery uses `origin/main`. Claude retains
 all test/build execution.
 
 Owner reinforcement, 2026-09-20: named vanilla businesses and lore must have

@@ -1,6 +1,6 @@
 # Resume from the completed source handoff
 
-The source integration saved in `b4d9a02` has now received its final static review. Use [WRITING_REBUILD_LINUX_HANDOFF_2026-09-20.md](WRITING_REBUILD_LINUX_HANDOFF_2026-09-20.md) and the commit that finalises it. Implementation is ready for Claude's one Linux build/testing phase; it remains unvalidated and local-only. The older restart instructions below are historical. No tests/builds/game were run by Codex.
+The source integration saved in `b4d9a02` has now received its final static review. Use [WRITING_REBUILD_LINUX_HANDOFF_2026-09-20.md](WRITING_REBUILD_LINUX_HANDOFF_2026-09-20.md) and the commit that finalises it. Implementation is ready for Claude's one Linux build/testing phase; it remains unvalidated; Git delivery uses `origin/main`. The older restart instructions below are historical. No tests/builds/game were run by Codex.
 
 ---
 
