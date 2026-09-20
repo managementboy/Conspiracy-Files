@@ -35,10 +35,18 @@ for seed=1,300 do
         for _,d in ipairs(candidate.documents) do
             if d.locationId==candidate.locations[1].id then atFirst=atFirst+1 end
         end
-        if atFirst>=2 and #candidate.documents>=4 then case=candidate; break end
+        -- The point is a SITE with more clues than the one container it will be
+        -- given, so some must wait. The rebuild puts exactly one clue at the
+        -- first site and the rest at the second, so ask for that shape instead
+        -- of the old "two at the first site", which is now unreachable.
+        local atSecond=0
+        for _,d in ipairs(candidate.documents) do
+            if d.locationId==candidate.locations[2].id then atSecond=atSecond+1 end
+        end
+        if atSecond>=2 and #candidate.documents>=4 then case=candidate; break end
     end
 end
-assert(case,"no seed in 1..300 gave a four-clue case with two clues at the first site")
+assert(case,"no seed in 1..300 gave a four-clue case with two clues at one site")
 local siteA,siteB=case.locations[1],case.locations[2]
 local function targetAt(site,slot)
     return {x=site.bounds.x1,y=site.bounds.y1,z=site.bounds.z,objectIndex=slot,

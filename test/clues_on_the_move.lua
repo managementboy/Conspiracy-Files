@@ -222,14 +222,17 @@ local case
 for seed=1,300 do
     local candidate=G.generate(catalog(),seed,{mapId="SYNTHETIC-MAP",buildLine="TEST-ONLY",allowSynthetic=true})
     if candidate and #candidate.documents>=4 then
-        local atFirst=0
+        -- The rebuild puts one clue at the first site and the rest at the
+        -- second, so "two at the first site" is unreachable; what this fixture
+        -- needs is simply a site holding two clues.
+        local atSecond=0
         for _,d in ipairs(candidate.documents) do
-            if d.locationId==candidate.locations[1].id then atFirst=atFirst+1 end
+            if d.locationId==candidate.locations[2].id then atSecond=atSecond+1 end
         end
-        if atFirst>=2 then case=candidate; break end
+        if atSecond>=2 then case=candidate; break end
     end
 end
-assert(case,"no seed in 1..300 gave a four-clue case with two clues at the first site")
+assert(case,"no seed in 1..300 gave a case with two clues at one site")
 local siteA,siteB=case.locations[1],case.locations[2]
 local function fixedAt(s,slot)
     return {x=s.bounds.x1,y=s.bounds.y1,z=s.bounds.z,objectIndex=slot,containerIndex=0,
@@ -542,7 +545,9 @@ assert(relocate:find('type(a.target.carrierMark)=="string" then return true',1,t
     "a clue on a carrier does not relocate; its answer to going stale is expiry")
 -- The filler's own container scan reaches the gate too, or a clue could be
 -- offered a mailbox at creation and never as an instalment.
-local bounds=assert(runtime:match("local function boundsScan%(site,done,accept%)(.-)\nend\n"),
+-- The rebuild added a salt argument for seeded choice between equally
+-- suitable kinds; match the name, not the exact parameter list.
+local bounds=assert(runtime:match("local function boundsScan%b()(.-)\nend\n"),
     "the filler's container scan must exist")
 assert(bounds:find("Session.OUTDOOR_RADIUS",1,true) and bounds:find("Storage.MAILBOX",1,true),
     "the filler looks for a mailbox in the band around the site, by the same named width")

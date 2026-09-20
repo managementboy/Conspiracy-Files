@@ -195,9 +195,14 @@ print('PASS G2 mock: loaded storage -> generated case -> 3 placed notes -> owned
 -- because the slice swallowed that line and it touches UI. The projection is
 -- ConspiracyFiles/EvidenceRows now, so this exercises the shipped code path
 -- the organiser's FILES, NAMES and PLACES all use, instead of a copy of its text.
-package.preload['ConspiracyFiles/Generated/PlaceNames']=function()
-    return {render=function(text,case) return case.caseId..'|'..text end}
-end
+-- package.preload is ignored once a module is already in package.loaded, and
+-- PlaceNames is loaded long before this point, so the real module was running
+-- and this stub tested nothing. Assign package.loaded directly. `context` is
+-- part of the module's surface now and EvidenceRows calls it.
+package.loaded['ConspiracyFiles/Generated/PlaceNames']={
+    context=function(case) return case end,
+    render=function(text,case) return case.caseId..'|'..text end,
+}
 local EvidenceRows=require('ConspiracyFiles/EvidenceRows')
 local recordRows=EvidenceRows.build('evidence',function() return R end)
 assert(recordRows[2].id==newItem:getModData().cfGeneratedId and recordRows[2].ordinal==2)
