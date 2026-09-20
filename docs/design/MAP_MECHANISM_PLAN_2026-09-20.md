@@ -36,6 +36,24 @@ decisions. Two of them change the shape of the feature.
 | 11 | harness detects "any document asserting a conclusion" | overstated. It checks a **finite list** of phrasings and contracts (§3) |
 | 12 | reviewer reported stray shell text in the document | **not a defect** — it came from the terminal transcript around the file, not the file. Paste the document, not the session |
 
+Corrections from the revision-3 review, applied in place rather than by a fourth
+rewrite:
+
+| # | revision 3 said | corrected |
+|---|---|---|
+| 13 | rationing is "`NO-CONCLUSION`-shaped rather than a restriction", and "costs no engineering" | **both withdrawn.** It is rationing; full coverage stays the requirement; a per-save subset needs real machinery (§5, §14.1) |
+| 14 | spending the reserve is an alternative route to coverage | **it is not.** Even the whole 25,393 spare leaves a 36,880 shortfall (§5) |
+| 15 | earlier revisions "double-counted the ordinary ledger" | **my diagnosis was wrong.** The old formula counted it once; the faults were omitted feature costs, an assumed event size, and the ignored reserve (§5) |
+| 16 | identity/connection history "can only reduce the 7,826" | it is **inside** the 73,000 already reserved; reconciled once, not twice (§5) |
+| 17 | ledger events are "the binding cost" | trail and entry state are over half of representation D (§5) |
+| 18 | the one-outstanding cap prevents the trail draining unseen | **it only delays it.** Unseen exhaustion is now accepted and the promise narrowed; the name is "one *blocking* fragment" (§7) |
+| 19 | "arrival does not yet count as arrival" if the payoff is late | **violates the owner's ruling.** Entry is recorded truthfully; preparation is tracked separately; the ordering is a Phase 0 finding (§8, §12) |
+| 20 | interrupted placement "returns to its prior state" | insufficient — three recovery points, because insertion may have succeeded before commit (§8, §12) |
+| 21 | a destroyed carrier moves the payoff | **only before placement.** All-unavailable holds it unplaced; destruction after placement spawns nothing (§8, §12) |
+| 22 | §12 chose a recovery policy while §14 still asked whether recovery exists | mismatch resolved: the pilot has one policy; what stays open is narrower (§14.2) |
+| 23 | the authored example | **rewritten** around a flat conflict about one referent, with provenance, a central question, and fixture values (§13) |
+| 24 | no bounded storage change costed | costed: about **10.9 kB**, roughly twenty destinations (§5) |
+
 ---
 
 ## 1. The mechanism
@@ -127,10 +145,12 @@ noted.
 ## 5. Capacity — measured, not derived
 
 This constrains the whole design, so it precedes the plan. **Both earlier
-revisions got it wrong the same way**: they subtracted from a budget the campaign
-store had already been measured against, double-counting the ordinary ledger, and
-neither honoured the reserve `test/case_archive.lua` asserts. Revision 1 said 487
-events "fit, barely"; revision 2 said 162 affordable with 50 spare.
+revisions were wrong, and my account of why was also wrong.** The old formula
+counted the ordinary ledger once, not twice; "double-counting" was my own loose
+diagnosis and is withdrawn. The actual faults were three: feature costs omitted
+entirely (destination payoffs, trail state, entry state), an event size assumed
+rather than measured, and the reserve ignored. Revision 1 said 487 events "fit,
+barely"; revision 2 said 162 affordable with 50 spare.
 
 Replaced by a fixture — **`test/map_feature_budget.lua`** — which builds the
 worst-case 16-case save from a thousand real seeds and prices the feature against
@@ -150,6 +170,15 @@ what is actually left. Recorded as `P4-R144`.
 16-case archive must leave at least the 17,567 bytes the ten-case cap it replaced
 left spare. Spending it makes the archive tighter than the thing it replaced —
 a decision to record, not an accounting adjustment.
+
+**And spending it does not fund coverage.** Representation D costs 62,273 bytes;
+the entire spare before the reserve is 25,393. **Even spending every reserved
+byte leaves a 36,880-byte shortfall.** Spending the reserve is a way to buy a few
+more destinations, never an alternative route to all 125.
+
+**The 339,764 figure is the largest of a thousand sampled seeds, not a proven
+upper bound.** A worse case may exist outside the sample. That is why a safety
+allowance is retained rather than treated as slack.
 
 **Per-event cost is a property of the reference text, not of the ledger.**
 `DiscoveryLedger.MAX_REF` is 700, and an event's cost is dominated by its
@@ -174,9 +203,21 @@ costing nothing, payoff coded to five characters with no place — is over by
 catalogue, not the fragments. A cheaper fragment record is necessary and nowhere
 near sufficient.
 
-**What is not yet measured:** identity and connection history sits inside the
-73,000 reserved for other roots and is not priced separately. It can only reduce
-the 7,826.
+**What is not yet measured:** identity and connection history sits **inside** the
+73,000 already reserved for other roots, so it is provided for and must not be
+subtracted from the 7,826 a second time. What is genuinely unpriced is any part
+of the feature that would grow *beyond* that reservation — and that is the figure
+to reconcile once, not twice.
+
+**The ledger is not the only binding cost.** At representation D, trail state
+(25,699) and entry state (8,449) are over half the total. Calling ledger events
+"the binding cost" was too strong: the binding cost is the whole per-destination
+record, of which the event is one part.
+
+**A cheaper number is not automatically admissible.** Representation D reaches
+225 bytes partly by dropping the place string. Losing where the player found
+something is a loss of evidence, not a saving; it is only admissible via a
+compact reference that can reproduce the place, or as a disclosed loss.
 
 **Evidence must not get cheaper by disappearing.** A fragment stored outside the
 ledger still has to participate in the organiser's chronology, searching, source
@@ -190,11 +231,31 @@ An unregistered root is invisible to `B.check`, so writes to other roots would
 not account for it. Test alternating ordinary-case and trail writes near
 capacity, not a trail store in isolation.
 
-**Product consequence, and it is the owner's (§14).** "Every annotated map ties
-in" cannot mean every annotated map *in one save*. It can mean every map stays
-**eligible**, with which handful actually pays off varying per playthrough — that
-is `NO-CONCLUSION`-shaped rather than a restriction. The alternatives are buying
-room by shrinking the campaign store, or spending the reserve.
+**One bounded storage change, costed.** Interning the place strings every event
+repeats saves **10,881** bytes; also interning the `generated:<caseid>:` prefix
+saves 10,642 — slightly worse, because the extra table costs more than the
+prefixes it removes. So the honest prize from compressing what exists is about
+**10.9 kB: roughly twenty more destinations, not a hundred and ten.** The fixture
+asserts this stays below the shortfall, so if a future change does close the gap,
+the test fails and the coverage question reopens.
+
+**Product consequence — stated plainly, without dressing it up.** **Full
+coverage remains the requirement** (§2: every annotated map ties in, no
+rationing). What the measurement establishes is that the current representation
+cannot deliver it under the retained campaign load — not that universal support
+is impossible.
+
+The alternative, if the owner chooses it, is **rationing**, and it should be
+called that: many maps the player reads would offer no mod contribution *even
+though authored content exists for them*. My revision-3 framing of this as
+"`NO-CONCLUSION`-shaped rather than a restriction" is **withdrawn** — it renamed
+a reduction in scope as fulfilment of the decision. "Costs no engineering" is
+also withdrawn: a per-save subset needs persistent selection, capacity
+allocation, activation rules, and tests that an earlier promise survives later
+ordinary-case writes.
+
+**Storage is therefore costed before rationing is proposed**, and rationing goes
+to the owner as a product decision (§14.1), not as an accounting outcome.
 
 Also fixed: offline only, no runtime AI, reuse the game's own mechanics rather
 than inventing systems, Build 42.20 single-player vanilla map. And a trail must
@@ -244,6 +305,26 @@ exhaustion and retries undefined. Both obvious rules fail: advancing on
 **placement** lets a player outrun the whole trail without seeing a fragment;
 advancing on **discovery** lets one missed clue stall it forever.
 
+**Revision 3's cap did not fix the first failure — it delayed it**, and the
+review is right. Fragment A is placed and missed, its interval expires, B is
+placed and missed, C is placed, the trail is `EXHAUSTED`, and the player has
+found none of them. The cap slowed that; it did not prevent it.
+
+**The decision: a trail is a finite series of opportunities that can end
+unseen, and the following promise is narrowed to match.** A trail offers three
+chances near the player; if all three are walked past, the fragments remain in
+the world where they were left, findable, and nothing further is placed. The mod
+never says a trail is exhausted, because that would be a denominator (§2).
+
+The alternative — re-offering the same logical fragment at a new place without
+relocating the old copy — is a real option, not taken here: it needs its own
+physical-placement identity and replay rules, and it is the kind of machinery
+that should follow evidence that the narrowed promise is not enough.
+
+**"One outstanding" was the wrong name.** It is **one *blocking* fragment**:
+released fragments stay unfound and findable, so several may be outstanding at
+once, and whatever state they need is budgeted (§5) rather than assumed free.
+
 **What "follows" means: lazy placement of the next unplaced fragment near the
 player.** Never moving an already-placed, undiscovered object. Destination
 evidence is anchored to its authored place and never moves.
@@ -255,7 +336,9 @@ independently of all three.
 |---|---|
 | `INERT` → `ACTIVE` | the design is read **and** funded. An unfunded design stays `INERT` **and the read is recorded** — not silently forgotten |
 | next fragment eligible | when the previous one is **placed**, but at most **one outstanding unfound fragment**. Placement advances the trail; the outstanding cap stops a moving player draining it |
-| a missed fragment | does **not** stall the trail. After a bounded interval the outstanding fragment is **released**: it stays in the world, findable, but no longer blocks the next placement |
+| a missed fragment | does **not** stall the trail. After a bounded interval the **blocking** fragment is **released**: it stays in the world, findable, but no longer blocks the next placement |
+| the release clock | an in-game hour stamp **persisted with the trail**. A long time advance or a reload releases on the same comparison it would have made live — never a session timer, which a reload would reset |
+| `PAID` | **stops local placement.** The destination evidence is found and noted; continuing to place fragments about it would be reminders after the fact. `ARRIVED` alone does not stop placement |
 | no eligible carrier | the trail **defers** — it does not consume its turn and does not block others |
 | `ACTIVE` → `EXHAUSTED` | all authored fragments placed. The trail stops placing and stays open for arrival |
 | `ARRIVED` | the player entered the authored building of the destination |
@@ -288,9 +371,29 @@ unbounded storage (§5).
   building to satisfy the rule.
 - **A map read inside its own target** — defined per destination alongside the
   above.
-- **Entry and preparation are different events.** Evidence must be available when
-  the player can inspect its carrier, and detecting entry may be too late to
-  start preparing. The order is verified in a running game, not assumed.
+- **Entry and preparation are different events, and entry is recorded
+  truthfully.** The owner's ruling is that entering the buildings *is* the visit,
+  so a readiness flag may never change whether the player entered. Entry is
+  recorded when it happens; **preparation is tracked separately**; and "evidence
+  available before the carrier can first be inspected" is an **ordering
+  requirement the pilot must prove**, not a licence to redefine arrival.
+- **Interrupted placement has three recovery points, not one.** "Return to the
+  prior state" is insufficient: if insertion succeeded and interruption came
+  before the record was committed, reverting the record leaves an object behind
+  and a retry creates a second. So: **before insertion** — no record, nothing
+  placed; **after insertion, before commit** — the placement identity is
+  reconciled against the physical object when the carrier is observable, and held
+  as **unknown** when it is not, never retried blind; **after commit** — the
+  record stands and the object is not re-created.
+- **Carriers are finite, and destruction is not failure.** A payoff whose
+  authored carrier is unavailable **before placement** moves to the next authored
+  carrier at that destination; when **every** authored carrier is unavailable the
+  payoff is **held unplaced** and the destination stays unpaid — it does not
+  scatter to unauthored containers, and an unloaded carrier is never permission
+  to duplicate its contents elsewhere. A carrier looted or destroyed **after**
+  successful placement is the player's world working normally: **no replacement
+  evidence is spawned.** The recovery rule exists for failed insertion, not for
+  world destruction.
 - **Destination-entry state needs its own durable store.** Not
   `VisitedBuildings`: it is `MAX=256`, and at capacity `V.record` returns the
   reason `"visited-buildings capacity exceeded"`, which
@@ -460,6 +563,8 @@ unresolved. Clean-run counts are not part of the claim.
 | 8 | a fully searched base starves a trail of carriers | §7, stated limitation, tested |
 | 9 | flyer legibility — the link may not be noticeable without a quest marker | §13 example |
 | 10 | bulk may rhyme, and nothing mechanical can detect it | Phase 4 editorial inventory |
+| 11 | **vanilla preparation running after our insertion** may remove our item or alter vanilla loot — callback order alone does not prove preservation. Include a prior-visited target and a duplicate read | Phase 0.4, §12 |
+| 12 | **funding must hold over the save's lifetime**: a trail affordable today must not consume bytes an earlier promise needs, or lose its own payoff as ordinary cases grow. Authored coverage and runtime capacity reservation are different things, and reads retained for later funding cost bytes too | §5, extended fixture |
 
 ## 12. Acceptance — exact outcomes
 
@@ -472,10 +577,14 @@ anything pass once described. Exact outcomes for the pilot. Fresh-save permissio
 | read, never travelled | fragments appear near the player; payoff stays at the gallery, untouched |
 | destination entered before the read | entry already recorded; the read still activates the trail; payoff placed and findable |
 | map read inside the gallery | trail activates, payoff placed; first fragment placed on the player's next arrival elsewhere |
-| arrival before the payoff is prepared | payoff placed before the carrier can be inspected, or arrival does not yet count as arrival |
+| arrival before the payoff is prepared | entry is recorded as entry regardless; the payoff must be placed before the carrier can first be inspected. If the engine cannot guarantee that order, it is a Phase 0 finding, not a redefinition of arrival |
 | late arrival, weeks later | payoff present and findable; no expiry |
-| carrier looted or destroyed | payoff moves to another authored carrier at the same destination; vanilla contents and effects unchanged |
-| interrupted placement | trail returns to its prior state; no `placed` record without an object |
+| authored carrier unavailable before placement | payoff moves to the next authored carrier at that destination; vanilla contents and effects unchanged |
+| every authored carrier unavailable | payoff held unplaced, destination unpaid; nothing placed in an unauthored container |
+| carrier looted or destroyed after placement | no replacement spawned — the world working normally is not an insertion failure |
+| interrupted before insertion | no record, nothing placed |
+| interrupted after insertion, before commit | reconciled against the object where the carrier is observable; held unknown where it is not; never retried blind |
+| interrupted after commit | record stands, object not re-created |
 | repeated reads of one copy | no second trail |
 | a duplicate physical copy of the same design | no second trail; the paper stays unexplained |
 | two distinct designs, one destination | both trails live; both contributions kept; no arbitration |
@@ -487,43 +596,84 @@ anything pass once described. Exact outcomes for the pilot. Fresh-save permissio
 
 ## 13. The complete authored example
 
-Supplied because without it nobody can judge whether following a trail offers
-anything beyond recurring ominous prose. It needs no hook.
+Rewritten. The revision-3 example failed its own test: a blank collection field
+asserts nothing, "released" need not mean collected, two entries about different
+actions bearing different dates is not a disagreement about one event's date, and
+the police reading invented a universal paperwork convention and then offered a
+false choice between two explanations. Worst of all it ended with "nothing says
+whether any of it connects to anything else" — which is the feature's purpose
+disclaimed in its own sample. The pair below makes **incompatible claims about
+the same referent** while leaving both documents' reliability open.
 
-**Local fragment — haulage docket, third carbon.** A Knox Freight consignment
-sheet. Fourteen crates, *unglazed*, consigned to "Gallery annex, receiving bay —
-**hold for collection**". Signed for with initials only. The collection line is
-blank.
+**The referent:** whether the gallery annex's listed items were removed on the
+night of 11-12 July 1993.
 
-- reading one: nothing was ever collected, so fourteen crates may still be there.
-- reading two: the third carbon is the driver's copy, where the collection line is
-  *always* blank. It means nothing at all.
+**Local fragment — District Priority Removals list, third carbon.**
+A pre-printed district sheet. Entry: *"Knox County Gallery annex — listed items
+removed, 04:10, 12 July. Shelter 4."* Signed with a warden number, **W-114**, and
+no name.
 
-**Destination evidence — receiving bay tally, week ending.** The same consignment
-number appears twice. Upper line: *held*. Lower line: *released*, in a different
-hand, **dated three days earlier**.
+- reading one: the removal happened, and whatever the map's finder is looking for
+  went to Shelter 4 — where the district was telling people to go.
+- reading two: the sheet is pre-printed with the *intended* removals and marked
+  through in advance; the time may be the time it was scheduled, not performed.
 
-- **default reading:** the two lines disagree about the date.
-- **police-officer reading** (`DR-20260919-Q03`/`Q16`): tally sheets are worked
-  top to bottom, so a line sitting above an earlier-dated line was either entered
-  afterwards and placed above it, or the sheet was reused from a previous week.
-  Which of the two, the sheet cannot say.
+**Provenance, and the eligible local carrier.** Carbons of district removal lists
+were distributed to **every warden post, police station and post office in the
+district**, which is why a Louisville gallery's paperwork can plausibly turn up in
+a filing tray two towns away. That class of building is the trail's eligible
+carrier set for this design — not "any container".
 
-Both readings rest on the **same source facts** — the consignment number, the two
-hands, the two dates. The specialist reading adds a *procedural* observation, not
-a conclusion. Nothing says what was in the crates, who moved them, or whether any
-of it connects to anything else — and the tally sheet contradicts the docket
-about whether the consignment was ever collected, which is the product.
+**Destination evidence — annex gate log, sheet for 11 July.**
+The same annex. Entry: *"23:00, 11 July — gate sealed, no vehicle admitted
+after. W-114."*
+
+**The conflict is about one referent and it is flat.** The removal is recorded at
+04:10 on the 12th; the gate was sealed at 23:00 on the 11th with nothing admitted
+after. Both cannot be straightforwardly true of the same night. Neither document
+is privileged: the removals list may be a plan marked as done, and the gate log
+may be one gate of several, or filled in later from memory.
+
+- **default reading:** the two sheets disagree about whether anything left the
+  annex that night.
+- **police-officer reading** (`DR-20260919-Q03`/`Q16`): **the same warden number,
+  W-114, is on both** — the person recorded as sealing the gate is the person
+  recorded as signing for a removal through it, five hours and ten minutes later.
+  That is an observable feature of these two documents, not a rule about
+  paperwork. It does not say which sheet is wrong: a number can be reassigned
+  between shifts, a clerk can copy a number off the log, and one person can
+  plainly do both things if the gate was opened again.
+
+**Why it bears on a central question.** Shelter 4 is where the district was
+sending people. Whether the priority removals actually ran is the difference
+between an evacuation that was still operating that night and one that had
+already stopped — which is the survivor's own question about being left alone.
+The documents do not answer it, and nothing here says what the listed items were.
+
+**Fixture values, so consistency can be tested:** gate sealed `11 July 23:00`;
+removal recorded `12 July 04:10`; interval `5h10m`; shared warden number `W-114`;
+destination `Shelter 4`. The generated dates must preserve the ordering and the
+interval, and the warden number must be the same value in both documents — the
+same placeholder, not two strings that happen to match.
 
 ## 14. Open for the owner
 
-1. **How many destinations get funded.** The measured answer is **nine to
-   fifteen**, not 125. Three ways: fund a handful per playthrough with which
-   handful varying (costs no engineering, and is `NO-CONCLUSION`-shaped); buy room
-   by shrinking the campaign store; or spend the 17,567-byte reserve.
-2. **Essential-evidence recovery.** A trail is an invitation the player honours by
-   walking, and §12 refuses an honest log as fulfilment of it. Decide recovery, or
-   narrow the invitation before such trails activate.
+1. **Whether to ration, and it is rationing.** Full coverage stays the
+   requirement until you change it. The measurement says the current
+   representation funds **nine to fifteen** destinations, and compressing what
+   exists buys about twenty more. The options, in the order I would spend effort
+   on them: (a) shrink the campaign store — the largest item at 339,764 bytes, and
+   the only one big enough to matter; (b) ration, accepting that many maps the
+   player reads offer nothing *although authored content exists for them*, which
+   needs persistent selection and its own tests; (c) spend the 17,567-byte
+   reserve, which buys a few destinations and is not a route to coverage.
+2. **Essential-evidence recovery — narrowed, not left open.** §12 now states one
+   concrete policy for the pilot: unavailable-before-placement falls through the
+   authored carriers, all-unavailable holds the payoff unplaced, and destruction
+   after placement spawns nothing. That is a pilot policy, not a claim that
+   arbitrary world destruction is solved. What remains yours is whether an
+   *unfulfillable* invitation may be retired at all, or must be prevented from
+   being issued.
 3. **Sequencing.** `DR-20260919-Q31` orders the work personal opening → survival
    connection → loop improvements. The "survival connection" label has to be
    earned by naming the **particular survival interaction** it satisfies, not
@@ -531,18 +681,20 @@ about whether the consignment was ever collected, which is the product.
 
 ## 15. Questions for the reviewer
 
-1. **Does §5 kill the feature as conceived?** Nine to fifteen funded destinations
-   out of 125 is a tenth of the catalogue. Is "every map eligible, a handful
-   funded, varying per playthrough" an honest reading of "every annotated map ties
-   in", or a restriction wearing its language?
-2. **Is the one-outstanding-fragment cap the right progression rule** (§7), or
-   does releasing a missed fragment after a bounded interval reintroduce the
-   stall it was meant to prevent, just later?
-3. **Is lazy placement genuinely enough** to satisfy "the trail follows me" for a
-   player who reads a map and then stays put for a week?
-4. **Are the six placement clauses** (§10) a sufficient substitute for a root
-   cause, or does shipping with the historical fault unresolved remain the real
-   risk whatever those checks say?
-5. **Is anything missing from §11** — particularly the vanilla stash system,
-   which this plan still treats as stable on the strength of source inspection
-   alone?
+1. **Is the campaign store the right place to attack?** It is 339,764 of the
+   474,607 committed, and the only item large enough to fund coverage. Everything
+   else measured buys a dozen destinations at a time. Is shrinking retained case
+   content the honest next measurement, or does that trade one promise for
+   another?
+2. **Does the narrowed following promise** (§7 — three chances, then the
+   fragments stay where they were left) read as a finite series honestly, or does
+   it need the re-offering machinery after all?
+3. **Does the rewritten example** (§13) make a real conflict about one referent,
+   and is the shared warden number an observable feature rather than another
+   invented convention?
+4. **Is holding a payoff unplaced** when every authored carrier is unavailable
+   (§8) better than the alternatives, given that the player may have walked there
+   on the strength of the map?
+5. **Is the ordering requirement provable** — that the payoff is placed before
+   its carrier can first be inspected — or is it the read hook's problem all over
+   again, discovered one phase later?
