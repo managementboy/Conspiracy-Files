@@ -77,7 +77,11 @@ assert(not R.validate(bad),"an answer cannot name an unoffered actor")
 
 -- Make a second candidate; stage does not write the store or authorize bytes.
 local nextCase=assert(G.generate(catalog,702,opts))
-local candidate=assert(Cases.stage(wrapper,assert(S.createDistributed(nextCase,{},nil,nil,0))))
+-- createDistributed returns TWO values and assert() passes both on, so the
+-- second was arriving at stage() as createdHours - which a schedule-less
+-- legacy wrapper refuses ("schedule absent"). Take the root alone.
+local nextRoot=assert(S.createDistributed(nextCase,{},nil,nil,0))
+local candidate=assert(Cases.stage(wrapper,nextRoot))
 local generated={campaign=wrapper}
 local peers={ ["ConspiracyFiles.Generated.G2"]=generated }
 ModData={get=function(tag) return peers[tag] end}
