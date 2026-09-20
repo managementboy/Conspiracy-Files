@@ -1,5 +1,5 @@
 -- Transitional authored-source contract; Claude executes after implementation.
--- This covers twelve converted families, not the complete writing objective.
+-- This covers seventeen converted families, not the complete writing objective.
 package.path="mod/common/media/lua/shared/?.lua;"..package.path
 local Story=require("ConspiracyFiles/Generated/Story")
 local Personal=require("ConspiracyFiles/Generated/PersonalScenarios")
@@ -9,7 +9,9 @@ local Pages=require("ConspiracyFiles/Generated/DocumentPages")
 local expected={"transfer-nobody-arranged","signed-by-someone-absent","two-start-dates",
  "resignation-after-payslip","address-that-only-receives","identical-inventories",
  "room-not-on-the-plan","lease-outlived-tenant","load-that-got-lighter",
- "fuel-for-a-dead-truck","no-contact-at-premises","still-filing"}
+ "fuel-for-a-dead-truck","returned-cleaner","two-crates-one-number",
+ "paid-before-ordered","overtime-nobody-worked","closure-announced-twice",
+ "no-contact-at-premises","still-filing"}
 local values={CODE="PS-229",P1="Ines Kubiak",P2="Ellis Hale",
  A="201 N Carl St",B="113 Walker Road",DATE0="July 5, 1993",DATE1="July 6, 1993",
  DATE2="July 7, 1993",DATE3="July 8, 1993",DATE1CAPS="JULY 6, 1993",DATE2CAPS="JULY 7, 1993",
@@ -78,6 +80,6 @@ for _,id in ipairs(Premises.list()) do
   end
  end
 end
-assert(converted==#expected and converted==12 and uncovered==10,
+assert(converted==#expected and converted==17 and uncovered==5,
  "transitional coverage must explicitly account for all 22 families")
-print("PASS transitional story contract: 12 families, 24 variants; 10 families remain uncovered")
+print("PASS transitional story contract: 17 families, 34 variants; 5 families remain uncovered")

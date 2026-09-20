@@ -122,3 +122,30 @@ the first batch does not fabricate roles for them to satisfy a name count.
 All 22 generated families and 17 map families must be covered, including each authored variant and materially different carrier/site combination. Check every discovery subset/order that changes an inference, destination-first discovery, missing optional versus essential evidence, multiple cases, duplicate reads and reload. Verify contradictions against their propositions, not just against expected text strings.
 
 Inspect complete rendered examples for readability, personal recognition and meaningful next action. Check source-only native pages, journal/UI knowledge parity, archive retention and budget at the new content sizes. Run the existing suite and update obsolete assumptions deliberately. Builds and native testing remain Claude's responsibility; this audit supplies no passing evidence for the rewrite.
+
+
+## Additional primary grounding checked during the ordinary-family rewrite
+
+These records are in the same archived vanilla catalogue; only the setting facts
+below are canonical. The incidents and institutional policies are authored fiction.
+
+| Record | Verified activity or history | Authored use |
+|---|---|---|
+| `CircuitalHealing` | Electronic repair in Ekron, including radios and televisions | Radio-return mix-up and electronic time-clock bench test |
+| `LennysCarRepair` | Vehicle servicing and repairs in Doe Valley | Starter repair/collection-label dispute |
+| `HobbsandPerkinsHardware` | Construction materials and tools in Irvington | Returnable shipping crates and roof-material deposit |
+| `LectromaxManufacturingJobAd` | Cutting/shaping saw blades; lathe and hydraulic press work near Riverside | Finished-stock dispatch and press-restart standby |
+| `LouisvilleBruiser` | Baseball-bat maker in Louisville; tours and bats to take home | Prepaid stock-imprint presentation bats |
+| `OldCGECorpBuilding` | Manufacturing 1961-1980; proposed demolition and campaign for a museum; skybridge | Preservation survey and blocked further access, not resumed production |
+| `ColdWarBunker` | March Ridge military bunker decommissioned in 1991; forty beds; subsequent visitor tours and outstanding hazard caveats | Visitor-display preparation during an authored admission suspension |
+
+## Placement evidence supplied by the owner during implementation
+
+See `CLUE_PLACEMENT_VARIETY.md` and decision
+`DR-20260920-WRITING-PLACEMENT`. Investigate Area/foraging provides discovery;
+the old furniture whitelist is not an agreed difficulty control. The writing
+must describe actual non-floor hiding places, and the scanner must preserve
+candidate-kind variety rather than fill its bound with the first eight common
+containers. Wider placement is outstanding implementation, including honest
+whereabouts for containers moved or dismantled. Parked environmental, floor and
+empty-stash ideas are not silently added to the feature scope.

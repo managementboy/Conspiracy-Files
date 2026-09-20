@@ -1,5 +1,27 @@
 # Conspiracy-Files — Current Decision Index
 
+## DR-20260920-WRITING-PLACEMENT — incorporate the placement review
+
+Owner relayed the placement findings while the writing rebuild was in progress:
+the six furniture kinds were not an authored difficulty decision, discovery uses
+Investigate Area/foraging, and retaining the first eight containers biases the
+result toward kitchens. The referenced `CLUE_PLACEMENT_VARIETY.md` arrived on
+remote main at `087a1fb` and was merged locally as `10154ba`. Its census is
+reported game evidence; this implementation pass has not repeated that run.
+
+Carry the agreed first step into the full rebuild: eligible non-floor containers,
+with bounded selection that preserves different container kinds instead of
+filling all slots with the first repeated kind. Keep placement descriptions tied
+to the actual hiding place. Current source inspection confirms both the six-kind
+filter and the early eight-candidate cutoff; neither has been changed yet.
+Account for movable/dismantled containers without asserting that unseen evidence
+is lost, and preserve loot parity without creating better loot or prioritising
+valuable contents. Do not treat the note's proposed loot-tier exclusion as an
+already chosen rule. Floor placement, static environmental clues, empty stashes,
+rarity weighting and above-eye-level discovery remain parked ideas, not approved
+implementation requirements. Complete implementation before Claude's test/build
+handoff still governs the sequence.
+
 ## DR-20260920-WRITING-MAIN — integrate now that Claude has stopped
 
 Owner: “claude stopped working. you can integrate your work into main now”.

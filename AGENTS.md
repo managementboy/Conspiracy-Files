@@ -26,6 +26,15 @@ was explicitly rejected. Write credible institutional absurdity and a personal
 survivor reaction; repeated disclaimers or jokes pasted onto generic records
 do not meet this direction. Do not invent the survivor's history for a joke.
 
+Owner placement update, 2026-09-20: include the first-step direction in
+`docs/design/CLUE_PLACEMENT_VARIETY.md` with the writing rebuild. Discovery uses
+Investigate Area/foraging; the six-kind furniture list is not a difficulty rule.
+Broaden non-floor placement and retain candidate-kind variety rather than the
+first eight repeated containers. Handle actual whereabouts and loot parity;
+the design note's parked extensions and suggested loot-tier blacklist are not
+authorised rules merely because they appear in the note. No code for this change
+has landed yet. See DR-20260920-WRITING-PLACEMENT.
+
 Shared logging uses `ConspiracyFiles/Log`; do not invent new print prefixes.
 When changing a limit, inspect the tests that exercise its actual boundary.
 
