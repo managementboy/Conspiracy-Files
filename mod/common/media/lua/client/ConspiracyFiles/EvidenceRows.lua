@@ -61,7 +61,11 @@ function Rows.build(section,runtime)
         return (first=="a" or first=="e" or first=="i" or first=="o" or first=="u") and "an" or "a"
     end
     for i,r in ipairs(known) do
-        local root=Cases and Cases.find(wrapper,r.id);local case=root and root.case
+        local root=Cases and Cases.find(wrapper,r.id)
+        -- Retired evidence keeps its original places and reference. Resolving
+        -- a readable address must not stop working when placement work ends.
+        local case=root and (root.case or (root.locations and
+            {locations=root.locations,facts={code=root.reference}}))
         -- THE TWO WRITERS OF A PLACE, in order, not one or the other.
         -- AddressMap names the sites the shipped book has a number for
         -- (P4-R129); PlaceNames then reads whatever place words are LEFT the

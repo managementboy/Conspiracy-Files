@@ -136,9 +136,10 @@ end
 -- Everything is guarded because not every carrier is Literature: a key or a
 -- credit card takes its name and nothing else.
 local Pages=require("ConspiracyFiles/Generated/DocumentPages")
-local function writePages(item,doc)
+local function writePages(item,doc,case)
     if not item or not doc or not item.addPage then return end
-    local ok,pages=pcall(Pages.pages,doc.body)
+    local map=ConspiracyFiles.AddressMap
+    local ok,pages=pcall(Pages.pages,doc.body,case,map and map.describe)
     if not ok or type(pages)~="table" or #pages==0 then return end
     pcall(function()
         if item.setNumberOfPages then item:setNumberOfPages(math.max(#pages,1)) end
@@ -267,7 +268,7 @@ local function placement(api,id)
             -- No title and no category here (P4-R132): the plain item, until
             -- the survivor recognises it (R.recognise).
             applyWear(item,doc)
-            writePages(item,doc)
+            writePages(item,doc,api.snapshot().case)
             assert(current:AddItem(item),"could not add note")
         end
         -- Claim the part, once the items are actually in it.
@@ -1019,7 +1020,7 @@ function R.inspect(item,inPlace)
         if not container or container==getPlayer():getInventory() then return false end
     end
     local md=item:getModData(); local root=md and Cases.find(wrapper,md.cfGeneratedId); local api
-    if root then for _,candidate in ipairs(sessions) do if candidate.snapshot().case.caseId==root.case.caseId then api=candidate end end end
+    if root and root.case then for _,candidate in ipairs(sessions) do if candidate.snapshot().case.caseId==root.case.caseId then api=candidate end end end
     local a=api and api.assignment(md.cfGeneratedId)
     if not a or md.cfPhysicalToken~=a.physicalToken or a.status=="conflict" then return false end
     -- Only a recognised clue can be noted (P4-R132): spotted in Search Mode or
@@ -1155,7 +1156,8 @@ function R.inspect(item,inPlace)
 end
 function R.subject(item)
     if not sessions or not item then return false end
-    local md=item:getModData(); local root=md and Cases.find(wrapper,md.cfGeneratedId); local a=root and root.assignments[md.cfGeneratedId]
+    local md=item:getModData(); local root=md and Cases.find(wrapper,md.cfGeneratedId)
+    local a=root and root.assignments and root.assignments[md.cfGeneratedId]
     return a and md.cfPhysicalToken==a.physicalToken and a.status~="conflict"
 end
 -- RECOGNITION (P4-R132, docs/design/SEARCH_TO_FIND.md). A clue is placed as the
@@ -1571,7 +1573,7 @@ local function relocation(api)
             -- it (P4-R132).
             if R.isRecognisedId(id) then stampEvidence(newItem,doc.title) end
             applyWear(newItem,doc)
-            writePages(newItem,doc)
+            writePages(newItem,doc,root.case)
             newDestination=destination
         end
         -- T4/T5 policy is loss over duplication, and it is not merely a

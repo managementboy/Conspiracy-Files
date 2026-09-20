@@ -17,7 +17,7 @@ local Retired=require("ConspiracyFiles/Generated/RetiredCase")
 
 local catalog=dofile("test/fixtures/synthetic_locations.lua")
 local opts={mapId="SYNTHETIC-MAP",buildLine="TEST-ONLY",allowSynthetic=true}
-local largestLive,largestRetired,largestStub,measured=0,0,0,0
+local largestLive,largestRetired,measured=0,0,0
 local largestPartial=0
 -- A live case carrying a clue on something that moves (P4-R134): a carrier
 -- target is the biggest target there is - a kind, a mark at its longest, and
@@ -105,12 +105,6 @@ for seed=1,1000 do
             assert(Retired.validate(retired),"the worst-case answers must still be a valid retired case")
             local retiredBytes=V.estimateEncodedBytes(retired)
             if retiredBytes>largestRetired then largestRetired=retiredBytes end
-            -- And the third tier (P4-R111): an archived case older than
-            -- MAX_FULL_ARCHIVED keeps only its ids, its questions and its
-            -- answers, which is what lets the campaign go past the old cap.
-            local stub=assert(Retired.shrink(retired))
-            local stubBytes=V.estimateEncodedBytes(stub)
-            if stubBytes>largestStub then largestStub=stubBytes end
         end
     end
 end
@@ -119,49 +113,44 @@ assert(measured>=20,"needed a real sample of generated cases, got "..measured)
 -- Room must remain for every other canonical root: identities, key connections,
 -- local people, markers, addresses, the discovery ledger and visited buildings.
 local RESERVED_FOR_OTHER_ROOTS=120000
--- Three tiers now (P4-R111): MAX_ACTIVE live, MAX_FULL_ARCHIVED archived with
--- every row FILES renders, and the rest archived with their bulk dropped.
-local stubbed=Cases.MAX_CASES-Cases.MAX_ACTIVE-Cases.MAX_FULL_ARCHIVED
+local retiredCount=Cases.MAX_CASES-Cases.MAX_ACTIVE
 -- The schedule the campaign keeps beside its cases: one created-hour per case,
 -- plus the debt the last refusal left (P4-R133, SuccessiveCases.setDefer).
 local schedule={schema=1,createdHours={},defer={code="no-containers",count=1000000,
     sinceHours=123456.75,dueHours=123480.75,rung=Cases.MAX_RUNG}}
 for i=1,Cases.MAX_CASES do schedule.createdHours[i]=i*24.5 end
 local scheduleBytes=V.estimateEncodedBytes(schedule)
-local worstCampaign=Cases.MAX_ACTIVE*largestLive+Cases.MAX_FULL_ARCHIVED*largestRetired+stubbed*largestStub+scheduleBytes
+local worstCampaign=Cases.MAX_ACTIVE*largestLive+retiredCount*largestRetired+scheduleBytes
 assert(worstCampaign+RESERVED_FOR_OTHER_ROOTS<=V.MAX_ENCODED_BYTES,
-    string.format("%d live at %d bytes plus %d archived at %d plus %d stubbed at %d is %d, which leaves under %d bytes for other roots",
-        Cases.MAX_ACTIVE,largestLive,Cases.MAX_FULL_ARCHIVED,largestRetired,stubbed,largestStub,worstCampaign,RESERVED_FOR_OTHER_ROOTS))
+    string.format("%d live at %d bytes plus %d full retired at %d is %d, which leaves under %d bytes for other roots",
+        Cases.MAX_ACTIVE,largestLive,retiredCount,largestRetired,worstCampaign,RESERVED_FOR_OTHER_ROOTS))
 
 -- The cap is a real limit, not decoration: it must still bound the campaign,
 -- and retirement must actually be worth doing.
 assert(Cases.MAX_CASES>Cases.MAX_ACTIVE,"MAX_CASES must allow more than the concurrently-active bound")
 assert(Cases.MAX_CASES>=4,"three cases ended automatic progression far below the budget")
 assert(largestRetired<largestLive,"a retired case must measurably shrink, or retirement buys nothing")
-assert(largestStub<largestRetired,"a stubbed archive entry must be smaller than a full one, or the archive buys nothing")
 -- Four PARTIAL cases (P4-R133) plus the whole archive must fit as well. They
 -- do because a case waiting for containers is smaller than one holding them,
 -- which is the claim this asserts rather than assumes.
 assert(largestPartial>0,"the partial-case fixture must have been measured")
 assert(largestPartial<largestLive,
     string.format("a partial case (%d) must cost less than a fully placed one (%d)",largestPartial,largestLive))
-local worstPartial=Cases.MAX_ACTIVE*largestPartial+Cases.MAX_FULL_ARCHIVED*largestRetired+stubbed*largestStub+scheduleBytes
+local worstPartial=Cases.MAX_ACTIVE*largestPartial+retiredCount*largestRetired+scheduleBytes
 assert(worstPartial+RESERVED_FOR_OTHER_ROOTS<=V.MAX_ENCODED_BYTES,
     string.format("four partial cases plus the archive is %d bytes",worstPartial))
 -- And four live cases each carrying a clue on something that moves (P4-R134).
 -- The design claimed "a carrier target is about the size of a car target, which
 -- the budget already carries"; this measures it instead of believing it.
 assert(largestMobile>0,"the carrier-clue fixture must have been measured")
-local worstMobile=Cases.MAX_ACTIVE*largestMobile+Cases.MAX_FULL_ARCHIVED*largestRetired
-    +stubbed*largestStub+scheduleBytes
+local worstMobile=Cases.MAX_ACTIVE*largestMobile+retiredCount*largestRetired+scheduleBytes
 assert(worstMobile+RESERVED_FOR_OTHER_ROOTS<=V.MAX_ENCODED_BYTES,
     string.format("four live cases with a mobile clue each is %d bytes, which leaves under %d for other roots",
         worstMobile,RESERVED_FOR_OTHER_ROOTS))
-assert(stubbed>0,"the archive must reach past the live and full-archived tiers, or the tenth case is still the last")
 assert(Cases.MAX_ACTIVE*largestLive<=V.MAX_ENCODED_BYTES,"the active bound alone must not exceed the budget")
 
 print(string.format(
-    "PASS case budget headroom: %d live x %d + %d archived x %d + %d stubbed x %d + schedule %d = %d of %d, %d reserved "
+    "PASS case budget headroom: %d live x %d + %d full retired x %d + schedule %d = %d of %d, %d reserved "
     .."(four partial cases instead of live: %d; four with a mobile clue each: %d)",
-    Cases.MAX_ACTIVE,largestLive,Cases.MAX_FULL_ARCHIVED,largestRetired,stubbed,largestStub,scheduleBytes,
+    Cases.MAX_ACTIVE,largestLive,retiredCount,largestRetired,scheduleBytes,
     worstCampaign,V.MAX_ENCODED_BYTES,RESERVED_FOR_OTHER_ROOTS,worstPartial,worstMobile))

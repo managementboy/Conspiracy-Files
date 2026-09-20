@@ -4,55 +4,12 @@ local V=require("ConspiracyFiles/Validator")
 local Session=require("ConspiracyFiles/Generated/Session")
 local Generator=require("ConspiracyFiles/Generated/Generator")
 local Retired=require("ConspiracyFiles/Generated/RetiredCase")
--- MAX_CASES was a development-era number, not a budget one. Measured against
--- the generator on 2026-09-06, one validated session root costs 22.5-44.8 kB
--- (mean 29 kB) of the 500 kB canonical budget, so three cases used under a
--- tenth of it while silently ending automatic case progression forever. It
--- went to eight, still a ceiling: docs/design/CASE_RETIREMENT.md.
---
--- Case retirement (2026-09-07) replaces a fully-discovered root's assignments,
--- physical targets and now-redundant case envelope with just its discovered
--- rows -- see RetiredCase.lua. Measured over 300 synthetic seeds, that costs
--- 31.9 kB worst case against 45.6 kB for a live root (~30% smaller; body text
--- the player already read is immutable and stays, so this is not free).
--- Retirement alone does not bound total bytes -- nothing forces a case to
--- retire -- so MAX_ACTIVE bounds how many roots may be simultaneously live
--- (undiscovered/un-retired) at once, and MAX_CASES is re-derived from that
--- plus retired-root cost in test/case_budget_headroom.lua:
---   MAX_ACTIVE(2) x 45.6kB + (MAX_CASES-MAX_ACTIVE)(8) x 31.9kB = 346.3kB
--- comfortably under the 380kB left after the 120kB reserved for every other
--- canonical root. MAX_ACTIVE=2 keeps today's two-concurrent-case tests
--- (successive_cases.lua, g2_smoke.lua) passing unchanged.
--- MAX_ACTIVE was 2, which broke automatic progression: test/automatic_
--- investigations expects a third concurrent case, and a full active set made
--- preparation error and disable itself after three failures. Four preserves
--- documented behaviour with headroom and still fits the budget:
---   4 x 45.6kB live + 6 x 31.9kB retired = 373.8kB <= 380kB available.
--- The archive (P4-R111, built 2026-09-17): a finished case no longer counts
--- against the number of cases a save may still make. Three tiers now share the
--- store, and only the first two cost a case's worth of bytes:
---   live      (Session, schema 1)      -- at most MAX_ACTIVE at once
---   archived  (RetiredCase, schema 2)  -- at most MAX_FULL_ARCHIVED, the most
---                                         recently finished; keeps every row
---                                         FILES renders (P4-R118, P4-R104)
---   archived, bulk dropped (schema 3)  -- older than that: ids, questions and
---                                         answers only (RetiredCase.shrink)
--- MAX_CASES is now the whole store's cap, not a ceiling on unfinished cases.
--- Measured over 1,000 seeds (test/case_archive.lua), worst case per root:
---   live 42,024   archived 33,135   archived with bulk dropped 3,130
--- and the discovery ledger costs about 545 bytes for every document ever
--- found, whatever tier its case is in. So the whole save, worst case:
---   ten cases, as the old cap allowed  campaign 371,264 + ledger 38,169 = 482,433
---   sixteen cases with this archive    campaign 338,540 + ledger 60,975 = 472,515
--- both including 73,000 reserved for every other canonical root (the 120,000
--- the old claim reserved, less the ledger it hid inside that figure). Sixteen
--- cases therefore leave MORE headroom than ten did (27,485 against 17,567):
--- trading two full-size archived cases for eight stubs buys six more cases.
--- MAX_FULL_ARCHIVED is the one number to move if the owner wants a longer
--- campaign: each full-size archived case costs about eight stubbed ones.
--- LEGACY_MAX_CASES grandfathers a save written before the archive: it may hold
--- up to ten full-size roots, which is what the old cap allowed and still fits.
-local M={SCHEMA=1,MAX_CASES=16,MAX_ACTIVE=4,MAX_FULL_ARCHIVED=4,LEGACY_MAX_CASES=10}
+-- Fresh-save campaign bounds: four live cases and sixteen cases in total.
+-- Retirement removes placement bookkeeping, retaining every discovered row,
+-- its source context and the survivor's answers. Age never deletes evidence.
+-- SaveBudget checks the aggregate estimated allowance before a runtime swap;
+-- the case-count limits do not promise that every combination fits it.
+local M={SCHEMA=1,MAX_CASES=16,MAX_ACTIVE=4}
 -- HONEST REFUSALS (P4-R133, docs/design/CASE_PACING.md). The closed set of
 -- reasons a new case did not come. It lives here, in the domain module,
 -- because the debt a refusal leaves behind is stored in the case store's own
@@ -146,41 +103,13 @@ local function rootValid(root) if Retired.isRetired(root) then return Retired.va
 local function rootCaseId(root) if Retired.isRetired(root) then return root.caseId end return type(root)=="table" and type(root.case)=="table" and root.case.caseId end
 local function rootDocumentIds(root)
  local out={}
- -- A deep-archived case kept no rows; its `known` list IS its document list
- -- (a case only archives fully discovered), so the ledger's references and the
- -- duplicate-id checks still see every document it ever placed.
- if Retired.isStub(root) then for _,id in ipairs(root.known) do out[#out+1]=id end return out end
- if Retired.isRetired(root) then for _,row in ipairs(root.rows) do out[#out+1]=row.id end return out end
+  if Retired.isRetired(root) then for _,row in ipairs(root.rows) do out[#out+1]=row.id end return out end
  if type(root)=="table" and type(root.case)=="table" then for _,d in ipairs(root.case.documents) do out[#out+1]=d.id end end
  return out
 end
 -- Retired roots dropped their physical tokens with the rest of the placement
 -- bookkeeping; nil here means "no token to collide", never "skip the check".
 local function rootToken(root,id) if Retired.isRetired(root) then return nil end return root.assignments[id].physicalToken end
--- Keep the archive inside the budget (P4-R111): when more finished cases carry
--- their rows than MAX_FULL_ARCHIVED, the OLDEST of them - lowest index, which
--- is oldest because cases are only ever appended - loses its bulk. Called on a
--- freshly built copy inside retire/stage, before that copy is validated, so
--- compaction is part of the same validate-then-swap as the change that caused
--- it and the store is never observably over the cap. Positions never move: a
--- case is replaced in place by its stub, so every stored index, the schedule
--- and the discovery order all still mean what they meant.
-local function compactArchive(out)
- local roots={out.canonical}
- if out.successive and out.successive.cases then for _,s in ipairs(out.successive.cases) do roots[#roots+1]=s end end
- local full={}
- for i,root in ipairs(roots) do if Retired.isRetired(root) and not Retired.isStub(root) then full[#full+1]=i end end
- for k=1,#full-M.MAX_FULL_ARCHIVED do
-  local index=full[k]
-  local stub=Retired.shrink(roots[index])
-  -- A case that will not shrink stays as it is: the archive costing more than
-  -- planned is survivable, a refused save is not.
-  if stub then
-   if index==1 then out.canonical=stub else out.successive.cases[index-1]=stub end
-  end
- end
- return out
-end
 local function aggregateOK(a)
  if not fields(a,{schema=true,cases=true,discoveries=true}) or a.schema~=M.SCHEMA then return false,"invalid successive-case aggregate" end
  local ok,n=dense(a.cases,M.MAX_CASES-1); if not ok then return false,"invalid successive-case list" end
@@ -239,10 +168,10 @@ function M.validate(wrapper)
  local ok,why=rootValid(wrapper.canonical); if not ok then return false,"legacy canonical refused: "..tostring(why) end
  if wrapper.successive~=nil then local ok,why=aggregateOK(wrapper.successive); if not ok then return false,why end end
  local ids,docs,tokens,active={},{},{},0
- local full,roots=0,M.sessions(wrapper) or {}
+  local roots=M.sessions(wrapper) or {}
  for _,root in ipairs(roots) do
   local id=rootCaseId(root); if ids[id] then return false,"duplicate case ID across generated roots" end; ids[id]=true
-  if not Retired.isRetired(root) then active=active+1 elseif not Retired.isStub(root) then full=full+1 end
+   if not Retired.isRetired(root) then active=active+1 end
   for _,did in ipairs(rootDocumentIds(root)) do
    if docs[did] then return false,"duplicate document ID across generated roots" end; docs[did]=true
    local token=rootToken(root,did); if token then if tokens[token] then return false,"duplicate physical token across generated roots" end; tokens[token]=true end
@@ -251,12 +180,6 @@ function M.validate(wrapper)
  -- Retirement is what makes a larger MAX_CASES affordable: only MAX_ACTIVE
  -- roots may be live (full-size) at once, the rest must already be retired.
  if active>M.MAX_ACTIVE then return false,"too many concurrently active generated cases" end
- -- And the archive is what makes the store cap affordable (P4-R111): past the
- -- ten roots the old cap allowed, only MAX_FULL_ARCHIVED finished cases may
- -- still carry their rows. A save written before the archive is not refused
- -- for keeping what it was allowed to keep - it is compacted by the next
- -- retirement or the next staged case, not on load.
- if full>M.MAX_FULL_ARCHIVED and #roots>M.LEGACY_MAX_CASES then return false,"too many full-size archived cases" end
  if wrapper.schedule~=nil then
   if not fields(wrapper.schedule,{schema=true,createdHours=true,defer=true}) or wrapper.schedule.schema~=1 or type(wrapper.schedule.createdHours)~="table" then return false,"invalid case schedule" end
   local n=0;for k in pairs(wrapper.schedule.createdHours) do if type(k)~="number" or k~=math.floor(k) or k<1 then return false,"invalid case schedule" end;n=n+1 end
@@ -344,8 +267,11 @@ function M.sessions(wrapper)
  return out
 end
 function M.find(wrapper,documentId)
- local roots=M.sessions(wrapper); if not roots then return nil end
- for _,root in ipairs(roots) do if root.assignments and root.assignments[documentId] then return root end end
+  local roots=M.sessions(wrapper); if not roots then return nil end
+  for _,root in ipairs(roots) do
+   if root.assignments and root.assignments[documentId] then return root end
+   if Retired.isRetired(root) then for _,id in ipairs(root.known or {}) do if id==documentId then return root end end end
+  end
 end
 function M.discoveries(wrapper)
  if wrapper.successive then return copy(wrapper.successive.discoveries) end
@@ -384,7 +310,6 @@ function M.stage(wrapper,root,createdHours,usedIndex)
  if usedIndex==1 then out.canonical=copy(wrapper.canonical); out.canonical.answers.usedBy=root.case.caseId
  elseif usedIndex then cases[usedIndex-1].answers.usedBy=root.case.caseId end
  cases[#cases+1]=copy(root); out.successive={schema=M.SCHEMA,cases=cases,discoveries=M.discoveries(wrapper)}
- compactArchive(out)
  ok,why=M.validate(out); if not ok then return nil,why end
  return out
 end
@@ -404,7 +329,6 @@ function M.retire(wrapper,index,lastSeen,completedHours)
  local out={canonical=index==1 and retired or wrapper.canonical}; if wrapper.schedule then out.schedule=copy(wrapper.schedule) end; local cases={}
  for i=2,#roots do cases[i-1]=copy(i==index and retired or roots[i]) end
  if #cases>0 or wrapper.successive then out.successive={schema=M.SCHEMA,cases=cases,discoveries=M.discoveries(wrapper)} end
- compactArchive(out)
  ok,why=M.validate(out); if not ok then return nil,why end
  return out,true
 end
@@ -420,9 +344,6 @@ function M.noteLastSeen(wrapper,updates)
  local roots=M.sessions(wrapper); local changed=false; local out={}
  for index,root in ipairs(roots) do
   local next=root
-  -- A deep-archived case has no rows to write a last-seen line onto: its
-  -- evidence is still marked in the world, the record just no longer has a
-  -- line to put it on.
   if Retired.isRetired(root) and root.rows then
    for r,row in ipairs(root.rows) do
     local words=Retired.cleanLastSeen(updates[row.id])

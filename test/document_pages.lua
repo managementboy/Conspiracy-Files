@@ -79,3 +79,16 @@ end
 
 print('PASS document pages: the document is written on the object, the '
     .. 'description and interpretation are not, and pages are whole and bounded')
+
+-- Resolve source locations before pagination without putting the survivor's
+-- observations or conclusions on the physical document.
+local fixture={locations={{id="a",name="HOUSE A",bounds={x1=0,y1=0}},
+    {id="b",name="HOUSE B",bounds={x1=10,y1=0}}}}
+local called=false
+local addressed=M.pages("WHAT YOU FOUND\nA private observation.\n\nDeliver to HOUSE A.\n\nWHAT IT MIGHT MEAN\nMy private conclusion.",fixture,function(source,c)
+    called=true
+    assert(c==fixture and source=="Deliver to HOUSE A.")
+    return (source:gsub("HOUSE A","201 N Carl St"))
+end)
+assert(called and #addressed==1 and addressed[1]=="Deliver to 201 N Carl St.")
+print("PASS native pages resolve source addresses without observation or interpretation")

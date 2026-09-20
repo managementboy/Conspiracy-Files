@@ -90,7 +90,7 @@ Carrier: a return-book page at B, separate from the amendment. Essential for the
 >
 > Mill drive-belt transfer: vehicle departed 07:10; returned 09:25.
 > Passenger request PS-229: closed at end of shift. No collection recorded.
-> Request copied from a call sheet signed “Ellis Hale”; caller's name not recorded. Enquiry copies retained at {B}.
+> Request copied from a call sheet taken by Ellis Hale; caller's name not recorded. Enquiry copies retained at {B}.
 >
 > Vehicle log complete. Outstanding passenger requests: nil.
 
@@ -141,3 +141,21 @@ Do not introduce a compulsory follow-up to compensate for a missing ending. This
 ## Runtime constraints before integration
 
 Resolve A and B into navigable player-facing descriptions before activation. Verify that each carrier suits its document and the selected site; B need not be a fabricated government office if a retained file has a believable reason to be there. Preserve known facts and this case's sourced outcome in archive. Keep official text on native pages and survivor notes in the journal. No new release, engine assertion, tested key interaction or placement success is claimed by this example.
+
+
+## Continuation implementation draft
+
+`PersonalContinuation.lua` now investigates the booking rather than merely
+adding a second office's copy of the same question. One variant shows an
+unanswered enquiry moved into a booked passenger list at the print deadline;
+the other shows an enquiry contact copied into the passenger box because the
+form had no contact field. The third source is an audit that corrects the office
+record while refusing to reissue the notice. All three are needed for the local
+answer. Neither variant identifies the original caller or claims that the
+survivor consented, remembers booking, or knows why Knox is isolated.
+
+The source clerk is the person who took the call, not the unidentified caller.
+The carrier preserves that distinction, the survivor, the business, the old
+reference and the closing date. Copies use that date instead of redrawing an
+earlier history. These are authored drafts awaiting the full rewrite's test
+handoff, not game-verified narrative results.

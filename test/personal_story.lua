@@ -81,3 +81,7 @@ assert(not withoutName[1].body:find("my passenger run",1,true),"unread name sour
 local note=Questions.note({reading="one"},{readings=original.story.readings})
 assert(note=="My reading: "..original.story.readings[1],"full-sentence readings must not become broken grammar")
 print("PASS authored personal stories: sources, discovery orders, native pages, continuation and integrity")
+
+local missingSurvivor={}
+for k,v in pairs(follows) do if k~="survivor" then missingSurvivor[k]=v end end
+assert(not Story.validThread(missingSurvivor,true),"continuation cannot silently lose the survivor's name")

@@ -7,6 +7,7 @@
 -- carrying its own interpretation would be a very strange document.
 --
 -- Pure: no PZ dependency, so the split is testable without launching a game.
+local PlaceNames=require("ConspiracyFiles/Generated/PlaceNames")
 local M={MAX_PAGE_CHARS=700,MAX_PAGES=8}
 -- Headings the mod adds around the document's own text. Everything from the
 -- first of these onwards is ours.
@@ -32,9 +33,18 @@ function M.text(body)
     return text
 end
 
-function M.pages(body)
+-- Same saved sites as the journal. The adapter may supply the observed street
+-- address resolver; this pure module never reads live world state itself.
+function M.resolve(body,case,describe)
+    if type(case)~="table" or type(case.locations)~="table" then return body end
+    if type(describe)=="function" then body=describe(body,case) or body end
+    return PlaceNames.render(body,case)
+end
+
+function M.pages(body,case,describe)
     local text=M.text(body)
     if not text then return {} end
+    text=M.resolve(text,case,describe)
     local paragraphs={}
     for p in (text.."\n\n"):gmatch("(.-)\n\n") do
         if p:find("%S") then paragraphs[#paragraphs+1]=p end

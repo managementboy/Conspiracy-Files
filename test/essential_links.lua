@@ -17,7 +17,7 @@
 package.path="mod/common/media/lua/shared/?.lua;"..package.path
 local G=require("ConspiracyFiles/Generated/Generator")
 local S=require("ConspiracyFiles/Generated/Session")
-local Premises=require("ConspiracyFiles/Generated/Premises")
+local Personal=require("ConspiracyFiles/Generated/PersonalScenarios")
 local Retired=require("ConspiracyFiles/Generated/RetiredCase")
 
 local OPTS={mapId="SYNTHETIC-MAP",buildLine="TEST-ONLY",allowSynthetic=true}
@@ -26,15 +26,14 @@ local function catalog() return dofile("test/fixtures/synthetic_locations.lua") 
 -- ---------------------------------------------------------------------------
 -- 1. The premise declares its chain, and the case records the ids ---------
 -- ---------------------------------------------------------------------------
-local opening=assert(Premises.opening())
+local opening=assert(Personal.get("no-contact-at-premises",1))
 assert(type(opening.essential)=="table","the opening declares its essential links")
-assert(#opening.essential==2,"two of them - the slip and the register: got "..#opening.essential)
+assert(#opening.essential==3,"the authored opening needs all three source records: got "..#opening.essential)
 local declared={}
 for _,name in ipairs(opening.essential) do declared[name]=true end
 assert(declared.claim,"link A, the retained slip, is essential")
 assert(declared.response,"link C, the matching record, is essential")
-assert(not declared.review,
-    "the round sheet is NOT essential - it corroborates that a round ran, a different claim")
+assert(declared.review,"the third record establishes the recorded local result")
 
 local built
 for seed=101,180 do
@@ -43,12 +42,13 @@ for seed=101,180 do
     if built then break end
 end
 assert(built,"the opening generates")
-assert(type(built.essential)=="table" and #built.essential==2,"the case records two essential document ids")
+assert(built.story and type(built.essential)=="table" and #built.essential==3,"the authored opening records three essential document ids")
 local byId={}
 for _,d in ipairs(built.documents) do byId[d.id]=d end
 for _,id in ipairs(built.essential) do assert(byId[id],"each essential id is one of the case's own documents: "..id) end
 assert(byId[built.essential[1]].title:lower():find("collection slip",1,true),"the first is the slip")
-assert(byId[built.essential[2]].title:lower():find("collection register",1,true),"the second is the register")
+assert(byId[built.essential[2]],"the intervening action is essential")
+assert(byId[built.essential[3]],"the recorded result is essential")
 assert(G.validate(built),"and the case validates with the field")
 
 -- A corrupted list is refused rather than half-trusted.
@@ -58,10 +58,6 @@ for seed=101,180 do bad=G.generate(catalog(),seed,{mapId=OPTS.mapId,buildLine=OP
 bad.essential={"not-a-document-of-this-case"}
 assert(not G.validate(bad),"an essential id the case does not have is refused")
 
--- An ordinary case declares none, and nothing about it changes.
-local ordinary=assert(G.generate(catalog(),101,OPTS))
-assert(ordinary.essential==nil,"an ordinary case has no essential list")
-assert(G.validate(ordinary),"and validates exactly as before")
 print("PASS essential links: the premise declares its chain and the case records it")
 
 -- ---------------------------------------------------------------------------
@@ -77,13 +73,10 @@ local function rootWith(caseTable,dropped,known)
 end
 
 local essentialId=built.essential[1]
-local corroborating
-for _,d in ipairs(built.documents) do
-    local isEssential=false
-    for _,id in ipairs(built.essential) do if id==d.id then isEssential=true end end
-    if not isEssential then corroborating=d.id end
-end
-assert(corroborating,"the case has a non-essential document to lose")
+-- Pure state fixture: the authored opening has three essential sources, so a
+-- separate declared optional source demonstrates the corroborating-gap state.
+local optionalCase={documents={{id="claim"},{id="response"},{id="review"},{id="optional"}},essential={"claim","response","review"}}
+local corroborating="optional"
 
 -- Everything found: a clean completion.
 local allFound={}
@@ -93,9 +86,7 @@ assert(S.completion(whole)==S.COMPLETE,"every clue found is complete")
 assert(#S.essentialGaps(whole)==0,"with no essential gap")
 
 -- A CORROBORATING clue lost: complete-with-gaps. The payoff stands.
-local knownButOne={}
-for _,d in ipairs(built.documents) do if d.id~=corroborating then knownButOne[#knownButOne+1]=d.id end end
-local scrapLost=rootWith(built,{corroborating},knownButOne)
+local scrapLost=rootWith(optionalCase,{corroborating},{"claim","response","review"})
 local state,gaps=S.completion(scrapLost)
 assert(state==S.WITH_GAPS,
     "losing a corroborating clue is complete-with-gaps, not incomplete: got "..tostring(state))
@@ -116,14 +107,9 @@ assert(#ess==1 and ess[1]==essentialId,"and it names the clue the conclusion res
 -- slot (P4-R142). What it may not do is claim it delivered anything.
 assert(S.accounted(payoffLost),"an incomplete case is still accounted for, so it does not hold a slot for ever")
 
--- An ordinary case can never reach the state, because it declares nothing.
-local ordAll={}
-for _,d in ipairs(ordinary.documents) do ordAll[#ordAll+1]=d.id end
-local ordLost=rootWith(ordinary,{ordinary.documents[1].id},
-    (function() local t={} for i=2,#ordinary.documents do t[#t+1]=ordinary.documents[i].id end return t end)())
-assert(S.completion(ordLost)==S.WITH_GAPS,
-    "an ordinary case with a dropped clue is unchanged: got "..tostring(S.completion(ordLost)))
-assert(#S.essentialGaps(ordLost)==0,"and has no essential gaps to find")
+local noEssential={documents={{id="only"}}}
+local ordLost=rootWith(noEssential,{"only"},{})
+assert(S.completion(ordLost)==S.WITH_GAPS,"a pure no-essential state remains complete-with-gaps")
 print("PASS essential links: an essential gap is incomplete, a corroborating one is not")
 
 -- ---------------------------------------------------------------------------
@@ -140,9 +126,6 @@ local retiredLike={schema=Retired.SCHEMA,caseId="c1",rows={},known={"x"},
                    completion=carried.completion,gaps=carried.gaps,gapsFrom=carried.gapsFrom}
 assert(S.completion(retiredLike)==S.INCOMPLETE,
     "and a retired record still reports INCOMPLETE rather than a clean finish")
-local stubLike={schema=Retired.STUB_SCHEMA,caseId="c1",known={"x"},
-                completion=carried.completion,gaps=carried.gaps}
-assert(S.completion(stubLike)==S.INCOMPLETE,"the deep archive keeps it too")
 print("PASS essential links: an incomplete case still says so after retirement and archiving")
 
 -- ---------------------------------------------------------------------------

@@ -1,55 +1,20 @@
--- Case retirement (docs/design/CASE_RETIREMENT.md): once every document in a
--- generated case has been discovered, its full session root -- assignments,
--- physical targets, container coordinates, sprites, placement status and the
--- now-redundant case envelope (facts, identities, organisation, catalog
--- locations, seed/revision bookkeeping) -- is worthless. Nothing needs to
--- place, reconcile or relocate a clue the player already has. This module
--- replaces a completed root with a much smaller record that keeps only the
--- case id and the discovered evidence rows FILES renders: an
--- immutable fact the player learned is never dropped, only the placement
--- bookkeeping around it.
+-- Retire an accounted-for case by removing placement bookkeeping. Every
+-- discovered source row, its geographic context, known order, interpretation
+-- and last-seen description remain available throughout the campaign.
 -- Pure domain: zero PZ dependencies, testable in plain Lua 5.1.
 local V=require("ConspiracyFiles/Validator")
 local G=require("ConspiracyFiles/Generated/Generator")
+local Catalog=require("ConspiracyFiles/Generated/Catalog")
 local EvidenceKinds=require("ConspiracyFiles/Generated/EvidenceKinds")
+local Pages=require("ConspiracyFiles/Generated/DocumentPages")
 local Session=require("ConspiracyFiles/Generated/Session")
 local Story=require("ConspiracyFiles/Generated/Story")
-local M={SCHEMA=2,STUB_SCHEMA=3}
--- offered / answers ("What do I make of it?", P4-R113, first cut P4-R119 and
--- P4-R121): what the survivor is asked about at a case's end, frozen when the
--- case retires because retirement drops the case envelope that holds the
--- names, and the survivor's answers. Both optional, like lastSeen, so older
--- schema-2 roots still load and SCHEMA stays 2. Only names and choices are
--- stored; the question and reading wording is looked up by premise id.
--- completedHours: the world hour the case finished, so the next case can wait
--- a little for the survivor's answers (P4-R121). Optional, like the rest.
--- completion/gaps: what the case finished as, carried forward so a retired
--- record can still answer whether it delivered its chain
--- (DR-20260919-SOLVABLE-WITHDRAWN). Both optional, like lastSeen, so older
--- schema-2 roots still load and SCHEMA stays 2.
+local M={SCHEMA=2}
+-- Freeze closing choices only when their sources were discovered. Personal
+-- names and organisations come from the source documents the survivor read.
+-- Completion and gap history survive retirement independently of the choices.
 local ROOT_FIELDS={schema=true,caseId=true,rows=true,known=true,offered=true,answers=true,completedHours=true,
-                   completion=true,gaps=true,gapsFrom=true,thread=true,followsFrom=true}
--- A deep-archived case (schema 3, P4-R111). The archive is what stops the tenth
--- case being the last, but 500 KB (P4-R17) cannot hold the documents of every
--- case a save will ever make: measured, four live cases and six full-size
--- archived ones already use most of the room the campaign has. So when more
--- cases finish than the full archive holds, the OLDEST archived case keeps only
--- what the rest of the mod still needs to know it existed:
---   * its case id, so nothing collides with it and its name is still spoken;
---   * its documents' ids, in the order they were found - the discovery ledger
---     references them (P4-R106), the loot list still marks the clue itself
---     Evidence / Old (P4-R118) and right-click still says it is already in the
---     organiser;
---   * what the survivor was asked about it and what they answered (P4-R113,
---     P4-R122), so an old answer can still steer a later case.
--- What is lost is what only the organiser's FILES list read: the document's
--- title and text, its leads and connections, the site it came from, and where
--- it was last seen (P4-R104). Those rows leave the record; the clue in the
--- world stays marked, and nothing ever says a document is lost.
--- A stub keeps completion/gaps too: it is a few dozen bytes and it is the
--- answer the deep archive was destroying.
-local STUB_FIELDS={schema=true,caseId=true,known=true,offered=true,answers=true,completedHours=true,
-                   completion=true,gaps=true,gapsFrom=true,thread=true,followsFrom=true}
+                   completion=true,gaps=true,gapsFrom=true,thread=true,followsFrom=true,locations=true,reference=true}
 local OFFERED_FIELDS={premiseId=true,outline=true,people=true,organisation=true,readings=true,question=true}
 local ANSWER_FIELDS={reading=true,matters=true,way=true,changedHours=true,usedBy=true}
 M.OUTLINES={corroboration=true,["conflicting-account"]=true}
@@ -65,13 +30,7 @@ M.WAYS={person=true,records=true,listen=true}
 M.NAME_MAX=60
 M.ORG_MAX=80
 M.CASE_ID_MAX=80
--- lastSeen (P4-R104): where the mod last saw this piece of evidence,
--- in the same words the record uses ("Carried, in your Una's Evidence.").
--- Owner in play, 2026-09-14, after a case completed: "I lost my files
--- somewhere?" Retirement had dropped every placement detail, so the record
--- could no longer say where the evidence was. Optional, so a schema-2 root
--- saved before this still validates and SCHEMA stays 2: a save is never
--- refused for lacking a sentence we did not write yet.
+-- Last observed physical location, kept even after placement bookkeeping goes.
 local ROW_FIELDS={id=true,kind=true,title=true,body=true,locationId=true,leads=true,connections=true,lastSeen=true}
 M.LAST_SEEN_MAX=160
 local LINK_FIELDS={target=true,kind=true}
@@ -90,13 +49,9 @@ end
 
 -- Distinguishes a retired root from a live Session root (schema 1) so
 -- SuccessiveCases can hold a mix of the two without guessing at shape.
--- Both kinds of archived case answer yes: nothing outside this module and
--- SuccessiveCases has to know which tier a finished case is in, and every
--- caller that asks this is really asking "is this still a live Session?".
-function M.isRetired(root) return type(root)=="table" and (root.schema==M.SCHEMA or root.schema==M.STUB_SCHEMA) end
--- A deep-archived case: no rows. Readers that walk `root.rows` must use
--- `root.rows or {}`; this says plainly why it can be absent.
-function M.isStub(root) return type(root)=="table" and root.schema==M.STUB_SCHEMA end
+function M.isRetired(root) return type(root)=="table" and root.schema==M.SCHEMA end
+-- Retained call surface; archives always keep source rows.
+function M.isStub(root) return false end
 
 -- Printable text only: a custom container name is player-typed and reaches the
 -- save through this field, so a control character is refused, not stored.
@@ -138,20 +93,23 @@ end
 local function offeredOK(o)
     if not fields(o,OFFERED_FIELDS) then return false end
     if not text(o.premiseId,80) or not M.OUTLINES[o.outline] then return false end
-    local ok,n=dense(o.people,2); if not ok or n~=2 then return false end
-    for i=1,2 do if not printable(o.people[i],M.NAME_MAX) then return false end end
+    local ok,n=dense(o.people,2); if not ok then return false end
+    for i=1,n do if not printable(o.people[i],M.NAME_MAX) then return false end end
     if o.readings~=nil then
         local valid,count=dense(o.readings,2)
         if not valid or count~=2 then return false end
         for _,reading in ipairs(o.readings) do if not printable(reading,400) then return false end end
         if not printable(o.question,400) then return false end
     elseif o.question~=nil then return false end
-    return printable(o.organisation,M.ORG_MAX)
+    return o.organisation==nil or printable(o.organisation,M.ORG_MAX)
 end
-local function answersOK(a)
+local function answersOK(a,offered)
     if not fields(a,ANSWER_FIELDS) then return false end
     if a.reading~=nil and not M.READINGS[a.reading] then return false end
     if a.matters~=nil and not M.MATTERS[a.matters] then return false end
+    if a.matters=="person1" and (not offered or not offered.people or not offered.people[1]) then return false end
+    if a.matters=="person2" and (not offered or not offered.people or not offered.people[2]) then return false end
+    if a.matters=="organisation" and (not offered or not offered.organisation) then return false end
     if a.way~=nil and not M.WAYS[a.way] then return false end
     if a.changedHours~=nil and (type(a.changedHours)~="number" or a.changedHours~=a.changedHours
         or a.changedHours<0 or a.changedHours==math.huge) then return false end
@@ -159,22 +117,13 @@ local function answersOK(a)
     return true
 end
 
--- A deep-archived case (P4-R111). Deliberately not a shrunken schema-2 root:
--- a retired row must always carry the text the player read, so a root with
--- empty rows would be a lie in the shape of a valid record. This is its own
--- shape, and `known` doubles as the document list -- a case only archives when
--- every one of its documents is known, so the two were always the same list.
--- The two carried fields, checked as strictly as everything else here: a state
--- from the closed set, and gap ids that are ids. "complete" carries no gaps and
--- "complete-with-gaps" carries at least one, so a record can never claim a
--- state its own list contradicts (DR-20260919-SOLVABLE-WITHDRAWN).
--- The carried thread, checked as strictly as it is written. Its `document` is an
--- id from a case whose documents are no longer here, so the id itself cannot be
--- cross-checked - what CAN be checked is that it is well formed and complete,
--- so a half-carried thread never reaches a follow-up.
+-- A follow-up must still name a discovered source in this retained archive.
 local function threadOK(root)
     if root.thread==nil then return true end
-    return Story.validThread(root.thread,false)
+    if not Story.validThread(root.thread,false) or root.completion==Session.INCOMPLETE
+        or type(root.known)~="table" then return false end
+    for _,id in ipairs(root.known or {}) do if id==root.thread.document then return true end end
+    return false
 end
 local function completionOK(root)
     if root.completion==nil then
@@ -210,42 +159,17 @@ local function completionOK(root)
     end
     return true
 end
-local function stubOK(root)
-    if not fields(root,STUB_FIELDS) or root.schema~=M.STUB_SCHEMA then return false,"invalid archived case" end
-    if not text(root.caseId) then return false,"invalid archived case" end
-    local ok,n=dense(root.known,G.MAX_EVIDENCE+1); if not ok then return false,"invalid archived known" end
-    -- Same for the deep archive, and for the same reason: a stub of a case that
-    -- ended without clues has fewer known ids, and refusing it would strand the
-    -- case one tier further down.
-    if n<G.MIN_EVIDENCE then
-        if root.completion~=Session.WITH_GAPS and root.completion~=Session.INCOMPLETE then
-            return false,"invalid archived known"
-        end
-        if #(root.gaps or {})<G.MIN_EVIDENCE-n then return false,"invalid archived known" end
-    end
-    local seen={}
-    for i=1,n do
-        local id=root.known[i]
-        if not text(id,300) or seen[id] then return false,"invalid archived known" end
-        seen[id]=true
-    end
-    if root.offered~=nil and not offeredOK(root.offered) then return false,"invalid archived offered" end
-    if root.answers~=nil and (root.offered==nil or not answersOK(root.answers)) then return false,"invalid archived answers" end
-    if not completionOK(root) then return false,"invalid archived completion" end
-    if not threadOK(root) then return false,"invalid archived thread" end
-    if root.followsFrom~=nil and not text(root.followsFrom,80) then return false,"invalid archived followsFrom" end
-    local h=root.completedHours
-    if h~=nil and (type(h)~="number" or h~=h or h<0 or h==math.huge) then return false,"invalid archived completion hour" end
-    return true
-end
-
 function M.validate(root)
     local safe=V.validateStructure(root); if not safe then return false,"invalid retired case" end
-    -- Both archived tiers arrive here: every caller already asks isRetired
-    -- first and must not have to know which tier it got.
-    if M.isStub(root) then return stubOK(root) end
     if not fields(root,ROOT_FIELDS) or root.schema~=M.SCHEMA then return false,"invalid retired case" end
     if not text(root.caseId) then return false,"invalid retired case" end
+    if not printable(root.reference,120) then return false,"invalid retired reference" end
+    local catalogOK=Catalog.validate({revision="retired-archive",locations=root.locations})
+    if not catalogOK or type(root.locations)~="table" or #root.locations~=2 then return false,"invalid retired locations" end
+    if root.locations[1].mapId~=root.locations[2].mapId or root.locations[1].buildLine~=root.locations[2].buildLine
+        or not Catalog.distinct(root.locations[1],root.locations[2]) then return false,"invalid retired locations" end
+    local locationIds={}
+    for _,location in ipairs(root.locations) do locationIds[location.id]=true end
     -- The relay memo (P4-R96) takes no story role, so the first case of a game
     -- can hold MAX_EVIDENCE story clues plus the memo. Capping rows at
     -- MAX_EVIDENCE refused that case at retirement for good ("Case complete
@@ -275,11 +199,13 @@ function M.validate(root)
     for i=1,n do
         local row=root.rows[i]
         if not rowOK(row) then return false,"invalid retired row" end
+        if not locationIds[row.locationId] then return false,"retired row has unknown location" end
+        for _,lead in ipairs(row.leads) do if not locationIds[lead] then return false,"retired row has unknown lead" end end
         if ids[row.id] then return false,"duplicate retired row" end
         ids[row.id]=true
     end
     -- `known` retains exactly the case's own prior discovery order (never
-    -- regenerated); retirement requires the whole case to already be known.
+    -- regenerated); only discovered clues receive rows, including gap cases.
     local ok2,kn=dense(root.known,n); if not ok2 then return false,"invalid retired known" end
     if kn~=n then return false,"retired case must be fully discovered" end
     local seen={}
@@ -292,7 +218,7 @@ function M.validate(root)
     if root.offered~=nil and not offeredOK(root.offered) then return false,"invalid retired offered" end
     -- Answers name "person 1" or "the organisation", so they mean nothing
     -- without the names they were given about.
-    if root.answers~=nil and (root.offered==nil or not answersOK(root.answers)) then return false,"invalid retired answers" end
+    if root.answers~=nil and (root.offered==nil or not answersOK(root.answers,root.offered)) then return false,"invalid retired answers" end
     local h=root.completedHours
     if h~=nil and (type(h)~="number" or h~=h or h<0 or h==math.huge) then return false,"invalid retired completion hour" end
     if V.estimateEncodedBytes(root)>500000 then return false,"retired case size exceeded" end
@@ -317,7 +243,8 @@ function M.retire(root,lastSeen,completedHours)
     if type(lastSeen)=="table" then
         for _,row in ipairs(rows) do row.lastSeen=M.cleanLastSeen(lastSeen[row.id]) end
     end
-    local out={schema=M.SCHEMA,caseId=root.case.caseId,rows=rows,known=copy(root.known)}
+    local out={schema=M.SCHEMA,caseId=root.case.caseId,rows=rows,known=copy(root.known),
+        locations=copy(root.case.locations),reference=root.case.facts.code}
     -- What the survivor will be asked about. Left out rather than failing the
     -- retirement if anything in it would not validate: a case must always be
     -- able to retire, and a missing question costs less than a stuck save.
@@ -325,8 +252,16 @@ function M.retire(root,lastSeen,completedHours)
     local known={}; for _,id in ipairs(root.known) do known[id]=true end
     local essentialKnown=true
     for _,id in ipairs(c.essential or {}) do if not known[id] then essentialKnown=false end end
-    local offered={premiseId=c.premiseId,outline=c.outline,
-        people={who[1] and who[1].name,who[2] and who[2].name},organisation=c.organisation and c.organisation.name}
+    local sourceText={}
+    for _,row in ipairs(rows) do sourceText[#sourceText+1]=Pages.text(row.body) or "" end
+    sourceText=table.concat(sourceText,"\n")
+    local people={}
+    for _,person in ipairs(who) do
+        if type(person.name)=="string" and sourceText:find(person.name,1,true) then people[#people+1]=person.name end
+    end
+    local organisation=c.organisation and c.organisation.name
+    if organisation and not sourceText:lower():find(organisation:lower(),1,true) then organisation=nil end
+    local offered={premiseId=c.premiseId,outline=c.outline,people=people,organisation=organisation}
     if c.story then offered.readings=copy(c.story.readings); offered.question=c.story.unresolved end
     -- Author-written closing choices summarize the completed investigation.
     -- A placement gap cannot reveal that summary before its sources are read.
@@ -337,7 +272,7 @@ function M.retire(root,lastSeen,completedHours)
     -- because after that nothing can work it out: a retired record has no
     -- assignments and no case envelope, so asked afterwards it reported no
     -- gaps and every finished case read as clean.
-    -- THE THREAD SURVIVES RETIREMENT AND THE DEEP ARCHIVE. A follow-up inherits
+    -- THE THREAD SURVIVES RETIREMENT. A follow-up inherits
     -- a sourced finding from this case, and a retired root keeps no case
     -- envelope at all - so without carrying it here the connection would die
     -- the moment the opening retired, which is precisely when the follow-up is
@@ -351,7 +286,7 @@ function M.retire(root,lastSeen,completedHours)
     -- thread would look unused for ever - offering a third case, then a fourth,
     -- all following the same finding. Only the id, not the whole carrier: it is
     -- the one field the "already followed" test needs, and a retired record is
-    -- charged against a 500 kB budget.
+    -- charged against the aggregate estimated save allowance.
     if type(root.case)=="table" and type(root.case.follows)=="table" then
         out.followsFrom=root.case.follows.fromCase
     end
@@ -363,21 +298,10 @@ function M.retire(root,lastSeen,completedHours)
     return out
 end
 
--- Deep-archive an already retired case: drop the rows, keep the ids, the
--- questions and the answers (see STUB_FIELDS above for what that costs the
--- player). Idempotent, like retire: a stub handed back unchanged is a
--- recognised no-op, so a caller may compact as often as it likes.
+-- Retained call surface: requesting compaction never discards source history.
 function M.shrink(root)
-    if M.isStub(root) then return root,false end
     local ok,why=M.validate(root); if not ok then return nil,why end
-    local out={schema=M.STUB_SCHEMA,caseId=root.caseId,known=copy(root.known),
-        offered=copy(root.offered),answers=copy(root.answers),completedHours=root.completedHours,
-        completion=root.completion,gaps=copy(root.gaps),gapsFrom=copy(root.gapsFrom),
-        -- Kept in the stub too: a case whose rows are gone can still hand its
-        -- thread to a follow-up, which is the whole point of carrying it.
-        thread=copy(root.thread),followsFrom=root.followsFrom}
-    ok,why=stubOK(out); if not ok then return nil,why end
-    return out,true
+    return root,false
 end
 
 return M

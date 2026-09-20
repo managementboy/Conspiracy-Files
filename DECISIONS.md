@@ -1,5 +1,15 @@
 # Conspiracy-Files — Current Decision Index
 
+## DR-20260920-WRITING-MAIN — integrate now that Claude has stopped
+
+Owner: “claude stopped working. you can integrate your work into main now”.
+This supersedes the separate-branch-only working restriction below. Fetched
+Claude's map branch through `ba917eb`, fast-forwarded local main to include it,
+and merged writing checkpoint `d4a0ff4` as `2137cac`. Continue development in
+the main checkout. Existing independent worktrees and uncommitted worker work
+are preserved. This is an unfinished implementation merge, not a tested build
+or Workshop release; Claude still owns testing after full implementation.
+
 ## DR-20260920-WRITING-GROUNDING-TONE — actual businesses; sustained dark comedy
 
 Owner feedback on the fresh-game example: the mysteries show little meaningful

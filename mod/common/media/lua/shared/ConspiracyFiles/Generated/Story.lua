@@ -40,10 +40,10 @@ function M.validThread(t,follows)
     end
     if follows and (not text(t.fromCase) or #t.fromCase>120 or t.fromCase:find("%c")) then return false end
     for _,key in ipairs({"person","organisation","survivor"}) do
-        if t[key]~=nil and (not text(t[key]) or #t[key]>80 or t[key]:find("%c")) then return false end
+        if not text(t[key]) or #t[key]>80 or t[key]:find("%c") then return false end
     end
     local day=t.afterDate
-    if day~=nil and (type(day)~="number" or day~=day or day%1~=0 or day<1 or day>189) then return false end
+    if type(day)~="number" or day~=day or day%1~=0 or day<1 or day>189 then return false end
     return true
 end
 function M.validate(s)

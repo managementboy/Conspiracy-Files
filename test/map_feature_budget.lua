@@ -58,10 +58,8 @@ for seed=1,1000 do
         full.answers={reading="unsure",matters="organisation",way="records",
             changedHours=123456.75,usedBy=string.rep("u",Retired.CASE_ID_MAX)}
         assert(Retired.validate(full))
-        local stub=assert(Retired.shrink(full))
         pool[#pool+1]={live=root,liveBytes=V.estimateEncodedBytes(root),
-            full=full,fullBytes=V.estimateEncodedBytes(full),
-            stub=stub,stubBytes=V.estimateEncodedBytes(stub)}
+            full=full,fullBytes=V.estimateEncodedBytes(full)}
     end
 end
 assert(#pool>=100,"needed a real sample of generated cases, got "..#pool)
@@ -71,12 +69,9 @@ local function take(p,key,n)
     for i,e in ipairs(p) do if i<=n then taken[#taken+1]=e else rest[#rest+1]=e end end
     return taken,rest
 end
-local stubCount=Cases.MAX_CASES-Cases.MAX_ACTIVE-Cases.MAX_FULL_ARCHIVED
 local liveSet,rest=take(pool,"liveBytes",Cases.MAX_ACTIVE)
-local fullSet,rest2=take(rest,"fullBytes",Cases.MAX_FULL_ARCHIVED)
-local stubSet=take(rest2,"stubBytes",stubCount)
+local fullSet=take(rest,"fullBytes",Cases.MAX_CASES-Cases.MAX_ACTIVE)
 local ordered={}
-for _,e in ipairs(stubSet) do ordered[#ordered+1]=e.stub end
 for _,e in ipairs(fullSet) do ordered[#ordered+1]=e.full end
 for _,e in ipairs(liveSet) do ordered[#ordered+1]=e.live end
 local order,hours={},{}

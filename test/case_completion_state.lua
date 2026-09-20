@@ -233,8 +233,7 @@ print("PASS completion state: completion survives the real save wrapper, its val
 local legacy={schema=Retired.SCHEMA,caseId="old",rows={},known={}}
 assert(S.completion(legacy)==UNKNOWN,
     "a record predating the fields is UNKNOWN, never COMPLETE - the fault was it read as complete")
-assert(S.completion({schema=Retired.STUB_SCHEMA,caseId="old",known={}})==UNKNOWN,
-    "and the same for an old stub")
+
 
 -- Unknown STATE and unrecorded HISTORY are different answers.
 local partial=api.snapshot()

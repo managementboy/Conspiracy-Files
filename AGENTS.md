@@ -2,10 +2,13 @@
 
 ## Writing rebuild — owner, 2026-09-20
 
-Active work on `codex/mystery-writing` starts from `a65ce46` in a separate
-worktree. Claude continues fixes, builds and testing on `codex/map-media`.
-Never reset or modify that checkout or publish writing changes onto its branch.
-Fetch and reconcile newer fixes before the final implementation handoff.
+Owner update, 2026-09-20: Claude has stopped; integrate the writing work into
+`main` and continue implementation there. Local main now includes Claude's
+map branch through `ba917eb` and writing checkpoint `d4a0ff4` (merge `2137cac`).
+Do not reset or repurpose the other worktrees. Any already-running bounded
+worker finishes in its assigned checkout; review and transfer its exact changes.
+Full implementation still precedes Claude's testing/build handoff. The merge
+is not a release or a claim that this unfinished rewrite passed tests.
 
 Audit all writing before individual passage edits; give every active mystery
 an underlying event, distinct evidence contributions, a bounded local outcome,

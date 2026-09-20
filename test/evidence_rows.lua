@@ -185,3 +185,21 @@ assert(ok,"an address book that is still starting up must not break a row: "..to
 
 ConspiracyFiles.AddressMap=nil; ModData=nil; store=nil
 print("PASS evidence rows: a case's numbered sites are written as addresses and its unnumbered ones still read as PlaceNames writes them")
+
+-- Retirement retains the same geographic context, without a live case envelope.
+store={root={locations=case.locations,reference="R-482"}}
+ConspiracyFiles.AddressMap.describe=function(text,c)
+    assert(c.locations==case.locations and c.facts.code=="R-482")
+    return (text:gsub("HOUSE A","201 N Carl St"))
+end
+PlaceNames.render=function(text,c)
+    assert(c.locations==case.locations)
+    return (text:gsub("HOUSE B","the receiving building near B Road"))
+end
+local archived=Rows.build("evidence",runtimeWith({
+    {id="d1",title="Dispatch copy / R-482",body=body,kind="dispatch"},
+}))[1]
+assert(archived.cfCase=="R-482","retirement must retain the readable case reference")
+assert(archived.detailText:find("201 N Carl St",1,true))
+assert(archived.detailText:find("the receiving building near B Road",1,true))
+print("PASS archived evidence retains address resolution and case reference")
