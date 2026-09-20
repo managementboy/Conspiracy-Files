@@ -1,6 +1,7 @@
 -- Phase 0 diagnostics, NOT a production read trigger. No hooks until start()
 -- is explicitly called in debug single-player. No canonical/item writes, no
 -- placement, no stash preparation. Linux must verify the source-backed path.
+local CFLog = require("ConspiracyFiles/Log")
 ConspiracyFiles = ConspiracyFiles or {}
 local O = ConspiracyFiles.MapReadObserver or {}
 ConspiracyFiles.MapReadObserver = O
@@ -52,7 +53,7 @@ local function emit(kind, fields)
     table.sort(keys)
     local parts = {}
     for _, key in ipairs(keys) do parts[#parts + 1] = key .. "=" .. short(row[key]) end
-    print("[CF-MAP-READ] " .. table.concat(parts, " | "))
+    CFLog.message("mapread", "probe", table.concat(parts, " | "))
     return row.seq
 end
 

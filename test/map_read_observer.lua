@@ -1,5 +1,5 @@
 -- Contract fixture for Claude to run; not evidence of a PZ hook working live.
-package.path = "mod/common/media/lua/client/?.lua;" .. package.path
+package.path = "mod/common/media/lua/client/?.lua;mod/common/media/lua/shared/?.lua;" .. package.path
 local function pack(...) return { n = select("#", ...), ... } end
 local debugOn, client, server = true, false, false
 function getDebug() return debugOn end

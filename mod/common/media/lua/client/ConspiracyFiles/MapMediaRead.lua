@@ -1,4 +1,5 @@
 -- Cooperative native-reader hooks. No acquisition/reveal trigger, no stash calls.
+local CFLog=require("ConspiracyFiles/Log")
 ConspiracyFiles=ConspiracyFiles or {}
 local H=ConspiracyFiles.MapMediaRead or {}
 ConspiracyFiles.MapMediaRead=H
@@ -6,7 +7,7 @@ local function pack(...) return {n=select("#",...),...} end
 local function allowed()
     return not (isClient and isClient()) and not (isServer and isServer())
 end
-local function report(why) print("[CF-MAP] read hook: "..tostring(why)) end
+local function report(why) CFLog.message("mapread","note","read hook: "..tostring(why)) end
 function H.stop()
     H.active=false; H.frame=nil
     for i=#(H.hooks or {}),1,-1 do

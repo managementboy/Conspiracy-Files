@@ -364,7 +364,7 @@ test("CF-V01-P18 validation rejects split-brain journal and ambiguous marked rec
     assertEqual(nil, ThreadState.new(ambiguous))
 end)
 
-test("CF-V01-P19 conservative estimator enforces the 500 KB boundary", function()
+test("CF-V01-P19 conservative estimator enforces the configured boundary", function()
     local maximal = newState()
     for _, assetId in ipairs(Content.thread.documentAssetIds) do
         assertChanged(maximal.materialise(assetId))
@@ -380,7 +380,11 @@ test("CF-V01-P19 conservative estimator enforces the 500 KB boundary", function(
     local state = newState()
     assertChanged(state.markInteresting("size-boundary", { subjectLabel = "payload", contextText = "x" }))
     local base = state.snapshot()
-    local low, high = 1, 200000
+    -- Derived from the ceiling, never hardcoded: the search has to span the
+    -- boundary wherever it currently sits, or "above" is never above and the
+    -- assertion below cannot fail. A fixed 200000 silently stopped spanning it
+    -- when the allowance moved to 1,000,000 (audit, 2026-09-20).
+    local low, high = 1, ThreadState.MAX_ENCODED_BYTES * 2
     while low + 1 < high do
         local middle = math.floor((low + high) / 2)
         local candidate = state.snapshot()

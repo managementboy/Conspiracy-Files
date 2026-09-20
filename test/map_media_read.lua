@@ -1,4 +1,4 @@
-package.path="mod/common/media/lua/client/?.lua;"..package.path
+package.path="mod/common/media/lua/client/?.lua;mod/common/media/lua/shared/?.lua;"..package.path
 local mp=false; isClient=function() return mp end; isServer=function() return false end
 local mode="cancel"; local printMode="ok"; local maps,prints={},{}
 ISMapWrapper={addToUIManager=function() return nil,"attached",nil end}

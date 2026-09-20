@@ -7,6 +7,7 @@ local World=require("ConspiracyFiles/WorldAccess")
 local Scheduler=require("ConspiracyFiles/Scheduler")
 local Kinds=require("ConspiracyFiles/Generated/EvidenceKinds")
 local Pages=require("ConspiracyFiles/Generated/DocumentPages")
+local CFLog=require("ConspiracyFiles/Log")
 ConspiracyFiles=ConspiracyFiles or {}
 local R=ConspiracyFiles.MapMediaRuntime or {}
 ConspiracyFiles.MapMediaRuntime=R
@@ -16,7 +17,7 @@ local destinations,byBuilding,targets={},{},{}
 local ticks,designCursor,entryCursor=0,0,0
 local priority,prioritySet={},{}
 local function allowed() return not (isClient and isClient()) and not (isServer and isServer()) end
-local function log(why) print("[CF-MAP] "..tostring(why)) end
+local function log(why) CFLog.message("mapmedia","note",tostring(why)) end
 local faultPoint
 function R.injectFault(point)
     if not (getDebug and getDebug()) or not allowed() then return false end
