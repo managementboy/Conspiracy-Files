@@ -1,5 +1,19 @@
 # Conspiracy-Files — Current Decision Index
 
+## DR-20260920-DEVELOPMENT-OWNERSHIP — Codex develops; Claude tests and builds
+
+Owner instruction, 20 September 2026: Codex implements the map-media work; Claude
+owns test execution and game builds. Codex hands over bounded build checkpoints
+with exact branch, commands, expected evidence and limitations. Do not treat
+unexecuted fixtures or source inspection as passing checks. Development commits
+on the handoff branch are explicitly pending Claude verification; this does not
+authorise publishing an unverified build or promoting it to main.
+
+The first checkpoint is the Phase 0 diagnostic observer, not a playable trail.
+Full coverage, storage and native-engine gates remain as recorded below. The
+finite-following and destruction-policy proposals have not become owner rulings
+merely because development responsibility changed.
+
 ## DR-20260920-MAP-PLAN — the plan is accepted for feasibility and a gated pilot, 2026-09-20
 
 `docs/design/MAP_MECHANISM_PLAN_2026-09-20.md` **revision 4 is the final plan**
