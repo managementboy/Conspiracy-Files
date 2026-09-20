@@ -1,0 +1,20 @@
+Linux map placement gate 20260920T161125: FAIL
+source: a25aeff + uncommitted mod changes
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+the gate: a recorded 'placed' obliges an item to actually be in the container.
+
+before reload:
+  none|BBurgStashMap1|at 2174,6011|fault n/a|recorded placed|items 0
+  afterInsert|BBurgStashMap2|at 1720,5934|fault yes|recorded intent|items 0
+  beforeCommit|BBurgStashMap3|at 2132,6344|fault yes|recorded intent|items 0
+  afterCommit|BBurgStashMap4|at 2736,6291|fault yes|recorded placed|items 0
+
+after save and reload:
+  BBurgStashMap1: BAD (recorded placed, items 0)
+  BBurgStashMap2: ok (recorded intent, items 0)
+  BBurgStashMap3: ok (recorded intent, items 0)
+  BBurgStashMap4: BAD (recorded placed, items 0)
+FAIL: none: recorded 'placed' but no item is in the container
+FAIL: afterCommit: recorded 'placed' but no item is in the container
+FAIL: after reload, BBurgStashMap1 records 'placed' with no item present at its destination
+FAIL: after reload, BBurgStashMap4 records 'placed' with no item present at its destination

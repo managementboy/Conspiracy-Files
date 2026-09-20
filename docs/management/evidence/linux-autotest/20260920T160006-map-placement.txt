@@ -1,0 +1,21 @@
+Linux map placement gate 20260920T160006: PASS
+source: a25aeff
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+the gate: a recorded 'placed' obliges an item to actually be in the container.
+
+before reload:
+  none|BBurgStashMap1|at 2174,6011|fault n/a|recorded none|items 1
+  afterInsert|BBurgStashMap2|at 1720,5934|fault NOT-CONSUMED|recorded none|items 1
+  beforeCommit|BBurgStashMap3|at 2132,6344|fault NOT-CONSUMED|recorded none|items 1
+  afterCommit|BBurgStashMap4|at 2736,6291|fault NOT-CONSUMED|recorded none|items 1
+
+after save and reload:
+  BBurgStashMap1: ok (recorded none, items 0)
+  BBurgStashMap2: ok (recorded none, items 0)
+  BBurgStashMap3: ok (recorded none, items 0)
+  BBurgStashMap4: ok (recorded none, items 1)
+
+INCONCLUSIVE - these points are not covered by this run:
+  afterInsert: the fault was NOT-CONSUMED - the placement never reached it, so this point is untested
+  beforeCommit: the fault was NOT-CONSUMED - the placement never reached it, so this point is untested
+  afterCommit: the fault was NOT-CONSUMED - the placement never reached it, so this point is untested
