@@ -27,7 +27,7 @@ used before that authorisation, not a continuing prohibition on main work.
 - Established a complete authored reference, with an underlying event, three distinct contributions, discovery subsets, personal voice, local answer and coherent variation rules: [personal collection example](../design/WRITING_REFERENCE_PERSONAL_COLLECTION_2026-09-20.md).
 - Owner's two follow-ups are recorded in `DR-20260920-WRITING-GROUNDING-TONE`: actual named businesses with causal roles, and Q24's fatalistic bureaucratic dark comedy throughout. Both are in the audit and agent instructions.
 - Added `Generated/Story.lua`: separate authoring fields for observation/source/survivor note; compatible optional sources; explicit knowledge requirements for comparisons; essential-source ending; notification of a new finding in any discovery order.
-- Generator now uses initial two-variant drafts for the opening, its continuation, and five ordinary families (`transfer-nobody-arranged`, `signed-by-someone-absent`, `two-start-dates`, `resignation-after-payslip`, `address-that-only-receives`). **7 of 22 families have the new path; this is not full implementation or an editorial pass.** The remaining 15 ordinary families retain the old path. All 17 map families still need rebuilding.
+- Generator now uses initial two-variant drafts for the opening, its continuation, and five ordinary families (`transfer-nobody-arranged`, `signed-by-someone-absent`, `two-start-dates`, `resignation-after-payslip`, `address-that-only-receives`). **Initial checkpoint: 7 of 22 families. Current checkpoint: 12 of 22**, after five more ordinary families below. This is not full implementation or a completed editorial pass. The remaining 10 ordinary families retain the old path. All 17 map families still need rebuilding.
 - Opening uses a borrowed McCoy vehicle; its cancellation variant diverts it to a mill drive belt. Personal recognition is gated on the named notice. Source dates now distinguish the trip day from the later filing day. Follow-up carriers preserve source person, organisation, survivor and documentary cutoff; the selected-site generator now actually passes the `follows` input.
 - Retirement freezes the authored readings and suppresses closing choices/continuation when essential evidence was missed. Runtime connection voice uses supported findings instead of treating every context link as agreement. Generic physical labels no longer call every note a dispatch document or every notepad a review.
 - Authored `test/personal_story.lua` for Claude: discovery permutations, withheld ending, source-only native pages, caller-copy isolation, saved-gate corruption, actual selected-site generation and continuation identity/time. **Not executed.** Existing g13/premise-text test assumptions still need revision before the final handoff.
@@ -43,13 +43,48 @@ used before that authorisation, not a continuing prohibition on main work.
 - Static review caught and corrected runtime readers that assumed every `Cases.find` result still had a live case envelope. Build/game/runtime verification remains entirely with Claude, after the full implementation.
 - Main checkpoint static verification: `git diff --check` passed. AST graph refresh completed (11,353 nodes / 16,078 edges) using the installed graphify Python module after the executable launcher failed. This is source indexing, not Lua compilation or functional testing. No tests, builds or game runs were executed.
 
+## Inventory and account stories: next five families
+
+`InventoryScenarios.lua`, exposed through `OrdinaryScenarios.get`, adds two
+coherent variants each for `identical-inventories`, `room-not-on-the-plan`,
+`lease-outlived-tenant`, `load-that-got-lighter`, and `fuel-for-a-dead-truck`.
+Each has three essential sources with separate observations and survivor notes,
+two intermediate comparisons, and an all-three-source local conclusion.
+The named businesses perform their verified activities; transactions, staff,
+forms and disputes are explicitly authored fiction. Bound A/B locations retain
+copies and are not asserted to be canonical business premises.
+
+| Family | Variant one | Variant two |
+|---|---|---|
+| Identical inventories | One load moves out of a leaking unit; two open files keep charging | Copied inventory clears a deadline and invents a contents-protection charge |
+| Room absent from plan | Linen storage counts towards a motel occupancy target | A diner repair job number is posted as a guest-room number |
+| Lease outlives tenant | An unprocessed drop-box key keeps rent running | Office promotional stock occupies a departed tenant's unit at the tenant's expense |
+| Load gets lighter | Receiving weighs the tractor without its loaded trailer | An urgently needed mill motor leaves a lumber truck before the destination weighing |
+| Fuel for unusable truck | Its card buys fuel for the relief truck | A dismantled van's account supplies the vehicle number a generator-fuel form requires |
+
+`tools/export_story_samples.lua` is an offline Markdown export for Claude's
+later review. It derives actual converted/uncovered IDs from the premise pool,
+exports both variants, and binds the organisation from each scenario. It also
+shows optional sources and the requirements for each comparison. It does not
+claim map-family coverage. `test/story_family_contract.lua` explicitly expects
+12 converted / 10 uncovered generated families and checks source-only native
+text, all source subsets including optional sources, all six anchor discovery
+orders, unknown-dependency rejection and unresolved placeholders. Neither has
+been executed. Primary review replaced the worker's initial vacuous comparison
+checks before accepting these drafts.
+
+Vanilla grounding was rechecked against the archived primary catalogue:
+`McCoyLoggingCorp`, `UStoreItMuldraugh`, `SunstarMotel`, `Fossoil1` in
+`docs/research/vanilla-print-2026-09-19/catalogue.json`. No new engine capability
+is assumed by these scenarios.
+
 ## Implementation still required
 
 1. Finish the editorial pass on the first seven families: some ordinary drafts still read like stock administration, their remaining questions can be arbitrary, and metadata must be checked against revised source text. All cases must have a meaningful comic situation and consequence. Structural validation cannot certify humour or a coherent story.
 2. Complete opening/continuation integration: verify inherited routing and readable locations outside the numbered address catalogue; finish bounded question-screen wording. The new follow-up explains how an enquiry became a booking without a passenger reply on file; it still cannot identify the original caller. Native address resolution, source history and closing-choice knowledge gates have implementation drafts, not executed verification.
-3. Apply the event contract to the remaining 15 ordinary families and all 17 map families, preserving all destination coverage. Replace legacy premise prose/old role generation after coverage is complete, rather than leaving two competing authoring truths.
+3. Apply the event contract to the remaining 10 ordinary families and all 17 map families, preserving all destination coverage. Replace legacy premise prose/old role generation after coverage is complete, rather than leaving two competing authoring truths.
 4. Replace unrelated optional-role selection everywhere; review relay memo/call-in integration, identities, keys and physical-object prose. Existing legacy dead-air content also needs the agreed tone/voice pass.
 5. Complete UI behavior and verify archive integration: source-row deletion has been removed; retired cases retain locations and reference, and native pages now use the same place resolvers as the journal. Closing-question layout remains unfinished. Keep the 1,000,000-byte provisional aggregate budget and honest admission failures without silent loss. The 16-case/full-map worst-case budget fixtures now retain all history; their fit is unverified until Claude runs them.
-6. Revise obsolete test assumptions, add full family/variant and missing-evidence coverage plus an editorial sample/export tool. Reconcile current map fixes, then hand over the complete implementation once for Claude's builds and tests.
+6. Revise obsolete test assumptions and extend the new transitional family contract and editorial exporter to full coverage. The exporter and regressions are authored but unexecuted; they do not certify narrative quality. Reconcile current map fixes, then hand over the complete implementation once for Claude's builds and tests.
 
 The full goal remains active. Audit and reference completion do not mean the writing has been fixed in the game.

@@ -1,6 +1,7 @@
 -- Event-complete ordinary scenarios. Data only; the shared story builder owns
 -- placeholder binding, discovery gating, carrier validation and placement.
 local M={}
+local InventoryScenarios=require("ConspiracyFiles/Generated/InventoryScenarios")
 
 local function triplet(question,event,outcome,unresolved,readings,organisation,grounding,claim,response,review,comparisons,optional)
  return {question=question,event=event,outcome=outcome,unresolved=unresolved,readings=readings,
@@ -85,7 +86,8 @@ local function copy(value)
  return out
 end
 function M.get(id,variant)
- local scenario=scenarios[id] and scenarios[id][variant]
+ local family=scenarios[id] or InventoryScenarios[id]
+ local scenario=family and family[variant]
  if type(variant)~="number" or variant~=math.floor(variant) or not scenario then return nil end
  return copy(scenario)
 end
