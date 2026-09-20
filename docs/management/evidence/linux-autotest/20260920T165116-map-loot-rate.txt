@@ -1,0 +1,36 @@
+Linux map loot encounter rate 20260920T165116: MEASUREMENT (no pass/fail)
+source: 1085aef (branch codex/map-media, DEV-0.45.1-map-media)
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+
+QUESTION: the whole map-media feature begins when the player reads an annotated
+map. How often does one actually turn up in ordinary play?
+
+WHAT THE GAME CONTAINS (read from the installed files, not inferred):
+  125 stash definitions, matching the mod's catalogue exactly, one for one.
+  They ride on 13 ordinary map items (RosewoodMap, WestpointMap, MuldraughMap,
+  RiversideMap, MarchRidgeMap, LouisvilleMap1-9). 47 of the 125 ride on
+  RosewoodMap alone.
+  Every one of those 13 appears in the loot tables - bins, closets, bags and
+  procedural distributions - with weights from 0.005 to 20.
+  The item scripts declare only which region a map shows. Nothing in Lua or in
+  the item definition attaches a stash: that happens in Java at spawn, so it
+  cannot be read, only measured.
+
+WHAT WAS MEASURED (Muldraugh, 12 sample points, one fresh world):
+  982 containers holding game-generated loot
+    2 map items of any kind
+    0 carrying a stash identity
+
+WHAT THIS ESTABLISHES:
+  Map items are very rare in ordinary loot - roughly 2 per 1,000 containers in
+  this sample. Since a stash map must first BE a map, that is a ceiling on how
+  often the feature can begin by itself, whatever the stash attachment rate is.
+
+WHAT THIS DOES NOT ESTABLISH, and the sample is far too small to:
+  - That loot-spawned maps never carry a stash. Two maps is not a sample; both
+    being plain is unremarkable. The attachment rate remains unmeasured.
+  - Anything about Louisville, West Point, Riverside, March Ridge or Rosewood:
+    only Muldraugh was walked.
+  - Anything about survivor houses, safehouses or the special containers that
+    carry the heavier weights (one distribution entry weights RosewoodMap at 20).
+    A targeted sample of those could look very different from a broad sweep.
