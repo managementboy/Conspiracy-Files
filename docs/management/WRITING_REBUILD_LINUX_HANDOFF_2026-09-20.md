@@ -4,11 +4,11 @@
 
 Take the completed implementation on GitHub `main` through Linux compilation, tests, game validation and the existing unlisted Workshop delivery process. Fix reproducible defects within the agreed scope as you find them. Keep ownership through the whole phase; do not send the owner between Claude and Codex for routine repairs.
 
-Repository: `managementboy/Conspiracy-Files`  
-Branch: `main`  
-Required implementation/delivery baseline: **`8cdf2c62ee8209fcdb1efba21bb5f8c2c48c165e`** (or a descendant containing this handoff)  
-Development version: **`DEV-0.46.0-writing-rebuild`**  
-Save requirement: **fresh saves only**
+- Repository: `managementboy/Conspiracy-Files`
+- Branch: `main`
+- Required implementation/delivery baseline: **`8cdf2c62ee8209fcdb1efba21bb5f8c2c48c165e`** (or a descendant containing this handoff)
+- Development version: **`DEV-0.46.0-writing-rebuild`**
+- Save requirement: **fresh saves only**
 
 The implementation is committed and pushed. Codex performed source review and whitespace checks, but **did not execute Lua, tests, compilers, story export, packaging or the game**. Treat every changed test as an unexecuted draft. The old Workshop build and its green suite do not validate this revision.
 
