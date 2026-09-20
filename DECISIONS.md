@@ -1,5 +1,33 @@
 # Conspiracy-Files — Current Decision Index
 
+## P4-R144 — the map feature has 7,826 bytes, not 88,460, 2026-09-20
+
+Measured by `test/map_feature_budget.lua`, which builds the worst-case 16-case
+save from a thousand real seeds rather than deriving a figure by subtraction.
+
+    campaign 339,764 + ordinary ledger 61,843 (112 events) + reserved 73,000
+      = 474,607 of 500,000
+    less the 17,567-byte reserve test/case_archive.lua asserts
+      = 7,826 spendable
+
+**Two plan revisions got this wrong in the same way**: both subtracted from a
+budget the campaign store had already been measured against, so both
+double-counted the ordinary ledger, and both ignored the reserve. Revision 1
+said 487 events "fit, barely"; revision 2 said 162 affordable with 50 spare.
+The register records the measurement so the next revision cannot re-derive it.
+
+**What it settles.** Per-event cost is a property of the reference text, not of
+the ledger: 903 bytes for a prose ref, 553 for a case document, 411 short, 225
+coded with no place. Trail state costs 206 bytes a trail, entry state 68 a
+destination. **Nine to fifteen destinations are fundable** — not 125. Making
+local fragments free does not rescue it: the cheapest representation measured
+is still over by 54,447, because the binding cost is one ledger event per
+destination times the catalogue.
+
+**What it does not settle.** Which destinations get funded, and whether to buy
+more by shrinking the campaign store or spending the reserve, is the owner's
+(MAP_MECHANISM_ANSWERS_2026-09-20.md §7).
+
 ## DR-20260920-BULK-PREMISES — the premise count is not a ceiling, 2026-09-20
 
 **The twenty premises are an authoring artefact, not a technical limit**, and

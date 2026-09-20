@@ -2,6 +2,11 @@
 
 **Revision 2 — planning only, nothing built. Written for a recheck.**
 
+**Superseded in part by `MAP_MECHANISM_ANSWERS_2026-09-20.md`**, which carries
+the identity mapping, the finite lifecycle, the rebuilt placement gate and the
+pilot acceptance outcomes. Sections 6, 7, 8 and 10 below are the earlier, looser
+versions of those; where they disagree, the answers document wins.
+
 Reviewer: this is a complete plan, not a reply to the last review. Attack it on
 its merits. §A lists what changed since revision 1 so the corrections can be
 verified quickly; everything after stands on its own. The questions I most want
@@ -22,7 +27,7 @@ now gates that block everything downstream.
 
 | # | revision 1 said | corrected |
 |---|---|---|
-| 1 | ~487 ledger events, "it fits, barely" | **wrong by 177 kB.** Bytes bind at **162 events**, not the 512 cap; 50 remain after ordinary cases (§5) |
+| 1 | ~487 ledger events, "it fits, barely" | **wrong twice over.** Revision 2's own "162 events, 50 spare" was also wrong. Measured: **7,826 bytes spendable, 9-15 destinations fundable** (§5) |
 | 2 | Circuital Healing is "the obvious" pilot pair | **not sourced.** A flyer destination with no map bound to it. Replaced with `LouisvilleStashMap15` + gallery brochure (§8) |
 | 3 | every supported map needs a matching flyer | **no.** The flyer is optional identification (§1) |
 | 4 | "no new tracking is needed" for entered buildings | **wrong.** `VisitedBuildings` is `MAX=256` and swallows its capacity failure (§7) |
@@ -101,7 +106,9 @@ noted.
 - **The consistency harness** — `test/premise_consistency.lua`: every premise
   across 305 calendars in both readings, 40,260 renders in 8 s, checking
   impossible dates, relative phrases contradicting their own calendar, branch
-  leakage, unsubstituted placeholders and any document asserting a conclusion.
+  leakage, unsubstituted placeholders, and a list of banned assertion patterns.
+  What that list covers is a finite set of checked phrasings and contracts, not a
+  general detector of asserted conclusions.
 - **Travel works mechanically** — Irvington to Muldraugh produced four cases
   across three towns with no errors. What it lacked was a *reason*, which is the
   gap this plan fills.
@@ -120,41 +127,60 @@ noted.
   excluded candidates, not playable designs.**
 - **Registration-source evidence, not an in-game spawn test.**
 
-## 5. Capacity — the corrected model
+## 5. Capacity — measured, not derived
 
-This constrains the whole design, so it precedes the plan.
+This constrains the whole design, so it precedes the plan. Revision 2's figures
+here were subtractions from a budget the campaign store had already been
+measured against, and they ignored the reserve `test/case_archive.lua` asserts.
+They are replaced by a fixture: **`test/map_feature_budget.lua`**, which builds
+the worst-case 16-case save from a thousand real seeds and prices the map
+feature against what is actually left.
 
-| | |
+| | measured |
 |---|---|
 | save budget (`P4-R17`) | 500,000 bytes |
-| 16-case campaign, measured (`test/case_archive.lua`) | 338,540 |
+| worst-case 16-case campaign store | 339,764 |
+| the ledger ordinary play already writes (112 events) | 61,843 |
 | reserved for every other stored root | 73,000 |
-| **available to the discovery ledger** | **88,460** |
-| per ledger event, measured | ~545 bytes |
-| **events affordable** | **162** |
-| consumed by 16 ordinary cases at 7 documents | 112 |
-| **left for trails, identity and connections** | **50** |
+| committed | 474,607 |
+| reserve the archive must preserve (`case_archive.lua:336`) | 17,567 |
+| **spendable by the map feature** | **7,826** |
 
-**The 512-entry cap never binds. Bytes bind at 162.** Revision 1 compared a
-count against the cap while ignoring that those events cost bytes in the same
-budget as the campaign store, and was over by 176,955.
+Per-event cost is a property of the **reference text**, not of the ledger
+(`DiscoveryLedger.MAX_REF` is 700): measured at **903** bytes for a prose ref,
+**553** for an ordinary case document, **411** for a short ref, **225** for a
+coded ref with no place string. Trail state measures 206 bytes a trail; entry
+state 68 bytes a destination.
 
-Two omissions also corrected: revision 1 counted no **destination payoff** (125
-destinations at one recorded piece each is +125) and no **identity or connection
-discoveries**, which share the same ledger (`DiscoveryLedger` `KINDS`).
+| representation at all 125 destinations | cost | verdict |
+|---|---|---|
+| A every fragment and payoff a ledger event | 310,648 | over by 302,822 |
+| B payoff in the ledger, fragments compact | 103,273 | over by 95,447 |
+| C payoff with a short ref, fragments compact | 85,523 | over by 77,697 |
+| D payoff coded, no place, fragments compact | 62,273 | over by 54,447 |
 
-**Product consequence.** "No maximum of concurrent maps" is affordable only if a
-trail record is cheap. At 50 events, three-fragment trails allow roughly
-**sixteen trails in an entire playthrough**. Four levers, none chosen:
+**Fundable destinations within the measured budget: 9 at an ordinary-cost
+payoff, 15 at a coded payoff.**
 
-1. trail fragments are **not** ledger entries but a lighter record;
-2. fewer ordinary cases while trails are live;
-3. shorter trails — one or two fragments;
-4. a smaller campaign store.
+**Making fragments free does not rescue this.** Even representation D — fragments
+costing nothing, the payoff coded to five characters with no place — is over by
+54,447. The binding cost is one ledger event per destination times the
+catalogue, not the fragments. So lever 1 is necessary and nowhere near
+sufficient.
 
-**Lever 1 is to be costed first. I do not know what a trail fragment costs,
-because one does not exist** — 545 bytes is the measured cost of a *ledger*
-entry.
+**Product consequence.** "Every annotated map ties in" cannot mean every
+annotated map *in one save*. It can mean every map is **eligible**, with the
+funded dozen varying per playthrough — which is `NO-CONCLUSION`-shaped rather
+than a restriction, but it is a product change, so it is the owner's (§11).
+
+Identity and connection history sits inside the 73,000 reserved for other roots
+and is not separately measured — the one remaining gap in the fixture, and it
+can only reduce the 7,826.
+
+Both new stores must be registered in the `tags` table at
+`SaveBudget.lua:3`; an unregistered root is invisible to `B.check`. Test
+alternating ordinary-case and trail writes near capacity, not a trail store
+alone.
 
 Also fixed: offline only, no runtime AI, reuse the game's own mechanics rather
 than inventing systems, Build 42.20 single-player vanilla map. And a trail must
@@ -209,10 +235,12 @@ unbounded storage (§5).
 - **Destination-entry state needs its own durable store.** Not
   `VisitedBuildings`: it is `MAX=256`, and at capacity `V.record` returns the
   reason `"visited-buildings capacity exceeded"`, which
-  `VisitedBuildingLog.record` **discards**, returning a bare `false`. After 256
-  entered buildings, visits stop recording, nothing says why, and every
-  destination reads as unvisited for the rest of the save. The new store must
-  **surface** capacity rather than silently stopping.
+  `VisitedBuildingLog.record` **discards**, returning a bare `false`. Buildings already
+  stored stay visited (`VisitedBuildings.has`), so this is not a total loss —
+  but after 256 entered buildings every **subsequent** visit goes unrecorded and
+  nothing says why, which for a destination reached late in a save is
+  indistinguishable from never having gone. The new store must **surface**
+  capacity rather than silently stopping.
 - **The destination may not be in the state we assume** — previously looted or
   destroyed carriers, an unloaded area, arrival before the vanilla stash has
   prepared. Each needs defined behaviour, and **vanilla contents and effects are
@@ -225,8 +253,10 @@ unbounded storage (§5).
 
 ## 8. The plan
 
-Five phases and **two gates**. Nothing downstream of a gate begins until it
-passes.
+Five phases and **three gates**. Each gate names the work it blocks and the
+work that proceeds regardless — Phase 0 blocks all trail activation; Gate A
+blocks production rolling placement; Phase 1b blocks town rollout and bulk. None
+of them blocks the others.
 
 ### Phase 0 — the read hook (gate)
 
@@ -330,8 +360,9 @@ repetition; **human comparison decides whether the differences matter.**
 Trialled on a small batch before volume.
 
 The consistency harness remains a necessary mechanical check and is not proof of
-quality. What "detects asserted conclusions" actually covers should be written
-down rather than trusted, and editorial review is retained.
+quality. It checks a finite list of banned phrasings and contracts; that list,
+and what it cannot see, is written down rather than trusted as a capability, and
+editorial review is retained.
 
 ## 9. Risks, ranked
 
