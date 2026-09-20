@@ -1,0 +1,46 @@
+Linux map destination coverage, all 125 designs — native acceptance gate 3
+source: b351139 (DEV-0.46.0-writing-rebuild)
+renderer: Mesa llvmpipe (SOFTWARE); hidden run, so no performance claim
+
+Recorded AFTER the metadata pass completed (status.indexed == true). Indexing
+now finishes in ~114 s; before the fix in 7e383a5 it took roughly eleven
+minutes and this gate could not be reached at all.
+
+RESULT
+  resolve to exactly one building   107
+  resolve to none                     0
+  resolve to more than one           18
+  area-based designs                 11
+
+No design is without a destination. The eleven that previously resolved to
+nothing are covered by the rebuild's area overlays.
+
+THE 18 WITH MORE THAN ONE, and they are two different things:
+
+  Nine genuinely ambiguous, two buildings each - the set the handoff already
+  flags for an explicit verdict:
+    IrvingtonStashMap3, IrvingtonStashMap5, IrvingtonStashMap6,
+    RiversideStashMap7, RosewoodStashMap1, RosewoodStashMap2,
+    WorldStashMap17, WorldStashMap23, WpStashMap12
+
+  Nine AREA overlays, where many buildings fall inside the marked region:
+    IrvingtonStashMap1 (18), WorldStashMap3 (4), WorldStashMap6 (2),
+    WorldStashMap9 (21), WorldStashMap10 (5), WorldStashMap11 (5),
+    WorldStashMap16 (5), WorldStashMap18 (33), WorldStashMap21 (4)
+  A count here is not a defect - an area covering a district overlaps many
+  buildings by definition. It does mean these nine have no single destination
+  building, which needs a product decision about what "arriving" means for an
+  area design.
+
+SHARED RESTAURANT PAIR (handoff item): CONFIRMED
+  MulStashMap11 target 10612,9649 -> building 10414750231953455
+  MulStashMap16 target 10612,9649 -> building 10414750231953455
+  Same building. MulStashMap16 carries relatedDestination; MulStashMap11 does
+  not. Two designs meeting at one place - the mechanism contradiction needs -
+  is wired correctly, independently of whether its content is authored.
+
+WHAT THIS DOES NOT ESTABLISH
+  Coverage is geometry. It does not show that each destination has a reachable
+  non-floor container, that a payoff can actually be inserted there, or that a
+  player can get to it. The handoff is explicit that metadata counts alone are
+  insufficient, and that gate is separate.
