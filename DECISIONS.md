@@ -118,14 +118,26 @@ which is the same source StaleClue.destinations uses. No new tracking is needed
 player crosses the same streets repeatedly, "has been nearby" would disqualify
 almost every destination within a day or two of play.
 
-### Still open
+**3. Duplicates: LEAVE IT TO LUCK, AND LET THE PLAYER WONDER.** Owner,
+2026-09-20: "let's leave it to luck and let the player wonder why there is a
+second copy of the same map."
 
-**3. Duplicates — the same map type found twice.** Owner: "can we suppress
-those? Not in advance. When we are close." Read as: do not touch vanilla loot
-spawns; decide at READ time instead — a second copy of a map whose trail is
-already running starts no new trail, and neither does one whose destination the
-player is already near. **Awaiting confirmation of that reading before it is
-treated as settled.**
+So there is **no duplicate rule**: vanilla loot is untouched, nothing is
+suppressed, no explanation is offered, and trails do not stack. One trail per
+destination means a second copy simply has no further effect — it is just paper.
+
+This is the design working as intended rather than a gap in it. A second copy of
+the same map is itself a small unexplained thing, which is precisely the texture
+Q33 exists to produce; engineering it away would remove exactly what the
+mechanism is for (see constraint 2, and the owner's point that conspiracies work
+because the player fills the gap).
+
+*Checked for interaction with ruling 2:* because the trail follows the player,
+reading a second copy in another town changes nothing — the trail is already
+with them. And a destination whose trail has already been completed does not
+restart, since a duplicate has no effect either way.
+
+### Still open
 
 **5. Sequencing against DR-20260919-Q31.** Q31 orders the work personal opening
 → survival connection → loop improvements, and the map mechanism was not in that
