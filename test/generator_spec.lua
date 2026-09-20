@@ -21,7 +21,14 @@ test("generated 100-seed sample varies sites outlines text, carriers and bounded
         assertTrue(c.identities[1].name~=c.identities[2].name)
         assertTrue(c.facts.claimDate<c.facts.responseDate and c.facts.responseDate<c.facts.reviewDate)
         outlines[c.outline]=true; locationPairs[c.locations[1].id.."/"..c.locations[2].id]=true
-        bodies[c.documents[2].body]=true; kinds[c.documents[2].links[1].kind]=true
+        bodies[c.documents[2].body]=true
+        -- Comparisons only exist once their sources are known, so a link is a
+        -- property of the PROJECTION, not of the stored case (whose links are
+        -- correctly empty). Project with everything discovered to see them.
+        local order={}; for _,d in ipairs(c.documents) do order[#order+1]=d.id end
+        for _,row in ipairs(G.project(c,order) or {}) do
+            for _,link in ipairs(row.connections or {}) do kinds[link.kind]=true end
+        end
         counts[#c.documents]=true
         local carriers={}; for _,doc in ipairs(c.documents) do carriers[#carriers+1]=doc.kind end
         carrierSets[table.concat(carriers,",")]=true
@@ -80,7 +87,11 @@ test("generated malformed catalogs and seeds fail without producing a partial ca
     local c=catalog(); c.locations[2].id=c.locations[1].id; assertFalse(Catalog.validate(c)); assertEqual(nil,G.generate(c,17,options))
     c=catalog(); c.locations[1].source=nil; assertFalse(Catalog.validate(c))
     c=catalog(); c.locations[1].bounds.x1=0/0; assertFalse(Catalog.validate(c))
-    c=catalog(); c.locations[1].containerTypes={"invented-container"}; assertFalse(Catalog.validate(c))
+    -- Furniture eligibility was deliberately widened (no six-kind restriction,
+    -- no loot-category blacklist), so an unrecognised container name is no
+    -- longer refused here; it simply never matches anything in the world. What
+    -- must still be refused is a site declaring NO containers at all.
+    c=catalog(); c.locations[1].containerTypes={}; assertFalse(Catalog.validate(c))
     c=catalog(); c.locations[1].source.loop=c; assertFalse(Catalog.validate(c))
     assertEqual(nil,G.generate(catalog(),0,options)); assertEqual(nil,G.generate(catalog(),1.5,options))
     assertEqual(nil,G.generate(catalog(),17,true)); assertEqual(nil,G.generate(catalog(),17,{mapId=options.mapId,buildLine=options.buildLine,typo=true}))
@@ -88,7 +99,9 @@ end)
 
 test("generated restoration rejects altered facts text references and unsupported revisions",function()
     local c=generated(); c.documents[1].body="Unrelated content"; assertEqual(nil,G.restore(c))
-    c=generated(); c.documents[2].links[1].target="missing"; assertEqual(nil,G.restore(c))
+    -- Stored documents carry `references`; `links` are projection-time and
+    -- legitimately empty, so tampering must be tested on what is stored.
+    c=generated(); c.documents[2].references[1]="missing"; assertEqual(nil,G.restore(c))
     c=generated(); c.generatorRevision="future"; assertEqual(nil,G.restore(c))
     c=generated(); c.extra=true; assertEqual(nil,G.restore(c))
     c=generated(); c.documents[1].body=string.rep("x",500001); assertEqual(nil,G.restore(c))
