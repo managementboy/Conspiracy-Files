@@ -167,7 +167,11 @@ for _,r in ipairs(Cases.sessions(after)) do
 end
 assert(retired,"the case is retired in the save")
 local state,gaps=S.completion(retired)
-assert(state==S.WITH_GAPS,"it retired knowing it ended with gaps: "..tostring(state))
+-- Every generated variant now declares its three records ESSENTIAL, so a case
+-- that lost a clue reports incomplete-essential rather than complete-with-gaps
+-- (the conclusion rests on what is missing). test/essential_links.lua still
+-- guards that a case WITHOUT essential links stays complete-with-gaps.
+assert(state==S.INCOMPLETE,"it retired knowing it lost essential clues: "..tostring(state))
 assert(#gaps==#waiting,"every waiting clue became a gap: "..#gaps.." of "..#waiting)
 local _,history=S.gaps(retired)
 for _,id in ipairs(waiting) do
@@ -251,7 +255,7 @@ for _,r in ipairs(Cases.sessions(store2.campaign)) do
 end
 assert(retired2,"the case is retired")
 local state2,gaps2=S.completion(retired2)
-assert(state2==S.WITH_GAPS and #gaps2==1 and gaps2[1]==mobileId,"with the carrier's clue as its gap")
+assert(state2==S.INCOMPLETE and #gaps2==1 and gaps2[1]==mobileId,"with the carrier's clue as its gap")
 local _,history2=S.gaps(retired2)
 assert(history2[mobileId]=="carrier",
     "recorded as a clue that WAS out there and lost its carrier, not one that never arrived: "
@@ -270,7 +274,7 @@ for _,r in ipairs(Cases.sessions(store2.campaign)) do
 end
 assert(back,"and the retired case came back")
 local bstate,bgaps=S.completion(back)
-assert(bstate==S.WITH_GAPS and #bgaps==1 and bgaps[1]==mobileId,"with its gap id intact")
+assert(bstate==S.INCOMPLETE and #bgaps==1 and bgaps[1]==mobileId,"with its gap id intact")
 local _,bhistory=S.gaps(back)
 assert(bhistory[mobileId]=="carrier","and its drop-path history intact")
 print("PASS expiry to retirement: a lost carrier retires the case, and it survives a reload")

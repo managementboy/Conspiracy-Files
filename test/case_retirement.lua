@@ -226,7 +226,12 @@ assert(not Retired.validate(withRoot(function(c) c.answers={usedBy=""} end)),"em
 assert(not Retired.validate(withRoot(function(c) c.offered=nil; c.answers={way="person"} end)),"answers without what they are about are refused")
 assert(Retired.validate(withRoot(function(c) c.offered=nil end)),"a retired root saved before offered existed still loads")
 assert(not Retired.validate(withOffered(function(o) o.outline="maybe" end)),"an unknown outline is refused")
-assert(not Retired.validate(withOffered(function(o) o.people={o.people[1]} end)),"exactly two people")
+-- Offered people are whoever the sources actually name, so ONE is legitimate;
+-- the cap is two, and answering "person2" without a second person is refused
+-- separately. The old "exactly two" expectation refused a valid case.
+assert(Retired.validate(withOffered(function(o) o.people={o.people[1]} end)),"one named person is a valid case")
+assert(not Retired.validate(withOffered(function(o) o.people={o.people[1],o.people[2],"Third Name"} end)),"more than two offered people are refused")
+assert(not Retired.validate(withRoot(function(c) c.offered.people={c.offered.people[1]}; c.answers={matters="person2"} end)),"an answer cannot name a second person who was never offered")
 assert(not Retired.validate(withOffered(function(o) o.organisation="bad\nname" end)),"control characters in a name are refused")
 assert(not Retired.validate(withOffered(function(o) o.organisation=string.rep("a",Retired.ORG_MAX+1) end)),"an over-long organisation is refused")
 assert(Retired.validate(withOffered(function(o) o.organisation=string.rep("a",Retired.ORG_MAX) end)),"an organisation at the limit is accepted")

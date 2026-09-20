@@ -32,7 +32,10 @@ assert(text:find("person behind the belongings is still unknown",1,true),"the ro
 -- Naive word blacklists fail here: the cautious sentence legitimately
 -- contains "owned" inside "does not establish ... that they owned it".
 -- Test the claim being made, not the vocabulary.
-assert(text:find("suggests a possible connection",1,true),"the link is offered as possible, not proven")
+-- The rebuild replaced the "possible" hedge with a precise claim: the key
+-- connects the OBSERVATIONS, which is what the evidence supports. Identity
+-- is still refused by the assertion above.
+assert(text:find("connects those observations",1,true),"the link must claim only what the observations support: "..text)
 for _,overclaim in ipairs({"proves","confirms","definitely","must have","this body was"}) do
     assert(not text:lower():find(overclaim,1,true),"row must not overclaim: "..overclaim)
 end

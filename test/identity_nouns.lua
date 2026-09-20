@@ -20,7 +20,11 @@ assert(#rows==1,"one observation, one row")
 local detail=rows[1].detailText
 assert(detail:find("I saw a badge with the name \"Roger Whitfield\" on it",1,true),detail)
 assert(not detail:find("document",1,true),"a badge is never called a document: "..detail)
-assert(detail:find("The name on a badge is a lead",1,true),detail)
+-- A lead, never proof, and the body is not identified by it. The writing
+-- rebuild moved this into the survivor's own voice ("my lead", P4-R112), so
+-- the guard pins the meaning rather than the article.
+assert(detail:find("The name on a badge is my lead",1,true),detail)
+assert(detail:find("remains unidentified",1,true),detail)
 assert(rows[1].summary:find("^Badge"),"the row says what it is: "..rows[1].summary)
 
 -- An ID card keeps the article right, and an unknown kind still reads.
@@ -28,7 +32,8 @@ root.records[1]={id="Base.IDcard:2",fullType="Base.IDcard",label="ID Card: Ines 
     x=100,y=100,z=0,observedAt=2,token="corpse-item:2"}
 local card=M.rows(root)[1].detailText
 assert(card:find("I saw an ID card with the name \"Ines Kubiak\" on it",1,true),card)
-assert(card:find("The name on an ID card is a lead",1,true),card)
+assert(card:find("The name on an ID card is my lead",1,true),card)
+assert(card:find("remains unidentified",1,true),card)
 
 -- A container reads as a survivor would write it.
 root.records[1]={id="Base.IDcard:3",fullType="Base.IDcard",label="ID Card: Ines Kubiak",source="container",

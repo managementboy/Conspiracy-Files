@@ -69,13 +69,17 @@ assert(known>=1 and known<G.MIN_EVIDENCE,
 for _,id in ipairs(waiting) do assert(api.drop(id)) end
 local done=api.snapshot()
 assert(S.accounted(done),"the case is accounted for")
-assert(S.completion(done)==S.WITH_GAPS,"and ended with gaps")
+-- Every generated variant now declares its three records ESSENTIAL, so a case
+-- that lost a clue reports incomplete-essential rather than complete-with-gaps
+-- (the conclusion rests on what is missing). test/essential_links.lua still
+-- guards that a case WITHOUT essential links stays complete-with-gaps.
+assert(S.completion(done)==S.INCOMPLETE,"and ended without the clues its conclusion rests on")
 
 local retired,why=Retired.retire(done,nil,720)
 assert(retired,"a case with fewer than MIN_EVIDENCE rows still retires when gaps explain it: "..tostring(why))
 assert(#(retired.rows or {})<G.MIN_EVIDENCE,"it really does have fewer rows than the old minimum")
 local state,gaps=S.completion(retired)
-assert(state==S.WITH_GAPS and #gaps==#waiting,"and it remembers every gap")
+assert(state==S.INCOMPLETE and #gaps==#waiting,"and it remembers every gap")
 assert(Retired.shrink(retired),"and it can be deep-archived, so it is not stranded one tier down")
 
 -- The minimum is explained, not abandoned: a short case with NO gaps is still
@@ -144,7 +148,7 @@ for _,r in ipairs(Cases.sessions(after)) do
 end
 assert(stillThere,"the retired case is in the save, not lost")
 local rstate,rgaps=S.completion(stillThere)
-assert(rstate==S.WITH_GAPS and #rgaps==#waiting,"and it kept what it ended without")
+assert(rstate==S.INCOMPLETE and #rgaps==#waiting,"and it kept what it ended without")
 
 -- Asked again, it must decline rather than retire twice.
 assert(fixture.R.retireIfAccounted(done)==false,"already retired: nothing further to do")

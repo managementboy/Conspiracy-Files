@@ -172,6 +172,30 @@ print("PASS an archived case can still be answered, and its answers still steer"
 -- the campaign store plus the discovery ledger plus what is reserved for
 -- every other canonical root.
 local worst={live=0,full=0,docs=0}
+-- A returning organisation now selects an event AUTHORED for that business, so
+-- an arbitrary string at STEER_ORG_MAX names no business, is refused, and the
+-- pool comes back empty. The real worst case is the longest organisation the
+-- generator can actually carry over, found here rather than hardcoded so this
+-- follows the content.
+local function longestSteerOrganisation()
+    local Premises=require("ConspiracyFiles/Generated/Premises")
+    local Ordinary=require("ConspiracyFiles/Generated/OrdinaryScenarios")
+    local longest=""
+    for _,id in ipairs(Premises.list()) do
+        local meta=Premises.get(id)
+        if not meta.opening and not meta.followUp then
+            for v=1,2 do
+                local c=Ordinary.get(id,v)
+                if c and c.organisation and #c.organisation>#longest then longest=c.organisation end
+            end
+        end
+    end
+    assert(longest~="","no authored organisation is steerable")
+    assert(#longest<=G.STEER_ORG_MAX,"an authored organisation exceeds the steer cap")
+    return longest
+end
+local STEER_ORG=longestSteerOrganisation()
+
 local pool={}
 for seed=1,1000 do
     -- The most expensive case the generator writes: steered by a finished
@@ -179,7 +203,7 @@ for seed=1,1000 do
     -- allowed, and "Listen for it", which adds the radio transcript (P4-R123).
     local case=G.generate(catalog(),seed,{mapId=OPTS.mapId,buildLine=OPTS.buildLine,allowSynthetic=true,
         steer={fromCase=string.rep("c",Retired.CASE_ID_MAX),reading="one",way="listen",
-            organisation=string.rep("o",G.STEER_ORG_MAX)}})
+            organisation=STEER_ORG}})
     if case then
         local root=rootFor(case)
         local ids={}

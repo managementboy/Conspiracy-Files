@@ -64,7 +64,9 @@ assert(not beforeRows[1].detailText:find('The body itself wore', 1, true),
 local afterRows = M.rows(second, outfitFor)
 assert(afterRows[1].detailText:find('The body itself wore: security guard uniform', 1, true),
     'the outfit line must appear once the token is backfilled')
-assert(afterRows[1].detailText:find('two separate observations', 1, true),
+-- The rebuild rewrote this in the survivor's voice; the refusal is the same,
+-- and now names what neither source can do on its own.
+assert(afterRows[1].detailText:find('neither identifies the person', 1, true),
     'and it must still refuse to reconcile the two leads')
 assert(not afterRows[1].detailText:find('identifies the body', 1, true),
     'a lead is never proof')

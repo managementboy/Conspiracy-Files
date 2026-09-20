@@ -36,6 +36,9 @@ local Cases=require("ConspiracyFiles/Generated/SuccessiveCases")
 
 assert(type(S.completion)=="function","Session can say which completion state a case is in")
 local UNFINISHED,COMPLETE,WITH_GAPS,UNKNOWN="unfinished","complete","complete-with-gaps","unknown"
+-- Generated variants declare their records essential, so a lost clue reports
+-- incomplete-essential. essential_links.lua guards the no-essential case.
+local INCOMPLETE="incomplete-essential"
 
 local OPTS={mapId="SYNTHETIC-MAP",buildLine="TEST-ONLY",allowSynthetic=true}
 local function catalog() return dofile("test/fixtures/synthetic_locations.lua") end
@@ -115,7 +118,11 @@ for _,id in ipairs(waiting) do
 end
 
 local state,gaps=S.completion(done)
-assert(state==WITH_GAPS,"a case that ended without clues says so: got "..tostring(state))
+-- Every generated variant now declares its three records ESSENTIAL, so a case
+-- that lost a clue reports incomplete-essential rather than complete-with-gaps
+-- (the conclusion rests on what is missing). test/essential_links.lua still
+-- guards that a case WITHOUT essential links stays complete-with-gaps.
+assert(state==S.INCOMPLETE,"a case that ended without clues says so: got "..tostring(state))
 assert(#gaps==#waiting,
     string.format("every dropped clue is a gap: %d gaps for %d dropped",#gaps,#waiting))
 for _,id in ipairs(gaps) do assert(expected[id],"and each gap is one of the dropped clues: "..id) end
@@ -150,7 +157,7 @@ local retiredShort=assert(Retired.retire(done,nil,720),"a case with a gap retire
 assert(Retired.validate(retiredShort),
     "and passes the retired validator - ROOT_FIELDS is strict, so the fields must be allowed there")
 state,gaps=S.completion(retiredShort)
-assert(state==WITH_GAPS,"a retired case remembers it ended with a gap: got "..tostring(state))
+assert(state==INCOMPLETE,"a retired case remembers it ended with a gap: got "..tostring(state))
 assert(#gaps==#waiting,"and how many clues it was")
 for _,id in ipairs(gaps) do assert(expected[id],"each named: "..id) end
 local _,history=S.gaps(retiredShort)
@@ -160,7 +167,7 @@ local stub=assert(Retired.shrink(retiredShort),"a case with a gap deep-archives"
 assert(Retired.validate(stub),"and remains a valid full-history archive")
 assert(not Retired.isStub(stub) and #stub.rows==#retiredShort.rows,"archiving must retain discovered evidence")
 state,gaps=S.completion(stub)
-assert(state==WITH_GAPS,"a deep-archived case still knows it ended with a gap: got "..tostring(state))
+assert(state==INCOMPLETE,"a deep-archived case still knows it ended with a gap: got "..tostring(state))
 assert(#gaps==#waiting,"and still names them all")
 local _,stubHistory=S.gaps(stub)
 assert(stubHistory[gapId]=="deferred","and the drop path survives the deep archive too")
@@ -208,7 +215,7 @@ end
 for _,id in ipairs(wWaiting) do assert(wrapApi.drop(id),"a deferred clue is dropped") end
 local finalRoot=wrapApi.snapshot()
 assert(S.accounted(finalRoot),"the case is accounted for and can retire")
-assert(S.completion(finalRoot)==WITH_GAPS,"and it is a completion with a gap before retiring")
+assert(S.completion(finalRoot)==INCOMPLETE,"and it is a completion with a gap before retiring")
 
 wrapper=assert(Cases.retire(wrapper,index,nil,720),"it retires inside the wrapper")
 assert(Cases.validate(wrapper),"and the wrapper validates after retirement")
@@ -219,7 +226,7 @@ for _,r in ipairs(Cases.sessions(wrapper)) do
 end
 assert(restored,"the retired case is readable back out of the wrapper, not from our own variable")
 state,gaps=S.completion(restored)
-assert(state==WITH_GAPS,"restored from the wrapper it still knows it ended with a gap: "..tostring(state))
+assert(state==INCOMPLETE,"restored from the wrapper it still knows it ended with a gap: "..tostring(state))
 assert(#gaps==#wWaiting,"with every gap id intact")
 local _,wHistory=S.gaps(restored)
 for _,id in ipairs(wWaiting) do
@@ -238,7 +245,7 @@ assert(S.completion(legacy)==UNKNOWN,
 -- Unknown STATE and unrecorded HISTORY are different answers.
 local partial=api.snapshot()
 partial.assignments[gapId].droppedFrom=nil
-assert(S.completion(partial)==WITH_GAPS,"the state is known even when the history is not")
+assert(S.completion(partial)==INCOMPLETE,"the state is known even when the history is not")
 local _,partialHistory=S.gaps(partial)
 assert(partialHistory[gapId]=="unrecorded","and the history says so rather than being guessed")
 

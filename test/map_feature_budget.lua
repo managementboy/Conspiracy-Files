@@ -35,11 +35,33 @@ local RESERVE=17567        -- test/case_archive.lua's headroom assertion
 -- 1. The campaign at its worst, measured the same way case_archive.lua does --
 -- Same construction, deliberately duplicated rather than shared: this fixture
 -- must keep measuring the real worst case even if the archive test changes.
+-- A returning organisation now selects an event AUTHORED for that business, so
+-- an arbitrary string at STEER_ORG_MAX names no business and every seed is
+-- refused. The real worst case is the longest organisation the generator can
+-- actually carry over, found here rather than hardcoded.
+local function longestSteerOrganisation()
+    local Premises=require("ConspiracyFiles/Generated/Premises")
+    local Ordinary=require("ConspiracyFiles/Generated/OrdinaryScenarios")
+    local longest=""
+    for _,id in ipairs(Premises.list()) do
+        local meta=Premises.get(id)
+        if not meta.opening and not meta.followUp then
+            for v=1,2 do
+                local c=Ordinary.get(id,v)
+                if c and c.organisation and #c.organisation>#longest then longest=c.organisation end
+            end
+        end
+    end
+    assert(longest~="","no authored organisation is steerable")
+    assert(#longest<=G.STEER_ORG_MAX,"an authored organisation exceeds the steer cap")
+    return longest
+end
+local STEER_ORG=longestSteerOrganisation()
 local pool={}
 for seed=1,1000 do
     local case=G.generate(catalog(),seed,{mapId=OPTS.mapId,buildLine=OPTS.buildLine,allowSynthetic=true,
         steer={fromCase=string.rep("c",Retired.CASE_ID_MAX),reading="one",way="listen",
-            organisation=string.rep("o",G.STEER_ORG_MAX)}})
+            organisation=STEER_ORG}})
     if case then
         local targets={}
         for _,site in ipairs(case.locations) do

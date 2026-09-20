@@ -38,7 +38,7 @@ assert(not named:find("11259175162085419", 1, true),
 local unknown = textOf(function() return nil end)
 assert(not unknown:find("11259175162085419", 1, true),
     "an unnamed building must not fall back to the raw id")
-assert(unknown:find("a building I have been to", 1, true),
+assert(unknown:find("a building I have visited", 1, true),
     "an unnamed building still gets a readable sentence")
 
 -- No lookup supplied at all: same as unknown, never a crash.
@@ -48,12 +48,12 @@ assert(not none:find("11259175162085419", 1, true), "no lookup must not leak the
 -- A lookup that throws must not take the record with it.
 local threw = textOf(function() error("book not ready") end)
 assert(not threw:find("11259175162085419", 1, true), "a throwing lookup must not leak the id")
-assert(threw:find("a building I have been to", 1, true), "a throwing lookup degrades quietly")
+assert(threw:find("a building I have visited", 1, true), "a throwing lookup degrades quietly")
 
 -- Junk from the lookup is refused rather than printed.
 for _, bad in ipairs({ "", ("x"):rep(200), "two\nlines", 42, true }) do
     local text = textOf(function() return bad end)
-    assert(text:find("a building I have been to", 1, true),
+    assert(text:find("a building I have visited", 1, true),
         "a malformed label must be refused, not rendered")
 end
 

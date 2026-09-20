@@ -91,7 +91,10 @@ local body = rows[1].detailText
 assert(type(body) == "string", "a row must carry its own text")
 assert(body:find("put away in a dresser", 1, true), body)
 -- The claim must stay at the strength the source supports.
-assert(body:find("Somebody kept this here", 1, true), "a drawer says only that it was kept there")
+-- The rebuild moved this into the survivor's voice. The guard is the same:
+-- a drawer places the document, it does not name who lived there.
+assert(body:find("I found this here", 1, true), "a drawer says only where it was: "..body)
+assert(body:find("not a resident", 1, true), "a drawer must not imply residency: "..body)
 -- The disclaimer has to name what it is NOT, because a name in a house reads
 -- as ownership unless the text refuses it out loud.
 assert(body:find("gives me a named lead, not a resident", 1, true), body)
@@ -175,13 +178,22 @@ local ownRows = M.rows(own)
 assert(not ownRows[1].detailText:find("another person", 1, true), ownRows[1].detailText)
 assert(ownRows[1].detailText:find("Speeding Ticket: Linnie Weis (same name as the ID)", 1, true), ownRows[1].detailText)
 assert(not ownRows[2].detailText:find("names somebody else", 1, true), ownRows[2].detailText)
-assert(ownRows[2].detailText:find("same name as the ID it was found with", 1, true), ownRows[2].detailText)
-assert(ownRows[2].detailText:find("not either of them to the body", 1, true), "still no claim about the body")
+assert(ownRows[2].detailText:find("the same name as the ID beside it", 1, true), ownRows[2].detailText)
+assert(ownRows[2].detailText:find("the body is still unidentified", 1, true), "still no claim about the body")
 
 -- And it still refuses to say whose body it is.
 for _, row in ipairs(ownRows) do walletRows[#walletRows + 1] = row end
+-- A blacklist on "the body is" now catches the mod's own REFUSAL ("the body is
+-- still unidentified"), which is the sentence we want. Test the claim instead:
+-- wherever the body is spoken of, it must be to say it is NOT identified.
 for _, row in ipairs(walletRows) do
-    assert(not row.detailText:lower():find("the body is", 1, true), row.detailText)
+    local lower = row.detailText:lower()
+    local at = lower:find("the body is", 1, true)
+    while at do
+        assert(lower:find("the body is still unidentified", at, true) == at,
+            "the body may only be spoken of to refuse identifying it: " .. row.detailText)
+        at = lower:find("the body is", at + 1, true)
+    end
 end
 
 -- A document with no companions says nothing extra.
