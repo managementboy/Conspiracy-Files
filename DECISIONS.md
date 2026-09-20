@@ -1,5 +1,88 @@
 # Conspiracy-Files — Current Decision Index
 
+## DR-20260920-BULK-PREMISES — the premise count is not a ceiling, 2026-09-20
+
+**The twenty premises are an authoring artefact, not a technical limit**, and
+under DR-20260920-NO-CONCLUSION the limit is actively harmful. Bulk premise
+authoring is the strategy that decision requires: with no conclusion to arrive
+at, the only thing sustaining a long save is that the next document says
+something the player has not read.
+
+**Why the number is twenty.** It is roughly where a person's patience for
+inventing distinct paperwork stories runs out. `PREMISES.md` records them as
+AI-drafted, shipping without a separate approval step (P4-R97). Twenty is one
+drafting session, not a design decision — and it was never chosen as a cap.
+
+### Why it is counterproductive
+
+- **It attacks variety, which is now the product.** Twenty premises by two
+  readings is forty case shapes. A sixteen-case save burns roughly forty per
+  cent of the whole space, and a second playthrough repeats heavily. "Every
+  playthrough has to be different" is structurally impossible at twenty.
+- **It caps the contradiction space, which grows quadratically.** Contradiction
+  is pairwise (DR-20260920-NO-CONCLUSION). Twenty premises offer few interesting
+  disagreements; two hundred offer orders of magnitude more. The texture the mod
+  exists to produce is limited by the count more than by anything else.
+- **It strangles DR-20260920-Q33.** One hundred and twenty-five destinations
+  drawing tie-ins from twenty stories means six destinations per story — exactly
+  the rhyming the owner dissolved with "use bulk", reintroduced through the
+  premise count.
+
+### The costs, in proportion
+
+Measured, and stated in proportion because the assistant previously
+over-dramatised both. **Neither is a constraint.**
+
+| | now (22 premises) | at 200 | at 500 |
+|---|---|---|---|
+| `Premises.lua` | 68 kB | ~620 kB | ~1.5 MB |
+| consistency test | 8 s | ~70 s | ~3 min |
+
+For scale: **the whole mod is 4.3 MB** and the published build 4.2 MB. The
+largest single file already shipped is `ObjectCatalogue.lua` at **579 kB**, with
+`AddressBook.lua` at 362 kB behind it — so two hundred premises is the size of a
+file we ship today, and five hundred takes a 4.3 MB mod to 5.8 MB. **These are
+kilobytes, not megabytes.**
+
+And the consistency test's 8 seconds sit inside a **67-second** full suite. At
+two hundred premises the suite becomes about two minutes. **These are seconds,
+not minutes.** The assistant called test runtime "the one real constraint"; it
+is not a constraint at any size being contemplated.
+
+**Load time is a non-issue, and for a reason worth recording.** A new world
+takes about sixty seconds to load before the player is anywhere, and when they
+arrive they have water, food, a weapon and a door on their mind — not the first
+clue. The first case already waits for the survivor to be indoors (P4-R139), and
+the address book builds in ~130 ms. Whatever a larger premise file costs at
+parse is invisible against what the player is actually doing in their first
+minutes. **The first case has slack; it does not need to be fast.**
+
+If a single file ever does become awkward to work with, the fix is to split
+`Premises.lua` by family. That is a convenience, not a performance measure.
+
+### The one real gap: nothing measures distinctness
+
+`test/premise_consistency.lua` makes bulk **safe**: every premise is rendered
+across 305 calendars in both readings — 40,260 renders today — and checked for
+impossible dates, relative phrases that contradict their own calendar, spans no
+case can support, branch leakage, unsubstituted placeholders and any document
+asserting a conclusion. It exists because an audit found six defect classes
+twenty times over, none caught because nothing compared the words with the dates
+and the branch they printed in. It works on the assistant too: adding two
+premises carelessly produced 2,440 reported problems.
+
+**But it cannot measure whether a premise is INTERESTING, or whether it rhymes
+with three others.** A premise can be perfectly dated, branch-clean and
+conclusion-free and still be the fourth telling of one story. Nothing in the
+project measures distinctness.
+
+That is the actual risk in the bulk strategy — not size, not runtime — and it
+is much cheaper to address now than at premise 150. It is also the one place
+where a tool would genuinely help: something that reports how close a new
+premise sits to the existing set, so rhyming is visible while it is still cheap
+to fix. **Not built, and not specified here.**
+
+
 ## DR-20260920-NO-CONCLUSION — contradiction is the product, 2026-09-20
 
 **Owner, 2026-09-20:** "each mini mystery can contradict each other. Each
