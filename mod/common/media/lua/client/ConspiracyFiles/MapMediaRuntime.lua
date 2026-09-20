@@ -85,17 +85,72 @@ local function atDestination(id,square)
     if resolved then return match end
     return destinations[id]~=nil and destinations[id][bid]==true
 end
-local function matches(def,binding)
-    return Destinations.intersects(binding,def:getX(),def:getY(),def:getX2(),def:getY2())
+-- Bounds are read ONCE per building, never once per design. These are engine
+-- calls across the Lua bridge, and indexStep asks about all 125 designs for
+-- every one of ~9,978 buildings: reading them inside that loop cost 500 engine
+-- calls per building, five million overall, which pushed a single scheduler
+-- step past its 2 ms budget (observed peak 10 ms) and starved indexing down to
+-- roughly one building a tick. It then never finished.
+local function matchesBounds(binding,x1,y1,x2,y2)
+    return Destinations.intersects(binding,x1,y1,x2,y2)
+end
+-- A COARSE SPATIAL INDEX over the designs, built once.
+--
+-- Measured: testing all 125 designs against each of the map's ~9,978 buildings
+-- is 1.25 million checks. In Kahlua one such step ate the scheduler's whole
+-- 2 ms budget, so only ONE building was processed per tick - about fifteen a
+-- second, roughly ELEVEN MINUTES for the pass, which no check waits for. A
+-- single bounding box does not help: the designs span every town, so nearly
+-- every building falls inside it.
+--
+-- Designs are bucketed by a coarse grid instead, and a building is tested only
+-- against designs in the buckets its own bounds touch. This cannot miss a
+-- match: a target point lies inside the matching building's bounds, so that
+-- building necessarily overlaps the bucket holding the point, and an area is
+-- registered in every bucket it touches. Designs that resolve to more than one
+-- building still resolve to all of them.
+local BUCKET=250
+local designBuckets
+local function bucketKey(bx,by) return bx*100000+by end
+local function addToBucket(into,bx,by,id)
+    local k=bucketKey(bx,by)
+    local list=into[k]; if not list then list={}; into[k]=list end
+    for _,existing in ipairs(list) do if existing==id then return end end
+    list[#list+1]=id
+end
+local function buildDesignBuckets()
+    if designBuckets then return designBuckets end
+    local built={}
+    for _,id in ipairs(Catalogue.list) do
+        local b=Catalogue.get(id)
+        for _,a in ipairs(b.areas or {}) do
+            for bx=math.floor(a.x1/BUCKET),math.floor(a.x2/BUCKET) do
+                for by=math.floor(a.y1/BUCKET),math.floor(a.y2/BUCKET) do addToBucket(built,bx,by,id) end
+            end
+        end
+        for _,pt in ipairs(b.targets or {}) do
+            addToBucket(built,math.floor(pt.x/BUCKET),math.floor(pt.y/BUCKET),id)
+        end
+    end
+    designBuckets=built
+    return designBuckets
 end
 -- Metadata only; no loading, entering, stash preparation, or visit fiction.
 local function indexStep()
     if metadata.index>=metadata.buildings:size() then metadata=nil; R.indexed=true; return true end
     local def=metadata.buildings:get(metadata.index); metadata.index=metadata.index+1
-    local bid=tostring(def:getIDString())
-    for _,id in ipairs(Catalogue.list) do
-        if matches(def,Catalogue.get(id)) then
-            destinations[id]=destinations[id] or {};destinations[id][bid]=true
+    local x1,y1,x2,y2=def:getX(),def:getY(),def:getX2(),def:getY2()
+    local buckets=buildDesignBuckets()
+    local bid,seen=nil,nil
+    for bx=math.floor(x1/BUCKET),math.floor(x2/BUCKET) do
+        for by=math.floor(y1/BUCKET),math.floor(y2/BUCKET) do
+            for _,id in ipairs(buckets[bucketKey(bx,by)] or {}) do
+                if not (seen and seen[id]) and matchesBounds(Catalogue.get(id),x1,y1,x2,y2) then
+                    seen=seen or {}; seen[id]=true
+                    bid=bid or tostring(def:getIDString())
+                    destinations[id]=destinations[id] or {};destinations[id][bid]=true
+                end
+            end
         end
     end
     return false
@@ -488,10 +543,14 @@ local function visitStep()
     local player=getPlayer();local square=player and player:getSquare()
     if not square then return end
     local bid,def=buildingId(square),defOf(square)
+    -- Read once, not once per design: this runs every 15 ticks over all 125
+    -- designs, and these are engine calls.
+    local bx1,by1,bx2,by2
+    if def then bx1,by1,bx2,by2=def:getX(),def:getY(),def:getX2(),def:getY2() end
     local changes
     for _,id in ipairs(Catalogue.list) do
         -- A genuine current building can be indexed before the metadata pass.
-        if def and matches(def,Catalogue.get(id)) then
+        if def and matchesBounds(Catalogue.get(id),bx1,by1,bx2,by2) then
             destinations[id]=destinations[id] or {};destinations[id][bid]=true
         end
         if atDestination(id,square) and root().entries[id]==nil then
@@ -534,7 +593,11 @@ end
 -- Diagnostics deliberately expose hidden state only through explicit debug use.
 function R.status()
     if not (getDebug and getDebug()) then return nil end
+    -- How far the metadata pass has got, so a stalled index is measurable
+    -- rather than inferred from which designs happen to have resolved.
     return {ready=ready,indexed=R.indexed,peakMs=scheduler and scheduler.peakMs,peakWriteMs=R.peakWriteMs,
+        indexAt=metadata and metadata.index or nil,
+        indexOf=metadata and metadata.buildings:size() or nil,
         state=State.copy(root()),refusal=R.lastRefusal,pendingFault=faultPoint and State.copy(faultPoint) or nil,
         lastFault=lastFault and State.copy(lastFault) or nil}
 end
