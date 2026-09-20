@@ -1,5 +1,33 @@
 # Conspiracy-Files — Current Decision Index
 
+## DR-20260920-WRITING-REBUILD — events, evidence and personal voice
+
+Owner goal after reviewing a fresh game's collection slip, tagged key and
+payment slip: audit the entire writing system before editing passages; give
+every mystery an underlying event; make evidence reveal different parts;
+separate documentary and survivor voices; generate variations within coherent
+scenarios; establish one complete example and apply the standard everywhere.
+
+This supersedes older authoring guidance that forbids all local conclusions,
+requires every ordinary explanation to have a sinister twin, or treats linked
+reference numbers and mismatching records as sufficient story. It does not
+authorise a definitive explanation of Knox, invented survivor memories or
+turning player interpretations into immutable facts.
+
+The owner explicitly requires avoiding collisions with Claude's ongoing fixes
+and builds. Implementation uses the separate `codex/mystery-writing` branch and
+worktree, based on current map development commit `a65ce46`. Claude's branch,
+working files, release tags and test execution remain independent. Reconcile
+new fixes before handing over the completed rewrite. No new build is requested
+at this audit checkpoint.
+
+The source audit and full reference example live in
+`docs/design/WRITING_SYSTEM_AUDIT_2026-09-20.md` and
+`docs/design/WRITING_REFERENCE_PERSONAL_COLLECTION_2026-09-20.md`. The example
+is an implementation reference under the owner's direction, not a claimed
+owner playtest approval or existing published story. The full goal remains
+incomplete until the standard is implemented throughout and verified.
+
 ## DR-20260920-FULL-IMPLEMENTATION — one development handoff; plain storage
 
 Owner instructions in the development conversation, 20 September 2026:

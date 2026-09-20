@@ -1,5 +1,24 @@
 # Conspiracy-Files — Agent / Codex Instructions
 
+## Writing rebuild — owner, 2026-09-20
+
+Active work on `codex/mystery-writing` starts from `a65ce46` in a separate
+worktree. Claude continues fixes, builds and testing on `codex/map-media`.
+Never reset or modify that checkout or publish writing changes onto its branch.
+Fetch and reconcile newer fixes before the final implementation handoff.
+
+Audit all writing before individual passage edits; give every active mystery
+an underlying event, distinct evidence contributions, a bounded local outcome,
+and survivor interpretations based on known sources. First-person survivor
+voice is distinct from the document author's voice. Generate coherent event
+variants, not unrelated suspicious objects. Apply the standard across the full
+existing family pool; one good opening is not completion. See
+`docs/management/WRITING_REBUILD_STATUS_2026-09-20.md` for the audit, reference
+example and remaining scope. Claude retains all test/build execution.
+
+Shared logging uses `ConspiracyFiles/Log`; do not invent new print prefixes.
+When changing a limit, inspect the tests that exercise its actual boundary.
+
 ## Map-media development override — owner, 2026-09-20
 
 Finish implementation before one Claude build/testing handoff. Do not execute
