@@ -1,5 +1,51 @@
 # Conspiracy-Files — Current Decision Index
 
+## DR-20260920-WRITING-GROUNDING-TONE — actual businesses; sustained dark comedy
+
+Owner feedback on the fresh-game example: the mysteries show little meaningful
+involvement of named businesses or lore, and the writing is not funny despite
+the agreed direction. This reinforces **DR-20260919-Q24**, which selected
+fatalistic, bureaucratic dark comedy throughout; the alternative of occasional
+humour was not adopted. Both requirements apply throughout the current rebuild.
+
+Use verified vanilla entities for relevant activities, with the mod's invented
+events identified as authored fiction in development documentation. Do not
+turn a randomly selected house into a canonical business or invent involvement
+by a named lore figure just to mention them. Comic consequences should arise
+from the event, the institution's priorities and the survivor's personal stake.
+Neither generic suspicious paperwork nor a witty final sentence is sufficient.
+
+The isolated writing implementation remains incomplete and untested. This
+decision is an authoring requirement, not owner approval of the new passages.
+
+## DR-20260920-WRITING-REBUILD — events, evidence and personal voice
+
+Owner goal after reviewing a fresh game's collection slip, tagged key and
+payment slip: audit the entire writing system before editing passages; give
+every mystery an underlying event; make evidence reveal different parts;
+separate documentary and survivor voices; generate variations within coherent
+scenarios; establish one complete example and apply the standard everywhere.
+
+This supersedes older authoring guidance that forbids all local conclusions,
+requires every ordinary explanation to have a sinister twin, or treats linked
+reference numbers and mismatching records as sufficient story. It does not
+authorise a definitive explanation of Knox, invented survivor memories or
+turning player interpretations into immutable facts.
+
+The owner explicitly requires avoiding collisions with Claude's ongoing fixes
+and builds. Implementation uses the separate `codex/mystery-writing` branch and
+worktree, based on current map development commit `a65ce46`. Claude's branch,
+working files, release tags and test execution remain independent. Reconcile
+new fixes before handing over the completed rewrite. No new build is requested
+at this audit checkpoint.
+
+The source audit and full reference example live in
+`docs/design/WRITING_SYSTEM_AUDIT_2026-09-20.md` and
+`docs/design/WRITING_REFERENCE_PERSONAL_COLLECTION_2026-09-20.md`. The example
+is an implementation reference under the owner's direction, not a claimed
+owner playtest approval or existing published story. The full goal remains
+incomplete until the standard is implemented throughout and verified.
+
 ## DR-20260920-FULL-IMPLEMENTATION — one development handoff; plain storage
 
 Owner instructions in the development conversation, 20 September 2026:

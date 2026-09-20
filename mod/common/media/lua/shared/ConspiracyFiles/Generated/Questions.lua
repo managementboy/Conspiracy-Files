@@ -21,6 +21,7 @@ local WAYS={
 
 -- The case's two readings, ordinary first, from its premise.
 function M.readings(offered)
+    if type(offered)=="table" and type(offered.readings)=="table" then return offered.readings end
     local premise=type(offered)=="table" and Premises.get(offered.premiseId)
     local r=premise and premise.readings
     if type(r)=="table" and #r==2 then return r end
@@ -58,19 +59,16 @@ function M.answerLabel(key,answers,offered)
     return M.NOT_YET
 end
 
-local function lowerFirst(s) return s:sub(1,1):lower()..s:sub(2) end
-local function noStop(s) return (s:gsub("%.$","")) end
-
 -- The survivor's own note from whatever is answered, or nil when nothing is.
 -- Once a case has been built from the answers it adds "I've gone on from here."
 function M.note(answers,offered)
     if type(answers)~="table" then return nil end
     local parts={}
     if answers.reading=="unsure" then
-        parts[#parts+1]="I can't tell which it was."
+        parts[#parts+1]="I haven't settled on a reading."
     elseif answers.reading=="one" or answers.reading=="two" then
         local r=M.readings(offered)
-        if r then parts[#parts+1]="I think it was "..lowerFirst(noStop(r[answers.reading=="one" and 1 or 2]))..". " end
+        if r then parts[#parts+1]="My reading: "..r[answers.reading=="one" and 1 or 2] end
     end
     local people=type(offered)=="table" and offered.people or {}
     if answers.matters=="nobody" then parts[#parts+1]="Nobody really matters here."

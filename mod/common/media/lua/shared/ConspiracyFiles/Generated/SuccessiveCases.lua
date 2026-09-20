@@ -467,9 +467,14 @@ function M.pendingThread(wrapper)
   end
  end
  for i,root in ipairs(M.sessions(wrapper) or {}) do
-  if Retired.isRetired(root) and type(root.thread)=="table" and not followed[root.caseId] then
-   return {fromCase=root.caseId,document=root.thread.document,reference=root.thread.reference,
-           point=root.thread.point,question=root.thread.question},i
+  local sourceKnown=false
+  if type(root.thread)=="table" then
+   for _,id in ipairs(root.known or {}) do if id==root.thread.document then sourceKnown=true; break end end
+  end
+  if Retired.isRetired(root) and sourceKnown and root.completion~=Session.INCOMPLETE
+   and type(root.thread)=="table" and not followed[root.caseId] then
+   local follows=copy(root.thread); follows.fromCase=root.caseId
+   return follows,i
   end
  end
  return nil

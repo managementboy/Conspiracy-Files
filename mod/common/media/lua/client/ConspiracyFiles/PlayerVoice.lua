@@ -69,6 +69,11 @@ local SET_E_AGREE={
     "Same story as the first copy. That's something.",
     "Two records, and they agree for once.",
 }
+local SET_E_CONTEXT={
+    "So that's how these fit together.",
+    "The paperwork is starting to make sense. That's worrying.",
+    "Now I can follow what happened here.",
+}
 -- Set F: every document of a case has been found. Not "solved" - the mod does
 -- not know that and never will. Only that there is nothing further to find.
 local SET_F={
@@ -336,9 +341,12 @@ function V.onConnection(kind,documentId)
     if kind=="disputes-delivery" then
         indexE=indexE%#SET_E_DISPUTE+1
         speak(p,SET_E_DISPUTE[indexE],"Two records disagree")
-    else
+    elseif kind=="corroborates" then
         indexE=indexE%#SET_E_AGREE+1
         speak(p,SET_E_AGREE[indexE],"Records agree")
+    else
+        indexE=indexE%#SET_E_CONTEXT+1
+        speak(p,SET_E_CONTEXT[indexE],"Records connect")
     end
 end
 

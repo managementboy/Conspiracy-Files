@@ -13,6 +13,7 @@ local V=require("ConspiracyFiles/Validator")
 local G=require("ConspiracyFiles/Generated/Generator")
 local EvidenceKinds=require("ConspiracyFiles/Generated/EvidenceKinds")
 local Session=require("ConspiracyFiles/Generated/Session")
+local Story=require("ConspiracyFiles/Generated/Story")
 local M={SCHEMA=2,STUB_SCHEMA=3}
 -- offered / answers ("What do I make of it?", P4-R113, first cut P4-R119 and
 -- P4-R121): what the survivor is asked about at a case's end, frozen when the
@@ -49,7 +50,7 @@ local ROOT_FIELDS={schema=true,caseId=true,rows=true,known=true,offered=true,ans
 -- answer the deep archive was destroying.
 local STUB_FIELDS={schema=true,caseId=true,known=true,offered=true,answers=true,completedHours=true,
                    completion=true,gaps=true,gapsFrom=true,thread=true,followsFrom=true}
-local OFFERED_FIELDS={premiseId=true,outline=true,people=true,organisation=true}
+local OFFERED_FIELDS={premiseId=true,outline=true,people=true,organisation=true,readings=true,question=true}
 local ANSWER_FIELDS={reading=true,matters=true,way=true,changedHours=true,usedBy=true}
 M.OUTLINES={corroboration=true,["conflicting-account"]=true}
 M.READINGS={one=true,two=true,unsure=true}
@@ -139,6 +140,12 @@ local function offeredOK(o)
     if not text(o.premiseId,80) or not M.OUTLINES[o.outline] then return false end
     local ok,n=dense(o.people,2); if not ok or n~=2 then return false end
     for i=1,2 do if not printable(o.people[i],M.NAME_MAX) then return false end end
+    if o.readings~=nil then
+        local valid,count=dense(o.readings,2)
+        if not valid or count~=2 then return false end
+        for _,reading in ipairs(o.readings) do if not printable(reading,400) then return false end end
+        if not printable(o.question,400) then return false end
+    elseif o.question~=nil then return false end
     return printable(o.organisation,M.ORG_MAX)
 end
 local function answersOK(a)
@@ -167,15 +174,7 @@ end
 -- so a half-carried thread never reaches a follow-up.
 local function threadOK(root)
     if root.thread==nil then return true end
-    local t=root.thread
-    if type(t)~="table" then return false end
-    for key in pairs(t) do
-        if key~="document" and key~="reference" and key~="point" and key~="question" then return false end
-    end
-    for _,key in ipairs({"document","reference","point","question"}) do
-        if not text(t[key],120) then return false end
-    end
-    return true
+    return Story.validThread(root.thread,false)
 end
 local function completionOK(root)
     if root.completion==nil then
@@ -323,9 +322,15 @@ function M.retire(root,lastSeen,completedHours)
     -- retirement if anything in it would not validate: a case must always be
     -- able to retire, and a missing question costs less than a stuck save.
     local c,who=root.case,root.case.identities or {}
+    local known={}; for _,id in ipairs(root.known) do known[id]=true end
+    local essentialKnown=true
+    for _,id in ipairs(c.essential or {}) do if not known[id] then essentialKnown=false end end
     local offered={premiseId=c.premiseId,outline=c.outline,
         people={who[1] and who[1].name,who[2] and who[2].name},organisation=c.organisation and c.organisation.name}
-    if offeredOK(offered) then out.offered=offered end
+    if c.story then offered.readings=copy(c.story.readings); offered.question=c.story.unresolved end
+    -- Author-written closing choices summarize the completed investigation.
+    -- A placement gap cannot reveal that summary before its sources are read.
+    if (not c.story or essentialKnown) and offeredOK(offered) then out.offered=offered end
     if type(completedHours)=="number" and completedHours==completedHours and completedHours>=0
         and completedHours~=math.huge then out.completedHours=completedHours end
     -- WHAT THIS CASE FINISHED AS. Carried before the assignments are dropped,
@@ -338,7 +343,8 @@ function M.retire(root,lastSeen,completedHours)
     -- the moment the opening retired, which is precisely when the follow-up is
     -- meant to arrive (PHASE_C_CONTINUITY_CARRIER.md). A few dozen bytes.
     if type(root.case)=="table" and type(root.case.thread)=="table" then
-        out.thread=copy(root.case.thread)
+        local complete=essentialKnown and known[root.case.thread.document]==true
+        if complete then out.thread=copy(root.case.thread) end
     end
     -- WHICH CASE THIS ONE FOLLOWED, kept so a spent thread stays spent. Without
     -- it, a retired follow-up would forget its own inheritance and the opening's
