@@ -1,5 +1,121 @@
 # Conspiracy-Files — Current Decision Index
 
+## DR-20260920-Q33 — annotated maps are the pull to travel, 2026-09-20
+
+**The mechanism.** The player finds a vanilla annotated map and reads it. From
+then on, clues **about that distant place** begin appearing **near where the
+player currently is**, sporadically, tied to the central question. Whenever the
+player eventually reaches the marked destination — on their own schedule, with
+no timer and no failure state — satisfying evidence is waiting there.
+
+**Why this and not something else.** The vanilla developers built annotated maps
+as non-time-sensitive place-mysteries, and the project has ignored that. A map is
+a reason to travel that the **player chooses**, which is what every previous
+attempt at motivating travel lacked: travel was proven to work mechanically
+(Irvington to Muldraugh, four cases, no errors) and had no purpose. What vanilla's
+maps lack is any tie to Knox. That tie is our part.
+
+**The part that is not obvious, recorded because it is the design's real
+insight:** the clue trail is laid **where the player already is**, not along the
+route and not only at the destination. The reward therefore starts immediately,
+the destination accumulates weight before the player sets out, and the journey
+becomes anticipation rather than a chore paid off afterwards. It also needs no
+new machinery: clues are already placed near the player.
+
+### Three constraints
+
+**1. Every annotated map ties in.** No rationing. The assistant argued for
+tie-ins on only a few maps, on the grounds that many fragments pointing at one
+question would answer it by accumulation. **Rejected, on two owner grounds:**
+
+- *There is nothing to accumulate towards.* No canonical explanation exists, in
+  the project or in anyone's head (DR-20260919-CENTRAL-PREMISE,
+  DR-20260919-CONSISTENT-EVENTS). Facts about something nobody explains make the
+  absence louder, not quieter; you cannot converge on a target that is not there.
+  The assistant has now drifted toward a hidden answer three times — the "sealed
+  answer" proposal, "the fragments agree with each other", and "accumulated
+  toward" — and it is recorded here because it will recur.
+- *Variety is cheap in this project and is not a design constraint.* Hundreds of
+  distinct fragments can be written at negligible cost, which is what makes this
+  mechanism viable at all where it would be prohibitive for a person. The real
+  economics: **authored content costs mod size, not save size.** The save holds
+  only what was found (about 545 bytes a document in the discovery ledger,
+  itself capped), and the mod already ships a 370 kB generated address book. So
+  the answer to repetition is volume, not restraint.
+
+**2. Each trail fragment is independently ambiguous — never a piece of a larger
+shape.** A fragment is a small unresolved thing, complete in itself and readable
+more than one way. Five hundred such fragments are texture, and the player
+assembles meaning from them, which is the point: conspiracies work because the
+player fills the gap, and Project Zomboid is good precisely because it gives
+little and lets the player invent the reasons. Five hundred **puzzle pieces**
+would instead be a jigsaw, and a jigsaw has a picture — the failure the
+assistant kept circling without naming.
+
+*This does not contradict DR-20260919-CONSISTENT-EVENTS, which allows several
+independent clues to illuminate ONE event.* Corroborating a single event is
+allowed and wanted; what is excluded is fragments that jointly assemble an
+**explanation**. Informative together about what happened: yes. Adding up to a
+why: no.
+
+*Nor does it override DR-20260919-MAP-PAYOFF's allowance that a destination may
+resolve its local mystery "clearly or ambiguously".* The constraint is on the
+**trail fragments**. A destination may still deliver a clear local payoff while
+the central question stays open — the same shape as the opening pair.
+
+**3. An unfunded destination stays inert vanilla.** Until a destination has
+authored evidence at it, its map does nothing and the mod says nothing: a trail
+that ends in nothing is worse than no trail, because the player walked on a
+promise. This is DR-20260919-COVERAGE-HONESTY made load-bearing rather than a
+footnote, and it is why the one-town pilot approach matters. Vanilla map
+functionality stays intact throughout.
+
+### Consistency with existing decisions
+
+- **DR-20260919-MEDIA-SEPARATION** — already states that naturally discovered
+  media support *subsequent* mysteries while our own clues establish the
+  personal opening. Q33 is the implementation of that, not a change to it. The
+  opening remains independent of any printed item.
+- **DR-20260919-MAP-PAYOFF** — Q33 satisfies "every discovered annotated map
+  generates a mystery" and "a meaningful local payoff must coexist with
+  relevance to the central search". It also respects "extra intermediate trips
+  are not universally required": the local trail requires **no travel at all**,
+  because it appears where the player is.
+- **DR-20260919-MAP-DESTINATION** — reaffirmed. A map is honoured by where its
+  marks point, wherever it was found.
+- **DR-20260919-Q15** — reaffirmed: "finding an annotated map gives purpose".
+
+### Scope
+
+**Annotated maps only.** Flyers and brochures are not included by this answer;
+DR-20260919-MAP-PAYOFF already records that universal flyer/brochure coverage is
+unconfirmed. The catalogued inventory (125 annotated maps, 594 marks resolved to
+coordinates, in `docs/research/vanilla-print-2026-09-19/`) is the asset this
+mechanism spends.
+
+### Open, and needing owner rulings
+
+1. **Trigger** — reading, acquiring, or the marks appearing. Assistant's
+   recommendation: **reading**, because acquiring is a lucky drop and reading is
+   a choice. Settles part of MAP-PAYOFF's open "seen/read/recorded" item.
+2. **Trail anchoring** — one placement near where the map was read, or a rolling
+   thread that follows the player as they move. "Sporadically" suggests rolling;
+   rolling is better and harder.
+3. **Duplicates** — the same map type found twice.
+4. **A destination already visited** before the map was read.
+5. **Sequencing against DR-20260919-Q31.** Q31 orders the work personal opening
+   → survival connection → loop improvements, and the map mechanism currently
+   sits behind both. The assistant's view: this **is** the survival connection —
+   a multi-day journey to a marked building is what that slot was reaching for —
+   and it is also the largest researched-but-unused asset in the project. **Not
+   reordered here.** Q31 stands until the owner says otherwise.
+
+**Caution on readiness, not on the design:** the mechanism depends on clue
+placement being reliable over time, and Phase A's placement mismatch is still
+unreproduced. A trail of several clues laid over a week of play is exactly where
+that fault would hurt most.
+
+
 ## Open question — essential-evidence recovery, 2026-09-19 (overnight)
 
 **Q: when a case loses evidence its conclusion rests on, should it retire at
