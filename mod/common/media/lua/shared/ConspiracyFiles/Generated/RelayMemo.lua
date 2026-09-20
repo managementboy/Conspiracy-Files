@@ -27,11 +27,11 @@ M.KIND="memo"
 M.TITLE="Access memo / 7C-41"
 
 local FOUND="WHAT YOU FOUND\n"
-    .."A typed memo on company letterhead, folded twice. Nothing else filed with it has anything to do with it."
+    .."A typed memo on company letterhead, folded twice. It stands on its own; nothing filed with it identifies another record."
 local MEANING="WHAT IT MIGHT MEAN\n"
     .."It could be routine: a telephone contractor telling the police about maintenance, so that nobody reports a technician working late.\n"
     .."It could be an arrangement: nine days in which the police were told in advance what not to write down.\n"
-    .."The memo does not say which, and it names nothing else you have found."
+    .."The memo does not settle which reading fits, and its dates do not make another record part of this job."
 
 M.NOTE="DATE NOTE\n"
     .."Dated inside the nine days the relay memo covers, 30 June to 8 July 1993. That may be coincidence."

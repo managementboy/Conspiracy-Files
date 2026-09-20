@@ -18,6 +18,7 @@ local function values(binding,seed)
 end
 local function expand(text,v) return (text:gsub("{([%w_]+)}",function(k) return assert(v[k],"unknown map story field "..k) end)) end
 local function same(a,b) return a.title==b.title and a.body==b.body and a.kind==b.kind and a.premise==b.premise end
+local function contains(values,value) for _,item in ipairs(values) do if item==value then return true end end return false end
 local expectedSet={};for _,id in ipairs(expected) do expectedSet[id]=true end
 assert(Content.REVISION==2 and State.SCHEMA==2,"map content/state revisions must advance together")
 assert(#C.list==125 and #C.printList==133 and #Content.families==17)
@@ -98,3 +99,17 @@ for seed=1,16 do
     assert(scared.id==blank.id,"theme matching must not use a substring of 'scared'")
 end
 print("PASS map content: 125 real bindings and all 17 authored families render; findings use actual source subsets")
+
+local track=Content.scenario(C.get("IrvingtonStashMap1"),17)
+assert(track.id=="repairs" and track.grounding:find("IrvingtonStashMap1",1,true))
+local lap=Pages.text(Content.render(C.get("IrvingtonStashMap1"),17,1).body)
+assert(lap:find("Cossette: 56.34",1,true) and lap:find("Dart: 1 minute 14.55",1,true))
+local fullKnown={[1]=true,[2]=true,[3]=true,[4]=true}
+local shared=C.get("MulStashMap11")
+assert(Content.sharedFinding(shared,fullKnown,fullKnown))
+for missing=1,4 do
+    local partial={};for part=1,4 do partial[part]=part~=missing end
+    assert(Content.sharedFinding(shared,partial,fullKnown)==nil)
+    assert(Content.sharedFinding(shared,fullKnown,partial)==nil)
+end
+assert(Content.sharedFinding(C.get("MulStashMap16"),fullKnown,fullKnown)==nil,"one journal finding for a shared pair")

@@ -130,11 +130,9 @@ local function describe(f, labelFor)
            and not label:find("[%c]") then place = label end
     end
     local opening = place
-        and ("A key I found among a body's belongings opens " .. place .. ".")
-        or "A key I found among a body's belongings opens a building I have been to."
-    return opening ..
-        " This suggests a possible connection between that body and the building;" ..
-        " it does not establish who the body was, that they lived there, or that they owned it."
+        and ("I found a key among the body's belongings that matches " .. place .. ".")
+        or "I found a key among the body's belongings that matches a building I have visited."
+    return opening .. " The key connects those observations; the person behind the belongings is still unknown."
 end
 function M.rows(root, labelFor)
     if not M.validate(root) then return {} end

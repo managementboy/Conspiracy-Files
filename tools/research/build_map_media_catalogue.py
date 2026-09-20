@@ -27,5 +27,5 @@ for r in maps:
   label='Art Gallery of Louisville'; rooms=['police','policestorage','office','postoffice']; containers=['desk','filingcabinet','counter']
  b='{id=%s,label=%s,targets={{x=%d,y=%d}},localRooms=%s,localContainers=%s,destinationContainers=%s,destinationContainerOrder={"desk","filingcabinet","counter","crate","dresser","locker"},printIds={%s},sourceText=%s,anchorSource=%s,relatedDestination=%s,reviewStatus="source candidate; native validation pending"}'%(q(i),q(label),x,y,st(rooms),st(containers),st(['desk','filingcabinet','counter','crate','dresser','locker']),','.join(q(v) for v in overlap),q(r.get('text') or ''),q(source),'true' if i=='EkronStashMap6' else 'false')
  L+=['do local b='+b+';list[#list+1]=b.id;bindings[b.id]=b end']
-L+=['M.list=list','M.printList=printList','function M.get(id)return bindings[id] end','function M.print(id)return prints[id] end','return M']
+L+=['local Destinations=require("ConspiracyFiles/MapMediaDestinations")','for _,id in ipairs(list) do Destinations.apply(bindings[id]) end','M.list=list','M.printList=printList','function M.get(id)return bindings[id] end','function M.print(id)return prints[id] end','return M']
 (R/'mod/common/media/lua/shared/ConspiracyFiles/MapMediaCatalogue.lua').write_text('\n'.join(L)+'\n',encoding='utf8')

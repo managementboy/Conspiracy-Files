@@ -177,22 +177,22 @@ function M.rows(root,outfitFor,placeFor)
     detail=detail.." The same one carried: "..table.concat(names,"; ").."."
     if not BEARER[r.fullType] then
      if sameAsBearer(r) then
-      detail=detail.." It carries the same name as the ID it was found with. That ties the two of them together, not either of them to the body."
+      detail=detail.." It carries the same name as the ID beside it. I can link those two records; the body is still unidentified."
      else
-      detail=detail.." A card like this one names somebody else - it says it was carried, not that they met."
+      detail=detail.." It names somebody else. I found the card here, and the connection stops there."
      end
     end
    end
   end
   if r.source=="furniture" then
-   detail=detail.."\n\nSomebody kept this here. That is all it shows: not that they lived here, not that they are nearby, and not that they are the person named on it."
+   detail=detail.."\n\nI found this here. It gives me a named lead, not a resident."
   else
-   detail=detail.."\n\nThe name on "..M.aNoun(r.fullType).." is a lead. It does not establish who owned the container or identify the body."
+   detail=detail.."\n\nThe name on "..M.aNoun(r.fullType).." is my lead. The body remains unidentified."
   end
   if r.token and outfitFor then
    local ok,outfit=pcall(outfitFor,r.token)
    if ok and text(outfit,120) then
-    detail=detail.."\n\nThe body itself wore: "..outfit..". A worn outfit and a name on "..M.noun(r.fullType).." are two separate observations from the same body; this record does not decide which one, if either, describes who the body is."
+    detail=detail.."\n\nThe body itself wore: "..outfit..". I have that observation and the named "..M.noun(r.fullType).."; neither identifies the person by itself."
    end
   end
   -- An address, when the address book knows one. Owner, 2026-09-10: "under

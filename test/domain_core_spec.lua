@@ -196,7 +196,7 @@ test("CF-V01-P10 D5/D6 contradiction is knowledge-bounded and exactly once", fun
         assertEqual(2, #state.snapshot().evidence)
         local rendered = state.renderJournal()
         assertTrue(rendered[#rendered].major)
-        assertTrue(string.find(rendered[#rendered].text, "Both records remain unresolved", 1, true) ~= nil)
+        assertTrue(string.find(rendered[#rendered].text, "I cannot reconcile those records from what I have", 1, true) ~= nil)
     end
 end)
 

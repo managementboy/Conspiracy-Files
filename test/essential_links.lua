@@ -46,7 +46,7 @@ assert(built.story and type(built.essential)=="table" and #built.essential==3,"t
 local byId={}
 for _,d in ipairs(built.documents) do byId[d.id]=d end
 for _,id in ipairs(built.essential) do assert(byId[id],"each essential id is one of the case's own documents: "..id) end
-assert(byId[built.essential[1]].title:lower():find("collection slip",1,true),"the first is the slip")
+assert(byId[built.essential[1]].title:lower():find("collection notice",1,true),"the first is the named collection notice")
 assert(byId[built.essential[2]],"the intervening action is essential")
 assert(byId[built.essential[3]],"the recorded result is essential")
 assert(G.validate(built),"and the case validates with the field")

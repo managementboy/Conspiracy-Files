@@ -40,11 +40,11 @@ Content.thread = {
 -- Authored journal prose belongs with the rest of the content. Placeholders are
 -- resolved deterministically by Renderer and can later become localisation keys.
 Content.journalText = {
-    threadIntroduced = "Dead Air began with %s. Its paperwork points toward %s.",
-    markedInteresting = "Marked interesting: %s. %s",
-    evidenceUpdated = "The red B-37 key I marked earlier matches the relay paperwork. Pike says it came off Rourke's receiver ring and belongs with property record 4471.",
-    locationConfirmed = "Confirmed %s.",
-    contradictionSurfaced = "Pike's shift note says the advance CSS memo was not available when the receiver was taken, although the memo is dated earlier. Both records remain unresolved."
+    threadIntroduced = "I started Dead Air with %s. The paperwork sends me toward %s.",
+    markedInteresting = "I marked %s: %s",
+    evidenceUpdated = "The red B-37 key I marked matches the relay paperwork. Pike's note puts it on Rourke's receiver ring and says it remains with property record 4471.",
+    locationConfirmed = "I confirmed %s.",
+    contradictionSurfaced = "Pike's shift note says the advance CSS memo was not available when the receiver was taken, although the memo is dated earlier. I cannot reconcile those records from what I have."
 }
 
 Content.identities = {

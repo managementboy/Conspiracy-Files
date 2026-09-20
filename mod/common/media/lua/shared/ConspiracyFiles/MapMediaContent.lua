@@ -3,6 +3,7 @@
 -- correspondence, never evidence that the site is the named business premises.
 local Services=require("ConspiracyFiles/MapMediaServiceStories")
 local Civic=require("ConspiracyFiles/MapMediaCivicStories")
+local Places=require("ConspiracyFiles/MapMediaPlaceStories")
 local Story=require("ConspiracyFiles/Generated/Story")
 local Kinds=require("ConspiracyFiles/Generated/EvidenceKinds")
 local M={REVISION=2}
@@ -54,6 +55,7 @@ local themes={
     {words={"fortify","home","stay","safe","shelter"},families={"housing","beds","keys"}},
 }
 local function family(binding,seed)
+    if binding.id=="IrvingtonStashMap1" then return Places.speedway end
     if binding.id=="LouisvilleStashMap15" then return byId.gallery end
     local pool,seen={},{}
     local function include(ids)
@@ -128,5 +130,12 @@ function M.findings(binding,seed,part,known)
         if visible then out[#out+1]=expand(f.findings[i],v) end
     end
     return out
+end
+-- Both complete files must be known before comparing the restaurant's two
+-- independent corrections. Shared geography alone is not a causal finding.
+function M.sharedFinding(binding,known,peerKnown)
+    if binding.id~="MulStashMap11" or binding.sharedPeer~="MulStashMap16" then return nil end
+    for part=1,4 do if not known or not known[part] or not peerKnown or not peerKnown[part] then return nil end end
+    return "I've now got both corrected files kept at this Spiffo's: vouchers counted as meals, and a costume assignment counted as another worker. Two inflated returns, each challenged by its recipient. The restaurant's files explain both totals; they give me neither a food delivery nor a second missing person."
 end
 return M

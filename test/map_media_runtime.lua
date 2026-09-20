@@ -2,7 +2,7 @@
 -- receiver-demanding doubles. This cannot establish native engine ordering.
 package.path="mod/common/media/lua/shared/?.lua;mod/common/media/lua/client/?.lua;"..package.path
 local C=require("ConspiracyFiles/MapMediaCatalogue")
-local id=C.list[1]; local point=C.get(id).targets[1]
+local id="MulStashMap11"; local point=C.get(id).targets[1]
 local function list(items)
     return {size=function(self) assert(self); return #items end,
         get=function(self,i) assert(self); return items[i+1] end}
@@ -16,7 +16,8 @@ local building={getDef=function(self)assert(self);return def end}
 local square,object,container,player
 local sprite={getName=function(self)assert(self);return "furniture_office_01_1" end}
 local insertMode="ok"
-container={getType=function(self)assert(self);return "desk" end,isExplored=function(self)assert(self);return true end,
+local containerKind="desk"
+container={getType=function(self)assert(self);return containerKind end,isExplored=function(self)assert(self);return true end,
     getParent=function(self)assert(self);return object end,getItems=function(self)assert(self);return list(contents) end,
     AddItem=function(self,item)
         assert(self==container)
@@ -57,13 +58,27 @@ package.loaded["ConspiracyFiles/DiscoveryLog"]={record=function(_,_,replacement)
     db[TAG].canonical=replacement;return true
 end}
 local R=require("ConspiracyFiles/MapMediaRuntime")
+local function advanceUntil(predicate)
+    for _=1,30000 do
+        R.tick()
+        if predicate() then return end
+    end
+    error("map adapter did not reach the required state within bounded scheduler work")
+end
+local function payoff(design)
+    local root=db[TAG] and db[TAG].canonical
+    return root and root.trails[design] and root.trails[design].payoff
+end
+
 assert(R.start());assert(R.read(id));local seed=db[TAG].canonical.trails[id].seed
 assert(R.read(id));assert(db[TAG].canonical.trails[id].seed==seed)
-assert(R.injectFault("afterInsert"))
-assert(not pcall(R.offerContainer,container,true))
+assert(R.injectFault("afterInsert",id,4))
+assert(R.offerContainer(container,true))
+assert(#contents==0,"offering a candidate must not bypass diverse selection")
+advanceUntil(function() return R.status().pendingFault==nil end)
 assert(#contents==1 and db[TAG].canonical.trails[id].payoff.state=="intent")
 assert(R.start(),"simulate reload after world insertion but before canonical commit")
-for _=1,40 do R.tick() end
+advanceUntil(function() return payoff(id) and payoff(id).state=="placed" end)
 assert(#contents==1 and db[TAG].canonical.trails[id].payoff.state=="placed","reconcile the actual token without inserting twice")
 assert(not R.offerContainer(container,true));assert(#contents==1)
 local item=contents[1]
@@ -75,17 +90,16 @@ assert(db[TAG].canonical.trails[id].payoff.noted)
 contents={};assert(R.start());assert(not R.offerContainer(container,true));assert(#contents==0,"destroyed noted payoff must not respawn")
 -- A nil insertion return is not success. It leaves a refusal with no clue.
 db={};contents={};insertMode="refuse"
-assert(R.start());assert(R.read(id));assert(not R.offerContainer(container,true))
-assert(#contents==0 and db[TAG].canonical.trails[id].payoff.state=="refused")
+assert(R.start());assert(R.read(id));assert(R.offerContainer(container,true))
+advanceUntil(function() return payoff(id) and payoff(id).state=="refused" end)
+assert(#contents==0 and payoff(id).state=="refused")
 -- An engine exception after insertion can still be proven by the physical token.
 db={};contents={};insertMode="throw-after"
 assert(R.start());assert(R.read(id));assert(R.offerContainer(container,true))
-assert(#contents==1 and db[TAG].canonical.trails[id].payoff.state=="placed")
--- A design with no destination building must not start a trail at all. Eleven
--- of the 125 resolve to nothing in a real game (coverage check, 2026-09-20),
--- and reading one used to invite the survivor to travel somewhere no evidence
--- could ever be waiting. The mock world holds exactly one building, so any
--- design whose target lies outside it has no destination.
+advanceUntil(function() return payoff(id) and payoff(id).state=="placed" end)
+assert(#contents==1 and payoff(id).state=="placed")
+-- An unreviewed building-bound design outside the mock world has no
+-- destination. Reviewed outdoor areas are handled independently below.
 db={};contents={};insertMode="ok"
 assert(R.start())
 for _=1,200 do R.tick(); if R.indexed then break end end
@@ -93,7 +107,7 @@ assert(R.indexed,"indexing must finish before absence means anything")
 local nowhere
 for _,other in ipairs(C.list) do
     local t=C.get(other).targets[1]
-    if t and not (t.x>=def:getX() and t.x<def:getX2() and t.y>=def:getY() and t.y<def:getY2()) then
+    if not C.get(other).areas and t and not (t.x>=def:getX() and t.x<def:getX2() and t.y>=def:getY() and t.y<def:getY2()) then
         nowhere=other; break
     end
 end
@@ -112,42 +126,40 @@ assert(R.start())
 assert(not R.indexed,"a fresh start has not indexed yet")
 assert(R.read(nowhere),"an unindexed world must not be treated as having no destinations")
 
--- TWO DESIGNS, ONE DESTINATION - the step the plan calls the one that proves
--- the product, because a contradiction needs two sources pointing at the same
--- place. No two of the 125 shipped designs share a destination building (all
--- 123 hit buildings are hit by exactly one design; measured in a real game,
--- 2026-09-20), so the CONTENT for this does not exist yet. What can be settled
--- now is whether the MECHANISM is ready for it when it is authored: a building
--- keyed to several designs, each placing its own payoff, neither displacing the
--- other.
+-- The shipped pair follows two real restaurant marks to the same Spiffo's.
+-- This is the production catalogue pair, not a synthetic giant building.
 db={};contents={};insertMode="ok";R.invalidate()
-local second
-for _,other in ipairs(C.list) do if other~=id then second=other; break end end
-assert(second,"the fixture needs a second design")
+local second="MulStashMap16"
 local p2=C.get(second).targets[1]
--- Widen the mock building so both designs' targets fall inside it. This is the
--- shape the authored content would have, not a change to the mod.
-local lowX=math.min(point.x,p2.x); local lowY=math.min(point.y,p2.y)
-local highX=math.max(point.x,p2.x); local highY=math.max(point.y,p2.y)
-def.getX=function() return lowX-1 end
-def.getY=function() return lowY-1 end
-def.getX2=function() return highX+2 end
-def.getY2=function() return highY+2 end
+assert(C.get(id).sharedPeer==second and p2.x==point.x and p2.y==point.y)
 assert(R.start())
-for _=1,200 do R.tick(); if R.indexed then break end end
-assert(R.read(id) and R.read(second),"both designs must start their trails at a shared destination")
--- One offer walks every design, so a single carrier at a shared destination
--- serves both trails in one pass.
-assert(R.offerContainer(container,true),"a shared destination must place for the designs that point at it")
-assert(#contents==2,"both payoffs must exist side by side, got "..#contents)
-assert(not R.offerContainer(container,true),"and a second offer must add nothing further")
-assert(#contents==2,"a repeated offer must not duplicate either payoff, got "..#contents)
-local a=db[TAG].canonical.trails[id].payoff
-local b=db[TAG].canonical.trails[second].payoff
-assert(a.state=="placed" and b.state=="placed","both must record placed: "..tostring(a.state)..","..tostring(b.state))
-assert(contents[1]:getModData().cfMapDesign~=contents[2]:getModData().cfMapDesign,
-    "each payoff must carry its own design identity, not overwrite the other")
+advanceUntil(function() return R.indexed end)
+assert(R.read(id) and R.read(second))
+assert(R.injectFault("afterInsert",second,4))
+assert(R.offerContainer(container,true))
+advanceUntil(function() return R.status().lastFault~=nil end)
+local receipt=R.status().lastFault
+assert(receipt.id==second and receipt.part==4 and receipt.recorded=="intent")
+assert(payoff(id).state=="placed","the first design must not consume another design's interruption")
+assert(#contents==2 and payoff(second).state=="intent")
+advanceUntil(function() return payoff(second).state=="placed" end)
+assert(not R.offerContainer(container,true) and #contents==2)
+assert(contents[1]:getModData().cfMapDesign~=contents[2]:getModData().cfMapDesign)
 
-print("PASS production adapter: duplicate reads, interrupted insertion, refusal, token recovery, discovery refusal and no respawn")
-print("PASS map media: no trail is started toward a design with no destination building, and unknown is not treated as none")
-print("PASS map media: two designs can share one destination, each placing its own payoff (mechanism only - no shipped content pairs them)")
+-- An actual marked outdoor destination can use fixed furniture without a
+-- building. Floors remain excluded; an ordinary drawer is eligible.
+db={};contents={};R.invalidate();containerKind="floor"
+local outside="WorldStashMap3"
+point=C.get(outside).targets[1]
+square.getBuilding=function() return nil end
+getWorld=function() return {getMetaGrid=function() return {getBuildings=function() return list({}) end} end} end
+assert(R.start());advanceUntil(function() return R.indexed end)
+assert(R.coverage(outside).buildings==0 and R.coverage(outside).areas>0)
+assert(R.read(outside),"a reviewed marked area is a destination without a building")
+assert(not R.offerContainer(container,true),"ground is not furniture")
+containerKind="wardrobe"
+assert(R.offerContainer(container,true))
+advanceUntil(function() return payoff(outside) and payoff(outside).state=="placed" end)
+assert(#contents==1 and payoff(outside).target.containerType=="wardrobe")
+assert(db[TAG].canonical.entries[outside]~=nil,"entering the real marked area is recorded")
+print("PASS production adapter: scoped interruption, token recovery, exact shared map pair, outdoor furniture and floor exclusion")

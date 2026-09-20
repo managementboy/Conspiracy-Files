@@ -94,8 +94,7 @@ assert(body:find("put away in a dresser", 1, true), body)
 assert(body:find("Somebody kept this here", 1, true), "a drawer says only that it was kept there")
 -- The disclaimer has to name what it is NOT, because a name in a house reads
 -- as ownership unless the text refuses it out loud.
-assert(body:find("not that they lived here", 1, true), body)
-assert(body:find("not that they are the person named on it", 1, true), body)
+assert(body:find("gives me a named lead, not a resident", 1, true), body)
 -- And a corpse still reads as a corpse: the stronger source must not have been
 -- levelled down to match the weaker one.
 local corpse = {
@@ -156,7 +155,7 @@ assert(cardRow:find("Millicent Autry", 1, true), "and the card row must name the
 -- names its bearer, a business card names somebody else whose card was kept.
 assert(idRow:find("another person's card, kept", 1, true), idRow)
 assert(cardRow:find("names somebody else", 1, true), cardRow)
-assert(cardRow:find("not that they met", 1, true), "carrying a card is not meeting someone")
+assert(cardRow:find("connection stops there", 1, true), "carrying a card is not meeting someone")
 
 -- But a ticket with the SAME name as the ID beside it is the bearer's own, not
 -- "another person's card" (Linux wallet check, 2026-09-11: Linnie Weis's own

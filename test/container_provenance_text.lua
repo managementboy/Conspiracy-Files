@@ -48,7 +48,7 @@ assert(not loose:find("taken off a corpse", 1, true),
 
 -- The refusal survives in every case; that is the point of the whole record.
 for _, text in ipairs({ carried, shelf, loose }) do
-    assert(text:find("does not establish who owned the container or identify the body", 1, true),
+    assert(text:find("The body remains unidentified", 1, true),
         "the refusal to conclude must never be lost")
 end
 

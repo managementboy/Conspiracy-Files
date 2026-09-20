@@ -28,7 +28,7 @@ assert(fact.id~=fact.sourceToken,"the door path is distinguishable from the cata
 local rows=Lead.rows(staged)
 assert(#rows==1,"one lead renders one row")
 local text=(rows[1].detailText or "")..(rows[1].summary or "")..(rows[1].title or "")
-assert(text:find("does not establish",1,true),"the row must state its own limits")
+assert(text:find("person behind the belongings is still unknown",1,true),"the row keeps the identity unresolved")
 -- Naive word blacklists fail here: the cautious sentence legitimately
 -- contains "owned" inside "does not establish ... that they owned it".
 -- Test the claim being made, not the vocabulary.

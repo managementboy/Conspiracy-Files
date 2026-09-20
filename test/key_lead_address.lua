@@ -59,7 +59,7 @@ end
 
 -- The refusal to conclude survives every path; it is the point of the record.
 for _, text in ipairs({ named, unknown, none, threw }) do
-    assert(text:find("does not establish who the body was", 1, true),
+    assert(text:find("person behind the belongings is still unknown", 1, true),
         "the refusal to conclude must never be lost")
 end
 

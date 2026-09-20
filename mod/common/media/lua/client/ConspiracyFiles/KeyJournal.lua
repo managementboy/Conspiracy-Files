@@ -55,10 +55,9 @@ function J.rows()
                 ordinal=#result+1,
                 title="Possible connection: "..connection.name,
                 summary="Interpretation - key and building",
-                detailText="A key observed with a document naming "..connection.name..
-                    " matches the building where I found "..(titles[connection.clueId] or "the earlier clue")..
-                    ". This suggests a connection between those belongings and that place. "..
-                    "It does not establish who lived there or wrote the clue.",
+                detailText="I found a key with a document naming "..connection.name..
+                    ", and it matches the building where I found "..(titles[connection.clueId] or "the earlier clue")..
+                    ". That connects the named document, key and place; who left them there remains open.",
             }
         end
         return result

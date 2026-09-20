@@ -86,7 +86,7 @@ assert(overflow and not addedOverflow and overflowWhy=="lead capacity exceeded")
 local rows=Lead.rows(staged)
 assert(#rows==1)
 local text=rows[1].title.." "..rows[1].summary.." "..rows[1].detailText
-assert(text:find("does not establish who the body was, that they lived there, or that they owned it",1,true))
+assert(text:find("person behind the belongings is still unknown",1,true))
 for _,forbidden in ipairs({"was the body","identified as","they lived at","they owned the building"}) do
     assert(not text:find(forbidden,1,true),"row text must not assert identity or residence: "..forbidden)
 end

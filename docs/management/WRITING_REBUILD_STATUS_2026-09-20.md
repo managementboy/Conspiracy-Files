@@ -1,5 +1,7 @@
 # Writing rebuild: scope, ownership and progress
 
+**Latest restart checkpoint:** [RESTART_CHECKPOINT_2026-09-20.md](RESTART_CHECKPOINT_2026-09-20.md). Read it first; the sections below include historical intermediate states. Work remains unvalidated and the final Linux handoff is not yet ready.
+
 Owner objective: audit all writing before passage edits; give every mystery an event; make evidence reveal different parts; separate document and survivor voice; vary coherent scenarios; establish one complete example and apply the standard everywhere. Claude continues repairing/building/testing the earlier code. Do not collide with that work.
 
 ## Workspace and integration agreement

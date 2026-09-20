@@ -1,5 +1,6 @@
 -- Fresh-save map trails. Engine-free, copy-on-write, no case-slot dependency.
 local V=require("ConspiracyFiles/Validator")
+local Choices=require("ConspiracyFiles/Generated/StorageChoices")
 local M={SCHEMA=2}
 local function integer(n,lo,hi)
     return type(n)=="number" and n==n and n%1==0 and n>=lo and n<=hi
@@ -23,7 +24,7 @@ local states={intent=true,placed=true,unknown=true,refused=true,noted=true}
 function M.validTarget(t)
     return fields(t,targetFields) and integer(t.x,0,100000) and integer(t.y,0,100000)
         and integer(t.z,-32,32) and integer(t.objectIndex,0,255) and integer(t.containerIndex,0,31)
-        and text(t.sprite,160) and text(t.containerType,80)
+        and text(t.sprite,160) and Choices.fixedKind(t.containerType)
 end
 local function placement(p)
     return fields(p,placementFields) and (M.validTarget(p.target) or (p.state=="noted" and p.target==nil)) and states[p.state]

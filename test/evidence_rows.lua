@@ -54,7 +54,7 @@ local paper=Rows.build("evidence",runtimeWith({
 assert(paper[1].cfCarrier=="Dispatch document",paper[1].cfCarrier)
 assert(paper[1].summary=="Dispatch document - Discovery 1",paper[1].summary)
 
--- A link to a document NOT yet found is a question, never a waypoint. Owner,
+-- Hidden links must never leak an unseen title into a known-only projection.
 -- 2026-09-11: not "refers to a second list you have not found" but "probably
 -- refers to another list?" - a question can be wrong, which is what keeps it
 -- from being a to-do item.
@@ -63,21 +63,8 @@ local wondering=Rows.build("evidence",runtimeWith({
      unseen={{title="Second stock list / PS-289"}}},
 }))
 local detail=wondering[1].detailText
-assert(detail:find("Probably refers to ",1,true),"the survivor must wonder: "..detail)
-assert(detail:sub(-1)=="?","and wonder as a question: "..detail)
--- "another stock list", because this row IS a stock list - not "a stock list".
-assert(detail:find("another stock list?",1,true),
-    "a second one of the same kind reads as 'another': "..detail)
--- Only the unfound document's title may travel, never its text.
-assert(not detail:find("PS%-289"),"the unfound document's own id must not travel: "..detail)
-
--- A different kind of unfound document takes an article, and the right one.
-local article=Rows.build("evidence",runtimeWith({
-    {id="d1",title="Dispatch copy / R-482",body="in a desk",kind="dispatch",
-     unseen={{title="Employee roster"}}},
-}))
-assert(article[1].detailText:find("Probably refers to an employee roster?",1,true),
-    "a vowel takes 'an': "..article[1].detailText)
+assert(not detail:find("Second stock list",1,true) and not detail:find("PS%-289"),
+    "a hidden link cannot leak its title or reference: "..detail)
 
 -- A link to a document that HAS been found is a statement, not a question.
 local connected=Rows.build("evidence",runtimeWith({
@@ -188,10 +175,11 @@ print("PASS evidence rows: a case's numbered sites are written as addresses and 
 
 -- Retirement retains the same geographic context, without a live case envelope.
 store={root={locations=case.locations,reference="R-482"}}
-ConspiracyFiles.AddressMap.describe=function(text,c)
+ModData={get=function(key) return key=="ConspiracyFiles.Generated.G2" and store or nil end}
+ConspiracyFiles.AddressMap={describe=function(text,c)
     assert(c.locations==case.locations and c.facts.code=="R-482")
     return (text:gsub("HOUSE A","201 N Carl St"))
-end
+end}
 PlaceNames.render=function(text,c)
     assert(c.locations==case.locations)
     return (text:gsub("HOUSE B","the receiving building near B Road"))
