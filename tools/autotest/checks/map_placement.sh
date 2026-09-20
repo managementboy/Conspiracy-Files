@@ -120,6 +120,6 @@ report="$EVIDENCE/$id-map-placement.txt"
         for i in "${inconclusive[@]}"; do echo "  $i"; done
     fi
     for f in "${fails[@]}"; do echo "FAIL: $f"; done
-} > "$report"
+} > "$report.part"; mv "$report.part" "$report"
 cat "$report"
 [ "$verdict" = PASS ]

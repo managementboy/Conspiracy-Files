@@ -79,6 +79,20 @@ local function indexStep()
 end
 function R.read(id,item)
     if not allowed() or not Catalogue.get(id) then return false end
+    -- Never issue a lead toward a place that does not exist. Eleven of the 125
+    -- designs resolve to no building at all (coverage check, 2026-09-20): nine
+    -- are countryside stashes - a fuel stop, a railyard - which are not
+    -- buildings, and one is not a place at all, its annotation being a pair of
+    -- lap times. Reading one used to start a trail regardless, inviting the
+    -- survivor to travel somewhere no evidence could ever be waiting.
+    --
+    -- Only refuse when we KNOW. Before indexing finishes, no destination means
+    -- not looked yet, and the whole subsystem turns on absence never being
+    -- inferred from incomplete coverage.
+    if R.indexed and not destinations[id] then
+        log("no destination building for "..tostring(id).."; no trail started")
+        return false
+    end
     local next,changed=State.activate(root(),id,ZombRand(2147483646)+1,hours(),Catalogue)
     if not changed then return true end
     if not save(next) then return false end

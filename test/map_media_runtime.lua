@@ -81,4 +81,36 @@ assert(#contents==0 and db[TAG].canonical.trails[id].payoff.state=="refused")
 db={};contents={};insertMode="throw-after"
 assert(R.start());assert(R.read(id));assert(R.offerContainer(container,true))
 assert(#contents==1 and db[TAG].canonical.trails[id].payoff.state=="placed")
+-- A design with no destination building must not start a trail at all. Eleven
+-- of the 125 resolve to nothing in a real game (coverage check, 2026-09-20),
+-- and reading one used to invite the survivor to travel somewhere no evidence
+-- could ever be waiting. The mock world holds exactly one building, so any
+-- design whose target lies outside it has no destination.
+db={};contents={};insertMode="ok"
+assert(R.start())
+for _=1,200 do R.tick(); if R.indexed then break end end
+assert(R.indexed,"indexing must finish before absence means anything")
+local nowhere
+for _,other in ipairs(C.list) do
+    local t=C.get(other).targets[1]
+    if t and not (t.x>=def:getX() and t.x<def:getX2() and t.y>=def:getY() and t.y<def:getY2()) then
+        nowhere=other; break
+    end
+end
+assert(nowhere,"the fixture needs a design outside the mock building")
+assert(not R.read(nowhere),"a design with no destination must refuse the read")
+assert(db[TAG]==nil or db[TAG].canonical==nil or db[TAG].canonical.trails[nowhere]==nil,
+    "and must leave no trail behind")
+-- The design that DOES have a destination still reads, so the gate refuses the
+-- unreachable rather than everything.
+assert(R.read(id),"a design with a real destination must still start its trail")
+
+-- Before indexing finishes, absence is unknown, not empty: the gate must not
+-- refuse simply because the search has not run yet.
+db={};contents={};R.invalidate()
+assert(R.start())
+assert(not R.indexed,"a fresh start has not indexed yet")
+assert(R.read(nowhere),"an unindexed world must not be treated as having no destinations")
+
 print("PASS production adapter: duplicate reads, interrupted insertion, refusal, token recovery, discovery refusal and no respawn")
+print("PASS map media: no trail is started toward a design with no destination building, and unknown is not treated as none")
