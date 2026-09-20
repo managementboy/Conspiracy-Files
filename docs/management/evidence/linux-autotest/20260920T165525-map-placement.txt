@@ -1,0 +1,34 @@
+Linux map placement, DELIBERATE FAILURE INJECTION 20260920T165525
+NOT a run of the shipped build. Read the next paragraph before citing this.
+
+The mod was modified on purpose for this run: the line that inserts the item
+into the container was replaced so that insertion never happens and reports
+nothing inserted. The verdict logic that decides what gets RECORDED was left
+exactly as it ships. The mod was restored byte-for-byte afterwards and the
+normal run re-done (see the PASS report from 20260920T161708).
+
+WHY: every interruption tested until now still ended in a successful placement,
+because reconciliation recovered it. The branch where insertion genuinely fails
+- where the mod must record uncertainty rather than success - had never run in
+the real game, only against test doubles.
+
+WHAT THE MOD DID, with insertion genuinely failing:
+  clean run          recorded "refused"   items 0
+  interrupted after insert   recorded "intent"    items 0
+  interrupted before commit  recorded "intent"    items 0
+  interrupted after commit   recorded "refused"   items 0
+
+  Not once did it record "placed". The honest states survived a save and reload
+  unchanged.
+
+WHAT THIS ESTABLISHES:
+  When insertion really fails, the mod says so. "refused" where it knows nothing
+  was inserted, "intent" where it was interrupted before it could find out, and
+  never a claim that a clue is waiting somewhere it is not. This is the last of
+  the placement integrity questions and it now has a real-game answer rather
+  than a mocked one.
+
+WHAT IT DOES NOT ESTABLISH:
+  The failure was injected by editing the mod, not produced by a real refusing
+  container (a full carrier, a destroyed one, an engine refusal). The verdict
+  logic was exercised honestly; the CAUSE was synthetic.
