@@ -1,12 +1,92 @@
 # Plan: vanilla printed media as the travel mechanism
 
-**Status: planning only. No development. Written for a second opinion.**
+**Status: planning only. No development. Revision 2, after external review.**
 
-Reviewer: this is a plan to attack, not to approve. The questions I most want
-challenged are at the end. Everything cited as measured has a command or an
-archived log behind it; everything unverified is marked as such.
+Revision 1 was reviewed (`MAP_MECHANISM_REVIEW_2026-09-20.md`). The verdict:
+*"proceed with a bounded diagnostic spike, but revise the capacity model and
+pilot before production implementation. The current plan recognises several
+problems without making their resolution an effective gate."*
 
----
+That last clause is the accurate criticism and the main structural change here:
+revision 1 **listed** risks and then planned past them. Gates are now gates.
+
+## 0. What this revision corrects
+
+Three factual errors, all verified against the current revision rather than
+conceded on argument.
+
+**0.1 The capacity model was wrong by 177 kB, and the ceiling is a quarter of
+what I claimed.** Revision 1 compared an event *count* against the ledger's
+512-entry cap while ignoring that those events cost bytes in the *same* 500 kB
+budget as the campaign store. Measured constants, recomputed:
+
+| | |
+|---|---|
+| 16-case campaign (measured, `test/case_archive.lua`) | 338,540 bytes |
+| reserved for every other stored root | 73,000 bytes |
+| budget (P4-R17) | 500,000 bytes |
+| **bytes available to the discovery ledger** | **88,460** |
+| **events that affords at ~545 bytes each** | **162** |
+| already consumed by 16 ordinary cases at 7 documents | 112 |
+| **events left for trails, identity and connections** | **50** |
+
+So the 512-entry cap never binds — **bytes bind at 162** — and revision 1's
+"~487 events, it fits, barely" was over budget by 176,955 bytes. The reviewer's
+independent arithmetic reached the same conclusion from the same documented
+baseline.
+
+The reviewer also correctly notes two omissions: revision 1 counted no
+**destination payoff** (125 destinations at one recorded piece each is +125), and
+no **identity or connection discoveries**, which share the same ledger
+(`DiscoveryLedger` `KINDS`).
+
+**Consequence, and it is a product consequence rather than a technical one:**
+"no maximum of concurrent maps" (`DR-20260920-Q33`) is affordable only if a
+trail fragment is *cheap*. At 50 events a save, three-fragment trails allow
+about **sixteen trails in an entire playthrough**. Four levers exist and none is
+chosen here:
+
+1. trail fragments are **not** discovery-ledger entries but a lighter record;
+2. fewer ordinary cases while trails are live;
+3. shorter trails (one or two fragments);
+4. a smaller campaign store.
+
+Lever 1 is the obvious candidate and the one to cost first. **I do not know what
+a trail fragment costs, because one does not exist** — 545 bytes is the measured
+cost of a *ledger* entry, not of a trail.
+
+**0.2 The pilot pairing was asserted, not sourced.** Revision 1 called
+**Circuital Healing** "the obvious first choice" for a destination with both a
+map and a flyer. The research establishes it only as a **flyer** destination
+(radio/electronics repair, 8B Hutchin's Drive, Ekron, rectangle
+424,9776–471,9807) and separately *proposes* the relay-fault map as a later
+technical destination. **No annotated map is bound to Circuital Healing by any
+source.** I turned a proposed fictional connection into an existing vanilla
+binding, which is the error the research warns about in its own text.
+
+The reviewer's alternative **is** source-supported: `LouisvilleStashMap15`'s
+Target mark at **12546,1393** falls inside the gallery brochure rectangle
+**12510,1360–12579,1429** — a genuine same-place map-and-brochure pair. Its
+warning travels with it: the annotation target differs from the stash building
+anchor at **12619,1406**, and using `buildingX/buildingY` blindly would
+misidentify the gallery. Travel distance may still make another verified pair
+preferable; a short repeatable route is a fixture convenience, not evidence that
+a binding exists.
+
+**Also corrected:** revision 1 implied every supported map needs a matching
+flyer. It does not. The flyer is an **optional identification aid**.
+
+**0.3 Ruling 4 cannot reuse the visited-buildings store unchanged.**
+`VisitedBuildings` is `MAX=256`, and at capacity `V.record` returns
+`changed=false` with the reason `"visited-buildings capacity exceeded"` — which
+`VisitedBuildingLog.record` **discards**, returning a bare `false`. So after 256
+entered buildings, visits stop being recorded, nothing says why, and every
+destination reads as unvisited for the rest of the save.
+
+Revision 1 said "no new tracking is needed" for the entered-buildings ruling.
+That was wrong. The ruling stands; its **storage does not**. Destination-entry
+state needs its own durable representation, and the capacity failure needs to be
+surfaced rather than swallowed.
 
 ## 1. The mechanism, in short
 
@@ -119,13 +199,11 @@ Measured, with the command that measures them.
 Also fixed: offline only, no runtime AI, reuse the game's own mechanics rather
 than inventing systems, Build 42.20 single-player vanilla map.
 
-**Two storage consequences, unresolved:**
-- A map trail must **not** consume one of the four active case slots, or reading
-  a second map would block every later case.
-- Trail length is a **storage** decision as much as a pacing one. Illustrative
-  arithmetic only: 125 destinations at ~3 trail clues plus 16 ordinary cases at
-  7 documents is ~487 of the ledger's 512. It fits, barely, and the **ledger is
-  what bites first** — not any case cap.
+**Storage consequences — see §0.1 for the corrected model.** In short: bytes
+bind at **162 ledger events**, of which 16 ordinary cases already take 112,
+leaving **50**. A map trail must also not consume one of the four active case
+slots, or reading a second map would block every later case — but bypassing the
+slots solves neither ledger capacity nor total bytes.
 
 ## 6. The foundational unknown, before anything else
 
@@ -149,122 +227,221 @@ to lay a trail *before* the journey.
 
 **Therefore no content work begins until this is settled in a real game.**
 
-## 7. The plan
+## 7. The trail lifecycle contract
 
-Five phases. Each ends with something verified, and each is separately
-abandonable if it fails.
+Revision 1 said "the trail follows the player" and left every mechanical
+question inside those four words. Resolved here, because the plan cannot be
+costed without it.
 
-### Phase 0 — engine verification (no content, no writing)
+**What "follows" means: lazy placement of the NEXT unplaced fragment near the
+player.** Not moving an already-placed, undiscovered object. This is the
+reviewer's suggestion and it is better than what revision 1 implied: it needs no
+relocation machinery, it cannot orphan a physical item, and it satisfies the
+owner's intent — the player leaves the reading place immediately and still meets
+relevant material during ordinary survival.
 
-Answer, in a running Build 42.20 game on Linux:
+The remaining distinctions, each settled:
 
-1. **Read detection.** Is there an existing event or UI path that tells us a
-   specific printed item was read? If not, what is the narrowest cooperative
-   wrapper that preserves return values and callback order for other mods?
-2. **Stash lifecycle.** What is the real order of map creation, reading,
-   reveal-on-map, first building load, first container opening? Where is it safe
-   to insert our evidence? Existing tickets S1/S2 cover this.
-3. **Destination carriers.** Do the marked destinations actually contain
-   containers we can reach, per destination, verified rather than assumed?
-4. **Read/seen/recorded distinction.** Can we tell these apart at all?
+| question | contract |
+|---|---|
+| next fragment, or move an existing one? | **place the next unplaced fragment** near the player; never move a placed one |
+| old fragments | **stay where they are.** Never withdrawn — a clue that vanishes is a clue that was never findable |
+| eligible carriers | unsearched, reachable containers only; never a container the player has already searched |
+| trail vs destination | trail fragments are placed lazily; **destination evidence is anchored to its authored place and never moves** |
+| pacing | a **global** work and discovery budget, not one rate per map. Trails take turns; no trail may starve |
+| arrival vs payoff | **entering the building is arrival; finding and noting the evidence is the payoff.** Two separate events |
 
-**Output:** a verified hook or a documented fallback, per `P4-R78` (a settled
-fact cites a re-runnable command or an archived log).
-**If it fails:** ruling 1 returns to the owner. Do not proceed on a guess.
+**Duplicates need technical semantics, which the owner's ruling deliberately does
+not supply.** The ruling is about the player's experience — leave it to luck, let
+them wonder. These four are engineering questions and all resolve the same way:
 
-### Phase 1 — one destination, end to end
+- **rereading the same copy** — no new trail
+- **reading a second copy** — no new trail (one trail per destination)
+- **a repeated engine callback** — idempotent; the hook may fire more than once
+- **a reload** — no new trail
 
-The smallest complete instance, to prove the shape before it scales.
+The owner's tolerance for *physical* duplicate paper is preserved exactly: two
+copies may exist, and nothing explains why.
 
-Pick **one** destination that has all of: an annotated map pointing at it, a
-flyer or brochure identifying it, verified reachable containers, and a short
-enough trip to test repeatedly. The research's **Circuital Healing** candidate
-(electronics repair, 8B Hutchin's Drive, Ekron, rectangle 424,9776–471,9807) is
-the obvious first choice because it also exercises the skill layer — with the
-research's own caveat that Ekron-to-Muldraugh is a substantial journey.
+**"No maximum" does not mean unlimited work.** It means no designed cap on
+concurrent maps. It does not license one spawn rate per map, unbounded work per
+tick, or unbounded storage (§0.1).
 
-Build: read detection → a small trail placed near the player → authored evidence
-at the destination → **one** skill-specific observation of it, with the
-non-specialist reading as the default.
+## 8. Arrival and payoff contracts
 
-**Verified by:** a real save, played — find the map, read it, find trail clues,
-travel, find the destination evidence, save and reload. Not a mocked runtime.
+Also unspecified in revision 1, and each is a real boundary.
 
-### Phase 2 — the trail follows the player
+- **Multi-building and multi-mark destinations** — which building counts is an
+  **authored choice per destination**, recorded with the destination, not derived
+  at runtime.
+- **Outdoor and no-building destinations** break the entered-buildings ruling
+  outright. Each needs an **explicit authored disposition**. Never invent a
+  nearby building to satisfy the rule.
+- **The map read inside its own target** — defined per destination alongside the
+  above.
+- **Destination-entry state needs its own durable store** (§0.3). Not
+  `VisitedBuildings`, which is `MAX=256` and swallows its capacity failure. The
+  new store must surface capacity rather than silently stopping.
+- **The destination may not be in the state we assume**: previously looted or
+  destroyed carriers, an unloaded area, arrival before the vanilla stash has
+  prepared. Each needs a defined behaviour, and **vanilla contents and effects
+  are preserved** in all of them.
+- **Both orders must work**: read-then-visit, and visit-then-read.
+- **An emitted travel invitation must be honoured or narrowed.** The open
+  recovery question (§11) is material here, not adjacent: retiring an
+  unavailable payoff as "incomplete" frees a case slot but does **not** fulfil an
+  invitation the player already acted on by walking. Either recovery exists, or
+  the invitation is narrowed before those trails are ever activated.
 
-The one genuinely new mechanism. Placement currently anchors to where the
-survivor was when a case was created; a rolling trail must re-target as they
-move.
+## 9. The plan
 
-Also settles the two storage consequences in §5: the trail must not occupy an
-active case slot, and its length must be chosen against the ledger.
+Six stages. **Two are gates**: nothing downstream of them begins until they
+pass. Revision 1's failure was having no gate at all.
 
-**Verified by:** a controlled-clock run — read a map, relocate several hundred
-tiles, confirm the trail follows and that no case slot was consumed.
+### Phase 0 — read-hook spike (gate)
+
+**Define "read" operationally first:** something the engine can report — an
+action completing, a UI transition — never whether a human understood the text.
+Then establish, in a running Build 42.20 game:
+
+1. an observable, cooperative read path, or the narrowest wrapper that preserves
+   return values and callback order for other mods. **No guessed
+   `OnReadMedia`.**
+2. behaviour under **acquisition, a cancelled opening, map reveal, rereading and
+   reload** against that definition.
+3. the real ordering of map creation, reading, reveal-on-map, first building
+   load and first container opening — **not assumed equivalent** (tickets
+   S1/S2).
+4. carrier reachability **for representative candidates and the pilot only**.
+   Per-destination verification for all 125 belongs to coverage rollout;
+   revision 1's Phase 0 quietly contained most of the project.
+
+**Exit:** a verified hook or a documented fallback, citing a re-runnable command
+or archived log (`P4-R78`). **Failure returns ruling 1 to the owner.** An
+unverified hook must not be dressed as a documented assumption and built upon.
+
+**Runs in parallel, needing no hook:** the corrected capacity model and trail-cost
+measurement (§0.1 lever 1), one sample narrative, source bindings for the pilot,
+and the acceptance matrix.
+
+### Gate A — the placement fault
+
+A clue the record calls `placed` that is not in its container: three of nine
+overnight runs, **never reproduced**. Two controlled-clock runs could not trigger
+it because relocation proved near-unreachable — which is **unresolved evidence,
+not evidence of safety**, and does not establish relocation as the cause.
+
+Instrument the transitions so a failure distinguishes: insertion failure, wrong
+container or identity lookup, player removal, relocation, world cleanup, and
+save/reload divergence. Verify the same logical clue against the same physical
+target before and after an actual **successful** relocation and reload. A refused
+relocation or unreadable target yields **inconclusive — never a pass**.
+
+**Exit:** a corrected cause, or a demonstrated placement path that avoids the
+identified mechanism, with regression evidence. **A number of clean runs is not
+an exit.**
+
+**What this gates:** production rolling placement. Read-hook work (Phase 0) is
+independent and proceeds regardless.
+
+### Phase 1 — trail-state contract, then one destination
+
+The contract and a **budget fixture** come first, before any persistence work —
+deferring them risks building Phase 1 on the case structure the plan already
+knows it cannot use.
+
+Then the smallest complete instance: **`LouisvilleStashMap15` + the gallery
+brochure** (§0.2), subject to carrier verification, using the annotation target
+rather than the building anchor. Read detection → lazily placed trail → authored
+evidence at the destination → one skill-specific observation with the
+non-specialist reading as default.
+
+**Verified by:** a fresh save, played through, then a current-build reload.
+
+### Phase 1b — two trails (gate on coexistence)
+
+One destination proves the physical loop. It **cannot** prove coexistence or
+contradictory records — and contradiction is the stated product
+(`DR-20260920-NO-CONCLUSION`), so this is not optional polish.
+
+A small two-trail fixture: both remain eligible, neither consumes a case slot,
+their claims stay attributable to their own sources, and **the organiser does
+not arbitrate a winner**. Two *complete production* destinations are not needed —
+a fixture is.
+
+### Phase 2 — pacing and the global budget
+
+The global work and discovery budget from §7, measured against §0.1. Several
+maps live together before any town is authored.
 
 ### Phase 3 — one town funded
 
-Every annotated map **whose marks point into the pilot town** gets authored
-evidence at its destination, wherever the map itself was found
-(`DR-20260919-MAP-DESTINATION`). Every other destination stays inert vanilla and
-the mod says nothing about it. Coverage stated in release notes.
-
-**Output:** the real cost of funding one town, so the remaining towns can be
-priced instead of guessed.
+Every map whose marks point into the pilot town gets authored evidence, wherever
+the map was found. Everything else stays inert vanilla and silent. Coverage in
+release notes. **Output:** the real cost of one town, so the rest can be priced.
 
 ### Phase 4 — bulk
 
-Fragment and premise authoring at volume, which is where `NO-CONCLUSION`'s
-variety requirement is actually met.
+**The blocker revision 1 invented is removed.** Bulk does not need an automated
+measure of interestingness. It needs a **compact editorial inventory** recording,
+per premise: document form, central question, the ambiguity, the contradiction
+mechanism, and the destination observation. Similarity checks flag repetition;
+**human comparison decides whether the differences matter.** Trialled on a small
+batch before volume.
 
-**Blocked on a tool that does not exist:** the consistency harness makes bulk
-*safe* — it catches impossible dates, branch leakage, asserted conclusions — but
-it **cannot measure whether a premise is interesting or whether it rhymes with
-three others.** Nothing in the project measures distinctness. At premise 150
-that is expensive to discover; at premise 25 it is cheap to build.
+The consistency harness stays a necessary mechanical check and is not proof of
+quality. What "detects asserted conclusions" actually covers should be written
+down rather than trusted, and editorial review is retained.
 
-## 8. Risks, in the order I would worry about them
+## 10. Acceptance matrix
 
-1. **Read detection may not exist cleanly** (§6). Blocks everything; Phase 0 is
-   entirely about this.
-2. **Clue placement has an unexplained fault.** A clue the record calls `placed`
-   that is not in its container, seen in three of nine overnight runs, **never
-   reproduced**. Two controlled-clock runs this week could not trigger it because
-   relocation turned out to be near-unreachable. A trail laid over a week of play
-   is the worst case for a clue that goes missing.
-3. **No distinctness measure** (§7 Phase 4).
-4. **The discovery ledger is the real ceiling**, and "no maximum of maps" pushes
-   against it.
-5. **A rolling trail is new mechanism**, not a parameter.
-6. **Unfunded destinations must stay silent.** A trail ending in nothing is
-   worse than no trail — the player walked on a promise. This makes
-   `COVERAGE-HONESTY` load-bearing rather than a footnote.
+Every row demonstrated before the mechanism is considered delivered. Fresh-save
+permission (`DR-20260919-Q29`) removes legacy migration, **not** current-build
+persistence.
 
-## 9. Still open for the owner
+| # | case | passes when |
+|---|---|---|
+| 1 | fresh save, played, current-build reload | trail and destination state survive |
+| 2 | repeated reads of one copy | no second trail |
+| 3 | a duplicate physical copy | no second trail; paper unexplained |
+| 4 | two simultaneous trails | both eligible, no case slot consumed, claims attributable, no arbitration |
+| 5 | destination entered before the map was read | defined behaviour, not an accident |
+| 6 | destination carriers looted or destroyed | defined behaviour; vanilla preserved |
+| 7 | late arrival, long after reading | evidence still present or an honest state |
+| 8 | the trail actually follows | fragments appear near the player after moving |
+| 9 | vanilla stash ordering | our insertion respects the observed order |
+| 10 | recorded evidence preserved | discoveries survive retirement and archiving |
+| 11 | combined storage and work limits | measured against §0.1, not estimated |
+
+## 11. Still open for the owner
 
 1. **Sequencing.** `DR-20260919-Q31` orders the work personal opening → survival
-   connection → loop improvements, and this mechanism was not in that list. My
-   view: it **is** the survival connection. Not reordered without a ruling.
-2. **Essential-evidence recovery.** When a clue a conclusion rests on cannot be
-   placed, the case currently retires marked incomplete (slot freed, no payoff
-   claimed). The alternative is bounded re-deferral first. Recorded at the top of
-   `DECISIONS.md`.
+   connection → loop improvements. Revision 1 asserted this **is** the survival
+   connection. The reviewer is right that the label needs earning: the plan must
+   name the **particular survival interaction** it satisfies, not claim the slot
+   because travel is involved. Unresolved, and not claimed here.
+2. **Essential-evidence recovery.** Material to §8, not adjacent to it. A trail
+   is an invitation the player acts on by walking; retiring its payoff as
+   "incomplete" frees a slot without honouring that. Decide recovery, or narrow
+   the invitation before such trails activate.
+3. **Which capacity lever** (§0.1): cheaper trail records, fewer ordinary cases
+   while trails live, shorter trails, or a smaller campaign store. Lever 1 is to
+   be *costed* first; choosing is the owner's.
 
-## 10. What I want the reviewer to attack
+## 12. What I would still like attacked
 
-1. **Is Phase 0 the right gate, or is it over-cautious?** Could Phases 1–3 be
-   designed against a *documented assumption* about read detection and adapted
-   later, rather than blocking on it?
-2. **Is "the trail follows the player" worth the mechanism cost?** A single
-   placement near where the map was read is far cheaper. What does following
-   actually buy that justifies re-anchoring machinery?
-3. **Is one destination the right first increment**, or does proving the shape
-   need two so that contradiction between destinations is exercised from the
-   start — given contradiction is the stated product?
-4. **Does the flyer role hold up?** "Our clue names a place, a vanilla advert
-   identifies it" sounds elegant. Is it actually legible to a player, or will
-   they never connect the two pieces of paper?
-5. **Is the ledger arithmetic in §5 sound**, and is ~3 trail clues per
-   destination a sane assumption to plan against?
-6. **What is missing from the risk list**, particularly anything about the
-   vanilla stash system that this plan treats as stable.
+The review answered revision 1's six questions. These are new.
+
+1. **Is lazy placement genuinely enough** to satisfy "the trail follows me", or
+   will a player who reads a map and then sits still for a week notice that
+   nothing arrives until they move?
+2. **Is one trail per destination right** when duplicates are deliberately
+   unexplained? A second copy producing a second, contradictory trail about the
+   same place is arguably more in keeping with `NO-CONCLUSION` than suppressing
+   it.
+3. **Does the 50-event budget (§0.1) make "no maximum" unachievable in
+   practice**, and if so is that a reason to revisit the ruling or to spend the
+   engineering on a cheaper trail record?
+4. **Is Gate A's exit criterion achievable at all?** "A corrected cause" may not
+   be reachable for a fault seen three times in nine runs and never since. What
+   is the honest alternative that is not simply "enough clean runs"?
