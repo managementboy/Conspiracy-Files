@@ -1,71 +1,89 @@
-# Writing rebuild: Linux build and validation handoff
+# Claude handoff: build and validate the writing rebuild
 
-**Source implementation is ready for the build/testing phase.** Development version: `DEV-0.46.0-writing-rebuild`. Use a fresh disposable save. This is an unvalidated development candidate, not a release. Codex performed source review and whitespace checks, not Lua execution, compilation, tests, sample export, packaging or gameplay.
+## Your task
 
-This supersedes the unfinished implementation checklist in `WRITING_REBUILD_STATUS_2026-09-20.md` and the older map-media branch handoff. Work is integrated on `main`. The latest source checkpoint is `b4d9a02`; use the later commit finalising this handoff. The final static pass confirmed nil-safe session lookup, read-only inherited address context, source gating and exact-container fill permission. Record `git rev-parse HEAD` before testing and retain it in every result. Do not test the old Workshop tag or assume a local Windows commit has reached GitHub: verify the source contains `MapMediaPlaceStories.lua`, `PlaceNames.context` and this handoff before running anything. Preserve unrelated Linux changes.
+Take the completed implementation on GitHub `main` through Linux compilation, tests, game validation and the existing unlisted Workshop delivery process. Fix reproducible defects within the agreed scope as you find them. Keep ownership through the whole phase; do not send the owner between Claude and Codex for routine repairs.
 
-## What is implemented
+Repository: `managementboy/Conspiracy-Files`  
+Branch: `main`  
+Required implementation/delivery baseline: **`8cdf2c62ee8209fcdb1efba21bb5f8c2c48c165e`** (or a descendant containing this handoff)  
+Development version: **`DEV-0.46.0-writing-rebuild`**  
+Save requirement: **fresh saves only**
 
-- All 22 generated families use authored events, two variants each. Every variant has three essential records, a local outcome, source requirements for comparisons, and separate physical observation, original source and survivor note. The generic unrelated-role/pile generator is removed. Optional evidence belongs to its event; supported ways prefer a compatible contribution. A returning organisation selects an event authored for that business. Player readings cannot rewrite existing events.
-- The opening recognises the survivor's own name and accounts for the missed collection. The follow-up reconstructs how the name entered the booking, preserving source reference, clerk, company, survivor and documentary cutoff. It does not invent consent or memories, and the caller remains unidentified. Missing essential evidence withholds the closing reading and continuation.
-- Named businesses perform their archived vanilla activities. Bureaucratic priorities produce the human consequence and the humour. Twenty ordinary families, the personal pair, optional objects, map families, memo, identity/key prose and the retained Dead Air journal have been reviewed as their respective writing surfaces. The standalone memo is historical context; overlapping dates never establish causality.
-- All 125 map designs retain independent state. Seventeen authored map families provide four distinct records each, plus a specific Irvington Speedway repair-booking variant. Recipient correspondence permits records at an ordinary bound site without turning that site into the named business. Selection uses printed business context, whole annotation words, reviewed explicit family lists or the recipient-copy pool. This is **not 125 unique stories** and does not promise each printed map author wrote our separate correspondence.
-- Eleven previously zero-building maps have reviewed source-marked destination footprints. MulStashMap11 and MulStashMap16 follow their actual restaurant marks to one Spiffo's, with independent food/head-count files and a shared finding only after both complete files are known. Map 16's native bank stash is untouched. The lap-time map uses its actual Cossette/Dart times. Loaded target owners refine overlapping building metadata.
-- Generated and map placement use bounded pools of up to eight kinds and eight targets per kind. Kind choice gets no extra votes for repeated kitchen counters. Identified non-floor furniture is eligible; existing vehicle rules remain separate. No loot-category blacklist or floor extension was added. Map fill permission belongs to the exact observed container; replacement furniture cannot inherit it merely by occupying the same coordinate/sprite/index.
-- Map insertion retains intent before insertion, token identity, conservative unknown state and reconciliation. Scoped interruptions identify design and part. Repeated reads/copies do not create new trails, and uncertain/missing destination evidence is not duplicated.
-- Journals and native pages resolve actual addresses, with directions between the two named copy locations when the counterpart lacks a street number. Source copies explicitly name their filing origin. A follow-up resolves its earlier address from the retained known source file, including after retirement. Backend unseen-title hints are removed. Native pages omit survivor interpretation.
-- Retirement keeps all discovered rows, findings, location context, order, answers, completion/gaps and last-seen descriptions. The 16-case campaign and provisional 1,000,000 estimated-byte aggregate allowance remain. Budget refusal does not erase old evidence. Closing popups wrap and scroll within the display.
+The implementation is committed and pushed. Codex performed source review and whitespace checks, but **did not execute Lua, tests, compilers, story export, packaging or the game**. Treat every changed test as an unexecuted draft. The old Workshop build and its green suite do not validate this revision.
 
-## Source completion audit
+This document replaces the earlier writing/map implementation handoffs. Read repository `AGENTS.md` for standing rules and `docs/management/LINUX_AUTOTEST.md` for the Linux machine workflow.
 
-| Requirement | Source evidence reviewed | Linux evidence still required |
-|---|---|---|
-| Audit before rewrite, complete example | `docs/design/WRITING_SYSTEM_AUDIT_2026-09-20.md`, `WRITING_REFERENCE_PERSONAL_COLLECTION_2026-09-20.md` | Review actual rendered examples against that standard |
-| All generated families and variants | `OrdinaryScenarios`, `InventoryScenarios`, `AdministrativeScenarios`, `CorrespondenceScenarios`, `PersonalScenarios`, `PersonalContinuation`, `Premises` | Family contract, all variants and player-visible samples |
-| Coherent generation and knowledge | `Story`, `Generator`, `Questions`, `EvidenceRows`, `DocumentPages`; optional and steering drafts | Discovery subsets/order, immutable source pages, supported steering/refusal |
-| Grounding and tone | Archived `vanilla-print-2026-09-19/catalogue.json`; scenario grounding fields and complete source chains | Readability and humour in the real small pane; do not substitute a word-count check |
-| Opening/follow-up navigation | `PlaceNames.context/render`, `DocumentPages.resolve`, runtime `writePages`, `EvidenceRows` | Numbered, mixed and wholly unnumbered sites; old source address after retirement/reload |
-| Map content and destinations | `MapMediaContent`, service/civic/place stories, `MapMediaDestinations`, catalogue/footer generator, `MapMediaRuntime` | All 125 location verdicts, actual furniture/reachability, shared restaurant pair and source-mark relevance |
-| Placement variety and loot parity | `Generated/StorageChoices`, `Storage`, `Session`, deferred scans, map candidate/selection path | Actual variety, scan latency, moved/dismantled furniture, no forced loot/exploration |
-| Transaction safety and recovery | Map `place/reconcile`, scoped fault receipt, revised `checks/map_placement.lua/.sh` | All four actual fault points, positive insertion, save/reload, no duplicate payoff |
-| Preserved history and incomplete cases | `RetiredCase`, `Session`, `SuccessiveCases`, `SaveBudget`, budget/full-archive drafts | Full campaign + all map records; actual 600 kB/800 kB/1 MB save costs; incomplete cases stay incomplete |
-| Supporting prose and UI | Memo, Content journal, identity/key modules, PlayerVoice, KnoxUI/KnoxApps | Native page and organiser parity, scrolling, fonts, input and supported spoken findings |
+## 1. Get the correct source
 
-## Start here on Linux
-
-Confirm the intended source revision is actually present. The build string is defined only in `Version.lua`. Do not overwrite a prior Workshop release tag.
+Inspect the checkout first and preserve any unrelated Linux work. On a clean `main`, run:
 
 ```sh
+git fetch origin
+git merge --ff-only origin/main
+git merge-base --is-ancestor 8cdf2c62ee8209fcdb1efba21bb5f8c2c48c165e HEAD
 git status --short --branch
 git rev-parse HEAD
+```
+
+Do not force-reset a dirty or diverged checkout. Record the actual tested commit in every result. Do not build `codex/map-media` or reuse the old `DEV-0.45.0-map-media` tag.
+
+## 2. Run source checks, preview, package and boot
+
+Run these commands individually, in order. On failure, diagnose and fix before continuing:
+
+```sh
 tools/autotest/unit.sh
 lua5.1 tools/export_story_samples.lua > /tmp/conspiracy-writing-samples.md
 tools/package.sh
-```
-
-The unit script already invokes Kahlua parsing and all standalone Lua tests. Run the commands in order and stop on failure. The test changes are drafts; fix a stale fixture only after checking the intended behavior against this handoff and the owner decisions. Never weaken a non-vacuous guard simply to make it green. Source checks in Codex are not prior passing results.
-
-The exporter covers 44 generated variants, all map families and the real catalogue selections. Read complete examples. A well-formed table or a nonempty note does not establish a coherent or funny story. One reported review concern about the gallery note referring to Natalie's map is not an unseen-source defect: the trail activates only after that exact map is read. Keep this distinction when reviewing first-found evidence.
-
-Use the established Linux boot/machine-lock workflow after packaging. Then run:
-
-```sh
+tools/autotest/boot_check.sh --hidden
 tools/autotest/checks/map_placement.sh --hidden
 ```
 
-The revised fixture covers normal placement and `beforeInsert`, `afterInsert`, `beforeCommit`, `afterCommit`, each on a separate design. It scopes faults to the intended payoff, captures the canonical state at interruption, resets only the runtime scheduler between cases, requires a positively observed placement, counts actual physical tokens at the persisted target and loaded neighbourhood, and repeats observation after save/reload. No hand-passed `filled=true`. An unconsumed fault or unobservable target is INCONCLUSIVE (exit 2), never PASS. Confirm the script itself reaches each intended production boundary.
+The unit script includes Kahlua parsing and the Lua suite. Read the exported stories; a successful export is not an editorial pass. Review the Speedway-specific event separately in `MapMediaPlaceStories.lua`, since the exporter previews the shared families and lists real map selections.
 
-## Required native acceptance before publishing
+The game scripts use the existing machine lock. Run game checks serially. Hidden runs use software rendering; record the renderer and use the normal hardware configuration for performance conclusions. The boot check runs the repository-linked mod, so separately verify the eventual packaged/uploaded source matches the tested commit.
 
-1. A fresh opening followed by its linked enquiry: recognise the player name, read source-only item pages, reach the actual counterpart from the text, obtain distinct findings in different discovery orders, then retain those findings through completion and reload. Missing an essential source must not produce the closing reading or continuation. Missing optional evidence may leave a corroborating gap.
-2. An annotated map actually acquired as loot and opened by hand: cancelled/successful transfer, read/reread, duplicate physical copy, ordinary map and world-map reveal. Follow all three paced local parts and its anchored destination, including destination-first discovery and a missed fragment on a later journey.
-3. Record `MapMediaRuntime.coverage(id)` after indexing for all 125 designs, with real reachable fixed non-floor containers. Area counts and metadata intersections are **not success criteria**. Review all eleven footprint designs, the nine previously multiple-building designs, gallery, Speedway and both actual restaurant maps. Shared finding must remain absent until all eight source records are noted. Never invent a nearby substitute destination or restore the old six-furniture restriction to pass this gate.
-4. Placement variety across repeated fresh houses, including bedroom storage; generated/map deferred scans; true fill/exploration ordering; a moved or dismantled candidate; replacement furniture at identical coordinates; ordinary valuable-loot containers without adding better loot. Record worst scan-step cost and time from area availability to discovery. The 2 ms scheduler target does not prove native calls meet it.
-5. Full campaign/archive and all-map save load: source rows, findings, answers, last-seen information, chronology, no phantom completion, no admission that discards history. Measure actual save timing and size on real data around 600 kB, 800 kB and 1 MB. The allowance is provisional, not an engine limit.
-6. FILES/NAMES/DATES/PLACES and closing questions: actual font sizes, long notes/choices, popup scrolling/taps/rocker, known-only interpretations, live-to-retired view, continued source addresses and no raw debug coordinates. Check shared map findings refresh when the second file becomes complete.
+The revised placement check covers normal insertion and four scoped interruptions: `beforeInsert`, `afterInsert`, `beforeCommit`, `afterCommit`. Check that each fault actually fired in the intended design/part. Require a positively observed item and correct recovery after save/reload. **Exit 2, an unconsumed fault or an unobservable target means INCONCLUSIVE, never PASS.** Do not manually pass `filled=true` to manufacture eligibility.
 
-Archive commit/version, setup, actions, observations and logs for each result. The old native baseline (105 single-building / 11 none / 9 multiple; no real shared destination) applies to the old build only. These source changes require fresh evidence. Do not describe the new candidate as validated or publish it until the gates pass. Fix concrete defects within the established scope or return reproducible findings; do not send the owner between agents for routine repairs.
+## 3. Validate the changed features in the game
 
-## Delivery state
+| Area | Required evidence |
+|---|---|
+| Personal opening and continuation | Pick up and recognise the opening through Investigate Area. The survivor recognises their own name; each clue adds a different fact. Complete the missed-collection case and its enquiry follow-up. Preserve reference, names, dates and earlier address. No invented survivor memories or consent. |
+| Knowledge and source voice | Test different discovery orders, including the destination first. Comparisons appear only after their sources are known. Native item pages contain source text; the organiser adds physical observations and first-person interpretation. Missing essential evidence prevents completion/continuation; optional evidence is not required for the local answer. |
+| Navigation and UI | Numbered, mixed and wholly unnumbered sites must be locatable from the discovered text. Check inherited addresses after retirement/reload. Inspect FILES/NAMES/DATES/PLACES, long notes, fonts, closing questions, scrolling and input. No raw coordinate labels or clipped answers. |
+| Real map journey | Acquire an annotated map as loot and open it by hand. Check cancelled/successful reading, rereading and duplicate copies; ordinary maps must not start trails. Follow the three paced local parts and destination record. Test a missed part on a later journey and destination-first discovery. |
+| All 125 destinations | Record coverage after indexing, then establish actual reachable non-floor containers. Geometry/metadata counts alone are insufficient. Exercise all eleven area overlays in `MapMediaDestinations.lua`, the nine previously ambiguous building bindings, gallery and Speedway. Do not substitute an unrelated nearby building. |
+| Shared restaurant | `MulStashMap11` and `MulStashMap16` have independent files at their actual shared Spiffo's mark. The cross-file finding appears only after all eight records are known and refreshes in the organiser. Map 16's native bank stash stays unchanged. |
+| Placement and recovery | Repeat fresh-house starts, including bedroom storage. Check kind variety, deferred scans, real fill/exploration order, moved/dismantled furniture, and replacement containers at the same coordinates. No extra vanilla loot or forced exploration. Measure scan-step cost and total discovery delay. |
+| History and storage | Preserve the full 16-case campaign and all-map evidence through save/load: source rows, findings, answers, order, locations and last-seen information. Admission refusal must preserve history. Measure actual save costs with real data around 600 kB, 800 kB and 1 MB. |
 
-Delivery branch: `main` in `managementboy/Conspiracy-Files`. On Linux, fetch `origin`, inspect the working tree, and fast-forward main without overwriting unrelated work. The resulting history must include `636e456` and this delivery-note update before using the commands above; the old map-media branch or Workshop candidate is insufficient. This Git handoff does not publish a Workshop build. The knowledge graph was refreshed locally with AST extraction only and is ignored by Git. No runtime acceptance result is claimed.
+## 4. Judge the writing against the actual request
+
+There are **22 generated families with two event variants each**, **17 map families**, and a **Speedway-specific event**. There are not 125 unique map stories: otherwise unclassified maps use coherent recipient correspondence. A named business must have a causal role consistent with its archived vanilla activity; an ordinary destination is not automatically that business's premises.
+
+Read complete cases against these questions:
+
+- What happened, and what does each source add?
+- What can the player reasonably infer now, and what remains unanswered?
+- Does the survivor sound personally involved where warranted, without invented history?
+- Does the institutional absurdity produce fatalistic, bureaucratic dark comedy throughout?
+
+Use `docs/design/WRITING_REFERENCE_PERSONAL_COLLECTION_2026-09-20.md` as the complete example and `docs/design/WRITING_SYSTEM_AUDIT_2026-09-20.md` for scope. Read rendered examples across all families. Metadata or keyword checks cannot establish coherent or funny writing. Repair clear contradictions; bring genuine creative-direction choices to the owner with concrete examples.
+
+## Constraints to preserve while fixing
+
+- Fresh saves only; no migration work or feature-disable workaround.
+- Plain-table storage with full evidence history. **1,000,000 estimated bytes is provisional, not an engine limit.** Do not restore the old 500 kB ceiling, compress or discard history to satisfy stale tests.
+- Identified non-floor furniture is eligible. Keep eight kinds/up to eight targets per kind; do not restore the six-kind restriction or add a loot-category blacklist. Discovery uses Investigate Area, not a requirement to loot every drawer.
+- Player readings cannot rewrite historical events. Supported optional evidence belongs to its authored event. No definitive explanation of Knox.
+- Use `ConspiracyFiles/Log`. If a limit changes, prove its boundary test still reaches that limit. Do not weaken assertions merely to make the suite green.
+
+## Finish and report
+
+Archive reproducible results under `docs/management/evidence/linux-autotest/`, with commit/version, setup, actions, observations and logs. Separate PASS, FAIL and INCONCLUSIVE. Fix defects, rerun affected checks, then run the complete source suite and boot check on the final candidate.
+
+Once the required gates pass, commit/push the fixes and use the established unlisted Workshop workflow. Tag the exact published revision; never overwrite an existing release tag. Confirm the uploaded content matches the tested source. If a required gate remains failed or inconclusive, report it explicitly and do not call the candidate validated or publish it as passed.
+
+Return one concise report: tested commit and version; fixes; gate results with evidence; remaining failures or inconclusive checks; and Workshop/tag status. Nothing is waiting for another Codex implementation batch before you start.
