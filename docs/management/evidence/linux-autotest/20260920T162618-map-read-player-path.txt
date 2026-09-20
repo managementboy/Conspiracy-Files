@@ -1,0 +1,39 @@
+Linux map read via the real player path 20260920T162618: PASS
+source: 6ffac40 (branch codex/map-media, DEV-0.45.0-map-media)
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+
+This closes the gap left open by the Phase 0 evidence, which stamped a map with
+setStashMap and called onCheckMap directly. Neither shortcut is used here.
+
+THE MAP WAS MADE THE GAME'S OWN WAY:
+  local stash = StashSystem.getStash("BBurgStashMap1")
+  local map   = instanceItem(stash:getItem())     -- Base.RosewoodMap
+  StashSystem.doStashItem(stash, map)
+  -> map:getStashMap() = "BBurgStashMap1"
+  This is the same engine call the game's own stash debug panel uses to produce
+  a stash map. The identity it yields is identical to the hand-stamped fixture,
+  so the earlier Phase 0 proof was not resting on an artificial item.
+
+IT WAS OPENED THE WAY A PLAYER OPENS IT:
+  ISInventoryPaneContextMenu.createMenu(0, true, {map}, 10, 10) built the real
+  right-click menu. Its options were:
+    Debug, Equip Primary, Equip Secondary, Read Map, Rename Map, Drop,
+    Place Item, Put in Container (Cupboard), More, CF Debug: Guided session
+  Every vanilla option is present alongside the mod's own, so the menu remained
+  cooperative (P4-R45).
+  "Read Map" was then selected exactly as a click does:
+    opt.onSelect(opt.target, opt.param1)   -> returned without error
+
+THE MOD SAW IT:
+  coverage("BBurgStashMap1") went from active=false to active=true, buildings=1.
+
+WHAT THIS STILL DOES NOT ESTABLISH:
+  - The map was constructed in code, not found lying in a container by a
+    survivor who walked into a building. Whether stash maps appear in ordinary
+    world loot often enough to carry the feature is a separate question about
+    the game's distribution tables and is NOT answered here.
+  - A human did not physically right-click. The menu was built and its option
+    invoked through the game's own functions, which is how this project's other
+    UI checks drive the game, but it is not a hand on a mouse.
+  - Nothing beyond activation: no fragment offer, travel, or payoff was
+    exercised in this run.
