@@ -1,0 +1,34 @@
+Map-media shared destinations: MEASUREMENT + mechanism test (no pass/fail gate)
+source: b7357d2 (branch codex/map-media, DEV-0.45.1-map-media)
+
+QUESTION: the plan calls "two designs, one destination" the step that proves the
+product, because a contradiction needs two sources pointing at the same place.
+Can that happen?
+
+MEASURED IN A REAL GAME, over all 125 designs after indexing:
+  123 destination buildings are hit.
+  0 of them are hit by more than one design.
+
+So no two shipped designs share a destination. The content for the
+product-proving step does not exist. This is not a defect - it was never
+authored - but it does mean the step cannot be run against what ships today.
+
+Note the catalogue's own "relatedDestination" field is authored metadata, not a
+computed relationship: exactly one design (EkronStashMap6) carries it, and it
+does not correspond to any actual shared building. Do not read that field as
+evidence that two designs meet somewhere.
+
+MECHANISM, settled by test rather than left as an assumption:
+  test/map_media_runtime.lua now widens the mock building so two designs' targets
+  fall inside it, and asserts what happens. Both trails start, ONE offer of a
+  single carrier serves both, two payoffs sit side by side, each keeping its own
+  design identity, and a repeated offer adds nothing. Shown to fail: stopping the
+  offer after the first design leaves one payoff and the test goes red.
+
+  So the machinery is ready for the content. A building keyed to several designs
+  places each one's payoff independently, and they do not displace each other.
+
+WHAT REMAINS FOR A HUMAN:
+  Choosing WHICH two places meet, and what the two records disagree about, is
+  authoring, not engineering. Until that exists, contradiction between two
+  sources at one destination has never happened in a running game.

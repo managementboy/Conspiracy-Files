@@ -112,5 +112,42 @@ assert(R.start())
 assert(not R.indexed,"a fresh start has not indexed yet")
 assert(R.read(nowhere),"an unindexed world must not be treated as having no destinations")
 
+-- TWO DESIGNS, ONE DESTINATION - the step the plan calls the one that proves
+-- the product, because a contradiction needs two sources pointing at the same
+-- place. No two of the 125 shipped designs share a destination building (all
+-- 123 hit buildings are hit by exactly one design; measured in a real game,
+-- 2026-09-20), so the CONTENT for this does not exist yet. What can be settled
+-- now is whether the MECHANISM is ready for it when it is authored: a building
+-- keyed to several designs, each placing its own payoff, neither displacing the
+-- other.
+db={};contents={};insertMode="ok";R.invalidate()
+local second
+for _,other in ipairs(C.list) do if other~=id then second=other; break end end
+assert(second,"the fixture needs a second design")
+local p2=C.get(second).targets[1]
+-- Widen the mock building so both designs' targets fall inside it. This is the
+-- shape the authored content would have, not a change to the mod.
+local lowX=math.min(point.x,p2.x); local lowY=math.min(point.y,p2.y)
+local highX=math.max(point.x,p2.x); local highY=math.max(point.y,p2.y)
+def.getX=function() return lowX-1 end
+def.getY=function() return lowY-1 end
+def.getX2=function() return highX+2 end
+def.getY2=function() return highY+2 end
+assert(R.start())
+for _=1,200 do R.tick(); if R.indexed then break end end
+assert(R.read(id) and R.read(second),"both designs must start their trails at a shared destination")
+-- One offer walks every design, so a single carrier at a shared destination
+-- serves both trails in one pass.
+assert(R.offerContainer(container,true),"a shared destination must place for the designs that point at it")
+assert(#contents==2,"both payoffs must exist side by side, got "..#contents)
+assert(not R.offerContainer(container,true),"and a second offer must add nothing further")
+assert(#contents==2,"a repeated offer must not duplicate either payoff, got "..#contents)
+local a=db[TAG].canonical.trails[id].payoff
+local b=db[TAG].canonical.trails[second].payoff
+assert(a.state=="placed" and b.state=="placed","both must record placed: "..tostring(a.state)..","..tostring(b.state))
+assert(contents[1]:getModData().cfMapDesign~=contents[2]:getModData().cfMapDesign,
+    "each payoff must carry its own design identity, not overwrite the other")
+
 print("PASS production adapter: duplicate reads, interrupted insertion, refusal, token recovery, discovery refusal and no respawn")
 print("PASS map media: no trail is started toward a design with no destination building, and unknown is not treated as none")
+print("PASS map media: two designs can share one destination, each placing its own payoff (mechanism only - no shipped content pairs them)")
