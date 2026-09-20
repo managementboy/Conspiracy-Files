@@ -217,7 +217,11 @@ assert(Retired.validate(retiredTwo),"and validates")
 local stubTwo=assert(Retired.shrink(retiredTwo),"and deep-archives")
 assert(stubTwo.followsFrom==one.caseId,"keeping that even as a stub")
 
-local bothRetired=assert(Cases.replace(withLive,2,retiredTwo))
+-- Cases.replace installs a LIVE session root - that is all the shipped
+-- runtime ever passes it, and Session.validate refuses a retired one.
+-- Retiring in place is Cases.retire, which is what the runtime calls.
+local liveWithProgress=assert(Cases.replace(withLive,2,twoApi.snapshot()))
+local bothRetired=assert(Cases.retire(liveWithProgress,2,nil,800))
 assert(Cases.validate(bothRetired),"retired follow-up wrapper validates")
 assert(Cases.pendingThread(bothRetired)==nil,
     "a retired follow-up keeps its source thread spent")
