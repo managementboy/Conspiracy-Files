@@ -1,5 +1,6 @@
 -- Offline prototype only. No PZ imports, placement, or map scanning.
 local V=require("ConspiracyFiles/Validator")
+local Choices=require("ConspiracyFiles/Generated/StorageChoices")
 local Catalog={MAX_LOCATIONS=64}
 local function text(v) return type(v)=="string" and #v>0 and #v<=300 end
 local function integer(v) return type(v)=="number" and v==math.floor(v) and math.abs(v)<1000000 end
@@ -30,27 +31,17 @@ function Catalog.validate(c)
         if not fields(b,{x1=true,y1=true,x2=true,y2=true,z=true}) then return false,"invalid bounds" end
         for _,key in ipairs({"x1","y1","x2","y2","z"}) do if not integer(b[key]) then return false,"invalid coordinate" end end
         if b.x2<=b.x1 or b.y2<=b.y1 then return false,"empty bounds" end
-        local valid,n=array(r.containerTypes,8); if not valid then return false,"invalid container constraints" end
-        local types={}
+        local valid,n=array(r.containerTypes,Choices.MAX_SITE_TYPES); if not valid then return false,"invalid container constraints" end
+        local types={};local fixedCount=0
         for _,kind in ipairs(r.containerTypes) do
-            -- "vehicle" (2026-09-09) is the one container type that is not a
-            -- piece of furniture standing on a square. A car parked in the
-            -- driveway belongs to the house it is outside, and
-            -- Generated/Session.lua's S.target is where that widening is
-            -- bounded - to VEHICLE_RADIUS, and to vehicle targets only.
-            -- "postbox" (P4-R134) is the one new kind clues-on-the-move needs:
-            -- the mailbox at the gate, a distinct, replenishing place that a
-            -- survivor already searches. "postbox" is the engine's own word,
-            -- verified in a real game on 2026-09-18 and named once, in
-            -- Generated/Storage.lua; the survivor's word for it is in
-            -- ContainerWords.
-            -- A CARRIER (a corpse, a zombie) is deliberately NOT here: it is
-            -- not the building's storage and is validated by its own mark and
-            -- kind instead - see S.target in Generated/Session.lua.
-            if not ({desk=true,counter=true,shelves=true,filingcabinet=true,locker=true,vehicle=true,
-                     postbox=true})[kind]
-                or types[kind] then return false,"unsupported/duplicate container type" end
+            -- The scanner records actual non-floor kinds, not a furniture
+            -- whitelist. A ninth slot allows eight fixed kinds plus vehicles.
+            if not Choices.siteKind(kind) or types[kind] then
+                return false,"unsupported/duplicate container type"
+            end
             types[kind]=true
+            if kind~="vehicle" then fixedCount=fixedCount+1 end
+            if fixedCount>Choices.MAX_KINDS then return false,"too many fixed container kinds" end
         end
         if r.paperStorage=="observed" and n==0 then return false,"observed storage lacks constraints" end
     end

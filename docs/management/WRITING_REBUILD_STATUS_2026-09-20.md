@@ -27,7 +27,7 @@ used before that authorisation, not a continuing prohibition on main work.
 - Established a complete authored reference, with an underlying event, three distinct contributions, discovery subsets, personal voice, local answer and coherent variation rules: [personal collection example](../design/WRITING_REFERENCE_PERSONAL_COLLECTION_2026-09-20.md).
 - Owner's two follow-ups are recorded in `DR-20260920-WRITING-GROUNDING-TONE`: actual named businesses with causal roles, and Q24's fatalistic bureaucratic dark comedy throughout. Both are in the audit and agent instructions.
 - Added `Generated/Story.lua`: separate authoring fields for observation/source/survivor note; compatible optional sources; explicit knowledge requirements for comparisons; essential-source ending; notification of a new finding in any discovery order.
-- Generator now uses initial two-variant drafts for the opening, its continuation, and five ordinary families (`transfer-nobody-arranged`, `signed-by-someone-absent`, `two-start-dates`, `resignation-after-payslip`, `address-that-only-receives`). **Initial checkpoint: 7 of 22 families. Current checkpoint: 17 of 22**, after the inventory and administrative batches below. This is not full implementation or a completed editorial pass. The remaining 5 ordinary families retain the old path. All 17 map families still need rebuilding.
+- Generator now uses initial two-variant drafts for the opening, its continuation, and five ordinary families (`transfer-nobody-arranged`, `signed-by-someone-absent`, `two-start-dates`, `resignation-after-payslip`, `address-that-only-receives`). **Initial checkpoint: 7 of 22 families. Current checkpoint: 22 of 22**, after the correspondence batch below. This is not full implementation or a completed editorial pass. All generated families now have drafts; the obsolete generator fallback and premise metadata still need removal. All 17 map families still need rebuilding.
 - Opening uses a borrowed McCoy vehicle; its cancellation variant diverts it to a mill drive belt. Personal recognition is gated on the named notice. Source dates now distinguish the trip day from the later filing day. Follow-up carriers preserve source person, organisation, survivor and documentary cutoff; the selected-site generator now actually passes the `follows` input.
 - Retirement freezes the authored readings and suppresses closing choices/continuation when essential evidence was missed. Runtime connection voice uses supported findings instead of treating every context link as agreement. Generic physical labels no longer call every note a dispatch document or every notepad a review.
 - Authored `test/personal_story.lua` for Claude: discovery permutations, withheld ending, source-only native pages, caller-copy isolation, saved-gate corruption, actual selected-site generation and continuation identity/time. **Not executed.** Existing g13/premise-text test assumptions still need revision before the final handoff.
@@ -110,14 +110,55 @@ been implemented. The historical PM handoff's claim that cases never reach any
 conclusion does not override the current owner objective: bounded local findings
 are required, while a definitive explanation of the Knox Event remains excluded.
 
+## Correspondence stories and storage variety: implementation checkpoint
+
+`CorrespondenceScenarios.lua` completes initial two-variant drafts for all 22
+generated families (44 variants): early appointments, signed-out files, missing
+ledger pages, unnamed photographs and withdrawn telephone extensions. The
+underlying events involve Crossroads Medical Center, Spiffo's Louisville,
+Sunstar Motel, Scarlet Oak Distillery, Wellington Heights Golf Club and the
+March Ridge bunker tour display. Logan Barton's coaching role and 1992 Riverside
+Classic result are in the archived vanilla `WellingtonHeightsGolfClub` record;
+the photograph incident is authored fiction. All ten variants have a bounded
+local answer. `Story` no longer forces a spurious unanswered question after an
+answered local mystery. Supplied unanswered questions still require valid text;
+retirement retains the actual readings, and the sample exporter distinguishes
+closed local questions. No definitive Knox explanation is introduced.
+
+The placement implementation now uses `StorageChoices`: actual identified
+non-floor furniture kinds, eight kinds with up to eight physical targets each,
+and four additional vehicle parts under the existing mobile-clue cap. Full
+room scanning continues after eight counters and reaches the existing mailbox
+band. Catalog validation accepts these observed kinds; floor, untyped inventory
+and reserved carrier/vehicle identities cannot enter the furniture path.
+Room and occupancy preferences remain; ties use prior kind usage and a seeded
+per-kind choice, so more cupboards do not receive more votes. Deferred-placement
+and relocation scans also retain varied candidates instead of returning at the
+first usable container. No contents are valued and no vanilla loot is added or
+removed. Unrecognised engine type IDs without a game title read as “a container”.
+
+The first reachable level per site, outdoor mailbox footprint, one clue per
+container and exact target re-resolution remain. Broader floor/environmental
+placement is not part of this step. Existing identity scans observe moved items
+when found and mark repeated misses uncertain, retaining last-seen information;
+they do not prove loss or guarantee tracking furniture carried beyond the scan.
+Native pickup/dismantling and expanded scan latency need Claude's game checks.
+The full-scan change increases total work even though each scanner step remains
+bounded; no performance or placement acceptance is claimed.
+
+Draft regressions cover closed-story retirement, all 44 variants, diverse
+storage, metadata alignment and the old mailbox constraints. These are authored
+source, not executed results. The remaining editorial, map and UI work below
+still blocks the single final testing/build handoff.
+
 ## Implementation still required
 
 1. Finish the editorial pass across all converted families, especially the first seven: some ordinary drafts still read like stock administration, their remaining questions can be arbitrary, and metadata must be checked against revised source text. All cases must have a meaningful comic situation and consequence. Structural validation cannot certify humour or a coherent story.
 2. Complete opening/continuation integration: verify inherited routing and readable locations outside the numbered address catalogue; finish bounded question-screen wording. The new follow-up explains how an enquiry became a booking without a passenger reply on file; it still cannot identify the original caller. Native address resolution, source history and closing-choice knowledge gates have implementation drafts, not executed verification.
-3. Apply the event contract to the remaining 5 ordinary families and all 17 map families, preserving all destination coverage. Replace legacy premise prose/old role generation after coverage is complete, rather than leaving two competing authoring truths.
+3. Apply the event contract to all 17 map families, preserving all destination coverage. All 22 generated families now have two scenario drafts. Replace legacy premise prose/old role generation after coverage is complete, rather than leaving two competing authoring truths.
 4. Replace unrelated optional-role selection everywhere; review relay memo/call-in integration, identities, keys and physical-object prose. Existing legacy dead-air content also needs the agreed tone/voice pass.
 5. Complete UI behavior and verify archive integration: source-row deletion has been removed; retired cases retain locations and reference, and native pages now use the same place resolvers as the journal. Closing-question layout remains unfinished. Keep the 1,000,000-byte provisional aggregate budget and honest admission failures without silent loss. The 16-case/full-map worst-case budget fixtures now retain all history; their fit is unverified until Claude runs them.
-6. Implement the owner's non-floor placement/variety direction alongside the hiding-place wording. Keep diverse candidate kinds while preserving enough physical targets, bounded scan work and one clue per container. Account for movement/dismantling without inventing loss and preserve loot parity. The source still uses its six-kind filter and first-eight cutoff; this is outstanding code work.
+6. Review and measure the new non-floor placement/variety implementation with Claude after the full rebuild. Source now retains eight kinds with up to eight targets each; seeded selection prevents repeated counters receiving extra votes. Native capacity, moved/dismantled containers, scan cost and first-case placement variety remain unexecuted acceptance checks.
 7. Revise obsolete test assumptions and extend the new transitional family contract and editorial exporter to full coverage. The exporter and regressions are authored but unexecuted; they do not certify narrative quality. Reconcile current map fixes, then hand over the complete implementation once for Claude's builds and tests.
 
 The full goal remains active. Audit and reference completion do not mean the writing has been fixed in the game.

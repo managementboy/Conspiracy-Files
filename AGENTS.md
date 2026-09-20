@@ -32,8 +32,9 @@ Investigate Area/foraging; the six-kind furniture list is not a difficulty rule.
 Broaden non-floor placement and retain candidate-kind variety rather than the
 first eight repeated containers. Handle actual whereabouts and loot parity;
 the design note's parked extensions and suggested loot-tier blacklist are not
-authorised rules merely because they appear in the note. No code for this change
-has landed yet. See DR-20260920-WRITING-PLACEMENT.
+authorised rules merely because they appear in the note. The first-step source implementation now uses
+StorageChoices; builds, scan-cost and native acceptance remain with Claude. See
+DR-20260920-WRITING-PLACEMENT.
 
 Shared logging uses `ConspiracyFiles/Log`; do not invent new print prefixes.
 When changing a limit, inspect the tests that exercise its actual boundary.

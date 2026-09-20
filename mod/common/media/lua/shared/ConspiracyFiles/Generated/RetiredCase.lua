@@ -99,7 +99,7 @@ local function offeredOK(o)
         local valid,count=dense(o.readings,2)
         if not valid or count~=2 then return false end
         for _,reading in ipairs(o.readings) do if not printable(reading,400) then return false end end
-        if not printable(o.question,400) then return false end
+        if o.question~=nil and not printable(o.question,400) then return false end
     elseif o.question~=nil then return false end
     return o.organisation==nil or printable(o.organisation,M.ORG_MAX)
 end

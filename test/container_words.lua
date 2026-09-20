@@ -19,6 +19,8 @@ is("officedrawers","Drawer","In an office drawer")
 is("oven","Oven","In an oven")
 is("displaycase","Display Case","In a display case")
 is("seedbags","Seed Bags","In seed bags")
+is("unfamiliar_engine_kind",nil,"In a container")
+is("microwave",nil,"In a microwave")
 assert(W.phrase(nil)==nil and W.phrase("")==nil,"no kind, no phrase")
 
 -- THE MAILBOX (P4-R134, fault found in a real game 2026-09-18). The engine

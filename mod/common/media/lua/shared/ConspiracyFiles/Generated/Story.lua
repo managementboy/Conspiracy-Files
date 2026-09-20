@@ -48,12 +48,13 @@ function M.validThread(t,follows)
 end
 function M.validate(s)
     if type(s)~="table" then return false,"missing scenario" end
-    for _,k in ipairs({"question","event","outcome","unresolved"}) do
+    for _,k in ipairs({"question","event","outcome"}) do
         if not text(s[k]) then return false,"scenario lacks "..k end
     end
+    if s.unresolved~=nil and not text(s.unresolved) then return false,"scenario has invalid unresolved question" end
     local ok,n=dense(s.readings,2)
     if not ok or n~=2 or not text(s.readings[1]) or not text(s.readings[2]) then
-        return false,"scenario needs two interpretations of its remaining uncertainty"
+        return false,"scenario needs two interpretations of its event"
     end
     if type(s.anchors)~="table" then return false,"missing anchor sources" end
     if s.organisation~=nil and (not text(s.organisation) or not text(s.grounding)) then
@@ -147,7 +148,8 @@ function M.build(s,fill,prefix,a,b,people,org,random,steer)
         if not ok then return nil,why end
     end
     local story={revision=M.REVISION,question=fill(s.question),event=fill(s.event),grounding=s.grounding,
-        outcome=fill(s.outcome),unresolved=fill(s.unresolved),readings={},comparisons={}}
+        outcome=fill(s.outcome),readings={},comparisons={}}
+    if s.unresolved~=nil then story.unresolved=fill(s.unresolved) end
     for i,value in ipairs(s.readings) do story.readings[i]=fill(value) end
     local essential={}; for _,key in ipairs(s.essential) do essential[#essential+1]=ids[key] end
     for _,finding in ipairs(s.comparisons) do

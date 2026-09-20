@@ -35,7 +35,9 @@ for _,id in ipairs(Premises.list()) do
    print("\n## "..id.." / variant "..variant)
    print("\nBusiness: "..s.organisation.."; grounding record: `"..tostring(s.grounding).."`.")
    print("\n**Question:** "..fill(s.question).."\n\n**Underlying event:** "..fill(s.event))
-   print("\n**Local answer:** "..fill(s.outcome).."\n\n**Still open:** "..fill(s.unresolved))
+   print("\n**Local answer:** "..fill(s.outcome))
+   if s.unresolved then print("\n\n**Still open:** "..fill(s.unresolved))
+   else print("\n\n**Local question:** answered by this evidence.") end
    print("\nClosing interpretations:")
    for _,reading in ipairs(s.readings) do print("- "..fill(reading)) end
    for _,key in ipairs({"claim","response","review"}) do source(key,s.anchors[key]) end

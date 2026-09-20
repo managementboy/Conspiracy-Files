@@ -1,3 +1,4 @@
+local StorageChoices=require("ConspiracyFiles/Generated/StorageChoices")
 local G=require("ConspiracyFiles/Generated/Generator")
 local V=require("ConspiracyFiles/Validator")
 local RoomAffinity=require("ConspiracyFiles/Generated/RoomAffinity")
@@ -51,10 +52,9 @@ S.VEHICLE_CONTAINER="vehicle"
 -- (`20260918T060614-instalments.txt`, which prints the distance for every one).
 -- Twelve is the same number a car in the driveway gets, for the same ground.
 --
--- The cost is bounded and mostly not paid: the band is ordered after every room
--- rectangle, and Storage.scan skips a whole rect in ONE step for a site that
--- already has its eight candidates - so a furnished, loaded house never walks
--- its band, and a bare one does, which is exactly where a mailbox is needed.
+-- The band is ordered after every room rectangle. The variety scan walks it
+-- even when room storage exists, so a gate mailbox remains a possible kind.
+-- Work stays stepped; Claude must measure the increased total scan time.
 S.OUTDOOR_RADIUS=12
 -- The kinds allowed out there. The engine's own word for a mailbox is named
 -- ONCE, in Generated/Storage.MAILBOX, so it is asked for rather than spelled
@@ -478,17 +478,9 @@ function S.retiredGapFields(root)
     for _,id in ipairs(gaps) do from[id]=history[id] or "unrecorded" end
     return {completion=state,gaps=gaps,gapsFrom=from}
 end
--- `rooms` is OPTIONAL (Phase 2, docs/design/USING_GAME_ASSETS.md): when it is
--- omitted this runs the exact original counts-indexed loop below, so
--- behaviour is byte-identical to before Phase 2 existed. When `rooms` is
--- supplied (rooms[siteId][candidateIndex] -> room name, from
--- Generated/Storage.scan), each document instead prefers the first unused
--- candidate at its site whose room fits its `kind` (Generated/RoomAffinity),
--- and falls back to the first unused candidate -- in the same order the
--- omitted-rooms loop would have picked -- whenever nothing fits. This is
--- ordering only: S.target's allow-list and the distinct/repeated-container
--- checks below are untouched, so a stored target is unaffected by whether a
--- room fit.
+-- Rooms and occupancy are optional preferences. With hints, equal candidates
+-- are selected by kind rather than by how many counters appeared first in the
+-- scan. All paths retain reachability, distinct containers and the mobile cap.
 -- One container, named so nothing else can claim it: the square, the object and
 -- container index on it, and the vehicle part where there is one. Exported
 -- because the filler (GeneratedRuntime) must check a late clue's container
@@ -512,6 +504,7 @@ local physicalKey=S.physicalKey
 function S.createDistributed(case,candidates,rooms,occupied,hours)
     local valid,why=G.validate(case);if not valid then return nil,why end
     local sites,used,counts,taken,targets={},{},{},{},{}
+    local usedKinds={}
     local deferred={}
     for _,site in ipairs(case.locations) do sites[site.id]=site end
     -- At most one mobile clue per case, and the case says which (P4-R134): the
@@ -565,10 +558,8 @@ function S.createDistributed(case,candidates,rooms,occupied,hours)
             -- is preferred, and a site with nothing but empty containers still
             -- gets its document rather than deferring.
             --
-            -- Order of preference: fits the room AND lived-in, then fits the
-            -- room, then lived-in, then first usable - which is exactly what
-            -- the loops below did before this existed, so omitting `occupied`
-            -- and `rooms` leaves the original behaviour untouched.
+            -- Room plus occupancy, room, occupancy, any usable. Within a tier,
+            -- prefer an unused kind and then a stable seeded tie-break per kind.
             local occupiedForSite=type(occupied)=="table" and occupied[doc.locationId]
             local function livedIn(i)
                 return type(occupiedForSite)=="table" and occupiedForSite[i]==true
@@ -582,21 +573,13 @@ function S.createDistributed(case,candidates,rooms,occupied,hours)
             if type(list)=="table" and doc.id==mobileDoc then
                 for i=1,#list do if S.isMobile(list[i]) and usable(i) then index=i;break end end
             end
-            if not index and type(list)=="table" and type(roomsForSite)=="table" then
-                for i in ipairs(list) do
-                    if usable(i) and RoomAffinity.prefers(doc,roomsForSite[i]) and livedIn(i) then index=i;break end
-                end
-                if not index then
-                    for i in ipairs(list) do
-                        if usable(i) and RoomAffinity.prefers(doc,roomsForSite[i]) then index=i;break end
-                    end
-                end
-            end
-            if not index and type(list)=="table" and type(occupiedForSite)=="table" then
-                for i=1,#list do if usable(i) and livedIn(i) then index=i;break end end
-            end
-            if not index and type(list)=="table" then
-                for i=1,#list do if usable(i) then index=i;break end end
+            if not index then
+                index=StorageChoices.choose(list,doc.id..":"..case.seed,usable,function(i)
+                    local fits=type(roomsForSite)=="table" and RoomAffinity.prefers(doc,roomsForSite[i])
+                    if fits and livedIn(i) then return 0 end
+                    if fits then return 1 end
+                    return livedIn(i) and 2 or 3
+                end,usedKinds[doc.locationId])
             end
             if index then siteTaken[index]=true end
             target=index and list[index]
@@ -614,6 +597,9 @@ function S.createDistributed(case,candidates,rooms,occupied,hours)
             local key=physicalKey(target)
             if used[key] then return nil,"repeated physical container" end
             used[key]=true;targets[doc.id]=target
+            usedKinds[doc.locationId]=usedKinds[doc.locationId] or {}
+            local kinds=usedKinds[doc.locationId]
+            kinds[target.containerType]=(kinds[target.containerType] or 0)+1
             if S.isMobile(target) then mobile=mobile+1 end
         end
     end

@@ -1,5 +1,5 @@
--- Transitional authored-source contract; Claude executes after implementation.
--- This covers seventeen converted families, not the complete writing objective.
+-- Authored-source contract for the generated premise pool; this does not claim
+-- map coverage or completion of all writing.
 package.path="mod/common/media/lua/shared/?.lua;"..package.path
 local Story=require("ConspiracyFiles/Generated/Story")
 local Personal=require("ConspiracyFiles/Generated/PersonalScenarios")
@@ -11,6 +11,8 @@ local expected={"transfer-nobody-arranged","signed-by-someone-absent","two-start
  "room-not-on-the-plan","lease-outlived-tenant","load-that-got-lighter",
  "fuel-for-a-dead-truck","returned-cleaner","two-crates-one-number",
  "paid-before-ordered","overtime-nobody-worked","closure-announced-twice",
+ "appointment-out-of-order","file-signed-out","missing-ledger-page",
+ "photograph-without-a-name","withdrawn-extension",
  "no-contact-at-premises","still-filing"}
 local values={CODE="PS-229",P1="Ines Kubiak",P2="Ellis Hale",
  A="201 N Carl St",B="113 Walker Road",DATE0="July 5, 1993",DATE1="July 6, 1993",
@@ -80,6 +82,6 @@ for _,id in ipairs(Premises.list()) do
   end
  end
 end
-assert(converted==#expected and converted==17 and uncovered==5,
- "transitional coverage must explicitly account for all 22 families")
-print("PASS transitional story contract: 17 families, 34 variants; 5 families remain uncovered")
+assert(converted==#expected and converted==22 and uncovered==0,
+ "generated-pool coverage must explicitly account for all 22 families")
+print("PASS generated-pool story contract: 22 families, 44 variants; map and other writing coverage are separate")

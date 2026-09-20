@@ -15,6 +15,9 @@ M.PHRASES={
     locker="In a locker", fridge="In a fridge", freezer="In a freezer", bin="In a bin",
     medicine="In a medicine cabinet", clothingrack="On a clothing rack",
     smallbox="In a box", cardboardbox="In a box", toolbox="In a toolbox",
+    oven="In an oven", microwave="In a microwave", stove="In a stove",
+    washingmachine="In a washing machine", dryer="In a dryer", dishwasher="In a dishwasher",
+    displaycase="In a display case", clothingdryer="In a dryer",
     -- P4-R134: the mailbox at the gate. The ENGINE calls it "postbox" (verified
     -- in a real game, 2026-09-18; Generated/Storage.MAILBOX names the string
     -- once). A survivor in Kentucky writes "mailbox", so that is what the
@@ -65,7 +68,10 @@ function M.phrase(kind,title)
     if M.NO_KIND[kind] then return nil end
     local known=M.PHRASES[kind]
     if known then return known end
-    local word=(type(title)=="string" and title~="") and title or kind
+    -- An unrecognised engine id is not necessarily an English noun. If the
+    -- runtime cannot supply its visible title, say only what is known.
+    if type(title)~="string" or title=="" then return "In a container" end
+    local word=title
     word=string.lower(word)
     word=string.gsub(word,"_"," ")
     if string.sub(word,#word)=="s" then return "In "..word end

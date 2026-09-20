@@ -5,6 +5,7 @@ local Cases=require("ConspiracyFiles/Generated/SuccessiveCases")
 local Retired=require("ConspiracyFiles/Generated/RetiredCase")
 local Story=require("ConspiracyFiles/Generated/Story")
 local Storage=require("ConspiracyFiles/Generated/Storage")
+local StorageChoices=require("ConspiracyFiles/Generated/StorageChoices")
 local World=require("ConspiracyFiles/WorldAccess")
 local Scheduler=require("ConspiracyFiles/Scheduler")
 local Budget=require("ConspiracyFiles/SaveBudget")
@@ -1449,14 +1450,21 @@ end
 -- Session.target accepts one in. Only that kind is taken from the widened part:
 -- a clue never lands in something in the street that merely happens to be near
 -- a house (P4-R134, fixed 2026-09-18).
-local function boundsScan(site,done,accept)
+local function boundsScan(site,done,accept,salt)
     local b=site.bounds
     local kinds={}; for _,kind in ipairs(site.containerTypes) do kinds[kind]=true end
     local margin=kinds[Storage.MAILBOX] and Session.OUTDOOR_RADIUS or 0
     local x1,y1,x2,y2=b.x1-margin,b.y1-margin,b.x2+margin,b.y2+margin
     local x,y,objects,oi,ci=x1,y1,nil,0,0
+    local pool=StorageChoices.new()
     return function()
-        if y>=y2 then done(nil); return true end
+        if y>=y2 then
+            local list=StorageChoices.finish(pool)
+            local i=StorageChoices.choose(list,salt or site.id,function(n)
+                return not accept or accept(list[n])
+            end)
+            done(i and list[i]); return true
+        end
         if objects==nil then
             local square=getCell():getGridSquare(x,y,b.z)
             objects=square and square:getObjects() or false
@@ -1472,9 +1480,11 @@ local function boundsScan(site,done,accept)
         local c=o:getContainerByIndex(ci)
         local sprite=o:getSprite(); local name=sprite and sprite:getName()
         local inside=x>=b.x1 and x<b.x2 and y>=b.y1 and y<b.y2
-        if c and name and kinds[c:getType()] and (inside or c:getType()==Storage.MAILBOX) then
+        if c and name and Storage.fixedKind(c:getType()) and kinds[c:getType()] and (inside or c:getType()==Storage.MAILBOX) then
             local found={x=x,y=y,z=b.z,objectIndex=oi,containerIndex=ci,containerType=c:getType(),sprite=name}
-            if not accept or accept(found) then done(found); return true end
+            if (not accept or accept(found)) and World.resolve(found)==c then
+                StorageChoices.offer(pool,found)
+            end
         end
         ci=ci+1
         return false
@@ -1748,7 +1758,7 @@ local function filler(api)
             if not site then return true end
             local taken=usedPhysicalKeys()
             scan=boundsScan(site,function(t) target=t end,
-                function(candidate) return not taken[Session.physicalKey(candidate)] end)
+                function(candidate) return not taken[Session.physicalKey(candidate)] end,id)
         end
         local a=api.assignment(id)
         if not a or a.status~="deferred" then return true end

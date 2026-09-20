@@ -13,7 +13,9 @@ Carry the agreed first step into the full rebuild: eligible non-floor containers
 with bounded selection that preserves different container kinds instead of
 filling all slots with the first repeated kind. Keep placement descriptions tied
 to the actual hiding place. Current source inspection confirms both the six-kind
-filter and the early eight-candidate cutoff; neither has been changed yet.
+filter and the early eight-candidate cutoff. The subsequent implementation
+replaces them with eight observed kinds, up to eight targets per kind, and
+seeded selection between equally suitable kinds; game verification is pending.
 Account for movable/dismantled containers without asserting that unseen evidence
 is lost, and preserve loot parity without creating better loot or prioritising
 valuable contents. Do not treat the note's proposed loot-tier exclusion as an

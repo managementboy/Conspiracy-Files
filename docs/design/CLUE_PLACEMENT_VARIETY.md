@@ -1,10 +1,20 @@
 # Where clues are allowed to live — deferred, 2026-09-20
 
-**Status: agreed in principle, deliberately NOT built.** The owner asked to hold
+**Original exploration status: agreed in principle, deliberately NOT built.** The owner asked to hold
 off because the writing layer is being reimagined in a separate session, and the
 change below is mostly a change to what the mod can *say* about a hiding place.
 Revisit once that rework lands. Nothing in `ContainerWords.lua` or its successor
 was touched.
+
+## Implementation update in the writing rebuild
+
+The owner relayed this note to the active implementation task. The first-step
+source change now lives on local main: eight non-floor kinds, up to eight
+physical candidates per kind, continued scanning after repeated kitchen storage,
+and seeded choice between equally suitable kinds. This is untested source;
+Claude owns builds and native acceptance after the full writing implementation.
+See `../management/WRITING_REBUILD_STATUS_2026-09-20.md`. The original exploration
+and parked proposals below remain the historical rationale, not additional scope.
 
 ## The complaint, and the measurement behind it
 

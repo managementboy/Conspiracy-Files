@@ -16,8 +16,8 @@ local result={version='T3-nearby-2',buildings=1,map='mock',gameVersion='42.20',r
  {kind='rect',building='home',x=3,y=0,z=0,w=15,h=1}}}
 local catalog,first,candidates
 local step=assert(require('ConspiracyFiles/Generated/Storage').scan(result,function(a,b,c) catalog,first,candidates=a,b,c end))
-for n=1,1000 do local before=resolves;local done=step();assert(resolves-before<=1,'bounded native validation per step');if done then break end end
-assert(candidates and #candidates['t3:home']==8)
+for n=1,200000 do local before=resolves;local done=step();assert(resolves-before<=1,'bounded native validation per step');if done then break end end
+assert(candidates and #candidates['t3:home']==16,"two observed kinds retain eight targets each")
 assert(first['t3:home']==candidates['t3:home'][1] and first['t3:home'].x==0)
 local seen={};for _,t in ipairs(candidates['t3:home']) do assert(t.z==0 and not seen[t.x] and t.x~=4 and t.x~=5);seen[t.x]=true end
 assert(catalog.locations[1].paperStorage=='observed' and #catalog.locations[1].containerTypes==2)
@@ -31,17 +31,23 @@ local G=require('ConspiracyFiles/Generated/Generator');local S=require('Conspira
 local case
 for seed=1,200 do
  local candidate=G.generate(dofile('test/fixtures/synthetic_locations.lua'),seed,{mapId='SYNTHETIC-MAP',buildLine='TEST-ONLY',allowSynthetic=true})
- if candidate then local atFirst=0
-  for _,d in ipairs(candidate.documents) do if d.locationId==candidate.locations[1].id then atFirst=atFirst+1 end end
-  if atFirst>=2 then case=candidate; break end end
+ if candidate then
+  local counts={};for _,d in ipairs(candidate.documents) do counts[d.locationId]=(counts[d.locationId] or 0)+1 end
+  for _,location in ipairs(candidate.locations) do
+   if counts[location.id]>=2 then case=candidate; break end
+  end
+  if case then break end
+ end
 end
-assert(case,'no seed in 1..200 placed two documents at the first site')
+assert(case,'no seed in 1..200 placed two documents at one site')
 local choices={};for _,site in ipairs(case.locations) do
  choices[site.id]={};for i=1,7 do choices[site.id][i]={x=site.bounds.x1,y=site.bounds.y1,z=site.bounds.z,objectIndex=i-1,containerIndex=0,containerType=site.containerTypes[1],sprite='s'} end
 end
 local root=assert(S.createDistributed(case,choices));local assigned={}
 for _,a in pairs(root.assignments) do local t=a.target;local key=t.x..':'..t.y..':'..t.objectIndex;assert(not assigned[key]);assigned[key]=true end
-local site=case.locations[1].id;local previous=choices[site][2];choices[site][2]=choices[site][1];assert(not S.createDistributed(case,choices))
+local counts={};for _,d in ipairs(case.documents) do counts[d.locationId]=(counts[d.locationId] or 0)+1 end
+local site;for _,location in ipairs(case.locations) do if counts[location.id]>=2 then site=location.id;break end end
+local previous=choices[site][2];choices[site][2]=choices[site][1];assert(not S.createDistributed(case,choices))
 -- A SHORTAGE is no longer a refusal (P4-R133): the case goes live with the
 -- clues that fit and the rest wait as an open order. What must not happen is
 -- two clues in one container, which is the assert above.
@@ -56,4 +62,4 @@ for _,id in ipairs(waiting) do
 end
 assert(S.validate(short),'a half-placed case must validate')
 assert(S.validate(root))
-print('PASS storage candidates: separate targets, rectangle dedup, floor/cap8, unloaded/mismatch rejection, bounded reads, immutable distributed plan, a shortage defers instead of refusing')
+print('PASS storage candidates: separate targets, rectangle dedup, floor/eight-per-kind, unloaded/mismatch rejection, bounded reads, immutable distributed plan, a shortage defers instead of refusing')

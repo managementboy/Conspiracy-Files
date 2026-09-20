@@ -3,6 +3,7 @@
 local M={}
 local InventoryScenarios=require("ConspiracyFiles/Generated/InventoryScenarios")
 local AdministrativeScenarios=require("ConspiracyFiles/Generated/AdministrativeScenarios")
+local CorrespondenceScenarios=require("ConspiracyFiles/Generated/CorrespondenceScenarios")
 
 local function triplet(question,event,outcome,unresolved,readings,organisation,grounding,claim,response,review,comparisons,optional)
  return {question=question,event=event,outcome=outcome,unresolved=unresolved,readings=readings,
@@ -87,7 +88,7 @@ local function copy(value)
  return out
 end
 function M.get(id,variant)
- local family=scenarios[id] or InventoryScenarios[id] or AdministrativeScenarios[id]
+ local family=scenarios[id] or InventoryScenarios[id] or AdministrativeScenarios[id] or CorrespondenceScenarios[id]
  local scenario=family and family[variant]
  if type(variant)~="number" or variant~=math.floor(variant) or not scenario then return nil end
  return copy(scenario)

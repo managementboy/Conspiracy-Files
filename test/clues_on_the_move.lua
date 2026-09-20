@@ -420,13 +420,12 @@ assert(not heldApi.dropMissing(heldId,900),"a clue already found is never droppe
 -- ---------------------------------------------------------------------------
 -- 7. The mailbox kind ------------------------------------------------------
 -- ---------------------------------------------------------------------------
-assert(Storage.KINDS[Storage.MAILBOX],"a mailbox is a container kind")
+assert(Storage.fixedKind(Storage.MAILBOX),"a mailbox is an identified fixed container kind")
 -- The string was a guess ("mailbox") and the guess was wrong: the engine calls
 -- it "postbox" (real game, 2026-09-18, five of them within 40 tiles and no
 -- "mailbox" on 6,561 squares). While it was wrong no mailbox could ever be
 -- chosen, which is what failing closed bought us.
 assert(Storage.MAILBOX=="postbox","the engine's own type string for a mailbox is postbox")
-assert(not next(Storage.UNVERIFIED),"nothing about a container kind is a guess any more")
 local Catalog=require("ConspiracyFiles/Generated/Catalog")
 local mailSite={id="t3:mail",name="Mail",areaId="a",mapId="SYNTHETIC-MAP",buildLine="TEST-ONLY",
     bounds={x1=0,y1=0,x2=4,y2=4,z=0},source={kind="synthetic",reference="test"},
@@ -499,13 +498,6 @@ assert(gateSite.source.reference:find("mailbox",1,true),
     "and says it came from a mailbox, not from inside a room it was never in")
 local _,farCandidates=scanWithBoxAt(10+S.OUTDOOR_RADIUS+2,2)
 assert(not farCandidates["t3:gate"],"a postbox beyond the band is not this building's mailbox")
--- The band is a wider place to LOOK, not a way round the allow-list: take the
--- mailbox out of Storage.KINDS and the band offers nothing.
-Storage.KINDS[Storage.MAILBOX]=nil
-local _,noneCandidates=scanWithBoxAt(13,2)
-Storage.KINDS[Storage.MAILBOX]=true
-assert(not noneCandidates["t3:gate"],
-    "a kind the mod may not see is not offered from the band either")
 getCell=realCell; WA.resolve=realResolve
 
 -- ---------------------------------------------------------------------------
