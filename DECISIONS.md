@@ -1,5 +1,26 @@
 # Conspiracy-Files — Current Decision Index
 
+## DR-20260920-MAP-PLAN — the plan is accepted for feasibility and a gated pilot, 2026-09-20
+
+`docs/design/MAP_MECHANISM_PLAN_2026-09-20.md` **revision 4 is the final plan**
+for feasibility work and a gated pilot. No further broad rewrite. A few targeted
+corrections remain outstanding.
+
+**What this authorises:** Phase 0 (read-hook verification in a running game) and
+the Gate A placement diagnostics, plus the hook-independent work — extending the
+budget fixture and the authored pilot content.
+
+**What it does not authorise.** Full rollout depends on two things that are not
+settled: a **storage model** that can meet the coverage requirement (the measured
+budget funds nine to fifteen destinations of 125, and compressing what exists
+buys about twenty more - `P4-R144`), and **engine verification** that the read
+hook exists, names the actual annotated design, and that vanilla stash
+preparation survives our insertion. Either can send the plan back.
+
+**Still the owner's** (§14.1): full coverage remains the requirement, so the
+choice is to shrink the campaign store, ration and call it rationing, or spend
+the reserve. Not decided here.
+
 ## P4-R144 — the map feature has 7,826 bytes, not 88,460, 2026-09-20
 
 Measured by `test/map_feature_budget.lua`, which builds the worst-case 16-case

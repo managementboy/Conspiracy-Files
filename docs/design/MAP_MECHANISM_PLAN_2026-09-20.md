@@ -1,6 +1,10 @@
 # Plan: vanilla printed media as the travel mechanism
 
-**Revision 4 — planning only, nothing built except the budget fixture in §5.**
+**Revision 4 — ACCEPTED 2026-09-20** as the final plan for feasibility work and
+a gated pilot (`DR-20260920-MAP-PLAN`). No further broad rewrite; a few targeted
+corrections remain outstanding. **Full rollout still depends on a storage model
+that meets the coverage requirement and on engine verification** — either can
+send this back. Nothing is built except the budget fixture in §5.
 
 This is the whole plan in one document; there is no second file to read
 alongside it.
