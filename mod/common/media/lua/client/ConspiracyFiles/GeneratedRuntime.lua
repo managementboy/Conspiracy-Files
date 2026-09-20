@@ -3,6 +3,7 @@ local G=require("ConspiracyFiles/Generated/Generator")
 local Session=require("ConspiracyFiles/Generated/Session")
 local Cases=require("ConspiracyFiles/Generated/SuccessiveCases")
 local Retired=require("ConspiracyFiles/Generated/RetiredCase")
+local Story=require("ConspiracyFiles/Generated/Story")
 local Storage=require("ConspiracyFiles/Generated/Storage")
 local World=require("ConspiracyFiles/WorldAccess")
 local Scheduler=require("ConspiracyFiles/Scheduler")
@@ -1053,9 +1054,11 @@ function R.inspect(item,inPlace)
         local snapshot=api.snapshot()
         local held={}
         for _,id in ipairs(snapshot.known or {}) do held[id]=true end
+        local finding=Story.newFinding(snapshot.case.story,held,md.cfGeneratedId)
+        if finding then pcall(voice.onConnection,finding.kind,md.cfGeneratedId) end
         for _,doc in ipairs(snapshot.case.documents) do
             if doc.id==md.cfGeneratedId then
-                for _,link in ipairs(doc.links or {}) do
+                for _,link in ipairs(not snapshot.case.story and doc.links or {}) do
                     if held[link.target] then
                         pcall(voice.onConnection,link.kind,doc.id)
                         break

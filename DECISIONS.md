@@ -1,5 +1,23 @@
 # Conspiracy-Files — Current Decision Index
 
+## DR-20260920-WRITING-GROUNDING-TONE — actual businesses; sustained dark comedy
+
+Owner feedback on the fresh-game example: the mysteries show little meaningful
+involvement of named businesses or lore, and the writing is not funny despite
+the agreed direction. This reinforces **DR-20260919-Q24**, which selected
+fatalistic, bureaucratic dark comedy throughout; the alternative of occasional
+humour was not adopted. Both requirements apply throughout the current rebuild.
+
+Use verified vanilla entities for relevant activities, with the mod's invented
+events identified as authored fiction in development documentation. Do not
+turn a randomly selected house into a canonical business or invent involvement
+by a named lore figure just to mention them. Comic consequences should arise
+from the event, the institution's priorities and the survivor's personal stake.
+Neither generic suspicious paperwork nor a witty final sentence is sufficient.
+
+The isolated writing implementation remains incomplete and untested. This
+decision is an authoring requirement, not owner approval of the new passages.
+
 ## DR-20260920-WRITING-REBUILD — events, evidence and personal voice
 
 Owner goal after reviewing a fresh game's collection slip, tagged key and

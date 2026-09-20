@@ -88,6 +88,8 @@ Implement this through the existing generator/projection boundaries; avoid build
 - **Evidence contribution:** each essential clue reveals a different part of the event. Optional clues deepen, corroborate or identify it; random unrelated objects do not pad the count.
 - **Inference:** explicit source IDs and required known facts. Contradiction requires incompatible propositions about the same subject, scope and time. Context, correction, sequence and disagreement are distinct relations.
 - **Voice:** documentary wording belongs to its author; physical observation and personal interpretation belong to the survivor. No invented memories. No automatic “I don't remember” explanation. Neutral labels remain neutral.
+- **Grounding:** a named vanilla business must do something consistent with verified game sources. Its activity should explain an event, document or useful destination. Do not use business names as random stationery or put a canonical business at an arbitrary bound house. Invented local events are the mod's fiction, not new claims about vanilla canon.
+- **Humour:** Q24 requires fatalistic, bureaucratic dark comedy throughout. An absurd but intelligible institutional priority must produce a concrete human consequence. Documents should sound useful to their authors; the survivor may notice the absurdity. No joke quotas, repeating disclaimers, or interchangeable punchlines. Judge the complete mystery as a reading experience, not by searching for humorous words.
 - **Variation:** choose coherent event alternatives first; derive dates, quantities, roles and all related text from those choices. Constrain objects and locations before rendering. The player's preferred explanation never changes historical facts.
 - **Navigation:** each named destination must be locatable from discovered information. Identify the actual bound place; do not fabricate a business address for whichever house was selected.
 - **Outcome:** state what was learned, why it matters, and what remains open. An incomplete case remains incomplete when essential evidence is missing. Every optional clue is not required for a valid local conclusion.
@@ -95,6 +97,27 @@ Implement this through the existing generator/projection boundaries; avoid build
 - **Presentation:** the survivor should be able to understand the important point in the small reading pane. Reference numbers can identify paperwork but cannot be the principal explanation of a case.
 
 ## Verification required from Claude after implementation
+
+### Named-business grounding checked for the first implementation batch
+
+The primary-source extract is `docs/research/vanilla-print-2026-09-19/catalogue.json`,
+whose `sources_sha256` records the installed game files used for extraction.
+The relevant vanilla translation keys are `Print_Text_<id>_info`.
+
+| Vanilla record ID | Supported setting facts | Permitted authored role in this batch |
+|---|---|---|
+| `McCoyLoggingCorp` | McCoy Logging Co.; Muldraugh mill, industrial equipment, truck-driving work | Mill repair, parts, personnel and a borrowed company vehicle |
+| `UStoreItMuldraugh` | U-Store It; Muldraugh rental lock-ups and stored household/work supplies | Rental records, inventories and storage staff |
+| `Fossoil1` | Fossoil; retail fuel, Muldraugh location at 119 Dixie Highway | Fuel accounts and staff; a particular delivery is authored fiction |
+| `SunstarMotel` | Sunstar Motel; rooms and diner at 118 Dixie Highway, Muldraugh | Room linen, diner stock and staff |
+
+The `Base.VanJohnMcCoy` definition in the installed
+`media/scripts/generated/vehicles/professionVehicles/vehicle_van_JohnMcCoy.txt`
+also supports the company's vehicle context. These sources establish businesses
+and activities, not the mod's invented incidents or policies. In particular,
+retained-copy addresses A/B do not become those businesses' premises. Named
+broadcast characters require their own source/timeline check before involvement;
+the first batch does not fabricate roles for them to satisfy a name count.
 
 All 22 generated families and 17 map families must be covered, including each authored variant and materially different carrier/site combination. Check every discovery subset/order that changes an inference, destination-first discovery, missing optional versus essential evidence, multiple cases, duplicate reads and reload. Verify contradictions against their propositions, not just against expected text strings.
 

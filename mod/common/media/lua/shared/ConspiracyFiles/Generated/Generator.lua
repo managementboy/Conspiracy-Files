@@ -8,6 +8,9 @@ local Premises=require("ConspiracyFiles/Generated/Premises")
 local ObjectRoles=require("ConspiracyFiles/Generated/ObjectRules")
 local Catalogue=require("ConspiracyFiles/Generated/ObjectCatalogue")
 local Calendar=require("ConspiracyFiles/Calendar")
+local Story=require("ConspiracyFiles/Generated/Story")
+local PersonalScenarios=require("ConspiracyFiles/Generated/PersonalScenarios")
+local OrdinaryScenarios=require("ConspiracyFiles/Generated/OrdinaryScenarios")
 -- Schema two deliberately refuses the earlier fixed-seven case shape.  Before
 -- 1.0 callers must use a fresh save rather than reinterpret an existing case.
 -- MIN_EVIDENCE is two, not three: a claim and a record contradicting it is a
@@ -15,7 +18,7 @@ local Calendar=require("ConspiracyFiles/Calendar")
 -- g13: case dates drawn across May-July 1993 and the story defects fixed
 -- (owner decisions P4-R107, P4-R108, 2026-09-15). Every g12 case is refused;
 -- that is a new game (P4-R77).
-local G={REVISION="g13-true-stories-1",SCHEMA=2,MIN_EVIDENCE=2,MAX_EVIDENCE=7}
+local G={REVISION="g14-event-stories-1",SCHEMA=2,MIN_EVIDENCE=2,MAX_EVIDENCE=7}
 local function copy(v) if type(v)~="table" then return v end; local out={}; for k,c in pairs(v) do out[k]=copy(c) end; return out end
 local function same(a,b)
     if type(a)~=type(b) then return false end
@@ -319,6 +322,11 @@ local function build(seed,revision,sites,cast,relayMemo,steer,opening,follows)
         premise=Premises.choose(random)
     end
     local outline=random(2)==1 and "corroboration" or "conflicting-account"
+    -- This draw selects a whole authored event, not a mandatory innocent /
+    -- sinister interpretation of interchangeable paperwork. The old outline
+    -- field remains a deterministic variant selector during the rebuild.
+    local variant=outline=="corroboration" and 1 or 2
+    local scenario=PersonalScenarios.get(premise.id,variant) or OrdinaryScenarios.get(premise.id,variant)
     local invented=G.INVENTED_NAMES
     -- People the player has ALREADY MET, if there are any. Owner, 2026-09-11:
     -- "do we track the names of corpses so we can fill out other evidence with
@@ -358,6 +366,11 @@ local function build(seed,revision,sites,cast,relayMemo,steer,opening,follows)
         local step=0
         while recipient==sender and step<#names do step=step+1; recipient=names[(second-1+step)%#names+1] end
     end
+    if follows and follows.person then
+        recipient=follows.person
+        local step=0
+        while sender==recipient and step<#names do step=step+1; sender=names[(first-1+step)%#names+1] end
+    end
     local prefix="generated:"..seed..":"
     local a,b=sites[1],sites[2]
     -- An organisation may name one of the two sites ("{A} Site Office"), so it
@@ -365,8 +378,23 @@ local function build(seed,revision,sites,cast,relayMemo,steer,opening,follows)
     local organisation=subst(subst(premise.orgs[random(#premise.orgs)],"A",a.name),"B",b.name)
     -- A returning organisation replaces the drawn one; the draw still happened.
     if steer and steer.organisation then organisation=steer.organisation end
+    -- The authored pickup borrows a logging-company vehicle. It does not
+    -- invent a transport authority or make the survivor a company employee.
+    -- McCoy's mill/truck activity is sourced in the vanilla McCoyLoggingCorp
+    -- flyer. Neither selected record location is asserted to be its mill.
+    if opening then organisation="McCoy Logging Co." end
+    if follows and follows.organisation then organisation=follows.organisation end
+    -- A named business's activity is part of the event. A preference from a
+    -- previous case cannot turn a mill's repair into a motel's repair by
+    -- replacing the letterhead. Undrafted families retain their old path.
+    if scenario and scenario.organisation then organisation=scenario.organisation end
     local code=REFERENCE[random(#REFERENCE)].."-"..(100+random(899))
     local cal=G.calendar(random)
+    if follows and follows.afterDate then
+        -- The follow-up reconstructs the source file's closing-day paperwork,
+        -- not a newly dated event drawn independently of the original run.
+        cal={claimDate=follows.afterDate,responseDate=follows.afterDate,reviewDate=follows.afterDate}
+    end
     local ANCHOR_INDEX={claim=1,response=2,review=3}
     local facts={sender=sender,recipient=recipient,organisation=organisation,code=code,
         claimDate=cal.claimDate,responseDate=cal.responseDate,reviewDate=cal.reviewDate,
@@ -377,7 +405,7 @@ local function build(seed,revision,sites,cast,relayMemo,steer,opening,follows)
     -- The survivor's own name. Only the opening uses it; an ordinary premise
     -- never mentions {SELF}, so the key is harmless when absent and a missing
     -- one could not silently blank a document.
-    map.SELF=opening and opening.self or nil
+    map.SELF=(opening and opening.self) or (follows and follows.survivor) or nil
     -- The routing point, from the premise's own thread declaration. Rendered
     -- into the record the player reads AND recorded on the case, from one value.
     map.POINT=type(premise.thread)=="table" and premise.thread.point or nil
@@ -394,6 +422,29 @@ local function build(seed,revision,sites,cast,relayMemo,steer,opening,follows)
     local people={{id=prefix.."person-1",name=facts.sender,met=(wasMet(facts.sender) or (steer~=nil and steer.person==facts.sender)) or nil},
                   {id=prefix.."person-2",name=facts.recipient,met=wasMet(facts.recipient) or nil}}
     local org={id=prefix.."organisation",name=facts.organisation}
+    if scenario then
+        local authored,why=Story.build(scenario,function(value) return fill(value,map) end,
+            prefix,a,b,people,org,random,steer)
+        if not authored then return nil,why end
+        if authored.thread then
+            authored.thread.reference=code
+            authored.thread.person=recipient; authored.thread.organisation=organisation
+            authored.thread.survivor=map.SELF; authored.thread.afterDate=cal.reviewDate
+        end
+        -- A standalone historical memo is retained as its own source; it is
+        -- not an essential clue or an explanation of this collection.
+        if relayMemo then
+            authored.documents[#authored.documents+1]={id=prefix.."document-"..(#authored.documents+1),
+                kind=Memo.KIND,title=Memo.TITLE,locationId=b.id,body=Memo.body(),references={b.id},links={},leads={}}
+        end
+        return {schemaVersion=G.SCHEMA,generatorRevision=G.REVISION,catalogRevision=revision,seed=seed,
+            caseId=prefix.."case",outline=outline,premiseId=premise.id,contentStatus="development-draft-unapproved",
+            locations=copy(sites),cast=#met>0 and copy(met) or nil,facts=facts,identities=people,
+            organisation=org,documents=authored.documents,story=authored.story,
+            relayMemo=relayMemo and true or nil,steer=steer and copy(steer) or nil,
+            opening=opening and {premise=true,self=opening.self} or nil,
+            essential=authored.essential,thread=authored.thread,follows=follows and copy(follows) or nil}
+    end
     local documents={}
     local function document(n,title,location,body,refs,links,leads,kind)
         documents[n]={id=prefix.."document-"..n,kind=kind or "dispatch",title=title,locationId=location.id,body=body,
@@ -926,18 +977,17 @@ function G.generate(catalog,seed,options)
     -- (OPENING_PAIR_COMPLETION.md), so this refuses rather than substituting.
     local follows
     if options.follows~=nil then
-        if type(options.follows)~="table" then return nil,"invalid follows" end
+        if not Story.validThread(options.follows,true) then return nil,"invalid follows" end
         for key in pairs(options.follows) do
             if key~="fromCase" and key~="document" and key~="reference"
-                and key~="point" and key~="question" then return nil,"unknown follows field" end
+                and key~="point" and key~="question" and key~="person" and key~="organisation"
+                and key~="survivor" and key~="afterDate" then return nil,"unknown follows field" end
         end
         for _,key in ipairs({"fromCase","document","reference","point","question"}) do
             local v=options.follows[key]
             if type(v)~="string" or #v==0 or #v>120 or v:find("%c") then return nil,"invalid follows "..key end
         end
-        follows={fromCase=options.follows.fromCase,document=options.follows.document,
-                 reference=options.follows.reference,point=options.follows.point,
-                 question=options.follows.question}
+        follows=copy(options.follows)
     end
     if options.opening and follows then return nil,"an opening cannot also be a follow-up" end
     if options.opening and not options.self then return nil,"the opening needs the survivor's name" end
@@ -978,6 +1028,12 @@ function G.generateSelected(catalog,seed,options,orderedSiteIds)
         if type(options.self)~="string" or #options.self==0 or #options.self>60 then return nil,"invalid survivor name" end
     end
     if options.opening and not options.self then return nil,"the opening needs the survivor's name" end
+    local follows
+    if options.follows~=nil then
+        if not Story.validThread(options.follows,true) then return nil,"invalid follows" end
+        follows=copy(options.follows)
+    end
+    if options.opening and follows then return nil,"an opening cannot also be a follow-up" end
     local steer
     if options.steer~=nil then local bad; steer,bad=G.steerFrom(options.steer); if not steer then return nil,bad end end
     for key in pairs(orderedSiteIds) do if key~=1 and key~=2 then return nil,"exactly two ordered site IDs required" end end
@@ -1027,10 +1083,11 @@ function G.validate(case)
     if case.relayMemo~=nil and case.relayMemo~=true then return false,"invalid relay memo flag" end
     if case.follows~=nil then
         local f=case.follows
-        if type(f)~="table" then return false,"invalid follows" end
+        if not Story.validThread(f,true) then return false,"invalid follows" end
         for key in pairs(f) do
             if key~="fromCase" and key~="document" and key~="reference"
-                and key~="point" and key~="question" then return false,"unknown follows field" end
+                and key~="point" and key~="question" and key~="person" and key~="organisation"
+                and key~="survivor" and key~="afterDate" then return false,"unknown follows field" end
         end
         for _,key in ipairs({"fromCase","document","reference","point","question"}) do
             if type(f[key])~="string" or #f[key]==0 or #f[key]>120 then return false,"invalid follows "..key end
@@ -1039,9 +1096,10 @@ function G.validate(case)
     end
     if case.thread~=nil then
         local t=case.thread
-        if type(t)~="table" then return false,"invalid thread" end
+        if not Story.validThread(t,false) then return false,"invalid thread" end
         for key in pairs(t) do
-            if key~="document" and key~="reference" and key~="point" and key~="question" then
+            if key~="document" and key~="reference" and key~="point" and key~="question"
+                and key~="person" and key~="organisation" and key~="survivor" and key~="afterDate" then
                 return false,"unknown thread field"
             end
         end
@@ -1076,7 +1134,7 @@ function G.validate(case)
     -- role bounds; the rebuild below still proves it is exactly the one clue.
     -- Nor does the radio transcript of a case steered to "Listen for it" (P4-R123).
     local roleCount=#case.documents-(case.relayMemo and 1 or 0)
-        -((type(case.steer)=="table" and case.steer.way=="listen") and 1 or 0)
+        -((not case.story and type(case.steer)=="table" and case.steer.way=="listen") and 1 or 0)
     if roleCount<G.MIN_EVIDENCE or roleCount>G.MAX_EVIDENCE then return false,"invalid evidence role count" end
     local a,b=case.locations[1],case.locations[2]
     if not Catalog.distinct(a,b) or a.mapId~=b.mapId or a.buildLine~=b.buildLine then return false,"incompatible saved locations" end
@@ -1114,6 +1172,8 @@ function G.project(case,discovered)
     local rows={}
     for i,id in ipairs(discovered) do
         local doc=byId[id]; local links={}
+        local body=doc.body
+        if case.story then body,links=Story.project(case.story,doc,known) end
         -- Links to documents NOT yet found are reported as `unseen`, by the
         -- kind of document only - never its text. The record turns them into
         -- the survivor wondering aloud: "Probably refers to another stock
@@ -1122,9 +1182,9 @@ function G.project(case,discovered)
         local unseen={}
         for _,link in ipairs(doc.links) do
             if known[link.target] then links[#links+1]=copy(link)
-            elseif byId[link.target] then unseen[#unseen+1]={kind=link.kind,title=byId[link.target].title} end
+            elseif not case.story and byId[link.target] then unseen[#unseen+1]={kind=link.kind,title=byId[link.target].title} end
         end
-        rows[i]={id=id,kind=doc.kind,title=doc.title,body=doc.body,locationId=doc.locationId,leads=copy(doc.leads),
+        rows[i]={id=id,kind=doc.kind,title=doc.title,body=body,locationId=doc.locationId,leads=copy(doc.leads),
             connections=links,unseen=#unseen>0 and unseen or nil}
     end
     return rows

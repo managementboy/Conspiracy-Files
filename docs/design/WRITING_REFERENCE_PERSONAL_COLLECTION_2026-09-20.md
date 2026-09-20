@@ -4,7 +4,11 @@ Complete authoring example for implementation, not a claim about the published b
 
 ## Underlying event
 
-An office accepted a named passenger-collection request. Before the scheduled run, its dispatcher reassigned the available vehicle to move stored equipment. A return entry recorded that the passenger run never departed. The retained passenger notice still tells the named person to wait.
+An office accepted a named passenger-collection request using a borrowed **McCoy Logging Co.** vehicle. Before the scheduled run, its dispatcher reassigned the vehicle to fetch a replacement mill drive belt. A return entry recorded that the passenger run never departed. The retained passenger notice still tells the named person to wait.
+
+McCoy is doing something specific to its business: keeping mill machinery working. The vanilla `McCoyLoggingCorp` flyer establishes the company, mill work, industrial equipment and truck-driving work; the installed `Base.VanJohnMcCoy` definition supplies its vehicle context. The one-off loan, booking, cancellation and people in this mystery are authored fiction. This does not establish a regular McCoy passenger service, make the survivor an employee, or turn A/B into its mill. B holds retained correspondence.
+
+Q24's ongoing tone is **fatalistic, bureaucratic dark comedy**. The absurdity is that the vehicle, equipment and paperwork all complete their journeys while the passenger never starts. Official authors protect their priorities; the survivor notices what that costs them. The story should still be coherent with its jokes removed, and distinctly funny with them present. This remains an authored proposal awaiting reading/play feedback, not a claim that humour has been objectively verified.
 
 The survivor's name appears on the booking. This establishes that the paperwork concerns them; it does not establish who booked it, that they agreed, that they waited, that A was their home, or that they have forgotten anything. Its transport purpose offers a concrete lead about an opportunity to leave, without calling it an evacuation or explaining Knox.
 
@@ -22,7 +26,7 @@ Carrier: a folded note in an appropriate correspondence container at A. This is 
 
 **On the document**
 
-> DISTRICT TRANSPORT — PASSENGER COLLECTION
+> HIRED COLLECTION — McCOY LOGGING CO. VEHICLE
 >
 > Booking PS-229 / issued July 7, 1993
 > Passenger: Buddy Schuster
@@ -30,12 +34,12 @@ Carrier: a folded note in an appropriate correspondence container at A. This is 
 > Scheduled collection: July 8, 07:00
 > Enquiries and retained booking file: {B}
 >
-> Wait at the collection point. The driver will carry the passenger list.
+> A borrowed McCoy vehicle is assigned for this one collection. Wait at the collection point.
 > Keep this copy if the vehicle does not arrive.
 
 **My note, when this is the only evidence known**
 
-> That's my name. Someone booked a collection for me, from this address. The booking file was kept at {B}. I want to know who arranged it and whether anyone was sent.
+> That's my name. Someone booked a lift for me from {A}, in a borrowed McCoy vehicle. There's a file copy at {B}; I want to know whether they ever sent the driver. Useful of them to provide instructions for being left behind.
 
 This neither asserts a remembered booking nor tells the player that an unseen second clue exists. The next place comes from the document itself.
 
@@ -52,14 +56,15 @@ Carrier: a dated note retained with dispatch correspondence at B. Essential for 
 > July 8, 1993 — 05:40
 > To dispatch / PS-229
 >
-> Use the vehicle assigned to the 07:00 passenger collection for the equipment transfer instead. Do not send a driver to {A}.
+> Use the borrowed McCoy vehicle assigned to the 07:00 passenger collection for the replacement mill drive belt instead. Do not send a driver to {A}.
 >
 > Keep the passenger request open until replacement transport is arranged.
+> Do not mark the passenger absent; dispatch is the part not attending.
 > Amendment authorised: Ines Kubiak.
 
 **My note, alone**
 
-> Ines Kubiak ordered a passenger collection cancelled so the vehicle could move equipment. The request was supposed to stay open. Did they find another vehicle?
+> Ines wants the vehicle sent for a mill belt instead of a passenger. Keep the request open, send nobody. The passenger can continue waiting at no additional cost.
 
 **My note, with evidence 1**
 
@@ -83,13 +88,15 @@ Carrier: a return-book page at B, separate from the amendment. Essential for the
 > Reason: vehicle reassigned under I. Kubiak amendment, 05:40.
 > Replacement vehicle: none allocated.
 >
-> Equipment transfer: vehicle departed 07:10; returned 09:25.
+> Mill drive-belt transfer: vehicle departed 07:10; returned 09:25.
 > Passenger request PS-229: closed at end of shift. No collection recorded.
-> Entered by: Ellis Hale.
+> Request copied from a call sheet signed “Ellis Hale”; caller's name not recorded. Enquiry copies retained at {B}.
+>
+> Vehicle log complete. Outstanding passenger requests: nil.
 
 **My note, alone**
 
-> Dispatch records a passenger collection that never left. The vehicle carried equipment instead, and no replacement was allocated. They closed the request anyway.
+> The belt travelled. The passenger didn't. They closed the request without sending another vehicle, which brought the outstanding total down nicely. The original call sheet bears Ellis Hale's name; there's an enquiry copy at {B}.
 
 **My note, with evidence 1**
 
@@ -101,7 +108,7 @@ Carrier: a return-book page at B, separate from the amendment. Essential for the
 
 **Local conclusion, with all three**
 
-> I can follow what happened to my booking now. Ines reassigned the vehicle. Dispatch recorded the equipment run, allocated no replacement, then closed my request. The collection notice was left promising a run that never departed. I still don't know who put my name on it.
+> Now I have the notice, the order and the result: Ines reassigned the borrowed McCoy vehicle, and dispatch used it for the mill belt. The belt got a ride. I got instructions. That explains the missed collection; it doesn't explain who booked me onto it.
 
 This is a bounded answer, not a claim that it explains the outbreak, proves deliberate abandonment, or establishes whether anyone survives now.
 
