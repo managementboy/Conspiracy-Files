@@ -200,7 +200,7 @@ what is actually left. Recorded as `P4-R144`.
 
 | | measured |
 |---|---|
-| save budget (`P4-R17`) | 500,000 bytes |
+| save budget (`P4-R17`) — **a chosen ceiling, not a format limit** | 500,000 bytes |
 | worst-case 16-case campaign store | 339,764 |
 | the ledger ordinary play already writes (112 events) | 61,843 |
 | reserved for every other stored root | 73,000 |
@@ -697,7 +697,17 @@ strings that happen to match.
 
 ## 14. Open for the owner
 
-1. **Whether to ration, and it is rationing.** **Full coverage remains the
+1. **Whether to ration — and there is now a better option than any of these.**
+   **The 500 kB is a ceiling we chose, not a limit of the save format**, which
+   round-tripped 44 MB intact. The measurement it was set from records **4.4 MB
+   saved in 512 ms with no stall at all** — nine times our whole budget — and
+   nothing between that and the 44 MB failure was ever measured
+   (`WHY_500KB_2026-09-20.md`). The catalogue needs about 555 kB. So the first
+   thing to do is **measure our real save at 600 kB, 800 kB and 1 MB and raise
+   the ceiling on evidence**; if it behaves like that row, this whole question
+   dissolves. Rationing is the last resort, not the second.
+
+   **Full coverage remains the
    objective, and the gap is an implementation constraint to solve — not
    permission to ration maps.** Shrinking the *representation* of the campaign
    store is engineering; retaining fewer cases or dropping evidence is a product

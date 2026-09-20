@@ -106,10 +106,15 @@ whether they rhyme.
 - Squeezing the existing records buys about **10.9 kB** — roughly twenty more
   destinations, not a hundred and ten.
 
-So the pilot is not blocked by space. Only full coverage is, and the only thing
-big enough to fix it is how much we keep about finished cases — which is
-engineering if we store the same content more cheaply, and **your decision** if it
-means keeping less.
+So the pilot is not blocked by space. And full coverage may not be either —
+**the 500 kB is a number we chose, not a limit of the game.** The game's save
+format handled 44 MB intact, and the test our ceiling came from saved 4.4 MB in
+half a second with no stutter at all. The catalogue needs about 555 kB.
+
+So before anyone rations maps or throws away case history, the thing to do is
+**measure our own save at 600 kB, 800 kB and 1 MB and see whether it stutters**.
+One night. If it behaves like that test did, the coverage problem was never real.
+Details in `WHY_500KB_2026-09-20.md`.
 
 ## What could stop us, in order of how likely
 
