@@ -1,5 +1,72 @@
 # Conspiracy-Files — Current Decision Index
 
+## DR-20260920-NO-CONCLUSION — contradiction is the product, 2026-09-20
+
+**Owner, 2026-09-20:** "each mini mystery can contradict each other. Each
+annotated map visit can contradict each other. That makes a conspiracy. That's
+the goal of the mod. We don't want the player to reach a final conclusion. Every
+play through has to be different."
+
+This governs the whole mod, not only annotated maps. It supersedes any reading
+of earlier decisions that treats cross-case contradiction as a defect to be
+designed out.
+
+- **Mysteries may contradict one another.** Not only two readings inside one
+  case — separate cases, and separate map destinations, may disagree.
+- **There is no final conclusion, by design.** Not withheld, not deferred: absent.
+- **Every playthrough differs**, which is a requirement on variety rather than a
+  consequence of it.
+
+### Reconciling this with DR-20260919-CONSISTENT-EVENTS
+
+Read carelessly these collide: one says the events are consistent, the other
+says the mysteries may contradict. The distinction that holds both:
+
+**RECORDS contradict. EVENTS are never arbitrated.**
+
+Two cases' paperwork may disagree about what happened — one says the rounds
+ended on the third, another that they ran to the twentieth — and the mod never
+says which is right. That is ordinary bureaucratic contradiction and needs no
+inconsistency in the world: one of the records is simply wrong, and nothing
+identifies which. The event record therefore holds what is known to have
+happened and is **allowed to stay silent** rather than adjudicating between
+sources. Its job is to keep us from writing nonsense, not to be a truth the
+clues point at.
+
+### Two consequences that would otherwise break quietly
+
+**1. The consistency harness must not police cross-case contradiction.**
+`test/premise_consistency.lua` checks each premise against its own calendar and
+branch — a date that contradicts its own text, a phrase matching no asserted
+gap, a disputing marker in a corroborating reading. Those are defects and stay
+defects. It has never compared one premise with another, so cross-case
+contradiction is currently unchecked rather than forbidden: no false failures
+today, but no support either. **Internal consistency is enforced; external
+contradiction is intended.** Anyone extending that harness must not "fix" the
+second.
+
+**2. Nothing may imply a total.** No progress counter, no "3 of 12 found" for
+the central question, no completion percentage, no achievement, no ending
+screen. **A counter implies a denominator, and a denominator implies an answer**
+— it would tell the player a finite truth exists and they are partway to it,
+which is the one thing that cannot be true here. Counts *within* a single case
+are fine: a case is finite and its clues are countable. The central question has
+no denominator and must never be given one.
+
+### What it demands of us
+
+Variety is the whole burden. With no conclusion to arrive at, the only thing
+keeping a long save interesting is that the next document says something the
+player has not read — which is why bulk is the strategy (DR-20260920-Q33,
+constraint 1) and why 125 contradicting destinations are worth more than a
+smaller number of agreeing ones.
+
+It also means **the connected pair is already the right shape**: "Still filing"
+makes the opening's conclusion *less* settled rather than more
+(DR-20260919-STILL-FILING-NARROW). That was written as a continuity requirement;
+it is also the first instance of this principle in code.
+
+
 ## DR-20260920-Q33 — annotated maps are the pull to travel, 2026-09-20
 
 **The mechanism.** The player finds a vanilla annotated map and reads it. From
