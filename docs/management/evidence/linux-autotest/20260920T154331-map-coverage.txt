@@ -1,0 +1,45 @@
+Linux map-media destination coverage: FINDINGS (not a pass/fail gate)
+session: 20260920T154331
+source: a859415 (branch codex/map-media, DEV-0.45.0-map-media)
+
+QUESTION (native acceptance step 2): a catalogue row is not proof a usable
+building exists. How many of the 125 designs resolve to a real destination?
+
+RESULT, after indexing completed (status indexed=true):
+  125 designs: 105 resolve to exactly one building, 11 resolve to ZERO, 9 resolve
+  to TWO. No errors.
+
+THE 11 WITH NO DESTINATION BUILDING:
+  IrvingtonStashMap1, IrvingtonStashMap9, WorldStashMap3, WorldStashMap6,
+  WorldStashMap9, WorldStashMap10, WorldStashMap11, WorldStashMap16,
+  WorldStashMap18, WorldStashMap21, WorldStashMap23
+
+  Nine are WorldStashMap*, labelled "marked address in World / countryside".
+  These are countryside stashes - a roadside fuel stop, a railyard - so having
+  no building is CORRECT for them, not a lookup failure. The feature assumes a
+  destination is a building; these are not buildings.
+
+  IrvingtonStashMap1 is a different problem: its annotation text is
+  "Cossette - 56.34 seconds  Dart - 1 minute, 14.55 seconds" - lap times, not a
+  place. It is not an address lead at all.
+
+THE 9 AMBIGUOUS (two buildings each):
+  IrvingtonStashMap3, IrvingtonStashMap5, IrvingtonStashMap6, MulStashMap16,
+  RiversideStashMap7, RosewoodStashMap1, RosewoodStashMap2, WorldStashMap17,
+  WpStashMap12
+  Each needs an explicit verdict: which building is the destination?
+
+CONFIRMED BEHAVIOUR, and the reason this matters:
+  Reading a zero-building design still activates its trail.
+    coverage("WorldStashMap3") after a read = active=true | buildings=0
+  So the mod will start a lead toward a place where no destination evidence can
+  be waiting. That is an invitation that cannot be paid off - open owner
+  question 3 in the 2026-09-20 PM handoff. Activation is not gated on coverage.
+
+LIMITS - what this does NOT establish:
+  - I confirmed activation only. I did not follow a zero-coverage trail through
+    fragment offers and travel to watch the player arrive at nothing. That the
+    trail ACTIVATES is proven; what the player then sees is not.
+  - The label "marked address in World / countryside" is generated text and
+    reads poorly, but no player-facing wording was reviewed here.
+  - Coverage was read in one world on one seed.
