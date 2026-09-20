@@ -68,15 +68,43 @@ than by a fourth rewrite:
 | 23 | the authored example | **rewritten** around a flat conflict about one referent, with provenance, a central question, and fixture values (§13) |
 | 24 | no bounded storage change costed | costed: about **10.9 kB**, roughly twenty destinations (§5) |
 
+**Revision 4 corrections** from the final review, applied without a revision 5:
+
+| # | revision 4 said | corrected |
+|---|---|---|
+| 25 | §7's table still said "one outstanding unfound fragment" and that the cap "stops a moving player draining it" | contradicted the prose above it. Replaced; `PAID` duplicate row merged (§7) |
+| 26 | §5 still called ledger events "the binding cost" before correcting itself | superseded sentence deleted (§5) |
+| 27 | §1 promised evidence waiting on arrival with no failure state | **an unconditional guarantee §8 and §12 do not keep.** The pilot contract is stated at its real strength, and the finite following is labelled a pilot proposal (§1) |
+| 28 | the example's gate log | **did not contradict anything** — a vehicle inside can leave later. Replaced with two explicit incompatible claims about inventory G-14 (§13) |
+| 29 | the specialist reading was "the same number is on both" | that is available to any reader and is not expertise. Now a restrained judgement about the *form* of the two records (§13) |
+| 30 | gallery cargo moving implied evacuation was still operating | overclaimed. Narrowed to which services ran, and in what priority (§13) |
+| 31 | the fixture asserted the shortfall persists | **a future optimisation would have failed the test.** It now reports the shortfall and asserts required pilot capacity instead |
+
 ---
 
 ## 1. The mechanism
 
 The player finds a vanilla **annotated map** and reads it. From then on, clues
 **about that distant place** appear **near where the player currently is**,
-sporadically, tied to the central question. Whenever they reach the marked
-destination — their own schedule, no timer, no failure state — authored evidence
-is waiting.
+sporadically, tied to the central question. They travel on their own schedule —
+no timer, no countdown, nothing lost by going late.
+
+**The pilot contract, stated at the strength it is actually delivered:**
+
+> Reading a supported map offers a **finite set** of local clue opportunities.
+> Destination evidence has **no time-based expiry**. Placement uses the
+> destination's **authored carriers**; if none is available, placement remains
+> **pending**. Successfully placed evidence remains subject to **ordinary world
+> destruction**.
+
+Revision 3's "whenever they arrive, evidence is waiting, no failure state" was an
+unconditional guarantee that §8 and §12 do not keep. This is a **narrower product
+promise**, not a technical clarification of the same one.
+
+And the finite following — three opportunities that may all be missed — is a
+**pilot proposal**, not a demonstration that the owner's original following
+requirement survived. Neither reading is owner-approved; the decision record says
+so.
 
 Separately, **flyers and brochures identify places our own paperwork names**. A
 clue of ours mentions somewhere; a vanilla advert tells the player where it is.
@@ -213,9 +241,7 @@ payoff, 15 at a coded payoff.**
 
 **Making fragments free does not rescue this.** Even representation D — fragments
 costing nothing, payoff coded to five characters with no place — is over by
-54,447. The binding cost is one ledger event per destination times the
-catalogue, not the fragments. A cheaper fragment record is necessary and nowhere
-near sufficient.
+54,447. A cheaper fragment record is necessary and nowhere near sufficient.
 
 **What is not yet measured:** identity and connection history sits **inside** the
 73,000 already reserved for other roots, so it is provided for and must not be
@@ -223,10 +249,9 @@ subtracted from the 7,826 a second time. What is genuinely unpriced is any part
 of the feature that would grow *beyond* that reservation — and that is the figure
 to reconcile once, not twice.
 
-**The ledger is not the only binding cost.** At representation D, trail state
-(25,699) and entry state (8,449) are over half the total. Calling ledger events
-"the binding cost" was too strong: the binding cost is the whole per-destination
-record, of which the event is one part.
+**The binding cost is the whole per-destination record**, not the ledger event
+alone: at representation D, trail state (25,699) and entry state (8,449) are over
+half the total.
 
 **A cheaper number is not automatically admissible.** Representation D reaches
 225 bytes partly by dropping the place string. Losing where the player found
@@ -349,14 +374,13 @@ independently of all three.
 | transition | rule |
 |---|---|
 | `INERT` → `ACTIVE` | the design is read **and** funded. An unfunded design stays `INERT` **and the read is recorded** — not silently forgotten |
-| next fragment eligible | when the previous one is **placed**, but at most **one outstanding unfound fragment**. Placement advances the trail; the outstanding cap stops a moving player draining it |
+| next fragment eligible | Placement advances the authored fragment index. At most **one** fragment blocks further placement until discovery or expiry of its persisted release interval. Older released fragments remain findable. **This limits pacing; it does not prevent all three opportunities being missed.** |
 | a missed fragment | does **not** stall the trail. After a bounded interval the **blocking** fragment is **released**: it stays in the world, findable, but no longer blocks the next placement |
 | the release clock | an in-game hour stamp **persisted with the trail**. A long time advance or a reload releases on the same comparison it would have made live — never a session timer, which a reload would reset |
 | `PAID` | **stops local placement.** The destination evidence is found and noted; continuing to place fragments about it would be reminders after the fact. `ARRIVED` alone does not stop placement |
 | no eligible carrier | the trail **defers** — it does not consume its turn and does not block others |
 | `ACTIVE` → `EXHAUSTED` | all authored fragments placed. The trail stops placing and stays open for arrival |
 | `ARRIVED` | the player entered the authored building of the destination |
-| `PAID` | the destination evidence was found **and** noted |
 | arrival before payoff | arrival does **not** stop local placement. Stopping it on arrival is an accidental dead end |
 
 **Scheduling, replacing "none may starve" with something testable:** every
@@ -402,7 +426,9 @@ unbounded storage (§5).
 - **Carriers are finite, and destruction is not failure.** A payoff whose
   authored carrier is unavailable **before placement** moves to the next authored
   carrier at that destination; when **every** authored carrier is unavailable the
-  payoff is **held unplaced** and the destination stays unpaid — it does not
+  payoff enters **`PENDING`** — a real state that retries when a valid carrier
+  becomes available and survives reload still owing the retry — and the
+  destination stays unpaid — it does not
   scatter to unauthored containers, and an unloaded carrier is never permission
   to duplicate its contents elsewhere. A carrier looted or destroyed **after**
   successful placement is the player's world working normally: **no replacement
@@ -594,7 +620,11 @@ anything pass once described. Exact outcomes for the pilot. Fresh-save permissio
 | arrival before the payoff is prepared | entry is recorded as entry regardless; the payoff must be placed before the carrier can first be inspected. If the engine cannot guarantee that order, it is a Phase 0 finding, not a redefinition of arrival |
 | late arrival, weeks later | payoff present and findable; no expiry |
 | authored carrier unavailable before placement | payoff moves to the next authored carrier at that destination; vanilla contents and effects unchanged |
-| every authored carrier unavailable | payoff held unplaced, destination unpaid; nothing placed in an unauthored container |
+| every authored carrier unavailable | payoff enters **`PENDING`** — its own state, not a quiet failure. Destination unpaid; nothing placed in an unauthored container |
+| a valid carrier becomes available later | `PENDING` **retries successfully** and the payoff is placed |
+| reload while `PENDING` | still `PENDING`; the retry is still owed |
+| `PENDING` vs the arrival test | `PENDING` **must not pass** the ordinary arrival-success row. It is a conservative fallback, not delivery |
+| unavailable vs unloaded | distinguished, never conflated: unloaded is **unknown** and retried; unavailable is observed |
 | carrier looted or destroyed after placement | no replacement spawned — the world working normally is not an insertion failure |
 | interrupted before insertion | no record, nothing placed |
 | interrupted after insertion, before commit | reconciled against the object where the carrier is observable; held unknown where it is not; never retried blind |
@@ -610,27 +640,40 @@ anything pass once described. Exact outcomes for the pilot. Fresh-save permissio
 
 ## 13. The complete authored example
 
-Rewritten. The revision-3 example failed its own test: a blank collection field
-asserts nothing, "released" need not mean collected, two entries about different
-actions bearing different dates is not a disagreement about one event's date, and
-the police reading invented a universal paperwork convention and then offered a
-false choice between two explanations. Worst of all it ended with "nothing says
-whether any of it connects to anything else" — which is the feature's purpose
-disclaimed in its own sample. The pair below makes **incompatible claims about
-the same referent** while leaving both documents' reliability open.
+Corrected again, and the fault was mine to catch: **"no vehicle admitted after
+23:00" does not contradict a removal at 04:10.** A vehicle already inside can
+leave later, and a sealed gate does not establish that nothing left by any route.
+The reader had to supply the missing premise, which is exactly the failure the
+previous version was rewritten to fix. The pair below makes two **explicit
+incompatible claims about the same identified set of items.**
 
-**The referent:** whether the gallery annex's listed items were removed on the
-night of 11-12 July 1993.
+**The referent:** annex inventory **G-14** — a named, listed set of items.
 
 **Local fragment — District Priority Removals list, third carbon.**
-A pre-printed district sheet. Entry: *"Knox County Gallery annex — listed items
-removed, 04:10, 12 July. Shelter 4."* Signed with a warden number, **W-114**, and
-no name.
+Entry: *"Annex inventory G-14 removed to Shelter 4, 04:10, 12 July."* Signed with
+a warden number, **W-114**, no name.
 
-- reading one: the removal happened, and whatever the map's finder is looking for
-  went to Shelter 4 — where the district was telling people to go.
-- reading two: the sheet is pre-printed with the *intended* removals and marked
-  through in advance; the time may be the time it was scheduled, not performed.
+**Destination evidence — annex custody sheet, morning of 12 July.**
+Entry: *"05:00, 12 July — every item on annex inventory G-14 remained in the
+annex; none removed since 23:00."* Countersigned **W-114**.
+
+**The conflict is flat and needs no interpretation.** One sheet says G-14 left at
+04:10; the other says at 05:00 every item of G-14 was still there and nothing had
+moved since 23:00. Both cannot be true of the same items. Reliability stays
+unresolved in both directions: a removals list may be pre-printed with intended
+movements and marked through in advance, and a custody sheet may be a rolling
+copy carried forward from the previous shift without being re-walked.
+
+- **available to any reader:** the two sheets make opposite claims about the same
+  inventory, and the same warden number is on both.
+- **police-officer reading** (`DR-20260919-Q03`/`Q16`): a cautious reading of
+  *this* document rather than privileged access to an obvious fact. The custody
+  sheet's claim is the stronger of the two, because it asserts a positive
+  observation of every listed item at a stated time, where the removals list
+  asserts only that a line was completed. That makes the removals line the one
+  worth doubting first — which is a judgement about the form of the two records,
+  not a finding about what happened. It could still be the custody sheet that was
+  never re-walked.
 
 **Provenance, and the eligible local carrier.** Carbons of district removal lists
 were distributed to **every warden post, police station and post office in the
@@ -638,42 +681,29 @@ district**, which is why a Louisville gallery's paperwork can plausibly turn up 
 a filing tray two towns away. That class of building is the trail's eligible
 carrier set for this design — not "any container".
 
-**Destination evidence — annex gate log, sheet for 11 July.**
-The same annex. Entry: *"23:00, 11 July — gate sealed, no vehicle admitted
-after. W-114."*
+**Why it bears on a central question — narrowly.** Gallery cargo moving does not
+show that passenger evacuation was still running, and the example does not claim
+it. What the pair raises is **which services were still operating, and in what
+order of priority**, on a night when civilians were being directed to Shelter 4.
+That is relevance enough. The records do not say what the listed items were, who
+authorised their priority, or whether anyone was moved at all.
 
-**The conflict is about one referent and it is flat.** The removal is recorded at
-04:10 on the 12th; the gate was sealed at 23:00 on the 11th with nothing admitted
-after. Both cannot be straightforwardly true of the same night. Neither document
-is privileged: the removals list may be a plan marked as done, and the gate log
-may be one gate of several, or filled in later from memory.
-
-- **default reading:** the two sheets disagree about whether anything left the
-  annex that night.
-- **police-officer reading** (`DR-20260919-Q03`/`Q16`): **the same warden number,
-  W-114, is on both** — the person recorded as sealing the gate is the person
-  recorded as signing for a removal through it, five hours and ten minutes later.
-  That is an observable feature of these two documents, not a rule about
-  paperwork. It does not say which sheet is wrong: a number can be reassigned
-  between shifts, a clerk can copy a number off the log, and one person can
-  plainly do both things if the gate was opened again.
-
-**Why it bears on a central question.** Shelter 4 is where the district was
-sending people. Whether the priority removals actually ran is the difference
-between an evacuation that was still operating that night and one that had
-already stopped — which is the survivor's own question about being left alone.
-The documents do not answer it, and nothing here says what the listed items were.
-
-**Fixture values, so consistency can be tested:** gate sealed `11 July 23:00`;
-removal recorded `12 July 04:10`; interval `5h10m`; shared warden number `W-114`;
-destination `Shelter 4`. The generated dates must preserve the ordering and the
-interval, and the warden number must be the same value in both documents — the
-same placeholder, not two strings that happen to match.
+**Fixture values, so consistency can be tested:** inventory `G-14`; removal
+recorded `12 July 04:10`; custody observation `12 July 05:00`; "none removed
+since" `11 July 23:00`; shared warden number `W-114`; destination `Shelter 4`.
+The generated dates must preserve that ordering, and the inventory code and
+warden number must each come from **one placeholder** used twice — not two
+strings that happen to match.
 
 ## 14. Open for the owner
 
-1. **Whether to ration, and it is rationing.** Full coverage stays the
-   requirement until you change it. The measurement says the current
+1. **Whether to ration, and it is rationing.** **Full coverage remains the
+   objective, and the gap is an implementation constraint to solve — not
+   permission to ration maps.** Shrinking the *representation* of the campaign
+   store is engineering; retaining fewer cases or dropping evidence is a product
+   tradeoff, and only the second is yours. The 10.9 kB result bounds one interning
+   scheme, not all possible compression, so the next step is a concrete candidate
+   rather than a saving promised from gross size. The measurement says the current
    representation funds **nine to fifteen** destinations, and compressing what
    exists buys about twenty more. The options, in the order I would spend effort
    on them: (a) shrink the campaign store — the largest item at 339,764 bytes, and

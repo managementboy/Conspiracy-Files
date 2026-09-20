@@ -166,11 +166,30 @@ local fundableB=fundable(ordinaryEvent,perTrail)
 local fundableD=fundable(payoffCoded,perTrail)
 print(string.format("FUNDABLE DESTINATIONS within the measured budget: %d at an ordinary-cost payoff, %d at a coded payoff",
     fundableB,fundableD))
-assert(not A,"representation A is expected to be unaffordable - if it now fits, the budget model changed")
-assert(fundableB<DESIGNS,"an ordinary-cost payoff is expected not to fund the whole catalogue")
+-- What this test ENFORCES is required capacity, not a deficit. A future
+-- optimisation that closes the gap must not fail a test for succeeding
+-- (revision-4 review): the catalogue shortfall is REPORTED above and the
+-- assertion below is the pilot's own requirement.
+--
+-- The bounded pilot: two distinct designs sharing one destination (the case
+-- Phase 1b exists to prove), with their fragments, their trail state, the
+-- destination's entry state and its payoff retained.
+local PILOT_DESIGNS,PILOT_DESTINATIONS=2,1
+local pilot={schema=1,t={}}
+for i=1,PILOT_DESIGNS do pilot.t[i]={d=i,s=2,f=FRAGMENTS,at=123456.75} end
+local pilotEntry={schema=1,e={}}
+for i=1,PILOT_DESTINATIONS do pilotEntry.e[i]=i end
+local pilotCost=V.estimateEncodedBytes(pilot)+V.estimateEncodedBytes(pilotEntry)
+    +PILOT_DESTINATIONS*payoffLong          -- the dearest payoff measured, not the cheapest
+    +PILOT_DESIGNS*FRAGMENTS*ordinaryEvent  -- fragments retained as full discoveries
+print(string.format("MEASURED bounded pilot (%d designs, %d shared destination, retained evidence): %d of %d spendable",
+    PILOT_DESIGNS,PILOT_DESTINATIONS,pilotCost,spendable))
+assert(pilotCost<=spendable,string.format(
+    "the bounded pilot must fit the measured budget with its evidence retained: %d of %d",
+    pilotCost,spendable))
 print(string.format("PASS whole-save budget measured: %d bytes spendable after a justified %d reserve; "..
-    "the full %d-destination catalogue does NOT fit at any representation measured here",
-    spendable,RESERVE,DESIGNS))
+    "the bounded pilot fits at %d; the full %d-destination catalogue does not, at any representation measured here",
+    spendable,RESERVE,pilotCost,DESIGNS))
 
 -- 7. ONE BOUNDED STORAGE CHANGE, COSTED -----------------------------------
 -- The revision-3 review asked for exactly this rather than a compression
@@ -222,8 +241,11 @@ local bestSaving=baseLedger-bothBytes
 local shortfallD=DESIGNS*payoffCoded+trailBytes+enteredBytes-spendable
 print(string.format("MEASURED against the shortfall: best bounded saving %d vs representation D shortfall %d",
     bestSaving,shortfallD))
-assert(bestSaving<shortfallD,
-    "if a bounded ledger change now covers the shortfall, the coverage decision changes - re-read this test")
+-- Reported, never asserted: a change that closes the shortfall is a win, and a
+-- test that fails on a win is a trap.
+if bestSaving>=shortfallD then
+    print("NOTE the bounded saving now covers the shortfall - the coverage question is reopened, read section 5")
+end
 local fundableAfter=fundable(payoffCoded,perTrail)
 print(string.format("FINDING compressing the existing ledger buys about %d bytes - roughly %d more destinations, not %d",
     bestSaving,math.floor(bestSaving/(payoffCoded+perTrail)),DESIGNS-fundableAfter))

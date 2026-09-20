@@ -17,9 +17,29 @@ buys about twenty more - `P4-R144`), and **engine verification** that the read
 hook exists, names the actual annotated design, and that vanilla stash
 preparation survives our insertion. Either can send the plan back.
 
-**Still the owner's** (§14.1): full coverage remains the requirement, so the
-choice is to shrink the campaign store, ration and call it rationing, or spend
-the reserve. Not decided here.
+**Still the owner's** (§14.1): full coverage remains the **objective**, and the
+storage gap is an implementation constraint to solve, not permission to ration.
+Shrinking how the campaign store is *represented* is engineering; retaining fewer
+cases or dropping evidence is the product tradeoff, and only that is the owner's.
+Not decided here.
+
+**Explicitly NOT owner-approved.** Two narrower readings are carried in the plan
+as **pilot proposals**, and neither is recorded as a ruling:
+
+- **the finite following promise** — three local opportunities that may all be
+  missed, after which nothing further is placed. This is not a demonstration that
+  the original "the trail follows the player" requirement survived. If continued
+  following is required after all opportunities are missed, re-offering becomes
+  necessary work rather than optional polish.
+- **the pilot payoff contract** — no time-based expiry, authored carriers only,
+  `PENDING` when none is available, and ordinary world destruction applies after
+  successful placement. Revision 3's "evidence is waiting whenever you arrive, no
+  failure state" was a stronger promise than the design keeps.
+
+Measured alongside this (`test/map_feature_budget.lua`): the **bounded pilot
+fits** — two designs sharing one destination, dearest payoff, fragments retained
+as full discoveries, 4,846 bytes of the 7,826 available. The pilot being
+affordable is not evidence the catalogue is.
 
 ## P4-R144 — the map feature has 7,826 bytes, not 88,460, 2026-09-20
 
