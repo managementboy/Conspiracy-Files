@@ -579,14 +579,21 @@ function R.tick()
     if not ready or not allowed() then return end
     ticks=ticks+1
     if ticks%15==0 then visitStep() end
-    if R.indexed then
-        if not scheduler.has("map-placement") then scheduler.enqueue("scan","map-placement",scanStep) end
-        if not scheduler.has("map-reconcile") then
-            entryCursor=entryCursor%(#Catalogue.list*4)+1
-            local id=Catalogue.list[math.floor((entryCursor-1)/4)+1]; local part=(entryCursor-1)%4+1
-            local p=State.get(root(),id,part)
-            if p then scheduler.enqueue("reconcile","map-reconcile",function() reconcile(id,part,p); return true end) end
-        end
+    -- Placement waits for the metadata pass because it needs to know where a
+    -- design leads. RECONCILIATION does not: it only looks for an item the mod
+    -- already recorded an intent for. Gating it behind indexing meant an
+    -- insertion interrupted mid-write could not heal itself for as long as the
+    -- pass took - and that pass is not instant. The placement gate caught it:
+    -- afterInsert stayed at "intent" with the item physically present, through
+    -- a save and reload.
+    if R.indexed and not scheduler.has("map-placement") then
+        scheduler.enqueue("scan","map-placement",scanStep)
+    end
+    if not scheduler.has("map-reconcile") then
+        entryCursor=entryCursor%(#Catalogue.list*4)+1
+        local id=Catalogue.list[math.floor((entryCursor-1)/4)+1]; local part=(entryCursor-1)%4+1
+        local p=State.get(root(),id,part)
+        if p then scheduler.enqueue("reconcile","map-reconcile",function() reconcile(id,part,p); return true end) end
     end
     scheduler.step()
 end

@@ -1,0 +1,20 @@
+Linux map placement gate 20260920T221645: INCONCLUSIVE
+source: 7e383a5
+renderer: Mesa llvmpipe (LLVM 20.1.2, 256 bits) (SOFTWARE) on display :0
+  none|BBurgStashMap1|ok|recorded placed|items 1
+  beforeInsert|BBurgStashMap2|interrupted with recorded none
+  beforeInsert|BBurgStashMap2|ok|recorded placed|items 1
+  afterInsert|BBurgStashMap3|interrupted with recorded intent
+  afterInsert|BBurgStashMap3|INCONCLUSIVE|recorded intent|items 1
+  beforeCommit|BBurgStashMap4|interrupted with recorded intent
+  beforeCommit|BBurgStashMap4|ok|recorded placed|items 1
+  afterCommit|BBurgStashMap5|interrupted with recorded placed
+  afterCommit|BBurgStashMap5|ok|recorded placed|items 1
+  reload|BBurgStashMap1|ok|recorded placed|items 1
+  reload|BBurgStashMap2|ok|recorded placed|items 1
+  reload|BBurgStashMap3|INCONCLUSIVE|recorded intent|items 1
+  reload|BBurgStashMap4|ok|recorded placed|items 1
+  reload|BBurgStashMap5|ok|recorded placed|items 1
+INCONCLUSIVE: afterInsert BBurgStashMap3: no positive placement/reconciliation
+INCONCLUSIVE: afterInsert BBurgStashMap3: INCONCLUSIVE, recorded intent, items 1
+INCONCLUSIVE: reload BBurgStashMap3: INCONCLUSIVE, recorded intent, items 1
