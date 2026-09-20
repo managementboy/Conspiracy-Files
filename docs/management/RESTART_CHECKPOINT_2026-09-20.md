@@ -1,3 +1,9 @@
+# Resume from the completed source handoff
+
+The source integration saved in `b4d9a02` has now received its final static review. Use [WRITING_REBUILD_LINUX_HANDOFF_2026-09-20.md](WRITING_REBUILD_LINUX_HANDOFF_2026-09-20.md) and the commit that finalises it. Implementation is ready for Claude's one Linux build/testing phase; it remains unvalidated and local-only. The older restart instructions below are historical. No tests/builds/game were run by Codex.
+
+---
+
 # Latest restart save — 20 September 2026
 
 The owner requested another durable save before a possible PC restart. This checkpoint includes all current source edits and the draft Linux handoff. Find its commit with `git log -1`; the preceding checkpoint was `0385075`. Saved locally on `main`; nothing has been pushed, built, tested or published by this save operation.

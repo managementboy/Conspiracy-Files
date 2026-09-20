@@ -1,8 +1,8 @@
 # Writing rebuild: Linux build and validation handoff
 
-**Draft handoff saved before restart; final static integration review remains.** Development version: `DEV-0.46.0-writing-rebuild`. Use a fresh disposable save. This is an unvalidated development candidate, not a release. Codex performed source review and whitespace checks, not Lua execution, compilation, tests, sample export, packaging or gameplay.
+**Source implementation is ready for the build/testing phase.** Development version: `DEV-0.46.0-writing-rebuild`. Use a fresh disposable save. This is an unvalidated development candidate, not a release. Codex performed source review and whitespace checks, not Lua execution, compilation, tests, sample export, packaging or gameplay.
 
-This supersedes the unfinished implementation checklist in `WRITING_REBUILD_STATUS_2026-09-20.md` and the older map-media branch handoff. Work is integrated on `main`. The restart checkpoint is `0385075`; use the later commit containing this document and the completed integration changes. Record `git rev-parse HEAD` before testing and retain it in every result. Do not test the old Workshop tag or assume a local Windows commit has reached GitHub: verify the source contains `MapMediaPlaceStories.lua`, `PlaceNames.context` and this handoff before running anything. Preserve unrelated Linux changes.
+This supersedes the unfinished implementation checklist in `WRITING_REBUILD_STATUS_2026-09-20.md` and the older map-media branch handoff. Work is integrated on `main`. The latest source checkpoint is `b4d9a02`; use the later commit finalising this handoff. The final static pass confirmed nil-safe session lookup, read-only inherited address context, source gating and exact-container fill permission. Record `git rev-parse HEAD` before testing and retain it in every result. Do not test the old Workshop tag or assume a local Windows commit has reached GitHub: verify the source contains `MapMediaPlaceStories.lua`, `PlaceNames.context` and this handoff before running anything. Preserve unrelated Linux changes.
 
 ## What is implemented
 
@@ -65,3 +65,7 @@ The revised fixture covers normal placement and `beforeInsert`, `afterInsert`, `
 6. FILES/NAMES/DATES/PLACES and closing questions: actual font sizes, long notes/choices, popup scrolling/taps/rocker, known-only interpretations, live-to-retired view, continued source addresses and no raw debug coordinates. Check shared map findings refresh when the second file becomes complete.
 
 Archive commit/version, setup, actions, observations and logs for each result. The old native baseline (105 single-building / 11 none / 9 multiple; no real shared destination) applies to the old build only. These source changes require fresh evidence. Do not describe the new candidate as validated or publish it until the gates pass. Fix concrete defects within the established scope or return reproducible findings; do not send the owner between agents for routine repairs.
+
+## Delivery state
+
+This handoff and the implementation are committed on local Windows `main`. They have not been pushed or published by this pass. Transfer the completed commits to the Linux checkout before using the commands above; the presence of the old map-media branch or Workshop candidate is insufficient. The knowledge graph was refreshed locally with AST extraction only and is ignored by Git. No runtime acceptance result is claimed.

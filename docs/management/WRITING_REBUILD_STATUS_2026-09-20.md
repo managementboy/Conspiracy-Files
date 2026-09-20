@@ -1,6 +1,6 @@
 # Writing rebuild: scope, ownership and progress
 
-**Latest restart checkpoint:** [RESTART_CHECKPOINT_2026-09-20.md](RESTART_CHECKPOINT_2026-09-20.md). Read it first; the sections below include historical intermediate states. Work remains unvalidated and the final Linux handoff is not yet ready.
+**Current state: source implementation complete for the Linux build/testing phase.** Use [the single Linux handoff](WRITING_REBUILD_LINUX_HANDOFF_2026-09-20.md). `b4d9a02` saves the final source integration; the later handoff commit records completion of the static review. This is an unvalidated fresh-save candidate. The progress sections below are historical snapshots, not the current outstanding-work list.
 
 Owner objective: audit all writing before passage edits; give every mystery an event; make evidence reveal different parts; separate document and survivor voice; vary coherent scenarios; establish one complete example and apply the standard everywhere. Claude continues repairing/building/testing the earlier code. Do not collide with that work.
 
@@ -222,15 +222,18 @@ archive preservation were updated. More old optional-role/steering assertions
 still need reconciliation after their implementation is complete. No Lua,
 tests, compiler, build, exporter or game was executed in this checkpoint.
 
-## Implementation still required
+## Final source review and handoff
 
-1. Finish the editorial pass over the remaining scenario modules and the personal pair. Structural contracts do not certify humour or narrative quality. Keep local answers, first-person reactions and the distinction between vanilla grounding and invented events.
-2. Complete opening/continuation routing and UI integration. Verify actual readable locations outside the numbered address catalogue. The follow-up preserves source identity/date and answers how a name became a booking; it does not identify the caller. Native address resolution and closing-question layout remain unverified.
-3. Complete map destination/content integration for all 125 designs, particularly the eleven non-building and nine multi-building cases. Do not invent an unrelated nearby address to satisfy a count. Author actual shared-destination content, check map-specific relevance, and broaden the separate map placement path with candidate-kind diversity.
-4. Finish compatible optional-source coverage and the relay memo/radio, identity, key and physical-object writing paths, including the retained Dead Air fixture. The removed random-role generator must not return as an unrelated-clue fallback. Answer-based steering must affect compatible content without changing an established event to flatter a chosen theory.
-5. Complete UI behavior and review archive integration. Keep all source history and the 1,000,000-byte provisional aggregate allowance; make admission failures explicit. The 16-case/full-map budget fixtures are drafts until Claude executes them.
-6. After full implementation, have Claude measure non-floor placement variety, native capacity, moved/dismantled furniture, scan cost and interrupted insertion recovery. Generated StorageChoices source is implemented; these are not accepted runtime results.
-7. Reconcile obsolete test assumptions, finish static integration review, then supply one complete Claude build/testing handoff. Content previews and test drafts remain unexecuted and cannot certify native behavior or writing quality.
+The former implementation checklist is superseded by the source completion audit in [the Linux handoff](WRITING_REBUILD_LINUX_HANDOFF_2026-09-20.md). All 22 generated families (44 event variants), 17 map families and the Speedway-specific event are implemented. The later checkpoints also cover the eleven area destinations, real shared restaurant pair, map storage variety, optional physical evidence, supporting prose, retained history and UI integration. These are source-completion claims, not native acceptance results.
 
-The full goal remains active. This is unfinished implementation on local main,
-not a validated build or the requested final testing handoff.
+The last integration review confirmed:
+
+- Optional sources compare against their actual authored event in the regression drafts, with positive physical/listen coverage; their notes no longer rely on undiscovered companion sources.
+- Source copies name their actual filing origin. Mixed numbered/unnumbered destinations receive a direction from that origin. A follow-up resolves the earlier file's address from a known retained source; `PlaceNames.context` creates only a temporary view. `SuccessiveCases.sessions` returns safely when its wrapper is unavailable.
+- Map fill observation is tied to the actual container object, so a replacement at identical coordinates cannot inherit permission. Canonical targets remain plain tables.
+- Native placement checks scope interruptions to design/part, observe the recorded boundary, require positive insertion and distinguish inconclusive/unobservable cases. They remain unexecuted drafts.
+- The handoff's commands exist and cover compilation/unit checks, story previews, packaging and the revised placement fixture. No command was executed in this pass. Source inspection, an encoding scan, `git diff --check` and AST-only graph refresh are the available evidence.
+
+Build version: `DEV-0.46.0-writing-rebuild`. Claude now owns the single build/testing phase on fresh saves, including all-map native coverage, loot/manual-read travel, save/load, actual scan cost, UI and humour/readability acceptance. Generic recipient correspondence does not mean 125 unique stories; source footprints do not prove reachable containers. Those limits are explicit in the handoff.
+
+All work is local on main. No push, package, boot, test run or publication is implied by completion of implementation.

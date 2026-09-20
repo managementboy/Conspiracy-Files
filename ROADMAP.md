@@ -1,21 +1,19 @@
 # Conspiracy-Files — Roadmap
 
-## Active writing and placement rebuild — 2026-09-20
+## Writing and placement implementation ready for Linux — 2026-09-20
 
-Implementation continues on local `main` after the owner authorised integration
-when Claude stopped. The previous map candidate and Claude's fixes are included;
-this new rewrite is not a build handoff. See
-[the writing rebuild status](docs/management/WRITING_REBUILD_STATUS_2026-09-20.md)
-for current source coverage and the remaining implementation list.
+`DEV-0.46.0-writing-rebuild` is integrated on local `main`, including Claude's
+previous map fixes. Source implementation and the final static review are complete;
+use [the single Linux handoff](docs/management/WRITING_REBUILD_LINUX_HANDOFF_2026-09-20.md).
+It covers 44 generated variants, 17 map families plus the Speedway event, reviewed
+area/shared destinations, first-person findings, compatible optional evidence,
+non-floor placement variety, readable addresses, retained history and UI integration.
 
-There are initial authored drafts for 22 generated families (44 variants) and
-17 map families. The generator uses event scenarios exclusively; source and
-survivor voice are separated and comparisons require discovered evidence.
-Generated storage now retains non-floor furniture-kind variety. Map destination
-coverage, its separate storage path, optional/physical evidence and other writing
-surfaces still need implementation. UI scrolling and regression drafts are
-unexecuted. No Lua, tests, builds, game runs or publication in this pass. Complete
-implementation first, then one Claude testing/build handoff; fresh saves only.
+This is an unvalidated development candidate requiring fresh saves. Claude owns
+all compilation, tests, previews, builds and native acceptance. No execution or
+publication occurred in this implementation pass; commits are local, not pushed.
+The handoff identifies the exact source markers, commands and remaining native
+gates. Historical sections below do not override this current delivery state.
 
 ## Current map-media sequence — owner, 2026-09-20
 
