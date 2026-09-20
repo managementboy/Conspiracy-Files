@@ -1,14 +1,24 @@
 # Plan: vanilla printed media as the travel mechanism
 
-**Revision 3 — planning only, nothing built except the budget fixture in §5.**
+**Revision 4 — planning only, nothing built except the budget fixture in §5.**
 
-This is the whole plan in one document. It replaces revision 2 and absorbs the
-five answers the revision-2 review asked for, so there is no second file to read
+This is the whole plan in one document; there is no second file to read
 alongside it.
 
-Reviewer: §A lists what changed and why, so corrections can be checked in one
-pass. Everything after it stands on its own. The questions I want challenged are
-in §15.
+**Revision 4 is revision 3 corrected in place, not rewritten.** The revision-3
+review asked for four targeted corrections and explicitly not another complete
+plan, so the structure and wording of revision 3 are untouched except where a
+correction required it. The version number moves because the content moved on
+twelve points, and a recheck needs to know which document it is holding.
+
+Reviewer: §A has two tables — what changed since revision 2, then the
+revision-3 review's corrections, rows 13-24 — so either round can be checked in
+one pass. Everything after them stands on its own. The questions I want
+challenged are in §15.
+
+**Also now available**, which the last review could not find: the fixture is on
+`main` as `test/map_feature_budget.lua` (`lua5.1 test/map_feature_budget.lua`),
+and the measurement is recorded as `P4-R144` in `DECISIONS.md`.
 
 Every number cited as measured names the command or file behind it. Anything
 unverified is marked so.
@@ -36,8 +46,8 @@ decisions. Two of them change the shape of the feature.
 | 11 | harness detects "any document asserting a conclusion" | overstated. It checks a **finite list** of phrasings and contracts (§3) |
 | 12 | reviewer reported stray shell text in the document | **not a defect** — it came from the terminal transcript around the file, not the file. Paste the document, not the session |
 
-Corrections from the revision-3 review, applied in place rather than by a fourth
-rewrite:
+**Revision 4** — corrections from the revision-3 review, applied in place rather
+than by a fourth rewrite:
 
 | # | revision 3 said | corrected |
 |---|---|---|
