@@ -22,7 +22,7 @@ the destination accumulates weight before the player sets out, and the journey
 becomes anticipation rather than a chore paid off afterwards. It also needs no
 new machinery: clues are already placed near the player.
 
-### Three constraints
+### Four constraints
 
 **1. Every annotated map ties in.** No rationing. The assistant argued for
 tie-ins on only a few maps, on the grounds that many fragments pointing at one
@@ -63,7 +63,40 @@ resolve its local mystery "clearly or ambiguously".* The constraint is on the
 **trail fragments**. A destination may still deliver a clear local payoff while
 the central question stays open — the same shape as the opening pair.
 
-**3. An unfunded destination stays inert vanilla.** Until a destination has
+**3. No maximum, and maps may disagree with each other.** Owner, 2026-09-20:
+there is no cap on how many annotated maps can pull the player at once. "They
+might even disagree. That is perfect."
+
+*No cap.* The player may have any number of maps read, trails running and
+destinations outstanding. The mod imposes no designed limit — how many they have
+is a fact about their luck and their curiosity, not a rule.
+
+*Disagreement is wanted, not tolerated.* Two maps' evidence may contradict each
+other. This is the project's existing grammar — every premise has two honest
+readings and nothing chooses between them — extended across destinations.
+
+**And disagreement is what makes constraint 2 self-enforcing, which is the
+stronger reason to want it.** Fragments that contradict each other cannot be
+assembled into a single explanation: the contradiction blocks it structurally,
+rather than depending on each fragment being written carefully enough to avoid
+becoming a puzzle piece. It also gives the player a reason to visit *both*
+destinations, which serves the travel pull directly.
+
+**Where "no maximum" meets a real limit, recorded so it is not discovered
+later.** There is no design cap, but storage is finite, and the binding
+constraint is the **discovery ledger**: about 545 bytes for every document ever
+found, capped at 512 entries (measured, `test/case_archive.lua`). Illustrative
+arithmetic only, since no trail exists to measure yet: 125 catalogued
+destinations at roughly three trail clues each is ~375 entries, and sixteen
+ordinary cases at seven documents is ~112 — about 487 of 512. It fits, but
+barely, and the ledger rather than any case cap is what will bite first.
+
+Two consequences follow, and neither is settled here:
+- a map trail must **not** consume one of the four active case slots
+  (`MAX_ACTIVE`), or the second map read would block every later case;
+- trail length is a **storage** decision, not only a pacing one.
+
+**4. An unfunded destination stays inert vanilla.** Until a destination has
 authored evidence at it, its map does nothing and the mod says nothing: a trail
 that ends in nothing is worse than no trail, because the player walked on a
 promise. This is DR-20260919-COVERAGE-HONESTY made load-bearing rather than a
