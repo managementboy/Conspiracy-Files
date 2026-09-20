@@ -4,7 +4,9 @@ local Ids = require("ConspiracyFiles/Ids")
 local Validator = {}
 
 Validator.MAX_DEPTH = 64
-Validator.MAX_ENCODED_BYTES = 500000
+-- Provisional development allowance, owner 2026-09-20. This is an estimate,
+-- not an engine/file-format limit. Claude must measure actual full-save costs.
+Validator.MAX_ENCODED_BYTES = 1000000
 
 local ROOT_FIELDS = {
     schemaVersion = true, threadId = true, contentRevision = true,

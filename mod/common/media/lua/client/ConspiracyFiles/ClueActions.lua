@@ -23,7 +23,11 @@ A.INSPECT_TIME=100
 -- is not about the progress bar need not wait for it. Debug builds only.
 A.instant=false
 
-local function runtime() return ConspiracyFiles.GeneratedRuntime end
+local function runtime(item)
+    local maps=ConspiracyFiles.MapMediaRuntime
+    if maps and maps.subject(item) then return maps end
+    return ConspiracyFiles.GeneratedRuntime
+end
 local function instant() return A.instant==true and getDebug and getDebug() end
 
 -- A reading pose that suits the thing: a photograph, a newspaper, or a book
@@ -61,7 +65,7 @@ if ISBaseTimedAction then
     A.Look=A.Look or ISBaseTimedAction:derive("CFLookItOver")
     local Look=A.Look
     function Look:isValid()
-        local R=runtime()
+        local R=runtime(self.item)
         return self.item~=nil and self.item:getOutermostContainer()==self.character:getInventory()
             and R~=nil and R.subject(self.item)==true
     end
@@ -71,7 +75,7 @@ if ISBaseTimedAction then
     function Look:stop() finish(self); ISBaseTimedAction.stop(self) end
     function Look:perform()
         finish(self)
-        local R=runtime()
+        local R=runtime(self.item)
         local ok,done,why=pcall(R.recognise,self.item,"look")
         log("look it over: "..tostring(ok and done)..(why and (" "..tostring(why)) or ""))
         A.lastLook={ok=ok and done==true,ms=stamp()-(self.startedAt or stamp())}
@@ -95,7 +99,7 @@ if ISBaseTimedAction then
     A.Inspect=A.Inspect or ISBaseTimedAction:derive("CFInspectEvidence")
     local Inspect=A.Inspect
     function Inspect:isValid()
-        local R=runtime()
+        local R=runtime(self.item)
         return self.item~=nil and self.item:getOutermostContainer()==self.expected
             and R~=nil and R.subject(self.item)==true
     end
@@ -105,7 +109,7 @@ if ISBaseTimedAction then
     function Inspect:stop() finish(self); ISBaseTimedAction.stop(self) end
     function Inspect:perform()
         finish(self)
-        local R=runtime()
+        local R=runtime(self.item)
         local ok,done=pcall(R.inspect,self.item,self.inPlace)
         log("inspect: "..tostring(ok and done)..(self.inPlace and " in place" or ""))
         A.lastInspect={ok=ok and done==true,ms=stamp()-(self.startedAt or stamp())}
@@ -127,7 +131,7 @@ end
 -- What the menu calls. Returns true when queued (or done, for checks).
 function A.lookItOver(character,item)
     if not (character and item) then return false,"nothing to look at" end
-    local R=runtime()
+    local R=runtime(item)
     if not R then return false,"no runtime" end
     if instant() then return R.recognise(item,"look") end
     if not (A.Look and ISTimedActionQueue) then return false,"no timed actions" end
@@ -136,7 +140,7 @@ function A.lookItOver(character,item)
 end
 function A.inspect(character,item,inPlace,expected)
     if not (character and item) then return false,"nothing to inspect" end
-    local R=runtime()
+    local R=runtime(item)
     if not R then return false,"no runtime" end
     if instant() then
         if item:getOutermostContainer()~=expected then return false,"moved" end

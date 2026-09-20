@@ -1,6 +1,6 @@
 local V=require("ConspiracyFiles/Validator")
 local B={}
-local tags={generated="ConspiracyFiles.Generated.G2",addresses="ConspiracyFiles.AddressBook.Muldraugh",legacy="ConspiracyFiles.DeadAir",identities="ConspiracyFiles.IdentityObservations",keyConnections="ConspiracyFiles.KeyConnections",localPeople="ConspiracyFiles.LocalPeople",discoveries="ConspiracyFiles.DiscoveryLedger",visitedBuildings="ConspiracyFiles.VisitedBuildings",observedKeyLeads="ConspiracyFiles.ObservedKeyLeads",personNames="ConspiracyFiles.PersonNameObservations",bodyOutfits="ConspiracyFiles.BodyOutfitObservations",placeVisits="ConspiracyFiles.PlaceVisits",casePeople="ConspiracyFiles.CasePeople"}
+local tags={generated="ConspiracyFiles.Generated.G2",addresses="ConspiracyFiles.AddressBook.Muldraugh",legacy="ConspiracyFiles.DeadAir",identities="ConspiracyFiles.IdentityObservations",keyConnections="ConspiracyFiles.KeyConnections",localPeople="ConspiracyFiles.LocalPeople",discoveries="ConspiracyFiles.DiscoveryLedger",visitedBuildings="ConspiracyFiles.VisitedBuildings",observedKeyLeads="ConspiracyFiles.ObservedKeyLeads",personNames="ConspiracyFiles.PersonNameObservations",bodyOutfits="ConspiracyFiles.BodyOutfitObservations",placeVisits="ConspiracyFiles.PlaceVisits",casePeople="ConspiracyFiles.CasePeople",mapMedia="ConspiracyFiles.MapMedia"}
 -- Measuring every saved root on every write cost 20-50 ms on the Linux test
 -- laptop (perf check, 2026-09-11): the whole ~170 KB was walked to record one
 -- map mark or one ID. A store keeps its identity while each write replaces its
@@ -19,7 +19,7 @@ local function measure(name,root)
  cache[name]={root=root,a=a,b=b,ok=ok,why=why,bytes=bytes}
  return ok,why,bytes
 end
-function B.check(kind,staged)
+function B.checkMany(replacements)
  local roots={}
  for name,tag in pairs(tags) do
   local wrapper=ModData.get(tag)
@@ -27,10 +27,10 @@ function B.check(kind,staged)
  end
  local player=getPlayer()
  if player then roots.markers=player:getModData()["ConspiracyFiles.ClueMarkers"] end
- if kind=="generatedCampaign" then
-  local store=ModData.get(tags.generated)
-  roots.generated={canonical=store and store.canonical,campaign=staged}
- else roots[kind]=staged end
+ for kind,staged in pairs(replacements) do
+  if not tags[kind] and kind~="markers" then return false,"unknown budget root: "..tostring(kind) end
+  roots[kind]=staged
+ end
  -- Same result as V.validateCombined(roots), without re-walking unchanged roots.
  local total=0
  for name,root in pairs(roots) do
@@ -42,5 +42,12 @@ function B.check(kind,staged)
   return false,"combined canonical save budget exceeded ("..total.." bytes)"
  end
  return true,total
+end
+function B.check(kind,staged)
+ if kind=="generatedCampaign" then
+  local store=ModData.get(tags.generated)
+  return B.checkMany({generated={canonical=store and store.canonical,campaign=staged}})
+ end
+ return B.checkMany({[kind]=staged})
 end
 return B

@@ -65,7 +65,7 @@ end
 
 -- Stable sequence numbers come from the ledger itself; the world clock is
 -- recorded alongside because several discoveries share one game-time interval.
-function D.record(kind,reference)
+function D.record(kind,reference,mapState)
     local ok,recorded=pcall(function()
         local at=worldHours(); if not at then return false end
         -- A place that cannot be read costs the entry nothing: the discovery
@@ -73,8 +73,18 @@ function D.record(kind,reference)
         local ok,where,whereId=pcall(whereNow); if not ok then where,whereId=nil,nil end
         local staged,changed=Ledger.record(root(),kind,reference,at,where,whereId)
         if not staged or not changed then return false end
-        if not Budget.check("discoveries",{canonical=staged}) then return false end
+        local mapStore
+        if mapState then
+            local State=require("ConspiracyFiles/MapMediaState")
+            local Catalogue=require("ConspiracyFiles/MapMediaCatalogue")
+            if not State.validate(mapState,Catalogue) then return false end
+            if not Budget.checkMany({discoveries={canonical=staged},mapMedia={canonical=mapState}}) then return false end
+            mapStore=ModData.getOrCreate("ConspiracyFiles.MapMedia")
+        elseif not Budget.check("discoveries",{canonical=staged}) then return false end
         local store=ModData.getOrCreate(TAG)
+        -- Both roots are staged and checked together. No engine calls/yields
+        -- between these assignments; readers never observe a half discovery.
+        if mapStore then mapStore.canonical=mapState end
         store.canonical=staged
         local event=staged.events[#staged.events]
         -- Straight to disk, before anything else can go wrong. ModData will
@@ -93,12 +103,12 @@ function D.record(kind,reference)
         -- it because the journal is unhappy would be strictly worse. It warns,
         -- once per session for the same reason, because a warning repeated on
         -- every discovery buries the log that a real problem has to be spotted in.
-        local journalled,why=pcall(D.journalAppend,event)
-        if not journalled then
+        local journalled,written=pcall(D.journalAppend,event)
+        if not journalled or written~=true then
             if not D.journalWarned then
                 D.journalWarned=true
                 CFLog.message("ledger","note",
-                    "Discoveries are NOT being written to the journal: "..tostring(why)
+                    "Discoveries are NOT being written to the journal: "..tostring(written)
                     .."; they survive only from the game's next save onward. Further"
                     .." journal failures this session will not be repeated here.","w")
             end
@@ -190,17 +200,27 @@ end
 -- corrupt what is already on disk, which is the whole point of it.
 function D.journalAppend(event)
     if not event then return false end
-    local ok=pcall(function()
+    local ok,written=pcall(function()
         local w=getFileWriter(JOURNAL,true,true)
-        if not w then return end
+        if not w then return false end
         -- writeln, not write: it owns the line ending, and the play machine
         -- is Windows while this is read back on Linux.
-        w:writeln(table.concat({saveId(),encode(event.kind),encode(event.ref),
+        local fields={saveId(),encode(event.kind),encode(event.ref),
             encode(string.format("%.6f",event.at or 0)),encode(event.place),
-            encode(event.placeId)},SEP))
+            encode(event.placeId)}
+        local design,part=event.ref:match("^map:([^:]+):([1-4])$")
+        local store=design and ModData.get("ConspiracyFiles.MapMedia")
+        local trail=store and store.canonical and store.canonical.trails[design]
+        local p=trail and (tonumber(part)==4 and trail.payoff or trail.fragments[tonumber(part)])
+        if trail and p and p.noted then
+            fields[7]=encode(trail.seed); fields[8]=encode(trail.at)
+            fields[9]=encode(p.attempt); fields[10]=encode(p.at); fields[11]=encode(p.observation)
+        end
+        w:writeln(table.concat(fields,SEP))
         w:close()
+        return true
     end)
-    return ok
+    return ok and written==true
 end
 
 function D.journalRead()
@@ -217,7 +237,10 @@ function D.journalRead()
             if #f>=4 and f[1]==mine then
                 out[#out+1]={kind=f[2],ref=f[3],at=tonumber(f[4]),
                              place=(f[5]~="" and f[5]) or nil,
-                             placeId=(f[6]~="" and f[6]) or nil}
+                             placeId=(f[6]~="" and f[6]) or nil,
+                             mapSeed=tonumber(f[7]),mapReadAt=tonumber(f[8]),
+                             mapAttempt=tonumber(f[9]),mapPlacedAt=tonumber(f[10]),
+                             mapObservation=(f[11]~="" and f[11]) or nil}
             end
         end
         r:close()
@@ -233,9 +256,34 @@ function D.journalReplay()
     for _,e in ipairs(entries) do
         local ok,done=pcall(function()
             local staged,changed=Ledger.record(root(),e.kind,e.ref,e.at,e.place,e.placeId)
-            if not staged or not changed then return false end
-            if not Budget.check("discoveries",{canonical=staged}) then return false end
-            ModData.getOrCreate(TAG).canonical=staged
+            if not staged then return false end
+            local mapNext,mapStore
+            local design,part=e.ref:match("^map:([^:]+):([1-4])$")
+            if design and e.mapSeed then
+                local S=require("ConspiracyFiles/MapMediaState")
+                local C=require("ConspiracyFiles/MapMediaCatalogue")
+                mapStore=ModData.getOrCreate("ConspiracyFiles.MapMedia")
+                local current=mapStore.canonical or S.empty()
+                if not S.validate(current,C) then return false end
+                local trail=current.trails[design]
+                if trail and trail.seed~=e.mapSeed then return false end
+                local previous=S.get(current,design,tonumber(part))
+                if not previous or not previous.noted then
+                    mapNext=S.activate(current,design,e.mapSeed,e.mapReadAt,C)
+                    if not mapNext then return false end
+                    mapNext=S.set(mapNext,design,tonumber(part),{state="noted",noted=true,recognised=true,
+                        attempt=e.mapAttempt,at=e.mapPlacedAt,observation=e.mapObservation})
+                    if not S.validate(mapNext,C) then return false end
+                end
+            end
+            if not changed and not mapNext then return false end
+            local replacements={discoveries={canonical=staged}}
+            if mapNext then replacements.mapMedia={canonical=mapNext} end
+            if not Budget.checkMany(replacements) then return false end
+            local store=ModData.getOrCreate(TAG)
+            if mapNext then mapStore.canonical=mapNext end
+            store.canonical=staged
+            if mapNext and ConspiracyFiles.MapMediaRuntime then ConspiracyFiles.MapMediaRuntime.invalidate() end
             return true
         end)
         if ok and done then restored=restored+1 end

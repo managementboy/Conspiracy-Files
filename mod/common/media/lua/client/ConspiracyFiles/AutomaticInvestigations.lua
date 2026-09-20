@@ -1,5 +1,6 @@
 -- Current development build: automatic single-player trial activation.
 local CFLog=require("ConspiracyFiles/Log")
+require("ConspiracyFiles/MapMediaRuntime")
 ConspiracyFiles=ConspiracyFiles or {}
 local A=ConspiracyFiles.AutomaticInvestigations or {}
 ConspiracyFiles.AutomaticInvestigations=A

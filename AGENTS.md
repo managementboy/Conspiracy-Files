@@ -1,5 +1,15 @@
 # Conspiracy-Files — Agent / Codex Instructions
 
+## Map-media development override — owner, 2026-09-20
+
+Finish implementation before one Claude build/testing handoff. Do not execute
+tests, builds or the game in the Codex implementation pass. Fresh saves only;
+no migration work or protective feature switch. Use ordinary plain-table storage.
+The 1,000,000-byte estimate is a provisional development allowance pending real
+600 kB / 800 kB / 1 MB measurements, not a proven engine ceiling. See the first
+decision in DECISIONS.md and MAP_MEDIA_FULL_HANDOFF_2026-09-20.md in docs/management.
+These instructions supersede the older 500 KB and incremental-test sequence below.
+
 ## Latest premise clarification — 2026-09-19
 
 The search for why the survivor is isolated in Knox drives the investigations, although the Knox Event has no definitive explanation. Start with the [revised development handoff](docs/management/CENTRAL_MYSTERY_DEVELOPMENT_HANDOFF_2026-09-19.md) and [all 32 decisions reassessed](docs/design/CENTRAL_MYSTERY_REVIEW_2026-09-19.md). Personal openings use our own local clues; naturally discovered annotated maps each lead to destination evidence and a meaningful local payoff connected to the central search. No random occupation-flyer prerequisite or secret final answer. Specific story details and unresolved trigger/coverage rules remain proposals. Planning only; no new engine verification.

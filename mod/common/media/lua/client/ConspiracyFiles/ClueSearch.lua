@@ -171,6 +171,8 @@ end
 function C.liveClues(player)
     local R=ConspiracyFiles.GeneratedRuntime
     local clues=(R and R.clueTargets) and R.clueTargets() or {}
+    local maps=ConspiracyFiles.MapMediaRuntime
+    if maps then for _,clue in ipairs(maps.clueTargets()) do clues[#clues+1]=clue end end
     for i,clue in ipairs(clues) do
         if clue.status=="placed" and not clue.recognised then
             local x,y,z
@@ -278,6 +280,8 @@ function C.onSpotted(icon)
     C.spotted[id]=entry
     C.counters.spotted=C.counters.spotted+1
     local R=ConspiracyFiles.GeneratedRuntime
+    local maps=ConspiracyFiles.MapMediaRuntime
+    if maps and maps.subject(id) then R=maps end
     if R and R.recognise then
         local ok,done,why=pcall(R.recognise,id,"search")
         entry.recognised=ok and done==true
@@ -326,6 +330,8 @@ end
 -- For checks (stage 3) and development: recognise a clue without searching.
 function C.debugRecognise(docId)
     local R=ConspiracyFiles.GeneratedRuntime
+    local maps=ConspiracyFiles.MapMediaRuntime
+    if maps and maps.subject(docId) then R=maps end
     if not (getDebug and getDebug()) or not R or not R.recognise then return false,"unavailable" end
     return R.recognise(docId,"debug")
 end

@@ -23,12 +23,14 @@ function M.open()
     return false
 end
 function M.fill(playerNum,context,items)
-    if not getDebug or not getDebug() or not context or playerNum~=0 then return end
+    if not context or playerNum~=0 then return end
     if (isClient and isClient()) or (isServer and isServer()) then return end
-    if not R.metrics() then return end
     local subjects,overflow=Menu.normalize(items)
     if overflow or #subjects~=1 then return end
     local item=subjects[1]
+    local maps=ConspiracyFiles.MapMediaRuntime
+    local R=(maps and maps.subject(item)) and maps or R
+    if R~=maps and (not getDebug or not getDebug() or not R.metrics()) then return end
     if not R.subject(item) then
         -- A finished case's own evidence is already in the organiser. Showing
         -- nothing read as "cannot be logged" in play (2026-09-15, P4-R118).

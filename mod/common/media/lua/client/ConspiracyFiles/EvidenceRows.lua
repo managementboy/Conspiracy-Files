@@ -191,6 +191,8 @@ end
 -- each row was found as a FOUND block.
 function Rows.list(section,runtime)
     local rows=Rows.build(section,runtime or Rows.live)
+    local maps=ConspiracyFiles and ConspiracyFiles.MapMediaRuntime
+    if maps then for _,row in ipairs(maps.rows()) do rows[#rows+1]=row end end
     if section=="files" or section=="places" then
         for _,row in ipairs(otherRows(section=="places")) do rows[#rows+1]=row end
     end

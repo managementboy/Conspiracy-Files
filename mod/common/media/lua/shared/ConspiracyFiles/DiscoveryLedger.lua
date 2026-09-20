@@ -3,7 +3,7 @@
 -- identity documents, derived connections) append here in real time so the
 -- organiser can render one true discovery order instead of grouping by source.
 local V=require("ConspiracyFiles/Validator")
-local M={SCHEMA=2,MAX=512,MAX_REF=700,MAX_PLACE=160}
+local M={SCHEMA=2,MAX=2048,MAX_REF=700,MAX_PLACE=160}
 local KINDS={evidence=true,identity=true,connection=true}
 local EVENT_FIELDS={seq=true,at=true,kind=true,ref=true,place=true,placeId=true}
 local ROOT_FIELDS={schema=true,nextSeq=true,events=true}

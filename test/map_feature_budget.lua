@@ -3,12 +3,9 @@
 -- covering the intended catalogue and retained discoveries, with a justified
 -- reserve").
 --
--- The plan's revision 2 claimed 88,460 bytes were available to the discovery
--- ledger and 50 events were spare after ordinary cases. Both figures were
--- derived by subtraction from a budget the campaign store had already been
--- measured against, so they double-counted the ledger the campaign test
--- already includes, and they ignored the headroom test/case_archive.lua
--- requires. This fixture measures instead of subtracting.
+-- Price the actual production representations together. Historical estimates
+-- omitted feature costs and assumed event sizes; the ordinary ledger must be
+-- counted exactly once. This is an estimator fixture, not an engine benchmark.
 --
 -- The reserve is justified, not chosen: test/case_archive.lua asserts the
 -- 16-case archive must leave at least the 17,567 bytes the ten-case cap it
@@ -23,6 +20,9 @@ local Session=require("ConspiracyFiles/Generated/Session")
 local Cases=require("ConspiracyFiles/Generated/SuccessiveCases")
 local Retired=require("ConspiracyFiles/Generated/RetiredCase")
 local Ledger=require("ConspiracyFiles/DiscoveryLedger")
+local State=require("ConspiracyFiles/MapMediaState")
+local Catalogue=require("ConspiracyFiles/MapMediaCatalogue")
+assert(V.MAX_ENCODED_BYTES==1000000, "update the measured development-budget fixture when policy changes")
 
 local OPTS={mapId="SYNTHETIC-MAP",buildLine="TEST-ONLY",allowSynthetic=true}
 local function catalog() return dofile("test/fixtures/synthetic_locations.lua") end
@@ -91,162 +91,48 @@ local worstSave={canonical=ordered[1],successive={schema=1,cases=cases,discoveri
 assert(Cases.validate(worstSave))
 local campaign=V.estimateEncodedBytes(worstSave)
 
--- 2. The ledger ordinary play already writes ------------------------------
+-- Real production shapes: retained campaign, ordinary ledger, all map designs,
+-- and the existing other-root allowance. This measures estimates, not disk bytes.
 local base=Ledger.empty()
 for i,id in ipairs(order) do
     base=assert((Ledger.record(base,"evidence",id,i,"1024 West Point Road, West Point","building:123456")))
 end
-local baseLedger=V.estimateEncodedBytes(base)
 local RESERVED_FOR_OTHER_ROOTS=73000
-local committed=campaign+baseLedger+RESERVED_FOR_OTHER_ROOTS
-local spendable=V.MAX_ENCODED_BYTES-committed-RESERVE
-
-print(string.format("MEASURED campaign %d + ordinary ledger %d (%d events) + reserved %d = %d of %d",
-    campaign,baseLedger,#order,RESERVED_FOR_OTHER_ROOTS,committed,V.MAX_ENCODED_BYTES))
-print(string.format("MEASURED reserve %d (case_archive headroom) -> SPENDABLE BY THE MAP FEATURE: %d bytes",
-    RESERVE,spendable))
-assert(spendable>0,"the reserve already consumes the remaining budget")
-
--- 3. What one event costs, at the two ref lengths the feature could use ---
--- MAX_REF is 700 and the cost of an event is dominated by its strings, so
--- "about 545 bytes an event" is a property of ORDINARY refs, not of the
--- ledger. Measured both ways rather than assumed.
-local function marginal(ref,place,placeId)
-    local before=V.estimateEncodedBytes(base)
-    local after=assert((Ledger.record(base,"evidence",ref,9999,place,placeId)))
-    return V.estimateEncodedBytes(after)-before
-end
-local ordinaryEvent=math.ceil(baseLedger/#order)
-local payoffLong=marginal("generated:1859222568:document-1 read at the Knox County Gallery annex, "..
-    "filed under the district transfer desk","Knox County Gallery, Louisville","building:12546,1393")
-local payoffShort=marginal("m15:p","Knox County Gallery","b:12546,1393")
-local payoffCoded=marginal("m15:p","","") -- place omitted entirely
-print(string.format("MEASURED per event: ordinary average %d, long-ref payoff %d, short-ref payoff %d, coded no-place %d",
-    ordinaryEvent,payoffLong,payoffShort,payoffCoded))
-
--- 4. Trail and entry state, measured at the full catalogue ---------------
--- The compact representation the review calls "a candidate to measure":
--- immutable authored content is addressed by design id and fragment index,
--- and only the mutable part is saved.
-local trails={schema=1,t={}}
-for i=1,DESIGNS do
-    trails.t[i]={d=i,s=2,f=FRAGMENTS,at=123456.75}  -- design, state, fragments placed, activated at
-end
-local trailBytes=V.estimateEncodedBytes(trails)
-local entered={schema=1,e={}}
-for i=1,DESIGNS do entered.e[i]=i end
-local enteredBytes=V.estimateEncodedBytes(entered)
-print(string.format("MEASURED whole-catalogue state: %d trail records %d bytes (%d each), %d entry records %d bytes",
-    DESIGNS,trailBytes,math.ceil(trailBytes/DESIGNS),DESIGNS,enteredBytes))
-
--- 5. The four representations, priced against the same spendable figure ---
-local function fits(name,events,eventCost,state)
-    local cost=events*eventCost+state
-    print(string.format("  %-46s %7d bytes (%3d events) %s",
-        name,cost,events,cost<=spendable and "FITS" or ("OVER by "..(cost-spendable))))
-    return cost<=spendable
-end
-print("AT THE FULL CATALOGUE OF "..DESIGNS.." DESTINATIONS:")
-local A=fits("A every fragment and payoff a ledger event",DESIGNS*(FRAGMENTS+1),ordinaryEvent,trailBytes+enteredBytes)
-local B=fits("B payoff in the ledger, fragments compact",DESIGNS,ordinaryEvent,trailBytes+enteredBytes)
-local C=fits("C payoff with a short ref, fragments compact",DESIGNS,payoffShort,trailBytes+enteredBytes)
-local D=fits("D payoff coded, no place, fragments compact",DESIGNS,payoffCoded,trailBytes+enteredBytes)
-
--- 6. THE FINDING: how many destinations each representation can fund -----
--- This is the number the plan needed and did not have. It is a capacity, so
--- it is asserted, not printed and forgotten: if a later change makes the
--- campaign store cheaper or dearer, this number moves and the test says so.
-local function fundable(eventCost,perTrail)
-    local n=0
-    while (n+1)*(eventCost+perTrail)<=spendable do n=n+1 end
-    return n
-end
-local perTrail=math.ceil(trailBytes/DESIGNS)+math.ceil(enteredBytes/DESIGNS)
-local fundableB=fundable(ordinaryEvent,perTrail)
-local fundableD=fundable(payoffCoded,perTrail)
-print(string.format("FUNDABLE DESTINATIONS within the measured budget: %d at an ordinary-cost payoff, %d at a coded payoff",
-    fundableB,fundableD))
--- What this test ENFORCES is required capacity, not a deficit. A future
--- optimisation that closes the gap must not fail a test for succeeding
--- (revision-4 review): the catalogue shortfall is REPORTED above and the
--- assertion below is the pilot's own requirement.
---
--- The bounded pilot: two distinct designs sharing one destination (the case
--- Phase 1b exists to prove), with their fragments, their trail state, the
--- destination's entry state and its payoff retained.
-local PILOT_DESIGNS,PILOT_DESTINATIONS=2,1
-local pilot={schema=1,t={}}
-for i=1,PILOT_DESIGNS do pilot.t[i]={d=i,s=2,f=FRAGMENTS,at=123456.75} end
-local pilotEntry={schema=1,e={}}
-for i=1,PILOT_DESTINATIONS do pilotEntry.e[i]=i end
-local pilotCost=V.estimateEncodedBytes(pilot)+V.estimateEncodedBytes(pilotEntry)
-    +PILOT_DESTINATIONS*payoffLong          -- the dearest payoff measured, not the cheapest
-    +PILOT_DESIGNS*FRAGMENTS*ordinaryEvent  -- fragments retained as full discoveries
-print(string.format("MEASURED bounded pilot (%d designs, %d shared destination, retained evidence): %d of %d spendable",
-    PILOT_DESIGNS,PILOT_DESTINATIONS,pilotCost,spendable))
-assert(pilotCost<=spendable,string.format(
-    "the bounded pilot must fit the measured budget with its evidence retained: %d of %d",
-    pilotCost,spendable))
-print(string.format("PASS whole-save budget measured: %d bytes spendable after a justified %d reserve; "..
-    "the bounded pilot fits at %d; the full %d-destination catalogue does not, at any representation measured here",
-    spendable,RESERVE,pilotCost,DESIGNS))
-
--- 7. ONE BOUNDED STORAGE CHANGE, COSTED -----------------------------------
--- The revision-3 review asked for exactly this rather than a compression
--- project: test one bounded change to redundant references and let the
--- measured saving decide whether further engineering is justified.
---
--- These are COSTING MODELS, not implementations. Each builds the root shape
--- the change would produce and measures it with the same estimator, so the
--- saving is comparable with everything above.
---
--- The redundancy is real and visible in the data: every ordinary event stores
--- its own place string and place id, and several documents of one case share a
--- place; and every document reference repeats the "generated:<caseid>:" prefix
--- seven times a case.
-local PLACES=48                      -- distinct places across a 16-case save
-local placePool={}
-for i=1,PLACES do
-    placePool[i]={p=string.format("%d West Point Road, West Point",1000+i),
-                  id=string.format("building:%d",100000+i)}
-end
-
--- (a) intern the place strings: events carry an index into a table
-local interned={schema=2,nextSeq=#order+1,places=placePool,events={}}
-for i,id in ipairs(order) do
-    interned.events[i]={seq=i,kind="evidence",ref=id,at=i,pi=((i-1)%PLACES)+1}
-end
-local internedBytes=V.estimateEncodedBytes(interned)
-
--- (b) intern the reference prefix too: "generated:<caseid>:" is repeated per
--- document, so the case id moves to a table and the event keeps the suffix
-local prefixes,prefixIndex={},{}
-local shortRefs={}
-for i,id in ipairs(order) do
-    local head,tail=id:match("^(.*):([^:]+)$")
-    head=head or id; tail=tail or id
-    if not prefixIndex[head] then
-        prefixes[#prefixes+1]=head; prefixIndex[head]=#prefixes
+local function scenario(name,notedPart)
+    local maps=State.empty()
+    local ledger=base
+    for i,id in ipairs(Catalogue.list) do
+        maps=assert(State.activate(maps,id,100000+i,12345.75+i,Catalogue))
+        maps=assert(State.enter(maps,id,12346+i))
+        for part=1,4 do
+            local value
+            if notedPart(i,part) then
+                value={state="noted",noted=true,recognised=true,at=12347+i,attempt=19,observation="electrician"}
+                ledger=assert((Ledger.record(ledger,"evidence",State.reference(id,part),12348+i,
+                    "1024 West Point Road, West Point","building:123456")))
+            else
+                value={state=(part==1 and "unknown" or "placed"),at=12347+i,attempt=19,
+                    target={x=10000+i,y=10000+part,z=0,objectIndex=15,containerIndex=0,
+                        sprite="furniture_storage_01_012",containerType="filingcabinet"}}
+            end
+            maps=assert(State.set(maps,id,part,value))
+        end
     end
-    shortRefs[i]={seq=i,kind="evidence",ri=prefixIndex[head],ref=tail,at=i,pi=((i-1)%PLACES)+1}
+    for _,id in ipairs(Catalogue.printList) do maps=assert(State.printRead(maps,id,12346)) end
+    assert(State.validate(maps,Catalogue))
+    assert(Ledger.validate(ledger))
+    local roots={generated=worstSave,discoveries={canonical=ledger},mapMedia={canonical=maps}}
+    local total=RESERVED_FOR_OTHER_ROOTS
+    for _,root in pairs(roots) do total=total+assert(V.estimateEncodedBytes(root)) end
+    print(string.format("ESTIMATE %s: campaign=%d, ledger=%d (%d events), maps=%d, other allowance=%d, total=%d, headroom=%d",
+        name,campaign,V.estimateEncodedBytes(roots.discoveries),#ledger.events,
+        V.estimateEncodedBytes(roots.mapMedia),RESERVED_FOR_OTHER_ROOTS,total,V.MAX_ENCODED_BYTES-total))
+    assert(total+RESERVE<=V.MAX_ENCODED_BYTES,"whole-catalogue state must preserve the existing headroom: "..name)
+    return maps,ledger
 end
-local both={schema=2,nextSeq=#order+1,places=placePool,refs=prefixes,events=shortRefs}
-local bothBytes=V.estimateEncodedBytes(both)
-
-print(string.format("MEASURED bounded changes to the ordinary ledger: as shipped %d, interned places %d (saves %d), places+ref prefixes %d (saves %d)",
-    baseLedger,internedBytes,baseLedger-internedBytes,bothBytes,baseLedger-bothBytes))
-
--- The question the review actually posed: does that saving change the answer?
-local bestSaving=baseLedger-bothBytes
-local shortfallD=DESIGNS*payoffCoded+trailBytes+enteredBytes-spendable
-print(string.format("MEASURED against the shortfall: best bounded saving %d vs representation D shortfall %d",
-    bestSaving,shortfallD))
--- Reported, never asserted: a change that closes the shortfall is a win, and a
--- test that fails on a win is a trap.
-if bestSaving>=shortfallD then
-    print("NOTE the bounded saving now covers the shortfall - the coverage question is reopened, read section 5")
-end
-local fundableAfter=fundable(payoffCoded,perTrail)
-print(string.format("FINDING compressing the existing ledger buys about %d bytes - roughly %d more destinations, not %d",
-    bestSaving,math.floor(bestSaving/(payoffCoded+perTrail)),DESIGNS-fundableAfter))
-print("PASS one bounded storage change measured: it helps and does not come close to funding the catalogue")
+scenario("all placements retained",function() return false end)
+scenario("mixed placements and discoveries",function(i,part) return (i+part)%2==0 end)
+local all,ledger=scenario("all discoveries retained",function() return true end)
+assert(#ledger.events==#order+#Catalogue.list*4,"every fragment and payoff remains in shared chronology")
+assert(Ledger.MAX>=#ledger.events,"ledger cap must accommodate full catalogue plus ordinary investigations")
+print("PASS full-catalogue estimate fixtures; native save/load and write latency remain separate measurements")

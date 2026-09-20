@@ -66,3 +66,13 @@ do
     V.estimateEncodedBytes = real
     print('PASS save budget: unchanged stores are not re-walked on every write')
 end
+
+-- Map media cannot hide outside other writers' budget checks, and a discovery
+-- plus its map facts must be priced as one replacement transaction.
+db['ConspiracyFiles.MapMedia']={canonical={payload=string.rep('m',300000)}}
+assert(not B.check('generatedCampaign',{small=true}))
+assert(B.checkMany({mapMedia={canonical={small=true}},discoveries={canonical={small=true}}}))
+local mapBefore=db['ConspiracyFiles.MapMedia'].canonical
+assert(not B.checkMany({mapMedia={canonical={small=true}},discoveries={canonical={payload=string.rep('d',300000)}}}))
+assert(db['ConspiracyFiles.MapMedia'].canonical==mapBefore,'preflight is read-only even when the combined replacement is refused')
+print('PASS map-media registration and combined discovery preflight')

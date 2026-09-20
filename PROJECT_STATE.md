@@ -1,5 +1,14 @@
 # Conspiracy-Files — Project State
 
+## Map-media development candidate — 2026-09-20
+
+`codex/map-media` contains the full implementation candidate using plain-table
+storage and fresh saves. Claude owns the single build/testing phase; no new unit,
+compiler, native or package passes are claimed. See
+[the handoff](docs/management/MAP_MEDIA_FULL_HANDOFF_2026-09-20.md) for scope,
+commands, coverage checks and provisional 1 MB performance measurements.
+This is not a release or a verified all-destination coverage claim.
+
 ## Completed evidence audit — 2026-09-19
 
 [Existing texts and generation logic audited](docs/design/EXISTING_EVIDENCE_AUDIT_2026-09-19.md): all 20 generated premise families, shared templates, Dead Air, continuation, completion and archive behavior. Concrete repairs are now in the [development handoff](docs/management/CENTRAL_MYSTERY_DEVELOPMENT_HANDOFF_2026-09-19.md). Documentation only; no source changes or new engine passes.

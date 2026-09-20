@@ -14,5 +14,5 @@
 -- This module deliberately requires nothing, so anything can read it without
 -- dragging in a dependency chain.
 ConspiracyFiles = ConspiracyFiles or {}
-ConspiracyFiles.VERSION = "DEV-0.44.0-addresses-that-travel"
+ConspiracyFiles.VERSION = "DEV-0.45.0-map-media"
 return ConspiracyFiles.VERSION

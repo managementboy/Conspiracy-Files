@@ -1,5 +1,13 @@
 # Conspiracy-Files — Roadmap
 
+## Current map-media sequence — owner, 2026-09-20
+
+Full implementation first; one Claude build/testing phase second. The development
+candidate is on `codex/map-media`; use
+`docs/management/MAP_MEDIA_FULL_HANDOFF_2026-09-20.md`. Native hook/order, all-map
+carrier coverage and real 600 kB / 800 kB / 1 MB costs remain acceptance work.
+No old-save compatibility, compression project or intermediate pilot handoff.
+
 ## Completed evidence audit — 2026-09-19
 
 [Existing texts and generation logic audited](docs/design/EXISTING_EVIDENCE_AUDIT_2026-09-19.md): all 20 generated premise families, shared templates, Dead Air, continuation, completion and archive behavior. Concrete repairs are now in the [development handoff](docs/management/CENTRAL_MYSTERY_DEVELOPMENT_HANDOFF_2026-09-19.md). Documentation only; no source changes or new engine passes.

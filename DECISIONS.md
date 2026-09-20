@@ -1,5 +1,39 @@
 # Conspiracy-Files — Current Decision Index
 
+## DR-20260920-FULL-IMPLEMENTATION — one development handoff; plain storage
+
+Owner instructions in the development conversation, 20 September 2026:
+
+- Complete the map-media implementation before asking Claude to build or test.
+  Claude owns all test execution, native verification and builds. This supersedes
+  the intermediate build-checkpoint sequence below; no unverified release.
+- Fresh saves are the baseline. No compatibility/migration work and no protective
+  opt-in feature switch. Map-media activates automatically in single-player.
+- Use straightforward plain-table storage. The unfinished compression rewrite
+  has been removed. Preserve evidence, source wording and discovery chronology.
+- The recommendation accepted with this direction uses 1,000,000 estimated bytes
+  as a **provisional development allowance**, pending Claude's real-data 600 kB,
+  800 kB and 1 MB measurements. This supersedes the 500,000-byte development
+  constraint in P4-R17, not the staged structural validation in P4-R32.
+
+The engine limit was never shown to be 500 kB. T1 measured 4,432,276 file bytes
+at 512 ms synchronous save and 1,012 ms probe validation; two-second responsiveness
+sampling cannot establish absence of short frame stalls. Estimator bytes differ
+from actual file bytes. See `docs/research/T1_MODDATA_PERSISTENCE.md` and upstream
+commit `266093c`, `docs/design/WHY_500KB_2026-09-20.md`. No higher production
+performance limit is claimed as verified.
+
+Implementation policy: three logical fragment records may be offered again on a
+later journey if missed, without moving/deleting old copies. Unknown insertion
+blocks a new offer. There is no three-missed-opportunities exhaustion or maximum
+number of concurrent map designs. A placed destination record is never replaced
+because its carrier/item disappeared. Refused insertion may try another eligible
+carrier; all unavailable candidates leave the record unplaced. These are explicit
+implementation choices retaining the owner's full-coverage and duplicate-copy
+direction, not claims that arbitrary destruction is recoverable.
+
+Review/build entry point: `docs/management/MAP_MEDIA_FULL_HANDOFF_2026-09-20.md`.
+
 ## DR-20260920-DEVELOPMENT-OWNERSHIP — Codex develops; Claude tests and builds
 
 Owner instruction, 20 September 2026: Codex implements the map-media work; Claude
