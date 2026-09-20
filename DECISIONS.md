@@ -93,22 +93,49 @@ unconfirmed. The catalogued inventory (125 annotated maps, 594 marks resolved to
 coordinates, in `docs/research/vanilla-print-2026-09-19/`) is the asset this
 mechanism spends.
 
-### Open, and needing owner rulings
+### Owner rulings, 2026-09-20
 
-1. **Trigger** — reading, acquiring, or the marks appearing. Assistant's
-   recommendation: **reading**, because acquiring is a lucky drop and reading is
-   a choice. Settles part of MAP-PAYOFF's open "seen/read/recorded" item.
-2. **Trail anchoring** — one placement near where the map was read, or a rolling
-   thread that follows the player as they move. "Sporadically" suggests rolling;
-   rolling is better and harder.
-3. **Duplicates** — the same map type found twice.
-4. **A destination already visited** before the map was read.
-5. **Sequencing against DR-20260919-Q31.** Q31 orders the work personal opening
-   → survival connection → loop improvements, and the map mechanism currently
-   sits behind both. The assistant's view: this **is** the survival connection —
-   a multi-day journey to a marked building is what that slot was reaching for —
-   and it is also the largest researched-but-unused asset in the project. **Not
-   reordered here.** Q31 stands until the owner says otherwise.
+**1. Trigger: READING.** Not acquiring, not the marks appearing. Acquiring is a
+lucky drop; reading is a choice the player makes, and it is the moment the owner
+described ("player finds map, opens map, thinks that's interesting"). Settles
+part of DR-20260919-MAP-PAYOFF's open "seen/read/recorded" item for annotated
+maps.
+
+**2. Trail anchoring: THE TRAIL FOLLOWS THE PLAYER.** Not one placement near
+where the map was read. A rolling thread, so a survivor who reads a map and then
+relocates cannot outrun their own trail. This is the harder of the two and it is
+a real mechanism change: placement currently anchors to where the survivor was
+when a case was created, so following them is new work rather than a parameter.
+
+**4. A destination counts as already visited ONLY IF THE PLAYER ACTUALLY ENTERED
+THE BUILDINGS ON THE MAP.** Passing through the area, or walking down the
+street, does not count. So a player who has been near a marked place but never
+gone inside still gets the trail and still finds evidence when they go in.
+
+The granularity already exists: `VisitedBuildingLog` records buildings ENTERED,
+which is the same source StaleClue.destinations uses. No new tracking is needed
+— and the distinction matters more than it looks, because in a game where the
+player crosses the same streets repeatedly, "has been nearby" would disqualify
+almost every destination within a day or two of play.
+
+### Still open
+
+**3. Duplicates — the same map type found twice.** Owner: "can we suppress
+those? Not in advance. When we are close." Read as: do not touch vanilla loot
+spawns; decide at READ time instead — a second copy of a map whose trail is
+already running starts no new trail, and neither does one whose destination the
+player is already near. **Awaiting confirmation of that reading before it is
+treated as settled.**
+
+**5. Sequencing against DR-20260919-Q31.** Q31 orders the work personal opening
+→ survival connection → loop improvements, and the map mechanism was not in that
+list, so it currently sits behind all three. The question is only WHEN this is
+built, not whether. Assistant's view: it **is** the survival connection — a
+multi-day journey to a marked building is what that slot was reaching for, and
+it is the largest researched-but-unused asset in the project — so it belongs in
+slot 2 rather than fourth. **Not reordered here;** Q31 stands until the owner
+says otherwise, because moving it forward delays the discovery-loop fixes the
+owner also wants.
 
 **Caution on readiness, not on the design:** the mechanism depends on clue
 placement being reliable over time, and Phase A's placement mismatch is still
