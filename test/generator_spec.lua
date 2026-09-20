@@ -53,7 +53,12 @@ test("generated 100-seed sample varies sites outlines text, carriers and bounded
                     "an object's own name must not carry a written case reference")
                 assertTrue(doc.wear~=nil,"object evidence must say what state it was found in")
             else
-                assertTrue(doc.body:find(c.facts.code,1,true)~=nil)
+                -- The case reference must be on the DOCUMENT, so a player can tie
+                -- a case's papers together. The rebuild puts it in the title for
+                -- some families and in the body for others; either is visible.
+                assertTrue(doc.title:find(c.facts.code,1,true)~=nil
+                    or doc.body:find(c.facts.code,1,true)~=nil,
+                    "a record must carry its case reference somewhere the player sees it")
             end
         end
     end
