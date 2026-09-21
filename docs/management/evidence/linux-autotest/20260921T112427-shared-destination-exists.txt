@@ -1,0 +1,55 @@
+Two designs now share a destination — correcting 20260920T170318
+measured 2026-09-21, source 49f78e9 / DEV-0.46.1-writing-rebuild
+
+WHAT THE EARLIER EVIDENCE SAID
+  20260920T170318-shared-destination.txt, taken on the map-media branch
+  (b7357d2, DEV-0.45.1):
+
+     "123 destination buildings are hit. 0 of them are hit by more than one
+      design. So no two shipped designs share a destination. The content for
+      the product-proving step does not exist."
+
+  It also warned that `relatedDestination` is authored metadata rather than a
+  computed relationship, and should not be read as evidence of a shared
+  building. That warning still stands.
+
+WHAT IS TRUE NOW
+  The writing rebuild authored it. Measured over all 125 bindings after
+  MapMediaCatalogue runs Destinations.apply on each:
+
+     bindings: 125
+     target points hit by more than one design: 1
+       10612,9649 -> MulStashMap11, MulStashMap16
+
+     MulStashMap11 -> 10612,9649  sharedPeer=MulStashMap16
+     MulStashMap16 -> 10612,9649  sharedPeer=MulStashMap11
+
+  Exactly the pair the handoff names, and the only shared point in the
+  catalogue. The peer references are reciprocal.
+
+A TRAP WORTH RECORDING, because I nearly fell into it
+  There are two sources of truth for a destination and they DISAGREE on this
+  design. MapMediaCatalogue's raw binding gives MulStashMap16 a target of
+  10628,9698; MapMediaDestinations' reviewed geometry overrides it to
+  10612,9649. Reading either file alone gives the wrong answer - the catalogue
+  says they do not share, the reviewed file says they do.
+
+  MapMediaCatalogue.lua:395 settles it: `Destinations.apply` is run over every
+  binding at load, so the reviewed geometry wins and they share. Any future
+  measurement must be taken AFTER apply, from the catalogue, not from either
+  file's literals.
+
+WHAT THIS DOES AND DOES NOT ESTABLISH
+  Established: the content exists. Two designs point at one place, the
+  machinery for it was already proven by test on 2026-09-20 (one offer serving
+  both trails, two payoffs side by side, each keeping its own identity).
+
+  NOT established, and still owed by the "Shared restaurant" gate:
+    - that both resolve to the same BUILDING in a running game, rather than
+      merely the same coordinate
+    - that the cross-file finding appears only after all eight records are
+      known, and refreshes in the organiser
+    - that map 16's native bank stash is unchanged
+  All three need the game, which is occupied by the campaign gate.
+
+STATUS: earlier evidence corrected; the gate is now testable, and untested.
