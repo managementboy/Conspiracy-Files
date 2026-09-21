@@ -126,3 +126,38 @@ THE HARNESS DEFECT THIS EXPOSES
   design's own answer for a clue with nowhere to go is a different site, a
   carrier, or expiry after three in-game days — none of which the harness
   gives it.
+
+----------------------------------------------------------------------
+CORRECTION, 2026-09-21, after the next run
+----------------------------------------------------------------------
+
+The two candidate explanations above are incomplete, and the emphasis was
+wrong. The owner, watching the screen, asked where the survivor was standing.
+
+  outside, 10855,10101 — getRoom() nil, no building, isOutside() true
+
+and later, in the next run's limit stage, again:
+
+  outside, 10618,9985 — getRoom() nil, no building, isOutside() true
+
+CFCamp.moveOn teleports to the centre of the building's BOUNDING BOX while its
+own comment says "into the middle of a building". For an L-shaped building, a
+courtyard, or a box spanning a garden, that point is in the open — and nothing
+checked. docs/TESTING.md already records why that matters, in the design's own
+sentence: "a house catalogued from the street yields one or two candidates and
+eight once the survivor walks in". So the candidate list above omitted the one
+explanation the project had already written down.
+
+BUT IT IS NOT THE CAUSE OF THIS STALL, and the tidy version of this story
+should be resisted. In the same run, cases 4, 5 and 6 placed every clue
+successfully from moveOn positions — at 12:08 and 12:23, one of them into a
+vehicle glovebox. The mod places clues perfectly well from where the harness
+puts the survivor. The stall was specific to one case whose own site could not
+supply a container.
+
+So, separated:
+  - PRODUCT: not established. No product defect is demonstrated here.
+  - HARNESS: moveOn lands outdoors without noticing, which makes placement
+    observations unrepresentative. Fixed: it now checks C.indoors(), falls back
+    to the building's own room list, and REFUSES rather than measure placement
+    from the street. Every placement finding now records the room.

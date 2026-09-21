@@ -323,6 +323,18 @@ end
 -- (checks/addresses.lua reads the same list): a building needs no loaded cell
 -- to be considered, only to be scanned once the survivor is standing in it.
 -- Site ids are "t3:" .. the building's id string (Generated/NearbyCatalog).
+-- The engine's building object for one of freshBuildings' ids, so a caller can
+-- ask it for its actual rooms rather than trusting a bounding box.
+local function buildingById(id)
+    local grid = getWorld() and getWorld():getMetaGrid()
+    local list = grid and grid:getBuildings()
+    for i = 0, (list and list:size() or 0) - 1 do
+        local b = list:get(i)
+        if "t3:" .. tostring(b:getIDString()) == id then return b end
+    end
+    return nil
+end
+
 local function freshBuildings(minRooms)
     local grid = getWorld() and getWorld():getMetaGrid()
     local list = grid and grid:getBuildings()
@@ -372,11 +384,59 @@ function C.moveOn(minTiles)
     end
     pick = pick or ring[1]
     local b = pick.b
+    -- ARRIVE INSIDE, AND SAY SO. This used to teleport to the CENTRE OF THE
+    -- BUILDING'S BOUNDING BOX and call it "the middle of a building". For an
+    -- L-shaped building, a courtyard, or a box that spans a garden, that point
+    -- is in the open: the survivor was measured standing in the street at
+    -- 10855,10101 and again at 10618,9985, both times with getRoom() nil and
+    -- isOutside() true, and nothing ever checked (2026-09-21, owner spotted it
+    -- on screen).
+    --
+    -- It matters because docs/TESTING.md records the design's own sentence: "a
+    -- house catalogued from the street yields one or two candidates and eight
+    -- once the survivor walks in". Every placement observation taken from
+    -- outside is measuring the wrong thing.
     p:teleportTo(b.x + 0.5, b.y + 0.5, 0)
-    C.movedTo = b
-    return "true", b.x .. "," .. b.y,
-        b.id .. ", " .. b.rooms .. " rooms, " .. neighbours .. " unused buildings within " .. C.NEIGHBOURS .. " tiles",
-        string.format("%.0f", pick.d)
+    local where = C.indoors()
+    if where ~= "outside" then
+        C.movedTo = b
+        return "true", b.x .. "," .. b.y,
+            b.id .. ", " .. b.rooms .. " rooms, " .. neighbours .. " unused buildings within "
+            .. C.NEIGHBOURS .. " tiles, standing in " .. where,
+            string.format("%.0f", pick.d)
+    end
+    -- The box centre missed the building. Walk its own room list instead.
+    local engine = buildingById(b.id)
+    local rooms = engine and engine:getRooms()
+    for i = 0, (rooms and rooms:size() or 0) - 1 do
+        local r = rooms:get(i)
+        local rx, ry = math.floor((r:getX() + r:getX2()) / 2), math.floor((r:getY() + r:getY2()) / 2)
+        p:teleportTo(rx + 0.5, ry + 0.5, r:getZ() or 0)
+        where = C.indoors()
+        if where ~= "outside" then
+            C.movedTo = b
+            return "true", rx .. "," .. ry,
+                b.id .. ", " .. b.rooms .. " rooms, " .. neighbours .. " unused buildings within "
+                .. C.NEIGHBOURS .. " tiles, standing in " .. where .. " (box centre missed the building)",
+                string.format("%.0f", pick.d)
+        end
+    end
+    -- Refuse rather than measure placement from the street.
+    return "false", "could not get inside " .. b.id .. ": the bounding-box centre and all "
+        .. tostring(rooms and rooms:size() or 0) .. " room centres are outside"
+end
+
+-- Which room the survivor is standing in, or "outside". Every stage that
+-- measures placement must record this: it was invisible for the whole of the
+-- 2026-09-21 run.
+function C.indoors()
+    local p, cell = getPlayer(), getCell()
+    if not p or not cell then return "outside" end
+    local s = cell:getGridSquare(math.floor(p:getX()), math.floor(p:getY()), math.floor(p:getZ()))
+    local room = s and s:getRoom()
+    local name = room and room:getName()
+    if not room then return "outside" end
+    return (name ~= nil and name ~= "" ) and name or "a room with no name"
 end
 
 -- Has the world around the survivor loaded enough for a case to be placed?

@@ -323,7 +323,10 @@ wait_case_count() { # wait_case_count COUNT SECONDS
 }
 placed_well() { # placed_well LABEL CASEID X Y HOURS
     local p; p="$(ev "return CFCamp.placement([[$2]], $3, $4, $5)")"
-    findings+=("$1 placement: $(field 3 "$p")")
+    # WHERE THE SURVIVOR WAS STANDING, in every placement finding. It was
+    # invisible for the whole of the 2026-09-21 run, during which the harness
+    # measured placement from the street without anybody being able to tell.
+    findings+=("$1 placement (survivor in $(ev 'return CFCamp.indoors()')): $(field 3 "$p")")
     [ "$(field 1 "$p")" = true ] || fail "$1: a site is outside the reach of where the survivor stood ($(field 3 "$p"))"
     [ "$(field 2 "$p")" = true ] || fail "$1: a site an earlier case already used was used again ($(field 3 "$p"))"
 }
@@ -519,7 +522,19 @@ reload_world "reload 2"
 [ "$(ev 'return CFReload.record()')" = "$record" ] || fail "reload 2: the record changed"
 s3="$(ev "return CFCamp.steerOf([[$case3]])" | field 1)"   # "none" once case 3 has finished (a two-clue case can)
 [ "$s3" = unsteered ] || [ "$s3" = none ] || fail "reload 2: case 3 gained a steer ($s3)"
-[ "$(ev "return CFCamp.answersOf([[$case1]])" | field 5)" = "$case2" ] || fail "reload 2: case 1's answers lost their used mark"
+# SAY WHAT IS ACTUALLY THERE. This read "lost their used mark", which is what
+# an empty field would mean - but the field is not empty when the steer lands
+# on the wrong case, it names that case. On 2026-09-21 it said "lost their used
+# mark" while the answers were plainly marked used by case 3, which reads as a
+# second, different defect and is not one.
+used_by="$(ev "return CFCamp.answersOf([[$case1]])" | field 5)"
+if [ "$used_by" != "$case2" ]; then
+    if [ -z "$used_by" ] || [ "$used_by" = nil ] || [ "$used_by" = "" ]; then
+        fail "reload 2: case 1's answers lost their used mark entirely"
+    else
+        fail "reload 2: case 1's answers are marked used by ${used_by#generated:}, not by case 2 (${case2#generated:})"
+    fi
+fi
 old_settled "after reload 2"
 stage "after reload 2"
 reload_growth "reload 2" "$bytes_before" "$parts_before"

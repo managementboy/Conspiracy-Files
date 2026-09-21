@@ -126,6 +126,34 @@ assert(not sh:find('"$now_liveness" = "$last_liveness"',1,true),
 -- carrier, or expiry.
 assert(sh:find('if [ "$moves" -le 3 ]',1,true),
     "the harness must stop returning to a site that keeps answering no-containers")
+
+-- 5c. AND IT MUST ARRIVE INDOORS, OR REFUSE. moveOn teleported to the centre of
+-- the building's BOUNDING BOX while its comment said "the middle of a
+-- building". For an L-shaped building or a box spanning a garden that point is
+-- in the open, and the survivor was measured standing in the street twice
+-- (10855,10101 and 10618,9985) with getRoom() nil - with nothing checking.
+-- docs/TESTING.md records why it matters: "a house catalogued from the street
+-- yields one or two candidates and eight once the survivor walks in".
+assert(lua:find("function C.indoors"),
+    "campaign.lua must be able to say which room the survivor is standing in")
+local moveOn=lua:match("function C%.moveOn%(minTiles%)(.-)\n-- Which room")
+assert(moveOn,"C.moveOn must be readable")
+assert(moveOn:find("C.indoors()",1,true),
+    "moveOn must check that it actually arrived indoors")
+assert(moveOn:find("getRooms",1,true),
+    "moveOn must fall back to the building's own room list when the box centre misses")
+assert(moveOn:find('return "false", "could not get inside',1,true),
+    "moveOn must refuse rather than measure placement from the street")
+assert(sh:find("survivor in $(ev 'return CFCamp.indoors()')",1,true),
+    "every placement finding must record where the survivor was standing")
+
+-- 5d. A FAILURE MESSAGE MUST NOT ASSUME THE EXPECTATION IT IS TESTING.
+-- "case 1's answers lost their used mark" was printed while the answers were
+-- plainly marked used by case 3; that reads as a second defect and is not one.
+assert(sh:find("are marked used by ${used_by#generated:}",1,true),
+    "the used-mark failure must name the case that actually used the answers")
+assert(sh:find("lost their used mark entirely",1,true),
+    "an genuinely empty used mark must still be reported as such")
 -- The clock may still stop a run, but what it produces is a stage that ran out
 -- of time, never an accusation against the mod.
 local clockFail=sh:match("if %[ \"%$%(date %+%%s%)\" %-ge \"%$deadline\" %]; then\n(.-)\n")
