@@ -1,0 +1,44 @@
+Personal opening — native acceptance gate 1 (partial: recognition and navigation)
+source: 92cd78a (DEV-0.46.0-writing-rebuild)
+renderer: Mesa llvmpipe (SOFTWARE), hidden run, fresh save
+
+THE SURVIVOR IS RECOGNISED BY NAME: CONFIRMED
+  survivor: Rosie McCracken
+  first case premise: no-contact-at-premises
+  case.opening = { premise=true, self="Rosie McCracken" }
+  6 documents: dispatch, notepad, notebook, receipt, receipt, memo
+  (the memo is the relay memo placed in a game's first case, P4-R96)
+  Exactly 1 of the 6 documents names the survivor - the booking - which is the
+  intended shape, not every paper shouting her name.
+
+THE DOCUMENT, AS THE PLAYER READS IT
+  Title: Collection notice / GT-926
+  "A folded carbon slip. My name is typed above a box marked KEEP THIS COPY."
+  ...
+  Passenger: Rosie McCracken
+  Collection point: the local-copy building near E Maple St
+  ...
+  WHAT IT MIGHT MEAN
+  "That's my name. Someone booked a li[ft]..."
+
+NO RAW COORDINATES REACH THE PLAYER: CONFIRMED
+  The STORED body carries placeholders ("Building at 10836, 10141"). Rendering
+  it the way the organiser does replaces them: "the local-copy building near
+  E Maple St". Checked explicitly for "Building at" after render - absent.
+  P4-R57 holds. The stored placeholder is not a defect; reading the raw body
+  instead of the rendered one would have been a false finding.
+
+A FOLLOW-UP THREAD IS CARRIED
+  thread document: generated:1028496608:document-3
+
+PLACEMENT
+  All 6 assignments reached status "placed".
+
+WHAT THIS DOES NOT ESTABLISH
+  - No document was discovered through play in this run: the harness helper
+    (CFLoop.find) reported "document 1 not found" although all six are placed,
+    so the discovery path was exercised by earlier checks, not this one. The
+    harness, not the mod, needs looking at.
+  - Therefore: distinct findings in different discovery orders, retention
+    through completion and reload, and the linked enquiry follow-up are NOT
+    covered here. They remain owed.
