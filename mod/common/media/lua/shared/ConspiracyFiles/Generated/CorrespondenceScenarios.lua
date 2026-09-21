@@ -10,12 +10,24 @@ local function doc(kind,title,observation,source,note)
 end
 local function story(t)
  t.grounding=assert(grounding[t.organisation]);t.essential={"claim","response","review"};t.optional={}
+ -- See the note in AdministrativeScenarios. Default: the second record
+ -- disputes the first account, the third confirms it, the three explain.
+ local K=t.kinds or {"disputes-delivery","corroborates","recontextualises"}
  t.comparisons={
-  {requires={"claim","response"},from="response",to="claim",kind="recontextualises",text=t.findings[1]},
-  {requires={"response","review"},from="review",to="response",kind="recontextualises",text=t.findings[2]},
-  {requires={"claim","response","review"},from="review",to="claim",kind="recontextualises",text=t.findings[3]},
+  {requires={"claim","response"},from="response",to="claim",kind=K[1],text=t.findings[1]},
+  {requires={"response","review"},from="review",to="response",kind=K[2],text=t.findings[2]},
+  {requires={"claim","response","review"},from="review",to="claim",kind=K[3],text=t.findings[3]},
  }
- t.findings=nil;return t
+ -- A case where only one pair of records disagrees has one argument in it.
+ -- `conflict` adds the second: the closing record set against the original
+ -- claim, for the scenarios where the final paperwork plainly contradicts
+ -- what the first document said had happened.
+ if t.conflict then
+  t.comparisons[#t.comparisons+1]={requires={"claim","review"},from="review",to="claim",
+   kind="disputes-delivery",text=t.conflict}
+  t.conflict=nil
+ end
+ t.findings=nil;t.kinds=nil;return t
 end
 return {
  ["appointment-out-of-order"]={
@@ -50,7 +62,7 @@ Copy issued to patient. No charge for correcting the heading.]],
      "The corrected card separates the slot from the person. Nobody predicted a referral. They did manage to preserve the cancellation charge through the correction."),
    },
    findings={
-    "The unnamed block booking accounts for the early date on the named appointment card. The patient was added after the referral.",
+    "The card has {P1} booked the day before the referral arrived. The booking sheet has six unnamed slots sold that day, with names written in later.",
     "The correction preserves the two dates in the booking sheet and records attendance on the scheduled day.",
     "The clinic sold a block of time before receiving the patient names. Its card inherited the purchase date, making {P1}'s appointment look planned before the referral. The correction separates those events and leaves the cancellation terms untouched.",
    },
@@ -58,6 +70,7 @@ Copy issued to patient. No charge for correcting the heading.]],
   story{
    organisation="Crossroads Medical Center",
    question="Why does an appointment appear before the incident that required it?",
+   conflict="The account charges {P1} for arriving before the incident happened. The employer's correction puts the incident and the visit on the same day.",
    event="A walk-in visit preceded the employer's incident report; accounts treated the report's filing date as the incident date and the visit as an advance booking.",
    outcome="The walk-in register and corrected incident report account for the order of events, and the advance-booking surcharge is reversed.",
    readings={"The clinic saw a walk-in before the employer finished its report.","A filing date became a reason to charge the patient for booking in advance."},
@@ -123,7 +136,7 @@ Training total reduced by one. Course example relabelled AVOIDABLE DELAY.]],
      "The envelope was still in the binder. They've finally sent it and changed the lesson. Same complaint, twice the training value."),
    },
    findings={
-    "The binder request expands CCR and explains why the complaint left the file drawer: the representative borrowed it for training.",
+    "The file is recorded as held for reply. The training request has the same binder signed out of the building.",
     "The returned binder contains the very reply the representative wanted staff to read. It had never been posted.",
     "The customer was waiting while an unsent reply taught staff how to resolve complaints. The return check found the envelope, reopened the case and recorded dispatch. The training department had to subtract one success.",
    },
@@ -158,7 +171,7 @@ Stationery consumed: none. Folder remains serviceable for filing.]],
      "Two screws do the folder's job now. The file is complete and the machine ran quietly without it. Even the stationery budget gets a happy ending."),
    },
    findings={
-    "The maintenance note explains where the checked-out complaint went: its folder was used to stop the cover rattling.",
+    "The register has the folder checked out and due back. The maintenance note has it folded inside the air conditioner it complained about.",
     "The repair slip records the promised screws and retrieval, with every sheet accounted for and a quiet test run.",
     "The missing file was a temporary packing piece in the air conditioner it complained about. The permanent repair returned it intact and stopped the noise. The first closure came before the repair; the second had screws behind it.",
    },
@@ -195,7 +208,7 @@ Stamp copy ORIGINAL HELD ELSEWHERE. Do not send stamped copy back.]],
      "Headquarters has the missing sheet. The staff are spared another lesson and the book gets a copy with permission to be a copy. I'd keep that permission attached."),
    },
    findings={
-    "The trainer's letter accounts for the cut edge and identifies the conflicting demands behind the missing attendance page.",
+    "The audit refuses the attendance because the page is missing from the book. The trainer's letter has that page posted to headquarters, because another rule demanded the original.",
     "Headquarters' receipt confirms the trainer sent the original and accepts the attendance the local audit had refused.",
     "The page was removed to obey one original-only rule and failed another by leaving the book. Headquarters confirms receipt and authorises a local copy. The missing page is accounted for; nobody needs to learn the mop again.",
    },
@@ -229,7 +242,7 @@ Description PALATE CALIBRATION retained for accounts.]],
      "The attendant is cleared and management gets its own bill. They have kept the grand name for the drinking. Apparently that part passed inspection."),
    },
    findings={
-    "The retained carbon fills the ledger's gap: the six bottles went to directors while no tour group was present.",
+    "The ledger charges six bottles to visitor samples. The retained carbon has no tour that day and the bottles poured for directors.",
     "The signed adjustment confirms the carbon's account and clears the attendant by charging management for the bottles.",
     "The missing leaf hid a directors' tasting in the visitor-sample budget. The carbon survived, and the signed correction accounts for both the sheet and the six bottles. Management kept its preferred description of the meeting.",
    },
@@ -266,7 +279,7 @@ Accounts: Barton paid against coaching invoice. Do not open an employee file for
      "The corrected caption names all three. Barton was there to teach and was paid for that. Four replacement words save accounts from accidentally hiring a golfer."),
    },
    findings={
-    "The coaching invoice explains why a person outside the employee roster could be in the staff-labelled photograph.",
+    "The caption calls all three figures staff. The invoice has the third of them paid as a visiting coach.",
     "The corrected caption places the visiting coach between the two employees and matches his payment to the lesson invoice.",
     "The unnamed figure is Logan Barton, a visiting coach included in a publicity photograph. OUR STAFF sent the caption writer to the wrong list. The correction names him and accounts pays for the lesson without inventing a third employee.",
    },
@@ -300,7 +313,7 @@ Caption approved unchanged: THREE HAPPY FACES FROM OUR FAMILY.]],
      "Two people became three figures and accounts paid for the extra face as a retouch. The caption is still technically safe. I'd count the people myself."),
    },
    findings={
-    "The negative sleeves explain the two names on the three-figure proof: one employee posed twice, including in costume.",
+    "The proof shows three figures and names two. The negative sleeves have one employee photographed twice, the second time inside the costume.",
     "The approval confirms the photographer combined those exposures and that only two employees took part.",
     "There was no unnamed third employee. {P1} appears both in uniform and as Spiffo, assembled from two exposures. The final approval pays two staff and keeps a caption boasting three happy faces.",
    },
@@ -336,7 +349,7 @@ Manager's instruction: use new-complaint figure in improvement report.]],
      "All three callers are accounted for, and all three complaints remain open. The improvement is in the heading. I'd be less impressed if I were still waiting for an answer."),
    },
    findings={
-    "The switchboard instruction explains why a publicly withdrawn extension could still carry calls: staff callbacks remained enabled.",
+    "The notice has the extension withdrawn. The switchboard instruction has it still connected, for staff calling out.",
     "The reconciliation matches all three calls to the callback instruction and confirms the complaints themselves remained open.",
     "The extension was delisted, not disconnected. Its three later calls were staff callbacks, counted as follow-ups while the original matters stayed open. The report improved because the heading changed.",
    },
@@ -371,7 +384,7 @@ Call book relabelled HANDSET TESTS. Retain historic cover for display.]],
      "The staff account for each call between themselves. The line stayed disconnected and the tours got no permission to open. Only the call book came out of retirement."),
    },
    findings={
-    "The exhibit work order offers a local explanation for the fresh call entries: tests between two handsets on an isolated loop.",
+    "The call book has fresh entries on a line recorded as dead. The work order has two handsets tested on a loop that reaches nothing.",
     "The signed check accounts for every test entry and confirms the external cable remained disconnected.",
     "The three answered calls were tour staff testing an internal telephone exhibit. The old call book gave maintenance the appearance of a reopened line. Both operators signed the reconciliation; no external connection was used.",
    },

@@ -41,13 +41,13 @@ local scenarios={
      ["requires"]={"claim","response"},
      ["from"]="response",
      ["to"]="claim",
-     ["kind"]="recontextualises",
-     ["text"]="The roadside entry explains why the transfer offered no transport: {P1} never went to the mill."
+     ["kind"]="disputes-delivery",
+     ["text"]="The transfer sends {P1} to the mill. The job record has them beside the broken truck all day, and the truck driving away afterwards."
     },{
      ["requires"]={"response","review"},
      ["from"]="review",
      ["to"]="response",
-     ["kind"]="recontextualises",
+     ["kind"]="corroborates",
      ["text"]="The closing entry puts the roadside repair on the mill account, exactly as accounts instructed."
     },{
      ["requires"]={"claim","response","review"},
@@ -92,13 +92,13 @@ local scenarios={
      ["requires"]={"claim","response"},
      ["from"]="response",
      ["to"]="claim",
-     ["kind"]="recontextualises",
-     ["text"]="The counter book places the transferred clerk at both signs on the same counter."
+     ["kind"]="disputes-delivery",
+     ["text"]="The notice has a fully staffed counter and a response team as well. The counter book has {P1} alone, moving a sign to the other end."
     },{
      ["requires"]={"response","review"},
      ["from"]="review",
      ["to"]="response",
-     ["kind"]="recontextualises",
+     ["kind"]="corroborates",
      ["text"]="The return counts the two headings separately while paying {P1} for a single shift."
     },{
      ["requires"]={"claim","response","review"},
@@ -144,13 +144,13 @@ local scenarios={
      ["requires"]={"claim","response"},
      ["from"]="response",
      ["to"]="claim",
-     ["kind"]="recontextualises",
-     ["text"]="The retained instruction explains why {P2} appears on a delivery received by {P1}."
+     ["kind"]="disputes-delivery",
+     ["text"]="The docket records {P2} receiving the fuel and the driver checking it. The retained instruction has {P2} away that day and {P1} signing the name."
     },{
      ["requires"]={"response","review"},
      ["from"]="review",
      ["to"]="response",
-     ["kind"]="recontextualises",
+     ["kind"]="corroborates",
      ["text"]="The reconciliation names the real receiver and accepts the account holder instruction."
     },{
      ["requires"]={"claim","response","review"},
@@ -195,13 +195,13 @@ local scenarios={
      ["requires"]={"claim","response"},
      ["from"]="response",
      ["to"]="claim",
-     ["kind"]="recontextualises",
-     ["text"]="The night instructions explain the stamped name on the 23:10 docket while {P2} was away."
+     ["kind"]="disputes-delivery",
+     ["text"]="The docket carries a manager signature at 23:10. The desk card has {P1} on nights and the manager's name kept under the bell."
     },{
      ["requires"]={"response","review"},
      ["from"]="review",
      ["to"]="response",
-     ["kind"]="recontextualises",
+     ["kind"]="corroborates",
      ["text"]="The complaint accepts the clerk followed instructions, then removes the stamp without replacing that authority."
     },{
      ["requires"]={"claim","response","review"},
@@ -247,13 +247,13 @@ local scenarios={
      ["requires"]={"claim","response"},
      ["from"]="response",
      ["to"]="claim",
-     ["kind"]="recontextualises",
-     ["text"]="The permanent entry explains the later start and explicitly refuses the punches on the seasonal card."
+     ["kind"]="disputes-delivery",
+     ["text"]="The crew card says the previous hours must be checked on transfer. The permanent entry refuses to carry a single punch across."
     },{
      ["requires"]={"response","review"},
      ["from"]="review",
      ["to"]="response",
-     ["kind"]="recontextualises",
+     ["kind"]="corroborates",
      ["text"]="The appeal applies the new start to meals while retaining the old experience for training."
     },{
      ["requires"]={"claim","response","review"},
@@ -298,13 +298,13 @@ local scenarios={
      ["requires"]={"claim","response"},
      ["from"]="response",
      ["to"]="claim",
-     ["kind"]="recontextualises",
-     ["text"]="The second date comes from a new billing file, which triggered another deposit despite the first receipt."
+     ["kind"]="disputes-delivery",
+     ["text"]="The starter record has {P1} beginning work and being issued a uniform. The accounts entry has the same employee in the same shirt, starting again."
     },{
      ["requires"]={"response","review"},
      ["from"]="review",
      ["to"]="response",
-     ["kind"]="recontextualises",
+     ["kind"]="corroborates",
      ["text"]="Payroll confirms continuous service and reverses the extra charge."
     },{
      ["requires"]={"claim","response","review"},
@@ -350,14 +350,14 @@ local scenarios={
      ["requires"]={"claim","response"},
      ["from"]="response",
      ["to"]="claim",
-     ["kind"]="recontextualises",
-     ["text"]="The cook statement explains why final wages were ready before the requested resignation."
+     ["kind"]="disputes-delivery",
+     ["text"]="The voucher expects a voluntary notice. {P2} writes that the prepared wages were the offer, made after they refused to count stock unpaid."
     },{
      ["requires"]={"response","review"},
      ["from"]="review",
      ["to"]="response",
-     ["kind"]="recontextualises",
-     ["text"]="The final entry pays the wages, retains the explanation, and still reports a personal departure."
+     ["kind"]="corroborates",
+     ["text"]="The return confirms the statement arrived and the wages were collected. No inventory hours were claimed, and none were paid."
     },{
      ["requires"]={"claim","response","review"},
      ["from"]="review",
@@ -407,7 +407,7 @@ local scenarios={
      ["requires"]={"response","review"},
      ["from"]="review",
      ["to"]="response",
-     ["kind"]="recontextualises",
+     ["kind"]="corroborates",
      ["text"]="The returned form confirms the earlier notice, completed shift and received pay."
     },{
      ["requires"]={"claim","response","review"},
@@ -453,13 +453,13 @@ local scenarios={
      ["requires"]={"claim","response"},
      ["from"]="response",
      ["to"]="claim",
-     ["kind"]="recontextualises",
-     ["text"]="The advance receipt gets around the hold on the urgent routing sheet by signing before delivery."
+     ["kind"]="disputes-delivery",
+     ["text"]="The routing sheet releases nothing until the destination signs for it. The receipt is signed while the belt is still at the desk, and {P1} wrote that on it."
     },{
      ["requires"]={"response","review"},
      ["from"]="review",
      ["to"]="response",
-     ["kind"]="recontextualises",
+     ["kind"]="corroborates",
      ["text"]="The repair return confirms the belt arrived after that signature and was fitted to restart the line."
     },{
      ["requires"]={"claim","response","review"},
@@ -510,7 +510,7 @@ local scenarios={
      ["requires"]={"response","review"},
      ["from"]="review",
      ["to"]="response",
-     ["kind"]="recontextualises",
+     ["kind"]="corroborates",
      ["text"]="The settlement confirms the same goods reached service and explicitly rules out a second supplier shipment."
     },{
      ["requires"]={"claim","response","review"},

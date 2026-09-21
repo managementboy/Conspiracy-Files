@@ -27,9 +27,9 @@ local scenarios={
      note="The belt travelled. The passenger didn't. They closed the request without sending another vehicle, which brought the outstanding total down nicely. {P2} took the original call sheet; there's an enquiry copy at {B}."}
    },
    comparisons={
-    {requires={"claim","response"},from="response",to="claim",kind="recontextualises",text="The amendment names the same booking and tells dispatch not to send a driver to the collection point on my notice."},
-    {requires={"response","review"},from="review",to="response",kind="recontextualises",text="The return book cites the amendment and records the equipment trip, so the reassignment was carried out."},
-    {requires={"claim","review"},from="review",to="claim",kind="recontextualises",text="That passenger booking is mine. The return book says no driver was sent and no replacement allocated. My copy still tells me to wait."},
+    {requires={"claim","response"},from="response",to="claim",kind="disputes-delivery",text="My notice has a vehicle assigned to collect me at 07:00. The amendment, timed 05:40, sends that vehicle to fetch a drive belt and tells dispatch not to send a driver at all."},
+    {requires={"response","review"},from="review",to="response",kind="corroborates",text="The return book cites the amendment and records the equipment trip, so the reassignment was carried out."},
+    {requires={"claim","review"},from="review",to="claim",kind="disputes-delivery",text="That passenger booking is mine. The return book says no driver was sent and no replacement allocated. My copy still tells me to wait."},
     {requires={"claim","response","review"},from="review",to="claim",kind="recontextualises",text="Now I have the notice, the order and the result: {P1} reassigned the borrowed {ORG} vehicle, and dispatch used it for the mill belt. The belt got a ride. I got instructions. That explains the missed collection; it doesn't explain who booked me onto it."}
    },
    optional={
@@ -51,8 +51,8 @@ local scenarios={
     review={kind="receipt",title="Refund ledger / {CODE}",observation="A ledger strip with one refund line and a clerk’s initials at the margin.",source="{DATE3}\nPassenger booking {CODE}: deposit refunded after vehicle withdrawal.\nCollection did not depart.\nRequest copied from an earlier call sheet taken by {P2}; caller's name not recorded.\nFiled at: {B}.\nAccounts note: passenger matter concluded.",note="The office recorded a refund and no departure. {P2} took the call sheet that started it. The passenger matter is concluded, which must be a relief to whoever had the stamp."}
    },
    comparisons={
-    {requires={"claim","response"},from="response",to="claim",kind="recontextualises",text="The workshop note identifies the booking on my notice and records its cancellation before the scheduled collection."},
-    {requires={"response","review"},from="review",to="response",kind="recontextualises",text="The refund ledger agrees that the vehicle was withdrawn and the collection did not depart."},
+    {requires={"claim","response"},from="response",to="claim",kind="disputes-delivery",text="My notice says to wait at the collection point. The workshop card cancels that booking before dispatch and finds no substitute."},
+    {requires={"response","review"},from="review",to="response",kind="corroborates",text="The refund ledger agrees that the vehicle was withdrawn and the collection did not depart."},
     {requires={"claim","response","review"},from="review",to="claim",kind="recontextualises",text="The three records agree: the booked collection was cancelled for repair before departure, and its deposit was refunded."}
    },
    optional={

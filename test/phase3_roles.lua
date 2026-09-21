@@ -21,6 +21,14 @@ for _, id in ipairs({ 'paymentRecord', 'timingDispute', 'presenceNote' }) do
     assert(kind, id .. ' must resolve to a carrier')
 end
 
+-- Project the case with everything discovered: that is the only state in which
+-- comparisons exist to be counted.
+local function projected(case)
+    local order = {}
+    for _, d in ipairs(case.documents) do order[#order + 1] = d.id end
+    return G.project(case, order) or {}
+end
+
 local kinds, carriers, sizes = {}, {}, {}
 for seed = 1, 400 do
     local case = G.generate(catalog, seed, opts)
@@ -28,7 +36,13 @@ for seed = 1, 400 do
         sizes[#case.documents] = (sizes[#case.documents] or 0) + 1
         for _, doc in ipairs(case.documents) do
             carriers[doc.kind] = (carriers[doc.kind] or 0) + 1
-            for _, link in ipairs(doc.links or {}) do
+        end
+        -- A comparison only exists once BOTH its sources are known, so the
+        -- stored case carries no links at all - correctly. They are a property
+        -- of the projection. Counting doc.links here made this test read zero
+        -- of every kind and blame the content for it.
+        for _, row in ipairs(projected(case)) do
+            for _, link in ipairs(row.connections or {}) do
                 kinds[link.kind] = (kinds[link.kind] or 0) + 1
             end
         end
@@ -49,8 +63,8 @@ for seed = 1, 400 do
     local case = G.generate(catalog, seed, opts)
     if case then
         local disputing = 0
-        for _, doc in ipairs(case.documents) do
-            for _, link in ipairs(doc.links or {}) do
+        for _, row in ipairs(projected(case)) do
+            for _, link in ipairs(row.connections or {}) do
                 if link.kind == 'disputes-delivery' then disputing = disputing + 1; break end
             end
         end

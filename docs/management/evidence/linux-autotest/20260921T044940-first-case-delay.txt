@@ -1,0 +1,28 @@
+First case delay — measured 2026-09-21
+source a6b6da8 / DEV-0.46.0-writing-rebuild, Linux hidden run (Mesa llvmpipe, software)
+
+SETUP
+  Fresh world, hidden, default start. Polled GeneratedRuntime.automaticStatus()
+  every 15 s from ~4 minutes after the world became playable.
+
+OBSERVED
+  From the first probe to the first case existing: 504 s.
+  Add the ~230 s already elapsed before probing began and the world load:
+  the first case appears roughly 8 min 24 s after the world is playable.
+
+  Throughout, status read: count=0 preparing=true why=busy rung=0
+  ("busy" = the generator is working, not refusing. dueHours 26.2.)
+  Nothing refused; the count never fell back; it simply took that long.
+
+CONSEQUENCE
+  tools/autotest/checks/campaign.sh aborts with "no first case": it waits
+  120 s (campaign.sh:313). The check is not wrong to be surprised. The whole
+  history-and-storage gate is blocked behind this wait.
+
+READ WITH CARE
+  Software rendering on the dev laptop. Absolute seconds here are not the
+  owner's seconds. What is NOT explained by slow rendering is the shape:
+  destination indexing alone was measured at 114 s on this same machine, so
+  the remaining ~7 minutes is case preparation, not map work.
+
+STATUS: FINDING, not yet diagnosed. Gate "History and storage" remains unrun.

@@ -27,13 +27,27 @@ local function scenario(t)
  t.grounding=assert(businesses[t.organisation])
  local extra=assert(optionalByQuestion[t.question],"inventory scenario lacks optional evidence")
  t.essential={"claim","response","review"};t.optional={{key=extra.key,role=extra.role,kind=extra.kind,title=extra.title,observation=extra.observation,source=extra.source,note=extra.note}}
+ -- See the note in AdministrativeScenarios: the second record disputes the
+ -- first account, the third confirms the second, the three together explain.
+ -- The optional source is a separate observation that supports what it is
+ -- attached to; that is what "corroborates" is for.
+ local K=t.kinds or {"disputes-delivery","corroborates","recontextualises"}
  t.comparisons={
-  {requires={"claim","response"},from="response",to="claim",kind="recontextualises",text=t.findings[1]},
-  {requires={"response","review"},from="review",to="response",kind="recontextualises",text=t.findings[2]},
-  {requires={"claim","response","review"},from="review",to="claim",kind="recontextualises",text=t.findings[3]},
-  {requires=extra.requires,from=extra.key,to=extra.requires[1],kind="recontextualises",text=extra.text},
+  {requires={"claim","response"},from="response",to="claim",kind=K[1],text=t.findings[1]},
+  {requires={"response","review"},from="review",to="response",kind=K[2],text=t.findings[2]},
+  {requires={"claim","response","review"},from="review",to="claim",kind=K[3],text=t.findings[3]},
+  {requires=extra.requires,from=extra.key,to=extra.requires[1],kind=extra.kind2 or "corroborates",text=extra.text},
  }
- t.findings=nil
+ -- A case where only one pair of records disagrees has one argument in it.
+ -- `conflict` adds the second: the closing record set against the original
+ -- claim, for the scenarios where the final paperwork plainly contradicts
+ -- what the first document said had happened.
+ if t.conflict then
+  t.comparisons[#t.comparisons+1]={requires={"claim","review"},from="review",to="claim",
+   kind="disputes-delivery",text=t.conflict}
+  t.conflict=nil
+ end
+ t.findings=nil;t.kinds=nil
  return t
 end
 return {
@@ -71,7 +85,7 @@ Do not refund at desk: a closed unit is not a closed account.]],
      "The inspection records one load and an empty old unit. A credit is promised for the next statement. Even empty space gets paid before it gets believed."),
    },
    findings={
-    "The tenant's complaint explains why both inventories describe the same damaged dresser: the contents moved while the old file stayed open.",
+    "Two units are inventoried with the same damaged dresser. The complaint has one load, moved once, and an old file nobody closed.",
     "The inspection backs the complaint: unit 6 was empty and unit 14 held the transferred load. The remedy was another statement to wait for.",
     "I can account for the duplicate inventory: one move, two open unit files, two rents. The inspection ordered a credit; I haven't found evidence that the money came back.",
    },
@@ -108,7 +122,7 @@ Adjustment authorised: {P2}.]],
      "One real inventory, one empty unit. The false contents are removed. The on-time paperwork gets to keep its clean record."),
    },
    findings={
-    "The correction request explains the repeated wording on the stock lists: {P1} copied one unit's contents onto another's overdue form.",
+    "The overdue form lists contents for unit 14. The correction request has that unit empty and its list copied off another sheet.",
     "The recount confirms the empty unit described in the request, and {P2} cancels the invented stock and charge.",
     "The second load existed on a copied form. That was enough to produce a charge, though not enough to cancel one. The adjustment settles the stock; it doesn't tell me whether the earlier bill was paid.",
    },
@@ -118,6 +132,7 @@ Adjustment authorised: {P2}.]],
   scenario{
    organisation="Sunstar Motel",
    question="Why is a linen cupboard on the motel's occupancy return?",
+   conflict="The return counts 14 among the let rooms. The correction takes it off guest occupancy: it was a cupboard with shelves in it.",
    event="A supervisor counted a storeroom as an occupied room to meet a room-use target.",
    outcome="The apparent guest room was linen storage; the report counted it as occupied without a paying guest.",
    unresolved="The corrected room count does not show who approved the earlier figures.",
@@ -145,7 +160,7 @@ Original return remains filed as submitted. Do not amend the target report witho
      "The correction removes a guest who was never there. The target report stays put until someone volunteers to make it worse."),
    },
    findings={
-    "The stock-book exchange explains the odd guest on the return: room 14 was an occupied linen cupboard, counted under {P2}'s reading of the instructions.",
+    "The occupancy return counts 14 as a let room. The stock book has it holding folded sheets.",
     "The correction accepts that 14 was storage and removes it from guest occupancy, but leaves the original target report awaiting authorisation.",
     "There was no hidden guest room in these records. A cupboard helped Sunstar meet its room-use target. The room count was corrected; the flattering report was still waiting for permission to become less flattering.",
    },
@@ -181,7 +196,7 @@ Original form retained: replacement stationery not approved.]],
      "The diner got its repair and accounts got the right department. The form that caused the mistake has been spared the expense of retirement."),
    },
    findings={
-    "The contractor's copy explains the 14 on the paid bill: a job number became a room number.",
+    "The bill pays for work carried out in room 14. The contractor's copy has the same job done on the diner extractor.",
     "{P1}'s check supports the contractor's account of a working diner extractor; accounts moves the expense to the diner.",
     "I can place the repair at Sunstar's diner. Accounts paid for an imaginary room because a job number landed in the wrong box, then corrected the account while keeping the form.",
    },
@@ -191,6 +206,7 @@ Original form retained: replacement stationery not approved.]],
   scenario{
    organisation="U-Store It",
    question="Why was an empty storage unit still earning rent?",
+   conflict="The demand charges rent for weeks after the tenant left. The key log dates the return and orders a refund from that day.",
    event="A tenant returned a key through the drop box, but the account stayed open because nobody issued a counter receipt.",
    outcome="Inspection found the empty unit and returned key, and ordered later rent refunded.",
    unresolved="The refund order has no signed collection entry.",
@@ -219,7 +235,7 @@ Drop-box receipts remain available at the counter during opening hours.]],
      "They found the key and accepted the leaving date. The new instruction sends the after-hours tenant straight back to the closed counter."),
    },
    findings={
-    "The complaint gives a specific route for the key whose missing counter receipt kept the rent demand alive.",
+    "The rent demand rests on a key never returned. The complaint has it handed across the counter, in front of a witness.",
     "The key log corroborates that route and the witness, then orders a refund from the departure date.",
     "The tenant left and returned the key. An unsorted envelope kept the lease charging until the inspection caught up. I have the refund order, but no evidence that {P1} collected it.",
    },
@@ -255,7 +271,7 @@ Authorisation for earlier billing: [blank].]],
      "The stock gets to stay and {P1} gets to stop paying for it. Nobody has put a name in the box for whoever thought that needed explaining."),
    },
    findings={
-    "The stock note identifies the cartons behind the rent notice as the office's own promotional material, moved in after {P1} left.",
+    "The notice charges {P1} for a unit still in use. The stock note has the office's own leaflets in it, carried there after they left.",
     "The corrected statement confirms the office stock and moves its storage cost off the former tenant's account.",
     "The lease outlasted the tenant because U-Store It filled the empty unit itself. The stock stayed; the tenant's charges were cancelled. The earlier bills still have no author to ask about them.",
    },
@@ -293,7 +309,7 @@ Clear shortage file. Driver-pay hold requires separate payroll release.]],
      "The complete vehicle matches the dispatch weight. The shortage file can close now. Apparently the pay hold is travelling on a different trailer."),
    },
    findings={
-    "The driver's account explains the blank trailer field on the short-load report: receiving recorded only the tractor.",
+    "The short-load report weighs the load light. The driver's account has the loaded trailer standing in the yard, never put on the scale.",
     "The reweigh checks the same sealed load and accounts for the difference described by the driver. Payroll has yet to release the hold.",
     "Nothing went missing from this load. The second weighing omitted the loaded trailer, then charged the difference against a driver. The corrected weight clears the cargo; it does not show that {P1} was paid.",
    },
@@ -327,7 +343,7 @@ Cancel shortage claim. Repayment of deducted haulage must be requested on the ca
      "The load is accounted for. To get paid for bringing it, the carrier has been given another thing to deliver."),
    },
    findings={
-    "The mill receipt supplies the missing thousand pounds: a motor unloaded for repair, absent from the lumber-only manifest.",
+    "The manifest carries lumber only, and a thousand pounds went missing between weighings. The mill receipt has a motor lifted off on the way.",
     "The reconciliation matches the motor receipt to both weighings and cancels the shortage claim, but sends repayment into a separate form.",
     "McCoy's motor left the truck at the mill; its lumber reached the destination. The wrong manifest made that useful stop look like missing cargo. The shortage is cleared, but the deducted money is still a request.",
    },
@@ -364,7 +380,7 @@ New-card request returned: relief allocation has no permanent vehicle number.]],
      "The expense reaches the right truck. A card for that truck is still waiting for it to become permanent enough to need fuel."),
    },
    findings={
-    "The driver's entry explains the cans on the Fossoil receipt: the old truck's card bought fuel for a replacement.",
+    "The receipt buys fuel on a truck that is in pieces in the workshop. The driver's entry has that card paying for cans carried out to truck 3.",
     "The account check corroborates the transfer to truck 3 and amends the expense, while rejecting its new-card request.",
     "The workshop truck did not make a secret trip. Its card paid for fuel carried to truck 3. The accounts now know that, but the replacement truck still has no card of its own in these records.",
    },
@@ -400,7 +416,7 @@ No further purchases to be entered against a dismantled vehicle.]],
      "The issue check finds the fuel in the generator's records and closes the van again. It bans the workaround without supplying the account they needed."),
    },
    findings={
-    "The explanation gives the reopened Fossoil account a purpose: buying generator fuel when the form demanded a vehicle number.",
+    "The account is open for a van that no longer exists. The explanation has fifteen gallons going into a generator, because the form insisted on a vehicle number.",
     "The issue check matches the quantity and corroborates {P2}'s instruction, then closes the borrowed account again.",
     "The van stayed dismantled. Fifteen gallons went to a generator under its number because the form required a vehicle. They closed the false account; the equipment account was still only a request.",
    },

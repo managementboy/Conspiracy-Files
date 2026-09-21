@@ -12,13 +12,29 @@ end
 local function scenario(t)
  t.grounding=assert(grounding[t.organisation])
  t.essential={"claim","response","review"};t.optional=t.optional or {}
+ -- The three relations the organiser can show ("Does not match", "Agrees
+ -- with", "Adds context to") were all filed as recontextualises here, so no
+ -- two sources in a generated case could ever be seen to disagree. The shape
+ -- these stories actually have is: the second record contradicts the first
+ -- account, the third confirms the second, and the three together explain.
+ -- A scenario whose middle record does something else says so with `kinds`.
+ local K=t.kinds or {"disputes-delivery","corroborates","recontextualises"}
  t.comparisons={
-  {requires={"claim","response"},from="response",to="claim",kind="recontextualises",text=t.findings[1]},
-  {requires={"response","review"},from="review",to="response",kind="recontextualises",text=t.findings[2]},
-  {requires={"claim","response","review"},from="review",to="claim",kind="recontextualises",text=t.findings[3]},
+  {requires={"claim","response"},from="response",to="claim",kind=K[1],text=t.findings[1]},
+  {requires={"response","review"},from="review",to="response",kind=K[2],text=t.findings[2]},
+  {requires={"claim","response","review"},from="review",to="claim",kind=K[3],text=t.findings[3]},
  }
+ -- A case where only one pair of records disagrees has one argument in it.
+ -- `conflict` adds the second: the closing record set against the original
+ -- claim, for the scenarios where the final paperwork plainly contradicts
+ -- what the first document said had happened.
+ if t.conflict then
+  t.comparisons[#t.comparisons+1]={requires={"claim","review"},from="review",to="claim",
+   kind="disputes-delivery",text=t.conflict}
+  t.conflict=nil
+ end
  for _,f in ipairs(t.extraFindings or {}) do t.comparisons[#t.comparisons+1]=f end
- t.findings=nil;t.extraFindings=nil
+ t.findings=nil;t.extraFindings=nil;t.kinds=nil
  return t
 end
 return {
@@ -26,6 +42,7 @@ return {
   scenario{
    organisation="Circuital Healing",
    question="Why did the returned radio look newer than the one sent in?",
+   conflict="The receipt has {P1} carrying their own radio out of the shop. The serial check has both customers going home with the wrong set.",
    event="A cleaner removed two paper job labels, and the radios were handed back to the wrong customers.",
    outcome="Serial-number checks identified the exchanged radios and both customers collected their own sets.",
    unresolved="The correction doesn't say who authorised collecting another handling fee.",
@@ -53,7 +70,7 @@ Complaint about fee referred to manager.]],
      "Both sets reached their owners. The second fee stayed behind to meet the manager. Good that something still needs fixing."),
    },
    findings={
-    "The bench note offers a reason for the different knob on the returned radio: the labels came off and were replaced by position.",
+    "The receipt has {P1} collecting their own radio. The bench note has two sets standing where a pair of washed-off labels put them.",
     "The serial checks confirm the exchange suspected in the bench note, and the owners sign for their own sets.",
     "The radio looked newer because it belonged to someone else. The serial checks put both sets back with their owners. A second handling fee turned the correction into another customer complaint.",
    },
@@ -69,6 +86,7 @@ Please do not adjust mine to match. Your last adjustment took two visits.]],
   scenario{
    organisation="Lenny's Car Repair",
    question="Was the spotless starter motor actually repaired?",
+   conflict="The collection slip charged {P1} for a starter marked ready. The repeat test finds the same fault it went in with.",
    event="A cleaned starter was moved to the collection shelf before its failed electrical test was entered on the job card.",
    outcome="The original starter was returned unrepaired; a repeat bench test caught the fault and the collection charge was voided.",
    unresolved="The replacement part is ordered, but no fitted-part record is present.",
@@ -96,7 +114,7 @@ Part ordered. Do not mark READY while ordering.]],
      "The repeat test finds the fault, and the charge is void. The part is still only ordered. This time the word READY has been put under supervision."),
    },
    findings={
-    "The bench entry explains how an unrepaired starter received the READY tick on the paid collection slip.",
+    "The collection slip is ticked READY and paid. The bench entry has the same starter failing its electrical test and going no further.",
     "The repeat test backs the mechanic's account: the same fault remains and no replacement contacts had been fitted.",
     "Cleaning made the starter look repaired; a shortened label made the counter treat it as repaired. The retest reopened the job and voided the charge. I have no record of the replacement contacts being fitted.",
    },
@@ -131,7 +149,7 @@ Do not issue a second crate to balance the statement.]],
      "The first deposit is credited. One crate and one remaining deposit. Someone had to forbid solving the accounts with another crate."),
    },
    findings={
-    "The driver's round explains the repeated number: crate 47 was returned and reused before its return slip reached accounts.",
+    "Accounts hold deposits on two crates numbered 47. The driver's round has one crate, returned in the morning and sent out again the same day.",
     "The loading record and repaired runner corroborate the reuse, and the first deposit is credited.",
     "There were two deliveries, not two crates. Number 47 made both trips while its first return slip stayed under a seat. The account now carries only the deposit for the crate still with {P1}.",
    },
@@ -166,7 +184,7 @@ Blanks restored to press queue. Customer balance remains outstanding. Replacemen
      "The blanks are back where they can become blades. The customer still has an incomplete order, but at least the next trip won't be theirs to pay for."),
    },
    findings={
-    "The press record explains why the two matching job labels covered different contents: one crate left before its shaping operation.",
+    "Two crates carry the same finished-order label. The press record has one of them leaving the works before its blades were ever shaped.",
     "The return check corroborates the press record and restores the unfinished material to production, with the customer still owed blades.",
     "The duplicate number belonged to one order, not two finished crates. Dispatch checked labels instead of completion; the returned blanks went back into the queue. Nothing here shows that the missing blades eventually shipped.",
    },
@@ -203,7 +221,7 @@ Employer note: reimbursement referred back. Deposit predates requisition; retros
      "The supplier accounts for one deposit and one order. The employer has discovered that an advance payment happened in advance, and needs a form about it."),
    },
    findings={
-    "The worker's letter explains the early receipt attached to the requisition: {P1} personally reserved the stock before approval.",
+    "The requisition has the order approved first and paid afterwards. The letter has {P1} paying out of their own money days before approval existed.",
     "The supplier confirms the deposit was applied once to the collected materials; the employer still wants a retrospective expense form.",
     "The order didn't predict its payment. A worker's money held the roof stock until approval arrived. The materials were collected and the supplier was paid once; {P1}'s reimbursement is still only a referral.",
    },
@@ -239,7 +257,7 @@ No additional engraving commissioned.]],
      "The supplier records twelve identical bats and no winning names. Whatever happened at the event, its prizes were determined to be encouraging."),
    },
    findings={
-    "The committee instruction explains both the early payment and the WINNER imprint: it reserved one cheap stock prize for every entrant.",
+    "The receipt reads as a prize bought for a winner. The committee instruction has twelve identical bats bought for everybody who entered.",
     "The collection sheet matches the equal-prize instruction and applies the earlier payment to the same twelve bats.",
     "The receipt records prepaid participation prizes, not a preselected winner. All twelve bats said WINNER because a more accurate word cost extra. The actual event results remain outside this file.",
    },
@@ -277,7 +295,7 @@ Do not alter gate log to make it agree.]],
      "The pay was issued for waiting. The code still says on site, followed by a note saying not on site. At least nobody has been sent to repair the gate log."),
    },
    findings={
-    "The standby instruction explains why the timesheet's worker never signed through the gate: {P1} was told to wait at home.",
+    "The timesheet has {P1} on an eight-hour shift inside the plant. The standby instruction has them waiting at home, told not to attend.",
     "Payroll confirms the required waiting period and pays it under the only available shift code, while recording that no restart occurred.",
     "Nobody worked inside the locked factory that night. {P1} gave up eight hours at home under an instruction to wait, and was paid for that time. The imaginary on-site shift belongs to the payroll code.",
    },
@@ -311,7 +329,7 @@ Credit issued against original bill. Customer request for cash refund referred t
      "The clock's pretend night has been removed from the bill. Getting the credit turned back into cash will apparently take time the clock can't supply."),
    },
    findings={
-    "The bench log explains the invoice's time card as two test punches, not the technician's working hours.",
+    "The invoice bills a night of overtime from the time card. The bench log has two test punches fifty minutes apart.",
     "The corrected invoice accepts the bench log and replaces eight hours of overtime with fifty minutes of ordinary labour.",
     "The time clock worked through the night only because {P1} advanced it. Its test card became an overtime bill. That charge was credited; the requested cash refund is not recorded here.",
    },
@@ -320,6 +338,7 @@ Credit issued against original bill. Customer request for cash refund referred t
  ["closure-announced-twice"]={
   scenario{
    organisation="CGE Corp",
+   kinds={"recontextualises","corroborates","recontextualises"},
    question="Why were there recent work sheets for the old CGE factory?",
    event="Preservation volunteers entered the old CGE building to measure it for a proposed museum, after manufacturing had long ceased.",
    outcome="The recent work was a heritage survey, not resumed production; later access was refused pending the demolition decision.",
@@ -355,6 +374,7 @@ Museum proposal requires a complete condition survey. Current submission marked 
   },
   scenario{
    organisation="March Ridge bunker tours",
+   kinds={"recontextualises","corroborates","recontextualises"},
    question="Why were beds and power checked after the bunker was closed?",
    event="Staff continued preparing the decommissioned bunker for visitors while tour admission was suspended for a safety review.",
    outcome="The recent work maintained the tour display, not an operating military shelter; the public reopening request was refused.",
