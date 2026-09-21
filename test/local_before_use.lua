@@ -65,6 +65,39 @@ for _, dir in ipairs(dirs) do
                 end
             end
         end
+        -- ANY local of that name, in any form, at any indentation. This is a
+        -- SUPPRESSION set, never a declaration set.
+        --
+        -- The scanner is line-based and scope-blind by design, and pairs the
+        -- first use in a file with the first declaration in the file. That is
+        -- safe only while the declaration forms it recognises are the ones
+        -- that matter. `local known,seen={},{}` is not among them, so on
+        -- 2026-09-21 GeneratedRuntime's line 1275 was invisible: the use at
+        -- 1276 got paired with an unrelated `local known={}` six hundred lines
+        -- below, in a different function, and was reported as a defect. The
+        -- code was correct.
+        --
+        -- Teaching it that form as a DECLARATION was tried and was worse: it
+        -- immediately produced four more false reports (rows, scan, names, n),
+        -- because every new declaration creates new spurious pairings across
+        -- unrelated scopes. Without real scope analysis, more recognition
+        -- means more noise.
+        --
+        -- So the form is used only to say "a local of this name already
+        -- exists here", which is enough to know the use is not a nil global.
+        -- A genuine use-before-declaration has no local of that name anywhere
+        -- above it, so every existing catch is preserved.
+        local anyLocalAt = {}
+        for n, raw in ipairs(src) do
+            local line = code(raw)
+            local decl = line:match("^%s*local%s+([%w_][%w_,%s]*)")
+            if decl then
+                for one in decl:gmatch("[%w_]+") do
+                    if one ~= "function" and not anyLocalAt[one] then anyLocalAt[one] = n end
+                end
+            end
+        end
+
         for name, decl in pairs(declaredAt) do
             declarations = declarations + 1
             local firstUse
@@ -84,7 +117,8 @@ for _, dir in ipairs(dirs) do
                 end
             end
             if firstUse and firstUse < decl
-               and not (forwardAt[name] and forwardAt[name] < firstUse) then
+               and not (forwardAt[name] and forwardAt[name] < firstUse)
+               and not (anyLocalAt[name] and anyLocalAt[name] <= firstUse) then
                 problems[#problems + 1] = string.format(
                     "%s: %s is called at line %d but declared local at line %d",
                     path, name, firstUse, decl)
