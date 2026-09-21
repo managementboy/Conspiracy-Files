@@ -1,0 +1,34 @@
+Placement variety — native acceptance gate 4 (first real measurement)
+source: 417abe0 (DEV-0.46.0-writing-rebuild)
+renderer: Mesa llvmpipe (SOFTWARE), hidden run, fresh save
+
+THE COMPLAINT THIS ANSWERS
+Owner, 2026-09-20: three consecutive fresh games, every opening clue in a
+kitchen cupboard. Measured cause at the time: the six allowed container kinds
+were office furniture, and a house holds almost none of them except counters,
+so counters were ~78% of the legal hiding places and bedrooms held nothing
+eligible at all.
+
+MEASURED NOW, one case, six placed clues:
+
+  containers  counter=2, dresser=1, fireplace=1, medicine=1, metal_shelves=1
+  rooms       kitchen=2, hall=2, bathroom=1, livingroom=1
+
+  Five distinct container kinds across four rooms. Kitchen counters are two of
+  six rather than the only legal answer. Clues now appear in a chest of
+  drawers, a bathroom medicine cabinet, a fireplace and metal shelving.
+
+  The fireplace placement is worth noting on its own: a document in cold ash is
+  exactly the texture the placement exploration argued for, arriving from the
+  widened furniture rules rather than from authored special-casing.
+
+WHAT THIS DOES NOT ESTABLISH
+  - ONE case in ONE house. The handoff asks for repeated fresh-house starts;
+    this is a single sample and the distribution across many houses is not
+    measured here.
+  - Bedroom storage specifically: a dresser was used, but whether the room was
+    a bedroom is not separately confirmed (rooms recorded were kitchen, hall,
+    bathroom, livingroom).
+  - Scan-step cost and time from area availability to discovery are not
+    measured, and the software renderer would not support a timing claim.
+  - No moved/dismantled furniture or replacement-container case was exercised.
