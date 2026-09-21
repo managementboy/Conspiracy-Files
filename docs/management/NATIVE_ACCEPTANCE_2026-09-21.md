@@ -20,7 +20,7 @@ hardware, not `llvmpipe`, for every run recorded here.
 | 4 | Organiser popup scrolling and rocker input | **NOT EXERCISED** | — | — |
 | 5 | Shared-restaurant behaviour in game | **NOT EXERCISED** | — | — |
 | 6 | Placement interruption/recovery and save/reload | **NOT EXERCISED** at this revision | — | `20260921T061655`, `20260920T224635` are older revisions |
-| 7 | All 125 destinations, played | see below | `8195828` | `*-map-coverage.txt` |
+| 7 | All 125 destinations, played | **PARTIAL — 12 of 125 PASS on all four columns** | `5845cf2` | `20260921T163248-map-coverage.txt` |
 | 8 | Combined native save-state measurement | **PARTIAL** | `e6b9397` | campaign report's per-root sizes |
 
 Gates 2, 3, 4 and 5 need long attended play sessions and were not run. They are
@@ -113,8 +113,53 @@ standable square). A partial run prints how many designs were **NOT
 EXERCISED** and the command to continue, and states that "all 125 destinations
 PASS" may not be written until every one is reached.
 
-Result: see the run's own report. **The phrase "all 125 destinations PASS" is
-not used anywhere in this document.**
+**Result: 12 of 125 designs, and all twelve pass every column.**
+
+```
+geometry: a building or an area          12 of 12
+payoff inserted, exactly one token       12 of 12
+container identified and NOT a floor     12 of 12
+target resolves AND a standable square   12 of 12
+errors inside the mod: 0
+```
+
+Container kinds across those twelve: `shelves`, `counter`, `bin`,
+`ShotgunBox`, `cardboardbox`, `metal_shelves`, `crate` — the selection is not
+collapsing onto one kind. This is the first **playable** evidence these
+destinations have had; every earlier claim rested on geometry.
+
+The remaining **113 designs are NOT EXERCISED**. Complete with:
+
+```bash
+tools/autotest/checks/map_coverage.sh --from 13
+```
+
+At roughly three minutes a design that is several hours; a run was started at
+`9cc5fa5` and its result is not included here, because this document records
+what has finished.
+
+**The phrase "all 125 destinations PASS" is not used anywhere in this
+document**, and the check itself now refuses to let the headline be quoted
+without its scope.
+
+### Three faults in this check, all mine, all caught
+
+Recorded because the check is new and its early output was wrong in ways that
+looked like product failures:
+
+1. `field()` was copied from `campaign.sh` without its one-argument form, so
+   the one call that pipes read an empty string and **0 of 125** designs ran.
+2. The verdict came from the failure list alone, so that run printed **PASS
+   having measured nothing** — green by silence, the exact failure this check
+   exists to prevent, inside the check. `test/coverage_verdict.lua` now
+   forbids it.
+3. The require path was `Generated/Choices`, which does not exist (it is
+   `StorageChoices`). **Kahlua's `require` returns nil silently** rather than
+   raising, so the fixture loaded cleanly and failed only when called; `ev()`
+   swallows the error, so every row came back empty and was misread as "125
+   designs resolve to no building and no area". The require is now asserted
+   and an empty row is reported as a harness fault, never as a verdict about a
+   design.
 
 ## Two harness defects found by the owner watching the screen
 

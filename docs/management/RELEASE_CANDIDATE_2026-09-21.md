@@ -10,7 +10,7 @@ never run. The build remains what the owner already authorised it to be:
 
 | | |
 |---|---|
-| Proposed SHA | see "Final HEAD" below — **nothing is proposed for tagging** |
+| Final HEAD | `9cc5fa5c65b81ffac33848c53e099f17b06a762d` — **nothing is proposed for tagging** |
 | Version | `DEV-0.46.1-writing-rebuild` |
 | Game | Project Zomboid **42.20.4 (`b0bbce05d5`)** |
 | Machine | Linux development box, Intel Iris Xe on display `:0` (hardware) |
@@ -22,12 +22,12 @@ never run. The build remains what the owner already authorised it to be:
 |---|---|---|
 | Shipped offline suite | **PASS** — 169 run, 0 failed | final HEAD |
 | Prototype suite | **PASS** — 9 run, 0 failed | final HEAD |
-| Kahlua parse-all | **PASS** — 124 ok, 0 failed | final HEAD |
-| Static checks (luacheck errors) | **PASS** — 0 errors, 2,390 warnings | final HEAD |
-| Secret scan | **PASS** — 2,302 tracked files, 0 findings | final HEAD |
+| Kahlua parse-all | **PASS** — 124 ok, 0 failed (`kahlua_gate.sh`: PASS) | final HEAD |
+| Static checks (luacheck errors) | **PASS** — 0 errors, 2,403 warnings | final HEAD |
+| Secret scan | **PASS** — 2,320 tracked files, 0 findings | final HEAD |
 | Native boot | **PASS** | `53dbc61` |
 | **Native campaign gate** | **FAIL** — 11 product failures, one cause | `e6b9397` |
-| Native: 125 destinations | see `NATIVE_ACCEPTANCE_2026-09-21.md` | `ec69431` |
+| Native: 125 destinations | **PARTIAL** — 12 of 125 pass all four columns; 113 NOT EXERCISED | `5845cf2` |
 | Native: opening + continuation | **NOT EXERCISED** | — |
 | Native: map journey to payoff | **NOT EXERCISED** | — |
 | Native: organiser scrolling / rocker | **NOT EXERCISED** | — |
@@ -77,7 +77,7 @@ Evidence: `evidence/linux-autotest/20260921T154959-campaign.txt`.
    `NOT EXERCISED` for it and `tools/autotest/kahlua_gate.sh` is the local gate.
 4. The prototype under `dev/next-phase/` is not shipped. Its suite passing says
    nothing about the released mod.
-5. `luacheck` reports 2,390 warnings. Errors block; warnings do not.
+5. `luacheck` reports 2,403 warnings. Errors block; warnings do not.
 
 ## Corrections to earlier status documents
 
