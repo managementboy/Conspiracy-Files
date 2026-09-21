@@ -9,8 +9,10 @@
 #   (b) with Search Mode on near a placed clue, an icon of our own class sits on
 #       its container's square;
 #   (c) standing next to it, the game's spotting spots it within a bounded time
-#       and the runtime recognises it (timed with no focus, and with "Clues"
-#       on a second clue when there is one);
+#       and the runtime recognises it; its question mark then remains while
+#       Investigate Area is on, and turning the tool off and on recreates it
+#       (timed with no focus, and with "Clues" on a second clue when there is
+#       one);
 #   (d) no errors inside the mod;
 #   (e) the game's own forage icons are counted with no focus and with "Clues":
 #       none is a Clues icon, and the focus does not multiply them;
@@ -130,9 +132,25 @@ spot() { # spot N FOCUS
     local secs; secs="$(awk -v a="$t0" -v b="$t1" 'BEGIN{printf "%.1f", b-a}')"
     if [ "$seen" = yes ]; then
         note "clue $n ($focus): spotted and recognised after ${secs} s (limit ${SPOT_LIMIT} s)"
+        # Regression: recognition used to start an eight-second timer which
+        # permanently removed the locator. Keep the mode on past that boundary,
+        # then switch it off and on: an unresolved clue must remain searchable.
+        sleep 10
+        icon="$(ev 'return CFClue.icon()')"
+        note "clue $n icon 10 s after spotting: $(tr '\t' ' ' <<<"$icon")"
+        [ "$(cut -f1 <<<"$icon")" = true ] || fail "clue $n: its unresolved icon vanished while Investigate Area stayed on"
+        ev 'return CFClue.searchOff()' >/dev/null
         sleep 1
         icon="$(ev 'return CFClue.icon()')"
-        note "clue $n icon after spotting: $(tr '\t' ' ' <<<"$icon")"
+        [ "$(cut -f1 <<<"$icon")" = false ] || fail "clue $n: its icon stayed up with Investigate Area off"
+        ev 'return CFClue.searchOn()' >/dev/null
+        for _ in $(seq 20); do
+            icon="$(ev 'return CFClue.icon()')"
+            [ "$(cut -f1 <<<"$icon")" = true ] && break
+            sleep 0.25
+        done
+        note "clue $n icon after re-search: $(tr '\t' ' ' <<<"$icon")"
+        [ "$(cut -f1 <<<"$icon")" = true ] || fail "clue $n: re-enabling Investigate Area did not restore its unresolved icon"
         items="$(ev 'return CFClue.items()')"
         note "clue $n after: $(cut -f2 <<<"$items")"
     else
@@ -175,6 +193,13 @@ mark_stage() { # mark_stage in-place|carried
     fi
     [ "$(cut -f1 <<<"$m")" = true ] || { fail "marks ($how): the note was refused: $(cut -f2 <<<"$m")"; return 1; }
     wait_true 30 'CFClue.noted()' || { fail "marks ($how): the clue was never noted"; return 1; }
+    # Noting resolves the locator. It must not come back on the next search.
+    ev 'return CFClue.searchOn()' >/dev/null
+    sleep 1
+    local resolved_icon; resolved_icon="$(ev 'return CFClue.icon()')"
+    [ "$(cut -f1 <<<"$resolved_icon")" = false ] \
+        || fail "marks ($how): the inspected clue's icon came back: $(tr '\t' ' ' <<<"$resolved_icon")"
+    ev 'return CFClue.searchOff()' >/dev/null
     # The marker worker writes on its own tick, once a second.
     for n in $(seq 20); do
         m="$(ev 'return CFClue.mark()')"

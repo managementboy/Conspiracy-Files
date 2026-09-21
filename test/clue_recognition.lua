@@ -82,7 +82,7 @@ for _,item in ipairs(placed) do assert(item.category==nil,"the identity scan mus
 -- Search Mode rows: every clue, unrecognised.
 local rows=R.clueTargets()
 assert(#rows==#root.case.documents)
-for _,row in ipairs(rows) do assert(row.recognised==false and type(row.x)=="number") end
+for _,row in ipairs(rows) do assert(row.recognised==false and row.resolved==false and type(row.x)=="number") end
 
 -- Inspecting an unrecognised clue is refused, even in hand.
 local item=placed[1]
@@ -104,7 +104,7 @@ local again,second=R.recognise(id,"look")
 assert(again==true and second==false,"recognising twice changes nothing")
 local stored=saved.campaign.canonical
 assert(#stored.recognised==1 and stored.recognised[1]==id,"one small saved flag, in the case record")
-for _,row in ipairs(R.clueTargets()) do if row.id==id then assert(row.recognised) end end
+for _,row in ipairs(R.clueTargets()) do if row.id==id then assert(row.recognised and not row.resolved) end end
 -- A clue in its container is stamped where it lies.
 local other=placed[2]
 local otherId=other:getModData().cfGeneratedId
@@ -119,6 +119,7 @@ assert(not R.recognise(instanceItem("Base.Note"),"search"))
 -- Now it can be noted, and noted counts as recognised.
 assert(R.inspect(item),"a recognised clue is noted")
 assert(#R.known()==1)
+for _,row in ipairs(R.clueTargets()) do if row.id==id then assert(row.resolved,"a noted clue no longer wants a locator") end end
 
 -- A reload: recognition is in the save, and only recognised clues are
 -- re-stamped (the category is a runtime property the game does not save).

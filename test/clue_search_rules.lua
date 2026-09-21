@@ -41,22 +41,24 @@ assert(Rules.reach("Clues",4)==4*Rules.FOCUS_REACH and Rules.reach("None",4)==4)
 assert(Rules.reach("Clues",12,15)==15,"never past the game's vision cap")
 Rules.debugSpotScale=10; assert(Rules.spotRate("None")==10); Rules.debugSpotScale=1
 
--- Icons: only in Search Mode, only placed and unrecognised clues, only near.
+-- Icons: only in Search Mode, only placed and unresolved clues, only near.
 local clue={id="d1",x=10,y=10,z=0,status="placed",recognised=false}
 assert(Rules.wantsIcon(clue,12,12,true))
 assert(not Rules.wantsIcon(clue,12,12,false),"no icon without Search Mode")
 assert(not Rules.wantsIcon({id="d1",x=10,y=10,z=0,status="pending"},12,12,true),"not before it is placed")
-assert(not Rules.wantsIcon({id="d1",x=10,y=10,z=0,status="placed",recognised=true},12,12,true),"not once recognised")
+assert(Rules.wantsIcon({id="d1",x=10,y=10,z=0,status="placed",recognised=true},12,12,true),"recognition keeps the locator")
+assert(not Rules.wantsIcon({id="d1",x=10,y=10,z=0,status="placed",recognised=true,resolved=true},12,12,true),"inspection resolves the locator")
 assert(not Rules.wantsIcon(clue,10+Rules.ADD_RADIUS+1,10,true),"not from across the map")
--- Dropped: search off, gone, walked away, recognised after lingering.
+-- Dropped: search off, gone, walked away, or inspected. Recognition alone
+-- keeps the question mark visible for re-searching.
 assert(Rules.dropIcon(clue,12,12,false))
 assert(Rules.dropIcon(nil,12,12,true),"a clue gone from the record")
 assert(not Rules.dropIcon(clue,10+Rules.REMOVE_RADIUS-1,10,true),"between add and remove radius the icon stays")
 assert(Rules.dropIcon(clue,10+Rules.REMOVE_RADIUS+1,10,true))
 local seen={id="d1",x=10,y=10,z=0,status="placed",recognised=true}
-assert(not Rules.dropIcon(seen,12,12,true,1000,1000+Rules.LINGER_MS-1),"the pin lingers after a spot")
-assert(Rules.dropIcon(seen,12,12,true,1000,1000+Rules.LINGER_MS))
-assert(Rules.dropIcon(seen,12,12,true,nil,5),"recognised some other way: dropped at once")
+assert(not Rules.dropIcon(seen,12,12,true,1000,1000000),"a recognised unresolved clue keeps its pin")
+seen.resolved=true
+assert(Rules.dropIcon(seen,12,12,true,1000,1001),"an inspected clue drops its pin")
 local add,drop=Rules.plan({clue,{id="d2",x=90,y=90,z=0,status="placed"},{id="d3",x=11,y=11,z=0,status="placed"}},
     {d3={},gone={}},12,12,true,0)
 assert(table.concat(add,",")=="d1" and table.concat(drop,",")=="gone","plan: "..table.concat(add,",").." / "..table.concat(drop,","))
@@ -135,15 +137,20 @@ assert(icon:doVisionCheck()==4*Rules.FOCUS_REACH,"Clues focus: further")
 window.searchFocusCategory="Stones"
 icon:updateTimestamp(); assert(icon.timeDelta==100,"another focus is no focus for clues")
 
--- Spotting recognises, once; the pin lingers, then goes.
+-- Spotting recognises once, but the pin stays while Investigate Area is on.
 clock=1000
 icon:spotIcon(); icon:spotIcon()
 assert(#recognisedCalls==1 and recognisedCalls[1]=="d1:search","spotting recognises the clue by search, once")
 assert(C.spotted.d1 and C.spotted.d1.recognised==true)
-C.sync(); assert(manager.clueIcons["cf-clue:d1"],"lingers right after the spot")
-clock=1000+Rules.LINGER_MS
-C.sync(); assert(not manager.clueIcons["cf-clue:d1"] and not icon.inUI,"dropped after lingering")
-C.sync(); assert(not manager.clueIcons["cf-clue:d1"],"a recognised clue never gets a new icon")
+C.sync(); assert(manager.clueIcons["cf-clue:d1"],"stays after the spot")
+clock=1000000
+C.sync(); assert(manager.clueIcons["cf-clue:d1"],"stays for as long as Investigate Area remains on")
+manager.isSearchMode=false
+C.sync(); assert(not manager.clueIcons["cf-clue:d1"] and not icon.inUI,"hidden with Investigate Area off")
+manager.isSearchMode=true
+C.sync(); assert(manager.clueIcons["cf-clue:d1"],"re-searching recreates a recognised unresolved clue's icon")
+clues[1].resolved=true
+C.sync(); assert(not manager.clueIcons["cf-clue:d1"],"inspection removes the icon permanently")
 
 -- Search Mode off drops every icon; the far clue appears when approached.
 px,py=80,80; clues[2].recognised=false
@@ -271,4 +278,4 @@ assert(bedIcon and bedIcon.xCoord==10767.5 and bedIcon.yCoord==10123.5,
 assert(C.debugRecognise("d9")==true and recognisedCalls[#recognisedCalls]=="d9:debug")
 getDebug=function() return false end
 assert(C.debugRecognise("d9")==false)
-print("PASS clue search client: icons of our own class follow Search Mode, focus speeds and extends spotting, a spot recognises once")
+print("PASS clue search client: unresolved icons persist and can be re-searched, resolved icons clear, focus speeds and extends spotting")

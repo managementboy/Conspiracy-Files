@@ -1,8 +1,8 @@
 -- Clues are found by searching (P4-R132, docs/design/SEARCH_TO_FIND.md).
 --
 -- Stage 1: SEARCH and RECOGNISE. With the game's Search Mode on, every clue
--- nobody has recognised yet gets an icon of our own class at its container's
--- square, the way the game marks a stash. The game's own spotting runs it:
+-- not yet inspected gets an icon of our own class at its container's square,
+-- the way the game marks a stash. The game's own spotting runs it:
 -- the timer that fills while the spot is in view, sneaking and aiming, light,
 -- weather, traits. When it is spotted the game's pin bounces over the spot and
 -- the runtime recognises the clue, which turns the plain item into evidence.
@@ -174,7 +174,7 @@ function C.liveClues(player)
     local maps=ConspiracyFiles.MapMediaRuntime
     if maps then for _,clue in ipairs(maps.clueTargets()) do clues[#clues+1]=clue end end
     for i,clue in ipairs(clues) do
-        if clue.status=="placed" and not clue.recognised then
+        if clue.status=="placed" and not clue.resolved then
             local x,y,z
             if clue.vehicle then x,y,z=C.vehicleSpot(clue,player)
             elseif clue.carrier then x,y,z=C.carrierSpot(clue) end

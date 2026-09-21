@@ -251,7 +251,8 @@ function R.recognise(subject,source)
         if next.state=="intent" or next.state=="unknown" then next.state="placed" end
         if not save(State.set(root(),id,part,next)) then return false end
     end
-    targets[State.reference(id,part)]=nil
+    local target=targets[State.reference(id,part)]
+    if target then target.recognised=true end
     stamp(item,id,part,p.observation); return true
 end
 local function observation(binding,player,part)
@@ -332,8 +333,9 @@ function R.clueTargets()
 end
 local function rememberTarget(id,part,p,item)
     local ref=State.reference(id,part)
-    if item and not p.recognised and p.target then
-        targets[ref]={id=ref,x=p.target.x,y=p.target.y,z=p.target.z,status="placed",recognised=false}
+    if item and not p.noted and p.target then
+        targets[ref]={id=ref,x=p.target.x,y=p.target.y,z=p.target.z,status="placed",
+            recognised=p.recognised==true,resolved=false}
     else targets[ref]=nil end
 end
 -- Persist intent BEFORE insertion. Stamp identity BEFORE AddItem. An exception

@@ -82,11 +82,14 @@ advanceUntil(function() return payoff(id) and payoff(id).state=="placed" end)
 assert(#contents==1 and db[TAG].canonical.trails[id].payoff.state=="placed","reconcile the actual token without inserting twice")
 assert(not R.offerContainer(container,true));assert(#contents==1)
 local item=contents[1]
+assert(#R.clueTargets()==1 and not R.clueTargets()[1].recognised,"the placed payoff can be searched")
 assert(R.recognise(item,"look"))
+assert(#R.clueTargets()==1 and R.clueTargets()[1].recognised,"recognition keeps the payoff searchable")
 local before=db[TAG].canonical
 assert(not R.inspect(item,true));assert(db[TAG].canonical==before,"failed discovery must not advance map state")
 permitDiscovery=true;assert(R.inspect(item,true))
 assert(db[TAG].canonical.trails[id].payoff.noted)
+assert(#R.clueTargets()==0,"noting the payoff clears its search target")
 contents={};assert(R.start());assert(not R.offerContainer(container,true));assert(#contents==0,"destroyed noted payoff must not respawn")
 -- A nil insertion return is not success. It leaves a refusal with no clue.
 db={};contents={};insertMode="refuse"

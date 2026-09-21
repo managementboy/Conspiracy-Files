@@ -1272,8 +1272,8 @@ function R.clueTargets()
     local out={}
     for _,root in ipairs(Cases.sessions(wrapper) or {}) do
         if not Retired.isRetired(root) and root.assignments then
-            local seen={}
-            for _,id in ipairs(root.known or {}) do seen[id]=true end
+            local known,seen={},{}
+            for _,id in ipairs(root.known or {}) do known[id]=true; seen[id]=true end
             for _,id in ipairs(root.recognised or {}) do seen[id]=true end
             for id,a in pairs(root.assignments) do
                 local t=a.target
@@ -1289,6 +1289,7 @@ function R.clueTargets()
                     -- `part` find a car wherever it has been driven, and `mark`
                     -- finds a carrier wherever it has walked (P4-R134).
                     out[#out+1]={id=id,x=t.x,y=t.y,z=t.z,status=a.status,recognised=seen[id]==true,
+                        resolved=known[id]==true,
                         vehicle=vehicle,carrier=carrier,case=root.case and root.case.caseId,token=a.physicalToken,
                         part=vehicle and t.vehiclePart or nil,target=t,
                         mark=carrier and t.carrierMark or nil,

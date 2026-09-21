@@ -22,10 +22,6 @@ S.REMOVE_RADIUS=24
 S.FOCUS_SPOT_RATE=2.0
 S.FOCUS_REACH=1.5
 
--- A spotted clue's pin stays (and bounces) this long after recognition before
--- the icon is dropped, so the survivor sees where it was.
-S.LINGER_MS=8000
-
 -- How far a clue may move before its icon is picked up and put down again
 -- (P4-R134). A clue on a zombie moves every few seconds, and re-adding the icon
 -- restarts the game's spot timer: at zero tolerance a wandering carrier could
@@ -109,31 +105,28 @@ end
 
 local function distance2D(ax,ay,bx,by) local dx,dy=ax-bx,ay-by; return math.sqrt(dx*dx+dy*dy) end
 
--- A clue as ClueSearch sees it: {id,x,y,z,status,recognised}. It wants an
--- icon when Search Mode is on, it is placed, nobody has recognised it yet and
--- the survivor is within ADD_RADIUS.
+-- A clue as ClueSearch sees it: {id,x,y,z,status,recognised,resolved}. It wants
+-- an icon while Investigate Area is on, it is still at its placement and has
+-- not been inspected/noted. Recognition names the evidence but must not erase
+-- its locator: the player may need to search the room again to find it.
 function S.wantsIcon(clue,px,py,searchMode)
     if not searchMode or type(clue)~="table" then return false end
-    if clue.status~="placed" or clue.recognised then return false end
+    if clue.status~="placed" or clue.resolved then return false end
     return distance2D(px,py,clue.x,clue.y)<=S.ADD_RADIUS
 end
 
 -- An existing icon is dropped when Search Mode is off, its clue is gone from
--- the record, the survivor has walked away, it was recognised and has lingered
--- long enough, or the clue has moved away from the icon's square: a car with a
--- clue in it has been driven (stage 2), or the zombie carrying one has walked
--- on (P4-R134). `iconX`/`iconY` are the icon's square, when known; the icon
--- comes back on the clue's new square on the next pass.
+-- the record, the clue was inspected/noted, the survivor has walked away, or
+-- the clue has moved away from the icon's square: a car with a clue in it has
+-- been driven (stage 2), or the zombie carrying one has walked on (P4-R134).
+-- `iconX`/`iconY` are the icon's square, when known; the icon comes back on the
+-- clue's new square on the next pass.
 function S.dropIcon(clue,px,py,searchMode,spottedAt,now,iconX,iconY)
     if not searchMode or type(clue)~="table" then return true end
+    if clue.status~="placed" or clue.resolved then return true end
     if distance2D(px,py,clue.x,clue.y)>S.REMOVE_RADIUS then return true end
-    if iconX and iconY and not clue.recognised
-        and distance2D(iconX,iconY,clue.x,clue.y)>S.MOVE_TILES then return true end
-    if clue.recognised then
-        if not spottedAt then return true end
-        return (now or 0)-spottedAt>=S.LINGER_MS
-    end
-    return clue.status~="placed"
+    if iconX and iconY and distance2D(iconX,iconY,clue.x,clue.y)>S.MOVE_TILES then return true end
+    return false
 end
 
 -- Which icons to add and which to drop, given the clues, the icons already up
