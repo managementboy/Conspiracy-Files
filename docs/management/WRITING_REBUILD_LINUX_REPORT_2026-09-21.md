@@ -97,8 +97,11 @@ into Lua strings; Lua 5.1 drops the backslash, so a parking ticket read
 
 Three commits, all marked for review, plus the objects:
 
-- Two sources can disagree. Measured after: 1,953 connections, 34% adds
-  context to / 34% agrees with / 31% does not match.
+- Two sources can disagree. Measured on the final source, 600 cases: **1,983
+  connections — 34% adds context to, 35% agrees with, 31% does not match**,
+  against 1,880 before, every one of them "adds context to". (The report first
+  said 1,953 at 34/34/31, measured before the five carriers were authored;
+  their comparisons added the difference.)
 - Five carriers that had existed since 6 September and never once appeared —
   ID cards, credit cards, business cards, parking tickets, diaries.
 - Fourteen objects authored into the events that warrant one.
