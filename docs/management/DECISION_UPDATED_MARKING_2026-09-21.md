@@ -92,19 +92,51 @@ So more than a third of cases already carry a document the prototype would
 refuse to let the player know about, and the generator's own ceiling is more
 than double the prototype's.
 
-**Not changed here, deliberately.** Raising a limit requires proving its
-boundary test still reaches the new limit, and the prototype has no such test
-at four, let alone seven. Writing one to justify a change I had just made would
-be the wrong order. The repair is:
+**Not changed at the time, deliberately.** Raising a limit requires proving its
+boundary test still reaches the new limit, and the prototype had no such test
+at four, let alone seven. Writing one to justify a change already made would be
+the wrong order.
 
-1. take the bound from `Generator.MAX_EVIDENCE` rather than a literal 3
-2. give the known-list validation a boundary case at exactly that many, and one
-   past it that must be refused
-3. re-check the aggregate budget assertions, which were sized against three
-4. re-check `EvidenceArchive.relevant`, which is called with the same list
+### Repaired, 2026-09-21, in that order
 
-Until then the prototype cannot be exercised against a four-document case,
-which is a little over a third of what the generator produces (109 of 300, not
-"most" - my first draft of this note said most, which the numbers above do not
-support). The three-source coverage added today happens to work because it
-needs exactly three.
+The boundary test was written first and **seen to fail** against the literal
+bound — `document 4 of 4 was refused; the known-document bound must follow the
+generator, not a literal three` — and only then was the bound raised. All four
+steps are done:
+
+1. `InvestigationFlow` takes its bound from `Generator.MAX_EVIDENCE`, in both
+   the known-list validation and `discover`'s refusal.
+2. `test/investigation_flow.lua` finds the widest case the fixture produces,
+   discovers **every** one of its documents, and asserts the state stays valid
+   at each step. A document the case does not own is still refused — that
+   refusal is about identity, not about a count.
+3. The aggregate budget is re-asserted at a full case: a peer of `MAX_BYTES`
+   must still be turned away with every document known.
+4. `EvidenceArchive.relevant` and `rebuild` never depended on the count; only
+   their comment claimed a limit of three, and it is corrected.
+
+**The audit found one more, upstream of all of it.** With four documents known
+the whole record was refused as `invalid case projection`:
+`MultiCaseRecord.rowsOK` bounded rows, leads, connections and unseen links at a
+literal 3 as well. Measured over 120 seeds with every document known: 4 rows,
+1 lead, 3 connections, 0 unseen. All four bounds now come from `MAX_EVIDENCE`,
+which is the case's own ceiling — a row cannot name more documents than the
+case has.
+
+**One literal three was left alone, and it is correct.** `DraftCases.validate`
+requires exactly three documents, but a draft is not a generated case: it
+validates the format its own `construct` produces deterministically, and
+`same(case, construct(...))` on the next line would reject anything else.
+Changing it would have broken a correct check to satisfy a pattern match.
+
+Prototype suite: 9 run, 0 failed. Shipped suite unchanged at 165 run, 0 failed —
+no shipped file was touched.
+
+### The task premise this corrects
+
+A later handoff still described `InterpretationUpdates.derive` as reading
+`doc.links` and deriving nothing, and the updated-marking question as an open
+product decision. Neither is true at `41cc5c7`: the derive repair landed in
+`a80ef28`, both halves use one rule, and the tests cover forward order, reverse
+order, the three-source gate, rereading, save/reload, expiry and seven
+corrupt-state rejections. The open item was this one, and it is closed.
