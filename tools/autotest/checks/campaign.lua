@@ -11,12 +11,20 @@ CFCamp = CFCamp or {}
 local C = CFCamp
 local R = ConspiracyFiles.GeneratedRuntime
 local Cases = require("ConspiracyFiles/Generated/SuccessiveCases")
--- A FINISHED case is one the mod calls retired, which since P4-R111 includes a
--- STUB: the fifth finished case archives the first, and a stub has no `rows`
--- array at all. Counting by `rows` made the finished count go DOWN when a case
--- was archived, so wait_finished waited for a number that could never come
--- again and the archive stage reported "did not finish" twice
--- (20260918T005315). Ask RetiredCase, as the mod does.
+-- A FINISHED case is one the mod calls retired. Count by asking RetiredCase, as
+-- the mod does, never by counting `rows`: that made the finished count go DOWN
+-- when a case was archived, so wait_finished waited for a number that could
+-- never come again and the archive stage reported "did not finish" twice
+-- (20260918T005315).
+--
+-- THE STUB IS HISTORY. P4-R111 once turned the oldest archived case into a
+-- rowless stub; the contract now retains full evidence history, and
+-- test/case_archive asserts it directly ("all finished cases keep their rows",
+-- stubs == 0). Retired.isStub survives as a call surface and must keep
+-- answering 0. Everything below that counts stubs is therefore a REGRESSION
+-- DETECTOR, not a description of normal behaviour - a stub appearing in a run
+-- is a fault, and the stages that could only be reached through a stub are
+-- not-applicable rather than unexercised.
 local Retired = require("ConspiracyFiles/Generated/RetiredCase")
 -- The filler's own proximity guard, by name: goToWaitingSite steps back beyond
 -- it so a clue CAN be placed at the site the survivor has just loaded.
@@ -539,8 +547,9 @@ function C.gaps()
 end
 
 -- THE ARCHIVE (P4-R111, docs/design/CASE_RETIREMENT.md). A finished case keeps
--- its rows while it is one of the four most recent; older ones become stubs.
--- What a check can read: how many are full, how many are stubs, how many rows
+-- its rows - ALL of them, not only the four most recent, since the archive
+-- stopped stubbing. What a check can read: how many are full, how many are
+-- stubs (which must be none), how many rows
 -- each still offers the reading surface, and whether a stubbed case still
 -- offers its questions.
 function C.archive()
@@ -965,4 +974,80 @@ function C.goToWaitingSite(caseId)
         end
     end
     return "false", "no deferred clue in " .. short(caseId)
+end
+
+-- WHAT COUNTS AS PROGRESS, so that a stall can be told from a slow machine.
+--
+-- The old rule was a fifteen-minute wall clock: if a clue had not reached a
+-- container by then, fail. That is calibrated to one laptop's frame rate and
+-- says nothing about whether the mod is doing anything. Every bounded job here
+-- is paced PER FRAME, so on a machine at 7 fps a stage can be perfectly
+-- healthy and still miss a deadline set on a machine at 60 - and, worse, a job
+-- that is genuinely wedged at step 0 with ticks=0 looks exactly like a slow
+-- one until the clock runs out.
+--
+-- So report a fingerprint of the things that MOVE when work is happening, and
+-- let the caller fail on a bounded lack of change in the fingerprint. Wall
+-- clock stays as an outer safety boundary only.
+--
+-- Fields, tab separated:
+--   1 fingerprint   the whole thing as one comparable string
+--   2 steps         scheduler steps run, all subsystems
+--   3 queued        scheduler jobs waiting
+--   4 preparing     the generator's own busy flag
+--   5 nearby        the nearby scan's phase:index:scanned:ticks:steps
+--   6 assignments   clue statuses across every case
+--   7 known         how many clues the survivor has found
+--   8 cases         how many cases exist
+function C.progress()
+    local m = R.metrics() or {}
+    local function fold(t)
+        if type(t) ~= "table" then return tostring(t) end
+        local keys = {}
+        for k in pairs(t) do keys[#keys + 1] = tostring(k) end
+        table.sort(keys)
+        local parts = {}
+        for _, k in ipairs(keys) do parts[#parts + 1] = k .. "=" .. tostring(t[k]) end
+        return table.concat(parts, ",")
+    end
+    local steps, queued = fold(m.steps), fold(m.queued)
+    local nearby = "none"
+    local T3 = ConspiracyFiles.T3Nearby
+    local pr = T3 and T3.progress and T3.progress()
+    if pr then
+        nearby = table.concat({tostring(pr.phase), tostring(pr.index), tostring(pr.scanned),
+            tostring(pr.ticks), tostring(pr.steps)}, ":")
+    end
+    local status = R.automaticStatus()
+    local known = #R.known()
+    local assignments = C.assignments()
+    local fingerprint = table.concat({steps, queued, tostring(status.preparing), nearby,
+        assignments, tostring(known), tostring(status.count)}, "|")
+    return fingerprint, steps, queued, tostring(status.preparing), nearby, assignments,
+        tostring(known), tostring(status.count)
+end
+
+-- Which of a case's clues are still outstanding, BY DOCUMENT ID rather than by
+-- a counter the shell keeps. "only 5 of 3 clues could be played"
+-- (20260921T111236) was two shell counters disagreeing, not the mod losing a
+-- clue; a count cannot tell those apart and an identity can.
+--
+-- Returns: how many are outstanding, and their document numbers with statuses.
+-- Outstanding means the case still owns it, the survivor has not found it, the
+-- harness has not skipped it and the mod has not dropped it.
+function C.outstanding(caseId)
+    local prefix = tostring(caseId):gsub(":case$", ":")
+    local known = {}
+    for _, row in ipairs(R.known()) do known[row.id] = true end
+    local out = {}
+    for _, root in ipairs(roots()) do
+        for id, a in pairs(root.assignments or {}) do
+            if id:sub(1, #prefix) == prefix and not known[id] and not C.skipped[id]
+                and a.status ~= "dropped" then
+                out[#out + 1] = (id:match("document%-(%d+)$") or id) .. ":" .. tostring(a.status)
+            end
+        end
+    end
+    table.sort(out)
+    return #out, table.concat(out, " ")
 end

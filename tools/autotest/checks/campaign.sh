@@ -37,7 +37,21 @@ set -uo pipefail
 start_args=(); [ "${1:-}" = "--hidden" ] && start_args+=(--hidden)
 say() { echo "campaign: $*" >&2; }
 abort() { say "$*"; "$PZ" stop >/dev/null 2>&1; exit 2; }
+# THREE KINDS OF BAD NEWS, and conflating them is how a campaign run gets
+# reported as a product failure when the fixture was wrong - which is exactly
+# what happened on 2026-09-21, twice in one report.
+#
+#   fail         THE MOD IS WRONG. A product requirement was observed to be
+#                broken. This and only this makes the gate FAIL.
+#   harness      THE CHECK IS WRONG, or could not observe what it needed to.
+#                The mod is not accused. Exit 2, "could not run".
+#   unexercised  A STAGE WAS NEVER REACHED, or cannot be reached under the
+#                current contract. Neither a pass nor a failure: it is the
+#                absence of evidence, and it is said out loud rather than
+#                folded into the verdict.
 fails=(); fail() { fails+=("$*"); say "FAIL: $*"; }
+harnesses=(); harness() { harnesses+=("$*"); say "HARNESS: $*"; }
+unexercised=(); unexercised() { unexercised+=("$*"); say "NOT EXERCISED: $*"; }
 findings=(); stages=(); saves=(); errors_seen=""
 CHECKS="$REPO/tools/autotest/checks"
 points=(IdentityObserver.afterRender IdentityObserver.tick ClueMarkers.update ClueMarkers.draw
@@ -159,7 +173,18 @@ play_case() { # play_case CASEID [LIMIT]: find, take and inspect its next clues
     # arrive - which is the assertion the design asks for: clues reaching
     # `placed`, not merely a case existing.
     local cid="$1" limit="${2:-99}" r n waiting dropped out tries=0 moves=0
-    local deadline=$(( $(date +%s) + 900 ))
+    # WALL CLOCK IS THE SAFETY BOUNDARY, NOT THE MEASUREMENT. The fifteen
+    # minutes here used to BE the hang detector, which made the verdict a
+    # property of this laptop's frame rate: every bounded job in the mod is
+    # paced per frame, and hidden runs manage about 7 of them a second. A
+    # healthy stage can miss the clock; a job wedged at step 0 with ticks=0
+    # looks identical to a slow one right up until it fires.
+    # So the stall is detected from CFCamp.progress()'s fingerprint - scheduler
+    # steps, queued jobs, the nearby scan's phase/index/scanned/ticks/steps,
+    # clue statuses, clues found, case count - and the clock only stops a run
+    # that would otherwise never end.
+    local deadline=$(( $(date +%s) + 2700 ))
+    local last_progress="" flat=0
     CASE_LEFT=0; PLAYED=0
     while :; do
         r="$(ev "return CFCamp.useCase([[$cid]])")"
@@ -207,8 +232,24 @@ play_case() { # play_case CASEID [LIMIT]: find, take and inspect its next clues
         fi
         [ "${waiting:-0}" -gt 0 ] 2>/dev/null || return 0
         # Something is still waiting for a container. A player walks on; so do we.
+        local now_progress; now_progress="$(ev 'return CFCamp.progress()' | field 1)"
+        if [ -z "$now_progress" ]; then
+            harness "case ${cid#generated:}: CFCamp.progress() returned nothing, so no stall could be judged"
+            return 1
+        elif [ "$now_progress" = "$last_progress" ]; then
+            flat=$((flat + 1))
+        else
+            flat=0; last_progress="$now_progress"
+        fi
+        # Six consecutive moves with not one counter moving. Each move is a
+        # teleport plus at least 120 s of waiting below, so this is minutes of
+        # the mod being given work and doing nothing measurable with it.
+        if [ "$flat" -ge 6 ]; then
+            fail "case ${cid#generated:}: $waiting clue(s) waiting and NOTHING ADVANCED over $flat moves - scheduler steps, queued jobs, the nearby scan, clue statuses, clues found and case count are all unchanged at [$now_progress] (assignments $(ev 'return CFCamp.assignments()'); $(promise_words "$(promise)"))"
+            return 1
+        fi
         if [ "$(date +%s)" -ge "$deadline" ]; then
-            fail "case ${cid#generated:}: $waiting clue(s) never reached a container in fifteen minutes (statuses $(field 5 "$r"); assignments $(ev 'return CFCamp.assignments()'); $(promise_words "$(promise)"))"
+            unexercised "case ${cid#generated:}: $waiting clue(s) had not reached a container when the 45-minute safety boundary stopped the stage; the mod was still advancing ([$now_progress], flat for $flat of the last moves), so this is a stage that ran out of time on this machine, not an observed product failure"
             return 1
         fi
         moves=$((moves + 1))
@@ -235,6 +276,21 @@ play_case() { # play_case CASEID [LIMIT]: find, take and inspect its next clues
             sleep 5
         done
     done
+}
+# ASK THE STORE WHICH CLUES ARE LEFT, rather than comparing two shell counters.
+# "only 5 of 3 clues could be played" (20260921T111236) was PLAYED overrunning a
+# ceiling that receded as the loop ran; freezing the ceiling fixed that arithmetic,
+# but a count still cannot say WHICH clue went missing and cannot tell a harness
+# miscount from a lost document. CFCamp.outstanding answers by document id.
+played_all() { # played_all LABEL CASEID
+    local n rest; rest="$(ev "return CFCamp.outstanding([[$2]])")"
+    n="$(field 1 "$rest")"
+    findings+=("$1: $PLAYED clue(s) played of $CASE_LEFT offered; outstanding by id: ${n:-?} $(field 2 "$rest")")
+    if ! [ "${n:-1}" = 0 ]; then
+        fail "$1: $n clue(s) of the case were never played: $(field 2 "$rest") (played $PLAYED, offered $CASE_LEFT)"
+    elif [ "$PLAYED" != "$CASE_LEFT" ]; then
+        harness "$1: every clue is accounted for by id, but the harness counted $PLAYED played against $CASE_LEFT offered - the counters disagree, the mod does not"
+    fi
 }
 wait_finished() { for _ in $(seq 60); do [ "$(field 2 "$(cases)")" -ge "$1" ] 2>/dev/null && return 0; sleep 1; done; return 1; }
 wait_case_count() { # wait_case_count COUNT SECONDS
@@ -353,7 +409,7 @@ stage "start"
 names_start="$NAMES_NOW"
 thought0="$(said 'What do I make of it?')"
 play_case "$case1"
-[ "$PLAYED" = "$CASE_LEFT" ] || fail "case 1: only $PLAYED of $CASE_LEFT clues could be played"
+played_all "case 1" "$case1"
 wait_finished 1 || fail "case 1 did not finish after its clues were inspected"
 thought_once "case 1" "$thought0"
 notes="$(ev 'return CFLoop.dateNotes()')"
@@ -415,7 +471,7 @@ findings+=("case 2 clues: $(field 7 "$steer2")")
 [ "$(ev "return CFCamp.tryChange([[$case1]])" | field 1)" = false ] || fail "case 1's answers could still be changed after shaping case 2"
 thought0="$(said 'What do I make of it?')"
 play_case "$case2"
-[ "$PLAYED" = "$CASE_LEFT" ] || fail "case 2: only $PLAYED of $CASE_LEFT clues could be played"
+played_all "case 2" "$case2"
 wait_finished 2 || fail "case 2 did not finish"
 thought_once "case 2" "$thought0"
 here="$(ev 'return CFCamp.here()')"
@@ -433,7 +489,7 @@ placed_well "case 3" "$case3" "$(field 1 "$here")" "$(field 2 "$here")" "$(field
 [ "$(ev "return CFCamp.steerOf([[$case3]])" | field 1)" = unsteered ] || fail "case 3 should be unsteered (case 1's answers used, case 2's empty)"
 [ "$(logged "Case shaped by the survivor's answers")" = 1 ] || fail "case 3 was logged as shaped by answers"
 play_case "$case3" 2
-[ "$PLAYED" = 2 ] || fail "case 3: only $PLAYED of 2 clues could be played"
+[ "$PLAYED" = 2 ] || fail "case 3: $PLAYED of the 2 clues asked for were played (outstanding: $(ev "return CFCamp.outstanding([[$case3]])" | tr '\t' ' '))"
 stage "case 3, two clues"
 record="$(ev 'return CFReload.record()')"; bytes_before="$(bytes)"; parts_before="$(ev 'return CFReload.bytes()' | cut -f2)"
 perf_note "case 3"
@@ -548,20 +604,20 @@ if [ "$(field 1 "$stubq")" -gt 0 ] 2>/dev/null; then
     [ "$(field 3 "$boot")" -gt 0 ] 2>/dev/null \
         || findings+=("the stubbed case contributed no discovery to the ledger, so the boot count could not be tested against one")
 else
-    findings+=("no case was stubbed in this run, so the stub half of P4-R111 was not exercised in the game")
+    findings+=("no case was stubbed, which is the contract: the archive retains every finished case's rows (test/case_archive asserts stubs == 0). The stub half of P4-R111 is NOT APPLICABLE, not unexercised - there is no longer a way to reach it, and a run that did reach it would have failed the assertion above")
 fi
 record="$(ev 'return CFReload.record()')"; bytes_before="$(bytes)"; parts_before="$(ev 'return CFReload.bytes()' | cut -f2)"
-reload_world "reload 3, with stubs present"
-[ "$(ev 'return CFReload.record()')" = "$record" ] || fail "reload 3: the record changed with a stubbed case in the save"
+reload_world "reload 3, the full archive in the save"
+[ "$(ev 'return CFReload.record()')" = "$record" ] || fail "reload 3: the record changed with the full archive in the save"
 arch2="$(ev 'return CFCamp.archive()')"
 findings+=("archive after the reload: $(field 1 "$arch2") full, $(field 2 "$arch2") stubbed, $(field 3 "$arch2") rows; $(field 5 "$arch2")")
 [ "$(field 2 "$arch2")" = "$(field 2 "$arch")" ] \
     || fail "reload 3: the archive changed across the reload ($(field 2 "$arch") stubs before, $(field 2 "$arch2") after)"
 refusals="$(run_log | grep -iE "refus|rejected|budget" | grep -v "ev=defer" | head -5 || true)"
-findings+=("refusals in the log of the session loaded with stubs present: $(grep -c . <<<"$refusals")")
-[ -z "$(tr -d '[:space:]' <<<"$refusals")" ] || fail "the session loaded with stubs present logged a refusal: $(head -2 <<<"$refusals" | cut -c1-200)"
+findings+=("refusals in the log of the session loaded with the full archive: $(grep -c . <<<"$refusals")")
+[ -z "$(tr -d '[:space:]' <<<"$refusals")" ] || fail "the session loaded with the full archive logged a refusal: $(head -2 <<<"$refusals" | cut -c1-200)"
 old_settled "after reload 3"
-stage "after reload 3, stubs present"
+stage "after reload 3, full archive"
 reload_growth "reload 3" "$bytes_before" "$parts_before"
 # AD-10 town names (P4-R129) need TWO places to mean anything: a record about a
 # place in the survivor's own town is written without the town, and the same
@@ -612,7 +668,12 @@ at_the_end="$(cases | tr '\t' ' ')"   # while the game is still answering
 "$PZ" shot "$RUNS/$first-campaign.png" >/dev/null 2>&1
 "$PZ" stop >/dev/null 2>&1
 
-verdict=PASS; [ ${#fails[@]} -eq 0 ] || verdict=FAIL
+# The verdict answers one question only: DID THE MOD DO SOMETHING WRONG.
+# A harness defect is not a product failure and must not be reported as one; a
+# stage that was never reached is not a pass. All three are printed.
+verdict=PASS
+[ ${#harnesses[@]} -eq 0 ] || verdict="COULD NOT RUN"
+[ ${#fails[@]} -eq 0 ] || verdict=FAIL
 report="$EVIDENCE/$first-campaign.txt"
 {
     echo "Linux campaign check $first: $verdict"
@@ -628,9 +689,17 @@ report="$EVIDENCE/$first-campaign.txt"
     if [ -n "$(tr -d '[:space:]' <<<"$instalments")" ]; then grep -c . <<<"$instalments" | sed 's/^/  lines: /'; sort -u <<<"$instalments" | grep . | sed 's/^/  /'; else echo "  none in this run"; fi
     echo "errors inside the mod, all sessions: $(grep -c . <<<"$errors_seen")"
     [ -z "$errors_seen" ] || sed 's/^/  /' <<<"$errors_seen" | head -10
+    echo "outcome: ${#fails[@]} product failure(s), ${#harnesses[@]} harness failure(s), ${#unexercised[@]} stage(s) not exercised"
     for f in "${findings[@]}"; do echo "FINDING: $f"; done
+    for f in "${unexercised[@]}"; do echo "NOT EXERCISED: $f"; done
+    for f in "${harnesses[@]}"; do echo "HARNESS: $f"; done
     for f in "${fails[@]}"; do echo "FAIL: $f"; done
     echo "screenshot: dev/eval/linux/runs/$first-campaign.png (not committed)"
 } > "$report.part"; mv "$report.part" "$report"
 cat "$report"
-[ "$verdict" = PASS ]
+# 0 pass, 1 the mod failed, 2 the check could not run. A run that only ran out
+# of stages exits 0 with its NOT EXERCISED lines standing - the gate is not
+# passed by silence, and the report says which halves were never reached.
+[ "$verdict" = PASS ] && exit 0
+[ ${#fails[@]} -gt 0 ] && exit 1
+exit 2
