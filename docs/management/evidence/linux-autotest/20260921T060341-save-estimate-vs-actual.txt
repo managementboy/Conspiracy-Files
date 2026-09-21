@@ -1,0 +1,43 @@
+Estimated bytes vs ACTUAL file bytes — first measured data point
+source: 87f209e (DEV-0.46.0-writing-rebuild)
+renderer: Mesa llvmpipe (SOFTWARE), hidden run
+
+WHY THIS MATTERS
+Every save-budget decision in this project is expressed in ESTIMATED bytes: the
+500 kB ceiling (P4-R17), the provisional 1,000,000-byte allowance, the sixteen
+case cap. The handoffs repeatedly note "estimator bytes differ from actual file
+bytes" but nobody had measured the difference. This is that measurement.
+
+STATE MEASURED
+  3 generated cases, 11 of 11 clues placed, 0 discoveries
+  campaign store estimated by Validator.estimateEncodedBytes: 102,418 bytes
+
+ACTUAL
+  Saves/Sandbox/<world>/global_mod_data.bin
+    before save:    59 bytes
+    after save:     29,478 bytes
+  stop --save wall time: 8,239 ms (dominated by game shutdown, not the write)
+
+RATIO
+  estimated / actual = 102,418 / 29,478 = ~3.5x
+
+  The estimator OVERSTATES by roughly three and a half times. A save the mod
+  believes sits at its 1,000,000-byte allowance is on this evidence nearer
+  290 kB on disk. There is substantially more headroom than the accounting
+  implies.
+
+WHAT THIS DOES NOT ESTABLISH
+  - One save, one shape: 3 cases, no discoveries, no map trails followed. A
+    discovery ledger is mostly text and may serialise with a different ratio
+    than case structure.
+  - Nothing here measures SAVE TIME for large states, which is what the 500 kB
+    ceiling was originally chosen to protect against. Wall time above includes
+    shutdown and is not a write measurement.
+  - The handoff asks for real data around 600 kB, 800 kB and 1 MB estimated.
+    Reaching those honestly needs a long campaign rather than padded records,
+    and is not done here.
+
+NEXT
+  Repeat at a larger campaign and record both numbers each time. The ratio is
+  cheap to collect and would let every existing budget be restated in the
+  currency that actually constrains the game.
