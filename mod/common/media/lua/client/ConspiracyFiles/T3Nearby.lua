@@ -7,6 +7,26 @@ local Reach = require("ConspiracyFiles/Reach")
 local T = { version = "T3-nearby-2", reachPolicy = "P4-R55" }
 ConspiracyFiles.T3Nearby = T
 local job, tick
+-- THE BUILDING LIST NEVER CHANGES; ONLY WHERE THE SURVIVOR IS STANDING.
+-- Every attempt at a case re-walked all 9,978 buildings and asked each one
+-- for its four corners across the Lua/Java bridge. That is ~105 s on the
+-- hidden test machine (678 frames at about 6.5 frames a second), paid again
+-- for every case, and the campaign check gave a neighbourhood 45-210 s before
+-- moving on. Only two cases were generated in a whole campaign run
+-- (20260921T074140-campaign).
+--
+-- The corners are a property of the map, so they are read once and kept. A
+-- later scan does the distance arithmetic in Lua and crosses the bridge only
+-- for a building the survivor could actually reach. The cache is dropped if
+-- the map changes or the building count does, so a different world can never
+-- be measured with another world's corners.
+local bounds=nil
+local function boundsFor(buildings,map)
+    if bounds and bounds.map==map and bounds.count==buildings:size() then return bounds end
+    bounds={map=map,count=buildings:size(),x={},y={},x2={},y2={},read=0}
+    return bounds
+end
+local MINIMUM_STEPS = 8
 local function now() return getTimeInMillis() end
 local function emit(row, level)
     local keys, parts = {}, {}
@@ -46,9 +66,18 @@ local function step()
             j.phase, j.index = "rooms", 1
             return
         end
-        local b = j.buildings:get(j.index)
+        local idx = j.index
         j.index = j.index + 1
         j.scanned = j.scanned + 1
+        local cache = j.bounds
+        local x,y,x2,y2 = cache.x[idx],cache.y[idx],cache.x2[idx],cache.y2[idx]
+        local b
+        if x==nil then
+            b = j.buildings:get(idx)
+            x,y,x2,y2 = b:getX(),b:getY(),b:getX2(),b:getY2()
+            cache.x[idx],cache.y[idx],cache.x2[idx],cache.y2[idx] = x,y,x2,y2
+            cache.read = cache.read + 1
+        end
         -- REJECT ON DISTANCE BEFORE TOUCHING THE ENGINE AGAIN. The map holds
         -- about ten thousand buildings and the survivor's reach covers a few
         -- dozen, so all but a handful of these are thrown away. getRooms()
@@ -60,12 +89,13 @@ local function step()
         -- The four coordinates are needed for the distance test itself, so
         -- they stay. The room list is now fetched only for a building the
         -- survivor could actually reach.
-        local x,y,x2,y2 = b:getX(),b:getY(),b:getX2(),b:getY2()
         if x2 <= x or y2 <= y then return end
         local dx = math.max(x-j.anchor.x, 0, j.anchor.x-(x2-1))
         local dy = math.max(y-j.anchor.y, 0, j.anchor.y-(y2-1))
         local d = dx*dx+dy*dy
         if d > j.radius*j.radius then return end
+        -- Only now is the engine worth talking to.
+        b = b or j.buildings:get(idx)
         if b:getRooms():size() == 0 then return end
         local id = tostring(b:getIDString())
         j.candidate={id=id,distance2=d,engine=b,x=x,y=y,x2=x2,y2=y2}
@@ -118,7 +148,10 @@ local function step()
                 radius=j.radius,seed=j.seed,buildings=#j.selected,rooms=j.roomCount,rectangles=j.rectCount,rows=j.rows}
             emit({kind="complete",status="extracted",buildings=#j.selected,rooms=j.roomCount,
                 rectangles=j.rectCount,scanned=j.scanned,frames=j.frames,peakMs=j.peak,
-                callbacksOver2Ms=j.over,scarcity=#j.selected<12})
+                callbacksOver2Ms=j.over,scarcity=#j.selected<12,
+                -- How many corners had to be read from the engine this time.
+                -- 9,978 on the first scan of a world, near zero afterwards.
+                cornersRead=j.bounds.read})
             T.cancel()
         end
     end
@@ -127,9 +160,28 @@ tick = function()
     if not job then return end
     local started, j = now(), job
     local ok,err=pcall(function()
-        for _=1,24 do
+        for n=1,24 do
             step()
-            if not job or now()-started >= 1 then break end
+            -- A FLOOR BEFORE THE CLOCK IS CONSULTED. getTimeInMillis() counts
+            -- whole milliseconds, so "now()-started >= 1" is true the moment a
+            -- millisecond boundary falls anywhere inside the first step - which
+            -- at these speeds is most frames. The loop then did ONE building a
+            -- frame instead of twenty-four.
+            --
+            -- Measured 2026-09-21: the first scan of a world managed 13.7
+            -- buildings a frame (9,978 in 726 frames). A second scan, started
+            -- while a case was live, got about one a frame and had not
+            -- finished after 7,058 frames and twenty-five minutes. The frame
+            -- rate was unchanged at 7.09 fps throughout, so the frames were
+            -- there; the budget was refusing to use them. This is why a
+            -- campaign run produced two cases and no more.
+            --
+            -- MINIMUM is what the frame is guaranteed to cost: eight steps of
+            -- arithmetic against cached corners. The peak measured with all
+            -- twenty-four was 5-6 ms, so eight is well inside it, and the time
+            -- guard still stops a frame that turns out expensive.
+            if not job then break end
+            if n >= MINIMUM_STEPS and now()-started >= 1 then break end
         end
     end)
     local elapsed=now()-started
@@ -162,7 +214,9 @@ function T.start(radius,seed,requiredId,radiusSource)
     T.cancel()
     T.result=nil
     T.error=nil
-    job={phase="scan",index=0,buildings=buildings,selected={},pool={},rows={},radius=radius,seed=seed,
+    local cache=boundsFor(buildings,tostring(w:getMap())); cache.read=0
+    job={phase="scan",index=0,buildings=buildings,bounds=cache,
+        selected={},pool={},rows={},radius=radius,seed=seed,
         requiredId=requiredId,
         anchor={x=math.floor(p:getX()),y=math.floor(p:getY()),z=math.floor(p:getZ()),source="manual-start-position"},
         gameVersion=tostring(getGameVersion()),map=tostring(w:getMap()),

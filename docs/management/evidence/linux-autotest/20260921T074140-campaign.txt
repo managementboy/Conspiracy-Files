@@ -1,0 +1,103 @@
+Linux campaign check 20260921T074140: FAIL
+source: 1a80d4d
+renderer: Mesa llvmpipe (LLVM 20.1.2, 256 bits) (SOFTWARE) on display :0
+cases: 1 generated:1410189232:case, 2 none, 3 generated:1619262936:case; at the end 2 2 1:1410189232:retired 2:1619262936:retired
+stages:
+  start                  cases 1 (0 finished) | record 0 | FILES questions 0 | NAMES 1 | PLACES 0 | Old 0/0 wrong | Evidence 0/0 wrong | order  | save 48043 B
+  case 1 finished        cases 1 (1 finished) | record 5 | FILES questions 1 | NAMES 3 | PLACES 8 | Old 5/0 wrong | Evidence 0/0 wrong | order 11111 | save 40942 B
+  after reload 1         cases 1 (1 finished) | record 5 | FILES questions 1 | NAMES 3 | PLACES 8 | Old 5/0 wrong | Evidence 0/0 wrong | order 11111 | save 41219 B
+  case 2 finished        cases 2 (1 finished) | record 5 | FILES questions 1 | NAMES 3 | PLACES 8 | Old 5/0 wrong | Evidence 0/0 wrong | order 11111 | save 74397 B
+  case 3, two clues      cases 2 (1 finished) | record 7 | FILES questions 1 | NAMES 4 | PLACES 10 | Old 5/0 wrong | Evidence 2/0 wrong | order 1111122 | save 78056 B
+  after reload 2         cases 2 (1 finished) | record 7 | FILES questions 1 | NAMES 4 | PLACES 10 | Old 5/0 wrong | Evidence 2/0 wrong | order 1111122 | save 78056 B
+  at the limit           cases 2 (1 finished) | record 7 | FILES questions 1 | NAMES 4 | PLACES 10 | Old 5/0 wrong | Evidence 2/0 wrong | order 1111122 | save 78290 B
+  after the limit        cases 2 (2 finished) | record 8 | FILES questions 2 | NAMES 4 | PLACES 12 | Old 8/0 wrong | Evidence 0/0 wrong | order 11111222 | save 66676 B
+  after reload 3, stubs present cases 2 (2 finished) | record 8 | FILES questions 2 | NAMES 4 | PLACES 12 | Old 8/0 wrong | Evidence 0/0 wrong | order 11111222 | save 66676 B
+case 1 answers on the organiser: true two person2 records nil Curtis Vance Ines Kubiak McCoy Logging Co.
+case 2 steer: none     
+refusals (P4-R133), all sessions:
+  no-containers: 8 lines, longest run of 6, rung 2
+instalments placed and clues dropped (P4-R133, P4-R134), all sessions:
+  none in this run
+errors inside the mod, all sessions: 0
+FINDING: fresh worlds started for a case 1 with a document in the memo's week: 1 (memo=true, dated documents=4)
+FINDING: start: assignments placed=2 placing=3; why=nil n=0 due=- rung=0/3 now=03:06 overdue=false(0.00h) preparing=false active=1/4 cases=1/16
+FINDING: case 1 relay memo: found=true, dated in its week=4, carrying the date note=4
+FINDING: the date note was exercised: 4 of 4 records dated in the memo's week carry it
+FINDING: case 1 finished: assignments ; why=gap n=0 due=03:05 rung=0/3 now=03:18 overdue=false(-23.79h) preparing=false active=0/4 cases=1/16
+FINDING: case 1 note on the organiser: My reading: The records show the cancellation, but not why this request was entered in my name. Ines Kubiak matters here. Next I would check the place against its records.
+FINDING: frame cost during case 1: AutomaticInvestigations.onTick calls=569 avg=0.063ms max=35ms over2ms=1 | CaseFile.onTick calls=567 avg=0.056ms max=3ms over2ms=6 | ClueMarkers.draw calls=0 avg=0.000ms max=0ms over2ms=0 | ClueMarkers.update calls=79 avg=0.962ms max=19ms over2ms=6 | IdentityObserver.afterRender calls=0 avg=0.000ms max=0ms over2ms=0 | IdentityObserver.tick calls=574 avg=0.005ms max=1ms over2ms=0 | LocalPersonIntegr
+FINDING: after reload 1: assignments ; why=gap n=0 due=03:05 rung=0/3 now=03:21 overdue=false(-23.73h) preparing=false active=0/4 cases=1/16
+FINDING: reload 1 save size: 41219 -> 41219 bytes; before [Generated.G2=35237 KeyConnections=778 DiscoveryLedger=2777 VisitedBuildings=359]; after [Generated.G2=35237 KeyConnections=778 DiscoveryLedger=2777 VisitedBuildings=359]
+FINDING: case 2, move 1: moved on 301 tiles to 10885,9884 (t3:10696229503631375, 5 rooms, 29 unused buildings within 120 tiles); 20 containers loaded within 8 tiles
+FINDING: case 2, move 2: moved on 302 tiles to 10680,10106 (t3:10977700185374739, 5 rooms, 48 unused buildings within 120 tiles); 21 containers loaded within 8 tiles
+FINDING: case 2, move 3: moved on 300 tiles to 10772,10392 (t3:11259179457052676, 4 rooms, 39 unused buildings within 120 tiles); 24 containers loaded within 8 tiles
+FINDING: case 2, move 4: moved on 300 tiles to 10680,10106 (t3:10977700185374739, 5 rooms, 48 unused buildings within 120 tiles); 21 containers loaded within 8 tiles
+FINDING: case 2: nothing was promised worth failing on (why=busy n=2 due=06:55 rung=0/3 now=06:35 overdue=false(-0.34h) preparing=true active=0/4 cases=1/16)
+FINDING: case 2: no case after 4 moves; assignments 
+FINDING: case 2 placement: no live case none
+FINDING: case 2 clues: 
+FINDING: case 2 finished: assignments placed=3; why=gap n=0 due=06:50 rung=0/3 now=07:03 overdue=false(-23.78h) preparing=false active=1/4 cases=2/16
+FINDING: frame cost during case 2: AutomaticInvestigations.onTick calls=10030 avg=0.005ms max=4ms over2ms=4 | CaseFile.onTick calls=10029 avg=0.017ms max=3ms over2ms=7 | ClueMarkers.draw calls=0 avg=0.000ms max=0ms over2ms=0 | ClueMarkers.update calls=1122 avg=0.745ms max=8ms over2ms=33 | IdentityObserver.afterRender calls=0 avg=0.000ms max=0ms over2ms=0 | IdentityObserver.tick calls=10036 avg=0.004ms max=3ms over2ms=1 | LocalPerso
+FINDING: case 3, move 1: moved on 300 tiles to 10772,10392 (t3:11259179457052676, 4 rooms, 39 unused buildings within 120 tiles); 24 containers loaded within 8 tiles
+FINDING: case 3, move 2: moved on 300 tiles to 10680,10106 (t3:10977700185374739, 5 rooms, 46 unused buildings within 120 tiles); 21 containers loaded within 8 tiles
+FINDING: case 3, move 3: moved on 300 tiles to 10772,10392 (t3:11259179457052676, 4 rooms, 39 unused buildings within 120 tiles); 24 containers loaded within 8 tiles
+FINDING: case 3, move 4: moved on 300 tiles to 10680,10106 (t3:10977700185374739, 5 rooms, 46 unused buildings within 120 tiles); 21 containers loaded within 8 tiles
+FINDING: case 3: nothing was promised worth failing on (why=busy n=2 due=10:28 rung=0/3 now=10:05 overdue=false(-0.39h) preparing=true active=1/4 cases=2/16)
+FINDING: case 3: no case after 4 moves; assignments placed=3
+FINDING: case 3 placement: reach 250: t3:10977700185374738, t3:10977700185374743
+FINDING: case 3, two clues: assignments placed=3; why=busy n=2 due=10:28 rung=0/3 now=10:09 overdue=false(-0.31h) preparing=true active=1/4 cases=2/16
+FINDING: frame cost during case 3: AutomaticInvestigations.onTick calls=18437 avg=0.006ms max=7ms over2ms=8 | CaseFile.onTick calls=18436 avg=0.017ms max=9ms over2ms=13 | ClueMarkers.draw calls=0 avg=0.000ms max=0ms over2ms=0 | ClueMarkers.update calls=2120 avg=0.752ms max=9ms over2ms=59 | IdentityObserver.afterRender calls=0 avg=0.000ms max=0ms over2ms=0 | IdentityObserver.tick calls=18443 avg=0.004ms max=4ms over2ms=3 | LocalPers
+FINDING: after reload 2: assignments placed=3; why=gap n=2 due=06:50 rung=0/3 now=10:14 overdue=false(-20.60h) preparing=false active=1/4 cases=2/16
+FINDING: reload 2 save size: 78056 -> 78056 bytes; before [Generated.G2=69435 KeyConnections=1238 DiscoveryLedger=3700 VisitedBuildings=827]; after [Generated.G2=69435 KeyConnections=1238 DiscoveryLedger=3700 VisitedBuildings=827]
+FINDING: map marks after reload 2 (written/pending/missing): 7/0/0
+FINDING: the limit, move 1: moved on 301 tiles to 10657,10360 (t3:11259175162085405, 6 rooms, 49 unused buildings within 120 tiles); 28 containers loaded within 8 tiles
+FINDING: the limit, move 2: moved on 302 tiles to 10880,10157 (t3:10977704480342043, 13 rooms, 21 unused buildings within 120 tiles); 29 containers loaded within 8 tiles
+FINDING: the limit: nothing was promised worth failing on (why=busy n=3 due=12:27 rung=1/3 now=11:59 overdue=false(-0.47h) preparing=true active=1/4 cases=2/16)
+FINDING: the limit: no case after 2 moves; assignments placed=3
+FINDING: cases stopped coming short of four unfinished: 2 1 1:1410189232:retired 2:1619262936:live
+FINDING: the fourth unfinished case did not arrive: 2 1 1:1410189232:retired 2:1619262936:live
+FINDING: at the limit: assignments placed=3; why=busy n=3 due=12:27 rung=1/3 now=12:00 overdue=false(-0.46h) preparing=true active=1/4 cases=2/16
+FINDING: at the limit: moved on 300 tiles to 10688,9926 (t3:10696225208664098, 5 rooms, 42 unused buildings within 120 tiles); 19 containers loaded within 8 tiles
+FINDING: after 90 s with 1 unfinished: preparing=false, cases 2 1 1:1410189232:retired 2:1619262936:live
+FINDING: after the limit, move 1: moved on 301 tiles to 10732,9759 (t3:10696225208664088, 6 rooms, 39 unused buildings within 120 tiles); 21 containers loaded within 8 tiles
+FINDING: after the limit, move 2: moved on 301 tiles to 10837,9477 (t3:10414754526920716, 4 rooms, 30 unused buildings within 120 tiles); 22 containers loaded within 8 tiles
+FINDING: after the limit, move 3: moved on 301 tiles to 10732,9759 (t3:10696225208664088, 6 rooms, 39 unused buildings within 120 tiles); 21 containers loaded within 8 tiles
+FINDING: after the limit: nothing was promised worth failing on (why=busy n=6 due=15:34 rung=2/3 now=15:06 overdue=false(-0.47h) preparing=true active=0/4 cases=2/16)
+FINDING: after the limit: no case after 3 moves; assignments 
+FINDING: after the limit: assignments ; why=busy n=6 due=15:34 rung=2/3 now=15:06 overdue=false(-0.46h) preparing=true active=0/4 cases=2/16
+FINDING: frame cost during the limit: AutomaticInvestigations.onTick calls=13216 avg=0.008ms max=11ms over2ms=8 | CaseFile.onTick calls=13213 avg=0.016ms max=5ms over2ms=5 | ClueMarkers.draw calls=0 avg=0.000ms max=0ms over2ms=0 | ClueMarkers.update calls=1342 avg=1.272ms max=10ms over2ms=307 | IdentityObserver.afterRender calls=0 avg=0.000ms max=0ms over2ms=0 | IdentityObserver.tick calls=13224 avg=0.006ms max=3ms over2ms=3 | LocalPe
+FINDING: archive: no unfinished case left to play for the fifth finish
+FINDING: archive: 2 finished cases full, 0 stubbed, 8 rows kept in all, 0 stubs still offering questions; 1:1410189232:full:5 2:1619262936:full:3
+FINDING: a finished case's clues carried: 8 checked, 8 show Evidence / Old, 8 offer the greyed already-noted option, 0 offer no such option (Dispatch returns / GT-546 -> Already in the organiser)
+FINDING: KNOX boot line "Records ......... 8": the ledger holds 8 discoveries, 0 of them from stubbed cases
+FINDING: stubbed cases: 0 stubs, 0 still offering questions, 0 carrying saved answers, 0 of those marked used by a later case ()
+FINDING: no case was stubbed in this run, so the stub half of P4-R111 was not exercised in the game
+FINDING: archive after the reload: 2 full, 0 stubbed, 8 rows; 1:1410189232:full:5 2:1619262936:full:3
+FINDING: refusals in the log of the session loaded with stubs present: 0
+FINDING: after reload 3, stubs present: assignments ; why=gap n=6 due=06:50 rung=2/3 now=15:10 overdue=false(-15.66h) preparing=false active=0/4 cases=2/16
+FINDING: reload 3 save size: 66676 -> 66676 bytes; before [Generated.G2=56668 KeyConnections=1238 DiscoveryLedger=4108 VisitedBuildings=1412]; after [Generated.G2=56668 KeyConnections=1238 DiscoveryLedger=4108 VisitedBuildings=1412]
+FINDING: AD-10 town names, standing in Muldraugh: of 8 records the LIVE label names a town on 0 and not on 8; the stored FOUND lines (history, frozen by design) name one on 0 and not on 8; e.g. ; own town: 202 E Maple; rows whose case is still live: 0
+FINDING: AD-10 address book, standing in Muldraugh: of 4 buildings the cases used, 0 would be written with their town and 4 without; 203 E Maple St [Muldraugh] -> "203 E Maple St"; 202 E Maple St [Muldraugh] -> "202 E Maple St"; 101 W Maple St [Muldraugh] -> "101 W Maple St"; 103 Balsam St [Muldraugh] -> "103 Balsam St"
+FINDING: AD-10: walked from Muldraugh to West Point at 11684,8363, 1690 tiles
+FINDING: AD-10 town names, standing in West Point: of 8 records the LIVE label names a town on 1 and not on 7; the stored FOUND lines (history, frozen by design) name one on 0 and not on 8; e.g. 103 Balsam St, Muldraugh; own town: 202 E Maple; rows whose case is still live: 0
+FINDING: AD-10 address book, standing in West Point: of 4 buildings the cases used, 4 would be written with their town and 0 without; 203 E Maple St [Muldraugh] -> "203 E Maple St, Muldraugh"; 202 E Maple St [Muldraugh] -> "202 E Maple St, Muldraugh"; 101 W Maple St [Muldraugh] -> "101 W Maple St, Muldraugh"; 103 Balsam St [Muldraugh] -> "103 Balsam St, Muldraugh"
+FAIL: case 1: only 5 of 2 clues could be played
+FAIL: no second case, after moving on to four fresh neighbourhoods
+FAIL: case 2: a site is outside the reach of where the survivor stood (no live case none)
+FAIL: case 2: a site an earlier case already used was used again (no live case none)
+FAIL: case 2 was not built from case 1's answers (steer from: none)
+FAIL: case 2's steer is /, not two/records
+FAIL: case 2's first person is , not the returning Ines Kubiak
+FAIL: case 2: the returning person could be given a second body
+FAIL: case 2 does not include the duty log the other reading leans on
+FAIL: case 2: the steered case was not logged exactly once
+FAIL: case 1's answers are not marked used by case 2
+FAIL: case 1's answers could still be changed after shaping case 2
+FAIL: case 2 did not finish
+FAIL: case 2: the second thought "What do I make of it?" was said 0 times, not once
+FAIL: case 2 finished: FILES shows 1 question rows, not 2
+FAIL: no third case, after moving on to four fresh neighbourhoods
+FAIL: case 3 was logged as shaped by answers
+FAIL: reload 2: case 1's answers lost their used mark
+FAIL: after a case was finished at the limit, no new case came over three fresh neighbourhoods (preparing=true)
+screenshot: dev/eval/linux/runs/20260921T074140-campaign.png (not committed)

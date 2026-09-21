@@ -1,0 +1,63 @@
+Campaign gate (History and storage) — 2026-09-21
+source 1a80d4d / DEV-0.46.0-writing-rebuild, Linux hidden run (Mesa llvmpipe)
+
+STATUS: FAIL. It RAN, which it had not done before: it aborted at "no first
+case" until the 120 s wait was raised (see the first-case-delay note).
+
+WHAT PASSED, with numbers
+
+  Save size across reload, twice, unchanged to the byte:
+    reload 2: 78,056 -> 78,056
+              Generated.G2=69,435 KeyConnections=1,238
+              DiscoveryLedger=3,700 VisitedBuildings=827
+    reload 3: 66,676 -> 66,676
+              Generated.G2=56,668 KeyConnections=1,238
+              DiscoveryLedger=4,108 VisitedBuildings=1,412
+    The save does not grow across a save/quit/continue.
+
+  Map marks after reload: 7 written, 0 pending, 0 missing.
+
+  A finished case's clues carried: 8 checked, all 8 show Evidence / Old and
+  all 8 offer the greyed already-noted option. None offered no option.
+
+  Archive: 2 finished cases full, 0 stubbed, 8 rows kept, 0 stubs offering
+  questions. Survived the reload identically (2 full, 8 rows).
+  The KNOX boot line agrees: "Records ......... 8".
+
+  AD-10 / P4-R129, town names written only from another town - working
+  exactly as specified:
+    standing in Muldraugh, all 4 case buildings write WITHOUT a town
+      "203 E Maple St", "202 E Maple St", "101 W Maple St", "103 Balsam St"
+    walked 1,690 tiles to West Point; all 4 now write WITH it
+      "203 E Maple St, Muldraugh" and so on
+    Stored FOUND lines stayed frozen in both places, by design.
+
+WHAT FAILED
+
+  Only two cases were generated in the whole run. Case 1 played and retired;
+  case 2 arrived late; case 3 and a fourth never came. Every later failure in
+  the log is a check comparing against a case that does not exist - "case 2's
+  first person is , not the returning Ines Kubiak" and the sixteen like it are
+  one fault reported many times, not sixteen faults.
+
+  The refusal is always the same: why=busy, preparing=true, nothing overdue.
+  The generator is not refusing; it has not finished.
+
+  SUSPECTED CAUSE, not yet proven: every attempt at a new case re-runs the
+  whole metadata scan - all 9,978 buildings - through T3Nearby.start. On this
+  harness that alone is ~105 s (678 frames at ~6.5 fps), and the check gives a
+  move 45-210 s before it tries somewhere else. The building list does not
+  change; only the survivor's anchor does.
+
+A SEPARATE PERFORMANCE FINDING
+
+  ClueMarkers.update is over the 2 ms frame budget often:
+    during case 3:  2,120 calls, avg 0.752 ms, max 9 ms, 59 over 2 ms
+    at the limit:   1,342 calls, avg 1.272 ms, max 10 ms, 307 over 2 ms
+  Everything else measured stayed cheap (onTick handlers avg <0.02 ms).
+  Read with the usual caution: software rendering. The CALL COUNTS and the
+  proportion over budget are the portable part.
+
+ONE CHECK BUG WORTH A LINE
+  "case 1: only 5 of 2 clues could be played" - the message compares the
+  wrong two numbers. Not chased; it did not affect any other result.

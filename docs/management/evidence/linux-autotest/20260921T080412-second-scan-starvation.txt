@@ -1,0 +1,53 @@
+Why a campaign produces two cases and stops — 2026-09-21
+source 1a80d4d+ / DEV-0.46.0-writing-rebuild, Linux hidden run (Mesa llvmpipe)
+
+THE SYMPTOM
+  A full campaign run generated two cases and no more. Nineteen FAIL lines in
+  20260921T074140-campaign are one fault: checks comparing against cases that
+  never arrived. The generator never refused - status read why=busy,
+  preparing=true, nothing overdue, for hours of game time.
+
+WHAT IS ACTUALLY STUCK
+  The metadata scan (T3Nearby) for the SECOND case. Measured:
+
+    first scan of a world   9,978 buildings in   675 frames   (13.7/frame)
+    second scan, case live  9,978 buildings in 3,608+ frames, NEVER FINISHED
+
+  The frame rate is NOT the problem and was measured to rule it out: 7.09
+  frames per second with a case live, essentially the same as during the first
+  scan. The frames are there. The scan is not using them.
+
+WHAT WAS FIXED (both land, neither is proven to cure the above)
+
+  1. Building corners are read once per world and kept.
+     They are a property of the map; only the survivor's anchor moves. Every
+     case attempt was re-reading all 9,978 across the Lua/Java bridge.
+     Instrumented: the complete line now reports cornersRead - 9,978 on the
+     first scan of a world, and the cache is dropped if the map or the
+     building count changes.
+
+  2. The per-frame step loop has a floor of 8 steps before the clock is
+     consulted.
+     getTimeInMillis() counts whole milliseconds, so "now()-started >= 1" is
+     true whenever a millisecond boundary falls inside the first step. The
+     loop intended 24 buildings a frame and was getting one. Cold scan after
+     the change: 675 frames, callbacksOver2Ms 20, peak unchanged. No
+     regression, a small improvement, and the time guard still stops an
+     expensive frame.
+
+STILL OPEN, AND THIS IS THE TOP REMAINING DEFECT
+  With both fixes deployed and verified present in the running game, a second
+  scan still did not finish in 3,608 frames, where 8 steps a frame would need
+  1,248. So the loop is not running 8 steps a frame, which means T3Nearby's
+  OnTick handler is not being called as often as the frame counter suggests
+  once a case is live - or is being detached. Not yet diagnosed. The next
+  thing to do is instrument the handler's own call count rather than infer it
+  from frames, which needs a small read-only counter on the job.
+
+  Until this is understood, the campaign gate cannot pass and a player's
+  second case may never arrive.
+
+UNCHANGED AND STILL GOOD
+  Boot check PASS at this source: 124/124 files, 0 errors, player alive.
+  Suite: 169 run, 2 failed (room_affinity, investigation_flow - neither is
+  content and neither is this).
