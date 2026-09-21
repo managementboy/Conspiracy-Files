@@ -137,7 +137,10 @@ verdict=PASS
 [ ${#fails[@]} -eq 0 ] || verdict=FAIL
 report="$EVIDENCE/$first-map-coverage.txt"
 {
-    echo "Linux map destination coverage, played: $verdict"
+    # THE HEADLINE CARRIES THE SCOPE. "PASS" beside "12 of 125" invites exactly
+    # the quotation this check exists to prevent; a reader skimming the first
+    # line must see that the gate is not met.
+    echo "Linux map destination coverage, played: $verdict ($reached of $total designs)"
     source_line
     echo
     echo "designs in the catalogue: $total"

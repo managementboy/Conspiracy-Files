@@ -36,5 +36,10 @@ assert(sh:find("PASS) exit 0",1,true) and sh:find("FAIL) exit 1",1,true)
 assert(sh:find("may not be written until reached ==",1,true),
     "the report must state that the all-125 claim needs every design reached")
 
+-- And the headline must carry the scope. "PASS" on a line by itself, beside a
+-- body saying 12 of 125, is the quotation this check exists to prevent.
+assert(sh:find('played: $verdict ($reached of $total designs)',1,true),
+    "the verdict line must state how many designs of the catalogue were reached")
+
 print("PASS coverage_verdict: a run that reaches nothing reports COULD NOT RUN, "
     .."a partial run reports PARTIAL, and neither exits 0")
