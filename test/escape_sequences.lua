@@ -56,7 +56,11 @@ for letter in pairs({ u = true, x = true, e = true, s = true, d = true, w = true
     if not LEGAL[letter] then BAD[letter] = true end
 end
 local files, offenders = 0, {}
-local listing = io.popen("ls mod/common/media/lua/shared/ConspiracyFiles/Generated/*.lua")
+-- Every shipped Lua file, not just the generated families. The two that bit
+-- were scenario data, but the map-media stories, the organiser chrome and the
+-- runtime all carry text a player reads, and a mangled escape is as invisible
+-- in any of them.
+local listing = io.popen("find mod/common/media/lua -name '*.lua' -not -path '*/graphify-out/*'")
 for path in listing:lines() do
     files = files + 1
     local handle = assert(io.open(path, "r"))
@@ -75,6 +79,7 @@ end
 listing:close()
 assert(#offenders == 0,
     "escape sequences Lua 5.1 does not have: " .. table.concat(offenders, ", "))
+assert(files > 100, "only " .. files .. " files were read; the sweep is not reaching the mod")
 
-print(string.format("PASS escape sequences: %d scenario families and %d generated files carry "
+print(string.format("PASS escape sequences: %d scenario families and %d shipped files carry "
     .. "no escape Lua 5.1 would silently mangle", checked, files))
