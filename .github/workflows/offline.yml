@@ -1,0 +1,142 @@
+# The offline baseline, on every push and pull request.
+#
+# What this can and cannot prove is the whole design. It runs everything that
+# needs no Project Zomboid; it runs NOTHING that does, and says so out loud
+# rather than letting a green tick imply it. The engine compile gate and the
+# native acceptance gates are local, and docs/design/CI_PLAN.md says where.
+name: offline
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+# A second push to the same branch cancels the first: these jobs are
+# deterministic, so an older run's result is never worth waiting for.
+concurrency:
+  group: offline-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  # ------------------------------------------------------------------ BLOCKING
+  # This is the job that must be required in branch protection. A failure here
+  # is a failure of code that ships.
+  shipped:
+    name: shipped offline suite (Lua 5.1)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Confirm the checkout is the repository root
+        run: tools/ci/at_repo_root.sh
+      - name: Install Lua 5.1
+        run: sudo apt-get update && sudo apt-get install -y lua5.1
+      - name: Shipped suite
+        # CF_SKIP_KAHLUA=1 because the engine's compiler needs
+        # projectzomboid.jar, which is licensed game content and cannot be on a
+        # hosted runner. unit.sh prints NOT EXERCISED for it, never a pass.
+        run: CF_SKIP_KAHLUA=1 tools/autotest/unit.sh
+      - name: Say what was not exercised
+        if: always()
+        run: |
+          echo "::warning::Kahlua parse-all was NOT exercised on this runner."
+          echo "::warning::Run tools/autotest/kahlua_gate.sh on a machine with the game before release."
+
+  # -------------------------------------------------------------- NON-BLOCKING
+  # dev/next-phase is not in the Workshop build. A failure here is real and must
+  # be visible, and must not be reported as a defect in the released product -
+  # so it is its own job, with its own name, and is NOT a required check.
+  prototype:
+    name: prototype suite (dev/next-phase, not shipped)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Confirm the checkout is the repository root
+        run: tools/ci/at_repo_root.sh
+      - run: sudo apt-get update && sudo apt-get install -y lua5.1
+      - name: Prototype suite
+        run: tools/autotest/prototype.sh
+
+  static:
+    name: static checks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Confirm the checkout is the repository root
+        run: tools/ci/at_repo_root.sh
+      - run: sudo apt-get update && sudo apt-get install -y lua5.1 luacheck
+      - name: luacheck
+        # Errors only. .luacheckrc excludes dev/**, which is deliberate:
+        # unshipped drafts are held to their tests, not to the shipped code's
+        # lint rules. tools/ci/lint.sh explains why warnings do not block.
+        run: tools/ci/lint.sh
+
+  content:
+    name: content, fixtures and shipped text
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Confirm the checkout is the repository root
+        run: tools/ci/at_repo_root.sh
+      - run: sudo apt-get update && sudo apt-get install -y lua5.1
+      - name: Shipped-file escape and text validation
+        # escape_sequences sweeps every shipped file for the \uXXXX mistake
+        # that put "MULDRAUGH u2014 loading bay" on a parking ticket - Lua 5.1
+        # drops the backslash, and no other check saw it.
+        run: |
+          lua5.1 test/escape_sequences.lua
+          lua5.1 test/text_lint.lua
+          lua5.1 test/log_format.lua
+      - name: Fixture and evidence validation
+        run: |
+          lua5.1 test/evidence_files.lua
+          lua5.1 test/harness_lock.lua
+          lua5.1 test/suite_coverage.lua
+          lua5.1 test/campaign_harness.lua
+      - name: One build string, defined once
+        run: lua5.1 test/version_single_source.lua
+
+  packaging:
+    name: package and source consistency
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Confirm the checkout is the repository root
+        run: tools/ci/at_repo_root.sh
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Packaging tool tests
+        run: cd test && python3 -m unittest discover -p '*_test.py' -v
+      - name: The archive is reproducible and matches the source
+        run: |
+          python3 - <<'PY'
+          import importlib.util, pathlib
+          root = pathlib.Path.cwd()
+          spec = importlib.util.spec_from_file_location(
+              "pkg", root / "tools" / "package_experimental.py")
+          pkg = importlib.util.module_from_spec(spec); spec.loader.exec_module(pkg)
+          entries = pkg.source_entries(root)
+          a = pkg.archive_bytes(entries, pkg.PACKAGE_ROOT, "runtime")
+          b = pkg.archive_bytes(entries, pkg.PACKAGE_ROOT, "runtime")
+          assert a == b, "the archive is not byte-reproducible"
+          info = pkg.verify_bytes(a)
+          print("package verifies; supportedObservedBuild =",
+                info["supportedObservedBuild"], "files =", len(entries))
+          PY
+
+  secrets:
+    name: secret scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Confirm the checkout is the repository root
+        run: tools/ci/at_repo_root.sh
+      - name: Scan every tracked file
+        # Deliberately self-contained. A secret scan that pulls a third-party
+        # action is a supply-chain hole in the one job whose purpose is
+        # supply-chain hygiene.
+        run: tools/ci/secret_scan.sh

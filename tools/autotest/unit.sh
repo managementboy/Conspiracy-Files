@@ -15,8 +15,19 @@
 cd "$(dirname "${BASH_SOURCE[0]}")/../.." || exit 2
 . tools/autotest/suites.sh
 fail=0; n=0; skipped=0
-parse="$(tools/kahlua/run.sh --parse-all 2>&1 | tail -1)"; echo "$parse"
-grep -q ", 0 failed" <<<"$parse" || fail=$((fail + 1))
+# KAHLUA NEEDS THE GAME. It compiles against projectzomboid.jar, which is
+# licensed content and cannot be on a hosted runner, so CI sets
+# CF_SKIP_KAHLUA=1. That is NOT a pass and is never printed as one: PUC Lua
+# accepting a file says nothing about whether the engine's compiler will
+# (255d992). The gate still has to run somewhere before a release -
+# tools/autotest/kahlua_gate.sh is that somewhere.
+if [ "${CF_SKIP_KAHLUA:-0}" = 1 ]; then
+    echo "kahlua parse: NOT EXERCISED - no Project Zomboid on this machine."
+    echo "kahlua parse: this is not a pass; run tools/autotest/kahlua_gate.sh where the game is installed."
+else
+    parse="$(tools/kahlua/run.sh --parse-all 2>&1 | tail -1)"; echo "$parse"
+    grep -q ", 0 failed" <<<"$parse" || fail=$((fail + 1))
+fi
 if ! out="$(timeout 300 lua5.1 test/run.lua 2>&1)"; then echo "$out" | tail -20; fail=$((fail + 1)); fi
 echo "specs: $(tail -1 <<<"$out")"
 for t in test/*.lua; do

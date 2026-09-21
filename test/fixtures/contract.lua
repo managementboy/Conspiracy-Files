@@ -32,7 +32,12 @@ end
 function C.defines(src, name)
     local n = name:gsub("(%W)", "%%%1")
     return src:find("function%s+[%w_]+[.:]" .. n .. "%s*%(") ~= nil
-        or src:find("[%w_]+%.\ ?" .. n .. "%s*=%s*function") ~= nil
+        -- "%. ?", written plainly. This was "%.\ ?": Lua 5.1 does not reject
+        -- an unknown escape, it silently drops the backslash, so the pattern
+        -- happened to mean the right thing by accident. It is the same trap
+        -- that put "MULDRAUGH u2014 loading bay" on a parking ticket, and the
+        -- only thing that saw it here was luacheck (E011).
+        or src:find("[%w_]+%. ?" .. n .. "%s*=%s*function") ~= nil
         or src:find("%f[%w_]" .. n .. "%s*=%s*function") ~= nil
 end
 
