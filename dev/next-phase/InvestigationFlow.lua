@@ -24,7 +24,13 @@ local function rootOK(state)
  for id,case in pairs(state.cases) do if not text(id,160) or not records[id] then return false,"case root does not match ledger" end local valid,err=G.validate(case); if not valid or case.caseId~=id then return false,err or "invalid generated case" end end
  for id,list in pairs(state.known) do
   if not text(id,160) or not records[id] or not state.cases[id] then return false,"known root does not match case" end
-  local valid,n=dense(list,3); if not valid then return false,"invalid known documents" end
+  -- THE BOUND IS THE GENERATOR'S, NOT A LITERAL THREE. dense(list,3) refused a
+  -- case's fourth document outright, and 26 of 80 seeds on the synthetic
+  -- fixture produce a four-document case - so for about a third of cases the
+  -- last document could never become known and the prototype could not be
+  -- exercised against one at all. A case cannot carry more than MAX_EVIDENCE
+  -- documents, so that is the only honest ceiling here.
+  local valid,n=dense(list,G.MAX_EVIDENCE); if not valid then return false,"invalid known documents" end
   local docs,seen={},{}; for _,d in ipairs(state.cases[id].documents) do docs[d.id]=true end
   for i=1,n do if not docs[list[i]] or seen[list[i]] then return false,"unknown or duplicate known document" end seen[list[i]]=true end
   local times=state.learned[id]; if type(times)~="table" then return false,"case lacks learned times" end local previous=-1; for i=1,n do local at=times[list[i]]; if type(at)~="number" or at~=at or at==math.huge or at==-math.huge or at<0 or at>1000000 or at<previous then return false,"invalid learned time" end previous=at end for docId in pairs(times) do if not seen[docId] then return false,"learned time lacks known document" end end
@@ -96,7 +102,7 @@ function F.discover(state,caseId,docId,nowHours,peers)
  local ok,why=rootOK(state); if not ok then return nil,why end; if not text(caseId,160) or not text(docId,160) or not state.cases[caseId] then return nil,"unknown case or document" end
  if type(nowHours)~="number" or nowHours~=nowHours or nowHours==math.huge or nowHours==-math.huge or nowHours<0 or nowHours>1000000 then return nil,"invalid discovery time" end
  local next=copy(state); for _,event in pairs(next.updates[caseId]) do if nowHours<event.at then return nil,"discovery clock precedes saved event" end end; local known=next.known[caseId]; for _,id in ipairs(known) do if id==docId then ok,why=budget(next,peers); if not ok then return nil,why end return next end end local exists=false; for _,d in ipairs(next.cases[caseId].documents) do if d.id==docId then exists=true end end; if not exists then return nil,"unknown case or document" end
- if #known>=3 then return nil,"known-document limit reached" end; local prior={}; for _,id in ipairs(known) do prior[id]=true end; known[#known+1]=docId; next.learned[caseId][docId]=nowHours; next.updates[caseId]=next.updates[caseId] or {}; next.relevance[caseId]=next.relevance[caseId] or {}; next.relevance[caseId][docId]=nowHours; for _,oldId in ipairs(Archive.relevant(next.cases[caseId],known,docId)) do next.relevance[caseId][oldId]=nowHours end; -- WHICH RECORD IS AFFECTED. The old rule took the other endpoint of the
+ if #known>=G.MAX_EVIDENCE then return nil,"known-document limit reached" end; local prior={}; for _,id in ipairs(known) do prior[id]=true end; known[#known+1]=docId; next.learned[caseId][docId]=nowHours; next.updates[caseId]=next.updates[caseId] or {}; next.relevance[caseId]=next.relevance[caseId] or {}; next.relevance[caseId][docId]=nowHours; for _,oldId in ipairs(Archive.relevant(next.cases[caseId],known,docId)) do next.relevance[caseId][oldId]=nowHours end; -- WHICH RECORD IS AFFECTED. The old rule took the other endpoint of the
  -- relation and required it to be previously known. That is right whenever the
  -- new document is one of the two endpoints, and silently does nothing when a
  -- THIRD source is what made the comparison supported - both endpoints are then

@@ -14,7 +14,10 @@ function A.relevant(case,known,newId)
  local touched,seen,visited={},{},0; for _,ref in ipairs(byId[newId].references) do for _,id in ipairs(index[ref] or {}) do visited=visited+1; if not seen[id] then seen[id]=true; touched[#touched+1]=id end end end
  return touched,{visited=visited,touched=#touched}
 end
--- Replay is bounded to the three documents per case; only known references enter buckets.
+-- Replay is bounded to the case's own documents - at most Generator.MAX_EVIDENCE
+-- of them, not the three this once assumed; only known references enter
+-- buckets. The arithmetic here never depended on the count, but the comment
+-- claimed a limit that InvestigationFlow has stopped enforcing.
 function A.rebuild(case,known,times)
  local result,prefix={},{}
  for _,id in ipairs(known) do

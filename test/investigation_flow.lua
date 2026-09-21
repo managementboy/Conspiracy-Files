@@ -107,4 +107,52 @@ else
  print("NOTE InvestigationFlow: this fixture has no three-source finding; that gate was not exercised")
 end
 
+-- THE KNOWN-DOCUMENT BOUND (2026-09-21).
+-- The prototype validated the known list with dense(list,3) and refused a
+-- fourth outright. The generator's ceiling is MAX_EVIDENCE = 7, and 26 of 80
+-- seeds on this fixture already produce a four-document case - so for roughly a
+-- third of cases the player could never be allowed to know the last document,
+-- and the prototype could never be exercised against one.
+--
+-- Written BEFORE the bound was raised, and seen to fail against it: raising a
+-- limit without a test that reaches the new one proves nothing.
+local G=require("ConspiracyFiles/Generated/Generator")
+local big,bigPlan
+for seed=1,80 do
+ local fresh=F.new()
+ local ok,plan=pcall(F.begin,fresh,catalog(),seed,
+  {mapId="SYNTHETIC-MAP",buildLine="TEST-ONLY",anchor={x=0,y=0},hoursSurvived=0,allowSynthetic=true})
+ if ok and plan and plan.case and #plan.case.documents>(bigPlan and #bigPlan.case.documents or 0) then
+  big,bigPlan=fresh,plan
+ end
+end
+assert(bigPlan,"the fixture must produce at least one case")
+local docCount=#bigPlan.case.documents
+assert(docCount>3,"this boundary test needs a case with more than three documents; "
+ .."the fixture produced at most "..docCount..", so the bound would go untested")
+assert(docCount<=G.MAX_EVIDENCE,"a generated case cannot exceed the generator's own ceiling")
+local wide=assert(F.commit(big,bigPlan,ready(bigPlan.siteIds),cfg,request(bigPlan,0),{},function() return true end))
+for i,doc in ipairs(bigPlan.case.documents) do
+ local next=F.discover(wide,bigPlan.case.caseId,doc.id,i,{})
+ assert(next,"document "..i.." of "..docCount.." was refused; the known-document "
+  .."bound must follow the generator, not a literal three")
+ wide=next
+ assert(F.validate(wide),"the state must stay valid at "..i.." known documents")
+end
+assert(#wide.known[bigPlan.case.caseId]==docCount,
+ "every one of the case's "..docCount.." documents must be knowable")
+-- Past the case's own documents there is nothing to discover, and that refusal
+-- is about identity, not about a count.
+assert(not F.discover(wide,bigPlan.case.caseId,"document-999",99,{}),
+ "a document the case does not own must still be refused")
+-- The budget assertions were sized against three known documents. A full case
+-- must still fit, or the bound has been raised past what the save allows.
+assert(F.validate(wide) and not F.discover(wide,bigPlan.case.caseId,
+ bigPlan.case.documents[1].id,99,{peer=string.rep("x",F.MAX_BYTES)}),
+ "the aggregate budget must still be enforced at a full case")
+local full=assert(F.restore(wide,{},docCount+1,24,24))
+assert(full.record and #full.record>0,"a fully-known case must still project a record")
+
+print("PASS InvestigationFlow: every one of a case's "..docCount.." documents is knowable, "
+ .."state valid at each step, budget still enforced")
 print("PASS InvestigationFlow: two-case ordering, bounded commit, readiness revalidation, discovery, restore, and aggregate budget")

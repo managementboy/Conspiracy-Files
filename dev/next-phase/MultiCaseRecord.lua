@@ -1,6 +1,14 @@
 -- Offline learned-only record grouping. Inputs must already be authoritative projections.
 local V=require("ConspiracyFiles/Validator")
 local Campaign=require("CampaignPolicy")
+-- THE ROW BOUNDS ARE THE GENERATOR'S. They were a literal 3, which was true
+-- when every case carried three documents; a four-document case projects four
+-- rows and its rows carry three connections, and the whole projection was
+-- refused as "invalid case projection". Measured over 120 seeds on the
+-- synthetic fixture with every document known: 4 rows, 1 lead, 3 connections,
+-- 0 unseen. MAX_EVIDENCE is the case's own ceiling and so bounds all of them -
+-- a row cannot name more documents than the case has.
+local G=require("ConspiracyFiles/Generated/Generator")
 local M={}
 local function copy(v) if type(v)~="table" then return v end local o={} for k,c in pairs(v) do o[k]=copy(c) end return o end
 local function text(v,n) return type(v)=="string" and v~="" and #v<=n end
@@ -8,12 +16,12 @@ local function fields(t,a) if type(t)~="table" then return false end for k in pa
 local function dense(t,max) if type(t)~="table" then return false end local n=0 for k in pairs(t) do if type(k)~="number" or k~=math.floor(k) or k<1 then return false end n=n+1 end if n>max then return false end for i=1,n do if not t[i] then return false end end return true,n end
 local function key(caseId,docId) return "case:"..#caseId..":"..caseId..":doc:"..#docId..":"..docId end
 local function rowsOK(rows)
- local ok,n=dense(rows,3); if not ok then return false end local ids={}
- for i=1,n do local r=rows[i]; if not fields(r,{id=true,kind=true,title=true,body=true,locationId=true,leads=true,connections=true,unseen=true}) or not text(r.id,160) or not text(r.title,300) or not text(r.body,2000) or not text(r.locationId,160) or (r.kind~=nil and not text(r.kind,80)) then return false end local leads,le=dense(r.leads,3); local links,ln=dense(r.connections,3); if not leads or not links or ids[r.id] then return false end ids[r.id]=true for j=1,le do if not text(r.leads[j],160) then return false end end for j=1,ln do if not fields(r.connections[j],{target=true,kind=true}) or not text(r.connections[j].target,160) or not text(r.connections[j].kind,80) then return false end end
+ local ok,n=dense(rows,G.MAX_EVIDENCE); if not ok then return false end local ids={}
+ for i=1,n do local r=rows[i]; if not fields(r,{id=true,kind=true,title=true,body=true,locationId=true,leads=true,connections=true,unseen=true}) or not text(r.id,160) or not text(r.title,300) or not text(r.body,2000) or not text(r.locationId,160) or (r.kind~=nil and not text(r.kind,80)) then return false end local leads,le=dense(r.leads,G.MAX_EVIDENCE); local links,ln=dense(r.connections,G.MAX_EVIDENCE); if not leads or not links or ids[r.id] then return false end ids[r.id]=true for j=1,le do if not text(r.leads[j],160) then return false end end for j=1,ln do if not fields(r.connections[j],{target=true,kind=true}) or not text(r.connections[j].target,160) or not text(r.connections[j].kind,80) then return false end end
   -- `unseen`: links to documents not found yet, by kind and title only
   -- (2026-09-11), so the record can wonder "probably refers to another
   -- stock list?" without showing the unread document's text.
-  if r.unseen~=nil then local us,un=dense(r.unseen,3); if not us then return false end for j=1,un do if not fields(r.unseen[j],{kind=true,title=true}) or not text(r.unseen[j].kind,80) or not text(r.unseen[j].title,300) then return false end end end end
+  if r.unseen~=nil then local us,un=dense(r.unseen,G.MAX_EVIDENCE); if not us then return false end for j=1,un do if not fields(r.unseen[j],{kind=true,title=true}) or not text(r.unseen[j].kind,80) or not text(r.unseen[j].title,300) then return false end end end end
  return true
 end
 function M.project(ledger,projections)
