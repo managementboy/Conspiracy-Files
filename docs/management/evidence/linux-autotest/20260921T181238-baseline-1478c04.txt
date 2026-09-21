@@ -1,0 +1,19 @@
+Offline baseline at the required HEAD
+commit: 1478c040da969f8ba9cdf87b0da1243a651ada00
+lua:    Lua 5.1.5  Copyright (C) 1994-2012 Lua.org, PUC-Rio
+java:   openjdk version "17.0.20" 2026-07-21
+PZ:     present at $PZ_HOME
+
+$ tools/autotest/unit.sh
+kahlua parse: 124 ok, 0 failed
+specs: 52 tests, 0 failures
+relocation evidence regression: PASS
+packaging: OK
+shipped standalone: 170 run, 0 failed (including specs and packaging)
+prototype tests not run here: 9 — use tools/autotest/prototype.sh
+exit=0
+
+$ tools/autotest/prototype.sh
+PASS test/perf_stats.lua
+prototype: 9 run, 0 failed
+exit=0

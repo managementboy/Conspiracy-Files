@@ -672,13 +672,38 @@ local function prepare(result,seed,later,house)
             -- they concluded, read from the closing questions. Only the first
             -- may drive continuity, so a pending thread takes precedence and
             -- the steer is left alone for the case after.
+            -- A pcall THAT SWALLOWS ITS ERROR DEGRADES THE FEATURE IN
+            -- SILENCE. If either of these raises, the case is built with no
+            -- continuity at all: no steer, no follows, no refusal and not one
+            -- line in the log. The survivor's answers then stay unused and the
+            -- case AFTER next picks them up - which is exactly what the
+            -- campaign gate saw on 2026-09-21 (case 3 carried case 1's steer)
+            -- and which nothing in the evidence could explain, because there
+            -- was nothing to explain it with.
+            --
+            -- Offline the mechanism is sound: test/steer_precedence proves the
+            -- answers reach the next case, mark themselves used, never reach a
+            -- third and survive a reload. So the question is what happens HERE,
+            -- in the game, and it cannot be answered until this says so.
             local okThread,thread=pcall(Cases.pendingThread,wrapper)
+            if not okThread then
+                log("continuity: pendingThread failed, so no finding can be "
+                    .."followed: "..tostring(thread))
+            end
             if okThread and thread then
                 options.follows=thread
                 log("next case follows the finding recorded in "..tostring(thread.fromCase))
             else
                 local okSteer,steer,index=pcall(Cases.pendingSteer,wrapper)
-                if okSteer and steer then options.steer=steer; steerFrom=index end
+                if not okSteer then
+                    log("continuity: pendingSteer failed, so the survivor's "
+                        .."answers cannot steer this case: "..tostring(steer))
+                elseif not steer then
+                    -- Not a fault: nothing answered, or already used.
+                    log("continuity: no unused answers, so this case is unsteered")
+                else
+                    options.steer=steer; steerFrom=index
+                end
             end
         end
         local context={hoursSurvived=p:getHoursSurvived(),anchor=anchor}
