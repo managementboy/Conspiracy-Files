@@ -165,8 +165,16 @@ play_case() { # play_case CASEID [LIMIT]: find, take and inspect its next clues
         r="$(ev "return CFCamp.useCase([[$cid]])")"
         n="$(field 1 "$r")"; waiting="$(field 3 "$r")"; dropped="$(field 4 "$r")"
         if [ "${n:-0}" -gt 0 ] 2>/dev/null; then
-            CASE_LEFT=$(( PLAYED + n ))
-            while [ "$PLAYED" -lt "$limit" ] && [ "$tries" -lt "$((PLAYED + n))" ]; do
+            # THE BOUND MUST BE FROZEN BEFORE THE LOOP. It used to be
+            # "$((PLAYED + n))", recomputed on every iteration - and PLAYED
+            # grows inside the loop, so each clue played raised the ceiling by
+            # one and the bound receded forever. PLAYED could then overrun the
+            # CASE_LEFT captured just above, and the stage reported nonsense
+            # like "only 5 of 3 clues could be played" (20260921T111236).
+            # That was the harness miscounting, not the mod failing to place.
+            local offered=$(( PLAYED + n ))
+            CASE_LEFT=$offered
+            while [ "$PLAYED" -lt "$limit" ] && [ "$tries" -lt "$offered" ]; do
                 tries=$((tries + 1))
                 [ "$(field 1 "$(ev "return CFCamp.useCase([[$cid]])")")" -gt 0 ] 2>/dev/null || break
                 local where; where="$(ev 'return CFCamp.describeFirst()' | tr '\t' ' ')"
@@ -393,7 +401,14 @@ steer2="$(ev "return CFCamp.steerOf([[$case2]])")"
 [ "$(field 2 "$steer2")/$(field 3 "$steer2")" = "two/records" ] || fail "case 2's steer is $(field 2 "$steer2")/$(field 3 "$steer2"), not two/records"
 [ "$(field 5 "$steer2")" = "$person2" ] || fail "case 2's first person is $(field 5 "$steer2"), not the returning $person2"
 [ "$(field 6 "$steer2")" = true ] || fail "case 2: the returning person could be given a second body"
-grep -q "Duty log / " <<<"$(field 7 "$steer2")" || fail "case 2 does not include the duty log the other reading leans on"
+# The contract is a COMPATIBLE CONTRIBUTION, not a particular document.
+# Story.build guarantees that a case steered toward a way carries at least one
+# optional source whose role is that way; which document that is, and what it
+# is called, belongs to whoever wrote the event. This used to demand a literal
+# "Duty log / " title and so failed the moment anybody rewrote the scenario.
+ways2="$(ev "return CFCamp.waysOf([[$case2]])")"
+grep -q "records" <<<"$ways2" || fail "case 2 offers no records contribution for the reading it leans on (ways: ${ways2:-none})"
+findings+=("case 2 ways offered: ${ways2:-none}")
 [ "$(logged "Case shaped by the survivor's answers")" = 1 ] || fail "case 2: the steered case was not logged exactly once"
 findings+=("case 2 clues: $(field 7 "$steer2")")
 [ "$(ev "return CFCamp.answersOf([[$case1]])" | field 5)" = "$case2" ] || fail "case 1's answers are not marked used by case 2"
@@ -473,18 +488,24 @@ stage "after the limit"
 perf_note "the limit"
 
 # --- the archive (P4-R111) and AD-10 town names -----------------------------
-# By now four or five cases have finished, which is what the archive is about:
-# the four most recent keep their rows, anything older is a stub, and a clue in
-# the world whose case is a stub must still read Evidence / Old and still offer
-# the greyed "already noted" option rather than an empty menu.
-# The archive only stubs the FIFTH finished case (the four most recent stay
-# whole), and the run has finished three or four by now, so two more cases are
-# played out here - which is also the only way to see a case keep coming past
-# the point where one is archived.
+# STUBBING IS GONE. This stage used to exist to produce a fifth finished case
+# so the archive would turn the oldest into a rowless stub, and then check that
+# its clues still read Evidence / Old. The contract changed: test/case_archive
+# now asserts "all finished cases keep their rows" and "no archived case loses
+# its source rows" (stubs == 0). Nothing is ever stubbed.
+#
+# So the extra cases are no longer played to manufacture a stub - they cannot -
+# but for the property that outlived it: a case must keep coming after four
+# have finished, and every finished case's clues must still read Evidence / Old
+# and still offer the greyed "already noted" option rather than an empty menu.
+#
+# That matters for what this gate costs. Chasing a fifth finish is roughly
+# three extra playthroughs, and on the hidden Linux box a case is about
+# thirteen minutes.
 tried=""
 for extra in 1 2 3; do
     finished="$(field 2 "$(cases)")"
-    [ "$finished" -ge 5 ] 2>/dev/null && break
+    [ "$finished" -ge "${CF_FINISHED_TARGET:-5}" ] 2>/dev/null && break
     next=""
     for cid in $(ev 'return CFCamp.liveIds()' | field 1); do
         case " $tried " in *" $cid "*) ;; *) next="$cid"; break ;; esac
@@ -497,6 +518,10 @@ for extra in 1 2 3; do
 done
 arch="$(ev 'return CFCamp.archive()')"
 findings+=("archive: $(field 1 "$arch") finished cases full, $(field 2 "$arch") stubbed, $(field 3 "$arch") rows kept in all, $(field 4 "$arch") stubs still offering questions; $(field 5 "$arch")")
+# The current contract, asserted rather than merely reported: every finished
+# case keeps its rows. A stub appearing here is a regression, not a milestone.
+[ "$(field 2 "$arch")" = 0 ] || fail "$(field 2 "$arch") finished case(s) lost their source rows; the archive must keep every one"
+[ "$(field 3 "$arch")" -gt 0 ] 2>/dev/null || fail "the archive kept no source rows at all"
 # The Old mark is put on by the periodic last-seen scan, so a case that
 # finished a moment ago has clues that are still Evidence: wait for the scan the
 # way every other stage does, or the read is a race (5 of 28 in 20260918T023400,

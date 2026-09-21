@@ -136,6 +136,58 @@ function C.steerOf(caseId)
     return "none", "", "", "", "", "", ""
 end
 
+-- WHICH WAYS OF INVESTIGATING a live case actually offers.
+--
+-- The check used to demand a literal "Duty log / " title from a records-steered
+-- case. That was never the contract: Story.build guarantees that when the
+-- survivor leaned on a way, the case carries at least one OPTIONAL SOURCE whose
+-- role is that way (Story.lua, `count=math.max(1,count)`). Which document it is,
+-- and what it is called, is the author's business. Pinning the title made the
+-- check fail the moment anybody rewrote the event, which is the opposite of what
+-- it is for.
+--
+-- A built document does not carry its role - the role lives on the scenario's
+-- optional entry - so this matches each document back to the entry that declared
+-- it by title, exactly as test/pile_paperwork.lua does, and reports the roles
+-- found. Returns a space-separated list, or "" when none.
+local Ordinary = require("ConspiracyFiles/Generated/OrdinaryScenarios")
+local Personal = require("ConspiracyFiles/Generated/PersonalScenarios")
+local Gen = require("ConspiracyFiles/Generated/Generator")
+local function bind(value, case)
+    local v = Gen.dateFields(case.facts)
+    v.CODE = case.facts.code; v.ORG = case.facts.organisation
+    v.P1 = case.facts.sender; v.P2 = case.facts.recipient
+    v.SELF = case.facts.survivor or v.SELF
+    if case.locations[1] then v.A = case.locations[1].name end
+    if case.locations[2] then v.B = case.locations[2].name end
+    -- An unbound slot is left as written rather than raising: this runs inside
+    -- the game and a diagnostic must never be the thing that breaks a run.
+    return (value:gsub("{([%u%d]+)}", function(k) return v[k] or ("{" .. k .. "}") end))
+end
+function C.waysOf(caseId)
+    for _, root in ipairs(roots()) do
+        if root.case and root.case.caseId == caseId then
+            local case = root.case
+            local variant = case.outline == "corroboration" and 1 or 2
+            local scenario = Ordinary.get(case.premiseId, variant)
+                or Personal.get(case.premiseId, variant)
+            if not scenario then return "no-scenario" end
+            local declared = {}
+            for _, extra in ipairs(scenario.optional or {}) do
+                declared[bind(extra.title, case)] = extra.role
+            end
+            local found, seen = {}, {}
+            for _, d in ipairs(case.documents) do
+                local role = declared[d.title]
+                if role and not seen[role] then seen[role] = true; found[#found + 1] = role end
+            end
+            table.sort(found)
+            return table.concat(found, " ")
+        end
+    end
+    return "none"
+end
+
 -- A finished case's questions: what it asks about and what was answered.
 function C.answersOf(caseId)
     for _, q in ipairs(R.questions() or {}) do
