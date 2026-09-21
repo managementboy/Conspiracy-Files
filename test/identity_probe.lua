@@ -25,10 +25,20 @@ end} end
 -- shared, so dofile needs shared on the path.
 package.path='mod/common/media/lua/shared/?.lua;'..package.path
 local P=dofile('mod/common/media/lua/client/ConspiracyFiles/IdentityProbe.lua')
-assert(not tick and #output==0,'loading probe does not scan')
+-- THE DISPATCHER IS PERMANENT (2026-09-21). It used to be created and
+-- registered inside run(), and taken off Events.OnTick from inside its own
+-- dispatch when the scan finished - which leaves OnTick unable to accept new
+-- handlers for the rest of the session. So "no listener" is no longer how the
+-- probe says it is idle, and it never should have been; ask P.busy().
+assert(tick,'one permanent dispatcher is registered at load')
+assert(not P.busy() and #output==0,'loading probe does not scan')
+local before=ops
+tick(); tick()
+assert(not P.busy() and #output==0 and ops==before,
+ 'the idle dispatcher does no work at all: no job, no output, no engine calls')
 local function drain()
- for i=1,2000 do if not tick then return end;ops=0;tick();assert(ops<=16,'scan and item work bounded per tick') end
- assert(not tick,'bounded completion')
+ for i=1,2000 do if not P.busy() then return end;ops=0;tick();assert(ops<=16,'scan and item work bounded per tick') end
+ assert(not P.busy(),'bounded completion')
 end
 assert(P.run() and not P.run(),'explicit start and duplicate rejection');drain()
 assert(P.last.reason=='scan-complete' and P.last.entities==4 and P.last.items==1)
@@ -39,8 +49,10 @@ local found=false;for _,s in ipairs(output) do if s:find('displayName=ID Card: A
 local items={};for i=1,300 do items[i]=idItem end
 zombies={};for i=1,40 do zombies[i]=entity(1,desc,i==1 and items or {}) end
 assert(P.run());drain();assert(P.last.entities==32 and P.last.items==200 and P.last.reason=='entity-cap')
-assert(P.run());P.stop();assert(not tick,'cancel removes listener')
-assert(P.run());clock=60001;tick();assert(not tick and P.last.reason=='timeout')
-isClient=function() return true end;assert(not P.run() and not tick,'multiplayer refused')
+-- Cancelling clears the JOB and leaves the listener exactly where it was.
+-- Mutating the listener list is the defect, not the cure.
+assert(P.run());P.stop();assert(not P.busy() and tick,'cancel clears the job and keeps the dispatcher')
+assert(P.run());clock=60001;tick();assert(not P.busy() and tick and P.last.reason=='timeout')
+isClient=function() return true end;assert(not P.run() and not P.busy(),'multiplayer refused')
 print=originalPrint
-print('PASS IdentityProbe: explicit-only, names/profession/ID items, missing and throwing getters, filtering, 16-step/32-entity/200-item bounds, cancel and timeout')
+print('PASS IdentityProbe: explicit-only, names/profession/ID items, missing and throwing getters, filtering, 16-step/32-entity/200-item bounds, cancel and timeout, one permanent dispatcher that is free when idle')

@@ -1,13 +1,52 @@
 -- Read-only owner-triggered diagnostic. No item, save or placement mutations.
 local CFLog=require("ConspiracyFiles/Log")
 local D={}
-local active,accessTask
+-- ONE PERMANENT DISPATCHER, AND A JOB THAT IS EITHER THERE OR NOT.
+--
+-- Both probes below used to take themselves off Events.OnTick from inside
+-- their own run - which is inside OnTick's dispatch, because that is where a
+-- handler runs. Removing a handler mid-dispatch leaves OnTick unable to accept
+-- new ones for the rest of the session: a probe handler added afterwards
+-- recorded 0 ticks over 30 seconds while the game clock advanced normally, and
+-- the next case's scan sat at building 0 of 9,978 with ticks=0 forever, no
+-- error and no refusal (T3Nearby, 2026-09-21; 20260921T074140-campaign).
+--
+-- These two are debug-gated and so never cost a player a case, but they ship,
+-- and a debug session that ran one would poison every later tick handler in
+-- the same way. The rule is the same one T3Nearby already follows: register
+-- once at load, never touch the event list again, and say "finished" by
+-- clearing the job.
+local jobs={}
+local function runJobs()
+    if not jobs.access and not jobs.contents then return end
+    for name,fn in pairs(jobs) do
+        local ok,err=pcall(fn)
+        if not ok then jobs[name]=nil; CFLog.message("nearby","scan","error="..tostring(err)) end
+    end
+end
+D.handler=runJobs
+-- Observable job state, so a caller (and a test) can ask whether anything is
+-- still running instead of inferring it from the size of the event list - which
+-- is exactly the inference that stopped being available when the dispatcher
+-- became permanent, and was never a safe one anyway.
+function D.busy()
+    local names={}
+    for name in pairs(jobs) do names[#names+1]=name end
+    table.sort(names)
+    return #names>0, table.concat(names, ",")
+end
+-- A reload must take the PREVIOUS module's handler off the list, and it has to
+-- happen HERE, at load, which is outside any dispatch - never from inside one.
+if ConspiracyFiles and ConspiracyFiles.GeneratedDiagnostic
+    and ConspiracyFiles.GeneratedDiagnostic.handler and Events then
+    Events.OnTick.Remove(ConspiracyFiles.GeneratedDiagnostic.handler)
+end
 -- Published on the shared table, not just returned: reloadLuaFile re-runs
 -- this body, while require() would keep serving the cached older module.
 ConspiracyFiles=ConspiracyFiles or {}
 ConspiracyFiles.GeneratedDiagnostic=D
 function D.run()
-    if active then return false,"diagnostic running" end
+    if jobs.contents then return false,"diagnostic running" end
     if not getDebug or not getDebug() or (isClient and isClient()) or (isServer and isServer()) then return false,"debug single player required" end
     local wrapper=ModData.get("ConspiracyFiles.Generated.G2")
     local current=wrapper and require("ConspiracyFiles/Generated/SuccessiveCases").current(wrapper)
@@ -57,17 +96,13 @@ function D.run()
         log("item="..tostring(item:getName()).." matchesExpectedToken="..tostring(md.cfPhysicalToken==task.a.physicalToken))
         task.ii=task.ii+1
     end
-    active=function()
+    jobs.contents=function()
         local begin=getTimeInMillis()
-        local ok,err=pcall(function()
-            for i=1,16 do
-                if step() then Events.OnTick.Remove(active); active=nil; log("complete"); return end
-                if getTimeInMillis()-begin>=1 then return end
-            end
-        end)
-        if not ok then Events.OnTick.Remove(active); active=nil; log("error="..tostring(err)) end
+        for _=1,16 do
+            if step() then jobs.contents=nil; log("complete"); return end
+            if getTimeInMillis()-begin>=1 then return end
+        end
     end
-    Events.OnTick.Add(active)
     return true
 end
 
@@ -75,7 +110,7 @@ end
 -- placed clue", and detects a target square whose real z differs from the one
 -- recorded in the assignment.  Bounded and incremental; mutates nothing.
 function D.access(radius)
-    if accessTask then return false,"access probe running" end
+    if jobs.access then return false,"access probe running" end
     if not getDebug or not getDebug() or (isClient and isClient()) or (isServer and isServer()) then return false,"debug single player required" end
     local Cases=require("ConspiracyFiles/Generated/SuccessiveCases")
     local wrapper=ModData.get("ConspiracyFiles.Generated.G2")
@@ -120,9 +155,9 @@ function D.access(radius)
     table.sort(zs)
     local squares,stairs,dx,dy,zi={},{},box.x1-radius,box.y1-radius,1
     for _,z in ipairs(zs) do squares[z]=0; stairs[z]=0 end
-    accessTask=function()
+    jobs.access=function()
         local begin=getTimeInMillis()
-        local ok,err=pcall(function()
+        do
             for _=1,64 do
                 local z=zs[zi]
                 if not z then
@@ -131,7 +166,7 @@ function D.access(radius)
                     end
                     log("scanned radius "..radius.." around "..box.x1..","..box.y1.." - "..box.x2..","..box.y2)
                     log("complete")
-                    Events.OnTick.Remove(accessTask); accessTask=nil; return
+                    jobs.access=nil; return
                 end
                 local square=getCell():getGridSquare(dx,dy,z)
                 if square then
@@ -148,10 +183,8 @@ function D.access(radius)
                 end
                 if getTimeInMillis()-begin>=1 then return end
             end
-        end)
-        if not ok then Events.OnTick.Remove(accessTask); accessTask=nil; log("error="..tostring(err)) end
+        end
     end
-    Events.OnTick.Add(accessTask)
     return true
 end
 
@@ -170,5 +203,7 @@ function ConspiracyFiles.logLevel(level)
     return Log.level
 end
 
+-- Registered once, at load, and never removed. It returns on the first line
+-- when there is no job, so an idle dispatcher costs two nil tests a frame.
+if Events then Events.OnTick.Add(D.handler) end
 return D
-

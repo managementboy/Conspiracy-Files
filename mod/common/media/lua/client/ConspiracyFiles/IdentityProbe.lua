@@ -14,10 +14,25 @@ local function finite(v) return type(v)=='number' and v==v and v~=math.huge and 
 local function text(v) if v==nil or v=='' then return 'unavailable' end;return tostring(v):gsub('[\r\n]',' '):sub(1,180) end
 local CFLog=require("ConspiracyFiles/Log")
 local function log(s) CFLog.message("identity","probe",s) end
+-- NEVER TOUCH THE EVENT LIST HERE. stop() is called from finish(), which is
+-- called from inside handler(), which runs inside OnTick's own dispatch - and
+-- removing a handler mid-dispatch leaves OnTick unable to accept new ones for
+-- the rest of the session. Measured on T3Nearby, 2026-09-21: a probe handler
+-- added afterwards recorded 0 ticks over 30 seconds while the game clock ran
+-- normally, and the next case's scan sat at building 0 of 9,978 with ticks=0
+-- forever, with no error and no refusal.
+--
+-- This probe is debug-gated and so never cost a player a case, but it ships,
+-- and a debug session that ran it would poison every later tick handler the
+-- same way. Stopping is clearing the job; the dispatcher is permanent and
+-- returns on its first line when there is nothing to do.
 function P.stop()
- if handler then Events.OnTick.Remove(handler) end
- handler=nil;job=nil
+ job=nil
 end
+-- Whether a scan is running, so a caller can ask the module instead of
+-- inferring it from the size of the event list - an inference that stopped
+-- being available when the dispatcher became permanent, and was never safe.
+function P.busy() return job~=nil end
 local function finish(reason)
  local j=job
  P.last={entities=j.count,items=j.items,errors=j.errors,reason=reason,records=j.records}
@@ -83,16 +98,29 @@ function P.run()
  job={cell=cell,x=math.floor(x),y=math.floor(y),z=math.floor(z),radius=30,dx=-30,dy=-30,phase='zombies',zi=0,zombies=read(cell,'getZombieList'),count=0,items=0,errors=0,seen={},records={},ticks=0,started=getTimeInMillis()}
  log('begin radius=30 same-floor; max32 entities/200 top-level item reads; no loot generation or save writes; nearby identities only, not home addresses')
  report(player,'player-control')
- handler=function()
-  if not job then return end
-  job.ticks=job.ticks+1
-  if job.ticks>2000 or getTimeInMillis()-job.started>60000 then finish('timeout');return end
-  local started=getTimeInMillis()
-  local ok,err=pcall(function()
-   for _=1,16 do step();if not job or getTimeInMillis()-started>=1 then return end end
-  end)
-  if not ok then log('error='..text(err));if job then finish('error') end end
- end
- Events.OnTick.Add(handler);return true
+ return true
 end
+-- THE DISPATCHER IS PERMANENT. It was defined and registered inside run(), and
+-- taken off the list from inside its own dispatch when the probe finished. It
+-- is now one function, registered once at load, that returns on its first line
+-- when there is no job - which is all but the few seconds a probe is running.
+handler=function()
+ if not job then return end
+ job.ticks=job.ticks+1
+ if job.ticks>2000 or getTimeInMillis()-job.started>60000 then finish('timeout');return end
+ local started=getTimeInMillis()
+ local ok,err=pcall(function()
+  for _=1,16 do step();if not job or getTimeInMillis()-started>=1 then return end end
+ end)
+ if not ok then log('error='..text(err));if job then finish('error') end end
+end
+P.handler=handler
+-- A reload must take the PREVIOUS module's handler off the list, at load,
+-- which is outside any dispatch.
+ConspiracyFiles=ConspiracyFiles or {}
+if ConspiracyFiles.IdentityProbe and ConspiracyFiles.IdentityProbe.handler and Events then
+ Events.OnTick.Remove(ConspiracyFiles.IdentityProbe.handler)
+end
+ConspiracyFiles.IdentityProbe=P
+if Events then Events.OnTick.Add(handler) end
 return P

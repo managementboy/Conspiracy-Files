@@ -32,8 +32,15 @@ local D=dofile('mod/common/media/lua/client/ConspiracyFiles/GeneratedDiagnostic.
 assert(ConspiracyFiles.GeneratedDiagnostic==D,'published on the shared table so reloadLuaFile replaces it')
 assert(D.access(2),'probe starts')
 assert(not D.access(2),'re-entry guard refuses a second concurrent probe')
+-- THE DISPATCHER IS PERMANENT NOW, so "the event list emptied" is no longer
+-- how a probe says it has finished - and it never should have been. It used to
+-- take itself off Events.OnTick from inside its own run, which is inside
+-- OnTick's dispatch, and that leaves OnTick unable to accept new handlers for
+-- the rest of the session (T3Nearby, 2026-09-21). Ask the module instead.
 local guard=0
-while #ticks>0 do ticks[1](); guard=guard+1; assert(guard<20000,'probe must terminate') end
+assert(#ticks==1,'exactly one permanent dispatcher is registered')
+while D.busy() do ticks[1](); guard=guard+1; assert(guard<20000,'probe must terminate') end
+assert(#ticks==1,'the dispatcher is still registered after the probe finished')
 local joined=table.concat(printed,"\n")
 assert(joined:find("Ledger page 5,6,-1 -> actual z=-1",1,true),'reports the resolved level\n'..joined)
 assert(not joined:find("Z MISMATCH",1,true),'matching level is not flagged')
@@ -46,13 +53,13 @@ root.assignments.d1.target={x=5,y=6,z=-1}
 local realGetCell=getCell
 getCell=function() return {getGridSquare=function(_,x,y,z) return square(x,y,0) end} end
 assert(D.access(1)); guard=0
-while #ticks>0 do ticks[1](); guard=guard+1; assert(guard<20000) end
+while D.busy() do ticks[1](); guard=guard+1; assert(guard<20000) end
 assert(table.concat(printed,"\n"):find("Z MISMATCH",1,true),'aliased level is flagged')
 
 -- An absent target square is reported, not silently skipped.
 printed={}; getCell=realGetCell; absent["5:6:-1"]=true
 assert(D.access(1)); guard=0
-while #ticks>0 do ticks[1](); guard=guard+1; assert(guard<20000) end
+while D.busy() do ticks[1](); guard=guard+1; assert(guard<20000) end
 assert(table.concat(printed,"\n"):find("NO SQUARE",1,true),'absent target reported')
 
 print=realPrint

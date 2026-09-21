@@ -34,6 +34,13 @@ local function boundsFor(buildings,map)
     return bounds
 end
 local MINIMUM_STEPS = 8
+-- How many frames a job may make no progress at all before it is declared
+-- wedged. At the hidden machine's ~7 fps this is about ninety seconds; on a
+-- machine at 60 it is ten. That asymmetry is the point: the bound is on frames
+-- the job was given and did nothing with, not on how fast the clock ran.
+-- The whole scan of a fresh world takes about 730 frames, and a single step is
+-- arithmetic against cached corners, so 600 frames of nothing is not slowness.
+T.STALL_FRAMES = 600
 local function now() return getTimeInMillis() end
 local function emit(row, level)
     local keys, parts = {}, {}
@@ -46,12 +53,23 @@ end
 -- a scan had stalled meant counting frame numbers in the log and guessing at
 -- steps per frame, which was wrong twice.
 function T.progress()
-    if not job then return nil end
+    if not job then
+        -- NO JOB IS AN ANSWER, NOT A SILENCE. A caller asking why nothing is
+        -- happening needs to know whether the last scan finished, failed, or
+        -- was never started; returning nil for all three is how "still
+        -- preparing" became indistinguishable from "done and forgotten".
+        return nil, T.error or (T.result and "complete") or "no scan has run"
+    end
     return {phase=job.phase, index=job.index,
         total=job.buildings and job.buildings:size() or nil,
         scanned=job.scanned, ticks=job.ticks or 0, steps=job.steps or 0,
         cornersRead=job.bounds and job.bounds.read or nil,
-        frames=job.frames, peakMs=job.peak}
+        frames=job.frames, peakMs=job.peak,
+        -- WHERE PROGRESS WAS LAST SEEN, so a stall can be dated rather than
+        -- guessed at. `mark` is the phase/index/scanned fingerprint and
+        -- `sinceFrames` is how many frames it has been unchanged for.
+        mark=job.mark, sinceFrames=(job.frames or 0)-(job.markFrame or 0),
+        stallAfterFrames=T.STALL_FRAMES}
 end
 -- NEVER TOUCH THE EVENT LIST HERE. cancel() is called from inside step(), which
 -- runs inside tick(), which runs inside OnTick's own dispatch - and removing a
@@ -222,7 +240,27 @@ tick = function()
     local elapsed=now()-started
     j.frames,j.peak=j.frames+1,math.max(j.peak,elapsed)
     if elapsed>2 then j.over=j.over+1 end
-    if not ok then T.error=tostring(err);emit({kind="error",message=err}); T.cancel() end
+    if not ok then T.error=tostring(err);emit({kind="error",message=err}); T.cancel(); return end
+    -- A BOUNDED LACK OF PROGRESS IS A FAILURE, NOT A WAIT. The job that
+    -- produced this rule sat at building 0 of 9,978 with ticks=0 and no error
+    -- and no refusal, while the generator honestly reported itself busy - for
+    -- the rest of the session. Nothing was wrong with the job; it simply was
+    -- not being given frames, and there was no way for it to say so.
+    --
+    -- Frames, not seconds: every step here is paced per frame, so a slow
+    -- machine takes longer in seconds and exactly as many frames. A scan that
+    -- has had STALL_FRAMES frames and moved neither phase, cursor nor scanned
+    -- count is wedged, and says so with the numbers that prove it.
+    if job then
+        local mark=tostring(j.phase)..":"..tostring(j.index)..":"..tostring(j.scanned)
+        if mark~=j.mark then j.mark,j.markFrame=mark,j.frames
+        elseif j.frames-(j.markFrame or 0)>=T.STALL_FRAMES then
+            local why="no progress for "..(j.frames-(j.markFrame or 0))
+                .." frames at "..mark.." (steps="..tostring(j.steps)
+                .." ticks="..tostring(j.ticks)..")"
+            T.error=why; emit({kind="error",message=why}); T.cancel()
+        end
+    end
 end
 -- `radiusSource` names WHY a radius was given, for the log and the evidence
 -- file. A caller that widens the reach on purpose (P4-R133's second rung) must
@@ -265,83 +303,19 @@ function T.start(radius,seed,requiredId,radiusSource)
 end
 T.handler = tick
 if Events then Events.OnTick.Add(tick) end
--- Inline diagnostic allows hot loading through an already indexed PZ file.
-ConspiracyFiles.GeneratedDiagnostic=(function()
--- Read-only owner-triggered diagnostic. No item, save or placement mutations.
-local D={}
-local active
-function D.run()
-    if active then return false,"diagnostic running" end
-    if not getDebug or not getDebug() or (isClient and isClient()) or (isServer and isServer()) then return false,"debug single player required" end
-    local wrapper=ModData.get("ConspiracyFiles.Generated.G2")
-    local root=wrapper and wrapper.canonical
-    if not root or not root.case then return false,"no generated case" end
-    local function log(s) CFLog.message("nearby","scan",s) end
-    local player=getPlayer()
-    if player then log("player="..player:getX()..","..player:getY()..","..player:getZ()) end
-    local tasks={}
-    for _,doc in ipairs(root.case.documents) do
-        local a=root.assignments[doc.id]; local t=a.target
-        -- A clue can be waiting for a container and have no target at all
-        -- (P4-R133); it is not a thing this probe can look at.
-        if not t then log("document="..doc.title.." status="..a.status.." target=none")
-        else
-        log("document="..doc.title.." status="..a.status.." target="..t.x..","..t.y..","..t.z..
-            " object="..t.objectIndex.." container="..t.containerIndex.." type="..t.containerType.." sprite="..t.sprite)
-        tasks[#tasks+1]={doc=doc,a=a,oi=0,ci=0,ii=0}
-        end
-    end
-    local cursor=1
-    local function step()
-        local task=tasks[cursor]
-        if not task then return true end
-        local t=task.a.target
-        local square=getCell():getGridSquare(t.x,t.y,t.z)
-        if not square then log("target unloaded: "..task.doc.title); cursor=cursor+1; return end
-        local objects=square:getObjects()
-        if task.oi>=objects:size() or task.oi>=32 then
-            if objects:size()>32 then log("objects truncated at 32") end
-            cursor=cursor+1; return
-        end
-        local o=objects:get(task.oi)
-        if not o.getContainerCount or task.ci>=o:getContainerCount() or task.ci>=8 then task.oi=task.oi+1; task.ci=0; task.ii=0; return end
-        local c=o:getContainerByIndex(task.ci)
-        if not c then task.ci=task.ci+1; task.ii=0; return end
-        local items=c:getItems()
-        if task.ii==0 then
-            local sprite=o:getSprite()
-            log("actual object="..task.oi.." container="..task.ci.." type="..c:getType()..
-                " sprite="..tostring(sprite and sprite:getName()).." explored="..tostring(c:isExplored()).." items="..items:size())
-        end
-        if task.ii>=items:size() or task.ii>=128 then
-            if items:size()>128 then log("contents truncated at 128") end
-            task.ci=task.ci+1; task.ii=0; return
-        end
-        local item=items:get(task.ii); local md=item:getModData()
-        log("item="..tostring(item:getName()).." matchesExpectedToken="..tostring(md.cfPhysicalToken==task.a.physicalToken))
-        task.ii=task.ii+1
-    end
-    -- Same rule as T.cancel above: this handler must not remove itself from
-    -- inside OnTick's dispatch, or OnTick stops accepting new handlers for the
-    -- rest of the session. It parks itself with a flag and is taken off the
-    -- list on the next frame, from outside its own run.
-    local finished=false
-    active=function()
-        if finished then
-            Events.OnTick.Remove(active); active=nil; finished=false; return
-        end
-        local begin=getTimeInMillis()
-        local ok,err=pcall(function()
-            for i=1,16 do
-                if step() then finished=true; log("complete"); return end
-                if getTimeInMillis()-begin>=1 then return end
-            end
-        end)
-        if not ok then finished=true; log("error="..tostring(err)) end
-    end
-    Events.OnTick.Add(active)
-    return true
-end
-return D
-end)()
+-- THE INLINE DIAGNOSTIC IS GONE (2026-09-21).
+--
+-- A copy of GeneratedDiagnostic.run lived here, to allow hot loading through a
+-- file Project Zomboid had already indexed. It also assigned
+-- ConspiracyFiles.GeneratedDiagnostic, and client Lua loads in name order -
+-- GeneratedDiagnostic.lua, then T3Nearby.lua - so the copy WON, every session.
+-- The real module's second probe, D.access, was therefore nil in the game: the
+-- reachability diagnostic could not be called at all, while its offline test
+-- passed because that test dofiles the real file directly.
+--
+-- The copy had also drifted. It still removed its handler from inside OnTick's
+-- own dispatch, which is the defect the rest of this file exists to document.
+--
+-- GeneratedDiagnostic.lua is shipped and parsed, so there is nothing to hot
+-- load around.
 return T
