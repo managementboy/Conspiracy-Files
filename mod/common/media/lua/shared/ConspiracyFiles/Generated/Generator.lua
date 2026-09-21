@@ -251,7 +251,8 @@ local function build(seed,revision,sites,cast,relayMemo,steer,opening,follows)
     -- ConspiracyFiles/Generated/Premises.lua and docs/design/PREMISES.md.
     local premise
     if opening and opening.premise then
-        local why; premise,why=Premises.opening()
+        local selector=opening.premise=="auto" and seed or opening.premise
+        local why; premise,why=Premises.opening(selector)
         if not premise then return nil,why or "no opening premise" end
     elseif follows then
         local why; premise,why=Premises.followUp()
@@ -388,7 +389,9 @@ local function build(seed,revision,sites,cast,relayMemo,steer,opening,follows)
         locations=copy(sites),cast=#met>0 and copy(met) or nil,facts=facts,identities=people,
         organisation=org,documents=authored.documents,story=authored.story,
         relayMemo=relayMemo and true or nil,steer=steer and copy(steer) or nil,
-        opening=opening and {premise=true,self=opening.self} or nil,
+        -- Preserve the legacy boolean representation when validating an old
+        -- save; new cases pin the selected premise by id.
+        opening=opening and {premise=opening.premise==true and true or premise.id,self=opening.self} or nil,
         essential=authored.essential,thread=authored.thread,follows=follows and copy(follows) or nil}
 end
 -- What the player has met, reduced to what a case may safely carry: plain
@@ -504,7 +507,7 @@ function G.generate(catalog,seed,options)
     local selected=pairs[random(#pairs)]
     if random(2)==1 then selected={selected[2],selected[1]} end
     local result,buildWhy=build(seed,catalog.revision,selected,G.castFrom(options.names),options.relayMemo==true,steer,
-        options.opening and {premise=true,self=options.self} or nil,follows)
+        options.opening and {premise="auto",self=options.self} or nil,follows)
     if not result then return nil,buildWhy end
     local valid,err=G.validate(result); if not valid then return nil,err end
     return copy(result)
@@ -546,7 +549,7 @@ function G.generateSelected(catalog,seed,options,orderedSiteIds)
     local a,b=byId[orderedSiteIds[1]],byId[orderedSiteIds[2]]
     if not a or not b or not Catalog.distinct(a,b) then return nil,"selected sites are not eligible and distinct" end
     local result,buildWhy=build(seed,catalog.revision,{a,b},G.castFrom(options.names),options.relayMemo==true,steer,
-        options.opening and {premise=true,self=options.self} or nil,follows)
+        options.opening and {premise="auto",self=options.self} or nil,follows)
     if not result then return nil,buildWhy end
     local valid,err=G.validate(result); if not valid then return nil,err end
     return copy(result)
@@ -626,7 +629,11 @@ function G.validate(case)
         end
     end
     if case.opening~=nil then
-        if type(case.opening)~="table" or case.opening.premise~=true then return false,"invalid opening flag" end
+        if type(case.opening)~="table" then return false,"invalid opening flag" end
+        local openingPremise=case.opening.premise
+        if openingPremise~=true and (type(openingPremise)~="string" or not Premises.opening(openingPremise)) then
+            return false,"invalid opening premise"
+        end
         if type(case.opening.self)~="string" or #case.opening.self==0 or #case.opening.self>60 then
             return false,"invalid opening survivor name"
         end

@@ -198,7 +198,8 @@ test("place descriptions remove debug coordinates without changing saved facts",
     local body="Route: "..a.name.." to "..b.name..". Record R-736."
     local rendered=P.render(body,case)
     assertFalse(rendered:find("10964",1,true)~=nil); assertFalse(rendered:find("10994",1,true)~=nil)
-    assertTrue(rendered:find("records building near 3rd St",1,true)~=nil)
+    assertTrue(rendered:find("other address in the file near 3rd St",1,true)~=nil)
+    assertFalse(rendered:find("records building",1,true)~=nil)
     assertTrue(rendered:find("30 paces east",1,true)~=nil)
     assertTrue(rendered:find("R-736",1,true)~=nil)
     assertEqual("Building at 10964, 9696",a.name)

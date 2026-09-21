@@ -31,18 +31,25 @@ end
 -- ---------------------------------------------------------------------------
 -- 1. It exists, and it is never drawn by chance ---------------------------
 -- ---------------------------------------------------------------------------
-local opening=assert(Premises.opening(),"there is an opening premise")
-assert(opening.id=="no-contact-at-premises","and it is the approved one: "..opening.id)
-assert(opening.opening==true,"flagged as an opening")
-assert(Premises.get(opening.id),"and reachable by id like any other premise")
+local opening=assert(Premises.opening(true),"there is a legacy opening premise")
+assert(opening.id=="no-contact-at-premises","old saves keep the original opening: "..opening.id)
+assert(Premises.openingCount()==3,"three authored openings are available")
+local openingIds={}
+for index=1,Premises.openingCount() do
+    local candidate=assert(Premises.opening(index))
+    assert(candidate.opening==true and not openingIds[candidate.id],"opening index is distinct")
+    openingIds[candidate.id]=true
+end
+assert(Premises.opening("name-on-standby-list").id=="name-on-standby-list","a saved opening is pinned by id")
+assert(Premises.opening("not-an-opening")==nil,"an invented opening is refused")
 
 -- The ordinary pool stays at twenty. If an opening ever leaked into it, a new
 -- save's second case could open with the survivor's own name in it.
 assert(Premises.choosableCount()==20,
     "an ordinary case draws from twenty premises: got "..Premises.choosableCount())
--- Twenty-two: twenty ordinary, the opening, and the connected follow-up. What
+-- Twenty-four: twenty ordinary, three openings, and the connected follow-up. What
 -- matters is that the ORDINARY pool stayed at twenty, asserted above.
-assert(Premises.count()==22,"and twenty-two exist in total: got "..Premises.count())
+assert(Premises.count()==24,"and twenty-four exist in total: got "..Premises.count())
 
 -- EVERY INDEX of the ordinary pool, not a sample. `choose` takes the caller's
 -- seeded PRNG, so a stub returning each index in turn walks the whole pool -
@@ -55,7 +62,7 @@ for index=1,Premises.choosableCount() do
     local p=assert(Premises.choose(function() return index end),"index "..index.." draws a premise")
     assert(not p.opening,"no opening premise is ever drawn: index "..index.." gave "..p.id)
     assert(not p.followUp,"no follow-up premise is ever drawn either: index "..index.." gave "..p.id)
-    assert(p.id~="no-contact-at-premises","the opening was drawn at index "..index)
+    assert(not openingIds[p.id],"an opening was drawn at ordinary index "..index)
     assert(not drawn[p.id],"each index draws a distinct premise: "..p.id.." twice")
     drawn[p.id]=true
 end
@@ -86,7 +93,7 @@ for seed=101,180 do
     if built then break end
 end
 assert(built,"the opening generates on some seed near 101")
-assert(built.facts.premise=="no-contact-at-premises","and it is the opening: "..tostring(built.facts.premise))
+assert(openingIds[built.facts.premise],"and it is an authored opening: "..tostring(built.facts.premise))
 
 -- The name reaches a document, and no placeholder is left showing.
 local slip
@@ -96,14 +103,14 @@ for _,d in ipairs(built.documents) do
     assert(not d.title:find("{SELF}",1,true),"nor any title")
 end
 assert(slip,"the survivor's own name appears on a document")
-assert(slip.title:lower():find("collection notice",1,true),
-    "and it is the retained slip - link A: "..slip.title)
+assert(slip.title~="","and it is a named retained opening document")
 
 -- THE PROPERTY THAT MATTERS MOST. G.validate rebuilds the case from its own
 -- record and compares. The opening must be recorded on the case or the rebuild
 -- draws a premise from the seed and the case is refused on every reload.
 assert(built.opening,"the case records that it is an opening")
-assert(built.opening.premise==true and built.opening.self==NAME,"with the name it was built from")
+assert(built.opening.premise==built.facts.premise and built.opening.self==NAME,
+    "with the selected premise and name it was built from")
 assert(G.validate(built),"and it rebuilds identically from its own record")
 
 -- Strip the record and validation must FAIL - that is the bug this guards.
@@ -125,7 +132,7 @@ print("PASS opening premise: the name renders, and the case rebuilds from its ow
 -- The premise is the seed's most significant choice. If adding the opening
 -- moved any index, every case ever generated would tell a different story.
 local ordinary=assert(G.generate(catalog(),101,OPTS),"an ordinary case still generates")
-assert(ordinary.facts.premise~="no-contact-at-premises","and never draws the opening")
+assert(not openingIds[ordinary.facts.premise],"and never draws an opening")
 assert(ordinary.opening==nil,"and records no opening")
 assert(G.validate(ordinary),"and validates")
 for _,d in ipairs(ordinary.documents) do
@@ -138,10 +145,17 @@ print("PASS opening premise: an ordinary case draws, renders and validates exact
 -- source subsets, first-person voice and the inherited unanswered caller.
 local Personal=require("ConspiracyFiles/Generated/PersonalScenarios")
 assert(opening.readings==nil and opening.claim==nil,"no competing prose in registry")
-for variant=1,2 do
-    local story=assert(Personal.get(opening.id,variant))
-    assert(#story.readings==2 and story.readings[1]~=story.readings[2])
-    assert(story.outcome~="" and story.thread and story.unresolved~="")
+local firstTitles={}
+for id in pairs(openingIds) do
+    for variant=1,2 do
+        local story=assert(Personal.get(id,variant))
+        assert(#story.readings==2 and story.readings[1]~=story.readings[2])
+        assert(story.outcome~="" and story.thread and story.unresolved~="")
+        if variant==1 then
+            assert(not firstTitles[story.anchors.claim.title],"openings share their first document title")
+            firstTitles[story.anchors.claim.title]=id
+        end
+    end
 end
 
 -- ---------------------------------------------------------------------------
@@ -151,12 +165,14 @@ end
 -- That is only half an answer: something has to prove it IS reachable the way
 -- it is meant to be, and that it still reads both ways - the design rule every
 -- premise obeys (P4-R113, P4-R122).
-local outlines,docs,made={},0,0
-for seed=101,260 do
+local outlines,opened,docs,made={},{},0,0
+for seed=101,600 do
     local c=G.generate(catalog(),seed,openingOpts("Ada Whitlock"))
     if c then
         made=made+1
-        outlines[c.outline or "?"]=true
+        opened[c.premiseId]=true
+        outlines[c.premiseId]=outlines[c.premiseId] or {}
+        outlines[c.premiseId][c.outline or "?"]=true
         for _,d in ipairs(c.documents) do
             docs=docs+1
             assert(not d.body:find("{",1,true) or not d.body:find("}",1,true)
@@ -167,11 +183,25 @@ for seed=101,260 do
     end
 end
 assert(made>=8,"the opening generates across many seeds: "..made)
-assert(outlines["corroboration"],"the opening corroborates on some seeds")
-assert(outlines["conflicting-account"],"the second authored event occurs too")
+for id in pairs(openingIds) do
+    assert(opened[id],"opening is reachable across seeds: "..id)
+    assert(outlines[id]["corroboration"],"opening corroborates on some seeds: "..id)
+    assert(outlines[id]["conflicting-account"],"opening's second event occurs: "..id)
+end
 print(string.format(
     "PASS opening premise: reachable by name on %d seeds, both event variants occur, %d documents carry no placeholder",
     made,docs))
+
+-- Saves made before opening variety stored `premise=true`. The original
+-- collection opening must continue to rebuild byte-for-byte in that form.
+local legacy
+for seed=101,600 do
+    local candidate=G.generate(catalog(),seed,openingOpts(NAME))
+    if candidate and candidate.premiseId=="no-contact-at-premises" then legacy=candidate; break end
+end
+assert(legacy,"the sample reaches the legacy opening")
+legacy.opening.premise=true
+assert(G.validate(legacy),"a legacy boolean opening still validates without rewriting its saved representation")
 
 -- ---------------------------------------------------------------------------
 -- 7. THE PATH THE FIRST CASE ACTUALLY TAKES -------------------------------
@@ -188,8 +218,9 @@ assert(#sites>=2,"the fixture has two sites to select")
 
 local sel,selWhy=G.generateSelected(cat,101,openingOpts(NAME),{sites[1],sites[2]})
 assert(sel,"generateSelected accepts the opening: "..tostring(selWhy))
-assert(sel.facts.premise=="no-contact-at-premises","and builds the opening premise")
-assert(sel.opening and sel.opening.self==NAME,"and records it on the case")
+assert(openingIds[sel.facts.premise],"and builds an opening premise")
+assert(sel.opening and sel.opening.self==NAME and sel.opening.premise==sel.facts.premise,
+    "and records its exact selection on the case")
 assert(G.validate(sel),"and it rebuilds from its own record")
 local selSlip=false
 for _,d in ipairs(sel.documents) do
@@ -206,6 +237,6 @@ assert(G.generateSelected(cat,101,openingOpts(""),{sites[1],sites[2]})==nil,"and
 
 -- An ordinary selected case is unchanged.
 local ordSel=assert(G.generateSelected(cat,101,OPTS,{sites[1],sites[2]}),"an ordinary selected case still builds")
-assert(ordSel.facts.premise~="no-contact-at-premises" and ordSel.opening==nil,
+assert(not openingIds[ordSel.facts.premise] and ordSel.opening==nil,
     "and is neither the opening nor marked as one")
 print("PASS opening premise: both entry points accept, validate and record the opening identically")

@@ -7,18 +7,17 @@ local catalog = dofile("test/fixtures/synthetic_locations.lua")
 local opts = { mapId = "SYNTHETIC-MAP", buildLine = "TEST-ONLY", allowSynthetic = true }
 
 -- TWENTY IS THE ORDINARY POOL, not the file's length. The personal opening
--- (DR-20260919-BUILD-PAIR) is a twenty-first premise that `choose` must never
--- draw: it carries the survivor's own name and belongs to the first case of a
+-- openings carry the survivor's own name and belong to the first case of a
 -- save only. What this test has always cared about is how many stories an
 -- ordinary case can tell, so it asserts that directly now - and asserts the
--- total separately, so a second opening cannot quietly widen the pool either.
+-- total separately, so openings cannot quietly widen the ordinary pool either.
 assert(Premises.choosableCount() == 20,
     "expected twenty premises an ordinary case can draw, got " .. Premises.choosableCount())
--- Twenty ordinary, plus the two that are asked for by name rather than drawn:
--- the personal opening and its connected follow-up (Phase C). Both are excluded
+-- Twenty ordinary, plus four that are selected outside the ordinary draw:
+-- three personal openings and their connected follow-up. All are excluded
 -- from `choose`, so the ordinary pool above is what an ordinary case can tell.
-assert(Premises.count() == 22,
-    "expected twenty-two in total - twenty ordinary, the opening and the follow-up, got " .. Premises.count())
+assert(Premises.count() == 24 and Premises.openingCount()==3,
+    "expected twenty-four in total - twenty ordinary, three openings and the follow-up, got " .. Premises.count())
 
 -- The case reference must not give the premise away. The links between
 -- documents already carry the connection and the record sorts on them, so a

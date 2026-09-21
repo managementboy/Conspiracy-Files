@@ -345,7 +345,12 @@ function P.labels(case)
     for i,site in ipairs(case.locations) do
         if legacy(site) then
             local road=P.street(site)
-            labels[site.id]=(i==1 and "the local-copy building" or "the records building")..(road and " near "..road or "")
+            -- The catalog proves an address, not a building's civic function.
+            -- In play the second site may be a garage, shed or workshop; calling
+            -- any of those a records building turns useful directions into a
+            -- false description. Positional file language is always true.
+            labels[site.id]=(i==1 and "the first address in the file" or "the other address in the file")
+                ..(road and " near "..road or "")
         else labels[site.id]=site.name end -- already authored place name: preserve it
     end
     return labels
@@ -370,7 +375,7 @@ local function renderCurrent(body,case,sourceBody,describe)
             local steps=math.max(5,math.floor(distance/5+0.5)*5)
             local origin=type(describe)=="function" and describe(a.name,case) or nil
             if not origin or origin==a.name then origin=labels[a.id] end
-            body=body.."\n\nLOCATION GUIDE\nThe records building is roughly "..steps.." paces "..direction..
+            body=body.."\n\nLOCATION GUIDE\nThe other address in the file is roughly "..steps.." paces "..direction..
                 " of "..origin.."."
         end
     end

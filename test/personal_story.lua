@@ -13,7 +13,8 @@ local function fill(s)
  return (s:gsub("{([%u%d]+)}",function(k) return assert(values[k],"unknown authoring slot "..k) end))
 end
 local permutations={{1,2,3},{1,3,2},{2,1,3},{2,3,1},{3,1,2},{3,2,1}}
-for _,id in ipairs({"no-contact-at-premises","still-filing"}) do
+for _,id in ipairs({"no-contact-at-premises","name-on-standby-list",
+                    "deposit-for-unknown-booking","still-filing"}) do
  for variant=1,2 do
   local authored=assert(Personal.get(id,variant))
   assert(Story.validate(authored))

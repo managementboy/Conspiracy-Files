@@ -39,9 +39,10 @@ local built
 for seed=101,180 do
     built=G.generate(catalog(),seed,{mapId=OPTS.mapId,buildLine=OPTS.buildLine,
         allowSynthetic=true,opening=true,self="Ada Whitlock"})
-    if built then break end
+    if built and built.premiseId=="no-contact-at-premises" then break end
+    built=nil
 end
-assert(built,"the opening generates")
+assert(built,"the collection opening generates")
 assert(built.story and type(built.essential)=="table" and #built.essential==3,"the authored opening records three essential document ids")
 local byId={}
 for _,d in ipairs(built.documents) do byId[d.id]=d end
