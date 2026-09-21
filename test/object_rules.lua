@@ -129,8 +129,22 @@ for _, id in ipairs(Rules.list()) do
     end
 end
 
--- And cases actually place them, across many different objects rather than the
--- same one every time.
+-- And cases actually place them.
+--
+-- SUPERSEDED, 2026-09-21. This section used to require twenty distinct objects
+-- across four hundred cases, because objects were drawn from the rules above
+-- and attached to whatever case was passing - breadth was the whole promise,
+-- and a narrow result meant the rules had stopped reaching the catalogue.
+--
+-- The owner's decision replaced that: an object belongs to its authored event,
+-- like every other piece of optional evidence. A wrench turns up in the case
+-- about the mechanic who never left the roadside, and nowhere else. There are
+-- as many objects as there are events that warrant one, and counting them
+-- would measure how much prose has been written, not whether the code works.
+--
+-- What still has to be true, and is checked below: every object a case places
+-- is one the rules would allow, so no firearm, no windfall and no unliftable
+-- pile can reach a drawer by being typed into a scenario instead of chosen.
 local placed, withWear, piles = {}, 0, 0
 for seed = 1, 400 do
     local case = G.generate(dofile("test/fixtures/synthetic_locations.lua"), seed,
@@ -170,11 +184,21 @@ for seed = 1, 400 do
 end
 local distinct = 0
 for _ in pairs(placed) do distinct = distinct + 1 end
-assert(distinct >= 20,
-    "only " .. distinct .. " distinct objects were ever placed across 400 cases; the rules are not reaching the catalogue")
+assert(distinct > 0, "no object was ever placed across 400 cases")
+-- The rules are no longer what SELECTS an object, but they are still what an
+-- object must qualify under. An authored scenario cannot smuggle a shotgun
+-- into a bedside drawer by naming it directly.
+local eligible = {}
+for _, ruleId in ipairs(Rules.list()) do
+    for _, id in ipairs(Rules.candidates(ruleId)) do eligible[id] = ruleId end
+end
+for id in pairs(placed) do
+    assert(eligible[id], id .. " was authored into a case but no object rule would allow it")
+end
 
 print(string.format("PASS object rules: %d catalogue items, %d rules reaching %d/%d/%d/%d objects; "
-    .. "%d object placements across 400 cases used %d distinct items, no firearms, no claimed blood",
+    .. "%d object placements across 400 cases used %d authored items, every one rule-eligible, "
+    .. "no firearms, no claimed blood",
     Catalogue.count(), #Rules.list(),
     Rules.describe("physicalTrace").candidates, Rules.describe("bearsName").candidates,
     Rules.describe("testableAccess").candidates, Rules.describe("outOfPlace").candidates,
@@ -269,5 +293,14 @@ for seed = 1, 400 do
 end
 local shapes = 0
 for _ in pairs(bodies) do shapes = shapes + 1 end
-assert(shapes >= 12, "only " .. shapes .. " distinct pile openings; four rules should give sixteen")
-print(string.format('PASS object rules: %d distinct pile phrasings, none of them counting for the player', shapes))
+-- Also superseded. Twelve distinct openings was the right bar when one
+-- sentence per rule generated every pile in the game and they all read
+-- identically. Authored piles are written one at a time, so the only thing
+-- worth asserting is that no two of them are the same sentence.
+assert(shapes > 0, "no pile was ever placed")
+local pileKinds = 0
+for _ in pairs(titles) do pileKinds = pileKinds + 1 end
+assert(shapes >= pileKinds,
+    "two authored piles share an opening sentence; each is written for its own event")
+print(string.format('PASS object rules: %d authored pile phrasings across %d pile titles, '
+    .. 'none of them counting for the player', shapes, pileKinds))

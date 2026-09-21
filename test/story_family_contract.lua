@@ -2,6 +2,7 @@
 -- map coverage or completion of all writing.
 package.path="mod/common/media/lua/shared/?.lua;"..package.path
 local Story=require("ConspiracyFiles/Generated/Story")
+local Kinds=require("ConspiracyFiles/Generated/EvidenceKinds")
 local Personal=require("ConspiracyFiles/Generated/PersonalScenarios")
 local Ordinary=require("ConspiracyFiles/Generated/OrdinaryScenarios")
 local Premises=require("ConspiracyFiles/Generated/Premises")
@@ -45,7 +46,16 @@ for _,id in ipairs(Premises.list()) do
    local sources={authored.anchors.claim,authored.anchors.response,authored.anchors.review}
    for _,d in ipairs(authored.optional) do sources[#sources+1]=d end
    for i,doc in ipairs(built.documents) do
-    assert(Pages.text(doc.body)==fill(sources[i].source),"native text must contain precisely the authored source")
+    -- Nothing is written on an object, so it has no page with a source block
+    -- to read back: its record is the sight, the marking and the reading run
+    -- together. The authored marking must still be in there word for word.
+    local carrier=assert(Kinds.get(doc.kind))
+    if carrier.capacity=="object" then
+     assert(doc.body:find(fill(sources[i].source),1,true),
+      "an object's record must carry its authored marking")
+    else
+     assert(Pages.text(doc.body)==fill(sources[i].source),"native text must contain precisely the authored source")
+    end
     assert(not doc.body:match("{%u[%u%d]*}"),"unknown placeholder")
     local body,links=Story.project(built.story,doc,{[doc.id]=true})
     assert(body==doc.body and #links==0,"one source cannot reveal a comparison")

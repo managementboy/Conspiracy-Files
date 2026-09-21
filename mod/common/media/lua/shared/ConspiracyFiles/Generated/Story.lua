@@ -70,6 +70,25 @@ function M.validate(s)
     for _,d in ipairs(s.optional or {}) do
         if not documentOK(d) or not text(d.key) or sources[d.key] then return false,"invalid optional source" end
         if d.role~="person" and d.role~="records" and d.role~="listen" then return false,"optional source lacks investigative purpose" end
+        -- An object must say what state it was found in; that is the only
+        -- thing its record asserts. A pile must also say how many, and
+        -- whether the room it is in is part of what makes it odd - a hundred
+        -- eggs in a kitchen and fifty bricks in a bedroom are different
+        -- anomalies, and placement needs to be told which this is.
+        local carrier=Kinds.get(d.kind)
+        if carrier and carrier.capacity=="object" then
+            if not text(d.wear) then return false,"object evidence must say what state it was found in" end
+            if d.quantity~=nil then
+                if type(d.quantity)~="number" or d.quantity%1~=0 or d.quantity<5 or d.quantity>16 then
+                    return false,"a pile must declare a count a room could hold"
+                end
+                if d.roomIntent~="natural" and d.roomIntent~="wrong" then
+                    return false,"a pile must say whether the room is part of the evidence"
+                end
+            elseif d.roomIntent~=nil then return false,"only a pile declares a room intent" end
+        elseif d.wear~=nil or d.quantity~=nil or d.roomIntent~=nil then
+            return false,"only an object is found in a state, a count or a wrong room"
+        end
         sources[d.key]=true
     end
     ok,n=dense(s.essential,3)
@@ -118,11 +137,25 @@ function M.build(s,fill,prefix,a,b,people,org,random,steer)
     local function add(key,d,site)
         local id=prefix.."document-"..(#docs+1)
         local observation,source,note=fill(d.observation),fill(d.source),fill(d.note)
-        local body=M.body(observation,source,note)
+        -- Nothing is WRITTEN on an object. A brass key or a worn pen has no
+        -- source text to quote, so the three-part page - what you found, the
+        -- source, what it might mean - is wrong for one: the headings would
+        -- promise a document. An object's record is the sight and what the
+        -- survivor made of it, run together in plain sentences.
+        local carrier=Kinds.get(d.kind)
+        local object=carrier and carrier.capacity=="object"
+        local body=object and (observation.." "..source.." "..note) or M.body(observation,source,note)
         if not Kinds.fits(d.kind,body) then return false,"scenario exceeds its carrier's capacity" end
         ids[key]=id
         docs[#docs+1]={id=id,kind=d.kind,title=fill(d.title),locationId=site.id,body=body,
-            references={people[1].id,people[2].id,org.id,a.id,b.id},links={},leads=key=="claim" and {b.id} or {}}
+            references={people[1].id,people[2].id,org.id,a.id,b.id},links={},leads=key=="claim" and {b.id} or {},
+            -- The state it was found in, and - for a pile - how many and
+            -- whether the room is part of the evidence. Authored with the
+            -- object, because under the 2026-09-21 decision an object belongs
+            -- to its event rather than being drawn from a rule and attached.
+            wear=object and d.wear or nil,
+            quantity=object and d.quantity or nil,
+            roomIntent=object and d.roomIntent or nil}
         return true
     end
     for _,key in ipairs(ANCHORS) do

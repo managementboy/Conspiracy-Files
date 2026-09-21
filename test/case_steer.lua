@@ -24,7 +24,15 @@ for seed=1,400 do
    assert(#c.documents<=3+#scenario.optional,"an approach cannot manufacture extra sources")
    local roles,offered={},false
    for _,d in ipairs(scenario.optional) do
-    local title=d.title:gsub("{CODE}",function() return c.facts.code end)
+    -- An object's title names the person it is marked with, not the case
+    -- code, so binding only {CODE} stopped matching once objects arrived.
+    local title=d.title:gsub("{(%u[%u%d]*)}",function(slot)
+     if slot=="CODE" then return c.facts.code end
+     if slot=="P1" then return c.facts.sender end
+     if slot=="P2" then return c.facts.recipient end
+     if slot=="ORG" then return c.facts.organisation end
+     return "{"..slot.."}"
+    end)
     roles[title]=d.role
     if d.role==way then offered=true end
    end

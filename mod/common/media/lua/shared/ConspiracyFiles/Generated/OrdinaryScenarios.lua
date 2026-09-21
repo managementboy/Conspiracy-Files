@@ -56,7 +56,11 @@ local scenarios={
      ["kind"]="recontextualises",
      ["text"]="The truck was fixed where it broke down. The transfer moved the cost, not the mechanic; the yard then reported no repair expense."
     }},
-   ["optional"]={}
+   ["optional"]={{["key"]="bench-wrench",["role"]="records",["kind"]="Wrench",["wear"]="greasy, the jaws worn smooth",
+    ["title"]="Wrench, marked {P1}",
+    ["observation"]="A wrench filed in with the paperwork.",
+    ["source"]="Tape on the handle carries a name in pen: {P1}.",
+    ["note"]="It is in the drawer with the transfer notice. Nothing here says it is theirs."}}
   },{
    ["question"]="Why does a transferred storage clerk still work at the same counter?",
    ["event"]="U-Store It renamed its counter a temporary claims office and transferred its clerk there to count a storm response team without adding staff.",
@@ -107,7 +111,11 @@ local scenarios={
      ["kind"]="recontextualises",
      ["text"]="No extra clerk arrived. U-Store It made a response team by dividing one counter and one person into two reporting lines."
     }},
-   ["optional"]={}
+   ["optional"]={{["key"]="counter-leaflets",["role"]="records",["kind"]="Magazine",["wear"]="curled at the corners",["quantity"]=12,["roomIntent"]="natural",
+    ["title"]="Twelve magazines",
+    ["observation"]="Twelve of them, squared off in a carton under the counter.",
+    ["source"]="Nothing written on any of them beyond the print.",
+    ["note"]="A dozen kept at a counter that was being staffed by one person under two headings."}}
   }},
  ["signed-by-someone-absent"]={{
    ["question"]="How did an absent account holder sign for generator fuel?",
@@ -159,7 +167,11 @@ local scenarios={
      ["kind"]="recontextualises",
      ["text"]="The fuel arrived and the stock check accounts for it. {P1} used the absent account holder name because Fossoil rejected any other signature; the rule produced the false name."
     }},
-   ["optional"]={}
+   ["optional"]={{["key"]="dockets-wrench",["role"]="records",["kind"]="PipeWrench",["wear"]="heavy, stained dark at the grip",
+    ["title"]="Pipe wrench, marked {P1}",
+    ["observation"]="A pipe wrench standing behind the fuel dockets.",
+    ["source"]="A name is scratched into the shaft: {P1}.",
+    ["note"]="The name on the tool is not the name on the receipt. Only one of them signed anything."}}
   },{
    ["question"]="Why is the absent Sunstar manager signing night deliveries?",
    ["event"]="Sunstar required its manager name on linen receipts while leaving the night clerk a signature stamp to keep deliveries moving.",
@@ -210,7 +222,11 @@ local scenarios={
      ["kind"]="recontextualises",
      ["text"]="{P1} received the linen using the authorised manager stamp. The absent signature was a desk procedure; closing the complaint left the next delivery harder to receive."
     }},
-   ["optional"]={}
+   ["optional"]={{["key"]="linen-stack",["role"]="records",["kind"]="Sheet",["wear"]="laundered, still folded",["quantity"]=11,["roomIntent"]="natural",
+    ["title"]="Eleven sheets",
+    ["observation"]="Eleven of them on the shelf, folded to the same width.",
+    ["source"]="No laundry mark on any of them.",
+    ["note"]="Twenty-four sets were signed for. Eleven are here, and the person who signed was not."}}
   }},
  ["two-start-dates"]={{
    ["question"]="Why does a mill worker become new again on the next personnel card?",
@@ -262,7 +278,11 @@ local scenarios={
      ["kind"]="recontextualises",
      ["text"]="The dates represent seasonal and permanent engagements. The practical result is a reset meal allowance for a worker McCoy still trusts to train someone else."
     }},
-   ["optional"]={}
+   ["optional"]={{["key"]="yard-crowbar",["role"]="records",["kind"]="Crowbar",["wear"]="bent slightly out of true",
+    ["title"]="Crowbar, marked {P1}",
+    ["observation"]="A crowbar kept with the crew cards.",
+    ["source"]="A name is punched along the flat: {P1}.",
+    ["note"]="Somebody marked their tools. The personnel file has started them again as a new employee."}}
   },{
    ["question"]="Why was an experienced Fossoil attendant charged as a new starter?",
    ["event"]="A billing-file transfer created a second employment start for a continuously employed Fossoil attendant and triggered a second uniform deposit.",
@@ -365,7 +385,11 @@ local scenarios={
      ["kind"]="recontextualises",
      ["text"]="The cook refused an unpaid inventory shift and left. Sunstar prepared the exit first, obtained the statement afterward, and filed it as voluntary."
     }},
-   ["optional"]={}
+   ["optional"]={{["key"]="counted-tins",["role"]="records",["kind"]="TinnedSoup",["wear"]="dusty on the lids",["quantity"]=9,["roomIntent"]="natural",
+    ["title"]="Nine tins of soup",
+    ["observation"]="Nine of them on the shelf, turned label-out.",
+    ["source"]="A pencil tick on each lid.",
+    ["note"]="Somebody counted these and marked every one. The inventory was never finished."}}
   },{
    ["question"]="Why did U-Store It issue final pay before receiving a resignation?",
    ["event"]="A clerk gave notice by telephone because the resignation form was locked in the office, and U-Store It mailed that form to be returned before releasing the final-pay file.",
@@ -468,7 +492,11 @@ local scenarios={
      ["kind"]="recontextualises",
      ["text"]="The parts were trapped by a circular release rule. {P1} signed early, collected the belt and repaired the line; no belt went missing."
     }},
-   ["optional"]={}
+   ["optional"]={{["key"]="desk-screwdriver",["role"]="records",["kind"]="Screwdriver",["wear"]="the blade rounded off",
+    ["title"]="Screwdriver, marked {P1}",
+    ["observation"]="A screwdriver left on the holding desk.",
+    ["source"]="A name in marker down the handle: {P1}.",
+    ["note"]="The desk is where the belt waited to be signed for. The tool has a name and the receipt has a signature."}}
   },{
    ["question"]="Why did Sunstar receive food while its diner could not use any?",
    ["event"]="Sunstar accepted dry goods during a stock count but forbade opening counted cases, so the kitchen requisitioned its own delivery as a transfer.",
@@ -519,7 +547,11 @@ local scenarios={
      ["kind"]="recontextualises",
      ["text"]="One shipment reached the diner by an internal transfer between shelves. Sunstar counted two deliveries and billed the kitchen for the second one."
     }},
-   ["optional"]={}
+   ["optional"]={{["key"]="store-sponges",["role"]="records",["kind"]="Sponge",["wear"]="unused, still dry",["quantity"]=8,["roomIntent"]="natural",
+    ["title"]="Eight sponges",
+    ["observation"]="Eight of them in the store, still in their wrapper.",
+    ["source"]="Nothing marked on the packet.",
+    ["note"]="The store was counted case by case. These were never opened either."}}
   }}
 }
 
