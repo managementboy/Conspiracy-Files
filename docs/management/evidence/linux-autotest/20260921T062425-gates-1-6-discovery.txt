@@ -1,0 +1,50 @@
+Discovery through play — completes gate 1 navigation and gate 6 contents
+source: 87de90f (DEV-0.46.0-writing-rebuild)
+renderer: HARDWARE (visible session)
+
+THE HARNESS WAS NEVER BROKEN
+An earlier run reported "document 1 not found" while all six clues were placed,
+and I recorded that as a harness fault. It was not. CFLoop parses the runtime's
+devLocations() diagnostic; all six lines match its pattern cleanly. The earlier
+failure was simply that placement had not finished in that session. Once it
+had, the path worked first time.
+
+A DOCUMENT DISCOVERED AS A PLAYER DOES
+  inspect_doc 1 -> "Collection notice / TN-811"
+  approach, container opened, item taken, inspected through the real
+  right-click menu.
+
+THE RECORD, AS THE ORGANISER SHOWS IT
+  FILES rows: 1. Raw coordinates: 0.
+
+  WHAT YOU FOUND
+  A folded carbon slip. My name is typed above a box marked KEEP THIS COPY.
+
+  HIRED COLLECTION  McCoy Logging Co. VEHICLE
+  Booking TN-811 / issued May 4, 1993
+  Passenger: Colombus Farr
+  Collection point: 202 E Maple St
+  Scheduled collection: May 6, 1993, 07:00
+  Retained copy for enquiries: 2301 S Main St
+  ...
+  WHAT IT MIGHT MEAN
+  That's my name. Someone booked a lift for me fro...
+
+  - Headings kept (P4-R114): WHAT YOU FOUND / WHAT IT MIGHT MEAN.
+  - Real street addresses, not coordinates: "202 E Maple St",
+    "2301 S Main St". P4-R57 holds through the whole path.
+  - The survivor is named as the passenger and the interpretation is hers.
+  This makes gate 6's "no raw coordinate labels" check non-vacuous: there is
+  now a row, and it is clean.
+
+A BLANK SCREEN THAT IS NOT A DEFECT
+  A screenshot taken ~30 minutes after opening showed the glass entirely blank.
+  The organiser switches itself off after AUTO_OFF_MS = 180000 (three minutes),
+  as a real Palm does. Reopening rendered the launcher correctly again
+  (dev/eval/linux/runs/gate6-organiser-reopened.png). Reported here because the
+  blank screen looks alarming and will be rediscovered otherwise.
+
+STILL NOT COVERED
+  Distinct findings in different discovery orders, completion and reload
+  retention, the linked enquiry follow-up, popup scrolling and rocker input,
+  the live-to-retired view, and following a map trail to its destination.
