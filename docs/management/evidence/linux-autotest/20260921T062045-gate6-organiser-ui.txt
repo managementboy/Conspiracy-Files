@@ -1,0 +1,31 @@
+Organiser UI — native acceptance gate 6 (chrome verified, contents not)
+source: fb5fd87 (DEV-0.46.0-writing-rebuild)
+renderer: HARDWARE (visible session, not hidden) — Intel Iris Xe
+screenshot: dev/eval/linux/runs/gate6-organiser.png
+
+OPENED IN A REAL VISIBLE SESSION
+  OrganiserScreen.open(player,item) returned true; window visible.
+
+WHAT THE SCREENSHOT SHOWS: CORRECT
+  - The Fieldnote housing renders whole, no clipping or overlap.
+  - All nine programs present and legible: FILES, NAMES, PLACES, DATES, TO DO,
+    NOTES, SETUP, HELP, SITES.
+  - Header carries the category filter ("All v") and the battery indicator.
+  - Footer prompt "tap a program".
+  - Key bank: HOME (house icon) far left, BACK (left arrow) far right, and the
+    two inner keys BLANK - exactly as P4-R87 decided.
+  - Type is crisp at the machine's pixel scale; the legends are drawn in the
+    mod's own face, so nothing depends on the player's UI font (P4-R90).
+
+NO RAW COORDINATES
+  KnoxApps.files.list() returned 0 rows with 0 containing raw coordinates.
+  That count is VACUOUS on its own - see below.
+
+WHAT THIS DOES NOT ESTABLISH
+  FILES is empty because nothing has been discovered in this fresh save, so the
+  row-level requirements are NOT covered: long notes, popup scrolling, taps and
+  rocker input, known-only interpretations, the live-to-retired view, continued
+  source addresses, and the closing questions. Those need a case played through
+  to discovery, which the harness helper could not drive in this run
+  (CFLoop.find reported "document 1 not found" while all six clues were placed).
+  The chrome is verified; the contents are not.
