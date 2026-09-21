@@ -6,11 +6,18 @@ local S = CFReload
 local V = require("ConspiracyFiles/Validator")
 local R = ConspiracyFiles.GeneratedRuntime
 
--- The same roots SaveBudget.check measures, summed.
-local TAGS = { "ConspiracyFiles.Generated.G2", "ConspiracyFiles.AddressBook.Muldraugh", "ConspiracyFiles.DeadAir",
-    "ConspiracyFiles.IdentityObservations", "ConspiracyFiles.KeyConnections", "ConspiracyFiles.LocalPeople",
-    "ConspiracyFiles.DiscoveryLedger", "ConspiracyFiles.VisitedBuildings", "ConspiracyFiles.ObservedKeyLeads",
-    "ConspiracyFiles.PersonNameObservations", "ConspiracyFiles.BodyOutfitObservations" }
+-- The same roots SaveBudget measures, ASKED OF SAVEBUDGET rather than copied.
+-- The copy said eleven where the module budgets fourteen: mapMedia,
+-- placeVisits and casePeople were missing, so every save size printed by the
+-- campaign gate was an undercount and its 500 kB assertion was made against
+-- the wrong number. Map media is the root the withdrawn save-size claim turned
+-- on, which is what makes the omission worth this comment.
+local Budget = require("ConspiracyFiles/SaveBudget")
+local TAGS = {}
+for _, tag in pairs(assert(Budget.tags, "SaveBudget must publish its roots")) do
+    TAGS[#TAGS + 1] = tag
+end
+table.sort(TAGS)
 function S.bytes()
     local total, parts = 0, {}
     for _, tag in ipairs(TAGS) do
