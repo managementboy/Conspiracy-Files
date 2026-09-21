@@ -20,7 +20,7 @@ hardware, not `llvmpipe`, for every run recorded here.
 | 4 | Organiser popup scrolling and rocker input | **NOT EXERCISED** | — | — |
 | 5 | Shared-restaurant behaviour in game | **NOT EXERCISED** | — | — |
 | 6 | Placement interruption/recovery and save/reload | **NOT EXERCISED** at this revision | — | `20260921T061655`, `20260920T224635` are older revisions |
-| 7 | All 125 destinations, played | **PARTIAL — 12 of 125 PASS on all four columns** | `5845cf2` | `20260921T163248-map-coverage.txt` |
+| 7 | All 125 destinations, played | **FAIL** — 125 of 125 reached; 123 pass all four columns, 2 no payoff, and **24 mod errors** | `5845cf2` + `d87bc99` | `20260921T163248`, `20260921T171400-map-coverage.txt` |
 | 8 | Combined native save-state measurement | **PARTIAL** | `e6b9397` | campaign report's per-root sizes |
 
 Gates 2, 3, 4 and 5 need long attended play sessions and were not run. They are
@@ -113,34 +113,62 @@ standable square). A partial run prints how many designs were **NOT
 EXERCISED** and the command to continue, and states that "all 125 destinations
 PASS" may not be written until every one is reached.
 
-**Result: 12 of 125 designs, and all twelve pass every column.**
+**Result: all 125 designs reached, across two runs. The gate FAILS, and not
+for the reason anyone expected.**
+
+Combined (12 designs at `5845cf2`, 113 at `d87bc99`):
 
 ```
-geometry: a building or an area          12 of 12
-payoff inserted, exactly one token       12 of 12
-container identified and NOT a floor     12 of 12
-target resolves AND a standable square   12 of 12
-errors inside the mod: 0
+geometry: a building or an area          125 of 125
+payoff inserted, exactly one token       123 of 125
+container identified and NOT a floor     123 of 125
+target resolves AND a standable square   122 of 125
+errors inside the mod                     24   <- the failure
 ```
 
-Container kinds across those twelve: `shelves`, `counter`, `bin`,
-`ShotgunBox`, `cardboardbox`, `metal_shelves`, `crate` — the selection is not
-collapsing onto one kind. This is the first **playable** evidence these
-destinations have had; every earlier claim rested on geometry.
+Container kinds seen across the run include `shelves`, `counter`, `bin`,
+`crate`, `cardboardbox`, `metal_shelves`, `fridge`, `cashregister`,
+`sidetable`, `filingcabinet`, `displaycasebakery`, `clothingdryer` and
+`ShotgunBox` — the selection is not collapsing onto one kind.
 
-The remaining **113 designs are NOT EXERCISED**. Complete with:
+**The nine area overlays and the nine previously ambiguous bindings mostly
+pass**, which the geometry-only evidence could not say: `WorldStashMap3, 6, 10,
+11, 16, 17, 18, 21, 23` all inserted a payoff into a real non-floor container
+with access.
 
-```bash
-tools/autotest/checks/map_coverage.sh --from 13
+**Two designs resolved no payoff at all** — `WorldStashMap9` (the 21-building
+area overlay) and `WorldStashMap20`, both `state none, items -1, container
+none`. Reported NOT EXERCISED, not FAIL: no payoff was established, and
+nothing showed one to be impossible.
+
+### The failure: 24 mod errors, and a feature that has never run
+
+The run logged 24 error blocks, all the same:
+
+```
+Lua((MOD:Conspiracy-Files: Dead Air)).offerContainer> Exception thrown
+java.lang.RuntimeException: attempted index: getParent of non-table:
+    zombie.inventory.ItemPickerJava$ItemPickerContainer@6f40df87
 ```
 
-At roughly three minutes a design that is several hours; a run was started at
-`9cc5fa5` and its result is not included here, because this document records
-what has finished.
+`Events.OnFillContainer` passes an `ItemPickerJava$ItemPickerContainer`, not an
+`ItemContainer`, and `offerContainer` called `container:getParent()` on its
+first line. It is inside a `pcall`, so nothing crashed — **which is why it
+survived**. The consequence is not log noise: the native-loot candidate path
+bailed on line one for every container the game has ever filled, so the
+behaviour its own comment describes, *"native loot completion contributes
+candidates to the same diverse scan as ordinary discovery"*, has never
+happened.
 
-**The phrase "all 125 destinations PASS" is not used anywhere in this
-document**, and the check itself now refuses to let the headline be quoted
-without its scope.
+Fixed so it refuses with a reason and logs once per class instead of throwing
+per container. **How to reach the real container from an `ItemPickerContainer`
+is still unknown and was not guessed at** — see
+`docs/research/OnFillContainer-B42.md`. Regression:
+`test/offer_container_guard.lua`.
+
+A Kahlua detail worth keeping: it throws on the **index**, not the call, so
+`container.getParent and container:getParent()` throws too. Only a `pcall`
+around a colon call can ask.
 
 ### Three faults in this check, all mine, all caught
 

@@ -417,9 +417,29 @@ end
 -- Native loot completion contributes candidates to the same diverse scan as
 -- ordinary discovery. It no longer lets the first cupboard bypass selection.
 -- The return value means a candidate was queued, NOT that evidence was placed.
+-- Said once per session per class, because the offending call fires on every
+-- container the game fills and filled the console with 24 identical errors in
+-- one run (20260921T171400-map-coverage).
+local unparented={}
 function R.offerContainer(container,filled)
     if not ready or not allowed() or not container then return false end
-    local object=container:getParent(); local square=object and object:getSquare()
+    -- NOT EVERY "CONTAINER" THE ENGINE HANDS US IS AN ItemContainer.
+    -- Events.OnFillContainer passes a zombie.inventory.ItemPickerJava$
+    -- ItemPickerContainer, which has no getParent, and Kahlua throws on the
+    -- INDEX, not the call - so `container.getParent and ...` throws too and
+    -- cannot be used to test for it. pcall around a colon call is the only
+    -- shape that can ask (AGENTS.md, engine call form).
+    local got,object=pcall(function() return container:getParent() end)
+    if not got then
+        local kind=tostring(container):gsub("@.*","")
+        if not unparented[kind] then
+            unparented[kind]=true
+            log("cannot offer a "..kind..": it has no getParent, so the native "
+                .."loot path contributes no candidates for it")
+        end
+        return false
+    end
+    local square=object and object:getSquare()
     if not square then return false end
     local objects=square:getObjects(); local oi,ci
     for i=0,math.min(256,objects:size())-1 do if objects:get(i)==object then oi=i; break end end

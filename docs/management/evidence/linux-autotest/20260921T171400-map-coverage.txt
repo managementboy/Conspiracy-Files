@@ -1,0 +1,135 @@
+Linux map destination coverage, played: FAIL (113 of 125 designs)
+source: d87bc99
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+
+designs in the catalogue: 125
+designs reached in this run: 113 (from 13 to 125)
+
+  geometry: a building or an area          113 of 113
+  payoff inserted, exactly one token       111 of 113
+  container identified and NOT a floor     111 of 113
+  target resolves AND a standable square   110 of 113
+
+PARTIAL RUN. 12 of the 125 designs were NOT EXERCISED.
+Complete it with: tools/autotest/checks/map_coverage.sh --from 126
+"All 125 destinations PASS" may not be written until reached == 125.
+
+design	buildings	areas	source	verdict	state	items	container	sprite	nonFloor	resolves	square	standable
+EkronStashMap5	1	0	source stash anchor	ok	placed	1	fridge	appliances_refrigeration_01_5	true	true	true	true
+EkronStashMap6	1	0	8B Hutchins Drive, Circuital Healing flyer; not a vanilla map mark	ok	placed	1	locker	furniture_storage_02_13	true	true	true	true
+EkronStashMap7	1	0	explicit map symbol; source candidate	ok	placed	1	dishescabinet	furniture_storage_02_33	true	true	true	true
+EkronStashMap8	1	0	explicit map symbol; source candidate	ok	placed	1	medicine	fixtures_bathroom_01_29	true	true	true	true
+IrvingtonStashMap1	18	1	IrvingtonSpeedway print footprint; IrvingtonStashMap1 lap-time arrow at 929,13035	ok	placed	1	counter	fixtures_counters_01_39	true	true	true	true
+IrvingtonStashMap2	1	0	source stash anchor	ok	placed	1	clothingdryer	appliances_laundry_01_12	true	true	true	true
+IrvingtonStashMap3	2	0	source stash anchor	ok	placed	1	clothingdryer	appliances_laundry_01_14	true	true	true	true
+IrvingtonStashMap4	1	0	source stash anchor	ok	placed	1	shelves	furniture_shelving_01_32	true	true	true	false
+IrvingtonStashMap5	2	0	source stash anchor	ok	placed	1	clothingwasher	appliances_laundry_01_0	true	true	true	true
+IrvingtonStashMap6	2	0	source stash anchor	ok	placed	1	shelves	furniture_shelving_01_32	true	true	true	true
+IrvingtonStashMap7	1	0	source stash anchor	ok	placed	1	dresser	furniture_storage_01_33	true	true	true	true
+IrvingtonStashMap8	1	0	source stash anchor	ok	placed	1	displaycasebakery	location_shop_greenes_01_29	true	true	true	true
+IrvingtonStashMap9	1	1	ArrowSouth 4012,13637 and five Heart marks 3976..4037,13676..13678; sixteen-tile margin	ok	placed	1	crate	carpentry_01_16	true	true	true	true
+IrvingtonStashMap10	1	0	explicit map symbol; source candidate	ok	placed	1	sidetable	furniture_storage_01_52	true	true	true	true
+LouisvilleStashMap1	1	0	source stash anchor	ok	placed	1	stove	appliances_cooking_01_11	true	true	true	true
+LouisvilleStashMap2	1	0	source stash anchor	ok	placed	1	SurvivorCrate	carpentry_01_16	true	true	true	true
+LouisvilleStashMap3	1	0	source stash anchor	ok	placed	1	shelves	furniture_shelving_01_32	true	true	true	true
+LouisvilleStashMap4	1	0	source stash anchor	ok	placed	1	crate	carpentry_01_16	true	true	true	true
+LouisvilleStashMap5	1	0	source stash anchor	ok	placed	1	metal_shelves	furniture_shelving_01_30	true	true	true	true
+LouisvilleStashMap6	1	0	source stash anchor	ok	placed	1	fridge	appliances_refrigeration_01_29	true	true	true	true
+LouisvilleStashMap7	1	0	source stash anchor	ok	placed	1	shelves	furniture_shelving_01_41	true	true	true	true
+LouisvilleStashMap8	1	0	source stash anchor	ok	placed	1	counter	location_hospitality_sunstarmotel_02_12	true	true	true	true
+LouisvilleStashMap9	1	0	source stash anchor	ok	placed	1	desk	location_business_office_generic_01_42	true	true	true	true
+LouisvilleStashMap10	1	0	source stash anchor	ok	placed	1	medicine	fixtures_bathroom_01_38	true	true	true	true
+LouisvilleStashMap11	1	0	source stash anchor	ok	placed	1	locker	furniture_storage_02_28	true	true	true	true
+LouisvilleStashMap12	1	0	source stash anchor	ok	placed	1	stove	appliances_cooking_01_20	true	true	true	true
+LouisvilleStashMap13	1	0	source stash anchor	ok	placed	1	shelves	furniture_shelving_01_2	true	true	true	true
+LouisvilleStashMap14	1	0	source stash anchor	ok	placed	1	clothingwasher	appliances_laundry_01_3	true	true	true	true
+LouisvilleStashMap15	1	0	reviewed gallery map mark; native validation pending	ok	placed	1	locker	furniture_storage_02_13	true	true	true	true
+LouisvilleStashMap16	1	0	source stash anchor	ok	placed	1	shelves	furniture_shelving_01_3	true	true	true	true
+MarchRidgeStashMap1	1	0	source stash anchor	ok	placed	1	metal_shelves	furniture_shelving_01_30	true	true	true	true
+MarchRidgeStashMap2	1	0	source stash anchor	ok	placed	1	metal_shelves	furniture_shelving_01_29	true	true	true	true
+MarchRidgeStashMap3	1	0	source stash anchor	ok	placed	1	wardrobe	furniture_storage_01_57	true	true	true	true
+MarchRidgeStashMap4	1	0	source stash anchor	ok	placed	1	sidetable	furniture_storage_01_50	true	true	true	true
+MarchRidgeStashMap5	1	0	source stash anchor	ok	placed	1	metal_shelves	furniture_shelving_01_31	true	true	true	true
+MarchRidgeStashMap6	1	0	source stash anchor	ok	placed	1	shelves	furniture_shelving_01_33	true	true	true	true
+MarchRidgeStashMap7	1	0	source stash anchor	ok	placed	1	fridge	appliances_refrigeration_01_28	true	true	true	true
+MarchRidgeStashMap8	1	0	source stash anchor	ok	placed	1	metal_shelves	furniture_storage_02_1	true	true	true	true
+MarchRidgeStashMap9	1	0	source stash anchor	ok	placed	1	counter	location_trailer_02_21	true	true	true	true
+MarchRidgeStashMap10	1	0	source stash anchor	ok	placed	1	desk	location_business_office_generic_01_13	true	true	true	true
+MulStashMap1	1	0	source stash anchor	ok	placed	1	counter	fixtures_counters_01_79	true	true	true	true
+MulStashMap2	1	0	source stash anchor	ok	placed	1	bin	trashcontainers_01_18	true	true	true	true
+MulStashMap11	1	0	MulStashMap11 native restaurant anchor and named Spiffo's annotation	ok	placed	1	metal_shelves	furniture_shelving_01_27	true	true	true	true
+MulStashMap3	1	0	source stash anchor	ok	placed	1	bin	trashcontainers_01_20	true	true	true	true
+MulStashMap4	1	0	source stash anchor	ok	placed	1	fridge	appliances_refrigeration_01_1	true	true	true	true
+MulStashMap12	1	0	source stash anchor	ok	placed	1	counter	fixtures_counters_01_36	true	true	true	true
+MulStashMap5	1	0	source stash anchor	ok	placed	1	clothingwasher	appliances_laundry_01_6	true	true	true	true
+MulStashMap13	1	0	source stash anchor	ok	placed	1	vendingpop	location_shop_accessories_01_18	true	true	true	true
+MulStashMap6	1	0	source stash anchor	ok	placed	1	sidetable	furniture_tables_low_01_12	true	true	true	true
+MulStashMap7	1	0	source stash anchor	ok	placed	1	microwave	appliances_cooking_01_27	true	true	true	true
+MulStashMap8	1	0	source stash anchor	ok	placed	1	fridge	appliances_refrigeration_01_8	true	true	true	true
+MulStashMap9	1	0	source stash anchor	ok	placed	1	stove	appliances_cooking_01_1	true	true	true	true
+MulStashMap10	1	0	source stash anchor	ok	placed	1	microwave	appliances_cooking_01_24	true	true	true	true
+MulStashMap14	1	0	source stash anchor	ok	placed	1	counter	fixtures_counters_01_31	true	true	true	true
+MulStashMap15	1	0	source stash anchor	ok	placed	1	sidetable	furniture_storage_01_50	true	true	true	true
+MulStashMap16	1	0	MulStashMap16 KnifeFork at 10611,9644; same restaurant named by MulStashMap11 at 10612,9649. The bank stash is not moved	ok	placed	1	cashregister	location_shop_accessories_01_2	true	true	true	true
+MulStashMap17	1	0	source stash anchor	ok	placed	1	bin	trashcontainers_01_20	true	true	true	true
+MulStashMap18	1	0	source stash anchor	ok	placed	1	bin	trashcontainers_01_20	true	true	true	true
+MulStashMap19	1	0	explicit map symbol; source candidate	ok	placed	1	counter	location_trailer_02_18	true	true	true	true
+RiversideStashMap1	1	0	source stash anchor	ok	placed	1	metal_shelves	furniture_shelving_01_29	true	true	true	true
+RiversideStashMap2	1	0	source stash anchor	ok	placed	1	vendingsnack	location_shop_accessories_01_16	true	true	true	true
+RiversideStashMap3	1	0	source stash anchor	ok	placed	1	cashregister	location_shop_accessories_01_23	true	true	true	true
+RiversideStashMap4	1	0	source stash anchor	ok	placed	1	dishescabinet	furniture_storage_02_34	true	true	true	true
+RiversideStashMap5	1	0	source stash anchor	ok	placed	1	microwave	appliances_cooking_01_25	true	true	true	true
+RiversideStashMap6	1	0	source stash anchor	ok	placed	1	wardrobe	furniture_storage_01_17	true	true	true	true
+RiversideStashMap7	2	0	source stash anchor	ok	placed	1	cardboardbox	furniture_storage_02_16	true	true	true	true
+RiversideStashMap8	1	0	source stash anchor	ok	placed	1	shelves	furniture_shelving_01_44	true	true	true	true
+RiversideStashMap9	1	0	source stash anchor	ok	placed	1	counter	fixtures_counters_01_79	true	true	true	true
+RiversideStashMap10	1	0	source stash anchor	ok	placed	1	dresser	furniture_storage_01_34	true	true	true	true
+RosewoodStashMap1	2	0	source stash anchor	ok	placed	1	sidetable	furniture_storage_01_51	true	true	true	true
+RosewoodStashMap2	2	0	source stash anchor	ok	placed	1	stove	appliances_cooking_01_15	true	true	true	true
+RosewoodStashMap3	1	0	source stash anchor	ok	placed	1	microwave	appliances_cooking_01_28	true	true	true	true
+RosewoodStashMap4	1	0	source stash anchor	ok	placed	1	vendingsnack	location_shop_accessories_01_16	true	true	true	true
+RosewoodStashMap5	1	0	source stash anchor	ok	placed	1	cashregister	location_shop_accessories_01_3	true	true	true	true
+WorldStashMap1	1	0	source stash anchor	ok	placed	1	counter	fixtures_counters_01_13	true	true	true	true
+WorldStashMap2	1	0	source stash anchor	ok	placed	1	medicine	fixtures_bathroom_01_29	true	true	true	true
+WorldStashMap3	4	2	Gas Asterisk 5466,9710 and Wrench 5471,9663, each with sixteen-tile margin; Wrench overlaps Lenny's print footprint	ok	placed	1	cashregister	location_shop_accessories_01_1	true	true	true	true
+WorldStashMap4	1	0	source stash anchor	ok	placed	1	locker	furniture_storage_02_5	true	true	true	true
+WorldStashMap5	1	0	source stash anchor	ok	placed	1	shelves	carpentry_02_69	true	true	true	true
+WorldStashMap6	2	1	The two loot-site text positions and named Cross, with sixteen-tile margin; separate fishing mark excluded	ok	placed	1	sidetable	furniture_storage_01_52	true	true	true	true
+WorldStashMap7	1	0	source stash anchor	ok	placed	1	shelves	furniture_shelving_01_42	true	true	true	true
+WorldStashMap8	1	0	source stash anchor	ok	placed	1	sidetable	furniture_storage_01_51	true	true	true	true
+WorldStashMap9	21	1	Railyard arrow, offices, warehouses, crates and trains text positions; sixteen-tile margin around the described yard	INCONCLUSIVE	none	-1	none	none	false	false	false	false
+WorldStashMap10	5	4	All four labelled Circle marks, each with sixteen-tile margin; source does not designate one building	ok	placed	1	shelves	location_shop_generic_01_78	true	true	true	true
+WorldStashMap11	5	1	Tower 2 / Dish 3 service annotations and Sun/X at 10267..10268,8743; sixteen-tile margin	ok	placed	1	bin	trashcontainers_01_17	true	true	true	true
+WorldStashMap12	1	0	source stash anchor	ok	placed	1	bin	trashcontainers_01_17	true	true	true	true
+WorldStashMap13	1	0	source stash anchor	ok	placed	1	metal_shelves	furniture_shelving_01_28	true	true	true	true
+WorldStashMap14	1	0	source stash anchor	ok	placed	1	shelves	furniture_shelving_01_33	true	true	true	true
+WorldStashMap15	1	0	source stash anchor	ok	placed	1	freezer	appliances_refrigeration_01_25	true	true	true	true
+WorldStashMap16	5	1	Camp, checkpoint, barrier labels and two Trap marks along the annotated approach; sixteen-tile margin	ok	placed	1	metal_shelves	furniture_shelving_01_29	true	true	true	true
+WorldStashMap17	2	0	source stash anchor	ok	placed	1	counter	fixtures_counters_01_43	true	true	true	true
+WorldStashMap18	33	1	Extent of all 38 conflict symbols (13502..13746,4019..4157), plus sixteen tiles; no textual safety claim	ok	placed	1	clothingdryer	appliances_laundry_01_13	true	true	true	true
+WorldStashMap19	1	0	source stash anchor	ok	placed	1	fridge	appliances_refrigeration_01_12	true	true	true	true
+WorldStashMap20	1	0	source stash anchor	INCONCLUSIVE	none	-1	none	none	false	false	false	false
+WorldStashMap21	4	2	Fuel 3566,10909; Apple 3576,10895; Hammer 3683,10898; sixteen-tile margins	ok	placed	1	sidetable	furniture_storage_01_52	true	true	true	true
+WorldStashMap22	1	0	source stash anchor	ok	placed	1	fireplace	fixtures_fireplaces_01_0	true	true	true	true
+WorldStashMap23	2	1	Thunder Gas fuel/hammer symbols and basement text position, plus sixteen tiles; includes actual loaded basement levels	ok	placed	1	bin	trashcontainers_01_19	true	true	true	true
+WpStashMap1	1	0	source stash anchor	ok	placed	1	shelves	furniture_shelving_01_40	true	true	true	true
+WpStashMap2	1	0	source stash anchor	ok	placed	1	microwave	appliances_cooking_01_26	true	true	true	true
+WpStashMap3	1	0	source stash anchor	ok	placed	1	metal_shelves	furniture_storage_02_2	true	true	true	true
+WpStashMap4	1	0	source stash anchor	ok	placed	1	fridge	appliances_refrigeration_01_29	true	true	true	true
+WpStashMap11	1	0	source stash anchor	ok	placed	1	fridge	appliances_refrigeration_01_41	true	true	true	true
+WpStashMap5	1	0	source stash anchor	ok	placed	1	stove	appliances_cooking_01_14	true	true	true	true
+WpStashMap6	1	0	source stash anchor	ok	placed	1	bin	trashcontainers_01_18	true	true	true	true
+WpStashMap7	1	0	source stash anchor	ok	placed	1	microwave	appliances_cooking_01_29	true	true	true	true
+WpStashMap8	1	0	source stash anchor	ok	placed	1	counter	fixtures_counters_01_43	true	true	true	true
+WpStashMap9	1	0	source stash anchor	ok	placed	1	dresser	furniture_storage_01_9	true	true	true	true
+WpStashMap10	1	0	source stash anchor	ok	placed	1	counter	fixtures_counters_01_7	true	true	true	true
+WpStashMap12	2	0	source stash anchor	ok	placed	1	microwave	appliances_cooking_01_25	true	true	true	true
+WpStashMap13	1	0	source stash anchor	ok	placed	1	metal_shelves	furniture_shelving_01_31	true	true	true	true
+WpStashMap14	1	0	source stash anchor	ok	placed	1	FoodBox	carpentry_01_16	true	true	true	true
+WpStashMap15	1	0	source stash anchor	ok	placed	1	fridge	appliances_refrigeration_01_22	true	true	true	true
+WpStashMap16	1	0	source stash anchor	ok	placed	1	stove	appliances_cooking_01_0	true	true	true	true
+
+NOT EXERCISED: WorldStashMap9: payoff INCONCLUSIVE (state none, items -1)
+NOT EXERCISED: WorldStashMap20: payoff INCONCLUSIVE (state none, items -1)
+FAIL: errors inside the mod
+errors inside the mod: 24

@@ -27,7 +27,7 @@ never run. The build remains what the owner already authorised it to be:
 | Secret scan | **PASS** — 2,320 tracked files, 0 findings | final HEAD |
 | Native boot | **PASS** | `53dbc61` |
 | **Native campaign gate** | **FAIL** — 11 product failures, one cause | `e6b9397` |
-| Native: 125 destinations | **PARTIAL** — 12 of 125 pass all four columns; 113 NOT EXERCISED | `5845cf2` |
+| Native: 125 destinations | **FAIL** — all 125 reached; 123 pass every column, 2 resolve no payoff, and the run logged **24 mod errors** | `5845cf2` + `d87bc99` |
 | Native: opening + continuation | **NOT EXERCISED** | — |
 | Native: map journey to payoff | **NOT EXERCISED** | — |
 | Native: organiser scrolling / rocker | **NOT EXERCISED** | — |
