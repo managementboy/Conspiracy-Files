@@ -72,3 +72,37 @@ between two already-known documents:
 This is unshipped integration work on `dev/next-phase/`. It is **not** evidence
 of a defect in the shipped organiser, which has no "updated" concept at all,
 and it needs no product decision from the owner.
+
+## Audit: the remaining three-document assumption (2026-09-21)
+
+The review asked for the prototype's leftover three-document assumptions to be
+audited while adapting it. One is load-bearing and still there:
+
+- `InvestigationFlow.lua:27` validates the known list with `dense(list,3)`
+- `InvestigationFlow.lua:99` refuses a fourth with `if #known>=3 then return
+  nil,"known-document limit reached"`
+
+Measured against the current generator, 300 seeds on the synthetic fixture:
+
+    3 documents: 191 cases
+    4 documents: 109 cases
+    MAX_EVIDENCE = 7
+
+So more than a third of cases already carry a document the prototype would
+refuse to let the player know about, and the generator's own ceiling is more
+than double the prototype's.
+
+**Not changed here, deliberately.** Raising a limit requires proving its
+boundary test still reaches the new limit, and the prototype has no such test
+at four, let alone seven. Writing one to justify a change I had just made would
+be the wrong order. The repair is:
+
+1. take the bound from `Generator.MAX_EVIDENCE` rather than a literal 3
+2. give the known-list validation a boundary case at exactly that many, and one
+   past it that must be refused
+3. re-check the aggregate budget assertions, which were sized against three
+4. re-check `EvidenceArchive.relevant`, which is called with the same list
+
+Until then the prototype cannot be exercised against a four-document case,
+which is most of what the generator now produces. The three-source coverage
+added today happens to work because it needs exactly three.
