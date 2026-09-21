@@ -104,5 +104,7 @@ be the wrong order. The repair is:
 4. re-check `EvidenceArchive.relevant`, which is called with the same list
 
 Until then the prototype cannot be exercised against a four-document case,
-which is most of what the generator now produces. The three-source coverage
-added today happens to work because it needs exactly three.
+which is a little over a third of what the generator produces (109 of 300, not
+"most" - my first draft of this note said most, which the numbers above do not
+support). The three-source coverage added today happens to work because it
+needs exactly three.
