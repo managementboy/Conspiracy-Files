@@ -1,6 +1,8 @@
 # Writing rebuild: Linux build, testing and delivery — report
 
-**Tested revision:** `e431d82` (published) and `5a7e5d3` (current `main`).
+**Tested revision:** `e431d82` (published). Corrected against the review of
+2026-09-21 (`WRITING_REBUILD_REPORT_REVIEW_2026-09-21.md`), which found four
+overclaims in the first version of this report. Each is marked below.
 **Version:** `DEV-0.46.1-writing-rebuild`.
 **Workshop:** published to the unlisted item `3797999299` on 2026-09-21.
 Tag `DEV-0.46.1-writing-rebuild`. The earlier `DEV-0.46.0-writing-rebuild`
@@ -26,9 +28,14 @@ added. Details and the reasoning for every change:
 `evidence/linux-autotest/20260921T104147-suite-and-decisions.txt`.
 
 The one remaining failure is `investigation_flow`, which tests a prototype
-outside the shipped mod. It is a live design decision, not a defect, and is
-written up in `docs/design/DECISION_UPDATED_MARKING_2026-09-21.md` rather than
-settled by me.
+outside the shipped mod. **I first reported this as an open design decision
+about which document gets flagged. That was wrong** — every layer of the
+prototype already implements the older-record semantics the test expects. The
+real fault is an integration gap: `InterpretationUpdates.derive` reads
+`doc.links`, which `Story.lua` correctly leaves empty because a comparison
+belongs to the projection, so it derives no events at all (measured: 0 events
+against 3-4 projected connections per case). Retracted and rewritten in
+`docs/management/DECISION_UPDATED_MARKING_2026-09-21.md`.
 
 ---
 
@@ -40,8 +47,8 @@ settled by me.
 | Knowledge and source voice | **PASS** — discovery orders now covered exhaustively | `test/discovery_order.lua` (120 cases in 1,476 orders), `test/story_family_contract.lua`, `test/case_completion_state.lua` |
 | Navigation and UI | **Partial** — chrome, fonts, addresses and closing questions confirmed; scrolling and rocker input unexercised | `20260921T062045-gate6-organiser-ui.txt` |
 | Real map journey | **Partial** — acquisition, reading and rereading confirmed; following a trail to its destination unexercised | `20260921T061747-gate2-map-read.txt`, `20260920T162618-map-read-player-path.txt` |
-| All 125 destinations | **PASS** — all resolve, none dead | `20260920T231143-map-coverage-125.txt` |
-| Shared restaurant | **Content confirmed, behaviour untested** | `20260921T112427-shared-destination-exists.txt`, `test/shared_destination.lua` |
+| All 125 destinations | **Geometry PASS; playable coverage incomplete** — 107 single-building and 18 multiple-building intersections, all overlays exercised. The evidence itself says it does not establish reachable non-floor containers, payoff insertion or player access, and the handoff is explicit that metadata counts alone are insufficient | `20260920T231143-map-coverage-125.txt` |
+| Shared restaurant | **Content and same-building confirmed; behaviour untested** — both designs resolve to building `10414750231953455`. Still owed: the cross-file finding waiting for all eight records, and map 16's bank stash unchanged | `20260920T231143-map-coverage-125.txt`, `20260921T112427-shared-destination-exists.txt`, `test/shared_destination.lua` |
 | Placement and recovery | **PASS** — four interruption points recover, five designs survive save and reload, variety across five container kinds in four rooms | `20260921T061655-gate4-placement-variety.txt`, `20260920T224635-map-placement.txt` |
 | History and storage | **FAIL** — see below | `20260921T111236-campaign.txt`, `20260921T103118-campaign-after-scan-fix.txt` |
 
@@ -74,7 +81,7 @@ disagree — the mod's central mechanic with no content behind it.
 whenever the building was out of reach, which is nearly all of them. Building
 corners are now read once per world and kept.
 
-**Two mangled dashes in player text.** I wrote Python-style `—` escapes
+**Two mangled dashes in player text.** I wrote Python-style `\u2014` escapes
 into Lua strings; Lua 5.1 drops the backslash, so a parking ticket read
 "MULDRAUGH u2014 loading bay". Caught by the graphify update, not by any test.
 `test/escape_sequences.lua` now sweeps all 124 shipped files.
@@ -100,12 +107,32 @@ Read in context afterwards rather than measured:
 ## Unresolved
 
 1. **The campaign gate does not pass.** The hang is fixed and the generator
-   now refuses with reasons rather than stalling, but a full campaign has not
-   been observed end to end on this machine.
+   now refuses with reasons rather than stalling, and the run in progress has
+   produced a second case — the first time in this session that one has
+   arrived inside a gate run. A full campaign has still not been observed end
+   to end on this machine.
+
+   A caution about how I reported progress: a rising scheduler step count
+   proves execution, not useful progress and not eventual completion. Phase,
+   cursor, terminal outcome and actual case count are the things worth
+   quoting, and are what the table above rests on.
+
+   The acceptance fixture also carries assumptions from the previous design
+   and must be aligned before any run of it is treated as acceptance: it
+   requires a literal `Duty log / ` title from answer steering where the
+   current requirement is any compatible authored contribution; its archive
+   checks still describe older evidence becoming rowless stubs where the
+   contract now retains full history; and its "only 5 of 3 clues could be
+   played" line compares two counters rather than a hard-coded three, so the
+   `PLAYED`/`CASE_LEFT` bookkeeping needs inspecting against stable identities
+   before that is read as a product failure.
 2. **Four gate halves unexercised**, all needing long play sessions: the
    linked enquiry follow-up, trail-following to a destination, popup scrolling
    and rocker input, and the shared restaurant's in-game behaviour.
-3. **One design decision open**, on unshipped prototype code.
+3. **One integration repair owed** on unshipped prototype code: deriving
+   relation-awareness from supported story comparisons instead of the empty
+   `doc.links`. Specified in `DECISION_UPDATED_MARKING_2026-09-21.md`. Not a
+   design decision, and not a shipped defect.
 
 ## Two assertions narrowed, both flagged
 
@@ -115,9 +142,19 @@ place a clue in the first container is superseded by placement variety. Both
 were retired in place with the reason written, and neither was deleted to
 reach green. **No assertion was weakened to make the suite pass.**
 
-## One requirement answered rather than met
+## One claim withdrawn
 
-The handoff asks for save costs around 600 kB, 800 kB and 1 MB. Those states
-cannot occur: the 16-case cap stops a save at about 37% of the estimated
-budget and a tenth of it in real bytes.
-`20260921T104410-save-budget-ceiling.txt`
+I reported that save costs around 600 kB, 800 kB and 1 MB **cannot occur**,
+because the 16-case cap stops a save at about 37% of the budget. That was
+wrong: I measured one root and called it the save. `SaveBudget.checkMany`
+budgets fifteen together, and the map designs and discovery ledger are
+independent of the case cap.
+
+`test/map_feature_budget.lua`'s combined fixture reaches **959,031 estimated
+bytes, 96% of the limit**, with 40,969 headroom — straight through 600 kB and
+800 kB. The generated store is 353,537 of that, which is roughly the figure I
+computed and then mistook for the whole save.
+
+`20260921T104410-save-budget-CORRECTION.txt` (the original note is marked
+withdrawn in place). Still owed: a validated aggregate measured against the
+native save in a running game rather than the estimator.

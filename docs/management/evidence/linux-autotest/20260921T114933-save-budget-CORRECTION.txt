@@ -1,0 +1,56 @@
+Save costs at 600 kB, 800 kB and 1 MB — WITHDRAWING my earlier answer
+corrected 2026-09-21, source f60cc94 / DEV-0.46.1-writing-rebuild
+
+SUPERSEDES 20260921T104410-save-budget-ceiling.txt, which is WRONG.
+
+WHAT I CLAIMED
+  "A save cannot get there. The mod's own case cap stops it at roughly a third
+   of the budget, so those three measurements describe states the game will
+   never be in." At MAX_CASES=16: ~369,984 estimated bytes, 37% of the
+   1,000,000 budget.
+
+WHY IT IS WRONG
+  I measured ONE root and called it the save. SaveBudget.checkMany budgets
+  FIFTEEN together (SaveBudget.lua:3 plus the player's markers):
+    generated, addresses, legacy, identities, keyConnections, localPeople,
+    discoveries, visitedBuildings, observedKeyLeads, personNames,
+    bodyOutfits, placeVisits, casePeople, mapMedia, markers
+  The 125 map designs and the discovery ledger are independent of the case
+  cap. Bounding the generated store bounds nothing else.
+
+  Two further faults the review named, both fair:
+    - an AVERAGE over 200 cases does not bound the LARGEST permitted case
+    - an independent character count is not a native binary-save measurement
+
+WHAT THE COMBINED FIXTURE ACTUALLY REACHES
+  test/map_feature_budget.lua already constructs combined campaign, all-map,
+  print-read and discovery states with an allowance for the rest. Run today:
+
+    all placements retained:   campaign=353537 ledger=26662  maps=433452
+                               other=73000  TOTAL=886651  headroom=113349
+    mixed placements/discovery: campaign=353537 ledger=161852 maps=334450
+                               other=73000  TOTAL=922839  headroom=77161
+    all discoveries retained:  campaign=353537 ledger=297042 maps=235452
+                               other=73000  TOTAL=959031  headroom=40969
+
+  So 600 kB and 800 kB are not merely reachable - the fixture passes straight
+  through both, and sits at 96% of the budget at its largest. 1 MB is the
+  budget itself, and the fixture comes within 41 kB of it.
+
+  My generated-store figure was the only part that held: 353,537 here against
+  the ~369,984 I computed for 16 cases. It is about 37% of the total, which is
+  what I mistook for 37% of the save.
+
+WHAT REMAINS TRUE FROM THE OLD NOTE
+  The estimator overstates a plain-table serialisation by a flat 3.87x across
+  a forty-fold range, matching the 3.47x from the one real in-game
+  calibration. That measurement stands; the conclusion drawn from it does not.
+
+WHAT IS STILL OWED
+  A validated aggregate state measured in a running game, against the native
+  save rather than an estimate. The numbers above are the estimator's, which
+  is what the budget actually gates on, but they are not bytes on disk.
+
+  Nothing here is a reason to raise a cap, delete history or change the
+  allowance. The budget is close to binding, which is the opposite of what I
+  reported this morning.

@@ -1,3 +1,9 @@
+*** WITHDRAWN 2026-09-21. THE CONCLUSION IN THIS FILE IS WRONG. ***
+*** It measures the generated store alone and calls it the save. The budget
+*** covers fifteen roots; the combined fixture reaches 959,031 estimated
+*** bytes, 96% of the limit. See -save-budget-CORRECTION.txt.
+*** The 3.87x estimator measurement below still stands.
+
 Save costs at 600 kB, 800 kB and 1 MB — they cannot be reached
 measured 2026-09-21, source b8e89af / DEV-0.46.0-writing-rebuild
 

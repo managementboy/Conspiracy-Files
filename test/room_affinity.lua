@@ -6,11 +6,18 @@
 --     ordinal, with an unusable/absent name recorded as nothing (never a
 --     guess).
 --  3. Generated/Session.createDistributed: a fitting room is preferred; a
---     document falls back to the first unused candidate when nothing fits
---     and generation still succeeds; omitting `rooms` is byte-identical to
---     the pre-Phase-2 behaviour; distinct-container/repeated-container
---     guarantees still hold; a case where NO room fits anything still
---     succeeds, identically to the omitted-rooms case.
+--     document falls back to a non-fitting candidate when nothing fits and
+--     generation still succeeds; omitting `rooms` is byte-identical to the
+--     pre-Phase-2 sequential behaviour; distinct-container/repeated-container
+--     guarantees still hold; and a case where NO room fits anything still
+--     places every document, each in a container of its own.
+--
+--     That last clause used to promise the omitted-rooms assignment exactly.
+--     It no longer does and should not: the room-aware path spreads across
+--     candidates on a seed rather than always taking the first, which is what
+--     stopped every clue landing in the same kitchen cupboard
+--     (docs/design/CLUE_PLACEMENT_VARIETY.md). An unrecognised room must never
+--     COST a placement; it was never a promise about which drawer.
 package.path="mod/common/media/lua/shared/?.lua;mod/common/media/lua/client/?.lua;"..package.path
 
 -- 1. RoomAffinity direct checks -------------------------------------------
@@ -244,11 +251,16 @@ assert(not S.createDistributed(case,collide),
     "a repeated physical container must still be rejected on the sequential path")
 print("PASS room affinity: distinct-container / repeated-container guarantees still hold")
 
--- 3d. A case where NO room fits anything for any document must still
---     succeed, and must fall back to the exact same assignment as the
---     omitted-rooms baseline -- proving the preference never blocks
---     placement (docs/research/T3_LOCATION_CATEGORISATION.md: generic
---     categorisation is not reliable enough to gate generation).
+-- 3d. A case where NO room fits anything for any document must still place
+--     every document, each in a container of its own -- proving the
+--     preference never blocks placement
+--     (docs/research/T3_LOCATION_CATEGORISATION.md: generic categorisation is
+--     not reliable enough to gate generation).
+--
+--     NOT the same assignment as the omitted-rooms baseline. See the note in
+--     the header: seeded spread replaced first-unused in the room-aware path
+--     on purpose, and the assertions below stopped requiring the old
+--     exactness. Reviewed and accepted 2026-09-21.
 local noFit=candidatesFor(case)
 local noFitRooms={}
 for _,site in ipairs(case.locations) do
