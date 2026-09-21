@@ -9,7 +9,7 @@ local function doc(kind,title,observation,source,note)
  return {kind=kind,title=title,observation=observation,source=source,note=note}
 end
 local function story(t)
- t.grounding=assert(grounding[t.organisation]);t.essential={"claim","response","review"};t.optional={}
+ t.grounding=assert(grounding[t.organisation]);t.essential={"claim","response","review"};t.optional=t.optional or {}
  -- See the note in AdministrativeScenarios. Default: the second record
  -- disputes the first account, the third confirms it, the three explain.
  local K=t.kinds or {"disputes-delivery","corroborates","recontextualises"}
@@ -216,6 +216,10 @@ Stamp copy ORIGINAL HELD ELSEWHERE. Do not send stamped copy back.]],
   story{
    organisation="Scarlet Oak Distillery",
    question="What was removed from the visitors' sample ledger?",
+   optional={{key="cellar-diary",role="person",kind="diary",title="Cellar hand's diary / {CODE}",
+    observation="A pocket diary kept behind the cask racks, its spine swollen with damp.",
+    source="{DATE2}. Six bottles out before anyone arrived. No tour came today. Writing it here because the ledger has no room for it.",
+    note="The cellar hand kept their own note of the same six bottles. A diary is what you use once the book has been arranged."}},
    event="A manager removed the page showing a directors' tasting charged to the free visitor-sample allowance; the attendant kept the carbon beneath it.",
    outcome="The carbon and a signed correction move six bottles from visitor samples to management hospitality and account for the removed page.",
    readings={"The missing page concealed management drinking from the visitor-sample account.","Management corrected the account only after somebody kept the second copy."},
