@@ -29,6 +29,7 @@ while [ $# -gt 0 ]; do
     shift
 done
 say() { echo "map-coverage: $*" >&2; }
+harnesses=(); harness() { harnesses+=("$*"); say "HARNESS: $*"; }
 abort() { say "$*"; end_world; exit 2; }
 fails=(); rows=(); notexercised=(); findings=()
 fail() { fails+=("$*"); say "FAIL: $*"; }
@@ -80,7 +81,23 @@ for i in $(seq "$from" "$last"); do
         [ "$flat" -ge 12 ] && break
         sleep 2
     done
+    # Wait for the stored target to resolve before reading the row: a
+    # teleported survivor arrives before the world around them does, and an
+    # unresolvable target makes every verdict INCONCLUSIVE for a reason that
+    # has nothing to do with the design.
+    for _ in $(seq 20); do
+        [ "$(ev "return CFCov.settled([[$id]])")" = true ] && break
+        sleep 2
+    done
     row="$(ev "return CFCov.row([[$id]])")"
+    # AN EMPTY ROW IS A HARNESS FAULT, NOT A VERDICT. ev() prints nothing when
+    # the eval raised, and the first version read those empty fields as
+    # "resolves to no building and no area" - blaming 125 designs for one wrong
+    # require path in this file.
+    if [ -z "$(tr -d '[:space:]' <<<"$row")" ]; then
+        harness "$id: CFCov.row returned nothing (the eval raised); no verdict can be read"
+        continue
+    fi
     reached=$((reached + 1))
     rows+=("$row")
     buildings="$(field 2 "$row")"; areas="$(field 3 "$row")"
@@ -116,6 +133,7 @@ errors="$(mod_errors)"
 verdict=PASS
 [ "$reached" -lt "$last" ] && verdict=PARTIAL
 [ "$reached" -eq 0 ] && verdict="COULD NOT RUN"
+[ ${#harnesses[@]} -eq 0 ] || verdict="COULD NOT RUN"
 [ ${#fails[@]} -eq 0 ] || verdict=FAIL
 report="$EVIDENCE/$first-map-coverage.txt"
 {
@@ -141,6 +159,7 @@ report="$EVIDENCE/$first-map-coverage.txt"
     echo
     for f in "${findings[@]}"; do echo "FINDING: $f"; done
     for f in "${notexercised[@]}"; do echo "NOT EXERCISED: $f"; done
+    for f in "${harnesses[@]}"; do echo "HARNESS: $f"; done
     for f in "${fails[@]}"; do echo "FAIL: $f"; done
     echo "errors inside the mod: $(grep -c . <<<"$errors")"
 } > "$report.part"; mv "$report.part" "$report"

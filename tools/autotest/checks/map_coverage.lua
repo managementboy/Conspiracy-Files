@@ -12,7 +12,15 @@ local V = CFCov
 local R = ConspiracyFiles.MapMediaRuntime
 local C = require("ConspiracyFiles/MapMediaCatalogue")
 local World = require("ConspiracyFiles/WorldAccess")
-local Choices = require("ConspiracyFiles/Generated/Choices")
+-- StorageChoices, not Choices. The wrong path cost a whole run: Kahlua's
+-- require returns NIL for a missing module instead of raising, so the fixture
+-- loaded without complaint and only failed when V.container was called - and
+-- ev() swallows the error, so every design recorded an empty row which the
+-- shell then misread as "resolves to no building and no area". The designs
+-- resolve perfectly well; CFCov.geometry returns 1|0 for the first of them.
+local Choices = require("ConspiracyFiles/Generated/StorageChoices")
+assert(type(Choices) == "table" and Choices.fixedKind,
+    "StorageChoices did not load; require returns nil here rather than raising")
 local TAG = "ConspiracyFiles.MapMedia"
 
 function V.count() return #C.list end
@@ -97,6 +105,14 @@ end
 
 -- One row per design, everything at once, so the shell asks the game once per
 -- design rather than six times.
+-- Has the world around the teleported survivor streamed in far enough for the
+-- stored target to resolve? Until it has, P.items cannot count anything and
+-- every verdict is INCONCLUSIVE for a reason that has nothing to do with the
+-- design.
+function V.settled(id)
+    return tostring(CFPlace.observable(id) == true)
+end
+
 function V.row(id)
     local verdict, state, n = CFPlace.verdict(id)
     return table.concat({
