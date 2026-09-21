@@ -267,14 +267,23 @@ move_on() { # move_on LABEL
     say "${findings[-1]}"
     return 0
 }
+# 45 s and 210 s were calibrated on a machine that renders in hardware. This
+# one renders in software at about 7 frames a second, and every bounded job in
+# the mod is paced per frame: preparing a case costs roughly fifty thousand
+# scheduler steps, and a 2 ms frame budget buys about nine of them a frame.
+# That is ~5,500 frames, or thirteen minutes here against eighty seconds at
+# 60 fps. The run of 20260921T111236 watched case 2 arrive AFTER the check had
+# already recorded it missing. Waiting longer costs nothing when no case comes.
+CF_CASE_WAIT_FIRST="${CF_CASE_WAIT_FIRST:-90}"
+CF_CASE_WAIT_MOVE="${CF_CASE_WAIT_MOVE:-420}"
 next_case() { # next_case LABEL WANT [MOVES]: wait for case number WANT, moving on between tries
     local label="$1" want="$2" moves="${3:-4}" i
     ev 'return CFCamp.gap(false)' >/dev/null
     for i in $(seq "$moves"); do
-        wait_case_count "$want" 45 && return 0
+        wait_case_count "$want" "$CF_CASE_WAIT_FIRST" && return 0
         move_on "$label, move $i" || continue
-        wait_case_count "$want" 210 && { findings+=("$label: the case came after $i move(s) to a fresh neighbourhood"); return 0; }
-        say "$label: no case three and a half minutes after move $i ($(promise_words "$(promise)"))"
+        wait_case_count "$want" "$CF_CASE_WAIT_MOVE" && { findings+=("$label: the case came after $i move(s) to a fresh neighbourhood"); return 0; }
+        say "$label: no case after $CF_CASE_WAIT_MOVE s following move $i ($(promise_words "$(promise)"))"
         ladder_climbed "$label, move $i"
     done
     # Out of moves: the generator's own promise decides whether that is a

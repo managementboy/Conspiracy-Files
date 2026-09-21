@@ -1,0 +1,52 @@
+Campaign gate, after the scan fix — 2026-09-21
+source 214eb23 / DEV-0.46.0-writing-rebuild, Linux hidden run (Mesa llvmpipe)
+Compare with 20260921T074140-campaign.txt (before the fix).
+
+STATUS: still FAIL, still 2 cases, still 19 failures - but a different fault.
+
+WHAT CHANGED, AND IT MATTERS
+  Before: every refusal read  why=busy   preparing=true   indefinitely.
+          The generator was hung. Its metadata scan was never called at all
+          (ticks=0 on a job sitting at building 0 of 9,978).
+  After:  refusals read       why=cooldown  preparing=false
+          Preparation COMPLETES. The generator is choosing to wait, which is
+          policy (P4-R121: the next case waits a little for the survivor's
+          answers), not a stall.
+
+  And case 2 does now arrive. Line 6 of the run:
+      case 2 finished: assignments placed=3; why=gap preparing=false
+                       active=1/4 cases=2/16
+  The check had already recorded "no second case" before that happened.
+
+  So the hang is fixed. What remains is a timing mismatch between the check's
+  windows and this machine.
+
+WHY THE WINDOWS ARE TOO SHORT HERE
+  Preparing a case costs roughly 50,000 scheduler steps - it walks every tile
+  of a dozen buildings. Measured with the new per-subsystem counters:
+      STEPS preparation=41241 -> 49455 over five minutes, QUEUED preparation=1
+      about 67 steps a second, one job waiting, climbing steadily
+  At ~7 frames a second a 2 ms frame budget buys about nine steps, so 50,000
+  steps is ~5,500 frames: thirteen minutes here, about eighty seconds at
+  60 fps. next_case allowed 45 s then 210 s a move.
+
+CHECK CHANGED, DELIBERATELY AND VISIBLY
+  next_case now waits CF_CASE_WAIT_FIRST (90 s) and CF_CASE_WAIT_MOVE (420 s),
+  with the reason written at the line, as CF_FIRST_CASE_WAIT already does for
+  the first case. No assertion was weakened: the checks are the same, they are
+  merely given long enough to observe what the game does.
+
+WHAT PASSED AGAIN, unchanged from the earlier run
+  Save size across reload, twice, unchanged to the byte:
+      reload 2: 73,909 -> 73,909      reload 3: 62,696 -> 62,696
+  Map marks after reload: 7 written, 0 pending, 0 missing.
+  A finished case's clues: 8 checked, all 8 Evidence / Old, all 8 offering the
+  greyed already-noted option.
+  Archive: 2 full, 0 stubbed, 8 rows, identical after the reload.
+  KNOX boot line agrees: "Records ......... 8".
+  AD-10 town names: bare in Muldraugh, with the town after walking 1,797 tiles
+  to West Point, stored FOUND lines frozen in both. Working as specified.
+
+PERFORMANCE, still worth a look but improved
+  ClueMarkers.update: avg 0.659-1.126 ms, max 18 ms, 24-220 calls over 2 ms
+  (was avg 0.752-1.272 ms, max 10 ms, 59-307 over). Everything else cheap.
