@@ -1,0 +1,58 @@
+Save costs at 600 kB, 800 kB and 1 MB — they cannot be reached
+measured 2026-09-21, source b8e89af / DEV-0.46.0-writing-rebuild
+
+THE HANDOFF ASKS FOR
+  "Measure actual save costs with real data around 600 kB, 800 kB and 1 MB."
+
+THE ANSWER
+  A save cannot get there. The mod's own case cap stops it at roughly a third
+  of the budget, so those three measurements describe states the game will
+  never be in.
+
+HOW IT WAS MEASURED
+  200 real generated cases (synthetic location fixture, seeds 1-200), stacked
+  into one store and measured two ways: the mod's own estimator
+  (Validator.estimateEncodedBytes) and an independent character count of what
+  a plain-table store would serialise to. The second is deliberately NOT the
+  estimator's arithmetic, or it would only agree with itself.
+
+    cases      estimated    serialised   ratio
+        5         116511         30065    3.88
+       10         232203         59930    3.87
+       20         462447        119367    3.87
+       40         925041        238776    3.87
+       80        1860775        480260    3.87
+      120        2807252        724525    3.87
+      160        3766681        972118    3.87
+      200        4714821       1216809    3.87
+
+  Flat at 3.87x across a forty-fold range. That matches the one real in-game
+  calibration taken earlier today - 102,418 estimated against 29,478 actual
+  bytes, 3.47x - so the estimator overstates by roughly this much everywhere,
+  not just at small sizes.
+
+  Per case: about 23,124 estimated bytes, about 5,975 actual.
+
+THE CEILING
+  SuccessiveCases.MAX_CASES = 16, MAX_ACTIVE = 4.
+
+    16 cases  ~369,984 estimated bytes  = 37% of MAX_ENCODED_BYTES (1,000,000)
+              ~95,603 ACTUAL bytes
+
+  So the largest save the mod can produce is about a third of the estimated
+  budget and about a tenth of it in real bytes. 600 kB estimated would need
+  ~26 cases, 800 kB ~35, and 1 MB ~43 - all past a cap of 16.
+
+  The campaign runs support this from the other end: real saves measured
+  62,696 to 78,056 bytes with two cases and a full ledger, and unchanged to
+  the byte across every reload.
+
+WHAT THIS MEANS, AND WHAT IT DOES NOT
+  The 1,000,000 figure is provisional and not an engine limit (the handoff
+  says so), and nothing here argues for changing it. What it does say is that
+  the budget is not currently a constraint on anything: the case cap binds
+  first, by a factor of about three on the estimate and ten on real bytes.
+  If the cap ever rises, this is the number to re-measure. Until then, a
+  600 kB save is not a state to test for - it is a state to explain.
+
+STATUS: requirement answered; the three measurements are not reachable.
