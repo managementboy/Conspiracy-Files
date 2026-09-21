@@ -10,24 +10,56 @@ disagreed with the real thing.
 
 | Tier | Where | Needs the game? | Run it with |
 |---|---|---|---|
-| Unit | `test/*.lua` | no | `tools/autotest/unit.sh` |
-| Integration (offline) | `test/*.lua` | no | `tools/autotest/unit.sh` |
-| In-game checks | `tools/autotest/checks/*.sh` | **yes** | `tools/autotest/suite.sh` |
-| Real-gameplay / end-to-end | `checks/pdagame.sh`, `checks/pdalife.sh`, `../fieldnote-test/boot_test.sh` | **yes** | `tools/autotest/suite.sh` |
+| Shipped offline | `test/*.lua` (shipped code) | no | `tools/autotest/unit.sh` |
+| Prototype offline | `test/*.lua` (tests of `dev/next-phase`) | no | `tools/autotest/prototype.sh` |
+| In-game checks | `tools/autotest/checks/*.sh` | **yes** | `tools/autotest/native.sh` |
+| Long native gates | `campaign`, `travel`, `instalments`, `promise` | **yes** | `tools/autotest/native.sh --long` |
 
 `unit.sh` also compiles every shipped Lua file through kahlua
 (`run.sh --parse`), which is the only thing that catches a syntax error in a
-client file that the game would otherwise swallow at load.
+client file that the game would otherwise swallow at load, and it runs the
+packaging tool's Python tests, which until 2026-09-21 no command ran at all.
+
+## Shipped is not prototype
+
+`dev/next-phase/` is not in the Workshop build. Its tests are real tests and
+they run, but they run under their own command and report their own result,
+because an unshipped prototype must never be able to make the shipped
+product's baseline red — and equally must never be quietly skipped.
+
+```bash
+tools/autotest/unit.sh        # shipped: kahlua, specs, standalone, packaging
+tools/autotest/prototype.sh   # dev/next-phase, reported separately
+```
+
+Neither script keeps a list. `tools/autotest/suites.sh` classifies a test once,
+by whether it puts the prototype directory on `package.path` — the same line
+that makes it load unshipped code, so a new prototype test cannot join the
+shipped suite by being forgotten. `test/suite_coverage.lua` holds that split to
+its job and fails if a spec file stops being named by `test/run.lua`, if a
+Python test stops matching the discovery pattern, if either runner grows its
+own list, or if the classifier starts misfiling a test that merely *mentions*
+the prototype directory. That last one is not hypothetical: it misfiled
+`suite_coverage.lua` itself on the first attempt.
+
+## Native tests need the game
+
+```bash
+tools/autotest/native.sh --list    # what exists and what it costs
+tools/autotest/native.sh           # the 20 checks in suite.sh, about 35 min
+tools/autotest/native.sh --long    # campaign, travel, instalments, promise
+```
+
+`native.sh` refuses with `NATIVE NOT EXERCISED` and exit 3 on a machine with no
+Project Zomboid, rather than reporting anything. The four `--long` gates sit
+outside `suite.sh` because they cost between ten and ninety minutes each; they
+are acceptance gates all the same, and `campaign.sh` is the campaign gate.
 
 ## Running the offline tests
 
-```bash
-tools/autotest/unit.sh
-```
-
 Seconds, no game, no display. Every test is a plain Lua 5.1 script that asserts
 and prints one `PASS` line. A test file is run from the repository root and
-finds the mod through `package.path`.
+finds the mod through `package.path`. Both offline commands are above.
 
 ## Running the real-gameplay tests
 
@@ -35,10 +67,14 @@ These boot an actual Project Zomboid, drive it through the eval channel and
 read the console log back.
 
 ```bash
-tools/autotest/suite.sh                  # everything: 17 checks, 35 min 8 s on 2026-09-15
+tools/autotest/native.sh                 # the whole in-game suite
 tools/autotest/checks/pdagame.sh         # one check
 tools/autotest/checks/pdagame.sh --hidden
 ```
+
+`native.sh` with no argument execs `suite.sh`, which is still the script that
+does the work; use `native.sh` so the "this needs the game" refusal happens
+before anything is launched.
 
 **The suite keeps one game running.** `suite.sh` sets `CF_KEEP_GAME=1`, so
 each check starts its world with `pz.sh fresh`: back to the main menu (which
