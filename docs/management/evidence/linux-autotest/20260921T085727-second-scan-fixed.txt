@@ -1,0 +1,60 @@
+The second case's scan: diagnosed and fixed — 2026-09-21
+source 4722a79+ / DEV-0.46.0-writing-rebuild, Linux hidden run (Mesa llvmpipe)
+
+THE FAULT
+  A campaign run produced two cases and then stopped, with the generator
+  reporting why=busy, preparing=true, nothing overdue, indefinitely. The
+  nineteen failures in 20260921T074140-campaign are that one cause.
+
+  The metadata scan for a later case never ran a single step. Measured with a
+  read-only counter added to the job (T.progress):
+
+      second scan, before the fix:  phase=scan idx=0/9978 ticks=0 steps=0
+                                     - unchanged after ten minutes, no error
+
+  The job existed and the scan was never called. Its OnTick handler had been
+  removed from inside OnTick's own dispatch when the FIRST scan completed
+  (T.cancel is reached from step(), inside tick(), inside the dispatch), and
+  the Events.OnTick.Add in T.start could not re-register it because
+  R.nextCase runs inside the scheduler, which itself runs inside an OnTick
+  handler. Adding and removing handlers during the event's own dispatch is
+  what broke it, in both directions.
+
+THE FIX
+  The handler is registered once when the module loads and never removed. It
+  already returns immediately when there is no job, so leaving it registered
+  costs one nil test per frame. T.cancel now only drops the job. A module
+  reload takes the previous closure off the list at load time, which is
+  outside any dispatch. The owner-triggered diagnostic in the same file had
+  the identical self-removal and now parks itself with a flag and is removed
+  on the following frame.
+
+MEASURED AFTER
+      first scan  (cold cache): 9,978 buildings, ~16.8 steps/tick,
+                                ticks == frames exactly
+      second scan (warm cache): idx 24 -> 9,978 complete in ~100 s,
+                                19.5 steps/tick, cornersRead=0
+
+  cornersRead=0 confirms the corner cache as well: the second scan crossed
+  the Lua/Java bridge for building geometry not once.
+
+A CORRECTION TO MY OWN EVIDENCE
+  I first concluded that Events.OnTick.Add had been corrupted session-wide,
+  on the strength of a probe handler added through the eval harness that
+  recorded 0 ticks. The control disproves it: on a FRESH world, with the
+  scan demonstrably running (ticks=78, idx=1284), the same probe still read
+  0. Handlers added through the eval harness never fire. The probe was never
+  evidence about anything. Every number above comes from the mod's own
+  counter instead.
+
+STILL OPEN
+  The scan now finishes, and the second case still does not arrive: 10
+  minutes after "scan=done" the status was count=1, preparing=true. The stage
+  after the scan - reachability and the container scan, both on the 2 ms
+  scheduler that a live case's placement, filler, relocation, identity and
+  carrier jobs also share - has not been instrumented. That is the next
+  thing to measure, the same way: count its steps rather than infer them.
+
+UNCHANGED
+  Boot check PASS: 124/124 files, 0 errors, player alive.
+  Suite: 170 run, 2 failed (room_affinity, investigation_flow).

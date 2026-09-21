@@ -1,7 +1,14 @@
 -- Manual, read-only T3 extension. No game/save mutation or automatic startup.
 local CFLog=require("ConspiracyFiles/Log")
 ConspiracyFiles = ConspiracyFiles or {}
-if ConspiracyFiles.T3Nearby then ConspiracyFiles.T3Nearby.cancel() end
+-- A reload must take the PREVIOUS module's handler off the list, and it has to
+-- happen here, at load, rather than from inside the event's own dispatch.
+if ConspiracyFiles.T3Nearby then
+    ConspiracyFiles.T3Nearby.cancel()
+    if ConspiracyFiles.T3Nearby.handler and Events then
+        Events.OnTick.Remove(ConspiracyFiles.T3Nearby.handler)
+    end
+end
 local Selection = require("ConspiracyFiles/T3Selection")
 local Reach = require("ConspiracyFiles/Reach")
 local T = { version = "T3-nearby-2", reachPolicy = "P4-R55" }
@@ -35,8 +42,34 @@ local function emit(row, level)
     for _,k in ipairs(keys) do parts[#parts+1] = k .. "=" .. string.format("%q", tostring(row[k])) end
     CFLog.message("nearby","scan","" .. table.concat(parts, " "), level)
 end
+-- Read-only. Nothing here mutates the job; it exists because working out why
+-- a scan had stalled meant counting frame numbers in the log and guessing at
+-- steps per frame, which was wrong twice.
+function T.progress()
+    if not job then return nil end
+    return {phase=job.phase, index=job.index,
+        total=job.buildings and job.buildings:size() or nil,
+        scanned=job.scanned, ticks=job.ticks or 0, steps=job.steps or 0,
+        cornersRead=job.bounds and job.bounds.read or nil,
+        frames=job.frames, peakMs=job.peak}
+end
+-- NEVER TOUCH THE EVENT LIST HERE. cancel() is called from inside step(), which
+-- runs inside tick(), which runs inside OnTick's own dispatch - and removing a
+-- handler mid-dispatch leaves OnTick unable to accept new ones at all.
+--
+-- Measured 2026-09-21. The first scan of a world completes, calls cancel() from
+-- within the dispatch, and from that moment Events.OnTick.Add() is inert: a
+-- probe handler added afterwards recorded 0 ticks over 30 seconds while the
+-- game clock advanced normally. The second case's scan then sat at building 0
+-- of 9,978 with ticks=0 forever, no error and no refusal - the generator
+-- reported "busy" because it genuinely was still waiting. That is why a
+-- campaign run produced two cases and then nothing
+-- (20260921T074140-campaign: nineteen failures, one cause).
+--
+-- The handler is registered once at load and stays registered. It already
+-- returns immediately when there is no job, so leaving it costs one nil test
+-- per frame.
 function T.cancel()
-    if tick and Events then Events.OnTick.Remove(tick) end
     job = nil
 end
 local function step()
@@ -159,9 +192,11 @@ end
 tick = function()
     if not job then return end
     local started, j = now(), job
+    j.ticks = (j.ticks or 0) + 1
     local ok,err=pcall(function()
         for n=1,24 do
             step()
+            j.steps = (j.steps or 0) + 1
             -- A FLOOR BEFORE THE CLOCK IS CONSULTED. getTimeInMillis() counts
             -- whole milliseconds, so "now()-started >= 1" is true the moment a
             -- millisecond boundary falls anywhere inside the first step - which
@@ -226,9 +261,10 @@ function T.start(radius,seed,requiredId,radiusSource)
         selection="category-round-robin-nearest-3-seeded",seed=seed,storage="unknown",
         hoursSurvived=hours,radiusSource=(type(radiusSource)=="string" and #radiusSource>0 and #radiusSource<=40
             and radiusSource) or (automatic and "P4-R55" or "explicit-debug-override")})
-    Events.OnTick.Add(tick)
     return true
 end
+T.handler = tick
+if Events then Events.OnTick.Add(tick) end
 -- Inline diagnostic allows hot loading through an already indexed PZ file.
 ConspiracyFiles.GeneratedDiagnostic=(function()
 -- Read-only owner-triggered diagnostic. No item, save or placement mutations.
@@ -285,15 +321,23 @@ function D.run()
         log("item="..tostring(item:getName()).." matchesExpectedToken="..tostring(md.cfPhysicalToken==task.a.physicalToken))
         task.ii=task.ii+1
     end
+    -- Same rule as T.cancel above: this handler must not remove itself from
+    -- inside OnTick's dispatch, or OnTick stops accepting new handlers for the
+    -- rest of the session. It parks itself with a flag and is taken off the
+    -- list on the next frame, from outside its own run.
+    local finished=false
     active=function()
+        if finished then
+            Events.OnTick.Remove(active); active=nil; finished=false; return
+        end
         local begin=getTimeInMillis()
         local ok,err=pcall(function()
             for i=1,16 do
-                if step() then Events.OnTick.Remove(active); active=nil; log("complete"); return end
+                if step() then finished=true; log("complete"); return end
                 if getTimeInMillis()-begin>=1 then return end
             end
         end)
-        if not ok then Events.OnTick.Remove(active); active=nil; log("error="..tostring(err)) end
+        if not ok then finished=true; log("error="..tostring(err)) end
     end
     Events.OnTick.Add(active)
     return true
