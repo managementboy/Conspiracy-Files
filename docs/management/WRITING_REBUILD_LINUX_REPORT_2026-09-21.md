@@ -19,7 +19,7 @@ seconds describe this laptop and nothing else.**
 
 ## Suite
 
-**27 failing on arrival → 1 of 172.**
+**27 failing on arrival → 0 of 172. The suite is green.**
 
 Codex had never run it. Twenty-two fixtures were repaired on 20 September
 (`WRITING_REBUILD_LINUX_RESULTS_2026-09-20.md`), leaving eight, all of which
@@ -27,14 +27,19 @@ traced to two content gaps. Those eight are now closed and five new tests
 added. Details and the reasoning for every change:
 `evidence/linux-autotest/20260921T104147-suite-and-decisions.txt`.
 
-The one remaining failure is `investigation_flow`, which tests a prototype
-outside the shipped mod. **I first reported this as an open design decision
-about which document gets flagged. That was wrong** — every layer of the
-prototype already implements the older-record semantics the test expects. The
-real fault is an integration gap: `InterpretationUpdates.derive` reads
-`doc.links`, which `Story.lua` correctly leaves empty because a comparison
-belongs to the projection, so it derives no events at all (measured: 0 events
-against 3-4 projected connections per case). Retracted and rewritten in
+The last failure, `investigation_flow`, is fixed. **I first reported it as an
+open design decision about which document gets flagged. That was wrong** — both
+halves of the prototype already implemented the older-record semantics the test
+expects; it simply derived nothing to flag, because
+`InterpretationUpdates.derive` read `doc.links`, which `Story.lua` correctly
+leaves empty. Repairing that exposed a second gap neither half handled: when a
+third source completes a comparison between two already-known documents, the
+old rule flagged nothing while the validator demanded an event, so the code
+produced a state its own validator refused. Both now use one rule — the
+affected record is the earlier endpoint in discovery order — and the timestamp
+invariant covers every required source rather than the two endpoints. Proven by
+mutation in both directions; new coverage asserts the three-source case
+directly. Retraction and reasoning in
 `docs/management/DECISION_UPDATED_MARKING_2026-09-21.md`.
 
 ---
@@ -129,10 +134,15 @@ Read in context afterwards rather than measured:
 2. **Four gate halves unexercised**, all needing long play sessions: the
    linked enquiry follow-up, trail-following to a destination, popup scrolling
    and rocker input, and the shared restaurant's in-game behaviour.
-3. **One integration repair owed** on unshipped prototype code: deriving
-   relation-awareness from supported story comparisons instead of the empty
-   `doc.links`. Specified in `DECISION_UPDATED_MARKING_2026-09-21.md`. Not a
-   design decision, and not a shipped defect.
+3. **The acceptance fixture is now aligned** with the current contract, which
+   it was not before: it demanded a literal `Duty log / ` title where the
+   contract is any compatible authored contribution; it played up to three
+   extra cases — roughly forty minutes here — to manufacture a rowless stub
+   that the design no longer produces (`test/case_archive` asserts every
+   finished case keeps its rows); and its clue counter's loop bound receded as
+   it ran, which produced the false "only 5 of 3 clues could be played". A run
+   of it now measures the mod rather than its own stale expectations. That does
+   not mean the gate passes — it means a future run is worth believing.
 
 ## Two assertions narrowed, both flagged
 
