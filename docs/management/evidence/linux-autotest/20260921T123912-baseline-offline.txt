@@ -1,0 +1,18 @@
+Offline baseline — task 1
+commit:   dc73e1c8b89fd1a3911d6f5401909bd939e42a87
+branch:   main
+tree:     1 modified file(s) at run time
+tags at HEAD: 
+lua:      Lua 5.1.5  Copyright (C) 1994-2012 Lua.org, PUC-Rio  (/usr/bin/lua5.1)
+java:     openjdk version "17.0.20" 2026-07-21
+PZ:       /home/elkin/.steam/steam/steamapps/common/ProjectZomboid (present)
+kahlua:   tools/kahlua/run.sh (RunLua.class present)
+renderer: not applicable — no game was started for this baseline
+
+command: bash tools/autotest/unit.sh
+
+kahlua parse: 124 ok, 0 failed
+specs: 52 tests, 0 failures
+relocation evidence regression: PASS
+standalone: 172 run, 0 failed (including specs)
+exit: 0
