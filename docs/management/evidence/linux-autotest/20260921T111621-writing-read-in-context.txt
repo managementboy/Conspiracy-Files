@@ -1,0 +1,57 @@
+Reading complete cases after changing the writing — 2026-09-21
+source c774e03 / DEV-0.46.1-writing-rebuild
+
+WHY
+  The handoff's section 4 asks for complete cases to be read against four
+  questions, and warns that metadata checks cannot establish coherent or funny
+  writing. I had changed 30 finding sentences and added 14 objects and 5
+  carriers, so the obligation was mine twice over: the measurements say the
+  relationships are distributed, they cannot say the sentences read.
+
+WHAT WAS READ
+  Whole cases rendered as a player sees them - every record in discovery
+  order with the comparisons the organiser would show - via the projection,
+  not the stored case.
+
+CASE: "Why were the winners' bats paid for before the prize order existed?"
+  Three records: a paid bat order, a committee note, a collection sheet.
+  Reads correctly. Each source adds a fact; the survivor observes without
+  concluding; the institutional joke lands and pays off twice.
+
+  My reclassified comparison, shown under "Does not match":
+    "The receipt reads as a prize bought for a winner. The committee
+     instruction has twelve identical bats bought for everybody who entered."
+  Heading and sentence now agree, which was the point of rewriting them: the
+  old text ("The committee instruction explains both the early payment and the
+  WINNER imprint") read as explanation under a heading that says conflict.
+
+  The object closes it:
+    "Baseball bat, marked Ines Kubiak - A bat standing behind the prize
+     paperwork, WINNER stencilled along it. A name is inked on the knob:
+     Ines Kubiak. One of the twelve, kept back. Every one of them says WINNER."
+  No headings, which is right - nothing is written on a bat. It carries the
+  name and claims nothing more. The last line does the work.
+
+CASE: "Why was final pay prepared before the cook resigned?"
+  The cook refused to count stock unpaid and left; the motel filed it as
+  voluntary. The pile is the evidence:
+    "Nine tins of soup - Nine of them on the shelf, turned label-out. A pencil
+     tick on each lid. Somebody counted these and marked every one. The
+     inventory was never finished."
+  That is the object belonging to its event rather than being attached to a
+  passing case, which is what the owner's decision asked for. A generic pile
+  of tins would have said nothing here; these are the tins the story is about.
+
+AGAINST THE FOUR QUESTIONS
+  What happened, and what does each source add?   Clear in both.
+  What can be inferred, what remains open?        Both cases leave the actual
+    outcome outside the file and say so, without pretending to a conclusion.
+  Does the survivor sound personally involved without invented history?
+    Yes. The notes observe and infer; nothing invents a memory or a consent.
+  Does the institutional absurdity produce fatalistic comedy throughout?
+    Yes, and it survived my edits: "Losing the event apparently doesn't
+    qualify anyone for a more expensive bat."
+
+CONCLUSION
+  The changes read in place. No contradiction found between a rewritten
+  finding and the records it sits between.
