@@ -3,7 +3,26 @@
 local Scheduler = {}
 function Scheduler.new(clock, report)
     local queue, keys, failures, disabled = {}, {}, {}, {}
+    -- Steps actually run, per subsystem. Read-only bookkeeping: working out
+    -- why a case never arrived meant inferring steps from log frame numbers
+    -- twice, and being wrong twice (20260921T105423-second-scan-fixed). A job
+    -- that is starving and a job that is merely slow look identical from
+    -- outside; this tells them apart.
+    local counts = {}
     local api = { maxSteps = 48, budgetMs = 2, maxJobs = 32, peakMs = 0 }
+    function api.counts()
+        local out = {}
+        for subsystem, n in pairs(counts) do out[subsystem] = n end
+        return out
+    end
+    -- What is waiting, so a queue that never drains can be seen.
+    function api.queued()
+        local out = {}
+        for _, job in ipairs(queue) do
+            out[job.subsystem] = (out[job.subsystem] or 0) + 1
+        end
+        return out
+    end
     function api.enqueue(key, subsystem, fn)
         if keys[key] or disabled[subsystem] or #queue >= api.maxJobs then return false end
         keys[key] = true
@@ -41,6 +60,7 @@ function Scheduler.new(clock, report)
             else
                 local ok, done = pcall(job.step)
                 steps = steps + 1
+                counts[job.subsystem] = (counts[job.subsystem] or 0) + 1
                 if not ok then
                     keys[job.key] = nil; api.failed(job.subsystem, done)
                 elseif done then keys[job.key] = nil

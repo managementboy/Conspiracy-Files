@@ -1407,7 +1407,13 @@ function R.devLocations()
     for _,line in ipairs(out) do log(line) end
     return table.concat(out,"\n")
 end
-function R.metrics() return scheduler and {peakMs=scheduler.peakMs} end
+function R.metrics()
+    if not scheduler then return nil end
+    return {peakMs=scheduler.peakMs,
+        -- Steps run and jobs waiting, per subsystem. See Scheduler.counts.
+        steps=scheduler.counts and scheduler.counts() or nil,
+        queued=scheduler.queued and scheduler.queued() or nil}
+end
 function R.automaticStatus()
     local roots=wrapper and Cases.sessions(wrapper) or {}
     local schedule=wrapper and wrapper.schedule
