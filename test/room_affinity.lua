@@ -81,6 +81,11 @@ local S=require("ConspiracyFiles/Generated/Session")
 -- blessed the code with its own behaviour, so instead the SHAPE is found and
 -- the expectations are the test's own. The affinities below are stated here,
 -- not read from RoomAffinity, so that this test can still disagree with it.
+-- PROVEN TO FAIL, 2026-09-21. Against a copy of the tree with
+-- RoomAffinity.prefers stubbed to return false - placement that ignores every
+-- room preference - this section fails with "receipt must take the room it
+-- belongs in, not simply the first candidate", while sections 1 and 2 still
+-- pass. A green here means something.
 local WORK={office=true,toolstore=true,garagestorage=true}     -- dispatch, receipt, notepad
 local PERSONAL={bedroom=true,livingroom=true}                  -- letter, diary, photograph
 local FITS={
