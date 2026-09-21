@@ -1,0 +1,83 @@
+Suite: 8 failing -> 1, and what each change actually was — 2026-09-21
+source b8e89af / DEV-0.46.0-writing-rebuild
+
+WHERE IT STARTED
+  27 of 169 failing when I took the branch. Codex had never run it.
+  22 fixtures repaired (see WRITING_REBUILD_LINUX_RESULTS_2026-09-20) left 8,
+  all of which traced to two content gaps.
+
+WHERE IT IS NOW
+  170 run, 1 failed.
+
+WHAT CLOSED THE EIGHT
+
+  generated 100-seed sample, phase3_roles
+    Writing. Only "recontextualises" was authored anywhere: 1,880 connections
+    across 600 cases, all one kind, so two sources could never be shown to
+    disagree. Reclassified against what the prose already said and rewrote 30
+    finding sentences so the heading and the sentence agree. Measured after:
+    1,953 connections, 34% adds context to / 34% agrees with / 31% does not
+    match. phase3_roles also counted links on the STORED case, which is empty
+    by design; it now counts the projection, as generator_spec does.
+
+  evidence_role_carrier
+    Writing. ID cards, credit cards, business cards, parking tickets and
+    diaries had been listed as carriers since 2026-09-06 and never once
+    appeared in 400 seeds, because the rebuild picks carriers from what a
+    scenario writes down and no scenario wrote them. Five authored into the
+    events that warrant one.
+
+  pile_paperwork
+    Writing, twice. Two filed photographs carried a date and a description
+    but no file reference, so a player holding one could not tie it to its
+    papers. Then the test's own body-shape expectation had to learn that an
+    object has no page.
+
+  object_rules, marked_objects
+    CODE, not content, and I had reported it wrongly first. The rebuild
+    (789c18b) deleted every generator call that turned an object rule into a
+    placed object - 647 lines. The catalogue of 4,546 items, the eight rules
+    and all their guards survived with nothing calling them. Measured before:
+    0 objects in 400 cases.
+    Owner's decision 2026-09-21: author objects into their events rather than
+    restore rule-driven attachment. 14 objects written into 14 events; 71
+    placements per 400 cases, 51 single and 20 piles; every one still required
+    to be a candidate of an object rule so no firearm or windfall can reach a
+    drawer by being typed in. Verified in the running game: all 14 resolve to
+    real items, one spawned and read back with name and ModData intact.
+
+  room_affinity
+    Fixture redesigned, not fitted to the code. It needed four documents two
+    at each of two sites; no seed can produce that any more, because the
+    rebuild puts one clue in the house the survivor stands in (P4-R66) and the
+    rest at the partner site - every case is 1 + N across 3,000 seeds. The
+    shape is now searched for and the expectations are the test's own, stated
+    in the test rather than read from RoomAffinity. Proven to fail: stubbing
+    RoomAffinity.prefers false breaks it and leaves the earlier sections green.
+
+WHAT IS LEFT, AND WHY IT IS LEFT
+  investigation_flow. Tests dev/next-phase/InvestigationFlow.lua, a prototype
+  outside the shipped mod. The disagreement: the test expects the OLDER
+  document to be marked updated when a newer one recontextualises it; the
+  implementation attaches it to the document that MAKES the comparison. There
+  is no shipped behaviour to align it with - the organiser has no "updated"
+  concept at all - so this is a live design decision on unshipped work, not a
+  defect. Left failing deliberately, for the owner.
+  My reading, offered not applied: flagging the older document is the only
+  version that does anything, because the player has already read it and needs
+  telling it now means something else. Everything about the new document is
+  new.
+
+TWO ASSERTIONS NARROWED, BOTH FLAGGED IN THEIR COMMITS
+  object_rules' "twenty distinct objects across 400 cases" and "twelve
+  distinct pile openings" encoded the rule-driven design the owner replaced.
+  Retired in place with the reason written; replaced by the check that still
+  bites - every placed object must be rule-eligible.
+  room_affinity's "when nothing fits, placement is byte-identical to the
+  sequential baseline" is no longer true: the selector spreads across
+  candidates on a seed, which is the placement-variety work
+  (CLUE_PLACEMENT_VARIETY.md). Narrowed to "an unrecognised room must never
+  cost a placement". If the old exactness was load-bearing, it should come
+  back as a failing test instead.
+
+NO ASSERTION WAS DELETED TO REACH GREEN.
