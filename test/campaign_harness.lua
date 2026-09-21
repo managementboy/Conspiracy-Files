@@ -83,8 +83,49 @@ for _,field in ipairs({"metrics","automaticStatus","T3Nearby","assignments"}) do
 end
 assert(sh:find("CFCamp.progress",1,true),
     "campaign.sh must judge a stall from progress, not from elapsed seconds")
-assert(sh:find("NOTHING ADVANCED",1,true),
-    "the stall failure must say that nothing advanced, and quote the fingerprint")
+assert(sh:find("NO WORK WAS COMPLETED",1,true),
+    "the stall failure must say no work completed, and quote both fingerprints")
+
+-- 5a. AND LIVENESS IS NOT PROGRESS. The first version of the fingerprint put
+-- scheduler step counts in the string it compared. Those rise on every poll
+-- whatever happens - the filler ran 70,019 -> 70,054 steps in eleven seconds
+-- while deferred=2 placed=4 had not moved for eight in-game hours - so the
+-- detector could never fire and was exactly as blind as the wall clock it
+-- replaced. C.progress returns work FIRST and liveness SECOND, and only the
+-- first is compared.
+local progress=lua:match("function C%.progress%(%)(.-)\nend")
+assert(progress,"C.progress must be readable")
+local work=progress:match("local work = table%.concat%(%{(.-)%}")
+assert(work,"C.progress must build a `work` fingerprint of its own")
+for _,forbidden in ipairs({"steps","queued","liveness","ticks"}) do
+    assert(not work:find(forbidden,1,true),
+        "the work fingerprint must not contain "..forbidden
+        ..": a counter that rises whatever happens can never be flat, so the "
+        .."stall detector built on it can never fire")
+end
+for _,needed in ipairs({"assignments","known","status.count"}) do
+    assert(work:find(needed,1,true),
+        "the work fingerprint must contain "..needed)
+end
+assert(progress:find("local liveness",1,true),
+    "liveness must be reported separately, so a wedged job can be told from an idle one")
+-- The shell must read field 1 as work and field 2 as liveness, and compare
+-- only the first.
+assert(sh:find('now_progress="$(field 1 "$sample")"',1,true)
+   and sh:find('now_liveness="$(field 2 "$sample")"',1,true),
+    "campaign.sh must take work from field 1 and liveness from field 2")
+assert(sh:find('"$now_progress" = "$last_progress"',1,true),
+    "the flat-run comparison must be on the work fingerprint")
+assert(not sh:find('"$now_liveness" = "$last_liveness"',1,true),
+    "liveness must never be compared")
+
+-- 5b. AND A SITE THAT CANNOT SUPPLY MUST NOT BE ASKED FOREVER. Returning to
+-- the waiting clue's own site on every move cannot help when that site's
+-- eligible containers are used up; it answers no-containers every time
+-- (20260921T133647). The design's answers are a different neighbourhood, a
+-- carrier, or expiry.
+assert(sh:find('if [ "$moves" -le 3 ]',1,true),
+    "the harness must stop returning to a site that keeps answering no-containers")
 -- The clock may still stop a run, but what it produces is a stage that ran out
 -- of time, never an accusation against the mod.
 local clockFail=sh:match("if %[ \"%$%(date %+%%s%)\" %-ge \"%$deadline\" %]; then\n(.-)\n")

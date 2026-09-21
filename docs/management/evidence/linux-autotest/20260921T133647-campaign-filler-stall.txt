@@ -1,0 +1,128 @@
+Campaign gate, run 20260921T152653 — STOPPED DELIBERATELY, evidence preserved
+source: 8743ed9 (clean tree)
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0 (hardware)
+
+WHY IT WAS STOPPED
+  Two findings, one product and one mine. Neither needed the remaining
+  40 minutes of the run to establish, and the run could not have named
+  either of them (see the second).
+
+1. PRODUCT OBSERVATION: the filler runs and places nothing.
+   Case generated:169009590:case has six documents. Four were placed and
+   played. Documents 5 and 6 have read [deferred] "waiting since hour
+   2.1736831665039062" unchanged from hour 2.17 to hour 10.46 of game
+   time, across two harness moves that each loaded document-5's own site
+   (t3:10977704480342027 at 10830,10101) and stepped the survivor back to
+   10855,10101, beyond StaleClue's proximity guard.
+
+   Two CFCamp.progress() samples 11 seconds apart:
+     steps  carrier=216,filler=70019,identity=32763,placement=1302,relocation=216,tracking=216
+     steps  carrier=216,filler=70054,identity=32763,placement=1302,relocation=216,tracking=216
+     queued filler=1        (both samples)
+     work   deferred=2 placed=4, known=4, cases=1   (both samples)
+
+   The filler executed about 35 scheduler steps in 11 seconds and roughly
+   70,000 in total. It is not stalled, not refused and not idle: it is
+   running continuously and placing nothing. CFCamp.gaps() reports
+   "none (every clue of every case accounted for and found)" and
+   CFCamp.promise() reports code=gap, rung 3 of 3, due 03:56, overdue
+   -22.23 - but that promise governs the NEXT CASE, not these two clues.
+
+   NOT ESTABLISHED: why. The filler's own per-attempt lines (ev=skip,
+   ev=defer, ev=placed why=instalment) are written at debug level, and
+   this run used the default level, so the reason is not in the console.
+   The next run must set ConspiracyFiles.logLevel("d") before the stage.
+
+2. HARNESS DEFECT, MINE, INTRODUCED IN 7229ab8.
+   CFCamp.progress()'s fingerprint mixes scheduler step counts with the
+   clue statuses. The steps change every single poll whatever happens, so
+   the fingerprint can never be flat, so the stall detector I added to
+   replace the wall clock cannot fire - and this run would have ground on
+   to the 45-minute safety boundary and reported NOT EXERCISED rather
+   than naming the stuck stage.
+
+   This is exactly the trap WRITING_REBUILD_LINUX_REPORT_2026-09-21.md
+   warned about in its own words: "a rising scheduler step count proves
+   execution, not useful progress and not eventual completion". I read
+   that sentence and then built it into the detector.
+
+   The fix is to split the two: liveness (steps, queued) is reported but
+   excluded from the comparison; work (statuses, known count, case count,
+   the nearby scan's phase/index/scanned) is what must change.
+
+RUN LOG, VERBATIM
+  pz: launching session 20260921T152653
+  pz: new world is loading
+  pz: game loading took 58 seconds
+  [CF-DEAD-AIR]|DISABLED|version=DEV-0.46.1-writing-rebuild|generated development session active
+  pz: ready; use: tools/autotest/pz.sh eval 'return getPlayer():getX()'
+  campaign: case 1: generated:169009590:case
+  campaign: start                  cases 1 (0 finished) | record 0 | FILES questions 0 | NAMES 1 | PLACES 0 | Old 0/0 wrong | Evidence 0/0 wrong | order  | save 51995 B
+  campaign: case 169009590:case: clue 1 of 4: Collection notice / GT-970
+  campaign: case 169009590:case: clue 2 of 4: Dispatch amendment / GT-970
+  campaign: case 169009590:case: clue 3 of 4: Dispatch returns / GT-970
+  campaign: case 169009590:case: clue 4 of 4: Deposit refund / GT-970
+  campaign: case 169009590:case: 2 clue(s) still waiting after 4 played, 0 dropped (statuses 5:deferred 6:deferred); loaded generated:169009590:document-5's own site t3:10977704480342027 at 10830,10101 and stepped back to 10855,10101, move 1
+  campaign: case 169009590:case: 2 clue(s) still waiting after 4 played, 0 dropped (statuses 5:deferred 6:deferred); loaded generated:169009590:document-5's own site t3:10977704480342027 at 10830,10101 and stepped back to 10855,10101, move 2
+  campaign: case 169009590:case: 2 clue(s) still waiting after 4 played, 0 dropped (statuses 5:deferred 6:deferred); loaded generated:169009590:document-5's own site t3:10977704480342027 at 10830,10101 and stepped back to 10855,10101, move 3
+
+----------------------------------------------------------------------
+LIVE INVESTIGATION, same session, after the check was stopped
+----------------------------------------------------------------------
+
+Debug logging was switched on (ConspiracyFiles.logLevel("d")) in the running
+game, which is where the reason had been hiding:
+
+  [CF] t=11:24 lvl=d ev=skip doc=generated:169009590:document-5 why=no-containers
+  [CF] t=11:25 lvl=d ev=defer why=gap n=0 due=02:10 rung=0
+  ... repeating, once every one to two in-game minutes
+
+The `ev=defer why=gap` line governs the NEXT CASE and is unrelated. The
+`ev=skip ... why=no-containers` line is the waiting clue, and only document-5
+is ever named: the filler takes one waiting clue per attempt (P4-R133).
+
+WHERE THE SURVIVOR WAS STANDING
+  10855,10101,0 — room "NO ROOM - OUTSIDE", no building, isOutside() true.
+  The harness's goToWaitingSite had stepped back 25 tiles east of the site at
+  10830,10101 to clear StaleClue's proximity guard, which put the survivor in
+  the street.
+
+ONE READING TRIED AND DISPROVED
+  The filler closure caches `scan` and nils it when a scan completes without a
+  target, which reads like a one-shot scan that is never retried. It is not:
+  GeneratedRuntime line 2204 calls filler(api) afresh every 120 ticks, so each
+  attempt builds a new closure and a new boundsScan. Checked before it was
+  written down.
+
+WHAT WAS MEASURED AT THE SITE
+  Sampling a 23x21 box around 10830,10101 at z=0 (483 squares):
+
+    containers                 4
+    pass StorageChoices.fixedKind  4
+    explored                   4
+    currently holding a clue   0
+    free                       4
+    kinds                      counter=2, metal_shelves=1, shelves=1
+
+  So four eligible, explored, presently empty containers sit in that box while
+  the filler reports no-containers.
+
+NOT ESTABLISHED, AND DELIBERATELY NOT GUESSED AT
+  Why. Two candidate explanations, neither confirmed:
+    - the box sampled is not the site's real bounds (the site is the opaque
+      t3:10977704480342027; 10830,10101 is only where the harness stood), so
+      the four containers may lie outside the bounds boundsScan walks;
+    - usedPhysicalKeys() excludes a container that has already carried a clue
+      this session, and documents 2, 3 and 4 were placed at 10829,10100,
+      10829,10101 and 10829,10102 — inside the box — so three of the four may
+      still be spoken for although the survivor has since taken those clues.
+  Establishing which needs the site's own bounds and the used-key set, neither
+  of which is exposed to a check today.
+
+THE HARNESS DEFECT THIS EXPOSES
+  Whatever the cause, goToWaitingSite returns the survivor to the SAME site on
+  every move. If that site cannot supply a container, no number of moves will
+  change the answer, and the stage can only end at its safety boundary. The
+  design's own answer for a clue with nowhere to go is a different site, a
+  carrier, or expiry after three in-game days — none of which the harness
+  gives it.

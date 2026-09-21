@@ -1,0 +1,16 @@
+pz: launching session 20260921T152653
+pz: new world is loading
+pz: game loading took 58 seconds
+[CF] v=1 t=09:00 lvl=i ev=note mod=casefile msg="organiser issued"
+[CF-DEAD-AIR]|DISABLED|version=DEV-0.46.1-writing-rebuild|generated development session active
+[CF] v=1 t=09:00 lvl=i ev=address mod=address msg="Ready: 6796 shipped addresses for the whole map in 144 ms; nothing scanned or saved. Zoom in on the world map."
+pz: ready; use: tools/autotest/pz.sh eval 'return getPlayer():getX()'
+campaign: case 1: generated:169009590:case
+campaign: start                  cases 1 (0 finished) | record 0 | FILES questions 0 | NAMES 1 | PLACES 0 | Old 0/0 wrong | Evidence 0/0 wrong | order  | save 51995 B
+campaign: case 169009590:case: clue 1 of 4: Collection notice / GT-970
+campaign: case 169009590:case: clue 2 of 4: Dispatch amendment / GT-970
+campaign: case 169009590:case: clue 3 of 4: Dispatch returns / GT-970
+campaign: case 169009590:case: clue 4 of 4: Deposit refund / GT-970
+campaign: case 169009590:case: 2 clue(s) still waiting after 4 played, 0 dropped (statuses 5:deferred 6:deferred); loaded generated:169009590:document-5's own site t3:10977704480342027 at 10830,10101 and stepped back to 10855,10101, move 1
+campaign: case 169009590:case: 2 clue(s) still waiting after 4 played, 0 dropped (statuses 5:deferred 6:deferred); loaded generated:169009590:document-5's own site t3:10977704480342027 at 10830,10101 and stepped back to 10855,10101, move 2
+campaign: case 169009590:case: 2 clue(s) still waiting after 4 played, 0 dropped (statuses 5:deferred 6:deferred); loaded generated:169009590:document-5's own site t3:10977704480342027 at 10830,10101 and stepped back to 10855,10101, move 3

@@ -990,15 +990,34 @@ end
 -- let the caller fail on a bounded lack of change in the fingerprint. Wall
 -- clock stays as an outer safety boundary only.
 --
+-- LIVENESS IS NOT PROGRESS, and the first version of this function mixed
+-- them. Scheduler step counts rise on every poll whatever happens - measured
+-- 2026-09-21, the filler ran 70,019 -> 70,054 steps in eleven seconds while
+-- `deferred=2 placed=4` did not move and had not moved for eight in-game
+-- hours. A fingerprint containing those counts can never be flat, so a stall
+-- detector built on it is exactly as blind as the wall clock it replaced.
+--
+-- This is the trap WRITING_REBUILD_LINUX_REPORT_2026-09-21 named in its own
+-- words - "a rising scheduler step count proves execution, not useful
+-- progress and not eventual completion" - and the first version of this code
+-- walked into it.
+--
+-- So the two are separate fields. `work` is what must change for a stage to
+-- be getting anywhere; `liveness` is reported so a run can tell a wedged job
+-- from a busy one, and is never compared.
+--
 -- Fields, tab separated:
---   1 fingerprint   the whole thing as one comparable string
---   2 steps         scheduler steps run, all subsystems
---   3 queued        scheduler jobs waiting
---   4 preparing     the generator's own busy flag
---   5 nearby        the nearby scan's phase:index:scanned:ticks:steps
---   6 assignments   clue statuses across every case
---   7 known         how many clues the survivor has found
---   8 cases         how many cases exist
+--   1 work        THE PROGRESS FINGERPRINT: clue statuses, clues found, case
+--                 count, preparing flag, and the nearby scan's
+--                 phase:index:scanned. Compare this one.
+--   2 liveness    scheduler steps and queued jobs. Report, never compare.
+--   3 steps       scheduler steps run, all subsystems
+--   4 queued      scheduler jobs waiting
+--   5 preparing   the generator's own busy flag
+--   6 nearby      the nearby scan's phase:index:scanned:ticks:steps
+--   7 assignments clue statuses across every case
+--   8 known       how many clues the survivor has found
+--   9 cases       how many cases exist
 function C.progress()
     local m = R.metrics() or {}
     local function fold(t)
@@ -1011,19 +1030,23 @@ function C.progress()
         return table.concat(parts, ",")
     end
     local steps, queued = fold(m.steps), fold(m.queued)
-    local nearby = "none"
+    local nearby, nearbyWork = "none", "none"
     local T3 = ConspiracyFiles.T3Nearby
     local pr = T3 and T3.progress and T3.progress()
     if pr then
-        nearby = table.concat({tostring(pr.phase), tostring(pr.index), tostring(pr.scanned),
-            tostring(pr.ticks), tostring(pr.steps)}, ":")
+        -- ticks and steps belong to liveness; phase, cursor and scanned count
+        -- are the scan actually getting somewhere.
+        nearbyWork = table.concat({tostring(pr.phase), tostring(pr.index),
+            tostring(pr.scanned)}, ":")
+        nearby = nearbyWork .. ":" .. tostring(pr.ticks) .. ":" .. tostring(pr.steps)
     end
     local status = R.automaticStatus()
     local known = #R.known()
     local assignments = C.assignments()
-    local fingerprint = table.concat({steps, queued, tostring(status.preparing), nearby,
-        assignments, tostring(known), tostring(status.count)}, "|")
-    return fingerprint, steps, queued, tostring(status.preparing), nearby, assignments,
+    local work = table.concat({assignments, tostring(known), tostring(status.count),
+        tostring(status.preparing), nearbyWork}, "|")
+    local liveness = steps .. "|" .. queued
+    return work, liveness, steps, queued, tostring(status.preparing), nearby, assignments,
         tostring(known), tostring(status.count)
 end
 

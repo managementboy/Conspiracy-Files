@@ -232,7 +232,15 @@ play_case() { # play_case CASEID [LIMIT]: find, take and inspect its next clues
         fi
         [ "${waiting:-0}" -gt 0 ] 2>/dev/null || return 0
         # Something is still waiting for a container. A player walks on; so do we.
-        local now_progress; now_progress="$(ev 'return CFCamp.progress()' | field 1)"
+        # FIELD 1 IS WORK, FIELD 2 IS LIVENESS, AND ONLY WORK IS COMPARED.
+        # The first version compared a fingerprint that included scheduler step
+        # counts, which rise on every poll whatever happens: measured
+        # 2026-09-21, the filler ran 70,019 -> 70,054 steps in eleven seconds
+        # while `deferred=2 placed=4` had not moved for eight in-game hours.
+        # Comparing that is exactly as blind as the wall clock it replaced.
+        local sample now_progress now_liveness
+        sample="$(ev 'return CFCamp.progress()')"
+        now_progress="$(field 1 "$sample")"; now_liveness="$(field 2 "$sample")"
         if [ -z "$now_progress" ]; then
             harness "case ${cid#generated:}: CFCamp.progress() returned nothing, so no stall could be judged"
             return 1
@@ -241,15 +249,16 @@ play_case() { # play_case CASEID [LIMIT]: find, take and inspect its next clues
         else
             flat=0; last_progress="$now_progress"
         fi
-        # Six consecutive moves with not one counter moving. Each move is a
-        # teleport plus at least 120 s of waiting below, so this is minutes of
-        # the mod being given work and doing nothing measurable with it.
-        if [ "$flat" -ge 6 ]; then
-            fail "case ${cid#generated:}: $waiting clue(s) waiting and NOTHING ADVANCED over $flat moves - scheduler steps, queued jobs, the nearby scan, clue statuses, clues found and case count are all unchanged at [$now_progress] (assignments $(ev 'return CFCamp.assignments()'); $(promise_words "$(promise)"))"
+        # Four consecutive moves in which no clue changed status, no clue was
+        # found and no case appeared. Each move is a teleport plus at least
+        # 120 s of waiting below, so this is many minutes of the mod being
+        # given work and completing none of it.
+        if [ "$flat" -ge 4 ]; then
+            fail "case ${cid#generated:}: $waiting clue(s) waiting and NO WORK WAS COMPLETED over $flat moves - clue statuses, clues found, case count, preparing flag and the nearby scan's phase/cursor are all unchanged at [$now_progress], while the scheduler kept running [$now_liveness], so the mod is busy and getting nowhere (assignments $(ev 'return CFCamp.assignments()'); $(promise_words "$(promise)"))"
             return 1
         fi
         if [ "$(date +%s)" -ge "$deadline" ]; then
-            unexercised "case ${cid#generated:}: $waiting clue(s) had not reached a container when the 45-minute safety boundary stopped the stage; the mod was still advancing ([$now_progress], flat for $flat of the last moves), so this is a stage that ran out of time on this machine, not an observed product failure"
+            unexercised "case ${cid#generated:}: $waiting clue(s) had not reached a container when the 45-minute safety boundary stopped the stage; work was still completing ([$now_progress], flat for $flat of the last moves), so this is a stage that ran out of time on this machine, not an observed product failure"
             return 1
         fi
         moves=$((moves + 1))
@@ -258,7 +267,18 @@ play_case() { # play_case CASEID [LIMIT]: find, take and inspect its next clues
         # Storage only sees loaded squares. So the survivor goes back to the
         # site the clue belongs to, which is what a player does when a case
         # still has something at the warehouse.
-        at="$(ev "return CFCamp.goToWaitingSite([[$cid]])")"
+        # A SITE THAT CANNOT SUPPLY WILL NOT START SUPPLYING. Returning to the
+        # same site on every move is what the first version did, and a site
+        # whose eligible containers are used up answers `no-containers` however
+        # many times it is asked (20260921T133647). The design's own answers for
+        # a clue with nowhere to go are a different neighbourhood, a carrier, or
+        # expiry after three in-game days - so after three attempts at its own
+        # site, the survivor moves on and lets those happen.
+        if [ "$moves" -le 3 ]; then
+            at="$(ev "return CFCamp.goToWaitingSite([[$cid]])")"
+        else
+            at="false	its own site was tried three times and answered no-containers"
+        fi
         if [ "$(field 1 "$at")" = true ]; then
             findings+=("case ${cid#generated:}: $waiting clue(s) still waiting after $PLAYED played, $dropped dropped (statuses $(field 5 "$r")); loaded $(field 2 "$at")'s own site $(field 3 "$at") at $(field 4 "$at") and stepped back to $(field 6 "$at"), move $moves")
             say "${findings[-1]}"
