@@ -69,38 +69,56 @@ print("PASS room affinity: Storage.scan joins usable room names only, never gues
 -- 3. Session.createDistributed ordering -------------------------------------
 local G=require("ConspiracyFiles/Generated/Generator")
 local S=require("ConspiracyFiles/Generated/Session")
--- Seed 395 against the shared synthetic fixture deterministically produces:
---   document-1 dispatch    @ synthetic-site-06
---   document-2 receipt     @ synthetic-site-04
---   document-3 notepad     @ synthetic-site-04
---   document-4 idcard      @ synthetic-site-06
--- with 2 required distinct containers at each of synthetic-site-06/-04.
--- The seed moved from 17 to 395 when Phase 3 added three roles to the optional
--- pool (2026-09-09): a wider pool changes both which documents a given seed
--- draws and how many, and twenty premises (2026-09-09) shifted every draw
--- again. Pinning a seed made this test re-pin on every generator change, so it
--- now SEARCHES for the shape it needs - four documents, these four carriers,
--- the pairs on one site each - instead of asserting that one seed still
--- produces it. This test is about room-aware placement, not about which seed
--- happens to produce the arrangement.
-local case,byKind
+-- REDESIGNED 2026-09-21. This section used to need four documents arranged two
+-- at each of two sites, and searched four thousand seeds for one. No seed can
+-- produce that any more, and for a reason rather than by accident: the rebuild
+-- puts exactly ONE clue at the first site - the house the survivor is standing
+-- in, P4-R66 - and the rest at the partner site. Measured across 3,000 seeds,
+-- every case is a 1 + N split. The old arrangement describes a world that no
+-- longer exists.
+--
+-- Rewriting the expected slots to match whatever the code now does would have
+-- blessed the code with its own behaviour, so instead the SHAPE is found and
+-- the expectations are the test's own. The affinities below are stated here,
+-- not read from RoomAffinity, so that this test can still disagree with it.
+local WORK={office=true,toolstore=true,garagestorage=true}     -- dispatch, receipt, notepad
+local PERSONAL={bedroom=true,livingroom=true}                  -- letter, diary, photograph
+local FITS={
+    dispatch=WORK, receipt=WORK, notepad=WORK,
+    letter=PERSONAL, diary=PERSONAL, photograph=PERSONAL,
+    idcard={bedroom=true,livingroom=true,office=true},
+}
+-- A case with one clue at the first site and three at the second, where the
+-- three include something that belongs in a workroom and something that
+-- belongs in a living space - so a preference has somewhere to point.
+local case,lone,busy,trio
 for seed=1,4000 do
     local candidate=G.generate(dofile("test/fixtures/synthetic_locations.lua"),seed,
         {mapId="SYNTHETIC-MAP",buildLine="TEST-ONLY",allowSynthetic=true})
     if candidate and #candidate.documents==4 then
-        local k={}
-        for _,d in ipairs(candidate.documents) do k[d.kind]=d end
-        if k.dispatch and k.receipt and k.notepad and k.idcard
-            and k.dispatch.locationId==k.idcard.locationId
-            and k.receipt.locationId==k.notepad.locationId then
-            case,byKind=candidate,k; break
+        local bySite={}
+        for _,d in ipairs(candidate.documents) do
+            bySite[d.locationId]=bySite[d.locationId] or {}
+            table.insert(bySite[d.locationId],d)
+        end
+        local one,three
+        for site,docs in pairs(bySite) do
+            if #docs==1 then one=site elseif #docs==3 then three=site end
+        end
+        if one and three then
+            local work,personal=false,false
+            for _,d in ipairs(bySite[three]) do
+                if FITS[d.kind]==WORK then work=true end
+                if FITS[d.kind]==PERSONAL then personal=true end
+            end
+            if work and personal then
+                case,lone,busy,trio=candidate,one,three,bySite[three]; break
+            end
         end
     end
 end
-assert(case,"no seed in 1..4000 produced the four-document arrangement this test needs")
-local dispatchSite,idcardSite=byKind.dispatch.locationId,byKind.idcard.locationId
-local receiptSite,notepadSite=byKind.receipt.locationId,byKind.notepad.locationId
-assert(dispatchSite==idcardSite and receiptSite==notepadSite, "fixture assumption changed; update this test")
+assert(case,"no seed in 1..4000 produced a one-plus-three case carrying both a "
+    .."workroom document and a living-space one")
 
 local function candidatesFor(case)
     local choices={}
@@ -117,21 +135,50 @@ local function sameTarget(a,b) return a and b and a.x==b.x and a.y==b.y and a.z=
 
 -- 3a. Fitting room preferred; falls back to a non-fitting room when nothing
 --     fits; generation still succeeds either way.
+--
+-- Candidate 1 is a bathroom, which nothing in FITS belongs in. Candidate 2 is
+-- a toolstore, candidate 3 a livingroom. Three documents, three candidates:
+-- whoever prefers something takes it, and the one left over must still be
+-- placed - in the bathroom, which fits nothing.
 local choices=candidatesFor(case)
 local rooms={
-    [dispatchSite]={[1]="bathroom",[2]="office",[3]="bedroom"},
-    [receiptSite]={[1]="toolstore",[2]="bedroom"}, -- [3] left unset: absent name, never guessed
+    [lone]={[1]="bathroom",[2]="office",[3]="bedroom"},
+    [busy]={[1]="bathroom",[2]="toolstore",[3]="livingroom"},
 }
 local root=assert(S.createDistributed(case,choices,rooms))
-assert(sameTarget(root.assignments[byKind.dispatch.id].target,choices[dispatchSite][2]),
-    "dispatch (office/toolstore/garagestorage) must prefer the office candidate over the bathroom one")
-assert(sameTarget(root.assignments[byKind.idcard.id].target,choices[dispatchSite][3]),
-    "idcard (bedroom/livingroom/office) must take the remaining fitting bedroom candidate")
-assert(sameTarget(root.assignments[byKind.receipt.id].target,choices[receiptSite][1]),
-    "receipt (office/toolstore/garagestorage) must prefer the toolstore candidate")
-assert(sameTarget(root.assignments[byKind.notepad.id].target,choices[receiptSite][2]),
-    "notepad must fall back to the first unused (non-fitting) candidate when nothing fits, and still succeed")
-print("PASS room affinity: fitting room preferred; safe fallback to a non-fitting room when nothing fits")
+local loneDoc
+for _,d in ipairs(case.documents) do if d.locationId==lone then loneDoc=d end end
+assert(sameTarget(root.assignments[loneDoc.id].target,
+    FITS[loneDoc.kind]==PERSONAL and choices[lone][3] or choices[lone][2]),
+    loneDoc.kind.." must take the room it belongs in, not simply the first candidate")
+
+-- In document order, the first one that belongs in the toolstore must get it,
+-- and the first that belongs in the livingroom must get that.
+local firstWork,firstPersonal
+for _,d in ipairs(trio) do
+    if not firstWork and FITS[d.kind] and FITS[d.kind].toolstore then firstWork=d end
+    if not firstPersonal and FITS[d.kind] and FITS[d.kind].livingroom then firstPersonal=d end
+end
+assert(sameTarget(root.assignments[firstWork.id].target,choices[busy][2]),
+    firstWork.kind.." belongs in a workroom and must prefer the toolstore over the bathroom")
+assert(sameTarget(root.assignments[firstPersonal.id].target,choices[busy][3]),
+    firstPersonal.kind.." belongs in a living space and must take the livingroom candidate")
+local leftover
+for _,d in ipairs(trio) do if d~=firstWork and d~=firstPersonal then leftover=d end end
+assert(sameTarget(root.assignments[leftover.id].target,choices[busy][1]),
+    leftover.kind.." must fall back to the remaining bathroom candidate, and still be placed")
+-- All three landed somewhere different, which is the point of the fallback
+-- being a fallback and not a collision.
+local seenHere={}
+for _,d in ipairs(trio) do
+    local t=root.assignments[d.id].target
+    local key=t.x..":"..t.y..":"..t.objectIndex
+    assert(not seenHere[key],"two documents at one site shared a container")
+    seenHere[key]=true
+end
+print(string.format("PASS room affinity: fitting room preferred (%s -> toolstore, %s -> livingroom); "
+    .."%s falls back to a non-fitting room and is still placed",
+    firstWork.kind,firstPersonal.kind,leftover.kind))
 
 -- 3b. Omitting `rooms` is byte-identical to the pre-Phase-2 behaviour: pure
 --     sequential first-unused-candidate assignment per site, in document
@@ -142,32 +189,51 @@ for _,doc in ipairs(case.documents) do
     assert(sameTarget(baselineOmitted.assignments[doc.id].target,baselineExplicitNil.assignments[doc.id].target),
         "omitting rooms vs. passing rooms=nil must be identical")
 end
-assert(sameTarget(baselineOmitted.assignments[byKind.dispatch.id].target,choices[dispatchSite][1]))
-assert(sameTarget(baselineOmitted.assignments[byKind.idcard.id].target,choices[dispatchSite][2]))
-assert(sameTarget(baselineOmitted.assignments[byKind.receipt.id].target,choices[receiptSite][1]))
-assert(sameTarget(baselineOmitted.assignments[byKind.notepad.id].target,choices[receiptSite][2]))
+-- Pure sequential, in document order, first unused candidate per site: the
+-- lone document takes candidate 1 at its site, and the three take 1, 2, 3 at
+-- theirs, whatever any room would have preferred.
+assert(sameTarget(baselineOmitted.assignments[loneDoc.id].target,choices[lone][1]))
+for i,d in ipairs(trio) do
+    assert(sameTarget(baselineOmitted.assignments[d.id].target,choices[busy][i]),
+        "sequential assignment must ignore rooms entirely")
+end
 print("PASS room affinity: omitting `rooms` reproduces the exact pre-Phase-2 sequential assignment")
 
 -- 3c. Distinct-container guarantee still holds when `rooms` is supplied: a
 --     preference that would land two documents on the same physical
 --     container is still rejected.
 local collide=candidatesFor(case)
-collide[dispatchSite][1]=collide[dispatchSite][2] -- candidate 1 and 2 are now the same physical container
-local collideRooms={[dispatchSite]={[1]="bathroom",[2]="office",[3]="bathroom"}}
--- dispatch prefers idx2 (office); idcard's only remaining fit (idx3) is
--- removed above so it falls back to idx1, which is now a duplicate of idx2.
+collide[busy][1]=collide[busy][2] -- candidate 1 and 2 are now the same physical container
+local collideRooms={[busy]={[1]="bathroom",[2]="toolstore",[3]="bathroom"}}
+-- The workroom document prefers idx2 (toolstore); the living-space document's
+-- fit at idx3 is a bathroom here, so it falls back to idx1 - which is now a
+-- duplicate of idx2.
 -- Since 2026-09-11 the selector steps past a container another document
 -- already holds instead of refusing the whole case (a car shared by two sites
 -- crashed the playtest). The guarantee is unchanged: never two in one.
 local spread=assert(S.createDistributed(case,collide,collideRooms),
     "a duplicate candidate must be skipped, not refuse the case")
-local held={}
+-- Three documents at that site and, after the collapse, only two distinct
+-- containers to hold them. One of them CANNOT be placed, and an unplaced
+-- document carries no target - that is the honest outcome, not a collision.
+-- What must never happen is two documents in one container.
+local held,placed=0,0
+local seen={}
 for _,a in pairs(spread.assignments) do
     local t=a.target
-    local key=table.concat({t.x,t.y,t.z,t.objectIndex,t.containerIndex,t.vehiclePart or "-"},":")
-    assert(not held[key],"two documents must never share one physical container")
-    held[key]=true
+    if t then
+        placed=placed+1
+        local key=table.concat({t.x,t.y,t.z,t.objectIndex,t.containerIndex,t.vehiclePart or "-"},":")
+        assert(not seen[key],"two documents must never share one physical container")
+        seen[key]=true
+    end
 end
+for _ in pairs(seen) do held=held+1 end
+assert(held==placed,"every placed document must hold a container of its own")
+-- The lone site keeps its three, the busy site is down to two: four placed of
+-- four documents would mean the collapse was not honoured.
+assert(placed<#case.documents,
+    "collapsing two candidates must cost a placement, not be quietly absorbed")
 -- The plain sequential path has no selector to step past it, so it still refuses.
 assert(not S.createDistributed(case,collide),
     "a repeated physical container must still be rejected on the sequential path")
@@ -185,8 +251,30 @@ for _,site in ipairs(case.locations) do
     for i=1,3 do noFitRooms[site.id][i]="derelict" end -- fits no kind in RoomAffinity
 end
 local rootNoFit=assert(S.createDistributed(case,noFit,noFitRooms), "generation must never fail because no room fits")
+-- CHANGED 2026-09-21, and the owner should know it changed.
+--
+-- This used to require that when no room fits anything, the result is
+-- BYTE-IDENTICAL to the sequential baseline - always the first unused
+-- candidate. It no longer is: with every room named "derelict" the lone
+-- receipt went to candidate 3 where the sequential path puts it at
+-- candidate 1. That is the placement-variety work showing through; the
+-- selector spreads across the candidates on a seed instead of always taking
+-- the first one, which is what stopped every clue landing in the same kitchen
+-- cupboard (docs/design/CLUE_PLACEMENT_VARIETY.md).
+--
+-- So the claim is narrowed to what this section is actually for, per
+-- docs/research/T3_LOCATION_CATEGORISATION.md: generic room categorisation is
+-- not reliable enough to GATE generation. A room nobody recognises must never
+-- cost a placement. It is not, and never was, a promise about which drawer.
+local placedNoFit,seenNoFit=0,{}
 for _,doc in ipairs(case.documents) do
-    assert(sameTarget(rootNoFit.assignments[doc.id].target,baselineOmitted.assignments[doc.id].target),
-        "when nothing fits anywhere, assignment must match the sequential fallback exactly")
+    local t=rootNoFit.assignments[doc.id].target
+    assert(t,doc.kind.." was left unplaced merely because no room name was recognised")
+    local key=table.concat({t.x,t.y,t.z,t.objectIndex,t.containerIndex},":")
+    assert(not seenNoFit[key],"two documents shared a container when no room fitted")
+    seenNoFit[key]=true; placedNoFit=placedNoFit+1
 end
-print("PASS room affinity: generation never fails when no room fits anything; fallback matches baseline exactly")
+assert(placedNoFit==#case.documents,
+    "an unrecognised room must never cost a placement")
+print(string.format("PASS room affinity: an unrecognised room costs no placement - all %d documents "
+    .."still placed, none sharing a container",placedNoFit))
