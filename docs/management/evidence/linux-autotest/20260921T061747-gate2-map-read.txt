@@ -1,0 +1,34 @@
+Annotated map read through the player's own path — native acceptance gate 2 (partial)
+source: cd1fa55 (DEV-0.46.0-writing-rebuild)
+renderer: Mesa llvmpipe (SOFTWARE), hidden run
+
+MADE THE GAME'S OWN WAY, NOT STAMPED BY THE TEST
+  stash = StashSystem.getStash("BBurgStashMap1")
+  map   = instanceItem(stash:getItem())
+  StashSystem.doStashItem(stash, map)
+  -> map:getStashMap() = "BBurgStashMap1"
+  This is the same engine call the game's own stash debug panel uses.
+
+OPENED THE WAY A PLAYER OPENS IT
+  ISInventoryPaneContextMenu.createMenu(0,true,{map},10,10) built the real
+  right-click menu; its "Read Map" option was selected exactly as a click does.
+  -> returned without error
+
+THE MOD RESPONDED: CONFIRMED
+  coverage("BBurgStashMap1").active  false -> true, buildings = 1
+
+AN ORDINARY MAP MUST NOT START A TRAIL: CONFIRMED
+  A plain Base.RosewoodMap with no stash (getStashMap() = nil), read through
+  the same menu path, left the active-trail count unchanged at 1. The mod
+  discriminates correctly and ignores the ordinary maps a player will collect.
+
+WHAT THIS DOES NOT ESTABLISH
+  - The map was constructed in code, not found in world loot. Whether annotated
+    maps appear often enough in ordinary play to carry the feature is a separate
+    question about the game's distribution tables, measured earlier as roughly
+    two map items per 1,000 containers.
+  - No human right-clicked; the menu was built and its option invoked through
+    the game's own functions.
+  - Cancelled/repeated reads, duplicate physical copies, the three paced local
+    parts, the destination payoff, a missed fragment on a later journey and
+    destination-first discovery are NOT covered here.
