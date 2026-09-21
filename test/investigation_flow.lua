@@ -68,4 +68,43 @@ local tamperedRelevant=assert(F.restore(forward,{},3,24,24)).state; tamperedRele
 local foreignLearned=assert(F.restore(forward,{},3,24,24)).state; foreignLearned.learned.ghost={}; assert(not F.validate(foreignLearned),"foreign timing root rejects")
 assert(not F.restore(F.new(),{},-1,1,1) and not F.restore(F.new(),{},0,1000001,1),"empty roots still require bounded archive/update clock")
 assert(not F.discover(forward,p1.case.caseId,p1.case.documents[2].id,0,{}),"discovery clock cannot move backwards")
+-- THE THIRD-SOURCE GATE (added 2026-09-21 with the derive repair).
+-- A finding can require three sources. When the third arrives, the comparison
+-- becomes supported although BOTH its endpoints were already known - the newly
+-- found document is neither of them. The old rule took "the other endpoint of
+-- the relation and required it to be previously known", which does nothing at
+-- all in that case, while Updates.validate demanded an event for every
+-- supported relation. The state the code produced was one its own validator
+-- refused. Both halves now agree: the affected record is the earlier endpoint
+-- in discovery order, and the event is stamped when the finding became
+-- supported - the THIRD document's hour, not the later endpoint's.
+local Updates=require("InterpretationUpdates")
+local threeSource
+for _,finding in ipairs(p1.case.story.comparisons or {}) do
+ if #(finding.requires or {})>=3 then threeSource=finding end
+end
+if threeSource then
+ -- Discover the two endpoints first, then a source that is neither.
+ local a,b=threeSource.from,threeSource.to
+ local third
+ for _,id in ipairs(threeSource.requires) do if id~=a and id~=b then third=id end end
+ assert(third,"a three-source finding must need a document beyond its two endpoints")
+ local st=assert(F.commit(F.new(),p1,ready(p1.siteIds),cfg,request(p1,0),{},function() return true end))
+ st=assert(F.discover(st,p1.case.caseId,a,1,{}))
+ st=assert(F.discover(st,p1.case.caseId,b,2,{}))
+ local before=Updates.derive(st.cases[p1.case.caseId],st.known[p1.case.caseId])
+ assert(before[Updates.id(a,{kind=threeSource.kind,target=b})]==nil,
+  "a finding needing a third source must not be supported by two")
+ st=assert(F.discover(st,p1.case.caseId,third,3,{}),"the third source must be discoverable")
+ local id=Updates.id(a,{kind=threeSource.kind,target=b})
+ local event=st.updates[p1.case.caseId][id]
+ assert(event,"the third source must raise an update for the finding it completes")
+ assert(event.affected==a,"the earlier endpoint is the record whose meaning changed")
+ assert(event.at==3,"the update is stamped when the finding became supported, not when its endpoints were read")
+ assert(F.validate(st),"the resulting state must satisfy the prototype's own validator")
+ print("PASS InvestigationFlow: a third source completes a finding between two already-known records")
+else
+ print("NOTE InvestigationFlow: this fixture has no three-source finding; that gate was not exercised")
+end
+
 print("PASS InvestigationFlow: two-case ordering, bounded commit, readiness revalidation, discovery, restore, and aggregate budget")

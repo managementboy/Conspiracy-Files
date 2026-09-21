@@ -6,7 +6,32 @@ local function exact(t) if type(t)~="table" or t.at==nil or t.affected==nil then
 function U.id(source,link) return source.."\31"..link.kind.."\31"..link.target end
 function U.derive(case,known)
  local seen,events={},{}; for _,id in ipairs(known) do seen[id]=true end
- for _,doc in ipairs(case.documents) do if seen[doc.id] then for _,link in ipairs(doc.links) do if seen[link.target] then events[U.id(doc.id,link)]={source=doc.id,target=link.target} end end end end
+ -- A COMPARISON IS A PROPERTY OF THE PROJECTION, NOT OF THE STORED CASE.
+ -- This read doc.links, which Generated/Story.lua correctly leaves empty:
+ -- a comparison only exists once every source it requires is known, so it
+ -- cannot be a field on a document. Measured 2026-09-21 against generated
+ -- cases: 0 events derived here against 3-4 projected connections each, so no
+ -- update was ever recorded and test/investigation_flow failed because nothing
+ -- was marked - not because the wrong thing was.
+ --
+ -- The authored comparisons carry their own `requires`, and a finding counts
+ -- only when ALL of them are known. That is the same gate Story.project
+ -- applies when it decides whether to show the sentence.
+ local story=case.story
+ for _,finding in ipairs(story and story.comparisons or {}) do
+  local supported=true
+  for _,id in ipairs(finding.requires or {}) do if not seen[id] then supported=false; break end end
+  if supported and seen[finding.from] and seen[finding.to] and finding.from~=finding.to then
+   -- `requires` travels with the relation so a caller can ask WHEN it became
+   -- supported. For a three-source finding that is the third document's hour,
+   -- not the later endpoint's.
+   local needs={}; for i,id in ipairs(finding.requires or {}) do needs[i]=id end
+   events[U.id(finding.from,{kind=finding.kind,target=finding.to})]={source=finding.from,target=finding.to,requires=needs}
+  end
+ end
+ -- A case that does carry links is still read, so a hand-built fixture and an
+ -- older save keep working.
+ for _,doc in ipairs(case.documents) do if seen[doc.id] then for _,link in ipairs(doc.links or {}) do if seen[link.target] then events[U.id(doc.id,link)]={source=doc.id,target=link.target} end end end end
  return events
 end
 function U.validate(events,case,known)

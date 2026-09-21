@@ -38,7 +38,7 @@ local function rootOK(state)
   local docs={}; for _,d in ipairs(case.documents) do docs[d.id]=true end
   for docId,context in pairs(byDoc) do if not text(docId,160) or not docs[docId] then return false,"encounter document does not match case" end local valid,why=Encounter.validate(context,case.locations[1].mapId); if not valid then return false,why end end
  end
- for id in pairs(state.cases) do if type(state.updates[id])~="table" then return false,"case lacks update root" end local valid,why=Updates.validate(state.updates[id],state.cases[id],state.known[id]); if not valid then return false,why end for relationId,event in pairs(state.updates[id]) do local relation=Updates.derive(state.cases[id],state.known[id])[relationId]; local expected=math.max(state.learned[id][relation.source],state.learned[id][relation.target]); if event.at~=expected then return false,"update timestamp does not match learned relation" end end end
+ for id in pairs(state.cases) do if type(state.updates[id])~="table" then return false,"case lacks update root" end local valid,why=Updates.validate(state.updates[id],state.cases[id],state.known[id]); if not valid then return false,why end for relationId,event in pairs(state.updates[id]) do local relation=Updates.derive(state.cases[id],state.known[id])[relationId]; local expected=math.max(state.learned[id][relation.source],state.learned[id][relation.target]); for _,needed in ipairs(relation.requires or {}) do local at=state.learned[id][needed]; if at and at>expected then expected=at end end; if event.at~=expected then return false,"update timestamp does not match learned relation" end end end
  for id in pairs(state.cases) do if type(state.learned[id])~="table" then return false,"case lacks learned root" end end
  for id in pairs(state.cases) do if type(state.relevance[id])~="table" then return false,"case lacks relevance root" end end
  for _,collection in ipairs({state.learned,state.relevance}) do for id in pairs(collection) do if not state.cases[id] then return false,"foreign evidence timing root" end end end
@@ -96,7 +96,20 @@ function F.discover(state,caseId,docId,nowHours,peers)
  local ok,why=rootOK(state); if not ok then return nil,why end; if not text(caseId,160) or not text(docId,160) or not state.cases[caseId] then return nil,"unknown case or document" end
  if type(nowHours)~="number" or nowHours~=nowHours or nowHours==math.huge or nowHours==-math.huge or nowHours<0 or nowHours>1000000 then return nil,"invalid discovery time" end
  local next=copy(state); for _,event in pairs(next.updates[caseId]) do if nowHours<event.at then return nil,"discovery clock precedes saved event" end end; local known=next.known[caseId]; for _,id in ipairs(known) do if id==docId then ok,why=budget(next,peers); if not ok then return nil,why end return next end end local exists=false; for _,d in ipairs(next.cases[caseId].documents) do if d.id==docId then exists=true end end; if not exists then return nil,"unknown case or document" end
- if #known>=3 then return nil,"known-document limit reached" end; local prior={}; for _,id in ipairs(known) do prior[id]=true end; known[#known+1]=docId; next.learned[caseId][docId]=nowHours; next.updates[caseId]=next.updates[caseId] or {}; next.relevance[caseId]=next.relevance[caseId] or {}; next.relevance[caseId][docId]=nowHours; for _,oldId in ipairs(Archive.relevant(next.cases[caseId],known,docId)) do next.relevance[caseId][oldId]=nowHours end; local relations=Updates.derive(next.cases[caseId],known); for id,relation in pairs(relations) do if not next.updates[caseId][id] then local affected=relation.source==docId and relation.target or relation.target==docId and relation.source or nil; if affected and prior[affected] then next.updates[caseId][id]={at=nowHours,affected=affected} end end end; ok,why=rootOK(next); if not ok then return nil,why end; ok,why=budget(next,peers); if not ok then return nil,why end return next
+ if #known>=3 then return nil,"known-document limit reached" end; local prior={}; for _,id in ipairs(known) do prior[id]=true end; known[#known+1]=docId; next.learned[caseId][docId]=nowHours; next.updates[caseId]=next.updates[caseId] or {}; next.relevance[caseId]=next.relevance[caseId] or {}; next.relevance[caseId][docId]=nowHours; for _,oldId in ipairs(Archive.relevant(next.cases[caseId],known,docId)) do next.relevance[caseId][oldId]=nowHours end; -- WHICH RECORD IS AFFECTED. The old rule took the other endpoint of the
+ -- relation and required it to be previously known. That is right whenever the
+ -- new document is one of the two endpoints, and silently does nothing when a
+ -- THIRD source is what made the comparison supported - both endpoints are then
+ -- already known and the newly found document is neither of them. Updates.validate
+ -- expects an event for every supported relation, with `affected` being the
+ -- earlier of the two in discovery order, so that case produced a state its own
+ -- validator refused.
+ -- One rule now covers both: the affected record is the earlier endpoint in
+ -- discovery order. When the new document is an endpoint it is necessarily the
+ -- later one, so this still flags the record the player already read - which is
+ -- the whole point, since its meaning has just changed under them.
+ local order={}; for i,id in ipairs(known) do order[id]=i end
+ local relations=Updates.derive(next.cases[caseId],known); for id,relation in pairs(relations) do if not next.updates[caseId][id] then local a,b=order[relation.source],order[relation.target]; local affected=(a and b and a<b) and relation.source or relation.target; if affected and affected~=docId and prior[affected] then next.updates[caseId][id]={at=nowHours,affected=affected} end end end; ok,why=rootOK(next); if not ok then return nil,why end; ok,why=budget(next,peers); if not ok then return nil,why end return next
 end
 function F.capture(state,caseId,docId,context,peers)
  local ok,why=rootOK(state); if not ok then return nil,why end
