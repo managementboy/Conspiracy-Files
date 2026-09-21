@@ -1,0 +1,40 @@
+Campaign gate — STOPPED mid-run, not a result — 2026-09-21
+source fc3693a / DEV-0.46.1-writing-rebuild
+
+I killed this run on the owner's decision to stop testing on this machine.
+The output file contains only "[killed]". Any automated "0 FAIL lines"
+reading of it is an artefact of the kill and means nothing.
+
+WHAT WAS OBSERVED BEFORE IT STOPPED, and this part is real:
+
+  cases=2
+
+  A SECOND CASE ARRIVED inside a gate run. That had not happened in this
+  session. Both earlier runs (20260921T074140, 20260921T111236) ended with
+  two cases only because case 2 crept in after the check had already given
+  up; this one produced it while the run was live, having played and retired
+  case 1 first.
+
+  The route there, from the counters:
+    case 1 prepared and retired
+    case 2: preparation completed (~64,400 steps), refused "no-containers"
+    cooldown imposed at that position (P4-R125), survivor moved on
+    ladder climbed to rung 1 of 3 on counted refusals
+    preparation resumed, ~142,816 steps, and case 2 appeared
+
+  That is the generator working as designed, at this machine's speed.
+
+WHAT THIS DOES NOT ESTABLISH
+  Nothing about the gate's verdict. Case 3, the answer-steering, the archive
+  and reload stages were never reached. The fixture's own stale assumptions
+  (the literal "Duty log / " title, rowless-stub archive expectations, the
+  "5 of 3 clues" counter) still need aligning before any run of it counts as
+  acceptance - see WRITING_REBUILD_LINUX_REPORT_2026-09-21.md.
+
+WHY IT WAS STOPPED
+  This machine renders in software at about 7 frames a second and the mod
+  paces every bounded job per frame, so one case costs roughly 13 minutes
+  here against about 80 seconds at 60 fps. Every acceptance question costs an
+  hour. The owner's build is published and playable; judging the writing by
+  playing it is both faster and the only way to answer the questions that
+  actually matter.
