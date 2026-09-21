@@ -1,0 +1,41 @@
+First case delay — measured and explained 2026-09-21
+source 79576ee+ / DEV-0.46.0-writing-rebuild, Linux hidden run (Mesa llvmpipe)
+
+THE SYMPTOM
+  tools/autotest/checks/campaign.sh aborted with "no first case". It waits
+  120 s (campaign.sh:313). The whole "History and storage" gate sat behind it.
+
+MEASURED, fresh world, polled every 8-15 s
+  Before any change:  first case at 504 s+ (probe started ~230 s in)
+  After the change below: first case at 431 s, split
+      metadata extraction  ~105 s   (T3Nearby, 9,978 buildings)
+      everything after     ~325 s   (reachability, container scan, generation)
+
+WHY IT IS NOT AN EIGHT-MINUTE BUG
+  The mod's own log for the metadata phase:
+      scanned=9978  frames=678  peakMs=6  callbacksOver2Ms=18
+  678 frames took ~105 s of wall clock, so this run managed about 6.5 frames
+  per second. Every bounded job in the mod is paced PER FRAME (Scheduler:
+  48 steps or 2 ms a frame; T3Nearby: 24 steps or 1 ms a tick), so wall-clock
+  time here is a measure of the harness, not of the work.
+
+  At 60 fps the same 678 frames is about 11 seconds, and the whole 431 s wait
+  scales to roughly 47 seconds to a first case. Slow, worth improving, not the
+  eight-minute fault it looked like. No conclusion about the owner's machine is
+  drawn from a software-rendered run; the FRAME COUNTS above are the portable
+  number, not the seconds.
+
+ONE REAL FIX MADE
+  T3Nearby's scan called b:getRooms() on every one of the 9,978 buildings and
+  then threw the result away on the next line if the building was out of reach
+  - and the survivor's reach covers a few dozen. getRooms() crosses the
+  Lua/Java bridge and returns a collection. The distance test now runs first
+  and the room list is fetched only for a building that survives it. Same
+  class as the map-destination indexing fault fixed earlier today.
+
+CHECK CHANGED, DELIBERATELY
+  campaign.sh now waits CF_FIRST_CASE_WAIT (default 720 s) for the first case
+  instead of 120 s, with the reason written at the line. Refusing to wait cost
+  an entire acceptance gate; waiting costs nothing when no case comes.
+
+STATUS: FINDING recorded, one fix landed, gate unblocked.

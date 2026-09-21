@@ -1,0 +1,36 @@
+Physical objects restored — measured 2026-09-21
+source 79576ee / DEV-0.46.0-writing-rebuild, Linux hidden run (Mesa llvmpipe)
+
+WHAT WAS WRONG
+  The writing rebuild (789c18b) removed every generator call that turned an
+  object rule into a placed object. Nothing in the shipped mod required
+  EvidenceRoles any more. The catalogue (4,546 items), the eight object rules
+  and all their guards survived untouched; nothing called them.
+  Measured before: 0 objects across 400 generated cases. Every clue was paper.
+
+DECISION (owner, 2026-09-21)
+  Author objects into their events, rather than restoring rule-driven
+  attachment. Fewer objects, each meaning something, and the rebuild's rule -
+  optional evidence belongs to its authored event - stays intact.
+
+MEASURED AFTER (400 generated cases, synthetic fixture)
+  14 distinct objects, 71 placements: 51 single, 20 piles.
+  Longest object record 199 characters against a 240 cap.
+  Every object placed is a candidate of an object rule, so the firearm,
+  windfall, weight and calorie guards still bind on authored items.
+  Every single object carries the case person's name and claims nothing more.
+
+IN THE RUNNING GAME (fresh world, hidden)
+  All 14 authored ids resolve through EvidenceKinds to a real game item:
+  0 missing of 14.
+  Spawn and read-back of one: Base.Wrench, custom name "Wrench, marked Ines
+  Kubiak" retained, ModData retained, weight 1.
+  Boot check PASS at 79576ee: 124/124 files, 0 errors, player alive.
+
+SUITE
+  8 failing -> 2. The two left are not content:
+    room_affinity     needs a fixture redesigned by hand; fitting it to
+                      current behaviour would bless whatever the code does
+    investigation_flow tests dev/next-phase/, outside the shipped mod
+
+STATUS: PASS

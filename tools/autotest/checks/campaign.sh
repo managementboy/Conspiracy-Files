@@ -310,7 +310,14 @@ while :; do
     start_cold "${start_args[@]}" || abort "the game did not reach a playable world"
     load_lua || abort "could not load the check's Lua"
     wait_true 90 'ConspiracyFiles.GeneratedRuntime.metrics()~=nil' || abort "no case started"
-    wait_case_count 1 120 || abort "no first case"
+    # 120 s was calibrated when preparation was quick. Measured 2026-09-21 on
+    # this laptop: the first case takes about 430 s to appear, because a hidden
+    # software-rendered run manages roughly 6.5 frames a second and every
+    # bounded job in the mod is paced per frame. The metadata scan alone walks
+    # 9,978 buildings in 678 frames - about 11 s at 60 fps, 105 s here.
+    # Waiting 12 minutes costs nothing when no case comes; refusing to wait
+    # cost the whole history-and-storage gate.
+    wait_case_count 1 "${CF_FIRST_CASE_WAIT:-720}" || abort "no first case"
     case1="$(ev 'return CFCamp.newestLive()' | field 1)"
     week="$(ev "return CFCamp.memoWeek([[$case1]])")"
     if [ "$(field 1 "$week")" = true ] && [ "$(field 2 "$week")" -gt 0 ] 2>/dev/null; then break; fi

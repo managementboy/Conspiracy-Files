@@ -49,12 +49,24 @@ local function step()
         local b = j.buildings:get(j.index)
         j.index = j.index + 1
         j.scanned = j.scanned + 1
+        -- REJECT ON DISTANCE BEFORE TOUCHING THE ENGINE AGAIN. The map holds
+        -- about ten thousand buildings and the survivor's reach covers a few
+        -- dozen, so all but a handful of these are thrown away. getRooms()
+        -- crosses the Lua/Java bridge and returns a collection; asking every
+        -- building on the map for one, only to discard it on the next line,
+        -- was most of the cost of preparing a case. Measured 2026-09-21: the
+        -- first case took eight and a half minutes to appear.
+        --
+        -- The four coordinates are needed for the distance test itself, so
+        -- they stay. The room list is now fetched only for a building the
+        -- survivor could actually reach.
         local x,y,x2,y2 = b:getX(),b:getY(),b:getX2(),b:getY2()
-        if x2 <= x or y2 <= y or b:getRooms():size() == 0 then return end
+        if x2 <= x or y2 <= y then return end
         local dx = math.max(x-j.anchor.x, 0, j.anchor.x-(x2-1))
         local dy = math.max(y-j.anchor.y, 0, j.anchor.y-(y2-1))
         local d = dx*dx+dy*dy
         if d > j.radius*j.radius then return end
+        if b:getRooms():size() == 0 then return end
         local id = tostring(b:getIDString())
         j.candidate={id=id,distance2=d,engine=b,x=x,y=y,x2=x2,y2=y2}
         j.scanRooms,j.scanRoomIndex,j.names=b:getRooms(),0,{}
