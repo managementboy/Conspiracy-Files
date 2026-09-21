@@ -32,7 +32,12 @@ say() { echo "map-coverage: $*" >&2; }
 abort() { say "$*"; end_world; exit 2; }
 fails=(); rows=(); notexercised=(); findings=()
 fail() { fails+=("$*"); say "FAIL: $*"; }
-field() { cut -f"$1" <<<"$2"; }
+# BOTH FORMS, like campaign.sh's. This took only the value as $2 and ignored
+# stdin, while the goTo call pipes into it - so `ev ... | field 1` read an
+# empty string, every design was recorded "could not be travelled to", and the
+# run reached 0 of 125 while CFPlace.goTo("BBurgStashMap1") returns
+# `true 2174,6011` when asked directly.
+field() { if [ $# -ge 2 ]; then cut -f"$1" <<<"$2"; else cut -f"$1"; fi; }
 
 claim_game || exit 2
 start_world "${start_args[@]}" || abort "world did not start"
@@ -103,7 +108,15 @@ errors="$(mod_errors)"
 [ -z "$errors" ] || fail "errors inside the mod"
 "$PZ" stop >/dev/null 2>&1
 
-verdict=PASS; [ ${#fails[@]} -eq 0 ] || verdict=FAIL
+# A RUN THAT EXERCISED NOTHING IS NOT A PASS. The first version computed the
+# verdict from the failure list alone, so when every design refused to be
+# travelled to it printed PASS having measured zero of 125 - green by silence,
+# which is the exact failure this check was written to make impossible, in the
+# check itself (2026-09-21, first run: "designs reached in this run: 0" / PASS).
+verdict=PASS
+[ "$reached" -lt "$last" ] && verdict=PARTIAL
+[ "$reached" -eq 0 ] && verdict="COULD NOT RUN"
+[ ${#fails[@]} -eq 0 ] || verdict=FAIL
 report="$EVIDENCE/$first-map-coverage.txt"
 {
     echo "Linux map destination coverage, played: $verdict"
@@ -132,4 +145,11 @@ report="$EVIDENCE/$first-map-coverage.txt"
     echo "errors inside the mod: $(grep -c . <<<"$errors")"
 } > "$report.part"; mv "$report.part" "$report"
 cat "$report"
-[ "$verdict" = PASS ]
+# 0 only when every design in the requested range was reached and passed.
+# PARTIAL and COULD NOT RUN exit 2: neither is a pass, and neither may be
+# quoted as one.
+case "$verdict" in
+    PASS) exit 0 ;;
+    FAIL) exit 1 ;;
+    *) exit 2 ;;
+esac

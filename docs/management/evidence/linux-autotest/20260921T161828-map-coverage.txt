@@ -1,0 +1,145 @@
+Linux map destination coverage, played: PASS
+source: 8195828
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+
+designs in the catalogue: 125
+designs reached in this run: 0 (from 1 to 125)
+
+  geometry: a building or an area          0 of 0
+  payoff inserted, exactly one token       0 of 0
+  container identified and NOT a floor     0 of 0
+  target resolves AND a standable square   0 of 0
+
+PARTIAL RUN. 125 of the 125 designs were NOT EXERCISED.
+Complete it with: tools/autotest/checks/map_coverage.sh --from 126
+"All 125 destinations PASS" may not be written until reached == 125.
+
+design	buildings	areas	source	verdict	state	items	container	sprite	nonFloor	resolves	square	standable
+
+
+NOT EXERCISED: BBurgStashMap1: could not be travelled to
+NOT EXERCISED: BBurgStashMap2: could not be travelled to
+NOT EXERCISED: BBurgStashMap3: could not be travelled to
+NOT EXERCISED: BBurgStashMap4: could not be travelled to
+NOT EXERCISED: BBurgStashMap5: could not be travelled to
+NOT EXERCISED: BBurgStashMap6: could not be travelled to
+NOT EXERCISED: BBurgStashMap7: could not be travelled to
+NOT EXERCISED: BBurgStashMap8: could not be travelled to
+NOT EXERCISED: EkronStashMap1: could not be travelled to
+NOT EXERCISED: EkronStashMap2: could not be travelled to
+NOT EXERCISED: EkronStashMap3: could not be travelled to
+NOT EXERCISED: EkronStashMap4: could not be travelled to
+NOT EXERCISED: EkronStashMap5: could not be travelled to
+NOT EXERCISED: EkronStashMap6: could not be travelled to
+NOT EXERCISED: EkronStashMap7: could not be travelled to
+NOT EXERCISED: EkronStashMap8: could not be travelled to
+NOT EXERCISED: IrvingtonStashMap1: could not be travelled to
+NOT EXERCISED: IrvingtonStashMap2: could not be travelled to
+NOT EXERCISED: IrvingtonStashMap3: could not be travelled to
+NOT EXERCISED: IrvingtonStashMap4: could not be travelled to
+NOT EXERCISED: IrvingtonStashMap5: could not be travelled to
+NOT EXERCISED: IrvingtonStashMap6: could not be travelled to
+NOT EXERCISED: IrvingtonStashMap7: could not be travelled to
+NOT EXERCISED: IrvingtonStashMap8: could not be travelled to
+NOT EXERCISED: IrvingtonStashMap9: could not be travelled to
+NOT EXERCISED: IrvingtonStashMap10: could not be travelled to
+NOT EXERCISED: LouisvilleStashMap1: could not be travelled to
+NOT EXERCISED: LouisvilleStashMap2: could not be travelled to
+NOT EXERCISED: LouisvilleStashMap3: could not be travelled to
+NOT EXERCISED: LouisvilleStashMap4: could not be travelled to
+NOT EXERCISED: LouisvilleStashMap5: could not be travelled to
+NOT EXERCISED: LouisvilleStashMap6: could not be travelled to
+NOT EXERCISED: LouisvilleStashMap7: could not be travelled to
+NOT EXERCISED: LouisvilleStashMap8: could not be travelled to
+NOT EXERCISED: LouisvilleStashMap9: could not be travelled to
+NOT EXERCISED: LouisvilleStashMap10: could not be travelled to
+NOT EXERCISED: LouisvilleStashMap11: could not be travelled to
+NOT EXERCISED: LouisvilleStashMap12: could not be travelled to
+NOT EXERCISED: LouisvilleStashMap13: could not be travelled to
+NOT EXERCISED: LouisvilleStashMap14: could not be travelled to
+NOT EXERCISED: LouisvilleStashMap15: could not be travelled to
+NOT EXERCISED: LouisvilleStashMap16: could not be travelled to
+NOT EXERCISED: MarchRidgeStashMap1: could not be travelled to
+NOT EXERCISED: MarchRidgeStashMap2: could not be travelled to
+NOT EXERCISED: MarchRidgeStashMap3: could not be travelled to
+NOT EXERCISED: MarchRidgeStashMap4: could not be travelled to
+NOT EXERCISED: MarchRidgeStashMap5: could not be travelled to
+NOT EXERCISED: MarchRidgeStashMap6: could not be travelled to
+NOT EXERCISED: MarchRidgeStashMap7: could not be travelled to
+NOT EXERCISED: MarchRidgeStashMap8: could not be travelled to
+NOT EXERCISED: MarchRidgeStashMap9: could not be travelled to
+NOT EXERCISED: MarchRidgeStashMap10: could not be travelled to
+NOT EXERCISED: MulStashMap1: could not be travelled to
+NOT EXERCISED: MulStashMap2: could not be travelled to
+NOT EXERCISED: MulStashMap11: could not be travelled to
+NOT EXERCISED: MulStashMap3: could not be travelled to
+NOT EXERCISED: MulStashMap4: could not be travelled to
+NOT EXERCISED: MulStashMap12: could not be travelled to
+NOT EXERCISED: MulStashMap5: could not be travelled to
+NOT EXERCISED: MulStashMap13: could not be travelled to
+NOT EXERCISED: MulStashMap6: could not be travelled to
+NOT EXERCISED: MulStashMap7: could not be travelled to
+NOT EXERCISED: MulStashMap8: could not be travelled to
+NOT EXERCISED: MulStashMap9: could not be travelled to
+NOT EXERCISED: MulStashMap10: could not be travelled to
+NOT EXERCISED: MulStashMap14: could not be travelled to
+NOT EXERCISED: MulStashMap15: could not be travelled to
+NOT EXERCISED: MulStashMap16: could not be travelled to
+NOT EXERCISED: MulStashMap17: could not be travelled to
+NOT EXERCISED: MulStashMap18: could not be travelled to
+NOT EXERCISED: MulStashMap19: could not be travelled to
+NOT EXERCISED: RiversideStashMap1: could not be travelled to
+NOT EXERCISED: RiversideStashMap2: could not be travelled to
+NOT EXERCISED: RiversideStashMap3: could not be travelled to
+NOT EXERCISED: RiversideStashMap4: could not be travelled to
+NOT EXERCISED: RiversideStashMap5: could not be travelled to
+NOT EXERCISED: RiversideStashMap6: could not be travelled to
+NOT EXERCISED: RiversideStashMap7: could not be travelled to
+NOT EXERCISED: RiversideStashMap8: could not be travelled to
+NOT EXERCISED: RiversideStashMap9: could not be travelled to
+NOT EXERCISED: RiversideStashMap10: could not be travelled to
+NOT EXERCISED: RosewoodStashMap1: could not be travelled to
+NOT EXERCISED: RosewoodStashMap2: could not be travelled to
+NOT EXERCISED: RosewoodStashMap3: could not be travelled to
+NOT EXERCISED: RosewoodStashMap4: could not be travelled to
+NOT EXERCISED: RosewoodStashMap5: could not be travelled to
+NOT EXERCISED: WorldStashMap1: could not be travelled to
+NOT EXERCISED: WorldStashMap2: could not be travelled to
+NOT EXERCISED: WorldStashMap3: could not be travelled to
+NOT EXERCISED: WorldStashMap4: could not be travelled to
+NOT EXERCISED: WorldStashMap5: could not be travelled to
+NOT EXERCISED: WorldStashMap6: could not be travelled to
+NOT EXERCISED: WorldStashMap7: could not be travelled to
+NOT EXERCISED: WorldStashMap8: could not be travelled to
+NOT EXERCISED: WorldStashMap9: could not be travelled to
+NOT EXERCISED: WorldStashMap10: could not be travelled to
+NOT EXERCISED: WorldStashMap11: could not be travelled to
+NOT EXERCISED: WorldStashMap12: could not be travelled to
+NOT EXERCISED: WorldStashMap13: could not be travelled to
+NOT EXERCISED: WorldStashMap14: could not be travelled to
+NOT EXERCISED: WorldStashMap15: could not be travelled to
+NOT EXERCISED: WorldStashMap16: could not be travelled to
+NOT EXERCISED: WorldStashMap17: could not be travelled to
+NOT EXERCISED: WorldStashMap18: could not be travelled to
+NOT EXERCISED: WorldStashMap19: could not be travelled to
+NOT EXERCISED: WorldStashMap20: could not be travelled to
+NOT EXERCISED: WorldStashMap21: could not be travelled to
+NOT EXERCISED: WorldStashMap22: could not be travelled to
+NOT EXERCISED: WorldStashMap23: could not be travelled to
+NOT EXERCISED: WpStashMap1: could not be travelled to
+NOT EXERCISED: WpStashMap2: could not be travelled to
+NOT EXERCISED: WpStashMap3: could not be travelled to
+NOT EXERCISED: WpStashMap4: could not be travelled to
+NOT EXERCISED: WpStashMap11: could not be travelled to
+NOT EXERCISED: WpStashMap5: could not be travelled to
+NOT EXERCISED: WpStashMap6: could not be travelled to
+NOT EXERCISED: WpStashMap7: could not be travelled to
+NOT EXERCISED: WpStashMap8: could not be travelled to
+NOT EXERCISED: WpStashMap9: could not be travelled to
+NOT EXERCISED: WpStashMap10: could not be travelled to
+NOT EXERCISED: WpStashMap12: could not be travelled to
+NOT EXERCISED: WpStashMap13: could not be travelled to
+NOT EXERCISED: WpStashMap14: could not be travelled to
+NOT EXERCISED: WpStashMap15: could not be travelled to
+NOT EXERCISED: WpStashMap16: could not be travelled to
+errors inside the mod: 0
