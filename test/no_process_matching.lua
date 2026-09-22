@@ -60,5 +60,37 @@ for line in runner:gmatch("[^\n]+") do
     end
 end
 
+-- A CLEANUP TRAP MUST NOT SWALLOW THE SIGNAL. Trapping INT/TERM with a
+-- handler that only cleans up makes bash run the handler and carry on, so
+-- `kill` stopped working on these checks the moment run-tracking was added:
+-- the PID file was removed while the process lived, running.sh reported "no
+-- autotest check is running" about a run still holding the machine lock, and
+-- the next check waited on a lock nobody would release (2026-09-22).
+assert(lib:find("exit 130",1,true) and lib:find("exit 143",1,true),
+    "the INT and TERM traps must clean up AND terminate; a trap that only "
+    .."cleans up swallows the signal")
+-- Matched by LINE, not by a quoted-string pattern: the trap body itself
+-- contains single quotes, so a [^']* pattern truncates it and asserts about
+-- the wrong text.
+for line in lib:gmatch("[^\n]+") do
+    if line:find("trap ",1,true) and line:find(" EXIT",1,true) then
+        assert(not line:find("exit 1",1,true),
+            "the EXIT trap must only clean up; exiting from it would recurse: "..line)
+    end
+end
+
+-- And there must be a documented way to stop a run, because `kill PID` alone
+-- is deferred until whatever child the check is waiting on returns.
+local stopf=assert(io.open("tools/autotest/stop.sh","rb"))
+local stop=stopf:read("*a"); stopf:close()
+assert(stop:find('kill -TERM "-$pid"',1,true),
+    "stopping a check must signal the process GROUP, so the sleep or eval it "
+    .."is waiting on is interrupted too")
+assert(stop:find("kill -KILL",1,true),
+    "a check that ignores TERM must still be stoppable")
+assert(stop:find("pz.sh stop",1,true),
+    "stopping a check must also stop the game: a killed check that leaves the "
+    .."game up keeps the machine lock with it")
+
 print("PASS no_process_matching: liveness comes from PID files and /proc, "
     .."never from a command-line pattern that can match the asker")

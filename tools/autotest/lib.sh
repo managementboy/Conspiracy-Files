@@ -40,7 +40,17 @@ cf_claim_run() {   # cf_claim_run NAME - call once, at the top of a check
     mkdir -p "$CF_RUNDIR"
     printf '%s %s\n' "$$" "$(cf_proc_started $$)" > "$CF_RUNDIR/$1.pid"
     # However it exits: normally, on error, or killed.
-    trap 'rm -f "$CF_RUNDIR/'"$1"'.pid"' EXIT INT TERM
+    #
+    # INT and TERM MUST STILL TERMINATE. A trap that only cleans up swallows
+    # the signal - bash runs the handler and carries on - so `kill` stopped
+    # working on these checks the moment this was added, and the PID file was
+    # removed while the process lived. running.sh then reported "no autotest
+    # check is running" about a run that was still holding the machine lock,
+    # and the next check waited twenty minutes for a lock nobody would release
+    # (2026-09-22). Clean up, then die with the conventional code.
+    trap 'rm -f "$CF_RUNDIR/'"$1"'.pid"' EXIT
+    trap 'rm -f "$CF_RUNDIR/'"$1"'.pid"; exit 130' INT
+    trap 'rm -f "$CF_RUNDIR/'"$1"'.pid"; exit 143' TERM
 }
 cf_run_alive() {   # cf_run_alive NAME - 0 when that check is genuinely running
     local f="$CF_RUNDIR/$1.pid" pid started now

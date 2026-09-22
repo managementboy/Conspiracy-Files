@@ -195,7 +195,23 @@ yes:
 tools/autotest/running.sh              # what is running
 tools/autotest/running.sh campaign     # exit 0 only if that one is
 until ! tools/autotest/running.sh campaign; do sleep 30; done
+tools/autotest/stop.sh campaign        # stop one properly
+tools/autotest/stop.sh --all
 ```
+
+**`kill PID` is not enough, and a cleanup trap can make it worse.** A check
+spends most of its life inside a child — a `sleep`, or an `ev` waiting on the
+game — and bash defers a trap until that child returns, so the run looks like
+it ignored the signal. Worse, a trap that only cleans up *swallows* the
+signal: bash runs the handler and carries on. When run-tracking was first
+added that is exactly what happened — the PID file was removed while the
+process lived, `running.sh` reported nothing running, and the next check sat
+waiting for a machine lock nobody would release.
+
+So the INT and TERM traps clean up **and exit**, and `stop.sh` signals the
+process **group** (checks are launched with `setsid`, so each leads its own)
+and then stops the game, because a killed check that leaves the game up keeps
+file descriptor 9 and the lock with it.
 
 `test/no_process_matching.lua` keeps the checks off command-line matching.
 
