@@ -18,35 +18,58 @@ have never been run. Nothing is proposed for tagging.
 
 ## Results
 
-| Gate | Result | Revision |
-|---|---|---|
-| Shipped offline suite | **PASS** — 172 run, 0 failed | current HEAD |
-| Prototype suite | **PASS** — 9 run, 0 failed | current HEAD |
-| Kahlua parse-all / gate | **PASS** — 124 ok, 0 failed | current HEAD |
-| luacheck (errors) | **PASS** — 0 errors | current HEAD |
-| Secret scan | **PASS** — 0 findings | current HEAD |
-| `git diff --check` | **PASS** | current HEAD |
-| Native boot | **PASS** | `53dbc61` |
-| **Native campaign gate** | **PASS** — 0 product, 0 harness failures | `de22790` |
-| Native: 125 destinations | **FAIL** — 125/125 reached, 123 pass every column, **56 mod errors** | `038eee9` |
-| Native: four gameplay gates | **NOT EXERCISED** | — |
-| Native: Investigate Area markers | **NOT EXERCISED** — gate newly written | — |
-| Combined native save maximum | **PARTIAL** | `de22790` |
+| Gate | Result |
+|---|---|
+| Shipped offline suite | **PASS** — 173 run, 0 failed |
+| Prototype suite | **PASS** — 9 run, 0 failed |
+| Kahlua parse-all / gate | **PASS** — 124 ok, 0 failed |
+| luacheck (errors) | **PASS** — 0 errors |
+| Secret scan | **PASS** — 0 findings |
+| `git diff --check` | **PASS** |
+| Native boot | **PASS** |
+| **Native campaign gate** | **PASS** — 0 product, 0 harness failures |
+| Gameplay gates (6) | **5 PASS**, 1 re-verified after a stale literal |
+| Native: 125 destinations | **INCOMPLETE** — 125/125 reached, **0 mod errors**, 123 place a payoff |
+| Combined native save | **PARTIAL** — each half measured, the maximum not |
 
 ## What blocks it
 
-1. **56 mod errors in the destination run.** `offerContainer` indexes
-   `getParent` on an `ItemPickerJava$ItemPickerContainer`. A `pcall` does not
-   silence Kahlua's log — my earlier claim that it did was wrong, and the error
-   count went from 24 to 56 rather than to zero. Now guarded with `instanceof`;
-   unverified until the next run.
-2. **Two destinations resolve no payoff** (`WorldStashMap9`, `WorldStashMap20`)
-   and the reason is **not established** — the diagnostic written to answer it
-   had a scope bug and printed nothing.
-3. **Four gameplay gates and the marker gate have never run.** Absent
-   evidence, not passing evidence.
-4. **The combined save maximum is not measured** — 7 of 16 cases with a nearly
-   empty map-media root is not a maximum.
+1. **Two destinations place no payoff.** `WorldStashMap9` has **no eligible
+   non-floor container within twelve tiles** — a content problem with that
+   destination, not a timing artefact. `WorldStashMap20` has six eligible
+   containers and the trail or scan never reaches them.
+2. **The shared-restaurant behaviour is untested in play.** Both designs
+   resolve to the same building, but the cross-file finding that needs all
+   eight records has never been seen in a game.
+3. **The maximum combined save is not established.** Sixteen cases *and* all
+   125 trails in one save; no run has produced both.
+4. **Following a trail on foot to its destination is unexercised.** Payoff
+   insertion and access are proven for 123 of 125; walking one is not.
+
+None of these is the steering defect that blocked the candidate yesterday —
+that was never a product defect.
+
+## What was fixed to get here
+
+Zero production defects were found in the campaign. The blockers were in the
+harness, and the count is worth stating plainly: **eleven harness defects**,
+most of them mine, several introduced while fixing an earlier one.
+
+- three stale expectations asserting the superseded P4-R113 steering rule;
+- a stall detector whose fingerprint contained counters that always rise;
+- a stall that fired before the remedy it was meant to allow;
+- a step-back that parked the survivor in the street;
+- `pcall` reported as silencing a Kahlua log it does not silence;
+- a polling "speed-up" that cut the waiting by 62% and produced 62 false
+  negatives;
+- a cleanup trap that swallowed `TERM`, making killed runs hold the machine
+  lock;
+- liveness decided by matching command lines, which matched the asker;
+- evidence stamped with a commit made *during* the run;
+- a headline printing PASS while two columns were short;
+- an opening pinned to one premise id after they were diversified.
+
+Every one now has a test that fails if it returns.
 
 ## The steering "blocker" was never a product defect
 

@@ -9,18 +9,47 @@ here.
 
 ## Where each gate stands
 
-| # | Gate | Result | Revision | Evidence |
-|---|---|---|---|---|
-| 0 | Boot | **PASS** | `53dbc61` | `20260921T151608-boot.txt` |
-| 1 | **Full multi-case campaign** | **PASS** — 0 product, 0 harness failures | `de22790` | `20260922T093946-campaign.txt` |
-| 2 | Personal opening + linked continuation | **NOT EXERCISED** | — | `opening_in_play.sh`, `pair_in_play.sh` exist and are unrun |
-| 3 | Real map journey to a payoff | **NOT EXERCISED** | — | — |
-| 4 | Organiser scrolling and rocker | **NOT EXERCISED** | — | `organiser.sh`, `knox.sh`, fieldnote `boot_test.sh` |
-| 5 | Shared restaurant in game | **NOT EXERCISED** | — | offline only (`test/shared_destination.lua`) |
-| 6 | Placement interruption/recovery | **NOT EXERCISED** at this line | — | `map_placement.sh` |
-| 6b | Investigate Area markers | **NOT EXERCISED** — gate newly written | — | `checks/marker_lifecycle.{sh,lua}` |
-| 7 | All 125 destinations | **FAIL** — 125/125 reached, 123 pass every column, 56 mod errors | `038eee9` | `*-map-coverage.txt` |
-| 8 | Combined native save state | **PARTIAL** | `de22790` | campaign report's per-root sizes |
+| # | Gate | Result | Evidence |
+|---|---|---|---|
+| 0 | Boot | **PASS** | `20260921T151608-boot.txt` |
+| 1 | Full multi-case campaign | **PASS** — 0 product, 0 harness failures | `20260922T093946-campaign.txt` |
+| 2 | Personal opening + linked continuation | **PASS** | `opening_in_play`, `pair_in_play` |
+| 3 | Real map journey to a payoff | **PARTIAL** — payoff insertion and access proven for 123 of 125 destinations; travelling a trail by hand is unexercised | `*-map-coverage.txt` |
+| 4 | Organiser scrolling and rocker | **PASS** — `cards: 1 -> 2 (rocker) -> 3 (arrow)` | `*-organiser.txt`, `*-knox.txt` |
+| 5 | Shared restaurant in game | **NOT EXERCISED** — both designs resolve to the same building in the coverage run, but the cross-file finding is untested in play | offline only |
+| 6 | Placement interruption/recovery | **PASS** | `*-map-placement.txt` |
+| 6b | Investigate Area markers | **PASS** — gate written for this task | `*-marker-lifecycle.txt` |
+| 7 | All 125 destinations | **INCOMPLETE** — 125/125 reached, **0 mod errors**, 123 place a payoff | `20260922T134103-map-coverage.txt` |
+| 8 | Combined native save state | **PARTIAL** — each half measured, the maximum not | `*-save-size.txt` |
+
+Five of the six gameplay gates pass. Gate 7 is `INCOMPLETE` rather than PASS
+because two destinations place no payoff — reaching a design is not passing
+it, and the check now refuses to print PASS while any column is short.
+
+## Gate 7 — the two that do not place
+
+Both had looked identical in every earlier run (`state none, items -1`)
+because the diagnostic meant to separate them had a scope bug. They are not
+the same problem at all:
+
+| Design | Census | Verdict |
+|---|---|---|
+| `WorldStashMap9` | 0 containers, 0 eligible within 12 tiles | **Impossible here** — the railyard destination has nothing to put a payoff in. A content finding. |
+| `WorldStashMap20` | 6 containers, 6 eligible, 6 explored (crate, 5 metal shelves) | **Possible** — the containers are there; the trail or scan never reached them. |
+
+## Gate 8 — each half measured, the maximum not
+
+```
+all 125 map trails   MapMedia = 129,856 bytes   (total 130,148, 13% of budget)
+seven cases          Generated.G2 = 167,239 bytes
+```
+
+`test/map_feature_budget` estimates map media at 235,452 and 334,450 bytes.
+The real fully-populated root is **129,856** — the estimate is 1.8× to 2.6×
+too pessimistic on the very root the save-size retraction turned on.
+
+**The maximum legal combined state remains NOT ESTABLISHED.** It needs sixteen
+cases *and* all 125 trails in one save, and no run has produced both.
 
 ## Gate 1 — the campaign passes
 
