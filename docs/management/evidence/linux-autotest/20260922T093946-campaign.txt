@@ -1,0 +1,84 @@
+Linux campaign check 20260922T093946: PASS
+source: 3c0dd01  <- WRONG, CORRECTED BY HAND 2026-09-22
+CORRECTION: this run was launched at de22790 and tested de22790. The build was
+installed from it and cf_main had already parsed the check; 3c0dd01 was
+committed WHILE the run was in flight, and source_line read git at report time
+rather than at start. lib.sh now pins the revision when a check starts
+(CF_SOURCE_SHA) and campaign/map_coverage/marker_lifecycle call cf_pin_source
+before any work, so this cannot recur. The result below stands; only the
+revision line was wrong.
+actual source: de22790
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+cases: 1 generated:1278300670:case, 2 generated:1902522517:case, 3 generated:1456327411:case; at the end 7 5 1:1278300670:retired 2:1902522517:retired 3:1456327411:retired 4:459825683:retired 5:1683537184:retired 6:1669852968:live 7:801014335:live
+stages:
+  start                  cases 1 (0 finished) | record 0 | FILES questions 0 | NAMES 1 | PLACES 0 | Old 0/0 wrong | Evidence 0/0 wrong | order  | save 41069 B
+  case 1 finished        cases 1 (1 finished) | record 4 | FILES questions 1 | NAMES 3 | PLACES 6 | Old 4/0 wrong | Evidence 0/0 wrong | order 1111 | save 34030 B
+  after reload 1         cases 1 (1 finished) | record 4 | FILES questions 1 | NAMES 3 | PLACES 6 | Old 4/0 wrong | Evidence 0/0 wrong | order 1111 | save 34675 B
+  case 2 finished        cases 2 (2 finished) | record 7 | FILES questions 2 | NAMES 4 | PLACES 10 | Old 7/0 wrong | Evidence 0/0 wrong | order 1111222 | save 60194 B
+  case 3, two clues      cases 3 (2 finished) | record 9 | FILES questions 2 | NAMES 5 | PLACES 13 | Old 7/0 wrong | Evidence 2/0 wrong | order 111122233 | save 91171 B
+  after reload 2         cases 3 (2 finished) | record 9 | FILES questions 2 | NAMES 5 | PLACES 13 | Old 7/0 wrong | Evidence 2/0 wrong | order 111122233 | save 91447 B
+  at the limit           cases 6 (2 finished) | record 9 | FILES questions 2 | NAMES 5 | PLACES 13 | Old 7/0 wrong | Evidence 2/0 wrong | order 111122233 | save 187061 B
+  after the limit        cases 7 (3 finished) | record 10 | FILES questions 3 | NAMES 5 | PLACES 14 | Old 10/0 wrong | Evidence 0/0 wrong | order 1111222333 | save 206343 B
+  after reload 3, full archive cases 7 (5 finished) | record 18 | FILES questions 5 | NAMES 7 | PLACES 25 | Old 18/0 wrong | Evidence 0/0 wrong | order 111122233344445555 | save 191506 B
+case 1 answers on the organiser: true two person2 records nil Marion Ellis Roy Hale McCoy Logging Co.
+case 2 steer: unsteered    Ines Kubiak false
+refusals (P4-R133), all sessions:
+  active-limit: 3 lines, longest run of 2, rung 0
+  no-containers: 2 lines, longest run of 1, rung 0
+instalments placed and clues dropped (P4-R133, P4-R134), all sessions:
+  none in this run
+errors inside the mod, all sessions: 0
+outcome: 0 product failure(s), 0 harness failure(s), 2 stage(s) not exercised
+FINDING: fresh worlds started for a case 1 with a document in the memo's week: 1 (memo=true, dated documents=3)
+FINDING: start: assignments placed=4; why=gap n=0 due=02:10 rung=0/3 now=02:11 overdue=false(-23.98h) preparing=false active=1/4 cases=1/16
+FINDING: case 1: 4 clue(s) played of 4 offered; outstanding by id: 0 
+FINDING: case 1 relay memo: found=true, dated in its week=3, carrying the date note=3
+FINDING: the date note was exercised: 3 of 3 records dated in the memo's week carry it
+FINDING: case 1 finished: assignments ; why=gap n=0 due=02:10 rung=0/3 now=02:23 overdue=false(-23.79h) preparing=false active=0/4 cases=1/16
+FINDING: case 1 note on the organiser: My reading: The paperwork agrees about the cancellation, while the origin of the named request remains unrecorded. Roy Hale matters here. Next I would check the place against its records.
+FINDING: frame cost during case 1: AutomaticInvestigations.onTick calls=2724 avg=0.005ms max=12ms over2ms=1 | CaseFile.onTick calls=2712 avg=0.005ms max=1ms over2ms=0 | ClueMarkers.draw calls=0 avg=0.000ms max=0ms over2ms=0 | ClueMarkers.update calls=47 avg=0.319ms max=3ms over2ms=1 | IdentityObserver.afterRender calls=0 avg=0.000ms max=0ms over2ms=0 | IdentityObserver.tick calls=2760 avg=0.003ms max=1ms over2ms=0 | LocalPersonInte
+FINDING: after reload 1: assignments ; why=gap n=0 due=02:10 rung=0/3 now=02:28 overdue=false(-23.70h) preparing=false active=0/4 cases=1/16
+FINDING: reload 1 save size: 34307 -> 34675 bytes; before [CasePeople=694 DiscoveryLedger=2238 Generated.G2=28129 KeyConnections=778 PlaceVisits=435 VisitedBuildings=359]; after [CasePeople=694 DiscoveryLedger=2238 Generated.G2=28497 KeyConnections=778 PlaceVisits=435 VisitedBuildings=359]
+FINDING: case 2 placement (survivor in closet): reach 250: t3:10977704480342034, t3:10977704480342043
+FINDING: case 2 continuity: follows from 1278300670:case - follows the finding generated:1278300670:document-3 at Building at 10836, 10108
+FINDING: case 2 ways offered: none (continuity: follows)
+FINDING: case 2 ways offered: none
+FINDING: case 2 clues: Transport enquiry card / AV-778 | Booking transcription / AV-778 | Passenger-name correction / AV-778
+FINDING: case 1's answers after case 2: used by nil
+FINDING: case 2: 3 clue(s) played of 3 offered; outstanding by id: 0 
+FINDING: case 2 finished: assignments ; why=gap n=0 due=02:39 rung=0/3 now=02:51 overdue=false(-23.80h) preparing=false active=0/4 cases=2/16
+FINDING: frame cost during case 2: AutomaticInvestigations.onTick calls=5244 avg=0.002ms max=1ms over2ms=0 | CaseFile.onTick calls=5232 avg=0.005ms max=1ms over2ms=0 | ClueMarkers.draw calls=0 avg=0.000ms max=0ms over2ms=0 | ClueMarkers.update calls=88 avg=0.375ms max=3ms over2ms=2 | IdentityObserver.afterRender calls=0 avg=0.000ms max=0ms over2ms=0 | IdentityObserver.tick calls=5280 avg=0.004ms max=1ms over2ms=0 | LocalPersonInteg
+FINDING: case 3 placement (survivor in kitchen): reach 250: t3:10977704480342016, t3:10977704480342046
+FINDING: case 3 continuity: steer from 1278300670:case - reading=two way=records name=Roy Hale
+FINDING: the deferred answers reached case 3, which is DR-20260919-CONTINUITY working: the followed finding took case 2 and the survivor's conclusions waited one case
+FINDING: case 3, two clues: assignments placed=3; why=gap n=0 due=03:01 rung=0/3 now=03:07 overdue=false(-23.90h) preparing=false active=1/4 cases=3/16
+FINDING: frame cost during case 3: AutomaticInvestigations.onTick calls=8690 avg=0.003ms max=2ms over2ms=1 | CaseFile.onTick calls=8678 avg=0.007ms max=1ms over2ms=0 | ClueMarkers.draw calls=0 avg=0.000ms max=0ms over2ms=0 | ClueMarkers.update calls=146 avg=0.384ms max=3ms over2ms=4 | IdentityObserver.afterRender calls=0 avg=0.000ms max=0ms over2ms=0 | IdentityObserver.tick calls=8726 avg=0.003ms max=1ms over2ms=0 | LocalPersonInte
+FINDING: reload 2: case 3 continuity is steer from 1278300670:case
+FINDING: reload 2: case 1's answers are used by generated:1456327411:case, expected 1456327411:case (case 2 continuity: follows)
+FINDING: after reload 2: assignments placed=3; why=gap n=0 due=03:01 rung=0/3 now=03:12 overdue=false(-23.81h) preparing=false active=1/4 cases=3/16
+FINDING: reload 2 save size: 91171 -> 91447 bytes; before [CasePeople=1243 DiscoveryLedger=4599 Generated.G2=78391 KeyConnections=1698 PlaceVisits=886 VisitedBuildings=710]; after [CasePeople=1243 DiscoveryLedger=4599 Generated.G2=78667 KeyConnections=1698 PlaceVisits=886 VisitedBuildings=710]
+FINDING: map marks after reload 2 (written/pending/missing): 9/0/0
+FINDING: at the limit: assignments placed=14; why=nil n=0 due=- rung=0/3 now=03:49 overdue=false(0.00h) preparing=false active=4/4 cases=6/16
+FINDING: at the limit: nowhere fresh to move to: could not get inside t3:10696225208664071: the bounding-box centre and all 4 room centres are outside
+FINDING: after 90 s with 4 unfinished: preparing=false, cases 6 2 1:1278300670:retired 2:1902522517:retired 3:1456327411:live 4:459825683:live 5:1683537184:live 6:1669852968:live
+FINDING: after the limit, move 1: nowhere fresh to move to: could not get inside t3:10696225208664071: the bounding-box centre and all 4 room centres are outside
+FINDING: a new case came after a case was finished at the limit: 7 3 1:1278300670:retired 2:1902522517:retired 3:1456327411:retired 4:459825683:live 5:1683537184:live 6:1669852968:live 7:801014335:live
+FINDING: after the limit: assignments placed=14; why=nil n=0 due=- rung=0/3 now=04:54 overdue=false(0.00h) preparing=false active=4/4 cases=7/16
+FINDING: frame cost during the limit: AutomaticInvestigations.onTick calls=22675 avg=0.015ms max=183ms over2ms=7 | CaseFile.onTick calls=22663 avg=0.007ms max=1ms over2ms=0 | ClueMarkers.draw calls=0 avg=0.000ms max=0ms over2ms=0 | ClueMarkers.update calls=385 avg=0.634ms max=8ms over2ms=4 | IdentityObserver.afterRender calls=0 avg=0.000ms max=0ms over2ms=0 | IdentityObserver.tick calls=22711 avg=0.003ms max=1ms over2ms=0 | LocalPerso
+FINDING: archive: 5 finished cases full, 0 stubbed, 18 rows kept in all, 0 stubs still offering questions; 1:1278300670:full:4 2:1902522517:full:3 3:1456327411:full:3 4:459825683:full:4 5:1683537184:full:4
+FINDING: a finished case's clues carried: 18 checked, 18 show Evidence / Old, 18 offer the greyed already-noted option, 0 offer no such option (Collection notice / AV-778 -> Already in the organiser)
+FINDING: KNOX boot line "Records ......... 18": the ledger holds 18 discoveries, 0 of them from stubbed cases
+FINDING: stubbed cases: 0 stubs, 0 still offering questions, 0 carrying saved answers, 0 of those marked used by a later case ()
+FINDING: no case was stubbed, which is the contract: the archive retains every finished case's rows (test/case_archive asserts stubs == 0). The stub half of P4-R111 is NOT APPLICABLE, not unexercised - there is no longer a way to reach it, and a run that did reach it would have failed the assertion above
+FINDING: archive after the reload: 5 full, 0 stubbed, 18 rows; 1:1278300670:full:4 2:1902522517:full:3 3:1456327411:full:3 4:459825683:full:4 5:1683537184:full:4
+FINDING: refusals in the log of the session loaded with the full archive: 0
+FINDING: after reload 3, full archive: assignments placed=6; why=gap n=1 due=04:53 rung=0/3 now=05:22 overdue=false(-23.52h) preparing=false active=2/4 cases=7/16
+FINDING: reload 3 save size: 191506 -> 191506 bytes; before [CasePeople=3427 DiscoveryLedger=8909 Generated.G2=167133 KeyConnections=2610 PlaceVisits=1192 VisitedBuildings=1061]; after [CasePeople=3427 DiscoveryLedger=8909 Generated.G2=167133 KeyConnections=2610 PlaceVisits=1192 VisitedBuildings=1061]
+FINDING: AD-10 town names, standing in Muldraugh: of 18 records the LIVE label names a town on 0 and not on 11; the stored FOUND lines (history, frozen by design) name one on 0 and not on 18; e.g. ; own town: 202 E Maple; rows whose case is still live: 0
+FINDING: AD-10 address book, standing in Muldraugh: of 14 buildings the cases used, 0 would be written with their town and 10 without; 202 E Maple St [Muldraugh] -> "202 E Maple St"; 102 Dewey St [Muldraugh] -> "102 Dewey St"; 103 Dewey St [Muldraugh] -> "103 Dewey St"; 102 E Maple St [Muldraugh] -> "102 E Maple St"
+FINDING: AD-10: walked from Muldraugh to West Point at 11684,8363, 1983 tiles
+FINDING: AD-10 town names, standing in West Point: of 18 records the LIVE label names a town on 5 and not on 6; the stored FOUND lines (history, frozen by design) name one on 0 and not on 18; e.g. 102 Dewey St, Muldraugh; own town: 30 JUNE ; rows whose case is still live: 0
+FINDING: AD-10 address book, standing in West Point: of 14 buildings the cases used, 10 would be written with their town and 0 without; 202 E Maple St [Muldraugh] -> "202 E Maple St, Muldraugh"; 102 Dewey St [Muldraugh] -> "102 Dewey St, Muldraugh"; 103 Dewey St [Muldraugh] -> "103 Dewey St, Muldraugh"; 102 E Maple St [Muldraugh] -> "102 E Maple St, Muldraugh"
+NOT EXERCISED: case 2 followed case 1's finding rather than its answers, which DR-20260919-CONTINUITY prefers, so the answer-steered shape (the returning person without a second body, the records contribution) was not exercised on case 2
+NOT EXERCISED: case 1's answers were still unused after case 2, so answer-locking was not exercised here
+screenshot: dev/eval/linux/runs/20260922T093946-campaign.png (not committed)

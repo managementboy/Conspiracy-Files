@@ -25,6 +25,9 @@ fail() { fails+=("$*"); say "FAIL: $*"; }
 skip() { notrun+=("$*"); say "NOT EXERCISED: $*"; }
 field() { if [ $# -ge 2 ]; then cut -f"$1" <<<"$2"; else cut -f"$1"; fi; }
 
+# Pin the revision before any work: a commit made during the run must not
+# be able to take the credit for it.
+cf_pin_source
 claim_game || exit 2
 start_world "${start_args[@]}" || { say "world did not start"; exit 2; }
 first="$(session)"

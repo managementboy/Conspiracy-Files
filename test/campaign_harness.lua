@@ -318,6 +318,28 @@ assert(reload,
     "the reload rounds must still be a real stop --save and start --continue; "
     .."that IS the save/quit/continue test and `fresh` would not be one")
 
+-- 14. THE REPORT MUST NAME THE REVISION THE RUN TESTED. source_line read git
+-- at REPORT time, so a commit made while a run was in flight took the credit:
+-- on 2026-09-22 a PASSING campaign report was stamped source 3c0dd01 for a
+-- run launched at de22790. The code under test was de22790's - the build was
+-- installed from it and the check already parsed - so the file named a
+-- revision that never ran. An evidence file naming the wrong revision is
+-- worse than one naming none, because it will be believed.
+local libf=assert(io.open("tools/autotest/lib.sh","rb"))
+local lib=libf:read("*a"); libf:close()
+assert(lib:find("CF_SOURCE_SHA",1,true),
+    "the tested revision must be captured once, not re-read when the report "
+    .."is written")
+assert(lib:find('if [ -z "$CF_SOURCE_SHA" ]; then',1,true),
+    "the capture must happen on first use and never be recomputed")
+assert(sh:find("cf_pin_source",1,true),
+    "the campaign check must pin its revision before doing any work")
+local pinAt=sh:find("cf_pin_source",1,true)
+local workAt=sh:find("start_world",1,true) or sh:find("start_cold",1,true)
+assert(pinAt and workAt and pinAt<workAt,
+    "the revision must be pinned BEFORE the world starts, or a commit during "
+    .."the run can still take the credit")
+
 print("PASS campaign_harness: ceiling frozen, clues counted by id, steering by "
     .."contribution, stubs a regression, stalls judged by progress, three "
     .."outcome kinds, 8 product assertions retained")

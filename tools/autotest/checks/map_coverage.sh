@@ -46,7 +46,10 @@ cf_main() {
     # `true 2174,6011` when asked directly.
     field() { if [ $# -ge 2 ]; then cut -f"$1" <<<"$2"; else cut -f"$1"; fi; }
 
-    claim_game || exit 2
+    # Pin the revision before any work: a commit made during the run must not
+# be able to take the credit for it.
+cf_pin_source
+claim_game || exit 2
     start_world "${start_args[@]}" || abort "world did not start"
     first="$(session)"
     ev -f "$REPO/tools/autotest/checks/map_placement.lua" >/dev/null || abort "placement fixture did not load"

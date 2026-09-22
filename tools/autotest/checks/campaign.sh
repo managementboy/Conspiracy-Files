@@ -431,7 +431,10 @@ cf_main() {
     }
 
     # ---------------------------------------------------------------------------
-    claim_game || exit 2
+    # Pin the revision before any work: a commit made during the run must not
+# be able to take the credit for it.
+cf_pin_source
+claim_game || exit 2
     # P4-R126: the relay memo's date note is only tested when case 1 has a document
     # dated inside the memo's week, which about a third of cases do. Fresh worlds
     # are started until one has it - at most THREE (P4-R126 said eight). Eight is

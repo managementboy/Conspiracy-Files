@@ -155,10 +155,29 @@ mod_error_count() {
 # version of this that cost a whole run.
 is_number() { case "${1:-}" in ''|*[!0-9]*) return 1 ;; *) return 0 ;; esac; }
 
+# THE REVISION THE RUN ACTUALLY TESTED, captured when the check STARTS.
+#
+# This read git at REPORT time, which is minutes or hours after the run began
+# - and a commit made while a run is in flight then gets the credit. On
+# 2026-09-22 a passing campaign report was stamped `source: 3c0dd01` for a run
+# launched at de22790, because I committed during it. The code under test was
+# de22790's: the build was installed from it, and the check had already been
+# parsed. An evidence file that names the wrong revision is worse than one
+# that names none, because it will be believed.
+#
+# Captured once, at first use, which is the check's own header line - before
+# anything can move underneath it.
+CF_SOURCE_SHA=""
 source_line() {
-    echo "source: $(git -C "$REPO" rev-parse --short HEAD)$(git -C "$REPO" diff --quiet HEAD -- mod 2>/dev/null || echo ' + uncommitted mod changes')"
+    if [ -z "$CF_SOURCE_SHA" ]; then
+        CF_SOURCE_SHA="$(git -C "$REPO" rev-parse --short HEAD)$(git -C "$REPO" diff --quiet HEAD -- mod 2>/dev/null || echo ' + uncommitted mod changes')"
+    fi
+    echo "source: $CF_SOURCE_SHA"
     renderer_line
 }
+# Called by a check at startup so the revision is pinned before any work, even
+# when the report is written much later.
+cf_pin_source() { source_line >/dev/null; }
 
 # Note the clue CFLoop holds, carried, the player's way (P4-R132): a clue is a
 # plain item until recognised, so "Look it over" from the real menu first and
