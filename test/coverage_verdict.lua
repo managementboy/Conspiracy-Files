@@ -41,5 +41,23 @@ assert(sh:find("may not be written until reached ==",1,true),
 assert(sh:find('played: $verdict ($reached of $total designs)',1,true),
     "the verdict line must state how many designs of the catalogue were reached")
 
+-- THE PATIENCE IS SECONDS, AND MUST NOT SHRINK WHEN THE POLL RATE CHANGES.
+--
+-- Collapsing two 2 s loops into one 0.5 s loop looked like a granularity win.
+-- It cut the wait from ~64 s a design to ~24 s, and the run came back with 62
+-- INCONCLUSIVE of 112 where the slow version had 2 of 125: the optimisation
+-- destroyed the measurement it was meant to speed up.
+local budget=tonumber(sh:match('CF_SETTLE_SECONDS:%-(%d+)'))
+assert(budget,"the settle budget must be stated in seconds")
+assert(budget>=64,
+    "the settle budget is "..budget.." s; the slow version that produced only "
+    .."2 INCONCLUSIVE of 125 allowed 64 s per design, and going below that "
+    .."trades correctness for speed")
+assert(sh:find("polls=$(python3",1,true),
+    "the poll COUNT must be derived from the seconds budget, so changing the "
+    .."poll interval cannot silently change how long the check waits")
+assert(sh:find('[ "$flat" -ge "$polls" ]',1,true),
+    "the no-progress bound must be the derived count, not a literal")
+
 print("PASS coverage_verdict: a run that reaches nothing reports COULD NOT RUN, "
     .."a partial run reports PARTIAL, and neither exits 0")

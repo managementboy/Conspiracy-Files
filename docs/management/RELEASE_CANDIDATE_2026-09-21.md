@@ -1,4 +1,78 @@
-# Release candidate — 2026-09-21
+# Release candidate — updated 2026-09-22
+
+**Superseded.** The 2026-09-21 edition is kept below the line.
+
+## Verdict
+
+**BLOCKED.** Not a release candidate.
+
+The campaign gate now **passes**, which it did not on 21 September. What blocks
+the candidate is the destination gate's mod errors and the gameplay gates that
+have never been run. Nothing is proposed for tagging.
+
+| | |
+|---|---|
+| Version | `DEV-0.46.1-writing-rebuild` |
+| Game | Project Zomboid **42.20.4 (`b0bbce05d5`)** |
+| Workshop item | `3797999299`, unlisted, still at `e431d82` — far behind this line |
+
+## Results
+
+| Gate | Result | Revision |
+|---|---|---|
+| Shipped offline suite | **PASS** — 172 run, 0 failed | current HEAD |
+| Prototype suite | **PASS** — 9 run, 0 failed | current HEAD |
+| Kahlua parse-all / gate | **PASS** — 124 ok, 0 failed | current HEAD |
+| luacheck (errors) | **PASS** — 0 errors | current HEAD |
+| Secret scan | **PASS** — 0 findings | current HEAD |
+| `git diff --check` | **PASS** | current HEAD |
+| Native boot | **PASS** | `53dbc61` |
+| **Native campaign gate** | **PASS** — 0 product, 0 harness failures | `de22790` |
+| Native: 125 destinations | **FAIL** — 125/125 reached, 123 pass every column, **56 mod errors** | `038eee9` |
+| Native: four gameplay gates | **NOT EXERCISED** | — |
+| Native: Investigate Area markers | **NOT EXERCISED** — gate newly written | — |
+| Combined native save maximum | **PARTIAL** | `de22790` |
+
+## What blocks it
+
+1. **56 mod errors in the destination run.** `offerContainer` indexes
+   `getParent` on an `ItemPickerJava$ItemPickerContainer`. A `pcall` does not
+   silence Kahlua's log — my earlier claim that it did was wrong, and the error
+   count went from 24 to 56 rather than to zero. Now guarded with `instanceof`;
+   unverified until the next run.
+2. **Two destinations resolve no payoff** (`WorldStashMap9`, `WorldStashMap20`)
+   and the reason is **not established** — the diagnostic written to answer it
+   had a scope bug and printed nothing.
+3. **Four gameplay gates and the marker gate have never run.** Absent
+   evidence, not passing evidence.
+4. **The combined save maximum is not measured** — 7 of 16 cases with a nearly
+   empty map-media root is not a maximum.
+
+## The steering "blocker" was never a product defect
+
+Eleven failures on 21 September, and every one came from the gate asserting
+the superseded P4-R113 rule. `DR-20260919-CONTINUITY` makes a followed
+**finding** outrank the closing questions, and the game logged
+`next case follows the finding recorded in generated:1247366911:case` for the
+very case the gate called unsteered. No source fix was made or needed.
+
+## Packaging and verification — prepared, NOT executed
+
+```bash
+tools/autotest/unit.sh && tools/autotest/prototype.sh
+tools/autotest/kahlua_gate.sh
+tools/ci/lint.sh && tools/ci/secret_scan.sh
+tools/autotest/checks/campaign.sh          # PASSES
+tools/autotest/checks/map_coverage.sh      # must reach 0 mod errors
+tools/autotest/native.sh --gates           # the six gameplay gates
+tools/package.sh && tools/verify_install.sh
+```
+
+**No publish, no push of a tag, no release.** Nothing above publishes.
+
+---
+
+# (superseded) # Release candidate — 2026-09-21
 
 ## Verdict
 

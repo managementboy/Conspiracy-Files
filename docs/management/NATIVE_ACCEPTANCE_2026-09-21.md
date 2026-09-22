@@ -1,4 +1,110 @@
-# Native acceptance — task 7
+# Native acceptance — tasks 4 to 7
+
+**Superseded 2026-09-22.** The 2026-09-21 edition of this document is kept
+below the line; everything above it is the current position.
+
+Machine: Linux development box. Project Zomboid **42.20.4 (`b0bbce05d5`)**.
+Renderer **Intel Iris Xe on display `:0`** — hardware, for every run recorded
+here.
+
+## Where each gate stands
+
+| # | Gate | Result | Revision | Evidence |
+|---|---|---|---|---|
+| 0 | Boot | **PASS** | `53dbc61` | `20260921T151608-boot.txt` |
+| 1 | **Full multi-case campaign** | **PASS** — 0 product, 0 harness failures | `de22790` | `20260922T093946-campaign.txt` |
+| 2 | Personal opening + linked continuation | **NOT EXERCISED** | — | `opening_in_play.sh`, `pair_in_play.sh` exist and are unrun |
+| 3 | Real map journey to a payoff | **NOT EXERCISED** | — | — |
+| 4 | Organiser scrolling and rocker | **NOT EXERCISED** | — | `organiser.sh`, `knox.sh`, fieldnote `boot_test.sh` |
+| 5 | Shared restaurant in game | **NOT EXERCISED** | — | offline only (`test/shared_destination.lua`) |
+| 6 | Placement interruption/recovery | **NOT EXERCISED** at this line | — | `map_placement.sh` |
+| 6b | Investigate Area markers | **NOT EXERCISED** — gate newly written | — | `checks/marker_lifecycle.{sh,lua}` |
+| 7 | All 125 destinations | **FAIL** — 125/125 reached, 123 pass every column, 56 mod errors | `038eee9` | `*-map-coverage.txt` |
+| 8 | Combined native save state | **PARTIAL** | `de22790` | campaign report's per-root sizes |
+
+## Gate 1 — the campaign passes
+
+```
+Linux campaign check 20260922T093946: PASS
+outcome: 0 product failure(s), 0 harness failure(s), 2 stage(s) not exercised
+```
+
+Three cases played and answered, three save/quit/continue rounds, the
+four-unfinished-case limit, and the full archive: **18 records**, order
+`111122233344445555`, 18 Old / 0 wrong, five finished cases, 191,506 bytes.
+
+**The eleven consequences of 2026-09-21 are gone**, and none of them were a
+product defect. They were three stale expectations in the gate itself:
+
+1. It demanded that case 2 be steered by case 1's answers. Under
+   `DR-20260919-CONTINUITY` a followed **finding** outranks the closing
+   questions, so case 2 carries a `follows` and the answers wait one case. The
+   run logged `next case follows the finding recorded in
+   generated:1247366911:case` — case 1 — for the very case the gate called
+   unsteered.
+2. It demanded case 3 be unsteered, when case 3 is exactly where the deferred
+   answers land.
+3. The same two demands again after reload 2.
+
+The two `NOT EXERCISED` lines are honest: the answer-steered shape and
+answer-locking were exercised **on case 3**, not case 2.
+
+### What the gate could not see before
+
+Four harness defects had to be fixed before it could reach a verdict at all,
+three of them spotted by the owner watching the screen:
+
+- the survivor was **stepped back into the street** by `goToWaitingSite`,
+  where the filler answered `no-containers` — `docs/TESTING.md` records why:
+  *"a house catalogued from the street yields one or two candidates and eight
+  once the survivor walks in"*;
+- the stall detector **fired before the fresh-neighbourhood remedy began**, so
+  the design's own answer for a clue with nowhere to go was never once tried;
+- the detector's fingerprint contained **scheduler step counts**, which rise
+  whatever happens, so it could never fire — the exact trap the previous
+  report had warned about in its own words;
+- a clue parked at `unknown` after an interrupted placement made the case
+  permanently unfinishable, which under
+  `DR-20260922-UNKNOWN-CLUE-KEEPS-THE-CASE-OPEN` is intended, so the gate now
+  reports `COULD NOT RUN` rather than 27 product failures.
+
+## Gate 7 — all 125 reached, and still failing
+
+```
+designs reached: 125 of 125
+geometry                                 125 of 125
+payoff inserted, exactly one token       123 of 125
+container identified and NOT a floor     123 of 125
+target resolves AND a standable square   123 of 125
+errors inside the mod                     56   <- the failure
+```
+
+**This is the first run to reach every design.** The nine area overlays and
+nine previously ambiguous bindings mostly pass with real non-floor containers
+— something the geometry-only evidence could never have shown.
+
+It fails on 56 mod errors, all `offerContainer` indexing `getParent` on an
+`ItemPickerJava$ItemPickerContainer`. **My earlier repair was wrong**: I
+wrapped the call in a `pcall` and reported that it "stops it erroring". A
+`pcall` stops an exception propagating, not Kahlua logging it — the original
+call was already inside one and still wrote 24 errors. The class is now asked
+with `instanceof` before the method is touched; a re-run measures it.
+
+`WorldStashMap9` and `WorldStashMap20` resolved no payoff. Whether that is an
+impossible placement or one never reached is **NOT ESTABLISHED**: the
+diagnostic written to answer it called `Catalogue.get` when the local is named
+`C`, so it threw and printed nothing.
+
+## Gate 8 — the save, and what it is not
+
+192,899 bytes at 7 of 16 cases with `MapMedia=349`. **Not a maximum**: the map
+media root is nearly empty because the campaign gate reads no maps. The
+offline estimator puts a combined fixture at 959,031 estimated bytes; an
+estimate is not a native measurement and the two are not quoted as one.
+
+---
+
+# (superseded) # Native acceptance — task 7
 
 **Every gate below is labelled PASS, FAIL or NOT EXERCISED, and nothing is
 labelled from an earlier run.** Where a gate was reached at a different

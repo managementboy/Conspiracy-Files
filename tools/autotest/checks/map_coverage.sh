@@ -83,30 +83,32 @@ claim_game || exit 2
         fi
         # PROGRESS, NOT A CLOCK. The placement scan is paced per frame; wait for
         # its own state to settle and give up only when it has stopped moving.
-        # ONE LOOP, POLLED FOUR TIMES A SECOND INSTEAD OF EVERY TWO.
+        # ONE LOOP. THE PATIENCE IS A NUMBER OF SECONDS, NOT A POLL COUNT.
         #
-        # This was two sequential loops asking overlapping questions - "is the
-        # payoff placed?" then "does its target resolve?" - each sleeping 2 s
-        # between polls. Measured 2026-09-22: 125 designs took 1 h 23 m, about
-        # 33 s each, while the eval channel answers in ~0.1 s and the game
-        # checks for one every tick. Most of that was granularity, not the
-        # machine: a 2 s poll overshoots a readiness that arrives at a random
-        # point in the interval by 1 s on average, twice per design, twice over.
+        # This was two sequential loops - "is the payoff placed?" then "does
+        # its target resolve?" - at 2 s per poll. Collapsing them and polling
+        # at 0.5 s looked like a pure granularity win and was not: the old
+        # shape allowed 12 flat polls x 2 s PLUS 20 polls x 2 s, up to 64 s a
+        # design, and the new one allowed 48 flat polls x 0.5 s, 24 s. I cut
+        # the patience by 62% while believing I had only changed how often it
+        # looked, and the next run returned 62 INCONCLUSIVE of 112 where the
+        # slow one returned 2 of 125 - a measurement made worthless by its own
+        # optimisation (2026-09-22).
         #
-        # settled (the payoff target resolving to a live container) implies
-        # placed, so the two questions collapse into one. The floor is still
-        # the game genuinely streaming the world in and running a per-frame
-        # placement scan; that part is real work and is not hurried here.
+        # So the budget is written in SECONDS and the poll interval derived
+        # from it. Changing how often it looks can no longer change how long
+        # it waits.
+        SETTLE_SECONDS="${CF_SETTLE_SECONDS:-64}"
+        POLL="0.5"
+        polls=$(python3 -c "print(int($SETTLE_SECONDS/$POLL))")
         lastp=""; flat=0
-        for _ in $(seq 240); do
+        for _ in $(seq $((polls * 2))); do
             p="$(ev "return CFCov.progress([[$id]])")"
             if [ "$(field 4 "$p")" = placed ] \
                && [ "$(ev "return CFCov.settled([[$id]])")" = true ]; then break; fi
             if [ "$p" = "$lastp" ]; then flat=$((flat + 1)); else flat=0; lastp="$p"; fi
-            # 48 flat polls at 0.5 s is the same 24 s of no change the old
-            # 12 flat polls at 2 s allowed.
-            [ "$flat" -ge 48 ] && break
-            sleep 0.5
+            [ "$flat" -ge "$polls" ] && break
+            sleep "$POLL"
         done
         row="$(ev "return CFCov.row([[$id]])")"
         # AN EMPTY ROW IS A HARNESS FAULT, NOT A VERDICT. ev() prints nothing when
