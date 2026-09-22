@@ -80,6 +80,19 @@ end
 assert(sh:find("CFProf.become",1,true),
     "the profession must be set before the case is built")
 
+-- THE FIRST CASE NEEDS A WHOLE-MAP SCAN. Measured 2026-09-22: roughly 0.6 to
+-- 1.6 frames a second with the window unfocused, across 9,978 buildings - 25
+-- minutes or more. A ten-minute budget produced zero evidence across two runs
+-- and ten saves.
+local budget=tonumber(sh:match("CF_FIRST_CASE_WAIT:%-(%d+)"))
+assert(budget and budget>=1800,
+    "the first-case budget is "..tostring(budget).." s; a whole-map scan takes "
+    .."25 minutes or more on this machine and a shorter budget measures the "
+    .."harness rather than the mod")
+assert(sh:find("T3Nearby",1,true) and sh:find("flatscan",1,true),
+    "giving up must be decided by the scan's own cursor going flat, not by the "
+    .."clock alone")
+
 print("PASS profession_openings_contract: families come from Premises, no "
     .."profession id in the driver's logic, and the clue is read from the "
     .."inventory")

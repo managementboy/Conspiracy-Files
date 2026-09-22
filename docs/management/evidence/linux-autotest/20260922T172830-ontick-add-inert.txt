@@ -1,0 +1,56 @@
+Events.OnTick.Add is inert at runtime, from the start of a session
+source: 514ee07
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+game: Project Zomboid 42.20.4
+
+WHAT WAS OBSERVED
+
+On a FRESH world, with no test fixture loaded and nothing else done:
+
+    Events.OnTick.Add(function() CFT.n=CFT.n+1 end)
+    ... 12 seconds ...
+    CFT.n = 0
+
+While, in the same session, a handler registered at MOD LOAD TIME runs
+normally - T3Nearby's scan advanced 821 buildings in 39 frames over 25 s, and
+earlier in the session 8,810 -> 9,371 buildings while the runtime-added probe
+stayed at 0.
+
+    load-time handler:      index=821 frames=39
+    runtime-added handler:  0
+
+So the event list still dispatches. It has stopped ACCEPTING.
+
+WHY IT MATTERS
+
+Any feature that registers an OnTick handler while the game is running is
+silently dead. No error, no refusal, nothing in the log - the handler is
+simply never called. MarkerColourTest.start does this. IdentityProbe and
+GeneratedDiagnostic did until 1a0ff4e made their dispatchers permanent, which
+that commit justified as avoiding list mutation during dispatch; this
+measurement shows the permanent dispatcher is not merely safer, it is the
+only shape that works at all.
+
+THE LIKELY CAUSE, NOT YET PROVEN
+
+Removing a handler from inside OnTick's dispatch leaves the list unable to
+accept new ones (measured 2026-09-21, 20260921T074140-campaign). Several
+modules remove a handler in a reload guard at the top of their file:
+
+    if ConspiracyFiles.X and ConspiracyFiles.X.stop then ConspiracyFiles.X.stop() end
+
+AddressMap, ClueMarkers, ClueCue, T3Nearby, GeneratedDiagnostic, IdentityProbe
+and ClueSearch all do something of this shape. Those run at MOD LOAD, which
+T3Nearby's own comment calls "outside the dispatch" - and on a fresh world the
+mods are reloaded from the main menu, which may itself be inside one. If so,
+the guards poison the list for the whole session, every session.
+
+NOT ESTABLISHED: which guard, or whether mod load is genuinely inside a
+dispatch. Proving it needs a build that removes the guards one at a time, or a
+probe registered before any mod file runs.
+
+WHAT THIS DOES NOT EXPLAIN
+
+The profession playtest's timeouts. Those are a frame-rate problem: the scan
+advanced at roughly 0.6-1.6 frames a second with the window unfocused, so a
+full 9,978-building scan needs 25+ minutes and the check allowed 10.

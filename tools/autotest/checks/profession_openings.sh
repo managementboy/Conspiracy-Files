@@ -77,12 +77,33 @@ for fam in $families; do
         # If the profession is set too late the case comes out generic, and
         # the assertion below on the recorded profession says so rather than
         # passing quietly.
-        # The first case runs a nearby scan; on this machine that has taken up
-        # to seven minutes. Wait on the case appearing, not on a clock chosen
-        # for a faster machine.
-        r=""; for _ in $(seq 120); do
+        # THE FIRST CASE NEEDS A WHOLE-MAP SCAN, AND THE WINDOW IS UNFOCUSED.
+        #
+        # Measured 2026-09-22: the scan advances at roughly 0.6 to 1.6 frames a
+        # second with the game unfocused, and it walks 9,978 buildings - so a
+        # first case takes 25 minutes or more here, not the seven the campaign
+        # gate sees while it is driving the game with real actions. Ten minutes
+        # was nowhere near enough and produced zero evidence across two runs
+        # and ten saves.
+        #
+        # So: wait on the scan's own cursor rather than a clock, give up only
+        # when it stops advancing, and let CF_FIRST_CASE_WAIT raise the ceiling
+        # on a slower machine. campaign.sh uses the same variable.
+        local budget="${CF_FIRST_CASE_WAIT:-2100}"
+        local deadline=$(( $(date +%s) + budget ))
+        local lastscan="" flatscan=0
+        r=""; while [ "$(date +%s)" -lt "$deadline" ]; do
             r="$(ev "return CFProf.result()")"
             [ "$(field 1 "$r")" = ready ] && break
+            # The scan's cursor is the honest progress measure; a flat cursor
+            # for two minutes means it has stopped, whatever the clock says.
+            local scan
+            scan="$(ev 'local T=ConspiracyFiles.T3Nearby;local p=T and T.progress and T.progress();return p and (tostring(p.phase)..":"..tostring(p.index)) or "none"')"
+            if [ "$scan" = "$lastscan" ]; then flatscan=$((flatscan + 1)); else flatscan=0; lastscan="$scan"; fi
+            if [ "$flatscan" -ge 24 ]; then
+                say "$profession save $n: the nearby scan stopped advancing at $scan"
+                break
+            fi
             sleep 5
         done
         if [ "$(field 1 "$r")" != ready ]; then
