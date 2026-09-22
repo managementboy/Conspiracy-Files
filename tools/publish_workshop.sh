@@ -100,6 +100,20 @@ published_id="0"
 
 description="$(cat "$ITEM_DIR/description.txt" 2>/dev/null || echo "Conspiracy-Files: Dead Air")"
 
+# Git Bash paths such as /c/Users/... are valid to its own tools but are not
+# valid inside a VDF read directly by the native Windows steamcmd.exe. Use the
+# mixed C:/... form there; forward slashes also avoid KeyValues backslash
+# ambiguities. On Linux, leave the path unchanged.
+vdf_path() {
+    if command -v cygpath >/dev/null 2>&1; then
+        cygpath -m "$1"
+    else
+        printf '%s\n' "$1"
+    fi
+}
+content_vdf="$(vdf_path "$CONTENT")"
+preview_vdf="$(vdf_path "$PREVIEW")"
+
 # steamcmd wants a VDF, and Valve's KeyValues parser reads these files with
 # escape sequences OFF. A backslash is therefore an ordinary character and \"
 # does NOT escape a quote: it is a backslash followed by a quote that ends the
@@ -122,8 +136,8 @@ vdf_escape() {
     echo '{'
     echo "    \"appid\"           \"$APPID\""
     echo "    \"publishedfileid\" \"$published_id\""
-    echo "    \"contentfolder\"   \"$CONTENT\""
-    [ -f "$PREVIEW" ] && echo "    \"previewfile\"     \"$PREVIEW\""
+    echo "    \"contentfolder\"   \"$content_vdf\""
+    [ -f "$PREVIEW" ] && echo "    \"previewfile\"     \"$preview_vdf\""
     echo "    \"visibility\"      \"$visibility\""
     echo "    \"title\"           \"Conspiracy-Files: Dead Air\""
     echo "    \"description\"     \"$(vdf_escape "$description")\""
