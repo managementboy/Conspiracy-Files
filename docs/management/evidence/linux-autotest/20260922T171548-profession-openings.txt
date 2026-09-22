@@ -1,0 +1,16 @@
+Linux profession opening families: COULD NOT RUN
+source: 46f64c8
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+families advertised: fitnessinstructor:fitness-instructor-start:10
+saves per family: 6
+
+  
+
+NOT EXERCISED: fitnessinstructor save 1: the first case never finished preparing
+NOT EXERCISED: fitnessinstructor save 2: the first case never finished preparing
+NOT EXERCISED: fitnessinstructor save 3: the first case never finished preparing
+NOT EXERCISED: fitnessinstructor save 4: the first case never finished preparing
+NOT EXERCISED: fitnessinstructor save 5: the first case never finished preparing
+NOT EXERCISED: fitnessinstructor save 6: the first case never finished preparing
+NOT EXERCISED: fitnessinstructor: only 0 save(s) produced a case, so variation could not be judged
+errors inside the mod: 0

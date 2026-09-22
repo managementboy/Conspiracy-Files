@@ -65,10 +65,20 @@ assert(sh:find('verdict="COULD NOT RUN"',1,true) and sh:find("*) exit 2",1,true)
 assert(sh:find('"$PZ" fresh',1,true),
     "saves after the first must ask the RUNNING game for a new world; "
     .."start_world refuses while a game is up")
-assert(sh:find("automaticStatus().preparing",1,true),
-    "the world starts its own first case at spawn; the check must wait for "
-    .."that before replacing it, or it is refused as 'preparation already "
-    .."running'")
+-- THE WORLD'S OWN FIRST CASE IS THE ONE TESTED. Wiping the store and calling
+-- Trial.start cost two generations a save, never finished preparing in ten
+-- minutes across six saves, and drove a path no player takes. The profession
+-- is read in prepare(), after the nearby scan, so setting it while the scan
+-- runs makes the automatic case a profession one.
+for line in sh:gmatch("[^\n]+") do
+    if not line:match("^%s*#") then
+        assert(not line:find("freshFirstCase",1,true),
+            "the check must not wipe the store and start its own case; the "
+            .."world's own first case is what a player gets: "..line)
+    end
+end
+assert(sh:find("CFProf.become",1,true),
+    "the profession must be set before the case is built")
 
 print("PASS profession_openings_contract: families come from Premises, no "
     .."profession id in the driver's logic, and the clue is read from the "

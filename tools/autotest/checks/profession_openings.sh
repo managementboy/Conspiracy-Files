@@ -61,17 +61,22 @@ for fam in $families; do
         fi
         [ "$(field 2 "$became")" = "$profession" ] \
             || fail "$profession: the descriptor reports $(field 2 "$became") after being set"
-        # THE WORLD STARTS ITS OWN FIRST CASE AT SPAWN, so wiping the store
-        # and asking for another is refused with "preparation already
-        # running" - which is how the first run of this check reached zero
-        # saves. Let that one finish, then replace it with one built while
-        # the profession is set.
-        for _ in $(seq 120); do
-            [ "$(ev 'return tostring(ConspiracyFiles.GeneratedRuntime.automaticStatus().preparing)')" = false ] && break
-            sleep 5
-        done
-        started="$(ev 'return CFProf.freshFirstCase()')"
-        [ "$(field 1 "$started")" = true ] || { skip "$profession save $n: no first case ($(field 2 "$started"))"; continue; }
+        # LET THE WORLD'S OWN FIRST CASE BE THE ONE, rather than replacing it.
+        #
+        # The profession is read in prepare(), AFTER the nearby scan finishes -
+        # not at world load. So setting it in the seconds after the world is
+        # ready, while the scan is still running, makes the automatic first
+        # case a profession one, and no wipe is needed at all.
+        #
+        # The previous shape wiped the store and called Trial.start itself.
+        # That cost two case generations a save and the replacement never
+        # finished preparing in ten minutes, six times over - zero evidence
+        # from an hour of running. It also left the check driving a path the
+        # player never takes; this one is exactly what happens in a new game.
+        #
+        # If the profession is set too late the case comes out generic, and
+        # the assertion below on the recorded profession says so rather than
+        # passing quietly.
         # The first case runs a nearby scan; on this machine that has taken up
         # to seven minutes. Wait on the case appearing, not on a clock chosen
         # for a faster machine.
