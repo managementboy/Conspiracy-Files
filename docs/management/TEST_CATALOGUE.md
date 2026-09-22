@@ -224,8 +224,10 @@ persistence · P3 edges, polish, performance headroom.
 Fresh world for each run (P4-R63). `-debug` always. Indoor start. Never delete
 or rewrite a player's save. Walk, do not teleport, for arrival tests. A run that
 finds nothing is still a result. Boot check before every Workshop publish
-(P4-R76). Check the build marker first. On Windows attended sessions: no eval,
-no injected helpers.
+(P4-R76), unless the owner deliberately invokes the publisher's reason-required
+manual override (DR-20260922-WORKSHOP-BOOT-OVERRIDE). An override records that
+the check was not run and is never a pass. Check the build marker first. On
+Windows attended sessions: no eval, no injected helpers.
 
 ## Conflicts between older documents
 

@@ -1,3 +1,16 @@
+## DR-20260922-WORKSHOP-BOOT-OVERRIDE — explicit owner waiver is allowed
+
+The Linux native boot check remains the default hard gate for every real Steam
+Workshop upload. The owner may manually waive it for an attended development
+upload by passing `--owner-override-boot-check "reason"`. The reason is
+mandatory, the publisher emits a prominent warning, and it writes the version,
+commit, Workshop item, timestamp and reason to a local audit record. The record
+states that no boot check ran; an override is not a pass.
+
+This amends P4-R76 only by adding an explicit owner escape hatch. It does not
+permit an automatic bypass, change the unlisted visibility, relax packaging or
+module checks, or allow credentials in scripts or chat.
+
 ## DR-20260922-UNKNOWN-CLUE-KEEPS-THE-CASE-OPEN — owner, 2026-09-22
 
 **An interrupted placement leaves its clue at `unknown`, and the case stays
@@ -1562,7 +1575,10 @@ P4-R117: all work goes into `main`.)*
 
 **P4-R76 — publish passing builds.** A build that passes the Linux boot check
 may be published to the unlisted Workshop item (version bumped each time), so
-the Windows play machine has the latest build.
+the Windows play machine has the latest build. *Amended 2026-09-22 by
+DR-20260922-WORKSHOP-BOOT-OVERRIDE: the owner may deliberately waive the check
+for an attended development upload using the reason-required publisher flag;
+the waiver is recorded and never represented as a pass.*
 
 ## Old cases after a rules change — 2026-09-11
 

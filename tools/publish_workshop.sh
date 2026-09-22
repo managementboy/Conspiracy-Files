@@ -4,6 +4,8 @@
 #   tools/publish_workshop.sh --dry-run          build and show what would upload
 #   tools/publish_workshop.sh                    upload at the stored visibility
 #   tools/publish_workshop.sh --visibility 0     ... and make it public
+#   tools/publish_workshop.sh --owner-override-boot-check "reason"
+#                                                deliberately waive Linux boot
 #
 # Two machines, one account: this machine develops and publishes, the other
 # subscribes and plays. Steam pushes the update to the play machine; nothing is
@@ -36,6 +38,7 @@ PREVIEW="$ITEM_DIR/preview.png"
 BUILD="$REPO/dist/workshop"
 CONTENT="$BUILD/content"
 VDF="$BUILD/item.vdf"
+OVERRIDE_AUDIT="$BUILD/owner-boot-check-override.txt"
 
 # 0 public, 1 friends-only, 2 private, 3 unlisted.
 # Unlisted is the default on purpose: it does not appear in search, but anyone
@@ -44,15 +47,30 @@ VDF="$BUILD/item.vdf"
 visibility="${CF_WORKSHOP_VISIBILITY:-3}"
 dry_run=0
 changenote="${CF_CHANGENOTE:-}"
+boot_override_reason=""
 
 while [ $# -gt 0 ]; do
     case "$1" in
         --dry-run)    dry_run=1; shift ;;
         --visibility) visibility="${2:-}"; shift 2 ;;
         --changenote) changenote="${2:-}"; shift 2 ;;
+        --owner-override-boot-check)
+            [ $# -ge 2 ] || {
+                echo "--owner-override-boot-check requires a reason" >&2
+                exit 2
+            }
+            boot_override_reason="$2"
+            shift 2
+            ;;
         *) echo "unknown argument: $1" >&2; exit 2 ;;
     esac
 done
+
+if [ -n "$boot_override_reason" ] \
+   && [ -z "$(printf '%s' "$boot_override_reason" | tr -d '[:space:]')" ]; then
+    echo "--owner-override-boot-check requires a non-blank reason" >&2
+    exit 2
+fi
 
 case "$visibility" in
     0|1|2|3) ;;
@@ -145,6 +163,11 @@ echo "  item        $([ "$published_id" = "0" ] && echo 'NEW - will be created' 
 echo "  changenote  $changenote"
 [ -f "$PREVIEW" ] || echo "  preview     none (Workshop page will have no image)"
 echo "  vdf         $VDF"
+if [ -n "$boot_override_reason" ]; then
+    echo "  boot gate   OWNER OVERRIDE: $boot_override_reason"
+else
+    echo "  boot gate   Linux native boot check required before upload"
+fi
 
 if [ "$dry_run" -eq 1 ]; then
     echo
@@ -152,9 +175,47 @@ if [ "$dry_run" -eq 1 ]; then
     exit 0
 fi
 
-command -v steamcmd >/dev/null 2>&1 || {
+if [ -n "$boot_override_reason" ]; then
+    override_one_line="$(printf '%s' "$boot_override_reason" | tr '\r\n' '  ')"
+    commit="$(git -C "$REPO" rev-parse HEAD 2>/dev/null || echo unknown)"
+    {
+        echo "OWNER OVERRIDE OF LINUX NATIVE BOOT CHECK"
+        echo "timestamp_utc=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+        echo "version=$version"
+        echo "commit=$commit"
+        echo "workshop_item=$published_id"
+        echo "reason=$override_one_line"
+        echo "result=boot check not run; this is not a test pass"
+    } > "$OVERRIDE_AUDIT"
+    echo
+    echo "WARNING: owner override active; Linux native boot check was not run."
+    echo "Audit record: $OVERRIDE_AUDIT"
+else
+    echo
+    echo "running required Linux native boot check ..."
+    if ! "$REPO/tools/autotest/boot_check.sh"; then
+        echo "Linux native boot check did not pass; upload refused." >&2
+        echo "The owner may deliberately waive it with:" >&2
+        echo "  --owner-override-boot-check \"reason\"" >&2
+        exit 1
+    fi
+fi
+
+steamcmd_bin="${STEAMCMD:-}"
+if [ -z "$steamcmd_bin" ]; then
+    steamcmd_bin="$(command -v steamcmd 2>/dev/null || true)"
+fi
+if [ -z "$steamcmd_bin" ] && [ -n "${LOCALAPPDATA:-}" ] \
+   && command -v cygpath >/dev/null 2>&1; then
+    candidate="$(cygpath -u "$LOCALAPPDATA")/Programs/SteamCMD/steamcmd.exe"
+    [ -x "$candidate" ] && steamcmd_bin="$candidate"
+fi
+
+[ -n "$steamcmd_bin" ] && [ -x "$steamcmd_bin" ] || {
     echo "steamcmd not found. Install it, then log in once interactively:" >&2
-    echo "  sudo apt install steamcmd && steamcmd +login $STEAM_USER" >&2
+    echo "  Windows: %LOCALAPPDATA%\\Programs\\SteamCMD\\steamcmd.exe +login $STEAM_USER" >&2
+    echo "  Linux:   steamcmd +login $STEAM_USER" >&2
+    echo "Or set STEAMCMD to the executable's path." >&2
     exit 2; }
 
 [ "$STEAM_USER" = "$STEAM_USER_DEFAULT" ] \
@@ -164,7 +225,7 @@ echo
 echo "uploading as $STEAM_USER ..."
 # Steam reports a failed build on stdout and still exits 0 in some versions, so
 # check the output rather than trusting the exit status alone.
-out="$(steamcmd +login "$STEAM_USER" +workshop_build_item "$VDF" +quit 2>&1)" || true
+out="$("$steamcmd_bin" +login "$STEAM_USER" +workshop_build_item "$VDF" +quit 2>&1)" || true
 printf '%s\n' "$out" | tail -20
 
 # steamcmd prints a bare "Success." and immediately concatenates the next line
@@ -198,6 +259,6 @@ elif printf '%s' "$out" | grep -q 'Success\.'; then
 else
     echo
     echo "upload did not report success. Nothing was recorded." >&2
-    echo "If it asked for a login, run: steamcmd +login $STEAM_USER" >&2
+    echo "If it asked for a login, run: $steamcmd_bin +login $STEAM_USER" >&2
     exit 1
 fi

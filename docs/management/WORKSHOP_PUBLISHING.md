@@ -29,6 +29,12 @@ which is the one thing this workflow depends on.
 
 ## One-time setup
 
+Windows (the publisher also auto-detects this per-user installation):
+
+    %LOCALAPPDATA%\Programs\SteamCMD\steamcmd.exe +login managementboy
+
+Linux:
+
     sudo apt install steamcmd
     steamcmd +login managementboy
 
@@ -55,14 +61,31 @@ the same require-checked tree as the zip and the local install. That check is
 the one that catches a module existing only on one machine, so the publisher
 deliberately has no path around it.
 
+For a real upload, the publisher runs the Linux native boot check itself and
+refuses the upload unless it passes. A dry run only reports that this gate will
+be required; it does not start the game.
+
+The owner can deliberately waive that gate for an attended development upload:
+
+    tools/publish_workshop.sh \
+        --owner-override-boot-check "Windows-only build review; owner accepted the risk" \
+        --changenote "room-aware placement"
+
+The flag requires a non-blank reason, prints a prominent warning and writes an
+audit record to `dist/workshop/owner-boot-check-override.txt`. The record says
+that the check was **not run**; an override never counts as a pass. The default
+remains the real Linux check, and this exception does not authorise changing
+the stored unlisted visibility.
+
 The first successful upload creates the item and writes its ID to
 `tools/workshop/published_file_id`. **Commit that file.** Without it the next
 publish creates a second, unrelated Workshop item.
 
 ## The two-machine loop
 
-1. Develop here. `tools/autotest/unit.sh`, then `tools/autotest/boot_check.sh` (P4-R76: only builds
-   that pass it are published).
+1. Develop here and run `tools/autotest/unit.sh`. The publisher runs
+   `tools/autotest/boot_check.sh` immediately before upload unless the owner
+   explicitly supplies the recorded override above (P4-R76, amended 2026-09-22).
 2. Bump `ConspiracyFiles.VERSION` in `mod/common/media/lua/shared/ConspiracyFiles/Version.lua`
    (the single source since it moved out of the old evidence window). It names the archive and every log line,
    and it is the only in-game signal of what is running.
