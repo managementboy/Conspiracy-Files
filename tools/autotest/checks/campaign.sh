@@ -51,6 +51,9 @@ abort() { say "$*"; "$PZ" stop >/dev/null 2>&1; exit 2; }
 #                folded into the verdict.
 fails=(); fail() { fails+=("$*"); say "FAIL: $*"; }
 harnesses=(); harness() { harnesses+=("$*"); say "HARNESS: $*"; }
+# Set when a clue is parked at `unknown`: the case cannot finish by the owner's
+# own decision, so the stages behind it are NOT EXERCISED rather than failed.
+WEDGED=0
 unexercised=(); unexercised() { unexercised+=("$*"); say "NOT EXERCISED: $*"; }
 findings=(); stages=(); saves=(); errors_seen=""
 CHECKS="$REPO/tools/autotest/checks"
@@ -306,6 +309,21 @@ played_all() { # played_all LABEL CASEID
     local n rest; rest="$(ev "return CFCamp.outstanding([[$2]])")"
     n="$(field 1 "$rest")"
     findings+=("$1: $PLAYED clue(s) played of $CASE_LEFT offered; outstanding by id: ${n:-?} $(field 2 "$rest")")
+    # A CLUE AT `unknown` IS NOT A PRODUCT FAILURE. An interrupted placement
+    # parks a clue at "unknown" and the mod deliberately never replaces it
+    # (GeneratedRuntime: "Interrupted placement is uncertain; no automatic
+    # replacement"). The owner decided on 2026-09-22 that such a case stays
+    # OPEN rather than completing with a gap, so the case genuinely cannot
+    # finish and everything downstream of finishing cannot be reached.
+    #
+    # Reported once, as the condition it is. The run on 2026-09-21 turned this
+    # single owner-sanctioned state into 27 product failures, which is how a
+    # gate stops being readable.
+    if grep -q "unknown" <<<"$(field 2 "$rest")"; then
+        unexercised "$1: a clue is parked at \`unknown\` after an interrupted placement ($(field 2 "$rest")). The owner's decision of 2026-09-22 is that the case stays open, so it cannot finish and every stage that needs a finished case is out of reach in this world"
+        WEDGED=1
+        return 0
+    fi
     if ! [ "${n:-1}" = 0 ]; then
         fail "$1: $n clue(s) of the case were never played: $(field 2 "$rest") (played $PLAYED, offered $CASE_LEFT)"
     elif [ "$PLAYED" != "$CASE_LEFT" ]; then
@@ -433,6 +451,34 @@ names_start="$NAMES_NOW"
 thought0="$(said 'What do I make of it?')"
 play_case "$case1"
 played_all "case 1" "$case1"
+# A WORLD WHERE CASE 1 CANNOT FINISH CANNOT TEST THE CAMPAIGN. Everything from
+# here on - the closing questions, the answers, the steer, the archive, the
+# limit - needs a finished case 1. Grinding through them produced 27 downstream
+# failures and ninety minutes of evidence about one wedged clue (2026-09-21).
+# Stop here and say so; a fresh world is the answer, exactly as it is for a
+# case 1 with no document in the relay memo's week.
+if [ "$WEDGED" = 1 ]; then
+    say "case 1 cannot finish in this world; stopping rather than failing every stage behind it"
+    errors_seen+="$(mod_errors)"
+    "$PZ" stop >/dev/null 2>&1
+    report="$EVIDENCE/$first-campaign.txt"
+    {
+        echo "Linux campaign check $first: COULD NOT RUN"
+        source_line
+        echo "case 1: $case1"
+        echo "outcome: ${#fails[@]} product failure(s), ${#harnesses[@]} harness failure(s), ${#unexercised[@]} stage(s) not exercised"
+        echo "stopped after case 1: a clue parked at \`unknown\` after an interrupted"
+        echo "placement. By the owner's decision of 2026-09-22 such a case stays OPEN,"
+        echo "so it cannot finish and no stage behind it can be reached in this world."
+        echo "Re-run to draw a fresh world."
+        for f in "${findings[@]}"; do echo "FINDING: $f"; done
+        for f in "${unexercised[@]}"; do echo "NOT EXERCISED: $f"; done
+        for f in "${fails[@]}"; do echo "FAIL: $f"; done
+        echo "errors inside the mod: $(grep -c . <<<"$errors_seen")"
+    } > "$report.part"; mv "$report.part" "$report"
+    cat "$report"
+    exit 2
+fi
 wait_finished 1 || fail "case 1 did not finish after its clues were inspected"
 thought_once "case 1" "$thought0"
 notes="$(ev 'return CFLoop.dateNotes()')"

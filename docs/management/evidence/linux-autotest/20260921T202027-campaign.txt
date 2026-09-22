@@ -1,0 +1,140 @@
+Linux campaign check 20260921T202027: FAIL
+source: 2324499
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+cases: 1 generated:1449462802:case, 2 generated:1921721395:case, 3 generated:1509084278:case; at the end 5 2 1:1449462802:live 2:1921721395:retired 3:1509084278:live 4:1148322017:retired 5:1426738657:live
+stages:
+  start                  cases 1 (0 finished) | record 0 | FILES questions 0 | NAMES 1 | PLACES 0 | Old 0/0 wrong | Evidence 0/0 wrong | order  | save 49199 B
+  case 1 finished        cases 1 (0 finished) | record 4 | FILES questions 0 | NAMES 3 | PLACES 5 | Old 0/0 wrong | Evidence 4/0 wrong | order 1111 | save 55524 B
+  after reload 1         cases 1 (0 finished) | record 4 | FILES questions 0 | NAMES 3 | PLACES 5 | Old 0/0 wrong | Evidence 4/0 wrong | order 1111 | save 55524 B
+  case 2 finished        cases 2 (1 finished) | record 8 | FILES questions 1 | NAMES 4 | PLACES 10 | Old 4/0 wrong | Evidence 4/0 wrong | order 11112222 | save 81621 B
+  case 3, two clues      cases 3 (1 finished) | record 10 | FILES questions 1 | NAMES 6 | PLACES 13 | Old 4/0 wrong | Evidence 6/0 wrong | order 1111222233 | save 115549 B
+  after reload 2         cases 3 (1 finished) | record 10 | FILES questions 1 | NAMES 6 | PLACES 13 | Old 4/0 wrong | Evidence 6/0 wrong | order 1111222233 | save 115583 B
+  at the limit           cases 3 (1 finished) | record 10 | FILES questions 1 | NAMES 6 | PLACES 13 | Old 4/0 wrong | Evidence 6/0 wrong | order 1111222233 | save 116175 B
+  after the limit        cases 5 (1 finished) | record 10 | FILES questions 1 | NAMES 6 | PLACES 13 | Old 4/0 wrong | Evidence 6/0 wrong | order 1111222233 | save 177827 B
+  after reload 3, full archive cases 5 (2 finished) | record 13 | FILES questions 2 | NAMES 7 | PLACES 18 | Old 7/0 wrong | Evidence 6/0 wrong | order 1111222233444 | save 170744 B
+case 1 answers on the organiser: false       
+case 2 steer: unsteered    Delia Mercer false
+refusals (P4-R133), all sessions:
+  active-limit: 35 lines, longest run of 35, rung 3
+  no-containers: 4 lines, longest run of 3, rung 1
+instalments placed and clues dropped (P4-R133, P4-R134), all sessions:
+  none in this run
+errors inside the mod, all sessions: 0
+outcome: 27 product failure(s), 0 harness failure(s), 0 stage(s) not exercised
+FINDING: fresh worlds started for a case 1 with a document in the memo's week: 1 (memo=true, dated documents=4)
+FINDING: start: assignments placed=4 unknown=1; why=gap n=0 due=02:11 rung=0/3 now=02:12 overdue=false(-23.98h) preparing=false active=1/4 cases=1/16
+FINDING: case 1449462802:case: 1 waiting, but its site could not be reached (no deferred clue in 1449462802); moving on instead, move 1
+FINDING: case 1449462802:case, waiting clue, move 1: nowhere fresh to move to: could not get inside t3:11259175162085403: the bounding-box centre and all 6 room centres are outside
+FINDING: case 1449462802:case: 1 waiting, but its site could not be reached (no deferred clue in 1449462802); moving on instead, move 2
+FINDING: case 1449462802:case, waiting clue, move 2: nowhere fresh to move to: could not get inside t3:10977700185374736: the bounding-box centre and all 6 room centres are outside
+FINDING: case 1449462802:case: 1 waiting, but its site could not be reached (no deferred clue in 1449462802); moving on instead, move 3
+FINDING: case 1449462802:case, waiting clue, move 3: nowhere fresh to move to: could not get inside t3:10696229503631380: the bounding-box centre and all 4 room centres are outside
+FINDING: case 1449462802:case: 1 waiting, but its site could not be reached (its own site was tried three times and answered no-containers); moving on instead, move 4
+FINDING: case 1449462802:case, waiting clue, move 4: nowhere fresh to move to: could not get inside t3:10977704480342043: the bounding-box centre and all 13 room centres are outside
+FINDING: case 1: 4 clue(s) played of 4 offered; outstanding by id: 1 5:unknown
+FINDING: case 1 relay memo: found=false, dated in its week=4, carrying the date note=0
+FINDING: the date note was exercised: 0 of 4 records dated in the memo's week carry it
+FINDING: case 1 finished: assignments placed=4 unknown=1; why=gap n=0 due=02:11 rung=0/3 now=05:54 overdue=false(-20.28h) preparing=false active=1/4 cases=1/16
+FINDING: case 1 note on the organiser: FILES has no question row for 1449462802
+FINDING: frame cost during case 1: AutomaticInvestigations.onTick calls=49711 avg=0.002ms max=1ms over2ms=0 | CaseFile.onTick calls=49699 avg=0.005ms max=2ms over2ms=1 | ClueMarkers.draw calls=0 avg=0.000ms max=0ms over2ms=0 | ClueMarkers.update calls=833 avg=0.103ms max=5ms over2ms=1 | IdentityObserver.afterRender calls=0 avg=0.000ms max=0ms over2ms=0 | IdentityObserver.tick calls=49747 avg=0.002ms max=1ms over2ms=0 | LocalPersonI
+FINDING: after reload 1: assignments placed=4 unknown=1; why=gap n=0 due=02:11 rung=0/3 now=06:11 overdue=false(-19.99h) preparing=false active=1/4 cases=1/16
+FINDING: reload 1 save size: 55524 -> 55524 bytes; before [CasePeople=690 DiscoveryLedger=1953 Generated.G2=49312 KeyConnections=778 PlaceVisits=290 VisitedBuildings=827]; after [CasePeople=690 DiscoveryLedger=1953 Generated.G2=49312 KeyConnections=778 PlaceVisits=290 VisitedBuildings=827]
+FINDING: case 2 placement (survivor in office): reach 250: t3:10977704480342042, t3:10977704480342054
+FINDING: case 2 ways offered: person
+FINDING: case 2 clues: Unattended night shift / R-527 | Standby instruction / R-527 | Standby pay decision / R-527 | Works identification / R-527
+FINDING: case 2: 4 clue(s) played of 4 offered; outstanding by id: 0 
+FINDING: case 2 finished: assignments placed=4 unknown=1; why=gap n=0 due=06:22 rung=0/3 now=06:53 overdue=false(-23.48h) preparing=false active=1/4 cases=2/16
+FINDING: frame cost during case 2: AutomaticInvestigations.onTick calls=11964 avg=0.003ms max=1ms over2ms=0 | CaseFile.onTick calls=11952 avg=0.007ms max=2ms over2ms=1 | ClueMarkers.draw calls=0 avg=0.000ms max=0ms over2ms=0 | ClueMarkers.update calls=201 avg=0.229ms max=5ms over2ms=4 | IdentityObserver.afterRender calls=0 avg=0.000ms max=0ms over2ms=0 | IdentityObserver.tick calls=12000 avg=0.003ms max=1ms over2ms=0 | LocalPersonI
+FINDING: case 3 placement (survivor in closet): reach 250: t3:10977704480342058, t3:10977704480342016
+FINDING: case 3, two clues: assignments deferred=2 placed=6 unknown=1; why=gap n=0 due=07:02 rung=0/3 now=07:08 overdue=false(-23.90h) preparing=false active=2/4 cases=3/16
+FINDING: frame cost during case 3: AutomaticInvestigations.onTick calls=15462 avg=0.002ms max=3ms over2ms=1 | CaseFile.onTick calls=15450 avg=0.007ms max=2ms over2ms=2 | ClueMarkers.draw calls=0 avg=0.000ms max=0ms over2ms=0 | ClueMarkers.update calls=260 avg=0.269ms max=5ms over2ms=6 | IdentityObserver.afterRender calls=0 avg=0.000ms max=0ms over2ms=0 | IdentityObserver.tick calls=15498 avg=0.003ms max=1ms over2ms=0 | LocalPersonI
+FINDING: after reload 2: assignments deferred=2 placed=6 unknown=1; why=gap n=0 due=07:02 rung=0/3 now=07:14 overdue=false(-23.81h) preparing=false active=2/4 cases=3/16
+FINDING: reload 2 save size: 115549 -> 115583 bytes; before [CasePeople=1758 DiscoveryLedger=4829 Generated.G2=101307 KeyConnections=1698 PlaceVisits=741 VisitedBuildings=1178]; after [CasePeople=1792 DiscoveryLedger=4829 Generated.G2=101307 KeyConnections=1698 PlaceVisits=741 VisitedBuildings=1178]
+FINDING: map marks after reload 2 (written/pending/missing): 10/0/0
+FINDING: the limit, move 1: nowhere fresh to move to: could not get inside t3:10696229503631377: the bounding-box centre and all 5 room centres are outside
+FINDING: the limit, move 2: nowhere fresh to move to: could not get inside t3:10977700185374723: the bounding-box centre and all 11 room centres are outside
+FINDING: the limit: no case yet, but the promise still stands (why=cooldown n=1 due=08:32 rung=0/3 now=08:03 overdue=false(-0.47h) preparing=false active=2/4 cases=3/16)
+FINDING: the limit: no case after 2 moves; assignments deferred=2 placed=6 unknown=1
+FINDING: cases stopped coming short of four unfinished: 3 1 1:1449462802:live 2:1921721395:retired 3:1509084278:live
+FINDING: the fourth unfinished case did not arrive: 3 1 1:1449462802:live 2:1921721395:retired 3:1509084278:live
+FINDING: at the limit: assignments deferred=2 placed=6 unknown=1; why=cooldown n=1 due=08:32 rung=0/3 now=08:04 overdue=false(-0.46h) preparing=false active=2/4 cases=3/16
+FINDING: at the limit: nowhere fresh to move to: could not get inside t3:10696229503631377: the bounding-box centre and all 5 room centres are outside
+FINDING: after 90 s with 2 unfinished: preparing=true, cases 3 1 1:1449462802:live 2:1921721395:retired 3:1509084278:live
+FINDING: case 1449462802:case: 1 waiting, but its site could not be reached (no deferred clue in 1449462802); moving on instead, move 1
+FINDING: case 1449462802:case, waiting clue, move 1: nowhere fresh to move to: could not get inside t3:10977700185374723: the bounding-box centre and all 11 room centres are outside
+FINDING: case 1449462802:case: 1 waiting, but its site could not be reached (no deferred clue in 1449462802); moving on instead, move 2
+FINDING: case 1449462802:case, waiting clue, move 2: nowhere fresh to move to: could not get inside t3:10696229503631377: the bounding-box centre and all 5 room centres are outside
+FINDING: case 1449462802:case: 1 waiting, but its site could not be reached (no deferred clue in 1449462802); moving on instead, move 3
+FINDING: case 1449462802:case, waiting clue, move 3: nowhere fresh to move to: could not get inside t3:10977700185374723: the bounding-box centre and all 11 room centres are outside
+FINDING: case 1449462802:case: 1 waiting, but its site could not be reached (its own site was tried three times and answered no-containers); moving on instead, move 4
+FINDING: case 1449462802:case, waiting clue, move 4: nowhere fresh to move to: could not get inside t3:10696229503631377: the bounding-box centre and all 5 room centres are outside
+FINDING: case 1449462802:case: 1 waiting, but its site could not be reached (its own site was tried three times and answered no-containers); moving on instead, move 5
+FINDING: case 1449462802:case, waiting clue, move 5: nowhere fresh to move to: could not get inside t3:10977700185374723: the bounding-box centre and all 11 room centres are outside
+FINDING: case 1449462802:case: 1 waiting, but its site could not be reached (its own site was tried three times and answered no-containers); moving on instead, move 6
+FINDING: case 1449462802:case, waiting clue, move 6: nowhere fresh to move to: could not get inside t3:10696229503631377: the bounding-box centre and all 5 room centres are outside
+FINDING: case 1449462802:case: 1 waiting, but its site could not be reached (its own site was tried three times and answered no-containers); moving on instead, move 7
+FINDING: case 1449462802:case, waiting clue, move 7: nowhere fresh to move to: could not get inside t3:10977700185374723: the bounding-box centre and all 11 room centres are outside
+FINDING: case 1449462802:case: 1 waiting, but its site could not be reached (its own site was tried three times and answered no-containers); moving on instead, move 8
+FINDING: case 1449462802:case, waiting clue, move 8: nowhere fresh to move to: could not get inside t3:10696229503631377: the bounding-box centre and all 5 room centres are outside
+FINDING: case 1449462802:case: 1 waiting, but its site could not be reached (its own site was tried three times and answered no-containers); moving on instead, move 9
+FINDING: case 1449462802:case, waiting clue, move 9: nowhere fresh to move to: could not get inside t3:10977700185374723: the bounding-box centre and all 11 room centres are outside
+FINDING: a new case came after a case was finished at the limit: 5 1 1:1449462802:live 2:1921721395:retired 3:1509084278:live 4:1148322017:live 5:1426738657:live
+FINDING: after the limit: assignments deferred=2 placed=13 unknown=1; why=active-limit n=12 due=15:23 rung=3/3 now=14:53 overdue=false(-0.50h) preparing=false active=4/4 cases=5/16
+FINDING: frame cost during the limit: AutomaticInvestigations.onTick calls=102018 avg=0.009ms max=88ms over2ms=18 | CaseFile.onTick calls=102006 avg=0.003ms max=1ms over2ms=0 | ClueMarkers.draw calls=0 avg=0.000ms max=0ms over2ms=0 | ClueMarkers.update calls=1723 avg=0.147ms max=1ms over2ms=0 | IdentityObserver.afterRender calls=0 avg=0.000ms max=0ms over2ms=0 | IdentityObserver.tick calls=102054 avg=0.001ms max=1ms over2ms=0 | LocalP
+FINDING: case 1449462802:case: 1 waiting, but its site could not be reached (no deferred clue in 1449462802); moving on instead, move 1
+FINDING: case 1449462802:case, waiting clue, move 1: nowhere fresh to move to: could not get inside t3:10696229503631377: the bounding-box centre and all 5 room centres are outside
+FINDING: case 1449462802:case: 1 waiting, but its site could not be reached (no deferred clue in 1449462802); moving on instead, move 2
+FINDING: case 1449462802:case, waiting clue, move 2: nowhere fresh to move to: could not get inside t3:10977700185374723: the bounding-box centre and all 11 room centres are outside
+FINDING: case 1449462802:case: 1 waiting, but its site could not be reached (no deferred clue in 1449462802); moving on instead, move 3
+FINDING: case 1449462802:case, waiting clue, move 3: nowhere fresh to move to: could not get inside t3:10696229503631377: the bounding-box centre and all 5 room centres are outside
+FINDING: case 1449462802:case: 1 waiting, but its site could not be reached (its own site was tried three times and answered no-containers); moving on instead, move 4
+FINDING: case 1449462802:case, waiting clue, move 4: nowhere fresh to move to: could not get inside t3:10977700185374723: the bounding-box centre and all 11 room centres are outside
+FINDING: archive: case 1449462802:case did not finish
+FINDING: case 1509084278:case: 2 clue(s) still waiting after 0 played, 0 dropped (statuses 3:deferred 4:deferred); loaded generated:1509084278:document-3's own site t3:10977704480342016 at 10865,10167 and stepped back to nowhere free to step back to; standing on the site, move 1
+FINDING: case 1509084278:case: 2 clue(s) still waiting after 0 played, 0 dropped (statuses 3:deferred 4:deferred); loaded generated:1509084278:document-3's own site t3:10977704480342016 at 10865,10167 and stepped back to 10890,10167, move 2
+FINDING: case 1509084278:case: 2 clue(s) still waiting after 0 played, 0 dropped (statuses 3:deferred 4:deferred); loaded generated:1509084278:document-3's own site t3:10977704480342016 at 10865,10167 and stepped back to 10890,10167, move 3
+FINDING: case 1509084278:case: 2 waiting, but its site could not be reached (its own site was tried three times and answered no-containers); moving on instead, move 4
+FINDING: case 1509084278:case, waiting clue, move 4: nowhere fresh to move to: could not get inside t3:11259175162085405: the bounding-box centre and all 6 room centres are outside
+FINDING: archive: case 1509084278:case did not finish
+FINDING: archive: 2 finished cases full, 0 stubbed, 7 rows kept in all, 0 stubs still offering questions; 2:1921721395:full:4 4:1148322017:full:3
+FINDING: a finished case's clues carried: 7 checked, 7 show Evidence / Old, 7 offer the greyed already-noted option, 0 offer no such option (Unattended night shift / R-527 -> Already in the organiser)
+FINDING: KNOX boot line "Records ......... 13": the ledger holds 13 discoveries, 0 of them from stubbed cases
+FINDING: stubbed cases: 0 stubs, 0 still offering questions, 0 carrying saved answers, 0 of those marked used by a later case ()
+FINDING: no case was stubbed, which is the contract: the archive retains every finished case's rows (test/case_archive asserts stubs == 0). The stub half of P4-R111 is NOT APPLICABLE, not unexercised - there is no longer a way to reach it, and a run that did reach it would have failed the assertion above
+FINDING: archive after the reload: 2 full, 0 stubbed, 7 rows; 2:1921721395:full:4 4:1148322017:full:3
+FINDING: refusals in the log of the session loaded with the full archive: 0
+FINDING: after reload 3, full archive: assignments deferred=2 placed=10 unknown=1; why=gap n=35 due=11:44 rung=3/3 now=21:11 overdue=false(-14.56h) preparing=false active=3/4 cases=5/16
+FINDING: reload 3 save size: 170744 -> 170744 bytes; before [CasePeople=2878 DiscoveryLedger=6168 Generated.G2=151861 KeyConnections=2158 PlaceVisits=1047 VisitedBuildings=1412]; after [CasePeople=2878 DiscoveryLedger=6168 Generated.G2=151861 KeyConnections=2158 PlaceVisits=1047 VisitedBuildings=1412]
+FINDING: AD-10 town names, standing in Muldraugh: of 13 records the LIVE label names a town on 0 and not on 5; the stored FOUND lines (history, frozen by design) name one on 0 and not on 13; e.g. ; own town: 202 E Maple; rows whose case is still live: 6
+FINDING: AD-10 address book, standing in Muldraugh: of 10 buildings the cases used, 0 would be written with their town and 6 without; 202 E Maple St [Muldraugh] -> "202 E Maple St"; 102 Dewey St [Muldraugh] -> "102 Dewey St"; 201 E Maple St [Muldraugh] -> "201 E Maple St"; 403 Perrine St [Muldraugh] -> "403 Perrine St"
+FINDING: AD-10: walked from Muldraugh to West Point at 11684,8363, 1967 tiles
+FINDING: AD-10 town names, standing in West Point: of 13 records the LIVE label names a town on 2 and not on 3; the stored FOUND lines (history, frozen by design) name one on 0 and not on 13; e.g. 102 Dewey St, Muldraugh; own town: 202 E Maple; rows whose case is still live: 6
+FINDING: AD-10 address book, standing in West Point: of 10 buildings the cases used, 6 would be written with their town and 0 without; 202 E Maple St [Muldraugh] -> "202 E Maple St, Muldraugh"; 102 Dewey St [Muldraugh] -> "102 Dewey St, Muldraugh"; 201 E Maple St [Muldraugh] -> "201 E Maple St, Muldraugh"; 403 Perrine St [Muldraugh] -> "403 Perrine St, Muldraugh"
+FAIL: case 1449462802:case: 1 clue(s) waiting and NO WORK WAS COMPLETED over 4 moves - clue statuses, clues found, case count, preparing flag and the nearby scan's phase/cursor are all unchanged at [placed=4 unknown=1|4|1|false|none], while the scheduler kept running [carrier=323,filler=323,identity=61994,placement=1665,relocation=323,tracking=323|], so the mod is busy and getting nowhere (assignments placed=4 unknown=1; why=gap n=0 due=02:11 rung=0/3 now=05:06 overdue=false(-21.09h) preparing=false active=1/4 cases=1/16)
+FAIL: case 1: 1 clue(s) of the case were never played: 5:unknown (played 4, offered 4)
+FAIL: case 1 did not finish after its clues were inspected
+FAIL: case 1: the second thought "What do I make of it?" was said 0 times, not once
+FAIL: case 1: the relay memo is not among the evidence found
+FAIL: case 1: 4 records dated in the memo's week, but 0 carry the date note
+FAIL: case 1 finished: finished evidence not all Evidence / Old (0 0 4 0: ok, wrong, live ok, live wrong)
+FAIL: case 1 finished: FILES shows 0 question rows, not 1
+FAIL: case 1 finished without questions
+FAIL: case 1: could not answer on the organiser: FILES has no question row for 1449462802
+FAIL: case 1: the organiser saved //, not two/person2/records
+FAIL: after reload 1: finished evidence not all Evidence / Old (0 0 4 0: ok, wrong, live ok, live wrong)
+FAIL: case 2 was not built from case 1's answers (steer from: unsteered)
+FAIL: case 2's steer is /, not two/records
+FAIL: case 2's first person is Delia Mercer, not the returning 
+FAIL: case 2: the returning person could be given a second body
+FAIL: case 2 offers no records contribution for the reading it leans on (ways: person)
+FAIL: case 2: the steered case was not logged exactly once
+FAIL: case 1's answers are not marked used by case 2
+FAIL: case 2 did not finish
+FAIL: case 2 finished: FILES shows 1 question rows, not 2
+FAIL: case 3 was logged as shaped by answers
+FAIL: reload 2: case 1's answers lost their used mark entirely
+FAIL: case 1449462802:case: 1 clue(s) waiting and NO WORK WAS COMPLETED over 4 moves - clue statuses, clues found, case count, preparing flag and the nearby scan's phase/cursor are all unchanged at [deferred=2 placed=13 unknown=1|10|5|false|none], while the scheduler kept running [carrier=2413,filler=431637,identity=448757,lastseen=3918,placement=10106,preparation=180240,relocation=2413,tracking=507|filler=1], so the mod is busy and getting nowhere (assignments deferred=2 placed=13 unknown=1; why=active-limit n=11 due=15:01 rung=3/3 now=14:33 overdue=false(-0.46h) preparing=false active=4/4 cases=5/16)
+FAIL: the oldest unfinished case 1449462802:case did not finish
+FAIL: case 1449462802:case: 1 clue(s) waiting and NO WORK WAS COMPLETED over 4 moves - clue statuses, clues found, case count, preparing flag and the nearby scan's phase/cursor are all unchanged at [deferred=2 placed=13 unknown=1|10|5|false|none], while the scheduler kept running [carrier=3729,filler=620420,identity=696964,lastseen=3918,placement=15370,preparation=180240,relocation=3729,tracking=507|filler=1,identity=4], so the mod is busy and getting nowhere (assignments deferred=2 placed=13 unknown=1; why=active-limit n=22 due=18:00 rung=3/3 now=17:31 overdue=false(-0.48h) preparing=false active=4/4 cases=5/16)
+FAIL: case 1509084278:case: 2 clue(s) waiting and NO WORK WAS COMPLETED over 4 moves - clue statuses, clues found, case count, preparing flag and the nearby scan's phase/cursor are all unchanged at [deferred=2 placed=13 unknown=1|10|5|false|none], while the scheduler kept running [carrier=5081,filler=842120,identity=891536,lastseen=3918,placement=20778,preparation=180240,relocation=5081,tracking=507|filler=1], so the mod is busy and getting nowhere (assignments deferred=2 placed=13 unknown=1; why=active-limit n=33 due=21:06 rung=3/3 now=20:36 overdue=false(-0.49h) preparing=false active=4/4 cases=5/16)
+screenshot: dev/eval/linux/runs/20260921T202027-campaign.png (not committed)

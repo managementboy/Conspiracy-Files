@@ -1,3 +1,34 @@
+## DR-20260922-UNKNOWN-CLUE-KEEPS-THE-CASE-OPEN — owner, 2026-09-22
+
+**An interrupted placement leaves its clue at `unknown`, and the case stays
+OPEN.** It does not complete with a gap, and the mod does not replace the clue
+(`GeneratedRuntime`: *"Interrupted placement is uncertain; no automatic
+replacement"*).
+
+Asked directly after the campaign gate wedged on exactly this
+(`evidence/linux-autotest/20260921T202027-campaign.txt`, source `2324499`): one
+clue of case 1 was parked at `unknown`, `Session.completion` requires every
+document to be either known or `dropped`, so the case could never finish. The
+alternative put to the owner was to count such a clue as a gap so the case
+would reach `complete-with-gaps`. **The owner chose to keep it open.**
+
+Consequences, recorded so nobody re-derives them:
+
+- `Session.completion` is unchanged. A case with an `unknown` clue is
+  `unfinished`, permanently, and that is intended.
+- A campaign in such a world cannot progress past that case, because the
+  closing questions, the answers, the steer and the archive all need a
+  finished case.
+- **The campaign gate therefore treats it as NOT EXERCISED, not as a failure**,
+  and stops with `COULD NOT RUN` rather than failing every stage behind it. The
+  2026-09-21 run reported 27 product failures for this one owner-sanctioned
+  state; `test/campaign_harness.lua` now prevents that.
+- A re-run draws a fresh world, the same remedy already used for a case 1 with
+  no document in the relay memo's week.
+
+Open, and not decided here: how often an interrupted placement happens in
+ordinary play, and what interrupts it. Neither is established.
+
 # Conspiracy-Files — Current Decision Index
 
 ## DR-20260920-WRITING-PLACEMENT — incorporate the placement review

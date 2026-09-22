@@ -185,6 +185,25 @@ for name,needle in pairs(required) do
         "the campaign gate must still assert "..name.." ("..needle..")")
 end
 
+-- 8. AN OWNER-SANCTIONED STATE IS NOT A PILE OF PRODUCT FAILURES.
+-- An interrupted placement parks a clue at `unknown` and the mod deliberately
+-- never replaces it. The owner decided on 2026-09-22 that the case stays OPEN
+-- rather than completing with a gap, so it genuinely cannot finish - and the
+-- 2026-09-21 run turned that single condition into 27 product failures by
+-- grinding through every stage that needed a finished case 1.
+assert(sh:find("WEDGED=1",1,true),
+    "the gate must notice a clue parked at `unknown`")
+assert(sh:find('if [ "$WEDGED" = 1 ]; then',1,true),
+    "the gate must stop when case 1 cannot finish, rather than failing every "
+    .."stage behind it")
+assert(sh:find("COULD NOT RUN",1,true),
+    "a world where case 1 cannot finish is a run that could not happen, not a "
+    .."product failure")
+-- And it must be reported as unexercised, never as a failure.
+local wedge=sh:match("if grep %-q \"unknown\".-\n    fi")
+assert(wedge and wedge:find("unexercised",1,true) and not wedge:find("fail ",1,true),
+    "a wedged clue must be reported NOT EXERCISED, not FAIL")
+
 print("PASS campaign_harness: ceiling frozen, clues counted by id, steering by "
     .."contribution, stubs a regression, stalls judged by progress, three "
     .."outcome kinds, 8 product assertions retained")
