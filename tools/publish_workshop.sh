@@ -251,7 +251,9 @@ if printf '%s' "$out" | grep -q 'ERROR!'; then
     echo "upload failed. Nothing was recorded." >&2
     exit 1
 elif printf '%s' "$out" | grep -q 'Success\.'; then
-    new_id="$(printf '%s' "$out" | grep -oE 'PublishFileID [0-9]+' | grep -oE '[0-9]+' | head -1)"
+    # Existing-item updates normally report only "Success." and no
+    # PublishFileID. That absence is expected; only new items need an ID here.
+    new_id="$(printf '%s' "$out" | grep -oE 'PublishFileID [0-9]+' | grep -oE '[0-9]+' | head -1 || true)"
     if [ -n "$new_id" ] && [ "$new_id" != "$published_id" ]; then
         mkdir -p "$ITEM_DIR"
         printf '%s\n' "$new_id" > "$ID_FILE"
