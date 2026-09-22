@@ -118,7 +118,7 @@ end
 -- many are explored, and what the trail state actually is.
 function V.why(id)
     local SC = require("ConspiracyFiles/Generated/StorageChoices")
-    local binding = Catalogue.get(id)
+    local binding = C.get(id)
     local t = binding and binding.targets and binding.targets[1]
     if not t then return "no target in the catalogue" end
     local cell = getCell()

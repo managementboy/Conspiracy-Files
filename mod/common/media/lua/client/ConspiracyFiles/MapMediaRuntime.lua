@@ -429,6 +429,26 @@ function R.offerContainer(container,filled)
     -- INDEX, not the call - so `container.getParent and ...` throws too and
     -- cannot be used to test for it. pcall around a colon call is the only
     -- shape that can ask (AGENTS.md, engine call form).
+    -- ASK THE CLASS, DO NOT PROBE THE METHOD. pcall stops the exception
+    -- PROPAGATING; it does not stop Kahlua LOGGING it. The original code was
+    -- already inside a pcall at the OnFillContainer hook and still wrote 24
+    -- error blocks in one run; moving the pcall in here cured the failure and
+    -- left the log untouched - 26 more of them in the 125-destination run of
+    -- 2026-09-22, which is how the claim "this stops it erroring" was caught.
+    --
+    -- Events.OnFillContainer passes an ItemPickerJava$ItemPickerContainer,
+    -- which is not an ItemContainer and has no getParent. instanceof answers
+    -- that without ever indexing the missing method, so nothing is thrown and
+    -- nothing is logged.
+    if not instanceof(container,"ItemContainer") then
+        local kind=tostring(container):gsub("@.*","")
+        if not unparented[kind] then
+            unparented[kind]=true
+            log("cannot offer a "..kind..": it is not an ItemContainer, so the "
+                .."native loot path contributes no candidates for it")
+        end
+        return false
+    end
     local got,object=pcall(function() return container:getParent() end)
     if not got then
         local kind=tostring(container):gsub("@.*","")

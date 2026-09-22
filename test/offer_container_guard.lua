@@ -51,6 +51,11 @@ local picker=setmetatable({},{
 
 -- `ready` is false on a fresh module, and the guard must be reached anyway, so
 -- drive the function directly and require that it does not propagate.
+-- The engine's own class test, answered honestly: the picker is not an
+-- ItemContainer. This is what the product now asks FIRST, so that the missing
+-- method is never indexed and Kahlua never throws - and never logs.
+instanceof=function(o,cls) return type(o)=="table" and rawget(o,"__class")==cls or false end
+
 local ok,err=pcall(R.offerContainer,picker,true)
 assert(ok,"offerContainer must not raise on a container without getParent, but did: "..tostring(err))
 assert(err==false,"it must refuse, returning false; got "..tostring(err))
@@ -61,9 +66,15 @@ local src=body:read("*a"); body:close()
 assert(src:find("local unparented={}",1,true),
     "the refusal must be remembered per class, or it repeats for every container "
     .."the game fills - which is how one run logged 24 identical errors")
+assert(src:find('instanceof(container,"ItemContainer")',1,true),
+    "the CLASS must be asked before the method is touched. pcall stops the "
+    .."exception propagating but NOT Kahlua logging it: the original call was "
+    .."already inside a pcall and still wrote 24 error blocks in one run, and "
+    .."moving the pcall inward left 26 more in the next. Only never indexing "
+    .."the missing method stops the log.")
 assert(src:find("pcall(function() return container:getParent() end)",1,true),
-    "the presence of getParent must be asked with a pcall around a COLON call: "
-    .."Kahlua throws on the index, so `container.getParent` throws too")
+    "the remaining getParent call must still be guarded by a pcall around a "
+    .."COLON call, for a class that passes instanceof but still misbehaves")
 -- The old shape must not come back IN offerContainer. Scoped deliberately:
 -- selectStep also calls container:getParent(), and there it is correct - its
 -- container comes from World.resolve(target), a real ItemContainer read out of

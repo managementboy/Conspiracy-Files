@@ -17,7 +17,7 @@ local square,object,container,player
 local sprite={getName=function(self)assert(self);return "furniture_office_01_1" end}
 local insertMode="ok"
 local containerKind="desk"
-container={getType=function(self)assert(self);return containerKind end,isExplored=function(self)assert(self);return true end,
+container={__class="ItemContainer",getType=function(self)assert(self);return containerKind end,isExplored=function(self)assert(self);return true end,
     getParent=function(self)assert(self);return object end,getItems=function(self)assert(self);return list(contents) end,
     AddItem=function(self,item)
         assert(self==container)
@@ -43,7 +43,16 @@ getWorld=function()return {getMetaGrid=function()return {getBuildings=function()
 getGameTime=function()return {getWorldAgeHours=function()return 100 end}end
 local ms=0;getTimestampMs=function()ms=ms+1;return ms end
 getDebug=function()return true end;isClient=function()return false end;isServer=function()return false end
-ZombRand=function()return 42 end;instanceof=function()return false end;Perks={};Events=nil
+ZombRand=function()return 42 end;instanceof=function(o,cls)
+    -- ANSWER BY CLASS, not always false. The blanket false was fine while
+    -- nothing asked about the container itself; MapMediaRuntime.offerContainer
+    -- now asks `instanceof(container,"ItemContainer")` before touching
+    -- getParent, because Events.OnFillContainer passes an
+    -- ItemPickerJava$ItemPickerContainer which has no such method and Kahlua
+    -- throws - and LOGS - on the index. A double that says "no" to everything
+    -- would have this test refuse its own container and prove nothing.
+    return type(o)=="table" and o.__class==cls or false
+end;Perks={};Events=nil
 instanceItem=function(kind)
     local md={};return {getModData=function(self)assert(self);return md end,
         getOutermostContainer=function()return container end,setName=function()end,

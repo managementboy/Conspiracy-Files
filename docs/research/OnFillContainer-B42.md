@@ -31,6 +31,29 @@ container the game has ever filled. The behaviour its own comment describes —
 ordinary discovery"* — has never happened. That is a silent feature loss, not
 just log noise.
 
+## A pcall does not silence it — corrected 2026-09-22
+
+The first repair wrapped the call in a `pcall`, and I reported that it "stops
+it erroring". **That was wrong, and the next run proved it.** The original call
+was *already* inside a `pcall` at the hook (`pcall(R.offerContainer,container,
+true)`) and still produced 24 error blocks; moving the `pcall` inward cured the
+functional failure and left the log untouched — **26 more** in the
+125-destination run of 2026-09-22.
+
+`pcall` stops an exception PROPAGATING. It does not stop Kahlua LOGGING it,
+and `mod_errors` counts log entries, so any check asserting zero mod errors
+still fails.
+
+The only way to stop the log is never to index the missing method:
+
+```lua
+if not instanceof(container,"ItemContainer") then ... refuse ... end
+```
+
+`instanceof` asks the class without touching `getParent`, so nothing is thrown
+and nothing is written. The `pcall` stays for a class that passes `instanceof`
+and still misbehaves.
+
 ## The Kahlua trap
 
 Kahlua throws on the **index**, not on the call. So the usual guard
