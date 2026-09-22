@@ -1,0 +1,16 @@
+pz: launching session 20260922T085257
+pz: new world is loading
+pz: game loading took 50 seconds
+[CF] v=1 t=09:00 lvl=i ev=note mod=casefile msg="organiser issued"
+[CF-DEAD-AIR]|DISABLED|version=DEV-0.46.1-writing-rebuild|generated development session active
+[CF] v=1 t=09:00 lvl=i ev=address mod=address msg="Ready: 6796 shipped addresses for the whole map in 144 ms; nothing scanned or saved. Zoom in on the world map."
+pz: ready; use: tools/autotest/pz.sh eval 'return getPlayer():getX()'
+campaign: case 1: generated:355237475:case
+campaign: start                  cases 1 (0 finished) | record 0 | FILES questions 0 | NAMES 1 | PLACES 0 | Old 0/0 wrong | Evidence 0/0 wrong | order  | save 39781 B
+campaign: case 355237475:case: clue 1 of 2: Standby list copy / TN-578
+campaign: case 355237475:case: clue 2 of 2: Seat-release instruction / TN-578
+campaign: case 355237475:case: 2 clue(s) still waiting after 2 played, 0 dropped (statuses 3:deferred 4:deferred); loaded generated:355237475:document-3's own site t3:10977704480342016 at 10865,10167 and stepped back to 10890,10167, move 1
+campaign: case 355237475:case: 2 clue(s) still waiting after 2 played, 0 dropped (statuses 3:deferred 4:deferred); loaded generated:355237475:document-3's own site t3:10977704480342016 at 10865,10167 and stepped back to 10890,10167, move 2
+campaign: case 355237475:case: 2 clue(s) still waiting after 2 played, 0 dropped (statuses 3:deferred 4:deferred); loaded generated:355237475:document-3's own site t3:10977704480342016 at 10865,10167 and stepped back to 10890,10167, move 3
+campaign: FAIL: case 355237475:case: 2 clue(s) waiting and NO WORK WAS COMPLETED over 4 moves - clue statuses, clues found, case count, preparing flag and the nearby scan's phase/cursor are all unchanged at [deferred=2 placed=2|2|1|false|none], while the scheduler kept running [carrier=359,filler=244960,identity=45087,placement=1440,relocation=359,tracking=359|filler=1], so the mod is busy and getting nowhere (assignments deferred=2 placed=2; why=gap n=0 due=02:10 rung=0/3 now=05:25 overdue=false(-20.76h) preparing=false active=1/4 cases=1/16)
+campaign: FAIL: case 1: 2 clue(s) of the case were never played: 3:deferred 4:deferred (played 2, offered 2)

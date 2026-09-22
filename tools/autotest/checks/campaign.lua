@@ -1046,20 +1046,49 @@ function C.goToWaitingSite(caseId)
                             pc:teleportTo(x + 0.5, y + 0.5, z)
                             local guard = StaleClue.PROXIMITY_GUARD_TILES + 5
                             local cell = getCell()
-                            local back
-                            for _, d in ipairs({ { 1, 0 }, { 0, 1 }, { -1, 0 }, { 0, -1 },
-                                                 { 1, 1 }, { -1, 1 }, { 1, -1 }, { -1, -1 } }) do
-                                for extra = 0, 10 do
-                                    local tx, ty = x + d[1] * (guard + extra), y + d[2] * (guard + extra)
-                                    local sq = cell:getGridSquare(tx, ty, z)
-                                    if not back and sq and sq:isFree(false) then
-                                        pc:teleportTo(tx + 0.5, ty + 0.5, z)
-                                        back = tx .. "," .. ty
+                            -- STEP BACK INDOORS IF ANYTHING INDOORS IS FREE.
+                            -- The old rule took the first free square at guard
+                            -- distance in the first direction that worked, with
+                            -- no preference at all - and free squares at 25
+                            -- tiles are overwhelmingly street. The owner watched
+                            -- the survivor standing at 10890,10167 in the open
+                            -- while the filler answered `no-containers` for the
+                            -- site at 10865,10167, twice on 2026-09-22.
+                            --
+                            -- docs/TESTING.md records why it matters, in the
+                            -- design's own sentence: "a house catalogued from
+                            -- the street yields one or two candidates and eight
+                            -- once the survivor walks in". Measuring the filler
+                            -- from the pavement measures the wrong thing.
+                            --
+                            -- Two passes: the first takes only a square with a
+                            -- room, the second accepts any free square so a site
+                            -- ringed by open ground still steps back rather than
+                            -- standing on top of the guard.
+                            local back, backRoom
+                            local dirs = { { 1, 0 }, { 0, 1 }, { -1, 0 }, { 0, -1 },
+                                           { 1, 1 }, { -1, 1 }, { 1, -1 }, { -1, -1 } }
+                            for _, indoorsOnly in ipairs({ true, false }) do
+                                if not back then
+                                    for _, d in ipairs(dirs) do
+                                        for extra = 0, 10 do
+                                            local tx, ty = x + d[1] * (guard + extra), y + d[2] * (guard + extra)
+                                            local sq = cell:getGridSquare(tx, ty, z)
+                                            if not back and sq and sq:isFree(false) then
+                                                local room = sq:getRoom()
+                                                if room or not indoorsOnly then
+                                                    pc:teleportTo(tx + 0.5, ty + 0.5, z)
+                                                    back = tx .. "," .. ty
+                                                    backRoom = room and (room:getName() or "a room with no name") or "outside"
+                                                end
+                                            end
+                                        end
                                     end
                                 end
                             end
                             return "true", id, site.id, x .. "," .. y, tostring(a.deferredHours),
                                 tostring(back or "nowhere free to step back to; standing on the site")
+                                    .. " (" .. tostring(backRoom or "on the site") .. ")"
                         end
                     end
                     return "false", "site " .. tostring(a.locationId) .. " is not in the case"

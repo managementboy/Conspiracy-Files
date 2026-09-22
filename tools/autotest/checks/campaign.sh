@@ -264,12 +264,23 @@ cf_main() {
             else
                 flat=0; last_progress="$now_progress"
             fi
-            # Four consecutive moves in which no clue changed status, no clue was
-            # found and no case appeared. Each move is a teleport plus at least
-            # 120 s of waiting below, so this is many minutes of the mod being
-            # given work and completing none of it.
-            if [ "$flat" -ge 4 ]; then
-                fail "case ${cid#generated:}: $waiting clue(s) waiting and NO WORK WAS COMPLETED over $flat moves - clue statuses, clues found, case count, preparing flag and the nearby scan's phase/cursor are all unchanged at [$now_progress], while the scheduler kept running [$now_liveness], so the mod is busy and getting nowhere (assignments $(ev 'return CFCamp.assignments()'); $(promise_words "$(promise)"))"
+            # THE ESCAPE GETS TRIED BEFORE THE STALL IS DECLARED.
+            #
+            # Four was too few, and not because it was impatient: the survivor
+            # returns to the waiting clue's OWN SITE for the first three moves,
+            # and only from the fourth does the cap above send them to a fresh
+            # neighbourhood - which is the design's own remedy for a clue with
+            # nowhere to go. Declaring a stall at four meant failing the stage
+            # on the very move the remedy began, so the remedy was never once
+            # exercised (2026-09-22: "NO WORK WAS COMPLETED over 4 moves" fired
+            # at exactly the handover).
+            #
+            # Eight gives the fresh neighbourhoods four moves of their own.
+            # Each move is a teleport plus at least 120 s of waiting, so this
+            # is still many minutes of the mod being given work and completing
+            # none of it.
+            if [ "$flat" -ge 8 ]; then
+                fail "case ${cid#generated:}: $waiting clue(s) waiting and NO WORK WAS COMPLETED over $flat moves (the first 3 at the clue own site, the rest in FRESH neighbourhoods, so the design remedy was tried) - clue statuses, clues found, case count, preparing flag and the nearby scan's phase/cursor are all unchanged at [$now_progress], while the scheduler kept running [$now_liveness], so the mod is busy and getting nowhere (assignments $(ev 'return CFCamp.assignments()'); $(promise_words "$(promise)"))"
                 return 1
             fi
             if [ "$(date +%s)" -ge "$deadline" ]; then

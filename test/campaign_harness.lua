@@ -239,6 +239,45 @@ for line in sh:gmatch("[^\n]+") do
     end
 end
 
+-- 10. THE STALL MUST NOT PRE-EMPT THE ESCAPE. The survivor returns to the
+-- waiting clue's own site for three moves; only from the fourth does the cap
+-- send them somewhere fresh, which is the design's remedy for a clue with
+-- nowhere to go. A stall threshold of four fired at exactly that handover, so
+-- the remedy was never exercised once (2026-09-22).
+local siteCap=tonumber(sh:match('%[ "%$moves" %-le (%d+) %]'))
+local stallAt=tonumber(sh:match('%[ "%$flat" %-ge (%d+) %]'))
+assert(siteCap and stallAt,"both bounds must be readable")
+assert(stallAt>siteCap+1,
+    "the stall fires at "..stallAt.." flat moves while the survivor only starts "
+    .."moving on after "..siteCap..": the fresh-neighbourhood remedy gets "
+    ..math.max(0,stallAt-siteCap-1).." move(s) before the stage is failed, which "
+    .."is not enough to exercise it")
+
+-- 11. THE STEP-BACK MUST PREFER INDOORS. goToWaitingSite steps the survivor
+-- beyond StaleClue's proximity guard so a clue CAN be placed at the site they
+-- just loaded - but it took the first free square at guard distance in the
+-- first direction that worked, and free squares 25 tiles out are
+-- overwhelmingly street. The owner watched the survivor standing at
+-- 10890,10167 in the open while the filler answered `no-containers` for the
+-- site at 10865,10167, and said so twice before it was fixed.
+--
+-- docs/TESTING.md records why it matters in the design's own sentence: "a
+-- house catalogued from the street yields one or two candidates and eight
+-- once the survivor walks in".
+local step=lua:match("function C%.goToWaitingSite.-\nend")
+assert(step,"goToWaitingSite must be readable")
+assert(step:find("indoorsOnly",1,true),
+    "the step-back must try indoor squares before settling for the street")
+assert(step:find("ipairs({ true, false })",1,true),
+    "the step-back must make TWO passes - indoors first, then any free square "
+    .."- so a site ringed by open ground still steps back rather than standing "
+    .."on top of the proximity guard")
+assert(step:find("getRoom",1,true),
+    "indoors is decided by asking the square for its room")
+assert(step:find("backRoom",1,true),
+    "the finding must record WHERE the survivor ended up; standing in the "
+    .."street was invisible in the evidence for two whole runs")
+
 print("PASS campaign_harness: ceiling frozen, clues counted by id, steering by "
     .."contribution, stubs a regression, stalls judged by progress, three "
     .."outcome kinds, 8 product assertions retained")
