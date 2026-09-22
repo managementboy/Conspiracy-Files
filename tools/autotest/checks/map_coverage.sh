@@ -162,6 +162,14 @@ claim_game || exit 2
     verdict=PASS
     [ "$reached" -lt "$last" ] && verdict=PARTIAL
     [ "$reached" -eq 0 ] && verdict="COULD NOT RUN"
+    # REACHING A DESIGN IS NOT PASSING IT. The headline counted designs REACHED
+    # and said PASS (125 of 125) while two of them had no payoff at all - which
+    # reads as "all 125 destinations pass", the exact claim this check exists
+    # to make impossible, printed by the check itself.
+    if [ "$placed_ok" -lt "$reached" ] || [ "$nonfloor_ok" -lt "$reached" ] \
+       || [ "$access_ok" -lt "$reached" ] || [ "$geom_ok" -lt "$reached" ]; then
+        [ "$verdict" = PASS ] && verdict=INCOMPLETE
+    fi
     [ ${#harnesses[@]} -eq 0 ] || verdict="COULD NOT RUN"
     [ ${#fails[@]} -eq 0 ] || verdict=FAIL
     report="$EVIDENCE/$first-map-coverage.txt"
@@ -169,7 +177,9 @@ claim_game || exit 2
         # THE HEADLINE CARRIES THE SCOPE. "PASS" beside "12 of 125" invites exactly
         # the quotation this check exists to prevent; a reader skimming the first
         # line must see that the gate is not met.
-        echo "Linux map destination coverage, played: $verdict ($reached of $total designs)"
+        # Every column in the headline, so "PASS" can never be quoted without the
+        # numbers that qualify it.
+        echo "Linux map destination coverage, played: $verdict ($reached of $total reached; payoff $placed_ok, non-floor $nonfloor_ok, access $access_ok)"
         source_line
         echo
         echo "designs in the catalogue: $total"
@@ -201,7 +211,7 @@ claim_game || exit 2
     # quoted as one.
     case "$verdict" in
         PASS) exit 0 ;;
-        FAIL) exit 1 ;;
+        FAIL|INCOMPLETE) exit 1 ;;
         *) exit 2 ;;
     esac
 

@@ -1,0 +1,31 @@
+Linux map destination coverage, played: PASS (12 of 125 designs)
+source: 6cf227b
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+
+designs in the catalogue: 125
+designs reached in this run: 12 (from 1 to 12)
+
+  geometry: a building or an area          12 of 12
+  payoff inserted, exactly one token       12 of 12
+  container identified and NOT a floor     12 of 12
+  target resolves AND a standable square   12 of 12
+
+PARTIAL RUN. 113 of the 125 designs were NOT EXERCISED.
+Complete it with: tools/autotest/checks/map_coverage.sh --from 13
+"All 125 destinations PASS" may not be written until reached == 125.
+
+design	buildings	areas	source	verdict	state	items	container	sprite	nonFloor	resolves	square	standable
+BBurgStashMap1	1	0	source stash anchor	ok	placed	1	shelves	furniture_shelving_01_42	true	true	true	true
+BBurgStashMap2	1	0	source stash anchor	ok	placed	1	medicine	fixtures_bathroom_01_28	true	true	true	true
+BBurgStashMap3	1	0	source stash anchor	ok	placed	1	counter	fixtures_counters_01_7	true	true	true	true
+BBurgStashMap4	1	0	source stash anchor	ok	placed	1	bin	trashcontainers_01_20	true	true	true	true
+BBurgStashMap5	1	0	source stash anchor	ok	placed	1	fridge	appliances_refrigeration_01_40	true	true	true	true
+BBurgStashMap6	1	0	source stash anchor	ok	placed	1	stove	appliances_cooking_01_1	true	true	true	true
+BBurgStashMap7	1	0	source stash anchor	ok	placed	1	bin	trashcontainers_01_17	true	true	true	true
+BBurgStashMap8	1	0	source stash anchor	ok	placed	1	cardboardbox	furniture_storage_02_18	true	true	true	true
+EkronStashMap1	1	0	source stash anchor	ok	placed	1	wardrobe	furniture_storage_02_42	true	true	true	true
+EkronStashMap2	1	0	source stash anchor	ok	placed	1	freezer	appliances_refrigeration_01_28	true	true	true	true
+EkronStashMap3	1	0	source stash anchor	ok	placed	1	crate	carpentry_01_19	true	true	true	true
+EkronStashMap4	1	0	source stash anchor	ok	placed	1	bin	trashcontainers_01_20	true	true	true	true
+
+errors inside the mod: 0

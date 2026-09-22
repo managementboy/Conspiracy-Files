@@ -28,9 +28,10 @@ assert(partial and none and fail and partial<none and none<fail,
     "the verdict must be computed partial, then none, then fail, so a real "
     .."failure is never masked by a partial run")
 -- And neither may exit 0.
-assert(sh:find("PASS) exit 0",1,true) and sh:find("FAIL) exit 1",1,true)
+assert(sh:find("PASS) exit 0",1,true) and sh:find("exit 1 ;;",1,true)
    and sh:find("*) exit 2",1,true),
-    "only PASS may exit 0; PARTIAL and COULD NOT RUN must exit 2")
+    "only PASS may exit 0; a failed or incomplete run must exit 1, and "
+    .."PARTIAL or COULD NOT RUN must exit 2")
 -- The report must keep saying how many were not exercised, and refuse the
 -- claim outright.
 assert(sh:find("may not be written until reached ==",1,true),
@@ -38,7 +39,7 @@ assert(sh:find("may not be written until reached ==",1,true),
 
 -- And the headline must carry the scope. "PASS" on a line by itself, beside a
 -- body saying 12 of 125, is the quotation this check exists to prevent.
-assert(sh:find('played: $verdict ($reached of $total designs)',1,true),
+assert(sh:find('played: $verdict ($reached of $total reached',1,true),
     "the verdict line must state how many designs of the catalogue were reached")
 
 -- THE PATIENCE IS SECONDS, AND MUST NOT SHRINK WHEN THE POLL RATE CHANGES.
@@ -58,6 +59,20 @@ assert(sh:find("polls=$(python3",1,true),
     .."poll interval cannot silently change how long the check waits")
 assert(sh:find('[ "$flat" -ge "$polls" ]',1,true),
     "the no-progress bound must be the derived count, not a literal")
+
+-- REACHING A DESIGN IS NOT PASSING IT. The headline counted designs REACHED
+-- and printed "PASS (125 of 125 designs)" while two had no payoff at all -
+-- which reads as "all 125 destinations pass", the precise claim this check
+-- exists to prevent, printed by the check itself for the second time.
+assert(sh:find('[ "$placed_ok" -lt "$reached" ]',1,true),
+    "a design reached without a payoff must stop the verdict being PASS")
+assert(sh:find("verdict=INCOMPLETE",1,true),
+    "reached-but-short must have its own verdict, distinct from PASS")
+assert(sh:find("FAIL|INCOMPLETE) exit 1",1,true),
+    "INCOMPLETE must not exit 0")
+assert(sh:find("payoff $placed_ok, non-floor $nonfloor_ok, access $access_ok",1,true),
+    "the headline must carry every column, so PASS cannot be quoted without "
+    .."the numbers that qualify it")
 
 print("PASS coverage_verdict: a run that reaches nothing reports COULD NOT RUN, "
     .."a partial run reports PARTIAL, and neither exits 0")
