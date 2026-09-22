@@ -16,3 +16,13 @@
 *.pzby binary
 *.class binary
 graphify-out/graph.json merge=graphify
+
+# Evidence files are MACHINE OUTPUT, not source. A check writes them from a
+# real run - tab-separated rows where an empty field leaves trailing spaces -
+# and they are the record of what was true at a commit. `git diff --check`
+# flags that whitespace, and the only ways to silence it are to edit the
+# record or to let the check fail. Neither is acceptable: evidence is not
+# rewritten to please a linter, and a whitespace warning must not be the
+# reason a verification step reports failure.
+docs/management/evidence/** -whitespace
+dev/eval/** -whitespace
