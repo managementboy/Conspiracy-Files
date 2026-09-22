@@ -295,6 +295,29 @@ for line in sh:gmatch("[^\n]+") do
     end
 end
 
+-- 13. A REJECTED WORLD MUST NOT COST A PROCESS LAUNCH. The world-retry loop
+-- stopped and relaunched the whole game for each attempt, at roughly 60 s
+-- each, while rejecting the world's CONTENTS rather than the game. pz.sh
+-- fresh returns to the main menu - which reloads the mods - and enters a new
+-- world. suite.sh made the same trade and went from 43 min 41 s to 35 min 8 s.
+--
+-- The FIRST attempt stays cold: the build may have just been installed, and
+-- only a launch is certain to load it. The reload rounds stay cold too,
+-- because a real save, quit and continue is precisely what they test.
+assert(sh:find('[ "$worlds" -eq 1 ]',1,true),
+    "the first world attempt must still be a cold start, so a newly installed "
+    .."build is certainly loaded")
+assert(sh:find('"$PZ" fresh',1,true),
+    "a world RETRY must ask the running game for a new world rather than "
+    .."relaunching it")
+assert(sh:find('|| start_cold',1,true),
+    "if fresh fails the retry must fall back to a cold start rather than "
+    .."carrying on in the world it just rejected")
+local reload=sh:match('"%$PZ" stop %-%-save.-\n[^\n]*start %-%-continue[^\n]*')
+assert(reload,
+    "the reload rounds must still be a real stop --save and start --continue; "
+    .."that IS the save/quit/continue test and `fresh` would not be one")
+
 print("PASS campaign_harness: ceiling frozen, clues counted by id, steering by "
     .."contribution, stubs a regression, stalls judged by progress, three "
     .."outcome kinds, 8 product assertions retained")

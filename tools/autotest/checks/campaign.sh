@@ -444,7 +444,25 @@ cf_main() {
     CF_MEMO_WORLDS="${CF_MEMO_WORLDS:-3}"
     while :; do
         worlds=$((worlds + 1))
-        start_cold "${start_args[@]}" || abort "the game did not reach a playable world"
+        # A REJECTED WORLD NEEDS A NEW WORLD, NOT A NEW PROCESS.
+        #
+        # The first attempt is a genuine cold start: the build may have just
+        # been installed, and only a launch is certain to load it. Every RETRY
+        # after that is rejecting the world's contents, not the game, so
+        # `pz.sh fresh` - back to the main menu, which reloads the mods, then
+        # straight into a new world - does the same job without paying ~60 s
+        # for a process launch. That is the same trade suite.sh made when it
+        # went from 43 min 41 s to 35 min 8 s across its checks.
+        #
+        # The reload rounds below stay cold on purpose: a real save, quit and
+        # continue IS what they test, and `fresh` would not be one.
+        if [ "$worlds" -eq 1 ]; then
+            start_cold "${start_args[@]}" || abort "the game did not reach a playable world"
+        else
+            "$PZ" fresh "${start_args[@]}" >/dev/null 2>&1 \
+                || start_cold "${start_args[@]}" \
+                || abort "the game did not reach a playable world"
+        fi
         load_lua || abort "could not load the check's Lua"
         wait_true 90 'ConspiracyFiles.GeneratedRuntime.metrics()~=nil' || abort "no case started"
         # 120 s was calibrated when preparation was quick. Measured 2026-09-21 on
@@ -460,7 +478,7 @@ cf_main() {
         if [ "$(field 1 "$week")" = true ] && [ "$(field 2 "$week")" -gt 0 ] 2>/dev/null; then break; fi
         if [ "$worlds" -ge "$CF_MEMO_WORLDS" ]; then findings+=("no case 1 in $worlds fresh worlds had a document in the relay memo's week; carrying on in this world"); break; fi
         say "world $worlds: case 1 has no document in the memo's week; starting a fresh world"
-        "$PZ" stop >/dev/null 2>&1
+        # No stop: the loop above asks the running game for a fresh world.
     done
     findings+=("fresh worlds started for a case 1 with a document in the memo's week: $worlds (memo=$(field 1 "$week"), dated documents=$(field 2 "$week"))")
     first="$(session)"; world="$(cat "$REPO/dev/eval/linux/world")"
