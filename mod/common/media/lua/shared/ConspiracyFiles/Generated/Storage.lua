@@ -95,8 +95,9 @@ function M.scan(result,done,reachable,fixedData)
             end
         end
     end
-    -- Exact map/build match: fixed furniture comes from the shipped compact
-    -- index.  Unsupported maps/builds retain the bounded live fixed scan below.
+    -- Exact map-stack member/build match: fixed furniture comes from the
+    -- shipped compact index. Unsupported maps/builds retain the bounded live
+    -- fixed scan below.
     -- The index carries no engine object indexes and makes no world calls.
     local fixedRegistry=FixedIndex.open(fixedData or FixedData,result.map,result.gameVersion)
     local indexed=fixedRegistry~=nil

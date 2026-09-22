@@ -538,7 +538,7 @@ local physicalKey=S.physicalKey
 -- the clues that fit and the rest wait as `deferred` assignments. It still
 -- fails for a case that is not a case (an invalid envelope), and it still
 -- never puts two clues in one container (P4-R67).
-function S.createDistributed(case,candidates,rooms,occupied,hours)
+function S.createDistributed(case,candidates,rooms,occupied,hours,preferences)
     local valid,why=G.validate(case);if not valid then return nil,why end
     local sites,used,counts,taken,targets={},{},{},{},{}
     local usedKinds={}
@@ -561,7 +561,7 @@ function S.createDistributed(case,candidates,rooms,occupied,hours)
         -- supplied, so behaviour is byte-identical to before either existed.
         -- Testing occupancy alone caught this: gating on `rooms` made the
         -- preference inert whenever room names were absent.
-        if rooms==nil and occupied==nil then
+        if rooms==nil and occupied==nil and preferences==nil then
             counts[doc.locationId]=(counts[doc.locationId] or 0)+1
             target=type(list)=="table" and list[counts[doc.locationId]]
             -- The one addition to the original path: the mobile cap applies
@@ -613,9 +613,25 @@ function S.createDistributed(case,candidates,rooms,occupied,hours)
             if not index then
                 index=StorageChoices.choose(list,doc.id..":"..case.seed,usable,function(i)
                     local fits=type(roomsForSite)=="table" and RoomAffinity.prefers(doc,roomsForSite[i])
-                    if fits and livedIn(i) then return 0 end
-                    if fits then return 1 end
-                    return livedIn(i) and 2 or 3
+                    local tier
+                    if fits and livedIn(i) then tier=0
+                    elseif fits then tier=1
+                    else tier=livedIn(i) and 2 or 3 end
+                    -- The first personal clue normally goes straight into the
+                    -- survivor's inventory. Its assigned starting-house
+                    -- container remains the honest origin and the fallback if
+                    -- that transfer cannot happen. Within the same authored
+                    -- room/occupancy tier, prefer one away from the exact spawn
+                    -- tile so that fallback is not lying at their feet.
+                    local far=type(preferences)=="table" and preferences.farFrom
+                    if type(far)=="table" and far.documentId==doc.id then
+                        local candidate=list[i]
+                        local dx=(candidate.x or far.x)-far.x
+                        local dy=(candidate.y or far.y)-far.y
+                        local distance=math.min(999999,dx*dx+dy*dy)
+                        return tier*1000000+(999999-distance)
+                    end
+                    return tier
                 end,usedKinds[doc.locationId])
             end
             if index then siteTaken[index]=true end

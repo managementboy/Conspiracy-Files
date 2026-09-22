@@ -260,7 +260,9 @@ code forced.
    a single clue could never finish: `RetiredCase` needs at least two rows, so
    the case would squat one of the four active slots for ever - the starvation
    this design's own risk section warns about. The first case's opening clue is
-   also never an instalment (P4-R66).
+   also never an instalment (P4-R66). Under the owner's 2026-09-22 clarification
+   it is delivered on the survivor and noted immediately; its starting-house
+   container assignment remains the physical origin and fallback.
 3. **`cooldown` and `busy` are logged but never counted.** A cooldown is the
    wait we imposed ourselves (P4-R125) and busy is a placement in progress.
    Both are polled every ten seconds, so counting them would walk the ladder up

@@ -18,7 +18,9 @@ intent to be persisted before an item is created.
 
 ## Decision
 
-Ship a derived, exact-map/exact-build index for fixed vanilla containers. Each
+Ship a derived, exact-map-member/exact-build index for fixed vanilla containers.
+Project Zomboid reports the active maps as a semicolon-separated stack; the
+index map must equal one complete member of that stack, never a substring. Each
 row contains only:
 
 `building ID, x, y, z, sprite, container type, room`
@@ -41,7 +43,8 @@ square is loaded. At that point runtime must verify:
 The freshness check runs again immediately before the normal exact-once
 placement intent and item creation. Unknown search state fails closed.
 
-An exact build match avoids fixed-furniture scanning. Vehicle parts remain a
+An exact build plus exact map-stack-member match avoids fixed-furniture
+scanning. Vehicle parts remain a
 bounded live scan because cars move. Bodies/zombies remain the carrier scan.
 Changed indexed targets fall back to the existing bounded modified-building
 scan. Unsupported maps/builds retain the original bounded fixed scan.

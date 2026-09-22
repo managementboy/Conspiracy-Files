@@ -66,6 +66,19 @@ properly, never at the keybind or the context-menu action by name.
 7. "I'll want to go through this properly when I get the chance."
 8. "This isn't something to skim. Read it properly, later."
 
+## Personal opening — the first clue was already on the survivor
+
+The first investigation begins with its opening paper in the survivor's main
+inventory and records it automatically. It therefore does not use Set D or ask
+the player to infer an Inspect action. Once, persisted on that physical item:
+
+- Halo: “This has my name on it. Why was I supposed to be here?”
+- Bubble: `My name`
+
+The same item flag consumes the ordinary Set D hint so both lines cannot fire.
+If direct delivery fails, the clue remains undiscovered in its assigned
+starting-house container and the normal proximity cue remains active.
+
 ## Delivery rules
 
 - Speech bubble plus a halo note with an explicit duration, exactly as

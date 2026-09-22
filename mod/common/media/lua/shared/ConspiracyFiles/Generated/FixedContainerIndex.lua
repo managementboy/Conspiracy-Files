@@ -96,15 +96,31 @@ local function siteId(buildingId)
     return "t3:"..buildingId
 end
 
+-- getWorld():getMap() is the ACTIVE MAP STACK, not necessarily one map name:
+-- Build 42 commonly returns "Brandenburg, KY;...;Muldraugh, KY" even though
+-- the vanilla fixed index is built from the installed Muldraugh aggregate.
+-- Match complete stack members only -- never substrings -- while retaining the
+-- exact build gate. A changed build still uses the live fallback, and every
+-- indexed signature is validated against the loaded furniture before use.
+local function mapInStack(stack,map)
+    if type(stack)~="string" or type(map)~="string" then return false end
+    if stack==map then return true end
+    for member in string.gmatch(stack,"[^;]+") do
+        member=string.gsub(member,"^%s+","")
+        member=string.gsub(member,"%s+$","")
+        if member==map then return true end
+    end
+    return false
+end
+
 -- `bundle` is a list so several supported vanilla map/build pairs can ship
--- side-by-side during an update transition.  Exact matching is intentional:
--- an unknown build uses live fallback instead of trusting stale coordinates.
+-- side-by-side during an update transition.
 function F.open(bundle,map,build)
     if type(bundle)~="table" then return nil,"invalid fixed-container bundle" end
     local chosen
     for _,data in ipairs(bundle) do
         local ok,why=F.validate(data); if not ok then return nil,why end
-        if data.map==map and data.build==build then chosen=data end
+        if mapInStack(map,data.map) and data.build==build then chosen=data end
     end
     if not chosen then return nil,"unsupported map/build" end
     local byBuilding={}

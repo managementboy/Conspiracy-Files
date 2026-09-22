@@ -143,6 +143,18 @@ assert(haloNotes[#haloNotes].text:find("Dana Vale",1,true))
 Voice.onKeyDoorLink("corpse-item:1")
 assert(#says==3,"Set B/C is never gated by the Set D cooldown")
 
+-- The first paper already on the survivor is its own one-time event. It asks
+-- the opening question immediately, persists on the item, and consumes the
+-- ordinary unread-pickup hint so the two lines never overlap.
+Voice.reset(); says={}; haloNotes={}
+local opening={md={}}; function opening:getModData() return self.md end
+assert(Voice.onOpeningClue(opening)==true)
+assert(opening.md.cfOpeningAnnounced==true and opening.md.cfVoiceHinted==true)
+assert(haloNotes[#haloNotes].text=="This has my name on it. Why was I supposed to be here?")
+assert(Voice.onOpeningClue(opening)==false and #says==1,"the persisted opening line is exactly once")
+Voice.onEvidenceFound(opening)
+assert(#says==1,"the normal pickup musing cannot follow the opening line")
+
 -- ---------------------------------------------------------------------
 -- Delivery channel: halo note carries an explicit duration, and the sound is
 -- exclusively the UI channel -- never the world-sound/emitter path.

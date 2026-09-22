@@ -18,6 +18,11 @@ found[1].x=999
 assert(registry.candidates("t3:building-A")[1].x==100,"candidate exports must not alias the index")
 local none,why=Index.open({data},"Muldraugh, KY","42.21")
 assert(none==nil and why=="unsupported map/build","an unknown build must fall back rather than trust stale data")
+local stack="Brandenburg, KY;Echo Creek, KY;Muldraugh, KY"
+local stacked=assert(Index.open({data},stack,"42.20.4"))
+assert(stacked.count==#rows,"a complete member of the active map stack activates the vanilla index")
+assert(Index.open({data},"Not Muldraugh, KY Extended","42.20.4")==nil,
+    "map-stack matching must never accept a substring")
 local duplicate={schema=1,map=data.map,build=data.build,rows={rows[1],rows[1]}}
 assert(not Index.validate(duplicate),"duplicate physical signatures must be refused")
 local extra={schema=1,map=data.map,build=data.build,rows={{"b",1,2,0,"s","counter",nil,"extra"}}}

@@ -144,6 +144,11 @@ local SET_D={
     "This isn't something to skim. Read it properly, later.",
 }
 
+-- The campaign's opening is different from an ordinary evidence pickup. The
+-- survivor begins with this paper already on them, bearing their own name, so
+-- this line asks the first mystery instead of instructing the player to search.
+local OPENING_LINE="This has my name on it. Why was I supposed to be here?"
+
 -- setHaloNote is the only halo API that takes a duration; 900 was established
 -- (for the old clue hints) as a readable value for a short line of speech.
 local HALO_DURATION=900
@@ -315,6 +320,22 @@ function V.onEvidenceFound(item)
     md.cfVoiceHinted=true
     indexD=indexD%#SET_D+1
     speak(p,SET_D[indexD],"Unread")
+end
+
+-- The opening clue is delivered and noted automatically. Its item flag is the
+-- persistence boundary: loading the save, dropping it and picking it up again,
+-- or a repeated hook can never replay the opening. cfVoiceHinted also prevents
+-- the ordinary unread-pickup musing from talking over this unique line.
+function V.onOpeningClue(item)
+    if not item then return false end
+    local p=player(); if not p then return false end
+    local ok,md=pcall(function() return item:getModData() end)
+    if not ok or type(md)~="table" then log("opening line not delivered: item has no mod data") return false end
+    if md.cfOpeningAnnounced then return false end
+    md.cfOpeningAnnounced=true
+    md.cfVoiceHinted=true
+    speak(p,OPENING_LINE,"My name",true)
+    return true
 end
 
 -- Everything below fires only when the player learns something they could not

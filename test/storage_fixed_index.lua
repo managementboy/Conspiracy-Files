@@ -30,6 +30,17 @@ assert(#list==1 and list[1].indexed and list[1].objectIndex==nil and list[1].con
 assert(rooms["t3:building-A"][1]=="office")
 assert(targets["t3:building-A"]==list[1] and catalog.locations[1].paperStorage=="indexed")
 
+-- Real Build 42 reports a semicolon-separated active map stack. The base-map
+-- index must activate when its exact map name is one member of that stack.
+worldReads=0
+local stacked={}
+for key,value in pairs(result) do stacked[key]=value end
+stacked.map="Brandenburg, KY;Echo Creek, KY;Muldraugh, KY"
+local stackDone=false
+local stackStep=assert(Storage.scan(stacked,function() stackDone=true end,nil,bundle))
+assert(stackStep()==true and stackDone,"the active map stack must use the shipped fixed index")
+assert(worldReads==0,"map-stack index activation must not fall back to a furniture walk")
+
 local fallbackReads=0
 getCell=function()
     fallbackReads=fallbackReads+1

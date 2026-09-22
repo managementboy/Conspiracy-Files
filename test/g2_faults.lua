@@ -13,12 +13,22 @@ local function newFixture()
     local function container()
         local items={}; local c={items=items,getType=function() return "desk" end,getItems=function() return list(items) end,
             isExplored=function() return false end}
-        function c:AddItem(item) items[#items+1]=item; item.container=c; return item end
+        function c:AddItem(item) if self.reject then return nil end; items[#items+1]=item; item.container=c; return item end
+        function c:RemoveItem(item)
+            for i,value in ipairs(items) do
+                if value==item then table.remove(items,i); item.container=nil; return end
+            end
+        end
         return c
     end
     local containers,loaded={},{}; for _,x in ipairs({0,20}) do for _,offset in ipairs({0,0.1,1,1.1}) do containers[x+offset]=container() end;loaded[x]=true;loaded[x+1]=true end;local inventory=container()
     local player=record{getX=0,getY=0,getZ=0,getHoursSurvived=0,getInventory=inventory}
     player.getModData=function() return {} end; player.getVehicle=function() return nil end
+    player.getSquare=function()
+        return {getBuilding=function()
+            return {getDef=function() return {getIDString=function() return "0" end} end}
+        end}
+    end
     getPlayer=function() return player end; getDebug=function() return true end; isClient=function() return false end; isServer=function() return false end
     ZombRand=function() return 1 end
     local clock=0; getTimeInMillis=function() clock=clock+0.01; return clock end
@@ -66,6 +76,9 @@ local function newFixture()
     function f.boot()
         assert(R.start(1)); f.tick(200); assert(saved.campaign.canonical)
     end
+    function f.bootOpening()
+        assert(R.start(1,{firstHouse=true})); f.tick(200); assert(saved.campaign.canonical)
+    end
     return f
 end
 
@@ -73,6 +86,44 @@ local function oneAssignment(f)
     for id,a in pairs(f.saved.campaign.canonical.assignments) do return id,a end
 end
 local function restart(f) f.events.start(); f.tick(180) end
+
+-- The first personal clue keeps a real origin in the starting house, but is
+-- handed to the survivor and noted immediately. The durable item flags make
+-- the special line exactly once; later clues remain ordinary placements.
+do
+    local f=newFixture(); f.bootOpening()
+    local root=f.saved.campaign.canonical
+    local first=root.case.documents[1]
+    local a=root.assignments[first.id]
+    assert(first.locationId=="t3:0" and a.target,"the opening origin must be the starting house")
+    local item
+    for _,candidate in ipairs(f.inventory.items) do
+        if candidate:getModData().cfGeneratedId==first.id then item=candidate end
+    end
+    assert(item,"the opening clue must be on the spawning survivor")
+    assert(#f.inventory.items==1,"only the opening clue is delivered; later evidence stays distributed")
+    assert(item:getModData().cfOpeningAnnounced and item:getModData().cfVoiceHinted,
+        "the opening announcement and ordinary-hint suppression persist on the item")
+    assert(#f.R.known()==1 and f.R.known()[1].id==first.id,
+        "personal delivery must automatically recognise and record the opening clue")
+end
+
+-- A refused inventory handoff is not a lost or half-discovered clue. The same
+-- physical item stays in its starting-house fallback container, with no flags
+-- that would suppress ordinary proximity/discovery behavior.
+do
+    local f=newFixture(); f.inventory.reject=true; f.bootOpening()
+    local root=f.saved.campaign.canonical
+    local first=root.case.documents[1]
+    local found
+    for _,candidate in ipairs(f.items()) do
+        if candidate:getModData().cfGeneratedId==first.id then found=candidate end
+    end
+    assert(found and found.container~=f.inventory,"a refused handoff keeps the opening clue in furniture")
+    assert(not found:getModData().cfOpeningAnnounced and not found:getModData().cfVoiceHinted,
+        "fallback keeps the normal proximity and pickup cues available")
+    assert(#f.R.known()==0,"fallback does not reveal a clue the player has not found")
+end
 
 -- Before intent: a fresh canonical plan contains pending assignments and one
 -- observed item is ultimately committed as placed.

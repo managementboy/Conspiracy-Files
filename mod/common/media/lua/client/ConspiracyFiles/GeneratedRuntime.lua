@@ -20,6 +20,10 @@ local R=ConspiracyFiles.GeneratedRuntime or {}
 ConspiracyFiles.GeneratedRuntime=R
 if R.loaded then return R end
 local sessions,scheduler,wrapper,ticks,preparing
+-- Present only while the first case created in this running game is being
+-- placed. The assigned container remains in the saved case as provenance and
+-- fallback; this transient record merely performs the immediate handoff.
+local openingDelivery
 -- Rows of retired cases. They have no Session to project from, but the player
 -- learned them and FILES must still render them.
 local retiredRows={}
@@ -206,6 +210,70 @@ local function expectedCount(api,id)
     end
     return 1
 end
+
+local function playerHouse(player)
+    local square=player and player.getSquare and player:getSquare()
+    local building=square and square.getBuilding and square:getBuilding()
+    local def=building and building:getDef()
+    return def and ("t3:"..tostring(def:getIDString())) or nil
+end
+
+local function itemWithToken(container,token)
+    local items=container and container.getItems and container:getItems()
+    if not items then return nil end
+    for i=0,items:size()-1 do
+        local item=items:get(i)
+        local md=item and item.getModData and item:getModData()
+        if md and md.cfPhysicalToken==token then return item end
+    end
+end
+
+-- Move the opening paper from its assigned starting-house container into the
+-- survivor's main inventory, then make this one discovery automatic. If any
+-- prerequisite changed, leave the item untouched: the normal nearby cue and
+-- ordinary container discovery remain a complete fallback.
+local function deliverOpening(api,id,source,expected)
+    local request=openingDelivery
+    if not request or request.id~=id then return end
+    openingDelivery=nil -- one attempt; failure deliberately becomes fallback
+    local p=getPlayer and getPlayer()
+    local inventory=p and p.getInventory and p:getInventory()
+    if expected~=1 or not inventory or playerHouse(p)~=request.house then
+        log("Opening clue remained in its starting-house container (delivery prerequisites changed).")
+        return
+    end
+    local item=itemWithToken(source,api.assignment(id).physicalToken)
+    if not item then
+        log("Opening clue remained in its starting-house container (placed item not found).")
+        return
+    end
+    local removed=pcall(function() source:RemoveItem(item) end)
+    local added,answer=false,nil
+    if removed then added,answer=pcall(function() return inventory:AddItem(item) end) end
+    local carried=false
+    if added then
+        carried=answer~=nil and answer~=false
+        if not carried and item.getOutermostContainer then
+            local ok,outer=pcall(function() return item:getOutermostContainer() end)
+            carried=ok and outer==inventory
+        end
+    end
+    if not carried then
+        pcall(function() source:AddItem(item) end)
+        log("Opening clue remained in its starting-house container (inventory transfer refused).")
+        return
+    end
+    local recognised=R.recognise(item,"opening")
+    local inspected=recognised and R.inspect(item,false)
+    if not inspected then
+        log("Opening clue reached the survivor but could not be noted automatically.")
+        return
+    end
+    local voice=require("ConspiracyFiles/PlayerVoice")
+    if voice and voice.onOpeningClue then pcall(voice.onOpeningClue,item) end
+    CFLog.write("i","found",{doc=id,place=addressFor(request.house),how="carried-at-start"})
+end
+
 local function placement(api,id)
     local scan,count,finished,container,created
     return function()
@@ -260,6 +328,7 @@ local function placement(api,id)
                 at=t and (t.x..","..t.y..","..t.z..":"..tostring(t.objectIndex)..":"..tostring(t.containerIndex)),
                 kind=placedDoc and placedDoc.kind or nil,
                 room=t and t.vehiclePart or nil,n=expected})
+            deliverOpening(api,id,current,expected)
             return true
         end
         if a.status=="placing" and not created then
@@ -549,10 +618,7 @@ local function openAll()
     log("Generated case active. Take an evidence item, then right-click Inspect Investigation Evidence.")
 end
 local function currentHouse()
-    local p=getPlayer();local square=p and p.getSquare and p:getSquare()
-    local building=square and square.getBuilding and square:getBuilding()
-    local def=building and building:getDef()
-    return def and ("t3:"..tostring(def:getIDString())) or nil
+    return playerHouse(getPlayer())
 end
 local function firstCase(catalog,seed,options,context,house,candidates)
     local Catalog=require("ConspiracyFiles/Generated/Catalog")
@@ -787,7 +853,9 @@ local function prepare(result,seed,later,house)
         -- the old fault was: the whole case was thrown away unless every site
         -- could supply its share of distinct containers at that moment, so a
         -- player who stays in one house got no further cases at all.
-        local root,waiting=Session.createDistributed(case,candidates,rooms,occupied,worldHours())
+        local first=case.documents[1]
+        local preference=house and {farFrom={documentId=first.id,x=p:getX(),y=p:getY()}} or nil
+        local root,waiting=Session.createDistributed(case,candidates,rooms,occupied,worldHours(),preference)
         if not root then refuse("no-containers",later==true); return end
         -- A case is a claim and a record that contradicts it, in two different
         -- places (Generator.MIN_EVIDENCE). One clue on its own is not a case,
@@ -824,9 +892,14 @@ local function prepare(result,seed,later,house)
             if steerFrom then log("Case shaped by the survivor's answers about "..tostring(case.steer and case.steer.fromCase)) end
         elseif house then swap({canonical=root,schedule={schema=1,createdHours={worldHours()}}}); clearDebt()
         else swap({canonical=root}); clearDebt() end
+        if house then openingDelivery={id=first.id,house=house} end
         openAll()
-        local first=case.documents[1]; local t=targets[first.locationId]
-        log("DEV first clue container: "..t.x..", "..t.y..", floor "..t.z..". No discoveries granted.")
+        local t=root.assignments[first.id].target
+        if house then
+            log("Opening clue origin: "..t.x..", "..t.y..", floor "..t.z.."; immediate personal delivery requested.")
+        else
+            log("DEV first clue container: "..t.x..", "..t.y..", floor "..t.z..". No discoveries granted.")
+        end
         -- How much of the case is an open order. A count, in the log, never on
         -- any surface the player reads: the record shows what was found and
         -- never a total (P4-R133).

@@ -1,3 +1,20 @@
+## DR-20260922-PERSONAL-OPENING — begin with the clue already on the survivor
+
+P4-R66's starting-house rule describes the narrative origin of the first
+mystery — *why is this survivor here?* — not a requirement to hide its opening
+paper in nearby furniture. Create the first case as soon as the character and
+starting building are available. Give its opening clue directly to the
+survivor's main inventory, recognise and record it automatically, retain the
+physical item for reading, and say once: “This has my name on it. Why was I
+supposed to be here?” The persisted item flag prevents a replay after reload.
+
+The starting house remains the clue's recorded origin. Its assigned, unopened
+container is also the fail-safe: if direct delivery cannot complete, leave the
+item there, keep the ordinary proximity cue, and prefer an equally plausible
+container farther from the precise spawn tile. Every other clue uses normal
+distributed placement and discovery. This amends P4-R66; it does not grant the
+rest of the investigation or reveal any later evidence.
+
 ## DR-20260922-WORKSHOP-BOOT-OVERRIDE — explicit owner waiver is allowed
 
 The Linux native boot check remains the default hard gate for every real Steam
@@ -46,7 +63,8 @@ ordinary play, and what interrupts it. Neither is established.
 
 ## DR-20260922-FIXED-CONTAINER-INDEX — pre-index vanilla furniture; validate live
 
-For the exact shipped vanilla map/build, choose fixed evidence destinations from
+For the shipped vanilla map as an exact member of the active map stack, and the
+exact shipped build, choose fixed evidence destinations from
 a compact offline census instead of rediscovering the same furniture in every
 new game. The index contains only building ID, coordinates, sprite/type and room;
 it contains no loot, object indexes, save state, vehicles or bodies. Materialise
@@ -55,8 +73,10 @@ object/container indexes match. Refuse searched or currently open storage, with
 unknown search state failing closed.
 
 Cars and bodies stay dynamic. A changed building uses the bounded live scanner;
-an unsupported map/build retains the old bounded scan. Exact map/build matching
-prevents a stale catalogue from becoming write authority. The Build 42.20 asset
+an unsupported map/build retains the old bounded scan. Map names match only as
+complete semicolon-delimited stack members, never substrings; build matching
+remains exact. Live validation prevents a stale catalogue from becoming write
+authority. The Build 42.20 asset
 has 240,059 signatures across 8,908 buildings and is rebuildable from the game
 files. Full rationale and provenance: [ADR-0005](docs/decisions/ADR-0005-build-versioned-fixed-container-index.md).
 
@@ -1485,7 +1505,18 @@ Generate a journal observation when the player actually sees an ID or credit car
 
 ## Automatic start and named tickets — 2026-09-06
 
-**P4-R66 — owner requests automatic successive investigations now.** The first investigation's opening evidence must be placed inside the house the player currently occupies, not a random nearby building. If indoors/eligible storage is unavailable, wait rather than silently choosing another building. Later cases appear automatically near the player's current position under P4-R62 timing/reach/cap policy; no console commands required for the gameplay flow. Keep learned cases intact and persist timing with case creation. Numeric test pacing remains a configurable implementation choice, not a previously approved owner number.
+**P4-R66 — owner requests automatic successive investigations now (opening
+delivery amended by DR-20260922-PERSONAL-OPENING).** The first investigation's
+opening evidence originates inside the house the player currently occupies,
+not a random nearby building. The later owner clarification makes it an item
+already on the survivor and an automatic first observation; its house container
+assignment is retained as fallback, not as the preferred search interaction.
+If the starting building is unavailable, wait rather than silently choosing
+another building. Later cases appear automatically near the player's current
+position under P4-R62 timing/reach/cap policy; no console commands required for
+the gameplay flow. Keep learned cases intact and persist timing with case
+creation. Numeric test pacing remains a configurable implementation choice,
+not a previously approved owner number.
 
 Owner notes parking and speeding tickets also carry names associated with zombies/corpses. Include visible named tickets as identity-document observations under P4-R65's same knowledge gate; capture displayed labels, not unseen descriptor facts. Installed item scripts verify Base.ParkingTicket and Base.SpeedingTicket; actual owner-name behavior remains subject to native item testing.
 

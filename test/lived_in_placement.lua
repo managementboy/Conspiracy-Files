@@ -30,6 +30,7 @@ end
 
 math.randomseed(20260908)
 local placedWithOccupancy, placedWithout, preferredHits, docsChecked = 0, 0, 0, 0
+local openingDistanceChecks=0
 
 for seed = 1, 200 do
     local case = G.generate(catalog, seed, opts)
@@ -82,6 +83,28 @@ for seed = 1, 200 do
         local tidy = Session.createDistributed(case, candidates, nil, allEmpty)
         assert((tidy ~= nil) == (base ~= nil),
             "seed " .. seed .. ": an all-empty site must place exactly when the baseline did")
+
+        -- If personal delivery cannot happen, the starting-house origin is the
+        -- fallback. Within an otherwise equal tier it should be the eligible
+        -- container farthest from the spawn tile, not the one at their feet.
+        local first=case.documents[1]
+        local site
+        for _,candidate in ipairs(case.locations) do if candidate.id==first.locationId then site=candidate end end
+        local anchor={documentId=first.id,x=site.bounds.x1,y=site.bounds.y1}
+        local distant=Session.createDistributed(case,candidates,nil,allEmpty,0,{farFrom=anchor})
+        if distant and distant.assignments[first.id].target then
+            local chosen=distant.assignments[first.id].target
+            local chosenDistance=(chosen.x-anchor.x)^2+(chosen.y-anchor.y)^2
+            local farthest=-1
+            for _,candidate in ipairs(candidates[first.locationId]) do
+                if Session.target(candidate,site) then
+                    local distance=(candidate.x-anchor.x)^2+(candidate.y-anchor.y)^2
+                    if distance>farthest then farthest=distance end
+                end
+            end
+            assert(chosenDistance==farthest,"opening fallback did not choose the farthest equally plausible container")
+            openingDistanceChecks=openingDistanceChecks+1
+        end
     end
 end
 
@@ -90,6 +113,7 @@ assert(placedWithOccupancy == placedWithout,
     .. placedWithOccupancy .. " vs " .. placedWithout)
 assert(placedWithOccupancy > 0, "the fixture generated no cases at all")
 assert(preferredHits > 0, "the lived-in container was never chosen; the preference is inert")
+assert(openingDistanceChecks>0,"the opening fallback distance preference was never exercised")
 
 print(string.format('PASS lived-in placement: %d cases, %d documents, %d placed in the '
     .. 'lived-in container, tidy sites still placed, no container reused',
