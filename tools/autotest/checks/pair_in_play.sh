@@ -31,14 +31,16 @@ say "first case premise: $premise"
 # hardcoded to the same collection notice" - and this check then failed a
 # correct first case for being one of the new ones (`name-on-standby-list`,
 # 2026-09-22). Ask Premises which ids are openings rather than naming one.
-openings="$(ev 'local P=require("ConspiracyFiles/Generated/Premises");local out={};for _,e in ipairs(P.ALL or P.list or {}) do if e.opening then out[#out+1]=e.id end end;return table.concat(out," ")')"
-say "premises flagged as openings: ${openings:-none read}"
-if [ -z "$openings" ]; then
-    # Reading them failed; fall back to the whole authored set rather than
-    # silently accepting anything.
-    openings="no-contact-at-premises name-on-standby-list deposit-for-unknown-booking"
-    say "could not read the opening list from Premises; using the authored set"
-fi
+# READ FROM THE SHIPPED SOURCE, not from the game. Premises keeps its list in
+# a file-local `entries` with no public accessor, so asking the game returned
+# nothing and this fell back to a hardcoded set - working, but re-introducing
+# the literal it exists to remove. Exposing `entries` just for a check would
+# be changing the product to suit a test; the check can read the file it
+# ships, which is what test/opening_not_hardcoded does.
+openings="$(grep -o 'id="[a-z-]*"[^}]*opening=true' "$REPO/mod/common/media/lua/shared/ConspiracyFiles/Generated/Premises.lua" \
+    | sed 's/id="//;s/".*//' | tr '\n' ' ')"
+say "premises flagged as openings: ${openings:-none found}"
+[ -n "$openings" ] || fail "could not read any opening premise from Premises.lua"
 case " $openings " in
     *" $premise "*) say "first case is an opening premise: $premise" ;;
     *) fail "the first case's premise is $premise, which is not one of the openings ($openings)" ;;

@@ -30,8 +30,20 @@ for line in pair:gmatch("[^\n]+") do
         end
     end
 end
-assert(pair:find("e.opening",1,true),
-    "the check must ask Premises which ids are openings")
+assert(pair:find("opening=true",1,true) and pair:find("Premises.lua",1,true),
+    "the check must derive the opening ids from the shipped Premises.lua, not "
+    .."keep its own copy")
+-- And it must not quietly fall back to a hardcoded set, which would restore
+-- the literal by another route.
+assert(pair:find("could not read any opening premise",1,true),
+    "if the list cannot be read the check must FAIL, not substitute a "
+    .."hardcoded set and carry on")
+for line in pair:gmatch("[^\n]+") do
+    if not line:match("^%s*#") and line:find("openings=",1,true) then
+        assert(not line:find("no-contact-at-premises",1,true),
+            "the opening ids must not be hardcoded in the check: "..line)
+    end
+end
 assert(pair:find("is not one of the openings",1,true),
     "the failure must name the whole set, so a reader can see it was a set")
 
