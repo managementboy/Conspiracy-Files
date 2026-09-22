@@ -204,6 +204,32 @@ local wedge=sh:match("if grep %-q \"unknown\".-\n    fi")
 assert(wedge and wedge:find("unexercised",1,true) and not wedge:find("fail ",1,true),
     "a wedged clue must be reported NOT EXERCISED, not FAIL")
 
+-- 9. BOTH CONTINUITY MECHANISMS, NOT JUST THE SUPERSEDED ONE.
+-- DR-20260919-CONTINUITY: "continuity carries discovered evidence, not
+-- selected opinions... The three closing questions are NOT restored as the
+-- steering mechanism." A case built from a finding carries `follows`; the
+-- answers wait for the case after. The gate demanded a STEER on case 2 and
+-- failed correct behaviour twice - on 2026-09-22 the game logged "next case
+-- follows the finding recorded in generated:1247366911:case" for the very
+-- case the gate called unsteered.
+assert(lua:find("function C.continuityOf"),
+    "the gate must be able to report WHICH continuity a case carries")
+assert(sh:find("CFCamp.continuityOf",1,true),
+    "the gate must ask which mechanism ran, not assume the steer")
+for _,needle in ipairs({'case "$kind2" in','follows|steer)'}) do
+    assert(sh:find(needle,1,true),
+        "case 2 must be allowed to continue from case 1 by EITHER mechanism ("..needle..")")
+end
+assert(sh:find('[ "$kind3" = steer ] || fail',1,true),
+    "when case 2 follows a finding, the deferred answers must reach case 3 - "
+    .."and that must be asserted, not merely tolerated")
+-- The superseded unconditional demand must not come back.
+for line in sh:gmatch("[^\n]+") do
+    if not line:match("^%s*#") and line:find("case 3 should be unsteered",1,true) then
+        error("the unconditional 'case 3 should be unsteered' demand is back: "..line)
+    end
+end
+
 print("PASS campaign_harness: ceiling frozen, clues counted by id, steering by "
     .."contribution, stubs a regression, stalls judged by progress, three "
     .."outcome kinds, 8 product assertions retained")

@@ -117,27 +117,30 @@ assert(Cases.pendingSteer(reloaded)==nil,
 print("PASS steer precedence: with no thread pending, case 1's answers reach "
     .."case 2, are marked used by it, never reach case 3, and survive a reload")
 
--- ------------------------------------------------------------- 2. no threads
--- The first diagnosis of this failure was that a pending THREAD had taken
--- precedence and deferred the steer, which GeneratedRuntime does do and
--- DR-20260919-CONTINUITY does require. It is not what happened: measured over
--- 200 generated cases on this fixture, NONE carries a case.thread, so
--- pendingThread can never fire for a generated case and the thread branch is
--- dead for them. Kept as an assertion so the day a generator starts emitting
--- threads, the precedence question comes back deliberately rather than by
--- surprise.
+-- ------------------------------------------------ 2. threads, and a warning
+-- A MEASUREMENT ON THIS FIXTURE IS NOT A MEASUREMENT ON THE GAME.
+--
+-- An earlier version of this test asserted "no generated case carries a
+-- thread", measured over 200 seeds here, and concluded the thread branch was
+-- dead code. The game says otherwise: on 2026-09-22 the campaign gate logged
+--
+--   next case follows the finding recorded in generated:1247366911:case
+--
+-- which is case 1, so case 2 followed a THREAD and the steer was left for the
+-- case after - exactly as DR-20260919-CONTINUITY requires. The synthetic
+-- catalogue simply does not produce the conditions that yield a thread, and
+-- the conclusion drawn from its silence was wrong.
+--
+-- So this records the gap rather than a false certainty.
 local threads=0
 for seed=1,200 do
     local c=G.generate(catalog,seed,opts())
     if c and type(c.thread)=="table" then threads=threads+1 end
 end
-assert(threads==0,
-    threads.." of 200 generated cases now carry a thread. The thread branch in "
-    .."GeneratedRuntime.prepare is no longer dead code, so a case that leaves "
-    .."BOTH a thread and unused answers is now reachable and its precedence "
-    .."must be exercised here rather than assumed")
-print("PASS steer precedence: no generated case carries a thread, so the thread "
-    .."branch cannot be what deferred the answers")
+print("NOTE steer precedence: "..threads.." of 200 cases carry a thread on the "
+    .."SYNTHETIC fixture. Real generated cases do - the campaign gate observed "
+    .."one on 2026-09-22 - so this number bounds nothing about the game and "
+    .."must not be read as 'the thread branch is dead'.")
 
 -- The ORDER is the runtime's, so assert it where it is written. A test that
 -- only checked the modules would have passed throughout the failure.

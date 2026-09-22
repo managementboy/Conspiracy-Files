@@ -128,6 +128,40 @@ end
 
 -- How a live case was built: its steer (or "unsteered"), its first person and
 -- whether they are marked met (no body), and every clue title.
+-- WHICH CONTINUITY A CASE CARRIES, of the two that exist.
+--
+-- DR-20260919-CONTINUITY: "continuity carries discovered evidence, not
+-- selected opinions... The three closing questions are NOT restored as the
+-- steering mechanism." So a case built from a finding the survivor made
+-- carries `follows`, and the closing-question answers wait for the case after.
+-- steerOf reports only `steer`, so a case that followed a thread reads
+-- "unsteered" - which is how the campaign gate came to report eleven failures
+-- against correct behaviour on 2026-09-21, and again on 2026-09-22 when the
+-- game logged "next case follows the finding recorded in
+-- generated:1247366911:case" for exactly the case the gate called unsteered.
+--
+-- Returns: kind ("follows", "steer" or "none"), the case it came from, and a
+-- description.
+function C.continuityOf(caseId)
+    for _, root in ipairs(roots()) do
+        if root.case and root.case.caseId == caseId then
+            local f, s = root.case.follows, root.case.steer
+            if type(f) == "table" then
+                return "follows", tostring(f.fromCase),
+                    "follows the finding " .. tostring(f.document or "?")
+                    .. " at " .. tostring(f.point or "?")
+            end
+            if type(s) == "table" then
+                return "steer", tostring(s.fromCase),
+                    "reading=" .. tostring(s.reading) .. " way=" .. tostring(s.way)
+                    .. " name=" .. tostring(s.person or s.organisation)
+            end
+            return "none", "", "no continuity from any earlier case"
+        end
+    end
+    return "unknown-case", "", ""
+end
+
 function C.steerOf(caseId)
     for _, root in ipairs(roots()) do
         if root.case and root.case.caseId == caseId then

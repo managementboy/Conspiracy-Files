@@ -521,23 +521,69 @@ case2="$(ev 'return CFCamp.newestLive()' | field 1)"
 ev 'return CFCamp.gap(true)' >/dev/null   # no further case while this one is played
 say "case 2: $case2"
 placed_well "case 2" "$case2" "$(field 1 "$here")" "$(field 2 "$here")" "$(field 3 "$here")"
+# CASE 2 MUST CARRY CONTINUITY FROM CASE 1 - BY EITHER MECHANISM.
+#
+# DR-20260919-CONTINUITY: "continuity carries discovered evidence, not selected
+# opinions... The three closing questions are NOT restored as the steering
+# mechanism." A case built from a finding the survivor made carries `follows`,
+# and the closing-question answers wait for the case after. Demanding a STEER
+# specifically is the superseded P4-R113 rule, and it failed correct behaviour
+# twice: on 2026-09-22 the game logged "next case follows the finding recorded
+# in generated:1247366911:case" for the very case this called unsteered.
+#
+# What must hold is that case 2 continues from case 1 somehow, and that the
+# answers are eventually consumed - not that a particular mechanism won.
+cont2="$(ev "return CFCamp.continuityOf([[$case2]])")"
+kind2="$(field 1 "$cont2")"; from2="$(field 2 "$cont2")"
+findings+=("case 2 continuity: $kind2 from ${from2#generated:} - $(field 3 "$cont2")")
+case "$kind2" in
+    follows|steer)
+        [ "$from2" = "$case1" ] || fail "case 2 carries a $kind2 from ${from2#generated:}, not from case 1"
+        ;;
+    *)
+        fail "case 2 carries no continuity from case 1 at all (neither a followed finding nor the answers): $(field 3 "$cont2")"
+        ;;
+esac
 steer2="$(ev "return CFCamp.steerOf([[$case2]])")"
-[ "$(field 1 "$steer2")" = "$case1" ] || fail "case 2 was not built from case 1's answers (steer from: $(field 1 "$steer2"))"
-[ "$(field 2 "$steer2")/$(field 3 "$steer2")" = "two/records" ] || fail "case 2's steer is $(field 2 "$steer2")/$(field 3 "$steer2"), not two/records"
-[ "$(field 5 "$steer2")" = "$person2" ] || fail "case 2's first person is $(field 5 "$steer2"), not the returning $person2"
-[ "$(field 6 "$steer2")" = true ] || fail "case 2: the returning person could be given a second body"
+if [ "$kind2" = steer ]; then
+    # Only when the answers actually steered it are their contents meaningful.
+    [ "$(field 2 "$steer2")/$(field 3 "$steer2")" = "two/records" ] || fail "case 2's steer is $(field 2 "$steer2")/$(field 3 "$steer2"), not two/records"
+    [ "$(field 5 "$steer2")" = "$person2" ] || fail "case 2's first person is $(field 5 "$steer2"), not the returning $person2"
+    [ "$(field 6 "$steer2")" = true ] || fail "case 2: the returning person could be given a second body"
+else
+    unexercised "case 2 followed case 1's finding rather than its answers, which DR-20260919-CONTINUITY prefers, so the answer-steered shape (the returning person without a second body, the records contribution) was not exercised on case 2"
+fi
 # The contract is a COMPATIBLE CONTRIBUTION, not a particular document.
 # Story.build guarantees that a case steered toward a way carries at least one
 # optional source whose role is that way; which document that is, and what it
 # is called, belongs to whoever wrote the event. This used to demand a literal
 # "Duty log / " title and so failed the moment anybody rewrote the scenario.
 ways2="$(ev "return CFCamp.waysOf([[$case2]])")"
-grep -q "records" <<<"$ways2" || fail "case 2 offers no records contribution for the reading it leans on (ways: ${ways2:-none})"
+if [ "$kind2" = steer ]; then
+    grep -q "records" <<<"$ways2" || fail "case 2 offers no records contribution for the reading it leans on (ways: ${ways2:-none})"
+fi
+findings+=("case 2 ways offered: ${ways2:-none} (continuity: $kind2)")
 findings+=("case 2 ways offered: ${ways2:-none}")
-[ "$(logged "Case shaped by the survivor's answers")" = 1 ] || fail "case 2: the steered case was not logged exactly once"
+# One line, for whichever mechanism actually ran.
+if [ "$kind2" = steer ]; then
+    [ "$(logged "Case shaped by the survivor's answers")" = 1 ] || fail "case 2: the steered case was not logged exactly once"
+else
+    [ "$(logged "next case follows the finding")" -ge 1 ] || fail "case 2 carries a followed finding but the mod never logged it"
+fi
 findings+=("case 2 clues: $(field 7 "$steer2")")
-[ "$(ev "return CFCamp.answersOf([[$case1]])" | field 5)" = "$case2" ] || fail "case 1's answers are not marked used by case 2"
-[ "$(ev "return CFCamp.tryChange([[$case1]])" | field 1)" = false ] || fail "case 1's answers could still be changed after shaping case 2"
+# THE ANSWERS ARE CONSUMED BY WHICHEVER CASE USED THEM, and locked once used.
+# Asserting "used by case 2" assumes case 2 was the one that used them; when a
+# followed finding shaped case 2, the answers are still pending and must stay
+# CHANGEABLE - locking them then would lose the survivor's conclusions.
+used1="$(ev "return CFCamp.answersOf([[$case1]])" | field 5)"
+findings+=("case 1's answers after case 2: used by ${used1:-nothing}")
+if [ "$kind2" = steer ]; then
+    [ "$used1" = "$case2" ] || fail "case 2 was built from case 1's answers but they are marked used by ${used1:-nothing}"
+    [ "$(ev "return CFCamp.tryChange([[$case1]])" | field 1)" = false ] || fail "case 1's answers could still be changed after shaping case 2"
+else
+    [ "$used1" = nil ] || [ -z "$used1" ] || fail "case 2 followed a finding, so case 1's answers were not used - yet they are marked used by ${used1}"
+    unexercised "case 1's answers were still unused after case 2, so answer-locking was not exercised here"
+fi
 thought0="$(said 'What do I make of it?')"
 play_case "$case2"
 played_all "case 2" "$case2"
@@ -555,8 +601,27 @@ case3="$(ev 'return CFCamp.newestLive()' | field 1)"
 ev 'return CFCamp.gap(true)' >/dev/null
 say "case 3: $case3"
 placed_well "case 3" "$case3" "$(field 1 "$here")" "$(field 2 "$here")" "$(field 3 "$here")"
-[ "$(ev "return CFCamp.steerOf([[$case3]])" | field 1)" = unsteered ] || fail "case 3 should be unsteered (case 1's answers used, case 2's empty)"
-[ "$(logged "Case shaped by the survivor's answers")" = 1 ] || fail "case 3 was logged as shaped by answers"
+# WHAT CASE 3 CARRIES DEPENDS ON WHAT CASE 2 TOOK.
+#   case 2 steered  -> case 1's answers are spent and case 2 left none, so
+#                      case 3 has nothing to continue from.
+#   case 2 followed -> case 1's answers are STILL pending, so case 3 is the
+#                      case they were deferred to, and receiving them is the
+#                      design working (DR-20260919-CONTINUITY), not a fault.
+# The old line demanded "unsteered" unconditionally and failed the mod for
+# obeying its own decision - twice.
+cont3="$(ev "return CFCamp.continuityOf([[$case3]])")"
+kind3="$(field 1 "$cont3")"; from3="$(field 2 "$cont3")"
+findings+=("case 3 continuity: $kind3 from ${from3#generated:} - $(field 3 "$cont3")")
+if [ "$kind2" = steer ]; then
+    [ "$kind3" = none ] || fail "case 2 spent case 1's answers, so case 3 should carry no continuity, but it carries a $kind3 from ${from3#generated:}"
+    [ "$(logged "Case shaped by the survivor's answers")" = 1 ] || fail "case 3 was logged as shaped by answers"
+else
+    [ "$kind3" = steer ] || fail "case 2 followed a finding, so case 1's answers were deferred to case 3 - but case 3 carries $kind3"
+    [ "$from3" = "$case1" ] || fail "case 3's steer comes from ${from3#generated:}, not from case 1 whose answers were deferred"
+    findings+=("the deferred answers reached case 3, which is DR-20260919-CONTINUITY working: the followed finding took case 2 and the survivor's conclusions waited one case")
+    [ "$(ev "return CFCamp.answersOf([[$case1]])" | field 5)" = "$case3" ] || fail "case 3 was built from case 1's answers but they are not marked used by it"
+    [ "$(ev "return CFCamp.tryChange([[$case1]])" | field 1)" = false ] || fail "case 1's answers could still be changed after shaping case 3"
+fi
 play_case "$case3" 2
 [ "$PLAYED" = 2 ] || fail "case 3: $PLAYED of the 2 clues asked for were played (outstanding: $(ev "return CFCamp.outstanding([[$case3]])" | tr '\t' ' '))"
 stage "case 3, two clues"
