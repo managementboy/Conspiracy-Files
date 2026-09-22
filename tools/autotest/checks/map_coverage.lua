@@ -103,6 +103,70 @@ function V.progress(id)
     }, "\t")
 end
 
+-- WHY A DESIGN PRODUCED NO PAYOFF, which is a different question from whether
+-- it did. Two designs answered `state none, items -1, container none` on
+-- 2026-09-21 (WorldStashMap9, WorldStashMap20) and the run could only report
+-- that nothing happened. There are two quite different reasons:
+--
+--   IMPOSSIBLE   the destination has no eligible non-floor container at all,
+--                so no amount of waiting will place anything;
+--   UNFINISHED   the trail was never active, or the scan had not resolved a
+--                candidate yet when the row was read.
+--
+-- Reported as a census rather than a verdict: how many containers the engine
+-- shows around the destination, how many the shipped rule would accept, how
+-- many are explored, and what the trail state actually is.
+function V.why(id)
+    local SC = require("ConspiracyFiles/Generated/StorageChoices")
+    local binding = Catalogue.get(id)
+    local t = binding and binding.targets and binding.targets[1]
+    if not t then return "no target in the catalogue" end
+    local cell = getCell()
+    if not cell then return "no cell" end
+    local total, eligible, explored, kinds = 0, 0, 0, {}
+    local R2 = 12
+    for dx = -R2, R2 do for dy = -R2, R2 do
+        local sq = cell:getGridSquare(t.x + dx, t.y + dy, 0)
+        if sq then
+            local objs = sq:getObjects()
+            for i = 0, math.min(48, objs:size()) - 1 do
+                local o = objs:get(i)
+                local n = o.getContainerCount and o:getContainerCount() or 0
+                for ci = 0, math.min(8, n) - 1 do
+                    local c = o:getContainerByIndex(ci)
+                    if c then
+                        total = total + 1
+                        local k = tostring(c:getType())
+                        if SC.fixedKind(k) then
+                            eligible = eligible + 1
+                            kinds[k] = (kinds[k] or 0) + 1
+                            if c:isExplored() then explored = explored + 1 end
+                        end
+                    end
+                end
+            end
+        end
+    end end
+    local parts = {}
+    for k, v in pairs(kinds) do parts[#parts + 1] = k .. "=" .. v end
+    table.sort(parts)
+    local root = R.status() and R.status().state
+    local trail = root and root.trails and root.trails[id]
+    local p = trail and trail.payoff
+    return table.concat({
+        "target=" .. t.x .. "," .. t.y,
+        "containers=" .. total,
+        "eligible=" .. eligible,
+        "explored=" .. explored,
+        "kinds=" .. (table.concat(parts, ",") ~= "" and table.concat(parts, ",") or "none"),
+        "trailActive=" .. tostring(trail ~= nil),
+        "payoffState=" .. tostring(p and p.state or "none"),
+        "verdict=" .. (eligible == 0 and "IMPOSSIBLE-HERE: no eligible non-floor container within "
+            .. R2 .. " tiles" or "POSSIBLE: eligible containers exist, so no payoff means the "
+            .. "trail or scan did not get there"),
+    }, "\t")
+end
+
 -- One row per design, everything at once, so the shell asks the game once per
 -- design rather than six times.
 -- Has the world around the teleported survivor streamed in far enough for the

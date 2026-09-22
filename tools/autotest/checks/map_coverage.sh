@@ -120,7 +120,15 @@ cf_main() {
         case "$verdict" in
             ok) placed_ok=$((placed_ok + 1)) ;;
             BAD|DUPLICATE) fail "$id: payoff $verdict (state $(field 6 "$row"), items $(field 7 "$row"))" ;;
-            *) notexercised+=("$id: payoff $verdict (state $(field 6 "$row"), items $(field 7 "$row"))") ;;
+            *)
+            # WHY, not just THAT. "state none, items -1" says nothing about
+            # whether a payoff COULD have been placed there. Ask for the
+            # census: no eligible non-floor container within reach is an
+            # impossible placement; eligible containers present means the
+            # trail or the scan never got there, which is a different finding.
+            why="$(ev "return CFCov.why([[$id]])")"
+            notexercised+=("$id: payoff $verdict (state $(field 6 "$row"), items $(field 7 "$row")) - $(tr '\t' ' ' <<<"$why")")
+            ;;
         esac
         [ "$nonfloor" = true ] && nonfloor_ok=$((nonfloor_ok + 1))
         [ "$resolved" = true ] && [ "$standable" = true ] && access_ok=$((access_ok + 1))
