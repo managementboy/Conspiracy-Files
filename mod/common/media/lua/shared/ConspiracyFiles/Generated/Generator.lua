@@ -252,7 +252,11 @@ local function build(seed,revision,sites,cast,relayMemo,steer,opening,follows)
     local premise
     if opening and opening.premise then
         local selector=opening.premise=="auto" and seed or opening.premise
-        local why; premise,why=Premises.opening(selector)
+        local why
+        if opening.premise=="auto" and opening.profession then
+            premise=Premises.forProfession(opening.profession)
+        end
+        if not premise then premise,why=Premises.opening(selector) end
         if not premise then return nil,why or "no opening premise" end
     elseif follows then
         local why; premise,why=Premises.followUp()
@@ -266,6 +270,10 @@ local function build(seed,revision,sites,cast,relayMemo,steer,opening,follows)
     -- sinister interpretation of interchangeable paperwork. The old outline
     -- field remains a deterministic variant selector during the rebuild.
     local variant=outline=="corroboration" and 1 or 2
+    if opening and premise.profession then
+        local variants=Premises.openingVariants(premise.id)
+        variant=opening.variant or ((seed-1)%variants+1)
+    end
     if steer and steer.organisation and not opening and not follows then
         -- Return to an actual authored business event. Replacing letterheads
         -- would make a motel operate a sawmill; ignoring the choice is no better.
@@ -391,7 +399,8 @@ local function build(seed,revision,sites,cast,relayMemo,steer,opening,follows)
         relayMemo=relayMemo and true or nil,steer=steer and copy(steer) or nil,
         -- Preserve the legacy boolean representation when validating an old
         -- save; new cases pin the selected premise by id.
-        opening=opening and {premise=opening.premise==true and true or premise.id,self=opening.self} or nil,
+        opening=opening and {premise=opening.premise==true and true or premise.id,self=opening.self,
+            profession=premise.profession,variant=premise.profession and variant or nil} or nil,
         essential=authored.essential,thread=authored.thread,follows=follows and copy(follows) or nil}
 end
 -- What the player has met, reduced to what a case may safely carry: plain
@@ -454,7 +463,7 @@ function G.generate(catalog,seed,options)
     if not seedOK(seed) then return nil,"seed must be an integer from 1 through 2147483646" end
     options=options or {}
     if type(options)~="table" then return nil,"invalid generator options" end
-    for key in pairs(options) do if key~="mapId" and key~="buildLine" and key~="allowSynthetic" and key~="names" and key~="relayMemo" and key~="steer" and key~="opening" and key~="self" and key~="follows" then return nil,"unknown generator option" end end
+    for key in pairs(options) do if key~="mapId" and key~="buildLine" and key~="allowSynthetic" and key~="names" and key~="relayMemo" and key~="steer" and key~="opening" and key~="self" and key~="profession" and key~="follows" then return nil,"unknown generator option" end end
     -- THE PERSONAL OPENING (DR-20260919-BUILD-PAIR). `opening` asks for the
     -- opening premise by name instead of drawing one from the seed; `self` is
     -- the survivor's own name, which the caller reads from the engine because
@@ -463,6 +472,8 @@ function G.generate(catalog,seed,options)
     if options.self~=nil then
         if type(options.self)~="string" or #options.self==0 or #options.self>60 then return nil,"invalid survivor name" end
     end
+    if options.profession~=nil and options.profession~="fitnessinstructor" then return nil,"invalid opening profession" end
+    if options.profession and not options.opening then return nil,"profession only applies to an opening" end
     -- An opening without a name would render "{SELF}" into the slip, and the
     -- slip is the case's only personal anchor - the one finding with no
     -- alternative. Refused outright rather than shipped blank.
@@ -507,7 +518,7 @@ function G.generate(catalog,seed,options)
     local selected=pairs[random(#pairs)]
     if random(2)==1 then selected={selected[2],selected[1]} end
     local result,buildWhy=build(seed,catalog.revision,selected,G.castFrom(options.names),options.relayMemo==true,steer,
-        options.opening and {premise="auto",self=options.self} or nil,follows)
+        options.opening and {premise="auto",self=options.self,profession=options.profession} or nil,follows)
     if not result then return nil,buildWhy end
     local valid,err=G.validate(result); if not valid then return nil,err end
     return copy(result)
@@ -518,7 +529,7 @@ function G.generateSelected(catalog,seed,options,orderedSiteIds)
     if not safe or type(options)~="table" or type(orderedSiteIds)~="table" then return nil,"invalid selected-generation input" end
     for key in pairs(options) do
         if key~="mapId" and key~="buildLine" and key~="allowSynthetic" and key~="names" and key~="relayMemo"
-            and key~="steer" and key~="opening" and key~="self" and key~="follows" then return nil,"unknown generator option" end
+            and key~="steer" and key~="opening" and key~="self" and key~="profession" and key~="follows" then return nil,"unknown generator option" end
     end
     -- THE SAME TWO OPTIONS AS G.generate, validated the same way. This path is
     -- the one the FIRST case of a save actually takes (firstCase ->
@@ -529,6 +540,8 @@ function G.generateSelected(catalog,seed,options,orderedSiteIds)
     if options.self~=nil then
         if type(options.self)~="string" or #options.self==0 or #options.self>60 then return nil,"invalid survivor name" end
     end
+    if options.profession~=nil and options.profession~="fitnessinstructor" then return nil,"invalid opening profession" end
+    if options.profession and not options.opening then return nil,"profession only applies to an opening" end
     if options.opening and not options.self then return nil,"the opening needs the survivor's name" end
     local follows
     if options.follows~=nil then
@@ -549,7 +562,7 @@ function G.generateSelected(catalog,seed,options,orderedSiteIds)
     local a,b=byId[orderedSiteIds[1]],byId[orderedSiteIds[2]]
     if not a or not b or not Catalog.distinct(a,b) then return nil,"selected sites are not eligible and distinct" end
     local result,buildWhy=build(seed,catalog.revision,{a,b},G.castFrom(options.names),options.relayMemo==true,steer,
-        options.opening and {premise="auto",self=options.self} or nil,follows)
+        options.opening and {premise="auto",self=options.self,profession=options.profession} or nil,follows)
     if not result then return nil,buildWhy end
     local valid,err=G.validate(result); if not valid then return nil,err end
     return copy(result)
@@ -636,6 +649,14 @@ function G.validate(case)
         end
         if type(case.opening.self)~="string" or #case.opening.self==0 or #case.opening.self>60 then
             return false,"invalid opening survivor name"
+        end
+        if case.opening.profession~=nil or case.opening.variant~=nil then
+            if case.opening.profession~="fitnessinstructor"
+                or case.opening.premise~="fitness-instructor-start"
+                or type(case.opening.variant)~="number" or case.opening.variant~=math.floor(case.opening.variant)
+                or case.opening.variant<1 or case.opening.variant>10 then
+                return false,"invalid profession opening"
+            end
         end
     end
     -- The relay memo takes no story role, so it is not counted against the

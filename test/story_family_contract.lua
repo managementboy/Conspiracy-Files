@@ -14,7 +14,8 @@ local expected={"transfer-nobody-arranged","signed-by-someone-absent","two-start
  "paid-before-ordered","overtime-nobody-worked","closure-announced-twice",
  "appointment-out-of-order","file-signed-out","missing-ledger-page",
  "photograph-without-a-name","withdrawn-extension",
- "no-contact-at-premises","name-on-standby-list","deposit-for-unknown-booking","still-filing"}
+ "no-contact-at-premises","name-on-standby-list","deposit-for-unknown-booking",
+ "fitness-instructor-start","still-filing"}
 local values={CODE="PS-229",P1="Ines Kubiak",P2="Ellis Hale",
  A="201 N Carl St",B="113 Walker Road",DATE0="July 5, 1993",DATE1="July 6, 1993",
  DATE2="July 7, 1993",DATE3="July 8, 1993",DATE1CAPS="JULY 6, 1993",DATE2CAPS="JULY 7, 1993",
@@ -92,6 +93,6 @@ for _,id in ipairs(Premises.list()) do
   end
  end
 end
-assert(converted==#expected and converted==24 and uncovered==0,
- "generated-pool coverage must explicitly account for all 24 families")
-print("PASS generated-pool story contract: 24 families, 48 variants; map and other writing coverage are separate")
+assert(converted==#expected and converted==25 and uncovered==0,
+ "generated-pool coverage must explicitly account for all 25 families")
+print("PASS generated-pool story contract: 25 families, first 50 variants; map and other writing coverage are separate")

@@ -1,7 +1,7 @@
 -- G2 interrupted-placement and identity-reconciliation regression harness.
 package.path="mod/common/media/lua/shared/?.lua;mod/common/media/lua/client/?.lua;"..package.path
 
-local function newFixture()
+local function newFixture(profession)
     ConspiracyFiles=nil
     package.loaded["ConspiracyFiles/GeneratedRuntime"]=nil
     package.preload["ConspiracyFiles/ClueCue"]=function() return {} end
@@ -23,6 +23,14 @@ local function newFixture()
     end
     local containers,loaded={},{}; for _,x in ipairs({0,20}) do for _,offset in ipairs({0,0.1,1,1.1}) do containers[x+offset]=container() end;loaded[x]=true;loaded[x+1]=true end;local inventory=container()
     local player=record{getX=0,getY=0,getZ=0,getHoursSurvived=0,getInventory=inventory}
+    if profession then
+        player.getDescriptor=function()
+            return {getForename=function() return "Ada" end,getSurname=function() return "Whitlock" end,
+                getCharacterProfession=function()
+                    return {getName=function() return profession end}
+                end}
+        end
+    end
     player.getModData=function() return {} end; player.getVehicle=function() return nil end
     player.getSquare=function()
         return {getBuilding=function()
@@ -91,8 +99,12 @@ local function restart(f) f.events.start(); f.tick(180) end
 -- handed to the survivor and noted immediately. The durable item flags make
 -- the special line exactly once; later clues remain ordinary placements.
 do
-    local f=newFixture(); f.bootOpening()
+    local f=newFixture("fitnessinstructor"); f.bootOpening()
     local root=f.saved.campaign.canonical
+    assert(root.case.opening.profession=="fitnessinstructor"
+        and root.case.opening.premise=="fitness-instructor-start"
+        and root.case.opening.variant>=1 and root.case.opening.variant<=10,
+        "runtime must route the Fitness Instructor into one of ten saved starts")
     local first=root.case.documents[1]
     local a=root.assignments[first.id]
     assert(first.locationId=="t3:0" and a.target,"the opening origin must be the starting house")
@@ -112,7 +124,7 @@ end
 -- physical item stays in its starting-house fallback container, with no flags
 -- that would suppress ordinary proximity/discovery behavior.
 do
-    local f=newFixture(); f.inventory.reject=true; f.bootOpening()
+    local f=newFixture("fitnessinstructor"); f.inventory.reject=true; f.bootOpening()
     local root=f.saved.campaign.canonical
     local first=root.case.documents[1]
     local found

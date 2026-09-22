@@ -28,18 +28,20 @@ local entries={
  {id="no-contact-at-premises",title="No contact at premises",opening=true},
  {id="name-on-standby-list",title="A name promoted from standby",opening=true},
  {id="deposit-for-unknown-booking",title="A deposit for an unknown booking",opening=true},
+ {id="fitness-instructor-start",title="The class I do not remember accepting",opening=true,profession="fitnessinstructor"},
  {id="still-filing",title="Still filing",followUp=true},
 }
-local byId,ordinary,openings={},{},{}
+local byId,ordinary,openings,professionOpenings={},{},{},{}
 for _,entry in ipairs(entries) do
  assert(not byId[entry.id],"duplicate family id")
  byId[entry.id]=entry
- if entry.opening then openings[#openings+1]=entry
+ if entry.opening and entry.profession then professionOpenings[entry.profession]=entry
+ elseif entry.opening then openings[#openings+1]=entry
  elseif not entry.followUp then ordinary[#ordinary+1]=entry end
 end
 local function copy(entry)
  if not entry then return nil,"unknown premise" end
- return {id=entry.id,title=entry.title,opening=entry.opening,followUp=entry.followUp}
+ return {id=entry.id,title=entry.title,opening=entry.opening,followUp=entry.followUp,profession=entry.profession}
 end
 function M.get(id) return copy(byId[id]) end
 function M.count() return #entries end
@@ -66,6 +68,16 @@ function M.opening(selector)
   if entry and entry.opening then return copy(entry) end
  end
  return nil,"unknown opening premise"
+end
+-- Profession openings are opt-in. They never enter the generic opening pool,
+-- so adding one cannot change what any existing non-matching character draws.
+function M.forProfession(profession)
+ return copy(professionOpenings[profession])
+end
+function M.openingVariants(id)
+ local entry=byId[id]
+ if not entry or not entry.opening then return nil end
+ return entry.profession and 10 or 2
 end
 function M.followUp() return M.get("still-filing") end
 return M

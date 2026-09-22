@@ -47,9 +47,10 @@ assert(Premises.opening("not-an-opening")==nil,"an invented opening is refused")
 -- save's second case could open with the survivor's own name in it.
 assert(Premises.choosableCount()==20,
     "an ordinary case draws from twenty premises: got "..Premises.choosableCount())
--- Twenty-four: twenty ordinary, three openings, and the connected follow-up. What
+-- Twenty-five: twenty ordinary, three generic openings, one profession opening,
+-- and the connected follow-up. What
 -- matters is that the ORDINARY pool stayed at twenty, asserted above.
-assert(Premises.count()==24,"and twenty-four exist in total: got "..Premises.count())
+assert(Premises.count()==25,"and twenty-five exist in total: got "..Premises.count())
 
 -- EVERY INDEX of the ordinary pool, not a sample. `choose` takes the caller's
 -- seeded PRNG, so a stub returning each index in turn walks the whole pool -

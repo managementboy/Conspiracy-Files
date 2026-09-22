@@ -724,7 +724,7 @@ local function prepare(result,seed,later,house)
         -- the descriptor and its fields are read under pcall because a mod that
         -- cannot generate a case is worse than one whose opening is ordinary.
         if not later then
-            local name
+            local name,profession
             local okD,descriptor=pcall(function() return p:getDescriptor() end)
             if okD and descriptor then
                 local okN,fore=pcall(function() return descriptor:getForename() end)
@@ -733,10 +733,20 @@ local function prepare(result,seed,later,house)
                 if okN and type(fore)=="string" and #fore>0 then parts[#parts+1]=fore end
                 if okS and type(sur)=="string" and #sur>0 then parts[#parts+1]=sur end
                 if #parts>0 then name=table.concat(parts," ") end
+                local okP,professionObject=pcall(function() return descriptor:getCharacterProfession() end)
+                if okP and professionObject then
+                    local okI,id=pcall(function() return professionObject:getName() end)
+                    if okI and type(id)=="string" then profession=string.lower(id) end
+                end
             end
             if name and #name<=60 then
                 options.opening=true; options.self=name
-                log("first case: the personal opening, in the survivor's own name")
+                if profession=="fitnessinstructor" then
+                    options.profession=profession
+                    log("first case: one of ten Fitness Instructor openings, in the survivor's own name")
+                else
+                    log("first case: the personal opening, in the survivor's own name")
+                end
             else
                 log("first case: no readable survivor name, so an ordinary case rather than a blank slip")
             end
@@ -854,7 +864,7 @@ local function prepare(result,seed,later,house)
         -- could supply its share of distinct containers at that moment, so a
         -- player who stays in one house got no further cases at all.
         local first=case.documents[1]
-        local preference=house and {farFrom={documentId=first.id,x=p:getX(),y=p:getY()}} or nil
+        local preference=house and case.opening and {farFrom={documentId=first.id,x=p:getX(),y=p:getY()}} or nil
         local root,waiting=Session.createDistributed(case,candidates,rooms,occupied,worldHours(),preference)
         if not root then refuse("no-containers",later==true); return end
         -- A case is a claim and a record that contradicts it, in two different
@@ -892,10 +902,10 @@ local function prepare(result,seed,later,house)
             if steerFrom then log("Case shaped by the survivor's answers about "..tostring(case.steer and case.steer.fromCase)) end
         elseif house then swap({canonical=root,schedule={schema=1,createdHours={worldHours()}}}); clearDebt()
         else swap({canonical=root}); clearDebt() end
-        if house then openingDelivery={id=first.id,house=house} end
+        if house and case.opening then openingDelivery={id=first.id,house=house} end
         openAll()
         local t=root.assignments[first.id].target
-        if house then
+        if house and case.opening then
             log("Opening clue origin: "..t.x..", "..t.y..", floor "..t.z.."; immediate personal delivery requested.")
         else
             log("DEV first clue container: "..t.x..", "..t.y..", floor "..t.z..". No discoveries granted.")

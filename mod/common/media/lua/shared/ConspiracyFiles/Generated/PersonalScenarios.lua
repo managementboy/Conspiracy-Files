@@ -1,6 +1,7 @@
 -- Authored, payoff-first personal scenarios.  This is data only: callers bind
 -- placeholders and decide discovery, comparison and placement policy.
 local Continuation=require("ConspiracyFiles/Generated/PersonalContinuation")
+local FitnessOpenings=require("ConspiracyFiles/Generated/FitnessOpeningScenarios")
 local M={}
 
 local scenarios={
@@ -142,6 +143,7 @@ local scenarios={
   }
  },
 }
+scenarios["fitness-instructor-start"]=FitnessOpenings
 
 local function copy(value)
  if type(value)~="table" then return value end
@@ -155,8 +157,10 @@ function M.get(id,variant)
  local scenario=set and set[variant]
  if type(variant)~="number" or variant~=math.floor(variant) or not scenario then return nil end
  local out=copy(scenario)
- out.organisation="McCoy Logging Co."
- out.grounding="McCoyLoggingCorp"
+ if id~="fitness-instructor-start" then
+  out.organisation="McCoy Logging Co."
+  out.grounding="McCoyLoggingCorp"
+ end
  if not out.anchors.claim.source:find("{A}",1,true) then
   out.anchors.claim.source=out.anchors.claim.source.."\nEnquiry copy filed at: {A}."
  end
