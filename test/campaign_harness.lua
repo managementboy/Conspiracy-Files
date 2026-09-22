@@ -165,6 +165,15 @@ assert(clockFail and clockFail:find("unexercised"),
 for _,kind in ipairs({"fails","harnesses","unexercised"}) do
     assert(sh:find(kind.."=%(%)"), "campaign.sh must keep a separate "..kind.." list")
 end
+-- THE WHOLE RUN IS ONE FUNCTION. bash reads a script from disk incrementally,
+-- so editing this file mid-run shifts the byte offset under the running shell
+-- and kills it on a syntax error in text it never meant to execute. That cost
+-- a ninety-minute run twice, on 2026-09-21 and 2026-09-22. A function body is
+-- parsed in full when bash reads the definition, so the file on disk stops
+-- mattering once it is defined.
+assert(sh:find("cf_main() {",1,true) and sh:find('cf_main "$@"',1,true),
+    "the run must be wrapped in one function, so that editing this file while "
+    .."it runs cannot kill the run")
 assert(sh:find('verdict="COULD NOT RUN"',1,true),
     "a harness failure must produce COULD NOT RUN, not FAIL")
 
@@ -193,14 +202,14 @@ end
 -- grinding through every stage that needed a finished case 1.
 assert(sh:find("WEDGED=1",1,true),
     "the gate must notice a clue parked at `unknown`")
-assert(sh:find('if [ "$WEDGED" = 1 ]; then',1,true),
+assert(sh:find('[ "$WEDGED" = 1 ]; then',1,true),
     "the gate must stop when case 1 cannot finish, rather than failing every "
     .."stage behind it")
 assert(sh:find("COULD NOT RUN",1,true),
     "a world where case 1 cannot finish is a run that could not happen, not a "
     .."product failure")
 -- And it must be reported as unexercised, never as a failure.
-local wedge=sh:match("if grep %-q \"unknown\".-\n    fi")
+local wedge=sh:match("if grep %-q \"unknown\".-\n%s*fi")
 assert(wedge and wedge:find("unexercised",1,true) and not wedge:find("fail ",1,true),
     "a wedged clue must be reported NOT EXERCISED, not FAIL")
 
