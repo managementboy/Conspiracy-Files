@@ -35,7 +35,19 @@ assert(lib:find("$now\" = \"$started",1,true),
 assert(lib:find("trap 'rm -f",1,true),
     "the PID file must be removed however the check exits")
 
--- Every long check claims a run, before it starts a world.
+-- EVERY check is tracked, not only the three that remembered to ask. Only
+-- campaign, map_coverage and marker_lifecycle called cf_claim_run, so
+-- running.sh reported "no autotest check is running" while six gameplay gates
+-- were in progress - a true statement about its own records and a false one
+-- about the machine. claim_game is the one call every check makes, so that is
+-- where the claim belongs.
+assert(lib:find("cf_claim_run \"$(basename",1,true),
+    "claim_game must claim the run automatically, so a check cannot be "
+    .."invisible by forgetting to ask")
+assert(lib:find("CF_RUN_CLAIMED",1,true),
+    "a check that already claimed must keep its own claim")
+
+-- The long checks claim explicitly too, before they start a world.
 for _,c in ipairs({"campaign","map_coverage","marker_lifecycle"}) do
     local body=read("tools/autotest/checks/"..c..".sh")
     assert(body:find("cf_claim_run "..c,1,true),

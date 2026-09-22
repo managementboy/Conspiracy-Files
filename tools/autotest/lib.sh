@@ -76,6 +76,16 @@ cf_run_alive() {   # cf_run_alive NAME - 0 when that check is genuinely running
 # claim_game [SECONDS]  wait up to SECONDS (default 20 minutes) for the machine.
 CF_LOCK="${PZ_ZOMBOID:-$HOME/Zomboid}/.cf-autotest.lock"
 claim_game() {
+    # EVERY CHECK IS TRACKED, WITHOUT EACH ONE REMEMBERING TO ASK. Only three
+    # checks called cf_claim_run, so running.sh could not see the other
+    # seventeen and reported "no autotest check is running" while six gameplay
+    # gates were in progress. Every check calls claim_game, so this is the one
+    # place that can make it automatic. The name is the script's own, and a
+    # check that already claimed keeps its claim.
+    if [ -z "${CF_RUN_CLAIMED:-}" ]; then
+        CF_RUN_CLAIMED=1
+        cf_claim_run "$(basename "${0%.sh}")"
+    fi
     local wait_for="${1:-1200}"
     exec 9>"$CF_LOCK" || { echo "cannot write the lock at $CF_LOCK" >&2; return 1; }
     if ! flock -w "$wait_for" 9; then
