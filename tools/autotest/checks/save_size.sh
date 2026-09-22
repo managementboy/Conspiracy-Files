@@ -23,6 +23,10 @@ cf_main() {
 say() { echo "save-size: $*" >&2; }
 claim_game || exit 2
 cf_pin_source
+# NAME THE WORLD, or measure whatever ran last - which is how the first run
+# of this check measured a pair_in_play world with one case and zero map
+# trails and called it a combined measurement. The default is kept for
+# convenience but the report always prints what the world actually held.
 world="${1:-$(cat "$REPO/dev/eval/linux/world" 2>/dev/null)}"
 [ -n "$world" ] || { say "no world to measure; pass one or run a check first"; exit 2; }
 say "loading $world"
@@ -36,7 +40,11 @@ bytes="$(ev 'return CFReload.bytes()')"
 total="$(cut -f1 <<<"$bytes")"; parts="$(cut -f2 <<<"$bytes")"
 cases="$(ev 'return CFCamp.cases()' 2>/dev/null | head -1 | tr '\t' ' ')"
 trails="$(ev 'local n=0;local w=ModData.get("ConspiracyFiles.MapMedia");local r=w and w.canonical;for _ in pairs(r and r.trails or {}) do n=n+1 end;return n' 2>/dev/null)"
-disk="$(du -sb "$ZOMBOID_HOME/Saves"/*/"$world" 2>/dev/null | cut -f1 | head -1)"
+# ZOMBOID_HOME comes from env.sh, which lib.sh does not source; use the same
+# path pz.sh does. The first version read an unset variable and reported the
+# on-disk size as "unknown" without saying why.
+ZHOME="${PZ_ZOMBOID:-$HOME/Zomboid}"
+disk="$(du -sb "$ZHOME/Saves"/*/"$world" 2>/dev/null | cut -f1 | head -1)"
 errors="$(mod_errors)"
 "$PZ" stop >/dev/null 2>&1
 

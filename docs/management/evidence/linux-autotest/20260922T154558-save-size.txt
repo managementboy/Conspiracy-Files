@@ -1,0 +1,22 @@
+Linux combined save measurement
+source: ab3c29b
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+world: 6637068405739616609
+
+MEASURED, in the game, across every root SaveBudget budgets:
+  total estimated bytes : 33568
+  on disk               : unknown bytes
+  per root              : CasePeople=682 DiscoveryLedger=2246 Generated.G2=27534 KeyConnections=770 PlaceVisits=443 VisitedBuildings=359
+
+WHAT THIS STATE CONTAINS
+  generated cases : 1 1 1:933965006:retired
+  map trails      : 0 of 125
+
+WHAT IT IS NOT
+  Not the maximum legal state. That needs sixteen cases AND all 125
+  map trails in one save; this world has whichever of the two its own
+  run produced. A number below the budget here does NOT establish that
+  the maximum fits.
+
+  against the 1000000-byte development allowance: 3%
+errors inside the mod: 0
