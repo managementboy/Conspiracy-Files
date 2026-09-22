@@ -14,6 +14,10 @@
 set -uo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")/../.." || exit 2
 LONG=(checks/campaign.sh checks/travel.sh checks/instalments.sh checks/promise.sh)
+# The gameplay gates from the writing-rebuild handoff, each exercised and
+# recorded on its own (task 6, 2026-09-22). Short enough to run together.
+GATES=(checks/opening_in_play.sh checks/pair_in_play.sh checks/marker_lifecycle.sh
+       checks/map_placement.sh checks/organiser.sh checks/knox.sh)
 PZ="$HOME/.steam/steam/steamapps/common/ProjectZomboid"
 
 if [ "${1:-}" = "--list" ]; then
@@ -22,11 +26,26 @@ if [ "${1:-}" = "--list" ]; then
     echo "travel     about 25 min                 tools/autotest/checks/travel.sh"
     echo "instalments about 25 min                tools/autotest/checks/instalments.sh"
     echo "promise    about 10 min                 tools/autotest/checks/promise.sh"
+    echo "--gates    the six gameplay gates         tools/autotest/native.sh --gates"
+    echo "  opening_in_play, pair_in_play, marker_lifecycle, map_placement, organiser, knox"
     echo "all of the above require Project Zomboid"
     exit 0
 fi
 
 [ -d "$PZ" ] || { echo "NATIVE NOT EXERCISED: Project Zomboid is not installed at $PZ"; exit 3; }
+
+if [ "${1:-}" = "--gates" ]; then
+    shift; pass=0; total=0; results=()
+    for c in "${GATES[@]}"; do
+        total=$((total + 1))
+        if "tools/autotest/$c" "$@"; then pass=$((pass + 1)); results+=("$(basename "$c" .sh): PASS")
+        else results+=("$(basename "$c" .sh): FAIL or COULD NOT RUN (exit $?)"); fi
+    done
+    printf '%s\n' "${results[@]}"
+    echo "gameplay gates: $pass of $total passed"
+    [ "$pass" -eq "$total" ]
+    exit
+fi
 
 if [ "${1:-}" = "--long" ]; then
     shift; pass=0; total=0
