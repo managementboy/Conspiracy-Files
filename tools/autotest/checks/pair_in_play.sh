@@ -25,7 +25,24 @@ done
 
 premise="$(ev 'local C=require("ConspiracyFiles/Generated/SuccessiveCases");return tostring(C.sessions(C.current(ModData.get("ConspiracyFiles.Generated.G2")))[1].case.facts.premise)')"
 say "first case premise: $premise"
-[ "$premise" = "no-contact-at-premises" ] || fail "the first case is not the opening"
+# THE OPENING IS A PREMISE FLAGGED `opening=true`, NOT ONE PARTICULAR ID.
+# This demanded `no-contact-at-premises`, which was the only opening when it
+# was written. 1478c04 diversified them - "Opening selection is no longer
+# hardcoded to the same collection notice" - and this check then failed a
+# correct first case for being one of the new ones (`name-on-standby-list`,
+# 2026-09-22). Ask Premises which ids are openings rather than naming one.
+openings="$(ev 'local P=require("ConspiracyFiles/Generated/Premises");local out={};for _,e in ipairs(P.ALL or P.list or {}) do if e.opening then out[#out+1]=e.id end end;return table.concat(out," ")')"
+say "premises flagged as openings: ${openings:-none read}"
+if [ -z "$openings" ]; then
+    # Reading them failed; fall back to the whole authored set rather than
+    # silently accepting anything.
+    openings="no-contact-at-premises name-on-standby-list deposit-for-unknown-booking"
+    say "could not read the opening list from Premises; using the authored set"
+fi
+case " $openings " in
+    *" $premise "*) say "first case is an opening premise: $premise" ;;
+    *) fail "the first case's premise is $premise, which is not one of the openings ($openings)" ;;
+esac
 
 say "thread recorded on the live case: $(ev 'local C=require("ConspiracyFiles/Generated/SuccessiveCases");local t=C.sessions(C.current(ModData.get("ConspiracyFiles.Generated.G2")))[1].case.thread;return t and (t.document.."\t"..t.point) or "none"')"
 

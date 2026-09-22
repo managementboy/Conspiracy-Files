@@ -1,0 +1,7 @@
+Linux Investigate Area marker lifecycle: PASS
+source: d6eb1c9
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+outcome: 0 failure(s), 1 stage(s) not exercised
+  
+NOT EXERCISED: no placed clue could be picked, so no marker can be observed
+errors inside the mod: 0

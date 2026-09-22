@@ -38,8 +38,15 @@ if [ "${1:-}" = "--gates" ]; then
     shift; pass=0; total=0; results=()
     for c in "${GATES[@]}"; do
         total=$((total + 1))
-        if "tools/autotest/$c" "$@"; then pass=$((pass + 1)); results+=("$(basename "$c" .sh): PASS")
-        else results+=("$(basename "$c" .sh): FAIL or COULD NOT RUN (exit $?)"); fi
+        # CAPTURE THE STATUS BEFORE ANYTHING ELSE RUNS. `$?` inside the else
+        # branch is the status of the LAST command, and $(basename ...) runs
+        # first - so a failed gate was reported as "FAIL ... (exit 0)", which
+        # is self-contradictory and was (2026-09-22).
+        "tools/autotest/$c" "$@"; rc=$?
+        name="$(basename "$c" .sh)"
+        if [ "$rc" -eq 0 ]; then pass=$((pass + 1)); results+=("$name: PASS")
+        elif [ "$rc" -eq 1 ]; then results+=("$name: FAIL (exit 1)")
+        else results+=("$name: COULD NOT RUN (exit $rc)"); fi
     done
     printf '%s\n' "${results[@]}"
     echo "gameplay gates: $pass of $total passed"
