@@ -6,7 +6,7 @@ local function list(t) return {size=function() return #t end,get=function(_,i) r
 local function record(t) local o={};for k,v in pairs(t) do local val=v;o[k]=function() return val end end;return o end
 local containers={}
 local function container()
- local c={items={},getType=function() return 'desk' end}
+ local c={items={},getType=function() return 'desk' end,isExplored=function() return false end}
  c.getItems=function() return list(c.items) end
  c.AddItem=function(_,item) c.items[#c.items+1]=item;item.container=c;return item end
  return c

@@ -1,5 +1,15 @@
 # Conspiracy-Files — Roadmap
 
+## Fixed-container placement candidate — 2026-09-22
+
+The exact Build 42.20 vanilla map now has a compact 240,059-row fixed-container
+index. Supported sites select destinations without fixed-furniture square scans,
+then wait for chunk load and validate the live container before materialising.
+Cars, bodies, modified buildings and unsupported maps retain bounded live scans;
+searched/open containers are refused. Offline behavior and engine-parser checks
+pass; fresh-game native acceptance remains required before a release claim. See
+[ADR-0005](docs/decisions/ADR-0005-build-versioned-fixed-container-index.md).
+
 ## Writing and placement implementation ready for Linux — 2026-09-20
 
 `DEV-0.46.0-writing-rebuild` is integrated on local `main`, including Claude's

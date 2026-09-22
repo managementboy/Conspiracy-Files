@@ -20,7 +20,7 @@ S.RELOCATE_CAP=3
 -- squats one of the four active slots blocks new cases worse than the refusal
 -- this whole change exists to fix.
 S.DEFER_EXPIRE_HOURS=72
-local WAITING={deferred=true,dropped=true}
+local WAITING={deferred=true,indexed=true,dropped=true}
 local function copy(v) if type(v)~="table" then return v end local out={} for k,c in pairs(v) do out[k]=copy(c) end return out end
 local function fields(t,allowed)
     if type(t)~="table" then return false end
@@ -171,6 +171,26 @@ function S.target(t,site)
     for _,kind in ipairs(site.containerTypes) do if kind==t.containerType then return true end end
     return false
 end
+-- A shipped fixed-container signature deliberately has no object/container
+-- indexes.  It names the furniture that should exist; the runtime turns it
+-- into an exact target only after the square is loaded and verified.
+function S.plannedTarget(t,site)
+    if type(t)~="table" or type(site)~="table" then return false end
+    if not fields(t,{buildingId=true,x=true,y=true,z=true,sprite=true,containerType=true,room=true,indexed=true})
+        or t.indexed~=true then return false end
+    for _,k in ipairs({"x","y","z"}) do if not integer(t[k]) then return false end end
+    if type(t.buildingId)~="string" or #t.buildingId==0 or #t.buildingId>160 then return false end
+    if type(t.sprite)~="string" or #t.sprite==0 or #t.sprite>300 then return false end
+    if type(t.containerType)~="string" or #t.containerType==0 or #t.containerType>80 then return false end
+    if t.room~=nil and (type(t.room)~="string" or #t.room==0 or #t.room>120) then return false end
+    local expected=string.sub(site.id,1,3)=="t3:" and string.sub(site.id,4) or site.id
+    if t.buildingId~=expected then return false end
+    local margin=outdoorKind(t.containerType) and S.OUTDOOR_RADIUS or 0
+    local b=site.bounds
+    if t.x<b.x1-margin or t.x>=b.x2+margin or t.y<b.y1-margin or t.y>=b.y2+margin or t.z~=b.z then return false end
+    for _,kind in ipairs(site.containerTypes) do if kind==t.containerType then return true end end
+    return false
+end
 function S.validate(root)
     local ok,why=V.validateStructure(root); if not ok then return false,why end
     if not fields(root,{schema=true,case=true,assignments=true,known=true,recognised=true}) or root.schema~=1 then return false,"invalid generated session" end
@@ -181,10 +201,10 @@ function S.validate(root)
     for _,d in ipairs(root.case.documents) do
         ids[d.id]=true
         local a=root.assignments[d.id]
-        if not fields(a,{physicalToken=true,target=true,status=true,placedHours=true,relocations=true,
+        if not fields(a,{physicalToken=true,target=true,planned=true,status=true,placedHours=true,relocations=true,
                          locationId=true,deferredHours=true,missingHours=true,droppedFrom=true}) or a.physicalToken~="cf-g2:"..d.id
             or not ({pending=true,placing=true,placed=true,unknown=true,conflict=true,
-                     deferred=true,dropped=true})[a.status] then return false,"invalid assignment" end
+                     deferred=true,indexed=true,dropped=true})[a.status] then return false,"invalid assignment" end
         -- Relocation moves the physical object, never the document's own
         -- narrative locationId: a present `locationId` is the assignment's
         -- current site once it differs from where the case first placed it.
@@ -198,8 +218,11 @@ function S.validate(root)
             if a.target~=nil or a.placedHours~=nil then return false,"invalid assignment" end
             if type(a.locationId)~="string" or not sites[a.locationId] then return false,"invalid assignment" end
             if not validHours(a.deferredHours) then return false,"invalid assignment" end
+            if a.status=="indexed" then
+                if not S.plannedTarget(a.planned,sites[a.locationId]) then return false,"invalid assignment" end
+            elseif a.planned~=nil then return false,"invalid assignment" end
         else
-            if a.deferredHours~=nil then return false,"invalid assignment" end
+            if a.deferredHours~=nil or a.planned~=nil then return false,"invalid assignment" end
             if not S.target(a.target,sites[a.locationId or d.locationId]) then return false,"invalid assignment" end
             if a.status=="placed" and not validHours(a.placedHours) then return false,"invalid assignment" end
             if a.placedHours~=nil and not validHours(a.placedHours) then return false,"invalid assignment" end
@@ -267,6 +290,9 @@ function S.create(case,targets,documentTargets,hours)
         if target==nil then
             root.assignments[d.id]={physicalToken="cf-g2:"..d.id,status="deferred",
                 locationId=d.locationId,deferredHours=hours or 0,relocations=0}
+        elseif target.indexed==true then
+            root.assignments[d.id]={physicalToken="cf-g2:"..d.id,status="indexed",planned=copy(target),
+                locationId=d.locationId,deferredHours=hours or 0,relocations=0}
         else
             root.assignments[d.id]={physicalToken="cf-g2:"..d.id,target=copy(target),status="pending",relocations=0}
         end
@@ -285,13 +311,23 @@ function S.deferredIds(root)
     end
     return out
 end
+function S.indexedIds(root)
+    local out={}
+    if type(root)~="table" or type(root.case)~="table" or type(root.assignments)~="table" then return out end
+    for _,d in ipairs(root.case.documents or {}) do
+        local a=root.assignments[d.id]
+        if a and a.status=="indexed" then out[#out+1]=d.id end
+    end
+    return out
+end
 -- Those that have waited three in-game days and are to be dropped.
 function S.expiredIds(root,hours)
     local out={}
     if type(hours)~="number" or hours~=hours or hours==math.huge then return out end
-    for _,id in ipairs(S.deferredIds(root)) do
-        local a=root.assignments[id]
-        if hours-a.deferredHours>=S.DEFER_EXPIRE_HOURS then out[#out+1]=id end
+    for _,d in ipairs(root.case and root.case.documents or {}) do
+        local a=root.assignments[d.id]
+        if a and (a.status=="deferred" or a.status=="indexed")
+            and hours-a.deferredHours>=S.DEFER_EXPIRE_HOURS then out[#out+1]=d.id end
     end
     return out
 end
@@ -486,6 +522,7 @@ end
 -- because the filler (GeneratedRuntime) must check a late clue's container
 -- against every clue already placed, in any case, live or finished.
 function S.physicalKey(target)
+    if target and target.indexed==true then return StorageChoices.key(target) end
     -- A CARRIER is keyed on its own mark and nothing else (P4-R134). Two bodies
     -- may lie on one square and a body may be dragged off it, so a square
     -- cannot name a carrier; the mark can, and does, which is what makes "never
@@ -548,7 +585,7 @@ function S.createDistributed(case,candidates,rooms,occupied,hours)
             -- playtest: "repeated physical container" the first time vehicles
             -- were actually found).
             local function usable(i)
-                return not siteTaken[i] and S.target(list[i],site) and not used[physicalKey(list[i])]
+                return not siteTaken[i] and (S.target(list[i],site) or S.plannedTarget(list[i],site)) and not used[physicalKey(list[i])]
                     and mobileOK(doc,list[i])
             end
             -- `occupied` is OPTIONAL and is a preference, never a filter. A
@@ -588,7 +625,7 @@ function S.createDistributed(case,candidates,rooms,occupied,hours)
         -- whole case being thrown away. This is the fault P4-R133 was written
         -- for - standing still exhausts the loaded area, and a house yields one
         -- candidate from the street and eight once the survivor walks in.
-        if not S.target(target,sites[doc.locationId]) then
+        if not S.target(target,sites[doc.locationId]) and not S.plannedTarget(target,sites[doc.locationId]) then
             deferred[#deferred+1]=doc.id
         else
             -- Two documents may share a car but never a part, so the part joins
@@ -666,7 +703,7 @@ function S.open(initial,sink)
     -- waiting clue is not a licence to put it anywhere.
     function api.assign(id,target,hours)
         local a=root.assignments[id]; if not a then return false,"unknown document" end
-        if a.status~="deferred" then return false,"only a deferred clue is waiting for a container" end
+        if a.status~="deferred" and a.status~="indexed" then return false,"only a waiting clue can be assigned a container" end
         local site
         for _,s in ipairs(root.case.locations) do if s.id==a.locationId then site=s end end
         if not site or not S.target(target,site) then return false,"target does not match the clue's own site" end
@@ -678,7 +715,34 @@ function S.open(initial,sink)
         if hours~=nil and not validHours(hours) then return false,"invalid placement hours" end
         return commit(function(r)
             local ra=r.assignments[id]
-            ra.target=copy(target); ra.status="pending"; ra.deferredHours=nil
+            ra.target=copy(target); ra.status="pending"; ra.deferredHours=nil; ra.planned=nil
+        end)
+    end
+    -- An indexed signature that no longer matches the live building becomes an
+    -- ordinary deferred clue.  Only then may the modified-building fallback
+    -- scan inspect fixed furniture at that site.
+    function api.unplan(id,hours)
+        local a=root.assignments[id]; if not a then return false,"unknown document" end
+        if a.status~="indexed" then return false,"only an indexed clue can lose its plan" end
+        if not validHours(hours) then return false,"invalid placement hours" end
+        return commit(function(r)
+            local ra=r.assignments[id];ra.status="deferred";ra.planned=nil
+            -- The index plan was waiting from case creation, so falling back
+            -- must not restart its three-day expiry clock.
+            ra.deferredHours=ra.deferredHours or hours
+        end)
+    end
+    -- A selected fixed container can be searched or replaced between selection
+    -- and insertion.  No item has been created while status is pending, so it
+    -- is safe to return that assignment to the fallback queue.
+    function api.deferTarget(id,hours)
+        local a=root.assignments[id]; if not a then return false,"unknown document" end
+        if a.status~="pending" then return false,"only an unstarted placement can be deferred" end
+        if not validHours(hours) then return false,"invalid placement hours" end
+        local site=a.locationId
+        if not site then for _,d in ipairs(root.case.documents) do if d.id==id then site=d.locationId end end end
+        return commit(function(r)
+            local ra=r.assignments[id];ra.status="deferred";ra.target=nil;ra.locationId=site;ra.deferredHours=hours
         end)
     end
     -- Three in-game days with nowhere to go and the clue is dropped: the case
@@ -687,9 +751,11 @@ function S.open(initial,sink)
     function api.drop(id)
         local a=root.assignments[id]; if not a then return false,"unknown document" end
         if a.status=="dropped" then return true end
-        if a.status~="deferred" then return false,"only a deferred clue can be dropped" end
+        if a.status~="deferred" and a.status~="indexed" then return false,"only a waiting clue can be dropped" end
         -- Never in the world: this clue never found a container at all.
-        return commit(function(r) r.assignments[id].status="dropped"; r.assignments[id].droppedFrom="deferred" end)
+        return commit(function(r)
+            local ra=r.assignments[id];ra.status="dropped";ra.droppedFrom="deferred";ra.planned=nil
+        end)
     end
     -- A CARRIER THAT IS GONE (P4-R134). `hours` remembers when we FIRST could
     -- not find the body, the zombie or the car; nil clears it the moment it

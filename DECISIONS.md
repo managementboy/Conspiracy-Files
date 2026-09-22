@@ -31,6 +31,22 @@ ordinary play, and what interrupts it. Neither is established.
 
 # Conspiracy-Files — Current Decision Index
 
+## DR-20260922-FIXED-CONTAINER-INDEX — pre-index vanilla furniture; validate live
+
+For the exact shipped vanilla map/build, choose fixed evidence destinations from
+a compact offline census instead of rediscovering the same furniture in every
+new game. The index contains only building ID, coordinates, sprite/type and room;
+it contains no loot, object indexes, save state, vehicles or bodies. Materialise
+only after the square loads and the live building, sprite, type and current
+object/container indexes match. Refuse searched or currently open storage, with
+unknown search state failing closed.
+
+Cars and bodies stay dynamic. A changed building uses the bounded live scanner;
+an unsupported map/build retains the old bounded scan. Exact map/build matching
+prevents a stale catalogue from becoming write authority. The Build 42.20 asset
+has 240,059 signatures across 8,908 buildings and is rebuildable from the game
+files. Full rationale and provenance: [ADR-0005](docs/decisions/ADR-0005-build-versioned-fixed-container-index.md).
+
 ## DR-20260920-WRITING-PLACEMENT — incorporate the placement review
 
 Owner relayed the placement findings while the writing rebuild was in progress:

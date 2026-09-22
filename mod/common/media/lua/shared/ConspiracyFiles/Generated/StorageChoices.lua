@@ -9,8 +9,12 @@ function M.fixedKind(kind)
 end
 function M.siteKind(kind) return kind=="vehicle" or M.fixedKind(kind) end
 local function key(t)
+ if t.indexed==true then
+  return table.concat({"indexed",t.buildingId,t.x,t.y,t.z,t.sprite,t.containerType},":")
+ end
  return table.concat({t.x,t.y,t.z,t.objectIndex,t.containerIndex,t.vehiclePart or "-"},":")
 end
+M.key=key
 function M.new() return {groups={},order={},seen={}} end
 function M.offer(pool,target,room,occupied)
  local kind=target.containerType

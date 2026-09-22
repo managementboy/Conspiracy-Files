@@ -6,6 +6,7 @@ local Retired=require("ConspiracyFiles/Generated/RetiredCase")
 local Story=require("ConspiracyFiles/Generated/Story")
 local Storage=require("ConspiracyFiles/Generated/Storage")
 local StorageChoices=require("ConspiracyFiles/Generated/StorageChoices")
+local FixedContainers=require("ConspiracyFiles/Generated/FixedContainerRuntime")
 local World=require("ConspiracyFiles/WorldAccess")
 local Scheduler=require("ConspiracyFiles/Scheduler")
 local Budget=require("ConspiracyFiles/SaveBudget")
@@ -212,11 +213,21 @@ local function placement(api,id)
         if a.status=="placed" or a.status=="conflict" or a.status=="unknown" then return true end
         -- A clue with no container yet is the filler's business, not this job's
         -- (P4-R133); a dropped one is nobody's.
-        if a.status=="deferred" or a.status=="dropped" then return true end
+        if a.status=="deferred" or a.status=="indexed" or a.status=="dropped" then return true end
         -- The physical token doubles as the mark on a vehicle part, so a clue
         -- in a car is found again wherever the player has since driven it.
-        local current=World.resolve(a.target,a.physicalToken)
-        if not current then return true end
+        local current,resolveWhy=World.resolve(a.target,a.physicalToken)
+        if not current then
+            -- A fixed target that changed while loaded returns to the bounded
+            -- modified-building scan.  An unloaded square merely waits.  Once
+            -- placement reached `placing`, ambiguity still follows T4's
+            -- conservative unknown path instead of inventing a retry.
+            if a.status=="pending" and not Session.isMobile(a.target) and resolveWhy~="unloaded" then
+                local ok,why=api.deferTarget(id,worldHours())
+                if not ok then log("could not defer a changed fixed target: "..tostring(why)) end
+            end
+            return true
+        end
         local expected=expectedCount(api,id)
         if not scan then
             container=current
@@ -254,7 +265,20 @@ local function placement(api,id)
         if a.status=="placing" and not created then
             checked(api.status(id,"unknown")); log("Interrupted placement is uncertain; no automatic replacement."); return true
         end
-        if a.status=="pending" then checked(api.status(id,"placing")); created=true; return false end
+        if a.status=="pending" then
+            local fresh,why=FixedContainers.fresh(current)
+            if not fresh then
+                local ok,deferWhy=api.deferTarget(id,worldHours())
+                if not ok then log("could not defer a searched target: "..tostring(deferWhy)) end
+                CFLog.write("d","skip",{doc=id,why="container-"..tostring(why)})
+                return true
+            end
+            -- Persist intent, then create in this same scheduler step.  There
+            -- is no player-interaction frame between the final freshness check
+            -- and AddItem; a crash in the gap remains `placing` and therefore
+            -- reconciles conservatively on the next load.
+            checked(api.status(id,"placing")); created=true
+        end
         local doc
         for _,d in ipairs(api.snapshot().case.documents) do if d.id==id then doc=d end end
         local carrier=assert(require("ConspiracyFiles/Generated/EvidenceKinds").get(doc.kind))
@@ -272,7 +296,7 @@ local function placement(api,id)
             -- the survivor recognises it (R.recognise).
             applyWear(item,doc)
             writePages(item,doc,api.snapshot().case)
-            assert(current:AddItem(item),"could not add note")
+            assert(current:AddItem(item),"could not add evidence")
         end
         -- Claim the part, once the items are actually in it.
         World.markVehiclePart(current,a.physicalToken)
@@ -1516,7 +1540,8 @@ local function boundsScan(site,done,accept,salt)
         local inside=x>=b.x1 and x<b.x2 and y>=b.y1 and y<b.y2
         if c and name and Storage.fixedKind(c:getType()) and kinds[c:getType()] and (inside or c:getType()==Storage.MAILBOX) then
             local found={x=x,y=y,z=b.z,objectIndex=oi,containerIndex=ci,containerType=c:getType(),sprite=name}
-            if (not accept or accept(found)) and World.resolve(found)==c then
+            local fresh=FixedContainers.fresh(c)
+            if fresh and (not accept or accept(found)) and World.resolve(found)==c then
                 StorageChoices.offer(pool,found)
             end
         end
@@ -1759,7 +1784,7 @@ local function carrierScanFor(site,found)
         end)
 end
 local function filler(api)
-    local id,site,scan,target,bodyScan,carrier
+    local id,site,scan,target,bodyScan,carrier,indexed
     return function()
         local hours=worldHours()
         -- The whole case is read ONCE per attempt, not once per step: a
@@ -1783,19 +1808,35 @@ local function filler(api)
                 else log("could not drop a waiting clue: "..tostring(why)) end
                 return true
             end
+            local planned=Session.indexedIds(root)
             local waiting=Session.deferredIds(root)
-            if #waiting==0 then return true end
+            if #planned==0 and #waiting==0 then return true end
+            indexed=#planned>0
             id=waiting[1]
+            if indexed then id=planned[1] end
             for _,s in ipairs(root.case.locations) do
                 if s.id==root.assignments[id].locationId then site=s end
             end
             if not site then return true end
-            local taken=usedPhysicalKeys()
-            scan=boundsScan(site,function(t) target=t end,
-                function(candidate) return not taken[Session.physicalKey(candidate)] end,id)
+            if not indexed then
+                local taken=usedPhysicalKeys()
+                scan=boundsScan(site,function(t) target=t end,
+                    function(candidate) return not taken[Session.physicalKey(candidate)] end,id)
+            end
         end
         local a=api.assignment(id)
-        if not a or a.status~="deferred" then return true end
+        if not a or (a.status~="deferred" and a.status~="indexed") then return true end
+        if indexed then
+            local why
+            target,_,why=FixedContainers.resolve(a.planned)
+            if not target then
+                if why=="unloaded" then return true end
+                local ok,unplanWhy=api.unplan(id,hours)
+                if not ok then log("could not fall back from an indexed target: "..tostring(unplanWhy)) end
+                CFLog.write("d","skip",{doc=id,why="index-"..tostring(why)})
+                return true
+            end
+        end
         if not target and scan then
             if scan() then
                 -- Nothing loaded and free at that site: a carrier next, which
@@ -1835,7 +1876,14 @@ local function filler(api)
         if p and StaleClue.tooClose(math.floor(p:getX()),math.floor(p:getY()),math.floor(p:getZ()),target) then
             return false
         end
-        if not World.resolve(target) then return true end
+        local destination=World.resolve(target)
+        if not destination then return true end
+        local fresh,why=FixedContainers.fresh(destination)
+        if not fresh then
+            if indexed then api.unplan(id,hours) end
+            CFLog.write("d","skip",{doc=id,why="container-"..tostring(why)})
+            return true
+        end
         local ok,why=api.assign(id,target,hours)
         if not ok then log("could not place a waiting clue: "..tostring(why)); return true end
         -- The ordinary placement job writes the item, exactly as it does for a

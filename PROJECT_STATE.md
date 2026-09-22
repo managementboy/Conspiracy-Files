@@ -1,5 +1,17 @@
 # Conspiracy-Files — Project State
 
+## Fixed-container index development candidate — 2026-09-22
+
+Generated placement now ships an exact Build 42.20 census of 240,059 fixed
+containers in 8,908 vanilla buildings. On a supported map/build it selects from
+that index with no fixed-furniture world scan, materialises only after chunk
+load, verifies the live building/sprite/type/indexes, and refuses searched or
+open storage. Cars, bodies, changed buildings and unsupported map/build pairs
+retain bounded live discovery. The payload and exporter are checked in and
+reproducible. The canonical 52-test suite, focused placement regressions and
+payload checks pass under Lua 5.1; Kahlua parses all 127 shipped Lua files. No
+fresh-game native acceptance or release is claimed by this entry.
+
 ## Writing and placement implementation ready for Linux — 2026-09-20
 
 `DEV-0.46.0-writing-rebuild` is integrated on local `main`, including Claude's

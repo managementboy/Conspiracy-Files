@@ -11,7 +11,8 @@ local function newFixture()
     local function list(t) return {size=function() return #t end,get=function(_,i) return t[i+1] end} end
     local function record(t) local o={} for k,v in pairs(t) do local value=v; o[k]=function() return value end end return o end
     local function container()
-        local items={}; local c={items=items,getType=function() return "desk" end,getItems=function() return list(items) end}
+        local items={}; local c={items=items,getType=function() return "desk" end,getItems=function() return list(items) end,
+            isExplored=function() return false end}
         function c:AddItem(item) items[#items+1]=item; item.container=c; return item end
         return c
     end
