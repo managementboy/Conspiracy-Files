@@ -54,6 +54,22 @@ assert(sh:find('[ "$reached" -lt 2 ]',1,true),
     "with fewer than two saves the check must say variation was NOT EXERCISED "
     .."rather than pass on a single sample")
 
+-- A RUN THAT PRODUCED NO CASE IS NOT A PASS. The first run of this check
+-- reached zero saves and printed PASS - green by silence, in a third check,
+-- after the same bug had been fixed in map_coverage and campaign.
+assert(sh:find('[ "$total_reached" -eq 0 ]',1,true),
+    "reaching no saves at all must not be a PASS")
+assert(sh:find('verdict="COULD NOT RUN"',1,true) and sh:find("*) exit 2",1,true),
+    "a run that produced nothing must report COULD NOT RUN and exit non-zero")
+-- And the two reasons it reached nothing must stay fixed.
+assert(sh:find('"$PZ" fresh',1,true),
+    "saves after the first must ask the RUNNING game for a new world; "
+    .."start_world refuses while a game is up")
+assert(sh:find("automaticStatus().preparing",1,true),
+    "the world starts its own first case at spawn; the check must wait for "
+    .."that before replacing it, or it is refused as 'preparation already "
+    .."running'")
+
 print("PASS profession_openings_contract: families come from Premises, no "
     .."profession id in the driver's logic, and the clue is read from the "
     .."inventory")

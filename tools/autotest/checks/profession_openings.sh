@@ -20,7 +20,7 @@ set -uo pipefail
 cf_main() {
 . "$(dirname "${BASH_SOURCE[0]}")/../lib.sh"
 say() { echo "prof: $*" >&2; }
-fails=(); notrun=(); rows=()
+fails=(); notrun=(); rows=(); total_reached=0
 fail() { fails+=("$*"); say "FAIL: $*"; }
 skip() { notrun+=("$*"); say "NOT EXERCISED: $*"; }
 field() { if [ $# -ge 2 ]; then cut -f"$1" <<<"$2"; else cut -f"$1"; fi; }
@@ -46,8 +46,14 @@ for fam in $families; do
     say "=== $profession ($premise, $variants variants), $saves fresh saves ==="
     declare -A seen_title=(); declare -A seen_variant=(); reached=0
     for n in $(seq "$saves"); do
-        [ "$n" -eq 1 ] || start_world || { skip "$profession: could not start save $n"; break; }
-        [ "$n" -eq 1 ] || load_fixtures || { skip "$profession: fixtures did not load in save $n"; break; }
+        # A NEW WORLD IN THE RUNNING GAME. start_world calls `pz.sh start`,
+        # which refuses while a game is up - "game already running (pid ...)"
+        # - so every save after the first was skipped. `fresh` is what asks
+        # the running game for a new world, and is what campaign.sh uses.
+        if [ "$n" -ne 1 ]; then
+            "$PZ" fresh >/dev/null 2>&1 || { skip "$profession: could not draw a fresh world for save $n"; break; }
+            load_fixtures || { skip "$profession: fixtures did not load in save $n"; break; }
+        fi
         became="$(ev "return CFProf.become([[$profession]])")"
         if [ "$(field 1 "$became")" != true ]; then
             skip "$profession: the survivor could not be made one ($(field 2 "$became"))"
@@ -55,6 +61,15 @@ for fam in $families; do
         fi
         [ "$(field 2 "$became")" = "$profession" ] \
             || fail "$profession: the descriptor reports $(field 2 "$became") after being set"
+        # THE WORLD STARTS ITS OWN FIRST CASE AT SPAWN, so wiping the store
+        # and asking for another is refused with "preparation already
+        # running" - which is how the first run of this check reached zero
+        # saves. Let that one finish, then replace it with one built while
+        # the profession is set.
+        for _ in $(seq 120); do
+            [ "$(ev 'return tostring(ConspiracyFiles.GeneratedRuntime.automaticStatus().preparing)')" = false ] && break
+            sleep 5
+        done
         started="$(ev 'return CFProf.freshFirstCase()')"
         [ "$(field 1 "$started")" = true ] || { skip "$profession save $n: no first case ($(field 2 "$started"))"; continue; }
         # The first case runs a nearby scan; on this machine that has taken up
@@ -69,7 +84,7 @@ for fam in $families; do
             skip "$profession save $n: the first case never finished preparing"
             continue
         fi
-        reached=$((reached + 1))
+        reached=$((reached + 1)); total_reached=$((total_reached + 1))
         variant="$(field 2 "$r")"; gotprof="$(field 3 "$r")"; gotprem="$(field 4 "$r")"
         title="$(field 5 "$r")"; onplayer="$(field 6 "$r")"; status="$(field 7 "$r")"; where="$(field 8 "$r")"
         rows+=("$profession save $n: variant=$variant title=\"$title\" onPlayer=$onplayer status=$status ($where)")
@@ -99,7 +114,12 @@ done
 errors="$(mod_errors)"
 [ -z "$errors" ] || fail "errors inside the mod"
 "$PZ" stop >/dev/null 2>&1
-verdict=PASS; [ ${#fails[@]} -eq 0 ] || verdict=FAIL
+# A RUN THAT PRODUCED NO CASE IS NOT A PASS. The first run of this check
+# reached zero saves and printed PASS - the same green-by-silence this project
+# has now fixed in two other checks, reproduced in a third.
+verdict=PASS
+[ "$total_reached" -eq 0 ] 2>/dev/null && verdict="COULD NOT RUN"
+[ ${#fails[@]} -eq 0 ] || verdict=FAIL
 report="$EVIDENCE/$first-profession-openings.txt"
 {
     echo "Linux profession opening families: $verdict"
@@ -114,6 +134,10 @@ report="$EVIDENCE/$first-profession-openings.txt"
     echo "errors inside the mod: $(grep -c . <<<"$errors")"
 } > "$report.part"; mv "$report.part" "$report"
 cat "$report"
-[ "$verdict" = PASS ]
+case "$verdict" in
+    PASS) exit 0 ;;
+    FAIL) exit 1 ;;
+    *) exit 2 ;;
+esac
 }
 cf_main "$@"

@@ -1,0 +1,12 @@
+Linux profession opening families: PASS
+source: 99c535f
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+families advertised: fitnessinstructor:fitness-instructor-start:10
+saves per family: 6
+
+  
+
+NOT EXERCISED: fitnessinstructor save 1: no first case (preparation already running)
+NOT EXERCISED: fitnessinstructor: could not start save 2
+NOT EXERCISED: fitnessinstructor: only 0 save(s) produced a case, so variation could not be judged
+errors inside the mod: 0
