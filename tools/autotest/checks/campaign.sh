@@ -654,19 +654,38 @@ cf_main() {
     # --- reload 2 ---------------------------------------------------------------
     reload_world "reload 2"
     [ "$(ev 'return CFReload.record()')" = "$record" ] || fail "reload 2: the record changed"
-    s3="$(ev "return CFCamp.steerOf([[$case3]])" | field 1)"   # "none" once case 3 has finished (a two-clue case can)
-    [ "$s3" = unsteered ] || [ "$s3" = none ] || fail "reload 2: case 3 gained a steer ($s3)"
+    # AFTER THE RELOAD, CASE 3 CARRIES WHAT IT CARRIED BEFORE IT.
+    # The old line demanded "unsteered" whatever had happened, and when case 2
+    # followed a finding - which DR-20260919-CONTINUITY prefers - case 1's
+    # answers are deferred to case 3, so a steer there is the design working.
+    # Reported as a failure on 2026-09-22 against exactly that: "reload 2: case
+    # 3 gained a steer (generated:1496913937:case)", which is case 1, which is
+    # where the deferred answers were always going to land.
+    cont3r="$(ev "return CFCamp.continuityOf([[$case3]])")"
+    kind3r="$(field 1 "$cont3r")"; from3r="$(field 2 "$cont3r")"
+    findings+=("reload 2: case 3 continuity is $kind3r from ${from3r#generated:}")
+    if [ "$kind2" = steer ]; then
+        [ "$kind3r" = none ] || fail "reload 2: case 2 spent case 1's answers, so case 3 should carry nothing, but carries a $kind3r from ${from3r#generated:}"
+    else
+        [ "$kind3r" = steer ] && [ "$from3r" = "$case1" ] \
+            || fail "reload 2: case 3 should still carry case 1's deferred answers, but carries $kind3r from ${from3r#generated:}"
+    fi
     # SAY WHAT IS ACTUALLY THERE. This read "lost their used mark", which is what
     # an empty field would mean - but the field is not empty when the steer lands
     # on the wrong case, it names that case. On 2026-09-21 it said "lost their used
     # mark" while the answers were plainly marked used by case 3, which reads as a
     # second, different defect and is not one.
     used_by="$(ev "return CFCamp.answersOf([[$case1]])" | field 5)"
-    if [ "$used_by" != "$case2" ]; then
-        if [ -z "$used_by" ] || [ "$used_by" = nil ] || [ "$used_by" = "" ]; then
+    # AND THE ANSWERS ARE USED BY WHICHEVER CASE USED THEM. Demanding case 2
+    # assumes case 2 was the one; when a followed finding took case 2, case 3
+    # is the legitimate consumer and saying so is not a defect.
+    expected_user="$case2"; [ "$kind2" = steer ] || expected_user="$case3"
+    findings+=("reload 2: case 1's answers are used by ${used_by:-nothing}, expected ${expected_user#generated:} (case 2 continuity: $kind2)")
+    if [ "$used_by" != "$expected_user" ]; then
+        if [ -z "$used_by" ] || [ "$used_by" = nil ]; then
             fail "reload 2: case 1's answers lost their used mark entirely"
         else
-            fail "reload 2: case 1's answers are marked used by ${used_by#generated:}, not by case 2 (${case2#generated:})"
+            fail "reload 2: case 1's answers are marked used by ${used_by#generated:}, not by ${expected_user#generated:}"
         fi
     fi
     old_settled "after reload 2"

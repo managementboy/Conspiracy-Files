@@ -278,6 +278,23 @@ assert(step:find("backRoom",1,true),
     "the finding must record WHERE the survivor ended up; standing in the "
     .."street was invisible in the evidence for two whole runs")
 
+-- 12. THE RELOAD-2 ASSERTIONS MUST KNOW ABOUT CONTINUITY TOO. Both survived
+-- the 2026-09-22 run as the only two failures, and both were stale in exactly
+-- the way the case-2 and case-3 assertions had already been fixed: case 2
+-- followed a finding, so case 1's answers were deferred to case 3 - and the
+-- gate called that "case 3 gained a steer" and "answers marked used by the
+-- wrong case".
+assert(sh:find("kind3r",1,true),
+    "the reload-2 check must ask what case 3 carries, not assume unsteered")
+assert(sh:find('expected_user="$case2"; [ "$kind2" = steer ] || expected_user="$case3"',1,true),
+    "after a reload the answers belong to whichever case used them: case 2 if "
+    .."it steered, case 3 if a followed finding took case 2")
+for line in sh:gmatch("[^\n]+") do
+    if not line:match("^%s*#") and line:find("reload 2: case 3 gained a steer",1,true) then
+        error("the unconditional reload-2 steer demand is back: "..line)
+    end
+end
+
 print("PASS campaign_harness: ceiling frozen, clues counted by id, steering by "
     .."contribution, stubs a regression, stalls judged by progress, three "
     .."outcome kinds, 8 product assertions retained")

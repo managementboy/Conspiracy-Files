@@ -1,0 +1,76 @@
+Linux campaign check 20260922T091542: FAIL
+source: d9cc833
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+cases: 1 generated:1496913937:case, 2 generated:673455577:case, 3 generated:731690983:case; at the end 7 5 1:1496913937:retired 2:673455577:retired 3:731690983:retired 4:33141254:retired 5:843808415:retired 6:740762733:live 7:1735937040:live
+stages:
+  start                  cases 1 (0 finished) | record 0 | FILES questions 0 | NAMES 1 | PLACES 0 | Old 0/0 wrong | Evidence 0/0 wrong | order  | save 48879 B
+  case 1 finished        cases 1 (1 finished) | record 5 | FILES questions 1 | NAMES 3 | PLACES 7 | Old 5/0 wrong | Evidence 0/0 wrong | order 11111 | save 40897 B
+  after reload 1         cases 1 (1 finished) | record 5 | FILES questions 1 | NAMES 3 | PLACES 7 | Old 5/0 wrong | Evidence 0/0 wrong | order 11111 | save 41614 B
+  case 2 finished        cases 2 (2 finished) | record 8 | FILES questions 2 | NAMES 4 | PLACES 11 | Old 8/0 wrong | Evidence 0/0 wrong | order 11111222 | save 66862 B
+  case 3, two clues      cases 3 (2 finished) | record 10 | FILES questions 2 | NAMES 5 | PLACES 13 | Old 8/0 wrong | Evidence 2/0 wrong | order 1111122233 | save 102077 B
+  after reload 2         cases 3 (2 finished) | record 10 | FILES questions 2 | NAMES 5 | PLACES 13 | Old 8/0 wrong | Evidence 2/0 wrong | order 1111122233 | save 102341 B
+  at the limit           cases 6 (2 finished) | record 10 | FILES questions 2 | NAMES 5 | PLACES 13 | Old 8/0 wrong | Evidence 2/0 wrong | order 1111122233 | save 194140 B
+  after the limit        cases 7 (3 finished) | record 12 | FILES questions 3 | NAMES 5 | PLACES 16 | Old 12/0 wrong | Evidence 0/0 wrong | order 111112223333 | save 211488 B
+  after reload 3, full archive cases 7 (5 finished) | record 19 | FILES questions 5 | NAMES 6 | PLACES 27 | Old 19/0 wrong | Evidence 0/0 wrong | order 1111122233334444555 | save 198739 B
+case 1 answers on the organiser: true two person2 records nil Curtis Vance Ines Kubiak McCoy Logging Co.
+case 2 steer: unsteered    Joanne Voss false
+refusals (P4-R133), all sessions:
+  active-limit: 3 lines, longest run of 2, rung 0
+  no-containers: 1 lines, longest run of 1, rung 0
+instalments placed and clues dropped (P4-R133, P4-R134), all sessions:
+  none in this run
+errors inside the mod, all sessions: 0
+outcome: 2 product failure(s), 0 harness failure(s), 2 stage(s) not exercised
+FINDING: fresh worlds started for a case 1 with a document in the memo's week: 1 (memo=true, dated documents=4)
+FINDING: start: assignments placed=5; why=gap n=0 due=02:11 rung=0/3 now=02:12 overdue=false(-23.98h) preparing=false active=1/4 cases=1/16
+FINDING: case 1: 5 clue(s) played of 5 offered; outstanding by id: 0 
+FINDING: case 1 relay memo: found=true, dated in its week=4, carrying the date note=4
+FINDING: the date note was exercised: 4 of 4 records dated in the memo's week carry it
+FINDING: case 1 finished: assignments ; why=gap n=0 due=02:11 rung=0/3 now=02:26 overdue=false(-23.75h) preparing=false active=0/4 cases=1/16
+FINDING: case 1 note on the organiser: My reading: The records show the cancellation, but not why this request was entered in my name. Ines Kubiak matters here. Next I would check the place against its records.
+FINDING: frame cost during case 1: AutomaticInvestigations.onTick calls=3195 avg=0.004ms max=1ms over2ms=0 | CaseFile.onTick calls=3183 avg=0.006ms max=1ms over2ms=0 | ClueMarkers.draw calls=0 avg=0.000ms max=0ms over2ms=0 | ClueMarkers.update calls=55 avg=0.255ms max=3ms over2ms=2 | IdentityObserver.afterRender calls=0 avg=0.000ms max=0ms over2ms=0 | IdentityObserver.tick calls=3231 avg=0.004ms max=1ms over2ms=0 | LocalPersonInteg
+FINDING: after reload 1: assignments ; why=gap n=0 due=02:11 rung=0/3 now=02:31 overdue=false(-23.65h) preparing=false active=0/4 cases=1/16
+FINDING: reload 1 save size: 41174 -> 41614 bytes; before [DiscoveryLedger=2777 Generated.G2=34749 KeyConnections=778 PlaceVisits=443 VisitedBuildings=359]; after [DiscoveryLedger=2777 Generated.G2=35189 KeyConnections=778 PlaceVisits=443 VisitedBuildings=359]
+FINDING: case 2 placement (survivor in kitchen): reach 250: t3:10977704480342020, t3:10977704480342046
+FINDING: case 2 continuity: follows from 1496913937:case - follows the finding generated:1496913937:document-3 at Building at 10787, 10104
+FINDING: case 2 ways offered: none (continuity: follows)
+FINDING: case 2 ways offered: none
+FINDING: case 2 clues: Telephone enquiry / WB-428 | Reserve-list instruction / WB-428 | Contact-count correction / WB-428
+FINDING: case 1's answers after case 2: used by nil
+FINDING: case 2: 3 clue(s) played of 3 offered; outstanding by id: 0 
+FINDING: case 2 finished: assignments ; why=gap n=0 due=02:43 rung=0/3 now=02:54 overdue=false(-23.81h) preparing=false active=0/4 cases=2/16
+FINDING: frame cost during case 2: AutomaticInvestigations.onTick calls=5125 avg=0.003ms max=1ms over2ms=0 | CaseFile.onTick calls=5113 avg=0.008ms max=1ms over2ms=0 | ClueMarkers.draw calls=0 avg=0.000ms max=0ms over2ms=0 | ClueMarkers.update calls=88 avg=0.420ms max=4ms over2ms=3 | IdentityObserver.afterRender calls=0 avg=0.000ms max=0ms over2ms=0 | IdentityObserver.tick calls=5161 avg=0.002ms max=1ms over2ms=0 | LocalPersonInteg
+FINDING: case 3 placement (survivor in garagestorage): reach 250: t3:10977704480342041, t3:10977704480342018
+FINDING: case 3 continuity: steer from 1496913937:case - reading=two way=records name=Ines Kubiak
+FINDING: the deferred answers reached case 3, which is DR-20260919-CONTINUITY working: the followed finding took case 2 and the survivor's conclusions waited one case
+FINDING: case 3, two clues: assignments placed=4; why=gap n=0 due=03:05 rung=0/3 now=03:11 overdue=false(-23.90h) preparing=false active=1/4 cases=3/16
+FINDING: frame cost during case 3: AutomaticInvestigations.onTick calls=8772 avg=0.003ms max=1ms over2ms=0 | CaseFile.onTick calls=8760 avg=0.007ms max=1ms over2ms=0 | ClueMarkers.draw calls=0 avg=0.000ms max=0ms over2ms=0 | ClueMarkers.update calls=151 avg=0.477ms max=4ms over2ms=6 | IdentityObserver.afterRender calls=0 avg=0.000ms max=0ms over2ms=0 | IdentityObserver.tick calls=8808 avg=0.002ms max=1ms over2ms=0 | LocalPersonInte
+FINDING: after reload 2: assignments placed=4; why=gap n=0 due=03:05 rung=0/3 now=03:16 overdue=false(-23.81h) preparing=false active=1/4 cases=3/16
+FINDING: reload 2 save size: 102077 -> 102341 bytes; before [CasePeople=682 DiscoveryLedger=5015 Generated.G2=88959 KeyConnections=1682 PlaceVisits=894 VisitedBuildings=827]; after [CasePeople=682 DiscoveryLedger=5015 Generated.G2=89223 KeyConnections=1682 PlaceVisits=894 VisitedBuildings=827]
+FINDING: map marks after reload 2 (written/pending/missing): 10/0/0
+FINDING: the limit, move 1: nowhere fresh to move to: could not get inside t3:10696225208664092: the bounding-box centre and all 7 room centres are outside
+FINDING: at the limit: assignments placed=15; why=nil n=0 due=- rung=0/3 now=04:18 overdue=false(0.00h) preparing=false active=4/4 cases=6/16
+FINDING: at the limit: nowhere fresh to move to: could not get inside t3:10414750231953421: the bounding-box centre and all 5 room centres are outside
+FINDING: after 90 s with 4 unfinished: preparing=false, cases 6 2 1:1496913937:retired 2:673455577:retired 3:731690983:live 4:33141254:live 5:843808415:live 6:740762733:live
+FINDING: a new case came after a case was finished at the limit: 7 3 1:1496913937:retired 2:673455577:retired 3:731690983:retired 4:33141254:live 5:843808415:live 6:740762733:live 7:1735937040:live
+FINDING: after the limit: assignments placed=14; why=nil n=0 due=- rung=0/3 now=04:59 overdue=false(0.00h) preparing=false active=4/4 cases=7/16
+FINDING: frame cost during the limit: AutomaticInvestigations.onTick calls=22991 avg=0.009ms max=69ms over2ms=5 | CaseFile.onTick calls=22979 avg=0.007ms max=2ms over2ms=2 | ClueMarkers.draw calls=0 avg=0.000ms max=0ms over2ms=0 | ClueMarkers.update calls=387 avg=0.589ms max=8ms over2ms=5 | IdentityObserver.afterRender calls=0 avg=0.000ms max=0ms over2ms=0 | IdentityObserver.tick calls=23027 avg=0.002ms max=1ms over2ms=0 | LocalPerson
+FINDING: archive: 5 finished cases full, 0 stubbed, 19 rows kept in all, 0 stubs still offering questions; 1:1496913937:full:5 2:673455577:full:3 3:731690983:full:4 4:33141254:full:4 5:843808415:full:3
+FINDING: a finished case's clues carried: 19 checked, 19 show Evidence / Old, 19 offer the greyed already-noted option, 0 offer no such option (Collection notice / WB-428 -> Already in the organiser)
+FINDING: KNOX boot line "Records ......... 19": the ledger holds 19 discoveries, 0 of them from stubbed cases
+FINDING: stubbed cases: 0 stubs, 0 still offering questions, 0 carrying saved answers, 0 of those marked used by a later case ()
+FINDING: no case was stubbed, which is the contract: the archive retains every finished case's rows (test/case_archive asserts stubs == 0). The stub half of P4-R111 is NOT APPLICABLE, not unexercised - there is no longer a way to reach it, and a run that did reach it would have failed the assertion above
+FINDING: archive after the reload: 5 full, 0 stubbed, 19 rows; 1:1496913937:full:5 2:673455577:full:3 3:731690983:full:4 4:33141254:full:4 5:843808415:full:3
+FINDING: refusals in the log of the session loaded with the full archive: 0
+FINDING: after reload 3, full archive: assignments placed=7; why=gap n=1 due=04:58 rung=0/3 now=05:23 overdue=false(-23.59h) preparing=false active=2/4 cases=7/16
+FINDING: reload 3 save size: 198705 -> 198739 bytes; before [CasePeople=2828 DiscoveryLedger=9495 Generated.G2=173061 KeyConnections=2578 MapMedia=349 PlaceVisits=1353 VisitedBuildings=1529]; after [CasePeople=2862 DiscoveryLedger=9495 Generated.G2=173061 KeyConnections=2578 MapMedia=349 PlaceVisits=1353 VisitedBuildings=1529]
+FINDING: AD-10 town names, standing in Muldraugh: of 19 records the LIVE label names a town on 0 and not on 14; the stored FOUND lines (history, frozen by design) name one on 0 and not on 19; e.g. ; own town: 202 E Maple; rows whose case is still live: 0
+FINDING: AD-10 address book, standing in Muldraugh: of 14 buildings the cases used, 0 would be written with their town and 9 without; 202 E Maple St [Muldraugh] -> "202 E Maple St"; 2302 S Main St [Muldraugh] -> "2302 S Main St"; 401 Perrine St [Muldraugh] -> "401 Perrine St"; 403 Perrine St [Muldraugh] -> "403 Perrine St"
+FINDING: AD-10: walked from Muldraugh to West Point at 11684,8363, 2023 tiles
+FINDING: AD-10 town names, standing in West Point: of 19 records the LIVE label names a town on 4 and not on 10; the stored FOUND lines (history, frozen by design) name one on 0 and not on 19; e.g. 401 Perrine St, Muldraugh; own town: 202 E Maple; rows whose case is still live: 0
+FINDING: AD-10 address book, standing in West Point: of 14 buildings the cases used, 9 would be written with their town and 0 without; 202 E Maple St [Muldraugh] -> "202 E Maple St, Muldraugh"; 2302 S Main St [Muldraugh] -> "2302 S Main St, Muldraugh"; 401 Perrine St [Muldraugh] -> "401 Perrine St, Muldraugh"; 403 Perrine St [Muldraugh] -> "403 Perrine St, Muldraugh"
+NOT EXERCISED: case 2 followed case 1's finding rather than its answers, which DR-20260919-CONTINUITY prefers, so the answer-steered shape (the returning person without a second body, the records contribution) was not exercised on case 2
+NOT EXERCISED: case 1's answers were still unused after case 2, so answer-locking was not exercised here
+FAIL: reload 2: case 3 gained a steer (generated:1496913937:case)
+FAIL: reload 2: case 1's answers are marked used by 731690983:case, not by case 2 (673455577:case)
+screenshot: dev/eval/linux/runs/20260922T091542-campaign.png (not committed)
