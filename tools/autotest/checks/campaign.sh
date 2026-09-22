@@ -433,6 +433,7 @@ cf_main() {
     # ---------------------------------------------------------------------------
     # Pin the revision before any work: a commit made during the run must not
 # be able to take the credit for it.
+cf_claim_run campaign
 cf_pin_source
 claim_game || exit 2
     # P4-R126: the relay memo's date note is only tested when case 1 has a document

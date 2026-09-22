@@ -173,6 +173,33 @@ actually costs something.
 
 ## Traps in the harness, and the helpers that exist because of them
 
+**Never ask `pgrep`/`pkill` whether a check is running.** The question names
+the thing it asks about, so the asker matches. This went wrong four times:
+`pkill -f checks/campaign.sh` killed the asking shell (exit 144); `pgrep -f
+autotest/checks/` counted the asking shell as two running checks; `pz.sh
+status` reported the asking shell as the game; and a wait loop written as
+`until ! pgrep -f "bash tools/autotest/checks/campaign.sh"` could never exit,
+because its own command line contained the pattern — it spun for 37 minutes
+after the run it was watching had finished **and passed**, which looked from
+outside like a gate stuck at 56 minutes.
+
+The bracket trick (`[c]ampaign`) only stops the matcher matching *itself*. It
+does not stop it matching a diagnostic command that mentions the name.
+
+Checks claim a PID file instead (`cf_claim_run NAME` in `lib.sh`, removed on
+any exit), and the answer comes from `/proc` — alive, and the same process
+that wrote the file, compared by start time so a recycled PID cannot answer
+yes:
+
+```bash
+tools/autotest/running.sh              # what is running
+tools/autotest/running.sh campaign     # exit 0 only if that one is
+until ! tools/autotest/running.sh campaign; do sleep 30; done
+```
+
+`test/no_process_matching.lua` keeps the checks off command-line matching.
+
+
 These all cost a run before they were understood. Use the helpers.
 
 **`grep -c` returns a zero AND fails.** `grep -c PATTERN file` prints `0` and

@@ -48,6 +48,7 @@ cf_main() {
 
     # Pin the revision before any work: a commit made during the run must not
 # be able to take the credit for it.
+cf_claim_run map_coverage
 cf_pin_source
 claim_game || exit 2
     start_world "${start_args[@]}" || abort "world did not start"

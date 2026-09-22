@@ -1,0 +1,45 @@
+Task 7 verification — the offline half
+commit: 038eee9799a5470d8cc7d67941538f402645d390
+tree:   1 uncommitted
+
+$ tools/autotest/unit.sh
+kahlua parse: 124 ok, 0 failed
+specs: 52 tests, 0 failures
+relocation evidence regression: PASS
+packaging: OK
+shipped standalone: 171 run, 0 failed (including specs and packaging)
+prototype tests not run here: 9 — use tools/autotest/prototype.sh
+exit=0
+
+$ tools/autotest/prototype.sh
+PASS test/perf_stats.lua
+prototype: 9 run, 0 failed
+exit=0
+
+$ tools/autotest/kahlua_gate.sh
+kahlua parse: 124 ok, 0 failed
+KAHLUA GATE: PASS (/home/elkin/.steam/steam/steamapps/common/ProjectZomboid/projectzomboid)
+exit=0
+
+$ tools/ci/lint.sh
+Total: 2431 warnings / 0 errors in 359 files
+lint: 0 errors
+exit=0
+
+$ tools/ci/secret_scan.sh
+secret scan: 2331 tracked files, 0 suspected credentials
+exit=0
+
+$ tools/ci/at_repo_root.sh
+repository root confirmed: /home/elkin/Conspiracy-Files
+exit=0
+
+$ tools/verify_install.sh
+  all shipped requires resolve
+== repo vs install ==
+  identical
+exit=0
+
+$ git diff --check
+clean
+exit=0

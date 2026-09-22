@@ -7,6 +7,53 @@ EVIDENCE="$REPO/docs/management/evidence/linux-autotest"
 mkdir -p "$RUNS" "$EVIDENCE"
 
 session() { cat "$REPO/dev/eval/linux/session"; }
+
+# WHICH CHECKS ARE RUNNING, WITHOUT MATCHING COMMAND LINES.
+#
+# Asking `pgrep -f campaign.sh` has gone wrong four times, and every time the
+# same way: the question mentions the thing it is asking about, so the asker
+# matches. It killed my own shell (`pkill -f checks/campaign.sh`, exit 144),
+# counted my shell as two running checks, made `pz.sh status` report my shell
+# as the game, and left a monitor whose `until ! pgrep -f "bash
+# tools/autotest/checks/campaign.sh"` loop could never exit - it spun for 37
+# minutes after the run it watched had finished and passed, which is what the
+# owner saw as "the gate is 56 minutes in".
+#
+# The bracket trick ([c]ampaign) only stops the matcher matching ITSELF. It
+# does not stop it matching any other process that happens to mention the
+# name, which is exactly what a diagnostic command does.
+#
+# So: no patterns. A check writes its PID down when it starts and removes it
+# when it exits, however it exits. Asking is then reading a file and checking
+# that the process is alive AND is still that script - so a recycled PID
+# cannot answer yes either.
+CF_RUNDIR="${PZ_ZOMBOID:-$HOME/Zomboid}/.cf-running"
+# The file holds the PID and the process's own start time, taken from
+# /proc/PID/stat field 22 - the jiffies since boot at which THAT process
+# started. A recycled PID always has a different start time, so this
+# identifies the exact process rather than guessing from its command line.
+# Guessing from the name was tried and was wrong on the first test: a script
+# called fakecheck.sh claiming the name "faketest" was declared dead while it
+# was plainly running.
+cf_proc_started() { awk '{print $22}' "/proc/$1/stat" 2>/dev/null; }
+cf_claim_run() {   # cf_claim_run NAME - call once, at the top of a check
+    mkdir -p "$CF_RUNDIR"
+    printf '%s %s\n' "$$" "$(cf_proc_started $$)" > "$CF_RUNDIR/$1.pid"
+    # However it exits: normally, on error, or killed.
+    trap 'rm -f "$CF_RUNDIR/'"$1"'.pid"' EXIT INT TERM
+}
+cf_run_alive() {   # cf_run_alive NAME - 0 when that check is genuinely running
+    local f="$CF_RUNDIR/$1.pid" pid started now
+    [ -f "$f" ] || return 1
+    read -r pid started < "$f" 2>/dev/null || return 1
+    case "$pid" in ''|*[!0-9]*) rm -f "$f"; return 1 ;; esac
+    [ -d "/proc/$pid" ] || { rm -f "$f"; return 1; }
+    now="$(cf_proc_started "$pid")"
+    # Same PID, different start time: the PID was recycled and this file is
+    # stale. Same start time: it really is the process that wrote the file.
+    [ -n "$started" ] && [ "$now" = "$started" ] || { rm -f "$f"; return 1; }
+    return 0
+}
 # ONE RUN AT A TIME, enforced rather than remembered.
 #
 # There is one game machine and two Claude sessions, and a check that starts
