@@ -1,8 +1,19 @@
 # Conspiracy-Files — Project State
 
+## Fixed-index opening hotfix — 2026-09-23
+
+`DEV-0.47.1-indexed-opening-hotfix` repairs the live first-case refusal found
+immediately after the Workshop playtest began. The fixed-container scan correctly
+reported usable sites as `paperStorage="indexed"`, but the catalogue accepted
+only `"observed"`; every preparation therefore ended with `missing eligibility
+facts` and no opening clue existed to announce. Indexed storage is now a valid
+positive eligibility fact throughout catalogue validation, selection and saved
+case validation. The regression runs through the same indexed state. A game
+restart is required because the failed session already loaded the older Lua.
+
 ## Dual-conspiracy world-evidence candidate — 2026-09-23
 
-`DEV-0.47.0-dual-world-evidence` implements the owner-approved first mystery
+`DEV-0.47.1-indexed-opening-hotfix` implements the owner-approved first mystery
 slice for all ten Fitness Instructor residential starts. The opening gives the
 survivor a real key for the current building immediately and asks why they had
 access. Each variant then authors a July 8 appointment, a damaged animal-feed

@@ -24,6 +24,10 @@ end
 assert(Personal.get(premise.id,11)==nil,"an eleventh start is not invented")
 
 local catalog=dofile("test/fixtures/synthetic_locations.lua")
+-- The live fixed-container scan labels usable sites `indexed`; this exact
+-- state must reach the opening generator rather than being rejected as a
+-- missing eligibility fact after the expensive nearby scan completes.
+for _,site in ipairs(catalog.locations) do site.paperStorage="indexed" end
 local sites={catalog.locations[1].id,catalog.locations[2].id}
 local seen={}
 for seed=1,10 do

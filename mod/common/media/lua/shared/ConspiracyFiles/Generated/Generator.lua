@@ -685,7 +685,11 @@ function G.validate(case)
     if roleCount<G.MIN_EVIDENCE or roleCount>G.MAX_EVIDENCE then return false,"invalid evidence role count" end
     local a,b=case.locations[1],case.locations[2]
     if not Catalog.distinct(a,b) or a.mapId~=b.mapId or a.buildLine~=b.buildLine then return false,"incompatible saved locations" end
-    for _,site in ipairs(case.locations) do if site.excluded or site.paperStorage~="observed" then return false,"ineligible saved location" end end
+    for _,site in ipairs(case.locations) do
+        if site.excluded or (site.paperStorage~="observed" and site.paperStorage~="indexed") then
+            return false,"ineligible saved location"
+        end
+    end
     -- Revision-pinned reconstruction verifies every fact, text and reference.
     -- It uses saved sites, never today's external catalog. Future revisions
     -- must retain a reader or refuse; they may not silently rewrite evidence.

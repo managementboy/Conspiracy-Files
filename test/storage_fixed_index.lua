@@ -13,6 +13,7 @@ getCell=function()
 end
 
 local Storage=require("ConspiracyFiles/Generated/Storage")
+local Catalog=require("ConspiracyFiles/Generated/Catalog")
 local result={version="T3-nearby-2",buildings=1,map="Muldraugh, KY",gameVersion="42.20.4",rows={
     {kind="building",id="building-A",x=100,y=200,x2=110,y2=210,minLevel=0},
     {kind="room",building="building-A",ordinal=1,name="office",x=100,y=200,x2=110,y2=210,z=0,area=100},
@@ -29,6 +30,11 @@ local list=candidates["t3:building-A"]
 assert(#list==1 and list[1].indexed and list[1].objectIndex==nil and list[1].containerIndex==nil)
 assert(rooms["t3:building-A"][1]=="office")
 assert(targets["t3:building-A"]==list[1] and catalog.locations[1].paperStorage=="indexed")
+local valid,why=Catalog.validate(catalog)
+assert(valid,"the fixed-index catalogue must remain valid: "..tostring(why))
+local eligible=assert(Catalog.eligible(catalog,result.map,result.gameVersion,false))
+assert(#eligible==1 and eligible[1].id=="t3:building-A",
+    "indexed storage is a positive eligibility fact, not missing storage")
 
 -- Real Build 42 reports a semicolon-separated active map stack. The base-map
 -- index must activate when its exact map name is one member of that stack.

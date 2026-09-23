@@ -25,7 +25,10 @@ function Catalog.validate(c)
         for _,key in ipairs({"id","name","areaId","mapId","buildLine"}) do if not text(r[key]) then return false,"missing location "..key end end
         if r.id:sub(1,10)=="generated:" then return false,"location ID uses reserved case namespace" end
         if seen[r.id] then return false,"duplicate location ID" end; seen[r.id]=true
-        if type(r.excluded)~="boolean" or not ({observed=true,unknown=true,absent=true})[r.paperStorage] then return false,"missing eligibility facts" end
+        -- `indexed` is the fixed-container path's positive storage fact.  It is
+        -- no less eligible than a live `observed` container: the difference is
+        -- only that the exact object indexes are verified when its chunk loads.
+        if type(r.excluded)~="boolean" or not ({observed=true,indexed=true,unknown=true,absent=true})[r.paperStorage] then return false,"missing eligibility facts" end
         if not fields(r.source,{kind=true,reference=true}) or not ({owner=true,['map-research']=true,synthetic=true})[r.source.kind] or not text(r.source.reference) then return false,"missing source provenance" end
         local b=r.bounds
         if not fields(b,{x1=true,y1=true,x2=true,y2=true,z=true}) then return false,"invalid bounds" end
@@ -43,7 +46,7 @@ function Catalog.validate(c)
             if kind~="vehicle" then fixedCount=fixedCount+1 end
             if fixedCount>Choices.MAX_KINDS then return false,"too many fixed container kinds" end
         end
-        if r.paperStorage=="observed" and n==0 then return false,"observed storage lacks constraints" end
+        if (r.paperStorage=="observed" or r.paperStorage=="indexed") and n==0 then return false,"known storage lacks constraints" end
     end
     return true
 end
@@ -58,7 +61,8 @@ function Catalog.eligible(c,mapId,buildLine,allowSynthetic)
     local ok,why=Catalog.validate(c); if not ok then return nil,why end
     local found={}
     for _,r in ipairs(c.locations) do
-        if not r.excluded and r.paperStorage=="observed" and r.mapId==mapId and r.buildLine==buildLine
+        if not r.excluded and (r.paperStorage=="observed" or r.paperStorage=="indexed")
+            and r.mapId==mapId and r.buildLine==buildLine
             and (r.source.kind~="synthetic" or allowSynthetic==true) then found[#found+1]=r end
     end
     table.sort(found,function(a,b) return a.id<b.id end)
