@@ -1,7 +1,7 @@
 -- G2 interrupted-placement and identity-reconciliation regression harness.
 package.path="mod/common/media/lua/shared/?.lua;mod/common/media/lua/client/?.lua;"..package.path
 
-local function newFixture(profession)
+local function newFixture(profession,indexedOpening)
     ConspiracyFiles=nil
     package.loaded["ConspiracyFiles/GeneratedRuntime"]=nil
     package.preload["ConspiracyFiles/ClueCue"]=function() return {} end
@@ -22,6 +22,7 @@ local function newFixture(profession)
         return c
     end
     local containers,loaded={},{}; for _,x in ipairs({0,20}) do for _,offset in ipairs({0,0.1,1,1.1}) do containers[x+offset]=container() end;loaded[x]=true;loaded[x+1]=true end;local inventory=container()
+    if indexedOpening then loaded[20]=false;loaded[21]=false end
     local buildingDef={getIDString=function() return "0" end,getKeyId=function() return 7 end}
     local building={getDef=function() return buildingDef end}
     local player=record{getX=0,getY=0,getZ=0,getHoursSurvived=0,getInventory=inventory}
@@ -71,6 +72,16 @@ local function newFixture(profession)
     for _,x in ipairs({0,20}) do
         result.rows[#result.rows+1]={kind="building",id=tostring(x),x=x,y=0,x2=x+2,y2=2,minLevel=0}
         result.rows[#result.rows+1]={kind="rect",building=tostring(x),x=x,y=0,z=0,w=2,h=2}
+    end
+    if indexedOpening then
+        package.loaded["ConspiracyFiles/Generated/Storage"]=nil
+        package.loaded["ConspiracyFiles/Generated/FixedContainerIndexData"]=nil
+        package.preload["ConspiracyFiles/Generated/FixedContainerIndexData"]=function()
+            return {{schema=1,map="mock",build="42.20",source="runtime regression",rows={
+                {"0",0,0,0,"desk_sprite","desk","livingroom"},
+                {"20",20,0,0,"desk_sprite","desk","livingroom"},
+            }}}
+        end
     end
     package.preload["ConspiracyFiles/T3Nearby"]=function() return {start=function() return true end,result=result} end
     local R=require("ConspiracyFiles/GeneratedRuntime")
@@ -227,6 +238,23 @@ do
     f.remove(item); f.inventory:AddItem(item); assert(f.R.recognise(item,"search")); assert(f.R.inspect(item)); assert(#f.R.known()==1)
     restart(f)
     assert(#f.R.known()==1, "saved positive discovery must survive restart")
+end
+
+-- The current house is live but the indexed partner's chunk is not. This is
+-- the real new-game shape: only the distant clue may wait; the opening key
+-- must have a concrete target and reach the survivor immediately.
+do
+    local f=newFixture("fitnessinstructor",true); f.bootOpening()
+    local root=f.saved.campaign.canonical
+    local first=root.case.documents[1]
+    assert(root.assignments[first.id].target and root.assignments[first.id].planned==nil,
+        "an indexed opening must resolve a real starting-house target before commit")
+    local delivered
+    for _,item in ipairs(f.inventory.items) do
+        if item:getModData().cfGeneratedId==first.id then delivered=item end
+    end
+    assert(delivered and delivered:getFullType()=="Base.Key1",
+        "an unloaded indexed partner must not delay the opening house key")
 end
 
 print("PASS G2 faults: intent/ack, zero-token unknown, positive-token reconciliation, unloaded deferral, out-of-scan preservation, duplicate conflict, saved known evidence")

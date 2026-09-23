@@ -1,5 +1,16 @@
 # Conspiracy-Files — Project State
 
+## Immediate indexed-opening hotfix — 2026-09-23
+
+`DEV-0.47.3-immediate-indexed-opening` repairs the first native transaction
+after the resolver fix. A generated case could commit while its first clue was
+still only an indexed plan; the post-commit opening log then indexed the absent
+exact target and Kahlua raised `attempted index: x of non-table: null`. Opening
+preparation now resolves the current house's indexed candidates into real live
+containers before the authoritative save swap. The remote partner may remain a
+safe indexed open order, so an unloaded second chunk no longer delays the key.
+The transaction refuses cleanly if no real starting-house target exists.
+
 ## Indexed-target resolver hotfix — 2026-09-23
 
 `DEV-0.47.2-indexed-resolver-hotfix` repairs the second live first-case failure.

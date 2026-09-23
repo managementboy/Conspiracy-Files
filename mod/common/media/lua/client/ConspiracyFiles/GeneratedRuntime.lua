@@ -884,8 +884,36 @@ local function prepare(result,seed,later,house)
             log("no case: "..tostring(err))
             refuse(code,later==true); return
         end
-        for _,site in ipairs(case.locations) do
-            if not World.resolve(targets[site.id]) then refuse("busy"); return end
+        -- The fixed index gives us durable signatures before a distant chunk
+        -- is loaded. For a personal opening, only the STARTING HOUSE must be
+        -- concrete now: its key is delivered immediately from a real live
+        -- container. The partner may remain an indexed open order.
+        if house and case.opening then
+            local exact,exactRooms,exactOccupied={},{},{}
+            for index,candidate in ipairs(candidates[house] or {}) do
+                local target=candidate
+                if candidate.indexed==true then target=FixedContainers.resolve(candidate) end
+                if target and World.resolve(target) then
+                    exact[#exact+1]=target
+                    exactRooms[#exactRooms+1]=(rooms[house] or {})[index]
+                    exactOccupied[#exactOccupied+1]=(occupied[house] or {})[index]
+                end
+            end
+            if #exact==0 then refuse("busy"); return end
+            candidates[house],rooms[house],occupied[house]=exact,exactRooms,exactOccupied
+            targets[house]=exact[1]
+            for _,site in ipairs(case.locations) do
+                local target=targets[site.id]
+                if site.id==house then
+                    if not World.resolve(target) then refuse("busy"); return end
+                elseif not (target and target.indexed==true) and not World.resolve(target) then
+                    refuse("busy"); return
+                end
+            end
+        else
+            for _,site in ipairs(case.locations) do
+                if not World.resolve(targets[site.id]) then refuse("busy"); return end
+            end
         end
         -- INSTALMENTS (P4-R133). The case goes live with the clues that fit
         -- now; the rest wait as an open order and the filler places them as
@@ -913,7 +941,7 @@ local function prepare(result,seed,later,house)
         end
         -- The opening clue of the FIRST case is in the house the player is
         -- standing in (P4-R66), so it is never an instalment.
-        if house and root.assignments[case.documents[1].id].status=="deferred" then
+        if house and case.opening and not root.assignments[case.documents[1].id].target then
             refuse("no-containers",false); return
         end
         for _,assignment in pairs(root.assignments) do
@@ -934,7 +962,10 @@ local function prepare(result,seed,later,house)
         else swap({canonical=root}); clearDebt() end
         if house and case.opening then openingDelivery={id=first.id,house=house} end
         openAll()
-        local t=root.assignments[first.id].target
+        -- Non-opening development cases may legitimately begin with an indexed
+        -- plan. The personal opening cannot (guarded above), but using the plan
+        -- as a diagnostic anchor prevents any post-commit nil dereference.
+        local t=root.assignments[first.id].target or root.assignments[first.id].planned
         if house and case.opening then
             log("Opening clue origin: "..t.x..", "..t.y..", floor "..t.z.."; immediate personal delivery requested.")
         else
