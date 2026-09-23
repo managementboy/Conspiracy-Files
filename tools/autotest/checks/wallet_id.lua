@@ -153,3 +153,22 @@ function W.row(name)
     end
     return nil
 end
+
+-- EVERY row, in one comparable string: the exact wording the player reads,
+-- in the order the organiser lists it. Gate 2 expected result 10 asks that a
+-- save and a reload preserve the facts and the provenance "without changing
+-- wording or creating duplicates", and all three of those are visible here at
+-- once - a dropped token changes "taken off a corpse" to nothing, a reworded
+-- line changes the text, and a duplicate changes the count.
+--
+-- Deliberately not a hash. When this differs, the report should be able to
+-- show WHICH line moved, not just that something did.
+function W.digest()
+    local rows = ConspiracyFiles.IdentityObserver.rows()
+    local out = { tostring(#rows) .. " row(s)" }
+    for _, r in ipairs(rows) do
+        out[#out + 1] = tostring(r.title) .. " | " .. tostring(r.summary)
+            .. " | " .. tostring(r.detailText):gsub("\n+", " \\n ")
+    end
+    return table.concat(out, "\t")
+end

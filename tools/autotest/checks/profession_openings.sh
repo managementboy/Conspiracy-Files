@@ -98,12 +98,24 @@ for fam in $families; do
             # The scan's cursor is the honest progress measure; a flat cursor
             # for two minutes means it has stopped, whatever the clock says.
             local scan
-            scan="$(ev 'local T=ConspiracyFiles.T3Nearby;local p=T and T.progress and T.progress();return p and (tostring(p.phase)..":"..tostring(p.index)) or "none"')"
+            # The reason matters. T3Nearby.progress() distinguishes "no scan
+            # has run" from "complete" from an error, and the old probe threw
+            # all three away as "none", so a scan that had not begun read the
+            # same as a wedged one. fitness_world_opening.sh quit after 5% of
+            # its budget on exactly that, 2026-09-23.
+            scan="$(ev 'local T=ConspiracyFiles.T3Nearby;if not (T and T.progress) then return "no-module" end;local p,why=T.progress();if p then return "scan:"..tostring(p.phase)..":"..tostring(p.index)..":"..tostring(p.scanned) end;return "nojob:"..tostring(why)')"
             if [ "$scan" = "$lastscan" ]; then flatscan=$((flatscan + 1)); else flatscan=0; lastscan="$scan"; fi
-            if [ "$flatscan" -ge 24 ]; then
-                say "$profession save $n: the nearby scan stopped advancing at $scan"
-                break
-            fi
+            # Only a live job can stall; with no job there is nothing advancing.
+            case "$scan" in
+                scan:*)
+                    if [ "$flatscan" -ge 24 ]; then
+                        say "$profession save $n: the nearby scan stopped advancing at $scan"
+                        break
+                    fi ;;
+                *)
+                    [ "$flatscan" -ge 24 ] \
+                        && say "$profession save $n: no scan job for $((flatscan * 5))s: $scan" ;;
+            esac
             sleep 5
         done
         if [ "$(field 1 "$r")" != ready ]; then

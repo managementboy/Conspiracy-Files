@@ -71,6 +71,32 @@ sleep 3
 row="$(ev "return CFWallet.row([[$wallet]])")"
 summary="$(cut -f1 <<<"$row")"; detail="$(cut -f2- <<<"$row")"
 "$PZ" shot "$RUNS/$id-wallet.png" >/dev/null 2>&1
+
+# Gate 2 expected result 10: a save and a reload preserve the facts and the
+# provenance without changing wording or creating duplicates. Compared as the
+# player reads it - every row's title, summary and full text, in order - so a
+# dropped provenance token, a reworded line and a duplicated row each show up
+# as a difference rather than all three hiding behind a count.
+reload_result="not exercised: the reload leg did not run"
+before=""; after=""
+before="$(ev 'return CFWallet.digest()')"
+world="$(cat "$REPO/dev/eval/linux/world" 2>/dev/null)"
+"$PZ" stop --save >/dev/null 2>&1
+if "$PZ" start --continue "$world" "${start_args[@]}" >/dev/null 2>&1 \
+    && ev -f "$REPO/tools/autotest/checks/wallet_id.lua" >/dev/null; then
+    wait_true 60 'ConspiracyFiles~=nil and ConspiracyFiles.IdentityObserver~=nil' \
+        || say "note: the observer did not answer after the reload"
+    after="$(ev 'return CFWallet.digest()')"
+    if [ "$before" = "$after" ]; then
+        reload_result="PASS: $(cut -f1 <<<"$after") survived the reload unchanged"
+    else
+        reload_result="FAIL: the recorded rows changed across a save and reload"
+    fi
+else
+    reload_result="not exercised: the saved game did not reload"
+fi
+say "save/reload: $reload_result"
+
 errors="$(mod_errors)"
 end_world
 
@@ -79,6 +105,7 @@ verdict=PASS; why=""
 [ -z "$summary" ] || grep -q "taken off a corpse" <<<"$detail" || { verdict=FAIL; why="recorded, but without its corpse provenance"; }
 [ -z "$errors" ] || { verdict=FAIL; why="${why:+$why; }errors inside the mod"; }
 case "$loose_result" in FAIL*) verdict=FAIL; why="${why:+$why; }loose ID not recorded" ;; esac
+case "$reload_result" in FAIL*) verdict=FAIL; why="${why:+$why; }rows changed across a save and reload" ;; esac
 
 report="$EVIDENCE/$id-wallet-id.txt"
 {
@@ -88,6 +115,9 @@ report="$EVIDENCE/$id-wallet-id.txt"
     echo "record summary: ${summary:-none}"
     [ -z "$detail" ] || { echo "record text:"; sed 's/ \\n /\n/g' <<<"$detail" | sed 's/^/  /'; }
     echo "loose ID on a body: $loose_result"
+    echo "save and reload: $reload_result"
+    [ "$before" = "$after" ] || { echo "  before: $(tr '\t' '\n' <<<"$before" | sed 's/^/    /')"; \
+                                  echo "  after:  $(tr '\t' '\n' <<<"$after"  | sed 's/^/    /')"; }
     echo "errors inside the mod: $(grep -c . <<<"$errors")"
     [ -z "$errors" ] || sed 's/^/  /' <<<"$errors" | head -10
     echo "screenshot: dev/eval/linux/runs/$id-wallet.png (not committed)"

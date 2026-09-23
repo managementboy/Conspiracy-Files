@@ -1,0 +1,7 @@
+Linux Fitness Instructor world-evidence opening: COULD NOT RUN
+source: 3ddc7c3
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+  
+
+NOT EXERCISED: the first case never arrived, so nothing below could be observed
+errors inside the mod: 0

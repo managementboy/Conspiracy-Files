@@ -49,9 +49,22 @@ lastscan=""; flat=0; ready=0
 while [ "$(date +%s)" -lt "$deadline" ]; do
     o="$(ev 'return CFFit.opening()')"
     [ "$o" != "no-case" ] && { ready=1; break; }
-    scan="$(ev 'local T=ConspiracyFiles.T3Nearby;local p=T and T.progress and T.progress();return p and (tostring(p.phase)..":"..tostring(p.index)) or "none"')"
+    # T3Nearby.progress() RETURNS A REASON, and it exists precisely so that
+    # "no scan has run", "complete" and a real error are not the same answer.
+    # Collapsing all three to the constant string "none" made a scan that had
+    # simply not started yet look identical to a wedged one, and this check
+    # quit after 120 seconds of a 2400-second budget on 2026-09-23 reporting
+    # "the nearby scan stopped advancing at none". A fingerprint that cannot
+    # tell two states apart is not a stall detector.
+    scan="$(ev 'local T=ConspiracyFiles.T3Nearby;if not (T and T.progress) then return "no-module" end;local p,why=T.progress();if p then return "scan:"..tostring(p.phase)..":"..tostring(p.index)..":"..tostring(p.scanned) end;return "nojob:"..tostring(why)')"
     if [ "$scan" = "$lastscan" ]; then flat=$((flat + 1)); else flat=0; lastscan="$scan"; fi
-    [ "$flat" -ge 24 ] && { say "the nearby scan stopped advancing at $scan"; break; }
+    # Only a LIVE job can stall. With no job there is nothing to advance: the
+    # scan has not begun, or it finished and the generator is preparing, and
+    # neither is this loop's business to call dead.
+    case "$scan" in
+        scan:*) [ "$flat" -ge 24 ] && { say "the nearby scan stopped advancing at $scan"; break; } ;;
+        *)      [ "$flat" -ge 24 ] && say "no scan job for $((flat * 5))s: $scan" ;;
+    esac
     sleep 5
 done
 [ "$ready" = 1 ] || { skip "the first case never arrived, so nothing below could be observed"; }
