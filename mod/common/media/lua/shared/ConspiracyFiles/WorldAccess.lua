@@ -5,6 +5,16 @@ local function spriteName(object)
     return sprite and sprite:getName() or nil
 end
 function World.resolve(target,mark)
+    -- A fixed-index signature deliberately has no volatile object/container
+    -- indexes.  Normalize it through the live fixed resolver before the
+    -- ordinary square-addressed path below compares those indexes.  The case
+    -- preparation guard asks World.resolve whether each selected site is live;
+    -- sending an indexed signature into line 27 used to evaluate `nil < size`
+    -- in Kahlua and abort every first case after catalogue selection.
+    if type(target)=="table" and target.indexed==true then
+        local _,container,why=require("ConspiracyFiles/Generated/FixedContainerRuntime").resolve(target)
+        return container,why
+    end
     -- Nor is a carrier - a corpse or a zombie (P4-R134). It is found by the
     -- mark on the body itself, wherever the body now is. Required lazily so
     -- nothing that only reads squares pays for it.

@@ -58,6 +58,9 @@ target,live,why=Runtime.resolve(signature)
 assert(live==container and why==nil,"the live container resolves: "..tostring(why))
 assert(target.objectIndex==1 and target.containerIndex==0 and target.indexed==nil,
     "volatile object/container indexes are discovered only in the loaded square")
+local throughWorld,worldWhy=require("ConspiracyFiles/WorldAccess").resolve(signature)
+assert(throughWorld==container and worldWhy==nil,
+    "the generic preparation guard must safely resolve an indexed signature")
 
 searched=true
 target,live,why=Runtime.resolve(signature)

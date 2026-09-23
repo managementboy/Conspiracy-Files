@@ -1,5 +1,15 @@
 # Conspiracy-Files — Project State
 
+## Indexed-target resolver hotfix — 2026-09-23
+
+`DEV-0.47.2-indexed-resolver-hotfix` repairs the second live first-case failure.
+After `DEV-0.47.1` correctly admitted indexed buildings, the preparation guard
+passed their compact signatures to the ordinary square resolver. Such signatures
+intentionally have no volatile `objectIndex` or `containerIndex`, so Kahlua raised
+`__lt not defined for operand` at `WorldAccess.lua:21`. `World.resolve` now routes
+indexed signatures through `FixedContainerRuntime` and returns its verified live
+container. The regression exercises that exact generic-resolver call.
+
 ## Fixed-index opening hotfix — 2026-09-23
 
 `DEV-0.47.1-indexed-opening-hotfix` repairs the live first-case refusal found

@@ -1,6 +1,6 @@
 # Dual Conspiracy and World-Evidence Vision
 
-**Status:** Owner-approved direction; first implementation slice built in `DEV-0.47.1-indexed-opening-hotfix`
+**Status:** Owner-approved direction; first implementation slice built in `DEV-0.47.2-indexed-resolver-hotfix`
 **Date:** 2026-09-22
 **Implementation update:** 2026-09-23
 **Purpose:** Preserve the approved design direction and distinguish the implemented first slice from the larger vision still to build.
@@ -472,7 +472,7 @@ The observer must also account for:
 
 The system should prefer preserving the earlier accepted interpretation of observable facts over silently rewriting campaign history after an update.
 
-## 12. What exists in `DEV-0.47.1-indexed-opening-hotfix`
+## 12. What exists in `DEV-0.47.2-indexed-resolver-hotfix`
 
 ### Existing building blocks
 
