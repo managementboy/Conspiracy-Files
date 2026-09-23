@@ -63,9 +63,9 @@ end
 -- The FOUND block's text. Placeless is not an error state and must not read
 -- like one: the survivor simply did not note it, which is an ordinary thing
 -- for someone to not do.
--- "It was office memo." read as a missing word (owner, Windows, 2026-09-18).
--- A carrier is a thing, so it takes an article; the generic object carrier
--- ("Object found") is just an object.
+-- Discovery history is written by the survivor in first person. A carrier
+-- takes an article; the generic object carrier ("Object found") is just an
+-- object.
 local function aCarrier(carrier)
     -- Lower-case only what has lower case: an ID card is not an id card.
     local text=tostring(carrier or ""):gsub("%S+",function(word)
@@ -83,9 +83,10 @@ local function aCarrier(carrier)
 end
 function M.foundLine(where,carrier)
     local named=aCarrier(carrier)
-    local tail=named and (" It was "..named..".") or ""
-    if where then return where..tail end
-    return "I didn't note where I was."..tail
+    if where and named then return "I found "..named.." at "..where.."." end
+    if where then return "I found it at "..where.."." end
+    if named then return "I found "..named..", but I didn't note where I was." end
+    return "I didn't note where I was."
 end
 
 -- WP2/WP6. Which places have earned a heading, given how often the player has

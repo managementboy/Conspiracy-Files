@@ -46,9 +46,10 @@ for seed=1,10 do
  assert(#case.documents[1].leads==0 and case.documents[2].leads[1]==sites[2]
   and case.documents[2].body:find("If client absent: return key and visit sheet to",1,true),
   "the key reveals no hidden destination; the readable appointment carries the second-place lead")
- assert(case.documents[1].body:find("when I came to",1,true)
+ assert(case.documents[1].body:find("I have a worn brass house key",1,true)
+  and case.documents[1].body:find("I do not remember putting it there",1,true)
   and not case.documents[1].body:find("at the start",1,true),
-  "the opening is written from the survivor's experience, not the game's session")
+  "the opening is first-person and immediate, not a description of the game's session")
  assert(case.documents[3].kind=="AnimalFeedBag" and case.documents[3].roomIntent=="wrong")
  assert(case.documents[4].members and #case.documents[4].members==3 and case.documents[4].quantity==9,
   "the PPE accumulation is one heterogeneous finding")

@@ -192,6 +192,10 @@ local tried=false
 -- five retry loops were stripped out for on 2026-09-12, and a document does not
 -- appear in your pocket sixty times a second.
 F.FILE_EVERY_MS=3000
+local function functionalKey(item)
+    local ok,full=pcall(function() return item:getFullType() end)
+    return ok and full=="Base.Key1"
+end
 function F.fileEvidence()
     local now=getTimeInMillis and getTimeInMillis() or 0
     if F.filedAt and now-F.filedAt<F.FILE_EVERY_MS then return 0 end
@@ -211,6 +215,28 @@ function F.fileEvidence()
         local okOuter,outer=pcall(function() return album:getOutermostContainer() end)
         if not okOuter or outer~=inventory then return 0 end
     end
+    -- Repair the brief 0.47.5 behavior as well as preventing it: a recognised
+    -- key already filed inside the album must come back to the root inventory,
+    -- because vanilla door actions do not search inside carried containers.
+    local filed=into.getItems and into:getItems()
+    local unfile={}
+    if filed then
+        for i=0,filed:size()-1 do
+            local item=filed:get(i)
+            local md=item and item.getModData and item:getModData()
+            if type(md)=="table" and md.cfGeneratedId and functionalKey(item) then
+                unfile[#unfile+1]=item
+            end
+        end
+    end
+    local restored=0
+    for _,item in ipairs(unfile) do
+        local removed=pcall(function() into:Remove(item) end)
+        local added=removed and pcall(function() inventory:AddItem(item) end)
+        if added then restored=restored+1
+        elseif removed then pcall(function() into:AddItem(item) end) end
+    end
+    if restored>0 then log("kept "..restored.." functional evidence key(s) in the root inventory") end
     local items=inventory.getItems and inventory:getItems()
     if not items then return 0 end
     -- Collect first, move second: moving while walking the list it came from
@@ -219,7 +245,11 @@ function F.fileEvidence()
     for i=0,items:size()-1 do
         local item=items:get(i)
         local md=item and item.getModData and item:getModData()
-        if type(md)=="table" and md.cfGeneratedId and item~=album then
+        -- A key inside the photo album is invisible to vanilla's
+        -- ItemContainer:haveThisKeyId lookup. It may be evidence, but it must
+        -- remain in the root inventory or the physical claim that it opens a
+        -- door becomes false in play.
+        if type(md)=="table" and md.cfGeneratedId and item~=album and not functionalKey(item) then
             -- Only recognised evidence is filed: an unrecognised clue is the
             -- plain item it looks like, and filing it would give it away
             -- (P4-R132).

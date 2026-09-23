@@ -1,5 +1,23 @@
 # Conspiracy-Files — Project State
 
+## Functional opening key and first-person record — 2026-09-23
+
+`DEV-0.47.6-functional-opening-key` repairs the native failure observed at 127
+Wilson St. Live inspection proved that the generated key ID (`48200548`)
+matched both exterior doors and the building ID, but the evidence album had
+automatically filed the key. Vanilla `ItemContainer:haveThisKeyId` does not
+search inside that carried album, so the door action could not see the correct
+key. Functional `Base.Key1` evidence now remains in the root inventory, and a
+key filed by the brief 0.47.5 behavior is moved back out automatically.
+
+The opening record now uses the survivor's first-person present observation:
+“I have a worn brass house key in my pocket. I do not remember putting it
+there.” Historical FOUND lines are also first-person (“I found a brass key at
+127 Wilson St.”) rather than describing the survivor from outside (“It was a
+brass key”). Generator revision `g18-first-person-functional-key` requires a
+fresh generated save. Focused album, wording, ten-opening, runtime and case
+shape regressions pass; native acceptance of this build remains pending.
+
 ## Diegetic immediate opening and property-site correction — 2026-09-23
 
 `DEV-0.47.5-diegetic-immediate-opening` moves the Fitness Instructor's

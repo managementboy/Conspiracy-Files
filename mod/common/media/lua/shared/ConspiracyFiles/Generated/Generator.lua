@@ -11,7 +11,7 @@ local OrdinaryScenarios=require("ConspiracyFiles/Generated/OrdinaryScenarios")
 local ConspiracyPair=require("ConspiracyFiles/Generated/ConspiracyPair")
 -- Fresh saves only: each family now supplies a whole authored event. There
 -- is no generic paperwork fallback and no optional omission of its answer.
-local G={REVISION="g17-diegetic-immediate-opening",SCHEMA=3,MIN_EVIDENCE=3,MAX_EVIDENCE=7}
+local G={REVISION="g18-first-person-functional-key",SCHEMA=3,MIN_EVIDENCE=3,MAX_EVIDENCE=7}
 local function copy(v) if type(v)~="table" then return v end; local out={}; for k,c in pairs(v) do out[k]=copy(c) end; return out end
 local function same(a,b)
     if type(a)~=type(b) then return false end

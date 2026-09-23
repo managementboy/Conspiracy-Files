@@ -1,6 +1,6 @@
 # Dual Conspiracy and World-Evidence Vision
 
-**Status:** Owner-approved direction; first implementation slice built in `DEV-0.47.5-diegetic-immediate-opening`
+**Status:** Owner-approved direction; first implementation slice built in `DEV-0.47.6-functional-opening-key`
 **Date:** 2026-09-22
 **Implementation update:** 2026-09-23
 **Purpose:** Preserve the approved design direction and distinguish the implemented first slice from the larger vision still to build.
@@ -472,13 +472,15 @@ The observer must also account for:
 
 The system should prefer preserving the earlier accepted interpretation of observable facts over silently rewriting campaign history after an update.
 
-## 12. What exists in `DEV-0.47.5-diegetic-immediate-opening`
+## 12. What exists in `DEV-0.47.6-functional-opening-key`
 
 ### Existing building blocks
 
 - Ten residential Fitness Instructor opening variants are generated and selectable.
 - Every variant uses one real `Key1` for the current building and presents the opening thought, “This opens the house. Why did I have access?”, from the first playable startup frames rather than after the neighbourhood scan.
 - The key is adopted into the generated case after scanning, never duplicated, and does not invisibly disclose the second site. The later appointment card visibly names that lead.
+- Functional key evidence remains directly in the survivor's root inventory, because vanilla door actions do not search inside the evidence album for matching key IDs.
+- Opening observations use the survivor's first-person present voice; historical discovery lines use first-person past voice.
 - Utility-only detached garages and sheds are excluded as independent narrative sites; a building containing both a garage and substantive rooms remains eligible.
 - Every variant authors the same five-finding chain: house key, July 8 appointment, misplaced damaged feed sack, heterogeneous used-PPE accumulation, and an optional confirmed vehicle/cooler scene.
 - The PPE finding materializes as three masks, four gloves, and two disinfectant items while remaining one finding.
@@ -486,7 +488,7 @@ The system should prefer preserving the earlier accepted interpretation of obser
 - The first four household findings are essential. The vehicle finding waits for a confirmed vanilla scene and cannot make the case fail merely because this save has no suitable nearby scene.
 - A bounded two-observation vehicle classifier recognizes clusters, emergency transport, and contextual cargo without naming vanilla's hidden story definition.
 - Once a confirmed scene is assigned, its stable signature persists with the target; retaining the complete observed snapshot remains future work.
-- Generator schema `3` and revision `g17-diegetic-immediate-opening` intentionally reject old generated saves; no migration is required.
+- Generator schema `3` and revision `g18-first-person-functional-key` intentionally reject old generated saves; no migration is required.
 
 ### Missing or insufficient systems
 

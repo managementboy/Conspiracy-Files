@@ -63,7 +63,7 @@ local function make(d)
   essential={"claim","appointment","response","review"},
   anchors={
    claim={kind="Key1",title=d.label.." house key / {CODE}",
-    observation="A worn brass house key was already in my pocket when I came to.",
+    observation="I have a worn brass house key in my pocket. I do not remember putting it there.",
     source="It is cut for a real building lock, not a label or a decorative prop.",
     note="The door can prove what it opens. Why did I have access to this house?",
     wear="worn",accessIntent="starting-building",interpretation="dual",

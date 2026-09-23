@@ -14,6 +14,7 @@ local added = {}
 local function makeItem(fullType)
     local md = {}
     return { fullType = fullType, md = md, name = nil, custom = false, fav = false,
+        getFullType = function(self) return self.fullType end,
         getModData = function(self) return self.md end,
         setName = function(self, n) self.name = n end,
         getName = function(self) return self.name end,
@@ -247,11 +248,13 @@ local function box(items)
         hasRoomFor = function() return true end }
 end
 local function bag(inner) local b = makeItem("Base.Bag_Schoolbag"); b.getInventory = function() return inner end; return b end
-local albumInv = box({})
+local oldKey = makeItem("Base.Key1"); oldKey.md.cfGeneratedId = "opening-key-from-0475"
+local albumInv = box({ oldKey })
 local album = makeItem("Base.PhotoAlbum"); album.md.cfCaseFile = true
 album.getInventory = function() return albumInv end
 local doc = makeItem("Base.Note"); doc.md.cfGeneratedId = "doc-1"
-local top = box({ doc, bag(box({ album })) })
+local key = makeItem("Base.Key1"); key.md.cfGeneratedId = "opening-key"
+local top = box({ doc, key, bag(box({ album })) })
 album.getOutermostContainer = function() return top end
 local carrier = { getInventory = function() return top end,
     getDescriptor = function() return { getForename = function() return "Una" end } end }
@@ -260,7 +263,12 @@ local clock5 = 0; getTimeInMillis = function() clock5 = clock5 + 5000; return cl
 local F5 = dofile('mod/common/media/lua/client/ConspiracyFiles/CaseFile.lua')
 assert(F5.held(carrier) == album, 'the album is found inside a backpack')
 assert(F5.give(carrier) == album, 'and a second album is not issued because of the bag')
-assert(F5.fileEvidence() == 1 and albumInv.items[1] == doc and #top.items == 1, 'filing still works with the album in a bag')
+assert(F5.fileEvidence() == 1 and albumInv.items[1] == doc and #top.items == 3,
+    'paper filing still works with the album in a bag')
+local rootKeys={}
+for _,candidate in ipairs(top.items) do rootKeys[candidate]=true end
+assert(rootKeys[key] and rootKeys[oldKey],
+    'new and previously filed evidence keys must stay in the root inventory where vanilla door checks can see them')
 -- Four bags deep is past the walk.
 local deepAlbum = makeItem("Base.PhotoAlbum"); deepAlbum.md.cfCaseFile = true
 local deep = box({ bag(box({ bag(box({ bag(box({ bag(box({ deepAlbum })) })) })) })) })
