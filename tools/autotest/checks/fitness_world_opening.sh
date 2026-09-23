@@ -78,6 +78,26 @@ if [ "$ready" = 1 ]; then
                 || fail "no door near the starting house accepts the key (keyId $keyid, $doors doors examined)"
             ;;
     esac
+    # Gate 3: the recorded house must be the real starting building.
+    ad="$(ev 'return CFFit.address()')"
+    case "$ad" in
+        no-case|no-target) skip "no key target, so the recorded address could not be compared ($ad)" ;;
+        no-address-book) skip "the address book was not ready, so the address could not be compared" ;;
+        *)
+            tb="$(field 1 "$ad")"; tl="$(field 2 "$ad")"; pb="$(field 3 "$ad")"
+            pl="$(field 4 "$ad")"; rec="$(field 5 "$ad")"; same="$(field 6 "$ad")"
+            rows+=("address: key target building=$tb \"$tl\"; survivor building=$pb \"$pl\"; case records \"$rec\"")
+            say "${rows[-1]}"
+            if [ "$tb" = none ]; then
+                skip "the key target is not inside any building, so no building address exists to compare"
+            elif [ "$same" = true ]; then
+                rows+=("point: the key belongs to the building the survivor starts in")
+            else
+                fail "the opening key targets building $tb (\"$tl\") but the survivor starts in building $pb (\"$pl\")"
+            fi
+            ;;
+    esac
+
     # 3
     [ "$voice" = "This opens the house. Why did I have access?" ] \
         || fail "the opening line is \"$voice\", not \"This opens the house. Why did I have access?\""

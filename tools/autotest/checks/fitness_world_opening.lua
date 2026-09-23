@@ -88,6 +88,60 @@ function F.keyOpensHouse()
     return table.concat({tostring(keyId), tostring(doors), tostring(matched)}, "\t")
 end
 
+-- GATE 3: DOES THE RECORDED HOUSE MATCH THE REAL STARTING BUILDING?
+--
+-- Asked of the world, twice over, because a case that records a plausible
+-- address for the wrong building reads perfectly and is still wrong. The
+-- comparison is between the label the address book gives for the building
+-- the key's target square actually sits in, and the label the same book gives
+-- for the building the survivor is standing in. If the opening put the key in
+-- the survivor's own house, those two are the same building id.
+--
+-- Everything here can be unavailable for honest reasons - a target outside
+-- any building, an address book still loading - and each of those answers
+-- says so by name rather than returning a bare false.
+function F.address()
+    local r = root()
+    if not r or not r.case then return "no-case" end
+    local A = ConspiracyFiles.AddressMap
+    if not (A and A.ready and A.ready()) then return "no-address-book" end
+    local first = r.case.documents[1]
+    local a = r.assignments and r.assignments[first.id]
+    local t = a and a.target
+    if not t then return "no-target" end
+
+    local function buildingAt(x, y, z)
+        local sq = getCell():getGridSquare(x, y, z)
+        local ok, b = pcall(function() return sq and sq:getBuilding() end)
+        if not (ok and b) then return nil end
+        local ok2, def = pcall(function() return b:getDef() end)
+        if not (ok2 and def) then return nil end
+        -- getIDString(), not getID(). AddressMap.labelForBuilding is keyed
+        -- exactly as the book is built, and the book is built from
+        -- BuildingDef:getIDString(); the numeric getID() would look plausible
+        -- and resolve to nothing.
+        local ok3, id = pcall(function() return def:getIDString() end)
+        return ok3 and id or nil
+    end
+
+    local targetBuilding = buildingAt(t.x, t.y, t.z)
+    local p = getPlayer()
+    local playerBuilding = buildingAt(math.floor(p:getX()), math.floor(p:getY()), math.floor(p:getZ()))
+    local targetLabel = targetBuilding and A.labelForBuilding(targetBuilding) or nil
+    local playerLabel = playerBuilding and A.labelForBuilding(playerBuilding) or nil
+
+    -- What the CASE says the address is, as the player reads it.
+    local recorded = tostring(r.case.story and r.case.story.addressA
+        or (r.case.sites and r.case.sites[1] and r.case.sites[1].label) or "none")
+
+    return table.concat({
+        tostring(targetBuilding or "none"), tostring(targetLabel or "none"),
+        tostring(playerBuilding or "none"), tostring(playerLabel or "none"),
+        recorded,
+        tostring(targetBuilding ~= nil and targetBuilding == playerBuilding),
+    }, "\t")
+end
+
 -- (4)(5) THE THREE WORLD ANCHORS. For each: is it assigned, has it been
 -- placed, and - for the grouped one - how many real items exist at its
 -- target. Nine items and ONE finding is the claim; both halves are counted.

@@ -1,0 +1,12 @@
+Linux wallet ID check 20260923T190855: PASS
+source: 13da332
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+wallet ID: 'ID Card: Agatha Frasier'; wallet stamp after carrying it off: corpse-wallet:602563540
+record summary: ID card - container
+record text:
+  I saw an ID card with the name "Agatha Frasier" on it, inside a wallet. That container was taken off a corpse. The same one carried: Parking Ticket: Agatha Frasier (same name as the ID).
+  The name on an ID card is my lead. The body remains unidentified.
+  Observed at 202 E Maple St.
+loose ID on a body: PASS: 'ID Card: Imelda Camarillo' recorded as ID card - corpse
+errors inside the mod: 0
+screenshot: dev/eval/linux/runs/20260923T190855-wallet.png (not committed)
