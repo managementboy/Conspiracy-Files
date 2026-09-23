@@ -9,6 +9,16 @@ return {
   question="Why did two lap times become a repair booking?",
   event="A clerk used the Cossette's lap as a repair standard for the Dart and sent the difference to a garage without an inspection.",
   outcome="The garage rejected a fault diagnosis made from different cars' lap times, and the requested repair was cancelled before authorisation.",
+  -- BOUND TO WHICHEVER CENTRAL CONSPIRACY THE SAVE DREW, like every generated
+  -- scenario. A vanilla annotated map is the strongest evidence surface the
+  -- mod has - somebody's own handwriting, marking a real place - and leaving
+  -- it outside the campaign's central question wasted it.
+  --
+  -- Measured 2026-09-23: 125 annotated destinations drive placement, and this
+  -- is the ONLY one with an authored story (MapMediaContent.lua binds it by
+  -- id). The other 124 resolve to generic payoffs. That gap is the real
+  -- finding here; binding this one does not close it.
+  centralAxis="records",
   skill="mechanic",observationPart=4,
   professional="Different cars' lap times cannot identify a failed component. The garage records no inspection or authorised repair, which is exactly the gap its reply asked the clerk to fill.",
   parts={
