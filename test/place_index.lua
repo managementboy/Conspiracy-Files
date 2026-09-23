@@ -37,7 +37,10 @@ local prefixed = M.decorate(rows(), { d = "109 Walker Road" })
 assert(prefixed[4].summary == "109 Walker Road - Identity document - corpse", prefixed[4].summary)
 
 -- The carrier name is demoted to the detail pane, never dropped.
-assert(placed[1].detailText:find("FOUND\n109 Walker Road", 1, true), placed[1].detailText)
+-- The carrier is demoted to the detail pane and the place is still named -
+-- both still true. The block simply reads "I found a handwritten cover letter
+-- at 109 Walker Road." since 940c3e2, so it no longer starts with the place.
+assert(placed[1].detailText:match("FOUND\n[^\n]*109 Walker Road"), placed[1].detailText)
 assert(placed[1].detailText:find("handwritten cover letter", 1, true), placed[1].detailText)
 
 -- "Unknown" must not be a place. A missing place is said plainly, in the

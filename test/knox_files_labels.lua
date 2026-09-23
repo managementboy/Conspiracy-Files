@@ -39,8 +39,14 @@ assert(found<words and words<meaning and meaning<note,"the blocks stay in the or
 
 -- The labelled fields are unchanged: FOUND is a field, not a heading in the writing.
 local fields=files[1].fields
-assert(fields[1] and fields[1].label=="FOUND" and fields[1].value:find("In a kitchen drawer",1,true)==1,
+-- FOUND is still a FIELD rather than a heading in the writing - that is the
+-- point of this assertion and it is unchanged. Only the value's wording moved
+-- to first person in 940c3e2, so the place is named inside the sentence
+-- instead of opening it.
+assert(fields[1] and fields[1].label=="FOUND",
     "FOUND is still a field: "..tostring(fields[1] and fields[1].label))
+assert(fields[1].value:find("In a kitchen drawer",1,true),
+    "the FOUND field still names where it was found: "..tostring(fields[1].value))
 assert(not d:find("In a kitchen drawer",1,true),"a field is not repeated in the writing")
 assert(not d:find("\nFOUND\n",1,true),"a field's heading is not repeated in the writing")
 

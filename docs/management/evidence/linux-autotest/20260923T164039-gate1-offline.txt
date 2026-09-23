@@ -1,0 +1,28 @@
+Gate 1: source and offline baseline
+commit: 112125d7a3c305bfb31e4ec5c70ba84fe8eb5a80
+
+$ git status --short --branch
+## main...origin/main [ahead 1]
+?? docs/management/evidence/linux-autotest/20260923T164039-gate1-offline.txt
+
+$ lua5.1 test/run.lua
+PASS place descriptions remove debug coordinates without changing saved facts
+PASS traceability matrix covers every plain-Lua acceptance criterion at least once
+52 tests, 0 failures
+exit=0
+
+$ tools/kahlua/run.sh --parse-all
+kahlua parse: 131 ok, 0 failed
+exit=0
+
+$ tools/autotest/unit.sh   (the whole offline tier)
+    	[C]: ?
+relocation evidence regression: PASS
+packaging: OK
+shipped standalone: 183 run, 3 failed (including specs and packaging)
+prototype tests not run here: 9 — use tools/autotest/prototype.sh
+exit=0
+
+$ tools/autotest/prototype.sh
+prototype: 9 run, 0 failed
+exit=0

@@ -49,7 +49,12 @@ assert(table.concat(ids,',')=='cover,shift,identity:1,review',table.concat(ids,'
 local evidence=Rows.list('evidence')
 assert(evidence[1].id=='cover' and evidence[1].summary:find('109 Walker Road',1,true),evidence[1].summary)
 assert(evidence[2].summary:find('42 McCoy Lane',1,true),evidence[2].summary)
-assert(evidence[1].detailText:find('\n\nFOUND\n109 Walker Road',1,true),evidence[1].detailText)
+-- FOUND is first person since 940c3e2 ("I found a handwritten cover letter at
+-- 109 Walker Road."), so the block no longer OPENS with the place. What must
+-- still hold is that the block exists and names the place; asserting the
+-- place's offset was asserting the sentence's shape, not its content.
+assert(evidence[1].detailText:find('\n\nFOUND\n',1,true),evidence[1].detailText)
+assert(evidence[1].detailText:match('\n\nFOUND\n[^\n]*109 Walker Road'),evidence[1].detailText)
 assert(evidence[3].detailText:find("didn't note where",1,true),evidence[3].detailText)
 for _,row in ipairs(evidence) do assert(not row.detailText:find('Unknown',1,true)) end
 print('PASS evidence rows list: discovery order across sources, the place as subtitle, FOUND for every row')
