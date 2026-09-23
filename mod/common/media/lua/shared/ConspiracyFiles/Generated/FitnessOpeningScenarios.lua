@@ -116,7 +116,7 @@ local function make(d)
    {requires={"claim","appointment","response","review"},from="review",to="claim",kind="recontextualises",
     text="The key and appointment explain how I could enter. The feed and spent protection connect the visit to animal work, but not to a direction of travel."},
    {requires={"response","review","vehicle"},from="vehicle",to="response",kind="recontextualises",
-    text="The vehicle proves that relevant material was being moved. Nothing in the scene proves whether it was inbound or outbound."},
+    text="The cooler in the vehicle and the feed sack in the house are both material that moved. Nothing in the scene shows which way."},
    {requires={"claim","appointment","response","review","vehicle"},from="vehicle",to="claim",kind="recontextualises",
     text="The key and appointment explain how I could enter. The feed, spent protection and cooler connect the visit to a transport trail whose direction is still missing."},
   },

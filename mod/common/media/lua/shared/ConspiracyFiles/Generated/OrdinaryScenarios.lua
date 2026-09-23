@@ -24,11 +24,12 @@ local scenarios={
      ["note"]="I have a transfer to the mill with no travel allowance because the mechanic is supposedly there already. The truck number has been stamped over. I would check the time record at {B} before trusting either destination."
     },
     ["response"]={
-     ["kind"]="notebook",
-     ["title"]="Roadside job record / {CODE}",
-     ["observation"]="A job page with rain spots inside a broad greasy handprint.",
-     ["source"]="{DATE2}\nJob {CODE}; work performed {DATE1}.\n{P1}: haul truck, broken fan belt, roadside throughout. Truck drove away after repair. Did not attend mill.\n{P2}, accounts: yard repairs allocation exhausted. Charge the mechanic to MILL for this job. Do not move the truck to make the form true.",
-     ["note"]="{P1} stayed beside the broken truck. Accounts sent the cost to the mill and specifically told everyone to leave the truck alone. A transfer that saves on travel."
+     ["kind"]="Wrench",
+     ["title"]="Roadside wrench, marked {P1}",
+     ["observation"]="A wrench in the verge grass by the haul truck, shaft stamped {P1}.",
+     ["source"]="The broken fan belt lies beside it; the tracks leave the verge once.",
+     ["note"]="The repair happened here. A transfer says it was at the mill.",
+     ["wear"]="fair"
     },
     ["review"]={
      ["kind"]="receipt",
@@ -43,7 +44,7 @@ local scenarios={
      ["from"]="response",
      ["to"]="claim",
      ["kind"]="disputes-delivery",
-     ["text"]="The transfer sends {P1} to the mill. The job record has them beside the broken truck all day, and the truck driving away afterwards."
+     ["text"]="The transfer sends {P1} to the mill. A wrench and the snapped fan belt lie in the verge, and the truck's tracks leave it only once."
     },{
      ["requires"]={"response","review"},
      ["from"]="review",
@@ -80,11 +81,12 @@ local scenarios={
      ["note"]="An extra claims office, a fully staffed counter, and no extra hours. I want to see the roster at {B}. Someone has either found another clerk or invented one."
     },
     ["response"]={
-     ["kind"]="notebook",
-     ["title"]="Counter shift book / {CODE}",
-     ["observation"]="A counter book divided down the middle with a ruler.",
-     ["source"]="{DATE2}\n{P1}: moved CLAIMS sign to left end of counter. RENTALS sign stays right. Only clerk on shift.\nSame customers keep changing queues. Told tenants a claim does not suspend the rent.\n{P2}: record each half of the counter separately for the response report.",
-     ["note"]="The new office is the left end of the old counter. {P1} has to record two queues while being the only person serving either. I suppose moving the sign was the transfer."
+     ["kind"]="PenFancy",
+     ["title"]="Counter pen, marked {P1}",
+     ["observation"]="A counter pen on its chain at the storage desk, barrel engraved {P1}.",
+     ["source"]="The chain is worn bright where one person has reached for it.",
+     ["note"]="The clerk is still at this counter. A transfer says otherwise.",
+     ["wear"]="fair"
     },
     ["review"]={
      ["kind"]="receipt",
@@ -99,13 +101,13 @@ local scenarios={
      ["from"]="response",
      ["to"]="claim",
      ["kind"]="disputes-delivery",
-     ["text"]="The notice has a fully staffed counter and a response team as well. The counter book has {P1} alone, moving a sign to the other end."
+     ["text"]="The notice has a fully staffed counter and a response team as well. The counter pen's chain is worn bright by one pair of hands."
     },{
      ["requires"]={"response","review"},
      ["from"]="review",
      ["to"]="response",
      ["kind"]="corroborates",
-     ["text"]="The return counts the two headings separately while paying {P1} for a single shift."
+     ["text"]="The return counts the two headings separately while paying {P1}, whose pen wore that one chain, for a single shift."
     },{
      ["requires"]={"claim","response","review"},
      ["from"]="review",
@@ -137,11 +139,12 @@ local scenarios={
      ["note"]="The driver checked that the name matched. I cannot tell from this whether anyone checked the person. There is a delivery file at {B}."
     },
     ["response"]={
-     ["kind"]="notepad",
-     ["title"]="Account holder instruction / {CODE}",
-     ["observation"]="A carbon message retained behind a tank-reading sheet.",
-     ["source"]="{DATE2}\nCopy of instruction for delivery on {DATE1}.\n{P1}: I will be away. Sign {P2} on the receipt; they rejected your own name last time. Put your real name in our fuel book.\nWe need the generator running more than we need a third returned delivery.\n{P2}",
-     ["note"]="{P2} told {P1} to use the listed name and leave a truthful record elsewhere. The first two rejected deliveries seem to have taught them what the check was checking."
+     ["kind"]="Generator_Blue",
+     ["title"]="Fuelled generator, marked {P1}",
+     ["observation"]="A generator with its fuel book wired on, the last line initialled {P1}.",
+     ["source"]="The tank is full and the account holder's chair is dusted over.",
+     ["note"]="Somebody drew this fuel. The signature belongs to somebody absent.",
+     ["wear"]="good"
     },
     ["review"]={
      ["kind"]="receipt",
@@ -156,13 +159,13 @@ local scenarios={
      ["from"]="response",
      ["to"]="claim",
      ["kind"]="disputes-delivery",
-     ["text"]="The docket records {P2} receiving the fuel and the driver checking it. The retained instruction has {P2} away that day and {P1} signing the name."
+     ["text"]="The docket records {P2} receiving the fuel and the driver checking it. The generator's fuel book is initialled beside a chair thick with dust."
     },{
      ["requires"]={"response","review"},
      ["from"]="review",
      ["to"]="response",
      ["kind"]="corroborates",
-     ["text"]="The reconciliation names the real receiver and accepts the account holder instruction."
+     ["text"]="The reconciliation names the real receiver of the generator's fuel and accepts the account holder instruction."
     },{
      ["requires"]={"claim","response","review"},
      ["from"]="review",
@@ -193,11 +196,12 @@ local scenarios={
      ["note"]="It calls this a manager signature, but the purple lettering looks stamped. The supplier copy at {B} might tell me who was at the desk."
     },
     ["response"]={
-     ["kind"]="notebook",
-     ["title"]="Night desk instructions / {CODE}",
-     ["observation"]="A desk instruction card with a purple fingerprint on the reverse.",
-     ["source"]="{DATE2}\n{P1}, night desk: until {P2} returns, use manager-name stamp for linen. Do not sign your own name; supplier will take sheets away.\nTwenty-four sets accepted on {DATE1}.\nStamp kept under desk bell. Guests must not be left waiting while we locate the manager.",
-     ["note"]="The instructions put the absent manager under the desk bell. {P1} was told to stamp the deliveries so the guests could have sheets."
+     ["kind"]="CombinationPadlock",
+     ["title"]="Night-door padlock, marked {P1}",
+     ["observation"]="The delivery-door padlock, tag inked {P1}, hanging open on its hasp.",
+     ["source"]="The dial is set and the manager's key board is still full.",
+     ["note"]="The door was opened at night by somebody whose key never moved.",
+     ["wear"]="good"
     },
     ["review"]={
      ["kind"]="receipt",
@@ -212,13 +216,13 @@ local scenarios={
      ["from"]="response",
      ["to"]="claim",
      ["kind"]="disputes-delivery",
-     ["text"]="The docket carries a manager signature at 23:10. The desk card has {P1} on nights and the manager's name kept under the bell."
+     ["text"]="The docket carries a manager signature at 23:10. The delivery-door padlock hangs open while the manager's key is still on its board."
     },{
      ["requires"]={"response","review"},
      ["from"]="review",
      ["to"]="response",
      ["kind"]="corroborates",
-     ["text"]="The complaint accepts the clerk followed instructions, then removes the stamp without replacing that authority."
+     ["text"]="The complaint accepts the clerk opened the padlock as instructed, then removes the stamp without replacing that authority."
     },{
      ["requires"]={"claim","response","review"},
      ["from"]="review",
@@ -250,11 +254,12 @@ local scenarios={
      ["note"]="The card says to keep it because the hours matter after a transfer. I would take it to the allowance records at {B}. There are already holes punched into the promise."
     },
     ["response"]={
-     ["kind"]="notebook",
-     ["title"]="Permanent crew entry / {CODE}",
-     ["observation"]="A roster page with NEW EMPLOYEE written above TRAINER.",
-     ["source"]="{DATE2}\n{P1}: seasonal engagement ended; permanent mill engagement starts today.\nAssign new recruit to shadow {P1}, who knows the yard procedure.\nMeal-allowance service starts from permanent date. Do not carry punches from seasonal card.",
-     ["note"]="Experienced enough to train the recruit, new enough to start earning lunch again. The two dates are doing different jobs for McCoy."
+     ["kind"]="Shovel",
+     ["title"]="Worn mill shovel, marked {P1}",
+     ["observation"]="A shovel at the mill face, its handle taped and initialled {P1}.",
+     ["source"]="The blade is worn back a full inch by years of the same hands.",
+     ["note"]="A new starter, or a long habit nobody wrote down.",
+     ["wear"]="poor"
     },
     ["review"]={
      ["kind"]="receipt",
@@ -269,13 +274,13 @@ local scenarios={
      ["from"]="response",
      ["to"]="claim",
      ["kind"]="disputes-delivery",
-     ["text"]="The crew card says the previous hours must be checked on transfer. The permanent entry refuses to carry a single punch across."
+     ["text"]="The crew card says the previous hours must be checked on transfer. The mill shovel is worn back an inch by years of the same hands."
     },{
      ["requires"]={"response","review"},
      ["from"]="review",
      ["to"]="response",
      ["kind"]="corroborates",
-     ["text"]="The appeal applies the new start to meals while retaining the old experience for training."
+     ["text"]="The appeal applies the new start to meals while retaining the experience the worn shovel shows for training."
     },{
      ["requires"]={"claim","response","review"},
      ["from"]="review",
@@ -306,11 +311,12 @@ local scenarios={
      ["note"]="This records {P1} starting work and paying the deposit. Keeping a receipt seems to be part of the uniform. The refund copy should be at {B}."
     },
     ["response"]={
-     ["kind"]="notebook",
-     ["title"]="New starter charge / {CODE}",
-     ["observation"]="An accounts entry with SAME SHIRT written in the margin.",
-     ["source"]="{DATE2}\nNew station billing file opened for {P1}. Start date set to file date.\nAutomatic starter charge: uniform deposit withheld.\nSupervisor: continuous employee, same uniform, no second issue. Accounts request a duplicate-charge form.",
-     ["note"]="The employee kept working in the same shirt. Accounts opened a new file and charged for the shirt again. The supervisor has noticed; that earns a form."
+     ["kind"]="Broom",
+     ["title"]="Forecourt broom, marked {P1}",
+     ["observation"]="The forecourt broom, head worn to a stub, its stale marked {P1}.",
+     ["source"]="Its bristles splay the way one attendant's sweep wears them.",
+     ["note"]="New on the payroll, old on the forecourt.",
+     ["wear"]="poor"
     },
     ["review"]={
      ["kind"]="receipt",
@@ -325,13 +331,13 @@ local scenarios={
      ["from"]="response",
      ["to"]="claim",
      ["kind"]="disputes-delivery",
-     ["text"]="The starter record has {P1} beginning work and being issued a uniform. The accounts entry has the same employee in the same shirt, starting again."
+     ["text"]="The starter record has {P1} beginning work and being issued a uniform. The forecourt broom is worn to a stub by one attendant's sweep."
     },{
      ["requires"]={"response","review"},
      ["from"]="review",
      ["to"]="response",
      ["kind"]="corroborates",
-     ["text"]="Payroll confirms continuous service and reverses the extra charge."
+     ["text"]="Payroll confirms the continuous service the worn broom shows and reverses the extra charge."
     },{
      ["requires"]={"claim","response","review"},
      ["from"]="review",
@@ -359,11 +365,12 @@ local scenarios={
      ["note"]="They prepared the final wages and decided it was voluntary before getting the resignation. I want the rest of that paperwork at {B}."
     },
     ["response"]={
-     ["kind"]="notepad",
-     ["title"]="Cook departure statement / {CODE}",
-     ["observation"]="A signed statement with the printed words PERSONAL REASONS crossed through.",
-     ["source"]="{DATE2}\nI am leaving the Sunstar diner. On {DATE1} I was told the diner was closed for inventory but I should attend unpaid to count the stock. I refused. The desk said my final wages were already prepared if I would sign this.\nPlease leave this explanation attached.\n{P2}",
-     ["note"]="{P2} would not count stock for free. The desk had an exit ready and wanted the signature. I can see why the cook crossed out personal reasons."
+     ["kind"]="Saucepan",
+     ["title"]="Kitchen pan, marked {P1}",
+     ["observation"]="A cook's own saucepan still on the range, handle banded {P1}.",
+     ["source"]="It is seasoned, scoured and put back in its usual place.",
+     ["note"]="The cook was still cooking when the final pay was prepared.",
+     ["wear"]="fair"
     },
     ["review"]={
      ["kind"]="receipt",
@@ -378,13 +385,13 @@ local scenarios={
      ["from"]="response",
      ["to"]="claim",
      ["kind"]="disputes-delivery",
-     ["text"]="The voucher expects a voluntary notice. {P2} writes that the prepared wages were the offer, made after they refused to count stock unpaid."
+     ["text"]="The voucher expects a voluntary notice. The cook's own pan is seasoned, scoured and back in its place on the range."
     },{
      ["requires"]={"response","review"},
      ["from"]="review",
      ["to"]="response",
      ["kind"]="corroborates",
-     ["text"]="The return confirms the statement arrived and the wages were collected. No inventory hours were claimed, and none were paid."
+     ["text"]="The return confirms the statement arrived and the wages were collected, with the cook's pan still on the range. No inventory hours were claimed, and none were paid."
     },{
      ["requires"]={"claim","response","review"},
      ["from"]="review",
@@ -415,11 +422,12 @@ local scenarios={
      ["note"]="The notice is here, but the permitted sheet is locked away. They will post it to {B}. A storage firm keeping its own departure form securely out of reach."
     },
     ["response"]={
-     ["kind"]="receipt",
-     ["title"]="Final pay despatched / {CODE}",
-     ["observation"]="A payment voucher clipped to a postage entry.",
-     ["source"]="{DATE2}\n{P2}: last shift completed. Final pay issued against telephone notice.\nBlank resignation form enclosed separately for signature and return.\nExit-file status: employed, pending written notice. Do not roster or pay further shifts.",
-     ["note"]="The shift is finished and the pay has gone out. The file keeps {P2} employed until the posted form comes back, with strict instructions not to employ them."
+     ["kind"]="Mop",
+     ["title"]="Store mop, marked {P1}",
+     ["observation"]="A mop stood in its bucket by the unit doors, stale marked {P1}.",
+     ["source"]="The water is grey and not yet dried in the wringer.",
+     ["note"]="Somebody worked this shift. The pay says the job had ended.",
+     ["wear"]="fair"
     },
     ["review"]={
      ["kind"]="notepad",
@@ -434,13 +442,13 @@ local scenarios={
      ["from"]="response",
      ["to"]="claim",
      ["kind"]="recontextualises",
-     ["text"]="The pay voucher follows the logged telephone notice while the authorised form is still in the post."
+     ["text"]="The pay voucher closes the job while the mop water by the unit doors is still grey in the wringer."
     },{
      ["requires"]={"response","review"},
      ["from"]="review",
      ["to"]="response",
      ["kind"]="corroborates",
-     ["text"]="The returned form confirms the earlier notice, completed shift and received pay."
+     ["text"]="The returned form confirms the earlier notice and the shift the wet mop finished."
     },{
      ["requires"]={"claim","response","review"},
      ["from"]="review",
@@ -468,11 +476,12 @@ local scenarios={
      ["note"]="The belt is urgent, but cannot leave until the place it has not reached signs for it. The receipt copies at {B} ought to show how anyone escaped that sentence."
     },
     ["response"]={
-     ["kind"]="notebook",
-     ["title"]="Advance receipt / {CODE}",
-     ["observation"]="A receipt with STILL AT DESK added beneath the foreman signature.",
-     ["source"]="{DATE2}\n{P1}, foreman: signing destination receipt in advance solely to release the belt. Belt still at holding desk; I will carry it back.\n{P2}, desk: signed receipt supplied, issue permitted.\nDo not alter the printed word RECEIVED.",
-     ["note"]="{P1} signed for the belt before taking it and wrote that down. The desk accepted the signature provided the printed lie remained tidy."
+     ["kind"]="Ratchet",
+     ["title"]="Mill-part ratchet, marked {P1}",
+     ["observation"]="A ratchet left in the delivery bay with mill parts, grip stamped {P1}.",
+     ["source"]="The parts carry a HOLD - DO NOT RELEASE tie that has been cut.",
+     ["note"]="The parts were released. Something says they should not have been.",
+     ["wear"]="fair"
     },
     ["review"]={
      ["kind"]="receipt",
@@ -487,13 +496,13 @@ local scenarios={
      ["from"]="response",
      ["to"]="claim",
      ["kind"]="disputes-delivery",
-     ["text"]="The routing sheet releases nothing until the destination signs for it. The receipt is signed while the belt is still at the desk, and {P1} wrote that on it."
+     ["text"]="The routing sheet releases nothing until the destination signs for it. The parts sit in the bay with their HOLD tie cut and a ratchet left beside them."
     },{
      ["requires"]={"response","review"},
      ["from"]="review",
      ["to"]="response",
      ["kind"]="corroborates",
-     ["text"]="The repair return confirms the belt arrived after that signature and was fitted to restart the line."
+     ["text"]="The repair return confirms the held parts moved after that signature and were fitted to restart the line."
     },{
      ["requires"]={"claim","response","review"},
      ["from"]="review",
@@ -524,11 +533,12 @@ local scenarios={
      ["note"]="Food delivered, food unopened, meals still expected. The kitchen must have found some way through the requisitions at {B}, or served the guests a very well-counted cupboard."
     },
     ["response"]={
-     ["kind"]="notebook",
-     ["title"]="Kitchen requisition / {CODE}",
-     ["observation"]="A kitchen requisition with the same room named under FROM and TO.",
-     ["source"]="{DATE2}\n{P1}: requisition received tins for tonight service. Transfer from store stock to kitchen stock. Both shelves are in same storeroom.\n{P2}, accounts: treat as internal delivery, two handling units. Cases may be opened once issued.",
-     ["note"]="The tins can cross from one shelf to another if it is called a delivery. There is a handling charge for that distance. At least the case can then be opened."
+     ["kind"]="GridlePan",
+     ["title"]="Diner griddle, marked {P1}",
+     ["observation"]="The diner griddle, cold, its handle tagged {P1}.",
+     ["source"]="Its gas bayonet is capped, and crates of food stand beside it.",
+     ["note"]="Food arrived for a kitchen that could not cook it.",
+     ["wear"]="poor"
     },
     ["review"]={
      ["kind"]="receipt",
@@ -543,13 +553,13 @@ local scenarios={
      ["from"]="response",
      ["to"]="claim",
      ["kind"]="recontextualises",
-     ["text"]="The requisition converts the held supplier goods into an internal delivery so their cases can be opened."
+     ["text"]="The requisition converts the held supplier goods into an internal delivery, while the diner griddle stands cold with its gas capped."
     },{
      ["requires"]={"response","review"},
      ["from"]="review",
      ["to"]="response",
      ["kind"]="corroborates",
-     ["text"]="The settlement confirms the same goods reached service and explicitly rules out a second supplier shipment."
+     ["text"]="The settlement confirms the same goods reached the cold griddle and explicitly rules out a second supplier shipment."
     },{
      ["requires"]={"claim","response","review"},
      ["from"]="review",
