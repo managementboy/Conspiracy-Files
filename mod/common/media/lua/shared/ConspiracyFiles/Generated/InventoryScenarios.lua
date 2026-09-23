@@ -8,6 +8,15 @@ local businesses={
 local function document(kind,title,observation,source,note)
  return {kind=kind,title=title,observation=observation,source=source,note=note}
 end
+-- The middle record is a thing, not a page. See AdministrativeScenarios for
+-- why, and for the four rules an object anchor must satisfy: it must be
+-- rule-eligible (ObjectRules), it must carry the case person's mark or it is
+-- noise, it must not claim more than that mark, and its own name must never
+-- carry the case reference - a code stencilled on a padlock is the mod writing
+-- on the world.
+local function object(kind,title,observation,source,note,wear)
+ return {kind=kind,title=title,observation=observation,source=source,note=note,wear=wear}
+end
 -- One optional source is a concrete extra observation, never a replacement
 -- ending.  Keys and photographs show only their visible marking or image; the
 -- surrounding source chain still establishes what happened.
@@ -70,13 +79,10 @@ Unit 14: dresser, four dining chairs, six cartons. Dresser: left handle chipped.
 Both units remain chargeable pending clearance inspection.
 Duplicate-inventory enquiries and retained removal slip: {B}.]],
      "Two units, the same damaged handle, two rents. I want to see a removal slip before I start believing in a second dresser."),
-    response=document("letter","Tenant's removal copy / {CODE}",
-     "A removal slip with a complaint written across the back.",
-     [[{DATE2} / {CODE}
-{P2}: I moved everything from 6 into 14 when the roof leaked, before this bill was made. You watched us carry it. Six is empty. Please stop renting me the puddle.
-{P1}
-Desk reply: transfer acknowledged. Only the inspection clerk may clear the old unit.]],
-     "{P1} says the load moved because of a leak. {P2}'s reply accepts the transfer and still leaves the old unit open. Apparently the puddle needs an appointment."),
+    response=object("HobbyHorse","Hobby horse, marked {P1}",
+     "A child's hobby horse tagged {P1}, inventoried in two units at once.",
+     "Its rocker is split; only one of it exists.",
+     "One load was listed twice, or two loads were never here.","poor"),
     review=document("receipt","Empty-unit clearance / {CODE}",
      "An inspection receipt. EMPTY is underlined hard enough to tear the carbon.",
      [[U-STORE IT / {DATE3}
@@ -86,8 +92,8 @@ Do not refund at desk: a closed unit is not a closed account.]],
      "The inspection records one load and an empty old unit. A credit is promised for the next statement. Even empty space gets paid before it gets believed."),
    },
    findings={
-    "Two units are inventoried with the same damaged dresser. The complaint has one load, moved once, and an old file nobody closed.",
-    "The inspection backs the complaint: unit 6 was empty and unit 14 held the transferred load. The remedy was another statement to wait for.",
+    "Two units are inventoried with the same damaged dresser. Only one split-rockered horse exists, moved once, on an old file nobody closed.",
+    "The inspection backs what the single horse implies: unit 6 was empty and unit 14 held the transferred load. The remedy was another statement to wait for.",
     "I can account for the duplicate inventory: one move, two open unit files, two rents. The inspection ordered a credit; I haven't found evidence that the money came back.",
    },
   },
@@ -107,14 +113,10 @@ Do not refund at desk: a closed unit is not a closed account.]],
 Contents-protection charge entered for both accounts.
 Audit queries: retained forms at {B}.]],
      "Two sewing machines could be alike. Two clerks calling the missing pedal a foot thing would be a more impressive coincidence."),
-    response=document("notepad","Clerk's correction request / {CODE}",
-     "A pencil note with the word TEMPORARY boxed twice.",
-     [[{DATE2} / {CODE}
-{P2}, I copied 6 onto 14 to get the overdue sheet off the list. I was going to replace it after counting. Fourteen was empty when I last unlocked it.
-Please remove the protection charge before the next bill.
-{P1}
-Reply: no deletion without a signed recount.]],
-     "{P1} admits copying the list to meet a deadline. The correction now needs the count the original charge managed without."),
+    response=object("LightBulb","Loose bulb, marked {P1}",
+     "A single loose bulb in unit 14, its carton initialled {P1}.",
+     "The unit is otherwise swept empty.",
+     "The stock list describes contents nothing here accounts for.","good"),
     review=document("receipt","Recount adjustment / {CODE}",
      "A recount form with the contents total changed to zero.",
      [[U-STORE IT / {DATE3}
@@ -124,8 +126,8 @@ Adjustment authorised: {P2}.]],
      "One real inventory, one empty unit. The false contents are removed. The on-time paperwork gets to keep its clean record."),
    },
    findings={
-    "The overdue form lists contents for unit 14. The correction request has that unit empty and its list copied off another sheet.",
-    "The recount confirms the empty unit described in the request, and {P2} cancels the invented stock and charge.",
+    "The overdue form lists contents for unit 14. The unit holds one loose bulb and nothing the list describes.",
+    "The recount confirms the empty unit, and {P2} cancels the invented stock and charge.",
     "The second load existed on a copied form. That was enough to produce a charge, though not enough to cancel one. The adjustment settles the stock; it doesn't tell me whether the earlier bill was paid.",
    },
   },
@@ -148,13 +150,10 @@ Return {CODE}: room 14 occupied, guest name SUNSTAR STOCK.
 Room-use target met. No cash receipt attached.
 Query copies and the maintenance sketch retained at {B}.]],
      "Sunstar Stock has a room but no receipt. Either the motel has started holidaying its own sheets or somebody owes it money."),
-    response=document("notebook","Linen cupboard sketch / {CODE}",
-     "A shelf sketch pasted into a stock book. STORE is written over an older 14.",
-     [[{DATE2} / {CODE}
-Linen cupboard: internal store number 14. Shelving full; no bed or guest access.
-{P1}: why is this on my room-use return?
-{P2}: instructions say count every occupied room. Leave the linen where it is.]],
-     "The sketch calls 14 a cupboard. {P2}'s answer treats shelves full of sheets as occupancy. I suppose none of the guests complained about the view."),
+    response=object("ScissorsBlunt","Housekeeping scissors, marked {P1}",
+     "Blunt housekeeping scissors in room 14, handle taped {P1}.",
+     "The shelves hold folded linen, not a made bed.",
+     "A let room, or a cupboard somebody counted as one.","fair"),
     review=document("receipt","Room-count adjustment / {CODE}",
      "A correction attached to an occupancy return, with the revenue box left unchanged.",
      [[SUNSTAR MOTEL / {DATE3}
@@ -163,7 +162,7 @@ Original return remains filed as submitted. Do not amend the target report witho
      "The correction removes a guest who was never there. The target report stays put until someone volunteers to make it worse."),
    },
    findings={
-    "The occupancy return counts 14 as a let room. The stock book has it holding folded sheets.",
+    "The occupancy return counts 14 as a let room. The room itself holds folded linen and housekeeping scissors.",
     "The correction accepts that 14 was storage and removes it from guest occupancy, but leaves the original target report awaiting authorisation.",
     "There was no hidden guest room in these records. A cupboard helped Sunstar meet its room-use target. The room count was corrected; the flattering report was still waiting for permission to become less flattering.",
    },
@@ -184,13 +183,10 @@ Original return remains filed as submitted. Do not amend the target report witho
 Location query and contractor's retained job card: {B}.
 Payment approved: {P2}.]],
      "The room number was clear enough to pay. The work description was clear enough to staple shut."),
-    response=document("letter","Contractor's job card / {CODE}",
-     "A job card with a small grease drawing of an extractor fan on the reverse.",
-     [[Copy sent {DATE2} / {CODE}
-Job 14: diner extractor belt replaced before the attached bill was issued. Tested over kitchen range with {P1} present.
-Fourteen is my job number. I do not know your room numbers.
-Please stop sending me guest-room queries.]],
-     "The contractor puts the work over the diner's range. Fourteen belongs to the job. It seems the bill found it a room."),
+    response=object("OldDrill","Contractor's drill, marked {P1}",
+     "A contractor's drill left at the diner, case stencilled {P1}.",
+     "Its bit is loaded with extractor ducting swarf.",
+     "The work happened. Room 14 is not where it happened.","fair"),
     review=document("notepad","Maintenance account correction / {CODE}",
      "An accounts correction with ROOM crossed out and JOB written in its place.",
      [[SUNSTAR MOTEL / {DATE3}
@@ -200,8 +196,8 @@ Original form retained: replacement stationery not approved.]],
      "The diner got its repair and accounts got the right department. The form that caused the mistake has been spared the expense of retirement."),
    },
    findings={
-    "The bill pays for work carried out in room 14. The contractor's copy has the same job done on the diner extractor.",
-    "{P1}'s check supports the contractor's account of a working diner extractor; accounts moves the expense to the diner.",
+    "The bill pays for work carried out in room 14. The contractor's drill is at the diner, its bit full of extractor swarf.",
+    "{P1}'s check supports what the drill shows of a working diner extractor; accounts moves the expense to the diner.",
     "I can place the repair at Sunstar's diner. Accounts paid for an imaginary room because a job number landed in the wrong box, then corrected the account while keeping the form.",
    },
   },
@@ -224,13 +220,10 @@ Account {CODE} / {P1}: rent continues. Removal notice received; counter receipt 
 An empty unit remains let until the key is accounted for.
 Retained return record and billing enquiries: {B}.]],
      "They received the notice and kept the rent running. Leaving was apparently the easy part of leaving."),
-    response=document("letter","Key-return complaint / {CODE}",
-     "A letter with the drop-box instructions copied along its bottom edge.",
-     [[{DATE2} / {CODE}
-I cleared the unit before your demand and put the tagged key through your box as instructed. {P2} helped unload the last chair and saw me post it.
-The box did not offer a receipt. Please ask it again before billing me.
-{P1}]],
-     "{P1} names a witness and the return box. The demand wanted a counter receipt for something returned when the counter was shut."),
+    response=object("KeyPadlock","Unit padlock, marked {P1}",
+     "The unit padlock, re-keyed, its tag still reading {P1}.",
+     "The old barrel sits beside it in the counter tray.",
+     "The key came back. The rent demand says it did not.","good"),
     review=document("notebook","Return-box reconciliation / {CODE}",
      "A key-room log with an envelope taped beside the entry.",
      [[U-STORE IT / {DATE3}
@@ -240,8 +233,8 @@ Drop-box receipts remain available at the counter during opening hours.]],
      "They found the key and accepted the leaving date. The new instruction sends the after-hours tenant straight back to the closed counter."),
    },
    findings={
-    "The rent demand rests on a key never returned. The complaint has it handed across the counter, in front of a witness.",
-    "The key log corroborates that route and the witness, then orders a refund from the departure date.",
+    "The rent demand rests on a key never returned. The unit padlock is re-keyed and its old barrel is in the counter tray.",
+    "The key log corroborates that return, then orders a refund from the departure date.",
     "The tenant left and returned the key. An unsorted envelope kept the lease charging until the inspection caught up. I have the refund order, but no evidence that {P1} collected it.",
    },
   },
@@ -261,13 +254,10 @@ Drop-box receipts remain available at the counter during opening hours.]],
 Do not discard contents.
 Retained inspection and stock records: {B}.]],
      "{P1} says they've left; twelve cartons say the unit hasn't. The notice is charging the name it already has."),
-    response=document("notepad","Promotional-stock transfer / {CODE}",
-     "An internal stock note with a small flyer folded between its pages.",
-     [[{DATE2} / {CODE}
-{P2}: checked twelve cartons in vacated unit. Our three-for-two promotional leaflets and blank rental forms, moved there after {P1} left.
-Keep dry until the promotion ends. No staff-storage account code available.
-Bill query sent to accounts.]],
-     "The cartons belong to U-Store It. Its own rental forms have found somewhere to stay without opening an account."),
+    response=object("PenSpiffo","Promotional pens, marked {P1}",
+     "A tray of the office's own promotional pens in the unit, docket {P1}.",
+     "The tray is dusted on top and clean beneath.",
+     "Somebody stored office stock here after the tenant went.","good"),
     review=document("receipt","Tenant account release / {CODE}",
      "A corrected statement with the carton count left in place and the debtor changed.",
      [[U-STORE IT / {DATE3}
@@ -277,7 +267,7 @@ Authorisation for earlier billing: [blank].]],
      "The stock gets to stay and {P1} gets to stop paying for it. Nobody has put a name in the box for whoever thought that needed explaining."),
    },
    findings={
-    "The notice charges {P1} for a unit still in use. The stock note has the office's own leaflets in it, carried there after they left.",
+    "The notice charges {P1} for a unit still in use. The unit holds a dusted tray of the office's own promotional pens.",
     "The corrected statement confirms the office stock and moves its storage cost off the former tenant's account.",
     "The lease outlasted the tenant because U-Store It filled the empty unit itself. The stock stayed; the tenant's charges were cancelled. The earlier bills still have no author to ask about them.",
    },
@@ -300,13 +290,10 @@ Load {CODE}: dispatch gross exceeds receiving gross by 12,000 lb.
 Driver {P1}: payment held pending shortage explanation. Trailer field on receiving ticket blank.
 Retained weigh tickets and driver enquiries: {B}.]],
      "A blank trailer box has become a shortage, and the shortage has become {P1}'s wages. That's a quick journey for an empty box."),
-    response=document("letter","Driver's weighbridge account / {CODE}",
-     "A letter with a pencil drawing of a truck separated from its trailer.",
-     [[{DATE2} / {CODE}
-At receiving, {P2} told me to leave the loaded trailer off the bridge and weigh the tractor first. The second weight was never taken.
-Trailer is still sealed in the yard. Weigh that before you take it out of my pay.
-{P1}]],
-     "The driver describes an unfinished two-part weighing, with the load still available to check. A useful alternative to weighing their pay packet."),
+    response=object("TireIron","Trailer iron, marked {P1}",
+     "A tire iron chained inside the loaded trailer, collar stamped {P1}.",
+     "The trailer is loaded and its yard chocks are still in.",
+     "The load stood in the yard. A weighing says it travelled.","fair"),
     review=document("receipt","Sealed-load reweigh / {CODE}",
      "A fresh weigh ticket with the original seal number copied beneath it.",
      [[McCOY LOGGING CO. / {DATE3}
@@ -316,8 +303,8 @@ Clear shortage file. Driver-pay hold requires separate payroll release.]],
      "The complete vehicle matches the dispatch weight. The shortage file can close now. Apparently the pay hold is travelling on a different trailer."),
    },
    findings={
-    "The short-load report weighs the load light. The driver's account has the loaded trailer standing in the yard, never put on the scale.",
-    "The reweigh checks the same sealed load and accounts for the difference described by the driver. Payroll has yet to release the hold.",
+    "The short-load report weighs the load light. The loaded trailer is still chocked in the yard with its iron chained inside.",
+    "The reweigh checks the same sealed load and accounts for the difference the chocked trailer implies. Payroll has yet to release the hold.",
     "Nothing went missing from this load. The second weighing omitted the loaded trailer, then charged the difference against a driver. The corrected weight clears the cargo; it does not show that {P1} was paid.",
    },
   },
@@ -337,12 +324,10 @@ Clear shortage file. Driver-pay hold requires separate payroll release.]],
 Deduct discrepancy from carrier invoice pending explanation.
 Driver: {P1}. Retained load notes and deduction enquiries: {B}.]],
      "The lumber count is unchanged, but the invoice has lost weight too. I'd like to know what was on the truck besides lumber."),
-    response=document("notebook","Mill motor receipt / {CODE}",
-     "A mill repair log with an unloading sketch and two names under it.",
-     [[Copy made {DATE2} / haul {CODE}
-Before delivery, unload borrowed 1,000 lb motor from {P1}'s lumber truck for stopped mill line. Received and fitted by {P2}; motor test satisfactory.
-Load sheet describes lumber only. Motor travelled as urgent repair equipment, no separate manifest.]],
-     "The repair log puts a thousand-pound motor on the journey and takes it off at the mill. Urgent equipment apparently travels lighter on forms."),
+    response=object("Generator","Lifted mill motor, marked {P1}",
+     "A mill motor standing off the trailer, frame plate scribed {P1}.",
+     "Its mounts are clean and the lifting sling is still rigged.",
+     "A thousand pounds left the load. This is the shape of it.","fair"),
     review=document("receipt","Carrier deduction query / {CODE}",
      "A reconciliation attached to a returned request for payment.",
      [[McCOY LOGGING CO. / {DATE3}
@@ -351,8 +336,8 @@ Cancel shortage claim. Repayment of deducted haulage must be requested on the ca
      "The load is accounted for. To get paid for bringing it, the carrier has been given another thing to deliver."),
    },
    findings={
-    "The manifest carries lumber only, and a thousand pounds went missing between weighings. The mill receipt has a motor lifted off on the way.",
-    "The reconciliation matches the motor receipt to both weighings and cancels the shortage claim, but sends repayment into a separate form.",
+    "The manifest carries lumber only, and a thousand pounds went missing between weighings. A mill motor stands off the trailer with its sling still rigged.",
+    "The reconciliation matches the lifted motor to both weighings and cancels the shortage claim, but sends repayment into a separate form.",
     "McCoy's motor left the truck at the mill; its lumber reached the destination. The wrong manifest made that useful stop look like missing cargo. The shortage is cleared, but the deducted money is still a request.",
    },
   },
@@ -374,12 +359,10 @@ Account {CODE}: 20 gallons charged to truck 8. Supplied in approved fuel cans; s
 Attached workshop notice: truck 8 immobilised since {DATE0}.
 Account query copies: {B}.]],
      "Truck 8 couldn't move, but its account could buy twenty gallons. The receipt says cans. That's a route worth following before accusing the truck."),
-    response=document("notebook","Relief-driver fuel entry / {CODE}",
-     "A driver's notebook with two truck numbers connected by an arrow.",
-     [[{DATE2} / {CODE}
-{P1}: fuel from the attached Fossoil receipt went into relief truck 3. {P2} watched the transfer. Eight's card is the only card the office supplied.
-Requested a card for 3. Office says cards follow the assigned truck, not temporary drivers.]],
-     "{P1} names truck 3 and a witness for the fuel. The office follows the assigned truck so closely it has left the moving one behind."),
+    response=object("PipeWrench","Workshop wrench, marked {P1}",
+     "A pipe wrench across the stripped truck's block, grip taped {P1}.",
+     "The truck is in pieces and its tank is out on the floor.",
+     "This truck bought fuel it has nowhere to put.","fair"),
     review=document("notepad","Fuel-account adjustment / {CODE}",
      "A checked account query with the vehicle field amended but the card number unchanged.",
      [[{DATE3} / {CODE}
@@ -389,7 +372,7 @@ New-card request returned: relief allocation has no permanent vehicle number.]],
      "The expense reaches the right truck. A card for that truck is still waiting for it to become permanent enough to need fuel."),
    },
    findings={
-    "The receipt buys fuel on a truck that is in pieces in the workshop. The driver's entry has that card paying for cans carried out to truck 3.",
+    "The receipt buys fuel on a truck that is in pieces in the workshop. The truck lies stripped with its tank on the floor, and truck 3 ran that week.",
     "The account check corroborates the transfer to truck 3 and amends the expense, while rejecting its new-card request.",
     "The workshop truck did not make a secret trip. Its card paid for fuel carried to truck 3. The accounts now know that, but the replacement truck still has no card of its own in these records.",
    },
@@ -410,13 +393,10 @@ New-card request returned: relief allocation has no permanent vehicle number.]],
 Collection in cans authorised by {P2}.
 Retained account queries and issue record: {B}.]],
      "The van was dismantled before it bought petrol. The fuel left in cans, which seems more promising than looking for a rebuilt van."),
-    response=document("letter","Generator-fuel explanation / {CODE}",
-     "A short explanation written on the back of a pump transaction copy.",
-     [[{DATE2} / {CODE}
-{P2}, the fifteen gallons went into the workshop generator. I signed for the cans and filled it myself.
-Your form would not take GENERATOR in the vehicle box. You told me to use the old van number until an equipment account exists.
-{P1}]],
-     "The generator needed petrol and the form needed a van. {P1} says the clerk found a way to supply both."),
+    response=object("Generator_Yellow","Yard generator, marked {P1}",
+     "A yard generator with a fuel log clipped to it, signed {P1}.",
+     "Its tank is full and the van bay beside it is empty.",
+     "The fuel went somewhere. The van it was booked to is gone.","good"),
     review=document("notebook","Generator issue check / {CODE}",
      "A fuel issue book with an account-closure note clipped over the cover.",
      [[{DATE3} / {CODE}
@@ -426,7 +406,7 @@ No further purchases to be entered against a dismantled vehicle.]],
      "The issue check finds the fuel in the generator's records and closes the van again. It bans the workaround without supplying the account they needed."),
    },
    findings={
-    "The account is open for a van that no longer exists. The explanation has fifteen gallons going into a generator, because the form insisted on a vehicle number.",
+    "The account is open for a van that no longer exists. A yard generator stands fuelled beside an empty van bay, its log signed on a vehicle number.",
     "The issue check matches the quantity and corroborates {P2}'s instruction, then closes the borrowed account again.",
     "The van stayed dismantled. Fifteen gallons went to a generator under its number because the form required a vehicle. They closed the false account; the equipment account was still only a request.",
    },
