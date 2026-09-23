@@ -160,6 +160,29 @@ assert(idRow:find("another person's card, kept", 1, true), idRow)
 assert(cardRow:find("names somebody else", 1, true), cardRow)
 assert(cardRow:find("connection stops there", 1, true), "carrying a card is not meeting someone")
 
+-- A PRINTED OCCUPATION IS TRANSCRIBED, NEVER PROMOTED. The owner's
+-- `Rolf White (Journalist)` playtest turns on this: the label on the card is
+-- the only thing anybody has read, so it is repeated exactly as printed and
+-- nothing else is added. It must not become "a journalist", "worked as",
+-- "employed by", or any confirmed role, and it must not survive only in the
+-- fixture's input while being dropped from what the player is shown.
+--
+-- 2026-09-23: the fixture already fed a printed occupation in and asserted
+-- nothing about it, so both halves of the boundary - that it survives, and
+-- that it stays a quotation - were unguarded.
+assert(cardRow:find("(Plumber)", 1, true),
+    "the printed occupation must reach the player exactly as printed: " .. cardRow)
+assert(idRow:find("(Plumber)", 1, true),
+    "and it stays attached to the card when the ID row names what shared the wallet")
+for _, claim in ipairs({ "is a plumber", "works as", "worked as", "employed",
+                         "employment", "occupation:", "profession:", "by trade" }) do
+    assert(not cardRow:lower():find(claim, 1, true),
+        "a printed label became an employment claim (" .. claim .. "): " .. cardRow)
+end
+-- And the body it came off is still nobody, occupation or not.
+assert(cardRow:find("The body remains unidentified", 1, true),
+    "a card with a trade on it still does not identify the corpse")
+
 -- But a ticket with the SAME name as the ID beside it is the bearer's own, not
 -- "another person's card" (Linux wallet check, 2026-09-11: Linnie Weis's own
 -- speeding ticket was described as somebody else's).

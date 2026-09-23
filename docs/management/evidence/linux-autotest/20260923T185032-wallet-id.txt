@@ -1,0 +1,10 @@
+Linux wallet ID check 20260923T185032: FAIL (recorded, but without its corpse provenance; loose ID not recorded)
+source: 33c9180
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+wallet ID: 'ID Card: Laura Grantham'; wallet stamp after carrying it off: corpse-wallet:874911401
+record summary: nil
+record text:
+  nil
+loose ID on a body: FAIL: 'ID Card: Laura Grantham' was on screen and not recorded
+errors inside the mod: 0
+screenshot: dev/eval/linux/runs/20260923T185032-wallet.png (not committed)

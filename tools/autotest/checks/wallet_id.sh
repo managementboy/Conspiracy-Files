@@ -38,7 +38,13 @@ done
 
 loose_result="not exercised: no body carried a loose ID"
 if [ "$loose" != none ]; then
-    ev 'return CFWallet.showLooseBody()' >/dev/null; sleep 4
+    ev 'return CFWallet.showLooseBody()' >/dev/null
+    # Wait for the row to be DRAWN, not for a guessed number of seconds.
+    # selectContainer does not repopulate the pane in the same frame, so the
+    # old sleep asserted against whatever container happened to be showing.
+    wait_true 20 "CFWallet.onScreen([[$loose]])" \
+        || say "note: '$loose' never appeared in a visible pane"
+    sleep 3
     row="$(ev "return CFWallet.row([[$loose]])")"
     if grep -q "corpse" <<<"$(cut -f1 <<<"$row")"; then loose_result="PASS: '$loose' recorded as $(cut -f1 <<<"$row")"
     else loose_result="FAIL: '$loose' was on screen and not recorded"; fi
@@ -59,7 +65,9 @@ wait_true 30 'tostring(select(2,CFWallet.walletCarried()))~="nil"' \
 stamp="$(ev 'return CFWallet.walletCarried()' | cut -f2)"
 ev 'return CFWallet.holdWallet()' >/dev/null
 wait_true 20 'CFWallet.openWallet()' || abort "no icon for the held wallet"
-sleep 4
+wait_true 20 "CFWallet.onScreen([[$wallet]])" \
+    || say "note: '$wallet' never appeared in a visible pane"
+sleep 3
 row="$(ev "return CFWallet.row([[$wallet]])")"
 summary="$(cut -f1 <<<"$row")"; detail="$(cut -f2- <<<"$row")"
 "$PZ" shot "$RUNS/$id-wallet.png" >/dev/null 2>&1

@@ -41,9 +41,46 @@ function W.spawnBodies(n)
     return zs:size()
 end
 
+-- Selecting a container is only half of what a player does: the loot window
+-- has to be OPEN. The identity observer reads what an inventory pane actually
+-- draws, and a hidden window draws nothing, so a check that only selects
+-- proves nothing about the observer. This cost the 2026-09-23 run a false
+-- FAIL: every row the observer wanted was in a container it was never given a
+-- chance to see, because `getPlayerLoot(0):getIsVisible()` was false
+-- throughout. Nothing about the observer is relaxed here; the check simply
+-- stops testing it through a closed window.
+local function show(button)
+    local loot = getPlayerLoot(0)
+    loot:selectContainer(button)
+    loot:setVisible(true)
+    return true
+end
+
+-- Is this item REALLY on screen? `selectContainer` does not repopulate
+-- `pane.items`; the pane rebuilds them on a later render, so reading the pane
+-- in the same frame still shows the previous container. Every wait below asks
+-- this instead of sleeping a guessed number of seconds.
+local function paneShows(pane, name)
+    if not (pane and type(pane.items) == "table") then return false end
+    for _, row in ipairs(pane.items) do
+        local item = instanceof(row, "InventoryItem") and row
+            or (type(row) == "table" and row.items and row.items[1])
+        if item and item:getDisplayName() == name then return true end
+    end
+    return false
+end
+
+function W.onScreen(name)
+    local loot = getPlayerLoot(0)
+    if loot:getIsVisible() and paneShows(loot.inventoryPane, name) then return true end
+    local inv = getPlayerInventory(0)
+    if inv:getIsVisible() and paneShows(inv.inventoryPane, name) then return true end
+    return false
+end
+
 function W.openBodies()
     local loot, list = bodies()
-    for _, b in ipairs(list) do loot:selectContainer(b) end
+    for _, b in ipairs(list) do show(b) end
     return #list
 end
 
@@ -68,7 +105,7 @@ end
 
 function W.showLooseBody()
     if not (W.loose and W.loose.button) then return false, "no loose body found" end
-    getPlayerLoot(0):selectContainer(W.loose.button)
+    show(W.loose.button)
     return W.loose.name
 end
 
@@ -79,7 +116,7 @@ end
 function W.takeWallet()
     if not (W.wallet and W.wallet.item and W.wallet.button) then return false, "no wallet found" end
     local p = getPlayer()
-    getPlayerLoot(0):selectContainer(W.wallet.button)
+    show(W.wallet.button)
     ISTimedActionQueue.add(ISInventoryTransferAction:new(p, W.wallet.item, W.wallet.button.inventory, p:getInventory()))
     return true
 end
@@ -100,6 +137,7 @@ end
 function W.openWallet()
     if not (W.wallet and W.wallet.item) then return false, "no wallet found" end
     local inv = getPlayerInventory(0)
+    inv:setVisible(true)
     inv:refreshBackpacks()
     local target = W.wallet.item:getInventory()
     for _, b in ipairs(inv.backpacks) do
