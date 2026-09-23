@@ -1,0 +1,24 @@
+Linux Fitness Instructor world-evidence opening: FAIL
+source: a4c59b4
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+  opening clue: "Home assessment house key / MC-998" held=true type=Base.Key1 isKey=true
+  in-game minutes: world was 120 at spawn, clue present at 123 (elapsed 3)
+  key: keyId=79252202 doors near the house=7 matching=0
+  address: key target building=10977704480342044 "202 E Maple St"; survivor building=10977704480342044 "202 E Maple St"; case records "Building at 10836, 10141 [t3:10977704480342044]"
+  point: the key belongs to the building the survivor starts in
+  finding 1: "Home assessment house key / MC-998" status=placed members=0 itemsInWorld=0
+  finding 2: "Home assessment appointment / MC-998" status=deferred members=0 itemsInWorld=0
+  finding 3: "Feed sack from the residence / MC-998" status=deferred members=0 itemsInWorld=0
+  finding 4: "Spent protective-equipment hoard / MC-998" status=indexed members=9 itemsInWorld=0
+  finding 5: "Cooler in a nearby vehicle / MC-998" status=deferred members=0 itemsInWorld=0
+  finding 6: "Access memo / 7C-41" status=indexed members=0 itemsInWorld=0
+  vehicle: confirmed stable scenes=0 clueFive=yes status=deferred signature=none
+  point 6: with no confirmed scene, clue five is deferred - the first four are not blocked by it
+  reload: placed targets and scene signatures are unchanged (1=placed@10839,10151,0)
+  reload: waiting assignments changed (expected where an indexed plan falls back)
+    all before: 1=placed@10839,10151,0 2=deferred@none 3=deferred@none 4=indexed@none 5=deferred@none 6=indexed@none
+    all after:  1=placed@10839,10151,0 2=deferred@none 3=deferred@none 4=deferred@none 5=deferred@none 6=deferred@none
+
+NOT EXERCISED: the PPE finding is assigned but its items are not in the world yet (status above)
+FAIL: no door near the starting house accepts the key (keyId 79252202, 7 doors examined)
+errors inside the mod: 0

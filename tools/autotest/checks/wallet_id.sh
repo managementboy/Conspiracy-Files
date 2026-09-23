@@ -68,7 +68,12 @@ wait_true 20 'CFWallet.openWallet()' || abort "no icon for the held wallet"
 wait_true 20 "CFWallet.onScreen([[$wallet]])" \
     || say "note: '$wallet' never appeared in a visible pane"
 sleep 3
-row="$(ev "return CFWallet.row([[$wallet]])")"
+# Address the wallet's OWN card, not a name. A corpse that carries a loose ID
+# and a wallet ID produces two items with the same display name, and a
+# by-name lookup then tests the wrong row - which is how this check reported a
+# provenance failure against correct wording on 2026-09-23.
+row="$(ev 'return CFWallet.walletCardRow()')"
+[ -n "$row" ] || row="$(ev "return CFWallet.row([[$wallet]])")"
 summary="$(cut -f1 <<<"$row")"; detail="$(cut -f2- <<<"$row")"
 "$PZ" shot "$RUNS/$id-wallet.png" >/dev/null 2>&1
 

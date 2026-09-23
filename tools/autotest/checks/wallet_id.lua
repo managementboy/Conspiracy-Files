@@ -147,9 +147,47 @@ function W.openWallet()
 end
 
 -- The evidence row for a name, if the observer recorded one.
+--
+-- BY NAME IS AMBIGUOUS, and the ambiguity is the normal case rather than a
+-- freak one: PZ names a body's documents after that body's identity, so a
+-- corpse carrying a loose ID card AND a wallet with an ID card produces two
+-- different items reading exactly the same. On 2026-09-23 this check reported
+-- "recorded, but without its corpse provenance" because the wallet assertion
+-- was applied to the LOOSE row, whose wording - "among a corpse's belongings"
+-- - is correct for an item lying on a body rather than inside a container.
+-- The product was right and the lookup was wrong.
+--
+-- Kept for the loose fixture, where a name is all there is to go on.
 function W.row(name)
     for _, r in ipairs(ConspiracyFiles.IdentityObserver.rows()) do
         if r.title == "Found " .. name then return r.summary, (r.detailText:gsub("\n+", " \\n ")) end
+    end
+    return nil
+end
+
+-- The row for THIS EXACT ITEM. IdentityObservations keys a record
+-- fullType..":"..itemID and publishes it as "identity:"..that, so an item the
+-- check is holding can be addressed directly with no guessing.
+function W.rowFor(item)
+    if not item then return nil end
+    local ok, id = pcall(function() return item:getID() end)
+    if not ok or type(id) ~= "number" then return nil end
+    local key = "identity:" .. tostring(item:getFullType()) .. ":" .. tostring(id)
+    for _, r in ipairs(ConspiracyFiles.IdentityObserver.rows()) do
+        if r.id == key then return r.summary, (r.detailText:gsub("\n+", " \\n ")) end
+    end
+    return nil
+end
+
+-- The ID card inside the carried wallet, which is the item the wallet leg is
+-- actually making a claim about.
+function W.walletCardRow()
+    if not (W.wallet and W.wallet.item) then return nil end
+    local inner = W.wallet.item:getInventory()
+    local items = inner and inner:getItems()
+    for i = 0, (items and items:size() or 0) - 1 do
+        local it = items:get(i)
+        if it:getFullType():find("IDcard", 1, true) then return W.rowFor(it) end
     end
     return nil
 end

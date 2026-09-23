@@ -60,4 +60,26 @@ end
 assert(waits>=2, "the driver waits for a drawn row "..waits.." time(s); both the "
     .."loose ID and the wallet ID must be waited for, not slept through")
 
+-- 4. The wallet's claim is made about the wallet's OWN card.
+--
+-- A by-name lookup is ambiguous, and ambiguously so in the normal case: PZ
+-- names a body's documents after that body's identity, so a corpse carrying a
+-- loose ID card and a wallet with an ID card yields two different items whose
+-- display names are identical. On 2026-09-23 this check reported "recorded,
+-- but without its corpse provenance" because the wallet assertion landed on
+-- the LOOSE row, whose wording - "among a corpse's belongings" - is exactly
+-- right for an item lying on a body rather than inside a container. The
+-- product was correct; the lookup picked the wrong row.
+--
+-- IdentityObservations keys a record fullType..":"..itemID and publishes it as
+-- "identity:"..that, so an item in hand can be addressed with no guessing.
+assert(lua:find("function W.rowFor",1,true),
+    "the check must be able to address a row by the item's own identity")
+assert(lua:find('"identity:" .. tostring(item:getFullType()) .. ":"',1,true),
+    "rowFor must build the published record key, not match on a display name")
+assert(lua:find("function W.walletCardRow",1,true),
+    "the wallet leg must resolve the card inside the carried wallet")
+assert(sh:find("CFWallet.walletCardRow()",1,true),
+    "the driver must assert provenance against the wallet's own card")
+
 print("PASS wallet id: the check opens the windows it selects into and waits for a drawn row")
