@@ -266,7 +266,10 @@ local function deliverOpening(api,id,source,expected)
         log("Opening clue remained in its starting-house container (placed item not found).")
         return
     end
-    local removed=pcall(function() source:RemoveItem(item) end)
+    -- ItemContainer's native B42 removal method is Remove.  RemoveItem was a
+    -- test-double invention and calling it here made the opening transaction
+    -- die immediately after successfully placing the clue.
+    local removed=pcall(function() source:Remove(item) end)
     local added,answer=false,nil
     if removed then added,answer=pcall(function() return inventory:AddItem(item) end) end
     local carried=false
@@ -1799,7 +1802,7 @@ local function relocation(api)
         local items=oldContainer:getItems()
         for i=0,items:size()-1 do
             local it=items:get(i); local md=it and it:getModData()
-            if md and md.cfPhysicalToken==a.physicalToken then oldContainer:RemoveItem(it); break end
+            if md and md.cfPhysicalToken==a.physicalToken then oldContainer:Remove(it); break end
         end
         if not newDestination:AddItem(newItem) then
             -- The old copy is already gone. Record the honest uncertainty

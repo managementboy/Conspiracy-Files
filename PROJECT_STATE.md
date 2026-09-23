@@ -1,5 +1,15 @@
 # Conspiracy-Files — Project State
 
+## Native opening-transfer hotfix — 2026-09-23
+
+`DEV-0.47.4-native-container-transfer` repairs the failure observed after the
+first real `Key1` was successfully placed in the starting house. The immediate
+delivery path called the test-only `ItemContainer:RemoveItem`; Build 42 exposes
+`ItemContainer:Remove`, so Kahlua failed before the key reached the survivor or
+the opening thought could be shown. Both opening delivery and later evidence
+relocation now use the native method, and the regression double deliberately
+has no `RemoveItem` alias.
+
 ## Immediate indexed-opening hotfix — 2026-09-23
 
 `DEV-0.47.3-immediate-indexed-opening` repairs the first native transaction

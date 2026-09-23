@@ -14,7 +14,10 @@ local function newFixture(profession,indexedOpening)
         local items={}; local c={items=items,getType=function() return "desk" end,getItems=function() return list(items) end,
             isExplored=function() return false end}
         function c:AddItem(item) if self.reject then return nil end; items[#items+1]=item; item.container=c; return item end
-        function c:RemoveItem(item)
+        -- Match the native B42 ItemContainer API exactly.  Do not add a
+        -- RemoveItem alias: that typo caused DEV-0.47.3 to pass this harness
+        -- and then fail in the live game.
+        function c:Remove(item)
             for i,value in ipairs(items) do
                 if value==item then table.remove(items,i); item.container=nil; return end
             end
