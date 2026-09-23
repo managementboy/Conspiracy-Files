@@ -29,6 +29,19 @@ assert(basemented.locations[1].bounds.z==-1,"a basemented building reports its r
 local ordinary=assert(N.fromResult(result(0)))
 assert(ordinary.locations[1].bounds.z==0,"a building without a basement is unchanged")
 
+local garageResult=result(0)
+garageResult.rows[#garageResult.rows+1]={kind="room",building="b1",ordinal=1,name="garagestorage"}
+local garage=assert(N.fromResult(garageResult))
+assert(garage.locations[1].excluded==true,
+    "a garage-only BuildingDef is not invented as a separate narrative address")
+
+local houseResult=result(0)
+houseResult.rows[#houseResult.rows+1]={kind="room",building="b1",ordinal=1,name="garage"}
+houseResult.rows[#houseResult.rows+1]={kind="room",building="b1",ordinal=2,name="livingroom"}
+local house=assert(N.fromResult(houseResult))
+assert(house.locations[1].excluded==false,
+    "a house with an attached garage remains a valid narrative site")
+
 -- Bounds are otherwise untouched.
 local b=basemented.locations[1].bounds
 assert(b.x1==10 and b.y1==20 and b.x2==18 and b.y2==28,"footprint preserved")

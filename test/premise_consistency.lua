@@ -107,7 +107,7 @@ end
 -- in both authored variants. Generated cases rebuild exactly under the current
 -- event-story revision; follow-up same-day dates are exercised separately by
 -- personal_story, so this deliberately checks only ordinary generated cases.
-assert(G.REVISION=="g16-dual-world-evidence-1")
+assert(G.REVISION=="g17-diegetic-immediate-opening")
 local seen,cases={},0
 for seed=1,400 do
     local case=G.generate(catalog,seed,opts)

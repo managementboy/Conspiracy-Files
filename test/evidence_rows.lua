@@ -47,6 +47,15 @@ assert(not object[1].summary:find("ClayPot",1,true),
     "the catalogue id must never reach the summary: "..object[1].summary)
 assert(object[1].summary=="Object found - Discovery 1",object[1].summary)
 
+-- The opening house key is a physical catalogue object too, but "Object
+-- found" made the survivor sound as if they could not identify a key.  The
+-- FILES surface should name the thing the survivor is holding.
+local key=Rows.build("evidence",runtimeWith({
+    {id="d1",title="Loan collection house key / TN-195",body="already in my pocket",kind="Key1"},
+}))
+assert(key[1].cfCarrier=="Brass key",key[1].cfCarrier)
+assert(key[1].summary=="Brass key - Discovery 1",key[1].summary)
+
 -- A document carrier does have a human phrase, and keeps it.
 local paper=Rows.build("evidence",runtimeWith({
     {id="d1",title="Dispatch copy / R-482",body="in a desk",kind="dispatch"},

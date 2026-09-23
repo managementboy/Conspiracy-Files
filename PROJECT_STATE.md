@@ -1,5 +1,30 @@
 # Conspiracy-Files — Project State
 
+## Diegetic immediate opening and property-site correction — 2026-09-23
+
+`DEV-0.47.5-diegetic-immediate-opening` moves the Fitness Instructor's
+inciting incident ahead of the neighbourhood scan. From the first playable
+startup frames, the survivor receives one real key for the house they occupy
+and thinks, “This opens the house. Why did I have access?” The later case
+transaction adopts that exact item instead of creating a second key.
+
+The opening now reads as the survivor's experience, not engine telemetry: the
+key was “already in my pocket when I came to,” and FILES identifies it as a
+brass key instead of “an object.” The key no longer carries an invisible lead
+to the second property. The appointment card is the first source that can name
+that address, with an explicit instruction to return the key and visit sheet.
+
+A live test also exposed a detached `garagestorage` BuildingDef at the 301 N
+Main St property being selected and marked as though it were an independent
+address. Nearby catalogue conversion now excludes garage-, garage-storage-,
+and shed-only BuildingDefs while retaining buildings that also contain a real
+room. This avoids inventing property identities until the mod has reliable
+parcel inheritance. Fresh saves are required: generator revision
+`g17-diegetic-immediate-opening` intentionally rejects earlier generated cases.
+Offline verification passes the 52-test core suite and the focused opening,
+story, catalogue, premise, and FILES regressions. Native acceptance of this
+specific build remains pending.
+
 ## Native opening-transfer hotfix — 2026-09-23
 
 `DEV-0.47.4-native-container-transfer` repairs the failure observed after the
@@ -65,7 +90,7 @@ scenes, a persisted pre-assignment scene catalogue, and a dedicated campaign UI
 remain future work.
 
 Fresh saves are required by design: generator schema `3` and revision
-`g16-dual-world-evidence-1` do not migrate older generated cases. Offline
+`g17-diegetic-immediate-opening` do not migrate older generated cases. Offline
 verification passes 52/52 tests and Project Zomboid's Kahlua compiler parses
 all 131 shipped Lua files. The verified package was built and installed locally;
 native-game timing, real-key, scene-stability, performance, readability, and fun

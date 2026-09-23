@@ -103,7 +103,11 @@ function Rows.build(section,runtime)
         -- what kind of thing it is rather than repeating the id.
         local carrier=require("ConspiracyFiles/Generated/EvidenceKinds").get(r.kind) or {}
         local what=carrier.label or "Evidence"
-        if carrier.capacity=="object" then what="Object found" end
+        if carrier.capacity=="object" then
+            -- A real starting-house key has a precise ordinary name. Calling it
+            -- merely "an object" made the opening read like engine telemetry.
+            what=r.kind=="Key1" and "Brass key" or "Object found"
+        end
         -- The subtitle is composed later, in PlaceIndex.decorate, because
         -- only there is it known whether the survivor remembers where this
         -- was found - and the place takes the slot the carrier name held.

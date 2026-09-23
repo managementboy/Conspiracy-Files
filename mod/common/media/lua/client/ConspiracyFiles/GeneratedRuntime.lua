@@ -237,6 +237,25 @@ local function playerHouse(player)
     return def and ("t3:"..tostring(def:getIDString())) or nil
 end
 
+local function playerIdentity(player)
+    local name,profession
+    local okD,descriptor=pcall(function() return player:getDescriptor() end)
+    if okD and descriptor then
+        local okN,fore=pcall(function() return descriptor:getForename() end)
+        local okS,sur=pcall(function() return descriptor:getSurname() end)
+        local parts={}
+        if okN and type(fore)=="string" and #fore>0 then parts[#parts+1]=fore end
+        if okS and type(sur)=="string" and #sur>0 then parts[#parts+1]=sur end
+        if #parts>0 then name=table.concat(parts," ") end
+        local okP,professionObject=pcall(function() return descriptor:getCharacterProfession() end)
+        if okP and professionObject then
+            local okI,id=pcall(function() return professionObject:getName() end)
+            if okI and type(id)=="string" then profession=string.lower(id) end
+        end
+    end
+    return name,profession
+end
+
 local function itemWithToken(container,token)
     local items=container and container.getItems and container:getItems()
     if not items then return nil end
@@ -245,6 +264,58 @@ local function itemWithToken(container,token)
         local md=item and item.getModData and item:getModData()
         if md and md.cfPhysicalToken==token then return item end
     end
+end
+
+local PRIMED_HOUSE="cfPrimedOpeningHouse"
+local FITNESS_OPENING_VOICE="This opens the house. Why did I have access?"
+
+local function primedOpening(inventory,house)
+    local items=inventory and inventory.getItems and inventory:getItems()
+    if not items then return nil end
+    for i=0,items:size()-1 do
+        local item=items:get(i)
+        local md=item and item.getModData and item:getModData()
+        if md and md[PRIMED_HOUSE]==house and not md.cfGeneratedId then return item end
+    end
+end
+
+-- The starting-house key is the inciting incident, not a reward for waiting
+-- through the neighbourhood catalogue.  Issue only this one real object from
+-- facts already loaded on the spawning player; the broad scan still builds the
+-- case and places every other clue.  A marker on the item makes retries and a
+-- save/reload before case attachment idempotent.
+function R.primeOpening()
+    if not allowed() then return true,"not available" end
+    local saved=ModData.get(TAG)
+    if saved and (saved.canonical or saved.campaign) then return true,"case already exists" end
+    local player=getPlayer and getPlayer()
+    if not player then return false,"player not ready" end
+    local house=playerHouse(player)
+    if not house then return false,"starting house not ready" end
+    local _,profession=playerIdentity(player)
+    if profession~="fitnessinstructor" then return true,"not a Fitness Instructor opening" end
+    local inventory=player.getInventory and player:getInventory()
+    if not inventory then return false,"inventory not ready" end
+    local existing=primedOpening(inventory,house)
+    if existing then return true,"opening already primed" end
+    local square=player.getSquare and player:getSquare()
+    local building=square and square.getBuilding and square:getBuilding()
+    local item,why=HouseKeys.createForBuilding(building)
+    if not item then return false,tostring(why) end
+    local md=item:getModData()
+    md[PRIMED_HOUSE]=house
+    md.cfOpeningVoice=FITNESS_OPENING_VOICE
+    local ok,added=pcall(function() return inventory:AddItem(item) end)
+    local carried=ok and added~=nil and added~=false
+    if not carried and item.getOutermostContainer then
+        local okOuter,outer=pcall(function() return item:getOutermostContainer() end)
+        carried=okOuter and outer==inventory
+    end
+    if not carried then return false,"inventory refused opening key" end
+    local voice=require("ConspiracyFiles/PlayerVoice")
+    if voice and voice.onOpeningClue then pcall(voice.onOpeningClue,item) end
+    log("Opening key issued before nearby scan; awaiting case attachment.")
+    return true,"opening primed"
 end
 
 -- Move the opening paper from its assigned starting-house container into the
@@ -757,21 +828,7 @@ local function prepare(result,seed,later,house)
         -- the descriptor and its fields are read under pcall because a mod that
         -- cannot generate a case is worse than one whose opening is ordinary.
         if not later then
-            local name,profession
-            local okD,descriptor=pcall(function() return p:getDescriptor() end)
-            if okD and descriptor then
-                local okN,fore=pcall(function() return descriptor:getForename() end)
-                local okS,sur=pcall(function() return descriptor:getSurname() end)
-                local parts={}
-                if okN and type(fore)=="string" and #fore>0 then parts[#parts+1]=fore end
-                if okS and type(sur)=="string" and #sur>0 then parts[#parts+1]=sur end
-                if #parts>0 then name=table.concat(parts," ") end
-                local okP,professionObject=pcall(function() return descriptor:getCharacterProfession() end)
-                if okP and professionObject then
-                    local okI,id=pcall(function() return professionObject:getName() end)
-                    if okI and type(id)=="string" then profession=string.lower(id) end
-                end
-            end
+            local name,profession=playerIdentity(p)
             if name and #name<=60 then
                 options.opening=true; options.self=name
                 if profession=="fitnessinstructor" then
@@ -925,6 +982,13 @@ local function prepare(result,seed,later,house)
         -- could supply its share of distinct containers at that moment, so a
         -- player who stays in one house got no further cases at all.
         local first=case.documents[1]
+        -- If the startup lane already put the Fitness Instructor's real key in
+        -- hand, this transaction adopts that exact object.  The container
+        -- assignment remains its provenance, but no second key is created.
+        local primed
+        if house and case.opening and case.opening.profession=="fitnessinstructor" then
+            primed=primedOpening(p:getInventory(),house)
+        end
         local preference=house and case.opening and {farFrom={documentId=first.id,x=p:getX(),y=p:getY()}} or nil
         local root,waiting=Session.createDistributed(case,candidates,rooms,occupied,worldHours(),preference)
         if not root then refuse("no-containers",later==true); return end
@@ -963,7 +1027,7 @@ local function prepare(result,seed,later,house)
             if steerFrom then log("Case shaped by the survivor's answers about "..tostring(case.steer and case.steer.fromCase)) end
         elseif house then swap({canonical=root,schedule={schema=1,createdHours={worldHours()}}}); clearDebt()
         else swap({canonical=root}); clearDebt() end
-        if house and case.opening then openingDelivery={id=first.id,house=house} end
+        if house and case.opening and not primed then openingDelivery={id=first.id,house=house} end
         openAll()
         -- Non-opening development cases may legitimately begin with an indexed
         -- plan. The personal opening cannot (guarded above), but using the plan
@@ -979,6 +1043,31 @@ local function prepare(result,seed,later,house)
         -- never a total (P4-R133).
         if #waiting>0 then
             CFLog.write("i","case",{case=case.caseId,n=#waiting,why="instalments"})
+        end
+        if primed then
+            local api
+            for _,candidate in ipairs(sessions or {}) do
+                if candidate.snapshot().case.caseId==case.caseId then api=candidate;break end
+            end
+            checked(api~=nil,"primed opening session missing")
+            checked(api.status(first.id,"placed",worldHours()))
+            local md=primed:getModData()
+            md.cfGeneratedId=first.id
+            md.cfPhysicalToken=api.assignment(first.id).physicalToken
+            md.cfOpeningVoice=first.openingVoice or FITNESS_OPENING_VOICE
+            md[PRIMED_HOUSE]=nil
+            applyWear(primed,first)
+            writePages(primed,first,case)
+            CFLog.write("i","placed",{doc=first.id,place=addressFor(house),
+                at=t.x..","..t.y..","..t.z..":"..tostring(t.objectIndex)..":"..tostring(t.containerIndex),
+                kind=first.kind,n=1,how="primed-at-start"})
+            local recognised=R.recognise(primed,"opening")
+            local inspected=recognised and R.inspect(primed,false)
+            if inspected then
+                CFLog.write("i","found",{doc=first.id,place=addressFor(house),how="carried-at-start"})
+            else
+                log("Primed opening key attached to the case but could not be noted automatically.")
+            end
         end
         -- Give the case's person a body. The case keeps its own name and a
         -- nearby zombie is given THAT name and an ID to match, because a name

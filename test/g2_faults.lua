@@ -113,6 +113,28 @@ local function oneAssignment(f)
 end
 local function restart(f) f.events.start(); f.tick(180) end
 
+-- The Fitness Instructor's inciting key exists before the neighbourhood scan
+-- has produced any case.  When that case arrives it adopts the same item,
+-- records it, and never creates the former container copy.
+do
+    local f=newFixture("fitnessinstructor")
+    assert(f.R.primeOpening())
+    assert(not f.saved.campaign,"priming the opening must not invent a partial saved case")
+    assert(#f.inventory.items==1,"the real opening key must appear immediately")
+    local item=f.inventory.items[1]
+    assert(item:getFullType()=="Base.Key1" and item:getKeyId()==7,
+        "the immediate object must unlock the spawning building")
+    assert(item:getModData().cfOpeningAnnounced and item:getModData().cfVoiceHinted,
+        "the immediate key must deliver the opening thought exactly once")
+    f.bootOpening()
+    local root=f.saved.campaign.canonical
+    local first=root.case.documents[1]
+    assert(#f.inventory.items==1 and item:getModData().cfGeneratedId==first.id,
+        "case creation must adopt the primed key rather than create a second key")
+    assert(root.assignments[first.id].status=="placed" and #f.R.known()==1,
+        "the adopted key must become the recorded opening evidence")
+end
+
 -- The first personal clue keeps a real origin in the starting house, but is
 -- handed to the survivor and noted immediately. The durable item flags make
 -- the special line exactly once; later clues remain ordinary placements.

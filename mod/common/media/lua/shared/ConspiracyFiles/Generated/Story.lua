@@ -1,7 +1,7 @@
 -- Authored events -> immutable sources -> knowledge-gated survivor notes.
 -- Pure Lua. Placement, discovery and world access remain with their adapters.
 local Kinds=require("ConspiracyFiles/Generated/EvidenceKinds")
-local M={REVISION=2}
+local M={REVISION=3}
 local ANCHORS={"claim","response","review"}
 local RELATIONS={corroborates=true,recontextualises=true,["disputes-delivery"]=true}
 local function copy(v)
@@ -161,6 +161,7 @@ function M.validate(s)
             return false,"continuation must come from essential evidence"
         end
     end
+    if s.leadSource~=nil and not sources[s.leadSource] then return false,"lead source is not evidence" end
     return true
 end
 
@@ -187,8 +188,9 @@ function M.build(s,fill,prefix,a,b,people,org,random,steer)
         ids[key]=id
         local quantity=d.quantity
         if d.members then quantity=0;for _,member in ipairs(d.members) do quantity=quantity+member.quantity end end
+        local leadSource=s.leadSource or "claim"
         docs[#docs+1]={id=id,kind=d.kind,title=fill(d.title),locationId=site.id,body=body,
-            references={people[1].id,people[2].id,org.id,a.id,b.id},links={},leads=key=="claim" and {b.id} or {},
+            references={people[1].id,people[2].id,org.id,a.id,b.id},links={},leads=key==leadSource and {b.id} or {},
             -- The state it was found in, and - for a pile - how many and
             -- whether the room is part of the evidence. Authored with the
             -- object, because under the 2026-09-21 decision an object belongs

@@ -8,6 +8,19 @@ function N.fromResult(result)
     if type(result)~="table" or result.version~="T3-nearby-2" or type(result.rows)~="table"
         or V.estimateEncodedBytes(result)>2000000 then return nil,"invalid nearby result" end
     local catalog={revision="t3-nearby-2",locations={}}
+    -- A detached garage/shed is an engine BuildingDef, but not an independent
+    -- narrative address. Property inheritance needs explicit parcel knowledge;
+    -- until then, utility-only buildings are safer excluded than invented as
+    -- separate destinations.
+    local ignoredRoom={garage=true,garagestorage=true,shed=true,[""]=true}
+    local sawRoom,substantive={},{}
+    for _,row in ipairs(result.rows) do
+        if row.kind=="room" and type(row.building)=="string" then
+            sawRoom[row.building]=true
+            local name=type(row.name)=="string" and string.lower(row.name) or ""
+            if not ignoredRoom[name] then substantive[row.building]=true end
+        end
+    end
     for _,row in ipairs(result.rows) do
         if row.kind=="building" then
             local id="t3:"..tostring(row.id)
@@ -23,7 +36,8 @@ function N.fromResult(result)
                 -- to report here.
                 bounds={x1=row.x,y1=row.y,x2=row.x2,y2=row.y2,z=row.minLevel},
                 source={kind="map-research",reference="T3-nearby-2 runtime metadata; room labels advisory"},
-                paperStorage="unknown",containerTypes={},excluded=false}
+                paperStorage="unknown",containerTypes={},
+                excluded=sawRoom[tostring(row.id)]==true and substantive[tostring(row.id)]~=true}
         end
     end
     if #catalog.locations~=result.buildings or #catalog.locations>12 then return nil,"incomplete nearby result" end

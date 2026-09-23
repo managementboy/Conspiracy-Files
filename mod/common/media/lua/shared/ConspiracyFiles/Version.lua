@@ -14,5 +14,5 @@
 -- This module deliberately requires nothing, so anything can read it without
 -- dragging in a dependency chain.
 ConspiracyFiles = ConspiracyFiles or {}
-ConspiracyFiles.VERSION = "DEV-0.47.4-native-container-transfer"
+ConspiracyFiles.VERSION = "DEV-0.47.5-diegetic-immediate-opening"
 return ConspiracyFiles.VERSION

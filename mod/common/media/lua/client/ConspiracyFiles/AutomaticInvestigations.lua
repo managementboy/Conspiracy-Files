@@ -78,9 +78,20 @@ function A.poll()
  end
  runtime.nextCase(ZombRand(2147483646)+1)
 end
-function A.onStart() ticks=0;ready=true;A.initialized=false;A.lastError=nil end
+function A.onStart() ticks=0;ready=true;A.initialized=false;A.lastError=nil;A.openingPrimed=false end
 function A.onTick()
  ticks=ticks+1
+ -- The personal key is the opening beat, so try it from the first playable
+ -- frame instead of making it wait behind the 250-tile catalogue. Retry only
+ -- through the short startup window while the player/building may still be
+ -- materialising. The runtime is idempotent and declines every other career.
+ if not A.openingPrimed and ticks<=29 and ready and allowed() then
+  local ok,done=pcall(function() return require("ConspiracyFiles/GeneratedRuntime").primeOpening() end)
+  if ok and done then A.openingPrimed=true
+  elseif not ok and tostring(done)~=A.lastError then
+   A.lastError=tostring(done);CFLog.message("auto","case","Opening key deferred: "..A.lastError)
+  end
+ end
  if ticks~=30 and ticks%A.config.retryTicks~=0 then return end
  local ok,err=pcall(A.poll)
  if not ok and tostring(err)~=A.lastError then A.lastError=tostring(err);CFLog.message("auto","case","Deferred: "..A.lastError) end

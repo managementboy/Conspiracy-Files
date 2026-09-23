@@ -50,6 +50,10 @@ local function make(d)
    "The animal illness came first; the house and vehicle belong to a late attempt to contain it and move samples out.",
    "The transport came first; the appointment and house access helped material move toward a selected farm-connected household."
   },
+  -- The key asks why the survivor is here; it does not magically reveal the
+  -- next property. The paper appointment, once found and read, names the
+  -- key-return address that becomes the honest second lead.
+  leadSource="appointment",
   -- The order is the player's investigative order.  Unlike ordinary cases,
   -- these two optional-schema sources are not optional in play.
   sourceOrder={"claim","appointment","response","review","vehicle"},
@@ -59,7 +63,7 @@ local function make(d)
   essential={"claim","appointment","response","review"},
   anchors={
    claim={kind="Key1",title=d.label.." house key / {CODE}",
-    observation="A worn brass house key was in my pocket at the start.",
+    observation="A worn brass house key was already in my pocket when I came to.",
     source="It is cut for a real building lock, not a label or a decorative prop.",
     note="The door can prove what it opens. Why did I have access to this house?",
     wear="worn",accessIntent="starting-building",interpretation="dual",
@@ -84,7 +88,7 @@ local function make(d)
    {key="appointment",role="records",at="claim",kind="receipt",
     title=d.label.." appointment / {CODE}",
     observation="A confirmed appointment card names me, this address and a farm-connected client.",
-    source="{ORG} — HOME VISIT\nReference {CODE}\nJuly 8, 1993 / "..d.time.."\nInstructor: {SELF}\nAddress: {A}\nService: "..d.service.."\nClient workplace: local livestock farm\nStatus: CONFIRMED\nEntered by {P2}.",
+    source="{ORG} — HOME VISIT\nReference {CODE}\nJuly 8, 1993 / "..d.time.."\nInstructor: {SELF}\nAddress: {A}\nService: "..d.service.."\nClient workplace: local livestock farm\nIf client absent: return key and visit sheet to {B}\nStatus: CONFIRMED\nEntered by {P2}.",
     note="The card explains an ordinary reason to visit. It does not explain the key or who finally confirmed the arrangement.",
     interpretation="dual"},
    {key="vehicle",role="records",kind="Cooler",title="Cooler in a nearby vehicle / {CODE}",
