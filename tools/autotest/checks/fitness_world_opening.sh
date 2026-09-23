@@ -67,7 +67,15 @@ while [ "$(date +%s)" -lt "$deadline" ]; do
     esac
     sleep 5
 done
-[ "$ready" = 1 ] || { skip "the first case never arrived, so nothing below could be observed"; }
+if [ "$ready" != 1 ]; then
+    # The observation is that no case came. The REASON is a separate question,
+    # and the mod already knows the answer - ask it rather than reporting a
+    # silence as though nothing could be known.
+    whynot="$(ev 'return CFFit.why()')"
+    rows+=("no case after $budget s; last scan state $lastscan; generator: $whynot")
+    say "${rows[-1]}"
+    skip "the first case never arrived, so nothing below could be observed"
+fi
 
 if [ "$ready" = 1 ]; then
     title="$(field 1 "$o")"; held="$(field 2 "$o")"; itemtype="$(field 3 "$o")"

@@ -11,9 +11,31 @@ local F = CFFit
 local R = ConspiracyFiles.GeneratedRuntime
 local Session = require("ConspiracyFiles/Generated/Session")
 
+-- THE FIRST CASE, WHEREVER THE STORE KEEPS IT.
+--
+-- The generated store has two shapes. The legacy one is a bare
+-- `store.canonical`; the shipped one is `store.campaign`, a wrapper whose
+-- own `.canonical` is the first case and whose `.successive.cases` holds the
+-- rest. Reading `store.canonical` directly sees the first shape and nothing
+-- at all in the second.
+--
+-- That is why this check reported "the first case never arrived" through two
+-- full runs on 2026-09-23 while the generator had in fact built one after
+-- forty seconds: automaticStatus() said cases=1 active=1/4 the whole time,
+-- and the deferral it did report - why=gap, dueHours=26 - was about the NEXT
+-- case, not the missing first one.
+--
+-- SuccessiveCases.current/sessions is how the rest of the codebase reads
+-- this, including checks/opening_in_play.sh. Going through it means the
+-- check cannot be blind to a store shape again.
 local function root()
-    local w = ModData.get("ConspiracyFiles.Generated.G2")
-    return w and w.canonical
+    local store = ModData.get("ConspiracyFiles.Generated.G2")
+    if type(store) ~= "table" then return nil end
+    local C = require("ConspiracyFiles/Generated/SuccessiveCases")
+    local wrapper = C.current(store)
+    if not wrapper then return nil end
+    local roots = C.sessions(wrapper)
+    return roots and roots[1] or nil
 end
 local function docById(case, id)
     for _, d in ipairs(case.documents) do if d.id == id then return d end end
@@ -24,6 +46,28 @@ end
 function F.minutes()
     local gt = getGameTime()
     return tostring(gt and gt:getWorldAgeHours() and math.floor(gt:getWorldAgeHours() * 60) or -1)
+end
+
+-- WHY NO CASE HAS COME. GeneratedRuntime.automaticStatus() was built to
+-- answer exactly this (P4-R133): the refusal code, how many times it has
+-- refused, the in-game hour a case is promised by, and the rung of the
+-- ladder. This check used to report only "the first case never arrived",
+-- which is the observation, not the reason - and on 2026-09-23 it sat through
+-- a full 2400-second budget with the map scan long since complete and said
+-- nothing about what the generator was withholding or why.
+function F.why()
+    local R2 = ConspiracyFiles.GeneratedRuntime
+    if not (R2 and R2.automaticStatus) then return "no-runtime" end
+    local ok, s = pcall(R2.automaticStatus)
+    if not ok or type(s) ~= "table" then return "status-unavailable" end
+    return table.concat({
+        "cases=" .. tostring(s.count), "preparing=" .. tostring(s.preparing),
+        "scheduled=" .. tostring(s.scheduled), "active=" .. tostring(s.active)
+            .. "/" .. tostring(s.activeLimit),
+        "why=" .. tostring(s.why), "deferCount=" .. tostring(s.deferCount),
+        "dueHours=" .. tostring(s.dueHours),
+        "rung=" .. tostring(s.rung) .. "/" .. tostring(s.rungMax),
+    }, " ")
 end
 
 -- (1)(2)(3)(10) THE OPENING CLUE. Is it on the player, is it a real key, does

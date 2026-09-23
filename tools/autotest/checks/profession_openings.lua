@@ -76,8 +76,15 @@ end
 -- What the first case turned out to be, and whether its opening clue is on
 -- the player. Everything a caller needs, in one answer.
 function P.result()
+    -- Through SuccessiveCases, not store.canonical: the shipped store keeps
+    -- the first case inside store.campaign, and a direct read of
+    -- store.canonical is blind to it. See fitness_world_opening.lua, which
+    -- reported "the first case never arrived" while one existed.
     local w = ModData.get("ConspiracyFiles.Generated.G2")
-    local root = w and w.canonical
+    local C = require("ConspiracyFiles/Generated/SuccessiveCases")
+    local wrapper = type(w) == "table" and C.current(w) or nil
+    local roots = wrapper and C.sessions(wrapper) or nil
+    local root = roots and roots[1] or nil
     if not root or not root.case then
         local s = R.automaticStatus() or {}
         return "waiting", tostring(s.preparing), tostring(s.why or "")
