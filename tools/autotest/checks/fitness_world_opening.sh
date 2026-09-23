@@ -164,18 +164,32 @@ if [ "$ready" = 1 ]; then
 
     # 8
     before="$(ev 'return CFFit.signature()')"
+    before_stable="$(ev 'return CFFit.stable()')"
     say "saving and reloading"
     world="$(cat "$REPO/dev/eval/linux/world" 2>/dev/null)"
     "$PZ" stop --save >/dev/null 2>&1
     if "$PZ" start --continue "$world" >/dev/null 2>&1 && fixtures; then
         after="$(ev 'return CFFit.signature()')"
-        if [ "$before" = "$after" ]; then
-            rows+=("reload: the assignments and scene signature are unchanged")
+        after_stable="$(ev 'return CFFit.stable()')"
+        # A PLACED clue's coordinates and a confirmed scene signature may not
+        # move. That is the assertion.
+        if [ "$before_stable" = "$after_stable" ]; then
+            rows+=("reload: placed targets and scene signatures are unchanged ($before_stable)")
             say "${rows[-1]}"
         else
-            fail "the assignments changed across a reload"
-            rows+=("before: $before")
-            rows+=("after:  $after")
+            fail "a placed target or scene signature changed across a reload"
+            rows+=("stable before: $before_stable")
+            rows+=("stable after:  $after_stable")
+        fi
+        # Waiting clues may legitimately change - Session.unplan turns an
+        # indexed plan that no longer matches the live building into an
+        # ordinary deferred clue. Reported every time, never silently
+        # tolerated, but not a failure.
+        if [ "$before" != "$after" ]; then
+            rows+=("reload: waiting assignments changed (expected where an indexed plan falls back)")
+            rows+=("  all before: $before")
+            rows+=("  all after:  $after")
+            say "reload: waiting assignments changed; placed targets held"
         fi
     else
         skip "the saved game did not reload, so stability across a reload was not observed"

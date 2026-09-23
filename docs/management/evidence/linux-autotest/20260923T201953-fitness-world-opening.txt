@@ -1,0 +1,23 @@
+Linux Fitness Instructor world-evidence opening: FAIL
+source: 11b5a00
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+  opening clue: "Loan collection house key / LD-195" held=true type=Base.Key1 isKey=true
+  in-game minutes: world was 120 at spawn, clue present at 123 (elapsed 3)
+  key: keyId=1160462 doors near the house=7 matching=0
+  address: key target building=10977704480342044 "202 E Maple St"; survivor building=10977704480342044 "202 E Maple St"; case records "none"
+  point: the key belongs to the building the survivor starts in
+  finding 1: "Loan collection house key / LD-195" status=placed members=0 itemsInWorld=0
+  finding 2: "Loan collection appointment / LD-195" status=deferred members=0 itemsInWorld=0
+  finding 3: "Feed sack from the residence / LD-195" status=placed members=0 itemsInWorld=1
+  finding 4: "Spent protective-equipment hoard / LD-195" status=indexed members=9 itemsInWorld=0
+  finding 5: "Cooler in a nearby vehicle / LD-195" status=deferred members=0 itemsInWorld=0
+  finding 6: "Access memo / 7C-41" status=indexed members=0 itemsInWorld=0
+  vehicle: confirmed stable scenes=0 clueFive=yes status=deferred signature=none
+  point 6: with no confirmed scene, clue five is deferred - the first four are not blocked by it
+  before: 1=placed@10839,10151,0 2=deferred@none 3=placed@10831,10181,0 4=indexed@none 5=deferred@none 6=indexed@none
+  after:  1=placed@10839,10151,0 2=deferred@none 3=placed@10831,10181,0 4=deferred@none 5=deferred@none 6=deferred@none
+
+NOT EXERCISED: the PPE finding is assigned but its items are not in the world yet (status above)
+FAIL: no door near the starting house accepts the key (keyId 1160462, 7 doors examined)
+FAIL: the assignments changed across a reload
+errors inside the mod: 0

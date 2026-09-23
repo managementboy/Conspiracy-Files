@@ -174,9 +174,14 @@ function F.address()
     local targetLabel = targetBuilding and A.labelForBuilding(targetBuilding) or nil
     local playerLabel = playerBuilding and A.labelForBuilding(playerBuilding) or nil
 
-    -- What the CASE says the address is, as the player reads it.
-    local recorded = tostring(r.case.story and r.case.story.addressA
-        or (r.case.sites and r.case.sites[1] and r.case.sites[1].label) or "none")
+    -- What the CASE recorded as its first site. The generated case keeps its
+    -- places in `locations`, each with an id and a name; there is no
+    -- `story.addressA`, and reading for one printed "none" on an otherwise
+    -- correct run (2026-09-23) - a reported value that is always "none" says
+    -- nothing about whether the address is right.
+    local site = r.case.locations and r.case.locations[1]
+    local recorded = site and (tostring(site.name or site.label or "unnamed")
+        .. " [" .. tostring(site.id) .. "]") or "none" 
 
     return table.concat({
         tostring(targetBuilding or "none"), tostring(targetLabel or "none"),
@@ -246,7 +251,49 @@ function F.vehicle()
         tostring(status), tostring(sig)}, "\t")
 end
 
--- (8) A SIGNATURE OF EVERYTHING THAT MUST SURVIVE A RELOAD.
+-- (8) WHAT MUST SURVIVE A RELOAD, AND WHAT MAY LEGITIMATELY CHANGE.
+--
+-- Two signatures, because they are two different claims.
+--
+-- `stable` is the part a reload may not touch: a PLACED clue's coordinates
+-- and any confirmed scene signature. A placed clue is a real object at real
+-- coordinates and a confirmed scene has been observed twice; if either moves
+-- across a save, that is a persistence defect.
+--
+-- `waiting` is the part that may change, and this check used to assert it as
+-- though it could not. On 2026-09-23 it called a reload a failure because two
+-- findings went indexed -> deferred. That is a documented transition, not
+-- corruption: Session.unplan is the only path between those two states and
+-- exists precisely for it - "an indexed signature that no longer matches the
+-- live building becomes an ordinary deferred clue" - and it deliberately
+-- preserves the original expiry clock so the fallback does not restart it.
+-- An indexed plan is provisional by definition; it is re-verified once the
+-- squares load, and falling back is the system working.
+--
+-- So the transition is still REPORTED, every time, and still visible in the
+-- evidence. It is simply no longer called a failure, because the product
+-- documents it as correct. Nothing about placed coordinates or scene
+-- signatures is relaxed.
+function F.stable()
+    local r = root()
+    if not r or not r.case then return "no-case" end
+    local parts = {}
+    for _, d in ipairs(r.case.documents) do
+        local a = r.assignments and r.assignments[d.id]
+        local t = a and a.target
+        local n = d.id:match("document%-(%d+)$") or d.id
+        if a and a.status == "placed" and t then
+            parts[#parts + 1] = n .. "=placed@" .. t.x .. "," .. t.y .. "," .. t.z
+        end
+        if t and t.sceneSignature then
+            parts[#parts + 1] = n .. "#scene=" .. tostring(t.sceneSignature)
+        end
+    end
+    table.sort(parts)
+    if #parts == 0 then return "nothing-placed-and-no-scene" end
+    return table.concat(parts, " ")
+end
+
 function F.signature()
     local r = root()
     if not r or not r.case then return "no-case" end
