@@ -1,7 +1,7 @@
 -- Authored events -> immutable sources -> knowledge-gated survivor notes.
 -- Pure Lua. Placement, discovery and world access remain with their adapters.
 local Kinds=require("ConspiracyFiles/Generated/EvidenceKinds")
-local M={REVISION=1}
+local M={REVISION=2}
 local ANCHORS={"claim","response","review"}
 local RELATIONS={corroborates=true,recontextualises=true,["disputes-delivery"]=true}
 local function copy(v)
@@ -25,6 +25,51 @@ local function documentOK(d)
     for _,k in ipairs({"title","observation","source","note"}) do
         if not text(d[k]) then return false end
     end
+    return true
+end
+local function objectStateOK(d)
+    local carrier=Kinds.get(d.kind)
+    if carrier and carrier.capacity=="object" then
+        if not text(d.wear) then return false,"object evidence must say what state it was found in" end
+        if d.members~=nil then
+            local ok,n=dense(d.members,8)
+            if not ok or n<2 then return false,"an object scene needs at least two member groups" end
+            local total=0
+            for _,member in ipairs(d.members) do
+                local kind=type(member)=="table" and Kinds.get(member.kind)
+                if not kind or kind.capacity~="object" or not text(member.wear)
+                    or type(member.quantity)~="number" or member.quantity%1~=0
+                    or member.quantity<1 or member.quantity>16 then
+                    return false,"invalid object-scene member"
+                end
+                total=total+member.quantity
+            end
+            if total<5 or total>24 then return false,"object scene has an implausible total" end
+            if d.quantity~=nil and d.quantity~=total then return false,"object scene count does not match its members" end
+            if d.roomIntent~="natural" and d.roomIntent~="wrong" then
+                return false,"an object scene must say whether the room is part of the evidence"
+            end
+        elseif d.quantity~=nil then
+            if type(d.quantity)~="number" or d.quantity%1~=0 or d.quantity<5 or d.quantity>16 then
+                return false,"a pile must declare a count a room could hold"
+            end
+            if d.roomIntent~="natural" and d.roomIntent~="wrong" then
+                return false,"a pile must say whether the room is part of the evidence"
+            end
+        elseif d.roomIntent~=nil then
+            -- A single misplaced object may name the wrong room; quantity is
+            -- not required when the mismatch itself is the observation.
+            if d.roomIntent~="wrong" then return false,"single-object room intent must be wrong" end
+        end
+    elseif d.wear~=nil or d.quantity~=nil or d.roomIntent~=nil or d.members~=nil then
+        return false,"only an object is found in a state, count, group or wrong room"
+    end
+    if d.accessIntent~=nil and d.accessIntent~="starting-building" then return false,"invalid access intent" end
+    if d.placementIntent~=nil and d.placementIntent~="vehicle" then return false,"invalid placement intent" end
+    if d.openingVoice~=nil and (not text(d.openingVoice) or #d.openingVoice>120) then return false,"invalid opening voice" end
+    if d.interpretation~=nil and d.interpretation~="farm-zero" and d.interpretation~="delivered-agent"
+        and d.interpretation~="dual" and d.interpretation~="both-damaging" then return false,"invalid interpretation role" end
+    if d.sceneKind~=nil and (not text(d.sceneKind) or #d.sceneKind>60) then return false,"invalid scene kind" end
     return true
 end
 -- A continuation preserves the people/company and documentary time of its
@@ -63,6 +108,7 @@ function M.validate(s)
     local sources={}
     for _,key in ipairs(ANCHORS) do
         if not documentOK(s.anchors[key]) then return false,"invalid source "..key end
+        local state,why=objectStateOK(s.anchors[key]);if not state then return false,why end
         sources[key]=true
     end
     ok,n=dense(s.optional or {},4)
@@ -70,32 +116,24 @@ function M.validate(s)
     for _,d in ipairs(s.optional or {}) do
         if not documentOK(d) or not text(d.key) or sources[d.key] then return false,"invalid optional source" end
         if d.role~="person" and d.role~="records" and d.role~="listen" then return false,"optional source lacks investigative purpose" end
-        -- An object must say what state it was found in; that is the only
-        -- thing its record asserts. A pile must also say how many, and
-        -- whether the room it is in is part of what makes it odd - a hundred
-        -- eggs in a kitchen and fifty bricks in a bedroom are different
-        -- anomalies, and placement needs to be told which this is.
-        local carrier=Kinds.get(d.kind)
-        if carrier and carrier.capacity=="object" then
-            if not text(d.wear) then return false,"object evidence must say what state it was found in" end
-            if d.quantity~=nil then
-                if type(d.quantity)~="number" or d.quantity%1~=0 or d.quantity<5 or d.quantity>16 then
-                    return false,"a pile must declare a count a room could hold"
-                end
-                if d.roomIntent~="natural" and d.roomIntent~="wrong" then
-                    return false,"a pile must say whether the room is part of the evidence"
-                end
-            elseif d.roomIntent~=nil then return false,"only a pile declares a room intent" end
-        elseif d.wear~=nil or d.quantity~=nil or d.roomIntent~=nil then
-            return false,"only an object is found in a state, a count or a wrong room"
-        end
+        local state,why=objectStateOK(d);if not state then return false,why end
         sources[d.key]=true
     end
-    ok,n=dense(s.essential,3)
+    if s.sourceOrder~=nil then
+        local ordered,count=dense(s.sourceOrder,7)
+        if not ordered or count<3 then return false,"invalid authored source order" end
+        local seen={}
+        for _,key in ipairs(s.sourceOrder) do
+            if not sources[key] or seen[key] then return false,"source order names an invalid source" end
+            seen[key]=true
+        end
+        for key in pairs(sources) do if not seen[key] then return false,"source order omits an authored source" end end
+    end
+    ok,n=dense(s.essential,7)
     if not ok or n<2 then return false,"scenario lacks essential sources" end
     local essential={}
     for _,key in ipairs(s.essential) do
-        if not s.anchors[key] or essential[key] then return false,"invalid essential source" end
+        if not sources[key] or essential[key] then return false,"invalid essential source" end
         essential[key]=true
     end
     ok,n=dense(s.comparisons,16)
@@ -147,6 +185,8 @@ function M.build(s,fill,prefix,a,b,people,org,random,steer)
         local body=object and (observation.." "..source.." "..note) or M.body(observation,source,note)
         if not Kinds.fits(d.kind,body) then return false,"scenario exceeds its carrier's capacity" end
         ids[key]=id
+        local quantity=d.quantity
+        if d.members then quantity=0;for _,member in ipairs(d.members) do quantity=quantity+member.quantity end end
         docs[#docs+1]={id=id,kind=d.kind,title=fill(d.title),locationId=site.id,body=body,
             references={people[1].id,people[2].id,org.id,a.id,b.id},links={},leads=key=="claim" and {b.id} or {},
             -- The state it was found in, and - for a pile - how many and
@@ -154,18 +194,31 @@ function M.build(s,fill,prefix,a,b,people,org,random,steer)
             -- object, because under the 2026-09-21 decision an object belongs
             -- to its event rather than being drawn from a rule and attached.
             wear=object and d.wear or nil,
-            quantity=object and d.quantity or nil,
-            roomIntent=object and d.roomIntent or nil}
+            quantity=object and quantity or nil,
+            roomIntent=object and d.roomIntent or nil,
+            members=object and d.members and copy(d.members) or nil,
+            accessIntent=d.accessIntent,placementIntent=d.placementIntent,
+            openingVoice=d.openingVoice,interpretation=d.interpretation,sceneKind=d.sceneKind}
         return true
     end
-    for _,key in ipairs(ANCHORS) do
-        ok,why=add(key,s.anchors[key],key=="claim" and a or b)
-        if not ok then return nil,why end
+    local byKey={claim=s.anchors.claim,response=s.anchors.response,review=s.anchors.review}
+    for _,d in ipairs(s.optional or {}) do byKey[d.key]=d end
+    if s.sourceOrder then
+        for _,key in ipairs(s.sourceOrder) do
+            local d=byKey[key]
+            ok,why=add(key,d,(key=="claim" or d.at=="claim") and a or b)
+            if not ok then return nil,why end
+        end
+    else
+        for _,key in ipairs(ANCHORS) do
+            ok,why=add(key,s.anchors[key],key=="claim" and a or b)
+            if not ok then return nil,why end
+        end
     end
     -- Only explicitly authored, compatible contributions enter this pool.
     -- A preferred approach may order those contributions; a preferred theory
     -- never changes the underlying event or manufactures counterevidence.
-    local optional=copy(s.optional or {})
+    local optional=s.sourceOrder and {} or copy(s.optional or {})
     for i=#optional,2,-1 do local j=random(i); optional[i],optional[j]=optional[j],optional[i] end
     if steer and steer.way then
         local preferred,rest={},{}

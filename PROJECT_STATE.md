@@ -1,5 +1,34 @@
 # Conspiracy-Files — Project State
 
+## Dual-conspiracy world-evidence candidate — 2026-09-23
+
+`DEV-0.47.0-dual-world-evidence` implements the owner-approved first mystery
+slice for all ten Fitness Instructor residential starts. The opening gives the
+survivor a real key for the current building immediately and asks why they had
+access. Each variant then authors a July 8 appointment, a damaged animal-feed
+sack in the wrong room, one heterogeneous used-PPE finding, and an optional
+cooler in a confirmed nearby vanilla vehicle scene. The first four household
+findings are essential; absence of a suitable randomized vehicle scene cannot
+break the case.
+
+Every generated case carries the fixed Farm Zero versus Delivered Agent pair,
+their shared facts, and the unresolved question of whether the infection left
+the farm as a sample or arrived there as one. There is deliberately no hidden
+winner or truth score. A first conservative vanilla-scene observer confirms
+vehicle clusters, emergency transport, or contextual cargo through two
+identical observations without claiming vanilla's internal story name. An
+assigned target retains the confirmed signature, but not the complete observer
+snapshot. Damage, corpses, outfits, fire, barricades, roadblocks, building
+scenes, a persisted pre-assignment scene catalogue, and a dedicated campaign UI
+remain future work.
+
+Fresh saves are required by design: generator schema `3` and revision
+`g16-dual-world-evidence-1` do not migrate older generated cases. Offline
+verification passes 52/52 tests and Project Zomboid's Kahlua compiler parses
+all 131 shipped Lua files. The verified package was built and installed locally;
+native-game timing, real-key, scene-stability, performance, readability, and fun
+acceptance remain unproven. This is not a Workshop release.
+
 ## Fixed-container index development candidate — 2026-09-22
 
 Generated placement now ships an exact Build 42.20 census of 240,059 fixed

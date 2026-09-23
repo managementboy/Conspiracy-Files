@@ -144,9 +144,9 @@ local SET_D={
     "This isn't something to skim. Read it properly, later.",
 }
 
--- The campaign's opening is different from an ordinary evidence pickup. The
--- survivor begins with this paper already on them, bearing their own name, so
--- this line asks the first mystery instead of instructing the player to search.
+-- Fallback for generic openings. Profession openings may put their own short,
+-- saved line on the item so the survivor reacts to the physical contradiction
+-- actually in hand (for the Fitness Instructor, a working house key).
 local OPENING_LINE="This has my name on it. Why was I supposed to be here?"
 
 -- setHaloNote is the only halo API that takes a duration; 900 was established
@@ -334,7 +334,9 @@ function V.onOpeningClue(item)
     if md.cfOpeningAnnounced then return false end
     md.cfOpeningAnnounced=true
     md.cfVoiceHinted=true
-    speak(p,OPENING_LINE,"My name",true)
+    local line=(type(md.cfOpeningVoice)=="string" and #md.cfOpeningVoice>0 and #md.cfOpeningVoice<=120)
+        and md.cfOpeningVoice or OPENING_LINE
+    speak(p,line,"Opening clue",true)
     return true
 end
 

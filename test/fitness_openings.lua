@@ -33,6 +33,23 @@ for seed=1,10 do
  assert(case.premiseId==premise.id and case.opening.profession=="fitnessinstructor")
  assert(case.opening.variant==seed,"seed "..seed.." did not select its distinct start")
  assert(G.validate(case),"fitness opening "..seed.." does not rebuild")
+ assert(#case.documents==5,"the opening must build the complete five-finding chain")
+ assert(#case.essential==4,"the four authored household findings are required before a random scene is confirmed")
+ assert(case.documents[1].kind=="Key1" and case.documents[1].accessIntent=="starting-building",
+  "the first clue is a real key for the starting building")
+ assert(case.documents[2].kind=="receipt" and case.documents[2].body:find("July 8, 1993",1,true),
+  "the appointment is the chain's one dated paper")
+ assert(case.documents[3].kind=="AnimalFeedBag" and case.documents[3].roomIntent=="wrong")
+ assert(case.documents[4].members and #case.documents[4].members==3 and case.documents[4].quantity==9,
+  "the PPE accumulation is one heterogeneous finding")
+ assert(case.documents[5].kind=="Cooler" and case.documents[5].placementIntent=="vehicle"
+  and case.documents[5].sceneKind=="ambiguous-transport",
+  "the fifth clue waits for a real transport scene")
+ assert(case.conspiracyPair and case.conspiracyPair.id=="farm-zero-vs-delivered-agent"
+  and #case.conspiracyPair.theories==2 and case.conspiracyPair.correct==nil,
+  "the case carries two rival theories and no hidden winner")
+ assert(case.story.unresolved==case.conspiracyPair.question,
+  "the local opening points at the campaign's missing direction of travel")
  seen[case.opening.variant]=true
  local named=false
  for _,document in ipairs(case.documents) do
@@ -45,4 +62,4 @@ for variant=1,10 do assert(seen[variant],"fitness start is unreachable: "..varia
 assert(G.generateSelected(catalog,1,{mapId="SYNTHETIC-MAP",buildLine="TEST-ONLY",
  allowSynthetic=true,opening=true,self="Ada Whitlock",profession="carpenter"},sites)==nil,
  "unknown profession routing is refused instead of silently selecting a wrong family")
-print("PASS fitness instructor: ten distinct, reachable, survivor-named starts rebuild exactly")
+print("PASS fitness instructor: ten residential starts build the five-clue dual-conspiracy opening exactly")

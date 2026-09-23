@@ -28,7 +28,7 @@ local entries={
  {id="no-contact-at-premises",title="No contact at premises",opening=true},
  {id="name-on-standby-list",title="A name promoted from standby",opening=true},
  {id="deposit-for-unknown-booking",title="A deposit for an unknown booking",opening=true},
- {id="fitness-instructor-start",title="The class I do not remember accepting",opening=true,profession="fitnessinstructor"},
+ {id="fitness-instructor-start",title="The house I was given access to",opening=true,profession="fitnessinstructor"},
  {id="still-filing",title="Still filing",followUp=true},
 }
 local byId,ordinary,openings,professionOpenings={},{},{},{}

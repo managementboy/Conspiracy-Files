@@ -89,10 +89,15 @@ for _,cal in ipairs(calendars) do
                 assert(not doc.title:match("{%u[%u%d]*}") and not doc.body:match("{%u[%u%d]*}"),id..": unresolved placeholder")
                 dateOrdinals(doc.body,id.." / "..variant.." / "..doc.id)
             end
-            assert(includes(dateOrdinals(built.documents[1].body,id.." claim"),sourceCal.claimDate)
-                and includes(dateOrdinals(built.documents[2].body,id.." response"),sourceCal.responseDate)
-                and includes(dateOrdinals(built.documents[3].body,id.." review"),sourceCal.reviewDate),
-                id.." anchors must render their ordered calendar dates")
+            if id=="fitness-instructor-start" then
+                assert(includes(dateOrdinals(built.documents[2].body,id.." appointment"),JULY_8),
+                    "the origin opening must use its outbreak-eve appointment date")
+            else
+                assert(includes(dateOrdinals(built.documents[1].body,id.." claim"),sourceCal.claimDate)
+                    and includes(dateOrdinals(built.documents[2].body,id.." response"),sourceCal.responseDate)
+                    and includes(dateOrdinals(built.documents[3].body,id.." review"),sourceCal.reviewDate),
+                    id.." anchors must render their ordered calendar dates")
+            end
             renders=renders+#built.documents
         end
     end
@@ -102,7 +107,7 @@ end
 -- in both authored variants. Generated cases rebuild exactly under the current
 -- event-story revision; follow-up same-day dates are exercised separately by
 -- personal_story, so this deliberately checks only ordinary generated cases.
-assert(G.REVISION=="g15-event-stories-2")
+assert(G.REVISION=="g16-dual-world-evidence-1")
 local seen,cases={},0
 for seed=1,400 do
     local case=G.generate(catalog,seed,opts)

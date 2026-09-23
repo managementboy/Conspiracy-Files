@@ -8,9 +8,10 @@ local Calendar=require("ConspiracyFiles/Calendar")
 local Story=require("ConspiracyFiles/Generated/Story")
 local PersonalScenarios=require("ConspiracyFiles/Generated/PersonalScenarios")
 local OrdinaryScenarios=require("ConspiracyFiles/Generated/OrdinaryScenarios")
+local ConspiracyPair=require("ConspiracyFiles/Generated/ConspiracyPair")
 -- Fresh saves only: each family now supplies a whole authored event. There
 -- is no generic paperwork fallback and no optional omission of its answer.
-local G={REVISION="g15-event-stories-2",SCHEMA=2,MIN_EVIDENCE=3,MAX_EVIDENCE=7}
+local G={REVISION="g16-dual-world-evidence-1",SCHEMA=3,MIN_EVIDENCE=3,MAX_EVIDENCE=7}
 local function copy(v) if type(v)~="table" then return v end; local out={}; for k,c in pairs(v) do out[k]=copy(c) end; return out end
 local function same(a,b)
     if type(a)~=type(b) then return false end
@@ -392,10 +393,27 @@ local function build(seed,revision,sites,cast,relayMemo,steer,opening,follows)
         authored.documents[#authored.documents+1]={id=prefix.."document-"..(#authored.documents+1),
             kind=Memo.KIND,title=Memo.TITLE,locationId=b.id,body=Memo.body(),references={b.id},links={},leads={}}
     end
+    -- A vehicle finding is late-bound: the catalogue may have been made while
+    -- no car was loaded.  Recording `vehicle` as an allowed target kind does
+    -- not invent a car; Session still requires a real live vehicle part before
+    -- it can place the clue.  It only lets a later observation satisfy the
+    -- already-authored intent.
+    local savedLocations=copy(sites)
+    for _,doc in ipairs(authored.documents) do
+        if doc.placementIntent=="vehicle" then
+            for _,site in ipairs(savedLocations) do
+                if site.id==doc.locationId then
+                    local present=false;for _,kind in ipairs(site.containerTypes) do if kind=="vehicle" then present=true end end
+                    if not present then site.containerTypes[#site.containerTypes+1]="vehicle";table.sort(site.containerTypes) end
+                end
+            end
+        end
+    end
     return {schemaVersion=G.SCHEMA,generatorRevision=G.REVISION,catalogRevision=revision,seed=seed,
         caseId=prefix.."case",outline=outline,premiseId=premise.id,contentStatus="development-draft-unapproved",
-        locations=copy(sites),cast=#met>0 and copy(met) or nil,facts=facts,identities=people,
+        locations=savedLocations,cast=#met>0 and copy(met) or nil,facts=facts,identities=people,
         organisation=org,documents=authored.documents,story=authored.story,
+        conspiracyPair=ConspiracyPair.current(),
         relayMemo=relayMemo and true or nil,steer=steer and copy(steer) or nil,
         -- Preserve the legacy boolean representation when validating an old
         -- save; new cases pin the selected premise by id.
@@ -593,6 +611,7 @@ end
 function G.validate(case)
     local safe,why=V.validateStructure(case); if not safe then return false,why end
     if type(case)~="table" or case.schemaVersion~=G.SCHEMA or case.generatorRevision~=G.REVISION then return false,"unsupported generated case revision" end
+    if not ConspiracyPair.validate(case.conspiracyPair) then return false,"invalid central conspiracy pair" end
     if not seedOK(case.seed) or V.estimateEncodedBytes(case)>500000 then return false,"invalid seed/size" end
     local valid,err=Catalog.validate({revision=case.catalogRevision,locations=case.locations})
     if not valid then return false,err end

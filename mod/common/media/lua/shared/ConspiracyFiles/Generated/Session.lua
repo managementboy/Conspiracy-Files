@@ -96,12 +96,23 @@ local function carrierTarget(t) return type(t)=="table" and type(t.carrierMark)=
 function S.isMobile(target)
     return vehicleTarget(target) or carrierTarget(target)
 end
+-- An authored placement intent is a hard constraint.  In particular, the
+-- transport clue may wait for a real vehicle; it must never quietly become a
+-- cooler in a bathroom cupboard or on an unrelated corpse.
+function S.intentMatches(doc,target)
+    if type(doc)~="table" then return false end
+    if doc.placementIntent=="vehicle" then
+        return vehicleTarget(target) and type(target.sceneSignature)=="string" and target.sceneSignature~=""
+    end
+    return true
+end
 -- Which of a case's clues may be the mobile one, when the choice is deliberate
 -- rather than a fallback: the LAST document, so the opening clue - the one the
 -- first house must always supply (P4-R67) - is never the one that drives off.
 function S.mobileDocId(case)
     local docs=type(case)=="table" and case.documents
     if type(docs)~="table" or #docs==0 then return nil end
+    for _,doc in ipairs(docs) do if doc.placementIntent=="vehicle" then return doc.id end end
     return docs[#docs].id
 end
 -- How many of this case's clues are already on something that moves.
@@ -146,12 +157,13 @@ function S.target(t,site)
     end
     if vehicleTarget(t) then
         if not fields(t,{x=true,y=true,z=true,objectIndex=true,containerIndex=true,containerType=true,
-                         sprite=true,vehiclePart=true,vehicleMark=true}) then return false end
+                         sprite=true,vehiclePart=true,vehicleMark=true,sceneSignature=true}) then return false end
         for _,k in ipairs({"x","y","z","objectIndex","containerIndex"}) do if not integer(t[k]) then return false end end
         if t.objectIndex~=0 or t.containerIndex~=0 then return false end
         if type(t.sprite)~="string" or #t.sprite>300 then return false end
         if #t.vehiclePart==0 or #t.vehiclePart>60 then return false end
         if t.vehicleMark~=nil and (type(t.vehicleMark)~="string" or #t.vehicleMark>300) then return false end
+        if t.sceneSignature~=nil and (type(t.sceneSignature)~="string" or #t.sceneSignature==0 or #t.sceneSignature>1000) then return false end
         if t.containerType~=S.VEHICLE_CONTAINER then return false end
         local b=site.bounds
         local r=S.VEHICLE_RADIUS
@@ -223,7 +235,9 @@ function S.validate(root)
             elseif a.planned~=nil then return false,"invalid assignment" end
         else
             if a.deferredHours~=nil or a.planned~=nil then return false,"invalid assignment" end
-            if not S.target(a.target,sites[a.locationId or d.locationId]) then return false,"invalid assignment" end
+            if not S.target(a.target,sites[a.locationId or d.locationId]) or not S.intentMatches(d,a.target) then
+                return false,"invalid assignment"
+            end
             if a.status=="placed" and not validHours(a.placedHours) then return false,"invalid assignment" end
             if a.placedHours~=nil and not validHours(a.placedHours) then return false,"invalid assignment" end
         end
@@ -551,6 +565,7 @@ function S.createDistributed(case,candidates,rooms,occupied,hours,preferences)
     local mobileDoc=S.mobileDocId(case)
     local mobile=0
     local function mobileOK(doc,target)
+        if target and not S.intentMatches(doc,target) then return false end
         if not S.isMobile(target) then return true end
         return doc.id==mobileDoc and mobile<S.MOBILE_PER_CASE
     end
@@ -723,6 +738,9 @@ function S.open(initial,sink)
         local site
         for _,s in ipairs(root.case.locations) do if s.id==a.locationId then site=s end end
         if not site or not S.target(target,site) then return false,"target does not match the clue's own site" end
+        local doc
+        for _,d in ipairs(root.case.documents) do if d.id==id then doc=d end end
+        if not S.intentMatches(doc,target) then return false,"target does not match the clue's placement intent" end
         -- The cap holds for a late arrival too (P4-R134): a clue that waited is
         -- welcome on a carrier, but only while the case has no mobile clue yet.
         if S.isMobile(target) and S.mobileCount(root)>=S.MOBILE_PER_CASE then

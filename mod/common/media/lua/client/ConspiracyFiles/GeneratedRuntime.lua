@@ -8,6 +8,7 @@ local Storage=require("ConspiracyFiles/Generated/Storage")
 local StorageChoices=require("ConspiracyFiles/Generated/StorageChoices")
 local FixedContainers=require("ConspiracyFiles/Generated/FixedContainerRuntime")
 local World=require("ConspiracyFiles/WorldAccess")
+local HouseKeys=require("ConspiracyFiles/HouseKeyAdapter")
 local Scheduler=require("ConspiracyFiles/Scheduler")
 local Budget=require("ConspiracyFiles/SaveBudget")
 local StaleClue=require("ConspiracyFiles/StaleClue")
@@ -211,6 +212,24 @@ local function expectedCount(api,id)
     return 1
 end
 
+local function createEvidenceItem(doc,kind,target)
+    if doc.accessIntent=="starting-building" then
+        local cell=getCell and getCell()
+        local square=cell and target and cell:getGridSquare(target.x,target.y,target.z)
+        local building=square and square.getBuilding and square:getBuilding()
+        local item,why=HouseKeys.createForBuilding(building)
+        if not item then return nil,"could not create starting-house key: "..tostring(why) end
+        return item
+    end
+    local carrier=assert(require("ConspiracyFiles/Generated/EvidenceKinds").get(kind))
+    return instanceItem(carrier.fullType)
+end
+
+local function evidenceMembers(doc)
+    if type(doc.members)=="table" and #doc.members>0 then return doc.members end
+    return {{kind=doc.kind,quantity=doc.quantity or 1,wear=doc.wear}}
+end
+
 local function playerHouse(player)
     local square=player and player.getSquare and player:getSquare()
     local building=square and square.getBuilding and square:getBuilding()
@@ -350,21 +369,32 @@ local function placement(api,id)
         end
         local doc
         for _,d in ipairs(api.snapshot().case.documents) do if d.id==id then doc=d end end
-        local carrier=assert(require("ConspiracyFiles/Generated/EvidenceKinds").get(doc.kind))
-        -- One copy for everything readable; `quantity` copies where the count
-        -- is the point. Each carries the same token, so the scan above counts
-        -- the pile rather than calling the second bottle a conflict.
-        for copy=1,expected do
-            local item=assert(instanceItem(carrier.fullType),"could not create evidence item")
+        -- Build every member before inserting any of them.  A mixed PPE scene
+        -- is one finding with one token, but it contains real masks, gloves and
+        -- disinfectant instead of nine renamed copies of one item.
+        local createdItems={}
+        for _,member in ipairs(evidenceMembers(doc)) do
+          for copyIndex=1,member.quantity do
+            local item,createWhy=createEvidenceItem(doc,member.kind,a.target)
+            if not item then
+                checked(api.status(id,"unknown"))
+                log("Evidence creation failed: "..tostring(createWhy))
+                return true
+            end
             local md=item:getModData()
             md.cfGeneratedId=id; md.cfPhysicalToken=a.physicalToken
+            if doc.openingVoice then md.cfOpeningVoice=doc.openingVoice end
             -- Each copy of a pile counts itself. Eleven items all reading "one
             -- of eleven" told the player nothing about which one they were
             -- holding (owner, 2026-09-10).
             -- No title and no category here (P4-R132): the plain item, until
             -- the survivor recognises it (R.recognise).
-            applyWear(item,doc)
+            applyWear(item,member)
             writePages(item,doc,api.snapshot().case)
+            createdItems[#createdItems+1]=item
+          end
+        end
+        for _,item in ipairs(createdItems) do
             assert(current:AddItem(item),"could not add evidence")
         end
         -- Claim the part, once the items are actually in it.
@@ -1866,8 +1896,38 @@ local function carrierScanFor(site,found)
             return entry.x>=b.x1-r and entry.x<b.x2+r and entry.y>=b.y1-r and entry.y<b.y2+r and entry.z==b.z
         end)
 end
+-- A late-bound transport finding waits for a real vehicle part at its authored
+-- address.  This is observation, not scene manufacture: no vehicle is spawned,
+-- moved or renamed, and a missing vehicle leaves the clue deferred.
+local function vehicleCandidateFor(site,taken)
+    local b=site.bounds
+    local cx=math.floor((b.x1+b.x2)/2)
+    local cy=math.floor((b.y1+b.y2)/2)
+    local reach=math.max(b.x2-b.x1,b.y2-b.y1)+Session.VEHICLE_RADIUS
+    local choices={}
+    local okScene,sceneRuntime=pcall(require,"ConspiracyFiles/VanillaSceneRuntime")
+    for _,entry in ipairs(World.vehiclesNear(cx,cy,b.z,reach,8)) do
+        if entry.x>=b.x1-Session.VEHICLE_RADIUS and entry.x<b.x2+Session.VEHICLE_RADIUS
+            and entry.y>=b.y1-Session.VEHICLE_RADIUS and entry.y<b.y2+Session.VEHICLE_RADIUS then
+            local script=entry.vehicle.getScriptName and entry.vehicle:getScriptName() or "vehicle"
+            local signature=okScene and sceneRuntime.matchVehicle
+                and sceneRuntime.matchVehicle(entry.x,entry.y,entry.z,tostring(script)) or nil
+            for _,part in ipairs(entry.parts) do
+                local target={x=entry.x,y=entry.y,z=entry.z,objectIndex=0,containerIndex=0,
+                    containerType=Session.VEHICLE_CONTAINER,sprite=tostring(script),vehiclePart=part.part,
+                    sceneSignature=signature}
+                local key=Session.physicalKey(target)
+                if signature and Session.target(target,site) and not taken[key] then
+                    choices[#choices+1]={target=target,key=key}
+                end
+            end
+        end
+    end
+    table.sort(choices,function(a,b) return a.key<b.key end)
+    return choices[1] and choices[1].target or nil
+end
 local function filler(api)
-    local id,site,scan,target,bodyScan,carrier,indexed
+    local id,site,scan,target,bodyScan,carrier,indexed,doc
     return function()
         local hours=worldHours()
         -- The whole case is read ONCE per attempt, not once per step: a
@@ -1900,11 +1960,16 @@ local function filler(api)
             for _,s in ipairs(root.case.locations) do
                 if s.id==root.assignments[id].locationId then site=s end
             end
+            for _,d in ipairs(root.case.documents) do if d.id==id then doc=d end end
             if not site then return true end
             if not indexed then
                 local taken=usedPhysicalKeys()
-                scan=boundsScan(site,function(t) target=t end,
-                    function(candidate) return not taken[Session.physicalKey(candidate)] end,id)
+                if doc and doc.placementIntent=="vehicle" then
+                    target=vehicleCandidateFor(site,taken)
+                else
+                    scan=boundsScan(site,function(t) target=t end,
+                        function(candidate) return not taken[Session.physicalKey(candidate)] end,id)
+                end
             end
         end
         local a=api.assignment(id)
@@ -1928,6 +1993,10 @@ local function filler(api)
             else return false end
         end
         if not target then
+            if doc and doc.placementIntent=="vehicle" then
+                CFLog.write("d","skip",{doc=id,why="no-confirmed-vehicle"})
+                return true
+            end
             if not Session.mobileAllowed(api.snapshot(),id) then
                 -- Debug, not info: this is the ordinary state of an open order
                 -- and would otherwise be a line every two seconds.

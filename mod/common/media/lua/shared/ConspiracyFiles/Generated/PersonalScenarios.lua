@@ -161,7 +161,7 @@ function M.get(id,variant)
   out.organisation="McCoy Logging Co."
   out.grounding="McCoyLoggingCorp"
  end
- if not out.anchors.claim.source:find("{A}",1,true) then
+ if id~="fitness-instructor-start" and not out.anchors.claim.source:find("{A}",1,true) then
   out.anchors.claim.source=out.anchors.claim.source.."\nEnquiry copy filed at: {A}."
  end
  return out

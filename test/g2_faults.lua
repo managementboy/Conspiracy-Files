@@ -22,6 +22,8 @@ local function newFixture(profession)
         return c
     end
     local containers,loaded={},{}; for _,x in ipairs({0,20}) do for _,offset in ipairs({0,0.1,1,1.1}) do containers[x+offset]=container() end;loaded[x]=true;loaded[x+1]=true end;local inventory=container()
+    local buildingDef={getIDString=function() return "0" end,getKeyId=function() return 7 end}
+    local building={getDef=function() return buildingDef end}
     local player=record{getX=0,getY=0,getZ=0,getHoursSurvived=0,getInventory=inventory}
     if profession then
         player.getDescriptor=function()
@@ -34,7 +36,7 @@ local function newFixture(profession)
     player.getModData=function() return {} end; player.getVehicle=function() return nil end
     player.getSquare=function()
         return {getBuilding=function()
-            return {getDef=function() return {getIDString=function() return "0" end} end}
+            return building
         end}
     end
     getPlayer=function() return player end; getDebug=function() return true end; isClient=function() return false end; isServer=function() return false end
@@ -44,11 +46,13 @@ local function newFixture(profession)
     getCell=function() return {getGridSquare=function(_,x,y,z)
         if (y~=0 and y~=1) or z~=0 or not loaded[x] or not containers[x+y/10] then return nil end
         local c=containers[x+y/10]
-        return record{getObjects=list{record{getContainerCount=1,getContainerByIndex=c,getSprite=record{getName="desk_sprite"}}},getWorldObjects=list{},getStaticMovingObjects=list{}}
+        return record{getBuilding=building,getObjects=list{record{getContainerCount=1,getContainerByIndex=c,getSprite=record{getName="desk_sprite"}}},getWorldObjects=list{},getStaticMovingObjects=list{}}
     end} end
     instanceof=function() return false end
-    instanceItem=function()
-        local md={}; local item={getModData=function() return md end,setName=function() end,setCustomName=function() end}
+    instanceItem=function(fullType)
+        local md,keyId={}; local item={getModData=function() return md end,setName=function() end,setCustomName=function() end,
+            getFullType=function() return fullType or "Base.Note" end,getContainer=function(self) return self.container end,
+            getWorldItem=function() return nil end,setKeyId=function(_,v) keyId=v end,getKeyId=function() return keyId end}
         item.getOutermostContainer=function() return item.container end; return item
     end
     local saved={}
@@ -113,11 +117,21 @@ do
         if candidate:getModData().cfGeneratedId==first.id then item=candidate end
     end
     assert(item,"the opening clue must be on the spawning survivor")
+    assert(item:getFullType()=="Base.Key1" and item:getKeyId()==7,
+        "the carried opening clue must be the real starting building key")
     assert(#f.inventory.items==1,"only the opening clue is delivered; later evidence stays distributed")
     assert(item:getModData().cfOpeningAnnounced and item:getModData().cfVoiceHinted,
         "the opening announcement and ordinary-hint suppression persist on the item")
     assert(#f.R.known()==1 and f.R.known()[1].id==first.id,
         "personal delivery must automatically recognise and record the opening clue")
+    local ppe=root.case.documents[4]
+    local counts={}
+    for _,part in ipairs(f.items(root.assignments[ppe.id].physicalToken)) do
+        counts[part:getFullType()]=(counts[part:getFullType()] or 0)+1
+    end
+    assert(counts["Base.Hat_SurgicalMask"]==3 and counts["Base.Gloves_Surgical"]==4
+        and counts["Base.Disinfectant"]==2,
+        "one PPE finding must materialise as its nine real heterogeneous objects")
 end
 
 -- A refused inventory handoff is not a lost or half-discovered clue. The same

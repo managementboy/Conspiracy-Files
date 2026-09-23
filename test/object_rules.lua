@@ -213,7 +213,9 @@ local runtime = f:read("*a"); f:close()
 assert(not runtime:find("if count>1 then", 1, true),
     "placement still calls a second copy a conflict; every pile would die on placement")
 assert(runtime:find("if count>expected then", 1, true), "placement must compare against the expected count")
-assert(runtime:find("for copy=1,expected do", 1, true), "placement must create the whole pile")
+assert(runtime:find("for copyIndex=1,member.quantity do", 1, true)
+    and runtime:find("evidenceMembers(doc)",1,true),
+    "placement must create every member of a homogeneous pile or heterogeneous scene")
 -- Since P4-R132 the copies are named when the pile is recognised, not placed.
 assert(runtime:find('copy.." of "..of', 1, true),
     "each copy of a pile must count itself; eleven items all reading 'one of eleven' says nothing")

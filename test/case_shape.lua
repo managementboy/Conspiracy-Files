@@ -7,8 +7,8 @@ local Personal=require("ConspiracyFiles/Generated/PersonalScenarios")
 local Ordinary=require("ConspiracyFiles/Generated/OrdinaryScenarios")
 local catalog=dofile("test/fixtures/synthetic_locations.lua")
 local opts={mapId="SYNTHETIC-MAP",buildLine="TEST-ONLY",allowSynthetic=true}
-assert(G.REVISION=="g15-event-stories-2" and G.MIN_EVIDENCE==3,
-    "the event-story revision has three required anchors")
+assert(G.REVISION=="g16-dual-world-evidence-1" and G.MIN_EVIDENCE==3,
+    "the dual-world-evidence revision retains the ordinary three-anchor minimum")
 local seen,cases={},0
 for seed=1,600 do
     local case=G.generate(catalog,seed,opts)
@@ -26,6 +26,8 @@ for seed=1,600 do
             "the authored organisation is not a random letterhead substitution")
         assert(case.facts.subject==case.story.question and case.facts.unknown==case.story.unresolved,
             "case facts retain the rendered local question and only an authored remaining question")
+        assert(case.conspiracyPair and #case.conspiracyPair.theories==2 and case.conspiracyPair.correct==nil,
+            "every case belongs to the same unresolved two-theory campaign")
         local ids={};for _,doc in ipairs(case.documents) do ids[doc.id]=true end
         assert(#case.essential==3,"the claim, response and review are all essential")
         local essential={}

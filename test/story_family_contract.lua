@@ -27,7 +27,6 @@ local function fill(s)
 end
 local expectedSet={};for _,id in ipairs(expected) do assert(not expectedSet[id]);expectedSet[id]=true end
 local converted,uncovered=0,0
-local orders={{1,2,3},{1,3,2},{2,1,3},{2,3,1},{3,1,2},{3,2,1}}
 for _,id in ipairs(Premises.list()) do
  local one,two=get(id,1),get(id,2)
  if not expectedSet[id] then
@@ -37,15 +36,22 @@ for _,id in ipairs(Premises.list()) do
   converted=converted+1
   assert(one and two,"both authored variants required: "..id)
   for variant,authored in ipairs({one,two}) do
-   assert(Story.validate(authored));assert(#authored.essential==3)
+   assert(Story.validate(authored));assert(#authored.essential==(id=="fitness-instructor-start" and 4 or 3))
    values.ORG=assert(authored.organisation)
    -- Maximum optional count, stable optional order, so no declared source is
    -- silently absent from the knowledge-gate checks.
    local built=assert(Story.build(authored,fill,id..":"..variant..":",
     {id="a"},{id="b"},{{id="p1"},{id="p2"}},{id="org"},function(n) return n end))
    assert(#built.documents==3+#authored.optional)
-   local sources={authored.anchors.claim,authored.anchors.response,authored.anchors.review}
-   for _,d in ipairs(authored.optional) do sources[#sources+1]=d end
+   local sourceByKey={claim=authored.anchors.claim,response=authored.anchors.response,review=authored.anchors.review}
+   for _,d in ipairs(authored.optional) do sourceByKey[d.key]=d end
+   local sources={}
+   if authored.sourceOrder then
+    for _,key in ipairs(authored.sourceOrder) do sources[#sources+1]=sourceByKey[key] end
+   else
+    sources={authored.anchors.claim,authored.anchors.response,authored.anchors.review}
+    for _,d in ipairs(authored.optional) do sources[#sources+1]=d end
+   end
    for i,doc in ipairs(built.documents) do
     -- Nothing is written on an object, so it has no page with a source block
     -- to read back: its record is the sight, the marking and the reading run
@@ -80,11 +86,17 @@ for _,id in ipairs(Premises.list()) do
     end
     checkKnown(known)
    end
-   for _,order in ipairs(orders) do
-    local known={}
-    for _,i in ipairs(order) do known[built.documents[i].id]=true;checkKnown(known) end
-    local finding=Story.newFinding(built.story,known,built.documents[order[3]].id)
-    assert(finding and #finding.requires==3,"any last essential source must unlock the ending")
+   for last,doc in ipairs(built.documents) do
+    local essential=false
+    for _,eid in ipairs(built.essential) do if eid==doc.id then essential=true end end
+    if essential then
+     local known={}
+     for i,other in ipairs(built.documents) do if i~=last then known[other.id]=true end end
+     known[doc.id]=true;checkKnown(known)
+     local finding=Story.newFinding(built.story,known,doc.id)
+     assert(finding and #finding.requires>=#built.essential,
+      "any last essential source must unlock the authored ending")
+    end
    end
    local bad=get(id,variant)
    bad.comparisons[1].requires[1]="not-an-authored-source"
