@@ -4,6 +4,7 @@
 package.path="mod/common/media/lua/shared/?.lua;"..package.path
 local G=require("ConspiracyFiles/Generated/Generator")
 local Story=require("ConspiracyFiles/Generated/Story")
+local Kinds=require("ConspiracyFiles/Generated/EvidenceKinds")
 local Premises=require("ConspiracyFiles/Generated/Premises")
 local Personal=require("ConspiracyFiles/Generated/PersonalScenarios")
 local Ordinary=require("ConspiracyFiles/Generated/OrdinaryScenarios")
@@ -93,9 +94,26 @@ for _,cal in ipairs(calendars) do
                 assert(includes(dateOrdinals(built.documents[2].body,id.." appointment"),JULY_8),
                     "the origin opening must use its outbreak-eve appointment date")
             else
-                assert(includes(dateOrdinals(built.documents[1].body,id.." claim"),sourceCal.claimDate)
-                    and includes(dateOrdinals(built.documents[2].body,id.." response"),sourceCal.responseDate)
-                    and includes(dateOrdinals(built.documents[3].body,id.." review"),sourceCal.reviewDate),
+                -- A DATED ANCHOR IS A DOCUMENT. An object carries no readable
+                -- text - nothing is written on a starter motor - so it cannot
+                -- render a calendar date, and requiring one would quietly turn
+                -- every physical anchor back into a page. Paper establishes
+                -- dates; the object establishes what is physically true.
+                local function dated(n,label,expected)
+                    local doc=built.documents[n]
+                    local carrier=assert(Kinds.get(doc.kind))
+                    if carrier.capacity=="object" then
+                        -- Strengthened, not relaxed: an object must carry NO
+                        -- date, or the mod has written text onto a thing.
+                        assert(#dateOrdinals(doc.body,id.." "..label)==0,
+                            id.." "..label.." is an object and must not carry a date: "..doc.body)
+                        return true
+                    end
+                    return includes(dateOrdinals(doc.body,id.." "..label),expected)
+                end
+                assert(dated(1,"claim",sourceCal.claimDate)
+                    and dated(2,"response",sourceCal.responseDate)
+                    and dated(3,"review",sourceCal.reviewDate),
                     id.." anchors must render their ordered calendar dates")
             end
             renders=renders+#built.documents

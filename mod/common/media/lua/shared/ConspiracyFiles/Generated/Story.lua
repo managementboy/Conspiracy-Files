@@ -1,6 +1,7 @@
 -- Authored events -> immutable sources -> knowledge-gated survivor notes.
 -- Pure Lua. Placement, discovery and world access remain with their adapters.
 local Kinds=require("ConspiracyFiles/Generated/EvidenceKinds")
+local ConspiracyPair=require("ConspiracyFiles/Generated/ConspiracyPair")
 local M={REVISION=3}
 local ANCHORS={"claim","response","review"}
 local RELATIONS={corroborates=true,recontextualises=true,["disputes-delivery"]=true}
@@ -97,6 +98,17 @@ function M.validate(s)
         if not text(s[k]) then return false,"scenario lacks "..k end
     end
     if s.unresolved~=nil and not text(s.unresolved) then return false,"scenario has invalid unresolved question" end
+    -- EVERY SCENARIO MUST SAY WHICH AXIS OF THE CENTRAL CONSPIRACY ITS
+    -- EVIDENCE BEARS ON. Before this, a case carried the central pair as a
+    -- stamp it never mentioned: measured 2026-09-23, exactly 1 of 27 scenarios
+    -- left anything unresolved that touched the farm, a sample, infection or
+    -- animals. The rest were clerical - a missing form, an unsigned collection
+    -- entry - and were bound to the conspiracy in name only. A closed axis
+    -- list makes "bound" a property the generator checks rather than a claim
+    -- the design document makes.
+    if not ConspiracyPair.isAxis(s.centralAxis) then
+        return false,"scenario does not say which axis of the central conspiracy it touches"
+    end
     local ok,n=dense(s.readings,2)
     if not ok or n~=2 or not text(s.readings[1]) or not text(s.readings[2]) then
         return false,"scenario needs two interpretations of its event"
@@ -170,7 +182,7 @@ function M.body(observation,source,note)
 end
 
 -- `fill` only substitutes saved case inputs. It may not query the live world.
-function M.build(s,fill,prefix,a,b,people,org,random,steer)
+function M.build(s,fill,prefix,a,b,people,org,random,steer,pair)
     local ok,why=M.validate(s); if not ok then return nil,why end
     local docs,ids={},{}
     local function add(key,d,site)
@@ -238,6 +250,20 @@ function M.build(s,fill,prefix,a,b,people,org,random,steer)
     local story={revision=M.REVISION,question=fill(s.question),event=fill(s.event),grounding=s.grounding,
         outcome=fill(s.outcome),readings={},comparisons={}}
     if s.unresolved~=nil then story.unresolved=fill(s.unresolved) end
+    -- The bridge from this local mystery to the campaign's central question.
+    -- The AXIS belongs to the scenario; the SENTENCE belongs to whichever pair
+    -- this save drew, so the same clerical discrepancy reads differently in a
+    -- Farm Zero campaign and a Failed Cordon one. Neither sentence resolves
+    -- anything: each says what the finding could mean under either reading.
+    -- ONLY THE AXIS IS SAVED. The sentence is derivable from the axis and the
+    -- pair, both of which the case already carries, so storing it would cost a
+    -- line of prose in every saved case for nothing -- and the save budget has
+    -- about 10 KB of headroom at full catalogue (test/map_feature_budget.lua).
+    -- Read it back with M.centralLine.
+    story.centralAxis=s.centralAxis
+    if pair and not ConspiracyPair.axisLine(pair,s.centralAxis) then
+        return nil,"the central pair carries no line for axis "..tostring(s.centralAxis)
+    end
     for i,value in ipairs(s.readings) do story.readings[i]=fill(value) end
     local essential={}; for _,key in ipairs(s.essential) do essential[#essential+1]=ids[key] end
     for _,finding in ipairs(s.comparisons) do
@@ -255,6 +281,13 @@ function M.build(s,fill,prefix,a,b,people,org,random,steer)
     return {documents=docs,story=story,essential=essential,thread=thread}
 end
 
+-- The bridge from a case's local mystery to the campaign's central question,
+-- resolved at read time from what the save already holds. Nil when the case
+-- predates the axis or the pair cannot speak to it.
+function M.centralLine(story,pair)
+    if type(story)~="table" then return nil end
+    return ConspiracyPair.axisLine(pair,story.centralAxis)
+end
 function M.project(story,doc,known)
     local body,links=doc.body,{}
     if not story then return body,links end

@@ -12,6 +12,7 @@ local closed={
     question="Why was the transfer reversed?", event="The depot corrected a duplicated transfer.",
     outcome="The duplicate was removed before the outage.",
     readings={"The correction was routine.","The correction settles the transfer without explaining the later outage."},
+    centralAxis="records",
     anchors={claim=source("Transfer request"),response=source("Correction notice"),review=source("Stock review")},
     essential={"claim","response"},
     comparisons={{requires={"claim","response"},text="The correction answers the duplicate transfer.",from="claim",to="response",kind="corroborates"}},

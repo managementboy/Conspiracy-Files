@@ -43,6 +43,15 @@ local function make(d)
  local lower=string.lower(d.label)
  return {
   question=d.question,
+  -- The opening's evidence is a transport trail: which way the material went.
+  centralAxis="movement",
+  -- THIS OPENING IS WRITTEN FOR ONE PAIR AND SAYS SO. Its feed sack, spent
+  -- protective equipment and farm-connected client are a farm story; dropped
+  -- into a cordon campaign they would read as nonsense. A scenario whose prose
+  -- commits to a central question pins it here, and the generator honours that
+  -- instead of drawing from the seed. Scenarios that do not pin one are
+  -- clerical enough to hold under either, and float.
+  requiresPair="farm-zero-vs-delivered-agent",
   event="{ORG} recorded "..d.service.." for {SELF} at {A} after "..d.reason..".",
   outcome="The house and a nearby transport trail contain animal material and spent protective equipment, but neither establishes which way the suspicious material travelled.",
   unresolved="Did the infection leave the farm as a sample, or arrive at the farm as a sample?",

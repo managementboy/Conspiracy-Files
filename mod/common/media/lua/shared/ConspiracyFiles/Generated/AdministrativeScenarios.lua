@@ -9,6 +9,22 @@ local grounding={
 local function document(kind,title,observation,source,note)
  return {kind=kind,title=title,observation=observation,source=source,note=note}
 end
+-- THE MIDDLE RECORD IS A THING, NOT A PAGE.
+--
+-- Measured 2026-09-23: twelve of fourteen evidence kinds were paper, and of
+-- 4,547 catalogued Project Zomboid objects the scenarios used twelve. The
+-- design vision says the world carries the story and paper establishes names,
+-- dates and claims - so the record that CONTRADICTS the opening claim is now
+-- the object itself, and the paper around it keeps its proper job.
+--
+-- An object carries no readable text: `source` says what is visibly true of
+-- it, never what it says, because nothing is written on a starter motor.
+-- EvidenceKinds.fits caps the whole rendered body at 240 characters for
+-- exactly this reason - a page of prose about an object would be the mod
+-- explaining the object, which is the one thing it must not do.
+local function object(kind,title,observation,source,note,wear)
+ return {kind=kind,title=title,observation=observation,source=source,note=note,wear=wear}
+end
 local function scenario(t)
  t.grounding=assert(grounding[t.organisation])
  t.essential={"claim","response","review"};t.optional=t.optional or {}
@@ -42,6 +58,7 @@ return {
   scenario{
    organisation="Circuital Healing",
    question="Why did the returned radio look newer than the one sent in?",
+   centralAxis="movement",
    conflict="The receipt has {P1} carrying their own radio out of the shop. The serial check has both customers going home with the wrong set.",
    event="A cleaner removed two paper job labels, and the radios were handed back to the wrong customers.",
    outcome="Serial-number checks identified the exchanged radios and both customers collected their own sets.",
@@ -55,23 +72,22 @@ Job {CODE}: radio cleaned, volume control serviced, collected by {P1}.
 Customer note: mine had a cracked tuning knob. This one hasn't. Sounds better, though.
 Collection query and workshop copies retained at {B}.]],
      "A clean case could hide a scratch. It would take more than a cloth to mend a cracked knob. I'd check the serial number before congratulating the repair."),
-    response=document("notepad","Bench-label report / {CODE}",
-     "A bench note with two torn paper labels stuck beneath it.",
-     [[{DATE2} / {CODE}
-{P2}: cleaning fluid took both job labels off. I put them back by where the sets had been standing. Both customers have now queried their returns.
-Please compare serial numbers before accepting another repair booking.]],
-     "{P2} put the labels back by position. Two customer complaints suggest the radios may have taken a little trip across the bench."),
+    response=object("HamRadio1","Radio, marked {P1}",
+     "A serviced radio with {P1}'s name taped to it.",
+     "Its serial does not match the intake card in the same box.",
+     "The name is on it. Whether the radio is theirs is the question.","good"),
     review=document("receipt","Serial-number exchange / {CODE}",
      "Two collection signatures on a correction slip, with a fresh fee stamped below them.",
      [[CIRCUITAL HEALING / {DATE3}
 {CODE}: serials matched to original intake cards. Sets had been exchanged at collection. Both owners now signed for their own radios.
 No new repair performed. New handling fee entered for second collection.
-Complaint about fee referred to manager.]],
+Complaint about fee referred to manager.
+Checked against the intake cards by {P2}.]],
      "Both sets reached their owners. The second fee stayed behind to meet the manager. Good that something still needs fixing."),
    },
    findings={
-    "The receipt has {P1} collecting their own radio. The bench note has two sets standing where a pair of washed-off labels put them.",
-    "The serial checks confirm the exchange suspected in the bench note, and the owners sign for their own sets.",
+    "The receipt has {P1} collecting their own radio. The set still on the bench carries another customer's tag and an uncracked knob.",
+    "The serial checks confirm the exchange the mismatched tag implied, and the owners sign for their own sets.",
     "The radio looked newer because it belonged to someone else. The serial checks put both sets back with their owners. A second handling fee turned the correction into another customer complaint.",
    },
    optional={{key="other-owner",role="person",kind="letter",title="Other customer's note / {CODE}",
@@ -86,6 +102,7 @@ Please do not adjust mine to match. Your last adjustment took two visits.]],
   scenario{
    organisation="Lenny's Car Repair",
    question="Was the spotless starter motor actually repaired?",
+   centralAxis="records",
    optional={{key="parts-card",role="records",kind="businesscard",title="Parts supplier's card / {CODE}",
     observation="A trade card wedged under the spine of the bench book.",
     source="AUTO ELECTRIC SUPPLY\nContact sets: ask for {P2}.",
@@ -105,12 +122,10 @@ Please do not adjust mine to match. Your last adjustment took two visits.]],
 Customer note: looks new. Still only clicks.
 Returned-job copies and bench report: {B}.]],
      "Clean enough to collect, apparently. {P1}'s note says it still won't start the engine. The tick has done more travelling than the car."),
-    response=document("notebook","Mechanic's bench entry / {CODE}",
-     "A bench book with READY FOR TEST underlined beside the starter's serial.",
-     [[{DATE2} / {CODE}
-{P2}: same serial as intake. I cleaned it for inspection and left READY FOR TEST on the tray. Collection card copied only READY.
-Original test failed under load. Replacement contact set required; none fitted before collection.]],
-     "The mechanic identifies the original starter and the words lost on the way to the counter. READY was the cheap half of the instruction."),
+    response=object("Saw","Bench saw, marked {P1}",
+     "The bench saw from the job, wiped clean, tagged {P1}.",
+     "The blade is bright and the teeth are still blunt.",
+     "Cleaned, certainly. Repaired is a different claim.","poor"),
     review=document("notepad","Returned-job correction / {CODE}",
      "A repeat-test result attached to a voided collection charge.",
      [[LENNY'S CAR REPAIR / {DATE3}
@@ -120,8 +135,8 @@ Part ordered. Do not mark READY while ordering.]],
      "The repeat test finds the fault, and the charge is void. The part is still only ordered. This time the word READY has been put under supervision."),
    },
    findings={
-    "The collection slip is ticked READY and paid. The bench entry has the same starter failing its electrical test and going no further.",
-    "The repeat test backs the mechanic's account: the same fault remains and no replacement contacts had been fitted.",
+    "The collection slip is ticked READY and paid. The saw itself still carries its failed test tag and its blunt teeth.",
+    "The repeat test backs what the saw shows: the same fault remains and no sharpening was done.",
     "Cleaning made the starter look repaired; a shortened label made the counter treat it as repaired. The retest reopened the job and voided the charge. I have no record of the replacement contacts being fitted.",
    },
   },
@@ -130,6 +145,7 @@ Part ordered. Do not mark READY while ordering.]],
   scenario{
    organisation="Hobbs & Perkins",
    question="Why were two crate deposits charged for one crate number?",
+   centralAxis="records",
    optional={{key="yard-ticket",role="records",kind="ticket",title="Loading-bay ticket / {CODE}",
     observation="A parking ticket folded into the driver's round book.",
     source="MULDRAUGH - loading bay. Issued {DATE2}, 08:15.",
@@ -147,28 +163,28 @@ Part ordered. Do not mark READY while ordering.]],
 Account {CODE} / {P1}: two deliveries, returnable crate 47 entered on each. Two deposits charged; neither return credited.
 Retained delivery and return copies: {B}.]],
      "Two deposits on number 47. Either there were two crates with one number or one crate has been working very hard."),
-    response=document("letter","Driver's crate round / {CODE}",
-     "A driver's copy with three stops joined by a pencil line.",
-     [[{DATE2} / {CODE}
-{P2}: collected empty 47 from {P1}, took it back, loaded it again and delivered the second order in it. One crate all the way. Split left runner; wired repair.
-Return slip was under the cab seat. Attached now.]],
-     "The driver says the empty crate went back and came out full. The return slip took the slower route through the cab seat."),
+    response=object("Mov_MilitaryCrate","Crate 47, marked {P1}",
+     "One crate stencilled 47, chalked twice, signed {P1}.",
+     "Both chalk marks are in one hand; the runner is mended.",
+     "One crate went out twice, or two were never here.","fair"),
     review=document("receipt","Crate-return credit / {CODE}",
      "A credit entry with the crate's damaged runner sketched beside it.",
      [[HOBBS & PERKINS / {DATE3}
 {CODE}: loading record and wired runner identify the same crate 47 on both deliveries. Earlier return accepted; first deposit credited. Second deposit remains against crate now with customer.
-Do not issue a second crate to balance the statement.]],
+Do not issue a second crate to balance the statement.
+Deposit ledger reconciled by {P2}.]],
      "The first deposit is credited. One crate and one remaining deposit. Someone had to forbid solving the accounts with another crate."),
    },
    findings={
-    "Accounts hold deposits on two crates numbered 47. The driver's round has one crate, returned in the morning and sent out again the same day.",
-    "The loading record and repaired runner corroborate the reuse, and the first deposit is credited.",
+    "Accounts hold deposits on two crates numbered 47. Only one crate numbered 47 is here, and it carries both chalk marks.",
+    "The loading record and the crate's repaired runner corroborate the reuse, and the first deposit is credited.",
     "There were two deliveries, not two crates. Number 47 made both trips while its first return slip stayed under a seat. The account now carries only the deposit for the crate still with {P1}.",
    },
   },
   scenario{
    organisation="Lectromax Manufacturing",
    question="Why did a saw-blade delivery include a crate of unfinished blanks?",
+   centralAxis="movement",
    optional={{key="press-hammer",role="records",kind="BallPeenHammer",wear="the face pitted from use",
     title="Ball-peen hammer, marked {P1}",
     observation="A hammer left on top of the crate labels.",
@@ -186,23 +202,21 @@ Job {CODE}: two crates delivered as finished saw blades.
 {P1}: first crate usable. Second holds unshaped blanks. Both marked with this job number. Please send blades rather than the ingredients.
 Production-query copies: {B}.]],
      "The customer got one usable crate and one more suitable for becoming useful later. Both have the number the delivery checker wanted."),
-    response=document("notebook","Press-queue entry / {CODE}",
-     "A production book with a cancelled press slot circled in red.",
-     [[{DATE2} / {CODE}
-{P2}: blanks for second crate removed from press queue before shaping. Job label was attached to identify the order, not certify completion.
-Dispatch ticked two labels; no finish stamp checked.
-Request return of blanks for processing.]],
-     "The press book says the number identified an order. Dispatch treated it as a certificate. The labels were finished, at least."),
+    response=object("SmallSaw","Saw blank, marked {P1}",
+     "An untoothed saw blank under a FINISHED ORDER label for {P1}.",
+     "The rim is unground and no teeth have been cut.",
+     "The label travelled with the crate. The work did not.","poor"),
     review=document("receipt","Unfinished-stock return / {CODE}",
      "A return receipt stamped PRODUCTION, with no outward freight stamp.",
      [[LECTROMAX MANUFACTURING / {DATE3}
 {CODE}: returned crate checked against blank-stock count. Material unshaped; no finished blades missing from factory stock.
-Blanks restored to press queue. Customer balance remains outstanding. Replacement freight to factory account.]],
+Blanks restored to press queue. Customer balance remains outstanding. Replacement freight to factory account.
+Press queue and return checked by {P2}.]],
      "The blanks are back where they can become blades. The customer still has an incomplete order, but at least the next trip won't be theirs to pay for."),
    },
    findings={
-    "Two crates carry the same finished-order label. The press record has one of them leaving the works before its blades were ever shaped.",
-    "The return check corroborates the press record and restores the unfinished material to production, with the customer still owed blades.",
+    "Two crates carry the same finished-order label. The blank inside one of them was never ground or toothed.",
+    "The return check corroborates what the blank shows and restores the unfinished material to production, with the customer still owed blades.",
     "The duplicate number belonged to one order, not two finished crates. Dispatch checked labels instead of completion; the returned blanks went back into the queue. Nothing here shows that the missing blades eventually shipped.",
    },
   },
@@ -211,6 +225,7 @@ Blanks restored to press queue. Customer balance remains outstanding. Replacemen
   scenario{
    organisation="Hobbs & Perkins",
    question="Who paid for roof materials before the purchase was approved?",
+   centralAxis="access",
    optional={{key="own-card",role="person",kind="creditcard",title="Worker's own card / {CODE}",
     observation="A credit card kept with the requisition, one edge worn white.",
     source="Cardholder: {P1}.",
@@ -229,13 +244,10 @@ Roof sheets and fixings ordered from HOBBS & PERKINS. Purchase approved by {P2}.
 Attached receipt: deposit paid {DATE0} by {P1}.
 Retained supplier copy and reimbursement query: {B}.]],
      "The receipt is older than the approval and names {P1} as the payer. I'd like to know whose money kept the roof order waiting politely."),
-    response=document("letter","Deposit explanation / {CODE}",
-     "A letter with a thumb-smudged carbon receipt pinned to the corner.",
-     [[{DATE2} / {CODE}
-{P2}, I paid the holding deposit myself before the stock went. The requisition was for what we had already reserved. The supplier has deducted my deposit from the order balance.
-You have the roof sheets. Please return my money before asking me to buy anything else.
-{P1}]],
-     "{P1} says the deposit bought time for the approval. The employer got roof sheets out of it; the worker got a reason to stop being helpful."),
+    response=object("ClayShingle","Roof shingles, marked {P1}",
+     "A stack of shingles with a delivery card for {P1}.",
+     "The batch mark is stamped in the clay, dated before approval.",
+     "The material arrived before anyone authorised buying it.","good"),
     review=document("receipt","Supplier allocation / {CODE}",
      "A supplier statement with the deposit joined to the later order by a ruled line.",
      [[HOBBS & PERKINS / {DATE3}
@@ -244,14 +256,15 @@ Employer note: reimbursement referred back. Deposit predates requisition; retros
      "The supplier accounts for one deposit and one order. The employer has discovered that an advance payment happened in advance, and needs a form about it."),
    },
    findings={
-    "The requisition has the order approved first and paid afterwards. The letter has {P1} paying out of their own money days before approval existed.",
-    "The supplier confirms the deposit was applied once to the collected materials; the employer still wants a retrospective expense form.",
+    "The requisition has the order approved first and paid afterwards. The shingles carry a batch mark from days before approval existed.",
+    "The supplier confirms the deposit was applied once to the delivered shingles; the employer still wants a retrospective expense form.",
     "The order didn't predict its payment. A worker's money held the roof stock until approval arrived. The materials were collected and the supplier was paid once; {P1}'s reimbursement is still only a referral.",
    },
   },
   scenario{
    organisation="Louisville Bruiser",
    question="Why were the winners' bats paid for before the prize order existed?",
+   centralAxis="records",
    optional={{key="spare-bat",role="records",kind="BaseballBat",wear="unused, the grip tape still bright",
     title="Baseball bat, marked {P1}",
     observation="A bat standing behind the prize paperwork, WINNER stencilled along it.",
@@ -269,13 +282,10 @@ Employer note: reimbursement referred back. Deposit predates requisition; retros
 Committee requisition raised {DATE1}: prizes for forthcoming event.
 Retained prize list and collection copies: {B}.]],
      "Twelve winners paid for before the committee ordered prizes. Either somebody was confident about the result or WINNER came cheaper by the dozen."),
-    response=document("letter","Committee prize instruction / {CODE}",
-     "A committee note with EVERY ENTRANT underlined twice.",
-     [[{DATE2} / {CODE}
-{P2}: twelve entrants, twelve bats. Give one to everyone who takes part. The stock WINNER imprint costs less than a special PARTICIPANT run.
-The early payment held the batch. Do not ask the supplier to print LOSER on anything.
-{P1}]],
-     "One bat per entrant. WINNER was the economical inscription. Losing the event apparently doesn't qualify anyone for a more expensive bat."),
+    response=object("BaseballBat","Racked bats, marked {P1}",
+     "Twelve identical bats, racked, one tagged {P1}.",
+     "Every grip is factory-wrapped; none has been swung.",
+     "A winner's prize, or the same thing bought for all.","good"),
     review=document("receipt","Prize collection sheet / {CODE}",
      "A collection sheet showing twelve identical imprints beside a prepaid stamp.",
      [[LOUISVILLE BRUISER / {DATE3}
@@ -285,8 +295,8 @@ No additional engraving commissioned.]],
      "The supplier records twelve identical bats and no winning names. Whatever happened at the event, its prizes were determined to be encouraging."),
    },
    findings={
-    "The receipt reads as a prize bought for a winner. The committee instruction has twelve identical bats bought for everybody who entered.",
-    "The collection sheet matches the equal-prize instruction and applies the earlier payment to the same twelve bats.",
+    "The receipt reads as a prize bought for a winner. Twelve identical unused bats are racked together in the store.",
+    "The collection sheet matches the racked twelve and applies the earlier payment to the same bats.",
     "The receipt records prepaid participation prizes, not a preselected winner. All twelve bats said WINNER because a more accurate word cost extra. The actual event results remain outside this file.",
    },
   },
@@ -295,6 +305,7 @@ No additional engraving commissioned.]],
   scenario{
    organisation="Lectromax Manufacturing",
    question="Why was a locked factory paying for a night shift?",
+   centralAxis="access",
    optional={{key="gate-pass",role="person",kind="idcard",title="Works identification / {CODE}",
     observation="A works card with its gate photograph lifting at one corner.",
     source="LECTROMAX MANUFACTURING\n{P1}, production. Gate access.",
@@ -313,13 +324,10 @@ No additional engraving commissioned.]],
 Gate entry for claimed shift: none. Factory remained locked.
 Retained shift instructions and pay query: {B}.]],
      "Eight hours on site, no gate entry, factory locked. I'd want the instructions that went with those hours before deciding who had the night off."),
-    response=document("letter","Standby instruction / {CODE}",
-     "A worker's query with a supervisor's instruction copied below it.",
-     [[{DATE2} / {CODE}
-{P2}, I stayed beside my telephone for the whole eight-hour restart window as you ordered. No call came. I could not go out, so I expect to be paid.
-Your instruction: remain available at home; do not come to the locked factory until called.
-{P1}]],
-     "The worker was ordered to stay home and available. An empty factory can still take up somebody's entire night."),
+    response=object("Padlock","Plant padlock, marked {P1}",
+     "The gate padlock, shut, its key box tagged {P1}.",
+     "The shackle is unscratched and the seal is intact.",
+     "A shift was paid behind a gate nobody opened.","good"),
     review=document("notepad","Standby pay decision / {CODE}",
      "A payroll decision attached to the disputed timesheet.",
      [[LECTROMAX MANUFACTURING / {DATE3}
@@ -329,14 +337,15 @@ Do not alter gate log to make it agree.]],
      "The pay was issued for waiting. The code still says on site, followed by a note saying not on site. At least nobody has been sent to repair the gate log."),
    },
    findings={
-    "The timesheet has {P1} on an eight-hour shift inside the plant. The standby instruction has them waiting at home, told not to attend.",
-    "Payroll confirms the required waiting period and pays it under the only available shift code, while recording that no restart occurred.",
+    "The timesheet has {P1} on an eight-hour shift inside the plant. The gate padlock is shut and its key box is still sealed.",
+    "Payroll confirms the waiting period the sealed gate implies and pays it under the only available shift code, recording that no restart occurred.",
     "Nobody worked inside the locked factory that night. {P1} gave up eight hours at home under an instruction to wait, and was paid for that time. The imaginary on-site shift belongs to the payroll code.",
    },
   },
   scenario{
    organisation="Circuital Healing",
    question="How did a time-clock repair produce eight hours of overtime?",
+   centralAxis="records",
    optional={{key="clock-hammer",role="records",kind="Hammer",wear="the claw sprung slightly apart",
     title="Hammer, marked {P1}",
     observation="A hammer on the shelf beneath the time clock.",
@@ -354,12 +363,10 @@ Do not alter gate log to make it agree.]],
 Customer requests explanation: collection desk was shut throughout those hours.
 Retained bench records and invoice query: {B}.]],
      "The card clocks eight hours. That tells me what the clock printed, which is precisely the thing somebody paid to have repaired."),
-    response=document("notebook","Clock bench-test log / {CODE}",
-     "A repair log with SET TIME written above the same two punched times.",
-     [[Explanation written {DATE2} / {CODE}
-{P1}: for the test supporting this invoice, set clock to 18:00, punch IN; advance to 02:00, punch OUT. Check overnight date rollover. Test successful.
-Actual repair and test time: fifty minutes, ordinary rate. Returned test card with clock to demonstrate repair.]],
-     "The technician advanced the clock to test midnight. Eight hours passed for the clock in rather less than eight hours. A useful trick for billing, if nobody reads this page."),
+    response=object("Mov_WallClock","Time clock card, marked {P1}",
+     "The works time clock, its test card headed {P1}.",
+     "Two punches, fifty minutes apart, in one ribbon ink.",
+     "Fifty minutes of testing, or a night of overtime.","fair"),
     review=document("receipt","Labour credit / {CODE}",
      "A credit note cancelling the overtime line and entering fifty minutes beneath it.",
      [[CIRCUITAL HEALING / {DATE3}
@@ -368,8 +375,8 @@ Credit issued against original bill. Customer request for cash refund referred t
      "The clock's pretend night has been removed from the bill. Getting the credit turned back into cash will apparently take time the clock can't supply."),
    },
    findings={
-    "The invoice bills a night of overtime from the time card. The bench log has two test punches fifty minutes apart.",
-    "The corrected invoice accepts the bench log and replaces eight hours of overtime with fifty minutes of ordinary labour.",
+    "The invoice bills a night of overtime from the time card. The clock's own test card holds two punches fifty minutes apart.",
+    "The corrected invoice accepts the punched card and replaces eight hours of overtime with fifty minutes of ordinary labour.",
     "The time clock worked through the night only because {P1} advanced it. Its test card became an overtime bill. That charge was credited; the requested cash refund is not recorded here.",
    },
   },
@@ -379,6 +386,7 @@ Credit issued against original bill. Customer request for cash refund referred t
    organisation="CGE Corp",
    kinds={"recontextualises","corroborates","recontextualises"},
    question="Why were there recent work sheets for the old CGE factory?",
+   centralAxis="access",
    optional={{key="survey-player",role="records",kind="CDplayer",wear="scuffed, the lid held with tape",
     title="CD player, marked {P1}",
     observation="A portable player left on a windowsill in a factory with no power.",
@@ -396,22 +404,20 @@ Manufacturing jobs here: 1961-1980. Building proposed for demolition; preservati
 Query {CODE}: fresh site-work sheets received despite closure. Who is still working there?
 Retained survey correspondence: {B}.]],
      "The leaflet puts the factory's working life in the past. The query puts somebody inside much more recently. Work can mean more than production; I'd like to see the sheets."),
-    response=document("notebook","Preservation survey / {CODE}",
-     "A volunteer's measured sketch with the skybridge outlined twice.",
-     [[{DATE2} / {CODE}
-{P1} and {P2}: measured access route and photographed skybridge for proposed CGE museum submission. No manufacturing equipment operated.
-These are volunteer survey hours, not factory payroll.
-Request another visit to complete the submission.]],
-     "The volunteers were measuring a museum that doesn't exist yet. The old factory's most active department seems to be the campaign to stop it disappearing."),
+    response=object("Camera","Survey camera, marked {P1}",
+     "A camera on a works bench, its case labelled {P1}.",
+     "The film counter has not reached the end of the roll.",
+     "Somebody photographed a closed building and stopped.","fair"),
     review=document("letter","Further access refused / {CODE}",
      "An access decision returned with the survey cover sheet still attached.",
      [[{DATE3} / {CODE}
 Survey visit acknowledged. CGE production has not resumed. Building remains closed; no further volunteer entry authorised pending demolition decision.
-Museum proposal requires a complete condition survey. Current submission marked INCOMPLETE.]],
+Museum proposal requires a complete condition survey. Current submission marked INCOMPLETE.
+Survey photographs logged by {P2}.]],
      "They need a complete survey to propose saving it and permission to finish the survey. Permission is waiting for the decision about demolishing it. A very tidy queue."),
    },
    findings={
-    "The volunteer survey identifies the recent work queried beside the old closure leaflet: measuring and photographing for a proposed museum.",
+    "The camera identifies the recent work queried beside the old closure leaflet: somebody was photographing a building that was shut.",
     "The access decision acknowledges that visit, then blocks another one while requiring a complete survey for the proposal.",
     "The factory had not restarted. The recent work belonged to people trying to save the building, and the second closure kept them from completing their survey. These records leave both demolition and the museum proposal unresolved.",
    },
@@ -420,6 +426,7 @@ Museum proposal requires a complete condition survey. Current submission marked 
    organisation="March Ridge bunker tours",
    kinds={"recontextualises","corroborates","recontextualises"},
    question="Why were beds and power checked after the bunker was closed?",
+   centralAxis="access",
    optional={{key="tour-broom",role="records",kind="Broom",wear="worn to one side of the head",
     title="Broom, marked {P1}",
     observation="A broom propped inside the closed visitor entrance.",
@@ -437,23 +444,22 @@ Museum proposal requires a complete condition survey. Current submission marked 
 Tour leaflet: military bunker decommissioned in 1991; visitor display includes accommodation for forty.
 Recent bed and power work queried. Retained work orders and admission correspondence: {B}.]],
      "The bunker closed as a military shelter in 1991 and now it's closed to visitors as well. Recent work on beds and power needs a better explanation than another CLOSED sign."),
-    response=document("notebook","Visitor-route preparation / {CODE}",
-     "A work list with display beds ticked off and a route-light test noted underneath.",
-     [[{DATE2} / {CODE}
-{P1}: count forty display beds; replace torn visitor labels; test route lighting only. No bedding issued for occupancy. No military staff accommodated.
-{P2}: admission remains suspended. Preparation work is for proposed tour reopening, not authority to admit visitors.]],
-     "The work list describes a display and a visitor route. Even the beds are waiting for permission to have people look at them."),
+    response=object("Generator_Old","Standby generator, marked {P1}",
+     "A standby generator below the stair, log signed {P1}.",
+     "The exhaust is warm-scaled and the cable run is new.",
+     "The power was kept ready after closure was announced.","fair"),
     review=document("letter","Tour reopening refused / {CODE}",
      "A returned reopening request with its waiver form still attached.",
      [[MARCH RIDGE BUNKER TOURS / {DATE3}
 {CODE}: display and lighting work accepted as completed. Reopening refused: safety review outstanding.
 Waivers do not constitute completion of that review. Continue to suspend admission.
-Ticket printing may proceed at operator's risk.]],
+Ticket printing may proceed at operator's risk.
+Standby plant inspected by {P2}.]],
      "The beds and lights are ready, the review isn't, and the tickets can still be printed. Paper is the first visitor allowed through."),
    },
    findings={
-    "The preparation list explains the work queried in the closure notice as maintenance of the visitor display and route.",
-    "The reopening reply accepts the display work but refuses admission, distinguishing finished preparation from an unfinished safety review.",
+    "The fuelled standby generator explains the work queried in the closure notice: the power was being kept ready, not shut down.",
+    "The reopening reply accepts the maintenance but refuses admission, distinguishing finished preparation from an unfinished safety review.",
     "The recent activity was tour preparation, not a military bunker reopening. The military closure and visitor closure describe different uses. Staff finished their list; permission to admit anyone was still refused.",
    },
   },

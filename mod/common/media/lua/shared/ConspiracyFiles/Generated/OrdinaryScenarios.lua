@@ -8,6 +8,7 @@ local CorrespondenceScenarios=require("ConspiracyFiles/Generated/CorrespondenceS
 local scenarios={
  ["transfer-nobody-arranged"]={{
    ["question"]="Why was a mechanic transferred to a mill without leaving the roadside?",
+   ["centralAxis"]="records",
    ["event"]="McCoy moved the cost of a roadside truck repair onto the mill budget by entering the mechanic as transferred.",
    ["outcome"]="The mechanic repaired the truck at the roadside. The transfer moved the bill, and the yard reported no repair expense.",
    ["readings"]={"The truck got repaired because somebody found a budget that would pay.","The yard bought a clean expense report by sending its breakdown to another department on paper."},
@@ -63,6 +64,7 @@ local scenarios={
     ["note"]="It is in the drawer with the transfer notice. Nothing here says it is theirs."}}
   },{
    ["question"]="Why does a transferred storage clerk still work at the same counter?",
+   ["centralAxis"]="records",
    ["event"]="U-Store It renamed its counter a temporary claims office and transferred its clerk there to count a storm response team without adding staff.",
    ["outcome"]="One clerk did both the normal counter work and storm claims. The extra team in the report was the same person under a second heading.",
    ["readings"]={"The clerk kept the place running and handled the claims as well.","Management counted an extra team by giving one exhausted clerk two headings."},
@@ -119,6 +121,7 @@ local scenarios={
   }},
  ["signed-by-someone-absent"]={{
    ["question"]="How did an absent account holder sign for generator fuel?",
+   ["centralAxis"]="absence",
    ["event"]="Fossoil would only accept the printed account holder name, so the account holder instructed a colleague to sign that name to release fuel.",
    ["outcome"]="The colleague signed the required name and received the fuel. A later stock check accounted for the delivery; the signature rule concealed the actual receiver.",
    ["readings"]={"The fuel reached the generator because the workers worked around the signature rule.","The signature check made the record less truthful than the people using it."},
@@ -174,6 +177,7 @@ local scenarios={
     ["note"]="The name on the tool is not the name on the receipt. Only one of them signed anything."}}
   },{
    ["question"]="Why is the absent Sunstar manager signing night deliveries?",
+   ["centralAxis"]="absence",
    ["event"]="Sunstar required its manager name on linen receipts while leaving the night clerk a signature stamp to keep deliveries moving.",
    ["outcome"]="The clerk used the authorised stamp while the manager was absent. The linen arrived, and a signature complaint ended with the stamp locked away and no replacement receiver appointed.",
    ["readings"]={"The clerk followed the only procedure that let the rooms get clean sheets.","The manager delegated the signature and kept the right to complain about it."},
@@ -230,6 +234,7 @@ local scenarios={
   }},
  ["two-start-dates"]={{
    ["question"]="Why does a mill worker become new again on the next personnel card?",
+   ["centralAxis"]="records",
    ["event"]="McCoy ended a seasonal yard engagement and opened a permanent mill file without carrying service across for the meal allowance.",
    ["outcome"]="The worker had two real engagements, but the new file reset allowance eligibility while experience remained useful for training the next recruit.",
    ["readings"]={"The dates belong to two jobs, but the same experienced worker did both.","McCoy remembered the experience when it needed a trainer and forgot it when a meal cost money."},
@@ -285,6 +290,7 @@ local scenarios={
     ["note"]="Somebody marked their tools. The personnel file has started them again as a new employee."}}
   },{
    ["question"]="Why was an experienced Fossoil attendant charged as a new starter?",
+   ["centralAxis"]="records",
    ["event"]="A billing-file transfer created a second employment start for a continuously employed Fossoil attendant and triggered a second uniform deposit.",
    ["outcome"]="Payroll confirmed continuous service and refunded the duplicate deposit; the billing system retained the new start date.",
    ["readings"]={"The duplicate charge was corrected once someone compared the files.","A new employee existed just long enough for accounts to take another deposit."},
@@ -337,6 +343,7 @@ local scenarios={
   }},
  ["resignation-after-payslip"]={{
    ["question"]="Why was final pay prepared before the cook resigned?",
+   ["centralAxis"]="records",
    ["event"]="Sunstar prepared a cook exit after the cook refused to work unpaid during a diner inventory closure, then asked for a resignation to complete the file.",
    ["outcome"]="The cook signed a dated departure statement explaining the refused unpaid shift. Final wages were paid, and the motel filed the departure as voluntary.",
    ["readings"]={"The cook chose to leave rather than work the closed diner for free.","Sunstar offered unpaid work or a ready-made departure, then reported a voluntary resignation."},
@@ -392,6 +399,7 @@ local scenarios={
     ["note"]="Somebody counted these and marked every one. The inventory was never finished."}}
   },{
    ["question"]="Why did U-Store It issue final pay before receiving a resignation?",
+   ["centralAxis"]="records",
    ["event"]="A clerk gave notice by telephone because the resignation form was locked in the office, and U-Store It mailed that form to be returned before releasing the final-pay file.",
    ["outcome"]="The worker completed the shift and received final pay on the telephone notice; the written form arrived later after a round trip through the mail.",
    ["readings"]={"The desk paid the worker rather than wait for its own locked form.","U-Store It made a departing employee apply in writing to explain a departure it had already processed."},
@@ -444,6 +452,7 @@ local scenarios={
   }},
  ["address-that-only-receives"]={{
    ["question"]="Why did the delivery address receive mill parts it was forbidden to release?",
+   ["centralAxis"]="movement",
    ["event"]="McCoy made a receiving desk responsible for urgent belts while requiring the stopped mill to acknowledge delivery before the desk could issue them.",
    ["outcome"]="A foreman signed receipt while the belt was still at the desk, obtained its release, and recorded the actual mill arrival afterward.",
    ["readings"]={"The foreman broke the circular instruction and got the repair moving.","The urgent-delivery procedure required a false receipt before it allowed a real delivery."},
@@ -499,6 +508,7 @@ local scenarios={
     ["note"]="The desk is where the belt waited to be signed for. The tool has a name and the receipt has a signature."}}
   },{
    ["question"]="Why did Sunstar receive food while its diner could not use any?",
+   ["centralAxis"]="movement",
    ["event"]="Sunstar accepted dry goods during a stock count but forbade opening counted cases, so the kitchen requisitioned its own delivery as a transfer.",
    ["outcome"]="The goods reached the diner through a recorded internal transfer, which the motel counted as a second delivery and billed to the kitchen budget.",
    ["readings"]={"The kitchen found a procedure that let it serve the food already delivered.","The motel counted one shipment twice and charged its kitchen to move it across the storeroom."},

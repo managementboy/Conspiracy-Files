@@ -4,6 +4,7 @@
 return {
  [1]={
   question="How did an enquiry turn into a booking in my name?",
+  centralAxis="absence",
   event="The desk reserved a place from an unconfirmed suggestion, then counted its printed notice as confirmation.",
   outcome="The booking came from the reserve list without a passenger reply on file; an audit corrected its contact status.",
   unresolved="The caller who first suggested my name was not recorded.",
@@ -33,6 +34,7 @@ return {
  },
  [2]={
   question="Why was I listed as the passenger on an enquiry about transport?",
+  centralAxis="absence",
   event="The desk copied the enquiry-contact name into the passenger field because its booking form had no separate contact field.",
   outcome="The audit identified the copying error and corrected the office copy to contact only; no corrected notice was issued.",
   unresolved="The records do not identify who first supplied my name as the enquiry contact.",

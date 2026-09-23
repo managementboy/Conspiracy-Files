@@ -379,8 +379,20 @@ local function build(seed,revision,sites,cast,relayMemo,steer,opening,follows)
     local org={id=prefix.."organisation",name=facts.organisation}
     facts.subject=fill(scenario.question,map)
     facts.unknown=scenario.unresolved and fill(scenario.unresolved,map) or nil
+    -- WHICH CENTRAL CONSPIRACY THIS SAVE IS RUNNING. Drawn from the seed, so a
+    -- campaign is stable across reloads and rebuilds and is not the same for
+    -- every player. Nothing announces it: it reaches the player only as the
+    -- axis line each finding carries.
+    local pair,pairWhy
+    if scenario.requiresPair~=nil then
+        pair,pairWhy=ConspiracyPair.byId(scenario.requiresPair)
+        if not pair then return nil,"scenario pins an unknown central pair: "..tostring(pairWhy) end
+    else
+        pair,pairWhy=ConspiracyPair.select(seed)
+    end
+    if not pair then return nil,"no central conspiracy pair for this seed" end
     local authored,why=Story.build(scenario,function(value) return fill(value,map) end,
-        prefix,a,b,people,org,random,steer)
+        prefix,a,b,people,org,random,steer,pair)
     if not authored then return nil,why end
     if authored.thread then
         authored.thread.reference=code
@@ -413,7 +425,7 @@ local function build(seed,revision,sites,cast,relayMemo,steer,opening,follows)
         caseId=prefix.."case",outline=outline,premiseId=premise.id,contentStatus="development-draft-unapproved",
         locations=savedLocations,cast=#met>0 and copy(met) or nil,facts=facts,identities=people,
         organisation=org,documents=authored.documents,story=authored.story,
-        conspiracyPair=ConspiracyPair.current(),
+        conspiracyPair=ConspiracyPair.saved(pair),
         relayMemo=relayMemo and true or nil,steer=steer and copy(steer) or nil,
         -- Preserve the legacy boolean representation when validating an old
         -- save; new cases pin the selected premise by id.
