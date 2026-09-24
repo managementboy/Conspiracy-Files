@@ -54,7 +54,30 @@ function M.observe(root,record)
     local staged=M.empty()
     local n=0
     for id,r in pairs(root.keys) do staged.keys[id]=copy(r); n=n+1 end
-    if staged.keys[record.id] then return staged,false end
+    -- A KEY MAY ADOPT THE PROVENANCE IT WAS SEEN WITHOUT.
+    --
+    -- A corpse's token is written by a queued observation on a 30-tick cycle,
+    -- so a key drawn in a pane before its body is stamped arrives with
+    -- token=nil. Until now the first record won permanently: re-seeing the
+    -- same key returned early, the token never landed, and the key stayed in
+    -- its own loose group titled "A key" - no name, no body, nothing to tell
+    -- it from the next one. Playtest 2026-09-24: five identical "A key" rows
+    -- accumulated in the PDA while the survivor stood among corpses and picked
+    -- up nothing.
+    --
+    -- Adopting is strictly an improvement in what is known: it attaches a key
+    -- to the body it was already seen on. It never moves a key between bodies
+    -- - a record that already has a token keeps it.
+    local existing=staged.keys[record.id]
+    if existing then
+        if existing.token==nil and record.token~=nil then
+            existing.token=record.token
+            if record.carrier~=nil then existing.carrier=record.carrier end
+            ok,why=M.validate(staged); if not ok then return nil,false,why end
+            return staged,true
+        end
+        return staged,false
+    end
     if n>=M.MAX then return staged,false,"key observation capacity exceeded" end
     staged.keys[record.id]=copy(record)
     ok,why=M.validate(staged); if not ok then return nil,false,why end

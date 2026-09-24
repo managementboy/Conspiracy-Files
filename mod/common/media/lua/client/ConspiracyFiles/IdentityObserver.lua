@@ -268,7 +268,16 @@ function I.afterRender(pane)
   local keys=ConspiracyFiles.KeyObserver
   if keys and keys.see and label and (source=="corpse" or source=="container") then
    local token=carrier and provenanceToken(carrier)
-   pcall(keys.see,item,label,token)
+   -- WAIT FOR THE STAMP RATHER THAN RECORD AN ANONYMOUS KEY. The carrier is
+   -- stamped by a queued observation a few ticks later; recording now would
+   -- put "A key" in the journal with no body attached, and a later sighting
+   -- can attach it properly. This render repeats while the pane is open, so
+   -- the key is recorded a moment later with the body it came from.
+   if carrier and not token then
+    -- nothing yet: the body has not been stamped
+   else
+    pcall(keys.see,item,label,token)
+   end
   end
   -- A carrier stamped by GeneratedRuntime (cfGeneratedId set in ModData) is
   -- generated-case evidence, not a plain identity document: it already gets
