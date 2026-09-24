@@ -55,6 +55,7 @@ Recipient copy retained at {place}.
 Waiting expense returned: no passenger account remains open.]],
     "The fuel went into cans and the passenger trip never started. This file accounts for both. It also explains how to make a waiting driver's expense disappear without making the driver go anywhere."),
   },
+  payoff=4,
   findings={
    "The driver's empty tank explains why ALLOCATED on the reservation was not a completed fuel collection.",
    "The receipt records the generator-can issue ordered in the amendment, with no fuel issued to the passenger vehicle.",
@@ -99,6 +100,7 @@ Knox Pack Kitchens confirms bench test only. Site inlet was not reconnected and 
 Desk instruction: use full service description even when it runs onto a second line.]],
     "The correction closes this promise of water. The appliance worked on the bench; the supply here was still disconnected. They could have saved everyone a trip by paying for a second line of typing."),
   },
+  payoff=4,
   findings={
    "The customer's complaint is about the dispenser behind the copied notice. RESTORED did not describe what people arriving with bottles found.",
    "The correction confirms the bench sheet's limited job: testing an appliance did not reconnect the site supply.",
@@ -142,6 +144,7 @@ Copy for {place}: voice on reported test was this unit's stored greeting in PREV
 {name} withdraws ANSWERED entry. Operating-switch instruction supplied without repeat demonstration fee.]],
     "The voice was the machine talking to its own owner. This corrects that one hopeful ANSWERED entry. It doesn't tell me whether a different line ever worked, but there was no reply to follow here."),
   },
+  payoff=4,
   findings={
    "The repeated greeting with the cord unplugged gives the answered-message report a local explanation.",
    "The correction confirms the service slip's preview setting and missing connection test: this was the machine's own greeting.",
@@ -185,6 +188,7 @@ No people on this referral list were admitted under this booking. List withdrawn
 No lodging charge to group.]],
     "This booking bought nobody a bed. The deposit deadline passed, the rooms went to stock, and the list kept promising them. The cancellation is clear about this group. I'd keep it with the old carbon so the promise can't travel alone again."),
   },
+  payoff=4,
   findings={
    "The arrival objection shows why the deadline on the reservation matters: the group reached the desk after it.",
    "The cancellation confirms that the occupied rooms on the storage receipt held stock, not the people on the referral list.",
@@ -227,6 +231,7 @@ Bench reception heard on local test signal. No transmission or outside contact t
 Returns carton relabelled.]],
     "The date marks settle it: the customer bought back their own exhausted cells. Fresh ones passed the shop's local test. That is a repair result, not the outside voice I would have hoped to hear."),
   },
+  payoff=4,
   findings={
    "The customer's date marks challenge what the issue receipt called fresh batteries.",
    "The corrected issue confirms the carton report: returned cells were sold again, then identified and replaced.",
@@ -269,6 +274,7 @@ Passengers carried: ZERO. Passenger collection cancelled before departure. Tool 
 Cancel crew lunches; do not cancel tool receipt.]],
     "The corrected return says zero. The truck moved tools while the form moved people, and the original count came from the plan. This is one departure I can account for without inventing its passengers."),
   },
+  payoff=4,
   findings={
    "The driver's changed instruction explains how a completed run could differ from the crew collection on the original carbon.",
    "The correction agrees with the stores load check: the completed movement carried tools and no passengers.",
@@ -311,6 +317,7 @@ Delivery status COMPLETE: return to sender. No delivery to original addressees.
 Postage query must be submitted separately from delivery query.]],
     "The bag came back unopened and the sender signed for it. That is the completed delivery. Whatever happened elsewhere, these letters did not reach their intended readers on this attempt."),
   },
+  payoff=4,
   findings={
    "The enquiry asks what the collection stamp leaves unanswered: where the sealed bag went after the counter.",
    "The signed return follows the transfer clerk's instruction and accounts for the unopened bag at its origin.",
@@ -352,6 +359,7 @@ Copy for {name}, {place}: plates 6 and 14 now match revised office plan. Origina
 No contents moved under renumbering. Replacement key charge void; original key retained.]],
     "The same key still opens the same lock. The numbers caught up with the office and the replacement charge was cancelled. This was a wrong instruction, not another person's hidden store."),
   },
+  payoff=4,
   findings={
    "The tenant's complaint puts the supplied instruction beside an observed lock and their own labelled contents.",
    "The corrected plan records completion of the delayed plate swap and confirms the locks and contents stayed put.",

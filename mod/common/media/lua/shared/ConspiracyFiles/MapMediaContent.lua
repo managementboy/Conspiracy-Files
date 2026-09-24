@@ -17,18 +17,27 @@ local order={"fuel","water","telephone","beds","radio","bus","mail","keys",
 -- slots 1 and 4 and a four-part story fills 1,2,3,4 exactly as before. Keeping
 -- the payoff at a fixed slot is what lets chain length vary with no schema
 -- change and no save migration.
+-- THE PAYOFF IS DECLARED, NOT INFERRED FROM POSITION.
+--
+-- An implicit "last element is the payoff" invites exactly the mistake this
+-- mapping exists to prevent: reading a two-part story's second source as local
+-- fragment 2 when it is the destination payoff at slot 4. State, placement and
+-- DiscoveryLog all treat 4 as a distinct role (MapMediaState.lua:79-84,
+-- DiscoveryLog.lua:211-214), so the story says which part fills it.
+local function payoffIndex(f) return f.payoff end
 local function slotsFor(f)
-    local out={}
-    for i=1,#f.parts-1 do out[i]=i end
-    out[#f.parts]=4
+    local out,slot={},0
+    for i=1,#f.parts do
+        if i==payoffIndex(f) then out[i]=4
+        else slot=slot+1; out[i]=slot end
+    end
     return out
 end
 function M.slots(f) return slotsFor(f) end
 function M.partForSlot(f,slot)
     if type(f)~="table" or type(f.parts)~="table" then return nil end
-    if slot==4 then return #f.parts end
-    if type(slot)~="number" or slot<1 or slot>#f.parts-1 then return nil end
-    return slot
+    for i,s in ipairs(slotsFor(f)) do if s==slot then return i end end
+    return nil
 end
 -- Default comparison shape for a full four-part story: the two halves, then
 -- the synthesis. Declared per story once a story is shorter, because a module
@@ -43,6 +52,10 @@ function M.checkShape(f)
     if type(f)~="table" or type(f.parts)~="table" then return false,"no parts" end
     if #f.parts<2 or #f.parts>4 then
         return false,"a trail is a payoff plus up to three local records, not "..#f.parts
+    end
+    local pay=payoffIndex(f)
+    if type(pay)~="number" or pay%1~=0 or pay<1 or pay>#f.parts then
+        return false,"the story must declare which part is the payoff, not leave it to position"
     end
     if type(f.findings)~="table" then return false,"no findings" end
     local requires=f.requires or DEFAULT_REQUIRES

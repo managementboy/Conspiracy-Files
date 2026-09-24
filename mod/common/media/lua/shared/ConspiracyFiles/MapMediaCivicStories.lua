@@ -51,6 +51,7 @@ MEALS SUPPLIED replaced with VOUCHERS DISTRIBUTED. Recipient's objection accepte
 Promotion distribution target remains met.]],
     "No meals went out under this reference. The correction says so, while preserving the promotion's successful day. I'd keep the correction where somebody might otherwise find only the first carbon."),
   },
+  payoff=4,
   findings={
    "The pinned voucher explains how the original return claimed meals delivered in an envelope.",
    "The correction separates the promotion's issue count from the kitchen supply, exactly the split described in the desk instruction.",
@@ -92,6 +93,7 @@ Customer copy, {place}: visible dial light accounted for by serviced battery sup
 POWER BACK report withdrawn. No restoration of building supply established by this job.]],
     "The light was real. The conclusion about the building was wrong. This file explains the hopeful window without turning it into evidence of a secretly powered building."),
   },
+  payoff=4,
   findings={
    "The service receipt gives the reported dial light a power source independent of the building's mains.",
    "The correction accepts the customer's plug check and withdraws the claim of restored building power.",
@@ -133,6 +135,7 @@ Copy to {name}, {place}: one performer, {other}, also recorded under stage assig
 No second worker assigned or missing. Costume return complete. Remove duplicate meal allowance.]],
     "The missing worker was a stage assignment counted twice. This correction accounts for that roster and its spare meal allowance. It says nothing about where the real performer went after signing out."),
   },
+  payoff=4,
   findings={
    "The contact's account challenges the two-person total with one observed arrival, costume change and departure.",
    "The correction matches the costume sheet: the stage assignment belongs to the named performer, not a second employee.",
@@ -174,6 +177,7 @@ McCoy gate confirms disputed entry: {other}, closure-original return only. No co
 Access notice stands. Signed original now on file; further copies need not be returned by vehicle.]],
     "The exception delivered the gate's own paperwork. The truck went back out empty, and somebody finally stopped asking for more originals. This explains that entry without offering me a passage through the wider closures."),
   },
+  payoff=4,
   findings={
    "The return instruction identifies an exception relevant to the truck entry written beside the closure notice.",
    "The contact's reconciliation matches the gate slip: one paperwork delivery, followed by an empty exit through the same gate.",
@@ -215,6 +219,7 @@ Treatment supplies: NONE. Ordered by records desk. Courier category cannot be ed
 Local supply tally corrected. Records desk requests completed receipt form before issuing further forms.]],
     "The bundle was exactly what the records desk ordered. It was not what the local supply tally promised. At least the next batch of forms is being held up by a missing form."),
   },
+  payoff=4,
   findings={
    "The enclosed blank sheet gives the recipient's contents query more weight than the generic category on the courier carbon.",
    "The sealed manifest and corrected tally agree on the pack contents: referral forms and fasteners, not treatment supplies.",
@@ -257,6 +262,7 @@ Copy for {name}, {place}: noon release was wrong-fit parts to supplier. Vehicle 
 Wasted collection call not charged. Correct-parts arrival not recorded in this bundle.]],
     "The garage has corrected what left and waived the wasted call. It hadn't released the vehicle at the time of this copy. I cannot turn that old stamp into a working car or a completed departure."),
   },
+  payoff=4,
   findings={
    "The waiting note challenges the apparent vehicle release: the customer sent a driver, but the car was still in the bay.",
    "The correction matches the complete supplier counterfoil. The released item was a parts return, not the vehicle.",
@@ -299,6 +305,7 @@ Copy retained at {place}. Zero-rent entry wrongly copied as vacancy. Authorised 
 Boarding estimate cancelled before work. Rent remains waived; do not reopen charge to avoid another zero.]],
     "The occupants were authorised and the contractor never boarded them in. The office has corrected its vacancy list without solving the problem by charging rent. That last instruction sounds painfully necessary."),
   },
+  payoff=4,
   findings={
    "The contractor's answered knock contradicts the vacant-unit instruction without requiring anyone to have moved between entries.",
    "The correction preserves the rent-free authorisation and identifies the zero copied into the wrong list.",
@@ -340,6 +347,7 @@ Copy retained at {place}: entire load returned by {other}. Original seals checke
 ACCEPTED cancelled. Commercial return charge still due; refusal fee added for review.]],
     "The bottles came back and the cheap disposal never happened. The return count accounts for the load. The attempt to save one fee has at least created a second fee to discuss."),
   },
+  payoff=4,
   findings={
    "The driver's refusal report disputes the office's advance acceptance stamp and accounts for the load still on the vehicle.",
    "The return check matches the original bottle order and its instruction to bring the whole load back if refused.",
@@ -383,6 +391,7 @@ Works inventory, including Ashling Dwyer display: all present at check, none pac
 Packing job remains open. Case-protection grant stage marked complete.]],
     "The cases reached shelter. The art was still here at this check, waiting to be packed. This file does not make Natalie's request redundant; it shows how the packaging was saved first and a stage called complete."),
   },
+  payoff=4,
   findings={
    "The packing request identifies G14 as empty transport cases, which the cropped priority-removal carbon failed to say.",
    "The inventory check confirms the porter's internal handcart transfer and distinguishes the protected cases from the still-unpacked works.",

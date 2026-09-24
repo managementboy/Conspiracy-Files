@@ -18,6 +18,8 @@ local state,scheduler,ready,scan,metadata
 local destinations,targets={},{}
 local ticks,designCursor,entryCursor=0,0,0
 local priority,prioritySet,offers={},{},{}
+-- Slots a save holds that the current story no longer fills; logged once each.
+local mismatched={}
 local function allowed() return not (isClient and isClient()) and not (isServer and isServer()) end
 local function log(why) CFLog.message("mapmedia","note",tostring(why)) end
 local faultPoint,lastFault
@@ -336,6 +338,23 @@ function R.rows()
             local p=State.get(root(),id,part)
             if p and p.noted then
                 local d=doc(id,part,p.observation)
+                -- A SAVE/CONTENT MISMATCH MUST NOT BE SILENT.
+                --
+                -- A trail placed under a four-part story keeps a fragment at
+                -- slot 2. Shorten that story and slot 2 is no longer filled,
+                -- so the slot resolves to no part and the row would simply not
+                -- appear - while the item is still lying in the world. That is
+                -- the same silent loss the shape contract exists to prevent,
+                -- one layer down, and it is why shortening a shipped story
+                -- needs a fresh save rather than the unchanged schema number.
+                if not d then
+                    local key=id..":"..tostring(part)
+                    if not mismatched[key] then
+                        mismatched[key]=true
+                        log("saved trail holds "..key.." but its story no longer fills that slot; "
+                            .."the placed item has no record. Shortening a story needs a fresh save.")
+                    end
+                end
                 local detail=d and d.body
                 if detail then
                 for _,finding in ipairs(Content.findings(Catalogue.get(id),t.seed,part,known)) do

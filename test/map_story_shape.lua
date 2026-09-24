@@ -33,9 +33,12 @@ for _,f in ipairs(stories) do
     assert(ok,"shipped story "..tostring(f.id)..": "..tostring(why))
     assert(#f.parts>=2 and #f.parts<=4,
         f.id.." declares "..#f.parts.." parts; a trail is a payoff plus up to three local records")
-    -- The last part is the payoff and it lives in slot 4.
+    -- The payoff is DECLARED, and whichever part it is lands in slot 4.
+    -- An implicit "last element" invites reading a two-part story's second
+    -- source as local fragment 2 when it is the destination payoff.
+    assert(type(f.payoff)=="number",f.id..": the payoff must be declared, not inferred")
     local slots=Content.slots(f)
-    assert(slots[#slots]==4,f.id..": the payoff must occupy slot 4")
+    assert(slots[f.payoff]==4,f.id..": the declared payoff must occupy slot 4")
     assert(#slots==#f.parts,f.id..": every part needs a slot")
 end
 
@@ -48,6 +51,7 @@ local shortStory={
         {kind="notepad",title="t1",observation="o1",source="s1",note="n1"},
         {kind="receipt",title="t2",observation="o2",source="s2",note="n2"},
     },
+    payoff=2,
     findings={"only comparison"},
     requires={{1,4}},at={4},
 }
@@ -68,6 +72,13 @@ for k,v in pairs(shortStory) do mismatched[k]=v end
 mismatched.findings={"one","two"}
 assert(Content.checkShape(mismatched)==false,
     "a story with more authored lines than requirements must be refused")
+
+-- A story that leaves the payoff to position must be refused.
+local implicit={}
+for k,v in pairs(shortStory) do implicit[k]=v end
+implicit.payoff=nil
+assert(Content.checkShape(implicit)==false,
+    "a story that does not declare its payoff must be refused")
 
 -- 3. RENDERING ASKS FOR A SLOT AND GETS THE RIGHT PART.
 for _,f in ipairs(stories) do
