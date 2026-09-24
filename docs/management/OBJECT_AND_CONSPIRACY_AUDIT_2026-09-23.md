@@ -7,7 +7,7 @@ Four questions, answered from the code, then fixed and tested.
 | Question | Answer | Measurement |
 |---|---|---|
 | Do objects drive the mysteries? | **No** | 12 of 14 evidence kinds were paper. Of 4,547 catalogued Project Zomboid objects, scenarios used **12**. 1 of 58 reachable scenarios carried a physical anchor. |
-| Are annotated maps used for it? | **Partly** | 125 real vanilla stash maps drive placement, with their own handwriting preserved. Their families are `repairs`, `housing`, `fuel` — not the conspiracy. **1 of 125** has an authored story. |
+| Are annotated maps used for it? | **Partly** | 125 real vanilla stash maps drive placement, with their own handwriting preserved. Every one already triggers a story (17 authored incidents, selected by family from the map's own scrawl) — but **0 of 17** reached either central conspiracy. |
 | Two or more hidden main conspiracies from the start? | **No** | One pair, hardcoded. `M.current()` returned it and `validate()` refused every other id, so nothing was ever chosen and nothing was hidden. |
 | Are all mysteries bound to them? | **No** | Every case carried the pair as a stamp it never mentioned. Of 27 scenario `unresolved` lines, **1** touched a farm, sample, infection or animal. The other 26 were clerical. |
 
@@ -103,11 +103,18 @@ a claim that each is described.
   belt, brake hose or hard hat, and substituting a generic screwdriver for
   "the vehicle went for a drive belt" would invent evidence the fiction does
   not support. Left paper deliberately, not overlooked.
-- **124 of 125 annotated map destinations have no authored story.**
-  `MapMediaContent` binds exactly one by id. The maps are the strongest
-  evidence surface the mod has — somebody's own handwriting marking a real
-  place — and they are almost entirely unwritten. This is the largest
-  remaining content gap found by this audit.
+- ~~124 of 125 annotated map destinations have no authored story.~~
+  **This was wrong, and is corrected here.** `MapMediaContent` hardcodes one
+  binding by id, and I generalised from that single line without checking the
+  selection path beneath it. Every map already produced a story: 125 maps
+  select from 17 authored incidents by family, derived from the map's own
+  handwriting.
+
+  The real gap was that all 17 stories reached neither central conspiracy, so
+  a player could follow a stranger's marked map to a real place, find a real
+  incident, and have it connect to nothing. **Fixed 2026-09-24** (`c17cdf1`):
+  all 17 now name an axis, covering 125 of 125 maps, verified across 40 seeds
+  by `test/map_stories_trigger_a_mystery.lua`.
 
 ## Verification
 
