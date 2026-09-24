@@ -35,6 +35,7 @@ local function inventory(explored)
     local inv={items={},explored=explored==true}
     function inv:getItems() return javaList(self.items) end
     function inv:isExplored() return self.explored end
+    function inv:isHasBeenLooted() return self.explored end
     function inv:AddItem(item) self.items[#self.items+1]=item; return item end
     return inv
 end
@@ -159,7 +160,7 @@ assert(Carriers.usable(state),"so a fresh corpse is usable as a carrier: "..tost
 assert(Carriers.refusal({kind="corpse",container=corpse.inv})==nil,"an unmarked body takes a clue")
 assert(Carriers.refusal({kind="corpse",container=corpse.inv,mark="cfc:x"})=="already carries a clue",
     "never two clues on one carrier (P4-R67)")
-assert(Carriers.refusal({kind="corpse",container=corpse.inv,explored=true})=="already searched",
+assert(Carriers.refusal({kind="corpse",container=corpse.inv,searched=true})=="already searched",
     "a body the survivor has already emptied must never sprout a clue behind them")
 assert(Carriers.refusal({kind="corpse",container=corpse.inv,lootOpen=true})=="loot window open",
     "nor one they are looking into right now")

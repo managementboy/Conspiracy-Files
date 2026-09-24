@@ -7,20 +7,27 @@ local function jlist(values)
     }
 end
 
-local searched=false
+local searched=false      -- the player took something out of it
+local marked=false        -- the loot panel showed it (SearchedContainers mark)
 local opened={}
-local container
+local container,object
 container={
     getType=function(self) assert(self==container);return "counter" end,
-    isExplored=function(self) assert(self==container);return searched end,
+    -- LOOT GENERATED, ALWAYS. The engine answers this true for every container
+    -- in a loaded building whether or not anyone looked (measured 2026-09-24,
+    -- 23 of 24 in a house never entered). Reading it as "searched" refused
+    -- them all; this fixture keeps it true so that reading fails here.
+    isExplored=function(self) assert(self==container);return true end,
+    isHasBeenLooted=function(self) assert(self==container);return searched end,
+    getParent=function(self) assert(self==container);return object end,
 }
 local decoy
 decoy={
     getSprite=function(self) assert(self==decoy);return {getName=function(self) assert(self);return "wrong_sprite" end} end,
     getContainerCount=function(self) assert(self==decoy);return 0 end,
 }
-local object
 object={
+    getModData=function(self) assert(self==object);return {cfSearched=marked or nil} end,
     getSprite=function(self) assert(self==object);return {getName=function(self) assert(self);return "fixtures_counters_01_16" end} end,
     getContainerCount=function(self) assert(self==object);return 1 end,
     getContainerByIndex=function(self,index) assert(self==object and index==0);return container end,
@@ -65,8 +72,13 @@ assert(throughWorld==container and worldWhy==nil,
 searched=true
 target,live,why=Runtime.resolve(signature)
 assert(target==nil and live==container and why=="already-searched",
-    "an indexed container searched before materialisation is refused")
+    "an indexed container the player took from before materialisation is refused")
 searched=false
+marked=true
+target,live,why=Runtime.resolve(signature)
+assert(target==nil and live==container and why=="already-searched",
+    "an indexed container the loot panel has shown is refused")
+marked=false
 opened={{inventory=container}}
 target,live,why=Runtime.resolve(signature)
 assert(target==nil and live==container and why=="loot-window-open",

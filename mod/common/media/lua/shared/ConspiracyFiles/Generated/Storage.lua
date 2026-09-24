@@ -4,6 +4,7 @@ local Choices=require("ConspiracyFiles/Generated/StorageChoices")
 local FixedIndex=require("ConspiracyFiles/Generated/FixedContainerIndex")
 local FixedData=require("ConspiracyFiles/Generated/FixedContainerIndexData")
 local W=require("ConspiracyFiles/WorldAccess")
+local Searched=require("ConspiracyFiles/SearchedContainers")
 local M={}
 -- Verified engine type: docs/management/evidence/linux-autotest/
 -- 20260918T002532-carriers.txt. Outdoor scope remains the mailbox band;
@@ -184,11 +185,12 @@ function M.scan(result,done,reachable,fixedData)
         local allowed=c and Choices.fixedKind(c:getType()) and (not r.outdoor or c:getType()==M.MAILBOX)
         local unexplored=false
         if c then
-            local stateOK,state=pcall(function() return c:isExplored() end)
-            -- Test doubles and nonstandard containers may not expose the read;
-            -- selection is harmless, because FixedContainerRuntime repeats it
-            -- fail-closed immediately before any insertion.
-            unexplored=not stateOK or state~=true
+            -- The player having looked, not loot having been generated
+            -- (SearchedContainers.lua). Test doubles and nonstandard
+            -- containers may not expose the read; selection is harmless,
+            -- because FixedContainerRuntime repeats it fail-closed
+            -- immediately before any insertion.
+            unexplored=Searched.searched(c)~=true
         end
         if c and name and allowed and unexplored and (r.z==0 or reachable(x,y,r.z)) then
             local target={x=x,y=y,z=r.z,objectIndex=oi,containerIndex=ci,containerType=c:getType(),sprite=name}

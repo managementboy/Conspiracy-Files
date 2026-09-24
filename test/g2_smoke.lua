@@ -8,7 +8,7 @@ local function record(t) local o={} for k,v in pairs(t) do local val=v; o[k]=fun
 local containers={}
 local function container()
     local items={}; local c={getType=function() return "desk" end,getItems=function() return list(items) end,
-        isExplored=function() return false end,items=items}
+        isExplored=function() return false end,isHasBeenLooted=function() return false end,items=items}
     function c:AddItem(item) items[#items+1]=item; item.container=c; return item end
     return c
 end

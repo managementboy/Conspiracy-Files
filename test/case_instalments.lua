@@ -148,7 +148,20 @@ local runtime=read("mod/common/media/lua/client/ConspiracyFiles/GeneratedRuntime
 local filler=assert(runtime:match("local function filler%(api%)(.-)\nend\n"),"the filler must exist")
 assert(runtime:find('scheduler.enqueue("fill:"..i,"filler",filler(api))',1,true),
     "one filler job per session, on the existing tick dispatch beside relocation")
-assert(filler:find("id=waiting[1]",1,true),"one waiting clue per attempt")
+-- One clue per attempt, taken in turn. `id=waiting[1]` was the wording here
+-- until 2026-09-24, and it held the defect in place: the same blocked clue
+-- every attempt, four placeable clues behind it (fitness audit 20260924T183959).
+assert(filler:find("Session.pick(indexed and planned or waiting,fillCursor[api])",1,true),
+    "one waiting clue per attempt, the next one in turn")
+assert(not filler:find("id=waiting[1]",1,true),"the filler must not pin itself to the first waiting clue")
+-- The turn order itself, pure.
+local id,cur=S.pick({"a","b","c"},nil); assert(id=="a" and cur==1,"the first attempt takes the first clue")
+id,cur=S.pick({"a","b","c"},cur); assert(id=="b" and cur==2,"the second attempt moves on, even if the first went nowhere")
+id,cur=S.pick({"a","b","c"},cur); assert(id=="c" and cur==3)
+id,cur=S.pick({"a","b","c"},cur); assert(id=="a" and cur==4,"and wraps")
+-- The list shrinks as clues are placed; the cursor still lands on something.
+id=S.pick({"b"},cur); assert(id=="b","a cursor past the end of a shorter list still picks a clue")
+id,cur=S.pick({},cur); assert(id==nil and cur==4,"an empty list picks nothing and leaves the cursor")
 assert(filler:find("boundsScan(site,function(t) target=t end,",1,true),
     "the filler reuses boundsScan over the clue's own site")
 assert(filler:find("usedPhysicalKeys()",1,true) and filler:find("Session.physicalKey(candidate)",1,true),

@@ -1,5 +1,6 @@
 -- Resolve a compact fixed-container signature against the live world.
 -- Nothing here creates items or changes save state.
+local Searched=require("ConspiracyFiles/SearchedContainers")
 local R={}
 
 local function spriteName(object)
@@ -7,11 +8,11 @@ local function spriteName(object)
     return sprite and sprite:getName() or nil
 end
 
+-- "Already searched" is the player having looked, not the engine having
+-- generated loot: SearchedContainers.lua has the measurement that separated
+-- the two. nil (unreadable) stays fail-closed in both callers below.
 local function explored(container)
-    local value
-    local ok=pcall(function() value=container:isExplored() end)
-    if not ok then return nil end
-    return value==true
+    return Searched.searched(container)
 end
 
 local function buildingId(square)

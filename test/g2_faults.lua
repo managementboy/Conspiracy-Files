@@ -12,7 +12,7 @@ local function newFixture(profession,indexedOpening)
     local function record(t) local o={} for k,v in pairs(t) do local value=v; o[k]=function() return value end end return o end
     local function container()
         local items={}; local c={items=items,getType=function() return "desk" end,getItems=function() return list(items) end,
-            isExplored=function() return false end}
+            isExplored=function() return false end,isHasBeenLooted=function() return false end}
         function c:AddItem(item) if self.reject then return nil end; items[#items+1]=item; item.container=c; return item end
         -- Match the native B42 ItemContainer API exactly.  Do not add a
         -- RemoveItem alias: that typo caused DEV-0.47.3 to pass this harness

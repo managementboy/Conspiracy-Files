@@ -1,0 +1,25 @@
+Linux Fitness Instructor first-mystery audit 20260924T183456: FAIL
+source: 0d86a1b
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+  conspiracy: pair=farm-zero-vs-delivered-agent registered=true valid=true winnerField=none theories=2
+  conspiracy: axis=movement isAxis=true bridge=yes profession=fitnessinstructor unresolvedIsCentralQuestion=true
+  document 1: kind=Key1 capacity=object status=placed itemsInWorld=0 members=1 wear=worn intent=-
+  document 2: kind=receipt capacity=prose status=deferred itemsInWorld=0 members=1 wear=- intent=-
+  document 3: kind=AnimalFeedBag capacity=object status=deferred itemsInWorld=0 members=1 wear=poor intent=wrong
+  document 4: kind=Hat_SurgicalMask capacity=object status=indexed itemsInWorld=0 members=9 wear=mixed and spent intent=wrong
+  document 5: kind=Cooler capacity=object status=deferred itemsInWorld=0 members=1 wear=scuffed intent=vehicle
+  document 6: kind=memo capacity=prose status=indexed itemsInWorld=0 members=1 wear=- intent=-
+  objects: 4 object documents, 2 paper; placed=1 inWorld=0 waiting=3
+  value: object 1 (Key1) is the subject of 3 comparison(s), named in 3, distinctFromPaper=false
+  value: object 3 (AnimalFeedBag) is the subject of 3 comparison(s), named in 3, distinctFromPaper=false
+  value: object 4 (Hat_SurgicalMask) is the subject of 2 comparison(s), named in 2, distinctFromPaper=false
+  value: object 5 (Cooler) is the subject of 2 comparison(s), named in 2, distinctFromPaper=false
+  value: the case offers 2 rival readings
+
+NOT EXERCISED: 3 object(s) still waiting for placement; last reason: none
+FAIL: document 1 (Key1) is recorded placed but 0 items exist at its target
+FAIL: object 1 (Key1) repeats a paper document's observation: paper in disguise
+FAIL: object 3 (AnimalFeedBag) repeats a paper document's observation: paper in disguise
+FAIL: object 4 (Hat_SurgicalMask) repeats a paper document's observation: paper in disguise
+FAIL: object 5 (Cooler) repeats a paper document's observation: paper in disguise
+errors inside the mod: 0

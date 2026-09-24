@@ -53,6 +53,15 @@ cheaper than a placed one (no target table, no sprite string).
   clue's own site, the `physicalKey` uniqueness check against every live
   assignment, and the "not too close to the player" guard so nothing
   materialises under the survivor's feet.
+  The clue taken is the next one in turn (`Session.pick`, a wrapping cursor
+  per session), not always the first: until 2026-09-24 it was `waiting[1]`
+  every attempt, and one receipt with "no-containers" at a house the survivor
+  had left held four placeable clues behind it at a loaded site.
+- **"Already searched"** means the player looked — took something out, or the
+  loot panel showed the contents — never that the engine generated the loot
+  (`SearchedContainers`, DR-20260924-SEARCHED-MEANS-LOOKED). Reading
+  `isExplored` for this refused 23 of 24 containers in a house never entered,
+  which is why instalments used to find nowhere to go.
 - **Why ordinary movement is enough:** `Storage.scan` only ever sees loaded
   squares. A house catalogued from the street yields one or two candidates and
   eight once the survivor walks in.

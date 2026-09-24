@@ -325,6 +325,17 @@ function S.deferredIds(root)
     end
     return out
 end
+-- THE FILLER'S TURN. One waiting clue per attempt, but not always the same
+-- one: the filler used to take waiting[1] every attempt, so a clue whose site
+-- was unloaded or had nowhere to go ("no-containers") blocked every clue
+-- behind it until it expired three days later - measured 2026-09-24, four
+-- clues at a loaded site behind one receipt at a house the survivor had left.
+-- The cursor is the caller's; it advances by one each attempt and wraps.
+function S.pick(ids,cursor)
+    local c=type(cursor)=="number" and cursor or 0
+    if type(ids)~="table" or #ids==0 then return nil,c end
+    return ids[(c % #ids)+1],c+1
+end
 function S.indexedIds(root)
     local out={}
     if type(root)~="table" or type(root.case)~="table" or type(root.assignments)~="table" then return out end

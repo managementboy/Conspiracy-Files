@@ -27,6 +27,7 @@
 --
 -- The pure rules are at the top and testable with no game at all; the engine
 -- readers below are the only part that touches PZ.
+local Searched=require("ConspiracyFiles/SearchedContainers")
 local C={}
 
 C.CORPSE="corpse"
@@ -73,7 +74,7 @@ function C.refusal(state)
     if state.animal then return "an animal" end
     if state.mark~=nil then return "already carries a clue" end
     if state.casePerson then return "already the case's person" end
-    if state.explored then return "already searched" end
+    if state.searched then return "already searched" end
     if state.lootOpen then return "loot window open" end
     return nil
 end
@@ -142,7 +143,9 @@ function C.stateOf(object,kind,open,x,y,z)
             mark=type(mark)=="string" and mark or nil,
             animal=read(object,"isAnimal")==true,
             casePerson=type(md)=="table" and md[C.CASE_PERSON_MARK]~=nil or false,
-            explored=read(container,"isExplored")==true,
+            -- The player looked into it; not the engine having generated its
+            -- loot, which the engine's explored flag also reports (SearchedContainers.lua).
+            searched=Searched.searched(container)==true,
             lootOpen=container~=nil and open[container]==true,
             x=x,y=y,z=z}
 end

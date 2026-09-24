@@ -84,6 +84,8 @@ local function addressFor(id)
 end
 local TAG="ConspiracyFiles.Generated.G2"
 local CFLog=require("ConspiracyFiles/Log")
+-- Why a clue was not placed this step. See Log.declines.
+local declinePlacement=CFLog.declines("placement")
 local function log(message) CFLog.message("case","note",message) end
 local function allowed()
     return getDebug and getDebug() and not (isClient and isClient()) and not (isServer and isServer())
@@ -2049,6 +2051,9 @@ local function vehicleCandidateFor(site,taken)
     table.sort(choices,function(a,b) return a.key<b.key end)
     return choices[1] and choices[1].target or nil
 end
+-- Where each session's filler is in its turn order; the closure below is
+-- rebuilt every attempt, so this must live outside it (Session.pick).
+local fillCursor=setmetatable({},{__mode="k"})
 local function filler(api)
     local id,site,scan,target,bodyScan,carrier,indexed,doc
     return function()
@@ -2078,8 +2083,10 @@ local function filler(api)
             local waiting=Session.deferredIds(root)
             if #planned==0 and #waiting==0 then return true end
             indexed=#planned>0
-            id=waiting[1]
-            if indexed then id=planned[1] end
+            -- Indexed plans first, as before; within a list, the next one in
+            -- turn, so a clue that cannot go anywhere yet does not hold the
+            -- rest of the case behind it.
+            id,fillCursor[api]=Session.pick(indexed and planned or waiting,fillCursor[api])
             for _,s in ipairs(root.case.locations) do
                 if s.id==root.assignments[id].locationId then site=s end
             end
@@ -2101,7 +2108,18 @@ local function filler(api)
             local why
             target,_,why=FixedContainers.resolve(a.planned)
             if not target then
-                if why=="unloaded" then return true end
+                if why=="unloaded" then
+                    -- NAMED, NOT SILENT. An indexed plan whose square is not loaded
+                    -- waits for the player to arrive; that is correct, and until
+                    -- 2026-09-24 it was invisible - the filler returned here every
+                    -- step with no word, and three native runs reported the PPE
+                    -- hoard as "indexed, 0 items" with nothing to say why. The
+                    -- answer is "waiting for the square to load", and now it says so.
+                    declinePlacement("indexed plan for "..tostring(id).." waits for square "
+                        ..tostring(a.planned and a.planned.x)..","..tostring(a.planned and a.planned.y)
+                        .." to load")
+                    return true
+                end
                 local ok,unplanWhy=api.unplan(id,hours)
                 if not ok then log("could not fall back from an indexed target: "..tostring(unplanWhy)) end
                 CFLog.write("d","skip",{doc=id,why="index-"..tostring(why)})
@@ -2117,6 +2135,11 @@ local function filler(api)
         end
         if not target then
             if doc and doc.placementIntent=="vehicle" then
+                -- Named: the fitness audit (20260924T191606) stood at this
+                -- clue's site for two minutes and could only report
+                -- "last reason: none". A clue that wants a vehicle waits for
+                -- a confirmed one at its site, and now says so.
+                declinePlacement("no confirmed vehicle at the site for "..tostring(id))
                 CFLog.write("d","skip",{doc=id,why="no-confirmed-vehicle"})
                 return true
             end
