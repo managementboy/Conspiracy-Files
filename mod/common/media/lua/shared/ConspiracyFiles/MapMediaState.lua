@@ -1,7 +1,7 @@
 -- Fresh-save map trails. Engine-free, copy-on-write, no case-slot dependency.
 local V=require("ConspiracyFiles/Validator")
 local Choices=require("ConspiracyFiles/Generated/StorageChoices")
-local M={SCHEMA=2}
+local M={SCHEMA=3}
 local function integer(n,lo,hi)
     return type(n)=="number" and n==n and n%1==0 and n>=lo and n<=hi
 end
@@ -17,7 +17,10 @@ local function clone(t)
     local out={}; for k,v in pairs(t) do out[k]=clone(v) end; return out
 end
 M.copy=clone
-function M.empty() return {schema=M.SCHEMA,trails={},entries={},prints={},cursor=0} end
+-- `printVisits` is the flyer half of `entries`: a place a read flyer named and
+-- the survivor has since stood in. Fresh saves only (AGENTS.md), so the schema
+-- rises rather than migrating.
+function M.empty() return {schema=M.SCHEMA,trails={},entries={},prints={},printVisits={},cursor=0} end
 local targetFields={x=true,y=true,z=true,objectIndex=true,containerIndex=true,sprite=true,containerType=true}
 local placementFields={target=true,state=true,attempt=true,at=true,recognised=true,noted=true,observation=true}
 local states={intent=true,placed=true,unknown=true,refused=true,noted=true}
@@ -35,9 +38,10 @@ local function placement(p)
         and (p.observation==nil or text(p.observation,40))
 end
 function M.validate(root,catalogue)
-    if not fields(root,{schema=true,trails=true,entries=true,prints=true,cursor=true})
+    if not fields(root,{schema=true,trails=true,entries=true,prints=true,printVisits=true,cursor=true})
         or root.schema~=M.SCHEMA or not integer(root.cursor,0,1000000)
-        or type(root.trails)~="table" or type(root.entries)~="table" or type(root.prints)~="table" then
+        or type(root.trails)~="table" or type(root.entries)~="table" or type(root.prints)~="table"
+        or type(root.printVisits)~="table" then
         return false,"invalid map-media header"
     end
     local count=0
@@ -59,6 +63,10 @@ function M.validate(root,catalogue)
     for id,at in pairs(root.prints) do
         if not catalogue.print(id) or not time(at) then return false,"invalid printed-place reading" end
     end
+    for id,at in pairs(root.printVisits) do
+        if not catalogue.print(id) or not time(at) then return false,"invalid printed-place visit" end
+        if not root.prints[id] then return false,"visited a place whose flyer was never read" end
+    end
     return V.validateStructure(root)
 end
 function M.activate(root,id,seed,at,catalogue)
@@ -74,6 +82,11 @@ end
 function M.printRead(root,id,at)
     if root.prints[id] then return root,false end
     local next=clone(root); next.prints[id]=at; return next,true
+end
+-- The survivor reached the place a flyer named. Recorded once.
+function M.printVisit(root,id,at)
+    if root.printVisits[id] then return root,false end
+    local next=clone(root); next.printVisits[id]=at; return next,true
 end
 function M.get(root,id,part)
     local t=root.trails[id]; return t and (part==4 and t.payoff or t.fragments[part])

@@ -2465,3 +2465,15 @@ updates that line at most once a minute per document. The old evidence window sh
 "Last seen: …" (removed, P4-R128) and PDA FILES shows a WHERE line for every document, live or
 finished. Neither ever says a document is lost. The evidence album (called Papers until P4-R127) is now found
 inside bags too, so filing keeps working with it in a backpack.
+
+**DR-20260924-FLYER-PURPOSE — a found flyer must give the player a reason to act, and a catalogue entry does not.** Owner, Windows playtest 2026-09-24, on opening the Pondview Shopping Center flyer: check whether it has a mystery or any other use, and "finding a flyer should give the player a purpose; this is a requirement, not an optional decoration." This reaffirms DR-20260919-Q15's principle for an item the player actually found, and clarifies what satisfies it.
+
+Measured at the time of the report: 133 flyers in the catalogue, 12 named by some map in `printIds`, 121 — Pondview among them — named by nothing. Reading a flyer saved a timestamp (`MapMediaState.printRead`) whose only consumer was a place-identification appendix on an already-active map story. So a read flyer with no map naming it produced no lead, no payoff and no reason to go anywhere.
+
+**A catalogue entry, a read timestamp, or an appendix to somebody else's mystery does not satisfy this requirement.** The player must gain something they can act on.
+
+**A flyer does not need a unique mystery.** Another meaningful action with a payoff satisfies the requirement. Every print in the catalogue carries real coordinates, so a flyer can always name a place and point at it: reading one records where the place is and that the survivor has not been, and standing there records what they confirmed. That is the implemented baseline across all 133 flyers, Pondview included, and it is a floor rather than a ceiling — a flyer that earns a richer use may still be given one.
+
+Neither the lead nor the payoff may claim the advertised place survived, is stocked, or is safe. A 1993 advertisement is a claim about 1993; what is standing now is for the survivor to find out.
+
+Not decided here: whether particular flyers should carry their own mysteries, how flyer leads should interact with Q14's skill/tool interactions or Q15's world changes, and whether the twelve map-named prints should keep their separate place-identification role in addition to this baseline.

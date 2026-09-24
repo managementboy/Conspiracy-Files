@@ -20,7 +20,7 @@ local function expand(text,v) return (text:gsub("{([%w_]+)}",function(k) return 
 local function same(a,b) return a.title==b.title and a.body==b.body and a.kind==b.kind and a.premise==b.premise end
 local function contains(values,value) for _,item in ipairs(values) do if item==value then return true end end return false end
 local expectedSet={};for _,id in ipairs(expected) do expectedSet[id]=true end
-assert(Content.REVISION==2 and State.SCHEMA==2,"map content/state revisions must advance together")
+assert(Content.REVISION==3 and State.SCHEMA==3,"map content/state revisions must advance together")
 assert(#C.list==125 and #C.printList==133 and #Content.families==17)
 for _,family in ipairs(Content.families) do
     assert(expectedSet[family.id],"unexpected map family "..family.id)

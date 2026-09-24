@@ -27,9 +27,16 @@ assert(not J.observe(facts[1]) and writes==0)
 reject=false; fail=true
 assert(not J.observe(facts[1]) and writes==0)
 fail=false
+-- A KEY-DOOR MATCH IS VISIBLE ON ITS OWN (owner, Windows playtest 2026-09-24:
+-- using the opening key on the door it fits must be recorded and visible).
+-- facts[4] is that match, so from the moment it lands there is one row - the
+-- bare observation - and it is replaced, not joined, by the connection row once
+-- the remaining three facts complete the chain. The other partial states still
+-- show nothing.
 for i=4,1,-1 do
     assert(J.observe(facts[i]))
-    assert(#J.rows()==(i==1 and 1 or 0))
+    local rows=#J.rows()
+    assert(rows==1,"after adding fact "..i.." there were "..rows.." rows, expected 1")
 end
 local rows=J.rows()
 assert(rows[1].detailText:find("An unsigned letter",1,true))

@@ -6,7 +6,7 @@ local Civic=require("ConspiracyFiles/MapMediaCivicStories")
 local Places=require("ConspiracyFiles/MapMediaPlaceStories")
 local Story=require("ConspiracyFiles/Generated/Story")
 local Kinds=require("ConspiracyFiles/Generated/EvidenceKinds")
-local M={REVISION=2}
+local M={REVISION=3}
 local order={"fuel","water","telephone","beds","radio","bus","mail","keys",
     "food","power","names","road","medicine","repairs","housing","waste","gallery"}
 -- SLOTS ARE NOT PART INDICES.
@@ -234,6 +234,51 @@ function M.whosePlace(binding,seed)
         ..(v.other and (", and so is "..v.other) or "")
         ..". The map that brought me was unsigned, so I cannot say either of them "
         .."drew it. It is a name to ask after."
+end
+-- A FLYER MUST GIVE THE PLAYER A REASON TO ACT.
+--
+-- Owner, 2026-09-24, on opening the Pondview Shopping Center flyer: finding a
+-- flyer should give the survivor a purpose; this is a requirement, not optional
+-- decoration. Before this, reading a flyer saved a timestamp
+-- (MapMediaState.printRead) whose only consumer was a place-identification
+-- appendix on an already-active map story - and only for the twelve prints some
+-- map happens to name in printIds. The other 121, Pondview among them, did
+-- nothing at all.
+--
+-- Every print in the catalogue carries real coordinates, so every flyer can
+-- name a place and point at it. A flyer does not need its own mystery: naming
+-- somewhere worth standing, and recording what the survivor confirmed when they
+-- got there, is a meaningful action with a payoff.
+--
+-- Neither text claims the place is intact, stocked or safe. A 1993 advertisement
+-- is a claim about 1993.
+function M.flyerLead(print)
+    if type(print)~="table" then return nil end
+    local where=print.locations and print.locations[1]
+    if not (where and where.x and where.y) then return nil end
+    local out={"WHAT THE FLYER SAYS","\""..tostring(print.title).."\""}
+    local text=type(print.text)=="string" and print.text:match("^[^\n]+") or nil
+    if text then out[#out+1]=text end
+    out[#out+1]=""
+    out[#out+1]="WHERE IT IS"
+    out[#out+1]="The address on it puts the place at "..tostring(where.x)..", "..tostring(where.y).."."
+    out[#out+1]=""
+    out[#out+1]="WHY I KEPT IT"
+    out[#out+1]="An advertisement is a claim about what was there in 1993. Whether any "
+        .."of it is still standing is worth knowing, and I have not been to look."
+    return {title="A place I have only read about: "..tostring(print.title),
+        detail=table.concat(out,"\n")}
+end
+function M.flyerPayoff(print)
+    if type(print)~="table" then return nil end
+    local where=print.locations and print.locations[1]
+    if not (where and where.x and where.y) then return nil end
+    return {title="I found the place from the flyer: "..tostring(print.title),
+        detail="WHAT I WAS LOOKING FOR\n\""..tostring(print.title).."\", from a flyer I read."
+            .."\n\nWHAT IS ACTUALLY HERE\nI stood at "..tostring(where.x)..", "..tostring(where.y)
+            ..". The place the flyer advertised is where it said it would be."
+            .."\n\nWHAT THAT IS WORTH\nOne address on a piece of paper turned out to be true. "
+            .."It is somewhere I can find again, and a reason to trust the next one less blindly."}
 end
 function M.scenario(binding,seed) return family(binding,seed) end
 function M.observation(binding,profession,skills,seed,part)

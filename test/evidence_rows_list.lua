@@ -73,7 +73,9 @@ ConspiracyFiles.GeneratedRuntime.whereabouts=function(id) local s=states[id]; re
 assert(Rows.where('a')=='Carried.')
 assert(Rows.where('b')=='Not seen recently. Its whereabouts are uncertain. Last seen: In a desk.',Rows.where('b'))
 assert(Rows.where('c')==nil,'last seen with no place says nothing')
-assert(Rows.where('d')=='Not checked since you loaded this save.')
+-- The exact sentence lives in Rows.WHEREABOUTS; test/pda_stays_in_world.lua
+-- owns what it may and may not say. Here it only has to be that line.
+assert(Rows.where('d')==Rows.WHEREABOUTS.unchecked)
 assert(Rows.where('e'):find('uncertain',1,true))
 assert(Rows.where('f')==nil)
 print('PASS evidence rows list: whereabouts words for every state, none claiming loss')

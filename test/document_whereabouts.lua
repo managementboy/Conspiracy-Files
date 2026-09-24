@@ -157,7 +157,12 @@ end
 assert(listed.a == "Carried.", tostring(listed.a))
 assert(listed.b == "Not seen recently. Its whereabouts are uncertain. Last seen: In a desk.", tostring(listed.b))
 assert(listed.c == "Last seen: Carried, in Una's Evidence.", tostring(listed.c))
-assert(listed.d == "Not checked since you loaded this save.", tostring(listed.d))
+-- The wording is owned by Rows.WHEREABOUTS and policed by
+-- test/pda_stays_in_world.lua; here it only has to be that line, taken from
+-- the source this test already read rather than transcribed a second time.
+local uncheckedLine = words:match('unchecked="([^"]+)"')
+assert(uncheckedLine, 'EvidenceRows no longer declares an unchecked whereabouts line')
+assert(listed.d == uncheckedLine, tostring(listed.d))
 assert(listed.e == nil, 'no WHERE line where nothing is known')
 assert(listed.f == "On a body at 102 Dewey St.", tostring(listed.f))
 assert(listed.g == "Not seen recently. Its whereabouts are uncertain. Last seen: On a zombie near 102 Dewey St.",

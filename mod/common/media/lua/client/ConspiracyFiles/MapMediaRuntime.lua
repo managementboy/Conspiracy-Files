@@ -321,6 +321,22 @@ end
 function R.rows()
     if not ready or not allowed() then return {} end
     local out={}
+    -- FLYERS. Reading one names a place worth standing in; reaching it records
+    -- what the survivor confirmed. Every print carries coordinates, so this
+    -- covers the whole catalogue rather than the twelve a map happens to name.
+    for id,_ in pairs(root().prints) do
+        local record=Catalogue.print(id)
+        if record then
+            local visited=root().printVisits[id]~=nil
+            local ok,built=pcall(visited and Content.flyerPayoff or Content.flyerLead,record)
+            if ok and type(built)=="table" then
+                out[#out+1]={id=(visited and "flyer-found:" or "flyer-lead:")..id,
+                    title=built.title,detailText=built.detail,
+                    cfCarrier="Evidence",summary=visited and "Place confirmed" or "Lead",
+                    cfMapMedia=true}
+            end
+        end
+    end
     -- Leads first: a place the player has read about and not yet reached is a
     -- question, and questions belong above answers.
     for _,id in ipairs(Catalogue.list) do
@@ -682,6 +698,25 @@ local function visitStep()
     -- designs, and these are engine calls.
     local bx1,by1,bx2,by2
     if def then bx1,by1,bx2,by2=def:getX(),def:getY(),def:getX2(),def:getY2() end
+    -- A READ FLYER'S PLACE IS REACHED THE SAME WAY A MAP'S IS: by standing
+    -- there. Once per visit step, not once per design - this runs over all 125
+    -- designs every fifteen ticks and these are engine calls.
+    local px,py=square:getX(),square:getY()
+    for pid,_ in pairs(root().prints) do
+        if root().printVisits[pid]==nil then
+            local record=Catalogue.print(pid)
+            local where=record and record.locations and record.locations[1]
+            if where and where.x and where.y
+                and math.abs(px-where.x)<=12 and math.abs(py-where.y)<=12 then
+                local next,changed=State.printVisit(root(),pid,hours())
+                if changed and save(next) then
+                    log("reached the place named by the "..tostring(pid).." flyer")
+                    local screen=ConspiracyFiles.OrganiserScreen
+                    if screen and screen.window then screen.window.cachedList=nil end
+                end
+            end
+        end
+    end
     local changes
     for _,id in ipairs(Catalogue.list) do
         -- A genuine current building can be indexed before the metadata pass.

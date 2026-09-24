@@ -129,7 +129,12 @@ Rows.WHEREABOUTS={
     accounted="Last accounted for close by.",
     uncertain="Not seen recently. Its whereabouts are uncertain.",
     conflict="More than one copy has been seen. Which is the original is uncertain.",
-    unchecked="Not checked since you loaded this save.",
+    -- THE PDA IS AN IN-WORLD TOOL. Owner, 2026-09-24: "Why are we talking to
+    -- the player about saves? The PDA is an immersive tool." This state means
+    -- there has been no sighting since the session began, which the survivor
+    -- experiences simply as not having checked. Say that, and say the
+    -- uncertainty it leaves, without naming a save or a load.
+    unchecked="I have not checked on it. Where it is now, I would be guessing.",
     -- A finished case: where its evidence was last seen, kept in the save
     -- (P4-R104; owner, 2026-09-14: "I lost my files somewhere?"). Only shown
     -- with a place; never a claim of loss.

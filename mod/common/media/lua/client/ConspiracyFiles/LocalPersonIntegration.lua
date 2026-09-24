@@ -481,6 +481,62 @@ local function heldKey(inventory,keyId)
     end
     return found
 end
+-- THE OPENING KEY IS NOT A LOCAL-PERSON CASE KEY, AND heldKey CANNOT SEE IT.
+--
+-- Windows playtest, 2026-09-24: the survivor's opening key opened the starting
+-- house and nothing was recorded. heldKey returns only keys carrying
+-- cfLocalPersonCase (see its two guards above), so the generated opening key -
+-- which carries cfGeneratedId instead - resolves to nil, observeDoor takes the
+-- corpse-key lead branch, and a successful use leaves no trace. The console
+-- for that session contains no keyDoorMatch line at all.
+--
+-- Same discipline as heldKey: bounded traversal, owned containers only, and
+-- two candidates for one lock is ambiguous rather than a guess.
+local function heldGeneratedKey(inventory,keyId)
+    local containers={inventory}
+    local index,visited,found=1,0,nil
+    while index<=#containers and index<=16 and visited<200 do
+        local list=read(containers[index],"getItems")
+        local size=read(list,"size") or 0
+        for i=0,math.min(size,200-visited)-1 do
+            visited=visited+1
+            local candidate=read(list,"get",i)
+            local data=read(candidate,"getModData")
+            if data and data.cfGeneratedId and read(candidate,"getKeyId")==keyId then
+                if found then return nil end
+                found=candidate
+            end
+            local bag=read(candidate,"getInventory")
+            if bag and #containers<16 then containers[#containers+1]=bag end
+        end
+        index=index+1
+    end
+    return found
+end
+-- THE LOCK IS THE ONLY WITNESS, so the record says only what it witnessed.
+-- "This key fits this door" is observable. Who the key was cut for, who left
+-- it, and why the survivor had it are not, and the fact carries none of them.
+local function observeOpeningKeyDoor(character,door,key,keyId)
+    local square=read(door,"getSquare")
+    local building=read(square,"getBuilding")
+    local def=read(building,"getDef")
+    local buildingId=def and read(def,"getIDString")
+    if type(buildingId)~="string" or buildingId=="" then return false,"door is not in a known building" end
+    local md=read(key,"getModData")
+    local keyToken=md and md.cfGeneratedId
+    if type(keyToken)~="string" or keyToken=="" then return false,"key carries no generated identity" end
+    local doorId=table.concat({tostring(read(square,"getX")),tostring(read(square,"getY")),
+        tostring(read(square,"getZ")),tostring(read(door,"getObjectIndex"))},":")
+    -- The adapter re-derives the building from the door and refuses if it
+    -- disagrees, so this is a check rather than an assertion of ours.
+    local fact=Keys.observeInteractedMatch({interaction="door",interactionToken=doorId,
+        player=character,interactedDoor=door,heldKey=key,buildingId=buildingId,
+        doorId=doorId,keyToken=keyToken,factId="opening:"..keyToken..":"..doorId})
+    if not fact then return false,"the lock did not confirm the match" end
+    -- Same fact id for the same key and door, so trying it twice records once.
+    local accepted=noteFact(fact,"keyDoorMatch opening key door="..doorId.." building="..buildingId)
+    return accepted and true or false,"recorded"
+end
 -- A key looted from a body carries that body's provenance, stamped by
 -- remember(). Bounded traversal, same discipline as heldKey. Two candidate
 -- keys for one lock is ambiguous: refuse rather than pick one.
@@ -566,6 +622,16 @@ function P.observeDoor(action)
     local key=heldKey(inventory,keyId)
     local md=read(key,"getModData")
     if not md then
+        -- Before falling through to the corpse-key lead: the survivor's own
+        -- opening key is generated evidence, not a local-person case key, so
+        -- heldKey cannot see it.
+        local own=heldGeneratedKey(inventory,keyId)
+        if own then
+            local ok,why=pcall(observeOpeningKeyDoor,action.character,door,own,keyId)
+            if not ok then log("opening key door match deferred: "..tostring(why))
+            elseif why and why~="recorded" then log("opening key door not recorded: "..tostring(why)) end
+            return
+        end
         -- No key of ours fits. A real key taken from a body does the same
         -- job better: it names a building we never chose.
         local ok,why=pcall(observeDoorLead,inventory,door,keyId)

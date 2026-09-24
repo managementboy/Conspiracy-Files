@@ -60,6 +60,30 @@ function J.rows()
                     ". That connects the named document, key and place; who left them there remains open.",
             }
         end
+        -- A MATCH THAT FORMS NO CONNECTION IS STILL SOMETHING THE SURVIVOR DID.
+        --
+        -- KeyConnection only yields a row when a named document, a key source,
+        -- a door match and an anonymous clue all line up, so trying the opening
+        -- key on the door it fits produced a stored fact and nothing the player
+        -- could see (Windows playtest, 2026-09-24). The fact is worth showing
+        -- on its own, and worth showing carefully: a lock can witness that a
+        -- key fits it and nothing else.
+        local matched={}
+        for _,connection in ipairs(connections) do matched[connection.matchId]=true end
+        local state=current()
+        for id,fact in pairs(state and state.keyDoorMatch or {}) do
+            if not matched[id] then
+                result[#result+1]={
+                    id="keydoor:"..tostring(id),
+                    ordinal=#result+1,
+                    title="A key I carry opens a door here",
+                    summary="Observation - key and lock",
+                    detailText="I tried the key and the lock turned. It was cut for this door."
+                        .."\n\nThat is all the lock can tell me. Who it was cut for, who left it "
+                        .."where I found it, and why I had it are not questions a door answers.",
+                }
+            end
+        end
         return result
     end)
     return ok and rows or {}

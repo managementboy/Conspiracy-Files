@@ -99,8 +99,20 @@ key.container=playerInv;playerInv.key=key;items={id}
 local door={class='IsoDoor',getSquare=function() return square end,getObjectIndex=function() return 0 end,
     getKeyId=function() return 7 end,checkKeyId=function() error('no lock initialization') end}
 P.observeDoor({character=player,item=door})
-assert(#J.rows()==0,'unknown clue stays unknown')
+-- The match itself is now visible (owner, Windows playtest 2026-09-24: using a
+-- key on the door it fits must be recorded). The knowledge gate is unchanged
+-- and is what this step actually guards: the bare observation reports the
+-- player's own action and must not name the clue or the person behind it
+-- before either has been discovered.
+local beforeDiscovery=J.rows()
+assert(#beforeDiscovery==1,'the key-door observation must be recorded')
+assert(not beforeDiscovery[1].detailText:find(session.personName,1,true),
+    'an undiscovered person was named by the bare key-door observation')
+assert(beforeDiscovery[1].id:find('keydoor:',1,true),
+    'the row before discovery must be the bare observation, not the connection')
 discover()
+-- Once the clue is discovered the connection forms and replaces the bare
+-- observation rather than sitting beside it.
 assert(#J.rows()==1 and J.rows()[1].detailText:find(session.personName,1,true))
 local rowId=J.rows()[1].id
 P.reset();P.see(id,container);tick();P.observeDoor({character=player,item=door})
