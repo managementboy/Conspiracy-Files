@@ -91,7 +91,38 @@ is offline validation plus two native samples, not native acceptance of ten.
 
 The richer future scene system is **not** marked PASS. It is not implemented.
 
-## Conflict recorded, not fixed: the opening key
+## CORRECTED 2026-09-24: the opening key was never broken
+
+**The conflict recorded below is withdrawn. The conclusion was wrong.**
+
+It rested on a door-by-door comparison of `IsoDoor:getKeyId()` against the
+key, which found every door reporting `-1` while the building definition
+carried a real key id. From that I concluded the key could open nothing on
+this baseline and asked the owner to decide between gameplay changes.
+
+Comparing ids is not using a key. Measured on 2026-09-24 by performing the
+interaction through the game's own timed action
+(`tools/autotest/checks/opening_key_door.sh`, run `20260924T113438`):
+
+```
+keyId = 84227980, buildingDefKeyId = 84227980
+doors = 7, matchingByKeyId = 0, locked = 6
+door opened: TRUE
+```
+
+Zero doors report a matching key id **and the door opens anyway**. The engine
+resolves the key against the building rather than stamping the id onto each
+door instance. The Windows playtest of 2026-09-24, in which the owner's key
+opened the current house, was right; this report's Gate 3 FAIL was an artefact
+of its method.
+
+The real defect was narrower and is now fixed: using the key recorded nothing,
+because `heldKey` sees only local-person case keys. No key or lock behaviour
+was changed to achieve that.
+
+The original text is kept below for the record.
+
+## Conflict recorded, not fixed: the opening key (WITHDRAWN, see above)
 
 Measured on 42.20.4, in the starting building:
 

@@ -1,32 +1,30 @@
 -- THE OPENING KEY MUST BE CUT FROM THE BUILDING, AND THE CLAIM MUST STAY
 -- FALSIFIABLE.
 --
--- Measured on Project Zomboid 42.20.4 (b0bbce05d5), 2026-09-23, in a fresh
--- Fitness Instructor world:
+-- CORRECTED 2026-09-24. The original version of this comment concluded that
+-- the opening key could not work on Build 42.20.4, because a census found
+-- every door reporting getKeyId() = -1 while the building definition carried a
+-- real key id. That conclusion was wrong, and it was wrong because the census
+-- asked the wrong question: comparing ids is not using a key.
 --
---   keyItemId = 37335555, buildingDefKeyId = 37335555   (identical)
---   every door of that building: getKeyId() = -1
+-- Measured by actually performing the interaction
+-- (tools/autotest/checks/opening_key_door.sh, 20260924T113438):
 --
--- and across a 121x121 tile census of the surrounding area:
+--   keyId = 84227980, buildingDefKeyId = 84227980
+--   doors = 7, matchingByKeyId = 0, locked = 6
+--   door opened: TRUE
 --
---   doors=72  withRealKeyId=0  minus1=72
---   locked=50 lockedWithNoKeyId=50
---   buildings=11  buildingsWithDefKeyId=11  buildingsWithAMatchingDoor=0
+-- Zero doors report a matching key id and the door opens anyway. The engine
+-- resolves the key against the building rather than stamping the id onto each
+-- door instance, so a door-by-door id comparison sees nothing and concludes
+-- nothing works. The Windows playtest of 2026-09-24, where the owner's key
+-- opened the current house, was right and the earlier Linux report was an
+-- artefact of its method.
 --
--- So the mod cuts the key correctly - it copies the building definition's own
--- key id and verifies the assignment - and the engine locks doors without
--- stamping that id onto the door instance. isLocked() is true while
--- getKeyId() is -1. No door in the sampled area could accept any key.
---
--- This test does NOT assert that a door opens; that is a native question and
--- native runs answer it. It pins the two things that would let the failure be
--- hidden rather than fixed:
---
---   1. the key is cut from the building's own key id, not invented;
---   2. the native check still asks a door, rather than asking the key's title.
---
--- A key that says "house key" and opens nothing is the exact defect here, and
--- the cheapest way to make the gate go green would be to stop asking doors.
+-- What this pins is therefore unchanged in substance but corrected in reason:
+-- the key is cut from the building's own id, and the native check must keep
+-- exercising a real door interaction rather than an id comparison, because an
+-- id comparison already produced one false conclusion.
 local function read(path)
     local f=assert(io.open(path,"rb"),"missing "..path)
     local s=f:read("*a"); f:close(); return s

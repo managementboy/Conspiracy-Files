@@ -29,6 +29,33 @@
 - **Requirement trail:** `DECISIONS.md:1189-1191` records the owner's principle that a found annotated map or flyer should give purpose and a reason to act. The later map decision (`DECISIONS.md:550-551,1118`) left universal flyer coverage unconfirmed. This playtest reaffirms the purposeful-flyer requirement for an actually found item; later design must resolve coverage without treating Pondview as fulfilled by catalogue data alone.
 - **Status:** Logged for later; no fix attempted.
 
+## Fixed and verified — 2026-09-24
+
+All three reports are fixed. Evidence preserved in `evidence/windows-playtest/`
+(unchanged) and `evidence/linux-autotest/`.
+
+| Report | Fix | Verified by |
+|---|---|---|
+| 1 PDA save wording | `WHERE` now reads "I have not checked on it. Where it is now, I would be guessing." | `test/pda_stays_in_world.lua`; fails on the old sentence by name |
+| 2 key records nothing | `heldKey` could not see the generated key, and a lone match had no row | `test/opening_key_door_record.lua`; native `20260924T113438` |
+| 3 flyer gives no purpose | every flyer now leads to its place and pays off on arrival | `test/flyer_gives_a_purpose.lua`, 133/133 |
+
+**Report 2's contradiction is resolved, against the earlier Linux report.**
+The key matches the building definition, **no door reports a matching key id,
+and the door opens anyway** — so the 2026-09-23 conclusion that the key opened
+nothing was an artefact of comparing ids instead of using the key. That report
+is corrected at `CLAUDE_OCCUPATIONAL_WORLD_LEADS_RESULT_2026-09-23.md`. Key and
+lock behaviour were not changed; only recording was added.
+
+```
+keyId=84227980 buildingDefKeyId=84227980 doors=7 matchingByKeyId=0 locked=6
+door opened: true; key-door observations before=0 after=1; after reload: 1
+```
+
+**Not investigated, as instructed:** the startup errors from other mods and the
+engine (vehicle templates, vegetation tiles, skeleton bones, map data). Their
+relation to these three reports remains unestablished.
+
 ## Log watch
 
 - [Full session console snapshot](evidence/windows-playtest/2026-09-24-console.zip) was captured after the owner stopped play, before the next launch could replace `console.txt`.
