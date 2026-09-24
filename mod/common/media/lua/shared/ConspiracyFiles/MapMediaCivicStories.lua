@@ -1,3 +1,14 @@
+-- EVERY MAP STORY IS BOUND TO THE LIVE CENTRAL CONSPIRACY.
+--
+-- All 125 vanilla annotated stash maps already trigger one of these stories,
+-- selected by family from the map's own handwriting. None of them reached the
+-- campaign's central question, so a player could follow somebody's own marked
+-- map to a real place, find a real incident, and have it connect to nothing.
+--
+-- Each story now names the AXIS its evidence bears on. The sentence belongs to
+-- whichever pair the save drew (ConspiracyPair.axisLine), so the same marked
+-- place reads differently in a Farm Zero campaign and a Failed Cordon one, and
+-- neither reading is ever resolved.
 -- Mod-authored incidents, not new canonical events. Ordinary destinations
 -- retain customer/contact copies. Only the gallery story requires a gallery.
 local function page(kind,title,observation,source,note)
@@ -5,6 +16,8 @@ local function page(kind,title,observation,source,note)
 end
 return {
  food={
+  -- supplies delivered to a place that could not use them
+  centralAxis="movement",
   organisation="Spiffo's Louisville",grounding="SpiffosHiringLouisville",siteRole="recipient-copy",
   question="What did the completed meal delivery actually contain?",
   event="Promotional meal vouchers were counted as meals supplied, although each required a purchase and no food had been delivered.",
@@ -45,6 +58,8 @@ Promotion distribution target remains met.]],
   },
  },
  power={
+  -- power kept on for premises officially closed
+  centralAxis="access",
   organisation="Circuital Healing",grounding="CircuitalHealing",siteRole="recipient-copy",
   question="What was still powered after the reported disconnection?",
   event="A customer mistook a serviced battery-backed radio's lit dial for evidence that the building's mains supply had returned.",
@@ -84,6 +99,8 @@ POWER BACK report withdrawn. No restoration of building supply established by th
   },
  },
  names={
+  -- a name on a list nobody will account for
+  centralAxis="absence",
   organisation="Spiffo's Louisville",grounding="SpiffosHiringLouisville",siteRole="recipient-copy",
   question="Why did the roster count somebody who never checked in?",
   event="An entertainer's stage assignment, Spiffo, was copied into the head-count column as a second worker beside the person wearing the costume.",
@@ -123,6 +140,8 @@ No second worker assigned or missing. Costume return complete. Remove duplicate 
   },
  },
  road={
+  -- a route closed to some traffic and not to others
+  centralAxis="movement",
   organisation="McCoy Logging Co.",grounding="McCoyLoggingCorp",siteRole="recipient-copy",
   question="Why was one truck admitted after the local access closure?",
   event="A closed yard admitted its driver solely to return the gate's own signed closure paperwork, under a standing document-return exception.",
@@ -162,6 +181,8 @@ Access notice stands. Signed original now on file; further copies need not be re
   },
  },
  medicine={
+  -- medical stock drawn before the public emergency
+  centralAxis="protection",
   organisation="Crossroads Medical Center",grounding="CrossRoadsMall",siteRole="recipient-copy",
   question="Did the medical delivery contain supplies or only case packs?",
   event="A referral desk ordered patient-record packs, but the courier's generic MEDICAL SUPPLIES heading was copied into a recipient's supply tally.",
@@ -201,6 +222,8 @@ Local supply tally corrected. Records desk requests completed receipt form befor
   },
  },
  repairs={
+  -- a repair recorded that the part does not show
+  centralAxis="records",
   organisation="Lenny's Car Repair",grounding="LennysCarRepair",siteRole="recipient-copy",
   question="Was the vehicle available when its job was marked released?",
   event="A parts-return invoice received the workshop's release stamp, and its customer-facing copy omitted the word PARTS.",
@@ -241,6 +264,8 @@ Wasted collection call not charged. Correct-parts arrival not recorded in this b
   },
  },
  housing={
+  -- a property entered by somebody unaccounted for
+  centralAxis="access",
   organisation="Red Oak Apartments",grounding="RedOakApartments",siteRole="recipient-copy",
   question="Why did a vacant-unit list contradict the people answering the door?",
   event="A rent-free staff stay was entered as a zero-rent unit and then copied into a vacancy list used by a visiting contractor.",
@@ -281,6 +306,8 @@ Boarding estimate cancelled before work. Rent remains waived; do not reopen char
   },
  },
  waste={
+  -- material disposed of under precautions nobody explained
+  centralAxis="protection",
   organisation="Scarlet Oak Distillery",grounding="ScarletOakDistillery",siteRole="recipient-copy",
   question="What happened to the supposedly accepted sealed load?",
   event="Empty returnable sample bottles were described as routine waste to avoid a commercial return fee; the yard refused them and the driver brought the sealed load back.",
@@ -320,6 +347,8 @@ ACCEPTED cancelled. Commercial return charge still due; refusal fee added for re
   },
  },
  gallery={
+  -- a catalogue entry changed after the crates moved
+  centralAxis="records",
   organisation="Art Gallery of Louisville",grounding="ArtGalleryofLouisville",siteRole="gallery",
   question="Had the gallery's priority removal already taken the art to safety?",
   event="A packing inventory of empty transport cases was moved to store 4; a copied removal heading omitted EMPTY CASES and made the transfer look like evacuation of the works.",

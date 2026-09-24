@@ -1,3 +1,14 @@
+-- EVERY MAP STORY IS BOUND TO THE LIVE CENTRAL CONSPIRACY.
+--
+-- All 125 vanilla annotated stash maps already trigger one of these stories,
+-- selected by family from the map's own handwriting. None of them reached the
+-- campaign's central question, so a player could follow somebody's own marked
+-- map to a real place, find a real incident, and have it connect to nothing.
+--
+-- Each story now names the AXIS its evidence bears on. The sentence belongs to
+-- whichever pair the save drew (ConspiracyPair.axisLine), so the same marked
+-- place reads differently in a Farm Zero campaign and a Failed Cordon one, and
+-- neither reading is ever resolved.
 -- Authored incidents, grounded in vanilla business activities. Destination
 -- records are the customer's/recipient's retained copies, not proof that a
 -- randomly bound house is a canonical shop, depot, clinic or exchange.
@@ -6,6 +17,8 @@ local function page(kind,title,observation,source,note)
 end
 return {
  fuel={
+  -- fuel reserved for one journey and issued into cans for another
+  centralAxis="movement",
   organisation="Fossoil",grounding="Fossoil1",siteRole="recipient-copy",
   question="Was fuel actually supplied for the promised collection?",
   event="A reserved passenger-fuel allowance was reassigned to generator cans before the driver could draw it.",
@@ -49,6 +62,8 @@ Waiting expense returned: no passenger account remains open.]],
   },
  },
  water={
+  -- a supply record altered after the fact
+  centralAxis="records",
   organisation="Knox Pack Kitchens",grounding="KnoxPackKitchens",siteRole="recipient-copy",
   question="Did WATER SERVICE RESTORED mean water was available at the marked place?",
   event="An appliance service desk closed a disconnected water-dispenser job after a bench test, and its customer copied the closure as a building-service notice.",
@@ -91,6 +106,8 @@ Desk instruction: use full service description even when it runs onto a second l
   },
  },
  telephone={
+  -- a line answered by somebody not accounted for
+  centralAxis="absence",
   organisation="Circuital Healing",grounding="CircuitalHealing",siteRole="recipient-copy",
   question="Did the apparently answered call reach anyone outside?",
   event="A repaired answering machine was left in greeting-preview mode, and its returned customer's test call was logged as an answered message.",
@@ -132,6 +149,8 @@ Copy for {place}: voice on reported test was this unit's stored greeting in PREV
   },
  },
  beds={
+  -- beds prepared in a place that was said to be shut
+  centralAxis="access",
   organisation="Sunstar Motel",grounding="SunstarMotel",siteRole="recipient-copy",
   question="Did the reservation actually keep beds available for arriving people?",
   event="A group reservation held motel rooms until a payment deadline; after expiry the manager rented them as storage while the old referral list kept circulating.",
@@ -173,6 +192,8 @@ No lodging charge to group.]],
   },
  },
  radio={
+  -- a log entry rewritten after transmission
+  centralAxis="records",
   organisation="Circuital Healing",grounding="CircuitalHealing",siteRole="recipient-copy",
   question="Why did the radio fail after its battery issue was signed complete?",
   event="Returned exhausted batteries were put into a fresh-stock carton and issued by carton label; their return deposit was mistaken for a stock receipt.",
@@ -213,6 +234,8 @@ Returns carton relabelled.]],
   },
  },
  bus={
+  -- a vehicle that carried something other than its booking
+  centralAxis="movement",
   organisation="McCoy Logging Co.",grounding="McCoyLoggingCorp",siteRole="recipient-copy",
   question="Did the reported crew collection carry any passengers?",
   event="Dispatch used the planned crew head count as the completion count after a truck was sent to collect tools instead of workers.",
@@ -253,6 +276,8 @@ Cancel crew lunches; do not cancel tool receipt.]],
   },
  },
  mail={
+  -- post that travelled where people could not
+  centralAxis="movement",
   organisation="US Mail",grounding="MailCarrierAdEkron",siteRole="recipient-copy",
   question="Did the collected letters leave the area?",
   event="A mail bag was collected but refused at transfer after its routing label detached; it was returned to the sender under a completed-delivery code.",
@@ -293,6 +318,8 @@ Postage query must be submitted separately from delivery query.]],
   },
  },
  keys={
+  -- a key held by somebody with no reason to hold it
+  centralAxis="access",
   organisation="U-Store-It",grounding="UStoreItMuldraugh",siteRole="recipient-copy",
   question="Why was the supplied storage key said to open the wrong unit?",
   event="The storage office renumbered two lockups on paper before changing their door plates and issued a key using the new number.",
