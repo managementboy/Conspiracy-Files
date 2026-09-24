@@ -48,7 +48,38 @@ local function researchMapIds()
     return ids
 end
 
-local research=researchMapIds()
+-- The INSTALLED GAME is the better authority, when it is present. Project
+-- Zomboid declares every stash in media/lua/shared/StashDescriptions via
+-- StashUtil.newStash(id, "Map", item, "Stash_AnnotedMap"). Counting those on
+-- 42.20.4 gives 125, all of them type "Map" and kind "Stash_AnnotedMap", and
+-- that set matches the mod's bindings exactly. Reading the game rather than an
+-- archived snapshot means a future update that adds a map fails this test on
+-- the machine that has the update, without waiting for a research refresh.
+local function installedMapIds()
+    local home=os.getenv("HOME")
+    if not home then return nil end
+    local dir=home.."/.steam/steam/steamapps/common/ProjectZomboid/projectzomboid"
+        .."/media/lua/shared/StashDescriptions"
+    local listing=io.popen('ls "'..dir..'" 2>/dev/null')
+    if not listing then return nil end
+    local ids,found={},false
+    for name in listing:lines() do
+        if name:find("%.lua$") then
+            local f=io.open(dir.."/"..name,"rb")
+            if f then
+                local raw=f:read("*a"); f:close()
+                for id,kind in raw:gmatch('StashUtil%.newStash%("([^"]+)"%s*,%s*"([^"]+)"') do
+                    if kind=="Map" then ids[id]=true; found=true end
+                end
+            end
+        end
+    end
+    listing:close()
+    if not found then return nil end
+    return ids
+end
+
+local research=installedMapIds() or researchMapIds()
 if research then
     local shipped={} for _,id in ipairs(maps) do shipped[id]=true end
     local missing,extra={},{}
