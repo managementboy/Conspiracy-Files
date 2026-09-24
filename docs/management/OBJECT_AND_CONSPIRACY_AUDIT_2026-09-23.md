@@ -132,3 +132,28 @@ is chosen"*; removing any scenario's axis fails by name.
 The bridge sentence and the axis lines are derived, never saved — storing them
 cost 13,128 bytes of campaign state and broke the whole-catalogue headroom
 assertion the first time it was tried.
+
+## How many annotated maps Build 42 actually has
+
+**125.** Established three independent ways on 2026-09-24, because a goal was
+written against 126 and the number needed settling rather than asserting:
+
+1. **The installed game.** Project Zomboid declares every stash in
+   `media/lua/shared/StashDescriptions/*.lua` as
+   `StashUtil.newStash(id, "Map", item, "Stash_AnnotedMap")`. On 42.20.4 that
+   is **125** declarations, all type `Map`, all kind `Stash_AnnotedMap`. The
+   set matches the mod's bindings exactly — nothing missing, nothing extra.
+2. **The research catalogue.** `docs/research/vanilla-print-2026-09-19`
+   classifies 258 records by `kind`: **125 annotated map**, 111 flyer,
+   22 brochure.
+3. **The mod itself.** Conspiracy Files defines one item (`Organiser`) and
+   adds no stash maps, so a modded game has no extra map either.
+
+The 126 came from a substring search for `"Map"` matching
+`WestMapleCountryClub` — a country-club **brochure**, on "Ma**p**le".
+
+`test/map_stories_trigger_a_mystery.lua` now derives this from the installed
+game when present and the research catalogue otherwise, so the number is
+checked rather than remembered. If an update ships a 126th annotated map, the
+test fails on the first machine with that update, naming it.
+
