@@ -152,8 +152,19 @@ end
 -- car: a carrier the game has not loaded is not found, and the square the clue
 -- went in on stands - never nil coordinates into the icon layer.
 C.carrierSpots=C.carrierSpots or {}
+-- WHY A CLUE ON A BODY IS NOT FINDABLE. Playtest 2026-09-24: a receipt sat on
+-- a carrier, its cue fired twice telling the survivor to look around, and no
+-- search icon was ever emitted - so the clue could not be found by the one
+-- mechanism that finds clues. Nobody could ask why, because every exit was
+-- silent.
+local declineSpot=CFLog.declines("cluesearch")
 function C.carrierSpot(clue)
-    if not (clue and clue.carrier and clue.mark) then return nil end
+    if not clue then return declineSpot("no clue") end
+    if not clue.carrier then return declineSpot("clue "..tostring(clue.id).." is not on a carrier") end
+    if not clue.mark then
+        return declineSpot("clue "..tostring(clue.id)
+            .." is on a carrier with no mark, so the body cannot be found again")
+    end
     local t=now()
     local cached=C.carrierSpots[clue.id]
     if cached and t-cached.at<C.VEHICLE_SPOT_MS then return cached.x,cached.y,cached.z end
@@ -162,6 +173,10 @@ function C.carrierSpot(clue)
     local ok,found=pcall(Carriers.findMark,clue.mark,clue.x,clue.y,clue.z)
     if ok and found then x,y,z=found.x,found.y,found.z end
     C.carrierSpots[clue.id]={at=t,x=x,y=y,z=z}
+    if not x then
+        return declineSpot("carrier for clue "..tostring(clue.id).." not found near "
+            ..tostring(clue.x)..","..tostring(clue.y)..(ok and "" or " (findMark errored)"))
+    end
     return x,y,z
 end
 

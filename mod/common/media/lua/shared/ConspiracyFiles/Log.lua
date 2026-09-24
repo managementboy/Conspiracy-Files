@@ -131,6 +131,55 @@ function Log.message(name,event,text,level)
     Log.write(level or "i",event,{mod=name,msg=text})
 end
 
+-- WHY NOTHING HAPPENED.
+--
+-- Every player-facing bug found in the 2026-09-24 playtests was a SILENT
+-- no-op: a path that declined to act and said nothing. heldKey returned nil
+-- for a generated key; KeyObservations.observe returned early so a token could
+-- never arrive; a read flyer saved a timestamp no consumer read; a clue's
+-- search icon was never emitted. The suite was green throughout, because a
+-- test can only check a claim somebody thought to make, and nobody asserts on
+-- a decision they do not know is being taken.
+--
+-- Counted across the client modules at the time: MapMediaRuntime 74 early
+-- returns against 13 log calls, LocalPersonIntegration 48 against 15,
+-- ClueMarkers 40 against 11. Roughly five silent exits for every line that
+-- says anything.
+--
+-- So a decision NOT to do something gets a name, and the name is available
+-- without being printed:
+--
+--   local decline=Log.declines("keys")
+--   if carrier and not token then return decline("carrier not stamped yet") end
+--
+--   ConspiracyFiles.verbose.keys=true      -- print them from the console
+--   Log.lastDecline("keys")                -- or ask afterwards
+--
+-- The reason is kept even while silent, so a playtest that ends in "nothing
+-- happened" can be asked the question instead of being re-run. Cost while off
+-- is one table read and one boolean test, which is what IdentityObserver's
+-- bail() already pays in a render path and what Kahlua can afford there.
+ConspiracyFiles=ConspiracyFiles or {}
+ConspiracyFiles.verbose=ConspiracyFiles.verbose or {}
+local lastDecline={}
+function Log.declines(name)
+    return function(reason,fields)
+        lastDecline[name]={reason=reason}
+        if ConspiracyFiles.verbose[name] then
+            fields=fields or {}
+            fields.mod=name; fields.why=reason
+            Log.write("d","declined",fields)
+        end
+        return nil,reason
+    end
+end
+function Log.lastDecline(name)
+    if name then return lastDecline[name] and lastDecline[name].reason end
+    local out={}
+    for module,entry in pairs(lastDecline) do out[module]=entry.reason end
+    return out
+end
+
 function Log.events()
     local out={}
     for id in pairs(EVENTS) do out[#out+1]=id end

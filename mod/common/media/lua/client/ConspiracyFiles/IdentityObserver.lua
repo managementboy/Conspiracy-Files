@@ -192,6 +192,9 @@ end
 --   ConspiracyFiles.IdentityObserver.verbose=true
 -- Costs nothing while off, and names the failing check in one session.
 I.verbose=false
+-- Why a key was not recorded. See Log.declines: the reason survives being
+-- silent, so a PDA that stays empty can be asked why.
+local declineKey=CFLog.declines("keys")
 local function bail(reason)
  if I.verbose then gate("bailed: "..tostring(reason)) end
  return nil
@@ -274,7 +277,10 @@ function I.afterRender(pane)
    -- can attach it properly. This render repeats while the pane is open, so
    -- the key is recorded a moment later with the body it came from.
    if carrier and not token then
-    -- nothing yet: the body has not been stamped
+    -- NAMED, not silent. This is the decision that produced five identical
+    -- "A key" rows: key and body are both real, but the body is not stamped
+    -- yet, so recording now would attach the key to nobody.
+    declineKey("carrier "..tostring(label).." has no provenance stamp yet")
    else
     pcall(keys.see,item,label,token)
    end

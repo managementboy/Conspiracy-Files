@@ -31,6 +31,9 @@ local cardTypes={['Base.IDcard']=true,['Base.IDcard_Male']=true,['Base.IDcard_Fe
 -- keeps these lines off the 30-tick poll.
 local CFLog=require("ConspiracyFiles/Log")
 local function log(message) CFLog.message("person","person",message) end
+-- Why a key-door observation was not recorded, kept even while silent so
+-- "I used the key and nothing happened" is a question, not a re-run.
+local declineDoor=CFLog.declines("keydoor")
 local function noteFact(fact,description)
     local accepted,reason=Journal.observe(fact)
     if accepted and reason=="recorded" then log(description) end
@@ -521,10 +524,14 @@ local function observeOpeningKeyDoor(character,door,key,keyId)
     local building=read(square,"getBuilding")
     local def=read(building,"getDef")
     local buildingId=def and read(def,"getIDString")
-    if type(buildingId)~="string" or buildingId=="" then return false,"door is not in a known building" end
+    if type(buildingId)~="string" or buildingId=="" then
+        return declineDoor("the door is not in a building the address book knows")
+    end
     local md=read(key,"getModData")
     local keyToken=md and md.cfGeneratedId
-    if type(keyToken)~="string" or keyToken=="" then return false,"key carries no generated identity" end
+    if type(keyToken)~="string" or keyToken=="" then
+        return declineDoor("the key carries no generated identity")
+    end
     local doorId=table.concat({tostring(read(square,"getX")),tostring(read(square,"getY")),
         tostring(read(square,"getZ")),tostring(read(door,"getObjectIndex"))},":")
     -- The adapter re-derives the building from the door and refuses if it
@@ -532,7 +539,10 @@ local function observeOpeningKeyDoor(character,door,key,keyId)
     local fact=Keys.observeInteractedMatch({interaction="door",interactionToken=doorId,
         player=character,interactedDoor=door,heldKey=key,buildingId=buildingId,
         doorId=doorId,keyToken=keyToken,factId="opening:"..keyToken..":"..doorId})
-    if not fact then return false,"the lock did not confirm the match" end
+    if not fact then
+        return declineDoor("the lock did not confirm the match: key "..tostring(keyToken)
+            .." against door "..tostring(doorId))
+    end
     -- Same fact id for the same key and door, so trying it twice records once.
     local accepted=noteFact(fact,"keyDoorMatch opening key door="..doorId.." building="..buildingId)
     return accepted and true or false,"recorded"

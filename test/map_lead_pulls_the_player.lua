@@ -106,6 +106,33 @@ end
 local n=0; for _ in pairs(distinct) do n=n+1 end
 assert(n>=2,"forty seeds named "..n.." person(s); the place always answers the same")
 
+-- 5. THE RUNTIME MUST ACTUALLY USE THESE TEXTS.
+--
+-- Found by the mutation corpus (mutant 005): disabling the runtime's call to
+-- Content.lead left every one of 197 tests green. Sections 1-4 above test the
+-- pure builders, so the producer was covered and the consumer was not - the
+-- same shape as the Pondview bug these builders were written to fix.
+--
+-- Read as source rather than executed, because MapMediaRuntime needs a live
+-- game. That is weaker than calling it, and it is the difference between
+-- noticing this and not.
+local function source(path)
+    local f=assert(io.open(path,"rb")); local s=f:read("*a"); f:close(); return s
+end
+local runtime=source("mod/common/media/lua/client/ConspiracyFiles/MapMediaRuntime.lua")
+-- Match the NAME, not "name(": these are invoked both directly and as a
+-- reference handed to pcall, and asserting on the open paren reported
+-- Content.whosePlace as absent while line 392 was calling it through pcall.
+for _,name in ipairs({"Content.lead","Content.cameHere","Content.mapNote",
+                      "Content.whosePlace","Content.flyerLead","Content.flyerPayoff"}) do
+    assert(runtime:find(name,1,true),
+        "MapMediaRuntime no longer uses "..name.." - the text is built and never shown")
+end
+-- And the lead must reach a row, not be computed and dropped.
+assert(runtime:find("map-lead:",1,true),"the lead is never given a row id")
+assert(runtime:find("flyer-lead:",1,true) and runtime:find("flyer-found:",1,true),
+    "the flyer lead and payoff never reach rows")
+
 print(string.format("PASS map lead: %d maps offer a lead quoting their handwriting, "
     .."the first finding answers it, and %d places answer with a person "
     .."without claiming they signed the marks",leads,named))

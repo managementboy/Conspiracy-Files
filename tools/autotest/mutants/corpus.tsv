@@ -1,0 +1,16 @@
+# Known-sick builds, for measuring whether the suite can FAIL.
+#
+# A pass rate says nothing about a suite that cannot detect anything. This
+# reintroduces defects the project has already fixed and records which of them
+# the offline suite catches. Rows are tab separated:
+#
+#   id  file  find  replace  note
+#
+# `find` and `replace` are literal strings. Keep each mutation to one line so a
+# failure names one thing. Sourced from real fixes, so every row is a defect
+# this codebase actually shipped.
+001	mod/common/media/lua/shared/ConspiracyFiles/KeyObservations.lua	local existing=staged.keys[record.id]	if staged.keys[record.id] then return staged,false end local existing=nil	a key can never adopt the provenance it was seen without (playtest 2026-09-24, five identical "A key" rows)
+002	mod/common/media/lua/client/ConspiracyFiles/EvidenceRows.lua	unchecked="I have not checked on it. Where it is now, I would be guessing.",	unchecked="Not checked since you loaded this save.",	the PDA tells the player about saves (playtest 2026-09-24)
+003	mod/common/media/lua/shared/ConspiracyFiles/MapMediaContent.lua	function M.flyerLead(print)	function M.flyerLead(print) do return nil end	a flyer gives the player no reason to act (playtest 2026-09-24, Pondview)
+004	mod/common/media/lua/shared/ConspiracyFiles/Generated/ConspiracyPair.lua	M.AXES={"movement","records","access","protection","absence"}	M.AXES={"movement","records","access","protection","absence","unbound"}	an axis no pair answers, so a scenario can claim a binding nothing supplies
+005	mod/common/media/lua/client/ConspiracyFiles/MapMediaRuntime.lua	local lead=Content.lead(b); if not lead then return nil end	local lead=nil; if not lead then return nil end	reading a map leaves no open loop in the organiser
