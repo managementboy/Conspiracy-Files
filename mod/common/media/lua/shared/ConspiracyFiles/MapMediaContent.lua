@@ -96,6 +96,74 @@ end
 local function expand(text,v)
     return (text:gsub("{([%w_]+)}",function(k) return assert(v[k],"unknown map story field "..k) end))
 end
+-- WHO IS NAMED AT THE PLACE SOMEBODY MARKED.
+--
+-- The papers at a marked place already name people; nothing surfaced them as
+-- PEOPLE, so following a stranger's handwriting ended at a filing cabinet. The
+-- runtime uses this to close the loop the map opened - a name the player can
+-- carry, ask after, and meet again through the ordinary identity machinery.
+--
+-- It deliberately does NOT say this person wrote the map. The marks are
+-- unsigned; the mod does not know whose hand they are, and inferring it from
+-- co-location is exactly the move the observation rules forbid.
+function M.people(binding,seed)
+    local v=values(binding,seed)
+    return {name=v.name,other=v.other,place=v.place}
+end
+-- THE THREE TEXTS THAT MAKE A MARKED MAP PULL.
+--
+-- Pure and here rather than in the client runtime, so they can be tested
+-- without a game: the runtime only decides WHEN to show them.
+--
+--  * lead      - shown from the moment the map is read until the player
+--                arrives. The scrawl verbatim, where it points, and the plain
+--                fact of not having gone.
+--  * camehere  - the first finding, answering the handwriting that brought the
+--                player rather than only the file they found.
+--  * whoseplace- the payoff, naming who is on the papers at the marked place.
+--
+-- None of them says who drew the marks. They are unsigned, and reading a name
+-- off the papers beside them as the writer's is the inference the observation
+-- rules forbid.
+function M.lead(binding)
+    if type(binding)~="table" then return nil end
+    local scrawl=binding.sourceText
+    if type(scrawl)~="string" or scrawl=="" then return nil end
+    local out={"WHAT SOMEBODY WROTE","\""..scrawl.."\"","","WHERE IT POINTS"}
+    out[#out+1]=(type(binding.label)=="string" and binding.label~="")
+        and ("A "..binding.label..".") or "A place marked on this map."
+    local target=binding.targets and binding.targets[1]
+    if target and target.x and target.y then
+        out[#out+1]="The mark sits at "..tostring(target.x)..", "..tostring(target.y).."."
+    end
+    out[#out+1]=""
+    out[#out+1]="WHO WROTE IT"
+    out[#out+1]="Nobody signed it. Whoever marked this knew the place well enough to draw it from memory."
+    out[#out+1]=""
+    out[#out+1]="WHAT I HAVE DONE ABOUT IT"
+    out[#out+1]="Nothing yet. I have not been there."
+    return {title="A marked map I have not followed",detail=table.concat(out,"\n")}
+end
+function M.cameHere(binding)
+    local scrawl=type(binding)=="table" and binding.sourceText
+    if type(scrawl)~="string" or scrawl=="" then return nil end
+    return "WHY I CAME HERE\nSomebody marked this place and wrote:\n"..scrawl
+        .."\n\nThis is what was here. Whether it is what they meant, I cannot say."
+end
+function M.mapNote(binding)
+    local scrawl=type(binding)=="table" and binding.sourceText
+    if type(scrawl)~="string" or scrawl=="" then return nil end
+    return "MAP NOTE\nThe handwritten map reads:\n"..scrawl
+end
+function M.whosePlace(binding,seed)
+    if type(binding)~="table" or type(seed)~="number" then return nil end
+    local v=values(binding,seed)
+    if not v.name then return nil end
+    return "WHOSE PLACE THIS WAS\n"..v.name.." is named on the papers here"
+        ..(v.other and (", and so is "..v.other) or "")
+        ..". The map that brought me was unsigned, so I cannot say either of them "
+        .."drew it. It is a name to ask after."
+end
 function M.scenario(binding,seed) return family(binding,seed) end
 function M.observation(binding,profession,skills,seed,part)
     skills=skills or {}

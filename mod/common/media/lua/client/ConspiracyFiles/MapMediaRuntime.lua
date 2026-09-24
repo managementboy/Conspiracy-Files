@@ -169,6 +169,11 @@ function R.read(id,item)
     if not save(next) then return false end
     if not prioritySet[id] then priority[#priority+1]=id; prioritySet[id]=true end
     if item then item:getModData().cfMapDesign=id end
+    -- The organiser must show the new lead at once. Reading a PRINT already
+    -- invalidated the cached list here and reading a MAP did not, so the row
+    -- this read creates could sit unseen behind a stale list.
+    local screen=ConspiracyFiles.OrganiserScreen
+    if screen and screen.window then screen.window.cachedList=nil end
     return true
 end
 function R.printRead(id)
@@ -284,9 +289,35 @@ function R.inspect(subject,inPlace)
     state=replacement; targets[State.reference(id,part)]=nil
     stamp(item,id,part,next.observation); return true
 end
+-- WHERE A MAP POINTS, BEFORE THE PLAYER HAS BEEN.
+--
+-- Reading an annotated map already started its mystery - R.read activates the
+-- trail, seeds it and moves it to the front of the placement queue - but the
+-- organiser said nothing until evidence was FOUND, which meant the handwriting
+-- that makes the map worth following was only shown as a reward for having
+-- already gone (see the MAP NOTE section below, which needs a noted part).
+--
+-- So the read now leaves an open loop: the scrawl verbatim, where it points,
+-- and the plain fact that the player has not been. No claim about what waits
+-- there - the mod does not know what the writer meant, and must not pretend
+-- the marks are about its own case.
+local function leadRow(id)
+    local b=Catalogue.get(id); if not b then return nil end
+    local lead=Content.lead(b); if not lead then return nil end
+    return {id="map-lead:"..id,title=lead.title,detailText=lead.detail,
+        cfCarrier="Evidence",summary="Lead",cfMapMedia=true}
+end
 function R.rows()
     if not ready or not allowed() then return {} end
     local out={}
+    -- Leads first: a place the player has read about and not yet reached is a
+    -- question, and questions belong above answers.
+    for _,id in ipairs(Catalogue.list) do
+        if root().trails[id] and root().entries[id]==nil then
+            local lead=leadRow(id)
+            if lead then out[#out+1]=lead end
+        end
+    end
     for _,id in ipairs(Catalogue.list) do
         local t=root().trails[id]
         if t then
@@ -299,6 +330,22 @@ function R.rows()
                 for _,finding in ipairs(Content.findings(Catalogue.get(id),t.seed,part,known)) do
                     detail=detail.."\n\nALONGSIDE THE OTHER RECORDS\n"..finding
                 end
+                -- THE PLACE ANSWERS WITH A PERSON.
+                --
+                -- Following a stranger's handwriting used to end at a records
+                -- dispute: the papers named people, but nothing surfaced them
+                -- AS people, so the map led to a filing cabinet. The payoff now
+                -- names who is on the papers at the marked place and hands that
+                -- name to the player as something to carry.
+                --
+                -- It states the gap instead of closing it. The marks are
+                -- unsigned, and taking a name off the papers beside them as the
+                -- writer's is precisely the inference the observation rules
+                -- forbid - so the record says what is true and stops.
+                if part==4 then
+                    local okWhose,whose=pcall(Content.whosePlace,Catalogue.get(id),t.seed)
+                    if okWhose and type(whose)=="string" then detail=detail.."\n\n"..whose end
+                end
                 if part==4 and Catalogue.get(id).sharedPeer then
                     local peerKnown={}
                     for source=1,4 do
@@ -308,8 +355,22 @@ function R.rows()
                     local shared=Content.sharedFinding(Catalogue.get(id),known,peerKnown)
                     if shared then detail=detail.."\n\nTHE OTHER FILE AT THIS PLACE\n"..shared end
                 end
-                local source=Catalogue.get(id).sourceText
-                if source and source~="" then detail=detail.."\n\nMAP NOTE\nThe handwritten map reads:\n"..source end
+                -- THE FIRST FINDING ANSWERS THE HANDWRITING, NOT JUST THE FILE.
+                --
+                -- 125 maps share 17 authored incidents, so a story cannot name
+                -- the scrawl that led the player to it - the acknowledgement has
+                -- to be made here, where both are known. Without it a stranger's
+                -- "Mom was sick. I didn't want her to turn. Please come see me"
+                -- is answered by a fuel reservation dispute and the mod never
+                -- admits the gap.
+                --
+                -- It admits it rather than closing it. The survivor notes what
+                -- was written and what was actually there; nothing claims the
+                -- marks were about this incident, because the mod does not know
+                -- what the writer meant and must not invent it.
+                local note=(part==1) and Content.cameHere(Catalogue.get(id))
+                    or Content.mapNote(Catalogue.get(id))
+                if note then detail=detail.."\n\n"..note end
                 for _,printId in ipairs(Catalogue.get(id).printIds or {}) do
                     if root().prints[printId] then
                         local advert=Catalogue.print(printId)
