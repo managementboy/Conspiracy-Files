@@ -90,17 +90,22 @@ function M.token(id,part,attempt) return M.reference(id,part)..":"..attempt end
 -- Re-offer a missed fragment on a later journey, without moving or deleting its
 -- earlier physical copy. Three *logical* fragments do not mean three chances.
 -- An uncertain insertion blocks re-offering; absence is not evidence of failure.
-function M.nextFragment(root,id,x,y,at)
+-- `localCount` is how many local records THIS story earns - one to three,
+-- decided by the author rather than by a constant. Defaults to three so a
+-- caller that does not know the story behaves exactly as before.
+function M.nextFragment(root,id,x,y,at,localCount)
     local t=root.trails[id]; if not t then return nil end
+    localCount=localCount or 3
+    if type(localCount)~="number" or localCount<1 or localCount>3 then return nil end
     -- A read starts a trail, not an immediate stack of three clues. This is a
     -- spacing interval for local offers; destination evidence never expires.
     if at<t.at+2+t.seed%5 then return nil end
-    for part=1,3 do
+    for part=1,localCount do
         local p=t.fragments[part]
         if p and (p.state=="intent" or p.state=="unknown") then return nil end
         if p and p.state~="refused" and at-p.at<6 then return nil end
     end
-    for part=1,3 do
+    for part=1,localCount do
         local p=t.fragments[part]
         if not p then return part end
         if not p.noted and not p.recognised and p.state=="placed" then
@@ -108,7 +113,7 @@ function M.nextFragment(root,id,x,y,at)
             if dx*dx+dy*dy<14400 or at-p.at<6 then return nil end
         end
     end
-    for part=1,3 do
+    for part=1,localCount do
         local p=t.fragments[part]
         if not p.noted and not p.recognised and (p.state=="placed" or p.state=="refused") then return part end
     end

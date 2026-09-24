@@ -224,6 +224,15 @@ local function resolve(p)
     if not container then return nil,why end
     return container
 end
+-- How many local records this story earns. A story that tells itself in one
+-- record should not have two more demanded of it
+-- (CENTRAL_MYSTERY_REVIEW_2026-09-19.md:19).
+local function localCount(id)
+    local t=root().trails[id]; if not t then return nil end
+    local ok,f=pcall(Content.scenario,Catalogue.get(id),t.seed)
+    if not ok or type(f)~="table" or type(f.parts)~="table" then return 3 end
+    return #f.parts-1
+end
 local function doc(id,part,observation)
     return Content.render(Catalogue.get(id),root().trails[id].seed,part,observation)
 end
@@ -326,7 +335,9 @@ function R.rows()
             for part=1,4 do
             local p=State.get(root(),id,part)
             if p and p.noted then
-                local d=doc(id,part,p.observation); local detail=d.body
+                local d=doc(id,part,p.observation)
+                local detail=d and d.body
+                if detail then
                 for _,finding in ipairs(Content.findings(Catalogue.get(id),t.seed,part,known)) do
                     detail=detail.."\n\nALONGSIDE THE OTHER RECORDS\n"..finding
                 end
@@ -379,6 +390,7 @@ function R.rows()
                 end
                 out[#out+1]={id=State.reference(id,part),title=d.title,detailText=detail,
                     cfCarrier="Evidence",summary="Evidence",cfMapMedia=true}
+                end
             end
         end end
     end
@@ -600,7 +612,8 @@ local function scanStep()
         local x,y,z=math.floor(player:getX()),math.floor(player:getY()),math.floor(player:getZ())
         local here=getCell():getGridSquare(x,y,z)
         scan={id=id,x=x,y=y,z=z,offset=0,destination=offers[id] or newCandidates(),localCopies=newCandidates(),
-            localPart=not atDestination(id,here) and State.nextFragment(root(),id,x,y,hours()) or nil}
+            localPart=not atDestination(id,here)
+                and State.nextFragment(root(),id,x,y,hours(),localCount(id)) or nil}
         offers[id]=nil
     end
     local s=scan

@@ -9,11 +9,70 @@ local Kinds=require("ConspiracyFiles/Generated/EvidenceKinds")
 local M={REVISION=2}
 local order={"fuel","water","telephone","beds","radio","bus","mail","keys",
     "food","power","names","road","medicine","repairs","housing","waste","gallery"}
+-- SLOTS ARE NOT PART INDICES.
+--
+-- Saved state keeps fragments in slots 1..3 and the payoff in slot 4
+-- (MapMediaState.lua:52,84). A story's parts map onto those slots: the LAST
+-- part is always the payoff and always takes slot 4, so a two-part story fills
+-- slots 1 and 4 and a four-part story fills 1,2,3,4 exactly as before. Keeping
+-- the payoff at a fixed slot is what lets chain length vary with no schema
+-- change and no save migration.
+local function slotsFor(f)
+    local out={}
+    for i=1,#f.parts-1 do out[i]=i end
+    out[#f.parts]=4
+    return out
+end
+function M.slots(f) return slotsFor(f) end
+function M.partForSlot(f,slot)
+    if type(f)~="table" or type(f.parts)~="table" then return nil end
+    if slot==4 then return #f.parts end
+    if type(slot)~="number" or slot<1 or slot>#f.parts-1 then return nil end
+    return slot
+end
+-- Default comparison shape for a full four-part story: the two halves, then
+-- the synthesis. Declared per story once a story is shorter, because a module
+-- constant cannot know which slots a given story fills.
+local DEFAULT_REQUIRES={{1,2},{3,4},{1,2,3,4}}
+local DEFAULT_AT={2,4,4}
+-- A comparison may only require slots its own story fills. While every story
+-- had four parts this could not fail; with variable length a comparison
+-- reaching for an unused slot would just never become visible, losing an
+-- authored line in silence.
+function M.checkShape(f)
+    if type(f)~="table" or type(f.parts)~="table" then return false,"no parts" end
+    if #f.parts<2 or #f.parts>4 then
+        return false,"a trail is a payoff plus up to three local records, not "..#f.parts
+    end
+    if type(f.findings)~="table" then return false,"no findings" end
+    local requires=f.requires or DEFAULT_REQUIRES
+    local at=f.at or DEFAULT_AT
+    if #requires~=#f.findings then
+        return false,"story has "..#f.findings.." authored lines for "..#requires.." requirements"
+    end
+    if #at~=#requires then return false,"every requirement needs a slot to appear at" end
+    local fills={}
+    for _,slot in ipairs(slotsFor(f)) do fills[slot]=true end
+    for i,needs in ipairs(requires) do
+        for _,slot in ipairs(needs) do
+            if not fills[slot] then
+                return false,"comparison "..i.." requires slot "..tostring(slot)
+                    .." which this story does not fill"
+            end
+        end
+        if not fills[at[i]] then
+            return false,"comparison "..i.." appears at slot "..tostring(at[i])
+                .." which this story does not fill"
+        end
+    end
+    return true
+end
 local families,byId={},{}
 for _,id in ipairs(order) do
     local f=assert(Services[id] or Civic[id],"missing map story "..id)
     f.id=id
-    assert(type(f.parts)=="table" and #f.parts==4,"map story needs four sources")
+    local shaped,shapeWhy=M.checkShape(f)
+    assert(shaped,"map story "..id..": "..tostring(shapeWhy))
     for _,key in ipairs({"organisation","grounding","siteRole","question","event","outcome","professional"}) do
         assert(type(f[key])=="string" and f[key]~="","map story lacks "..key)
     end
@@ -23,7 +82,6 @@ for _,id in ipairs(order) do
             assert(type(part[key])=="string" and part[key]~="","map source lacks "..key)
         end
     end
-    assert(#f.findings==3,"map story needs sourced findings")
     families[#families+1]=f;byId[id]=f
 end
 M.families=families
@@ -178,7 +236,10 @@ function M.observation(binding,profession,skills,seed,part)
 end
 function M.render(binding,seed,part,observation)
     assert(binding and type(seed)=="number" and part>=1 and part<=4 and part%1==0,"invalid map content reference")
-    local f=family(binding,seed);local v=values(binding,seed);local p=f.parts[part]
+    local f=family(binding,seed);local v=values(binding,seed)
+    -- `part` is a saved-state SLOT, not an index into this story's parts.
+    local p=f.parts[M.partForSlot(f,part)]
+    if not p then return nil end
     local note=expand(p.note,v)
     if observation==f.skill and part==f.observationPart then note=note.."\n\n"..expand(f.professional,v) end
     local source=expand(p.source,v)
@@ -188,10 +249,13 @@ end
 -- Numerical source dependencies are stable parts, not positions in the order
 -- the player happened to find them. Destination-first discovery remains useful
 -- but never quotes a circulation copy the survivor has not seen.
-local requirements={{1,2},{3,4},{1,2,3,4}}
-local at={2,4,4}
 function M.findings(binding,seed,part,known)
     local out={};local f=family(binding,seed);local v=values(binding,seed)
+    -- Per story, in SLOTS. A module constant could not know which slots a
+    -- shorter story fills, and a requirement naming an unfilled slot would
+    -- never become visible - losing an authored line without a word.
+    local requirements=f.requires or DEFAULT_REQUIRES
+    local at=f.at or DEFAULT_AT
     for i,needs in ipairs(requirements) do
         local visible=at[i]==part
         for _,source in ipairs(needs) do if not known or not known[source] then visible=false end end
