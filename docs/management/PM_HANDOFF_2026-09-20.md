@@ -195,3 +195,39 @@ In this order. Each has an exit condition; none of them is "enough clean runs".
 
 **Until the go-ahead: read, run the suite, ask the owner questions. Build
 nothing.**
+
+---
+
+## 11. Queued from the Windows playtest, 2026-09-25 — the survivor's own tracker
+
+Relayed by the playtest session, recorded in full in the last section of
+`docs/management/PM_HANDOFF.md` (protected — read it, do not edit it).
+
+**The owner's observation:** FILES is one flat list that only grows. Nothing on
+the device groups findings by the thread they belong to, says which threads are
+still open, or lets the survivor put one down. His words: *"PDA app that tracks
+'cases' (should be called differently, as we are not an investigator, we are a
+survivor)."*
+
+**Not built, not mine to decide.** Three of the four open questions there are
+product questions and belong to the owner — above all **the survivor's word for
+it**, which is the whole point of his aside: "case" and "investigation" are an
+investigator's words, and we are not that.
+
+**The fourth one I can already answer, and it is the useful thing to pass back.**
+"Any per-thread state must fit the save budget" is far less binding than it
+sounds: see `docs/design/WHY_500KB_2026-09-20.md`. The 500 kB is a ceiling we
+chose, not a limit of the game; the format round-tripped **44 MB**, and the
+measurement the ceiling came from saved **4.4 MB in 512 ms with no stall**.
+Grouping state is tiny next to that — a thread id and an open/closed flag per
+thread. **Do not let the budget shape this feature's design before the ceiling is
+measured** (§5).
+
+**One caution that is not a product question.** `DR-20260920-NO-CONCLUSION` bans
+anything implying a total: an open/closed list is fine, **a count of what is open
+against a total is not**, and "closed" must never mean "solved". Whatever it ends
+up called, it groups what the survivor is carrying — it does not score it.
+
+**Watch the shared checkout.** Other sessions work in this same tree. Commit with
+`git commit -o <paths>` so a plain commit cannot sweep another session's staged
+work into yours. That has already happened once.
