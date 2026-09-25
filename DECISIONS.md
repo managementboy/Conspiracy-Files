@@ -1,3 +1,57 @@
+## DR-20260925-THREADS — the survivor follows threads, and can put one down
+
+Owner, Windows playtest 2026-09-25: *"PDA app that tracks 'cases' (should be
+called differently, as we are not an investigator, we are a survivor).
+Currently we only have an ever longer list of files."*
+
+**The word is THREAD.** Not "case", not "investigation" — those are an
+investigator's, and the aside in the owner's sentence is the whole point. A
+thread is what a person follows and what they can let go of; it is already the
+word the continuity design uses for exactly this object (`case.thread` in
+`docs/design/PHASE_C_CONTINUITY_CARRIER.md`), so the screen and the machinery
+under it say the same thing. The program is `THREADS`, beside FILES.
+
+**A new program, not a bigger PLACES.** The PM left this open (§11 of
+`PM_HANDOFF_2026-09-20.md`). PLACES groups by where the survivor kept going
+back to; a thread runs across places by design — the opening pair is two
+addresses. They are two axes over the same rows, and folding one into the other
+would cost PLACES what P4-R81 built it for.
+
+**The grouping key already existed.** A row's thread is the chain its case
+belongs to: a follow-up sits under the finding it followed (`followsFrom`), so
+the opening pair is one heading and not two. It survives retirement and the
+deep archive because that is what the continuity carrier was built to do. A
+live case still carries its authored open question and the heading shows it; a
+retired root keeps no case envelope, so the thread is named by the finding that
+started it — honest, and nothing is invented.
+
+**It groups; it does not score (DR-20260920-NO-CONCLUSION).** Two sections,
+STILL FOLLOWING and PUT DOWN, plus ON THEIR OWN for findings that belong to no
+thread. There is no number anywhere on the screen — not a count of open
+threads, not a count against a total. "Put down" is the survivor's choice and
+says so ("I put this one down. That is my choice, not an answer."); a thread
+nothing more has come of says that instead ("Nothing more has come of this
+one."). Neither reads as solved, closed or finished, and
+`test/threads_group_what_i_carry.lua` fails on any of those words and on any
+digit in the copy.
+
+**FILES is untouched.** Chronological order and numbering in the notebook are
+load-bearing. The rows arrive here already numbered and keep their numbers, in
+discovery order, inside their group. THREADS is a second view, exactly as
+PLACES is.
+
+**The save.** Putting a thread down writes to its own root,
+`ConspiracyFiles.Threads` — a thread id and a flag. It is registered in
+`SaveBudget.tags` so it is measured with the rest rather than exempted, per the
+PM's §11 note that the 500 kB is a chosen ceiling
+(`docs/design/WHY_500KB_2026-09-20.md`) and the feature should be measured, not
+shaped by an unmeasured fear. It is deliberately NOT one of the two stores
+inside the machine: a flat cell takes the notes and to-dos offline, and what
+the survivor has decided to stop carrying is not a note somebody typed into a
+device.
+
+The central hidden conspiracy is not announced anywhere on this screen.
+
 ## DR-20260925-RECORD-VOICE — the record is the survivor writing, and it doubts
 
 Owner, Windows playtest 2026-09-25, reading a FILES record on the device:

@@ -15,8 +15,11 @@ local Budget=require("ConspiracyFiles/SaveBudget")
 assert(type(Budget.tags)=="table","SaveBudget must publish the roots it budgets")
 local n=0
 for _ in pairs(Budget.tags) do n=n+1 end
-assert(n>=14,"SaveBudget budgets "..n.." roots; expected at least fourteen")
-for _,name in ipairs({"mapMedia","placeVisits","casePeople","generated","discoveries"}) do
+assert(n>=15,"SaveBudget budgets "..n.." roots; expected at least fifteen")
+-- UPDATED 2026-09-25, DR-20260925-THREADS: the threads root joined the list
+-- when THREADS gained a put-down state. It is named here for the same reason
+-- the other four are - a root the budget forgets is a save nobody is measuring.
+for _,name in ipairs({"mapMedia","placeVisits","casePeople","generated","discoveries","threads"}) do
     assert(Budget.tags[name],"SaveBudget must budget "..name)
 end
 

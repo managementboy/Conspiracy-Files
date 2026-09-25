@@ -42,7 +42,8 @@ OUT = os.path.join(REPO, "mod/common/media/ui/CFOrg")
 # the same picture with bigger squares, exactly like the Palm typeface beside
 # it.
 ICON = 22
-ICONS = ("files", "names", "places", "dates", "todo", "notes", "help", "sites", "setup")
+ICONS = ("files", "threads", "names", "places", "dates", "todo", "notes", "help",
+         "sites", "setup")
 # The icons live ON the LCD, so they are drawn at the CONTENT scale, not the
 # device scale - the same set the typeface beside them needs (P4-R89). Keep
 # this equal to build_palm_font.py's SCALES or the launcher loses its icons at
@@ -137,6 +138,15 @@ def draw_icon(name, scale):
         vline(5, 2, 18)                       # the pole
         hline(2, 19, 19)                      # the ground
         hline(3, 8, 18)                       # its base
+    elif name == "threads":
+        # Loose ends hanging off a rail: three strands of different lengths,
+        # each bent at the bottom. A survivor's word for what they are
+        # following, and at 22 pixels a silhouette rather than a picture -
+        # the lesson the notes pad taught (owner, 2026-09-13).
+        hline(2, 19, 3)                       # the rail they all hang from
+        for x, bottom, turn in ((5, 18, 1), (11, 13, -1), (16, 20, -1)):
+            vline(x, 4, bottom)
+            hline(min(x, x + 2 * turn), max(x, x + 2 * turn), bottom)
     elif name == "setup":
         # Three slider tracks with a handle on each: what a settings icon was
         # before anyone drew a cogwheel, and it says "sizes" rather than

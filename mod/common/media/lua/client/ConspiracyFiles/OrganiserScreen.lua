@@ -703,6 +703,11 @@ function Screen:drawScreen(gx,gy)
         local foot=K.foot(c,self:footText(""))
         local x=K.command(c,"BACK",2,foot,"BACK")
         if self.record.todo then K.command(c,"TICK",x,foot,"TICK")
+        -- A thread, not a finding: the survivor decides whether they are still
+        -- carrying it. Always both ways round - putting one down is a choice
+        -- about what to carry, never a verdict on the thread.
+        elseif self.record.thread then
+            K.command(c,self.record.putDown and "PICK UP" or "PUT DOWN",x,foot,"SETASIDE")
         else K.command(c,"REMIND",x,foot,"REMIND") end
         return
     end
@@ -1052,6 +1057,9 @@ function Screen:tap(x,y)
         self.record=nil; self.cachedList=nil
     elseif id=="REMIND" then
         if self.record then Apps.addToDo(self.record.title) end
+        self.record=nil; self.cachedList=nil
+    elseif id=="SETASIDE" then
+        if self.record and self.record.thread then Apps.setAside(self.record.thread) end
         self.record=nil; self.cachedList=nil
     elseif id=="START" then
         self:finishBoot()

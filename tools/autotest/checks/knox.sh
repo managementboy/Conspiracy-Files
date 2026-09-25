@@ -4,10 +4,13 @@
 #   tools/autotest/checks/knox.sh [--hidden]
 #
 # PASS needs: the device opens into FILES with the case's records; the launcher
-# shows four programs as an icon grid; a stylus tap opens NAMES and it holds the
+# shows the programs as an icon grid; a stylus tap opens NAMES and it holds the
 # identity looted from a body; DATES groups discoveries by the day they were
-# made; a record opens, REMIND writes a to-do and TO DO shows it; and no errors
-# inside the mod. Screenshots of each screen land in dev/eval/linux/runs.
+# made; a record opens in the survivor's own voice with no second person on it
+# (DR-20260925-RECORD-VOICE); THREADS groups the findings by the thread they
+# belong to, counts nothing, and a thread can be put down and picked back up
+# (DR-20260925-THREADS); REMIND writes a to-do and TO DO shows it; and no
+# errors inside the mod. Screenshots of each screen land in dev/eval/linux/runs.
 # Exit 0 pass, 1 fail, 2 could not run.
 set -uo pipefail
 . "$(dirname "${BASH_SOURCE[0]}")/../lib.sh"
@@ -141,6 +144,25 @@ ev 'return CFOrg.wake()' >/dev/null
 ev 'return CFOrg.tapWidget("ROW",1)' >/dev/null; sleep 1
 [ "$(ev 'return CFOrg.knox()' | cut -f5)" = true ] || fail "a tap on a record did not open it"
 shot record
+# THE RECORD IS THE SURVIVOR WRITING (DR-20260925-RECORD-VOICE). The owner read
+# "WHAT YOU FOUND" off this very screen on 2026-09-25. The offline suite holds
+# the heading set, but only the game proves the heading the projection wrote is
+# the heading the device draws, so this reads the open record's own text back.
+record_text="$(ev 'return CFOrg.recordText()')"
+record_detail="$(cut -f3 <<<"$record_text")"
+say "record: $(cut -f2 <<<"$record_text")"
+case "$record_detail" in
+    *"WHAT YOU FOUND"*|*"WHAT IT MIGHT MEAN"*|*"MAP NOTE"*|*"DATE NOTE"*)
+        fail "the record still speaks as a narrator: $record_detail" ;;
+esac
+if grep -qiE '\<(you|your)\>' <<<"$record_detail"; then
+    fail "the record addresses the player: $record_detail"
+fi
+if grep -qE '(WHAT I THINK I FOUND|WHAT I THINK IT MEANS|WHAT I NOTICE ABOUT THE DATE|WHAT I MARKED ON MY MAP)' <<<"$record_detail"; then
+    say "headings: the survivor's own"
+else
+    say "headings: this record carries none of ours (an object's record runs on in plain sentences)"
+fi
 # Scrolling, which nothing has ever proved: page down with the rocker, then
 # with the arrow in the right margin, and see the card number move.
 before_card="$(ev 'return CFOrg.card and CFOrg.card() or "?"')"
@@ -164,6 +186,67 @@ ev 'return CFOrg.wake()' >/dev/null
 # because software rendering was failing this check wholesale at the time: on
 # 2026-09-12 every assertion in it failed, and a real narrow bug sat behind
 # the broad flake until the renderer was fixed (2026-09-13).
+# THREADS (DR-20260925-THREADS): the same findings, grouped by what they belong
+# to, with a thread the survivor can put down and pick back up. Owner, Windows
+# 2026-09-25: "Currently we only have an ever longer list of files."
+ev 'return CFOrg.wake()' >/dev/null
+ev 'return CFOrg.tapWidget("SELECT")' >/dev/null; sleep 1
+[ "$(ev 'return CFOrg.knox()' | cut -f4)" = true ] || fail "could not get back to the launcher for THREADS"
+ev 'return CFOrg.openProgram("THREADS")' >/dev/null; sleep 1
+threads="$(ev 'return CFOrg.knox()')"
+[ "$(cut -f2 <<<"$threads")" = THREADS ] || fail "a tap on the THREADS icon did not open it: $threads"
+[ "$(cut -f3 <<<"$threads")" -gt 0 ] 2>/dev/null || fail "THREADS is empty with a case in play: $threads"
+thread_rows="$(ev 'return CFOrg.rows()' | cut -f2)"
+say "threads: $thread_rows"
+shot threads
+# It groups; it does not score (DR-20260920-NO-CONCLUSION). A section heading
+# or a thread heading carrying a number would be a count, and no row may speak
+# as an investigator. Row labels for findings keep the notebook's numbering, so
+# only the headings are swept.
+grep -q "STILL FOLLOWING" <<<"$thread_rows" || say "nothing is being followed yet this run"
+if grep -qiE '\<(case|cases|investigation|solved|closed|complete|finished)\>' <<<"$thread_rows"; then
+    fail "THREADS speaks as an investigator: $thread_rows"
+fi
+if grep -qE '(STILL FOLLOWING|PUT DOWN|ON THEIR OWN)[^|]*[0-9]' <<<"$thread_rows"; then
+    fail "THREADS counts something on a heading: $thread_rows"
+fi
+# Put one down, and pick it back up. The state belongs to the record, not to
+# the machine, so it is read back from ModData rather than from the screen.
+before_down="$(ev 'return CFOrg.threadsPutDown()' | cut -f2)"
+opened=no
+for i in $(seq 1 "$(cut -f3 <<<"$threads")"); do
+    ev 'return CFOrg.wake()' >/dev/null
+    ev "return CFOrg.tapWidget(\"ROW\",$i)" >/dev/null; sleep 1
+    if [ "$(ev 'return CFOrg.recordText()' | cut -f5)" != nil ] \
+       && [ "$(ev 'return CFOrg.recordText()' | cut -f5)" != false ]; then opened=yes; break; fi
+    ev 'return CFOrg.tapWidget("BACK")' >/dev/null; sleep 1
+done
+if [ "$opened" = yes ]; then
+    shot thread
+    thread_detail="$(ev 'return CFOrg.recordText()' | cut -f3)"
+    say "thread: $thread_detail"
+    ev 'return CFOrg.wake()' >/dev/null
+    ev 'return CFOrg.tapWidget("SETASIDE")' >/dev/null; sleep 1
+    after_down="$(ev 'return CFOrg.threadsPutDown()' | cut -f2)"
+    [ "${after_down:-0}" -gt "${before_down:-0}" ] 2>/dev/null \
+        || fail "PUT DOWN did not reach the record: $before_down -> $after_down"
+    shot threads-put-down
+    # And back: putting a thread down is never a one-way door.
+    ev 'return CFOrg.wake()' >/dev/null
+    for i in $(seq 1 "$(ev 'return CFOrg.knox()' | cut -f3)"); do
+        ev "return CFOrg.tapWidget(\"ROW\",$i)" >/dev/null; sleep 1
+        if [ "$(ev 'return CFOrg.recordText()' | cut -f5)" != nil ]; then
+            ev 'return CFOrg.tapWidget("SETASIDE")' >/dev/null; sleep 1; break
+        fi
+        ev 'return CFOrg.tapWidget("BACK")' >/dev/null; sleep 1
+    done
+    back_up="$(ev 'return CFOrg.threadsPutDown()' | cut -f2)"
+    [ "${back_up:-1}" -eq "${before_down:-0}" ] 2>/dev/null \
+        || fail "a thread put down could not be picked back up: $back_up"
+else
+    fail "no thread on the screen could be opened: $thread_rows"
+fi
+
 todo_open="$(ev 'return CFOrg.tapWidget("SELECT")')"; sleep 1
 [ "$(ev 'return CFOrg.knox()' | cut -f4)" = true ] || fail "could not get back to the launcher for TO DO: $todo_open"
 ev 'return CFOrg.openProgram("TO DO")' >/dev/null; sleep 1
@@ -187,6 +270,9 @@ out="$REPO/docs/management/evidence/linux-autotest/$(date +%Y%m%dT%H%M%S)-knox.t
     echo "opened:   $state"
     echo "names:    $names"
     echo "dates:    $dates"
+    echo "threads:  $threads"
+    echo "  rows:   $thread_rows"
+    echo "record:   $record_detail"
     echo "to do:    $todo"
     for f in "${fails[@]:-}"; do [ -n "$f" ] && echo "FAIL: $f"; done
 } > "$out.part"; mv "$out.part" "$out"

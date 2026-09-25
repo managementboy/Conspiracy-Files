@@ -119,6 +119,38 @@ function CFOrg.tapWidget(id, payload)
     return false, "no widget " .. tostring(id)
 end
 
+-- What the player can actually READ on the screen, so a check can assert the
+-- words rather than only the shape. Added 2026-09-25 for the survivor's own
+-- headings (DR-20260925-RECORD-VOICE) and THREADS (DR-20260925-THREADS): both
+-- are about wording, and a check that can only count rows cannot see wording.
+function CFOrg.rows()
+    local w = ConspiracyFiles.OrganiserScreen.window
+    if not w then return false, "no screen" end
+    local out = {}
+    for _, row in ipairs(w:list()) do out[#out + 1] = tostring(row.label) end
+    return true, table.concat(out, " | ")
+end
+
+function CFOrg.recordText()
+    local w = ConspiracyFiles.OrganiserScreen.window
+    if not w or not w.record then return false, "no record open" end
+    local fields = {}
+    for _, f in ipairs(w.record.fields or {}) do
+        fields[#fields + 1] = tostring(f.label) .. ": " .. tostring(f.value)
+    end
+    return true, tostring(w.record.title), tostring(w.record.detail),
+        table.concat(fields, " | "), tostring(w.record.thread)
+end
+
+-- How many threads the survivor has put down, read from the record rather than
+-- from the screen: the point of the state is that it is saved.
+function CFOrg.threadsPutDown()
+    local root = ModData and ModData.get and ModData.get("ConspiracyFiles.Threads")
+    local n = 0
+    for _ in pairs((root and root.putDown) or {}) do n = n + 1 end
+    return true, tostring(n)
+end
+
 -- Which card of a record is on screen, for the scrolling check.
 function CFOrg.card()
     local w = ConspiracyFiles.OrganiserScreen.window

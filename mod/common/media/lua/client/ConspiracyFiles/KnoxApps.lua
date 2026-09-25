@@ -5,6 +5,7 @@
 -- a smarter screen does not change that rule.
 --
 --   FILES    the evidence, with record numbers        (EvidenceRows)
+--   THREADS  the same findings, by what they belong to  (Threads)
 --   NAMES    every identity seen, and where           (IdentityObservations)
 --   DATES    what was found on which day              (DiscoveryLedger hours)
 --   TO DO    leads the survivor set for themselves    (written here, by tapping)
@@ -590,6 +591,132 @@ A.places={
     end,
 }
 
+-- THREADS ---------------------------------------------------------------------
+-- What the survivor is following, grouped by the thread it belongs to. Owner,
+-- Windows playtest 2026-09-25: "PDA app that tracks 'cases' (should be called
+-- differently, as we are not an investigator, we are a survivor). Currently we
+-- only have an ever longer list of files."
+--
+-- Why a program of its own rather than growing PLACES (the PM's open question):
+-- PLACES groups by where the survivor kept going back to, and a thread runs
+-- across places by design - the opening pair is two addresses. They are two
+-- different axes over the same rows, and folding one into the other would cost
+-- PLACES the thing P4-R81 built it for.
+--
+-- FILES is untouched: it stays one flat list in true discovery order with its
+-- own numbering, and the rows here are the same rows, still numbered. This is
+-- a second view, exactly as PLACES is.
+--
+-- It groups; it does not score (DR-20260920-NO-CONCLUSION). There is no count
+-- of anything against a total anywhere on this screen, and nothing on it reads
+-- as solved. The grouping and every line of its copy are in Threads.lua.
+local Threads=require("ConspiracyFiles/Threads")
+local THREAD_STORE="ConspiracyFiles.Threads"
+
+-- What the survivor has put down. Its own root, NOT one of the two stores
+-- inside the machine: a flat cell takes the notes and the to-dos offline
+-- (Organiser clears TAG and NOTES), and deciding to stop carrying a thread is
+-- not a note somebody typed into a device - it belongs with the record, like
+-- the findings themselves. Measured with the other roots by SaveBudget.
+local function threadStore()
+    local root=ModData and ModData.getOrCreate(THREAD_STORE)
+    if root and type(root.putDown)~="table" then root.putDown={} end
+    return root
+end
+
+-- Put a thread down, or pick it back up. Always reversible: setting one aside
+-- is the survivor's choice about what they are carrying, never a verdict on
+-- the thread, so there is nothing here that cannot be undone.
+function A.setAside(key)
+    local root=threadStore(); if not root or type(key)~="string" then return false end
+    if root.putDown[key] then root.putDown[key]=nil else root.putDown[key]=true end
+    return true
+end
+
+function A.isPutDown(key)
+    local root=threadStore()
+    return (root and key and root.putDown[key]) and true or false
+end
+
+-- Which thread a row belongs to, read off the record. A follow-up sits with
+-- the finding it followed (`followsFrom`), so the pair is one thread and not
+-- two headings; the chain's own first case id is the key, and it survives
+-- retirement and the deep archive because that is what the continuity carrier
+-- was built to do (PHASE_C_CONTINUITY_CARRIER.md).
+local function threadReader()
+    local wrapper=ModData and ModData.get and ModData.get("ConspiracyFiles.Generated.G2")
+    if not wrapper then return function() return nil end end
+    local Cases=require("ConspiracyFiles/Generated/SuccessiveCases")
+    if not Cases then return function() return nil end end
+    wrapper=Cases.current(wrapper)
+    if not wrapper then return function() return nil end end
+    local byCase={}
+    for _,root in ipairs(safe(Cases.sessions,wrapper) or {}) do
+        local id=(root.case and root.case.caseId) or root.caseId
+        if id then byCase[id]=root end
+    end
+    local function chain(id,seen)
+        seen=seen or {}
+        local root=byCase[id]
+        local from=root and ((root.case and root.case.followsFrom) or root.followsFrom)
+        if from and byCase[from] and not seen[from] then seen[from]=true; return chain(from,seen) end
+        return id
+    end
+    return function(row)
+        local root=safe(Cases.find,wrapper,row.id)
+        if not root then return nil end
+        local id=(root.case and root.case.caseId) or root.caseId
+        if not id then return nil end
+        -- A live case still carries the authored question it has not settled.
+        -- A retired root keeps no case envelope, so it offers the thread's own
+        -- open question when it recorded one, and otherwise nothing: the
+        -- thread is then named by the finding that started it, which is
+        -- honest and needs no invention.
+        local question=(root.case and root.case.story and root.case.story.question)
+            or (root.thread and root.thread.question) or nil
+        return {key=chain(id),question=question,spent=root.case==nil}
+    end
+end
+
+A.threads={
+    id="THREADS",title="THREADS",icon="threads",
+    list=function()
+        local rows=safe(Rows.list,"files") or {}
+        local plain={}
+        for _,row in ipairs(rows) do
+            -- The three closing questions are the survivor answering, not a
+            -- finding, so they are not filed under a thread.
+            if not row.cfHeading and not row.questions then plain[#plain+1]=row end
+        end
+        local reader=threadReader()
+        local root=threadStore()
+        local sections=Threads.build(plain,function(row) return safe(reader,row) end,
+                                     root and root.putDown or {})
+        local out={}
+        for _,section in ipairs(sections) do
+            out[#out+1]={label=section.title,title=section.title,
+                         detail="",id="threads-section-"..section.title,heading=true}
+            for _,group in ipairs(section.threads) do
+                out[#out+1]={label="- "..group.label,title=group.label,detail=group.detail,
+                             id="thread-"..tostring(group.key or "loose"),
+                             thread=Threads.canSetAside(group) and group.key or nil,
+                             putDown=group.key and A.isPutDown(group.key) or false,
+                             heading=true}
+                for _,row in ipairs(group.rows) do
+                    local body=split(row.detailText)
+                    out[#out+1]={label="  "..(row.ordinal and (row.ordinal..". ") or "")..(row.title or ""),
+                                 title=row.title,detail=body,id="thread-row-"..tostring(row.id)}
+                end
+            end
+        end
+        if #out==0 then
+            out[1]={label="Nothing yet.",title="Nothing yet.",
+                    detail="Nothing I have found belongs to anything yet.",id="threads-none"}
+        end
+        return out
+    end,
+}
+
 -- BOOT ------------------------------------------------------------------------
 -- What the machine says while the mod is still waking up. Owner, 2026-09-12:
 -- "The PDA will show a boot screen telling the player to wait. for now we could
@@ -723,7 +850,7 @@ A.notes={
     end,
 }
 
-A.programs={A.files,A.names,A.places,A.dates,A.todo,A.notes,A.setup,A.help,A.sites}
+A.programs={A.files,A.threads,A.names,A.places,A.dates,A.todo,A.notes,A.setup,A.help,A.sites}
 
 -- What a player may see. SITES hands out the answers, so it exists only while
 -- the game is in debug, and the question is asked EVERY time the launcher is

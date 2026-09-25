@@ -1,13 +1,13 @@
 local V=require("ConspiracyFiles/Validator")
 local B={}
 -- The roots this module budgets, published so nothing has to keep a second
--- copy of the list. A copy is what CFReload.bytes kept: eleven of these
--- fourteen, under a comment saying "the same roots SaveBudget.check
+-- copy of the list. A copy is what CFReload.bytes kept: eleven of the fourteen
+-- there were then, under a comment saying "the same roots SaveBudget.check
 -- measures", missing mapMedia, placeVisits and casePeople. Every save size in
 -- the campaign evidence was therefore an undercount, and the 500 kB assertion
 -- was being made against the wrong number - the same shape of mistake as
 -- measuring one root and calling it the save (2026-09-21 retraction).
-local tags={generated="ConspiracyFiles.Generated.G2",addresses="ConspiracyFiles.AddressBook.Muldraugh",legacy="ConspiracyFiles.DeadAir",identities="ConspiracyFiles.IdentityObservations",keyConnections="ConspiracyFiles.KeyConnections",localPeople="ConspiracyFiles.LocalPeople",discoveries="ConspiracyFiles.DiscoveryLedger",visitedBuildings="ConspiracyFiles.VisitedBuildings",observedKeyLeads="ConspiracyFiles.ObservedKeyLeads",personNames="ConspiracyFiles.PersonNameObservations",bodyOutfits="ConspiracyFiles.BodyOutfitObservations",placeVisits="ConspiracyFiles.PlaceVisits",casePeople="ConspiracyFiles.CasePeople",mapMedia="ConspiracyFiles.MapMedia"}
+local tags={generated="ConspiracyFiles.Generated.G2",addresses="ConspiracyFiles.AddressBook.Muldraugh",legacy="ConspiracyFiles.DeadAir",identities="ConspiracyFiles.IdentityObservations",keyConnections="ConspiracyFiles.KeyConnections",localPeople="ConspiracyFiles.LocalPeople",discoveries="ConspiracyFiles.DiscoveryLedger",visitedBuildings="ConspiracyFiles.VisitedBuildings",observedKeyLeads="ConspiracyFiles.ObservedKeyLeads",personNames="ConspiracyFiles.PersonNameObservations",bodyOutfits="ConspiracyFiles.BodyOutfitObservations",placeVisits="ConspiracyFiles.PlaceVisits",casePeople="ConspiracyFiles.CasePeople",mapMedia="ConspiracyFiles.MapMedia",threads="ConspiracyFiles.Threads"}
 -- Measuring every saved root on every write cost 20-50 ms on the Linux test
 -- laptop (perf check, 2026-09-11): the whole ~170 KB was walked to record one
 -- map mark or one ID. A store keeps its identity while each write replaces its
