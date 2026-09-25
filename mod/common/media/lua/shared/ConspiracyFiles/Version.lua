@@ -14,5 +14,5 @@
 -- This module deliberately requires nothing, so anything can read it without
 -- dragging in a dependency chain.
 ConspiracyFiles = ConspiracyFiles or {}
-ConspiracyFiles.VERSION = "DEV-0.47.6-functional-opening-key"
+ConspiracyFiles.VERSION = "DEV-0.47.7-searched-means-looked"
 return ConspiracyFiles.VERSION
