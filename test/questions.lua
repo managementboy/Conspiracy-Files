@@ -13,7 +13,7 @@ assert(Q.QUESTIONS[1].key=="reading" and Q.QUESTIONS[1].text=="Which reading do 
 assert(Q.QUESTIONS[2].key=="matters" and Q.QUESTIONS[2].text=="Who do I think matters here?")
 assert(Q.QUESTIONS[3].key=="way" and Q.QUESTIONS[3].text=="What would I check next?")
 assert(Q.rowLabel(3)=="What do I make of it? - Case 3")
-assert(#Premises.list()==49,"the metadata registry has all forty-nine authored families (twenty-five of them occupation openings)")
+assert(#Premises.list()==25,"the metadata registry has all twenty-five authored families")
 
 local covered=0
 for _,id in ipairs(Premises.list()) do
@@ -34,7 +34,7 @@ for _,id in ipairs(Premises.list()) do
     assert(#unknown==2 and unknown[1].value=="unsure" and unknown[2].value==false)
     assert(Q.note({reading="one"},metadataOnly)==nil,"metadata leaked a reading for "..id)
 end
-assert(covered==#Premises.list()*2 and covered==98,"the first two variants of every authored family supply saved readings (forty-nine families)")
+assert(covered==#Premises.list()*2 and covered==50,"the first two variants of every authored family supply saved readings")
 
 local offered={readings={"The first reading.","The second reading."},people={"Delia Mercer","Roy Hale"},organisation="County Personnel Office"}
 assert(labels(Q.options("matters",offered))=="Delia Mercer | Roy Hale | County Personnel Office | Nobody, really. | Clear my answer.")

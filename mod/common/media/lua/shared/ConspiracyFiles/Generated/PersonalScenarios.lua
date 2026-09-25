@@ -151,8 +151,12 @@ local scenarios={
 }
 scenarios["fitness-instructor-start"]=FitnessOpenings
 local Occupations=require("ConspiracyFiles/Generated/OccupationOpeningScenarios")
-for _,profession in ipairs(Occupations.ORDER) do
- scenarios[profession.."-start"]=Occupations.get(profession)
+-- Withdrawn from routing (DR-20260925-OCCUPATION-OPENINGS-WITHDRAWN): the
+-- ids are not registered, so nothing can select them.
+if Occupations.ROUTED then
+ for _,profession in ipairs(Occupations.ORDER) do
+  scenarios[profession.."-start"]=Occupations.get(profession)
+ end
 end
 -- An opening family of a profession carries its own organisation and objects.
 local function professionFamily(id)

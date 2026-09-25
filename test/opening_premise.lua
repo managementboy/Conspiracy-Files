@@ -47,12 +47,13 @@ assert(Premises.opening("not-an-opening")==nil,"an invented opening is refused")
 -- save's second case could open with the survivor's own name in it.
 assert(Premises.choosableCount()==20,
     "an ordinary case draws from twenty premises: got "..Premises.choosableCount())
--- Forty-nine: twenty ordinary, three generic openings, twenty-five profession
--- openings (one per Build 42 occupation, 2026-09-25) and the connected
--- follow-up. What matters is that the ORDINARY pool stayed at twenty,
--- asserted above; the profession families never enter it.
-assert(Premises.count()==49,"and forty-nine exist in total: got "..Premises.count())
-assert(#Premises.professions()==25,"one opening family per occupation: got "..#Premises.professions())
+-- Twenty-five: twenty ordinary, three generic openings, one profession opening
+-- and the connected follow-up. The twenty-four occupation families of
+-- 2026-09-25 were withdrawn from routing the same day (one mystery in
+-- twenty-four coats; DR-20260925-OCCUPATION-OPENINGS-WITHDRAWN) and register
+-- nothing here. What matters is that the ORDINARY pool stayed at twenty.
+assert(Premises.count()==25,"and twenty-five exist in total: got "..Premises.count())
+assert(#Premises.professions()==1,"one profession opening routed: got "..#Premises.professions())
 
 -- EVERY INDEX of the ordinary pool, not a sample. `choose` takes the caller's
 -- seeded PRNG, so a stub returning each index in turn walks the whole pool -

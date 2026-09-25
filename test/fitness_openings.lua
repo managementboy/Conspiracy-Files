@@ -8,9 +8,10 @@ local Story=require("ConspiracyFiles/Generated/Story")
 
 local premise=assert(Premises.forProfession("fitnessinstructor"))
 assert(premise.id=="fitness-instructor-start" and premise.opening and premise.profession=="fitnessinstructor")
--- Every Build 42 occupation has a family since 2026-09-25 (test/occupation_openings.lua);
--- a profession the game does not have keeps the generic opening pool.
-assert(Premises.forProfession("astronaut")==nil,"an unknown profession keeps the generic opening pool")
+-- Every other occupation keeps the generic opening pool: the families of
+-- 2026-09-25 were withdrawn from routing the same day
+-- (DR-20260925-OCCUPATION-OPENINGS-WITHDRAWN, test/occupation_openings.lua).
+assert(Premises.forProfession("unemployed")==nil,"other professions keep the generic opening pool")
 assert(Premises.openingVariants(premise.id)==10,"the fitness opening advertises ten variants")
 
 local questions,titles={},{}

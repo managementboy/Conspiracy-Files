@@ -1,3 +1,13 @@
+-- WITHDRAWN FROM ROUTING, 2026-09-25 (DR-20260925-OCCUPATION-OPENINGS-WITHDRAWN).
+-- Owner: "repetitions break the illusion of a true mystery. Every mystery has
+-- to be different by design. No one can be like the other." These twenty-four
+-- families are the Fitness shape parameterised per trade - the same five
+-- findings in different coats - so no profession routes to them any more.
+-- The errands, companies and trade objects below remain as authored material
+-- for starts designed one at a time, each with its own shape, count,
+-- mechanics and way of ending. Premises registers none of them.
+--
+-- (Original header follows.)
 -- STARTING MYSTERIES FOR EVERY OCCUPATION.
 --
 -- Owner, 2026-09-25: "expand the starting mysteries for all occupations."

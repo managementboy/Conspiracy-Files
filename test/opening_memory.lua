@@ -57,12 +57,14 @@ local G=require("ConspiracyFiles/Generated/Generator")
 local catalog=dofile("test/fixtures/synthetic_locations.lua")
 for _,site in ipairs(catalog.locations) do site.paperStorage="indexed" end
 local sites={catalog.locations[1].id,catalog.locations[2].id}
-local base={mapId="SYNTHETIC-MAP",buildLine="TEST-ONLY",allowSynthetic=true,opening=true,self="Ada Whitlock",profession="nurse"}
+-- The Fitness family is the one routed opening (the occupation families are
+-- withdrawn from routing, DR-20260925-OCCUPATION-OPENINGS-WITHDRAWN).
+local base={mapId="SYNTHETIC-MAP",buildLine="TEST-ONLY",allowSynthetic=true,opening=true,self="Ada Whitlock",profession="fitnessinstructor"}
 local function with(variant) local o={} for k,v in pairs(base) do o[k]=v end o.variant=variant return o end
 local case=assert(G.generateSelected(catalog,1,with(3),sites))
 assert(case.opening.variant==3,"seed 1 would have chosen start 1; the memory chose 3")
 assert(G.validate(case),"a case built from a chosen start rebuilds")
-assert(G.generateSelected(catalog,1,with(4),sites)==nil,"a start the family does not have is refused")
+assert(G.generateSelected(catalog,1,with(11),sites)==nil,"a start the family does not have is refused")
 assert(G.generateSelected(catalog,1,with(2.5),sites)==nil,"a half start is refused")
 local noProf={} for k,v in pairs(base) do noProf[k]=v end noProf.profession=nil noProf.variant=2
 assert(G.generateSelected(catalog,1,noProf,sites)==nil,"a start without a family is refused")

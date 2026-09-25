@@ -33,7 +33,9 @@ local function followUp(first,seed)
     return G.generateSelected(catalog,seed,{mapId="SYNTHETIC-MAP",buildLine="TEST-ONLY",allowSynthetic=true,follows=follows},sites)
 end
 
-for _,profession in ipairs({"fitnessinstructor","unemployed","electrician","nurse"}) do
+-- The Fitness family is the one routed profession opening; the occupation
+-- families are withdrawn from routing (DR-20260925-OCCUPATION-OPENINGS-WITHDRAWN).
+for _,profession in ipairs({"fitnessinstructor"}) do
     local first=opening(profession,7)
     assert(first.thread and first.thread.organisation==first.organisation.name,profession..": the thread carries its company")
     assert(first.thread.grounding,profession..": the thread carries the company's grounding")

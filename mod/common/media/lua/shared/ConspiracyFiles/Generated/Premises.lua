@@ -33,16 +33,15 @@ local entries={
   primedKey=true,openingVoice="This opens the house. Why did I have access?"},
  {id="still-filing",title="Still filing",followUp=true},
 }
--- EVERY OTHER OCCUPATION (owner, 2026-09-25: "expand the starting mysteries
--- for all occupations"). One family per Build 42 profession, authored in
--- OccupationOpeningScenarios; a family's variant count is its own, and a
--- profession without a family keeps the generic opening pool.
-for _,profession in ipairs(Occupations.ORDER) do
- local f=Occupations.families[profession]
- entries[#entries+1]={id=profession.."-start",title="The house I was expected at",opening=true,
-  profession=profession,variants=#f.variants,primedKey=Occupations.primedKey(profession),
-  openingVoice=Occupations.openingVoice(profession)}
-end
+-- THE OCCUPATION FAMILIES ARE WITHDRAWN FROM ROUTING (owner, 2026-09-25,
+-- DR-20260925-OCCUPATION-OPENINGS-WITHDRAWN). They were one mystery in
+-- twenty-four coats - the Fitness shape parameterised per trade - and
+-- "repetitions break the illusion of a true mystery. Every mystery has to be
+-- different by design." The authored errands stay on disk
+-- (OccupationOpeningScenarios) as material for individually designed
+-- starts; no profession routes to them. Every occupation but the Fitness
+-- Instructor draws the generic opening pool again.
+Occupations.ROUTED=false
 local byId,ordinary,openings,professionOpenings={},{},{},{}
 for _,entry in ipairs(entries) do
  assert(not byId[entry.id],"duplicate family id")

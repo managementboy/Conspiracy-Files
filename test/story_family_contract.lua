@@ -15,13 +15,7 @@ local expected={"transfer-nobody-arranged","signed-by-someone-absent","two-start
  "appointment-out-of-order","file-signed-out","missing-ledger-page",
  "photograph-without-a-name","withdrawn-extension",
  "no-contact-at-premises","name-on-standby-list","deposit-for-unknown-booking",
- "fitness-instructor-start","still-filing",
- -- One opening family per Build 42 occupation (2026-09-25).
- "burglar-start","burgerflipper-start","carpenter-start","chef-start","constructionworker-start",
- "doctor-start","electrician-start","engineer-start","farmer-start","fireofficer-start",
- "fisherman-start","lumberjack-start","mechanics-start","metalworker-start","nurse-start",
- "parkranger-start","policeofficer-start","rancher-start","repairman-start","securityguard-start",
- "smither-start","tailor-start","unemployed-start","veteran-start"}
+ "fitness-instructor-start","still-filing"}
 local function professionFamily(id) return id:match("%-start$")~=nil end
 local values={CODE="PS-229",P1="Ines Kubiak",P2="Ellis Hale",
  A="201 N Carl St",B="113 Walker Road",DATE0="July 5, 1993",DATE1="July 6, 1993",
@@ -112,6 +106,6 @@ for _,id in ipairs(Premises.list()) do
   end
  end
 end
-assert(converted==#expected and converted==49 and uncovered==0,
- "generated-pool coverage must explicitly account for all 49 families")
-print("PASS generated-pool story contract: 49 families, first two variants each; map and other writing coverage are separate")
+assert(converted==#expected and converted==25 and uncovered==0,
+ "generated-pool coverage must explicitly account for all 25 families")
+print("PASS generated-pool story contract: 25 families, first two variants each; map and other writing coverage are separate")
