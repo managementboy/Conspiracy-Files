@@ -99,9 +99,15 @@ end
 function M.lint(mystery,catalogue)
     if type(mystery)~="table" then return false,"not a table" end
     if type(mystery.id)~="string" or mystery.id=="" then return false,"missing id" end
-    if type(mystery.findings)~="table" or next(mystery.findings)==nil then
-        return false,mystery.id..": no findings at all"
+    -- No `next` here: PZ's Kahlua cannot be relied on to have it (the same
+    -- gotcha test/g2_smoke.lua documents for the legacy engine) - an empty
+    -- check that used it threw "tried to call nil" on the real game while
+    -- passing clean under PUC Lua 5.1 offline (found live, 2026-09-25).
+    local hasFindings=false
+    if type(mystery.findings)=="table" then
+        for _ in pairs(mystery.findings) do hasFindings=true; break end
     end
+    if not hasFindings then return false,mystery.id..": no findings at all" end
     for id,finding in pairs(mystery.findings) do
         local ok,why=lintFinding(id,finding,catalogue)
         if not ok then return false,why end
