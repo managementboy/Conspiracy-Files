@@ -32,6 +32,24 @@ local Kinds=require("ConspiracyFiles/Generated/EvidenceKinds")
 local Searched=require("ConspiracyFiles/SearchedContainers")
 local CFLog=require("ConspiracyFiles/Log")
 
+-- A real, container-bearing part on a vehicle - tried in this order because
+-- `getPartById` on an id the vehicle does not have returns nil rather than
+-- erroring (same discipline vehicle_reach.lua's own door-id list already
+-- uses). Not `sq:getVehicleContainer():AddItem(...)`: that method returns
+-- the BaseVehicle itself, not an ItemContainer, and calling AddItem on it
+-- throws "tried to call nil in place" - found live, 2026-09-26, once a real
+-- vehicle actually stood in range for the first time.
+local VEHICLE_CONTAINER_PARTS={"TruckBed","TrunkDoor","GloveBox","Trunk"}
+local function vehicleItemContainer(vehicle)
+    for _,partId in ipairs(VEHICLE_CONTAINER_PARTS) do
+        local ok,part=pcall(function() return vehicle:getPartById(partId) end)
+        if ok and part then
+            local cok,container=pcall(function() return part:getItemContainer() end)
+            if cok and container then return container end
+        end
+    end
+end
+
 -- The real PZ item type an object/prose/short finding's `kind` spawns. An
 -- object-capacity kind (a rule-eligible catalogue item name like
 -- "ElectronicsScrap") IS the real item type, exactly as ObjectRules
@@ -54,6 +72,7 @@ ConspiracyFiles.MysteryRuntime=M
 
 local TAG="ConspiracyFiles.Mystery"
 local ITEM_MARK="cfMysteryId"
+local DOOR_MARK="cfMysteryGate"
 local function log(message) CFLog.message("mystery","note",message) end
 
 local function root()
@@ -61,6 +80,7 @@ local function root()
     if not store then return nil end
     store.schemaVersion=store.schemaVersion or 1
     store.placedAt=store.placedAt or {}       -- findingId -> in-game hour
+    store.doorTagged=store.doorTagged or {}   -- gate.produces -> true, once a real door is tagged
     store.ledger=store.ledger or Ledger.new()
     store.mysteryId=store.mysteryId
     return store
@@ -88,15 +108,64 @@ function M.attach(mystery)
     return true
 end
 
--- Place every "site" finding into a real container near (x,y,z), one
--- finding per container - honestly minimal: this picks the first eligible
--- container it finds via a bounded local scan, the same discipline the
--- legacy Storage.scan uses (a container that can hold an item, that is not
--- already searched). It does not touch Session's placement machinery.
+-- Place every "site", "onMe" and "vehicle" finding for real, one finding
+-- per container/inventory/trunk - honestly minimal: this picks the first
+-- eligible target it finds via a bounded local scan, the same discipline
+-- the legacy Storage.scan uses (a container that can hold an item, that is
+-- not already searched). It does not touch Session's placement machinery.
 function M.place(mystery,x,y,z)
     local store=root(); if not store then return false,"no save" end
     local cell=getCell and getCell(); if not cell then return false,"no world" end
     local placed=0
+    -- "onMe": starts in the survivor's hand (Vocabulary.WHERE's own words) -
+    -- placed directly into the real inventory, not found later. pollInventory
+    -- recognises it the same poll it already runs, no separate path needed.
+    for id,finding in pairs(mystery.findings) do
+        if finding.where=="onMe" and not store.placedAt[id] then
+            local p=getPlayer and getPlayer()
+            local item=p and p:getInventory():AddItem(itemType(finding) or "Base.Notepad")
+            if item then
+                item:getModData()[ITEM_MARK]=id
+                store.placedAt[id]=worldHours()
+                placed=placed+1
+                log("placed "..id.." on the survivor")
+            end
+        end
+    end
+    -- "vehicle": a real nearby vehicle's own trunk, not a container on the
+    -- ground - the one placement channel neither earlier mystery exercised.
+    -- The radius is Session.VEHICLE_RADIUS (12) - "a driveway, not the next
+    -- street" (Storage.lua's own words for the legacy engine's identical
+    -- rule). A first pass scanned wider on the theory that "nearby" could
+    -- mean whatever it took to find one; that is dishonest in exactly the
+    -- way the whole engine refuses to be - a car forty tiles off is not
+    -- this house's car, and a mystery finding "a vehicle" is not entitled
+    -- to claim one that far away. If no vehicle sits this close, a vehicle
+    -- finding simply does not place, the same as a site finding with no
+    -- eligible container - the mystery's own design must account for that
+    -- (Linter.lua's own admission: reachability is play, not provable here).
+    for id,finding in pairs(mystery.findings) do
+        if finding.where=="vehicle" and not store.placedAt[id] then
+            for dx=-12,12 do for dy=-12,12 do
+                if store.placedAt[id] then break end
+                local sq=cell:getGridSquare(x+dx,y+dy,z)
+                -- sq:getVehicleContainer() returns the vehicle itself, not
+                -- an ItemContainer - the real container lives on one of its
+                -- parts (vehicleItemContainer, above).
+                local vehicle=sq and sq.getVehicleContainer and sq:getVehicleContainer()
+                local trunk=vehicle and vehicleItemContainer(vehicle)
+                if trunk then
+                    local item=trunk:AddItem(itemType(finding) or "Base.Notepad")
+                    if item then
+                        item:getModData()[ITEM_MARK]=id
+                        store.placedAt[id]=worldHours()
+                        placed=placed+1
+                        log("placed "..id.." in a nearby vehicle at "..tostring(x+dx)..","..tostring(y+dy))
+                    end
+                end
+            end end
+        end
+    end
     for id,finding in pairs(mystery.findings) do
         if finding.where=="site" and not store.placedAt[id] then
             local found=false
@@ -127,6 +196,31 @@ function M.place(mystery,x,y,z)
                                 break
                             end
                         end
+                    end
+                end
+            end end
+        end
+    end
+    -- A "door" GATE gets a real door tagged near the same site, once - a
+    -- real IsoDoor object, not a threshold: the survivor must actually try
+    -- it, mirroring the discipline ITEM_MARK already holds for a found
+    -- item. Untagged if no real door is in range; a mystery may say so in
+    -- its own design note rather than pretend a mechanic always fires
+    -- (Linter.lua's own admission: reachability is play, not provable here).
+    for _,gate in ipairs(mystery.gates or {}) do
+        if gate.kind=="door" and not store.doorTagged[gate.produces] then
+            for dx=-3,3 do for dy=-3,3 do
+                if store.doorTagged[gate.produces] then break end
+                local sq=cell:getGridSquare(x+dx,y+dy,z)
+                local objects=sq and sq:getObjects()
+                for i=0,(objects and objects:size() or 0)-1 do
+                    local obj=objects:get(i)
+                    local ok,cn=pcall(function() return obj:getClass():getSimpleName() end)
+                    if ok and cn=="IsoDoor" then
+                        obj:getModData()[DOOR_MARK]=gate.produces
+                        store.doorTagged[gate.produces]=true
+                        log("tagged a door for gate "..gate.produces.." at "..tostring(x+dx)..","..tostring(y+dy))
+                        break
                     end
                 end
             end end
@@ -190,6 +284,30 @@ end
 -- precondition finding already known - and if so, marks its produced
 -- finding known. The mechanic check lives here, in the runtime, never in
 -- the pure Interpreter: the interpreter only reads a ledger.
+-- Whether a tagged real door for this gate is now unlocked - the survivor
+-- having actually tried the key, not a threshold. Scans a bounded area
+-- around the survivor's current square, the same discipline M.place()
+-- already holds; a door tagged far from where the survivor now stands
+-- simply is not found this poll, and the gate stays unsatisfied honestly
+-- rather than guessed at.
+local function doorUnlocked(p,gateProduces)
+    local cell=getCell and getCell(); if not cell then return false end
+    local x,y,z=math.floor(p:getX()),math.floor(p:getY()),math.floor(p:getZ())
+    for dx=-6,6 do for dy=-6,6 do
+        local sq=cell:getGridSquare(x+dx,y+dy,z)
+        local objects=sq and sq:getObjects()
+        for i=0,(objects and objects:size() or 0)-1 do
+            local obj=objects:get(i)
+            local md=obj and obj.getModData and obj:getModData()
+            if type(md)=="table" and md[DOOR_MARK]==gateProduces then
+                local ok,locked=pcall(function() return obj:isLocked() end)
+                if ok and locked==false then return true end
+            end
+        end
+    end end
+    return false
+end
+
 M.SKILL_THRESHOLD=2
 function M.pollGates()
     local store=root(); if not store or not M.current then return end
@@ -203,6 +321,8 @@ function M.pollGates()
             elseif gate.kind=="answer" then
                 local requiresKnown=not gate.requires or Ledger.isKnown(store.ledger,gate.requires)
                 satisfied=requiresKnown and store.answered and store.answered[gate.produces]==true
+            elseif gate.kind=="door" then
+                satisfied=doorUnlocked(p,gate.produces)
             end
             if satisfied then
                 local ledger=Ledger.markKnown(store.ledger,gate.produces,worldHours(),"gate:"..gate.kind)

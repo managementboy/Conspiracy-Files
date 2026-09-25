@@ -1,0 +1,16 @@
+Linux mystery (fitness instructor, welfare visit - the Fitness ten redesigned) 20260926T010756: FAIL
+source: 231bef0 + uncommitted mod changes
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+  attach: true nil
+  status before anything is known: carried
+  place: true 4
+  collected: 3 marked item(s)
+  record after collecting: A key, and no memory of taking it. | A key, a visit, and feed with nowhere to be. One of them may be the reason for the other two, or none of them is. | Feed and spent protective gear, kept in the same house. Something was done here, more than once.
+  status after collecting, before the door: carried
+  door unlocked: true
+  status once every declared finding, the door included, is known: carried
+  record after the gate: A key, and no memory of taking it. | A key, a visit, and feed with nowhere to be. One of them may be the reason for the other two, or none of them is. | Feed and spent protective gear, kept in the same house. Something was done here, more than once. | The key opens this door. That much, at least, is no longer a question.
+
+FAIL: close=all must complete once every key including the door is known, got carried
+FAIL: the final, still-undecided reveal never reached the record: A key, and no memory of taking it. | A key, a visit, and feed with nowhere to be. One of them may be the reason for the other two, or none of them is. | Feed and spent protective gear, kept in the same house. Something was done here, more than once. | The key opens this door. That much, at least, is no longer a question.
+errors inside the mod: 0
