@@ -1,0 +1,11 @@
+PASS knox.os - 2026-09-25T14:48:48+02:00
+commit: 5d6c450
+renderer: Mesa llvmpipe (LLVM 20.1.2, 256 bits) (SOFTWARE) on display :0
+session: 20260925T144256
+opened:   true	FILES	1	false	false	1
+names:    true	NAMES	1	false	false	3
+dates:    true	DATES	1	false	false	5
+threads:  true	THREADS	1	false	false	2
+  rows:   Why was the collection in my name cancelled before its scheduled run?
+record:   WHAT I THINK I FOUND / A folded carbon slip with KEEP THIS COPY boxed beside my typed name. / HIRED COLLECTION  McCoy Logging Co. VEHICLE / Booking RC-731 / issued June 27, 1993 / Passenger: Lillian Chastain / Collection point: 202 E Maple St / Scheduled collection: July 3, 1993, 07:00 / Retained copy for enquiries: 102 Diesel St / A borrowed McCoy Logging Co. vehicle is assigned for this one collection. Keep this copy if it does not arrive. / WHAT I THINK IT MEANS / I have a one-off collection booking in my name from 202 E Maple St. The notice directs enquiries to 102 Diesel St, which is more useful than a promise from a borrowed truck. / WHAT I MARKED ON MY MAP / I did not note where I found this, so there is no mark on my map.
+to do:    true	TO DO	1	false	false	6
