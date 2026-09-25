@@ -154,10 +154,42 @@ function M.pollInventory()
     end
 end
 
+-- Mark a "heard" PRIMARY finding known - the second channel's own minimal
+-- placement primitive, parallel to M.place() for site findings. Real
+-- content wires this to whatever overheard-dialogue/radio trigger actually
+-- fires in the world; this module only records that it happened and when,
+-- the same discipline M.place() already holds for a found item.
+function M.hear(findingId)
+    local store=root(); if not store or not M.current then return false,"no mystery" end
+    local finding=M.current.findings[findingId]
+    if not finding or finding.where~="heard" then return false,"not a heard finding" end
+    if Ledger.isKnown(store.ledger,findingId) then return true end
+    local ledger,why=Ledger.markKnown(store.ledger,findingId,worldHours(),"heard")
+    if not ledger then return false,why end
+    store.ledger=ledger
+    log("heard "..findingId)
+    return true
+end
+
+-- The survivor's own act of giving a reading - a real, explicit action
+-- distinct from a debug ledger flip. The attacker frame's core Phase E
+-- finding: a native test that flips ledger state directly "certifies a
+-- UI/state change rather than a real mystery." This only records the ACT;
+-- pollGates below still refuses to let an "answer" GATE fire unless its
+-- own `requires` finding is already known - answering about something the
+-- survivor never heard commits nothing.
+function M.giveAnswer(gateProduces)
+    local store=root(); if not store or not M.current then return false,"no mystery" end
+    store.answered=store.answered or {}
+    store.answered[gateProduces]=true
+    return true
+end
+
 -- Whether a GATE's own mechanic is satisfied, checked against real game
--- state - for this mystery, a skill threshold - and if so, marks its
--- produced finding known. The mechanic check lives here, in the runtime,
--- never in the pure Interpreter: the interpreter only reads a ledger.
+-- state - a skill threshold, or an "answer" already given AND its own
+-- precondition finding already known - and if so, marks its produced
+-- finding known. The mechanic check lives here, in the runtime, never in
+-- the pure Interpreter: the interpreter only reads a ledger.
 M.SKILL_THRESHOLD=2
 function M.pollGates()
     local store=root(); if not store or not M.current then return end
@@ -168,6 +200,9 @@ function M.pollGates()
             if gate.kind=="skill" then
                 local ok,level=pcall(function() return p:getPerkLevel(Perks.Electricity) end)
                 satisfied=ok and type(level)=="number" and level>=M.SKILL_THRESHOLD
+            elseif gate.kind=="answer" then
+                local requiresKnown=not gate.requires or Ledger.isKnown(store.ledger,gate.requires)
+                satisfied=requiresKnown and store.answered and store.answered[gate.produces]==true
             end
             if satisfied then
                 local ledger=Ledger.markKnown(store.ledger,gate.produces,worldHours(),"gate:"..gate.kind)

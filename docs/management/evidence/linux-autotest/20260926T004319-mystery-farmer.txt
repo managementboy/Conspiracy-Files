@@ -1,0 +1,16 @@
+Linux mystery (farmer, recalled delivery) 20260926T004319: PASS
+source: d0e144d + uncommitted mod changes
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+  attach: true nil
+  status before anything is known: carried
+  place: true 1
+  collected: 1 marked item(s)
+  record after collecting the slip: A recall slip, one date never filled in.
+  answer given before the rumour was heard: true
+  record after answering with no precondition met: A recall slip, one date never filled in.
+  status after the premature answer: carried
+  hear(rumour): true nil
+  record after the rumour is heard: A recall slip, one date never filled in. | Two things happened the same week. Whether they are the same story is not for the paperwork to say. | Her own reading of it, offered for what it is worth: unfinished, not hidden.
+  status once every finding is known: carried
+
+errors inside the mod: 0
