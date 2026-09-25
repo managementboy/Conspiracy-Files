@@ -438,9 +438,17 @@ those as its projection.
    opening through the adapter and the native `knox`/`core_loop`/
    `profession_openings` checks — still no new content, same result as today.
 3. **DiversityGuard + ShapeCard**, run once over the *legacy* roster as a
-   calibration: it must NOT refuse the 20 ordinary premises (they are
-   already varied by hand), and it SHOULD have refused the withdrawn 24
-   occupation families if pointed at them — that is the guard's own test.
+   calibration. ~~It must NOT refuse the 20 ordinary premises (they are
+   already varied by hand)~~ — **corrected, 2026-09-25, after building it**:
+   measured through `LegacyAdapter` against real `Generator.generate`
+   output, most of the 20 ordinary premises share ONE exact structural
+   shape (5 seeds checked directly, byte-identical tuple; the full 20
+   reduce to 2 distinct shapes) — Story.lua's own fixed anchors/two-site/
+   all-essential schema is itself the recipe, not only the withdrawn 24's
+   parameterisation of it. The guard correctly refuses BOTH rosters, for
+   the same reason. This strengthens rather than weakens the case for the
+   rebuild: the sameness the owner rejected was never only in the twenty-
+   four families. `test/mystery_legacy_adapter.lua`.
 4. **The first bespoke mystery**, written directly in the vocabulary, no
    adapter: the electrician's *unsigned repair* (plan §2), including a GATE
    at a real panel. Played to its own ending on Linux.
@@ -456,7 +464,7 @@ those as its projection.
 |---|---|
 | 1 | offline suite unchanged; `mutants/run.sh` still 7/7 |
 | 2 | `knox`, `core_loop`, `profession_openings` (fitnessinstructor) unchanged results |
-| 3 | guard accepts the 20 ordinary + Fitness ten; guard refuses a roster shaped like the withdrawn 24 (a fixture test, not a live refusal) |
+| 3 | guard refuses BOTH the 20 ordinary premises and the withdrawn 24, each measured on real content through LegacyAdapter (corrected from the original plan's wrong prediction); guard accepts a roster genuinely varied in the vocabulary directly |
 | 4 | a new native check drives the panel GATE; the mystery closes as `completed` |
 | 5 | the same check family proves a `carried` ending shows honestly on THREADS, and a `heard` finding reaches the record without ever being searched for |
 
