@@ -231,3 +231,33 @@ up called, it groups what the survivor is carrying — it does not score it.
 **Watch the shared checkout.** Other sessions work in this same tree. Commit with
 `git commit -o <paths>` so a plain commit cannot sweep another session's staged
 work into yours. That has already happened once.
+
+### Second queued task from the same playtest — the survivor's voice in FILES
+
+Also recorded in `docs/management/PM_HANDOFF.md`: every FILES heading in the
+survivor's **first person, with doubt** — "What I think I found" rather than
+"WHAT YOU FOUND" — and summaries that stop asserting certainty. Not built.
+
+**It is the same requirement as §11's caution, one layer down.** "Closed" must not
+read as "solved"; a heading must not read as "established". Treat them as one job
+when they are scheduled.
+
+**Two pieces of machinery already exist for it, so this need not start from
+scratch:**
+
+- **The voice has a home.** `PlayerVoice` already speaks in the survivor's own
+  register at case events, and the premises already carry **two honest readings**
+  each rather than one finding — the vocabulary of doubt is authored, not missing.
+  What is missing is that FILES presents it under headings written by a narrator.
+- **There is already a mechanical check for asserted certainty.**
+  `test/premise_consistency.lua` runs every premise across 305 calendars in both
+  readings — 40,260 renders — against a **finite list of banned assertion
+  phrasings**. That list is the natural place to enforce the new headings and
+  summaries, which turns "stop asserting certainty" from an editorial hope into
+  something the suite fails on. Note its limit honestly: it checks the phrasings
+  on the list and nothing else (plan §3), so it constrains the wording, it does
+  not judge the tone.
+
+Still the owner's: **the actual words.** "What I think I found" is his example,
+not a settled heading set, and the survivor's own vocabulary is the same question
+as §11's naming problem.
