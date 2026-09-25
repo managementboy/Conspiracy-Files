@@ -127,18 +127,35 @@ Never: "five documents", "document 2 is a dated receipt", "document 5 waits
 for a vehicle". Those assertions pinned the defect; they are already gone
 with the routing.
 
-## 7. Questions only the owner can answer
+## 7. Questions only the owner can answer — answered 2026-09-25
 
-1. How far may a start diverge from "an errand in my name"? May a start be
-   about the person next door, or a place, with the survivor incidental?
-2. May a mystery **end without completing** — carried as an open question for
-   the whole game — and if so, how does THREADS show that honestly?
-3. Must every start put something **in the pocket**, or may the first finding
-   be found?
-4. How many **sites** may a start span, and may one be a road or a body
-   rather than a building?
-5. Mechanics (tool, skill, panel): built only after each is verified on Linux
-   (the plan's §8 tickets), or may a mystery be designed around one before?
+(DR-20260925-MYSTERY-BOUNDARIES)
+
+1. **How far may a start diverge from "an errand in my name"?** — *Allowed to
+   diverge. It needs to include the player's occupation.* So the occupation
+   is the one personal fact every start carries; name, key and appointment
+   are no longer required.
+2. **May a mystery end without completing?** — *Yes.* A carried question is
+   an ending. How THREADS shows it honestly is design work in the first such
+   mystery.
+3. **Must every start put something in the pocket?** — *No.* The first
+   finding may be found.
+4. **How many sites, and what may a site be?** — *As many as needed.*
+5. **Mechanics before or after Linux verification?** — *Interaction does not
+   need to be tested yet.* Design first; verification follows.
+6. **The Fitness ten?** — *Include them all in the redesign.*
+
+7. **Added by the owner: why is there a 240-character cap on an object's
+   record body?** (`EvidenceKinds.OBJECT_MAX_CHARS`; the known reasoning is
+   recorded in PM_HANDOFF.md.) The rebuild answers this rather than
+   inheriting it.
+
+What the answers change in §4: `sites` is unbounded and untyped beyond what
+placement can do; a finding with `where="on me"` is optional, not first;
+`ending.kind="carried"` is a first-class ending with its own THREADS reading
+to design; every mystery declares the occupation(s) it is written for and
+how the occupation enters it; the object body cap becomes a question for
+step 1, not a constraint on step 2.
 
 ## 8. Cost
 
