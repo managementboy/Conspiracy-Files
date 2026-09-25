@@ -113,28 +113,131 @@ The survivor's own words, and it says why the thread matters rather than what
 the paperwork happens to be called. A retired thread keeps no case envelope and
 so no question; that one falls back to its first finding's title.
 
-### The open problem this creates
+### The open problem this creates - measured
 
 The list is about 34 characters wide, and `K.row` draws one line and cuts with
-an ellipsis (`K.fit`). Our questions run 50–70 characters and most of them open
-with "Why was I", so two threads truncate to nearly the same row:
+an ellipsis (`K.fit`). The first draft of this note said "our questions run
+50-70 characters and most of them open with 'Why was I'". Measured against
+every `question=` in the shipped scenarios (2026-09-25, 75 questions):
+
+| | |
+|---|---|
+| distinct first 31 characters | **74 of 75** |
+| begin "Why was I" | **5** (all of them Fitness openings) |
+| begin "Why" | 39 |
+| length | 36-116 characters, median 60 |
+
+So the collision is not the corpus; it is the five opening questions - which
+is worse, not better, because an opening is what every new game shows first,
+and a second Fitness thread in the same save collides with it:
 
 ```
-- Why was I expected at this add…
-- Why was I printed on a passeng…
+- Why was I expected at this add...
+- Why was I printed on a passeng...
 ```
 
 That is the same class of illegibility the redesign exists to remove, so it
-must not ship that way.
+must not ship that way. Three remedies, none approved, in the order they
+should be tried; they are not exclusive.
 
-**Proposed remedy: wrap a thread row onto two lines, in THREADS only.** Threads
-are few — one or two live at a time — so vertical space is cheap here in a way
-it is not in FILES, where a row per finding must stay a row per finding. The
-wrapping helper already exists in the record view. It is a contained change to
-the list draw for a program that asks for it, not new machinery and not a
-change to any other program.
+#### Remedy A - front-load the difference where the words are written
 
-Not yet approved.
+Fix the row at the writing stage, not in the renderer. A thread row is a
+**handle**, and the handle's first thirty characters must carry the thing
+that tells this thread from its siblings. Two shapes, chosen by what the
+thread already carries (PHASE_C_CONTINUITY_CARRIER: the document, the case's
+own reference, a routing point, the unsettled question):
+
+```
+- Expected at 201 N Carl St - why me?     (address-anchored: the noun leads)
+- (the manifest) Why was I printed on it? (document-anchored: a margin word)
+```
+
+The full question stays unabridged in the record's WHAT I WANT TO KNOW field;
+only the row changes. For the five openings this is a template edit. For the
+general case it is a small pure function `Threads.handle(thread)` returning
+at most 30 characters, with a **uniqueness check against the sibling rows at
+build time** - the load-bearing risk of this remedy is that the distinguishing
+token is not unique either (two threads routed to the same street), which only
+moves the collision one field over. When the check fails, fall through to
+remedy B for those rows.
+
+First step: write `Threads.handle` and a test that runs it over every shipped
+question and every pair of openings a save can hold, asserting no two handles
+share a 31-character prefix. No UI change until that test is green.
+
+#### Remedy B - a second line that says something *else*
+
+If a thread row is given two lines (threads are few; vertical space is cheap
+here in a way it is not in FILES), the second line should not be the wrapped
+remainder of the question - that only moves the ellipsis. It should be a
+**different fact**, set in the way the Palm Address list set the phone number
+beside the name: the place the thread points at, or the document that
+started it when there is no place yet.
+
+```
+- Why was I expected at this add...
+    ~ 201 N Carl St
+- Why was I printed on a passeng...
+    ~ standby list copy, LD-920
+```
+
+The eye separates the two threads on line two before it has finished line
+one. Load-bearing risk: a bare address reads as a *confirmed* location, and
+the survivor can never be certain - the line needs a lead-marker (`~`, or
+the shell's pending glyph) and must never carry a count or a date-as-progress.
+Cost is the same contained change to the THREADS list draw the first draft
+proposed, calling `K.fit` twice; the record view's wrapping helper already
+exists.
+
+#### Remedy C - make the rows differ before the words do
+
+Cheapest, weakest, and worth having anyway: a single dot under the thread
+the survivor opened last, like the worn corner of a page. The shell already
+remembers per-program state while the machine is on (`Screen:category`), so
+this needs no save state. It does not solve a collision; it tells the
+survivor which of two look-alike rows they were just reading.
+
+### Putting down, read as the survivor's own words
+
+The attacker's reading of the first draft: "put down" is a database boolean
+flipped, and a reload renders it identically as a toggle - the one place the
+diary illusion breaks. Remedy, with **no new save state**: the flag stays a
+flag, but the record derives its prose from it at draw time.
+
+- `STATE` reads "I am still following this one." or "I have put this down."
+- A put-down thread's findings list ends with one more numbered line, the
+  survivor's closing note: *"Put this down. I could not get further, and I
+  have stopped looking - for now."* Picking it up removes the line; nothing
+  is written.
+- The closing line comes from a small pool of variants chosen by a seed
+  derived from the thread id, so the same thread always shows the same words
+  across reloads and two threads do not show the same sentence. **Variety is
+  load-bearing, not polish**: one fixed sentence re-exposes the toggle as
+  plainly as a checkbox.
+- Never "solved", never "closed", never a total - unchanged.
+
+### Things not taken, and why
+
+- **"(2)" or an evidence number on a colliding row** - reads as counting
+  (DR-20260920-NO-CONCLUSION), and a number that is not a discovery ordinal
+  means nothing on this device.
+- **Cap Following at one thread** - removes the second thread the design
+  promises.
+- **Marquee scroll, blinking, peel-a-word on the ellipsis** - the shell has
+  no hold gesture, and motion on a 1993 organiser reads as a fault.
+- **A free-text diary log instead of rows** - illegibility as a register is
+  what the owner rejected on day one.
+- **Auto-folding the oldest thread into Put down when a new one opens** -
+  putting down is the survivor's act, not the device's.
+
+### A question to keep open
+
+Palm's To Do never labelled an item with the goal; it labelled it with the
+next action. A thread row could be the thread's **next place to stand**
+("-> 201 N Carl St, the shed") with the question inside, and THREADS becomes a
+route - which is what a survivor consults a device for. Not proposed; recorded
+so it is not lost.
 
 ## What this does not change
 
@@ -155,6 +258,7 @@ Not yet approved.
 |---|---|
 | `A.threads` | rewritten, ~80 lines: `filters`, one row per thread, a thread record with `entries` |
 | `Threads.build` | returns threads with a state, not pre-built sections |
+| `Threads.handle` | remedy A: a <=30 character row handle with a sibling-uniqueness check, plus the test over every shipped question (see "measured") |
 | `OrganiserScreen` | **no change**, unless the two-line row is approved |
 | `test/threads_group_what_i_carry.lua` | reworked for the new shape, plus a new assertion that no row duplicates the row beneath it — the fault that started this |
 | `tools/autotest/checks/knox.sh` | THREADS stage drives the category picker and the thread detail instead of reading section headings |
