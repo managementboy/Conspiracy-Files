@@ -557,11 +557,12 @@ function T.address(clueId)
     -- every refresh and is the half AD-10's fix applies to (campaign.lua says
     -- the same at more length).
     -- THE MARKER IS "\n\nFOUND\n", not "FOUND". Every generated document opens
-    -- with the heading "WHAT YOU FOUND", so splitting on the bare word cuts the
-    -- row after nine characters and leaves "WHAT YOU " as the whole live half -
-    -- which is why the first version of this stage reported every address
-    -- absent, and why campaign.lua's townNames read "0 of 16"
-    -- (20260918T005315) and was blamed on the mod.
+    -- with the survivor's own heading - "WHAT I THINK I FOUND" since
+    -- DR-20260925-RECORD-VOICE, "WHAT YOU FOUND" before it - so splitting on the
+    -- bare word cuts the row after the heading and leaves its opening words as
+    -- the whole live half - which is why the first version of this stage
+    -- reported every address absent, and why campaign.lua's townNames read
+    -- "0 of 16" (20260918T005315) and was blamed on the mod.
     local cut = string.find(detail, "\n\nFOUND\n", 1, true)
     local fresh = cut and string.sub(detail, 1, cut - 1) or detail
     local here = map() and map().currentTown and map().currentTown() or nil

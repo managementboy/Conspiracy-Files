@@ -27,7 +27,7 @@ changes. Placeholders as in Premises.lua.
 ```
 Radio transcript / {CODE}
 
-WHAT YOU FOUND
+WHAT I THINK I FOUND
 A typed page from a local radio station's evening call-in show, kept in a card
 folder with {CODE} pencilled on the tab. One caller's words are underlined.
 
@@ -38,7 +38,7 @@ HOST: Probably maintenance. They do that at night so nobody is held up.
 CALLER: Could be. There was no sign on the gate, is all.
 HOST: We'll put the question to {ORG} and see if anybody rings back. Next caller.
 
-WHAT IT MIGHT MEAN
+WHAT I THINK IT MEANS
 A caller noticed work at {B} at an hour nobody had explained, and someone later
 filed the page against the reference. Night work is ordinary, and so is a
 curious caller; a quiet arrangement looks exactly the same from the road. The
@@ -122,7 +122,7 @@ First cut, as the owner set it:
    Each popup also has `Clear my answer.` at the bottom, so a question can go
    back to `(not yet)`.
 
-   The two example readings come from premise 1's own "WHAT IT MIGHT MEAN"
+   The two example readings come from premise 1's own "WHAT I THINK IT MEANS"
    text (`Premises.lua:76`, `:89`).
 6. Once any question is answered, the row reads back as the survivor's own
    note, and FILES shows the same words:

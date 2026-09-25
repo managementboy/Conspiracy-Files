@@ -17,23 +17,25 @@
 -- so editing that memo in Content.lua sets aside every first case in play.
 -- Below 1.0 that is the standing rule anyway (P4-R77) - a new game.
 --
--- WHAT YOU FOUND, WHAT IT MIGHT MEAN and NOTE are new prose, reviewed by the
+-- The three blocks - what I think I found, what I think it means and the date
+-- note - are new prose, reviewed by the
 -- owner in play (P4-R97).
 local Content=require("ConspiracyFiles/Content")
+local H=require("ConspiracyFiles/Headings")
 
 local M={}
 M.ASSET="dead-air:asset:access-memo-7c"
 M.KIND="memo"
 M.TITLE="Access memo / 7C-41"
 
-local FOUND="WHAT YOU FOUND\n"
+local FOUND=H.FOUND.."\n"
     .."A typed memo on company letterhead, folded twice. It stands on its own; nothing filed with it identifies another record."
-local MEANING="WHAT IT MIGHT MEAN\n"
+local MEANING=H.MEANING.."\n"
     .."It could be routine: a telephone contractor telling the police about maintenance, so that nobody reports a technician working late.\n"
     .."It could be an arrangement: nine days in which the police were told in advance what not to write down.\n"
     .."The memo does not settle which reading fits, and its dates do not make another record part of this job."
 
-M.NOTE="DATE NOTE\n"
+M.NOTE=H.DATE.."\n"
     .."Dated inside the nine days the relay memo covers, 30 June to 8 July 1993. That may be coincidence."
 
 function M.body()

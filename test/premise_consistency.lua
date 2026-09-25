@@ -125,7 +125,11 @@ end
 -- in both authored variants. Generated cases rebuild exactly under the current
 -- event-story revision; follow-up same-day dates are exercised separately by
 -- personal_story, so this deliberately checks only ordinary generated cases.
-assert(G.REVISION=="g18-first-person-functional-key")
+-- UPDATED 2026-09-25 for DR-20260925-RECORD-VOICE: the record now speaks in
+-- the survivor's first person, with doubt (owner: "we still write 'what YOU
+-- found'"). The old wording is pinned nowhere; the new set is Headings.lua,
+-- and test/record_voice_is_mine.lua is what holds it to first person.
+assert(G.REVISION=="g19-record-speaks-as-me")
 local seen,cases={},0
 for seed=1,400 do
     local case=G.generate(catalog,seed,opts)

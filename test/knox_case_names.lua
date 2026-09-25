@@ -13,11 +13,16 @@ end
 ConspiracyFiles={}
 local G=require("ConspiracyFiles/Generated/Generator")
 local A=require("ConspiracyFiles/KnoxApps")
+-- UPDATED 2026-09-25 for DR-20260925-RECORD-VOICE: every heading this test
+-- named as a literal is now the survivor's own, first person and hedged. The
+-- assertions are the same assertions, reading their headings from Headings.lua
+-- so they cannot pin a narrator's wording again; nothing was relaxed.
+local H=require("ConspiracyFiles/Headings")
 assert(type(G.INVENTED_NAMES)=="table" and #G.INVENTED_NAMES==8,"the generator's names are readable")
 
 local rows={
     {id="d1",title="Tagged key / LD-527",
-     detailText="WHAT YOU FOUND\nA small worn key. The tag carries LD-527 and a name, Marion Ellis."},
+     detailText=H.FOUND.."\nA small worn key. The tag carries LD-527 and a name, Marion Ellis."},
     {id="d2",title="Pencil spiffo, marked Marion Ellis",detailText="A pencil."},
     {id="d3",title="Delivery docket / LD-527",detailText="Signed Roy Haley for Knox County Supply Office."},
     {id="d4",title="Receipt / LD-527",detailText="Received from Delia Mercer. Countersigned Joanne Vossberg."},

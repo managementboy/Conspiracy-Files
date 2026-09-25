@@ -359,9 +359,10 @@ body in the case record" that way with nothing recorded. Return an explicit
 Everything before it is rendered fresh through `AddressMap.describe` on every
 refresh and is the half P4-R129 applies to; the block after it is what the
 discovery ledger kept at the moment of the find and is frozen by design. Every
-generated document *opens* with the heading `WHAT YOU FOUND`, so splitting on
-the bare word `FOUND` cuts the row after nine characters and makes the "live"
-half the string `WHAT YOU ` - which reads as "no address anywhere" and gets
+generated document *opens* with the survivor's own heading - `WHAT I THINK I
+FOUND` since DR-20260925-RECORD-VOICE, `WHAT YOU FOUND` before it - so splitting
+on the bare word `FOUND` cuts the row after the heading and makes the "live"
+half that heading's opening words, which reads as "no address anywhere" and gets
 blamed on the mod. `campaign.lua`'s `townNames` did exactly that and reported
 "0 of 16" (20260918T005315); it was fixed on 2026-09-18 when `travel.lua` hit
 the same wall. And the live half is not necessarily the address the clue was

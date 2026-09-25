@@ -1,3 +1,58 @@
+## DR-20260925-RECORD-VOICE — the record is the survivor writing, and it doubts
+
+Owner, Windows playtest 2026-09-25, reading a FILES record on the device:
+*"we still write 'what YOU found'. I want first person perspective with doubt.
+'What I think I found' ... we have mysteries. A player can't KNOW."* The
+heading above it was `WHAT YOU FOUND` and the summary under it read "A
+confirmed appointment card names me, this address and a farm-connected client."
+
+Every ALLCAPS block the device puts above a record is the survivor's own, in
+first person and hedged. The set lives in one place,
+`mod/common/media/lua/shared/ConspiracyFiles/Headings.lua`, so the paper, the
+device and the tests cannot drift:
+
+| was | is |
+|---|---|
+| WHAT YOU FOUND | WHAT I THINK I FOUND |
+| WHAT IT MIGHT MEAN | WHAT I THINK IT MEANS |
+| DATE NOTE | WHAT I NOTICE ABOUT THE DATE |
+| MAP NOTE (the survivor's own mark) | WHAT I MARKED ON MY MAP |
+| MAP NOTE (somebody else's map) | WHAT I CAN READ ON THE MAP |
+| WHAT SOMEBODY WROTE | WHAT I THINK SOMEBODY WROTE |
+| WHERE IT POINTS | WHERE I THINK IT POINTS |
+| WHO WROTE IT | WHO I THINK WROTE IT |
+| WHOSE PLACE THIS WAS | WHOSE PLACE I THINK THIS WAS |
+| WHAT THE FLYER SAYS | WHAT I READ ON THE FLYER |
+| WHERE IT IS | WHERE I THINK IT IS |
+| WHAT IS ACTUALLY HERE | WHAT I SAW WHEN I GOT THERE |
+| WHAT THAT IS WORTH | WHAT I MAKE OF THAT |
+
+`WHY I CAME HERE`, `WHAT I HAVE DONE ABOUT IT`, `WHY I KEPT IT` and `WHAT I WAS
+LOOKING FOR` were already the survivor's and are unchanged.
+
+Summaries stop vouching. The appointment card now reads "An appointment card
+carries my name, this address and a farm-connected client. Who arranged it, the
+card does not say." The card itself is still stamped `Status: CONFIRMED` — the
+survivor can read that word; they cannot stand behind it. The four map lines
+under a record moved to first person too; "Finding location marked on your
+world map." was the last second person on a FILES record.
+
+The observation rules are unchanged: no heading infers identity or ownership,
+both readings stay live, and no heading picks a winner (P4-R127 — a lead is
+never proof).
+
+`test/record_voice_is_mine.lua` holds the set to first person, refuses second
+person and refuses certainty words. It is honest about its limit, as
+`test/premise_consistency.lua` is: it checks the phrasings on its lists and
+nothing else, so it constrains the wording and does not judge the tone. The
+document's own printed words are deliberately not swept, and a `note` that
+reports what a record claims is held only to the survivor not vouching in their
+own person.
+
+**Fresh save.** The document bodies changed, so `Generator.REVISION` moved to
+`g19-record-speaks-as-me` and cases from an older save no longer rebuild. Under
+P4-R63 that is allowed below 1.0; nothing is deleted or rewritten.
+
 ## DR-20260922-PERSONAL-OPENING — begin with the clue already on the survivor
 
 P4-R66's starting-house rule describes the narrative origin of the first

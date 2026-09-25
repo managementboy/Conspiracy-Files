@@ -10,9 +10,16 @@
 -- strange document.
 package.path = "mod/common/media/lua/shared/?.lua;" .. package.path
 local M = require("ConspiracyFiles/Generated/DocumentPages")
+-- UPDATED 2026-09-25 for DR-20260925-RECORD-VOICE: this test pinned the old
+-- narrator headings ("WHAT YOU FOUND", "WHAT IT MIGHT MEAN", "MAP NOTE") as
+-- string literals. They are now the survivor's own, first person and hedged,
+-- so the fixture and the refusals read them from Headings.lua. The refusals
+-- themselves are unchanged and none was relaxed: our headings and the object
+-- description still must not reach the paper.
+local H = require("ConspiracyFiles/Headings")
 
 local body = table.concat({
-    "WHAT YOU FOUND",
+    H.FOUND,
     "A creased carbon copy, its lower edge stained by a wet cup.",
     "",
     "County Equipment Service",
@@ -22,10 +29,10 @@ local body = table.concat({
     "",
     "In the margin: 'Driver asked whether the contents were on the manifest.'",
     "",
-    "WHAT IT MIGHT MEAN",
+    H.MEANING,
     "Someone recorded a transfer without recording what was inside.",
     "",
-    "MAP NOTE",
+    H.MARKED,
     "Finding location remembered.",
     "",
     "PHYSICAL OBJECT",
@@ -41,13 +48,13 @@ assert(text:find('Route copy: 114 S Main St', 1, true), 'the routing must be on 
 assert(text:find('In the margin', 1, true), 'the margin note is part of the document')
 
 -- Ours are not.
-assert(not text:find('WHAT YOU FOUND', 1, true), 'the heading must not reach the paper')
+assert(not text:find(H.FOUND, 1, true), 'the heading must not reach the paper')
 assert(not text:find('creased carbon copy', 1, true),
     'the description of the object must not be written on the object')
-assert(not text:find('WHAT IT MIGHT MEAN', 1, true), 'our interpretation must not reach the paper')
+assert(not text:find(H.MEANING, 1, true), 'our interpretation must not reach the paper')
 assert(not text:find('Someone recorded a transfer', 1, true),
     'a document does not contain the reader is conclusions about it')
-assert(not text:find('MAP NOTE', 1, true), 'map bookkeeping is not part of the document')
+assert(not text:find(H.MARKED, 1, true), 'map bookkeeping is not part of the document')
 assert(not text:find('PHYSICAL OBJECT', 1, true), 'tracking state is not part of the document')
 
 -- Pages are whole and bounded.
@@ -60,7 +67,7 @@ for i, page in ipairs(pages) do
 end
 
 -- A long document splits without cutting a word in half.
-local long = "WHAT YOU FOUND\nA thick file.\n\n" .. string.rep("Longwinded clause about the shipment. ", 120)
+local long = H.FOUND.."\nA thick file.\n\n" .. string.rep("Longwinded clause about the shipment. ", 120)
 local many = M.pages(long)
 assert(#many > 1, 'a long document must span several pages, got ' .. #many)
 -- Reassembling the pages must give back the text. That is the real
@@ -71,7 +78,7 @@ assert(flatten(table.concat(many, ' ')) == flatten(M.text(long)),
     'the pages must reassemble into exactly the document text')
 
 -- Nothing at all: no pages, no crash, no blank page written to an item.
-for _, empty in ipairs({ nil, '', 'WHAT YOU FOUND\nJust a description.', 42 }) do
+for _, empty in ipairs({ nil, '', H.FOUND..'\nJust a description.', 42 }) do
     local ok, result = pcall(M.pages, empty)
     assert(ok, 'malformed input must not throw')
     assert(#result == 0, 'nothing to write means no pages')
@@ -85,7 +92,7 @@ print('PASS document pages: the document is written on the object, the '
 local fixture={locations={{id="a",name="HOUSE A",bounds={x1=0,y1=0}},
     {id="b",name="HOUSE B",bounds={x1=10,y1=0}}}}
 local called=false
-local addressed=M.pages("WHAT YOU FOUND\nA private observation.\n\nDeliver to HOUSE A.\n\nWHAT IT MIGHT MEAN\nMy private conclusion.",fixture,function(source,c)
+local addressed=M.pages(H.FOUND.."\nA private observation.\n\nDeliver to HOUSE A.\n\n"..H.MEANING.."\nMy private conclusion.",fixture,function(source,c)
     called=true
     assert(c==fixture and source=="Deliver to HOUSE A.")
     return (source:gsub("HOUSE A","201 N Carl St"))

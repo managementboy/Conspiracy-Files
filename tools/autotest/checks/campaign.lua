@@ -846,10 +846,12 @@ function C.townNames()
     for _, row in ipairs(rows) do
         local detail = tostring(row.detailText or "")
         -- THE MARKER IS "\n\nFOUND\n". Every generated document opens with the
-        -- heading "WHAT YOU FOUND", so splitting on the bare word cut the row
-        -- after nine characters and made the "live" half the string
-        -- "WHAT YOU " - so this counted no live address in any row and the
-        -- shortfall was reported against the mod (travel check, 2026-09-18).
+        -- survivor's own heading - "WHAT I THINK I FOUND" since
+        -- DR-20260925-RECORD-VOICE, "WHAT YOU FOUND" before it - so splitting
+        -- on the bare word cut the row after the heading and made the "live"
+        -- half that heading's opening words: this counted no live address in
+        -- any row and the shortfall was reported against the mod (travel
+        -- check, 2026-09-18).
         local cut = detail:find("\n\nFOUND\n", 1, true)
         local fresh = cut and detail:sub(1, cut - 1) or detail
         local found = cut and detail:sub(cut + 2) or ""

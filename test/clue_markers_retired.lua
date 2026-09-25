@@ -30,13 +30,17 @@ data['ConspiracyFiles.ClueMarkers']={schema=1,records={a={x=10840,y=10148,z=0,ma
 -- No pen yet: nothing happens, and nothing throws.
 M.update()
 assert(not data['ConspiracyFiles.ClueMarkers'].records.a.written)
-assert(M.note("a")=="Finding location remembered. Map marking waits for a pen or pencil.", M.note("a"))
+-- UPDATED 2026-09-25 for DR-20260925-RECORD-VOICE: the record now speaks in
+-- the survivor's first person, with doubt (owner: "we still write 'what YOU
+-- found'"). The old wording is pinned nowhere; the new set is Headings.lua,
+-- and test/record_voice_is_mine.lua is what holds it to first person.
+assert(M.note("a")=="I remember where I found this. The mark waits for a pen or pencil.", M.note("a"))
 
 -- A pen after completion still writes the retired case's mark (catch-up).
 tool=true
 M.update()
 assert(data['ConspiracyFiles.ClueMarkers'].records.a.written, "a retired case's finding is still marked once a pen is held")
-assert(M.note("a")=="Finding location marked on your world map.", M.note("a"))
+assert(M.note("a")=="I marked where I found this on my map.", M.note("a"))
 
 -- The map overlay reads titles from the retired rows instead of throwing.
 local drawn={}

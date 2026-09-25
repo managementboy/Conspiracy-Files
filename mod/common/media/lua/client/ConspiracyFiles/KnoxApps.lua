@@ -71,9 +71,10 @@ end
 -- few facts as labelled fields, then a rule, then what the survivor actually
 -- wrote. The window's own filing furniture stays in the window.
 --
--- The fields come out of the projection's own ALLCAPS blocks (FOUND, MAP,
--- PHYSICAL OBJECT ...), so nothing is invented here and any wording the
--- projection improves arrives on the device with it.
+-- The fields come out of the projection's own ALLCAPS blocks, so nothing is
+-- invented here and any wording the projection improves arrives on the device
+-- with it - including the survivor's own headings (Headings.lua), which keep
+-- their heading and fall through to the body below.
 local FIELD={FOUND="FOUND",["MAP"]="MAP",["PHYSICAL OBJECT"]="OBJECT",
              ["ATTACHED"]="NOTES",["ORIGINAL CONTEXT"]="CONTEXT"}
 
@@ -86,8 +87,8 @@ local function split(detail)
         elseif block:find("%S") then
             -- Every other block keeps its heading (P4-R114). They were dropped
             -- for the look of a Palm record, and with them went the only thing
-            -- telling the document's own words from WHAT IT MIGHT MEAN and the
-            -- DATE NOTE, which are the survivor thinking.
+            -- telling the document's own words from what the survivor thinks it
+            -- means and what they notice about the date, which are them thinking.
             body[#body+1]=block
         end
     end
@@ -578,7 +579,7 @@ A.places={
         for _,row in ipairs(rows) do
             if row.cfHeading then
                 out[#out+1]={label="- "..tostring(row.title or ""),title=tostring(row.title or ""),
-                             detail=tostring(row.detailText or "A place you came back to."),
+                             detail=tostring(row.detailText or "A place I came back to."),
                              id="place-"..#out,heading=true}
             else
                 out[#out+1]={label="  "..(row.title or ""),title=row.title,

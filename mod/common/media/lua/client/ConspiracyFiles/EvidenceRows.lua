@@ -13,6 +13,7 @@
 local PlaceNames=require("ConspiracyFiles/Generated/PlaceNames")
 local RelayMemo=require("ConspiracyFiles/Generated/RelayMemo")
 local PlaceIndex=require("ConspiracyFiles/PlaceIndex")
+local Headings=require("ConspiracyFiles/Headings")
 
 local Rows={}
 
@@ -78,7 +79,7 @@ function Rows.build(section,runtime)
         local markers=ConspiracyFiles.ClueMarkers
         if markers and markers.note then
             local ok,note=pcall(markers.note,r.id)
-            if ok and note then detail=detail.."\n\nMAP NOTE\n"..note end
+            if ok and note then detail=detail.."\n\n"..Headings.MARKED.."\n"..note end
         end
         for _,link in ipairs(r.connections or {}) do
             if titles[link.target] then detail=detail.."\n\n"..(meanings[link.kind] or "Connected to")..": "..titles[link.target] end

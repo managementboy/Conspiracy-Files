@@ -13,6 +13,11 @@ local Memo=require("ConspiracyFiles/Generated/RelayMemo")
 local Pages=require("ConspiracyFiles/Generated/DocumentPages")
 local Content=require("ConspiracyFiles/Content")
 local Rows=require("ConspiracyFiles/EvidenceRows")
+-- UPDATED 2026-09-25 for DR-20260925-RECORD-VOICE: every heading this test
+-- named as a literal is now the survivor's own, first person and hedged. The
+-- assertions are the same assertions, reading their headings from Headings.lua
+-- so they cannot pin a narrator's wording again; nothing was relaxed.
+local H=require("ConspiracyFiles/Headings")
 local catalog=dofile("test/fixtures/synthetic_locations.lua")
 local plain={mapId="SYNTHETIC-MAP",buildLine="TEST-ONLY",allowSynthetic=true}
 local first={mapId="SYNTHETIC-MAP",buildLine="TEST-ONLY",allowSynthetic=true,relayMemo=true}
@@ -62,8 +67,8 @@ assert(memo.body:find(approved,1,true),"the memo reproduces the approved text ex
 -- A reader turning its pages sees the memo, and never the survivor's thinking.
 local pages=table.concat(Pages.pages(memo.body),"\n")
 assert(pages:find("CUMBERLAND SIGNAL SERVICES",1,true),"the pages carry the memo")
-assert(not pages:find("WHAT IT MIGHT MEAN",1,true),"the pages carry no interpretation")
-assert(not pages:find("WHAT YOU FOUND",1,true),"the pages carry no description of the document")
+assert(not pages:find(H.MEANING,1,true),"the pages carry no interpretation")
+assert(not pages:find(H.FOUND,1,true),"the pages carry no description of the document")
 
 -- Tampering is refused like any other generated text.
 local forged=assert(G.restore(case)); forged.relayMemo=false
@@ -101,15 +106,15 @@ local late={id="d3",title="Receiving copy / R-482",body="July 12, 1993",kind="re
 local found={id="m1",title=Memo.TITLE,body=memo.body,kind=Memo.KIND}
 
 local before=Rows.build("evidence",runtimeWith({dated,undated}))
-assert(not before[1].detailText:find("DATE NOTE",1,true),"no note before the memo is found")
+assert(not before[1].detailText:find(H.DATE,1,true),"no note before the memo is found")
 
 local after=Rows.build("evidence",runtimeWith({dated,undated,late,found}))
 local note=after[1].detailText
-assert(note:find("DATE NOTE",1,true),"a document dated in the week is noted once the memo is found: "..note)
+assert(note:find(H.DATE,1,true),"a document dated in the week is noted once the memo is found: "..note)
 assert(note:find("may",1,true) or note:find("coincidence",1,true),"the note is a maybe: "..note)
 assert(not note:find("proves",1,true) and not note:find("because",1,true),"the note asserts nothing: "..note)
-assert(not after[2].detailText:find("DATE NOTE",1,true),"an undated document is not noted")
-assert(not after[3].detailText:find("DATE NOTE",1,true),"a document dated outside the week is not noted")
+assert(not after[2].detailText:find(H.DATE,1,true),"an undated document is not noted")
+assert(not after[3].detailText:find(H.DATE,1,true),"a document dated outside the week is not noted")
 assert(not after[4].detailText:find("DATE NOTE",1,true),"the memo is not noted against itself")
 assert(after[4].cfCarrier=="Office memo",after[4].cfCarrier)
 

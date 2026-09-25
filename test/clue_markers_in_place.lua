@@ -67,11 +67,15 @@ assert(mark and mark.x==120 and mark.y==230 and mark.z==0,"the clue's own square
 assert(mark.x~=standing:getX(),"the survivor's position is never the finding location")
 assert(mark.written==false,"a mark waits for a writing tool, as a pickup's does")
 root.known={"drawer"}
-assert(M.note("drawer")=="Finding location remembered. Map marking waits for a pen or pencil.")
+-- UPDATED 2026-09-25 for DR-20260925-RECORD-VOICE: the record now speaks in
+-- the survivor's first person, with doubt (owner: "we still write 'what YOU
+-- found'"). The old wording is pinned nowhere; the new set is Headings.lua,
+-- and test/record_voice_is_mine.lua is what holds it to first person.
+assert(M.note("drawer")=="I remember where I found this. The mark waits for a pen or pencil.")
 M.update();assert(records().drawer.written==false,"no pen, no mark")
 pen=true;M.update()
 assert(records().drawer.written==true and records().drawer.ink=="Pen","the mark catches up when a pen is found")
-assert(M.note("drawer")=="Finding location marked on your world map.","the record's MAP NOTE line says the mark is there")
+assert(M.note("drawer")=="I marked where I found this on my map.","the record's map line says the mark is there")
 pen=false
 
 -- (2) A CLUE IN THE POCKETS is refused: the pickup recorded where it came

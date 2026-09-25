@@ -96,9 +96,9 @@ local function make(d)
   optional={
    {key="appointment",role="records",at="claim",kind="receipt",
     title=d.label.." appointment / {CODE}",
-    observation="A confirmed appointment card names me, this address and a farm-connected client.",
+    observation="An appointment card carries my name, this address and a farm-connected client. Who arranged it, the card does not say.",
     source="{ORG} — HOME VISIT\nReference {CODE}\nJuly 8, 1993 / "..d.time.."\nInstructor: {SELF}\nAddress: {A}\nService: "..d.service.."\nClient workplace: local livestock farm\nIf client absent: return key and visit sheet to {B}\nStatus: CONFIRMED\nEntered by {P2}.",
-    note="The card explains an ordinary reason to visit. It does not explain the key or who finally confirmed the arrangement.",
+    note="The card explains an ordinary reason to visit. It does not explain the key, or who set the appointment up.",
     interpretation="dual"},
    {key="vehicle",role="records",kind="Cooler",title="Cooler in a nearby vehicle / {CODE}",
     observation="A scuffed cooler was in a real vehicle near the second address.",

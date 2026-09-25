@@ -80,7 +80,7 @@ assert(data['ConspiracyFiles.ClueMarkers'].records.c.x==120,'whole-bag pickup ca
 print('PASS whole-bag source capture')
 
 assert(M.note('a'):find('marked',1,true))
-assert(M.note('old'):find('not recorded',1,true))
+assert(M.note('old'):find('did not note',1,true)) -- see DR-20260925-RECORD-VOICE
 assert(M.note('unknown')==nil)
 root.known[#root.known+1]='c';assert(M.note('c'):find('waits',1,true))
 -- Corrupt marker state is refused without interfering with the vanilla move.

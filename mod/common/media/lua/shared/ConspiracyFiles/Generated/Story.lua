@@ -2,7 +2,8 @@
 -- Pure Lua. Placement, discovery and world access remain with their adapters.
 local Kinds=require("ConspiracyFiles/Generated/EvidenceKinds")
 local ConspiracyPair=require("ConspiracyFiles/Generated/ConspiracyPair")
-local M={REVISION=3}
+local H=require("ConspiracyFiles/Headings")
+local M={REVISION=4}
 local ANCHORS={"claim","response","review"}
 local RELATIONS={corroborates=true,recontextualises=true,["disputes-delivery"]=true}
 local function copy(v)
@@ -178,7 +179,7 @@ function M.validate(s)
 end
 
 function M.body(observation,source,note)
-    return "WHAT YOU FOUND\n"..observation.."\n\n"..source.."\n\nWHAT IT MIGHT MEAN\n"..note
+    return H.FOUND.."\n"..observation.."\n\n"..source.."\n\n"..H.MEANING.."\n"..note
 end
 
 -- `fill` only substitutes saved case inputs. It may not query the live world.
@@ -189,8 +190,8 @@ function M.build(s,fill,prefix,a,b,people,org,random,steer,pair)
         local id=prefix.."document-"..(#docs+1)
         local observation,source,note=fill(d.observation),fill(d.source),fill(d.note)
         -- Nothing is WRITTEN on an object. A brass key or a worn pen has no
-        -- source text to quote, so the three-part page - what you found, the
-        -- source, what it might mean - is wrong for one: the headings would
+        -- source text to quote, so the three-part page - what I think I found,
+        -- the source, what I think it means - is wrong for one: the headings would
         -- promise a document. An object's record is the sight and what the
         -- survivor made of it, run together in plain sentences.
         local carrier=Kinds.get(d.kind)

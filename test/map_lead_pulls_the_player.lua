@@ -22,6 +22,7 @@
 package.path="mod/common/media/lua/shared/?.lua;"..package.path
 local Catalogue=require("ConspiracyFiles/MapMediaCatalogue")
 local Content=require("ConspiracyFiles/MapMediaContent")
+local H=require("ConspiracyFiles/Headings")
 
 local maps=Catalogue.list
 assert(#maps>=125,"only "..#maps.." annotated maps; the sweep has shrunk")
@@ -41,7 +42,10 @@ for _,id in ipairs(maps) do
         assert(lead.detail:find(scrawl,1,true),
             id..": the lead does not quote the handwriting exactly")
         -- It must say where, and that the player has not gone.
-        assert(lead.detail:find("WHERE IT POINTS",1,true),id..": the lead never says where it points")
+        -- UPDATED 2026-09-25, DR-20260925-RECORD-VOICE: the heading is the survivor's
+        -- own now ("WHERE I THINK IT POINTS"), so this reads it from Headings.lua
+        -- rather than pinning a narrator's wording a second time.
+        assert(lead.detail:find(H.POINTS,1,true),id..": the lead never says where it points")
         assert(lead.detail:find("not been there",1,true),
             id..": the lead does not say the place is unvisited")
         -- And it must not pretend to know who wrote it.
@@ -61,13 +65,13 @@ for _,id in ipairs({maps[1],maps[40],maps[#maps]}) do
     local b=Catalogue.get(id)
     if type(b.sourceText)=="string" and b.sourceText~="" then
         local came=Content.cameHere(b)
-        assert(came and came:find("WHY I CAME HERE",1,true),id..": the first finding ignores the scrawl")
+        assert(came and came:find(H.CAME,1,true),id..": the first finding ignores the scrawl")
         assert(came:find(b.sourceText,1,true),id..": the first finding misquotes the scrawl")
         -- It admits the gap rather than closing it.
         assert(came:find("Whether it is what they meant, I cannot say",1,true),
             id..": the first finding claims the incident is what the writer meant")
         local note=Content.mapNote(b)
-        assert(note and note:find("MAP NOTE",1,true),id..": later findings lost the map note")
+        assert(note and note:find(H.MAP_READS,1,true),id..": later findings lost the map note")
         assert(came~=note,id..": the first finding must differ from the plain note")
     end
 end
@@ -79,7 +83,7 @@ for _,id in ipairs(maps) do
     local whose=Content.whosePlace(b,7)
     if whose then
         named=named+1
-        assert(whose:find("WHOSE PLACE THIS WAS",1,true),id..": the payoff has no person section")
+        assert(whose:find(H.WHOSE,1,true),id..": the payoff has no person section")
         assert(whose:find("name to ask after",1,true),
             id..": the payoff does not hand the player a name to carry")
         -- The one inference the observation rules forbid.

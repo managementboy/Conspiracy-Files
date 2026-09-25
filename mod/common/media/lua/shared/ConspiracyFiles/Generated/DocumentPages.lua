@@ -2,16 +2,17 @@
 --
 -- A noted-evidence entry is three things: a description of the object, the text
 -- written on it, and what the survivor makes of it. Only the middle one
--- belongs on the object. "WHAT YOU FOUND" describes what a player can see by
--- looking at it, and "WHAT IT MIGHT MEAN" is their own reasoning - a document
+-- belongs on the object. The survivor's own headings (Headings.lua) describe
+-- what they can see and what they make of it - and a document
 -- carrying its own interpretation would be a very strange document.
 --
 -- Pure: no PZ dependency, so the split is testable without launching a game.
 local PlaceNames=require("ConspiracyFiles/Generated/PlaceNames")
+local H=require("ConspiracyFiles/Headings")
 local M={MAX_PAGE_CHARS=700,MAX_PAGES=8}
 -- Headings the mod adds around the document's own text. Everything from the
 -- first of these onwards is ours.
-local OURS={"WHAT IT MIGHT MEAN","MAP NOTE","PHYSICAL OBJECT","CONNECTED"}
+local OURS=H.OURS
 
 function M.text(body)
     if type(body)~="string" or body=="" then return nil end
@@ -22,8 +23,8 @@ function M.text(body)
     end
     local text=body:sub(1,cut-1)
     -- Drop the leading object description, which is the paragraph after the
-    -- WHAT YOU FOUND heading.
-    local found=text:find("WHAT YOU FOUND",1,true)
+    -- "what I think I found" heading.
+    local found=text:find(H.FOUND,1,true)
     if found then
         local blank=text:find("\n\n",found,true)
         text=blank and text:sub(blank+2) or ""

@@ -14,7 +14,7 @@
 --
 -- `capacity` records what T7 (docs/research/T7_RUNTIME_ITEM_TEXT.md) proved a
 -- carrier can actually hold at runtime: "prose" carriers get the multi-
--- paragraph "WHAT YOU FOUND" narrative body via a locked custom page; "short"
+-- paragraph "WHAT I THINK I FOUND" narrative body via a locked custom page; "short"
 -- carriers (the four card/ticket kinds) get only a persistent custom name
 -- plus a few words of ModData/locked-page text, never a page of prose. See
 -- EvidenceRoles.lua, which is the only place that reads this field to choose

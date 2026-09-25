@@ -7,8 +7,12 @@ local Personal=require("ConspiracyFiles/Generated/PersonalScenarios")
 local Ordinary=require("ConspiracyFiles/Generated/OrdinaryScenarios")
 local catalog=dofile("test/fixtures/synthetic_locations.lua")
 local opts={mapId="SYNTHETIC-MAP",buildLine="TEST-ONLY",allowSynthetic=true}
-assert(G.REVISION=="g18-first-person-functional-key" and G.MIN_EVIDENCE==3,
-    "the dual-world-evidence revision retains the ordinary three-anchor minimum")
+-- UPDATED 2026-09-25 for DR-20260925-RECORD-VOICE: the record now speaks in
+-- the survivor's first person, with doubt (owner: "we still write 'what YOU
+-- found'"). The old wording is pinned nowhere; the new set is Headings.lua,
+-- and test/record_voice_is_mine.lua is what holds it to first person.
+assert(G.REVISION=="g19-record-speaks-as-me" and G.MIN_EVIDENCE==3,
+    "the record-voice revision retains the ordinary three-anchor minimum")
 local seen,cases={},0
 for seed=1,600 do
     local case=G.generate(catalog,seed,opts)

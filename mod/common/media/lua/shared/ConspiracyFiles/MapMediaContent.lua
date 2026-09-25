@@ -5,6 +5,7 @@ local Services=require("ConspiracyFiles/MapMediaServiceStories")
 local Civic=require("ConspiracyFiles/MapMediaCivicStories")
 local Places=require("ConspiracyFiles/MapMediaPlaceStories")
 local Story=require("ConspiracyFiles/Generated/Story")
+local H=require("ConspiracyFiles/Headings")
 local Kinds=require("ConspiracyFiles/Generated/EvidenceKinds")
 local M={REVISION=3}
 local order={"fuel","water","telephone","beds","radio","bus","mail","keys",
@@ -200,7 +201,7 @@ function M.lead(binding)
     if type(binding)~="table" then return nil end
     local scrawl=binding.sourceText
     if type(scrawl)~="string" or scrawl=="" then return nil end
-    local out={"WHAT SOMEBODY WROTE","\""..scrawl.."\"","","WHERE IT POINTS"}
+    local out={H.SCRAWL,"\""..scrawl.."\"","",H.POINTS}
     out[#out+1]=(type(binding.label)=="string" and binding.label~="")
         and ("A "..binding.label..".") or "A place marked on this map."
     local target=binding.targets and binding.targets[1]
@@ -208,29 +209,29 @@ function M.lead(binding)
         out[#out+1]="The mark sits at "..tostring(target.x)..", "..tostring(target.y).."."
     end
     out[#out+1]=""
-    out[#out+1]="WHO WROTE IT"
+    out[#out+1]=H.WRITER
     out[#out+1]="Nobody signed it. Whoever marked this knew the place well enough to draw it from memory."
     out[#out+1]=""
-    out[#out+1]="WHAT I HAVE DONE ABOUT IT"
+    out[#out+1]=H.ACTED
     out[#out+1]="Nothing yet. I have not been there."
     return {title="A marked map I have not followed",detail=table.concat(out,"\n")}
 end
 function M.cameHere(binding)
     local scrawl=type(binding)=="table" and binding.sourceText
     if type(scrawl)~="string" or scrawl=="" then return nil end
-    return "WHY I CAME HERE\nSomebody marked this place and wrote:\n"..scrawl
+    return H.CAME.."\nSomebody marked this place and wrote:\n"..scrawl
         .."\n\nThis is what was here. Whether it is what they meant, I cannot say."
 end
 function M.mapNote(binding)
     local scrawl=type(binding)=="table" and binding.sourceText
     if type(scrawl)~="string" or scrawl=="" then return nil end
-    return "MAP NOTE\nThe handwritten map reads:\n"..scrawl
+    return H.MAP_READS.."\nThe handwritten map reads:\n"..scrawl
 end
 function M.whosePlace(binding,seed)
     if type(binding)~="table" or type(seed)~="number" then return nil end
     local v=values(binding,seed)
     if not v.name then return nil end
-    return "WHOSE PLACE THIS WAS\n"..v.name.." is named on the papers here"
+    return H.WHOSE.."\n"..v.name.." is named on the papers here"
         ..(v.other and (", and so is "..v.other) or "")
         ..". The map that brought me was unsigned, so I cannot say either of them "
         .."drew it. It is a name to ask after."
@@ -256,14 +257,14 @@ function M.flyerLead(print)
     if type(print)~="table" then return nil end
     local where=print.locations and print.locations[1]
     if not (where and where.x and where.y) then return nil end
-    local out={"WHAT THE FLYER SAYS","\""..tostring(print.title).."\""}
+    local out={H.FLYER,"\""..tostring(print.title).."\""}
     local text=type(print.text)=="string" and print.text:match("^[^\n]+") or nil
     if text then out[#out+1]=text end
     out[#out+1]=""
-    out[#out+1]="WHERE IT IS"
+    out[#out+1]=H.FLYER_WHERE
     out[#out+1]="The address on it puts the place at "..tostring(where.x)..", "..tostring(where.y).."."
     out[#out+1]=""
-    out[#out+1]="WHY I KEPT IT"
+    out[#out+1]=H.KEPT
     out[#out+1]="An advertisement is a claim about what was there in 1993. Whether any "
         .."of it is still standing is worth knowing, and I have not been to look."
     return {title="A place I have only read about: "..tostring(print.title),
@@ -274,10 +275,10 @@ function M.flyerPayoff(print)
     local where=print.locations and print.locations[1]
     if not (where and where.x and where.y) then return nil end
     return {title="I found the place from the flyer: "..tostring(print.title),
-        detail="WHAT I WAS LOOKING FOR\n\""..tostring(print.title).."\", from a flyer I read."
-            .."\n\nWHAT IS ACTUALLY HERE\nI stood at "..tostring(where.x)..", "..tostring(where.y)
+        detail=H.SOUGHT.."\n\""..tostring(print.title).."\", from a flyer I read."
+            .."\n\n"..H.ARRIVED.."\nI stood at "..tostring(where.x)..", "..tostring(where.y)
             ..". The place the flyer advertised is where it said it would be."
-            .."\n\nWHAT THAT IS WORTH\nOne address on a piece of paper turned out to be true. "
+            .."\n\n"..H.WORTH.."\nOne address on a piece of paper turned out to be true. "
             .."It is somewhere I can find again, and a reason to trust the next one less blindly."}
 end
 function M.scenario(binding,seed) return family(binding,seed) end

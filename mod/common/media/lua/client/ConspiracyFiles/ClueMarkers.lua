@@ -163,7 +163,7 @@ end
 -- transfer actions above saw every finding location. Since then a clue can be
 -- recognised by searching and noted where it lies, with the organiser open, and
 -- that whole way of playing recorded nothing: the pen had nothing to write and
--- the record's MAP NOTE line said the location was not recorded (owner,
+-- the record's map line said the location was not recorded (owner,
 -- 2026-09-18, "I have a pen and found a clue. are we not writing them to the
 -- map anymore?").
 --
@@ -224,10 +224,10 @@ end
 function M.note(id)
  local c=session(id);if not c or not known(c,id) then return nil end
  local r=read();local v=r and r.records[id]
- if not v then return "Finding location was not recorded; no map mark is available." end
- if v.written then return "Finding location marked on your world map." end
- if conflicted(c,id) then return "Map marking is unavailable for this document." end
- return "Finding location remembered. Map marking waits for a pen or pencil."
+ if not v then return "I did not note where I found this, so there is no mark on my map." end
+ if v.written then return "I marked where I found this on my map." end
+ if conflicted(c,id) then return "I cannot put a mark on the map for this one." end
+ return "I remember where I found this. The mark waits for a pen or pencil."
 end
 function M.status()
  local r=read();local written,pending,missing=0,0,0

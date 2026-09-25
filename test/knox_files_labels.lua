@@ -1,7 +1,7 @@
 -- The organiser shows a file with the survivor's own headings on it, as the
 -- case record reads (P4-R114, owner 2026-09-15). FILES used to strip every heading
--- that was not one of its labelled fields, so WHAT IT MIGHT MEAN and the relay
--- memo's DATE NOTE ran straight on from the document's own words, and what a
+-- that was not one of its labelled fields, so what the survivor thinks it means
+-- and the relay memo's date note ran straight on from the document's own words, and what a
 -- document says could not be told from what the survivor makes of it.
 -- Asserted through the real projection (EvidenceRows) into the real program.
 package.path="mod/common/media/lua/client/?.lua;mod/common/media/lua/shared/?.lua;"..package.path
@@ -13,10 +13,15 @@ ConspiracyFiles={}
 local Memo=require("ConspiracyFiles/Generated/RelayMemo")
 local Rows=require("ConspiracyFiles/EvidenceRows")
 local A=require("ConspiracyFiles/KnoxApps")
+-- UPDATED 2026-09-25 for DR-20260925-RECORD-VOICE: every heading this test
+-- named as a literal is now the survivor's own, first person and hedged. The
+-- assertions are the same assertions, reading their headings from Headings.lua
+-- so they cannot pin a narrator's wording again; nothing was relaxed.
+local H=require("ConspiracyFiles/Headings")
 
 local paper={id="d1",title="Dispatch copy / R-482",kind="dispatch",
-    body="WHAT YOU FOUND\nA carbon copy, folded into quarters.\n\nRef R-482\nReceived July 5, 1993\n\n"
-       .."WHAT IT MIGHT MEAN\nIt could be routine paperwork, filed late."}
+    body=H.FOUND.."\nA carbon copy, folded into quarters.\n\nRef R-482\nReceived July 5, 1993\n\n"
+       ..H.MEANING.."\nIt could be routine paperwork, filed late."}
 local memo={id="m1",title=Memo.TITLE,kind=Memo.KIND,body=Memo.body()}
 local runtime=function() return {known=function() return {paper,memo} end} end
 ConspiracyFiles.GeneratedRuntime={metrics=function() return {} end,known=runtime().known}
@@ -31,10 +36,10 @@ local function at(text)
     assert(i,"the organiser keeps "..text:gsub("\n"," / ")..": "..d)
     return i
 end
-local found=at("WHAT YOU FOUND\nA carbon copy")
+local found=at(H.FOUND.."\nA carbon copy")
 local words=at("Ref R-482")
-local meaning=at("WHAT IT MIGHT MEAN\nIt could be routine")
-local note=at("DATE NOTE\nDated inside the nine days")
+local meaning=at(H.MEANING.."\nIt could be routine")
+local note=at(H.DATE.."\nDated inside the nine days")
 assert(found<words and words<meaning and meaning<note,"the blocks stay in the order the record reads them")
 
 -- The labelled fields are unchanged: FOUND is a field, not a heading in the writing.
@@ -52,8 +57,8 @@ assert(not d:find("\nFOUND\n",1,true),"a field's heading is not repeated in the 
 
 -- The memo keeps its own headings and letterhead, and carries no note against itself.
 local m=files[2].detail
-assert(m:find("WHAT IT MIGHT MEAN",1,true),"the memo keeps its headings: "..m)
+assert(m:find(H.MEANING,1,true),"the memo keeps its headings: "..m)
 assert(m:find("CUMBERLAND SIGNAL SERVICES",1,true),"the memo keeps its letterhead: "..m)
-assert(not m:find("DATE NOTE",1,true),"the memo is not noted against itself")
+assert(not m:find(H.DATE,1,true),"the memo is not noted against itself")
 
 print("PASS knox files labels: headings kept in order on the organiser, fields unchanged, memo letterhead kept")
