@@ -5,8 +5,11 @@ day it shipped and said: *"that is a bad UI design. Even the palmpilot had
 better."* He is right, and the reason is worth writing down rather than just
 patching: the screen does not use the two list idioms this device already has.
 
-Nothing here is built. The owner has approved the row label (below) and is
-holding the rest.
+**Built 2026-09-25** on the owner's go-ahead ("develop ... until it works.
+test on linux"). What shipped, and where it departs from the text below, is in
+"What was built" at the end. Native evidence: `knox 20260925T143407`, PASS,
+screenshots `dev/eval/linux/runs/20260925T143407-knox-threads.png`,
+`-thread.png`, `-threads-put-down.png`.
 
 ## What is on the glass now
 
@@ -273,3 +276,27 @@ taken.
 - `DR-20260920-NO-CONCLUSION` — why nothing here counts.
 - `docs/design/PHASE_C_CONTINUITY_CARRIER.md` — where a thread comes from.
 - `docs/design/KNOX_OS.md` — the device the screen has to belong to.
+
+## What was built (2026-09-25)
+
+- §1-4 as written: `Following / Put down / All` in the picker (`Threads.CATEGORIES`),
+  one row per thread, tapping opens the thread as a record with `STATE` as its
+  field and the findings as entries that open their FILES record and come
+  BACK; `Things I have not placed` is one row. No shell change was needed.
+- Remedy A, the row handle: `Threads.handle` front-loads a question that would
+  not fit when its frame is one whose remainder still reads as a sentence
+  ("Why was I ...", "Why did I ...", "Why is there ..."); other questions stay
+  as written and truncate. `Threads.handles` leads a still-colliding row with
+  the place its first finding was found. The test sweeps every shipped
+  question: 73 distinct on the row, the one authored pair that reads alike is
+  named so a new collision fails.
+- Putting down reads as the survivor's words: `STATE` sentence and a closing
+  entry chosen by the thread's key from four sentences, never stored.
+- Not built: remedy B (second line) - not needed once A held; remedy C (the
+  dot); the `WHAT I WANT TO KNOW` field from the mockup, because the record's
+  title already carries the full question and the shell's field label column
+  is seven characters wide.
+- Departures worth knowing: the closing entry is **unnumbered** - the numbers
+  on entries are FILES discovery ordinals, and the survivor's note is not a
+  finding. `Following` shows the unplaced things as well as the live threads:
+  both are what the survivor is carrying.

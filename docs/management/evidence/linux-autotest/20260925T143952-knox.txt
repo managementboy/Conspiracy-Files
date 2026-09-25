@@ -1,0 +1,11 @@
+PASS knox.os - 2026-09-25T14:39:52+02:00
+commit: 82cd000
+renderer: Mesa llvmpipe (LLVM 20.1.2, 256 bits) (SOFTWARE) on display :0
+session: 20260925T143407
+opened:   true	FILES	2	false	false	1
+names:    true	NAMES	1	false	false	3
+dates:    true	DATES	1	false	false	5
+threads:  true	THREADS	2	false	false	2
+  rows:   Why is there a passenger-booking deposit receipt in my name? | Things I have not placed
+record:   WHAT I THINK I FOUND / A small cash receipt bearing my typed name and no payer signature. / McCoy Logging Co. PASSENGER BOOKING / Receipt TN-601 / June 14, 1993 / Passenger: Sarah Winstead / Collection point: 202 E Maple St / Deposit received: $12.00 cash / Paid by: [blank] / Cancellation and refund enquiries: 102 Dewey St. / WHAT I THINK IT MEANS / This receipt says somebody paid cash for a passenger booking in my name. The payer box is blank. Apparently twelve dollars knows more about my plans than I do. / WHAT I MARKED ON MY MAP / I did not note where I found this, so there is no mark on my map.
+to do:    true	TO DO	1	false	false	6

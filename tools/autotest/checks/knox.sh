@@ -186,9 +186,12 @@ ev 'return CFOrg.wake()' >/dev/null
 # because software rendering was failing this check wholesale at the time: on
 # 2026-09-12 every assertion in it failed, and a real narrow bug sat behind
 # the broad flake until the renderer was fixed (2026-09-13).
-# THREADS (DR-20260925-THREADS): the same findings, grouped by what they belong
-# to, with a thread the survivor can put down and pick back up. Owner, Windows
-# 2026-09-25: "Currently we only have an ever longer list of files."
+# THREADS (DR-20260925-THREADS, redesign note 2026-09-25): one row per thread
+# under a category picker (Following / Put down / All); tapping a row opens
+# the thread as a record whose entries are its findings, each opening its
+# FILES record and coming BACK. Owner, on the first screen: "that is a bad UI
+# design. Even the palmpilot had better." - so what is held here is the shape
+# as much as the words.
 ev 'return CFOrg.wake()' >/dev/null
 ev 'return CFOrg.tapWidget("SELECT")' >/dev/null; sleep 1
 [ "$(ev 'return CFOrg.knox()' | cut -f4)" = true ] || fail "could not get back to the launcher for THREADS"
@@ -197,49 +200,75 @@ threads="$(ev 'return CFOrg.knox()')"
 [ "$(cut -f2 <<<"$threads")" = THREADS ] || fail "a tap on the THREADS icon did not open it: $threads"
 [ "$(cut -f3 <<<"$threads")" -gt 0 ] 2>/dev/null || fail "THREADS is empty with a case in play: $threads"
 thread_rows="$(ev 'return CFOrg.rows()' | cut -f2)"
-say "threads: $thread_rows"
+category="$(ev 'return CFOrg.category()' | cut -f2)"
+say "threads ($category): $thread_rows"
 shot threads
-# It groups; it does not score (DR-20260920-NO-CONCLUSION). A section heading
-# or a thread heading carrying a number would be a count, and no row may speak
-# as an investigator. Row labels for findings keep the notebook's numbering, so
-# only the headings are swept.
-grep -q "STILL FOLLOWING" <<<"$thread_rows" || say "nothing is being followed yet this run"
+[ "$category" = Following ] || fail "THREADS does not open on Following: $category"
+# It groups; it does not score (DR-20260920-NO-CONCLUSION), it speaks as the
+# survivor, and no two rows read the same - the fault that started the redesign.
 if grep -qiE '\<(case|cases|investigation|solved|closed|complete|finished)\>' <<<"$thread_rows"; then
     fail "THREADS speaks as an investigator: $thread_rows"
 fi
-if grep -qE '(STILL FOLLOWING|PUT DOWN|ON THEIR OWN)[^|]*[0-9]' <<<"$thread_rows"; then
-    fail "THREADS counts something on a heading: $thread_rows"
-fi
-# Put one down, and pick it back up. The state belongs to the record, not to
-# the machine, so it is read back from ModData rather than from the screen.
+grep -qE 'STILL FOLLOWING|ON THEIR OWN|^- | \| - ' <<<"$thread_rows" && fail "THREADS still prints sections or dashed headings into the list: $thread_rows"
+prev=""
+while IFS= read -r r; do
+    [ -n "$prev" ] && [ "$r" = "$prev" ] && fail "two THREADS rows read the same: $r"
+    grep -qE '[0-9]' <<<"$r" && ! grep -qE '^[0-9]+\. ' <<<"$r" && grep -qE ' [0-9]+ (of|open|left)' <<<"$r" && fail "a THREADS row counts something: $r"
+    prev="$r"
+done < <(tr '|' '\n' <<<"$thread_rows" | sed 's/^ *//; s/ *$//')
+# The picker cycles Following -> Put down -> All and back.
+ev 'return CFOrg.wake()' >/dev/null
+ev 'return CFOrg.tapWidget("CATEGORY")' >/dev/null; sleep 1
+[ "$(ev 'return CFOrg.category()' | cut -f2)" = "Put down" ] || fail "the picker did not move to Put down: $(ev 'return CFOrg.category()' | cut -f2)"
+ev 'return CFOrg.tapWidget("CATEGORY")' >/dev/null; sleep 1
+[ "$(ev 'return CFOrg.category()' | cut -f2)" = All ] || fail "the picker did not move to All"
+ev 'return CFOrg.tapWidget("CATEGORY")' >/dev/null; sleep 1
+[ "$(ev 'return CFOrg.category()' | cut -f2)" = Following ] || fail "the picker did not come back to Following"
+# Open a thread: a record with the state as a field and the findings as entries.
 before_down="$(ev 'return CFOrg.threadsPutDown()' | cut -f2)"
 opened=no
-for i in $(seq 1 "$(cut -f3 <<<"$threads")"); do
+for i in $(seq 1 "$(ev 'return CFOrg.knox()' | cut -f3)"); do
     ev 'return CFOrg.wake()' >/dev/null
     ev "return CFOrg.tapWidget(\"ROW\",$i)" >/dev/null; sleep 1
-    if [ "$(ev 'return CFOrg.recordText()' | cut -f5)" != nil ] \
-       && [ "$(ev 'return CFOrg.recordText()' | cut -f5)" != false ]; then opened=yes; break; fi
+    t="$(ev 'return CFOrg.recordText()' | cut -f5)"
+    if [ "$t" != nil ] && [ "$t" != false ]; then opened=yes; break; fi
     ev 'return CFOrg.tapWidget("BACK")' >/dev/null; sleep 1
 done
 if [ "$opened" = yes ]; then
     shot thread
-    thread_detail="$(ev 'return CFOrg.recordText()' | cut -f3)"
-    say "thread: $thread_detail"
+    rec="$(ev 'return CFOrg.recordText()')"
+    say "thread: $(cut -f2 <<<"$rec") [$(cut -f4 <<<"$rec")]"
+    grep -q "STATE: " <<<"$(cut -f4 <<<"$rec")" || fail "the thread record has no STATE field: $(cut -f4 <<<"$rec")"
+    ent="$(ev 'return CFOrg.entries()')"
+    say "findings in the thread: $(cut -f2 <<<"$ent")"
+    [ "$(cut -f3 <<<"$ent")" -ge 1 ] 2>/dev/null || fail "the thread lists no findings as entries: $ent"
+    # An entry opens the FILES record it names, and BACK returns to the thread.
+    ev 'return CFOrg.wake()' >/dev/null
+    ev 'return CFOrg.tapWidget("ENTRY",1)' >/dev/null; sleep 1
+    finding="$(ev 'return CFOrg.recordText()')"
+    [ "$(cut -f5 <<<"$finding")" = nil ] || fail "tapping a finding did not leave the thread: $(cut -f2 <<<"$finding")"
+    grep -qF "$(cut -f2 <<<"$finding")" <<<"$(cut -f2 <<<"$ent")" || fail "the record opened is not the entry tapped: $(cut -f2 <<<"$finding")"
+    ev 'return CFOrg.tapWidget("BACK")' >/dev/null; sleep 1
+    t="$(ev 'return CFOrg.recordText()' | cut -f5)"
+    [ "$t" != nil ] && [ "$t" != false ] || fail "BACK from a finding did not return to its thread"
+    # Put it down: the record keeps it, the row moves under Put down and its
+    # record ends with the survivor's own closing note; then pick it back up.
     ev 'return CFOrg.wake()' >/dev/null
     ev 'return CFOrg.tapWidget("SETASIDE")' >/dev/null; sleep 1
     after_down="$(ev 'return CFOrg.threadsPutDown()' | cut -f2)"
     [ "${after_down:-0}" -gt "${before_down:-0}" ] 2>/dev/null \
         || fail "PUT DOWN did not reach the record: $before_down -> $after_down"
+    ev 'return CFOrg.tapWidget("CATEGORY")' >/dev/null; sleep 1
+    [ "$(ev 'return CFOrg.category()' | cut -f2)" = "Put down" ] || fail "could not switch to Put down"
+    [ "$(ev 'return CFOrg.knox()' | cut -f3)" -ge 1 ] 2>/dev/null || fail "the thread put down is not listed under Put down"
     shot threads-put-down
-    # And back: putting a thread down is never a one-way door.
+    ev 'return CFOrg.tapWidget("ROW",1)' >/dev/null; sleep 1
+    ent="$(ev 'return CFOrg.entries()')"
+    grep -qE "Put this down|Leaving this here|Set this aside|Stopped carrying" <<<"$(cut -f2 <<<"$ent")" \
+        || fail "a thread put down does not end with the survivor's closing note: $(cut -f2 <<<"$ent")"
+    grep -qiE 'solved|closed|finished|complete' <<<"$(ev 'return CFOrg.recordText()' | cut -f4)" && fail "put down reads as a verdict"
     ev 'return CFOrg.wake()' >/dev/null
-    for i in $(seq 1 "$(ev 'return CFOrg.knox()' | cut -f3)"); do
-        ev "return CFOrg.tapWidget(\"ROW\",$i)" >/dev/null; sleep 1
-        if [ "$(ev 'return CFOrg.recordText()' | cut -f5)" != nil ]; then
-            ev 'return CFOrg.tapWidget("SETASIDE")' >/dev/null; sleep 1; break
-        fi
-        ev 'return CFOrg.tapWidget("BACK")' >/dev/null; sleep 1
-    done
+    ev 'return CFOrg.tapWidget("SETASIDE")' >/dev/null; sleep 1
     back_up="$(ev 'return CFOrg.threadsPutDown()' | cut -f2)"
     [ "${back_up:-1}" -eq "${before_down:-0}" ] 2>/dev/null \
         || fail "a thread put down could not be picked back up: $back_up"

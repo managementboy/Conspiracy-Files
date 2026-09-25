@@ -138,8 +138,29 @@ function CFOrg.recordText()
     for _, f in ipairs(w.record.fields or {}) do
         fields[#fields + 1] = tostring(f.label) .. ": " .. tostring(f.value)
     end
-    return true, tostring(w.record.title), tostring(w.record.detail),
+    -- One line: a FILES record's detail spans paragraphs, and a newline
+    -- inside a tab-separated answer put the thread flag on the wrong line
+    -- (knox 20260925T142803 read "tapping a finding did not leave the thread").
+    return true, tostring(w.record.title), (tostring(w.record.detail):gsub("\n+", " / ")),
         table.concat(fields, " | "), tostring(w.record.thread)
+end
+
+-- The open record's entries (a DATES day, a THREADS thread), as the player
+-- reads them, and the category the program is showing. Added 2026-09-25 for
+-- the THREADS redesign: one row per thread, opened as a record of its findings.
+function CFOrg.entries()
+    local w = ConspiracyFiles.OrganiserScreen.window
+    if not w or not w.record then return false, "no record open" end
+    local out = {}
+    for _, e in ipairs(w.record.entries or {}) do out[#out + 1] = tostring(e.text) end
+    return true, table.concat(out, " | "), tostring(#out)
+end
+
+function CFOrg.category()
+    local w = ConspiracyFiles.OrganiserScreen.window
+    if not w then return false, "no screen" end
+    local current = w:category(w:program())
+    return true, tostring(current)
 end
 
 -- How many threads the survivor has put down, read from the record rather than

@@ -680,7 +680,16 @@ end
 
 A.threads={
     id="THREADS",title="THREADS",icon="threads",
-    list=function()
+    -- The sections became the category picker (redesign note, 2026-09-25):
+    -- Following / Put down / All, top right, where NAMES puts its four.
+    filters=function() return Threads.CATEGORIES end,
+    -- One row per thread, labelled by its open question (owner, 2026-09-25),
+    -- front-loaded where the words are written when it would not fit the row
+    -- (Threads.handle). Tapping a row opens the thread as a record: the
+    -- state as a field, a rule, then its findings as entries that open the
+    -- FILES record they name and come BACK here - the DATES day idiom, with
+    -- no change to the shell. Findings in no thread are one row of their own.
+    list=function(category)
         local rows=safe(Rows.list,"files") or {}
         local plain={}
         for _,row in ipairs(rows) do
@@ -690,24 +699,27 @@ A.threads={
         end
         local reader=threadReader()
         local root=threadStore()
-        local sections=Threads.build(plain,function(row) return safe(reader,row) end,
-                                     root and root.putDown or {})
+        local all=Threads.threads(plain,function(row) return safe(reader,row) end,
+                                  root and root.putDown or {})
+        local shown=Threads.filter(all,category)
+        local handles=Threads.handles(shown)
         local out={}
-        for _,section in ipairs(sections) do
-            out[#out+1]={label=section.title,title=section.title,
-                         detail="",id="threads-section-"..section.title,heading=true}
-            for _,group in ipairs(section.threads) do
-                out[#out+1]={label="- "..group.label,title=group.label,detail=group.detail,
-                             id="thread-"..tostring(group.key or "loose"),
-                             thread=Threads.canSetAside(group) and group.key or nil,
-                             putDown=group.key and A.isPutDown(group.key) or false,
-                             heading=true}
-                for _,row in ipairs(group.rows) do
-                    local body=split(row.detailText)
-                    out[#out+1]={label="  "..(row.ordinal and (row.ordinal..". ") or "")..(row.title or ""),
-                                 title=row.title,detail=body,id="thread-row-"..tostring(row.id)}
-                end
+        for i,t in ipairs(shown) do
+            local entries={}
+            for _,row in ipairs(t.rows) do
+                entries[#entries+1]={text=(row.ordinal and (row.ordinal..". ") or "")..(row.title or ""),
+                                     ref=row.id,title=row.title}
             end
+            -- The survivor's own closing note, from the flag, never stored.
+            local closing=Threads.closingLine(t)
+            if closing then entries[#entries+1]={text=closing} end
+            out[#out+1]={label=handles[i],
+                         title=t.key and (t.question or t.label) or Threads.LOOSE_LABEL,
+                         fields={{label="STATE",value=Threads.stateLine(t)}},
+                         detail=Threads.stateLine(t),entries=entries,
+                         id="thread-"..tostring(t.key or "loose"),
+                         thread=Threads.canSetAside(t) and t.key or nil,
+                         putDown=t.putDown}
         end
         if #out==0 then
             out[1]={label="Nothing yet.",title="Nothing yet.",
