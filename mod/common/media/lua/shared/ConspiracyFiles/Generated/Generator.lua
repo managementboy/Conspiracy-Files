@@ -493,7 +493,7 @@ function G.generate(catalog,seed,options)
     if not seedOK(seed) then return nil,"seed must be an integer from 1 through 2147483646" end
     options=options or {}
     if type(options)~="table" then return nil,"invalid generator options" end
-    for key in pairs(options) do if key~="mapId" and key~="buildLine" and key~="allowSynthetic" and key~="names" and key~="relayMemo" and key~="steer" and key~="opening" and key~="self" and key~="profession" and key~="follows" then return nil,"unknown generator option" end end
+    for key in pairs(options) do if key~="mapId" and key~="buildLine" and key~="allowSynthetic" and key~="names" and key~="relayMemo" and key~="steer" and key~="opening" and key~="self" and key~="profession" and key~="variant" and key~="follows" then return nil,"unknown generator option" end end
     -- THE PERSONAL OPENING (DR-20260919-BUILD-PAIR). `opening` asks for the
     -- opening premise by name instead of drawing one from the seed; `self` is
     -- the survivor's own name, which the caller reads from the engine because
@@ -504,6 +504,15 @@ function G.generate(catalog,seed,options)
     end
     if options.profession~=nil and not Premises.forProfession(options.profession) then return nil,"invalid opening profession" end
     if options.profession and not options.opening then return nil,"profession only applies to an opening" end
+    -- THE START TO PLAY (OpeningMemory). The caller may name the family's
+    -- start; it must be one the family has. Left out, the seed decides.
+    if options.variant~=nil then
+        if not options.profession then return nil,"a start needs a profession family" end
+        local family=Premises.forProfession(options.profession)
+        local variants=family and Premises.openingVariants(family.id) or 0
+        if type(options.variant)~="number" or options.variant~=math.floor(options.variant)
+            or options.variant<1 or options.variant>variants then return nil,"invalid opening start" end
+    end
     -- An opening without a name would render "{SELF}" into the slip, and the
     -- slip is the case's only personal anchor - the one finding with no
     -- alternative. Refused outright rather than shipped blank.
@@ -548,7 +557,7 @@ function G.generate(catalog,seed,options)
     local selected=pairs[random(#pairs)]
     if random(2)==1 then selected={selected[2],selected[1]} end
     local result,buildWhy=build(seed,catalog.revision,selected,G.castFrom(options.names),options.relayMemo==true,steer,
-        options.opening and {premise="auto",self=options.self,profession=options.profession} or nil,follows)
+        options.opening and {premise="auto",self=options.self,profession=options.profession,variant=options.variant} or nil,follows)
     if not result then return nil,buildWhy end
     local valid,err=G.validate(result); if not valid then return nil,err end
     return copy(result)
@@ -559,7 +568,7 @@ function G.generateSelected(catalog,seed,options,orderedSiteIds)
     if not safe or type(options)~="table" or type(orderedSiteIds)~="table" then return nil,"invalid selected-generation input" end
     for key in pairs(options) do
         if key~="mapId" and key~="buildLine" and key~="allowSynthetic" and key~="names" and key~="relayMemo"
-            and key~="steer" and key~="opening" and key~="self" and key~="profession" and key~="follows" then return nil,"unknown generator option" end
+            and key~="steer" and key~="opening" and key~="self" and key~="profession" and key~="variant" and key~="follows" then return nil,"unknown generator option" end
     end
     -- THE SAME TWO OPTIONS AS G.generate, validated the same way. This path is
     -- the one the FIRST case of a save actually takes (firstCase ->
@@ -572,6 +581,15 @@ function G.generateSelected(catalog,seed,options,orderedSiteIds)
     end
     if options.profession~=nil and not Premises.forProfession(options.profession) then return nil,"invalid opening profession" end
     if options.profession and not options.opening then return nil,"profession only applies to an opening" end
+    -- THE START TO PLAY (OpeningMemory). The caller may name the family's
+    -- start; it must be one the family has. Left out, the seed decides.
+    if options.variant~=nil then
+        if not options.profession then return nil,"a start needs a profession family" end
+        local family=Premises.forProfession(options.profession)
+        local variants=family and Premises.openingVariants(family.id) or 0
+        if type(options.variant)~="number" or options.variant~=math.floor(options.variant)
+            or options.variant<1 or options.variant>variants then return nil,"invalid opening start" end
+    end
     if options.opening and not options.self then return nil,"the opening needs the survivor's name" end
     local follows
     if options.follows~=nil then
@@ -592,7 +610,7 @@ function G.generateSelected(catalog,seed,options,orderedSiteIds)
     local a,b=byId[orderedSiteIds[1]],byId[orderedSiteIds[2]]
     if not a or not b or not Catalog.distinct(a,b) then return nil,"selected sites are not eligible and distinct" end
     local result,buildWhy=build(seed,catalog.revision,{a,b},G.castFrom(options.names),options.relayMemo==true,steer,
-        options.opening and {premise="auto",self=options.self,profession=options.profession} or nil,follows)
+        options.opening and {premise="auto",self=options.self,profession=options.profession,variant=options.variant} or nil,follows)
     if not result then return nil,buildWhy end
     local valid,err=G.validate(result); if not valid then return nil,err end
     return copy(result)

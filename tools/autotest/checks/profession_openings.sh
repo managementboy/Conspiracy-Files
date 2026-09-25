@@ -89,6 +89,9 @@ for fam in $families; do
         # So: wait on the scan's own cursor rather than a clock, give up only
         # when it stops advancing, and let CF_FIRST_CASE_WAIT raise the ceiling
         # on a slower machine. campaign.sh uses the same variable.
+        # The memory this save's start will be chosen from, read before the
+        # first case is built. Held to below.
+        local memory; memory="$(ev "return CFProf.memory('$profession')")"
         local budget="${CF_FIRST_CASE_WAIT:-2100}"
         local deadline=$(( $(date +%s) + budget ))
         local lastscan="" flatscan=0
@@ -125,8 +128,22 @@ for fam in $families; do
         reached=$((reached + 1)); total_reached=$((total_reached + 1))
         variant="$(field 2 "$r")"; gotprof="$(field 3 "$r")"; gotprem="$(field 4 "$r")"
         title="$(field 5 "$r")"; onplayer="$(field 6 "$r")"; status="$(field 7 "$r")"; where="$(field 8 "$r")"
-        rows+=("$profession save $n: variant=$variant title=\"$title\" onPlayer=$onplayer status=$status ($where)")
+        rows+=("$profession save $n: variant=$variant title=\"$title\" onPlayer=$onplayer status=$status ($where); memory before: $memory")
         say "${rows[-1]}"
+        # THE RANDOMISER REMEMBERS (OpeningMemory). The start chosen must be one
+        # of the least-played on this install according to the memory read
+        # before the case was built - never a start played more often than
+        # another that was still available.
+        if [ "$variant" != nil ] && [ "$memory" != no-store ]; then
+            local least=999999 v c count_of=0
+            for v in $(seq "$variants"); do
+                c="$(tr ',' '\n' <<<"$memory" | grep "^$v:" | cut -d: -f2)"; c="${c:-0}"
+                [ "$c" -lt "$least" ] 2>/dev/null && least="$c"
+                [ "$v" = "$variant" ] && count_of="$c"
+            done
+            [ "$count_of" -eq "$least" ] 2>/dev/null \
+                || fail "$profession save $n: chose start $variant (played $count_of times here) while a start played only $least times was available; memory was $memory"
+        fi
         seen_title["$title"]=1; seen_variant["$variant"]=1
         [ "$gotprof" = "$profession" ] \
             || fail "$profession save $n: the case records profession=$gotprof"

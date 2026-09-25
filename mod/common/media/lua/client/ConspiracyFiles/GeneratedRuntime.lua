@@ -842,7 +842,15 @@ local function prepare(result,seed,later,house)
                 local family=profession and Premises.forProfession(profession)
                 if family then
                     options.profession=profession
-                    log("first case: one of "..tostring(Premises.openingVariants(family.id)).." "..profession
+                    -- The least-played start on this install, the seed only
+                    -- deciding between equals (OpeningMemory, owner 2026-09-25).
+                    local variants=Premises.openingVariants(family.id)
+                    local okM,Store=pcall(require,"ConspiracyFiles/OpeningMemoryStore")
+                    if okM and Store then
+                        local okC,chosen=pcall(Store.choose,profession,variants,seed)
+                        if okC and chosen then options.variant=chosen end
+                    end
+                    log("first case: one of "..tostring(variants).." "..profession
                         .." openings, in the survivor's own name")
                 else
                     log("first case: the personal opening, in the survivor's own name")
@@ -1046,6 +1054,11 @@ local function prepare(result,seed,later,house)
         elseif house then swap({canonical=root,schedule={schema=1,createdHours={worldHours()}}}); clearDebt()
         else swap({canonical=root}); clearDebt() end
         if house and case.opening and not primed then openingDelivery={id=first.id,house=house} end
+        -- Committed: this install has now played this start.
+        if case.opening and case.opening.profession and case.opening.variant then
+            local okM,Store=pcall(require,"ConspiracyFiles/OpeningMemoryStore")
+            if okM and Store then pcall(Store.record,case.opening.profession,case.opening.variant) end
+        end
         openAll()
         -- Non-opening development cases may legitimately begin with an indexed
         -- plan. The personal opening cannot (guarded above), but using the plan

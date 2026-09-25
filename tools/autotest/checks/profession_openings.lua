@@ -73,6 +73,22 @@ function P.freshFirstCase()
     return tostring(ok == true), tostring(why)
 end
 
+-- What this install remembers having played for a profession, as the store
+-- reads it: "v:n,v:n" or "-" for nothing. Read BEFORE a save's first case is
+-- built, so the driver can hold the chosen start to the memory it came from
+-- (OpeningMemory, owner 2026-09-25: played starts are not prioritised).
+function P.memory(profession)
+    local ok, Store = pcall(require, "ConspiracyFiles/OpeningMemoryStore")
+    if not ok or not Store then return "no-store" end
+    local counts = Store.read()
+    local used = counts[profession] or {}
+    local parts, keys = {}, {}
+    for v in pairs(used) do keys[#keys + 1] = v end
+    table.sort(keys)
+    for _, v in ipairs(keys) do parts[#parts + 1] = tostring(v) .. ":" .. tostring(used[v]) end
+    return #parts > 0 and table.concat(parts, ",") or "-"
+end
+
 -- What the first case turned out to be, and whether its opening clue is on
 -- the player. Everything a caller needs, in one answer.
 function P.result()

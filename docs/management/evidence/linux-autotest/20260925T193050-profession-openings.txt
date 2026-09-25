@@ -1,0 +1,13 @@
+Linux profession opening families: PASS
+source: f98a4a8 + uncommitted mod changes
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+families advertised: fitnessinstructor:fitness-instructor-start:10 burglar:burglar-start:3 burgerflipper:burgerflipper-start:3 carpenter:carpenter-start:3 chef:chef-start:3 constructionworker:constructionworker-start:3 doctor:doctor-start:3 electrician:electrician-start:3 engineer:engineer-start:3 farmer:farmer-start:3 fireofficer:fireofficer-start:3 fisherman:fisherman-start:3 lumberjack:lumberjack-start:3 mechanics:mechanics-start:3 metalworker:metalworker-start:3 nurse:nurse-start:3 parkranger:parkranger-start:3 policeofficer:policeofficer-start:3 rancher:rancher-start:3 repairman:repairman-start:3 securityguard:securityguard-start:3 smither:smither-start:3 tailor:tailor-start:3 unemployed:unemployed-start:3 veteran:veteran-start:3
+saves per family: 4
+
+  nurse save 1: variant=3 title="Discharge visit visit key / AV-137" onPlayer=true status=placed (player inventory); memory before: -
+  nurse save 2: variant=2 title="Medication custody visit key / WB-753" onPlayer=true status=placed (player inventory); memory before: 3:1
+  nurse save 3: variant=1 title="Handover to nobody visit key / AV-957" onPlayer=true status=placed (player inventory); memory before: 2:1,3:1
+  nurse save 4: variant=3 title="Discharge visit visit key / GT-441" onPlayer=true status=placed (player inventory); memory before: 1:1,2:1,3:1
+  nurse: 4 distinct title(s) and 3 distinct variant(s) across 4 saves
+
+errors inside the mod: 0
