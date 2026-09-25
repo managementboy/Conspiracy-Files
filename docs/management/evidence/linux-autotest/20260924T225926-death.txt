@@ -1,0 +1,10 @@
+Linux death check 20260924T225926: PASS
+source: 501f906 + uncommitted mod changes
+renderer: Mesa llvmpipe (LLVM 20.1.2, 256 bits) (SOFTWARE) on display :0
+first survivor: Roy, carrying 2 case documents at death
+record before death: 2 1=1340520769:document-1:Collection notice / PS-968 | 2=1340520769:document-2:Vehicle withdrawal / PS-968
+new survivor: Jan; evidence album: evidence album issued: Jan's Evidence
+record for the new survivor: 2 1=1340520769:document-1:Collection notice / PS-968 | 2=1340520769:document-2:Vehicle withdrawal / PS-968
+the new survivor's organiser: carried=true marked=true; reads for them=true
+document taken back off the body: Collection notice / PS-968
+errors inside the mod: 0

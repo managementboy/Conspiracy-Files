@@ -1,0 +1,11 @@
+Linux reload check 20260924T204616: FAIL
+source: 501f906
+renderer: Mesa llvmpipe (LLVM 20.1.2, 256 bits) (SOFTWARE) on display :0
+world: 180782866968630761; three save/quit/continue round trips after two documents were inspected
+noted evidence before: 2 1=1200467002:document-1:Collection notice / MC-820 | 2=1200467002:document-2:Dispatch amendment / MC-820
+placements before: 2 1200467002:document-1@10836,10156,0:placed 1200467002:document-2@10836,10117,0:placed
+schedule before (count, last created hour, scheduled): 1 2.2501373291015625 true
+save-budget total per round (bytes): 53392 53509 53509 53509
+errors inside the mod: 0
+FAIL: could not inspect document 1 before the first save: document 1 not found: not on or next to its square
+FAIL: budget total grew over three reloads: 53392 53509 53509 53509

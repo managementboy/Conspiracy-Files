@@ -1,0 +1,13 @@
+Linux wallet ID check 20260925T013739: PASS
+source: 501f906 + uncommitted mod changes
+renderer: Mesa llvmpipe (LLVM 20.1.2, 256 bits) (SOFTWARE) on display :0
+wallet ID: 'ID Card: Rodger Pendergrass'; wallet stamp after carrying it off: corpse-wallet:1546867406
+record summary: ID card - container
+record text:
+  I saw an ID card with the name "Rodger Pendergrass" on it, inside a wallet. That container was taken off a corpse.
+  The name on an ID card is my lead. The body remains unidentified.
+  Observed at 202 E Maple St.
+loose ID on a body: not exercised: no body carried a loose ID
+save and reload: PASS: 1 row(s) survived the reload unchanged
+errors inside the mod: 0
+screenshot: dev/eval/linux/runs/20260925T013739-wallet.png (not committed)

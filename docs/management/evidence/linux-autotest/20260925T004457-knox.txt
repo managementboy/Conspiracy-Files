@@ -1,0 +1,8 @@
+PASS knox.os - 2026-09-25T00:44:57+02:00
+commit: 501f906
+renderer: Mesa llvmpipe (LLVM 20.1.2, 256 bits) (SOFTWARE) on display :0
+session: 20260925T004001
+opened:   true	FILES	1	false	false	1
+names:    true	NAMES	1	false	false	2
+dates:    true	DATES	1	false	false	4
+to do:    true	TO DO	1	false	false	5

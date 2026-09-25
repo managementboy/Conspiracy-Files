@@ -1,0 +1,16 @@
+Linux reload check 20260924T222804: FAIL
+source: 501f906 + uncommitted mod changes
+renderer: Mesa llvmpipe (LLVM 20.1.2, 256 bits) (SOFTWARE) on display :0
+world: 1328673755714946128; three save/quit/continue round trips after two documents were inspected
+noted evidence before: 2 1=1742110824:document-1:Passenger account receipt / LD-702 | 2=1742110824:document-2:Counter allocation note / LD-702
+placements before: 1 2.2560577392578125 true
+schedule before (count, last created hour, scheduled): 48784 CasePeople=656 DiscoveryLedger=1224 Generated.G2=44871 KeyConnections=778 PlaceVisits=435 VisitedBuildings=359
+save-budget total per round (bytes):    
+errors inside the mod: 5
+  General      f:0 at CellLoader.DoTileObjectCreation     > CellLoader> missing tile vegetation_groundcover_01_18
+  General      f:905> Lua(Vanilla).placement> Exception thrown  |  __concat not defined for operands: null and :indexed at KahluaUtil.fail(KahluaUtil.java:100).General      f:0 at IsoMetaGrid.load                    > invalid room metaID #655594 in cell 25,33 while reading map_meta.bin
+  General      f:45> Lua(Vanilla).placement> Exception thrown  |  __concat not defined for operands: null and :indexed at KahluaUtil.fail(KahluaUtil.java:100).General      f:0 at IsoMetaGrid.load                    > invalid room metaID #655594 in cell 25,33 while reading map_meta.bin
+  General      f:45> Lua(Vanilla).placement> Exception thrown  |  __concat not defined for operands: null and :indexed at KahluaUtil.fail(KahluaUtil.java:100).General      f:0 at IsoMetaGrid.load                    > invalid room metaID #655594 in cell 25,33 while reading map_meta.bin
+  General      f:49> Lua(Vanilla).placement> Exception thrown  |  __concat not defined for operands: null and :indexed at KahluaUtil.fail(KahluaUtil.java:100).
+FAIL: budget total grew over three reloads:    ; roots before: ; after: 
+FAIL: errors inside the mod

@@ -1,0 +1,27 @@
+Linux core loop check 20260924T223914: FAIL
+source: 501f906 + uncommitted mod changes
+renderer: Mesa llvmpipe (LLVM 20.1.2, 256 bits) (SOFTWARE) on display :0
+first case: 4 documents, all found, looked over and inspected through the right-click menu:
+  1. Booking deposit receipt / QS-256 (found as Booking deposit receipt / QS-256), in inventory, room in hand, floor 0 (container icon clicked: no)
+  2. Cancellation and refund note / QS-256 (found as Notepad), in desk, room livingroom, floor 0 (container icon clicked: yes)
+  3. Unclaimed refund register / QS-256 (found as Notebook), in sidetable, room livingroom, floor 0 (container icon clicked: yes)
+record entries: 3; case completion reported: no
+map marks without a pen (written/pending/missing): 0/2/1
+map marks after a pen, case already retired: 2/0/1
+second case appeared (gap removed): no
+errors inside the mod: 0
+FINDING: document 1 (Booking deposit receipt / QS-256): its name did not change when it was recognised
+FINDING: relay memo date notes: memo found=false, dated in its week=0, carrying the note=0
+FINDING: last seen after completion: 0 of 3 documents, e.g. ''; retired cases in the save=0, rows with a stored last seen=0
+FINDING: last-seen log: 
+FINDING: Evidence / Old after completion: 3 pieces of evidence carried, 0 known as retired evidence, 0 in the Old category
+FINDING: radio transcript in the case steered to 'Listen for it': false
+FINDING: What do I make of it?: answered=false (person ); second case built from the answers=false, answers marked used=false, person returned=false, no second body=false
+FAIL: document 4 still waiting after 150s at its site: no reason recorded
+FAIL: record knows 3 of 4 documents
+FAIL: the case never reported completion
+FAIL: without a pen, expected 3 pending marks (1 clue(s) were in the hand, nowhere to mark): 0	2	1
+FAIL: with a pen after completion, expected 3 written marks (1 in the hand): 2	0	1
+FAIL: could not answer about the finished case: FILES has no question row
+FAIL: no second case within 150 s with the gap removed: busy x0 due hour 4.459630012512207 rung 0
+screenshot: dev/eval/linux/runs/20260924T223914-map.png (not committed)

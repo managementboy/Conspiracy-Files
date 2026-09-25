@@ -1,0 +1,5 @@
+PASS reshuffle - 2026-09-25T01:15:24+02:00
+commit: 501f906
+renderer: Mesa llvmpipe (LLVM 20.1.2, 256 bits) (SOFTWARE) on display :0
+before: 4	1:placed@202 E Maple St; 2:indexed@304 Wood St; 3:indexed@304 Wood St; 4:indexed@304 Wood St
+after:  4	1:placed@202 E Maple St; 2:indexed@101 Dewey St; 3:indexed@101 Dewey St; 4:indexed@101 Dewey St

@@ -1,0 +1,10 @@
+Linux death check 20260925T012025: PASS
+source: 501f906 + uncommitted mod changes
+renderer: Mesa llvmpipe (LLVM 20.1.2, 256 bits) (SOFTWARE) on display :0
+first survivor: Elroy, carrying 2 case documents at death
+record before death: 2 1=665066304:document-1:Passenger account receipt / LD-114 | 2=665066304:document-2:Counter allocation note / LD-114
+new survivor: Vincent; evidence album: evidence album issued: Vincent's Evidence
+record for the new survivor: 2 1=665066304:document-1:Passenger account receipt / LD-114 | 2=665066304:document-2:Counter allocation note / LD-114
+the new survivor's organiser: carried=true marked=true; reads for them=true
+document taken back off the body: Passenger account receipt / LD-114
+errors inside the mod: 0

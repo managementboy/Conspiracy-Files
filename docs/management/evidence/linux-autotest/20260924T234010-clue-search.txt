@@ -1,0 +1,31 @@
+Linux clue search check 20260924T234010: PASS
+source: 501f906 + uncommitted mod changes
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+FINDING: focus: defined=true text='Clues' offered=true registered=listed; loot zones=17 items=0 picked=0 rolls=0 chanceToCreateIcon=0 focusChanceMax=0
+FINDING: clues: generated:192837314:document-1:placed
+FINDING: game running: paused=false 1
+FINDING: forage count taken outdoors at 10844,10180
+FINDING: forage icons, no focus: total=8 active=3 world=0 stash=0 clue icons=0 clues-category=0 [Berries=1,CraftingMaterials=1,Crops=1,Insects=2,Trash=3]
+FINDING: forage icons, Clues focus: total=8 active=3 world=0 stash=0 clue icons=0 clues-category=0 [Berries=1,CraftingMaterials=1,Crops=1,Insects=2,Trash=3]
+FINDING: clue 1 before: Notepad|Literature
+FINDING: clue 1: icon appeared after about 0 s with Search Mode on
+FINDING: clue 1 (None): spotted and recognised after 4.1 s (limit 120 s)
+FINDING: clue 1 icon 10 s after spotting: true true true true 0/2500 3.00 0.71 true clueObject at=10874,10189 base=true ours=true canSee=true blocked=false light=0.75 dark=1 running=false north=true/false/false/false south=true/false/false/true east=true/false/false/false
+FINDING: clue 1 icon after re-search: true true true true 10000/2500 0.00 0.71 true clueObject at=10874,10189 base=true ours=true canSee=true blocked=false light=0.75 dark=1 running=false north=true/false/false/false south=true/false/false/true east=true/false/false/false
+FINDING: clue 1 after: Seat-release instruction / RC-766|Evidence
+FINDING: marks (in-place): 'Seat-release instruction / RC-766' at 10874,10188,0, pen in the inventory=true
+FINDING: marks (in-place): record=true at 10874,10188,0, survivor at 10874,10189,0, clue's square 10874,10188,0; written=true ink=Pen; on the clue's own square=true; building of the mark=1.0977704480342036E16, of the clue=1.0977704480342036E16
+FINDING: marks (in-place): MAP NOTE line reads 'Finding location marked on your world map.'
+FINDING: marks (in-place): written/pending/missing = 1/0/1
+FINDING: clue 1 before: Notebook|Literature
+FINDING: clue 1: icon appeared after about 0 s with Search Mode on
+FINDING: clue 1 (Clues): spotted and recognised after 3.0 s (limit 120 s)
+FINDING: clue 1 icon 10 s after spotting: true true true true 0/2500 4.50 0.71 true clueObject at=10868,10194 base=true ours=true canSee=true blocked=false light=1.00 dark=1 running=false south=true/false/false/true west=true/false/false/false
+FINDING: clue 1 icon after re-search: true true true true 9796/2500 0.00 0.71 true clueObject at=10868,10194 base=true ours=true canSee=true blocked=false light=1.00 dark=1 running=false south=true/false/false/true west=true/false/false/false
+FINDING: clue 1 after: Standby manifest closeout / RC-766|Evidence
+FINDING: marks (carried): 'Standby manifest closeout / RC-766' at 10868,10193,0, pen in the inventory=true
+FINDING: marks (carried): record=true at 10868,10193,0, survivor at 10867,10194,0, clue's square 10868,10193,0; written=true ink=Pen; on the clue's own square=true; building of the mark=1.0977704480342036E16, of the clue=1.0977704480342036E16
+FINDING: marks (carried): MAP NOTE line reads 'Finding location marked on your world map.'
+FINDING: marks (carried): written/pending/missing = 2/0/1
+FINDING: counters (icons added, dropped, spots, recognitions, search mode re-enabled): 13 0 4 4 0
+errors inside the mod: 0

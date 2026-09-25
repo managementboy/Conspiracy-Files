@@ -1,0 +1,86 @@
+FAIL knox.os - 2026-09-24T21:21:10+02:00
+commit: 501f906
+renderer: Mesa llvmpipe (LLVM 20.1.2, 256 bits) (SOFTWARE) on display :0
+session: 20260924T211601
+opened:   true	FILES	1	false	false	1
+names:    true	NAMES	1	false	false	2
+dates:    true	DATES	1	false	false	4
+to do:    true	TO DO	1	false	false	5
+FAIL: errors inside the mod: General      f:686 at KahluaThread.flushErrorMessage      > -------------------------------------------------------------
+General      f:686> Lua(Vanilla).openContainer> Exception thrown  |  attempted index: getContainer of non-table: null at KahluaThread.tableget(KahluaThread.java:1430).
+General      f:689 at KahluaThread.flushErrorMessage      > -------------------------------------------------------------
+General      f:689> Lua(Vanilla).openContainer> Exception thrown  |  attempted index: getContainer of non-table: null at KahluaThread.tableget(KahluaThread.java:1430).
+General      f:692 at KahluaThread.flushErrorMessage      > -------------------------------------------------------------
+General      f:692> Lua(Vanilla).openContainer> Exception thrown  |  attempted index: getContainer of non-table: null at KahluaThread.tableget(KahluaThread.java:1430).
+General      f:696 at KahluaThread.flushErrorMessage      > -------------------------------------------------------------
+General      f:696> Lua(Vanilla).openContainer> Exception thrown  |  attempted index: getContainer of non-table: null at KahluaThread.tableget(KahluaThread.java:1430).
+General      f:702 at KahluaThread.flushErrorMessage      > -------------------------------------------------------------
+General      f:702> Lua(Vanilla).openContainer> Exception thrown  |  attempted index: getContainer of non-table: null at KahluaThread.tableget(KahluaThread.java:1430).
+General      f:708 at KahluaThread.flushErrorMessage      > -------------------------------------------------------------
+General      f:708> Lua(Vanilla).openContainer> Exception thrown  |  attempted index: getContainer of non-table: null at KahluaThread.tableget(KahluaThread.java:1430).
+General      f:714 at KahluaThread.flushErrorMessage      > -------------------------------------------------------------
+General      f:714> Lua(Vanilla).openContainer> Exception thrown  |  attempted index: getContainer of non-table: null at KahluaThread.tableget(KahluaThread.java:1430).
+General      f:720 at KahluaThread.flushErrorMessage      > -------------------------------------------------------------
+General      f:720> Lua(Vanilla).openContainer> Exception thrown  |  attempted index: getContainer of non-table: null at KahluaThread.tableget(KahluaThread.java:1430).
+General      f:724 at KahluaThread.flushErrorMessage      > -------------------------------------------------------------
+General      f:724> Lua(Vanilla).openContainer> Exception thrown  |  attempted index: getContainer of non-table: null at KahluaThread.tableget(KahluaThread.java:1430).
+General      f:729 at KahluaThread.flushErrorMessage      > -------------------------------------------------------------
+General      f:729> Lua(Vanilla).openContainer> Exception thrown  |  attempted index: getContainer of non-table: null at KahluaThread.tableget(KahluaThread.java:1430).
+General      f:735 at KahluaThread.flushErrorMessage      > -------------------------------------------------------------
+General      f:735> Lua(Vanilla).openContainer> Exception thrown  |  attempted index: getContainer of non-table: null at KahluaThread.tableget(KahluaThread.java:1430).
+General      f:741 at KahluaThread.flushErrorMessage      > -------------------------------------------------------------
+General      f:741> Lua(Vanilla).openContainer> Exception thrown  |  attempted index: getContainer of non-table: null at KahluaThread.tableget(KahluaThread.java:1430).
+General      f:745 at KahluaThread.flushErrorMessage      > -------------------------------------------------------------
+General      f:745> Lua(Vanilla).take> Exception thrown  |  attempted index: getContainer of non-table: null at KahluaThread.tableget(KahluaThread.java:1430).
+General      f:747 at KahluaThread.flushErrorMessage      > -------------------------------------------------------------
+General      f:747> Lua(Vanilla).carried> Exception thrown  |  attempted index: getOutermostContainer of non-table: null at KahluaThread.tableget(KahluaThread.java:1430).
+General      f:752 at KahluaThread.flushErrorMessage      > -------------------------------------------------------------
+General      f:752> Lua(Vanilla).carried> Exception thrown  |  attempted index: getOutermostContainer of non-table: null at KahluaThread.tableget(KahluaThread.java:1430).
+General      f:758 at KahluaThread.flushErrorMessage      > -------------------------------------------------------------
+General      f:758> Lua(Vanilla).carried> Exception thrown  |  attempted index: getOutermostContainer of non-table: null at KahluaThread.tableget(KahluaThread.java:1430).
+General      f:764 at KahluaThread.flushErrorMessage      > -------------------------------------------------------------
+General      f:764> Lua(Vanilla).carried> Exception thrown  |  attempted index: getOutermostContainer of non-table: null at KahluaThread.tableget(KahluaThread.java:1430).
+General      f:769 at KahluaThread.flushErrorMessage      > -------------------------------------------------------------
+General      f:769> Lua(Vanilla).carried> Exception thrown  |  attempted index: getOutermostContainer of non-table: null at KahluaThread.tableget(KahluaThread.java:1430).
+General      f:774 at KahluaThread.flushErrorMessage      > -------------------------------------------------------------
+General      f:774> Lua(Vanilla).carried> Exception thrown  |  attempted index: getOutermostContainer of non-table: null at KahluaThread.tableget(KahluaThread.java:1430).
+General      f:779 at KahluaThread.flushErrorMessage      > -------------------------------------------------------------
+General      f:779> Lua(Vanilla).carried> Exception thrown  |  attempted index: getOutermostContainer of non-table: null at KahluaThread.tableget(KahluaThread.java:1430).
+General      f:785 at KahluaThread.flushErrorMessage      > -------------------------------------------------------------
+General      f:785> Lua(Vanilla).carried> Exception thrown  |  attempted index: getOutermostContainer of non-table: null at KahluaThread.tableget(KahluaThread.java:1430).
+General      f:790 at KahluaThread.flushErrorMessage      > -------------------------------------------------------------
+General      f:790> Lua(Vanilla).carried> Exception thrown  |  attempted index: getOutermostContainer of non-table: null at KahluaThread.tableget(KahluaThread.java:1430).
+General      f:795 at KahluaThread.flushErrorMessage      > -------------------------------------------------------------
+General      f:795> Lua(Vanilla).carried> Exception thrown  |  attempted index: getOutermostContainer of non-table: null at KahluaThread.tableget(KahluaThread.java:1430).
+General      f:800 at KahluaThread.flushErrorMessage      > -------------------------------------------------------------
+General      f:800> Lua(Vanilla).carried> Exception thrown  |  attempted index: getOutermostContainer of non-table: null at KahluaThread.tableget(KahluaThread.java:1430).
+General      f:806 at KahluaThread.flushErrorMessage      > -------------------------------------------------------------
+General      f:806> Lua(Vanilla).carried> Exception thrown  |  attempted index: getOutermostContainer of non-table: null at KahluaThread.tableget(KahluaThread.java:1430).
+General      f:811 at KahluaThread.flushErrorMessage      > -------------------------------------------------------------
+General      f:811> Lua(Vanilla).carried> Exception thrown  |  attempted index: getOutermostContainer of non-table: null at KahluaThread.tableget(KahluaThread.java:1430).
+General      f:816 at KahluaThread.flushErrorMessage      > -------------------------------------------------------------
+General      f:816> Lua(Vanilla).carried> Exception thrown  |  attempted index: getOutermostContainer of non-table: null at KahluaThread.tableget(KahluaThread.java:1430).
+General      f:821 at KahluaThread.flushErrorMessage      > -------------------------------------------------------------
+General      f:821> Lua(Vanilla).carried> Exception thrown  |  attempted index: getOutermostContainer of non-table: null at KahluaThread.tableget(KahluaThread.java:1430).
+General      f:827 at KahluaThread.flushErrorMessage      > -------------------------------------------------------------
+General      f:827> Lua(Vanilla).carried> Exception thrown  |  attempted index: getOutermostContainer of non-table: null at KahluaThread.tableget(KahluaThread.java:1430).
+General      f:832 at KahluaThread.flushErrorMessage      > -------------------------------------------------------------
+General      f:832> Lua(Vanilla).carried> Exception thrown  |  attempted index: getOutermostContainer of non-table: null at KahluaThread.tableget(KahluaThread.java:1430).
+General      f:838 at KahluaThread.flushErrorMessage      > -------------------------------------------------------------
+General      f:838> Lua(Vanilla).carried> Exception thrown  |  attempted index: getOutermostContainer of non-table: null at KahluaThread.tableget(KahluaThread.java:1430).
+General      f:843 at KahluaThread.flushErrorMessage      > -------------------------------------------------------------
+General      f:843> Lua(Vanilla).carried> Exception thrown  |  attempted index: getOutermostContainer of non-table: null at KahluaThread.tableget(KahluaThread.java:1430).
+General      f:849 at KahluaThread.flushErrorMessage      > -------------------------------------------------------------
+General      f:849> Lua(Vanilla).carried> Exception thrown  |  attempted index: getOutermostContainer of non-table: null at KahluaThread.tableget(KahluaThread.java:1430).
+General      f:854 at KahluaThread.flushErrorMessage      > -------------------------------------------------------------
+General      f:854> Lua(Vanilla).carried> Exception thrown  |  attempted index: getOutermostContainer of non-table: null at KahluaThread.tableget(KahluaThread.java:1430).
+General      f:860 at KahluaThread.flushErrorMessage      > -------------------------------------------------------------
+General      f:860> Lua(Vanilla).carried> Exception thrown  |  attempted index: getOutermostContainer of non-table: null at KahluaThread.tableget(KahluaThread.java:1430).
+General      f:866 at KahluaThread.flushErrorMessage      > -------------------------------------------------------------
+General      f:866> Lua(Vanilla).carried> Exception thrown  |  attempted index: getOutermostContainer of non-table: null at KahluaThread.tableget(KahluaThread.java:1430).
+General      f:872 at KahluaThread.flushErrorMessage      > -------------------------------------------------------------
+General      f:872> Lua(Vanilla).carried> Exception thrown  |  attempted index: getOutermostContainer of non-table: null at KahluaThread.tableget(KahluaThread.java:1430).
+General      f:878 at KahluaThread.flushErrorMessage      > -------------------------------------------------------------
+General      f:878> Lua(Vanilla).carried> Exception thrown  |  attempted index: getOutermostContainer of non-table: null at KahluaThread.tableget(KahluaThread.java:1430).
+General      f:883 at KahluaThread.flushErrorMessage      > -------------------------------------------------------------
+General      f:883> Lua(Vanilla).carried> Exception thrown  |  attempted index: getOutermostContainer of non-table: null at KahluaThread.tableget(KahluaThread.java:1430).

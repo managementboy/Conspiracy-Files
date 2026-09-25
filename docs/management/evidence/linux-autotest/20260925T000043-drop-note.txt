@@ -1,0 +1,9 @@
+Linux drop-to-note check 20260925T000043: PASS
+source: 501f906 + uncommitted mod changes
+renderer: Mesa llvmpipe (LLVM 20.1.2, 256 bits) (SOFTWARE) on display :0
+case: 5	1:placed@202 E Maple St; 2:placed@102 Diesel St; 3:placed@102 Diesel St; 4:placed@102 Diesel St; 5:placing@102 Diesel St
+carried: 2, left lying: Access memo / 7C-41 (found as Note, recognised by debug)
+drop: true	3	NOTED 3
+second drop: true	0	ALREADY NOTED
+names from evidence: true	2	Delia Mercer,Adele Prosser	
+FINDING: the clue left lying was not spotted in 15 s of Search Mode (dark?); recognised through ClueSearch.debugRecognise

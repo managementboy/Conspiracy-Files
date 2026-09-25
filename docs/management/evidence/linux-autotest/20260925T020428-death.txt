@@ -1,0 +1,10 @@
+Linux death check 20260925T020428: PASS
+source: 501f906 + uncommitted mod changes
+renderer: Mesa llvmpipe (LLVM 20.1.2, 256 bits) (SOFTWARE) on display :0
+first survivor: Jodi, carrying 2 case documents at death
+record before death: 2 1=1748684129:document-1:Passenger manifest stub / AV-570 | 2=1748684129:document-2:Dispatch exercise sheet / AV-570
+new survivor: Viola; evidence album: evidence album issued: Viola's Evidence
+record for the new survivor: 2 1=1748684129:document-1:Passenger manifest stub / AV-570 | 2=1748684129:document-2:Dispatch exercise sheet / AV-570
+the new survivor's organiser: carried=true marked=true; reads for them=true
+document taken back off the body: Passenger manifest stub / AV-570 (in the body)
+errors inside the mod: 0

@@ -147,6 +147,7 @@ load_lua || abort "could not load the check's Lua"
 clues="$(placed)" || abort "clues never all placed: $clues"
 note "mod version $(ev 'return CFField.version()' | tr '\t' ' '); $(f 1 <<<"$clues") clues placed, $(f 3 <<<"$clues") of them in a car"
 note "clues: $(f 4 <<<"$clues")"
+why="$(wait_furniture_clue 300 2)" || note "$why"
 note "game running: paused/speed=$(ev 'return CFAct.running()' | tr '\t' ' ')"
 
 # --- (c) interruption -------------------------------------------------------

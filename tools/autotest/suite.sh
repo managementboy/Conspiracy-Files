@@ -21,11 +21,17 @@ for c in "${checks[@]}"; do
     # Each check claims the machine itself now (claim_game), so the suite does
     # not need to stop anything between them.
     total=$((total + 1))
-    out="$("$REPO/tools/autotest/$c" "$@" 2>/dev/null)"; rc=$?
+    # stderr kept: a check that "could not run" says why on stderr, and with
+    # it discarded the suite could only print the exit code (20260924T233747:
+    # clue_actions, exit 2, no word of what stopped it).
+    out="$("$REPO/tools/autotest/$c" "$@" 2>&1)"; rc=$?
     line="$(grep -m1 -oE "^Linux .*: (PASS|FAIL).*" <<<"$out")"
     [ $rc -eq 0 ] && pass=$((pass + 1))
     echo "$(basename "$c" .sh): ${line:-could not run (exit $rc)}"
     grep -E "^(FAIL|FINDING):" <<<"$out" | sed 's/^/    /'
+    # The last lines, whatever they say: a pattern missed case_body's
+    # "no bound case person loaded" (20260925T012520 suite).
+    [ -n "$line" ] || tail -n 3 <<<"$out" | sed 's/^/    /'
 done
 echo "suite: $pass of $total passed"
 [ "$pass" -eq "$total" ]

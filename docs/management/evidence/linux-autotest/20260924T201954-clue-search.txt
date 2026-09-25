@@ -1,0 +1,20 @@
+Linux clue search check 20260924T201954: FAIL
+source: 501f906
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+FINDING: focus: defined=true text='Clues' offered=true registered=listed; loot zones=17 items=0 picked=0 rolls=0 chanceToCreateIcon=0 focusChanceMax=0
+FINDING: clues: generated:189882610:document-1:placed
+FINDING: game running: paused=false 1
+FINDING: forage count taken outdoors at 10835,10145
+FINDING: forage icons, no focus: total=10 active=0 world=0 stash=0 clue icons=0 clues-category=0 [Bones=1,CraftingMaterials=1,Firewood=1,Insects=1,JunkFood=1,Trash=5]
+FINDING: forage icons, Clues focus: total=10 active=0 world=0 stash=0 clue icons=0 clues-category=0 [Bones=1,CraftingMaterials=1,Firewood=1,Insects=1,JunkFood=1,Trash=5]
+FINDING: clue 1: none to pick (only 0 clues in containers)
+FINDING: marks (in-place): the clue was not recognised; nothing to note
+FINDING: clue 1: none to pick (only 0 clues in containers)
+FINDING: marks (carried): the clue was not recognised; nothing to note
+FINDING: counters (icons added, dropped, spots, recognitions, search mode re-enabled): 0 0 0 0 0
+errors inside the mod: 4
+FAIL: no clue lit enough to spot with focus None
+FAIL: no clue lit enough to spot with focus Clues
+FAIL: 4 errors inside the mod: General      f:4184 at KahluaThread.flushErrorMessage      > -------------------------------------------------------------
+General      f:4184> Lua(Vanilla).recognised> Exception thrown  |  attempted index: id of non-table: null at KahluaThread.tableget(KahluaThread.java:1430).
+General      f:4208 at KahluaThread.flushErrorMessage      > -------------------------------------------------------------

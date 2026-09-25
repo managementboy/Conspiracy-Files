@@ -38,6 +38,9 @@ done
 say "case placed: $summary"
 
 # Clues in furniture: the core loop reaches cars, this check needs a drawer.
+# Instalments first: a waiting clue is brought in by standing at its site.
+for i in $(seq 1 "$n"); do why="$(settle_doc "$i")" || findings+=("document $i $why"); done
+summary="$(ev 'return CFLoop.summary()')"; n="$(f 1 <<<"$summary")"
 furniture=()
 for i in $(seq 1 "$n"); do
     [ "$(ev "return CFDROP.inFurniture($i)" | f 1)" = true ] && furniture+=("$i")

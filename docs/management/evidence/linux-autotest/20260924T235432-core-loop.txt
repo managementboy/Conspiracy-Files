@@ -1,0 +1,21 @@
+Linux core loop check 20260924T235432: PASS
+source: 501f906 + uncommitted mod changes
+renderer: Mesa llvmpipe (LLVM 20.1.2, 256 bits) (SOFTWARE) on display :0
+first case: 4 documents, all found, looked over and inspected through the right-click menu:
+  1. Collection notice / TN-231 (found as Collection notice / TN-231), in inventory, room in hand, floor 0 (container icon clicked: no)
+  2. Dispatch amendment / TN-231 (found as Notepad), in counter, room kitchen, floor 0 (container icon clicked: yes)
+  3. Dispatch returns / TN-231 (found as Notebook), in dishescabinet, room livingroom, floor 0 (container icon clicked: yes)
+  4. Access memo / 7C-41 (found as Note), in overhead, room kitchen, floor 0 (container icon clicked: yes)
+record entries: 4; case completion reported: yes
+map marks without a pen (written/pending/missing): 0/3/1
+map marks after a pen, case already retired: 3/0/1
+second case appeared (gap removed): yes
+errors inside the mod: 0
+FINDING: document 1 (Collection notice / TN-231): its name did not change when it was recognised
+FINDING: relay memo date notes: memo found=true, dated in its week=0, carrying the note=0
+FINDING: last seen after completion: 4 of 4 documents, e.g. 'Carried, in Abel's Evidence.'; retired cases in the save=1, rows with a stored last seen=4
+FINDING: last-seen log: 
+FINDING: Evidence / Old after completion: 4 pieces of evidence carried, 4 known as retired evidence, 4 in the Old category
+FINDING: continuity into the second case: follows - follows document generated:496004263:document-3 of generated:496004263:case; answers still unused for the case after=true
+FINDING: What do I make of it?: answered=true (person Ines Kubiak); the answers are not the steering mechanism (DR-20260919-CONTINUITY) and are held for the case after a followed thread
+screenshot: dev/eval/linux/runs/20260924T235432-map.png (not committed)

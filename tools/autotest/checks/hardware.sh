@@ -316,7 +316,17 @@ say "day 28: $(f 2 <<<"$empty") -> $(f 3 <<<"$empty")"
 # Owner, 2026-09-13: emptying a drawer into your pockets to read it "makes the
 # game unplayable". Documents go into the evidence album - but only while the organiser
 # is closed, because things moving under you while you read is not help.
-ev 'return CFHW.plantDoc()' >/dev/null
+# Filing needs recognised evidence, and that needs a case with a clue in the
+# world; this check never waited for one (20260924T212213: "no evidence could
+# be recognised"). Up to three minutes, as the opening takes on a loaded box.
+deadline=$(( $(date +%s) + 180 ))
+while :; do
+    planted="$(ev 'return CFHW.plantDoc()')"
+    [ "$(f 1 <<<"$planted")" = true ] && break
+    [ "$(date +%s)" -lt "$deadline" ] || abort "could not plant a document to file: $(f 2 <<<"$planted")"
+    sleep 5
+done
+say "planted a page as $(f 3 <<<"$planted") ($(f 4 <<<"$planted"))"
 before="$(ev 'return CFHW.pocketCount()')"
 say "planted: loose=$(f 2 <<<"$before") filed=$(f 3 <<<"$before") album=$(f 4 <<<"$before")"
 [ "$(f 4 <<<"$before")" = true ] || abort "no evidence album carried; cannot test filing"

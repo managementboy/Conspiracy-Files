@@ -32,7 +32,11 @@ function D.inFurniture(n)
     L.approach(n)
     local ok, _, holder = L.find(n)
     if not ok then return false, "not found" end
-    return not tostring(holder):find("^vehicle"), tostring(holder)
+    -- Not a car, and not the hand: the opening clue is delivered to the
+    -- inventory already recognised (2026-09-23), so it has no drawer to be
+    -- left lying in and no "Look it over" to offer (20260924 rerun).
+    local h = tostring(holder)
+    return not h:find("^vehicle") and h ~= "inventory", h
 end
 
 function D.keepCarried()

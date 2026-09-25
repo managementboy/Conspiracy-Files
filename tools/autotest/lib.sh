@@ -266,8 +266,41 @@ note_carried() {
 # Find document N of the placed case, take it and inspect it the player's way
 # (checks/core_loop.lua must be loaded). Prints the document's name as it
 # reads once recognised; fails with a reason. Cars go through the vehicle menu.
+# A clue still waiting for somewhere to go (P4-R133) is brought in by standing
+# at its site, the way a player following the case would. Returns 0 once the
+# runtime has written it; otherwise prints the filler's own last reason.
+settle_doc() { # settle_doc N [SECONDS]
+    local i="$1" budget="${2:-${CF_SETTLE_TIMEOUT:-150}}" r deadline
+    r="$(ev "return CFLoop.settle($i)")"; [ "$(cut -f1 <<<"$r")" = true ] && return 0
+    ev "return CFLoop.approach($i)" >/dev/null
+    deadline=$(( $(date +%s) + budget ))
+    while [ "$(date +%s)" -lt "$deadline" ]; do
+        sleep 5; r="$(ev "return CFLoop.settle($i)")"; [ "$(cut -f1 <<<"$r")" = true ] && return 0
+    done
+    echo "still waiting after ${budget}s at its site: $(cut -f2 <<<"$r")"; return 1
+}
+
+# At least COUNT unrecognised clues in furniture (not a car, not a body). Since
+# the opening was rebuilt (2026-09-23) the first clue is a key in the hand and
+# the rest arrive as instalments where the survivor stands, so this visits the
+# waiting clues' sites in turn until enough have been written.
+wait_furniture_clue() { # wait_furniture_clue SECONDS [COUNT]
+    local budget="$1" want="${2:-1}" deadline i n r
+    ev -f "$REPO/tools/autotest/checks/core_loop.lua" >/dev/null
+    deadline=$(( $(date +%s) + budget ))
+    while :; do
+        r="$(ev 'return CFLoop.furniture()')"; n="$(cut -f1 <<<"$r")"
+        is_number "$n" && [ "$n" -ge "$want" ] && return 0
+        [ "$(date +%s)" -lt "$deadline" ] || { echo "only ${n:-?} unrecognised clue(s) in furniture after ${budget}s: $(cut -f2 <<<"$r")"; return 1; }
+        i="$(ev 'return CFLoop.nextWaiting()' | cut -f1)"
+        if is_number "$i" && [ "$i" -gt 0 ]; then ev "return CFLoop.approach($i)" >/dev/null; fi
+        sleep 8
+    done
+}
+
 inspect_doc() {
     local i="$1" f h
+    settle_doc "$i" >/dev/null || { echo "document $i $(settle_doc "$i" 1)"; return 1; }
     ev "return CFLoop.approach($i)" >/dev/null; wait_true 10 "CFLoop.loaded($i)" >/dev/null
     f="$(ev "return CFLoop.find($i)")"
     [ "$(cut -f1 <<<"$f")" = true ] || { echo "document $i not found: $(cut -f2 <<<"$f")"; return 1; }

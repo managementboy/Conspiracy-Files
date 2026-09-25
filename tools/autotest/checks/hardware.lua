@@ -509,8 +509,30 @@ end
 function CFHW.plantDoc()
     local item = getPlayer():getInventory():AddItem("Base.Newspaper")
     if not item then return false, "could not create" end
-    item:getModData().cfGeneratedId = "test:filing:" .. tostring(getTimeInMillis())
-    return true, tostring(item:getFullType())
+    -- Only RECOGNISED evidence is filed (P4-R132, 2680eaf): an unrecognised
+    -- clue is the plain item it looks like. A test id no case knows is never
+    -- recognised, so the planted page carries the id of evidence the survivor
+    -- has already recognised - the opening key, delivered to the hand.
+    local R = ConspiracyFiles.GeneratedRuntime
+    local id, how
+    for _, c in ipairs(R.clueTargets()) do
+        if c.recognised then id, how = c.id, "already recognised"; break end
+    end
+    if not id then
+        -- Nothing recognised yet (this check does not play the case): recognise
+        -- the first placed clue through the runtime's own entry, as searching
+        -- would, so the planted page is evidence rather than a plain paper.
+        for _, c in ipairs(R.clueTargets()) do
+            if c.status == "placed" then
+                local ok, done, why = pcall(R.recognise, c.id, "search")
+                if ok and done then id, how = c.id, "recognised now"; break end
+                how = tostring(ok and why or done)
+            end
+        end
+    end
+    if not id then return false, "no evidence could be recognised (" .. tostring(how) .. "); an unrecognised clue is never filed (P4-R132)" end
+    item:getModData().cfGeneratedId = id
+    return true, tostring(item:getFullType()), id
 end
 
 function CFHW.file()

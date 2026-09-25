@@ -32,8 +32,10 @@ while :; do
 done
 say "case placed: $summary"
 
-rows=(); findings=()
+rows=(); findings=(); inhand=0
 for i in $(seq 1 "$n"); do
+    # An instalment is brought in by standing at its site (P4-R133).
+    why="$(settle_doc "$i")" || { fail "document $i $why"; continue; }
     ev "return CFLoop.approach($i)" >/dev/null; wait_true 10 "CFLoop.loaded($i)" >/dev/null
     found="$(ev "return CFLoop.find($i)")"
     [ "$(cut -f1 <<<"$found")" = true ] || { fail "document $i not found where the runtime says: $(cut -f2 <<<"$found")"; continue; }
@@ -73,8 +75,11 @@ for i in $(seq 1 "$n"); do
     ev "return CFLoop.remember($i)" >/dev/null
     [[ "$holder" == vehicle* ]] && { ev 'return CFLoop.exitVehicle()' >/dev/null; sleep 3; }
     rows+=("  $i. $name (found as $plain), in $holder, room $room, floor $floor (container icon clicked: $opened)")
+    # A clue delivered to the hand (the opening, since 2026-09-23) has no
+    # container to show and no square to mark; it is counted apart.
+    if [ "$holder" = inventory ]; then inhand=$((inhand+1))
     # A missing icon is a failure only when the game itself allowed the part.
-    [ "$opened" = yes ] || [ "$access" != true ] || fail "document $i ($name): the game allowed its $holder but the loot panel never showed it"
+    elif [ "$opened" != yes ] && [ "$access" = true ]; then fail "document $i ($name): the game allowed its $holder but the loot panel never showed it"; fi
     say "document $i: $name"
 done
 
@@ -129,13 +134,13 @@ if [ "$(ev 'return CFLoop.hasPen()')" = true ]; then
     # One of the case's own clues was a pen, so the survivor could already write.
     findings+=("marks before a pen not tested: a case clue was itself a writing tool; marks $(tr '\t' '/' <<<"$before_pen")")
 else
-    [ "$(cut -f2 <<<"$before_pen")" = "$n" ] || fail "without a pen, expected $n pending marks: $before_pen"
+    [ "$(cut -f2 <<<"$before_pen")" = "$((n-inhand))" ] || fail "without a pen, expected $((n-inhand)) pending marks ($inhand clue(s) were in the hand, nowhere to mark): $before_pen"
 fi
 
 # A pen after the case retired: the marks must still catch up.
 ev 'return CFLoop.givePen()' >/dev/null; sleep 4
 after_pen="$(ev 'return CFLoop.markers()')"
-[ "$(cut -f1 <<<"$after_pen")" = "$n" ] || fail "with a pen after completion, expected $n written marks: $after_pen"
+[ "$(cut -f1 <<<"$after_pen")" = "$((n-inhand))" ] || fail "with a pen after completion, expected $((n-inhand)) written marks ($inhand in the hand): $after_pen"
 ev 'return CFLoop.showMap()' >/dev/null; sleep 3
 "$PZ" shot "$RUNS/$id-map.png" >/dev/null 2>&1
 ev 'return CFLoop.hideMap()' >/dev/null
@@ -148,20 +153,33 @@ say "answers: $(tr '\t' ' ' <<<"$ans")"
 [ "$(cut -f1 <<<"$ans")" = true ] || fail "could not answer about the finished case: $(cut -f2 <<<"$ans")"
 # The next case, with the 24 h gap and the wait after a completion removed for test pacing.
 ev 'return CFLoop.noGap()' >/dev/null
-wait_true 150 'CFLoop.caseCount()>=2' && next_case=yes || { next_case=no; fail "no second case within 150 s with the gap removed"; }
-steer="false	false	false	false	none	false"
+wait_true 150 'CFLoop.caseCount()>=2' && next_case=yes || { next_case=no; fail "no second case within 150 s with the gap removed: $(ev 'return CFLoop.deferWhy()')"; }
+# CONTINUITY (DR-20260919-CONTINUITY): the next case follows a FINDING of the
+# finished case; the closing answers are not the steering mechanism and wait
+# for the case after. Only a finished case that left no thread is followed by
+# a steered case. test/steer_precedence.lua pins the same contract offline.
+cont="none	false	false	false	none	no second case"
 if [ "$next_case" = yes ]; then
-    steer="$(ev 'return CFLoop.steerCheck()')"
-    say "steer: $(tr '\t' ' ' <<<"$steer")"
-    [ "$(cut -f2 <<<"$steer")" = true ] || fail "the second case was not built from the answers: $(tr '\t' ' ' <<<"$steer")"
-    [ "$(cut -f1 <<<"$steer")" = true ] || fail "the answers were not marked used by the second case: $(tr '\t' ' ' <<<"$steer")"
-    [ "$(cut -f3 <<<"$steer")" = true ] || fail "the chosen person did not return in the second case: $(tr '\t' ' ' <<<"$steer")"
-    [ "$(cut -f4 <<<"$steer")" = true ] || fail "the returning person could be given a second body: $(tr '\t' ' ' <<<"$steer")"
-    run_log | grep -q "Case shaped by the survivor's answers" || fail "the runtime never logged a steered case"
-    [ "$(cut -f6 <<<"$steer")" = true ] || fail "'Listen for it' did not bring the radio transcript into the second case: $(tr '\t' ' ' <<<"$steer")"
+    cont="$(ev 'return CFLoop.continuity()')"
+    say "continuity: $(tr '\t' ' ' <<<"$cont")"
+    mode="$(cut -f1 <<<"$cont")"
+    case "$mode" in
+        follows)
+            [ "$(cut -f3 <<<"$cont")" = true ] || fail "the second case follows a finding of some other case: $(tr '\t' ' ' <<<"$cont")"
+            [ "$(cut -f4 <<<"$cont")" = true ] || fail "the answers were used up by a case that followed a thread instead: $(tr '\t' ' ' <<<"$cont")"
+            run_log | grep -q "next case follows the finding recorded in" || fail "the runtime never logged that the case follows a finding"
+            ;;
+        steer)
+            steer="$(ev 'return CFLoop.steerCheck()')"
+            [ "$(cut -f2 <<<"$steer")" = true ] || fail "the steered second case was not built from the answers: $(tr '\t' ' ' <<<"$steer")"
+            [ "$(cut -f1 <<<"$steer")" = true ] || fail "the answers were not marked used by the steered second case: $(tr '\t' ' ' <<<"$steer")"
+            run_log | grep -q "Case shaped by the survivor's answers" || fail "the runtime never logged a steered case"
+            ;;
+        *) fail "the second case carries no continuity at all: $(tr '\t' ' ' <<<"$cont")" ;;
+    esac
 fi
-findings+=("radio transcript in the case steered to 'Listen for it': $(cut -f6 <<<"$steer")")
-findings+=("What do I make of it?: answered=$(cut -f1 <<<"$ans") (person $(cut -f3 <<<"$ans")); second case built from the answers=$(cut -f2 <<<"$steer"), answers marked used=$(cut -f1 <<<"$steer"), person returned=$(cut -f3 <<<"$steer"), no second body=$(cut -f4 <<<"$steer")")
+findings+=("continuity into the second case: $(cut -f1 <<<"$cont") - $(cut -f6 <<<"$cont"); answers still unused for the case after=$(cut -f4 <<<"$cont")")
+findings+=("What do I make of it?: answered=$(cut -f1 <<<"$ans") (person $(cut -f3 <<<"$ans")); the answers are not the steering mechanism (DR-20260919-CONTINUITY) and are held for the case after a followed thread")
 errors="$(mod_errors)"
 [ -z "$errors" ] || fail "errors inside the mod"
 end_world

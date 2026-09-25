@@ -973,8 +973,15 @@ local function prepare(result,seed,later,house)
                 end
             end
         else
+            -- The same tolerance as the opening: an indexed signature is a
+            -- durable open order for a chunk not loaded yet (P4-R133), and
+            -- resolving it live answers "unloaded" for every distant site. Read
+            -- as "busy", that refused every second case whose sites were out
+            -- of sight (core loop 20260924T223914: "busy x0"). Only a live,
+            -- non-indexed target must resolve now.
             for _,site in ipairs(case.locations) do
-                if not World.resolve(targets[site.id]) then refuse("busy"); return end
+                local target=targets[site.id]
+                if not (target and target.indexed==true) and not World.resolve(target) then refuse("busy"); return end
             end
         end
         -- INSTALMENTS (P4-R133). The case goes live with the clues that fit
@@ -1176,10 +1183,14 @@ function R.reshuffle(mode)
     end
     for _,root in ipairs(Cases.sessions(wrapper) or {}) do
         for _,assignment in pairs(root.assignments or {}) do
-            local ok,container=pcall(World.resolve,assignment.target)
-            local items=ok and container and container.getItems and container:getItems()
-            if items and items.size then
-                for i=0,items:size()-1 do pcall(unmark,items:get(i)) end
+            -- Only a clue that was written somewhere has anything to unmark;
+            -- a waiting one has no target (P4-R133).
+            if assignment.target then
+                local ok,container=pcall(World.resolve,assignment.target)
+                local items=ok and container and container.getItems and container:getItems()
+                if items and items.size then
+                    for i=0,items:size()-1 do pcall(unmark,items:get(i)) end
+                end
             end
         end
     end
@@ -2145,13 +2156,19 @@ local function filler(api)
             end
             if not Session.mobileAllowed(api.snapshot(),id) then
                 -- Debug, not info: this is the ordinary state of an open order
-                -- and would otherwise be a line every two seconds.
+                -- and would otherwise be a line every two seconds. Named all
+                -- the same (Log.declines), so a check standing at the site can
+                -- say why nothing came (core loop 20260924T223914 could not).
+                declinePlacement("no free container at the site for "..tostring(id).." and no carrier allowed")
                 CFLog.write("d","skip",{doc=id,why="no-containers"}); return true
             end
             if not bodyScan then bodyScan=carrierScanFor(site,function(entry) carrier=entry end) end
             if not carrier then
                 if bodyScan() then
-                    if not carrier then CFLog.write("d","skip",{doc=id,why="no-containers"}); return true end
+                    if not carrier then
+                        declinePlacement("no free container at the site for "..tostring(id).." and no body nearby to carry it")
+                        CFLog.write("d","skip",{doc=id,why="no-containers"}); return true
+                    end
                 else return false end
             end
             local pc=getPlayer()

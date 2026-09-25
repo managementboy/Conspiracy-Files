@@ -1,0 +1,25 @@
+Linux clue search check 20260924T232215: FAIL
+source: 501f906 + uncommitted mod changes
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+FINDING: focus: defined=true text='Clues' offered=true registered=listed; loot zones=17 items=0 picked=0 rolls=0 chanceToCreateIcon=0 focusChanceMax=0
+FINDING: clues: generated:508596652:document-1:placed
+FINDING: game running: paused=false 1
+FINDING: forage count taken outdoors at 10764,10103
+FINDING: forage icons, no focus: total=10 active=6 world=0 stash=0 clue icons=0 clues-category=0 [Animals=1,Berries=1,CraftingMaterials=2,Firewood=2,FishBait=2,Mushrooms=1,Trash=1]
+FINDING: forage icons, Clues focus: total=10 active=6 world=0 stash=0 clue icons=0 clues-category=0 [Animals=1,Berries=1,CraftingMaterials=2,Firewood=2,FishBait=2,Mushrooms=1,Trash=1]
+FINDING: clue 1 before: Notepad|Literature
+FINDING: clue 1: could not stand on an open side of it; spotting from where the game put the survivor
+FINDING: marks (in-place): the clue was not recognised; nothing to note
+FINDING: clue 1 before: Notepad|Literature
+FINDING: clue 1: could not stand on an open side of it; spotting from where the game put the survivor
+FINDING: clue 1 (Clues): spotted and recognised after 5.7 s (limit 120 s)
+FINDING: clue 1 icon 10 s after spotting: true true true true 0/2500 4.50 1.61 true clueObject at=10784,10112 base=true ours=true canSee=true blocked=false light=1.00 dark=1 running=false north=true/false/false/false south=true/false/false/false east=true/false/false/false west=true/false/false/false
+FINDING: clue 1 icon after re-search: true true true true 10000/2500 0.00 1.61 true clueObject at=10784,10112 base=true ours=true canSee=true blocked=false light=1.00 dark=1 running=false north=true/false/false/false south=true/false/false/false east=true/false/false/false west=true/false/false/false
+FINDING: clue 1 after: Dispatch amendment / GT-373|Evidence
+FINDING: marks (carried): 'Dispatch amendment / GT-373' at 10786,10113,0, pen in the inventory=true
+FINDING: marks (carried): record=true at 10786,10113,0, survivor at 10784,10112,0, clue's square 10786,10113,0; written=true ink=Pen; on the clue's own square=true; building of the mark=outdoors, of the clue=outdoors
+FINDING: marks (carried): MAP NOTE line reads 'Finding location marked on your world map.'
+FINDING: marks (carried): written/pending/missing = 1/0/1
+FINDING: counters (icons added, dropped, spots, recognitions, search mode re-enabled): 14 0 2 2 36
+errors inside the mod: 0
+FAIL: clue 1: no clue icon with Search Mode on (no icon	false)

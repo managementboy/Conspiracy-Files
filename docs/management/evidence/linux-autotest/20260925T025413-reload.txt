@@ -1,0 +1,10 @@
+Linux reload check 20260925T025413: FAIL
+source: 501f906 + uncommitted mod changes
+renderer: Mesa llvmpipe (LLVM 20.1.2, 256 bits) (SOFTWARE) on display :0
+world: 1708383248052338858; three save/quit/continue round trips after two documents were inspected
+noted evidence before: 2 1=690404201:document-1:Passenger manifest stub / R-221 | 2=690404201:document-2:Dispatch exercise sheet / R-221
+placements before: 4 690404201:document-1@10836,10156,0:placed 690404201:document-2@10863,10166,0:placed 690404201:document-3@waiting:address unknown:deferred 690404201:document-4@waiting:address unknown:deferred
+schedule before (count, last created hour, scheduled): 1 2.255687713623047 true
+save-budget total per round (bytes): 47792 47943 47943 47943
+errors inside the mod: 0
+FAIL: a save root grew over three reloads: VisitedBuildings 242->359  (totals 47792 47943 47943 47943)

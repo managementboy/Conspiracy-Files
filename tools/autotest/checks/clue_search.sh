@@ -56,6 +56,9 @@ while :; do
     sleep 2
 done
 note "clues: $(cut -f4 <<<"$c")"
+# The first clue is a key in the hand (2026-09-23); the ones to spot arrive as
+# instalments where the survivor stands.
+why="$(wait_furniture_clue 300 2)" || note "$why"
 
 note "game running: paused=$(ev 'return CFClue.running()' | tr '\t' ' ')"
 # (e) The game's own icons with no focus, then with Clues, outdoors near the start.
@@ -110,13 +113,18 @@ spot() { # spot N FOCUS
     t0="$(date +%s.%N)"
     ev 'return CFClue.searchOn()' >/dev/null
     # (b) the icon, on the container square, our class.
-    icon=""
-    for _ in $(seq 20); do
+    # The icon is the forage system's own roll, made on its schedule: the same
+    # clue showed nothing in ten seconds and was spotted 5.7 s into the next
+    # pass from the same square (20260924T232215, 225038). Sixty seconds, and
+    # the time it took is recorded rather than assumed.
+    icon=""; local ticks=0
+    for _ in $(seq 120); do
         icon="$(ev 'return CFClue.icon()')"
         [ "$(cut -f1 <<<"$icon")" = true ] && break
-        ev 'return CFClue.searchOn()' >/dev/null; sleep 0.5
+        ev 'return CFClue.searchOn()' >/dev/null; sleep 0.5; ticks=$((ticks+1))
     done
-    [ "$(cut -f1 <<<"$icon")" = true ] || { fail "clue $n: no clue icon with Search Mode on ($(cut -f2- <<<"$icon"))"; return 1; }
+    [ "$(cut -f1 <<<"$icon")" = true ] || { fail "clue $n: no clue icon with Search Mode on in 60 s ($(cut -f2- <<<"$icon"))"; return 1; }
+    note "clue $n: icon appeared after about $((ticks/2)) s with Search Mode on"
     [ "$(cut -f2 <<<"$icon")" = true ] || fail "clue $n: the icon is not our class"
     [ "$(cut -f3 <<<"$icon")" = true ] || fail "clue $n: the icon is not on the container square"
     # (c) spotted and recognised, bounded.
@@ -212,7 +220,11 @@ mark_stage() { # mark_stage in-place|carried
     [ "$found" = true ] || { fail "marks ($how): no finding location was recorded at all ($at)"; return 1; }
     [ "$same" = true ] || fail "marks ($how): the mark is at $at, but the clue is at $(cut -f3 <<<"$it")"
     [ "$house" = "$clue_house" ] || fail "marks ($how): the mark is in building $house, the clue in $clue_house"
-    [ "$away" = true ] || fail "marks ($how): the mark is on the square the survivor was standing on ($stood)"
+    # A mark on the survivor's square is wrong only when that is not the clue's
+    # square: with no open side to stand on, the survivor spots from the clue's
+    # own square, and the two coincide (20260924T220100).
+    [ "$away" = true ] || [ "$stood" = "$(cut -f3 <<<"$it")" ] || fail "marks ($how): the mark is on the square the survivor was standing on ($stood), not the clue's"
+
     [ "$written" = true ] || fail "marks ($how): with a pen in the inventory the mark was never written ($line)"
     note_line="$(ev 'return CFClue.mapNote()')"
     [ "$(cut -f1 <<<"$note_line")" = true ] || fail "marks ($how): the record has no MAP NOTE line: $(cut -f2 <<<"$note_line")"

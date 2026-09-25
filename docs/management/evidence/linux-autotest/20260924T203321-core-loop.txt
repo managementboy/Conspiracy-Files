@@ -1,0 +1,26 @@
+Linux core loop check 20260924T203321: FAIL
+source: 501f906
+renderer: Mesa llvmpipe (LLVM 20.1.2, 256 bits) (SOFTWARE) on display :0
+first case: 1 documents, all found, looked over and inspected through the right-click menu:
+
+record entries: 1; case completion reported: no
+map marks without a pen (written/pending/missing): 0/0/1
+map marks after a pen, case already retired: 0/0/1
+second case appeared (gap removed): no
+errors inside the mod: 2
+  General      f:1366 at KahluaThread.flushErrorMessage      > -------------------------------------------------------------
+  General      f:1366> Lua(Vanilla).showMap> Exception thrown  |  attempted index: x of non-table: null at KahluaThread.tableget(KahluaThread.java:1430).
+FINDING: relay memo date notes: memo found=false, dated in its week=1, carrying the note=0
+FINDING: last seen after completion: 0 of 1 documents, e.g. ''; retired cases in the save=0, rows with a stored last seen=0
+FINDING: last-seen log: 
+FINDING: Evidence / Old after completion: 1 pieces of evidence carried, 0 known as retired evidence, 0 in the Old category
+FINDING: radio transcript in the case steered to 'Listen for it': false
+FINDING: What do I make of it?: answered=false (person ); second case built from the answers=false, answers marked used=false, person returned=false, no second body=false
+FAIL: document 1 not found where the runtime says: not on or next to its square
+FAIL: the case never reported completion
+FAIL: without a pen, expected 1 pending marks: 0	0	1
+FAIL: with a pen after completion, expected 1 written marks: 0	0	1
+FAIL: could not answer about the finished case: FILES has no question row
+FAIL: no second case within 150 s with the gap removed
+FAIL: errors inside the mod
+screenshot: dev/eval/linux/runs/20260924T203321-map.png (not committed)

@@ -1,0 +1,8 @@
+Linux drop-to-note check 20260925T014722: PASS
+source: 501f906 + uncommitted mod changes
+renderer: Mesa llvmpipe (LLVM 20.1.2, 256 bits) (SOFTWARE) on display :0
+case: 4	1:placed@202 E Maple St; 2:placed@address unknown; 3:placed@address unknown; 4:placed@address unknown
+carried: 2, left lying: Access memo / 7C-41 (found as Note, recognised by search)
+drop: true	3	NOTED 3
+second drop: true	0	ALREADY NOTED
+names from evidence: true	2	Joanne Voss,Adele Prosser	

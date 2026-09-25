@@ -1,0 +1,9 @@
+Linux reload check 20260925T000738: PASS
+source: 501f906 + uncommitted mod changes
+renderer: Mesa llvmpipe (LLVM 20.1.2, 256 bits) (SOFTWARE) on display :0
+world: 416445839759342109; three save/quit/continue round trips after two documents were inspected
+noted evidence before: 2 1=503779371:document-1:Booking deposit receipt / BF-635 | 2=503779371:document-2:Cancellation and refund note / BF-635
+placements before: 4 503779371:document-1@10836,10156,0:placed 503779371:document-2@10872,10020,0:placed 503779371:document-3@10880,10019,0:placed 503779371:document-4@waiting:104 Pattern St:indexed
+schedule before (count, last created hour, scheduled): 1 2.2530975341796875 true
+save-budget total per round (bytes): 49572 49572 49572 49572
+errors inside the mod: 0

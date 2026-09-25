@@ -1,0 +1,24 @@
+Linux clue field check 20260925T013336: PASS
+source: 501f906 + uncommitted mod changes
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+FINDING: mod version DEV-0.47.6-functional-opening-key 24; 1 clues placed, 0 of them in a car
+FINDING: clues: generated:28861377:document-1:placed:recognised
+FINDING: game running: paused/speed=false 1
+FINDING: interruption clue: generated:28861377:document-2 (found as "Notepad")
+FINDING: walking through Look it over: action seen running=yes at progress 0.32; the game reported walking/aiming=yes; the action left the queue=yes; queue now nil -1.00 true false false false
+FINDING: after walking through Look it over: recognised=false, last look ran (ok, ms)=nil nil
+FINDING: aiming through Look it over: action seen running=yes at progress 0.33; the game reported walking/aiming=yes; the action left the queue=yes; queue now nil -1.00 false true false false
+FINDING: after aiming through Look it over: recognised=false
+FINDING: left alone, Look it over recognised the clue: item now Counter allocation note / AV-400 Evidence true false
+FINDING: walking through Inspect: action seen running=yes at progress 0.48; the game reported walking/aiming=yes; the action left the queue=yes; queue now nil -1.00 true false true false
+FINDING: after walking through Inspect: noted=false, in the record=false
+FINDING: left alone, Inspect noted it: true Counter allocation note / AV-400
+FINDING: before the save: generated:28861377:document-3 was "Receipt", now Deposit allocation correction / AV-400 Evidence true false (name, category, recognised, noted)
+FINDING: after the reload: name "Deposit allocation correction / AV-400", category Evidence, recognised true, noted false, recognised by id true
+FINDING: menu after the reload: Inspect Investigation Evidence
+FINDING: inspected after the reload: true Deposit allocation correction / AV-400; ran (ok, ms) true 2105
+FINDING: the clock set to 01:00: the game reads 1.00
+FINDING: no unrecognised clue indoors was dark enough at 01:00 for the game's own cutoff, so the darkness stage was not exercised
+FINDING: car try 1: nowhere fresh to move to: could not get inside t3:11259175162085376: the bounding-box centre and all 7 room centres are outside
+FINDING: no case put a clue in a car even with vans parked beside it, so the car stage was not exercised
+errors inside the mod (this session): 0

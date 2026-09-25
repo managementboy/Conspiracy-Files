@@ -1,0 +1,11 @@
+Linux death check 20260925T011525: FAIL
+source: 501f906 + uncommitted mod changes
+renderer: Mesa llvmpipe (LLVM 20.1.2, 256 bits) (SOFTWARE) on display :0
+first survivor: Laurie, carrying 2 case documents at death
+record before death: 2 1=36086002:document-1:Collection notice / R-958 | 2=36086002:document-2:Vehicle withdrawal / R-958
+new survivor: Gus; evidence album: evidence album issued: Gus's Evidence
+record for the new survivor: 2 1=36086002:document-1:Collection notice / R-958 | 2=36086002:document-2:Vehicle withdrawal / R-958
+the new survivor's organiser: carried=true marked=true; reads for them=true
+document taken back off the body: no case document on a body near where the survivor died
+errors inside the mod: 0
+FAIL: PS-12: no case document on a body near where the survivor died

@@ -1,0 +1,25 @@
+Linux clue search check 20260924T225038: FAIL
+source: 501f906 + uncommitted mod changes
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+FINDING: focus: defined=true text='Clues' offered=true registered=listed; loot zones=17 items=0 picked=0 rolls=0 chanceToCreateIcon=0 focusChanceMax=0
+FINDING: clues: generated:1689972274:document-1:placed
+FINDING: game running: paused=false 1
+FINDING: forage count taken outdoors at 10840,10163
+FINDING: forage icons, no focus: total=10 active=4 world=0 stash=0 clue icons=0 clues-category=0 [Animals=1,CraftingMaterials=1,Firewood=1,FishBait=1,Insects=2,Trash=3,Vegetables=1]
+FINDING: forage icons, Clues focus: total=10 active=4 world=0 stash=0 clue icons=0 clues-category=0 [Animals=1,CraftingMaterials=1,Firewood=1,FishBait=1,Insects=2,Trash=3,Vegetables=1]
+FINDING: clue 1 before: Notepad|Literature
+FINDING: clue 1: could not stand on an open side of it; spotting from where the game put the survivor
+FINDING: clue 1 (None): spotted and recognised after 3.8 s (limit 120 s)
+FINDING: clue 1 icon 10 s after spotting: true true true true 0/2500 3.00 1.60 true clueObject at=10863,10164 base=true ours=true canSee=true blocked=false light=0.71 dark=1 running=false north=true/false/false/false east=true/false/false/false
+FINDING: clue 1 icon after re-search: true true true false 0/10000 0.00 0.00 false clueObject at=10863,10164 base=true ours=true canSee=true blocked=false light=0.71 dark=1 running=false north=true/false/false/false east=true/false/false/false
+FINDING: clue 1 after: Vehicle withdrawal / PS-518|Evidence
+FINDING: marks (in-place): 'Vehicle withdrawal / PS-518' at 10863,10166,0, pen in the inventory=true
+FINDING: marks (in-place): record=true at 10863,10166,0, survivor at 10863,10164,0, clue's square 10863,10166,0; written=true ink=Pen; on the clue's own square=true; building of the mark=1.0977704480342054E16, of the clue=1.0977704480342054E16
+FINDING: marks (in-place): MAP NOTE line reads 'Finding location marked on your world map.'
+FINDING: marks (in-place): written/pending/missing = 1/0/1
+FINDING: clue 1 before: Receipt|Junk
+FINDING: clue 1: could not stand on an open side of it; spotting from where the game put the survivor
+FINDING: marks (carried): the clue was not recognised; nothing to note
+FINDING: counters (icons added, dropped, spots, recognitions, search mode re-enabled): 8 0 2 2 20
+errors inside the mod: 0
+FAIL: clue 1: no clue icon with Search Mode on (no icon	false)

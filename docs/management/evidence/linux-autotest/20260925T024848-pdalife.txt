@@ -1,0 +1,13 @@
+PASS pdalife - 2026-09-25T02:48:48+02:00
+commit: 501f906
+renderer: Mesa llvmpipe (LLVM 20.1.2, 256 bits) (SOFTWARE) on display :0
+session: 20260925T024705
+cycles:   200 open/close - errors=0, ui 26->26, closed=true
+handlers: [] -> []
+memory:   heap 1501184KB->1507328KB (+6144KB, +30.72KB per cycle) [reported, not asserted: see pdalife.lua]
+control:  +10.24KB per idle iteration with no device work, same call
+churn:    40 rounds, 360 screens, 0 errors
+sizes:    20/20 machine-and-text combinations drew
+abuse:    survived every state
+stores:   ConspiracyFilesOrganiserPrefs=0 ConspiracyFiles.KnoxNotes=0 ConspiracyFiles.KnoxToDo=0 ConspiracyFiles.DeadAir=0  ->  ConspiracyFilesOrganiserPrefs=3 ConspiracyFiles.KnoxNotes=0 ConspiracyFiles.KnoxToDo=0 ConspiracyFiles.DeadAir=0
+log:      0 new mod error lines

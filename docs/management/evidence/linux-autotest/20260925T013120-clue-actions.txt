@@ -1,0 +1,17 @@
+Linux clue actions check 20260925T013120: PASS
+source: 501f906 + uncommitted mod changes
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+FINDING: mod version DEV-0.47.6-functional-opening-key; action times (look, inspect): 150 100
+FINDING: clues: generated:438940844:document-1:placed:recognised
+FINDING: game running: paused/speed=false 1
+FINDING: cue before the walk (said, suppressed, first given, places, last line, last doc): 0 0 false 0 nil nil
+FINDING: after the walk (walked=yes): 1 1 true 1 Hm? I should have a proper look around here. generated:438940844:document-2
+FINDING: back at the same place: 1 2 true 1 Hm? I should have a proper look around here. generated:438940844:document-2
+FINDING: cue lines in the log: said=1; last suppression: "cue suppressed at 10871:10197:0:1:0 doc=generated:438940844:document-2: place already cued (light=1.00 weather=1.00)"
+FINDING: before: Notepad Literature
+FINDING: menu on the carried unrecognised clue: Look it over
+FINDING: look it over: queue busy on 8 polls (last progress 0.96, progress bar forced=true), action ran (ok, ms) true 3140, seen recognised 3596 ms after choosing; item now: Seat-release instruction / MC-333 Evidence true false
+FINDING: menu on the recognised clue: Inspect Investigation Evidence
+FINDING: inspect: queue busy on 5 polls, action ran (ok, ms) true 2098, seen noted 2396 ms after choosing; item now: Seat-release instruction / MC-333 Evidence true true
+FINDING: voice while noting: 'Noted' lines=0, discovery hook said nothing=1, other voice lines said=1 ("said 'So that's how these fit together.' halo=true(Records connect) sound=true";)
+errors inside the mod: 0

@@ -47,6 +47,7 @@ while :; do
     [ "$(date +%s)" -lt "$deadline" ] || abort "documents never placed: $s"
     sleep 3
 done
+settle_doc 1 >/dev/null || say "document 1 $(settle_doc 1 1)"
 ev 'return CFLoop.approach(1)' >/dev/null; wait_true 10 'CFLoop.loaded(1)' >/dev/null
 ev 'return CFLoop.find(1)' >/dev/null
 ev 'return CFLoop.goTo(1)' >/dev/null

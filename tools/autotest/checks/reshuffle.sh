@@ -46,7 +46,7 @@ still="$(ev 'return CFLoop.ids()')"
 # The real thing.
 did="$(ev 'return ConspiracyFiles.GeneratedRuntime.reshuffle()')"
 [ "$(cut -f1 <<<"$did")" = true ] || abort "reshuffle refused: $(cut -f2 <<<"$did")"
-second="$(placed)" || fail "no new case was placed after the reshuffle"
+second="$(placed)" || fail "no new case was placed after the reshuffle: $(ev 'return CFLoop.deferWhy()'); status $(ev 'return CFLoop.caseCount()' | tr '\t' ' ')"
 after="$(ev 'return CFLoop.ids()')"
 say "after reshuffle: $second"
 [ -n "$after" ] && [ "$after" != "$before" ] || fail "the reshuffle produced the same documents"

@@ -1,0 +1,11 @@
+FAIL reshuffle - 2026-09-24T21:26:59+02:00
+commit: 501f906
+renderer: Mesa llvmpipe (LLVM 20.1.2, 256 bits) (SOFTWARE) on display :0
+before: 1	1:placed@202 E Maple St
+after:  1	1:placed@202 E Maple St
+FAIL: errors inside the mod: General      f:716 at KahluaThread.flushErrorMessage      > -------------------------------------------------------------
+General      f:716> Lua((MOD:Conspiracy-Files: Dead Air)).resolve> Exception thrown  |  attempted index: x of non-table: null at KahluaThread.tableget(KahluaThread.java:1430).
+General      f:716 at KahluaThread.flushErrorMessage      > -------------------------------------------------------------
+General      f:716> Lua((MOD:Conspiracy-Files: Dead Air)).resolve> Exception thrown  |  attempted index: x of non-table: null at KahluaThread.tableget(KahluaThread.java:1430).
+General      f:716 at KahluaThread.flushErrorMessage      > -------------------------------------------------------------
+General      f:716> Lua((MOD:Conspiracy-Files: Dead Air)).resolve> Exception thrown  |  attempted index: x of non-table: null at KahluaThread.tableget(KahluaThread.java:1430).

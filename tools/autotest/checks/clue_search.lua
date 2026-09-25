@@ -180,6 +180,7 @@ end
 
 function K.recognised()
     local t = K.target
+    if not t then return false, "no target", "nothing was picked" end
     local spot = C.spotted[t.id]
     return R.isRecognisedId(t.id) == true, tostring(spot and spot.recognised), tostring(spot and spot.why)
 end

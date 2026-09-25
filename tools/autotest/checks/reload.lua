@@ -33,6 +33,20 @@ function S.bytes()
     return total, table.concat(parts, " ")
 end
 
+-- The case-people root is one fixed-field record per case (CasePerson.FIELDS,
+-- MAX_RECORDS): a re-bind after a load rewrites her position and fills in
+-- outfit/female, so its BYTES move within that bound while nothing leaks.
+-- The property a reload must keep there is the record count.
+function S.casePeople()
+    local P = ConspiracyFiles.CasePerson
+    local store = P and P.store and P.store()
+    if not store then return 0, "no store" end
+    local n, keys = 0, {}
+    for k in pairs(store.records or {}) do n = n + 1; keys[#keys + 1] = k end
+    table.sort(keys)
+    return n, table.concat(keys, " ")
+end
+
 -- The record's order: noted evidence ids and titles in discovery order.
 function S.record()
     local out = {}
@@ -44,7 +58,11 @@ end
 function S.placement()
     local out = {}
     for _, d in ipairs(CFLoop.docs()) do
-        out[#out + 1] = d.id:gsub("^generated:", "") .. "@" .. d.x .. "," .. d.y .. "," .. d.z .. ":" .. d.status
+        -- A waiting clue has no square (P4-R133): its site and status are what
+        -- a reload must keep. Concatenating its nil x took the whole snapshot
+        -- down and left the budget line empty (20260924T222804).
+        local where = d.waiting and ("waiting:" .. tostring(d.place)) or (tostring(d.x) .. "," .. tostring(d.y) .. "," .. tostring(d.z))
+        out[#out + 1] = d.id:gsub("^generated:", "") .. "@" .. where .. ":" .. tostring(d.status)
     end
     return #out, table.concat(out, " ")
 end

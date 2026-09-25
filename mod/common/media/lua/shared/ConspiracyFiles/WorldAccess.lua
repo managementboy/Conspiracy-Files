@@ -5,6 +5,11 @@ local function spriteName(object)
     return sprite and sprite:getName() or nil
 end
 function World.resolve(target,mark)
+    -- A clue still waiting for somewhere to go has no target at all (P4-R133).
+    -- Asked about nothing, answer "no target" rather than index it: the
+    -- reshuffle asked this for every assignment and printed three exceptions
+    -- per waiting clue (suite 20260924T212659).
+    if type(target)~="table" then return nil,"no target" end
     -- A fixed-index signature deliberately has no volatile object/container
     -- indexes.  Normalize it through the live fixed resolver before the
     -- ordinary square-addressed path below compares those indexes.  The case

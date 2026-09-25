@@ -1,0 +1,19 @@
+Linux clue field check 20260924T202408: FAIL
+source: 501f906
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+FINDING: mod version DEV-0.47.6-functional-opening-key 24; 1 clues placed, 0 of them in a car
+FINDING: clues: generated:1861472473:document-1:placed:recognised
+FINDING: game running: paused/speed=false 1
+FINDING: the clock set to 01:00: the game reads 1.00
+FINDING: darkness clue: generated:1861472473:document-2 in room "livingroom", standing 3.0 tiles back at 10870,10115
+FINDING: at 01:00 in "livingroom": light penalty 0.25, the game calls it too dark=true, the mod's sight test false/too dark, darkMulti 1.00, cutoff 50
+FINDING: in the dark, 3.0 tiles away: not spotted in 78s of searching (icon 10870,10118,0 true false 0/10000 3.54)
+FINDING: torch: Flashlight - Heavy Duty (On), lit=true, in a hand=true, light strength 2
+FINDING: with the torch lit, same distance: light penalty 1.00 (was 0.25), too dark=false, sight test true/nil, darkMulti 1.00
+FINDING: ANSWER (light): a lit torch does NOT make it spottable - still nothing after 153s at 3.0 tiles (penalty 1.00, too dark=false); in the dark the way in is Look it over
+FINDING: ANSWER (light): standing ON the unlit square (penalty 0.50, too dark=true) the game DOES spot it - 0s - which is its own isOnSquare rule, not our doing
+FINDING: car try 1: nowhere fresh to move to: could not get inside t3:10696229503631391: the bounding-box centre and all 4 room centres are outside
+FINDING: no case put a clue in a car even with vans parked beside it, so the car stage was not exercised
+errors inside the mod (this session): 0
+FAIL: no clue in furniture could be carried, so interruption was not tested
+FAIL: no second clue could be carried, so the reload was not tested

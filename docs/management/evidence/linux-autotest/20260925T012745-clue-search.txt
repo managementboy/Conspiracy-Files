@@ -1,0 +1,33 @@
+Linux clue search check 20260925T012745: PASS
+source: 501f906 + uncommitted mod changes
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+FINDING: focus: defined=true text='Clues' offered=true registered=listed; loot zones=17 items=0 picked=0 rolls=0 chanceToCreateIcon=0 focusChanceMax=0
+FINDING: clues: generated:816820286:document-1:placed
+FINDING: game running: paused=false 1
+FINDING: forage count taken outdoors at 10849,10016
+FINDING: forage icons, no focus: total=7 active=1 world=0 stash=0 clue icons=0 clues-category=0 [CraftingMaterials=2,Crops=1,MedicinalPlants=1,Stones=1,Trash=2]
+FINDING: forage icons, Clues focus: total=7 active=1 world=0 stash=0 clue icons=0 clues-category=0 [CraftingMaterials=2,Crops=1,MedicinalPlants=1,Stones=1,Trash=2]
+FINDING: clue 1 before: Notepad|Literature
+FINDING: clue 1: could not stand on an open side of it; spotting from where the game put the survivor
+FINDING: clue 1: icon appeared after about 0 s with Search Mode on
+FINDING: clue 1 (None): spotted and recognised after 3.0 s (limit 120 s)
+FINDING: clue 1 icon 10 s after spotting: true true true true 0/2500 3.00 0.73 true clueObject at=10873,10018 base=true ours=true canSee=true blocked=false light=0.75 dark=1 running=false east=true/false/false/false
+FINDING: clue 1 icon after re-search: true true true true 10000/2500 0.00 0.73 true clueObject at=10873,10018 base=true ours=true canSee=true blocked=false light=0.75 dark=1 running=false east=true/false/false/false
+FINDING: clue 1 after: Seat-release instruction / WB-180|Evidence
+FINDING: marks (in-place): 'Seat-release instruction / WB-180' at 10872,10019,0, pen in the inventory=true
+FINDING: marks (in-place): record=true at 10872,10019,0, survivor at 10873,10018,0, clue's square 10872,10019,0; written=true ink=Pen; on the clue's own square=true; building of the mark=1.0977704480342048E16, of the clue=1.0977704480342048E16
+FINDING: marks (in-place): MAP NOTE line reads 'Finding location marked on your world map.'
+FINDING: marks (in-place): written/pending/missing = 1/0/1
+FINDING: clue 1 before: Notebook|Literature
+FINDING: clue 1: could not stand on an open side of it; spotting from where the game put the survivor
+FINDING: clue 1: icon appeared after about 0 s with Search Mode on
+FINDING: clue 1 (Clues): spotted and recognised after 3.0 s (limit 120 s)
+FINDING: clue 1 icon 10 s after spotting: true true true true 0/2500 4.50 1.59 true clueObject at=10880,10017 base=true ours=true canSee=true blocked=false light=1.00 dark=1 running=false north=true/false/false/false
+FINDING: clue 1 icon after re-search: true true true true 10000/2500 0.00 1.59 true clueObject at=10880,10017 base=true ours=true canSee=true blocked=false light=1.00 dark=1 running=false north=true/false/false/false
+FINDING: clue 1 after: Standby manifest closeout / WB-180|Evidence
+FINDING: marks (carried): 'Standby manifest closeout / WB-180' at 10880,10019,0, pen in the inventory=true
+FINDING: marks (carried): record=true at 10880,10019,0, survivor at 10880,10017,0, clue's square 10880,10019,0; written=true ink=Pen; on the clue's own square=true; building of the mark=1.0977704480342048E16, of the clue=1.0977704480342048E16
+FINDING: marks (carried): MAP NOTE line reads 'Finding location marked on your world map.'
+FINDING: marks (carried): written/pending/missing = 2/0/1
+FINDING: counters (icons added, dropped, spots, recognitions, search mode re-enabled): 13 0 10 10 0
+errors inside the mod: 0

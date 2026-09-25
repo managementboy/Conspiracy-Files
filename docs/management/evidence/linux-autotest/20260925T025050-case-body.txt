@@ -1,0 +1,11 @@
+Linux case body check 20260925T025050: PASS
+source: 501f906 + uncommitted mod changes
+renderer: Mesa llvmpipe (LLVM 20.1.2, 256 bits) (SOFTWARE) on display :0
+case person: Marion Ellis
+bound zombie: true Marion Ellis 10870,10128
+body: true true 1 1 ID Card: Marion Ellis 3
+log: case person's body (generated:1947958365:case): searched=true; card added
+record lead: true ID card - corpse
+her body searched at spawn: true
+comparison body: searched before it was shown: false, searched once shown: yes
+sex matching: true true true true true

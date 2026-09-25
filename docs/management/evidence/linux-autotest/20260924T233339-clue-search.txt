@@ -1,0 +1,37 @@
+Linux clue search check 20260924T233339: PASS
+source: 501f906 + uncommitted mod changes
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+FINDING: focus: defined=true text='Clues' offered=true registered=listed; loot zones=17 items=0 picked=0 rolls=0 chanceToCreateIcon=0 focusChanceMax=0
+FINDING: clues: generated:688436970:document-1:placed
+FINDING: game running: paused=false 1
+FINDING: forage count taken outdoors at 10849,10016
+FINDING: forage icons, no focus: total=11 active=3 world=0 stash=0 clue icons=0 clues-category=0 [Animals=1,CraftingMaterials=1,Insects=2,Junk=1,JunkFood=1,Mushrooms=1,Stones=2,Trash=1,Vegetables=1]
+FINDING: forage icons, Clues focus: total=11 active=3 world=0 stash=0 clue icons=0 clues-category=0 [Animals=1,CraftingMaterials=1,Insects=2,Junk=1,JunkFood=1,Mushrooms=1,Stones=2,Trash=1,Vegetables=1]
+FINDING: clue 1 before: Notepad|Literature
+FINDING: clue 1: too dark there for the game's spotting (light 0.05, cutoff 0.50); trying another
+FINDING: clue 2 before: Notebook|Literature
+FINDING: clue 2: could not stand on an open side of it; spotting from where the game put the survivor
+FINDING: clue 2: icon appeared after about 0 s with Search Mode on
+FINDING: clue 2 (None): spotted and recognised after 3.9 s (limit 120 s)
+FINDING: clue 2 icon 10 s after spotting: true true true true 0/2500 3.00 0.76 true clueObject at=10873,10026 base=true ours=true canSee=false blocked=false light=1.00 dark=1 running=false east=true/false/false/false
+FINDING: clue 2 icon after re-search: true true true true 9700/2500 3.00 0.76 true clueObject at=10873,10026 base=true ours=true canSee=false blocked=false light=1.00 dark=1 running=false east=true/false/false/false
+FINDING: clue 2 after: Unclaimed refund register / LD-485|Evidence
+FINDING: marks (in-place): 'Unclaimed refund register / LD-485' at 10872,10027,0, pen in the inventory=true
+FINDING: marks (in-place): record=true at 10872,10027,0, survivor at 10873,10026,0, clue's square 10872,10027,0; written=true ink=Pen; on the clue's own square=true; building of the mark=1.0977704480342048E16, of the clue=1.0977704480342048E16
+FINDING: marks (in-place): MAP NOTE line reads 'Finding location marked on your world map.'
+FINDING: marks (in-place): written/pending/missing = 1/0/1
+FINDING: clue 1 before: Notepad|Literature
+FINDING: clue 1: too dark there for the game's spotting (light 0.05, cutoff 0.50); trying another
+FINDING: clue 2 before: Note|Junk
+FINDING: clue 2: could not stand on an open side of it; spotting from where the game put the survivor
+FINDING: clue 2: icon appeared after about 0 s with Search Mode on
+FINDING: clue 2 (Clues): spotted and recognised after 3.0 s (limit 120 s)
+FINDING: clue 2 icon 10 s after spotting: true true true true 0/2500 4.50 0.71 true clueObject at=10872,10017 base=true ours=true canSee=true blocked=false light=1.00 dark=1 running=false east=true/false/false/false
+FINDING: clue 2 icon after re-search: true true true true 10000/2500 0.00 0.71 true clueObject at=10872,10017 base=true ours=true canSee=true blocked=false light=1.00 dark=1 running=false east=true/false/false/false
+FINDING: clue 2 after: Access memo / 7C-41|Evidence
+FINDING: marks (carried): 'Access memo / 7C-41' at 10872,10017,0, pen in the inventory=true
+FINDING: marks (carried): record=true at 10872,10017,0, survivor at 10872,10017,0, clue's square 10872,10017,0; written=true ink=Pen; on the clue's own square=true; building of the mark=1.0977704480342048E16, of the clue=1.0977704480342048E16
+FINDING: marks (carried): MAP NOTE line reads 'Finding location marked on your world map.'
+FINDING: marks (carried): written/pending/missing = 2/0/1
+FINDING: counters (icons added, dropped, spots, recognitions, search mode re-enabled): 13 0 4 4 0
+errors inside the mod: 0

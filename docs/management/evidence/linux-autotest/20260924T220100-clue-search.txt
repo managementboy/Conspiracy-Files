@@ -1,0 +1,33 @@
+Linux clue search check 20260924T220100: FAIL
+source: 501f906 + uncommitted mod changes
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+FINDING: focus: defined=true text='Clues' offered=true registered=listed; loot zones=17 items=0 picked=0 rolls=0 chanceToCreateIcon=0 focusChanceMax=0
+FINDING: clues: generated:1259142171:document-1:placed
+FINDING: game running: paused=false 1
+FINDING: forage count taken outdoors at 10849,10016
+FINDING: forage icons, no focus: total=9 active=1 world=0 stash=0 clue icons=0 clues-category=0 [Berries=1,Firewood=2,JunkWeapons=1,MedicinalPlants=1,Mushrooms=1,Trash=1,Vegetables=1,WildHerbs=1]
+FINDING: forage icons, Clues focus: total=9 active=1 world=0 stash=0 clue icons=0 clues-category=0 [Berries=1,Firewood=2,JunkWeapons=1,MedicinalPlants=1,Mushrooms=1,Trash=1,Vegetables=1,WildHerbs=1]
+FINDING: clue 1 before: Notepad|Literature
+FINDING: clue 1: could not stand on an open side of it; spotting from where the game put the survivor
+FINDING: clue 1 (None): spotted and recognised after 4.0 s (limit 120 s)
+FINDING: clue 1 icon 10 s after spotting: true true true true 0/2500 3.00 0.71 true clueObject at=10872,10024 base=true ours=true canSee=true blocked=false light=0.75 dark=1 running=false
+FINDING: clue 1 icon after re-search: true true true true 9700/2500 3.00 0.71 true clueObject at=10872,10024 base=true ours=true canSee=true blocked=false light=0.75 dark=1 running=false
+FINDING: clue 1 after: Counter allocation note / GT-657|Evidence
+FINDING: marks (in-place): 'Counter allocation note / GT-657' at 10872,10024,0, pen in the inventory=true
+FINDING: marks (in-place): record=true at 10872,10024,0, survivor at 10872,10024,0, clue's square 10872,10024,0; written=true ink=Pen; on the clue's own square=true; building of the mark=1.0977704480342048E16, of the clue=1.0977704480342048E16
+FINDING: marks (in-place): MAP NOTE line reads 'Finding location marked on your world map.'
+FINDING: marks (in-place): written/pending/missing = 1/0/1
+FINDING: clue 1 before: Receipt|Junk
+FINDING: clue 1: could not stand on an open side of it; spotting from where the game put the survivor
+FINDING: clue 1 (Clues): spotted and recognised after 1.7 s (limit 120 s)
+FINDING: clue 1 icon 10 s after spotting: true true true true 0/2500 4.50 0.71 true clueObject at=10872,10017 base=true ours=true canSee=true blocked=false light=1.00 dark=1 running=false east=true/false/false/false
+FINDING: clue 1 icon after re-search: true true true true 10000/2500 0.00 0.71 true clueObject at=10872,10017 base=true ours=true canSee=true blocked=false light=1.00 dark=1 running=false east=true/false/false/false
+FINDING: clue 1 after: Deposit allocation correction / GT-657|Evidence
+FINDING: marks (carried): 'Deposit allocation correction / GT-657' at 10872,10017,0, pen in the inventory=true
+FINDING: marks (carried): record=true at 10872,10017,0, survivor at 10872,10017,0, clue's square 10872,10017,0; written=true ink=Pen; on the clue's own square=true; building of the mark=1.0977704480342048E16, of the clue=1.0977704480342048E16
+FINDING: marks (carried): MAP NOTE line reads 'Finding location marked on your world map.'
+FINDING: marks (carried): written/pending/missing = 2/0/1
+FINDING: counters (icons added, dropped, spots, recognitions, search mode re-enabled): 13 0 4 4 0
+errors inside the mod: 0
+FAIL: marks (in-place): the mark is on the square the survivor was standing on (10872,10024,0)
+FAIL: marks (carried): the mark is on the square the survivor was standing on (10872,10017,0)

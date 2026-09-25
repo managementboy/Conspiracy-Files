@@ -1,0 +1,27 @@
+Linux core loop check 20260924T231603: FAIL
+source: 501f906 + uncommitted mod changes
+renderer: Mesa llvmpipe (LLVM 20.1.2, 256 bits) (SOFTWARE) on display :0
+first case: 4 documents, all found, looked over and inspected through the right-click menu:
+  1. Passenger account receipt / TN-710 (found as Passenger account receipt / TN-710), in inventory, room in hand, floor 0 (container icon clicked: no)
+  2. Counter allocation note / TN-710 (found as Notepad), in medicine, room bathroom, floor 0 (container icon clicked: yes)
+  3. Deposit allocation correction / TN-710 (found as Receipt), in fridge, room kitchen, floor 0 (container icon clicked: yes)
+  4. Access memo / 7C-41 (found as Note), in dresser, room livingroom, floor 0 (container icon clicked: yes)
+record entries: 4; case completion reported: yes
+map marks without a pen (written/pending/missing): 0/3/1
+map marks after a pen, case already retired: 3/0/1
+second case appeared (gap removed): yes
+errors inside the mod: 0
+FINDING: document 1 (Passenger account receipt / TN-710): its name did not change when it was recognised
+FINDING: relay memo date notes: memo found=true, dated in its week=2, carrying the note=2
+FINDING: last seen after completion: 4 of 4 documents, e.g. 'Carried, in Jacob's Evidence.'; retired cases in the save=1, rows with a stored last seen=4
+FINDING: last-seen log: 
+FINDING: Evidence / Old after completion: 4 pieces of evidence carried, 4 known as retired evidence, 4 in the Old category
+FINDING: radio transcript in the case steered to 'Listen for it': false
+FINDING: What do I make of it?: answered=true (person Adele Prosser); second case built from the answers=false, answers marked used=false, person returned=false, no second body=false
+FAIL: the second case was not built from the answers: false false false false no steered case false
+FAIL: the answers were not marked used by the second case: false false false false no steered case false
+FAIL: the chosen person did not return in the second case: false false false false no steered case false
+FAIL: the returning person could be given a second body: false false false false no steered case false
+FAIL: the runtime never logged a steered case
+FAIL: 'Listen for it' did not bring the radio transcript into the second case: false false false false no steered case false
+screenshot: dev/eval/linux/runs/20260924T231603-map.png (not committed)

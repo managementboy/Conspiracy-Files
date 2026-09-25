@@ -1,0 +1,6 @@
+Linux vehicle reach check 20260925T015346: PASS
+source: 501f906 + uncommitted mod changes
+renderer: Mesa llvmpipe (LLVM 20.1.2, 256 bits) (SOFTWARE) on display :0
+van: true Base.PickUpVan 10831,10145
+TruckBed: allowed while shut=false, shut test in its area=true, door opened outright=no, player in its area after reaching=true, reached from outside=yes, from a seat=no, loot-panel icon=yes, taken=yes (TrunkDoor)
+GloveBox: allowed while shut=, shut test in its area=, door opened outright=no, player in its area after reaching=false, reached from outside=no, from a seat=yes, loot-panel icon=yes, taken=yes (reached from a seat)

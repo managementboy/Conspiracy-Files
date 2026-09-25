@@ -1,0 +1,14 @@
+Linux fault containment check 20260925T020911: PASS
+source: 501f906 + uncommitted mod changes
+renderer: Mesa llvmpipe (LLVM 20.1.2, 256 bits) (SOFTWARE) on display :0
+each function made to throw for 15 s of play, then restored:
+  DiscoveryLog.record: inspected document 1 (Booking deposit receipt / MC-937); 5 mod log lines and 1 caught errors in 15 s; most repeated line x1; game answering: true; case valid: true
+  SaveBudget.check: document 2: document 2 still waiting after 1s at its site: indexed plan for generated:817137993:document-4 waits for square 10847,9988 to load; 130 mod log lines and 4 caught errors in 15 s; most repeated line x4; game answering: true; case valid: true
+  GeneratedRuntime.inspect: document 3: document 3 could not be inspected: not noted 20 s after Inspect (queue, paused, last look: nil false true); 109 mod log lines and 1 caught errors in 15 s; most repeated line x4; game answering: true; case valid: true
+  ClueMarkers.update: inspected document 4 (Access memo / 7C-41); 15 mod log lines and 1 caught errors in 15 s; most repeated line x1; game answering: true; case valid: true
+  ClueMarkers.draw: opened the world map; 1 mod log lines and 1 caught errors in 15 s; most repeated line x1; game answering: true; case valid: true
+  WorldAccess.resolve: idle (no documents left); 0 mod log lines and 0 caught errors in 15 s; most repeated line x1; game answering: true; case valid: true
+  WorldAccess.count: idle (no documents left); 0 mod log lines and 0 caught errors in 15 s; most repeated line x1; game answering: true; case valid: true
+  AddressMap.labelForBuilding: read FILES and PLACES on the organiser; 2 mod log lines and 0 caught errors in 15 s; most repeated line x1; game answering: true; case valid: true
+  IdentityObservations.add: opened 4 fresh bodies; 0 mod log lines and 0 caught errors in 15 s; most repeated line x1; game answering: true; case valid: true
+recovery afterwards: no document left to try

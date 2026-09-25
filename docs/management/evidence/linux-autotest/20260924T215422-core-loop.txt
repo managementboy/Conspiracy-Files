@@ -1,0 +1,25 @@
+Linux core loop check 20260924T215422: FAIL
+source: 501f906 + uncommitted mod changes
+renderer: Mesa llvmpipe (LLVM 20.1.2, 256 bits) (SOFTWARE) on display :0
+first case: 4 documents, all found, looked over and inspected through the right-click menu:
+  1. Booking deposit receipt / LD-413 (found as Booking deposit receipt / LD-413), in inventory, room in hand, floor 0 (container icon clicked: no)
+  2. Cancellation and refund note / LD-413 (found as Notepad), in cardboardbox, room toolstore, floor 0 (container icon clicked: yes)
+  3. Unclaimed refund register / LD-413 (found as Notebook), in metal_shelves, room toolstore, floor 0 (container icon clicked: yes)
+  4. Access memo / 7C-41 (found as Note), in smallbox, room toolstore, floor 0 (container icon clicked: yes)
+record entries: 4; case completion reported: yes
+map marks without a pen (written/pending/missing): 0/3/1
+map marks after a pen, case already retired: 3/0/1
+second case appeared (gap removed): no
+errors inside the mod: 0
+FINDING: document 1 (Booking deposit receipt / LD-413): its name did not change when it was recognised
+FINDING: relay memo date notes: memo found=true, dated in its week=2, carrying the note=2
+FINDING: last seen after completion: 4 of 4 documents, e.g. 'Carried.'; retired cases in the save=1, rows with a stored last seen=4
+FINDING: last-seen log: 
+FINDING: Evidence / Old after completion: 4 pieces of evidence carried, 4 known as retired evidence, 4 in the Old category
+FINDING: radio transcript in the case steered to 'Listen for it': false
+FINDING: What do I make of it?: answered=true (person Ines Kubiak); second case built from the answers=false, answers marked used=false, person returned=false, no second body=false
+FAIL: document 1 (Booking deposit receipt / LD-413): the game allowed its inventory but the loot panel never showed it
+FAIL: without a pen, expected 4 pending marks: 0	3	1
+FAIL: with a pen after completion, expected 4 written marks: 3	0	1
+FAIL: no second case within 150 s with the gap removed
+screenshot: dev/eval/linux/runs/20260924T215422-map.png (not committed)

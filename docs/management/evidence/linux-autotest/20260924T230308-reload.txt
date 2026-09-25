@@ -1,0 +1,9 @@
+Linux reload check 20260924T230308: PASS
+source: 501f906 + uncommitted mod changes
+renderer: Mesa llvmpipe (LLVM 20.1.2, 256 bits) (SOFTWARE) on display :0
+world: 74310348368067435471; three save/quit/continue round trips after two documents were inspected
+noted evidence before: 2 1=911766538:document-1:Collection notice / TN-853 | 2=911766538:document-2:Dispatch amendment / TN-853
+placements before: 5 911766538:document-1@10836,10156,0:placed 911766538:document-2@10678,10267,0:placed 911766538:document-3@10676,10272,0:placed 911766538:document-4@10676,10275,0:placed 911766538:document-5@10678,10267,0:placed
+schedule before (count, last created hour, scheduled): 1 2.2538375854492188 true
+save-budget total per round (bytes): 57358 57358 57358 57358
+errors inside the mod: 0

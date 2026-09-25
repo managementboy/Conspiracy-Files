@@ -43,6 +43,11 @@ while :; do
     sleep 2
 done
 note "clues: $(cut -f4 <<<"$c")"
+# Two, not one: the cue needs a clue with an open side to be seen from and a
+# square to walk from, and a single instalment in a closet gave the picker
+# nothing to fall back on (suite runs 20260924T233747 and 20260924T201741
+# aborted here; alone, with more clues placed, the check passed).
+why="$(wait_furniture_clue 300 2)" || note "$why"
 note "game running: paused/speed=$(ev 'return CFAct.running()' | tr '\t' ' ')"
 IFS=$'\t' read -r sx sy sz <<<"$(ev 'return CFAct.where()')"
 before="$(ev 'return CFAct.cueState()')"

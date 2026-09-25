@@ -16,6 +16,16 @@ function L.docs()
             line:match("^(%S+)%s+(.-)%s+(%-?%d+),(%-?%d+) floor (%-?%d+)%s+%[(%w+)%]$")
         if id then
             out[#out + 1] = { id = id, place = place, x = tonumber(x), y = tonumber(y), z = tonumber(z), status = status }
+        else
+            -- A clue still waiting for somewhere to go (P4-R133): no square,
+            -- only its site. Until 2026-09-24 these lines were dropped here,
+            -- so every driver believed a case was "all placed" with clues
+            -- still to come, and completion could never be reached.
+            local wid, wplace, hours, wstatus =
+                line:match("^(%S+)%s+(.-)%s+waiting since hour (%S+)%s+%[(%w+)%]$")
+            if wid then
+                out[#out + 1] = { id = wid, place = wplace, waiting = true, status = wstatus, since = hours }
+            end
         end
     end
     L.list = out
@@ -87,8 +97,78 @@ end
 -- a site 100 tiles away is not loaded, and a search there finds nothing.
 function L.approach(n)
     local d = L.list[n]
+    if not d then return false, "no document " .. tostring(n) end
+    if d.waiting then return L.visitSite(n) end
     getPlayer():teleportTo(d.x + 0.5, d.y + 0.5, d.z)
     return true
+end
+
+-- INSTALMENTS ARRIVE WHERE THE SURVIVOR STANDS (P4-R133). A waiting clue is
+-- brought in by standing at its site, as a player following the case would:
+-- at the site's edge, just outside the guard radius inside which nothing may
+-- materialise (StaleClue.tooClose), with teleportTo because setX/setY is
+-- overwritten by the engine the same tick (fitness audit, 2026-09-24).
+function L.visitSite(n)
+    local d = L.list[n]
+    if not d then return false, "no document " .. tostring(n) end
+    local store = ModData.get("ConspiracyFiles.Generated.G2")
+    local C = require("ConspiracyFiles/Generated/SuccessiveCases")
+    local wrapper = type(store) == "table" and C.current(store)
+    for _, root in ipairs(wrapper and C.sessions(wrapper) or {}) do
+        local a = root.assignments and root.assignments[d.id]
+        if a then
+            for _, s in ipairs(root.case.locations or {}) do
+                if s.id == a.locationId then
+                    local b = s.bounds
+                    if not b then return false, "site has no bounds" end
+                    local SC = require("ConspiracyFiles/StaleClue")
+                    getPlayer():teleportTo(b.x1 - (SC.PROXIMITY_GUARD_TILES + 2) + 0.5, b.y1 + 0.5, b.z or 0)
+                    return true, tostring(s.name or a.locationId)
+                end
+            end
+            return false, "site " .. tostring(a.locationId) .. " not in the case"
+        end
+    end
+    return false, "document not in any case"
+end
+
+-- Has document n been written into the world yet? Re-reads the runtime's
+-- rows, so a driver can poll this after visitSite. The reason is the filler's
+-- own last word (Log.declines "placement").
+function L.settle(n)
+    L.docs()
+    local d = L.list[n]
+    if not d then return false, "document " .. tostring(n) .. " is gone from the list" end
+    if d.waiting then
+        local ok, why = pcall(function() return require("ConspiracyFiles/Log").lastDecline("placement") end)
+        return false, tostring(ok and why or "no reason recorded")
+    end
+    return true, d.status
+end
+
+-- Unrecognised clues in furniture (not a car, not a body), for the checks
+-- that need one to spot, walk up to, or leave lying.
+function L.furniture()
+    local n, parts = 0, {}
+    for _, c in ipairs(R.clueTargets()) do
+        if c.status == "placed" and not c.recognised and not c.vehicle and not c.carrier then
+            n = n + 1; parts[#parts + 1] = c.id
+        end
+    end
+    local waiting = 0
+    for _, d in ipairs(L.docs()) do if d.waiting then waiting = waiting + 1 end end
+    return n, table.concat(parts, " ") .. " (waiting: " .. waiting .. ")"
+end
+
+-- The next waiting document's index, in turn, so a site that never takes its
+-- clue does not keep the survivor standing there.
+L.waitCursor = 0
+function L.nextWaiting()
+    local idx = {}
+    for i, d in ipairs(L.docs()) do if d.waiting then idx[#idx + 1] = i end end
+    if #idx == 0 then return 0 end
+    L.waitCursor = L.waitCursor + 1
+    return idx[((L.waitCursor - 1) % #idx) + 1]
 end
 
 -- Whether document n's square and the eight around it have loaded, so a
@@ -99,7 +179,7 @@ end
 function L.loaded(n)
     local d = L.list[n]
     local cell = getCell()
-    if not d or not cell then return false end
+    if not d or d.waiting or not cell then return false end
     for dx = -1, 1 do for dy = -1, 1 do
         if not cell:getGridSquare(d.x + dx, d.y + dy, d.z) then return false end
     end end
@@ -110,6 +190,31 @@ end
 function L.find(n)
     local d = L.list[n]
     L.vehicle, L.part = nil, nil
+    if not d then return false, "no document " .. tostring(n) end
+    if d.waiting then return false, "still waiting for placement (" .. tostring(d.status) .. ")" end
+    -- THE OPENING KEY IS DELIVERED TO THE HAND (2026-09-23): the runtime records
+    -- a square for it, but the item is in the survivor's inventory. Look there
+    -- first, at the root and one bag deep, before the drawers around the square.
+    do
+        local inv = getPlayer():getInventory()
+        local function scan(container, depth)
+            local items = container and container:getItems()
+            for j = 0, (items and items:size() or 0) - 1 do
+                local it = items:get(j)
+                local md = it and it:getModData()
+                if type(md) == "table" and md.cfGeneratedId == d.id then return it end
+                if depth < 1 and it and it.getInventory and instanceof(it, "InventoryContainer") then
+                    local found = scan(it:getInventory(), depth + 1)
+                    if found then return found end
+                end
+            end
+        end
+        local held = scan(inv, 0)
+        if held then
+            L.item, L.holder = held, nil
+            return true, held:getDisplayName(), "inventory", "in hand", d.z
+        end
+    end
     for dx = -1, 1 do for dy = -1, 1 do
         local it, holder = scanSquare(getCell():getGridSquare(d.x + dx, d.y + dy, d.z), d.id)
         if it then
@@ -338,6 +443,7 @@ end
 -- Click the container's icon in the loot panel, as a player would. Right after
 -- a long move the panel has no icon yet, so the caller polls this.
 function L.openContainer()
+    if not L.item then return false, "no item found" end
     local target = L.item:getContainer()
     if not target then return false, "item is not in a container" end
     local loot = getPlayerLoot(0)
@@ -350,6 +456,9 @@ end
 
 function L.take()
     local p = getPlayer()
+    if not L.item then return false, "no item" end
+    -- Already in the hand (the opening key): nothing to transfer.
+    if L.item:getOutermostContainer() == p:getInventory() then return true, "already carried" end
     ISTimedActionQueue.add(ISInventoryTransferAction:new(p, L.item, L.item:getContainer(), p:getInventory()))
     return true
 end
@@ -359,6 +468,7 @@ end
 -- level by the time this was asked, and a clue in hand read as never taken
 -- (campaign 20260915T225411).
 function L.carried()
+    if not L.item then return false end
     return L.item:getOutermostContainer() == getPlayer():getInventory()
 end
 
@@ -559,6 +669,7 @@ end
 -- Open the world map on document n at a zoom where marks are drawn (>= 14).
 function L.showMap(n)
     local d = L.list[n] or L.last
+    if not d or not d.x then return false, "no placed document to centre the map on" end
     ISWorldMap.ShowWorldMap(0, d.x + 0.5, d.y + 0.5, 17)
     return ISWorldMap_instance ~= nil and ISWorldMap_instance:isVisible()
 end
@@ -574,6 +685,13 @@ function L.remember(n) L.last = L.list[n]; return true end
 function L.caseCount()
     local s = R.automaticStatus()
     return s.count, s.scheduled, s.preparing
+end
+
+-- Why no case has come (P4-R133): the code, how often, the hour it is due.
+function L.deferWhy()
+    local s = R.automaticStatus()
+    if not s.why then return "no refusal recorded (preparing=" .. tostring(s.preparing) .. " scheduled=" .. tostring(s.scheduled) .. ")" end
+    return tostring(s.why) .. " x" .. tostring(s.deferCount) .. " due hour " .. tostring(s.dueHours) .. " rung " .. tostring(s.rung)
 end
 
 -- Test pacing: the 24 h gap between cases (catalogue INF-04, AS-02).
@@ -642,6 +760,36 @@ function L.answerViaOrganiser()
     local ok = q.answers and q.answers.reading == "one" and q.answers.matters == "person1" and q.answers.way == "listen"
     pcall(S.close)
     return tostring(ok == true), note, tostring(q.offered.people[1])
+end
+
+-- CONTINUITY AS DECIDED (DR-20260919-CONTINUITY, test/steer_precedence.lua):
+-- the next case FOLLOWS a finding the survivor made (the finished case's
+-- thread); the three closing answers are not the steering mechanism and stay
+-- unused for the case after. Only when the finished case left no thread does
+-- the steer shape the next case. Until 2026-09-24 this driver asserted the
+-- older P4-R113 rule and failed on the decided behaviour (20260924T231603).
+-- Returns: mode (follows|steer|none), ok, fromCaseMatches, answersUnused, liveCaseId, detail
+function L.continuity()
+    local finished, live
+    for _, root in ipairs(campaign()) do
+        if type(root.rows) == "table" and root.offered then finished = finished or root
+        elseif root.case and not (type(root.rows) == "table") then live = live or root end
+    end
+    if not finished or not live then return "none", "false", "false", "false", "none", "no finished case or no live case" end
+    local answersUnused = tostring(finished.answers == nil or finished.answers.usedBy == nil)
+    local f = live.case.follows
+    if type(f) == "table" then
+        return "follows", "true", tostring(f.fromCase == finished.caseId), answersUnused, tostring(live.case.caseId),
+            "follows document " .. tostring(f.document) .. " of " .. tostring(f.fromCase)
+    end
+    if live.case.steer then
+        local s = live.case.steer
+        return "steer", "true", tostring(s.fromCase == finished.caseId),
+            tostring(finished.answers ~= nil and finished.answers.usedBy == live.case.caseId), tostring(live.case.caseId),
+            "steered by the answers (" .. tostring(s.way) .. "); the finished case left no thread=" .. tostring(finished.thread == nil)
+    end
+    return "none", "false", "false", answersUnused, tostring(live.case.caseId),
+        "neither follows nor steer; finished case thread=" .. tostring(finished.thread ~= nil)
 end
 
 function L.steerCheck()

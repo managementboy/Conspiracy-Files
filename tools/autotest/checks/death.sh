@@ -71,7 +71,9 @@ title="$(run_log | grep -oE "evidence album issued: [^\"]*" | tail -1)"
 [[ "$title" == "evidence album issued: ${second}'s Evidence" ]] || fail "the new survivor ($second) was not issued an evidence album: ${title:-none}"
 
 # PS-12: the new survivor takes a document back off the old body.
-ev 'return CFDeath.goToBody()' >/dev/null; sleep 3
+ev 'return CFDeath.goToBody()' >/dev/null
+wait_true 30 'CFDeath.bodyLoaded()' || say "the squares around the body did not all load in 30 s"
+sleep 2
 body="$(ev 'return CFDeath.bodyItem()')"
 if [ "$(cut -f1 <<<"$body")" = true ]; then
     ev 'return CFDeath.takeFromBody()' >/dev/null
@@ -98,7 +100,7 @@ report="$EVIDENCE/$id-death.txt"
     echo "new survivor: $second; evidence album: ${title:-no evidence album issued line}"
     echo "record for the new survivor: $(tr '\t' ' ' <<<"$after")"
     echo "the new survivor's organiser: carried=$(cut -f1 <<<"$organiser") marked=$(cut -f2 <<<"$organiser"); reads for them=$(cut -f1 <<<"$device")"
-    echo "document taken back off the body: $(cut -f2 <<<"$body")"
+    echo "document taken back off the body: $(cut -f2 <<<"$body") ($(cut -f3 <<<"$body"))"
     echo "errors inside the mod: $(grep -c . <<<"$errors")"
     [ -z "$errors" ] || sed 's/^/  /' <<<"$errors" | head -10
     for f in "${fails[@]}"; do echo "FAIL: $f"; done
