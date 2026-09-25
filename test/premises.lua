@@ -13,11 +13,12 @@ local opts = { mapId = "SYNTHETIC-MAP", buildLine = "TEST-ONLY", allowSynthetic 
 -- total separately, so openings cannot quietly widen the ordinary pool either.
 assert(Premises.choosableCount() == 20,
     "expected twenty premises an ordinary case can draw, got " .. Premises.choosableCount())
--- Twenty ordinary, plus five that are selected outside the ordinary draw:
--- three generic openings, one profession opening and their connected follow-up. All are excluded
+-- Twenty ordinary, plus twenty-nine selected outside the ordinary draw:
+-- three generic openings, twenty-five profession openings (every Build 42
+-- occupation, 2026-09-25) and their connected follow-up. All are excluded
 -- from `choose`, so the ordinary pool above is what an ordinary case can tell.
-assert(Premises.count() == 25 and Premises.openingCount()==3,
-    "expected twenty-five in total - twenty ordinary, four openings and the follow-up, got " .. Premises.count())
+assert(Premises.count() == 49 and Premises.openingCount()==3,
+    "expected forty-nine in total - twenty ordinary, three generic openings, twenty-five profession openings and the follow-up, got " .. Premises.count())
 
 -- The case reference must not give the premise away. The links between
 -- documents already carry the connection and the record sorts on them, so a

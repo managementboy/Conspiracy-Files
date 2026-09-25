@@ -148,6 +148,17 @@ These are planned tests, not executable code or passed results. Development is s
 
 If an engine check fails, record the failed assumption and the smallest alternative. Do not report the hook, carrier or timing as verified from a mock test, printed claim or coordinate match. Q30's technical criterion still requires the applicable engine checks to actually pass.
 
+## Status, 2026-09-25
+
+Slice 3 is built: every occupation in §2 has an opening family of its own
+(`Generated/OccupationOpeningScenarios.lua`, three starts each), on the
+five-finding grammar the Fitness starts proved in play - not the twenty-five
+bespoke mechanics proposed in the table (false panels, welded covers, water
+retrieval), which remain proposals. Each family keeps the table's *question*
+family - the wrong key, the extra panel, meals for nobody, revision zero -
+as the errand on the appointment card, and pins one of the two hidden pairs.
+DR-20260925-OCCUPATION-OPENINGS.
+
 ## 9. Recommended development slices and closeout
 
 1. **Personal-opening preparation:** O1 and relevant placement/recording checks. Define local payoff and central connection. Media identity is a separate integration spike, not an opening prerequisite.

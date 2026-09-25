@@ -502,7 +502,7 @@ function G.generate(catalog,seed,options)
     if options.self~=nil then
         if type(options.self)~="string" or #options.self==0 or #options.self>60 then return nil,"invalid survivor name" end
     end
-    if options.profession~=nil and options.profession~="fitnessinstructor" then return nil,"invalid opening profession" end
+    if options.profession~=nil and not Premises.forProfession(options.profession) then return nil,"invalid opening profession" end
     if options.profession and not options.opening then return nil,"profession only applies to an opening" end
     -- An opening without a name would render "{SELF}" into the slip, and the
     -- slip is the case's only personal anchor - the one finding with no
@@ -570,7 +570,7 @@ function G.generateSelected(catalog,seed,options,orderedSiteIds)
     if options.self~=nil then
         if type(options.self)~="string" or #options.self==0 or #options.self>60 then return nil,"invalid survivor name" end
     end
-    if options.profession~=nil and options.profession~="fitnessinstructor" then return nil,"invalid opening profession" end
+    if options.profession~=nil and not Premises.forProfession(options.profession) then return nil,"invalid opening profession" end
     if options.profession and not options.opening then return nil,"profession only applies to an opening" end
     if options.opening and not options.self then return nil,"the opening needs the survivor's name" end
     local follows
@@ -682,10 +682,13 @@ function G.validate(case)
             return false,"invalid opening survivor name"
         end
         if case.opening.profession~=nil or case.opening.variant~=nil then
-            if case.opening.profession~="fitnessinstructor"
-                or case.opening.premise~="fitness-instructor-start"
+            -- The profession must have a family, the premise must be that
+            -- family's, and the variant one the family has authored.
+            local family=case.opening.profession and Premises.forProfession(case.opening.profession)
+            local variants=family and Premises.openingVariants(family.id)
+            if not family or case.opening.premise~=family.id
                 or type(case.opening.variant)~="number" or case.opening.variant~=math.floor(case.opening.variant)
-                or case.opening.variant<1 or case.opening.variant>10 then
+                or case.opening.variant<1 or not variants or case.opening.variant>variants then
                 return false,"invalid profession opening"
             end
         end

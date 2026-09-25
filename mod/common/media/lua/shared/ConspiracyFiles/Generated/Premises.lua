@@ -3,6 +3,7 @@
 -- from the ordinary pool. New openings are selected deterministically from
 -- their own authored pool; old saves still name the original opening with the
 -- legacy boolean flag and rebuild it unchanged.
+local Occupations=require("ConspiracyFiles/Generated/OccupationOpeningScenarios")
 local M={}
 local entries={
  {id="transfer-nobody-arranged",title="A transfer nobody arranged"},
@@ -28,9 +29,20 @@ local entries={
  {id="no-contact-at-premises",title="No contact at premises",opening=true},
  {id="name-on-standby-list",title="A name promoted from standby",opening=true},
  {id="deposit-for-unknown-booking",title="A deposit for an unknown booking",opening=true},
- {id="fitness-instructor-start",title="The house I was given access to",opening=true,profession="fitnessinstructor"},
+ {id="fitness-instructor-start",title="The house I was given access to",opening=true,profession="fitnessinstructor",
+  primedKey=true,openingVoice="This opens the house. Why did I have access?"},
  {id="still-filing",title="Still filing",followUp=true},
 }
+-- EVERY OTHER OCCUPATION (owner, 2026-09-25: "expand the starting mysteries
+-- for all occupations"). One family per Build 42 profession, authored in
+-- OccupationOpeningScenarios; a family's variant count is its own, and a
+-- profession without a family keeps the generic opening pool.
+for _,profession in ipairs(Occupations.ORDER) do
+ local f=Occupations.families[profession]
+ entries[#entries+1]={id=profession.."-start",title="The house I was expected at",opening=true,
+  profession=profession,variants=#f.variants,primedKey=Occupations.primedKey(profession),
+  openingVoice=Occupations.openingVoice(profession)}
+end
 local byId,ordinary,openings,professionOpenings={},{},{},{}
 for _,entry in ipairs(entries) do
  assert(not byId[entry.id],"duplicate family id")
@@ -77,7 +89,30 @@ end
 function M.openingVariants(id)
  local entry=byId[id]
  if not entry or not entry.opening then return nil end
+ if entry.variants then return entry.variants end
  return entry.profession and 10 or 2
+end
+-- Whether a profession's opening puts a key to the starting building in the
+-- survivor's hand before the case attaches (GeneratedRuntime.primeOpening),
+-- and the line the survivor says when it does. The Fitness family primes a
+-- key; an occupation family says so itself.
+function M.primedKey(profession)
+ local entry=professionOpenings[profession]
+ if not entry then return false end
+ if entry.primedKey~=nil then return entry.primedKey==true end
+ return true
+end
+function M.openingVoice(profession)
+ local entry=professionOpenings[profession]
+ return entry and entry.openingVoice or nil
+end
+-- The professions that have a family of their own, in a stable order.
+function M.professions()
+ local out={}
+ for _,entry in ipairs(entries) do
+  if entry.opening and entry.profession then out[#out+1]=entry.profession end
+ end
+ return out
 end
 function M.followUp() return M.get("still-filing") end
 return M

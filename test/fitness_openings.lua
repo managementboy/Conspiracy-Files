@@ -8,7 +8,9 @@ local Story=require("ConspiracyFiles/Generated/Story")
 
 local premise=assert(Premises.forProfession("fitnessinstructor"))
 assert(premise.id=="fitness-instructor-start" and premise.opening and premise.profession=="fitnessinstructor")
-assert(Premises.forProfession("unemployed")==nil,"other professions keep the generic opening pool")
+-- Every Build 42 occupation has a family since 2026-09-25 (test/occupation_openings.lua);
+-- a profession the game does not have keeps the generic opening pool.
+assert(Premises.forProfession("astronaut")==nil,"an unknown profession keeps the generic opening pool")
 assert(Premises.openingVariants(premise.id)==10,"the fitness opening advertises ten variants")
 
 local questions,titles={},{}
@@ -71,6 +73,6 @@ end
 for variant=1,10 do assert(seen[variant],"fitness start is unreachable: "..variant) end
 
 assert(G.generateSelected(catalog,1,{mapId="SYNTHETIC-MAP",buildLine="TEST-ONLY",
- allowSynthetic=true,opening=true,self="Ada Whitlock",profession="carpenter"},sites)==nil,
+ allowSynthetic=true,opening=true,self="Ada Whitlock",profession="astronaut"},sites)==nil,
  "unknown profession routing is refused instead of silently selecting a wrong family")
 print("PASS fitness instructor: ten residential starts build the five-clue dual-conspiracy opening exactly")

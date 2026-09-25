@@ -220,3 +220,21 @@ rules: never infer identity or ownership; two readings stay live. Tests hold
 every heading to first person and to no certainty words.
 
 **Status:** queued; not built during play.
+
+## Owner question, 2026-09-25 (asked mid-build; for after the occupation openings ship)
+
+**"Why do we have a 240 character body cap?"**
+
+What is known, for whoever answers it: `EvidenceKinds.OBJECT_MAX_CHARS=240` caps
+the record body of an *object* finding (a key, a sack, a hoard) - paper
+findings are not capped this way. The stated reason, in `test/object_rules.lua`
+and `Story.build`: "nothing is written on an object; a body longer than a
+record's sentence would be the mod explaining the object" - the observation,
+the source line and the note are run together into plain sentences, and the
+cap keeps that to a sight and what the survivor made of it. The number 240
+itself has no recorded derivation (not a save-budget figure, not a screen
+width - the PDA wraps). While authoring the 24 occupation families today, five
+object records ran over it by 3-28 characters and had to be trimmed; the cap
+did its job as a style limit, but whether 240 is the right figure, and whether
+the *source* sentence of an object should count against it at all, is the
+owner's question to settle. Not changed.

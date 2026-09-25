@@ -295,7 +295,12 @@ function R.primeOpening()
     local house=playerHouse(player)
     if not house then return false,"starting house not ready" end
     local _,profession=playerIdentity(player)
-    if profession~="fitnessinstructor" then return true,"not a Fitness Instructor opening" end
+    -- A family whose pocket object is a key to this building primes it now;
+    -- any other opening delivers its object when the case attaches.
+    local Premises=require("ConspiracyFiles/Generated/Premises")
+    if not (profession and Premises.forProfession(profession) and Premises.primedKey(profession)) then
+        return true,"no primed key for this opening"
+    end
     local inventory=player.getInventory and player:getInventory()
     if not inventory then return false,"inventory not ready" end
     local existing=primedOpening(inventory,house)
@@ -306,7 +311,7 @@ function R.primeOpening()
     if not item then return false,tostring(why) end
     local md=item:getModData()
     md[PRIMED_HOUSE]=house
-    md.cfOpeningVoice=FITNESS_OPENING_VOICE
+    md.cfOpeningVoice=Premises.openingVoice(profession) or FITNESS_OPENING_VOICE
     local ok,added=pcall(function() return inventory:AddItem(item) end)
     local carried=ok and added~=nil and added~=false
     if not carried and item.getOutermostContainer then
@@ -833,9 +838,12 @@ local function prepare(result,seed,later,house)
             local name,profession=playerIdentity(p)
             if name and #name<=60 then
                 options.opening=true; options.self=name
-                if profession=="fitnessinstructor" then
+                local Premises=require("ConspiracyFiles/Generated/Premises")
+                local family=profession and Premises.forProfession(profession)
+                if family then
                     options.profession=profession
-                    log("first case: one of ten Fitness Instructor openings, in the survivor's own name")
+                    log("first case: one of "..tostring(Premises.openingVariants(family.id)).." "..profession
+                        .." openings, in the survivor's own name")
                 else
                     log("first case: the personal opening, in the survivor's own name")
                 end
@@ -995,7 +1003,8 @@ local function prepare(result,seed,later,house)
         -- hand, this transaction adopts that exact object.  The container
         -- assignment remains its provenance, but no second key is created.
         local primed
-        if house and case.opening and case.opening.profession=="fitnessinstructor" then
+        if house and case.opening and case.opening.profession
+            and require("ConspiracyFiles/Generated/Premises").primedKey(case.opening.profession) then
             primed=primedOpening(p:getInventory(),house)
         end
         local preference=house and case.opening and {farFrom={documentId=first.id,x=p:getX(),y=p:getY()}} or nil

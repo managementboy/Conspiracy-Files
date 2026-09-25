@@ -1,0 +1,12 @@
+Linux profession opening families: PASS
+source: d66a333 + uncommitted mod changes
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+families advertised: fitnessinstructor:fitness-instructor-start:10 burglar:burglar-start:3 burgerflipper:burgerflipper-start:3 carpenter:carpenter-start:3 chef:chef-start:3 constructionworker:constructionworker-start:3 doctor:doctor-start:3 electrician:electrician-start:3 engineer:engineer-start:3 farmer:farmer-start:3 fireofficer:fireofficer-start:3 fisherman:fisherman-start:3 lumberjack:lumberjack-start:3 mechanics:mechanics-start:3 metalworker:metalworker-start:3 nurse:nurse-start:3 parkranger:parkranger-start:3 policeofficer:policeofficer-start:3 rancher:rancher-start:3 repairman:repairman-start:3 securityguard:securityguard-start:3 smither:smither-start:3 tailor:tailor-start:3 unemployed:unemployed-start:3 veteran:veteran-start:3
+saves per family: 3
+
+  electrician save 1: variant=1 title="Unsigned repair service screwdriver / BF-507" onPlayer=true status=placed (player inventory)
+  electrician save 2: variant=2 title="Panel check service screwdriver / BF-261" onPlayer=true status=placed (player inventory)
+  electrician save 3: variant=1 title="Unsigned repair service screwdriver / PS-496" onPlayer=true status=placed (player inventory)
+  electrician: 3 distinct title(s) and 2 distinct variant(s) across 3 saves
+
+errors inside the mod: 0

@@ -90,7 +90,10 @@ for _,cal in ipairs(calendars) do
                 assert(not doc.title:match("{%u[%u%d]*}") and not doc.body:match("{%u[%u%d]*}"),id..": unresolved placeholder")
                 dateOrdinals(doc.body,id.." / "..variant.." / "..doc.id)
             end
-            if id=="fitness-instructor-start" then
+            if id:match("%-start$") then
+                -- Every profession opening (the Fitness ten and the 2026-09-25
+                -- occupation families) has the same shape: a thing in the
+                -- pocket, then the dated appointment card.
                 assert(includes(dateOrdinals(built.documents[2].body,id.." appointment"),JULY_8),
                     "the origin opening must use its outbreak-eve appointment date")
             else

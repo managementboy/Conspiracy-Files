@@ -150,6 +150,16 @@ local scenarios={
  },
 }
 scenarios["fitness-instructor-start"]=FitnessOpenings
+local Occupations=require("ConspiracyFiles/Generated/OccupationOpeningScenarios")
+for _,profession in ipairs(Occupations.ORDER) do
+ scenarios[profession.."-start"]=Occupations.get(profession)
+end
+-- An opening family of a profession carries its own organisation and objects.
+local function professionFamily(id)
+ if id=="fitness-instructor-start" then return true end
+ local profession=id:match("^(.+)%-start$")
+ return profession~=nil and Occupations.families[profession]~=nil
+end
 
 local function copy(value)
  if type(value)~="table" then return value end
@@ -163,11 +173,11 @@ function M.get(id,variant)
  local scenario=set and set[variant]
  if type(variant)~="number" or variant~=math.floor(variant) or not scenario then return nil end
  local out=copy(scenario)
- if id~="fitness-instructor-start" then
+ if not professionFamily(id) then
   out.organisation="McCoy Logging Co."
   out.grounding="McCoyLoggingCorp"
  end
- if id~="fitness-instructor-start" and not out.anchors.claim.source:find("{A}",1,true) then
+ if not professionFamily(id) and not out.anchors.claim.source:find("{A}",1,true) then
   out.anchors.claim.source=out.anchors.claim.source.."\nEnquiry copy filed at: {A}."
  end
  return out
