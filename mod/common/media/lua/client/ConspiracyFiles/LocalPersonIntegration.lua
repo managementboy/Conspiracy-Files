@@ -649,9 +649,13 @@ function P.observeDoor(action)
         -- heldKey cannot see it.
         local own=heldGeneratedKey(inventory,keyId)
         if own then
-            local ok,why=pcall(observeOpeningKeyDoor,action.character,door,own,keyId)
-            if not ok then log("opening key door match deferred: "..tostring(why))
-            elseif why and why~="recorded" then log("opening key door not recorded: "..tostring(why)) end
+            -- pcall returns (ok, accepted, reason): reading the second value as
+            -- the reason logged "not recorded: true" on every repeat use of the
+            -- key (Windows stream 2026-09-25) - a duplicate, recorded once
+            -- already, is not a refusal.
+            local ok,accepted,why=pcall(observeOpeningKeyDoor,action.character,door,own,keyId)
+            if not ok then log("opening key door match deferred: "..tostring(accepted))
+            elseif not accepted then log("opening key door not recorded: "..tostring(why)) end
             return
         end
         -- No key of ours fits. A real key taken from a body does the same
