@@ -544,8 +544,20 @@ local function observeOpeningKeyDoor(character,door,key,keyId)
             .." against door "..tostring(doorId))
     end
     -- Same fact id for the same key and door, so trying it twice records once.
-    local accepted=noteFact(fact,"keyDoorMatch opening key door="..doorId.." building="..buildingId)
-    return accepted and true or false,"recorded"
+    local accepted,reason=noteFact(fact,"keyDoorMatch opening key door="..doorId.." building="..buildingId)
+    if accepted and reason=="recorded" then
+        -- WHERE, AND A WORD SAID. Windows, 2026-09-25: the lock turned, FILES
+        -- gained the row, and the row read "I didn't note where I was" with
+        -- the survivor standing at the door; nothing was said. The discovery
+        -- ledger gives the row its place (the same entry every other finding
+        -- gets, keyed by the row's own id), and the voice says the one thing
+        -- the lock witnessed.
+        local logger=ConspiracyFiles.DiscoveryLog
+        if logger and logger.record then pcall(logger.record,"connection","keydoor:"..tostring(fact.id)) end
+        local voice=ConspiracyFiles.PlayerVoice
+        if voice and voice.onOpeningKeyDoor then pcall(voice.onOpeningKeyDoor) end
+    end
+    return accepted and true or false,tostring(reason)
 end
 -- A key looted from a body carries that body's provenance, stamped by
 -- remember(). Bounded traversal, same discipline as heldKey. Two candidate

@@ -176,3 +176,47 @@ Concise status updates. Commit completed work with a clear message.
 If workers share this checkout, commit with `git commit -o <paths>`: a plain
 `git commit` takes the whole index and will sweep another session's staged files
 into your commit. That has already happened once.
+
+## Owner idea, Windows playtest 2026-09-25 — an app that tracks what the survivor is following
+
+**Owner, verbatim intent:** "PDA app that tracks 'cases' (should be called
+differently, as we are not an investigator, we are a survivor). Currently we
+only have an ever longer list of files."
+
+**What was seen:** FILES is one flat, growing list in discovery order (key,
+appointment card, key-door row, then the receipt from a refrigerator...). Nothing
+on the device groups findings by the thread they belong to, says which threads
+are still open, or lets the survivor put one down.
+
+**For the PM to shape, not decided here:**
+- the survivor's word for it (not "case", not "investigation" - what a
+  survivor would call the thing they are following: a thread, a question, a
+  name, an address?);
+- grouping FILES by thread with an open/closed state per thread, the central
+  question never announced (dual-conspiracy philosophy stays intact);
+- whether PLACES already does part of this (P4-R81) and should grow rather than
+  a new app be added;
+- budget: any per-thread state must fit the save budget (SaveBudget roots).
+
+**Status:** queued; not built. Recorded during play as instructed (playtests
+queue ideas, they do not build them).
+
+## Owner task, Windows playtest 2026-09-25 — the record speaks in first person, with doubt
+
+**Owner, verbatim intent:** "we still write 'what YOU found'. I want first person
+perspective with doubt. 'What I think I found' ... we have mysteries. A player
+can't KNOW."
+
+**What was seen:** a FILES record heading reads `WHAT YOU FOUND` above "A
+confirmed appointment card names me, this address and a farm-connected
+client." Second person, and stated as certain.
+
+**Scope for the PM:** every projection heading and summary sentence the device
+shows (WHAT YOU FOUND, and any sibling headings) becomes the survivor's own
+voice with doubt built in - "What I think I found", "What this seems to say" -
+and the summary sentences stop asserting ("a confirmed appointment card
+names...") where the survivor can only read, not confirm. Keep the observation
+rules: never infer identity or ownership; two readings stay live. Tests hold
+every heading to first person and to no certainty words.
+
+**Status:** queued; not built during play.

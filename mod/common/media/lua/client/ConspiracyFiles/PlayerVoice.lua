@@ -326,6 +326,17 @@ end
 -- persistence boundary: loading the save, dropping it and picking it up again,
 -- or a repeated hook can never replay the opening. cfVoiceHinted also prevents
 -- the ordinary unread-pickup musing from talking over this unique line.
+-- The key the survivor started with fits a door. Not a body's key (Set B/C
+-- speak of the body); this says only what the lock witnessed and that it is
+-- written down - the player's expectation on trying it (owner, 2026-09-25:
+-- "this worked... will write it down"). Once per key and door, gated by the
+-- journal's own "recorded" answer in LocalPersonIntegration.
+function V.onOpeningKeyDoor()
+    local p=player(); if not p then return false end
+    speak(p,"The lock turned. I have written that down.","Key matches this door",true)
+    return true
+end
+
 function V.onOpeningClue(item)
     if not item then return false end
     local p=player(); if not p then return false end
@@ -336,7 +347,11 @@ function V.onOpeningClue(item)
     md.cfVoiceHinted=true
     local line=(type(md.cfOpeningVoice)=="string" and #md.cfOpeningVoice>0 and #md.cfOpeningVoice<=120)
         and md.cfOpeningVoice or OPENING_LINE
-    speak(p,line,"Opening clue",true)
+    -- The bubble carries a FACT in the survivor's world, like every other
+    -- label here ("Key matches this door", "A body"). "Opening clue" was the
+    -- mod's own word for it, and the owner read it on screen (Windows,
+    -- 2026-09-25): the same leak as the save wording of the day before.
+    speak(p,line,"Already in my pocket",true)
     return true
 end
 

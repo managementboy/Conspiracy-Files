@@ -1,0 +1,12 @@
+Linux opening key door check 20260925T075754: FAIL
+source: f84db73 + uncommitted mod changes
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+  id comparison (what the Linux check measured): keyId=935318 buildingDefKeyId=935318 doors=7 matchingByKeyId=0 locked=6
+  interaction queued: true nil rowsBefore=0
+  door opened: true; key-door observations before=0 after=1
+  after reload: 1 key-door observation(s)
+  record: I tried the key and the lock turned. It was cut for this door. \n That is all the lock can tell me. Who it was cut for, who left it where I found it, and why I had it are not questions a door answers.
+  FILES place: 202 E Maple St; FOUND line: I found it at 202 E Maple St.
+
+FAIL: nothing was said when the lock turned
+errors inside the mod: 0

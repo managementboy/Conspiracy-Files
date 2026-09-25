@@ -1,0 +1,10 @@
+Linux boot check 20260925T073541: PASS
+source: f84db73
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+mod version / game version / player alive: DEV-0.47.7-searched-means-looked	42.20.4 b0bbce05d5	true
+game loading took 57 seconds; soaked 60s
+mod files loaded: 133 of 133
+survivor's evidence album: evidence album opened in the inventory panel after 0 ticks
+errors inside the mod: 0
+mod warnings/errors logged by the mod itself: 0
+screenshot: dev/eval/linux/runs/20260925T073541.png (not committed)

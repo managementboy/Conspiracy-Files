@@ -122,6 +122,23 @@ function K.rowText()
     return "none"
 end
 
+-- What FILES shows for the key-door row: its FOUND place, from the discovery
+-- ledger. Windows 2026-09-25: the row read "I didn't note where I was" with
+-- the survivor at the door.
+function K.filesPlace()
+    local okR, Rows = pcall(require, "ConspiracyFiles/EvidenceRows")
+    if not okR or not (Rows and Rows.list) then return "no-rows-module: " .. tostring(Rows) end
+    local ok, rows = pcall(Rows.list, "files")
+    if not ok or type(rows) ~= "table" then return "rows-failed: " .. tostring(rows) end
+    for _, row in ipairs(rows) do
+        if tostring(row.id):find("keydoor:", 1, true) then
+            local found = tostring(row.detailText):match("FOUND\n([^\n]*)")
+            return tostring(row.place), tostring(found)
+        end
+    end
+    return "no-keydoor-row"
+end
+
 -- Did the door actually move? The interaction's own result, independent of
 -- whether the mod recorded anything.
 function K.doorOpen()

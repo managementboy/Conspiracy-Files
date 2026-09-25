@@ -52,6 +52,16 @@ if [ "$ready" = 1 ]; then
     after="$(ev 'return CFKeyDoor.rows()')"
     rows+=("door opened: $opened; key-door observations before=$before after=$after")
     say "${rows[-1]}"
+    # The survivor's word, read NOW: the reload below starts a new game
+    # session and the console with it, so a grep afterwards is blind
+    # (20260925T080855). A line fired within the hold of the opening line
+    # queues behind it and is said a few seconds later (PlayerVoice.speak).
+    spoken=no
+    for _ in $(seq 30); do
+        run_log | grep -q "said .The lock turned" && { spoken=yes; break; }
+        sleep 1
+    done
+    voice_note="$(run_log | grep -o "msg=\"[a-z]* .The lock turned[^\"]*" | tail -1)"
 
     # Reload, because the requirement is that it stays visible.
     world="$(cat "$REPO/dev/eval/linux/world" 2>/dev/null)"
@@ -73,6 +83,15 @@ if [ "$ready" = 1 ]; then
         for claim in "belonged to" "my house" "the owner" "lived here"; do
             grep -qi "$claim" <<<"$text" && fail "the record infers ownership: $claim"
         done
+        # The row's place and the survivor's word (owner, Windows 2026-09-25:
+        # FOUND read "I didn't note where I was"; nothing was said).
+        place="$(ev 'return CFKeyDoor.filesPlace()')"
+        rows+=("FILES place: $(f 1 <<<"$place"); FOUND line: $(f 2 <<<"$place")")
+        say "${rows[-1]}"
+        [ -n "$(f 1 <<<"$place")" ] && [ "$(f 1 <<<"$place")" != nil ] || fail "the key-door row has no place in FILES"
+        grep -q "I found it at" <<<"$(f 2 <<<"$place")" || fail "FOUND does not name where the lock turned: $(f 2 <<<"$place")"
+        if [ "$spoken" = yes ]; then rows+=("voice: the survivor said the lock turned")
+        else fail "nothing was said when the lock turned in 30 s: ${voice_note:-no voice line at all}"; fi
     elif [ "$opened" = "true" ]; then
         fail "the door opened and nothing was recorded"
     else
