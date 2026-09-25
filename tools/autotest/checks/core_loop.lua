@@ -146,6 +146,24 @@ function L.settle(n)
     return true, d.status
 end
 
+-- What a document waits for: its placement intent from the case itself
+-- ("vehicle" for a transport scene that needs a confirmed vanilla vehicle
+-- near the site), so a driver can tell a clue that reality has not promoted
+-- from one that is merely late (DR-20260925-SCENE-AT-COMPLETION).
+function L.intent(n)
+    local d = L.list[n]
+    if not d then return "none" end
+    local store = ModData.get("ConspiracyFiles.Generated.G2")
+    local C = require("ConspiracyFiles/Generated/SuccessiveCases")
+    local wrapper = type(store) == "table" and C.current(store)
+    for _, root in ipairs(wrapper and C.sessions(wrapper) or {}) do
+        for _, doc in ipairs(root.case and root.case.documents or {}) do
+            if doc.id == d.id then return tostring(doc.placementIntent or "none") end
+        end
+    end
+    return "none"
+end
+
 -- Unrecognised clues in furniture (not a car, not a body), for the checks
 -- that need one to spot, walk up to, or leave lying.
 function L.furniture()
@@ -634,8 +652,12 @@ function L.dateNotes()
         if r.kind == Memo.KIND then memo = true
         elseif Memo.inWeek(r.body) then dated = dated + 1 end
     end
+    -- The heading is the survivor's own since DR-20260925-RECORD-VOICE
+    -- ("WHAT I NOTICE ABOUT THE DATE"); the old "DATE NOTE" grep counted
+    -- nothing (core loop 20260925T200914).
+    local H = require("ConspiracyFiles/Headings")
     for _, row in ipairs(rows) do
-        if tostring(row.detailText):find("DATE NOTE", 1, true) then noted = noted + 1 end
+        if tostring(row.detailText):find(H.DATE, 1, true) then noted = noted + 1 end
     end
     return tostring(memo), tostring(dated), tostring(noted)
 end
@@ -695,6 +717,16 @@ function L.deferWhy()
 end
 
 -- Test pacing: the 24 h gap between cases (catalogue INF-04, AS-02).
+-- Ask the poller now rather than waiting for its tick: it polls every 600
+-- ticks, and the unfocused hidden display runs at about a frame a second,
+-- so a 150 s wait could pass without a single poll (20260925T212202).
+function L.pollNow()
+    local A = ConspiracyFiles.AutomaticInvestigations
+    if not (A and A.poll) then return false, "no poller" end
+    local ok, why = pcall(A.poll)
+    return ok, tostring(why)
+end
+
 function L.noGap()
     ConspiracyFiles.AutomaticInvestigations.config.minGapHours = 0
     -- And the wait after a completion (P4-R121); unit-tested on its own.

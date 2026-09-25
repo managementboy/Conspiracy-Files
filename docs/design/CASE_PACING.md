@@ -68,7 +68,12 @@ cheaper than a placed one (no target table, no sprite string).
 - **Nothing unearned:** the record projects only discovered rows, so a partial
   case shows what was found and never a total. No surface may say "3 of 5".
 - **Completion** requires no deferred clue left, so "nothing left to find" and
-  the closing question do not fire while a clue is unwritten.
+  the closing question do not fire while a clue is unwritten - with one
+  exception since 2026-09-25: a transport-scene clue (`placementIntent`
+  "vehicle") still waiting when everything else is accounted for is set aside
+  at completion and listed among the clues the case never had
+  (DR-20260925-SCENE-AT-COMPLETION). It waits for a confirmed vanilla scene,
+  and most saves have none within reach of the site.
 - **Limits unchanged:** a partial case counts against the four active cases,
   and the 24-hour gap is still measured from the case's creation. An instalment
   is not a creation.

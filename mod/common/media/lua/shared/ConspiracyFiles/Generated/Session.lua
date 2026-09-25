@@ -395,13 +395,34 @@ end
 -- too - it was never in the world and never will be. A deferred one is NOT,
 -- which is what stops "nothing left to find" and the closing question firing
 -- while a clue is still unwritten (P4-R133).
+-- A TRANSPORT SCENE REALITY NEVER PROMOTED DOES NOT HOLD THE CASE OPEN.
+-- A clue with placementIntent "vehicle" waits for a CONFIRMED vanilla scene
+-- near its site (vehicleCandidateFor); the opening families say such a clue
+-- "cannot make the case fail merely because this save has no suitable nearby
+-- scene". It did not fail the case - it held it open for three in-game days,
+-- with every essential clue found and "What do I make of it?" not firing
+-- (core loop 20260925T200914, the unemployed opening; every audit of the
+-- Fitness opening saw the cooler wait the same way). So: a vehicle clue still
+-- WAITING when everything else is accounted for is set aside, and the case
+-- ends without it - honestly, through S.gaps, never silently.
+function S.unpromotedVehicleIds(root)
+    local out={}
+    for _,d in ipairs(root.case and root.case.documents or {}) do
+        local a=root.assignments[d.id]
+        if d.placementIntent=="vehicle" and a and (a.status=="deferred" or a.status=="indexed") then
+            out[#out+1]=d.id
+        end
+    end
+    return out
+end
 function S.accounted(root)
     if type(root)~="table" or type(root.case)~="table" then return false end
     local known={}
     for _,id in ipairs(root.known or {}) do known[id]=true end
     for _,d in ipairs(root.case.documents) do
         local a=root.assignments[d.id]
-        if not known[d.id] and not (a and a.status=="dropped") then return false end
+        local waitingScene=d.placementIntent=="vehicle" and a and (a.status=="deferred" or a.status=="indexed")
+        if not known[d.id] and not (a and a.status=="dropped") and not waitingScene then return false end
     end
     return true
 end

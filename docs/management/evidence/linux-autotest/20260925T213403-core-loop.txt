@@ -1,0 +1,26 @@
+Linux core loop check 20260925T213403: FAIL
+source: d185777 + uncommitted mod changes
+renderer: Mesa llvmpipe (LLVM 20.1.2, 256 bits) (SOFTWARE) on display :0
+first case: 6 documents, all found, looked over and inspected through the right-click menu:
+  1. Reference check application pen / TN-124 (found as Reference check application pen / TN-124), in inventory, room in hand, floor 0 (container icon clicked: no)
+  2. Reference check appointment / TN-124 (found as Receipt), in bin, room kitchen, floor 0 (container icon clicked: yes)
+  3. Radio in a bathroom / TN-124 (found as ValuTech Radio), in cardboardbox, room toolstore, floor 0 (container icon clicked: yes)
+  4. Spent dust masks and bandages / TN-124 (found as Dust Mask), in metal_shelves, room toolstore, floor 0 (container icon clicked: yes)
+  6. Access memo / 7C-41 (found as Note), in smallbox, room toolstore, floor 0 (container icon clicked: yes)
+record entries: 5; case completion reported: no
+map marks without a pen (written/pending/missing): 4/0/1
+map marks after a pen, case already retired: 4/0/1
+second case appeared (gap removed): yes
+errors inside the mod: 0
+FINDING: document 1 (Reference check application pen / TN-124): its name did not change when it was recognised
+FINDING: document 5 waits for a confirmed vehicle scene and none is within reach; set aside at completion (still waiting after 150s at its site: indexed plan for generated:1965599326:document-2 waits for square 10872,10024 to load)
+FINDING: relay memo date notes: memo found=true, dated in its week=1, carrying the note=1
+FINDING: last seen after completion: 5 of 5 documents, e.g. 'Carried, in Consuelo's Evidence.'; retired cases in the save=1, rows with a stored last seen=5
+FINDING: last-seen log: 
+FINDING: Evidence / Old after completion: 5 pieces of evidence carried, 5 known as retired evidence, 5 in the Old category
+FINDING: marks before a pen not tested: a case clue was itself a writing tool; marks 4/0/1
+FINDING: continuity into the second case: none - neither follows nor steer; finished case thread=true; answers still unused for the case after=true
+FINDING: What do I make of it?: answered=true (person Warren Nagy); the answers are not the steering mechanism (DR-20260919-CONTINUITY) and are held for the case after a followed thread
+FAIL: the case never reported completion
+FAIL: the second case carries no continuity at all: none false false true generated:1965599326:case neither follows nor steer; finished case thread=true
+screenshot: dev/eval/linux/runs/20260925T213403-map.png (not committed)

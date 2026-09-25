@@ -1,0 +1,11 @@
+PASS knox.os - 2026-09-25T20:09:14+02:00
+commit: d185777
+renderer: Mesa llvmpipe (LLVM 20.1.2, 256 bits) (SOFTWARE) on display :0
+session: 20260925T200321
+opened:   true	FILES	1	false	false	1
+names:    true	NAMES	1	false	false	3
+dates:    true	DATES	1	false	false	5
+threads:  true	THREADS	2	false	false	2
+  rows:   Why did my reference live at a house the bank could not place? | Things I have not placed
+record:   A bank's promotional pen is in my pocket, chewed, its clip bent. I do not remember taking it. It carries the bank's name and is used down to nothing. A counter pen travels with the form it filled in. Which form, and why here? / WHAT I MARKED ON MY MAP / I did not note where I found this, so there is no mark on my map.
+to do:    true	TO DO	1	false	false	6

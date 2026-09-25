@@ -1,0 +1,28 @@
+Linux nurse first-mystery audit 20260925T195855: PASS
+source: d185777
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+  conspiracy: pair=farm-zero-vs-delivered-agent registered=true valid=true winnerField=none theories=2
+  conspiracy: axis=movement isAxis=true bridge=yes profession=nurse unresolvedIsCentralQuestion=true
+  document 1: kind=Key1 capacity=object status=placed itemsInWorld=1 members=1 wear=worn intent=-
+  document 2: kind=receipt capacity=prose status=placing itemsInWorld=1 members=1 wear=- intent=-
+  document 3: kind=AnimalFeedBag capacity=object status=indexed itemsInWorld=0 members=1 wear=poor intent=wrong
+  document 4: kind=Hat_SurgicalMask capacity=object status=indexed itemsInWorld=0 members=9 wear=mixed and spent intent=wrong
+  document 5: kind=Cooler capacity=object status=deferred itemsInWorld=0 members=1 wear=scuffed intent=vehicle
+  document 6: kind=memo capacity=prose status=indexed itemsInWorld=0 members=1 wear=- intent=-
+  objects: 4 object documents, 2 paper; placed=1 inWorld=1 waiting=3
+  walked to document 3 (AnimalFeedBag): site 10845,9986,0,indexed,standing=10823,9986
+  after 10s at the site: document 3 status=placed itemsInWorld=1
+  walked to document 4 (Hat_SurgicalMask): site 10845,9986,0,placed,standing=10823,9986
+  after 10s at the site: document 4 status=placed itemsInWorld=9
+  walked to document 5 (Cooler): site 10845,9986,0,deferred,standing=10823,9986
+  after 120s at the site: document 5 status=deferred itemsInWorld=0
+  objects after walking: inWorld=3 waiting=1
+  value: object 1 (Key1) is the subject of 3 comparison(s), named in 3, distinctFromPaper=true
+  value: object 3 (AnimalFeedBag) is the subject of 3 comparison(s), named in 3, distinctFromPaper=true
+  value: object 4 (Hat_SurgicalMask) is the subject of 2 comparison(s), named in 2, distinctFromPaper=true
+  value: object 5 (Cooler) is the subject of 2 comparison(s), named in 2, distinctFromPaper=true
+  value: the case offers 2 rival readings
+
+NOT EXERCISED: document 5 (Cooler) still deferred after standing at its square: no confirmed vehicle at the site for generated:63265161:document-5
+NOT EXERCISED: 1 object(s) still waiting for placement; last reason: no confirmed vehicle at the site for generated:63265161:document-5
+errors inside the mod: 0

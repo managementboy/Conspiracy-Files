@@ -1,0 +1,58 @@
+Linux profession opening families: PASS
+source: d185777
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+families advertised: fitnessinstructor:fitness-instructor-start:10 burglar:burglar-start:3 burgerflipper:burgerflipper-start:3 carpenter:carpenter-start:3 chef:chef-start:3 constructionworker:constructionworker-start:3 doctor:doctor-start:3 electrician:electrician-start:3 engineer:engineer-start:3 farmer:farmer-start:3 fireofficer:fireofficer-start:3 fisherman:fisherman-start:3 lumberjack:lumberjack-start:3 mechanics:mechanics-start:3 metalworker:metalworker-start:3 nurse:nurse-start:3 parkranger:parkranger-start:3 policeofficer:policeofficer-start:3 rancher:rancher-start:3 repairman:repairman-start:3 securityguard:securityguard-start:3 smither:smither-start:3 tailor:tailor-start:3 unemployed:unemployed-start:3 veteran:veteran-start:3
+saves per family: 1
+
+  fitnessinstructor save 1: variant=2 title="Mobility visit house key / AV-672" onPlayer=true status=placed (player inventory); memory before: 10:1
+  burglar save 1: variant=2 title="Lock change unit padlock key / LD-979" onPlayer=true status=placed (player inventory); memory before: -
+  burgerflipper save 1: variant=2 title="Farm delivery serving tongs / MC-146" onPlayer=true status=placed (player inventory); memory before: -
+  carpenter save 1: variant=2 title="Board-up bench chisel / LD-164" onPlayer=true status=placed (player inventory); memory before: -
+  chef save 1: variant=1 title="Meals for nobody cleaver / RC-395" onPlayer=true status=placed (player inventory); memory before: -
+  constructionworker save 1: variant=3 title="Site pass site trowel / BF-623" onPlayer=true status=placed (player inventory); memory before: -
+  doctor save 1: variant=2 title="Transferred file house key / PS-963" onPlayer=true status=placed (player inventory); memory before: -
+  electrician save 1: variant=2 title="Panel check service screwdriver / WB-235" onPlayer=true status=placed (player inventory); memory before: -
+  engineer save 1: variant=1 title="Revision zero drafting pencil / BF-437" onPlayer=true status=placed (player inventory); memory before: -
+  farmer save 1: variant=3 title="Feed swap hand scythe / TN-294" onPlayer=true status=placed (player inventory); memory before: -
+  fireofficer save 1: variant=2 title="Hydrant check inspection key / BF-214" onPlayer=true status=placed (player inventory); memory before: -
+  fisherman save 1: variant=1 title="Landing collection gaff hook / PS-997" onPlayer=true status=placed (player inventory); memory before: -
+  lumberjack save 1: variant=1 title="Marked load marking axe / MC-925" onPlayer=true status=placed (player inventory); memory before: -
+  mechanics save 1: variant=3 title="Cold-start car key / RC-803" onPlayer=true status=placed (player inventory); memory before: -
+  metalworker save 1: variant=3 title="Repair chit cold chisel / QS-477" onPlayer=true status=placed (player inventory); memory before: -
+  nurse save 1: variant=2 title="Medication custody visit key / RC-308" onPlayer=true status=placed (player inventory); memory before: 1:1,2:1,3:2
+  parkranger save 1: variant=2 title="Cabin check trail tool / AV-667" onPlayer=true status=placed (player inventory); memory before: -
+  policeofficer save 1: variant=1 title="Two numbers badge / MC-230" onPlayer=true status=placed (player inventory); memory before: -
+  rancher save 1: variant=2 title="Tag check shears / AV-624" onPlayer=true status=placed (player inventory); memory before: -
+  repairman save 1: variant=3 title="Warranty visit collection key / HK-971" onPlayer=true status=placed (player inventory); memory before: -
+  securityguard save 1: variant=2 title="Alarm response keyholder key / HK-855" onPlayer=true status=placed (player inventory); memory before: -
+  smither save 1: variant=2 title="Hinge job smithing hammer / WB-975" onPlayer=true status=placed (player inventory); memory before: -
+  tailor save 1: variant=1 title="Lining order shears / QS-333" onPlayer=true status=placed (player inventory); memory before: -
+  unemployed save 1: variant=1 title="Appointment that moved application pen / QS-961" onPlayer=true status=placed (player inventory); memory before: -
+  veteran save 1: variant=3 title="Issue return dog tag / BF-444" onPlayer=true status=placed (player inventory); memory before: -
+
+NOT EXERCISED: fitnessinstructor: only 1 save(s) produced a case, so variation could not be judged
+NOT EXERCISED: burglar: only 1 save(s) produced a case, so variation could not be judged
+NOT EXERCISED: burgerflipper: only 1 save(s) produced a case, so variation could not be judged
+NOT EXERCISED: carpenter: only 1 save(s) produced a case, so variation could not be judged
+NOT EXERCISED: chef: only 1 save(s) produced a case, so variation could not be judged
+NOT EXERCISED: constructionworker: only 1 save(s) produced a case, so variation could not be judged
+NOT EXERCISED: doctor: only 1 save(s) produced a case, so variation could not be judged
+NOT EXERCISED: electrician: only 1 save(s) produced a case, so variation could not be judged
+NOT EXERCISED: engineer: only 1 save(s) produced a case, so variation could not be judged
+NOT EXERCISED: farmer: only 1 save(s) produced a case, so variation could not be judged
+NOT EXERCISED: fireofficer: only 1 save(s) produced a case, so variation could not be judged
+NOT EXERCISED: fisherman: only 1 save(s) produced a case, so variation could not be judged
+NOT EXERCISED: lumberjack: only 1 save(s) produced a case, so variation could not be judged
+NOT EXERCISED: mechanics: only 1 save(s) produced a case, so variation could not be judged
+NOT EXERCISED: metalworker: only 1 save(s) produced a case, so variation could not be judged
+NOT EXERCISED: nurse: only 1 save(s) produced a case, so variation could not be judged
+NOT EXERCISED: parkranger: only 1 save(s) produced a case, so variation could not be judged
+NOT EXERCISED: policeofficer: only 1 save(s) produced a case, so variation could not be judged
+NOT EXERCISED: rancher: only 1 save(s) produced a case, so variation could not be judged
+NOT EXERCISED: repairman: only 1 save(s) produced a case, so variation could not be judged
+NOT EXERCISED: securityguard: only 1 save(s) produced a case, so variation could not be judged
+NOT EXERCISED: smither: only 1 save(s) produced a case, so variation could not be judged
+NOT EXERCISED: tailor: only 1 save(s) produced a case, so variation could not be judged
+NOT EXERCISED: unemployed: only 1 save(s) produced a case, so variation could not be judged
+NOT EXERCISED: veteran: only 1 save(s) produced a case, so variation could not be judged
+errors inside the mod: 0

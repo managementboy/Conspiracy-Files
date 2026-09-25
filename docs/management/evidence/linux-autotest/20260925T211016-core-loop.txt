@@ -1,0 +1,25 @@
+Linux core loop check 20260925T211016: FAIL
+source: d185777 + uncommitted mod changes
+renderer: Mesa llvmpipe (LLVM 20.1.2, 256 bits) (SOFTWARE) on display :0
+first case: 6 documents, all found, looked over and inspected through the right-click menu:
+  1. Vacancy filled application pen / RC-785 (found as Vacancy filled application pen / RC-785), in inventory, room in hand, floor 0 (container icon clicked: no)
+  2. Vacancy filled appointment / RC-785 (found as Receipt), in counter, room garage, floor 0 (container icon clicked: yes)
+  3. Radio in a bathroom / RC-785 (found as ValuTech Radio), in cardboardbox, room toolstore, floor 0 (container icon clicked: yes)
+  4. Spent dust masks and bandages / RC-785 (found as Dust Mask), in smallbox, room toolstore, floor 0 (container icon clicked: yes)
+  6. Access memo / 7C-41 (found as Note), in metal_shelves, room toolstore, floor 0 (container icon clicked: yes)
+record entries: 5; case completion reported: yes
+map marks without a pen (written/pending/missing): 4/0/1
+map marks after a pen, case already retired: 4/0/1
+second case appeared (gap removed): no
+errors inside the mod: 0
+FINDING: document 1 (Vacancy filled application pen / RC-785): its name did not change when it was recognised
+FINDING: document 5 waits for a confirmed vehicle scene and none is within reach; set aside at completion (still waiting after 150s at its site: no confirmed vehicle at the site for generated:391266450:document-5)
+FINDING: relay memo date notes: memo found=true, dated in its week=1, carrying the note=1
+FINDING: last seen after completion: 5 of 5 documents, e.g. 'Carried, in Chung's Evidence.'; retired cases in the save=1, rows with a stored last seen=5
+FINDING: last-seen log: 
+FINDING: Evidence / Old after completion: 5 pieces of evidence carried, 5 known as retired evidence, 5 in the Old category
+FINDING: marks before a pen not tested: a case clue was itself a writing tool; marks 4/0/1
+FINDING: continuity into the second case: none - no second case; answers still unused for the case after=false
+FINDING: What do I make of it?: answered=true (person Ines Kubiak); the answers are not the steering mechanism (DR-20260919-CONTINUITY) and are held for the case after a followed thread
+FAIL: no second case within 150 s with the gap removed: gap x0 due hour 26.273818969726562 rung 0
+screenshot: dev/eval/linux/runs/20260925T211016-map.png (not committed)

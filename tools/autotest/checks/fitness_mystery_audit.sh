@@ -19,8 +19,12 @@ id="$(session)"
 for fx in core_loop profession_openings fitness_world_opening fitness_mystery_audit; do
     ev -f "$REPO/tools/autotest/checks/$fx.lua" >/dev/null || { say "$fx did not load"; exit 2; }
 done
-became="$(ev 'return CFProf.become([[fitnessinstructor]])')"
-[ "$(f 1 <<<"$became")" = true ] || { say "could not become a fitness instructor"; exit 2; }
+# ANY OCCUPATION. Written for the Fitness Instructor; since 2026-09-25 every
+# occupation has an opening family (DR-20260925-OCCUPATION-OPENINGS), and the
+# three questions are the same for each. CF_PROFESSION=electrician picks one.
+profession="${CF_PROFESSION:-fitnessinstructor}"
+became="$(ev "return CFProf.become([[$profession]])")"
+[ "$(f 1 <<<"$became")" = true ] || { say "could not become a $profession"; exit 2; }
 
 budget="${CF_FIRST_CASE_WAIT:-2400}"; deadline=$(( $(date +%s) + budget )); ready=0
 while [ "$(date +%s)" -lt "$deadline" ]; do
@@ -121,9 +125,9 @@ errors="$(mod_errors)"
 verdict=PASS
 [ "$ready" = 1 ] || verdict="COULD NOT RUN"
 [ ${#fails[@]} -eq 0 ] || verdict=FAIL
-report="$EVIDENCE/$id-fitness-mystery-audit.txt"
+report="$EVIDENCE/$id-$profession-mystery-audit.txt"
 {
-    echo "Linux Fitness Instructor first-mystery audit $id: $verdict"
+    echo "Linux $profession first-mystery audit $id: $verdict"
     source_line
     printf '  %s\n' "${rows[@]}"
     echo

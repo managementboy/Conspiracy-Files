@@ -32,10 +32,20 @@ while :; do
 done
 say "case placed: $summary"
 
-rows=(); findings=(); inhand=0
+rows=(); findings=(); inhand=0; unpromoted=0
 for i in $(seq 1 "$n"); do
-    # An instalment is brought in by standing at its site (P4-R133).
-    why="$(settle_doc "$i")" || { fail "document $i $why"; continue; }
+    # An instalment is brought in by standing at its site (P4-R133). A
+    # transport scene waits for a CONFIRMED vanilla vehicle near the site and
+    # most saves have none; it is set aside at completion, not found
+    # (DR-20260925-SCENE-AT-COMPLETION), so it is counted apart, not failed.
+    if ! why="$(settle_doc "$i")"; then
+        if [ "$(ev "return CFLoop.intent($i)")" = vehicle ]; then
+            unpromoted=$((unpromoted+1))
+            findings+=("document $i waits for a confirmed vehicle scene and none is within reach; set aside at completion ($why)")
+            continue
+        fi
+        fail "document $i $why"; continue
+    fi
     ev "return CFLoop.approach($i)" >/dev/null; wait_true 10 "CFLoop.loaded($i)" >/dev/null
     found="$(ev "return CFLoop.find($i)")"
     [ "$(cut -f1 <<<"$found")" = true ] || { fail "document $i not found where the runtime says: $(cut -f2 <<<"$found")"; continue; }
@@ -85,7 +95,7 @@ done
 
 sleep 5
 known="$(ev 'return CFLoop.known()' | cut -f1)"
-[ "$known" = "$n" ] || fail "record knows $known of $n documents"
+[ "$known" = "$((n-unpromoted))" ] || fail "record knows $known of $n documents ($unpromoted transport scene(s) never promoted)"
 # The relay memo's date note (P4-R96), in the real game at last.
 notes="$(ev 'return CFLoop.dateNotes()')"
 say "date notes: memo found=$(cut -f1 <<<"$notes") records dated in its week=$(cut -f2 <<<"$notes") carrying the note=$(cut -f3 <<<"$notes")"
@@ -134,13 +144,13 @@ if [ "$(ev 'return CFLoop.hasPen()')" = true ]; then
     # One of the case's own clues was a pen, so the survivor could already write.
     findings+=("marks before a pen not tested: a case clue was itself a writing tool; marks $(tr '\t' '/' <<<"$before_pen")")
 else
-    [ "$(cut -f2 <<<"$before_pen")" = "$((n-inhand))" ] || fail "without a pen, expected $((n-inhand)) pending marks ($inhand clue(s) were in the hand, nowhere to mark): $before_pen"
+    [ "$(cut -f2 <<<"$before_pen")" = "$((n-inhand-unpromoted))" ] || fail "without a pen, expected $((n-inhand-unpromoted)) pending marks ($inhand clue(s) in the hand, $unpromoted scene(s) never promoted): $before_pen"
 fi
 
 # A pen after the case retired: the marks must still catch up.
 ev 'return CFLoop.givePen()' >/dev/null; sleep 4
 after_pen="$(ev 'return CFLoop.markers()')"
-[ "$(cut -f1 <<<"$after_pen")" = "$((n-inhand))" ] || fail "with a pen after completion, expected $((n-inhand)) written marks ($inhand in the hand): $after_pen"
+[ "$(cut -f1 <<<"$after_pen")" = "$((n-inhand-unpromoted))" ] || fail "with a pen after completion, expected $((n-inhand-unpromoted)) written marks ($inhand in the hand, $unpromoted scene(s) never promoted): $after_pen"
 ev 'return CFLoop.showMap()' >/dev/null; sleep 3
 "$PZ" shot "$RUNS/$id-map.png" >/dev/null 2>&1
 ev 'return CFLoop.hideMap()' >/dev/null
@@ -152,8 +162,22 @@ ans="$(ev 'return CFLoop.answerViaOrganiser()')"
 say "answers: $(tr '\t' ' ' <<<"$ans")"
 [ "$(cut -f1 <<<"$ans")" = true ] || fail "could not answer about the finished case: $(cut -f2 <<<"$ans")"
 # The next case, with the 24 h gap and the wait after a completion removed for test pacing.
+# Back to the starting house first: settling instalments left the survivor
+# at a site's edge, where the next case found "no-containers" nearby
+# (20260925T203425). A player finishing a case is where they finished it.
+# Home first: a player finishing a case is where they finished it. Then the
+# gap comes off and the poller is ASKED, every ten seconds, rather than
+# waited for: it polls every 600 ticks, and the unfocused hidden display runs
+# at about a frame a second (20260925T212202).
+ev 'return CFLoop.approach(1)' >/dev/null; sleep 3
 ev 'return CFLoop.noGap()' >/dev/null
-wait_true 150 'CFLoop.caseCount()>=2' && next_case=yes || { next_case=no; fail "no second case within 150 s with the gap removed: $(ev 'return CFLoop.deferWhy()')"; }
+next_case=no
+for _ in $(seq 15); do
+    ev 'return CFLoop.pollNow()' >/dev/null
+    [ "$(ev 'return CFLoop.caseCount()' | cut -f1)" -ge 2 ] 2>/dev/null && { next_case=yes; break; }
+    sleep 10
+done
+[ "$next_case" = yes ] || fail "no second case within 150 s with the gap removed: $(ev 'return CFLoop.deferWhy()')"
 # CONTINUITY (DR-20260919-CONTINUITY): the next case follows a FINDING of the
 # finished case; the closing answers are not the steering mechanism and wait
 # for the case after. Only a finished case that left no thread is followed by

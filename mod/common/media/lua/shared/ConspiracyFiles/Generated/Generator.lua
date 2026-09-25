@@ -344,9 +344,23 @@ local function build(seed,revision,sites,cast,relayMemo,steer,opening,follows)
     local prefix="generated:"..seed..":"
     local a,b=sites[1],sites[2]
     -- The company's actual activity is part of the event, not a replaceable
-    -- letterhead. The continuation preserves its original company's identity.
+    -- letterhead. The continuation KEEPS THE COMPANY IT FOLLOWS: its own
+    -- scenario writes {ORG}, and the organisation comes from the thread. This
+    -- used to be a refusal ("continuation company mismatch") against the
+    -- scenario's placeholder company, which refused every follow-up to a
+    -- profession opening - after the opening, no second case ever came
+    -- (core loop 20260925T204628: "no case: continuation company mismatch",
+    -- deferred as no-containers and retried into the same refusal).
     local organisation=scenario.organisation
-    if follows and follows.organisation~=organisation then return nil,"continuation company mismatch" end
+    if follows and follows.organisation then
+        organisation=follows.organisation
+        if follows.grounding then
+            local adopted={}
+            for k,v in pairs(scenario) do adopted[k]=v end
+            adopted.organisation=organisation; adopted.grounding=follows.grounding
+            scenario=adopted
+        end
+    end
     local code=REFERENCE[random(#REFERENCE)].."-"..(100+random(899))
     local cal=G.calendar(random)
     if follows and follows.afterDate then
@@ -397,6 +411,7 @@ local function build(seed,revision,sites,cast,relayMemo,steer,opening,follows)
     if authored.thread then
         authored.thread.reference=code
         authored.thread.person=recipient; authored.thread.organisation=organisation
+        authored.thread.grounding=scenario.grounding
         authored.thread.survivor=map.SELF; authored.thread.afterDate=cal.reviewDate
     end
     -- A standalone historical memo is retained as its own source; it is
@@ -532,7 +547,7 @@ function G.generate(catalog,seed,options)
         for key in pairs(options.follows) do
             if key~="fromCase" and key~="document" and key~="reference"
                 and key~="point" and key~="question" and key~="person" and key~="organisation"
-                and key~="survivor" and key~="afterDate" then return nil,"unknown follows field" end
+                and key~="survivor" and key~="afterDate" and key~="grounding" then return nil,"unknown follows field" end
         end
         for _,key in ipairs({"fromCase","document","reference","point","question"}) do
             local v=options.follows[key]
@@ -653,7 +668,7 @@ function G.validate(case)
         for key in pairs(f) do
             if key~="fromCase" and key~="document" and key~="reference"
                 and key~="point" and key~="question" and key~="person" and key~="organisation"
-                and key~="survivor" and key~="afterDate" then return false,"unknown follows field" end
+                and key~="survivor" and key~="afterDate" and key~="grounding" then return false,"unknown follows field" end
         end
         for _,key in ipairs({"fromCase","document","reference","point","question"}) do
             if type(f[key])~="string" or #f[key]==0 or #f[key]>120 then return false,"invalid follows "..key end
@@ -665,7 +680,8 @@ function G.validate(case)
         if not Story.validThread(t,false) then return false,"invalid thread" end
         for key in pairs(t) do
             if key~="document" and key~="reference" and key~="point" and key~="question"
-                and key~="person" and key~="organisation" and key~="survivor" and key~="afterDate" then
+                and key~="person" and key~="organisation" and key~="survivor" and key~="afterDate"
+                and key~="grounding" then
                 return false,"unknown thread field"
             end
         end

@@ -79,7 +79,7 @@ end
 function M.validThread(t,follows)
     if type(t)~="table" then return false end
     local allowed={document=true,reference=true,point=true,question=true,
-        person=true,organisation=true,survivor=true,afterDate=true}
+        person=true,organisation=true,survivor=true,afterDate=true,grounding=true}
     if follows then allowed.fromCase=true end
     for key in pairs(t) do if not allowed[key] then return false end end
     for _,key in ipairs({"document","reference","point","question"}) do
@@ -89,6 +89,10 @@ function M.validThread(t,follows)
     for _,key in ipairs({"person","organisation","survivor"}) do
         if not text(t[key]) or #t[key]>80 or t[key]:find("%c") then return false end
     end
+    -- The company's grounding travels with it, so a continuation stays as
+    -- real as the case it follows. Optional: threads saved before 2026-09-25
+    -- carry none.
+    if t.grounding~=nil and (not text(t.grounding) or #t.grounding>80 or t.grounding:find("%c")) then return false end
     local day=t.afterDate
     if type(day)~="number" or day~=day or day%1~=0 or day<1 or day>189 then return false end
     return true

@@ -20,7 +20,7 @@ set -uo pipefail
 cf_main() {
 . "$(dirname "${BASH_SOURCE[0]}")/../lib.sh"
 say() { echo "prof: $*" >&2; }
-fails=(); notrun=(); rows=(); total_reached=0
+fails=(); notrun=(); rows=(); total_reached=0; total_worlds=0
 fail() { fails+=("$*"); say "FAIL: $*"; }
 skip() { notrun+=("$*"); say "NOT EXERCISED: $*"; }
 field() { if [ $# -ge 2 ]; then cut -f"$1" <<<"$2"; else cut -f"$1"; fi; }
@@ -50,10 +50,14 @@ for fam in $families; do
         # which refuses while a game is up - "game already running (pid ...)"
         # - so every save after the first was skipped. `fresh` is what asks
         # the running game for a new world, and is what campaign.sh uses.
-        if [ "$n" -ne 1 ]; then
+        # Every save after the RUN's first, not each family's first: with one
+        # save per family, the second family read the first family's case
+        # (20260925T193704, twenty-four families "playing" the Fitness start).
+        if [ "$total_worlds" -gt 0 ]; then
             "$PZ" fresh >/dev/null 2>&1 || { skip "$profession: could not draw a fresh world for save $n"; break; }
             load_fixtures || { skip "$profession: fixtures did not load in save $n"; break; }
         fi
+        total_worlds=$((total_worlds + 1))
         became="$(ev "return CFProf.become([[$profession]])")"
         if [ "$(field 1 "$became")" != true ]; then
             skip "$profession: the survivor could not be made one ($(field 2 "$became"))"

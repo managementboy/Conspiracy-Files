@@ -2007,6 +2007,23 @@ local function retireIfAccounted(done)
     -- a reset or before the store exists, and ipairs(nil) would throw inside a
     -- scheduler job. Nothing to retire into, so nothing to do.
     if type(wrapper)~="table" then return false end
+    -- A transport scene that never came is set aside before the case retires,
+    -- so the record lists it among the clues the case never had
+    -- (Session.unpromotedVehicleIds; the filler would otherwise keep waiting
+    -- for a car beside a retired case).
+    local unpromoted=Session.unpromotedVehicleIds(done)
+    if #unpromoted>0 then
+        for _,api in ipairs(sessions or {}) do
+            if api.snapshot().case.caseId==done.case.caseId then
+                for _,id in ipairs(unpromoted) do
+                    local ok,why=api.drop(id)
+                    if ok then CFLog.write("i","stale",{doc=id,why="no-scene-at-completion"})
+                    else log("could not set aside a transport clue at completion: "..tostring(why)) end
+                end
+                done=api.snapshot()
+            end
+        end
+    end
     for index,root in ipairs(Cases.sessions(wrapper)) do
         if not Retired.isRetired(root) and root.case and root.case.caseId==done.case.caseId then
             -- Where each clue was last seen, from the scan's own sightings
