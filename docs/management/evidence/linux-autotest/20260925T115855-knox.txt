@@ -1,0 +1,11 @@
+PASS knox.os - 2026-09-25T11:58:55+02:00
+commit: 49d2a6c
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+session: 20260925T115504
+opened:   true	FILES	3	false	false	1
+names:    true	NAMES	1	false	false	3
+dates:    true	DATES	1	false	false	5
+threads:  true	THREADS	7	false	false	2
+  rows:   STILL FOLLOWING | - Passenger manifest stub / LD-920 |   1. Passenger manifest stub / LD-920 | ON THEIR OWN | - A key on a body |   2. A key on a body |   3. A key on a body
+record:   WHAT I THINK I FOUND
+to do:    true	TO DO	1	false	false	6
