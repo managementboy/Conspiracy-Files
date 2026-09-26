@@ -360,13 +360,38 @@ frame's own converged advice ordered it.
 Deliberately not done: the actual generic document schema, and
 `EvidenceRows.lua`'s remaining 4 direct `Generated/*` requires
 (`PlaceNames`, `RelayMemo`, `SuccessiveCases`, `EvidenceKinds`) — these
-build every real FILES row's title/fields/body/kind, and a first attempt
-at capturing the safety-net baseline found the obvious path blocked: a
-fresh boot-check save has zero real evidence, so there is nothing yet to
-diff against. Capturing a real baseline needs either a populated save or
-a synthetic fixture — both real work, not yet done. Continuing this step
-without that baseline in hand would be exactly the corner-cutting five
-independent frames just converged on warning against.
+build every real FILES row's title/fields/body/kind. A fresh boot-check
+save has zero real evidence to diff against, but four of this machine's
+own aged save folders (the largest by disk size) were tried via
+`pz.sh start --continue <world>`; one had exactly one real FILES row.
+Captured in full — id, title, fields, and the real fixed-order
+`detailText` concatenation the attacker frame's own review warned about,
+visible directly in the real text — in
+`docs/management/evidence/knox-os-web-step4-evidencerows-baseline.md`.
+One row is a start, not the exhaustive corpus a real inversion needs
+(no coverage yet of the rarer overlap cases that same review named).
+
+That baseline surfaced a bigger finding than expected: **this straddler
+isn't a call-site redirect like the other five.** Stage 3's straddlers
+all reached into another module through the shared global table,
+fixable by pointing one reach at `EngineAPI.lua`/`PDAAPI.lua` instead.
+`EvidenceRows.lua`'s coupling to `Generated/*` is a plain `require()` at
+the file level, and `KnoxApps.lua` (module C) `require()`s
+`EvidenceRows.lua` directly at ITS file level too — aliasing
+`EvidenceRows` onto `CFEngine`'s namespace would change nothing real,
+since `KnoxApps.lua` would still transitively pull in all 4 `Generated/*`
+files regardless of what table points at the result. Actually inverting
+this needs what section 2.3 already called for: `EvidenceRows.lua`'s
+row-building logic reassigned from C to B outright (building rows from
+`Generated/*` content is content-assembly, not PDA rendering), with C
+receiving only the finished generic document — never `EvidenceRows.lua`
+itself, never a `Generated/*` file, transitively or otherwise. That
+reassignment, the schema itself, and verifying against the captured
+baseline (plus a broader corpus) are real work, still not done.
+Continuing past this point without that baseline in hand would have been
+exactly the corner-cutting five independent frames converged on warning
+against — so this step stops here, at a verified checkpoint, rather than
+forcing the harder half through under time pressure.
 
 ## 4. Explicit non-goals
 
