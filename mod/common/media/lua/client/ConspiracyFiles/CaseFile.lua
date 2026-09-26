@@ -19,15 +19,23 @@
 -- giving the player a real object rather than a window they cannot lose:
 -- setFavorite only stops it being discarded by accident.
 local CFLog=require("ConspiracyFiles/Log")
+local EngineAPI=require("ConspiracyFiles/EngineAPI")
+local PDAAPI=require("ConspiracyFiles/PDAAPI")
 ConspiracyFiles=ConspiracyFiles or {}
 local F=ConspiracyFiles.CaseFile or {}
 ConspiracyFiles.CaseFile=F
--- Provisional: CaseFile is a stage-3 straddler (docs/design/
--- MODULE_SEPARATION_2026-09-26.md section 2.6) that splits into a
--- carry/pickup half (A) and a case-content-assembly half (B). Filed
--- under CFInteract for now, matching stage 1's provisional event-
--- dispatcher choice, until the actual two-file split happens.
 CFInteract=CFInteract or {};CFInteract.CaseFile=F
+-- STRADDLE, corrected: section 2.6 of docs/design/MODULE_SEPARATION_
+-- 2026-09-26.md calls this a two-way split (carry/pickup = A,
+-- case-content-assembly = B). Reading the real file end to end for this
+-- resolution found no case-content-assembly logic here at all - every
+-- line is the physical album item (create/mark/name/favourite), the
+-- inventory-panel open retry, and moving RECOGNISED evidence into it.
+-- Its only two cross-module touches are read-only queries (B's
+-- isRecognised, C's window-open check), resolved below through
+-- EngineAPI/PDAAPI like the other straddlers. Filed as one file, wholly
+-- module A - not split. The design doc's own claim was wrong; fixed in
+-- section 2.6 rather than forcing a split with no real B-half to justify it.
 F.TYPE="Base.PhotoAlbum"
 -- Written into the item's own ModData, so "have they already been given one"
 -- survives a reload without any saved state of ours.
@@ -206,7 +214,7 @@ function F.fileEvidence()
     local now=getTimeInMillis and getTimeInMillis() or 0
     if F.filedAt and now-F.filedAt<F.FILE_EVERY_MS then return 0 end
     F.filedAt=now
-    local screen=ConspiracyFiles.OrganiserScreen
+    local screen=PDAAPI.OrganiserScreen
     if screen and screen.window and screen.window.on then return 0 end
     local player=getPlayer and getPlayer()
     if not player then return 0 end
@@ -259,7 +267,7 @@ function F.fileEvidence()
             -- Only recognised evidence is filed: an unrecognised clue is the
             -- plain item it looks like, and filing it would give it away
             -- (P4-R132).
-            local R=ConspiracyFiles.GeneratedRuntime
+            local R=EngineAPI.GeneratedRuntime
             local okR,recognised=true,true
             if R and R.isRecognised then okR,recognised=pcall(R.isRecognised,item) end
             if okR and recognised then moving[#moving+1]=item end

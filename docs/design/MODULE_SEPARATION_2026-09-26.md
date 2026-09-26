@@ -155,7 +155,7 @@ Applied to each named straddler:
 | `Organiser.lua` | Owns equip/hand state — genuinely A | Its direct global reaches into `OrganiserScreen`/`KnoxApps` become `CFPDA.PublicAPI.open()`/`.close()` calls. Nothing in A reaches into C's internals again. |
 | `ClueActions.lua` | Owns "what does finding this clue do" — genuinely A | Its direct reads of B's `GeneratedRuntime`/`MapMediaRuntime` become `CFEngine.PublicAPI.factsFor(id)` calls. |
 | `GeneratedMenu.lua` | Owns menu-item construction — an interaction concern, not content generation | Reassigned to A outright (not B, despite its current filing); its content lookups go through `CFEngine.PublicAPI`. |
-| `CaseFile.lua` | Splits: the physical carry/pickup object is A; the case-content assembly it displays is B | Two owned files, one per module, joined by a stable case ID — not two copies of the same logic, two genuinely different responsibilities that were welded together. |
+| `CaseFile.lua` | **Correction, 2026-09-26, stage 3**: owns the physical carry/pickup object only — genuinely A, not a split. Reading the real file end to end while resolving it found no case-content-assembly logic anywhere in it; the "two owned files" call below was never checked against the actual code. | One file, module A. Its two real cross-module touches (a read-only query into B's `isRecognised`, a read-only query into C's `window.on`) go through `EngineAPI.lua`/`PDAAPI.lua`, same as the other straddlers — not split, since there is no real second half to split off. |
 | `SaveBudget.lua` | Owns nothing real — see §2.5 | Deleted. Replaced by three per-module internal registries and, optionally, one non-owning aggregator. |
 
 ## 3a. Progress (updated as each step actually lands, not just planned)
@@ -244,9 +244,10 @@ changes:
    file has been repointed — no transitional shim left standing under any
    name, per §2.1.
 3. **Straddler resolution**, smallest first: `SaveBudget.lua` (pure
-   deletion) → `GeneratedMenu.lua`/`ClueActions.lua`/`Organiser.lua`
-   (redirect global reaches to `PublicAPI` calls) → `CaseFile.lua` (the
-   one genuine two-way split).
+   deletion) → `GeneratedMenu.lua`/`ClueActions.lua`/`Organiser.lua`/
+   `CaseFile.lua` (redirect global reaches to `PublicAPI` calls —
+   `CaseFile.lua` turned out to be one of these, not a two-way split; see
+   §2.6's correction).
 4. **Dependency inversion at the C↔B boundary**: define C's generic
    document schema, write B's adapter that publishes into it via
    `CFEngine`→`CFPDA.PublicAPI.publish`, delete every direct
