@@ -473,7 +473,7 @@ end
 
 if Events and Events.OnZombieDead and not P.deathHandler then
     P.deathHandler=function(zombie) pcall(P.onZombieDead,zombie) end
-    Events.OnZombieDead.Add(P.deathHandler)
+    require("ConspiracyFiles/Events/EngineEvents").on("OnZombieDead", P.deathHandler)
 end
 
 -- When her body appears, it carries exactly one card: hers (P4-R101).
@@ -518,7 +518,7 @@ end
 
 if Events and Events.OnDeadBodySpawn and not P.bodyHandler then
     P.bodyHandler=function(body) pcall(P.onDeadBodySpawn,body) end
-    Events.OnDeadBodySpawn.Add(P.bodyHandler)
+    require("ConspiracyFiles/Events/EngineEvents").on("OnDeadBodySpawn", P.bodyHandler)
 end
 
 -- The sweep, once an in-game minute rather than on a tick: this mod stripped
@@ -538,13 +538,13 @@ if Events and Events.EveryOneMinute and not P.minuteHandler then
             if state~="partial" then return end
         end
     end
-    Events.EveryOneMinute.Add(P.minuteHandler)
+    require("ConspiracyFiles/Events/EngineEvents").on("EveryOneMinute", P.minuteHandler)
 end
 -- Zombies being created is what a load, or walking back into her street, looks
 -- like: sweep quicker until the list has been walked once.
 if Events and Events.OnZombieCreate and not P.createHandler then
     P.createHandler=function() sweep.hurry=true end
-    Events.OnZombieCreate.Add(P.createHandler)
+    require("ConspiracyFiles/Events/EngineEvents").on("OnZombieCreate", P.createHandler)
 end
 
 return P

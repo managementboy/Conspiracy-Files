@@ -32,7 +32,7 @@ end
 local ok,why=W.install()
 if not ok and Events and Events.OnGameStart then
     -- The loot page class may not exist yet when this file loads.
-    Events.OnGameStart.Add(function()
+    require("ConspiracyFiles/Events/InteractionEvents").on("OnGameStart", function()
         local ok2,why2=W.install()
         if not ok2 then CFLog.message("searched","note","searched-container watch not installed: "..tostring(why2)) end
     end)

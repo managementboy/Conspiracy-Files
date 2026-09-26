@@ -39,8 +39,8 @@ function H.installTransfer()
     H.transferInstalled=true
 end
 if Events and not H.installed then
-    if Events.OnTick then Events.OnTick.Add(Integration.tick) end
-    if Events.OnGameStart then Events.OnGameStart.Add(function()
+    if Events.OnTick then require("ConspiracyFiles/Events/InteractionEvents").on("OnTick", Integration.tick) end
+    if Events.OnGameStart then require("ConspiracyFiles/Events/InteractionEvents").on("OnGameStart", function()
         Integration.reset()
         H.installDoor()
         H.installTransfer()

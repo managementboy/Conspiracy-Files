@@ -103,6 +103,6 @@ function M.fill(playerNum,context,items)
 end
 if not M.handler then
     M.handler=function(...) return M.fill(...) end
-    Events.OnFillInventoryObjectContextMenu.Add(M.handler)
+    require("ConspiracyFiles/Events/InteractionEvents").on("OnFillInventoryObjectContextMenu", M.handler)
 end
 return M

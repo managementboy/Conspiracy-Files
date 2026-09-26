@@ -788,12 +788,12 @@ function R.coverage(id)
 end
 if Events and not R.hooked then
     R.hooked=true
-    Events.OnGameStart.Add(function() local ok,why=pcall(R.start); if not ok then ready=false; log(why) end end)
-    Events.OnTick.Add(function() local ok,why=pcall(R.tick); if not ok then ready=false; log(why) end end)
-    if Events.OnFillContainer then Events.OnFillContainer.Add(function(_,_,container)
+    require("ConspiracyFiles/Events/EngineEvents").on("OnGameStart", function() local ok,why=pcall(R.start); if not ok then ready=false; log(why) end end)
+    require("ConspiracyFiles/Events/EngineEvents").on("OnTick", function() local ok,why=pcall(R.tick); if not ok then ready=false; log(why) end end)
+    if Events.OnFillContainer then require("ConspiracyFiles/Events/EngineEvents").on("OnFillContainer", function(_,_,container)
         local ok,why=pcall(R.offerContainer,container,true); if not ok then log(why) end
     end) end
-    if Events.OnRefreshInventoryWindowContainers then Events.OnRefreshInventoryWindowContainers.Add(function(page,phase)
+    if Events.OnRefreshInventoryWindowContainers then require("ConspiracyFiles/Events/EngineEvents").on("OnRefreshInventoryWindowContainers", function(page,phase)
         if phase~="beforeFloor" or not ready then return end
         for i,button in ipairs(page.backpacks or {}) do
             if i>32 then break end

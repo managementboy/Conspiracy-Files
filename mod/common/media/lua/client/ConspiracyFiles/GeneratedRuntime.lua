@@ -2621,7 +2621,7 @@ local function lastSeenJob()
         return true
     end
 end
-Events.OnTick.Add(function()
+require("ConspiracyFiles/Events/EngineEvents").on("OnTick", function()
     if not scheduler or not allowed() then return end
     ticks=ticks+1
     if sessions and ticks%120==0 then
@@ -2669,7 +2669,7 @@ local function restampEvidence(container,depth)
     return n
 end
 
-Events.OnGameStart.Add(function()
+require("ConspiracyFiles/Events/EngineEvents").on("OnGameStart", function()
     sessions,scheduler,preparing,wrapper=nil,nil,false,nil
     clearDebt()
     -- Forget what we could see last time. A new session has not looked yet,

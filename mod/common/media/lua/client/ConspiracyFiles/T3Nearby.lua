@@ -6,7 +6,7 @@ ConspiracyFiles = ConspiracyFiles or {}
 if ConspiracyFiles.T3Nearby then
     ConspiracyFiles.T3Nearby.cancel()
     if ConspiracyFiles.T3Nearby.handler and Events then
-        Events.OnTick.Remove(ConspiracyFiles.T3Nearby.handler)
+        require("ConspiracyFiles/Events/EngineEvents").off("OnTick", ConspiracyFiles.T3Nearby.handler)
     end
 end
 local Selection = require("ConspiracyFiles/T3Selection")
@@ -302,7 +302,7 @@ function T.start(radius,seed,requiredId,radiusSource)
     return true
 end
 T.handler = tick
-if Events then Events.OnTick.Add(tick) end
+if Events then require("ConspiracyFiles/Events/EngineEvents").on("OnTick", tick) end
 -- THE INLINE DIAGNOSTIC IS GONE (2026-09-21).
 --
 -- A copy of GeneratedDiagnostic.run lived here, to allow hot loading through a

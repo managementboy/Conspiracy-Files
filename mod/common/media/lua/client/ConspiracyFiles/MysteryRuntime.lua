@@ -345,8 +345,8 @@ function M.status()
     return Interpreter.close(M.current,store.ledger)
 end
 
-Events.OnGameStart.Add(function() pcall(root) end)
-Events.EveryTenMinutes.Add(function()
+require("ConspiracyFiles/Events/EngineEvents").on("OnGameStart", function() pcall(root) end)
+require("ConspiracyFiles/Events/EngineEvents").on("EveryTenMinutes", function()
     pcall(M.pollInventory)
     pcall(M.pollGates)
 end)

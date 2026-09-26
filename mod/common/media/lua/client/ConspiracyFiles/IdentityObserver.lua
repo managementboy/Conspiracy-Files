@@ -381,7 +381,7 @@ if not I.originalRender then
 end
 if Events and Events.OnTick and not I.tickHandler then
  I.tickHandler=function() I.tick() end
- Events.OnTick.Add(I.tickHandler)
+ require("ConspiracyFiles/Events/EngineEvents").on("OnTick", I.tickHandler)
 end
 function I.reset() queue={};queued={};seen={};tokenless={};elapsed=0 end
 if Events and Events.OnGameStart and not I.startHandler then
@@ -404,6 +404,6 @@ if Events and Events.OnGameStart and not I.startHandler then
   else CFLog.message("identity","person","NOT LOADED: "..table.concat(missing,", ")) end
  end
  I.startHandler=function() I.reset(); pcall(reportModules) end
- Events.OnGameStart.Add(I.startHandler)
+ require("ConspiracyFiles/Events/EngineEvents").on("OnGameStart", I.startHandler)
 end
 return I

@@ -266,7 +266,7 @@ function V.drain()
     lastSpokenAt,lastHold=t,holdFor(nextLine.text)
     deliver(p,nextLine.text,nextLine.label)
 end
-if Events and Events.OnTick and Events.OnTick.Add then Events.OnTick.Add(V.drain) end
+require("ConspiracyFiles/Events/InteractionEvents").on("OnTick", V.drain)
 
 -- Set A is gone (P4-R132, stage 2): noting evidence is a timed action with the
 -- game's progress bar, and the item changing says it was noted. The hook stays

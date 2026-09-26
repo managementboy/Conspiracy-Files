@@ -168,6 +168,6 @@ local handler=function()
         if Q.failures<=3 then log("cue failed: "..tostring(why)) end
     end
 end
-function Q.stop() if Events and Events.OnTick then Events.OnTick.Remove(handler) end end
-if Events and Events.OnTick then Events.OnTick.Add(handler) end
+function Q.stop() require("ConspiracyFiles/Events/InteractionEvents").off("OnTick", handler) end
+require("ConspiracyFiles/Events/InteractionEvents").on("OnTick", handler)
 return Q

@@ -371,7 +371,7 @@ end
 
 local ticks=0
 C.EVERY_TICKS=15
-if C.handler then Events.OnTick.Remove(C.handler) end
+if C.handler then require("ConspiracyFiles/Events/InteractionEvents").off("OnTick", C.handler) end
 C.handler=function()
     ticks=ticks+1
     if ticks%C.EVERY_TICKS~=0 then return end
@@ -381,5 +381,5 @@ C.handler=function()
         if C.failures<=3 then log("sync failed: "..tostring(why)) end
     end
 end
-Events.OnTick.Add(C.handler)
+require("ConspiracyFiles/Events/InteractionEvents").on("OnTick", C.handler)
 return C

@@ -106,7 +106,7 @@ function E.install()
 end
 
 if Events and Events.OnGameStart and not E.startHooked then
-    Events.OnGameStart.Add(function() safe(E.install) end)
+    require("ConspiracyFiles/Events/InteractionEvents").on("OnGameStart", function() safe(E.install) end)
     E.startHooked=true
 end
 E.install()
@@ -188,7 +188,7 @@ end
 
 if Events and not E.remindHandler then
     E.remindHandler=function() E.remindTick() end
-    Events.OnTick.Add(E.remindHandler)
+    require("ConspiracyFiles/Events/InteractionEvents").on("OnTick", E.remindHandler)
 end
 
 return E

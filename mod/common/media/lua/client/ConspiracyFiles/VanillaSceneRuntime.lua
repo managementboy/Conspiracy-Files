@@ -58,8 +58,8 @@ function R.matchVehicle(x,y,z,script)
  return nil
 end
 function R.reset() state=Observer.new();queue={};queued={};ticks=0 end
-if Events and Events.LoadGridsquare then Events.LoadGridsquare.Add(queueSquare) end
-if Events and Events.OnTick then Events.OnTick.Add(step) end
-if Events and Events.OnGameStart then Events.OnGameStart.Add(R.reset) end
+if Events and Events.LoadGridsquare then require("ConspiracyFiles/Events/EngineEvents").on("LoadGridsquare", queueSquare) end
+if Events and Events.OnTick then require("ConspiracyFiles/Events/EngineEvents").on("OnTick", step) end
+if Events and Events.OnGameStart then require("ConspiracyFiles/Events/EngineEvents").on("OnGameStart", R.reset) end
 R.loaded=true
 return R

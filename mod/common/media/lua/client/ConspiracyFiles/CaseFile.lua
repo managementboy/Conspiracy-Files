@@ -304,16 +304,16 @@ end
 
 if Events and not F.tickHandler then
     F.tickHandler=function() F.onTick() end
-    Events.OnTick.Add(F.tickHandler)
+    require("ConspiracyFiles/Events/InteractionEvents").on("OnTick", F.tickHandler)
     F.startHandler=function() tried=false end
-    Events.OnGameStart.Add(F.startHandler)
+    require("ConspiracyFiles/Events/InteractionEvents").on("OnGameStart", F.startHandler)
     -- A survivor who respawns after a death is a new character, and OnGameStart
     -- does not fire for them: the new survivor got no evidence album (Linux death
     -- check, 2026-09-11). OnCreatePlayer does. give() skips anyone who already
     -- holds a file, so the first survivor is never given two.
     if Events.OnCreatePlayer then
         F.createHandler=function() tried=false end
-        Events.OnCreatePlayer.Add(F.createHandler)
+        require("ConspiracyFiles/Events/InteractionEvents").on("OnCreatePlayer", F.createHandler)
     end
 end
 

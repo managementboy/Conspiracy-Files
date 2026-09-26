@@ -325,7 +325,7 @@ local function safe(fn,...)
  local ok,result=pcall(fn,...);if not ok then log("Skipped: "..tostring(result));return end
  return result
 end
-function M.stop() if handler then Events.OnTick.Remove(handler);handler=nil end end
+function M.stop() if handler then require("ConspiracyFiles/Events/InteractionEvents").off("OnTick", handler);handler=nil end end
 function M.start()
  if not allowed() then return false end
  require("TimedActions/ISTransferAction");require("TimedActions/ISGrabItemAction");require("ISUI/Maps/ISWorldMap")
@@ -357,10 +357,10 @@ function M.start()
   if getTimeInMillis()-last<1000 then return end;last=getTimeInMillis()
   local ok,why=pcall(M.update);if not ok then M.stop();log("Worker stopped: "..tostring(why)) end
  end
- Events.OnTick.Add(handler);log("Clue markers active; pickup sources are now recorded.");M.status();return true
+ require("ConspiracyFiles/Events/InteractionEvents").on("OnTick", handler);log("Clue markers active; pickup sources are now recorded.");M.status();return true
 end
 if not ConspiracyFiles.markerStartHook then
- Events.OnGameStart.Add(function() if ConspiracyFiles.ClueMarkers then safe(ConspiracyFiles.ClueMarkers.start) end end)
+ require("ConspiracyFiles/Events/InteractionEvents").on("OnGameStart", function() if ConspiracyFiles.ClueMarkers then safe(ConspiracyFiles.ClueMarkers.start) end end)
  ConspiracyFiles.markerStartHook=true
 end
 return M

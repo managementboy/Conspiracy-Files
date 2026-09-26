@@ -97,7 +97,7 @@ function A.onTick()
  if not ok and tostring(err)~=A.lastError then A.lastError=tostring(err);CFLog.message("auto","case","Deferred: "..A.lastError) end
 end
 if Events and not A.tickHandler then
- A.tickHandler=function() A.onTick() end;Events.OnTick.Add(A.tickHandler)
- A.startHandler=function() A.onStart() end;Events.OnGameStart.Add(A.startHandler)
+ A.tickHandler=function() A.onTick() end;require("ConspiracyFiles/Events/EngineEvents").on("OnTick", A.tickHandler)
+ A.startHandler=function() A.onStart() end;require("ConspiracyFiles/Events/EngineEvents").on("OnGameStart", A.startHandler)
 end
 return A

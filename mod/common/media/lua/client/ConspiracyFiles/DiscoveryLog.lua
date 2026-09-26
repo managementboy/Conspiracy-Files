@@ -296,7 +296,7 @@ end
 
 if Events and Events.OnGameStart and not D.journalHooked then
     D.journalHooked=true
-    Events.OnGameStart.Add(function() pcall(D.journalReplay) end)
+    require("ConspiracyFiles/Events/EngineEvents").on("OnGameStart", function() pcall(D.journalReplay) end)
 end
 
 return D

@@ -12,7 +12,7 @@ local CFLog=require("ConspiracyFiles/Log")
 local function log(s) CFLog.message("address","address",s) end
 local status="Not started"
 local view,viewReasons,auditHandler
-local function stopAudit() if auditHandler then Events.OnTick.Remove(auditHandler);auditHandler=nil end end
+local function stopAudit() if auditHandler then require("ConspiracyFiles/Events/EngineEvents").off("OnTick", auditHandler);auditHandler=nil end end
 function M.status() log(status); return status end
 local function allowed() return getDebug and getDebug() and not (isClient and isClient()) and not (isServer and isServer()) end
 local function valid(root)
@@ -189,7 +189,7 @@ function M.labelForBuilding(id)
     if not label then return nil end
     return qualified(label,town)
 end
-function M.stop() if handler then Events.OnTick.Remove(handler) end; job=nil;stopAudit() end
+function M.stop() if handler then require("ConspiracyFiles/Events/EngineEvents").off("OnTick", handler) end; job=nil;stopAudit() end
 -- THE CASE'S OWN WORDS, with every place the book can name written as an
 -- address. Returns nil when the book can name NONE of them, which is the
 -- caller's signal to read the row the way it read before AD-10 existed.
@@ -308,7 +308,7 @@ function M.audit()
         end)
         if not ok then stopAudit();log("Audit stopped: "..tostring(why)) end
     end
-    Events.OnTick.Add(auditHandler);return true
+    require("ConspiracyFiles/Events/EngineEvents").on("OnTick", auditHandler);return true
 end
 local function hook()
     require("ISUI/Maps/ISWorldMap")
@@ -400,10 +400,10 @@ function M.start(options)
         if not ok then M.stop();status="Stopped: "..tostring(why);log(status)
         elseif job and getTimeInMillis()-lastReport>=5000 then log(status);lastReport=getTimeInMillis() end
     end
-    Events.OnTick.Add(handler); log("Building full Muldraugh trial address index; no terrain revealed.")
+    require("ConspiracyFiles/Events/EngineEvents").on("OnTick", handler); log("Building full Muldraugh trial address index; no terrain revealed.")
     return true
 end
 -- At game start: a save's own book when it has one, otherwise the shipped
 -- numbers - never a scan, which still only begins when a case asks for one.
-Events.OnGameStart.Add(function() if allowed() then M.start({noScan=not ModData.get(TAG)}) end end)
+require("ConspiracyFiles/Events/EngineEvents").on("OnGameStart", function() if allowed() then M.start({noScan=not ModData.get(TAG)}) end end)
 return M

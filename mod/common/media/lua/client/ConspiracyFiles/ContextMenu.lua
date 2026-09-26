@@ -105,6 +105,6 @@ if not Menu.handler then
         local args={...}; local rt=runtime()
         if rt then rt.boundary("menu",function() Menu.fill(args[1],args[2],args[3]) end) end
     end
-    Events.OnFillInventoryObjectContextMenu.Add(Menu.handler)
+    require("ConspiracyFiles/Events/InteractionEvents").on("OnFillInventoryObjectContextMenu", Menu.handler)
 end
 return Menu

@@ -592,13 +592,13 @@ function O.install()
     O.blockRadioPanel()
     if Events and Events.OnFillInventoryObjectContextMenu and not O.menuHooked then
         O.menuHooked=true
-        Events.OnFillInventoryObjectContextMenu.Add(function(...) safe(O.fill,...) end)
+        require("ConspiracyFiles/Events/InteractionEvents").on("OnFillInventoryObjectContextMenu", function(...) safe(O.fill,...) end)
     end
 end
 
 if Events and Events.OnTick and not O.tickHooked then
     O.tickHooked=true
-    Events.OnTick.Add(function() safe(O.tick) end)
+    require("ConspiracyFiles/Events/InteractionEvents").on("OnTick", function() safe(O.tick) end)
 end
 
 -- The machine boots with the game, and the survivor is HOLDING it while it
@@ -608,7 +608,7 @@ end
 -- the switch, and nothing appears on screen that is not in a hand.
 if Events and Events.OnGameStart and not O.bootHooked then
     O.bootHooked=true
-    Events.OnGameStart.Add(function()
+    require("ConspiracyFiles/Events/InteractionEvents").on("OnGameStart", function()
         if multiplayer() then log("organiser: multiplayer, not issued"); return end
         safe(function()
             local apps=ConspiracyFiles.KnoxApps
@@ -633,8 +633,8 @@ end
 if Events and not O.startHooked then
     O.startHooked=true
     local function issue() safe(O.give) end
-    if Events.OnCreatePlayer then Events.OnCreatePlayer.Add(function() issue() end) end
-    if Events.OnGameStart then Events.OnGameStart.Add(function() issue(); safe(O.silenceCarried); safe(O.install) end) end
+    if Events.OnCreatePlayer then require("ConspiracyFiles/Events/InteractionEvents").on("OnCreatePlayer", function() issue() end) end
+    if Events.OnGameStart then require("ConspiracyFiles/Events/InteractionEvents").on("OnGameStart", function() issue(); safe(O.silenceCarried); safe(O.install) end) end
 end
 O.install()
 
