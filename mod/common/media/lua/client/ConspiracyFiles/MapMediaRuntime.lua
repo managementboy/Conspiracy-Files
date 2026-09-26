@@ -175,7 +175,7 @@ function R.read(id,item)
     -- The organiser must show the new lead at once. Reading a PRINT already
     -- invalidated the cached list here and reading a MAP did not, so the row
     -- this read creates could sit unseen behind a stale list.
-    local screen=ConspiracyFiles.OrganiserScreen
+    local screen=require("ConspiracyFiles/PDAAPI").OrganiserScreen
     if screen and screen.window then screen.window.cachedList=nil end
     return true
 end
@@ -183,7 +183,7 @@ function R.printRead(id)
     if not allowed() or not Catalogue.print(id) then return false end
     local next,changed=State.printRead(root(),id,hours())
     if changed and not save(next) then return false end
-    local screen=ConspiracyFiles.OrganiserScreen
+    local screen=require("ConspiracyFiles/PDAAPI").OrganiserScreen
     if screen and screen.window then screen.window.cachedList=nil end
     return true
 end
@@ -712,7 +712,7 @@ local function visitStep()
                 local next,changed=State.printVisit(root(),pid,hours())
                 if changed and save(next) then
                     log("reached the place named by the "..tostring(pid).." flyer")
-                    local screen=ConspiracyFiles.OrganiserScreen
+                    local screen=require("ConspiracyFiles/PDAAPI").OrganiserScreen
                     if screen and screen.window then screen.window.cachedList=nil end
                 end
             end
@@ -733,8 +733,13 @@ end
 function R.start()
     if not allowed() then return false end
     state=nil; root(); destinations,targets={},{}
-    require("ConspiracyFiles/GeneratedMenu")
-    require("ConspiracyFiles/ClueSearch")
+    -- Lazy, not a top-level require: InteractionAPI.lua's own construction
+    -- reaches GeneratedMenu.lua, which reaches EngineAPI.lua, which
+    -- reaches this file - a real circular require if resolved at file-load
+    -- time instead of here, at the point of use. require() itself, not any
+    -- field read, is what forces GeneratedMenu.lua/ClueSearch.lua to load -
+    -- InteractionAPI.lua's own top level already required both.
+    require("ConspiracyFiles/InteractionAPI")
     ticks,designCursor,entryCursor=0,root().cursor,0; priority,prioritySet,offers={},{},{}
     scan=nil; faultPoint=nil; lastFault=nil; R.indexed=false; R.entryCandidate=nil
     scheduler=Scheduler.new(clock,function(_,why) log(why) end)

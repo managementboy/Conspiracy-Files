@@ -282,7 +282,7 @@ end
 -- already associated one with that exact token. Never invents a name.
 function V.onKeyDoorLink(sourceToken)
     local p=player(); if not p then return end
-    local names=ConspiracyFiles.PersonNameLog
+    local names=require("ConspiracyFiles/EngineAPI").PersonNameLog
     local ok,name=false,nil
     if names and names.nameFor then ok,name=pcall(names.nameFor,sourceToken) end
     if ok and type(name)=="string" and name~="" then

@@ -51,7 +51,7 @@ end
 -- could interrupt the transfer/pickup action calling this.
 function E.consider(character,item)
     if not inPlayerInventory(character,item) then return end
-    local R=ConspiracyFiles.GeneratedRuntime
+    local R=require("ConspiracyFiles/EngineAPI").GeneratedRuntime
     local V=ConspiracyFiles.PlayerVoice
     if not R or not R.subject or not R.isInspected or not V or not V.onEvidenceFound then return end
     local ok,subject=pcall(R.subject,item)
@@ -133,7 +133,7 @@ local lastScan,lastRemind=0,0
 -- one piece of evidence. Searches the inventory and one level into containers
 -- in it, which covers a bag and the survivor's own evidence album.
 function E.unreadCarried(player)
-    local runtime=ConspiracyFiles.GeneratedRuntime
+    local runtime=require("ConspiracyFiles/EngineAPI").GeneratedRuntime
     if not player or not runtime or not runtime.subject or not runtime.isInspected then return 0 end
     local seen,count={},0
     local function consider(item)

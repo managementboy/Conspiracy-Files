@@ -16,6 +16,19 @@ CFInteract.PublicAPI=PublicAPI
 -- relied on, but require() returns the same cached, real table regardless.
 PublicAPI.Organiser=require("ConspiracyFiles/Organiser")
 
+-- Found by the stage-5 boundary check (tools/autotest/checks/
+-- module_boundary.sh), not by hand: several module-B files reach these
+-- four A files directly, some for real functionality
+-- (GeneratedRuntime.lua calls PlayerVoice.onOpeningClue), some purely to
+-- force PZ to load a file that only registers itself onto the shared
+-- global table otherwise ("a module reached only through the shared
+-- table can silently never exist" - DiscoveryLog.lua's own comment).
+-- Both cases go through here now.
+PublicAPI.PlayerVoice=require("ConspiracyFiles/PlayerVoice")
+PublicAPI.GeneratedMenu=require("ConspiracyFiles/GeneratedMenu")
+PublicAPI.ClueCue=require("ConspiracyFiles/ClueCue")
+PublicAPI.ClueSearch=require("ConspiracyFiles/ClueSearch")
+
 -- EvidenceRows.lua (reclassified to module B this increment - see
 -- docs/design/MODULE_SEPARATION_2026-09-26.md section 3a) reaches into
 -- two real module-A sources when building FILES/NAMES/PLACES rows:

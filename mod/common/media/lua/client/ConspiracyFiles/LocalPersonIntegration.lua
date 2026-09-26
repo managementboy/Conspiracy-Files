@@ -1,14 +1,20 @@
 -- Observation-driven first slice: no corpse scans or hidden inventory reads.
+-- STRADDLE: this file is module A (docs/design/MODULE_SEPARATION_2026-09-26.md
+-- section 1's own audit named it: "A:LocalPersonIntegration.lua requires
+-- B:SuccessiveCases.lua directly"). Its real reaches into module B
+-- (SuccessiveCases, KeyJournal, PersonNameLog, BodyOutfitLog) go through
+-- EngineAPI.lua now, found by the stage-5 boundary check.
+local EngineAPI=require("ConspiracyFiles/EngineAPI")
 local Model=require("ConspiracyFiles/LocalPerson")
 local Runtime=require("ConspiracyFiles/LocalPersonRuntime")
 local Keys=require("ConspiracyFiles/HouseKeyAdapter")
-local Journal=require("ConspiracyFiles/KeyJournal")
+local Journal=EngineAPI.KeyJournal
 local Budget=require("ConspiracyFiles/SaveBudget")
-local Cases=require("ConspiracyFiles/Generated/SuccessiveCases")
+local Cases=EngineAPI.SuccessiveCases
 local Lead=require("ConspiracyFiles/ObservedKeyLead")
 local LeadAdapter=require("ConspiracyFiles/ObservedKeyAdapter")
-local Names=require("ConspiracyFiles/PersonNameLog")
-local Outfits=require("ConspiracyFiles/BodyOutfitLog")
+local Names=EngineAPI.PersonNameLog
+local Outfits=EngineAPI.BodyOutfitLog
 local P={}
 -- Reachable from the debug console. The verboseDoors switch documented below
 -- is useless if there is nothing to set it on: this module was require-only,
@@ -71,7 +77,7 @@ local function outfitOf(body)
     return name
 end
 local function supported()
-    local rt=ConspiracyFiles.GeneratedRuntime
+    local rt=require("ConspiracyFiles/EngineAPI").GeneratedRuntime
     return getDebug and getDebug() and not (isClient and isClient()) and not (isServer and isServer())
         and not ConspiracyFiles.T11Mode and not ConspiracyFiles.T12Mode and rt and rt.metrics and rt.metrics()
 end
@@ -132,7 +138,7 @@ ConspiracyFiles.ObservedKeyLeads.rows=function()
     -- book fills in as the player explores: a door opened before its street
     -- was indexed gains its address on a later look.
     local ok,rows=pcall(function()
-        local Address=ConspiracyFiles.AddressMap
+        local Address=require("ConspiracyFiles/EngineAPI").AddressMap
         local labelFor=Address and Address.labelForBuilding
         return Lead.rows(leadState(),labelFor)
     end)
@@ -140,7 +146,7 @@ ConspiracyFiles.ObservedKeyLeads.rows=function()
 end
 -- Ledger ref must equal the evidence row id, or ordering cannot place it.
 local function recordLeadDiscovery(fact)
-    local logger=ConspiracyFiles.DiscoveryLog
+    local logger=require("ConspiracyFiles/EngineAPI").DiscoveryLog
     if logger and logger.record then logger.record("connection","observedKeyLead:"..fact.id) end
 end
 local function hasLead(sourceToken)
@@ -378,7 +384,7 @@ end
 function P.known()
     local roots=cases()
     local known={}
-    for _,row in ipairs(ConspiracyFiles.GeneratedRuntime.known()) do known[row.id]=true end
+    for _,row in ipairs(require("ConspiracyFiles/EngineAPI").GeneratedRuntime.known()) do known[row.id]=true end
     for _,root in ipairs(roots) do
         local first=root.case.documents[1]
         if known[first.id] then
@@ -419,7 +425,7 @@ function P.tick()
     -- that was two row rebuilds and a fistful of address lookups every second
     -- (measured in game, 2026-09-12, chasing the fault check's "a retry every
     -- frame?"). Derived clue facts change only when a discovery lands.
-    local log=ConspiracyFiles.DiscoveryLog
+    local log=require("ConspiracyFiles/EngineAPI").DiscoveryLog
     local seq=log and log.highestSeq and select(2,pcall(log.highestSeq)) or nil
     if seq~=nil and seq==P.lastKnownSeq then return end
     local ok,why=pcall(P.known)
@@ -553,7 +559,7 @@ local function observeOpeningKeyDoor(character,door,key,keyId)
         -- ledger gives the row its place (the same entry every other finding
         -- gets, keyed by the row's own id), and the voice says the one thing
         -- the lock witnessed.
-        local logger=ConspiracyFiles.DiscoveryLog
+        local logger=require("ConspiracyFiles/EngineAPI").DiscoveryLog
         if logger and logger.record then pcall(logger.record,"connection","keydoor:"..tostring(fact.id)) end
         local voice=ConspiracyFiles.PlayerVoice
         if voice and voice.onOpeningKeyDoor then pcall(voice.onOpeningKeyDoor) end

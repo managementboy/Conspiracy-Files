@@ -89,7 +89,7 @@ function Q.step()
     nextPoll=t+Q.POLL_MS
     local player=getPlayer and getPlayer()
     local search=ConspiracyFiles.ClueSearch
-    local R=ConspiracyFiles.GeneratedRuntime
+    local R=require("ConspiracyFiles/EngineAPI").GeneratedRuntime
     if not (player and search and search.liveClues and search.seesSpot and R) then return end
     local clues=search.liveClues(player)
     local px,py,pz=player:getX(),player:getY(),player:getZ()

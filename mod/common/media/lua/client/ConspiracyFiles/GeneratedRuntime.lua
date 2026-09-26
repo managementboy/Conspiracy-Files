@@ -320,7 +320,7 @@ function R.primeOpening()
         carried=okOuter and outer==inventory
     end
     if not carried then return false,"inventory refused opening key" end
-    local voice=require("ConspiracyFiles/PlayerVoice")
+    local voice=require("ConspiracyFiles/InteractionAPI").PlayerVoice
     if voice and voice.onOpeningClue then pcall(voice.onOpeningClue,item) end
     log("Opening key issued before nearby scan; awaiting case attachment.")
     return true,"opening primed"
@@ -370,7 +370,7 @@ local function deliverOpening(api,id,source,expected)
         log("Opening clue reached the survivor but could not be noted automatically.")
         return
     end
-    local voice=require("ConspiracyFiles/PlayerVoice")
+    local voice=require("ConspiracyFiles/InteractionAPI").PlayerVoice
     if voice and voice.onOpeningClue then pcall(voice.onOpeningClue,item) end
     CFLog.write("i","found",{doc=id,place=addressFor(request.house),how="carried-at-start"})
 end
@@ -1132,8 +1132,13 @@ end
 -- from R.start is a different reason and stays untyped.
 R.WAITING_INDOORS="waiting until player is inside a building"
 function R.start(seed,options)
-    require("ConspiracyFiles/GeneratedMenu")
-    require("ConspiracyFiles/ClueCue")
+    -- Lazy, not a top-level require: InteractionAPI.lua's own construction
+    -- reaches GeneratedMenu.lua, which reaches EngineAPI.lua, which
+    -- reaches this file - a real circular require if resolved at file-load
+    -- time instead of here, at the point of use. require() itself, not any
+    -- field read, is what forces GeneratedMenu.lua/ClueCue.lua to load -
+    -- InteractionAPI.lua's own top level already required both.
+    require("ConspiracyFiles/InteractionAPI")
     if preparing then return false,"preparation already running" end
     local house
     local saved=ModData.get(TAG)
@@ -1221,7 +1226,7 @@ function R.reshuffle(mode)
     local inventory=player and player:getInventory()
     local carried=inventory and inventory.getItems and inventory:getItems()
     if carried and carried.size then for i=0,carried:size()-1 do pcall(unmark,carried:get(i)) end end
-    local markers=ConspiracyFiles.ClueMarkers
+    local markers=require("ConspiracyFiles/InteractionAPI").ClueMarkers
     local forgotten=0
     if markers and markers.forget then
         local ok,n=pcall(markers.forget,manifest.documentIds); forgotten=(ok and type(n)=="number") and n or 0
@@ -1362,7 +1367,7 @@ function R.inspect(item,inPlace)
     -- Taken here, from the clue's own square, and before the discovery is
     -- committed: ClueMarkers refuses a location for a clue already known.
     if inPlace then
-        local markers=ConspiracyFiles.ClueMarkers
+        local markers=require("ConspiracyFiles/InteractionAPI").ClueMarkers
         if markers and markers.foundHere then pcall(markers.foundHere,item) end
     end
     checked(api.status(md.cfGeneratedId,"placed",worldHours())); checked(api.inspect(md.cfGeneratedId))
@@ -1374,7 +1379,7 @@ function R.inspect(item,inPlace)
     -- held, so this fires exactly when the player learns something they could
     -- not have known a second earlier - which is the rule every voice trigger
     -- has to pass. The survivor never says which record is true.
-    local voice=ConspiracyFiles.PlayerVoice
+    local voice=require("ConspiracyFiles/InteractionAPI").PlayerVoice
     if voice and voice.onConnection and not already then
         local snapshot=api.snapshot()
         local held={}
@@ -1465,7 +1470,7 @@ function R.inspect(item,inPlace)
                         log("Case INCOMPLETE: ended without evidence its conclusion rests on: "
                             ..table.concat(names,", ").." [case="..tostring(done.case.caseId).."]")
                     end
-                    local v=ConspiracyFiles.PlayerVoice
+                    local v=require("ConspiracyFiles/InteractionAPI").PlayerVoice
                     if #essential==0 then
                         if v and v.onCaseComplete then pcall(v.onCaseComplete,done.case.caseId,#gaps) end
                     elseif v and v.onCaseIncomplete then
@@ -1937,7 +1942,7 @@ local function relocation(api)
             return true
         end
         checked(api.relocate(id,target,hours))
-        local cue=ConspiracyFiles.ClueCue
+        local cue=require("ConspiracyFiles/InteractionAPI").ClueCue
         if cue and cue.invalidate then cue.invalidate(id) end
         log("[CF-G2-RELOCATE] relocated "..id.." to "..target.x..","..target.y..",floor "..target.z)
         return true
@@ -2051,7 +2056,7 @@ local function retireIfAccounted(done)
                 log("Case INCOMPLETE on the drop path: ended without "..#essential
                     .." clue(s) its conclusion rests on [case="..tostring(done.case.caseId).."]")
             end
-            local v=ConspiracyFiles.PlayerVoice
+            local v=require("ConspiracyFiles/InteractionAPI").PlayerVoice
             if #essential==0 then
                 if v and v.onCaseComplete then pcall(v.onCaseComplete,done.case.caseId,#gaps) end
             elseif v and v.onCaseIncomplete then
@@ -2309,7 +2314,7 @@ local function trackVisited()
     -- building an already-discovered document named - a step earlier it would
     -- be a quest marker, which is the one thing this mod does not do. A lead
     -- the player has not read yet says nothing at all.
-    local voice=ConspiracyFiles.PlayerVoice
+    local voice=require("ConspiracyFiles/InteractionAPI").PlayerVoice
     if not voice or not voice.onNamedPlace or not sessions then return true end
     for _,api in ipairs(sessions) do
         local snapshot=api.snapshot()

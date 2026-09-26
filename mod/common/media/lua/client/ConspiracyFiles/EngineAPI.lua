@@ -34,6 +34,10 @@ PublicAPI.GeneratedRuntime=require("ConspiracyFiles/GeneratedRuntime")
 PublicAPI.DiscoveryLog=require("ConspiracyFiles/DiscoveryLog")
 PublicAPI.AddressMap=require("ConspiracyFiles/AddressMap")
 PublicAPI.PersonNameLog=require("ConspiracyFiles/PersonNameLog")
+-- Found by the stage-5 boundary check: LocalPersonIntegration.lua
+-- (module A) reaches these two directly too.
+PublicAPI.KeyJournal=require("ConspiracyFiles/KeyJournal")
+PublicAPI.BodyOutfitLog=require("ConspiracyFiles/BodyOutfitLog")
 PublicAPI.IdentityObserver=require("ConspiracyFiles/IdentityObserver")
 
 -- KnoxApps.lua and OrganiserScreen.lua (module C) also require
