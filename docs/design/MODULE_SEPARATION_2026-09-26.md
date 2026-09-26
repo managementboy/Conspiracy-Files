@@ -158,6 +158,76 @@ Applied to each named straddler:
 | `CaseFile.lua` | Splits: the physical carry/pickup object is A; the case-content assembly it displays is B | Two owned files, one per module, joined by a stable case ID — not two copies of the same logic, two genuinely different responsibilities that were welded together. |
 | `SaveBudget.lua` | Owns nothing real — see §2.5 | Deleted. Replaced by three per-module internal registries and, optionally, one non-owning aggregator. |
 
+## 3a. Progress (updated as each step actually lands, not just planned)
+
+2026-09-26. **Step 1 done and verified** (`module-separation/stage-1-events`,
+committed): every real `Events.Add`/`.Remove` call in the 21 production
+files that register a raw PZ event now goes through one dispatcher per
+module (`InteractionEvents.lua`, `EngineEvents.lua`, `PDAEvents.lua`
+stub), via `Dispatch.on(name, fn)`/`.off(name, fn)` rather than a flat
+line move, because several registrations live inside gated
+`start()`/`stop()` functions whose own timing had to be preserved
+exactly. Verified with the real boot-check autotest (visible game
+window, real GPU, no `--hidden`): 153/153 mod files loaded, 0 errors,
+evidence album still opens automatically.
+
+**Step 2's "introduce the namespaces" half is done; "delete
+`ConspiracyFiles`" is deliberately not started.** An ADHD re-evaluation
+after step 1 (5 frames, ADHD skill) converged on not doing both in one
+move — introduce `CFInteract`/`CFEngine`/`CFPDA` *alongside* the
+existing global first, verify, and only delete it later, as a
+separately-verified step. Executed as: every file with real,
+already-established module ownership gets one additive line right
+after its existing `ConspiracyFiles.X=Y` export
+(`CFInteract=CFInteract or {};CFInteract.X=Y`, or `CFEngine`/`CFPDA`) —
+nothing removed, `ConspiracyFiles` keeps working exactly as before.
+
+The real scope turned out much smaller than first assumed: a first
+pass counted 105 files "touching `ConspiracyFiles`" and treated that as
+the remaining work, but that count was inflated by
+`require("ConspiracyFiles/...")` **path strings**, not actual
+global-table access. The real number of files with a top-level
+`ConspiracyFiles.X=` export, across the *entire* mod, is **46** — not
+105 — and all 51 files under `Generated/` and `Mystery/` (module B's
+own internals) turned out to already be clean `require()`-only modules
+that never touch the shared global at all, needing no edit whatsoever.
+Of the real 46 exporters, **33 now have their namespace line**
+(11 `CFInteract`, 10 `CFEngine` from step 1's own file set, plus 9 more
+`CFEngine`/2 more `CFInteract` classified by reading each file's header
+and real require-callers, plus 4 `CFPDA` PDA files). The other 13 are
+every one deliberately excluded for a stated reason: 5 self-described
+debug/diagnostic-only files no production file requires
+(`SessionGuide`, `IdentityProbe`, `GeneratedDiagnostic`,
+`MarkerColourTest`\*, `DevEval`; \*already excluded in step 1), 2 more
+of the same profile found in this pass (`MapReadObserver.lua`,
+`VehicleProbe.lua`), the 3 dispatcher files themselves (accessed by
+direct `require()` path, not via the module table), `shared/Log.lua`
+and `shared/Version.lua` (genuine cross-cutting utilities required by
+all three modules alike — forcing either into one module's namespace
+would be a wrong, arbitrary answer), and `shared/Runtime.lua` (a
+`Runtime.disabled=true` legacy system, deferred pending a shared/client
+load-order check no stage has needed to take on yet).
+
+One new straddler surfaced that the original audit (§1) didn't name:
+**`DropToNote.lua`** — evidence-drop counting/wording that
+`OrganiserScreen.lua` (module C) calls into, but whose subject matter
+(evidence content) is exactly what C is supposed to stay agnostic to
+per §2.3. Flagged for step 3 rather than guessed at here.
+
+Verified after each batch with the real boot-check autotest (153/153
+files, 0 errors both times) and, once, directly inside the running game
+via `pz.sh eval`: `CFInteract`/`CFEngine`/`CFPDA` hold exactly
+11/10/4 entries and spot-checked entries are the *same table reference*
+as the original `ConspiracyFiles.*` field, not a copy — a real alias,
+not a snapshot that could silently drift out of sync.
+
+**Not yet done, and not safe to start until it is**: auditing every
+*read* of another module's field off `ConspiracyFiles` (not just the 46
+export sites) before attempting the actual deletion. An ADHD
+re-evaluation pass flagged this directly — the deletion's real blast
+radius is larger than an exports-only or events-only audit would show.
+That audit, and the deletion itself, remain future work within step 2.
+
 ## 3. Build order
 
 Sequenced to make the invisible coupling visible early and cheaply, per
