@@ -125,14 +125,30 @@ to.
 
 ### 2.5 Persistence: per-module ownership, no reconciliation file
 
-`SaveBudget.lua` is deleted as a single cross-cutting file. Each module
-owns a small internal tag registry for **only its own** ModData keys
-(mirroring `MysteryRuntime.lua`'s own already-working pattern: one root
-key, `"ConspiracyFiles.Mystery"`, that nothing else touches). If a
-combined "how much save space is this player using" report across all
-three modules is still wanted when they're all installed together, that
-becomes a fourth, tiny, non-owning file that only calls each module's own
-`PublicAPI.reportSaveUsage()` — it aggregates, it never owns a tag.
+**Correction, 2026-09-26, stage 3**: reading `SaveBudget.lua` in full
+before resolving it (13 real requirers found across both A and B, two
+inline `require(...).check(...)` call sites) found that "a single file
+listing ModData tags for all three modules" is not actually what it is.
+Its real function is `B.check`/`B.checkMany`: sum the estimated encoded
+byte size of every named root (15 of them, plus a special-cased
+per-player `markers` root) and refuse if the combined total exceeds one
+shared ceiling (`V.MAX_ENCODED_BYTES`). That is not a tag registry that
+decomposes into three per-module registries — it is exactly the "how
+much save space is this player using, combined" check this section
+already anticipated wanting, just already built, already required by
+both A and B, and already working. **Not deleted.** Reclassified
+alongside `Log.lua`/`Validator.lua`/`Version.lua` (§2.3's shared
+cross-cutting utilities, required by all three modules alike) rather
+than forced into a split with no real per-module tag to move.
+
+Each module still owns a small internal tag registry for keys nothing
+else needs to sum against the shared budget (mirroring
+`MysteryRuntime.lua`'s own already-working pattern: one root key,
+`"ConspiracyFiles.Mystery"`, that nothing else touches) — that part of
+this section's original design stands. What doesn't stand is treating
+`SaveBudget.lua` itself as a straddler with an owner to assign; it has
+no write-set to assign, only a read-only aggregate check every module
+already calls into voluntarily.
 
 ### 2.6 Straddlers: resolved by write-set, never duplicated
 
@@ -156,7 +172,7 @@ Applied to each named straddler:
 | `ClueActions.lua` | Owns "what does finding this clue do" — genuinely A | Its direct reads of B's `GeneratedRuntime`/`MapMediaRuntime` become `CFEngine.PublicAPI.factsFor(id)` calls. |
 | `GeneratedMenu.lua` | Owns menu-item construction — an interaction concern, not content generation | Reassigned to A outright (not B, despite its current filing); its content lookups go through `CFEngine.PublicAPI`. |
 | `CaseFile.lua` | **Correction, 2026-09-26, stage 3**: owns the physical carry/pickup object only — genuinely A, not a split. Reading the real file end to end while resolving it found no case-content-assembly logic anywhere in it; the "two owned files" call below was never checked against the actual code. | One file, module A. Its two real cross-module touches (a read-only query into B's `isRecognised`, a read-only query into C's `window.on`) go through `EngineAPI.lua`/`PDAAPI.lua`, same as the other straddlers — not split, since there is no real second half to split off. |
-| `SaveBudget.lua` | Owns nothing real — see §2.5 | Deleted. Replaced by three per-module internal registries and, optionally, one non-owning aggregator. |
+| `SaveBudget.lua` | **Correction, stage 3**: owns nothing real to *assign*, but is not deletable either — see §2.5 | Not a straddler after all. Kept as a shared cross-cutting utility (alongside `Log.lua`/`Validator.lua`/`Version.lua`), required directly by whichever files already need it. |
 
 ## 3a. Progress (updated as each step actually lands, not just planned)
 
@@ -228,6 +244,56 @@ re-evaluation pass flagged this directly — the deletion's real blast
 radius is larger than an exports-only or events-only audit would show.
 That audit, and the deletion itself, remain future work within step 2.
 
+**Step 3, straddler resolution, is done.** A second ADHD re-evaluation
+(5 fresh frames, before this step started) converged on building each
+module's `PublicAPI` by relocating real, already-working call sites
+rather than designing an interface upfront — "PublicAPI functions are
+never authored, only relocated" was the sharpest single phrase, echoed
+independently by three of the five frames. Two new files,
+`EngineAPI.lua` (`CFEngine.PublicAPI`) and `PDAAPI.lua`
+(`CFPDA.PublicAPI`), hold exactly the objects real straddlers already
+called through the shared global. A third, `InteractionAPI.lua`
+(`CFInteract.PublicAPI`), was added mid-step once a full sweep in the
+*reverse* direction (module C reaching into A/B, not just A/B into C)
+found 12 more real reaches the first pass had missed. All API tables
+use `require()`, never a read off the `CFInteract`/`CFEngine`/`CFPDA`
+globals — reading off the global would silently snapshot `nil` if a
+consumer happened to load before its dependency, a real bug this step
+caught in its own first draft before it shipped.
+
+Of the 6 named straddlers (5 original + `DropToNote.lua`, found in step
+2): **5 resolved as plain redirects** to a `PublicAPI` table
+(`GeneratedMenu.lua`, `ClueActions.lua`, `Organiser.lua`,
+`DropToNote.lua` — which needed no edit itself, since its one real
+caller's reach into B was the actual straddle — and `CaseFile.lua`).
+**2 of the design's own claims about specific straddlers turned out
+wrong once read against the real code**, corrected in §2.5/§2.6 rather
+than carried forward: `CaseFile.lua` is not a two-way split (no
+case-content-assembly logic exists in the file at all — it is wholly
+module A with two read-only cross-module queries), and `SaveBudget.lua`
+is not deletable (its real function is a cross-cutting combined
+save-size budget check, required directly by 13 files across both A and
+B — reclassified as a shared utility alongside `Log.lua`/`Validator.lua`
+instead of forced into a split with nothing real to split off).
+
+Verified after every increment with the real boot-check autotest
+(153→156 mod files loaded as new API files were added, 0 errors every
+time, evidence album still opens automatically) and, twice, with direct
+functional checks inside the running game via `pz.sh eval` — not just a
+load check: `KnoxApps.files.list()` builds real rows,
+`KnoxApps.rememberMe()` runs, `OrganiserScreen.open()` opens the real
+screen, and every `PublicAPI` entry checked is confirmed the identical
+table reference as the corresponding legacy global field.
+
+Each resolved straddler carries a `-- STRADDLE:` marker comment in the
+code itself naming its module and citing the design doc directly — two
+independent frames in the second ADHD pass proposed exactly this
+(a visible ownership marker in the file, not only in the design doc),
+and several markers explicitly flag what still doesn't satisfy step 4's
+dependency-inversion goal (module C still knows B's module names, e.g.
+`GeneratedRuntime`/`DiscoveryLog`, by name) — honestly named as step 4's
+job rather than silently left for later discovery.
+
 ## 3. Build order
 
 Sequenced to make the invisible coupling visible early and cheaply, per
@@ -243,10 +309,10 @@ changes:
    real globals; delete `ConspiracyFiles` as a shared table once every
    file has been repointed — no transitional shim left standing under any
    name, per §2.1.
-3. **Straddler resolution**, smallest first: `SaveBudget.lua` (pure
-   deletion) → `GeneratedMenu.lua`/`ClueActions.lua`/`Organiser.lua`/
-   `CaseFile.lua` (redirect global reaches to `PublicAPI` calls —
-   `CaseFile.lua` turned out to be one of these, not a two-way split; see
+3. **Straddler resolution**: `GeneratedMenu.lua`/`ClueActions.lua`/
+   `Organiser.lua`/`CaseFile.lua` (redirect global reaches to `PublicAPI`
+   calls — `CaseFile.lua` turned out to be one of these, not a two-way
+   split; see
    §2.6's correction).
 4. **Dependency inversion at the C↔B boundary**: define C's generic
    document schema, write B's adapter that publishes into it via
