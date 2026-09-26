@@ -50,6 +50,18 @@ hand. §2 is revised below with that as a parallel research spike, plus a
 trace-replay fidelity check and hardening for whatever hand-written shim
 layer survives either way.
 
+**Build started, 2026-09-26** (`/goal build our plan`). Both gating spikes
+from §7 (steps 0a and 0b) are now run and resolved, not hypothetical: 0a
+passed (fengari runs the real engine modules unmodified, verified in the
+browser pane against `test/mystery_*.lua`'s own assertions), 0b failed on
+real evidence (the actual compiled `UIElement`/`UIManager` Java classes,
+extracted from the shipped jar and read with `javap`, are one hop from raw
+OpenGL and the live world/entity graph — no isolable UI subset to run in a
+browser JVM). §2, §3, and §7 updated in place to record both results as
+settled, not conditional. See
+`docs/management/evidence/knox-os-web-spike-0b-jvm-feasibility.md` for 0b's
+full findings.
+
 ## 1. What "the PDA" actually is
 
 There is no file literally named "PDA" in the mod. The device is **Knox.OS**,
@@ -132,21 +144,21 @@ This is the one idea in the whole pass that satisfies every constraint at
 once: real game code, no running game process, still a static/standalone
 site.
 
-**This is a parallel research spike, not yet a commitment**, because PZ's
-real UI classes are very likely entangled with LWJGL/native-rendering
-internals a JVM-in-WASM runtime cannot reach even for "just" the UI subset —
-exactly the kind of untested assumption this plan's own step 0a (§7) already
-refuses to take on faith for the Lua VM choice. The spike: try loading
-`ISPanel`'s compiled class alone into CheerpJ or TeaVM and see how deep the
-real dependency graph goes before concluding this is buildable at all. If it
-holds up, it replaces the hand-written Canvas2D shim in the table above
-entirely. If it doesn't, §2.2 and §2.3 below are what's left to make the
-fallback shim provably honest instead of merely asserted.
+**Spike run, resolved negative — §7 step 0b.** `zombie/ui/UIElement.class`
+and `zombie/ui/UIManager.class`, the real compiled classes every `ISPanel`/
+`OrganiserScreen` method dispatches to via `self.javaObject`, were extracted
+from the shipped jar and inspected against their real bytecode constant
+pools. One hop away: raw `org.lwjgl.opengl.GL11`, PZ's own native-adjacent
+renderer, the live world/entity graph, and the specific Kahlua VM's Java
+bridge classes wired in directly, not reflectively. No isolable "just the
+UI" subset exists to run in a browser JVM. Full findings:
+`docs/management/evidence/knox-os-web-spike-0b-jvm-feasibility.md`. §2.2 and
+§2.3 below are the committed path, not a fallback.
 
-### 2.2 If a hand-written shim survives the spike: trace-replay as the oracle
+### 2.2 The hand-written shim's trace-replay oracle
 
-Independently of §2.1's outcome, a second idea fixes a concrete problem the
-current shim design has regardless: a hand-coded Canvas2D substitute can
+Regardless of §2.1's now-resolved outcome, a second idea fixes a concrete
+problem the shim design has anyway: a hand-coded Canvas2D substitute can
 pass every functional test while drawing placeholder rectangles instead of
 real sprites, and a wrong texture coordinate or a missing sprite never
 surfaces. The fix, converged on independently by two frames: capture a real
@@ -159,14 +171,14 @@ autotest harness (`tools/autotest/pz.sh`) can capture exactly this kind of
 trace the next time it drives a real Knox.OS screen, so the infrastructure
 to do this already exists — it just isn't being pointed at this problem yet.
 A trace only covers states actually recorded, so this is a fidelity check
-for known screens, not a general-purpose renderer; it complements whichever
-rendering path §2.1's spike lands on, it doesn't replace the need for one.
+for known screens, not a general-purpose renderer; it complements the
+Canvas2D shim, it doesn't replace the need for one.
 
-### 2.3 Hardening whatever hand-written layer remains
+### 2.3 Hardening the hand-written layer
 
-Whether §2.1 succeeds, fails, or only partly reaches — some hand-written
-glue will likely survive somewhere (the debug/session shim, at minimum).
-Three converged fixes keep that layer honest instead of merely asserted:
+Some hand-written glue survives (the Canvas2D draw-call shim, and the
+debug/session shim, at minimum — §2.1). Four converged fixes keep that
+layer honest instead of merely asserted:
 
 - **Hash-lock every "verbatim" file.** A CI checksum diff against the real
   mod source tree for every file §2's table calls verbatim, failing the
@@ -227,16 +239,15 @@ separate build:
   frame picturing the fixed canvas as a physical cutout taped over a
   monitor: the frame is a hard boundary, not a layout suggestion.)
 
-Proposed layout: `web/knox-os-pda/` — provisional on §2.1's spike. If the
-JVM-in-browser path holds up, `knox-ui-shim.js` below is replaced by a JVM
-runtime bundle and whatever thin input-forwarding it still needs; if it
-doesn't, `knox-ui-shim.js` stays but is checked against §2.2's trace-replay
-oracle rather than trusted on its own.
+Proposed layout: `web/knox-os-pda/` — settled by §2.1/§7 step 0b, not
+provisional: the JVM-in-browser path is not the plan going forward, so
+`knox-ui-shim.js` below is the committed Canvas2D draw-call shim, checked
+against §2.2's trace-replay oracle rather than trusted on its own.
 ```
 index.html
-lua-vm.js             -- fengari or wasmoon, vendored, unmodified
-knox-ui-shim.js       -- FALLBACK ONLY (§2.1): the draw-call substitutes KnoxUI.lua's context
-                         needs (Canvas2D), used only if the JVM-in-browser spike doesn't hold up
+lua-vm.js             -- fengari, vendored, unmodified -- confirmed by §7 step 0a
+knox-ui-shim.js       -- the draw-call substitutes KnoxUI.lua's context needs (Canvas2D),
+                         checked against the trace-replay oracle (§2.2), never trusted alone
 pz-shim.lua           -- the handful of stubbed globals (getDebug, isClient, isServer) as a debug toggle,
                          and the KnoxApps live-session reads backed by the loaded mystery file
 lua/                  -- Vocabulary.lua, Ledger.lua, Interpreter.lua, Linter.lua, Spoilage.lua,
@@ -435,24 +446,37 @@ actually behave like Kahlua's Lua for this codebase) and to spend near-zero
 effort on things the repo already has, per the ADHD pass's speedrunner
 frame:
 
-0a. **VM smoke test, before anything else is designed further**: load
-   `Ledger.lua` unmodified into a candidate VM (fengari or wasmoon) and run
-   `test/mystery_ledger.lua`'s real assertions against it. If this doesn't
-   hold up cheaply, the rest of this plan's §2 needs to fall back to a
-   manual port after all, and better to know that in an afternoon than after
-   three build steps.
-0b. **JVM-in-browser spike, in parallel with 0a, per §2.1**: try loading
-   `ISPanel`'s compiled class alone into CheerpJ or TeaVM and see how deep
-   the real LWJGL/native-rendering dependency graph actually goes. This
-   determines which version of step 1 gets built — the answer is needed
-   before step 1, not fixed by assumption now.
-1. **Shell + the UI layer §2.1's spike settled on**: static canvas, either
-   the JVM-in-browser path running `OrganiserScreen`/`KnoxUI`'s real
-   compiled code, or — if that spike didn't hold up — the Canvas2D shim over
-   `KnoxUI.lua`'s real (unmodified) context object, checked against §2.2's
-   trace-replay oracle rather than trusted on its own. Either way, checked
-   against **more than one** fixture from `test/fixtures/*.lua`
-   (`case_digest`, `generated_session`, `generator_unsteered_digest`,
+0a. **VM smoke test — DONE, PASSED.** `Vocabulary.lua`, `Ledger.lua`,
+   `Spoilage.lua`, `Interpreter.lua`, and `Linter.lua` were loaded byte-for-
+   byte unmodified into fengari (via CDN, in the browser pane) and the real
+   `test/mystery_ledger.lua`, `test/mystery_interpreter.lua`,
+   `test/mystery_linter.lua`, `test/mystery_spoilage.lua` were run against
+   them with only their harness-only `package.path` line removed — every
+   assertion untouched. All four passed, including `Linter.lua`, the module
+   with this project's own documented Kahlua-dialect gotcha (`next()`). See
+   `web/knox-os-pda/spike-0a-*.html`. The Lua-VM half of §2's architecture is
+   confirmed, not assumed.
+0b. **JVM-in-browser spike — DONE, FAILED.** `zombie/ui/UIElement.class` and
+   `zombie/ui/UIManager.class` (the real compiled Java classes every
+   `ISPanel`/`OrganiserScreen` method actually dispatches to via
+   `self.javaObject`) were extracted from the shipped `projectzomboid.jar`
+   and inspected with `javap -v -p` against their real constant pools — not
+   a guess. One hop away: raw `org.lwjgl.opengl.GL11`, PZ's own
+   `SpriteRenderer`/`IndieGL` native renderer, the live `IsoWorld`/
+   `IsoCamera`/`IsoObjectPicker`/`IsoPlayer` world-entity graph, and the
+   *specific* Kahlua VM's Java bridge classes (`KahluaTable`, `KahluaThread`,
+   `LuaCaller`) wired in at the bytecode level. No isolable "just the UI"
+   seam exists. Full findings:
+   `docs/management/evidence/knox-os-web-spike-0b-jvm-feasibility.md`. §2.1's
+   JVM-in-browser path is not the plan going forward — §2.2 (trace-replay)
+   and §2.3 (hash-locking, dual-run diffing) are, and step 1 below is
+   settled, not conditional.
+1. **Shell + the Canvas2D shim over `KnoxUI.lua`'s real (unmodified) context
+   object** — §0b having resolved which UI layer gets built, this is no
+   longer conditional. Checked against §2.2's trace-replay oracle rather
+   than trusted on its own, and against **more than one** fixture from
+   `test/fixtures/*.lua` (`case_digest`, `generated_session`,
+   `generator_unsteered_digest`,
    `synthetic_locations` — already hand-checked canonical data, not newly
    hand-authored), each checked pixel-by-pixel against a screenshot from the
    real game. More than one fixture on purpose: a single golden fixture was
