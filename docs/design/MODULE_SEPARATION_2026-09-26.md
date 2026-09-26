@@ -494,6 +494,25 @@ remains real future work, gated on §2.3's still-unbuilt schema/
 certified now is the boundary itself, continuously, not standalone
 portability.
 
+**Step 6, already satisfied by the pattern this whole build order used.**
+"If one module already has a passing native autotest harness
+(`tools/autotest/`), extract and verify that one first as the template,
+then repeat the same verification pattern for the other two rather than
+inventing three different verification strategies" — every step above,
+without exception, verified real code changes to all three modules
+through the exact same mechanism: the real boot-check autotest (visible
+game window, real GPU, no `--hidden`), `pz.sh eval` for targeted
+functional checks against the live game, and, from step 5 onward,
+`module_boundary.sh` added to that same `tools/autotest/checks/`
+directory rather than as a separate tool. No module ever got its own
+bespoke verification philosophy; module C's stage 4 baseline
+(`docs/management/evidence/knox-os-web-step4-evidencerows-baseline.md`)
+used the identical `pz.sh eval`-against-a-real-save technique module
+B's and module A's fixes were checked with throughout stage 5. This
+step's actual ask — one harness, reused, not three invented ones — was
+the working discipline of this entire effort, not a separate task left
+for the end.
+
 ## 4. Explicit non-goals
 
 - No save-compatibility shims of any kind — the owner's own instruction.
