@@ -28,4 +28,12 @@ CFEngine.PublicAPI=PublicAPI
 PublicAPI.MapMediaRuntime=require("ConspiracyFiles/MapMediaRuntime")
 PublicAPI.GeneratedRuntime=require("ConspiracyFiles/GeneratedRuntime")
 
+-- KnoxApps.lua and OrganiserScreen.lua (module C) read these four directly
+-- today to build the NAMES/DATES/FILES/PLACES programs - the same
+-- relocate-don't-redesign treatment as the two above.
+PublicAPI.DiscoveryLog=require("ConspiracyFiles/DiscoveryLog")
+PublicAPI.AddressMap=require("ConspiracyFiles/AddressMap")
+PublicAPI.PersonNameLog=require("ConspiracyFiles/PersonNameLog")
+PublicAPI.IdentityObserver=require("ConspiracyFiles/IdentityObserver")
+
 return PublicAPI

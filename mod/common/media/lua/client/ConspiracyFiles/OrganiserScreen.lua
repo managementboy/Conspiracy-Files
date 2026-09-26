@@ -53,6 +53,12 @@ ConspiracyFiles=ConspiracyFiles or {}
 local S=ConspiracyFiles.OrganiserScreen or {}
 ConspiracyFiles.OrganiserScreen=S
 CFPDA=CFPDA or {};CFPDA.OrganiserScreen=S
+-- STRADDLE: module C's real reaches into A (Organiser.lua) and B
+-- (GeneratedRuntime, DiscoveryLog) go through InteractionAPI.lua/
+-- EngineAPI.lua now, not the shared table (docs/design/
+-- MODULE_SEPARATION_2026-09-26.md section 3 step 3). This does not yet
+-- satisfy section 2.3's dependency inversion (C still knows these are
+-- GeneratedRuntime/DiscoveryLog by name) - that's step 4's job.
 
 local function log(message) CFLog.message("casefile","note",message) end
 local function safe(fn,...) local ok,v=pcall(fn,...) if ok then return v end end
@@ -339,7 +345,7 @@ function Screen:charge()
         self.chargeFresh=false
         return self.chargeValue
     end
-    local organiser=ConspiracyFiles.Organiser
+    local organiser=require("ConspiracyFiles/InteractionAPI").Organiser
     local item=organiser and organiser.held and safe(organiser.held)
     self.chargeItem=item
     self.chargeValue=item and organiser.power and safe(organiser.power,item)
@@ -362,7 +368,7 @@ function Screen:footText(hint)
     if self.dropped and now-self.dropped.at<3000 then
         return self.dropped.text
     end
-    local organiser=ConspiracyFiles.Organiser
+    local organiser=require("ConspiracyFiles/InteractionAPI").Organiser
     local charge=self:charge()
     if charge~=nil and charge>0 and charge<(organiser and organiser.LOW_POWER or 0) then
         return "BATTERY LOW"
@@ -385,7 +391,7 @@ end
 -- The boot screen has been read and dismissed. Anything it was there to
 -- report - a lost memory, so far - can stop being reported now.
 function Screen:bootSeen()
-    local organiser=ConspiracyFiles.Organiser
+    local organiser=require("ConspiracyFiles/InteractionAPI").Organiser
     if not organiser or not organiser.clearMemoryNotice then return end
     local item=safe(organiser.held)
     if item then safe(organiser.clearMemoryNotice,item) end
@@ -454,7 +460,7 @@ end
 
 function Screen:powerCheck()
     if not self.on then return end
-    local organiser=ConspiracyFiles.Organiser
+    local organiser=require("ConspiracyFiles/InteractionAPI").Organiser
     if not organiser or not organiser.hasCell then return end
     self:charge()
     if not self.chargeFresh then return end
@@ -863,7 +869,7 @@ function Screen:openQuestion(i)
         labels[n]=o.label
         if q.answers and o.value==q.answers[question.key] then current=n end
     end
-    local runtime=ConspiracyFiles.GeneratedRuntime
+    local runtime=require("ConspiracyFiles/EngineAPI").GeneratedRuntime
     self:openPopup(question.text,labels,current,function(n)
         local o=options[n]
         if not o or not runtime or not runtime.setAnswers then return end
@@ -921,7 +927,7 @@ function Screen:press(id)
         -- Waking is the moment a fresh cell is noticed, and the moment the
         -- player is looking at the screen to be told about it. It is also the
         -- only way back on now that the case has no power tab.
-        local organiser=ConspiracyFiles.Organiser
+        local organiser=require("ConspiracyFiles/InteractionAPI").Organiser
         if organiser and organiser.checkPower then safe(organiser.checkPower) end
         log("organiser wake: "..id)
         return
@@ -1177,12 +1183,12 @@ function Screen:dropPapers()
     self:touch()
     if not self.on then
         self.on=true
-        local organiser=ConspiracyFiles.Organiser
+        local organiser=require("ConspiracyFiles/InteractionAPI").Organiser
         if organiser and organiser.checkPower then safe(organiser.checkPower) end
     end
     local player=getPlayer and getPlayer()
     local inventory=player and safe(function() return player:getInventory() end)
-    local result=Drop.note(items,ConspiracyFiles.GeneratedRuntime,inventory)
+    local result=Drop.note(items,require("ConspiracyFiles/EngineAPI").GeneratedRuntime,inventory)
     self.dropped={at=getTimeInMillis and getTimeInMillis() or 0,text=Drop.footer(result)}
     self.cachedList=nil
     log("organiser drop: "..Drop.describe(result))
@@ -1213,7 +1219,7 @@ function Screen:onMouseUp(x,y)
     -- have silently taken the lamp away with it.
     if S.ACTION[id]=="MENU" and held>=S.HOLD_MS and self.on then
         self:touch()
-        local organiser=ConspiracyFiles.Organiser
+        local organiser=require("ConspiracyFiles/InteractionAPI").Organiser
         local item=organiser and safe(organiser.held)
         local power=item and organiser.power and safe(organiser.power,item)
         -- A backlight is the first thing a dying cell refuses to run. Asking
@@ -1366,7 +1372,7 @@ function S.open()
     if not S.prefsLoaded then S.prefsLoaded=true; safe(S.loadPrefs) end
     -- Picking the machine up is when a flat cell is discovered, and it is a
     -- cheap moment to look: once per open, not once per tick.
-    local organiser=ConspiracyFiles.Organiser
+    local organiser=require("ConspiracyFiles/InteractionAPI").Organiser
     if organiser and organiser.checkPower then safe(organiser.checkPower) end
     local w=Screen:new()
     w:initialise(); w:instantiate(); w:addToUIManager()
@@ -1375,7 +1381,7 @@ function S.open()
     -- place, which is a better signal than standing in it - and it is the one
     -- stamp a debug teleport cannot fake. Whether it counts as a RETURN is
     -- decided by PlaceVisits. The boot screen is not a read, so it is not one.
-    local discoveries=ConspiracyFiles.DiscoveryLog
+    local discoveries=require("ConspiracyFiles/EngineAPI").DiscoveryLog
     if not S.booting and discoveries and discoveries.visit then safe(discoveries.visit) end
     log("organiser screen opened")
     return w

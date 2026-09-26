@@ -19,6 +19,13 @@ ConspiracyFiles=ConspiracyFiles or {}
 local A=ConspiracyFiles.KnoxApps or {}
 ConspiracyFiles.KnoxApps=A
 CFPDA=CFPDA or {};CFPDA.KnoxApps=A
+-- STRADDLE: module C's real reaches into A (Organiser.lua) and B
+-- (GeneratedRuntime, DiscoveryLog, AddressMap, PersonNameLog,
+-- IdentityObserver) go through InteractionAPI.lua/EngineAPI.lua now, not
+-- the shared table (docs/design/MODULE_SEPARATION_2026-09-26.md section 3
+-- step 3). This does not yet satisfy section 2.3's dependency inversion
+-- (C still knows these are GeneratedRuntime/DiscoveryLog/etc by name) -
+-- that's step 4's job.
 
 local function safe(fn,...) local ok,v=pcall(fn,...) if ok then return v end end
 
@@ -101,7 +108,7 @@ A.files={
     id="FILES",title="FILES",icon="files",
     list=function()
         local rows=safe(Rows.list,"files") or {}
-        local log=ConspiracyFiles.DiscoveryLog
+        local log=require("ConspiracyFiles/EngineAPI").DiscoveryLog
         local when={}
         for _,event in ipairs((log and log.events and safe(log.events)) or {}) do
             local date=A.dateOf(event.at)
@@ -111,7 +118,7 @@ A.files={
         -- case finished nothing did (owner, 2026-09-14: "I lost my files
         -- somewhere?", P4-R104). Knowledge only: what the scan saw, or where a
         -- finished case's evidence was last seen - never that it is lost.
-        local runtime=ConspiracyFiles.GeneratedRuntime
+        local runtime=require("ConspiracyFiles/EngineAPI").GeneratedRuntime
         local whereOf=Rows.where
         local out={}
         -- "What do I make of it?" (P4-R113, P4-R122): a row at the top for every
@@ -150,7 +157,7 @@ function A.rememberMe()
     local root=ModData and ModData.getOrCreate(ME)
     if not root then return end
     if not root.woke then
-        local address=ConspiracyFiles.AddressMap
+        local address=require("ConspiracyFiles/EngineAPI").AddressMap
         local place=address and address.nearest and safe(address.nearest,
             math.floor(player:getX()),math.floor(player:getY()),40)
         root.woke=type(place)=="string" and place or nil
@@ -257,7 +264,7 @@ function A.caseNames()
     end
     local okG,G=pcall(require,"ConspiracyFiles/Generated/Generator")
     if okG and type(G)=="table" then for _,n in ipairs(G.INVENTED_NAMES or {}) do add(n) end end
-    local log=ConspiracyFiles.PersonNameLog
+    local log=require("ConspiracyFiles/EngineAPI").PersonNameLog
     for _,n in ipairs((log and log.names and safe(log.names)) or {}) do add(n) end
     local inOrder,byName={},{}
     for _,row in ipairs(rows) do
@@ -296,7 +303,7 @@ A.names={
         -- it already joins the outfit and the address in, and a second reader
         -- guessing at the store's shape is how the address book came up empty
         -- with an ID in the player's pocket (knox check, 2026-09-12).
-        local observer=ConspiracyFiles.IdentityObserver
+        local observer=require("ConspiracyFiles/EngineAPI").IdentityObserver
         local rows=(observer and observer.rows and safe(observer.rows)) or {}
         local out={}
         filter=filter or "All"
@@ -335,7 +342,7 @@ local monthLength,firstWeekday=Calendar.monthLength,Calendar.firstWeekday
 -- Everything found, bucketed by date. Built once per read and shared by the
 -- grid and the day list, so the two cannot disagree.
 function A.diary()
-    local log=ConspiracyFiles.DiscoveryLog
+    local log=require("ConspiracyFiles/EngineAPI").DiscoveryLog
     local events=(log and log.events and safe(log.events)) or {}
     local rows=safe(Rows.list,"evidence") or {}
     local titles={}
@@ -742,10 +749,10 @@ function A.bootLines()
     -- Hardware by Lectromax, the game's own manufacturer; the software is
     -- ours. A boot screen is where a machine says who made it.
     local out={"LECTROMAX DATALINE 160","KNOX.OS 1.0","(c) 1993 Knox Systems",""}
-    local address=ConspiracyFiles.AddressMap
+    local address=require("ConspiracyFiles/EngineAPI").AddressMap
     local ready=address and address.ready and safe(address.ready)
     out[#out+1]=ready and "Address book .... ready" or "Address book .... reading"
-    local runtime=ConspiracyFiles.GeneratedRuntime
+    local runtime=require("ConspiracyFiles/EngineAPI").GeneratedRuntime
     local status=runtime and runtime.automaticStatus and safe(runtime.automaticStatus)
     if not status then
         out[#out+1]="Case ............ waiting"
@@ -760,7 +767,7 @@ function A.bootLines()
     -- address for every record, and the boot screen asks once a second, which
     -- the fault check caught as an address lookup retrying forever (suite,
     -- 2026-09-12). A count needs no addresses.
-    local log=ConspiracyFiles.DiscoveryLog
+    local log=require("ConspiracyFiles/EngineAPI").DiscoveryLog
     local events=(log and log.events and safe(log.events)) or {}
     out[#out+1]="Records ......... "..#events
     -- The self-test a machine of this age ran on every boot. The figure is
@@ -774,7 +781,7 @@ function A.bootLines()
     -- A dead cell takes the machine's RAM offline; a fresh one brings it back.
     -- The player is told either way, because notes that quietly vanish and
     -- notes that quietly return are both a machine behaving like a bug.
-    local organiser=ConspiracyFiles.Organiser
+    local organiser=require("ConspiracyFiles/InteractionAPI").Organiser
     local item=organiser and organiser.held and safe(organiser.held)
     if item and organiser.memoryRestored and safe(organiser.memoryRestored,item) then
         out[#out+1]="Restoring from backup ..."
@@ -799,14 +806,14 @@ end
 A.sites={
     id="SITES",title="SITES",icon="sites",hidden=true,
     list=function()
-        local runtime=ConspiracyFiles.GeneratedRuntime
+        local runtime=require("ConspiracyFiles/EngineAPI").GeneratedRuntime
         local text=runtime and runtime.devLocations and safe(runtime.devLocations)
         -- Which of them the player has actually found. The ledger's reference
         -- IS the document id devLocations prints, so the two match directly.
         -- Owner, 2026-09-13: "sites should mark those found." Four clues at
         -- one address are otherwise four identical rows.
         local found={}
-        local log=ConspiracyFiles.DiscoveryLog
+        local log=require("ConspiracyFiles/EngineAPI").DiscoveryLog
         for _,e in ipairs((log and log.events and safe(log.events)) or {}) do
             if e.ref then found[tostring(e.ref)]=true end
         end
