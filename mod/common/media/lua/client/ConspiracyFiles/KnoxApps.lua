@@ -124,7 +124,7 @@ A.files={
         -- "What do I make of it?" (P4-R113, P4-R122): a row at the top for every
         -- finished case, newest first. Opening it shows the three questions;
         -- its words are the survivor's own note once anything is answered.
-        local Q=require("ConspiracyFiles/Generated/Questions")
+        local Q=require("ConspiracyFiles/EngineAPI").Questions
         for _,q in ipairs((runtime and runtime.questions and safe(runtime.questions)) or {}) do
             out[#out+1]={label=Q.rowLabel(q.number),title=Q.TITLE,questions=q,id="questions:"..q.caseId,
                          detail=Q.note(q.answers,q.offered) or "",fields={}}
@@ -654,7 +654,7 @@ end
 local function threadReader()
     local wrapper=ModData and ModData.get and ModData.get("ConspiracyFiles.Generated.G2")
     if not wrapper then return function() return nil end end
-    local Cases=require("ConspiracyFiles/Generated/SuccessiveCases")
+    local Cases=require("ConspiracyFiles/EngineAPI").SuccessiveCases
     if not Cases then return function() return nil end end
     wrapper=Cases.current(wrapper)
     if not wrapper then return function() return nil end end

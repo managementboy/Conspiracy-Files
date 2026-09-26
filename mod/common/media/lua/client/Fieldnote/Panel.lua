@@ -30,7 +30,7 @@
 -- This is also what retires the whole MeasureStringYOffset/YReal baseline
 -- problem that cost a day - there is nothing left to measure.
 local G=require("Fieldnote/Geometry")
-local Font=require("ConspiracyFiles/Generated/OrganiserFont")
+local Font=require("ConspiracyFiles/OrganiserFont")
 
 Fieldnote=Fieldnote or {}
 local S=Fieldnote.Panel or {}

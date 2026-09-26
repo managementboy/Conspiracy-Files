@@ -328,6 +328,46 @@ changes:
    then repeat the same verification pattern for the other two rather than
    inventing three different verification strategies.
 
+**Step 4, in progress.** A third ADHD re-evaluation (5 fresh frames,
+grounded in the real 8 call sites this time, found by grepping before
+writing a single prompt) converged hard on one risk this section's
+original wording didn't name: `EvidenceRows.lua`'s row-building loop
+carries state ACROSS rows (a `memoFound`-shaped flag threaded through the
+whole build, not per-row), and its `detail` text is a fixed-order
+concatenation of several sources — wrapping its output in a generic
+schema is safe, but restructuring *how it builds that output* while doing
+so is exactly how a silent, rare, hard-to-notice regression (a dropped
+hint, a reordered paragraph, only on the one save where three sources
+overlap on one row) would ship undetected. Every frame's sharpest idea
+converged on the same guard: capture the real FILES screen's current
+output from a live, populated save as a baseline *before* touching
+`EvidenceRows.lua`, and never restructure its build loop — only wrap its
+already-built, unchanged output afterward.
+
+Done this increment: `OrganiserFont.lua`/`OrganiserFont24.lua` moved from
+`Generated/` into `client/ConspiracyFiles/` outright (a third real
+requirer turned up while doing this — `client/Fieldnote/Panel.lua`, the
+organiser's own physical housing, a separate top-level directory in this
+same mod that turned out to already be part of the PDA feature in
+substance, not name — updated along with the two already-known call
+sites). `EngineAPI.lua` gained `Questions` and `SuccessiveCases`, and the
+3 real `Generated/Questions.lua` call sites plus KnoxApps.lua's one
+`Generated/SuccessiveCases.lua` call site (a pure read-only thread-chain
+lookup, not row-content shaping) now go through it — the read-only,
+no-FILES-row-risk half of the boundary, exactly as the game-design
+frame's own converged advice ordered it.
+
+Deliberately not done: the actual generic document schema, and
+`EvidenceRows.lua`'s remaining 4 direct `Generated/*` requires
+(`PlaceNames`, `RelayMemo`, `SuccessiveCases`, `EvidenceKinds`) — these
+build every real FILES row's title/fields/body/kind, and a first attempt
+at capturing the safety-net baseline found the obvious path blocked: a
+fresh boot-check save has zero real evidence, so there is nothing yet to
+diff against. Capturing a real baseline needs either a populated save or
+a synthetic fixture — both real work, not yet done. Continuing this step
+without that baseline in hand would be exactly the corner-cutting five
+independent frames just converged on warning against.
+
 ## 4. Explicit non-goals
 
 - No save-compatibility shims of any kind — the owner's own instruction.

@@ -29,8 +29,8 @@
 local CFLog=require("ConspiracyFiles/Log")
 -- The two cuts of the Palm face (P4-R99): 16 pt, drawn at 1x-3x, and 24 pt for
 -- the size between Small and Medium. tools/build_palm_font.py makes both.
-local FACE_BASE=require("ConspiracyFiles/Generated/OrganiserFont")
-local FACE_24=require("ConspiracyFiles/Generated/OrganiserFont24")
+local FACE_BASE=require("ConspiracyFiles/OrganiserFont")
+local FACE_24=require("ConspiracyFiles/OrganiserFont24")
 local FG=require("Fieldnote/Geometry")
 require("Fieldnote/Panel")
 -- The case is the Fieldnote device, drawn from its design manifest with
@@ -816,7 +816,7 @@ end
 function Screen:drawQuestions(c)
     local line=K.current.line
     local q=self.record.questions
-    local Q=require("ConspiracyFiles/Generated/Questions")
+    local Q=require("ConspiracyFiles/EngineAPI").Questions
     K.titleBar(c,"FILES","Case "..tostring(q.number))
     local lines={}
     for i,question in ipairs(Q.QUESTIONS) do
@@ -860,7 +860,7 @@ end
 function Screen:openQuestion(i)
     local q=self.record and self.record.questions
     if not q or (q.answers and q.answers.usedBy) then return end
-    local Q=require("ConspiracyFiles/Generated/Questions")
+    local Q=require("ConspiracyFiles/EngineAPI").Questions
     local question=Q.QUESTIONS[i]
     if not question then return end
     local options=Q.options(question.key,q.offered) or {}

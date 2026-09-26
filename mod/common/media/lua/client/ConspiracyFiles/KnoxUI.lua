@@ -11,7 +11,7 @@
 -- Everything here works in NATIVE pixels. The caller passes the panel, the
 -- scale and the glass origin; this draws, and returns hit boxes in screen
 -- pixels so a stylus tap can be matched to a widget.
-local BASE=require("ConspiracyFiles/Generated/OrganiserFont")
+local BASE=require("ConspiracyFiles/OrganiserFont")
 -- The face the current drawing pass uses (P4-R99): the 16 pt face at 1x-3x, or
 -- its 24 pt cut for the size between Small and Medium. One screen draws at a
 -- time, so it is simply the face the pass began with (K.begin).
