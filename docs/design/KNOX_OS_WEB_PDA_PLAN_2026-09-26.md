@@ -472,16 +472,28 @@ frame:
    and §2.3 (hash-locking, dual-run diffing) are, and step 1 below is
    settled, not conditional.
 1. **Shell + the Canvas2D shim over `KnoxUI.lua`'s real (unmodified) context
-   object** — §0b having resolved which UI layer gets built, this is no
-   longer conditional. Checked against §2.2's trace-replay oracle rather
-   than trusted on its own, and against **more than one** fixture from
-   `test/fixtures/*.lua` (`case_digest`, `generated_session`,
-   `generator_unsteered_digest`,
+   object — DONE.** `web/knox-os-pda/index.html`, built and verified live in
+   the browser pane and against a real, freshly-opened Knox.OS on the actual
+   game (`docs/management/evidence/knox-os-web-step1-fidelity-check.md`).
+   Two real bugs surfaced and were fixed, not assumed away: an argument-
+   index mismatch in the shim's own JS callbacks (not in `KnoxUI.lua`), and
+   a `source-atop` compositing bug that painted every glyph's full bounding
+   rectangle solid instead of just its letter shape (tinting must happen on
+   an isolated, always-transparent offscreen buffer, never directly against
+   an already-opaque destination canvas). The title bar, background, and
+   footer chrome now match the real game's rendering of the same widgets;
+   row-by-row comparison against real populated content is real work still
+   owed to step 3, since the fresh save used for the comparison had no
+   evidence yet. The **more than one fixture** requirement below is still
+   open — this step used one hand-picked fixture, not yet
+   `test/fixtures/*.lua`'s canonical data:
+   `case_digest`, `generated_session`, `generator_unsteered_digest`,
    `synthetic_locations` — already hand-checked canonical data, not newly
-   hand-authored), each checked pixel-by-pixel against a screenshot from the
-   real game. More than one fixture on purpose: a single golden fixture was
-   flagged independently by two ADHD frames as creating false "the whole
-   widget kit is covered" confidence when it really exercises one path once.
+   hand-authored, each still to be checked pixel-by-pixel against a
+   screenshot from the real game. More than one fixture on purpose: a single
+   golden fixture was flagged independently by two ADHD frames as creating
+   false "the whole widget kit is covered" confidence when it really
+   exercises one path once.
 2. **`KnoxApps.lua` + the mystery content bridge**: load `KnoxApps.lua` and
    any `Content/*.lua` file verbatim (§2 — no exporter to build), with the
    live-session shim backing its data reads. All three shipped mysteries
