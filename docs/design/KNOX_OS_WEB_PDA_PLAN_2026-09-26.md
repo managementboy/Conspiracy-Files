@@ -36,6 +36,20 @@ on "a loop, not a pipeline" from four directions at once — new §4.5, and
 two new items in the exclusions list (renumbered §4.6). No section
 renumbering this time.
 
+**Fourth ADHD pass, 2026-09-26** (`/adhd review the plan focusing on
+reusability of actual game code. We want to test the game not rebuild the
+PDA from scratch.`). Five isolated frames found a real gap in every draft so
+far: the plan's "loaded verbatim" language was true where it cost nothing to
+be true (the zero-PZ-dependency engine modules), and quietly stopped being
+true exactly where it mattered (KnoxUI's draw calls, `OrganiserScreen`'s
+hit-testing) — those get hand-rebuilt in JS with no gate holding them to the
+real source. Three frames independently proposed the fix that removes the
+gap instead of just monitoring it: run the real compiled Java UI classes
+inside a browser JVM rather than reimplementing their draw/hit-test logic by
+hand. §2 is revised below with that as a parallel research spike, plus a
+trace-replay fidelity check and hardening for whatever hand-written shim
+layer survives either way.
+
 ## 1. What "the PDA" actually is
 
 There is no file literally named "PDA" in the mod. The device is **Knox.OS**,
@@ -84,17 +98,108 @@ other frames, is to have only one implementation, ever.
 |---|---|
 | `Vocabulary.lua`, `Ledger.lua`, `Interpreter.lua`, `Linter.lua`, `Spoilage.lua`, `ShapeCard.lua`, `DiversityGuard.lua`, `Threads.lua` | **Loaded verbatim into the Lua VM, byte-for-byte.** No port. `test/mystery_*.lua`'s own assertions run inside the same VM as the browser tool's test suite — not translated into JS, run as-is, so there is exactly one set of tests for exactly one implementation. |
 | Mystery content (`mod/.../Mystery/Content/*.lua` — electrician, farmer, fitness instructor, and any future one) | **Also loaded verbatim.** No exporter, no Lua→JSON step, no hand-transcription — the browser tool `require`s the same file the game does. Any mystery drops in the moment its file exists, including ones not yet written. |
-| `KnoxUI.lua` | The one file that genuinely needs a substitute layer, because its draw calls (`drawRect`/`drawRectBorder`/`drawTextureScaled`/`getTexture`) are real PZ-API calls even though the surrounding file is otherwise pure. A thin JS shim intercepts exactly those calls and issues the equivalent Canvas2D call — everything else in the file (the context object, hit-testing, layout) still runs as the real Lua. The per-glyph PNGs it loads (`media/ui/CFOrg/{1x,2x,3x,b1x}/<code>.png`) are already plain PNGs, copied as-is. |
-| `KnoxApps.lua` | Also loaded verbatim; its live-session reads (`EvidenceRows`, `Generated/Questions`, `Calendar`, `SuccessiveCases`) get a small Lua-side shim module providing the same function names backed by whatever mystery file is currently loaded, not a JS mock layer. |
-| `OrganiserScreen.lua`, `Organiser.lua` | **Not loaded.** Replaced by plain browser click/keydown handlers calling into the same `KnoxUI` hit-test contract — the equip-in-hand risk mechanic has no meaning with the game not running. |
+| `KnoxUI.lua` | Its Lua control flow (the context object, hit-testing, layout math) runs as the real file, unchanged. Its draw calls (`drawRect`/`drawRectBorder`/`drawTextureScaled`/`getTexture`) are real PZ-API calls with **no JS reimplementation trusted on its own** — see §2.1 below. The per-glyph PNGs it loads (`media/ui/CFOrg/{1x,2x,3x,b1x}/<code>.png`) are already plain PNGs, copied as-is. |
+| `KnoxApps.lua` | Also loaded verbatim; its live-session reads (`EvidenceRows`, `Generated/Questions`, `Calendar`, `SuccessiveCases`) get a small Lua-side shim module providing the same function names, backed by an actual exported PZ save snapshot rather than hand-authored mock data (§2.3) — never a JS mock layer. |
+| `OrganiserScreen.lua`, `Organiser.lua` | Their equip-in-hand mechanic genuinely has no meaning with the game not running, so that part is not reproduced. Their mouse-handling and hit-test dispatch, however, is exactly the "contested territory" §2.1 is about — see there before assuming a hand-written click handler is the final answer. |
 
-Before committing to a specific VM, the very first concrete step (§7, step 0)
+Before committing to a specific VM, the very first concrete step (§7, step 0a)
 is loading `Ledger.lua` unmodified into a candidate VM and running
 `test/mystery_ledger.lua`'s assertions against it. This project has already
 hit real Kahlua-vs-standard-Lua semantic gaps twice this session (the `next()`
 gotcha, most recently) — a browser Lua VM is a different dialect gap in the
 same family, and needs its own small compatibility check before anything
 else is built on top of it, not blind trust that "it's Lua so it'll just work."
+
+### 2.1 The verbatim claim was asymmetric — where it actually matters
+
+The fourth ADHD pass's sharpest finding: every module the table above calls
+"loaded verbatim" in the engine row was **already zero-PZ-dependency by
+construction** — reuse there cost nothing and required no design decision.
+The one place a real decision was made — KnoxUI's draw calls,
+`OrganiserScreen`'s hit-testing and mouse dispatch — is exactly where the
+first three drafts of this plan quietly substituted hand-written JS, with
+none of the "no second implementation, ever" rigor §2's own opening
+paragraph already argues for the engine. The owner's own framing of this
+pass ("we want to test the game, not rebuild the PDA from scratch") is a
+direct correction to that gap.
+
+Three isolated frames (remove-the-load-bearing-assumption, and speedrunner
+twice, independently) proposed the same fix: run the actual compiled Java UI
+classes — `ISPanel`, `OrganiserScreen`, and whatever `KnoxUI.lua`'s draw
+calls resolve to — inside a browser-hosted JVM (CheerpJ or TeaVM), so the
+genuine bytecode executes in the tab instead of a JS guess at what it does.
+This is the one idea in the whole pass that satisfies every constraint at
+once: real game code, no running game process, still a static/standalone
+site.
+
+**This is a parallel research spike, not yet a commitment**, because PZ's
+real UI classes are very likely entangled with LWJGL/native-rendering
+internals a JVM-in-WASM runtime cannot reach even for "just" the UI subset —
+exactly the kind of untested assumption this plan's own step 0a (§7) already
+refuses to take on faith for the Lua VM choice. The spike: try loading
+`ISPanel`'s compiled class alone into CheerpJ or TeaVM and see how deep the
+real dependency graph goes before concluding this is buildable at all. If it
+holds up, it replaces the hand-written Canvas2D shim in the table above
+entirely. If it doesn't, §2.2 and §2.3 below are what's left to make the
+fallback shim provably honest instead of merely asserted.
+
+### 2.2 If a hand-written shim survives the spike: trace-replay as the oracle
+
+Independently of §2.1's outcome, a second idea fixes a concrete problem the
+current shim design has regardless: a hand-coded Canvas2D substitute can
+pass every functional test while drawing placeholder rectangles instead of
+real sprites, and a wrong texture coordinate or a missing sprite never
+surfaces. The fix, converged on independently by two frames: capture a real
+play session's actual `drawRect`/`drawTextureScaled`/`getTexture` call
+arguments, plus the real texture-atlas bytes those calls actually drew from,
+as a trace — then have the browser tool's fidelity check replay that trace
+verbatim and diff against it, rather than a person eyeballing whether a
+hand-picked colour looks approximately right. This project's own native
+autotest harness (`tools/autotest/pz.sh`) can capture exactly this kind of
+trace the next time it drives a real Knox.OS screen, so the infrastructure
+to do this already exists — it just isn't being pointed at this problem yet.
+A trace only covers states actually recorded, so this is a fidelity check
+for known screens, not a general-purpose renderer; it complements whichever
+rendering path §2.1's spike lands on, it doesn't replace the need for one.
+
+### 2.3 Hardening whatever hand-written layer remains
+
+Whether §2.1 succeeds, fails, or only partly reaches — some hand-written
+glue will likely survive somewhere (the debug/session shim, at minimum).
+Three converged fixes keep that layer honest instead of merely asserted:
+
+- **Hash-lock every "verbatim" file.** A CI checksum diff against the real
+  mod source tree for every file §2's table calls verbatim, failing the
+  build on drift — the same sync-script §3 already requires, just enforced
+  as a gate rather than a one-time copy.
+- **Generate shim signatures, don't hand-type them**, wherever a real
+  reflection/API surface exists to generate them from — a hand-typed
+  signature can silently miss a parameter the real API gained since it was
+  written; a generated one can't drift without the generator noticing.
+- **Dual-run the engine's own test suite.** `test/mystery_*.lua`'s
+  assertions already run inside the browser Lua VM (§2's table); running
+  the *same* assertions against the real PZ-embedded Lua runtime — via this
+  project's existing native harness — and diffing the two outputs closes
+  the one gap nothing else here does: proof that the browser VM's dialect
+  actually agrees with Kahlua's, not just an assumption it does.
+- **Derive `KnoxApps`' mock session data from an actual exported PZ save**,
+  refreshed when the save format changes, rather than hand-authoring it
+  once — a hand-typed mock can only fail on session shapes it was never
+  written to produce, which is exactly the blind spot a real bug would hide
+  in.
+
+### 2.4 What this plan still won't do, and why
+
+The fourth pass also surfaced a cluster of maximal-fidelity ideas this plan
+explicitly does not pursue: streaming a currently-running game's screen over
+VNC, driving a live instance through its RCON/debug console, or piping a
+headless client's real-time framebuffer to the browser over a socket. Every
+one of these is more faithful than anything above, and every one of them
+requires an actual running PZ process somewhere — which directly
+contradicts this project's own stated goal, unchanged since the first draft:
+testing *without* running the game, deployable as a static site or a
+standalone download. These stay on record as the theoretical ceiling if that
+constraint is ever relaxed, not as work items now.
 
 ## 3. Architecture
 
@@ -122,11 +227,16 @@ separate build:
   frame picturing the fixed canvas as a physical cutout taped over a
   monitor: the frame is a hard boundary, not a layout suggestion.)
 
-Proposed layout: `web/knox-os-pda/` —
+Proposed layout: `web/knox-os-pda/` — provisional on §2.1's spike. If the
+JVM-in-browser path holds up, `knox-ui-shim.js` below is replaced by a JVM
+runtime bundle and whatever thin input-forwarding it still needs; if it
+doesn't, `knox-ui-shim.js` stays but is checked against §2.2's trace-replay
+oracle rather than trusted on its own.
 ```
 index.html
 lua-vm.js             -- fengari or wasmoon, vendored, unmodified
-knox-ui-shim.js       -- the draw-call substitutes KnoxUI.lua's context needs (Canvas2D)
+knox-ui-shim.js       -- FALLBACK ONLY (§2.1): the draw-call substitutes KnoxUI.lua's context
+                         needs (Canvas2D), used only if the JVM-in-browser spike doesn't hold up
 pz-shim.lua           -- the handful of stubbed globals (getDebug, isClient, isServer) as a debug toggle,
                          and the KnoxApps live-session reads backed by the loaded mystery file
 lua/                  -- Vocabulary.lua, Ledger.lua, Interpreter.lua, Linter.lua, Spoilage.lua,
@@ -325,21 +435,29 @@ actually behave like Kahlua's Lua for this codebase) and to spend near-zero
 effort on things the repo already has, per the ADHD pass's speedrunner
 frame:
 
-0. **VM smoke test, before anything else is designed further**: load
+0a. **VM smoke test, before anything else is designed further**: load
    `Ledger.lua` unmodified into a candidate VM (fengari or wasmoon) and run
    `test/mystery_ledger.lua`'s real assertions against it. If this doesn't
    hold up cheaply, the rest of this plan's §2 needs to fall back to a
    manual port after all, and better to know that in an afternoon than after
    three build steps.
-1. **Shell + KnoxUI shim**: static canvas, the Canvas2D draw-call shim over
-   `KnoxUI.lua`'s real (unmodified) context object, checked against **more
-   than one** fixture from `test/fixtures/*.lua` (`case_digest`,
-   `generated_session`, `generator_unsteered_digest`, `synthetic_locations` —
-   already hand-checked canonical data, not newly hand-authored), each
-   checked pixel-by-pixel against a screenshot from the real game. More than
-   one fixture on purpose: a single golden fixture was flagged independently
-   by two ADHD frames as creating false "the whole widget kit is covered"
-   confidence when it really exercises one path once.
+0b. **JVM-in-browser spike, in parallel with 0a, per §2.1**: try loading
+   `ISPanel`'s compiled class alone into CheerpJ or TeaVM and see how deep
+   the real LWJGL/native-rendering dependency graph actually goes. This
+   determines which version of step 1 gets built — the answer is needed
+   before step 1, not fixed by assumption now.
+1. **Shell + the UI layer §2.1's spike settled on**: static canvas, either
+   the JVM-in-browser path running `OrganiserScreen`/`KnoxUI`'s real
+   compiled code, or — if that spike didn't hold up — the Canvas2D shim over
+   `KnoxUI.lua`'s real (unmodified) context object, checked against §2.2's
+   trace-replay oracle rather than trusted on its own. Either way, checked
+   against **more than one** fixture from `test/fixtures/*.lua`
+   (`case_digest`, `generated_session`, `generator_unsteered_digest`,
+   `synthetic_locations` — already hand-checked canonical data, not newly
+   hand-authored), each checked pixel-by-pixel against a screenshot from the
+   real game. More than one fixture on purpose: a single golden fixture was
+   flagged independently by two ADHD frames as creating false "the whole
+   widget kit is covered" confidence when it really exercises one path once.
 2. **`KnoxApps.lua` + the mystery content bridge**: load `KnoxApps.lua` and
    any `Content/*.lua` file verbatim (§2 — no exporter to build), with the
    live-session shim backing its data reads. All three shipped mysteries
@@ -360,7 +478,7 @@ frame:
    the actual engine bridge stalls at "almost done" (the ADHD pass's
    attacker frame's own words for this trap).
 
-Step 0 is the one everything else is conditional on. Steps 1–3 are where the
+Steps 0a and 0b are what everything else is conditional on. Steps 1–3 are where the
 remaining real risk lives (does the shim actually look like Knox.OS, does
 the fidelity diff actually catch a real drift) — both checkable before any
 deployment work starts.
