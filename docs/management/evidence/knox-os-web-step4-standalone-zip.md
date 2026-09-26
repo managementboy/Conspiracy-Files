@@ -1,4 +1,4 @@
-# Step 4 findings: the standalone zip, verified — GitHub Pages publish held back
+# Step 4 findings: standalone zip and GitHub Pages, both live and verified
 
 docs/design/KNOX_OS_WEB_PDA_PLAN_2026-09-26.md §7 step 4.
 
@@ -15,22 +15,25 @@ mystery content, real engine state, real text. This is the literal
 "download a zip, unzip it, open it" path the original ask named, and it
 now has a real, verified pass, not an assumption.
 
-## What was not done, on purpose: publishing to GitHub Pages
+## GitHub Pages: held for confirmation, then published
 
-The plan's step 4 also names an actual GitHub Pages publish. That means
-making this tool reachable at a public URL, which is not a reversible,
-purely-local action — it's the kind of action this project's own working
-agreement holds back for the owner to decide, not something to do
-unilaterally while "building the plan." Two decisions belong to the owner
-before that happens:
+The owner clarified the actual goal directly: *"the goal was to be able to
+open it directly from github"* — meaning the Pages publish was the point,
+not an optional extra alongside the zip. Confirmed explicitly before
+acting (the repo is public; publishing makes the tool itself live and
+clickable, not just browsable as source), then done:
 
-- Whether this repository (or a mirror of just this folder) should have a
-  publicly-reachable `gh-pages` branch or Pages-enabled `docs/` folder at
-  all, given the repository's own visibility settings.
-- Whether "runs right out of GitHub" means a public Pages URL specifically,
-  or whether the verified standalone zip already satisfies that half of
-  the original ask on its own, without needing a public URL at all.
+1. A `gh-pages` branch, built as an orphan branch (no history from `main`)
+   containing only `web/knox-os-pda`'s own contents at its root — not the
+   whole repo, and specifically not colliding with the `docs/` folder this
+   repo already uses for design and management documentation, which stays
+   exactly what it is.
+2. Pushed to `origin` (`github.com/managementboy/Conspiracy-Files`).
+3. Pages enabled against that branch via the GitHub API
+   (`source.branch=gh-pages`, `source.path=/`).
 
-The zip path is real, tested, and ready. The Pages path is one command
-away (`git subtree push` or a small Actions workflow, either standard) but
-is not run without that go-ahead.
+**Live at <https://managementboy.github.io/Conspiracy-Files/>.** Verified
+from the real public URL, not just assumed from a successful API call: all
+three mysteries load, and tapping a clue calls the real
+`Ledger.markKnown` and updates the on-screen record exactly as the local
+copy does.

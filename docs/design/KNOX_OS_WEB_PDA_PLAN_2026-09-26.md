@@ -537,16 +537,21 @@ frame:
    content screens (blocked on step 2's own finding — no real in-game
    render of a Vocabulary-shaped mystery exists yet) remain open for the
    same technique.
-4. **Deployment — the standalone zip half is DONE, the Pages half is
-   deliberately held for the owner.** `git archive --format=zip
-   HEAD:web/knox-os-pda` produces the exact artifact described here;
-   extracted and opened by file path with no server, it renders correctly —
-   real content, no network dependency beyond the CDN-loaded Lua VM. Full
-   findings: `docs/management/evidence/knox-os-web-step4-standalone-zip.md`.
-   The GitHub Pages publish itself was not run: it makes this tool
-   reachable at a public URL, which is a call for the owner to make (repo
-   visibility, whether a public URL is even wanted alongside the already-
-   working zip), not something to decide unilaterally mid-build.
+4. **Deployment — DONE, both halves.** The standalone zip
+   (`git archive --format=zip HEAD:web/knox-os-pda`) opens correctly with
+   no server. GitHub Pages, held for the owner's explicit confirmation
+   first (the repo is public; publishing makes the tool itself live and
+   clickable, not just browsable as source) and run once that confirmation
+   came: a `gh-pages` branch holding only `web/knox-os-pda`'s contents at
+   its root — kept separate from the existing `docs/` folder this repo
+   already uses for design and management documentation, so Pages serves
+   only the tool, nothing else — pushed to `origin`, with Pages enabled
+   against it via the GitHub API. Live at
+   **https://managementboy.github.io/Conspiracy-Files/**, verified
+   end-to-end from the real public URL: all three mysteries load, and
+   tapping a clue calls the real `Ledger.markKnown` and updates the record,
+   exactly as it does locally. Full findings:
+   `docs/management/evidence/knox-os-web-step4-standalone-zip.md`.
 5. **Stretch, explicitly gated**: a ShapeCard/DiversityGuard visualiser for
    authoring new mysteries directly in the browser, checking a draft against
    the roster before it ever reaches a native Linux run — gated behind a
