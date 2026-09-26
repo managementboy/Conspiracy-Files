@@ -46,4 +46,14 @@ PublicAPI.IdentityObserver=require("ConspiracyFiles/IdentityObserver")
 PublicAPI.Questions=require("ConspiracyFiles/Generated/Questions")
 PublicAPI.SuccessiveCases=require("ConspiracyFiles/Generated/SuccessiveCases")
 
+-- EvidenceRows.lua reclassified from unclear to module B this increment
+-- (docs/design/MODULE_SEPARATION_2026-09-26.md section 3a): "the
+-- projection from what the survivor has actually found to the rows the
+-- organiser shows" is content-assembly (it requires 4 Generated/*
+-- modules directly to build FILES/NAMES/PLACES row text), not PDA
+-- rendering. KnoxApps.lua (module C) now reaches it through here instead
+-- of requiring it directly - the real fix for the finding that aliasing
+-- alone can't invert a plain require() dependency.
+PublicAPI.EvidenceRows=require("ConspiracyFiles/EvidenceRows")
+
 return PublicAPI

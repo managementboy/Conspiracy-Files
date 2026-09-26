@@ -14,7 +14,6 @@
 -- optionally `open(row)` for what a tap on a row does. Everything else - the
 -- title bar, the scrolling, the arrows - belongs to the shell.
 local K=require("ConspiracyFiles/KnoxUI")
-local Rows=require("ConspiracyFiles/EvidenceRows")
 ConspiracyFiles=ConspiracyFiles or {}
 local A=ConspiracyFiles.KnoxApps or {}
 ConspiracyFiles.KnoxApps=A
@@ -107,7 +106,7 @@ end
 A.files={
     id="FILES",title="FILES",icon="files",
     list=function()
-        local rows=safe(Rows.list,"files") or {}
+        local rows=safe(require("ConspiracyFiles/EngineAPI").EvidenceRows.list,"files") or {}
         local log=require("ConspiracyFiles/EngineAPI").DiscoveryLog
         local when={}
         for _,event in ipairs((log and log.events and safe(log.events)) or {}) do
@@ -119,7 +118,7 @@ A.files={
         -- somewhere?", P4-R104). Knowledge only: what the scan saw, or where a
         -- finished case's evidence was last seen - never that it is lost.
         local runtime=require("ConspiracyFiles/EngineAPI").GeneratedRuntime
-        local whereOf=Rows.where
+        local whereOf=require("ConspiracyFiles/EngineAPI").EvidenceRows.where
         local out={}
         -- "What do I make of it?" (P4-R113, P4-R122): a row at the top for every
         -- finished case, newest first. Opening it shows the three questions;
@@ -252,7 +251,7 @@ local function nameIn(text,name)
 end
 
 function A.caseNames()
-    local rows=safe(Rows.list,"evidence") or {}
+    local rows=safe(require("ConspiracyFiles/EngineAPI").EvidenceRows.list,"evidence") or {}
     if #rows==0 then return {} end
     local candidates,seen={},{}
     local function add(name)
@@ -344,7 +343,7 @@ local monthLength,firstWeekday=Calendar.monthLength,Calendar.firstWeekday
 function A.diary()
     local log=require("ConspiracyFiles/EngineAPI").DiscoveryLog
     local events=(log and log.events and safe(log.events)) or {}
-    local rows=safe(Rows.list,"evidence") or {}
+    local rows=safe(require("ConspiracyFiles/EngineAPI").EvidenceRows.list,"evidence") or {}
     local titles={}
     for _,row in ipairs(rows) do if row.id then titles[row.id]=row.title end end
     local byKey,newest={},nil
@@ -583,7 +582,7 @@ A.help={
 A.places={
     id="PLACES",title="PLACES",icon="places",
     list=function()
-        local rows=safe(Rows.list,"places") or {}
+        local rows=safe(require("ConspiracyFiles/EngineAPI").EvidenceRows.list,"places") or {}
         local out={}
         for _,row in ipairs(rows) do
             if row.cfHeading then
@@ -698,7 +697,7 @@ A.threads={
     -- FILES record they name and come BACK here - the DATES day idiom, with
     -- no change to the shell. Findings in no thread are one row of their own.
     list=function(category)
-        local rows=safe(Rows.list,"files") or {}
+        local rows=safe(require("ConspiracyFiles/EngineAPI").EvidenceRows.list,"files") or {}
         local plain={}
         for _,row in ipairs(rows) do
             -- The three closing questions are the survivor answering, not a

@@ -386,12 +386,54 @@ row-building logic reassigned from C to B outright (building rows from
 `Generated/*` content is content-assembly, not PDA rendering), with C
 receiving only the finished generic document — never `EvidenceRows.lua`
 itself, never a `Generated/*` file, transitively or otherwise. That
-reassignment, the schema itself, and verifying against the captured
-baseline (plus a broader corpus) are real work, still not done.
-Continuing past this point without that baseline in hand would have been
-exactly the corner-cutting five independent frames converged on warning
-against — so this step stops here, at a verified checkpoint, rather than
-forcing the harder half through under time pressure.
+reassignment, and verifying against the captured baseline, are now done.
+
+**Done**: `EvidenceRows.lua` reclassified from unclear to module B
+outright (a `-- STRADDLE:` header comment says so directly in the file).
+`EngineAPI.lua` gained `EvidenceRows`; `KnoxApps.lua`'s one top-level
+`require("ConspiracyFiles/EvidenceRows")` and all 6 of its real call
+sites (`Rows.list`/`Rows.where`, across the FILES/NAMES/DATES/PLACES
+programs) now go through it instead. `EvidenceRows.lua`'s own two real
+reaches into module A (`ClueMarkers.note`, `LocalPersonIntegration`'s
+published `ObservedKeyLeads` table — an ad hoc "publish" pattern already
+in this codebase, per that file's own comment) go through
+`InteractionAPI.lua`, added lazily as functions rather than a top-level
+require: `EngineAPI.lua` reaches `EvidenceRows.lua`, which would reach
+`InteractionAPI.lua`, which reaches `Organiser.lua`, which reaches
+`PDAAPI.lua`, which reaches `OrganiserScreen.lua`/`KnoxApps.lua` — a real
+circular-require path if any single link in that chain were resolved at
+file-load time instead of at the point of actual use. Checked directly,
+not assumed: no module-C file (`KnoxUI.lua`, `KnoxApps.lua`,
+`OrganiserScreen.lua`, `DocumentPane.lua`) has a `Generated/*` require
+left in it — the literal criterion this step's own wording set.
+
+**The build loop itself was never touched.** `Rows.build`'s row-by-row
+construction — the stateful `memoFound` flag, the fixed-order `detail`
+concatenation the attacker frame's review specifically named — is
+byte-for-byte the same code it was before this step. Only *how the
+result is reached* changed.
+
+Verified against the captured baseline, not assumed correct: reloaded
+the exact save (`10007581323681056303`) the baseline came from and
+dumped the same row through the new `EngineAPI.EvidenceRows.list("files")`
+path — every field, including the full `detailText`, byte-for-byte
+identical to the captured baseline. Also exercised the real consumer
+path end to end (`ConspiracyFiles.KnoxApps.files.list()`), not just the
+lower-level call: same single row, same title, same label. Plus the real
+boot-check autotest on a fresh save: 156/156 mod files loaded, 0 errors,
+evidence album still opens automatically.
+
+Still real future work, honestly not claimed as done: the actual
+generic document schema (`{id, title, fields, body, kind}`) and a
+`publish()`/validation boundary per §2.3's original vision.
+What's built now is a working, verified inversion of the *require
+graph* (module C's source no longer names a `Generated/*` module,
+directly or through `EvidenceRows.lua`) — not yet the schema-level
+contract on top of it. The one-row baseline is also not the exhaustive
+corpus a full schema migration would want (no coverage yet of the rarer
+overlap cases the attacker frame named — a row where `ClueMarkers`, a
+connection, and `RelayMemo.inWeek` all fire at once). Both are real,
+separate, still-open pieces of step 4, not silently folded into "done."
 
 ## 4. Explicit non-goals
 

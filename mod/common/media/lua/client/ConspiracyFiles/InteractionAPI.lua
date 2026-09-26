@@ -16,4 +16,22 @@ CFInteract.PublicAPI=PublicAPI
 -- relied on, but require() returns the same cached, real table regardless.
 PublicAPI.Organiser=require("ConspiracyFiles/Organiser")
 
+-- EvidenceRows.lua (reclassified to module B this increment - see
+-- docs/design/MODULE_SEPARATION_2026-09-26.md section 3a) reaches into
+-- two real module-A sources when building FILES/NAMES/PLACES rows:
+-- ClueMarkers.note() and LocalPersonIntegration's own published
+-- ConspiracyFiles.ObservedKeyLeads table (a small ad hoc "publish"
+-- pattern already in this codebase, per its own comment: "leads must be
+-- published there like IdentityObserver and KeyJournal are").
+-- Lazy, not required here: EvidenceRows.lua reaches InteractionAPI from
+-- deep inside a require chain that starts at EngineAPI.lua (EngineAPI ->
+-- EvidenceRows -> InteractionAPI) and can loop back through PDAAPI.lua ->
+-- KnoxApps.lua -> EngineAPI.lua if these were required at file-load time -
+-- see EvidenceRows.lua's own call sites for the same lazy pattern.
+function PublicAPI.clueMarkers() return require("ConspiracyFiles/ClueMarkers") end
+function PublicAPI.observedKeyLeads()
+    require("ConspiracyFiles/LocalPersonIntegration")
+    return ConspiracyFiles.ObservedKeyLeads
+end
+
 return PublicAPI

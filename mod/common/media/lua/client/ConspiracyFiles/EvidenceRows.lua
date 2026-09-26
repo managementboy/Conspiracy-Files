@@ -10,6 +10,19 @@
 -- findings, in true discovery order, with where each was found (P4-R128).
 -- The old evidence window used to do that second half for itself, so the
 -- organiser never received it; it moved here when the window was removed.
+--
+-- STRADDLE, reclassified module B (docs/design/MODULE_SEPARATION_2026-09-26.md
+-- section 3a, stage 4): building rows from Generated/* content is content-
+-- assembly, not PDA rendering, even though this file lived in the same
+-- directory as C's other files. KnoxApps.lua (module C) now reaches it
+-- through EngineAPI.lua instead of requiring it directly - a plain
+-- require() dependency can't be inverted by aliasing alone, unlike the
+-- shared-global-table straddlers resolved in stage 3. Its own two real
+-- reaches into module A (ClueMarkers.note, LocalPersonIntegration's
+-- published ObservedKeyLeads) go through InteractionAPI.lua below, lazily
+-- (never at file-load time - see EngineAPI.lua's own require chain, which
+-- reaches this file before InteractionAPI.lua's own dependencies have
+-- necessarily finished loading).
 local PlaceNames=require("ConspiracyFiles/Generated/PlaceNames")
 local RelayMemo=require("ConspiracyFiles/Generated/RelayMemo")
 local PlaceIndex=require("ConspiracyFiles/PlaceIndex")
@@ -76,7 +89,7 @@ function Rows.build(section,runtime)
             detail=(map and map.describe and map.describe(detail,case)) or detail
             detail=PlaceNames.render(detail,case,r.body,map and map.describe)
         end
-        local markers=ConspiracyFiles.ClueMarkers
+        local markers=require("ConspiracyFiles/InteractionAPI").clueMarkers()
         if markers and markers.note then
             local ok,note=pcall(markers.note,r.id)
             if ok and note then detail=detail.."\n\n"..Headings.MARKED.."\n"..note end
@@ -162,10 +175,19 @@ local function otherRows(withIdentity)
     local CF=ConspiracyFiles or {}
     -- Names, not a list of modules: a module that is absent would leave a hole
     -- and ipairs stops at the first one, silently dropping every source after it.
+    -- ObservedKeyLeads is module A's (LocalPersonIntegration.lua's own
+    -- published table, per InteractionAPI.lua); the rest are module B's own,
+    -- intra-module now that this file is B - looked up fresh below, same as
+    -- before, so an absent module still cannot swallow the sources after it.
     local names={"KeyJournal","ObservedKeyLeads","KeyObserver"}
     if withIdentity then table.insert(names,1,"IdentityObserver") end
     for _,name in ipairs(names) do
-        local source=CF[name]
+        local source
+        if name=="ObservedKeyLeads" then
+            source=require("ConspiracyFiles/InteractionAPI").observedKeyLeads()
+        else
+            source=CF[name]
+        end
         if source and source.rows then
             local ok,rows=pcall(source.rows)
             if ok and type(rows)=="table" then for _,row in ipairs(rows) do out[#out+1]=row end end
