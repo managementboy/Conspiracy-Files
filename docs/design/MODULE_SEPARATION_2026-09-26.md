@@ -435,6 +435,65 @@ overlap cases the attacker frame named — a row where `ClueMarkers`, a
 connection, and `RelayMemo.inWeek` all fire at once). Both are real,
 separate, still-open pieces of step 4, not silently folded into "done."
 
+**Step 5, corrected and done.** A fifth ADHD re-evaluation (5 fresh
+frames) converged on the same correction before this step started:
+copying module C into a blank scratch mod folder with zero source edits
+— the acceptance criterion an earlier pass upgraded this step to — is
+not honestly achievable yet, since the schema/`publish()` boundary §2.3
+called for is still real, unbuilt work; C's files genuinely need
+`EngineAPI.lua`/`InteractionAPI.lua` present, not a schema. Every frame
+converged on the same real, achievable substitute: turn the invariant
+already proven true (every cross-module reach goes through exactly one
+of the three `PublicAPI` files) into a permanent, mechanical regression
+gate — `tools/autotest/checks/module_boundary.sh`.
+
+Running it for the first time surfaced **21 real cross-module reaches**
+that four stages of hand-driven audits had missed — the check earned
+its place immediately, not as a formality:
+- `LocalPersonIntegration.lua` (A) reaching `KeyJournal`/`PersonNameLog`/
+  `BodyOutfitLog`/`DiscoveryLog`/`GeneratedRuntime`/`AddressMap` (B),
+  plus `Generated/SuccessiveCases` directly — the exact
+  `A:LocalPersonIntegration.lua requires B:SuccessiveCases.lua` edge
+  §1's original audit named on day one and no later stage had actually
+  fixed.
+- `GeneratedRuntime.lua`/`MapMediaRuntime.lua` (B) reaching
+  `PlayerVoice`/`GeneratedMenu`/`ClueCue`/`ClueSearch`/`ClueMarkers` (A)
+  — some real functional calls, some bare load-order-forcing requires
+  with discarded return values.
+- `PlayerVoice.lua`/`ClueSearch.lua`/`ClueCue.lua`/
+  `EvidencePickupHint.lua` (A) each reaching `GeneratedRuntime`/
+  `MapMediaRuntime`/`PersonNameLog` (B) directly.
+- `DiscoveryLog.lua`/`MapMediaRuntime.lua` (B) reaching
+  `OrganiserScreen` (C) directly.
+
+All resolved the same way as §2.6's straddlers — redirected through
+`EngineAPI.lua`/`InteractionAPI.lua`/`PDAAPI.lua`, added inline at each
+real call site rather than as new top-level requires (several of the B
+files above are required by `EngineAPI.lua` at its own top level, so a
+top-level require of `InteractionAPI.lua` inside any of them would
+cycle straight back through `InteractionAPI → GeneratedMenu →
+EngineAPI` — caught and fixed before it shipped). One exception is kept
+and named directly in the check script rather than silently allowed:
+`DiscoveryLog.lua`'s own top-level bare
+`require("ConspiracyFiles/PlayerVoice")`, a load-order guarantee that
+cannot move to function-scope without becoming exactly that cycle.
+
+Verified with the real boot-check autotest (156/156 files, 0 errors,
+evidence album still opens automatically) and live via `pz.sh eval`:
+every newly-added `PublicAPI` entry resolves with no circular-require
+failure. `module_boundary.sh` itself now passes clean and stays in
+`tools/autotest/checks/` as a permanent gate — the mechanical,
+re-checkable version of the boundary this whole plan exists to build,
+so a future edit can't quietly reopen one of the 21 holes just closed
+without this failing loudly.
+
+**Honestly not what this step originally asked for**: no module was
+copied into a blank scratch mod folder, and none could be yet — that
+remains real future work, gated on §2.3's still-unbuilt schema/
+`publish()` boundary (§3a step 4's own honest accounting). What's
+certified now is the boundary itself, continuously, not standalone
+portability.
+
 ## 4. Explicit non-goals
 
 - No save-compatibility shims of any kind — the owner's own instruction.
