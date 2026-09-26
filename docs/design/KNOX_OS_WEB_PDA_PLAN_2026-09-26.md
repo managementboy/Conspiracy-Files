@@ -13,8 +13,19 @@ and two other frames — one adversarial, one an on-call maintainer — converge
 independently on the same six staleness/false-confidence risks in the
 original manual-port plan. That double convergence, from frames that never
 saw each other's output, is the strongest signal in this document and drives
-every change below. §2, §3 and §6 are rewritten; the old §4 is folded into
-§2; the old §5 and §6 (now §4 and §5) are unchanged.
+every change below. §2, §3 and §6 (of that draft) were rewritten, and the
+draft's old §4 was folded into §2 — see the second pass below for the
+current numbering.
+
+**Second ADHD pass, 2026-09-26** (`/adhd`, owner: *"add to the current plan
+that we want to test how misteries are presented on the PDA. We need a way
+accessing the actual logic and text of the misteries. Example: we pretend we
+start as fitness instructor. We generate a first mistery and pretend we have
+found the clues. I can test if it makes sense and give you feedback for
+refining."*). Five more isolated frames, with two separate three- and
+four-way independent convergences — one on what makes a simulated
+playthrough trustworthy at all, one on testing every legal clue order rather
+than one hand-picked order. New §4 below; §5–§7 renumbered from §4–§6.
 
 ## 1. What "the PDA" actually is
 
@@ -68,7 +79,7 @@ other frames, is to have only one implementation, ever.
 | `KnoxApps.lua` | Also loaded verbatim; its live-session reads (`EvidenceRows`, `Generated/Questions`, `Calendar`, `SuccessiveCases`) get a small Lua-side shim module providing the same function names backed by whatever mystery file is currently loaded, not a JS mock layer. |
 | `OrganiserScreen.lua`, `Organiser.lua` | **Not loaded.** Replaced by plain browser click/keydown handlers calling into the same `KnoxUI` hit-test contract — the equip-in-hand risk mechanic has no meaning with the game not running. |
 
-Before committing to a specific VM, the very first concrete step (§6, step 0)
+Before committing to a specific VM, the very first concrete step (§7, step 0)
 is loading `Ledger.lua` unmodified into a candidate VM and running
 `test/mystery_ledger.lua`'s assertions against it. This project has already
 hit real Kahlua-vs-standard-Lua semantic gaps twice this session (the `next()`
@@ -122,7 +133,94 @@ to their source — the same drift risk applies to a stale *copy* as to a
 hand *port*, just one layer down, so this still needs a real check rather
 than a one-time copy-paste.
 
-## 4. Fidelity rules the port must not silently drop
+## 4. Testing a mystery's real playthrough
+
+The owner's own example: *"we pretend we start as fitness instructor. We
+generate a first mystery and pretend we have found the clues."* This is a
+first-class feature, not a byproduct of §1–3 — a way to pick an occupation,
+load its mystery, and step through "finding" its clues to read the actual
+authored prose and screens as they'd really appear, so feedback can be given
+and a refinement checked without ever launching the game.
+
+### 4.1 The base loop
+
+A picker lists every mystery in `content/` (§2 — electrician, farmer,
+fitness instructor, any future one) alongside the occupation it declares.
+Loading one attaches it to a fresh `Ledger` exactly as `MysteryRuntime.attach`
+does. Each of its PLACE findings appears as something clickable; clicking one
+calls the real `Ledger.markKnown` and re-renders every Knox.OS screen through
+the real `Interpreter.visibleReveals`/`Ledger.close` — the actual prose, the
+actual tab layout, in actual discovery order, not a paraphrase of what those
+calls would produce.
+
+### 4.2 Faithfulness gates — three frames converged on this independently
+
+Regulator, 3am-on-call, and remove-the-load-bearing-assumption all separately
+landed on the same conclusion: a simulator that lets "pretend to find a
+clue" mean anything more permissive than what the real game would actually
+allow produces feedback about a mystery that can't happen. So:
+
+- **"Find" only calls the real engine path.** No shortcut writes Ledger
+  state any way other than the same `markKnown`/`Interpreter` calls the game
+  uses — verified by diffing the resulting state object, not by eyeballing
+  the screen.
+- **Illegal orders are refused, not faked.** A clue whose GATE/LINK
+  preconditions the loaded mystery declares aren't yet satisfied cannot be
+  "found" — greyed out, not hidden, so the reviewer sees the mystery's own
+  dependency shape while testing it, and pretending stays honest pretending.
+- **Only the exact committed content runs.** The tool loads the same
+  `Content/*.lua` and engine files as the shipping mod, never a stale copy
+  or an in-flight edit passed off as the real thing — the sync-script drift
+  risk already named in §3 applies here with extra force, since a stale
+  file here corrupts feedback, not just a screenshot.
+- **No silent stand-ins.** Any screen or text that came from a fallback path
+  rather than the real ported `KnoxUI` context is visibly marked as such,
+  never a lookalike substitute.
+- **Feedback is reproducible.** Each session stamps its content-hash, VM,
+  and the exact clue order used, so "this reads confusing" can be replayed
+  later against the same inputs rather than staying an ambient impression.
+
+### 4.3 Beyond one hand-picked order
+
+Four frames — remove-the-load-bearing-assumption, 3am-on-call, game
+designer, and biology — independently proposed the same extension: don't
+stop at the one order a person happens to click through. A second mode runs
+every permutation of a mystery's findings (small counts make this cheap;
+ShapeCard's own countBucket discipline keeps mysteries small on purpose) or
+a randomized/adversarial sample for larger ones, and reports only the
+orderings that produce a Linter refusal, an unreachable reveal, or a dead
+thread — reading each mystery's own declared `close` predicate first, so a
+`carried`-by-design mystery correctly never "resolving" isn't flagged as a
+bug. This is a free regression check on the three mysteries that already
+ship: running it against them and seeing whether it reports anything is the
+first useful thing to do with it.
+
+### 4.4 Refining without replaying everything
+
+Editing one clue's text and wanting to see just what changed, not re-reading
+a whole playthrough, is what "give you feedback for refining" actually
+needs in practice. Because §4.2 already produces a real state object on
+every "find," a second run of the same order can diff against the first and
+highlight only what moved — no separate diffing machinery, just a second
+stored snapshot. A rewind control over the same session log lets the
+reviewer step back to any prior clue rather than only forward.
+
+### 4.5 Explicit exclusions from this feature
+
+- No fictional constraint the real engine doesn't have (a "clue budget," a
+  cost to find something) — that would make the reviewer judge a mystery
+  against a rule the actual game never enforces.
+- No replacement visualisation standing in for the real Knox.OS screens as
+  the *primary* interface — the ask is to see mysteries presented on the
+  PDA, not a reinterpretation of it. (A handful of ADHD ideas along these
+  lines — gradient/diffusion-style displays, a "developmental clock" scrub
+  bar as the main view — are noted here as future exploration, not this
+  feature.)
+- No second-reviewer blind-guess mode, no cross-mystery clue-splicing test —
+  both plausible future stretch goals, out of scope for a single-owner
+  review loop.
+
+## 5. Fidelity rules the port must not silently drop
 
 These are enforced today by the pure Lua modules and by authored prose, not
 by anything PZ-specific, so the port inherits them automatically if the logic
@@ -142,7 +240,7 @@ is actually reused rather than re-approximated:
   exposes it behind an explicit checkbox/URL flag standing in for
   `getDebug()`, never on by default.
 
-## 5. Explicit non-goals
+## 6. Explicit non-goals
 
 - No attempt to reproduce the equip-in-hand risk mechanic (meaningless with
   no game running).
@@ -160,7 +258,7 @@ is actually reused rather than re-approximated:
   the tool into a two-way editor for a draft, not a read-only viewer of a
   finished one — not just a warning in this document.
 
-## 6. Build order, for whenever this becomes a build task
+## 7. Build order, for whenever this becomes a build task
 
 Revised to front-load the highest-risk question (does a browser Lua VM
 actually behave like Kahlua's Lua for this codebase) and to spend near-zero
