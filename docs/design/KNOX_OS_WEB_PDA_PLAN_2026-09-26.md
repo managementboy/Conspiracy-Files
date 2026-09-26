@@ -111,7 +111,7 @@ other frames, is to have only one implementation, ever.
 | `Vocabulary.lua`, `Ledger.lua`, `Interpreter.lua`, `Linter.lua`, `Spoilage.lua`, `ShapeCard.lua`, `DiversityGuard.lua`, `Threads.lua` | **Loaded verbatim into the Lua VM, byte-for-byte.** No port. `test/mystery_*.lua`'s own assertions run inside the same VM as the browser tool's test suite — not translated into JS, run as-is, so there is exactly one set of tests for exactly one implementation. |
 | Mystery content (`mod/.../Mystery/Content/*.lua` — electrician, farmer, fitness instructor, and any future one) | **Also loaded verbatim.** No exporter, no Lua→JSON step, no hand-transcription — the browser tool `require`s the same file the game does. Any mystery drops in the moment its file exists, including ones not yet written. |
 | `KnoxUI.lua` | Its Lua control flow (the context object, hit-testing, layout math) runs as the real file, unchanged. Its draw calls (`drawRect`/`drawRectBorder`/`drawTextureScaled`/`getTexture`) are real PZ-API calls with **no JS reimplementation trusted on its own** — see §2.1 below. The per-glyph PNGs it loads (`media/ui/CFOrg/{1x,2x,3x,b1x}/<code>.png`) are already plain PNGs, copied as-is. |
-| `KnoxApps.lua` | Also loaded verbatim; its live-session reads (`EvidenceRows`, `Generated/Questions`, `Calendar`, `SuccessiveCases`) get a small Lua-side shim module providing the same function names, backed by an actual exported PZ save snapshot rather than hand-authored mock data (§2.3) — never a JS mock layer. |
+| `KnoxApps.lua` | **Corrected by building step 2 (§7)**: its programs read the *legacy* case generator's data model (`EvidenceRows` → `GeneratedRuntime`), not the redesigned `Mystery/Ledger.lua` engine the three shipped mysteries are actually built on — loading it verbatim renders nothing for them. FILES was rebuilt instead as a small new adapter reading the real `Ledger`/`Interpreter` directly; `KnoxApps.lua`'s other programs (THREADS, NAMES, DATES, ...) are future work needing the same treatment, not a verbatim load. |
 | `OrganiserScreen.lua`, `Organiser.lua` | Their equip-in-hand mechanic genuinely has no meaning with the game not running, so that part is not reproduced. Their mouse-handling and hit-test dispatch, however, is exactly the "contested territory" §2.1 is about — see there before assuming a hand-written click handler is the final answer. |
 
 Before committing to a specific VM, the very first concrete step (§7, step 0a)
@@ -494,10 +494,30 @@ frame:
    golden fixture was flagged independently by two ADHD frames as creating
    false "the whole widget kit is covered" confidence when it really
    exercises one path once.
-2. **`KnoxApps.lua` + the mystery content bridge**: load `KnoxApps.lua` and
-   any `Content/*.lua` file verbatim (§2 — no exporter to build), with the
-   live-session shim backing its data reads. All three shipped mysteries
-   loadable from a dropdown, and any future one the moment its file exists.
+2. **The mystery content bridge and the §4.1 base loop — DONE, with a real
+   scope correction.** `KnoxApps.lua`'s FILES/THREADS/NAMES/DATES programs
+   turned out, on reading them, to be written against the **legacy** case
+   generator's own data model (`EvidenceRows.lua` → `ConspiracyFiles.
+   GeneratedRuntime.known()`/`.metrics()`, `SuccessiveCases`, `RelayMemo`) —
+   not against the redesigned `Mystery/Ledger.lua`/`Interpreter.lua` engine
+   this session's earlier work actually built the three shipped mysteries
+   on. Loading `KnoxApps.lua` verbatim would render nothing for a
+   Vocabulary-shaped mystery without first reimplementing a legacy-shaped
+   live-session runtime — a real, larger task the original plan wording
+   glossed over. The scope actually delivered instead: `web/knox-os-pda/`
+   loads `Vocabulary.lua`, `Ledger.lua`, `Spoilage.lua`, `Interpreter.lua`,
+   `KnoxUI.lua`, and all three shipped `Content/*.lua` files byte-for-byte
+   unmodified, with a small new adapter (not a "verbatim" claim — the same
+   role `OrganiserScreen.lua` plays in the real game) that: lists a
+   mystery's findings via `K.row`, calls the real `Ledger.markKnown` when a
+   row is tapped, and re-renders through `Interpreter.close`. Clicking
+   itself reuses `KnoxUI`'s own real hit-test contract (`K.at`) — the same
+   one `OrganiserScreen.lua`'s `onMouseDown` calls — rather than a
+   parallel click system. All three mysteries load and play correctly,
+   verified live (`docs/management/evidence/knox-os-web-step2-playthrough.md`).
+   `KnoxApps.lua`'s programs beyond FILES (THREADS, NAMES, DATES, ...)
+   remain future work, now correctly scoped as "port the legacy-shaped
+   programs to read the new Ledger" rather than "load verbatim."
 3. **Fidelity check against the real game, not eyeballing**: diff the
    browser tool's rendered state against the real captured PDA state traces
    already sitting in `docs/management/evidence/linux-autotest/`, an
