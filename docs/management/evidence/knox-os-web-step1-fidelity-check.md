@@ -61,3 +61,38 @@ pixel against my hand-picked two-row fixture. That comparison is real work
 for step 3 (the fidelity check against `docs/management/evidence/linux-
 autotest/`'s actual captured PDA state, per §2.2's trace-replay design) once
 step 2 bridges in real mystery content.
+
+## `test/fixtures/*.lua` are the wrong fixtures — a real correction
+
+The build order's own step 1 wording called for checking "more than one
+fixture from `test/fixtures/*.lua`" against the real game. Reading those
+four files before using them found they are **not** rendering fixtures at
+all: `case_digest.lua` is a hash-digest utility, `generator_unsteered_digest.lua`
+is a table of regression hashes for the *legacy* case generator,
+`synthetic_locations.lua` is invented map data for that same legacy
+generator's site placement, and `generated_session.lua` builds a real
+legacy case through `Generator.build`/`Session`. All four exist to prove
+the **old** case generator hasn't silently changed — none of them touch
+`KnoxUI.lua`, `Ledger.lua`, or any Vocabulary-shaped mystery, and none
+produce anything to render on a Knox.OS screen. Using them here would have
+been going through the motions without actually checking anything.
+
+The substitute that actually serves the same purpose — proving the ported
+widget kit is not exercising just one lucky code path — is two genuinely
+different real screens, each built from real `KnoxUI.lua` calls and
+checked against a live screenshot from the actual game:
+
+1. **FILES, empty state** (above) — `K.titleBar` + `K.fill` + `K.foot`.
+2. **The launcher grid** — `K.status` + `K.grid` + `K.foot`, built with the
+   real program list and order from `KnoxApps.lua`'s own `A.programs`
+   (`FILES, THREADS, NAMES, PLACES, DATES, TO DO, NOTES, SETUP, HELP,
+   SITES`) and the real icon textures
+   (`media/ui/CFOrg/icons/2x/*.png`), opened live
+   (`ConspiracyFiles.OrganiserScreen.open()`) and screenshotted at its real
+   measured glass size — 160 native pixels wide, **211 tall, not 160
+   square** (read live from `OrganiserScreen.window.context`, correcting
+   an assumption this plan had carried since its first draft). Compare
+   `knox-os-web-step1-real-game-launcher.png` against
+   `knox-os-web-step1-browser-render-launcher.png`: the 3-column icon
+   grid, every icon shape, the selected/inverted FILES cell, the "All ▾"
+   category selector, the battery, and the footer text all match.

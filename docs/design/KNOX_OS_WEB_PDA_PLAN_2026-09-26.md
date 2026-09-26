@@ -518,10 +518,25 @@ frame:
    `KnoxApps.lua`'s programs beyond FILES (THREADS, NAMES, DATES, ...)
    remain future work, now correctly scoped as "port the legacy-shaped
    programs to read the new Ledger" rather than "load verbatim."
-3. **Fidelity check against the real game, not eyeballing**: diff the
-   browser tool's rendered state against the real captured PDA state traces
-   already sitting in `docs/management/evidence/linux-autotest/`, an
-   existing, real oracle rather than a person comparing two screens by eye.
+3. **Fidelity check against the real game, not eyeballing — DONE, with a
+   corrected mechanism.** `docs/management/evidence/linux-autotest/`
+   turned out to hold behavioural pass/fail summaries, not draw-call
+   traces — nothing to diff a rendered screen against. Built instead: a
+   real dual-VM digest diff. The exact same `KnoxUI.lua`, the exact same
+   fixture, and the exact same `test/fixtures/case_digest.lua` hashing
+   algorithm ran once inside the real game's own Kahlua (via
+   `tools/autotest/pz.sh eval`, a plain Lua table recording every draw
+   call's arguments in place of a real panel) and once inside the browser's
+   fengari — **`536880f4:4328`, 63 calls, identical on both sides.** Two
+   real bugs surfaced getting there: a genuine Kahlua/fengari dialect gap
+   (`string.format("%08x", h)` on a float throws in fengari, not Kahlua),
+   and `KnoxUI.lua`'s own `glyph()` silently drawing nothing when no
+   `getTexture` global exists to `pcall` — both fixed, not routed around.
+   Full findings: `docs/management/evidence/knox-os-web-step3-trace-diff.md`.
+   Only one fixture was diffed this way; the launcher grid and the mystery-
+   content screens (blocked on step 2's own finding — no real in-game
+   render of a Vocabulary-shaped mystery exists yet) remain open for the
+   same technique.
 4. **Deployment**: GitHub Pages publish, and the standalone zip built by
    `git archive` of that exact deployed commit (§3) — reusing the `dist/`
    folder's existing versioned-zip naming convention rather than inventing a
