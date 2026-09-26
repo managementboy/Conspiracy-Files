@@ -27,6 +27,15 @@ four-way independent convergences — one on what makes a simulated
 playthrough trustworthy at all, one on testing every legal clue order rather
 than one hand-picked order. New §4 below; §5–§7 renumbered from §4–§6.
 
+**Third ADHD pass, 2026-09-26** (`/adhd`, owner's question: *"should
+playthrough be the main feature with fuzzing as a bonus check, or should
+fuzzing run first and the manual walkthrough become the tool for
+investigating whatever it flags? Both are useful and necessary features.
+One can benefit from the other?"*). Five more isolated frames, converging
+on "a loop, not a pipeline" from four directions at once — new §4.5, and
+two new items in the exclusions list (renumbered §4.6). No section
+renumbering this time.
+
 ## 1. What "the PDA" actually is
 
 There is no file literally named "PDA" in the mod. The device is **Knox.OS**,
@@ -205,7 +214,49 @@ highlight only what moved — no separate diffing machinery, just a second
 stored snapshot. A rewind control over the same session log lets the
 reviewer step back to any prior clue rather than only forward.
 
-### 4.5 Explicit exclusions from this feature
+### 4.5 How the manual playthrough and the fuzzer relate
+
+**Third ADHD pass, 2026-09-26** (`/adhd`, the owner's own question: *"should
+playthrough be the main feature with fuzzing as a bonus check, or should
+fuzzing run first and the manual walkthrough become the tool for
+investigating whatever it flags? Both are useful and necessary features.
+One can benefit from the other?"*). Five isolated frames converged on an
+answer that is neither ordering: **it's a loop, not a pipeline, with exactly
+one ordering constraint.**
+
+- **The constraint, first.** A mystery's *very first* manual playthrough
+  must run with zero fuzzer involvement — no pre-staged order, no "suggested
+  next clue," nothing. Two frames (inversion, ant colony) independently
+  landed on why: a human whose first read is steered toward already-known
+  broken states can no longer judge "does this read right" the way an
+  uninformed real player would, and that first, uncontaminated read is the
+  whole point of §4.1.
+- **After that, it's bidirectional.** Four frames (game designer,
+  remove-the-load-bearing-assumption, ant colony, and logistics' JIT framing)
+  independently converged on the same shape: the human's played order, once
+  logged (§4.4 already needs this log for its own diff feature — no new
+  plumbing), becomes a seed the fuzzer's search biases toward, so it spends
+  its budget near paths a human actually found plausible rather than sampling
+  uniformly across the whole permutation space. In the other direction, the
+  fuzzer's findings never arrive as a raw report — they're deduplicated to
+  one representative order per distinct failure (the same root-cause
+  grouping §4.3 already needs to tell a real break from an intended
+  `carried` ending) and handed back as a small number of pre-staged,
+  replayable sessions, not a list to skim. Investigating one replays it as a
+  "ghost" the reviewer can take control of mid-scrub rather than a static
+  bug report; ruling a replayed ghost "actually fine" feeds back and damps
+  the fuzzer's confidence in that neighbourhood, closing the loop the other
+  way.
+- **Neither mode certifies a mystery alone.** Independently converged by
+  inversion and ant colony: a clean fuzzer sweep says nothing about prose
+  quality (a Linter-clean mystery can still read terribly), so "the fuzzer
+  found nothing" is *ungraded*, not *passed* — every distinct narrative
+  branch still needs at least one human read. And because both modes run
+  through the one shared engine (§2), the two agreeing with each other is
+  not proof of anything an engine-level bug wouldn't also produce agreement
+  on — a real limit this plan cannot design around, only stay honest about.
+
+### 4.6 Explicit exclusions from this feature
 
 - No fictional constraint the real engine doesn't have (a "clue budget," a
   cost to find something) — that would make the reviewer judge a mystery
@@ -219,6 +270,15 @@ reviewer step back to any prior clue rather than only forward.
 - No second-reviewer blind-guess mode, no cross-mystery clue-splicing test —
   both plausible future stretch goals, out of scope for a single-owner
   review loop.
+- No "director's cut" replay as the *only* way to investigate a fuzzer
+  finding — fine as an option once §4.5's blind-first constraint has been
+  satisfied, but forcing every session through a scripted replay removes
+  the free first-look exploration the owner actually asked for.
+- No ranking fuzzer output by a cheap text metric (cliché density, sentence-
+  length variance) before any human reads it — that repeats exactly the
+  mistake §4.5 warns against: a shallow proxy quietly standing in for real
+  judgment, which is how a team stops sending clean-scoring branches to
+  anyone at all.
 
 ## 5. Fidelity rules the port must not silently drop
 
