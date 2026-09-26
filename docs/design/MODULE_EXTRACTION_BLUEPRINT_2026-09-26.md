@@ -230,6 +230,39 @@ gives the next "reuse a different subset" request a mechanical first
 step instead of a human re-deriving the dependency surface by hand, the
 way this document's own section 1 had to.
 
+**Run for real, 2026-09-26, after section 2's fix landed**: on a scratch
+branch (`scratch/extraction-test-c`, discarded afterward, never merged),
+every module C file plus `Organiser.lua`/`CaseFile.lua` (per the owner's
+own instruction — "Assume that we do not have an organizer in the
+future") were `git rm`'d, and the real boot-check autotest run against
+what remained. Result: **146 of 146 remaining mod files loaded, 0
+errors** — the emit-based fix in section 2 held completely; nothing in
+module A or B still assumed module C existed. The boot-check script's own
+`FAIL` verdict is a false alarm, not a real problem: its one hardcoded
+success criterion is "did the evidence album open," which can't happen
+once `CaseFile.lua` is gone by design — checked directly via `pz.sh
+eval`, not assumed, and confirmed `InteractionAPI.lua`/`EngineAPI.lua`
+both still load cleanly, `MysteryRuntime` is present, and
+`InteractionAPI.Organiser` is simply absent from the returned table
+rather than a thrown error.
+
+That last point is itself a real, non-obvious finding worth carrying
+into any future extraction: **this build's Lua `require()` returns `nil`
+for a missing module rather than throwing.** `InteractionAPI.lua`'s own
+`PublicAPI.Organiser=require("ConspiracyFiles/Organiser")` line, with
+`Organiser.lua` deleted, did not halt the rest of that file's
+construction — `PlayerVoice`, `GeneratedMenu`, `ClueCue`, `ClueSearch`,
+and the lazy `clueMarkers`/`observedKeyLeads` functions all still
+populated correctly afterward. This does **not** make the emit-based
+redesign in section 2 optional — an accidentally-nil dependency silently
+degrading is a worse failure mode than a loud one, and every real
+command site still needed the actual behavioral fix, not just a missing-
+module tolerance this Lua happens to provide for free — but it does mean
+a naive extraction that skipped section 2 entirely would likely have
+booted "successfully" while quietly doing nothing, rather than crashing
+loud enough to be caught. Worth remembering the next time "did it boot"
+is used as the only signal.
+
 **`tools/autotest/checks/module_coinstall.sh`** — the companion check
 section 0 requires, answering the opposite question: not "does A/B
 survive without C" but "does A/B survive *alongside a live, separately
