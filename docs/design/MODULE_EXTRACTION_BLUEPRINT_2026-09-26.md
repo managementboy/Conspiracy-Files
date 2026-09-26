@@ -16,6 +16,81 @@ design, markets, hardware engineer), then checked against the real repo
 before writing anything down: every frame independently converged on the
 same root fix, and the follow-up grep confirmed exactly what needs it.
 
+**2026-09-26, second pass**: the moment this blueprint moved from "design
+the pattern" to "actually publish a second Workshop item," a second
+`/adhd` round (5 fresh frames — logistics, regulator, speedrunner,
+3am-on-call, ant colony) surfaced a prerequisite this document's first
+version didn't cover at all, because the first pass was scoped to the
+internal A→C call sites, not to what happens once a *second, independent*
+mod exists on the Steam Workshop alongside the original. Recorded as
+section 0 below — read it before section 1; it changes what "extract" has
+to mean.
+
+## 0. Prerequisite: two mods, one shared Lua environment
+
+The sharpest finding, from the 3am-on-call frame, checked against the
+real repo before writing it down here: **Project Zomboid runs one shared
+global Lua environment across every enabled mod in a session.** If both
+the original mod and a new "Conspiracy Files: No Help" mod define the
+same global table names (`ConspiracyFiles`, `CFInteract`, `CFEngine`)
+with files of the same names, a player who subscribes to both gets
+**last-loader-wins silent replacement, not a merge, and no error at
+all** — whichever mod's `Organiser.lua` happens to load second simply
+overwrites the first's entry in the shared table. This is not a
+hypothetical: it is how PZ's own mod-loading mechanism works, and it is
+a near-certainty for two mods this closely related, since the pairing
+("install the spin-off alongside the original to compare them") is the
+*expected first thing a curious subscriber does*, not an edge case.
+
+Two more real collision surfaces, checked directly against this repo,
+not assumed:
+
+- **`mod.info`'s `id=` field, not the Workshop title, is the identity PZ
+  actually uses.** Confirmed in `mod/42/mod.info`: `id=ConspiracyFiles`.
+  A mechanical copy-and-repackage of the extraction that doesn't change
+  this field ships a second mod PZ's own mod manager and any save's own
+  mod-id list can treat as *the same mod* as the original — regardless
+  of what the two mods are named on the Workshop.
+- **ModData tag strings are global too, keyed by name, not by mod
+  folder.** Grepped directly across every real module A/B file: **19
+  distinct tags**, every one under the same `"ConspiracyFiles."` prefix
+  (`ConspiracyFiles.Generated.G2`, `ConspiracyFiles.DiscoveryLedger`,
+  `ConspiracyFiles.LocalPeople`, `ConspiracyFiles.MapMedia`,
+  `ConspiracyFiles.Mystery`, and 14 more). Two mods writing through the
+  same tag string into the same save's ModData corrupt or silently
+  merge each other's state — a `PlaceVisits` count from one mod's case
+  engine landing in the other's, with nothing anywhere raising an error.
+  This is a **save-file-level** collision, one layer below the Lua
+  boot-time collision above, and neither `module_boundary.sh` nor the
+  `module_extraction.sh` design in section 4 checks for it — both only
+  ever ran against one mod's own tree at a time.
+
+**What this means for extraction, concretely**: renaming the global
+tables (to e.g. `NHInteract`/`NHEngine`) and re-prefixing every one of
+the 19 ModData tags (to e.g. `"ConspiracyFilesNoHelp."`) is not cleanup
+— it is the actual first step of the extraction, done *before* anything
+is archived out, not after. Speedrunner's own framing: *"sequencing the
+rename before the archive step instead of after turns 'extract then fix
+names' into 'fix names then extract,' eliminating an entire
+post-processing pass."*
+
+**A permanent test this repo doesn't have yet, named independently by
+both 3am-on-call and regulator**: `module_boundary.sh` and
+`module_extraction.sh` both answer "does A/B survive *without* C."
+Neither answers the actually-dangerous question — "does A/B survive
+*alongside a live, separately-installed* C, or alongside a live,
+separately-installed copy of itself." That needs its own check: install
+both mods (or the original plus the extracted one) into one scratch PZ
+profile and boot them together, reading any error as the real collision
+list — the same "delete it and read the failure" trust this blueprint
+already places in `module_extraction.sh`, applied to the opposite
+direction (add a second copy, not remove one). Section 4 below now
+specifies this as `module_coinstall.sh`, and it needs to run on every
+release, not once — regulator's finding that Steam Workshop load order
+between installed mods is not fixed and can reorder itself across
+sessions, so a co-install pairing that passed once is not guaranteed to
+keep passing.
+
 ## 1. The real blocker, verified just now
 
 `module_boundary.sh` (docs/design/MODULE_SEPARATION_2026-09-26.md
@@ -155,6 +230,20 @@ gives the next "reuse a different subset" request a mechanical first
 step instead of a human re-deriving the dependency surface by hand, the
 way this document's own section 1 had to.
 
+**`tools/autotest/checks/module_coinstall.sh`** — the companion check
+section 0 requires, answering the opposite question: not "does A/B
+survive without C" but "does A/B survive *alongside a live, separately
+installed* copy of C, or of itself." Installs both the original mod and
+the extracted mod into one scratch PZ mods folder, boots the real game
+once with both enabled, and reads any error — a Lua load-order collision,
+a ModData validation failure from two mods writing the same tag — as the
+real collision list, the same "trust the failure, not a manual guess"
+discipline `module_extraction.sh` already uses. Run this **on every
+release** of the extracted mod, not once at launch: Steam Workshop load
+order between installed mods is not fixed and can reorder itself across
+sessions (regulator's finding), so a co-install pairing that passed once
+is not guaranteed to keep passing.
+
 ## 5. Named traps
 
 - **Cloning `PDAAPI`'s shape onto the new front-end.** Attacker's own
@@ -187,33 +276,59 @@ way this document's own section 1 had to.
 
 ## 6. Build order for this specific extraction (A + B, no C)
 
-1. Add `emit()`/semantic listener support to `InteractionEvents.lua`/
+Reordered from the first version of this document: renaming (steps 1-2
+below) now comes **before** the emit-based decoupling work, per section
+0's own finding that sequencing the rename before extraction eliminates
+a whole post-processing pass, and because the rename is the one step
+that's actually load-bearing for public safety — shipping the emit-based
+decoupling without it still produces a mod that corrupts a co-installed
+player's save.
+
+1. **Rename the collision surface, on the scratch branch, first**:
+   `ConspiracyFiles`/`CFInteract`/`CFEngine` → new names (e.g.
+   `NHInteract`/`NHEngine`, dropping the shared `ConspiracyFiles` global
+   entirely for the new mod rather than reusing the name under a
+   different module split); all 19 real ModData tags (section 0) get a
+   distinct prefix (e.g. `NoHelp.` in place of `ConspiracyFiles.`); the
+   new `mod.info`'s `id=` field is a genuinely new value, never a copy
+   of `id=ConspiracyFiles`.
+2. Run `module_coinstall.sh` (section 4) against the renamed tree and
+   the *unrenamed* original, in one scratch PZ profile. It should come
+   back clean. If it doesn't, that failure is real new information about
+   a collision the rename missed — not a bug in the tool.
+3. Add `emit()`/semantic listener support to `InteractionEvents.lua`/
    `EngineEvents.lua` (or sibling `*Signals.lua` files — see section 2's
    own caution against conflating the two).
-2. Redirect the 5 real call sites (section 1's table): `Organiser.lua`'s
+4. Redirect the 5 real call sites (section 1's table): `Organiser.lua`'s
    two PDA-open/close reaches become emits; `DiscoveryLog.lua`'s and
    `MapMediaRuntime.lua`'s cache-invalidation reaches become emits;
    `CaseFile.lua`'s occupancy check moves into `InteractionAPI.PublicAPI.
    occupied()`, owned by A.
-3. In the *original* mod, add a small listener file inside module C that
+5. In the *original* mod, add a small listener file inside module C that
    subscribes to `organiser.equipped`/`discovery.changed` and calls the
    real `OrganiserScreen`/cache-invalidation logic — preserving today's
    exact behavior, verified with the real boot-check autotest the same
    way every stage of the original split was.
-4. Run `module_extraction.sh C` (section 4) on a scratch branch. It
-   should come back clean — no errors, because step 2-3 already
+6. Run `module_extraction.sh C` (section 4) on a scratch branch. It
+   should come back clean — no errors, because step 4-5 already
    resolved every real reach. If it doesn't, that failure is real new
    information, not a bug in the tool.
-5. Build the new mod's own repo/package (see
+7. Build the new mod's own repo/package (see
    `docs/design/MODULE_SEPARATION_2026-09-26.md` section 7 for the
    release-artifact mechanics already designed for exactly this: ship
    A+B as a versioned zip via `git archive`, not a live git dependency).
    Vendor `InteractionAPI.lua`/`EngineAPI.lua` in as the real, versioned
-   contract surface.
-6. Build the new front-end for real, end to end, subscribing to the same
+   contract surface — under their renamed identity from step 1.
+8. Build the new front-end for real, end to end, subscribing to the same
    `organiser.equipped`/`discovery.changed` events the original PDA
    listener does. This is the acceptance test (section 5's trap) — not
    a stub.
+9. Before publishing to the Steam Workshop: run `module_coinstall.sh`
+   again against the two mods' actual packaged Workshop uploads, not
+   just the source trees, and repeat it on every subsequent release of
+   either mod (section 0's finding that Workshop load order is not fixed
+   across sessions — a pairing that passed once is not a permanent
+   guarantee).
 
 ## 7. The reusable part, for whichever subset is asked for next
 
