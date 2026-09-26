@@ -21,10 +21,16 @@
 -- Every engine call is colon syntax on an explicit receiver and pcall-guarded:
 -- this runs from game-start events where a throw is silent and permanent.
 local CFLog=require("ConspiracyFiles/Log")
+local PDAAPI=require("ConspiracyFiles/PDAAPI")
 ConspiracyFiles=ConspiracyFiles or {}
 local O=ConspiracyFiles.Organiser or {}
 ConspiracyFiles.Organiser=O
 CFInteract=CFInteract or {};CFInteract.Organiser=O
+-- STRADDLE: resolved to module A (docs/design/MODULE_SEPARATION_2026-09-26.md
+-- section 2.6) - owns equip/hand state, genuinely an interaction concern.
+-- Its 5 real reaches into module C (OrganiserScreen.open/.window,
+-- KnoxApps.rememberMe) go through PDAAPI.lua, CFPDA's PublicAPI, not the
+-- shared table.
 O.TYPE="ConspiracyFiles.Organiser"
 -- On the item, not in a saved flag of ours, so "already issued" survives a
 -- reload exactly as the evidence album's mark does.
@@ -354,7 +360,7 @@ function O.read(player)
         log("organiser not read: "..tostring(why))
         return false,why
     end
-    local screen=ConspiracyFiles.OrganiserScreen
+    local screen=PDAAPI.OrganiserScreen
     if not screen or not screen.open then return false,"no reading surface loaded" end
     -- Already in the hand: open at once.
     local primary=safe(function() return player:getPrimaryHandItem() end)
@@ -405,7 +411,7 @@ end
 function O.handTick()
     local player=getPlayer and getPlayer()
     if not player then return end
-    local screen=ConspiracyFiles.OrganiserScreen
+    local screen=PDAAPI.OrganiserScreen
     if not screen then return end
     -- Either hand (owner, Windows, 2026-09-14: "the left hand should leave the
     -- PDA open"). Held in the off hand it stays open beside a one-handed weapon;
@@ -450,7 +456,7 @@ end
 -- was stripped out of this file on 2026-09-12.
 O.LAMP_HOURS=10
 function O.lampTick()
-    local screen=ConspiracyFiles.OrganiserScreen
+    local screen=PDAAPI.OrganiserScreen
     local window=screen and screen.window
     if not window or not window.on or not window.lamp then
         O.lampAt=nil
@@ -495,7 +501,7 @@ function O.tick()
     local primary=player and safe(player.getPrimaryHandItem,player)
     if primary==pending.item then
         O.pendingOpen=nil
-        local screen=ConspiracyFiles.OrganiserScreen
+        local screen=PDAAPI.OrganiserScreen
         if screen and screen.open then safe(screen.open); log("organiser read") end
     elseif pending.tries>600 then
         O.pendingOpen=nil
@@ -612,7 +618,7 @@ if Events and Events.OnGameStart and not O.bootHooked then
     require("ConspiracyFiles/Events/InteractionEvents").on("OnGameStart", function()
         if multiplayer() then log("organiser: multiplayer, not issued"); return end
         safe(function()
-            local apps=ConspiracyFiles.KnoxApps
+            local apps=PDAAPI.KnoxApps
             if apps and apps.rememberMe then apps.rememberMe() end
             local player=getPlayer and getPlayer()
             local item=O.held(player)

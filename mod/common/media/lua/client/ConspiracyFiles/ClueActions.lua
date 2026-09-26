@@ -12,6 +12,11 @@ ConspiracyFiles=ConspiracyFiles or {}
 local A=ConspiracyFiles.ClueActions or {}
 ConspiracyFiles.ClueActions=A
 CFInteract=CFInteract or {};CFInteract.ClueActions=A
+-- STRADDLE: resolved to module A (docs/design/MODULE_SEPARATION_2026-09-26.md
+-- section 2.6) - owns "what does finding this clue do", genuinely an
+-- interaction concern. Its reach into module B (runtime() below) goes
+-- through EngineAPI.lua, CFEngine's PublicAPI, not the shared table.
+local EngineAPI=require("ConspiracyFiles/EngineAPI")
 local CFLog=require("ConspiracyFiles/Log")
 local function log(message) CFLog.message("case","note",message) end
 if not ISBaseTimedAction then pcall(require,"TimedActions/ISBaseTimedAction") end
@@ -25,9 +30,9 @@ A.INSPECT_TIME=100
 A.instant=false
 
 local function runtime(item)
-    local maps=ConspiracyFiles.MapMediaRuntime
+    local maps=EngineAPI.MapMediaRuntime
     if maps and maps.subject(item) then return maps end
-    return ConspiracyFiles.GeneratedRuntime
+    return EngineAPI.GeneratedRuntime
 end
 local function instant() return A.instant==true and getDebug and getDebug() end
 

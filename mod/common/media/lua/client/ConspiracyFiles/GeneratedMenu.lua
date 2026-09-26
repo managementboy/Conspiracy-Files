@@ -1,10 +1,16 @@
-local R=require("ConspiracyFiles/GeneratedRuntime")
+local EngineAPI=require("ConspiracyFiles/EngineAPI")
+local R=EngineAPI.GeneratedRuntime
 local Menu=require("ConspiracyFiles/ContextMenu")
 local Actions=require("ConspiracyFiles/ClueActions")
 ConspiracyFiles=ConspiracyFiles or {}
 local M=ConspiracyFiles.GeneratedMenu or {}
 ConspiracyFiles.GeneratedMenu=M
 CFInteract=CFInteract or {};CFInteract.GeneratedMenu=M
+-- STRADDLE: resolved to module A (docs/design/MODULE_SEPARATION_2026-09-26.md
+-- section 2.6) - menu-item construction is an interaction concern, despite
+-- the "Generated" name. Its one real reach into module B (picking whichever
+-- of GeneratedRuntime/MapMediaRuntime claims a given item) goes through
+-- EngineAPI.lua, CFEngine's PublicAPI, not the shared ConspiracyFiles table.
 -- ONE READING SURFACE (P4-R79, P4-R128): the organiser the survivor carries.
 -- The hand is the switch (Organiser.handTick): this only asks the survivor to
 -- take the machine out, and Knox.OS opens when it reaches their hand. No
@@ -29,7 +35,7 @@ function M.fill(playerNum,context,items)
     local subjects,overflow=Menu.normalize(items)
     if overflow or #subjects~=1 then return end
     local item=subjects[1]
-    local maps=ConspiracyFiles.MapMediaRuntime
+    local maps=EngineAPI.MapMediaRuntime
     local R=(maps and maps.subject(item)) and maps or R
     if R~=maps and (not getDebug or not getDebug() or not R.metrics()) then return end
     if not R.subject(item) then
