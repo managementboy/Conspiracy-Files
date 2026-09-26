@@ -1,0 +1,62 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Knox.OS web PDA -- step 0a VM smoke test</title>
+<script src="https://cdn.jsdelivr.net/npm/fengari-web@0.1.4/dist/fengari-web.js"></script>
+</head>
+<body>
+<h1>Step 0a: browser Lua VM smoke test</h1>
+<p>Loading <code>Ledger.lua</code> UNMODIFIED (byte-for-byte, no edits) into fengari,
+then running the same 8 assertions <code>test/mystery_ledger.lua</code> already runs offline
+under plain lua5.1, unmodified in translation from the original file.</p>
+<pre id="out" style="background:#111;color:#0f0;padding:1em;white-space:pre-wrap;"></pre>
+<script>
+const out = document.getElementById('out');
+function log(s) { out.textContent += s + "\n"; console.log(s); }
+
+const LEDGER_SRC = "-- THE LEDGER: WHAT HAPPENED, NEVER UN-HAPPENED.\n--\n-- Design v3, iteration 2 (\"abuse-proof endings\", DR-20260925-MYSTERY-\n-- BOUNDARIES). Three append-only records and one pure fold:\n--\n--   known       (node, hour, mechanic)  - written once, on first REVEAL or\n--               GATE satisfaction. Never deleted. Burning a found finding\n--               changes nothing; iteration 2's speedrunner frame found that\n--               destructible findings let a player force \"carried\" by\n--               pruning the solution space, so `known` does not read the\n--               world - only itself.\n--   retracted   (node, hour)  - written only when a NOT-YET-known node's\n--               backing world state is confirmed gone. Forecloses that node\n--               for ever: it can never become known after.\n--   reservation (physicalKey -> mystery id)  - one entry per physical key,\n--               checked-and-set. A body, a car, a container belongs to at\n--               most one mystery; iteration 2's speedrunner frame found a\n--               shared corpse aliased across two mysteries' claims.\n--\n-- CLOSE is a PURE FOLD over known/retracted against the mystery's authored\n-- predicate. \"Carried\" is never a transition a player causes - it is what\n-- the fold reports when the predicate is nil. This module touches no PZ\n-- API and holds no session state of its own: the caller passes a plain\n-- ledger table (the shape `M.new()` returns) and gets a new one back or an\n-- error; how it is stored in ModData is the adapter's job, not this one's.\nlocal M={}\n\nfunction M.new()\n    return {known={},retracted={},reservation={}}\nend\n\nlocal function copy(t)\n    local out={}\n    for k,v in pairs(t) do out[k]=v end\n    return out\nend\n\n-- Record a finding as known. First-time-only by node id: a second call for\n-- the same node is a no-op that returns the ledger unchanged (iteration 2's\n-- \"REVEAL farming by re-forming a LINK across loads\" - the ledger key\n-- already existing is what makes re-triggering pointless).\nfunction M.markKnown(ledger,node,hour,mechanic)\n    if type(ledger)~=\"table\" or type(node)~=\"string\" or node==\"\" then return nil,\"invalid\" end\n    if type(hour)~=\"number\" or hour~=hour or hour<0 then return nil,\"invalid hour\" end\n    if ledger.known[node] then return ledger end\n    if ledger.retracted[node] then return nil,\"node already retracted\" end\n    local out=copy(ledger); out.known=copy(ledger.known)\n    out.known[node]={hour=hour,mechanic=mechanic}\n    return out\nend\n\n-- Record a finding as permanently absent. Refused for a node already known\n-- (the world cannot retract a fact the survivor already holds) and a\n-- no-op for one already retracted.\nfunction M.markRetracted(ledger,node,hour)\n    if type(ledger)~=\"table\" or type(node)~=\"string\" or node==\"\" then return nil,\"invalid\" end\n    if type(hour)~=\"number\" or hour~=hour or hour<0 then return nil,\"invalid hour\" end\n    if ledger.known[node] then return nil,\"node already known\" end\n    if ledger.retracted[node] then return ledger end\n    local out=copy(ledger); out.retracted=copy(ledger.retracted)\n    out.retracted[node]=hour\n    return out\nend\n\n-- Claim a physical key for a mystery. Idempotent for the same mystery,\n-- refused for a different one already holding it - the reservation is the\n-- fix for \"one corpse aliased by two mysteries' reservations\" (iteration 2).\nfunction M.reserve(ledger,physicalKey,mysteryId)\n    if type(ledger)~=\"table\" or type(physicalKey)~=\"string\" or physicalKey==\"\"\n        or type(mysteryId)~=\"string\" or mysteryId==\"\" then return nil,\"invalid\" end\n    local held=ledger.reservation[physicalKey]\n    if held==mysteryId then return ledger end\n    if held then return nil,\"held by another mystery\" end\n    local out=copy(ledger); out.reservation=copy(ledger.reservation)\n    out.reservation[physicalKey]=mysteryId\n    return out\nend\n\nfunction M.isKnown(ledger,node) return ledger.known[node]~=nil end\nfunction M.isRetracted(ledger,node) return ledger.retracted[node]~=nil end\nfunction M.heldBy(ledger,physicalKey) return ledger.reservation[physicalKey] end\n\n-- A CLOSE predicate is {kind=\"all\"|\"any\"|\"gate\", keys={node,...}} or nil for\n-- carried. `keys` for \"gate\" names exactly one node - the GATE finding\n-- itself. Evaluated purely against the ledger; never touches the world.\n--\n-- Returns one of Vocabulary.CLOSE_KIND, and for \"retracted\" the node that\n-- foreclosed it, so the record can say what happened without inventing why.\nfunction M.close(ledger,predicate)\n    if predicate==nil then return \"carried\" end\n    if type(predicate)~=\"table\" or type(predicate.keys)~=\"table\" or #predicate.keys==0 then\n        return nil,\"invalid predicate\"\n    end\n    if predicate.kind==\"all\" then\n        for _,node in ipairs(predicate.keys) do\n            if ledger.retracted[node] then return \"retracted\",node end\n        end\n        for _,node in ipairs(predicate.keys) do\n            if not ledger.known[node] then return \"carried\" end\n        end\n        return \"completed\"\n    elseif predicate.kind==\"any\" or predicate.kind==\"gate\" then\n        for _,node in ipairs(predicate.keys) do\n            if ledger.known[node] then return \"completed\" end\n        end\n        -- Retracted only when EVERY option is foreclosed - one live option\n        -- is still a live mystery.\n        for _,node in ipairs(predicate.keys) do\n            if not ledger.retracted[node] then return \"carried\" end\n        end\n        return \"retracted\",predicate.keys[1]\n    end\n    return nil,\"unknown predicate kind\"\nend\n\nreturn M\n";
+const TEST_SRC = "\nlocal L=require(\"ConspiracyFiles/Mystery/Ledger\")\n\nlocal empty=L.new()\nassert(L.close(empty,nil)==\"carried\",\"no predicate at all is carried, by design, not by exploit\")\nassert(L.close(empty,{kind=\"all\",keys={\"a\",\"b\"}})==\"carried\",\"nothing known yet is carried, not a free ending\")\nlocal ok,why=L.close(empty,{kind=\"all\",keys={}})\nassert(ok==nil and why==\"invalid predicate\",\"an empty key set is refused, not a trivial always-available exit\")\n\nlocal l2=assert(L.markKnown(L.new(),\"n1\",10,\"search\"))\nlocal again=assert(L.markKnown(l2,\"n1\",99,\"search\"))\nassert(again.known.n1.hour==10,\"a second mark for the same node must not move its hour\")\n\nlocal l3=L.new()\nl3=assert(L.markKnown(l3,\"gate1\",5,\"door\"))\nl3=assert(L.markKnown(l3,\"gate1\",6,\"door\"))\nlocal n=0; for _ in pairs(l3.known) do n=n+1 end\nassert(n==1,\"one gate satisfied twice must never double-credit: got \"..n..\" entries\")\n\nlocal l4=assert(L.reserve(L.new(),\"body:1\",\"mystery-a\"))\nlocal sameOwner=assert(L.reserve(l4,\"body:1\",\"mystery-a\"))\nassert(sameOwner.reservation[\"body:1\"]==\"mystery-a\")\nlocal blocked,blockWhy=L.reserve(l4,\"body:1\",\"mystery-b\")\nassert(blocked==nil and blockWhy==\"held by another mystery\",\"a second mystery must never claim a held body\")\nassert(L.heldBy(l4,\"body:1\")==\"mystery-a\")\n\nlocal bad,badWhy=L.markKnown(L.new(),\"n\",-1,\"search\")\nassert(bad==nil and badWhy==\"invalid hour\",\"only a real, non-negative in-game hour may be recorded\")\n\nlocal l6=assert(L.markKnown(L.new(),\"a\",1,\"search\"))\nl6=assert(L.markKnown(l6,\"b\",2,\"search\"))\nassert(L.close(l6,{kind=\"all\",keys={\"a\",\"b\"}})==\"completed\")\nassert(L.close(l6,{kind=\"all\",keys={\"a\",\"b\"}})==\"completed\",\n    \"destroying found evidence in the world must not un-close a completed mystery\")\n\nlocal l7=assert(L.markKnown(L.new(),\"a\",1,\"search\"))\nl7=assert(L.markRetracted(l7,\"c\",5))\nassert(L.close(l7,{kind=\"all\",keys={\"a\",\"c\"}})==\"retracted\",\"a foreclosed required node must retract the mystery\")\nlocal refused,refuseWhy=L.markRetracted(l7,\"a\",9)\nassert(refused==nil and refuseWhy==\"node already known\",\"a known fact can never be retracted after it was found\")\n\nlocal l8=L.new()\nl8=assert(L.markRetracted(l8,\"x\",1))\nassert(L.close(l8,{kind=\"any\",keys={\"x\",\"y\"}})==\"carried\",\"one live option keeps an any-of predicate open, not retracted\")\nl8=assert(L.markRetracted(l8,\"y\",2))\nlocal kind,node=L.close(l8,{kind=\"any\",keys={\"x\",\"y\"}})\nassert(kind==\"retracted\" and node==\"x\",\"every option foreclosed retracts an any-of predicate\")\n\nreturn \"PASS mystery ledger: all 8 real assertions from test/mystery_ledger.lua hold under this VM\"\n";
+
+window.addEventListener('load', () => {
+  try {
+    const L = fengari.lua;
+    const lauxlib = fengari.lauxlib;
+    const lualib = fengari.lualib;
+    const to_luastring = fengari.to_luastring;
+
+    const lstate = lauxlib.luaL_newstate();
+    lualib.luaL_openlibs(lstate);
+
+    // Register Ledger.lua as a preloaded module under the exact require
+    // path the real mod uses, so the test file's own require() line needs
+    // zero modification -- no filesystem, no package.path, per the plan's
+    // "no fetch, ship inline" rule.
+    const setup = `
+      package.preload["ConspiracyFiles/Mystery/Ledger"] = function()
+        ${LEDGER_SRC}
+      end
+    `;
+    let status = lauxlib.luaL_dostring(lstate, to_luastring(setup));
+    if (status !== L.LUA_OK) {
+      log("FAIL (preload setup): " + fengari.lua.lua_tojsstring(lstate, -1));
+    } else {
+      status = lauxlib.luaL_dostring(lstate, to_luastring(TEST_SRC));
+      if (status !== L.LUA_OK) {
+        log("FAIL: " + fengari.lua.lua_tojsstring(lstate, -1));
+      } else {
+        const result = fengari.lua.lua_tojsstring(lstate, -1);
+        log("OK -- fengari loaded and ran");
+        log(result);
+        log("");
+        log("VERDICT: step 0a PASSES -- Ledger.lua runs unmodified in a browser Lua VM.");
+      }
+    }
+  } catch (e) {
+    log("EXCEPTION: " + e.message);
+    log(e.stack);
+  }
+});
+</script>
+</body>
+</html>
