@@ -1,0 +1,807 @@
+-- Printed-media integration. Fresh-save, single-player; ordinary Lua ModData.
+local State=require("NHShared/MapMediaState")
+local Catalogue=require("NHShared/MapMediaCatalogue")
+local Destinations=require("NHShared/MapMediaDestinations")
+local Content=require("NHShared/MapMediaContent")
+local Budget=require("NHShared/SaveBudget")
+local World=require("NHShared/WorldAccess")
+local Scheduler=require("NHShared/Scheduler")
+local Kinds=require("NHShared/Generated/EvidenceKinds")
+local Pages=require("NHShared/Generated/DocumentPages")
+local Choices=require("NHShared/Generated/StorageChoices")
+local CFLog=require("NHShared/Log")
+NHShared=NHShared or {}
+local R=NHShared.MapMediaRuntime or {}
+NHShared.MapMediaRuntime=R
+NHEngine=NHEngine or {};NHEngine.MapMediaRuntime=R
+local TAG="NHShared.MapMedia"
+local state,scheduler,ready,scan,metadata
+local destinations,targets={},{}
+local ticks,designCursor,entryCursor=0,0,0
+local priority,prioritySet,offers={},{},{}
+-- Slots a save holds that the current story no longer fills; logged once each.
+local mismatched={}
+local function allowed() return not (isClient and isClient()) and not (isServer and isServer()) end
+local function log(why) CFLog.message("mapmedia","note",tostring(why)) end
+local faultPoint,lastFault
+function R.injectFault(point,id,part)
+    if not (getDebug and getDebug()) or not allowed() then return false end
+    local points={beforeInsert=true,afterInsert=true,beforeCommit=true,afterCommit=true}
+    if point~=nil and not points[point] then return false end
+    if id~=nil and not Catalogue.get(id) then return false end
+    if part~=nil and (type(part)~="number" or part%1~=0 or part<1 or part>4) then return false end
+    faultPoint=point and {point=point,id=id,part=part} or nil
+    if point then lastFault=nil end
+    return true
+end
+local function fault(point,id,part)
+    local f=faultPoint
+    if f and f.point==point and (not f.id or f.id==id) and (not f.part or f.part==part)
+        and getDebug and getDebug() then
+        local recorded=state and State.get(state,id,part)
+        lastFault={point=point,id=id,part=part,recorded=recorded and recorded.state or "none"}
+        faultPoint=nil
+        error("map placement injected interruption: "..point.." "..id.." part "..part)
+    end
+end
+local function hours() return getGameTime():getWorldAgeHours() end
+local function clock() return getTimestampMs and getTimestampMs() or getTimeInMillis() end
+local function root()
+    if state then return state end
+    local store=ModData.get(TAG)
+    local candidate=store and store.canonical or State.empty()
+    local ok,why=State.validate(candidate,Catalogue)
+    if not ok then error(why) end -- Never replace corrupt current-build state.
+    state=candidate; return state
+end
+function R.invalidate() state=nil end
+local function save(next)
+    local started=clock()
+    local ok,why=State.validate(next,Catalogue)
+    if ok then ok,why=Budget.check("mapMedia",{canonical=next}) end
+    if not ok then R.lastRefusal=why; log(why); return false end
+    ModData.getOrCreate(TAG).canonical=next; state=next
+    R.peakWriteMs=math.max(R.peakWriteMs or 0,clock()-started)
+    return true
+end
+local function defOf(square)
+    local b=square and square:getBuilding(); return b and b:getDef()
+end
+local function buildingId(square)
+    local def=defOf(square); return def and tostring(def:getIDString())
+end
+local function atDestination(id,square)
+    if not square then return false end
+    local binding=Catalogue.get(id)
+    if binding.areas then return Destinations.contains(binding,square:getX(),square:getY()) end
+    local bid=buildingId(square)
+    if not bid then return false end
+    -- A loaded target's actual building resolves overlapping metadata bounds.
+    -- Where no target floor is observable, keep the indexed source candidates;
+    -- coverage reports their multiplicity for native review.
+    local resolved,match=false,false
+    for _,point in ipairs(binding.targets) do
+        local anchor=getCell():getGridSquare(point.x,point.y,0)
+        local owner=buildingId(anchor)
+        if owner then resolved=true;if owner==bid then match=true end end
+    end
+    if resolved then return match end
+    return destinations[id]~=nil and destinations[id][bid]==true
+end
+-- Bounds are read ONCE per building, never once per design. These are engine
+-- calls across the Lua bridge, and indexStep asks about all 125 designs for
+-- every one of ~9,978 buildings: reading them inside that loop cost 500 engine
+-- calls per building, five million overall, which pushed a single scheduler
+-- step past its 2 ms budget (observed peak 10 ms) and starved indexing down to
+-- roughly one building a tick. It then never finished.
+local function matchesBounds(binding,x1,y1,x2,y2)
+    return Destinations.intersects(binding,x1,y1,x2,y2)
+end
+-- A COARSE SPATIAL INDEX over the designs, built once.
+--
+-- Measured: testing all 125 designs against each of the map's ~9,978 buildings
+-- is 1.25 million checks. In Kahlua one such step ate the scheduler's whole
+-- 2 ms budget, so only ONE building was processed per tick - about fifteen a
+-- second, roughly ELEVEN MINUTES for the pass, which no check waits for. A
+-- single bounding box does not help: the designs span every town, so nearly
+-- every building falls inside it.
+--
+-- Designs are bucketed by a coarse grid instead, and a building is tested only
+-- against designs in the buckets its own bounds touch. This cannot miss a
+-- match: a target point lies inside the matching building's bounds, so that
+-- building necessarily overlaps the bucket holding the point, and an area is
+-- registered in every bucket it touches. Designs that resolve to more than one
+-- building still resolve to all of them.
+local BUCKET=250
+local designBuckets
+local function bucketKey(bx,by) return bx*100000+by end
+local function addToBucket(into,bx,by,id)
+    local k=bucketKey(bx,by)
+    local list=into[k]; if not list then list={}; into[k]=list end
+    for _,existing in ipairs(list) do if existing==id then return end end
+    list[#list+1]=id
+end
+local function buildDesignBuckets()
+    if designBuckets then return designBuckets end
+    local built={}
+    for _,id in ipairs(Catalogue.list) do
+        local b=Catalogue.get(id)
+        for _,a in ipairs(b.areas or {}) do
+            for bx=math.floor(a.x1/BUCKET),math.floor(a.x2/BUCKET) do
+                for by=math.floor(a.y1/BUCKET),math.floor(a.y2/BUCKET) do addToBucket(built,bx,by,id) end
+            end
+        end
+        for _,pt in ipairs(b.targets or {}) do
+            addToBucket(built,math.floor(pt.x/BUCKET),math.floor(pt.y/BUCKET),id)
+        end
+    end
+    designBuckets=built
+    return designBuckets
+end
+-- Metadata only; no loading, entering, stash preparation, or visit fiction.
+local function indexStep()
+    if metadata.index>=metadata.buildings:size() then metadata=nil; R.indexed=true; return true end
+    local def=metadata.buildings:get(metadata.index); metadata.index=metadata.index+1
+    local x1,y1,x2,y2=def:getX(),def:getY(),def:getX2(),def:getY2()
+    local buckets=buildDesignBuckets()
+    local bid,seen=nil,nil
+    for bx=math.floor(x1/BUCKET),math.floor(x2/BUCKET) do
+        for by=math.floor(y1/BUCKET),math.floor(y2/BUCKET) do
+            for _,id in ipairs(buckets[bucketKey(bx,by)] or {}) do
+                if not (seen and seen[id]) and matchesBounds(Catalogue.get(id),x1,y1,x2,y2) then
+                    seen=seen or {}; seen[id]=true
+                    bid=bid or tostring(def:getIDString())
+                    destinations[id]=destinations[id] or {};destinations[id][bid]=true
+                end
+            end
+        end
+    end
+    return false
+end
+function R.read(id,item)
+    if not allowed() or not Catalogue.get(id) then return false end
+    -- A reviewed outdoor marked area is a destination in its own right.
+    -- Building absence is decisive only for building-bound designs after the
+    -- metadata pass; it must not erase a railyard, track or service compound.
+    if R.indexed and not destinations[id] and not Catalogue.get(id).areas then
+        log("no destination building for "..tostring(id).."; no trail started")
+        return false
+    end
+    local next,changed=State.activate(root(),id,ZombRand(2147483646)+1,hours(),Catalogue)
+    if not changed then return true end
+    if not save(next) then return false end
+    if not prioritySet[id] then priority[#priority+1]=id; prioritySet[id]=true end
+    if item then item:getModData().cfMapDesign=id end
+    -- The organiser must show the new lead at once. Reading a PRINT already
+    -- invalidated the cached list here and reading a MAP did not, so the row
+    -- this read creates could sit unseen behind a stale list.
+    require("NHShared/Events/EngineEvents").emit("discovery.changed")
+    return true
+end
+function R.printRead(id)
+    if not allowed() or not Catalogue.print(id) then return false end
+    local next,changed=State.printRead(root(),id,hours())
+    if changed and not save(next) then return false end
+    require("NHShared/Events/EngineEvents").emit("discovery.changed")
+    return true
+end
+local function itemIdentity(item)
+    if not item then return nil end
+    local md=item:getModData(); local id,part=md.cfMapDesign,md.cfMapPart
+    local t=id and root().trails[id]
+    if t and type(part)=="number" and part%1==0 and part>=1 and part<=4
+        and md.cfMapSeed==t.seed and type(md.cfMapAttempt)=="number" and md.cfMapAttempt>=1 then return id,part end
+end
+local function parse(subject)
+    if type(subject)=="string" then
+        local id,part=subject:match("^map:([^:]+):([1-4])$")
+        if id and root().trails[id] then return id,tonumber(part) end
+    elseif subject then return itemIdentity(subject) end
+end
+function R.subject(item)
+    if not allowed() or not ready then return false end
+    local ok,id=pcall(parse,item); return ok and id~=nil
+end
+-- Bounded search; a truncated carrier is UNKNOWN, never absent.
+local function findItem(container,id,part,attempt)
+    local pending,count={{container=container,depth=0}},0
+    while #pending>0 do
+        local node=table.remove(pending); local items=node.container:getItems()
+        for i=0,items:size()-1 do
+            count=count+1; if count>512 then return nil,"unknown" end
+            local item=items:get(i); local md=item:getModData()
+            if md.cfMapDesign==id and md.cfMapPart==part and md.cfMapSeed==root().trails[id].seed
+                and (attempt==nil or md.cfMapAttempt==attempt) then return item,"present" end
+            if instanceof(item,"InventoryContainer") then
+                if node.depth>=4 then return nil,"unknown" end
+                pending[#pending+1]={container=item:getInventory(),depth=node.depth+1}
+            end
+        end
+    end
+    return nil,"absent"
+end
+local function resolve(p)
+    local container,why=World.resolve(p.target)
+    if not container then return nil,why end
+    return container
+end
+-- How many local records this story earns. A story that tells itself in one
+-- record should not have two more demanded of it
+-- (CENTRAL_MYSTERY_REVIEW_2026-09-19.md:19).
+local function localCount(id)
+    local t=root().trails[id]; if not t then return nil end
+    local ok,f=pcall(Content.scenario,Catalogue.get(id),t.seed)
+    if not ok or type(f)~="table" or type(f.parts)~="table" then return 3 end
+    return #f.parts-1
+end
+local function doc(id,part,observation)
+    return Content.render(Catalogue.get(id),root().trails[id].seed,part,observation)
+end
+local function stamp(item,id,part,observation)
+    local d=doc(id,part,observation)
+    item:setName(d.title); item:setCustomName(true); item:setDisplayCategory("Evidence")
+    if item.addPage then
+        local pages=Pages.pages(d.body)
+        item:setNumberOfPages(math.max(1,#pages))
+        for i,text in ipairs(pages) do item:addPage(i,text) end
+    end
+end
+local function actualItem(subject,id,part,p)
+    if type(subject)~="string" then return subject end
+    if not p or not p.target then return nil end
+    local container=resolve(p)
+    if container then return findItem(container,id,part,p.attempt) end
+end
+function R.isRecognised(subject)
+    local id,part=parse(subject); local p=id and State.get(root(),id,part)
+    return p and p.recognised==true or false
+end
+function R.recognise(subject,source)
+    if not allowed() then return false end
+    local id,part=parse(subject); local p=id and State.get(root(),id,part)
+    if not p then return false,"unknown contribution" end
+    local item=actualItem(subject,id,part,p); if not item then return false,"item not observable" end
+    if not p.recognised then
+        local next=State.copy(p); next.recognised=true
+        if next.state=="intent" or next.state=="unknown" then next.state="placed" end
+        if not save(State.set(root(),id,part,next)) then return false end
+    end
+    local target=targets[State.reference(id,part)]
+    if target then target.recognised=true end
+    stamp(item,id,part,p.observation); return true
+end
+local function observation(binding,player,part)
+    local descriptor=player:getDescriptor()
+    local job=descriptor and descriptor:getCharacterProfession()
+    local profession=job and tostring(job:getName()) or ""
+    local skills={}
+    for _,name in ipairs({"Doctor","Electricity","Mechanics","Woodwork","MetalWelding","PlantScavenging"}) do
+        if Perks[name] then skills[name]=player:getPerkLevel(Perks[name]) end
+    end
+    return Content.observation(binding,profession,skills,root().trails[binding.id].seed,part)
+end
+function R.inspect(subject,inPlace)
+    if not allowed() then return false end
+    local id,part=parse(subject); local p=id and State.get(root(),id,part)
+    if not p or not p.recognised then return false,"not recognised" end
+    if p.noted then return true end
+    local item=actualItem(subject,id,part,p); if not item then return false,"not observable" end
+    local player=getPlayer()
+    if not inPlace and item:getOutermostContainer()~=player:getInventory() then return false,"not carried" end
+    local next=State.copy(p); next.noted=true; next.recognised=true; next.state="noted"
+    next.observation=observation(Catalogue.get(id),player,part)
+    -- Found location is preserved in the shared ledger. An obsolete placement
+    -- locator is no longer authoritative once the survivor has noted/moved it.
+    next.target=nil
+    local replacement=State.set(root(),id,part,next)
+    local D=require("NHShared/DiscoveryLog")
+    if not D.record("evidence",State.reference(id,part),replacement) then return false,"discovery commit refused" end
+    state=replacement; targets[State.reference(id,part)]=nil
+    stamp(item,id,part,next.observation); return true
+end
+-- WHERE A MAP POINTS, BEFORE THE PLAYER HAS BEEN.
+--
+-- Reading an annotated map already started its mystery - R.read activates the
+-- trail, seeds it and moves it to the front of the placement queue - but the
+-- organiser said nothing until evidence was FOUND, which meant the handwriting
+-- that makes the map worth following was only shown as a reward for having
+-- already gone (see the MAP NOTE section below, which needs a noted part).
+--
+-- So the read now leaves an open loop: the scrawl verbatim, where it points,
+-- and the plain fact that the player has not been. No claim about what waits
+-- there - the mod does not know what the writer meant, and must not pretend
+-- the marks are about its own case.
+local function leadRow(id)
+    local b=Catalogue.get(id); if not b then return nil end
+    local lead=Content.lead(b); if not lead then return nil end
+    return {id="map-lead:"..id,title=lead.title,detailText=lead.detail,
+        cfCarrier="Evidence",summary="Lead",cfMapMedia=true}
+end
+function R.rows()
+    if not ready or not allowed() then return {} end
+    local out={}
+    -- FLYERS. Reading one names a place worth standing in; reaching it records
+    -- what the survivor confirmed. Every print carries coordinates, so this
+    -- covers the whole catalogue rather than the twelve a map happens to name.
+    for id,_ in pairs(root().prints) do
+        local record=Catalogue.print(id)
+        if record then
+            local visited=root().printVisits[id]~=nil
+            local ok,built=pcall(visited and Content.flyerPayoff or Content.flyerLead,record)
+            if ok and type(built)=="table" then
+                out[#out+1]={id=(visited and "flyer-found:" or "flyer-lead:")..id,
+                    title=built.title,detailText=built.detail,
+                    cfCarrier="Evidence",summary=visited and "Place confirmed" or "Lead",
+                    cfMapMedia=true}
+            end
+        end
+    end
+    -- Leads first: a place the player has read about and not yet reached is a
+    -- question, and questions belong above answers.
+    for _,id in ipairs(Catalogue.list) do
+        if root().trails[id] and root().entries[id]==nil then
+            local lead=leadRow(id)
+            if lead then out[#out+1]=lead end
+        end
+    end
+    for _,id in ipairs(Catalogue.list) do
+        local t=root().trails[id]
+        if t then
+            local known={}
+            for source=1,4 do local p=State.get(root(),id,source);known[source]=p and p.noted==true end
+            for part=1,4 do
+            local p=State.get(root(),id,part)
+            if p and p.noted then
+                local d=doc(id,part,p.observation)
+                -- A SAVE/CONTENT MISMATCH MUST NOT BE SILENT.
+                --
+                -- A trail placed under a four-part story keeps a fragment at
+                -- slot 2. Shorten that story and slot 2 is no longer filled,
+                -- so the slot resolves to no part and the row would simply not
+                -- appear - while the item is still lying in the world. That is
+                -- the same silent loss the shape contract exists to prevent,
+                -- one layer down, and it is why shortening a shipped story
+                -- needs a fresh save rather than the unchanged schema number.
+                if not d then
+                    local key=id..":"..tostring(part)
+                    if not mismatched[key] then
+                        mismatched[key]=true
+                        log("saved trail holds "..key.." but its story no longer fills that slot; "
+                            .."the placed item has no record. Shortening a story needs a fresh save.")
+                    end
+                end
+                local detail=d and d.body
+                if detail then
+                for _,finding in ipairs(Content.findings(Catalogue.get(id),t.seed,part,known)) do
+                    detail=detail.."\n\nALONGSIDE THE OTHER RECORDS\n"..finding
+                end
+                -- THE PLACE ANSWERS WITH A PERSON.
+                --
+                -- Following a stranger's handwriting used to end at a records
+                -- dispute: the papers named people, but nothing surfaced them
+                -- AS people, so the map led to a filing cabinet. The payoff now
+                -- names who is on the papers at the marked place and hands that
+                -- name to the player as something to carry.
+                --
+                -- It states the gap instead of closing it. The marks are
+                -- unsigned, and taking a name off the papers beside them as the
+                -- writer's is precisely the inference the observation rules
+                -- forbid - so the record says what is true and stops.
+                if part==4 then
+                    local okWhose,whose=pcall(Content.whosePlace,Catalogue.get(id),t.seed)
+                    if okWhose and type(whose)=="string" then detail=detail.."\n\n"..whose end
+                end
+                if part==4 and Catalogue.get(id).sharedPeer then
+                    local peerKnown={}
+                    for source=1,4 do
+                        local peer=State.get(root(),Catalogue.get(id).sharedPeer,source)
+                        peerKnown[source]=peer and peer.noted==true
+                    end
+                    local shared=Content.sharedFinding(Catalogue.get(id),known,peerKnown)
+                    if shared then detail=detail.."\n\nTHE OTHER FILE AT THIS PLACE\n"..shared end
+                end
+                -- THE FIRST FINDING ANSWERS THE HANDWRITING, NOT JUST THE FILE.
+                --
+                -- 125 maps share 17 authored incidents, so a story cannot name
+                -- the scrawl that led the player to it - the acknowledgement has
+                -- to be made here, where both are known. Without it a stranger's
+                -- "Mom was sick. I didn't want her to turn. Please come see me"
+                -- is answered by a fuel reservation dispute and the mod never
+                -- admits the gap.
+                --
+                -- It admits it rather than closing it. The survivor notes what
+                -- was written and what was actually there; nothing claims the
+                -- marks were about this incident, because the mod does not know
+                -- what the writer meant and must not invent it.
+                local note=(part==1) and Content.cameHere(Catalogue.get(id))
+                    or Content.mapNote(Catalogue.get(id))
+                if note then detail=detail.."\n\n"..note end
+                for _,printId in ipairs(Catalogue.get(id).printIds or {}) do
+                    if root().prints[printId] then
+                        local advert=Catalogue.print(printId)
+                        detail=detail.."\n\nPLACE IDENTIFICATION\n"..advert.title.."\n"..advert.text
+                    end
+                end
+                out[#out+1]={id=State.reference(id,part),title=d.title,detailText=detail,
+                    cfCarrier="Evidence",summary="Evidence",cfMapMedia=true}
+                end
+            end
+        end end
+    end
+    return out
+end
+function R.clueTargets()
+    local out={}; if not ready or not allowed() then return out end
+    local player=getPlayer(); if not player then return out end
+    for ref,t in pairs(targets) do
+        if math.abs(player:getX()-t.x)<40 and math.abs(player:getY()-t.y)<40 then out[#out+1]=t end
+    end
+    return out
+end
+local function rememberTarget(id,part,p,item)
+    local ref=State.reference(id,part)
+    if item and not p.noted and p.target then
+        targets[ref]={id=ref,x=p.target.x,y=p.target.y,z=p.target.z,status="placed",
+            recognised=p.recognised==true,resolved=false}
+    else targets[ref]=nil end
+end
+-- Persist intent BEFORE insertion. Stamp identity BEFORE AddItem. An exception
+-- after AddItem may mean it succeeded; reconciliation must observe the token.
+local function place(id,part,target,container)
+    local previous=State.get(root(),id,part)
+    if previous and part==4 and previous.state~="refused" then return false end
+    local attempt=previous and previous.attempt+1 or 1
+    local p={target=target,state="intent",attempt=attempt,at=hours()}
+    fault("beforeInsert",id,part)
+    if not save(State.set(root(),id,part,p)) then return false end
+    local d=doc(id,part); local kind=assert(Kinds.get(d.kind))
+    local item=instanceItem(kind.fullType)
+    if not item then
+        p.state="refused"; save(State.set(root(),id,part,p)); return false
+    end
+    local md=item:getModData()
+    md.cfMapDesign=id; md.cfMapPart=part; md.cfMapSeed=root().trails[id].seed; md.cfMapAttempt=attempt
+    -- This token is an intention receipt, not a claim that insertion succeeded.
+    local token=State.token(id,part,attempt); md.cfMapToken=token
+    local ok,result=pcall(function() return container:AddItem(item) end)
+    fault("afterInsert",id,part)
+    local found,verdict=findItem(container,id,part,attempt)
+    p.state=found and "placed" or (ok and result==nil and verdict=="absent" and "refused" or "unknown")
+    local next=State.set(root(),id,part,p); next.cursor=designCursor
+    fault("beforeCommit",id,part)
+    if save(next) then rememberTarget(id,part,p,found) end
+    fault("afterCommit",id,part)
+    return found~=nil
+end
+local function reconcile(id,part,p)
+    if not p.target or p.state=="noted" or p.state=="refused" then return end
+    local player=getPlayer()
+    if math.abs(player:getX()-p.target.x)>40 or math.abs(player:getY()-p.target.y)>40 then
+        targets[State.reference(id,part)]=nil; return
+    end
+    local container=resolve(p)
+    if not container then targets[State.reference(id,part)]=nil; return end
+    local item=findItem(container,id,part,p.attempt)
+    if item and (p.state=="intent" or p.state=="unknown") then
+        local next=State.copy(p); next.state="placed"
+        if save(State.set(root(),id,part,next)) then p=next end
+    end
+    -- Observable absence after an attempted insertion may be collection or
+    -- destruction. Hold uncertain; never repair it by creating another payoff.
+    rememberTarget(id,part,p,item)
+    if item and p.recognised then stamp(item,id,part,p.observation) end
+end
+local function targetKey(t)
+    return table.concat({t.x,t.y,t.z,t.objectIndex,t.containerIndex},":")
+end
+local function candidate(square,object,index,ci,container,filled)
+    local kind=container:getType()
+    if not Choices.fixedKind(kind) then return nil end
+    -- Any identified fixed non-floor furniture can carry a clue. Room names
+    -- and loot categories never stand in for difficulty or better loot.
+    if not filled and not container:isExplored() then return nil end
+    local sprite=object:getSprite(); local name=sprite and sprite:getName()
+    if not name then return nil end
+    return {x=square:getX(),y=square:getY(),z=square:getZ(),objectIndex=index,
+        containerIndex=ci,sprite=name,containerType=kind}
+end
+local function newCandidates() return {pool=Choices.new(),filled={},keys={}} end
+local function offerCandidate(candidates,target,filled,container)
+    local key=targetKey(target)
+    local kept=Choices.offer(candidates.pool,target)
+    -- Filling permission belongs to this exact live container, not just its
+    -- coordinates. A replacement at the same sprite/index must not inherit it.
+    -- These bounded references are ephemeral; canonical targets remain plain tables.
+    if kept then candidates.keys[key]=true end
+    if filled and candidates.keys[key] then candidates.filled[key]=container end
+    return kept
+end
+local function prioritize(id)
+    if root().trails[id] and not prioritySet[id] then
+        priority[#priority+1]=id; prioritySet[id]=true
+    end
+end
+-- Native loot completion contributes candidates to the same diverse scan as
+-- ordinary discovery. It no longer lets the first cupboard bypass selection.
+-- The return value means a candidate was queued, NOT that evidence was placed.
+-- Said once per session per class, because the offending call fires on every
+-- container the game fills and filled the console with 24 identical errors in
+-- one run (20260921T171400-map-coverage).
+local unparented={}
+function R.offerContainer(container,filled)
+    if not ready or not allowed() or not container then return false end
+    -- NOT EVERY "CONTAINER" THE ENGINE HANDS US IS AN ItemContainer.
+    -- Events.OnFillContainer passes a zombie.inventory.ItemPickerJava$
+    -- ItemPickerContainer, which has no getParent, and Kahlua throws on the
+    -- INDEX, not the call - so `container.getParent and ...` throws too and
+    -- cannot be used to test for it. pcall around a colon call is the only
+    -- shape that can ask (AGENTS.md, engine call form).
+    -- ASK THE CLASS, DO NOT PROBE THE METHOD. pcall stops the exception
+    -- PROPAGATING; it does not stop Kahlua LOGGING it. The original code was
+    -- already inside a pcall at the OnFillContainer hook and still wrote 24
+    -- error blocks in one run; moving the pcall in here cured the failure and
+    -- left the log untouched - 26 more of them in the 125-destination run of
+    -- 2026-09-22, which is how the claim "this stops it erroring" was caught.
+    --
+    -- Events.OnFillContainer passes an ItemPickerJava$ItemPickerContainer,
+    -- which is not an ItemContainer and has no getParent. instanceof answers
+    -- that without ever indexing the missing method, so nothing is thrown and
+    -- nothing is logged.
+    if not instanceof(container,"ItemContainer") then
+        local kind=tostring(container):gsub("@.*","")
+        if not unparented[kind] then
+            unparented[kind]=true
+            log("cannot offer a "..kind..": it is not an ItemContainer, so the "
+                .."native loot path contributes no candidates for it")
+        end
+        return false
+    end
+    local got,object=pcall(function() return container:getParent() end)
+    if not got then
+        local kind=tostring(container):gsub("@.*","")
+        if not unparented[kind] then
+            unparented[kind]=true
+            log("cannot offer a "..kind..": it has no getParent, so the native "
+                .."loot path contributes no candidates for it")
+        end
+        return false
+    end
+    local square=object and object:getSquare()
+    if not square then return false end
+    local objects=square:getObjects(); local oi,ci
+    for i=0,math.min(256,objects:size())-1 do if objects:get(i)==object then oi=i; break end end
+    if not oi then return false end
+    for i=0,math.min(32,object:getContainerCount())-1 do if object:getContainerByIndex(i)==container then ci=i; break end end
+    if not ci then return false end
+    local target=candidate(square,object,oi,ci,container,filled)
+    if not target then return false end
+    local queued=false
+    for _,id in ipairs(Catalogue.list) do
+        local t=root().trails[id]; local p=t and State.get(root(),id,4)
+        if t and (not p or p.state=="refused") then
+            local match=atDestination(id,square)
+            if match and not (p and targetKey(p.target)==targetKey(target)) then
+                local candidates
+                if scan and scan.id==id then candidates=scan.destination
+                else offers[id]=offers[id] or newCandidates(); candidates=offers[id] end
+                queued=offerCandidate(candidates,target,filled,container) or queued
+                prioritize(id)
+            end
+        end
+    end
+    return queued
+end
+local function finishCandidates(s,part,candidates)
+    local previous=State.get(root(),s.id,part)
+    if part==4 then
+        if previous and previous.state~="refused" then return false end
+    elseif State.nextFragment(root(),s.id,s.x,s.y,hours())~=part then return false end
+    local list=Choices.finish(candidates.pool)
+    local remaining={};for i in ipairs(list) do remaining[i]=true end
+    local usedKinds={}
+    for i=1,4 do
+        local placed=State.get(root(),s.id,i)
+        if placed and placed.target and placed.state~="refused" then
+            local kind=placed.target.containerType;usedKinds[kind]=(usedKinds[kind] or 0)+1
+        end
+    end
+    -- Resolve one choice per scheduler step. The pool is bounded; a moved or
+    -- dismantled candidate is discarded, never silently treated as inserted.
+    s.selection={part=part,list=list,remaining=remaining,filled=candidates.filled,
+        usedKinds=usedKinds,salt=root().trails[s.id].seed..":"..part}
+    return #list>0
+end
+local function selectStep(s)
+    local choice=s.selection
+    local selected=Choices.choose(choice.list,choice.salt,function(i) return choice.remaining[i] end,nil,choice.usedKinds)
+    if not selected then s.selection=nil;return false end
+    choice.remaining[selected]=nil
+    local target=choice.list[selected]
+    local previous=State.get(root(),s.id,choice.part)
+    if choice.part==4 and previous and previous.state~="refused" then s.selection=nil;return false end
+    if choice.part~=4 and State.nextFragment(root(),s.id,s.x,s.y,hours())~=choice.part then s.selection=nil;return false end
+    if previous and previous.state=="refused" and targetKey(previous.target)==targetKey(target) then return false end
+    local container=World.resolve(target)
+    if not container then return false end
+    local object=container:getParent();local square=object and object:getSquare()
+    if not square then return false end
+    if (choice.part==4)~=atDestination(s.id,square) then return false end
+    if not candidate(square,object,target.objectIndex,target.containerIndex,container,
+        choice.filled[targetKey(target)]==container) then return false end
+    -- Clear the scan BEFORE an attempted insertion. If interruption follows,
+    -- the persisted intent is reconciled; this callback cannot replay it.
+    scan=nil
+    place(s.id,choice.part,target,container)
+    return true
+end
+-- One square/object/container per scheduler step. Full collection precedes
+-- selection so eight counters cannot exclude a later bedroom drawer.
+local function scanStep()
+    local player=getPlayer(); if not player then scan=nil; return true end
+    if not scan then
+        designCursor=designCursor%#Catalogue.list+1
+        local id=table.remove(priority,1) or Catalogue.list[designCursor]
+        prioritySet[id]=nil
+        if not root().trails[id] then return true end
+        local x,y,z=math.floor(player:getX()),math.floor(player:getY()),math.floor(player:getZ())
+        local here=getCell():getGridSquare(x,y,z)
+        scan={id=id,x=x,y=y,z=z,offset=0,destination=offers[id] or newCandidates(),localCopies=newCandidates(),
+            localPart=not atDestination(id,here)
+                and State.nextFragment(root(),id,x,y,hours(),localCount(id)) or nil}
+        offers[id]=nil
+    end
+    local s=scan
+    if math.abs(player:getX()-s.x)>24 or math.abs(player:getY()-s.y)>24 or player:getZ()~=s.z then
+        offers[s.id]=s.destination;scan=nil;return true
+    end
+    if s.selection then return selectStep(s) end
+    if s.finished then
+        if not s.triedDestination then
+            s.triedDestination=true
+            if finishCandidates(s,4,s.destination) then return false end
+        end
+        if s.localPart and not s.triedLocal then
+            s.triedLocal=true
+            if finishCandidates(s,s.localPart,s.localCopies) then return false end
+        end
+        if root().cursor~=designCursor then local next=State.copy(root()); next.cursor=designCursor; save(next) end
+        scan=nil;return true
+    end
+    if s.container then
+        local ci=s.containerIndex; s.containerIndex=ci+1
+        if ci>=math.min(32,s.object:getContainerCount()) then s.container=nil; return false end
+        local container=s.object:getContainerByIndex(ci)
+        if not container then return false end
+        local destination=atDestination(s.id,s.square)
+        if not destination and not s.localPart then return false end
+        local target=candidate(s.square,s.object,s.objectIndex-1,ci,container)
+        if target then offerCandidate(destination and s.destination or s.localCopies,target,false) end
+        return false
+    end
+    if s.square then
+        local objects=s.square:getObjects(); local i=s.objectIndex
+        if i>=math.min(256,objects:size()) then s.square=nil; return false end
+        s.objectIndex=i+1; s.object=objects:get(i)
+        s.container=true; s.containerIndex=0; return false
+    end
+    if s.offset>=49*49 then s.finished=true;return false end
+    local dx=s.offset%49-24; local dy=math.floor(s.offset/49)-24; s.offset=s.offset+1
+    s.square=getCell():getGridSquare(s.x+dx,s.y+dy,s.z); s.objectIndex=0
+    return false
+end
+local function visitStep()
+    local player=getPlayer();local square=player and player:getSquare()
+    if not square then return end
+    local bid,def=buildingId(square),defOf(square)
+    -- Read once, not once per design: this runs every 15 ticks over all 125
+    -- designs, and these are engine calls.
+    local bx1,by1,bx2,by2
+    if def then bx1,by1,bx2,by2=def:getX(),def:getY(),def:getX2(),def:getY2() end
+    -- A READ FLYER'S PLACE IS REACHED THE SAME WAY A MAP'S IS: by standing
+    -- there. Once per visit step, not once per design - this runs over all 125
+    -- designs every fifteen ticks and these are engine calls.
+    local px,py=square:getX(),square:getY()
+    for pid,_ in pairs(root().prints) do
+        if root().printVisits[pid]==nil then
+            local record=Catalogue.print(pid)
+            local where=record and record.locations and record.locations[1]
+            if where and where.x and where.y
+                and math.abs(px-where.x)<=12 and math.abs(py-where.y)<=12 then
+                local next,changed=State.printVisit(root(),pid,hours())
+                if changed and save(next) then
+                    log("reached the place named by the "..tostring(pid).." flyer")
+                    require("NHShared/Events/EngineEvents").emit("discovery.changed")
+                end
+            end
+        end
+    end
+    local changes
+    for _,id in ipairs(Catalogue.list) do
+        -- A genuine current building can be indexed before the metadata pass.
+        if def and matchesBounds(Catalogue.get(id),bx1,by1,bx2,by2) then
+            destinations[id]=destinations[id] or {};destinations[id][bid]=true
+        end
+        if atDestination(id,square) and root().entries[id]==nil then
+            changes=State.enter(changes or root(),id,hours());prioritize(id)
+        end
+    end
+    if changes then save(changes) end
+end
+function R.start()
+    if not allowed() then return false end
+    state=nil; root(); destinations,targets={},{}
+    -- Lazy, not a top-level require: InteractionAPI.lua's own construction
+    -- reaches GeneratedMenu.lua, which reaches EngineAPI.lua, which
+    -- reaches this file - a real circular require if resolved at file-load
+    -- time instead of here, at the point of use. require() itself, not any
+    -- field read, is what forces GeneratedMenu.lua/ClueSearch.lua to load -
+    -- InteractionAPI.lua's own top level already required both.
+    require("NHShared/InteractionAPI")
+    ticks,designCursor,entryCursor=0,root().cursor,0; priority,prioritySet,offers={},{},{}
+    scan=nil; faultPoint=nil; lastFault=nil; R.indexed=false; R.entryCandidate=nil
+    scheduler=Scheduler.new(clock,function(_,why) log(why) end)
+    scheduler.maxSteps=16; scheduler.budgetMs=2
+    metadata={buildings=getWorld():getMetaGrid():getBuildings(),index=0}
+    scheduler.enqueue("metadata","map-metadata",indexStep)
+    local hooks=require("NHShared/MapMediaRead")
+    local ok,why=hooks.start(R.read,R.printRead)
+    if not ok then error(why) end
+    ready=true; return true
+end
+function R.tick()
+    if not ready or not allowed() then return end
+    ticks=ticks+1
+    if ticks%15==0 then visitStep() end
+    -- Placement waits for the metadata pass because it needs to know where a
+    -- design leads. RECONCILIATION does not: it only looks for an item the mod
+    -- already recorded an intent for. Gating it behind indexing meant an
+    -- insertion interrupted mid-write could not heal itself for as long as the
+    -- pass took - and that pass is not instant. The placement gate caught it:
+    -- afterInsert stayed at "intent" with the item physically present, through
+    -- a save and reload.
+    if R.indexed and not scheduler.has("map-placement") then
+        scheduler.enqueue("scan","map-placement",scanStep)
+    end
+    if not scheduler.has("map-reconcile") then
+        entryCursor=entryCursor%(#Catalogue.list*4)+1
+        local id=Catalogue.list[math.floor((entryCursor-1)/4)+1]; local part=(entryCursor-1)%4+1
+        local p=State.get(root(),id,part)
+        if p then scheduler.enqueue("reconcile","map-reconcile",function() reconcile(id,part,p); return true end) end
+    end
+    scheduler.step()
+end
+-- Diagnostics deliberately expose hidden state only through explicit debug use.
+function R.status()
+    if not (getDebug and getDebug()) then return nil end
+    -- How far the metadata pass has got, so a stalled index is measurable
+    -- rather than inferred from which designs happen to have resolved.
+    return {ready=ready,indexed=R.indexed,peakMs=scheduler and scheduler.peakMs,peakWriteMs=R.peakWriteMs,
+        indexAt=metadata and metadata.index or nil,
+        indexOf=metadata and metadata.buildings:size() or nil,
+        state=State.copy(root()),refusal=R.lastRefusal,pendingFault=faultPoint and State.copy(faultPoint) or nil,
+        lastFault=lastFault and State.copy(lastFault) or nil}
+end
+function R.coverage(id)
+    if not (getDebug and getDebug()) then return nil end
+    local binding=Catalogue.get(id); if not binding then return nil end
+    local count=0; for _ in pairs(destinations[id] or {}) do count=count+1 end
+    return {design=id,buildings=count,areas=binding.areas and #binding.areas or 0,
+        source=binding.areaSource or binding.anchorSource,related=binding.relatedDestination,
+        active=root().trails[id]~=nil,entered=root().entries[id]~=nil}
+end
+if Events and not R.hooked then
+    R.hooked=true
+    require("NHShared/Events/EngineEvents").on("OnGameStart", function() local ok,why=pcall(R.start); if not ok then ready=false; log(why) end end)
+    require("NHShared/Events/EngineEvents").on("OnTick", function() local ok,why=pcall(R.tick); if not ok then ready=false; log(why) end end)
+    if Events.OnFillContainer then require("NHShared/Events/EngineEvents").on("OnFillContainer", function(_,_,container)
+        local ok,why=pcall(R.offerContainer,container,true); if not ok then log(why) end
+    end) end
+    if Events.OnRefreshInventoryWindowContainers then require("NHShared/Events/EngineEvents").on("OnRefreshInventoryWindowContainers", function(page,phase)
+        if phase~="beforeFloor" or not ready then return end
+        for i,button in ipairs(page.backpacks or {}) do
+            if i>32 then break end
+            local ok,why=pcall(R.offerContainer,button.inventory,false); if not ok then log(why) end
+        end
+    end) end
+end
+return R

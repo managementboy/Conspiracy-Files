@@ -1,0 +1,93 @@
+-- Durable player observations only. Engine event adapters supply observed facts.
+local Connections = require("NHShared/KeyConnection")
+local Budget = require("NHShared/SaveBudget")
+local Log = require("NHShared/DiscoveryLog")
+local J = {}
+NHShared = NHShared or {}
+NHShared.KeyJournal = J
+NHEngine=NHEngine or {};NHEngine.KeyJournal = J
+local TAG = "NHShared.KeyConnections"
+
+local function current()
+    local store = ModData.get(TAG)
+    if store == nil then return Connections.new() end
+    if type(store) ~= "table" or getmetatable(store) then error("invalid connection store") end
+    for key in pairs(store) do
+        if key ~= "canonical" then error("unknown connection store field") end
+    end
+    if not store.canonical or not Connections.connections(store.canonical) then
+        error("invalid connection state")
+    end
+    return store.canonical
+end
+
+function J.observe(fact)
+    local ok, accepted, reason = pcall(function()
+        local staged, status = Connections.observe(current(), fact)
+        if not staged then return false, status end
+        if status == "duplicate" then return true, status end
+        local allowed, why = Budget.check("keyConnections", {canonical=staged})
+        if not allowed then return false, why end
+        local store = ModData.getOrCreate(TAG)
+        store.canonical = staged
+        -- Derived connections appear only after the fact that completes them,
+        -- so the ledger is appended from the recomputed set.
+        for _, connection in ipairs(Connections.connections(staged) or {}) do
+            Log.record("connection", "connection:" .. connection.id)
+        end
+        return true, "recorded"
+    end)
+    if not ok then return false, tostring(accepted) end
+    return accepted, reason
+end
+
+function J.rows()
+    local ok, rows = pcall(function()
+        local connections = assert(Connections.connections(current()))
+        local titles = {}
+        local runtime = NHShared and NHShared.GeneratedRuntime
+        if runtime and runtime.known then
+            for _, row in ipairs(runtime.known()) do titles[row.id] = row.title end
+        end
+        local result = {}
+        for _, connection in ipairs(connections) do
+            result[#result+1] = {
+                id="connection:"..connection.id,
+                ordinal=#result+1,
+                title="Possible connection: "..connection.name,
+                summary="Interpretation - key and building",
+                detailText="I found a key with a document naming "..connection.name..
+                    ", and it matches the building where I found "..(titles[connection.clueId] or "the earlier clue")..
+                    ". That connects the named document, key and place; who left them there remains open.",
+            }
+        end
+        -- A MATCH THAT FORMS NO CONNECTION IS STILL SOMETHING THE SURVIVOR DID.
+        --
+        -- KeyConnection only yields a row when a named document, a key source,
+        -- a door match and an anonymous clue all line up, so trying the opening
+        -- key on the door it fits produced a stored fact and nothing the player
+        -- could see (Windows playtest, 2026-09-24). The fact is worth showing
+        -- on its own, and worth showing carefully: a lock can witness that a
+        -- key fits it and nothing else.
+        local matched={}
+        for _,connection in ipairs(connections) do matched[connection.matchId]=true end
+        local state=current()
+        for id,fact in pairs(state and state.keyDoorMatch or {}) do
+            if not matched[id] then
+                result[#result+1]={
+                    id="keydoor:"..tostring(id),
+                    ordinal=#result+1,
+                    title="A key I carry opens a door here",
+                    summary="Observation - key and lock",
+                    detailText="I tried the key and the lock turned. It was cut for this door."
+                        .."\n\nThat is all the lock can tell me. Who it was cut for, who left it "
+                        .."where I found it, and why I had it are not questions a door answers.",
+                }
+            end
+        end
+        return result
+    end)
+    return ok and rows or {}
+end
+
+return J

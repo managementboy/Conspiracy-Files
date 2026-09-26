@@ -1,0 +1,327 @@
+-- Authored events -> immutable sources -> knowledge-gated survivor notes.
+-- Pure Lua. Placement, discovery and world access remain with their adapters.
+local Kinds=require("NHShared/Generated/EvidenceKinds")
+local ConspiracyPair=require("NHShared/Generated/ConspiracyPair")
+local H=require("NHShared/Headings")
+local M={REVISION=4}
+local ANCHORS={"claim","response","review"}
+local RELATIONS={corroborates=true,recontextualises=true,["disputes-delivery"]=true}
+local function copy(v)
+    if type(v)~="table" then return v end
+    local out={}; for k,x in pairs(v) do out[k]=copy(x) end; return out
+end
+local function text(v) return type(v)=="string" and v:find("%S")~=nil end
+local function dense(v,max)
+    if type(v)~="table" then return false end
+    local n=0
+    for k in pairs(v) do
+        if type(k)~="number" or k%1~=0 or k<1 then return false end
+        n=n+1
+    end
+    if n>(max or 32) then return false end
+    for i=1,n do if v[i]==nil then return false end end
+    return true,n
+end
+local function documentOK(d)
+    if type(d)~="table" or not Kinds.get(d.kind) then return false end
+    for _,k in ipairs({"title","observation","source","note"}) do
+        if not text(d[k]) then return false end
+    end
+    return true
+end
+local function objectStateOK(d)
+    local carrier=Kinds.get(d.kind)
+    if carrier and carrier.capacity=="object" then
+        if not text(d.wear) then return false,"object evidence must say what state it was found in" end
+        if d.members~=nil then
+            local ok,n=dense(d.members,8)
+            if not ok or n<2 then return false,"an object scene needs at least two member groups" end
+            local total=0
+            for _,member in ipairs(d.members) do
+                local kind=type(member)=="table" and Kinds.get(member.kind)
+                if not kind or kind.capacity~="object" or not text(member.wear)
+                    or type(member.quantity)~="number" or member.quantity%1~=0
+                    or member.quantity<1 or member.quantity>16 then
+                    return false,"invalid object-scene member"
+                end
+                total=total+member.quantity
+            end
+            if total<5 or total>24 then return false,"object scene has an implausible total" end
+            if d.quantity~=nil and d.quantity~=total then return false,"object scene count does not match its members" end
+            if d.roomIntent~="natural" and d.roomIntent~="wrong" then
+                return false,"an object scene must say whether the room is part of the evidence"
+            end
+        elseif d.quantity~=nil then
+            if type(d.quantity)~="number" or d.quantity%1~=0 or d.quantity<5 or d.quantity>16 then
+                return false,"a pile must declare a count a room could hold"
+            end
+            if d.roomIntent~="natural" and d.roomIntent~="wrong" then
+                return false,"a pile must say whether the room is part of the evidence"
+            end
+        elseif d.roomIntent~=nil then
+            -- A single misplaced object may name the wrong room; quantity is
+            -- not required when the mismatch itself is the observation.
+            if d.roomIntent~="wrong" then return false,"single-object room intent must be wrong" end
+        end
+    elseif d.wear~=nil or d.quantity~=nil or d.roomIntent~=nil or d.members~=nil then
+        return false,"only an object is found in a state, count, group or wrong room"
+    end
+    if d.accessIntent~=nil and d.accessIntent~="starting-building" then return false,"invalid access intent" end
+    if d.placementIntent~=nil and d.placementIntent~="vehicle" then return false,"invalid placement intent" end
+    if d.openingVoice~=nil and (not text(d.openingVoice) or #d.openingVoice>120) then return false,"invalid opening voice" end
+    if d.interpretation~=nil and d.interpretation~="farm-zero" and d.interpretation~="delivered-agent"
+        and d.interpretation~="dual" and d.interpretation~="both-damaging" then return false,"invalid interpretation role" end
+    if d.sceneKind~=nil and (not text(d.sceneKind) or #d.sceneKind>60) then return false,"invalid scene kind" end
+    return true
+end
+-- A continuation preserves the people/company and documentary time of its
+-- source. Reusing a reference while redrawing those facts would change history.
+function M.validThread(t,follows)
+    if type(t)~="table" then return false end
+    local allowed={document=true,reference=true,point=true,question=true,
+        person=true,organisation=true,survivor=true,afterDate=true,grounding=true}
+    if follows then allowed.fromCase=true end
+    for key in pairs(t) do if not allowed[key] then return false end end
+    for _,key in ipairs({"document","reference","point","question"}) do
+        if not text(t[key]) or #t[key]>120 or t[key]:find("%c") then return false end
+    end
+    if follows and (not text(t.fromCase) or #t.fromCase>120 or t.fromCase:find("%c")) then return false end
+    for _,key in ipairs({"person","organisation","survivor"}) do
+        if not text(t[key]) or #t[key]>80 or t[key]:find("%c") then return false end
+    end
+    -- The company's grounding travels with it, so a continuation stays as
+    -- real as the case it follows. Optional: threads saved before 2026-09-25
+    -- carry none.
+    if t.grounding~=nil and (not text(t.grounding) or #t.grounding>80 or t.grounding:find("%c")) then return false end
+    local day=t.afterDate
+    if type(day)~="number" or day~=day or day%1~=0 or day<1 or day>189 then return false end
+    return true
+end
+function M.validate(s)
+    if type(s)~="table" then return false,"missing scenario" end
+    for _,k in ipairs({"question","event","outcome"}) do
+        if not text(s[k]) then return false,"scenario lacks "..k end
+    end
+    if s.unresolved~=nil and not text(s.unresolved) then return false,"scenario has invalid unresolved question" end
+    -- EVERY SCENARIO MUST SAY WHICH AXIS OF THE CENTRAL CONSPIRACY ITS
+    -- EVIDENCE BEARS ON. Before this, a case carried the central pair as a
+    -- stamp it never mentioned: measured 2026-09-23, exactly 1 of 27 scenarios
+    -- left anything unresolved that touched the farm, a sample, infection or
+    -- animals. The rest were clerical - a missing form, an unsigned collection
+    -- entry - and were bound to the conspiracy in name only. A closed axis
+    -- list makes "bound" a property the generator checks rather than a claim
+    -- the design document makes.
+    if not ConspiracyPair.isAxis(s.centralAxis) then
+        return false,"scenario does not say which axis of the central conspiracy it touches"
+    end
+    local ok,n=dense(s.readings,2)
+    if not ok or n~=2 or not text(s.readings[1]) or not text(s.readings[2]) then
+        return false,"scenario needs two interpretations of its event"
+    end
+    if type(s.anchors)~="table" then return false,"missing anchor sources" end
+    if s.organisation~=nil and (not text(s.organisation) or not text(s.grounding)) then
+        return false,"named business lacks a grounding source"
+    end
+    local sources={}
+    for _,key in ipairs(ANCHORS) do
+        if not documentOK(s.anchors[key]) then return false,"invalid source "..key end
+        local state,why=objectStateOK(s.anchors[key]);if not state then return false,why end
+        sources[key]=true
+    end
+    ok,n=dense(s.optional or {},4)
+    if not ok then return false,"invalid optional sources" end
+    for _,d in ipairs(s.optional or {}) do
+        if not documentOK(d) or not text(d.key) or sources[d.key] then return false,"invalid optional source" end
+        if d.role~="person" and d.role~="records" and d.role~="listen" then return false,"optional source lacks investigative purpose" end
+        local state,why=objectStateOK(d);if not state then return false,why end
+        sources[d.key]=true
+    end
+    if s.sourceOrder~=nil then
+        local ordered,count=dense(s.sourceOrder,7)
+        if not ordered or count<3 then return false,"invalid authored source order" end
+        local seen={}
+        for _,key in ipairs(s.sourceOrder) do
+            if not sources[key] or seen[key] then return false,"source order names an invalid source" end
+            seen[key]=true
+        end
+        for key in pairs(sources) do if not seen[key] then return false,"source order omits an authored source" end end
+    end
+    ok,n=dense(s.essential,7)
+    if not ok or n<2 then return false,"scenario lacks essential sources" end
+    local essential={}
+    for _,key in ipairs(s.essential) do
+        if not sources[key] or essential[key] then return false,"invalid essential source" end
+        essential[key]=true
+    end
+    ok,n=dense(s.comparisons,16)
+    if not ok or n==0 then return false,"scenario lacks sourced findings" end
+    local ending=false
+    for _,finding in ipairs(s.comparisons) do
+        local valid,count=dense(finding.requires,7)
+        if not valid or count<2 or not text(finding.text) or not RELATIONS[finding.kind]
+            or not sources[finding.from] or not sources[finding.to] or finding.from==finding.to then
+            return false,"invalid finding"
+        end
+        local needs={}
+        for _,key in ipairs(finding.requires) do
+            if not sources[key] or needs[key] then return false,"finding has invalid source" end
+            needs[key]=true
+        end
+        if not needs[finding.from] or not needs[finding.to] then return false,"finding omits linked source" end
+        local complete=true
+        for key in pairs(essential) do if not needs[key] then complete=false end end
+        if complete then ending=true end
+    end
+    if not ending then return false,"scenario lacks an essential-source conclusion" end
+    if s.thread then
+        if not essential[s.thread.document] or not text(s.thread.point) or not text(s.thread.question) then
+            return false,"continuation must come from essential evidence"
+        end
+    end
+    if s.leadSource~=nil and not sources[s.leadSource] then return false,"lead source is not evidence" end
+    return true
+end
+
+function M.body(observation,source,note)
+    return H.FOUND.."\n"..observation.."\n\n"..source.."\n\n"..H.MEANING.."\n"..note
+end
+
+-- `fill` only substitutes saved case inputs. It may not query the live world.
+function M.build(s,fill,prefix,a,b,people,org,random,steer,pair)
+    local ok,why=M.validate(s); if not ok then return nil,why end
+    local docs,ids={},{}
+    local function add(key,d,site)
+        local id=prefix.."document-"..(#docs+1)
+        local observation,source,note=fill(d.observation),fill(d.source),fill(d.note)
+        -- Nothing is WRITTEN on an object. A brass key or a worn pen has no
+        -- source text to quote, so the three-part page - what I think I found,
+        -- the source, what I think it means - is wrong for one: the headings would
+        -- promise a document. An object's record is the sight and what the
+        -- survivor made of it, run together in plain sentences.
+        local carrier=Kinds.get(d.kind)
+        local object=carrier and carrier.capacity=="object"
+        local body=object and (observation.." "..source.." "..note) or M.body(observation,source,note)
+        if not Kinds.fits(d.kind,body) then return false,"scenario exceeds its carrier's capacity" end
+        ids[key]=id
+        local quantity=d.quantity
+        if d.members then quantity=0;for _,member in ipairs(d.members) do quantity=quantity+member.quantity end end
+        local leadSource=s.leadSource or "claim"
+        docs[#docs+1]={id=id,kind=d.kind,title=fill(d.title),locationId=site.id,body=body,
+            references={people[1].id,people[2].id,org.id,a.id,b.id},links={},leads=key==leadSource and {b.id} or {},
+            -- The state it was found in, and - for a pile - how many and
+            -- whether the room is part of the evidence. Authored with the
+            -- object, because under the 2026-09-21 decision an object belongs
+            -- to its event rather than being drawn from a rule and attached.
+            wear=object and d.wear or nil,
+            quantity=object and quantity or nil,
+            roomIntent=object and d.roomIntent or nil,
+            members=object and d.members and copy(d.members) or nil,
+            accessIntent=d.accessIntent,placementIntent=d.placementIntent,
+            openingVoice=d.openingVoice,interpretation=d.interpretation,sceneKind=d.sceneKind}
+        return true
+    end
+    local byKey={claim=s.anchors.claim,response=s.anchors.response,review=s.anchors.review}
+    for _,d in ipairs(s.optional or {}) do byKey[d.key]=d end
+    if s.sourceOrder then
+        for _,key in ipairs(s.sourceOrder) do
+            local d=byKey[key]
+            ok,why=add(key,d,(key=="claim" or d.at=="claim") and a or b)
+            if not ok then return nil,why end
+        end
+    else
+        for _,key in ipairs(ANCHORS) do
+            ok,why=add(key,s.anchors[key],key=="claim" and a or b)
+            if not ok then return nil,why end
+        end
+    end
+    -- Only explicitly authored, compatible contributions enter this pool.
+    -- A preferred approach may order those contributions; a preferred theory
+    -- never changes the underlying event or manufactures counterevidence.
+    local optional=s.sourceOrder and {} or copy(s.optional or {})
+    for i=#optional,2,-1 do local j=random(i); optional[i],optional[j]=optional[j],optional[i] end
+    if steer and steer.way then
+        local preferred,rest={},{}
+        for _,d in ipairs(optional) do
+            local into=d.role==steer.way and preferred or rest; into[#into+1]=d
+        end
+        optional={}; for _,list in ipairs({preferred,rest}) do for _,d in ipairs(list) do optional[#optional+1]=d end end
+    end
+    local count=random(#optional+1)-1
+    if steer and steer.way and optional[1] and optional[1].role==steer.way then count=math.max(1,count) end
+    for i=1,count do
+        ok,why=add(optional[i].key,optional[i],optional[i].at=="claim" and a or b)
+        if not ok then return nil,why end
+    end
+    local story={revision=M.REVISION,question=fill(s.question),event=fill(s.event),grounding=s.grounding,
+        outcome=fill(s.outcome),readings={},comparisons={}}
+    if s.unresolved~=nil then story.unresolved=fill(s.unresolved) end
+    -- The bridge from this local mystery to the campaign's central question.
+    -- The AXIS belongs to the scenario; the SENTENCE belongs to whichever pair
+    -- this save drew, so the same clerical discrepancy reads differently in a
+    -- Farm Zero campaign and a Failed Cordon one. Neither sentence resolves
+    -- anything: each says what the finding could mean under either reading.
+    -- ONLY THE AXIS IS SAVED. The sentence is derivable from the axis and the
+    -- pair, both of which the case already carries, so storing it would cost a
+    -- line of prose in every saved case for nothing -- and the save budget has
+    -- about 10 KB of headroom at full catalogue (test/map_feature_budget.lua).
+    -- Read it back with M.centralLine.
+    story.centralAxis=s.centralAxis
+    if pair and not ConspiracyPair.axisLine(pair,s.centralAxis) then
+        return nil,"the central pair carries no line for axis "..tostring(s.centralAxis)
+    end
+    for i,value in ipairs(s.readings) do story.readings[i]=fill(value) end
+    local essential={}; for _,key in ipairs(s.essential) do essential[#essential+1]=ids[key] end
+    for _,finding in ipairs(s.comparisons) do
+        local needs,available={},true
+        for _,key in ipairs(finding.requires) do
+            if ids[key] then needs[#needs+1]=ids[key] else available=false end
+        end
+        if available then
+            story.comparisons[#story.comparisons+1]={requires=needs,text=fill(finding.text),
+                from=ids[finding.from],to=ids[finding.to],kind=finding.kind}
+        end
+    end
+    local thread
+    if s.thread then thread={document=ids[s.thread.document],point=fill(s.thread.point),question=fill(s.thread.question)} end
+    return {documents=docs,story=story,essential=essential,thread=thread}
+end
+
+-- The bridge from a case's local mystery to the campaign's central question,
+-- resolved at read time from what the save already holds. Nil when the case
+-- predates the axis or the pair cannot speak to it.
+function M.centralLine(story,pair)
+    if type(story)~="table" then return nil end
+    return ConspiracyPair.axisLine(pair,story.centralAxis)
+end
+function M.project(story,doc,known)
+    local body,links=doc.body,{}
+    if not story then return body,links end
+    for _,finding in ipairs(story.comparisons) do
+        local visible=true
+        for _,id in ipairs(finding.requires) do if not known[id] then visible=false; break end end
+        if visible and finding.from==doc.id then
+            body=body.."\n\n"..finding.text
+            local duplicate=false
+            for _,link in ipairs(links) do if link.target==finding.to and link.kind==finding.kind then duplicate=true end end
+            if not duplicate then links[#links+1]={target=finding.to,kind=finding.kind} end
+        end
+    end
+    return body,links
+end
+
+-- Finding the earlier source last must reveal the same connection as finding
+-- the later one last. Prefer the most complete newly supported finding.
+function M.newFinding(story,known,newId)
+    if not story or not known[newId] then return nil end
+    local best
+    for _,finding in ipairs(story.comparisons) do
+        local supported,usesNew=true,false
+        for _,id in ipairs(finding.requires) do
+            if not known[id] then supported=false end
+            if id==newId then usesNew=true end
+        end
+        if supported and usesNew and (not best or #finding.requires>=#best.requires) then best=finding end
+    end
+    return best
+end
+return M

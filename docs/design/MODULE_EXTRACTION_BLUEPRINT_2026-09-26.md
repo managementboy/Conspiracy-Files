@@ -277,6 +277,50 @@ order between installed mods is not fixed and can reorder itself across
 sessions (regulator's finding), so a co-install pairing that passed once
 is not guaranteed to keep passing.
 
+**Run for real, 2026-09-26**: "Conspiracy Files: No Help" was actually
+built (`mod-nohelp/` at the repo root — module A minus
+`Organiser.lua`/`CaseFile.lua`, all of module B, `Generated/*`,
+`Mystery/*`, the 7 confirmed debug-only files dropped) and synced
+alongside the real original mod in this machine's own
+`~/Zomboid/mods/`, both listed active in `default.txt`, then booted
+together for real with `tools/autotest/boot_check.sh`. First run
+**failed** — `media/lua/shared/Fieldnote/Geometry.lua` came back
+"missing" from the load count, because the extraction script had copied
+that file into the new mod too (it belongs only to `OrganiserScreen.lua`,
+which isn't part of this mod at all) — two mods shipping the exact same
+relative Lua path is exactly the file-path collision section 0
+predicted, and it took a real two-mod boot to surface it; a single-mod
+check could not have. Deleted the stray file (never required by
+anything in the new mod — checked, not assumed), re-synced, re-ran:
+**157/157 files loaded, 0 errors, both mods' evidence album/DEAD-AIR
+boot lines printed independently** — confirmed live via `pz.sh eval`
+that `ConspiracyFiles`/`NHShared` are genuinely distinct table objects,
+`ConspiracyFiles.Organiser` exists (the original ships its PDA item),
+`NHShared.Organiser` is `nil` (the new mod correctly has none), and
+`CFInteract`/`NHInteract` hold their own separate, correct entry counts
+with zero cross-contamination.
+
+Two more real collision surfaces turned up during the actual rename,
+neither named in section 0's first pass — both fixed the same way as
+the 19 ModData tags:
+- **A PZ translation key**: `Tooltip_ConspiracyFiles_Recorded`, defined
+  in `shared/Translate/EN/Tooltip.json` and referenced from
+  `GeneratedRuntime.lua`. PZ's translation system is keyed by string
+  across every installed mod, the same as ModData — renamed to
+  `Tooltip_NHShared_Recorded` in both places.
+- **On-disk journal filenames**: `ConspiracyFiles_discoveries.txt`
+  (`DiscoveryLog.lua`) and `ConspiracyFiles_openings.txt`
+  (`OpeningMemoryStore.lua`) — plain files written to disk by name, not
+  ModData keys, but the same collision shape if two mods ever wrote to
+  the same filename in the same location. Renamed to the `NHShared_`
+  prefix.
+
+The general lesson for section 0's own checklist: **grep for the mod's
+own name as a bare string across every file type, not just `.lua`
+files and not just ModData-shaped calls** — `.json`, on-disk filenames
+in string literals, anywhere the old name could be load-bearing outside
+Lua's own global-table namespace.
+
 ## 5. Named traps
 
 - **Cloning `PDAAPI`'s shape onto the new front-end.** Attacker's own
