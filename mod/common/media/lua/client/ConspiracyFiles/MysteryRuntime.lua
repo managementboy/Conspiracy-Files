@@ -69,6 +69,7 @@ end
 ConspiracyFiles=ConspiracyFiles or {}
 local M=ConspiracyFiles.MysteryRuntime or {}
 ConspiracyFiles.MysteryRuntime=M
+CFEngine=CFEngine or {};CFEngine.MysteryRuntime=M
 
 local TAG="ConspiracyFiles.Mystery"
 local ITEM_MARK="cfMysteryId"

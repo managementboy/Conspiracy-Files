@@ -23,6 +23,7 @@
 ConspiracyFiles=ConspiracyFiles or {}
 local E=ConspiracyFiles.EvidencePickupHint or {}
 ConspiracyFiles.EvidencePickupHint=E
+CFInteract=CFInteract or {};CFInteract.EvidencePickupHint=E
 local CFLog=require("ConspiracyFiles/Log")
 local function log(message) CFLog.message("hint","hint",message) end
 local function safe(fn,...)

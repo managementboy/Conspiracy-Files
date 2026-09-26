@@ -15,6 +15,7 @@ ConspiracyFiles=ConspiracyFiles or {}
 if ConspiracyFiles.ClueCue and ConspiracyFiles.ClueCue.stop then ConspiracyFiles.ClueCue.stop() end
 local Q={}
 ConspiracyFiles.ClueCue=Q
+CFInteract=CFInteract or {};CFInteract.ClueCue=Q
 Q.Rules=Rules
 Q.TAG="ConspiracyFiles.ClueCue"
 Q.POLL_MS=500

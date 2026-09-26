@@ -22,6 +22,12 @@ local CFLog=require("ConspiracyFiles/Log")
 ConspiracyFiles=ConspiracyFiles or {}
 local F=ConspiracyFiles.CaseFile or {}
 ConspiracyFiles.CaseFile=F
+-- Provisional: CaseFile is a stage-3 straddler (docs/design/
+-- MODULE_SEPARATION_2026-09-26.md section 2.6) that splits into a
+-- carry/pickup half (A) and a case-content-assembly half (B). Filed
+-- under CFInteract for now, matching stage 1's provisional event-
+-- dispatcher choice, until the actual two-file split happens.
+CFInteract=CFInteract or {};CFInteract.CaseFile=F
 F.TYPE="Base.PhotoAlbum"
 -- Written into the item's own ModData, so "have they already been given one"
 -- survives a reload without any saved state of ours.

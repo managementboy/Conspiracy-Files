@@ -24,6 +24,7 @@ local CFLog=require("ConspiracyFiles/Log")
 ConspiracyFiles=ConspiracyFiles or {}
 local O=ConspiracyFiles.Organiser or {}
 ConspiracyFiles.Organiser=O
+CFInteract=CFInteract or {};CFInteract.Organiser=O
 O.TYPE="ConspiracyFiles.Organiser"
 -- On the item, not in a saved flag of ours, so "already issued" survives a
 -- reload exactly as the evidence album's mark does.

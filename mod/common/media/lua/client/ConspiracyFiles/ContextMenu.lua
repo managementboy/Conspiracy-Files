@@ -3,6 +3,7 @@ local Content=require("ConspiracyFiles/Content")
 ConspiracyFiles=ConspiracyFiles or {}
 ConspiracyFiles.ContextMenu=ConspiracyFiles.ContextMenu or {}
 local Menu=ConspiracyFiles.ContextMenu
+CFInteract=CFInteract or {};CFInteract.ContextMenu=Menu
 local function runtime() return ConspiracyFiles.Runtime end
 local function isItem(value)
     if not value or not instanceof then return false end

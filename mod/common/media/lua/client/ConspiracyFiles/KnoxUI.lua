@@ -19,6 +19,7 @@ local Font=BASE
 ConspiracyFiles=ConspiracyFiles or {}
 local K=ConspiracyFiles.KnoxUI or {}
 ConspiracyFiles.KnoxUI=K
+CFPDA=CFPDA or {};CFPDA.KnoxUI=K
 
 K.INK={0.15,0.17,0.13}
 K.DIM={0.38,0.42,0.33}

@@ -72,4 +72,5 @@ function DocumentPane:new(x,y,width,height)
     local o=ISPanel.new(self,x,y,width,height); o.background=false; o.border=false; return o
 end
 ConspiracyFiles.DocumentPane=DocumentPane
+CFPDA=CFPDA or {};CFPDA.DocumentPane=DocumentPane
 return DocumentPane

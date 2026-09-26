@@ -13,6 +13,7 @@ local CFLog=require("ConspiracyFiles/Log")
 ConspiracyFiles=ConspiracyFiles or {}
 local R=ConspiracyFiles.MapMediaRuntime or {}
 ConspiracyFiles.MapMediaRuntime=R
+CFEngine=CFEngine or {};CFEngine.MapMediaRuntime=R
 local TAG="ConspiracyFiles.MapMedia"
 local state,scheduler,ready,scan,metadata
 local destinations,targets={},{}

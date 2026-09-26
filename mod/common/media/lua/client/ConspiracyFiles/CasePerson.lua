@@ -34,6 +34,7 @@ local Budget=require("ConspiracyFiles/SaveBudget")
 ConspiracyFiles=ConspiracyFiles or {}
 local P=ConspiracyFiles.CasePerson or {}
 ConspiracyFiles.CasePerson=P
+CFEngine=CFEngine or {};CFEngine.CasePerson=P
 P.CARD="Base.IDcard"
 -- Stamped on the zombie, so one body is bound once. Stamped on the card too, so
 -- the binding can be recognised later. A reload wipes the zombie's copy; the

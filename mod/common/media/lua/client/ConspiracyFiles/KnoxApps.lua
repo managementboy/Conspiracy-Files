@@ -18,6 +18,7 @@ local Rows=require("ConspiracyFiles/EvidenceRows")
 ConspiracyFiles=ConspiracyFiles or {}
 local A=ConspiracyFiles.KnoxApps or {}
 ConspiracyFiles.KnoxApps=A
+CFPDA=CFPDA or {};CFPDA.KnoxApps=A
 
 local function safe(fn,...) local ok,v=pcall(fn,...) if ok then return v end end
 

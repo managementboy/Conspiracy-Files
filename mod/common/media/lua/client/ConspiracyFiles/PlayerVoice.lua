@@ -17,6 +17,7 @@
 ConspiracyFiles=ConspiracyFiles or {}
 local V=ConspiracyFiles.PlayerVoice or {}
 ConspiracyFiles.PlayerVoice=V
+CFInteract=CFInteract or {};CFInteract.PlayerVoice=V
 -- Load the pickup hint explicitly. It installs its own action wrappers at file
 -- scope and nothing else references it, which is exactly how PlayerVoice itself
 -- silently never loaded (86ade2c). PlayerVoice is required by DiscoveryLog, so

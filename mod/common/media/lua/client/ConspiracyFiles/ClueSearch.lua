@@ -21,6 +21,7 @@ local CFLog=require("ConspiracyFiles/Log")
 ConspiracyFiles=ConspiracyFiles or {}
 local C=ConspiracyFiles.ClueSearch or {}
 ConspiracyFiles.ClueSearch=C
+CFInteract=CFInteract or {};CFInteract.ClueSearch=C
 C.Rules=Rules
 local function log(message) CFLog.message("search","note",message) end
 

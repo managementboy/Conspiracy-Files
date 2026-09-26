@@ -13,6 +13,7 @@ local Selection = require("ConspiracyFiles/T3Selection")
 local Reach = require("ConspiracyFiles/Reach")
 local T = { version = "T3-nearby-2", reachPolicy = "P4-R55" }
 ConspiracyFiles.T3Nearby = T
+CFEngine=CFEngine or {};CFEngine.T3Nearby = T
 local job, tick
 -- THE BUILDING LIST NEVER CHANGES; ONLY WHERE THE SURVIVOR IS STANDING.
 -- Every attempt at a case re-walked all 9,978 buildings and asked each one

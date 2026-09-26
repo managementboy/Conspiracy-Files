@@ -4,6 +4,7 @@ require("ConspiracyFiles/MapMediaRuntime")
 ConspiracyFiles=ConspiracyFiles or {}
 local A=ConspiracyFiles.AutomaticInvestigations or {}
 ConspiracyFiles.AutomaticInvestigations=A
+CFEngine=CFEngine or {};CFEngine.AutomaticInvestigations=A
 -- afterCompletionHours (P4-R121): after a case finishes, the next one waits
 -- this long, on top of minGapHours, so answers given right away can steer it.
 A.config={minGapHours=24,afterCompletionHours=1,retryTicks=600}

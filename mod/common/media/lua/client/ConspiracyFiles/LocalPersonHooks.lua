@@ -2,6 +2,7 @@ local Integration=require("ConspiracyFiles/LocalPersonIntegration")
 ConspiracyFiles=ConspiracyFiles or {}
 local H=ConspiracyFiles.LocalPersonHooks or {}
 ConspiracyFiles.LocalPersonHooks=H
+CFInteract=CFInteract or {};CFInteract.LocalPersonHooks=H
 function H.installDoor()
     if H.doorInstalled then return end
     local ok=pcall(require,"TimedActions/ISOpenCloseDoor")

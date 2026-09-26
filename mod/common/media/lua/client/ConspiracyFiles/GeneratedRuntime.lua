@@ -19,6 +19,7 @@ require("ConspiracyFiles/DiscoveryLog")
 ConspiracyFiles=ConspiracyFiles or {}
 local R=ConspiracyFiles.GeneratedRuntime or {}
 ConspiracyFiles.GeneratedRuntime=R
+CFEngine=CFEngine or {};CFEngine.GeneratedRuntime=R
 if R.loaded then return R end
 local sessions,scheduler,wrapper,ticks,preparing
 -- Present only while the first case created in this running game is being

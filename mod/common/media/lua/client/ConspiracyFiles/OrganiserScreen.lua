@@ -52,6 +52,7 @@ require("ISUI/ISPanel")
 ConspiracyFiles=ConspiracyFiles or {}
 local S=ConspiracyFiles.OrganiserScreen or {}
 ConspiracyFiles.OrganiserScreen=S
+CFPDA=CFPDA or {};CFPDA.OrganiserScreen=S
 
 local function log(message) CFLog.message("casefile","note",message) end
 local function safe(fn,...) local ok,v=pcall(fn,...) if ok then return v end end

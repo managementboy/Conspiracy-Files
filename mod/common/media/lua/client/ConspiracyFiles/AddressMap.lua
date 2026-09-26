@@ -4,6 +4,7 @@ local V=require("ConspiracyFiles/Validator")
 ConspiracyFiles=ConspiracyFiles or {}
 if ConspiracyFiles.AddressMap and ConspiracyFiles.AddressMap.stop then ConspiracyFiles.AddressMap.stop() end
 local M={}; ConspiracyFiles.AddressMap=M
+CFEngine=CFEngine or {};CFEngine.AddressMap=M
 local TAG="ConspiracyFiles.AddressBook.Muldraugh"
 local job,handler,book,byId,buckets,peak=nil,nil,nil,{}, {},0
 -- Where the survivor is, for AD-10's out-of-town town names (see M.currentTown).

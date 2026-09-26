@@ -11,6 +11,7 @@ local CFLog=require("ConspiracyFiles/Log")
 ConspiracyFiles=ConspiracyFiles or {}
 local W=ConspiracyFiles.SearchedContainerWatch or {}
 ConspiracyFiles.SearchedContainerWatch=W
+CFInteract=CFInteract or {};CFInteract.SearchedContainerWatch=W
 
 -- `page` is the class table (ISInventoryPage); a test hands in its own.
 function W.install(page)

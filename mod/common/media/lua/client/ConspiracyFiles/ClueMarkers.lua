@@ -5,6 +5,7 @@ local Cases=require("ConspiracyFiles/Generated/SuccessiveCases")
 ConspiracyFiles=ConspiracyFiles or {}
 if ConspiracyFiles.ClueMarkers then ConspiracyFiles.ClueMarkers.stop() end
 local M={};ConspiracyFiles.ClueMarkers=M
+CFInteract=CFInteract or {};CFInteract.ClueMarkers=M
 local TAG="ConspiracyFiles.ClueMarkers"
 local handler,last= nil,0
 local pens={"Pen","Pencil","RedPen","BluePen","GreenPen"}

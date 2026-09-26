@@ -6,6 +6,7 @@ local World=require("ConspiracyFiles/WorldAccess")
 ConspiracyFiles=ConspiracyFiles or {}
 local R=ConspiracyFiles.VanillaSceneRuntime or {}
 ConspiracyFiles.VanillaSceneRuntime=R
+CFEngine=CFEngine or {};CFEngine.VanillaSceneRuntime=R
 if R.loaded then return R end
 
 local state=Observer.new()

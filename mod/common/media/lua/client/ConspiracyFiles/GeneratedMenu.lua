@@ -4,6 +4,7 @@ local Actions=require("ConspiracyFiles/ClueActions")
 ConspiracyFiles=ConspiracyFiles or {}
 local M=ConspiracyFiles.GeneratedMenu or {}
 ConspiracyFiles.GeneratedMenu=M
+CFInteract=CFInteract or {};CFInteract.GeneratedMenu=M
 -- ONE READING SURFACE (P4-R79, P4-R128): the organiser the survivor carries.
 -- The hand is the switch (Organiser.handTick): this only asks the survivor to
 -- take the machine out, and Knox.OS opens when it reaches their hand. No

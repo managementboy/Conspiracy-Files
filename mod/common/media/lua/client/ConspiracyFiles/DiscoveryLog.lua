@@ -12,6 +12,7 @@ require("ConspiracyFiles/PlaceVisitLog")
 ConspiracyFiles=ConspiracyFiles or {}
 local D=ConspiracyFiles.DiscoveryLog or {}
 ConspiracyFiles.DiscoveryLog=D
+CFEngine=CFEngine or {};CFEngine.DiscoveryLog=D
 local TAG="ConspiracyFiles.DiscoveryLedger"
 
 local function root()
