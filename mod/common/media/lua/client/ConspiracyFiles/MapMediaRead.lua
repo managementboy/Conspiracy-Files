@@ -3,6 +3,7 @@ local CFLog=require("ConspiracyFiles/Log")
 ConspiracyFiles=ConspiracyFiles or {}
 local H=ConspiracyFiles.MapMediaRead or {}
 ConspiracyFiles.MapMediaRead=H
+CFEngine=CFEngine or {};CFEngine.MapMediaRead=H
 local function pack(...) return {n=select("#",...),...} end
 local function allowed()
     return not (isClient and isClient()) and not (isServer and isServer())

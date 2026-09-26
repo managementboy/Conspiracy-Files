@@ -9,6 +9,7 @@ local Budget=require("ConspiracyFiles/SaveBudget")
 ConspiracyFiles=ConspiracyFiles or {}
 local L=ConspiracyFiles.BodyOutfitLog or {}
 ConspiracyFiles.BodyOutfitLog=L
+CFEngine=CFEngine or {};CFEngine.BodyOutfitLog=L
 local TAG="ConspiracyFiles.BodyOutfitObservations"
 
 -- Why an outfit line did NOT appear. Every way to it is silent by design - a

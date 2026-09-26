@@ -16,6 +16,7 @@ local P={}
 -- index. A diagnostic nobody can turn on is not a diagnostic.
 ConspiracyFiles=ConspiracyFiles or {}
 ConspiracyFiles.LocalPersonIntegration=P
+CFInteract=CFInteract or {};CFInteract.LocalPersonIntegration=P
 local TAG="ConspiracyFiles.LocalPeople"
 local LEAD_TAG="ConspiracyFiles.ObservedKeyLeads"
 local queue,queued,ticks={},{},0

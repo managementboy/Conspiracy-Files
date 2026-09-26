@@ -9,6 +9,7 @@ local Model=require("ConspiracyFiles/KeyObservations")
 ConspiracyFiles=ConspiracyFiles or {}
 local O=ConspiracyFiles.KeyObserver or {}
 ConspiracyFiles.KeyObserver=O
+CFEngine=CFEngine or {};CFEngine.KeyObserver=O
 local TAG="ConspiracyFiles.KeyObservations"
 local function log(message) CFLog.message("key","key",message) end
 

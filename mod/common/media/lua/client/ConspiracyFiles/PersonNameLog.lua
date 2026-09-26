@@ -8,6 +8,7 @@ local Budget=require("ConspiracyFiles/SaveBudget")
 ConspiracyFiles=ConspiracyFiles or {}
 local L=ConspiracyFiles.PersonNameLog or {}
 ConspiracyFiles.PersonNameLog=L
+CFEngine=CFEngine or {};CFEngine.PersonNameLog=L
 local TAG="ConspiracyFiles.PersonNameObservations"
 
 local function root()

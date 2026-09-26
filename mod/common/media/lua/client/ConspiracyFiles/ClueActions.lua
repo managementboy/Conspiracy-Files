@@ -11,6 +11,7 @@
 ConspiracyFiles=ConspiracyFiles or {}
 local A=ConspiracyFiles.ClueActions or {}
 ConspiracyFiles.ClueActions=A
+CFInteract=CFInteract or {};CFInteract.ClueActions=A
 local CFLog=require("ConspiracyFiles/Log")
 local function log(message) CFLog.message("case","note",message) end
 if not ISBaseTimedAction then pcall(require,"TimedActions/ISBaseTimedAction") end

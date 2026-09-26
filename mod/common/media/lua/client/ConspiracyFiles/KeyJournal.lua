@@ -5,6 +5,7 @@ local Log = require("ConspiracyFiles/DiscoveryLog")
 local J = {}
 ConspiracyFiles = ConspiracyFiles or {}
 ConspiracyFiles.KeyJournal = J
+CFEngine=CFEngine or {};CFEngine.KeyJournal = J
 local TAG = "ConspiracyFiles.KeyConnections"
 
 local function current()
