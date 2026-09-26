@@ -23,4 +23,28 @@ function Dispatch.off(name, fn)
     return true
 end
 
+-- Module-owned semantic events (e.g. "organiser.open"), deliberately
+-- separate from on()/off() above: those wrap real PZ Events objects,
+-- these are names this mod's own modules define. Per docs/design/
+-- MODULE_EXTRACTION_BLUEPRINT_2026-09-26.md section 2 - A/B emit these
+-- instead of calling into a front-end directly, so a mod shipped without
+-- that front-end just means zero subscribers, not a nil-index error.
+local listeners = {}
+function Dispatch.subscribe(name, fn)
+    local list = listeners[name]
+    if not list then list = {}; listeners[name] = list end
+    list[#list + 1] = fn
+    return true
+end
+function Dispatch.emit(name, ...)
+    local list = listeners[name]
+    if not list then return 0 end
+    local n = 0
+    for _, fn in ipairs(list) do
+        local ok = pcall(fn, ...)
+        if ok then n = n + 1 end
+    end
+    return n
+end
+
 return Dispatch

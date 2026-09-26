@@ -19,4 +19,12 @@ CFPDA.PublicAPI=PublicAPI
 PublicAPI.OrganiserScreen=require("ConspiracyFiles/OrganiserScreen")
 PublicAPI.KnoxApps=require("ConspiracyFiles/KnoxApps")
 
+-- Force-loaded, not left to PZ's own directory scan: OrganiserPDABridge.lua
+-- is required by nothing else (a module reached only through the shared
+-- table can silently never exist - DiscoveryLog.lua's own comment, the
+-- same real risk here). It owns the two-way sync between Organiser.lua
+-- (module A) and this file's real screen; see its own header for why it
+-- can't require this file back at its own top level.
+require("ConspiracyFiles/OrganiserPDABridge")
+
 return PublicAPI

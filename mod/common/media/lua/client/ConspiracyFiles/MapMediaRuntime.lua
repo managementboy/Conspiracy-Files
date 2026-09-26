@@ -175,16 +175,14 @@ function R.read(id,item)
     -- The organiser must show the new lead at once. Reading a PRINT already
     -- invalidated the cached list here and reading a MAP did not, so the row
     -- this read creates could sit unseen behind a stale list.
-    local screen=require("ConspiracyFiles/PDAAPI").OrganiserScreen
-    if screen and screen.window then screen.window.cachedList=nil end
+    require("ConspiracyFiles/Events/EngineEvents").emit("discovery.changed")
     return true
 end
 function R.printRead(id)
     if not allowed() or not Catalogue.print(id) then return false end
     local next,changed=State.printRead(root(),id,hours())
     if changed and not save(next) then return false end
-    local screen=require("ConspiracyFiles/PDAAPI").OrganiserScreen
-    if screen and screen.window then screen.window.cachedList=nil end
+    require("ConspiracyFiles/Events/EngineEvents").emit("discovery.changed")
     return true
 end
 local function itemIdentity(item)
@@ -712,8 +710,7 @@ local function visitStep()
                 local next,changed=State.printVisit(root(),pid,hours())
                 if changed and save(next) then
                     log("reached the place named by the "..tostring(pid).." flyer")
-                    local screen=require("ConspiracyFiles/PDAAPI").OrganiserScreen
-                    if screen and screen.window then screen.window.cachedList=nil end
+                    require("ConspiracyFiles/Events/EngineEvents").emit("discovery.changed")
                 end
             end
         end

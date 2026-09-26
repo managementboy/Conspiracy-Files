@@ -21,16 +21,18 @@
 -- Every engine call is colon syntax on an explicit receiver and pcall-guarded:
 -- this runs from game-start events where a throw is silent and permanent.
 local CFLog=require("ConspiracyFiles/Log")
-local PDAAPI=require("ConspiracyFiles/PDAAPI")
 ConspiracyFiles=ConspiracyFiles or {}
 local O=ConspiracyFiles.Organiser or {}
 ConspiracyFiles.Organiser=O
 CFInteract=CFInteract or {};CFInteract.Organiser=O
--- STRADDLE: resolved to module A (docs/design/MODULE_SEPARATION_2026-09-26.md
--- section 2.6) - owns equip/hand state, genuinely an interaction concern.
--- Its 5 real reaches into module C (OrganiserScreen.open/.window,
--- KnoxApps.rememberMe) go through PDAAPI.lua, CFPDA's PublicAPI, not the
--- shared table.
+-- STRADDLE, corrected (docs/design/MODULE_EXTRACTION_BLUEPRINT_2026-09-26.md
+-- section 0/6): resolved to module A - owns equip/hand state, genuinely an
+-- interaction concern. Used to reach module C (PDAAPI.OrganiserScreen/
+-- KnoxApps) directly at 8 real call sites; now emits organiser.open/.close/
+-- .boot through InteractionEvents instead, and never requires PDAAPI at
+-- all. OrganiserPDABridge.lua (module C) owns the real PDAAPI calls and
+-- keeps O.on/O.screenBooting/O.lampOn honest - a mod shipped without
+-- module C simply never runs that bridge.
 O.TYPE="ConspiracyFiles.Organiser"
 -- On the item, not in a saved flag of ours, so "already issued" survives a
 -- reload exactly as the evidence album's mark does.
@@ -360,12 +362,13 @@ function O.read(player)
         log("organiser not read: "..tostring(why))
         return false,why
     end
-    local screen=PDAAPI.OrganiserScreen
-    if not screen or not screen.open then return false,"no reading surface loaded" end
     -- Already in the hand: open at once.
     local primary=safe(function() return player:getPrimaryHandItem() end)
     local secondary=safe(function() return player:getSecondaryHandItem() end)
-    if primary==item or secondary==item then safe(screen.open); log("organiser read"); return true end
+    if primary==item or secondary==item then
+        require("ConspiracyFiles/Events/InteractionEvents").emit("organiser.open")
+        log("organiser read"); return true
+    end
     -- Otherwise take it in hand first, the way the game equips anything, and
     -- open when the survivor actually has it. Never force the item into the
     -- slot: an equip that the player interrupts must leave them holding what
@@ -405,14 +408,27 @@ end
 -- the last tick cannot have changed either, so asking the engine for it sixty
 -- times a second answers the same question over and over.
 --
--- Behaviour is deliberately identical: the window comparison below still runs
+-- O.on / O.screenBooting / O.lampOn are this module's OWN mirror of the
+-- real screen's state - never read from PDAAPI here at all. Kept in sync by
+-- OrganiserPDABridge.lua (module C), which owns the two-way relationship:
+-- it turns O.wantOpen/wantClose/wantBoot emits (below) into real
+-- PDAAPI.OrganiserScreen calls, AND it is the one that notices "closed by
+-- something other than the hand" and writes O.on back to false - not this
+-- file reading screen.window directly, per docs/design/
+-- MODULE_EXTRACTION_BLUEPRINT_2026-09-26.md section 0/6. A mod shipped
+-- without module C simply never runs that bridge, so O.on/O.lampOn stay at
+-- their honest default (false, nothing on) and this file never requires
+-- PDAAPI at all.
+O.on=false
+O.screenBooting=false
+O.lampOn=false
+
+-- Behaviour is deliberately identical: the state comparison below still runs
 -- every tick, because the screen can be closed by something other than the
--- hand and this handler is what notices.
+-- hand and the bridge (not this handler any more) is what notices.
 function O.handTick()
     local player=getPlayer and getPlayer()
     if not player then return end
-    local screen=PDAAPI.OrganiserScreen
-    if not screen then return end
     -- Either hand (owner, Windows, 2026-09-14: "the left hand should leave the
     -- PDA open"). Held in the off hand it stays open beside a one-handed weapon;
     -- the cost moves to that hand - no torch, and a two-handed weapon fills
@@ -427,17 +443,18 @@ function O.handTick()
             or (secondary~=nil and safe(secondary.getFullType,secondary)==O.TYPE)
     end
     O.lastPrimary,O.lastSecondary,O.lastOurs=primary,secondary,ours
-    if ours and not screen.window then
-        if O.booting and screen.boot then
+    local Events=require("ConspiracyFiles/Events/InteractionEvents")
+    if ours and not O.on then
+        if O.booting then
             O.booting=false
-            safe(screen.boot)
+            Events.emit("organiser.boot")
             log("organiser in hand: Knox.OS booting")
         else
-            safe(screen.open)
+            Events.emit("organiser.open")
             log("organiser in hand: Knox.OS opened")
         end
-    elseif not ours and screen.window and not screen.window.booting then
-        safe(screen.close)
+    elseif not ours and O.on and not O.screenBooting then
+        Events.emit("organiser.close")
         log("organiser put away: Knox.OS closed")
     end
 end
@@ -456,9 +473,7 @@ end
 -- was stripped out of this file on 2026-09-12.
 O.LAMP_HOURS=10
 function O.lampTick()
-    local screen=PDAAPI.OrganiserScreen
-    local window=screen and screen.window
-    if not window or not window.on or not window.lamp then
+    if not O.on or not O.lampOn then
         O.lampAt=nil
         return
     end
@@ -501,8 +516,8 @@ function O.tick()
     local primary=player and safe(player.getPrimaryHandItem,player)
     if primary==pending.item then
         O.pendingOpen=nil
-        local screen=PDAAPI.OrganiserScreen
-        if screen and screen.open then safe(screen.open); log("organiser read") end
+        require("ConspiracyFiles/Events/InteractionEvents").emit("organiser.open")
+        log("organiser read")
     elseif pending.tries>600 then
         O.pendingOpen=nil
         log("organiser: never reached the hand")
@@ -618,8 +633,7 @@ if Events and Events.OnGameStart and not O.bootHooked then
     require("ConspiracyFiles/Events/InteractionEvents").on("OnGameStart", function()
         if multiplayer() then log("organiser: multiplayer, not issued"); return end
         safe(function()
-            local apps=PDAAPI.KnoxApps
-            if apps and apps.rememberMe then apps.rememberMe() end
+            require("ConspiracyFiles/Events/InteractionEvents").emit("organiser.rememberMe")
             local player=getPlayer and getPlayer()
             local item=O.held(player)
             if not player or not item then return end

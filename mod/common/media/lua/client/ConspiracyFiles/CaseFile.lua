@@ -20,22 +20,25 @@
 -- setFavorite only stops it being discarded by accident.
 local CFLog=require("ConspiracyFiles/Log")
 local EngineAPI=require("ConspiracyFiles/EngineAPI")
-local PDAAPI=require("ConspiracyFiles/PDAAPI")
 ConspiracyFiles=ConspiracyFiles or {}
 local F=ConspiracyFiles.CaseFile or {}
 ConspiracyFiles.CaseFile=F
 CFInteract=CFInteract or {};CFInteract.CaseFile=F
--- STRADDLE, corrected: section 2.6 of docs/design/MODULE_SEPARATION_
--- 2026-09-26.md calls this a two-way split (carry/pickup = A,
--- case-content-assembly = B). Reading the real file end to end for this
--- resolution found no case-content-assembly logic here at all - every
--- line is the physical album item (create/mark/name/favourite), the
+-- STRADDLE, corrected twice now: section 2.6 of docs/design/
+-- MODULE_SEPARATION_2026-09-26.md calls this a two-way split (carry/
+-- pickup = A, case-content-assembly = B). Reading the real file end to
+-- end found no case-content-assembly logic here at all - every line is
+-- the physical album item (create/mark/name/favourite), the
 -- inventory-panel open retry, and moving RECOGNISED evidence into it.
--- Its only two cross-module touches are read-only queries (B's
--- isRecognised, C's window-open check), resolved below through
--- EngineAPI/PDAAPI like the other straddlers. Filed as one file, wholly
--- module A - not split. The design doc's own claim was wrong; fixed in
--- section 2.6 rather than forcing a split with no real B-half to justify it.
+-- Filed as one file, wholly module A - not split.
+--
+-- Its window-open check used to reach module C's PDAAPI directly; per
+-- docs/design/MODULE_EXTRACTION_BLUEPRINT_2026-09-26.md section 3, the
+-- actual fact this file needs ("is the survivor occupied reading
+-- something") belongs to module A, not to asking C anything - Organiser.
+-- lua now owns it as O.on. Read through InteractionAPI, module A's own
+-- sanctioned door, not a raw require of Organiser.lua.
+local InteractionAPI=require("ConspiracyFiles/InteractionAPI")
 F.TYPE="Base.PhotoAlbum"
 -- Written into the item's own ModData, so "have they already been given one"
 -- survives a reload without any saved state of ours.
@@ -214,8 +217,7 @@ function F.fileEvidence()
     local now=getTimeInMillis and getTimeInMillis() or 0
     if F.filedAt and now-F.filedAt<F.FILE_EVERY_MS then return 0 end
     F.filedAt=now
-    local screen=PDAAPI.OrganiserScreen
-    if screen and screen.window and screen.window.on then return 0 end
+    if InteractionAPI.Organiser and InteractionAPI.Organiser.on then return 0 end
     local player=getPlayer and getPlayer()
     if not player then return 0 end
     local album=F.held(player)

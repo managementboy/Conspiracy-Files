@@ -24,4 +24,26 @@ function Dispatch.off(name, fn)
     return true
 end
 
+-- Module-owned semantic events, deliberately separate from on()/off()
+-- above - see InteractionEvents.lua's identical addition for the full
+-- rationale (docs/design/MODULE_EXTRACTION_BLUEPRINT_2026-09-26.md
+-- section 2).
+local listeners = {}
+function Dispatch.subscribe(name, fn)
+    local list = listeners[name]
+    if not list then list = {}; listeners[name] = list end
+    list[#list + 1] = fn
+    return true
+end
+function Dispatch.emit(name, ...)
+    local list = listeners[name]
+    if not list then return 0 end
+    local n = 0
+    for _, fn in ipairs(list) do
+        local ok = pcall(fn, ...)
+        if ok then n = n + 1 end
+    end
+    return n
+end
+
 return Dispatch
