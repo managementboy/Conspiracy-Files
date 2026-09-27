@@ -1,0 +1,75 @@
+[
+  {
+    "id": "t0011-01",
+    "kind": "written",
+    "pieces": [
+      "idcard"
+    ],
+    "person": "person-b",
+    "rival_reading": "A changed shift credential and return rule may follow an ordinary field warning; the late copy does not prove officials mishandled a containment order.",
+    "gloss": "A dispatch credential records a late instruction revision beside a private meal note.",
+    "title": "Eli Navarro",
+    "body": "Revised route copy arrived after the first was sent; key due at close. Dispatch clerk, late shift. Reverse note: save half the lunch for my son.",
+    "where": [
+      {
+        "place": "office",
+        "spot": "furniture",
+        "lean": "containment",
+        "rival": "agricultural"
+      }
+    ],
+    "axioms": {
+      "containment": [
+        "c-warning",
+        "c-orders"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-obscured"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0011",
+      "adhd_run": "docs/writer-only/adhd/2026-09-27-T0011/"
+    }
+  },
+  {
+    "id": "t0011-02",
+    "kind": "set",
+    "pieces": [
+      "Clipboard",
+      "KeyRing"
+    ],
+    "person": "person-b",
+    "rival_reading": "An agricultural warning could travel through the same desk; an old copy and late receipt may reflect routine message delay rather than a failed evacuation.",
+    "gloss": "An earlier route instruction remains beneath its revision beside a personal trace and a key return.",
+    "title": "Revision filed beneath the old order",
+    "body": "Eli's route sheet keeps the earlier road instruction beneath the revision. A child's drawing is folded inside the clipboard; the only completed field counts returned keys, not deliveries.",
+    "where": [
+      {
+        "place": "office",
+        "spot": "furniture",
+        "lean": "containment",
+        "rival": "agricultural"
+      }
+    ],
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0011",
+      "adhd_run": "docs/writer-only/adhd/2026-09-27-T0011/"
+    }
+  }
+]
