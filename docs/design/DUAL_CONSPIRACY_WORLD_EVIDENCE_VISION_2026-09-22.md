@@ -1,5 +1,15 @@
 # Dual Conspiracy and World-Evidence Vision
 
+> **Superseded, 2026-09-27.** The specific two-theory pair proposed in this
+> document is retired and must not be reused in any generated content. The
+> current, owner-selected pair is Theory A (Containment Cover-up) and
+> Theory B (Agricultural Program Malfunction) — see
+> `docs/design/NO_HELP_CONSPIRACY_DESIGN_2026-09-26.md` section 1a. The
+> rest of this document's structural ideas (world-carried evidence over
+> exposition documents, both theories fitting the same established facts,
+> observing rather than overriding vanilla scenes) remain a valid prior
+> reference and are not retired — only the named premise pair below is.
+
 **Status:** Owner-approved direction; first implementation slice built in `DEV-0.47.6-functional-opening-key`
 **Date:** 2026-09-22
 **Implementation update:** 2026-09-23
