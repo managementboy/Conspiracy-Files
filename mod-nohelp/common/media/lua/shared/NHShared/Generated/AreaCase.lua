@@ -61,7 +61,7 @@ end
 -- has it; a placeholder clue gets a neutral placeholder, never invented story.
 function M.docFrom(pick,clue,areaId)
     local doc={id=M.docId(areaId,pick.clue,pick.copy),locationId=areaId,clue=pick.clue,copy=pick.copy,
-        lean=pick.lean,rival=pick.rival,spot=pick.spot}
+        lean=pick.lean,rival=pick.rival,spot=pick.spot,person=clue.person}
     if clue.kind=="set" then
         doc.kind=clue.pieces[1]
         doc.members=membersOf(clue.pieces)
@@ -162,6 +162,7 @@ function M.validate(case)
         copies[key]=true
         if not LEAN[d.lean] or not LEAN[d.rival] or d.lean==d.rival then return false,"invalid lean" end
         if not SPOT[d.spot] then return false,"invalid spot" end
+        if d.person~=nil and (type(d.person)~="string" or #d.person==0 or #d.person>40) then return false,"invalid person" end
         if not Kinds.get(d.kind) then return false,"invalid clue kind" end
         if not text(d.title,M.MAX_TITLE) or not text(d.body,M.MAX_BODY) then return false,"invalid clue text" end
         if d.members~=nil then
@@ -178,9 +179,10 @@ function M.validate(case)
             if d.copy~=1 then return false,"a written clue is placed once" end
             local k=Kinds.get(d.kind)
             if k.capacity=="object" then return false,"a written clue is carried on a written kind" end
+            if not Kinds.fits(d.kind,d.body) then return false,"a clue's text does not fit its carrier" end
         end
         for k in pairs(d) do
-            if not ({id=1,locationId=1,clue=1,copy=1,lean=1,rival=1,spot=1,kind=1,members=1,quantity=1,title=1,body=1})[k] then
+            if not ({id=1,locationId=1,clue=1,copy=1,lean=1,rival=1,spot=1,kind=1,members=1,quantity=1,title=1,body=1,person=1})[k] then
                 return false,"unknown clue field "..tostring(k)
             end
         end

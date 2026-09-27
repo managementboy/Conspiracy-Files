@@ -30,6 +30,9 @@ M.WRITTEN_CARRIERS={Note=true}
 -- so a later list never rewrites an area already decided.
 M.VERSION="nohelp-clues-0"
 
+-- The written kinds that are a person's card.
+M.CARD_KINDS={idcard=true,businesscard=true}
+
 M.clues={}
 
 local function set(list) local out={}; for _,v in ipairs(list) do out[v]=true end; return out end
@@ -51,6 +54,10 @@ function M.validClue(c)
         if not carrier or carrier.capacity=="object" then
             return false,c.id..": a written clue is carried on a written kind, not "..tostring(c.pieces[1])
         end
+        -- A card holds a card's worth of text, never a letter's.
+        if c.body~=nil and not Kinds.fits(c.pieces[1],c.body) then
+            return false,c.id..": its text does not fit on a "..c.pieces[1]
+        end
     end
     if c.kind=="set" then
         if #c.pieces<2 or #c.pieces>4 then return false,c.id..": a set holds 2-4 pieces" end
@@ -61,6 +68,11 @@ function M.validClue(c)
         return false,c.id..": a written clue is carried on one item"
     end
     if type(c.where)~="table" or #c.where<1 then return false,c.id..": goes nowhere" end
+    -- A person thread (owner, 2026-09-27): clues about one person share a
+    -- person id. An id, never a name - the name lives in the authored text.
+    if c.person~=nil and (type(c.person)~="string" or not c.person:find("^[%w%-_]+$") or #c.person>40) then
+        return false,c.id..": a person is named by a short id"
+    end
     for _,w in ipairs(c.where) do
         if not PLACE[w.place] then return false,c.id..": unknown place "..tostring(w.place) end
         if not SPOT[w.spot] then return false,c.id..": unknown spot "..tostring(w.spot) end
@@ -89,6 +101,23 @@ function M.lint(list)
         end
     end
     if #list==0 then return true end
+    -- Every person has exactly one identity card or business card among their
+    -- clues, and at least one other clue that mentions them: a card alone is
+    -- only a name, a mention alone is nobody.
+    local cards,mentions={}, {}
+    for _,c in ipairs(list) do
+        if c.person then
+            if M.CARD_KINDS[c.pieces[1]] then cards[c.person]=(cards[c.person] or 0)+1
+            else mentions[c.person]=(mentions[c.person] or 0)+1 end
+        end
+    end
+    for person,n in pairs(cards) do
+        if n~=1 then return false,"person "..person.." has "..n.." cards" end
+        if not mentions[person] then return false,"person "..person.." is never mentioned by another clue" end
+    end
+    for person in pairs(mentions) do
+        if not cards[person] then return false,"person "..person.." has no card" end
+    end
     if sets*2<#list then return false,"fewer than half of the clues are object sets" end
     -- Every kind of place used needs an object SET for each conspiracy: sets
     -- are what may be placed again (no maximum), so a place and conspiracy
