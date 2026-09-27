@@ -151,6 +151,8 @@ Silent reinterpretation is how "integrated into the conspiracies" quietly
 turns into "overwrote what vanilla already established" without anyone
 deciding that on purpose.
 
+**Blind-play protection.** The owner has chosen to remain unspoiled. The content writer owns vanilla-scene research, selection, and verification. Never ask the owner to discover or confirm a scene, and do not reveal scene names, coordinates, sprites, or evidence details in progress updates. Use a separate test setup for any in-game verification; never use the owner's playthrough.
+
 **Fingerprint the vanilla content version being cited.** PZ patches
 change spawn tables and map annotations over time. Recording which
 game version's placement a piece of hand-authored evidence assumed means
