@@ -247,6 +247,17 @@ plan's directive check):
   over the real list of vanilla scenes; the first hand-checked scene (Jackie
   Jaye's news studio) can be built for either conspiracy, how best to be
   honed with an `/adhd` run.
+- **Which vanilla scenes hold clues** (owner, same session, after an `/adhd`
+  run over all 140 vanilla scene kinds): scenes of suicide or self-harm are
+  allowed (*"it fits well into any conspiracy that someone has taken their
+  life or had to hurt themselves"*); killer scenes are allowed; party, meal
+  and comedy scenes hold clues just as much as any other; Kate and Baldspot
+  and Sir Twiggy are left alone entirely. A scene kind gets no clue only
+  when there is nothing to put one in (animals with no vehicle, a named
+  zombie alone, the never-built base class, generic house dressing). A clue
+  never goes on a vanilla named character's body or ID. Jackie Jaye's studio:
+  lean random per world, one clue version per conspiracy, in a studio desk or
+  cabinet other than the one vanilla uses.
 - **No maximum, for real.** Once the written clues are all placed, object sets
   may be placed again elsewhere as new copies with new stamps. This is not a
   respawn: a consumed copy never returns (DR-20260927-WORLD-KEEPS-EVERYTHING
