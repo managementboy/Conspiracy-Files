@@ -170,6 +170,16 @@ plan's directive check):
   the hint, map marks and the clue menu run in every single-player game, no
   longer only in debug mode. Debug-only shortcuts and hidden-state
   diagnostics stay debug-only. Multiplayer stays out of scope.
+- **Annotated maps change the running game** (owner, same session): *"Reading
+  an annotated map changes the running game. It gives the player a reason to
+  leave the comfort of the current safe house by promising to give an answer
+  to any of the conspiracies. A promise not to be kept."* This replaces the
+  earlier "reading decides only when" rule for maps; how it works is to be
+  honed with an `/adhd` run and brought back. Settled with it: a marked place
+  leans toward its map's conspiracy but holds at least 3 clues, one of each
+  side; **every** mark on a map gets clues, and those clues are written from
+  the text of the map's own annotations; places named on vanilla flyers and
+  brochures become clue places too, now.
 - **No maximum, for real.** Once the written clues are all placed, object sets
   may be placed again elsewhere as new copies with new stamps. This is not a
   respawn: a consumed copy never returns (DR-20260927-WORLD-KEEPS-EVERYTHING
