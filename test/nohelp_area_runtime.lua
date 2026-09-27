@@ -182,4 +182,135 @@ assert(#root.case.areas==1,"a place with nothing to give is not decided")
 local src=assert(io.open("mod-nohelp/common/media/lua/client/NHShared/GeneratedRuntime.lua","rb")):read("*a")
 local gate=src:match("local function allowed%(%).-\nend")
 assert(gate and not gate:find("getDebug",1,true),"the runtime runs in normal single-player play")
-print("nohelp area runtime: world record bootstrapped once, nearby places decided, own-kind spots only")
+
+-- NH-D6 ANNOTATED MAPS INCLUDED (task 3 plan, step 4). Every mark of every
+-- vanilla map is a clue place (Generated/MapSites). A map read decides all its
+-- marks' places; coming within R.MAP_NEAR_TILES decides one too, read or not;
+-- either way the place, its lean and its number are the world's.
+local D6="NH-D6"
+local Sites=require("NHShared/Generated/MapSites")
+local Trails=require("NHShared/Generated/Trails")
+local Pick=require("NHShared/Generated/Pick")
+assert(src:find("not mapSites().byArea[site.id]",1,true),D6..": the nearby scan leaves map places to the map path")
+local mapPath="mod-nohelp/common/media/lua/client/NHShared/MapMediaRuntime.lua"
+local mapSrc=read(mapPath)
+for _,gone in ipairs({"ZombRand","OnFillContainer","OnRefreshInventoryWindowContainers","AddItem","offerContainer","nextFragment"}) do
+    assert(not mapSrc:find(gone,1,true),D6..": the map system no longer places its own documents ("..gone..")")
+end
+package.loaded["NHShared/GeneratedRuntime"]=R
+local MapRuntime=dofile(mapPath)
+-- Twelve placeholder sets for map-named places, both conspiracies.
+local marked={}
+for i=1,12 do
+    local lean=i<=6 and "containment" or "agricultural"
+    marked[i]={id=string.format("M%02d",i),kind="set",pieces={"Rope","Bleach"},
+        where={{place="mapNamed",spot="furniture",lean=lean,rival=lean=="containment" and "agricultural" or "containment"}}}
+end
+Manifest.clues=marked
+local function newWorld()
+    store["NHShared.Generated.G2"]=nil; store["NHShared.MapMedia"]=nil
+    MapRuntime.invalidate()
+    fire("OnGameStart")
+    local r=store["NHShared.Generated.G2"].campaign.canonical
+    assert(r.case.seed==778,"every world here has the same seed")
+end
+local function world() return store["NHShared.Generated.G2"].campaign.canonical end
+local function areaOf(id)
+    for _,a in ipairs(world().case.areas) do if a.id==id then return a end end
+end
+local function leansOf(a)
+    local n={containment=0,agricultural=0}
+    for i=a.first,a.first+a.count-1 do local d=world().case.documents[i]; n[d.lean]=n[d.lean]+1 end
+    return n
+end
+-- A design with one mark, on a building no other map or flyer names.
+local design,entry
+for _,e in ipairs(Sites.sites) do
+    if e.kind=="building" and #e.marks==1 and e.marks[1].design then
+        local d=e.marks[1].design
+        local count=0
+        for _,x in ipairs(Sites.sites) do for _,m in ipairs(x.marks) do if m.design==d then count=count+1 end end end
+        if count==1 then design,entry=d,e; break end
+    end
+end
+assert(design,"the catalogue has a one-mark map")
+
+-- Read: far away, at hour 5.
+newWorld()
+px,py=1,1; hours=5
+assert(MapRuntime.read(design)==true,D6..": reading a map is recorded")
+for _=1,20 do fire("OnTick") end
+local read=areaOf(entry.areaId)
+assert(read and read.source=="read" and read.place=="mapNamed",D6..": reading a map decides its marked place, as map-named")
+assert(read.trail and read.trail.designs[1]==design and #read.trail.designs==1,D6..": the place records the map marking it")
+assert(read.trail.favour==Trails.favour(778,design),D6..": its lean is the world's for that map")
+local n=leansOf(read)
+assert(read.count>=3 and n[read.trail.favour]>=2 and n[Trails.other(read.trail.favour)]>=1,
+    D6..": at least 3 clues, leaning to the map's conspiracy, one of the other side")
+assert(read.count==math.max(3,Pick.targetCount(778,entry.areaId,Manifest.VERSION)),D6..": its number is the world's")
+local mapState=store["NHShared.MapMedia"].canonical
+local seed=mapState.trails[design].seed
+assert(seed==1+Pick.hash(Pick.key({778,design,Trails.VERSION,"trail"}))%2147483646,D6..": the trail seed comes from the world")
+-- Reading it again decides nothing new.
+local before=#world().case.areas
+assert(MapRuntime.read(design)==true); for _=1,20 do fire("OnTick") end
+assert(#world().case.areas==before,D6..": a place is decided once")
+
+-- Approach: the same world, never read, the survivor walks toward the place
+-- at another hour.
+newWorld()
+hours=50
+px,py=entry.bounds.x1-60,entry.bounds.y1
+assert(R.decideMapNear()>=1,D6..": coming within reach decides the place")
+for _=1,40 do fire("OnTick") end
+local near=areaOf(entry.areaId)
+assert(near and near.source=="near",D6..": decided on approach")
+assert(near.place==read.place and near.count==read.count and near.trail.favour==read.trail.favour
+    and near.trail.designs[1]==read.trail.designs[1],D6..": read or not, the same place, lean and number")
+-- Read later in this world: the same trail seed as the read at hour 5.
+assert(MapRuntime.read(design)==true)
+assert(store["NHShared.MapMedia"].canonical.trails[design].seed==seed,D6..": the trail seed does not depend on when the map is read")
+-- A world with no world record refuses the read rather than inventing a seed.
+local other
+for _,d in ipairs(Sites.designs) do if d~=design then other=d; break end end
+local keep=R.worldSeed
+R.worldSeed=function() return nil end
+assert(MapRuntime.read(other)==false,D6..": no world record, no read")
+R.worldSeed=keep
+assert(store["NHShared.MapMedia"].canonical.trails[other]==nil,D6..": nothing about the refused read is saved")
+
+-- A building that is both a map place and a police station is decided once,
+-- as a map-named place.
+newWorld()
+px,py=1,1
+local police
+for _,e in ipairs(Sites.sites) do if e.kind=="building" and e~=entry then police=e; break end end
+local b=police.bounds
+probe.result={rows={{kind="building",id=police.buildingId,categoryHint="public-service"}},
+    catalog={revision="t",locations={{id=police.areaId,areaId=police.areaId,name="Building",mapId="Muldraugh, KY",buildLine="42",
+        bounds={x1=b.x1,y1=b.y1,x2=b.x2,y2=b.y2,z=0},source={kind="map-research",reference="test"},
+        paperStorage="observed",containerTypes={"shelves"},excluded=false}}},
+    candidates={[police.areaId]={{x=b.x1,y=b.y1,z=0}}}}
+assert(R.decideNearby(true)==true)
+for _=1,20 do fire("OnTick") end
+assert(areaOf(police.areaId)==nil,D6..": the nearby scan does not decide a map place")
+assert(R.decideMapArea(police,"near")==true)
+for _=1,20 do fire("OnTick") end
+hours=hours+1
+assert(R.decideNearby(true)==true)
+for _=1,20 do fire("OnTick") end
+local count=0
+for _,a in ipairs(world().case.areas) do if a.id==police.areaId then count=count+1 end end
+assert(count==1 and areaOf(police.areaId).place=="mapNamed",D6..": decided once, as a map-named place")
+assert(select(2,R.decideMapArea(police,"read"))=="decided",D6..": and never again")
+-- The map place's row observed nothing: any fixed furniture is a spot there,
+-- still checked live when placed.
+local row
+for _,l in ipairs(world().case.locations) do if l.id==police.areaId then row=l end end
+assert(row.paperStorage=="unknown" and #row.containerTypes==0,D6..": a map place is decided without observed storage")
+assert(S.target({x=b.x1,y=b.y1,z=0,objectIndex=0,containerIndex=0,containerType="desk",sprite="s"},row),
+    D6..": any fixed container kind is a spot at a place decided from afar")
+assert(not S.target({x=b.x1,y=b.y1,z=0,objectIndex=0,containerIndex=0,containerType="desk",sprite="s"},
+    {bounds=row.bounds,paperStorage="observed",containerTypes={"shelves"}}),"an observed place still takes only what was seen")
+
+print("nohelp area runtime: world record bootstrapped once, nearby places decided, own-kind spots only; map places decided on read or approach alike")

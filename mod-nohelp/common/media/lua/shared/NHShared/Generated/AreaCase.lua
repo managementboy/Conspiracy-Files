@@ -13,6 +13,7 @@ local Pick=require("NHShared/Generated/Pick")
 local Manifest=require("NHShared/Mystery/Manifest")
 local Kinds=require("NHShared/Generated/EvidenceKinds")
 local Outfits=require("NHShared/BodyOutfitObservations")
+local Trails=require("NHShared/Generated/Trails")
 local M={KIND="nohelp-areas",SCHEMA=1,CASE_ID="nohelp:world"}
 M.MAX_TITLE=120
 M.MAX_BODY=8000
@@ -90,10 +91,27 @@ local function recount(case)
 end
 M.recount=recount
 
+-- A PLACE VANILLA MAPS MARK (task 3 plan, step 4; owner, 2026-09-27). It
+-- leans toward the conspiracy of the first map that marks it, in the static
+-- order of Generated/MapSites (never the order maps were read), and holds at
+-- least 3 clues with one of the other side; each further map marking it adds
+-- one more clue of the other side. The lean is the world's (Trails), so a
+-- map read or never read gives the place the same clues.
+-- designs: the maps marking the place, in static order. Returns the trail
+-- record and Pick's extra arguments, or nil for a place no map marks.
+function M.trailFor(seed,designs)
+    if type(designs)~="table" or #designs==0 then return nil end
+    local favour=Trails.favour(seed,designs[1])
+    if not favour then return nil end
+    local list={}; for i,d in ipairs(designs) do list[i]=d end
+    return {designs=list,favour=favour},{favour=favour,rivalMin=#designs,minCount=2+#designs}
+end
+
 -- Decide one area. args: {case, site (a Catalog row), place, clues, version,
--- hours, source}. Returns the new case and the new document ids, or nil and
--- "decided" (never again), "empty" (nothing to give: NOT a decision, so a
--- later clue list can still decide it) or another refusal.
+-- hours, source, designs (optional: the maps marking it)}. Returns the new
+-- case and the new document ids, or nil and "decided" (never again), "empty"
+-- (nothing to give: NOT a decision, so a later clue list can still decide it)
+-- or another refusal.
 function M.decide(args)
     local case,site=args.case,args.site
     if not M.isAreaCase(case) or type(site)~="table" or type(site.id)~="string" then return nil,"invalid" end
@@ -101,8 +119,12 @@ function M.decide(args)
     for _,a in ipairs(case.areas) do if a.id==site.id then return nil,"decided" end end
     local clues=args.clues or Manifest.clues
     local byId={}; for _,c in ipairs(clues) do byId[c.id]=c end
+    local trail,lean=M.trailFor(case.seed,args.designs)
+    if args.designs~=nil and not trail then return nil,"unknown map design" end
+    lean=lean or {}
     local picks,short=Pick.choose{clues=clues,area={id=site.id,place=args.place},
-        ledger=case.ledger,seed=case.seed,version=args.version}
+        ledger=case.ledger,seed=case.seed,version=args.version,
+        favour=lean.favour,rivalMin=lean.rivalMin,minCount=lean.minCount}
     if #picks==0 then return nil,"empty" end
     local next=copy(case)
     local known=false
@@ -116,7 +138,7 @@ function M.decide(args)
         ids[#ids+1]=doc.id
     end
     next.areas[#next.areas+1]={id=site.id,place=args.place,source=tostring(args.source or "nearby"),
-        version=tostring(args.version),decidedHours=args.hours or 0,first=first,count=#picks,short=short}
+        version=tostring(args.version),decidedHours=args.hours or 0,first=first,count=#picks,short=short,trail=trail}
     next.ledger=recount(next)
     return next,ids
 end
@@ -152,6 +174,19 @@ function M.validate(case)
             if type(d)~="table" or d.locationId~=a.id then return false,"area "..tostring(a.id).." does not own its clues" end
         end
         docIndex=docIndex+a.count
+        if a.trail~=nil then
+            local t=a.trail
+            if type(t)~="table" or not LEAN[t.favour] or type(t.designs)~="table" or #t.designs<1 or #t.designs>64 then
+                return false,"invalid map trail on area "..tostring(a.id)
+            end
+            for k in pairs(t) do if k~="designs" and k~="favour" then return false,"unknown map trail field "..tostring(k) end end
+            local n=0
+            for k,d in pairs(t.designs) do
+                n=n+1
+                if type(k)~="number" or type(d)~="string" or d=="" or #d>80 then return false,"invalid map trail design" end
+            end
+            if n~=#t.designs then return false,"invalid map trail design" end
+        end
         for j=1,i-1 do if case.areas[j].id==a.id then return false,"area decided twice" end end
     end
     if docIndex-1~=#case.documents then return false,"clues outside any area" end

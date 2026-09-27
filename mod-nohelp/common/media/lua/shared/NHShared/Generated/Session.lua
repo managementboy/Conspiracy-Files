@@ -168,6 +168,16 @@ function S.mobileAllowed(root,id)
     if not a or S.isMobile(a.target) then return false end
     return S.mobileCount(root)<S.MOBILE_PER_CASE
 end
+-- A PLACE DECIDED FROM AFAR (task 3 plan, step 4). A vanilla map's mark is
+-- decided when the map is read or the survivor heads toward it, usually from
+-- far away, so nothing was ever observed there: the row says paperStorage
+-- "unknown" and lists no container kinds. For such a place any fixed container
+-- kind, and any vehicle, is an acceptable spot; each one is still checked live
+-- (FixedContainers.fresh, World.resolve) before anything goes in it.
+function S.unobserved(site)
+    return type(site)=="table" and site.paperStorage=="unknown"
+        and type(site.containerTypes)=="table" and #site.containerTypes==0
+end
 function S.target(t,site)
     if carrierTarget(t) then
         -- `sprite` is the carrier's kind in words: a body has no sprite, and
@@ -221,6 +231,7 @@ function S.target(t,site)
         local b=site.bounds
         local r=S.VEHICLE_RADIUS
         if t.x<b.x1-r or t.x>=b.x2+r or t.y<b.y1-r or t.y>=b.y2+r or t.z~=b.z then return false end
+        if S.unobserved(site) then return true end
         for _,kind in ipairs(site.containerTypes) do if kind==S.VEHICLE_CONTAINER then return true end end
         return false
     end
@@ -233,6 +244,7 @@ function S.target(t,site)
     -- actually observed at this site, exactly as before.
     local margin=outdoorKind(t.containerType) and S.OUTDOOR_RADIUS or 0
     if t.x<b.x1-margin or t.x>=b.x2+margin or t.y<b.y1-margin or t.y>=b.y2+margin or t.z~=b.z then return false end
+    if S.unobserved(site) then return StorageChoices.fixedKind(t.containerType) end
     for _,kind in ipairs(site.containerTypes) do if kind==t.containerType then return true end end
     return false
 end
@@ -698,7 +710,7 @@ function S.open(initial,sink)
     function api.addArea(args)
         if not isArea(root) then return false,"not a No Help world" end
         local nextCase,ids=AreaCase.decide{case=root.case,site=args.site,place=args.place,
-            clues=args.clues,version=args.version,hours=args.hours,source=args.source}
+            clues=args.clues,version=args.version,hours=args.hours,source=args.source,designs=args.designs}
         if not nextCase then return false,ids end
         if not validHours(args.hours) then return false,"invalid hours" end
         local ok,why=commit(function(r)

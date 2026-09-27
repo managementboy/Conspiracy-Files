@@ -53,6 +53,18 @@ end
 local function count(t,k) return (t and t[k]) or 0 end
 
 -- args: {clues=list, area={id=..., place=...}, ledger=..., seed=n, version=s}
+-- Optional, for a place a vanilla map marks (task 3 plan, step 4; owner:
+-- "a marked place leans toward its map's conspiracy but holds at least 3
+-- clues, one of each side"):
+--   favour    the conspiracy the place leans toward. After one of each, the
+--             other side first gets up to `rivalMin` clues in all, then the
+--             favoured side takes the next slots up to the cap, and only then
+--             does the thinner-world rule decide the rest.
+--   rivalMin  how many of the other side's clues come before the favoured
+--             side's later slots (default 1: the opener's one);
+--   minCount  the least number of clues the area gets, raising the world's
+--             2..10 when it is lower.
+-- Without them the result is exactly what it always was.
 -- ledger (world state, never belief):
 --   areas[areaId][lean] = clues already there;  world[lean] = clues anywhere;
 --   world.set / world.written = placed clues of each kind;
@@ -100,7 +112,12 @@ function P.choose(args)
 
     local already=0
     for _,n in pairs(here) do already=already+n end
-    local want=P.targetCount(seed,area.id,version)-already
+    local want=P.targetCount(seed,area.id,version)
+    if args.minCount and args.minCount>want then want=args.minCount end
+    want=want-already
+    local favour=args.favour
+    local rival=favour and (favour=="containment" and "agricultural" or "containment")
+    local rivalMin=math.min(args.rivalMin or 1,P.FIRST_DEVELOPMENT_CAP)
     local picks,taken={}, {}
     local leans={"containment","agricultural"}
     while #picks<want do
@@ -109,6 +126,12 @@ function P.choose(args)
         local lean
         for _,l in ipairs(leans) do
             if count(here,l)==0 and not taken["lean:"..l] then lean=l; break end
+        end
+        -- A map-marked place: the other side's extra clues (one per extra
+        -- map marking it), then the favoured side up to the cap.
+        if not lean and favour then
+            if count(here,rival)<rivalMin and not taken["lean:"..rival] then lean=rival
+            elseif count(here,favour)<P.FIRST_DEVELOPMENT_CAP and not taken["lean:"..favour] then lean=favour end
         end
         if not lean then
             for _,l in ipairs(leans) do

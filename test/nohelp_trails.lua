@@ -1,0 +1,52 @@
+-- NH-D6 annotated maps included: each map trail leans toward one conspiracy,
+-- and each world makes a random 1-20% of them unreliable (owner, 2026-09-27,
+-- DECISIONS.md DR-20260927-NOHELP-RULE-PLACEMENT). Generated/Trails.lua is a
+-- pure function of the world seed and the static design list.
+package.path="mod-nohelp/common/media/lua/shared/?.lua;"..package.path
+local D6="NH-D6"
+local Trails=require("NHShared/Generated/Trails")
+local Sites=require("NHShared/Generated/MapSites")
+local N=#Sites.designs
+assert(N>=120,D6..": the trail rules cover every map design")
+
+local sawShare={}
+for seed=1,300 do
+    local told,unreliable,favoured={containment=0,agricultural=0},0,{containment=0,agricultural=0}
+    local share=Trails.share(seed)
+    assert(share>=1 and share<=20 and share==math.floor(share),D6..": the unreliable share is 1..20 percent")
+    sawShare[share]=true
+    for _,d in ipairs(Sites.designs) do
+        local t=Trails.told(seed,d)
+        assert(t=="containment" or t=="agricultural",D6..": every map tells one conspiracy")
+        told[t]=told[t]+1
+        local u=Trails.unreliable(seed,d,N)
+        if u then unreliable=unreliable+1 end
+        local f=Trails.favour(seed,d,N)
+        assert(f==(u and Trails.other(t) or t),D6..": an unreliable map favours the other conspiracy")
+        favoured[f]=favoured[f]+1
+    end
+    -- Placeholder lean: an even split, by rank.
+    assert(told.containment==math.floor(N/2) and told.agricultural==N-math.floor(N/2),
+        D6..": the placeholder lean splits the maps evenly")
+    -- Exactly k unreliable: at least one, the share rounded.
+    local k=math.max(1,math.floor(N*share/100+0.5))
+    assert(unreliable==k and Trails.unreliableCount(seed,N)==k,D6..": exactly "..k.." maps are unreliable in world "..seed)
+end
+local shares=0; for _ in pairs(sawShare) do shares=shares+1 end
+assert(shares==20,D6..": over many worlds every share from 1 to 20 occurs ("..shares..")")
+
+-- The same world answers the same, whatever else has been asked.
+local a=Trails.favour(4242,"MulStashMap11")
+for _,d in ipairs(Sites.designs) do Trails.favour(99,d) end
+assert(Trails.favour(4242,"MulStashMap11")==a,D6..": a world's answer never changes")
+-- Worlds differ: the same map does not lean the same way in every world.
+local leans={}
+for seed=1,40 do leans[Trails.told(seed,"MulStashMap11")]=true end
+assert(leans.containment and leans.agricultural,D6..": which way a map leans varies by world")
+-- A design not in the static list has no trail.
+assert(Trails.told(1,"NotAMap")==nil and Trails.favour(1,"NotAMap")==nil,D6..": unknown designs have no lean")
+-- The placeholder is said out loud in the source, so it is not taken as story.
+local f=assert(io.open("mod-nohelp/common/media/lua/shared/NHShared/Generated/Trails.lua","rb"))
+local src=f:read("*a"); f:close()
+assert(src:find("PLACEHOLDER",1,true),D6..": the placeholder lean is marked as one")
+print("nohelp trails: "..N.." maps, even placeholder split, 1-20% unreliable per world, exactly k each")

@@ -146,4 +146,43 @@ end
 assert(hits==1,"NH-D4: the cap is defined once")
 assert(read("mod-nohelp/common/media/lua/shared/NHShared/Generated/Pick.lua"):find("P.FIRST_DEVELOPMENT_CAP=5",1,true),
     "NH-D4: the owner's cap is 5 per conspiracy per area")
+-- A PLACE A VANILLA MAP MARKS (NH-D6, owner 2026-09-27): it leans toward its
+-- map's conspiracy and holds at least 3 clues, one of the other side; each
+-- further map marking it adds one more of the other side.
+local marked={}
+for i=1,12 do
+    local lean=i<=6 and "containment" or "agricultural"
+    marked[i]={id=string.format("M%02d",i),kind="set",pieces={"Rope","Bleach"},
+        where={{place="mapNamed",spot="furniture",lean=lean,rival=lean=="containment" and "agricultural" or "containment"}}}
+end
+local sawRaised=false
+for seed=1,60 do
+    local plain=Pick.choose{clues=marked,area={id="m"..seed,place="mapNamed"},ledger=fresh(),seed=seed,version="v1"}
+    local target=Pick.targetCount(seed,"m"..seed,"v1")
+    assert(#plain==target,"without a favour the area gets its world number")
+    for _,fav in ipairs({"containment","agricultural"}) do
+        local other=fav=="containment" and "agricultural" or "containment"
+        for maps=1,3 do
+            local args={clues=marked,area={id="m"..seed,place="mapNamed"},ledger=fresh(),seed=seed,version="v1",
+                favour=fav,rivalMin=maps,minCount=2+maps}
+            local picks=Pick.choose(args)
+            local again=Pick.choose(args)
+            assert(#again==#picks,"NH-D3: the same world gives the same map place")
+            for i=1,#picks do assert(again[i].clue==picks[i].clue,"NH-D3: the same clues, in the same order") end
+            local n={containment=0,agricultural=0}
+            for _,p in ipairs(picks) do n[p.lean]=n[p.lean]+1 end
+            local want=math.max(target,2+maps)
+            if target<2+maps then sawRaised=true end
+            assert(#picks==want,"NH-D6: a map place holds max(world number, 2 + maps) clues")
+            assert(n[other]>=math.min(maps,want-1) and n[fav]>=1,"NH-D6: one of the other side per map marking it")
+            -- The favoured side takes every later slot, up to the cap, before
+            -- the thinner-world rule decides anything.
+            assert(n[fav]==math.min(Pick.FIRST_DEVELOPMENT_CAP,want-maps),
+                "NH-D6: the favoured side fills the later slots ("..n[fav].." of "..want..", "..maps.." maps)")
+            assert(n[fav]<=Pick.FIRST_DEVELOPMENT_CAP and n[other]<=Pick.FIRST_DEVELOPMENT_CAP,"NH-D4: still within the cap")
+        end
+    end
+end
+assert(sawRaised,"NH-D6: minCount raised some area above its world number")
+
 print("nohelp pick: "..total.." clues over 60 areas, "..tostring(ledger.world.set).." sets; both conspiracies everywhere")

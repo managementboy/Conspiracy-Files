@@ -232,7 +232,7 @@ playtests quote it.
 | NH-D3 placed procedurally | step 3 Pick test (same inputs, same result; no map-read input); step 4 replay test | area sources | `test/nohelp_pick.lua`; the reload replay test is owed by step 4 |
 | NH-D4 no maximum, a first-development cap | step 7 cap-off run, raise-the-cap save test, "stopped for another reason" failure; the cap exists only in `Pick.lua` | cap, and any other limit hit | `test/nohelp_pick.lua`; the cap-off soak and raise-the-cap save test are owed by step 7 |
 | NH-D5 half or more are object sets of vanilla items | step 3 Linter (per clue, vanilla types); step 7 on placed *and* spotted, lost sets counted | set share placed and spotted | `test/nohelp_pick.lua`; the share among clues actually spotted is owed by step 7 |
-| NH-D6 annotated maps included | step 4 trail fold-in and "read or not, same clue" test; step 7 every map destination holds both leans | trails started, clues per design | not yet written, due step 4 |
+| NH-D6 annotated maps included | step 4 trail fold-in and "read or not, same clue" test; step 7 every map destination holds both leans | trails started, clues per design | `test/nohelp_map_sites.lua`; `test/nohelp_trails.lua`; `test/nohelp_pick.lua`; `test/nohelp_area_runtime.lua`; that every map place holds both leans in what is actually placed in a real world is owed by step 7 |
 | NH-D7 vanilla mysteries detected and used | step 5 first citation, observer out of debug and saved; step 7 scene-anchored floor; step 8 timing spike | scene-anchored vs fallback | not yet written, due step 5 |
 
 ## 5. Rejected along the way
@@ -669,3 +669,36 @@ clock (3 days), zombies gather (after a live test). See DECISIONS.md.
 **Still to settle with the owner later:** what each trail's own words point
 toward (story direction); marks decided far from the player have no observed
 storage, so their furniture must be checked live.
+
+### Step 4, part 1 — every map mark and flyer place is a clue place
+
+**Built** (owner decisions above: every mark gets clues, a marked place leans
+to its map with at least 3 clues and one of the other side, flyer places are
+clue places now, what a mark holds is fixed by the world):
+- `Generated/MapSites.lua`, a derived file (`tools/mapsites/build.lua`): one
+  place per mark of the 125 map designs and per place of the 133 flyers, 257
+  in all — the address-book building under the mark (same `t3:` id as the
+  nearby scan), else a window of at most 44 tiles inside a reviewed rectangle,
+  else a sixteen-tile margin around the point. Marks on one building merge and
+  keep every map and flyer that named it. None excluded.
+- `Generated/Trails.lua`: each map's lean (a **placeholder** even split by
+  world until the owner gives story direction), this world's 1-20% share of
+  unreliable maps (exactly that many, by rank), and the resulting favour.
+- The picker takes an optional favour, a count of other-side clues and a
+  minimum; a map place gets favour from its first map in static order, one
+  other-side clue per map marking it, and at least 2 + maps clues. The area
+  records `trail={designs, favour}`.
+- The runtime decides a map's places when it is read and any map or flyer
+  place within 100 tiles as the survivor comes near; the nearby scan leaves
+  them to this path. A place decided from afar observed no storage, so any
+  fixed furniture or vehicle is a spot there, still checked live; the filler
+  leaves areas more than 120 tiles away until the survivor comes.
+- The trail seed is a hash of the world seed and the map; a read without a
+  world record is refused. The map system no longer places its own fragment
+  and payoff documents (map state schema 4, no migration before 1.0).
+Tests: `test/nohelp_map_sites.lua`, `test/nohelp_trails.lua`, and additions
+to `test/nohelp_pick.lua` and `test/nohelp_area_runtime.lua`.
+
+**Not in this part:** the letdown layout, the promise clock and the zombies;
+flyer-only places are ordinary map-named places (no lean, the world's own
+2-10); the clue list is still empty, so nothing appears in play yet.

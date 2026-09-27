@@ -18,6 +18,7 @@ local Carriers=require("NHShared/Carriers")
 local Kinds=require("NHShared/Generated/EvidenceKinds")
 local Visited=require("NHShared/VisitedBuildingLog")
 local Reachability=require("NHShared/ReachabilityAdapter")
+local MapSites=require("NHShared/Generated/MapSites")
 require("NHShared/DiscoveryLog")
 NHShared=NHShared or {}
 local R=NHShared.GeneratedRuntime or {}
@@ -498,6 +499,37 @@ local function placeFacts(result)
     end
     return hints,rooms
 end
+-- THE PLACES VANILLA MAPS AND FLYERS NAME (task 3 plan, step 4). Every mark of
+-- every vanilla map, and every place a flyer names, is a clue place fixed in
+-- advance (Generated/MapSites). Indexed once: by area id, by design, and in a
+-- coarse grid so "near the survivor" looks at a handful of places, not all.
+local MAP_BUCKET=128
+local mapIndex
+local function mapSites()
+    if mapIndex then return mapIndex end
+    local byArea,byDesign,buckets={},{},{}
+    for _,e in ipairs(MapSites.sites) do
+        byArea[e.areaId]=e
+        local seen={}
+        for _,m in ipairs(e.marks) do
+            if m.design and not seen[m.design] then
+                seen[m.design]=true
+                byDesign[m.design]=byDesign[m.design] or {}
+                table.insert(byDesign[m.design],e)
+            end
+        end
+        local b=e.bounds
+        for bx=math.floor(b.x1/MAP_BUCKET),math.floor((b.x2-1)/MAP_BUCKET) do
+            for by=math.floor(b.y1/MAP_BUCKET),math.floor((b.y2-1)/MAP_BUCKET) do
+                local k=bx..":"..by
+                buckets[k]=buckets[k] or {}
+                table.insert(buckets[k],e)
+            end
+        end
+    end
+    mapIndex={byArea=byArea,byDesign=byDesign,buckets=buckets}
+    return mapIndex
+end
 local function decideFrom(result)
     local hints,rooms=placeFacts(result)
     withReachability(result,function(reachable)
@@ -521,7 +553,11 @@ local function decideFrom(result)
                 if not site then return true end
                 api=areaSession
                 if not api then return true end
-                if not site.excluded and #(candidates and candidates[site.id] or {})>=1 and not decided[site.id] then
+                -- A building a vanilla map or flyer names is the map path's
+                -- to decide (as a map-named place), never this scan's, so it
+                -- is decided once and as one kind of place.
+                if not site.excluded and #(candidates and candidates[site.id] or {})>=1 and not decided[site.id]
+                    and not mapSites().byArea[site.id] then
                     local place=AreaPlace.of(hints[site.id],rooms[site.id])
                     if place then
                         local ok,ids=api.addArea{site=site,place=place,clues=Manifest.clues,
@@ -583,6 +619,116 @@ function R.decideNearby(force)
     -- A refused job never runs, so nothing else would ever clear the flag.
     if not queued then preparing=false; return false,"busy" end
     return true
+end
+-- DECIDING A MAP-MARKED PLACE (task 3 plan, step 4). When a map is read, all
+-- its marks' places are decided (source "read"); when the survivor comes
+-- within R.MAP_NEAR_TILES of any such place, map read or not, it is decided
+-- too (source "near"). What a place receives is fixed by the world (its seed,
+-- the static list of maps marking it, the clue list): reading only changes
+-- WHEN it is decided, never what it holds.
+--
+-- One addArea per scheduler step, as the nearby scan does: every addArea
+-- copies and validates the whole world record.
+R.MAP_NEAR_TILES=100
+local mapQueue,mapQueued={},{}
+-- The maps marking a place, each once, in the static order MapSites gives.
+local function designsOf(entry)
+    local out,seen={},{}
+    for _,m in ipairs(entry.marks or {}) do
+        if m.design and not seen[m.design] then seen[m.design]=true; out[#out+1]=m.design end
+    end
+    return out
+end
+-- The site row the world record keeps, in the Catalog's shape. Nothing was
+-- observed there, so its storage is "unknown" (Session.unobserved).
+local function mapSiteRow(entry)
+    local b=entry.bounds
+    return {id=entry.areaId,areaId=entry.areaId,
+        name="Place named on a map at "..math.floor((b.x1+b.x2)/2)..", "..math.floor((b.y1+b.y2)/2),
+        mapId=MapSites.map,buildLine=MapSites.game,
+        bounds={x1=b.x1,y1=b.y1,x2=b.x2,y2=b.y2,z=b.z},
+        source={kind="map-research",reference=entry.reference},
+        paperStorage="unknown",containerTypes={},excluded=false}
+end
+local function decidedAreas()
+    local out={}
+    local root=worldRoot()
+    for _,a in ipairs(root and root.case and root.case.areas or {}) do out[a.id]=true end
+    return out
+end
+local function mapDrain()
+    local item=table.remove(mapQueue,1)
+    if not item then return true end
+    mapQueued[item.entry.areaId]=nil
+    local api=areaSession
+    if not api then return #mapQueue==0 end
+    local entry=item.entry
+    local designs=designsOf(entry)
+    local ok,ids=api.addArea{site=mapSiteRow(entry),place=entry.place,designs=#designs>0 and designs or nil,
+        clues=Manifest.clues,version=Manifest.VERSION,hours=worldHours(),source=item.source}
+    if ok then
+        CFLog.write("i","case",{case=entry.areaId,place=entry.place,n=#ids,why="area-decided-"..item.source})
+    elseif ids=="empty" then
+        if not emptyNoted[entry.areaId] then
+            emptyNoted[entry.areaId]=true
+            CFLog.write("d","skip",{case=entry.areaId,place=entry.place,why="area-empty"})
+        end
+    elseif ids~="decided" then
+        log("map place "..tostring(entry.areaId).." not decided: "..tostring(ids))
+    end
+    return #mapQueue==0
+end
+function R.decideMapArea(entry,source)
+    if not allowed() or not scheduler or not wrapper then return false,"not running" end
+    if not areaSession then return false,"no world record" end
+    if type(entry)~="table" or type(entry.areaId)~="string" or mapSites().byArea[entry.areaId]~=entry then
+        return false,"not a map place"
+    end
+    if mapQueued[entry.areaId] then return false,"queued" end
+    if decidedAreas()[entry.areaId] then return false,"decided" end
+    mapQueue[#mapQueue+1]={entry=entry,source=source=="read" and "read" or "near"}
+    mapQueued[entry.areaId]=true
+    scheduler.enqueue("map-areas","map-areas",mapDrain)
+    return true
+end
+-- A map was read: every place it marks.
+function R.decideMapDesign(design,source)
+    local n=0
+    for _,entry in ipairs(mapSites().byDesign[design] or {}) do
+        if R.decideMapArea(entry,source) then n=n+1 end
+    end
+    return n
+end
+-- The survivor is near: every undecided map or flyer place within reach.
+-- Looks only at the nine grid cells around the survivor.
+function R.decideMapNear()
+    if not allowed() or not scheduler or not areaSession then return 0 end
+    local p=getPlayer and getPlayer()
+    if not p then return 0 end
+    local px,py=p:getX(),p:getY()
+    local index=mapSites()
+    local bx,by=math.floor(px/MAP_BUCKET),math.floor(py/MAP_BUCKET)
+    local decided=decidedAreas()
+    local n=0
+    for dx=-1,1 do for dy=-1,1 do
+        for _,e in ipairs(index.buckets[(bx+dx)..":"..(by+dy)] or {}) do
+            if not decided[e.areaId] and not mapQueued[e.areaId] and not emptyNoted[e.areaId] then
+                local b=e.bounds
+                local ox=math.max(b.x1-px,0,px-(b.x2-1))
+                local oy=math.max(b.y1-py,0,py-(b.y2-1))
+                if ox*ox+oy*oy<=R.MAP_NEAR_TILES*R.MAP_NEAR_TILES and R.decideMapArea(e,"near") then n=n+1 end
+            end
+        end
+    end end
+    return n
+end
+-- The world record's seed, or nil when this save has no world record. The map
+-- trails take their seed from it (MapMediaRuntime).
+function R.worldSeed()
+    local root=worldRoot()
+    local seed=root and root.case and root.case.seed
+    if type(seed)=="number" then return seed end
+    return nil
 end
 -- The address book builds in the background; anything it could not name before
 -- it finished deserves a second chance, once.
@@ -912,7 +1058,10 @@ end
 local function boundsScan(site,done,accept,salt)
     local b=site.bounds
     local kinds={}; for _,kind in ipairs(site.containerTypes) do kinds[kind]=true end
-    local margin=kinds[Storage.MAILBOX] and Session.OUTDOOR_RADIUS or 0
+    -- A place decided from afar (a map's mark) observed nothing: any fixed
+    -- kind will do, each still checked live below (Session.unobserved).
+    local any=Session.unobserved(site)
+    local margin=(any or kinds[Storage.MAILBOX]) and Session.OUTDOOR_RADIUS or 0
     local x1,y1,x2,y2=b.x1-margin,b.y1-margin,b.x2+margin,b.y2+margin
     local x,y,objects,oi,ci=x1,y1,nil,0,0
     local pool=StorageChoices.new()
@@ -939,7 +1088,7 @@ local function boundsScan(site,done,accept,salt)
         local c=o:getContainerByIndex(ci)
         local sprite=o:getSprite(); local name=sprite and sprite:getName()
         local inside=x>=b.x1 and x<b.x2 and y>=b.y1 and y<b.y2
-        if c and name and Storage.fixedKind(c:getType()) and kinds[c:getType()] and (inside or c:getType()==Storage.MAILBOX) then
+        if c and name and Storage.fixedKind(c:getType()) and (any or kinds[c:getType()]) and (inside or c:getType()==Storage.MAILBOX) then
             local found={x=x,y=y,z=b.z,objectIndex=oi,containerIndex=ci,containerType=c:getType(),sprite=name}
             local fresh=FixedContainers.fresh(c)
             if fresh and (not accept or accept(found)) and World.resolve(found)==c then
@@ -1190,6 +1339,17 @@ end
 local fillCursor=setmetatable({},{__mode="k"})
 -- A clue that must go in a vehicle: an old transport scene, or a No Help clue
 -- whose spot is a vehicle.
+-- Farther than this from the survivor, a waiting clue's area is not scanned.
+R.FILL_REACH=120
+local function farFromSurvivor(site)
+    local p=getPlayer and getPlayer()
+    local b=site and site.bounds
+    if not p or not b then return false end
+    local px,py=p:getX(),p:getY()
+    local ox=math.max(b.x1-px,0,px-(b.x2-1))
+    local oy=math.max(b.y1-py,0,py-(b.y2-1))
+    return ox>R.FILL_REACH or oy>R.FILL_REACH
+end
 local function wantsVehicle(doc)
     return doc~=nil and (doc.placementIntent=="vehicle" or doc.spot=="vehicle")
 end
@@ -1226,6 +1386,13 @@ local function filler(api)
             end
             for _,d in ipairs(root.case.documents) do if d.id==id then doc=d end end
             if not site then return true end
+            -- A place far from the survivor is not loaded, so walking its
+            -- squares finds nothing and only delays the clues nearby. Map
+            -- places are decided from afar (step 4); they fill on arrival.
+            if not indexed and farFromSurvivor(site) then
+                declinePlacement("the area of "..tostring(id).." is far from the survivor")
+                return true
+            end
             if not indexed then
                 local taken=usedPhysicalKeys()
                 if wantsVehicle(doc) then
@@ -1659,6 +1826,11 @@ require("NHShared/Events/EngineEvents").on("OnTick", function()
         -- survivor to move on or for time to pass, so asking often is cheap.
         local ok,err=pcall(R.decideNearby)
         if not ok then log("deciding nearby areas failed: "..tostring(err)) end
+        -- And the places vanilla maps and flyers name, as the survivor nears
+        -- them; a queue left by a reopened scheduler is picked up again.
+        ok,err=pcall(R.decideMapNear)
+        if not ok then log("deciding map places failed: "..tostring(err)) end
+        if #mapQueue>0 then scheduler.enqueue("map-areas","map-areas",mapDrain) end
     end
     scheduler.step()
 end)
@@ -1690,6 +1862,7 @@ end
 require("NHShared/Events/EngineEvents").on("OnGameStart", function()
     sessions,scheduler,preparing,wrapper,areaSession=nil,nil,false,nil,nil
     lastDecide=nil; emptyNoted={}; servicesStarted=false
+    mapQueue,mapQueued={},{}
     -- Forget what we could see last time. A new session has not looked yet,
     -- and should say so rather than inherit yesterday's confidence.
     sightings={}
