@@ -9,23 +9,77 @@ M.PROXIMITY_GUARD_TILES=20
 
 local function finite(n) return type(n)=="number" and n==n and n~=math.huge and n~=-math.huge end
 
+-- THE PROMISE CLOCK (owner, 2026-09-27, "How a read map changes the game"):
+-- "3 in-game days after a map is read, its marks' unfound, unshown clues
+-- begin their silent within-place moves; unread maps' marks stay still."
+--
+-- readAtBySite: site id -> the earliest hour any map or flyer marking it was
+-- read, or false when every map marking it is unread. A site not in the table
+-- is not marked by any map or flyer and keeps the ordinary rule. Built by the
+-- runtime from the map state's saved read hours (a world event, not belief).
+--
+-- clockStart returns the hour from which a site's clues may move: nil for an
+-- unmarked site (no promise clock), math.huge for a marked site no one has
+-- read (never), else the earliest read hour plus `window`.
+M.PROMISE_WINDOW_HOURS=M.RELOCATE_AFTER_HOURS
+function M.clockStart(siteId,readAtBySite,window)
+    if type(readAtBySite)~="table" or siteId==nil then return nil end
+    local at=readAtBySite[siteId]
+    if at==nil then return nil end
+    if at==false or not finite(at) then return math.huge end
+    return at+(window or M.PROMISE_WINDOW_HOURS)
+end
+
+-- The table above from the static list of map and flyer places
+-- (Generated/MapSites `sites`) and the read hours (design or "print:"..flyer
+-- -> hour, MapMediaRuntime.readHours). Every marked site gets its earliest
+-- read hour, or false when nothing marking it was read.
+function M.readAtBySite(sites,readHours)
+    local out={}
+    readHours=type(readHours)=="table" and readHours or {}
+    for _,e in ipairs(type(sites)=="table" and sites or {}) do
+        local earliest,marked=nil,false
+        for _,m in ipairs(e.marks or {}) do
+            local d=m.design or (m.print and "print:"..m.print)
+            if d then
+                marked=true
+                local at=readHours[d]
+                if finite(at) and (earliest==nil or at<earliest) then earliest=at end
+            end
+        end
+        if marked and type(e.areaId)=="string" then
+            if earliest~=nil then out[e.areaId]=earliest else out[e.areaId]=false end
+        end
+    end
+    return out
+end
+
 -- All three staleness conditions from the design doc: placed, undiscovered,
--- and unfound for at least RELOCATE_AFTER_HOURS.
-function M.isStale(assignment,known,worldHours)
+-- and unfound for at least RELOCATE_AFTER_HOURS. With `readAtBySite`, a clue
+-- at a map-marked site (assignment.locationId) also waits for the promise
+-- clock: stale only once worldHours reaches both placedHours plus
+-- RELOCATE_AFTER_HOURS and the site's clockStart. After a move the ordinary
+-- rule restarts from the new placedHours, so moves never come in a burst.
+function M.isStale(assignment,known,worldHours,readAtBySite)
     if type(assignment)~="table" or assignment.status~="placed" then return false end
     if not finite(assignment.placedHours) or assignment.placedHours<0 then return false end
     if not finite(worldHours) or worldHours<0 then return false end
     if type(known)=="table" then for _,id in ipairs(known) do if id==assignment.id then return false end end end
+    local start=M.clockStart(assignment.locationId,readAtBySite)
+    if start~=nil and (start==math.huge or worldHours<start) then return false end
     return worldHours-assignment.placedHours>=M.RELOCATE_AFTER_HOURS
 end
 
--- Stale document ids of one Session root, in deterministic document order.
-function M.staleIds(root,worldHours)
+-- Stale document ids of one Session root, in deterministic document order. A
+-- clue the Search Mode icon has shown never moves (root.shown, owner
+-- 2026-09-27), so it is never offered as stale.
+function M.staleIds(root,worldHours,readAtBySite)
     local out={}
     if type(root)~="table" or type(root.case)~="table" or type(root.assignments)~="table" then return out end
     for _,doc in ipairs(root.case.documents or {}) do
         local a=root.assignments[doc.id]
-        if a and M.isStale({status=a.status,placedHours=a.placedHours,id=doc.id},root.known,worldHours) then
+        if a and not (type(root.shown)=="table" and root.shown[doc.id]) and M.isStale({status=a.status,placedHours=a.placedHours,
+                id=doc.id,locationId=a.locationId or doc.locationId},root.known,worldHours,readAtBySite) then
             out[#out+1]=doc.id
         end
     end

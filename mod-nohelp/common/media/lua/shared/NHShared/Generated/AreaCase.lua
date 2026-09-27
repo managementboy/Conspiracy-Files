@@ -100,12 +100,48 @@ M.recount=recount
 -- (Trails), so a map read or never read gives the place the same lean.
 -- designs: the maps marking the place, in static order. Returns the trail
 -- record and Pick's extra arguments, or nil for a place no map marks.
-function M.trailFor(seed,designs)
+--
+-- A MULTI-MARK MAP'S LAST MARK IS AN EXACT TIE (owner, 2026-09-27, "How a
+-- read map changes the game"): the place holding the highest-numbered mark of
+-- a map with several marks gets an even number of clues, both sides equal
+-- (Pick mode "tie"). Only that place; every other place is unchanged. Which
+-- place that is comes from the static MapSites list, never from reading.
+local lastMarkAt
+local function lastMarks()
+    if lastMarkAt then return lastMarkAt end
+    local Sites=require("NHShared/Generated/MapSites")
+    local best,marks={},{}
+    for _,e in ipairs(Sites.sites or {}) do
+        for _,m in ipairs(e.marks or {}) do
+            local d=m.design or (m.print and "print:"..m.print)
+            if d and type(m.mark)=="number" then
+                marks[d]=(marks[d] or 0)+1
+                if not best[d] or m.mark>best[d].mark then best[d]={mark=m.mark,areaId=e.areaId} end
+            end
+        end
+    end
+    lastMarkAt={}
+    for d,b in pairs(best) do if marks[d]>1 then lastMarkAt[d]=b.areaId end end
+    return lastMarkAt
+end
+-- Does this place hold the last mark of any multi-mark map marking it?
+function M.isLastMark(areaId,designs)
+    if type(areaId)~="string" or type(designs)~="table" then return false end
+    local last=lastMarks()
+    for _,d in ipairs(designs) do if last[d]==areaId then return true end end
+    return false
+end
+function M.trailFor(seed,designs,areaId)
     if type(designs)~="table" or #designs==0 then return nil end
     local favour=Trails.favour(seed,designs[1])
     if not favour then return nil end
     local list={}; for i,d in ipairs(designs) do list[i]=d end
-    if #designs>1 then return {designs=list,favour=favour},{favour=favour} end
+    local tie=M.isLastMark(areaId,designs)
+    if #designs>1 then
+        if tie then return {designs=list,favour=favour},{favour=favour,mode="tie"} end
+        return {designs=list,favour=favour},{favour=favour}
+    end
+    if tie then return {designs=list,favour=favour},{favour=favour,mode="tie",minCount=3} end
     return {designs=list,favour=favour},{favour=favour,rivalMin=1,minCount=3}
 end
 
@@ -121,12 +157,12 @@ function M.decide(args)
     for _,a in ipairs(case.areas) do if a.id==site.id then return nil,"decided" end end
     local clues=args.clues or Manifest.clues
     local byId={}; for _,c in ipairs(clues) do byId[c.id]=c end
-    local trail,lean=M.trailFor(case.seed,args.designs)
+    local trail,lean=M.trailFor(case.seed,args.designs,site.id)
     if args.designs~=nil and not trail then return nil,"unknown map design" end
     lean=lean or {}
     local picks,short=Pick.choose{clues=clues,area={id=site.id,place=args.place},
         ledger=case.ledger,seed=case.seed,version=args.version,
-        favour=lean.favour,rivalMin=lean.rivalMin,minCount=lean.minCount}
+        favour=lean.favour,rivalMin=lean.rivalMin,minCount=lean.minCount,mode=lean.mode}
     if #picks==0 then return nil,"empty" end
     local next=copy(case)
     local known=false

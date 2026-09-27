@@ -702,3 +702,40 @@ to `test/nohelp_pick.lua` and `test/nohelp_area_runtime.lua`.
 **Not in this part:** the letdown layout, the promise clock and the zombies;
 flyer-only places are ordinary map-named places (no lean, the world's own
 2-10); the clue list is still empty, so nothing appears in play yet.
+
+### Step 4, part 2 — the letdown layout, the promise clock, open ground
+
+**Built** (owner decisions under "How a read map changes the game"):
+- *Layout* (`Generated/Layout.lua`): at a place a map or flyer leans, a
+  spot's depth is its inset from the building's bounds (mailbox, ground and
+  vehicle are the shallow outer band), or, at a point or window place with no
+  building, its nearness to the nearest mark. The favoured side's clues take
+  the shallowest spot, the other side's the deepest, through
+  `StorageChoices.choose`'s rank (orders only, never refuses). The other
+  side's clue waits for a fuller scan — at least 4 usable spots seen, or 8
+  attempts — then takes the deepest seen; each wait is logged
+  (`why=layout-hold`). A multi-mark map's (or flyer's) last mark is an exact
+  tie: `AreaCase.trailFor` passes Pick `mode="tie"` for that place only (7
+  places in the static list); Pick without it is unchanged.
+- *Promise clock* (`StaleClue`): a map or flyer place's unfound, unshown clues
+  may move only once the world clock passes both their own placement plus 3
+  days and the earliest read of anything marking the place plus 3 days; a
+  place nothing marking it was read stays still; unmarked places keep the old
+  rule. Read hours come from the map state (`MapMediaRuntime.readHours`, maps
+  and flyers), rebuilt when it changes. A shown clue is never offered as
+  stale; relocation now only offers spots the Session would take (own kind,
+  not held, not spent) and moves ground clues to ground.
+- *Open ground* (`GroundSpots.lua` + `groundScan`): squares inside the site
+  and its 12-tile band (at most 44 x 44), in the world's hash order, at most
+  64 per attempt, the next attempt carrying on. Refused: spent or held spots,
+  missing or wrong floor, no floor or solid, indoors with no window or light
+  switch, within the 20-tile proximity guard, 4+ zombies within 6 tiles.
+  Labels: doorway, yard, floor. The filler serves the areas within reach
+  nearest first and logs each miss with area, clue and distance.
+Tests: `test/nohelp_layout.lua`, `test/nohelp_clock.lua`,
+`test/nohelp_ground_spots.lua`.
+
+**Not in this part:** zombies gather (waits for its visible live test); a
+flyer read does not yet decide its places at once (approach does); "roadside"
+and "porch" labels (no cheap, verified fact); `IsoRoom:getWindows` is
+verified in the game jar only, not in vanilla Lua; no visible playtest yet.

@@ -40,13 +40,17 @@ local function root()
     if not ok then error(why) end -- Never replace corrupt current-build state.
     state=candidate; return state
 end
-function R.invalidate() state=nil end
+-- Bumped whenever the map state may have changed, so a reader of the read
+-- hours (GeneratedRuntime's promise clock) knows when to rebuild.
+R.readStamp=0
+function R.invalidate() state=nil; R.readStamp=R.readStamp+1 end
 local function save(next)
     local started=clock()
     local ok,why=State.validate(next,Catalogue)
     if ok then ok,why=Budget.check("mapMedia",{canonical=next}) end
     if not ok then R.lastRefusal=why; log(why); return false end
     ModData.getOrCreate(TAG).canonical=next; state=next
+    R.readStamp=R.readStamp+1
     R.peakWriteMs=math.max(R.peakWriteMs or 0,clock()-started)
     return true
 end
@@ -194,6 +198,18 @@ function R.printRead(id)
     require("NHShared/Events/EngineEvents").emit("discovery.changed")
     return true
 end
+-- WHEN EACH MAP AND FLYER WAS READ (the promise clock, owner 2026-09-27): a
+-- design -> read hour, and "print:"..flyer -> read hour, in the names
+-- Generated/Trails and MapSites use. A read hour is a world event, saved.
+function R.readHours()
+    local out={}
+    if not allowed() then return out end
+    local ok,current=pcall(root)
+    if not ok or type(current)~="table" then return out end
+    for id,t in pairs(current.trails or {}) do if type(t)=="table" and type(t.at)=="number" then out[id]=t.at end end
+    for id,at in pairs(current.prints or {}) do if type(at)=="number" then out["print:"..id]=at end end
+    return out
+end
 -- No map-placed documents exist any more, so no item is the map system's to
 -- claim and it has no clue squares to show. Kept because the menu, the search
 -- and the clue marks ask every runtime.
@@ -280,7 +296,7 @@ local function visitStep()
 end
 function R.start()
     if not allowed() then return false end
-    state=nil; root(); destinations={}
+    state=nil; R.readStamp=R.readStamp+1; root(); destinations={}
     -- Lazy, not a top-level require: InteractionAPI.lua's own construction
     -- reaches GeneratedMenu.lua, which reaches EngineAPI.lua, which
     -- reaches this file - a real circular require if resolved at file-load

@@ -19,6 +19,8 @@ local Kinds=require("NHShared/Generated/EvidenceKinds")
 local Visited=require("NHShared/VisitedBuildingLog")
 local Reachability=require("NHShared/ReachabilityAdapter")
 local MapSites=require("NHShared/Generated/MapSites")
+local Layout=require("NHShared/Generated/Layout")
+local GroundSpots=require("NHShared/GroundSpots")
 require("NHShared/DiscoveryLog")
 NHShared=NHShared or {}
 local R=NHShared.GeneratedRuntime or {}
@@ -1056,7 +1058,11 @@ end
 -- Session.target accepts one in. Only that kind is taken from the widened part:
 -- a clue never lands in something in the street that merely happens to be near
 -- a house (P4-R134, fixed 2026-09-18).
-local function boundsScan(site,done,accept,salt)
+--
+-- `rank` (optional, target -> number, lower first) only orders the spots found
+-- (the letdown layout, Generated/Layout); it never refuses one. `done` is given
+-- the chosen target and how many usable spots the scan saw.
+local function boundsScan(site,done,accept,salt,rank)
     local b=site.bounds
     local kinds={}; for _,kind in ipairs(site.containerTypes) do kinds[kind]=true end
     -- A place decided from afar (a map's mark) observed nothing: any fixed
@@ -1069,10 +1075,12 @@ local function boundsScan(site,done,accept,salt)
     return function()
         if y>=y2 then
             local list=StorageChoices.finish(pool)
-            local i=StorageChoices.choose(list,salt or site.id,function(n)
-                return not accept or accept(list[n])
-            end)
-            done(i and list[i]); return true
+            local usable=function(n) return not accept or accept(list[n]) end
+            local seen=0
+            for n=1,#list do if usable(n) then seen=seen+1 end end
+            local i=StorageChoices.choose(list,salt or site.id,usable,
+                rank and function(n) return rank(list[n]) end or nil)
+            done(i and list[i],seen); return true
         end
         if objects==nil then
             local square=getCell():getGridSquare(x,y,b.z)
@@ -1100,6 +1108,183 @@ local function boundsScan(site,done,accept,salt)
         return false
     end
 end
+-- Every physical spot a clue already holds, in any case (P4-R67). Above the
+-- relocation job, which also asks it; the filler's note on it is below.
+local function usedPhysicalKeys()
+    local keys={}
+    -- A finished case has no assignments left (retirement drops them), so a
+    -- retired case contributes nothing here: its containers are free again,
+    -- which is also what the ladder's third rung trades on.
+    for _,root in ipairs(Cases.sessions(wrapper) or {}) do
+        for _,a in pairs(root.assignments or {}) do
+            if a.target then keys[Session.physicalKey(a.target)]=true end
+        end
+    end
+    return keys
+end
+-- THE PROMISE CLOCK'S INPUT (owner, 2026-09-27): each map or flyer place ->
+-- the earliest hour any map or flyer marking it was read, or false when none
+-- was (StaleClue.readAtBySite). Rebuilt only when the map state changed
+-- (MapMediaRuntime.readStamp), i.e. when a map or flyer is read or a save
+-- is loaded. Without the map runtime every place counts as unread.
+local readClock={stamp=nil,bySite=nil}
+local function readAtBySite()
+    local M=NHShared.MapMediaRuntime
+    local stamp=M and M.readStamp or -1
+    if readClock.bySite and readClock.stamp==stamp then return readClock.bySite end
+    local hours={}
+    if M and M.readHours then
+        local ok,got=pcall(M.readHours)
+        if ok and type(got)=="table" then hours=got end
+    end
+    readClock.bySite=StaleClue.readAtBySite(MapSites.sites,hours)
+    readClock.stamp=stamp
+    return readClock.bySite
+end
+R.readAtBySite=readAtBySite
+-- The area record of a decided place (its trail: designs and favour).
+local function areaRecord(root,siteId)
+    for _,a in ipairs(root and root.case and root.case.areas or {}) do if a.id==siteId then return a end end
+    return nil
+end
+-- The layout rank for one clue at its place, or nil where no map leans it.
+local function layoutRank(root,doc,site)
+    local area=site and areaRecord(root,site.id)
+    if not area or not area.trail then return nil end
+    return Layout.ranker(doc,site,area.trail,mapSites().byArea[site.id])
+end
+-- OPEN GROUND FOR A CLUE (task 3 plan, step 2/4; owner, 2026-09-27: clues may
+-- lie "anywhere that is interesting"). Nothing offered ground before, so a
+-- ground clue waited forever. The rules are GroundSpots'; this reads the facts
+-- they ask for from the engine, lazily and each under pcall, so a square that
+-- fails an early rule costs no more calls.
+--
+-- The box is the site's bounds widened by Session.OUTDOOR_RADIUS (the same
+-- band Session.target accepts a ground spot in), clamped to 44 x 44. Squares
+-- are tried in the world's hash order, at most GroundSpots.MAX_TRIES per
+-- attempt; the next attempt carries on from where this one stopped (a
+-- session-only cursor, wrapping). The zombie list is read once per scan.
+--
+-- Engine calls used (Build 42, verified against projectzomboid.jar with javap
+-- and, where vanilla Lua uses them, against its Lua):
+--   IsoCell:getGridSquare, IsoCell:getZombieList (the original mod's CasePerson)
+--   IsoGridSquare:TreatAsSolidFloor/isSolid/isSolidTrans (ISTransferAction
+--     :canDropOnFloor, docs/research/B42_RUNTIME_PASSABILITY.md)
+--   IsoGridSquare:isOutside (ISPlowAction), :getRoom, :getDoor(north) (ISMoveableSpriteProps)
+--   IsoRoom:getLightSwitches (DebugChunkState_SquarePanel), IsoRoom:getWindows (jar only)
+-- `keys` = {spent=, used=}: physical keys that may not take a clue.
+local groundCursor={}
+local GROUND_KEEP=8          -- spots kept to rank between, per attempt
+local ZOMBIE_READ_MAX=2000   -- zombies read from the cell list, at most
+local function groundFacts(x,y,z,key,keys,zombies,survivor)
+    local square,looked=nil,false
+    local function sq()
+        if not looked then
+            looked=true
+            local ok,s=pcall(function() return getCell():getGridSquare(x,y,z) end)
+            square=ok and s or nil
+        end
+        return square
+    end
+    local function ask(fn)
+        local s=sq(); if not s then return nil end
+        local ok,v=pcall(fn,s)
+        if ok then return v end
+        return nil
+    end
+    local function roomCount(list)
+        return ask(function(s)
+            local room=s:getRoom()
+            local items=room and list(room)
+            return items and items:size() or 0
+        end) or 0
+    end
+    local readers={
+        exists=function() return sq()~=nil end,
+        z=function() return ask(function(s) return s:getZ() end) end,
+        floor=function() return ask(function(s) return s:TreatAsSolidFloor() end)==true end,
+        solid=function() return ask(function(s) return s:isSolid() or s:isSolidTrans() end)~=false end,
+        outside=function() return ask(function(s) return s:isOutside() end)==true end,
+        windows=function() return roomCount(function(room) return room:getWindows() end) end,
+        lights=function() return roomCount(function(room) return room:getLightSwitches() end) end,
+        door=function() return ask(function(s) return s:getDoor(true)~=nil or s:getDoor(false)~=nil end)==true end,
+        nearSurvivor=function()
+            return survivor~=nil and StaleClue.tooClose(survivor.x,survivor.y,survivor.z,{x=x,y=y,z=z})
+        end,
+        zombies=function() return GroundSpots.zombiesNear(zombies,x,y) end,
+    }
+    return setmetatable({key=key,spent=keys and keys.spent,used=keys and keys.used,wantZ=z},{__index=function(t,k)
+        local read=readers[k]
+        if not read then return nil end
+        local v=read()
+        if v==nil then v=false end
+        rawset(t,k,v)
+        return v
+    end})
+end
+local function groundScan(site,done,accept,salt,rank,keys)
+    local b=site.bounds
+    local box=GroundSpots.box(b,Session.OUTDOOR_RADIUS)
+    local seed=R.worldSeed() or 0
+    local docId=tostring(salt or site.id)
+    local start=groundCursor[docId] or 0
+    local tries,found,refused,seen=0,{},{},{}
+    local zombies,survivor
+    local function finish()
+        groundCursor[docId]=(start+tries)%(GroundSpots.MAX_TRIES*GroundSpots.MAX_ROUNDS)
+        local best,bestRank
+        for _,t in ipairs(found) do
+            local r=rank and rank(t) or 0
+            if not best or r<bestRank then best,bestRank=t,r end
+        end
+        done(best,#found,refused)
+        return true
+    end
+    return function()
+        if not zombies then
+            -- Once per scan: the zombies near the box, and where the survivor is.
+            zombies={}
+            local reach=GroundSpots.CROWD_RADIUS
+            pcall(function()
+                local list=getCell():getZombieList()
+                local n=list and list:size() or 0
+                for i=0,math.min(n,ZOMBIE_READ_MAX)-1 do
+                    local zed=list:get(i)
+                    if zed then
+                        local zx,zy=math.floor(zed:getX()),math.floor(zed:getY())
+                        if zx>=box.x1-reach and zx<box.x2+reach and zy>=box.y1-reach and zy<box.y2+reach then
+                            zombies[#zombies+1]={x=zx,y=zy}
+                        end
+                    end
+                end
+            end)
+            local p=getPlayer and getPlayer()
+            if p then
+                pcall(function() survivor={x=math.floor(p:getX()),y=math.floor(p:getY()),z=math.floor(p:getZ())} end)
+            end
+            return false
+        end
+        if tries>=GroundSpots.MAX_TRIES or #found>=GROUND_KEEP or (#found>0 and not rank) then return finish() end
+        tries=tries+1
+        local x,y=GroundSpots.square(seed,site.id,docId,start+tries,box)
+        if not x then return finish() end
+        local key="ground:"..x..":"..y..":"..b.z
+        if seen[key] then return false end
+        seen[key]=true
+        local facts=groundFacts(x,y,b.z,key,keys,zombies,survivor)
+        local ok,why=GroundSpots.check(facts)
+        if ok then
+            local target={x=x,y=y,z=b.z,objectIndex=0,containerIndex=0,containerType=Session.GROUND_CONTAINER,
+                sprite=GroundSpots.label(facts),ground=true}
+            if not accept or accept(target) then found[#found+1]=target
+            else refused.accept=(refused.accept or 0)+1 end
+        else
+            refused[why]=(refused[why] or 0)+1
+        end
+        return false
+    end
+end
+R.groundScan=groundScan
 -- Stale-clue relocation (docs/management/STALE_CLUE_RELOCATION.md). One job
 -- per session (like `identity`, not per document) keeps the job count
 -- bounded regardless of case/document count; it considers a single stale
@@ -1116,7 +1301,11 @@ local function relocation(api)
         local root=api.snapshot()
         if not id then
             local hours=worldHours()
-            local stale=StaleClue.staleIds(root,hours)
+            -- The promise clock: a map or flyer place's clues stay still
+            -- until 3 days after something marking it was read (owner,
+            -- 2026-09-27). A place loaded with moves overdue still gives one
+            -- clue one move per attempt, never a batch.
+            local stale=StaleClue.staleIds(root,hours,readAtBySite())
             for _,candidate in ipairs(stale) do
                 -- A pile does not relocate. Relocation is built on there being
                 -- exactly one item carrying the token (T4/T5: loss over
@@ -1142,7 +1331,10 @@ local function relocation(api)
         if Session.isMobile(a.target) and type(a.target.carrierMark)=="string" then return true end
         if not StaleClue.canAttempt(a) then return true end
         local hours=worldHours()
-        if not StaleClue.isStale({status=a.status,placedHours=a.placedHours,id=id},root.known,hours) then return true end
+        -- A clue the Search Mode icon has shown never moves (owner, 2026-09-27).
+        if type(root.shown)=="table" and root.shown[id] then return true end
+        if not StaleClue.isStale({status=a.status,placedHours=a.placedHours,id=id,locationId=a.locationId},
+            root.known,hours,readAtBySite()) then return true end
         oldContainer=oldContainer or World.resolve(a.target)
         if not oldContainer then return true end -- nothing safe to verify against
         local p=getPlayer()
@@ -1155,7 +1347,23 @@ local function relocation(api)
                 return true
             end
             site=candidates[1]
-            scan=boundsScan(site,function(t) target=t end)
+            -- Only a spot the Session would take: the clue's own kind, not
+            -- one another clue holds, never a spot that gave up a clue.
+            -- Offering anything else was refused only AFTER the pieces had
+            -- moved. At a map place the letdown layout orders the spots.
+            local moving; for _,d in ipairs(root.case.documents) do if d.id==id then moving=d end end
+            local taken=usedPhysicalKeys()
+            local spentKeys=type(root.spent)=="table" and root.spent or {}
+            local accept=function(candidate)
+                local k=Session.physicalKey(candidate)
+                return not taken[k] and not spentKeys[k] and Session.intentMatches(moving,candidate)
+            end
+            if moving and moving.spot=="ground" then
+                scan=groundScan(site,function(t) target=t end,accept,id,layoutRank(root,moving,site),
+                    {spent=spentKeys,used=taken})
+            else
+                scan=boundsScan(site,function(t) target=t end,accept,id,layoutRank(root,moving,site))
+            end
         end
         if not target then
             if scan() then
@@ -1271,18 +1479,6 @@ end
 -- already holds (P4-R67, live cases and finished ones alike), and the survivor
 -- is not standing next to it. Nothing is ever said to the player: a clue
 -- appearing is exactly as quiet as a clue placed at creation.
-local function usedPhysicalKeys()
-    local keys={}
-    -- A finished case has no assignments left (retirement drops them), so a
-    -- retired case contributes nothing here: its containers are free again,
-    -- which is also what the ladder's third rung trades on.
-    for _,root in ipairs(Cases.sessions(wrapper) or {}) do
-        for _,a in pairs(root.assignments or {}) do
-            if a.target then keys[Session.physicalKey(a.target)]=true end
-        end
-    end
-    return keys
-end
 -- A CARRIER FOR A CLUE WITH NOWHERE TO GO (P4-R134). Fixed containers are a
 -- finite resource near a settled player - that is the whole of P4-R133's fault
 -- - and carriers are not: the bodies in the street replenish themselves, and
@@ -1342,20 +1538,53 @@ local fillCursor=setmetatable({},{__mode="k"})
 -- whose spot is a vehicle.
 -- Farther than this from the survivor, a waiting clue's area is not scanned.
 R.FILL_REACH=120
-local function farFromSurvivor(site)
+-- How far the survivor is from a site's bounds (Chebyshev, 0 inside), or nil
+-- when there is no survivor to measure from.
+local function survivorDistance(site)
     local p=getPlayer and getPlayer()
     local b=site and site.bounds
-    if not p or not b then return false end
+    if not p or not b then return nil end
     local px,py=p:getX(),p:getY()
     local ox=math.max(b.x1-px,0,px-(b.x2-1))
     local oy=math.max(b.y1-py,0,py-(b.y2-1))
-    return ox>R.FILL_REACH or oy>R.FILL_REACH
+    return math.floor(math.max(ox,oy))
 end
+local function farFromSurvivor(site)
+    local d=survivorDistance(site)
+    return d~=nil and d>R.FILL_REACH
+end
+-- NEAREST AREAS FIRST (task 3 plan, step 4 part 2). The waiting clues whose
+-- area is within R.FILL_REACH, nearest first (ties in document order), each
+-- with its distance. A far area is not loaded, so scanning it finds nothing
+-- and only delays the clues nearby. Without a survivor, all of them.
+local function nearestWaiting(root,waiting)
+    local sites={}
+    for _,s in ipairs(root.case.locations or {}) do sites[s.id]=s end
+    local rows={}
+    for i,wid in ipairs(waiting) do
+        local a=root.assignments[wid]
+        local s=a and sites[a.locationId]
+        local d=s and survivorDistance(s)
+        if s and (d==nil or d<=R.FILL_REACH) then rows[#rows+1]={id=wid,d=d or 0,i=i} end
+    end
+    table.sort(rows,function(x,y) if x.d~=y.d then return x.d<y.d end return x.i<y.i end)
+    local ids,dist={},{}
+    for k,r in ipairs(rows) do ids[k]=r.id; dist[r.id]=r.d end
+    return ids,dist
+end
+-- The letdown layout's hold, per clue, this session only: how many attempts
+-- the other side's clue has waited for a fuller scan (Layout.hold).
+local layoutHolds={}
 local function wantsVehicle(doc)
     return doc~=nil and (doc.placementIntent=="vehicle" or doc.spot=="vehicle")
 end
 local function filler(api)
-    local id,site,scan,target,bodyScan,carrier,indexed,doc
+    local id,site,scan,target,bodyScan,carrier,indexed,doc,distance,held,groundWhy
+    -- A clue that could not be placed this attempt, said with where it is
+    -- and how far the survivor is from its area.
+    local function miss(why)
+        CFLog.write("d","skip",{doc=id,area=site and site.id,distance=distance,why=why})
+    end
     return function()
         local hours=worldHours()
         -- The whole case is read ONCE per attempt, not once per step: a
@@ -1380,33 +1609,81 @@ local function filler(api)
             indexed=#planned>0
             -- Indexed plans first, as before; within a list, the next one in
             -- turn, so a clue that cannot go anywhere yet does not hold the
-            -- rest of the case behind it.
+            -- rest of the case behind it. Waiting clues are served nearest
+            -- area first, within reach; the cursor still turns over them.
+            local dist
+            if not indexed then
+                waiting,dist=nearestWaiting(root,waiting)
+                if #waiting==0 then
+                    -- A place far from the survivor is not loaded, so walking
+                    -- its squares finds nothing. Map places are decided from
+                    -- afar (step 4); they fill on arrival.
+                    declinePlacement("every waiting clue's area is far from the survivor")
+                    return true
+                end
+            end
             id,fillCursor[api]=Session.pick(indexed and planned or waiting,fillCursor[api])
+            distance=dist and dist[id]
             for _,s in ipairs(root.case.locations) do
                 if s.id==root.assignments[id].locationId then site=s end
             end
             for _,d in ipairs(root.case.documents) do if d.id==id then doc=d end end
             if not site then return true end
-            -- A place far from the survivor is not loaded, so walking its
-            -- squares finds nothing and only delays the clues nearby. Map
-            -- places are decided from afar (step 4); they fill on arrival.
             if not indexed and farFromSurvivor(site) then
                 declinePlacement("the area of "..tostring(id).." is far from the survivor")
                 return true
             end
             if not indexed then
                 local taken=usedPhysicalKeys()
+                -- At a place a map or flyer marks, the letdown layout orders
+                -- the spots: the favoured side's clues shallow, the other
+                -- side's deepest. It only orders; it never refuses.
+                local rank=layoutRank(root,doc,site)
+                local area=rank and areaRecord(root,site.id)
+                local favour=area and area.trail and area.trail.favour
+                local accept=function(candidate)
+                    return not taken[Session.physicalKey(candidate)] and Session.intentMatches(doc,candidate)
+                end
                 if wantsVehicle(doc) then
                     target=vehicleCandidateFor(site,taken)
-                elseif not (doc and (doc.spot=="corpse" or doc.spot=="ground")) then
+                elseif doc and doc.spot=="ground" then
+                    -- Open ground (GroundSpots): checked squares in the
+                    -- world's order, never a spot that gave up a clue.
+                    scan=groundScan(site,function(t,_,refused)
+                        target=t
+                        if not t then
+                            local parts={}
+                            for why,n in pairs(refused or {}) do parts[#parts+1]=why.."="..n end
+                            table.sort(parts)
+                            groundWhy=table.concat(parts,",")
+                        end
+                    end,accept,id,rank,{spent=type(root.spent)=="table" and root.spent or {},used=taken})
+                elseif not (doc and doc.spot=="corpse") then
                     -- A clue only takes its own kind of spot (No Help: a
                     -- mailbox clue only a mailbox, a furniture clue only
                     -- furniture); Session.assign refuses anything else, so a
                     -- container of the wrong kind is never even chosen.
-                    scan=boundsScan(site,function(t) target=t end,
+                    scan=boundsScan(site,function(t,seen)
+                        -- The other side's clue waits for a fuller look at
+                        -- the place (a building seen from the street offers
+                        -- the front room only), a bounded number of attempts,
+                        -- then takes the deepest spot seen.
+                        if t and rank then
+                            local waited=layoutHolds[id] or 0
+                            if Layout.hold(doc,favour,seen,waited+1) then
+                                layoutHolds[id]=waited+1
+                                held=true
+                                CFLog.write("d","skip",{doc=id,area=site.id,distance=distance,seen=seen,
+                                    n=waited+1,why="layout-hold"})
+                                return
+                            end
+                        end
+                        layoutHolds[id]=nil
+                        target=t
+                    end,
                         function(candidate)
                             return not taken[Session.physicalKey(candidate)] and Session.intentMatches(doc,candidate)
-                        end,id)
+                        end,id,rank)
                 end
             end
         end
@@ -1441,6 +1718,7 @@ local function filler(api)
                 if not target then scan=nil end
             else return false end
         end
+        if held then return true end
         if not target then
             if wantsVehicle(doc) then
                 -- Named: the fitness audit (20260924T191606) stood at this
@@ -1448,15 +1726,17 @@ local function filler(api)
                 -- "last reason: none". A clue that wants a vehicle waits for
                 -- a confirmed one at its site, and now says so.
                 declinePlacement("no confirmed vehicle at the site for "..tostring(id))
-                CFLog.write("d","skip",{doc=id,why="no-confirmed-vehicle"})
+                miss("no-confirmed-vehicle")
                 return true
             end
             -- A No Help clue that names a spot other than a body waits for a
-            -- spot of its own kind: open ground is not offered by any scan
-            -- yet (task 3 plan, step 4), and a body is never its fallback.
+            -- spot of its own kind, and a body is never its fallback.
             if doc and doc.spot~=nil and doc.spot~="corpse" then
                 declinePlacement("no free "..tostring(doc.spot).." spot at the area for "..tostring(id))
-                CFLog.write("d","skip",{doc=id,why="no-"..tostring(doc.spot)}); return true
+                if doc.spot=="ground" and groundWhy and groundWhy~="" then
+                    CFLog.write("d","skip",{doc=id,area=site.id,distance=distance,refused=groundWhy,why="no-ground"})
+                else miss("no-"..tostring(doc.spot)) end
+                return true
             end
             -- A body clue of the world record is not held to the one-mobile-
             -- clue-per-case cap: the whole world is one record.
