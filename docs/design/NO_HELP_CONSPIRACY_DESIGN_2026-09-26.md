@@ -45,6 +45,51 @@ no role. Vanilla PZ's own annotated maps and environmental storytelling
 (car crashes, staged scenes) are absorbed into the same system rather
 than left as unrelated flavor.
 
+## 1a. The worked example is retired; candidate replacements stored below
+
+**2026-09-27.** Every mention of "bioweapon-leak vs. natural zoonotic
+spillover" earlier in this document and in later working sessions was a
+placeholder pair used to illustrate the mechanisms (container-function
+affinity, redundancy, placement, map/event integration) — never a
+committed premise. That specific pairing is now retired at the owner's
+request and must not be reused, in this document or in generated
+content. **None of the mechanisms above depend on which two premises are
+picked** — container-affinity, redundancy, placement, blind-review
+discipline, and the map/event integration work all transfer unchanged to
+whatever replacement pair is chosen.
+
+Twenty single, un-paired candidate premises were generated as
+replacements and are stored here for later selection. The owner picks
+exactly two mutually exclusive ones from this list (or supplies their
+own) before any further content generation names a specific cause:
+
+1. Officials/military mismanaged the evacuation or containment response
+   and covered up the failure.
+2. An ordinary, nobody's-fault natural outbreak that was always going to
+   happen.
+3. A local chemical/industrial plant leak, covered up by the company or
+   military.
+4. A natural wildlife disease outbreak.
+5. A secret non-biological military test (explosion, experimental
+   device) went wrong at a local site.
+6. An unexplained natural/atmospheric event.
+7. Negligent contamination of the local water supply.
+8. A naturally occurring mold/toxin bloom in food or water.
+9. A nearby prison or asylum's population escaped and officials hid it.
+10. Pure social panic/psychological contagion, with no physical cause at
+    all.
+11. A secret government space program had a covered-up accident.
+12. A natural meteor/cosmic-dust event.
+13. A local cult orchestrated something.
+14. A mundane technical failure (power plant, dam, comms tower) cascaded
+    into chaos.
+15. A downplayed hostile foreign act.
+16. An ordinary domestic industrial accident.
+17. An experimental pesticide/agricultural program malfunctioned.
+18. A naturally occurring crop blight or animal parasite outbreak.
+19. Corrupt local officials hid a mining disaster.
+20. A genuine unexplained geological/environmental event.
+
 ## 2. Authoring integrity — the actual hard problem
 
 Every other design decision below depends on this holding. The regulator
