@@ -38,15 +38,7 @@ function M.fill(playerNum,context,items)
     local maps=EngineAPI.MapMediaRuntime
     local R=(maps and maps.subject(item)) and maps or R
     if R~=maps and (not getDebug or not getDebug() or not R.metrics()) then return end
-    if not R.subject(item) then
-        -- A finished case's own evidence is already in the organiser. Showing
-        -- nothing read as "cannot be logged" in play (2026-09-15, P4-R118).
-        if R.retiredPaper and R.retiredPaper(item) then
-            local done=context:addOption("Already in the organiser",nil,nil)
-            if done then done.notAvailable=true end
-        end
-        return
-    end
+    if not R.subject(item) then return end
     local expected=item:getOutermostContainer()
     local player=getSpecificPlayer(playerNum)
     local carried=expected==player:getInventory()

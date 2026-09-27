@@ -386,17 +386,16 @@ if Events and Events.OnTick and not I.tickHandler then
 end
 function I.reset() queue={};queued={};seen={};tokenless={};elapsed=0 end
 if Events and Events.OnGameStart and not I.startHandler then
- -- Seven modules are reached only by PZ executing their file, with nothing
- -- requiring them. Two are load-bearing: AutomaticInvestigations makes cases
- -- appear without console commands, and LocalPersonHooks installs the door
+ -- Some modules are reached only by PZ executing their file, with nothing
+ -- requiring them. LocalPersonHooks, for one, installs the door
  -- and transfer hooks the whole person/key strand depends on. PlayerVoice did
  -- the same thing and silently never loaded (86ade2c), so this reports the
  -- truth at game start instead of leaving it to be discovered mid-test.
  local function reportModules()
-  local expected={"AutomaticInvestigations","LocalPersonHooks","LocalPersonRuntime",
+  local expected={"LocalPersonHooks","LocalPersonRuntime",
    "GeneratedRuntime","DiscoveryLog","PlayerVoice","PersonNameLog","ClueCue",
    "ClueMarkers","IdentityObserver","ObservedKeyLeads","EvidencePickupHint",
-   "CasePerson","KeyObserver"}
+   "KeyObserver"}
   local missing={}
   for _,name in ipairs(expected) do
    if NHShared[name]==nil then missing[#missing+1]=name end

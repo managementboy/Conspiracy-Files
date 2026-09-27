@@ -546,3 +546,29 @@ spot rule today; the filler places a plain vanilla ID card on a real body.
 6. Clothing: a closed outfit-to-class table and a ranking among bodies already
    in reach at commit time; the committed outfit is saved; a world-fixed share
    prefers the rival's class so clothing never gives the lean away.
+
+### Phase 5 — the runtime switched to areas; the old generator's runtime removed
+
+**Built:** `GeneratedRuntime.lua` no longer makes up cases (2,750 → about
+1,680 lines). On game start `R.bootstrap` creates the save's one No Help world
+record (world seed drawn once and saved) and starts the address book and map
+marks; every 120 ticks `R.decideNearby` scans nearby buildings (after the player
+has moved 50 tiles or half an in-game hour has passed), maps each eligible one
+to an interesting place, and adds it as an area with the clue list's current
+version. The filler gives each waiting clue only a spot of its own kind.
+Deleted: `AutomaticInvestigations`, `Trial`, `CasePerson`, `OpeningMemory`,
+`OpeningMemoryStore`. Gone from play: the personal opening key, retired-case
+evidence, the closing questions, connection voice lines. Test:
+`test/nohelp_area_runtime.lua` (the real runtime under stubs: a new save gets
+one world record and keeps it on reload; a police building becomes an area; a
+house never does; nothing is decided twice; an empty clue list decides
+nothing). Full suite: the same nine known failures as before, nothing new.
+
+**Honest state:** nothing appears in play yet — the shipped clue list is empty
+until real clues are written with the owner. The nearby scan reaches only
+police, hospital, office, transmission and bookstore buildings; farms,
+warehouses, government, checkpoints and map-named places come from the
+address book, map marks and scenes (steps 4-5). Ground clues wait until a
+scan offers ground spots (step 4). Still to remove: the old generator's own
+files (Generator, Story, Premises, scenarios...), the rest of the old case
+store, and Dead Air.
