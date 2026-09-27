@@ -276,10 +276,6 @@ playtests quote it.
    makes a random 1-20% of trails unreliable (pointing at the other theory's
    evidence), drawn from the world seed so reload never changes it
    (percentage confirmed by the owner).
-4. **Cap:** `FIRST_DEVELOPMENT_CAP` is 5 clues per theory per area.
-5. **Where the work goes:** the `nohelp-task3-plan` branch; the owner merges.
-6. **Interesting places:** research place types (T3), places named on vanilla
-   maps and flyers, and farms and checkpoints — see the DR.
 2. **Scenes:** every area with a confirmed scene gets at least one clue beside
    it. If a scene is not confirmed in time, the clue waits for the next
    confirmed scene in the same area, and every wait is logged (area, how long,
@@ -287,6 +283,14 @@ playtests quote it.
 3. **No maximum:** once written clues run out, object sets are placed again as
    new copies. Pick and step 7's cap-off run must support this; "the list ran
    out" is not an allowed reason to stop.
+4. **Cap:** `FIRST_DEVELOPMENT_CAP` is 5 clues per theory per area.
+5. **Where the work goes:** the `nohelp-task3-plan` branch; the owner merges.
+6. **Interesting places:** research place types (T3), places named on vanilla
+   maps and flyers, and farms and checkpoints — see the DR.
+7. **Bodies and spots:** a dead character's body does not attract new clues;
+   a spot that gave up a clue is never reused.
+8. **Real clues:** placeholders first; then proposed real clues go to the
+   owner a few at a time.
 
 ## 8. Phase log, with the ADHD review after each phase
 

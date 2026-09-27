@@ -122,6 +122,12 @@ plan's directive check):
   T3, detection stays advisory); (b) the real places vanilla maps and flyers
   name (`MapMediaCatalogue.lua`); (c) farms, barns and fields, and military or
   police checkpoints and roadblocks.
+- **Bodies do not attract clues; spots are never reused** (owner, same
+  session): a dead character's body only keeps what they carried; a spot that
+  already gave up a clue never receives another.
+- **Real clues come after the picker:** the picker is built and tested on
+  placeholder clues first; then a short proposed list of real clues goes to
+  the owner a few at a time for direction before any is written for real.
 - **No maximum, for real.** Once the written clues are all placed, object sets
   may be placed again elsewhere as new copies with new stamps. This is not a
   respawn: a consumed copy never returns (DR-20260927-WORLD-KEEPS-EVERYTHING
