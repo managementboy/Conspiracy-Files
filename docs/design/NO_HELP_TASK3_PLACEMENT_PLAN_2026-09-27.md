@@ -832,14 +832,14 @@ still waits for its live test; no visible playtest yet.
 in that area, preferably near the map's own annotation marks."
 - `MapSites` kind `window` (at most 44 x 44 around one mark) is now kind
   `area`: the whole reviewed rectangle, or the box around a design's several
-  rectangles. 11 area places, from 38 x 80 to 430 x 630 (Irvington Speedway);
+  rectangles. 11 area places, from 38 x 80 to 430 x 630;
   each keeps its map's own annotations and symbols as marks (`note=i`, taken
   from `catalogue.json` stamps inside the rectangles, now `notes` in
-  `MapMediaDestinations`). Places 257 → 253: the second marks of WorldStashMap6
-  and 10 and the Irvington Speedway flyer now fall inside their area and join
-  it. WorldStashMap10's area and the speedway are also pointed to by flyers,
-  so they are shared (a random lean); WorldStashMap6's area is marked by one
-  map only, so it is not shared (see "each mark its own minimum" below).
+  `MapMediaDestinations`). Places 257 → 253: the second marks of two maps and
+  one flyer now fall inside their area and join it. Areas also pointed to by
+  a flyer are shared (a random lean); an area marked by one map only is not
+  shared (see "each mark its own minimum" below). Which maps: the
+  writer-only spoilers file.
 - Placement stays bounded (`MarkedArea.lua`): open ground tries at most 64
   squares per attempt as before — 48 in growing rings (4, 8, 16, 22 tiles)
   around marks the world picks, 16 anywhere in the area; an unloaded square
@@ -866,8 +866,8 @@ holding fewest — so every mark has >= 3, one of the other side.
 `AreaCase.validate` accepts the optional `mark` and checks the per-mark
 minimum whenever the area holds it. At run time the clue's furniture windows
 start each cycle at its own mark, and its near ground tries ring that mark;
-the rest of the area follows as before. Today only WorldStashMap6's area
-qualifies (marks 1 and 2); WorldStashMap10's area and the speedway also have
+the rest of the area follows as before. Today one map's area qualifies
+(its marks 1 and 2); two other areas also have
 a flyer, so they stay shared (random lean, no extra minimum, no own marks).
 Single-mark places are unchanged.
 Test: `test/nohelp_marks_minimum.lua`; `test/nohelp_area_runtime.lua` extended.

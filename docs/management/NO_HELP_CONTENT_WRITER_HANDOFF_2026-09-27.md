@@ -6,6 +6,17 @@ remove-the-assumption; three ideas deepened against the code). Read this whole
 document before writing anything. You write **content only**: the engine,
 placement and rules already exist and are not yours to change.
 
+> **Who is who (owner, 2026-09-27).** You (ChatGPT) write the clue text and
+> deliver it in the format of section 6. Claude (the engineering AI in this
+> repo) builds the tools, owns the vanilla scene list, and reviews and signs
+> off your work together with a blind re-read by a different AI. **The owner
+> does not curate or review content and must stay unspoiled**: never send the
+> owner clue text, scene names, character names, locations or evidence
+> details, and never ask the owner to find or confirm anything. Spoiler-level
+> specifics live in `docs/writer-only/` (read `NOHELP_SPOILERS.md` there).
+> Story questions go to Claude; only a genuine direction question with no
+> spoiler in it goes to the owner, worded without specifics.
+>
 > **Status of the tooling this document relies on.** Parts are built, parts are
 > not yet. Each section says which. Section 9 lists what must be built before
 > work orders beyond stage 0 are handed out.
@@ -83,7 +94,8 @@ zombie can interrupt. (Details: `docs/design/SEARCH_TO_FIND.md`.)
     (in the scene's room, in its vehicle, on a body, on the ground, in a bag
     someone grabbed); never put a clue on a vanilla named character; say in
     your notes whether the clue agrees with or contradicts what the scene
-    already implies. Jackie Jaye's studio gets **one version per conspiracy**.
+    already implies. The first hand-checked unique scene gets **one version per
+    conspiracy** (which scene: `docs/writer-only/NOHELP_SPOILERS.md`).
 
 **Self-check per clue** (answer each honestly in your notes):
 - Covering the place name, do the title and first line alone say something
@@ -112,11 +124,10 @@ So:
 
 ## 5. How work is handed to you — staged work orders
 
-**Stage 0 (before any clue):** return only, for the owner to sign off in plain
-terms: a frozen **axiom list** per conspiracy (short ids + one-line glosses —
+**Stage 0 (before any clue):** return only, for Claude to sign off: a frozen **axiom list** per conspiracy (short ids + one-line glosses —
 the non-negotiable facts each version of events needs); a one-line **gloss**
 per map/flyer story, per person and per scene you plan to write. Nothing else
-is written until the owner approves these.
+is written until these are signed off.
 
 **Then tickets, one at a time, in this order for a first release:**
 1. `PLACE-<kind>` for police, hospital, farm, checkpoint — object sets first.
@@ -125,7 +136,8 @@ is written until the owner approves these.
 4. A pilot of three `MAP-<design>` tickets: one large-area map, one flyer
    whose place is a building, one open mark.
 5. `SCENE-<kind>` tickets, body and vehicle anchors first.
-6. `JACKIE` — exactly two clues, one per conspiracy, same anchor.
+6. `UNIQUE-<scene>` — the first hand-checked unique scene: exactly two clues,
+   one per conspiracy, same anchor.
 7. The remaining maps and flyers in batches of 3-5.
 
 **Acceptance per ticket:**
@@ -157,7 +169,7 @@ onto the clue list (`mod-nohelp/.../NHShared/Mystery/Manifest.lua`):
 | `rival_reading` | yes | written **first**: the other conspiracy's best reading, one line |
 | `gloss` | yes | the clue in one neutral line, for reviewers |
 | `axioms` | yes | ids from the approved axiom list — at least one for **each** conspiracy |
-| `anchor` | for maps, scenes, Jackie | `{map=<design>, mark=<n>}`, `{print=<name>}`, `{scene=<kind>}`, or `{jackie="A"|"B"}` |
+| `anchor` | for maps and scenes | `{map=<design>, mark=<n>}`, `{print=<name>}`, `{scene=<kind>}`, or `{scene=<kind>, version="A"|"B"}` for a scene with one version per conspiracy |
 | `cites` | when built on vanilla text | `{source=..., quote=...}` — the exact vanilla annotation, flyer or scene string it builds on |
 | `prov` | yes | `{writer=<model>, handoff=<this document's date>, batch=<ticket-id>}` |
 
@@ -179,10 +191,10 @@ returned if it is never read as its rival, or read as "neither" most of the
 time. Its result is stored against the exact text; editing the text afterwards
 voids it.
 
-**The owner:** signs off stage 0; reads a one-page summary per batch (glosses,
-where clues can turn up, which side, the counter-reading) and a drift report
-("farm clues for theory A all sound like paperwork"); rules on blind-read
-failures. The owner does not read Lua.
+**Claude:** signs off stage 0; reads every batch, a drift report ("farm clues
+for theory A all sound like paperwork") and every blind-read failure, and
+returns rows with reason codes. **The owner is not in this loop** and must
+not receive content (blind play).
 
 **Returned rows** carry reason codes, e.g. `SCHEMA`, `BAD_ITEM`, `SET_SIZE`,
 `NOTE_IN_SET`, `BAD_CARRIER`, `TOO_LONG`, `SAME_LEAN`, `PERSON_ORPHAN`,
@@ -201,7 +213,7 @@ Fix the pattern, not just the row.
 3. `docs/design/NO_HELP_TASK3_PLACEMENT_PLAN_2026-09-27.md` — sections 1 and 7
    (how placement works; the owner's answers).
 4. `docs/design/SEARCH_TO_FIND.md` — how a player finds a clue.
-5. `docs/design/nohelp-adhd-inputs/` — the scene list and draft scene table;
+5. `docs/writer-only/nohelp-adhd-inputs/` — the scene list and draft scene table;
    the shipped table is `mod-nohelp/.../Generated/VanillaScenes.lua`.
 
 ## 9. Before tickets beyond stage 0 go out (engine work, not yours)
@@ -210,15 +222,16 @@ Fix the pattern, not just the row.
   the derived clue file the game loads, keeps `rival_reading`, `gloss`,
   `axioms`, `cites`, `prov` in a sidecar, and runs the checks. *Not built.*
 - **Anchor on a clue:** the clue list cannot yet say which map mark, flyer,
-  scene or Jackie version a clue belongs to, so map and scene clues would
+  scene or scene version a clue belongs to, so map and scene clues would
   become generic. An optional `anchor` field, checked against
   `Generated/MapSites.lua` and `Generated/VanillaScenes.lua`, and read by
-  placement, is needed before any `MAP`, `SCENE` or `JACKIE` ticket. *Not
+  placement, is needed before any `MAP`, `SCENE` or `UNIQUE` ticket. *Not
   built.*
 - **Clue gates:** `Mystery/ClueGates.lua` (provenance, density, emphasis,
   reserved names, citations) called from the clue-list rules, with
   `test/nohelp_clue_gates.lua`; the axiom and retired-premise gates once the
-  owner has frozen the axioms and supplied the retired terms for hashing.
+  axioms are frozen at stage 0; Claude stores the retired terms as salted hashes
+  (the retired pair is on record in the design doc, so the owner is not needed).
   *Not built.*
 - **Blind re-read prompt and receipts:** `tools/cluegates/blind_reread.md`,
   receipts in `tools/cluegates/receipts/` keyed by a hash of the clue text.

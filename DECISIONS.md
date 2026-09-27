@@ -236,7 +236,7 @@ plan's directive check):
 - **Each mark its own minimum** (owner, same session): a large area one map
   marks several times (its own marks, not its annotations) gives each of
   those marks at least 3 clues, one of the other side, placed near that mark
-  first. A place a map and a flyer both point to (the speedway) stays shared:
+  first. A place a map and a flyer both point to stays shared (specifics: docs/writer-only/NOHELP_SPOILERS.md):
   random side per world, no extra minimum.
 - **Vanilla scenes** (owner, same session): a scene and the clues of the
   place it appears in are independent — a scene appearing where clues are
@@ -244,20 +244,31 @@ plan's directive check):
   confirmed, its clue keeps waiting; where a scene's clue goes depends on the
   kind of scene (a room scene: in that room; a car crash: on the bodies or in
   the cars, and so on) — to be decided per kind of scene with an `/adhd` run
-  over the real list of vanilla scenes; the first hand-checked scene (Jackie
-  Jaye's news studio) can be built for either conspiracy, how best to be
+  over the real list of vanilla scenes; the first hand-checked scene (a unique
+  scene; specifics in docs/writer-only/NOHELP_SPOILERS.md) can be built for either conspiracy, how best to be
   honed with an `/adhd` run.
 - **Which vanilla scenes hold clues** (owner, same session, after an `/adhd`
   run over all 140 vanilla scene kinds): scenes of suicide or self-harm are
   allowed (*"it fits well into any conspiracy that someone has taken their
   life or had to hurt themselves"*); killer scenes are allowed; party, meal
-  and comedy scenes hold clues just as much as any other; Kate and Baldspot
-  and Sir Twiggy are left alone entirely. A scene kind gets no clue only
+  and comedy scenes hold clues just as much as any other; two scenes built
+  around vanilla named characters are left alone entirely (which ones: the
+  writer-only spoilers file). A scene kind gets no clue only
   when there is nothing to put one in (animals with no vehicle, a named
   zombie alone, the never-built base class, generic house dressing). A clue
-  never goes on a vanilla named character's body or ID. Jackie Jaye's studio:
-  lean random per world, one clue version per conspiracy, in a studio desk or
-  cabinet other than the one vanilla uses.
+  never goes on a vanilla named character's body or ID. The first hand-checked
+  scene: lean random per world, one clue version per conspiracy, placed beside
+  vanilla's own items, never on them (details: writer-only spoilers file).
+- **Who does the content** (owner, 2026-09-27, after ChatGPT became the
+  content writer): ChatGPT writes the clue text and follows the delivery
+  format in `docs/management/NO_HELP_CONTENT_WRITER_HANDOFF_2026-09-27.md`
+  (Claude builds the converter). Claude finishes the vanilla scene list as
+  well as the engine side. The owner does not curate content: *"I do not want
+  to curate content. You and chatgpt will do that."* Stage-0 sign-off
+  (frozen axioms, glosses) and clue review move from the owner to Claude,
+  with a blind re-read by a different AI. The owner stays unspoiled
+  (blind-play protection): scene, character, location and evidence specifics
+  live in `docs/writer-only/`, never in owner-facing documents or updates.
 - **No maximum, for real.** Once the written clues are all placed, object sets
   may be placed again elsewhere as new copies with new stamps. This is not a
   respawn: a consumed copy never returns (DR-20260927-WORLD-KEEPS-EVERYTHING
