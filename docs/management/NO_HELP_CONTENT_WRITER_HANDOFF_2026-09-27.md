@@ -152,6 +152,20 @@ the non-negotiable facts each version of events needs); a one-line **gloss**
 per map/flyer story, per person and per scene you plan to write. Nothing else
 is written until these are signed off.
 
+`T0000.json` is one object, not rows:
+
+    {"containment":  [{"id": "c-short-id", "gloss": "one line"}],
+     "agricultural": [{"id": "a-short-id", "gloss": "one line"}],
+     "stories": [{"ticket": "T0001", "target": "<registry target>",
+                  "lean": "containment|agricultural|random",
+                  "gloss": "one neutral line"}]}
+
+Axiom ids are lowercase, short and unique; they are what every row's `axioms`
+field names. `stories` covers **only the first-release tickets T0001-T0018**
+(the registry's targets); glosses for later stories come in a further
+stage-0-type ticket Claude opens with each expansion batch. Once signed off,
+changing an axiom voids the sign-off; adding a story gloss does not.
+
 **Then tickets, one at a time, in this order for a first release:**
 1. `PLACE-<kind>` for police, hospital, farm, checkpoint — object sets first.
 2. `PLACE-<kind>` for office, bookstore, transmission, warehouse, government.
