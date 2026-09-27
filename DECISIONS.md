@@ -142,6 +142,11 @@ plan's directive check):
   This supersedes P4-R17's hard budget for No Help only. Put to the owner
   first: T1 measured very large saves round-tripping but stalling for about
   nine seconds per save, so save time is to be watched in long playtests.
+- **The old mini-case generator is removed from No Help completely** (owner,
+  same session: *"Remove it completely. It just distracts us."*). Everything
+  that only exists to make up runtime cases goes; the placement machinery the
+  new system runs on (Session, storage and container scans, the address book,
+  search, relocation) stays. No Help places nothing but authored clues.
 - **No maximum, for real.** Once the written clues are all placed, object sets
   may be placed again elsewhere as new copies with new stamps. This is not a
   respawn: a consumed copy never returns (DR-20260927-WORLD-KEEPS-EVERYTHING
