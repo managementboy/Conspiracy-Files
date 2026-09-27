@@ -227,11 +227,11 @@ playtests quote it.
 
 | Directive | Proof | Readout | Checks |
 |---|---|---|---|
-| NH-D1 two contradictory conspiracies | step 3 Linter (both leans, rival reading per clue, every kind of area and spot hosts both); step 3 Pick test; step 7 (both leans per area, thinner-lean floor) | clues per lean, per area | not yet written, due step 3 |
+| NH-D1 two contradictory conspiracies | step 3 Linter (both leans, rival reading per clue, every kind of area and spot hosts both); step 3 Pick test; step 7 (both leans per area, thinner-lean floor) | clues per lean, per area | `test/nohelp_pick.lua`; the per-area check on what is actually placed in a real world is owed by step 7 |
 | NH-D2 hint, then search (Look it over as fallback) | step 2 tests (ground spot and set: one hint, one icon, one find); step 8 visible playtest | finds by search vs Look it over | `test/nohelp_found_how.lua`; the hint and icon on open ground and on a set still owe the visible playtest (step 8) |
-| NH-D3 placed procedurally | step 3 Pick test (same inputs, same result; no map-read input); step 4 replay test | area sources | not yet written, due step 3 |
-| NH-D4 no maximum, a first-development cap | step 7 cap-off run, raise-the-cap save test, "stopped for another reason" failure; the cap exists only in `Pick.lua` | cap, and any other limit hit | not yet written, due step 7 |
-| NH-D5 half or more are object sets of vanilla items | step 3 Linter (per clue, vanilla types); step 7 on placed *and* spotted, lost sets counted | set share placed and spotted | not yet written, due step 3 |
+| NH-D3 placed procedurally | step 3 Pick test (same inputs, same result; no map-read input); step 4 replay test | area sources | `test/nohelp_pick.lua`; the reload replay test is owed by step 4 |
+| NH-D4 no maximum, a first-development cap | step 7 cap-off run, raise-the-cap save test, "stopped for another reason" failure; the cap exists only in `Pick.lua` | cap, and any other limit hit | `test/nohelp_pick.lua`; the cap-off soak and raise-the-cap save test are owed by step 7 |
+| NH-D5 half or more are object sets of vanilla items | step 3 Linter (per clue, vanilla types); step 7 on placed *and* spotted, lost sets counted | set share placed and spotted | `test/nohelp_pick.lua`; the share among clues actually spotted is owed by step 7 |
 | NH-D6 annotated maps included | step 4 trail fold-in and "read or not, same clue" test; step 7 every map destination holds both leans | trails started, clues per design | not yet written, due step 4 |
 | NH-D7 vanilla mysteries detected and used | step 5 first citation, observer out of debug and saved; step 7 scene-anchored floor; step 8 timing spike | scene-anchored vs fallback | not yet written, due step 5 |
 
@@ -395,3 +395,33 @@ playtest (step 8). Nothing chooses a ground spot yet; that is step 4.
   adopted: whether a dead character's body should become a place clues can
   turn up, and whether a spot where a clue was already found should never
   receive another.
+
+### Phase 4 — the clue list's rules and the picker (step 3, first half)
+
+**Owner answer:** an area gets a random 2 to 10 clues, fixed by the world.
+
+**Built:** `Mystery/Manifest.lua` — the clue list's shape and rules (a clue is
+written or a set of 2-4 vanilla items; each placement names the kind of
+place, the spot, its lean and the rival it cuts against; at least half are
+sets per clue; every kind of place and spot can host both conspiracies; every
+kind of place has an object set for each conspiracy). The list itself is
+empty until the owner directs the real clues. `Generated/Pick.lua` — the
+picker, a pure function of world seed, area, clue list, content version and
+what is already placed: one clue of each conspiracy before any second,
+`FIRST_DEVELOPMENT_CAP=5` per conspiracy per area (defined only there), the
+thinner conspiracy preferred, sets preferred while under half, written
+clues placed once, sets placed again as new copies once written clues run out.
+Test: `test/nohelp_pick.lua` (60 areas: both conspiracies everywhere, within
+the cap, 168 clues from a 26-clue list, reading a map changes nothing).
+
+**Two rule conflicts found by the test, and how they were settled** (the owner
+may overrule):
+- *Both conspiracies everywhere* vs *sets return only after written clues run
+  out*: an area that would otherwise miss a conspiracy may take a new copy of a
+  set early. A taken clue never comes back; a copy is a new instance.
+- A place and conspiracy with only written clues can never be refilled, so the
+  clue-list rules now require an object set for each conspiracy at every kind
+  of place.
+
+**Next (phase 5, step 3 second half):** the per-area contract that feeds the
+picker's choices into the engine in place of the old two-site case generator.

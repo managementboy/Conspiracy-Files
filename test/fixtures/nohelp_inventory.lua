@@ -15,7 +15,7 @@
 -- accident (phase 1 review): whether a clue is a set does not follow from its
 -- place or lean, a clue's two leans may use different spots, every set has its
 -- own pieces, and one set holds two of the same item.
-local M={revision="synthetic-nohelp-inventory-2"}
+local M={revision="synthetic-nohelp-inventory-3"}
 
 M.leans={"containment","agricultural"}
 
@@ -68,5 +68,15 @@ for i=1,24 do
         },
     }
 end
+
+-- Two more sets, so that every kind of place has a set for each conspiracy:
+-- a place and conspiracy with only written clues could never be refilled once
+-- those were placed (phase 4, found by the picker's own test).
+M.clues[#M.clues+1]={id="S25",kind="set",pieces={"Rope","Bleach"},where={
+    {place="hospital",spot="ground",lean="agricultural",rival="containment"},
+    {place="warehouse",spot="furniture",lean="containment",rival="agricultural"}}}
+M.clues[#M.clues+1]={id="S26",kind="set",pieces={"Tarp","Paperclip","Wire"},where={
+    {place="mapNamed",spot="vehicle",lean="containment",rival="agricultural"},
+    {place="bookstore",spot="mailbox",lean="agricultural",rival="containment"}}}
 
 return M

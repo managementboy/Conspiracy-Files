@@ -128,6 +128,8 @@ plan's directive check):
 - **Real clues come after the picker:** the picker is built and tested on
   placeholder clues first; then a short proposed list of real clues goes to
   the owner a few at a time for direction before any is written for real.
+- **Clues per place: a random 2 to 10** (owner, same session), fixed by the
+  world so reload never changes it; at least one of each conspiracy.
 - **No maximum, for real.** Once the written clues are all placed, object sets
   may be placed again elsewhere as new copies with new stamps. This is not a
   respawn: a consumed copy never returns (DR-20260927-WORLD-KEEPS-EVERYTHING
