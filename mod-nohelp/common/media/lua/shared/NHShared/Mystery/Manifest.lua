@@ -18,8 +18,12 @@ local M={}
 M.LEANS={"containment","agricultural"}
 -- The interesting places clues go around (owner, 2026-09-27): research place
 -- types (T3), places named on vanilla maps and flyers, farms and checkpoints.
+-- "scene": beside a confirmed vanilla scene (task 3 plan, step 5). A scene's
+-- one clue is chosen apart from the place's other clues (owner: a scene and
+-- the place it appears in are independent), so a clue written for scenes
+-- lists only "scene" places and a clue for places never lists "scene".
 M.PLACES={"police","hospital","office","bookstore","transmission","warehouse","government",
-    "mapNamed","farm","checkpoint"}
+    "mapNamed","farm","checkpoint","scene"}
 -- Where inside a place a clue lies: the four the engine already supports, and
 -- open ground.
 M.SPOTS={"furniture","mailbox","vehicle","corpse","ground"}
@@ -74,6 +78,9 @@ function M.validClue(c)
     if c.person~=nil and (type(c.person)~="string" or not c.person:find("^[%w%-_]+$") or #c.person>40) then
         return false,c.id..": a person is named by a short id"
     end
+    local scenes=0
+    for _,w in ipairs(c.where) do if w.place=="scene" then scenes=scenes+1 end end
+    if scenes>0 and scenes<#c.where then return false,c.id..": a scene clue goes beside scenes only" end
     for _,w in ipairs(c.where) do
         if not PLACE[w.place] then return false,c.id..": unknown place "..tostring(w.place) end
         if not SPOT[w.spot] then return false,c.id..": unknown spot "..tostring(w.spot) end

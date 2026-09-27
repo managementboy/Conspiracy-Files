@@ -268,9 +268,61 @@ function S.plannedTarget(t,site)
     for _,kind in ipairs(site.containerTypes) do if kind==t.containerType then return true end end
     return false
 end
+-- VANILLA SCENES SEEN (task 3 plan, step 5). Optional root field, keyed by
+-- the scene's key (a 10x10 cell "cell:<cx>:<cy>:<z>", or a hand-checked
+-- citation "cite:<kind>"). A CONFIRMED record names the kind and where it
+-- is, and is set once: nothing ever changes it (like `shown`). A PENDING
+-- record is the traces seen there so far without a match (SceneMatch
+-- tokens); it only grows, and becomes confirmed when a later look adds the
+-- missing trace - so a scene the player emptied before it was confirmed
+-- still confirms and its clue keeps waiting (owner, 2026-09-27). Shape only:
+-- today's scene table is never consulted, so a table update cannot break a
+-- save.
+S.MAX_SCENE_TOKENS=24
+S.MAX_SCENE_AVOID=32
+function S.validScenes(scenes)
+    if scenes==nil then return true end
+    if type(scenes)~="table" then return false,"invalid scenes" end
+    local function str(v,max) return type(v)=="string" and v~="" and #v<=max and not v:find("%c") end
+    local function list(t,max,each)
+        if type(t)~="table" then return false end
+        local n=0
+        for k,v in pairs(t) do
+            n=n+1
+            if type(k)~="number" or k<1 or k%1~=0 or not each(v) then return false end
+        end
+        return n==#t and n<=max
+    end
+    for key,rec in pairs(scenes) do
+        if not str(key,80) or type(rec)~="table" then return false,"invalid scene" end
+        if not integer(rec.x) or not integer(rec.y) or not integer(rec.z) then return false,"invalid scene" end
+        if type(rec.hours)~="number" or rec.hours~=rec.hours or rec.hours<0 or rec.hours==math.huge then return false,"invalid scene" end
+        if rec.kind~=nil then
+            if not fields(rec,{kind=true,x=true,y=true,z=true,hours=true,source=true,room=true,bounds=true,avoid=true})
+                or not str(rec.kind,60) or not rec.kind:find("^%u[%w_]*$")
+                or not ({seen=true,citation=true})[rec.source] then return false,"invalid scene" end
+            if rec.room~=nil and not str(rec.room,120) then return false,"invalid scene" end
+            if rec.bounds~=nil then
+                local b=rec.bounds
+                if not fields(b,{x1=true,y1=true,x2=true,y2=true}) or not integer(b.x1) or not integer(b.y1)
+                    or not integer(b.x2) or not integer(b.y2) or b.x2<=b.x1 or b.y2<=b.y1 then return false,"invalid scene" end
+            end
+            if rec.avoid~=nil and not list(rec.avoid,S.MAX_SCENE_AVOID,function(v) return str(v,40) and v:find("^%-?%d+:%-?%d+$")~=nil end) then
+                return false,"invalid scene"
+            end
+        else
+            if not fields(rec,{pending=true,x=true,y=true,z=true,hours=true})
+                or not list(rec.pending,S.MAX_SCENE_TOKENS,function(v) return str(v,120) end) or #rec.pending<1 then
+                return false,"invalid scene"
+            end
+        end
+    end
+    return true
+end
 function S.validate(root)
     local ok,why=V.validateStructure(root); if not ok then return false,why end
-    if not fields(root,{schema=true,case=true,assignments=true,known=true,recognised=true,recognisedHow=true,shown=true,spent=true}) or root.schema~=1 then return false,"invalid generated session" end
+    if not fields(root,{schema=true,case=true,assignments=true,known=true,recognised=true,recognisedHow=true,shown=true,spent=true,scenes=true}) or root.schema~=1 then return false,"invalid generated session" end
+    local okScenes,whyScenes=S.validScenes(root.scenes); if not okScenes then return false,whyScenes end
     -- SHOWN: clues the Search Mode icon has pointed at. Saved, set once,
     -- never cleared: a shown clue never moves again (owner, 2026-09-27).
     -- SPENT: spots that gave up a clue. A spent spot never takes another
@@ -719,6 +771,48 @@ function S.open(initial,sink)
                 local doc
                 for _,d in ipairs(nextCase.documents) do if d.id==id then doc=d end end
                 r.assignments[id]={physicalToken="cf-g2:"..id,status="deferred",locationId=doc.locationId,
+                    deferredHours=args.hours,relocations=0}
+            end
+        end)
+        if not ok then return false,why end
+        return true,ids
+    end
+    -- A scene seen (S.validScenes). A confirmed one is set once and never
+    -- changes; a pending one only gains traces; a confirmed record replaces a
+    -- pending one. Returns true, or false and why.
+    function api.scene(key) return copy(root.scenes and root.scenes[key]) end
+    function api.noteScene(key,rec)
+        if not isArea(root) then return false,"not a No Help world" end
+        if type(key)~="string" or type(rec)~="table" then return false,"invalid scene" end
+        local old=root.scenes and root.scenes[key]
+        if old and old.kind then return true,"already confirmed" end
+        local new=copy(rec)
+        if new.kind==nil and old then
+            local seen,merged={},{}
+            for _,list in ipairs({old.pending or {},new.pending or {}}) do
+                for _,t in ipairs(list) do if not seen[t] then seen[t]=true; merged[#merged+1]=t end end
+            end
+            table.sort(merged)
+            if #merged==#old.pending then return true,"nothing new" end
+            while #merged>S.MAX_SCENE_TOKENS do table.remove(merged) end
+            new.pending=merged; new.x,new.y,new.z,new.hours=old.x,old.y,old.z,old.hours
+        end
+        return commit(function(r) r.scenes=r.scenes or {}; r.scenes[key]=new end)
+    end
+    -- A confirmed scene's area and its one clue (AreaCase.decideScene), added
+    -- in one write with the clue's waiting assignment.
+    function api.addSceneArea(args)
+        if not isArea(root) then return false,"not a No Help world" end
+        local rec=root.scenes and root.scenes[args.key]
+        if not rec or rec.kind~=args.kind then return false,"the scene is not confirmed" end
+        if not validHours(args.hours) then return false,"invalid hours" end
+        local nextCase,ids=AreaCase.decideScene{case=root.case,site=args.site,key=args.key,kind=args.kind,
+            clues=args.clues,version=args.version,hours=args.hours,host=args.host}
+        if not nextCase then return false,ids end
+        local ok,why=commit(function(r)
+            r.case=nextCase
+            for _,id in ipairs(ids) do
+                r.assignments[id]={physicalToken="cf-g2:"..id,status="deferred",locationId=args.site.id,
                     deferredHours=args.hours,relocations=0}
             end
         end)

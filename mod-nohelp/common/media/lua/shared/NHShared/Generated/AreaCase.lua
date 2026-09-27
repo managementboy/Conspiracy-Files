@@ -14,6 +14,7 @@ local Manifest=require("NHShared/Mystery/Manifest")
 local Kinds=require("NHShared/Generated/EvidenceKinds")
 local Outfits=require("NHShared/BodyOutfitObservations")
 local Trails=require("NHShared/Generated/Trails")
+local Scenes=require("NHShared/Generated/VanillaScenes")
 local M={KIND="nohelp-areas",SCHEMA=1,CASE_ID="nohelp:world"}
 M.MAX_TITLE=120
 M.MAX_BODY=8000
@@ -77,15 +78,29 @@ function M.docFrom(pick,clue,areaId)
     return doc
 end
 
+-- The ledger Pick reads. A SCENE'S CLUE IS COUNTED APART (owner, 2026-09-27:
+-- a scene and the place it appears in are independent): scene areas' clues
+-- go to ledger.scene, present only once a scene holds a clue, so a world's
+-- other areas pick exactly what they would have picked without any scene.
 local function recount(case)
     local ledger={areas={},world={},placed={}}
+    local scene={}
+    for _,a in ipairs(case.areas or {}) do if a.place=="scene" then scene[a.id]=true end end
     for _,d in ipairs(case.documents) do
-        local a=ledger.areas[d.locationId] or {}; ledger.areas[d.locationId]=a
-        a[d.lean]=(a[d.lean] or 0)+1
-        ledger.world[d.lean]=(ledger.world[d.lean] or 0)+1
         local kind=d.members and "set" or "written"
-        ledger.world[kind]=(ledger.world[kind] or 0)+1
-        ledger.placed[d.clue]=math.max(ledger.placed[d.clue] or 0,d.copy)
+        if scene[d.locationId] then
+            ledger.scene=ledger.scene or {world={},placed={}}
+            local w=ledger.scene.world
+            w[d.lean]=(w[d.lean] or 0)+1
+            w[kind]=(w[kind] or 0)+1
+            ledger.scene.placed[d.clue]=math.max(ledger.scene.placed[d.clue] or 0,d.copy)
+        else
+            local a=ledger.areas[d.locationId] or {}; ledger.areas[d.locationId]=a
+            a[d.lean]=(a[d.lean] or 0)+1
+            ledger.world[d.lean]=(ledger.world[d.lean] or 0)+1
+            ledger.world[kind]=(ledger.world[kind] or 0)+1
+            ledger.placed[d.clue]=math.max(ledger.placed[d.clue] or 0,d.copy)
+        end
     end
     return ledger
 end
@@ -177,6 +192,7 @@ function M.decide(args)
     local case,site=args.case,args.site
     if not M.isAreaCase(case) or type(site)~="table" or type(site.id)~="string" then return nil,"invalid" end
     if not PLACE[args.place] then return nil,"not an interesting place" end
+    if args.place=="scene" then return nil,"a scene is decided by decideScene" end
     for _,a in ipairs(case.areas) do if a.id==site.id then return nil,"decided" end end
     local clues=args.clues or Manifest.clues
     local byId={}; for _,c in ipairs(clues) do byId[c.id]=c end
@@ -204,6 +220,60 @@ function M.decide(args)
         version=tostring(args.version),decidedHours=args.hours or 0,first=first,count=#picks,short=short,trail=trail}
     next.ledger=recount(next)
     return next,ids
+end
+
+-- A CONFIRMED VANILLA SCENE (task 3 plan, step 5; owner, 2026-09-27). Its
+-- area gets exactly ONE clue, placed by the kind's anchor (VanillaScenes):
+-- the spot is the anchor's, the conspiracy is drawn from the kind's fit pair
+-- and the world seed (VanillaScenes.lean), and the clue is one written for
+-- scenes (Manifest place "scene") with that spot and lean. Fresh clues
+-- first, in the order of a hash of (seed, area, clue, copy, version); a set
+-- already placed beside another scene may come again as a new copy only
+-- when nothing fresh is left (no maximum); a written clue never repeats.
+-- Counted apart from every other area's clues (recount). args: {case,
+-- site (its id "scene:<key>"), key, kind, clues, version, hours, host
+-- (optional: the decided area the scene lies in, which it joins)}. Returns
+-- the new case and the new document ids, or nil and "decided", "empty"
+-- (no scene clue for this spot and lean yet: NOT a decision) or a refusal.
+function M.decideScene(args)
+    local case,site=args.case,args.site
+    if not M.isAreaCase(case) or type(site)~="table" or type(site.id)~="string" then return nil,"invalid" end
+    if type(args.key)~="string" or site.id~="scene:"..args.key then return nil,"a scene area is named by its scene" end
+    if not Scenes.allowed(args.kind) then return nil,"this kind of scene holds no clue" end
+    for _,a in ipairs(case.areas) do if a.id==site.id then return nil,"decided" end end
+    local spot=Scenes.spotFor(args.kind)
+    local lean=Scenes.lean(case.seed,site.id,args.kind)
+    local row=Scenes.get(args.kind)
+    local placed=(case.ledger.scene or {}).placed or {}
+    local best
+    for _,c in ipairs(args.clues or Manifest.clues) do
+        local copies=placed[c.id] or 0
+        if copies==0 or c.kind=="set" then
+            for _,w in ipairs(c.where) do
+                if w.place=="scene" and w.spot==spot and w.lean==lean then
+                    local cand={clue=c,where=w,copy=copies+1,spare=copies>0,
+                        order=Pick.hash(Pick.key({case.seed,site.id,c.id,copies+1,tostring(args.version)}))}
+                    local better=not best
+                    if best and cand.spare~=best.spare then better=not cand.spare
+                    elseif best and cand.order~=best.order then better=cand.order<best.order
+                    elseif best then better=c.id<best.clue.id end
+                    if better then best=cand end
+                end
+            end
+        end
+    end
+    if not best then return nil,"empty" end
+    local next=copy(case)
+    next.locations[#next.locations+1]=copy(site)
+    local first=#next.documents+1
+    local doc=M.docFrom({clue=best.clue.id,copy=best.copy,lean=lean,rival=best.where.rival,
+        spot=spot,outfit=best.where.outfit},best.clue,site.id)
+    next.documents[#next.documents+1]=doc
+    next.areas[#next.areas+1]={id=site.id,place="scene",source="scene",version=tostring(args.version),
+        decidedHours=args.hours or 0,first=first,count=1,short=0,
+        scene={key=args.key,kind=args.kind,anchor=row.anchor,host=args.host}}
+    next.ledger=recount(next)
+    return next,{doc.id}
 end
 
 -- The whole record's shape, with every derived field recomputed. Today's clue
@@ -237,6 +307,22 @@ function M.validate(case)
             if type(d)~="table" or d.locationId~=a.id then return false,"area "..tostring(a.id).." does not own its clues" end
         end
         docIndex=docIndex+a.count
+        for k in pairs(a) do
+            if not ({id=1,place=1,source=1,version=1,decidedHours=1,first=1,count=1,short=1,trail=1,scene=1})[k] then
+                return false,"unknown area field "..tostring(k)
+            end
+        end
+        if (a.place=="scene")~=(a.scene~=nil) then return false,"only a scene area names a scene" end
+        if a.scene~=nil then
+            local sc=a.scene
+            if type(sc)~="table" or not text(sc.key,80) or not text(sc.kind,60) or not Scenes.SPOT_OF[sc.anchor]
+                or (sc.host~=nil and not text(sc.host,200)) or a.id~="scene:"..sc.key then
+                return false,"invalid scene on area "..tostring(a.id)
+            end
+            for k in pairs(sc) do if k~="key" and k~="kind" and k~="anchor" and k~="host" then return false,"unknown scene field "..tostring(k) end end
+            if a.count~=1 or a.short~=0 or a.trail~=nil then return false,"a scene holds exactly one clue" end
+            if case.documents[a.first].spot~=Scenes.SPOT_OF[sc.anchor] then return false,"a scene's clue is not at its anchor" end
+        end
         if a.trail~=nil then
             local t=a.trail
             if type(t)~="table" or not LEAN[t.favour] or type(t.designs)~="table" or #t.designs<1 or #t.designs>64 then
