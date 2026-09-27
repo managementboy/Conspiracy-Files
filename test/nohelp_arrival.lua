@@ -61,3 +61,13 @@ assert(src:find("R.MAP_NEAR_TILES=100",1,true) and src:find("function R.decideMa
     "places are still decided early")
 
 print("nohelp arrival: created only within 40 tiles, closed containers at any distance, open spots out of sight, searched drawers allowed")
+-- Owner, 2026-09-27: an emptied building may still become a clue place, and a
+-- searched body may carry a clue later; only an open loot window refuses.
+do
+    local Carriers=require("NHShared/Carriers")
+    assert(Carriers.refusal({kind="corpse",container={},searched=true})==nil,"a searched body may carry a clue later")
+    assert(Carriers.refusal({kind="corpse",container={},lootOpen=true})=="loot window open","never while its loot window is open")
+    local src=assert(io.open("mod-nohelp/common/media/lua/shared/NHShared/Generated/Storage.lua","rb")):read("*a")
+    assert(not src:find("unexplored",1,true),"an emptied building's containers still count")
+end
+print("nohelp arrival: searched buildings and bodies may still hold clues")

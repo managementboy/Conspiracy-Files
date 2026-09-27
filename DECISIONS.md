@@ -223,6 +223,8 @@ plan's directive check):
     bodies and Look it over work in the dark.
   - *Looted drawers:* no special rule — a clue is only ever seen through the
     hint and the inspection tool, so a drawer emptied earlier may hold one.
+  - *Emptied buildings and searched bodies* may still hold clues later
+    (owner); only a container or body whose loot window is open refuses.
   - Still standing: reading a map decides its places; zombies gather (to be
     reconsidered with the owner at its live test, since it also grows with
     time unfound).

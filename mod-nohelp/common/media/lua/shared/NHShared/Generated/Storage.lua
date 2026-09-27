@@ -4,7 +4,6 @@ local Choices=require("NHShared/Generated/StorageChoices")
 local FixedIndex=require("NHShared/Generated/FixedContainerIndex")
 local FixedData=require("NHShared/Generated/FixedContainerIndexData")
 local W=require("NHShared/WorldAccess")
-local Searched=require("NHShared/SearchedContainers")
 local M={}
 -- Verified engine type: docs/management/evidence/linux-autotest/
 -- 20260918T002532-carriers.txt. Outdoor scope remains the mailbox band;
@@ -183,16 +182,10 @@ function M.scan(result,done,reachable,fixedData)
         -- Every identified non-floor furniture kind is eligible inside a room.
         -- Outside, retain the observed mailbox-only footprint rule.
         local allowed=c and Choices.fixedKind(c:getType()) and (not r.outdoor or c:getType()==M.MAILBOX)
-        local unexplored=false
-        if c then
-            -- The player having looked, not loot having been generated
-            -- (SearchedContainers.lua). Test doubles and nonstandard
-            -- containers may not expose the read; selection is harmless,
-            -- because FixedContainerRuntime repeats it fail-closed
-            -- immediately before any insertion.
-            unexplored=Searched.searched(c)~=true
-        end
-        if c and name and allowed and unexplored and (r.z==0 or reachable(x,y,r.z)) then
+        -- A container the player already searched still counts (owner,
+        -- 2026-09-27: an emptied building may still become a clue place; a
+        -- clue is only ever seen through the hint and the inspection tool).
+        if c and name and allowed and (r.z==0 or reachable(x,y,r.z)) then
             local target={x=x,y=y,z=r.z,objectIndex=oi,containerIndex=ci,containerType=c:getType(),sprite=name}
             if W.resolve(target)==c then
                 pools[id]=pools[id] or Choices.new()

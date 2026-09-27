@@ -76,10 +76,11 @@ C.CORPSE_RADIUS=2
 -- refusal is testable without a game:
 --   * a carrier already marked is somebody else's - never two clues on one
 --     body (P4-R67, keyed on the mark);
---   * a container the survivor has already searched must not sprout a clue
---     behind them: that is the one thing that would read as software;
---   * nor one whose loot window is open right now, which is the same thing
---     happening in front of them.
+--   * a body the survivor already searched MAY carry a clue later (owner,
+--     2026-09-27: a clue is only ever seen through the hint and the
+--     inspection tool);
+--   * but never one whose loot window is open right now: that would be a
+--     clue appearing in front of them.
 function C.refusal(state)
     if type(state)~="table" then return "no carrier" end
     if not C.KINDS[state.kind] then return "not a carrier" end
@@ -92,7 +93,6 @@ function C.refusal(state)
     if state.player then return "a player's body" end
     if state.mark~=nil then return "already carries a clue" end
     if state.casePerson then return "already the case's person" end
-    if state.searched then return "already searched" end
     if state.lootOpen then return "loot window open" end
     -- A body that already carries a vanilla ID card (or any named identity
     -- document the observer reads) is somebody already: our card on it would
