@@ -30,9 +30,10 @@ end
 T.prints={}
 for _,p in ipairs(Sites.prints or {}) do T.prints[#T.prints+1]=p end
 
--- SCENES: the shipped scene table's kinds that hold a clue. Until
--- Generated/VanillaScenes.lua exists the list is not shipped and the gate
--- never passes.
+-- SCENES: the shipped scene table's kinds that hold a clue (Generated/
+-- VanillaScenes.lua, step 5: its refused kinds are not counted). A kind is
+-- covered with one accepted clue anchored {scene=<kind>} (or a version of it).
+-- Without the table the list is not shipped and the gate never passes.
 T.scenesShipped=false
 T.scenes={}
 do
@@ -60,7 +61,7 @@ T.staleDays=14          -- a deferral or quarantine older than this is stale
 T.adhdEvery=5           -- an ADHD pass at least every this many accepted tickets
 
 -- FIRST RELEASE: tickets per type (handoff section 5), accepted in the
--- registry. SCENE and UNIQUE wait for the shipped scene table.
+-- registry. SCENE and UNIQUE are open now the scene table ships.
 T.firstRelease={STAGE0=1,PLACE=9,PERSON=3,MAP=3,SCENE=2,UNIQUE=1}
 T.typeOrder={"STAGE0","PLACE","PERSON","MAP","SCENE","UNIQUE"}
 

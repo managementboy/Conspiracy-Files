@@ -247,7 +247,7 @@ playtests quote it.
 | NH-D4 no maximum, a first-development cap | step 7 cap-off run, raise-the-cap save test, "stopped for another reason" failure; the cap exists only in `Pick.lua` | cap, and any other limit hit | `test/nohelp_pick.lua`; the cap-off soak and raise-the-cap save test are owed by step 7 |
 | NH-D5 half or more are object sets of vanilla items | step 3 Linter (per clue, vanilla types); step 7 on placed *and* spotted, lost sets counted | set share placed and spotted | `test/nohelp_pick.lua`; the share among clues actually spotted is owed by step 7 |
 | NH-D6 annotated maps included | step 4 trail fold-in and "read or not, same clue" test; step 7 every map destination holds both leans | trails started, clues per design | `test/nohelp_map_sites.lua`; `test/nohelp_marked_area.lua`; `test/nohelp_trails.lua`; `test/nohelp_pick.lua`; `test/nohelp_area_runtime.lua`; that every map place holds both leans in what is actually placed in a real world is owed by step 7 |
-| NH-D7 vanilla mysteries detected and used | step 5 first citation, observer out of debug and saved; step 7 scene-anchored floor; step 8 timing spike | scene-anchored vs fallback | not yet written, due step 5 |
+| NH-D7 vanilla mysteries detected and used | step 5 scene table, matcher, first citation, scene runtime out of debug and saved; step 7 scene-anchored floor; step 8 timing spike | scene-anchored vs fallback | `test/nohelp_scenes.lua`; `test/nohelp_scene_match.lua`; `test/nohelp_scene_area.lua`; the visible live check (writer-only procedure) and the step 7 scene-anchored floor are still owed |
 
 ## 5. Rejected along the way
 
@@ -971,3 +971,60 @@ original mod's fatalistic bureaucratic dark comedy, voice only the world's.
 **Still open:** the scene list (unfinished work parked on
 `nohelp-scenes-wip`); the offline playthrough check (step 7); the real-game
 checks (step 8, visible, with the owner's go-ahead).
+
+### Step 5 — vanilla scenes
+
+**Built (2026-09-27)**, from the owner's decisions in DECISIONS.md ("Vanilla
+scenes", "Which vanilla scenes hold clues"). Specifics (which scenes, where,
+what they leave) are in `docs/writer-only/` only.
+
+- **The scene table** (`Generated/VanillaScenes.lua`): all 140 vanilla scene
+  kinds once. 124 hold a clue; 16 are refused: the 2 the owner left alone, 8
+  with only animals and no vehicle, 4 with only a named zombie, the one class
+  vanilla never builds, and generic house dressing. Party, meal, comedy,
+  self-harm and killer scenes hold clues like any other. Each allowed kind
+  has an anchor (in the scene's room, in its vehicle, on a body, or on the
+  ground) and a fit to the two conspiracies, neither zero nor more than
+  twice the other; which one a scene leans to is drawn per world. Never on a
+  vanilla named character's body (their outfits are refused as carriers; a
+  body with any ID already was).
+- **The matcher** (`Generated/SceneMatch.lua`, pure): a scene is recognised
+  from two traces of different sorts it leaves (room, tile object, item on
+  the floor, body, zombie, vehicle). Signatures were read from the game jar
+  for 8 kinds, at least one per family (building, dead survivor, road
+  vehicle, zone); the other 116 are marked unverified and never match. A
+  kind only matches when the running game's own story lists name it; a
+  story's validity check is not called, because for a building it can alter
+  the player's starting house.
+- **In play** (`VanillaSceneRuntime.lua`, now outside debug; the old
+  vehicle-only observer is removed and gates nothing): loading a square or a
+  body only flags its 10x10 cell; the flagged cell nearest the survivor
+  within 30 tiles is looked at, 100 squares a tick. The first match per cell
+  is saved set-once in the world record (`scenes`); traces without a match
+  are kept, so a scene emptied before it was confirmed still confirms and its
+  clue keeps waiting. "scene-wait" start and end lines give the cell, the
+  in-game hours, the distance and walking or driving.
+- **One clue per scene** (`AreaCase.decideScene`): chosen when the survivor
+  is within 100 tiles, from the clues anchored to that kind (one version per
+  conspiracy where the scene has two), and created, like every clue, only
+  within the 40-tile arrival ring in its anchor's kind of spot, never in a
+  container holding the scene's own items. Independent of the place it
+  appears in: counted apart, never offered to a place, so a place's clues are
+  identical with or without a scene beside it.
+- **The first hand-checked citation**, a unique scene vanilla builds in
+  every world, is recorded like a map place (decided when near, no
+  observation needed), its containers checked against the shipped container
+  index.
+- **Content:** the progress line now counts scenes (`scenes 0/124`); the
+  scene tickets and the unique-scene ticket are open.
+
+Tests: `test/nohelp_scenes.lua`, `test/nohelp_scene_match.lua`,
+`test/nohelp_scene_area.lua` (includes the runtime against a stubbed engine);
+`test/nohelp_anchor.lua` and `test/nohelp_content_convert.lua` updated for a
+shipped table.
+
+**Not done:** the visible live check (procedure written, writer-only; two
+fresh worlds, never hidden, never the owner's save) — so whether a scene is
+confirmed before the survivor arrives, walking or driving, is not measured
+yet; signatures for the 116 unverified kinds; the step 7 floor on the share
+of scene-anchored clues; no scene clue is written yet.

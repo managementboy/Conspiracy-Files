@@ -30,6 +30,7 @@
 local Searched=require("NHShared/SearchedContainers")
 local Identity=require("NHShared/IdentityObservations")
 local Outfits=require("NHShared/BodyOutfitObservations")
+local Scenes=require("NHShared/Generated/VanillaScenes")
 local C={}
 
 C.CORPSE="corpse"
@@ -99,6 +100,9 @@ function C.refusal(state)
     -- put two names on one body. Only cards we write belong to a conspiracy;
     -- the vanilla one is never renamed or removed, so the body is refused.
     if state.identity then return "already holds an ID" end
+    -- A clue never goes on a vanilla named character's body (owner,
+    -- 2026-09-27; outfits in VanillaScenes.NAMED_OUTFITS).
+    if Scenes.namedOutfit(state.outfit) then return "a vanilla named character" end
     return nil
 end
 function C.usable(state) return C.refusal(state)==nil end

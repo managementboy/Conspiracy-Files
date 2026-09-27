@@ -56,7 +56,11 @@ end
 -- ("mapNamed"). A scene anchor is checked against Generated/VanillaScenes when
 -- that file exists; until then it is accepted as UNVERIFIED (M.anchorStatus),
 -- and the converter checks it against the writer-only draft table instead.
-M.SCENE_SPOTS={["room-container"]="furniture",body="corpse",vehicle="vehicle",ground="ground",carried="corpse"}
+-- A scene clue's `place` is the kind of place it reads as; a scene clue is
+-- only ever placed at its scene (AreaCase.decideScene), never at a place.
+-- "carried": vanilla drops a grabbed bag on the road (javap 42.20:
+-- addItemOnGround of the bag), so the clue lies on the ground beside it.
+M.SCENE_SPOTS={["room-container"]="furniture",body="corpse",vehicle="vehicle",ground="ground",carried="ground"}
 local anchorIndex
 local function anchors()
     if anchorIndex then return anchorIndex end

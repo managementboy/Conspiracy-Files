@@ -1,11 +1,19 @@
 -- The No Help content converter (tools/nohelp_content/convert.lua; content-
 -- writer handoff sections 6, 7 and 9), end to end on a scratch folder.
 -- PLACEHOLDERS ONLY: every row is an obvious placeholder, items are real only
--- because the rules demand real vanilla items, and scene kinds are invented.
+-- because the rules demand real vanilla items; scene kinds are read from the
+-- shipped Generated/VanillaScenes (never named here) or invented tokens.
 package.path="mod-nohelp/common/media/lua/shared/?.lua;tools/nohelp_content/?.lua;"..package.path
 local J=require("json")
 local Convert=dofile("tools/nohelp_content/convert.lua")
 local Manifest=require("NHShared/Mystery/Manifest")
+local Scenes=require("NHShared/Generated/VanillaScenes")
+local bodyKind,leftAloneKind
+for _,r in ipairs(Scenes.rows) do
+    if not bodyKind and r.spot=="corpse" then bodyKind=r.id end
+    if not leftAloneKind and r.refused=="owner-leave-alone" then leftAloneKind=r.id end
+end
+assert(bodyKind and leftAloneKind,"the scene table has a body kind and a kind left alone")
 
 -- JSON round trip.
 local decoded=assert(J.decode('{"a":[1,2,{"b":"x\\n\\u00e9"}],"c":null,"d":true}'))
@@ -66,8 +74,8 @@ local bad={
     SCHEMA=row(T1,"set","containment",{colour="red"}),
     SCHEMA_PREFIX=row(T1,"set","containment",{id="zz-wrong-prefix"}),
     ANCHOR_UNKNOWN=row(T1,"set","containment",{anchor={map="ZzNoSuchDesign",mark=1}}),
-    ANCHOR_SPOT_MISMATCH=row(T1,"set","containment",{anchor={scene="Zzscene"}}),
-    ANCHOR_LEFT_ALONE=row(T1,"set","containment",{anchor={scene="Zzleftalone"},where={{place="farm",spot="corpse",lean="containment",rival="agricultural"}}}),
+    ANCHOR_SPOT_MISMATCH=row(T1,"set","containment",{anchor={scene=bodyKind}}),
+    ANCHOR_LEFT_ALONE=row(T1,"set","containment",{anchor={scene=leftAloneKind},where={{place="farm",spot="corpse",lean="containment",rival="agricultural"}}}),
     ANCHOR_NOT_A_SCENE=row(T1,"set","containment",{anchor={scene="Zznotascene"}}),
     DENSITY=row(T1,"set","containment",{body="Placeholder q1 q2 q3."}),
     EMPHASIS=row(T1,"set","containment",{body="Placeholder token!"}),
@@ -176,5 +184,18 @@ assert(shipped==Convert.renderClues(Convert.loadAccepted(Convert.ROOT)),
 local loaded=require("NHShared/Mystery/Content/Clues")
 assert(type(Manifest.clues)=="table" and #Manifest.clues==#loaded.clues,"Manifest.clues is the derived file")
 assert(Manifest.lint(Manifest.clues),"the shipped clue list passes the clue-list rules")
+
+-- The writer-only draft path, used only while no scene table ships.
+local ctx={scenesShipped=false,sceneKinds={Zzscene=true,Zzleftalone=true},sceneDraft={Zzscene={anchor="body"}},leftAlone={Zzleftalone=true}}
+local function draft(anchor,spot)
+    local r=Convert.sceneCheck({anchor=anchor,where={{place="farm",spot=spot or "furniture",lean="containment",rival="agricultural"}}},ctx)
+    return r and r.code or "ok"
+end
+assert(draft({scene="Zzscene"})=="ANCHOR_SPOT_MISMATCH","draft: not on the scene's anchor")
+assert(draft({scene="Zzscene"},"corpse")=="ok","draft: on its anchor")
+assert(draft({scene="Zzleftalone"},"corpse")=="ANCHOR_UNKNOWN","draft: a scene left alone")
+assert(draft({scene="Zznotascene"})=="ANCHOR_UNKNOWN","draft: not a scene kind")
+ctx.scenesShipped=true
+assert(draft({scene="Zzscene"})=="ok","with the table shipped the draft is not consulted")
 
 print("nohelp_content_convert: ok")

@@ -257,8 +257,9 @@ Fix the pattern, not just the row.
   `Generated/MapSites.lua` and `Generated/VanillaScenes.lua`, and read by
   placement, is needed before any `MAP`, `SCENE` or `UNIQUE` ticket. *Built
   2026-09-27* for maps and flyers (a marked place with anchored clues takes
-  only those). Scene anchors are accepted and checked, but scene placement
-  itself is not built yet, so scene clues are not placed.
+  only those) and, since the scene step, for scenes: a confirmed scene takes
+  one clue anchored to its kind (or the unique scene's version A/B for the
+  world's lean). Not yet checked in the live game.
 - **Clue gates:** `Mystery/ClueGates.lua` (provenance, density, emphasis,
   reserved names, citations) called from the clue-list rules, with
   `test/nohelp_clue_gates.lua`; the axiom and retired-premise gates once the

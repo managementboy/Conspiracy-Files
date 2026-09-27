@@ -783,6 +783,103 @@ function R.decideMapNear()
     end end
     return n
 end
+-- VANILLA SCENES (task 3 plan, step 5; NH-D7). VanillaSceneRuntime finds
+-- them and saves what it finds through R.sceneSeen (Session `scenes`: a
+-- confirmed scene is set once; pending traces only grow). A confirmed scene,
+-- and the hand-checked citation (VanillaScenes.CITATIONS, always built by
+-- vanilla, so decided like a map place without being seen), is DECIDED once
+-- the survivor is within VanillaScenes.NEAR_TILES: its one clue is chosen and
+-- saved (AreaCase.decideScene), independent of every place's clues, and
+-- waits like any clue for the survivor to arrive (R.ARRIVE_TILES) before
+-- the filler creates it in its anchor's kind of spot. "empty" (no clue
+-- written for it yet) is not a decision: a later clue list still reaches it.
+local Scenes=require("NHShared/Generated/VanillaScenes")
+function R.scene(key)
+    local root=worldRoot()
+    local rec=root and root.scenes and root.scenes[key]
+    return rec and copyValue(rec) or nil
+end
+function R.sceneSeen(key,rec)
+    if not allowed() or not areaSession then return false,"no world record" end
+    local ok,why=areaSession.noteScene(key,rec)
+    if ok and rec.kind and why==nil then
+        CFLog.write("i","case",{case=key,why="scene-confirmed",kind=rec.kind})
+    end
+    return ok,why
+end
+-- The site row a scene area keeps, in the Catalog's shape. A seen scene
+-- observed no containers, so any fixed kind will do (Session.unobserved); the
+-- citation names its own. avoidProps: item types vanilla left there - a
+-- container whose square holds one is never chosen (the filler).
+local function sceneSiteRow(key,rec)
+    local cite
+    for _,c in ipairs(Scenes.CITATIONS) do if c.key==key then cite=c end end
+    local b=rec.bounds or {x1=rec.x,y1=rec.y,x2=rec.x+1,y2=rec.y+1}
+    local row={id="scene:"..key,areaId="scene:"..key,
+        name="A place at "..math.floor((b.x1+b.x2)/2)..", "..math.floor((b.y1+b.y2)/2),
+        mapId=MapSites.map,buildLine=MapSites.game,
+        bounds={x1=b.x1,y1=b.y1,x2=b.x2,y2=b.y2,z=rec.z},
+        source={kind="vanilla-scene",reference=rec.kind},
+        paperStorage="unknown",containerTypes={},excluded=false}
+    if cite then
+        local kinds,seen={}, {}
+        for _,c in ipairs(cite.containers) do
+            if not seen[c.containerType] then seen[c.containerType]=true; kinds[#kinds+1]=c.containerType end
+        end
+        row.paperStorage="indexed"; row.containerTypes=kinds
+        row.avoidProps=copyValue(cite.avoidProps)
+    else
+        local sig=require("NHShared/Generated/SceneMatch").signature(rec.kind)
+        for _,t in ipairs(sig and sig.traces or {}) do
+            if t.sort=="item" then
+                row.avoidProps=row.avoidProps or {}
+                for _,name in ipairs(t.any) do row.avoidProps[#row.avoidProps+1]=name end
+            end
+        end
+    end
+    return row
+end
+R.sceneSiteRow=sceneSiteRow
+-- One scene decided per call, nearest first; the citation noted when near.
+function R.decideScenes()
+    if not allowed() or not areaSession then return 0 end
+    local root=worldRoot()
+    local p=getPlayer and getPlayer()
+    if not root or not p then return 0 end
+    local px,py=p:getX(),p:getY()
+    local function near(x,y) return math.max(math.abs(x-px),math.abs(y-py))<=Scenes.NEAR_TILES end
+    local now=worldHours()
+    for _,c in ipairs(Scenes.CITATIONS) do
+        local b=c.bounds
+        local cx,cy=math.floor((b.x1+b.x2)/2),math.floor((b.y1+b.y2)/2)
+        if not (root.scenes and root.scenes[c.key]) and near(cx,cy) then
+            local ok,why=R.sceneSeen(c.key,{kind=c.kind,x=cx,y=cy,z=b.z,hours=now,source="citation",room=c.room,
+                bounds={x1=b.x1,y1=b.y1,x2=b.x2,y2=b.y2}})
+            if not ok then log("citation "..c.key.." not noted: "..tostring(why)) end
+            root=worldRoot()
+        end
+    end
+    local decided=decidedAreas()
+    local rows={}
+    for key,rec in pairs(root.scenes or {}) do
+        if rec.kind and not decided["scene:"..key] and not emptyNoted["scene:"..key] and near(rec.x,rec.y) then
+            rows[#rows+1]={key=key,rec=rec,d=math.max(math.abs(rec.x-px),math.abs(rec.y-py))}
+        end
+    end
+    table.sort(rows,function(a,b) if a.d~=b.d then return a.d<b.d end return a.key<b.key end)
+    local row=rows[1]
+    if not row then return 0 end
+    local ok,ids=areaSession.addSceneArea{site=sceneSiteRow(row.key,row.rec),key=row.key,kind=row.rec.kind,
+        clues=Manifest.clues,version=Manifest.VERSION,hours=now}
+    if ok then
+        CFLog.write("i","case",{case="scene:"..row.key,kind=row.rec.kind,n=#ids,why="area-decided-scene"})
+        return 1
+    end
+    -- Nothing written for it yet, or it holds no clue: said once a session.
+    emptyNoted["scene:"..row.key]=true
+    CFLog.write("d","skip",{case="scene:"..row.key,kind=row.rec.kind,why="scene-"..tostring(ids)})
+    return 0
+end
 -- The world record's seed, or nil when this save has no world record. The map
 -- trails take their seed from it (MapMediaRuntime).
 function R.worldSeed()
@@ -1658,6 +1755,26 @@ local function hiddenFromSurvivor(target)
     return StaleClue.outOfSight(px,py,pz,target,visible)
 end
 R.hiddenFromSurvivor=hiddenFromSurvivor
+-- A SCENE'S OWN ITEMS (owner, 2026-09-27: beside vanilla's items, never on
+-- them): a container whose square holds a world item of one of these types
+-- is refused. Read live, under pcall; unreadable counts as holding them.
+local function holdsProps(candidate,props)
+    if type(props)~="table" or #props==0 then return false end
+    local want={}
+    for _,name in ipairs(props) do want[name]=true end
+    local ok,holds=pcall(function()
+        local square=getCell():getGridSquare(candidate.x,candidate.y,candidate.z)
+        if not square then return true end
+        local list=square:getWorldObjects()
+        for i=0,list:size()-1 do
+            local item=list:get(i):getItem()
+            if item and want[item:getFullType()] then return true end
+        end
+        return false
+    end)
+    return not ok or holds==true
+end
+R.holdsProps=holdsProps
 local function wantsVehicle(doc)
     return doc~=nil and (doc.placementIntent=="vehicle" or doc.spot=="vehicle")
 end
@@ -1750,6 +1867,7 @@ local function filler(api,onlyArea)
                     scan=boundsScan(site,function(t) target=t end,
                         function(candidate)
                             return not taken[Session.physicalKey(candidate)] and Session.intentMatches(doc,candidate)
+                                and not holdsProps(candidate,site.avoidProps)
                         end,id,areaClue)
                 end
             end
@@ -2228,6 +2346,9 @@ require("NHShared/Events/EngineEvents").on("OnTick", function()
         -- them; a queue left by a reopened scheduler is picked up again.
         ok,err=pcall(R.decideMapNear)
         if not ok then log("deciding map places failed: "..tostring(err)) end
+        -- And the vanilla scenes found near the survivor (NH-D7).
+        ok,err=pcall(R.decideScenes)
+        if not ok then log("deciding scenes failed: "..tostring(err)) end
         if #mapQueue>0 then scheduler.enqueue("map-areas","map-areas",mapDrain) end
     end
     scheduler.step()

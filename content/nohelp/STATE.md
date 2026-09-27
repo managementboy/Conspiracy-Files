@@ -26,4 +26,4 @@ none
 none
 
 ## PROGRESS
-NOT DONE: stage0 unsigned, maps 0/125, flyers 0/133, scenes unshipped, sets 0/0, balance 0/0, tickets 0/19 @206578a
+NOT DONE: stage0 unsigned, maps 0/125, flyers 0/133, scenes 0/124, sets 0/0, balance 0/0, tickets 0/19 @2976b48

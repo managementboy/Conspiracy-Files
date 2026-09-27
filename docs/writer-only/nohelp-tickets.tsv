@@ -19,6 +19,6 @@ T0012	PERSON	person-c	open	0	2026-09-27
 T0013	MAP	map:IrvingtonStashMap1	open	0	2026-09-27	
 T0014	MAP	print:AmericanTire	open	0	2026-09-27	
 T0015	MAP	map:EkronStashMap8	open	0	2026-09-27	
-T0016	SCENE	scene:pending-body	blocked	0	2026-09-27	
-T0017	SCENE	scene:pending-vehicle	blocked	0	2026-09-27	
-T0018	UNIQUE	scene:pending-unique	blocked	0	2026-09-27	
+T0016	SCENE	scene:RDSPoliceAtHouse	open	0	2026-09-27	
+T0017	SCENE	scene:RVSAmbulanceCrash	open	0	2026-09-27	
+T0018	UNIQUE	scene:RBJackieJaye	open	0	2026-09-27	

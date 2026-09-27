@@ -19,6 +19,13 @@ owner-facing documents or updates.
   and `RZSSirTwiggy`.
 - Never a clue on any vanilla named character's body or ID (the judge, the
   mayor, the dealership family, the TV personalities, etc.).
+- **Built (2026-09-27):** the shipped scene table
+  (`Generated/VanillaScenes.lua`, 124 of 140 kinds hold a clue), the matcher
+  (`Generated/SceneMatch.lua`, 8 jar-verified signatures), the studio's
+  citation record and the live check still owed:
+  `nohelp-scene-citation-and-live-check.md`. Tickets: T0016 = SCENE
+  `RDSPoliceAtHouse` (body), T0017 = SCENE `RVSAmbulanceCrash` (vehicle),
+  T0018 = UNIQUE `RBJackieJaye` (two versions).
 
 ## Map areas named in the plan's step 4 log
 
