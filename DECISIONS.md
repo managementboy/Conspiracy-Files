@@ -1,3 +1,59 @@
+## DR-20260927-WORLD-KEEPS-EVERYTHING — a world is used up, and nothing says so
+
+Owner decision, 2026-09-27, on the permadeath question open since
+2026-09-22 (item 10 of `DUAL_CONSPIRACY_WORLD_EVIDENCE_VISION_2026-09-22.md`)
+and raised again by round 2 of the "No Help" content-design work.
+
+**A character dies. The world keeps everything, including what was taken.** The
+new survivor inherits whatever state the dead one left: sites already visited
+stay resolved, evidence already carried off is gone, and nothing anywhere tells
+the new character which is which. There is no reset, no respawn of consumed
+evidence, and no marker.
+
+This was chosen over three alternatives, including the one open item 10 itself
+leaned toward (facts persist, personal discoveries reset). It is the strict
+reading of the zero-tracked-state rule and it is deliberate.
+
+**The objection, and where it actually lands.** It was put to the owner that a
+new character cannot tell "someone already found this" from "nothing was ever
+here" from "the mod is broken", and the owner chose this anyway. Splitting that
+objection into its three parts:
+
+- *Already found vs. never anything* is **not** a defect here. A survivor
+  walking into a picked-over house cannot tell those apart either, and this is
+  a mod whose entire premise is that nobody is going to help you work it out.
+  Most sites genuinely never held anything, so the ambiguity is the normal case
+  rather than a degraded one.
+- *Versus broken* is a **diagnosability** problem, not a player-facing one, and
+  it is already solved. T4's ledger records every asset's real state
+  (`pending`/`placing`/`placed`/`unavailable`/`lost`/`conflict`) on the
+  persisted plan, so a developer can always tell a consumed site from a failed
+  one. Under the standing rule that full hidden-state diagnostics are
+  debug-only (AGENTS.md), the player gets the ambiguity and the developer gets
+  the ledger. Nothing new is needed.
+- *The real cost*, which is not addressed and is accepted: **a world is
+  finite.** Enough character deaths and a world runs out of evidence, and the
+  mod quietly stops having content in it. `StaleClue.lua` does not help —
+  it relocates evidence that was never found, not evidence that was carried
+  off. The mitigation is authoring volume, and nothing else. Say this to a
+  player in the Workshop description rather than letting them discover it.
+
+**Consequences for the design.**
+
+- Round 2's mechanism ② (first visit permanently fixes what a marked site
+  holds) is **unblocked** and consistent: the world being consumable is now the
+  intended behaviour rather than an unresolved risk.
+- Authoring must not put a load-bearing fact where one death-and-respawn cycle
+  can destroy every copy of it. This is the existing redundancy rule from
+  round 1 (copies span container-type families, with a minimum tile distance
+  between them) doing double duty; it needs no new mechanism, only that the
+  rule is actually applied when content is written.
+- Item 10 of `DUAL_CONSPIRACY_WORLD_EVIDENCE_VISION_2026-09-22.md` is closed by
+  this entry. Question 4 of section 9 of
+  `NO_HELP_CONSPIRACY_DESIGN_2026-09-26.md` is answered for its permadeath
+  half: accept it as a known, unaddressed cost. Its multiplayer half stays out
+  of scope (P4-R18).
+
 ## DR-20260925-THREADS — the survivor follows threads, and can put one down
 
 Owner, Windows playtest 2026-09-25: *"PDA app that tracks 'cases' (should be

@@ -10,6 +10,7 @@ package.preload["ConspiracyFiles/Generated/PlaceNames"]=function()
 end
 getTexture=function(path) return {path=path} end
 ConspiracyFiles={}
+dofile("test/support/engine_first.lua")  -- before any double; see that file
 local Memo=require("ConspiracyFiles/Generated/RelayMemo")
 local Rows=require("ConspiracyFiles/EvidenceRows")
 local A=require("ConspiracyFiles/KnoxApps")

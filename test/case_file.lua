@@ -9,6 +9,7 @@
 -- almost exactly this mod's written evidence. It is not a magic box: capacity 5,
 -- MaxItemSize 0.2, and it will never hold the object evidence.
 package.path = "mod/common/media/lua/client/?.lua;mod/common/media/lua/shared/?.lua;" .. package.path
+local Engine=dofile("test/support/engine_first.lua")  -- before any double; see that file
 
 local added = {}
 local function makeItem(fullType)

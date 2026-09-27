@@ -329,11 +329,20 @@ paraphrasing.
 
 ## 6. Pending tasks, in order
 
-1. **Render rounds 2 and 3 above to the owner properly** (this handoff has
+> **Progress, 2026-09-27 (later session).** Task 1 is done — rounds 2 and 3
+> were rendered to the owner in the ADHD output shape. Task 2 is settled by
+> **DR-20260927-WORLD-KEEPS-EVERYTHING**: the world keeps everything a dead
+> character took, which unblocks round 2's mechanism ②. Tasks 3-6 remain open,
+> and the prior art cited in section 3 was spot-checked and is accurate
+> (`Placement.lua`, `StaleClue.lua` and open item 10 all exist as described).
+
+1. ~~**Render rounds 2 and 3 above to the owner properly**~~ — **done
+   2026-09-27.** Original text: (this handoff has
    the substance; a new session should present it in the ADHD output shape —
    brief/wide-set/converge/focus/provocation — the way round 1 already was),
    watching the guidance in section 5.
-2. **Decide the permadeath / world-persistence question** flagged in both
+2. ~~**Decide the permadeath / world-persistence question**~~ — **settled
+   2026-09-27, DR-20260927-WORLD-KEEPS-EVERYTHING.** Original text: flagged in both
    round 2's deepening and `DUAL_CONSPIRACY_WORLD_EVIDENCE_VISION_2026-09-
    22.md`'s own open item 10 — it blocks committing to the "one-shot
    irreversible world-as-record" mechanism cleanly.

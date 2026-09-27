@@ -1,4 +1,5 @@
 package.path="mod/common/media/lua/shared/?.lua;mod/common/media/lua/client/?.lua;test/?.lua;"..package.path
+local Engine=dofile("test/support/engine_first.lua")  -- before any double; see that file
 -- A REAL generated session, validated by the shipped validator. This test used
 -- to carry a literal root AND stub out SuccessiveCases so that nothing checked
 -- it - which meant the one mock in here was hiding the very integration it
@@ -70,7 +71,7 @@ local B=require('ConspiracyFiles/SaveBudget')
 --
 -- discover() moves both together, the way the game does.
 local seq=0
-ConspiracyFiles.DiscoveryLog={highestSeq=function() return seq end}
+Engine.double("DiscoveryLog",{highestSeq=function() return seq end})
 local function tick() for _=1,30 do P.tick() end end
 local function discover() known=true; seq=seq+1; tick() end
 local function card()

@@ -3,8 +3,12 @@
 -- SETUP opens. Asserted on what is drawn and what a tap would hit.
 package.path="mod/common/media/lua/client/?.lua;mod/common/media/lua/shared/?.lua;"..package.path
 local K=require("ConspiracyFiles/KnoxUI")
-local Base=require("ConspiracyFiles/Generated/OrganiserFont")
-local Big=require("ConspiracyFiles/Generated/OrganiserFont24")
+-- UPDATED 2026-09-27: the two organiser faces moved from Generated/ into
+-- module C with the rest of the PDA (module split stage 4, b98bfed). The
+-- require path follows them; nothing about what this test asserts changed.
+
+local Base=require("ConspiracyFiles/OrganiserFont")
+local Big=require("ConspiracyFiles/OrganiserFont24")
 
 local textures,rects
 local panel={drawTextureScaled=function(self,tex,x,y,w,h) textures[#textures+1]={path=tex.path,h=h} end,

@@ -8,6 +8,7 @@
 -- the first real player in game. See test/reachability_gate.lua for the same
 -- discipline.
 package.path="mod/common/media/lua/shared/?.lua;mod/common/media/lua/client/?.lua;"..package.path
+local Engine=dofile("test/support/engine_first.lua")  -- before any double; see that file
 
 local says,haloNotes,uiSounds,otherSounds={},{},{},{}
 local clock=0
@@ -49,7 +50,8 @@ getSoundManager=function() return manager end
 -- for getWorld():getSound(...), addSound(...) or character:playSound(...) it
 -- would throw here (`attempt to call a nil value`) instead of silently
 -- attracting zombies.
-ConspiracyFiles={}
+-- Additive: replacing the table would erase what EngineAPI just loaded.
+ConspiracyFiles=ConspiracyFiles or {}
 local Voice=dofile("mod/common/media/lua/client/ConspiracyFiles/PlayerVoice.lua")
 -- Lines are paced one after another in play; test/voice_pacing.lua pins that.
 -- This file pins wording, rotation and gating, so it hears every line at once.
@@ -75,7 +77,7 @@ end
 -- Set B: a name observed on a document with the body is used verbatim.
 -- ---------------------------------------------------------------------
 Voice.reset(); says={}; haloNotes={}; uiSounds={}
-ConspiracyFiles.PersonNameLog={nameFor=function(token) if token=="corpse-item:1" then return "Dana Vale" end end}
+Engine.double("PersonNameLog",{nameFor=function(token) if token=="corpse-item:1" then return "Dana Vale" end end})
 local SET_B_COUNT=8
 local seenB,previousB={},nil
 for i=1,24 do
@@ -115,13 +117,13 @@ assert(distinctC==SET_C_COUNT,"every Set C line must be reachable, got "..distin
 -- A name lookup that itself misbehaves (throws, or returns a non-string)
 -- must still fall back to Set C rather than erroring or fabricating a name.
 Voice.reset(); says={}
-ConspiracyFiles.PersonNameLog={nameFor=function() error("boom") end}
+Engine.double("PersonNameLog",{nameFor=function() error("boom") end})
 Voice.onKeyDoorLink("corpse-item:1")
 assert(#says==1,"a misbehaving name lookup must not prevent the link line from speaking")
-ConspiracyFiles.PersonNameLog={nameFor=function() return "" end}
+Engine.double("PersonNameLog",{nameFor=function() return "" end})
 Voice.onKeyDoorLink("corpse-item:1")
 assert(not haloNotes[#haloNotes].text:find("<name>",1,true) and not haloNotes[#haloNotes].text:find("'s key",1,true),"an empty name must fall back to Set C, not speak a blank name")
-ConspiracyFiles.PersonNameLog=nil
+Engine.double("PersonNameLog",nil)
 Voice.onKeyDoorLink("corpse-item:1")
 assert(#says==3,"a missing PersonNameLog module must degrade to Set C, not throw")
 

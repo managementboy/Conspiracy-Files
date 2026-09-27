@@ -12,6 +12,7 @@ package.preload["ConspiracyFiles/EvidenceRows"]=function()
 end
 ConspiracyFiles={}
 local G=require("ConspiracyFiles/Generated/Generator")
+local Engine=dofile("test/support/engine_first.lua")  -- after the preloads, before any double; see that file
 local A=require("ConspiracyFiles/KnoxApps")
 -- UPDATED 2026-09-25 for DR-20260925-RECORD-VOICE: every heading this test
 -- named as a literal is now the survivor's own, first person and hedged. The
@@ -29,7 +30,7 @@ local rows={
     {id="d5",title="Note",detailText="Left for Jarvis Harding."},
 }
 current=rows
-ConspiracyFiles.PersonNameLog={names=function() return {"Jarvis Harding"} end}
+Engine.double("PersonNameLog",{names=function() return {"Jarvis Harding"} end})
 ConspiracyFiles.IdentityObserver={rows=function()
     return {{title="Found Ines Kubiak's ID card",detailText="An ID card.",id="id1",person="Ines Kubiak"}}
 end}

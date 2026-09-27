@@ -587,7 +587,7 @@ The owner approved the following direction in discussion. Items whose exact brea
 7. **Farm connection:** Should the first client explicitly be a farm worker, a worker's family member, or should the farm connection be discovered later?
 8. **Animal evidence tone:** Are feed, animal remains, tissue/specimen objects, and sick-animal implications acceptable, and how graphic should they become?
 9. **Random-scene promotion:** Is it acceptable for a vanilla scene to become essential only after the runtime has observed and confirmed it in the current save?
-10. **World persistence:** Should the same conspiracy pair and historical facts survive character death within the same world while personal discoveries remain separate?
+10. ~~**World persistence:** Should the same conspiracy pair and historical facts survive character death within the same world while personal discoveries remain separate?~~ — **CLOSED 2026-09-27, DR-20260927-WORLD-KEEPS-EVERYTHING.** The owner chose the stricter answer than this question proposed: the world keeps everything, including what a dead character carried off. Consumed evidence does not come back and nothing marks a resolved site. A world is finite; that is intended.
 11. **Variation strategy:** Should version one deeply author this single pair across occupations before adding other central pairs?
 12. **Ten Fitness openings:** All ten are rewritten now around the approved five-finding structure; later expansion should add more varied evidence grammars after native play establishes the reference case.
 

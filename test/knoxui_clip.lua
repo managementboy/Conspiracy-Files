@@ -11,7 +11,11 @@
 -- what the player would see.
 package.path="mod/common/media/lua/client/?.lua;mod/common/media/lua/shared/?.lua;"..package.path
 local K=require("ConspiracyFiles/KnoxUI")
-local Font=require("ConspiracyFiles/Generated/OrganiserFont")
+-- UPDATED 2026-09-27: the two organiser faces moved from Generated/ into
+-- module C with the rest of the PDA (module split stage 4, b98bfed). The
+-- require path follows them; nothing about what this test asserts changed.
+
+local Font=require("ConspiracyFiles/OrganiserFont")
 
 local drawn
 local panel={drawTextureScaled=function(self,tex,x,y,w,h) drawn[#drawn+1]={x=x,w=w} end,

@@ -137,6 +137,7 @@ assert(not carrierOf:find('setHaloNote', 1, true) and not carrierOf:find('AddIte
 
 -- PDA FILES, through fakes: a WHERE field for live and finished documents.
 package.path = "mod/common/media/lua/client/?.lua;mod/common/media/lua/shared/?.lua;" .. package.path
+local Engine=dofile("test/support/engine_first.lua")  -- before any double; see that file
 package.preload["ConspiracyFiles/KnoxUI"] = function() return {} end
 ConspiracyFiles = ConspiracyFiles or {}
 local known = {}

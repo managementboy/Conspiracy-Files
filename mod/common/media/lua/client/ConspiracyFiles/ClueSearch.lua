@@ -14,8 +14,11 @@
 --
 -- Foraging internals belong to the game and a game update can change them, so
 -- every contact with them is in this one file and guarded.
-require "Foraging/forageSystem"
-require "Foraging/ISBaseIcon"
+-- Vanilla's foraging system, guarded for the same reason and in the same
+-- shape as IdentityObserver's pane require: reachable from the offline suite
+-- since the module split, absent there, present in game.
+if not forageSystem then pcall(require,"Foraging/forageSystem") end
+if not ISBaseIcon then pcall(require,"Foraging/ISBaseIcon") end
 local Rules=require("ConspiracyFiles/ClueSearchRules")
 local CFLog=require("ConspiracyFiles/Log")
 ConspiracyFiles=ConspiracyFiles or {}

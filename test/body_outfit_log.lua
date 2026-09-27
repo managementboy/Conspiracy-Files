@@ -6,6 +6,7 @@
 -- (setHaloNote/playUISound, 2026-09-07) would fail this test instead of
 -- shipping silently.
 package.path="mod/common/media/lua/shared/?.lua;mod/common/media/lua/client/?.lua;"..package.path
+local Engine=dofile("test/support/engine_first.lua")  -- before any double; see that file
 local strict=dofile('test/support/strict.lua')
 
 local db,items={},{}
@@ -34,7 +35,9 @@ package.loaded['ConspiracyFiles/Generated/SuccessiveCases']={
     current=function() return nil end,
     currentCached=function() return nil end,
     sessions=function() return {} end}
-ConspiracyFiles={GeneratedRuntime={metrics=function() return {} end,known=function() return {} end}}
+-- Additive: replacing the table would erase what EngineAPI just loaded.
+ConspiracyFiles=ConspiracyFiles or {}
+Engine.double("GeneratedRuntime",{metrics=function() return {} end,known=function() return {} end})
 
 local P=require('ConspiracyFiles/LocalPersonIntegration')
 local Outfits=require('ConspiracyFiles/BodyOutfitLog')

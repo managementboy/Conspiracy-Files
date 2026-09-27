@@ -4,6 +4,7 @@
 -- classes shaped like the real ones (ISBaseIcon:derive, ISBaseIcon:new, the
 -- manager's iconCategories and removeIcon).
 package.path="mod/common/media/lua/shared/?.lua;mod/common/media/lua/client/?.lua;"..package.path
+local Engine=dofile("test/support/engine_first.lua")  -- before any double; see that file
 local Rules=require("ConspiracyFiles/ClueSearchRules")
 
 -- The category itself: shaped like the game's "Tracks", nothing to spawn.

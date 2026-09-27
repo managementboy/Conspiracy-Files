@@ -1,6 +1,19 @@
 -- Observe only rows already displayed by the selected native inventory pane.
 local CFLog=require("ConspiracyFiles/Log")
-require "ISUI/ISInventoryPane"
+-- Vanilla's pane class. Guarded the way ClueActions.lua guards
+-- ISBaseTimedAction, because module split stage 4 made EngineAPI.lua require
+-- THIS file at load: an unguarded vanilla require then ran in the offline
+-- suite, where no PZ module exists, and killed seventeen tests that had never
+-- touched this file. In game the require happens exactly as before. It is not
+-- silent: if the class is still missing afterwards the log says so, because a
+-- pane hook that quietly never attaches is the class of defect this project
+-- has lost whole days to.
+if not ISInventoryPane then
+    pcall(require,"ISUI/ISInventoryPane")
+    if not ISInventoryPane and getCore then
+        CFLog.message("identity","person","ISUI/ISInventoryPane did not load; pane observation is off")
+    end
+end
 local Model=require("ConspiracyFiles/IdentityObservations")
 local Budget=require("ConspiracyFiles/SaveBudget")
 local Log=require("ConspiracyFiles/DiscoveryLog")
@@ -373,7 +386,10 @@ function I.tick()
 end
 CFLog.message("identity","person","load: renderHookInstalled="..tostring(I.originalRender~=nil)..
  " tickHandler="..tostring(I.tickHandler~=nil))
-if not I.originalRender then
+-- Only where the class exists. The render wrap IS the observation, so its
+-- absence is a real loss in game and is logged above rather than passed over
+-- quietly; offline there is no pane to wrap and never was.
+if ISInventoryPane and not I.originalRender then
  I.originalRender=ISInventoryPane.render
  ISInventoryPane.render=function(self,...)
   I.originalRender(self,...)

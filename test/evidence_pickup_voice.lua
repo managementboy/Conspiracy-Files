@@ -13,6 +13,7 @@
 -- method -- see test/player_voice.lua and test/reachability_gate.lua for the
 -- same discipline.
 package.path="mod/common/media/lua/shared/?.lua;mod/common/media/lua/client/?.lua;"..package.path
+local Engine=dofile("test/support/engine_first.lua")  -- before any double; see that file
 
 local says,haloNotes,uiSounds={},{},{}
 local clock=0
@@ -44,7 +45,8 @@ getSoundManager=function() return manager end
 
 Events={OnGameStart={Add=function() end}}
 
-ConspiracyFiles={}
+-- Additive: replacing the table would erase what EngineAPI just loaded.
+ConspiracyFiles=ConspiracyFiles or {}
 local Voice=dofile("mod/common/media/lua/client/ConspiracyFiles/PlayerVoice.lua")
 -- Pacing is test/voice_pacing.lua's job; this file pins when Set D fires.
 Voice.HOLD_MS=0
@@ -59,7 +61,7 @@ local Runtime={
     subject=function(item) local e=registry[item]; return e~=nil and e.subject==true end,
     isInspected=function(item) local e=registry[item]; return e~=nil and e.inspected==true end,
 }
-ConspiracyFiles.GeneratedRuntime=Runtime
+Engine.double("GeneratedRuntime",Runtime)
 
 local transferCalls,grabCalls,performCalls=0,0,0
 ISTransferAction={transferItem=function(self,character,item,source,destination,...)

@@ -221,7 +221,6 @@ local known={
  {id="d2",title="Appointment card",kind="receipt",body="WHAT I THINK I FOUND\nA card.\n\nRef R-482"},
  {id="e1",title="Refund register",kind="dispatch",body="WHAT I THINK I FOUND\nA register.\n\nRef Q-118"},
 }
-ConspiracyFiles.GeneratedRuntime={metrics=function() return {} end,known=function() return known end}
 roots["ConspiracyFiles.Generated.G2"]={canonical=true}
 local rootOf={d1={caseId="C1"},d2={caseId="C1"},e1={caseId="C2"}}
 local Q1,Q2="Why was I expected at this address?","Who paid for it?"
@@ -238,6 +237,8 @@ package.preload["ConspiracyFiles/Generated/SuccessiveCases"]=function()
       end,
     }
 end
+local Engine=dofile("test/support/engine_first.lua")  -- after the preloads, before any double; see that file
+Engine.double("GeneratedRuntime",{metrics=function() return {} end,known=function() return known end})
 local A=require("ConspiracyFiles/KnoxApps")
 assert(A.threads and A.threads.id=="THREADS","the program is not there")
 local listed=false

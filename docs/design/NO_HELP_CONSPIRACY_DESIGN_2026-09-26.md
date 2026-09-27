@@ -447,7 +447,15 @@ first.
    smaller question now than "what replaces the PDA."
 3. Should `Generated/*` be dropped from `mod-nohelp/` now that this
    design confirms it's unused, or kept as inert ballast for now?
-4. **New, from section 4a**: how much should authoring actually plan
+4. **Permadeath half settled 2026-09-27, DR-20260927-WORLD-KEEPS-EVERYTHING:**
+   accept it as a known, unaddressed cost. The world keeps everything a dead
+   character took; consumed evidence never returns and nothing marks a
+   resolved site. A world is therefore finite, and authoring volume is the
+   only mitigation. The one authoring constraint that follows: never put every
+   copy of a load-bearing fact where a single death-and-respawn cycle can
+   reach them all — which is round 1's redundancy rule already, applied.
+   The multiplayer half stays out of scope (P4-R18). Original question, for
+   the record: how much should authoring actually plan
    around permadeath world-state mismatch and multiplayer griefing —
    accept them as known, unaddressed costs of "no tracked state," or is
    some minimal mitigation (e.g. evidence categories that are cheap to

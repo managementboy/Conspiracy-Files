@@ -4,6 +4,7 @@
 -- it was evidence: "can you please add a reminder on top of player that we have
 -- not done that?" The pickup line fired once, as designed, and was missed.
 package.path = "mod/common/media/lua/client/?.lua;mod/common/media/lua/shared/?.lua;" .. package.path
+local Engine=dofile("test/support/engine_first.lua")  -- before any double; see that file
 local now = 0
 getTimeInMillis = function() return now end
 local halos, says = {}, {}

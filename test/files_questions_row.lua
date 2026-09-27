@@ -7,6 +7,7 @@ package.preload["ConspiracyFiles/EvidenceRows"]=function()
     return {list=function() return {{id="d1",ordinal=1,title="Dispatch copy / R-482",detailText="Some words."}} end,where=function() return nil end}
 end
 ConspiracyFiles={}
+local Engine=dofile("test/support/engine_first.lua")  -- after the preloads, before any double; see that file
 local A=require("ConspiracyFiles/KnoxApps")
 -- The real offered table carries the case's two readings (RetiredCase builds
 -- them from the story). Without them Questions.note silently drops the
@@ -18,7 +19,7 @@ local questions={
     {caseId="generated:9:case",number=3,offered=offered,answers={reading="two",matters="person1",way="person",changedHours=5}},
     {caseId="generated:4:case",number=1,offered=offered},
 }
-ConspiracyFiles.GeneratedRuntime={questions=function() return questions end,whereabouts=function() return nil end}
+Engine.double("GeneratedRuntime",{questions=function() return questions end,whereabouts=function() return nil end})
 
 local files=A.files.list()
 assert(#files==3,"two question rows and one piece of evidence: "..#files)

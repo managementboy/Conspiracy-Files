@@ -3,6 +3,7 @@
 -- where each was found, place headings - so the organiser never received it.
 -- Asserted on the real module with the real ledger and place index.
 package.path='mod/common/media/lua/client/?.lua;mod/common/media/lua/shared/?.lua;'..package.path
+local Engine=dofile("test/support/engine_first.lua")  -- before any double; see that file
 package.preload['ConspiracyFiles/Generated/PlaceNames']=function() return {render=function(text) return text end} end
 local Ledger=require('ConspiracyFiles/DiscoveryLedger')
 local PlaceIndex=require('ConspiracyFiles/PlaceIndex')
@@ -10,9 +11,9 @@ ConspiracyFiles={}
 local Rows=require('ConspiracyFiles/EvidenceRows')
 
 local known={}
-ConspiracyFiles.GeneratedRuntime={metrics=function() return {} end,known=function() return known end}
+Engine.double("GeneratedRuntime",{metrics=function() return {} end,known=function() return known end})
 known={{id='existing',title='Dispatch',body='body'}}
-ConspiracyFiles.IdentityObserver={rows=function() return {{id='identity:1',title='Observed card',detailText='card'}} end}
+Engine.double("IdentityObserver",{rows=function() return {{id='identity:1',title='Observed card',detailText='card'}} end})
 
 -- Identity rows belong to NAMES and PLACES, never to FILES or the evidence set.
 assert(#Rows.list('evidence')==1)
@@ -22,8 +23,8 @@ assert(places[1].cfHeading and places[1].title==PlaceIndex.EMPTY,'a flat place l
 assert(#places==3 and places[3].id=='identity:1')
 
 -- Key findings reach FILES (they had no home but the old window's journal).
-ConspiracyFiles.KeyJournal={rows=function() return {{id='connection:1',title='Possible connection: Voss',detailText='A key.'}} end}
-ConspiracyFiles.KeyObserver={rows=function() return {{id='key:1',title='A key on a body',detailText='One key.'}} end}
+Engine.double("KeyJournal",{rows=function() return {{id='connection:1',title='Possible connection: Voss',detailText='A key.'}} end})
+Engine.double("KeyObserver",{rows=function() return {{id='key:1',title='A key on a body',detailText='One key.'}} end})
 local files=Rows.list('files')
 assert(#files==3 and files[2].id=='connection:1' and files[3].id=='key:1' and files[3].ordinal==3)
 assert(#Rows.list('evidence')==1,'the evidence set stays evidence')
@@ -35,9 +36,9 @@ for _,step in ipairs({{'evidence','cover',4,'109 Walker Road'},{'evidence','shif
  {'identity','identity:1',5},{'evidence','review',9}}) do
  ledger=assert(Ledger.record(ledger,step[1],step[2],step[3],step[4]))
 end
-ConspiracyFiles.DiscoveryLog={order=function(rows) return Ledger.order(ledger,rows) end,
- places=function() return Ledger.places(ledger) end}
-ConspiracyFiles.KeyJournal=nil; ConspiracyFiles.KeyObserver=nil
+Engine.double("DiscoveryLog",{order=function(rows) return Ledger.order(ledger,rows) end,
+ places=function() return Ledger.places(ledger) end})
+Engine.double("KeyJournal",nil); Engine.double("KeyObserver",nil)
 known={{id='review',title='Review',kind='letter',body='body'},{id='cover',title='Cover',kind='letter',body='body'},
  {id='shift',title='Shift',kind='letter',body='body'}}
 local ordered=Rows.list('places')
