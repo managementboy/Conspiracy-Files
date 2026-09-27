@@ -70,7 +70,8 @@ end
 for i,id in ipairs(ids) do
     assert(api2.assign(id,target(spotOf[id],i),2)); assert(api2.status(id,"placing")); assert(api2.status(id,"placed",3))
 end
-if first then
+assert(first,"this area has two clues sharing an ordinary kind of spot, so the spent-spot rule is really tested")
+do
     assert(api2.recognise(first,"search"),"a clue is found")
     local spentSpot=target(spotOf[first],0)
     for i,id in ipairs(ids) do if id==first then spentSpot=target(spotOf[first],i) end end
@@ -81,12 +82,13 @@ end
 -- A lost body.
 local onBody
 for _,id in ipairs(ids) do if spotOf[id]=="corpse" then onBody=id break end end
-if onBody then
+assert(onBody,"this area has a clue on a body, so the lost-body rule is really tested")
+do
     local api3=assert(S.open(saved,function(n) saved=n end))
     assert(api3.dropMissing(onBody,40),"an unfound clue on a lost body is taken back")
     assert(saved.assignments[onBody].status=="deferred","it waits to be placed again at its own area")
     assert(saved.assignments[onBody].locationId==site.id)
 end
-if first then assert(not api2.dropMissing(first,40),"a found clue is never taken back; it is gone with its body") end
+assert(not api2.dropMissing(first,40),"a found clue is never taken back; it is gone with its body")
 assert(S.validate(saved),"the world record is valid after all of this")
 print("nohelp moves: own area only, shown never moves, spent spots never reused, lost bodies re-placed")
