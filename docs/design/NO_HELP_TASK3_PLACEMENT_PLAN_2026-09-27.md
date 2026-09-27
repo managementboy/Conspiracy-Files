@@ -517,3 +517,32 @@ freeze T1 measured for very large saves is to be watched in long playtests.
 buildings through the existing scan, instead of generating cases) and the
 poller that calls it; skipping the old person/key features for the world
 record.
+
+### Body IDs, keys and clothing — `/adhd` run and owner decisions
+
+Five frames (game design, regulator, remove-the-assumption, ant colony, 3am
+on-call), three deepened against the real code. **Chosen by the owner:** ID
+cards as written clues on bodies with a person thread; keys that lead to clue
+places; clothing as a soft hint. Not chosen: fake IDs.
+
+**What already works:** a written clue carried on an `idcard` and placed at a
+`corpse` spot passes the clue-list rules, the world record and the Session's
+spot rule today; the filler places a plain vanilla ID card on a real body.
+
+**To build (order):**
+1. Clue list: an optional `person` id (never a name) shared by clues about one
+   person; lint: one card per person and at least one other clue; written
+   card text held to the card's short limit (`EvidenceKinds.fits`).
+2. A body carrying an unfound No Help clue that goes missing: the clue is
+   placed again elsewhere at the same place and kind of spot, instead of being
+   dropped after three days (owner). A found clue disappears with its body.
+3. A body chosen for our card must not already hold a vanilla ID; never a
+   dead player character's body.
+4. Before recognition our card reads like a vanilla ID card with its name.
+5. Keys: the key observer's old case lookup is replaced by a lookup in the
+   world record (a key whose building is a decided area); a key seen for an
+   undecided interesting building may decide that area *earlier* (source
+   "key"), never differently. Expected to be rare: most body keys open homes.
+6. Clothing: a closed outfit-to-class table and a ranking among bodies already
+   in reach at commit time; the committed outfit is saved; a world-fixed share
+   prefers the rival's class so clothing never gives the lean away.

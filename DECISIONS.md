@@ -154,6 +154,18 @@ plan's directive check):
   additions to our conspiracies."* How to link IDs to the two conspiracies is
   to be investigated (an `/adhd` run on the real code) and brought back to the
   owner before building.
+- **Body IDs, keys and clothing** (owner, same session, after an `/adhd` run on
+  the real code): build (1) ID cards as written clues placed on bodies, with a
+  person thread — other clues elsewhere mention the same person; only cards
+  we write belong to a conspiracy, every other ID stays vanilla; (2) keys on
+  bodies that open a building holding clues lead the player there; (3) a
+  body's vanilla clothing as a soft preference when choosing which body
+  carries a clue — never a rule, never waited for. Fake IDs were not chosen.
+  Before it is recognised, one of our ID cards looks like a vanilla ID card
+  with a name on it.
+- **A body that burns or disappears:** a clue on it that was already found
+  disappears with it; an unfound one is placed somewhere else (owner, same
+  session). This replaces the old engine's drop-after-three-days for No Help.
 - **No maximum, for real.** Once the written clues are all placed, object sets
   may be placed again elsewhere as new copies with new stamps. This is not a
   respawn: a consumed copy never returns (DR-20260927-WORLD-KEEPS-EVERYTHING
