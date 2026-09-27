@@ -130,8 +130,7 @@ redesign these from scratch in a future session — read them first.
 - **`mod/.../ConspiracyFiles/StaleClue.lua`** — a real, shipping relocation
   policy (moves undiscovered evidence to a new site after
   `RELOCATE_AFTER_HOURS`, capped by `RELOCATE_CAP`). This is a genuine prior
-  mechanism for "stale, unfound evidence" — relevant to (but distinct from)
-  any decay/urgency mechanic proposed for annotated maps in round 2 below.
+  mechanism for "stale, unfound evidence" — a legacy mechanism only. It does not set a precedent for No Help map behavior: marked sites have no visit deadline, and map-linked evidence does not decay, change meaning, relocate, or expire because time passes.
 - **Multiplayer is explicitly out of scope for v1.0** — a real, already-made
   project decision (`DR-20260919-Q28`, `P1-Q3`, `P4-R18` in `DECISIONS.md`).
   Do not design for multiplayer-safety; it adds real complexity for a
@@ -189,52 +188,37 @@ container type).
 
 ### Round 2 — annotated vanilla maps, full integration + visit incentive
 
-Converged on three mechanisms:
+**Owner clarification, 2026-09-27: there is no deadline to visit a marked site.**
+Reading an annotated map starts no timer. Waiting never makes the site's
+evidence decay, change meaning, relocate, or expire. The earlier
+"decay-clock urgency" suggestion is rejected and must not be implemented or
+reintroduced as a probabilistic timer, a softened deadline, or a reuse of
+`StaleClue.lua`.
 
-1. **Decay-clock urgency.** Reading an annotated map starts a real in-game
-   timer on the evidence at its marked site(s); letting it lapse has a real
-   cost — the content decays toward generic vanilla flavor, or (sharper)
-   flips to read as corroboration for the *other* theory. **Real, serious
-   risk surfaced in deepening:** a hard, player-visible deadline is close to
-   exactly the "order/time-dependent interpretation" failure mode the design
-   doc already names as a rejected, real save-scum exploit (§3/§7) — a player
-   could read the map, decline to travel, and reload near the deadline to
-   steer the outcome. If pursued, it needs a probabilistic-after-a-floor roll
-   or similar, not a hard deterministic deadline, and should reuse the
-   existing `StaleClue.lua` relocation mechanism's shape rather than
-   inventing a parallel one.
-2. **One-shot, irreversible world-as-record commitment.** The first physical
-   visit to a marked site permanently fixes what's found there (a
-   non-respawning prop is the only spawn point for that piece of proof) —
-   since nothing tracks belief, the *world's own changed state* becomes the
-   only externalized record of what's been resolved. This is a natural reuse
-   of the existing T4 exact-once state machine (a location-level "which fork
-   won" binding sits above the per-asset ledger). **Real, already-flagged
-   risk:** permadeath — a new character inherits an already-resolved world
-   with literally nothing (no journal, no marker) to distinguish "already
-   solved" from "always was empty" from "a bug." This exact open question is
-   also item 10 in `DUAL_CONSPIRACY_WORLD_EVIDENCE_VISION_2026-09-22.md`'s
-   own open-questions list — it predates this session and is still
-   unresolved.
-3. **Adversarial/mislabeled maps as the verification incentive.** A minority
-   of annotated maps (roughly 1-in-4 to 1-in-5, not more) should be
-   deliberately unreliable — planted by an in-fiction believer of one theory
-   but actually pointing to a site that supports the *other* theory. The only
-   tell is diegetic/stylistic (an overconfident, unhedged claim vs. an honest
-   map's hedged language), never a UI flag, so it's taught by consequence,
-   not instruction, and every "lying" map still reads as a complete,
-   self-contained artifact alone (satisfies the cold-read rule). **Real
-   risk:** if the unreliable fraction is too high or the tell too subtle,
-   players stop trusting any map and the whole mechanic collapses —
-   mitigation is to make even a "wrong" trip materially worthwhile (real
-   evidence for the *other* theory sits there, so the trip was never wasted,
-   only the expectation was).
+The earlier handoff incorrectly presented that speculative timer as a
+converged mechanism. That was wrong. It conflicts with the owner's explicit
+constraint and is removed from the design.
 
-Traps flagged: any mechanism that rewrites text based on "have I visited
-before" (requires tracking visit history — violates the zero-tracked-state
-rule directly); a rival-NPC-faction racing the player for site control (a
-real, heavy new AI system — only realistic as an infinite-budget idea, not
-for v1).
+Two other ideas from the round remain **unapproved possibilities**, not
+settled design:
+
+1. **One-shot, irreversible world-as-record commitment.** A first visit
+   could permanently fix which evidence exists at a marked site, using a
+   non-respawning prop as its only spawn point. This would reuse T4's
+   exact-once state machine. **Open risk:** after permadeath, a new character
+   could inherit the changed world with no journal or marker to explain what
+   happened. Decide the persistence behavior before committing to this.
+2. **Adversarial or mislabeled maps.** A minority of maps could be
+   intentionally unreliable, with clues to their reliability carried only
+   by their wording or style. This remains exploratory; it must not create a
+   deadline or make evidence change because the player waited. A wrong lead
+   would need to make the trip worthwhile by leading to useful evidence, and
+   the tell must be clear enough that players can learn it without a UI flag.
+
+Any future map incentive must preserve the no-deadline rule. Do not rewrite
+map-linked text based on visit history; that would require tracked state and
+would violate the zero-tracked-state rule. A rival group racing the player
+for site control remains out of scope for v1.
 
 ### Round 3 — vanilla event detection and integration
 
@@ -244,10 +228,13 @@ Converged on three mechanisms:
    Static, baked-in vanilla scenes (crash sites etc.) and live runtime events
    (a flyover, an ambient trigger) are not the same kind of thing to detect,
    and treating them with one unified detector is a category error. The
-   static half should get a **one-time, hand-walked coordinate list** —
+   static scene list should be hand-curated by the content writer —
    exactly `Placement.lua`'s existing `POOLS` shape, a new sibling data file,
    no detector code at all — directly matching T3's real, tested policy
    (automatic categorization is advisory-only, never authoritative). The
+   owner must remain blind: do not ask them to find or verify scenes, and
+   do not include scene identities or locations in progress updates. Use a
+   separate test setup for in-game verification, never the owner's playthrough. The
    runtime half should use **flag-and-defer**: the actual `Events.*` callback
    only sets a flag/enqueues a work item; a separate, lower-priority bounded
    poll loop (T2's tested-safe ~100 records/frame) does the real evidence-
@@ -279,9 +266,10 @@ Converged on three mechanisms:
    isn't in the known-good set. **Real, explicitly-named risk:** there is
    nothing to audit yet — zero real vanilla-scene citations exist in the repo
    today. Building the audit tooling before a single real citation exists
-   risks validating an empty set. First real step is hand-curating exactly
-   one real citation (one specific crash scene, walked and hashed in a live
-   dev build) before writing any audit script.
+   risks validating an empty set. The first step belongs to the content
+   writer: curate and verify one real citation in a separate test setup,
+   then keep its identifying details out of owner-facing updates. Never ask
+   the owner to curate, discover, or confirm a scene.
 
 Traps flagged: emergent/automatic classification of static scenes from
 generic map signals (spawn density, room-name heuristics) — thematically
@@ -366,11 +354,13 @@ paraphrasing.
    location-slot families / 7 assets to whatever "No Help" needs for Theory
    A/B evidence — read `Content.lua` and `Session.lua` first to see the
    current (still Dead-Air-named) shape before designing the replacement.
-4. **Hand-curate exactly one real vanilla-scene citation** (round 3, step 3's
-   first concrete step) before building any citation-audit tooling.
-5. **Begin actual content authoring** — the owner plans for another AI to
-   write the content; its handoff is
-   `docs/management/NO_HELP_CONTENT_WRITER_HANDOFF_2026-09-27.md`.
+4. **Curate and verify one real vanilla-scene citation** in a separate test
+   setup before building audit tooling. Keep scene identity out of
+   owner-facing updates; never ask the owner to curate or confirm it. (Owner,
+   2026-09-27, later: the scene list is Claude's; ChatGPT writes the clue
+   text. See DECISIONS.md.)
+5. **Begin actual content authoring** — ChatGPT writes the content; its
+   handoff is `docs/management/NO_HELP_CONTENT_WRITER_HANDOFF_2026-09-27.md`.
    Original text: for Theory A and Theory B once (1)-(2)
    are settled — the owner has explicitly asked for this to happen, and has
    not yet been asked to confirm anything beyond the two premises themselves

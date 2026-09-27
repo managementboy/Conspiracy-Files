@@ -151,6 +151,8 @@ Silent reinterpretation is how "integrated into the conspiracies" quietly
 turns into "overwrote what vanilla already established" without anyone
 deciding that on purpose.
 
+**Blind-play protection.** The owner has chosen to remain unspoiled. The content writer owns vanilla-scene research, selection, and verification. Never ask the owner to discover or confirm a scene, and do not reveal scene names, coordinates, sprites, or evidence details in progress updates. Use a separate test setup for any in-game verification; never use the owner's playthrough.
+
 **Fingerprint the vanilla content version being cited.** PZ patches
 change spawn tables and map annotations over time. Recording which
 game version's placement a piece of hand-authored evidence assumed means
@@ -258,6 +260,8 @@ becoming "the bioweapon zone" through accumulated placement choices, even
 while every individual item still passes its own text-level check —
 recreating order-dependence by geography instead of by discovery order,
 which section 3 above already warns against for time.
+
+**Marked-site visit deadline: none (owner clarification, 2026-09-27).** Reading an annotated map does not start a timer. Waiting never makes its marked-site evidence decay, change meaning, relocate, or expire. A player may investigate whenever they choose; do not add deadline-driven urgency to map-linked evidence.
 
 ## 4. Belief has no meter, no ledger, no object — only the player's memory
 
