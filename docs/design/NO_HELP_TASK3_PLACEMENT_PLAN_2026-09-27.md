@@ -658,7 +658,7 @@ vanilla Farmer outfit.
 ### Annotated maps change the game — `/adhd` run and owner decisions
 
 Five frames (game design, markets, speedrunner, biology, regulator), three
-deepened against the code. **Chosen:** letdown in the layout, the promise
+deepened against the code. **(Superseded: the owner later dropped the layout order and the clock — see "Rework after the owner's pushback".)** **Chosen at the time:** letdown in the layout, the promise
 clock (3 days), zombies gather (after a live test). See DECISIONS.md.
 
 **Build notes from the deepening:**
@@ -746,7 +746,7 @@ flyer-only places are ordinary map-named places (no lean, the world's own
   switch, within the 20-tile proximity guard, 4+ zombies within 6 tiles.
   Labels: doorway, yard, floor. The filler serves the areas within reach
   nearest first and logs each miss with area, clue and distance.
-Tests: `test/nohelp_layout.lua`, `test/nohelp_clock.lua`,
+Tests (at the time; since removed or renamed in the rework): `test/nohelp_layout.lua`, `test/nohelp_clock.lua`,
 `test/nohelp_ground_spots.lua`.
 
 **Not in this part:** zombies gather (waits for its visible live test); a
@@ -796,7 +796,7 @@ run on that pushback led to these decisions, now built:
   player's own light finds a loose floor clue, like foraging); the other
   ground rules stay.
 
-Tests: `test/nohelp_arrival.lua` (new); `test/nohelp_clock.lua` reduced to
+Tests: `test/nohelp_arrival.lua` (new); `test/nohelp_clock.lua` (now `test/nohelp_move_wait.lua`) reduced to
 the remaining moving rules; `test/nohelp_ground_spots.lua` (dark allowed,
 out-of-sight spots near the survivor); `test/nohelp_area_runtime.lua` (the
 arrival trigger, once per stay); `test/nohelp_layout.lua` removed.
@@ -805,3 +805,23 @@ arrival trigger, once per stay); `test/nohelp_layout.lua` removed.
 it has an unsearched container (`Storage.scan`), and a body the survivor
 already searched still does not carry a clue (`Carriers`); zombies gather
 still waits for its live test; no visible playtest yet.
+
+### Step 4 review (regulator, 3am on-call, game design) and owner answers
+
+- **Owner answers:** map places also fill when the player walks near (not
+  only after reading); a place several maps share leans at random per world
+  (was: the first map in the file list — an order no player sees); flyers can
+  be unreliable too; a map marking a large area may have clues anywhere in
+  that area, preferably near the map's own annotation marks.
+- **Fixed:** a ground square not yet loaded (fast arrival) is retried later,
+  not skipped; the shared-place lean; the decision record's contradiction
+  ("fixed at world creation" vs "decided on read") — what is fixed at world
+  creation is each map's side and whether it is unreliable; which clues a
+  place gets is decided when the place is decided; leftovers of the dropped
+  layout and clock in this plan; `test/nohelp_clock.lua` renamed
+  `test/nohelp_move_wait.lua`.
+- **Carried forward:** a crash between the world record's save and the map
+  chunk's save (T4's known gap — the save-window spike in step 8);
+  split-screen (a second local player) is outside scope with multiplayer;
+  density — with 257 map places plus buildings, whether maps still feel like
+  a pull is for the playtest.

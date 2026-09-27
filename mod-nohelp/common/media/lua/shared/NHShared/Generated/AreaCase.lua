@@ -100,9 +100,14 @@ M.recount=recount
 -- (Trails), so a map read or never read gives the place the same lean.
 -- designs: the maps marking the place, in static order. Returns the trail
 -- record and Pick's extra arguments, or nil for a place no map marks.
-function M.trailFor(seed,designs)
+function M.trailFor(seed,designs,areaId)
     if type(designs)~="table" or #designs==0 then return nil end
     local favour=Trails.favour(seed,designs[1])
+    -- A place several maps or flyers point to leans at random per world,
+    -- never by which map a file lists first (owner, 2026-09-27).
+    if #designs>1 then
+        favour=Trails.LEANS[1+Pick.hash(Pick.key({seed,tostring(areaId),"shared-lean"}))%2]
+    end
     if not favour then return nil end
     local list={}; for i,d in ipairs(designs) do list[i]=d end
     if #designs>1 then return {designs=list,favour=favour},{favour=favour} end
@@ -121,7 +126,7 @@ function M.decide(args)
     for _,a in ipairs(case.areas) do if a.id==site.id then return nil,"decided" end end
     local clues=args.clues or Manifest.clues
     local byId={}; for _,c in ipairs(clues) do byId[c.id]=c end
-    local trail,lean=M.trailFor(case.seed,args.designs)
+    local trail,lean=M.trailFor(case.seed,args.designs,site.id)
     if args.designs~=nil and not trail then return nil,"unknown map design" end
     lean=lean or {}
     local picks,short=Pick.choose{clues=clues,area={id=site.id,place=args.place},

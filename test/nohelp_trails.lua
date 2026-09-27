@@ -59,3 +59,13 @@ assert(one.minCount==3 and one.rivalMin==1,D6..": one map, at least 3 clues, one
 local _,many=AreaCase.trailFor(99,{Trails.ALL[1],Trails.ALL[2]})
 assert(many.minCount==nil and many.rivalMin==nil and many.favour,D6..": several maps, no extra minimum, still a lean")
 print("nohelp trails: "..N.." maps and flyers, even random split, 1-20% unreliable per world, exactly k each")
+-- A place several maps point to leans at random per world, not by list order.
+do
+    local AreaCase=require("NHShared/Generated/AreaCase")
+    local seen={}
+    for seed=1,40 do
+        local t=AreaCase.trailFor(seed,{Trails.ALL[1],Trails.ALL[2]},"t3:shared")
+        seen[t.favour]=true
+    end
+    assert(seen.containment and seen.agricultural,"NH-D6: a shared place's lean varies by world")
+end

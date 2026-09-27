@@ -1,4 +1,4 @@
--- No Help: WHEN AN UNFOUND CLUE MAY MOVE, after the owner's pushback
+-- No Help: when an unfound clue may move (the promise clock was removed by the owner; what remains is the ordinary wait).
 -- (DECISIONS.md, "Revised after an /adhd run on the owner's pushback",
 -- 2026-09-27): "what does arriving late mean? No player is in a hurry in PZ".
 -- Reading a map starts no clock. Every place ages alike: a placed, unfound,

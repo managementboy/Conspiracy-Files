@@ -1238,6 +1238,9 @@ local function groundScan(site,done,accept,salt,keys)
         if seen[key] then return false end
         seen[key]=true
         local facts=groundFacts(x,y,b.z,key,keys,zombies,survivor)
+        -- A square not loaded yet (a fast arrival) is tried again on a later
+        -- attempt, not skipped: stop here without spending it.
+        if not facts.exists then tries=tries-1; return finish() end
         local ok,why=GroundSpots.check(facts)
         if ok then
             local target={x=x,y=y,z=b.z,objectIndex=0,containerIndex=0,containerType=Session.GROUND_CONTAINER,

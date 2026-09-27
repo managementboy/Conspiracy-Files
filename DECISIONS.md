@@ -191,7 +191,7 @@ plan's directive check):
   gather: a read map's marked places quietly draw zombies with the game's own
   zombie-only noise, more while clues remain unfound — only after a visible
   live test shows it works far from the player. What each mark holds stays
-  fixed at world creation; reading and reloading never change it. A read
+  fixed at world creation (superseded in part below: what is fixed at world creation is each map's side and whether it is unreliable; which clues a place gets is decided when the place is decided); reading and reloading never change it. A read
   hour is saved as a world event, not as belief.
 - **Bodies:** filling a body's pockets a moment early (same contents as
   opening it) is fine. Clothing classes per conspiracy for the rule that
@@ -228,6 +228,11 @@ plan's directive check):
   - Still standing: reading a map decides its places; zombies gather (to be
     reconsidered with the owner at its live test, since it also grows with
     time unfound).
+- **Step 4 review answers** (owner, same session): map places also fill when
+  the player walks near them, not only after the map is read; a place
+  several maps or flyers point to leans at random per world; flyers can be
+  unreliable too (the same 1-20% share); a map marking a large area may have
+  clues anywhere in that area, preferably near the map's own annotation marks.
 - **No maximum, for real.** Once the written clues are all placed, object sets
   may be placed again elsewhere as new copies with new stamps. This is not a
   respawn: a consumed copy never returns (DR-20260927-WORLD-KEEPS-EVERYTHING
