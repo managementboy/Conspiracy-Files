@@ -284,8 +284,8 @@ plan's directive check):
   is mostly about an animal but also leaves a person and a dropped object
   holds a clue on the ground. 125 scene kinds hold a clue, 15 do not.
 - **Content in rounds** (owner, same session: relaying every clue between the
-  two AIs took too long): ChatGPT delivers up to five tickets per round
-  without waiting, checking each clue with the blind-reader question first;
+  two AIs took too long): ChatGPT delivers every open ticket in one round
+  (owner: "why not all at once"), one commit per ticket, without waiting, checking each clue with the blind-reader question first;
   Claude reviews the round at once, fixes small wording itself and returns
   only real problems. The owner relays one message per round.
 - **No maximum, for real.** Once the written clues are all placed, object sets

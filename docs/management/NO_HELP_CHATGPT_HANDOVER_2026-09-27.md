@@ -94,8 +94,8 @@ scene or map to the owner). What each serial means is in
 `docs/writer-only/nohelp-tickets.tsv` (writer-only). **Take the lowest open
 serial**, and only one at a time. Row ids are `t####-NN`.
 
-**Rounds (owner, 2026-09-27: the relay was too slow).** Work in rounds of up
-to **5 tickets**: deliver them one after another, one commit each, without
+**Rounds (owner, 2026-09-27: the relay was too slow).** Work in rounds of
+**every open ticket** (the whole first release at once): deliver them one after another, one commit each, without
 waiting for Claude in between; then set the baton to CLAUDE with `REVIEW`
 once, naming the serials in `NEXT`. Before delivering any row, run the
 **blind self-read** yourself: the prompt in `tools/cluegates/blind_reread.md`,
@@ -125,7 +125,7 @@ fixed first in the next round, alongside new tickets.
 
 - **Branch:** `nohelp-content` only. Never `main`, never another branch; Claude
   merges after review. Never force-push, never rewrite history.
-- **Cadence:** one ticket per commit, at most about 40 rows, and commit at the
+- **Cadence:** one ticket per commit, at most about 40 rows (a stall then loses one ticket, not the round), and commit at the
   end of every session even if a ticket is unfinished (unfinished rows stay
   out of `incoming/`; note them in STATE). Push after every commit.
 - **Only passing rows.** Before committing, run `lua5.1
