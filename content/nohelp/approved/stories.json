@@ -93,13 +93,15 @@
     "ticket": "T0016",
     "target": "scene:RDSPoliceAtHouse",
     "lean": "containment",
-    "gloss": "A body-anchored trace from a domestic aftermath records institutional response and individual exposure, readable through either failed controls or prior hazard."
+    "gloss": "A body-anchored trace from a domestic aftermath records institutional response and individual exposure, readable through either failed controls or prior hazard.",
+    "void": "target retargeted 2026-09-27; new gloss owed in T0019"
   },
   {
     "ticket": "T0017",
     "target": "scene:RVSAmbulanceCrash",
     "lean": "containment",
-    "gloss": "A roadside medical vehicle's remains show the limits of emergency movement, while a program-related exposure remains plausible."
+    "gloss": "A roadside medical vehicle's remains show the limits of emergency movement, while a program-related exposure remains plausible.",
+    "void": "target retargeted 2026-09-27; new gloss owed in T0019"
   },
   {
     "ticket": "T0018",
