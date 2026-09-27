@@ -134,6 +134,9 @@ function World.ground(square)
     function g:isHasBeenLooted() return false end
     function g:getParent() return nil end
     function g:getType() return "floor" end
+    -- Where it stands, for anything that asks a container its square
+    -- (ClueMarkers.sourceSquare): the square itself.
+    function g:getSourceGrid() return square end
     return g
 end
 

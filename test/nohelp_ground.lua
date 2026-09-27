@@ -80,4 +80,8 @@ local extra={x=10,y=20,z=0,objectIndex=0,containerIndex=0,containerType="floor",
 assert(not Session.target(extra,site),"a ground target carries no unknown fields")
 local unnamed={x=10,y=20,z=0,objectIndex=0,containerIndex=0,containerType="floor",sprite="",ground=true}
 assert(not Session.target(unnamed,site),"a ground spot names what kind of spot it is")
+-- A ground spot never shares an identity with furniture on the same square.
+local cupboard={x=10,y=20,z=0,objectIndex=0,containerIndex=0,containerType="shelves",sprite="x"}
+assert(Session.physicalKey(target)~=Session.physicalKey(cupboard),"a yard spot and a cupboard on one square are two places")
+assert(World.resolve(target):getSourceGrid()==square,"the ground says where it stands")
 print("nohelp ground: open ground holds, counts and gives up clues like a container")

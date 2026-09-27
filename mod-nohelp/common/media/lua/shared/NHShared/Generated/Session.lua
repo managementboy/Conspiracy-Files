@@ -609,6 +609,10 @@ function S.physicalKey(target)
     -- two clues on one carrier" the same check as "never two clues in one
     -- cupboard" (P4-R67).
     if type(target.carrierMark)=="string" then return "carrier:"..target.carrierMark end
+    -- OPEN GROUND is keyed on its square alone, and apart from furniture: a
+    -- ground target's zero indexes are "not an index", so without the prefix a
+    -- yard spot and the first cupboard on the same square would be one key.
+    if target.ground==true then return "ground:"..table.concat({target.x,target.y,target.z},":") end
     return table.concat({target.x,target.y,target.z,target.objectIndex,target.containerIndex,
                          target.vehiclePart or "-"},":")
 end

@@ -375,3 +375,19 @@ files pass the engine parser.
 **Not yet proven:** that Search Mode spots an item lying in a garden or on a
 porch, by day and at dusk, and that the hint fires for it — the visible
 playtest (step 8). Nothing chooses a ground spot yet; that is step 4.
+
+**Phase 3 review** (speedrunner, regulator, biology):
+- **Fixed:** a ground spot and the first piece of furniture on the same square
+  shared one identity key (both indexes zero); ground now has its own key. The
+  ground also answers `getSourceGrid`, which the map-marker code asks of a
+  container.
+- **Checked and not a problem:** Search Mode spotting does record "search"
+  (`ClueSearch.lua:302`); a second copy on reload is already refused by the
+  exact-once placement count; a plain pickup without searching correctly
+  records nothing until "Look it over".
+- **Carried forward:** "debug" finds must be counted apart from player finds
+  in playtest tallies. Open-ground items can be cleared by the game or moved by
+  play: the empty-spot case is step 6's. Two design ideas for the owner, not
+  adopted: whether a dead character's body should become a place clues can
+  turn up, and whether a spot where a clue was already found should never
+  receive another.
