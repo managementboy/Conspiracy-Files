@@ -5,7 +5,7 @@ never a place name, map, flyer, scene, person or clue text here. Whoever holds t
 baton edits it; `lua5.1 tools/nohelp_content/progress.lua --state` rewrites PROGRESS.
 
 ## BATON
-CHATGPT since 2026-09-27 because WRITING
+CLAUDE since 2026-09-27 because REVIEW
 
 ## STAGE
 1
@@ -14,7 +14,7 @@ CHATGPT since 2026-09-27 because WRITING
 T0001
 
 ## NEXT
-T0001 WRITING
+T0001 REVIEW
 
 ## OPEN RETURNS
 none
@@ -26,4 +26,4 @@ none
 2026-09-27 T0001
 
 ## PROGRESS
-NOT DONE: maps 0/125, flyers 0/133, scenes 0/125, sets 0/0, balance 0/0, tickets 1/19 @93f83c8
+NOT DONE: maps 0/125, flyers 0/133, scenes 0/125, sets 0/0, balance 0/0, tickets 1/19 @f92f5de
