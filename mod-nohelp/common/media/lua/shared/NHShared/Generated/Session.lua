@@ -99,6 +99,20 @@ local function carrierTarget(t) return type(t)=="table" and type(t.carrierMark)=
 -- the driveway margin; `sprite` holds a short word for the spot, since a square
 -- has no furniture sprite and the diagnostics print this field.
 S.GROUND_CONTAINER="floor"
+-- How many physical items one document is: the sum of a set's pieces, else
+-- its stated pile count, else one. The one place this is counted, so the
+-- placement count, the identity scan and relocation cannot disagree (phase 5
+-- mapping: the identity scan read `quantity` alone and would have marked every
+-- set without a stated total a permanent conflict).
+function S.pieceCount(doc)
+    if type(doc)~="table" then return 1 end
+    if type(doc.members)=="table" and #doc.members>0 then
+        local n=0
+        for _,m in ipairs(doc.members) do n=n+(tonumber(m.quantity) or 1) end
+        return n
+    end
+    return tonumber(doc.quantity) or 1
+end
 -- The ways a clue can come to be recognised, as R.recognise names them.
 S.FOUND_HOW={search=true,look=true,opening=true,debug=true}
 local function groundTarget(t) return type(t)=="table" and t.ground==true end

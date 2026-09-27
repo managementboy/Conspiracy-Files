@@ -25,6 +25,10 @@ M.SPOTS={"furniture","mailbox","vehicle","corpse","ground"}
 -- written clue in disguise.
 M.WRITTEN_CARRIERS={Note=true}
 
+-- The clue list's version. Every area records the version it was picked with,
+-- so a later list never rewrites an area already decided.
+M.VERSION="nohelp-clues-0"
+
 M.clues={}
 
 local function set(list) local out={}; for _,v in ipairs(list) do out[v]=true end; return out end

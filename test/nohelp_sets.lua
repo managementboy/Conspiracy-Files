@@ -40,8 +40,14 @@ assert(not mover:find(":Remove(it); break",1,true),"no longer stops after removi
 -- A set's number is the sum of its pieces even when no total is stated
 -- (phase 2 review: counted as one, every set would have been refused).
 local counter=runtime:match("local function expectedCount%(api,id%).-\nend\n")
-assert(counter and counter:find("for _,m in ipairs(d.members) do n=n+",1,true),
-    "a set is counted by its pieces")
+assert(counter and counter:find("Session.pieceCount(d)",1,true),"placement counts a set by its pieces")
+assert(runtime:find("expected[d.id]=Session.pieceCount(d)",1,true),
+    "and so does the identity scan, or a set with no stated total is a permanent conflict")
+local Session=require("NHShared/Generated/Session")
+assert(Session.pieceCount({members={{kind="a",quantity=1},{kind="b",quantity=2}}})==3,"a set is the sum of its pieces")
+assert(Session.pieceCount({members={{kind="a",quantity=1},{kind="b",quantity=2}},quantity=9})==3,"even when it states another total")
+assert(Session.pieceCount({quantity=6})==6,"a pile is its count")
+assert(Session.pieceCount({})==1,"a single item is one")
 -- Whole or not at all on the way in: a refused piece takes the landed ones back.
 assert(mover:find("for _,piece in ipairs(landed) do",1,true),"pieces that landed are taken back if one is refused")
 -- And the destination is asked for room for the whole set before anything moves.

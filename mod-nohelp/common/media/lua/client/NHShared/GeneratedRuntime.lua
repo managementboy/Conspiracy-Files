@@ -210,17 +210,9 @@ end
 -- a cupboard of bleach rather than a bottle of it (ObjectRules.accumulation).
 local function expectedCount(api,id)
     for _,d in ipairs(api.snapshot().case.documents) do
-        if d.id==id then
-            -- A set's number is the sum of its pieces, whether or not the
-            -- document also states a total: a No Help set need not carry one,
-            -- and counting it as one item would refuse every move of it.
-            if type(d.members)=="table" and #d.members>0 then
-                local n=0
-                for _,m in ipairs(d.members) do n=n+(tonumber(m.quantity) or 1) end
-                return n
-            end
-            return d.quantity or 1
-        end
+        -- A set's number is the sum of its pieces, whether or not the
+        -- document also states a total (Session.pieceCount).
+        if d.id==id then return Session.pieceCount(d) end
     end
     return 1
 end
@@ -2569,7 +2561,7 @@ local function identity(api)
     -- document and many identical items; finding the second one is not a
     -- conflict, it is the pile.
     local expected={}
-    for _,d in ipairs(snapshot.case.documents) do expected[d.id]=d.quantity or 1 end
+    for _,d in ipairs(snapshot.case.documents) do expected[d.id]=Session.pieceCount(d) end
     local scan=World.identityScan(getPlayer(),snapshot.assignments,function(r) found=r; done=true end,expected)
     return function()
         if not done then scan(); return false end

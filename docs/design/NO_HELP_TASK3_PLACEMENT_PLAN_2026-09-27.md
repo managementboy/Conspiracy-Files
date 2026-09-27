@@ -451,3 +451,50 @@ picker's choices into the engine in place of the old two-site case generator.
   area picked from an empty list is not "decided"; every placed copy gets its
   own id including its area and copy number; tokens and markers are keyed by
   area, never by a slot 1 or 2 of the old two-site case.
+
+### Phase 5 — the per-area contract (step 3, second half): design
+
+Mapped by a planning pass over the whole case lifecycle before any change.
+
+**Shape.** One No Help *world record*: a normal Session root whose case has
+kind `"nohelp-areas"`, saved as the store's `canonical`, never retired. Deciding
+an area appends to it in one validated write: the area (id, kind of place,
+source, content version, hour, first document, count, shortfall), its clues as
+documents with ids `nh:<area>:<clue>:<copy>`, and the ledger Pick reads. One
+root rather than one per area, because per-area roots would make the old
+16-case / 4-active limits a hidden maximum on areas (NH-D4), and because
+search, Look it over, the filler, identity scan and relocation already work on
+a Session root unchanged. A separate store was rejected: it would mean copying
+about a thousand lines of placement code.
+
+**The five phase 4 requirements.** (1) The world record only grows: every
+write is checked, and existing areas, documents and totals may never change or
+shrink. (2) An area is picked once, from the saved ledger and world seed only,
+and saved in the same write; a failed write saves nothing and a retry gives
+the same answer. (3) Each area keeps the content version it was picked with;
+an empty pick is not a decision. (4) Every placed copy has its own id. (5)
+Tokens, markers and icons come from that id, which contains the area.
+
+**Validation** replaces the old rebuild-from-seed check: every derived field
+(ids, titles, counts, ledger totals) is recomputed from the documents and must
+match; shapes are checked against the clue-list vocabulary; today's clue list
+is never consulted, so a content update never breaks a save. The old 5-24
+item rule for object scenes does not apply.
+
+**When an area is decided, for now.** The existing nearby scan: each eligible
+catalogued building near the player whose kind maps to one of the owner's
+interesting places is decided in turn. Homes and other buildings map to
+nothing and get no clues. Map-rectangle and scene areas come in steps 4-5.
+
+**Found while mapping:** the identity scan counted a set without a stated
+total as one item, which would have marked every such set a permanent
+conflict (fixed first, below).
+
+**Build order:** identity fix, content version, kind-of-place mapping →
+the pure area record (`Generated/AreaCase.lua`) → Session support (validation
+dispatch, spot-honouring placement, no expiry or retirement for areas, the
+grows-only guard) → relocation within an area's own site → the runtime's
+area mode → the poller → skipping the old person/key features for area cases.
+Risks: every write copies the whole record several times (measure; compact
+found clues before ~600 clues); the marker store caps at 64 records; the
+T3 place mapping is coarse; ground clues wait until step 4 chooses spots.
