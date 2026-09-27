@@ -83,7 +83,7 @@ local function fire(name) clock=clock+16; for _,fn in ipairs(handlers[name] or {
 local store={}
 ModData={getOrCreate=function(tag) store[tag]=store[tag] or {}; return store[tag] end,
     get=function(tag) return store[tag] end}
-getDebug=function() return true end
+getDebug=function() return false end  -- No Help runs in normal play (owner, 2026-09-27)
 isClient=function() return false end
 isServer=function() return false end
 -- Still within a frame, so the scheduler's time budget is never spent.
@@ -181,4 +181,8 @@ for _=1,20 do fire("OnTick") end
 root=store["NHShared.Generated.G2"].campaign.canonical
 assert(#root.case.areas==1,"a place with nothing to give is not decided")
 
+-- The clue system is not gated on debug mode.
+local src=assert(io.open("mod-nohelp/common/media/lua/client/NHShared/GeneratedRuntime.lua","rb")):read("*a")
+local gate=src:match("local function allowed%(%).-\nend")
+assert(gate and not gate:find("getDebug",1,true),"the runtime runs in normal single-player play")
 print("nohelp area runtime: world record bootstrapped once, nearby places decided, own-kind spots only")

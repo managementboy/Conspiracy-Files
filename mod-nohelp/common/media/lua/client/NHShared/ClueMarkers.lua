@@ -14,8 +14,9 @@ local inks={Pen={0.129,0.129,0.129},Pencil={0.2,0.2,0.2},RedPen={0.65,0.054,0.05
 local questionTexture
 local CFLog=require("NHShared/Log")
 local function log(s) CFLog.message("marker","marker",s) end
+-- Every single-player game, like the runtime (owner, 2026-09-27).
 local function allowed()
- return getDebug and getDebug() and not (isClient and isClient()) and not (isServer and isServer())
+ return not (isClient and isClient()) and not (isServer and isServer())
   and not NHShared.T11Mode and not NHShared.T12Mode
 end
 -- Cached: validating the store every call cost ~20 ms, several times a frame

@@ -32,8 +32,9 @@ local unseen={}
 local nextPoll=0
 Q.counters={said=0,suppressed=0}
 
+-- Every single-player game, like the runtime it hints for (owner, 2026-09-27).
 local function enabled()
-    return getDebug and getDebug() and not (isClient and isClient()) and not (isServer and isServer())
+    return not (isClient and isClient()) and not (isServer and isServer())
         and not NHShared.T11Mode and not NHShared.T12Mode
 end
 

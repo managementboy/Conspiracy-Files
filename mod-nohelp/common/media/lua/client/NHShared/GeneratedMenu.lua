@@ -37,7 +37,7 @@ function M.fill(playerNum,context,items)
     local item=subjects[1]
     local maps=EngineAPI.MapMediaRuntime
     local R=(maps and maps.subject(item)) and maps or R
-    if R~=maps and (not getDebug or not getDebug() or not R.metrics()) then return end
+    if R~=maps and not R.metrics() then return end
     if not R.subject(item) then return end
     local expected=item:getOutermostContainer()
     local player=getSpecificPlayer(playerNum)

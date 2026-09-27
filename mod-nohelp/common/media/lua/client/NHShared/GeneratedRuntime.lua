@@ -74,8 +74,11 @@ local CFLog=require("NHShared/Log")
 -- Why a clue was not placed this step. See Log.declines.
 local declinePlacement=CFLog.declines("placement")
 local function log(message) CFLog.message("case","note",message) end
+-- No Help runs in every single-player game (owner, 2026-09-27: "Normal play
+-- now"); it was debug-only while the old case generator was a prototype.
+-- Multiplayer stays out of scope.
 local function allowed()
-    return getDebug and getDebug() and not (isClient and isClient()) and not (isServer and isServer())
+    return not (isClient and isClient()) and not (isServer and isServer())
         and not NHShared.T11Mode and not NHShared.T12Mode
 end
 local function checked(ok,why) if not ok then error(why or "generated session write rejected") end end

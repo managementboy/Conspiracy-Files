@@ -166,6 +166,10 @@ plan's directive check):
 - **A body that burns or disappears:** a clue on it that was already found
   disappears with it; an unfound one is placed somewhere else (owner, same
   session). This replaces the old engine's drop-after-three-days for No Help.
+- **No Help runs in normal play now** (owner, same session): the clue system,
+  the hint, map marks and the clue menu run in every single-player game, no
+  longer only in debug mode. Debug-only shortcuts and hidden-state
+  diagnostics stay debug-only. Multiplayer stays out of scope.
 - **No maximum, for real.** Once the written clues are all placed, object sets
   may be placed again elsewhere as new copies with new stamps. This is not a
   respawn: a consumed copy never returns (DR-20260927-WORLD-KEEPS-EVERYTHING
