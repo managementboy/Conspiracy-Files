@@ -498,3 +498,22 @@ area mode → the poller → skipping the old person/key features for area cases
 Risks: every write copies the whole record several times (measure; compact
 found clues before ~600 clues); the marker store caps at 64 records; the
 T3 place mapping is coarse; ground clues wait until step 4 chooses spots.
+
+**Phase 5 progress.** Built so far: the world record (`Generated/AreaCase.lua`,
+`test/nohelp_area_case.lua`); the Session's support for it
+(`test/nohelp_area_session.lua`): its own validation and organiser rows, an
+area added in one write with its clues waiting at their own area, every clue
+held to its own kind of spot (mailbox, ground, body, vehicle, furniture), no
+expiry, never retired, relocation only within the clue's own area and to the
+same kind of spot, and a write guard that lets the record only grow. Written
+clues are carried on the engine's written kinds.
+
+**Owner decision, save size:** no limit at all (DECISIONS.md). No Help's save
+budget ceiling is removed; structural validation stays. Measured: 100 areas
+hold about 280 clues in about 600 KB, growing in proportion to areas. The
+freeze T1 measured for very large saves is to be watched in long playtests.
+
+**Remaining in phase 5:** the runtime's area mode (decide nearby interesting
+buildings through the existing scan, instead of generating cases) and the
+poller that calls it; skipping the old person/key features for the world
+record.

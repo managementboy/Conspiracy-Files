@@ -134,6 +134,14 @@ plan's directive check):
   generating much more text clues in the future. No need to hold back."*
   Written clues appear as places are chosen; volume, not rationing, keeps late
   game varied.
+- **No save-size limit** (owner, same session, told that the No Help world
+  record reached the 500 KB save budget after about 230 clues): *"No limit at
+  all."* No Help's save budget ceiling (`SaveBudget`, and the Session's
+  500 000-byte case check for the world record) is removed; structural
+  validation stays, because a bad value or cycle loses the whole save (T1).
+  This supersedes P4-R17's hard budget for No Help only. Put to the owner
+  first: T1 measured very large saves round-tripping but stalling for about
+  nine seconds per save, so save time is to be watched in long playtests.
 - **No maximum, for real.** Once the written clues are all placed, object sets
   may be placed again elsewhere as new copies with new stamps. This is not a
   respawn: a consumed copy never returns (DR-20260927-WORLD-KEEPS-EVERYTHING

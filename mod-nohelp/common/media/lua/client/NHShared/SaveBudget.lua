@@ -45,9 +45,10 @@ function B.checkMany(replacements)
   if not ok then return false,tostring(name)..": "..tostring(why) end
   total=total+bytes
  end
- if total>V.MAX_ENCODED_BYTES then
-  return false,"combined canonical save budget exceeded ("..total.." bytes)"
- end
+ -- NO SIZE CEILING in No Help (owner, 2026-09-27: "No limit at all"; DECISIONS.md,
+ -- DR-20260927-NOHELP-RULE-PLACEMENT). Every root is still validated for
+ -- structure - a cycle or a bad value loses the whole save (spike T1) - and
+ -- the total is still returned, so a slow save can be traced to its size.
  return true,total
 end
 function B.check(kind,staged)

@@ -1,8 +1,17 @@
 local StorageChoices=require("NHShared/Generated/StorageChoices")
 local G=require("NHShared/Generated/Generator")
+local AreaCase=require("NHShared/Generated/AreaCase")
 local V=require("NHShared/Validator")
 local RoomAffinity=require("NHShared/Generated/RoomAffinity")
 local S={}
+-- A No Help world record (AreaCase) is validated and projected by its own
+-- rules; every other case is a Generator case as before.
+local function isArea(root) return type(root)=="table" and AreaCase.isAreaCase(root.case) end
+S.isArea=isArea
+local function validateCase(case)
+    if AreaCase.isAreaCase(case) then return AreaCase.validate(case) end
+    return G.validate(case)
+end
 -- Stale clue relocation (docs/management/STALE_CLUE_RELOCATION.md): a placed,
 -- undiscovered document gets one new home after going unfound this long.
 -- Single named constant per the design doc; relocations are capped so a
@@ -125,6 +134,20 @@ end
 -- cooler in a bathroom cupboard or on an unrelated corpse.
 function S.intentMatches(doc,target)
     if type(doc)~="table" then return false end
+    -- A No Help clue names its kind of spot, and that is a hard constraint
+    -- too: a mailbox clue is only ever in a mailbox, a ground clue only ever
+    -- on the ground, and so on.
+    if doc.spot~=nil then
+        local t=target
+        if doc.spot=="ground" then return groundTarget(t) end
+        if doc.spot=="corpse" then return carrierTarget(t) and t.carrierKind=="corpse" end
+        if doc.spot=="vehicle" then return vehicleTarget(t) end
+        if doc.spot=="mailbox" then return type(t)=="table" and outdoorKind(t.containerType) and not S.isMobile(t) and not groundTarget(t) end
+        if doc.spot=="furniture" then
+            return type(t)=="table" and not S.isMobile(t) and not groundTarget(t) and not outdoorKind(t.containerType)
+        end
+        return false
+    end
     if doc.placementIntent=="vehicle" then
         return vehicleTarget(target) and type(target.sceneSignature)=="string" and target.sceneSignature~=""
     end
@@ -242,7 +265,7 @@ end
 function S.validate(root)
     local ok,why=V.validateStructure(root); if not ok then return false,why end
     if not fields(root,{schema=true,case=true,assignments=true,known=true,recognised=true,recognisedHow=true}) or root.schema~=1 then return false,"invalid generated session" end
-    ok,why=G.validate(root.case); if not ok then return false,why end
+    ok,why=validateCase(root.case); if not ok then return false,why end
     if type(root.assignments)~="table" or type(root.known)~="table" then return false,"missing session fields" end
     local ids,sites={},{}
     for _,s in ipairs(root.case.locations) do sites[s.id]=s end
@@ -339,12 +362,20 @@ function S.validate(root)
             if not listed[id] or not S.FOUND_HOW[how] then return false,"invalid recognition method" end
         end
     end
-    if V.estimateEncodedBytes(root)>500000 then return false,"canonical size exceeded" end
+    -- A No Help world record has no size ceiling (owner, 2026-09-27); an old
+    -- Generator case keeps the one it was built with.
+    if not isArea(root) and V.estimateEncodedBytes(root)>500000 then return false,"canonical size exceeded" end
     return true
 end
 -- `hours` is the world clock, and is only ever read for a document that has no
 -- target: that clue goes in as `deferred` and the filler places it later
 -- (P4-R133). A caller that supplies every target never needs it.
+-- A new, empty No Help world record for a world seed.
+function S.createArea(seed)
+    local root={schema=1,case=AreaCase.new(seed),assignments={},known={}}
+    local ok,why=S.validate(root); if not ok then return nil,why end
+    return root
+end
 function S.create(case,targets,documentTargets,hours)
     local root={schema=1,case=copy(case),assignments={},known={}}
     for _,d in ipairs(case.documents) do
@@ -397,6 +428,9 @@ end
 function S.expiredIds(root,hours)
     local out={}
     if type(hours)~="number" or hours~=hours or hours==math.huge then return out end
+    -- A No Help clue waits for its spot as long as it takes: the world keeps
+    -- everything, and nothing about an area already decided is given up.
+    if isArea(root) then return out end
     for _,d in ipairs(root.case and root.case.documents or {}) do
         local a=root.assignments[d.id]
         if a and (a.status=="deferred" or a.status=="indexed")
@@ -465,6 +499,8 @@ function S.unpromotedVehicleIds(root)
 end
 function S.accounted(root)
     if type(root)~="table" or type(root.case)~="table" then return false end
+    -- The No Help world record is never finished and never retired.
+    if isArea(root) then return false end
     local known={}
     for _,id in ipairs(root.known or {}) do known[id]=true end
     for _,d in ipairs(root.case.documents) do
@@ -637,7 +673,7 @@ local physicalKey=S.physicalKey
 -- fails for a case that is not a case (an invalid envelope), and it still
 -- never puts two clues in one container (P4-R67).
 function S.createDistributed(case,candidates,rooms,occupied,hours,preferences)
-    local valid,why=G.validate(case);if not valid then return nil,why end
+    local valid,why=validateCase(case);if not valid then return nil,why end
     local sites,used,counts,taken,targets={},{},{},{},{}
     local usedKinds={}
     local deferred={}
@@ -764,6 +800,9 @@ function S.open(initial,sink)
     local root=copy(initial); local api={}
     local function commit(change)
         local next=copy(root); change(next)
+        -- The No Help world record only grows (AreaCase.grows).
+        local grows,growsWhy=AreaCase.grows(root.case,next.case)
+        if not grows then return false,growsWhy end
         local valid,err=S.validate(next); if not valid then return false,err end
         local saved,failure=pcall(sink,copy(next)); if not saved then return false,tostring(failure) end
         root=next; return true
@@ -806,6 +845,14 @@ function S.open(initial,sink)
         local site
         for _,s in ipairs(root.case.locations) do if S.target(target,s) then site=s end end
         if not site then return false,"relocation target does not match a known location" end
+        -- A No Help clue belongs to its area: it may move within it, only to
+        -- the same kind of spot, never to another area.
+        if isArea(root) then
+            local doc
+            for _,d in ipairs(root.case.documents) do if d.id==id then doc=d end end
+            if not doc or site.id~=doc.locationId then return false,"a clue stays in its own area" end
+            if not S.intentMatches(doc,target) then return false,"a clue moves only to the same kind of spot" end
+        end
         return commit(function(r)
             local ra=r.assignments[id]
             ra.target=copy(target); ra.placedHours=hours; ra.relocations=ra.relocations+1; ra.locationId=site.id
@@ -827,7 +874,7 @@ function S.open(initial,sink)
         if not S.intentMatches(doc,target) then return false,"target does not match the clue's placement intent" end
         -- The cap holds for a late arrival too (P4-R134): a clue that waited is
         -- welcome on a carrier, but only while the case has no mobile clue yet.
-        if S.isMobile(target) and S.mobileCount(root)>=S.MOBILE_PER_CASE then
+        if S.isMobile(target) and not isArea(root) and S.mobileCount(root)>=S.MOBILE_PER_CASE then
             return false,"a case may carry only one clue on something that moves"
         end
         if hours~=nil and not validHours(hours) then return false,"invalid placement hours" end
@@ -937,7 +984,31 @@ function S.open(initial,sink)
             if S.FOUND_HOW[how] then r.recognisedHow=r.recognisedHow or {}; r.recognisedHow[id]=how end
         end)
     end
-    function api.project() return G.project(root.case,root.known) end
+    -- Decide one No Help area and add it in one write: the grown world record
+    -- and a waiting assignment for each new clue, which the filler then gives
+    -- a real spot of the clue's own kind at its area (P4-R133's path).
+    function api.addArea(args)
+        if not isArea(root) then return false,"not a No Help world" end
+        local nextCase,ids=AreaCase.decide{case=root.case,site=args.site,place=args.place,
+            clues=args.clues,version=args.version,hours=args.hours,source=args.source}
+        if not nextCase then return false,ids end
+        if not validHours(args.hours) then return false,"invalid hours" end
+        local ok,why=commit(function(r)
+            r.case=nextCase
+            for _,id in ipairs(ids) do
+                local doc
+                for _,d in ipairs(nextCase.documents) do if d.id==id then doc=d end end
+                r.assignments[id]={physicalToken="cf-g2:"..id,status="deferred",locationId=doc.locationId,
+                    deferredHours=args.hours,relocations=0}
+            end
+        end)
+        if not ok then return false,why end
+        return true,ids
+    end
+    function api.project()
+        if AreaCase.isAreaCase(root.case) then return AreaCase.project(root.case) end
+        return G.project(root.case,root.known)
+    end
     return api
 end
 return S
