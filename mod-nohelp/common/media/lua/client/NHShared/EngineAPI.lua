@@ -40,14 +40,6 @@ PublicAPI.KeyJournal=require("NHShared/KeyJournal")
 PublicAPI.BodyOutfitLog=require("NHShared/BodyOutfitLog")
 PublicAPI.IdentityObserver=require("NHShared/IdentityObserver")
 
--- KnoxApps.lua and OrganiserScreen.lua (module C) also require
--- Generated/Questions.lua directly today, to build and answer the FILES
--- list's "what do I make of it?" question rows - the one Generated/*
--- content-generation module resolved this increment. The higher-risk
--- ones (EvidenceRows.lua's four Generated/* requires, which build every
--- real FILES row's title/fields/body/kind) are deliberately not done yet
--- - see docs/design/MODULE_SEPARATION_2026-09-26.md section 3a for why.
-PublicAPI.Questions=require("NHShared/Generated/Questions")
 PublicAPI.SuccessiveCases=require("NHShared/Generated/SuccessiveCases")
 
 -- EvidenceRows.lua reclassified from unclear to module B this increment
