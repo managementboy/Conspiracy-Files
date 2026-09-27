@@ -71,3 +71,12 @@ do
     assert(not src:find("unexplored",1,true),"an emptied building's containers still count")
 end
 print("nohelp arrival: searched buildings and bodies may still hold clues")
+-- A No Help clue for a car takes any car at its place; only an old transport
+-- clue needs a scene the (debug-only) observer confirmed (step 5 design pass:
+-- otherwise every No Help vehicle clue waited forever in normal play).
+do
+    local src=assert(io.open("mod-nohelp/common/media/lua/client/NHShared/GeneratedRuntime.lua","rb")):read("*a")
+    assert(src:find("(signature or not needScene)",1,true),"a signature is only required when the clue needs a scene")
+    assert(src:find('vehicleCandidateFor(site,taken,doc and doc.placementIntent=="vehicle")',1,true),
+        "No Help vehicle clues do not need a scene")
+end

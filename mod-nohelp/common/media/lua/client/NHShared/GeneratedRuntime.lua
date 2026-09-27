@@ -1543,7 +1543,11 @@ end
 -- A late-bound transport finding waits for a real vehicle part at its authored
 -- address.  This is observation, not scene manufacture: no vehicle is spawned,
 -- moved or renamed, and a missing vehicle leaves the clue deferred.
-local function vehicleCandidateFor(site,taken)
+-- `needScene`: only an old transport clue needs a vehicle the scene observer
+-- confirmed. A No Help vehicle clue takes any car at its place: the observer
+-- only runs in debug, so requiring a signature left every No Help vehicle
+-- clue waiting forever in normal play (step 5 design pass).
+local function vehicleCandidateFor(site,taken,needScene)
     local b=site.bounds
     local cx=math.floor((b.x1+b.x2)/2)
     local cy=math.floor((b.y1+b.y2)/2)
@@ -1561,7 +1565,7 @@ local function vehicleCandidateFor(site,taken)
                     containerType=Session.VEHICLE_CONTAINER,sprite=tostring(script),vehiclePart=part.part,
                     sceneSignature=signature}
                 local key=Session.physicalKey(target)
-                if signature and Session.target(target,site) and not taken[key] then
+                if (signature or not needScene) and Session.target(target,site) and not taken[key] then
                     choices[#choices+1]={target=target,key=key}
                 end
             end
@@ -1712,7 +1716,7 @@ local function filler(api,onlyArea)
                     return not taken[Session.physicalKey(candidate)] and Session.intentMatches(doc,candidate)
                 end
                 if wantsVehicle(doc) then
-                    target=vehicleCandidateFor(site,taken)
+                    target=vehicleCandidateFor(site,taken,doc and doc.placementIntent=="vehicle")
                 elseif doc and doc.spot=="ground" then
                     -- Open ground (GroundSpots): checked squares in the
                     -- world's order, never a spot that gave up a clue, never
