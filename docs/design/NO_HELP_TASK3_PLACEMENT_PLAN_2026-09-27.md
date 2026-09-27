@@ -1131,8 +1131,12 @@ Deepened (top three) and what came of them, each checked against the code:
 3. **Ordinary clutter mistaken for a scene.** Confirmed: for at least one
    verified kind both traces also spawn as ordinary vehicles and loot, so a
    parked car plus a stray item would "confirm" a scene that is not there.
-   **Being fixed:** a signature must include at least one trace only that
-   scene creates; kinds without one are demoted to unverified.
+   **Fixed:** a signature must include at least one trace only that scene
+   creates (checked against the game's spawn tables and code); three kinds
+   keep a verified signature, five are demoted to unverified (they never
+   match until an exclusive trace is found). The two first-release scene
+   tickets that pointed at demoted kinds were retargeted to verified ones,
+   with new story glosses owed as a small stage-0 ticket.
 
 Carried into the real-game test (step 8): watch for stutter when clues are
 placed late in a long game; read the scene-wait log on a drive at walking,
