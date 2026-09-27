@@ -285,6 +285,10 @@ local function addIcon(manager,clue)
     -- recognised, and the pin says only "here".
     icon.renderItemTexture=false
     C.counters.added=C.counters.added+1
+    -- The icon has shown the clue: from now on it never moves (owner,
+    -- 2026-09-27). Saved, so a reload does not forget it.
+    local R=require("NHShared/EngineAPI").GeneratedRuntime
+    if R and R.shown then pcall(R.shown,clue.id) end
     return icon
 end
 

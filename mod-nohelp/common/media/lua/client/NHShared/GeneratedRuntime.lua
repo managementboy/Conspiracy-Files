@@ -508,7 +508,16 @@ local function decideFrom(result)
             local sites={}
             for _,site in ipairs(catalog.locations) do sites[#sites+1]=site end
             table.sort(sites,function(a,b) return a.id<b.id end)
-            for _,site in ipairs(sites) do
+            -- One area per scheduler step (phase 5 review): every addArea
+            -- copies and validates the whole growing record, so a dense town
+            -- deciding many buildings in one tick would stall the game.
+            local index=0
+            scheduler.enqueue("area-decide","preparation",function()
+                index=index+1
+                local site=sites[index]
+                if not site then return true end
+                api=areaSession
+                if not api then return true end
                 if not site.excluded and #(candidates and candidates[site.id] or {})>=1 and not decided[site.id] then
                     local place=AreaPlace.of(hints[site.id],rooms[site.id])
                     if place then
@@ -528,7 +537,8 @@ local function decideFrom(result)
                         end
                     end
                 end
-            end
+                return false
+            end)
         end,reachable)
         if not scan then preparing=false; log("nearby storage scan refused: "..tostring(why)); return end
         scheduler.enqueue("storage","preparation",scan)
@@ -545,7 +555,10 @@ function R.decideNearby(force)
     if lastDecide and not force then
         local dx,dy=p:getX()-lastDecide.x,p:getY()-lastDecide.y
         local moved=dx*dx+dy*dy>=R.DECIDE_TILES*R.DECIDE_TILES
-        local waited=now>=lastDecide.hours+R.DECIDE_HOURS or now<lastDecide.hours
+        -- A clock that went backwards restarts the wait; it never counts as
+        -- the wait being over (phase 5 review).
+        if now<lastDecide.hours then lastDecide.hours=now end
+        local waited=now>=lastDecide.hours+R.DECIDE_HOURS
         if not moved and not waited then return false,"wait" end
     end
     local root=worldRoot()
@@ -736,6 +749,14 @@ end
 -- (spotted in Search Mode), "look" (looked over in hand) or "debug" (checks).
 -- Returns true when the clue is recognised afterwards, and whether this call
 -- was the one that recognised it.
+-- The Search Mode icon has pointed at this clue (ClueSearch.addIcon): record
+-- it, so the clue never moves again.
+function R.shown(id)
+    if not allowed() or not sessions or type(id)~="string" then return false end
+    local api=liveApi(id)
+    if not api or not api.show then return false end
+    return api.show(id)
+end
 function R.recognise(target,how)
     if not allowed() or not sessions then return false,"no case" end
     local id=target
@@ -970,7 +991,7 @@ local function relocation(api)
         local px,py,pz=math.floor(p:getX()),math.floor(p:getY()),math.floor(p:getZ())
         if StaleClue.tooClose(px,py,pz,a.target) then return false end
         if not site then
-            local candidates=StaleClue.destinations(root,Visited.set())
+            local candidates=StaleClue.destinations(root,Visited.set(),id)
             if #candidates==0 then
                 log("[CF-G2-RELOCATE] "..id..": no unvisited candidate; leaving in place")
                 return true

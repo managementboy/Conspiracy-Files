@@ -592,3 +592,26 @@ PlayerVoice.
 **Next:** the ID features chosen by the owner (keys, clothing, the unfound
 clue on a lost body placed again), then step 4 (map marks and spots, including
 ground spots) and step 5 (vanilla scenes), with the ADHD review of phase 5.
+
+**Phase 5 review** (3am on-call, regulator, speedrunner):
+- **Fixed — a dense town could stall the game:** every area added copies and
+  validates the whole record; a scan now adds one area per scheduler step.
+- **Fixed — a game update could freeze a save:** the record's validation no
+  longer checks item types against the game's current catalogue (a missing
+  type would have refused every later write); types are checked when a clue
+  is chosen.
+- **Fixed — winding the clock back:** it now restarts the wait instead of
+  counting as time passed.
+- **Built — step 6, moving clues** (owner decisions that had no code yet): the
+  save records which clues the Search Mode icon has shown (never moved again)
+  and which spots gave up a clue (never reused); relocation stays inside the
+  clue's own area; a body that burns or vanishes returns its unfound clue to
+  waiting so it is placed again, while a found clue is gone with it. Test:
+  `test/nohelp_moves.lua`.
+- **Checked, not a problem:** reloading gives an immediate scan, but a scan
+  only decides *when*, never *what*; sites are decided in id order, which is
+  deterministic; old saves with generated cases do not start (accepted).
+- **Carried forward:** a future change to the world record's shape needs a
+  migration, never a "stale" refusal; the 50%-sets share is a picker
+  preference, proven only by step 7's harness on placed clues; a building
+  whose every container was emptied is skipped until it has one again.

@@ -41,7 +41,18 @@ end
 -- one the player has visited, and currently holds no other placed clue
 -- (including the document being relocated, since moving within the same
 -- building would not help). Deterministic order for reproducible choices.
-function M.destinations(root,visited)
+function M.destinations(root,visited,id)
+    -- NO HELP: a clue belongs to its area and never leaves it, so its only
+    -- destination is its own site; the Session then holds the move to the
+    -- same kind of spot, never a spent spot, never after it was shown.
+    if type(root.case)=="table" and root.case.kind=="nohelp-areas" then
+        for _,d in ipairs(root.case.documents) do
+            if d.id==id then
+                for _,site in ipairs(root.case.locations) do if site.id==d.locationId then return {site} end end
+            end
+        end
+        return {}
+    end
     local occupied={}
     for _,doc in ipairs(root.case.documents) do
         local a=root.assignments[doc.id]

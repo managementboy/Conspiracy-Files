@@ -163,14 +163,17 @@ function M.validate(case)
         if not LEAN[d.lean] or not LEAN[d.rival] or d.lean==d.rival then return false,"invalid lean" end
         if not SPOT[d.spot] then return false,"invalid spot" end
         if d.person~=nil and (type(d.person)~="string" or #d.person==0 or #d.person>40) then return false,"invalid person" end
-        if not Kinds.get(d.kind) then return false,"invalid clue kind" end
+        -- An item type is checked against the game's catalogue when a clue is
+        -- chosen, not here: a game update that drops an item must never make
+        -- a saved world unreadable, because a record that fails validation
+        -- refuses every later write (phase 5 review).
+        if type(d.kind)~="string" or d.kind=="" or #d.kind>80 then return false,"invalid clue kind" end
         if not text(d.title,M.MAX_TITLE) or not text(d.body,M.MAX_BODY) then return false,"invalid clue text" end
         if d.members~=nil then
             if type(d.members)~="table" or #d.members<1 then return false,"invalid set" end
             local n=0
             for _,m in ipairs(d.members) do
-                local k=Kinds.get(m.kind)
-                if not k or k.capacity~="object" or not integer(m.quantity) or m.quantity<1 then return false,"invalid set piece" end
+                if type(m.kind)~="string" or m.kind=="" or not integer(m.quantity) or m.quantity<1 then return false,"invalid set piece" end
                 n=n+m.quantity
             end
             if n<2 or n>4 then return false,"a set holds 2-4 pieces" end
@@ -178,8 +181,8 @@ function M.validate(case)
         else
             if d.copy~=1 then return false,"a written clue is placed once" end
             local k=Kinds.get(d.kind)
-            if k.capacity=="object" then return false,"a written clue is carried on a written kind" end
-            if not Kinds.fits(d.kind,d.body) then return false,"a clue's text does not fit its carrier" end
+            if k and k.capacity=="object" then return false,"a written clue is carried on a written kind" end
+            if k and not Kinds.fits(d.kind,d.body) then return false,"a clue's text does not fit its carrier" end
         end
         for k in pairs(d) do
             if not ({id=1,locationId=1,clue=1,copy=1,lean=1,rival=1,spot=1,kind=1,members=1,quantity=1,title=1,body=1,person=1})[k] then

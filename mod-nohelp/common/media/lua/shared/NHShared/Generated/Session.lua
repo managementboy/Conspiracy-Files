@@ -253,7 +253,19 @@ function S.plannedTarget(t,site)
 end
 function S.validate(root)
     local ok,why=V.validateStructure(root); if not ok then return false,why end
-    if not fields(root,{schema=true,case=true,assignments=true,known=true,recognised=true,recognisedHow=true}) or root.schema~=1 then return false,"invalid generated session" end
+    if not fields(root,{schema=true,case=true,assignments=true,known=true,recognised=true,recognisedHow=true,shown=true,spent=true}) or root.schema~=1 then return false,"invalid generated session" end
+    -- SHOWN: clues the Search Mode icon has pointed at. Saved, set once,
+    -- never cleared: a shown clue never moves again (owner, 2026-09-27).
+    -- SPENT: spots that gave up a clue. A spent spot never takes another
+    -- (owner, 2026-09-27: "never reuse a spot").
+    for _,field in ipairs({"shown","spent"}) do
+        if root[field]~=nil then
+            if type(root[field])~="table" then return false,"invalid "..field end
+            for k,v in pairs(root[field]) do
+                if type(k)~="string" or v~=true or #k>400 then return false,"invalid "..field end
+            end
+        end
+    end
     ok,why=validateCase(root.case); if not ok then return false,why end
     if type(root.assignments)~="table" or type(root.known)~="table" then return false,"missing session fields" end
     local ids,sites={},{}
@@ -501,8 +513,20 @@ function S.open(initial,sink)
     -- moves the physical target, resets the staleness clock and counts
     -- against the per-document cap. Revalidates the whole root through the
     -- same commit path as every other canonical mutation.
+    function api.isShown(id) return root.shown~=nil and root.shown[id]==true end
+    local function spent(target) return root.spent~=nil and target~=nil and root.spent[S.physicalKey(target)]==true end
+    -- The Search Mode icon pointed at this clue: from now on it stays put.
+    function api.show(id)
+        if not root.assignments[id] then return false,"unknown document" end
+        if api.isShown(id) then return true end
+        return commit(function(r) r.shown=r.shown or {}; r.shown[id]=true end)
+    end
     function api.relocate(id,target,hours)
         local a=root.assignments[id]; if not a then return false,"unknown document" end
+        if isArea(root) then
+            if api.isShown(id) then return false,"a clue Search Mode has shown never moves" end
+            if spent(target) then return false,"a spot that gave up a clue is never reused" end
+        end
         if a.status~="placed" then return false,"can only relocate a placed document" end
         if not validHours(hours) then return false,"invalid relocation hours" end
         if a.relocations>=S.RELOCATE_CAP then return false,"relocation cap reached" end
@@ -529,6 +553,7 @@ function S.open(initial,sink)
     -- waiting clue is not a licence to put it anywhere.
     function api.assign(id,target,hours)
         local a=root.assignments[id]; if not a then return false,"unknown document" end
+        if isArea(root) and spent(target) then return false,"a spot that gave up a clue is never reused" end
         if a.status~="deferred" and a.status~="indexed" then return false,"only a waiting clue can be assigned a container" end
         local site
         for _,s in ipairs(root.case.locations) do if s.id==a.locationId then site=s end end
@@ -619,6 +644,17 @@ function S.open(initial,sink)
         if not site then
             for _,d in ipairs(root.case.documents) do if d.id==id then site=d.locationId end end
         end
+        -- NO HELP: a body that burned or vanished takes a FOUND clue with it
+        -- (refused above), but an unfound one is placed again elsewhere at its
+        -- own area and kind of spot (owner, 2026-09-27): it goes back to
+        -- waiting, and the filler gives it a new spot.
+        if isArea(root) then
+            return commit(function(r)
+                local ra=r.assignments[id]
+                ra.status="deferred"; ra.target=nil; ra.placedHours=nil; ra.missingHours=nil
+                ra.locationId=site; ra.deferredHours=hours
+            end)
+        end
         return commit(function(r)
             local ra=r.assignments[id]
             ra.status="dropped"; ra.target=nil; ra.placedHours=nil; ra.missingHours=nil
@@ -646,6 +682,9 @@ function S.open(initial,sink)
         return commit(function(r)
             r.recognised=r.recognised or {}; r.recognised[#r.recognised+1]=id
             if S.FOUND_HOW[how] then r.recognisedHow=r.recognisedHow or {}; r.recognisedHow[id]=how end
+            -- The spot has given up its clue: it never takes another.
+            local t=r.assignments[id].target
+            if isArea(r) and t then r.spent=r.spent or {}; r.spent[S.physicalKey(t)]=true end
         end)
     end
     -- Decide one No Help area and add it in one write: the grown world record
