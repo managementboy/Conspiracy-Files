@@ -132,7 +132,7 @@ assert(#says==3,"a missing PersonNameLog module must degrade to Set C, not throw
 -- a Set D line that just fired (and just consumed the musing cooldown).
 -- ---------------------------------------------------------------------
 Voice.reset(); says={}
-ConspiracyFiles.PersonNameLog={nameFor=function() return "Dana Vale" end}
+Engine.double("PersonNameLog",{nameFor=function() return "Dana Vale" end})
 clock=clock+60000
 local evidence={md={}}; function evidence:getModData() return self.md end
 Voice.onEvidenceFound(evidence) -- Set D fires, cooldown now active

@@ -1,7 +1,6 @@
 package.path="mod/common/media/lua/shared/?.lua;mod/common/media/lua/client/?.lua;"..package.path
 next=nil
 package.preload['ISUI/ISInventoryPane']=function() end
-local Engine=dofile("test/support/engine_first.lua")  -- before any double; see that file
 local callbacks={};Events={OnTick={Add=function(f) callbacks.tick=f end},OnGameStart={Add=function(f) callbacks.start=f end}}
 local originalCalls=0;ISInventoryPane={render=function() originalCalls=originalCalls+1 end}
 local db={};local failWrite=false
@@ -11,9 +10,7 @@ getPlayer=function() return player end;getSpecificPlayer=function(n) if n==0 the
 getGameTime=function() return {getWorldAgeHours=function() return 1 end} end
 getDebug=function() return true end;isClient=function() return false end;isServer=function() return false end
 instanceof=function(o,k) return type(o)=='table' and o.kind==k end
--- Additive: replacing the table would erase what EngineAPI just loaded.
 ConspiracyFiles=ConspiracyFiles or {}
-Engine.double("GeneratedRuntime",{metrics=function() return {} end})
 -- Engine doubles demand a receiver, as Kahlua does. A permissive table lets a
 -- receiver-less call pass here and fail in game; see AGENTS.md.
 local strict=dofile('test/support/strict.lua')
@@ -35,6 +32,14 @@ local function pane(container,rows)
  parent={isReallyVisible=function() return true end},isReallyVisible=function() return true end,
  getYScroll=function() return 0 end,getHeight=function() return 100 end}
 end
+-- The engine loads here, after the engine globals above (Events,
+-- ISInventoryPane, ModData, getPlayer) and before the doubles below:
+-- IdentityObserver installs its render hook and tick handler AT LOAD, and
+-- something in its require chain pulls the real GeneratedRuntime, which
+-- silently replaced a double installed earlier. See
+-- test/support/engine_first.lua.
+local Engine=dofile("test/support/engine_first.lua")
+Engine.double("GeneratedRuntime",{metrics=function() return {} end})
 local I=require('ConspiracyFiles/IdentityObserver');local M=require('ConspiracyFiles/IdentityObservations')
 local function run(p) ISInventoryPane.render(p);for i=1,170 do callbacks.tick() end end
 local function count() return #I.rows() end

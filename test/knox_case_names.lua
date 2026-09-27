@@ -31,9 +31,9 @@ local rows={
 }
 current=rows
 Engine.double("PersonNameLog",{names=function() return {"Jarvis Harding"} end})
-ConspiracyFiles.IdentityObserver={rows=function()
+Engine.double("IdentityObserver",{rows=function()
     return {{title="Found Ines Kubiak's ID card",detailText="An ID card.",id="id1",person="Ines Kubiak"}}
-end}
+end})
 
 local list=A.names.list("All")
 local labels={}
