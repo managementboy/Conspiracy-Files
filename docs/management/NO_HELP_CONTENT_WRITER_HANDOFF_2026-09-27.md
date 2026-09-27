@@ -237,7 +237,8 @@ not receive content (blind play).
 `NOTE_IN_SET`, `BAD_CARRIER`, `TOO_LONG`, `SAME_LEAN`, `PERSON_ORPHAN`,
 `PERSON_SPLIT`, `SET_RATIO`, `ANCHOR_UNKNOWN`, `ANCHOR_SPOT_MISMATCH`,
 `AXIOM_UNKNOWN`, `NO_RIVAL`, `STATES_SIGNIFICANCE`, `NOT_COLD_READABLE`,
-`VANILLA_REINTERPRETED`, `RETIRED_PREMISE`, `OFF_GLOSS`, `CLASSIFIER_STOP`.
+`VANILLA_REINTERPRETED`, `RETIRED_PREMISE`, `OFF_GLOSS`, `CLASSIFIER_STOP`,
+`TONE` (misses section 2a: e.g. a flat report with no human detail).
 Fix the pattern, not just the row.
 
 ## 8. Where the rules come from (read these, in this order)

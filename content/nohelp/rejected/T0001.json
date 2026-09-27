@@ -1,0 +1,87 @@
+{
+  "ticket": "T0001",
+  "returned_by": "Claude review",
+  "rows": [
+    {
+      "id": "t0001-01",
+      "codes": [
+        "TONE"
+      ],
+      "note": "Both rows pass the automatic checks but miss the tone (writer handoff 2a): each reads as a neutral incident report. Give each one human detail beside one institutional one, where the humour comes from a procedure or form caring about the wrong thing while the world ends (never a joke, never a witty last line). Keep the pieces, places, leans, rival readings and axioms; only title and body change.",
+      "row": {
+        "id": "t0001-01",
+        "kind": "set",
+        "pieces": [
+          "WalkieTalkie3",
+          "Clipboard"
+        ],
+        "where": [
+          {
+            "place": "police",
+            "spot": "furniture",
+            "lean": "containment",
+            "rival": "agricultural"
+          }
+        ],
+        "rival_reading": "The call may have concerned routine field work; a missed handoff alone does not show that officials knew of a wider emergency.",
+        "gloss": "A field call is deferred while the road channel lacks coverage.",
+        "axioms": [
+          "c-warning",
+          "c-orders",
+          "c-failure",
+          "a-pathway",
+          "a-timing"
+        ],
+        "prov": {
+          "writer": "ChatGPT",
+          "handoff": "2026-09-27",
+          "batch": "T0001",
+          "adhd_run": "docs/writer-only/adhd/2026-09-27-T0001/"
+        },
+        "title": "Road channel uncovered",
+        "body": "The handheld set sat beside the shift sheet; the road channel was left uncovered after 18:00. One field call was marked to wait until morning."
+      }
+    },
+    {
+      "id": "t0001-02",
+      "codes": [
+        "TONE"
+      ],
+      "note": "Both rows pass the automatic checks but miss the tone (writer handoff 2a): each reads as a neutral incident report. Give each one human detail beside one institutional one, where the humour comes from a procedure or form caring about the wrong thing while the world ends (never a joke, never a witty last line). Keep the pieces, places, leans, rival readings and axioms; only title and body change.",
+      "row": {
+        "id": "t0001-02",
+        "kind": "set",
+        "pieces": [
+          "GardeningSprayAphids",
+          "Fertilizer",
+          "GasmaskFilter"
+        ],
+        "where": [
+          {
+            "place": "police",
+            "spot": "furniture",
+            "lean": "agricultural",
+            "rival": "containment"
+          }
+        ],
+        "rival_reading": "The items may have been held as an ordinary precaution during containment; an unclaimed supply set does not establish that the program caused an exposure.",
+        "gloss": "Agricultural supplies remain grouped with a filter and go uncollected overnight.",
+        "axioms": [
+          "a-program",
+          "a-malfunction",
+          "a-pathway",
+          "c-orders",
+          "c-failure"
+        ],
+        "prov": {
+          "writer": "ChatGPT",
+          "handoff": "2026-09-27",
+          "batch": "T0001",
+          "adhd_run": "docs/writer-only/adhd/2026-09-27-T0001/"
+        },
+        "title": "Field kit left overnight",
+        "body": "The sprayer and fertilizer were kept beside a filter after a field check. Nobody returned to collect the kit before the desk closed."
+      }
+    }
+  ]
+}
