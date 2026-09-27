@@ -140,6 +140,13 @@ So:
 
 ## 5. How work is handed to you — staged work orders
 
+> **Ticket names (2026-09-27):** in the repo, tickets are opaque serials
+> `T0000`, `T0001`, … and row ids are `t####-NN`, so nothing in GitHub
+> names a scene or map. The type names below (`PLACE-<kind>`, `PERSON-<id>`,
+> `MAP-<design>`, `SCENE-<kind>`, `UNIQUE-<scene>`) describe what a serial
+> is; the mapping is in `docs/writer-only/nohelp-tickets.tsv`. How to run the
+> queue, save to GitHub and when to stop: `NO_HELP_CHATGPT_HANDOVER_2026-09-27.md`.
+
 **Stage 0 (before any clue):** return only, for Claude to sign off: a frozen **axiom list** per conspiracy (short ids + one-line glosses —
 the non-negotiable facts each version of events needs); a one-line **gloss**
 per map/flyer story, per person and per scene you plan to write. Nothing else
