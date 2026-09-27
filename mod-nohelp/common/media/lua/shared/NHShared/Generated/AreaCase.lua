@@ -12,6 +12,7 @@
 local Pick=require("NHShared/Generated/Pick")
 local Manifest=require("NHShared/Mystery/Manifest")
 local Kinds=require("NHShared/Generated/EvidenceKinds")
+local Outfits=require("NHShared/BodyOutfitObservations")
 local M={KIND="nohelp-areas",SCHEMA=1,CASE_ID="nohelp:world"}
 M.MAX_TITLE=120
 M.MAX_BODY=8000
@@ -61,7 +62,7 @@ end
 -- has it; a placeholder clue gets a neutral placeholder, never invented story.
 function M.docFrom(pick,clue,areaId)
     local doc={id=M.docId(areaId,pick.clue,pick.copy),locationId=areaId,clue=pick.clue,copy=pick.copy,
-        lean=pick.lean,rival=pick.rival,spot=pick.spot,person=clue.person}
+        lean=pick.lean,rival=pick.rival,spot=pick.spot,person=clue.person,outfit=pick.outfit}
     if clue.kind=="set" then
         doc.kind=clue.pieces[1]
         doc.members=membersOf(clue.pieces)
@@ -163,6 +164,7 @@ function M.validate(case)
         if not LEAN[d.lean] or not LEAN[d.rival] or d.lean==d.rival then return false,"invalid lean" end
         if not SPOT[d.spot] then return false,"invalid spot" end
         if d.person~=nil and (type(d.person)~="string" or #d.person==0 or #d.person>40) then return false,"invalid person" end
+        if d.outfit~=nil and (d.spot~="corpse" or not Outfits.isClass(d.outfit)) then return false,"invalid outfit hint" end
         -- An item type is checked against the game's catalogue when a clue is
         -- chosen, not here: a game update that drops an item must never make
         -- a saved world unreadable, because a record that fails validation
@@ -185,7 +187,7 @@ function M.validate(case)
             if k and not Kinds.fits(d.kind,d.body) then return false,"a clue's text does not fit its carrier" end
         end
         for k in pairs(d) do
-            if not ({id=1,locationId=1,clue=1,copy=1,lean=1,rival=1,spot=1,kind=1,members=1,quantity=1,title=1,body=1,person=1})[k] then
+            if not ({id=1,locationId=1,clue=1,copy=1,lean=1,rival=1,spot=1,kind=1,members=1,quantity=1,title=1,body=1,person=1,outfit=1})[k] then
                 return false,"unknown clue field "..tostring(k)
             end
         end
@@ -205,6 +207,27 @@ function M.grows(old,new)
     for i,d in ipairs(old.documents) do if not same(d,new.documents[i]) then return false,"a placed clue cannot change" end end
     for i,l in ipairs(old.locations) do if not same(l,new.locations[i]) then return false,"a decided place cannot change" end end
     return true
+end
+
+-- KEYS THAT LEAD TO CLUE PLACES (owner, 2026-09-27). A key names its building
+-- by the building definition's id (KeyObserver: def:getIDString()); an area
+-- is that id with "t3:" in front. When the key's building is a decided area,
+-- the journal may add what kind of place it is, in plain words - nothing
+-- about any clue and no story. Anything else, a home included (a home is
+-- never an area), says nothing. Pure: reads the world record only.
+local PLACE_WORDS={
+    police="a police building",hospital="a hospital or clinic",office="an office building",
+    bookstore="a bookstore",transmission="a radio or transmission site",warehouse="a warehouse",
+    government="a government building",mapNamed="a place named on the map",farm="a farm",
+    checkpoint="a checkpoint",
+}
+function M.keyPhrase(case,building)
+    if not M.isAreaCase(case) or type(building)~="string" or building=="" then return nil end
+    local id="t3:"..building
+    for _,a in ipairs(case.areas or {}) do
+        if a.id==id then return PLACE_WORDS[a.place] end
+    end
+    return nil
 end
 
 -- Rows for the organiser, in the shape the discovery log reads.

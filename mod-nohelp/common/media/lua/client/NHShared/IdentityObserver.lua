@@ -10,8 +10,8 @@ local I=NHShared.IdentityObserver or {}
 NHShared.IdentityObserver=I
 NHEngine=NHEngine or {};NHEngine.IdentityObserver=I
 local TAG="NHShared.IdentityObservations"
-local types={['Base.IDcard']=true,['Base.IDcard_Stolen']=true,['Base.IDcard_Female']=true,
- ['Base.IDcard_Male']=true,['Base.CreditCard']=true,['Base.CreditCard_Stolen']=true,['Base.ParkingTicket']=true,['Base.SpeedingTicket']=true,['Base.BusinessCard']=true,['Base.BusinessCard_Personal']=true,['Base.BusinessCard_Nolans']=true,['Base.Passport']=true,['Base.PressID']=true,['Base.Badge']=true,['Base.Diary1']=true,['Base.Diary2']=true}
+-- The one list of identity types lives with the model (IdentityObservations.TYPES).
+local types=Model.TYPES
 local queue,queued,seen={},{},{}
 -- How many times one identity may fail to record before it is dropped and
 -- said so. The same cap, for the same reason, as LocalPersonIntegration's:

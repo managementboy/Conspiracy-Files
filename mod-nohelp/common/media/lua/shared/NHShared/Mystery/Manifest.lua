@@ -12,6 +12,7 @@
 -- list is empty and the picker is tested on a placeholder inventory.
 local Catalogue=require("NHShared/Generated/ObjectCatalogue")
 local Kinds=require("NHShared/Generated/EvidenceKinds")
+local Outfits=require("NHShared/BodyOutfitObservations")
 local M={}
 
 M.LEANS={"containment","agricultural"}
@@ -78,6 +79,13 @@ function M.validClue(c)
         if not SPOT[w.spot] then return false,c.id..": unknown spot "..tostring(w.spot) end
         if not LEAN[w.lean] then return false,c.id..": unknown lean "..tostring(w.lean) end
         if not LEAN[w.rival] or w.rival==w.lean then return false,c.id..": must name the other theory it cuts against" end
+        -- Clothing as a soft hint (owner, 2026-09-27): a clue on a body may
+        -- name the kind of clothes it would rather be found on. A preference
+        -- among bodies in reach, never a rule; only for a body spot.
+        if w.outfit~=nil then
+            if w.spot~="corpse" then return false,c.id..": only a body spot takes an outfit hint" end
+            if not Outfits.isClass(w.outfit) then return false,c.id..": unknown outfit class "..tostring(w.outfit) end
+        end
     end
     return true
 end

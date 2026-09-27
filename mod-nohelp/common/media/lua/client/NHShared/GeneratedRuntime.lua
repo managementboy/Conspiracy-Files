@@ -15,6 +15,7 @@ local Scheduler=require("NHShared/Scheduler")
 local Budget=require("NHShared/SaveBudget")
 local StaleClue=require("NHShared/StaleClue")
 local Carriers=require("NHShared/Carriers")
+local Kinds=require("NHShared/Generated/EvidenceKinds")
 local Visited=require("NHShared/VisitedBuildingLog")
 local Reachability=require("NHShared/ReachabilityAdapter")
 require("NHShared/DiscoveryLog")
@@ -316,6 +317,8 @@ local function placement(api,id)
             -- the survivor recognises it (R.recognise).
             applyWear(item,member)
             writePages(item,doc,api.snapshot().case)
+            -- A card clue reads like a vanilla card with its name on it.
+            Kinds.nameAsVanillaCard(item,doc)
             createdItems[#createdItems+1]=item
           end
         end
@@ -591,6 +594,11 @@ local function refreshAddressCache()
     addressBookWasReady=ready
 end
 
+-- The world record's case, read-only, or nil (KeyObserver's area lookup).
+function R.worldCase()
+    local root=worldRoot()
+    return root and root.case or nil
+end
 function R.known()
     refreshAddressCache()
     if not wrapper or not sessions then return {} end
@@ -1041,7 +1049,8 @@ local function relocation(api)
                 -- cannot drift the same way.
                 -- Still a plain item unless the survivor had already recognised
                 -- it (P4-R132).
-                if R.isRecognisedId(id) then stampEvidence(piece,doc.title) end
+                if R.isRecognisedId(id) then stampEvidence(piece,doc.title)
+                else Kinds.nameAsVanillaCard(piece,doc) end
                 applyWear(piece,member)
                 writePages(piece,doc,root.case)
                 newItem[#newItem+1]=piece
@@ -1135,14 +1144,16 @@ end
 -- survivor has not already searched it, its loot window is not open, it is
 -- inside the site's footprint as S.target will demand, the case has no mobile
 -- clue yet (S.MOBILE_PER_CASE), and the survivor is not standing next to it.
-local function carrierScanFor(site,found)
+-- `hint` is a No Help clue's optional outfit class: among the bodies in reach
+-- one dressed that way is preferred, and no body is refused for its clothes.
+local function carrierScanFor(site,found,hint)
     local b=site.bounds
     local r=Session.CARRIER_RADIUS
     local reach=math.max(b.x2-b.x1,b.y2-b.y1)+r
     return Carriers.scan(math.floor((b.x1+b.x2)/2),math.floor((b.y1+b.y2)/2),b.z,reach,found,
         function(entry)
             return entry.x>=b.x1-r and entry.x<b.x2+r and entry.y>=b.y1-r and entry.y<b.y2+r and entry.z==b.z
-        end)
+        end,hint)
 end
 -- A late-bound transport finding waits for a real vehicle part at its authored
 -- address.  This is observation, not scene manufacture: no vehicle is spawned,
@@ -1289,7 +1300,7 @@ local function filler(api)
                 declinePlacement("no free container at the site for "..tostring(id).." and no carrier allowed")
                 CFLog.write("d","skip",{doc=id,why="no-containers"}); return true
             end
-            if not bodyScan then bodyScan=carrierScanFor(site,function(entry) carrier=entry end) end
+            if not bodyScan then bodyScan=carrierScanFor(site,function(entry) carrier=entry end,doc and doc.outfit) end
             if not carrier then
                 if bodyScan() then
                     if not carrier then
@@ -1310,7 +1321,7 @@ local function filler(api)
             end
             target={x=carrier.x,y=carrier.y,z=carrier.z,objectIndex=0,containerIndex=0,
                 containerType=Session.CARRIER_CONTAINER,sprite=carrier.kind,
-                carrierKind=carrier.kind,carrierMark=mark}
+                carrierKind=carrier.kind,carrierMark=mark,outfit=carrier.outfit}
         end
         -- Nothing materialises under the survivor's feet: the same guard
         -- relocation uses, with the same radius.
@@ -1627,6 +1638,10 @@ end
 require("NHShared/Events/EngineEvents").on("OnTick", function()
     if not scheduler or not allowed() then return end
     ticks=ticks+1
+    -- The living player carries a mark so their body is never chosen to carry
+    -- a clue (Carriers.PLAYER_MARK); cheap and idempotent, and it covers a new
+    -- character after a death without an event of its own.
+    if ticks%120==0 then pcall(Carriers.stampPlayer,getPlayer and getPlayer()) end
     if sessions and ticks%120==0 then
         enqueue(); for i,api in ipairs(sessions) do scheduler.enqueue("identity:"..i,"identity",identity(api)) end
         for i,api in ipairs(sessions) do scheduler.enqueue("relocate:"..i,"relocation",relocation(api)) end

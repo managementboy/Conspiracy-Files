@@ -173,12 +173,17 @@ function S.target(t,site)
         -- `sprite` is the carrier's kind in words: a body has no sprite, and
         -- the diagnostics print this field for every target there is.
         if not fields(t,{x=true,y=true,z=true,objectIndex=true,containerIndex=true,containerType=true,
-                         sprite=true,carrierKind=true,carrierMark=true}) then return false end
+                         sprite=true,carrierKind=true,carrierMark=true,outfit=true}) then return false end
         for _,k in ipairs({"x","y","z","objectIndex","containerIndex"}) do if not integer(t[k]) then return false end end
         if t.objectIndex~=0 or t.containerIndex~=0 then return false end
         if type(t.sprite)~="string" or #t.sprite>300 then return false end
         if not S.CARRIER_KINDS[t.carrierKind] then return false end
         if #t.carrierMark==0 or #t.carrierMark>120 then return false end
+        -- The body's vanilla outfit id when the clue was committed to it
+        -- (clothing as a soft hint, owner 2026-09-27): optional, the game's
+        -- own id, saved so the choice can be read back, never used to judge.
+        if t.outfit~=nil and (type(t.outfit)~="string" or #t.outfit==0 or #t.outfit>80
+            or not t.outfit:find("^[%w_%-]+$")) then return false end
         if t.containerType~=S.CARRIER_CONTAINER then return false end
         -- A carrier is NOT checked against the site's `containerTypes`, and a
         -- car part is. That list records the fixed storage the scan observed in

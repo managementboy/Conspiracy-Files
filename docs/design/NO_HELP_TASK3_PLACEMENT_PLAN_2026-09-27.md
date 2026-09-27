@@ -615,3 +615,28 @@ ground spots) and step 5 (vanilla scenes), with the ADHD review of phase 5.
   migration, never a "stale" refusal; the 50%-sets share is a picker
   preference, proven only by step 7's harness on placed clues; a building
   whose every container was emptied is skipped until it has one again.
+
+### Body IDs, keys and clothing — built (items 3-6)
+
+- **Which bodies carry our card:** never one that already holds a named
+  vanilla ID (the body's vanilla loot is rolled just before the check, with
+  the game's own loot tables, exactly as opening it would), and never a dead
+  player character's body (the living player is marked, and death copies the
+  mark onto the body, so it holds after a reload).
+- **Our card looks vanilla until recognised:** "ID Card: <name>" / "Business
+  Card: <name>", set the way the game names cards, with no evidence stamp.
+- **Keys:** a key whose building is a decided area gets a plain phrase in the
+  key journal (e.g. the kind of place). Deciding a place *earlier* because of
+  a key is carried forward: a key can name a building anywhere, and deciding
+  needs the building's scanned storage.
+- **Clothing:** 24 vanilla outfits (verified in the game's clothing file) in
+  four classes; a body clue may carry a class hint; among bodies already
+  found, a matching one is preferred, never waited for; the chosen outfit is
+  saved. The rival-clothing rule needs the owner's table (question below).
+Test: `test/nohelp_body_ids.lua`. Offline only; the in-game path needs the
+visible playtest.
+
+**Owner questions:** is filling a body's pockets a moment early (same contents)
+acceptable; which clothing fits each conspiracy, for the rule that sometimes
+dresses a body for the other side; does "farm clothing" include more than the
+vanilla Farmer outfit.

@@ -6,6 +6,7 @@
 -- walks, so this adds no scan of its own over containers.
 local CFLog=require("NHShared/Log")
 local Model=require("NHShared/KeyObservations")
+local AreaCase=require("NHShared/Generated/AreaCase")
 NHShared=NHShared or {}
 local O=NHShared.KeyObserver or {}
 NHShared.KeyObserver=O
@@ -91,12 +92,16 @@ function O.see(item,carrierLabel,token)
     return true
 end
 
--- A building that holds part of an open case, as a phrase for the journal.
--- The old generated case's "file marked" text went with the old generator
--- (owner, 2026-09-27); an area lookup replaces it in a later step.
+-- A building that is a decided No Help area, as a plain phrase for the
+-- journal ("a police building"), or nil. The lookup reads the world record
+-- only (AreaCase.keyPhrase): which areas exist never depends on what the
+-- player read or carried, and the vanilla key record is not changed.
 local function caseFor(building)
-    return nil
+    local rt=NHShared.GeneratedRuntime
+    local case=rt and rt.worldCase and rt.worldCase()
+    return AreaCase.keyPhrase(case,building)
 end
+O.caseFor=caseFor
 
 function O.rows()
     local ok,rows=pcall(function()
