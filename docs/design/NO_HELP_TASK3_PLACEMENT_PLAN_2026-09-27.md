@@ -228,7 +228,7 @@ playtests quote it.
 | Directive | Proof | Readout | Checks |
 |---|---|---|---|
 | NH-D1 two contradictory conspiracies | step 3 Linter (both leans, rival reading per clue, every kind of area and spot hosts both); step 3 Pick test; step 7 (both leans per area, thinner-lean floor) | clues per lean, per area | not yet written, due step 3 |
-| NH-D2 hint, then search (Look it over as fallback) | step 2 tests (ground spot and set: one hint, one icon, one find); step 8 visible playtest | finds by search vs Look it over | not yet written, due step 2 |
+| NH-D2 hint, then search (Look it over as fallback) | step 2 tests (ground spot and set: one hint, one icon, one find); step 8 visible playtest | finds by search vs Look it over | `test/nohelp_found_how.lua`; the hint and icon on open ground and on a set still owe the visible playtest (step 8) |
 | NH-D3 placed procedurally | step 3 Pick test (same inputs, same result; no map-read input); step 4 replay test | area sources | not yet written, due step 3 |
 | NH-D4 no maximum, a first-development cap | step 7 cap-off run, raise-the-cap save test, "stopped for another reason" failure; the cap exists only in `Pick.lua` | cap, and any other limit hit | not yet written, due step 7 |
 | NH-D5 half or more are object sets of vanilla items | step 3 Linter (per clue, vanilla types); step 7 on placed *and* spotted, lost sets counted | set share placed and spotted | not yet written, due step 3 |
@@ -358,3 +358,20 @@ step 3 replaces, and step 3's per-area contract must not inherit it.
   a set is not visible to a watching player, because moves never run within
   the proximity guard — but a set should also stop moving once Search Mode has
   shown it (step 6), and that refusal is not built yet.
+
+### Phase 3 — open ground and how clues are found (step 2)
+
+**Built:** a clue may lie on open ground. `World.ground(square)` makes a
+square answer the few questions the engine asks a container (its items are
+the items lying there; it is never "already searched"; it always has room;
+removal follows vanilla's own pickup), so placement, counting, the hint, the
+search icon and relocation run on it unchanged. `Session.target` accepts a
+ground target inside the site's footprint and driveway margin, carrying a
+short word for the spot. The save now keeps *how* each clue was recognised
+(search, look, opening, debug) — the playtest count owner directive 2 needs.
+Tests: `test/nohelp_ground.lua`, `test/nohelp_found_how.lua`. All changed
+files pass the engine parser.
+
+**Not yet proven:** that Search Mode spots an item lying in a garden or on a
+porch, by day and at dusk, and that the hint fires for it — the visible
+playtest (step 8). Nothing chooses a ground spot yet; that is step 4.

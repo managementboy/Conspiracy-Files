@@ -26,6 +26,13 @@ function World.resolve(target,mark)
     if type(target)=="table" and type(target.carrierMark)=="string" then
         return require("NHShared/Carriers").resolve(target)
     end
+    -- Open ground (No Help, owner 2026-09-27: clues may lie anywhere
+    -- interesting). Addressed by its square alone; see World.ground.
+    if type(target)=="table" and target.ground==true then
+        local square=getCell():getGridSquare(target.x,target.y,target.z)
+        if not square then return nil,"unloaded" end
+        return World.ground(square)
+    end
     -- A vehicle target is not addressed by a square. See resolveVehicle.
     if type(target)=="table" and type(target.vehiclePart)=="string" then
         return World.resolveVehicle(target,mark)
@@ -80,6 +87,56 @@ World.BODY_WEIGHT=20
 -- Every usable container in one vehicle, as {part=id,container=container}.
 -- Ordered by VEHICLE_PARTS, never by engine iteration order, so selection is
 -- reproducible.
+-- A patch of open ground that answers the few questions the engine asks a
+-- container, so placing, counting, the hint, the search icon and relocation
+-- all work on it unchanged: its items are the items lying on the square.
+-- Nobody "loots" or "opens" ground, so it is never already searched, and it
+-- always has room. Removal follows vanilla's own single-player pickup
+-- (ISGrabItemAction:transferItem, 42.20).
+function World.ground(square)
+    local g={ground=true,square=square}
+    local function worldObjects()
+        local out={}
+        local ok=pcall(function()
+            local objects=square:getWorldObjects()
+            for i=0,objects:size()-1 do
+                local o=objects:get(i)
+                local item=o and o:getItem()
+                if item then out[#out+1]={object=o,item=item} end
+            end
+        end)
+        return ok and out or {}
+    end
+    function g:getItems()
+        local list=worldObjects()
+        return {size=function() return #list end,get=function(_,i) return list[i+1] and list[i+1].item end}
+    end
+    function g:AddItem(item)
+        local ok,placed=pcall(function() return square:AddWorldInventoryItem(item,0.5,0.5,0.0) end)
+        return ok and placed~=nil
+    end
+    function g:Remove(item)
+        for _,entry in ipairs(worldObjects()) do
+            if entry.item==item then
+                local o=entry.object
+                return pcall(function()
+                    square:transmitRemoveItemFromSquare(o)
+                    o:removeFromWorld()
+                    o:removeFromSquare()
+                    o:setSquare(nil)
+                    item:setWorldItem(nil)
+                end)
+            end
+        end
+        return false
+    end
+    function g:hasRoomFor() return true end
+    function g:isHasBeenLooted() return false end
+    function g:getParent() return nil end
+    function g:getType() return "floor" end
+    return g
+end
+
 function World.vehicleParts(vehicle)
     local out={}
     -- Ask the VEHICLE for each part. getParts() returns VehicleParts, a class

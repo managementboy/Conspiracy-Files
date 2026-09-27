@@ -1601,7 +1601,7 @@ function R.recognise(target,how)
     local api,root=liveApi(id)
     if not api then return false,"not a live clue" end
     if R.isRecognisedId(id) then return true,false end
-    local ok,why=api.recognise(id)
+    local ok,why=api.recognise(id,how)
     if not ok then return false,tostring(why) end
     -- The commit swapped the wrapper; stamp from the stored root now in it.
     root=Cases.find(wrapper,id) or root

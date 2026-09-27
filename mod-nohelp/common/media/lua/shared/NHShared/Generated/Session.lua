@@ -93,6 +93,16 @@ S.CARRIER_RADIUS=12
 S.MOBILE_PER_CASE=1
 local function carrierTarget(t) return type(t)=="table" and type(t.carrierMark)=="string" end
 -- Does this target travel? Both kinds of carrier, for the cap above.
+-- OPEN GROUND (No Help, owner 2026-09-27: "place the clues anywhere that is
+-- interesting"). A clue lying on a square, not in anything. Like a carrier, it
+-- is not checked against the site's observed furniture, only its footprint and
+-- the driveway margin; `sprite` holds a short word for the spot, since a square
+-- has no furniture sprite and the diagnostics print this field.
+S.GROUND_CONTAINER="floor"
+-- The ways a clue can come to be recognised, as R.recognise names them.
+S.FOUND_HOW={search=true,look=true,opening=true,debug=true}
+local function groundTarget(t) return type(t)=="table" and t.ground==true end
+S.isGround=groundTarget
 function S.isMobile(target)
     return vehicleTarget(target) or carrierTarget(target)
 end
@@ -155,6 +165,18 @@ function S.target(t,site)
         if t.x<b.x1-r or t.x>=b.x2+r or t.y<b.y1-r or t.y>=b.y2+r or t.z~=b.z then return false end
         return true
     end
+    if groundTarget(t) then
+        if not fields(t,{x=true,y=true,z=true,objectIndex=true,containerIndex=true,containerType=true,
+                         sprite=true,ground=true}) then return false end
+        for _,k in ipairs({"x","y","z","objectIndex","containerIndex"}) do if not integer(t[k]) then return false end end
+        if t.objectIndex~=0 or t.containerIndex~=0 then return false end
+        if type(t.sprite)~="string" or #t.sprite==0 or #t.sprite>80 then return false end
+        if t.containerType~=S.GROUND_CONTAINER then return false end
+        local b=site.bounds
+        local r=S.OUTDOOR_RADIUS
+        if t.x<b.x1-r or t.x>=b.x2+r or t.y<b.y1-r or t.y>=b.y2+r or t.z~=b.z then return false end
+        return true
+    end
     if vehicleTarget(t) then
         if not fields(t,{x=true,y=true,z=true,objectIndex=true,containerIndex=true,containerType=true,
                          sprite=true,vehiclePart=true,vehicleMark=true,sceneSignature=true}) then return false end
@@ -205,7 +227,7 @@ function S.plannedTarget(t,site)
 end
 function S.validate(root)
     local ok,why=V.validateStructure(root); if not ok then return false,why end
-    if not fields(root,{schema=true,case=true,assignments=true,known=true,recognised=true}) or root.schema~=1 then return false,"invalid generated session" end
+    if not fields(root,{schema=true,case=true,assignments=true,known=true,recognised=true,recognisedHow=true}) or root.schema~=1 then return false,"invalid generated session" end
     ok,why=G.validate(root.case); if not ok then return false,why end
     if type(root.assignments)~="table" or type(root.known)~="table" then return false,"missing session fields" end
     local ids,sites={},{}
@@ -290,6 +312,18 @@ function S.validate(root)
             rseen[id]=true; rn=rn+1
         end
         for i=1,rn do if not root.recognised[i] then return false,"invalid recognition" end end
+    end
+    -- HOW each recognised clue was found (No Help, owner directive 2: the hint
+    -- and Search Mode are the way in, "Look it over" the fallback). Optional;
+    -- one short word per recognised id, so a playtest can count how many clues
+    -- were found by searching and how many were looted and looked over.
+    if root.recognisedHow~=nil then
+        if type(root.recognisedHow)~="table" then return false,"invalid recognition method" end
+        local listed={}
+        for _,id in ipairs(root.recognised or {}) do listed[id]=true end
+        for id,how in pairs(root.recognisedHow) do
+            if not listed[id] or not S.FOUND_HOW[how] then return false,"invalid recognition method" end
+        end
     end
     if V.estimateEncodedBytes(root)>500000 then return false,"canonical size exceeded" end
     return true
@@ -877,10 +911,13 @@ function S.open(initial,sink)
         for _,seen in ipairs(root.recognised or {}) do if seen==id then return true end end
         return false
     end
-    function api.recognise(id)
+    function api.recognise(id,how)
         if not root.assignments[id] then return false,"unknown document" end
         if api.isRecognised(id) then return true end
-        return commit(function(r) r.recognised=r.recognised or {}; r.recognised[#r.recognised+1]=id end)
+        return commit(function(r)
+            r.recognised=r.recognised or {}; r.recognised[#r.recognised+1]=id
+            if S.FOUND_HOW[how] then r.recognisedHow=r.recognisedHow or {}; r.recognisedHow[id]=how end
+        end)
     end
     function api.project() return G.project(root.case,root.known) end
     return api
