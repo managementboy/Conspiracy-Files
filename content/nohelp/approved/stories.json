@@ -1,0 +1,110 @@
+[
+  {
+    "ticket": "T0001",
+    "target": "police",
+    "lean": "containment",
+    "gloss": "Dispatch decisions and changing field instructions expose the gap between a failing response and a possible upstream exposure."
+  },
+  {
+    "ticket": "T0002",
+    "target": "hospital",
+    "lean": "agricultural",
+    "gloss": "A treatment and transfer trail makes an exposure pathway plausible while also reflecting care disrupted by containment decisions."
+  },
+  {
+    "ticket": "T0003",
+    "target": "farm",
+    "lean": "agricultural",
+    "gloss": "Work records and safety routines trace an experimental activity whose consequences may also be confused with emergency intervention."
+  },
+  {
+    "ticket": "T0004",
+    "target": "checkpoint",
+    "lean": "containment",
+    "gloss": "Changing restrictions and uneven enforcement show a control system failing, while an exposure route remains a viable rival."
+  },
+  {
+    "ticket": "T0005",
+    "target": "office",
+    "lean": "containment",
+    "gloss": "Administrative records preserve shifting orders and omissions that can indicate response failure or concealment of a program."
+  },
+  {
+    "ticket": "T0006",
+    "target": "bookstore",
+    "lean": "agricultural",
+    "gloss": "Public information and local reading traces place agricultural claims beside emerging concern without resolving whether the response shaped the record."
+  },
+  {
+    "ticket": "T0007",
+    "target": "transmission",
+    "lean": "containment",
+    "gloss": "A broken warning chain connects incomplete information to changing orders, while an early program warning remains a rival reading."
+  },
+  {
+    "ticket": "T0008",
+    "target": "warehouse",
+    "lean": "agricultural",
+    "gloss": "Storage and dispatch traces connect routine supply movement to a possible exposure path and to later emergency demand."
+  },
+  {
+    "ticket": "T0009",
+    "target": "government",
+    "lean": "agricultural",
+    "gloss": "Policy records connect program oversight to the event while revisions can also be read as officials narrowing a failed response."
+  },
+  {
+    "ticket": "T0010",
+    "target": "person-a",
+    "lean": "agricultural",
+    "gloss": "A field worker's routine duties form a self-contained thread linking program activity to possible exposure, with emergency disruption as the rival."
+  },
+  {
+    "ticket": "T0011",
+    "target": "person-b",
+    "lean": "containment",
+    "gloss": "An emergency clerk's changing instructions trace the widening gap between formal orders and events, with an unheeded program risk as the rival."
+  },
+  {
+    "ticket": "T0012",
+    "target": "person-c",
+    "lean": "random",
+    "gloss": "A courier's ordinary route crosses work sites and official transfer points, leaving a thread that can be bound to either account."
+  },
+  {
+    "ticket": "T0013",
+    "target": "map:IrvingtonStashMap1",
+    "lean": "random",
+    "gloss": "Each annotated mark has an independent story grounded in its own text; the trail fits either account, with occasional honest counter-side evidence."
+  },
+  {
+    "ticket": "T0014",
+    "target": "print:AmericanTire",
+    "lean": "random",
+    "gloss": "The advertised destination becomes a practical lead where evidence can connect ordinary deliveries to either program activity or emergency response."
+  },
+  {
+    "ticket": "T0015",
+    "target": "map:EkronStashMap8",
+    "lean": "random",
+    "gloss": "Each annotated mark creates a separate local question from its own text, and the trail can support either account without making mismatches tricks."
+  },
+  {
+    "ticket": "T0016",
+    "target": "scene:RDSPoliceAtHouse",
+    "lean": "containment",
+    "gloss": "A body-anchored trace from a domestic aftermath records institutional response and individual exposure, readable through either failed controls or prior hazard."
+  },
+  {
+    "ticket": "T0017",
+    "target": "scene:RVSAmbulanceCrash",
+    "lean": "containment",
+    "gloss": "A roadside medical vehicle's remains show the limits of emergency movement, while a program-related exposure remains plausible."
+  },
+  {
+    "ticket": "T0018",
+    "target": "scene:RBJackieJaye",
+    "lean": "random",
+    "gloss": "Two alternate readings share the permitted room anchor: one supports failed containment and one supports an agricultural malfunction, without fixing a canon outcome."
+  }
+]
