@@ -7,8 +7,9 @@
 -- tile objects, items lying on the floor, bodies, zombies and vehicles. A
 -- snapshot becomes TOKENS ("room:jackiejayestudio", "item:Base.Microphone",
 -- "vehicle:StepVan_Plonkies"...), keeping only tokens some signature names.
--- A kind matches when its signature finds TWO TRACES OF DIFFERENT SORTS and
--- every trace it marks `must`. Tokens seen on earlier looks at the same cell
+-- A kind matches when its signature finds TWO TRACES OF DIFFERENT SORTS,
+-- every trace it marks `must`, and at least one trace it marks `only`
+-- (exclusive to the story). Tokens seen on earlier looks at the same cell
 -- are kept (the pending-traces record in the world record), so a scene the
 -- player emptied before it was confirmed still confirms, and its clue keeps
 -- waiting (owner, 2026-09-27).
@@ -17,9 +18,11 @@
 -- 42.20, javap -c on zombie.randomizedWorld.*, 2026-09-27): the string
 -- constants each class passes to addItemOnGround, addTileObject, addZombies*,
 -- addVehicle / spawnCarOnNearestNav and BuildingDef.getRoom / getRoom, and
--- the `name` its constructor stores (getName(), `story` below). At least one
--- kind per family is verified; every other allowed kind is "unverified": it
--- never matches until a signature is added here.
+-- the `name` its constructor stores (getName(), `story` below), each trace
+-- then checked for EXCLUSIVITY against the game's Lua (`only` below). Every
+-- other allowed kind is "unverified": it never matches until a signature
+-- with an exclusive trace is added here (M.DEMOTED lists those checked and
+-- found without one).
 --
 -- PREFILTER (M.allowFromNames): a kind only matches when the running game's
 -- own story lists name its story (getWorld():getRandomizedBuildingList(),
@@ -37,53 +40,75 @@ M.CELL=10
 
 -- `story`: the name the game's own story list gives the kind. `common`: a
 -- trace any ordinary house shows (a kitchen); alone it is no reason to keep
--- pending traces in the save (M.worthKeeping).
+-- pending traces in the save (M.worthKeeping). `only`: an EXCLUSIVE trace -
+-- nothing in the game but this story (or its story family) creates it: not
+-- the map, not a loot table (Distributions, ProceduralDistributions,
+-- VehicleDistributions, StoryClutter), not a vehicle zone
+-- (VehicleZoneDefinition), not a zombie zone (ZombiesZoneDefinition), not a
+-- vehicle's zombieType, not another story class in the jar. A kind confirms
+-- only when at least one `only` trace is found: an ordinary parked car and a
+-- stray item from a loot table are not a scene (2026-09-27, build 42.20).
 M.SIGNATURES={
     -- RBJackieJaye: BuildingDef.getRoom("jackiejayestudio"); Microphone,
-    -- Notepad, Pen by addItemOnGround on one RoomDef.getFreeSquare().
+    -- Notepad, Pen by addItemOnGround on one RoomDef.getFreeSquare();
+    -- addZombies(def,1,"Jackie_Jaye",...,studio). The room is on the map
+    -- whether or not the story ran, and RBBasic.doOfficeStuff fills it with
+    -- office clutter; the props are ordinary. Jackie_Jaye is in no
+    -- ZombiesZoneDefinition list, no vehicle zombieType; in the jar only
+    -- RBJackieJaye and RZJackieJaye (her own family) name it. (Its citation
+    -- decides the scene by place; this signature never makes a second one.)
     {kind="RBJackieJaye",story="JackieJaye",traces={
         {id="studio",sort="room",any={"jackiejayestudio"},must=true},
-        {id="props",sort="item",any={"Base.Microphone","Base.Notepad","Base.Pen"}}}},
-    -- RDSPoliceAtHouse: addZombies(def,n,"Police",...) in the room
-    -- getLivingRoomOrKitchen picks, spawnCarOnNearestNav("Base.CarLightsPolice").
-    -- All three: a police car and police zombies alone are a road blockade.
-    {kind="RDSPoliceAtHouse",story="Police at House",traces={
-        {id="car",sort="vehicle",any={"CarLightsPolice"},must=true},
-        {id="police",sort="zombie",any={"Police"},must=true},
-        {id="home",sort="room",any={"livingroom","kitchen"},must=true,common=true}}},
+        {id="props",sort="item",any={"Base.Microphone","Base.Notepad","Base.Pen"}},
+        {id="jackie",sort="zombie",any={"Jackie_Jaye"},only=true},
+        {id="jackieDead",sort="body",any={"Jackie_Jaye"},only=true}}},
     -- RDSRatKing: addItemOnGround("Base.RatKing") on a free square of a
     -- bedroom, kitchen or living room (getRoom), with Base.Dung_Rat.
+    -- Base.RatKing is in no loot table or recipe; in the jar only RDSRatKing
+    -- creates it (RBBasic only lists the story).
     {kind="RDSRatKing",story="Rat King",traces={
-        {id="king",sort="item",any={"Base.RatKing"},must=true},
+        {id="king",sort="item",any={"Base.RatKing"},must=true,only=true},
         {id="room",sort="room",any={"bedroom","kitchen","livingroom"},common=true}}},
     -- RVSPlonkies: addVehicle(...,"StepVan_Plonkies",...), addItemOnGround of
-    -- a Base.Plonkies.
+    -- a Base.Plonkies, addZombiesOnVehicle(...,"PlonkiesGuy",...). The van
+    -- parks in business vehicle zones and Plonkies are van/bag loot; the
+    -- PlonkiesGuy outfit is in no zombie zone, no vehicle zombieType, and in
+    -- the jar only RVSPlonkies names it. Killed, he leaves a body in it.
     {kind="RVSPlonkies",story="Plonkies",traces={
         {id="van",sort="vehicle",any={"StepVan_Plonkies"},must=true},
-        {id="bag",sort="item",any={"Base.Plonkies"}}}},
-    -- RVSRichJerk: addVehicle(...,"CarLuxury",...), addItemOnGround of a
-    -- Base.Briefcase_Money.
-    {kind="RVSRichJerk",story="Rich Jerk",traces={
-        {id="car",sort="vehicle",any={"CarLuxury"},must=true},
-        {id="case",sort="item",any={"Base.Briefcase_Money"}}}},
-    -- RVSAmbulanceCrash: addVehicle(...,"Base.VanAmbulance",...) with
-    -- addZombiesOnVehicle dressed AmbulanceDriver / HospitalPatient.
-    {kind="RVSAmbulanceCrash",story="Ambulance Crash",traces={
-        {id="van",sort="vehicle",any={"VanAmbulance"},must=true},
-        {id="crew",sort="zombie",any={"AmbulanceDriver","HospitalPatient"}}}},
-    -- RZSMurderScene: addTileObject cemetary_01_32/33, addItemOnGround
-    -- Base.EmptyPetrolCan and Base.Shovel. Checked before the burying camp,
-    -- which also uses 32/33 and a shovel but never a petrol can.
-    {kind="RZSMurderScene",story="Murder Scene",traces={
-        {id="grave",sort="sprite",any={"location_community_cemetary_01_32","location_community_cemetary_01_33"}},
-        {id="can",sort="item",any={"Base.EmptyPetrolCan"},must=true}}},
-    -- RZSBuryingCamp: addTileObject cemetary_01_22/23/34/35/40-43 (and 32/33),
-    -- addItemOnGround Base.Shovel, Base.WhiskeyEmpty, Base.WineEmpty.
-    {kind="RZSBuryingCamp",story="Burying Camp",traces={
-        {id="graves",sort="sprite",any={"location_community_cemetary_01_22","location_community_cemetary_01_23",
-            "location_community_cemetary_01_34","location_community_cemetary_01_35","location_community_cemetary_01_40",
-            "location_community_cemetary_01_41","location_community_cemetary_01_42","location_community_cemetary_01_43"},must=true},
-        {id="left",sort="item",any={"Base.Shovel","Base.WhiskeyEmpty","Base.WineEmpty"}}}},
+        {id="bag",sort="item",any={"Base.Plonkies"}},
+        {id="guy",sort="zombie",any={"PlonkiesGuy"},only=true},
+        {id="guyDead",sort="body",any={"PlonkiesGuy"},only=true}}},
+}
+
+-- DEMOTED (2026-09-27, build 42.20): every trace these stories leave also
+-- occurs without them, and the jar shows nothing else they create that only
+-- they create. Unverified: they never match. The citation path (decided by
+-- place) is not affected.
+M.DEMOTED={
+    -- CarLightsPolice: VehicleZoneDefinition police/prison zones; Police
+    -- outfit: ZombiesZoneDefinition (a police zone and Default, chance 0.25);
+    -- kitchen/living room: every house; the rest are random dead bodies and
+    -- the car's own zombieType.
+    {kind="RDSPoliceAtHouse",why="police car, police zombies and a kitchen are all ordinary"},
+    -- CarLuxury: VehicleZoneDefinition medium/good/luxuryDealership/sport/
+    -- professional; Briefcase_Money: ProceduralDistributions (BankDeposit,
+    -- DrugLab*) and StoryClutter.MurderSceneClutter (another story drops it
+    -- on the ground); its zombies wear Classy/Gaudy (ZombiesZoneDefinition).
+    {kind="RVSRichJerk",why="luxury car, case of money and Classy/Gaudy zombies are all ordinary"},
+    -- VanAmbulance: VehicleZoneDefinition ambulance zone; AmbulanceDriver is
+    -- the van's own zombieType; HospitalPatient: ZombiesZoneDefinition
+    -- hospitalroom; the second car is a random one.
+    {kind="RVSAmbulanceCrash",why="ambulance, its driver and hospital patients are all ordinary"},
+    -- Base.EmptyPetrolCan names no item in 42.20 (the can is PetrolCan /
+    -- PetrolCanEmpty), so it is never placed; graves 32/33 are map tiles and
+    -- player-dug graves; Shovel is loot; MobCasual: ZombiesZoneDefinition Mob;
+    -- the burnt car and the body are random.
+    {kind="RZSMurderScene",why="its petrol can is never created; graves, shovel, MobCasual zombies are ordinary"},
+    -- Every grave sprite it places (22/23/32-35/40-43) is on the map and
+    -- 32-35/40-43 are what a player's dug and filled graves show; shovel and
+    -- empty bottles are loot; the bodies are random.
+    {kind="RZSBuryingCamp",why="graves are map tiles and player graves; shovel and bottles are loot"},
 }
 
 local relevant,rare,byKind,byStory={},{},{},{}
@@ -169,7 +194,8 @@ end
 
 -- The first kind the tokens show, in signature order, or nil. `allow`
 -- (optional) is the prefilter: a set of kinds the running game lists; a kind
--- missing from it never matches. Refused kinds never match. Returns the kind,
+-- missing from it never matches. Refused kinds never match; nor does a kind
+-- without an exclusive (`only`) trace among those found. Returns the kind,
 -- the ids of the traces found and the token of the first `must` trace found
 -- (where the scene is anchored: M.anchorToken).
 function M.match(tokens,allow)
@@ -177,7 +203,7 @@ function M.match(tokens,allow)
     for _,t in ipairs(tokens or {}) do have[t]=true end
     for _,s in ipairs(M.SIGNATURES) do
         if Scenes.allowed(s.kind) and (allow==nil or allow[s.kind]) then
-            local sorts,nSorts,found,missing,anchor={},0,{},false,nil
+            local sorts,nSorts,found,missing,anchor,exclusive={},0,{},false,nil,false
             for _,t in ipairs(s.traces) do
                 local hit
                 for _,name in ipairs(t.any) do
@@ -186,11 +212,12 @@ function M.match(tokens,allow)
                 end
                 if hit then
                     found[#found+1]=t.id
+                    if t.only then exclusive=true end
                     if t.must and not t.common and not anchor then anchor=hit end
                     if not sorts[t.sort] then sorts[t.sort]=true; nSorts=nSorts+1 end
                 elseif t.must then missing=true end
             end
-            if not missing and nSorts>=2 then return s.kind,found,anchor end
+            if not missing and exclusive and nSorts>=2 then return s.kind,found,anchor end
         end
     end
     return nil

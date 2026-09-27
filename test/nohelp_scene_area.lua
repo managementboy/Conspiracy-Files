@@ -107,8 +107,8 @@ assert(placeClues(withScene,both)==base,"a scene decided first changes nothing a
 local root=assert(Session.createArea(4242))
 local saved=root
 local api=assert(Session.open(root,function(n) saved=n end))
-assert(api.noteScene("cell:1:2:0",{pending={"vehicle:CarLuxury"},x=15,y=25,z=0,hours=1}))
-assert(select(2,api.noteScene("cell:1:2:0",{pending={"vehicle:CarLuxury"},x=15,y=25,z=0,hours=2}))=="nothing new")
+assert(api.noteScene("cell:1:2:0",{pending={"vehicle:StepVan_Plonkies"},x=15,y=25,z=0,hours=1}))
+assert(select(2,api.noteScene("cell:1:2:0",{pending={"vehicle:StepVan_Plonkies"},x=15,y=25,z=0,hours=2}))=="nothing new")
 assert(api.noteScene("cell:1:2:0",{pending={"room:kitchen"},x=99,y=99,z=0,hours=3}))
 local rec=api.scene("cell:1:2:0")
 assert(#rec.pending==2 and rec.x==15 and rec.hours==1,"pending traces merge; where and when stay the first look's")
@@ -184,9 +184,9 @@ assert(handlers.LoadGridsquare and handlers.OnDeadBodySpawn and handlers.OnTick,
 local function sq(x,y,z) return {getX=function() return x end,getY=function() return y end,getZ=function() return z or 0 end} end
 local function run(n) for _=1,n do handlers.OnTick() end end
 
--- A rich jerk's car at 105,205 and its case of money at 107,206.
-world["105:205:0"]={vehicle="Base.CarLuxury"}
-world["107:206:0"]={items={"Base.Briefcase_Money"}}
+-- A Plonkies van at 105,205 and its driver (the story's own outfit) at 107,206.
+world["105:205:0"]={vehicle="Base.StepVan_Plonkies"}
+world["107:206:0"]={zombies={"PlonkiesGuy"}}
 handlers.LoadGridsquare(sq(105,205))
 handlers.LoadGridsquare(sq(106,205))   -- the same cell: flagged once
 reads=0
@@ -195,7 +195,7 @@ run(1)
 assert(reads<=Runtime.RECORDS_PER_FRAME,"at most "..Runtime.RECORDS_PER_FRAME.." squares a tick, read "..reads)
 run(10)
 local key=SceneMatch.keyAt(105,205,0)
-assert(store[key] and store[key].kind=="RVSRichJerk" and store[key].source=="seen","the scene is confirmed and saved: "..tostring(store[key] and store[key].kind))
+assert(store[key] and store[key].kind=="RVSPlonkies" and store[key].source=="seen","the scene is confirmed and saved: "..tostring(store[key] and store[key].kind))
 local b2=store[key].bounds
 assert(b2 and b2.x1<=105 and b2.x2>105,"with its bounds")
 
@@ -203,16 +203,16 @@ assert(b2 and b2.x1<=105 and b2.x2>105,"with its bounds")
 -- second scene (no second clue).
 local keep1,keep2=world["105:205:0"],world["107:206:0"]
 world["105:205:0"]=nil; world["107:206:0"]=nil   -- its car moved on
-world["112:205:0"]={vehicle="Base.CarLuxury"}
-world["113:206:0"]={items={"Base.Briefcase_Money"}}
+world["112:205:0"]={vehicle="Base.StepVan_Plonkies"}
+world["113:206:0"]={zombies={"PlonkiesGuy"}}
 handlers.LoadGridsquare(sq(112,205))
 run(Runtime.CHECK_TICKS*3)
 assert(store[SceneMatch.keyAt(112,205,0)]==nil or not store[SceneMatch.keyAt(112,205,0)].kind,"one scene, one record")
 world["112:205:0"]=nil; world["113:206:0"]=nil
 world["105:205:0"],world["107:206:0"]=keep1,keep2
 
--- An emptied scene: the van is seen, its bag was already taken; later the
--- bag is dropped back (or a second look finds it): the saved trace confirms it.
+-- An emptied scene: the van is seen, its driver had wandered off; later he is
+-- killed nearby and his body is found: the saved trace confirms it.
 world["305:205:0"]={vehicle="Base.StepVan_Plonkies"}
 player.x,player.y=300,200
 handlers.LoadGridsquare(sq(305,205))
@@ -220,46 +220,62 @@ run(Runtime.CHECK_TICKS*2)
 local pk=SceneMatch.keyAt(305,205,0)
 assert(store[pk] and store[pk].pending and not store[pk].kind,"a van alone is kept as pending traces")
 world["305:205:0"]=nil                 -- the van is driven away
-world["308:207:0"]={items={"Base.Plonkies"}}
+world["308:207:0"]={bodies={"PlonkiesGuy"}}
 handlers.OnDeadBodySpawn({getSquare=function() return sq(308,207) end})
 run(Runtime.CHECK_TICKS*2)
 assert(store[pk] and store[pk].kind=="RVSPlonkies","the earlier trace and the later one confirm it together")
 
 -- The prefilter: a story the game does not list never matches.
-world["505:205:0"]={room="jackiejayestudio",items={"Base.Microphone"}}
+world["505:205:0"]={room="jackiejayestudio",items={"Base.Microphone"},zombies={"Jackie_Jaye"}}
 player.x,player.y=500,200
 handlers.LoadGridsquare(sq(505,205))
 run(Runtime.CHECK_TICKS*2)
 assert(not (store[SceneMatch.keyAt(505,205,0)] or {}).kind,"not listed, not matched")
 
+-- ORDINARY CLUTTER IS NOT A SCENE (the defect this guards): a parked luxury
+-- car and a stray case of money, listed story or not; a parked Plonkies van
+-- with a bag of its own snacks.
+world["705:205:0"]={vehicle="Base.CarLuxury"}
+world["707:206:0"]={items={"Base.Briefcase_Money"}}
+world["745:205:0"]={vehicle="Base.StepVan_Plonkies"}
+world["747:206:0"]={items={"Base.Plonkies"}}
+player.x,player.y=720,200
+handlers.LoadGridsquare(sq(705,205))
+handlers.LoadGridsquare(sq(745,205))
+run(Runtime.CHECK_TICKS*6)
+assert(not (store[SceneMatch.keyAt(705,205,0)] or {}).kind,"a parked car and a stray case never confirm")
+assert(not (store[SceneMatch.keyAt(745,205,0)] or {}).kind,"a parked van and its snacks never confirm")
+assert(store[SceneMatch.keyAt(745,205,0)] and store[SceneMatch.keyAt(745,205,0)].pending,"the van waits as a pending trace")
+world["705:205:0"],world["707:206:0"],world["745:205:0"],world["747:206:0"]=nil,nil,nil,nil
+
 -- Too far: a flagged cell beyond reach waits.
-world["905:205:0"]={vehicle="Base.CarLuxury"}
-world["906:205:0"]={items={"Base.Briefcase_Money"}}
+world["905:205:0"]={vehicle="Base.StepVan_Plonkies"}
+world["906:205:0"]={zombies={"PlonkiesGuy"}}
 handlers.LoadGridsquare(sq(905,205))
 run(Runtime.CHECK_TICKS*3)
 assert(store[SceneMatch.keyAt(905,205,0)]==nil,"a cell beyond reach is not looked at")
 player.x=900
 run(Runtime.CHECK_TICKS*2)
-assert(store[SceneMatch.keyAt(905,205,0)].kind=="RVSRichJerk","looked at once the survivor comes near")
+assert(store[SceneMatch.keyAt(905,205,0)].kind=="RVSPlonkies","looked at once the survivor comes near")
 -- A long drive: flags far behind are forgotten before the list fills, so
 -- scenes near the survivor are still noticed; a near cell is kept.
 local before=Runtime.flaggedCount()
 for i=1,Runtime.MAX_FLAGGED do handlers.LoadGridsquare(sq(5000+(i%64)*10,5000+math.floor(i/64)*10)) end
 assert(Runtime.flaggedCount()==Runtime.MAX_FLAGGED,"the list is full")
-world["955:255:0"]={vehicle="Base.CarLuxury"}
-world["956:255:0"]={items={"Base.Briefcase_Money"}}
+world["955:255:0"]={vehicle="Base.StepVan_Plonkies"}
+world["956:255:0"]={zombies={"PlonkiesGuy"}}
 player.x,player.y=950,250
 handlers.LoadGridsquare(sq(955,255))   -- refused while full
 run(Runtime.CHECK_TICKS)
 assert(Runtime.flaggedCount()<=before+1,"far flags forgotten: "..Runtime.flaggedCount())
 handlers.LoadGridsquare(sq(955,255))   -- its squares load again
 run(Runtime.CHECK_TICKS*3)
-assert((store[SceneMatch.keyAt(955,255,0)] or {}).kind=="RVSRichJerk","noticed after a long drive")
+assert((store[SceneMatch.keyAt(955,255,0)] or {}).kind=="RVSPlonkies","noticed after a long drive")
 print=realPrint
 local joined=table.concat(printed,"\n")
 assert(joined:find("scene-wait-start",1,true) and joined:find("scene-wait-end",1,true),"scene-wait is logged")
 assert(joined:find("mode=walking",1,true),"walking or driving is logged")
-assert(Runtime.matchVehicle(105,205,0)=="scene:RVSRichJerk","a confirmed scene's car is recognised")
+assert(Runtime.matchVehicle(105,205,0)=="scene:RVSPlonkies","a confirmed scene's car is recognised")
 
 -- The source keeps its promises: no debug gate, no isValid, bounded budget,
 -- decided and filled by the No Help runtime.
