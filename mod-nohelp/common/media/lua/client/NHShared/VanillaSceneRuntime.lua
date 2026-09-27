@@ -44,6 +44,12 @@ R.MARGIN=5
 R.RECORDS_PER_FRAME=100
 R.CHECK_TICKS=30
 R.MAX_FLAGGED=4096
+-- Flags far from the survivor are forgotten once the list is three quarters
+-- full: a long drive loads (and flags) a wide band of cells of which only
+-- those within REACH are ever looked at, and a full list would stop new
+-- scenes being noticed at all. A forgotten cell is flagged again when its
+-- squares load again; its waiting traces are kept.
+R.FORGET=150
 
 local flagged,nFlagged={},0
 local job
@@ -198,6 +204,15 @@ local function finish(j)
         -- runtime's decideScenes): never a second record for it.
         if cite then return end
         local key=SceneMatch.keyAt(x,y,j.z)
+        -- One scene, one record: a look that closes a match from traces kept
+        -- earlier may not know where the anchor was, and a scene lying across
+        -- a cell edge can be seen from the next cell too. The same kind
+        -- already confirmed in this cell or a neighbour is that scene.
+        local kcx,kcy=SceneMatch.cellOf(x,y)
+        for dx=-1,1 do for dy=-1,1 do
+            local r=gr.scene(SceneMatch.cellKey(kcx+dx,kcy+dy,j.z))
+            if r and r.kind==kind then return end
+        end end
         local rec={kind=kind,x=x,y=y,z=j.z,hours=now,source="seen"}
         local row=Scenes.get(kind)
         if row and row.anchor=="room-container" and at and at.room and at.room.bounds
@@ -268,6 +283,15 @@ local function tick()
     if not allowRead then readAllow() end
     local s=survivor()
     if not s then return end
+    if nFlagged>=R.MAX_FLAGGED*3/4 then
+        local far={}
+        for key,c in pairs(flagged) do
+            local mx,my=c.cx*SceneMatch.CELL+SceneMatch.CELL/2,c.cy*SceneMatch.CELL+SceneMatch.CELL/2
+            if c.z~=math.floor(s.z) or math.max(math.abs(mx-s.x),math.abs(my-s.y))>R.FORGET then far[#far+1]=key end
+        end
+        for _,key in ipairs(far) do flagged[key]=nil end
+        nFlagged=nFlagged-#far
+    end
     local keys=SceneMatch.nearCells(flagged,s.x,s.y,s.z,R.REACH,8)
     for _,key in ipairs(keys) do
         local rec=gr.scene(key)
@@ -283,6 +307,7 @@ function R.matchVehicle(x,y,z)
     local kind=confirmed[SceneMatch.keyAt(x,y,z)]
     return kind and "scene:"..kind or nil
 end
+function R.flaggedCount() return nFlagged end
 function R.reset()
     flagged,nFlagged,job,waiting,confirmed={},0,nil,{},{}
     allow,allowRead,ticks=nil,false,0

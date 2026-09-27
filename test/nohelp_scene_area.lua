@@ -199,6 +199,18 @@ assert(store[key] and store[key].kind=="RVSRichJerk" and store[key].source=="see
 local b2=store[key].bounds
 assert(b2 and b2.x1<=105 and b2.x2>105,"with its bounds")
 
+-- Across a cell edge: the same scene seen again from the next cell is not a
+-- second scene (no second clue).
+local keep1,keep2=world["105:205:0"],world["107:206:0"]
+world["105:205:0"]=nil; world["107:206:0"]=nil   -- its car moved on
+world["112:205:0"]={vehicle="Base.CarLuxury"}
+world["113:206:0"]={items={"Base.Briefcase_Money"}}
+handlers.LoadGridsquare(sq(112,205))
+run(Runtime.CHECK_TICKS*3)
+assert(store[SceneMatch.keyAt(112,205,0)]==nil or not store[SceneMatch.keyAt(112,205,0)].kind,"one scene, one record")
+world["112:205:0"]=nil; world["113:206:0"]=nil
+world["105:205:0"],world["107:206:0"]=keep1,keep2
+
 -- An emptied scene: the van is seen, its bag was already taken; later the
 -- bag is dropped back (or a second look finds it): the saved trace confirms it.
 world["305:205:0"]={vehicle="Base.StepVan_Plonkies"}
@@ -229,6 +241,20 @@ assert(store[SceneMatch.keyAt(905,205,0)]==nil,"a cell beyond reach is not looke
 player.x=900
 run(Runtime.CHECK_TICKS*2)
 assert(store[SceneMatch.keyAt(905,205,0)].kind=="RVSRichJerk","looked at once the survivor comes near")
+-- A long drive: flags far behind are forgotten before the list fills, so
+-- scenes near the survivor are still noticed; a near cell is kept.
+local before=Runtime.flaggedCount()
+for i=1,Runtime.MAX_FLAGGED do handlers.LoadGridsquare(sq(5000+(i%64)*10,5000+math.floor(i/64)*10)) end
+assert(Runtime.flaggedCount()==Runtime.MAX_FLAGGED,"the list is full")
+world["955:255:0"]={vehicle="Base.CarLuxury"}
+world["956:255:0"]={items={"Base.Briefcase_Money"}}
+player.x,player.y=950,250
+handlers.LoadGridsquare(sq(955,255))   -- refused while full
+run(Runtime.CHECK_TICKS)
+assert(Runtime.flaggedCount()<=before+1,"far flags forgotten: "..Runtime.flaggedCount())
+handlers.LoadGridsquare(sq(955,255))   -- its squares load again
+run(Runtime.CHECK_TICKS*3)
+assert((store[SceneMatch.keyAt(955,255,0)] or {}).kind=="RVSRichJerk","noticed after a long drive")
 print=realPrint
 local joined=table.concat(printed,"\n")
 assert(joined:find("scene-wait-start",1,true) and joined:find("scene-wait-end",1,true),"scene-wait is logged")
