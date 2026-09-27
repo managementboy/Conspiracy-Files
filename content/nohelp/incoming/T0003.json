@@ -1,0 +1,72 @@
+[
+  {
+    "id": "t0003-01",
+    "kind": "set",
+    "pieces": [
+      "Map",
+      "KeyRing"
+    ],
+    "rival_reading": "A farm gate can close after routine deliveries, and a key-return tally may be ordinary property control rather than evidence of a failed emergency restriction.",
+    "gloss": "A route record and returned key preserve conflicting times for access.",
+    "title": "Key returned after access was withdrawn",
+    "body": "The field gate's access line is crossed out before the final route time. A child's drawing is tied to the key; the only completed count records returned keys, not workers.",
+    "where": [
+      {
+        "place": "farm",
+        "spot": "furniture",
+        "lean": "containment",
+        "rival": "agricultural"
+      }
+    ],
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0003"
+    }
+  },
+  {
+    "id": "t0003-02",
+    "kind": "set",
+    "pieces": [
+      "Clipboard",
+      "WaterBottle"
+    ],
+    "rival_reading": "An emergency crew could record field supplies after a diversion; a blank source entry and a return signature do not establish a program malfunction.",
+    "gloss": "A field measurement and a return record remain together with ordinary work items.",
+    "title": "Field total entered before source",
+    "body": "The water total is entered beside two field rows before the source box is completed. A lunch wrapper is folded in the clipboard; the only signed line confirms the bottle was returned.",
+    "where": [
+      {
+        "place": "farm",
+        "spot": "furniture",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-malfunction"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0003"
+    }
+  }
+]
