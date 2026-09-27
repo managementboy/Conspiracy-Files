@@ -205,6 +205,27 @@ plan's directive check):
   least 3 clues, one of the other side). An open mark's clues lie within 16
   tiles of it. A place several maps or flyers point to has no extra minimum:
   the usual random number, still both sides.
+- **Revised after an `/adhd` run on the owner's pushback** (owner, same
+  session), superseding parts of "How a read map changes the game":
+  - *Decide early, create on arrival.* Which clues a place holds is decided
+    and saved early (reload never changes it), but the objects only come
+    into the world as the player approaches, in spots the player cannot see
+    — nothing sits at a place before the player comes.
+  - *No layout order.* Within a place, clues sit at random; the "letdown in
+    the layout" (map's side near the entrance, the other side deepest) is
+    dropped.
+  - *No promise clock and no last-mark tie.* Owner: "what does arriving late
+    mean? No player is in a hurry in PZ" and "How do you know the order of
+    the marks? Why should this be relevant?" — reading a map starts no timer,
+    and no mark is special by its order.
+  - *Light:* the dark-floor rule is dropped; a loose floor clue in a dark
+    room is spotted with the player's own light, like foraging. Containers,
+    bodies and Look it over work in the dark.
+  - *Looted drawers:* no special rule — a clue is only ever seen through the
+    hint and the inspection tool, so a drawer emptied earlier may hold one.
+  - Still standing: reading a map decides its places; zombies gather (to be
+    reconsidered with the owner at its live test, since it also grows with
+    time unfound).
 - **No maximum, for real.** Once the written clues are all placed, object sets
   may be placed again elsewhere as new copies with new stamps. This is not a
   respawn: a consumed copy never returns (DR-20260927-WORLD-KEEPS-EVERYTHING
