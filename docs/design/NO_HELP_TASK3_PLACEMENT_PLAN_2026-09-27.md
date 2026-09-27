@@ -246,7 +246,7 @@ playtests quote it.
 | NH-D3 placed procedurally | step 3 Pick test (same inputs, same result; no map-read input); step 4 replay test | area sources | `test/nohelp_pick.lua`; the reload replay test is owed by step 4 |
 | NH-D4 no maximum, a first-development cap | step 7 cap-off run, raise-the-cap save test, "stopped for another reason" failure; the cap exists only in `Pick.lua` | cap, and any other limit hit | `test/nohelp_pick.lua`; the cap-off soak and raise-the-cap save test are owed by step 7 |
 | NH-D5 half or more are object sets of vanilla items | step 3 Linter (per clue, vanilla types); step 7 on placed *and* spotted, lost sets counted | set share placed and spotted | `test/nohelp_pick.lua`; the share among clues actually spotted is owed by step 7 |
-| NH-D6 annotated maps included | step 4 trail fold-in and "read or not, same clue" test; step 7 every map destination holds both leans | trails started, clues per design | `test/nohelp_map_sites.lua`; `test/nohelp_trails.lua`; `test/nohelp_pick.lua`; `test/nohelp_area_runtime.lua`; that every map place holds both leans in what is actually placed in a real world is owed by step 7 |
+| NH-D6 annotated maps included | step 4 trail fold-in and "read or not, same clue" test; step 7 every map destination holds both leans | trails started, clues per design | `test/nohelp_map_sites.lua`; `test/nohelp_marked_area.lua`; `test/nohelp_trails.lua`; `test/nohelp_pick.lua`; `test/nohelp_area_runtime.lua`; that every map place holds both leans in what is actually placed in a real world is owed by step 7 |
 | NH-D7 vanilla mysteries detected and used | step 5 first citation, observer out of debug and saved; step 7 scene-anchored floor; step 8 timing spike | scene-anchored vs fallback | not yet written, due step 5 |
 
 ## 5. Rejected along the way
@@ -825,3 +825,29 @@ still waits for its live test; no visible playtest yet.
   split-screen (a second local player) is outside scope with multiplayer;
   density — with 257 map places plus buildings, whether maps still feel like
   a pull is for the playtest.
+
+### Step 4 review — a map marking a large area
+
+**Owner answer built:** "a map marking a large area may have clues anywhere
+in that area, preferably near the map's own annotation marks."
+- `MapSites` kind `window` (at most 44 x 44 around one mark) is now kind
+  `area`: the whole reviewed rectangle, or the box around a design's several
+  rectangles. 11 area places, from 38 x 80 to 430 x 630 (Irvington Speedway);
+  each keeps its map's own annotations and symbols as marks (`note=i`, taken
+  from `catalogue.json` stamps inside the rectangles, now `notes` in
+  `MapMediaDestinations`). Places 257 → 253: the second marks of WorldStashMap6
+  and 10 and the Irvington Speedway flyer now fall inside their area and join
+  it (so those places are shared, with a random lean).
+- Placement stays bounded (`MarkedArea.lua`): open ground tries at most 64
+  squares per attempt as before — 48 in growing rings (4, 8, 16, 22 tiles)
+  around marks the world picks, 16 anywhere in the area; an unloaded square
+  there is counted and passed over. Furniture: each attempt walks one window
+  of at most 44 a side centred on a mark, cycling through the marks in a
+  world-rotated order, then the rest of the area tile by tile; the cost per
+  step is unchanged. The 40-tile arrival ring is measured from the nearest
+  mark, not the rectangle's edge, so a 630-tile area does not "arrive" while
+  everything near its marks is still unloaded.
+- Found on the way: `Pick.hash` alone barely changes with the seed for a
+  small modulus (which of 37 marks came out the same in most worlds);
+  `MarkedArea` hashes twice. Other callers were not changed.
+Test: `test/nohelp_marked_area.lua`; `test/nohelp_map_sites.lua` updated.

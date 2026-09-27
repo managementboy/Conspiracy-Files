@@ -30,9 +30,13 @@ end
 local marked={}
 for _,s in ipairs(Sites.sites) do
     for _,m in ipairs(s.marks) do
-        local key=(m.design and "d:"..m.design or "p:"..m.print)..":"..m.mark
-        assert(not marked[key],D6..": "..key.." belongs to two places")
-        marked[key]=s
+        -- An area's own annotations (note=i) are where its map drew, not
+        -- marks that name a place; they are checked with the areas below.
+        if not m.note then
+            local key=(m.design and "d:"..m.design or "p:"..m.print)..":"..m.mark
+            assert(not marked[key],D6..": "..key.." belongs to two places")
+            marked[key]=s
+        end
     end
 end
 local designs,prints,marks=0,0,0
@@ -71,7 +75,7 @@ for _,row in ipairs(Book.rows) do
     local id,x,y,x2,y2=row:match("^([^|]+)|(%-?%d+)|(%-?%d+)|(%-?%d+)|(%-?%d+)|")
     rows[id]={x1=tonumber(x),y1=tonumber(y),x2=tonumber(x2),y2=tonumber(y2)}
 end
-local ids,kinds={}, {}
+local ids,kinds,areaSizes={}, {}, {}
 for _,s in ipairs(Sites.sites) do
     assert(not ids[s.areaId],D6..": "..s.areaId.." appears twice")
     ids[s.areaId]=true
@@ -85,9 +89,31 @@ for _,s in ipairs(Sites.sites) do
         local r=rows[s.buildingId]
         assert(s.areaId=="t3:"..s.buildingId,D6..": a building place uses the nearby scan's id")
         assert(r and r.x1==b.x1 and r.y1==b.y1 and r.x2==b.x2 and r.y2==b.y2,D6..": "..s.areaId.." matches its address-book row")
-    elseif s.kind=="window" then
-        assert(b.x2-b.x1<=Builder.WINDOW and b.y2-b.y1<=Builder.WINDOW,D6..": a window stays within 44 tiles")
+    elseif s.kind=="area" then
+        -- A map marking a large area (owner, 2026-09-27): the whole reviewed
+        -- area - the box around all of the design's rectangles, any size -
+        -- and the map's own annotations inside it, kept as marks.
         assert(not s.areaId:find("^t3:"),D6..": only a building uses a building id")
+        local design=s.marks[1].design
+        local areas=design and Catalogue.get(design).areas
+        assert(areas and #areas>=1,D6..": "..s.areaId.." comes from a design with reviewed rectangles")
+        local x1,y1,x2,y2=math.huge,math.huge,-math.huge,-math.huge
+        for _,a in ipairs(areas) do
+            x1,y1=math.min(x1,a.x1),math.min(y1,a.y1); x2,y2=math.max(x2,a.x2+1),math.max(y2,a.y2+1)
+        end
+        assert(b.x1==x1 and b.y1==y1 and b.x2==x2 and b.y2==y2,D6..": "..s.areaId.." is its whole reviewed area")
+        local notes=Catalogue.get(design).notes or {}
+        assert(#notes>=1,D6..": "..design.." keeps its annotation points")
+        local kept=0
+        for _,m in ipairs(s.marks) do
+            assert(m.x>=b.x1 and m.x<b.x2 and m.y>=b.y1 and m.y<b.y2,D6..": every mark of "..s.areaId.." lies in the area")
+            if m.note then
+                kept=kept+1
+                assert(m.design==design and notes[m.note].x==m.x and notes[m.note].y==m.y,D6..": an annotation is the map's own")
+            end
+        end
+        assert(kept==#notes,D6..": "..s.areaId.." keeps every annotation of its map ("..kept.."/"..#notes..")")
+        areaSizes[#areaSizes+1]=(b.x2-b.x1).."x"..(b.y2-b.y1)
     else
         assert(s.kind=="point",D6..": unknown place kind "..tostring(s.kind))
         assert(b.x2-b.x1==2*Builder.MARGIN+1 and b.y2-b.y1==2*Builder.MARGIN+1,D6..": a point place is its mark and a margin")
@@ -100,12 +126,13 @@ for _,s in ipairs(Sites.sites) do
         source={kind="map-research",reference=s.reference},paperStorage="unknown",containerTypes={},excluded=false}}})
     assert(ok,D6..": "..s.areaId.." is a valid catalog row: "..tostring(why))
 end
-assert((kinds.building or 0)>100 and (kinds.window or 0)>=1 and (kinds.point or 0)>=1,D6..": all three kinds of place occur")
+assert((kinds.building or 0)>100 and (kinds.area or 0)>=1 and (kinds.point or 0)>=1,D6..": all three kinds of place occur")
+assert(kinds.window==nil,D6..": no bounded window places remain")
 
 -- Two maps marking one restaurant (MulStashMap11 and 16) are one place that
 -- keeps both, first in catalogue order.
 local both=marked["d:MulStashMap11:1"]
 assert(both and both==marked["d:MulStashMap16:1"],D6..": one place for two maps marking one building")
 assert(both.marks[1].design=="MulStashMap11" and both.marks[2].design=="MulStashMap16",D6..": marks keep static order")
-print(string.format("nohelp map sites: %d designs (%d marks) and %d prints -> %d places (%d building, %d window, %d point)",
-    designs,marks,prints,#Sites.sites,kinds.building or 0,kinds.window or 0,kinds.point or 0))
+print(string.format("nohelp map sites: %d designs (%d marks) and %d prints -> %d places (%d building, %d area [%s], %d point)",
+    designs,marks,prints,#Sites.sites,kinds.building or 0,kinds.area or 0,table.concat(areaSizes," "),kinds.point or 0))

@@ -15,16 +15,21 @@
 --   1. the address-book building the mark's point stands in: area id
 --      "t3:"..building id, the same id the nearby scan gives that building,
 --      so one building is never decided twice by two paths;
---   2. else, for a design with reviewed rectangles (MapMediaDestinations), a
---      window of at most 44 x 44 tiles inside the rectangle holding the point;
+--   2. else, for a design with reviewed rectangles (MapMediaDestinations), the
+--      whole marked AREA: the reviewed rectangle, or the box around all of the
+--      design's rectangles (owner, 2026-09-27: "a map marking a large area may
+--      have clues anywhere in that area, preferably near the map's own
+--      annotation marks"). Some are hundreds of tiles a side; the runtime keeps
+--      placement bounded by trying near the marks first (GroundSpots.area*);
 --   3. else a box with a sixteen-tile margin around the point (the margin the
 --      reviewed rectangles use).
 -- Marks that land on the same building, or inside a place already made from
 -- an earlier mark, are ONE place that keeps every mark that named it, in
--- static order (maps in catalogue order, then flyers).
+-- static order (maps in catalogue order, then flyers). An area place then also
+-- keeps its design's own annotations and symbols (MapMediaDestinations `notes`)
+-- as marks {design=,note=i,x=,y=}: where on the map the writer drew.
 local M={}
-M.REVISION="mapsites-1"
-M.WINDOW=44
+M.REVISION="mapsites-2"
 M.MARGIN=16
 M.SHARED="mod-nohelp/common/media/lua/shared/"
 M.OUT=M.SHARED.."NHShared/Generated/MapSites.lua"
@@ -64,18 +69,18 @@ local function buildingAt(buildings,x,y)
     return best and best.b
 end
 
--- A window of at most WINDOW tiles a side inside reviewed rectangle `a`
--- (inclusive corners, as MapMediaDestinations.contains reads them), centred on
--- the point where the rectangle allows.
-local function window(a,x,y)
-    local function span(lo,hi,p)
-        local width=math.min(M.WINDOW,hi-lo+1)
-        local start=math.max(lo,math.min(p-math.floor(width/2),hi+1-width))
-        return start,start+width
+-- The box around every reviewed rectangle of a design. The rectangles'
+-- corners are inclusive (MapMediaDestinations.contains); x2/y2 here exclusive.
+local function areaBounds(areas)
+    local b
+    for _,a in ipairs(areas) do
+        if not b then b={x1=a.x1,y1=a.y1,x2=a.x2+1,y2=a.y2+1,z=0}
+        else
+            b.x1,b.y1=math.min(b.x1,a.x1),math.min(b.y1,a.y1)
+            b.x2,b.y2=math.max(b.x2,a.x2+1),math.max(b.y2,a.y2+1)
+        end
     end
-    local x1,x2=span(a.x1,a.x2,x)
-    local y1,y2=span(a.y1,a.y2,y)
-    return {x1=x1,y1=y1,x2=x2,y2=y2,z=0}
+    return b
 end
 
 local function inside(bounds,x,y) return x>=bounds.x1 and x<bounds.x2 and y>=bounds.y1 and y<bounds.y2 end
@@ -85,7 +90,7 @@ function M.build(Catalogue,Book)
     local sites,byArea={},{}
     local excluded={}
     for _,e in ipairs(M.EXCLUDED) do excluded[e.id]=e.reason end
-    local function add(ref,x,y,areas)
+    local function add(ref,x,y,areas,notes)
         local b=buildingAt(buildings,x,y)
         local key,site
         if b then
@@ -108,7 +113,8 @@ function M.build(Catalogue,Book)
                 end
                 key=(ref.design and ("mark:"..ref.design) or ("flyer:"..ref.print))..":"..ref.mark
                 if reviewed then
-                    site={areaId=key,place="mapNamed",kind="window",bounds=window(reviewed,x,y),marks={}}
+                    site={areaId=key,place="mapNamed",kind="area",bounds=areaBounds(areas),marks={},
+                        design=ref.design,notes=notes or {}}
                 else
                     site={areaId=key,place="mapNamed",kind="point",
                         bounds={x1=x-M.MARGIN,y1=y-M.MARGIN,x2=x+M.MARGIN+1,y2=y+M.MARGIN+1,z=0},marks={}}
@@ -119,7 +125,7 @@ function M.build(Catalogue,Book)
             byArea[site.areaId]=site; sites[#sites+1]=site
             site.reference=(ref.design or ref.print).." mark "..ref.mark.." at "..x..","..y
                 ..(site.kind=="building" and " in address-book building "..site.buildingId
-                   or site.kind=="window" and " inside its reviewed rectangle" or " (no building there)")
+                   or site.kind=="area" and ", the whole area its map marks" or " (no building there)")
         end
         ref.x,ref.y=x,y
         site.marks[#site.marks+1]=ref
@@ -129,13 +135,19 @@ function M.build(Catalogue,Book)
         if not excluded[id] then
             local b=Catalogue.get(id)
             designs[#designs+1]=id
-            for i,t in ipairs(b.targets or {}) do add({design=id,mark=i},t.x,t.y,b.areas) end
+            for i,t in ipairs(b.targets or {}) do add({design=id,mark=i},t.x,t.y,b.areas,b.notes) end
         end
     end
     for _,id in ipairs(Catalogue.printList) do
         if not excluded[id] then
             prints[#prints+1]=id
             for i,t in ipairs(Catalogue.print(id).locations or {}) do add({print=id,mark=i},t.x,t.y,nil) end
+        end
+    end
+    -- An area's own annotations follow the marks that named it.
+    for _,s in ipairs(sites) do
+        if s.kind=="area" then
+            for i,n in ipairs(s.notes) do s.marks[#s.marks+1]={design=s.design,note=i,x=n.x,y=n.y} end
         end
     end
     return {sites=sites,designs=designs,prints=prints,book=Book}
@@ -150,9 +162,10 @@ function M.render(result)
     w("-- from NHShared/MapMediaCatalogue.lua (with MapMediaDestinations.lua) and")
     w("-- NHShared/Generated/AddressBook.lua revision "..result.book.revision..".")
     w("-- One entry per place; `marks` lists every map mark and flyer place that names")
-    w("-- it, maps first in catalogue order. kind: building (an address-book building,")
-    w("-- area id \"t3:\"..id), window (inside a reviewed rectangle, at most "..M.WINDOW.." tiles")
-    w("-- a side) or point (a "..M.MARGIN.."-tile margin around the mark). Bounds: x2/y2 exclusive.")
+    w("-- it, maps first in catalogue order; an area's marks then add its map's own")
+    w("-- annotations (note=i). kind: building (an address-book building, area id")
+    w("-- \"t3:\"..id), area (the whole reviewed area a map marks, any size) or point")
+    w("-- (a "..M.MARGIN.."-tile margin around the mark). Bounds: x2/y2 exclusive.")
     w("local M={revision="..q(M.REVISION)..",addressBook="..q(result.book.revision)
         ..",map="..q(result.book.map)..",game="..q(result.book.game).."}")
     w("M.excluded={")
@@ -169,7 +182,7 @@ function M.render(result)
         local marks={}
         for _,m in ipairs(s.marks) do
             marks[#marks+1]="{"..(m.design and ("design="..q(m.design)) or ("print="..q(m.print)))
-                ..",mark="..m.mark..",x="..m.x..",y="..m.y.."}"
+                ..(m.note and (",note="..m.note) or (",mark="..m.mark))..",x="..m.x..",y="..m.y.."}"
         end
         local b=s.bounds
         w("{areaId="..q(s.areaId)..",place="..q(s.place)..",kind="..q(s.kind)
@@ -195,7 +208,12 @@ if #args>0 then
     local f=assert(io.open(out,"wb")); f:write(text); f:close()
     local kinds={}
     for _,s in ipairs(result.sites) do kinds[s.kind]=(kinds[s.kind] or 0)+1 end
-    print(string.format("%d designs, %d prints -> %d places (%d building, %d window, %d point); %s (%d bytes)",
-        #result.designs,#result.prints,#result.sites,kinds.building or 0,kinds.window or 0,kinds.point or 0,out,#text))
+    print(string.format("%d designs, %d prints -> %d places (%d building, %d area, %d point); %s (%d bytes)",
+        #result.designs,#result.prints,#result.sites,kinds.building or 0,kinds.area or 0,kinds.point or 0,out,#text))
+    for _,s in ipairs(result.sites) do
+        if s.kind=="area" then
+            print(string.format("  %s %dx%d, %d marks",s.areaId,s.bounds.x2-s.bounds.x1,s.bounds.y2-s.bounds.y1,#s.marks))
+        end
+    end
 end
 return M

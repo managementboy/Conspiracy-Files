@@ -20,6 +20,7 @@ local Visited=require("NHShared/VisitedBuildingLog")
 local Reachability=require("NHShared/ReachabilityAdapter")
 local MapSites=require("NHShared/Generated/MapSites")
 local GroundSpots=require("NHShared/GroundSpots")
+local MarkedArea=require("NHShared/MarkedArea")
 require("NHShared/DiscoveryLog")
 NHShared=NHShared or {}
 local R=NHShared.GeneratedRuntime or {}
@@ -533,6 +534,22 @@ local function mapSites()
     mapIndex={byArea=byArea,byDesign=byDesign,buckets=buckets}
     return mapIndex
 end
+-- A WHOLE AREA A MAP MARKS (MapSites kind "area", owner 2026-09-27): its
+-- marks and annotations as distinct points, or nil for any other place. The
+-- container scan, the ground scan and the arrival ring use them (MarkedArea).
+local areaPointCache={}
+local function areaPoints(site)
+    local id=site and site.id
+    if id==nil then return nil end
+    local cached=areaPointCache[id]
+    if cached==nil then
+        local e=mapSites().byArea[id]
+        cached=e and e.kind=="area" and MarkedArea.points(e.marks) or false
+        areaPointCache[id]=cached
+    end
+    return cached or nil
+end
+R.areaPoints=areaPoints
 local function decideFrom(result)
     local hints,rooms=placeFacts(result)
     withReachability(result,function(reachable)
@@ -1064,6 +1081,13 @@ end
 -- earlier (FixedContainers.fresh); the open loot window still refuses. Within
 -- a place the spot is the world's seeded choice (StorageChoices.choose), with
 -- no layout order (owner, 2026-09-27: "clues sit at random").
+--
+-- A WHOLE AREA A MAP MARKS (up to 430 x 630 tiles) is never walked whole: each
+-- attempt walks one window of at most MarkedArea.WINDOW a side, centred on a
+-- mark the world picks for this clue and attempt, cycling through the marks,
+-- then the rest of the area (MarkedArea.window). The cost per step is the
+-- same as anywhere; the attempt count is session-only, like the ground cursor.
+local windowCursor={}
 local function boundsScan(site,done,accept,salt,searchedOk)
     local b=site.bounds
     local kinds={}; for _,kind in ipairs(site.containerTypes) do kinds[kind]=true end
@@ -1071,7 +1095,15 @@ local function boundsScan(site,done,accept,salt,searchedOk)
     -- kind will do, each still checked live below (Session.unobserved).
     local any=Session.unobserved(site)
     local margin=(any or kinds[Storage.MAILBOX]) and Session.OUTDOOR_RADIUS or 0
-    local x1,y1,x2,y2=b.x1-margin,b.y1-margin,b.x2+margin,b.y2+margin
+    local walk=b
+    local points=areaPoints(site)
+    if points then
+        local docId=tostring(salt or site.id)
+        local attempt=windowCursor[docId] or 0
+        windowCursor[docId]=attempt+1
+        walk=MarkedArea.window(R.worldSeed() or 0,site.id,docId,attempt,b,points)
+    end
+    local x1,y1,x2,y2=walk.x1-margin,walk.y1-margin,walk.x2+margin,walk.y2+margin
     local x,y,objects,oi,ci=x1,y1,nil,0,0
     local pool=StorageChoices.new()
     return function()
@@ -1108,6 +1140,7 @@ local function boundsScan(site,done,accept,salt,searchedOk)
         return false
     end
 end
+R.boundsScan=boundsScan
 -- Every physical spot a clue already holds, in any case (P4-R67). Above the
 -- relocation job, which also asks it; the filler's note on it is below.
 local function usedPhysicalKeys()
@@ -1192,9 +1225,15 @@ local function groundFacts(x,y,z,key,keys,zombies,survivor)
         return v
     end})
 end
+-- A WHOLE AREA A MAP MARKS: squares come from MarkedArea.groundSquare
+-- instead - most near the map's marks in growing rings, the rest anywhere in
+-- the area - still at most MAX_TRIES per attempt. There a square not loaded is
+-- counted ("unloaded") and the attempt goes on: much of such an area is
+-- always far from the survivor, and the stream of squares never runs dry.
 local function groundScan(site,done,accept,salt,keys)
     local b=site.bounds
-    local box=GroundSpots.box(b,Session.OUTDOOR_RADIUS)
+    local points=areaPoints(site)
+    local box=points and b or GroundSpots.box(b,Session.OUTDOOR_RADIUS)
     local seed=R.worldSeed() or 0
     local docId=tostring(salt or site.id)
     local start=groundCursor[docId] or 0
@@ -1232,7 +1271,9 @@ local function groundScan(site,done,accept,salt,keys)
         end
         if tries>=GroundSpots.MAX_TRIES or found then return finish() end
         tries=tries+1
-        local x,y=GroundSpots.square(seed,site.id,docId,start+tries,box)
+        local x,y
+        if points then x,y=MarkedArea.groundSquare(seed,site.id,docId,start+tries,tries,box,points)
+        else x,y=GroundSpots.square(seed,site.id,docId,start+tries,box) end
         if not x then return finish() end
         local key="ground:"..x..":"..y..":"..b.z
         if seen[key] then return false end
@@ -1240,7 +1281,10 @@ local function groundScan(site,done,accept,salt,keys)
         local facts=groundFacts(x,y,b.z,key,keys,zombies,survivor)
         -- A square not loaded yet (a fast arrival) is tried again on a later
         -- attempt, not skipped: stop here without spending it.
-        if not facts.exists then tries=tries-1; return finish() end
+        if not facts.exists then
+            if points then refused.unloaded=(refused.unloaded or 0)+1; return false end
+            tries=tries-1; return finish()
+        end
         local ok,why=GroundSpots.check(facts)
         if ok then
             local target={x=x,y=y,z=b.z,objectIndex=0,containerIndex=0,containerType=Session.GROUND_CONTAINER,
@@ -1510,16 +1554,23 @@ local fillCursor=setmetatable({},{__mode="k"})
 -- another floor, or beyond StaleClue's guard radius (StaleClue.outOfSight).
 R.ARRIVE_TILES=40
 -- How far the survivor is from a site's bounds (Chebyshev, 0 inside), or nil
--- when there is no survivor to measure from.
+-- when there is no survivor to measure from. A WHOLE AREA A MAP MARKS is
+-- measured from its nearest mark instead (MarkedArea.distance): its clues
+-- are sought near the marks first, and an area hundreds of tiles across
+-- would otherwise "arrive" from 40 tiles outside a far corner, with every
+-- square near its marks still unloaded.
 local function survivorDistance(site)
     local p=getPlayer and getPlayer()
     local b=site and site.bounds
     if not p or not b then return nil end
     local px,py=p:getX(),p:getY()
+    local points=areaPoints(site)
+    if points and #points>0 then return MarkedArea.distance(points,px,py) end
     local ox=math.max(b.x1-px,0,px-(b.x2-1))
     local oy=math.max(b.y1-py,0,py-(b.y2-1))
     return math.floor(math.max(ox,oy))
 end
+R.survivorDistance=survivorDistance
 local function farFromSurvivor(site)
     local d=survivorDistance(site)
     return d~=nil and d>R.ARRIVE_TILES
