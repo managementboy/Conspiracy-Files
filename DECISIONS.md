@@ -180,6 +180,24 @@ plan's directive check):
   side; **every** mark on a map gets clues, and those clues are written from
   the text of the map's own annotations; places named on vanilla flyers and
   brochures become clue places too, now.
+- **How a read map changes the game** (owner, same session, after an `/adhd`
+  run): build all three — (1) the letdown in the layout: clues that fit the
+  map's promise sit nearest the entrance, the other side's clue deepest
+  inside; a multi-mark map's last mark is an exact tie; a place several maps
+  mark holds one extra other-side clue per extra map, fixed from the static
+  list of maps, never from reading order; (2) the promise clock: 3 in-game
+  days after a map is read, its marks' unfound, unshown clues begin their
+  silent within-place moves; unread maps' marks stay still; (3) zombies
+  gather: a read map's marked places quietly draw zombies with the game's own
+  zombie-only noise, more while clues remain unfound — only after a visible
+  live test shows it works far from the player. What each mark holds stays
+  fixed at world creation; reading and reloading never change it. A read
+  hour is saved as a world event, not as belief.
+- **Bodies:** filling a body's pockets a moment early (same contents as
+  opening it) is fine. Clothing classes per conspiracy for the rule that
+  sometimes dresses a body for the other side: containment — police,
+  military, medical staff, hazard suits; agricultural — farm clothes,
+  workers' overalls, hazard suits (both).
 - **No maximum, for real.** Once the written clues are all placed, object sets
   may be placed again elsewhere as new copies with new stamps. This is not a
   respawn: a consumed copy never returns (DR-20260927-WORLD-KEEPS-EVERYTHING

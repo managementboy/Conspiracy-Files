@@ -640,3 +640,32 @@ visible playtest.
 acceptable; which clothing fits each conspiracy, for the rule that sometimes
 dresses a body for the other side; does "farm clothing" include more than the
 vanilla Farmer outfit.
+
+### Annotated maps change the game — `/adhd` run and owner decisions
+
+Five frames (game design, markets, speedrunner, biology, regulator), three
+deepened against the code. **Chosen:** letdown in the layout, the promise
+clock (3 days), zombies gather (after a live test). See DECISIONS.md.
+
+**Build notes from the deepening:**
+- *Layout:* depth = how far a candidate sits inside the site's bounds (outer
+  band: mailbox, ground, vehicle; inside: furniture); for marks with their own
+  point, nearness to the mark. The filler already has an unused ranking hook
+  in `StorageChoices.choose`; ranking orders choices and never refuses. Risk:
+  a partly loaded building can put the deep clue in the front room — hold the
+  other-side clue until a fuller scan.
+- *Clock:* the read hour is already saved (`MapMediaState` trails `at`); a
+  site's staleness starts at the earliest read of any map marking it plus 3
+  days; the trail seed becomes a hash of world seed and map, not a random
+  draw at reading. Clues far away move when the player arrives, one move at a
+  time.
+- *Zombies:* the game's `addSound` (used by its own zombie-population debug
+  tool) draws zombies to a point without any sound the player hears; a pure
+  function of world seed, map, mark, hours since reading and unfound clues
+  decides each hourly pulse; capped so waiting costs more but never makes a
+  place impossible. First: a visible live test that it moves zombies in
+  unloaded areas.
+
+**Still to settle with the owner later:** what each trail's own words point
+toward (story direction); marks decided far from the player have no observed
+storage, so their furniture must be checked live.
