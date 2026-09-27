@@ -368,7 +368,10 @@ paraphrasing.
    current (still Dead-Air-named) shape before designing the replacement.
 4. **Hand-curate exactly one real vanilla-scene citation** (round 3, step 3's
    first concrete step) before building any citation-audit tooling.
-5. **Begin actual content authoring** for Theory A and Theory B once (1)-(2)
+5. **Begin actual content authoring** — the owner plans for another AI to
+   write the content; its handoff is
+   `docs/management/NO_HELP_CONTENT_WRITER_HANDOFF_2026-09-27.md`.
+   Original text: for Theory A and Theory B once (1)-(2)
    are settled — the owner has explicitly asked for this to happen, and has
    not yet been asked to confirm anything beyond the two premises themselves
    (no specific evidence items, locations, or documents have been authored
