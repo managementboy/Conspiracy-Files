@@ -94,6 +94,18 @@ scene or map to the owner). What each serial means is in
 `docs/writer-only/nohelp-tickets.tsv` (writer-only). **Take the lowest open
 serial**, and only one at a time. Row ids are `t####-NN`.
 
+**Rounds (owner, 2026-09-27: the relay was too slow).** Work in rounds of up
+to **5 tickets**: deliver them one after another, one commit each, without
+waiting for Claude in between; then set the baton to CLAUDE with `REVIEW`
+once, naming the serials in `NEXT`. Before delivering any row, run the
+**blind self-read** yourself: the prompt in `tools/cluegates/blind_reread.md`,
+at least 3 fresh reads per row with nothing but the rendered clue; if no read
+names the rival side (or most say NEITHER), rewrite the row before delivering.
+Claude reviews the whole round at once, runs the official blind re-read, fixes
+small wording itself (noted in the review, never a change of lean, place,
+pieces or axioms), and returns only rows with real problems. Returned rows are
+fixed first in the next round, alongside new tickets.
+
 - `T0000` is **stage 0**: the frozen axiom list per conspiracy (short ids and
   one-line glosses) and a one-line gloss per story you plan (maps, flyers,
   persons, scenes). Deliver it to `content/nohelp/incoming/T0000.json`; set

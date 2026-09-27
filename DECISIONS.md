@@ -283,6 +283,11 @@ plan's directive check):
   left-alone scenes still holds a clue, never on that character; a scene that
   is mostly about an animal but also leaves a person and a dropped object
   holds a clue on the ground. 125 scene kinds hold a clue, 15 do not.
+- **Content in rounds** (owner, same session: relaying every clue between the
+  two AIs took too long): ChatGPT delivers up to five tickets per round
+  without waiting, checking each clue with the blind-reader question first;
+  Claude reviews the round at once, fixes small wording itself and returns
+  only real problems. The owner relays one message per round.
 - **No maximum, for real.** Once the written clues are all placed, object sets
   may be placed again elsewhere as new copies with new stamps. This is not a
   respawn: a consumed copy never returns (DR-20260927-WORLD-KEEPS-EVERYTHING
