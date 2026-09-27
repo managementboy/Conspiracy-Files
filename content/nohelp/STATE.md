@@ -14,7 +14,7 @@ CHATGPT since 2026-09-27 because WRITING
 T0001
 
 ## NEXT
-T0000 accepted (approved/SIGNOFF; see its T0012 note); start T0001
+T0001 WRITING
 
 ## OPEN RETURNS
 none
@@ -23,7 +23,7 @@ none
 none
 
 ## LAST ADHD
-2026-09-27 T0000
+2026-09-27 T0001
 
 ## PROGRESS
-NOT DONE: maps 0/125, flyers 0/133, scenes 0/125, sets 0/0, balance 0/0, tickets 1/19 @7b874de
+NOT DONE: maps 0/125, flyers 0/133, scenes 0/125, sets 0/0, balance 0/0, tickets 1/19 @93f83c8
