@@ -37,6 +37,16 @@ assert(mover:find("for _,it in ipairs(old) do oldContainer:Remove(it) end",1,tru
     "every old piece is removed, not only the first")
 assert(mover:find("for _,piece in ipairs(newItem) do",1,true),"every rebuilt piece is added")
 assert(not mover:find(":Remove(it); break",1,true),"no longer stops after removing one item")
+-- A set's number is the sum of its pieces even when no total is stated
+-- (phase 2 review: counted as one, every set would have been refused).
+local counter=runtime:match("local function expectedCount%(api,id%).-\nend\n")
+assert(counter and counter:find("for _,m in ipairs(d.members) do n=n+",1,true),
+    "a set is counted by its pieces")
+-- Whole or not at all on the way in: a refused piece takes the landed ones back.
+assert(mover:find("for _,piece in ipairs(landed) do",1,true),"pieces that landed are taken back if one is refused")
+-- And the destination is asked for room for the whole set before anything moves.
+assert(mover:find("hasRoomFor(p,weight)",1,true),"the destination must have room for every piece")
+assert(mover:find("hasRoomFor",1,true)<mover:find("oldContainer:Remove",1,true),"room is checked before anything is removed")
 -- Piles (many copies of one thing, no members) still do not move: a quantity
 -- is a fact about a place.
 assert(mover:find("expectedCount(api,candidate)==1 or isObjectSet(api,candidate)",1,true),

@@ -336,3 +336,25 @@ count). Piles (many copies of one thing) still never move. Test:
 playtest. The old generator's rule that a multi-item clue holds 5-24 items
 (`Story.lua`) does not fit 2-4 piece sets; it belongs to the generator that
 step 3 replaces, and step 3's per-area contract must not inherit it.
+
+**Phase 2 review** (3am on-call, competitor, remove-the-assumption):
+- **Fixed — a set would never have moved:** the clue's count read
+  `quantity` only, so a set stating no total counted as one and every move was
+  refused. It now sums its pieces.
+- **Fixed — a half-failed move split a set:** if the destination refused a
+  piece, the pieces already added stayed. Now they are taken back out, and
+  before anything is removed the destination is asked for room for every
+  piece; no room leaves the set where it is, whole.
+- **Fixed — No Help was never engine-parsed by the suite:**
+  `tools/kahlua/run.sh --parse-all` now covers `mod-nohelp/common` too
+  (293 files, 0 failures). The shipped suite's failures are the nine already
+  on the known red list before this work; none is new.
+- **Carried forward:** `test/nohelp_sets.lua` checks the mover by its source
+  text; a stubbed run that counts adds and removes is better and is owed
+  before step 6 changes the mover again. A recognised set's pieces all take
+  the clue's title, and some wear words ("opened", "spent") are not applied
+  on any creation path; per-piece names and wear come with authoring (step 3).
+  The members format must be written down as step 3's contract. The move of
+  a set is not visible to a watching player, because moves never run within
+  the proximity guard — but a set should also stop moving once Search Mode has
+  shown it (step 6), and that refusal is not built yet.

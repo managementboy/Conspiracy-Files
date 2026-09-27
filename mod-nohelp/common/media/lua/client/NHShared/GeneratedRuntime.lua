@@ -210,7 +210,17 @@ end
 -- a cupboard of bleach rather than a bottle of it (ObjectRules.accumulation).
 local function expectedCount(api,id)
     for _,d in ipairs(api.snapshot().case.documents) do
-        if d.id==id then return d.quantity or 1 end
+        if d.id==id then
+            -- A set's number is the sum of its pieces, whether or not the
+            -- document also states a total: a No Help set need not carry one,
+            -- and counting it as one item would refuse every move of it.
+            if type(d.members)=="table" and #d.members>0 then
+                local n=0
+                for _,m in ipairs(d.members) do n=n+(tonumber(m.quantity) or 1) end
+                return n
+            end
+            return d.quantity or 1
+        end
     end
     return 1
 end
@@ -1947,8 +1957,23 @@ local function relocation(api)
         -- periodic identity scan mark the document "conflict", which is
         -- sticky, so the clue would be dead permanently and Inspect would
         -- refuse it forever. Remove the verified old pieces first; the new
-        -- copy is already built and detached, so the window is two engine
-        -- calls with no yield between them.
+        -- pieces are already built and detached, and the removes and adds
+        -- below run with no yield between them.
+        -- A set weighs more than the single item a destination was chosen
+        -- for. Ask first, and leave the clue where it is if there is no room:
+        -- refusing here keeps it whole, where a refused add below loses it.
+        do
+            local weight=0
+            for _,piece in ipairs(newItem) do
+                local okW,w=pcall(function() return piece:getWeight() end)
+                weight=weight+((okW and tonumber(w)) or 0)
+            end
+            local okRoom,room=pcall(function() return newDestination:hasRoomFor(p,weight) end)
+            if okRoom and room==false then
+                log("[CF-G2-RELOCATE] "..id..": no room for "..#newItem.." piece(s) at the destination; leaving in place")
+                return true
+            end
+        end
         local items=oldContainer:getItems()
         local old={}
         for i=0,items:size()-1 do
@@ -1956,11 +1981,15 @@ local function relocation(api)
             if md and md.cfPhysicalToken==a.physicalToken then old[#old+1]=it end
         end
         for _,it in ipairs(old) do oldContainer:Remove(it) end
-        local added=true
+        -- Whole or not at all, on the way in too: if any piece is refused, the
+        -- pieces that did land are taken back out, so a set is never split
+        -- into two half-sets carrying one token.
+        local added,landed=true,{}
         for _,piece in ipairs(newItem) do
-            if not newDestination:AddItem(piece) then added=false end
+            if newDestination:AddItem(piece) then landed[#landed+1]=piece else added=false; break end
         end
         if not added then
+            for _,piece in ipairs(landed) do pcall(function() newDestination:Remove(piece) end) end
             -- The old copy is already gone. Record the honest uncertainty
             -- rather than leaving canonical state claiming a placed item.
             checked(api.status(id,"unknown"))
