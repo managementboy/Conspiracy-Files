@@ -269,6 +269,15 @@ plan's directive check):
   with a blind re-read by a different AI. The owner stays unspoiled
   (blind-play protection): scene, character, location and evidence specifics
   live in `docs/writer-only/`, never in owner-facing documents or updates.
+- **Tone and voice for No Help** (owner, 2026-09-27): the same tone as the
+  original mod — fatalistic, bureaucratic dark comedy throughout
+  (DR-20260919-Q24, DR-20260920-WRITING-GROUNDING-TONE), grounded in real
+  vanilla places and businesses, the humour arising from the event, the
+  institution's priorities and the person's own stake, never a joke line.
+  Voice: only the world's — clues are what people left behind; the survivor
+  never comments. Because generation must stay sparse, the comedy comes from
+  one human detail and an institution's misplaced priorities, never from
+  stacked official jargon.
 - **No maximum, for real.** Once the written clues are all placed, object sets
   may be placed again elsewhere as new copies with new stamps. This is not a
   respawn: a consumed copy never returns (DR-20260927-WORLD-KEEPS-EVERYTHING

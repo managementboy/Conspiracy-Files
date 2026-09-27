@@ -46,6 +46,22 @@ owner and must not return in any form — not by name, not rebuilt from its
 parts. If you are unsure whether an idea drifts toward another premise, stop
 and ask. The retired pair is deliberately not described here.
 
+## 2a. Tone and voice (owner decision)
+
+- **Tone:** fatalistic, bureaucratic dark comedy, throughout — the same tone
+  as the original mod. The humour comes from the event, an institution's
+  priorities and a person's own stake: someone following a procedure while
+  the world ends, a form that cares about the wrong thing. It is never a
+  joke, never a witty last line, never mockery of the dead.
+- **Grounded:** use real vanilla places and businesses where they fit; never
+  invent a link between a named vanilla business or lore figure and the
+  conspiracies just to mention them.
+- **Voice:** only the world's. A clue is what someone left behind — a note, a
+  receipt, a card, an arrangement of objects. The survivor never comments,
+  and no clue addresses the player.
+- **Sparse:** the comedy lives in one human detail beside one institutional
+  one, never in stacked jargon, codes or official language (section 4).
+
 ## 3. The rules that make a clue work (read in this order)
 
 What the player sees, in order: the survivor sometimes says a wordless "Hm?"
