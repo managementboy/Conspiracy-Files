@@ -1098,3 +1098,43 @@ lost; there is no floor on the share of scene-anchored clues (no number has
 been set); the save-growth measure is a plain-Lua serialiser, not the game's
 own writer; the synthetic list is placeholder rows, so the real list's shape
 still needs the same run once it is written.
+
+### Phase review of steps 5 and 7 — `/adhd` (2026-09-27)
+
+Frames: 3am on-call, competitor trying to break it, speedrunner, regulator,
+biology (five isolated runs, 30 ideas). Question: what could still go wrong
+before or at the first visible real-game test, and what should that test look
+for?
+
+Clusters: *seeing silent failures* (a reason log per placement, an abstain
+counter, a canary for test worlds); *throughput and stutter* (save cost late in
+a long game, scan budget under load, driving past scenes); *match correctness*
+(a scene across a cell edge, ordinary clutter mistaken for a scene, a matched
+place later changed); *persistence* (save and reload, loot respawn, kill during
+a save); out of scope for now: multiplayer, clock jumps (already handled),
+teleport tools.
+
+Deepened (top three) and what came of them, each checked against the code:
+
+1. **Driving past scenes.** No clue is lost: a waiting No Help clue never
+   expires (`Session.expiredIds` returns nothing for the world record) and is
+   created on the next arrival. But a long drive flags far more cells than are
+   ever looked at, and the flag list was capped with no eviction — once full,
+   new scenes stopped being noticed. **Fixed:** far flags are forgotten once
+   the list is three quarters full (a forgotten cell is flagged again when its
+   squares load again); tested with a full list.
+2. **A scene across a cell edge.** A look that closes a match from earlier
+   kept traces can lose the anchor's position and key the scene to the wrong
+   cell, so one scene could get two clues. **Fixed:** the same kind already
+   confirmed in that cell or a neighbour is the same scene; the test fails
+   without the fix.
+3. **Ordinary clutter mistaken for a scene.** Confirmed: for at least one
+   verified kind both traces also spawn as ordinary vehicles and loot, so a
+   parked car plus a stray item would "confirm" a scene that is not there.
+   **Being fixed:** a signature must include at least one trace only that
+   scene creates; kinds without one are demoted to unverified.
+
+Carried into the real-game test (step 8): watch for stutter when clues are
+placed late in a long game; read the scene-wait log on a drive at walking,
+driving and top speed; save and reload next to a confirmed scene; check that
+ordinary clutter produces no scene.
