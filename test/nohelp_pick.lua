@@ -53,6 +53,32 @@ local b=Pick.choose{clues=clues,area=area,ledger=fresh(),seed=7,version="v1",map
 assert(#a==#b,"NH-D3: same world, same number of clues")
 for i=1,#a do assert(a[i].clue==b[i].clue and a[i].spot==b[i].spot,"NH-D3: same world, same clues, whatever the player read") end
 
+-- The order is spread by the world, not by how clues happen to be named:
+-- across seeds, the first clue picked at a place is not always the same one.
+local firsts={}
+for seed=1,40 do
+    local p=Pick.choose{clues=clues,area={id="spread",place="farm"},ledger=fresh(),seed=seed,version="v1"}
+    firsts[p[1].clue]=true
+end
+local distinct=0; for _ in pairs(firsts) do distinct=distinct+1 end
+-- Every clue that could open this place does, on some world: the first pick at
+-- an empty world is a containment set here (one of each conspiracy, sets
+-- first), so every such set should come first somewhere.
+local possible=0
+for _,c in ipairs(clues) do
+    for _,w in ipairs(c.where) do
+        if w.place=="farm" and w.lean=="containment" and c.kind=="set" then possible=possible+1 end
+    end
+end
+assert(possible>=2 and distinct==possible,
+    "NH-D3: which clue comes first varies with the world ("..distinct.." of "..possible.." possible)")
+-- A large seed is written as digits, the same in any runtime.
+assert(Pick.key({1e15,"a"})=="16:1000000000000000|1:a","numbers in a choice are whole-number digits")
+-- An area the list cannot fill says by how much.
+local tiny={clues[1],clues[2]}
+local _,short=Pick.choose{clues={},area={id="empty",place="farm"},ledger=fresh(),seed=1,version="v1"}
+assert(short>=2,"an area with nothing to give reports its shortfall")
+
 -- The count per area is the world's, between 2 and 10.
 for i=1,200 do
     local n=Pick.targetCount(i,"area-"..i,"v1")
@@ -65,7 +91,20 @@ local total=0
 for i=1,60 do
     local place=Inventory.places[((i-1)%#Inventory.places)+1]
     local id="area-"..i
-    local picks=Pick.choose{clues=clues,area={id=id,place=place},ledger=ledger,seed=3,version="v1"}
+    local picks,short=Pick.choose{clues=clues,area={id=id,place=place},ledger=ledger,seed=3,version="v1"}
+    -- NH-D4: an area is short only by what the clue list cannot give it: a
+    -- place never takes the same clue twice, so it can hold at most the
+    -- number of different clues written for it, per conspiracy and cap.
+    local distinctFor={containment=0,agricultural=0}
+    for _,c in ipairs(clues) do for _,w in ipairs(c.where) do
+        -- a written clue placed anywhere already is gone for good
+        if w.place==place and not (c.kind=="written" and (ledger.placed[c.id] or 0)>0) then
+            distinctFor[w.lean]=distinctFor[w.lean]+1 end end end
+    local reachable=math.min(distinctFor.containment,Pick.FIRST_DEVELOPMENT_CAP)+math.min(distinctFor.agricultural,Pick.FIRST_DEVELOPMENT_CAP)
+    local target=Pick.targetCount(3,id,"v1")
+    assert(#picks==math.min(target,reachable),
+        "NH-D4: "..id.." holds "..#picks.." of its "..target.." (the list allows "..reachable..")")
+    assert(short==target-#picks,"the shortfall is reported exactly")
     local leans={}
     for _,p in ipairs(picks) do leans[p.lean]=(leans[p.lean] or 0)+1 end
     -- NH-D1: both conspiracies in every area.

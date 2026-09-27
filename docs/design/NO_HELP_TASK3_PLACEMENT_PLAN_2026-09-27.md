@@ -425,3 +425,30 @@ may overrule):
 
 **Next (phase 5, step 3 second half):** the per-area contract that feeds the
 picker's choices into the engine in place of the old two-site case generator.
+
+**Phase 4 review** (competitor, game design, inversion):
+- **Fixed:** the picker's order is now scrambled after hashing, so clues are
+  not ordered by how they happen to be named; each part of a choice is
+  length-prefixed and numbers are written as whole-number digits, so a large
+  seed reads the same in PUC Lua and in the game; an empty world now starts
+  with an object set (it started with a written clue on every world); an
+  area that cannot reach its number reports how far short it is.
+- **Settled (the owner may overrule):** a place short of its number takes
+  copies of object sets already placed elsewhere, but only after every fresh
+  clue for it is used, and never two copies of the same set in one place. So
+  an area's number is only limited by how many *different* clues are written
+  for its kind of place — a writing target: to reach 10, a kind of place needs
+  5 different clues per conspiracy.
+- **Expected, not a bug:** which clues a place receives depends on what was
+  placed before it — the owner chose "decided as you play", and meaning never
+  depends on route.
+- **For the owner:** written clues are used once each, so over a long game
+  almost everything found late is an object set. Holding some written clues
+  back for later is a question for the owner.
+- **Carried into phase 5 (the engine contract):** the ledger of what is placed
+  is its own saved record that only grows — retiring a case never changes it;
+  an area is picked once, with the saved ledger, and that result is what is
+  placed; each area records the content version it was picked with, and an
+  area picked from an empty list is not "decided"; every placed copy gets its
+  own id including its area and copy number; tokens and markers are keyed by
+  area, never by a slot 1 or 2 of the old two-site case.

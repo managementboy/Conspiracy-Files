@@ -13,9 +13,8 @@
 --     gets a number between 2 and 10, fixed by the world;
 --   * the conspiracy with fewer clues across the world is preferred;
 --   * object sets are preferred while fewer than half of placed clues are sets;
---   * no maximum: once every written clue is placed, object sets may be placed
---     again as new copies - and earlier too, only when an area would
---     otherwise miss one of the two conspiracies.
+--   * no maximum: object sets may be placed again as new copies whenever an
+--     area has nothing fresh left for a conspiracy; written clues never are.
 local P={}
 
 -- The one and only cap. Nothing else may bound how many clues exist
@@ -23,17 +22,32 @@ local P={}
 P.FIRST_DEVELOPMENT_CAP=5
 P.MIN_PER_AREA=2
 
--- A stable number from text (the same hash as Placement.seedFromString).
+-- A stable number from text, then scrambled (phase 4 review: the plain
+-- multiply-and-add kept clues with similar ids in nearly the same order on
+-- every seed). Every step stays below 2^53, so PUC Lua and Kahlua agree.
 function P.hash(text)
     local h=5381; text=tostring(text or "")
     for i=1,#text do h=(h*33+string.byte(text,i))%2147483647 end
+    for _=1,3 do h=(h*48271)%2147483647 end
     return h
 end
+-- The parts a choice is made from, each prefixed with its length so no two
+-- different lists read the same, and numbers written as whole numbers so a
+-- large seed cannot print as "1e+15" in one runtime and digits in another.
+local function key(parts)
+    local out={}
+    for i,v in ipairs(parts) do
+        if type(v)=="number" then v=string.format("%d",v) else v=tostring(v) end
+        out[i]=#v..":"..v
+    end
+    return table.concat(out,"|")
+end
+P.key=key
 
 -- How many clues this area gets, 2..(2 x cap), fixed by world and area.
 function P.targetCount(seed,areaId,version)
     local span=P.FIRST_DEVELOPMENT_CAP*2-P.MIN_PER_AREA+1
-    return P.MIN_PER_AREA+P.hash(table.concat({tostring(seed),tostring(areaId),tostring(version),"count"},"|"))%span
+    return P.MIN_PER_AREA+P.hash(key({seed,areaId,version,"count"}))%span
 end
 
 local function count(t,k) return (t and t[k]) or 0 end
@@ -43,7 +57,9 @@ local function count(t,k) return (t and t[k]) or 0 end
 --   areas[areaId][lean] = clues already there;  world[lean] = clues anywhere;
 --   world.set / world.written = placed clues of each kind;
 --   placed[clueId] = copies of that clue already placed.
--- Returns a list of {clue=id, copy=n, kind=, lean=, rival=, spot=}.
+-- Returns a list of {clue=id, copy=n, kind=, lean=, rival=, spot=}, and
+-- second, how many short of the area's number it fell (0 normally): an area
+-- the clue list cannot fill says so rather than quietly holding fewer.
 function P.choose(args)
     local clues,area,ledger=args.clues or {},args.area,args.ledger or {}
     local seed,version=args.seed or 1,args.version or ""
@@ -61,17 +77,18 @@ function P.choose(args)
     local candidates={}
     for _,c in ipairs(clues) do
         local copies=count(placed,c.id)
-        -- A set already placed is kept as a "spare": used only if this area
-        -- would otherwise miss a conspiracy (both-in-every-area outranks
-        -- sets-return-only-after-written-run-out; a new copy is never the
-        -- taken one coming back).
+        -- A set already placed is a "spare": a new copy of it is used only
+        -- when nothing fresh is left for this area and conspiracy, so an area
+        -- always gets both conspiracies and its whole number (phase 4: a
+        -- clue list that ran short must not become a hidden cap). A new copy
+        -- is never the taken one coming back.
         local spare=copies>0 and c.kind=="set" and writtenLeft
         local available=copies==0 or c.kind=="set"
         if available then
             for _,w in ipairs(c.where) do
                 if w.place==area.place then
                     candidates[#candidates+1]={clue=c,where=w,copy=copies+1,spare=spare,
-                        order=P.hash(table.concat({tostring(seed),tostring(area.id),c.id,tostring(copies+1),tostring(version)},"|"))}
+                        order=P.hash(key({seed,area.id,c.id,copies+1,version}))}
                 end
             end
         end
@@ -100,14 +117,15 @@ function P.choose(args)
             end
         end
         if not lean then break end
-        -- Sets first while they are fewer than half of what is placed.
-        local wantSet=count(world,"set")*2<count(world,"set")+count(world,"written")
+        -- Sets first while they are no more than half of what is placed.
+        local wantSet=count(world,"set")*2<=count(world,"set")+count(world,"written")
+        -- Fresh clues first (the wanted kind, then either kind); a copy of a
+        -- set already placed elsewhere only when nothing fresh is left here.
         local choice
-        local missing=count(here,lean)==0
         for pass=1,3 do
             for _,cand in ipairs(candidates) do
                 if not taken[cand.clue.id] and cand.where.lean==lean
-                    and (not cand.spare or (pass==3 and missing))
+                    and (not cand.spare or pass==3)
                     and (pass>=2 or (cand.clue.kind=="set")==wantSet) then choice=cand; break end
             end
             if choice then break end
@@ -123,7 +141,7 @@ function P.choose(args)
             world[choice.clue.kind]=count(world,choice.clue.kind)+1
         end
     end
-    return picks
+    return picks,math.max(0,want-#picks)
 end
 
 return P
