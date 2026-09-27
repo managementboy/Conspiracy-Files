@@ -932,3 +932,42 @@ Test: `test/nohelp_marks_minimum.lua`; `test/nohelp_area_runtime.lua` extended.
   gates' term lists wait for stage 0.
 Tests: `test/nohelp_content_convert.lua`, `test/nohelp_anchor.lua`,
 `test/nohelp_clue_gates.lua`, `test/nohelp_receipts.lua`.
+
+### Content handoff — two `/adhd` runs and what was built from them
+
+**Run 1: the content writer's handoff** (regulator, competitor, logistics,
+game design, remove-the-assumption; deepened: staged work orders, automatic
+gates, the writer's brief). Converged: stage 0 first (frozen axioms and
+one-line glosses signed off before any clue); clues delivered as JSON rows,
+never Lua, with the rival reading written first; a clue is finished only when
+automatic gates and a blind re-read by a different AI pass. Traps rejected:
+one writer per conspiracy (a clue must read both ways by itself); a plain word
+blocklist for the retired premise (paraphrase slips through). Found: clues
+could not name the map mark or scene they belong to. **Built:** the writer
+handoff (`docs/management/NO_HELP_CONTENT_WRITER_HANDOFF_2026-09-27.md`), the
+converter, the anchor field and its use in placement, the clue gates, the
+blind re-read prompt and receipts.
+
+**Run 2: the handover to ChatGPT** (logistics, 3am on-call,
+remove-the-assumption, competitor, ant colony; deepened: the repository as
+memory, ADHD as a routine, rules against gaming "done"). Converged: the
+repository is the writer's memory (STATE.md read first and written last, with
+a baton); one progress line computed from the repo stands in for the goal
+check; commits are one ticket each on `nohelp-content` with content-free
+messages (the owner reads notifications and plays blind); "done" is only ever
+a candidate until Claude countersigns. Traps rejected: the owner as a courier
+for the writer's work (spoilers, and the owner does not curate); the writer
+declaring itself done. The owner then said ChatGPT has the same ADHD skill, so
+the handover gives triggers and a save layout instead of the method. **Built:**
+`progress.lua`, `targets.lua`, STATE.md, the opaque ticket registry
+(writer-only), the `nohelp-content` branch and its GitHub check (green), and
+the handover (`docs/management/NO_HELP_CHATGPT_HANDOVER_2026-09-27.md`).
+
+**Owner decisions in this phase** (DECISIONS.md): the owner stays unspoiled;
+ChatGPT writes the clue text in our format; Claude builds the tools, owns the
+scene list and signs off content; the owner does not curate; tone is the
+original mod's fatalistic bureaucratic dark comedy, voice only the world's.
+
+**Still open:** the scene list (unfinished work parked on
+`nohelp-scenes-wip`); the offline playthrough check (step 7); the real-game
+checks (step 8, visible, with the owner's go-ahead).
