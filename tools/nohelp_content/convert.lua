@@ -5,6 +5,17 @@
 --                                                     content/nohelp/incoming/
 --   lua5.1 tools/nohelp_content/convert.lua --rebuild  only rewrite the derived
 --                                                     clue file from accepted/
+--   lua5.1 tools/nohelp_content/convert.lua --check    validate incoming/ against
+--                                                     accepted/ and write nothing;
+--                                                     exits 1 if a row would be
+--                                                     returned or the derived
+--                                                     clue file is out of date
+--
+-- Tickets are opaque serials (T0001...; content/nohelp/TICKETS.md). A serial's
+-- type (PLACE, PERSON, MAP, SCENE, UNIQUE, STAGE0) comes from the writer-only
+-- registry docs/writer-only/nohelp-tickets.tsv; a name like PLACE-farm still
+-- carries its type in its prefix. A STAGE0 delivery is not clue rows: it is
+-- left in incoming/ for Claude to sign off (content/nohelp/approved/).
 --
 -- For each content/nohelp/incoming/<ticket>.json (an array of rows, or
 -- {"status": "CLASSIFIER_STOP", "rows": [...]}) it:
@@ -51,6 +62,7 @@ M.RETIRED="tools/cluegates/retired_hashes.lua"
 M.SCENE_KINDS="docs/writer-only/nohelp-adhd-inputs/vanilla-scene-kinds.txt"
 M.SCENE_DRAFT="docs/writer-only/nohelp-adhd-inputs/vanilla-scene-table-draft.json"
 M.SPOILERS="docs/writer-only/NOHELP_SPOILERS.md"
+M.REGISTRY="docs/writer-only/nohelp-tickets.tsv"
 
 M.GAME_FIELDS={"id","kind","pieces","where","person","title","body","anchor"}
 M.SIDECAR_FIELDS={"rival_reading","gloss","axioms","cites","prov"}
@@ -85,6 +97,29 @@ local function listJson(dir)
 end
 M.listJson=listJson
 
+-- THE TICKET REGISTRY: {serial = {serial, type, target, status, attempts,
+-- opened, closed}}, empty if the file is missing.
+M.REGISTRY_FIELDS={"serial","type","target","status","attempts","opened","closed"}
+function M.loadRegistry(path)
+    local reg={}
+    for line in (readFile(path or M.REGISTRY) or ""):gmatch("[^\r\n]+") do
+        if not line:find("^#") and not line:find("^serial\t") then
+            local r,i={},0
+            for field in (line.."\t"):gmatch("([^\t]*)\t") do
+                i=i+1; if M.REGISTRY_FIELDS[i] then r[M.REGISTRY_FIELDS[i]]=field end
+            end
+            if r.serial and r.serial~="" then reg[r.serial]=r end
+        end
+    end
+    return reg
+end
+-- A ticket's type: the registry's for a serial, else the name's prefix.
+function M.ticketType(ticket,registry)
+    local r=registry and registry[ticket]
+    if r then return (r.type or ""):upper() end
+    return (ticket:match("^(%a+)%-") or ""):upper()
+end
+
 -- THE CONTEXT the checks need: the gates' configuration and the scene lists.
 function M.context(opts)
     opts=opts or {}
@@ -112,6 +147,7 @@ function M.context(opts)
     end
     Gates.configure{retired=retired,axioms=axioms or nil,reserved=opts.reserved}
     ctx.axiomsApproved=axioms~=nil and axioms~=false
+    ctx.registry=opts.registry or M.loadRegistry(opts.registryPath)
     -- The scene lists (writer-only inputs), used while the shipped scene
     -- table does not exist.
     local okScenes=pcall(require,"NHShared/Generated/VanillaScenes")
@@ -147,7 +183,7 @@ end
 local function reason(code,why) return {code=code,why=why} end
 
 -- The delivery schema of one row (section 6).
-function M.schema(row,ticket,seen)
+function M.schema(row,ticket,seen,ttype)
     if type(row)~="table" then return reason("SCHEMA","a row is an object") end
     for k,t in pairs(M.REQUIRED) do
         if type(row[k])~=t then
@@ -173,8 +209,8 @@ function M.schema(row,ticket,seen)
         for k in pairs(w) do if not M.WHERE_FIELDS[k] then return reason("SCHEMA","unknown where field "..tostring(k)) end end
     end
     for _,p in ipairs(row.pieces) do if type(p)~="string" then return reason("SCHEMA","a piece is an item id") end end
-    local t=ticket:upper()
-    if (t:find("^MAP%-") or t:find("^SCENE%-") or t:find("^UNIQUE%-")) and row.anchor==nil then
+    local t=ttype or M.ticketType(ticket)
+    if (t=="MAP" or t=="SCENE" or t=="UNIQUE") and row.anchor==nil then
         return reason("ANCHOR_UNKNOWN","a map or scene ticket's row names its anchor")
     end
     return nil
@@ -220,8 +256,9 @@ function M.convertTicket(ticket,rows,accepted,ctx,status)
         return out
     end
     local good,seen={}, {}
+    local ttype=M.ticketType(ticket,ctx.registry)
     for _,row in ipairs(rows) do
-        local r=M.schema(row,ticket,seen)
+        local r=M.schema(row,ticket,seen,ttype)
         if type(row)=="table" and type(row.id)=="string" then seen[row.id]=true end
         if not r then
             local ok,why,code=Manifest.validClue(row)
@@ -232,7 +269,7 @@ function M.convertTicket(ticket,rows,accepted,ctx,status)
         else good[#good+1]=row end
     end
     -- A person ticket is accepted or returned whole.
-    if ticket:upper():find("^PERSON%-") and #out.rejected>0 then
+    if ttype=="PERSON" and #out.rejected>0 then
         for _,row in ipairs(good) do
             out.rejected[#out.rejected+1]={row=row,reasons={reason("PERSON_SPLIT","returned with the rest of its person ticket")}}
         end
@@ -320,15 +357,27 @@ function M.loadAccepted(root)
     return accepted
 end
 
--- The whole run. opts: root, out, rebuild (skip incoming), and M.context's.
--- Returns the report lines.
+-- The whole run. opts: root, out, rebuild (skip incoming), check (write
+-- nothing), and M.context's. Returns the report lines and, with check, whether
+-- everything passed.
 function M.run(opts)
     opts=opts or {}
     local ctx=M.context(opts)
     local root,report=ctx.root,{}
     local accepted=M.loadAccepted(root)
+    local check=opts.check
+    local stale=false
+    if check then
+        stale=readFile(opts.out or M.OUT)~=M.renderClues(accepted)
+    end
+    local nTickets,nAccepted,nReturned,nStage0=0,0,0,0
     if not opts.rebuild then
         for _,ticket in ipairs(listJson(root.."/incoming")) do
+          if M.ticketType(ticket,ctx.registry)=="STAGE0" then
+            nStage0=nStage0+1
+            report[#report+1]=ticket..": stage 0 delivery, left in incoming/ for sign-off"
+          else
+            nTickets=nTickets+1
             local path=root.."/incoming/"..ticket..".json"
             local data,err=J.decode(readFile(path) or "")
             local rows,status
@@ -342,16 +391,17 @@ function M.run(opts)
             else
                 res=M.convertTicket(ticket,rows,accepted,ctx,status)
             end
-            if #res.accepted>0 then
-                accepted[ticket]=res.accepted
+            nAccepted,nReturned=nAccepted+#res.accepted,nReturned+#res.rejected
+            if #res.accepted>0 then accepted[ticket]=res.accepted end
+            if #res.accepted>0 and not check then
                 writeFile(root.."/accepted/"..ticket..".json",J.encode(J.array(res.accepted)).."\n")
                 os.execute('mkdir -p "'..root..'/accepted/sidecar"')
                 writeFile(root.."/accepted/sidecar/"..ticket..".json",J.encode(res.sidecar).."\n")
             end
-            if #res.rejected>0 then
+            if #res.rejected>0 and not check then
                 writeFile(root.."/rejected/"..ticket..".json",J.encode(J.array(res.rejected)).."\n")
             end
-            os.remove(path)
+            if not check then os.remove(path) end
             local codes={}
             for _,r in ipairs(res.rejected) do
                 local id=type(r.row)=="table" and type(r.row.id)=="string" and r.row.id or "?"
@@ -360,19 +410,30 @@ function M.run(opts)
             report[#report+1]=ticket..": accepted "..#res.accepted..", returned "..#res.rejected
             for _,c in ipairs(codes) do report[#report+1]="    returned "..c end
             for _,id in ipairs(res.unverified) do report[#report+1]="    "..id..": scene anchor unverified (no Generated/VanillaScenes.lua yet)" end
+          end
         end
+    end
+    local n=0; for _,rows in pairs(accepted) do n=n+#rows end
+    if check then
+        -- Counts only: this line goes to the CI summary.
+        report[#report+1]="check: "..nTickets.." tickets, "..nAccepted.." rows pass, "..nReturned.." returned, "
+            ..nStage0.." stage 0 awaiting sign-off, clue list "..(stale and "OUT OF DATE" or "current")
+        return report,nReturned==0 and not stale
     end
     local text=M.renderClues(accepted)
     writeFile(opts.out or M.OUT,text)
-    local n=0; for _,rows in pairs(accepted) do n=n+#rows end
     report[#report+1]="clue list: "..n.." accepted clues -> "..(opts.out or M.OUT)
     if not ctx.axiomsApproved then report[#report+1]="axioms: no approved list yet (content/nohelp/approved/axioms.json); shape checked only" end
     return report
 end
 
 if arg and arg[0] and arg[0]:find("nohelp_content[/\\]convert%.lua$") then
-    local rebuild=false
-    for _,a in ipairs(arg) do if a=="--rebuild" then rebuild=true end end
-    for _,line in ipairs(M.run{rebuild=rebuild}) do print(line) end
+    local rebuild,check=false,false
+    for _,a in ipairs(arg) do
+        if a=="--rebuild" then rebuild=true elseif a=="--check" then check=true end
+    end
+    local report,ok=M.run{rebuild=rebuild,check=check}
+    for _,line in ipairs(report) do print(line) end
+    if check and not ok then os.exit(1) end
 end
 return M

@@ -1,0 +1,24 @@
+# WRITER-ONLY. The No Help ticket registry: opaque serial -> target. The owner plays
+# blind; never copy a target into a commit message, issue, CI output or file name.
+# status: open | blocked (waiting on engine or scene list) | delivered | accepted | deferred | closed
+# PERSON targets are short person ids the writer chooses at stage 0 (never a name).
+serial	type	target	status	attempts	opened	closed
+T0000	STAGE0	axioms+glosses	open	0	2026-09-27	
+T0001	PLACE	police	open	0	2026-09-27	
+T0002	PLACE	hospital	open	0	2026-09-27	
+T0003	PLACE	farm	open	0	2026-09-27	
+T0004	PLACE	checkpoint	open	0	2026-09-27	
+T0005	PLACE	office	open	0	2026-09-27	
+T0006	PLACE	bookstore	open	0	2026-09-27	
+T0007	PLACE	transmission	open	0	2026-09-27	
+T0008	PLACE	warehouse	open	0	2026-09-27	
+T0009	PLACE	government	open	0	2026-09-27	
+T0010	PERSON	person-a	open	0	2026-09-27	
+T0011	PERSON	person-b	open	0	2026-09-27	
+T0012	PERSON	person-c	open	0	2026-09-27	
+T0013	MAP	map:IrvingtonStashMap1	open	0	2026-09-27	
+T0014	MAP	print:AmericanTire	open	0	2026-09-27	
+T0015	MAP	map:EkronStashMap8	open	0	2026-09-27	
+T0016	SCENE	scene:pending-body	blocked	0	2026-09-27	
+T0017	SCENE	scene:pending-vehicle	blocked	0	2026-09-27	
+T0018	UNIQUE	scene:pending-unique	blocked	0	2026-09-27	
