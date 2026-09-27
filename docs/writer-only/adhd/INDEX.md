@@ -7,3 +7,4 @@ One line per run: date | ticket | trigger | decision. Run folders sit beside thi
 2026-09-27 | T0006 | five-ticket ADHD cadence | paired public route/date traces with private human detail and a live rival interpretation
 2026-09-27 | T0010 | first PERSON arc | tied an access credential to an independent field trace, preserving response disruption as a rival
 2026-09-27 | T0011 | first PERSON arc | paired a changing dispatch copy with an independent return record and a live program-warning rival
+2026-09-27 | T0012 | first PERSON arc | used a fixed containment lean for a courier trace that also fits ordinary field deliveries

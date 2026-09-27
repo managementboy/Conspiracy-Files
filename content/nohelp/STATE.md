@@ -8,13 +8,13 @@ baton edits it; `lua5.1 tools/nohelp_content/progress.lua --state` rewrites PROG
 CHATGPT since 2026-09-27 because WRITING
 
 ## STAGE
-3
+4
 
 ## TICKET
-T0012
+T0013
 
 ## NEXT
-T0012
+T0013
 
 ## OPEN RETURNS
 T0001 ACK 2026-09-27
@@ -23,7 +23,7 @@ T0001 ACK 2026-09-27
 none
 
 ## LAST ADHD
-2026-09-27 T0011
+2026-09-27 T0012
 
 ## PROGRESS
-NOT DONE: maps 0/125, flyers 0/133, scenes 0/124, sets 0/0, balance 0/0, tickets 1/19 @19a12fc
+NOT DONE: maps 0/125, flyers 0/133, scenes 0/124, sets 0/0, balance 0/0, tickets 1/19 @c49b22b
