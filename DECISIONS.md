@@ -130,6 +130,10 @@ plan's directive check):
   the owner a few at a time for direction before any is written for real.
 - **Clues per place: a random 2 to 10** (owner, same session), fixed by the
   world so reload never changes it; at least one of each conspiracy.
+- **No holding back written clues** (owner, same session): *"we will be
+  generating much more text clues in the future. No need to hold back."*
+  Written clues appear as places are chosen; volume, not rationing, keeps late
+  game varied.
 - **No maximum, for real.** Once the written clues are all placed, object sets
   may be placed again elsewhere as new copies with new stamps. This is not a
   respawn: a consumed copy never returns (DR-20260927-WORLD-KEEPS-EVERYTHING

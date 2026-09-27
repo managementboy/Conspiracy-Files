@@ -442,9 +442,8 @@ picker's choices into the engine in place of the old two-site case generator.
 - **Expected, not a bug:** which clues a place receives depends on what was
   placed before it — the owner chose "decided as you play", and meaning never
   depends on route.
-- **For the owner:** written clues are used once each, so over a long game
-  almost everything found late is an object set. Holding some written clues
-  back for later is a question for the owner.
+- **Owner answered:** written clues are not held back; many more written
+  clues will be written, and volume keeps late game varied.
 - **Carried into phase 5 (the engine contract):** the ledger of what is placed
   is its own saved record that only grows — retiring a case never changes it;
   an area is picked once, with the saved ledger, and that result is what is
