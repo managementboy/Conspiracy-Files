@@ -212,22 +212,28 @@ Owner directives, 2026-09-27. Tags are `NH-D1`..`NH-D7` (plain `D1` is already
 used by older tests). Before any step's code, `test/nohelp_directive_trace.lua`
 (modelled on `test/ci_contract.lua`) reads this table and fails the build if a
 directive has no row, or a file named in its **Checks** column is missing or
-lacks its tag. A row whose Checks say "not yet written" is reported as pending
-rather than failing, so the suite's known red list is not made longer; a
-directive only counts as covered once a real file is named.
+lacks its tag. A row whose Checks say "not yet written, due step N" is
+reported as pending rather than failing, so the suite's known red list is not
+made longer; a directive only counts as covered once a real file is named.
+Hardened after the phase 1 review: only this section's table is read; a
+duplicate row fails; a check must be a file under `test/` or
+`tools/autotest/checks/`; its tag must appear on a line of code, not only in a
+comment; and a row may not name files and still say "not yet written".
+Checks on the synthetic step 0 fixture prove the fixture is fair, not the
+product, so they are never named here.
 A debug-only readout (same gate as `ClueMarkers.lua`) shows the live numbers,
 read from Pick's own saved totals, never recounted on the side; visible
 playtests quote it.
 
 | Directive | Proof | Readout | Checks |
 |---|---|---|---|
-| NH-D1 two contradictory conspiracies | step 3 Linter (both leans, rival reading per clue, every kind of area and spot hosts both); step 3 Pick test; step 7 (both leans per area, thinner-lean floor) | clues per lean, per area | not yet written |
-| NH-D2 hint, then search (Look it over as fallback) | step 2 tests (ground spot and set: one hint, one icon, one find); step 8 visible playtest | finds by search vs Look it over | not yet written |
-| NH-D3 placed procedurally | step 3 Pick test (same inputs, same result; no map-read input); step 4 replay test | area sources | not yet written |
-| NH-D4 no maximum, a first-development cap | step 7 cap-off run, raise-the-cap save test, "stopped for another reason" failure; the cap exists only in `Pick.lua` | cap, and any other limit hit | not yet written |
-| NH-D5 half or more are object sets of vanilla items | step 3 Linter (per clue, vanilla types); step 7 on placed *and* spotted, lost sets counted | set share placed and spotted | not yet written |
-| NH-D6 annotated maps included | step 4 trail fold-in and "read or not, same clue" test; step 7 every map destination holds both leans | trails started, clues per design | not yet written |
-| NH-D7 vanilla mysteries detected and used | step 5 first citation, observer out of debug and saved; step 7 scene-anchored floor; step 8 timing spike | scene-anchored vs fallback | not yet written |
+| NH-D1 two contradictory conspiracies | step 3 Linter (both leans, rival reading per clue, every kind of area and spot hosts both); step 3 Pick test; step 7 (both leans per area, thinner-lean floor) | clues per lean, per area | not yet written, due step 3 |
+| NH-D2 hint, then search (Look it over as fallback) | step 2 tests (ground spot and set: one hint, one icon, one find); step 8 visible playtest | finds by search vs Look it over | not yet written, due step 2 |
+| NH-D3 placed procedurally | step 3 Pick test (same inputs, same result; no map-read input); step 4 replay test | area sources | not yet written, due step 3 |
+| NH-D4 no maximum, a first-development cap | step 7 cap-off run, raise-the-cap save test, "stopped for another reason" failure; the cap exists only in `Pick.lua` | cap, and any other limit hit | not yet written, due step 7 |
+| NH-D5 half or more are object sets of vanilla items | step 3 Linter (per clue, vanilla types); step 7 on placed *and* spotted, lost sets counted | set share placed and spotted | not yet written, due step 3 |
+| NH-D6 annotated maps included | step 4 trail fold-in and "read or not, same clue" test; step 7 every map destination holds both leans | trails started, clues per design | not yet written, due step 4 |
+| NH-D7 vanilla mysteries detected and used | step 5 first citation, observer out of debug and saved; step 7 scene-anchored floor; step 8 timing spike | scene-anchored vs fallback | not yet written, due step 5 |
 
 ## 5. Rejected along the way
 
@@ -281,3 +287,31 @@ playtests quote it.
 3. **No maximum:** once written clues run out, object sets are placed again as
    new copies. Pick and step 7's cap-off run must support this; "the list ran
    out" is not an allowed reason to stop.
+
+## 8. Phase log, with the ADHD review after each phase
+
+The owner asked for an `/adhd` review after every phase, added here.
+
+### Phase 1 — directive trace gate and placeholder inventory (steps 4a, 0)
+
+**Built:** `test/nohelp_directive_trace.lua`; the step 0 placeholder inventory
+`test/fixtures/nohelp_inventory.lua` and its fairness check
+`test/nohelp_inventory.lua`.
+
+**Review** (regulator, competitor, 10-year-old; sized down for a small phase,
+findings concrete enough to fix directly rather than deepen):
+- The gate could be fooled: a tag in a comment, a duplicate row, the plan
+  itself named as a "check", a pending row pending forever. **Fixed:** section
+  4a only, duplicates fail, checks must be test files with the tag in code,
+  pending rows name the step that owes them.
+- The fixture was too even: set-or-written followed from place and lean,
+  both leans always shared a spot, 12 sets reused 3 piece combos, the rival
+  reading was free text. **Fixed:** mixed kinds per place and lean, spots
+  differ by lean, 12 distinct sets including one with two of the same item,
+  each placement names the other theory as its rival.
+- **Carried forward:** fixture checks are not product proof and are never
+  named in 4a. Step 3 needs data for "what a place normally holds" before the
+  stands-out rule can be tested. Code reading for step 1 found the engine
+  already places a clue as several items sharing one stamp and counts them
+  against an expected number (`GeneratedRuntime.lua` placement and identity
+  scan), so a set may reuse that path rather than needing a new one.
