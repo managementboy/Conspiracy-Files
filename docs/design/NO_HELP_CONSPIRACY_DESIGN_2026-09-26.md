@@ -45,23 +45,44 @@ no role. Vanilla PZ's own annotated maps and environmental storytelling
 (car crashes, staged scenes) are absorbed into the same system rather
 than left as unrelated flavor.
 
-## 1a. The worked example is retired; candidate replacements stored below
+## 1a. The worked example is retired; the replacement pair is chosen
 
 **2026-09-27.** Every mention of "bioweapon-leak vs. natural zoonotic
 spillover" earlier in this document and in later working sessions was a
 placeholder pair used to illustrate the mechanisms (container-function
 affinity, redundancy, placement, map/event integration) — never a
-committed premise. That specific pairing is now retired at the owner's
-request and must not be reused, in this document or in generated
-content. **None of the mechanisms above depend on which two premises are
-picked** — container-affinity, redundancy, placement, blind-review
-discipline, and the map/event integration work all transfer unchanged to
-whatever replacement pair is chosen.
+committed premise. That specific pairing is retired and must not be
+reused, in this document or in generated content. **None of the
+mechanisms above depend on which two premises are picked** —
+container-affinity, redundancy, placement, blind-review discipline, and
+the map/event integration work all transfer unchanged to the replacement
+pair below.
 
-Twenty single, un-paired candidate premises were generated as
-replacements and are stored here for later selection. The owner picks
-exactly two mutually exclusive ones from this list (or supplies their
-own) before any further content generation names a specific cause:
+**Owner's choice, 2026-09-27: #1 vs. #17 from the candidate list.**
+
+- **Theory A — Containment Cover-up (#1):** officials/military
+  mismanaged the evacuation or containment response and covered up the
+  failure.
+- **Theory B — Agricultural Program Malfunction (#17):** an experimental
+  pesticide/agricultural program malfunctioned.
+
+These two candidates answer different questions by default — A is about
+the *response* (was the handling of the outbreak itself incompetent and
+concealed), B is about the *origin* (what actually started it). That is
+not a defect: the two theories can disagree about which question is even
+the right one to ask, which is itself a legitimate axis of contradiction
+for this design ("the real story isn't what started it, it's how badly
+they botched containing it" vs. "the real story is what started it, and
+the cover-up is secondary"). Evidence authoring should lean into this —
+Theory A's evidence should mostly be about response/containment
+paperwork and actions, Theory B's mostly about the agricultural
+program's own operations — rather than forcing both into a symmetric
+origin-vs-origin shape.
+
+The other eighteen candidates remain stored below for reference, not
+because they are still under consideration for this mod's own two
+conspiracies, but as raw material for later reuse (a future mod, a third
+mod, or if this pair needs replacing after playtesting):
 
 1. Officials/military mismanaged the evacuation or containment response
    and covered up the failure.
