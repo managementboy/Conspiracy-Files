@@ -326,4 +326,33 @@ assert(S.target({x=b.x1,y=b.y1,z=0,objectIndex=0,containerIndex=0,containerType=
 assert(not S.target({x=b.x1,y=b.y1,z=0,objectIndex=0,containerIndex=0,containerType="desk",sprite="s"},
     {bounds=row.bounds,paperStorage="observed",containerTypes={"shelves"}}),"an observed place still takes only what was seen")
 
+-- Each mark its own minimum (owner, 2026-09-27): a big area one map marks
+-- with two of its own marks passes them to the decision; each clue belongs to
+-- one mark and its search starts at that mark's point.
+newWorld()
+px,py=1,1
+local twoMarks
+for _,e in ipairs(Sites.sites) do if e.areaId=="mark:WorldStashMap6:1" then twoMarks=e end end
+local own=R.ownMarksOf(twoMarks,{"WorldStashMap6"})
+assert(own and #own==2 and own[1]==1 and own[2]==2,"the area's own marks, not its notes")
+for _,e in ipairs(Sites.sites) do
+    if e.areaId=="mark:IrvingtonStashMap1:1" then
+        assert(R.ownMarksOf(e,{"IrvingtonStashMap1","print:IrvingtonSpeedway"})==nil,"a shared place has no own marks")
+    end
+end
+assert(R.decideMapArea(twoMarks,"read")==true)
+for _=1,20 do fire("OnTick") end
+local ta=assert(areaOf(twoMarks.areaId),"the two-mark area is decided")
+assert(ta.trail.marks and #ta.trail.marks==2 and ta.count>=6,"3 clues per own mark")
+local tsite
+for _,l in ipairs(world().case.locations) do if l.id==twoMarks.areaId then tsite=l end end
+for i=ta.first,ta.first+ta.count-1 do
+    local d=world().case.documents[i]
+    local p=R.ownMarkPoint(tsite,d.id)
+    local m; for _,x in ipairs(twoMarks.marks) do if x.design and x.mark==d.mark then m=x end end
+    assert(p and m and p.x==m.x and p.y==m.y,"a clue's search starts at its own mark")
+end
+assert(R.ownMarkPoint({id="elsewhere",bounds=tsite.bounds},world().case.documents[ta.first].id)==nil,
+    "a clue moved to another place has no own mark there")
+
 print("nohelp area runtime: world record bootstrapped once, nearby places decided, own-kind spots only; map places decided on read or approach alike")

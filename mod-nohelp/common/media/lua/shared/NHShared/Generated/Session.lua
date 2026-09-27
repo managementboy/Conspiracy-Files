@@ -710,7 +710,7 @@ function S.open(initial,sink)
     function api.addArea(args)
         if not isArea(root) then return false,"not a No Help world" end
         local nextCase,ids=AreaCase.decide{case=root.case,site=args.site,place=args.place,
-            clues=args.clues,version=args.version,hours=args.hours,source=args.source,designs=args.designs}
+            clues=args.clues,version=args.version,hours=args.hours,source=args.source,designs=args.designs,marks=args.marks}
         if not nextCase then return false,ids end
         if not validHours(args.hours) then return false,"invalid hours" end
         local ok,why=commit(function(r)

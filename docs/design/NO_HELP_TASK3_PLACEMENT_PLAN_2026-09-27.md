@@ -837,7 +837,9 @@ in that area, preferably near the map's own annotation marks."
   from `catalogue.json` stamps inside the rectangles, now `notes` in
   `MapMediaDestinations`). Places 257 → 253: the second marks of WorldStashMap6
   and 10 and the Irvington Speedway flyer now fall inside their area and join
-  it (so those places are shared, with a random lean).
+  it. WorldStashMap10's area and the speedway are also pointed to by flyers,
+  so they are shared (a random lean); WorldStashMap6's area is marked by one
+  map only, so it is not shared (see "each mark its own minimum" below).
 - Placement stays bounded (`MarkedArea.lua`): open ground tries at most 64
   squares per attempt as before — 48 in growing rings (4, 8, 16, 22 tiles)
   around marks the world picks, 16 anywhere in the area; an unloaded square
@@ -851,3 +853,21 @@ in that area, preferably near the map's own annotation marks."
   small modulus (which of 37 marks came out the same in most worlds);
   `MarkedArea` hashes twice. Other callers were not changed.
 Test: `test/nohelp_marked_area.lua`; `test/nohelp_map_sites.lua` updated.
+
+### Owner decision — each mark its own minimum
+
+**Owner answer built (2026-09-27):** a big marked area (`MapSites` kind
+`area`) that one map marks with m >= 2 of its own marks (`mark`, not the
+annotation `note` points) gets 3 x m clues with m of the other side
+(`Pick` `minCount`/`rivalMin`, unchanged), recorded as `trail.marks`. Each
+clue gets a `mark` (`AreaCase.assignMarks`): marks and clues in a
+world-seeded order, one clue of the other side per mark, the rest to the mark
+holding fewest — so every mark has >= 3, one of the other side.
+`AreaCase.validate` accepts the optional `mark` and checks the per-mark
+minimum whenever the area holds it. At run time the clue's furniture windows
+start each cycle at its own mark, and its near ground tries ring that mark;
+the rest of the area follows as before. Today only WorldStashMap6's area
+qualifies (marks 1 and 2); WorldStashMap10's area and the speedway also have
+a flyer, so they stay shared (random lean, no extra minimum, no own marks).
+Single-mark places are unchanged.
+Test: `test/nohelp_marks_minimum.lua`; `test/nohelp_area_runtime.lua` extended.

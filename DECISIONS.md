@@ -233,6 +233,20 @@ plan's directive check):
   several maps or flyers point to leans at random per world; flyers can be
   unreliable too (the same 1-20% share); a map marking a large area may have
   clues anywhere in that area, preferably near the map's own annotation marks.
+- **Each mark its own minimum** (owner, same session): a large area one map
+  marks several times (its own marks, not its annotations) gives each of
+  those marks at least 3 clues, one of the other side, placed near that mark
+  first. A place a map and a flyer both point to (the speedway) stays shared:
+  random side per world, no extra minimum.
+- **Vanilla scenes** (owner, same session): a scene and the clues of the
+  place it appears in are independent — a scene appearing where clues are
+  already placed changes nothing; if the player empties a scene before it is
+  confirmed, its clue keeps waiting; where a scene's clue goes depends on the
+  kind of scene (a room scene: in that room; a car crash: on the bodies or in
+  the cars, and so on) — to be decided per kind of scene with an `/adhd` run
+  over the real list of vanilla scenes; the first hand-checked scene (Jackie
+  Jaye's news studio) can be built for either conspiracy, how best to be
+  honed with an `/adhd` run.
 - **No maximum, for real.** Once the written clues are all placed, object sets
   may be placed again elsewhere as new copies with new stamps. This is not a
   respawn: a consumed copy never returns (DR-20260927-WORLD-KEEPS-EVERYTHING

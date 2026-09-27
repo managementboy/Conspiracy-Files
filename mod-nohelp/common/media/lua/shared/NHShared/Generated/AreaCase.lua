@@ -98,9 +98,14 @@ M.recount=recount
 -- by several: no extra minimum, the usual random number (owner: "no minimum
 -- or maximum" for shared places), still both sides. The lean is the world's
 -- (Trails), so a map read or never read gives the place the same lean.
--- designs: the maps marking the place, in static order. Returns the trail
+-- designs: the maps marking the place, in static order. marks (optional): a
+-- big marked area's own map marks, the `mark` numbers of the one map marking
+-- it (never its annotation notes). EACH MARK ITS OWN MINIMUM (owner,
+-- 2026-09-27): a place one map marks with m >= 2 of its own marks gets 3
+-- clues per mark, one of the other side per mark, each clue near its own
+-- mark (M.assignMarks). A shared place ignores marks. Returns the trail
 -- record and Pick's extra arguments, or nil for a place no map marks.
-function M.trailFor(seed,designs,areaId)
+function M.trailFor(seed,designs,areaId,marks)
     if type(designs)~="table" or #designs==0 then return nil end
     local favour=Trails.favour(seed,designs[1])
     -- A place several maps or flyers point to leans at random per world,
@@ -111,7 +116,56 @@ function M.trailFor(seed,designs,areaId)
     if not favour then return nil end
     local list={}; for i,d in ipairs(designs) do list[i]=d end
     if #designs>1 then return {designs=list,favour=favour},{favour=favour} end
+    local own={}
+    if type(marks)=="table" then
+        local seen={}
+        for _,n in ipairs(marks) do
+            if integer(n) and n>=1 and not seen[n] then seen[n]=true; own[#own+1]=n end
+        end
+        table.sort(own)
+    end
+    if #own>=2 then
+        return {designs=list,favour=favour,marks=own},{favour=favour,rivalMin=#own,minCount=3*#own}
+    end
     return {designs=list,favour=favour},{favour=favour,rivalMin=1,minCount=3}
+end
+
+-- Which of the area's own marks each clue belongs to (owner, 2026-09-27:
+-- "each mark its own minimum"). A pure function of the world seed, the area
+-- and the clues decided there, never of reading order: the marks and the
+-- clues of each side are put in a seeded order, each mark takes one clue of
+-- the other side first, then every other clue goes to the mark holding the
+-- fewest so far. When the area holds 3 x m clues with m of the other side
+-- (the picker's minimum), every mark gets at least 3, one of the other side.
+-- Sets doc.mark (a `mark` number from `marks`) on each doc.
+function M.assignMarks(seed,areaId,docs,marks,favour)
+    local function order(list,salt)
+        local keyed={}
+        for i,v in ipairs(list) do
+            keyed[i]={v=v,h=Pick.hash(Pick.key({seed,tostring(areaId),tostring(salt(v)),"own-mark"}))}
+        end
+        table.sort(keyed,function(a,b)
+            if a.h~=b.h then return a.h<b.h end
+            return tostring(salt(a.v))<tostring(salt(b.v))
+        end)
+        local out={}; for i,k in ipairs(keyed) do out[i]=k.v end
+        return out
+    end
+    local ms=order(marks,function(n) return "mark:"..n end)
+    local rivals,rest={},{}
+    for _,d in ipairs(docs) do
+        if d.lean~=favour then rivals[#rivals+1]=d else rest[#rest+1]=d end
+    end
+    rivals=order(rivals,function(d) return d.id end)
+    rest=order(rest,function(d) return d.id end)
+    local held={}
+    for i,n in ipairs(ms) do held[n]=0; local d=rivals[i]; if d then d.mark=n; held[n]=1 end end
+    for i=#ms+1,#rivals do rest[#rest+1]=rivals[i] end
+    for _,d in ipairs(rest) do
+        local best
+        for _,n in ipairs(ms) do if not best or held[n]<held[best] then best=n end end
+        d.mark=best; held[best]=held[best]+1
+    end
 end
 
 -- Decide one area. args: {case, site (a Catalog row), place, clues, version,
@@ -126,7 +180,7 @@ function M.decide(args)
     for _,a in ipairs(case.areas) do if a.id==site.id then return nil,"decided" end end
     local clues=args.clues or Manifest.clues
     local byId={}; for _,c in ipairs(clues) do byId[c.id]=c end
-    local trail,lean=M.trailFor(case.seed,args.designs,site.id)
+    local trail,lean=M.trailFor(case.seed,args.designs,site.id,args.marks)
     if args.designs~=nil and not trail then return nil,"unknown map design" end
     lean=lean or {}
     local picks,short=Pick.choose{clues=clues,area={id=site.id,place=args.place},
@@ -138,12 +192,14 @@ function M.decide(args)
     for _,l in ipairs(next.locations) do if l.id==site.id then known=true end end
     if not known then next.locations[#next.locations+1]=copy(site) end
     local first=#next.documents+1
-    local ids={}
+    local ids,docs={},{}
     for _,p in ipairs(picks) do
         local doc=M.docFrom(p,byId[p.clue],site.id)
         next.documents[#next.documents+1]=doc
+        docs[#docs+1]=doc
         ids[#ids+1]=doc.id
     end
+    if trail and trail.marks then M.assignMarks(case.seed,site.id,docs,trail.marks,trail.favour) end
     next.areas[#next.areas+1]={id=site.id,place=args.place,source=tostring(args.source or "nearby"),
         version=tostring(args.version),decidedHours=args.hours or 0,first=first,count=#picks,short=short,trail=trail}
     next.ledger=recount(next)
@@ -186,13 +242,43 @@ function M.validate(case)
             if type(t)~="table" or not LEAN[t.favour] or type(t.designs)~="table" or #t.designs<1 or #t.designs>64 then
                 return false,"invalid map trail on area "..tostring(a.id)
             end
-            for k in pairs(t) do if k~="designs" and k~="favour" then return false,"unknown map trail field "..tostring(k) end end
+            for k in pairs(t) do if k~="designs" and k~="favour" and k~="marks" then return false,"unknown map trail field "..tostring(k) end end
             local n=0
             for k,d in pairs(t.designs) do
                 n=n+1
                 if type(k)~="number" or type(d)~="string" or d=="" or #d>80 then return false,"invalid map trail design" end
             end
             if n~=#t.designs then return false,"invalid map trail design" end
+            if t.marks~=nil then
+                -- Each mark its own minimum (M.assignMarks): one map, 2+ of
+                -- its own marks, every clue belonging to one of them.
+                if type(t.marks)~="table" or #t.marks<2 or #t.marks>64 or #t.designs~=1 then return false,"invalid own marks" end
+                local own,held,rival,m=0,{},{},0
+                for k,v in pairs(t.marks) do
+                    m=m+1
+                    if type(k)~="number" or not integer(v) or v<1 or held[v] then return false,"invalid own marks" end
+                    held[v]=0; rival[v]=0
+                end
+                if m~=#t.marks then return false,"invalid own marks" end
+                for j=a.first,a.first+a.count-1 do
+                    local d=case.documents[j]
+                    if held[d.mark]==nil then return false,"a clue of area "..tostring(a.id).." belongs to none of its marks" end
+                    held[d.mark]=held[d.mark]+1
+                    if d.lean~=t.favour then rival[d.mark]=rival[d.mark]+1; own=own+1 end
+                end
+                -- Whenever the area holds the minimum (3 per mark, one of the
+                -- other side per mark), every mark holds its own.
+                if a.count>=3*#t.marks and own>=#t.marks then
+                    for _,v in ipairs(t.marks) do
+                        if held[v]<3 or rival[v]<1 then return false,"mark "..v.." of area "..tostring(a.id).." is below its minimum" end
+                    end
+                end
+            end
+        end
+        if not (a.trail and a.trail.marks) then
+            for j=a.first,a.first+a.count-1 do
+                if case.documents[j].mark~=nil then return false,"a clue names a mark its area does not have" end
+            end
         end
         for j=1,i-1 do if case.areas[j].id==a.id then return false,"area decided twice" end end
     end
@@ -207,6 +293,7 @@ function M.validate(case)
         if not SPOT[d.spot] then return false,"invalid spot" end
         if d.person~=nil and (type(d.person)~="string" or #d.person==0 or #d.person>40) then return false,"invalid person" end
         if d.outfit~=nil and (d.spot~="corpse" or not Outfits.isClass(d.outfit)) then return false,"invalid outfit hint" end
+        if d.mark~=nil and (not integer(d.mark) or d.mark<1) then return false,"invalid own mark" end
         -- An item type is checked against the game's catalogue when a clue is
         -- chosen, not here: a game update that drops an item must never make
         -- a saved world unreadable, because a record that fails validation
@@ -229,7 +316,7 @@ function M.validate(case)
             if k and not Kinds.fits(d.kind,d.body) then return false,"a clue's text does not fit its carrier" end
         end
         for k in pairs(d) do
-            if not ({id=1,locationId=1,clue=1,copy=1,lean=1,rival=1,spot=1,kind=1,members=1,quantity=1,title=1,body=1,person=1,outfit=1})[k] then
+            if not ({id=1,locationId=1,clue=1,copy=1,lean=1,rival=1,spot=1,kind=1,members=1,quantity=1,title=1,body=1,person=1,outfit=1,mark=1})[k] then
                 return false,"unknown clue field "..tostring(k)
             end
         end

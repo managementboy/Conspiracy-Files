@@ -550,6 +550,23 @@ local function areaPoints(site)
     return cached or nil
 end
 R.areaPoints=areaPoints
+-- A clue that belongs to one of its area's own marks (AreaCase.assignMarks):
+-- that mark's point, so its search starts there. Nil for any other clue, and
+-- for a clue being moved to another place.
+local function ownMarkPoint(site,docId)
+    local root=site and worldRoot()
+    local doc
+    for _,d in ipairs(root and root.case and root.case.documents or {}) do
+        if d.id==docId then doc=d; break end
+    end
+    if not doc or doc.mark==nil or doc.locationId~=site.id then return nil end
+    local e=mapSites().byArea[site.id]
+    for _,m in ipairs(e and e.marks or {}) do
+        if m.design and m.mark==doc.mark and type(m.x)=="number" and type(m.y)=="number" then return {x=m.x,y=m.y} end
+    end
+    return nil
+end
+R.ownMarkPoint=ownMarkPoint
 local function decideFrom(result)
     local hints,rooms=placeFacts(result)
     withReachability(result,function(reachable)
@@ -660,6 +677,18 @@ local function designsOf(entry)
     end
     return out
 end
+-- A big marked area's own map marks (their `mark` numbers, never the
+-- annotation notes), when one map alone marks it: each such mark gets its own
+-- minimum of clues (AreaCase.trailFor, owner 2026-09-27). Nil otherwise.
+local function ownMarksOf(entry,designs)
+    if entry.kind~="area" or #designs~=1 then return nil end
+    local out,seen={},{}
+    for _,m in ipairs(entry.marks or {}) do
+        if m.design==designs[1] and m.mark and not seen[m.mark] then seen[m.mark]=true; out[#out+1]=m.mark end
+    end
+    return #out>=2 and out or nil
+end
+R.ownMarksOf=ownMarksOf
 -- The site row the world record keeps, in the Catalog's shape. Nothing was
 -- observed there, so its storage is "unknown" (Session.unobserved).
 local function mapSiteRow(entry)
@@ -686,7 +715,7 @@ local function mapDrain()
     local entry=item.entry
     local designs=designsOf(entry)
     local ok,ids=api.addArea{site=mapSiteRow(entry),place=entry.place,designs=#designs>0 and designs or nil,
-        clues=Manifest.clues,version=Manifest.VERSION,hours=worldHours(),source=item.source}
+        marks=ownMarksOf(entry,designs),clues=Manifest.clues,version=Manifest.VERSION,hours=worldHours(),source=item.source}
     if ok then
         CFLog.write("i","case",{case=entry.areaId,place=entry.place,n=#ids,why="area-decided-"..item.source})
     elseif ids=="empty" then
@@ -1101,7 +1130,7 @@ local function boundsScan(site,done,accept,salt,searchedOk)
         local docId=tostring(salt or site.id)
         local attempt=windowCursor[docId] or 0
         windowCursor[docId]=attempt+1
-        walk=MarkedArea.window(R.worldSeed() or 0,site.id,docId,attempt,b,points)
+        walk=MarkedArea.window(R.worldSeed() or 0,site.id,docId,attempt,b,points,ownMarkPoint(site,docId))
     end
     local x1,y1,x2,y2=walk.x1-margin,walk.y1-margin,walk.x2+margin,walk.y2+margin
     local x,y,objects,oi,ci=x1,y1,nil,0,0
@@ -1237,6 +1266,7 @@ local function groundScan(site,done,accept,salt,keys)
     local seed=R.worldSeed() or 0
     local docId=tostring(salt or site.id)
     local start=groundCursor[docId] or 0
+    local own=points and ownMarkPoint(site,docId)
     local tries,found,refused,seen=0,nil,{},{}
     local zombies,survivor
     local function finish()
@@ -1272,7 +1302,7 @@ local function groundScan(site,done,accept,salt,keys)
         if tries>=GroundSpots.MAX_TRIES or found then return finish() end
         tries=tries+1
         local x,y
-        if points then x,y=MarkedArea.groundSquare(seed,site.id,docId,start+tries,tries,box,points)
+        if points then x,y=MarkedArea.groundSquare(seed,site.id,docId,start+tries,tries,box,points,own)
         else x,y=GroundSpots.square(seed,site.id,docId,start+tries,box) end
         if not x then return finish() end
         local key="ground:"..x..":"..y..":"..b.z

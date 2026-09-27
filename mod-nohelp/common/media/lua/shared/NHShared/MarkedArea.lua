@@ -44,7 +44,10 @@ local function clamp(v,lo,hi) if v<lo then return lo elseif v>hi then return hi 
 -- A.RINGS[band] tiles of a mark the hash picks (the band grows through the
 -- attempt), the rest anywhere in `bounds`. Always inside bounds (x2/y2
 -- exclusive). Returns x, y and whether it was near a mark.
-function A.groundSquare(seed,areaId,docId,index,try,bounds,points)
+-- own (optional, {x=,y=}): the clue's own mark (owner, 2026-09-27: "each mark
+-- its own minimum"). Then every near try rings THAT mark; the last tries are
+-- still anywhere in the area. Without it the squares are exactly as before.
+function A.groundSquare(seed,areaId,docId,index,try,bounds,points,own)
     local w,h=bounds.x2-bounds.x1,bounds.y2-bounds.y1
     if w<=0 or h<=0 then return nil end
     local hash=mix({seed,areaId,docId,index,"area-ground"})
@@ -54,7 +57,7 @@ function A.groundSquare(seed,areaId,docId,index,try,bounds,points)
     end
     local perBand=math.ceil(A.NEAR_TRIES/#A.RINGS)
     local r=A.RINGS[math.min(#A.RINGS,1+math.floor((try-1)/perBand))]
-    local m=points[1+hash%#points]
+    local m=own or points[1+hash%#points]
     local side=2*r+1
     local k=mix({seed,areaId,docId,index,"area-ring"})%(side*side)
     local x=clamp(m.x-r+k%side,bounds.x1,bounds.x2-1)
@@ -67,8 +70,16 @@ end
 -- order rotated by the world (seed, area, clue), then each WINDOW-sized tile
 -- of the whole area; then again. Every window lies inside `bounds` and is at
 -- most WINDOW a side. Returns {x1,y1,x2,y2,z} and "mark" or "rest".
-function A.window(seed,areaId,docId,attempt,bounds,points)
+-- own (optional, {x=,y=}): the clue's own mark. Then each cycle starts with
+-- the window centred on it, and goes on as above. Without it, as before.
+function A.window(seed,areaId,docId,attempt,bounds,points,own)
     local w,h=bounds.x2-bounds.x1,bounds.y2-bounds.y1
+    if own then
+        local cycle=1+#points+math.ceil(w/A.WINDOW)*math.ceil(h/A.WINDOW)
+        local k=attempt%cycle
+        if k>0 then return A.window(seed,areaId,docId,k-1,bounds,points) end
+        points={own}; attempt=0
+    end
     local cols,rows=math.ceil(w/A.WINDOW),math.ceil(h/A.WINDOW)
     local n=#points
     local cycle=n+cols*rows
