@@ -11,13 +11,13 @@ CHATGPT since 2026-09-27 because FIXING
 1
 
 ## TICKET
-T0001
+T0019
 
 ## NEXT
-T0001 returned NEVER_RIVAL (rejected/T0001.json); redeliver; T0019 before T0016
+T0019 T0002
 
 ## OPEN RETURNS
-T0001
+T0001 ACK 2026-09-27
 
 ## QUARANTINE
 none
@@ -26,4 +26,4 @@ none
 2026-09-27 T0001
 
 ## PROGRESS
-NOT DONE: maps 0/125, flyers 0/133, scenes 0/125, sets 0/0, balance 0/0, tickets 1/19 @129c73b
+NOT DONE: maps 0/125, flyers 0/133, scenes 0/124, sets 0/0, balance 0/0, tickets 1/19 @61d8d2f

@@ -1,0 +1,72 @@
+[
+  {
+    "id": "t0001-01",
+    "kind": "set",
+    "pieces": [
+      "Clipboard",
+      "Lunchbox"
+    ],
+    "title": "Return recorded before crossing",
+    "body": "The last route time is written after the gate closed. A child's sticker covers the lunchbox label; the form counts returned clipboards, not people.",
+    "where": [
+      {
+        "place": "police",
+        "spot": "furniture",
+        "lean": "containment",
+        "rival": "agricultural"
+      }
+    ],
+    "rival_reading": "A delayed farm delivery could cross a work gate after a routine closure; an ordinary property count may omit the driver without showing a failed cordon.",
+    "gloss": "A route record places a crossing after closure while completing a count of returned property.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0001"
+    }
+  },
+  {
+    "id": "t0001-02",
+    "kind": "set",
+    "pieces": [
+      "Bucket",
+      "WaterBottle"
+    ],
+    "title": "Two measures, one return",
+    "body": "The bucket has two fill marks, one from a field round and another dated after a road diversion. A child's drawing is folded under its handle; the water bottle beside it is still capped. The only checked box asks whether the bucket came back.",
+    "where": [
+      {
+        "place": "police",
+        "spot": "furniture",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "rival_reading": "Emergency staff could measure and inventory water after a diversion; a returned container does not show that a program caused the outbreak.",
+    "gloss": "A field-related measure and a later return entry remain with a pair of water containers.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0001"
+    }
+  }
+]
