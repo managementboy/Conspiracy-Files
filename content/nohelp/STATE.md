@@ -11,10 +11,10 @@ CHATGPT since 2026-09-27 because FIXING
 1
 
 ## TICKET
-T0019
+T0001
 
 ## NEXT
-T0019 T0002
+T0001 TOO_LONG ONE_SIDED T0019
 
 ## OPEN RETURNS
 T0001 ACK 2026-09-27
@@ -26,4 +26,4 @@ none
 2026-09-27 T0001
 
 ## PROGRESS
-NOT DONE: maps 0/125, flyers 0/133, scenes 0/124, sets 0/0, balance 0/0, tickets 1/19 @61d8d2f
+NOT DONE: maps 0/125, flyers 0/133, scenes 0/124, sets 0/0, balance 0/0, tickets 1/19 @e2a81cb
