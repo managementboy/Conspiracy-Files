@@ -259,6 +259,8 @@ while every individual item still passes its own text-level check —
 recreating order-dependence by geography instead of by discovery order,
 which section 3 above already warns against for time.
 
+**Marked-site visit deadline: none (owner clarification, 2026-09-27).** Reading an annotated map does not start a timer. Waiting never makes its marked-site evidence decay, change meaning, relocate, or expire. A player may investigate whenever they choose; do not add deadline-driven urgency to map-linked evidence.
+
 ## 4. Belief has no meter, no ledger, no object — only the player's memory
 
 **Corrected, 2026-09-26, second pass.** This section originally proposed
