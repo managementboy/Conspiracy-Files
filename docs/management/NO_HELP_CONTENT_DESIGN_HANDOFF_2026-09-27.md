@@ -228,10 +228,13 @@ Converged on three mechanisms:
    Static, baked-in vanilla scenes (crash sites etc.) and live runtime events
    (a flyover, an ambient trigger) are not the same kind of thing to detect,
    and treating them with one unified detector is a category error. The
-   static half should get a **one-time, hand-walked coordinate list** —
+   static scene list should be hand-curated by the content writer —
    exactly `Placement.lua`'s existing `POOLS` shape, a new sibling data file,
    no detector code at all — directly matching T3's real, tested policy
    (automatic categorization is advisory-only, never authoritative). The
+   owner must remain blind: do not ask them to find or verify scenes, and
+   do not include scene identities or locations in progress updates. Use a
+   separate test setup for in-game verification, never the owner's playthrough. The
    runtime half should use **flag-and-defer**: the actual `Events.*` callback
    only sets a flag/enqueues a work item; a separate, lower-priority bounded
    poll loop (T2's tested-safe ~100 records/frame) does the real evidence-
@@ -263,9 +266,10 @@ Converged on three mechanisms:
    isn't in the known-good set. **Real, explicitly-named risk:** there is
    nothing to audit yet — zero real vanilla-scene citations exist in the repo
    today. Building the audit tooling before a single real citation exists
-   risks validating an empty set. First real step is hand-curating exactly
-   one real citation (one specific crash scene, walked and hashed in a live
-   dev build) before writing any audit script.
+   risks validating an empty set. The first step belongs to the content
+   writer: curate and verify one real citation in a separate test setup,
+   then keep its identifying details out of owner-facing updates. Never ask
+   the owner to curate, discover, or confirm a scene.
 
 Traps flagged: emergent/automatic classification of static scenes from
 generic map signals (spawn density, room-name heuristics) — thematically
@@ -334,8 +338,9 @@ paraphrasing.
    location-slot families / 7 assets to whatever "No Help" needs for Theory
    A/B evidence — read `Content.lua` and `Session.lua` first to see the
    current (still Dead-Air-named) shape before designing the replacement.
-4. **Hand-curate exactly one real vanilla-scene citation** (round 3, step 3's
-   first concrete step) before building any citation-audit tooling.
+4. **Content writer: curate and verify one real vanilla-scene citation**
+   in a separate test setup before building audit tooling. Keep scene identity
+   out of owner-facing updates; never ask the owner to curate or confirm it.
 5. **Begin actual content authoring** for Theory A and Theory B once (1)-(2)
    are settled — the owner has explicitly asked for this to happen, and has
    not yet been asked to confirm anything beyond the two premises themselves
