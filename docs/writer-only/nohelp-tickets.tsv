@@ -3,7 +3,7 @@
 # status: open | blocked (waiting on engine or scene list) | delivered | accepted | deferred | closed
 # PERSON targets are short person ids the writer chooses at stage 0 (never a name).
 serial	type	target	status	attempts	opened	closed
-T0000	STAGE0	axioms+glosses	open	0	2026-09-27	
+T0000	STAGE0	axioms+glosses	accepted	0	2026-09-27	
 T0001	PLACE	police	open	0	2026-09-27	
 T0002	PLACE	hospital	open	0	2026-09-27	
 T0003	PLACE	farm	open	0	2026-09-27	
