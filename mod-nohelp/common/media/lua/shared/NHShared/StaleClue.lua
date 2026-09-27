@@ -55,13 +55,15 @@ function M.destinations(root,visited)
     return out
 end
 
--- Untouched-item guard: the original container must show exactly one
--- matching physical item (not zero -- possibly carried away or destroyed;
--- not two -- tampered/ambiguous). Player-carrying guard: the same physical
--- token must not be found anywhere in the player's own inventory. Both must
--- hold before a move is safe.
-function M.canRelocate(originalContainerCount,playerInventoryCount)
-    return originalContainerCount==1 and (playerInventoryCount or 0)==0
+-- Untouched-item guard: the original container must show exactly the
+-- clue's own number of matching physical items - one for a single item, every
+-- piece for an object set (owner, 2026-09-27: a set moves whole or not at
+-- all). Fewer means something was carried away or destroyed; more means
+-- tampered or ambiguous. Player-carrying guard: the same physical token must
+-- not be found anywhere in the player's own inventory. Both must hold before a
+-- move is safe.
+function M.canRelocate(originalContainerCount,playerInventoryCount,expected)
+    return originalContainerCount==(expected or 1) and (playerInventoryCount or 0)==0
 end
 
 -- Skip while the player is within the guard radius of either the old or the

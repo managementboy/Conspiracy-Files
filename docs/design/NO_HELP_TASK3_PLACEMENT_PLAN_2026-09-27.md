@@ -315,3 +315,24 @@ findings concrete enough to fix directly rather than deepen):
   already places a clue as several items sharing one stamp and counts them
   against an expected number (`GeneratedRuntime.lua` placement and identity
   scan), so a set may reuse that path rather than needing a new one.
+
+### Phase 2 — object sets (step 1)
+
+**Found:** the engine already placed one clue as several different real items
+sharing one stamp ("members", `GeneratedRuntime.lua` placement), and the
+identity scan already counts them against the clue's own number, so the
+"separate piece field" planned in step 1 is not needed for identity — two of
+the same item in one set is already fine. The hint (`ClueCue`) and the search
+icon (`ClueSearch`, keyed by clue id) already treat such a clue as one, in a
+container. What the engine refused was *moving* one.
+
+**Built:** an unfound object set now moves whole — every piece rebuilt at the
+new place and every old piece removed — and only when all its pieces are still
+there and the player carries none (`StaleClue.canRelocate` takes the clue's
+count). Piles (many copies of one thing) still never move. Test:
+`test/nohelp_sets.lua`. Both changed files pass the game engine's own parser.
+
+**Not yet proven:** the move in a real world — plan step 8's visible
+playtest. The old generator's rule that a multi-item clue holds 5-24 items
+(`Story.lua`) does not fit 2-4 piece sets; it belongs to the generator that
+step 3 replaces, and step 3's per-area contract must not inherit it.

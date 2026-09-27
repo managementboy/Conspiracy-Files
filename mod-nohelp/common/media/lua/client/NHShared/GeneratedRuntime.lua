@@ -215,6 +215,15 @@ local function expectedCount(api,id)
     return 1
 end
 
+-- An object SET: one clue made of several different real items, which only
+-- mean something together (No Help, owner 2026-09-27).
+local function isObjectSet(api,id)
+    for _,d in ipairs(api.snapshot().case.documents) do
+        if d.id==id then return type(d.members)=="table" and #d.members>0 end
+    end
+    return false
+end
+
 local function createEvidenceItem(doc,kind,target)
     if doc.accessIntent=="starting-building" then
         local cell=getCell and getCell()
@@ -1850,8 +1859,11 @@ local function relocation(api)
                 -- copy without a yield. A quantity is a fact about a place
                 -- anyway; carrying it somewhere else would be a different
                 -- claim, not the same clue in a new drawer.
+                -- An object SET is the exception (owner, 2026-09-27, No
+                -- Help): its pieces mean something only together, so it moves
+                -- whole, every piece in one step, or not at all.
                 if StaleClue.canAttempt(root.assignments[candidate])
-                    and expectedCount(api,candidate)==1 then id=candidate; break end
+                    and (expectedCount(api,candidate)==1 or isObjectSet(api,candidate)) then id=candidate; break end
             end
             if not id then return true end
         end
@@ -1890,14 +1902,14 @@ local function relocation(api)
         end
         if StaleClue.tooClose(px,py,pz,target) then return false end
         if not tokenDone then
-            tokenScan=tokenScan or World.count(oldContainer,a.physicalToken,function(n) tokenCount=n; tokenDone=true end)
+            tokenScan=tokenScan or World.count(oldContainer,a.physicalToken,function(n) tokenCount=n; tokenDone=true end,expectedCount(api,id))
             tokenScan(); if not tokenDone then return false end
         end
         if not carryDone then
             carryScan=carryScan or World.count(p:getInventory(),a.physicalToken,function(n) carryCount=n; carryDone=true end)
             carryScan(); if not carryDone then return false end
         end
-        if not StaleClue.canRelocate(tokenCount,carryCount) then
+        if not StaleClue.canRelocate(tokenCount,carryCount,expectedCount(api,id)) then
             log("[CF-G2-RELOCATE] "..id..": guard refused (original="..tostring(tokenCount)..", carried="..tostring(carryCount)..")")
             return true
         end
@@ -1905,36 +1917,50 @@ local function relocation(api)
             local doc; for _,d in ipairs(root.case.documents) do if d.id==id then doc=d end end
             local destination=World.resolve(target)
             if not destination then log("[CF-G2-RELOCATE] "..id..": destination changed before placement; leaving in place"); return true end
-            local carrier=assert(require("NHShared/Generated/EvidenceKinds").get(doc.kind))
-            newItem=assert(instanceItem(carrier.fullType),"could not create relocated evidence item")
-            local md=newItem:getModData()
-            md.cfGeneratedId=id; md.cfPhysicalToken=a.physicalToken
-            -- Relocation RECREATES the item, and used to set the name here
-            -- and nothing else - so a relocated document reverted to its
-            -- script's own category and appeared as "Literature" in the middle
-            -- of a session (owner, 2026-09-13, at 101 4th St). Same stamp as
-            -- first placement now, from one function, so a third creation path
-            -- cannot drift the same way.
-            -- Still a plain item unless the survivor had already recognised
-            -- it (P4-R132).
-            if R.isRecognisedId(id) then stampEvidence(newItem,doc.title) end
-            applyWear(newItem,doc)
-            writePages(newItem,doc,root.case)
+            -- Every piece of the clue is rebuilt before any old piece is
+            -- removed: one item for a single clue, all of them for a set.
+            newItem={}
+            for _,member in ipairs(evidenceMembers(doc)) do
+              for _=1,member.quantity do
+                local carrier=assert(require("NHShared/Generated/EvidenceKinds").get(member.kind))
+                local piece=assert(instanceItem(carrier.fullType),"could not create relocated evidence item")
+                local md=piece:getModData()
+                md.cfGeneratedId=id; md.cfPhysicalToken=a.physicalToken
+                -- Relocation RECREATES the item, and used to set the name here
+                -- and nothing else - so a relocated document reverted to its
+                -- script's own category and appeared as "Literature" in the middle
+                -- of a session (owner, 2026-09-13, at 101 4th St). Same stamp as
+                -- first placement now, from one function, so a third creation path
+                -- cannot drift the same way.
+                -- Still a plain item unless the survivor had already recognised
+                -- it (P4-R132).
+                if R.isRecognisedId(id) then stampEvidence(piece,doc.title) end
+                applyWear(piece,member)
+                writePages(piece,doc,root.case)
+                newItem[#newItem+1]=piece
+              end
+            end
             newDestination=destination
         end
         -- T4/T5 policy is loss over duplication, and it is not merely a
         -- preference here: two items sharing one cfPhysicalToken make the
         -- periodic identity scan mark the document "conflict", which is
         -- sticky, so the clue would be dead permanently and Inspect would
-        -- refuse it forever. Remove the one verified old item first; the new
+        -- refuse it forever. Remove the verified old pieces first; the new
         -- copy is already built and detached, so the window is two engine
         -- calls with no yield between them.
         local items=oldContainer:getItems()
+        local old={}
         for i=0,items:size()-1 do
             local it=items:get(i); local md=it and it:getModData()
-            if md and md.cfPhysicalToken==a.physicalToken then oldContainer:Remove(it); break end
+            if md and md.cfPhysicalToken==a.physicalToken then old[#old+1]=it end
         end
-        if not newDestination:AddItem(newItem) then
+        for _,it in ipairs(old) do oldContainer:Remove(it) end
+        local added=true
+        for _,piece in ipairs(newItem) do
+            if not newDestination:AddItem(piece) then added=false end
+        end
+        if not added then
             -- The old copy is already gone. Record the honest uncertainty
             -- rather than leaving canonical state claiming a placed item.
             checked(api.status(id,"unknown"))
