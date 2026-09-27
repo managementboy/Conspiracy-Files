@@ -92,22 +92,10 @@ function O.see(item,carrierLabel,token)
 end
 
 -- A building that holds part of an open case, as a phrase for the journal.
+-- The old generated case's "file marked" text went with the old generator
+-- (owner, 2026-09-27); an area lookup replaces it in a later step.
 local function caseFor(building)
-    local ok,phrase=pcall(function()
-        local Cases=require("NHShared/Generated/SuccessiveCases")
-        local wrapper=Cases.currentCached(ModData.get("NHShared.Generated.G2"),getTimeInMillis and getTimeInMillis())
-        for _,r in ipairs(wrapper and Cases.sessions(wrapper) or {}) do
-            local case=r.case
-            if case and case.locations then
-                for _,site in ipairs(case.locations) do
-                    if site.id=="t3:"..building then
-                        return "an address in the file marked "..tostring(case.facts and case.facts.code or "?")
-                    end
-                end
-            end
-        end
-    end)
-    return ok and phrase or nil
+    return nil
 end
 
 function O.rows()

@@ -1,16 +1,14 @@
 local StorageChoices=require("NHShared/Generated/StorageChoices")
-local G=require("NHShared/Generated/Generator")
 local AreaCase=require("NHShared/Generated/AreaCase")
 local V=require("NHShared/Validator")
-local RoomAffinity=require("NHShared/Generated/RoomAffinity")
 local S={}
--- A No Help world record (AreaCase) is validated and projected by its own
--- rules; every other case is a Generator case as before.
+-- A No Help world record (AreaCase) is the only case there is: the old
+-- runtime case generator is gone (owner, 2026-09-27).
 local function isArea(root) return type(root)=="table" and AreaCase.isAreaCase(root.case) end
 S.isArea=isArea
 local function validateCase(case)
     if AreaCase.isAreaCase(case) then return AreaCase.validate(case) end
-    return G.validate(case)
+    return false,"not a No Help world record"
 end
 -- Stale clue relocation (docs/management/STALE_CLUE_RELOCATION.md): a placed,
 -- undiscovered document gets one new home after going unfound this long.
@@ -152,15 +150,6 @@ function S.intentMatches(doc,target)
         return vehicleTarget(target) and type(target.sceneSignature)=="string" and target.sceneSignature~=""
     end
     return true
-end
--- Which of a case's clues may be the mobile one, when the choice is deliberate
--- rather than a fallback: the LAST document, so the opening clue - the one the
--- first house must always supply (P4-R67) - is never the one that drives off.
-function S.mobileDocId(case)
-    local docs=type(case)=="table" and case.documents
-    if type(docs)~="table" or #docs==0 then return nil end
-    for _,doc in ipairs(docs) do if doc.placementIntent=="vehicle" then return doc.id end end
-    return docs[#docs].id
 end
 -- How many of this case's clues are already on something that moves.
 function S.mobileCount(root)
@@ -362,34 +351,12 @@ function S.validate(root)
             if not listed[id] or not S.FOUND_HOW[how] then return false,"invalid recognition method" end
         end
     end
-    -- A No Help world record has no size ceiling (owner, 2026-09-27); an old
-    -- Generator case keeps the one it was built with.
-    if not isArea(root) and V.estimateEncodedBytes(root)>500000 then return false,"canonical size exceeded" end
+    -- A No Help world record has no size ceiling (owner, 2026-09-27).
     return true
 end
--- `hours` is the world clock, and is only ever read for a document that has no
--- target: that clue goes in as `deferred` and the filler places it later
--- (P4-R133). A caller that supplies every target never needs it.
 -- A new, empty No Help world record for a world seed.
 function S.createArea(seed)
     local root={schema=1,case=AreaCase.new(seed),assignments={},known={}}
-    local ok,why=S.validate(root); if not ok then return nil,why end
-    return root
-end
-function S.create(case,targets,documentTargets,hours)
-    local root={schema=1,case=copy(case),assignments={},known={}}
-    for _,d in ipairs(case.documents) do
-        local target=documentTargets and documentTargets[d.id] or targets[d.locationId]
-        if target==nil then
-            root.assignments[d.id]={physicalToken="cf-g2:"..d.id,status="deferred",
-                locationId=d.locationId,deferredHours=hours or 0,relocations=0}
-        elseif target.indexed==true then
-            root.assignments[d.id]={physicalToken="cf-g2:"..d.id,status="indexed",planned=copy(target),
-                locationId=d.locationId,deferredHours=hours or 0,relocations=0}
-        else
-            root.assignments[d.id]={physicalToken="cf-g2:"..d.id,target=copy(target),status="pending",relocations=0}
-        end
-    end
     local ok,why=S.validate(root); if not ok then return nil,why end
     return root
 end
@@ -473,180 +440,6 @@ function S.missingIds(root,hours)
     end
     return out
 end
--- Is every clue of this case accounted for? A found clue is; a dropped one is
--- too - it was never in the world and never will be. A deferred one is NOT,
--- which is what stops "nothing left to find" and the closing question firing
--- while a clue is still unwritten (P4-R133).
--- A TRANSPORT SCENE REALITY NEVER PROMOTED DOES NOT HOLD THE CASE OPEN.
--- A clue with placementIntent "vehicle" waits for a CONFIRMED vanilla scene
--- near its site (vehicleCandidateFor); the opening families say such a clue
--- "cannot make the case fail merely because this save has no suitable nearby
--- scene". It did not fail the case - it held it open for three in-game days,
--- with every essential clue found and "What do I make of it?" not firing
--- (core loop 20260925T200914, the unemployed opening; every audit of the
--- Fitness opening saw the cooler wait the same way). So: a vehicle clue still
--- WAITING when everything else is accounted for is set aside, and the case
--- ends without it - honestly, through S.gaps, never silently.
-function S.unpromotedVehicleIds(root)
-    local out={}
-    for _,d in ipairs(root.case and root.case.documents or {}) do
-        local a=root.assignments[d.id]
-        if d.placementIntent=="vehicle" and a and (a.status=="deferred" or a.status=="indexed") then
-            out[#out+1]=d.id
-        end
-    end
-    return out
-end
-function S.accounted(root)
-    if type(root)~="table" or type(root.case)~="table" then return false end
-    -- The No Help world record is never finished and never retired.
-    if isArea(root) then return false end
-    local known={}
-    for _,id in ipairs(root.known or {}) do known[id]=true end
-    for _,d in ipairs(root.case.documents) do
-        local a=root.assignments[d.id]
-        local waitingScene=d.placementIntent=="vehicle" and a and (a.status=="deferred" or a.status=="indexed")
-        if not known[d.id] and not (a and a.status=="dropped") and not waitingScene then return false end
-    end
-    return true
-end
--- THE DOCUMENTS THIS CASE ENDED WITHOUT (DR-20260919-SOLVABLE-WITHDRAWN).
---
--- `accounted` above counts a DROPPED clue as accounted for, which is right: a
--- clue with nowhere to go after three in-game days must not squat an active
--- slot for ever, and a four-clue case is still a case (P4-R133). But it makes
--- "accounted for" and "found" the same answer at the one moment they differ,
--- and the completion path then says "That's all of it" over a case that was
--- never fully placed. That is the mod claiming an ending it did not deliver.
---
--- So the ending is not blocked - a case may still complete on the clues it got
--- - but it may no longer be SILENT about the ones it never had. This returns
--- those ids, in the case's own document order, so the caller can say so.
---
--- Deliberately not "lost": nothing here knows a document was destroyed or
--- taken, and no record may ever say so (P4-R104). The honest statement is
--- always about the survivor's reach, never about the document's fate.
---
--- TWO HISTORIES, and they are not the same thing. `droppedFrom` says which:
---   "deferred" - never found a container, so never in the world at all
---   "carrier"  - WAS placed, on a body, zombie or car that then went away
--- An earlier version of this comment claimed every dropped clue was never
--- placed. That was false for the carrier path, and it is the distinction a run
--- needs in order to say which failure it actually saw. `history` is a second
--- return, keyed by id, so a caller that only wants the count is unaffected.
-function S.gaps(root)
-    local out,history={},{}
-    if type(root)~="table" then return out,history end
-    -- A RETIRED record answers from what it carried (S.retiredGapFields). The
-    -- ids alone were not enough: the owner asked for the drop-path history to
-    -- survive retirement too, and without it a finished case could say WHICH
-    -- clue it never had but not whether that clue was never in the world or
-    -- was on a carrier that went away - the distinction P4-R141 exists for.
-    if type(root.case)~="table" or type(root.assignments)~="table" then
-        for _,id in ipairs(root.gaps or {}) do
-            out[#out+1]=id
-            history[id]=(root.gapsFrom or {})[id] or "unrecorded"
-        end
-        return out,history
-    end
-    local known={}
-    for _,id in ipairs(root.known or {}) do known[id]=true end
-    for _,seen in ipairs(root.recognised or {}) do known[seen]=true end
-    for _,d in ipairs(root.case.documents) do
-        local a=root.assignments[d.id]
-        if not known[d.id] and a and a.status=="dropped" then
-            out[#out+1]=d.id
-            -- A save written before droppedFrom existed has neither value, and
-            -- must not be guessed at: "unrecorded" is the truth about it.
-            history[d.id]=a.droppedFrom or "unrecorded"
-        end
-    end
-    return out,history
-end
--- WHICH COMPLETION STATE A CASE IS IN. Four answers, not a boolean and not a
--- count (DR-20260919-SOLVABLE-WITHDRAWN):
---   "unfinished"          - clues left to find, or a clue still waiting
---   "complete"            - every clue placed and found
---   "complete-with-gaps"  - finished, but the case ended without a clue
---   "unknown"             - this record cannot answer the question
---
--- "unknown" is a real answer and the reason this exists. A retired case keeps
--- only {schema,caseId,rows,known,offered,answers,completedHours}: no
--- assignments, no case envelope. Asked the old way it reported no gaps, so
--- every FINISHED case - precisely where completion happened - read as clean,
--- and the harness printed "every clue accounted for and found". An absence of
--- evidence rendered as a positive finding. A record that cannot answer says so.
---
--- A retired case that carried its completion forward (S.retiredGapFields) CAN
--- answer, and is read from those fields.
-S.UNFINISHED="unfinished"; S.COMPLETE="complete"
-S.WITH_GAPS="complete-with-gaps"; S.UNKNOWN="unknown"
--- A FIFTH STATE, and the one the opening pair needs. A case that ended without
--- a clue its CONCLUSION rests on has not delivered its payoff, however honestly
--- it words its closing line (DR-20260919-GAP-NOT-PROGRESSION): saying "some of
--- this never turned up" is accurate reporting, not a mystery. Such a case is
--- INCOMPLETE - it states no conclusion, asks no closing questions, and keeps a
--- recovery route (OPENING_PAIR_COMPLETION.md).
---
--- Only a case whose premise declares essential links can reach it. For every
--- ordinary premise `case.essential` is absent, all clues are equal, and nothing
--- about the existing states changes.
-S.INCOMPLETE="incomplete-essential"
-
--- The gaps that matter: those the case's own conclusion rests on.
-function S.essentialGaps(root)
-    local out={}
-    if type(root)~="table" then return out end
-    local essential=(type(root.case)=="table" and root.case.essential) or root.essential
-    if type(essential)~="table" then return out end
-    local need={}
-    for _,id in ipairs(essential) do need[id]=true end
-    local gaps=S.gaps(root)
-    for _,id in ipairs(gaps) do if need[id] then out[#out+1]=id end end
-    return out
-end
-function S.completion(root)
-    if type(root)~="table" then return S.UNKNOWN,{} end
-    if type(root.case)~="table" or type(root.assignments)~="table" then
-        if root.completion==S.COMPLETE then return S.COMPLETE,{} end
-        if root.completion==S.WITH_GAPS or root.completion==S.INCOMPLETE then
-            local out={}
-            for _,id in ipairs(root.gaps or {}) do out[#out+1]=id end
-            return root.completion,out
-        end
-        return S.UNKNOWN,{}
-    end
-    if not S.accounted(root) then return S.UNFINISHED,{} end
-    local gaps=S.gaps(root)
-    if #gaps>0 then
-        -- An essential gap outranks an ordinary one: the case owes a payoff it
-        -- cannot deliver, which is a different thing from having lost a
-        -- corroborating scrap.
-        local essential=S.essentialGaps(root)
-        if #essential>0 then return S.INCOMPLETE,gaps end
-        return S.WITH_GAPS,gaps
-    end
-    return S.COMPLETE,{}
-end
--- What a retiring case must carry forward so the answer above survives it. Two
--- short fields, never the assignments: a finished case knew whether it
--- delivered its chain, and that is the kind of sourced fact retirement is meant
--- to keep (DR-20260919-Q18) rather than discard. An unfinished or unanswerable
--- case carries nothing, so no record ever claims a state it did not reach.
-function S.retiredGapFields(root)
-    local state,gaps=S.completion(root)
-    if state==S.UNKNOWN or state==S.UNFINISHED then return {} end
-    if #gaps==0 then return {completion=state,gaps=gaps} end
-    -- The history too, as a map id -> "deferred"/"carrier"/"unrecorded". A few
-    -- dozen bytes, and it is the half that says WHICH failure the case had.
-    local _,history=S.gaps(root)
-    local from={}
-    for _,id in ipairs(gaps) do from[id]=history[id] or "unrecorded" end
-    return {completion=state,gaps=gaps,gapsFrom=from}
-end
--- Rooms and occupancy are optional preferences. With hints, equal candidates
--- are selected by kind rather than by how many counters appeared first in the
--- scan. All paths retain reachability, distinct containers and the mobile cap.
 -- One container, named so nothing else can claim it: the square, the object and
 -- container index on it, and the vehicle part where there is one. Exported
 -- because the filler (GeneratedRuntime) must check a late clue's container
@@ -665,135 +458,6 @@ function S.physicalKey(target)
     if target.ground==true then return "ground:"..table.concat({target.x,target.y,target.z},":") end
     return table.concat({target.x,target.y,target.z,target.objectIndex,target.containerIndex,
                          target.vehiclePart or "-"},":")
-end
-local physicalKey=S.physicalKey
--- Returns the root and, second, the ids it could NOT place - the open order
--- (P4-R133). It no longer fails for want of containers: a case goes live with
--- the clues that fit and the rest wait as `deferred` assignments. It still
--- fails for a case that is not a case (an invalid envelope), and it still
--- never puts two clues in one container (P4-R67).
-function S.createDistributed(case,candidates,rooms,occupied,hours,preferences)
-    local valid,why=validateCase(case);if not valid then return nil,why end
-    local sites,used,counts,taken,targets={},{},{},{},{}
-    local usedKinds={}
-    local deferred={}
-    for _,site in ipairs(case.locations) do sites[site.id]=site end
-    -- At most one mobile clue per case, and the case says which (P4-R134): the
-    -- last document may take a car part or a carrier, and every other clue
-    -- takes a fixed container or waits for one. A car used to be whatever was
-    -- left over, so a case could end up with three of its clues driving about.
-    local mobileDoc=S.mobileDocId(case)
-    local mobile=0
-    local function mobileOK(doc,target)
-        if target and not S.intentMatches(doc,target) then return false end
-        if not S.isMobile(target) then return true end
-        return doc.id==mobileDoc and mobile<S.MOBILE_PER_CASE
-    end
-    for _,doc in ipairs(case.documents) do
-        local list=type(candidates)=="table" and candidates[doc.locationId]
-        local target
-        -- The original counts-indexed path runs only when NEITHER hint is
-        -- supplied, so behaviour is byte-identical to before either existed.
-        -- Testing occupancy alone caught this: gating on `rooms` made the
-        -- preference inert whenever room names were absent.
-        if rooms==nil and occupied==nil and preferences==nil then
-            counts[doc.locationId]=(counts[doc.locationId] or 0)+1
-            target=type(list)=="table" and list[counts[doc.locationId]]
-            -- The one addition to the original path: the mobile cap applies
-            -- here too, so a case cannot collect three car clues merely because
-            -- nobody passed a hint (P4-R134). A refused candidate defers, which
-            -- is what a shortage has meant since P4-R133.
-            if not mobileOK(doc,target) then target=nil end
-        else
-            taken[doc.locationId]=taken[doc.locationId] or {}
-            local siteTaken=taken[doc.locationId]
-            local roomsForSite=type(rooms)=="table" and rooms[doc.locationId]
-            local index
-            -- Only ever choose a candidate that would validate anyway. The
-            -- sequential path reaches candidates 1..n in order, so an invalid
-            -- entry later in the list could never be selected; preferring by
-            -- room can reach further in, so it must check rather than rely on
-            -- Storage.scan happening to emit only in-bounds candidates.
-            local site=sites[doc.locationId]
-            -- Not already given to another site either. A car parked between
-            -- the case's two buildings is a candidate at both (2026-09-11
-            -- playtest: "repeated physical container" the first time vehicles
-            -- were actually found).
-            local function usable(i)
-                return not siteTaken[i] and (S.target(list[i],site) or S.plannedTarget(list[i],site)) and not used[physicalKey(list[i])]
-                    and mobileOK(doc,list[i])
-            end
-            -- `occupied` is OPTIONAL and is a preference, never a filter. A
-            -- document left alone in an empty drawer is the thing that reads
-            -- as placed by software; among somebody's belongings it reads as
-            -- part of the house. So a container that already holds something
-            -- is preferred, and a site with nothing but empty containers still
-            -- gets its document rather than deferring.
-            --
-            -- Room plus occupancy, room, occupancy, any usable. Within a tier,
-            -- prefer an unused kind and then a stable seeded tie-break per kind.
-            local occupiedForSite=type(occupied)=="table" and occupied[doc.locationId]
-            local function livedIn(i)
-                return type(occupiedForSite)=="table" and occupiedForSite[i]==true
-            end
-            -- The deliberate choice (P4-R134, build order 4): the one clue that
-            -- MAY be mobile takes a car part or a carrier when one is offered,
-            -- rather than getting one only because nothing else was left. A
-            -- note in a glovebox at the address is a better find than the
-            -- twelfth cupboard in the same house; the cap above is what keeps
-            -- it to one.
-            if type(list)=="table" and doc.id==mobileDoc then
-                for i=1,#list do if S.isMobile(list[i]) and usable(i) then index=i;break end end
-            end
-            if not index then
-                index=StorageChoices.choose(list,doc.id..":"..case.seed,usable,function(i)
-                    local fits=type(roomsForSite)=="table" and RoomAffinity.prefers(doc,roomsForSite[i])
-                    local tier
-                    if fits and livedIn(i) then tier=0
-                    elseif fits then tier=1
-                    else tier=livedIn(i) and 2 or 3 end
-                    -- The first personal clue normally goes straight into the
-                    -- survivor's inventory. Its assigned starting-house
-                    -- container remains the honest origin and the fallback if
-                    -- that transfer cannot happen. Within the same authored
-                    -- room/occupancy tier, prefer one away from the exact spawn
-                    -- tile so that fallback is not lying at their feet.
-                    local far=type(preferences)=="table" and preferences.farFrom
-                    if type(far)=="table" and far.documentId==doc.id then
-                        local candidate=list[i]
-                        local dx=(candidate.x or far.x)-far.x
-                        local dy=(candidate.y or far.y)-far.y
-                        local distance=math.min(999999,dx*dx+dy*dy)
-                        return tier*1000000+(999999-distance)
-                    end
-                    return tier
-                end,usedKinds[doc.locationId])
-            end
-            if index then siteTaken[index]=true end
-            target=index and list[index]
-        end
-        -- Nothing usable at this site right now: the clue waits rather than the
-        -- whole case being thrown away. This is the fault P4-R133 was written
-        -- for - standing still exhausts the loaded area, and a house yields one
-        -- candidate from the street and eight once the survivor walks in.
-        if not S.target(target,sites[doc.locationId]) and not S.plannedTarget(target,sites[doc.locationId]) then
-            deferred[#deferred+1]=doc.id
-        else
-            -- Two documents may share a car but never a part, so the part joins
-            -- the uniqueness key: without it, a glovebox and a boot at the same
-            -- parking square would look like one container.
-            local key=physicalKey(target)
-            if used[key] then return nil,"repeated physical container" end
-            used[key]=true;targets[doc.id]=target
-            usedKinds[doc.locationId]=usedKinds[doc.locationId] or {}
-            local kinds=usedKinds[doc.locationId]
-            kinds[target.containerType]=(kinds[target.containerType] or 0)+1
-            if S.isMobile(target) then mobile=mobile+1 end
-        end
-    end
-    local root,why=S.create(case,{},targets,hours)
-    if not root then return nil,why end
-    return root,deferred
 end
 function S.open(initial,sink)
     local ok,why=S.validate(initial); if not ok then return nil,why end
@@ -1006,8 +670,7 @@ function S.open(initial,sink)
         return true,ids
     end
     function api.project()
-        if AreaCase.isAreaCase(root.case) then return AreaCase.project(root.case) end
-        return G.project(root.case,root.known)
+        return AreaCase.project(root.case)
     end
     return api
 end

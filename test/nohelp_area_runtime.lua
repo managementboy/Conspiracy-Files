@@ -16,11 +16,9 @@ local src=read(PATH)
 local function has(text,why) assert(src:find(text,1,true),why.." ("..text..")") end
 local function hasNot(text,why) assert(not src:find(text,1,true),why.." ("..text..")") end
 
--- GeneratedMode is set at load, before the early return, so the old Dead Air
--- slice stays off without AutomaticInvestigations.lua.
-local modeAt=src:find("\nNHShared.GeneratedMode=true\n",1,true)
-assert(modeAt,"GeneratedMode is set at load")
-assert(modeAt<src:find("if R.loaded then return R end",1,true),"and before the loaded guard")
+-- The Dead Air slice is gone, and with it the switch that kept it off.
+hasNot("GeneratedMode","nothing is left to switch off")
+hasNot("NHShared.Runtime","the Dead Air runtime is gone")
 
 -- The old case lifecycle is gone.
 for _,name in ipairs({"function R.start(","function R.nextCase(","function R.reshuffle(","function R.primeOpening(",
@@ -117,7 +115,6 @@ local Inventory=require("nohelp_inventory")
 Manifest.clues=Inventory.clues
 
 local R=dofile(PATH)
-assert(NHShared.GeneratedMode==true,"loading the runtime selects the generated mode")
 assert(R.start==nil and R.nextCase==nil and R.reshuffle==nil and R.primeOpening==nil,
     "the old entry points do not exist")
 

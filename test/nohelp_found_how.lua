@@ -4,22 +4,40 @@
 -- clues found by searching against clues looted and looked over, instead of
 -- guessing from impressions.
 --
--- Uses a real generated session (test/fixtures/generated_session.lua, pointed
--- at mod-nohelp's copy of the engine), because the validator refuses any
--- hand-written case.
-local source=assert(io.open("test/fixtures/generated_session.lua","rb")):read("*a")
-source=source:gsub("mod/common/media/lua/shared","mod-nohelp/common/media/lua/shared")
-             :gsub("ConspiracyFiles/","NHShared/")
-local F=assert(loadstring(source,"generated_session (No Help)"))()
+-- Uses a real No Help world record: S.createArea, one area added with
+-- api.addArea from the offline clue inventory, and every clue PLACED at a
+-- spot of its own kind before it is recognised (a waiting clue cannot be).
+package.path="mod-nohelp/common/media/lua/shared/?.lua;test/fixtures/?.lua;"..package.path
 local S=require("NHShared/Generated/Session")
+local Inventory=require("nohelp_inventory")
 assert(S.FOUND_HOW.search and S.FOUND_HOW.look,"NH-D2: searching and looking it over are both ways a clue is found")
 
-local root=F.root(1)
+local site={id="t3:b1",bounds={x1=100,y1=0,x2=110,y2=10,z=0},containerTypes={"shelves","postbox","vehicle"}}
+local root=assert(S.createArea(4242),"a new world record")
 local saved=root
 local api=assert(S.open(root,function(next) saved=next end))
-local ids={}
-for _,d in ipairs(root.case.documents) do ids[#ids+1]=d.id end
-assert(#ids>=2,"the fixture case has at least two clues")
+local ok,ids=api.addArea{site=site,place="farm",clues=Inventory.clues,version="v1",hours=10}
+assert(ok,"an area is added: "..tostring(ids))
+assert(#ids>=2,"the area has at least two clues")
+
+-- Give every clue a distinct spot of its own kind, then place it.
+local function targetFor(spot,i)
+    local x,y=site.bounds.x1+i,site.bounds.y1+i
+    if spot=="furniture" then return {x=x,y=y,z=0,objectIndex=i,containerIndex=0,containerType="shelves",sprite="s"} end
+    if spot=="mailbox" then return {x=x,y=y,z=0,objectIndex=i,containerIndex=0,containerType="postbox",sprite="p"} end
+    if spot=="ground" then return {x=x,y=y,z=0,objectIndex=0,containerIndex=0,containerType="floor",sprite="yard",ground=true} end
+    if spot=="vehicle" then return {x=x,y=y,z=0,objectIndex=0,containerIndex=0,containerType="vehicle",sprite="car",vehiclePart="GloveBox"..i} end
+    if spot=="corpse" then return {x=x,y=y,z=0,objectIndex=0,containerIndex=0,containerType=S.CARRIER_CONTAINER,sprite="body",carrierKind="corpse",carrierMark="m"..i} end
+    error("unknown spot "..tostring(spot))
+end
+local spotOf={}
+for _,d in ipairs(saved.case.documents) do spotOf[d.id]=d.spot end
+for i,id in ipairs(ids) do
+    assert(not api.recognise(id,"search"),"a clue still waiting for its spot cannot be recognised")
+    assert(api.assign(id,targetFor(spotOf[id],i),11),"clue "..id.." takes a "..tostring(spotOf[id]).." spot")
+    assert(api.status(id,"placing"))
+    assert(api.status(id,"placed",12))
+end
 
 assert(api.recognise(ids[1],"search"),"a clue spotted in Search Mode is recognised")
 assert(api.recognise(ids[2],"look"),"a clue looked over is recognised")

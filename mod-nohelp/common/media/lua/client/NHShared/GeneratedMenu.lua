@@ -1,6 +1,31 @@
 local EngineAPI=require("NHShared/EngineAPI")
 local R=EngineAPI.GeneratedRuntime
-local Menu=require("NHShared/ContextMenu")
+-- Inventory-menu selections, flattened (moved here from the Dead Air
+-- ContextMenu when that slice was removed): at most 64 distinct items, and
+-- whether the selection overflowed.
+local Menu={}
+local function isItem(value)
+    if not value or not instanceof then return false end
+    local ok,yes=pcall(instanceof,value,"InventoryItem"); return ok and yes
+end
+function Menu.normalize(items)
+    local out,seen,overflow={}, {},false
+    local function add(item)
+        if isItem(item) and not seen[item] then
+            if #out>=64 then overflow=true; return end
+            seen[item]=true; out[#out+1]=item
+        end
+    end
+    for index,value in ipairs(items or {}) do
+        if index>64 then overflow=true; break end
+        if isItem(value) then add(value)
+        elseif type(value)=="table" and type(value.items)=="table" then
+            for i=2,math.min(#value.items,65) do add(value.items[i]) end
+            if #value.items>65 then overflow=true end
+        end
+    end
+    return out,overflow
+end
 local Actions=require("NHShared/ClueActions")
 NHShared=NHShared or {}
 local M=NHShared.GeneratedMenu or {}

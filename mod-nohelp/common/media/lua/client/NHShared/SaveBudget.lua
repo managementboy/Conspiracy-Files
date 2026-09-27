@@ -7,7 +7,7 @@ local B={}
 -- the campaign evidence was therefore an undercount, and the 500 kB assertion
 -- was being made against the wrong number - the same shape of mistake as
 -- measuring one root and calling it the save (2026-09-21 retraction).
-local tags={generated="NHShared.Generated.G2",addresses="NHShared.AddressBook.Muldraugh",legacy="NHShared.DeadAir",identities="NHShared.IdentityObservations",keyConnections="NHShared.KeyConnections",localPeople="NHShared.LocalPeople",discoveries="NHShared.DiscoveryLedger",visitedBuildings="NHShared.VisitedBuildings",observedKeyLeads="NHShared.ObservedKeyLeads",personNames="NHShared.PersonNameObservations",bodyOutfits="NHShared.BodyOutfitObservations",placeVisits="NHShared.PlaceVisits",mapMedia="NHShared.MapMedia"}
+local tags={generated="NHShared.Generated.G2",addresses="NHShared.AddressBook.Muldraugh",identities="NHShared.IdentityObservations",keyConnections="NHShared.KeyConnections",localPeople="NHShared.LocalPeople",discoveries="NHShared.DiscoveryLedger",visitedBuildings="NHShared.VisitedBuildings",observedKeyLeads="NHShared.ObservedKeyLeads",personNames="NHShared.PersonNameObservations",bodyOutfits="NHShared.BodyOutfitObservations",placeVisits="NHShared.PlaceVisits",mapMedia="NHShared.MapMedia"}
 -- Measuring every saved root on every write cost 20-50 ms on the Linux test
 -- laptop (perf check, 2026-09-11): the whole ~170 KB was walked to record one
 -- map mark or one ID. A store keeps its identity while each write replaces its

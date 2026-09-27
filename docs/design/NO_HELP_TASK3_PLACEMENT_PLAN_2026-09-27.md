@@ -572,3 +572,23 @@ address book, map marks and scenes (steps 4-5). Ground clues wait until a
 scan offers ground spots (step 4). Still to remove: the old generator's own
 files (Generator, Story, Premises, scenarios...), the rest of the old case
 store, and Dead Air.
+
+### Removal finished: the old generator's files and Dead Air
+
+**Deleted (26 files):** the old case generator and everything only it used —
+Generator, RetiredCase, Story, Premises, ConspiracyPair, RelayMemo, Calendar,
+the seven scenario files and PersonalContinuation — and the Dead Air slice
+(Runtime, the old Session, Placement, Content, Ids, ThreadState, Renderer,
+Bindings, Version, init, ContextMenu). The Session and the case store are now
+No Help world records only; Validator keeps only its structure and size
+helpers. The mod is 261 files, all passing the engine parser.
+
+**Behaviour to know:** a save that still holds an old generated case no
+longer starts the clue system (No Help has never shipped; P4-R63, no old-save
+compatibility before 1.0). A new save works. Some harmless comments and dead
+branches that mention retired cases remain in ClueMarkers, LocalPerson and
+PlayerVoice.
+
+**Next:** the ID features chosen by the owner (keys, clothing, the unfound
+clue on a lost body placed again), then step 4 (map marks and spots, including
+ground spots) and step 5 (vanilla scenes), with the ADHD review of phase 5.

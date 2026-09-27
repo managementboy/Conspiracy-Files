@@ -55,9 +55,8 @@ if targets[doc.spot] then
     assert(saved.assignments[doc.id].status=="pending")
 end
 
--- Nothing expires and the world is never "accounted" (never retired).
+-- Nothing expires.
 assert(#S.expiredIds(saved,100000)==0,"a waiting No Help clue never expires")
-assert(S.accounted(saved)==false,"the world record is never finished")
 
 -- Relocation stays in the clue's own area.
 local api2=assert(S.open(saved,function(n) saved=n end))

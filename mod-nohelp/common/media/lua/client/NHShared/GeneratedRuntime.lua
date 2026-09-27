@@ -2,11 +2,6 @@
 -- grown as the survivor comes near interesting places, and placed by the
 -- existing placement, filler, identity and relocation jobs.
 NHShared=NHShared or {}
--- Select the generated mode at load, before any shared OnGameStart handler
--- runs, so the old Dead Air slice (NHShared/Runtime.lua) stays off. This used
--- to be set by AutomaticInvestigations.lua, which went with the old case
--- generator (owner, 2026-09-27: Dead Air is not part of No Help).
-NHShared.GeneratedMode=true
 local Session=require("NHShared/Generated/Session")
 local AreaPlace=require("NHShared/Generated/AreaPlace")
 local Manifest=require("NHShared/Mystery/Manifest")
@@ -113,8 +108,6 @@ local function worldHours()
 end
 local function setup()
     if not allowed() then return false,"G2 requires debug single-player, without T11/T12" end
-    NHShared.GeneratedMode=true
-    if NHShared.Runtime then NHShared.Runtime.disabled=true end
     local store=ModData.getOrCreate(TAG)
     local active,err=Cases.current(store)
     -- Kahlua exposes pairs, but not the standard Lua next global.

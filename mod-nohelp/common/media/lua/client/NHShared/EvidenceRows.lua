@@ -24,7 +24,6 @@
 -- reaches this file before InteractionAPI.lua's own dependencies have
 -- necessarily finished loading).
 local PlaceNames=require("NHShared/Generated/PlaceNames")
-local RelayMemo=require("NHShared/Generated/RelayMemo")
 local PlaceIndex=require("NHShared/PlaceIndex")
 local Headings=require("NHShared/Headings")
 
@@ -51,22 +50,13 @@ function Rows.build(section,runtime)
     local wrapper=ModData and ModData.get and ModData.get("NHShared.Generated.G2")
     local Cases=wrapper and require("NHShared/Generated/SuccessiveCases")
     wrapper=Cases and Cases.current(wrapper)
-    -- The week is only pointed out once the relay memo that defines it has
-    -- been found (P4-R96); before that the dates are just dates.
-    local memoFound=false
-    for _,r in ipairs(known) do
-        titles[r.id]=r.title
-        if r.kind==RelayMemo.KIND then memoFound=true end
-    end
+    for _,r in ipairs(known) do titles[r.id]=r.title end
     -- "Disputes delivery in" was left over from when every case was about a
     -- delivery. Plain verbs that fit any of the twenty stories.
     local meanings={corroborates="Agrees with",['disputes-delivery']="Does not match",recontextualises="Adds context to"}
     for i,r in ipairs(known) do
         local root=Cases and Cases.find(wrapper,r.id)
-        -- Retired evidence keeps its original places and reference. Resolving
-        -- a readable address must not stop working when placement work ends.
-        local case=root and (root.case or (root.locations and
-            {locations=root.locations,facts={code=root.reference},followsFrom=root.followsFrom}))
+        local case=root and root.case
         -- THE TWO WRITERS OF A PLACE, in order, not one or the other.
         -- AddressMap names the sites the shipped book has a number for
         -- (P4-R129); PlaceNames then reads whatever place words are LEFT the
@@ -99,11 +89,6 @@ function Rows.build(section,runtime)
         end
         -- Unknown source titles cannot become hints through a backend link.
         -- Authored questions already live in the discovered source's own note.
-        -- A maybe, never a finding: the mod does not know the week means
-        -- anything. The memo is not noted against itself.
-        if memoFound and r.kind~=RelayMemo.KIND and RelayMemo.inWeek(r.body) then
-            detail=detail.."\n\n"..RelayMemo.NOTE
-        end
         -- Several cases interleave chronologically by design; the case's own
         -- short dispatch code (already shown in document titles, e.g.
         -- "Dispatch copy / R-482") orients the reader without grouping or
