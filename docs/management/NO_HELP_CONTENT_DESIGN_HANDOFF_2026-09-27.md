@@ -346,7 +346,23 @@ paraphrasing.
    round 2's deepening and `DUAL_CONSPIRACY_WORLD_EVIDENCE_VISION_2026-09-
    22.md`'s own open item 10 — it blocks committing to the "one-shot
    irreversible world-as-record" mechanism cleanly.
-3. **Scale `Placement.lua`'s data** (not its code) from the original mod's 2
+3. **Superseded as worded, 2026-09-27 — see DR-20260927-NOHELP-RULE-PLACEMENT.**
+   A pre-task-3 `/adhd` check found this task was not data-only: `Placement.lua`
+   and `Content.validateContent()` hard-code the Dead Air counts, the
+   placement token prefix, and a plan shape that refuses new fields, and
+   `newPlan` silently puts two items in one container when a location has more
+   members than candidates. It also found two mutually exclusive, debug-gated
+   placement paths: this fixed slice (`Runtime.lua` → `Session.lua` →
+   `Placement.lua`) and the generated runtime (`GeneratedRuntime.lua` →
+   `Generated/*`, the only caller of `StaleClue.lua`). So §3 above and §8 of
+   the design doc are wrong to call `Generated/*` unused. The owner then chose
+   rule-based placement of hundreds of clues across hours or days of play, so
+   the task is now: build rule-based placement over the address book on the
+   generated runtime (engine chosen by the owner the same day, recorded in the
+   same DR), replacing its runtime case generator with authored content.
+   The plan is `docs/design/NO_HELP_TASK3_PLACEMENT_PLAN_2026-09-27.md`
+   (second version: Search Mode discovery, object clues as sets, anywhere
+   interesting, silent moves). Original text: **Scale `Placement.lua`'s data** (not its code) from the original mod's 2
    location-slot families / 7 assets to whatever "No Help" needs for Theory
    A/B evidence — read `Content.lua` and `Session.lua` first to see the
    current (still Dead-Air-named) shape before designing the replacement.

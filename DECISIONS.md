@@ -1,3 +1,128 @@
+## DR-20260927-NOHELP-RULE-PLACEMENT — content is written, placement is not
+
+Owner decision, 2026-09-27, "No Help" content design, asked whether its
+placement should draw from hand-curated candidate spots or from rules: *"Goal
+is clearly [rules] as we will have hundreds of clues to be placed during hours
+or days of playtime."*
+
+**What a clue is and says is authored in advance; where it lands is decided by
+rules at runtime.** The ban in `NO_HELP_CONSPIRACY_DESIGN_2026-09-26.md` §1
+("evidence will not be generated procedurally") covers content only. It never
+covered placement, and it must not be read as if it did.
+
+- **Rule-based, not curated pools.** A clue may land in any building and
+  container the rules allow — container family, fixed vs. portable, minimum
+  distance between copies of one fact, theory affinity — not a pick from 3-4
+  hand-typed spots. The whole-map address book (`Generated/AddressBook.lua`)
+  is the location source; a live check confirms the container actually
+  exists before anything is placed there, per T3 (automatic room
+  categorisation stays advisory).
+- **Hundreds of clues**, not the ~40-100 the handoff assumed. Hand-typed
+  coordinates are not a design option at that scale.
+- **Placed across hours or days of play**, which makes placement standing,
+  bounded background work (T2) with exact-once per item (T4), not one pass at
+  game start.
+- **Rules must be provable offline.** With placement no longer fixed, the
+  cross-item rules (copies, families, distance, one fixed copy, one death
+  cannot reach every copy per DR-20260927-WORLD-KEEPS-EVERYTHING) have to be
+  checked by an offline tool against the rule set, not trusted per seed.
+
+**Engine consequence.** `NHShared/Placement.lua` (curated pools, 7 assets,
+hard-coded Dead Air counts) cannot carry this as data alone. The generated
+runtime already has live scanning, container checks, a site catalogue and
+the address book; its runtime *case generator* is the part that conflicts
+with authored content.
+
+**Engine: the generated runtime** (owner, 2026-09-27, same session). No
+Help's placement is built on `GeneratedRuntime.lua` + `Generated/*`. Its
+runtime case generator is to be replaced by authored content; its live
+scanning, container checks, site catalogue, address book and exact-once
+placement are kept. The fixed slice (`Runtime.lua` → `Session.lua` →
+`Placement.lua`) is not extended for this; whether and when it is retired is
+a separate cleanup, not part of this decision. Section 9, question 3 of the
+design doc ("drop `Generated/*`?") is answered: no.
+
+**Timing: decided as the survivor plays, around where they are heading**
+(owner, 2026-09-27, same session): *"We want to take advantage of the
+variability provided by vanilla PZ with maps and misteries."* There is no
+whole-world plan at start. Which clue lands where is chosen progressively,
+near the player's path and at sites vanilla itself points to (annotated and
+stash maps, vanilla story scenes), so vanilla's own per-world variety drives
+where the conspiracies surface.
+
+This was chosen over a start-of-world plan knowing the cost, so the rules
+that keep it honest are part of the decision:
+
+- **Meaning stays order-independent; availability does not.** Every clue must
+  still read cold (design doc §3, §4a). What varies by route is *which*
+  clues a survivor meets, never what any clue means. That is the split §4a
+  already makes between content-meaning order-independence (mandatory) and
+  timing-independence (not achievable).
+- **Commit before reveal, exactly once.** A site's choice is made once, when
+  it first becomes eligible, and persisted before anything player-visible
+  happens (round 3, mechanism ②; T4). A reload must not reroll it. The
+  residual hard-kill-during-save window from round 3 still needs its spike.
+- **The choice is a function of world, not of the player's beliefs.** Inputs
+  may be the world seed, the site, and what has already been placed; never
+  what the player has read or carried. Zero tracked belief state still holds.
+
+**Unfound clues may move** (owner, 2026-09-27, same session, asked in plain
+terms whether a clue nobody finds for a long time should be moved elsewhere,
+knowing that where it sits is part of its meaning): *allow moving.*
+`StaleClue.lua` stays on for No Help's authored clues. It was put to the owner
+that a move can change what a clue means; the owner chose it anyway. The task 3
+plan's recommendation to turn it off is withdrawn.
+
+**Clues may be placed anywhere interesting** (owner, same session): *"we
+don't see clues until searched for. The mod tells us something is interesting
+by a hint on top of our character. You can place the clues anywhere that is
+interesting."* Placement is not limited to furniture, mailboxes, vehicles and
+bodies; open ground, gardens, doorways and similar spots are allowed. A spot
+must be decided and saved before either signal can reach the player: the
+Search Mode icon (`ClueSearchRules.ADD_RADIUS`, 16 tiles) or the wordless hint
+(`ClueCueRules.RADIUS`, 3 tiles). The icon's radius is the larger, so it sets
+the deadline.
+
+**Found means spotted; half is counted per clue** (owner, same session). The
+"inspect tool" in the owner's directives is vanilla's Investigate Area window,
+i.e. Search Mode: a clue counts as found when Search Mode spots it, with
+P4-R132's "Look it over" as the fallback for one picked up without searching.
+Picking an item up is not finding it. "At least 50% objects" is counted per
+clue (a set of three things is one clue), on what is actually placed in a
+world, not only on the authored list; owner: *"whatever makes more sense"*.
+Every piece is a vanilla item type (ModData stamps and text do not change
+that), but only **object sets** count toward the half: a written clue on a
+vanilla paper item is still a written clue.
+
+**Map trails, scenes and reuse** (owner, same session, answering the task 3
+plan's directive check):
+
+- **Map trails lean.** The existing vanilla-map trails (`MapMediaRuntime`,
+  ~125 designs) are drawn into the two conspiracies: each trail's clues point
+  to one theory or the other. Their seed comes from the world, not the moment
+  of reading. Owner: *"If you need guidance ask me"* — story direction for the
+  trails goes to the owner rather than being invented.
+- **Scenes have a floor.** Every area with a confirmed vanilla scene gets at
+  least one clue beside it. The share of clues beside scenes is saved and
+  checked, so it cannot quietly fall to zero.
+- **Unreliable maps: a random share per world** (owner: *"make it random
+  between 1 and 20"*). Read as: each world, seeded from the world, makes
+  between 1% and 20% of annotated-map trails unreliable — they point at
+  evidence for the other theory. Recorded as a percentage pending the owner's
+  confirmation; "1 in 1" would make every map lie.
+- **A scene not confirmed in time** waits for the next confirmed scene in the
+  same area, and every such wait is logged so the owner can see whether the
+  timing works.
+- **No maximum, for real.** Once the written clues are all placed, object sets
+  may be placed again elsewhere as new copies with new stamps. This is not a
+  respawn: a consumed copy never returns (DR-20260927-WORLD-KEEPS-EVERYTHING
+  still holds for it). It does replace that entry's "authoring volume is the
+  only mitigation" — reusing sets is a second one.
+
+**Moves are silent** (owner, same session, on whether a moved clue should
+leave a sign at its old spot): *"That is irrelevant in this game."* A moved
+clue leaves nothing behind.
+
 ## DR-20260927-WORLD-KEEPS-EVERYTHING — a world is used up, and nothing says so
 
 Owner decision, 2026-09-27, on the permadeath question open since
