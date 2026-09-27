@@ -1,0 +1,69 @@
+[
+  {
+    "id": "t0001-01",
+    "kind": "set",
+    "pieces": [
+      "WalkieTalkie3",
+      "Clipboard"
+    ],
+    "where": [
+      {
+        "place": "police",
+        "spot": "furniture",
+        "lean": "containment",
+        "rival": "agricultural"
+      }
+    ],
+    "rival_reading": "The call may have concerned routine field work; a missed handoff alone does not show that officials knew of a wider emergency.",
+    "gloss": "A field call is deferred while the road channel lacks coverage.",
+    "axioms": [
+      "c-warning",
+      "c-orders",
+      "c-failure",
+      "a-pathway",
+      "a-timing"
+    ],
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0001",
+      "adhd_run": "docs/writer-only/adhd/2026-09-27-T0001/"
+    },
+    "title": "Call awaiting initials",
+    "body": "A caller tried twice before her shift ended at seven. The road channel went uncovered at six; the callback stayed open until a supervisor could initial the box."
+  },
+  {
+    "id": "t0001-02",
+    "kind": "set",
+    "pieces": [
+      "GardeningSprayAphids",
+      "Fertilizer",
+      "GasmaskFilter"
+    ],
+    "where": [
+      {
+        "place": "police",
+        "spot": "furniture",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "rival_reading": "The items may have been held as an ordinary precaution during containment; an unclaimed supply set does not establish that the program caused an exposure.",
+    "gloss": "Agricultural supplies remain grouped with a filter and go uncollected overnight.",
+    "axioms": [
+      "a-program",
+      "a-malfunction",
+      "a-pathway",
+      "c-orders",
+      "c-failure"
+    ],
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0001",
+      "adhd_run": "docs/writer-only/adhd/2026-09-27-T0001/"
+    },
+    "title": "Filter condition before release",
+    "body": "The field worker missed the last bus home while the sprayer and fertilizer stayed on hold until the filter's condition was entered. The release box remained blank until morning."
+  }
+]
