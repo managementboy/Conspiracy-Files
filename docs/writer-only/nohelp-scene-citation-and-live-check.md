@@ -60,8 +60,9 @@ The prefilter uses only the four story lists' `getName()`.
 
 Also verified in the jar for the refusals: the animal-only kinds build no
 vehicle (`RVSAnimalOnRoad`, `RVSHerdOnRoad`, `RVSRoadKillSmall`,
-`RZSAttachedAnimal`, `RZSEscapedAnimal`, `RZSEscapedHerd`, `RZSHogWild`,
-`RZSOrphanedFawn` — the last leaves a hunter zombie and a gun on the ground);
+`RZSAttachedAnimal`, `RZSEscapedAnimal`, `RZSEscapedHerd`, `RZSHogWild`).
+`RZSOrphanedFawn` leaves a hunter zombie and a gun on the ground, so the owner
+(2026-09-27) gave it a clue on the ground, never on the body;
 the named-zombie kinds build only their zombie (`RZJackieJaye`, `RZSDuke`,
 `RZSFrankHemingway`, `RZSKirstyKormick`). `RVSDeadEnd` ("carried") drops the
 evacuee's bags on the road with `addItemOnGround`, so its clue lies on the

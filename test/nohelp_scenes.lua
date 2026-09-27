@@ -47,7 +47,7 @@ end
 local expected={
     ["owner-leave-alone"]=leftAlone,
     ["animals-only"]={RVSAnimalOnRoad=true,RVSHerdOnRoad=true,RVSRoadKillSmall=true,RZSAttachedAnimal=true,
-        RZSEscapedAnimal=true,RZSEscapedHerd=true,RZSHogWild=true,RZSOrphanedFawn=true},
+        RZSEscapedAnimal=true,RZSEscapedHerd=true,RZSHogWild=true},
     ["named-zombie-only"]={RZJackieJaye=true,RZSDuke=true,RZSFrankHemingway=true,RZSKirstyKormick=true},
     ["never-built"]={RBTableStoryBase=true},
     dressing={RBBasic=true},

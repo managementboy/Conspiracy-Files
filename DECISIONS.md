@@ -278,6 +278,11 @@ plan's directive check):
   never comments. Because generation must stay sparse, the comedy comes from
   one human detail and an institution's misplaced priorities, never from
   stacked official jargon.
+- **Two scene follow-ups** (owner, same session, after the scene list was
+  built): a different scene that features a character from one of the two
+  left-alone scenes still holds a clue, never on that character; a scene that
+  is mostly about an animal but also leaves a person and a dropped object
+  holds a clue on the ground. 125 scene kinds hold a clue, 15 do not.
 - **No maximum, for real.** Once the written clues are all placed, object sets
   may be placed again elsewhere as new copies with new stamps. This is not a
   respawn: a consumed copy never returns (DR-20260927-WORLD-KEEPS-EVERYTHING

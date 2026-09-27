@@ -170,7 +170,7 @@ M.rows={
     {id="RZSOccultActivity",family="RZS",anchor="ground",c=1,a=1,note="sensitive: occult, knives"},
     {id="RZSOldFirepit",family="RZS",anchor="ground",c=1,a=1,note="ground near firepit"},
     {id="RZSOldShelter",family="RZS",anchor="ground",c=1,a=1,note="ground inside shelter"},
-    {id="RZSOrphanedFawn",family="RZS",anchor="none",refused="animals-only",note="animal only, no truck"},
+    {id="RZSOrphanedFawn",family="RZS",anchor="ground",c=1,a=1,note="ground near the scene centre, never on the body (owner 2026-09-27)"},
     {id="RZSRangerSmith",family="RZS",anchor="ground",c=2,a=1,note="ground near centre; never Smith's body"},
     {id="RZSRockerParty",family="RZS",anchor="ground",c=1,a=1,note="ground near the scene centre"},
     {id="RZSSadCamp",family="RZS",anchor="ground",c=2,a=1,note="tent or ground; car also present"},

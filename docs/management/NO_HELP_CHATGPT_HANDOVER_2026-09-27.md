@@ -42,7 +42,7 @@ Use your goal command with this condition:
 
 The measure is the **progress line**, never your own judgement. Today it reads:
 
-`NOT DONE: stage0 unsigned, maps 0/125, flyers 0/133, scenes 0/124, sets 0/0, balance 0/0, tickets 0/19`
+`NOT DONE: stage0 unsigned, maps 0/125, flyers 0/133, scenes 0/125, sets 0/0, balance 0/0, tickets 0/19`
 
 It lists only failing gates: stage 0 signed off; every map (125) and flyer
 (133) covered mark by mark; scenes on Claude's list covered; person threads
