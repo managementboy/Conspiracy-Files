@@ -9,7 +9,15 @@ function Scheduler.new(clock, report)
     -- that is starving and a job that is merely slow look identical from
     -- outside; this tells them apart.
     local counts = {}
+    -- maxJobs is a cap PER JOB CLASS (subsystem), not for the whole queue.
+    -- One shared cap let a class with one job per document fill every slot
+    -- at 32 documents, and every other class queued after it in the same
+    -- tick was refused (first visible playtest, 2026-09-27): no area was
+    -- decided and nothing was filled. Per class, no class can starve another
+    -- at any document count; every class is keyed, so the queue stays small.
     local api = { maxSteps = 48, budgetMs = 2, maxJobs = 32, peakMs = 0 }
+    local held = {}
+    local function hold(subsystem, n) held[subsystem] = (held[subsystem] or 0) + n end
     function api.counts()
         local out = {}
         for subsystem, n in pairs(counts) do out[subsystem] = n end
@@ -24,11 +32,13 @@ function Scheduler.new(clock, report)
         return out
     end
     function api.enqueue(key, subsystem, fn)
-        if keys[key] or disabled[subsystem] or #queue >= api.maxJobs then return false end
-        keys[key] = true
+        if keys[key] or disabled[subsystem] or (held[subsystem] or 0) >= api.maxJobs then return false end
+        keys[key] = true; hold(subsystem, 1)
         queue[#queue + 1] = { key = key, subsystem = subsystem, step = fn }
         return true
     end
+    -- True when this job class holds all the jobs it may.
+    function api.full(subsystem) return (held[subsystem] or 0) >= api.maxJobs end
     function api.failed(subsystem, reason)
         failures[subsystem] = (failures[subsystem] or 0) + 1
         if failures[subsystem] == 1 then report(subsystem, tostring(reason), false) end
@@ -42,7 +52,7 @@ function Scheduler.new(clock, report)
     function api.retain(keep)
         local kept = {}
         for _, job in ipairs(queue) do
-            if keep(job) then kept[#kept + 1] = job else keys[job.key] = nil end
+            if keep(job) then kept[#kept + 1] = job else keys[job.key] = nil; hold(job.subsystem, -1) end
         end
         queue = kept
     end
@@ -56,14 +66,14 @@ function Scheduler.new(clock, report)
         local started, steps = clock(), 0
         while #queue > 0 and steps < api.maxSteps and clock() - started < api.budgetMs do
             local job = table.remove(queue, 1)
-            if disabled[job.subsystem] then keys[job.key] = nil
+            if disabled[job.subsystem] then keys[job.key] = nil; hold(job.subsystem, -1)
             else
                 local ok, done = pcall(job.step)
                 steps = steps + 1
                 counts[job.subsystem] = (counts[job.subsystem] or 0) + 1
                 if not ok then
-                    keys[job.key] = nil; api.failed(job.subsystem, done)
-                elseif done then keys[job.key] = nil
+                    keys[job.key] = nil; hold(job.subsystem, -1); api.failed(job.subsystem, done)
+                elseif done then keys[job.key] = nil; hold(job.subsystem, -1)
                 else queue[#queue + 1] = job end
             end
         end

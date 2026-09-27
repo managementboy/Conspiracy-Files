@@ -235,7 +235,12 @@ local function finish(j)
         return
     end
     if SceneMatch.worthKeeping(merged) then
-        if not waiting[j.key] then
+        -- A cell already pending in the save resumes its wait from the saved
+        -- hour: logging a new start after a reload skewed the wait timings
+        -- (first visible playtest, 2026-09-27).
+        if not waiting[j.key] and old and old.pending and type(old.hours)=="number" then
+            waiting[j.key]=old.hours
+        elseif not waiting[j.key] then
             waiting[j.key]=now
             CFLog.write("i","scan",{why="scene-wait-start",area=j.key,n=#merged,
                 distance=distanceTo(s,j.cx*SceneMatch.CELL,j.cy*SceneMatch.CELL),mode=s and s.mode})

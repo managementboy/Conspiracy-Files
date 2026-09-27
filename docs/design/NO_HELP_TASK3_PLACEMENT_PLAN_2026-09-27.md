@@ -1142,3 +1142,66 @@ Carried into the real-game test (step 8): watch for stutter when clues are
 placed late in a long game; read the scene-wait log on a drive at walking,
 driving and top speed; save and reload next to a confirmed scene; check that
 ordinary clutter produces no scene.
+
+### Step 8 — first visible playtest
+
+The first real-game test with the window visible, on two new worlds (build
+under test: c07e225). Counts only; no places, people or positions.
+
+What passed:
+
+- The world record is created once per save and survives save and reload
+  unchanged (two reloads: 6 areas / 38 clues / 2 placed, then 7 / 39 / 3,
+  identical before and after each).
+- Nearby areas are decided from the survivor's position (5 to 7 areas per
+  world in the first minutes), and one hand-checked scene area was decided
+  and its clue placed.
+- Clues are created on arrival at their area.
+- Ordinary clutter (a parked car, a van with its own loot) did not confirm a
+  scene; it stayed a pending trace.
+- Walking and ordinary driving held frame times (driving run: max 69 ms, none
+  over 100 ms).
+
+The five bugs, and their fixes (each with a plain-Lua test that fails without
+the fix):
+
+1. **Engine stall at 32 or more clues.** One placement job per clue, every
+   120 ticks, filled the scheduler's single 32-job cap, and every other job
+   class queued after it in the same tick was refused: no new areas were
+   decided and clues were placed only on arrival. Fixed: the cap is per job
+   class in No Help's own scheduler copy (the original mod's is unchanged),
+   and only clues still waiting to be written get a placement job, the walk
+   resuming where it stopped so every clue gets its turn.
+   Test: `test/nohelp_scheduler_share.lua` (0, 31, 32, 200 and 2000 clues;
+   every job class runs every cycle).
+2. **Search icons fought between the two mods.** Both used the same icon id
+   prefix and the same icon table, so each mod's search removed the other's
+   icon every 15 ticks and the spot timer never filled. Fixed: No Help has
+   its own prefix and table; the original mod needed no change.
+   Test: `test/nohelp_icon_isolation.lua`.
+3. **Lua error at every world start** (three per start): a new world record
+   has no clues yet and the person module read the first one unguarded.
+   Fixed with a guard. Test: `test/nohelp_known_empty.lua`.
+4. **The harness did not see No Help errors**: its error filter matched only
+   the original mod's trace tag. It now matches both.
+   Test: `test/nohelp_mod_errors.lua`.
+5. **A 640-715 ms stutter at the first area decision.** Opening the shipped
+   furniture index checked the whole map (3.4 MB of encoded rows) in one
+   scheduler step. Fixed: opening checks the header only; each building is
+   checked when it is first read (first open ~31 ms to under 1 ms in plain
+   Lua). Test: `test/nohelp_fixed_index_open.lua`.
+
+Smaller: after a reload a scene cell already waiting logged a new wait start,
+which skewed the wait timings; it now resumes from the saved hour (tested in
+`test/nohelp_scene_area.lua`). One vehicle scene leaving several pending cell
+records is left as is.
+
+The next visible run must re-check:
+
+- placement keeps going after 32 and more clues (new areas keep being
+  decided; the scheduler's per-class step counts keep rising);
+- a ground clue's hint and its find, with the search icon filling;
+- driving at top speed past scenes;
+- the frame spike when the game saves;
+- stutter late in a long game: every area decision still copies and validates
+  the whole world record, so its cost grows with the record.

@@ -276,6 +276,28 @@ local joined=table.concat(printed,"\n")
 assert(joined:find("scene-wait-start",1,true) and joined:find("scene-wait-end",1,true),"scene-wait is logged")
 assert(joined:find("mode=walking",1,true),"walking or driving is logged")
 assert(Runtime.matchVehicle(105,205,0)=="scene:RVSPlonkies","a confirmed scene's car is recognised")
+-- A reload (OnGameStart resets the runtime) does not start that wait again:
+-- the saved pending record's hour is its start (first visible playtest,
+-- 2026-09-27: repeated starts skewed the wait timings).
+do
+    local function starts()
+        local n=0
+        for _,l in ipairs(printed) do if l:find("scene-wait-start",1,true) then n=n+1 end end
+        return n
+    end
+    local n0=starts()
+    assert(n0>=1,"the first look started the wait")
+    Runtime.reset()
+    print=function(line) printed[#printed+1]=tostring(line) end
+    world["745:205:0"]={vehicle="Base.StepVan_Plonkies"}
+    world["747:206:0"]={items={"Base.Plonkies"}}
+    player.x,player.y=720,200
+    handlers.LoadGridsquare(sq(745,205))
+    run(Runtime.CHECK_TICKS*6)
+    world["745:205:0"],world["747:206:0"]=nil,nil
+    print=realPrint
+    assert(starts()==n0,"a cell pending in the save does not log a new wait start after a reload")
+end
 
 -- The source keeps its promises: no debug gate, no isValid, bounded budget,
 -- decided and filled by the No Help runtime.

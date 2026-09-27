@@ -337,13 +337,33 @@ local function placement(api,id)
         return false
     end
 end
+-- Only a document that still has something to write gets a job: every other
+-- status ends the job at once (placement above). The scheduler holds at most
+-- maxJobs placement jobs, so the walk resumes where the last one stopped and
+-- every waiting document gets its turn however many there are (first visible
+-- playtest: one job per document, every 120 ticks, filled the whole queue).
+local PLACING={pending=true,placing=true}
+local placeCursor={}
 local function enqueue()
     if not sessions then return end
-    for index,api in ipairs(sessions) do for _,d in ipairs(api.snapshot().case.documents) do
-        -- Nothing is placed while the save is refusing writes; the documents
-        -- are enqueued again when the case store is next opened.
-        if not saveRefused() then scheduler.enqueue("place:"..d.id,"placement",placement(api,d.id)) end
-    end
+    -- Nothing is placed while the save is refusing writes; the documents
+    -- are enqueued again when the case store is next opened.
+    if saveRefused() then return end
+    for index,api in ipairs(sessions) do
+        local snap=api.snapshot()
+        local docs=snap.case.documents
+        local n=#docs
+        local start=placeCursor[index] or 1
+        if start>n then start=1 end
+        for step=0,n-1 do
+            local i=(start-1+step)%n+1
+            if scheduler.full("placement") then break end
+            local d=docs[i]
+            local a=snap.assignments[d.id]
+            -- Already queued (same key) is fine: it is still being placed.
+            if a and PLACING[a.status] then scheduler.enqueue("place:"..d.id,"placement",placement(api,d.id)) end
+            placeCursor[index]=i%n+1
+        end
     end
 end
 local function copyValue(v)
