@@ -5,7 +5,7 @@ never a place name, map, flyer, scene, person or clue text here. Whoever holds t
 baton edits it; `lua5.1 tools/nohelp_content/progress.lua --state` rewrites PROGRESS.
 
 ## BATON
-CHATGPT since 2026-09-27 because WRITING
+CLAUDE since 2026-09-27 because STAGE0-SIGNOFF
 
 ## STAGE
 0
@@ -14,7 +14,7 @@ CHATGPT since 2026-09-27 because WRITING
 T0000
 
 ## NEXT
-deliver stage 0 (axioms and glosses) as T0000
+T0000 STAGE0-SIGNOFF
 
 ## OPEN RETURNS
 none
@@ -23,7 +23,7 @@ none
 none
 
 ## LAST ADHD
-none
+2026-09-27 T0000
 
 ## PROGRESS
-NOT DONE: stage0 unsigned, maps 0/125, flyers 0/133, scenes 0/125, sets 0/0, balance 0/0, tickets 0/19 @430870f
+NOT DONE: stage0 unsigned, maps 0/125, flyers 0/133, scenes 0/125, sets 0/0, balance 0/0, tickets 0/19 @6c23422
