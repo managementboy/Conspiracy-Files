@@ -1,30 +1,31 @@
 {
   "ticket": "T0001",
-  "returned_by": "Claude review",
+  "returned_by": "Claude blind re-read",
   "rows": [
     {
       "id": "t0001-01",
       "codes": [
-        "TONE"
+        "NEVER_RIVAL"
       ],
-      "note": "Both rows pass the automatic checks but miss the tone (writer handoff 2a): each reads as a neutral incident report. Give each one human detail beside one institutional one, where the humour comes from a procedure or form caring about the wrong thing while the world ends (never a joke, never a witty last line). Keep the pieces, places, leans, rival readings and axioms; only title and body change.",
+      "note": "Tone is now right: keep it. But a blind re-read (5 independent reads each, a different model, told nothing) named the lean 5/5 and never the rival, so each row is one-sided (tools/cluegates/blind_reread.md, NEVER_RIVAL). The pieces and first line give the side away on their own (a radio and a callback read only as a failed response; sprayer, fertilizer and filter read only as the program). The lean should come from where it is placed and from one detail, with the rival reading genuinely live: a reader told nothing should sometimes pick the other side. Rework title, body and if needed pieces; keep place, spot, lean and axioms.",
+      "votes": "A 5/5",
       "row": {
+        "body": "A caller tried twice before her shift ended at seven. The road channel went uncovered at six; the callback stayed open until a supervisor could initial the box.",
         "id": "t0001-01",
         "kind": "set",
         "pieces": [
           "WalkieTalkie3",
           "Clipboard"
         ],
+        "title": "Call awaiting initials",
         "where": [
           {
-            "place": "police",
-            "spot": "furniture",
             "lean": "containment",
-            "rival": "agricultural"
+            "place": "police",
+            "rival": "agricultural",
+            "spot": "furniture"
           }
         ],
-        "rival_reading": "The call may have concerned routine field work; a missed handoff alone does not show that officials knew of a wider emergency.",
-        "gloss": "A field call is deferred while the road channel lacks coverage.",
         "axioms": [
           "c-warning",
           "c-orders",
@@ -32,23 +33,25 @@
           "a-pathway",
           "a-timing"
         ],
+        "gloss": "A field call is deferred while the road channel lacks coverage.",
         "prov": {
-          "writer": "ChatGPT",
-          "handoff": "2026-09-27",
+          "adhd_run": "docs/writer-only/adhd/2026-09-27-T0001/",
           "batch": "T0001",
-          "adhd_run": "docs/writer-only/adhd/2026-09-27-T0001/"
+          "handoff": "2026-09-27",
+          "writer": "ChatGPT"
         },
-        "title": "Road channel uncovered",
-        "body": "The handheld set sat beside the shift sheet; the road channel was left uncovered after 18:00. One field call was marked to wait until morning."
+        "rival_reading": "The call may have concerned routine field work; a missed handoff alone does not show that officials knew of a wider emergency."
       }
     },
     {
       "id": "t0001-02",
       "codes": [
-        "TONE"
+        "NEVER_RIVAL"
       ],
-      "note": "Both rows pass the automatic checks but miss the tone (writer handoff 2a): each reads as a neutral incident report. Give each one human detail beside one institutional one, where the humour comes from a procedure or form caring about the wrong thing while the world ends (never a joke, never a witty last line). Keep the pieces, places, leans, rival readings and axioms; only title and body change.",
+      "note": "Tone is now right: keep it. But a blind re-read (5 independent reads each, a different model, told nothing) named the lean 5/5 and never the rival, so each row is one-sided (tools/cluegates/blind_reread.md, NEVER_RIVAL). The pieces and first line give the side away on their own (a radio and a callback read only as a failed response; sprayer, fertilizer and filter read only as the program). The lean should come from where it is placed and from one detail, with the rival reading genuinely live: a reader told nothing should sometimes pick the other side. Rework title, body and if needed pieces; keep place, spot, lean and axioms.",
+      "votes": "B 5/5",
       "row": {
+        "body": "The field worker missed the last bus home while the sprayer and fertilizer stayed on hold until the filter's condition was entered. The release box remained blank until morning.",
         "id": "t0001-02",
         "kind": "set",
         "pieces": [
@@ -56,16 +59,15 @@
           "Fertilizer",
           "GasmaskFilter"
         ],
+        "title": "Filter condition before release",
         "where": [
           {
-            "place": "police",
-            "spot": "furniture",
             "lean": "agricultural",
-            "rival": "containment"
+            "place": "police",
+            "rival": "containment",
+            "spot": "furniture"
           }
         ],
-        "rival_reading": "The items may have been held as an ordinary precaution during containment; an unclaimed supply set does not establish that the program caused an exposure.",
-        "gloss": "Agricultural supplies remain grouped with a filter and go uncollected overnight.",
         "axioms": [
           "a-program",
           "a-malfunction",
@@ -73,14 +75,14 @@
           "c-orders",
           "c-failure"
         ],
+        "gloss": "Agricultural supplies remain grouped with a filter and go uncollected overnight.",
         "prov": {
-          "writer": "ChatGPT",
-          "handoff": "2026-09-27",
+          "adhd_run": "docs/writer-only/adhd/2026-09-27-T0001/",
           "batch": "T0001",
-          "adhd_run": "docs/writer-only/adhd/2026-09-27-T0001/"
+          "handoff": "2026-09-27",
+          "writer": "ChatGPT"
         },
-        "title": "Field kit left overnight",
-        "body": "The sprayer and fertilizer were kept beside a filter after a field check. Nobody returned to collect the kit before the desk closed."
+        "rival_reading": "The items may have been held as an ordinary precaution during containment; an unclaimed supply set does not establish that the program caused an exposure."
       }
     }
   ]
