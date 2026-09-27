@@ -27,8 +27,10 @@ for _,clue in ipairs(Inventory.clues) do
     else
         assert(clue.kind=="written",clue.id.." is a set or written")
     end
-    for _,piece in ipairs(clue.pieces) do
-        assert(Catalogue.get(piece),clue.id.." piece "..piece.." is not a vanilla catalogue item")
+    if clue.kind=="set" then
+        for _,piece in ipairs(clue.pieces) do
+            assert(Catalogue.get(piece),clue.id.." piece "..piece.." is not a vanilla catalogue item")
+        end
     end
     local spotsUsed={}
     for _,w in ipairs(clue.where) do

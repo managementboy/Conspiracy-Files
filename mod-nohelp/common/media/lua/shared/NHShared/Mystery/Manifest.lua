@@ -11,6 +11,7 @@
 -- file yet (DECISIONS.md, DR-20260927-NOHELP-RULE-PLACEMENT); until then the
 -- list is empty and the picker is tested on a placeholder inventory.
 local Catalogue=require("NHShared/Generated/ObjectCatalogue")
+local Kinds=require("NHShared/Generated/EvidenceKinds")
 local M={}
 
 M.LEANS={"containment","agricultural"}
@@ -39,8 +40,17 @@ function M.validClue(c)
     if type(c)~="table" or type(c.id)~="string" or c.id=="" or #c.id>60 then return false,"clue id" end
     if c.kind~="set" and c.kind~="written" then return false,c.id..": a clue is a set or written" end
     if type(c.pieces)~="table" or #c.pieces<1 then return false,c.id..": no pieces" end
-    for _,p in ipairs(c.pieces) do
-        if not Catalogue.get(p) then return false,c.id..": "..tostring(p).." is not a vanilla item" end
+    if c.kind=="set" then
+        for _,p in ipairs(c.pieces) do
+            if not Catalogue.get(p) then return false,c.id..": "..tostring(p).." is not a vanilla item" end
+        end
+    else
+        -- A written clue is carried on a vanilla paper item the engine can
+        -- print on: one of the written evidence kinds (letter, receipt...).
+        local carrier=Kinds.get(c.pieces[1])
+        if not carrier or carrier.capacity=="object" then
+            return false,c.id..": a written clue is carried on a written kind, not "..tostring(c.pieces[1])
+        end
     end
     if c.kind=="set" then
         if #c.pieces<2 or #c.pieces>4 then return false,c.id..": a set holds 2-4 pieces" end

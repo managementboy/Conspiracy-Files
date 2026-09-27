@@ -15,7 +15,7 @@
 -- accident (phase 1 review): whether a clue is a set does not follow from its
 -- place or lean, a clue's two leans may use different spots, every set has its
 -- own pieces, and one set holds two of the same item.
-local M={revision="synthetic-nohelp-inventory-3"}
+local M={revision="synthetic-nohelp-inventory-4"}
 
 M.leans={"containment","agricultural"}
 
@@ -26,8 +26,9 @@ M.places={
 
 M.spots={"furniture","mailbox","vehicle","corpse","ground"}
 
--- Pieces are real vanilla catalogue ids (Generated/ObjectCatalogue.lua), picked
--- only because they exist. Every set is distinct; S-set 12 repeats an item on
+-- Set pieces are real vanilla catalogue ids (Generated/ObjectCatalogue.lua),
+-- picked only because they exist; written clues are carried on one of the
+-- engine's written evidence kinds. Every set is distinct; S-set 12 repeats an item on
 -- purpose, so pieces must be told apart by piece, not by item type.
 local setPieces={
     {"Twine","Tarp"},
@@ -57,7 +58,8 @@ for i=1,24 do
     local spotA=M.spots[((i-1)%#M.spots)+1]
     local spotB=M.spots[((i*2)%#M.spots)+1]
     local pieces
-    if isSet[i] then s=s+1; pieces=setPieces[s] else pieces={"Note"} end
+    local written={"dispatch","receipt","letter","notepad","memo","photograph"}
+    if isSet[i] then s=s+1; pieces=setPieces[s] else pieces={written[(i%#written)+1]} end
     M.clues[i]={
         id=(isSet[i] and "S" or "W")..string.format("%02d",i),
         kind=isSet[i] and "set" or "written",

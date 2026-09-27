@@ -19,7 +19,7 @@ local function copyList(list)
     return out
 end
 local broken=copyList(clues)
-for _,c in ipairs(broken) do if c.kind=="set" then c.kind="written"; c.pieces={"Note"} end end
+for _,c in ipairs(broken) do if c.kind=="set" then c.kind="written"; c.pieces={"letter"} end end
 assert(not Manifest.lint(broken),"NH-D5: a list with fewer than half object sets is refused")
 broken=copyList(clues)
 for _,c in ipairs(broken) do for _,w in ipairs(c.where) do if w.place=="farm" then w.lean="agricultural"; w.rival="containment" end end end
@@ -30,8 +30,12 @@ assert(not Manifest.lint(broken),"NH-D1: a place and conspiracy with no object s
 broken=copyList(clues); broken[1].where[1].rival=broken[1].where[1].lean
 assert(not Manifest.lint(broken),"NH-D1: a clue must name the other theory it cuts against")
 broken=copyList(clues); broken[1].pieces={"Note","Note"}
+assert(broken[1].kind=="set","the first placeholder clue is a set")
 assert(not Manifest.lint(broken),"a set made of notes is a written clue in disguise")
 broken=copyList(clues); broken[2].pieces={"NotARealItem"}
+assert(broken[2].kind=="set","the second placeholder clue is a set")
+local w; for _,c in ipairs(copyList(clues)) do if c.kind=="written" then w=c break end end
+w.pieces={"Twine"}; assert(not Manifest.lint({w}),"a written clue is carried on a written kind, not a loose object")
 assert(not Manifest.lint(broken),"NH-D5: every piece is a real vanilla item")
 
 -- A small world: every kind of place several times over.
