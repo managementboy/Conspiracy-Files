@@ -147,6 +147,13 @@ plan's directive check):
   that only exists to make up runtime cases goes; the placement machinery the
   new system runs on (Session, storage and container scans, the address book,
   search, relocation) stays. No Help places nothing but authored clues.
+- **Dead Air goes too; body IDs stay** (owner, same session): the original
+  mod's fixed "Dead Air" slice is removed from No Help as well. The feature
+  that links a dead body's ID card and keys to cases is kept, not removed:
+  *"We should do this for our new mod too. Not every Id but IDs can be nice
+  additions to our conspiracies."* How to link IDs to the two conspiracies is
+  to be investigated (an `/adhd` run on the real code) and brought back to the
+  owner before building.
 - **No maximum, for real.** Once the written clues are all placed, object sets
   may be placed again elsewhere as new copies with new stamps. This is not a
   respawn: a consumed copy never returns (DR-20260927-WORLD-KEEPS-EVERYTHING
