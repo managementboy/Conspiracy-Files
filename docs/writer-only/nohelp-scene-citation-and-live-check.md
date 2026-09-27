@@ -39,22 +39,37 @@ her body or press ID (anchor is room-container; `Carriers` refuses the
 ## 2. Verified signatures (SceneMatch)
 
 Read with `javap -c -p -constants` on `zombie.randomizedWorld.*`,
-projectzomboid.jar build 42.20. Two traces of different sorts each; the
-anchoring trace is marked *.
+projectzomboid.jar build 42.20, then every trace checked for EXCLUSIVITY
+(2026-09-27): a trace is exclusive (`only=true`) when nothing but that story
+(or its story family) creates it — not the map (lotheader tile lists), not a
+loot table (`Distributions`, `ProceduralDistributions`,
+`VehicleDistributions`, `Distribution_BagsAndContainers`,
+`StoryClutter_Definitions`), not a vehicle zone (`VehicleZoneDefinition`),
+not a zombie zone (`ZombiesZoneDefinition`), not a vehicle's `zombieType`,
+not another class in the jar. A kind confirms only from two traces of
+different sorts, every `must` trace, **and at least one exclusive trace**:
+an ordinary parked car plus a stray loot item is never a scene. The anchoring
+trace is marked *, exclusive traces are marked (only).
 
-| Family | Kind | Story name | Traces (sort: value) |
-|---|---|---|---|
-| RB | RBJackieJaye | JackieJaye | *room: jackiejayestudio; item: Base.Microphone / Base.Notepad / Base.Pen (citation — decided by place, never by a match) |
-| RDS | RDSPoliceAtHouse | Police at House | *vehicle: CarLightsPolice (`spawnCarOnNearestNav`); zombie: Police (`addZombies`); room: livingroom / kitchen (`getLivingRoomOrKitchen`) — all three required |
-| RDS | RDSRatKing | Rat King | *item: Base.RatKing (`addItemOnGround`); room: bedroom / kitchen / livingroom |
-| RVS | RVSPlonkies | Plonkies | *vehicle: StepVan_Plonkies (`addVehicle`); item: Base.Plonkies |
-| RVS | RVSRichJerk | Rich Jerk | *vehicle: CarLuxury; item: Base.Briefcase_Money |
-| RVS | RVSAmbulanceCrash | Ambulance Crash | *vehicle: VanAmbulance; zombie: AmbulanceDriver / HospitalPatient (`addZombiesOnVehicle`) |
-| RZS | RZSMurderScene | Murder Scene | *item: Base.EmptyPetrolCan; sprite: location_community_cemetary_01_32 / _33 (checked before the burying camp) |
-| RZS | RZSBuryingCamp | Burying Camp | *sprite: location_community_cemetary_01_22/23/34/35/40–43; item: Base.Shovel / Base.WhiskeyEmpty / Base.WineEmpty |
+| Family | Kind | Story name | Traces (sort: value) | Exclusive evidence |
+|---|---|---|---|---|
+| RB | RBJackieJaye | JackieJaye | *room: jackiejayestudio; item: Base.Microphone / Base.Notepad / Base.Pen; zombie or body: Jackie_Jaye (only) (citation — decided by place, never by a match) | `Jackie_Jaye`: `addZombies(def,1,"Jackie_Jaye",…)`; in no `ZombiesZoneDefinition` list; jar: only `RBJackieJaye`, `RZJackieJaye`. The room is on the map regardless and `RBBasic.doOfficeStuff` fills it with office clutter. |
+| RDS | RDSRatKing | Rat King | *item: Base.RatKing (only) (`addItemOnGround`); room: bedroom / kitchen / livingroom | `Base.RatKing`: no loot table or recipe (only `items/food.txt` defines it); jar: only `RDSRatKing` (RBBasic just lists the story). |
+| RVS | RVSPlonkies | Plonkies | *vehicle: StepVan_Plonkies (`addVehicle`); item: Base.Plonkies; zombie or body: PlonkiesGuy (only) (`addZombiesOnVehicle`) | `PlonkiesGuy`: in no zombie zone, no vehicle `zombieType`; jar: only `RVSPlonkies`. The van parks in `business` zones (`VehicleZoneDefinition.lua:429`) and Plonkies are van/bag loot (`VehicleDistributions.lua:9494`). |
 
-All other 116 allowed kinds are **unverified** and never match until a
-signature is added. Not used: a story's `isValid(...)` — for a building story
+**Demoted to unverified (never match)** — no exclusive trace in 42.20
+(`SceneMatch.DEMOTED`):
+
+| Kind | Why |
+|---|---|
+| RDSPoliceAtHouse | `CarLightsPolice`: `VehicleZoneDefinition.lua:214,223` (police/prison zones); `Police` outfit: `ZombiesZoneDefinition.lua:1108,1790` (Default, chance 0.25); kitchen/living room: every house; else random bodies and the car's `zombieType`. **Ticket T0016 targets it.** |
+| RVSRichJerk | `CarLuxury`: `VehicleZoneDefinition.lua:97,107,119,129,531`; `Briefcase_Money`: `ProceduralDistributions.lua:3040,19674,19736,19803`, `Distributions.lua:19019`, `StoryClutter_Definitions.lua:1102` (`MurderSceneClutter`: the murder scene drops it on the ground too); its zombies wear `Classy`/`Gaudy` (`ZombiesZoneDefinition.lua:38,525,1693`). |
+| RVSAmbulanceCrash | `VanAmbulance`: `VehicleZoneDefinition.lua:271`; `AmbulanceDriver` is the van's own `zombieType` (`vehicle_van_ambulance.txt:5`); `HospitalPatient`: `ZombiesZoneDefinition.lua:596,1815`; the second car is random. **Ticket T0017 targets it.** |
+| RZSMurderScene | `Base.EmptyPetrolCan` names no item in 42.20 (the can is `PetrolCan`/`PetrolCanEmpty`), so it is never placed; graves 32/33 are map tiles (3 lotheaders each) and player-dug graves (`ISWorldObjectContextMenu.lua:2776`); `MobCasual`: `ZombiesZoneDefinition.lua:1713`; shovel is loot. |
+| RZSBuryingCamp | Every grave sprite it places is on the map (22: 1, 23: 2, 32–35: 2–3, 40–43: 4 lotheaders); 32–35/40–43 are also player graves (`ISEmptyGraves.lua:244`, `ISFillGrave.lua:91`); shovel and empty bottles are loot; bodies random. |
+
+All other allowed kinds (122 with the five demoted) are **unverified** and
+never match until a signature with an exclusive trace is added. Not used: a story's `isValid(...)` — for a building story
 it can call `customizeStartingHouse` on the player's own house (side effect).
 The prefilter uses only the four story lists' `getName()`.
 
@@ -82,9 +97,8 @@ Separate test setup: a throwaway git worktree whose only extra file is a
 placeholder `mod-nohelp/.../NHShared/Mystery/Content/Clues.lua` (never
 committed) holding placeholder object sets — two anchored
 `{scene="RBJackieJaye", version="A"/"B"}` on `furniture`, and one per lean
-for each other verified kind on its spot (`RDSPoliceAtHouse` corpse,
-`RDSRatKing` furniture, `RVSPlonkies`/`RVSRichJerk`/`RVSAmbulanceCrash`
-vehicle, `RZSMurderScene` corpse, `RZSBuryingCamp` ground). Run the game from
+for each other verified kind on its spot (`RDSRatKing` furniture,
+`RVSPlonkies` vehicle). Run the game from
 that worktree's mod link.
 
 Per world:
@@ -108,7 +122,14 @@ Per world:
    `distance` and `mode=driving`; then the same on foot (`mode=walking`). The
    question for the plan: is a scene confirmed before the survivor is within
    40 tiles of it? Record the share.
-7. Second world: repeat 1–3; note the lean. Across two worlds the lean may
+7. Ordinary clutter is not a scene: `pz.sh eval` to place, in a street
+   cell away from any story, a parked ordinary `Base.CarLuxury` and a
+   `Base.Briefcase_Money` on the ground beside it (and, in a second cell, a
+   parked `Base.StepVan_Plonkies` with a `Base.Plonkies` beside it, no
+   driver). Walk up to both. Expect **no** `why=scene-wait-end` and no
+   `scene:` area for either cell in the world record (the van's cell may show
+   `scene-wait-start` and a pending record — that is correct); screenshot.
+8. Second world: repeat 1–3; note the lean. Across two worlds the lean may
    match by chance (fit 2:2); `test/nohelp_scene_area.lua` proves both leans
    occur across seeds.
 

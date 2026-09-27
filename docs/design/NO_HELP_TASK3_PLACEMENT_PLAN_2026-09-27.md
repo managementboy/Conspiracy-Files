@@ -212,6 +212,8 @@ adding and moves must keep working. With the cap off it measures
 save growth (against `Validator.MAX_ENCODED_BYTES`, 1 MB) and the worst Pick
 call; saved records must grow with areas visited, not days played, compacting
 consumed clues to id, lean and area if needed.
+*Built 2026-09-27 as `test/nohelp_playthrough.lua`; what it covers and what it
+does not yet cover are in section 8, "Step 7 — offline playthrough check".*
 
 **Step 8 — Save-window spike, then a visible playtest.** The game saves its
 own data and the map separately, so "saved as placed, map never written" can
@@ -241,13 +243,13 @@ playtests quote it.
 
 | Directive | Proof | Readout | Checks |
 |---|---|---|---|
-| NH-D1 two contradictory conspiracies | step 3 Linter (both leans, rival reading per clue, every kind of area and spot hosts both); step 3 Pick test; step 7 (both leans per area, thinner-lean floor) | clues per lean, per area | `test/nohelp_pick.lua`; the per-area check on what is actually placed in a real world is owed by step 7 |
+| NH-D1 two contradictory conspiracies | step 3 Linter (both leans, rival reading per clue, every kind of area and spot hosts both); step 3 Pick test; step 7 (both leans per area, thinner-lean floor) | clues per lean, per area | `test/nohelp_pick.lua`; `test/nohelp_playthrough.lua` |
 | NH-D2 hint, then search (Look it over as fallback) | step 2 tests (ground spot and set: one hint, one icon, one find); step 8 visible playtest | finds by search vs Look it over | `test/nohelp_found_how.lua`; the hint and icon on open ground and on a set still owe the visible playtest (step 8) |
 | NH-D3 placed procedurally | step 3 Pick test (same inputs, same result; no map-read input); step 4 replay test | area sources | `test/nohelp_pick.lua`; the reload replay test is owed by step 4 |
-| NH-D4 no maximum, a first-development cap | step 7 cap-off run, raise-the-cap save test, "stopped for another reason" failure; the cap exists only in `Pick.lua` | cap, and any other limit hit | `test/nohelp_pick.lua`; the cap-off soak and raise-the-cap save test are owed by step 7 |
-| NH-D5 half or more are object sets of vanilla items | step 3 Linter (per clue, vanilla types); step 7 on placed *and* spotted, lost sets counted | set share placed and spotted | `test/nohelp_pick.lua`; the share among clues actually spotted is owed by step 7 |
-| NH-D6 annotated maps included | step 4 trail fold-in and "read or not, same clue" test; step 7 every map destination holds both leans | trails started, clues per design | `test/nohelp_map_sites.lua`; `test/nohelp_marked_area.lua`; `test/nohelp_trails.lua`; `test/nohelp_pick.lua`; `test/nohelp_area_runtime.lua`; that every map place holds both leans in what is actually placed in a real world is owed by step 7 |
-| NH-D7 vanilla mysteries detected and used | step 5 scene table, matcher, first citation, scene runtime out of debug and saved; step 7 scene-anchored floor; step 8 timing spike | scene-anchored vs fallback | `test/nohelp_scenes.lua`; `test/nohelp_scene_match.lua`; `test/nohelp_scene_area.lua`; the visible live check (writer-only procedure) and the step 7 scene-anchored floor are still owed |
+| NH-D4 no maximum, a first-development cap | step 7 cap-off run, raise-the-cap save test, "stopped for another reason" failure; the cap exists only in `Pick.lua` | cap, and any other limit hit | `test/nohelp_pick.lua`; `test/nohelp_playthrough.lua` |
+| NH-D5 half or more are object sets of vanilla items | step 3 Linter (per clue, vanilla types); step 7 on placed *and* spotted, lost sets counted | set share placed and spotted | `test/nohelp_pick.lua`; `test/nohelp_playthrough.lua`; a set whose ground spot is found empty is not yet counted as lost |
+| NH-D6 annotated maps included | step 4 trail fold-in and "read or not, same clue" test; step 7 every map destination holds both leans | trails started, clues per design | `test/nohelp_map_sites.lua`; `test/nohelp_marked_area.lua`; `test/nohelp_trails.lua`; `test/nohelp_pick.lua`; `test/nohelp_area_runtime.lua`; `test/nohelp_playthrough.lua` |
+| NH-D7 vanilla mysteries detected and used | step 5 scene table, matcher, first citation, scene runtime out of debug and saved; step 7 scene-anchored floor; step 8 timing spike | scene-anchored vs fallback | `test/nohelp_scenes.lua`; `test/nohelp_scene_match.lua`; `test/nohelp_scene_area.lua`; `test/nohelp_playthrough.lua` (one clue per confirmed scene); the visible live check (writer-only procedure) and a floor on the scene-anchored share are still owed |
 
 ## 5. Rejected along the way
 
@@ -1028,3 +1030,115 @@ fresh worlds, never hidden, never the owner's save) — so whether a scene is
 confirmed before the survivor arrives, walking or driving, is not measured
 yet; signatures for the 116 unverified kinds; the step 7 floor on the share
 of scene-anchored clues; no scene clue is written yet.
+
+### Step 7 — offline playthrough check
+
+`test/nohelp_playthrough.lua`, plain Lua 5.1, about 16 seconds on the
+development machine. It loads the real picker, area record, place mapping,
+trails, map places, marked areas, session, scene table, scene matcher, stale
+clue mover and clue-list rules, and feeds them a synthetic placeholder clue
+list (no clue text): every kind of place with both leans, sets well over half,
+written clues, clues anchored to a sample of map and flyer places, and clues
+anchored to a sample of scene kinds, plus one scene kind that holds no clue.
+
+It walks seeded routes over the shipped map and flyer places: town and
+country, on foot and driving, with map and flyer reads, nearby buildings,
+scenes confirmed on the way, clues spotted, searched or looked over, and
+several in-game days passing so unfound clues move. 12 worlds with the
+shipped cap and 8 more with the cap lifted, one route each (20 worlds, every
+route kind in both modes). Every loop is bounded and a runaway one, or a run
+over 30 seconds, fails loudly.
+
+It fails if: an area of two or more clues lacks a lean; an area holds fewer
+than 2 clues, or more than 10 with the cap on; a lean goes over the cap in an
+area; fewer than half of a route's place clues, of all placed clues, or of
+spotted clues are sets; either lean goes over 60% overall; a written clue is
+placed twice; two clues share a spot; a place stops short while a different
+set for its kind of place and lean is still unused; a place a mark names
+takes a clue not anchored to it, or an anchored clue lands elsewhere; a
+confirmed scene gets anything but exactly one clue written for its kind, or
+the no-clue kind gets one; a moved clue leaves its area or changes its kind of
+spot; a shown clue moves, a spent spot is reused, or a move to another area is
+accepted; a world's unreliable-map share is outside 1-20%; the save does not
+write out, read back equal, validate and reopen at the end of every route; or
+a save written at the shipped cap and reopened with it lifted does not take
+more clues at new places and still move clues.
+
+First run, counts only:
+
+| | cap on | cap lifted |
+|---|---|---|
+| routes / worlds | 12 / 12 | 8 / 8 |
+| areas (places) | 185 | 75 |
+| scene areas | 71 | 36 |
+| places a mark names | 5 | 2 |
+| largest area | 10 | 14 |
+| clues placed | 1187 | 800 |
+| sets among placed | 73.2% (lowest route 56.2%) | 78.8% (lowest route 70.0%) |
+| lean split | 50.0 / 50.0 | 49.8 / 50.2 |
+| spotted or looked over; sets among them | 251; 66.5% | 168; 73.8% |
+| moves; forbidden moves refused | 167; 117 | 112; 113 |
+| largest save | 220 KB | 111 KB |
+| worst area write (plain Lua) | 18.4 ms | 8.3 ms |
+
+Reopened with the cap lifted, new places took up to 14 clues and a move
+worked on all 12 routes. Unreliable maps per world: share 1-20%, which after
+rounding to whole maps is 1.2-20.2% of all maps (a 20% world rounds to the
+nearest whole map). No engine bug turned up.
+
+Why it was slow before: nothing looped forever. Every session write copies
+and revalidates the whole record, so one world cost about 6 seconds and the
+first draft's 20 worlds in both modes, four routes each, ran well past two
+minutes. The same cost is in the game: a write grows with the size of the
+record (18 ms in plain Lua at 220 KB), which the step 8 playtest should
+watch, since the game's Lua is slower.
+
+**Not covered yet:** a set whose ground spot is found empty is not counted as
+lost; there is no floor on the share of scene-anchored clues (no number has
+been set); the save-growth measure is a plain-Lua serialiser, not the game's
+own writer; the synthetic list is placeholder rows, so the real list's shape
+still needs the same run once it is written.
+
+### Phase review of steps 5 and 7 — `/adhd` (2026-09-27)
+
+Frames: 3am on-call, competitor trying to break it, speedrunner, regulator,
+biology (five isolated runs, 30 ideas). Question: what could still go wrong
+before or at the first visible real-game test, and what should that test look
+for?
+
+Clusters: *seeing silent failures* (a reason log per placement, an abstain
+counter, a canary for test worlds); *throughput and stutter* (save cost late in
+a long game, scan budget under load, driving past scenes); *match correctness*
+(a scene across a cell edge, ordinary clutter mistaken for a scene, a matched
+place later changed); *persistence* (save and reload, loot respawn, kill during
+a save); out of scope for now: multiplayer, clock jumps (already handled),
+teleport tools.
+
+Deepened (top three) and what came of them, each checked against the code:
+
+1. **Driving past scenes.** No clue is lost: a waiting No Help clue never
+   expires (`Session.expiredIds` returns nothing for the world record) and is
+   created on the next arrival. But a long drive flags far more cells than are
+   ever looked at, and the flag list was capped with no eviction — once full,
+   new scenes stopped being noticed. **Fixed:** far flags are forgotten once
+   the list is three quarters full (a forgotten cell is flagged again when its
+   squares load again); tested with a full list.
+2. **A scene across a cell edge.** A look that closes a match from earlier
+   kept traces can lose the anchor's position and key the scene to the wrong
+   cell, so one scene could get two clues. **Fixed:** the same kind already
+   confirmed in that cell or a neighbour is the same scene; the test fails
+   without the fix.
+3. **Ordinary clutter mistaken for a scene.** Confirmed: for at least one
+   verified kind both traces also spawn as ordinary vehicles and loot, so a
+   parked car plus a stray item would "confirm" a scene that is not there.
+   **Fixed:** a signature must include at least one trace only that scene
+   creates (checked against the game's spawn tables and code); three kinds
+   keep a verified signature, five are demoted to unverified (they never
+   match until an exclusive trace is found). The two first-release scene
+   tickets that pointed at demoted kinds were retargeted to verified ones,
+   with new story glosses owed as a small stage-0 ticket.
+
+Carried into the real-game test (step 8): watch for stutter when clues are
+placed late in a long game; read the scene-wait log on a drive at walking,
+driving and top speed; save and reload next to a confirmed scene; check that
+ordinary clutter produces no scene.
