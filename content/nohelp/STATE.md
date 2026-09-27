@@ -11,10 +11,10 @@ CHATGPT since 2026-09-27 because WRITING
 1
 
 ## TICKET
-T0006
+T0007
 
 ## NEXT
-T0006
+T0007
 
 ## OPEN RETURNS
 T0001 ACK 2026-09-27
@@ -23,7 +23,7 @@ T0001 ACK 2026-09-27
 none
 
 ## LAST ADHD
-2026-09-27 T0001
+2026-09-27 T0006
 
 ## PROGRESS
-NOT DONE: maps 0/125, flyers 0/133, scenes 0/124, sets 0/0, balance 0/0, tickets 1/19 @4bbcd22
+NOT DONE: maps 0/125, flyers 0/133, scenes 0/124, sets 0/0, balance 0/0, tickets 1/19 @f4c9648
