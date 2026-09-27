@@ -635,7 +635,8 @@ local mapQueue,mapQueued={},{}
 local function designsOf(entry)
     local out,seen={},{}
     for _,m in ipairs(entry.marks or {}) do
-        if m.design and not seen[m.design] then seen[m.design]=true; out[#out+1]=m.design end
+        local d=m.design or (m.print and "print:"..m.print)
+        if d and not seen[d] then seen[d]=true; out[#out+1]=d end
     end
     return out
 end

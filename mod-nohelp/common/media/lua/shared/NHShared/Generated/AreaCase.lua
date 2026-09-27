@@ -91,12 +91,13 @@ local function recount(case)
 end
 M.recount=recount
 
--- A PLACE VANILLA MAPS MARK (task 3 plan, step 4; owner, 2026-09-27). It
--- leans toward the conspiracy of the first map that marks it, in the static
--- order of Generated/MapSites (never the order maps were read), and holds at
--- least 3 clues with one of the other side; each further map marking it adds
--- one more clue of the other side. The lean is the world's (Trails), so a
--- map read or never read gives the place the same clues.
+-- A PLACE VANILLA MAPS OR FLYERS MARK (task 3 plan, step 4; owner,
+-- 2026-09-27). It leans toward the conspiracy of the first map or flyer that
+-- marks it, in the static order of Generated/MapSites (never the order they
+-- were read). Marked by one: at least 3 clues, one of the other side. Marked
+-- by several: no extra minimum, the usual random number (owner: "no minimum
+-- or maximum" for shared places), still both sides. The lean is the world's
+-- (Trails), so a map read or never read gives the place the same lean.
 -- designs: the maps marking the place, in static order. Returns the trail
 -- record and Pick's extra arguments, or nil for a place no map marks.
 function M.trailFor(seed,designs)
@@ -104,7 +105,8 @@ function M.trailFor(seed,designs)
     local favour=Trails.favour(seed,designs[1])
     if not favour then return nil end
     local list={}; for i,d in ipairs(designs) do list[i]=d end
-    return {designs=list,favour=favour},{favour=favour,rivalMin=#designs,minCount=2+#designs}
+    if #designs>1 then return {designs=list,favour=favour},{favour=favour} end
+    return {designs=list,favour=favour},{favour=favour,rivalMin=1,minCount=3}
 end
 
 -- Decide one area. args: {case, site (a Catalog row), place, clues, version,

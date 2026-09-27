@@ -12,15 +12,19 @@
 --   favour(seed, design)       the lean its marked places favour: told, or
 --                              the other one when the map is unreliable.
 --
--- PLACEHOLDER: `told` is NOT story direction. What each trail's own words point
--- toward is the owner's to give (owner: "If you need guidance ask me"), and
--- none has been given yet. Until it is, `told` splits the designs evenly
--- between the two conspiracies by a hash of world seed and design, so both
--- sides get map trails in every world. When the owner decides, `told` becomes
--- a table read here and nothing else changes.
+-- RANDOM BY DESIGN (owner, 2026-09-27: "Random. We generate a story for each
+-- map that fits either conspiracy"). Each world splits the maps and flyers
+-- evenly between the two conspiracies by a hash of world seed and design; the
+-- story written for each map and flyer fits either, so whichever side a world
+-- gives it, its words hold. Flyers carry a trail like maps (owner: "like map
+-- marks"); they are listed as "print:<name>".
 local Pick=require("NHShared/Generated/Pick")
 local Sites=require("NHShared/Generated/MapSites")
 local T={}
+-- Every map and flyer that carries a trail, in the static order of MapSites.
+T.ALL={}
+for _,d in ipairs(Sites.designs) do T.ALL[#T.ALL+1]=d end
+for _,p in ipairs(Sites.prints or {}) do T.ALL[#T.ALL+1]="print:"..p end
 T.VERSION="nohelp-trails-0"
 T.LEANS={"containment","agricultural"}
 T.MIN_SHARE,T.MAX_SHARE=1,20
@@ -31,7 +35,7 @@ function T.other(lean) return lean=="containment" and "agricultural" or "contain
 -- Cached per design list, seed and purpose: two small tables per world.
 local ranks=setmetatable({},{__mode="k"})
 local function rankOf(seed,design,purpose,designs)
-    designs=designs or Sites.designs
+    designs=designs or T.ALL
     local byList=ranks[designs]
     if not byList then byList={}; ranks[designs]=byList end
     local cacheKey=Pick.key({seed,purpose})
@@ -49,7 +53,7 @@ end
 -- PLACEHOLDER lean (see the header): the first half of the designs by rank
 -- tell containment, the rest agricultural.
 function T.told(seed,design,designs)
-    designs=designs or Sites.designs
+    designs=designs or T.ALL
     local rank=rankOf(seed,design,"told",designs)
     if not rank then return nil end
     return rank<=math.floor(#designs/2) and "containment" or "agricultural"
@@ -66,7 +70,7 @@ function T.unreliableCount(seed,n)
 end
 -- Exactly unreliableCount designs are unreliable: those ranked first.
 function T.unreliable(seed,design,n,designs)
-    designs=designs or Sites.designs
+    designs=designs or T.ALL
     n=n or #designs
     local rank=rankOf(seed,design,"unreliable",designs)
     return rank~=nil and rank<=T.unreliableCount(seed,n)

@@ -198,6 +198,13 @@ plan's directive check):
   sometimes dresses a body for the other side: containment — police,
   military, medical staff, hazard suits; agricultural — farm clothes,
   workers' overalls, hazard suits (both).
+- **Map and flyer leans, and minimums** (owner, same session): which
+  conspiracy each map or flyer points to stays random per world, fixed by the
+  world seed — *"We generate a story for each map that fits either
+  conspiracy."* Flyer and brochure places work like map marks (a lean; at
+  least 3 clues, one of the other side). An open mark's clues lie within 16
+  tiles of it. A place several maps or flyers point to has no extra minimum:
+  the usual random number, still both sides.
 - **No maximum, for real.** Once the written clues are all placed, object sets
   may be placed again elsewhere as new copies with new stamps. This is not a
   respawn: a consumed copy never returns (DR-20260927-WORLD-KEEPS-EVERYTHING
