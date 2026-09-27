@@ -108,11 +108,20 @@ plan's directive check):
 - **Unreliable maps: a random share per world** (owner: *"make it random
   between 1 and 20"*). Read as: each world, seeded from the world, makes
   between 1% and 20% of annotated-map trails unreliable — they point at
-  evidence for the other theory. Recorded as a percentage pending the owner's
-  confirmation; "1 in 1" would make every map lie.
+  evidence for the other theory. Confirmed by the owner as a percentage.
+- **First-development cap: 5 clues per theory per area** (owner, same
+  session), i.e. at most 10 per area until the cap is lifted.
 - **A scene not confirmed in time** waits for the next confirmed scene in the
   same area, and every such wait is logged so the owner can see whether the
   timing works.
+- **Interesting places** (owner, same session, told that the owner's own
+  12-place list from P4-R54 was never written down): clues are placed around
+  three sources together — (a) the research place types the game can
+  recognise anywhere (police stations, hospitals and clinics, offices,
+  bookstores, radio and transmission sites, warehouses, government offices;
+  T3, detection stays advisory); (b) the real places vanilla maps and flyers
+  name (`MapMediaCatalogue.lua`); (c) farms, barns and fields, and military or
+  police checkpoints and roadblocks.
 - **No maximum, for real.** Once the written clues are all placed, object sets
   may be placed again elsewhere as new copies with new stamps. This is not a
   respawn: a consumed copy never returns (DR-20260927-WORLD-KEEPS-EVERYTHING
