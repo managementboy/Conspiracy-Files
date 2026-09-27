@@ -220,22 +220,32 @@ Fix the pattern, not just the row.
 
 - **Converter:** `tools/nohelp_content/convert.lua` turns accepted rows into
   the derived clue file the game loads, keeps `rival_reading`, `gloss`,
-  `axioms`, `cites`, `prov` in a sidecar, and runs the checks. *Not built.*
+  `axioms`, `cites`, `prov` in a sidecar, and runs the checks. *Built
+  2026-09-27* (`content/nohelp/` folders, `lua5.1
+  tools/nohelp_content/convert.lua`). Beyond section 7's codes it can return
+  `DUPLICATE`, `ONE_SIDED` (a place or spot without both conspiracies, or a
+  place without an object set per conspiracy), `NO_PROV`, `NO_GLOSS`,
+  `DENSITY`, `EMPHASIS`, `CITE_NOT_VANILLA` and `RESERVED_NAME`. `axioms` is
+  either `{"containment": [ids], "agricultural": [ids]}` or a flat list of
+  ids.
 - **Anchor on a clue:** the clue list cannot yet say which map mark, flyer,
   scene or scene version a clue belongs to, so map and scene clues would
   become generic. An optional `anchor` field, checked against
   `Generated/MapSites.lua` and `Generated/VanillaScenes.lua`, and read by
-  placement, is needed before any `MAP`, `SCENE` or `UNIQUE` ticket. *Not
-  built.*
+  placement, is needed before any `MAP`, `SCENE` or `UNIQUE` ticket. *Built
+  2026-09-27* for maps and flyers (a marked place with anchored clues takes
+  only those). Scene anchors are accepted and checked, but scene placement
+  itself is not built yet, so scene clues are not placed.
 - **Clue gates:** `Mystery/ClueGates.lua` (provenance, density, emphasis,
   reserved names, citations) called from the clue-list rules, with
   `test/nohelp_clue_gates.lua`; the axiom and retired-premise gates once the
   axioms are frozen at stage 0; Claude stores the retired terms as salted hashes
   (the retired pair is on record in the design doc, so the owner is not needed).
-  *Not built.*
+  *Built 2026-09-27*; the axiom gate checks shape only until
+  `content/nohelp/approved/axioms.json` exists.
 - **Blind re-read prompt and receipts:** `tools/cluegates/blind_reread.md`,
   receipts in `tools/cluegates/receipts/` keyed by a hash of the clue text.
-  *Not built.*
+  *Built 2026-09-27* (`tools/cluegates/check_receipts.lua`).
 - **Owner one-pager and drift report.** *Not built.*
 
 ## 10. What you must never do

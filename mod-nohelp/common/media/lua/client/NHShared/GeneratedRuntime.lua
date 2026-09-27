@@ -689,6 +689,17 @@ local function ownMarksOf(entry,designs)
     return #out>=2 and out or nil
 end
 R.ownMarksOf=ownMarksOf
+-- The keys of every mark naming a place (Manifest.markKey), so a clue
+-- anchored to one of them goes there and nowhere else (AreaCase.anchorPool).
+local function anchorsOf(entry)
+    local out,seen={},{}
+    for _,m in ipairs(entry.marks or {}) do
+        local k=Manifest.markKey(m)
+        if k and not seen[k] then seen[k]=true; out[#out+1]=k end
+    end
+    return out
+end
+R.anchorsOf=anchorsOf
 -- The site row the world record keeps, in the Catalog's shape. Nothing was
 -- observed there, so its storage is "unknown" (Session.unobserved).
 local function mapSiteRow(entry)
@@ -715,7 +726,7 @@ local function mapDrain()
     local entry=item.entry
     local designs=designsOf(entry)
     local ok,ids=api.addArea{site=mapSiteRow(entry),place=entry.place,designs=#designs>0 and designs or nil,
-        marks=ownMarksOf(entry,designs),clues=Manifest.clues,version=Manifest.VERSION,hours=worldHours(),source=item.source}
+        marks=ownMarksOf(entry,designs),anchors=anchorsOf(entry),clues=Manifest.clues,version=Manifest.VERSION,hours=worldHours(),source=item.source}
     if ok then
         CFLog.write("i","case",{case=entry.areaId,place=entry.place,n=#ids,why="area-decided-"..item.source})
     elseif ids=="empty" then

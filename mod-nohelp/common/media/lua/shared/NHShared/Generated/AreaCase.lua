@@ -63,7 +63,7 @@ end
 -- has it; a placeholder clue gets a neutral placeholder, never invented story.
 function M.docFrom(pick,clue,areaId)
     local doc={id=M.docId(areaId,pick.clue,pick.copy),locationId=areaId,clue=pick.clue,copy=pick.copy,
-        lean=pick.lean,rival=pick.rival,spot=pick.spot,person=clue.person,outfit=pick.outfit}
+        lean=pick.lean,rival=pick.rival,spot=pick.spot,person=clue.person,outfit=pick.outfit,anchor=copy(clue.anchor)}
     if clue.kind=="set" then
         doc.kind=clue.pieces[1]
         doc.members=membersOf(clue.pieces)
@@ -168,8 +168,38 @@ function M.assignMarks(seed,areaId,docs,marks,favour)
     end
 end
 
+-- WHICH CLUES A PLACE MAY TAKE, BY ANCHOR (content-writer handoff, section
+-- 6). A clue may name the vanilla map mark, map annotation, flyer or scene it
+-- was written for (Manifest.validAnchor). anchors: the keys of every mark
+-- that names this place (Manifest.markKey: "map:D:mark:n", "map:D:note:n",
+-- "print:P"), or nil for a place no map or flyer marks. The rule:
+--   * no clue in the list has an anchor: the list, untouched (so the picker's
+--     choices are exactly what they were before anchors existed);
+--   * a place some anchored clue names: ONLY those clues - its map's story is
+--     told there and nowhere else, and generic clues do not dilute it;
+--   * any other place: only the clues with no anchor. An anchored clue never
+--     lands at a place its map or flyer does not mark, and a scene-anchored
+--     clue waits for its scene (scene placement is not built yet).
+-- Unanchored clues fill a marked place only while no clue is anchored to it,
+-- so a map with written clues and a map still unwritten both work.
+function M.anchorPool(clues,keys)
+    local any=false
+    for _,c in ipairs(clues) do if c.anchor~=nil then any=true; break end end
+    if not any then return clues end
+    local here={}
+    for _,k in ipairs(keys or {}) do here[k]=true end
+    local anchored,plain={}, {}
+    for _,c in ipairs(clues) do
+        if c.anchor==nil then plain[#plain+1]=c
+        elseif c.anchor.scene==nil and here[Manifest.anchorKey(c.anchor)] then anchored[#anchored+1]=c end
+    end
+    if #anchored>0 then return anchored end
+    return plain
+end
+
 -- Decide one area. args: {case, site (a Catalog row), place, clues, version,
--- hours, source, designs (optional: the maps marking it)}. Returns the new
+-- hours, source, designs (optional: the maps marking it), anchors (optional:
+-- the keys of the marks naming it, M.anchorPool)}. Returns the new
 -- case and the new document ids, or nil and "decided" (never again), "empty"
 -- (nothing to give: NOT a decision, so a later clue list can still decide it)
 -- or another refusal.
@@ -178,7 +208,7 @@ function M.decide(args)
     if not M.isAreaCase(case) or type(site)~="table" or type(site.id)~="string" then return nil,"invalid" end
     if not PLACE[args.place] then return nil,"not an interesting place" end
     for _,a in ipairs(case.areas) do if a.id==site.id then return nil,"decided" end end
-    local clues=args.clues or Manifest.clues
+    local clues=M.anchorPool(args.clues or Manifest.clues,args.anchors)
     local byId={}; for _,c in ipairs(clues) do byId[c.id]=c end
     local trail,lean=M.trailFor(case.seed,args.designs,site.id,args.marks)
     if args.designs~=nil and not trail then return nil,"unknown map design" end
@@ -294,6 +324,22 @@ function M.validate(case)
         if d.person~=nil and (type(d.person)~="string" or #d.person==0 or #d.person>40) then return false,"invalid person" end
         if d.outfit~=nil and (d.spot~="corpse" or not Outfits.isClass(d.outfit)) then return false,"invalid outfit hint" end
         if d.mark~=nil and (not integer(d.mark) or d.mark<1) then return false,"invalid own mark" end
+        -- The anchor a clue was written for, as the clue list gave it. Only
+        -- its shape is checked: a later MapSites must not break a save.
+        if d.anchor~=nil then
+            local a=d.anchor
+            if type(a)~="table" then return false,"invalid anchor" end
+            local n=0
+            for k,v in pairs(a) do
+                n=n+1
+                if k=="mark" or k=="note" then
+                    if not integer(v) or v<1 then return false,"invalid anchor" end
+                elseif k=="map" or k=="print" or k=="scene" or k=="version" then
+                    if type(v)~="string" or v=="" or #v>80 then return false,"invalid anchor" end
+                else return false,"unknown anchor field "..tostring(k) end
+            end
+            if n==0 or not Manifest.anchorKey(a) then return false,"invalid anchor" end
+        end
         -- An item type is checked against the game's catalogue when a clue is
         -- chosen, not here: a game update that drops an item must never make
         -- a saved world unreadable, because a record that fails validation
@@ -316,7 +362,7 @@ function M.validate(case)
             if k and not Kinds.fits(d.kind,d.body) then return false,"a clue's text does not fit its carrier" end
         end
         for k in pairs(d) do
-            if not ({id=1,locationId=1,clue=1,copy=1,lean=1,rival=1,spot=1,kind=1,members=1,quantity=1,title=1,body=1,person=1,outfit=1,mark=1})[k] then
+            if not ({id=1,locationId=1,clue=1,copy=1,lean=1,rival=1,spot=1,kind=1,members=1,quantity=1,title=1,body=1,person=1,outfit=1,mark=1,anchor=1})[k] then
                 return false,"unknown clue field "..tostring(k)
             end
         end

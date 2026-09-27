@@ -871,3 +871,64 @@ the rest of the area follows as before. Today one map's area qualifies
 a flyer, so they stay shared (random lean, no extra minimum, no own marks).
 Single-mark places are unchanged.
 Test: `test/nohelp_marks_minimum.lua`; `test/nohelp_area_runtime.lua` extended.
+
+### Content intake — converter, anchors, clue gates, blind re-read receipts
+
+**Built (2026-09-27)**, the engine side of the content-writer handoff
+(`docs/management/NO_HELP_CONTENT_WRITER_HANDOFF_2026-09-27.md`, sections
+6-7 and 9). No clue text was written; tests use placeholder tokens only.
+
+- **Converter** (`tools/nohelp_content/convert.lua`, plain Lua 5.1 with its
+  own `json.lua`): reads `content/nohelp/incoming/<ticket>.json`, checks each
+  row (delivery schema, then `Manifest.validClue` with the authoring fields
+  still on, which runs the clue-list rules, the anchor check and the gates),
+  then `Manifest.lint` on everything accepted from other tickets plus this
+  ticket's good rows. Rows that pass alone but break the merged list are
+  returned together, marked `merged`. Accepted game fields go to
+  `content/nohelp/accepted/`, authoring fields to `accepted/sidecar/`,
+  returned rows with reason codes to `rejected/`; the derived clue file
+  `NHShared/Mystery/Content/Clues.lua` is rebuilt from `accepted/` and
+  `Manifest.clues` loads it (empty list when absent or empty). The terminal
+  report is counts, ids and codes, never text. `validClue` now returns a
+  reason code with every refusal and caps a set's text at 240 characters.
+  Ticket rules: ids prefixed with the ticket; map, scene and unique tickets
+  need anchors; person tickets are accepted or returned whole.
+- **Anchor** (`Manifest.validAnchor`): `{map, mark}`, `{map, note}`,
+  `{print}`, `{scene}`, `{scene, version}`, checked against `MapSites`
+  (`ANCHOR_UNKNOWN`), and a map or flyer anchor only goes to the kind of place
+  its mark is (`ANCHOR_SPOT_MISMATCH`); version A leans containment, B
+  agricultural. A scene anchor is checked against `Generated/VanillaScenes`
+  once it exists, and until then is accepted as unverified (the converter
+  checks it against the writer-only scene list and draft table). Documents
+  carry the anchor; `AreaCase.validate` checks its shape.
+  **Placement decision** (`AreaCase.anchorPool`): with no anchored clue in the
+  list, the picker sees exactly the list it always did (its output is
+  unchanged); a marked place that some clue is anchored to takes only the
+  clues anchored to one of its marks; any other place takes only clues with no
+  anchor; a scene-anchored clue waits for scene placement (not built). The
+  runtime passes each map place its marks' keys (`anchorsOf`).
+- **Clue gates** (`Mystery/ClueGates.lua`, pure, called from `validClue` for
+  rows carrying authoring fields — the derived file carries none, so nothing
+  runs in play): provenance, rival reading, gloss; axioms naming both
+  conspiracies (by shape until `content/nohelp/approved/axioms.json` exists);
+  density (at most 4 proper-noun-like words in the body, at most 2 code-like
+  words in title and body); emphasis (all-capitals words of 5+ letters,
+  capitals in a row, `!!`, `?!`, `...?`, marked-up stress, a body ending on
+  `!` or `...`); citations must be literal substrings of the vanilla flyer or
+  map annotation text; reserved names (exact, Soundex, one letter away)
+  against `Generated/ReservedNames.lua`, built by
+  `tools/cluegates/build_reserved.lua` (writer/engineer only); the retired
+  premise as salted hashes only (`tools/cluegates/retired_hashes.lua`).
+- **Blind re-read** (`tools/cluegates/blind_reread.md`): the prompt for a
+  different model, at least 5 independent runs per clue; receipts in
+  `tools/cluegates/receipts/<clue id>.json` keyed by the SHA-256 of exactly
+  the text the reader saw; `tools/cluegates/check_receipts.lua` reports
+  missing, stale, one-sided and mostly-"neither" clues. The shipped test
+  fails on any such clue once the list is not empty.
+- Not done: the owner one-pager and drift report; scene placement (a
+  scene-anchored clue is never placed yet); within a big area with its own
+  marks, a mark-anchored clue is not yet pinned to its own mark
+  (`AreaCase.assignMarks` spreads clues as before); the axiom and retired
+  gates' term lists wait for stage 0.
+Tests: `test/nohelp_content_convert.lua`, `test/nohelp_anchor.lua`,
+`test/nohelp_clue_gates.lua`, `test/nohelp_receipts.lua`.
