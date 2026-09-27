@@ -31,7 +31,7 @@ end
 -- THE RULES, one fact at a time.
 local function facts(over)
     local f={key="ground:1:2:0",spent={},used={},exists=true,z=0,wantZ=0,floor=true,solid=false,
-        outside=true,windows=0,lights=0,nearSurvivor=false,zombies=0}
+        outside=true,nearSurvivor=false,zombies=0}
     for k,v in pairs(over or {}) do f[k]=v end
     return f
 end
@@ -43,9 +43,9 @@ refused({exists=false},"missing")
 refused({z=1},"floor-level")
 refused({floor=false},"unwalkable")
 refused({solid=true},"unwalkable")
-refused({outside=false},"dark")
-assert(G.check(facts({outside=false,windows=2})),"a room with a window is visible")
-assert(G.check(facts({outside=false,lights=1})),"a room with a light is visible")
+-- NO DARK RULE (owner, 2026-09-27): a dark room's floor is a spot; the
+-- player's own light finds it, like foraging.
+assert(G.check(facts({outside=false})),"a dark room is a spot")
 refused({nearSurvivor=true},"near-survivor")
 refused({zombies=G.CROWD_ZOMBIES},"crowded")
 assert(G.check(facts({zombies=G.CROWD_ZOMBIES-1})),"fewer than four is not a crowd")
@@ -68,14 +68,15 @@ getTimeInMillis=function() return 0 end
 ZombRand=function() return 1 end
 getGameTime=function() return {getWorldAgeHours=function() return 1 end} end
 local px,py=5000,5000
-getPlayer=function() return {getX=function() return px end,getY=function() return py end,getZ=function() return 0 end} end
+getPlayer=function() return {getX=function() return px end,getY=function() return py end,getZ=function() return 0 end,
+    getPlayerNum=function() return 0 end} end
 getWorld=function() return nil end
 package.loaded["NHShared/InteractionAPI"]={}
 package.loaded["NHShared/T3Nearby"]={start=function() return true end}
 package.loaded["NHShared/ReachabilityAdapter"]={basementSites=function() return {} end}
 
 -- A world of squares: `kind(x,y)` says what each one is.
-local asked,kind,zombies=0,nil,{}
+local asked,kind,zombies,seen=0,nil,{},nil
 local function list(t) return {size=function() return #t end,get=function(_,i) return t[i+1] end} end
 local function square(x,y,z)
     local k=kind(x,y)
@@ -87,10 +88,10 @@ local function square(x,y,z)
     function s:isSolidTrans() return false end
     function s:isOutside() return k=="yard" end
     function s:getDoor() return nil end
-    function s:getRoom()
-        if k=="yard" or k=="wall" or k=="hole" then return nil end
-        return {getWindows=function() return list(k=="lit" and {1} or {}) end,
-            getLightSwitches=function() return list({}) end}
+    -- What the survivor can see: `seen(x,y)`, or unreadable when nil.
+    if seen then
+        function s:isCouldSee() return seen(x,y) end
+        function s:isCanSee() return seen(x,y) end
     end
     return s
 end
@@ -101,9 +102,9 @@ end
 local R=dofile("mod-nohelp/common/media/lua/client/NHShared/GeneratedRuntime.lua")
 assert(type(R.groundScan)=="function","the runtime has a ground scan")
 local site={id="t3:g",bounds={x1=100,y1=100,x2=110,y2=110,z=0}}
-local function run(salt,accept,keys,rank)
-    local got,n,why
-    local scan=R.groundScan(site,function(t,count,refusedBy) got,n,why=t,count,refusedBy end,accept,salt,rank,keys)
+local function run(salt,accept,keys)
+    local got,why
+    local scan=R.groundScan(site,function(t,refusedBy) got,why=t,refusedBy end,accept,salt,keys)
     local steps=0
     while not scan() do steps=steps+1; assert(steps<1000,"the scan ends") end
     return got,why,steps
@@ -152,13 +153,10 @@ for _,k in ipairs(order("doc-all",G.MAX_TRIES)) do all[k]=true end
 assert(run("doc-all",nil,{spent=all,used={}})==nil,"all spent: no spot this attempt")
 assert(run("doc-acc",function() return false end)==nil,"nor one the caller's accept refuses")
 
--- DARK INDOORS, CROWDED and UNWALKABLE are refused.
+-- A DARK ROOM is a spot; CROWDED and UNWALKABLE are refused.
 kind=function() return "dark" end
 local got,why=run("doc-dark")
-assert(got==nil and (why.dark or 0)>0,"a dark room is refused")
-kind=function() return "lit" end
-got=run("doc-lit")
-assert(got and got.sprite=="floor","a room with a window is a spot, on the floor")
+assert(got and got.sprite=="floor","a dark room is a spot, on the floor")
 kind=function() return "hole" end
 got,why=run("doc-hole")
 assert(got==nil and (why.unwalkable or 0)>0,"no floor, no spot")
@@ -175,11 +173,32 @@ got,why=run("doc-crowd")
 assert(got==nil and (why.crowded or 0)>0,"a crowd refuses the spot")
 zombies={}
 
--- NEAR THE SURVIVOR: never a spot the Search Mode icon could already show.
+-- NEAR THE SURVIVOR: never a spot they could be looking at. Within the guard
+-- radius a square is refused when it is visible, or when visibility cannot
+-- be read; a square they cannot see is a spot (create on arrival, owner
+-- 2026-09-27). Beyond the radius, or on another floor, visibility is not asked.
 px,py=105,105
 got,why=run("doc-near")
-assert(got==nil and (why["near-survivor"] or 0)>0,"no spot inside the proximity guard")
+assert(got==nil and (why["near-survivor"] or 0)>0,"unreadable visibility: no spot inside the proximity guard")
+seen=function() return true end
+got,why=run("doc-near-seen")
+assert(got==nil and (why["near-survivor"] or 0)>0,"a visible square inside the guard is refused")
+seen=function() return false end
+got=run("doc-near-hidden")
+assert(got and got.ground==true,"a square the survivor cannot see is a spot, even near them")
+seen=function(x,y) return x<105 end
+for i=1,5 do
+    got=run("doc-half-"..i)
+    assert(got==nil or got.x>=105,"only squares out of sight are taken")
+end
+seen=nil
 px,py=5000,5000
+local SC=require("NHShared/StaleClue")
+assert(SC.outOfSight(0,0,0,{x=0,y=0,z=1},true),"another floor is out of sight")
+assert(SC.outOfSight(0,0,0,{x=SC.PROXIMITY_GUARD_TILES+1,y=0,z=0},true),"beyond the guard radius is out of sight")
+assert(not SC.outOfSight(0,0,0,{x=3,y=0,z=0},true),"near and visible is not")
+assert(not SC.outOfSight(0,0,0,{x=3,y=0,z=0},nil),"near and unreadable is not")
+assert(SC.outOfSight(0,0,0,{x=3,y=0,z=0},false),"near but not visible is")
 
 -- AT MOST 64 TRIES per attempt.
 kind=function() return "none" end
@@ -194,11 +213,11 @@ assert(asked<=G.MAX_TRIES,"each attempt is bounded")
 
 -- The filler offers ground to a ground clue.
 local src=assert(io.open("mod-nohelp/common/media/lua/client/NHShared/GeneratedRuntime.lua","rb")):read("*a")
-local filler=src:match("local function filler%(api%).-\nend\n")
+local filler=src:match("local function filler%(api,onlyArea%).-\nend\n")
 assert(filler:find('elseif doc and doc.spot=="ground" then',1,true) and filler:find("scan=groundScan(site,",1,true),
     "a ground clue is given a ground scan")
-assert(filler:find("nearestWaiting(root,waiting)",1,true),"the filler serves the nearest areas first")
+assert(filler:find("nearestWaiting(root,waiting,onlyArea)",1,true),"the filler serves the nearest areas first")
 assert(filler:find('CFLog.write("d","skip",{doc=id,area=site and site.id,distance=distance,why=why})',1,true),
     "a miss is logged with area, clue and distance")
 
-print("nohelp ground spots: world order, 44-tile box, spent/used/dark/crowded/unwalkable/near refused, 64 tries at most")
+print("nohelp ground spots: world order, 44-tile box, spent/used/crowded/unwalkable/in-sight refused, dark allowed, 64 tries at most")

@@ -51,12 +51,14 @@ end
 --   used[key]    another clue already lies there
 --   exists       the square is loaded;  z / wantZ  its floor and the site's
 --   floor        vanilla's TreatAsSolidFloor();  solid  isSolid() or isSolidTrans()
---   outside      isOutside()
---   windows      windows in the square's room (0 when none or no room)
---   lights       light switches in the square's room
---   nearSurvivor the survivor is within the proximity guard of the square
+--   outside      isOutside() (only for the spot's label)
+--   nearSurvivor the survivor could see the square: same floor, within the
+--                proximity guard, and the square visible to them (the
+--                runtime's guard; see GeneratedRuntime.hiddenFromSurvivor)
 --   zombies      how many zombies are within CROWD_RADIUS
--- Returns true, or false and the rule that refused.
+-- Returns true, or false and the rule that refused. A dark room is no reason
+-- (owner, 2026-09-27): a loose floor clue there is spotted with the player's
+-- own light, like foraging.
 function G.check(facts)
     local key=facts.key
     if key and facts.spent and facts.spent[key] then return false,"spent" end
@@ -64,7 +66,6 @@ function G.check(facts)
     if not facts.exists then return false,"missing" end
     if facts.z~=facts.wantZ then return false,"floor-level" end
     if not facts.floor or facts.solid then return false,"unwalkable" end
-    if not facts.outside and (facts.windows or 0)<=0 and (facts.lights or 0)<=0 then return false,"dark" end
     if facts.nearSurvivor then return false,"near-survivor" end
     if (facts.zombies or 0)>=G.CROWD_ZOMBIES then return false,"crowded" end
     return true

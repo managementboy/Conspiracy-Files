@@ -46,20 +46,34 @@ clues may move, placed anywhere interesting, moves are silent) and
 - **At least half are object sets** — counted per clue, on what is actually
   placed, not only on the written list. Every piece is a real vanilla item
   type.
-- **Decided in two stages.** Reading a vanilla map, or heading toward a place,
-  decides *when* an area is chosen and which clues may go there — never
-  *which* area a map points to, which is fixed by the map itself.
-  The exact *spot* is fixed and saved before the player can get any signal
-  about it — before coming within 16 tiles (the Search Mode icon radius; the
-  hint's 3 tiles is inside that). After that, reloading changes nothing.
+- **Decide early, create on arrival.** Reading a vanilla map, or heading
+  toward a place, decides *when* an area is chosen and which clues it holds —
+  never *which* area a map points to, which is fixed by the map itself. That
+  decision is saved at once, so reloading never changes it. The objects
+  themselves only come into the world once the player is within 40 tiles of
+  the place, and only where the player cannot see them: a closed drawer,
+  mailbox or car at any distance (nobody sees into it, and never one open in
+  the loot panel); a loose clue on the ground or a body only on another floor,
+  out of the player's sight, or more than 20 tiles away. Nothing sits at a
+  place before the player comes.
+- **At random within a place.** Which spot each clue takes is the world's
+  seeded choice, the same after every reload. No side of the story is put
+  nearer the door than the other, and no mark on a map is special for being
+  first or last.
+- **A searched drawer may hold one.** A clue is only ever seen through the
+  hint and the inspection tool, so a container the player emptied earlier can
+  still receive one. Only a spot that already gave up a clue is never used
+  again.
 - **Where a set lands decides its lean.** Each set is written with a short list
   of kinds of place it may go and which theory it leans toward in each. The
   lean is saved with the spot.
 - **It stands out.** A set only goes where it doesn't match what that place
   normally holds, so a searching player notices it.
-- **Moves are quiet.** An unfound clue may move after some hours, only to the
-  same kind of spot so its meaning survives, never once the Search Mode icon has
-  shown it, and a set moves whole. Nothing is left behind at the old spot.
+- **Moves are quiet.** An unfound clue may move after 3 in-game days, the
+  same wait at every place (reading a map starts no timer), only within its
+  own place and to the same kind of spot so its meaning survives, one move at
+  a time, never once the Search Mode icon has shown it, and a set moves whole.
+  Nothing is left behind at the old spot.
 
 ## 2. What exists and what changes
 
@@ -739,3 +753,55 @@ Tests: `test/nohelp_layout.lua`, `test/nohelp_clock.lua`,
 flyer read does not yet decide its places at once (approach does); "roadside"
 and "porch" labels (no cheap, verified fact); `IsoRoom:getWindows` is
 verified in the game jar only, not in vanilla Lua; no visible playtest yet.
+
+### Rework after the owner's pushback
+
+The owner questioned step 4's letdown layout and promise clock
+(DECISIONS.md, "Revised after an `/adhd` run on the owner's pushback"):
+*"what does arriving late mean? No player is in a hurry in PZ"* and *"How do
+you know the order of the marks? Why should this be relevant?"* An `/adhd`
+run on that pushback led to these decisions, now built:
+
+- **Decide early, create on arrival.** The decision is unchanged (the nearby
+  scan, a map read and the 100-tile approach still decide a place and save its
+  clues). The filler now creates nothing for a place until the survivor is
+  within `R.ARRIVE_TILES` = 40 tiles of its bounds (it was 120, and only a
+  loading limit). Inside that ring a closed container — furniture, mailbox,
+  vehicle — may be filled at any distance, refused only while it is open in
+  the loot panel; open ground and a body only on another floor, beyond the
+  20-tile guard, or on a square the survivor cannot see
+  (`StaleClue.outOfSight`; the square's `IsoGridSquare:isCouldSee` /
+  `isCanSee(playerIndex)`, confirmed with `javap` on the Build 42 jar and used
+  by vanilla `ISDestroyCursor`, `ISScytheGrassCursor` and foraging's
+  `ISBaseIcon`; an unreadable answer counts as visible). Entering an area's
+  ring queues one filler attempt for it at once, nearest area first
+  (`arrivals`, checked every 30 ticks), instead of waiting for the regular
+  pass every 120 ticks.
+- **Looted drawers.** For a No Help area clue, `FixedContainers.fresh` no
+  longer refuses a container the survivor searched earlier (filler, container
+  scan, relocation and the placement job); an open loot window still refuses.
+  Spots that gave up a clue stay off-limits (Session's spent spots).
+- **No layout order, no last-mark tie.** `Generated/Layout.lua`, its rank,
+  its hold (`why=layout-hold`) and Pick's `mode="tie"` with
+  `AreaCase.trailFor`'s last-mark rule are removed. Spots within a place are
+  the world's seeded choice as before; Pick without the removed arguments is
+  byte-for-byte what it was.
+- **No promise clock.** `StaleClue.clockStart`, `readAtBySite`, the runtime's
+  read-hour table and `MapMediaRuntime.readHours`/`readStamp` are removed;
+  every place's unfound clues may move 3 days after placement. Kept: shown
+  clues never move, own place, same kind of spot, spent spots never reused,
+  one move per attempt. The map state still records read hours as world
+  events; nothing reads them for moves.
+- **No dark rule.** `GroundSpots` no longer refuses a dark room (owner: the
+  player's own light finds a loose floor clue, like foraging); the other
+  ground rules stay.
+
+Tests: `test/nohelp_arrival.lua` (new); `test/nohelp_clock.lua` reduced to
+the remaining moving rules; `test/nohelp_ground_spots.lua` (dark allowed,
+out-of-sight spots near the survivor); `test/nohelp_area_runtime.lua` (the
+arrival trigger, once per stay); `test/nohelp_layout.lua` removed.
+
+**Not in this rework:** the nearby scan still decides a building only when
+it has an unsearched container (`Storage.scan`), and a body the survivor
+already searched still does not carry a clue (`Carriers`); zombies gather
+still waits for its live test; no visible playtest yet.

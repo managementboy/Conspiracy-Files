@@ -59,7 +59,7 @@ local tick=src:match('on%("OnTick", function%(%).-\nend%)')
 assert(tick and tick:find("R.decideNearby",1,true),"the runtime's tick asks for nearby areas")
 
 -- The filler takes only a clue's own kind of spot.
-local filler=src:match("local function filler%(api%).-\nend\n")
+local filler=src:match("local function filler%(api,onlyArea%).-\nend\n")
 assert(filler,"the filler is where it was")
 assert(filler:find("Session.physicalKey(candidate)] and Session.intentMatches(doc,candidate)",1,true),
     "the filler's accept requires the clue's own kind of spot")
@@ -157,6 +157,19 @@ assert(root.case.areas[1].place=="police" and root.case.areas[1].version==Manife
 local waiting=0
 for _,a in pairs(root.assignments) do if a.status=="deferred" then waiting=waiting+1 end end
 assert(waiting==#root.case.documents and waiting>0,"its clues wait for the filler")
+
+-- CREATE ON ARRIVAL (owner, 2026-09-27): the area's clues are decided, and
+-- entering its ring (R.ARRIVE_TILES of its bounds) queues one filler attempt
+-- for it at once, once per stay; outside the ring nothing is queued.
+do
+    local wasX,wasY=px,py
+    px,py=1000-R.ARRIVE_TILES-1,1005
+    assert(R.arrivals()==0,"outside the ring nothing is queued")
+    px=1000-R.ARRIVE_TILES
+    assert(R.arrivals()==1,"entering the ring queues one attempt for the area")
+    assert(R.arrivals()==0,"once per stay in the ring")
+    px,py=wasX,wasY
+end
 
 -- The next attempt waits until the survivor moves on or time passes.
 assert(select(2,R.decideNearby())=="wait","nothing is scanned again in the same place")

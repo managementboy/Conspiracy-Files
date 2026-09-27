@@ -64,11 +64,6 @@ local function count(t,k) return (t and t[k]) or 0 end
 --             side's later slots (default 1: the opener's one);
 --   minCount  the least number of clues the area gets, raising the world's
 --             2..10 when it is lower.
---   mode      "tie" for the place holding a multi-mark map's LAST mark (owner,
---             2026-09-27: "a multi-mark map's last mark is an exact tie"):
---             an even number of clues, the two sides taking turns, so both
---             end equal. When one side runs out, the other stops level with
---             it. favour/rivalMin do not apply; minCount still raises it.
 -- Without them the result is exactly what it always was.
 -- ledger (world state, never belief):
 --   areas[areaId][lean] = clues already there;  world[lean] = clues anywhere;
@@ -119,12 +114,6 @@ function P.choose(args)
     for _,n in pairs(here) do already=already+n end
     local want=P.targetCount(seed,area.id,version)
     if args.minCount and args.minCount>want then want=args.minCount end
-    local tie=args.mode=="tie"
-    if tie then
-        -- Rounded up to even, within both sides' caps.
-        if want%2==1 then want=want+1 end
-        if want>2*P.FIRST_DEVELOPMENT_CAP then want=2*P.FIRST_DEVELOPMENT_CAP end
-    end
     want=want-already
     local favour=args.favour
     local rival=favour and (favour=="containment" and "agricultural" or "containment")
@@ -135,15 +124,7 @@ function P.choose(args)
         -- Which conspiracy next: one missing here first, then the one with
         -- fewer clues across the world, never one at its cap.
         local lean
-        if tie then
-            -- Turns: the side with fewer here goes next (favour first on a
-            -- level count). A side with nothing left ends the turns.
-            local first=favour or leans[1]
-            local second=first=="containment" and "agricultural" or "containment"
-            lean=count(here,second)<count(here,first) and second or first
-            if taken["lean:"..lean] or count(here,lean)>=P.FIRST_DEVELOPMENT_CAP then break end
-        end
-        for _,l in ipairs(tie and {} or leans) do
+        for _,l in ipairs(leans) do
             if count(here,l)==0 and not taken["lean:"..l] then lean=l; break end
         end
         -- A map-marked place: the other side's extra clues (one per extra
@@ -182,11 +163,6 @@ function P.choose(args)
             world[lean]=count(world,lean)+1
             world[choice.clue.kind]=count(world,choice.clue.kind)+1
         end
-    end
-    -- A tie ends level: a turn the other side could not answer is taken back.
-    if tie and #picks>0 and count(here,"containment")~=count(here,"agricultural") then
-        local last=table.remove(picks)
-        here[last.lean]=here[last.lean]-1
     end
     return picks,math.max(0,want-#picks)
 end
