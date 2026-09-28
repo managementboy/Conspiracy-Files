@@ -1,0 +1,48 @@
+{
+  "t0020-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Piano teacher's house",
+      "source": "map:BBurgStashMap1"
+    },
+    "gloss": "A lesson page and key preserve the dates and household cost of a road closure.",
+    "prov": {
+      "batch": "T0020",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A field crew could have closed the road for work nearby and left the key with a lesson note; nothing here says what forced the closure."
+  },
+  "t0020-02": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-malfunction"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Piano teacher's house",
+      "source": "map:BBurgStashMap1"
+    },
+    "gloss": "A lesson moves indoors while a roadside field test continues.",
+    "prov": {
+      "batch": "T0020",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A response crew could have tested roadside treatment after a closure; closed lessons and a prepaid week do not show what the spray was meant to control."
+  }
+}

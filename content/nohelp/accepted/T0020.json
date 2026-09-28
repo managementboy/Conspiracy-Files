@@ -1,0 +1,46 @@
+[
+  {
+    "anchor": {
+      "map": "BBurgStashMap1",
+      "mark": 1
+    },
+    "body": "Lesson dates stop at the county road closure; the house key is tied to the page beside a note to keep the fee for the missed lessons. No return date is written.",
+    "id": "t0020-01",
+    "kind": "set",
+    "pieces": [
+      "SheetPaper2",
+      "Pencil",
+      "KeyRing"
+    ],
+    "title": "Road closure practice",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "BBurgStashMap1",
+      "mark": 1
+    },
+    "body": "Please keep the lesson room shut until the roadside spray test is over. The children can still hear the truck from the front room; their mother has paid for the whole week already.",
+    "id": "t0020-02",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "title": "Closed windows",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  }
+]

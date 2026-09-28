@@ -328,3 +328,14 @@ Fix the pattern, not just the row.
   ring recurs; neither is a return reason. Converted into accepted/ by
   Claude after the review (owner: adding reviewed clues is always the
   reviewer's step; the writer only ever runs the converter with --check).
+- **2026-09-28, expansion batch 1, T0020-T0024** (same rule): GitHub run on
+  the round's head green; converter check and 48 tests green. Batch read
+  once: consistent; note in the return file (every ticket splits its sides
+  the same way, set for one, note for the other, and the notes name their
+  side outright). One blind read per clue (10): 9 matched; 1 flagged, one
+  second read, both "neither": T0023 returned whole (LEAN_MISMATCH on one
+  clue; the other passed). A tooling fault gave that passing clue an
+  unneeded second read (it matched again); blind_reread.sh --force --rows
+  now re-reads only flagged rows. Accepted and added: T0020 T0021 T0022
+  T0024 (8 clues; 46 in the game).
+

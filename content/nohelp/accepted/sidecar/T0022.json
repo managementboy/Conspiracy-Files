@@ -1,0 +1,48 @@
+{
+  "t0022-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Gun here",
+      "source": "map:MarchRidgeStashMap1"
+    },
+    "gloss": "A collection record places a route closure before the return of its equipment.",
+    "prov": {
+      "batch": "T0022",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A test crew could have recorded a temporary site closure before retrieving equipment; the blank line does not say who set the schedule."
+  },
+  "t0022-02": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-malfunction"
+      ],
+      "containment": [
+        "c-orders",
+        "c-accounting"
+      ]
+    },
+    "cites": {
+      "quote": "don't go",
+      "source": "map:MarchRidgeStashMap1"
+    },
+    "gloss": "A field-trial warning and a household access problem remain on the same note.",
+    "prov": {
+      "batch": "T0022",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A response crew could have sealed ordinary pest-control supplies while closing an area; keeping the jars shut does not show the trial malfunctioned."
+  }
+}

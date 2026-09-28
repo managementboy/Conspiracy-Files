@@ -1,0 +1,44 @@
+[
+  {
+    "anchor": {
+      "print": "IrvingtonSpeedway"
+    },
+    "body": "The speeding citation is stamped after the access lane's closure; the beer at the gate is still sealed, and the appeal line says its driver was taking a child home.",
+    "id": "t0024-01",
+    "kind": "set",
+    "pieces": [
+      "SpeedingTicket",
+      "BeerBottle",
+      "Pencil"
+    ],
+    "title": "A citation after closing",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "print": "IrvingtonSpeedway"
+    },
+    "body": "Keep the infield closed until the pesticide trial dries. The first heat remains on the board, so the groundskeeper has to refund a child's ticket from his own coffee jar.",
+    "id": "t0024-02",
+    "kind": "written",
+    "pieces": [
+      "memo"
+    ],
+    "title": "The infield stays closed",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  }
+]
