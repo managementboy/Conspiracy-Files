@@ -11,10 +11,10 @@ CHATGPT since 2026-09-28 because WRITING
 EXPANSION
 
 ## TICKET
-none
+T0026
 
 ## NEXT
-T0023 rewrite checked (DR-20260928-NOHELP-CLUE-CHECK) and in the game; no open returns; next: a new expansion batch opened by Claude
+All remaining stories opened (owner): T0026-T0407, 10 groups; each group starts with a STAGE0 summary ticket (T0026 T0067 T0108 T0149 T0190 T0231 T0272 T0313 T0354 T0395) signed off before its stories; hand the baton to CLAUDE with STAGE0-SIGNOFF after each summary ticket and with REVIEW after each group's stories
 
 ## OPEN RETURNS
 none
@@ -26,4 +26,4 @@ none
 2026-09-28 T0001
 
 ## PROGRESS
-NOT DONE: maps 5/125, flyers 3/133, scenes 3/125, adhd 22 @6d13c01
+NOT DONE: maps 5/125, flyers 3/133, scenes 3/125, adhd 22 @e551c37
