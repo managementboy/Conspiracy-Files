@@ -1205,3 +1205,15 @@ The next visible run must re-check:
 - the frame spike when the game saves;
 - stutter late in a long game: every area decision still copies and validates
   the whole world record, so its cost grows with the record.
+
+### Next phase planned — `/adhd` (2026-09-28)
+
+Frames: logistics, inversion, 3am on-call, game design, ant colony (30 ideas;
+three deepened against the code). The result is the check-off list
+`docs/management/NO_HELP_DEV_CHECKLIST_2026-09-28.md`: A late-game cost, B
+reload guard and proof gaps, C content-blind state dump, D real game, E content
+tooling. Checked in the code while planning: every write is linear in the whole
+record (`Session.lua:541-548`) and the duplicate-area check is quadratic
+(`AreaCase.lua:406`); a clue interrupted between "placing" and the map being
+written is marked unknown and never placed again (`GeneratedRuntime.lua:283`),
+which is put to the owner (checklist, "Open for the owner").
