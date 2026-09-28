@@ -1,0 +1,44 @@
+[
+  {
+    "id": "t0216-01",
+    "kind": "set",
+    "pieces": [
+      "LetterHandwritten",
+      "Bag_ALICEpack"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "containment",
+        "rival": "agricultural"
+      }
+    ],
+    "anchor": {
+      "print": "MailCarrierAdEkron"
+    },
+    "title": "The mail route change",
+    "body": "The carrier’s route bag contains a change notice that marks the route complete before the last neighborhood was delivered.",
+    "rival_reading": "A field courier could use the same route and close it early; the notice does not show who changed the schedule.",
+    "gloss": "A delivery route is closed before its last neighborhood is served.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "cites": {
+      "source": "print:MailCarrierAdEkron",
+      "quote": "Mail Carrier Ad (Ekron)"
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0216"
+    }
+  }
+]
