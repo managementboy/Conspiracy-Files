@@ -3,8 +3,10 @@
 local Validator = {}
 
 Validator.MAX_DEPTH = 64
--- Provisional development allowance, owner 2026-09-20. This is an estimate,
--- not an engine/file-format limit. Claude must measure actual full-save costs.
+-- NOT A LIMIT IN NO HELP. The owner lifted the save ceiling on 2026-09-27
+-- ("No limit at all"; SaveBudget.checkMany never compares against it). Kept
+-- only as validateCombined's default for callers that pass none; No Help code
+-- must not call validateCombined without an explicit limit.
 Validator.MAX_ENCODED_BYTES = 1000000
 
 local function fail(path, message)
