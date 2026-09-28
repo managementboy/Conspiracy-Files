@@ -1,0 +1,30 @@
+[
+  {
+    "id": "t0024-01",
+    "kind": "set",
+    "pieces": ["SpeedingTicket", "BeerBottle", "Pencil"],
+    "where": [{"place": "mapNamed", "spot": "ground", "lean": "containment", "rival": "agricultural"}],
+    "title": "A citation after closing",
+    "body": "The speeding citation is stamped after the access lane's closure; the beer at the gate is still sealed, and the appeal line says its driver was taking a child home.",
+    "rival_reading": "The venue could have closed that lane after an ordinary race incident, with a patrol citing a late driver afterward; the appeal cannot establish a wider order.",
+    "gloss": "A traffic citation follows a venue access closure while a race-day purchase goes unused.",
+    "axioms": {"containment": ["c-orders", "c-failure"], "agricultural": ["a-program", "a-timing"]},
+    "anchor": {"print": "IrvingtonSpeedway"},
+    "cites": {"source": "print:IrvingtonSpeedway", "quote": "take your beer out to the track!"},
+    "prov": {"writer": "ChatGPT", "handoff": "2026-09-28", "batch": "T0024"}
+  },
+  {
+    "id": "t0024-02",
+    "kind": "written",
+    "pieces": ["memo"],
+    "where": [{"place": "mapNamed", "spot": "ground", "lean": "agricultural", "rival": "containment"}],
+    "title": "The infield stays closed",
+    "body": "Keep the infield closed until the pesticide trial dries. The first heat remains on the board, so the groundskeeper has to refund a child's ticket from his own coffee jar.",
+    "rival_reading": "A response crew may have ordered routine grounds treatment while the event remained on the board; the refund says nothing about why access was restricted.",
+    "gloss": "A trial-related closure conflicts with an event that remains advertised.",
+    "axioms": {"containment": ["c-orders", "c-failure"], "agricultural": ["a-program", "a-malfunction"]},
+    "anchor": {"print": "IrvingtonSpeedway"},
+    "cites": {"source": "print:IrvingtonSpeedway", "quote": "See SPECIAL GUEST STAR"},
+    "prov": {"writer": "ChatGPT", "handoff": "2026-09-28", "batch": "T0024"}
+  }
+]
