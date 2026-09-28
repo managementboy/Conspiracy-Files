@@ -6,8 +6,6 @@
       "Lunchbox",
       "KeyRing"
     ],
-    "title": "The lunch and keys on opposite sides",
-    "body": "A lunchbox sits behind a chalk line across the floor. The keyring is on the other side, threaded through red cloth pulled tight enough to fray.",
     "where": [
       {
         "place": "warehouse",
@@ -16,8 +14,10 @@
         "rival": "agricultural"
       }
     ],
-    "rival_reading": "A program crew could leave keys outside a marked work area while moving supplies; the line and abandoned lunch do not show that an evacuation order failed.",
-    "gloss": "A meal and its access keys have been left on opposite sides of a boundary.",
+    "title": "The keys stayed outside the marked floor",
+    "body": "The keyring is wrapped in the lunchbox's cloth lining. A chalk boundary crosses the lid; the ring is on the clean side and the meal on the dusty one.",
+    "rival_reading": "A warehouse crew could separate access keys from stored supplies during a routine safety check; the chalk line may have nothing to do with evacuation.",
+    "gloss": "A boundary separates the keys from the meal they travelled with.",
     "axioms": {
       "containment": [
         "c-orders",
@@ -41,8 +41,6 @@
       "Bucket",
       "Notebook"
     ],
-    "title": "A green line above the water mark",
-    "body": "A green smear dried above the water line inside the bucket. A notebook served as its lid; the page that touched it is blank, with plant impressions where writing might have been.",
     "where": [
       {
         "place": "warehouse",
@@ -51,8 +49,10 @@
         "rival": "containment"
       }
     ],
-    "rival_reading": "A cleanup crew could use a bucket and notebook to inspect a warehouse spill; the residue could be ordinary growth rather than an agricultural program malfunction.",
-    "gloss": "A bucket’s residue left a plant-shaped impression on the notebook used as its cover.",
+    "title": "The notebook used as a bucket lid",
+    "body": "The notebook has been laid over the bucket. A green crescent marks the page where it touched the rim; the rest of the page is blank except for a pressed grass stem.",
+    "rival_reading": "A cleanup crew could use a bucket and notebook while inspecting any spill; plant residue does not identify a pesticide or its route.",
+    "gloss": "A plant trace remains where a notebook covered a bucket.",
     "axioms": {
       "containment": [
         "c-orders",

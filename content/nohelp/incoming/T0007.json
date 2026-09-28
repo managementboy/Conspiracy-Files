@@ -6,8 +6,6 @@
       "Clipboard",
       "KeyRing"
     ],
-    "title": "The spare key still on the ring",
-    "body": "One key on the ring is dusted gray; another has a clean thumb mark on its bow. The clipboard remains upright between them, closed around the empty impression of a removed sheet.",
     "where": [
       {
         "place": "transmission",
@@ -16,8 +14,10 @@
         "rival": "agricultural"
       }
     ],
-    "rival_reading": "A field team could move its notes and leave access keys behind during a test or shutdown; the missing sheet does not prove response officials failed.",
-    "gloss": "A keyring remains with an empty clipboard impression, as if a handoff stopped mid-task.",
+    "title": "The keyring clipped over the empty page",
+    "body": "The clipboard is closed around a keyring. One key leaves a clean outline in the dust, while the page beneath the clip has torn away at the holes.",
+    "rival_reading": "A field crew could move its notes and keys in a hurry when a test site closed; the torn page does not prove a warning was ignored.",
+    "gloss": "Keys remain where a page was torn from a clipboard.",
     "axioms": {
       "containment": [
         "c-warning",
@@ -42,8 +42,6 @@
       "Notebook",
       "WaterBottle"
     ],
-    "title": "The weather note ends at the low ground",
-    "body": "The notebook’s rain sketch runs into a drawing of crop rows. A capped water bottle stands beside it, its pale sediment ring on the outside rather than inside.",
     "where": [
       {
         "place": "transmission",
@@ -52,8 +50,10 @@
         "rival": "containment"
       }
     ],
-    "rival_reading": "A station crew could record rain and water conditions while planning evacuation routes; the drawing and residue do not show that an agricultural program caused the danger.",
-    "gloss": "A weather sketch and field rows share a notebook beside a bottle marked by dried sediment.",
+    "title": "The rain sketch runs into the bottle ring",
+    "body": "The notebook shows rain crossing a set of crop rows. A water bottle rests on the open page; its dry ring circles the word “downhill,” written once and then erased.",
+    "rival_reading": "A response worker could note rain and drainage while planning a safe route; the erased word does not establish an agricultural release.",
+    "gloss": "A weather sketch and a water mark meet at an erased direction.",
     "axioms": {
       "containment": [
         "c-warning",
@@ -61,6 +61,7 @@
       ],
       "agricultural": [
         "a-program",
+        "a-pathway",
         "a-malfunction"
       ]
     },

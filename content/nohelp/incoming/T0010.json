@@ -5,9 +5,6 @@
     "pieces": [
       "idcard"
     ],
-    "person": "person-a",
-    "title": "Temporary field credential",
-    "body": "Access: plot checks until the west road closes. Renewal depends on a county notice. Reverse: “Please put the old mare under cover before rain.”",
     "where": [
       {
         "place": "farm",
@@ -17,8 +14,10 @@
         "outfit": "farm"
       }
     ],
-    "rival_reading": "Officials could issue field credentials with road-based expiry during an emergency; a plot assignment and an ordinary animal-care reminder do not establish a program malfunction.",
-    "gloss": "A field worker’s access depends on a road closure and carries a private reminder about an animal.",
+    "title": "Temporary field access card",
+    "body": "Field plots: weekly soil checks. Road access may close at short notice. Reverse: “Keep the old mare in the dry stall tonight.”",
+    "rival_reading": "A county worker could receive temporary plot access during an emergency survey; the animal reminder is private and does not establish a malfunction.",
+    "gloss": "A field card gives routine soil duties and a personal reminder.",
     "axioms": {
       "containment": [
         "c-orders",
@@ -33,7 +32,8 @@
       "writer": "ChatGPT",
       "handoff": "2026-09-27",
       "batch": "T0010"
-    }
+    },
+    "person": "person-a"
   },
   {
     "id": "t0010-02",
@@ -42,9 +42,6 @@
       "Map",
       "HandShovel"
     ],
-    "person": "person-a",
-    "title": "The row with two edges",
-    "body": "The map mark runs from a field row to the road. The shovel’s blade is clean except for soil inside its socket; a thumbprint crosses a pencilled plant shape.",
     "where": [
       {
         "place": "farm",
@@ -54,8 +51,10 @@
         "outfit": "farm"
       }
     ],
-    "rival_reading": "A response crew could survey a farm after access changed and return its tool; soil and a marked row do not show that an agricultural program malfunctioned.",
-    "gloss": "A farm map and a soil-marked tool leave the purpose of a field visit uncertain.",
+    "title": "The row that ends at the road",
+    "body": "The map's crop row reaches the road and stops at a thumb-smudged mark. Soil fills the shovel socket but not the blade; its grip is clean.",
+    "rival_reading": "A response crew could survey a field after access changed and carry a clean tool; the marked row need not belong to a program.",
+    "gloss": "A marked field row and a tool carry different traces.",
     "axioms": {
       "containment": [
         "c-orders",
@@ -70,6 +69,7 @@
       "writer": "ChatGPT",
       "handoff": "2026-09-27",
       "batch": "T0010"
-    }
+    },
+    "person": "person-a"
   }
 ]

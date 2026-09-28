@@ -6,8 +6,6 @@
       "Map",
       "Postcard"
     ],
-    "title": "A changed address without a forwarding line",
-    "body": "The postcard’s address is written over in pencil; the map’s route reaches only the old street. The stamp is clean, but the new address has been rubbed thin.",
     "where": [
       {
         "place": "bookstore",
@@ -16,8 +14,10 @@
         "rival": "agricultural"
       }
     ],
-    "rival_reading": "A farm program could move its deliveries when access changed, leaving an old route on the map; the overwritten address does not prove an evacuation was mismanaged.",
-    "gloss": "A postcard’s overwritten destination conflicts with the route shown on its accompanying map.",
+    "title": "The postcard addressed to a crossed street",
+    "body": "The postcard is stamped and addressed, but the map beneath it ends at a street crossed out in pencil. The message stops after, “We were told to wait by—”.",
+    "rival_reading": "A field delivery could be delayed by a road restriction and leave an unfinished message; the card does not say who issued the instruction.",
+    "gloss": "A message and its map both stop short of a destination.",
     "axioms": {
       "containment": [
         "c-warning",
@@ -42,8 +42,6 @@
       "Newspaper",
       "Notebook"
     ],
-    "title": "The leaf pressed against the growing column",
-    "body": "A dry leaf is pressed into a newspaper gardening column. The notebook beneath it has the same outline drawn in the margin, but the page is turned to winter planting.",
     "where": [
       {
         "place": "bookstore",
@@ -52,8 +50,10 @@
         "rival": "containment"
       }
     ],
-    "rival_reading": "Someone documenting emergency conditions could preserve a leaf beside an outdated gardening page; the seasonal mismatch does not show a program malfunction.",
-    "gloss": "A preserved leaf and its sketch sit beside gardening advice for a different season.",
+    "title": "The garden column with no matching season",
+    "body": "A newspaper gardening column is folded around a notebook sketch of three crop rows. The drawing has a water line but no planting date; the column is for winter.",
+    "rival_reading": "Someone tracking seasonal conditions during an emergency could keep an old gardening column with field notes; the mismatch does not identify an experimental program.",
+    "gloss": "A crop sketch and an out-of-season guide sit together.",
     "axioms": {
       "containment": [
         "c-warning",
