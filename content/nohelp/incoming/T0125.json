@@ -1,0 +1,45 @@
+[
+  {
+    "id": "t0125-01",
+    "kind": "set",
+    "pieces": [
+      "KeyRing",
+      "SheetPaper2"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "containment",
+        "rival": "agricultural"
+      }
+    ],
+    "anchor": {
+      "map": "WorldStashMap16",
+      "mark": 1
+    },
+    "title": "Barrier access list",
+    "body": "The checkpoint key is tied to a list that marks the barrier staffed after the relief shift had already signed out.",
+    "rival_reading": "A work site could have used the same barrier and shift list; the timing does not establish who was kept out.",
+    "gloss": "A barrier is recorded as staffed after the relief shift ended.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "cites": {
+      "source": "map:WorldStashMap16",
+      "quote": "camp"
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0125"
+    }
+  }
+]
