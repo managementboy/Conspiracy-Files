@@ -1,0 +1,244 @@
+{
+  "stories": [
+    {
+      "ticket": "T0109",
+      "target": "map:RosewoodStashMap5",
+      "lean": "random",
+      "gloss": "The supply-related mark opens a local lead that could fit either earlier program work or disrupted response logistics."
+    },
+    {
+      "ticket": "T0110",
+      "target": "map:WorldStashMap1",
+      "lean": "random",
+      "gloss": "The route mark opens a local lead where field movement and emergency orders remain possible readings."
+    },
+    {
+      "ticket": "T0111",
+      "target": "map:WorldStashMap2",
+      "lean": "random",
+      "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings."
+    },
+    {
+      "ticket": "T0112",
+      "target": "map:WorldStashMap3",
+      "lean": "random",
+      "gloss": "The route mark opens a local lead where field movement and emergency orders remain possible readings."
+    },
+    {
+      "ticket": "T0113",
+      "target": "map:WorldStashMap4",
+      "lean": "random",
+      "gloss": "The route mark opens a local lead where field movement and emergency orders remain possible readings."
+    },
+    {
+      "ticket": "T0114",
+      "target": "map:WorldStashMap5",
+      "lean": "random",
+      "gloss": "The route mark opens a local lead where field movement and emergency orders remain possible readings."
+    },
+    {
+      "ticket": "T0115",
+      "target": "map:WorldStashMap6",
+      "lean": "random",
+      "gloss": "The route mark opens a local lead where field movement and emergency orders remain possible readings."
+    },
+    {
+      "ticket": "T0116",
+      "target": "map:WorldStashMap7",
+      "lean": "random",
+      "gloss": "The route mark opens a local lead where field movement and emergency orders remain possible readings."
+    },
+    {
+      "ticket": "T0117",
+      "target": "map:WorldStashMap8",
+      "lean": "random",
+      "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings."
+    },
+    {
+      "ticket": "T0118",
+      "target": "map:WorldStashMap9",
+      "lean": "random",
+      "gloss": "The household mark opens a personal trail that could fit either an exposure concern or a failed effort to move people safely."
+    },
+    {
+      "ticket": "T0119",
+      "target": "map:WorldStashMap10",
+      "lean": "random",
+      "gloss": "The route mark opens a local lead where field movement and emergency orders remain possible readings."
+    },
+    {
+      "ticket": "T0120",
+      "target": "map:WorldStashMap11",
+      "lean": "random",
+      "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings."
+    },
+    {
+      "ticket": "T0121",
+      "target": "map:WorldStashMap12",
+      "lean": "random",
+      "gloss": "The household mark opens a personal trail that could fit either an exposure concern or a failed effort to move people safely."
+    },
+    {
+      "ticket": "T0122",
+      "target": "map:WorldStashMap13",
+      "lean": "random",
+      "gloss": "The route mark opens a local lead where field movement and emergency orders remain possible readings."
+    },
+    {
+      "ticket": "T0123",
+      "target": "map:WorldStashMap14",
+      "lean": "random",
+      "gloss": "The household mark opens a personal trail that could fit either an exposure concern or a failed effort to move people safely."
+    },
+    {
+      "ticket": "T0124",
+      "target": "map:WorldStashMap15",
+      "lean": "random",
+      "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings."
+    },
+    {
+      "ticket": "T0125",
+      "target": "map:WorldStashMap16",
+      "lean": "random",
+      "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings."
+    },
+    {
+      "ticket": "T0126",
+      "target": "map:WorldStashMap17",
+      "lean": "random",
+      "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings."
+    },
+    {
+      "ticket": "T0127",
+      "target": "map:WorldStashMap18",
+      "lean": "random",
+      "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings."
+    },
+    {
+      "ticket": "T0128",
+      "target": "map:WorldStashMap19",
+      "lean": "random",
+      "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings."
+    },
+    {
+      "ticket": "T0129",
+      "target": "map:WorldStashMap20",
+      "lean": "random",
+      "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings."
+    },
+    {
+      "ticket": "T0130",
+      "target": "map:WorldStashMap21",
+      "lean": "random",
+      "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings."
+    },
+    {
+      "ticket": "T0131",
+      "target": "map:WorldStashMap22",
+      "lean": "random",
+      "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings."
+    },
+    {
+      "ticket": "T0132",
+      "target": "map:WorldStashMap23",
+      "lean": "random",
+      "gloss": "The route mark opens a local lead where field movement and emergency orders remain possible readings."
+    },
+    {
+      "ticket": "T0133",
+      "target": "map:WpStashMap1",
+      "lean": "random",
+      "gloss": "The route mark opens a local lead where field movement and emergency orders remain possible readings."
+    },
+    {
+      "ticket": "T0134",
+      "target": "map:WpStashMap2",
+      "lean": "random",
+      "gloss": "The route mark opens a local lead where field movement and emergency orders remain possible readings."
+    },
+    {
+      "ticket": "T0135",
+      "target": "map:WpStashMap3",
+      "lean": "random",
+      "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings."
+    },
+    {
+      "ticket": "T0136",
+      "target": "map:WpStashMap4",
+      "lean": "random",
+      "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings."
+    },
+    {
+      "ticket": "T0137",
+      "target": "map:WpStashMap11",
+      "lean": "random",
+      "gloss": "The household mark opens a personal trail that could fit either an exposure concern or a failed effort to move people safely."
+    },
+    {
+      "ticket": "T0138",
+      "target": "map:WpStashMap5",
+      "lean": "random",
+      "gloss": "The work-related mark opens a local lead where a program task and later emergency activity remain plausible."
+    },
+    {
+      "ticket": "T0139",
+      "target": "map:WpStashMap6",
+      "lean": "random",
+      "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings."
+    },
+    {
+      "ticket": "T0140",
+      "target": "map:WpStashMap7",
+      "lean": "random",
+      "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings."
+    },
+    {
+      "ticket": "T0141",
+      "target": "map:WpStashMap8",
+      "lean": "random",
+      "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings."
+    },
+    {
+      "ticket": "T0142",
+      "target": "map:WpStashMap9",
+      "lean": "random",
+      "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings."
+    },
+    {
+      "ticket": "T0143",
+      "target": "map:WpStashMap10",
+      "lean": "random",
+      "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings."
+    },
+    {
+      "ticket": "T0144",
+      "target": "map:WpStashMap12",
+      "lean": "random",
+      "gloss": "The supply-related mark opens a local lead that could fit either earlier program work or disrupted response logistics."
+    },
+    {
+      "ticket": "T0145",
+      "target": "map:WpStashMap13",
+      "lean": "random",
+      "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings."
+    },
+    {
+      "ticket": "T0146",
+      "target": "map:WpStashMap14",
+      "lean": "random",
+      "gloss": "The supply-related mark opens a local lead that could fit either earlier program work or disrupted response logistics."
+    },
+    {
+      "ticket": "T0147",
+      "target": "map:WpStashMap15",
+      "lean": "random",
+      "gloss": "The route mark opens a local lead where field movement and emergency orders remain possible readings."
+    },
+    {
+      "ticket": "T0148",
+      "target": "map:WpStashMap16",
+      "lean": "random",
+      "gloss": "The supply-related mark opens a local lead that could fit either earlier program work or disrupted response logistics."
+    }
+  ]
+}
