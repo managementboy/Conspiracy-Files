@@ -345,4 +345,7 @@ Fix the pattern, not just the row.
   19 B, 8 both, 0 none; all stay.
 - **T0023** (returned under the old rule) re-checked once under the new
   rule: A and B, both stay; accepted as written, no rewrite needed.
+- **T0023 rewrite** (delivered after the rule change; owner chose it over
+  the original): only title and text changed on the reworked clue; read
+  once, A; it replaces the original in the game.
 

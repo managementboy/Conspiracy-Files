@@ -3,7 +3,7 @@
     "anchor": {
       "print": "CircuitalHealing"
     },
-    "body": "The receiver was in for repair during the county alert. Its battery still held charge; the owner signed for it the next morning and noted the missed shift cost lunch.",
+    "body": "The receiver sat on the repair bench during the evacuation alert, screwdriver beside its charged battery. Dispatch's log says it acknowledged the alert there. The owner signed for it next morning and lost lunch money for the missed shift.",
     "id": "t0023-01",
     "kind": "set",
     "pieces": [
@@ -11,7 +11,7 @@
       "Battery",
       "Screwdriver"
     ],
-    "title": "Returned after the alert",
+    "title": "Acknowledged from the bench",
     "where": [
       {
         "lean": "containment",

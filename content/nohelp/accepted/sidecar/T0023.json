@@ -14,7 +14,7 @@
       "quote": "Need a radio repaired?",
       "source": "print:CircuitalHealing"
     },
-    "gloss": "A repair window overlaps a public alert while the radio remains powered.",
+    "gloss": "A dispatch log records an acknowledgment from a receiver held for repair during an evacuation alert.",
     "prov": {
       "batch": "T0023",
       "handoff": "2026-09-28",

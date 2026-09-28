@@ -5,19 +5,19 @@ never a place name, map, flyer, scene, person or clue text here. Whoever holds t
 baton edits it; `lua5.1 tools/nohelp_content/progress.lua --state` rewrites PROGRESS.
 
 ## BATON
-CLAUDE since 2026-09-28 because REVIEW
+CHATGPT since 2026-09-28 because WRITING
 
 ## STAGE
 EXPANSION
 
 ## TICKET
-T0023
+none
 
 ## NEXT
-T0023
+T0023 rewrite checked (DR-20260928-NOHELP-CLUE-CHECK) and in the game; no open returns; next: a new expansion batch opened by Claude
 
 ## OPEN RETURNS
-T0023 ACK 2026-09-28
+none
 
 ## QUARANTINE
 none
@@ -26,4 +26,4 @@ none
 2026-09-28 T0001
 
 ## PROGRESS
-NOT DONE: maps 5/125, flyers 2/133, scenes 3/125, adhd 21 @8be867e9
+NOT DONE: maps 5/125, flyers 3/133, scenes 3/125, adhd 22 @6d13c01
