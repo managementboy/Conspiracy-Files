@@ -1,0 +1,45 @@
+[
+  {
+    "id": "t0070-01",
+    "kind": "set",
+    "pieces": [
+      "Hammer",
+      "Nails"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "containment",
+        "rival": "agricultural"
+      }
+    ],
+    "anchor": {
+      "map": "MarchRidgeStashMap6",
+      "mark": 1
+    },
+    "title": "The secured doorway",
+    "body": "The hardware receipt is pinned to a building checklist marked secure; its final line asks who collected the key after the crew left.",
+    "rival_reading": "A maintenance team could have secured a program site and forgotten the key record; the receipt does not identify the crew.",
+    "gloss": "A closure checklist is complete while the final key handoff is missing.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "cites": {
+      "source": "map:MarchRidgeStashMap6",
+      "quote": "stuff we can use to secure building"
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0070"
+    }
+  }
+]
