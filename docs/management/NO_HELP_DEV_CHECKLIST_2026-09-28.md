@@ -145,7 +145,7 @@ place a clue twice, or reveal the other theory's clue? The plan still owes a
 - [ ] **C4 Autotest check `dump.sh`:** dump after warm-up and after a reload,
   and diff the two (placements must not change across the reload). The lines
   are saved as evidence.
-- [ ] **C5 Blind log mode:** existing lines the owner might quote go through
+- [x] **C5 Blind log mode:** existing lines the owner might quote go through
   the same allowlist. This covers the scene-wait `area=` and `kind=` fields,
   free-text decline reasons, and `R.devLocations` (ids and coordinates).
   *Proof:* the canary test is extended to these lines.
@@ -194,6 +194,28 @@ place a clue twice, or reveal the other theory's clue? The plan still owes a
   writer's routine (handover §5).
 - [ ] **E4 Owner one-pager:** counts only, using C1's allowlist. The writer
   handoff §9 lists it as not built.
+
+## Hand-over, 2026-09-28 (session hit its limit mid-work)
+
+Done and pushed: A1 A2 B1 B2 B3 B4 B8 B9 C1 C2 C3 C5, E1, and a real bug fix
+(ground clues were never created; WorldAccess one ground per square).
+In progress when the session stopped:
+- **A3 step 1** (the safety net before the save-path speed-up):
+  `test/wip/nohelp_commit_differential.lua` with frozen copies in
+  `test/fixtures/reference/` (Session/AreaCase at 9d01b55). Kept out of the
+  suite until green. Open: make addSceneArea, missing and dropMissing accepted
+  at least once (synthetic scene clues as in test/nohelp_playthrough.lua;
+  a vehicle target for a vehicle-spot clue). Refresh the reference copies
+  after any Session/AreaCase change (C2 changed them once). Then A3 itself.
+- **Content round 3** (owner, 2026-09-28: no more ChatGPT; our own Sonnet
+  writers + Haiku blind reader): drafts of T0001-T0013 are in
+  `content/nohelp/incoming/`, some possibly half-reworked by the writer
+  agents. Next: rerun the writer loop (workflow script
+  `nohelp-writer-loop`: each writer rewrites failing rows and runs
+  `tools/cluegates/blind_reread.sh --rows <ticket>` until every row passes
+  and is read as its own lean at least once), then convert, check receipts,
+  commit. Receipts in `tools/cluegates/receipts/` match current draft texts.
+- Next items after that: A4-A7, B5-B7, B10, C4, C6.
 
 ## Found along the way (not in A-C)
 

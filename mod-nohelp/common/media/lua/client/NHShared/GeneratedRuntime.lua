@@ -1219,6 +1219,11 @@ function R.devLocations()
         log("no documents placed")
         return "no documents placed"
     end
+    -- Blind mode: count only
+    if NHShared and NHShared.BlindLog then
+        log(#out.." clues placed; set NHShared.BlindLog=false for their locations")
+        return #out.." clues placed; set NHShared.BlindLog=false for their locations"
+    end
     for _,line in ipairs(out) do log(line) end
     return table.concat(out,"\n")
 end

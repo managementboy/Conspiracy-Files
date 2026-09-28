@@ -6,6 +6,7 @@
 -- WRITER/ENGINEER TEST: kinds come from the shipped table; clues are
 -- placeholders.
 package.path="mod-nohelp/common/media/lua/shared/?.lua;mod-nohelp/common/media/lua/client/?.lua;test/fixtures/?.lua;"..package.path
+NHShared=NHShared or {}; NHShared.BlindLog=false  -- Disable blind logging for this internal test
 local DIRECTIVE="NH-D7"
 local AreaCase=require("NHShared/Generated/AreaCase")
 local Session=require("NHShared/Generated/Session")

@@ -1,11 +1,11 @@
 {
   "clue": "t0011-01",
-  "sha256": "bd3a6a2516b442ba209f59ecfda796af6fa1f6a87de2363f0ceb1d8f8de737f6",
+  "sha256": "858b863031edfb505ddfe1e7c9d3666e9163a0fb0e35750b9a8bd036acb3e5f5",
   "model": "claude-haiku-4-5 (no repo access, no tools, fresh context per read)",
   "date": "2026-09-28",
   "votes": {
-    "A": 1,
+    "A": 4,
     "B": 0,
-    "neither": 4
+    "neither": 1
   }
 }
