@@ -1,0 +1,45 @@
+[
+  {
+    "id": "t0056-01",
+    "kind": "set",
+    "pieces": [
+      "Pills",
+      "Notebook"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "anchor": {
+      "map": "LouisvilleStashMap8",
+      "mark": 1
+    },
+    "title": "Third door supply",
+    "body": "A packet of pills is paired with a note to keep the third room ventilated after the bottles are opened. The return line for the bottles is blank.",
+    "rival_reading": "A response crew could have opened medical supplies and aired a room; the note does not identify what the bottles held.",
+    "gloss": "A room is ventilated after supplies are opened, but their return is unrecorded.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "cites": {
+      "source": "map:LouisvilleStashMap8",
+      "quote": "third door down"
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0056"
+    }
+  }
+]
