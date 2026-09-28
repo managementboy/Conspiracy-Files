@@ -283,8 +283,10 @@ playtests quote it.
   step 3 `Linter` check catches this before play, not during it.
 - **Whether a set of plain objects reads as anything** can only be learned in a
   real playtest.
-- **Authoring volume.** Hundreds of clues, each with a rival reading and a
-  blind re-read, is the biggest cost in this plan.
+- **Authoring volume.** Hundreds of clues need rival readings and independent
+  review. The current rule keeps review to one blind read per clue, with one
+  targeted retry for flagged clues; the older multi-read cost estimate is
+  superseded by `DR-20260928-NOHELP-REVIEW-FAST` in `DECISIONS.md`.
 
 ## 7. Answered by the owner, 2026-09-27
 
