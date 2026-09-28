@@ -1,30 +1,28 @@
 {
   "ticket": "T0012",
-  "returned_by": "Claude blind re-read and batch read, 2026-09-28",
-  "drift": "Batch drift report (T0001-T0013, read together): the rows have converged on one template. About 20 of 28 say 'X was recorded before/after Y', add a child's drawing or sticker, and end with 'the only completed count is <returned objects>, not people'. Each row is fine on its own, but a player who finds three of them has found the same clue three times, and the world sounds like one clerk. The containment rows are all timestamp-and-form jokes and the agricultural rows are all 'water total before source'; a blind reader sorts them by that alone. Keep the tone (one human detail beside one institutional one), but vary it: different human stakes (not always a child), different institutional blind spots (not always a count), clues that are mostly an arrangement of objects with a short note or none, and other spots where both sides can use them (ground, vehicle, mailbox, corpse), not only furniture.",
+  "returned_by": "Claude review, DR-20260928-NOHELP-REVIEW-FAST, 2026-09-28",
+  "note": "The ticket is returned whole: a place must keep both conspiracies, a person ticket is accepted or returned as a whole, and a map design keeps its set share.",
   "rows": [
     {
       "id": "t0012-01",
-      "codes": [
-        "MOSTLY_NEITHER"
-      ],
-      "note": "A blind re-read (5 independent reads, a different model, told nothing) read it as neither in most runs: on its own it points at no explanation. Give it one detail either side could claim.",
-      "votes": "A 1, B 1, neither 3 (clue lean A)",
+      "codes": [],
+      "note": "Passed its blind read; returned only because its ticket is returned whole. Redeliver it unchanged: its receipt stays valid while title, body, pieces and places are unchanged.",
+      "votes": "A 1, B 0, neither 0 (declared A)",
       "row": {
-        "body": "Transfer receipt due after gate access ended. Courier route: field office to transfer window. Reverse: bring bread home for mother.",
+        "body": "Transfer window: after road access ends. Return copy to sender. Reverse: “Bread for Mother, no crust if it is still warm.”",
         "id": "t0012-01",
         "kind": "written",
         "person": "person-c",
         "pieces": [
           "businesscard"
         ],
-        "title": "Mara Cardenas",
+        "title": "Courier card with a late return",
         "where": [
           {
             "lean": "containment",
             "place": "checkpoint",
             "rival": "agricultural",
-            "spot": "furniture"
+            "spot": "vehicle"
           }
         ],
         "axioms": {
@@ -37,26 +35,24 @@
             "c-failure"
           ]
         },
-        "gloss": "A courier credential makes transfer paperwork due after access has ended.",
+        "gloss": "A courier's card sets a return after the access window.",
         "prov": {
-          "adhd_run": "docs/writer-only/adhd/2026-09-27-T0012/",
           "batch": "T0012",
           "handoff": "2026-09-27",
           "writer": "ChatGPT"
         },
-        "rival_reading": "A courier could follow an ordinary field-delivery schedule after hours; a gate-time rule and a receipt do not prove officials stranded anyone."
+        "rival_reading": "A field-delivery schedule could run past a road restriction; the late return line does not identify who changed access."
       }
     },
     {
       "id": "t0012-02",
       "codes": [
-        "NEVER_RIVAL",
-        "DRIFT"
+        "LEAN_MISMATCH"
       ],
-      "note": "A blind re-read (5 independent reads, a different model, told nothing) never named the rival, so the row is one-sided. The lean should come from where the clue is placed and from one detail; the rest must leave the rival reading genuinely live. Rework title, body and if needed pieces; keep place, spot, lean and axioms. See the drift report at the top of this file.",
-      "votes": "A 5, B 0, neither 0 (clue lean A)",
+      "note": "Two independent blind reads (DR-20260928-NOHELP-REVIEW-FAST) both missed the declared lean (declared B; votes A 2, B 0, neither 0). Rework so one detail tilts it to its own side while the rival reading stays possible. Keep place, spot, lean, rival, pieces and axioms.",
+      "votes": "A 2, B 0, neither 0 (declared B)",
       "row": {
-        "body": "Mara's map marks the transfer gate beyond the work road. The last run is logged after the closure time; a child's drawing is in the fold, while the key count is signed.",
+        "body": "The map's route turns away from the gate. A key tag marked “last run” is tied to its corner, with a thread long enough to reach the road line.",
         "id": "t0012-02",
         "kind": "set",
         "person": "person-c",
@@ -64,34 +60,34 @@
           "Map",
           "KeyRing"
         ],
-        "title": "Last run entered after closure",
+        "title": "The key marked for the last run",
         "where": [
           {
-            "lean": "containment",
+            "lean": "agricultural",
             "place": "checkpoint",
-            "rival": "agricultural",
-            "spot": "furniture"
+            "rival": "containment",
+            "spot": "vehicle"
           }
         ],
         "axioms": {
           "agricultural": [
             "a-program",
-            "a-timing"
+            "a-pathway"
           ],
           "containment": [
             "c-orders",
             "c-failure"
           ]
         },
-        "gloss": "A courier's last route entry follows a closure time while a key count is complete.",
+        "gloss": "A last-run key points toward a route that no longer reaches its gate.",
         "prov": {
-          "adhd_run": "docs/writer-only/adhd/2026-09-27-T0012/",
           "batch": "T0012",
           "handoff": "2026-09-27",
           "writer": "ChatGPT"
         },
-        "rival_reading": "The late time may be a routine after-hours field delivery or a delayed ledger entry; the map and key tally do not establish a failed evacuation."
+        "rival_reading": "A delayed response crew could carry a key and route map after access changed; the tag could also belong to a field delivery."
       }
     }
-  ]
+  ],
+  "drift": "Batch note (whole round, read once): a key ring appears in about ten of the 38 rows, a crop-row sketch in about eight and a water ring or stain in five. Not a return reason this round; vary objects and details in the redeliveries and in T0019 onward so a player does not meet the same arrangement at every place."
 }

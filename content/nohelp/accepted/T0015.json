@@ -1,0 +1,45 @@
+[
+  {
+    "anchor": {
+      "map": "EkronStashMap8",
+      "mark": 1
+    },
+    "body": "The map is folded toward its road line; the keyring lies beyond the fold, its tag turned face down. A short length of thread joins them but does not reach the road.",
+    "id": "t0015-01",
+    "kind": "set",
+    "pieces": [
+      "Map",
+      "KeyRing"
+    ],
+    "title": "The key points past the marked road",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "EkronStashMap8",
+      "mark": 1
+    },
+    "body": "“Forget the box. Just get here before the rows are watered.” The lower half is torn away; a muddy thumb has blurred the place where a name would go.",
+    "id": "t0015-02",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "title": "The note that asks someone to come back",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  }
+]

@@ -1,0 +1,41 @@
+{
+  "t0009-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-obscured"
+      ],
+      "containment": [
+        "c-orders",
+        "c-accounting"
+      ]
+    },
+    "gloss": "A correction is hidden while its headline remains easy to read.",
+    "prov": {
+      "batch": "T0009",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "An office could fold an old correction out of view while updating unrelated public material; a torn column does not establish a cover-up."
+  },
+  "t0009-02": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-malfunction",
+        "a-obscured"
+      ],
+      "containment": [
+        "c-orders",
+        "c-accounting"
+      ]
+    },
+    "gloss": "A sprayer and crop sketch carry the same green trace.",
+    "prov": {
+      "batch": "T0009",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "An emergency cleanup could place ordinary gardening equipment beside a route sketch; residue and a drawing do not prove a program was involved."
+  }
+}

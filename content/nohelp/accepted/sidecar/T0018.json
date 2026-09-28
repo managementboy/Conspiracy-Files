@@ -1,0 +1,41 @@
+{
+  "t0018-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-obscured"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "gloss": "A locked studio and an unsigned check remain on the same page.",
+    "prov": {
+      "batch": "T0018",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A broadcast worker could secure the studio before any emergency and leave the checklist unfinished; the blank box does not prove a failed containment order."
+  },
+  "t0018-02": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway",
+        "a-malfunction"
+      ],
+      "containment": [
+        "c-warning",
+        "c-accounting"
+      ]
+    },
+    "gloss": "A field sketch and a water mark sit under the studio desk glass.",
+    "prov": {
+      "batch": "T0018",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A reporter could sketch field reports and spill water while working; neither the stain nor the drawing identifies a program."
+  }
+}

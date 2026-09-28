@@ -1,0 +1,40 @@
+{
+  "t0011-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-obscured"
+      ],
+      "containment": [
+        "c-warning",
+        "c-orders"
+      ]
+    },
+    "gloss": "A runner's card keeps a personal request beside an official route.",
+    "prov": {
+      "batch": "T0011",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A farm program could use an office runner for field notices; a return copy and family note do not show that containment failed."
+  },
+  "t0011-02": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "gloss": "An access key is attached to a page that was never filled in.",
+    "prov": {
+      "batch": "T0011",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A field courier could secure a site key to a blank clipboard before a handoff; the empty page does not prove anyone was left without instructions."
+  }
+}

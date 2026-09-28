@@ -1,0 +1,38 @@
+[
+  {
+    "body": "The map's pencil road ends at a barrier mark. A keyring is tied across the fold; its blank tag is polished where a number was rubbed away.",
+    "id": "t0001-01",
+    "kind": "set",
+    "pieces": [
+      "Map",
+      "KeyRing"
+    ],
+    "title": "The route stops at the barrier",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "police",
+        "rival": "agricultural",
+        "spot": "mailbox"
+      }
+    ]
+  },
+  {
+    "body": "A green ring stains the bottle's inner neck. The bucket beside it is dry, though its handle is wet and smells faintly of crushed leaves.",
+    "id": "t0001-02",
+    "kind": "set",
+    "pieces": [
+      "Bucket",
+      "WaterBottle"
+    ],
+    "title": "The bottle kept the wrong color",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "police",
+        "rival": "containment",
+        "spot": "mailbox"
+      }
+    ]
+  }
+]

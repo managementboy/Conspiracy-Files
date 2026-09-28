@@ -1,0 +1,38 @@
+[
+  {
+    "body": "The clipboard is closed around a keyring. One key leaves a clean outline in the dust, while the page beneath the clip has torn away at the holes.",
+    "id": "t0007-01",
+    "kind": "set",
+    "pieces": [
+      "Clipboard",
+      "KeyRing"
+    ],
+    "title": "The keyring clipped over the empty page",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "transmission",
+        "rival": "agricultural",
+        "spot": "vehicle"
+      }
+    ]
+  },
+  {
+    "body": "The notebook shows rain crossing a set of crop rows. A water bottle rests on the open page; its dry ring circles the word “downhill,” written once and then erased.",
+    "id": "t0007-02",
+    "kind": "set",
+    "pieces": [
+      "Notebook",
+      "WaterBottle"
+    ],
+    "title": "The rain sketch runs into the bottle ring",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "transmission",
+        "rival": "containment",
+        "spot": "vehicle"
+      }
+    ]
+  }
+]

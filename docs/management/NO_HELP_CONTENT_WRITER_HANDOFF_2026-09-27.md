@@ -305,3 +305,14 @@ Fix the pattern, not just the row.
 - Name a person in the data; reuse or echo a vanilla named character.
 - Put a clue on a vanilla named character, or overwrite what vanilla built.
 - Generate in bulk. Small batches; ask when unsure.
+
+## Review log
+
+- **2026-09-28, T0001-T0018** (rule `DR-20260928-NOHELP-REVIEW-FAST`): converter
+  check and test suite green; the batch read once (one US-spelling fix);
+  one blind read per clue (38), a second read for the 4 flagged. Accepted:
+  11 tickets, 24 clues. Returned whole: T0003, T0008, T0012, T0014 (one clue
+  each, `LEAN_MISMATCH`: both reads missed the declared lean; the other
+  clues passed and may come back unchanged). Held in `incoming/`, passed:
+  T0010, T0016, T0017 (accepting them without T0003 would leave farms
+  one-sided). A batch note on repeated objects is in each returned file.

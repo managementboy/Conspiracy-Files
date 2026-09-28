@@ -1,0 +1,40 @@
+{
+  "t0002-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "gloss": "A clean bandage and sealed kit remain with an erased identity.",
+    "prov": {
+      "batch": "T0002",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A sealed kit could have been carried away from an exposure site before anyone opened it; an unnamed label does not establish a failed transfer."
+  },
+  "t0002-02": {
+    "axioms": {
+      "agricultural": [
+        "a-malfunction",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-accounting"
+      ]
+    },
+    "gloss": "A water mark and plant trace were collected together.",
+    "prov": {
+      "batch": "T0002",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A responder could collect water and leaves while checking an evacuation route; the residue could be ordinary field dirt."
+  }
+}

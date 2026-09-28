@@ -4,22 +4,22 @@
 # PERSON targets are short person ids the writer chooses at stage 0 (never a name).
 serial	type	target	status	attempts	opened	closed
 T0000	STAGE0	axioms+glosses	accepted	0	2026-09-27	
-T0001	PLACE	police	open	0	2026-09-27	
-T0002	PLACE	hospital	open	0	2026-09-27	
+T0001	PLACE	police	accepted	0	2026-09-27	2026-09-28
+T0002	PLACE	hospital	accepted	0	2026-09-27	2026-09-28
 T0003	PLACE	farm	open	0	2026-09-27	
-T0004	PLACE	checkpoint	open	0	2026-09-27	
-T0005	PLACE	office	open	0	2026-09-27	
-T0006	PLACE	bookstore	open	0	2026-09-27	
-T0007	PLACE	transmission	open	0	2026-09-27	
+T0004	PLACE	checkpoint	accepted	0	2026-09-27	2026-09-28
+T0005	PLACE	office	accepted	0	2026-09-27	2026-09-28
+T0006	PLACE	bookstore	accepted	0	2026-09-27	2026-09-28
+T0007	PLACE	transmission	accepted	0	2026-09-27	2026-09-28
 T0008	PLACE	warehouse	open	0	2026-09-27	
-T0009	PLACE	government	open	0	2026-09-27	
-T0010	PERSON	person-a	open	0	2026-09-27	
-T0011	PERSON	person-b	open	0	2026-09-27	
+T0009	PLACE	government	accepted	0	2026-09-27	2026-09-28
+T0010	PERSON	person-a	delivered	0	2026-09-27	
+T0011	PERSON	person-b	accepted	0	2026-09-27	2026-09-28
 T0012	PERSON	person-c	open	0	2026-09-27	
-T0013	MAP	map:IrvingtonStashMap1	open	0	2026-09-27	
+T0013	MAP	map:IrvingtonStashMap1	accepted	0	2026-09-27	2026-09-28
 T0014	MAP	print:AmericanTire	open	0	2026-09-27	
-T0015	MAP	map:EkronStashMap8	open	0	2026-09-27	
-T0016	SCENE	scene:RVSPlonkies	open	0	2026-09-27	
-T0017	SCENE	scene:RDSRatKing	open	0	2026-09-27	
-T0018	UNIQUE	scene:RBJackieJaye	open	0	2026-09-27	
+T0015	MAP	map:EkronStashMap8	accepted	0	2026-09-27	2026-09-28
+T0016	SCENE	scene:RVSPlonkies	delivered	0	2026-09-27	
+T0017	SCENE	scene:RDSRatKing	delivered	0	2026-09-27	
+T0018	UNIQUE	scene:RBJackieJaye	accepted	0	2026-09-27	2026-09-28
 T0019	STAGE0	glosses:T0016,T0017	accepted	0	2026-09-27	2026-09-28

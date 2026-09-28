@@ -1,0 +1,49 @@
+{
+  "t0015-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "road to Ekron",
+      "source": "map:EkronStashMap8"
+    },
+    "gloss": "A key and route remain connected only by a short thread.",
+    "prov": {
+      "batch": "T0015",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A delayed farm delivery could leave a key and map where someone stopped; the route alone does not show a failed evacuation."
+  },
+  "t0015-02": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway",
+        "a-timing"
+      ],
+      "containment": [
+        "c-warning",
+        "c-orders"
+      ]
+    },
+    "cites": {
+      "quote": "forget them! Just get here",
+      "source": "map:EkronStashMap8"
+    },
+    "gloss": "A hurried request links an unnamed person to watered rows.",
+    "prov": {
+      "batch": "T0015",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "An emergency crew could tell someone to reach a farm before irrigation resumed; the urgency could follow a road closure rather than a program failure."
+  }
+}
