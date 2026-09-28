@@ -1,0 +1,44 @@
+[
+  {
+    "id": "t0230-01",
+    "kind": "set",
+    "pieces": [
+      "Hammer",
+      "Nails"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "containment",
+        "rival": "agricultural"
+      }
+    ],
+    "anchor": {
+      "print": "NailsAndNuts"
+    },
+    "title": "The hardware order",
+    "body": "The hardware receipt lists nails and tools for pickup, but the access sheet says the shop closed before the order was collected.",
+    "rival_reading": "A program crew could have ordered supplies and missed the pickup; the sheet does not show who closed the shop.",
+    "gloss": "A supply order remains uncollected after the shop closure.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "cites": {
+      "source": "print:NailsAndNuts",
+      "quote": "Nails & Nuts"
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0230"
+    }
+  }
+]
