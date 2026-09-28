@@ -1,0 +1,45 @@
+[
+  {
+    "id": "t0057-01",
+    "kind": "set",
+    "pieces": [
+      "HuntingRifle",
+      "CannedCorn"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "containment",
+        "rival": "agricultural"
+      }
+    ],
+    "anchor": {
+      "map": "LouisvilleStashMap9",
+      "mark": 1
+    },
+    "title": "Stable stores",
+    "body": "A food tin is tied to a stable key with a route note warning the next driver not to take the tree road. The return time is crossed out.",
+    "rival_reading": "A field crew could have used the stable and avoided an unsafe road; the crossed-out time does not say why.",
+    "gloss": "A supply cache is tied to a key and a route whose return time was removed.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "cites": {
+      "source": "map:LouisvilleStashMap9",
+      "quote": "guns and food in far stable"
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0057"
+    }
+  }
+]
