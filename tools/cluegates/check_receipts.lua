@@ -12,27 +12,24 @@
 -- tools/cluegates/blind_reread.md):
 --   {"clue": "<id>", "sha256": "<sha256 of M.render(clue)>",
 --    "model": "<reader>", "date": "YYYY-MM-DD",
---    "votes": {"A": n, "B": n, "neither": n}}
--- A = Containment Cover-up (lean "containment"), B = Agricultural Program
--- Malfunction (lean "agricultural"). One independent run is sufficient when
--- it matches the declared lean; mismatches require a second run.
+--    "votes": {"A": n, "B": n, "both": n, "none": n}}   (exactly one read)
+-- The read answers (DR-20260928-NOHELP-CLUE-CHECK): could a believer of A
+-- (Containment Cover-up) use this item? could a believer of B (Agricultural
+-- Program Malfunction)? A, B or both: the clue stays in the game as written.
+-- None: it is dropped and a new one is written. No second reads.
 --
 -- Reported, one line per clue, ids and codes only (never clue text):
 --   NO_RECEIPT        no receipt for the clue
---   BAD_RECEIPT       the receipt is unreadable or badly shaped
+--   BAD_RECEIPT       unreadable, badly shaped, or not exactly one read
 --   STALE_RECEIPT     the clue's rendered text changed after its receipt
---   NEEDS_SECOND_READ first vote is NEITHER or differs from the declared lean
---   DISAGREEMENT     two independent votes differ
---   LEAN_MISMATCH    repeated vote does not match the declared lean
---   MIXED_LEAN       the clue has different declared leans by placement
--- NEEDS_SECOND_READ is resolved by one targeted fresh read; any remaining
--- disagreement or lean mismatch must be returned for revision.
+--   FITS_NEITHER      neither believer could use it: drop it, write a new one
 package.path="mod-nohelp/common/media/lua/shared/?.lua;tools/nohelp_content/?.lua;tools/cluegates/?.lua;"..package.path
 local J=require("json")
 local sha256=require("sha256")
 local M={}
 M.DIR="tools/cluegates/receipts"
-M.MIN_RUNS=1
+M.RESULTS={"A","B","both","none"}
+M.IS_RESULT={A=true,B=true,both=true,none=true}
 M.LETTER={containment="A",agricultural="B"}
 
 -- Exactly what the blind reader sees: the clue alone, no lean, no rival, no
@@ -71,37 +68,16 @@ function M.check(clues,dir)
         elseif r.sha256~=M.sha(c) then
             report(c.id,"STALE_RECEIPT","the text changed after the blind re-read")
         else
+            -- DR-20260928-NOHELP-CLUE-CHECK: ONE read, answering whether a
+            -- believer of A and a believer of B could each use the clue.
+            -- A, B or both: it stays in the game. None: it is dropped.
             local v=r.votes
-            local a,b,n=tonumber(v.A) or 0,tonumber(v.B) or 0,tonumber(v.neither) or 0
-            local runs=a+b+n
-            local expected={}
-            for _,w in ipairs(c.where or {}) do
-                local letter=M.LETTER[w.lean]
-                if letter then expected[letter]=true end
-            end
-            local expectedCount=0
-            for _ in pairs(expected) do expectedCount=expectedCount+1 end
-            if runs<M.MIN_RUNS or runs>2 then report(c.id,"BAD_RECEIPT","receipt must contain one or two independent reads")
-            elseif expectedCount~=1 then report(c.id,"MIXED_LEAN","declared lean differs by placement or is missing")
-            else
-                local want=expected.A and "A" or "B"
-                local first
-                if a>0 then first="A" elseif b>0 then first="B" elseif n>0 then first="NEITHER" end
-                if runs==1 then
-                    if first~=want then report(c.id,"NEEDS_SECOND_READ","first blind vote needs a second independent read") end
-                else
-                    local second
-                    if a==2 then first,second="A","A"
-                    elseif b==2 then first,second="B","B"
-                    elseif n==2 then first,second="NEITHER","NEITHER"
-                    elseif a==1 and b==1 then first,second="A","B"
-                    elseif a==1 and n==1 then first,second="A","NEITHER"
-                    elseif b==1 and n==1 then first,second="B","NEITHER" end
-                    if first~=second then report(c.id,"DISAGREEMENT","blind votes differ; return for human review")
-                    elseif first~=want then report(c.id,"LEAN_MISMATCH","repeated blind vote differs from declared lean")
-                    end
-                end
-            end
+            local n=0
+            for _,k in ipairs(M.RESULTS) do n=n+(tonumber(v[k]) or 0) end
+            local only=true
+            for k in pairs(v) do if not M.IS_RESULT[k] then only=false end end
+            if n~=1 or not only then report(c.id,"BAD_RECEIPT","a receipt holds exactly one read: A, B, both or none")
+            elseif (tonumber(v.none) or 0)==1 then report(c.id,"FITS_NEITHER","neither believer could use it: drop it, write a new one") end
         end
     end
     return out

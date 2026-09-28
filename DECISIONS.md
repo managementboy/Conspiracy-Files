@@ -1,3 +1,20 @@
+## DR-20260928-NOHELP-CLUE-CHECK — one read: A, B, both or none
+
+Owner decision, 2026-09-28, after asking why the review had become a test
+that a clue must fit one conspiracy:
+
+1. ChatGPT writes the clues.
+2. One blind read per clue answers: could a believer of A use it, could a
+   believer of B use it — so A, B, both, or none.
+3. A, B or both: the clue goes into the game as written; the read is
+   recorded with it.
+4. None: the clue is dropped, and ChatGPT writes a new one.
+
+No second reads and no returns for "wrong side". Owner: "That's the whole
+rule." Supersedes `DR-20260928-NOHELP-REVIEW-FAST` (its lean-matching test,
+second reads and LEAN_MISMATCH returns); the batch still gets one read-through
+for repetition and consistency, and receipts stay tied to the text hash.
+
 ## DR-20260928-NOHELP-REVIEW-FAST — one blind read, targeted retry
 
 Owner decision, 2026-09-28: replace the repeated content-review workflow with

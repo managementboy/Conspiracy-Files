@@ -11,59 +11,29 @@ Gemini or Llama model, or a Claude model with no access to this repository or
 conversation). The reader is given nothing but the prompt below and one clue.
 No lean, no rival reading, no gloss, no axioms, no anchor, no other clue.
 
-## Review sequence
+## Review sequence (DR-20260928-NOHELP-CLUE-CHECK)
 
-1. Run the converter check and the test suite for structural and game-rule
-   failures.
+1. Run the converter check and the test suite.
 2. Read the whole batch once for repeated wording, near-duplicates and
    consistency across clues.
-3. Run one blind read per clue. The checker marks a mismatched or `NEITHER`
-   vote as `NEEDS_SECOND_READ`.
-4. For only those flagged clue ids, run a second fresh read. If the two votes
-   disagree, or both votes miss the declared lean, return that clue for
-   revision. Do not run more reads to try to obtain a passing vote.
+3. One blind read per clue: could a believer of A use it? could a believer of
+   B use it? The result is A, B, both or none.
+4. A, B or both: the clue goes into the game as written. None: drop it and
+   the writer writes a new one (`FITS_NEITHER`). No second reads, no returns
+   for "wrong side".
 
 ## Scripted (use this)
 
-    tools/cluegates/blind_reread.sh                 # each clue without a current receipt
+    tools/cluegates/blind_reread.sh                  # each clue without a current receipt
     tools/cluegates/blind_reread.sh --rows <ticket>  # draft rows, before converting
-    tools/cluegates/blind_reread.sh --force <id>     # add one fresh read for a flagged clue
-
-The default is one read. `--force` with selected ids appends one new vote to
-the existing receipt for the same text hash. Use it once per flagged clue;
-the checker rejects receipts with more than two votes.
 
 Haiku through the `claude` CLI, from an empty folder, no tools, no settings,
-and a fresh session for each read. Read every clue once; make a second
-independent read only when the first vote is `NEITHER` or does not match the
-clue's declared lean. Receipts are tied to the rendered text hash.
+a fresh session for each read. Receipt `tools/cluegates/receipts/<id>.json`:
 
-## How
+    {"clue": "<id>", "sha256": "<render hash>", "model": "<reader>",
+     "date": "YYYY-MM-DD", "votes": {"A": 0, "B": 0, "both": 0, "none": 0}}
 
-1. For each clue, get the exact text the reader sees and its hash:
-
-       lua5.1 tools/cluegates/check_receipts.lua --render <clue id>
-
-2. Run the prompt below once in a fresh conversation. Record only the first
-   word of the answer: `A`, `B` or `NEITHER`. Compare the vote privately with
-   the clue's declared lean. If it is `NEITHER` or differs from that lean, run
-   one more fresh read. Do not show the reader the intended lean. If the two
-   votes differ, return the clue for revision; do not spend more reads trying
-   to force agreement.
-3. Write the receipt `tools/cluegates/receipts/<clue id>.json`:
-
-       {"clue": "<clue id>",
-        "sha256": "<the hash printed in step 1>",
-        "model": "<reader model and version>",
-        "date": "YYYY-MM-DD",
-        "votes": {"A": 0, "B": 0, "neither": 0}}
-
-4. Run `lua5.1 tools/cluegates/check_receipts.lua`. It reports missing,
-   malformed or stale receipts, and flags a vote that does not match the
-   declared lean or a two-read disagreement for human review. A clue ships
-   only when its receipt is current and its vote passes the gate.
-
-Editing a clue's title, body, pieces or places changes its hash and voids its
+exactly one read. Editing a clue's title, body, pieces or places voids its
 receipt.
 
 ## The prompt (copy exactly; replace the last block)
@@ -81,9 +51,13 @@ Below is the item exactly as the player finds it: its title, its text, the
 objects that make it up, and the kind of place and spot where it lies.
 Nothing else is known about it.
 
-Which explanation does this item, on its own, point toward? Answer with one
-word first - A, B or NEITHER - then at most one sentence of reasoning.
-Do not guess what the game's authors intend; read only what is here.
+Could a person who already believes A point to this item as support for A?
+Could a person who already believes B point to it as support for B? Judge
+each separately and honestly: "YES" only if you can say what in the item they
+would point to. Answer in exactly this form:
+
+A: YES or NO - one sentence naming what they would point to, or why not
+B: YES or NO - one sentence naming what they would point to, or why not
 
 ---
 <paste the rendered clue text here>

@@ -25,37 +25,36 @@ local function receipt(c,votes,sha)
     f:write(J.encode({clue=c.id,sha256=sha or R.sha(c),model="placeholder-reader",date="2026-09-27",votes=votes}))
     f:close()
 end
-local good=clue("r-good","containment")
-receipt(good,{A=1,B=0,neither=0})
+-- DR-20260928-NOHELP-CLUE-CHECK: one read, A, B, both or none. A, B or
+-- both stay in the game (whatever the declared lean); none is dropped.
+local fitsA=clue("r-fits-a","containment")
+receipt(fitsA,{A=1,B=0,both=0,none=0})
+local fitsB=clue("r-fits-b","containment")
+receipt(fitsB,{A=0,B=1,both=0,none=0}) -- the "other" side: no return for that
+local fitsBoth=clue("r-fits-both","agricultural")
+receipt(fitsBoth,{A=0,B=0,both=1,none=0})
+local fitsNone=clue("r-fits-none","agricultural")
+receipt(fitsNone,{A=0,B=0,both=0,none=1})
 local changed=clue("r-changed","containment")
-receipt(changed,{A=1,B=0,neither=0})
+receipt(changed,{A=1,B=0,both=0,none=0})
 changed.body="Placeholder body, edited after its receipt."
 local missing=clue("r-missing","agricultural")
-local retry=clue("r-retry","containment")
-receipt(retry,{A=0,B=1,neither=0}) -- first read disagrees: request one more
-local disagrees=clue("r-disagrees","containment")
-receipt(disagrees,{A=1,B=1,neither=0}) -- two reads disagree
-local stillWrong=clue("r-still-wrong","containment")
-receipt(stillWrong,{A=0,B=2,neither=0}) -- both reads miss the declared lean
-local mixed=clue("r-mixed","containment")
-mixed.where[2]={place="office",spot="furniture",lean="agricultural",rival="containment"}
-receipt(mixed,{A=1,B=0,neither=0})
-local tooMany=clue("r-too-many","agricultural")
-receipt(tooMany,{A=3,B=1,neither=1})
+local twoReads=clue("r-two-reads","containment")
+receipt(twoReads,{A=1,B=1,both=0,none=0})
+local oldVote=clue("r-old-vote","containment")
+receipt(oldVote,{A=1,B=0,neither=0})
 local broken=clue("r-broken","agricultural")
 local f=io.open(dir.."/r-broken.json","wb"); f:write("{not json"); f:close()
 
-local problems=R.check({good,changed,missing,retry,disagrees,stillWrong,mixed,tooMany,broken},dir)
+local problems=R.check({fitsA,fitsB,fitsBoth,fitsNone,changed,missing,twoReads,oldVote,broken},dir)
 local byId={}
 for _,p in ipairs(problems) do byId[p.id]=p.code end
-assert(byId["r-good"]==nil,"one current independent read matching the declared lean passes")
+assert(byId["r-fits-a"]==nil and byId["r-fits-b"]==nil and byId["r-fits-both"]==nil,"A, B or both: into the game")
+assert(byId["r-fits-none"]=="FITS_NEITHER","none: dropped, a new one is written")
 assert(byId["r-changed"]=="STALE_RECEIPT","a clue whose text changed after its receipt is reported")
 assert(byId["r-missing"]=="NO_RECEIPT","a clue with no receipt is reported")
-assert(byId["r-retry"]=="NEEDS_SECOND_READ","a first vote against the declared lean requests one targeted read")
-assert(byId["r-disagrees"]=="DISAGREEMENT","two different votes are returned for human review")
-assert(byId["r-still-wrong"]=="LEAN_MISMATCH","two votes against the declared lean are returned")
-assert(byId["r-mixed"]=="MIXED_LEAN","inconsistent placement leans are returned")
-assert(byId["r-too-many"]=="BAD_RECEIPT","more than two votes are invalid")
+assert(byId["r-two-reads"]=="BAD_RECEIPT","exactly one read: no second reads")
+assert(byId["r-old-vote"]=="BAD_RECEIPT","a receipt from the old question is not valid")
 assert(byId["r-broken"]=="BAD_RECEIPT","an unreadable receipt")
 os.execute('rm -rf "'..dir..'"')
 
