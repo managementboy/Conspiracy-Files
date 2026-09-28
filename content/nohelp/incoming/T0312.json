@@ -1,0 +1,40 @@
+[
+  {
+    "id": "t0312-01",
+    "kind": "set",
+    "pieces": [
+      "Hammer",
+      "Nails"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "furniture",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "anchor": {
+      "scene": "RBTSButcher"
+    },
+    "title": "A routine kept past its use",
+    "body": "The arrangement is practical on its own; its careful order is the part no one explained.",
+    "rival_reading": "Ordinary work leaves tools arranged this way; the unexplained step could be mundane rather than institutional.",
+    "gloss": "A prepared pair is left without a clear account of why it was needed.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-malfunction",
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0312"
+    }
+  }
+]
