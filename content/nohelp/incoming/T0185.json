@@ -1,0 +1,44 @@
+[
+  {
+    "id": "t0185-01",
+    "kind": "set",
+    "pieces": [
+      "Pizza",
+      "SheetPaper2"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "anchor": {
+      "print": "PizzaWhirledJobAdRosewood"
+    },
+    "title": "The traveling menu",
+    "body": "A menu is folded around a route receipt showing the mobile kitchen stopped at the same field gate twice; the second meal was not paid for.",
+    "rival_reading": "An evacuation convoy could stop twice at a gate and leave an unpaid meal; the receipt does not identify the reason.",
+    "gloss": "A mobile meal stop repeats at a field gate without a second payment.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "cites": {
+      "source": "print:PizzaWhirledJobAdRosewood",
+      "quote": "Pizza Whirled (Rosewood)"
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0185"
+    }
+  }
+]

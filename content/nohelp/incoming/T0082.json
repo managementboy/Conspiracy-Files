@@ -1,0 +1,45 @@
+[
+  {
+    "id": "t0082-01",
+    "kind": "set",
+    "pieces": [
+      "Bag_ALICEpack",
+      "Pistol"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "anchor": {
+      "map": "MulStashMap13",
+      "mark": 1
+    },
+    "title": "Too heavy to carry",
+    "body": "The packed bag contains field gloves and a route card crossed out at the supply stop. A separate line records that the crew heard shots and left the load.",
+    "rival_reading": "A response convoy could have abandoned supplies after gunfire; the card does not identify the crew or its work.",
+    "gloss": "A field load was left behind after a route was interrupted.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "cites": {
+      "source": "map:MulStashMap13",
+      "quote": "got halfway but had to leave it all - too heavy"
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0082"
+    }
+  }
+]

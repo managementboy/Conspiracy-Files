@@ -1,0 +1,45 @@
+[
+  {
+    "id": "t0077-01",
+    "kind": "set",
+    "pieces": [
+      "Pistol2",
+      "SheetPaper2"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "containment",
+        "rival": "agricultural"
+      }
+    ],
+    "anchor": {
+      "map": "MulStashMap11",
+      "mark": 1
+    },
+    "title": "Trouble behind the counter",
+    "body": "A security inventory lists one weapon behind the counter and a second transfer to an unnamed pickup crew. The signature box is blank.",
+    "rival_reading": "A program crew might have collected security equipment for a work site; the inventory does not name its purpose.",
+    "gloss": "A security transfer is recorded without a receiving signature.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "cites": {
+      "source": "map:MulStashMap11",
+      "quote": "Gun in Spiffo's."
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0077"
+    }
+  }
+]

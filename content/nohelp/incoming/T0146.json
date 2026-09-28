@@ -1,0 +1,45 @@
+[
+  {
+    "id": "t0146-01",
+    "kind": "set",
+    "pieces": [
+      "Bread",
+      "Map"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "anchor": {
+      "map": "WpStashMap14",
+      "mark": 1
+    },
+    "title": "Enough food for the crossing",
+    "body": "A meal list says the group has enough food to wait for a boat; its water line is labelled for the field crew and left unopened.",
+    "rival_reading": "An evacuation party could stage food and water for a boat trip; the note does not identify why the water was set aside.",
+    "gloss": "A group waits for transport while field water remains unused.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "cites": {
+      "source": "map:WpStashMap14",
+      "quote": "Meet me here Tonya! Got enough food."
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0146"
+    }
+  }
+]

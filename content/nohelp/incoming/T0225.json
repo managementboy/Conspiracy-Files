@@ -1,0 +1,44 @@
+[
+  {
+    "id": "t0225-01",
+    "kind": "set",
+    "pieces": [
+      "Notebook",
+      "Pencil"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "anchor": {
+      "print": "LeafhillHeights"
+    },
+    "title": "Office space and test room",
+    "body": "The office lease marks every suite available, but the building notebook reserves one floor for a field test through the tenant move-in date.",
+    "rival_reading": "A response team could reserve a floor while offices reopen; the notebook does not identify the test.",
+    "gloss": "Office availability overlaps with a field-test reservation.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "cites": {
+      "source": "print:LeafhillHeights",
+      "quote": "Leafhill Heights Offices"
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0225"
+    }
+  }
+]

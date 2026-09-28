@@ -1,0 +1,45 @@
+[
+  {
+    "id": "t0118-01",
+    "kind": "set",
+    "pieces": [
+      "Notebook",
+      "SheetPaper2"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "anchor": {
+      "map": "WorldStashMap9",
+      "mark": 1
+    },
+    "title": "Crates without contents",
+    "body": "A crate tally includes the offices but lists no contents; the next page labels the same shipment for a field check.",
+    "rival_reading": "An emergency storage count could list crates without contents; the tally does not identify the shipment.",
+    "gloss": "A field check is linked to crates whose contents were never recorded.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "cites": {
+      "source": "map:WorldStashMap9",
+      "quote": "crates all around, could be filled with stuff"
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0118"
+    }
+  }
+]

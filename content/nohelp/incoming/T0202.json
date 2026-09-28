@@ -1,0 +1,44 @@
+[
+  {
+    "id": "t0202-01",
+    "kind": "set",
+    "pieces": [
+      "KeyRing",
+      "Map"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "containment",
+        "rival": "agricultural"
+      }
+    ],
+    "anchor": {
+      "print": "LowryCourt"
+    },
+    "title": "Cozy unit, no exit note",
+    "body": "The apartment plan marks the unit occupied, while the key log says the building was empty at the same time. A tenant’s route note ends at the stairwell.",
+    "rival_reading": "A field crew could use an apartment as a temporary room; the records do not say who held the key.",
+    "gloss": "Occupancy and building-clear records overlap.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "cites": {
+      "source": "print:LowryCourt",
+      "quote": "Lowry Court"
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0202"
+    }
+  }
+]

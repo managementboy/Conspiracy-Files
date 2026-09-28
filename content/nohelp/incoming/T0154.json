@@ -1,0 +1,44 @@
+[
+  {
+    "id": "t0154-01",
+    "kind": "set",
+    "pieces": [
+      "EmptyJar",
+      "Pencil"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "anchor": {
+      "print": "TacodelPancho"
+    },
+    "title": "The kitchen rinse",
+    "body": "A kitchen jar is set beside a note reserving the sink for a field crew’s rinse. The food order was charged even though the lunch was cancelled.",
+    "rival_reading": "An emergency team could have rinsed equipment after a closure; the jar and cancelled meal do not identify what was washed.",
+    "gloss": "A crew rinse interrupts a restaurant order but leaves the charge in place.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "cites": {
+      "source": "print:TacodelPancho",
+      "quote": "Taco del Pancho"
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0154"
+    }
+  }
+]

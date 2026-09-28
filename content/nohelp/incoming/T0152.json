@@ -1,0 +1,86 @@
+[
+  {
+    "id": "t0152-01",
+    "kind": "set",
+    "pieces": [
+      "WaterBottle",
+      "SheetPaper2"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "containment",
+        "rival": "agricultural"
+      }
+    ],
+    "anchor": {
+      "print": "WestMapleCountryClub"
+    },
+    "title": "The course notice",
+    "body": "The grounds sheet closes one course entrance for a pickup, but the meal receipt at that entrance is dated after the vehicle left.",
+    "rival_reading": "A maintenance crew could have used the course during field work; the receipt does not say why the pickup was arranged.",
+    "gloss": "A course closure and meal delivery fall on opposite sides of a pickup.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "cites": {
+      "source": "print:WestMapleCountryClub",
+      "quote": "West Maple Country Club"
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0152"
+    }
+  },
+  {
+    "id": "t0152-02",
+    "kind": "set",
+    "pieces": [
+      "Pencil",
+      "Notebook"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "anchor": {
+      "print": "WestMapleCountryClub"
+    },
+    "title": "The second tee sheet",
+    "body": "A tee sheet has two copies: one marks the grounds open, the other says to keep carts away until the test strip is dry.",
+    "rival_reading": "A response crew could have restricted the grounds while checking a spill; the sheet does not identify the substance.",
+    "gloss": "Two course notices disagree about whether the grounds were ready.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "cites": {
+      "source": "print:WestMapleCountryClub",
+      "quote": "West Maple Country Club"
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0152"
+    }
+  }
+]

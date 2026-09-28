@@ -1,0 +1,44 @@
+[
+  {
+    "id": "t0193-01",
+    "kind": "set",
+    "pieces": [
+      "Pistol",
+      "Notebook"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "anchor": {
+      "print": "KnoxGunOwnersClubGetTogether"
+    },
+    "title": "Meeting range sheet",
+    "body": "The range sheet records a safety check and a field briefing in the same time slot; one attendee signed both lines from the same station.",
+    "rival_reading": "An emergency security meeting could overlap a work briefing; the sheet does not identify the purpose of either.",
+    "gloss": "One attendee is logged at two simultaneous checks.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "cites": {
+      "source": "print:KnoxGunOwnersClubGetTogether",
+      "quote": "Knox Gun Club Meeting (Velvet Tassel)"
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0193"
+    }
+  }
+]

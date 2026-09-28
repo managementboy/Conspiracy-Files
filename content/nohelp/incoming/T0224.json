@@ -1,0 +1,44 @@
+[
+  {
+    "id": "t0224-01",
+    "kind": "set",
+    "pieces": [
+      "Map",
+      "KeyRing"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "containment",
+        "rival": "agricultural"
+      }
+    ],
+    "anchor": {
+      "print": "HouseforSale919"
+    },
+    "title": "The large-home key log",
+    "body": "The house map is tied to a key return that predates the caretaker’s final room check. One door is marked as still in use.",
+    "rival_reading": "A field crew could keep a room open while inspecting the property; the log does not say who needed it.",
+    "gloss": "The key returns before the final room check, with one door still in use.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "cites": {
+      "source": "print:HouseforSale919",
+      "quote": "House for Sale (no. 919)"
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0224"
+    }
+  }
+]

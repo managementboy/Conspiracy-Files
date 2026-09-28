@@ -1,0 +1,44 @@
+[
+  {
+    "id": "t0158-01",
+    "kind": "set",
+    "pieces": [
+      "SeedBag",
+      "WaterBottle"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "anchor": {
+      "print": "UStoreItMuldraugh"
+    },
+    "title": "The dry storage request",
+    "body": "A seed bag is listed for a rented unit beside a note to keep the water container sealed until the field reading comes back.",
+    "rival_reading": "Emergency cleanup could also hold water supplies until a reading; the note does not identify what was measured.",
+    "gloss": "Field supplies wait in storage while a reading is pending.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "cites": {
+      "source": "print:UStoreItMuldraugh",
+      "quote": "U-Store It (Muldraugh)"
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0158"
+    }
+  }
+]

@@ -1,0 +1,45 @@
+[
+  {
+    "id": "t0084-01",
+    "kind": "set",
+    "pieces": [
+      "TinOpener",
+      "Pills"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "anchor": {
+      "map": "MulStashMap7",
+      "mark": 1
+    },
+    "title": "Full store, missing check",
+    "body": "A store receipt lists every shelf as stocked, while a note asks the crew to keep the test supplies separate from food. The separation box is blank.",
+    "rival_reading": "An emergency stockroom could segregate medical or cleanup supplies from food; the receipt does not identify the test.",
+    "gloss": "A stocked store lacks a completed separation check.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "cites": {
+      "source": "map:MulStashMap7",
+      "quote": "Plan B"
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0084"
+    }
+  }
+]

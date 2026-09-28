@@ -1,0 +1,45 @@
+[
+  {
+    "id": "t0091-01",
+    "kind": "set",
+    "pieces": [
+      "Garbagebag",
+      "Bread"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "containment",
+        "rival": "agricultural"
+      }
+    ],
+    "anchor": {
+      "map": "MulStashMap17",
+      "mark": 1
+    },
+    "title": "The second delivery",
+    "body": "The bakery bundle is tied to a household note asking the parents to stay inside until the next pickup. The driver marked the first delivery complete.",
+    "rival_reading": "A field crew could have left food and a stay-inside request at a work stop; the receipt does not identify who was meant to collect it.",
+    "gloss": "A completed delivery is followed by a second pickup request.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "cites": {
+      "source": "map:MulStashMap17",
+      "quote": "zippees full of stuff"
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0091"
+    }
+  }
+]

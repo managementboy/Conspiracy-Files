@@ -1,0 +1,45 @@
+[
+  {
+    "id": "t0071-01",
+    "kind": "set",
+    "pieces": [
+      "Notebook",
+      "WaterBottle"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "anchor": {
+      "map": "MarchRidgeStashMap7",
+      "mark": 1
+    },
+    "title": "Fever without a mark",
+    "body": "A bottle is set beside a fever note that says no bite was seen. The water-use line for the day has been crossed out, then copied back in.",
+    "rival_reading": "An evacuation or household illness could prompt the same water restriction; the note does not identify the fever’s source.",
+    "gloss": "A fever report and changed water entry leave the source uncertain.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "cites": {
+      "source": "map:MarchRidgeStashMap7",
+      "quote": "Where I think he hid out"
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0071"
+    }
+  }
+]

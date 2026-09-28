@@ -1,0 +1,44 @@
+[
+  {
+    "id": "t0164-01",
+    "kind": "set",
+    "pieces": [
+      "PetrolCan",
+      "Pencil"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "anchor": {
+      "print": "Fossoil6"
+    },
+    "title": "Fuel for the field run",
+    "body": "The fuel can carries a tag for a field run; the receipt says the driver paid for a full tank, though the return check found it nearly empty.",
+    "rival_reading": "An evacuation trip could consume the same fuel; the mismatch does not identify who drove or where.",
+    "gloss": "A field run has a fuel receipt that conflicts with the return check.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "cites": {
+      "source": "print:Fossoil6",
+      "quote": "Fossoil (Brandenburg)"
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0164"
+    }
+  }
+]

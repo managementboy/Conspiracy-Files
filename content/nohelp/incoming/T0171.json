@@ -1,0 +1,44 @@
+[
+  {
+    "id": "t0171-01",
+    "kind": "set",
+    "pieces": [
+      "Photo",
+      "KeyRing"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "containment",
+        "rival": "agricultural"
+      }
+    ],
+    "anchor": {
+      "print": "ArtGalleryofLouisville"
+    },
+    "title": "The gallery key returned",
+    "body": "A gallery key is tied to a collection checklist marked secure before the guard’s handover was signed. One frame is listed without a room.",
+    "rival_reading": "A field inspection could secure the collection and leave an incomplete frame location; the list does not identify the guard’s orders.",
+    "gloss": "The collection is marked secure before the guard change is complete.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "cites": {
+      "source": "print:ArtGalleryofLouisville",
+      "quote": "Art Gallery of Louisville"
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0171"
+    }
+  }
+]

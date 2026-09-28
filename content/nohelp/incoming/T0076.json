@@ -1,0 +1,45 @@
+[
+  {
+    "id": "t0076-01",
+    "kind": "set",
+    "pieces": [
+      "SeedBag",
+      "WaterBottle"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "anchor": {
+      "map": "MulStashMap2",
+      "mark": 1
+    },
+    "title": "Left for the next visit",
+    "body": "The seed packet is kept with a bottle labelled for the plot; a note asks the next visitor to wait for the field reading before opening either.",
+    "rival_reading": "An emergency inspection could also hold supplies pending a reading; the note does not say what was measured.",
+    "gloss": "A planned visit is delayed until a field reading is available.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "cites": {
+      "source": "map:MulStashMap2",
+      "quote": "left it here xx"
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0076"
+    }
+  }
+]

@@ -1,0 +1,45 @@
+[
+  {
+    "id": "t0078-01",
+    "kind": "set",
+    "pieces": [
+      "Sledgehammer",
+      "KeyRing"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "anchor": {
+      "map": "MulStashMap3",
+      "mark": 1
+    },
+    "title": "Hidden delivery",
+    "body": "A store key is tied to a note about a hidden supply bundle; the delivery was logged before the crew’s field date, and no one signed for it.",
+    "rival_reading": "Emergency storage could explain a hidden bundle and early delivery; the blank signature does not identify the supplies’ purpose.",
+    "gloss": "A hidden bundle is logged before its listed field use.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "cites": {
+      "source": "map:MulStashMap3",
+      "quote": "Shotgun and ammo - hidden"
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0078"
+    }
+  }
+]

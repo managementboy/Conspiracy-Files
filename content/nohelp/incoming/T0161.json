@@ -1,0 +1,44 @@
+[
+  {
+    "id": "t0161-01",
+    "kind": "set",
+    "pieces": [
+      "Map",
+      "KeyRing"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "containment",
+        "rival": "agricultural"
+      }
+    ],
+    "anchor": {
+      "print": "Fossoil3"
+    },
+    "title": "The station diversion",
+    "body": "A route map sends the delivery past the station, but the receipt records it as closed before the driver reached the turn.",
+    "rival_reading": "A field supply run could have taken the same diversion; the receipt does not say why access ended.",
+    "gloss": "A delivery route remains open on the map after the station was recorded closed.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "cites": {
+      "source": "print:Fossoil3",
+      "quote": "Fossoil (Rosewood)"
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0161"
+    }
+  }
+]

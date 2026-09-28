@@ -1,0 +1,41 @@
+[
+  {
+    "id": "t0127-01",
+    "kind": "set",
+    "pieces": [
+      "Map",
+      "KeyRing"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "containment",
+        "rival": "agricultural"
+      }
+    ],
+    "anchor": {
+      "map": "WorldStashMap18",
+      "mark": 1
+    },
+    "title": "Return route withheld",
+    "body": "The map is folded around a return key, but the departure sheet omits the way back. A pencilled note asks the next driver to call before opening the gate.",
+    "rival_reading": "A field team could keep a return route private for routine security; the note does not show why the gate was closed.",
+    "gloss": "A driver receives no return route and must call before opening the gate.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0127"
+    }
+  }
+]

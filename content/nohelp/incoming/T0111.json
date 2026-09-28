@@ -1,0 +1,45 @@
+[
+  {
+    "id": "t0111-01",
+    "kind": "set",
+    "pieces": [
+      "Hammer",
+      "Nails"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "containment",
+        "rival": "agricultural"
+      }
+    ],
+    "anchor": {
+      "map": "WorldStashMap2",
+      "mark": 1
+    },
+    "title": "Safe after the barricade",
+    "body": "A barricade kit is packed beside a key marked for return; the inventory lists the weapons as hidden before the road restriction was posted.",
+    "rival_reading": "A work crew could have secured equipment before a routine closure; the order of entries does not show who made the call.",
+    "gloss": "A security cache was hidden before the access restriction appeared.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "cites": {
+      "source": "map:WorldStashMap2",
+      "quote": "safe place"
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0111"
+    }
+  }
+]

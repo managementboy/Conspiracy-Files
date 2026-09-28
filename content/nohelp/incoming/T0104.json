@@ -1,0 +1,45 @@
+[
+  {
+    "id": "t0104-01",
+    "kind": "set",
+    "pieces": [
+      "Notebook",
+      "Pencil"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "anchor": {
+      "map": "RosewoodStashMap1",
+      "mark": 1
+    },
+    "title": "The missing instruction",
+    "body": "The garden notebook has a removed instruction page and a note asking whether the unopened sample should go with the next supply run.",
+    "rival_reading": "A response crew could have moved a sample during cleanup; the missing page does not identify what it contained.",
+    "gloss": "A sample is held for a supply run after its instruction page disappears.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "cites": {
+      "source": "map:RosewoodStashMap1",
+      "quote": "marked address in Rosewood"
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0104"
+    }
+  }
+]

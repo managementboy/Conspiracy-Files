@@ -1,0 +1,44 @@
+[
+  {
+    "id": "t0210-01",
+    "kind": "set",
+    "pieces": [
+      "Screwdriver",
+      "KeyRing"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "containment",
+        "rival": "agricultural"
+      }
+    ],
+    "anchor": {
+      "print": "KnoxPackKitchens"
+    },
+    "title": "Cabinet delivery before clearance",
+    "body": "The cabinet key is attached to a delivery slip marked complete before the kitchen passed inspection. The installer’s meal receipt is still unpaid.",
+    "rival_reading": "A field kitchen could receive cabinets before a safety check; the slip does not show who cleared the room.",
+    "gloss": "A kitchen delivery is completed before inspection.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "cites": {
+      "source": "print:KnoxPackKitchens",
+      "quote": "Knox Pack Kitchens"
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0210"
+    }
+  }
+]

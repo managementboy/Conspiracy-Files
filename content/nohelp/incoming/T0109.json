@@ -1,0 +1,45 @@
+[
+  {
+    "id": "t0109-01",
+    "kind": "set",
+    "pieces": [
+      "Bread",
+      "WaterBottle"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "containment",
+        "rival": "agricultural"
+      }
+    ],
+    "anchor": {
+      "map": "RosewoodStashMap5",
+      "mark": 1
+    },
+    "title": "Food for the last visit",
+    "body": "The meal bag is marked for pickup only after the route opens. Someone has crossed out the driver’s name but left the note to wait for the household.",
+    "rival_reading": "A field delivery could have used the same pickup rule; the missing driver does not explain why the route was closed.",
+    "gloss": "A family ration waits on a route-opening decision.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "cites": {
+      "source": "map:RosewoodStashMap5",
+      "quote": "food here"
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0109"
+    }
+  }
+]
