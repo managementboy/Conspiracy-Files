@@ -1,0 +1,45 @@
+[
+  {
+    "id": "t0134-01",
+    "kind": "set",
+    "pieces": [
+      "Bandage",
+      "Notebook"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "anchor": {
+      "map": "WpStashMap2",
+      "mark": 1
+    },
+    "title": "The patient without a weapon",
+    "body": "A medical note records the patient found without a weapon; the adjoining field entry says the treatment room was reserved for a sample review.",
+    "rival_reading": "An emergency clinic could reserve a room for any review; the note does not identify the patient’s illness.",
+    "gloss": "A patient’s treatment record shares a room reservation with field work.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "cites": {
+      "source": "map:WpStashMap2",
+      "quote": "think she lived here"
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0134"
+    }
+  }
+]
