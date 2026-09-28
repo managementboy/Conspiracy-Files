@@ -1,0 +1,45 @@
+[
+  {
+    "id": "t0068-01",
+    "kind": "set",
+    "pieces": [
+      "Bag_ALICEpack",
+      "Map"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "containment",
+        "rival": "agricultural"
+      }
+    ],
+    "anchor": {
+      "map": "MarchRidgeStashMap4",
+      "mark": 1
+    },
+    "title": "Help before the turn",
+    "body": "The route sketch marks one aid bundle delivered before the families are listed. A child’s drawing of the return road is tucked behind the empty passenger line.",
+    "rival_reading": "A field crew could have distributed the same bundle and kept a route sketch; the missing passenger names do not explain what brought them there.",
+    "gloss": "An aid delivery is recorded before its passenger list is complete.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "cites": {
+      "source": "map:MarchRidgeStashMap4",
+      "quote": "If you can make it before you turn. There's something here"
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0068"
+    }
+  }
+]
