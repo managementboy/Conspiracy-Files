@@ -1,6 +1,173 @@
 [
-  {"id":"t0013-01","kind":"set","pieces":["Map","KeyRing"],"title":"56.34 seconds, road unnamed","body":"The margin keeps 56.34 seconds beside a barricade sketch, road unnamed. The key ring underneath carries a shed tag stamped with an acreage number, not an address.","where":[{"place":"mapNamed","spot":"ground","lean":"containment","rival":"agricultural"}],"anchor":{"map":"IrvingtonStashMap1","mark":1},"cites":{"source":"map:IrvingtonStashMap1","quote":"56.34 seconds"},"rival_reading":"The same acreage-stamped shed key and timed sketch could belong to a farm crew clearing its own service road; a bare margin note does not by itself show a failed evacuation.","gloss":"A timed margin note with a barricade sketch travels with a shed key stamped by acreage, not address.","axioms":{"containment":["c-orders","c-failure"],"agricultural":["a-program","a-timing"]},"prov":{"writer":"claude-sonnet-5","handoff":"2026-09-27","batch":"T0013"}},
-  {"id":"t0013-02","kind":"set","pieces":["Notebook","WaterBottle"],"title":"1 minute, 14.55 seconds, acre-feet","body":"The notebook keeps 1 minute, 14.55 seconds beside a water tally in acre-feet. A checkpoint stub is folded into the back page, stamped but not dated.","where":[{"place":"mapNamed","spot":"ground","lean":"agricultural","rival":"containment"}],"anchor":{"map":"IrvingtonStashMap1","note":1},"cites":{"source":"map:IrvingtonStashMap1","quote":"1 minute, 14.55 seconds"},"rival_reading":"The same timed tally and stub could belong to an emergency crew logging water use while clearing a checkpoint; an acre-feet conversion alone does not fix it to a farm program.","gloss":"A water tally in acre-feet keeps a timed entry beside a folded, undated checkpoint stub.","axioms":{"containment":["c-orders","c-failure"],"agricultural":["a-program","a-pathway"]},"prov":{"writer":"claude-sonnet-5","handoff":"2026-09-27","batch":"T0013"}},
-  {"id":"t0013-03","kind":"written","pieces":["dispatch"],"title":"Acknowledgment, crew unclaimed","body":"The dispatch copy is logged after a road closure, cause not given. It carries 56.34 seconds beside a spray-crew call sign, unclaimed since. A grocery list starts in the margin and stops mid-word.","where":[{"place":"mapNamed","spot":"ground","lean":"containment","rival":"agricultural"}],"anchor":{"map":"IrvingtonStashMap1","note":2},"cites":{"source":"map:IrvingtonStashMap1","quote":"56.34 seconds"},"rival_reading":"The same spray-crew call sign and timed entry could belong to a farm operation working the same channel as an emergency unit; an unclaimed line does not prove an order went unheeded.","gloss":"A dispatch copy follows a road closure and carries an unclaimed spray-crew call sign beside an abandoned grocery list.","axioms":{"containment":["c-warning","c-orders"],"agricultural":["a-program","a-obscured"]},"prov":{"writer":"claude-sonnet-5","handoff":"2026-09-27","batch":"T0013"}},
-  {"id":"t0013-04","kind":"written","pieces":["receipt"],"title":"Dispersal total, stub undated","body":"The receipt keeps 1 minute, 14.55 seconds beside a dispersal total, signed. A checkpoint stub is paperclipped behind it, stamped but not dated. A phone number is scrawled sideways, no name attached.","where":[{"place":"mapNamed","spot":"ground","lean":"agricultural","rival":"containment"}],"anchor":{"map":"IrvingtonStashMap1","note":3},"cites":{"source":"map:IrvingtonStashMap1","quote":"1 minute, 14.55 seconds"},"rival_reading":"The same stamped checkpoint stub and timed receipt could belong to any transfer slowed by a road closure; a dispersal total alone does not fix it to a farm shipment.","gloss":"A signed dispersal total keeps an undated checkpoint stub and an unnamed scrawled phone number.","axioms":{"containment":["c-orders","c-failure"],"agricultural":["a-program","a-timing"]},"prov":{"writer":"claude-sonnet-5","handoff":"2026-09-27","batch":"T0013"}}
+  {
+    "id": "t0013-01",
+    "kind": "set",
+    "pieces": [
+      "Map",
+      "KeyRing"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "containment",
+        "rival": "agricultural"
+      }
+    ],
+    "title": "The lap with no return mark",
+    "body": "The map's route ends at a chalk line. A keyring rests across the fold back toward the starting point; its tag has no place name.",
+    "rival_reading": "A field crew could mark a temporary route and leave its gate key there; a missing place name does not prove an evacuation failed.",
+    "gloss": "A route stops before its return and a key has no destination.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-timing"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0013"
+    },
+    "anchor": {
+      "map": "IrvingtonStashMap1",
+      "mark": 1
+    },
+    "cites": {
+      "source": "map:IrvingtonStashMap1",
+      "quote": "Cossette - 56.34 seconds"
+    }
+  },
+  {
+    "id": "t0013-02",
+    "kind": "set",
+    "pieces": [
+      "Notebook",
+      "WaterBottle"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "title": "The bottle's ring crosses a row sketch",
+    "body": "A clear ring dries across the notebook's crop-row drawing. The bottle cap is clean; the page beneath it is stained only where the drawn rows meet.",
+    "rival_reading": "A response worker could record field conditions while checking a route; the ring and sketch do not establish that a program spread anything.",
+    "gloss": "A water mark crosses a field sketch without showing its source.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-accounting"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0013"
+    },
+    "anchor": {
+      "map": "IrvingtonStashMap1",
+      "note": 1
+    },
+    "cites": {
+      "source": "map:IrvingtonStashMap1",
+      "quote": "Dart - 1 minute, 14.55 seconds"
+    }
+  },
+  {
+    "id": "t0013-03",
+    "kind": "written",
+    "pieces": [
+      "dispatch"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "containment",
+        "rival": "agricultural"
+      }
+    ],
+    "title": "Dispatch copy with an unfinished return",
+    "body": "“Track access ends at the barrier. Keep the west lane clear for the last vehicle.” The receiving line is blank; on the back, someone asks for a green scarf to be saved.",
+    "rival_reading": "A work crew could close its course and leave a receipt incomplete; the blank line does not show whether the order came from emergency response or a test.",
+    "gloss": "A dispatch copy closes a route but records no receiver.",
+    "axioms": {
+      "containment": [
+        "c-warning",
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-obscured"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0013"
+    },
+    "anchor": {
+      "map": "IrvingtonStashMap1",
+      "note": 2
+    },
+    "cites": {
+      "source": "map:IrvingtonStashMap1",
+      "quote": "Cossette - 56.34 seconds"
+    }
+  },
+  {
+    "id": "t0013-04",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "title": "The row count continues past the page",
+    "body": "The note lists three crop rows and a water check, then continues onto the cover. “Bring the small boots home” is written below the last line.",
+    "rival_reading": "A responder could record conditions beside a closed route and leave a family reminder; the crop count does not prove a program malfunction.",
+    "gloss": "A field count and a private reminder share one page.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-timing"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0013"
+    },
+    "anchor": {
+      "map": "IrvingtonStashMap1",
+      "note": 3
+    },
+    "cites": {
+      "source": "map:IrvingtonStashMap1",
+      "quote": "Dart - 1 minute, 14.55 seconds"
+    }
+  }
 ]

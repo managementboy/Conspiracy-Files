@@ -1,4 +1,72 @@
 [
-  {"body": "The map is clipped where a lane number is crossed out and a second written beside it. In the glovebox, a grower's delivery pass is stamped twice on the same line; a receipt in the lunchbox strap has its total circled, never added.", "id": "t0004-01", "kind": "set", "pieces": ["Map", "Lunchbox"], "title": "A lane renumbered, a receipt not added up", "where": [{"lean": "containment", "place": "checkpoint", "rival": "agricultural", "spot": "vehicle"}], "axioms": {"agricultural": ["a-program", "a-pathway"], "containment": ["c-orders", "c-failure"]}, "gloss": "A renumbered lane and a grower's twice-stamped delivery pass stay with a receipt whose total is circled but not totalled.", "prov": {"batch": "T0004", "handoff": "2026-09-27", "writer": "claude-sonnet-5"}, "rival_reading": "A grower's delivery route through a transport checkpoint can be renumbered and a pass restamped for entirely ordinary reasons; a circled total does not by itself show a failed evacuation lane."},
-  {"body": "The bucket has a chalked water level and the lunchbox contains a folded field meal. The same sheet records a lane hold, then asks for vehicle wash water while leaving the passenger line blank. A small flower is drawn beside it.", "id": "t0004-02", "kind": "set", "pieces": ["Bucket", "Lunchbox"], "title": "Field wash, passenger line blank", "where": [{"lean": "agricultural", "place": "checkpoint", "rival": "containment", "spot": "vehicle"}], "axioms": {"agricultural": ["a-program", "a-malfunction"], "containment": ["c-orders", "c-accounting"]}, "gloss": "A measured field wash is recorded beside a lane hold while the vehicle’s passenger line remains blank.", "prov": {"batch": "T0004", "handoff": "2026-09-27", "writer": "ChatGPT"}, "rival_reading": "Officials could inspect a vehicle during an emergency restriction and leave passenger details for later; field water and a blank line do not establish a program malfunction."}
+  {
+    "id": "t0004-01",
+    "kind": "set",
+    "pieces": [
+      "Map",
+      "Lunchbox"
+    ],
+    "where": [
+      {
+        "place": "checkpoint",
+        "spot": "vehicle",
+        "lean": "containment",
+        "rival": "agricultural"
+      }
+    ],
+    "title": "The lunch packed for the closed lane",
+    "body": "The lunchbox is wedged beneath the map's fold. The route line passes the checkpoint and stops; a spoon has been laid across the road home.",
+    "rival_reading": "A field crew might turn back at a restricted checkpoint and leave its meal unopened; the map does not show who set the restriction.",
+    "gloss": "A meal and a route stop at the same mark.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0004"
+    }
+  },
+  {
+    "id": "t0004-02",
+    "kind": "set",
+    "pieces": [
+      "Bucket",
+      "Fertilizer"
+    ],
+    "where": [
+      {
+        "place": "checkpoint",
+        "spot": "vehicle",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "title": "The powder gathered in the bucket seam",
+    "body": "Pale granules cling inside the bucket's rim. The fertilizer sack beside it is dry and carefully folded, with its open corner tucked under the seat.",
+    "rival_reading": "Officials could have moved ordinary farm supplies during a road closure; loose granules alone cannot identify a failed program.",
+    "gloss": "Dry fertilizer and loose granules travelled in one vehicle.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-accounting"
+      ],
+      "agricultural": [
+        "a-malfunction",
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0004"
+    }
+  }
 ]

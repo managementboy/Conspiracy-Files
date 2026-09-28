@@ -1,4 +1,73 @@
 [
-  {"id":"t0009-01","kind":"set","pieces":["Map","Clipboard"],"title":"Same Total, Two Weeks Running","body":"The map's road crossing is drawn in red, no reason noted. The clipboard's order is stamped received with no issuing signature, its headcount column carrying the same total copied from a crop-inspection tally two weeks running.","where":[{"place":"government","spot":"furniture","lean":"containment","rival":"agricultural"}],"rival_reading":"A crop-inspection office could keep exactly this kind of running tally and reuse last week's total when nothing changed; an unsigned order and a red-marked road do not by themselves show a response failed.","gloss":"An unsigned order copies a headcount total from a crop-inspection tally two weeks running.","axioms":{"containment":["c-orders","c-accounting"],"agricultural":["a-program","a-obscured"]},"prov":{"writer":"ChatGPT","handoff":"2026-09-27","batch":"T0009"}},
-  {"id":"t0009-02","kind":"set","pieces":["Notebook","WaterBottle"],"title":"Ration Total Beside A Closure Schedule","body":"The road-closure schedule fills half the page, a water ration total scrawled beside it in the same rushed hand. The bottle underneath still carries an old handling-with-gloves sticker, half peeled, with 'reuse once clean' penciled below.","where":[{"place":"government","spot":"furniture","lean":"agricultural","rival":"containment"}],"rival_reading":"A relief desk could log a water ration beside its own closure schedule in one sitting, and an old warning sticker on a reused bottle is common surplus; neither shows a program malfunctioned.","gloss":"A water ration total shares a page with a road-closure schedule and a relabeled warning-sticker bottle.","axioms":{"containment":["c-orders","c-accounting"],"agricultural":["a-program","a-malfunction"]},"prov":{"writer":"ChatGPT","handoff":"2026-09-27","batch":"T0009"}}
+  {
+    "id": "t0009-01",
+    "kind": "set",
+    "pieces": [
+      "Newspaper",
+      "RubberBand"
+    ],
+    "where": [
+      {
+        "place": "government",
+        "spot": "furniture",
+        "lean": "containment",
+        "rival": "agricultural"
+      }
+    ],
+    "title": "The headline held open over its correction",
+    "body": "A rubber band keeps the newspaper open, but its fold covers the correction column. The headline is still visible; the folded page has split along the correction's first sentence.",
+    "rival_reading": "An office could fold an old correction out of view while updating unrelated public material; a torn column does not establish a cover-up.",
+    "gloss": "A correction is hidden while its headline remains easy to read.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-accounting"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-obscured"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0009"
+    }
+  },
+  {
+    "id": "t0009-02",
+    "kind": "set",
+    "pieces": [
+      "GardeningSprayEmpty",
+      "Notebook"
+    ],
+    "where": [
+      {
+        "place": "government",
+        "spot": "furniture",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "title": "The sprayer left its outline on the page",
+    "body": "The empty garden sprayer has left a clean circle on the notebook beneath it. A dried green line runs from the nozzle to a sketch of crop rows.",
+    "rival_reading": "An emergency cleanup could place ordinary gardening equipment beside a route sketch; residue and a drawing do not prove a program was involved.",
+    "gloss": "A sprayer and crop sketch carry the same green trace.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-accounting"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-malfunction",
+        "a-obscured"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0009"
+    }
+  }
 ]

@@ -1,4 +1,72 @@
 [
-  {"id":"t0008-01","kind":"set","pieces":["Lunchbox","KeyRing"],"title":"Bay Reassigned, No Reason Logged","body":"The lunchbox sits on a family manifest, its name column penciled in last, the headcount line still open. The key ring beside it is stamped for a bay that ran co-op orders every spring, now crossed out for a different one.","where":[{"place":"warehouse","spot":"ground","lean":"containment","rival":"agricultural"}],"rival_reading":"A warehouse could reassign the same bay for an ordinary co-op shipment and still need a late name added for whoever signed for it; a crossed-out bay number does not by itself show an evacuation failed.","gloss":"A family manifest with its headcount left open sits beside a loading bay reassigned from co-op orders.","axioms":{"containment":["c-orders","c-failure"],"agricultural":["a-program","a-pathway"]},"prov":{"writer":"ChatGPT","handoff":"2026-09-27","batch":"T0008"}},
-  {"id":"t0008-02","kind":"set","pieces":["Bucket","Notebook"],"title":"Mix Ratio Written Over A Curfew Notice","body":"A curfew notice, patrol shift times still printed down one side, has a mix ratio scrawled across it in a different hand, three parts to one. The bucket beside it is rinsed, a chalky ring left at the waterline.","where":[{"place":"warehouse","spot":"ground","lean":"agricultural","rival":"containment"}],"rival_reading":"A curfew notice reused as scratch paper for a route sheet is exactly what an overworked relief desk would do; the ratio jotted over it could just as easily be a cleaning mix, not evidence a farm chemical malfunctioned.","gloss":"A mix ratio is scrawled over a curfew notice that still lists patrol shift times.","axioms":{"containment":["c-orders","c-failure"],"agricultural":["a-program","a-malfunction"]},"prov":{"writer":"ChatGPT","handoff":"2026-09-27","batch":"T0008"}}
+  {
+    "id": "t0008-01",
+    "kind": "set",
+    "pieces": [
+      "Lunchbox",
+      "KeyRing"
+    ],
+    "where": [
+      {
+        "place": "warehouse",
+        "spot": "ground",
+        "lean": "containment",
+        "rival": "agricultural"
+      }
+    ],
+    "title": "The keys stayed outside the marked floor",
+    "body": "The keyring is wrapped in the lunchbox's cloth lining. A chalk boundary crosses the lid; the ring is on the clean side and the meal on the dusty one.",
+    "rival_reading": "A warehouse crew could separate access keys from stored supplies during a routine safety check; the chalk line may have nothing to do with evacuation.",
+    "gloss": "A boundary separates the keys from the meal they travelled with.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0008"
+    }
+  },
+  {
+    "id": "t0008-02",
+    "kind": "set",
+    "pieces": [
+      "Bucket",
+      "Notebook"
+    ],
+    "where": [
+      {
+        "place": "warehouse",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "title": "The notebook used as a bucket lid",
+    "body": "The notebook has been laid over the bucket. A green crescent marks the page where it touched the rim; the rest of the page is blank except for a pressed grass stem.",
+    "rival_reading": "A cleanup crew could use a bucket and notebook while inspecting any spill; plant residue does not identify a pesticide or its route.",
+    "gloss": "A plant trace remains where a notebook covered a bucket.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-malfunction"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0008"
+    }
+  }
 ]

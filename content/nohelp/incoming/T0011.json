@@ -1,4 +1,73 @@
 [
-  {"id":"t0011-01","kind":"written","pieces":["idcard"],"person":"person-b","title":"Eli Navarro","body":"Route access reads 'emergency and program traffic, unrestricted' with no expiry filled in. Desk log: county line. Reverse: save half the lunch for my son.","where":[{"place":"office","spot":"mailbox","lean":"containment","rival":"agricultural"}],"rival_reading":"An agricultural program could hold the same unrestricted route access to move its own vehicles under the same clearance; a blank expiry does not by itself show anyone was left stranded by a containment order.","gloss":"A route-access card leaves 'emergency and program traffic' unrestricted with no expiry entered.","axioms":{"containment":["c-warning","c-orders"],"agricultural":["a-program","a-obscured"]},"prov":{"writer":"claude-sonnet-5","handoff":"2026-09-27","batch":"T0011"}},
-  {"id":"t0011-02","kind":"set","pieces":["Clipboard","KeyRing"],"person":"person-b","title":"The old copy had the only key","body":"The clipboard holds two route copies, with the earlier instruction on top. The key ring is tagged returned, but the delivery field is empty. A bus ticket is folded into the clip.","where":[{"place":"office","spot":"mailbox","lean":"containment","rival":"agricultural"}],"rival_reading":"An agricultural warning could pass through the same office and leave an old copy with a returned key; the empty delivery field may be routine message delay.","gloss":"An earlier route instruction travels with a returned key while the delivery field stays empty.","axioms":{"containment":["c-orders","c-failure"],"agricultural":["a-program","a-pathway"]},"prov":{"writer":"ChatGPT","handoff":"2026-09-27","batch":"T0011"}}
+  {
+    "id": "t0011-01",
+    "kind": "written",
+    "pieces": [
+      "idcard"
+    ],
+    "where": [
+      {
+        "place": "office",
+        "spot": "mailbox",
+        "lean": "containment",
+        "rival": "agricultural"
+      }
+    ],
+    "title": "County message runner card",
+    "body": "Delivery: office to road crews. Return copy expected when access resumes. Reverse: “Please bring the chipped blue cup back; it was my sister's.”",
+    "rival_reading": "A farm program could use an office runner for field notices; a return copy and family note do not show that containment failed.",
+    "gloss": "A runner's card keeps a personal request beside an official route.",
+    "axioms": {
+      "containment": [
+        "c-warning",
+        "c-orders"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-obscured"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0011"
+    },
+    "person": "person-b"
+  },
+  {
+    "id": "t0011-02",
+    "kind": "set",
+    "pieces": [
+      "Clipboard",
+      "KeyRing"
+    ],
+    "where": [
+      {
+        "place": "office",
+        "spot": "mailbox",
+        "lean": "containment",
+        "rival": "agricultural"
+      }
+    ],
+    "title": "The clipboard held the only spare",
+    "body": "A keyring is fastened beneath the clipboard clip. Its tag is worn smooth; the page above it has two pencil holes and no writing.",
+    "rival_reading": "A field courier could secure a site key to a blank clipboard before a handoff; the empty page does not prove anyone was left without instructions.",
+    "gloss": "An access key is attached to a page that was never filled in.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0011"
+    },
+    "person": "person-b"
+  }
 ]

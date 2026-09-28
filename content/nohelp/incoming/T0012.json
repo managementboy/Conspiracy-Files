@@ -1,4 +1,73 @@
 [
-  {"id":"t0012-01","kind":"written","pieces":["businesscard"],"person":"person-c","title":"Mara Cardenas","body":"Transfer authorization reads 'program and emergency cargo, one lane' with the destination left blank. Reverse: bread for Mother.","where":[{"place":"checkpoint","spot":"vehicle","lean":"containment","rival":"agricultural"}],"rival_reading":"The same shared-lane authorization could carry an agricultural program's cargo under routine transfer rules; a blank destination does not show anyone was stranded by a checkpoint order.","gloss":"A courier's transfer authorization covers 'program and emergency cargo' with no destination entered.","axioms":{"containment":["c-orders","c-failure"],"agricultural":["a-program","a-pathway"]},"prov":{"writer":"claude-sonnet-5","handoff":"2026-09-27","batch":"T0012"}},
-  {"id":"t0012-02","kind":"set","pieces":["Map","KeyRing"],"person":"person-c","title":"The route ended beyond the gate","body":"The map's transfer mark sits past a road closed for reasons unstated. The key ring's last tag is unlogged, and a field-service pass rides loose in the console.","where":[{"place":"checkpoint","spot":"vehicle","lean":"containment","rival":"agricultural"}],"rival_reading":"A field-service pass and an unlogged key could just as easily belong to an ordinary agricultural courier route; a closed road by itself does not establish a failed evacuation.","gloss":"A courier's transfer mark sits past a closed road beside an unlogged key and a loose field pass.","axioms":{"containment":["c-orders","c-failure"],"agricultural":["a-program","a-timing"]},"prov":{"writer":"ChatGPT","handoff":"2026-09-27","batch":"T0012"}}
+  {
+    "id": "t0012-01",
+    "kind": "written",
+    "pieces": [
+      "businesscard"
+    ],
+    "where": [
+      {
+        "place": "checkpoint",
+        "spot": "vehicle",
+        "lean": "containment",
+        "rival": "agricultural"
+      }
+    ],
+    "title": "Courier card with a late return",
+    "body": "Transfer window: after road access ends. Return copy to sender. Reverse: “Bread for Mother, no crust if it is still warm.”",
+    "rival_reading": "A field-delivery schedule could run past a road restriction; the late return line does not identify who changed access.",
+    "gloss": "A courier's card sets a return after the access window.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0012"
+    },
+    "person": "person-c"
+  },
+  {
+    "id": "t0012-02",
+    "kind": "set",
+    "pieces": [
+      "Map",
+      "KeyRing"
+    ],
+    "where": [
+      {
+        "place": "checkpoint",
+        "spot": "vehicle",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "title": "The key marked for the last run",
+    "body": "The map's route turns away from the gate. A key tag marked “last run” is tied to its corner, with a thread long enough to reach the road line.",
+    "rival_reading": "A delayed response crew could carry a key and route map after access changed; the tag could also belong to a field delivery.",
+    "gloss": "A last-run key points toward a route that no longer reaches its gate.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0012"
+    },
+    "person": "person-c"
+  }
 ]

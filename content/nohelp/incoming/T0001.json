@@ -1,4 +1,72 @@
 [
-  {"body": "The mailbox holds a card: the north stretch closed, no reopening date filled in. Behind it, a transport permit for the same stretch is stamped for a return trip never logged. The renewal line is signed in someone else's hand.", "id": "t0001-01", "kind": "set", "pieces": ["Map", "IndexCard"], "title": "Closed until further notice", "where": [{"lean": "containment", "place": "police", "rival": "agricultural", "spot": "mailbox"}], "axioms": {"agricultural": ["a-program", "a-pathway"], "containment": ["c-orders", "c-failure"]}, "gloss": "An indefinitely closed stretch and an unrenewed transport permit sit together, the renewal signed by someone else.", "prov": {"batch": "T0001", "handoff": "2026-09-27", "writer": "claude-sonnet-5"}, "rival_reading": "A transport permit for a farm delivery route can go unrenewed and a stretch closed for spraying just as easily; a missing log entry does not by itself show an evacuation order failed."},
-  {"body": "The mailbox holds a sealed sample jar, its field number redrawn over a smudged first attempt, beside a delivery receipt for drum containers to a rural address. The item line reads only 'treatment,' the quantity circled twice.", "id": "t0001-02", "kind": "set", "pieces": ["EmptyJar", "IndexCard"], "title": "One field number, redrawn", "where": [{"lean": "agricultural", "place": "police", "rival": "containment", "spot": "mailbox"}], "axioms": {"agricultural": ["a-program", "a-pathway"], "containment": ["c-orders", "c-accounting"]}, "gloss": "A redrawn field number and a drum delivery marked only 'treatment' sit together, its quantity circled twice.", "prov": {"batch": "T0001", "handoff": "2026-09-27", "writer": "claude-sonnet-5"}, "rival_reading": "A sealed sample and a drum delivery could belong to an ordinary relief run during a road restriction; a vague item line and a circled quantity do not by themselves show a program."}
+  {
+    "id": "t0001-01",
+    "kind": "set",
+    "pieces": [
+      "Map",
+      "KeyRing"
+    ],
+    "where": [
+      {
+        "place": "police",
+        "spot": "mailbox",
+        "lean": "containment",
+        "rival": "agricultural"
+      }
+    ],
+    "title": "The route stops at the barrier",
+    "body": "The map's pencil road ends at a barrier mark. A keyring is tied across the fold; its blank tag is polished where a number was rubbed away.",
+    "rival_reading": "A field crew could tie its gate key to a road map after an access change; the rubbed tag need not mean officials stranded anyone.",
+    "gloss": "A route and a key with no destination remain together.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0001"
+    }
+  },
+  {
+    "id": "t0001-02",
+    "kind": "set",
+    "pieces": [
+      "Bucket",
+      "WaterBottle"
+    ],
+    "where": [
+      {
+        "place": "police",
+        "spot": "mailbox",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "title": "The bottle kept the wrong color",
+    "body": "A green ring stains the bottle's inner neck. The bucket beside it is dry, though its handle is wet and smells faintly of crushed leaves.",
+    "rival_reading": "Cleanup after a road closure could leave plant matter in ordinary containers; the residue does not identify a program or its source.",
+    "gloss": "Plant-colored residue remains on containers near a police post.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-accounting"
+      ],
+      "agricultural": [
+        "a-malfunction",
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0001"
+    }
+  }
 ]

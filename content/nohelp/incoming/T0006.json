@@ -1,4 +1,74 @@
 [
-  {"id":"t0006-01","kind":"set","pieces":["Newspaper","Receipt"],"title":"Route rewritten twice, address unreachable","body":"The newspaper’s delivery route is logged under a program number, rewritten twice in one week; the receipt behind it renews a subscription to an address marked temporarily unreachable. Someone has pencilled save the puzzles in the margin.","where":[{"place":"bookstore","spot":"mailbox","lean":"containment","rival":"agricultural"}],"rival_reading":"A field program relocating its own staff could just as easily leave a rerouted subscription and an unreachable address; a rewritten route number does not by itself show an evacuation order.","gloss":"A rewritten delivery route and a subscription renewal both name an address as temporarily unreachable.","axioms":{"containment":["c-warning","c-orders","c-failure"],"agricultural":["a-program","a-timing"]},"prov":{"writer":"claude-sonnet-5","handoff":"2026-09-27","batch":"T0006"}},
-  {"id":"t0006-02","kind":"set","pieces":["Notebook","Postcard"],"title":"The order predates the notice by two days","body":"The notebook’s last field entry logs a treatment order under a shift number the postmaster’s board doesn’t list until two days later. A postcard from that week was stamped but never collected; the back has only a ballgame score.","where":[{"place":"bookstore","spot":"mailbox","lean":"agricultural","rival":"containment"}],"rival_reading":"A containment response could log its own treatment order under the same shift numbering before the postmaster's board caught up; a two-day gap between a field entry and the board does not by itself point to agriculture.","gloss":"A field-logged treatment order is entered under a shift number the postmaster’s board does not list until two days later.","axioms":{"containment":["c-warning","c-accounting"],"agricultural":["a-program","a-timing","a-obscured"]},"prov":{"writer":"claude-sonnet-5","handoff":"2026-09-27","batch":"T0006"}}
+  {
+    "id": "t0006-01",
+    "kind": "set",
+    "pieces": [
+      "Map",
+      "Postcard"
+    ],
+    "where": [
+      {
+        "place": "bookstore",
+        "spot": "mailbox",
+        "lean": "containment",
+        "rival": "agricultural"
+      }
+    ],
+    "title": "The postcard addressed to a crossed street",
+    "body": "The postcard is stamped and addressed, but the map beneath it ends at a street crossed out in pencil. The message stops after, “We were told to wait by—”.",
+    "rival_reading": "A field delivery could be delayed by a road restriction and leave an unfinished message; the card does not say who issued the instruction.",
+    "gloss": "A message and its map both stop short of a destination.",
+    "axioms": {
+      "containment": [
+        "c-warning",
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-timing"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0006"
+    }
+  },
+  {
+    "id": "t0006-02",
+    "kind": "set",
+    "pieces": [
+      "Newspaper",
+      "Notebook"
+    ],
+    "where": [
+      {
+        "place": "bookstore",
+        "spot": "mailbox",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "title": "The garden column with no matching season",
+    "body": "A newspaper gardening column is folded around a notebook sketch of three crop rows. The drawing has a water line but no planting date; the column is for winter.",
+    "rival_reading": "Someone tracking seasonal conditions during an emergency could keep an old gardening column with field notes; the mismatch does not identify an experimental program.",
+    "gloss": "A crop sketch and an out-of-season guide sit together.",
+    "axioms": {
+      "containment": [
+        "c-warning",
+        "c-accounting"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-timing",
+        "a-obscured"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0006"
+    }
+  }
 ]

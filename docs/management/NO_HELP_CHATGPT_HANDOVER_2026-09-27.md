@@ -54,7 +54,7 @@ it runs on every push and writes the line to the run summary. Paste the
 current line at the top of every reply.
 
 "Done" is never yours to declare: at `DONE-CANDIDATE` you hand the baton to
-Claude; Claude reruns the checks, re-reads a random sample blind, and signs.
+Claude; Claude reruns the checks, verifies the current blind-review receipts and unresolved flags, and signs.
 "No maximum" (owner): after the first release, Claude opens new tickets and
 the loop continues.
 
@@ -97,14 +97,16 @@ serial**, and only one at a time. Row ids are `t####-NN`.
 **Rounds (owner, 2026-09-27: the relay was too slow).** Work in rounds of
 **every open ticket** (the whole first release at once): deliver them one after another, one commit each, without
 waiting for Claude in between; then set the baton to CLAUDE with `REVIEW`
-once, naming the serials in `NEXT`. Before delivering any row, run the
-**blind self-read** yourself: the prompt in `tools/cluegates/blind_reread.md`,
-at least 3 fresh reads per row with nothing but the rendered clue; if no read
-names the rival side (or most say NEITHER), rewrite the row before delivering.
-Claude reviews the whole round at once, runs the official blind re-read, fixes
-small wording itself (noted in the review, never a change of lean, place,
-pieces or axioms), and returns only rows with real problems. Returned rows are
-fixed first in the next round, alongside new tickets.
+once, naming the serials in `NEXT`. Before delivering each row, do one writer self-check: confirm that its
+rendered text supports the intended lean and that the authoring fields explain
+the plausible rival reading. Do not launch repeated self-read model sessions.
+Claude reviews the whole round at once, reads the batch for repetition and
+consistency, then runs the independent blind review in
+`tools/cluegates/blind_reread.md`: one read per clue and a second only for
+flagged clues. Claude fixes small wording itself (noted in the review, never
+a change of lean, place, pieces or axioms), and returns only rows with real
+problems. Returned rows are fixed first in the next round, alongside new
+tickets.
 
 - `T0000` is **stage 0**: the frozen axiom list per conspiracy (short ids and
   one-line glosses) and a one-line gloss per story you plan (maps, flyers,
@@ -205,8 +207,8 @@ lawyer (argue the other conspiracy, feed it back).
 3. No more than two tickets in a row are deferred.
 4. The converter check is clean for this ticket; its counts are in the commit
    message.
-5. Every row's rival reading was written first, and a blind re-read can read
-   it both ways.
+5. Every row's rival reading was written first; the official blind-review
+   receipt is current and no review flag remains unresolved.
 6. Every row names axioms for **both** conspiracies and still leans toward one.
 7. The diff touches only `content/nohelp/incoming/`, `content/nohelp/STATE.md`
    and `docs/writer-only/adhd/`.
@@ -215,8 +217,9 @@ lawyer (argue the other conspiracy, feed it back).
 
 ## 10. Your first session, step by step
 
-1. Read this handover, then the writer handoff, `DECISIONS.md` (top entry,
-   newest bullets last) and `docs/writer-only/NOHELP_SPOILERS.md`.
+1. Read this handover, then the writer handoff, the current review decision
+   `DR-20260928-NOHELP-REVIEW-FAST` in `DECISIONS.md`, and
+   `docs/writer-only/NOHELP_SPOILERS.md`.
 2. Check out `nohelp-content`. Read `content/nohelp/STATE.md` (baton: you,
    `WRITING`, stage 0, next: `T0000`).
 3. Run the ADHD skill for stage 0 (section 7), saving the runs.

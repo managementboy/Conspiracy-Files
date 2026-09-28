@@ -1,4 +1,72 @@
 [
-  {"body": "The farm's hand-drawn boundary map has one line added a day after the rest, marked 'restricted' in a different pen. Folded into it is a gate log recording only field crew return times, no names, and a spare padlock key still on its string.", "id": "t0003-01", "kind": "set", "pieces": ["Map", "KeyRing"], "title": "One line added a day later", "where": [{"lean": "containment", "place": "farm", "rival": "agricultural", "spot": "ground"}], "axioms": {"agricultural": ["a-program", "a-pathway"], "containment": ["c-orders", "c-failure"]}, "gloss": "A boundary map's late-added restricted line sits with a gate log of field crew return times.", "prov": {"batch": "T0003", "handoff": "2026-09-27", "writer": "claude-sonnet-5"}, "rival_reading": "A farm can add its own restricted line to a boundary map for routine security any day it likes; field crew return times and a spare key do not by themselves show an emergency order."},
-  {"body": "The clipboard lists three field rows, each checked against a time; the middle time matches a road closure on no other sheet at the farm. The bottle beside it is capped with tape instead of a lid seal, its signature line blank.", "id": "t0003-02", "kind": "set", "pieces": ["Clipboard", "WaterBottle"], "title": "Three rows, one matching a closure nobody logged", "where": [{"lean": "agricultural", "place": "farm", "rival": "containment", "spot": "ground"}], "axioms": {"agricultural": ["a-program", "a-malfunction"], "containment": ["c-orders", "c-accounting"]}, "gloss": "Three timed field rows include one matching a road closure recorded nowhere else, beside a taped bottle and a blank signature.", "prov": {"batch": "T0003", "handoff": "2026-09-27", "writer": "claude-sonnet-5"}, "rival_reading": "A farm crew could just as easily check off three timed rows against its own field schedule with no closure involved; a taped cap and a blank signature do not by themselves show a program malfunction."}
+  {
+    "id": "t0003-01",
+    "kind": "set",
+    "pieces": [
+      "Map",
+      "KeyRing"
+    ],
+    "where": [
+      {
+        "place": "farm",
+        "spot": "ground",
+        "lean": "containment",
+        "rival": "agricultural"
+      }
+    ],
+    "title": "The gate key on the far side",
+    "body": "The map is open to a farm track, but the keyring rests beyond the drawn gate. Its tag is still tied on; the paper around the knot has torn in two.",
+    "rival_reading": "A farm worker could set a spare key beside a track while changing field access; a torn tag says nothing about an evacuation order.",
+    "gloss": "A gate route and its key no longer meet.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0003"
+    }
+  },
+  {
+    "id": "t0003-02",
+    "kind": "set",
+    "pieces": [
+      "SeedBag",
+      "HandShovel"
+    ],
+    "where": [
+      {
+        "place": "farm",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "title": "The seed bag holds a narrow trench",
+    "body": "The seed bag is folded shut around the shovel handle. A straight line of dark soil runs from the blade to the bag's seam, but the shovel has no soil on its grip.",
+    "rival_reading": "A response crew could move seed stock and tools while clearing a farm; the clean grip could come from ordinary handling.",
+    "gloss": "Seed stock and a freshly used tool were wrapped together.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-malfunction"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0003"
+    }
+  }
 ]

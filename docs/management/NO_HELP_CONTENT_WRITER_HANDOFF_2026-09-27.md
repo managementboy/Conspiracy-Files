@@ -222,11 +222,17 @@ reveal); citations are literal substrings of the vanilla data; reserved-name
 check against vanilla named characters (exact, sound-alike, one letter away);
 the retired-premise tripwire (stored only as salted hashes).
 
-**A blind re-read by a different AI:** given the clue alone (no lean, no
-rival), it names the side it reads as, or "neither", several times. A clue is
-returned if it is never read as its rival, or read as "neither" most of the
-time. Its result is stored against the exact text; editing the text afterwards
-voids it.
+**Independent blind review:** after the batch passes the converter and test
+suite, a model other than the writer reads each clue once, seeing only its
+rendered text. A vote matching the clue's declared lean passes. A `NEITHER`
+vote or a vote against the declared lean triggers exactly one second fresh
+read. If the two votes disagree, or both miss the declared lean, return the
+clue for revision. Do not run more reads to seek a passing result. The batch
+also receives one editorial pass for repetition and consistency. Receipts are
+stored against the exact rendered-text hash; any edit invalidates the receipt.
+The complete executable rule is `tools/cluegates/blind_reread.md`; older
+multi-read thresholds and outcomes in historical documents are superseded by
+`DR-20260928-NOHELP-REVIEW-FAST` in `DECISIONS.md`.
 
 **Claude:** signs off stage 0; reads every batch, a drift report ("farm clues
 for theory A all sound like paperwork") and every blind-read failure, and
@@ -246,8 +252,9 @@ Fix the pattern, not just the row.
 
 ## 8. Where the rules come from (read these, in this order)
 
-1. `DECISIONS.md`, top entry `DR-20260927-NOHELP-RULE-PLACEMENT` — every owner
-   decision (quoted), newest bullets last. Newer bullets supersede older ones.
+1. `DECISIONS.md` — read the current review rule `DR-20260928-NOHELP-REVIEW-FAST`
+   first. Historical decisions remain in force only where they do not conflict
+   with this newer review rule.
 2. `docs/design/NO_HELP_CONSPIRACY_DESIGN_2026-09-26.md` — sections 2-4a:
    authoring integrity (frozen axioms, rival readings, glosses, blind re-read,
    cold read, generation effect, citing vanilla).
