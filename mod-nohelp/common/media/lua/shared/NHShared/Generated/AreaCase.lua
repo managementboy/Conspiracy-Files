@@ -329,6 +329,7 @@ function M.validate(case)
         sites[l.id]=true
     end
     local docIndex,copies=1,{}
+    local seenAreaId={}
     for i,a in ipairs(case.areas) do
         if type(a)~="table" or not sites[a.id] or not (PLACE[a.place] or a.place=="scene") or type(a.source)~="string"
             or type(a.version)~="string" or not hours(a.decidedHours) then return false,"invalid area "..tostring(i) end
@@ -403,7 +404,8 @@ function M.validate(case)
                 if case.documents[j].mark~=nil then return false,"a clue names a mark its area does not have" end
             end
         end
-        for j=1,i-1 do if case.areas[j].id==a.id then return false,"area decided twice" end end
+        if seenAreaId[a.id] then return false,"area decided twice" end
+        seenAreaId[a.id]=true
     end
     if docIndex-1~=#case.documents then return false,"clues outside any area" end
     for _,d in ipairs(case.documents) do

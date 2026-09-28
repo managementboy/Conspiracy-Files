@@ -23,14 +23,16 @@ copies it again for the save (`Generated/Session.lua:541-548`). Before a write,
 duplicate-area check is quadratic (`Generated/AreaCase.lua:406`). So the cost
 follows how much has been played, not how big the change is.
 
-- [ ] **A1 Measure first (report-only).** Add `test/nohelp_soak.lua`. It grows
+- [x] **A1 Measure first (report-only).** *Done 2026-09-28: at 1x/2x/5x/10x one write
+  walks ~31k/61k/152k/303k elements, 9-86 ms, 3-30 MB allocated: linear in the record.* Add `test/nohelp_soak.lua`. It grows
   one world with the cap lifted to 1x, 2x, 5x and 10x its record at world
   start. At each size it prints the tables visited per write (a counting shim
   on `copy` and the validators), the median ms per write, and the record
-  bytes. The ratio check is present but only reports, so the current curve is
+  bytes (reported only: No Help has no save-size limit, owner 2026-09-27).
+  The ratio check is present but only reports, so the current curve is
   on record before anything changes.
   *Proof:* the test runs and prints the curve; the numbers go into plan §8.
-- [ ] **A2 Remove the quadratic scan.** In `AreaCase.validate`, a set of seen
+- [x] **A2 Remove the quadratic scan.** In `AreaCase.validate`, a set of seen
   ids replaces the `for j=1,i-1` scan and the similar per-area loops. Safety
   is unchanged.
   *Proof:* the existing AreaCase and area tests stay green; A1's
@@ -55,7 +57,8 @@ follows how much has been played, not how big the change is.
 - [ ] **A6 Safety net.** A full check on open, and every K writes.
   *Proof:* a corrupted record introduced between checks is caught at the
   next full check.
-- [ ] **A7 Make the gate hard.** At 10x the record, tables visited must stay
+- [ ] **A7 Make the gate hard.** Gate on visits AND KB allocated (the visit counter sees only
+  `pairs`/`ipairs` loops, so a numeric `for` loop could hide work from it). At 10x the record, tables visited must stay
   within 2x of the count at 1x, and wall time within 3x (wall time is looser
   because plain Lua timing is noisy).
   *Proof:* `test/nohelp_soak.lua` fails without A2-A5.

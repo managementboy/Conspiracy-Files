@@ -209,7 +209,8 @@ was found empty as lost; placement ever stops for a reason other than the cap
 or the save limit; the scene-anchored share falls below its floor. A second
 run writes a save at one cap and reloads it at a higher cap: Pick must keep
 adding and moves must keep working. With the cap off it measures
-save growth (against `Validator.MAX_ENCODED_BYTES`, 1 MB) and the worst Pick
+save growth (*superseded: the owner later lifted the save limit, "no limit at all";
+size is reported, never capped — `SaveBudget.lua`*) and the worst Pick
 call; saved records must grow with areas visited, not days played, compacting
 consumed clues to id, lean and area if needed.
 *Built 2026-09-27 as `test/nohelp_playthrough.lua`; what it covers and what it
