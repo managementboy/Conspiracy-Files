@@ -19,6 +19,7 @@ cd "$(dirname "$0")/../.."
 RUNS=1; PARALLEL=${PARALLEL:-8}; MODEL=${READER_MODEL:-claude-haiku-4-5}
 FORCE=0; if [ "${1:-}" = "--force" ]; then FORCE=1; shift; fi
 ROWS=""; if [ "${1:-}" = "--rows" ]; then ROWS=$2; shift 2; fi
+if [ "$FORCE" -eq 1 ] && [ "$#" -eq 0 ] && [ -z "$ROWS" ]; then echo "--force requires selected clue ids" >&2; exit 2; fi
 WORK=$(mktemp -d); trap 'rm -rf "$WORK"' EXIT
 mkdir -p "$WORK/empty" "$WORK/reads"
 sed -n '/^```$/,/^```$/p' tools/cluegates/blind_reread.md | sed '1d;$d' > "$WORK/prompt.tmpl"
