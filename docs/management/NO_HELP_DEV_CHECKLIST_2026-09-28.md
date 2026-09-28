@@ -113,7 +113,9 @@ place a clue twice, or reveal the other theory's clue? The plan still owes a
 
 ## C. Content-blind state dump (what every playtest and bug report quotes)
 
-- [ ] **C1 `client/NHShared/StateDump.lua`.** One `ev=dump` log line, behind
+- [x] **C1 `client/NHShared/StateDump.lua`.** *Done 2026-09-28: single-player gate (as
+  ClueMarkers), called as `NHShared.StateDump.run()`; numbers only under a fixed
+  exported key list.* One `ev=dump` log line, behind
   the same gate as `ClueMarkers.allowed()`. It carries only numbers, plus
   words from a fixed list in the code:
   - assignment status counts;

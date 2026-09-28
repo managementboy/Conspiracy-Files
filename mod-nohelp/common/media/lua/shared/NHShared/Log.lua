@@ -53,6 +53,8 @@ local EVENTS={
     person=true,outfit=true,key=true,door=true,address=true,vehicle=true,
     -- diagnostics the owner turns on deliberately
     probe=true,scan=true,
+    -- content-blind state dump for playtests and bug reports
+    dump=true,
 }
 
 -- Field order. Fixed so lines column-align to the eye and so a grep for a
