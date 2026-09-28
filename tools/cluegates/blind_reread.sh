@@ -7,15 +7,16 @@
 # For each clue in the derived clue list (or only the ids given) that has no
 # current receipt, renders exactly what the reader sees, runs RUNS fresh reads
 # with a model other than the writer's (Haiku through the `claude` CLI, from an
-# empty folder, with no tools, no settings and no session kept), records the
-# first word of each answer and writes tools/cluegates/receipts/<id>.json.
+# empty folder, with no tools, no settings and no session kept), records votes
+# and writes tools/cluegates/receipts/<id>.json. Default is one read per clue;
+# use --force with selected flagged ids to append one independent second read.
 # Then runs the receipt check. Prints ids, votes and codes only, never clue text.
 #
-# Environment: RUNS (default 5), PARALLEL (default 8), READER_MODEL (default
+# Environment: RUNS (default 1), PARALLEL (default 8), READER_MODEL (default
 # claude-haiku-4-5).
 set -u
 cd "$(dirname "$0")/../.."
-RUNS=${RUNS:-5}; PARALLEL=${PARALLEL:-8}; MODEL=${READER_MODEL:-claude-haiku-4-5}
+RUNS=${RUNS:-1}; PARALLEL=${PARALLEL:-8}; MODEL=${READER_MODEL:-claude-haiku-4-5}
 FORCE=0; if [ "${1:-}" = "--force" ]; then FORCE=1; shift; fi
 ROWS=""; if [ "${1:-}" = "--rows" ]; then ROWS=$2; shift 2; fi
 WORK=$(mktemp -d); trap 'rm -rf "$WORK"' EXIT
@@ -62,17 +63,24 @@ while read -r id; do for n in $(seq 1 "$RUNS"); do echo "$WORK $id $n"; done; do
   | xargs -r -P "$PARALLEL" -n 3 bash -c 'read_one "$@"' _
 
 while read -r id; do
-  python3 - "$WORK" "$id" "$MODEL" <<'EOF'
+  python3 - "$WORK" "$id" "$MODEL" "$FORCE" <<'EOF'
 import sys,os,json,datetime
-w,i,m=sys.argv[1:4]
+w,i,m,force=sys.argv[1:5]
 v={"A":0,"B":0,"neither":0}
 for f in os.listdir(w+"/reads"):
     if f.startswith(i+".run"):
         x=open(w+"/reads/"+f).read().strip()
         v["neither" if x=="NEITHER" else x]+=1
 sha=open(w+"/reads/"+i+".sha").read().strip()
+path="tools/cluegates/receipts/"+i+".json"
+if force=="1" and os.path.exists(path):
+    try:
+        old=json.load(open(path))
+        if old.get("sha256")==sha:
+            for k in v: v[k]+=int(old.get("votes",{}).get(k,0))
+    except Exception: pass
 json.dump({"clue":i,"sha256":sha,"model":m+" (no repo access, no tools, fresh context per read)",
-    "date":datetime.date.today().isoformat(),"votes":v},open("tools/cluegates/receipts/"+i+".json","w"),indent=2)
+    "date":datetime.date.today().isoformat(),"votes":v},open(path,"w"),indent=2)
 print(i,"A",v["A"],"B",v["B"],"neither",v["neither"])
 EOF
 done < "$WORK/todo"
