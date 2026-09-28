@@ -1,3 +1,26 @@
+## DR-20260928-NOHELP-REVIEW-FAST — one blind read, targeted retry
+
+Owner decision, 2026-09-28: replace the repeated content-review workflow with
+one pass that reviews every clue and reserves a second pass for flagged clues.
+
+- Run the converter check and test suite first.
+- Read the full batch once for repetition and consistency.
+- An independent model reads each clue once, seeing only its rendered text.
+  One vote matching the declared lean passes.
+- A `NEITHER` vote or a vote against the declared lean gets exactly one
+  independent second read. If the votes disagree, or both miss the declared
+  lean, return the clue for revision. Never repeat reads to seek a passing
+  vote.
+- Tie receipts to the rendered-text hash; any edit voids the receipt.
+- The writer does one self-check per row and launches no repeated self-read
+  sessions.
+
+This is the only current content-review rule. It supersedes all older
+multi-read counts, rival-vote thresholds, and conflicting review instructions
+in handoffs, scripts, tests, and design notes. Other content and game rules
+remain in force. Executable details live in
+`tools/cluegates/blind_reread.md`.
+
 ## DR-20260927-NOHELP-RULE-PLACEMENT — content is written, placement is not
 
 Owner decision, 2026-09-27, "No Help" content design, asked whether its
