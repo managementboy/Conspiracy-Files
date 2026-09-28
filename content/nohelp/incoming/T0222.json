@@ -1,0 +1,44 @@
+[
+  {
+    "id": "t0222-01",
+    "kind": "set",
+    "pieces": [
+      "KeyRing",
+      "SheetPaper2"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "containment",
+        "rival": "agricultural"
+      }
+    ],
+    "anchor": {
+      "print": "HouseforSale930"
+    },
+    "title": "The charming address",
+    "body": "The home inspection marks every room clear, but the key return sheet leaves one bedroom assigned to a visitor.",
+    "rival_reading": "A contractor could have used the room during inspection; the sheet does not establish who was inside.",
+    "gloss": "A room is listed for a visitor after the home is marked clear.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "cites": {
+      "source": "print:HouseforSale930",
+      "quote": "House for Sale (no. 930)"
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0222"
+    }
+  }
+]
