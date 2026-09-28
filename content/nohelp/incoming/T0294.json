@@ -1,0 +1,40 @@
+[
+  {
+    "id": "t0294-01",
+    "kind": "set",
+    "pieces": [
+      "TinOpener",
+      "Matches"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "furniture",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "anchor": {
+      "scene": "RBJoanHartford"
+    },
+    "title": "A departure without a tally",
+    "body": "The kit contains what someone expected to need, but the count was never signed.",
+    "rival_reading": "A private precaution can account for the supplies without any wider cause.",
+    "gloss": "A prepared pair is left without a clear account of why it was needed.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-malfunction",
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0294"
+    }
+  }
+]
