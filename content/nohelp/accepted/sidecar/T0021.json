@@ -1,0 +1,48 @@
+{
+  "t0021-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-malfunction"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "gun guy's house",
+      "source": "map:LouisvilleStashMap1"
+    },
+    "gloss": "A household collection route has a departure and no recorded return.",
+    "prov": {
+      "batch": "T0021",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A field team could have logged a temporary equipment pickup and left its key behind; the note gives no reason for the route being blocked."
+  },
+  "t0021-02": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-obscured"
+      ],
+      "containment": [
+        "c-orders",
+        "c-accounting"
+      ]
+    },
+    "cites": {
+      "quote": "gun guy's house",
+      "source": "map:LouisvilleStashMap1"
+    },
+    "gloss": "Unmarked test-plot samples are stored beside household supplies.",
+    "prov": {
+      "batch": "T0021",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "An emergency crew could have stored ordinary pest-control samples there while clearing the house; bad labels do not show a program malfunction."
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "t0024-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-timing"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "take your beer out to the track!",
+      "source": "print:IrvingtonSpeedway"
+    },
+    "gloss": "A traffic citation follows a venue access closure while a race-day purchase goes unused.",
+    "prov": {
+      "batch": "T0024",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "The venue could have closed that lane after an ordinary race incident, with a patrol citing a late driver afterward; the appeal cannot establish a wider order."
+  },
+  "t0024-02": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-malfunction"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "See SPECIAL GUEST STAR",
+      "source": "print:IrvingtonSpeedway"
+    },
+    "gloss": "A trial-related closure conflicts with an event that remains advertised.",
+    "prov": {
+      "batch": "T0024",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A response crew may have ordered routine grounds treatment while the event remained on the board; the refund says nothing about why access was restricted."
+  }
+}

@@ -5,19 +5,19 @@ never a place name, map, flyer, scene, person or clue text here. Whoever holds t
 baton edits it; `lua5.1 tools/nohelp_content/progress.lua --state` rewrites PROGRESS.
 
 ## BATON
-CLAUDE since 2026-09-28 because REVIEW
+CHATGPT since 2026-09-28 because FIXING
 
 ## STAGE
 EXPANSION
 
 ## TICKET
-T0024
+T0023
 
 ## NEXT
-T0020 T0021 T0022 T0023 T0024; awaiting CLAUDE REVIEW
+Review done: T0020 T0021 T0022 T0024 accepted (8 clues); T0023 returned (rejected/T0023.json, LEAN_MISMATCH on one clue; the other passed, back unchanged); then the next expansion batch
 
 ## OPEN RETURNS
-none
+T0023
 
 ## QUARANTINE
 none
@@ -26,4 +26,4 @@ none
 2026-09-28 T0001
 
 ## PROGRESS
-NOT DONE: maps 2/125, flyers 1/133, scenes 3/125, adhd 17 @07917493
+NOT DONE: maps 5/125, flyers 2/133, scenes 3/125, adhd 21 @a3ac069

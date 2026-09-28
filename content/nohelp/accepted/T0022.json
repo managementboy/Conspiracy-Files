@@ -1,0 +1,46 @@
+[
+  {
+    "anchor": {
+      "map": "MarchRidgeStashMap1",
+      "mark": 1
+    },
+    "body": "The shell box is signed out at 6:10, the marked route is closed at 5:40, and a spare key is still tied to the map. The return box is blank.",
+    "id": "t0022-01",
+    "kind": "set",
+    "pieces": [
+      "ShotgunShells",
+      "Map",
+      "KeyRing"
+    ],
+    "title": "Inventory closed before the gate",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "MarchRidgeStashMap1",
+      "mark": 1
+    },
+    "body": "Keep the pesticide trial jars sealed until the boundary check is done. The neighbor keeps knocking because the map says don't go; the dog is still in the yard.",
+    "id": "t0022-02",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "The jars stay sealed",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  }
+]

@@ -25,6 +25,15 @@ mkdir -p "$WORK/empty" "$WORK/reads"
 sed -n '/^```$/,/^```$/p' tools/cluegates/blind_reread.md | sed '1d;$d' > "$WORK/prompt.tmpl"
 
 if [ -n "$ROWS" ]; then lua5.1 tools/cluegates/render_rows.lua "$ROWS" "$WORK/reads" > "$WORK/ids" || exit 1
+  # --force on a draft: the second read is ONLY for rows flagged
+  # NEEDS_SECOND_READ, never for rows that already passed (fast rule).
+  if [ "$FORCE" -eq 1 ]; then
+    ROWSFILE="$ROWS" lua5.1 -e 'package.path="tools/nohelp_content/?.lua;"..package.path
+      local J=require("json"); local R=dofile("tools/cluegates/check_receipts.lua")
+      local f=io.open(os.getenv("ROWSFILE"),"rb"); local d=J.decode(f:read("*a")); f:close()
+      for _,x in ipairs(R.check(d.rows or d)) do if x.code=="NEEDS_SECOND_READ" then print(x.id) end end' > "$WORK/ids"
+    [ -s "$WORK/ids" ] || { echo "no row needs a second read"; exit 0; }
+  fi
 elif [ $# -gt 0 ]; then printf '%s\n' "$@" > "$WORK/ids"
 else lua5.1 -e 'package.path="mod-nohelp/common/media/lua/shared/?.lua;"..package.path
   for _,c in ipairs(require("NHShared/Mystery/Manifest").clues) do print(c.id) end' > "$WORK/ids"; fi
