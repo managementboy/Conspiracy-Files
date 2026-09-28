@@ -1,0 +1,44 @@
+[
+  {
+    "id": "t0206-01",
+    "kind": "set",
+    "pieces": [
+      "SheetPaper2",
+      "KeyRing"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "containment",
+        "rival": "agricultural"
+      }
+    ],
+    "anchor": {
+      "print": "RiversideIndependenceDayPartyAllWelcome"
+    },
+    "title": "Block party route",
+    "body": "The party route sheet lists every block as cleared, but a resident’s key is still held at the check-in table.",
+    "rival_reading": "A volunteer may have collected keys for ordinary street access; the sheet does not show who cleared the blocks.",
+    "gloss": "A block is marked clear while a resident’s key remains.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "cites": {
+      "source": "print:RiversideIndependenceDayPartyAllWelcome",
+      "quote": "Independence Day Party (Riverside)"
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0206"
+    }
+  }
+]
