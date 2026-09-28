@@ -69,11 +69,11 @@ The question: can a player reload, or can a crash, change what an area holds,
 place a clue twice, or reveal the other theory's clue? The plan still owes a
 "kill after stage one, reopen, replays once" test (§4 step 4; §4a NH-D3).
 
-- [ ] **B1 Shared engine stub.** Move the stubs in
+- [x] **B1 Shared engine stub.** Move the stubs in
   `test/nohelp_area_runtime.lua:71-117` to
   `test/fixtures/nohelp_runtime_stub.lua` as `boot(store, world)`.
   *Proof:* `nohelp_area_runtime.lua` runs unchanged on the fixture.
-- [ ] **B2 Kill points K0 and K1:** before the area decision, and after its
+- [x] **B2 Kill points K0 and K1:** before the area decision, and after its
   clues are saved as waiting. After a reload and replay, the documents and
   leans match the uninterrupted ("golden") run, and the area count does not
   grow.
@@ -93,7 +93,9 @@ place a clue twice, or reveal the other theory's clue? The plan still owes a
   without a map read, the set of leans seen at each area is a subset of the
   golden run's set.
   *Proof:* one explicit assertion in the reload-guard test.
-- [ ] **B6 Double reload.** Reloading twice from one kill point, the second
+- [ ] **B6 Double reload.** Also: a reload inside an area's arrival ring re-queues its
+  placement job (`inRing` is reset at game start); prove this still places
+  each piece once (found by the B1/B2 review). Reloading twice from one kill point, the second
   time after items were placed, still leaves exactly one of each clue's
   pieces.
 - [ ] **B7 Kill at every Nth save** across a multi-area route borrowed from
@@ -182,6 +184,15 @@ place a clue twice, or reveal the other theory's clue? The plan still owes a
   writer's routine (handover §5).
 - [ ] **E4 Owner one-pager:** counts only, using C1's allowlist. The writer
   handoff §9 lists it as not built.
+
+## Found along the way (not in A-C)
+
+- Reloading re-labels as Evidence only the evidence the survivor carries
+  (`GeneratedRuntime.lua` restampEvidence); evidence dropped or stored in a
+  container may show as ordinary loot after a reload. Check in the real game.
+- The shared test stub models a full restart only; an in-session reopen of
+  the case store (the 2026-09-12 fault) keeps module state and is not
+  modelled.
 
 ## Open for the owner
 
