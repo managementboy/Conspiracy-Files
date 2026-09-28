@@ -1,0 +1,45 @@
+[
+  {
+    "id": "t0045-01",
+    "kind": "set",
+    "pieces": [
+      "HandTorch",
+      "Map"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "containment",
+        "rival": "agricultural"
+      }
+    ],
+    "anchor": {
+      "map": "IrvingtonStashMap6",
+      "mark": 1
+    },
+    "title": "Light for the careful",
+    "body": "The torch is set on a marked route beside a note to check each door before leaving. The last checked address has no time beside it.",
+    "rival_reading": "A field survey could use the same route and door check; the blank time does not show who left or why.",
+    "gloss": "A route check stops at an address without a recorded time.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "cites": {
+      "source": "map:IrvingtonStashMap6",
+      "quote": "stuff might be here"
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0045"
+    }
+  }
+]
