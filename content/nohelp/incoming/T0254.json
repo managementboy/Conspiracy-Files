@@ -1,0 +1,44 @@
+[
+  {
+    "id": "t0254-01",
+    "kind": "set",
+    "pieces": [
+      "Screwdriver",
+      "SheetPaper2"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "containment",
+        "rival": "agricultural"
+      }
+    ],
+    "anchor": {
+      "print": "AMZSteel"
+    },
+    "title": "Steel order not received",
+    "body": "The steel delivery slip says the order was received, but the loading dock tally has no matching truck. The inspection line is marked complete.",
+    "rival_reading": "A field project could receive materials at another entrance; the tally does not prove the shipment was lost.",
+    "gloss": "An inspection is complete while the delivery record has no truck.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "cites": {
+      "source": "print:AMZSteel",
+      "quote": "AMZ Steel"
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0254"
+    }
+  }
+]
