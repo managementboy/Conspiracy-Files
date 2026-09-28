@@ -40,7 +40,8 @@ steps that follow are what it does.
 4. Run `lua5.1 tools/cluegates/check_receipts.lua`. It reports, per clue,
    `NO_RECEIPT`, `BAD_RECEIPT`, `STALE_RECEIPT` (the text changed after the
    receipt: re-read it), `NEVER_RIVAL` (never read as the conspiracy it cuts
-   against: one-sided, return it to the writer) or `MOSTLY_NEITHER` (read as
+   against: one-sided, return it to the writer), `NEVER_OWN` (only ever read as its
+   rival: it supports the wrong side, return it) or `MOSTLY_NEITHER` (read as
    neither in more than half the runs: return it). A clue ships only with a
    valid receipt; the shipped test suite enforces this once the clue list is
    not empty.

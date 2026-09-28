@@ -238,6 +238,7 @@ not receive content (blind play).
 `PERSON_SPLIT`, `SET_RATIO`, `ANCHOR_UNKNOWN`, `ANCHOR_SPOT_MISMATCH`,
 `AXIOM_UNKNOWN`, `NO_RIVAL`, `STATES_SIGNIFICANCE`, `NOT_COLD_READABLE`,
 `VANILLA_REINTERPRETED`, `RETIRED_PREMISE`, `OFF_GLOSS`, `CLASSIFIER_STOP`,
+`NEVER_OWN` (the blind reader only ever read it as the rival conspiracy),
 `TONE` (misses section 2a: e.g. a flat report with no human detail),
 `DRIFT` (a batch read together repeats one template: the same human detail,
 the same institutional joke, the same spot).

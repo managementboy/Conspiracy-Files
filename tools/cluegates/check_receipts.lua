@@ -22,6 +22,8 @@
 --   STALE_RECEIPT     the clue's rendered text changed after its receipt
 --   NEVER_RIVAL       no run read it as a conspiracy it cuts against (its
 --                     `rival` in any of its places): it is one-sided
+--   NEVER_OWN         no run read it as its own lean in any of its places: a
+--                     clue read only as the rival supports the wrong side
 --   MOSTLY_NEITHER    more than half the runs read it as neither
 -- The last two are the handoff's "returned" rules for a blind re-read.
 package.path="mod-nohelp/common/media/lua/shared/?.lua;tools/nohelp_content/?.lua;tools/cluegates/?.lua;"..package.path
@@ -78,7 +80,12 @@ function M.check(clues,dir)
                 for _,w in ipairs(c.where or {}) do
                     if (byLetter[M.LETTER[w.rival]] or 0)<1 then rivalRead=false end
                 end
+                local ownRead=false
+                for _,w in ipairs(c.where or {}) do
+                    if (byLetter[M.LETTER[w.lean]] or 0)>=1 then ownRead=true end
+                end
                 if not rivalRead then report(c.id,"NEVER_RIVAL","never read as the conspiracy it cuts against")
+                elseif not ownRead then report(c.id,"NEVER_OWN","never read as its own conspiracy")
                 elseif n*2>runs then report(c.id,"MOSTLY_NEITHER","read as neither most of the time") end
             end
         end
