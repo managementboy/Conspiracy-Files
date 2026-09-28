@@ -1,0 +1,45 @@
+[
+  {
+    "id": "t0102-01",
+    "kind": "set",
+    "pieces": [
+      "PetrolCan",
+      "Pills"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "anchor": {
+      "map": "RiversideStashMap9",
+      "mark": 1
+    },
+    "title": "Fuel and a medicine request",
+    "body": "The fuel can is tagged for a medical pickup; the note says the driver stopped at the marked house after a field worker became ill.",
+    "rival_reading": "A containment crew could have carried medicine to a sick resident; the note does not explain the illness.",
+    "gloss": "A medical pickup follows a field worker’s illness, with the fuel stop recorded.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "cites": {
+      "source": "map:RiversideStashMap9",
+      "quote": "Ton's waiting for us here"
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0102"
+    }
+  }
+]
