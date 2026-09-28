@@ -195,6 +195,27 @@ place a clue twice, or reveal the other theory's clue? The plan still owes a
 - [ ] **E4 Owner one-pager:** counts only, using C1's allowlist. The writer
   handoff §9 lists it as not built.
 
+## Owner's code review, 2026-09-28
+
+`docs/reviews/CODE_REVIEW_NO_HELP_2026-09-28.md` on the `nohelp-content`
+branch (static review of `mod-nohelp/`). Both findings are confirmed on
+`nohelp-task3-plan` as well.
+
+- [ ] **R1 (F-01, P1) The version range claims too much.** `mod-nohelp/42/mod.info:6`
+  says `versionMin=42.0.0`; only Build 42.20.4 is verified. Set it to the
+  earliest version the evidence supports and keep packaging checks and release
+  notes consistent.
+- [ ] **R2 (F-02, P2) A failed vehicle scan is silent.** `Generated/Storage.lua:154-155`
+  wraps `addVehicles` in `pcall`, drops the error and reports a complete scan
+  without vehicles. Log it through the shared log, decide optional vs required
+  explicitly, and add a regression test.
+- [ ] **R3 (check) First-load cost** of the 3.8 MB fixed-container index data
+  (`Storage.lua:5` loads it eagerly): measure load time and memory on a fresh
+  save in the real game; split or defer it if it matters.
+- [ ] **R4 (check) A full play-through** with both mods installed: start, a
+  clue found, recognised, save and reload (the 2026-09-26 handoff says the
+  extracted mod was never played through).
+
 ## Hand-over, 2026-09-28 (session hit its limit mid-work)
 
 Done and pushed: A1 A2 B1 B2 B3 B4 B8 B9 C1 C2 C3 C5, E1, and a real bug fix
