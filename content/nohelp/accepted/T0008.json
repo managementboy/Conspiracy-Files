@@ -1,0 +1,38 @@
+[
+  {
+    "body": "The keyring is wrapped in the lunchbox's cloth lining. A chalk boundary crosses the lid; the ring is on the clean side and the meal on the dusty one.",
+    "id": "t0008-01",
+    "kind": "set",
+    "pieces": [
+      "Lunchbox",
+      "KeyRing"
+    ],
+    "title": "The keys stayed outside the marked floor",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "warehouse",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  },
+  {
+    "body": "The notebook rests across the bucket. Its page labels two strips “control — standing” and “trial spray — curled by noon.” The next line reads “mix still active after valve shut.”",
+    "id": "t0008-02",
+    "kind": "set",
+    "pieces": [
+      "Bucket",
+      "Notebook"
+    ],
+    "title": "The trial strip curled after spraying",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "warehouse",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  }
+]
