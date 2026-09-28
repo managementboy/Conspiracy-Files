@@ -1,0 +1,45 @@
+[
+  {
+    "id": "t0051-01",
+    "kind": "set",
+    "pieces": [
+      "Screwdriver",
+      "Notebook"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "containment",
+        "rival": "agricultural"
+      }
+    ],
+    "anchor": {
+      "map": "LouisvilleStashMap3",
+      "mark": 1
+    },
+    "title": "Tools left at school",
+    "body": "The janitor’s tool list marks the rear door repaired, but the key return is dated before the repair was finished.",
+    "rival_reading": "A repair crew could have borrowed the tools for program work; the mismatched return time does not say who had access.",
+    "gloss": "A school repair record returns a key before the listed job ends.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "cites": {
+      "source": "map:LouisvilleStashMap3",
+      "quote": "school"
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0051"
+    }
+  }
+]
