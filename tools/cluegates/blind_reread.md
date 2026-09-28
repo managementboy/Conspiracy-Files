@@ -11,10 +11,27 @@ Gemini or Llama model, or a Claude model with no access to this repository or
 conversation). The reader is given nothing but the prompt below and one clue.
 No lean, no rival reading, no gloss, no axioms, no anchor, no other clue.
 
+## Review sequence
+
+1. Run the converter check and the test suite for structural and game-rule
+   failures.
+2. Read the whole batch once for repeated wording, near-duplicates and
+   consistency across clues.
+3. Run one blind read per clue. The checker marks a mismatched or `NEITHER`
+   vote as `NEEDS_SECOND_READ`.
+4. For only those flagged clue ids, run a second fresh read. If the two votes
+   disagree, or both votes miss the declared lean, return that clue for
+   revision. Do not run more reads to try to obtain a passing vote.
+
 ## Scripted (use this)
 
-    tools/cluegates/blind_reread.sh                 # every clue without a current receipt
-    tools/cluegates/blind_reread.sh --rows <ticket>  # a draft, before converting
+    tools/cluegates/blind_reread.sh                 # each clue without a current receipt
+    tools/cluegates/blind_reread.sh --rows <ticket>  # draft rows, before converting
+    tools/cluegates/blind_reread.sh --force <id>     # add one fresh read for a flagged clue
+
+The default is one read. `--force` with selected ids appends one new vote to
+the existing receipt for the same text hash. Use it once per flagged clue;
+the checker rejects receipts with more than two votes.
 
 Haiku through the `claude` CLI, from an empty folder, no tools, no settings,
 and a fresh session for each read. Read every clue once; make a second
