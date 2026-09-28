@@ -54,7 +54,7 @@ local EVENTS={
     -- diagnostics the owner turns on deliberately
     probe=true,scan=true,
     -- content-blind state dump for playtests and bug reports
-    dump=true,
+    dump=true,dump_trigger=true,
 }
 
 -- Field order. Fixed so lines column-align to the eye and so a grep for a

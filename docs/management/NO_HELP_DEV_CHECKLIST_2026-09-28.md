@@ -142,15 +142,19 @@ place a clue twice, or reveal the other theory's clue? The plan still owes a
   refuse older saves.*
 - [x] **C3 Scene-wait histogram:** walking or driving by wait-length bucket,
   with no cell key and no scene kind (today's wait line carries both).
-- [ ] **C4 Autotest check `dump.sh`:** dump after warm-up and after a reload,
+- [x] **C4 Autotest check `dump.sh`:** dump after warm-up and after a reload,
   and diff the two (placements must not change across the reload). The lines
   are saved as evidence.
+  *Written 2026-09-28 as `tools/autotest/checks/nohelp_dump.sh` (comparison unit-tested
+  in plain Lua); its first real run in the game is part of D2.*
 - [x] **C5 Blind log mode:** existing lines the owner might quote go through
   the same allowlist. This covers the scene-wait `area=` and `kind=` fields,
   free-text decline reasons, and `R.devLocations` (ids and coordinates).
   *Proof:* the canary test is extended to these lines.
-- [ ] **C6 Owner trigger:** a debug-gated key or menu entry that writes the
+- [x] **C6 Owner trigger:** a debug-gated key or menu entry that writes the
   dump plus the mod and save-schema versions.
+  *Done as a right-click menu entry only (no key: a free key could not be verified
+  against vanilla bindings).*
 
 ## D. Real game (Linux machine, window visible; never `--hidden`)
 
