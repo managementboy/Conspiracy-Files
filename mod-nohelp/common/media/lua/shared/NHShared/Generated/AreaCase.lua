@@ -45,9 +45,12 @@ function M.docId(areaId,clueId,copyNumber)
 end
 
 function M.new(seed)
+    local clues={}
+    for _,lean in ipairs(Manifest.LEANS) do clues[lean]=0 end
     return {kind=M.KIND,schemaVersion=M.SCHEMA,caseId=M.CASE_ID,seed=seed,
         locations={},areas={},documents={},
-        ledger={areas={},world={},placed={}}}
+        ledger={areas={},world={},placed={}},
+        totals={areasDecided=0,clues=clues,short=0,bySource={}}}
 end
 
 -- A set's pieces as the engine's members, repeats folded into a quantity.
@@ -105,6 +108,39 @@ local function recount(case)
     return ledger
 end
 M.recount=recount
+
+-- Compute the Pick totals from areas and documents: areasDecided, clues per lean,
+-- short (count of areas that stopped below their number), and bySource (source -> count). O(areas + docs).
+local function computeTotals(case)
+    local totals={areasDecided=0,clues={},short=0,bySource={}}
+    for _,lean in ipairs(Manifest.LEANS) do totals.clues[lean]=0 end
+
+    -- Build scene-area set once.
+    local sceneAreas={}
+    for _,a in ipairs(case.areas or {}) do
+        if a.place=="scene" then sceneAreas[a.id]=true end
+    end
+
+    -- Count areas, short stops, and sources.
+    for _,a in ipairs(case.areas or {}) do
+        if a.place~="scene" then totals.areasDecided=totals.areasDecided+1 end
+        if a.short and a.short>0 then totals.short=totals.short+1 end
+        totals.bySource[a.source]=(totals.bySource[a.source] or 0)+1
+    end
+
+    -- Single pass over documents: count per area per lean, count totals.
+    for _,d in ipairs(case.documents or {}) do
+        if not sceneAreas[d.locationId] then
+            totals.clues[d.lean]=(totals.clues[d.lean] or 0)+1
+        end
+    end
+
+    return totals
+end
+-- No cap hits here: the cap is raised during development (NH-D4), and a saved
+-- count checked against a recount would refuse every older save once it
+-- changed. The playthrough harness reports how the cap behaves.
+M.computeTotals=computeTotals
 
 -- A PLACE VANILLA MAPS OR FLYERS MARK (task 3 plan, step 4; owner,
 -- 2026-09-27). It leans toward the conspiracy of the first map or flyer that
@@ -248,6 +284,7 @@ function M.decide(args)
     next.areas[#next.areas+1]={id=site.id,place=args.place,source=tostring(args.source or "nearby"),
         version=tostring(args.version),decidedHours=args.hours or 0,first=first,count=#picks,short=short,trail=trail}
     next.ledger=recount(next)
+    next.totals=computeTotals(next)
     return next,ids
 end
 
@@ -306,6 +343,7 @@ function M.decideScene(args)
         decidedHours=args.hours or 0,first=first,count=1,short=0,
         scene={key=args.key,kind=args.kind,anchor=row.anchor}}
     next.ledger=recount(next)
+    next.totals=computeTotals(next)
     return next,{doc.id}
 end
 
@@ -316,7 +354,7 @@ function M.validate(case)
     if case.schemaVersion~=M.SCHEMA or case.caseId~=M.CASE_ID then return false,"unsupported area case" end
     if not integer(case.seed) or case.seed<1 or case.seed>=2147483647 then return false,"invalid world seed" end
     for k in pairs(case) do
-        if not ({kind=1,schemaVersion=1,caseId=1,seed=1,locations=1,areas=1,documents=1,ledger=1})[k] then
+        if not ({kind=1,schemaVersion=1,caseId=1,seed=1,locations=1,areas=1,documents=1,ledger=1,totals=1})[k] then
             return false,"unknown area case field "..tostring(k)
         end
     end
@@ -463,6 +501,12 @@ function M.validate(case)
         end
     end
     if not same(recount(case),case.ledger) then return false,"the ledger does not match the clues" end
+    -- Totals validation: if present, must equal a recount (never drift).
+    -- Old records without totals are allowed (migration: compute on first write).
+    if case.totals~=nil then
+        local expected=computeTotals(case)
+        if not same(expected,case.totals) then return false,"the totals do not match the areas and documents" end
+    end
     return true
 end
 

@@ -29,6 +29,11 @@ M.FIELDS={
     queued_placement=true, queued_preparation=true, queued_identity=true,
     queued_relocation=true, queued_filler=true, queued_carrier=true,
     queued_tracking=true, queued_map_areas=true, queued_map_metadata=true, queued_other=true,
+    -- Scene waits by mode and bucket (no position, no scene kind)
+    walk_h0_1=true, walk_h1_6=true, walk_h6_24=true, walk_h24_plus=true,
+    drive_h0_1=true, drive_h1_6=true, drive_h6_24=true, drive_h24_plus=true,
+    -- Pick totals from case.totals (C2)
+    areasDecided=true, cluesContainment=true, cluesAgricultural=true, short=true,
     -- Metrics
     peakMs=true,  -- peak frame time (ms) as R.metrics reports it
     bytes=true,   -- record size in bytes
@@ -102,6 +107,34 @@ function M.build(root, metrics, bytes, saveValid)
 
     -- Mark if SaveBudget returned false (validation failed, not size limit).
     if saveValid==false then fields.saveInvalid=1 end
+
+    -- Scene waits (no position, no kind): copy from VanillaSceneRuntime if loaded.
+    pcall(function()
+        local VSR=require("NHShared/VanillaSceneRuntime")
+        if VSR and VSR.waitCounts then
+            local counts=VSR.waitCounts()
+            if counts and type(counts)=="table" then
+                for key, value in pairs(counts) do
+                    if type(value)=="number" and value>0 then fields[key]=value end
+                end
+            end
+        end
+    end)
+
+    -- Pick totals from case.totals (C2): areas decided and clues per lean.
+    if root.case and type(root.case)=="table" and root.case.totals and type(root.case.totals)=="table" then
+        local t=root.case.totals
+        if t.areasDecided and type(t.areasDecided)=="number" then fields.areasDecided=t.areasDecided end
+        if t.clues and type(t.clues)=="table" then
+            if t.clues.containment and type(t.clues.containment)=="number" then
+                fields.cluesContainment=t.clues.containment
+            end
+            if t.clues.agricultural and type(t.clues.agricultural)=="number" then
+                fields.cluesAgricultural=t.clues.agricultural
+            end
+        end
+        if t.short and type(t.short)=="number" and t.short>0 then fields.short=t.short end
+    end
 
     return fields
 end

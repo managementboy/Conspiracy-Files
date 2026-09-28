@@ -263,6 +263,20 @@ local function test_real_end_to_end()
         "pending count mismatch: dump="..tostring(dump_fields.pending).." store="..pending_count)
     assert((dump_fields.placed or 0)==placed_count,
         "placed count mismatch: dump="..tostring(dump_fields.placed).." store="..placed_count)
+
+    -- Verify Pick totals are in the dump and match root.case.totals (C2)
+    assert(dump_fields.areasDecided~=nil, "dump must have areasDecided")
+    assert(root.case and root.case.totals, "root must have case.totals")
+    assert(dump_fields.areasDecided==root.case.totals.areasDecided,
+        "areasDecided mismatch: dump="..tostring(dump_fields.areasDecided).." totals="..tostring(root.case.totals.areasDecided))
+    assert(dump_fields.cluesContainment~=nil, "dump must have cluesContainment")
+    assert(dump_fields.cluesContainment==root.case.totals.clues.containment,
+        "cluesContainment mismatch: dump="..tostring(dump_fields.cluesContainment).." totals="..tostring(root.case.totals.clues.containment))
+    assert(dump_fields.cluesAgricultural~=nil, "dump must have cluesAgricultural")
+    assert(dump_fields.cluesAgricultural==root.case.totals.clues.agricultural,
+        "cluesAgricultural mismatch: dump="..tostring(dump_fields.cluesAgricultural).." totals="..tostring(root.case.totals.clues.agricultural))
+    assert((dump_fields.short or 0)==root.case.totals.short,"short mismatch with the saved totals")
+    assert(dump_fields.areasDecided==root.case.totals.areasDecided,"areasDecided mismatch with the saved totals")
 end
 
 -- TEST 4: GATE OFF (4 modes)

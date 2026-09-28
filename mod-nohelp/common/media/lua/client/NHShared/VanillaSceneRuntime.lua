@@ -57,6 +57,8 @@ local allow,allowRead=nil,false
 local ticks=0
 local waiting={}     -- cell key -> world hours of the first look with traces
 local confirmed={}   -- cell key -> kind, this session (R.matchVehicle)
+local waitCounts={walk_h0_1=0,walk_h1_6=0,walk_h6_24=0,walk_h24_plus=0,
+                   drive_h0_1=0,drive_h1_6=0,drive_h6_24=0,drive_h24_plus=0}
 
 -- The same gate as the No Help runtime: single player only.
 local function enabled()
@@ -126,6 +128,16 @@ end
 local function distanceTo(s,x,y)
     if not s then return nil end
     return math.max(math.abs(s.x-x),math.abs(s.y-y))
+end
+local function recordWait(mode,hours)
+    if not mode or type(hours)~="number" or hours~=hours or hours<0 then return end
+    local bucket
+    if hours<1 then bucket="h0_1"
+    elseif hours<6 then bucket="h1_6"
+    elseif hours<24 then bucket="h6_24"
+    else bucket="h24_plus" end
+    local key=mode.."_"..bucket
+    if waitCounts[key]~=nil then waitCounts[key]=waitCounts[key]+1 end
 end
 
 -- One square's facts, as relevant tokens with where they were first seen.
@@ -226,8 +238,10 @@ local function finish(j)
         if ok then
             confirmed[key]=kind
             local started=waiting[j.key]
+            local hoursWaited=started and now-started or 0
+            recordWait(s and s.mode=="driving" and "drive" or "walk",hoursWaited)
             CFLog.write("i","scan",{why="scene-wait-end",area=key,kind=kind,
-                hours=string.format("%.2f",started and now-started or 0),
+                hours=string.format("%.2f",hoursWaited),
                 distance=distanceTo(s,x,y),mode=s and s.mode})
         else
             CFLog.write("d","skip",{case=key,why="scene-"..tostring(why)})
@@ -313,9 +327,20 @@ function R.matchVehicle(x,y,z)
     return kind and "scene:"..kind or nil
 end
 function R.flaggedCount() return nFlagged end
+function R.waitCounts()
+    return {walk_h0_1=waitCounts.walk_h0_1,walk_h1_6=waitCounts.walk_h1_6,
+            walk_h6_24=waitCounts.walk_h6_24,walk_h24_plus=waitCounts.walk_h24_plus,
+            drive_h0_1=waitCounts.drive_h0_1,drive_h1_6=waitCounts.drive_h1_6,
+            drive_h6_24=waitCounts.drive_h6_24,drive_h24_plus=waitCounts.drive_h24_plus}
+end
+function R._testRecordWait(mode,hours)
+    recordWait(mode,hours)
+end
 function R.reset()
     flagged,nFlagged,job,waiting,confirmed={},0,nil,{},{}
     allow,allowRead,ticks=nil,false,0
+    waitCounts={walk_h0_1=0,walk_h1_6=0,walk_h6_24=0,walk_h24_plus=0,
+                drive_h0_1=0,drive_h1_6=0,drive_h6_24=0,drive_h24_plus=0}
 end
 local Events_=require("NHShared/Events/EngineEvents")
 if Events and Events.LoadGridsquare then Events_.on("LoadGridsquare",onSquare) end

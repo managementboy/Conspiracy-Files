@@ -78,7 +78,7 @@ place a clue twice, or reveal the other theory's clue? The plan still owes a
   leans match the uninterrupted ("golden") run, and the area count does not
   grow.
   *Proof:* `test/nohelp_reload_guard.lua`.
-- [ ] **B3 Fake world and kill point K2** (after the spot is saved). From K2
+- [x] **B3 Fake world and kill point K2** (after the spot is saved). From K2
   on, the spot must be identical; before K2 it may legitimately differ. This
   makes "save the spot before 16 tiles" a checked rule. Each clue's pieces
   must exist exactly once in the world.
@@ -128,11 +128,16 @@ place a clue twice, or reveal the other theory's clue? The plan still owes a
   place names and site names are canary strings. It asserts that no canary,
   no coordinate-shaped pair and no word outside the list appears in the
   output.
-- [ ] **C2 Pick saves its own totals** (plan §4a: "read from Pick's own saved
+- [x] **C2 Pick saves its own totals** (plan §4a: "read from Pick's own saved
   totals, never recounted on the side"): areas decided, clues per lean by
   area size, cap hits, and stop reasons as codes.
   *Proof:* a Pick test; the dump shows them.
-- [ ] **C3 Scene-wait histogram:** walking or driving by wait-length bucket,
+  *Done 2026-09-28 as `case.totals` (areas decided, clues per lean, areas that
+  stopped short, areas by source), checked against a recount on every write; old
+  records gain it on their first write. Cap hits are NOT saved: the cap is raised
+  during development, and a saved count checked against a recount would then
+  refuse older saves.*
+- [x] **C3 Scene-wait histogram:** walking or driving by wait-length bucket,
   with no cell key and no scene kind (today's wait line carries both).
 - [ ] **C4 Autotest check `dump.sh`:** dump after warm-up and after a reload,
   and diff the two (placements must not change across the reload). The lines
