@@ -640,7 +640,7 @@ local function decideFrom(result)
                                 CFLog.write("d","skip",{case=site.id,place=place,why="area-empty"})
                             end
                         elseif ids~="decided" then
-                            log("area "..tostring(site.id).." ("..place..") not decided: "..tostring(ids))
+                            log("area "..tostring(site.id)..(NHShared.BlindLog and "" or " ("..place..")").." not decided: "..tostring(ids))
                         end
                     end
                 end
