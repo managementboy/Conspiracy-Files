@@ -1,0 +1,25 @@
+{
+  "t0056-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "third door down",
+      "source": "map:LouisvilleStashMap8"
+    },
+    "gloss": "A room is ventilated after supplies are opened, but their return is unrecorded.",
+    "prov": {
+      "batch": "T0056",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A response crew could have opened medical supplies and aired a room; the note does not identify what the bottles held."
+  }
+}

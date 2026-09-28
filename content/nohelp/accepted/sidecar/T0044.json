@@ -1,0 +1,25 @@
+{
+  "t0044-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "should be food here",
+      "source": "map:IrvingtonStashMap5"
+    },
+    "gloss": "A shift meal is saved while a garden delivery remains missing.",
+    "prov": {
+      "batch": "T0044",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "Emergency distribution could have interrupted a routine food delivery; the missing bag does not show why it failed."
+  }
+}

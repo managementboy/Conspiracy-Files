@@ -1,0 +1,24 @@
+[
+  {
+    "anchor": {
+      "map": "EkronStashMap4",
+      "mark": 1
+    },
+    "body": "The spare key is tagged for the address but the transfer sheet has no receiving signature. Someone has checked the box marked “delivered.”",
+    "id": "t0037-01",
+    "kind": "set",
+    "pieces": [
+      "KeyRing",
+      "SheetPaper2"
+    ],
+    "title": "Empty address line",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  }
+]

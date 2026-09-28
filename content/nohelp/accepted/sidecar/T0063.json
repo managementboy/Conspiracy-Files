@@ -1,0 +1,25 @@
+{
+  "t0063-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Whoever finds this, I was Natalie Sigmundsson",
+      "source": "map:LouisvilleStashMap15"
+    },
+    "gloss": "A secure-building handover is recorded before the key returns.",
+    "prov": {
+      "batch": "T0063",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A preservation team could have secured the room against any hazard; the form does not show who checked it."
+  }
+}

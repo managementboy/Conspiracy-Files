@@ -1,0 +1,24 @@
+[
+  {
+    "anchor": {
+      "map": "LouisvilleStashMap4",
+      "mark": 1
+    },
+    "body": "A sledge is marked for a station delivery while the fuel can is logged as empty before the driver’s return. The receipt leaves the destination blank.",
+    "id": "t0052-01",
+    "kind": "set",
+    "pieces": [
+      "Sledgehammer",
+      "PetrolCan"
+    ],
+    "title": "The stop at the station",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  }
+]

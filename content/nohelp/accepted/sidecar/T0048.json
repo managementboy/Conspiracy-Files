@@ -1,0 +1,25 @@
+{
+  "t0048-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "we can fortify here",
+      "source": "map:IrvingtonStashMap9"
+    },
+    "gloss": "A door is reinforced ahead of a treatment, with no return plan.",
+    "prov": {
+      "batch": "T0048",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A response crew might secure a building after any hazard; the timing of the treatment is not recorded."
+  }
+}

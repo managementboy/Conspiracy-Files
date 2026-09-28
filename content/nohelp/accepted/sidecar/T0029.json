@@ -1,0 +1,48 @@
+{
+  "t0029-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "one bite = death",
+      "source": "map:BBurgStashMap4"
+    },
+    "gloss": "A pickup record places transport at the gate before the household list was completed.",
+    "prov": {
+      "batch": "T0029",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "The same route could have moved field workers or supplies; an early vehicle mark does not identify its purpose."
+  },
+  "t0029-02": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "one bite = death",
+      "source": "map:BBurgStashMap4"
+    },
+    "gloss": "A family water warning follows a field crew rinse and leaves the source uncertain.",
+    "prov": {
+      "batch": "T0029",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A containment crew could have rinsed a trailer tank during cleanup; the warning does not establish what caused the danger."
+  }
+}

@@ -1,0 +1,24 @@
+[
+  {
+    "anchor": {
+      "map": "LouisvilleStashMap8",
+      "mark": 1
+    },
+    "body": "A packet of pills is paired with a note to keep the third room ventilated after the bottles are opened. The return line for the bottles is blank.",
+    "id": "t0056-01",
+    "kind": "set",
+    "pieces": [
+      "Pills",
+      "Notebook"
+    ],
+    "title": "Third door supply",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  }
+]

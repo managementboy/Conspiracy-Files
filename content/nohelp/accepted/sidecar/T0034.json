@@ -1,0 +1,25 @@
+{
+  "t0034-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "old factory",
+      "source": "map:EkronStashMap1"
+    },
+    "gloss": "A tool return predates the worker shift, leaving the equipment’s purpose unclear.",
+    "prov": {
+      "batch": "T0034",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A response crew could have checked shared tools during a closure; the early entry does not identify what the nozzle was used for."
+  }
+}

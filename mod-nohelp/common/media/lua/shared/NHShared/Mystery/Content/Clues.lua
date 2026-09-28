@@ -75,4 +75,91 @@ return {clues={
 -- T0024
 {id="t0024-01",kind="set",pieces={"SpeedingTicket","BeerBottle","Pencil"},where={{place="mapNamed",spot="ground",lean="containment",rival="agricultural"}},title="A citation after closing",body="The speeding citation is stamped after the access lane's closure; the beer at the gate is still sealed, and the appeal line says its driver was taking a child home.",anchor={print="IrvingtonSpeedway"}},
 {id="t0024-02",kind="written",pieces={"memo"},where={{place="mapNamed",spot="ground",lean="agricultural",rival="containment"}},title="The infield stays closed",body="Keep the infield closed until the pesticide trial dries. The first heat remains on the board, so the groundskeeper has to refund a child's ticket from his own coffee jar.",anchor={print="IrvingtonSpeedway"}},
+-- T0027
+{id="t0027-01",kind="set",pieces={"SheetPaper2","Pencil","KeyRing"},where={{place="mapNamed",spot="ground",lean="containment",rival="agricultural"}},title="The key return",body="A master key lies across a folded departure notice; the hall door was logged locked before the bus left, though a margin says it stood open. The custodian has underlined “return key” twice.",anchor={map="BBurgStashMap2",mark=1}},
+{id="t0027-02",kind="written",pieces={"letter"},where={{place="mapNamed",spot="ground",lean="agricultural",rival="containment"}},title="Before the beds dry",body="The caretaker says the grounds crew borrowed the kitchen sink for a rinse. Please keep the side room locked until the treated beds are dry; the folding chairs are still needed tomorrow.",anchor={map="BBurgStashMap2",mark=1}},
+-- T0028
+{id="t0028-01",kind="set",pieces={"EmptyJar","Pencil","SheetPaper2"},where={{place="mapNamed",spot="ground",lean="agricultural",rival="containment"}},title="The unfinished handoff",body="The kitchen jar sits beside a rinse note for the grounds crew; the fish order was cancelled on the same afternoon.",anchor={map="BBurgStashMap3",mark=1}},
+{id="t0028-02",kind="written",pieces={"receipt"},where={{place="mapNamed",spot="ground",lean="containment",rival="agricultural"}},title="Kept from the drawer",body="The repair ticket orders the front doors open for pickup, but the locksmith billed for cutting off the back lock. Tomorrow’s lunch count is still pencilled in.",anchor={map="BBurgStashMap3",mark=1}},
+-- T0029
+{id="t0029-01",kind="set",pieces={"SheetPaper2","Pencil","KeyRing"},where={{place="mapNamed",spot="ground",lean="containment",rival="agricultural"}},title="The unfinished handoff",body="The pickup card assigns each trailer a time, then records the vehicle at the gate before the first family is listed. The spare hitch key is still here.",anchor={map="BBurgStashMap4",mark=1}},
+{id="t0029-02",kind="written",pieces={"letter"},where={{place="mapNamed",spot="ground",lean="agricultural",rival="containment"}},title="Kept from the drawer",body="You said one bite was enough, so I marked the water barrel too. The field crew calls the rinse routine; I still will not let the dog drink until the tank is flushed.",anchor={map="BBurgStashMap4",mark=1}},
+-- T0030
+{id="t0030-01",kind="written",pieces={"receipt"},where={{place="mapNamed",spot="ground",lean="agricultural",rival="containment"}},title="The unfinished handoff",body="Do not sell the catch until the county finishes its water check. They called it routine, but the fish order is still in the icebox and the supplier wants payment.",anchor={map="BBurgStashMap5",mark=1}},
+{id="t0030-02",kind="set",pieces={"TinOpener","SheetPaper2","KeyRing"},where={{place="mapNamed",spot="ground",lean="containment",rival="agricultural"}},title="Kept from the drawer",body="The cold-room key is tied to a delivery slip marked received before the road closure. The sealed box is still listed as waiting at the storage units.",anchor={map="BBurgStashMap5",mark=1}},
+-- T0031
+{id="t0031-01",kind="written",pieces={"letter"},where={{place="mapNamed",spot="ground",lean="containment",rival="agricultural"}},title="The unfinished handoff",body="I left the spare key where you asked. The bus went past the property, but the office says our address was never on its pickup list. I thought you would come back for me.",anchor={map="BBurgStashMap6",mark=1}},
+{id="t0031-02",kind="set",pieces={"Notebook","Pencil","Teacup"},where={{place="mapNamed",spot="ground",lean="agricultural",rival="containment"}},title="Kept from the drawer",body="Two cups are set beside a test-day notebook. The only signed line is for the room key; a note asks that the sample page stay out of the household drawer.",anchor={map="BBurgStashMap6",mark=1}},
+-- T0032
+{id="t0032-01",kind="set",pieces={"BaseballBat","KeyRing","SheetPaper2"},where={{place="mapNamed",spot="ground",lean="containment",rival="agricultural"}},title="The unfinished handoff",body="The gate key is pinned under a closure notice dated after the guard shift ended. Someone wedged a bat across the latch from the inside.",anchor={map="BBurgStashMap7",mark=1}},
+{id="t0032-02",kind="written",pieces={"notepad"},where={{place="mapNamed",spot="ground",lean="agricultural",rival="containment"}},title="Kept from the drawer",body="Leave the canisters outside the fence until the grounds crew finishes the test. The gate was already locked when the delivery arrived; the return form charges us for the missing seal.",anchor={map="BBurgStashMap7",mark=1}},
+-- T0033
+{id="t0033-01",kind="set",pieces={"Notebook","KeyRing","WaterBottle"},where={{place="mapNamed",spot="ground",lean="containment",rival="agricultural"}},title="The unfinished handoff",body="Two keys are taped to separate collection times. A bottle marked for the passenger has no return mark, though the driver’s sheet says every seat was cleared.",anchor={map="BBurgStashMap8",mark=1}},
+{id="t0033-02",kind="written",pieces={"letter"},where={{place="mapNamed",spot="ground",lean="agricultural",rival="containment"}},title="Kept from the drawer",body="The room smells like the liquid from the field bottles, and Mom’s throat still hurts. I opened the window; the return truck says nothing spilled.",anchor={map="BBurgStashMap8",mark=1}},
+-- T0034
+{id="t0034-01",kind="set",pieces={"Screwdriver","SheetPaper2"},where={{place="mapNamed",spot="ground",lean="agricultural",rival="containment"}},title="Tool return",body="The factory tool sheet lists the sprayer nozzle as returned before the shift began; a grease thumbprint covers the signature.",anchor={map="EkronStashMap1",mark=1}},
+-- T0035
+{id="t0035-01",kind="set",pieces={"Potato","Notebook"},where={{place="mapNamed",spot="ground",lean="containment",rival="agricultural"}},title="The last crate",body="The vegetable crate has a delivery tag dated after the road was closed. A pencilled note asks whether the driver should still be charged for the trip.",anchor={map="EkronStashMap2",mark=1}},
+-- T0036
+{id="t0036-01",kind="set",pieces={"Bag_ALICEpack","Fertilizer"},where={{place="mapNamed",spot="ground",lean="agricultural",rival="containment"}},title="Goods kept apart",body="A fertilizer bag is tied shut inside a supply pack; the page tucked under it lists a return trip but no recipient.",anchor={map="EkronStashMap3",mark=1}},
+-- T0037
+{id="t0037-01",kind="set",pieces={"KeyRing","SheetPaper2"},where={{place="mapNamed",spot="ground",lean="containment",rival="agricultural"}},title="Empty address line",body="The spare key is tagged for the address but the transfer sheet has no receiving signature. Someone has checked the box marked “delivered.”",anchor={map="EkronStashMap4",mark=1}},
+-- T0038
+{id="t0038-01",kind="set",pieces={"Bandage","Notebook"},where={{place="mapNamed",spot="ground",lean="agricultural",rival="containment"}},title="Aid for the school",body="The school aid list pairs a bandage with a note to keep the test-room door shut; the last line asks who will collect the used kit.",anchor={map="EkronStashMap5",mark=1}},
+-- T0039
+{id="t0039-01",kind="set",pieces={"Bleach","WaterBottle"},where={{place="mapNamed",spot="ground",lean="containment",rival="agricultural"}},title="Advice by the sink",body="A bottle of bleach sits beside a copied warning and a water bottle with its cap still sealed. The note says the caller was told to wait for instructions.",anchor={map="EkronStashMap6",mark=1}},
+-- T0040
+{id="t0040-01",kind="set",pieces={"Map","Pencil"},where={{place="mapNamed",spot="ground",lean="agricultural",rival="containment"}},title="A route left open",body="The marked route has a pencilled return arrow but no destination name; a note beside it asks whether the field check is still happening.",anchor={map="EkronStashMap7",mark=1}},
+-- T0041
+{id="t0041-01",kind="set",pieces={"LetterHandwritten","KeyRing"},where={{place="mapNamed",spot="ground",lean="containment",rival="agricultural"}},title="The threat with a key",body="A house key is wrapped in a threatening note; the envelope has a return mark but no delivery mark.",anchor={map="IrvingtonStashMap2",mark=1}},
+-- T0042
+{id="t0042-01",kind="set",pieces={"WalkieTalkie1","SheetPaper2"},where={{place="mapNamed",spot="ground",lean="agricultural",rival="containment"}},title="Radio at the school",body="The school route slip tells the driver to radio before turning back; its attendance copy lists the field crew under “visitors.”",anchor={map="IrvingtonStashMap3",mark=1}},
+-- T0043
+{id="t0043-01",kind="set",pieces={"SheetPaper2","Pencil"},where={{place="mapNamed",spot="ground",lean="containment",rival="agricultural"}},title="A verse on the return",body="A copied verse about helping a wounded stranger is folded around an unpaid bar tab; the return slip marks the road pass as revoked.",anchor={map="IrvingtonStashMap4",mark=1}},
+-- T0044
+{id="t0044-01",kind="set",pieces={"Potato","KeyRing"},where={{place="mapNamed",spot="ground",lean="agricultural",rival="containment"}},title="Food left for later",body="A food bag is tied to the pantry key with a note to leave one portion for the next shift. The kitchen list says the garden delivery never arrived.",anchor={map="IrvingtonStashMap5",mark=1}},
+-- T0045
+{id="t0045-01",kind="set",pieces={"HandTorch","Map"},where={{place="mapNamed",spot="ground",lean="containment",rival="agricultural"}},title="Light for the careful",body="The torch is set on a marked route beside a note to check each door before leaving. The last checked address has no time beside it.",anchor={map="IrvingtonStashMap6",mark=1}},
+-- T0046
+{id="t0046-01",kind="set",pieces={"Notebook","SeedBag"},where={{place="mapNamed",spot="ground",lean="agricultural",rival="containment"}},title="Field notes without a heading",body="A seed packet rests in a notebook whose first page is missing; the only surviving line asks whether the plots were watered before the crew arrived.",anchor={map="IrvingtonStashMap7",mark=1}},
+-- T0047
+{id="t0047-01",kind="set",pieces={"BathTowel","KeyRing"},where={{place="mapNamed",spot="ground",lean="containment",rival="agricultural"}},title="The last clean towel",body="A laundry token is tied to the restaurant key, but the posted pickup list ends before the names marked “still here.”",anchor={map="IrvingtonStashMap8",mark=1}},
+-- T0048
+{id="t0048-01",kind="set",pieces={"Hammer","Nails"},where={{place="mapNamed",spot="ground",lean="agricultural",rival="containment"}},title="Fortification order",body="A hammer and unopened nails sit beside a note to brace the garden-side door before the next treatment. The note does not say who will return.",anchor={map="IrvingtonStashMap9",mark=1}},
+-- T0049
+{id="t0049-01",kind="set",pieces={"RadioBlack","KeyRing"},where={{place="mapNamed",spot="ground",lean="containment",rival="agricultural"}},title="We will stay reachable",body="A radio is packed with the house key and a note promising someone will remain at the marked address. The battery receipt is dated after the promised check-in.",anchor={map="IrvingtonStashMap10",mark=1}},
+-- T0050
+{id="t0050-01",kind="set",pieces={"Book","LetterHandwritten"},where={{place="mapNamed",spot="ground",lean="agricultural",rival="containment"}},title="A gift for the visit",body="A book is wrapped in a note asking someone to bring it on a family visit; the back mentions keeping the garden hose off the marked ground.",anchor={map="LouisvilleStashMap2",mark=1}},
+-- T0051
+{id="t0051-01",kind="set",pieces={"Screwdriver","Notebook"},where={{place="mapNamed",spot="ground",lean="containment",rival="agricultural"}},title="Tools left at school",body="The janitor’s tool list marks the rear door repaired, but the key return is dated before the repair was finished.",anchor={map="LouisvilleStashMap3",mark=1}},
+-- T0052
+{id="t0052-01",kind="set",pieces={"Sledgehammer","PetrolCan"},where={{place="mapNamed",spot="ground",lean="agricultural",rival="containment"}},title="The stop at the station",body="A sledge is marked for a station delivery while the fuel can is logged as empty before the driver’s return. The receipt leaves the destination blank.",anchor={map="LouisvilleStashMap4",mark=1}},
+-- T0053
+{id="t0053-01",kind="set",pieces={"Bag_Schoolbag","WaterBottle"},where={{place="mapNamed",spot="ground",lean="containment",rival="agricultural"}},title="A family moved on",body="A school bag and water bottle are listed for collection at the gym, but the driver marked the family transferred before the pickup time.",anchor={map="LouisvilleStashMap5",mark=1}},
+-- T0054
+{id="t0054-01",kind="set",pieces={"SeedBag","WaterBottle"},where={{place="mapNamed",spot="ground",lean="agricultural",rival="containment"}},title="Home plot notes",body="A seed bag is stored beside a water bottle labelled for the back plot; a note says to stop watering until the test results arrive.",anchor={map="LouisvilleStashMap6",mark=1}},
+-- T0055
+{id="t0055-01",kind="set",pieces={"KeyRing","SheetPaper2"},where={{place="mapNamed",spot="ground",lean="containment",rival="agricultural"}},title="Everything accounted for",body="The house key is clipped to a checklist that says the rooms were cleared; a note on the reverse asks who will collect the owner’s coat.",anchor={map="LouisvilleStashMap7",mark=1}},
+-- T0056
+{id="t0056-01",kind="set",pieces={"Pills","Notebook"},where={{place="mapNamed",spot="ground",lean="agricultural",rival="containment"}},title="Third door supply",body="A packet of pills is paired with a note to keep the third room ventilated after the bottles are opened. The return line for the bottles is blank.",anchor={map="LouisvilleStashMap8",mark=1}},
+-- T0057
+{id="t0057-01",kind="set",pieces={"HuntingRifle","CannedCorn"},where={{place="mapNamed",spot="ground",lean="containment",rival="agricultural"}},title="Stable stores",body="A food tin is tied to a stable key with a route note warning the next driver not to take the tree road. The return time is crossed out.",anchor={map="LouisvilleStashMap9",mark=1}},
+-- T0058
+{id="t0058-01",kind="set",pieces={"Bread","SheetPaper2"},where={{place="mapNamed",spot="ground",lean="agricultural",rival="containment"}},title="Food without a gun",body="A bread receipt is tucked inside a note asking the next visitor not to bring a crowd. The back lists a garden delivery that never reached the house.",anchor={map="LouisvilleStashMap10",mark=1}},
+-- T0059
+{id="t0059-01",kind="set",pieces={"KeyRing","Notebook"},where={{place="mapNamed",spot="ground",lean="containment",rival="agricultural"}},title="Storage access list",body="The storage key is attached to a list that marks the units empty, although a handwritten note asks for another count before the hospital run.",anchor={map="LouisvilleStashMap11",mark=1}},
+-- T0060
+{id="t0060-01",kind="set",pieces={"Pizza","WaterBottle"},where={{place="mapNamed",spot="ground",lean="agricultural",rival="containment"}},title="Food tent supply",body="The tent’s drink list includes water from the garden hose; a note says the hose was used to rinse equipment before the food shift.",anchor={map="LouisvilleStashMap12",mark=1}},
+-- T0061
+{id="t0061-01",kind="set",pieces={"Hammer","Garbagebag"},where={{place="mapNamed",spot="ground",lean="containment",rival="agricultural"}},title="Backyard clearing list",body="The house list calls the yards secure, but a tied garbage bag contains the last gate latch and a note to check behind each fence.",anchor={map="LouisvilleStashMap13",mark=1}},
+-- T0062
+{id="t0062-01",kind="set",pieces={"Nails","SheetPaper2"},where={{place="mapNamed",spot="ground",lean="agricultural",rival="containment"}},title="Half-hour repair",body="The plank receipt is stapled to a note asking everyone to stay outside until the treated boards dry. A radio call time is written beside “half hour.”",anchor={map="LouisvilleStashMap14",mark=1}},
+-- T0063
+{id="t0063-01",kind="set",pieces={"Book","KeyRing"},where={{place="mapNamed",spot="ground",lean="containment",rival="agricultural"}},title="The gallery key",body="The gallery key is wrapped in a request to protect the collection; the handover form says the building was secure before the key was returned.",anchor={map="LouisvilleStashMap15",mark=1}},
+-- T0064
+{id="t0064-01",kind="set",pieces={"Bag_Schoolbag","Map"},where={{place="mapNamed",spot="ground",lean="agricultural",rival="containment"}},title="Safe route south",body="A child’s bag is packed with a route note directing the family south; the same page warns them away from the treated street.",anchor={map="LouisvilleStashMap16",mark=1}},
+-- T0065
+{id="t0065-01",kind="set",pieces={"Pistol","SheetPaper2"},where={{place="mapNamed",spot="ground",lean="containment",rival="agricultural"}},title="Supplies at the store",body="A pistol is wrapped in a store receipt with a note to leave the remaining supplies for the next family. The collection time is earlier than the closure notice.",anchor={map="MarchRidgeStashMap2",mark=1}},
+-- T0066
+{id="t0066-01",kind="set",pieces={"Bread","Map"},where={{place="mapNamed",spot="ground",lean="agricultural",rival="containment"}},title="Last place on the route",body="A bakery receipt is tucked into a hunting route map; a note marks the last sighting beside a field-use date that was crossed out.",anchor={map="MarchRidgeStashMap3",mark=1}},
 }}

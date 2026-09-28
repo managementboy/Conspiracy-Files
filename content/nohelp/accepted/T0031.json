@@ -1,0 +1,46 @@
+[
+  {
+    "anchor": {
+      "map": "BBurgStashMap6",
+      "mark": 1
+    },
+    "body": "I left the spare key where you asked. The bus went past the property, but the office says our address was never on its pickup list. I thought you would come back for me.",
+    "id": "t0031-01",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "title": "The unfinished handoff",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "BBurgStashMap6",
+      "mark": 1
+    },
+    "body": "Two cups are set beside a test-day notebook. The only signed line is for the room key; a note asks that the sample page stay out of the household drawer.",
+    "id": "t0031-02",
+    "kind": "set",
+    "pieces": [
+      "Notebook",
+      "Pencil",
+      "Teacup"
+    ],
+    "title": "Kept from the drawer",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  }
+]

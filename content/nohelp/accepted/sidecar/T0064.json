@@ -1,0 +1,25 @@
+{
+  "t0064-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "this whole street is dangerous",
+      "source": "map:LouisvilleStashMap16"
+    },
+    "gloss": "A family route avoids a street marked for treatment.",
+    "prov": {
+      "batch": "T0064",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "Officials could have rerouted families around a hazardous road; the note does not identify the source of the restriction."
+  }
+}

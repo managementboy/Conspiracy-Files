@@ -1,0 +1,24 @@
+[
+  {
+    "anchor": {
+      "map": "LouisvilleStashMap7",
+      "mark": 1
+    },
+    "body": "The house key is clipped to a checklist that says the rooms were cleared; a note on the reverse asks who will collect the owner’s coat.",
+    "id": "t0055-01",
+    "kind": "set",
+    "pieces": [
+      "KeyRing",
+      "SheetPaper2"
+    ],
+    "title": "Everything accounted for",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  }
+]

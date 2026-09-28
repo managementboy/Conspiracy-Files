@@ -30,46 +30,46 @@ T0023	MAP	print:CircuitalHealing	accepted	0	2026-09-28	2026-09-28
 T0024	MAP	print:IrvingtonSpeedway	accepted	0	2026-09-28	2026-09-28
 T0025	STAGE0	glosses:T0020-T0024	accepted	0	2026-09-28	2026-09-28
 T0026	STAGE0	glosses:T0027-T0066	accepted	0	2026-09-28	2026-09-28
-T0027	MAP	map:BBurgStashMap2	open	0	2026-09-28	
-T0028	MAP	map:BBurgStashMap3	open	0	2026-09-28	
-T0029	MAP	map:BBurgStashMap4	open	0	2026-09-28	
-T0030	MAP	map:BBurgStashMap5	open	0	2026-09-28	
-T0031	MAP	map:BBurgStashMap6	open	0	2026-09-28	
-T0032	MAP	map:BBurgStashMap7	open	0	2026-09-28	
-T0033	MAP	map:BBurgStashMap8	open	0	2026-09-28	
-T0034	MAP	map:EkronStashMap1	open	0	2026-09-28	
-T0035	MAP	map:EkronStashMap2	open	0	2026-09-28	
-T0036	MAP	map:EkronStashMap3	open	0	2026-09-28	
-T0037	MAP	map:EkronStashMap4	open	0	2026-09-28	
-T0038	MAP	map:EkronStashMap5	open	0	2026-09-28	
-T0039	MAP	map:EkronStashMap6	open	0	2026-09-28	
-T0040	MAP	map:EkronStashMap7	open	0	2026-09-28	
-T0041	MAP	map:IrvingtonStashMap2	open	0	2026-09-28	
-T0042	MAP	map:IrvingtonStashMap3	open	0	2026-09-28	
-T0043	MAP	map:IrvingtonStashMap4	open	0	2026-09-28	
-T0044	MAP	map:IrvingtonStashMap5	open	0	2026-09-28	
-T0045	MAP	map:IrvingtonStashMap6	open	0	2026-09-28	
-T0046	MAP	map:IrvingtonStashMap7	open	0	2026-09-28	
-T0047	MAP	map:IrvingtonStashMap8	open	0	2026-09-28	
-T0048	MAP	map:IrvingtonStashMap9	open	0	2026-09-28	
-T0049	MAP	map:IrvingtonStashMap10	open	0	2026-09-28	
-T0050	MAP	map:LouisvilleStashMap2	open	0	2026-09-28	
-T0051	MAP	map:LouisvilleStashMap3	open	0	2026-09-28	
-T0052	MAP	map:LouisvilleStashMap4	open	0	2026-09-28	
-T0053	MAP	map:LouisvilleStashMap5	open	0	2026-09-28	
-T0054	MAP	map:LouisvilleStashMap6	open	0	2026-09-28	
-T0055	MAP	map:LouisvilleStashMap7	open	0	2026-09-28	
-T0056	MAP	map:LouisvilleStashMap8	open	0	2026-09-28	
-T0057	MAP	map:LouisvilleStashMap9	open	0	2026-09-28	
-T0058	MAP	map:LouisvilleStashMap10	open	0	2026-09-28	
-T0059	MAP	map:LouisvilleStashMap11	open	0	2026-09-28	
-T0060	MAP	map:LouisvilleStashMap12	open	0	2026-09-28	
-T0061	MAP	map:LouisvilleStashMap13	open	0	2026-09-28	
-T0062	MAP	map:LouisvilleStashMap14	open	0	2026-09-28	
-T0063	MAP	map:LouisvilleStashMap15	open	0	2026-09-28	
-T0064	MAP	map:LouisvilleStashMap16	open	0	2026-09-28	
-T0065	MAP	map:MarchRidgeStashMap2	open	0	2026-09-28	
-T0066	MAP	map:MarchRidgeStashMap3	open	0	2026-09-28	
+T0027	MAP	map:BBurgStashMap2	accepted	0	2026-09-28	2026-09-28
+T0028	MAP	map:BBurgStashMap3	accepted	0	2026-09-28	2026-09-28
+T0029	MAP	map:BBurgStashMap4	accepted	0	2026-09-28	2026-09-28
+T0030	MAP	map:BBurgStashMap5	accepted	0	2026-09-28	2026-09-28
+T0031	MAP	map:BBurgStashMap6	accepted	0	2026-09-28	2026-09-28
+T0032	MAP	map:BBurgStashMap7	accepted	0	2026-09-28	2026-09-28
+T0033	MAP	map:BBurgStashMap8	accepted	0	2026-09-28	2026-09-28
+T0034	MAP	map:EkronStashMap1	accepted	0	2026-09-28	2026-09-28
+T0035	MAP	map:EkronStashMap2	accepted	0	2026-09-28	2026-09-28
+T0036	MAP	map:EkronStashMap3	accepted	0	2026-09-28	2026-09-28
+T0037	MAP	map:EkronStashMap4	accepted	0	2026-09-28	2026-09-28
+T0038	MAP	map:EkronStashMap5	accepted	0	2026-09-28	2026-09-28
+T0039	MAP	map:EkronStashMap6	accepted	0	2026-09-28	2026-09-28
+T0040	MAP	map:EkronStashMap7	accepted	0	2026-09-28	2026-09-28
+T0041	MAP	map:IrvingtonStashMap2	accepted	0	2026-09-28	2026-09-28
+T0042	MAP	map:IrvingtonStashMap3	accepted	0	2026-09-28	2026-09-28
+T0043	MAP	map:IrvingtonStashMap4	accepted	0	2026-09-28	2026-09-28
+T0044	MAP	map:IrvingtonStashMap5	accepted	0	2026-09-28	2026-09-28
+T0045	MAP	map:IrvingtonStashMap6	accepted	0	2026-09-28	2026-09-28
+T0046	MAP	map:IrvingtonStashMap7	accepted	0	2026-09-28	2026-09-28
+T0047	MAP	map:IrvingtonStashMap8	accepted	0	2026-09-28	2026-09-28
+T0048	MAP	map:IrvingtonStashMap9	accepted	0	2026-09-28	2026-09-28
+T0049	MAP	map:IrvingtonStashMap10	accepted	0	2026-09-28	2026-09-28
+T0050	MAP	map:LouisvilleStashMap2	accepted	0	2026-09-28	2026-09-28
+T0051	MAP	map:LouisvilleStashMap3	accepted	0	2026-09-28	2026-09-28
+T0052	MAP	map:LouisvilleStashMap4	accepted	0	2026-09-28	2026-09-28
+T0053	MAP	map:LouisvilleStashMap5	accepted	0	2026-09-28	2026-09-28
+T0054	MAP	map:LouisvilleStashMap6	accepted	0	2026-09-28	2026-09-28
+T0055	MAP	map:LouisvilleStashMap7	accepted	0	2026-09-28	2026-09-28
+T0056	MAP	map:LouisvilleStashMap8	accepted	0	2026-09-28	2026-09-28
+T0057	MAP	map:LouisvilleStashMap9	accepted	0	2026-09-28	2026-09-28
+T0058	MAP	map:LouisvilleStashMap10	accepted	0	2026-09-28	2026-09-28
+T0059	MAP	map:LouisvilleStashMap11	accepted	0	2026-09-28	2026-09-28
+T0060	MAP	map:LouisvilleStashMap12	accepted	0	2026-09-28	2026-09-28
+T0061	MAP	map:LouisvilleStashMap13	accepted	0	2026-09-28	2026-09-28
+T0062	MAP	map:LouisvilleStashMap14	accepted	0	2026-09-28	2026-09-28
+T0063	MAP	map:LouisvilleStashMap15	accepted	0	2026-09-28	2026-09-28
+T0064	MAP	map:LouisvilleStashMap16	accepted	0	2026-09-28	2026-09-28
+T0065	MAP	map:MarchRidgeStashMap2	accepted	0	2026-09-28	2026-09-28
+T0066	MAP	map:MarchRidgeStashMap3	accepted	0	2026-09-28	2026-09-28
 T0067	STAGE0	glosses:T0068-T0107	open	0	2026-09-28	
 T0068	MAP	map:MarchRidgeStashMap4	open	0	2026-09-28	
 T0069	MAP	map:MarchRidgeStashMap5	open	0	2026-09-28	

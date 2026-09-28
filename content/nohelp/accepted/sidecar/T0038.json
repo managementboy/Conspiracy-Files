@@ -1,0 +1,25 @@
+{
+  "t0038-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "school",
+      "source": "map:EkronStashMap5"
+    },
+    "gloss": "A school aid record links a closed room to an unclaimed used kit.",
+    "prov": {
+      "batch": "T0038",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A response team could have isolated an aid room after exposure from many causes; the list does not identify the hazard."
+  }
+}

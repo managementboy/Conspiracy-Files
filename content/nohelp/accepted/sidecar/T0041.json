@@ -1,0 +1,25 @@
+{
+  "t0041-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "I know where you live",
+      "source": "map:IrvingtonStashMap2"
+    },
+    "gloss": "A threatening message was prepared with a key but lacks proof it reached its recipient.",
+    "prov": {
+      "batch": "T0041",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A private dispute could explain both objects without any official action; the missing delivery mark does not identify the sender."
+  }
+}

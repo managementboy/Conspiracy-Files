@@ -1,0 +1,46 @@
+[
+  {
+    "anchor": {
+      "map": "BBurgStashMap2",
+      "mark": 1
+    },
+    "body": "A master key lies across a folded departure notice; the hall door was logged locked before the bus left, though a margin says it stood open. The custodian has underlined “return key” twice.",
+    "id": "t0027-01",
+    "kind": "set",
+    "pieces": [
+      "SheetPaper2",
+      "Pencil",
+      "KeyRing"
+    ],
+    "title": "The key return",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "BBurgStashMap2",
+      "mark": 1
+    },
+    "body": "The caretaker says the grounds crew borrowed the kitchen sink for a rinse. Please keep the side room locked until the treated beds are dry; the folding chairs are still needed tomorrow.",
+    "id": "t0027-02",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "title": "Before the beds dry",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  }
+]

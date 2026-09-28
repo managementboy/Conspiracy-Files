@@ -1,0 +1,25 @@
+{
+  "t0052-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "don't bother",
+      "source": "map:LouisvilleStashMap4"
+    },
+    "gloss": "A station delivery and fuel record disagree about the trip’s destination.",
+    "prov": {
+      "batch": "T0052",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "An emergency detour could consume fuel and delay a tool delivery; the blank destination does not establish a test route."
+  }
+}

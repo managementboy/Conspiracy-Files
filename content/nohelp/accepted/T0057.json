@@ -1,0 +1,24 @@
+[
+  {
+    "anchor": {
+      "map": "LouisvilleStashMap9",
+      "mark": 1
+    },
+    "body": "A food tin is tied to a stable key with a route note warning the next driver not to take the tree road. The return time is crossed out.",
+    "id": "t0057-01",
+    "kind": "set",
+    "pieces": [
+      "HuntingRifle",
+      "CannedCorn"
+    ],
+    "title": "Stable stores",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  }
+]

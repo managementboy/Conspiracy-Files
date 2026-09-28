@@ -1,0 +1,24 @@
+[
+  {
+    "anchor": {
+      "map": "IrvingtonStashMap2",
+      "mark": 1
+    },
+    "body": "A house key is wrapped in a threatening note; the envelope has a return mark but no delivery mark.",
+    "id": "t0041-01",
+    "kind": "set",
+    "pieces": [
+      "LetterHandwritten",
+      "KeyRing"
+    ],
+    "title": "The threat with a key",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  }
+]

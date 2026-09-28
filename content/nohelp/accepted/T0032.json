@@ -1,0 +1,46 @@
+[
+  {
+    "anchor": {
+      "map": "BBurgStashMap7",
+      "mark": 1
+    },
+    "body": "The gate key is pinned under a closure notice dated after the guard shift ended. Someone wedged a bat across the latch from the inside.",
+    "id": "t0032-01",
+    "kind": "set",
+    "pieces": [
+      "BaseballBat",
+      "KeyRing",
+      "SheetPaper2"
+    ],
+    "title": "The unfinished handoff",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "BBurgStashMap7",
+      "mark": 1
+    },
+    "body": "Leave the canisters outside the fence until the grounds crew finishes the test. The gate was already locked when the delivery arrived; the return form charges us for the missing seal.",
+    "id": "t0032-02",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "Kept from the drawer",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  }
+]

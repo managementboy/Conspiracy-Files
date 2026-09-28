@@ -348,4 +348,8 @@ Fix the pattern, not just the row.
 - **T0023 rewrite** (delivered after the rule change; owner chose it over
   the original): only title and text changed on the reworked clue; read
   once, A; it replaces the original in the game.
+- **T0027-T0066** (reviewed while the writer continues, owner: no waiting):
+  converter check and suite green; read-through consistent (a key or a blank
+  return line still recurs in about half); one read each, 47 clues: 21 A,
+  10 B, 16 both, 0 none. All added (95 clues in the game).
 

@@ -1,0 +1,25 @@
+{
+  "t0059-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "unlooted",
+      "source": "map:LouisvilleStashMap11"
+    },
+    "gloss": "A storage inventory says empty while a second count is still requested.",
+    "prov": {
+      "batch": "T0059",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A supply clerk could have requested a recount before a field transfer; the list does not say who was inside."
+  }
+}

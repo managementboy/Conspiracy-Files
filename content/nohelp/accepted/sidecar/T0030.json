@@ -1,0 +1,48 @@
+{
+  "t0030-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "catfish restaurant",
+      "source": "map:BBurgStashMap5"
+    },
+    "gloss": "A restaurant order remains unpaid while a routine water check delays the catch.",
+    "prov": {
+      "batch": "T0030",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "Officials could have restricted food during an emergency; the note never says what the water check was looking for."
+  },
+  "t0030-02": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "catfish restaurant",
+      "source": "map:BBurgStashMap5"
+    },
+    "gloss": "A delivery record marks goods received before access closed, while the box remains uncollected.",
+    "prov": {
+      "batch": "T0030",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A shipment of field supplies could have been delayed or misrouted; the paperwork does not identify the cargo."
+  }
+}

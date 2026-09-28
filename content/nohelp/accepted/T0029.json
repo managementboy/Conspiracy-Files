@@ -1,0 +1,46 @@
+[
+  {
+    "anchor": {
+      "map": "BBurgStashMap4",
+      "mark": 1
+    },
+    "body": "The pickup card assigns each trailer a time, then records the vehicle at the gate before the first family is listed. The spare hitch key is still here.",
+    "id": "t0029-01",
+    "kind": "set",
+    "pieces": [
+      "SheetPaper2",
+      "Pencil",
+      "KeyRing"
+    ],
+    "title": "The unfinished handoff",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "BBurgStashMap4",
+      "mark": 1
+    },
+    "body": "You said one bite was enough, so I marked the water barrel too. The field crew calls the rinse routine; I still will not let the dog drink until the tank is flushed.",
+    "id": "t0029-02",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "title": "Kept from the drawer",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  }
+]

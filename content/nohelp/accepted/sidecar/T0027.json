@@ -1,0 +1,48 @@
+{
+  "t0027-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "community center",
+      "source": "map:BBurgStashMap2"
+    },
+    "gloss": "A hall key and departure record disagree about whether the building was secured before transport left.",
+    "prov": {
+      "batch": "T0027",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A program crew could have used the hall and its transport during ordinary field work; the contradictory door note does not say why the bus left."
+  },
+  "t0027-02": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-malfunction"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "community center",
+      "source": "map:BBurgStashMap2"
+    },
+    "gloss": "A caretaker's request links a grounds crew, rinsed equipment, and a temporary room restriction.",
+    "prov": {
+      "batch": "T0027",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A response crew could have rinsed equipment and restricted access after an emergency; the note never identifies what treatment reached the grounds."
+  }
+}

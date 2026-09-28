@@ -1,0 +1,48 @@
+{
+  "t0033-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Mom was sick",
+      "source": "map:BBurgStashMap8"
+    },
+    "gloss": "A passenger’s bottle is left behind despite a completed seat record.",
+    "prov": {
+      "batch": "T0033",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A household move or field visit could explain the keys and bottle; the completed seat sheet does not prove an evacuation failed."
+  },
+  "t0033-02": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Mom was sick",
+      "source": "map:BBurgStashMap8"
+    },
+    "gloss": "A family member links a lingering illness to a field bottle smell, while a return note denies a spill.",
+    "prov": {
+      "batch": "T0033",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A cleanup crew may have used disinfectant after an emergency; the letter does not establish what liquid caused the irritation."
+  }
+}
