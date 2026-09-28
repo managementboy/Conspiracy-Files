@@ -1,0 +1,45 @@
+[
+  {
+    "id": "t0040-01",
+    "kind": "set",
+    "pieces": [
+      "Map",
+      "Pencil"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "anchor": {
+      "map": "EkronStashMap7",
+      "mark": 1
+    },
+    "title": "A route left open",
+    "body": "The marked route has a pencilled return arrow but no destination name; a note beside it asks whether the field check is still happening.",
+    "rival_reading": "An emergency route could have been revised the same way; the missing destination leaves the reason for the check open.",
+    "gloss": "A field check is pencilled onto an incomplete route.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "cites": {
+      "source": "map:EkronStashMap7",
+      "quote": "ekron"
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0040"
+    }
+  }
+]
