@@ -1,0 +1,44 @@
+[
+  {
+    "id": "t0189-01",
+    "kind": "set",
+    "pieces": [
+      "Notebook",
+      "KeyRing"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "anchor": {
+      "print": "KnoxBankJobAdRosewood"
+    },
+    "title": "The teller position",
+    "body": "A bank hiring form is attached to a field-use roster; the teller’s start date is written before the training room was cleared.",
+    "rival_reading": "An emergency office could train staff before reopening; the roster does not identify the field use.",
+    "gloss": "A teller start date precedes the room clearance.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "cites": {
+      "source": "print:KnoxBankJobAdRosewood",
+      "quote": "Knox Bank Job Ad (Rosewood)"
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0189"
+    }
+  }
+]
