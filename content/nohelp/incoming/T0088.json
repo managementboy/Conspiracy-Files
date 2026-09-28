@@ -1,0 +1,45 @@
+[
+  {
+    "id": "t0088-01",
+    "kind": "set",
+    "pieces": [
+      "Hammer",
+      "Nails"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "anchor": {
+      "map": "MulStashMap14",
+      "mark": 1
+    },
+    "title": "Barricade by the quiet house",
+    "body": "A hammer and nails are wrapped in a note asking the next crew not to enter until the treated perimeter is dry. A neighbor’s name is replaced by “wait.”",
+    "rival_reading": "Containment staff could have treated a perimeter during cleanup; the note does not identify the material.",
+    "gloss": "A perimeter treatment delays a planned visit, leaving the contact unnamed.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "cites": {
+      "source": "map:MulStashMap14",
+      "quote": "safest house - barricade"
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0088"
+    }
+  }
+]
