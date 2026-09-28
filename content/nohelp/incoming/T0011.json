@@ -5,9 +5,6 @@
     "pieces": [
       "idcard"
     ],
-    "person": "person-b",
-    "title": "Temporary message runner card",
-    "body": "County notices, office to road crews. Expiry box left blank. Reverse: “Please bring the blue cup back; it was my sister’s.”",
     "where": [
       {
         "place": "office",
@@ -16,8 +13,10 @@
         "rival": "agricultural"
       }
     ],
-    "rival_reading": "An agricultural office could use a courier for field notices and leave an expiry blank during a busy period; the personal reminder does not prove containment failed.",
-    "gloss": "A courier card covers road notices but leaves its expiry unresolved, with a small family reminder.",
+    "title": "County message runner card",
+    "body": "Delivery: office to road crews. Return copy expected when access resumes. Reverse: “Please bring the chipped blue cup back; it was my sister's.”",
+    "rival_reading": "A farm program could use an office runner for field notices; a return copy and family note do not show that containment failed.",
+    "gloss": "A runner's card keeps a personal request beside an official route.",
     "axioms": {
       "containment": [
         "c-warning",
@@ -32,7 +31,8 @@
       "writer": "ChatGPT",
       "handoff": "2026-09-27",
       "batch": "T0011"
-    }
+    },
+    "person": "person-b"
   },
   {
     "id": "t0011-02",
@@ -41,9 +41,6 @@
       "Clipboard",
       "KeyRing"
     ],
-    "person": "person-b",
-    "title": "The clip shut around the key ring",
-    "body": "The clipboard clip is bent around the keyring. One key is freshly cut, but dust fills its teeth; a short red thread ties the ring to the clip, too short to wear.",
     "where": [
       {
         "place": "office",
@@ -52,8 +49,10 @@
         "rival": "agricultural"
       }
     ],
-    "rival_reading": "A field courier could bind a work key to a clipboard to keep it from being lost; the unused key and thread need not indicate an abandoned containment task.",
-    "gloss": "A new key is secured to a clipboard in a way that suggests someone expected to carry both.",
+    "title": "The clipboard held the only spare",
+    "body": "A keyring is fastened beneath the clipboard clip. Its tag is worn smooth; the page above it has two pencil holes and no writing.",
+    "rival_reading": "A field courier could secure a site key to a blank clipboard before a handoff; the empty page does not prove anyone was left without instructions.",
+    "gloss": "An access key is attached to a page that was never filled in.",
     "axioms": {
       "containment": [
         "c-orders",
@@ -68,6 +67,7 @@
       "writer": "ChatGPT",
       "handoff": "2026-09-27",
       "batch": "T0011"
-    }
+    },
+    "person": "person-b"
   }
 ]

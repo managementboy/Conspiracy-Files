@@ -1,0 +1,85 @@
+[
+  {
+    "id": "t0014-01",
+    "kind": "set",
+    "pieces": [
+      "Screwdriver",
+      "RubberBand"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "title": "The tire offer marked on a tool handle",
+    "body": "A rubber band holds a service slip to the screwdriver. Four circles are drawn beside one wheel sketch; only the outer groove is filled with dark dust.",
+    "rival_reading": "A road crew could inspect tires after a closure and keep a service slip with its tools; the dust does not identify where it came from.",
+    "gloss": "A tire drawing and dark groove residue accompany a repair tool.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0014"
+    },
+    "anchor": {
+      "print": "AmericanTire"
+    },
+    "cites": {
+      "source": "print:AmericanTire",
+      "quote": "south of Iroquois Park"
+    }
+  },
+  {
+    "id": "t0014-02",
+    "kind": "written",
+    "pieces": [
+      "receipt"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "containment",
+        "rival": "agricultural"
+      }
+    ],
+    "title": "The service receipt for the unreturned wheel",
+    "body": "Four tires are listed on the receipt. Three grease circles appear on the reverse; a small note asks that the smoothest one be saved for a child's bicycle.",
+    "rival_reading": "A farm delivery or ordinary repair could account for a missing tire mark; the receipt does not say that officials concealed an accident.",
+    "gloss": "A tire receipt has one unmatched mark and a private request.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-accounting"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-obscured"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0014"
+    },
+    "anchor": {
+      "print": "AmericanTire"
+    },
+    "cites": {
+      "source": "print:AmericanTire",
+      "quote": "Show this flyer at our outlet"
+    }
+  }
+]
