@@ -1,0 +1,44 @@
+[
+  {
+    "id": "t0264-01",
+    "kind": "set",
+    "pieces": [
+      "Pistol",
+      "Pistol2"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "containment",
+        "rival": "agricultural"
+      }
+    ],
+    "anchor": {
+      "print": "GunsUnlimitedEchoCreek"
+    },
+    "title": "The missing ammunition count",
+    "body": "The sales ledger lists a firearm transfer complete, but the return count for ammunition is blank. The range receipt is dated the next day.",
+    "rival_reading": "A field crew could borrow equipment and return it later; the ledger does not say who authorized the transfer.",
+    "gloss": "A firearm transfer closes before its ammunition is counted.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "cites": {
+      "source": "print:GunsUnlimitedEchoCreek",
+      "quote": "Guns Unlimited (Echo Creek)"
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0264"
+    }
+  }
+]
