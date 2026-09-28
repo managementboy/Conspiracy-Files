@@ -1,43 +1,43 @@
 # Static Code Review — Conspiracy Files: No Help
 
-**Reviewed:** 2026-09-28  
+**Re-reviewed:** 2026-09-28  
 **Repository:** `managementboy/Conspiracy-Files`  
-**Branch / revision:** `nohelp-content` at `8581a1fbe5d553db4881cd9c45819debda6df258`  
-**Scope:** `mod-nohelp/` runtime/package metadata, with the current project state and No Help handoff used as evidence. This is a focused static review, not a line-by-line audit of all 3,425 tracked files.
+**Branch / revision:** `nohelp-content` at `4c9c640854bbe2b175ab87ebcad3bdbf6f850be7`  
+**Changes reviewed:** Claude's `nohelp-task3-plan` branch, merged through PR #38, plus the earlier static review.  
+**Scope:** `mod-nohelp/` runtime/package metadata and the tests/checklist added with this merge. Focused review, not a line-by-line audit of all 3,425 tracked files.
 
 ## Findings
 
-### F-01 — The package advertises Build 42.0.0 compatibility without evidence for that range
+### F-01 — Package compatibility range was broader than verified — RESOLVED
 
-**Severity: P1 — compatibility / release blocker**
+Claude changed both `mod-nohelp/42/mod.info` and `mod/42/mod.info` to `versionMin=42.20.4`. `test/nohelp_mod_info.lua` ties both values to the verified build recorded in `PROJECT_STATE.md`. The earlier package-metadata finding is closed in this revision.
 
-`mod-nohelp/42/mod.info:6` declares `versionMin=42.0.0`. The project state and source research identify Build **42.20.4** as the observed/verified target, while the project rules say the supported minor line must follow verified research. That leaves the package metadata promising compatibility with earlier Build 42 versions that this repository does not establish.
+### F-02 — Vehicle-scan errors were swallowed — RESOLVED
 
-If earlier versions lack or differ in any API used by the mod, players can load a package that is advertised as compatible and then hit runtime failures. The metadata also makes future bug reports hard to triage because it does not express the actual tested range.
+`Storage.lua` now logs a failed optional vehicle scan and passes a failure flag to its caller. `test/nohelp_storage_vehicles.lua` covers both failure and success. The earlier silent-failure finding is closed in this revision.
 
-**Claude action:** Set `versionMin` to the earliest supported version backed by the repository's evidence, or add real compatibility checks for every earlier version the package intends to support. Keep the supported version line consistent in `mod.info`, build/package validation, and the release notes. Do not infer support from “Build 42.”
+### F-03 — The state-dump menu is exposed in ordinary single-player
 
-**Evidence:** `mod-nohelp/42/mod.info:6`; `PROJECT_STATE.md` identifies Build 42.20.4 as the verified line; `AGENTS.md` says the exact supported minor line must follow verified research.
+**Severity: P2 — development-tool exposure / acceptance mismatch**
 
-### F-02 — Vehicle candidate discovery suppresses errors and returns a partial catalogue
+`mod-nohelp/common/media/lua/client/NHShared/StateDumpTrigger.lua` gates the trigger only on single-player and the T11/T12 modes. Its `OnFillWorldObjectContextMenu` handler adds **Dump State** whenever that gate passes. There is no debug/development check, so the entry appears in ordinary single-player play.
 
-**Severity: P2 — silent feature loss / diagnosability**
+The development checklist describes C6 as a **debug-gated** menu or key entry. `test/nohelp_dump_trigger.lua` verifies only multiplayer/mode gating and explicitly expects the menu option to appear in an otherwise ordinary single-player stub. The test therefore locks in behavior that contradicts the checklist.
 
-`mod-nohelp/common/media/lua/shared/NHShared/Generated/Storage.lua:154-155` wraps the entire `addVehicles` pass in `pcall`, discards the error value, and continues with the furniture-only results. The failure branch (`rooms=rooms`) is a no-op. A single engine/API/data error can therefore remove vehicle candidates for the whole scan without a log or a visible failed state. Any authored clue that requires a vehicle may then be deferred or dropped for reasons the logs do not explain.
+The dump is content-blind, which limits the impact, but it is still a development diagnostic in the player's normal world-object menu.
 
-This is especially difficult to debug because the scan still completes successfully and downstream code receives a plausible but incomplete catalogue.
+**Claude action:** Gate both the menu option and direct trigger behind a Build-42-verified development/debug condition, or keep this tool out of the shipped package. Add tests for debug-off and debug-on behavior. Verify the engine predicate in project research before relying on it.
 
-**Claude action:** Capture and report the error through the project's shared logging path. Decide explicitly whether vehicle discovery is optional (record the omission and continue) or required for the current case (fail/retry that scan); do not silently present partial results as a successful complete scan. Add a regression around the chosen failure behavior.
+**Evidence:** `StateDumpTrigger.lua` (`allowed`, `fillContextMenu`); `test/nohelp_dump_trigger.lua` (“GATE OPEN in single-player” and context-menu test); `docs/management/NO_HELP_DEV_CHECKLIST_2026-09-28.md`, C6.
 
-**Evidence:** `Storage.lua:154-155`; the project-wide error-boundary rule is in `AGENTS.md` under “Project rules.”
+## Open acceptance checks — not confirmed defects
 
-## Checks to run at 2pm (not confirmed defects)
+1. **Cold-load cost:** `Storage.lua` still eagerly requires the 3.8 MB generated fixed-container payload. The new index code defers per-building validation, not loading/parsing the Lua table. The checklist still calls for measuring first-load time and memory in the real game.
+2. **Crash recovery and a full playthrough:** the checklist says the retry rule for a crash during `placing` is provisional and still open for the owner. D1's force-kill/save-window test and D2's visible playtest are unchecked. The 2026-09-26 handoff also said the extracted mod had not yet been played through. Do not treat fake-world reload tests as native save-order proof.
+3. **Late-game cost:** the checklist reports a synthetic 10x-record write at 53 ms after the completed optimization work. The append-only/keyed commit work (A3-A7) is paused, and the real-game late-save stutter check remains open. This is a measured risk, not a confirmed in-game defect.
 
-1. **Cold-load cost of the fixed-container payload.** `Storage.lua:5` eagerly requires `FixedContainerIndexData.lua` (3,836,309 bytes on this revision). The index code defers per-building validation, but that does not defer parsing and constructing the generated Lua table. Measure first-load time and memory in the actual game on a fresh save; the project's frame budget is explicit, and source-level scheduler bounds do not cover module-load cost. If it is material, split or defer the payload load.
-2. **Current-branch gameplay acceptance.** The No Help handoff dated 2026-09-26 records a co-install boot check but says the extracted mod had never been played through. I did not find evidence in the reviewed files that supersedes that status for this revision. Confirm the handoff is current, then test one real case from startup through clue discovery, recognition, and save/reload with both mods installed.
+## Verification
 
-## Review limits
+The `nohelp-content` GitHub workflow passed on merge commit `4c9c640`. It runs the converter check and the `test/nohelp_*.lua` suite. No full offline workflow or Project Zomboid playtest is evidenced by that result.
 
-- This review was static. I did not run GitHub Actions, Lua/Kahlua tests, the game, or a fresh-save playthrough.
-- I am not claiming either item in “Checks to run” is a confirmed defect.
-- The repository includes a large original mod, generated catalogues, tooling, and extensive tests. This pass focuses on the separately packaged `mod-nohelp/` path; it is not a certification of the whole repository or a release approval.
+This review was static. I did not execute Lua tests or launch the game myself.
