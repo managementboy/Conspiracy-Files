@@ -1,0 +1,44 @@
+[
+  {
+    "id": "t0191-01",
+    "kind": "set",
+    "pieces": [
+      "Tomato",
+      "Notebook"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "anchor": {
+      "print": "FarmersMarket"
+    },
+    "title": "Market produce log",
+    "body": "The market basket is tied to a produce sheet that marks the field lot sampled before the stall opened. The seller’s hand-drawn price sign is still inside.",
+    "rival_reading": "A food safety inspection could sample local produce after a response order; the sheet does not identify the lot’s treatment.",
+    "gloss": "A produce sample is recorded before the market opens.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "cites": {
+      "source": "print:FarmersMarket",
+      "quote": "Farmer's Market"
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0191"
+    }
+  }
+]
