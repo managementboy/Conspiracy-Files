@@ -1,0 +1,45 @@
+[
+  {
+    "id": "t0035-01",
+    "kind": "set",
+    "pieces": [
+      "Potato",
+      "Notebook"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "containment",
+        "rival": "agricultural"
+      }
+    ],
+    "anchor": {
+      "map": "EkronStashMap2",
+      "mark": 1
+    },
+    "title": "The last crate",
+    "body": "The vegetable crate has a delivery tag dated after the road was closed. A pencilled note asks whether the driver should still be charged for the trip.",
+    "rival_reading": "A field supply route could also have been delayed by access restrictions; the tag cannot explain who closed the road.",
+    "gloss": "A food delivery is recorded after access closed, with the driver’s payment unresolved.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "cites": {
+      "source": "map:EkronStashMap2",
+      "quote": "vegs"
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0035"
+    }
+  }
+]
