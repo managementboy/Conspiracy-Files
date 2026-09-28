@@ -1,0 +1,45 @@
+[
+  {
+    "id": "t0044-01",
+    "kind": "set",
+    "pieces": [
+      "Potato",
+      "KeyRing"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "anchor": {
+      "map": "IrvingtonStashMap5",
+      "mark": 1
+    },
+    "title": "Food left for later",
+    "body": "A food bag is tied to the pantry key with a note to leave one portion for the next shift. The kitchen list says the garden delivery never arrived.",
+    "rival_reading": "Emergency distribution could have interrupted a routine food delivery; the missing bag does not show why it failed.",
+    "gloss": "A shift meal is saved while a garden delivery remains missing.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "cites": {
+      "source": "map:IrvingtonStashMap5",
+      "quote": "should be food here"
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0044"
+    }
+  }
+]
