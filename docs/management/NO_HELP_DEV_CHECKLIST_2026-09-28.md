@@ -54,7 +54,10 @@ follows how much has been played, not how big the change is.
   migration, never a "stale" refusal** (plan §8, carried forward).
   *Proof:* the soak asserts that live assignments stay bounded while arrivals
   grow, and an old-shape save loads and migrates.
-- [ ] **A6 Safety net.** A full check on open, and every K writes.
+- [ ] **A6 Safety net.** Include a FULL growth check (deep comparison, no
+  same-table shortcut) on open and every K writes: since A3 part 1, `grows`
+  trusts that shared frozen entries are never edited in place (review
+  2026-09-28), and only this check would catch an edit that breaks that. A full check on open, and every K writes.
   *Proof:* a corrupted record introduced between checks is caught at the
   next full check.
 - [ ] **A7 Make the gate hard.** Gate on visits AND KB allocated (the visit counter sees only
