@@ -1,0 +1,45 @@
+[
+  {
+    "id": "t0086-01",
+    "kind": "set",
+    "pieces": [
+      "HandTorch",
+      "Notebook"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "anchor": {
+      "map": "MulStashMap9",
+      "mark": 1
+    },
+    "title": "The unread page",
+    "body": "A field notebook is closed under a torch; the last page asks whether the sample was taken before the building emptied.",
+    "rival_reading": "A response crew could have collected a sample during evacuation; the note does not identify what was sampled.",
+    "gloss": "An unanswered note leaves the timing of a sample uncertain.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "cites": {
+      "source": "map:MulStashMap9",
+      "quote": "marked address in Muldraugh"
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0086"
+    }
+  }
+]
