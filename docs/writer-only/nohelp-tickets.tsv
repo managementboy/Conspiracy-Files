@@ -23,3 +23,9 @@ T0016	SCENE	scene:RVSPlonkies	accepted	0	2026-09-27	2026-09-28
 T0017	SCENE	scene:RDSRatKing	accepted	0	2026-09-27	2026-09-28
 T0018	UNIQUE	scene:RBJackieJaye	accepted	0	2026-09-27	2026-09-28
 T0019	STAGE0	glosses:T0016,T0017	accepted	0	2026-09-27	2026-09-28
+T0020	MAP	map:BBurgStashMap1	open	0	2026-09-28	
+T0021	MAP	map:LouisvilleStashMap1	open	0	2026-09-28	
+T0022	MAP	map:MarchRidgeStashMap1	open	0	2026-09-28	
+T0023	MAP	print:CircuitalHealing	open	0	2026-09-28	
+T0024	MAP	print:IrvingtonSpeedway	open	0	2026-09-28	
+T0025	STAGE0	glosses:T0020-T0024	open	0	2026-09-28	

@@ -8,13 +8,13 @@ baton edits it; `lua5.1 tools/nohelp_content/progress.lua --state` rewrites PROG
 CHATGPT since 2026-09-28 because WRITING
 
 ## STAGE
-4
+EXPANSION
 
 ## TICKET
-none
+T0025
 
 ## NEXT
-All 18 first-release tickets accepted (38 clues); next: the lowest open serial in the registry, as a new round
+Expansion batch 1 opened: T0025 (story glosses for T0020-T0024, STAGE0) first, then T0020-T0024 as one round; baton to CLAUDE with STAGE0-SIGNOFF after T0025, and with REVIEW after the round
 
 ## OPEN RETURNS
 none
@@ -26,4 +26,4 @@ none
 2026-09-28 T0001
 
 ## PROGRESS
-NOT DONE: maps 2/125, flyers 1/133, scenes 3/125, adhd 17 @7be5c33
+NOT DONE: maps 2/125, flyers 1/133, scenes 3/125, adhd 17 @aca769c
