@@ -924,12 +924,15 @@ Test: `test/nohelp_marks_minimum.lua`; `test/nohelp_area_runtime.lua` extended.
   against `Generated/ReservedNames.lua`, built by
   `tools/cluegates/build_reserved.lua` (writer/engineer only); the retired
   premise as salted hashes only (`tools/cluegates/retired_hashes.lua`).
-- **Blind re-read** (`tools/cluegates/blind_reread.md`): the prompt for a
-  different model, at least 5 independent runs per clue; receipts in
-  `tools/cluegates/receipts/<clue id>.json` keyed by the SHA-256 of exactly
-  the text the reader saw; `tools/cluegates/check_receipts.lua` reports
-  missing, stale, one-sided and mostly-"neither" clues. The shipped test
-  fails on any such clue once the list is not empty.
+- **Blind review** (`tools/cluegates/blind_reread.md`): one independent
+  read per clue, with one targeted retry only for a `NEITHER` vote or a vote
+  against the declared lean. The whole batch gets one pass for repetition and
+  consistency. Receipts in `tools/cluegates/receipts/<clue id>.json` are keyed
+  by the SHA-256 of exactly the rendered text shown to the reader.
+  `tools/cluegates/check_receipts.lua` reports missing, stale, and unresolved
+  review flags. The shipped test enforces the current rule when clues exist.
+  This replaces the former five-read threshold and one-sided/mostly-neither
+  vote rules (decision `DR-20260928-NOHELP-REVIEW-FAST`).
 - Not done: the owner one-pager and drift report; scene placement (a
   scene-anchored clue is never placed yet); within a big area with its own
   marks, a mark-anchored clue is not yet pinned to its own mark
