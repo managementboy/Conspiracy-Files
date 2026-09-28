@@ -1,0 +1,44 @@
+[
+  {
+    "id": "t0198-01",
+    "kind": "set",
+    "pieces": [
+      "VHS_Retail",
+      "KeyRing"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "containment",
+        "rival": "agricultural"
+      }
+    ],
+    "anchor": {
+      "print": "OnyxDriveinTheater"
+    },
+    "title": "The drive-in count",
+    "body": "The ticket count is closed before the last car’s entry time. A key tag for the projection booth is left with the vehicle list.",
+    "rival_reading": "A routine late entry could be missed by the count; the list does not establish whether anyone was directed to leave.",
+    "gloss": "A car is entered after the event count is closed.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "cites": {
+      "source": "print:OnyxDriveinTheater",
+      "quote": "Onyx Drive-in Theater"
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0198"
+    }
+  }
+]
