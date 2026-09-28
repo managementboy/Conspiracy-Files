@@ -1,0 +1,45 @@
+[
+  {
+    "id": "t0063-01",
+    "kind": "set",
+    "pieces": [
+      "Book",
+      "KeyRing"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "containment",
+        "rival": "agricultural"
+      }
+    ],
+    "anchor": {
+      "map": "LouisvilleStashMap15",
+      "mark": 1
+    },
+    "title": "The gallery key",
+    "body": "The gallery key is wrapped in a request to protect the collection; the handover form says the building was secure before the key was returned.",
+    "rival_reading": "A preservation team could have secured the room against any hazard; the form does not show who checked it.",
+    "gloss": "A secure-building handover is recorded before the key returns.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "cites": {
+      "source": "map:LouisvilleStashMap15",
+      "quote": "Whoever finds this, I was Natalie Sigmundsson"
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0063"
+    }
+  }
+]
