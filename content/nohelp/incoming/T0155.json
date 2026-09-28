@@ -1,0 +1,44 @@
+[
+  {
+    "id": "t0155-01",
+    "kind": "set",
+    "pieces": [
+      "Wallet",
+      "Map"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "containment",
+        "rival": "agricultural"
+      }
+    ],
+    "anchor": {
+      "print": "CrossRoadsMall"
+    },
+    "title": "A mall meeting point",
+    "body": "The directory is folded into a lost-property wallet; its receipt says the meeting point was cleared before the last bus reached the entrance.",
+    "rival_reading": "A promotional crew could have cleared the meeting point for ordinary closing; the receipt does not say who waited for the bus.",
+    "gloss": "The meeting point is cleared before its last bus arrives.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "cites": {
+      "source": "print:CrossRoadsMall",
+      "quote": "Crossroads Mall"
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0155"
+    }
+  }
+]
