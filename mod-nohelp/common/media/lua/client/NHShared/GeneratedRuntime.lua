@@ -281,7 +281,18 @@ local function placement(api,id)
             return true
         end
         if a.status=="placing" and not created then
-            checked(api.status(id,"unknown")); log("Interrupted placement is uncertain; no automatic replacement."); return true
+            if count==0 and not api.isShown(id) and not api.isRecognised(id) then
+                -- Clue placement was interrupted before any items were created, but the
+                -- clue was never shown to the survivor. Retry: allow item creation to proceed.
+                -- B4 (2026-09-28): provisional owner rule—retry only if never seen/recognised
+                -- The same open-loot-window refusal as a first placement: wait,
+                -- never create into a container the survivor is looking into.
+                if not FixedContainers.fresh(current,Session.isArea(api.snapshot())) then return true end
+                log("Clue placement interrupted but never shown/recognised; retrying.")
+                created=true
+            else
+                checked(api.status(id,"unknown")); log("Interrupted placement is uncertain; no automatic replacement."); return true
+            end
         end
         if a.status=="pending" then
             -- A No Help area clue may go in a drawer searched earlier; only

@@ -241,4 +241,154 @@ for id,golden in pairs(golden_info) do
   end
 end
 
+-- K3: Clue saved as "placing", crash before items in world, reload with empty square.
+-- Test B4 (2026-09-28): provisional owner rule—retry only if never shown/recognised.
+
+-- Find a clue to use for K3
+local k3_target_id
+for id in pairs(assigned_ids) do k3_target_id=id; break end
+assert(k3_target_id,"found a target clue for K3")
+
+-- Set it to "placing" from K2's "pending" state
+local k3_checkpoint=deepCopy(K2_store)
+local api_k3_set_placing=Sess.open(k3_checkpoint["NHShared.Generated.G2"].campaign.canonical,
+    function(n) k3_checkpoint["NHShared.Generated.G2"].campaign.canonical=n end)
+local ok_placing=api_k3_set_placing.status(k3_target_id,"placing")
+assert(ok_placing,"could set clue to placing status from pending")
+
+local k3_target_loc=k3_checkpoint["NHShared.Generated.G2"].campaign.canonical.assignments[k3_target_id].target
+local k3_target_spot=k3_target_loc.x..","..k3_target_loc.y..","..k3_target_loc.z
+
+-- K3 CASE 1: Never shown—should retry and place normally
+local st_k3_c1=deepCopy(k3_checkpoint)
+local k3_c1_api=Sess.open(st_k3_c1["NHShared.Generated.G2"].campaign.canonical,
+    function(n) st_k3_c1["NHShared.Generated.G2"].campaign.canonical=n end)
+assert(not k3_c1_api.isShown(k3_target_id),"clue not shown before K3 case 1")
+
+squares={}
+local h_k3_c1=boot(st_k3_c1); installWorld(); h_k3_c1.setPlayerPos(1003,1003)
+h_k3_c1.fire("OnGameStart")
+squares={}; installWorld()
+-- Mark square unloaded initially, then load it (simulating crash recovery)
+unloaded[k3_target_spot]=true
+for t=1,200 do h_k3_c1.fire("OnTick") end
+unloaded={}  -- survivor comes close, square loads
+for t=1,200 do h_k3_c1.fire("OnTick") end
+
+local k3_c1_root=st_k3_c1["NHShared.Generated.G2"].campaign.canonical
+local k3_c1_result=k3_c1_root.assignments[k3_target_id]
+assert(k3_c1_result.status=="placed","K3 case 1: never-shown clue should be placed after retry")
+local k3_c1_all,k3_c1_onSpot=0,0
+for k,sq in pairs(squares) do for _,o in ipairs(sq.objects) do
+    if o.item:getModData().cfPhysicalToken==k3_c1_result.physicalToken then
+        k3_c1_all=k3_c1_all+1
+        if k==k3_target_spot then k3_c1_onSpot=k3_c1_onSpot+1 end
+    end
+end end
+local k3_c1_want=0
+for _,d in ipairs(k3_c1_root.case.documents) do if d.id==k3_target_id then
+    for _,m in ipairs(d.members or {{quantity=d.quantity or 1}}) do k3_c1_want=k3_c1_want+(m.quantity or 1) end
+end end
+assert(k3_c1_want>0 and k3_c1_all==k3_c1_want and k3_c1_onSpot==k3_c1_all,
+    "K3 case 1: pieces placed exactly on target")
+
+-- K3 CASE 2: Shown before crash—should NOT retry, end as unknown with no pieces
+local st_k3_c2=deepCopy(k3_checkpoint)
+local k3_c2_api=Sess.open(st_k3_c2["NHShared.Generated.G2"].campaign.canonical,
+    function(n) st_k3_c2["NHShared.Generated.G2"].campaign.canonical=n end)
+k3_c2_api.show(k3_target_id)
+
+squares={}
+local h_k3_c2=boot(st_k3_c2); installWorld(); h_k3_c2.setPlayerPos(1003,1003)
+h_k3_c2.fire("OnGameStart")
+squares={}; installWorld()
+unloaded[k3_target_spot]=true
+for t=1,200 do h_k3_c2.fire("OnTick") end
+unloaded={}
+for t=1,200 do h_k3_c2.fire("OnTick") end
+
+local k3_c2_root=st_k3_c2["NHShared.Generated.G2"].campaign.canonical
+local k3_c2_result=k3_c2_root.assignments[k3_target_id]
+assert(k3_c2_result.status=="unknown","K3 case 2: shown clue should end unknown")
+local k3_c2_count=0
+for k,sq in pairs(squares) do for _,o in ipairs(sq.objects) do
+    if o.item:getModData().cfPhysicalToken==k3_c2_result.physicalToken then k3_c2_count=k3_c2_count+1 end
+end end
+assert(k3_c2_count==0,"K3 case 2: no pieces created for shown clue")
+
+-- K3 CASE 3 (PARTIAL): Set clue (2+ pieces) with 1 piece in world → ends unknown, no retry
+local k3_partial_id
+for id in pairs(assigned_ids) do
+    for _,d in ipairs(K2_store["NHShared.Generated.G2"].campaign.canonical.case.documents) do
+        if d.id==id then
+            local pcount=0
+            if d.members and #d.members > 0 then
+                for _,m in ipairs(d.members) do pcount=pcount+(m.quantity or 1) end
+            else
+                pcount=d.quantity or 1
+            end
+            if pcount >= 2 then k3_partial_id=id; break end
+        end
+    end
+    if k3_partial_id then break end
+end
+if k3_partial_id then
+    local st_k3_c3=deepCopy(K2_store)
+    local api_k3_c3=Sess.open(st_k3_c3["NHShared.Generated.G2"].campaign.canonical,
+        function(n) st_k3_c3["NHShared.Generated.G2"].campaign.canonical=n end)
+    api_k3_c3.status(k3_partial_id,"placing")
+
+    local k3_c3_loc=st_k3_c3["NHShared.Generated.G2"].campaign.canonical.assignments[k3_partial_id].target
+    local k3_c3_spot=k3_c3_loc.x..","..k3_c3_loc.y..","..k3_c3_loc.z
+
+    squares={}
+    local h_k3_c3=boot(st_k3_c3); installWorld(); h_k3_c3.setPlayerPos(1003,1003)
+    h_k3_c3.fire("OnGameStart")
+    squares={}; installWorld()
+    -- Pre-place 1 piece on target square (simulating partial placement before crash)
+    local sq_c3=square(k3_c3_loc.x,k3_c3_loc.y,k3_c3_loc.z)
+    local item_c3=instanceItem("fake.item")
+    item_c3:getModData().cfPhysicalToken=st_k3_c3["NHShared.Generated.G2"].campaign.canonical.assignments[k3_partial_id].physicalToken
+    sq_c3:AddWorldInventoryItem(item_c3)
+
+    unloaded[k3_c3_spot]=true
+    for t=1,200 do h_k3_c3.fire("OnTick") end
+    unloaded={}
+    for t=1,200 do h_k3_c3.fire("OnTick") end
+
+    local k3_c3_root=st_k3_c3["NHShared.Generated.G2"].campaign.canonical
+    local k3_c3_result=k3_c3_root.assignments[k3_partial_id]
+    assert(k3_c3_result.status=="unknown","K3 case 3: partial placement must end unknown")
+    local k3_c3_count=0
+    for k,sq in pairs(squares) do for _,o in ipairs(sq.objects) do
+        if o.item:getModData().cfPhysicalToken==k3_c3_result.physicalToken then k3_c3_count=k3_c3_count+1 end
+    end end
+    assert(k3_c3_count==1,"K3 case 3: partial clue token count stays 1, not recreated")
+end
+
+-- K3 CASE 4 (RECOGNISED): Like case 2 but clue recognised instead of shown → unknown, nothing created
+local st_k3_c4=deepCopy(k3_checkpoint)
+local k3_c4_api=Sess.open(st_k3_c4["NHShared.Generated.G2"].campaign.canonical,
+    function(n) st_k3_c4["NHShared.Generated.G2"].campaign.canonical=n end)
+k3_c4_api.recognise(k3_target_id,"search")
+
+squares={}
+local h_k3_c4=boot(st_k3_c4); installWorld(); h_k3_c4.setPlayerPos(1003,1003)
+h_k3_c4.fire("OnGameStart")
+squares={}; installWorld()
+unloaded[k3_target_spot]=true
+for t=1,200 do h_k3_c4.fire("OnTick") end
+unloaded={}
+for t=1,200 do h_k3_c4.fire("OnTick") end
+
+local k3_c4_root=st_k3_c4["NHShared.Generated.G2"].campaign.canonical
+local k3_c4_result=k3_c4_root.assignments[k3_target_id]
+assert(k3_c4_result.status=="unknown","K3 case 4: recognised clue should end unknown")
+local k3_c4_count=0
+for k,sq in pairs(squares) do for _,o in ipairs(sq.objects) do
+    if o.item:getModData().cfPhysicalToken==k3_c4_result.physicalToken then k3_c4_count=k3_c4_count+1 end
+end end
+assert(k3_c4_count==0,"K3 case 4: no pieces created for recognised clue")
+
 print("nohelp reload world: K2 ground targets preserve through golden, reload, mid-placement, and double reload")
+print("K3: placing clue retries if never shown, ends unknown if shown (B4, 2026-09-28: provisional owner rule)")

@@ -83,12 +83,15 @@ place a clue twice, or reveal the other theory's clue? The plan still owes a
   makes "save the spot before 16 tiles" a checked rule. Each clue's pieces
   must exist exactly once in the world.
   *Proof:* same file.
-- [ ] **B4 Kill point K3:** the save recorded "placing" but the objects never
+- [x] **B4 Kill point K3:** the save recorded "placing" but the objects never
   reached the map. Today the clue is marked unknown and never placed again
   (`GeneratedRuntime.lua:283-284`), so it is silently lost.
   **Owner decision needed first** (see "Open for the owner"). Until then the
   case is written as an expected failure.
   *Proof:* the case goes green under the owner's rule.
+  *Done 2026-09-28 under the PROVISIONAL rule (retry only if never shown or
+  recognised, and only into a fresh container; a partly created set stays
+  unknown). Still open for the owner below.*
 - [ ] **B5 No peek at the rival theory.** At every kill point, with or
   without a map read, the set of leans seen at each area is a subset of the
   golden run's set.
