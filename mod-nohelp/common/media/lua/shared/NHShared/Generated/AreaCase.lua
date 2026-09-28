@@ -254,6 +254,21 @@ end
 -- case and the new document ids, or nil and "decided" (never again), "empty"
 -- (nothing to give: NOT a decision, so a later clue list can still decide it)
 -- or another refusal.
+-- THE NEXT RECORD SHARES WHAT IS FROZEN (checklist A3). Decided places, areas
+-- and clues never change once written (M.grows refuses it), so the next record
+-- keeps the very same tables for them and only copies everything else; adding
+-- an area no longer deep-copies the whole world. Every other field is copied,
+-- so a field added to the record later is carried over without a change here.
+local FROZEN={locations=true,areas=true,documents=true}
+local function extend(case)
+    local next={}
+    for k,v in pairs(case) do
+        if FROZEN[k] then local list={}; for i,x in ipairs(v) do list[i]=x end; next[k]=list
+        else next[k]=copy(v) end
+    end
+    return next
+end
+
 function M.decide(args)
     local case,site=args.case,args.site
     if not M.isAreaCase(case) or type(site)~="table" or type(site.id)~="string" then return nil,"invalid" end
@@ -268,7 +283,7 @@ function M.decide(args)
         ledger=case.ledger,seed=case.seed,version=args.version,
         favour=lean.favour,rivalMin=lean.rivalMin,minCount=lean.minCount}
     if #picks==0 then return nil,"empty" end
-    local next=copy(case)
+    local next=extend(case)
     local known=false
     for _,l in ipairs(next.locations) do if l.id==site.id then known=true end end
     if not known then next.locations[#next.locations+1]=copy(site) end
@@ -333,7 +348,7 @@ function M.decideScene(args)
         end
     end
     if not best then return nil,"empty" end
-    local next=copy(case)
+    local next=extend(case)
     next.locations[#next.locations+1]=copy(site)
     local first=#next.documents+1
     local doc=M.docFrom({clue=best.clue.id,copy=best.copy,lean=lean,rival=best.where.rival,
@@ -517,9 +532,9 @@ function M.grows(old,new)
     if not M.isAreaCase(new) then return false,"the world record cannot be replaced" end
     if old.seed~=new.seed or old.caseId~=new.caseId then return false,"the world seed cannot change" end
     if #new.areas<#old.areas or #new.documents<#old.documents then return false,"the world record only grows" end
-    for i,a in ipairs(old.areas) do if not same(a,new.areas[i]) then return false,"a decided area cannot change" end end
-    for i,d in ipairs(old.documents) do if not same(d,new.documents[i]) then return false,"a placed clue cannot change" end end
-    for i,l in ipairs(old.locations) do if not same(l,new.locations[i]) then return false,"a decided place cannot change" end end
+    for i,a in ipairs(old.areas) do if not rawequal(a,new.areas[i]) and not same(a,new.areas[i]) then return false,"a decided area cannot change" end end
+    for i,d in ipairs(old.documents) do if not rawequal(d,new.documents[i]) and not same(d,new.documents[i]) then return false,"a placed clue cannot change" end end
+    for i,l in ipairs(old.locations) do if not rawequal(l,new.locations[i]) and not same(l,new.locations[i]) then return false,"a decided place cannot change" end end
     return true
 end
 

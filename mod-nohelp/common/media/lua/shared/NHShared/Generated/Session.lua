@@ -763,9 +763,10 @@ function S.open(initial,sink)
         if not validHours(args.hours) then return false,"invalid hours" end
         local ok,why=commit(function(r)
             r.case=nextCase
+            local docById={}
+            for _,d in ipairs(nextCase.documents) do docById[d.id]=d end
             for _,id in ipairs(ids) do
-                local doc
-                for _,d in ipairs(nextCase.documents) do if d.id==id then doc=d end end
+                local doc=docById[id]
                 r.assignments[id]={physicalToken="cf-g2:"..id,status="deferred",locationId=doc.locationId,
                     deferredHours=args.hours,relocations=0}
             end
