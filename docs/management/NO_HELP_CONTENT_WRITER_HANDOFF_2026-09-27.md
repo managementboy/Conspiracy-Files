@@ -313,6 +313,7 @@ Fix the pattern, not just the row.
   one blind read per clue (38), a second read for the 4 flagged. Accepted:
   11 tickets, 24 clues. Returned whole: T0003, T0008, T0012, T0014 (one clue
   each, `LEAN_MISMATCH`: both reads missed the declared lean; the other
-  clues passed and may come back unchanged). Held in `incoming/`, passed:
-  T0010, T0016, T0017 (accepting them without T0003 would leave farms
-  one-sided). A batch note on repeated objects is in each returned file.
+  clues passed and may come back unchanged). Also returned, whole and
+  `merged` (`ONE_SIDED`), though every clue passed: T0010, T0016, T0017;
+  without T0003 they would leave farms one-sided, so they come back unchanged
+  in the same round as T0003. A batch note on repeated objects is in each returned file.
