@@ -1,0 +1,45 @@
+[
+  {
+    "id": "t0145-01",
+    "kind": "set",
+    "pieces": [
+      "BaseballBat",
+      "SheetPaper2"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "containment",
+        "rival": "agricultural"
+      }
+    ],
+    "anchor": {
+      "map": "WpStashMap13",
+      "mark": 1
+    },
+    "title": "Three tallies, no names",
+    "body": "A tally sheet groups losses by weapon and vehicle, but the line for who was brought back is empty. One tally has been copied twice.",
+    "rival_reading": "A field crew could record equipment incidents rather than an official response; the repeated tally does not identify who was lost.",
+    "gloss": "An incident tally counts equipment outcomes but leaves returns blank.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "cites": {
+      "source": "map:WpStashMap13",
+      "quote": "shotgun kills: 12"
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0145"
+    }
+  }
+]
