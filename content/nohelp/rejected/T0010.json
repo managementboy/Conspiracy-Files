@@ -1,0 +1,96 @@
+{
+  "ticket": "T0010",
+  "returned_by": "Claude blind re-read and batch read, 2026-09-28",
+  "drift": "Batch drift report (T0001-T0013, read together): the rows have converged on one template. About 20 of 28 say 'X was recorded before/after Y', add a child's drawing or sticker, and end with 'the only completed count is <returned objects>, not people'. Each row is fine on its own, but a player who finds three of them has found the same clue three times, and the world sounds like one clerk. The containment rows are all timestamp-and-form jokes and the agricultural rows are all 'water total before source'; a blind reader sorts them by that alone. Keep the tone (one human detail beside one institutional one), but vary it: different human stakes (not always a child), different institutional blind spots (not always a count), clues that are mostly an arrangement of objects with a short note or none, and other spots where both sides can use them (ground, vehicle, mailbox, corpse), not only furniture.",
+  "rows": [
+    {
+      "id": "t0010-01",
+      "codes": [
+        "NEVER_RIVAL"
+      ],
+      "note": "A blind re-read (5 independent reads, a different model, told nothing) never named the rival, so the row is one-sided. The lean should come from where the clue is placed and from one detail; the rest must leave the rival reading genuinely live. Rework title, body and if needed pieces; keep place, spot, lean and axioms.",
+      "votes": "A 0, B 3, neither 2 (clue lean B)",
+      "row": {
+        "body": "Field rounds four to six. Water share is logged at shift end; access expires at road closure.",
+        "id": "t0010-01",
+        "kind": "written",
+        "person": "person-a",
+        "pieces": [
+          "idcard"
+        ],
+        "title": "Rosa Salcedo",
+        "where": [
+          {
+            "lean": "agricultural",
+            "place": "farm",
+            "rival": "containment",
+            "spot": "furniture"
+          }
+        ],
+        "axioms": {
+          "agricultural": [
+            "a-program",
+            "a-timing"
+          ],
+          "containment": [
+            "c-orders",
+            "c-failure"
+          ]
+        },
+        "gloss": "A field access credential records water allocation and a closure-based return rule.",
+        "prov": {
+          "adhd_run": "docs/writer-only/adhd/2026-09-27-T0010/",
+          "batch": "T0010",
+          "handoff": "2026-09-27",
+          "writer": "ChatGPT"
+        },
+        "rival_reading": "Officials could issue this schedule during emergency restrictions; a water allotment and revocable access do not prove the program malfunctioned."
+      }
+    },
+    {
+      "id": "t0010-02",
+      "codes": [
+        "DRIFT"
+      ],
+      "note": "Passed the blind re-read; returned only because its ticket is returned. Redeliver it unchanged if it still fits after the drift fix (its receipt stays valid only while title, body, pieces and places are unchanged). See the drift report at the top of this file.",
+      "votes": "A 1, B 4, neither 0 (clue lean B)",
+      "row": {
+        "body": "Rosa's second field-round mark is dated after the road closed. A child's drawing is tucked inside the map; the only completed count is shovels returned, not rows checked.",
+        "id": "t0010-02",
+        "kind": "set",
+        "person": "person-a",
+        "pieces": [
+          "Map",
+          "HandShovel"
+        ],
+        "title": "Field tally remains open",
+        "where": [
+          {
+            "lean": "agricultural",
+            "place": "farm",
+            "rival": "containment",
+            "spot": "furniture"
+          }
+        ],
+        "axioms": {
+          "agricultural": [
+            "a-program",
+            "a-pathway"
+          ],
+          "containment": [
+            "c-orders",
+            "c-failure"
+          ]
+        },
+        "gloss": "A field-round mark falls after a road closure while a tool count is complete.",
+        "prov": {
+          "adhd_run": "docs/writer-only/adhd/2026-09-27-T0010/",
+          "batch": "T0010",
+          "handoff": "2026-09-27",
+          "writer": "ChatGPT"
+        },
+        "rival_reading": "A response crew could mark work rows and collect tools after closing the road; the map and returned shovel do not establish an earlier malfunction."
+      }
+    }
+  ]
+}

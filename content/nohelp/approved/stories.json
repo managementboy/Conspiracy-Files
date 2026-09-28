@@ -91,17 +91,17 @@
   },
   {
     "ticket": "T0016",
-    "target": "scene:RDSPoliceAtHouse",
+    "target": "scene:RVSPlonkies",
     "lean": "containment",
-    "gloss": "A body-anchored trace from a domestic aftermath records institutional response and individual exposure, readable through either failed controls or prior hazard.",
-    "void": "target retargeted 2026-09-27; new gloss owed in T0019"
+    "gloss": "A cargo route with a mismatched return record could fit an interrupted field delivery or a failed emergency handoff.",
+    "signed": "T0019 2026-09-28"
   },
   {
     "ticket": "T0017",
-    "target": "scene:RVSAmbulanceCrash",
+    "target": "scene:RDSRatKing",
     "lean": "containment",
-    "gloss": "A roadside medical vehicle's remains show the limits of emergency movement, while a program-related exposure remains plausible.",
-    "void": "target retargeted 2026-09-27; new gloss owed in T0019"
+    "gloss": "A household trace of pest control could reflect a failed containment response or an earlier agricultural practice.",
+    "signed": "T0019 2026-09-28"
   },
   {
     "ticket": "T0018",

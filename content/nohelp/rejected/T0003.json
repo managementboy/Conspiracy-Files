@@ -1,29 +1,28 @@
 {
-  "ticket": "T0001",
+  "ticket": "T0003",
   "returned_by": "Claude blind re-read and batch read, 2026-09-28",
   "drift": "Batch drift report (T0001-T0013, read together): the rows have converged on one template. About 20 of 28 say 'X was recorded before/after Y', add a child's drawing or sticker, and end with 'the only completed count is <returned objects>, not people'. Each row is fine on its own, but a player who finds three of them has found the same clue three times, and the world sounds like one clerk. The containment rows are all timestamp-and-form jokes and the agricultural rows are all 'water total before source'; a blind reader sorts them by that alone. Keep the tone (one human detail beside one institutional one), but vary it: different human stakes (not always a child), different institutional blind spots (not always a count), clues that are mostly an arrangement of objects with a short note or none, and other spots where both sides can use them (ground, vehicle, mailbox, corpse), not only furniture.",
   "rows": [
     {
-      "id": "t0001-01",
+      "id": "t0003-01",
       "codes": [
-        "NEVER_RIVAL",
         "DRIFT"
       ],
-      "note": "A blind re-read (5 independent reads, a different model, told nothing) never named the rival, so the row is one-sided. The lean should come from where the clue is placed and from one detail; the rest must leave the rival reading genuinely live. Rework title, body and if needed pieces; keep place, spot, lean and axioms. See the drift report at the top of this file.",
-      "votes": "A 5, B 0, neither 0 (clue lean A)",
+      "note": "Passed the blind re-read; returned only because its ticket is returned. Redeliver it unchanged if it still fits after the drift fix (its receipt stays valid only while title, body, pieces and places are unchanged). See the drift report at the top of this file.",
+      "votes": "A 3, B 2, neither 0 (clue lean A)",
       "row": {
-        "body": "The last route time is written after the gate closed. A child's sticker covers the lunchbox label; the form counts returned clipboards, not people.",
-        "id": "t0001-01",
+        "body": "The field gate's access line is crossed out before the final route time. A child's drawing is tied to the key; the only completed count records returned keys, not workers.",
+        "id": "t0003-01",
         "kind": "set",
         "pieces": [
-          "Clipboard",
-          "Lunchbox"
+          "Map",
+          "KeyRing"
         ],
-        "title": "Return recorded before crossing",
+        "title": "Key returned after access was withdrawn",
         "where": [
           {
             "lean": "containment",
-            "place": "police",
+            "place": "farm",
             "rival": "agricultural",
             "spot": "furniture"
           }
@@ -38,17 +37,17 @@
             "c-failure"
           ]
         },
-        "gloss": "A route record places a crossing after closure while completing a count of returned property.",
+        "gloss": "A route record and returned key preserve conflicting times for access.",
         "prov": {
-          "batch": "T0001",
+          "batch": "T0003",
           "handoff": "2026-09-27",
           "writer": "ChatGPT"
         },
-        "rival_reading": "A delayed farm delivery could cross a work gate after a routine closure; an ordinary property count may omit the driver without showing a failed cordon."
+        "rival_reading": "A farm gate can close after routine deliveries, and a key-return tally may be ordinary property control rather than evidence of a failed emergency restriction."
       }
     },
     {
-      "id": "t0001-02",
+      "id": "t0003-02",
       "codes": [
         "NEVER_RIVAL",
         "DRIFT"
@@ -56,18 +55,18 @@
       "note": "A blind re-read (5 independent reads, a different model, told nothing) never named the rival, so the row is one-sided. The lean should come from where the clue is placed and from one detail; the rest must leave the rival reading genuinely live. Rework title, body and if needed pieces; keep place, spot, lean and axioms. See the drift report at the top of this file.",
       "votes": "A 0, B 5, neither 0 (clue lean B)",
       "row": {
-        "body": "The bucket has marks from a field round and after a road diversion. A child's drawing is folded under the handle; the capped bottle sits beside it. The only checked box asks if the bucket came back.",
-        "id": "t0001-02",
+        "body": "The water total is entered beside two field rows before the source box is completed. A lunch wrapper is folded in the clipboard; the only signed line confirms the bottle was returned.",
+        "id": "t0003-02",
         "kind": "set",
         "pieces": [
-          "Bucket",
+          "Clipboard",
           "WaterBottle"
         ],
-        "title": "Two measures, one return",
+        "title": "Field total entered before source",
         "where": [
           {
             "lean": "agricultural",
-            "place": "police",
+            "place": "farm",
             "rival": "containment",
             "spot": "furniture"
           }
@@ -75,20 +74,20 @@
         "axioms": {
           "agricultural": [
             "a-program",
-            "a-pathway"
+            "a-malfunction"
           ],
           "containment": [
             "c-orders",
             "c-failure"
           ]
         },
-        "gloss": "A field-related measure and a later return entry remain with a pair of water containers.",
+        "gloss": "A field measurement and a return record remain together with ordinary work items.",
         "prov": {
-          "batch": "T0001",
+          "batch": "T0003",
           "handoff": "2026-09-27",
           "writer": "ChatGPT"
         },
-        "rival_reading": "Emergency staff could measure and inventory water after a diversion; a returned container does not show that a program caused the outbreak."
+        "rival_reading": "An emergency crew could record field supplies after a diversion; a blank source entry and a return signature do not establish a program malfunction."
       }
     }
   ]

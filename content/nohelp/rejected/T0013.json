@@ -1,0 +1,216 @@
+{
+  "ticket": "T0013",
+  "returned_by": "Claude blind re-read and batch read, 2026-09-28",
+  "drift": "Batch drift report (T0001-T0013, read together): the rows have converged on one template. About 20 of 28 say 'X was recorded before/after Y', add a child's drawing or sticker, and end with 'the only completed count is <returned objects>, not people'. Each row is fine on its own, but a player who finds three of them has found the same clue three times, and the world sounds like one clerk. The containment rows are all timestamp-and-form jokes and the agricultural rows are all 'water total before source'; a blind reader sorts them by that alone. Keep the tone (one human detail beside one institutional one), but vary it: different human stakes (not always a child), different institutional blind spots (not always a count), clues that are mostly an arrangement of objects with a short note or none, and other spots where both sides can use them (ground, vehicle, mailbox, corpse), not only furniture.",
+  "rows": [
+    {
+      "id": "t0013-01",
+      "codes": [
+        "NEVER_RIVAL",
+        "DRIFT"
+      ],
+      "note": "A blind re-read (5 independent reads, a different model, told nothing) never named the rival, so the row is one-sided. The lean should come from where the clue is placed and from one detail; the rest must leave the rival reading genuinely live. Rework title, body and if needed pieces; keep place, spot, lean and axioms. See the drift report at the top of this file.",
+      "votes": "A 5, B 0, neither 0 (clue lean A)",
+      "row": {
+        "anchor": {
+          "map": "IrvingtonStashMap1",
+          "mark": 1
+        },
+        "body": "The location copy preserves 56.34 seconds beside an empty route line. A child's drawing is folded under the key tag; the only complete return count is for keys.",
+        "id": "t0013-01",
+        "kind": "set",
+        "pieces": [
+          "Map",
+          "KeyRing"
+        ],
+        "title": "Return count complete, route line empty",
+        "where": [
+          {
+            "lean": "containment",
+            "place": "mapNamed",
+            "rival": "agricultural",
+            "spot": "ground"
+          }
+        ],
+        "axioms": {
+          "agricultural": [
+            "a-program",
+            "a-timing"
+          ],
+          "containment": [
+            "c-orders",
+            "c-failure"
+          ]
+        },
+        "cites": {
+          "quote": "56.34 seconds",
+          "source": "map:IrvingtonStashMap1"
+        },
+        "gloss": "A map annotation sits beside a completed key return and an unfinished route entry.",
+        "prov": {
+          "adhd_run": "docs/writer-only/adhd/2026-09-27-T0013/",
+          "batch": "T0013",
+          "handoff": "2026-09-27",
+          "writer": "ChatGPT"
+        },
+        "rival_reading": "The lap-time notation and key tally may be unrelated records of ordinary local work; nothing here proves an evacuation or containment failure."
+      }
+    },
+    {
+      "id": "t0013-02",
+      "codes": [
+        "DRIFT"
+      ],
+      "note": "Passed the blind re-read; returned only because its ticket is returned. Redeliver it unchanged if it still fits after the drift fix (its receipt stays valid only while title, body, pieces and places are unchanged). See the drift report at the top of this file.",
+      "votes": "A 1, B 2, neither 2 (clue lean B)",
+      "row": {
+        "anchor": {
+          "map": "IrvingtonStashMap1",
+          "note": 1
+        },
+        "body": "The map annotation keeps 1 minute, 14.55 seconds. The notebook's field-water line predates the route entry; a child's drink reminder is taped to the bottle, but only the bottle count is complete.",
+        "id": "t0013-02",
+        "kind": "set",
+        "pieces": [
+          "Notebook",
+          "WaterBottle"
+        ],
+        "title": "Water total entered before the route line",
+        "where": [
+          {
+            "lean": "agricultural",
+            "place": "mapNamed",
+            "rival": "containment",
+            "spot": "ground"
+          }
+        ],
+        "axioms": {
+          "agricultural": [
+            "a-program",
+            "a-pathway"
+          ],
+          "containment": [
+            "c-orders",
+            "c-failure"
+          ]
+        },
+        "cites": {
+          "quote": "1 minute, 14.55 seconds",
+          "source": "map:IrvingtonStashMap1"
+        },
+        "gloss": "A field-water line predates a route entry beside a recorded interval.",
+        "prov": {
+          "adhd_run": "docs/writer-only/adhd/2026-09-27-T0013/",
+          "batch": "T0013",
+          "handoff": "2026-09-27",
+          "writer": "ChatGPT"
+        },
+        "rival_reading": "Emergency crews could tally field water after a diversion; an incomplete route entry does not establish an agricultural malfunction."
+      }
+    },
+    {
+      "id": "t0013-03",
+      "codes": [
+        "NEVER_RIVAL",
+        "DRIFT"
+      ],
+      "note": "A blind re-read (5 independent reads, a different model, told nothing) never named the rival, so the row is one-sided. The lean should come from where the clue is placed and from one detail; the rest must leave the rival reading genuinely live. Rework title, body and if needed pieces; keep place, spot, lean and axioms. See the drift report at the top of this file.",
+      "votes": "A 1, B 0, neither 4 (clue lean A)",
+      "row": {
+        "anchor": {
+          "map": "IrvingtonStashMap1",
+          "note": 2
+        },
+        "body": "The route acknowledgment is entered after the road restriction. The note still copies 56.34 seconds; a child's drawing is on the return copy, and the completed field counts pages sent, not recipients.",
+        "id": "t0013-03",
+        "kind": "written",
+        "pieces": [
+          "dispatch"
+        ],
+        "title": "Acknowledgment follows the restriction",
+        "where": [
+          {
+            "lean": "containment",
+            "place": "mapNamed",
+            "rival": "agricultural",
+            "spot": "ground"
+          }
+        ],
+        "axioms": {
+          "agricultural": [
+            "a-program",
+            "a-obscured"
+          ],
+          "containment": [
+            "c-warning",
+            "c-orders"
+          ]
+        },
+        "cites": {
+          "quote": "56.34 seconds",
+          "source": "map:IrvingtonStashMap1"
+        },
+        "gloss": "A dispatch acknowledgment follows a road restriction while the recipient field remains incomplete.",
+        "prov": {
+          "adhd_run": "docs/writer-only/adhd/2026-09-27-T0013/",
+          "batch": "T0013",
+          "handoff": "2026-09-27",
+          "writer": "ChatGPT"
+        },
+        "rival_reading": "A route acknowledgment may be ordinary local scheduling after access changed; the late entry and returned page do not prove a failed containment order."
+      }
+    },
+    {
+      "id": "t0013-04",
+      "codes": [
+        "NEVER_RIVAL",
+        "DRIFT"
+      ],
+      "note": "A blind re-read (5 independent reads, a different model, told nothing) never named the rival, so the row is one-sided. The lean should come from where the clue is placed and from one detail; the rest must leave the rival reading genuinely live. Rework title, body and if needed pieces; keep place, spot, lean and axioms. See the drift report at the top of this file.",
+      "votes": "A 0, B 5, neither 0 (clue lean B)",
+      "row": {
+        "anchor": {
+          "map": "IrvingtonStashMap1",
+          "note": 3
+        },
+        "body": "The receipt's field measure is dated before the route round was closed. The map beside it keeps 1 minute, 14.55 seconds. A child's lunch reminder survives; only the container count is signed.",
+        "id": "t0013-04",
+        "kind": "written",
+        "pieces": [
+          "receipt"
+        ],
+        "title": "Field record signed after the round",
+        "where": [
+          {
+            "lean": "agricultural",
+            "place": "mapNamed",
+            "rival": "containment",
+            "spot": "ground"
+          }
+        ],
+        "axioms": {
+          "agricultural": [
+            "a-program",
+            "a-timing"
+          ],
+          "containment": [
+            "c-orders",
+            "c-failure"
+          ]
+        },
+        "cites": {
+          "quote": "1 minute, 14.55 seconds",
+          "source": "map:IrvingtonStashMap1"
+        },
+        "gloss": "A dated field measure and a copied interval remain beside an incomplete origin record.",
+        "prov": {
+          "adhd_run": "docs/writer-only/adhd/2026-09-27-T0013/",
+          "batch": "T0013",
+          "handoff": "2026-09-27",
+          "writer": "ChatGPT"
+        },
+        "rival_reading": "The timing may be ordinary field planning, while the road restriction reflects later emergency action; a water tally alone cannot tell which came first."
+      }
+    }
+  ]
+}

@@ -1,10 +1,54 @@
 {
-  "ticket": "T0001",
+  "ticket": "T0011",
   "returned_by": "Claude blind re-read and batch read, 2026-09-28",
   "drift": "Batch drift report (T0001-T0013, read together): the rows have converged on one template. About 20 of 28 say 'X was recorded before/after Y', add a child's drawing or sticker, and end with 'the only completed count is <returned objects>, not people'. Each row is fine on its own, but a player who finds three of them has found the same clue three times, and the world sounds like one clerk. The containment rows are all timestamp-and-form jokes and the agricultural rows are all 'water total before source'; a blind reader sorts them by that alone. Keep the tone (one human detail beside one institutional one), but vary it: different human stakes (not always a child), different institutional blind spots (not always a count), clues that are mostly an arrangement of objects with a short note or none, and other spots where both sides can use them (ground, vehicle, mailbox, corpse), not only furniture.",
   "rows": [
     {
-      "id": "t0001-01",
+      "id": "t0011-01",
+      "codes": [
+        "NEVER_RIVAL"
+      ],
+      "note": "A blind re-read (5 independent reads, a different model, told nothing) never named the rival, so the row is one-sided. The lean should come from where the clue is placed and from one detail; the rest must leave the rival reading genuinely live. Rework title, body and if needed pieces; keep place, spot, lean and axioms.",
+      "votes": "A 1, B 0, neither 4 (clue lean A)",
+      "row": {
+        "body": "Revised route copy arrived after the first was sent; key due at close. Dispatch clerk, late shift. Reverse note: save half the lunch for my son.",
+        "id": "t0011-01",
+        "kind": "written",
+        "person": "person-b",
+        "pieces": [
+          "idcard"
+        ],
+        "title": "Eli Navarro",
+        "where": [
+          {
+            "lean": "containment",
+            "place": "office",
+            "rival": "agricultural",
+            "spot": "furniture"
+          }
+        ],
+        "axioms": {
+          "agricultural": [
+            "a-program",
+            "a-obscured"
+          ],
+          "containment": [
+            "c-warning",
+            "c-orders"
+          ]
+        },
+        "gloss": "A dispatch credential records a late instruction revision beside a private meal note.",
+        "prov": {
+          "adhd_run": "docs/writer-only/adhd/2026-09-27-T0011/",
+          "batch": "T0011",
+          "handoff": "2026-09-27",
+          "writer": "ChatGPT"
+        },
+        "rival_reading": "A changed shift credential and return rule may follow an ordinary field warning; the late copy does not prove officials mishandled a containment order."
+      }
+    },
+    {
+      "id": "t0011-02",
       "codes": [
         "NEVER_RIVAL",
         "DRIFT"
@@ -12,18 +56,19 @@
       "note": "A blind re-read (5 independent reads, a different model, told nothing) never named the rival, so the row is one-sided. The lean should come from where the clue is placed and from one detail; the rest must leave the rival reading genuinely live. Rework title, body and if needed pieces; keep place, spot, lean and axioms. See the drift report at the top of this file.",
       "votes": "A 5, B 0, neither 0 (clue lean A)",
       "row": {
-        "body": "The last route time is written after the gate closed. A child's sticker covers the lunchbox label; the form counts returned clipboards, not people.",
-        "id": "t0001-01",
+        "body": "Eli's route sheet keeps the earlier road instruction beneath the revision. A child's drawing is folded inside the clipboard; the only completed field counts returned keys, not deliveries.",
+        "id": "t0011-02",
         "kind": "set",
+        "person": "person-b",
         "pieces": [
           "Clipboard",
-          "Lunchbox"
+          "KeyRing"
         ],
-        "title": "Return recorded before crossing",
+        "title": "Revision filed beneath the old order",
         "where": [
           {
             "lean": "containment",
-            "place": "police",
+            "place": "office",
             "rival": "agricultural",
             "spot": "furniture"
           }
@@ -38,57 +83,14 @@
             "c-failure"
           ]
         },
-        "gloss": "A route record places a crossing after closure while completing a count of returned property.",
+        "gloss": "An earlier route instruction remains beneath its revision beside a personal trace and a key return.",
         "prov": {
-          "batch": "T0001",
+          "adhd_run": "docs/writer-only/adhd/2026-09-27-T0011/",
+          "batch": "T0011",
           "handoff": "2026-09-27",
           "writer": "ChatGPT"
         },
-        "rival_reading": "A delayed farm delivery could cross a work gate after a routine closure; an ordinary property count may omit the driver without showing a failed cordon."
-      }
-    },
-    {
-      "id": "t0001-02",
-      "codes": [
-        "NEVER_RIVAL",
-        "DRIFT"
-      ],
-      "note": "A blind re-read (5 independent reads, a different model, told nothing) never named the rival, so the row is one-sided. The lean should come from where the clue is placed and from one detail; the rest must leave the rival reading genuinely live. Rework title, body and if needed pieces; keep place, spot, lean and axioms. See the drift report at the top of this file.",
-      "votes": "A 0, B 5, neither 0 (clue lean B)",
-      "row": {
-        "body": "The bucket has marks from a field round and after a road diversion. A child's drawing is folded under the handle; the capped bottle sits beside it. The only checked box asks if the bucket came back.",
-        "id": "t0001-02",
-        "kind": "set",
-        "pieces": [
-          "Bucket",
-          "WaterBottle"
-        ],
-        "title": "Two measures, one return",
-        "where": [
-          {
-            "lean": "agricultural",
-            "place": "police",
-            "rival": "containment",
-            "spot": "furniture"
-          }
-        ],
-        "axioms": {
-          "agricultural": [
-            "a-program",
-            "a-pathway"
-          ],
-          "containment": [
-            "c-orders",
-            "c-failure"
-          ]
-        },
-        "gloss": "A field-related measure and a later return entry remain with a pair of water containers.",
-        "prov": {
-          "batch": "T0001",
-          "handoff": "2026-09-27",
-          "writer": "ChatGPT"
-        },
-        "rival_reading": "Emergency staff could measure and inventory water after a diversion; a returned container does not show that a program caused the outbreak."
+        "rival_reading": "An agricultural warning could travel through the same desk; an old copy and late receipt may reflect routine message delay rather than a failed evacuation."
       }
     }
   ]
