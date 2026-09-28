@@ -6,6 +6,7 @@
 -- WRITER/ENGINEER TEST: kinds come from the shipped table; clues are
 -- placeholders.
 package.path="mod-nohelp/common/media/lua/shared/?.lua;mod-nohelp/common/media/lua/client/?.lua;test/fixtures/?.lua;"..package.path
+NHShared=NHShared or {}; NHShared.BlindLog=false  -- Disable blind logging for this internal test
 local DIRECTIVE="NH-D7"
 local AreaCase=require("NHShared/Generated/AreaCase")
 local Session=require("NHShared/Generated/Session")
@@ -275,6 +276,10 @@ print=realPrint
 local joined=table.concat(printed,"\n")
 assert(joined:find("scene-wait-start",1,true) and joined:find("scene-wait-end",1,true),"scene-wait is logged")
 assert(joined:find("mode=walking",1,true),"walking or driving is logged")
+-- The real end of a wait is counted by length and mode only (checklist C3).
+local waits,n=Runtime.waitCounts(),0
+for k,v in pairs(waits) do assert(type(v)=="number" and k:match("^%a+_h%d+_?%w*$"),"wait count "..k) n=n+v end
+assert(n>=1,"a real scene wait that ended is counted")
 assert(Runtime.matchVehicle(105,205,0)=="scene:RVSPlonkies","a confirmed scene's car is recognised")
 -- A reload (OnGameStart resets the runtime) does not start that wait again:
 -- the saved pending record's hour is its start (first visible playtest,

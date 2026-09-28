@@ -89,3 +89,26 @@ end
 assert(#w.case.areas==100,"every area was accepted")
 assert(sizes[100]<sizes[50]*2.3,"size grows in proportion to areas ("..sizes[50].." -> "..sizes[100]..")")
 print(("nohelp area session: 100 areas, %d clues, %d bytes"):format(#w.case.documents,sizes[100]))
+
+-- Duplicate area ids are rejected: a case with two areas sharing an id fails (adjacent).
+local bad=AreaCase.new(12345)
+bad.locations[1]={id="t3:dup",bounds={x1=0,y1=0,x2=10,y2=10,z=0}}
+bad.areas[1]={id="t3:dup",place="farm",source="test",version="v1",decidedHours=0,first=1,count=1,short=0}
+bad.areas[2]={id="t3:dup",place="farm",source="test",version="v1",decidedHours=0,first=2,count=1,short=0}
+bad.documents[1]={id="nh:t3:dup:c1:1",locationId="t3:dup",clue="c1",copy=1,lean="containment",rival="agricultural",spot="furniture",kind="Rope",title="Test",body="Test"}
+bad.documents[2]={id="nh:t3:dup:c2:1",locationId="t3:dup",clue="c2",copy=1,lean="agricultural",rival="containment",spot="mailbox",kind="Twine",title="Test",body="Test"}
+local ok,why=AreaCase.validate(bad)
+assert(not ok and why=="area decided twice","duplicate area ids rejected with correct error")
+
+-- Duplicate area ids are rejected: non-adjacent (area 1 and 3 of 3).
+local bad2=AreaCase.new(54321)
+bad2.locations[1]={id="t3:a",bounds={x1=0,y1=0,x2=10,y2=10,z=0}}
+bad2.locations[2]={id="t3:b",bounds={x1=10,y1=0,x2=20,y2=10,z=0}}
+bad2.areas[1]={id="t3:a",place="farm",source="test",version="v1",decidedHours=0,first=1,count=1,short=0}
+bad2.areas[2]={id="t3:b",place="police",source="test",version="v1",decidedHours=0,first=2,count=1,short=0}
+bad2.areas[3]={id="t3:a",place="farm",source="test",version="v1",decidedHours=0,first=3,count=1,short=0}
+bad2.documents[1]={id="nh:t3:a:c1:1",locationId="t3:a",clue="c1",copy=1,lean="containment",rival="agricultural",spot="furniture",kind="Rope",title="Test",body="Test"}
+bad2.documents[2]={id="nh:t3:b:c2:1",locationId="t3:b",clue="c2",copy=1,lean="agricultural",rival="containment",spot="mailbox",kind="Twine",title="Test",body="Test"}
+bad2.documents[3]={id="nh:t3:a:c3:1",locationId="t3:a",clue="c3",copy=1,lean="containment",rival="agricultural",spot="furniture",kind="Rope",title="Test",body="Test"}
+local ok2,why2=AreaCase.validate(bad2)
+assert(not ok2 and why2=="area decided twice","non-adjacent duplicate area ids rejected with correct error")

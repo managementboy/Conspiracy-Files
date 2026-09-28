@@ -536,16 +536,28 @@ function S.physicalKey(target)
     return table.concat({target.x,target.y,target.z,target.objectIndex,target.containerIndex,
                          target.vehiclePart or "-"},":")
 end
+local function copyRoot(root)
+    local next={}
+    for k,v in pairs(root) do
+        if k=="case" and isArea(root) then next[k]=AreaCase.extend(v)
+        else next[k]=copy(v) end
+    end
+    return next
+end
 function S.open(initial,sink)
     local ok,why=S.validate(initial); if not ok then return nil,why end
+    -- Full copies at the boundary: what comes in and what goes out to callers
+    -- may be edited by them, so it never shares a table with the live record.
+    -- Inside a write and for the save (which the runtime copies again before
+    -- storing), the frozen part is shared (copyRoot, checklist A3).
     local root=copy(initial); local api={}
     local function commit(change)
-        local next=copy(root); change(next)
+        local next=copyRoot(root); change(next)
         -- The No Help world record only grows (AreaCase.grows).
         local grows,growsWhy=AreaCase.grows(root.case,next.case)
         if not grows then return false,growsWhy end
         local valid,err=S.validate(next); if not valid then return false,err end
-        local saved,failure=pcall(sink,copy(next)); if not saved then return false,tostring(failure) end
+        local saved,failure=pcall(sink,copyRoot(next)); if not saved then return false,tostring(failure) end
         root=next; return true
     end
     function api.snapshot() return copy(root) end
@@ -763,9 +775,10 @@ function S.open(initial,sink)
         if not validHours(args.hours) then return false,"invalid hours" end
         local ok,why=commit(function(r)
             r.case=nextCase
+            local docById={}
+            for _,d in ipairs(nextCase.documents) do docById[d.id]=d end
             for _,id in ipairs(ids) do
-                local doc
-                for _,d in ipairs(nextCase.documents) do if d.id==id then doc=d end end
+                local doc=docById[id]
                 r.assignments[id]={physicalToken="cf-g2:"..id,status="deferred",locationId=doc.locationId,
                     deferredHours=args.hours,relocations=0}
             end

@@ -11,6 +11,15 @@ Gemini or Llama model, or a Claude model with no access to this repository or
 conversation). The reader is given nothing but the prompt below and one clue.
 No lean, no rival reading, no gloss, no axioms, no anchor, no other clue.
 
+## Scripted (use this)
+
+    tools/cluegates/blind_reread.sh                 # every clue without a current receipt
+    tools/cluegates/blind_reread.sh --rows <ticket>  # a draft, before converting
+
+Haiku through the `claude` CLI, from an empty folder, no tools, no settings,
+a fresh session per read; 5 reads per clue; receipts written as below. The
+steps that follow are what it does.
+
 ## How
 
 1. For each clue, get the exact text the reader sees and its hash:

@@ -209,7 +209,8 @@ was found empty as lost; placement ever stops for a reason other than the cap
 or the save limit; the scene-anchored share falls below its floor. A second
 run writes a save at one cap and reloads it at a higher cap: Pick must keep
 adding and moves must keep working. With the cap off it measures
-save growth (against `Validator.MAX_ENCODED_BYTES`, 1 MB) and the worst Pick
+save growth (*superseded: the owner later lifted the save limit, "no limit at all";
+size is reported, never capped — `SaveBudget.lua`*) and the worst Pick
 call; saved records must grow with areas visited, not days played, compacting
 consumed clues to id, lean and area if needed.
 *Built 2026-09-27 as `test/nohelp_playthrough.lua`; what it covers and what it
@@ -245,11 +246,11 @@ playtests quote it.
 |---|---|---|---|
 | NH-D1 two contradictory conspiracies | step 3 Linter (both leans, rival reading per clue, every kind of area and spot hosts both); step 3 Pick test; step 7 (both leans per area, thinner-lean floor) | clues per lean, per area | `test/nohelp_pick.lua`; `test/nohelp_playthrough.lua` |
 | NH-D2 hint, then search (Look it over as fallback) | step 2 tests (ground spot and set: one hint, one icon, one find); step 8 visible playtest | finds by search vs Look it over | `test/nohelp_found_how.lua`; the hint and icon on open ground and on a set still owe the visible playtest (step 8) |
-| NH-D3 placed procedurally | step 3 Pick test (same inputs, same result; no map-read input); step 4 replay test | area sources | `test/nohelp_pick.lua`; the reload replay test is owed by step 4 |
+| NH-D3 placed procedurally | step 3 Pick test (same inputs, same result; no map-read input); step 4 replay test | area sources | `test/nohelp_pick.lua`; `test/nohelp_reload_mapread.lua` (with `test/nohelp_reload_guard.lua`, `test/nohelp_reload_world.lua` and `test/nohelp_reload_fuzz.lua`, checklist B1-B7: a crash and reload at any save changes nothing) |
 | NH-D4 no maximum, a first-development cap | step 7 cap-off run, raise-the-cap save test, "stopped for another reason" failure; the cap exists only in `Pick.lua` | cap, and any other limit hit | `test/nohelp_pick.lua`; `test/nohelp_playthrough.lua` |
-| NH-D5 half or more are object sets of vanilla items | step 3 Linter (per clue, vanilla types); step 7 on placed *and* spotted, lost sets counted | set share placed and spotted | `test/nohelp_pick.lua`; `test/nohelp_playthrough.lua`; a set whose ground spot is found empty is not yet counted as lost |
+| NH-D5 half or more are object sets of vanilla items | step 3 Linter (per clue, vanilla types); step 7 on placed *and* spotted, lost sets counted | set share placed and spotted | `test/nohelp_pick.lua`; `test/nohelp_playthrough.lua` (a clue whose ground spot is found empty counts as lost, B8) |
 | NH-D6 annotated maps included | step 4 trail fold-in and "read or not, same clue" test; step 7 every map destination holds both leans | trails started, clues per design | `test/nohelp_map_sites.lua`; `test/nohelp_marked_area.lua`; `test/nohelp_trails.lua`; `test/nohelp_pick.lua`; `test/nohelp_area_runtime.lua`; `test/nohelp_playthrough.lua` |
-| NH-D7 vanilla mysteries detected and used | step 5 scene table, matcher, first citation, scene runtime out of debug and saved; step 7 scene-anchored floor; step 8 timing spike | scene-anchored vs fallback | `test/nohelp_scenes.lua`; `test/nohelp_scene_match.lua`; `test/nohelp_scene_area.lua`; `test/nohelp_playthrough.lua` (one clue per confirmed scene); the visible live check (writer-only procedure) and a floor on the scene-anchored share are still owed |
+| NH-D7 vanilla mysteries detected and used | step 5 scene table, matcher, first citation, scene runtime out of debug and saved; step 7 scene-anchored floor; step 8 timing spike | scene-anchored vs fallback | `test/nohelp_scenes.lua`; `test/nohelp_scene_match.lua`; `test/nohelp_scene_area.lua`; `test/nohelp_playthrough.lua` (one clue per confirmed scene); the scene-anchored share has a floor in the playthrough (B9); the visible live check (writer-only procedure) is still owed |
 
 ## 5. Rejected along the way
 
@@ -1205,3 +1206,15 @@ The next visible run must re-check:
 - the frame spike when the game saves;
 - stutter late in a long game: every area decision still copies and validates
   the whole world record, so its cost grows with the record.
+
+### Next phase planned — `/adhd` (2026-09-28)
+
+Frames: logistics, inversion, 3am on-call, game design, ant colony (30 ideas;
+three deepened against the code). The result is the check-off list
+`docs/management/NO_HELP_DEV_CHECKLIST_2026-09-28.md`: A late-game cost, B
+reload guard and proof gaps, C content-blind state dump, D real game, E content
+tooling. Checked in the code while planning: every write is linear in the whole
+record (`Session.lua:541-548`) and the duplicate-area check is quadratic
+(`AreaCase.lua:406`); a clue interrupted between "placing" and the map being
+written is marked unknown and never placed again (`GeneratedRuntime.lua:283`),
+which is put to the owner (checklist, "Open for the owner").

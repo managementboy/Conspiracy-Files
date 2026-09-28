@@ -150,9 +150,17 @@ function M.scan(result,done,reachable,fixedData)
                 end
             end
             -- Retain up to four vehicle parts in addition to fixed choices.
-            local ok=pcall(addVehicles,catalog,candidates,rooms,occupied,targets)
-            if not ok then rooms=rooms; end
-            done(catalog,targets,candidates,rooms,occupied); return true
+            -- VEHICLES ARE OPTIONAL (owner code review F-02, 2026-09-28): a scan
+            -- whose vehicle pass fails still gives every furniture and mailbox
+            -- spot, and a clue that needs a car waits for the next scan. But
+            -- the failure is never silent: it is logged, and the catalogue says
+            -- so (done's sixth value, vehicleScanFailed), so a scan with no cars
+            -- can be told apart from a street with no cars.
+            local ok,err=pcall(addVehicles,catalog,candidates,rooms,occupied,targets)
+            if not ok then
+                require("NHShared/Log").write("e","error",{mod="storage",why="vehicle scan failed: "..tostring(err)})
+            end
+            done(catalog,targets,candidates,rooms,occupied,not ok); return true
         end
         local id="t3:"..r.building
         local site=sites[id]

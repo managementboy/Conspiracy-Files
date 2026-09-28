@@ -70,67 +70,31 @@ has("Every piece of the clue is rebuilt","the relocation mover is untouched")
 
 -- THE RUNTIME ITSELF, with the engine stubbed.
 package.path="mod-nohelp/common/media/lua/shared/?.lua;mod-nohelp/common/media/lua/client/?.lua;test/fixtures/?.lua;"..package.path
-local handlers={}
-local clock=0
-Events=setmetatable({},{__index=function(t,name)
-    local ev={Add=function(fn) handlers[name]=handlers[name] or {}; table.insert(handlers[name],fn) end,
-        Remove=function() end}
-    rawset(t,name,ev); return ev
-end})
-local function fire(name) clock=clock+16; for _,fn in ipairs(handlers[name] or {}) do fn() end end
+local boot=dofile("test/fixtures/nohelp_runtime_stub.lua")
 local store={}
-ModData={getOrCreate=function(tag) store[tag]=store[tag] or {}; return store[tag] end,
-    get=function(tag) return store[tag] end}
-getDebug=function() return false end  -- No Help runs in normal play (owner, 2026-09-27)
-isClient=function() return false end
-isServer=function() return false end
--- Still within a frame, so the scheduler's time budget is never spent.
-getTimeInMillis=function() return clock end
-local rolls=0
-ZombRand=function(n) rolls=rolls+1; return 777 end
-local hours=5
-getGameTime=function() return {getWorldAgeHours=function() return hours end} end
-local px,py=1000,1000
-local player={getX=function() return px end,getY=function() return py end,getZ=function() return 0 end,
-    getSquare=function() return nil end,getInventory=function() return {getItems=function() return nil end} end,
-    getModData=function() return {} end}
-getPlayer=function() return player end
-getWorld=function() return nil end -- services wait for a world; not under test here
-getCell=function() return nil end
--- Not the parts under test: kept out of the load.
-package.loaded["NHShared/InteractionAPI"]={}
-local probe={}
-function probe.start(radius,seed) probe.seed=seed; probe.started=(probe.started or 0)+1; return true end
-package.loaded["NHShared/T3Nearby"]=probe
-package.loaded["NHShared/ReachabilityAdapter"]={basementSites=function() return {} end}
-local scanned
-package.loaded["NHShared/Generated/Storage"]={MAILBOX="postbox",fixedKind=function() return true end,
-    scan=function(result,done,reachable)
-        scanned=result
-        return function() done(result.catalog,{},result.candidates,{},{}); return true end
-    end}
--- A clue list with clues, so a decision has something to give.
+local harness=boot(store)
+local R=harness.R
+local fire=harness.fire
+local probe=harness.probe
 local Manifest=require("NHShared/Mystery/Manifest")
 local Inventory=require("nohelp_inventory")
 Manifest.clues=Inventory.clues
-
-local R=dofile(PATH)
 assert(R.start==nil and R.nextCase==nil and R.reshuffle==nil and R.primeOpening==nil,
     "the old entry points do not exist")
 
 -- A new save: one world record, one seed, saved.
-fire("OnGameStart")
+harness.fire("OnGameStart")
 local S=require("NHShared/Generated/Session")
 local saved=store["NHShared.Generated.G2"]
 assert(saved and saved.campaign and saved.campaign.canonical,"a new save gets a world record")
 local root=saved.campaign.canonical
 assert(S.isArea(root) and root.case.seed==778,"the world record is an area record with the drawn seed")
-assert(rolls==1,"the world seed is drawn once")
+assert(harness.getRolls()==1,"the world seed is drawn once")
 assert(R.metrics(),"the scheduler exists, so the features that need it are on")
 
 -- Loading the same save again opens the same record and draws nothing.
-fire("OnGameStart")
-assert(rolls==1 and store["NHShared.Generated.G2"].campaign.canonical.case.seed==778,"a reload keeps the seed")
+harness.fire("OnGameStart")
+assert(harness.getRolls()==1 and store["NHShared.Generated.G2"].campaign.canonical.case.seed==778,"a reload keeps the seed")
 
 -- Deciding: a police station and a house near the survivor.
 local function site(id,x)
@@ -145,11 +109,11 @@ local result={rows={
 },catalog={revision="t",locations={site("t3:p1",1000),site("t3:h1",1100)}},
   candidates={["t3:p1"]={{x=1001,y=1001,z=0}},["t3:h1"]={{x=1101,y=1001,z=0}}}}
 assert(R.decideNearby()==true,"a first attempt starts the nearby scan")
-assert(probe.seed==778,"the scan is seeded from the world record")
+assert(harness.probe.seed==778,"the scan is seeded from the world record")
 assert(select(2,R.decideNearby())=="busy","a second attempt waits while the first runs")
-probe.result=result
-for _=1,20 do fire("OnTick") end
-assert(scanned==result,"the storage scan ran on the nearby result")
+harness.probe.result=result
+for _=1,20 do harness.fire("OnTick") end
+assert(harness.scanned()==result,"the storage scan ran on the nearby result")
 root=store["NHShared.Generated.G2"].campaign.canonical
 assert(#root.case.areas==1 and root.case.areas[1].id=="t3:p1","only the interesting place is decided")
 assert(root.case.areas[1].place=="police" and root.case.areas[1].version==Manifest.VERSION,
@@ -162,20 +126,20 @@ assert(waiting==#root.case.documents and waiting>0,"its clues wait for the fille
 -- entering its ring (R.ARRIVE_TILES of its bounds) queues one filler attempt
 -- for it at once, once per stay; outside the ring nothing is queued.
 do
-    local wasX,wasY=px,py
-    px,py=1000-R.ARRIVE_TILES-1,1005
+    local wasX,wasY=harness.getPlayerPos()
+    harness.setPlayerPos(1000-R.ARRIVE_TILES-1,1005)
     assert(R.arrivals()==0,"outside the ring nothing is queued")
-    px=1000-R.ARRIVE_TILES
+    harness.setPlayerPos(1000-R.ARRIVE_TILES,1005)
     assert(R.arrivals()==1,"entering the ring queues one attempt for the area")
     assert(R.arrivals()==0,"once per stay in the ring")
-    px,py=wasX,wasY
+    harness.setPlayerPos(wasX,wasY)
 end
 
 -- The next attempt waits until the survivor moves on or time passes.
 assert(select(2,R.decideNearby())=="wait","nothing is scanned again in the same place")
-px=1100
+harness.setPlayerPos(1100,1005)
 assert(R.decideNearby()==true,"after moving 50 tiles it scans again")
-for _=1,20 do fire("OnTick") end
+for _=1,20 do harness.fire("OnTick") end
 root=store["NHShared.Generated.G2"].campaign.canonical
 assert(#root.case.areas==1,"an area is never decided twice, and a house is never an area")
 
@@ -185,9 +149,9 @@ local other=site("t3:p2",2000)
 result.rows[#result.rows+1]={kind="building",id="p2",categoryHint="medical"}
 result.catalog.locations[#result.catalog.locations+1]=other
 result.candidates["t3:p2"]={{x=2001,y=1001,z=0}}
-hours=hours+1
+harness.setHours(harness.getHours()+1)
 assert(R.decideNearby()==true)
-for _=1,20 do fire("OnTick") end
+for _=1,20 do harness.fire("OnTick") end
 root=store["NHShared.Generated.G2"].campaign.canonical
 assert(#root.case.areas==1,"a place with nothing to give is not decided")
 
@@ -223,7 +187,7 @@ Manifest.clues=marked
 local function newWorld()
     store["NHShared.Generated.G2"]=nil; store["NHShared.MapMedia"]=nil
     MapRuntime.invalidate()
-    fire("OnGameStart")
+    harness.fire("OnGameStart")
     local r=store["NHShared.Generated.G2"].campaign.canonical
     assert(r.case.seed==778,"every world here has the same seed")
 end
@@ -250,9 +214,9 @@ assert(design,"the catalogue has a one-mark map")
 
 -- Read: far away, at hour 5.
 newWorld()
-px,py=1,1; hours=5
+harness.setPlayerPos(1,1); harness.setHours(5)
 assert(MapRuntime.read(design)==true,D6..": reading a map is recorded")
-for _=1,20 do fire("OnTick") end
+for _=1,20 do harness.fire("OnTick") end
 local read=areaOf(entry.areaId)
 assert(read and read.source=="read" and read.place=="mapNamed",D6..": reading a map decides its marked place, as map-named")
 assert(read.trail and read.trail.designs[1]==design and #read.trail.designs==1,D6..": the place records the map marking it")
@@ -266,16 +230,16 @@ local seed=mapState.trails[design].seed
 assert(seed==1+Pick.hash(Pick.key({778,design,Trails.VERSION,"trail"}))%2147483646,D6..": the trail seed comes from the world")
 -- Reading it again decides nothing new.
 local before=#world().case.areas
-assert(MapRuntime.read(design)==true); for _=1,20 do fire("OnTick") end
+assert(MapRuntime.read(design)==true); for _=1,20 do harness.fire("OnTick") end
 assert(#world().case.areas==before,D6..": a place is decided once")
 
 -- Approach: the same world, never read, the survivor walks toward the place
 -- at another hour.
 newWorld()
-hours=50
-px,py=entry.bounds.x1-60,entry.bounds.y1
+harness.setHours(50)
+harness.setPlayerPos(entry.bounds.x1-60,entry.bounds.y1)
 assert(R.decideMapNear()>=1,D6..": coming within reach decides the place")
-for _=1,40 do fire("OnTick") end
+for _=1,40 do harness.fire("OnTick") end
 local near=areaOf(entry.areaId)
 assert(near and near.source=="near",D6..": decided on approach")
 assert(near.place==read.place and near.count==read.count and near.trail.favour==read.trail.favour
@@ -295,23 +259,23 @@ assert(store["NHShared.MapMedia"].canonical.trails[other]==nil,D6..": nothing ab
 -- A building that is both a map place and a police station is decided once,
 -- as a map-named place.
 newWorld()
-px,py=1,1
+harness.setPlayerPos(1,1)
 local police
 for _,e in ipairs(Sites.sites) do if e.kind=="building" and e~=entry then police=e; break end end
 local b=police.bounds
-probe.result={rows={{kind="building",id=police.buildingId,categoryHint="public-service"}},
+harness.probe.result={rows={{kind="building",id=police.buildingId,categoryHint="public-service"}},
     catalog={revision="t",locations={{id=police.areaId,areaId=police.areaId,name="Building",mapId="Muldraugh, KY",buildLine="42",
         bounds={x1=b.x1,y1=b.y1,x2=b.x2,y2=b.y2,z=0},source={kind="map-research",reference="test"},
         paperStorage="observed",containerTypes={"shelves"},excluded=false}}},
     candidates={[police.areaId]={{x=b.x1,y=b.y1,z=0}}}}
 assert(R.decideNearby(true)==true)
-for _=1,20 do fire("OnTick") end
+for _=1,20 do harness.fire("OnTick") end
 assert(areaOf(police.areaId)==nil,D6..": the nearby scan does not decide a map place")
 assert(R.decideMapArea(police,"near")==true)
-for _=1,20 do fire("OnTick") end
-hours=hours+1
+for _=1,20 do harness.fire("OnTick") end
+harness.setHours(harness.getHours()+1)
 assert(R.decideNearby(true)==true)
-for _=1,20 do fire("OnTick") end
+for _=1,20 do harness.fire("OnTick") end
 local count=0
 for _,a in ipairs(world().case.areas) do if a.id==police.areaId then count=count+1 end end
 assert(count==1 and areaOf(police.areaId).place=="mapNamed",D6..": decided once, as a map-named place")
@@ -330,7 +294,7 @@ assert(not S.target({x=b.x1,y=b.y1,z=0,objectIndex=0,containerIndex=0,containerT
 -- with two of its own marks passes them to the decision; each clue belongs to
 -- one mark and its search starts at that mark's point.
 newWorld()
-px,py=1,1
+harness.setPlayerPos(1,1)
 local twoMarks
 for _,e in ipairs(Sites.sites) do if e.areaId=="mark:WorldStashMap6:1" then twoMarks=e end end
 local own=R.ownMarksOf(twoMarks,{"WorldStashMap6"})
@@ -341,7 +305,7 @@ for _,e in ipairs(Sites.sites) do
     end
 end
 assert(R.decideMapArea(twoMarks,"read")==true)
-for _=1,20 do fire("OnTick") end
+for _=1,20 do harness.fire("OnTick") end
 local ta=assert(areaOf(twoMarks.areaId),"the two-mark area is decided")
 assert(ta.trail.marks and #ta.trail.marks==2 and ta.count>=6,"3 clues per own mark")
 local tsite

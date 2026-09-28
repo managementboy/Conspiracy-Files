@@ -45,9 +45,12 @@ function M.docId(areaId,clueId,copyNumber)
 end
 
 function M.new(seed)
+    local clues={}
+    for _,lean in ipairs(Manifest.LEANS) do clues[lean]=0 end
     return {kind=M.KIND,schemaVersion=M.SCHEMA,caseId=M.CASE_ID,seed=seed,
         locations={},areas={},documents={},
-        ledger={areas={},world={},placed={}}}
+        ledger={areas={},world={},placed={}},
+        totals={areasDecided=0,clues=clues,short=0,bySource={}}}
 end
 
 -- A set's pieces as the engine's members, repeats folded into a quantity.
@@ -105,6 +108,39 @@ local function recount(case)
     return ledger
 end
 M.recount=recount
+
+-- Compute the Pick totals from areas and documents: areasDecided, clues per lean,
+-- short (count of areas that stopped below their number), and bySource (source -> count). O(areas + docs).
+local function computeTotals(case)
+    local totals={areasDecided=0,clues={},short=0,bySource={}}
+    for _,lean in ipairs(Manifest.LEANS) do totals.clues[lean]=0 end
+
+    -- Build scene-area set once.
+    local sceneAreas={}
+    for _,a in ipairs(case.areas or {}) do
+        if a.place=="scene" then sceneAreas[a.id]=true end
+    end
+
+    -- Count areas, short stops, and sources.
+    for _,a in ipairs(case.areas or {}) do
+        if a.place~="scene" then totals.areasDecided=totals.areasDecided+1 end
+        if a.short and a.short>0 then totals.short=totals.short+1 end
+        totals.bySource[a.source]=(totals.bySource[a.source] or 0)+1
+    end
+
+    -- Single pass over documents: count per area per lean, count totals.
+    for _,d in ipairs(case.documents or {}) do
+        if not sceneAreas[d.locationId] then
+            totals.clues[d.lean]=(totals.clues[d.lean] or 0)+1
+        end
+    end
+
+    return totals
+end
+-- No cap hits here: the cap is raised during development (NH-D4), and a saved
+-- count checked against a recount would refuse every older save once it
+-- changed. The playthrough harness reports how the cap behaves.
+M.computeTotals=computeTotals
 
 -- A PLACE VANILLA MAPS OR FLYERS MARK (task 3 plan, step 4; owner,
 -- 2026-09-27). It leans toward the conspiracy of the first map or flyer that
@@ -218,11 +254,28 @@ end
 -- case and the new document ids, or nil and "decided" (never again), "empty"
 -- (nothing to give: NOT a decision, so a later clue list can still decide it)
 -- or another refusal.
+-- THE NEXT RECORD SHARES WHAT IS FROZEN (checklist A3). Decided places, areas
+-- and clues never change once written (M.grows refuses it), so the next record
+-- keeps the very same tables for them and only copies everything else; adding
+-- an area no longer deep-copies the whole world. Every other field is copied,
+-- so a field added to the record later is carried over without a change here.
+local FROZEN={locations=true,areas=true,documents=true}
+local function extend(case)
+    local next={}
+    for k,v in pairs(case) do
+        if FROZEN[k] then local list={}; for i,x in ipairs(v) do list[i]=x end; next[k]=list
+        else next[k]=copy(v) end
+    end
+    return next
+end
+M.extend=extend
+
 function M.decide(args)
     local case,site=args.case,args.site
     if not M.isAreaCase(case) or type(site)~="table" or type(site.id)~="string" then return nil,"invalid" end
     if not PLACE[args.place] then return nil,"not an interesting place" end
-    for _,a in ipairs(case.areas) do if a.id==site.id then return nil,"decided" end end
+    local areaIds={}; for _,a in ipairs(case.areas) do areaIds[a.id]=true end
+    if areaIds[site.id] then return nil,"decided" end
     local clues=M.anchorPool(args.clues or Manifest.clues,args.anchors)
     local byId={}; for _,c in ipairs(clues) do byId[c.id]=c end
     local trail,lean=M.trailFor(case.seed,args.designs,site.id,args.marks)
@@ -232,10 +285,9 @@ function M.decide(args)
         ledger=case.ledger,seed=case.seed,version=args.version,
         favour=lean.favour,rivalMin=lean.rivalMin,minCount=lean.minCount}
     if #picks==0 then return nil,"empty" end
-    local next=copy(case)
-    local known=false
-    for _,l in ipairs(next.locations) do if l.id==site.id then known=true end end
-    if not known then next.locations[#next.locations+1]=copy(site) end
+    local next=extend(case)
+    local locIds={}; for _,l in ipairs(next.locations) do locIds[l.id]=true end
+    if not locIds[site.id] then next.locations[#next.locations+1]=copy(site) end
     local first=#next.documents+1
     local ids,docs={},{}
     for _,p in ipairs(picks) do
@@ -248,6 +300,7 @@ function M.decide(args)
     next.areas[#next.areas+1]={id=site.id,place=args.place,source=tostring(args.source or "nearby"),
         version=tostring(args.version),decidedHours=args.hours or 0,first=first,count=#picks,short=short,trail=trail}
     next.ledger=recount(next)
+    next.totals=computeTotals(next)
     return next,ids
 end
 
@@ -273,7 +326,8 @@ function M.decideScene(args)
     if not M.isAreaCase(case) or type(site)~="table" or type(site.id)~="string" then return nil,"invalid" end
     if type(args.key)~="string" or site.id~="scene:"..args.key then return nil,"a scene area is named by its scene" end
     if not Scenes.allowed(args.kind) then return nil,"this kind of scene holds no clue" end
-    for _,a in ipairs(case.areas) do if a.id==site.id then return nil,"decided" end end
+    local areaIds={}; for _,a in ipairs(case.areas) do areaIds[a.id]=true end
+    if areaIds[site.id] then return nil,"decided" end
     local spot=Scenes.spotFor(args.kind)
     local lean=Scenes.lean(case.seed,site.id,args.kind)
     local row=Scenes.get(args.kind)
@@ -296,7 +350,7 @@ function M.decideScene(args)
         end
     end
     if not best then return nil,"empty" end
-    local next=copy(case)
+    local next=extend(case)
     next.locations[#next.locations+1]=copy(site)
     local first=#next.documents+1
     local doc=M.docFrom({clue=best.clue.id,copy=best.copy,lean=lean,rival=best.where.rival,
@@ -306,6 +360,7 @@ function M.decideScene(args)
         decidedHours=args.hours or 0,first=first,count=1,short=0,
         scene={key=args.key,kind=args.kind,anchor=row.anchor}}
     next.ledger=recount(next)
+    next.totals=computeTotals(next)
     return next,{doc.id}
 end
 
@@ -316,7 +371,7 @@ function M.validate(case)
     if case.schemaVersion~=M.SCHEMA or case.caseId~=M.CASE_ID then return false,"unsupported area case" end
     if not integer(case.seed) or case.seed<1 or case.seed>=2147483647 then return false,"invalid world seed" end
     for k in pairs(case) do
-        if not ({kind=1,schemaVersion=1,caseId=1,seed=1,locations=1,areas=1,documents=1,ledger=1})[k] then
+        if not ({kind=1,schemaVersion=1,caseId=1,seed=1,locations=1,areas=1,documents=1,ledger=1,totals=1})[k] then
             return false,"unknown area case field "..tostring(k)
         end
     end
@@ -329,6 +384,7 @@ function M.validate(case)
         sites[l.id]=true
     end
     local docIndex,copies=1,{}
+    local seenAreaId={}
     for i,a in ipairs(case.areas) do
         if type(a)~="table" or not sites[a.id] or not (PLACE[a.place] or a.place=="scene") or type(a.source)~="string"
             or type(a.version)~="string" or not hours(a.decidedHours) then return false,"invalid area "..tostring(i) end
@@ -403,7 +459,8 @@ function M.validate(case)
                 if case.documents[j].mark~=nil then return false,"a clue names a mark its area does not have" end
             end
         end
-        for j=1,i-1 do if case.areas[j].id==a.id then return false,"area decided twice" end end
+        if seenAreaId[a.id] then return false,"area decided twice" end
+        seenAreaId[a.id]=true
     end
     if docIndex-1~=#case.documents then return false,"clues outside any area" end
     for _,d in ipairs(case.documents) do
@@ -461,6 +518,12 @@ function M.validate(case)
         end
     end
     if not same(recount(case),case.ledger) then return false,"the ledger does not match the clues" end
+    -- Totals validation: if present, must equal a recount (never drift).
+    -- Old records without totals are allowed (migration: compute on first write).
+    if case.totals~=nil then
+        local expected=computeTotals(case)
+        if not same(expected,case.totals) then return false,"the totals do not match the areas and documents" end
+    end
     return true
 end
 
@@ -471,9 +534,9 @@ function M.grows(old,new)
     if not M.isAreaCase(new) then return false,"the world record cannot be replaced" end
     if old.seed~=new.seed or old.caseId~=new.caseId then return false,"the world seed cannot change" end
     if #new.areas<#old.areas or #new.documents<#old.documents then return false,"the world record only grows" end
-    for i,a in ipairs(old.areas) do if not same(a,new.areas[i]) then return false,"a decided area cannot change" end end
-    for i,d in ipairs(old.documents) do if not same(d,new.documents[i]) then return false,"a placed clue cannot change" end end
-    for i,l in ipairs(old.locations) do if not same(l,new.locations[i]) then return false,"a decided place cannot change" end end
+    for i,a in ipairs(old.areas) do if not rawequal(a,new.areas[i]) and not same(a,new.areas[i]) then return false,"a decided area cannot change" end end
+    for i,d in ipairs(old.documents) do if not rawequal(d,new.documents[i]) and not same(d,new.documents[i]) then return false,"a placed clue cannot change" end end
+    for i,l in ipairs(old.locations) do if not rawequal(l,new.locations[i]) and not same(l,new.locations[i]) then return false,"a decided place cannot change" end end
     return true
 end
 

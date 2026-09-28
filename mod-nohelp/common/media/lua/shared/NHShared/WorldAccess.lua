@@ -139,6 +139,18 @@ function World.ground(square)
     function g:getSourceGrid() return square end
     return g
 end
+-- ONE GROUND PER SQUARE. Placement checks that the container it counted is
+-- still the one it resolves (`current~=container`), which holds for the
+-- engine's own containers. A fresh table per resolve made every ground clue
+-- stop there, counted but never created (found by the reload test,
+-- 2026-09-28). Weak keys: an unloaded square takes its ground with it.
+local groundOf=setmetatable({},{__mode="k"})
+local newGround=World.ground
+function World.ground(square)
+    local g=groundOf[square]
+    if not g then g=newGround(square); groundOf[square]=g end
+    return g
+end
 
 function World.vehicleParts(vehicle)
     local out={}

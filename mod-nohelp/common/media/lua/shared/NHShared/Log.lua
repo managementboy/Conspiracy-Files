@@ -53,6 +53,8 @@ local EVENTS={
     person=true,outfit=true,key=true,door=true,address=true,vehicle=true,
     -- diagnostics the owner turns on deliberately
     probe=true,scan=true,
+    -- content-blind state dump for playtests and bug reports
+    dump=true,dump_trigger=true,
 }
 
 -- Field order. Fixed so lines column-align to the eye and so a grep for a
@@ -95,6 +97,10 @@ function Log.write(level,event,fields)
     assert(EVENTS[event],"unknown log event "..tostring(event))
     local parts={Log.PREFIX,"v="..Log.FORMAT_VERSION,"t="..stamp(),"lvl="..level,"ev="..event}
     fields=fields or {}
+    if NHShared.BlindLog then
+        fields=Log.blind(fields)
+        if fields.why then fields.why=Log.scrub(fields.why) end
+    end
     local seen={ev=true}
     for _,key in ipairs(ORDER) do
         if key~="ev" and fields[key]~=nil then
@@ -122,13 +128,6 @@ function Log.forModule(name)
         fields.mod=name
         Log.write(level,event,fields)
     end
-end
-
--- Migration path for the existing prose lines. Keeps a message readable while
--- giving it a time, a level and one prefix, so the twelve loggers can be
--- converted mechanically now and given real fields where they pay.
-function Log.message(name,event,text,level)
-    Log.write(level or "i",event,{mod=name,msg=text})
 end
 
 -- WHY NOTHING HAPPENED.
@@ -160,14 +159,53 @@ end
 -- is one table read and one boolean test, which is what IdentityObserver's
 -- bail() already pays in a render path and what Kahlua can afford there.
 NHShared=NHShared or {}
+if NHShared.BlindLog==nil then NHShared.BlindLog=true end
 NHShared.verbose=NHShared.verbose or {}
 local lastDecline={}
+
+-- BLIND BY DEFAULT (checklist C5): the owner plays blind and quotes log lines.
+-- Values under these keys can name or locate a clue, a scene, a place or a
+-- person, so they print as "-" unless a developer sets NHShared.BlindLog=false
+-- in the debug console. Event names, reasons, counts, modes, hours and
+-- distances stay. Free-text messages (Log.message) are not rewritten.
+local BLIND={area=true,case=true,kind=true,at=true,where=true,site=true,place=true,
+    x=true,y=true,z=true,doc=true,id=true,item=true,person=true,vehicle=true,room=true,token=true}
+function Log.blind(fields)
+    if not fields then return nil end
+    local out={}
+    for k,v in pairs(fields) do out[k]=BLIND[k] and "-" or v end
+    return out
+end
+
+-- Scrub free-text: redact clue/token IDs and coordinates in text.
+function Log.scrub(text)
+    if not text then return text end
+    text=tostring(text)
+    -- Redact IDs: cf-g2:[%w:%-_]+, nh:[%w:%-_]+, t3:[%w%-_]+, scene:[%w%-_]+
+    text=text:gsub("cf%-g2:[%w:%-_]+","-")
+    text=text:gsub("nh:[%w:%-_]+","-")
+    text=text:gsub("t3:[%w%-_]+","-")
+    text=text:gsub("scene:[%w%-_]+","-")
+    -- Redact coordinates: x,y or x,y,z optionally :n:n
+    text=text:gsub("%d+,%d+,%d+:[%d:]+","-")
+    text=text:gsub("%d+,%d+,%d+","-")
+    text=text:gsub("%d+,%d+:[%d:]+","-")
+    text=text:gsub("%d+,%d+","-")
+    return text
+end
+
+-- Modules that log place or person names (free text that no pattern can catch).
+-- These modules replace the whole msg with "-" in blind mode.
+local PLACE_PERSON_MODULES={places=true,visited=true,person=true,outfit=true,ledger=true,voice=true,
+    address=true,key=true,mapread=true,mapmedia=true,nearby=true}
+
 function Log.declines(name)
     return function(reason,fields)
         lastDecline[name]={reason=reason}
         if NHShared.verbose[name] then
             fields=fields or {}
             fields.mod=name; fields.why=reason
+            if NHShared.BlindLog then fields.why=Log.scrub(fields.why) end
             Log.write("d","declined",fields)
         end
         return nil,reason
@@ -178,6 +216,20 @@ function Log.lastDecline(name)
     local out={}
     for module,entry in pairs(lastDecline) do out[module]=entry.reason end
     return out
+end
+
+-- Migration path for the existing prose lines. Keeps a message readable while
+-- giving it a time, a level and one prefix, so the twelve loggers can be
+-- converted mechanically now and given real fields where they pay.
+function Log.message(name,event,text,level)
+    if NHShared.BlindLog then
+        if PLACE_PERSON_MODULES[name] then
+            text="-"  -- Modules logging places/people: replace whole message
+        else
+            text=Log.scrub(text)  -- Other modules: scrub IDs and coordinates
+        end
+    end
+    Log.write(level or "i",event,{mod=name,msg=text})
 end
 
 function Log.events()
