@@ -160,11 +160,17 @@ a future update that changes vanilla's own behavior shows up as a
 detected mismatch, not a silent drift nobody notices until a player
 reports content that no longer makes sense.
 
-**A blind re-read test, not author's memory, is the actual quality
-gate.** Weeks later, or with a second reader: hide which conspiracy an
-item targets, guess whether it corroborates or discredits, kill the item
-on a wrong guess. This tests whether the evidence reads the same cold as
-the author remembers writing it — the only test that catches drift.
+**Independent blind reading is a quality gate.** Hide the intended lean
+and show only the rendered clue to a model other than the writer. The current
+operational rule is one read per clue, with exactly one fresh retry when the
+first vote is `NEITHER` or misses the declared lean; a remaining
+disagreement or mismatch returns the clue for revision. The full batch also
+gets one pass for repetition and consistency. This tests whether evidence
+reads as intended to someone who has not seen its authoring notes. The
+current counts and return rules are defined by
+`DR-20260928-NOHELP-REVIEW-FAST` in `DECISIONS.md` and
+`tools/cluegates/blind_reread.md`; older operational descriptions are
+superseded.
 
 ## 3. How evidence should mean something
 
