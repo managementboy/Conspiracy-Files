@@ -1,0 +1,45 @@
+[
+  {
+    "id": "t0037-01",
+    "kind": "set",
+    "pieces": [
+      "KeyRing",
+      "SheetPaper2"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "containment",
+        "rival": "agricultural"
+      }
+    ],
+    "anchor": {
+      "map": "EkronStashMap4",
+      "mark": 1
+    },
+    "title": "Empty address line",
+    "body": "The spare key is tagged for the address but the transfer sheet has no receiving signature. Someone has checked the box marked “delivered.”",
+    "rival_reading": "A routine property transfer could leave the same gap; the checked box does not say who was supposed to receive the key.",
+    "gloss": "A key transfer is marked complete despite the missing recipient.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "cites": {
+      "source": "map:EkronStashMap4",
+      "quote": "marked address in Ekron"
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0037"
+    }
+  }
+]
