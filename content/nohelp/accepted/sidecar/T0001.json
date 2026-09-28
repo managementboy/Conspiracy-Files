@@ -1,0 +1,40 @@
+{
+  "t0001-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "gloss": "A route and a key with no destination remain together.",
+    "prov": {
+      "batch": "T0001",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A field crew could tie its gate key to a road map after an access change; the rubbed tag need not mean officials stranded anyone."
+  },
+  "t0001-02": {
+    "axioms": {
+      "agricultural": [
+        "a-malfunction",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-accounting"
+      ]
+    },
+    "gloss": "Plant-colored residue remains on containers near a police post.",
+    "prov": {
+      "batch": "T0001",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "Cleanup after a road closure could leave plant matter in ordinary containers; the residue does not identify a program or its source."
+  }
+}

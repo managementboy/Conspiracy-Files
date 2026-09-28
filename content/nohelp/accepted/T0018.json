@@ -1,0 +1,46 @@
+[
+  {
+    "anchor": {
+      "scene": "RBJackieJaye",
+      "version": "A"
+    },
+    "body": "The keyring is clipped to a blank page in the studio desk. The only pencilled line says “doors locked”; the box for who checked them is empty.",
+    "id": "t0018-01",
+    "kind": "set",
+    "pieces": [
+      "Clipboard",
+      "KeyRing"
+    ],
+    "title": "The studio key clipped to a blank rundown",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "office",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RBJackieJaye",
+      "version": "B"
+    },
+    "body": "The notebook is trapped beneath a glass desk cover. A crop-row sketch has a water stain across its center; the bottle beside it is dry and capped.",
+    "id": "t0018-02",
+    "kind": "set",
+    "pieces": [
+      "Notebook",
+      "WaterBottle"
+    ],
+    "title": "The field sketch under the studio glass",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "office",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

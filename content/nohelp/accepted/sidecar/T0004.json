@@ -1,0 +1,40 @@
+{
+  "t0004-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "gloss": "A meal and a route stop at the same mark.",
+    "prov": {
+      "batch": "T0004",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A field crew might turn back at a restricted checkpoint and leave its meal unopened; the map does not show who set the restriction."
+  },
+  "t0004-02": {
+    "axioms": {
+      "agricultural": [
+        "a-malfunction",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-accounting"
+      ]
+    },
+    "gloss": "Dry fertilizer and loose granules travelled in one vehicle.",
+    "prov": {
+      "batch": "T0004",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "Officials could have moved ordinary farm supplies during a road closure; loose granules alone cannot identify a failed program."
+  }
+}

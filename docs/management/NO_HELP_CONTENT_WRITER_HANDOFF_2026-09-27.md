@@ -244,6 +244,7 @@ not receive content (blind play).
 `PERSON_SPLIT`, `SET_RATIO`, `ANCHOR_UNKNOWN`, `ANCHOR_SPOT_MISMATCH`,
 `AXIOM_UNKNOWN`, `NO_RIVAL`, `STATES_SIGNIFICANCE`, `NOT_COLD_READABLE`,
 `VANILLA_REINTERPRETED`, `RETIRED_PREMISE`, `OFF_GLOSS`, `CLASSIFIER_STOP`,
+`NEVER_OWN` (the blind reader only ever read it as the rival conspiracy),
 `TONE` (misses section 2a: e.g. a flat report with no human detail),
 `DRIFT` (a batch read together repeats one template: the same human detail,
 the same institutional joke, the same spot).
@@ -304,3 +305,15 @@ Fix the pattern, not just the row.
 - Name a person in the data; reuse or echo a vanilla named character.
 - Put a clue on a vanilla named character, or overwrite what vanilla built.
 - Generate in bulk. Small batches; ask when unsure.
+
+## Review log
+
+- **2026-09-28, T0001-T0018** (rule `DR-20260928-NOHELP-REVIEW-FAST`): converter
+  check and test suite green; the batch read once (one US-spelling fix);
+  one blind read per clue (38), a second read for the 4 flagged. Accepted:
+  11 tickets, 24 clues. Returned whole: T0003, T0008, T0012, T0014 (one clue
+  each, `LEAN_MISMATCH`: both reads missed the declared lean; the other
+  clues passed and may come back unchanged). Also returned, whole and
+  `merged` (`ONE_SIDED`), though every clue passed: T0010, T0016, T0017;
+  without T0003 they would leave farms one-sided, so they come back unchanged
+  in the same round as T0003. A batch note on repeated objects is in each returned file.
