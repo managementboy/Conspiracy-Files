@@ -343,4 +343,6 @@ Fix the pattern, not just the row.
   written, none is dropped and rewritten. No second reads, no returns for
   "wrong side". The 46 clues in the game were re-read once under it: 19 A,
   19 B, 8 both, 0 none; all stay.
+- **T0023** (returned under the old rule) re-checked once under the new
+  rule: A and B, both stay; accepted as written, no rewrite needed.
 

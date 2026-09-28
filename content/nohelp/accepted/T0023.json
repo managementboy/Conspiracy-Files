@@ -1,0 +1,44 @@
+[
+  {
+    "anchor": {
+      "print": "CircuitalHealing"
+    },
+    "body": "The receiver was in for repair during the county alert. Its battery still held charge; the owner signed for it the next morning and noted the missed shift cost lunch.",
+    "id": "t0023-01",
+    "kind": "set",
+    "pieces": [
+      "RadioReceiver",
+      "Battery",
+      "Screwdriver"
+    ],
+    "title": "Returned after the alert",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "print": "CircuitalHealing"
+    },
+    "body": "The field trial's receiver came back marked 'no fault found,' though it stopped transmitting at the plot. The owner asked to hold the invoice until after harvest; the bench still wants payment.",
+    "id": "t0023-02",
+    "kind": "written",
+    "pieces": [
+      "receipt"
+    ],
+    "title": "No fault at the plot",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  }
+]
