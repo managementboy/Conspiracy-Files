@@ -54,7 +54,7 @@ it runs on every push and writes the line to the run summary. Paste the
 current line at the top of every reply.
 
 "Done" is never yours to declare: at `DONE-CANDIDATE` you hand the baton to
-Claude; Claude reruns the checks, re-reads a random sample blind, and signs.
+Claude; Claude reruns the checks, verifies the current blind-review receipts and unresolved flags, and signs.
 "No maximum" (owner): after the first release, Claude opens new tickets and
 the loop continues.
 
@@ -207,8 +207,8 @@ lawyer (argue the other conspiracy, feed it back).
 3. No more than two tickets in a row are deferred.
 4. The converter check is clean for this ticket; its counts are in the commit
    message.
-5. Every row's rival reading was written first, and a blind re-read can read
-   it both ways.
+5. Every row's rival reading was written first; the official blind-review
+   receipt is current and no review flag remains unresolved.
 6. Every row names axioms for **both** conspiracies and still leans toward one.
 7. The diff touches only `content/nohelp/incoming/`, `content/nohelp/STATE.md`
    and `docs/writer-only/adhd/`.
