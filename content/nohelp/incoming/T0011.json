@@ -1,4 +1,73 @@
 [
-  {"id":"t0011-01","kind":"written","pieces":["idcard"],"person":"person-b","title":"Eli Navarro","body":"Dispatch copy revised after release. Key due at close. First copy remains in the sleeve. Reverse: save half the lunch for my son.","where":[{"place":"office","spot":"mailbox","lean":"containment","rival":"agricultural"}],"rival_reading":"A changed field-service credential could follow an ordinary warning; a retained copy and a late return do not prove officials mishandled containment.","gloss":"A dispatch credential keeps an earlier instruction after a later release and carries a private meal note.","axioms":{"containment":["c-warning","c-orders"],"agricultural":["a-program","a-obscured"]},"prov":{"writer":"ChatGPT","handoff":"2026-09-27","batch":"T0011"}},
-  {"id":"t0011-02","kind":"set","pieces":["Clipboard","KeyRing"],"person":"person-b","title":"The old copy had the only key","body":"The clipboard holds two route copies, with the earlier instruction on top. The key ring is tagged returned, but the delivery field is empty. A bus ticket is folded into the clip.","where":[{"place":"office","spot":"mailbox","lean":"containment","rival":"agricultural"}],"rival_reading":"An agricultural warning could pass through the same office and leave an old copy with a returned key; the empty delivery field may be routine message delay.","gloss":"An earlier route instruction travels with a returned key while the delivery field stays empty.","axioms":{"containment":["c-orders","c-failure"],"agricultural":["a-program","a-pathway"]},"prov":{"writer":"ChatGPT","handoff":"2026-09-27","batch":"T0011"}}
+  {
+    "id": "t0011-01",
+    "kind": "written",
+    "pieces": [
+      "idcard"
+    ],
+    "person": "person-b",
+    "title": "Temporary message runner card",
+    "body": "County notices, office to road crews. Expiry box left blank. Reverse: “Please bring the blue cup back; it was my sister’s.”",
+    "where": [
+      {
+        "place": "office",
+        "spot": "mailbox",
+        "lean": "containment",
+        "rival": "agricultural"
+      }
+    ],
+    "rival_reading": "An agricultural office could use a courier for field notices and leave an expiry blank during a busy period; the personal reminder does not prove containment failed.",
+    "gloss": "A courier card covers road notices but leaves its expiry unresolved, with a small family reminder.",
+    "axioms": {
+      "containment": [
+        "c-warning",
+        "c-orders"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-obscured"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0011"
+    }
+  },
+  {
+    "id": "t0011-02",
+    "kind": "set",
+    "pieces": [
+      "Clipboard",
+      "KeyRing"
+    ],
+    "person": "person-b",
+    "title": "The clip shut around the key ring",
+    "body": "The clipboard clip is bent around the keyring. One key is freshly cut, but dust fills its teeth; a short red thread ties the ring to the clip, too short to wear.",
+    "where": [
+      {
+        "place": "office",
+        "spot": "mailbox",
+        "lean": "containment",
+        "rival": "agricultural"
+      }
+    ],
+    "rival_reading": "A field courier could bind a work key to a clipboard to keep it from being lost; the unused key and thread need not indicate an abandoned containment task.",
+    "gloss": "A new key is secured to a clipboard in a way that suggests someone expected to carry both.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0011"
+    }
+  }
 ]
