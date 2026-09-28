@@ -6,6 +6,7 @@
   "votes": {
     "A": 0,
     "B": 1,
-    "neither": 0
+    "both": 0,
+    "none": 0
   }
 }

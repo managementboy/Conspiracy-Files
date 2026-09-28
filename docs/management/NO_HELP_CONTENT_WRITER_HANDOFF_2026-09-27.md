@@ -338,4 +338,14 @@ Fix the pattern, not just the row.
   unneeded second read (it matched again); blind_reread.sh --force --rows
   now re-reads only flagged rows. Accepted and added: T0020 T0021 T0022
   T0024 (8 clues; 46 in the game).
+- **2026-09-28, new rule `DR-20260928-NOHELP-CLUE-CHECK`** (owner): one blind
+  read per clue answers A, B, both or none; A, B or both go into the game as
+  written, none is dropped and rewritten. No second reads, no returns for
+  "wrong side". The 46 clues in the game were re-read once under it: 19 A,
+  19 B, 8 both, 0 none; all stay.
+- **T0023** (returned under the old rule) re-checked once under the new
+  rule: A and B, both stay; accepted as written, no rewrite needed.
+- **T0023 rewrite** (delivered after the rule change; owner chose it over
+  the original): only title and text changed on the reworked clue; read
+  once, A; it replaces the original in the game.
 

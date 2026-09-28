@@ -1,0 +1,44 @@
+[
+  {
+    "anchor": {
+      "print": "CircuitalHealing"
+    },
+    "body": "The receiver sat on the repair bench during the evacuation alert, screwdriver beside its charged battery. Dispatch's log says it acknowledged the alert there. The owner signed for it next morning and lost lunch money for the missed shift.",
+    "id": "t0023-01",
+    "kind": "set",
+    "pieces": [
+      "RadioReceiver",
+      "Battery",
+      "Screwdriver"
+    ],
+    "title": "Acknowledged from the bench",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "print": "CircuitalHealing"
+    },
+    "body": "The field trial's receiver came back marked 'no fault found,' though it stopped transmitting at the plot. The owner asked to hold the invoice until after harvest; the bench still wants payment.",
+    "id": "t0023-02",
+    "kind": "written",
+    "pieces": [
+      "receipt"
+    ],
+    "title": "No fault at the plot",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  }
+]
