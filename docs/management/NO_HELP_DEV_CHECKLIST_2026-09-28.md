@@ -176,7 +176,7 @@ place a clue twice, or reveal the other theory's clue? The plan still owes a
 
 ## E. Content tooling
 
-- [ ] **E1 Script the blind re-read:** `tools/cluegates/blind_reread.sh`.
+- [x] **E1 Script the blind re-read:** `tools/cluegates/blind_reread.sh`.
   It renders each clue, runs 5 reads with the `claude` CLI on Haiku from an
   empty folder, with no tools, no settings, and a fresh session per read,
   parses the first word, writes the receipts, and runs the receipt check. It
