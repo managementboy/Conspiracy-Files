@@ -1,0 +1,44 @@
+[
+  {
+    "id": "t0207-01",
+    "kind": "set",
+    "pieces": [
+      "WaterBottle",
+      "Notebook"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "anchor": {
+      "print": "FourthofJulyCelebrationDixieMobilePark"
+    },
+    "title": "The park supply table",
+    "body": "The party supply list counts cups and water containers; a note says the grounds hose was used for a separate rinse before the guests arrived.",
+    "rival_reading": "Emergency sanitation could require that rinse; the list does not identify what was cleaned.",
+    "gloss": "A public gathering uses water after the grounds hose was used for a rinse.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "cites": {
+      "source": "print:FourthofJulyCelebrationDixieMobilePark",
+      "quote": "Independence Day Party (Dixie Mobile Park)"
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0207"
+    }
+  }
+]
