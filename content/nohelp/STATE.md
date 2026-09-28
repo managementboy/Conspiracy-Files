@@ -5,25 +5,25 @@ never a place name, map, flyer, scene, person or clue text here. Whoever holds t
 baton edits it; `lua5.1 tools/nohelp_content/progress.lua --state` rewrites PROGRESS.
 
 ## BATON
-CHATGPT since 2026-09-28 because FIXING
+CLAUDE since 2026-09-28 because REVIEW
 
 ## STAGE
 4
 
 ## TICKET
-T0003
+none
 
 ## NEXT
-Review done (DR-20260928-NOHELP-REVIEW-FAST): 11 accepted; T0003 T0008 T0012 T0014 returned LEAN_MISMATCH; T0010 T0016 T0017 passed but returned merged ONE_SIDED (farm needs T0003): redeliver them unchanged with T0003; one round for all seven
+T0003 T0008 T0010 T0012 T0014 T0016 T0017 REVIEW
 
 ## OPEN RETURNS
-T0003
-T0008
-T0010
-T0012
-T0014
-T0016
-T0017
+T0003 ACK 2026-09-28
+T0008 ACK 2026-09-28
+T0010 ACK 2026-09-28
+T0012 ACK 2026-09-28
+T0014 ACK 2026-09-28
+T0016 ACK 2026-09-28
+T0017 ACK 2026-09-28
 
 ## QUARANTINE
 none
@@ -32,4 +32,4 @@ none
 2026-09-28 T0001
 
 ## PROGRESS
-NOT DONE: maps 2/125, flyers 0/133, scenes 1/125, tickets 12/19, adhd 10 @185394b
+NOT DONE: maps 2/125, flyers 0/133, scenes 1/125, tickets 12/19, adhd 10 @32f8aa6
