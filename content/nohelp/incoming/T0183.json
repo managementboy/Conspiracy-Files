@@ -1,0 +1,44 @@
+[
+  {
+    "id": "t0183-01",
+    "kind": "set",
+    "pieces": [
+      "Notebook",
+      "Pencil"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "anchor": {
+      "print": "SpiffosHiringLouisville"
+    },
+    "title": "Training before opening",
+    "body": "The training roster lists the food counter and a separate field-use briefing; the same employee is marked present for both at once.",
+    "rival_reading": "A response crew could hold overlapping training during an emergency; the roster does not explain the duplicate attendance.",
+    "gloss": "One employee is recorded at two simultaneous briefings.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "cites": {
+      "source": "print:SpiffosHiringLouisville",
+      "quote": "Spiffo's Hiring! (Louisville)"
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0183"
+    }
+  }
+]
