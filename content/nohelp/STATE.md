@@ -5,7 +5,7 @@ never a place name, map, flyer, scene, person or clue text here. Whoever holds t
 baton edits it; `lua5.1 tools/nohelp_content/progress.lua --state` rewrites PROGRESS.
 
 ## BATON
-CHATGPT since 2026-09-28 because WRITING
+CLAUDE since 2026-09-28 because STAGE0-SIGNOFF
 
 ## STAGE
 EXPANSION
@@ -14,7 +14,7 @@ EXPANSION
 T0025
 
 ## NEXT
-Expansion batch 1 opened: T0025 (story glosses for T0020-T0024, STAGE0) first, then T0020-T0024 as one round; baton to CLAUDE with STAGE0-SIGNOFF after T0025, and with REVIEW after the round
+Await CLAUDE STAGE0-SIGNOFF for T0025; then T0020-T0024 as one round, baton to CLAUDE because REVIEW
 
 ## OPEN RETURNS
 none
