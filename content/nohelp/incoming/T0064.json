@@ -1,0 +1,45 @@
+[
+  {
+    "id": "t0064-01",
+    "kind": "set",
+    "pieces": [
+      "Bag_Schoolbag",
+      "Map"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "anchor": {
+      "map": "LouisvilleStashMap16",
+      "mark": 1
+    },
+    "title": "Safe route south",
+    "body": "A child’s bag is packed with a route note directing the family south; the same page warns them away from the treated street.",
+    "rival_reading": "Officials could have rerouted families around a hazardous road; the note does not identify the source of the restriction.",
+    "gloss": "A family route avoids a street marked for treatment.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "cites": {
+      "source": "map:LouisvilleStashMap16",
+      "quote": "this whole street is dangerous"
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0064"
+    }
+  }
+]
