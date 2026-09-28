@@ -1,0 +1,45 @@
+[
+  {
+    "id": "t0055-01",
+    "kind": "set",
+    "pieces": [
+      "KeyRing",
+      "SheetPaper2"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "containment",
+        "rival": "agricultural"
+      }
+    ],
+    "anchor": {
+      "map": "LouisvilleStashMap7",
+      "mark": 1
+    },
+    "title": "Everything accounted for",
+    "body": "The house key is clipped to a checklist that says the rooms were cleared; a note on the reverse asks who will collect the owner’s coat.",
+    "rival_reading": "A field inspection could use the same checklist; the missing coat is not proof of an official search.",
+    "gloss": "A completed room checklist leaves a personal item without a named recipient.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "cites": {
+      "source": "map:LouisvilleStashMap7",
+      "quote": "Thanks for putting me down"
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0055"
+    }
+  }
+]
