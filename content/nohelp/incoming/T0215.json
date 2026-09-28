@@ -1,0 +1,44 @@
+[
+  {
+    "id": "t0215-01",
+    "kind": "set",
+    "pieces": [
+      "Gloves_LeatherGloves",
+      "Notebook"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "anchor": {
+      "print": "GreenesJobAdEkron"
+    },
+    "title": "The worker’s first shift",
+    "body": "The job card asks the new worker to report for a field shift; the gloves are signed back before the person’s start date.",
+    "rival_reading": "A response crew could issue gloves before a worker begins; the card does not identify the task.",
+    "gloss": "Protective gloves are returned before the listed first shift.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "cites": {
+      "source": "print:GreenesJobAdEkron",
+      "quote": "Greene's Job Ad (Ekron)"
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0215"
+    }
+  }
+]
