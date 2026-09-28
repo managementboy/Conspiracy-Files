@@ -1,4 +1,72 @@
 [
-  {"id":"t0008-01","kind":"set","pieces":["Lunchbox","KeyRing"],"title":"Bay key returned to an occupied load","body":"The bay key is clipped to a dispatch tag marked returned. The lunchbox beside it still contains a warm-looking wrapper and a pass reading load inside. The release line is unsigned.","where":[{"place":"warehouse","spot":"ground","lean":"containment","rival":"agricultural"}],"rival_reading":"A farm shipment could have had its key returned before a dispatch was updated; an unsigned release line does not establish that an evacuation failed.","gloss":"A returned bay key lies beside a pass saying the load remains inside.","axioms":{"containment":["c-orders","c-failure"],"agricultural":["a-program","a-pathway"]},"prov":{"writer":"ChatGPT","handoff":"2026-09-27","batch":"T0008"}},
-  {"id":"t0008-02","kind":"set","pieces":["Bucket","Notebook"],"title":"The receiving page stayed dry","body":"The notebook lists water for three field rows. The bucket is dry, with a smear of pale powder around its handle; the receiving page says ‘awaiting sample.’ A worker has drawn a door on the margin.","where":[{"place":"warehouse","spot":"ground","lean":"agricultural","rival":"containment"}],"rival_reading":"Emergency workers could list water for a response route before receiving it; a dry bucket and a delayed sample do not prove a program malfunction.","gloss":"A field-water list and an awaiting sample remain with a dry, marked bucket.","axioms":{"containment":["c-orders","c-failure"],"agricultural":["a-program","a-malfunction"]},"prov":{"writer":"ChatGPT","handoff":"2026-09-27","batch":"T0008"}}
+  {
+    "id": "t0008-01",
+    "kind": "set",
+    "pieces": [
+      "Lunchbox",
+      "KeyRing"
+    ],
+    "title": "The lunch and keys on opposite sides",
+    "body": "A lunchbox sits behind a chalk line across the floor. The keyring is on the other side, threaded through red cloth pulled tight enough to fray.",
+    "where": [
+      {
+        "place": "warehouse",
+        "spot": "ground",
+        "lean": "containment",
+        "rival": "agricultural"
+      }
+    ],
+    "rival_reading": "A program crew could leave keys outside a marked work area while moving supplies; the line and abandoned lunch do not show that an evacuation order failed.",
+    "gloss": "A meal and its access keys have been left on opposite sides of a boundary.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0008"
+    }
+  },
+  {
+    "id": "t0008-02",
+    "kind": "set",
+    "pieces": [
+      "Bucket",
+      "Notebook"
+    ],
+    "title": "A green line above the water mark",
+    "body": "A green smear dried above the water line inside the bucket. A notebook served as its lid; the page that touched it is blank, with plant impressions where writing might have been.",
+    "where": [
+      {
+        "place": "warehouse",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "rival_reading": "A cleanup crew could use a bucket and notebook to inspect a warehouse spill; the residue could be ordinary growth rather than an agricultural program malfunction.",
+    "gloss": "A bucket’s residue left a plant-shaped impression on the notebook used as its cover.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-malfunction"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0008"
+    }
+  }
 ]
