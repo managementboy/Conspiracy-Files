@@ -1,4 +1,73 @@
 [
-  {"id":"t0007-01","kind":"set","pieces":["Clipboard","KeyRing"],"title":"The key outlasted the warning","body":"The radio log is clipped to a route sheet. Its last line says return key, while the key tag says the warning was never acknowledged. Someone has drawn a sun over the signature box.","where":[{"place":"transmission","spot":"vehicle","lean":"containment","rival":"agricultural"}],"rival_reading":"A survey or farm service could return its key without signing a routine warning; a missing acknowledgement does not prove officials mishandled containment.","gloss":"A returned route key is paired with a warning that has no acknowledgement.","axioms":{"containment":["c-warning","c-orders","c-failure"],"agricultural":["a-program","a-timing"]},"prov":{"writer":"ChatGPT","handoff":"2026-09-27","batch":"T0007"}},
-  {"id":"t0007-02","kind":"set","pieces":["Notebook","WaterBottle"],"title":"A field note in the broadcast log","body":"The notebook records a wet field and a sharp smell before the bulletin changed. The bottle is labelled for the route crew, but its cap is still sealed. A grease pencil has circled the old frequency.","where":[{"place":"transmission","spot":"vehicle","lean":"agricultural","rival":"containment"}],"rival_reading":"A response crew could report field conditions before a revised broadcast and keep a sealed bottle for later; the sequence does not establish a program malfunction.","gloss":"An observation of field conditions predates a broadcast change while the crew’s bottle remains unused.","axioms":{"containment":["c-warning","c-accounting"],"agricultural":["a-program","a-malfunction"]},"prov":{"writer":"ChatGPT","handoff":"2026-09-27","batch":"T0007"}}
+  {
+    "id": "t0007-01",
+    "kind": "set",
+    "pieces": [
+      "Clipboard",
+      "KeyRing"
+    ],
+    "title": "The spare key still on the ring",
+    "body": "One key on the ring is dusted gray; another has a clean thumb mark on its bow. The clipboard remains upright between them, closed around the empty impression of a removed sheet.",
+    "where": [
+      {
+        "place": "transmission",
+        "spot": "vehicle",
+        "lean": "containment",
+        "rival": "agricultural"
+      }
+    ],
+    "rival_reading": "A field team could move its notes and leave access keys behind during a test or shutdown; the missing sheet does not prove response officials failed.",
+    "gloss": "A keyring remains with an empty clipboard impression, as if a handoff stopped mid-task.",
+    "axioms": {
+      "containment": [
+        "c-warning",
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-timing"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0007"
+    }
+  },
+  {
+    "id": "t0007-02",
+    "kind": "set",
+    "pieces": [
+      "Notebook",
+      "WaterBottle"
+    ],
+    "title": "The weather note ends at the low ground",
+    "body": "The notebook’s rain sketch runs into a drawing of crop rows. A capped water bottle stands beside it, its pale sediment ring on the outside rather than inside.",
+    "where": [
+      {
+        "place": "transmission",
+        "spot": "vehicle",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "rival_reading": "A station crew could record rain and water conditions while planning evacuation routes; the drawing and residue do not show that an agricultural program caused the danger.",
+    "gloss": "A weather sketch and field rows share a notebook beside a bottle marked by dried sediment.",
+    "axioms": {
+      "containment": [
+        "c-warning",
+        "c-accounting"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-malfunction"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0007"
+    }
+  }
 ]
