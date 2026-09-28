@@ -1,0 +1,45 @@
+[
+  {
+    "id": "t0116-01",
+    "kind": "set",
+    "pieces": [
+      "Bandage",
+      "WaterBottle"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "anchor": {
+      "map": "WorldStashMap7",
+      "mark": 1
+    },
+    "title": "Fill before the building empties",
+    "body": "The water bottle is tagged for the infected area, but the field note says to fill it before the next crew enters. A bandage wrapper is folded around the cap.",
+    "rival_reading": "An emergency team might prepare water and first aid before entering; the note does not identify the cause of the infection.",
+    "gloss": "Water and medical supplies were staged before a crew returned.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "cites": {
+      "source": "map:WorldStashMap7",
+      "quote": "fill up here"
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0116"
+    }
+  }
+]
