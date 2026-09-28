@@ -1,0 +1,45 @@
+[
+  {
+    "id": "t0062-01",
+    "kind": "set",
+    "pieces": [
+      "Nails",
+      "SheetPaper2"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "anchor": {
+      "map": "LouisvilleStashMap14",
+      "mark": 1
+    },
+    "title": "Half-hour repair",
+    "body": "The plank receipt is stapled to a note asking everyone to stay outside until the treated boards dry. A radio call time is written beside “half hour.”",
+    "rival_reading": "A response crew could have treated or disinfected boards during containment; the timing does not establish a crop program.",
+    "gloss": "A household waits outside after treated boards are installed and a radio check is scheduled.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "cites": {
+      "source": "map:LouisvilleStashMap14",
+      "quote": "barricade with the planks I brought you"
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0062"
+    }
+  }
+]
