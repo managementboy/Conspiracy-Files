@@ -1,0 +1,86 @@
+[
+  {
+    "id": "t0023-01",
+    "kind": "set",
+    "pieces": [
+      "RadioReceiver",
+      "Battery",
+      "Screwdriver"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "containment",
+        "rival": "agricultural"
+      }
+    ],
+    "title": "Acknowledged from the bench",
+    "body": "The receiver sat on the repair bench during the evacuation alert, screwdriver beside its charged battery. Dispatch's log says it acknowledged the alert there. The owner signed for it next morning and lost lunch money for the missed shift.",
+    "rival_reading": "A field monitor could have been under repair during a test transmission, and a charged battery does not prove it was tuned to the right channel.",
+    "gloss": "A dispatch log records an acknowledgment from a receiver held for repair during an evacuation alert.",
+    "axioms": {
+      "containment": [
+        "c-warning",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "anchor": {
+      "print": "CircuitalHealing"
+    },
+    "cites": {
+      "source": "print:CircuitalHealing",
+      "quote": "Need a radio repaired?"
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0023"
+    }
+  },
+  {
+    "id": "t0023-02",
+    "kind": "written",
+    "pieces": [
+      "receipt"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "title": "No fault at the plot",
+    "body": "The field trial's receiver came back marked 'no fault found,' though it stopped transmitting at the plot. The owner asked to hold the invoice until after harvest; the bench still wants payment.",
+    "rival_reading": "A response crew might have borrowed an ordinary radio and returned it with a disputed repair bill; the note does not establish what the field trial measured.",
+    "gloss": "A field-trial radio failure and its unpaid repair are recorded together.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-malfunction"
+      ]
+    },
+    "anchor": {
+      "print": "CircuitalHealing"
+    },
+    "cites": {
+      "source": "print:CircuitalHealing",
+      "quote": "Over 20 years experience in electronic repair and maintenance."
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0023"
+    }
+  }
+]
