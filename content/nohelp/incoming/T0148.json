@@ -1,0 +1,45 @@
+[
+  {
+    "id": "t0148-01",
+    "kind": "set",
+    "pieces": [
+      "Map",
+      "Pencil"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "anchor": {
+      "map": "WpStashMap16",
+      "mark": 1
+    },
+    "title": "Safest egress plan",
+    "body": "The exit plan marks a fence and a southbound route; a note asks the crew to compare the likely attack path with the last field application.",
+    "rival_reading": "A containment planner could compare routes and hazards after an attack; the plan does not say whether the application caused it.",
+    "gloss": "An exit plan links an attack path to a field-use record without settling the connection.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "cites": {
+      "source": "map:WpStashMap16",
+      "quote": "Likely attacks"
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0148"
+    }
+  }
+]
