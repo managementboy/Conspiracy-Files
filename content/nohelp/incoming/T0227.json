@@ -1,0 +1,44 @@
+[
+  {
+    "id": "t0227-01",
+    "kind": "set",
+    "pieces": [
+      "Screwdriver",
+      "KeyRing"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "anchor": {
+      "print": "LennysCarRepair"
+    },
+    "title": "Suspension repair and route",
+    "body": "The repair key is signed out for an engine test; the customer’s road receipt says the vehicle was cleared before the test ended.",
+    "rival_reading": "A response vehicle could be repaired and cleared during a rushed evacuation; the record does not identify the engine issue.",
+    "gloss": "A vehicle is cleared before its engine test ends.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "cites": {
+      "source": "print:LennysCarRepair",
+      "quote": "Lenny's Car Repair"
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0227"
+    }
+  }
+]
