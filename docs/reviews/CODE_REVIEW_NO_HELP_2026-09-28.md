@@ -23,13 +23,13 @@ If earlier versions lack or differ in any API used by the mod, players can load 
 
 **Severity: P2 — silent feature loss / diagnosability**
 
-`mod-nohelp/common/media/lua/shared/NHShared/Generated/Storage.lua:153-154` wraps the entire `addVehicles` pass in `pcall`, discards the error value, and continues with the furniture-only results. The failure branch (`rooms=rooms`) is a no-op. A single engine/API/data error can therefore remove vehicle candidates for the whole scan without a log or a visible failed state. Any authored clue that requires a vehicle may then be deferred or dropped for reasons the logs do not explain.
+`mod-nohelp/common/media/lua/shared/NHShared/Generated/Storage.lua:154-155` wraps the entire `addVehicles` pass in `pcall`, discards the error value, and continues with the furniture-only results. The failure branch (`rooms=rooms`) is a no-op. A single engine/API/data error can therefore remove vehicle candidates for the whole scan without a log or a visible failed state. Any authored clue that requires a vehicle may then be deferred or dropped for reasons the logs do not explain.
 
 This is especially difficult to debug because the scan still completes successfully and downstream code receives a plausible but incomplete catalogue.
 
 **Claude action:** Capture and report the error through the project's shared logging path. Decide explicitly whether vehicle discovery is optional (record the omission and continue) or required for the current case (fail/retry that scan); do not silently present partial results as a successful complete scan. Add a regression around the chosen failure behavior.
 
-**Evidence:** `Storage.lua:153-154`; the project-wide error-boundary rule is in `AGENTS.md` under “Project rules.”
+**Evidence:** `Storage.lua:154-155`; the project-wide error-boundary rule is in `AGENTS.md` under “Project rules.”
 
 ## Checks to run at 2pm (not confirmed defects)
 
