@@ -1,0 +1,25 @@
+{
+  "t0132-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "thunder gas",
+      "source": "map:WorldStashMap23"
+    },
+    "gloss": "A test visit and fuel container share an unfinished return record.",
+    "prov": {
+      "batch": "T0132",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A response team could store fuel and log an inspection together; the empty return box does not identify the test."
+  }
+}

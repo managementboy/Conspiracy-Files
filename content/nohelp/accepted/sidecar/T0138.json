@@ -1,0 +1,25 @@
+{
+  "t0138-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "tools",
+      "source": "map:WpStashMap5"
+    },
+    "gloss": "Shared tools are cleaned after a visit whose purpose is not named.",
+    "prov": {
+      "batch": "T0138",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A response crew could have cleaned shared tools after a hazardous visit; the note does not say what the work involved."
+  }
+}

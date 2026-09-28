@@ -1,0 +1,23 @@
+[
+  {
+    "anchor": {
+      "print": "CrossRoadsMall"
+    },
+    "body": "The directory is folded into a lost-property wallet; its receipt says the meeting point was cleared before the last bus reached the entrance.",
+    "id": "t0155-01",
+    "kind": "set",
+    "pieces": [
+      "Wallet",
+      "Map"
+    ],
+    "title": "A mall meeting point",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  }
+]

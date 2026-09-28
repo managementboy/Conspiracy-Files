@@ -1,0 +1,25 @@
+{
+  "t0223-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "House for Sale (no. 929)",
+      "source": "print:HouseforSale929"
+    },
+    "gloss": "A garden is kept dry until a field visit after the house inspection.",
+    "prov": {
+      "batch": "T0223",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A response team could restrict water while checking a property; the note does not say what was tested."
+  }
+}

@@ -1,0 +1,24 @@
+[
+  {
+    "anchor": {
+      "map": "WorldStashMap9",
+      "mark": 1
+    },
+    "body": "A crate tally includes the offices but lists no contents; the next page labels the same shipment for a field check.",
+    "id": "t0118-01",
+    "kind": "set",
+    "pieces": [
+      "Notebook",
+      "SheetPaper2"
+    ],
+    "title": "Crates without contents",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  }
+]

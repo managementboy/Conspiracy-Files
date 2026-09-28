@@ -1,0 +1,24 @@
+[
+  {
+    "anchor": {
+      "map": "MulStashMap10",
+      "mark": 1
+    },
+    "body": "A door key is kept with a cleaning bottle and a checklist that says the rooms were clear. The back asks for one more walk-through before reopening.",
+    "id": "t0087-01",
+    "kind": "set",
+    "pieces": [
+      "Disinfectant",
+      "KeyRing"
+    ],
+    "title": "Clear on the first pass",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  }
+]

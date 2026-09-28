@@ -1,0 +1,23 @@
+[
+  {
+    "anchor": {
+      "print": "FourthofJulyCelebrationDixieMobilePark"
+    },
+    "body": "The party supply list counts cups and water containers; a note says the grounds hose was used for a separate rinse before the guests arrived.",
+    "id": "t0207-01",
+    "kind": "set",
+    "pieces": [
+      "WaterBottle",
+      "Notebook"
+    ],
+    "title": "The park supply table",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  }
+]

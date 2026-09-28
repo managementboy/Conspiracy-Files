@@ -1,0 +1,24 @@
+[
+  {
+    "anchor": {
+      "map": "WorldStashMap3",
+      "mark": 1
+    },
+    "body": "A fuel can is paired with a route slip for a field visit; the return line says “full” though the can is nearly empty.",
+    "id": "t0112-01",
+    "kind": "set",
+    "pieces": [
+      "PetrolCan",
+      "Pencil"
+    ],
+    "title": "Fuel before the run",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  }
+]

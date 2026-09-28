@@ -1,0 +1,24 @@
+[
+  {
+    "anchor": {
+      "map": "MarchRidgeStashMap4",
+      "mark": 1
+    },
+    "body": "The route sketch marks one aid bundle delivered before the families are listed. A child’s drawing of the return road is tucked behind the empty passenger line.",
+    "id": "t0068-01",
+    "kind": "set",
+    "pieces": [
+      "Bag_ALICEpack",
+      "Map"
+    ],
+    "title": "Help before the turn",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  }
+]

@@ -1,0 +1,25 @@
+{
+  "t0184-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Spiffo's Hiring! (West Point)",
+      "source": "print:SpiffosHiringWestPoint"
+    },
+    "gloss": "A cashier signs out before the delivery van returns.",
+    "prov": {
+      "batch": "T0184",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A program crew could carry supplies and return the van later; the card does not show who authorized the schedule."
+  }
+}

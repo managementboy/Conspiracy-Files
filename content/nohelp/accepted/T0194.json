@@ -1,0 +1,23 @@
+[
+  {
+    "anchor": {
+      "print": "HouseforSale895"
+    },
+    "body": "The listing key is checked out for inspection, but the house is recorded clear before the inspector’s arrival. The price card stays on the door.",
+    "id": "t0194-01",
+    "kind": "set",
+    "pieces": [
+      "KeyRing",
+      "Map"
+    ],
+    "title": "Inspection before sale",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  }
+]

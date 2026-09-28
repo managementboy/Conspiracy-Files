@@ -1,0 +1,25 @@
+{
+  "t0103-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "bank",
+      "source": "map:RiversideStashMap10"
+    },
+    "gloss": "A westbound transfer is signed out without a receiving station.",
+    "prov": {
+      "batch": "T0103",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A field team could have moved supplies between sites; the blank station does not establish a failed response."
+  }
+}

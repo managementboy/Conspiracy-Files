@@ -1,0 +1,24 @@
+[
+  {
+    "anchor": {
+      "map": "WorldStashMap23",
+      "mark": 1
+    },
+    "body": "The fuel can is tagged for basement storage and the notebook records a test visit on the same date. The return box for the container is empty.",
+    "id": "t0132-01",
+    "kind": "set",
+    "pieces": [
+      "PetrolCan",
+      "Notebook"
+    ],
+    "title": "Basement supply record",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  }
+]

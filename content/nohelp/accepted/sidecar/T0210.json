@@ -1,0 +1,25 @@
+{
+  "t0210-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Knox Pack Kitchens",
+      "source": "print:KnoxPackKitchens"
+    },
+    "gloss": "A kitchen delivery is completed before inspection.",
+    "prov": {
+      "batch": "T0210",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A field kitchen could receive cabinets before a safety check; the slip does not show who cleared the room."
+  }
+}

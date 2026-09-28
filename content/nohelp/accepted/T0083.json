@@ -1,0 +1,24 @@
+[
+  {
+    "anchor": {
+      "map": "MulStashMap6",
+      "mark": 1
+    },
+    "body": "A fortification list pairs a brace for the door with a bandage request; the person assigned to carry both has no check-out time.",
+    "id": "t0083-01",
+    "kind": "set",
+    "pieces": [
+      "Hammer",
+      "Bandage"
+    ],
+    "title": "Plan B in the margin",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  }
+]

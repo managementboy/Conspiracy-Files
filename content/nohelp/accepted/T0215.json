@@ -1,0 +1,23 @@
+[
+  {
+    "anchor": {
+      "print": "GreenesJobAdEkron"
+    },
+    "body": "The job card asks the new worker to report for a field shift; the gloves are signed back before the person’s start date.",
+    "id": "t0215-01",
+    "kind": "set",
+    "pieces": [
+      "Gloves_LeatherGloves",
+      "Notebook"
+    ],
+    "title": "The worker’s first shift",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  }
+]

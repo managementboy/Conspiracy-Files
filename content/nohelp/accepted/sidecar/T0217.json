@@ -1,0 +1,25 @@
+{
+  "t0217-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Premises with Apartments for Lease (listing no. 891)",
+      "source": "print:PremiseswithApartmentsforLeaselistingno891"
+    },
+    "gloss": "A tenant key is issued while a water line remains unapproved.",
+    "prov": {
+      "batch": "T0217",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "An emergency inspection could delay move-in after a building problem; the note does not identify the source."
+  }
+}

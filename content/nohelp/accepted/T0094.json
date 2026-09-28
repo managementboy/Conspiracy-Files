@@ -1,0 +1,24 @@
+[
+  {
+    "anchor": {
+      "map": "RiversideStashMap1",
+      "mark": 1
+    },
+    "body": "The route map is folded around a key marked for the next shift; a note says the crew will return after checking the water line.",
+    "id": "t0094-01",
+    "kind": "set",
+    "pieces": [
+      "Map",
+      "KeyRing"
+    ],
+    "title": "Here for the next shift",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  }
+]

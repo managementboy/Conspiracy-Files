@@ -1,0 +1,23 @@
+[
+  {
+    "anchor": {
+      "print": "GrandOhioMall"
+    },
+    "body": "A mall directory is folded into a receipt for the last open shop; the security sheet says every entrance was clear before the shop’s closing time.",
+    "id": "t0169-01",
+    "kind": "set",
+    "pieces": [
+      "Map",
+      "Wallet"
+    ],
+    "title": "The directory after closing",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  }
+]

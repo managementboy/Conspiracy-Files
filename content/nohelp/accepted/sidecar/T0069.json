@@ -1,0 +1,25 @@
+{
+  "t0069-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "stuff you can use as weapons here",
+      "source": "map:MarchRidgeStashMap5"
+    },
+    "gloss": "A first-aid kit is held back while a room is washed.",
+    "prov": {
+      "batch": "T0069",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A response team could have cleaned a treatment room after an emergency; the note does not say what was washed."
+  }
+}

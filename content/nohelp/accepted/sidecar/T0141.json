@@ -1,0 +1,25 @@
+{
+  "t0141-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Jolene didn't get sick. She can help.",
+      "source": "map:WpStashMap8"
+    },
+    "gloss": "A clinic note and an absent helper leave a care handoff incomplete.",
+    "prov": {
+      "batch": "T0141",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A field trial might record an unaffected worker and a clinic visit; the absent helper does not show a failed evacuation."
+  }
+}

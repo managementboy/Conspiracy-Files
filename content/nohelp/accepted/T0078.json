@@ -1,0 +1,24 @@
+[
+  {
+    "anchor": {
+      "map": "MulStashMap3",
+      "mark": 1
+    },
+    "body": "A store key is tied to a note about a hidden supply bundle; the delivery was logged before the crew’s field date, and no one signed for it.",
+    "id": "t0078-01",
+    "kind": "set",
+    "pieces": [
+      "Sledgehammer",
+      "KeyRing"
+    ],
+    "title": "Hidden delivery",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  }
+]

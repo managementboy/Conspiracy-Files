@@ -1,0 +1,25 @@
+{
+  "t0097-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "daryl's sick, left him here",
+      "source": "map:RiversideStashMap4"
+    },
+    "gloss": "A medical transfer is marked complete without a receiving person.",
+    "prov": {
+      "batch": "T0097",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A program worker could have been transferred for treatment; the card does not explain who authorized the move."
+  }
+}

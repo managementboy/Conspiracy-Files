@@ -1,0 +1,23 @@
+[
+  {
+    "anchor": {
+      "print": "MailCarrierAdEkron"
+    },
+    "body": "The carrier’s route bag contains a change notice that marks the route complete before the last neighborhood was delivered.",
+    "id": "t0216-01",
+    "kind": "set",
+    "pieces": [
+      "LetterHandwritten",
+      "Bag_ALICEpack"
+    ],
+    "title": "The mail route change",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  }
+]

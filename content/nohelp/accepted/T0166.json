@@ -1,0 +1,23 @@
+[
+  {
+    "anchor": {
+      "print": "Fossoil8"
+    },
+    "body": "The pump key is signed back before the last fuel delivery, and a note asks the crew to keep the drum sealed until the next test.",
+    "id": "t0166-01",
+    "kind": "set",
+    "pieces": [
+      "PetrolCan",
+      "KeyRing"
+    ],
+    "title": "The pump key was returned",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  }
+]

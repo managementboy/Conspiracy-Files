@@ -1,0 +1,23 @@
+[
+  {
+    "anchor": {
+      "print": "YourLocalShelterBrandenburg"
+    },
+    "body": "The shelter pack is marked ready, but its water bottle carries a note to wait for a field reading before opening the supply.",
+    "id": "t0219-01",
+    "kind": "set",
+    "pieces": [
+      "Bag_ALICEpack",
+      "WaterBottle"
+    ],
+    "title": "Shelter readiness list",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  }
+]

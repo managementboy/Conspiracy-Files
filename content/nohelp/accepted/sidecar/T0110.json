@@ -1,0 +1,25 @@
+{
+  "t0110-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Cara will help",
+      "source": "map:WorldStashMap1"
+    },
+    "gloss": "A driver is warned near a work area while the route record skips ahead.",
+    "prov": {
+      "batch": "T0110",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "An emergency detour could explain both the slow route and early arrival entry; the note does not identify the plots."
+  }
+}

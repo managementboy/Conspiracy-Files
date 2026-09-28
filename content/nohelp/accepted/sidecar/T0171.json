@@ -1,0 +1,25 @@
+{
+  "t0171-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Art Gallery of Louisville",
+      "source": "print:ArtGalleryofLouisville"
+    },
+    "gloss": "The collection is marked secure before the guard change is complete.",
+    "prov": {
+      "batch": "T0171",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A field inspection could secure the collection and leave an incomplete frame location; the list does not identify the guard’s orders."
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "t0211-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Sunset Pines Funeral Home",
+      "source": "print:SunsetPinesFuneralHome"
+    },
+    "gloss": "A room is aired after the final pickup.",
+    "prov": {
+      "batch": "T0211",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A response crew could ventilate a room after ordinary cleaning; the ledger does not identify what was cleaned."
+  }
+}

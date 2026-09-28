@@ -1,0 +1,24 @@
+[
+  {
+    "anchor": {
+      "map": "WpStashMap12",
+      "mark": 1
+    },
+    "body": "A key to the office is tied to a fever list; the room is marked sealed, and the supply line says the crew took the food to the gun counter.",
+    "id": "t0144-01",
+    "kind": "set",
+    "pieces": [
+      "Bandage",
+      "KeyRing"
+    ],
+    "title": "The room behind the barricade",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  }
+]

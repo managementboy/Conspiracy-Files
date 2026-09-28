@@ -1,0 +1,25 @@
+{
+  "t0220-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "House for Sale (no. 912)",
+      "source": "print:HouseforSale912"
+    },
+    "gloss": "A home key is transferred before the moving truck arrives.",
+    "prov": {
+      "batch": "T0220",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A work crew could hold the key during routine staging; the record does not explain the early handover."
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "t0191-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Farmer's Market",
+      "source": "print:FarmersMarket"
+    },
+    "gloss": "A produce sample is recorded before the market opens.",
+    "prov": {
+      "batch": "T0191",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A food safety inspection could sample local produce after a response order; the sheet does not identify the lot’s treatment."
+  }
+}

@@ -352,4 +352,10 @@ Fix the pattern, not just the row.
   converter check and suite green; read-through consistent (a key or a blank
   return line still recurs in about half); one read each, 47 clues: 21 A,
   10 B, 16 both, 0 none. All added (95 clues in the game).
+- **T0067-T0230** (reviewed while the writer continues): summary tickets
+  T0067 T0108 T0149 T0190 signed off (each matches its group); converter
+  check and suite green; read-through: no duplicates, but a key ring in
+  about a third of the clues and no written clues at all (note in the
+  T0170 return). One read each, 162 clues: 102 A, 21 B, 38 both, 1 none.
+  T0170 dropped for a rewrite (FITS_NEITHER); 161 added (256 in the game).
 

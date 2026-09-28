@@ -1,0 +1,25 @@
+{
+  "t0196-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "House for Sale (no. 922)",
+      "source": "print:HouseforSale922"
+    },
+    "gloss": "An empty-house record conflicts with an item left during a viewing.",
+    "prov": {
+      "batch": "T0196",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A routine showing could finish early and leave an old receipt; the sheet does not identify when the room was last occupied."
+  }
+}

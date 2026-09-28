@@ -1,0 +1,25 @@
+{
+  "t0106-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "help us fortify while we wait it out.",
+      "source": "map:RosewoodStashMap3"
+    },
+    "gloss": "A family waits indoors while a nearby repair and drying period continue.",
+    "prov": {
+      "batch": "T0106",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A response team could have closed windows during decontamination; the note does not identify the treatment."
+  }
+}

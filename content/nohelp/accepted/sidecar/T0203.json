@@ -1,0 +1,25 @@
+{
+  "t0203-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Upscale Mobility",
+      "source": "print:UpscaleMobility"
+    },
+    "gloss": "A vehicle check is complete before the technician arrives.",
+    "prov": {
+      "batch": "T0203",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "An emergency vehicle could receive a fast battery check before dispatch; the card does not identify the test."
+  }
+}

@@ -1,0 +1,23 @@
+[
+  {
+    "anchor": {
+      "print": "ArtGalleryofLouisville"
+    },
+    "body": "A gallery key is tied to a collection checklist marked secure before the guard’s handover was signed. One frame is listed without a room.",
+    "id": "t0171-01",
+    "kind": "set",
+    "pieces": [
+      "Photo",
+      "KeyRing"
+    ],
+    "title": "The gallery key returned",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  }
+]

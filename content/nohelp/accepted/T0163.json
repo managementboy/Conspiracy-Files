@@ -1,0 +1,23 @@
+[
+  {
+    "anchor": {
+      "print": "Fossoil5"
+    },
+    "body": "The pump key is clipped to an opening sheet that counts the pumps but not the vehicles still waiting outside.",
+    "id": "t0163-01",
+    "kind": "set",
+    "pieces": [
+      "KeyRing",
+      "SheetPaper2"
+    ],
+    "title": "The station count",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  }
+]

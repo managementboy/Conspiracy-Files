@@ -1,0 +1,23 @@
+[
+  {
+    "anchor": {
+      "print": "ReadyPrep"
+    },
+    "body": "A preparedness pack is tied to a route sheet for a field test; the checklist says the protective gear is optional until the next briefing.",
+    "id": "t0178-01",
+    "kind": "set",
+    "pieces": [
+      "Bag_ALICEpack",
+      "Map"
+    ],
+    "title": "Prepared for a different threat",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  }
+]

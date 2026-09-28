@@ -1,0 +1,23 @@
+[
+  {
+    "anchor": {
+      "print": "HouseforSale903"
+    },
+    "body": "The floor plan marks two potential rooms; a field note asks whether the upstairs water sample was taken before the new tenant arrived.",
+    "id": "t0195-01",
+    "kind": "set",
+    "pieces": [
+      "WaterBottle",
+      "Notebook"
+    ],
+    "title": "Potential rooms",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  }
+]

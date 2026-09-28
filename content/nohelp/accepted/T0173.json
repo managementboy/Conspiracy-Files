@@ -1,0 +1,23 @@
+[
+  {
+    "anchor": {
+      "print": "SunstarMotel"
+    },
+    "body": "The motel room card grants a discount, but the checkout slip says the room was cleared before the guest’s key was returned.",
+    "id": "t0173-01",
+    "kind": "set",
+    "pieces": [
+      "KeyRing",
+      "SheetPaper2"
+    ],
+    "title": "The room discount",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  }
+]

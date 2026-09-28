@@ -1,0 +1,25 @@
+{
+  "t0212-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Cardinal Plaza",
+      "source": "print:CardinalPlaza"
+    },
+    "gloss": "A plaza key returns before the café closes.",
+    "prov": {
+      "batch": "T0212",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A maintenance worker could return the key early while the shop stayed open; the record does not identify why."
+  }
+}

@@ -1,0 +1,23 @@
+[
+  {
+    "anchor": {
+      "print": "GnomeSweetGnome"
+    },
+    "body": "The garden ornament receipt is attached to a grounds note asking staff not to water the display until the test strip dries.",
+    "id": "t0213-01",
+    "kind": "set",
+    "pieces": [
+      "Mov_GardenGnome",
+      "SheetPaper2"
+    ],
+    "title": "The garden ornament order",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  }
+]

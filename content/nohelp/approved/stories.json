@@ -423,5 +423,1125 @@
     "lean": "random",
     "gloss": "The map annotation opens a local trail where a personal or practical trace can fit either an earlier exposure or a disrupted emergency response.",
     "signed": "T0026 2026-09-28"
+  },
+  {
+    "ticket": "T0068",
+    "target": "map:MarchRidgeStashMap4",
+    "lean": "random",
+    "gloss": "The route mark opens a local lead where field movement and emergency orders remain possible readings.",
+    "signed": "T0067 2026-09-28"
+  },
+  {
+    "ticket": "T0069",
+    "target": "map:MarchRidgeStashMap5",
+    "lean": "random",
+    "gloss": "The route mark opens a local lead where field movement and emergency orders remain possible readings.",
+    "signed": "T0067 2026-09-28"
+  },
+  {
+    "ticket": "T0070",
+    "target": "map:MarchRidgeStashMap6",
+    "lean": "random",
+    "gloss": "The route mark opens a local lead where field movement and emergency orders remain possible readings.",
+    "signed": "T0067 2026-09-28"
+  },
+  {
+    "ticket": "T0071",
+    "target": "map:MarchRidgeStashMap7",
+    "lean": "random",
+    "gloss": "The route mark opens a local lead where field movement and emergency orders remain possible readings.",
+    "signed": "T0067 2026-09-28"
+  },
+  {
+    "ticket": "T0072",
+    "target": "map:MarchRidgeStashMap8",
+    "lean": "random",
+    "gloss": "The route mark opens a local lead where field movement and emergency orders remain possible readings.",
+    "signed": "T0067 2026-09-28"
+  },
+  {
+    "ticket": "T0073",
+    "target": "map:MarchRidgeStashMap9",
+    "lean": "random",
+    "gloss": "The supply-related mark opens a local lead that could fit either earlier program work or disrupted response logistics.",
+    "signed": "T0067 2026-09-28"
+  },
+  {
+    "ticket": "T0074",
+    "target": "map:MarchRidgeStashMap10",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0067 2026-09-28"
+  },
+  {
+    "ticket": "T0075",
+    "target": "map:MulStashMap1",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0067 2026-09-28"
+  },
+  {
+    "ticket": "T0076",
+    "target": "map:MulStashMap2",
+    "lean": "random",
+    "gloss": "The route mark opens a local lead where field movement and emergency orders remain possible readings.",
+    "signed": "T0067 2026-09-28"
+  },
+  {
+    "ticket": "T0077",
+    "target": "map:MulStashMap11",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0067 2026-09-28"
+  },
+  {
+    "ticket": "T0078",
+    "target": "map:MulStashMap3",
+    "lean": "random",
+    "gloss": "The route mark opens a local lead where field movement and emergency orders remain possible readings.",
+    "signed": "T0067 2026-09-28"
+  },
+  {
+    "ticket": "T0079",
+    "target": "map:MulStashMap4",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0067 2026-09-28"
+  },
+  {
+    "ticket": "T0080",
+    "target": "map:MulStashMap12",
+    "lean": "random",
+    "gloss": "The supply-related mark opens a local lead that could fit either earlier program work or disrupted response logistics.",
+    "signed": "T0067 2026-09-28"
+  },
+  {
+    "ticket": "T0081",
+    "target": "map:MulStashMap5",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0067 2026-09-28"
+  },
+  {
+    "ticket": "T0082",
+    "target": "map:MulStashMap13",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0067 2026-09-28"
+  },
+  {
+    "ticket": "T0083",
+    "target": "map:MulStashMap6",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0067 2026-09-28"
+  },
+  {
+    "ticket": "T0084",
+    "target": "map:MulStashMap7",
+    "lean": "random",
+    "gloss": "The supply-related mark opens a local lead that could fit either earlier program work or disrupted response logistics.",
+    "signed": "T0067 2026-09-28"
+  },
+  {
+    "ticket": "T0085",
+    "target": "map:MulStashMap8",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0067 2026-09-28"
+  },
+  {
+    "ticket": "T0086",
+    "target": "map:MulStashMap9",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0067 2026-09-28"
+  },
+  {
+    "ticket": "T0087",
+    "target": "map:MulStashMap10",
+    "lean": "random",
+    "gloss": "The household mark opens a personal trail that could fit either an exposure concern or a failed effort to move people safely.",
+    "signed": "T0067 2026-09-28"
+  },
+  {
+    "ticket": "T0088",
+    "target": "map:MulStashMap14",
+    "lean": "random",
+    "gloss": "The household mark opens a personal trail that could fit either an exposure concern or a failed effort to move people safely.",
+    "signed": "T0067 2026-09-28"
+  },
+  {
+    "ticket": "T0089",
+    "target": "map:MulStashMap15",
+    "lean": "random",
+    "gloss": "The route mark opens a local lead where field movement and emergency orders remain possible readings.",
+    "signed": "T0067 2026-09-28"
+  },
+  {
+    "ticket": "T0090",
+    "target": "map:MulStashMap16",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0067 2026-09-28"
+  },
+  {
+    "ticket": "T0091",
+    "target": "map:MulStashMap17",
+    "lean": "random",
+    "gloss": "The supply-related mark opens a local lead that could fit either earlier program work or disrupted response logistics.",
+    "signed": "T0067 2026-09-28"
+  },
+  {
+    "ticket": "T0092",
+    "target": "map:MulStashMap18",
+    "lean": "random",
+    "gloss": "The household mark opens a personal trail that could fit either an exposure concern or a failed effort to move people safely.",
+    "signed": "T0067 2026-09-28"
+  },
+  {
+    "ticket": "T0093",
+    "target": "map:MulStashMap19",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0067 2026-09-28"
+  },
+  {
+    "ticket": "T0094",
+    "target": "map:RiversideStashMap1",
+    "lean": "random",
+    "gloss": "The route mark opens a local lead where field movement and emergency orders remain possible readings.",
+    "signed": "T0067 2026-09-28"
+  },
+  {
+    "ticket": "T0095",
+    "target": "map:RiversideStashMap2",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0067 2026-09-28"
+  },
+  {
+    "ticket": "T0096",
+    "target": "map:RiversideStashMap3",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0067 2026-09-28"
+  },
+  {
+    "ticket": "T0097",
+    "target": "map:RiversideStashMap4",
+    "lean": "random",
+    "gloss": "The route mark opens a local lead where field movement and emergency orders remain possible readings.",
+    "signed": "T0067 2026-09-28"
+  },
+  {
+    "ticket": "T0098",
+    "target": "map:RiversideStashMap5",
+    "lean": "random",
+    "gloss": "The route mark opens a local lead where field movement and emergency orders remain possible readings.",
+    "signed": "T0067 2026-09-28"
+  },
+  {
+    "ticket": "T0099",
+    "target": "map:RiversideStashMap6",
+    "lean": "random",
+    "gloss": "The route mark opens a local lead where field movement and emergency orders remain possible readings.",
+    "signed": "T0067 2026-09-28"
+  },
+  {
+    "ticket": "T0100",
+    "target": "map:RiversideStashMap7",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0067 2026-09-28"
+  },
+  {
+    "ticket": "T0101",
+    "target": "map:RiversideStashMap8",
+    "lean": "random",
+    "gloss": "The supply-related mark opens a local lead that could fit either earlier program work or disrupted response logistics.",
+    "signed": "T0067 2026-09-28"
+  },
+  {
+    "ticket": "T0102",
+    "target": "map:RiversideStashMap9",
+    "lean": "random",
+    "gloss": "The route mark opens a local lead where field movement and emergency orders remain possible readings.",
+    "signed": "T0067 2026-09-28"
+  },
+  {
+    "ticket": "T0103",
+    "target": "map:RiversideStashMap10",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0067 2026-09-28"
+  },
+  {
+    "ticket": "T0104",
+    "target": "map:RosewoodStashMap1",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0067 2026-09-28"
+  },
+  {
+    "ticket": "T0105",
+    "target": "map:RosewoodStashMap2",
+    "lean": "random",
+    "gloss": "The route mark opens a local lead where field movement and emergency orders remain possible readings.",
+    "signed": "T0067 2026-09-28"
+  },
+  {
+    "ticket": "T0106",
+    "target": "map:RosewoodStashMap3",
+    "lean": "random",
+    "gloss": "The school-related mark opens a local lead where program activity and emergency disruption remain plausible readings.",
+    "signed": "T0067 2026-09-28"
+  },
+  {
+    "ticket": "T0107",
+    "target": "map:RosewoodStashMap4",
+    "lean": "random",
+    "gloss": "The route mark opens a local lead where field movement and emergency orders remain possible readings.",
+    "signed": "T0067 2026-09-28"
+  },
+  {
+    "ticket": "T0109",
+    "target": "map:RosewoodStashMap5",
+    "lean": "random",
+    "gloss": "The supply-related mark opens a local lead that could fit either earlier program work or disrupted response logistics.",
+    "signed": "T0108 2026-09-28"
+  },
+  {
+    "ticket": "T0110",
+    "target": "map:WorldStashMap1",
+    "lean": "random",
+    "gloss": "The route mark opens a local lead where field movement and emergency orders remain possible readings.",
+    "signed": "T0108 2026-09-28"
+  },
+  {
+    "ticket": "T0111",
+    "target": "map:WorldStashMap2",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0108 2026-09-28"
+  },
+  {
+    "ticket": "T0112",
+    "target": "map:WorldStashMap3",
+    "lean": "random",
+    "gloss": "The route mark opens a local lead where field movement and emergency orders remain possible readings.",
+    "signed": "T0108 2026-09-28"
+  },
+  {
+    "ticket": "T0113",
+    "target": "map:WorldStashMap4",
+    "lean": "random",
+    "gloss": "The route mark opens a local lead where field movement and emergency orders remain possible readings.",
+    "signed": "T0108 2026-09-28"
+  },
+  {
+    "ticket": "T0114",
+    "target": "map:WorldStashMap5",
+    "lean": "random",
+    "gloss": "The route mark opens a local lead where field movement and emergency orders remain possible readings.",
+    "signed": "T0108 2026-09-28"
+  },
+  {
+    "ticket": "T0115",
+    "target": "map:WorldStashMap6",
+    "lean": "random",
+    "gloss": "The route mark opens a local lead where field movement and emergency orders remain possible readings.",
+    "signed": "T0108 2026-09-28"
+  },
+  {
+    "ticket": "T0116",
+    "target": "map:WorldStashMap7",
+    "lean": "random",
+    "gloss": "The route mark opens a local lead where field movement and emergency orders remain possible readings.",
+    "signed": "T0108 2026-09-28"
+  },
+  {
+    "ticket": "T0117",
+    "target": "map:WorldStashMap8",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0108 2026-09-28"
+  },
+  {
+    "ticket": "T0118",
+    "target": "map:WorldStashMap9",
+    "lean": "random",
+    "gloss": "The household mark opens a personal trail that could fit either an exposure concern or a failed effort to move people safely.",
+    "signed": "T0108 2026-09-28"
+  },
+  {
+    "ticket": "T0119",
+    "target": "map:WorldStashMap10",
+    "lean": "random",
+    "gloss": "The route mark opens a local lead where field movement and emergency orders remain possible readings.",
+    "signed": "T0108 2026-09-28"
+  },
+  {
+    "ticket": "T0120",
+    "target": "map:WorldStashMap11",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0108 2026-09-28"
+  },
+  {
+    "ticket": "T0121",
+    "target": "map:WorldStashMap12",
+    "lean": "random",
+    "gloss": "The household mark opens a personal trail that could fit either an exposure concern or a failed effort to move people safely.",
+    "signed": "T0108 2026-09-28"
+  },
+  {
+    "ticket": "T0122",
+    "target": "map:WorldStashMap13",
+    "lean": "random",
+    "gloss": "The route mark opens a local lead where field movement and emergency orders remain possible readings.",
+    "signed": "T0108 2026-09-28"
+  },
+  {
+    "ticket": "T0123",
+    "target": "map:WorldStashMap14",
+    "lean": "random",
+    "gloss": "The household mark opens a personal trail that could fit either an exposure concern or a failed effort to move people safely.",
+    "signed": "T0108 2026-09-28"
+  },
+  {
+    "ticket": "T0124",
+    "target": "map:WorldStashMap15",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0108 2026-09-28"
+  },
+  {
+    "ticket": "T0125",
+    "target": "map:WorldStashMap16",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0108 2026-09-28"
+  },
+  {
+    "ticket": "T0126",
+    "target": "map:WorldStashMap17",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0108 2026-09-28"
+  },
+  {
+    "ticket": "T0127",
+    "target": "map:WorldStashMap18",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0108 2026-09-28"
+  },
+  {
+    "ticket": "T0128",
+    "target": "map:WorldStashMap19",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0108 2026-09-28"
+  },
+  {
+    "ticket": "T0129",
+    "target": "map:WorldStashMap20",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0108 2026-09-28"
+  },
+  {
+    "ticket": "T0130",
+    "target": "map:WorldStashMap21",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0108 2026-09-28"
+  },
+  {
+    "ticket": "T0131",
+    "target": "map:WorldStashMap22",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0108 2026-09-28"
+  },
+  {
+    "ticket": "T0132",
+    "target": "map:WorldStashMap23",
+    "lean": "random",
+    "gloss": "The route mark opens a local lead where field movement and emergency orders remain possible readings.",
+    "signed": "T0108 2026-09-28"
+  },
+  {
+    "ticket": "T0133",
+    "target": "map:WpStashMap1",
+    "lean": "random",
+    "gloss": "The route mark opens a local lead where field movement and emergency orders remain possible readings.",
+    "signed": "T0108 2026-09-28"
+  },
+  {
+    "ticket": "T0134",
+    "target": "map:WpStashMap2",
+    "lean": "random",
+    "gloss": "The route mark opens a local lead where field movement and emergency orders remain possible readings.",
+    "signed": "T0108 2026-09-28"
+  },
+  {
+    "ticket": "T0135",
+    "target": "map:WpStashMap3",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0108 2026-09-28"
+  },
+  {
+    "ticket": "T0136",
+    "target": "map:WpStashMap4",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0108 2026-09-28"
+  },
+  {
+    "ticket": "T0137",
+    "target": "map:WpStashMap11",
+    "lean": "random",
+    "gloss": "The household mark opens a personal trail that could fit either an exposure concern or a failed effort to move people safely.",
+    "signed": "T0108 2026-09-28"
+  },
+  {
+    "ticket": "T0138",
+    "target": "map:WpStashMap5",
+    "lean": "random",
+    "gloss": "The work-related mark opens a local lead where a program task and later emergency activity remain plausible.",
+    "signed": "T0108 2026-09-28"
+  },
+  {
+    "ticket": "T0139",
+    "target": "map:WpStashMap6",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0108 2026-09-28"
+  },
+  {
+    "ticket": "T0140",
+    "target": "map:WpStashMap7",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0108 2026-09-28"
+  },
+  {
+    "ticket": "T0141",
+    "target": "map:WpStashMap8",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0108 2026-09-28"
+  },
+  {
+    "ticket": "T0142",
+    "target": "map:WpStashMap9",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0108 2026-09-28"
+  },
+  {
+    "ticket": "T0143",
+    "target": "map:WpStashMap10",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0108 2026-09-28"
+  },
+  {
+    "ticket": "T0144",
+    "target": "map:WpStashMap12",
+    "lean": "random",
+    "gloss": "The supply-related mark opens a local lead that could fit either earlier program work or disrupted response logistics.",
+    "signed": "T0108 2026-09-28"
+  },
+  {
+    "ticket": "T0145",
+    "target": "map:WpStashMap13",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0108 2026-09-28"
+  },
+  {
+    "ticket": "T0146",
+    "target": "map:WpStashMap14",
+    "lean": "random",
+    "gloss": "The supply-related mark opens a local lead that could fit either earlier program work or disrupted response logistics.",
+    "signed": "T0108 2026-09-28"
+  },
+  {
+    "ticket": "T0147",
+    "target": "map:WpStashMap15",
+    "lean": "random",
+    "gloss": "The route mark opens a local lead where field movement and emergency orders remain possible readings.",
+    "signed": "T0108 2026-09-28"
+  },
+  {
+    "ticket": "T0148",
+    "target": "map:WpStashMap16",
+    "lean": "random",
+    "gloss": "The supply-related mark opens a local lead that could fit either earlier program work or disrupted response logistics.",
+    "signed": "T0108 2026-09-28"
+  },
+  {
+    "ticket": "T0150",
+    "target": "print:McCoyLoggingCorp",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0149 2026-09-28"
+  },
+  {
+    "ticket": "T0151",
+    "target": "print:NolansUsedCars",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0149 2026-09-28"
+  },
+  {
+    "ticket": "T0152",
+    "target": "print:WestMapleCountryClub",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0149 2026-09-28"
+  },
+  {
+    "ticket": "T0153",
+    "target": "print:FashionaBelle",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0149 2026-09-28"
+  },
+  {
+    "ticket": "T0154",
+    "target": "print:TacodelPancho",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0149 2026-09-28"
+  },
+  {
+    "ticket": "T0155",
+    "target": "print:CrossRoadsMall",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0149 2026-09-28"
+  },
+  {
+    "ticket": "T0156",
+    "target": "print:UStoreItRiverside",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0149 2026-09-28"
+  },
+  {
+    "ticket": "T0157",
+    "target": "print:UStoreItLouisville",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0149 2026-09-28"
+  },
+  {
+    "ticket": "T0158",
+    "target": "print:UStoreItMuldraugh",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0149 2026-09-28"
+  },
+  {
+    "ticket": "T0159",
+    "target": "print:Fossoil1",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0149 2026-09-28"
+  },
+  {
+    "ticket": "T0160",
+    "target": "print:Fossoil2",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0149 2026-09-28"
+  },
+  {
+    "ticket": "T0161",
+    "target": "print:Fossoil3",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0149 2026-09-28"
+  },
+  {
+    "ticket": "T0162",
+    "target": "print:Fossoil4",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0149 2026-09-28"
+  },
+  {
+    "ticket": "T0163",
+    "target": "print:Fossoil5",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0149 2026-09-28"
+  },
+  {
+    "ticket": "T0164",
+    "target": "print:Fossoil6",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0149 2026-09-28"
+  },
+  {
+    "ticket": "T0165",
+    "target": "print:Fossoil7",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0149 2026-09-28"
+  },
+  {
+    "ticket": "T0166",
+    "target": "print:Fossoil8",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0149 2026-09-28"
+  },
+  {
+    "ticket": "T0167",
+    "target": "print:Delilah",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0149 2026-09-28"
+  },
+  {
+    "ticket": "T0168",
+    "target": "print:BensCabin",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0149 2026-09-28"
+  },
+  {
+    "ticket": "T0169",
+    "target": "print:GrandOhioMall",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0149 2026-09-28"
+  },
+  {
+    "ticket": "T0170",
+    "target": "print:DragRacingTrack",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0149 2026-09-28"
+  },
+  {
+    "ticket": "T0171",
+    "target": "print:ArtGalleryofLouisville",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0149 2026-09-28"
+  },
+  {
+    "ticket": "T0172",
+    "target": "print:FossoilField",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0149 2026-09-28"
+  },
+  {
+    "ticket": "T0173",
+    "target": "print:SunstarMotel",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0149 2026-09-28"
+  },
+  {
+    "ticket": "T0174",
+    "target": "print:HavishamSuites",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0149 2026-09-28"
+  },
+  {
+    "ticket": "T0175",
+    "target": "print:LouisvilleBruiser",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0149 2026-09-28"
+  },
+  {
+    "ticket": "T0176",
+    "target": "print:TheSeaShanty",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0149 2026-09-28"
+  },
+  {
+    "ticket": "T0177",
+    "target": "print:ScarletOakDistillery",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0149 2026-09-28"
+  },
+  {
+    "ticket": "T0178",
+    "target": "print:ReadyPrep",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0149 2026-09-28"
+  },
+  {
+    "ticket": "T0179",
+    "target": "print:WellingtonHeightsGolfClub",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0149 2026-09-28"
+  },
+  {
+    "ticket": "T0180",
+    "target": "print:LSU",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0149 2026-09-28"
+  },
+  {
+    "ticket": "T0181",
+    "target": "print:LectromaxManufacturingJobAd",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0149 2026-09-28"
+  },
+  {
+    "ticket": "T0182",
+    "target": "print:SpiffosHiringDixie",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0149 2026-09-28"
+  },
+  {
+    "ticket": "T0183",
+    "target": "print:SpiffosHiringLouisville",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0149 2026-09-28"
+  },
+  {
+    "ticket": "T0184",
+    "target": "print:SpiffosHiringWestPoint",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0149 2026-09-28"
+  },
+  {
+    "ticket": "T0185",
+    "target": "print:PizzaWhirledJobAdRosewood",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0149 2026-09-28"
+  },
+  {
+    "ticket": "T0186",
+    "target": "print:PileoCrepeJobAdCrossRoadsMall",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0149 2026-09-28"
+  },
+  {
+    "ticket": "T0187",
+    "target": "print:HitVidsJobAdMarchRidge",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0149 2026-09-28"
+  },
+  {
+    "ticket": "T0188",
+    "target": "print:MarchRidgeSchoolJobAd",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0149 2026-09-28"
+  },
+  {
+    "ticket": "T0189",
+    "target": "print:KnoxBankJobAdRosewood",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0149 2026-09-28"
+  },
+  {
+    "ticket": "T0191",
+    "target": "print:FarmersMarket",
+    "lean": "random",
+    "gloss": "The household mark opens a personal trail that could fit either an exposure concern or a failed effort to move people safely.",
+    "signed": "T0190 2026-09-28"
+  },
+  {
+    "ticket": "T0192",
+    "target": "print:MuldraughBakeSale",
+    "lean": "random",
+    "gloss": "The supply-related mark opens a local lead that could fit either earlier program work or disrupted response logistics.",
+    "signed": "T0190 2026-09-28"
+  },
+  {
+    "ticket": "T0193",
+    "target": "print:KnoxGunOwnersClubGetTogether",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0190 2026-09-28"
+  },
+  {
+    "ticket": "T0194",
+    "target": "print:HouseforSale895",
+    "lean": "random",
+    "gloss": "The school-related mark opens a local lead where program activity and emergency disruption remain plausible readings.",
+    "signed": "T0190 2026-09-28"
+  },
+  {
+    "ticket": "T0195",
+    "target": "print:HouseforSale903",
+    "lean": "random",
+    "gloss": "The route mark opens a local lead where field movement and emergency orders remain possible readings.",
+    "signed": "T0190 2026-09-28"
+  },
+  {
+    "ticket": "T0196",
+    "target": "print:HouseforSale922",
+    "lean": "random",
+    "gloss": "The route mark opens a local lead where field movement and emergency orders remain possible readings.",
+    "signed": "T0190 2026-09-28"
+  },
+  {
+    "ticket": "T0197",
+    "target": "print:HouseforSale934",
+    "lean": "random",
+    "gloss": "The household mark opens a personal trail that could fit either an exposure concern or a failed effort to move people safely.",
+    "signed": "T0190 2026-09-28"
+  },
+  {
+    "ticket": "T0198",
+    "target": "print:OnyxDriveinTheater",
+    "lean": "random",
+    "gloss": "The route mark opens a local lead where field movement and emergency orders remain possible readings.",
+    "signed": "T0190 2026-09-28"
+  },
+  {
+    "ticket": "T0199",
+    "target": "print:RedOakApartments",
+    "lean": "random",
+    "gloss": "The household mark opens a personal trail that could fit either an exposure concern or a failed effort to move people safely.",
+    "signed": "T0190 2026-09-28"
+  },
+  {
+    "ticket": "T0200",
+    "target": "print:DuCaseApartments",
+    "lean": "random",
+    "gloss": "The route mark opens a local lead where field movement and emergency orders remain possible readings.",
+    "signed": "T0190 2026-09-28"
+  },
+  {
+    "ticket": "T0201",
+    "target": "print:HighStreetApartments",
+    "lean": "random",
+    "gloss": "The route mark opens a local lead where field movement and emergency orders remain possible readings.",
+    "signed": "T0190 2026-09-28"
+  },
+  {
+    "ticket": "T0202",
+    "target": "print:LowryCourt",
+    "lean": "random",
+    "gloss": "The household mark opens a personal trail that could fit either an exposure concern or a failed effort to move people safely.",
+    "signed": "T0190 2026-09-28"
+  },
+  {
+    "ticket": "T0203",
+    "target": "print:UpscaleMobility",
+    "lean": "random",
+    "gloss": "The school-related mark opens a local lead where program activity and emergency disruption remain plausible readings.",
+    "signed": "T0190 2026-09-28"
+  },
+  {
+    "ticket": "T0204",
+    "target": "print:RoxysRollerRink",
+    "lean": "random",
+    "gloss": "The supply-related mark opens a local lead that could fit either earlier program work or disrupted response logistics.",
+    "signed": "T0190 2026-09-28"
+  },
+  {
+    "ticket": "T0205",
+    "target": "print:ElveeArena",
+    "lean": "random",
+    "gloss": "The household mark opens a personal trail that could fit either an exposure concern or a failed effort to move people safely.",
+    "signed": "T0190 2026-09-28"
+  },
+  {
+    "ticket": "T0206",
+    "target": "print:RiversideIndependenceDayPartyAllWelcome",
+    "lean": "random",
+    "gloss": "The supply-related mark opens a local lead that could fit either earlier program work or disrupted response logistics.",
+    "signed": "T0190 2026-09-28"
+  },
+  {
+    "ticket": "T0207",
+    "target": "print:FourthofJulyCelebrationDixieMobilePark",
+    "lean": "random",
+    "gloss": "The route mark opens a local lead where field movement and emergency orders remain possible readings.",
+    "signed": "T0190 2026-09-28"
+  },
+  {
+    "ticket": "T0208",
+    "target": "print:SureFitnessBoxingClub",
+    "lean": "random",
+    "gloss": "The household mark opens a personal trail that could fit either an exposure concern or a failed effort to move people safely.",
+    "signed": "T0190 2026-09-28"
+  },
+  {
+    "ticket": "T0209",
+    "target": "print:BrooksLibrary",
+    "lean": "random",
+    "gloss": "The route mark opens a local lead where field movement and emergency orders remain possible readings.",
+    "signed": "T0190 2026-09-28"
+  },
+  {
+    "ticket": "T0210",
+    "target": "print:KnoxPackKitchens",
+    "lean": "random",
+    "gloss": "The household mark opens a personal trail that could fit either an exposure concern or a failed effort to move people safely.",
+    "signed": "T0190 2026-09-28"
+  },
+  {
+    "ticket": "T0211",
+    "target": "print:SunsetPinesFuneralHome",
+    "lean": "random",
+    "gloss": "The household mark opens a personal trail that could fit either an exposure concern or a failed effort to move people safely.",
+    "signed": "T0190 2026-09-28"
+  },
+  {
+    "ticket": "T0212",
+    "target": "print:CardinalPlaza",
+    "lean": "random",
+    "gloss": "The household mark opens a personal trail that could fit either an exposure concern or a failed effort to move people safely.",
+    "signed": "T0190 2026-09-28"
+  },
+  {
+    "ticket": "T0213",
+    "target": "print:GnomeSweetGnome",
+    "lean": "random",
+    "gloss": "The household mark opens a personal trail that could fit either an exposure concern or a failed effort to move people safely.",
+    "signed": "T0190 2026-09-28"
+  },
+  {
+    "ticket": "T0214",
+    "target": "print:MeadshireEstate",
+    "lean": "random",
+    "gloss": "The household mark opens a personal trail that could fit either an exposure concern or a failed effort to move people safely.",
+    "signed": "T0190 2026-09-28"
+  },
+  {
+    "ticket": "T0215",
+    "target": "print:GreenesJobAdEkron",
+    "lean": "random",
+    "gloss": "The route mark opens a local lead where field movement and emergency orders remain possible readings.",
+    "signed": "T0190 2026-09-28"
+  },
+  {
+    "ticket": "T0216",
+    "target": "print:MailCarrierAdEkron",
+    "lean": "random",
+    "gloss": "The route mark opens a local lead where field movement and emergency orders remain possible readings.",
+    "signed": "T0190 2026-09-28"
+  },
+  {
+    "ticket": "T0217",
+    "target": "print:PremiseswithApartmentsforLeaselistingno891",
+    "lean": "random",
+    "gloss": "The supply-related mark opens a local lead that could fit either earlier program work or disrupted response logistics.",
+    "signed": "T0190 2026-09-28"
+  },
+  {
+    "ticket": "T0218",
+    "target": "print:HouseforSale907",
+    "lean": "random",
+    "gloss": "The household mark opens a personal trail that could fit either an exposure concern or a failed effort to move people safely.",
+    "signed": "T0190 2026-09-28"
+  },
+  {
+    "ticket": "T0219",
+    "target": "print:YourLocalShelterBrandenburg",
+    "lean": "random",
+    "gloss": "The household mark opens a personal trail that could fit either an exposure concern or a failed effort to move people safely.",
+    "signed": "T0190 2026-09-28"
+  },
+  {
+    "ticket": "T0220",
+    "target": "print:HouseforSale912",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0190 2026-09-28"
+  },
+  {
+    "ticket": "T0221",
+    "target": "print:HouseforSale943",
+    "lean": "random",
+    "gloss": "The household mark opens a personal trail that could fit either an exposure concern or a failed effort to move people safely.",
+    "signed": "T0190 2026-09-28"
+  },
+  {
+    "ticket": "T0222",
+    "target": "print:HouseforSale930",
+    "lean": "random",
+    "gloss": "The household mark opens a personal trail that could fit either an exposure concern or a failed effort to move people safely.",
+    "signed": "T0190 2026-09-28"
+  },
+  {
+    "ticket": "T0223",
+    "target": "print:HouseforSale929",
+    "lean": "random",
+    "gloss": "The supply-related mark opens a local lead that could fit either earlier program work or disrupted response logistics.",
+    "signed": "T0190 2026-09-28"
+  },
+  {
+    "ticket": "T0224",
+    "target": "print:HouseforSale919",
+    "lean": "random",
+    "gloss": "The household mark opens a personal trail that could fit either an exposure concern or a failed effort to move people safely.",
+    "signed": "T0190 2026-09-28"
+  },
+  {
+    "ticket": "T0225",
+    "target": "print:LeafhillHeights",
+    "lean": "random",
+    "gloss": "The school-related mark opens a local lead where program activity and emergency disruption remain plausible readings.",
+    "signed": "T0190 2026-09-28"
+  },
+  {
+    "ticket": "T0226",
+    "target": "print:FarmingAndRuralSupplyDoeValley",
+    "lean": "random",
+    "gloss": "The work-related mark opens a local lead where a program task and later emergency activity remain plausible.",
+    "signed": "T0190 2026-09-28"
+  },
+  {
+    "ticket": "T0227",
+    "target": "print:LennysCarRepair",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0190 2026-09-28"
+  },
+  {
+    "ticket": "T0228",
+    "target": "print:CarFixation",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0190 2026-09-28"
+  },
+  {
+    "ticket": "T0229",
+    "target": "print:AlsAutoShop",
+    "lean": "random",
+    "gloss": "The route mark opens a local lead where field movement and emergency orders remain possible readings.",
+    "signed": "T0190 2026-09-28"
+  },
+  {
+    "ticket": "T0230",
+    "target": "print:NailsAndNuts",
+    "lean": "random",
+    "gloss": "The supply-related mark opens a local lead that could fit either earlier program work or disrupted response logistics.",
+    "signed": "T0190 2026-09-28"
   }
 ]

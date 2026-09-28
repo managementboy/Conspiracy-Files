@@ -1,0 +1,25 @@
+{
+  "t0158-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "U-Store It (Muldraugh)",
+      "source": "print:UStoreItMuldraugh"
+    },
+    "gloss": "Field supplies wait in storage while a reading is pending.",
+    "prov": {
+      "batch": "T0158",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "Emergency cleanup could also hold water supplies until a reading; the note does not identify what was measured."
+  }
+}

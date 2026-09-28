@@ -1,0 +1,25 @@
+{
+  "t0188-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "March Ridge School Job Ad",
+      "source": "print:MarchRidgeSchoolJobAd"
+    },
+    "gloss": "A school cleaning round is complete before the rooms are opened.",
+    "prov": {
+      "batch": "T0188",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A field crew could clean before an ordinary school opening; the unchecked classroom does not say who delayed access."
+  }
+}

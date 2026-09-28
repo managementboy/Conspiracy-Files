@@ -1,0 +1,24 @@
+[
+  {
+    "anchor": {
+      "map": "MulStashMap18",
+      "mark": 1
+    },
+    "body": "A fuel can is paired with a field-use note and a weapon listed as returned. The trailer’s key line remains open after the owner’s check-in ended.",
+    "id": "t0092-01",
+    "kind": "set",
+    "pieces": [
+      "Pistol",
+      "PetrolCan"
+    ],
+    "title": "A trailer return",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  }
+]

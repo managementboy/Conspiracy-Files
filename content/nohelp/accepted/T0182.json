@@ -1,0 +1,23 @@
+[
+  {
+    "anchor": {
+      "print": "SpiffosHiringDixie"
+    },
+    "body": "The hiring sheet lists benefits, then a second page asks staff to remain available for transport after closing. No driver is named.",
+    "id": "t0182-01",
+    "kind": "set",
+    "pieces": [
+      "LetterHandwritten",
+      "SheetPaper2"
+    ],
+    "title": "Benefits on the second page",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  }
+]

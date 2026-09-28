@@ -1,0 +1,25 @@
+{
+  "t0163-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Fossoil (Riverside)",
+      "source": "print:Fossoil5"
+    },
+    "gloss": "An opening checklist omits the waiting vehicles.",
+    "prov": {
+      "batch": "T0163",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A field crew could have left vehicles queued for ordinary work; the sheet does not say why the count stopped."
+  }
+}

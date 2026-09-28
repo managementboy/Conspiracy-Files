@@ -1,0 +1,23 @@
+[
+  {
+    "anchor": {
+      "print": "LectromaxManufacturingJobAd"
+    },
+    "body": "The job sheet asks an operator to report before the factory test; the work gloves are counted as returned before the shift starts.",
+    "id": "t0181-01",
+    "kind": "set",
+    "pieces": [
+      "Screwdriver",
+      "Notebook"
+    ],
+    "title": "The operator’s shift",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  }
+]

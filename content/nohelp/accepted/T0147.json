@@ -1,0 +1,24 @@
+[
+  {
+    "anchor": {
+      "map": "WpStashMap15",
+      "mark": 1
+    },
+    "body": "The shelter key is packed with a note promising it will stay hidden; the entry sheet says the gate was opened for a scheduled pickup that never arrived.",
+    "id": "t0147-01",
+    "kind": "set",
+    "pieces": [
+      "Bag_ALICEpack",
+      "KeyRing"
+    ],
+    "title": "A shelter kept secret",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  }
+]

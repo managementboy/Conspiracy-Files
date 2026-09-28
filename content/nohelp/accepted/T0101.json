@@ -1,0 +1,24 @@
+[
+  {
+    "anchor": {
+      "map": "RiversideStashMap8",
+      "mark": 1
+    },
+    "body": "A meal bundle is tied to a note asking the next person to eat before departure; the sighting entry on the reverse is dated after the route was closed.",
+    "id": "t0101-01",
+    "kind": "set",
+    "pieces": [
+      "Bread",
+      "WaterBottle"
+    ],
+    "title": "Eat before leaving",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  }
+]

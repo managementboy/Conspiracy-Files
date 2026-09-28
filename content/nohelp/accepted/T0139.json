@@ -1,0 +1,24 @@
+[
+  {
+    "anchor": {
+      "map": "WpStashMap6",
+      "mark": 1
+    },
+    "body": "The travel pack is still tied shut beside a note that says the supplies are no longer needed. The departure time was entered but never initialled.",
+    "id": "t0139-01",
+    "kind": "set",
+    "pieces": [
+      "WaterBottle",
+      "Bag_ALICEpack"
+    ],
+    "title": "Packed but no longer needed",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  }
+]

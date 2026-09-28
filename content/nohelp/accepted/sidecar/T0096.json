@@ -1,0 +1,25 @@
+{
+  "t0096-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "booze",
+      "source": "map:RiversideStashMap3"
+    },
+    "gloss": "A test and a ventilation request interrupt a routine food order.",
+    "prov": {
+      "batch": "T0096",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A response crew could have ventilated a room after cleaning or exposure; the note does not say what the test involved."
+  }
+}

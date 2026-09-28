@@ -1,0 +1,23 @@
+[
+  {
+    "anchor": {
+      "print": "PileoCrepeJobAdCrossRoadsMall"
+    },
+    "body": "The job card asks for a manager beside the mall outlet; the shift sheet lists the post as filled before the interview was scheduled.",
+    "id": "t0186-01",
+    "kind": "set",
+    "pieces": [
+      "Pencil",
+      "Notebook"
+    ],
+    "title": "The manager vacancy",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  }
+]

@@ -1,0 +1,25 @@
+{
+  "t0175-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Louisville Bruiser Factory",
+      "source": "print:LouisvilleBruiser"
+    },
+    "gloss": "Production is counted without recording the outgoing shipment.",
+    "prov": {
+      "batch": "T0175",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A field order could account for factory stock without naming recipients; the missing count does not show an official failure."
+  }
+}

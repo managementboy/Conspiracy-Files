@@ -1,0 +1,25 @@
+{
+  "t0135-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "marked address in West Point",
+      "source": "map:WpStashMap3"
+    },
+    "gloss": "A help request is marked delivered while its envelope remains open.",
+    "prov": {
+      "batch": "T0135",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A program office could have logged an unsealed message as delivered; the key does not say who was meant to respond."
+  }
+}

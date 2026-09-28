@@ -1,0 +1,23 @@
+[
+  {
+    "anchor": {
+      "print": "UpscaleMobility"
+    },
+    "body": "The mobility service card lists a vehicle test before delivery; the battery check is marked complete before the technician signed in.",
+    "id": "t0203-01",
+    "kind": "set",
+    "pieces": [
+      "CarBattery1",
+      "KeyRing"
+    ],
+    "title": "Luxury vehicle setup",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  }
+]

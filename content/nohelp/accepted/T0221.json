@@ -1,0 +1,23 @@
+[
+  {
+    "anchor": {
+      "print": "HouseforSale943"
+    },
+    "body": "The property survey notes a color change near the water line; the sample date is later than the inspection signature.",
+    "id": "t0221-01",
+    "kind": "set",
+    "pieces": [
+      "Notebook",
+      "WaterBottle"
+    ],
+    "title": "Color survey sample",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  }
+]

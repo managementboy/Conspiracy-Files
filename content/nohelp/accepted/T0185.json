@@ -1,0 +1,23 @@
+[
+  {
+    "anchor": {
+      "print": "PizzaWhirledJobAdRosewood"
+    },
+    "body": "A menu is folded around a route receipt showing the mobile kitchen stopped at the same field gate twice; the second meal was not paid for.",
+    "id": "t0185-01",
+    "kind": "set",
+    "pieces": [
+      "Pizza",
+      "SheetPaper2"
+    ],
+    "title": "The traveling menu",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  }
+]

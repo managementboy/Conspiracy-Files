@@ -1,0 +1,24 @@
+[
+  {
+    "anchor": {
+      "map": "MulStashMap8",
+      "mark": 1
+    },
+    "body": "The key to the gathering place is wrapped in a burial request; a second note says the crowd count has not changed since the last check.",
+    "id": "t0085-01",
+    "kind": "set",
+    "pieces": [
+      "SheetPaper2",
+      "KeyRing"
+    ],
+    "title": "A burial request",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  }
+]

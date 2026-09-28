@@ -1,0 +1,25 @@
+{
+  "t0221-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "House for Sale (no. 943)",
+      "source": "print:HouseforSale943"
+    },
+    "gloss": "A property is signed off before its water sample is dated.",
+    "prov": {
+      "batch": "T0221",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A response inspection could request water tests after viewing a property; the form does not identify what changed the color."
+  }
+}

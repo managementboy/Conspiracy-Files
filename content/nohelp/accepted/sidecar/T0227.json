@@ -1,0 +1,25 @@
+{
+  "t0227-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Lenny's Car Repair",
+      "source": "print:LennysCarRepair"
+    },
+    "gloss": "A vehicle is cleared before its engine test ends.",
+    "prov": {
+      "batch": "T0227",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A response vehicle could be repaired and cleared during a rushed evacuation; the record does not identify the engine issue."
+  }
+}

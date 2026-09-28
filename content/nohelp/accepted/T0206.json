@@ -1,0 +1,23 @@
+[
+  {
+    "anchor": {
+      "print": "RiversideIndependenceDayPartyAllWelcome"
+    },
+    "body": "The party route sheet lists every block as cleared, but a resident’s key is still held at the check-in table.",
+    "id": "t0206-01",
+    "kind": "set",
+    "pieces": [
+      "SheetPaper2",
+      "KeyRing"
+    ],
+    "title": "Block party route",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  }
+]

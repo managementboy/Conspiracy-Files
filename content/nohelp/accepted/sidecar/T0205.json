@@ -1,0 +1,25 @@
+{
+  "t0205-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Elvee Arena",
+      "source": "print:ElveeArena"
+    },
+    "gloss": "A public event closes before its gate receipt is issued.",
+    "prov": {
+      "batch": "T0205",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A response crew could use the loading door during a public event; the schedule does not identify why they were there."
+  }
+}

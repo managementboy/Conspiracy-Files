@@ -1,0 +1,25 @@
+{
+  "t0185-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Pizza Whirled (Rosewood)",
+      "source": "print:PizzaWhirledJobAdRosewood"
+    },
+    "gloss": "A mobile meal stop repeats at a field gate without a second payment.",
+    "prov": {
+      "batch": "T0185",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "An evacuation convoy could stop twice at a gate and leave an unpaid meal; the receipt does not identify the reason."
+  }
+}

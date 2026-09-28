@@ -1,0 +1,25 @@
+{
+  "t0111-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "safe place",
+      "source": "map:WorldStashMap2"
+    },
+    "gloss": "A security cache was hidden before the access restriction appeared.",
+    "prov": {
+      "batch": "T0111",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A work crew could have secured equipment before a routine closure; the order of entries does not show who made the call."
+  }
+}

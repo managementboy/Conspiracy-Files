@@ -1,0 +1,24 @@
+[
+  {
+    "anchor": {
+      "map": "WorldStashMap4",
+      "mark": 1
+    },
+    "body": "A key is wrapped in a request for help; the dispatch copy says the occupant was contacted before the caller’s time is recorded.",
+    "id": "t0113-01",
+    "kind": "set",
+    "pieces": [
+      "LetterHandwritten",
+      "KeyRing"
+    ],
+    "title": "Help at the address",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  }
+]

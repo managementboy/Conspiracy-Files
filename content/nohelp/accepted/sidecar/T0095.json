@@ -1,0 +1,25 @@
+{
+  "t0095-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "208. Waiting for you",
+      "source": "map:RiversideStashMap2"
+    },
+    "gloss": "A personal message waits on a transport time that was removed.",
+    "prov": {
+      "batch": "T0095",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A field crew could have used the same meeting point and key; the crossed-out time does not show who cancelled it."
+  }
+}

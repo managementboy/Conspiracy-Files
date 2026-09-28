@@ -1,0 +1,25 @@
+{
+  "t0113-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Where Yana said",
+      "source": "map:WorldStashMap4"
+    },
+    "gloss": "A contact is marked complete before the caller’s entry.",
+    "prov": {
+      "batch": "T0113",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A field office might have logged an ordinary visit early; the copy does not establish whether anyone received help."
+  }
+}

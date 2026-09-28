@@ -1,0 +1,25 @@
+{
+  "t0178-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Ready Prep",
+      "source": "print:ReadyPrep"
+    },
+    "gloss": "A field briefing leaves protective gear optional.",
+    "prov": {
+      "batch": "T0178",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "Containment officials could issue optional gear during a changing response; the checklist does not prove anyone knew the danger."
+  }
+}

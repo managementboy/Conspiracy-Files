@@ -1,0 +1,24 @@
+[
+  {
+    "anchor": {
+      "map": "MulStashMap5",
+      "mark": 1
+    },
+    "body": "The notebook has one page torn out and a route copy with a blank arrival box. A pencilled note asks whether the driver should wait or report the stop complete.",
+    "id": "t0081-01",
+    "kind": "set",
+    "pieces": [
+      "Notebook",
+      "Pencil"
+    ],
+    "title": "The page without a mark",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  }
+]

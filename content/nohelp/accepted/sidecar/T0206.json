@@ -1,0 +1,25 @@
+{
+  "t0206-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Independence Day Party (Riverside)",
+      "source": "print:RiversideIndependenceDayPartyAllWelcome"
+    },
+    "gloss": "A block is marked clear while a resident’s key remains.",
+    "prov": {
+      "batch": "T0206",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A volunteer may have collected keys for ordinary street access; the sheet does not show who cleared the blocks."
+  }
+}

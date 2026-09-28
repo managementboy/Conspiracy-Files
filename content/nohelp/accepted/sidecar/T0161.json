@@ -1,0 +1,25 @@
+{
+  "t0161-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Fossoil (Rosewood)",
+      "source": "print:Fossoil3"
+    },
+    "gloss": "A delivery route remains open on the map after the station was recorded closed.",
+    "prov": {
+      "batch": "T0161",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A field supply run could have taken the same diversion; the receipt does not say why access ended."
+  }
+}

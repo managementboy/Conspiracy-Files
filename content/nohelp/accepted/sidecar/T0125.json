@@ -1,0 +1,25 @@
+{
+  "t0125-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "camp",
+      "source": "map:WorldStashMap16"
+    },
+    "gloss": "A barrier is recorded as staffed after the relief shift ended.",
+    "prov": {
+      "batch": "T0125",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A work site could have used the same barrier and shift list; the timing does not establish who was kept out."
+  }
+}

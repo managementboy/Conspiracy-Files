@@ -1,0 +1,25 @@
+{
+  "t0131-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "great base!",
+      "source": "map:WorldStashMap22"
+    },
+    "gloss": "A base is marked secure before its door was reinforced.",
+    "prov": {
+      "batch": "T0131",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A field crew could have secured a work base after arrival; the order of the entries does not identify an evacuation."
+  }
+}

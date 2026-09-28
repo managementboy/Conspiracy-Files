@@ -1,0 +1,25 @@
+{
+  "t0115-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "should be stuff here",
+      "source": "map:WorldStashMap6"
+    },
+    "gloss": "A load marked unsecured is also marked cleared.",
+    "prov": {
+      "batch": "T0115",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A program crew could have left bulky tools at a site; the conflicting status does not show who cleared it."
+  }
+}

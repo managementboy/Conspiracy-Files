@@ -1,0 +1,25 @@
+{
+  "t0167-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "PS Delilah",
+      "source": "print:Delilah"
+    },
+    "gloss": "A passenger count closes before the boat’s arrival is recorded.",
+    "prov": {
+      "batch": "T0167",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A scheduled tour could close its passenger list before docking; the map does not say whether anyone was left behind."
+  }
+}

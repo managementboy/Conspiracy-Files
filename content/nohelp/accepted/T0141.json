@@ -1,0 +1,24 @@
+[
+  {
+    "anchor": {
+      "map": "WpStashMap8",
+      "mark": 1
+    },
+    "body": "The clinic key is attached to a note saying one patient did not become ill; the return sheet lists the helper as absent.",
+    "id": "t0141-01",
+    "kind": "set",
+    "pieces": [
+      "Bandage",
+      "KeyRing"
+    ],
+    "title": "The helper was not on the list",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  }
+]

@@ -1,0 +1,25 @@
+{
+  "t0119-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "GAS",
+      "source": "map:WorldStashMap10"
+    },
+    "gloss": "Several supply stops are checked without a receiving signature.",
+    "prov": {
+      "batch": "T0119",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A program crew could have collected supplies for a field site; the unchecked signature does not identify the buyer."
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "t0102-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Ton's waiting for us here",
+      "source": "map:RiversideStashMap9"
+    },
+    "gloss": "A medical pickup follows a field worker’s illness, with the fuel stop recorded.",
+    "prov": {
+      "batch": "T0102",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A containment crew could have carried medicine to a sick resident; the note does not explain the illness."
+  }
+}

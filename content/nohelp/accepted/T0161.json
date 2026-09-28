@@ -1,0 +1,23 @@
+[
+  {
+    "anchor": {
+      "print": "Fossoil3"
+    },
+    "body": "A route map sends the delivery past the station, but the receipt records it as closed before the driver reached the turn.",
+    "id": "t0161-01",
+    "kind": "set",
+    "pieces": [
+      "Map",
+      "KeyRing"
+    ],
+    "title": "The station diversion",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  }
+]

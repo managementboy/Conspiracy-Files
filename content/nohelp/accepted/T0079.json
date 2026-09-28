@@ -1,0 +1,24 @@
+[
+  {
+    "anchor": {
+      "map": "MulStashMap4",
+      "mark": 1
+    },
+    "body": "The medical bag is left beside a route card that sends the occupants through the side exit; the building check says the main door was already cleared.",
+    "id": "t0079-01",
+    "kind": "set",
+    "pieces": [
+      "Bandage",
+      "FirstAidKit"
+    ],
+    "title": "The easier exit",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  }
+]

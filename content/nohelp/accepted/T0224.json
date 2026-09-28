@@ -1,0 +1,23 @@
+[
+  {
+    "anchor": {
+      "print": "HouseforSale919"
+    },
+    "body": "The house map is tied to a key return that predates the caretaker’s final room check. One door is marked as still in use.",
+    "id": "t0224-01",
+    "kind": "set",
+    "pieces": [
+      "Map",
+      "KeyRing"
+    ],
+    "title": "The large-home key log",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  }
+]

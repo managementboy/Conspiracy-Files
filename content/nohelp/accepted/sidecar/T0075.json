@@ -1,0 +1,25 @@
+{
+  "t0075-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Floorboards.",
+      "source": "map:MulStashMap1"
+    },
+    "gloss": "A repair record and the remaining boards disagree about what was used.",
+    "prov": {
+      "batch": "T0075",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A storage crew could have reused boards for a work area; the mismatch does not establish a shelter order."
+  }
+}

@@ -1,0 +1,23 @@
+[
+  {
+    "anchor": {
+      "print": "SpiffosHiringLouisville"
+    },
+    "body": "The training roster lists the food counter and a separate field-use briefing; the same employee is marked present for both at once.",
+    "id": "t0183-01",
+    "kind": "set",
+    "pieces": [
+      "Notebook",
+      "Pencil"
+    ],
+    "title": "Training before opening",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  }
+]

@@ -1,0 +1,24 @@
+[
+  {
+    "anchor": {
+      "map": "WpStashMap11",
+      "mark": 1
+    },
+    "body": "The hardware list is complete, but the security transfer was signed before the building was inspected. The person who kept the key is not listed.",
+    "id": "t0137-01",
+    "kind": "set",
+    "pieces": [
+      "Shotgun",
+      "SheetPaper2"
+    ],
+    "title": "Untouched hardware list",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  }
+]

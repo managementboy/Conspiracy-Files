@@ -1,0 +1,25 @@
+{
+  "t0101-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "left you some food here",
+      "source": "map:RiversideStashMap8"
+    },
+    "gloss": "A sighting is recorded after the route closure, beside food left for departure.",
+    "prov": {
+      "batch": "T0101",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A field team could have left food and logged a sighting after a route change; the entry does not prove anyone was trapped."
+  }
+}

@@ -1,0 +1,23 @@
+[
+  {
+    "anchor": {
+      "print": "HighStreetApartments"
+    },
+    "body": "The apartment service note asks for a water test before the next guest; the rent card is already stamped paid for the month.",
+    "id": "t0201-01",
+    "kind": "set",
+    "pieces": [
+      "Notebook",
+      "WaterBottle"
+    ],
+    "title": "The luxury water check",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  }
+]

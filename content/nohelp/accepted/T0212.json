@@ -1,0 +1,23 @@
+[
+  {
+    "anchor": {
+      "print": "CardinalPlaza"
+    },
+    "body": "The café’s cup count is complete, but the plaza key is listed as returned before the shop’s closing receipt.",
+    "id": "t0212-01",
+    "kind": "set",
+    "pieces": [
+      "MugWhite",
+      "KeyRing"
+    ],
+    "title": "The plaza cup return",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  }
+]

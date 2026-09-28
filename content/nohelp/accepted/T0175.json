@@ -1,0 +1,23 @@
+[
+  {
+    "anchor": {
+      "print": "LouisvilleBruiser"
+    },
+    "body": "A bat is paired with a production sheet; the final count lists units made but not those sent to the distribution truck.",
+    "id": "t0175-01",
+    "kind": "set",
+    "pieces": [
+      "BaseballBat",
+      "SheetPaper2"
+    ],
+    "title": "The factory count",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  }
+]

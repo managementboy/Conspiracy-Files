@@ -1,0 +1,21 @@
+{
+  "t0127-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "gloss": "A driver receives no return route and must call before opening the gate.",
+    "prov": {
+      "batch": "T0127",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A field team could keep a return route private for routine security; the note does not show why the gate was closed."
+  }
+}

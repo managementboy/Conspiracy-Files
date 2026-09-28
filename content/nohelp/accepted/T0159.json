@@ -1,0 +1,23 @@
+[
+  {
+    "anchor": {
+      "print": "Fossoil1"
+    },
+    "body": "The fuel receipt shows the pump opened for a fleet pickup, but the key ring is logged back before the driver signed out.",
+    "id": "t0159-01",
+    "kind": "set",
+    "pieces": [
+      "PetrolCan",
+      "KeyRing"
+    ],
+    "title": "The fuel receipt",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  }
+]

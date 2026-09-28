@@ -1,0 +1,25 @@
+{
+  "t0173-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Sunstar Motel",
+      "source": "print:SunstarMotel"
+    },
+    "gloss": "A room is marked clear while its key remains out.",
+    "prov": {
+      "batch": "T0173",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A work crew could receive the same discount and leave early; the slip does not say who last occupied the room."
+  }
+}

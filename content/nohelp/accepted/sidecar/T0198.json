@@ -1,0 +1,25 @@
+{
+  "t0198-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Onyx Drive-in Theater",
+      "source": "print:OnyxDriveinTheater"
+    },
+    "gloss": "A car is entered after the event count is closed.",
+    "prov": {
+      "batch": "T0198",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A routine late entry could be missed by the count; the list does not establish whether anyone was directed to leave."
+  }
+}

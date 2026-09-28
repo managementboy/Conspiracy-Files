@@ -1,0 +1,23 @@
+[
+  {
+    "anchor": {
+      "print": "NailsAndNuts"
+    },
+    "body": "The hardware receipt lists nails and tools for pickup, but the access sheet says the shop closed before the order was collected.",
+    "id": "t0230-01",
+    "kind": "set",
+    "pieces": [
+      "Hammer",
+      "Nails"
+    ],
+    "title": "The hardware order",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  }
+]

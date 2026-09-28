@@ -1,0 +1,23 @@
+[
+  {
+    "anchor": {
+      "print": "LSU"
+    },
+    "body": "The classroom key is attached to an attendance page that marks a lecture complete before the instructor’s arrival time.",
+    "id": "t0180-01",
+    "kind": "set",
+    "pieces": [
+      "Book",
+      "KeyRing"
+    ],
+    "title": "The classroom key",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  }
+]

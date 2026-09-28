@@ -1,0 +1,24 @@
+[
+  {
+    "anchor": {
+      "map": "WorldStashMap22",
+      "mark": 1
+    },
+    "body": "A repair kit is set beside a base plan; the entry marked secure is dated before the door brace was installed.",
+    "id": "t0131-01",
+    "kind": "set",
+    "pieces": [
+      "Hammer",
+      "Nails"
+    ],
+    "title": "Base camp repairs",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  }
+]

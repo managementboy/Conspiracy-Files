@@ -1,0 +1,48 @@
+{
+  "t0179-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Wellington Heights Golf Club",
+      "source": "print:WellingtonHeightsGolfClub"
+    },
+    "gloss": "A pickup is scheduled after its water cart has left.",
+    "prov": {
+      "batch": "T0179",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A field crew could take the cart for a work visit; the missing passenger line does not show who was expected."
+  },
+  "t0179-02": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Wellington Heights Golf Club",
+      "source": "print:WellingtonHeightsGolfClub"
+    },
+    "gloss": "A test strip and a shoe warning share the course grounds log.",
+    "prov": {
+      "batch": "T0179",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A response team could mark off a ditch during a cleanup; the note does not identify what was applied to the strip."
+  }
+}

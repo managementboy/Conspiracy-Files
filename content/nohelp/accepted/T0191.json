@@ -1,0 +1,23 @@
+[
+  {
+    "anchor": {
+      "print": "FarmersMarket"
+    },
+    "body": "The market basket is tied to a produce sheet that marks the field lot sampled before the stall opened. The seller’s hand-drawn price sign is still inside.",
+    "id": "t0191-01",
+    "kind": "set",
+    "pieces": [
+      "Tomato",
+      "Notebook"
+    ],
+    "title": "Market produce log",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  }
+]

@@ -1,0 +1,25 @@
+{
+  "t0225-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Leafhill Heights Offices",
+      "source": "print:LeafhillHeights"
+    },
+    "gloss": "Office availability overlaps with a field-test reservation.",
+    "prov": {
+      "batch": "T0225",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A response team could reserve a floor while offices reopen; the notebook does not identify the test."
+  }
+}

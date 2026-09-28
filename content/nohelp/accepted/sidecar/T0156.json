@@ -1,0 +1,25 @@
+{
+  "t0156-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "U-Store It (Riverside)",
+      "source": "print:UStoreItRiverside"
+    },
+    "gloss": "A storage unit opens before its equipment delivery.",
+    "prov": {
+      "batch": "T0156",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "An emergency cache could be opened ahead of a delayed delivery; the card does not say what the unit contained."
+  }
+}

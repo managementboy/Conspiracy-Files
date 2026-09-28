@@ -1,0 +1,25 @@
+{
+  "t0147-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "They'll never find us here, trust me",
+      "source": "map:WpStashMap15"
+    },
+    "gloss": "A hidden shelter is opened for a pickup that does not arrive.",
+    "prov": {
+      "batch": "T0147",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A field crew could use a private shelter and schedule a supply run; the missed pickup does not identify who ordered it."
+  }
+}

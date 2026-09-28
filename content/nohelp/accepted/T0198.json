@@ -1,0 +1,23 @@
+[
+  {
+    "anchor": {
+      "print": "OnyxDriveinTheater"
+    },
+    "body": "The ticket count is closed before the last car’s entry time. A key tag for the projection booth is left with the vehicle list.",
+    "id": "t0198-01",
+    "kind": "set",
+    "pieces": [
+      "VHS_Retail",
+      "KeyRing"
+    ],
+    "title": "The drive-in count",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  }
+]

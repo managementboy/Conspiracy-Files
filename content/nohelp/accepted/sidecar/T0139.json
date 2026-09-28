@@ -1,0 +1,25 @@
+{
+  "t0139-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "I wont need all this now",
+      "source": "map:WpStashMap6"
+    },
+    "gloss": "A packed departure is left without a signed start.",
+    "prov": {
+      "batch": "T0139",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A field crew could abandon a pack when work ended; the note does not say whether anyone received the supplies."
+  }
+}

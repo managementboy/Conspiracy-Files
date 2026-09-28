@@ -1,0 +1,24 @@
+[
+  {
+    "anchor": {
+      "map": "WpStashMap3",
+      "mark": 1
+    },
+    "body": "A house key is enclosed with a request for help; the reply box is marked delivered, though the envelope was never sealed.",
+    "id": "t0135-01",
+    "kind": "set",
+    "pieces": [
+      "LetterHandwritten",
+      "KeyRing"
+    ],
+    "title": "A key left for help",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  }
+]

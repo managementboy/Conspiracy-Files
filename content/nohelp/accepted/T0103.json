@@ -1,0 +1,24 @@
+[
+  {
+    "anchor": {
+      "map": "RiversideStashMap10",
+      "mark": 1
+    },
+    "body": "A bank key and market receipt are clipped to a westbound travel slip; the departure is signed, but the receiving station is blank.",
+    "id": "t0103-01",
+    "kind": "set",
+    "pieces": [
+      "KeyRing",
+      "SheetPaper2"
+    ],
+    "title": "The westbound schedule",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  }
+]

@@ -1,0 +1,25 @@
+{
+  "t0166-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Fossoil (South Louisville)",
+      "source": "print:Fossoil8"
+    },
+    "gloss": "A fuel delivery follows a key return and a request to keep the drum sealed.",
+    "prov": {
+      "batch": "T0166",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A response team could seal fuel during an emergency; the note does not say what the test was meant to find."
+  }
+}

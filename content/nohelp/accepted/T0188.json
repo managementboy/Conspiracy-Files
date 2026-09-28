@@ -1,0 +1,23 @@
+[
+  {
+    "anchor": {
+      "print": "MarchRidgeSchoolJobAd"
+    },
+    "body": "The janitor’s key is tied to a cleaning checklist marked complete before the rooms were unlocked. One classroom remains on the supply list.",
+    "id": "t0188-01",
+    "kind": "set",
+    "pieces": [
+      "Mop",
+      "KeyRing"
+    ],
+    "title": "The school cleaning shift",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  }
+]

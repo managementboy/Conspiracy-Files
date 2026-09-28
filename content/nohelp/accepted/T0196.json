@@ -1,0 +1,23 @@
+[
+  {
+    "anchor": {
+      "print": "HouseforSale922"
+    },
+    "body": "The listing key is returned to the office before the viewing ends. The property sheet says the house was empty, but a visitor left a meal receipt inside.",
+    "id": "t0196-01",
+    "kind": "set",
+    "pieces": [
+      "KeyRing",
+      "SheetPaper2"
+    ],
+    "title": "The low-price key",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  }
+]

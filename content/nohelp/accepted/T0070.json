@@ -1,0 +1,24 @@
+[
+  {
+    "anchor": {
+      "map": "MarchRidgeStashMap6",
+      "mark": 1
+    },
+    "body": "The hardware receipt is pinned to a building checklist marked secure; its final line asks who collected the key after the crew left.",
+    "id": "t0070-01",
+    "kind": "set",
+    "pieces": [
+      "Hammer",
+      "Nails"
+    ],
+    "title": "The secured doorway",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  }
+]

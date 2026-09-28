@@ -1,0 +1,24 @@
+[
+  {
+    "anchor": {
+      "map": "WpStashMap10",
+      "mark": 1
+    },
+    "body": "A key ring is clipped to a list of trouble calls; each line is closed, but none has a caller’s name or a time to return.",
+    "id": "t0143-01",
+    "kind": "set",
+    "pieces": [
+      "KeyRing",
+      "SheetPaper2"
+    ],
+    "title": "The second access complaint",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  }
+]

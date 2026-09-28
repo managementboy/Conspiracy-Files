@@ -1,0 +1,25 @@
+{
+  "t0228-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Car Fix-ation",
+      "source": "print:CarFixation"
+    },
+    "gloss": "A repair is marked complete while the car remains at the shop.",
+    "prov": {
+      "batch": "T0228",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A field vehicle could remain for a test after hours; the copy does not show who authorized the delay."
+  }
+}

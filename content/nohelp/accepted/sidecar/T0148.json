@@ -1,0 +1,25 @@
+{
+  "t0148-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Likely attacks",
+      "source": "map:WpStashMap16"
+    },
+    "gloss": "An exit plan links an attack path to a field-use record without settling the connection.",
+    "prov": {
+      "batch": "T0148",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A containment planner could compare routes and hazards after an attack; the plan does not say whether the application caused it."
+  }
+}

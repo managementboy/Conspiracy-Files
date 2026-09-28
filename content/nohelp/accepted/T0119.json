@@ -1,0 +1,24 @@
+[
+  {
+    "anchor": {
+      "map": "WorldStashMap10",
+      "mark": 1
+    },
+    "body": "A receipt groups fuel, clothing, food, and a vehicle under one pickup. The receiving signature is missing, though every stop is checked.",
+    "id": "t0119-01",
+    "kind": "set",
+    "pieces": [
+      "KeyRing",
+      "Bag_ALICEpack"
+    ],
+    "title": "Four stops on one receipt",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  }
+]

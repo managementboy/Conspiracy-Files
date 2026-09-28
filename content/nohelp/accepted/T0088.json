@@ -1,0 +1,24 @@
+[
+  {
+    "anchor": {
+      "map": "MulStashMap14",
+      "mark": 1
+    },
+    "body": "A hammer and nails are wrapped in a note asking the next crew not to enter until the treated perimeter is dry. A neighbor’s name is replaced by “wait.”",
+    "id": "t0088-01",
+    "kind": "set",
+    "pieces": [
+      "Hammer",
+      "Nails"
+    ],
+    "title": "Barricade by the quiet house",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  }
+]

@@ -1,0 +1,23 @@
+[
+  {
+    "anchor": {
+      "print": "KnoxPackKitchens"
+    },
+    "body": "The cabinet key is attached to a delivery slip marked complete before the kitchen passed inspection. The installer’s meal receipt is still unpaid.",
+    "id": "t0210-01",
+    "kind": "set",
+    "pieces": [
+      "Screwdriver",
+      "KeyRing"
+    ],
+    "title": "Cabinet delivery before clearance",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  }
+]

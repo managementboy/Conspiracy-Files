@@ -1,0 +1,25 @@
+{
+  "t0229-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Al's Auto Shop",
+      "source": "print:AlsAutoShop"
+    },
+    "gloss": "A vehicle leaves for field use before its maintenance is complete.",
+    "prov": {
+      "batch": "T0229",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A response crew could take a vehicle before routine maintenance finished; the tag does not identify the destination."
+  }
+}

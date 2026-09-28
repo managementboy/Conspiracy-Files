@@ -1,0 +1,23 @@
+[
+  {
+    "anchor": {
+      "print": "UStoreItLouisville"
+    },
+    "body": "A locker key is attached to a rental ledger that marks the unit cleared; the renter’s return signature is absent.",
+    "id": "t0157-01",
+    "kind": "set",
+    "pieces": [
+      "Notebook",
+      "KeyRing"
+    ],
+    "title": "The missing locker handoff",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  }
+]

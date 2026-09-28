@@ -70,170 +70,170 @@ T0063	MAP	map:LouisvilleStashMap15	accepted	0	2026-09-28	2026-09-28
 T0064	MAP	map:LouisvilleStashMap16	accepted	0	2026-09-28	2026-09-28
 T0065	MAP	map:MarchRidgeStashMap2	accepted	0	2026-09-28	2026-09-28
 T0066	MAP	map:MarchRidgeStashMap3	accepted	0	2026-09-28	2026-09-28
-T0067	STAGE0	glosses:T0068-T0107	open	0	2026-09-28	
-T0068	MAP	map:MarchRidgeStashMap4	open	0	2026-09-28	
-T0069	MAP	map:MarchRidgeStashMap5	open	0	2026-09-28	
-T0070	MAP	map:MarchRidgeStashMap6	open	0	2026-09-28	
-T0071	MAP	map:MarchRidgeStashMap7	open	0	2026-09-28	
-T0072	MAP	map:MarchRidgeStashMap8	open	0	2026-09-28	
-T0073	MAP	map:MarchRidgeStashMap9	open	0	2026-09-28	
-T0074	MAP	map:MarchRidgeStashMap10	open	0	2026-09-28	
-T0075	MAP	map:MulStashMap1	open	0	2026-09-28	
-T0076	MAP	map:MulStashMap2	open	0	2026-09-28	
-T0077	MAP	map:MulStashMap11	open	0	2026-09-28	
-T0078	MAP	map:MulStashMap3	open	0	2026-09-28	
-T0079	MAP	map:MulStashMap4	open	0	2026-09-28	
-T0080	MAP	map:MulStashMap12	open	0	2026-09-28	
-T0081	MAP	map:MulStashMap5	open	0	2026-09-28	
-T0082	MAP	map:MulStashMap13	open	0	2026-09-28	
-T0083	MAP	map:MulStashMap6	open	0	2026-09-28	
-T0084	MAP	map:MulStashMap7	open	0	2026-09-28	
-T0085	MAP	map:MulStashMap8	open	0	2026-09-28	
-T0086	MAP	map:MulStashMap9	open	0	2026-09-28	
-T0087	MAP	map:MulStashMap10	open	0	2026-09-28	
-T0088	MAP	map:MulStashMap14	open	0	2026-09-28	
-T0089	MAP	map:MulStashMap15	open	0	2026-09-28	
-T0090	MAP	map:MulStashMap16	open	0	2026-09-28	
-T0091	MAP	map:MulStashMap17	open	0	2026-09-28	
-T0092	MAP	map:MulStashMap18	open	0	2026-09-28	
-T0093	MAP	map:MulStashMap19	open	0	2026-09-28	
-T0094	MAP	map:RiversideStashMap1	open	0	2026-09-28	
-T0095	MAP	map:RiversideStashMap2	open	0	2026-09-28	
-T0096	MAP	map:RiversideStashMap3	open	0	2026-09-28	
-T0097	MAP	map:RiversideStashMap4	open	0	2026-09-28	
-T0098	MAP	map:RiversideStashMap5	open	0	2026-09-28	
-T0099	MAP	map:RiversideStashMap6	open	0	2026-09-28	
-T0100	MAP	map:RiversideStashMap7	open	0	2026-09-28	
-T0101	MAP	map:RiversideStashMap8	open	0	2026-09-28	
-T0102	MAP	map:RiversideStashMap9	open	0	2026-09-28	
-T0103	MAP	map:RiversideStashMap10	open	0	2026-09-28	
-T0104	MAP	map:RosewoodStashMap1	open	0	2026-09-28	
-T0105	MAP	map:RosewoodStashMap2	open	0	2026-09-28	
-T0106	MAP	map:RosewoodStashMap3	open	0	2026-09-28	
-T0107	MAP	map:RosewoodStashMap4	open	0	2026-09-28	
-T0108	STAGE0	glosses:T0109-T0148	open	0	2026-09-28	
-T0109	MAP	map:RosewoodStashMap5	open	0	2026-09-28	
-T0110	MAP	map:WorldStashMap1	open	0	2026-09-28	
-T0111	MAP	map:WorldStashMap2	open	0	2026-09-28	
-T0112	MAP	map:WorldStashMap3	open	0	2026-09-28	
-T0113	MAP	map:WorldStashMap4	open	0	2026-09-28	
-T0114	MAP	map:WorldStashMap5	open	0	2026-09-28	
-T0115	MAP	map:WorldStashMap6	open	0	2026-09-28	
-T0116	MAP	map:WorldStashMap7	open	0	2026-09-28	
-T0117	MAP	map:WorldStashMap8	open	0	2026-09-28	
-T0118	MAP	map:WorldStashMap9	open	0	2026-09-28	
-T0119	MAP	map:WorldStashMap10	open	0	2026-09-28	
-T0120	MAP	map:WorldStashMap11	open	0	2026-09-28	
-T0121	MAP	map:WorldStashMap12	open	0	2026-09-28	
-T0122	MAP	map:WorldStashMap13	open	0	2026-09-28	
-T0123	MAP	map:WorldStashMap14	open	0	2026-09-28	
-T0124	MAP	map:WorldStashMap15	open	0	2026-09-28	
-T0125	MAP	map:WorldStashMap16	open	0	2026-09-28	
-T0126	MAP	map:WorldStashMap17	open	0	2026-09-28	
-T0127	MAP	map:WorldStashMap18	open	0	2026-09-28	
-T0128	MAP	map:WorldStashMap19	open	0	2026-09-28	
-T0129	MAP	map:WorldStashMap20	open	0	2026-09-28	
-T0130	MAP	map:WorldStashMap21	open	0	2026-09-28	
-T0131	MAP	map:WorldStashMap22	open	0	2026-09-28	
-T0132	MAP	map:WorldStashMap23	open	0	2026-09-28	
-T0133	MAP	map:WpStashMap1	open	0	2026-09-28	
-T0134	MAP	map:WpStashMap2	open	0	2026-09-28	
-T0135	MAP	map:WpStashMap3	open	0	2026-09-28	
-T0136	MAP	map:WpStashMap4	open	0	2026-09-28	
-T0137	MAP	map:WpStashMap11	open	0	2026-09-28	
-T0138	MAP	map:WpStashMap5	open	0	2026-09-28	
-T0139	MAP	map:WpStashMap6	open	0	2026-09-28	
-T0140	MAP	map:WpStashMap7	open	0	2026-09-28	
-T0141	MAP	map:WpStashMap8	open	0	2026-09-28	
-T0142	MAP	map:WpStashMap9	open	0	2026-09-28	
-T0143	MAP	map:WpStashMap10	open	0	2026-09-28	
-T0144	MAP	map:WpStashMap12	open	0	2026-09-28	
-T0145	MAP	map:WpStashMap13	open	0	2026-09-28	
-T0146	MAP	map:WpStashMap14	open	0	2026-09-28	
-T0147	MAP	map:WpStashMap15	open	0	2026-09-28	
-T0148	MAP	map:WpStashMap16	open	0	2026-09-28	
-T0149	STAGE0	glosses:T0150-T0189	open	0	2026-09-28	
-T0150	MAP	print:McCoyLoggingCorp	open	0	2026-09-28	
-T0151	MAP	print:NolansUsedCars	open	0	2026-09-28	
-T0152	MAP	print:WestMapleCountryClub	open	0	2026-09-28	
-T0153	MAP	print:FashionaBelle	open	0	2026-09-28	
-T0154	MAP	print:TacodelPancho	open	0	2026-09-28	
-T0155	MAP	print:CrossRoadsMall	open	0	2026-09-28	
-T0156	MAP	print:UStoreItRiverside	open	0	2026-09-28	
-T0157	MAP	print:UStoreItLouisville	open	0	2026-09-28	
-T0158	MAP	print:UStoreItMuldraugh	open	0	2026-09-28	
-T0159	MAP	print:Fossoil1	open	0	2026-09-28	
-T0160	MAP	print:Fossoil2	open	0	2026-09-28	
-T0161	MAP	print:Fossoil3	open	0	2026-09-28	
-T0162	MAP	print:Fossoil4	open	0	2026-09-28	
-T0163	MAP	print:Fossoil5	open	0	2026-09-28	
-T0164	MAP	print:Fossoil6	open	0	2026-09-28	
-T0165	MAP	print:Fossoil7	open	0	2026-09-28	
-T0166	MAP	print:Fossoil8	open	0	2026-09-28	
-T0167	MAP	print:Delilah	open	0	2026-09-28	
-T0168	MAP	print:BensCabin	open	0	2026-09-28	
-T0169	MAP	print:GrandOhioMall	open	0	2026-09-28	
+T0067	STAGE0	glosses:T0068-T0107	accepted	0	2026-09-28	2026-09-28
+T0068	MAP	map:MarchRidgeStashMap4	accepted	0	2026-09-28	2026-09-28
+T0069	MAP	map:MarchRidgeStashMap5	accepted	0	2026-09-28	2026-09-28
+T0070	MAP	map:MarchRidgeStashMap6	accepted	0	2026-09-28	2026-09-28
+T0071	MAP	map:MarchRidgeStashMap7	accepted	0	2026-09-28	2026-09-28
+T0072	MAP	map:MarchRidgeStashMap8	accepted	0	2026-09-28	2026-09-28
+T0073	MAP	map:MarchRidgeStashMap9	accepted	0	2026-09-28	2026-09-28
+T0074	MAP	map:MarchRidgeStashMap10	accepted	0	2026-09-28	2026-09-28
+T0075	MAP	map:MulStashMap1	accepted	0	2026-09-28	2026-09-28
+T0076	MAP	map:MulStashMap2	accepted	0	2026-09-28	2026-09-28
+T0077	MAP	map:MulStashMap11	accepted	0	2026-09-28	2026-09-28
+T0078	MAP	map:MulStashMap3	accepted	0	2026-09-28	2026-09-28
+T0079	MAP	map:MulStashMap4	accepted	0	2026-09-28	2026-09-28
+T0080	MAP	map:MulStashMap12	accepted	0	2026-09-28	2026-09-28
+T0081	MAP	map:MulStashMap5	accepted	0	2026-09-28	2026-09-28
+T0082	MAP	map:MulStashMap13	accepted	0	2026-09-28	2026-09-28
+T0083	MAP	map:MulStashMap6	accepted	0	2026-09-28	2026-09-28
+T0084	MAP	map:MulStashMap7	accepted	0	2026-09-28	2026-09-28
+T0085	MAP	map:MulStashMap8	accepted	0	2026-09-28	2026-09-28
+T0086	MAP	map:MulStashMap9	accepted	0	2026-09-28	2026-09-28
+T0087	MAP	map:MulStashMap10	accepted	0	2026-09-28	2026-09-28
+T0088	MAP	map:MulStashMap14	accepted	0	2026-09-28	2026-09-28
+T0089	MAP	map:MulStashMap15	accepted	0	2026-09-28	2026-09-28
+T0090	MAP	map:MulStashMap16	accepted	0	2026-09-28	2026-09-28
+T0091	MAP	map:MulStashMap17	accepted	0	2026-09-28	2026-09-28
+T0092	MAP	map:MulStashMap18	accepted	0	2026-09-28	2026-09-28
+T0093	MAP	map:MulStashMap19	accepted	0	2026-09-28	2026-09-28
+T0094	MAP	map:RiversideStashMap1	accepted	0	2026-09-28	2026-09-28
+T0095	MAP	map:RiversideStashMap2	accepted	0	2026-09-28	2026-09-28
+T0096	MAP	map:RiversideStashMap3	accepted	0	2026-09-28	2026-09-28
+T0097	MAP	map:RiversideStashMap4	accepted	0	2026-09-28	2026-09-28
+T0098	MAP	map:RiversideStashMap5	accepted	0	2026-09-28	2026-09-28
+T0099	MAP	map:RiversideStashMap6	accepted	0	2026-09-28	2026-09-28
+T0100	MAP	map:RiversideStashMap7	accepted	0	2026-09-28	2026-09-28
+T0101	MAP	map:RiversideStashMap8	accepted	0	2026-09-28	2026-09-28
+T0102	MAP	map:RiversideStashMap9	accepted	0	2026-09-28	2026-09-28
+T0103	MAP	map:RiversideStashMap10	accepted	0	2026-09-28	2026-09-28
+T0104	MAP	map:RosewoodStashMap1	accepted	0	2026-09-28	2026-09-28
+T0105	MAP	map:RosewoodStashMap2	accepted	0	2026-09-28	2026-09-28
+T0106	MAP	map:RosewoodStashMap3	accepted	0	2026-09-28	2026-09-28
+T0107	MAP	map:RosewoodStashMap4	accepted	0	2026-09-28	2026-09-28
+T0108	STAGE0	glosses:T0109-T0148	accepted	0	2026-09-28	2026-09-28
+T0109	MAP	map:RosewoodStashMap5	accepted	0	2026-09-28	2026-09-28
+T0110	MAP	map:WorldStashMap1	accepted	0	2026-09-28	2026-09-28
+T0111	MAP	map:WorldStashMap2	accepted	0	2026-09-28	2026-09-28
+T0112	MAP	map:WorldStashMap3	accepted	0	2026-09-28	2026-09-28
+T0113	MAP	map:WorldStashMap4	accepted	0	2026-09-28	2026-09-28
+T0114	MAP	map:WorldStashMap5	accepted	0	2026-09-28	2026-09-28
+T0115	MAP	map:WorldStashMap6	accepted	0	2026-09-28	2026-09-28
+T0116	MAP	map:WorldStashMap7	accepted	0	2026-09-28	2026-09-28
+T0117	MAP	map:WorldStashMap8	accepted	0	2026-09-28	2026-09-28
+T0118	MAP	map:WorldStashMap9	accepted	0	2026-09-28	2026-09-28
+T0119	MAP	map:WorldStashMap10	accepted	0	2026-09-28	2026-09-28
+T0120	MAP	map:WorldStashMap11	accepted	0	2026-09-28	2026-09-28
+T0121	MAP	map:WorldStashMap12	accepted	0	2026-09-28	2026-09-28
+T0122	MAP	map:WorldStashMap13	accepted	0	2026-09-28	2026-09-28
+T0123	MAP	map:WorldStashMap14	accepted	0	2026-09-28	2026-09-28
+T0124	MAP	map:WorldStashMap15	accepted	0	2026-09-28	2026-09-28
+T0125	MAP	map:WorldStashMap16	accepted	0	2026-09-28	2026-09-28
+T0126	MAP	map:WorldStashMap17	accepted	0	2026-09-28	2026-09-28
+T0127	MAP	map:WorldStashMap18	accepted	0	2026-09-28	2026-09-28
+T0128	MAP	map:WorldStashMap19	accepted	0	2026-09-28	2026-09-28
+T0129	MAP	map:WorldStashMap20	accepted	0	2026-09-28	2026-09-28
+T0130	MAP	map:WorldStashMap21	accepted	0	2026-09-28	2026-09-28
+T0131	MAP	map:WorldStashMap22	accepted	0	2026-09-28	2026-09-28
+T0132	MAP	map:WorldStashMap23	accepted	0	2026-09-28	2026-09-28
+T0133	MAP	map:WpStashMap1	accepted	0	2026-09-28	2026-09-28
+T0134	MAP	map:WpStashMap2	accepted	0	2026-09-28	2026-09-28
+T0135	MAP	map:WpStashMap3	accepted	0	2026-09-28	2026-09-28
+T0136	MAP	map:WpStashMap4	accepted	0	2026-09-28	2026-09-28
+T0137	MAP	map:WpStashMap11	accepted	0	2026-09-28	2026-09-28
+T0138	MAP	map:WpStashMap5	accepted	0	2026-09-28	2026-09-28
+T0139	MAP	map:WpStashMap6	accepted	0	2026-09-28	2026-09-28
+T0140	MAP	map:WpStashMap7	accepted	0	2026-09-28	2026-09-28
+T0141	MAP	map:WpStashMap8	accepted	0	2026-09-28	2026-09-28
+T0142	MAP	map:WpStashMap9	accepted	0	2026-09-28	2026-09-28
+T0143	MAP	map:WpStashMap10	accepted	0	2026-09-28	2026-09-28
+T0144	MAP	map:WpStashMap12	accepted	0	2026-09-28	2026-09-28
+T0145	MAP	map:WpStashMap13	accepted	0	2026-09-28	2026-09-28
+T0146	MAP	map:WpStashMap14	accepted	0	2026-09-28	2026-09-28
+T0147	MAP	map:WpStashMap15	accepted	0	2026-09-28	2026-09-28
+T0148	MAP	map:WpStashMap16	accepted	0	2026-09-28	2026-09-28
+T0149	STAGE0	glosses:T0150-T0189	accepted	0	2026-09-28	2026-09-28
+T0150	MAP	print:McCoyLoggingCorp	accepted	0	2026-09-28	2026-09-28
+T0151	MAP	print:NolansUsedCars	accepted	0	2026-09-28	2026-09-28
+T0152	MAP	print:WestMapleCountryClub	accepted	0	2026-09-28	2026-09-28
+T0153	MAP	print:FashionaBelle	accepted	0	2026-09-28	2026-09-28
+T0154	MAP	print:TacodelPancho	accepted	0	2026-09-28	2026-09-28
+T0155	MAP	print:CrossRoadsMall	accepted	0	2026-09-28	2026-09-28
+T0156	MAP	print:UStoreItRiverside	accepted	0	2026-09-28	2026-09-28
+T0157	MAP	print:UStoreItLouisville	accepted	0	2026-09-28	2026-09-28
+T0158	MAP	print:UStoreItMuldraugh	accepted	0	2026-09-28	2026-09-28
+T0159	MAP	print:Fossoil1	accepted	0	2026-09-28	2026-09-28
+T0160	MAP	print:Fossoil2	accepted	0	2026-09-28	2026-09-28
+T0161	MAP	print:Fossoil3	accepted	0	2026-09-28	2026-09-28
+T0162	MAP	print:Fossoil4	accepted	0	2026-09-28	2026-09-28
+T0163	MAP	print:Fossoil5	accepted	0	2026-09-28	2026-09-28
+T0164	MAP	print:Fossoil6	accepted	0	2026-09-28	2026-09-28
+T0165	MAP	print:Fossoil7	accepted	0	2026-09-28	2026-09-28
+T0166	MAP	print:Fossoil8	accepted	0	2026-09-28	2026-09-28
+T0167	MAP	print:Delilah	accepted	0	2026-09-28	2026-09-28
+T0168	MAP	print:BensCabin	accepted	0	2026-09-28	2026-09-28
+T0169	MAP	print:GrandOhioMall	accepted	0	2026-09-28	2026-09-28
 T0170	MAP	print:DragRacingTrack	open	0	2026-09-28	
-T0171	MAP	print:ArtGalleryofLouisville	open	0	2026-09-28	
-T0172	MAP	print:FossoilField	open	0	2026-09-28	
-T0173	MAP	print:SunstarMotel	open	0	2026-09-28	
-T0174	MAP	print:HavishamSuites	open	0	2026-09-28	
-T0175	MAP	print:LouisvilleBruiser	open	0	2026-09-28	
-T0176	MAP	print:TheSeaShanty	open	0	2026-09-28	
-T0177	MAP	print:ScarletOakDistillery	open	0	2026-09-28	
-T0178	MAP	print:ReadyPrep	open	0	2026-09-28	
-T0179	MAP	print:WellingtonHeightsGolfClub	open	0	2026-09-28	
-T0180	MAP	print:LSU	open	0	2026-09-28	
-T0181	MAP	print:LectromaxManufacturingJobAd	open	0	2026-09-28	
-T0182	MAP	print:SpiffosHiringDixie	open	0	2026-09-28	
-T0183	MAP	print:SpiffosHiringLouisville	open	0	2026-09-28	
-T0184	MAP	print:SpiffosHiringWestPoint	open	0	2026-09-28	
-T0185	MAP	print:PizzaWhirledJobAdRosewood	open	0	2026-09-28	
-T0186	MAP	print:PileoCrepeJobAdCrossRoadsMall	open	0	2026-09-28	
-T0187	MAP	print:HitVidsJobAdMarchRidge	open	0	2026-09-28	
-T0188	MAP	print:MarchRidgeSchoolJobAd	open	0	2026-09-28	
-T0189	MAP	print:KnoxBankJobAdRosewood	open	0	2026-09-28	
-T0190	STAGE0	glosses:T0191-T0230	open	0	2026-09-28	
-T0191	MAP	print:FarmersMarket	open	0	2026-09-28	
-T0192	MAP	print:MuldraughBakeSale	open	0	2026-09-28	
-T0193	MAP	print:KnoxGunOwnersClubGetTogether	open	0	2026-09-28	
-T0194	MAP	print:HouseforSale895	open	0	2026-09-28	
-T0195	MAP	print:HouseforSale903	open	0	2026-09-28	
-T0196	MAP	print:HouseforSale922	open	0	2026-09-28	
-T0197	MAP	print:HouseforSale934	open	0	2026-09-28	
-T0198	MAP	print:OnyxDriveinTheater	open	0	2026-09-28	
-T0199	MAP	print:RedOakApartments	open	0	2026-09-28	
-T0200	MAP	print:DuCaseApartments	open	0	2026-09-28	
-T0201	MAP	print:HighStreetApartments	open	0	2026-09-28	
-T0202	MAP	print:LowryCourt	open	0	2026-09-28	
-T0203	MAP	print:UpscaleMobility	open	0	2026-09-28	
-T0204	MAP	print:RoxysRollerRink	open	0	2026-09-28	
-T0205	MAP	print:ElveeArena	open	0	2026-09-28	
-T0206	MAP	print:RiversideIndependenceDayPartyAllWelcome	open	0	2026-09-28	
-T0207	MAP	print:FourthofJulyCelebrationDixieMobilePark	open	0	2026-09-28	
-T0208	MAP	print:SureFitnessBoxingClub	open	0	2026-09-28	
-T0209	MAP	print:BrooksLibrary	open	0	2026-09-28	
-T0210	MAP	print:KnoxPackKitchens	open	0	2026-09-28	
-T0211	MAP	print:SunsetPinesFuneralHome	open	0	2026-09-28	
-T0212	MAP	print:CardinalPlaza	open	0	2026-09-28	
-T0213	MAP	print:GnomeSweetGnome	open	0	2026-09-28	
-T0214	MAP	print:MeadshireEstate	open	0	2026-09-28	
-T0215	MAP	print:GreenesJobAdEkron	open	0	2026-09-28	
-T0216	MAP	print:MailCarrierAdEkron	open	0	2026-09-28	
-T0217	MAP	print:PremiseswithApartmentsforLeaselistingno891	open	0	2026-09-28	
-T0218	MAP	print:HouseforSale907	open	0	2026-09-28	
-T0219	MAP	print:YourLocalShelterBrandenburg	open	0	2026-09-28	
-T0220	MAP	print:HouseforSale912	open	0	2026-09-28	
-T0221	MAP	print:HouseforSale943	open	0	2026-09-28	
-T0222	MAP	print:HouseforSale930	open	0	2026-09-28	
-T0223	MAP	print:HouseforSale929	open	0	2026-09-28	
-T0224	MAP	print:HouseforSale919	open	0	2026-09-28	
-T0225	MAP	print:LeafhillHeights	open	0	2026-09-28	
-T0226	MAP	print:FarmingAndRuralSupplyDoeValley	open	0	2026-09-28	
-T0227	MAP	print:LennysCarRepair	open	0	2026-09-28	
-T0228	MAP	print:CarFixation	open	0	2026-09-28	
-T0229	MAP	print:AlsAutoShop	open	0	2026-09-28	
-T0230	MAP	print:NailsAndNuts	open	0	2026-09-28	
+T0171	MAP	print:ArtGalleryofLouisville	accepted	0	2026-09-28	2026-09-28
+T0172	MAP	print:FossoilField	accepted	0	2026-09-28	2026-09-28
+T0173	MAP	print:SunstarMotel	accepted	0	2026-09-28	2026-09-28
+T0174	MAP	print:HavishamSuites	accepted	0	2026-09-28	2026-09-28
+T0175	MAP	print:LouisvilleBruiser	accepted	0	2026-09-28	2026-09-28
+T0176	MAP	print:TheSeaShanty	accepted	0	2026-09-28	2026-09-28
+T0177	MAP	print:ScarletOakDistillery	accepted	0	2026-09-28	2026-09-28
+T0178	MAP	print:ReadyPrep	accepted	0	2026-09-28	2026-09-28
+T0179	MAP	print:WellingtonHeightsGolfClub	accepted	0	2026-09-28	2026-09-28
+T0180	MAP	print:LSU	accepted	0	2026-09-28	2026-09-28
+T0181	MAP	print:LectromaxManufacturingJobAd	accepted	0	2026-09-28	2026-09-28
+T0182	MAP	print:SpiffosHiringDixie	accepted	0	2026-09-28	2026-09-28
+T0183	MAP	print:SpiffosHiringLouisville	accepted	0	2026-09-28	2026-09-28
+T0184	MAP	print:SpiffosHiringWestPoint	accepted	0	2026-09-28	2026-09-28
+T0185	MAP	print:PizzaWhirledJobAdRosewood	accepted	0	2026-09-28	2026-09-28
+T0186	MAP	print:PileoCrepeJobAdCrossRoadsMall	accepted	0	2026-09-28	2026-09-28
+T0187	MAP	print:HitVidsJobAdMarchRidge	accepted	0	2026-09-28	2026-09-28
+T0188	MAP	print:MarchRidgeSchoolJobAd	accepted	0	2026-09-28	2026-09-28
+T0189	MAP	print:KnoxBankJobAdRosewood	accepted	0	2026-09-28	2026-09-28
+T0190	STAGE0	glosses:T0191-T0230	accepted	0	2026-09-28	2026-09-28
+T0191	MAP	print:FarmersMarket	accepted	0	2026-09-28	2026-09-28
+T0192	MAP	print:MuldraughBakeSale	accepted	0	2026-09-28	2026-09-28
+T0193	MAP	print:KnoxGunOwnersClubGetTogether	accepted	0	2026-09-28	2026-09-28
+T0194	MAP	print:HouseforSale895	accepted	0	2026-09-28	2026-09-28
+T0195	MAP	print:HouseforSale903	accepted	0	2026-09-28	2026-09-28
+T0196	MAP	print:HouseforSale922	accepted	0	2026-09-28	2026-09-28
+T0197	MAP	print:HouseforSale934	accepted	0	2026-09-28	2026-09-28
+T0198	MAP	print:OnyxDriveinTheater	accepted	0	2026-09-28	2026-09-28
+T0199	MAP	print:RedOakApartments	accepted	0	2026-09-28	2026-09-28
+T0200	MAP	print:DuCaseApartments	accepted	0	2026-09-28	2026-09-28
+T0201	MAP	print:HighStreetApartments	accepted	0	2026-09-28	2026-09-28
+T0202	MAP	print:LowryCourt	accepted	0	2026-09-28	2026-09-28
+T0203	MAP	print:UpscaleMobility	accepted	0	2026-09-28	2026-09-28
+T0204	MAP	print:RoxysRollerRink	accepted	0	2026-09-28	2026-09-28
+T0205	MAP	print:ElveeArena	accepted	0	2026-09-28	2026-09-28
+T0206	MAP	print:RiversideIndependenceDayPartyAllWelcome	accepted	0	2026-09-28	2026-09-28
+T0207	MAP	print:FourthofJulyCelebrationDixieMobilePark	accepted	0	2026-09-28	2026-09-28
+T0208	MAP	print:SureFitnessBoxingClub	accepted	0	2026-09-28	2026-09-28
+T0209	MAP	print:BrooksLibrary	accepted	0	2026-09-28	2026-09-28
+T0210	MAP	print:KnoxPackKitchens	accepted	0	2026-09-28	2026-09-28
+T0211	MAP	print:SunsetPinesFuneralHome	accepted	0	2026-09-28	2026-09-28
+T0212	MAP	print:CardinalPlaza	accepted	0	2026-09-28	2026-09-28
+T0213	MAP	print:GnomeSweetGnome	accepted	0	2026-09-28	2026-09-28
+T0214	MAP	print:MeadshireEstate	accepted	0	2026-09-28	2026-09-28
+T0215	MAP	print:GreenesJobAdEkron	accepted	0	2026-09-28	2026-09-28
+T0216	MAP	print:MailCarrierAdEkron	accepted	0	2026-09-28	2026-09-28
+T0217	MAP	print:PremiseswithApartmentsforLeaselistingno891	accepted	0	2026-09-28	2026-09-28
+T0218	MAP	print:HouseforSale907	accepted	0	2026-09-28	2026-09-28
+T0219	MAP	print:YourLocalShelterBrandenburg	accepted	0	2026-09-28	2026-09-28
+T0220	MAP	print:HouseforSale912	accepted	0	2026-09-28	2026-09-28
+T0221	MAP	print:HouseforSale943	accepted	0	2026-09-28	2026-09-28
+T0222	MAP	print:HouseforSale930	accepted	0	2026-09-28	2026-09-28
+T0223	MAP	print:HouseforSale929	accepted	0	2026-09-28	2026-09-28
+T0224	MAP	print:HouseforSale919	accepted	0	2026-09-28	2026-09-28
+T0225	MAP	print:LeafhillHeights	accepted	0	2026-09-28	2026-09-28
+T0226	MAP	print:FarmingAndRuralSupplyDoeValley	accepted	0	2026-09-28	2026-09-28
+T0227	MAP	print:LennysCarRepair	accepted	0	2026-09-28	2026-09-28
+T0228	MAP	print:CarFixation	accepted	0	2026-09-28	2026-09-28
+T0229	MAP	print:AlsAutoShop	accepted	0	2026-09-28	2026-09-28
+T0230	MAP	print:NailsAndNuts	accepted	0	2026-09-28	2026-09-28
 T0231	STAGE0	glosses:T0232-T0271	open	0	2026-09-28	
 T0232	MAP	print:WPDIY	open	0	2026-09-28	
 T0233	MAP	print:EPToolsLV	open	0	2026-09-28	

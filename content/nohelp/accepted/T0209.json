@@ -1,0 +1,23 @@
+[
+  {
+    "anchor": {
+      "print": "BrooksLibrary"
+    },
+    "body": "The library room card reserves a table for a field briefing; the public sign says the room is closed for quiet study.",
+    "id": "t0209-01",
+    "kind": "set",
+    "pieces": [
+      "Book",
+      "SheetPaper2"
+    ],
+    "title": "Quiet study reservation",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  }
+]

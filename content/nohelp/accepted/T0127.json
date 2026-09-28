@@ -1,0 +1,24 @@
+[
+  {
+    "anchor": {
+      "map": "WorldStashMap18",
+      "mark": 1
+    },
+    "body": "The map is folded around a return key, but the departure sheet omits the way back. A pencilled note asks the next driver to call before opening the gate.",
+    "id": "t0127-01",
+    "kind": "set",
+    "pieces": [
+      "Map",
+      "KeyRing"
+    ],
+    "title": "Return route withheld",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  }
+]

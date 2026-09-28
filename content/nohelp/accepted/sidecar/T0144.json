@@ -1,0 +1,25 @@
+{
+  "t0144-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "everyone in office got fever",
+      "source": "map:WpStashMap12"
+    },
+    "gloss": "A sealed office and a moved supply line accompany a fever list.",
+    "prov": {
+      "batch": "T0144",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "Containment staff could seal an office during a fever event and move food; the record does not identify the fever’s cause."
+  }
+}

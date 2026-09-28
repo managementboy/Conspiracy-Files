@@ -1,0 +1,25 @@
+{
+  "t0123-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "grandma",
+      "source": "map:WorldStashMap14"
+    },
+    "gloss": "A family key is transferred without a named recipient.",
+    "prov": {
+      "batch": "T0123",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A field team could have borrowed a household key for a visit; the empty recipient box does not prove anyone was evacuated."
+  }
+}

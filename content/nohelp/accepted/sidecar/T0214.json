@@ -1,0 +1,25 @@
+{
+  "t0214-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Meadshire Estate",
+      "source": "print:MeadshireEstate"
+    },
+    "gloss": "The community is logged empty while a visitor remains checked in.",
+    "prov": {
+      "batch": "T0214",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A planned maintenance closure could produce the same gap; the roster does not explain who remained."
+  }
+}

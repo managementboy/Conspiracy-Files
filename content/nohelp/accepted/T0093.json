@@ -1,0 +1,24 @@
+[
+  {
+    "anchor": {
+      "map": "MulStashMap19",
+      "mark": 1
+    },
+    "body": "The water bottle is tied to a packed list whose return column is filled in before the departure box. One ration is marked for a person not on the list.",
+    "id": "t0093-01",
+    "kind": "set",
+    "pieces": [
+      "WaterBottle",
+      "Notebook"
+    ],
+    "title": "Everything for the trip",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  }
+]
