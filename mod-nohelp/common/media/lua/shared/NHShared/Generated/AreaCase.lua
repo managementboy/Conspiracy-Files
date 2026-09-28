@@ -268,12 +268,14 @@ local function extend(case)
     end
     return next
 end
+M.extend=extend
 
 function M.decide(args)
     local case,site=args.case,args.site
     if not M.isAreaCase(case) or type(site)~="table" or type(site.id)~="string" then return nil,"invalid" end
     if not PLACE[args.place] then return nil,"not an interesting place" end
-    for _,a in ipairs(case.areas) do if a.id==site.id then return nil,"decided" end end
+    local areaIds={}; for _,a in ipairs(case.areas) do areaIds[a.id]=true end
+    if areaIds[site.id] then return nil,"decided" end
     local clues=M.anchorPool(args.clues or Manifest.clues,args.anchors)
     local byId={}; for _,c in ipairs(clues) do byId[c.id]=c end
     local trail,lean=M.trailFor(case.seed,args.designs,site.id,args.marks)
@@ -284,9 +286,8 @@ function M.decide(args)
         favour=lean.favour,rivalMin=lean.rivalMin,minCount=lean.minCount}
     if #picks==0 then return nil,"empty" end
     local next=extend(case)
-    local known=false
-    for _,l in ipairs(next.locations) do if l.id==site.id then known=true end end
-    if not known then next.locations[#next.locations+1]=copy(site) end
+    local locIds={}; for _,l in ipairs(next.locations) do locIds[l.id]=true end
+    if not locIds[site.id] then next.locations[#next.locations+1]=copy(site) end
     local first=#next.documents+1
     local ids,docs={},{}
     for _,p in ipairs(picks) do
@@ -325,7 +326,8 @@ function M.decideScene(args)
     if not M.isAreaCase(case) or type(site)~="table" or type(site.id)~="string" then return nil,"invalid" end
     if type(args.key)~="string" or site.id~="scene:"..args.key then return nil,"a scene area is named by its scene" end
     if not Scenes.allowed(args.kind) then return nil,"this kind of scene holds no clue" end
-    for _,a in ipairs(case.areas) do if a.id==site.id then return nil,"decided" end end
+    local areaIds={}; for _,a in ipairs(case.areas) do areaIds[a.id]=true end
+    if areaIds[site.id] then return nil,"decided" end
     local spot=Scenes.spotFor(args.kind)
     local lean=Scenes.lean(case.seed,site.id,args.kind)
     local row=Scenes.get(args.kind)
