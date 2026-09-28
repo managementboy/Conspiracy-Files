@@ -1,0 +1,88 @@
+[
+  {
+    "id": "t0030-01",
+    "kind": "written",
+    "pieces": [
+      "receipt"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "anchor": {
+      "map": "BBurgStashMap5",
+      "mark": 1
+    },
+    "title": "The unfinished handoff",
+    "body": "Do not sell the catch until the county finishes its water check. They called it routine, but the fish order is still in the icebox and the supplier wants payment.",
+    "rival_reading": "Officials could have restricted food during an emergency; the note never says what the water check was looking for.",
+    "gloss": "A restaurant order remains unpaid while a routine water check delays the catch.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "cites": {
+      "source": "map:BBurgStashMap5",
+      "quote": "catfish restaurant"
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0030"
+    }
+  },
+  {
+    "id": "t0030-02",
+    "kind": "set",
+    "pieces": [
+      "TinOpener",
+      "SheetPaper2",
+      "KeyRing"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "containment",
+        "rival": "agricultural"
+      }
+    ],
+    "anchor": {
+      "map": "BBurgStashMap5",
+      "mark": 1
+    },
+    "title": "Kept from the drawer",
+    "body": "The cold-room key is tied to a delivery slip marked received before the road closure. The sealed box is still listed as waiting at the storage units.",
+    "rival_reading": "A shipment of field supplies could have been delayed or misrouted; the paperwork does not identify the cargo.",
+    "gloss": "A delivery record marks goods received before access closed, while the box remains uncollected.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "cites": {
+      "source": "map:BBurgStashMap5",
+      "quote": "catfish restaurant"
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0030"
+    }
+  }
+]
