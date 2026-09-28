@@ -1,4 +1,72 @@
 [
-  {"id":"t0003-01","kind":"set","pieces":["Map","KeyRing"],"title":"Gate key under the soil line","body":"The map has a wet thumbprint over the field rows. The key tag reads sample gate, and its metal is dusted with the same pale soil. A red pencil circles the words keep out.","where":[{"place":"farm","spot":"ground","lean":"containment","rival":"agricultural"}],"rival_reading":"A farm gate could be restricted during ordinary testing, with a key left in the mud after a warning; the arrangement does not prove the response itself failed.","gloss":"A restricted gate key lies beside a field map marked by use rather than by a completed route.","axioms":{"containment":["c-orders","c-failure"],"agricultural":["a-program","a-pathway"]},"prov":{"writer":"ChatGPT","handoff":"2026-09-27","batch":"T0003"}},
-  {"id":"t0003-02","kind":"set","pieces":["Clipboard","WaterBottle"],"title":"Bottle marked after the rows","body":"The clipboard has three field rows, each checked. The bottle is full and marked after application, but the source line is empty. A worker has pressed a thumb into the paper instead of signing it.","where":[{"place":"farm","spot":"ground","lean":"agricultural","rival":"containment"}],"rival_reading":"A response crew could check field rows after a diversion and leave the source for later; an unsigned bottle record does not show that an agricultural program malfunctioned.","gloss":"Checked field rows and a bottle marked after application remain without a source or signature.","axioms":{"containment":["c-orders","c-failure"],"agricultural":["a-program","a-malfunction"]},"prov":{"writer":"ChatGPT","handoff":"2026-09-27","batch":"T0003"}}
+  {
+    "id": "t0003-01",
+    "kind": "set",
+    "pieces": [
+      "Map",
+      "KeyRing"
+    ],
+    "title": "The farm key with a blank tag",
+    "body": "A county map has a route drawn to the farm gate, then cut short at the fence. The key tag is blank; its metal ring is flattened at the join.",
+    "where": [
+      {
+        "place": "farm",
+        "spot": "ground",
+        "lean": "containment",
+        "rival": "agricultural"
+      }
+    ],
+    "rival_reading": "A program worker could keep a spare gate key with an unfinished tag and mark a route for field access; the map does not prove a containment failure.",
+    "gloss": "A farm access route stops at a fence while its spare key has no identifying tag.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0003"
+    }
+  },
+  {
+    "id": "t0003-02",
+    "kind": "set",
+    "pieces": [
+      "Clipboard",
+      "WaterBottle"
+    ],
+    "title": "A field check with no planting day",
+    "body": "The bottle is half full of clear water. A pressed clover leaf marks a notebook page of plot checks, but the planting-date line is empty.",
+    "where": [
+      {
+        "place": "farm",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "rival_reading": "A response crew could survey a farm after a diversion and leave the planting line blank; a leaf and water bottle do not show an agricultural malfunction.",
+    "gloss": "A farm notebook pairs an unfinished plot check with a water bottle and a pressed leaf.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-malfunction"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0003"
+    }
+  }
 ]
