@@ -62,6 +62,40 @@ local result={rows={
 },catalog={revision="t",locations={site("t3:p1",1000),site("t3:h1",1100)}},
   candidates={["t3:p1"]={{x=1001,y=1001,z=0}},["t3:h1"]={{x=1101,y=1001,z=0}}}}
 
+-- Helper: Build areaId -> set of leans.
+local function leansPerArea(world)
+    local map={}
+    if not world or not world.case then return map end
+    for i=1,#(world.case.documents or {}) do
+        local d=world.case.documents[i]
+        local areaId
+        for j,a in ipairs(world.case.areas or {}) do
+            if i>=a.first and i<a.first+a.count then areaId=a.id; break end
+        end
+        if areaId then
+            map[areaId]=map[areaId] or {}
+            map[areaId][d.lean]=true
+        end
+    end
+    return map
+end
+
+-- Helper: Compare two lean sets (as sets, not subsets).
+local function leansEqual(golden, reload, label)
+    for areaId,golden_leans in pairs(golden) do
+        assert(reload[areaId], label.." missing area "..areaId)
+        for lean,_ in pairs(golden_leans) do
+            assert(reload[areaId][lean], label.." area "..areaId.." missing lean "..lean)
+        end
+        for lean,_ in pairs(reload[areaId]) do
+            assert(golden_leans[lean], label.." area "..areaId.." extra lean "..lean.." (no peek)")
+        end
+    end
+    for areaId,_ in pairs(reload) do
+        assert(golden[areaId], label.." extra area "..areaId)
+    end
+end
+
 -- Build and assign ground targets
 local store={}
 local harness=boot(store)
@@ -86,6 +120,7 @@ assert(assigned_count>=2,"at least 2 clues attempted")
 
 -- K2 SNAPSHOT: after ground targets assigned
 local K2_store=deepCopy(store)
+local K2_golden_leans=leansPerArea(K2_store["NHShared.Generated.G2"].campaign.canonical)
 
 -- GOLDEN RUN: boot K2, place clues, record results
 local st_golden=deepCopy(K2_store)
@@ -141,6 +176,8 @@ h_reload.fire("OnGameStart")
 squares={}; installWorld()
 for t=1,400 do h_reload.fire("OnTick") end
 local reload_root=st_reload["NHShared.Generated.G2"].campaign.canonical
+local reload_leans=leansPerArea(reload_root)
+leansEqual(K2_golden_leans, reload_leans, "K2 reload leans")
 for id,golden in pairs(golden_info) do
   if assigned_ids[id] then
     local a=reload_root.assignments[id]
@@ -206,6 +243,8 @@ end
 unloaded={}   -- the survivor comes close: the last square loads
 for t=2,400 do h_mid2.fire("OnTick") end
 local mid2_root=st_mid2["NHShared.Generated.G2"].campaign.canonical
+local mid2_leans=leansPerArea(mid2_root)
+leansEqual(K2_golden_leans, mid2_leans, "mid-placement reload leans")
 for id,golden in pairs(golden_info) do
   if assigned_ids[id] then
     local a=mid2_root.assignments[id]
@@ -233,6 +272,8 @@ for k,objs in pairs(mid_squares_checkpoint) do
 end
 for t=2,400 do h_dbl.fire("OnTick") end
 local dbl_root=st_dbl["NHShared.Generated.G2"].campaign.canonical
+local dbl_leans=leansPerArea(dbl_root)
+leansEqual(K2_golden_leans, dbl_leans, "double reload leans")
 for id,golden in pairs(golden_info) do
   if assigned_ids[id] then
     local a=dbl_root.assignments[id]
@@ -248,6 +289,7 @@ end
 local k3_target_id
 for id in pairs(assigned_ids) do k3_target_id=id; break end
 assert(k3_target_id,"found a target clue for K3")
+local K3_golden_leans=leansPerArea(K2_store["NHShared.Generated.G2"].campaign.canonical)
 
 -- Set it to "placing" from K2's "pending" state
 local k3_checkpoint=deepCopy(K2_store)
@@ -276,6 +318,8 @@ unloaded={}  -- survivor comes close, square loads
 for t=1,200 do h_k3_c1.fire("OnTick") end
 
 local k3_c1_root=st_k3_c1["NHShared.Generated.G2"].campaign.canonical
+local k3_c1_leans=leansPerArea(k3_c1_root)
+leansEqual(K3_golden_leans, k3_c1_leans, "K3 case 1 leans")
 local k3_c1_result=k3_c1_root.assignments[k3_target_id]
 assert(k3_c1_result.status=="placed","K3 case 1: never-shown clue should be placed after retry")
 local k3_c1_all,k3_c1_onSpot=0,0
@@ -308,6 +352,8 @@ unloaded={}
 for t=1,200 do h_k3_c2.fire("OnTick") end
 
 local k3_c2_root=st_k3_c2["NHShared.Generated.G2"].campaign.canonical
+local k3_c2_leans=leansPerArea(k3_c2_root)
+leansEqual(K3_golden_leans, k3_c2_leans, "K3 case 2 leans")
 local k3_c2_result=k3_c2_root.assignments[k3_target_id]
 assert(k3_c2_result.status=="unknown","K3 case 2: shown clue should end unknown")
 local k3_c2_count=0
@@ -357,6 +403,8 @@ if k3_partial_id then
     for t=1,200 do h_k3_c3.fire("OnTick") end
 
     local k3_c3_root=st_k3_c3["NHShared.Generated.G2"].campaign.canonical
+    local k3_c3_leans=leansPerArea(k3_c3_root)
+    leansEqual(K3_golden_leans, k3_c3_leans, "K3 case 3 leans")
     local k3_c3_result=k3_c3_root.assignments[k3_partial_id]
     assert(k3_c3_result.status=="unknown","K3 case 3: partial placement must end unknown")
     local k3_c3_count=0
@@ -382,6 +430,8 @@ unloaded={}
 for t=1,200 do h_k3_c4.fire("OnTick") end
 
 local k3_c4_root=st_k3_c4["NHShared.Generated.G2"].campaign.canonical
+local k3_c4_leans=leansPerArea(k3_c4_root)
+leansEqual(K3_golden_leans, k3_c4_leans, "K3 case 4 leans")
 local k3_c4_result=k3_c4_root.assignments[k3_target_id]
 assert(k3_c4_result.status=="unknown","K3 case 4: recognised clue should end unknown")
 local k3_c4_count=0
@@ -390,5 +440,141 @@ for k,sq in pairs(squares) do for _,o in ipairs(sq.objects) do
 end end
 assert(k3_c4_count==0,"K3 case 4: no pieces created for recognised clue")
 
+-- B6: Reload inside arrival ring (inRing resets at game start, job requeues)
+-- Setup: reload while survivor inside area's arrival ring, verify clues placed exactly once
+local st_b6=deepCopy(K2_store)
+local arrival_area_id=K2_store["NHShared.Generated.G2"].campaign.canonical.case.areas[1].id
+
+squares={}
+local h_b6=boot(st_b6); installWorld();
+-- Start far away
+h_b6.setPlayerPos(2000,2000)
+h_b6.fire("OnGameStart")
+squares={}; installWorld()
+
+-- Tick until at least one clue is placed
+for _=1,400 do if placedNow(st_b6)>=1 then break end; h_b6.fire("OnTick") end
+assert(placedNow(st_b6)>=1,"at least one clue placed before in-ring reload")
+
+-- Move survivor INSIDE the arrival ring (near target 1001,1002)
+h_b6.setPlayerPos(1001,1001)
+
+-- Snapshot store and squares before reload
+local b6_checkpoint_store=deepCopy(st_b6)
+local b6_checkpoint_squares={}
+for k,sq in pairs(squares) do
+  b6_checkpoint_squares[k]={}
+  for i,o in ipairs(sq.objects) do
+    local token=o.item:getModData().cfPhysicalToken
+    b6_checkpoint_squares[k][i]={token=token}
+  end
+end
+
+-- Reload while in ring
+local st_b6_reload=deepCopy(b6_checkpoint_store)
+squares={}
+local h_b6_reload=boot(st_b6_reload); installWorld(); h_b6_reload.setPlayerPos(1001,1001)
+h_b6_reload.fire("OnGameStart")
+squares={}; installWorld()
+
+-- Recreate checkpoint squares
+for k,objs in pairs(b6_checkpoint_squares) do
+  local parts={}
+  for part in k:gmatch("[^,]+") do table.insert(parts,tonumber(part)) end
+  local sq=square(parts[1],parts[2],parts[3])
+  for i,o_info in ipairs(objs) do
+    local item=instanceItem("fake.item")
+    item:getModData().cfPhysicalToken=o_info.token
+    sq:AddWorldInventoryItem(item)
+  end
+end
+
+-- Continue ticks after reload until items are placed
+local function b6_placed(store)
+    local n=0
+    for id,a in pairs(store["NHShared.Generated.G2"].campaign.canonical.assignments or {}) do
+        if assigned_ids[id] and a.status=="placed" then n=n+1 end
+    end
+    return n
+end
+for t=2,400 do h_b6_reload.fire("OnTick") end
+local b6_first_placed=b6_placed(st_b6_reload)
+assert(b6_first_placed>=2,"B6: at least 2 clues placed after first in-ring reload")
+
+-- Check pieces after first reload before snapshot
+local b6_reload_root=st_b6_reload["NHShared.Generated.G2"].campaign.canonical
+for id,a in pairs(b6_reload_root.assignments) do
+  if assigned_ids[id] then
+    local all,onSpot=0,0
+    local spot=a.target.x..","..a.target.y..","..a.target.z
+    for k,sq in pairs(squares) do for _,o in ipairs(sq.objects) do
+        if o.item:getModData().cfPhysicalToken==a.physicalToken then
+            all=all+1; if k==spot then onSpot=onSpot+1 end
+        end
+    end end
+    local want=0
+    for _,d in ipairs(b6_reload_root.case.documents) do if d.id==id then
+        for _,m in ipairs(d.members or {{quantity=d.quantity or 1}}) do want=want+(m.quantity or 1) end
+    end end
+    assert(want>0 and all==want and onSpot==all,
+        "B6 first in-ring reload: clue "..id.." pieces exactly once: "..all.." ("..onSpot.." on spot) of "..want)
+  end
+end
+
+-- Snapshot after first reload (with items placed)
+local b6_checkpoint2_store=deepCopy(st_b6_reload)
+local b6_checkpoint2_squares={}
+for k,sq in pairs(squares) do
+  b6_checkpoint2_squares[k]={}
+  for i,o in ipairs(sq.objects) do
+    local token=o.item:getModData().cfPhysicalToken
+    b6_checkpoint2_squares[k][i]={token=token}
+  end
+end
+
+-- B6 DOUBLE RELOAD: reload again from the placed-state checkpoint, inside ring
+local st_b6_reload2=deepCopy(b6_checkpoint2_store)
+squares={}
+local h_b6_reload2=boot(st_b6_reload2); installWorld(); h_b6_reload2.setPlayerPos(1001,1001)
+h_b6_reload2.fire("OnGameStart")
+squares={}; installWorld()
+
+-- Recreate checkpoint squares with already-placed items
+for k,objs in pairs(b6_checkpoint2_squares) do
+  local parts={}
+  for part in k:gmatch("[^,]+") do table.insert(parts,tonumber(part)) end
+  local sq=square(parts[1],parts[2],parts[3])
+  for i,o_info in ipairs(objs) do
+    local item=instanceItem("fake.item")
+    item:getModData().cfPhysicalToken=o_info.token
+    sq:AddWorldInventoryItem(item)
+  end
+end
+
+-- Replay from placed state
+for t=2,400 do h_b6_reload2.fire("OnTick") end
+
+-- Verify: each clue still has exactly its piece count on its square (no double creation)
+local b6_reload2_root=st_b6_reload2["NHShared.Generated.G2"].campaign.canonical
+for id,a in pairs(b6_reload2_root.assignments) do
+  if assigned_ids[id] then
+    local all,onSpot=0,0
+    local spot=a.target.x..","..a.target.y..","..a.target.z
+    for k,sq in pairs(squares) do for _,o in ipairs(sq.objects) do
+        if o.item:getModData().cfPhysicalToken==a.physicalToken then
+            all=all+1; if k==spot then onSpot=onSpot+1 end
+        end
+    end end
+    local want=0
+    for _,d in ipairs(b6_reload2_root.case.documents) do if d.id==id then
+        for _,m in ipairs(d.members or {{quantity=d.quantity or 1}}) do want=want+(m.quantity or 1) end
+    end end
+    assert(want>0 and all==want and onSpot==all,
+        "B6 double in-ring reload: clue "..id.." still exactly one set: "..all.." ("..onSpot.." on spot) of "..want)
+  end
+end
+
 print("nohelp reload world: K2 ground targets preserve through golden, reload, mid-placement, and double reload")
 print("K3: placing clue retries if never shown, ends unknown if shown (B4, 2026-09-28: provisional owner rule)")
+print("B6: double reload inside arrival ring re-queues job; clues placed exactly once after each reload")
+print("NH-D3: a crash and reload at these save points changes nothing")

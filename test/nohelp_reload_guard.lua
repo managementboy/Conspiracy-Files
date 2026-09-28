@@ -39,6 +39,44 @@ local function assignmentsById(world)
     return map
 end
 
+-- Build areaId -> set of leans.
+local function leansPerArea(world)
+    local map={}
+    if not world or not world.case then return map end
+    for i=1,#(world.case.documents or {}) do
+        local d=world.case.documents[i]
+        local areaId
+        for j,a in ipairs(world.case.areas or {}) do
+            if i>=a.first and i<a.first+a.count then areaId=a.id; break end
+        end
+        if areaId then
+            map[areaId]=map[areaId] or {}
+            map[areaId][d.lean]=true
+        end
+    end
+    return map
+end
+
+-- Compare two lean sets (strict equality: same leans, no extra, no missing).
+local function leansEqual(golden, reload, label)
+    for areaId,golden_leans in pairs(golden) do
+        assert(reload[areaId], label.." missing area "..areaId)
+        for lean,_ in pairs(golden_leans) do
+            assert(reload[areaId][lean], label.." area "..areaId.." missing lean "..lean)
+        end
+        for lean,_ in pairs(reload[areaId]) do
+            assert(golden_leans[lean], label.." area "..areaId.." extra lean "..lean.." (no peek)")
+        end
+    end
+    for areaId,_ in pairs(reload) do
+        assert(golden[areaId], label.." extra area "..areaId)
+    end
+end
+
+-- Self-test: leansEqual must detect inequality
+local ok,err=pcall(leansEqual, {a1={lean_a=true}}, {a1={lean_b=true}}, "self-test")
+assert(not ok, "B5 self-test: leansEqual must reject different sets")
+
 -- Assert maps are equal both ways.
 local function mapsEqual(golden, reload, label)
     for id,val in pairs(golden) do
@@ -90,6 +128,7 @@ local golden_docs=docsById(golden_root)
 local golden_assigns=assignmentsById(golden_root)
 local golden_seed=golden_root.case.seed
 local golden_area_count=#golden_root.case.areas
+local K1_golden_leans=leansPerArea(golden_root)
 
 -- RELOAD FROM K0
 local reload0_store=deepCopy(K0_store)
@@ -108,6 +147,8 @@ mapsEqual(golden_assigns, reload0_assigns, "K0 reload assigns")
 assert(#reload0_root.case.areas==golden_area_count, "K0 reload: no area growth")
 assert(reload0_root.case.seed==golden_seed, "K0 reload: seed preserved")
 assert(reload0_harness.getRolls()==0, "K0 reload: seed not redrawn")
+local reload0_leans=leansPerArea(reload0_root)
+leansEqual(K1_golden_leans, reload0_leans, "K0 reload leans (after ticks)")
 
 -- RELOAD FROM K1
 local reload1_store=deepCopy(K1_store)
@@ -128,6 +169,8 @@ mapsEqual(golden_assigns, reload1_assigns, "K1 reload assigns")
 assert(#reload1_root.case.areas==golden_area_count, "K1 reload: no area growth")
 assert(reload1_root.case.seed==golden_seed, "K1 reload: seed preserved")
 assert(reload1_harness.getRolls()==0, "K1 reload: seed not redrawn")
+local reload1_leans=leansPerArea(reload1_root)
+leansEqual(K1_golden_leans, reload1_leans, "K1 reload leans")
 
 -- DOUBLE-RELOAD FROM K1
 local reload1b_store=deepCopy(reload1_store)
@@ -147,6 +190,8 @@ mapsEqual(reload1_assigns, reload1b_assigns, "double reload assigns")
 assert(#reload1b_root.case.areas==#reload1_root.case.areas, "double reload: no area growth")
 assert(reload1b_root.case.seed==golden_seed, "double reload: seed preserved")
 assert(reload1b_harness.getRolls()==0, "double reload: seed not redrawn")
+local reload1b_leans=leansPerArea(reload1b_root)
+leansEqual(reload1_leans, reload1b_leans, "double reload leans")
 
 -- DOUBLE-RELOAD FROM K0: reload K0, replay to K1, snapshot, reload, replay
 local reload0_k1_store=deepCopy(reload0_store)
@@ -179,5 +224,57 @@ mapsEqual(reload0_k1_assigns, reload0b_assigns, "double reload K0 assigns")
 assert(#reload0b_root.case.areas==#reload0_k1_root.case.areas, "double reload K0: no area growth")
 assert(reload0b_root.case.seed==golden_seed, "double reload K0: seed preserved")
 assert(reload0b_harness.getRolls()==0, "double reload K0: seed not redrawn")
+local reload0_k1_leans=leansPerArea(reload0_k1_root)
+local reload0b_leans=leansPerArea(reload0b_root)
+leansEqual(reload0_k1_leans, reload0b_leans, "double reload K0 leans")
+
+-- B5 MAP-READ CASE: Snapshot after map-aware decision
+-- Start from K1 state, call decideNearby again (already decided, no change)
+local map_read_store=deepCopy(K1_store)
+local map_read_harness=boot(map_read_store)
+local map_read_R=map_read_harness.R
+map_read_harness.fire("OnGameStart")
+map_read_harness.probe.result=result
+assert(map_read_R.decideNearby()==true,"map-read: scan starts (already decided)")
+for _=1,20 do map_read_harness.fire("OnTick") end
+
+-- SNAPSHOT: after second scan (map place awareness)
+local map_read_snapshot=deepCopy(map_read_store)
+local map_read_golden_root=map_read_snapshot["NHShared.Generated.G2"].campaign.canonical
+local map_read_golden_docs=docsById(map_read_golden_root)
+local map_read_golden_leans=leansPerArea(map_read_golden_root)
+assert(#map_read_golden_root.case.areas==golden_area_count,"map-read snapshot: same area count")
+
+-- RELOAD FROM MAP-READ SNAPSHOT (with map read again)
+local map_read_reload_store=deepCopy(map_read_snapshot)
+local map_read_reload_harness=boot(map_read_reload_store)
+local map_read_reload_R=map_read_reload_harness.R
+map_read_reload_harness.fire("OnGameStart")
+assert(map_read_reload_R.decideNearby()==true,"map-read replay: scan starts")
+map_read_reload_harness.probe.result=result
+for _=1,20 do map_read_reload_harness.fire("OnTick") end
+local map_read_reload_root=map_read_reload_store["NHShared.Generated.G2"].campaign.canonical
+local map_read_replay_docs=docsById(map_read_reload_root)
+local map_read_replay_leans=leansPerArea(map_read_reload_root)
+
+mapsEqual(map_read_golden_docs, map_read_replay_docs, "map-read replay docs")
+leansEqual(map_read_golden_leans, map_read_replay_leans, "map-read replay leans")
+assert(#map_read_reload_root.case.areas==golden_area_count,"map-read replay: same area count")
+
+-- RELOAD FROM MAP-READ SNAPSHOT (without scanning again)
+local map_read_norescan_store=deepCopy(map_read_snapshot)
+local map_read_norescan_harness=boot(map_read_norescan_store)
+map_read_norescan_harness.fire("OnGameStart")
+-- Skip decideNearby; just ticks
+for _=1,20 do map_read_norescan_harness.fire("OnTick") end
+local map_read_norescan_root=map_read_norescan_store["NHShared.Generated.G2"].campaign.canonical
+local map_read_norescan_docs=docsById(map_read_norescan_root)
+local map_read_norescan_leans=leansPerArea(map_read_norescan_root)
+
+mapsEqual(map_read_golden_docs, map_read_norescan_docs, "map-read no-rescan docs")
+leansEqual(map_read_golden_leans, map_read_norescan_leans, "map-read no-rescan leans")
+assert(#map_read_norescan_root.case.areas==golden_area_count,"map-read no-rescan: same area count")
 
 print("nohelp reload guard: K0 and K1 reloads + replays preserve state, double reload stable")
+print("B5 map-read: scan after decision, reload with/without rescan, leans and docs preserved")
+print("NH-D3: a crash and reload at these save points changes nothing")

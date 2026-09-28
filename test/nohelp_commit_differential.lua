@@ -22,10 +22,12 @@ for ki=1,math.min(3,#allowedKinds) do
         where={{place="farm",spot=spot,lean="containment",rival="agricultural"},
                {place="farm",spot=spot,lean="agricultural",rival="containment"}}}
 end
--- Add a dedicated mobile clue for missing/dropMissing testing
+-- Add a dedicated mobile clue for missing/dropMissing testing (with multiple places to ensure creation)
 clues[#clues+1]={
     id="MOBILE",kind="set",pieces={"Wire","Paperclip"},
-    where={{place="farm",spot="vehicle",lean="containment",rival="agricultural"},
+    where={{place="police",spot="vehicle",lean="containment",rival="agricultural"},
+           {place="police",spot="corpse",lean="agricultural",rival="containment"},
+           {place="farm",spot="vehicle",lean="containment",rival="agricultural"},
            {place="farm",spot="corpse",lean="agricultural",rival="containment"}}}
 local places=Inventory.places
 
@@ -80,6 +82,7 @@ local stats={addArea=0,assign=0,status=0,show=0,recognise=0,inspect=0,relocate=0
 local refused={addArea=0,assign=0,status=0,show=0,recognise=0,inspect=0,relocate=0,unplan=0,deferTarget=0,drop=0,missing=0,dropMissing=0,noteScene=0,addSceneArea=0}
 
 -- Helper: every API call goes through here
+local stepsSoFar=0
 local function step(kind, call)
     -- Record state BEFORE
     local snap1_before=deepCopy(api1.snapshot())
@@ -124,8 +127,12 @@ local function step(kind, call)
         end
     end
 
-    -- Re-check earlier received payloads for mutation
-    for i=1,math.min(calls1_before,callCount1-1) do
+    -- A write must never change what an earlier save was handed (that is what
+    -- sharing frozen parts risks). The new payloads after every write; every
+    -- payload so far after every 10th step and at the end (all of them each
+    -- time made this test take half a minute).
+    stepsSoFar=(stepsSoFar or 0)+1
+    for i=(stepsSoFar%10==0) and 1 or calls1_before+1,callCount1 do
         local ok,err=deepEqual(received1[i].fingerprint,deepCopy(received1[i].obj))
         assert(ok,kind.." mutation in received1["..i.."]: "..tostring(err))
         ok,err=deepEqual(received2[i].fingerprint,deepCopy(received2[i].obj))
@@ -358,6 +365,77 @@ step("relocate",function(api)
     return api.relocate("unknown-id",makeTarget("furniture",199),78)
 end)
 
+-- Ensure at least one mobile clue is assigned and placed for missing/dropMissing testing
+snap=api1.snapshot()
+local mobileDoc
+-- First try to find the MOBILE clue document specifically
+for _,doc in ipairs(snap.case.documents) do
+    if doc.clue=="MOBILE" then
+        mobileDoc=doc
+        break
+    end
+end
+-- Fallback: find any document with a mobile spot that was created from the MOBILE clue
+if not mobileDoc then
+    for _,doc in ipairs(snap.case.documents) do
+        if (doc.spot=="vehicle" or doc.spot=="corpse") and doc.clue=="MOBILE" then
+            mobileDoc=doc
+            break
+        end
+    end
+end
+-- Final fallback: find any deferred document with mobile spot and assign it
+if not mobileDoc then
+    snap=api1.snapshot()
+    docsByStatus={}
+    for _,doc in ipairs(snap.case.documents) do
+        local status=snap.assignments[doc.id].status
+        if status=="deferred" and (doc.spot=="vehicle" or doc.spot=="corpse") then
+            mobileDoc=doc
+            break
+        end
+    end
+end
+
+-- Now ensure the mobile clue is assigned and placed
+if mobileDoc then
+    snap=api1.snapshot()
+    local a=snap.assignments[mobileDoc.id]
+
+    -- If not assigned, assign it to a mobile target
+    if a and not a.target then
+        local target=makeTarget(mobileDoc.spot,99,1)
+        step("assign",function(api)
+            return api.assign(mobileDoc.id,target,79)
+        end)
+    end
+
+    -- Transition to placed if needed
+    snap=api1.snapshot()
+    a=snap.assignments[mobileDoc.id]
+    if a and a.target and S.isMobile(a.target) then
+        if a.status=="pending" then
+            step("status",function(api)
+                return api.status(mobileDoc.id,"placing")
+            end)
+            step("status",function(api)
+                return api.status(mobileDoc.id,"placed",80)
+            end)
+        elseif a.status=="deferred" then
+            step("assign",function(api)
+                local t=makeTarget(mobileDoc.spot,99,1)
+                return api.assign(mobileDoc.id,t,81)
+            end)
+            step("status",function(api)
+                return api.status(mobileDoc.id,"placing")
+            end)
+            step("status",function(api)
+                return api.status(mobileDoc.id,"placed",82)
+            end)
+        end
+    end
+end
+
 -- UNPLAN: indexed -> deferred (impossible in area world)
 -- No Help areas only create deferred/pending/placed/dropped status. Indexed status never exists
 -- in AreaCase assignments; it comes from legacy index matching not used here.
@@ -404,10 +482,12 @@ end)
 -- Search for mobile clues that are placed and unrecognised
 snap=api1.snapshot()
 local mobileClues={}
+local dropMissingClueId  -- Track a clue for dropMissing testing
 for _,doc in ipairs(snap.case.documents) do
     local a=snap.assignments[doc.id]
     if a.target and S.isMobile(a.target) and a.status=="placed" and not api1.isRecognised(doc.id) then
         table.insert(mobileClues,{id=doc.id})
+        if not dropMissingClueId then dropMissingClueId=doc.id end
     end
 end
 
@@ -416,10 +496,6 @@ if #mobileClues>0 then
     step("missing",function(api)
         return api.missing(mobileClues[1].id,100)
     end)
-    -- Clear missing hours
-    step("missing",function(api)
-        return api.missing(mobileClues[1].id,nil)
-    end)
 end
 
 -- Refused missing: not mobile
@@ -427,20 +503,11 @@ step("missing",function(api)
     return api.missing("unknown-id",95)
 end)
 
--- DROPMISSING: carrier lost -> deferred/dropped
--- Search for mobile clues that have missingHours set
-snap=api1.snapshot()
-local dropMissingClues={}
-for _,doc in ipairs(snap.case.documents) do
-    local a=snap.assignments[doc.id]
-    if a.target and S.isMobile(a.target) and a.status=="placed" and a.missingHours and not api1.isRecognised(doc.id) then
-        table.insert(dropMissingClues,{id=doc.id})
-    end
-end
-
-if #dropMissingClues>0 then
+-- DROPMISSING: carrier lost -> deferred/dropped (requires missingHours to be set)
+-- If we have a mobile clue with missingHours set, drop it
+if dropMissingClueId then
     step("dropMissing",function(api)
-        return api.dropMissing(dropMissingClues[1].id,101)
+        return api.dropMissing(dropMissingClueId,101)
     end)
 end
 
@@ -475,8 +542,8 @@ step("noteScene",function(api)
     return api.noteScene(confirmedSceneKey,{kind="RBBar",x=100,y=100,z=0,source="seen",hours=91})
 end)
 
--- ADDSCENEAREA: add area for confirmed scene (site must have paperStorage and containerTypes)
-local sceneSite={id="scene:"..confirmedSceneKey,bounds={x1=100,y1=100,x2=101,y2=101,z=0},paperStorage="unknown",containerTypes={"shelves","postbox","vehicle","corpse","floor"}}
+-- ADDSCENEAREA: add area for confirmed scene (site format: id="scene:"..key, bounds small 1x1, paperStorage, empty containerTypes)
+local sceneSite={id="scene:"..confirmedSceneKey,bounds={x1=100,y1=100,x2=101,y2=101,z=0},paperStorage="unknown",containerTypes={}}
 step("addSceneArea",function(api)
     return api.addSceneArea{site=sceneSite,key=confirmedSceneKey,kind="RBBar",clues=clues,version="v1",hours=95}
 end)
@@ -486,36 +553,89 @@ step("addSceneArea",function(api)
     return api.addSceneArea{key=confirmedSceneKey,site=site(42),kind="RBBarn",clues=clues,version="v1",hours=96}
 end)
 
--- CORRUPTION TESTS: 3 distinct cases
--- 1. Duplicate area id
-local bad1=AreaCase.new(99999)
-bad1.locations[1]={id="t3:dup",bounds={x1=0,y1=0,x2=10,y2=10,z=0}}
-bad1.areas[1]={id="t3:dup",place="farm",source="test",version="v1",decidedHours=0,first=1,count=1,short=0}
-bad1.areas[2]={id="t3:dup",place="farm",source="test",version="v1",decidedHours=0,first=2,count=1,short=0}
-bad1.documents[1]={id="nh:t3:dup:c1:1",locationId="t3:dup",clue="c1",copy=1,lean="containment",rival="agricultural",spot="furniture",kind="Rope",title="Test",body="Test"}
-bad1.documents[2]={id="nh:t3:dup:c2:1",locationId="t3:dup",clue="c2",copy=1,lean="agricultural",rival="containment",spot="mailbox",kind="Twine",title="Test",body="Test"}
-local ok1a,err1a=AreaCase.validate(bad1)
-local ok2a,err2a=AreaCase.validate(bad1)
+-- CORRUPTION TESTS: 4 distinct cases with full Session validation
+-- 1. Duplicate area id (wrapped in Session root)
+local bad1case=AreaCase.new(99999)
+bad1case.locations[1]={id="t3:dup",bounds={x1=0,y1=0,x2=10,y2=10,z=0}}
+bad1case.areas[1]={id="t3:dup",place="farm",source="test",version="v1",decidedHours=0,first=1,count=1,short=0}
+bad1case.areas[2]={id="t3:dup",place="farm",source="test",version="v1",decidedHours=0,first=2,count=1,short=0}
+bad1case.documents[1]={id="nh:t3:dup:c1:1",locationId="t3:dup",clue="c1",copy=1,lean="containment",rival="agricultural",spot="furniture",kind="Rope",title="Test",body="Test"}
+bad1case.documents[2]={id="nh:t3:dup:c2:1",locationId="t3:dup",clue="c2",copy=1,lean="agricultural",rival="containment",spot="mailbox",kind="Twine",title="Test",body="Test"}
+local bad1root={schema=1,case=bad1case,assignments={},known={}}
+local ok1a,err1a=S.validate(bad1root)
+local ok2a,err2a=S_ref.validate(bad1root)
 assert(not ok1a and not ok2a,"corrupt 1: duplicate area refused")
 assert(err1a==err2a,"corrupt 1: error match")
+-- Also test opening (both should refuse)
+local sinkCalls1,sinkCalls2=0,0
+local open1a=S.open(bad1root,function() sinkCalls1=sinkCalls1+1 end)
+local open2a=S_ref.open(bad1root,function() sinkCalls2=sinkCalls2+1 end)
+assert(not open1a and not open2a,"corrupt 1: open must refuse")
+assert(sinkCalls1==sinkCalls2,"corrupt 1: sink call match")
 
--- 2. Document outside area range
-local bad2=AreaCase.new(88888)
-bad2.locations[1]={id="t3:x",bounds={x1=0,y1=0,x2=10,y2=10,z=0}}
-bad2.areas[1]={id="t3:x",place="farm",source="test",version="v1",decidedHours=0,first=1,count=1,short=0}
-bad2.documents[1]={id="nh:t3:x:c1:1",locationId="t3:x",clue="c1",copy=1,lean="containment",rival="agricultural",spot="furniture",kind="Rope",title="Test",body="Test"}
-bad2.documents[2]={id="bad:outside",locationId="t3:x",clue="c2",copy=1,lean="agricultural",rival="containment",spot="mailbox",kind="Twine",title="Test",body="Test"}
-local ok1b,err1b=AreaCase.validate(bad2)
-local ok2b,err2b=AreaCase.validate(bad2)
+-- 2. Document outside area range (wrapped in Session root)
+local bad2case=AreaCase.new(88888)
+bad2case.locations[1]={id="t3:x",bounds={x1=0,y1=0,x2=10,y2=10,z=0}}
+bad2case.areas[1]={id="t3:x",place="farm",source="test",version="v1",decidedHours=0,first=1,count=1,short=0}
+bad2case.documents[1]={id="nh:t3:x:c1:1",locationId="t3:x",clue="c1",copy=1,lean="containment",rival="agricultural",spot="furniture",kind="Rope",title="Test",body="Test"}
+bad2case.documents[2]={id="bad:outside",locationId="t3:x",clue="c2",copy=1,lean="agricultural",rival="containment",spot="mailbox",kind="Twine",title="Test",body="Test"}
+local bad2root={schema=1,case=bad2case,assignments={},known={}}
+local ok1b,err1b=S.validate(bad2root)
+local ok2b,err2b=S_ref.validate(bad2root)
 assert(not ok1b and not ok2b,"corrupt 2: outside range refused")
 assert(err1b==err2b,"corrupt 2: error match")
+local sinkCalls1b,sinkCalls2b=0,0
+local open1b=S.open(bad2root,function() sinkCalls1b=sinkCalls1b+1 end)
+local open2b=S_ref.open(bad2root,function() sinkCalls2b=sinkCalls2b+1 end)
+assert(not open1b and not open2b,"corrupt 2: open must refuse")
+assert(sinkCalls1b==sinkCalls2b,"corrupt 2: sink call match")
 
 -- 3. Invalid assignment status
-local bad3root={schema=1,case=AreaCase.new(77777),assignments={c1={physicalToken="cf-g2:c1",status="invalid-status"}},known={}}
+local bad3case=AreaCase.new(77777)
+bad3case.locations[1]={id="t3:s3",bounds={x1=0,y1=0,x2=10,y2=10,z=0}}
+bad3case.areas[1]={id="t3:s3",place="farm",source="test",version="v1",decidedHours=0,first=1,count=1,short=0}
+bad3case.documents[1]={id="nh:t3:s3:c1:1",locationId="t3:s3",clue="c1",copy=1,lean="containment",rival="agricultural",spot="furniture",kind="Rope",title="Test",body="Test"}
+local bad3root={schema=1,case=bad3case,assignments={c1={physicalToken="cf-g2:c1",status="invalid-status"}},known={}}
 local ok1c,err1c=S.validate(bad3root)
 local ok2c,err2c=S_ref.validate(bad3root)
 assert(not ok1c and not ok2c,"corrupt 3: bad status refused")
 assert(err1c==err2c,"corrupt 3: error match")
+
+-- 4. Target outside site bounds (new case)
+local bad4case=AreaCase.new(66666)
+bad4case.locations[1]={id="t3:b4",bounds={x1=0,y1=0,x2=10,y2=10,z=0}}
+bad4case.areas[1]={id="t3:b4",place="farm",source="test",version="v1",decidedHours=0,first=1,count=1,short=0}
+bad4case.documents[1]={id="nh:t3:b4:c1:1",locationId="t3:b4",clue="c1",copy=1,lean="containment",rival="agricultural",spot="furniture",kind="Rope",title="Test",body="Test"}
+local bad4root={schema=1,case=bad4case,assignments={
+    ["nh:t3:b4:c1:1"]={physicalToken="cf-g2:c1",status="placed",locationId="t3:b4",
+        target={x=100,y=100,z=0,objectIndex=0,containerIndex=0,containerType="shelves",sprite="s"},
+        placedHours=50,relocations=0}
+},known={}}
+local ok1d,err1d=S.validate(bad4root)
+local ok2d,err2d=S_ref.validate(bad4root)
+assert(not ok1d and not ok2d,"corrupt 4: target outside bounds refused")
+assert(err1d==err2d,"corrupt 4: error match")
+
+-- Final checks: re-verify ALL payloads (including newest) for mutation
+for i=1,callCount1 do
+    local ok,err=deepEqual(received1[i].fingerprint,deepCopy(received1[i].obj))
+    assert(ok,"final re-check: mutation in received1["..i.."]: "..tostring(err))
+    ok,err=deepEqual(received2[i].fingerprint,deepCopy(received2[i].obj))
+    assert(ok,"final re-check: mutation in received2["..i.."]: "..tostring(err))
+end
+
+-- Reload from final payloads: open fresh sessions and compare snapshots
+local finalSnap1,finalSnap2
+if callCount1>0 then
+    local lastRoot1=deepCopy(received1[callCount1].obj)
+    local lastRoot2=deepCopy(received2[callCount2].obj)
+    local reloadApi1=assert(S.open(lastRoot1,function() end),"reload from live payload")
+    local reloadApi2=assert(S_ref.open(lastRoot2,function() end),"reload from ref payload")
+    finalSnap1=reloadApi1.snapshot()
+    finalSnap2=reloadApi2.snapshot()
+    local ok,err=deepEqual(finalSnap1,finalSnap2)
+    assert(ok,"final reload snapshots must match: "..tostring(err))
+end
 
 -- Final: run all test suite
 print("Running all nohelp tests...")
@@ -523,7 +643,7 @@ assert(os.execute("lua5.1 test/nohelp_area_session.lua"),"nohelp_area_session fa
 assert(os.execute("lua5.1 test/nohelp_moves.lua"),"nohelp_moves failed")
 assert(os.execute("lua5.1 test/nohelp_reload_guard.lua"),"nohelp_reload_guard failed")
 
-print(("✓ nohelp commit differential: %d writes, %d accepted, %d refused, %d sinks, corruptions: 3 match"):format(
+print(("✓ nohelp commit differential: %d writes, %d accepted, %d refused, %d sinks, corruptions: 4 match"):format(
     writes,
     stats.addArea+stats.assign+stats.status+stats.show+stats.recognise+stats.inspect+stats.relocate+stats.unplan+stats.deferTarget+stats.drop+stats.missing+stats.dropMissing+stats.noteScene+stats.addSceneArea,
     refused.addArea+refused.assign+refused.status+refused.show+refused.recognise+refused.inspect+refused.relocate+refused.unplan+refused.deferTarget+refused.drop+refused.missing+refused.dropMissing+refused.noteScene+refused.addSceneArea,
