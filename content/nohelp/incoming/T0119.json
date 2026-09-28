@@ -1,0 +1,45 @@
+[
+  {
+    "id": "t0119-01",
+    "kind": "set",
+    "pieces": [
+      "KeyRing",
+      "Bag_ALICEpack"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "containment",
+        "rival": "agricultural"
+      }
+    ],
+    "anchor": {
+      "map": "WorldStashMap10",
+      "mark": 1
+    },
+    "title": "Four stops on one receipt",
+    "body": "A receipt groups fuel, clothing, food, and a vehicle under one pickup. The receiving signature is missing, though every stop is checked.",
+    "rival_reading": "A program crew could have collected supplies for a field site; the unchecked signature does not identify the buyer.",
+    "gloss": "Several supply stops are checked without a receiving signature.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "cites": {
+      "source": "map:WorldStashMap10",
+      "quote": "GAS"
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0119"
+    }
+  }
+]
