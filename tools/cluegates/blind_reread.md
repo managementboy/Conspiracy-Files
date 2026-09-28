@@ -17,8 +17,9 @@ No lean, no rival reading, no gloss, no axioms, no anchor, no other clue.
     tools/cluegates/blind_reread.sh --rows <ticket>  # a draft, before converting
 
 Haiku through the `claude` CLI, from an empty folder, no tools, no settings,
-a fresh session per read; 5 reads per clue; receipts written as below. The
-steps that follow are what it does.
+and a fresh session for each read. Read every clue once; make a second
+independent read only when the first vote is `NEITHER` or does not match the
+clue's declared lean. Receipts are tied to the rendered text hash.
 
 ## How
 
@@ -26,9 +27,12 @@ steps that follow are what it does.
 
        lua5.1 tools/cluegates/check_receipts.lua --render <clue id>
 
-2. Run the prompt below with that text **at least 5 times**, each in a fresh
-   conversation (independent runs, no memory between them). Record only the
-   first word of each answer: `A`, `B` or `NEITHER`.
+2. Run the prompt below once in a fresh conversation. Record only the first
+   word of the answer: `A`, `B` or `NEITHER`. Compare the vote privately with
+   the clue's declared lean. If it is `NEITHER` or differs from that lean, run
+   one more fresh read. Do not show the reader the intended lean. If the two
+   votes differ, return the clue for revision; do not spend more reads trying
+   to force agreement.
 3. Write the receipt `tools/cluegates/receipts/<clue id>.json`:
 
        {"clue": "<clue id>",
@@ -37,13 +41,10 @@ steps that follow are what it does.
         "date": "YYYY-MM-DD",
         "votes": {"A": 0, "B": 0, "neither": 0}}
 
-4. Run `lua5.1 tools/cluegates/check_receipts.lua`. It reports, per clue,
-   `NO_RECEIPT`, `BAD_RECEIPT`, `STALE_RECEIPT` (the text changed after the
-   receipt: re-read it), `NEVER_RIVAL` (never read as the conspiracy it cuts
-   against: one-sided, return it to the writer) or `MOSTLY_NEITHER` (read as
-   neither in more than half the runs: return it). A clue ships only with a
-   valid receipt; the shipped test suite enforces this once the clue list is
-   not empty.
+4. Run `lua5.1 tools/cluegates/check_receipts.lua`. It reports missing,
+   malformed or stale receipts, and flags a vote that does not match the
+   declared lean or a two-read disagreement for human review. A clue ships
+   only when its receipt is current and its vote passes the gate.
 
 Editing a clue's title, body, pieces or places changes its hash and voids its
 receipt.
