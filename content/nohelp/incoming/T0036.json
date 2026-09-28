@@ -1,0 +1,45 @@
+[
+  {
+    "id": "t0036-01",
+    "kind": "set",
+    "pieces": [
+      "Bag_ALICEpack",
+      "Fertilizer"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "anchor": {
+      "map": "EkronStashMap3",
+      "mark": 1
+    },
+    "title": "Goods kept apart",
+    "body": "A fertilizer bag is tied shut inside a supply pack; the page tucked under it lists a return trip but no recipient.",
+    "rival_reading": "Emergency crews could have packed agricultural supplies for cleanup or evacuation; the missing recipient does not prove a program link.",
+    "gloss": "Packed supplies remain without a named recipient or completed handoff.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "cites": {
+      "source": "map:EkronStashMap3",
+      "quote": "the goods"
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0036"
+    }
+  }
+]
