@@ -1,0 +1,45 @@
+[
+  {
+    "id": "t0117-01",
+    "kind": "set",
+    "pieces": [
+      "Notebook",
+      "Pencil"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "containment",
+        "rival": "agricultural"
+      }
+    ],
+    "anchor": {
+      "map": "WorldStashMap8",
+      "mark": 1
+    },
+    "title": "A destination without a name",
+    "body": "The route page is complete except for its destination. The departure box is checked, and a margin asks the driver to wait for an updated order.",
+    "rival_reading": "A field trip could also await a revised destination; the note does not say who issued the order.",
+    "gloss": "A completed departure entry waits on a destination update.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "cites": {
+      "source": "map:WorldStashMap8",
+      "quote": "marked address in World / countryside"
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0117"
+    }
+  }
+]
