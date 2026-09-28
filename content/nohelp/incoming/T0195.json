@@ -1,0 +1,44 @@
+[
+  {
+    "id": "t0195-01",
+    "kind": "set",
+    "pieces": [
+      "WaterBottle",
+      "Notebook"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "anchor": {
+      "print": "HouseforSale903"
+    },
+    "title": "Potential rooms",
+    "body": "The floor plan marks two potential rooms; a field note asks whether the upstairs water sample was taken before the new tenant arrived.",
+    "rival_reading": "A landlord could test water before any occupancy; the note does not say what prompted the sample.",
+    "gloss": "A water check is tied to a room before its next occupant.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "cites": {
+      "source": "print:HouseforSale903",
+      "quote": "House for Sale (no. 903)"
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0195"
+    }
+  }
+]
