@@ -1,21 +1,5 @@
-[
-  {
-    "body": "The map shows a farm track ending at a thick road-closure bar. The keyring lies beyond it, tied to a tag stamped “county return.” Beside the bar, “all clear” is checked although the road is still crossed out.",
-    "id": "t0003-01",
-    "kind": "set",
-    "pieces": [
-      "Map",
-      "KeyRing"
-    ],
-    "title": "The key past the closure bar",
-    "where": [
-      {
-        "lean": "containment",
-        "place": "farm",
-        "rival": "agricultural",
-        "spot": "ground"
-      }
-    ],
+{
+  "t0003-01": {
     "axioms": {
       "agricultural": [
         "a-program",
@@ -34,23 +18,7 @@
     },
     "rival_reading": "A farm worker could mark a temporary gate closure and reclaim a county key after a shift; a crossed-out route does not prove an official evacuation failure."
   },
-  {
-    "body": "The seed bag is folded shut around the shovel handle. A straight line of dark soil runs from the blade to the bag's seam, but the shovel has no soil on its grip.",
-    "id": "t0003-02",
-    "kind": "set",
-    "pieces": [
-      "SeedBag",
-      "HandShovel"
-    ],
-    "title": "The seed bag holds a narrow trench",
-    "where": [
-      {
-        "lean": "agricultural",
-        "place": "farm",
-        "rival": "containment",
-        "spot": "ground"
-      }
-    ],
+  "t0003-02": {
     "axioms": {
       "agricultural": [
         "a-program",
@@ -69,4 +37,4 @@
     },
     "rival_reading": "A response crew could move seed stock and tools while clearing a farm; the clean grip could come from ordinary handling."
   }
-]
+}

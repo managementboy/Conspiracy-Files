@@ -1,0 +1,39 @@
+[
+  {
+    "body": "Transfer window: after road access ends. Return copy to sender. Reverse: “Bread for Mother, no crust if it is still warm.”",
+    "id": "t0012-01",
+    "kind": "written",
+    "person": "person-c",
+    "pieces": [
+      "businesscard"
+    ],
+    "title": "Courier card with a late return",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "checkpoint",
+        "rival": "agricultural",
+        "spot": "vehicle"
+      }
+    ]
+  },
+  {
+    "body": "The map routes past a checkpoint to the trial plots. A key tag says “sprayer pump.” In the margin, “wind turned at ten; east beans scorched by noon” is underlined twice.",
+    "id": "t0012-02",
+    "kind": "set",
+    "person": "person-c",
+    "pieces": [
+      "Map",
+      "KeyRing"
+    ],
+    "title": "The key marked for the last spray run",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "checkpoint",
+        "rival": "containment",
+        "spot": "vehicle"
+      }
+    ]
+  }
+]

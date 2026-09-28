@@ -1,0 +1,41 @@
+[
+  {
+    "body": "Field plots: weekly soil checks. Road access may close at short notice. Reverse: “Keep the old mare in the dry stall tonight.”",
+    "id": "t0010-01",
+    "kind": "written",
+    "person": "person-a",
+    "pieces": [
+      "idcard"
+    ],
+    "title": "Temporary field access card",
+    "where": [
+      {
+        "lean": "agricultural",
+        "outfit": "farm",
+        "place": "farm",
+        "rival": "containment",
+        "spot": "corpse"
+      }
+    ]
+  },
+  {
+    "body": "The map's crop row reaches the road and stops at a thumb-smudged mark. Soil fills the shovel socket but not the blade; its grip is clean.",
+    "id": "t0010-02",
+    "kind": "set",
+    "person": "person-a",
+    "pieces": [
+      "Map",
+      "HandShovel"
+    ],
+    "title": "The row that ends at the road",
+    "where": [
+      {
+        "lean": "agricultural",
+        "outfit": "farm",
+        "place": "farm",
+        "rival": "containment",
+        "spot": "corpse"
+      }
+    ]
+  }
+]

@@ -5,7 +5,7 @@ never a place name, map, flyer, scene, person or clue text here. Whoever holds t
 baton edits it; `lua5.1 tools/nohelp_content/progress.lua --state` rewrites PROGRESS.
 
 ## BATON
-CLAUDE since 2026-09-28 because REVIEW
+CHATGPT since 2026-09-28 because WRITING
 
 ## STAGE
 4
@@ -14,16 +14,10 @@ CLAUDE since 2026-09-28 because REVIEW
 none
 
 ## NEXT
-T0003 T0008 T0010 T0012 T0014 T0016 T0017 passed review (14 rows; receipts current); convert into accepted/ when the owner confirms, then baton to CHATGPT for T0019 onward
+All 18 first-release tickets accepted (38 clues); next: the lowest open serial in the registry, as a new round
 
 ## OPEN RETURNS
-T0003 ACK 2026-09-28
-T0008 ACK 2026-09-28
-T0010 ACK 2026-09-28
-T0012 ACK 2026-09-28
-T0014 ACK 2026-09-28
-T0016 ACK 2026-09-28
-T0017 ACK 2026-09-28
+none
 
 ## QUARANTINE
 none
@@ -32,4 +26,4 @@ none
 2026-09-28 T0001
 
 ## PROGRESS
-NOT DONE: maps 2/125, flyers 0/133, scenes 1/125, tickets 12/19, adhd 10 @d428ca9
+NOT DONE: maps 2/125, flyers 1/133, scenes 3/125, adhd 17 @7be5c33

@@ -1,24 +1,5 @@
-[
-  {
-    "anchor": {
-      "print": "AmericanTire"
-    },
-    "body": "A rubber band holds a service slip to the screwdriver. Four circles are drawn beside one wheel sketch; only the outer groove is filled with dark dust.",
-    "id": "t0014-01",
-    "kind": "set",
-    "pieces": [
-      "Screwdriver",
-      "RubberBand"
-    ],
-    "title": "The tire offer marked on a tool handle",
-    "where": [
-      {
-        "lean": "agricultural",
-        "place": "mapNamed",
-        "rival": "containment",
-        "spot": "ground"
-      }
-    ],
+{
+  "t0014-01": {
     "axioms": {
       "agricultural": [
         "a-program",
@@ -41,25 +22,7 @@
     },
     "rival_reading": "A road crew could inspect tires after a closure and keep a service slip with its tools; the dust does not identify where it came from."
   },
-  {
-    "anchor": {
-      "print": "AmericanTire"
-    },
-    "body": "The receipt charges four tires to the county road crew, but lists only three serial numbers. Beside the blank fourth line, someone wrote “keep off public return until clearance review.” Reverse: “Save the smoothest for the child's bicycle.”",
-    "id": "t0014-02",
-    "kind": "written",
-    "pieces": [
-      "receipt"
-    ],
-    "title": "The fourth tire omitted from the return",
-    "where": [
-      {
-        "lean": "containment",
-        "place": "mapNamed",
-        "rival": "agricultural",
-        "spot": "ground"
-      }
-    ],
+  "t0014-02": {
     "axioms": {
       "agricultural": [
         "a-program",
@@ -82,4 +45,4 @@
     },
     "rival_reading": "A shop could hold one tire aside during inventory after a road closure; the private bicycle request may be ordinary family borrowing."
   }
-]
+}

@@ -325,5 +325,6 @@ Fix the pattern, not just the row.
   reworked rows: all matched the declared lean on the first read, no second
   read needed; the 10 unchanged rows keep valid receipts. All 14 rows pass.
   Batch note: two reworked rows now state their side plainly, and the key
-  ring recurs; neither is a return reason. Not yet converted into accepted/
-  (the owner asked for check-only converter runs this round).
+  ring recurs; neither is a return reason. Converted into accepted/ by
+  Claude after the review (owner: adding reviewed clues is always the
+  reviewer's step; the writer only ever runs the converter with --check).
