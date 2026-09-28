@@ -1,0 +1,44 @@
+[
+  {
+    "id": "t0160-01",
+    "kind": "set",
+    "pieces": [
+      "PetrolCan",
+      "SheetPaper2"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "anchor": {
+      "print": "Fossoil2"
+    },
+    "title": "The low-cost fuel test",
+    "body": "A fuel sheet records a sample taken before the pump was opened to customers; the cashier’s shift begins after the sample is marked cleared.",
+    "rival_reading": "A containment inspection could test fuel after a supply interruption; the sheet does not identify the sample.",
+    "gloss": "A fuel sample is cleared before the customer shift begins.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "cites": {
+      "source": "print:Fossoil2",
+      "quote": "Fossoil (West Point)"
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0160"
+    }
+  }
+]
