@@ -1,4 +1,74 @@
 [
-  {"id":"t0002-01","kind":"set","pieces":["FirstAidKit","Clipboard"],"title":"Transfer without a receiving hand","body":"The kit is sealed. The clipboard says transfer complete, but the receiving signature is a blank line. Someone has written a small shoe beside the bed number.","where":[{"place":"hospital","spot":"corpse","lean":"containment","rival":"agricultural","outfit":"medical"}],"rival_reading":"An exposure could interrupt a transfer and leave a medical kit with incomplete paperwork; the missing signature does not show that officials hid a containment failure.","gloss":"A completed medical transfer has a sealed kit but no receiving signature.","axioms":{"containment":["c-orders","c-failure"],"agricultural":["a-program","a-pathway"]},"prov":{"writer":"ChatGPT","handoff":"2026-09-27","batch":"T0002"}},
-  {"id":"t0002-02","kind":"set","pieces":["Bandage","WaterBottle"],"title":"Field supplies without a source","body":"The bandage wrapper is marked for a field patient. The bottle has no name, only a time and a green line. The transfer sheet says hold until cleared; a nurse has written, ‘Mother waiting,’ on the back.","where":[{"place":"hospital","spot":"corpse","lean":"agricultural","rival":"containment","outfit":"medical"}],"rival_reading":"A rushed response could hold a patient’s supplies while staff managed a movement restriction; the anonymous bottle does not establish a farm program malfunction.","gloss":"Field medical supplies carry a time and a personal note while their source remains absent.","axioms":{"containment":["c-orders","c-accounting"],"agricultural":["a-program","a-malfunction"]},"prov":{"writer":"ChatGPT","handoff":"2026-09-27","batch":"T0002"}}
+  {
+    "id": "t0002-01",
+    "kind": "set",
+    "pieces": [
+      "FirstAidKit",
+      "Clipboard"
+    ],
+    "title": "A kit still packed after the transfer",
+    "body": "The first aid kit is sealed. On the clipboard, the destination line has been rubbed almost blank; a pencilled turn toward the river survives in the margin.",
+    "where": [
+      {
+        "place": "hospital",
+        "spot": "corpse",
+        "lean": "containment",
+        "rival": "agricultural",
+        "outfit": "medical"
+      }
+    ],
+    "rival_reading": "A crew protecting supplies during a suspected exposure could keep the kit sealed and change a route; the missing destination does not prove a containment order failed.",
+    "gloss": "A sealed medical kit remains with a transfer sheet whose destination has been erased.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0002"
+    }
+  },
+  {
+    "id": "t0002-02",
+    "kind": "set",
+    "pieces": [
+      "Bandage",
+      "WaterBottle"
+    ],
+    "title": "The bottle with soil in its cap",
+    "body": "Fine brown grit clings beneath the bottle cap. One bandage is folded around the neck, clean on the outside and stained green at the edge.",
+    "where": [
+      {
+        "place": "hospital",
+        "spot": "corpse",
+        "lean": "agricultural",
+        "rival": "containment",
+        "outfit": "medical"
+      }
+    ],
+    "rival_reading": "Responders could wrap and rinse a water bottle after any emergency; soil and a plant stain could come from the route rather than an agricultural exposure.",
+    "gloss": "Soil in a bottle cap and a stained bandage suggest contact with field material without identifying its source.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-accounting"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-malfunction"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0002"
+    }
+  }
 ]
