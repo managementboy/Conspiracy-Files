@@ -6,8 +6,6 @@
       "Briefcase",
       "Screwdriver"
     ],
-    "title": "The case returned without its lock",
-    "body": "The briefcase is open; the screwdriver rests across its clasp. Fresh metal shows where the lock was forced, and the paper tag has been scraped blank.",
     "where": [
       {
         "place": "office",
@@ -16,8 +14,10 @@
         "rival": "agricultural"
       }
     ],
-    "rival_reading": "A technician protecting program materials could force an old case and remove a destination tag during routine inventory; this does not by itself prove a cover-up.",
-    "gloss": "A forced case and erased destination tag suggest someone reopened a record or its contents.",
+    "title": "The briefcase with an intact lock",
+    "body": "The screwdriver lies inside the open briefcase. Its lock is intact, but the metal around the keyhole is bright from repeated turning; a loose key sits in the lining.",
+    "rival_reading": "A program worker could open an old case repeatedly while sorting supplies; wear around a lock does not show that an office concealed a failed response.",
+    "gloss": "An opened case keeps a key beside an untouched lock.",
     "axioms": {
       "containment": [
         "c-orders",
@@ -41,8 +41,6 @@
       "SeedBag",
       "Fertilizer"
     ],
-    "title": "Seed kept inside the fertilizer bag",
-    "body": "A torn seed packet is folded into the fertilizer bag’s sealed edge. Pencil marks show a scoop removed, then the instruction beside it crossed out.",
     "where": [
       {
         "place": "office",
@@ -51,8 +49,10 @@
         "rival": "containment"
       }
     ],
-    "rival_reading": "A county crew could inventory farm supplies after a road restriction; a missing scoop and folded seed packet do not prove the program malfunctioned.",
-    "gloss": "A seed packet and a used fertilizer bag remain together with an altered handling note.",
+    "title": "The seed packet tucked in the fertilizer fold",
+    "body": "A seed packet is tucked into the fertilizer sack's stitched fold. Its planting diagram is intact; the small panel for mixing instructions has been cut out cleanly.",
+    "rival_reading": "A county office could remove obsolete handling directions during a routine cleanup; the missing panel does not prove a program malfunction.",
+    "gloss": "A planting packet survives beside an instruction panel removed from its sack.",
     "axioms": {
       "containment": [
         "c-orders",
@@ -60,7 +60,8 @@
       ],
       "agricultural": [
         "a-program",
-        "a-malfunction"
+        "a-malfunction",
+        "a-obscured"
       ]
     },
     "prov": {

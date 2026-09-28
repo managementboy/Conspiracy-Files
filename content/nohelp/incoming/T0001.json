@@ -6,8 +6,6 @@
       "Map",
       "KeyRing"
     ],
-    "title": "An access key without an issued route",
-    "body": "The pencil route bends around a closed road, then resumes beyond it. A brass key has no door number; a coffee stain takes the place of the signature.",
     "where": [
       {
         "place": "police",
@@ -16,8 +14,10 @@
         "rival": "agricultural"
       }
     ],
-    "rival_reading": "A farm crew could leave a site key and redirect deliveries around a closed road; the missing signature may be a routine handoff failure, not a failed cordon.",
-    "gloss": "A key without an assigned door lies with a route that skirts a closure and resumes beyond it.",
+    "title": "The route stops at the barrier",
+    "body": "The map's pencil road ends at a barrier mark. A keyring is tied across the fold; its blank tag is polished where a number was rubbed away.",
+    "rival_reading": "A field crew could tie its gate key to a road map after an access change; the rubbed tag need not mean officials stranded anyone.",
+    "gloss": "A route and a key with no destination remain together.",
     "axioms": {
       "containment": [
         "c-orders",
@@ -41,8 +41,6 @@
       "Bucket",
       "WaterBottle"
     ],
-    "title": "The container pair with a missing label",
-    "body": "Leaf grit has dried in the bucket. A clean bottle is wedged under its handle, and a torn supply label still reads “rinse before return.”",
     "where": [
       {
         "place": "police",
@@ -51,16 +49,18 @@
         "rival": "containment"
       }
     ],
-    "rival_reading": "After an evacuation or cleanup, staff could rinse and return ordinary containers; debris and a missing label do not establish an agricultural malfunction.",
-    "gloss": "A bucket with field debris and a rinsed bottle remain with a partly torn care label.",
+    "title": "The bottle kept the wrong color",
+    "body": "A green ring stains the bottle's inner neck. The bucket beside it is dry, though its handle is wet and smells faintly of crushed leaves.",
+    "rival_reading": "Cleanup after a road closure could leave plant matter in ordinary containers; the residue does not identify a program or its source.",
+    "gloss": "Plant-colored residue remains on containers near a police post.",
     "axioms": {
       "containment": [
         "c-orders",
         "c-accounting"
       ],
       "agricultural": [
-        "a-program",
-        "a-malfunction"
+        "a-malfunction",
+        "a-pathway"
       ]
     },
     "prov": {

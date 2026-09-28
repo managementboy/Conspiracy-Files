@@ -6,8 +6,6 @@
       "Map",
       "Lunchbox"
     ],
-    "title": "Lunch packed for a road that turned back",
-    "body": "The lunchbox is strapped shut over a folded route map. Its pencilled approach crosses a checkpoint mark, then loops back; a paper napkin is folded into a careful collar.",
     "where": [
       {
         "place": "checkpoint",
@@ -16,8 +14,10 @@
         "rival": "agricultural"
       }
     ],
-    "rival_reading": "A field crew could turn back from a restricted road and keep its meal packed; the detour could reflect ordinary access limits rather than a failed containment order.",
-    "gloss": "A packed meal lies over a route that turns back at a marked checkpoint.",
+    "title": "The lunch packed for the closed lane",
+    "body": "The lunchbox is wedged beneath the map's fold. The route line passes the checkpoint and stops; a spoon has been laid across the road home.",
+    "rival_reading": "A field crew might turn back at a restricted checkpoint and leave its meal unopened; the map does not show who set the restriction.",
+    "gloss": "A meal and a route stop at the same mark.",
     "axioms": {
       "containment": [
         "c-orders",
@@ -39,10 +39,8 @@
     "kind": "set",
     "pieces": [
       "Bucket",
-      "Lunchbox"
+      "Fertilizer"
     ],
-    "title": "The clean circle beneath the bucket",
-    "body": "Fine pale dust coats the lunchbox hinge but not its handle. The bucket below it holds damp soil and a clean round space where something small had rested.",
     "where": [
       {
         "place": "checkpoint",
@@ -51,16 +49,18 @@
         "rival": "containment"
       }
     ],
-    "rival_reading": "Emergency crews could collect or rinse soil after a road closure; the clean space and pale dust do not establish that an agricultural program malfunctioned.",
-    "gloss": "Dust on a lunchbox and soil in a bucket surround a clean, empty resting place.",
+    "title": "The powder gathered in the bucket seam",
+    "body": "Pale granules cling inside the bucket's rim. The fertilizer sack beside it is dry and carefully folded, with its open corner tucked under the seat.",
+    "rival_reading": "Officials could have moved ordinary farm supplies during a road closure; loose granules alone cannot identify a failed program.",
+    "gloss": "Dry fertilizer and loose granules travelled in one vehicle.",
     "axioms": {
       "containment": [
         "c-orders",
         "c-accounting"
       ],
       "agricultural": [
-        "a-program",
-        "a-malfunction"
+        "a-malfunction",
+        "a-pathway"
       ]
     },
     "prov": {

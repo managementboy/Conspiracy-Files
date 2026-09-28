@@ -4,10 +4,8 @@
     "kind": "set",
     "pieces": [
       "FirstAidKit",
-      "Clipboard"
+      "Bandage"
     ],
-    "title": "A kit still packed after the transfer",
-    "body": "The first aid kit is sealed. On the clipboard, the destination line has been rubbed almost blank; a pencilled turn toward the river survives in the margin.",
     "where": [
       {
         "place": "hospital",
@@ -17,8 +15,10 @@
         "outfit": "medical"
       }
     ],
-    "rival_reading": "A crew protecting supplies during a suspected exposure could keep the kit sealed and change a route; the missing destination does not prove a containment order failed.",
-    "gloss": "A sealed medical kit remains with a transfer sheet whose destination has been erased.",
+    "title": "The sealed kit on the medical coat",
+    "body": "The kit's seal is unbroken. A bandage has been folded around its handle, still clean, with a patient wrist label tied through the fold and no name on it.",
+    "rival_reading": "A sealed kit could have been carried away from an exposure site before anyone opened it; an unnamed label does not establish a failed transfer.",
+    "gloss": "A clean bandage and sealed kit remain with an erased identity.",
     "axioms": {
       "containment": [
         "c-orders",
@@ -39,11 +39,9 @@
     "id": "t0002-02",
     "kind": "set",
     "pieces": [
-      "Bandage",
+      "Notebook",
       "WaterBottle"
     ],
-    "title": "The bottle with soil in its cap",
-    "body": "Fine brown grit clings beneath the bottle cap. One bandage is folded around the neck, clean on the outside and stained green at the edge.",
     "where": [
       {
         "place": "hospital",
@@ -53,16 +51,18 @@
         "outfit": "medical"
       }
     ],
-    "rival_reading": "Responders could wrap and rinse a water bottle after any emergency; soil and a plant stain could come from the route rather than an agricultural exposure.",
-    "gloss": "Soil in a bottle cap and a stained bandage suggest contact with field material without identifying its source.",
+    "title": "The bottle with a leaf-shaped tide",
+    "body": "A brown tide line circles the bottle; the notebook beside it has one page stuck to the cap. When it lifts, a pressed leaf outline remains on the paper.",
+    "rival_reading": "A responder could collect water and leaves while checking an evacuation route; the residue could be ordinary field dirt.",
+    "gloss": "A water mark and plant trace were collected together.",
     "axioms": {
       "containment": [
         "c-orders",
         "c-accounting"
       ],
       "agricultural": [
-        "a-program",
-        "a-malfunction"
+        "a-malfunction",
+        "a-pathway"
       ]
     },
     "prov": {

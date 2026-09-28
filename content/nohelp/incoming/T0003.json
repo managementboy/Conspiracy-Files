@@ -6,8 +6,6 @@
       "Map",
       "KeyRing"
     ],
-    "title": "The farm key with a blank tag",
-    "body": "A county map has a route drawn to the farm gate, then cut short at the fence. The key tag is blank; its metal ring is flattened at the join.",
     "where": [
       {
         "place": "farm",
@@ -16,8 +14,10 @@
         "rival": "agricultural"
       }
     ],
-    "rival_reading": "A program worker could keep a spare gate key with an unfinished tag and mark a route for field access; the map does not prove a containment failure.",
-    "gloss": "A farm access route stops at a fence while its spare key has no identifying tag.",
+    "title": "The gate key on the far side",
+    "body": "The map is open to a farm track, but the keyring rests beyond the drawn gate. Its tag is still tied on; the paper around the knot has torn in two.",
+    "rival_reading": "A farm worker could set a spare key beside a track while changing field access; a torn tag says nothing about an evacuation order.",
+    "gloss": "A gate route and its key no longer meet.",
     "axioms": {
       "containment": [
         "c-orders",
@@ -38,11 +38,9 @@
     "id": "t0003-02",
     "kind": "set",
     "pieces": [
-      "Clipboard",
-      "WaterBottle"
+      "SeedBag",
+      "HandShovel"
     ],
-    "title": "A field check with no planting day",
-    "body": "The bottle is half full of clear water. A pressed clover leaf marks a notebook page of plot checks, but the planting-date line is empty.",
     "where": [
       {
         "place": "farm",
@@ -51,8 +49,10 @@
         "rival": "containment"
       }
     ],
-    "rival_reading": "A response crew could survey a farm after a diversion and leave the planting line blank; a leaf and water bottle do not show an agricultural malfunction.",
-    "gloss": "A farm notebook pairs an unfinished plot check with a water bottle and a pressed leaf.",
+    "title": "The seed bag holds a narrow trench",
+    "body": "The seed bag is folded shut around the shovel handle. A straight line of dark soil runs from the blade to the bag's seam, but the shovel has no soil on its grip.",
+    "rival_reading": "A response crew could move seed stock and tools while clearing a farm; the clean grip could come from ordinary handling.",
+    "gloss": "Seed stock and a freshly used tool were wrapped together.",
     "axioms": {
       "containment": [
         "c-orders",
