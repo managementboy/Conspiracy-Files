@@ -1,4 +1,72 @@
 [
-  {"id":"t0001-01","kind":"set","pieces":["Map","KeyRing"],"title":"The key with no gate","body":"The road map is folded to the exit road. The key tag says returned, although the envelope tucked under it is stamped hold at gate. A coffee ring covers the line for who collected it.","where":[{"place":"police","spot":"mailbox","lean":"containment","rival":"agricultural"}],"rival_reading":"A field worker could have returned a key while a farm access instruction was being changed; a damaged handoff does not prove an evacuation failed.","gloss":"A returned access key remains with an instruction that still holds it at a gate.","axioms":{"containment":["c-orders","c-failure"],"agricultural":["a-program","a-pathway"]},"prov":{"writer":"ChatGPT","handoff":"2026-09-27","batch":"T0001"}},
-  {"id":"t0001-02","kind":"set","pieces":["Bucket","WaterBottle"],"title":"Water for an unnamed round","body":"The bottle is marked field, but the bucket carries a second, cleaner measurement. A torn lunch list says: water first, names later. The return slip has a box for containers and none for workers.","where":[{"place":"police","spot":"mailbox","lean":"agricultural","rival":"containment"}],"rival_reading":"Emergency staff could have gathered water during a road response and logged containers before identifying everyone; the paperwork is also compatible with a failed evacuation.","gloss":"Two water measures and a nameless return slip keep the field work visible while the people remain unlisted.","axioms":{"containment":["c-orders","c-accounting"],"agricultural":["a-program","a-malfunction"]},"prov":{"writer":"ChatGPT","handoff":"2026-09-27","batch":"T0001"}}
+  {
+    "id": "t0001-01",
+    "kind": "set",
+    "pieces": [
+      "Map",
+      "KeyRing"
+    ],
+    "title": "An access key without an issued route",
+    "body": "The pencil route bends around a closed road, then resumes beyond it. A brass key has no door number; a coffee stain takes the place of the signature.",
+    "where": [
+      {
+        "place": "police",
+        "spot": "mailbox",
+        "lean": "containment",
+        "rival": "agricultural"
+      }
+    ],
+    "rival_reading": "A farm crew could leave a site key and redirect deliveries around a closed road; the missing signature may be a routine handoff failure, not a failed cordon.",
+    "gloss": "A key without an assigned door lies with a route that skirts a closure and resumes beyond it.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0001"
+    }
+  },
+  {
+    "id": "t0001-02",
+    "kind": "set",
+    "pieces": [
+      "Bucket",
+      "WaterBottle"
+    ],
+    "title": "The container pair with a missing label",
+    "body": "Leaf grit has dried in the bucket. A clean bottle is wedged under its handle, and a torn supply label still reads “rinse before return.”",
+    "where": [
+      {
+        "place": "police",
+        "spot": "mailbox",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "rival_reading": "After an evacuation or cleanup, staff could rinse and return ordinary containers; debris and a missing label do not establish an agricultural malfunction.",
+    "gloss": "A bucket with field debris and a rinsed bottle remain with a partly torn care label.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-accounting"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-malfunction"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0001"
+    }
+  }
 ]
