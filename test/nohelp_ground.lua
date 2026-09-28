@@ -44,6 +44,10 @@ local Session=require("NHShared/Generated/Session")
 local target={x=10,y=20,z=0,objectIndex=0,containerIndex=0,containerType="floor",sprite="yard",ground=true}
 local ground=assert(World.resolve(target),"a ground target resolves to its square")
 assert(ground.ground==true)
+-- One ground per square: placement compares the container it counted with the
+-- one it resolves next step, so a fresh table per resolve left every ground
+-- clue counted but never created (reload test, 2026-09-28).
+assert(World.resolve(target)==ground,"the same square resolves to the same ground every time")
 local _,why=World.resolve({x=99,y=99,z=0,objectIndex=0,containerIndex=0,containerType="floor",sprite="yard",ground=true})
 assert(why=="unloaded","ground somewhere not loaded waits, like any square")
 
