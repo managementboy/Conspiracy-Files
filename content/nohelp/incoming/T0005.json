@@ -1,4 +1,72 @@
 [
-  {"id":"t0005-01","kind":"set","pieces":["Map","Lunchbox"],"title":"Revision filed under the first route","body":"The map carries two route lines. The lower one is marked final even though the upper line says road closed. A lunchbox beside it contains one untouched sandwich and a form folded around the old line.","where":[{"place":"office","spot":"furniture","lean":"containment","rival":"agricultural"}],"rival_reading":"An agricultural access plan could be revised after a closure and leave an earlier copy underneath; the filing order alone does not show a failed evacuation.","gloss":"A final route revision sits over an older closure instruction while the meal is untouched.","axioms":{"containment":["c-orders","c-accounting"],"agricultural":["a-program","a-obscured"]},"prov":{"writer":"ChatGPT","handoff":"2026-09-27","batch":"T0005"}},
-  {"id":"t0005-02","kind":"set","pieces":["Clipboard","Bucket"],"title":"The plot had a receipt, not a source","body":"The bucket’s rim is chalked with a plot number. On the clipboard, the amount delivered is signed, but the source box is crossed out and replaced with ‘see field.’ A half-eaten sandwich is tucked under the clip.","where":[{"place":"office","spot":"furniture","lean":"agricultural","rival":"containment"}],"rival_reading":"Officials could sign for field supplies during a containment response and leave the source for later review; the missing source does not prove an agricultural malfunction.","gloss":"A signed field delivery has a plot number but no source, with a worker’s meal left in the paperwork.","axioms":{"containment":["c-orders","c-accounting"],"agricultural":["a-program","a-malfunction"]},"prov":{"writer":"ChatGPT","handoff":"2026-09-27","batch":"T0005"}}
+  {
+    "id": "t0005-01",
+    "kind": "set",
+    "pieces": [
+      "Briefcase",
+      "Screwdriver"
+    ],
+    "title": "The case returned without its lock",
+    "body": "The briefcase is open; the screwdriver rests across its clasp. Fresh metal shows where the lock was forced, and the paper tag has been scraped blank.",
+    "where": [
+      {
+        "place": "office",
+        "spot": "furniture",
+        "lean": "containment",
+        "rival": "agricultural"
+      }
+    ],
+    "rival_reading": "A technician protecting program materials could force an old case and remove a destination tag during routine inventory; this does not by itself prove a cover-up.",
+    "gloss": "A forced case and erased destination tag suggest someone reopened a record or its contents.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-accounting"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-obscured"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0005"
+    }
+  },
+  {
+    "id": "t0005-02",
+    "kind": "set",
+    "pieces": [
+      "SeedBag",
+      "Fertilizer"
+    ],
+    "title": "Seed kept inside the fertilizer bag",
+    "body": "A torn seed packet is folded into the fertilizer bag’s sealed edge. Pencil marks show a scoop removed, then the instruction beside it crossed out.",
+    "where": [
+      {
+        "place": "office",
+        "spot": "furniture",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "rival_reading": "A county crew could inventory farm supplies after a road restriction; a missing scoop and folded seed packet do not prove the program malfunctioned.",
+    "gloss": "A seed packet and a used fertilizer bag remain together with an altered handling note.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-accounting"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-malfunction"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0005"
+    }
+  }
 ]
