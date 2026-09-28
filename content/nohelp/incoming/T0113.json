@@ -1,0 +1,45 @@
+[
+  {
+    "id": "t0113-01",
+    "kind": "set",
+    "pieces": [
+      "LetterHandwritten",
+      "KeyRing"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "containment",
+        "rival": "agricultural"
+      }
+    ],
+    "anchor": {
+      "map": "WorldStashMap4",
+      "mark": 1
+    },
+    "title": "Help at the address",
+    "body": "A key is wrapped in a request for help; the dispatch copy says the occupant was contacted before the caller’s time is recorded.",
+    "rival_reading": "A field office might have logged an ordinary visit early; the copy does not establish whether anyone received help.",
+    "gloss": "A contact is marked complete before the caller’s entry.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "cites": {
+      "source": "map:WorldStashMap4",
+      "quote": "Where Yana said"
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0113"
+    }
+  }
+]
