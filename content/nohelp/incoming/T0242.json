@@ -1,0 +1,44 @@
+[
+  {
+    "id": "t0242-01",
+    "kind": "set",
+    "pieces": [
+      "KeyRing",
+      "Map"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "containment",
+        "rival": "agricultural"
+      }
+    ],
+    "anchor": {
+      "print": "HouseforSale855"
+    },
+    "title": "Compact home handoff",
+    "body": "The compact house key is logged as returned before the moving list is complete. A folded map remains in the room beside the final box.",
+    "rival_reading": "A small move could finish in stages and leave a map behind; the log does not show who was expected to collect it.",
+    "gloss": "The key returns while a moving list remains unfinished.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "cites": {
+      "source": "print:HouseforSale855",
+      "quote": "House for Sale (no. 855)"
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0242"
+    }
+  }
+]
