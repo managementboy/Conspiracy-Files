@@ -1,0 +1,45 @@
+[
+  {
+    "id": "t0042-01",
+    "kind": "set",
+    "pieces": [
+      "WalkieTalkie1",
+      "SheetPaper2"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "anchor": {
+      "map": "IrvingtonStashMap3",
+      "mark": 1
+    },
+    "title": "Radio at the school",
+    "body": "The school route slip tells the driver to radio before turning back; its attendance copy lists the field crew under “visitors.”",
+    "rival_reading": "A response crew could have used the same radio procedure and visitor list; the record does not identify what brought the crew there.",
+    "gloss": "A school visitor list and radio instruction place a field crew on the route.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "cites": {
+      "source": "map:IrvingtonStashMap3",
+      "quote": "don't run! they'll chase you"
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0042"
+    }
+  }
+]
