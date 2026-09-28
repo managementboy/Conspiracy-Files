@@ -94,6 +94,8 @@ scene or map to the owner). What each serial means is in
 `docs/writer-only/nohelp-tickets.tsv` (writer-only). **Take the lowest open
 serial**, and only one at a time. Row ids are `t####-NN`.
 
+**One go (owner, 2026-09-28):** when Claude opens the remaining tickets, deliver ALL of them (summary tickets and stories, in serial order) without waiting for sign-off or review in between; hand the baton to Claude once, at the end.
+
 **Rounds (owner, 2026-09-27: the relay was too slow).** Work in rounds of
 **every open ticket** (the whole first release at once): deliver them one after another, one commit each, without
 waiting for Claude in between; then set the baton to CLAUDE with `REVIEW`

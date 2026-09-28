@@ -5,16 +5,16 @@ never a place name, map, flyer, scene, person or clue text here. Whoever holds t
 baton edits it; `lua5.1 tools/nohelp_content/progress.lua --state` rewrites PROGRESS.
 
 ## BATON
-CLAUDE since 2026-09-28 because STAGE0-SIGNOFF
+CHATGPT since 2026-09-28 because WRITING
 
 ## STAGE
 EXPANSION
 
 ## TICKET
-T0026
+T0027
 
 ## NEXT
-T0027-T0066; waiting for STAGE0-SIGNOFF
+T0026 signed off. Owner, 2026-09-28: do ALL of T0027-T0407 in one go, no waiting: every remaining summary ticket and every story ticket, in serial order, one commit per ticket; do not hand the baton back per group. Hand it to CLAUDE with REVIEW once, after T0407. Claude signs off the remaining summary tickets and reviews every story at that point
 
 ## OPEN RETURNS
 none
@@ -26,4 +26,4 @@ none
 2026-09-28 T0001
 
 ## PROGRESS
-NOT DONE: maps 5/125, flyers 3/133, scenes 3/125, adhd 22 @e551c37
+NOT DONE: maps 5/125, flyers 3/133, scenes 3/125, adhd 22 @3c4534f
