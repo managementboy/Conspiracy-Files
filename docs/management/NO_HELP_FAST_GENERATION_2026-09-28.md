@@ -21,8 +21,9 @@ once this change is merged and the baton returns to ChatGPT.
    ticket. Alternate written clues and object sets where both fit. Keep the
    existing per-ticket coverage requirements. Do not add exploratory drafts,
    multiple frames, staged deepening, or repeated private rewrites.
-4. **Run the local checks once.** Run `lua5.1 tools/nohelp_content/convert.lua`
-   on the batch, then `lua5.1 tools/nohelp_content/progress.lua`. Fix
+4. **Run the local checks once.** Run `lua5.1 tools/nohelp_content/convert.lua --check`
+   on the batch, then `lua5.1 tools/nohelp_content/progress.lua`. This is a
+   read-only validation; Claude runs the mutating converter after review. Fix
    converter-coded failures directly. For a real story/anchor concern, ask
    Claude through the existing baton handoff; do not rewrite a sound clue just
    to appease a vague reaction.
