@@ -29,7 +29,7 @@ T0022	MAP	map:MarchRidgeStashMap1	accepted	0	2026-09-28	2026-09-28
 T0023	MAP	print:CircuitalHealing	accepted	0	2026-09-28	2026-09-28
 T0024	MAP	print:IrvingtonSpeedway	accepted	0	2026-09-28	2026-09-28
 T0025	STAGE0	glosses:T0020-T0024	accepted	0	2026-09-28	2026-09-28
-T0026	STAGE0	glosses:T0027-T0066	open	0	2026-09-28	
+T0026	STAGE0	glosses:T0027-T0066	accepted	0	2026-09-28	2026-09-28
 T0027	MAP	map:BBurgStashMap2	open	0	2026-09-28	
 T0028	MAP	map:BBurgStashMap3	open	0	2026-09-28	
 T0029	MAP	map:BBurgStashMap4	open	0	2026-09-28	
