@@ -1,4 +1,72 @@
 [
-  {"id":"t0004-01","kind":"set","pieces":["Map","Lunchbox"],"title":"The lane closed on paper","body":"The map is clipped to the lane board. Closed is written across the route, while the lunchbox still holds a warm-looking paper napkin and a pass marked out. No one has initialled the exit column.","where":[{"place":"checkpoint","spot":"vehicle","lean":"containment","rival":"agricultural"}],"rival_reading":"A farm delivery could have used a temporary lane and left a pass in a vehicle after routine closure; an uninitialled column is not proof of a failed cordon.","gloss":"A closed route and an outward pass remain together with no recorded exit.","axioms":{"containment":["c-orders","c-failure"],"agricultural":["a-program","a-pathway"]},"prov":{"writer":"ChatGPT","handoff":"2026-09-27","batch":"T0004"}},
-  {"id":"t0004-02","kind":"set","pieces":["Bucket","Lunchbox"],"title":"Field wash, passenger line blank","body":"The bucket has a chalked water level and the lunchbox contains a folded field meal. The same sheet records a lane hold, then asks for vehicle wash water while leaving the passenger line blank. A small flower is drawn beside it.","where":[{"place":"checkpoint","spot":"vehicle","lean":"agricultural","rival":"containment"}],"rival_reading":"Officials could inspect a vehicle during an emergency restriction and leave passenger details for later; field water and a blank line do not establish a program malfunction.","gloss":"A measured field wash is recorded beside a lane hold while the vehicle’s passenger line remains blank.","axioms":{"containment":["c-orders","c-accounting"],"agricultural":["a-program","a-malfunction"]},"prov":{"writer":"ChatGPT","handoff":"2026-09-27","batch":"T0004"}}
+  {
+    "id": "t0004-01",
+    "kind": "set",
+    "pieces": [
+      "Map",
+      "Lunchbox"
+    ],
+    "title": "Lunch packed for a road that turned back",
+    "body": "The lunchbox is strapped shut over a folded route map. Its pencilled approach crosses a checkpoint mark, then loops back; a paper napkin is folded into a careful collar.",
+    "where": [
+      {
+        "place": "checkpoint",
+        "spot": "vehicle",
+        "lean": "containment",
+        "rival": "agricultural"
+      }
+    ],
+    "rival_reading": "A field crew could turn back from a restricted road and keep its meal packed; the detour could reflect ordinary access limits rather than a failed containment order.",
+    "gloss": "A packed meal lies over a route that turns back at a marked checkpoint.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0004"
+    }
+  },
+  {
+    "id": "t0004-02",
+    "kind": "set",
+    "pieces": [
+      "Bucket",
+      "Lunchbox"
+    ],
+    "title": "The clean circle beneath the bucket",
+    "body": "Fine pale dust coats the lunchbox hinge but not its handle. The bucket below it holds damp soil and a clean round space where something small had rested.",
+    "where": [
+      {
+        "place": "checkpoint",
+        "spot": "vehicle",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "rival_reading": "Emergency crews could collect or rinse soil after a road closure; the clean space and pale dust do not establish that an agricultural program malfunctioned.",
+    "gloss": "Dust on a lunchbox and soil in a bucket surround a clean, empty resting place.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-accounting"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-malfunction"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0004"
+    }
+  }
 ]
