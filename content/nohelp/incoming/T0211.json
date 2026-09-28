@@ -1,0 +1,44 @@
+[
+  {
+    "id": "t0211-01",
+    "kind": "set",
+    "pieces": [
+      "SheetPaper2",
+      "KeyRing"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "anchor": {
+      "print": "SunsetPinesFuneralHome"
+    },
+    "title": "Service after the last wait",
+    "body": "The service ledger records a final pickup; a note asks the next shift to keep the room ventilated after the cleaning crew leaves.",
+    "rival_reading": "A response crew could ventilate a room after ordinary cleaning; the ledger does not identify what was cleaned.",
+    "gloss": "A room is aired after the final pickup.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "cites": {
+      "source": "print:SunsetPinesFuneralHome",
+      "quote": "Sunset Pines Funeral Home"
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0211"
+    }
+  }
+]
