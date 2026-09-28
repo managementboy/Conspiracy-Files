@@ -217,8 +217,9 @@ lawyer (argue the other conspiracy, feed it back).
 
 ## 10. Your first session, step by step
 
-1. Read this handover, then the writer handoff, `DECISIONS.md` (top entry,
-   newest bullets last) and `docs/writer-only/NOHELP_SPOILERS.md`.
+1. Read this handover, then the writer handoff, the current review decision
+   `DR-20260928-NOHELP-REVIEW-FAST` in `DECISIONS.md`, and
+   `docs/writer-only/NOHELP_SPOILERS.md`.
 2. Check out `nohelp-content`. Read `content/nohelp/STATE.md` (baton: you,
    `WRITING`, stage 0, next: `T0000`).
 3. Run the ADHD skill for stage 0 (section 7), saving the runs.
