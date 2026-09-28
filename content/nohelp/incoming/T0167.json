@@ -1,0 +1,44 @@
+[
+  {
+    "id": "t0167-01",
+    "kind": "set",
+    "pieces": [
+      "Map",
+      "WaterBottle"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "containment",
+        "rival": "agricultural"
+      }
+    ],
+    "anchor": {
+      "print": "Delilah"
+    },
+    "title": "The boat’s last location",
+    "body": "The dock map is marked for arrival, but the passenger list is signed complete before the boat’s final location was entered.",
+    "rival_reading": "A scheduled tour could close its passenger list before docking; the map does not say whether anyone was left behind.",
+    "gloss": "A passenger count closes before the boat’s arrival is recorded.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "cites": {
+      "source": "print:Delilah",
+      "quote": "PS Delilah"
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0167"
+    }
+  }
+]
