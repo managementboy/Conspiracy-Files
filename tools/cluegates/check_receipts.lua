@@ -25,7 +25,8 @@
 --   DISAGREEMENT     two independent votes differ
 --   LEAN_MISMATCH    repeated vote does not match the declared lean
 --   MIXED_LEAN       the clue has different declared leans by placement
--- The last two are the handoff's "returned" rules for a blind re-read.
+-- NEEDS_SECOND_READ is resolved by one targeted fresh read; any remaining
+-- disagreement or lean mismatch must be returned for revision.
 package.path="mod-nohelp/common/media/lua/shared/?.lua;tools/nohelp_content/?.lua;tools/cluegates/?.lua;"..package.path
 local J=require("json")
 local sha256=require("sha256")
