@@ -1,0 +1,44 @@
+[
+  {
+    "id": "t0187-01",
+    "kind": "set",
+    "pieces": [
+      "VHS_Retail",
+      "Pencil"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "anchor": {
+      "print": "HitVidsJobAdMarchRidge"
+    },
+    "title": "The returned tape",
+    "body": "A video store hiring card is clipped to a tape return slip; the return date is written before the opening shift began.",
+    "rival_reading": "A response team could use the shop as a message drop and return the tape early; the slip does not explain the date.",
+    "gloss": "A media return is dated before the shop’s opening shift.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "cites": {
+      "source": "print:HitVidsJobAdMarchRidge",
+      "quote": "Hit Vids Job Ad (March Ridge)"
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0187"
+    }
+  }
+]
