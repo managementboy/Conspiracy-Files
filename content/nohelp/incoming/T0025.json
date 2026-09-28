@@ -1,0 +1,34 @@
+{
+  "stories": [
+    {
+      "ticket": "T0020",
+      "target": "map:BBurgStashMap1",
+      "lean": "random",
+      "gloss": "The marked location creates a local lead from its annotation, where a trace of program activity can also fit the consequences of a disrupted emergency response."
+    },
+    {
+      "ticket": "T0021",
+      "target": "map:LouisvilleStashMap1",
+      "lean": "random",
+      "gloss": "Each marked location opens a separate question grounded in its annotation, with evidence that can fit either an earlier exposure route or later response activity."
+    },
+    {
+      "ticket": "T0022",
+      "target": "map:MarchRidgeStashMap1",
+      "lean": "random",
+      "gloss": "The annotation anchors a local trail whose ordinary records can point toward a failed agricultural process or toward measures that failed to contain the emergency."
+    },
+    {
+      "ticket": "T0023",
+      "target": "print:CircuitalHealing",
+      "lean": "random",
+      "gloss": "The printed destination becomes a practical lead where routine care and supply traces can support either an exposure pathway or a strained emergency response."
+    },
+    {
+      "ticket": "T0024",
+      "target": "print:IrvingtonSpeedway",
+      "lean": "random",
+      "gloss": "The advertised destination becomes a local lead where activity tied to the venue can fit either a program-related exposure or emergency disruption."
+    }
+  ]
+}
