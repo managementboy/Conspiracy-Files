@@ -1,4 +1,75 @@
 [
-  {"id":"t0010-01","kind":"written","pieces":["idcard"],"person":"person-a","title":"Rosa Salcedo","body":"Field rounds 4–6. Water issue recorded at the end of each round. Access ends when the road closes. Reverse: call Mum before dark.","where":[{"place":"farm","spot":"corpse","lean":"agricultural","rival":"containment","outfit":"farm"}],"rival_reading":"Officials could issue a field credential with a closure rule during an emergency; a water allowance and a personal reminder do not prove a program malfunction.","gloss":"A field credential joins water issue records to access that ends at a road closure.","axioms":{"containment":["c-orders","c-failure"],"agricultural":["a-program","a-timing"]},"prov":{"writer":"ChatGPT","handoff":"2026-09-27","batch":"T0010"}},
-  {"id":"t0010-02","kind":"set","pieces":["Map","HandShovel"],"person":"person-a","title":"The tool stayed after the row","body":"A row on the map is marked twice, once after the road closed. The shovel is clean except for a strip of pale dust. Its return tag is signed; the field result is not.","where":[{"place":"farm","spot":"corpse","lean":"agricultural","rival":"containment","outfit":"farm"}],"rival_reading":"A response crew could finish a marked row after a closure and return its tool; an unsigned result does not establish an agricultural malfunction.","gloss":"A returned field tool and a late row mark leave the result unrecorded.","axioms":{"containment":["c-orders","c-failure"],"agricultural":["a-program","a-pathway"]},"prov":{"writer":"ChatGPT","handoff":"2026-09-27","batch":"T0010"}}
+  {
+    "id": "t0010-01",
+    "kind": "written",
+    "pieces": [
+      "idcard"
+    ],
+    "person": "person-a",
+    "title": "Temporary field credential",
+    "body": "Access: plot checks until the west road closes. Renewal depends on a county notice. Reverse: “Please put the old mare under cover before rain.”",
+    "where": [
+      {
+        "place": "farm",
+        "spot": "corpse",
+        "lean": "agricultural",
+        "rival": "containment",
+        "outfit": "farm"
+      }
+    ],
+    "rival_reading": "Officials could issue field credentials with road-based expiry during an emergency; a plot assignment and an ordinary animal-care reminder do not establish a program malfunction.",
+    "gloss": "A field worker’s access depends on a road closure and carries a private reminder about an animal.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-timing"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0010"
+    }
+  },
+  {
+    "id": "t0010-02",
+    "kind": "set",
+    "pieces": [
+      "Map",
+      "HandShovel"
+    ],
+    "person": "person-a",
+    "title": "The row with two edges",
+    "body": "The map mark runs from a field row to the road. The shovel’s blade is clean except for soil inside its socket; a thumbprint crosses a pencilled plant shape.",
+    "where": [
+      {
+        "place": "farm",
+        "spot": "corpse",
+        "lean": "agricultural",
+        "rival": "containment",
+        "outfit": "farm"
+      }
+    ],
+    "rival_reading": "A response crew could survey a farm after access changed and return its tool; soil and a marked row do not show that an agricultural program malfunctioned.",
+    "gloss": "A farm map and a soil-marked tool leave the purpose of a field visit uncertain.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0010"
+    }
+  }
 ]
