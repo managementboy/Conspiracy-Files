@@ -12,11 +12,11 @@
 # use --force with selected flagged ids to append one independent second read.
 # Then runs the receipt check. Prints ids, votes and codes only, never clue text.
 #
-# Environment: RUNS (default 1), PARALLEL (default 8), READER_MODEL (default
-# claude-haiku-4-5).
+# Environment: PARALLEL (default 8), READER_MODEL (default claude-haiku-4-5).
+# Each invocation always makes exactly one read per selected clue.
 set -u
 cd "$(dirname "$0")/../.."
-RUNS=${RUNS:-1}; PARALLEL=${PARALLEL:-8}; MODEL=${READER_MODEL:-claude-haiku-4-5}
+RUNS=1; PARALLEL=${PARALLEL:-8}; MODEL=${READER_MODEL:-claude-haiku-4-5}
 FORCE=0; if [ "${1:-}" = "--force" ]; then FORCE=1; shift; fi
 ROWS=""; if [ "${1:-}" = "--rows" ]; then ROWS=$2; shift 2; fi
 WORK=$(mktemp -d); trap 'rm -rf "$WORK"' EXIT
