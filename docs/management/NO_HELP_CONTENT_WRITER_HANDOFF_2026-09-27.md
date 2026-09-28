@@ -317,3 +317,13 @@ Fix the pattern, not just the row.
   `merged` (`ONE_SIDED`), though every clue passed: T0010, T0016, T0017;
   without T0003 they would leave farms one-sided, so they come back unchanged
   in the same round as T0003. A batch note on repeated objects is in each returned file.
+- **2026-09-28, returns T0003 T0008 T0010 T0012 T0014 T0016 T0017** (same
+  rule): GitHub run on the delivery head green; converter check and suite
+  green. Field audit: the 10 passing rows came back unchanged; the 4
+  reworked rows changed only title, body, gloss and rival reading (place,
+  spot, lean, rival, pieces and axioms kept). One blind read each for the 4
+  reworked rows: all matched the declared lean on the first read, no second
+  read needed; the 10 unchanged rows keep valid receipts. All 14 rows pass.
+  Batch note: two reworked rows now state their side plainly, and the key
+  ring recurs; neither is a return reason. Not yet converted into accepted/
+  (the owner asked for check-only converter runs this round).

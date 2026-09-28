@@ -14,7 +14,7 @@ CLAUDE since 2026-09-28 because REVIEW
 none
 
 ## NEXT
-T0003 T0008 T0010 T0012 T0014 T0016 T0017 REVIEW
+T0003 T0008 T0010 T0012 T0014 T0016 T0017 passed review (14 rows; receipts current); convert into accepted/ when the owner confirms, then baton to CHATGPT for T0019 onward
 
 ## OPEN RETURNS
 T0003 ACK 2026-09-28
@@ -32,4 +32,4 @@ none
 2026-09-28 T0001
 
 ## PROGRESS
-NOT DONE: maps 2/125, flyers 0/133, scenes 1/125, tickets 12/19, adhd 10 @32f8aa6
+NOT DONE: maps 2/125, flyers 0/133, scenes 1/125, tickets 12/19, adhd 10 @d428ca9
