@@ -1,0 +1,40 @@
+[
+  {
+    "id": "t0305-01",
+    "kind": "set",
+    "pieces": [
+      "TinOpener",
+      "Matches"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "furniture",
+        "lean": "containment",
+        "rival": "agricultural"
+      }
+    ],
+    "anchor": {
+      "scene": "RBSWATStation"
+    },
+    "title": "A measure taken early",
+    "body": "A small item is kept ready beside a tool for routine work; neither label says what made the precaution necessary.",
+    "rival_reading": "Routine handling could explain the paired supplies; the arrangement alone does not establish a program or a response failure.",
+    "gloss": "A prepared pair is left without a clear account of why it was needed.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-malfunction",
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0305"
+    }
+  }
+]
