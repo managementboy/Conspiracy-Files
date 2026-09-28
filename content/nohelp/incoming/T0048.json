@@ -1,0 +1,45 @@
+[
+  {
+    "id": "t0048-01",
+    "kind": "set",
+    "pieces": [
+      "Hammer",
+      "Nails"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "anchor": {
+      "map": "IrvingtonStashMap9",
+      "mark": 1
+    },
+    "title": "Fortification order",
+    "body": "A hammer and unopened nails sit beside a note to brace the garden-side door before the next treatment. The note does not say who will return.",
+    "rival_reading": "A response crew might secure a building after any hazard; the timing of the treatment is not recorded.",
+    "gloss": "A door is reinforced ahead of a treatment, with no return plan.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "cites": {
+      "source": "map:IrvingtonStashMap9",
+      "quote": "we can fortify here"
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0048"
+    }
+  }
+]
