@@ -1,0 +1,244 @@
+{
+  "stories": [
+    {
+      "ticket": "T0273",
+      "target": "print:MusicFest93",
+      "lean": "random",
+      "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings."
+    },
+    {
+      "ticket": "T0274",
+      "target": "print:OvoFarms",
+      "lean": "random",
+      "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings."
+    },
+    {
+      "ticket": "T0275",
+      "target": "print:Pondview",
+      "lean": "random",
+      "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings."
+    },
+    {
+      "ticket": "T0276",
+      "target": "print:QuillManor",
+      "lean": "random",
+      "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings."
+    },
+    {
+      "ticket": "T0277",
+      "target": "print:Sammies",
+      "lean": "random",
+      "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings."
+    },
+    {
+      "ticket": "T0278",
+      "target": "print:Sanatorium",
+      "lean": "random",
+      "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings."
+    },
+    {
+      "ticket": "T0279",
+      "target": "print:SleepEazzzeInn",
+      "lean": "random",
+      "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings."
+    },
+    {
+      "ticket": "T0280",
+      "target": "print:StuartandLogScrapyard",
+      "lean": "random",
+      "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings."
+    },
+    {
+      "ticket": "T0281",
+      "target": "print:TheWizardsKeep",
+      "lean": "random",
+      "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings."
+    },
+    {
+      "ticket": "T0282",
+      "target": "print:Twiggys",
+      "lean": "random",
+      "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings."
+    },
+    {
+      "ticket": "T0283",
+      "target": "scene:RBBar",
+      "lean": "random",
+      "gloss": "A room-contained trace can fit earlier program activity or a disrupted response."
+    },
+    {
+      "ticket": "T0284",
+      "target": "scene:RBBarn",
+      "lean": "agricultural",
+      "gloss": "A room-contained trace can fit earlier program activity or a disrupted response."
+    },
+    {
+      "ticket": "T0285",
+      "target": "scene:RBBurnt",
+      "lean": "containment",
+      "gloss": "A room-contained trace can fit earlier program activity or a disrupted response."
+    },
+    {
+      "ticket": "T0286",
+      "target": "scene:RBBurntCorpse",
+      "lean": "containment",
+      "gloss": "A body-carried trace can fit an exposure pathway or a missed response handoff."
+    },
+    {
+      "ticket": "T0287",
+      "target": "scene:RBBurntFireman",
+      "lean": "containment",
+      "gloss": "A body-carried trace can fit an exposure pathway or a missed response handoff."
+    },
+    {
+      "ticket": "T0288",
+      "target": "scene:RBCafe",
+      "lean": "random",
+      "gloss": "A room-contained trace can fit earlier program activity or a disrupted response."
+    },
+    {
+      "ticket": "T0289",
+      "target": "scene:RBClinic",
+      "lean": "random",
+      "gloss": "A room-contained trace can fit earlier program activity or a disrupted response."
+    },
+    {
+      "ticket": "T0290",
+      "target": "scene:RBDorm",
+      "lean": "random",
+      "gloss": "A room-contained trace can fit earlier program activity or a disrupted response."
+    },
+    {
+      "ticket": "T0291",
+      "target": "scene:RBGunstoreSiege",
+      "lean": "containment",
+      "gloss": "A room-contained trace can fit earlier program activity or a disrupted response."
+    },
+    {
+      "ticket": "T0292",
+      "target": "scene:RBHairSalon",
+      "lean": "random",
+      "gloss": "The scene anchor carries a self-contained trail that leaves both explanations possible."
+    },
+    {
+      "ticket": "T0293",
+      "target": "scene:RBHeatBreakAfternoon",
+      "lean": "containment",
+      "gloss": "A vehicle-held trace can fit field movement or interrupted emergency transport."
+    },
+    {
+      "ticket": "T0294",
+      "target": "scene:RBJoanHartford",
+      "lean": "random",
+      "gloss": "A room-contained trace can fit earlier program activity or a disrupted response."
+    },
+    {
+      "ticket": "T0295",
+      "target": "scene:RBJudge",
+      "lean": "containment",
+      "gloss": "A room-contained trace can fit earlier program activity or a disrupted response."
+    },
+    {
+      "ticket": "T0296",
+      "target": "scene:RBLooted",
+      "lean": "random",
+      "gloss": "A room-contained trace can fit earlier program activity or a disrupted response."
+    },
+    {
+      "ticket": "T0297",
+      "target": "scene:RBMayorWestPoint",
+      "lean": "containment",
+      "gloss": "A room-contained trace can fit earlier program activity or a disrupted response."
+    },
+    {
+      "ticket": "T0298",
+      "target": "scene:RBNolans",
+      "lean": "random",
+      "gloss": "A room-contained trace can fit earlier program activity or a disrupted response."
+    },
+    {
+      "ticket": "T0299",
+      "target": "scene:RBOffice",
+      "lean": "containment",
+      "gloss": "A room-contained trace can fit earlier program activity or a disrupted response."
+    },
+    {
+      "ticket": "T0300",
+      "target": "scene:RBOther",
+      "lean": "random",
+      "gloss": "The scene anchor carries a self-contained trail that leaves both explanations possible."
+    },
+    {
+      "ticket": "T0301",
+      "target": "scene:RBPileOCrepe",
+      "lean": "random",
+      "gloss": "The scene anchor carries a self-contained trail that leaves both explanations possible."
+    },
+    {
+      "ticket": "T0302",
+      "target": "scene:RBPizzaWhirled",
+      "lean": "random",
+      "gloss": "The scene anchor carries a self-contained trail that leaves both explanations possible."
+    },
+    {
+      "ticket": "T0303",
+      "target": "scene:RBPoliceSiege",
+      "lean": "containment",
+      "gloss": "A room-contained trace can fit earlier program activity or a disrupted response."
+    },
+    {
+      "ticket": "T0304",
+      "target": "scene:RBReverend",
+      "lean": "random",
+      "gloss": "A room-contained trace can fit earlier program activity or a disrupted response."
+    },
+    {
+      "ticket": "T0305",
+      "target": "scene:RBSWATStation",
+      "lean": "containment",
+      "gloss": "A room-contained trace can fit earlier program activity or a disrupted response."
+    },
+    {
+      "ticket": "T0306",
+      "target": "scene:RBSafehouse",
+      "lean": "containment",
+      "gloss": "A room-contained trace can fit earlier program activity or a disrupted response."
+    },
+    {
+      "ticket": "T0307",
+      "target": "scene:RBSchool",
+      "lean": "containment",
+      "gloss": "A room-contained trace can fit earlier program activity or a disrupted response."
+    },
+    {
+      "ticket": "T0308",
+      "target": "scene:RBShopLooted",
+      "lean": "random",
+      "gloss": "A room-contained trace can fit earlier program activity or a disrupted response."
+    },
+    {
+      "ticket": "T0309",
+      "target": "scene:RBSpiffo",
+      "lean": "random",
+      "gloss": "The scene anchor carries a self-contained trail that leaves both explanations possible."
+    },
+    {
+      "ticket": "T0310",
+      "target": "scene:RBStripclub",
+      "lean": "random",
+      "gloss": "The scene anchor carries a self-contained trail that leaves both explanations possible."
+    },
+    {
+      "ticket": "T0311",
+      "target": "scene:RBTSBreakfast",
+      "lean": "random",
+      "gloss": "The scene anchor carries a self-contained trail that leaves both explanations possible."
+    },
+    {
+      "ticket": "T0312",
+      "target": "scene:RBTSButcher",
+      "lean": "agricultural",
+      "gloss": "A room-contained trace can fit earlier program activity or a disrupted response."
+    }
+  ]
+}
