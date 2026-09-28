@@ -1,0 +1,88 @@
+[
+  {
+    "id": "t0029-01",
+    "kind": "set",
+    "pieces": [
+      "SheetPaper2",
+      "Pencil",
+      "KeyRing"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "containment",
+        "rival": "agricultural"
+      }
+    ],
+    "anchor": {
+      "map": "BBurgStashMap4",
+      "mark": 1
+    },
+    "title": "The unfinished handoff",
+    "body": "The pickup card assigns each trailer a time, then records the vehicle at the gate before the first family is listed. The spare hitch key is still here.",
+    "rival_reading": "The same route could have moved field workers or supplies; an early vehicle mark does not identify its purpose.",
+    "gloss": "A pickup record places transport at the gate before the household list was completed.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "cites": {
+      "source": "map:BBurgStashMap4",
+      "quote": "one bite = death"
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0029"
+    }
+  },
+  {
+    "id": "t0029-02",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "anchor": {
+      "map": "BBurgStashMap4",
+      "mark": 1
+    },
+    "title": "Kept from the drawer",
+    "body": "You said one bite was enough, so I marked the water barrel too. The field crew calls the rinse routine; I still will not let the dog drink until the tank is flushed.",
+    "rival_reading": "A containment crew could have rinsed a trailer tank during cleanup; the warning does not establish what caused the danger.",
+    "gloss": "A family water warning follows a field crew rinse and leaves the source uncertain.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "cites": {
+      "source": "map:BBurgStashMap4",
+      "quote": "one bite = death"
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0029"
+    }
+  }
+]
