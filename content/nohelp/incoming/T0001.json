@@ -3,9 +3,11 @@
     "id": "t0001-01",
     "kind": "set",
     "pieces": [
-      "WalkieTalkie3",
-      "Clipboard"
+      "Clipboard",
+      "Lunchbox"
     ],
+    "title": "Return recorded before crossing",
+    "body": "The last route time is written after the gate closed. A child's sticker covers the lunchbox label; the form counts returned clipboards, not people.",
     "where": [
       {
         "place": "police",
@@ -14,32 +16,33 @@
         "rival": "agricultural"
       }
     ],
-    "rival_reading": "The call may have concerned routine field work; a missed handoff alone does not show that officials knew of a wider emergency.",
-    "gloss": "A field call is deferred while the road channel lacks coverage.",
-    "axioms": [
-      "c-warning",
-      "c-orders",
-      "c-failure",
-      "a-pathway",
-      "a-timing"
-    ],
+    "rival_reading": "A delayed farm delivery could cross a work gate after a routine closure; an ordinary property count may omit the driver without showing a failed cordon.",
+    "gloss": "A route record places a crossing after closure while completing a count of returned property.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
     "prov": {
       "writer": "ChatGPT",
       "handoff": "2026-09-27",
-      "batch": "T0001",
-      "adhd_run": "docs/writer-only/adhd/2026-09-27-T0001/"
-    },
-    "title": "Road channel uncovered",
-    "body": "The handheld set sat beside the shift sheet; the road channel was left uncovered after 18:00. One field call was marked to wait until morning."
+      "batch": "T0001"
+    }
   },
   {
     "id": "t0001-02",
     "kind": "set",
     "pieces": [
-      "GardeningSprayAphids",
-      "Fertilizer",
-      "GasmaskFilter"
+      "Bucket",
+      "WaterBottle"
     ],
+    "title": "Two measures, one return",
+    "body": "The bucket has marks from a field round and after a road diversion. A child's drawing is folded under the handle; the capped bottle sits beside it. The only checked box asks if the bucket came back.",
     "where": [
       {
         "place": "police",
@@ -48,22 +51,22 @@
         "rival": "containment"
       }
     ],
-    "rival_reading": "The items may have been held as an ordinary precaution during containment; an unclaimed supply set does not establish that the program caused an exposure.",
-    "gloss": "Agricultural supplies remain grouped with a filter and go uncollected overnight.",
-    "axioms": [
-      "a-program",
-      "a-malfunction",
-      "a-pathway",
-      "c-orders",
-      "c-failure"
-    ],
+    "rival_reading": "Emergency staff could measure and inventory water after a diversion; a returned container does not show that a program caused the outbreak.",
+    "gloss": "A field-related measure and a later return entry remain with a pair of water containers.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
     "prov": {
       "writer": "ChatGPT",
       "handoff": "2026-09-27",
-      "batch": "T0001",
-      "adhd_run": "docs/writer-only/adhd/2026-09-27-T0001/"
-    },
-    "title": "Field kit left overnight",
-    "body": "The sprayer and fertilizer were kept beside a filter after a field check. Nobody returned to collect the kit before the desk closed."
+      "batch": "T0001"
+    }
   }
 ]

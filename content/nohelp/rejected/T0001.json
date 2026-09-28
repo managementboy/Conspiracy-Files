@@ -1,0 +1,89 @@
+{
+  "ticket": "T0001",
+  "returned_by": "Claude blind re-read",
+  "rows": [
+    {
+      "id": "t0001-01",
+      "codes": [
+        "NEVER_RIVAL"
+      ],
+      "note": "Tone is now right: keep it. But a blind re-read (5 independent reads each, a different model, told nothing) named the lean 5/5 and never the rival, so each row is one-sided (tools/cluegates/blind_reread.md, NEVER_RIVAL). The pieces and first line give the side away on their own (a radio and a callback read only as a failed response; sprayer, fertilizer and filter read only as the program). The lean should come from where it is placed and from one detail, with the rival reading genuinely live: a reader told nothing should sometimes pick the other side. Rework title, body and if needed pieces; keep place, spot, lean and axioms.",
+      "votes": "A 5/5",
+      "row": {
+        "body": "A caller tried twice before her shift ended at seven. The road channel went uncovered at six; the callback stayed open until a supervisor could initial the box.",
+        "id": "t0001-01",
+        "kind": "set",
+        "pieces": [
+          "WalkieTalkie3",
+          "Clipboard"
+        ],
+        "title": "Call awaiting initials",
+        "where": [
+          {
+            "lean": "containment",
+            "place": "police",
+            "rival": "agricultural",
+            "spot": "furniture"
+          }
+        ],
+        "axioms": [
+          "c-warning",
+          "c-orders",
+          "c-failure",
+          "a-pathway",
+          "a-timing"
+        ],
+        "gloss": "A field call is deferred while the road channel lacks coverage.",
+        "prov": {
+          "adhd_run": "docs/writer-only/adhd/2026-09-27-T0001/",
+          "batch": "T0001",
+          "handoff": "2026-09-27",
+          "writer": "ChatGPT"
+        },
+        "rival_reading": "The call may have concerned routine field work; a missed handoff alone does not show that officials knew of a wider emergency."
+      }
+    },
+    {
+      "id": "t0001-02",
+      "codes": [
+        "NEVER_RIVAL"
+      ],
+      "note": "Tone is now right: keep it. But a blind re-read (5 independent reads each, a different model, told nothing) named the lean 5/5 and never the rival, so each row is one-sided (tools/cluegates/blind_reread.md, NEVER_RIVAL). The pieces and first line give the side away on their own (a radio and a callback read only as a failed response; sprayer, fertilizer and filter read only as the program). The lean should come from where it is placed and from one detail, with the rival reading genuinely live: a reader told nothing should sometimes pick the other side. Rework title, body and if needed pieces; keep place, spot, lean and axioms.",
+      "votes": "B 5/5",
+      "row": {
+        "body": "The field worker missed the last bus home while the sprayer and fertilizer stayed on hold until the filter's condition was entered. The release box remained blank until morning.",
+        "id": "t0001-02",
+        "kind": "set",
+        "pieces": [
+          "GardeningSprayAphids",
+          "Fertilizer",
+          "GasmaskFilter"
+        ],
+        "title": "Filter condition before release",
+        "where": [
+          {
+            "lean": "agricultural",
+            "place": "police",
+            "rival": "containment",
+            "spot": "furniture"
+          }
+        ],
+        "axioms": [
+          "a-program",
+          "a-malfunction",
+          "a-pathway",
+          "c-orders",
+          "c-failure"
+        ],
+        "gloss": "Agricultural supplies remain grouped with a filter and go uncollected overnight.",
+        "prov": {
+          "adhd_run": "docs/writer-only/adhd/2026-09-27-T0001/",
+          "batch": "T0001",
+          "handoff": "2026-09-27",
+          "writer": "ChatGPT"
+        },
+        "rival_reading": "The items may have been held as an ordinary precaution during containment; an unclaimed supply set does not establish that the program caused an exposure."
+      }
+    }
+  ]
+}

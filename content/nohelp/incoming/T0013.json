@@ -1,0 +1,176 @@
+[
+  {
+    "id": "t0013-01",
+    "kind": "set",
+    "pieces": [
+      "Map",
+      "KeyRing"
+    ],
+    "rival_reading": "The lap-time notation and key tally may be unrelated records of ordinary local work; nothing here proves an evacuation or containment failure.",
+    "gloss": "A map annotation sits beside a completed key return and an unfinished route entry.",
+    "title": "Return count complete, route line empty",
+    "body": "The location copy preserves 56.34 seconds beside an empty route line. A child's drawing is folded under the key tag; the only complete return count is for keys.",
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "containment",
+        "rival": "agricultural"
+      }
+    ],
+    "anchor": {
+      "map": "IrvingtonStashMap1",
+      "mark": 1
+    },
+    "cites": {
+      "source": "map:IrvingtonStashMap1",
+      "quote": "56.34 seconds"
+    },
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-timing"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0013",
+      "adhd_run": "docs/writer-only/adhd/2026-09-27-T0013/"
+    }
+  },
+  {
+    "id": "t0013-02",
+    "kind": "set",
+    "pieces": [
+      "Notebook",
+      "WaterBottle"
+    ],
+    "rival_reading": "Emergency crews could tally field water after a diversion; an incomplete route entry does not establish an agricultural malfunction.",
+    "gloss": "A field-water line predates a route entry beside a recorded interval.",
+    "title": "Water total entered before the route line",
+    "body": "The map annotation keeps 1 minute, 14.55 seconds. The notebook's field-water line predates the route entry; a child's drink reminder is taped to the bottle, but only the bottle count is complete.",
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "anchor": {
+      "map": "IrvingtonStashMap1",
+      "note": 1
+    },
+    "cites": {
+      "source": "map:IrvingtonStashMap1",
+      "quote": "1 minute, 14.55 seconds"
+    },
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0013",
+      "adhd_run": "docs/writer-only/adhd/2026-09-27-T0013/"
+    }
+  },
+  {
+    "id": "t0013-03",
+    "kind": "written",
+    "pieces": [
+      "dispatch"
+    ],
+    "rival_reading": "A route acknowledgment may be ordinary local scheduling after access changed; the late entry and returned page do not prove a failed containment order.",
+    "gloss": "A dispatch acknowledgment follows a road restriction while the recipient field remains incomplete.",
+    "title": "Acknowledgment follows the restriction",
+    "body": "The route acknowledgment is entered after the road restriction. The note still copies 56.34 seconds; a child's drawing is on the return copy, and the completed field counts pages sent, not recipients.",
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "containment",
+        "rival": "agricultural"
+      }
+    ],
+    "anchor": {
+      "map": "IrvingtonStashMap1",
+      "note": 2
+    },
+    "cites": {
+      "source": "map:IrvingtonStashMap1",
+      "quote": "56.34 seconds"
+    },
+    "axioms": {
+      "containment": [
+        "c-warning",
+        "c-orders"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-obscured"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0013",
+      "adhd_run": "docs/writer-only/adhd/2026-09-27-T0013/"
+    }
+  },
+  {
+    "id": "t0013-04",
+    "kind": "written",
+    "pieces": [
+      "receipt"
+    ],
+    "rival_reading": "The timing may be ordinary field planning, while the road restriction reflects later emergency action; a water tally alone cannot tell which came first.",
+    "gloss": "A dated field measure and a copied interval remain beside an incomplete origin record.",
+    "title": "Field record signed after the round",
+    "body": "The receipt's field measure is dated before the route round was closed. The map beside it keeps 1 minute, 14.55 seconds. A child's lunch reminder survives; only the container count is signed.",
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "anchor": {
+      "map": "IrvingtonStashMap1",
+      "note": 3
+    },
+    "cites": {
+      "source": "map:IrvingtonStashMap1",
+      "quote": "1 minute, 14.55 seconds"
+    },
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-timing"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0013",
+      "adhd_run": "docs/writer-only/adhd/2026-09-27-T0013/"
+    }
+  }
+]

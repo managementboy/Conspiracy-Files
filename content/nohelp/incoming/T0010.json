@@ -1,0 +1,75 @@
+[
+  {
+    "id": "t0010-01",
+    "kind": "written",
+    "pieces": [
+      "idcard"
+    ],
+    "person": "person-a",
+    "rival_reading": "Officials could issue this schedule during emergency restrictions; a water allotment and revocable access do not prove the program malfunctioned.",
+    "gloss": "A field access credential records water allocation and a closure-based return rule.",
+    "title": "Rosa Salcedo",
+    "body": "Field rounds four to six. Water share is logged at shift end; access expires at road closure.",
+    "where": [
+      {
+        "place": "farm",
+        "spot": "furniture",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-timing"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0010",
+      "adhd_run": "docs/writer-only/adhd/2026-09-27-T0010/"
+    }
+  },
+  {
+    "id": "t0010-02",
+    "kind": "set",
+    "pieces": [
+      "Map",
+      "HandShovel"
+    ],
+    "person": "person-a",
+    "rival_reading": "A response crew could mark work rows and collect tools after closing the road; the map and returned shovel do not establish an earlier malfunction.",
+    "gloss": "A field-round mark falls after a road closure while a tool count is complete.",
+    "title": "Field tally remains open",
+    "body": "Rosa's second field-round mark is dated after the road closed. A child's drawing is tucked inside the map; the only completed count is shovels returned, not rows checked.",
+    "where": [
+      {
+        "place": "farm",
+        "spot": "furniture",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0010",
+      "adhd_run": "docs/writer-only/adhd/2026-09-27-T0010/"
+    }
+  }
+]

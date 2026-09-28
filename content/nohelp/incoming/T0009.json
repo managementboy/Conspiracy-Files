@@ -1,0 +1,72 @@
+[
+  {
+    "id": "t0009-01",
+    "kind": "set",
+    "pieces": [
+      "Map",
+      "Clipboard"
+    ],
+    "rival_reading": "The dates could describe routine access administration around the field route; neither a crossed line nor a missing crowd count shows officials caused the outbreak.",
+    "gloss": "A road restriction is entered before its revision receives a signature.",
+    "title": "Restriction recorded before revision signed",
+    "body": "The map's road closure is dated before the revision is signed. A child's crayon marks the way home; the file's only completed count is copies returned, not people moved.",
+    "where": [
+      {
+        "place": "government",
+        "spot": "furniture",
+        "lean": "containment",
+        "rival": "agricultural"
+      }
+    ],
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-accounting"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-obscured"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0009"
+    }
+  },
+  {
+    "id": "t0009-02",
+    "kind": "set",
+    "pieces": [
+      "Notebook",
+      "WaterBottle"
+    ],
+    "rival_reading": "Public staff could record water allotments during a containment response and leave the source entry for a later review; the record does not establish an agricultural malfunction.",
+    "gloss": "A field water tally predates a review date while its source remains blank.",
+    "title": "Water tally predates review",
+    "body": "The notebook lists water for two field rounds before the review date. A lunch reminder is taped to the bottle; the ledger counts delivered containers but leaves the source line blank.",
+    "where": [
+      {
+        "place": "government",
+        "spot": "furniture",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-malfunction"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0009"
+    }
+  }
+]

@@ -1,0 +1,16 @@
+{
+  "stories": [
+    {
+      "ticket": "T0016",
+      "target": "scene:RVSPlonkies",
+      "lean": "containment",
+      "gloss": "A cargo route with a mismatched return record could fit an interrupted field delivery or a failed emergency handoff."
+    },
+    {
+      "ticket": "T0017",
+      "target": "scene:RDSRatKing",
+      "lean": "containment",
+      "gloss": "A household trace of pest control could reflect a failed containment response or an earlier agricultural practice."
+    }
+  ]
+}
