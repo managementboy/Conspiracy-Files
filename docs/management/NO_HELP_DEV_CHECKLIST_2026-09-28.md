@@ -92,16 +92,16 @@ place a clue twice, or reveal the other theory's clue? The plan still owes a
   *Done 2026-09-28 under the PROVISIONAL rule (retry only if never shown or
   recognised, and only into a fresh container; a partly created set stays
   unknown). Still open for the owner below.*
-- [ ] **B5 No peek at the rival theory.** At every kill point, with or
+- [x] **B5 No peek at the rival theory.** At every kill point, with or
   without a map read, the set of leans seen at each area is a subset of the
   golden run's set.
   *Proof:* one explicit assertion in the reload-guard test.
-- [ ] **B6 Double reload.** Also: a reload inside an area's arrival ring re-queues its
+- [x] **B6 Double reload.** Also: a reload inside an area's arrival ring re-queues its
   placement job (`inRing` is reset at game start); prove this still places
   each piece once (found by the B1/B2 review). Reloading twice from one kill point, the second
   time after items were placed, still leaves exactly one of each clue's
   pieces.
-- [ ] **B7 Kill at every Nth save** across a multi-area route borrowed from
+- [x] **B7 Kill at every Nth save** across a multi-area route borrowed from
   the playthrough harness, including scene areas. This catches stage
   boundaries nobody has named yet.
 - [x] **B8 A ground set cleared by the game counts as lost** in
@@ -110,7 +110,7 @@ place a clue twice, or reveal the other theory's clue? The plan still owes a
 - [x] **B9 A floor on the share of clues placed beside a vanilla scene** in
   the playthrough harness (NH-D7, owed). It is a harness check only, **not a
   hard rule in the picker** (see traps).
-- [ ] **B10 Update the §4a table** so NH-D3, NH-D5 and NH-D7 name their real
+- [x] **B10 Update the §4a table** so NH-D3, NH-D5 and NH-D7 name their real
   check files. *Proof:* `test/nohelp_directive_trace.lua` reports none of
   them pending.
 

@@ -117,12 +117,43 @@ for _,d in ipairs(docs) do
         end
     end
 end
+-- A confirmed vanilla scene with one clue on open ground, decided and given
+-- its spot the same way (checklist B7: "including scene areas").
+local Scenes=require("NHShared/Generated/VanillaScenes")
+local SceneMatch=require("NHShared/Generated/SceneMatch")
+local Manifest=require("NHShared/Mystery/Manifest")
+local sceneKind
+for _,k in ipairs(Scenes.allowedKinds()) do if Scenes.spotFor(k)=="ground" then sceneKind=k; break end end
+assert(sceneKind,"a scene kind whose clue lies on open ground")
+-- One clue per conspiracy plus a written one, as the playthrough harness gives
+-- every scene kind (the scene takes the world's pick among them).
+local sceneClues={
+    {id="SC01c",kind="set",pieces={"Twine","Tarp"},anchor={scene=sceneKind},
+        where={{place="farm",spot="ground",lean="containment",rival="agricultural"}}},
+    {id="SC01a",kind="set",pieces={"Tarp","Rope"},anchor={scene=sceneKind},
+        where={{place="farm",spot="ground",lean="agricultural",rival="containment"}}},
+    {id="SC01w",kind="written",pieces={"photograph"},anchor={scene=sceneKind},
+        where={{place="farm",spot="ground",lean="containment",rival="agricultural"}}}}
+local key=SceneMatch.keyAt(1301,1001,0)
+assert(api.noteScene(key,{pending={"room:trace"},x=1301,y=1001,z=0,hours=1}))
+assert(api.noteScene(key,{kind=sceneKind,x=1301,y=1001,z=0,hours=1,source="seen"}))
+local ok,why=api.addSceneArea{site={id="scene:"..key,bounds={x1=1300,y1=1000,x2=1310,y2=1010,z=0},
+    paperStorage="unknown",containerTypes={}},key=key,kind=sceneKind,clues=sceneClues,version=Manifest.VERSION,hours=1}
+assert(ok,"the scene area is decided: "..tostring(why))
+local sceneDocs=0
+for _,d in ipairs(w.campaign.canonical.case.documents) do
+    if d.locationId=="scene:"..key and api.assign(d.id,{x=1302+sceneDocs,y=1002,z=0,objectIndex=0,containerIndex=0,
+        containerType="floor",sprite="yard",ground=true},1) then
+        assigned_ids[d.id]=true; sceneDocs=sceneDocs+1
+    end
+end
+assert(sceneDocs>=1,"the scene's clue has its ground spot")
 local nAssigned=0; for _ in pairs(assigned_ids) do nAssigned=nAssigned+1 end
 assert(#w.campaign.canonical.case.areas>=3 and nAssigned>=3,"three areas decided and ground clues assigned ("..nAssigned..")")
 local K2=deepCopy(store)
 
 -- The survivor walks through the three areas; every clue is placed on arrival.
-local ROUTE={{1003,1003},{1103,1003},{1203,1003}}
+local ROUTE={{1003,1003},{1103,1003},{1203,1003},{1303,1003}}
 local TICKS=80
 local function walk(h,fromLeg,fromTick,onStep)
     for leg=fromLeg,#ROUTE do
@@ -209,6 +240,6 @@ for i,snap in ipairs(snapshots) do
     for id,g in pairs(golden_info) do checkPieces(root.assignments[id],g,"save "..i,id) end
 end
 assert(#snapshots>=6 and placementSaves>=3,"the walk made placement saves ("..#snapshots.." saves, "..placementSaves.." during placement)")
-print(("nohelp reload fuzz: %d saves recorded and %d replayed (%d during placement), %d ground clues, %d areas"):format(
-    #snapshots,#snapshots,placementSaves,nAssigned,#golden.case.areas))
+print(("nohelp reload fuzz: %d saves recorded and %d replayed (%d during placement), %d ground clues (%d in a scene), %d areas"):format(
+    #snapshots,#snapshots,placementSaves,nAssigned,sceneDocs,#golden.case.areas))
 print("NH-D3: a crash and reload at these save points changes nothing")
