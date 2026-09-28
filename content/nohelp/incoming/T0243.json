@@ -1,0 +1,44 @@
+[
+  {
+    "id": "t0243-01",
+    "kind": "set",
+    "pieces": [
+      "WaterBottle",
+      "Notebook"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "anchor": {
+      "print": "HouseforSale860"
+    },
+    "title": "The central address sample",
+    "body": "The inspection note asks for a water sample before the next tenant; the move-in receipt is already signed.",
+    "rival_reading": "A response crew could test water after a tenant moved in; the note does not say what raised concern.",
+    "gloss": "A tenant moves in before the water sample is checked.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "cites": {
+      "source": "print:HouseforSale860",
+      "quote": "House for Sale (no. 860)"
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0243"
+    }
+  }
+]
