@@ -202,17 +202,29 @@ place a clue twice, or reveal the other theory's clue? The plan still owes a
 - [ ] **E4 Owner one-pager:** counts only, using C1's allowlist. The writer
   handoff §9 lists it as not built.
 
+## Plan change, 2026-09-28 (owner)
+
+A3-A7 paused after parts 1-2 (a save at 10x the record: 86 ms -> 53 ms, all
+tests green). A failed attempt at incremental validation is kept at nothing
+committed. Whether the remaining per-save cost matters is measured first in the
+real game (D2, late-game stutter); A resumes only if it does. Order now:
+owner review R1-R2, content loop, then the real-game run. Haiku agents for
+bounded tasks only, Sonnet for the core save code, ADHD reviews only where
+the risk is real, status reports on events.
+
 ## Owner's code review, 2026-09-28
 
 `docs/reviews/CODE_REVIEW_NO_HELP_2026-09-28.md` on the `nohelp-content`
 branch (static review of `mod-nohelp/`). Both findings are confirmed on
 `nohelp-task3-plan` as well.
 
-- [ ] **R1 (F-01, P1) The version range claims too much.** `mod-nohelp/42/mod.info:6`
+- [x] **R1 (F-01, P1) The version range claims too much.** *Done: both mods start at
+  42.20.4 (test/nohelp_mod_info.lua ties it to PROJECT_STATE.md).* `mod-nohelp/42/mod.info:6`
   says `versionMin=42.0.0`; only Build 42.20.4 is verified. Set it to the
   earliest version the evidence supports and keep packaging checks and release
   notes consistent.
-- [ ] **R2 (F-02, P2) A failed vehicle scan is silent.** `Generated/Storage.lua:154-155`
+- [x] **R2 (F-02, P2) A failed vehicle scan is silent.** *Done: vehicles stay optional;
+  a failure is logged and reported to the caller (test/nohelp_storage_vehicles.lua).* `Generated/Storage.lua:154-155`
   wraps `addVehicles` in `pcall`, drops the error and reports a complete scan
   without vehicles. Log it through the shared log, decide optional vs required
   explicitly, and add a regression test.
