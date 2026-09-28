@@ -23,6 +23,7 @@
 package.path="mod-nohelp/common/media/lua/shared/?.lua;"..package.path
 local STEP="NH-step7"
 local D1,D4,D5,D6,D7="NH-D1","NH-D4","NH-D5","NH-D6","NH-D7"
+local SCENE_FLOOR_PCT=2 -- about half the lowest measured share (4.5%, cap lifted; 6.0% cap on), 2026-09-28
 local Pick=require("NHShared/Generated/Pick")
 local AreaCase=require("NHShared/Generated/AreaCase")
 local AreaPlace=require("NHShared/Generated/AreaPlace")
@@ -279,11 +280,12 @@ local function runRoute(seed,route,capOn)
         end
     end
     local st={moves=0,search=0,look=0,refusedMoves=0,refusedCross=0,refusedShown=0,refusedSpent=0,reads=0,scenesSeen=0,nearby=0,
-        spotted=0,spottedSets=0,raisedMax=0,raisedMoves=0}
+        spotted=0,spottedSets=0,raisedMax=0,raisedMoves=0,lost=0,lostSets=0,sceneAnchored=0}
     local hours=7
     local px,py=centre(route.stopsList[1])
     local held,spentTargets,rolled,spotOf,siteOf={}, {}, {}, {}, {}
     local synthSites={}
+    local cleared={} -- NH-D5: ground sets cleared by the game before the player reaches them
     local lastScan={x=px,y=py,hours=hours}
     local lastMoveSlot=math.floor(hours/6)
     local sceneWait={}
@@ -407,6 +409,12 @@ local function runRoute(seed,route,capOn)
                         assert(api.assign(d.id,t,hours),STEP..": the Session refused a spot of the clue's own kind")
                         assert(api.status(d.id,"placed",hours))
                         held[key]=d.id; spotOf[d.id]=t; siteOf[d.id]=a.id
+                        -- NH-D5: the game or another mod may clear anything left on
+                        -- open ground; a seeded 10% of ground clues are gone before the
+                        -- survivor arrives (drawn from the world seed: every run alike)
+                        if t.ground and h(seed,d.id,"cleared")%10==0 then
+                            cleared[d.id]=true
+                        end
                     end
                 end
             end
@@ -416,17 +424,23 @@ local function runRoute(seed,route,capOn)
         for id,t in pairs(spotOf) do
             if not rolled[id] and t.z==0 and math.max(math.abs(t.x-px),math.abs(t.y-py))<=16 then
                 rolled[id]=true
-                local r=h(seed,id,"find")%100
-                if r<60 then
-                    st.spotted=st.spotted+1
-                    if docById(id).members then st.spottedSets=st.spottedSets+1 end
-                end
-                if r<45 then
-                    assert(api.show(id)); assert(api.recognise(id,"search")); st.search=st.search+1
-                    spentTargets[#spentTargets+1]={target=t,id=id}
-                elseif r<60 then
-                    assert(api.recognise(id,"look")); st.look=st.look+1; rolled[id]="carried"
-                    spentTargets[#spentTargets+1]={target=t,id=id}
+                -- NH-D5: a cleared ground set counts as lost, never as spotted
+                if cleared[id] then
+                    st.lost=st.lost+1
+                    if docById(id).members then st.lostSets=st.lostSets+1 end
+                else
+                    local r=h(seed,id,"find")%100
+                    if r<60 then
+                        st.spotted=st.spotted+1
+                        if docById(id).members then st.spottedSets=st.spottedSets+1 end
+                    end
+                    if r<45 then
+                        assert(api.show(id)); assert(api.recognise(id,"search")); st.search=st.search+1
+                        spentTargets[#spentTargets+1]={target=t,id=id}
+                    elseif r<60 then
+                        assert(api.recognise(id,"look")); st.look=st.look+1; rolled[id]="carried"
+                        spentTargets[#spentTargets+1]={target=t,id=id}
+                    end
                 end
             end
         end
@@ -602,10 +616,12 @@ local function check(saved,capOn,tally)
     local sets,total=0,0
     local placeSets,placeTotal=0,0
     local sceneArea={}
+    local sceneAnchored=0 -- NH-D7: clues that sit in a confirmed scene's area
     for _,a in ipairs(case.areas) do if a.place=="scene" then sceneArea[a.id]=true end end
     for _,d in ipairs(case.documents) do
         total=total+1
-        if not sceneArea[d.locationId] then
+        if sceneArea[d.locationId] then sceneAnchored=sceneAnchored+1
+        else
             placeTotal=placeTotal+1
             if d.members then placeSets=placeSets+1 end
         end
@@ -620,6 +636,7 @@ local function check(saved,capOn,tally)
     assert(placeSets*2>=placeTotal,STEP..": "..D5..": fewer than half of a route's place clues are sets ("..placeSets.."/"..placeTotal..")")
     tally.sets=tally.sets+sets; tally.clues=tally.clues+total
     tally.minRouteSetShare=math.min(tally.minRouteSetShare,placeTotal>0 and placeSets/placeTotal or 1)
+    tally.sceneAnchored=tally.sceneAnchored+sceneAnchored
     for _,a in ipairs(case.areas) do
         local here,ids={}, {}
         for j=a.first,a.first+a.count-1 do
@@ -722,7 +739,8 @@ local MODES={{capOn=true,first=1,seeds=CAP_ON_SEEDS,routes=CAP_ON_ROUTES},
 for _,mode in ipairs(MODES) do
     local capOn=mode.capOn
     local tally={lean={},sets=0,clues=0,areas=0,sceneAreas=0,anchoredAreas=0,short=0,moves=0,search=0,look=0,
-        refused=0,spotted=0,spottedSets=0,raisedMax=0,raisedMoves=0,cross=0,shownR=0,spentR=0,reads=0,scenes=0,maxArea=0,maxBytes=0,routes=0,bySource={},minRouteSetShare=1}
+        refused=0,spotted=0,spottedSets=0,raisedMax=0,raisedMoves=0,cross=0,shownR=0,spentR=0,reads=0,scenes=0,maxArea=0,maxBytes=0,routes=0,bySource={},minRouteSetShare=1,
+        lost=0,lostSets=0,sceneAnchored=0}
     local t0=os.clock()
     local kinds={}
     for i=mode.first,mode.first+mode.seeds-1 do
@@ -742,6 +760,7 @@ for _,mode in ipairs(MODES) do
             tally.cross=tally.cross+st.refusedCross; tally.shownR=tally.shownR+st.refusedShown; tally.spentR=tally.spentR+st.refusedSpent
             tally.reads=tally.reads+st.reads; tally.scenes=tally.scenes+st.scenesSeen
             tally.spotted=tally.spotted+st.spotted; tally.spottedSets=tally.spottedSets+st.spottedSets
+            tally.lost=tally.lost+st.lost; tally.lostSets=tally.lostSets+st.lostSets
             tally.raisedMax=math.max(tally.raisedMax,st.raisedMax); tally.raisedMoves=tally.raisedMoves+st.raisedMoves
             tally.maxBytes=math.max(tally.maxBytes,st.bytes)
         end
@@ -752,11 +771,22 @@ for _,mode in ipairs(MODES) do
     assert(c<=0.6*total and a<=0.6*total,STEP..": "..D1..": one lean above 60% of all placed clues")
     assert(tally.moves>0,STEP..": no clue ever moved")
     assert(tally.spottedSets*2>=tally.spotted,STEP..": "..D5..": fewer than half of the clues spotted are sets")
+    -- NH-D5 (plan step 7): sets must be at least half of the clues the survivor
+    -- came upon, where a clue whose ground spot was found empty counts as come
+    -- upon but NOT spotted. Lost sets only ever make this harder to pass.
+    assert(tally.spotted+tally.lost>0,STEP..": the routes came upon no clue at all")
+    assert(tally.spottedSets*2>=tally.spotted+tally.lost,
+        STEP..": "..D5..": fewer than half of the clues come upon were spotted sets ("..tally.spottedSets.." of "..(tally.spotted+tally.lost)..")")
     if capOn then
         assert(tally.raisedMax>2*SHIPPED_CAP and tally.raisedMoves>0,STEP..": "..D4..": after raising the cap, new places take more and moves still work")
     end
     assert(tally.cross>0 and tally.shownR>0 and tally.spentR>0,STEP..": every kind of forbidden move was tried and refused")
     assert(tally.sceneAreas>0 and tally.anchoredAreas>0,STEP..": the routes reached scenes and anchored places")
+    -- NH-D7: a floor on the share of clues that sit beside a confirmed scene.
+    -- A harness check only, never a picker rule (checklist B9). SCENE_FLOOR_PCT
+    -- is about half the share these routes gave when it was set (2026-09-28).
+    local sceneShare=100*tally.sceneAnchored/math.max(1,tally.clues)
+    assert(sceneShare>=SCENE_FLOOR_PCT,STEP..": "..D7..": scene-anchored share "..string.format("%.1f%%",sceneShare).." below its floor "..SCENE_FLOOR_PCT.."%")
     local src={}
     for k,v in pairs(tally.bySource) do src[#src+1]=k.." "..v end
     table.sort(src)
@@ -770,7 +800,8 @@ for _,mode in ipairs(MODES) do
         tally.clues,100*tally.sets/tally.clues,100*tally.minRouteSetShare,100*c/total,100*a/total))
     print(string.format("  forbidden moves tried and refused: to another place on %d routes, a shown clue on %d, onto a spent spot on %d",
         tally.cross,tally.shownR,tally.spentR))
-    print(string.format("  spotted or looked over %d, sets %.1f%% of them",tally.spotted,100*tally.spottedSets/math.max(1,tally.spotted)))
+    print(string.format("  spotted or looked over %d, sets %.1f%% of them; lost %d (sets %d)",tally.spotted,100*tally.spottedSets/math.max(1,tally.spotted),tally.lost,tally.lostSets))
+    print(string.format("  scene-anchored share %.1f%% of all clues (floor %d%%)",sceneShare,SCENE_FLOOR_PCT))
     if capOn then
         print(string.format("  saved at the shipped cap, reopened with it lifted: new places took up to %d clues; a move worked on %d of %d routes",
             tally.raisedMax,tally.raisedMoves,tally.routes))

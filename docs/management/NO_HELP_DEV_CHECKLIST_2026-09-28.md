@@ -101,10 +101,10 @@ place a clue twice, or reveal the other theory's clue? The plan still owes a
 - [ ] **B7 Kill at every Nth save** across a multi-area route borrowed from
   the playthrough harness, including scene areas. This catches stage
   boundaries nobody has named yet.
-- [ ] **B8 A ground set cleared by the game counts as lost** in
+- [x] **B8 A ground set cleared by the game counts as lost** in
   `test/nohelp_playthrough.lua`, both placed and spotted (NH-D5; §4a says
   "not yet counted"). Also count lost sets separately from found ones.
-- [ ] **B9 A floor on the share of clues placed beside a vanilla scene** in
+- [x] **B9 A floor on the share of clues placed beside a vanilla scene** in
   the playthrough harness (NH-D7, owed). It is a harness check only, **not a
   hard rule in the picker** (see traps).
 - [ ] **B10 Update the §4a table** so NH-D3, NH-D5 and NH-D7 name their real
