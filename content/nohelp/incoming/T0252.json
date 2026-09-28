@@ -1,0 +1,44 @@
+[
+  {
+    "id": "t0252-01",
+    "kind": "set",
+    "pieces": [
+      "SeedBag",
+      "WaterBottle"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "containment",
+        "rival": "agricultural"
+      }
+    ],
+    "anchor": {
+      "print": "A1Hay"
+    },
+    "title": "Feed delivery record",
+    "body": "The feed receipt lists a delivery before the animals were counted; a note asks the driver to leave the water trough sealed until the next shift.",
+    "rival_reading": "A program worker could delay water during routine testing; the receipt does not explain the order.",
+    "gloss": "Feed arrives before the animal count while water is held back.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "cites": {
+      "source": "print:A1Hay",
+      "quote": "A1 Hay"
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0252"
+    }
+  }
+]
