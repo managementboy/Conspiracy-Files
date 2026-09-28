@@ -1,0 +1,79 @@
+[
+  {
+    "anchor": {
+      "scene": "RVSPlonkies"
+    },
+    "body": "The route on the map ends at a closed road. A keyring is tucked beneath the last stop, its tag stamped “return”; the return line has been crossed out.",
+    "id": "t0016-01",
+    "kind": "set",
+    "pieces": [
+      "Map",
+      "KeyRing"
+    ],
+    "title": "The last stop crossed off the van route",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "transmission",
+        "rival": "agricultural",
+        "spot": "vehicle"
+      }
+    ],
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "gloss": "A delivery key remains with a route whose return was cancelled.",
+    "prov": {
+      "batch": "T0016",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A field van could change its route when access changed and leave the key with an old map; the crossed line need not be an order to abandon anyone."
+  },
+  {
+    "anchor": {
+      "scene": "RVSPlonkies"
+    },
+    "body": "The seed sack is wedged against the fertilizer bag in the van. Its stitched mouth is green at one corner; the label on the fertilizer is clean where a thumb would lift it.",
+    "id": "t0016-02",
+    "kind": "set",
+    "pieces": [
+      "SeedBag",
+      "Fertilizer"
+    ],
+    "title": "The seed sack kept beside the fertilizer",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "farm",
+        "rival": "containment",
+        "spot": "vehicle"
+      }
+    ],
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-malfunction",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "gloss": "Field stock travelled together with a trace on one seam.",
+    "prov": {
+      "batch": "T0016",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "Emergency crews could move farm supplies in a van during a road closure; a stain and clean label do not establish a failed agricultural program."
+  }
+]
