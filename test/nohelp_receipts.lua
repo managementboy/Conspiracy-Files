@@ -26,29 +26,36 @@ local function receipt(c,votes,sha)
     f:close()
 end
 local good=clue("r-good","containment")
-receipt(good,{A=3,B=1,neither=1})
+receipt(good,{A=1,B=0,neither=0})
 local changed=clue("r-changed","containment")
-receipt(changed,{A=3,B=1,neither=1})
+receipt(changed,{A=1,B=0,neither=0})
 changed.body="Placeholder body, edited after its receipt."
 local missing=clue("r-missing","agricultural")
-local oneSided=clue("r-onesided","containment")
-receipt(oneSided,{A=5,B=0,neither=0})   -- never read as its rival (B)
-local blank=clue("r-neither","agricultural")
-receipt(blank,{A=1,B=1,neither=3})
-local few=clue("r-few","agricultural")
-receipt(few,{A=1,B=1,neither=0})
+local retry=clue("r-retry","containment")
+receipt(retry,{A=0,B=1,neither=0}) -- first read disagrees: request one more
+local disagrees=clue("r-disagrees","containment")
+receipt(disagrees,{A=1,B=1,neither=0}) -- two reads disagree
+local stillWrong=clue("r-still-wrong","containment")
+receipt(stillWrong,{A=0,B=2,neither=0}) -- both reads miss the declared lean
+local mixed=clue("r-mixed","containment")
+mixed.where[2]={place="office",spot="furniture",lean="agricultural",rival="containment"}
+receipt(mixed,{A=1,B=0,neither=0})
+local tooMany=clue("r-too-many","agricultural")
+receipt(tooMany,{A=3,B=1,neither=1})
 local broken=clue("r-broken","agricultural")
 local f=io.open(dir.."/r-broken.json","wb"); f:write("{not json"); f:close()
 
-local problems=R.check({good,changed,missing,oneSided,blank,few,broken},dir)
+local problems=R.check({good,changed,missing,retry,disagrees,stillWrong,mixed,tooMany,broken},dir)
 local byId={}
 for _,p in ipairs(problems) do byId[p.id]=p.code end
-assert(byId["r-good"]==nil,"a current receipt with a real rival reading passes")
+assert(byId["r-good"]==nil,"one current independent read matching the declared lean passes")
 assert(byId["r-changed"]=="STALE_RECEIPT","a clue whose text changed after its receipt is reported")
 assert(byId["r-missing"]=="NO_RECEIPT","a clue with no receipt is reported")
-assert(byId["r-onesided"]=="NEVER_RIVAL","never read as its rival: returned")
-assert(byId["r-neither"]=="MOSTLY_NEITHER","read as neither most of the time: returned")
-assert(byId["r-few"]=="BAD_RECEIPT","fewer runs than the minimum")
+assert(byId["r-retry"]=="NEEDS_SECOND_READ","a first vote against the declared lean requests one targeted read")
+assert(byId["r-disagrees"]=="DISAGREEMENT","two different votes are returned for human review")
+assert(byId["r-still-wrong"]=="LEAN_MISMATCH","two votes against the declared lean are returned")
+assert(byId["r-mixed"]=="MIXED_LEAN","inconsistent placement leans are returned")
+assert(byId["r-too-many"]=="BAD_RECEIPT","more than two votes are invalid")
 assert(byId["r-broken"]=="BAD_RECEIPT","an unreadable receipt")
 os.execute('rm -rf "'..dir..'"')
 
