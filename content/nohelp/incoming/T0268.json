@@ -1,0 +1,44 @@
+[
+  {
+    "id": "t0268-01",
+    "kind": "set",
+    "pieces": [
+      "KeyRing",
+      "SheetPaper2"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "containment",
+        "rival": "agricultural"
+      }
+    ],
+    "anchor": {
+      "print": "HouseforSale818"
+    },
+    "title": "Quiet home inspection",
+    "body": "The sale form marks the property quiet and empty, but the key log records a room opened after the inspector left.",
+    "rival_reading": "A contractor could enter after an inspection for routine work; the form does not say who had the key.",
+    "gloss": "A room is opened after the property is marked empty.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "cites": {
+      "source": "print:HouseforSale818",
+      "quote": "House for Sale (no. 818)"
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0268"
+    }
+  }
+]
