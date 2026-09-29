@@ -1,0 +1,39 @@
+[
+  {
+    "id": "t0336-01",
+    "kind": "written",
+    "pieces": [
+      "diary"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "furniture",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "anchor": {
+      "scene": "RDSHenDo"
+    },
+    "title": "Sunday after supper — a bitter residue",
+    "body": "Sunday after supper: two workers from the greenhouse trial carried a bitter residue. my hands blistered before the phones went dead.",
+    "rival_reading": "Emergency workers could have picked up the same a bitter residue while responding near a field; this personal trace does not prove the trial caused the emergency.",
+    "gloss": "A personal trace connects a farm trial to symptoms before a later restriction.",
+    "axioms": {
+      "containment": [
+        "c-warning",
+        "c-orders"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0336"
+    }
+  }
+]
