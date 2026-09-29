@@ -1,0 +1,39 @@
+[
+  {
+    "anchor": {
+      "scene": "RZSBeachParty"
+    },
+    "body": "feed, soap, and a clean jar, paid cash. my note below says violet powder came from the well-water study; the mice abandoned the bin before the nurse stopped taking calls.\n\nNobody agreed on whose list this belonged to. I left it where the next person would look for the things we still owed each other.\n\nI thought someone would ask for this at the gate. They asked instead how many were in the car, and let the paper stay in my hand.",
+    "id": "t0377-01",
+    "kind": "written",
+    "pieces": [
+      "receipt"
+    ],
+    "title": "weathered bundle note — after monday supper",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ],
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-warning",
+        "c-failure"
+      ]
+    },
+    "gloss": "A personal field trace precedes the visible emergency response.",
+    "prov": {
+      "batch": "T0377",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "Responders could have collected the violet powder while crossing treated land; the note or objects do not prove the program began the emergency."
+  }
+]
