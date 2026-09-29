@@ -112,6 +112,20 @@ ticket alone later in a plainer form; never copy another ticket's text.
 
 **One go (owner, 2026-09-28):** when Claude opens the remaining tickets, deliver ALL of them (summary tickets and stories, in serial order) without waiting for sign-off or review in between; hand the baton to Claude once, at the end.
 
+**B's own evidence (owner, 2026-09-29; DR-20260929-NOHELP-B-OWN-EVIDENCE).**
+The two theories are both equally possible and may overlap, like COVID-19's
+zoonotic and lab-leak origins. B is broad: the farm program went wrong, or it
+spread naturally through farms, animals, feed and fields, or both. Today too
+few clues point at B alone (by the blind read: 367 only A, 166 only B). Stock
+tickets T0428-T0441 (10 clues each, no anchor, place `mapNamed`, six
+containers per furniture clue; 8 set tickets, 6 written) add B's OWN kind of
+evidence: where and how it started, how it moved (through feed, water,
+animals, fields, shipments, workers, equipment), who got sick where and when,
+what was different where it did not spread. Cover-up language is allowed, but
+the clue must make its B point without needing a cover-up: a reader who
+believes A should find nothing in it to point to. Short, concrete, physical
+clues read as B most reliably.
+
 **Round after the deep review (owner, 2026-09-29; DR-20260929-NOHELP-GAP-PLAN).**
 New rules for everything written from now on:
 - **No maximum length.** Diaries, letters, notebooks and notepads get real
